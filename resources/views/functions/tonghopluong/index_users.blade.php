@@ -39,9 +39,43 @@
                 <div class="portlet-body form-horizontal">
                     <div class="row">
                         <div class="form-group">
-                            <label class="control-label col-md-3">Đơn vị sử dụng </label>
-                            <div class="col-md-5">
-                                {!! Form::select('madv',$model_donvi,$madv,array('id' => 'madv', 'class' => 'form-control'))!!}
+                            <label class="control-label col-md-1" style="text-align: right">Tháng </label>
+                            <div class="col-md-2">
+                                {!! Form::select(
+                                'thang',
+                                array(
+                                '01' => '01',
+                                '02' => '02',
+                                '03' => '03',
+                                '04' => '04',
+                                '05' => '05',
+                                '06' => '06',
+                                '07' => '07',
+                                '08' => '08',
+                                '09' => '09',
+                                '10' => '10',
+                                '11' => '11',
+                                '12' => '12',
+                                ),null,
+                                array('id' => 'thang', 'class' => 'form-control'))
+                                !!}
+                            </div>
+                            <label class="control-label col-md-1" style="text-align: right">Năm </label>
+                            <div class="col-md-2">
+                                {!! Form::select(
+                                'nam',
+                                array(
+                                '2015' => '2015',
+                                '2016' => '2016',
+                                '2017' => '2017'
+                                ),null,
+                                array('id' => 'nam', 'class' => 'form-control'))
+                                !!}
+                            </div>
+                            <label class="control-label col-md-1" style="text-align: right">Khu vực </label>
+                            <div class="col-md-4">
+                                {!!Form::select('level', array('KVHCSN'=>'Khu vực HCSN, Đảng, Đoàn thể','KVXP'=>'Khu vực xã, phường, thị trấn'),
+                                null, array('id' => 'level','class' => 'form-control'))!!}
                             </div>
                         </div>
                     </div>
@@ -49,9 +83,8 @@
                         <thead>
                         <tr>
                             <th class="text-center" style="width: 5%">STT</th>
-                            <th class="text-center">Tháng</th>
-                            <th class="text-center">Năm</th>
-                            <th class="text-center">Nội dung bảng lương</th>
+                            <th class="text-center">Tên đơn vị</th>
+                            <th class="text-center">Tên đơn vị quản lý</th>
                             <th class="text-center">Thao tác</th>
                         </tr>
                         </thead>
@@ -60,17 +93,18 @@
                             @foreach($model as $key=>$value)
                                 <tr>
                                     <td class="text-center">{{$key+1}}</td>
-                                    <td>{{$value->thang}}</td>
-                                    <td>{{$value->nam}}</td>
-                                    <td>{{$value->noidung}}</td>
+                                    <td>{{$value->tendv}}</td>
+                                    <td>{{$value->tendv}}</td>
                                     <td>
-                                        <a href="{{url('/chuc_nang/bang_luong/maso='.$value->mabl)}}" class="btn btn-warning btn-xs mbs">
-                                            <i class="fa fa-th-list"></i>&nbsp; Chi tiết</a>
-                                        <a href="{{url('/chuc_nang/bang_luong/in/maso='.$value->mabl)}}" class="btn btn-success btn-xs mbs" TARGET="_blank">
-                                            <i class="fa fa-print"></i>&nbsp; In bảng lương</a>
-                                        <a href="{{url('/chuc_nang/bang_luong/in_bh/maso='.$value->mabl)}}" class="btn btn-success btn-xs mbs" TARGET="_blank">
-                                            <i class="fa fa-print"></i>&nbsp; In bảo hiểm</a>
-
+                                        @if ($value->mabl != NULL)
+                                            <a href="{{url('/chuc_nang/bang_luong/in/maso='.$value->mabl)}}" class="btn btn-success btn-xs mbs" TARGET="_blank">
+                                                <i class="fa fa-print"></i>&nbsp; In bảng lương</a>
+                                            <a href="{{url('/chuc_nang/bang_luong/in_bh/maso='.$value->mabl)}}" class="btn btn-success btn-xs mbs" TARGET="_blank">
+                                                <i class="fa fa-print"></i>&nbsp; In bảo hiểm</a>
+                                        @else
+                                            <a href="{{url('/chuc_nang/bang_luong/in/maso='.$value->mabl)}}" class="btn btn-danger btn-xs mbs" TARGET="_blank">
+                                                <i class="fa fa-warning"></i>&nbsp; Đơn vị chưa có bảng lương</a>
+                                        @endif
                                     </td>
                                 </tr>
                             @endforeach

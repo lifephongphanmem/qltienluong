@@ -304,6 +304,7 @@ class ComposerStaticInitd7de3fb6aaadd474bf447891cb3bef8d
         'CreateBangluongctTable' => __DIR__ . '/../..' . '/database/migrations/2016_06_20_101936_create_bangluongct_table.php',
         'CreateBangluongphucapTable' => __DIR__ . '/../..' . '/database/migrations/2017_06_06_093518_create_bangluongphucap_table.php',
         'CreateBuocthoiviecChitietTable' => __DIR__ . '/../..' . '/database/migrations/2017_06_09_095530_create_buocthoiviec_chitiet_table.php',
+        'CreateChitieubiencheTable' => __DIR__ . '/../..' . '/database/migrations/2017_08_25_165446_create_chitieubienche_table.php',
         'CreateDaotaoChitietTable' => __DIR__ . '/../..' . '/database/migrations/2017_06_09_095349_create_daotao_chitiet_table.php',
         'CreateDmbaomatTable' => __DIR__ . '/../..' . '/database/migrations/2017_06_29_144148_create_dmbaomat_table.php',
         'CreateDmchucvucdTable' => __DIR__ . '/../..' . '/database/migrations/2016_06_10_102650_create_dmchucvucd_table.php',

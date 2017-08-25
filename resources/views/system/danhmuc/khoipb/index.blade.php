@@ -32,7 +32,7 @@
             <div class="portlet light bordered">
                 <div class="portlet-title">
                     <div class="caption">
-                        DANH MỤC ĐƠN VỊ QUẢN LÝ
+                        DANH MỤC LĨNH VỰC HOẠT ĐỘNG
                     </div>
                     <div class="actions">
                         <button type="button" id="_btnaddPB" class="btn btn-success btn-xs" onclick="addPB()"><i class="fa fa-plus"></i>&nbsp;Thêm mới</button>
@@ -40,7 +40,7 @@
                 </div>
                 <div class="row">
                     <div class="form-group">
-                        <label class="control-label col-md-3">Cấp độ quản lý </label>
+                        <label class="control-label col-md-3" style="text-align: right">Khu vực</label>
                         <div class="col-md-5">
                             {!! Form::select('mucbaomat',$a_baomat,$level,array('id' => 'mucbaomat', 'class' => 'form-control'))!!}
                         </div>
@@ -53,7 +53,7 @@
                             <tr>
                                 <th class="text-center" style="width: 10%">STT</th>
                                 <th class="text-center">Mã số</th>
-                                <th class="text-center">Tên khối, phòng ban</th>
+                                <th class="text-center">Lĩnh vực hoạt động</th>
                                 <th class="text-center">Ghi chú</th>
                                 <th class="text-center">Thao tác</th>
                             </tr>
@@ -89,7 +89,7 @@
                     <label class="form-control-label">Mã số<span class="require">*</span></label>
                     {!!Form::text('makhoipb', null, array('id' => 'makhoipb','class' => 'form-control required'))!!}
 
-                    <label class="form-control-label">Tên khối phòng ban<span class="require">*</span></label>
+                    <label class="form-control-label">Lĩnh vực hoạt động<span class="require">*</span></label>
                     {!!Form::text('tenkhoipb', null, array('id' => 'tenkhoipb','class' => 'form-control required'))!!}
 
                     <label class="form-control-label">Ghi chú</label>

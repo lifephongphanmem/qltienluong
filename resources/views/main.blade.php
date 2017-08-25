@@ -172,7 +172,7 @@
                             <a href="{{url('chuc_nang/bang_luong/danh_sach')}}">Bảng lương</a>
                         </li>
                         <li>
-                            <a href="{{url('chuc_nang/tong_hop_luong/ma_so='.session('admin')->madv)}}">Bảng lương từ đơn vị cấp dưới</a>
+                            <a href="{{url('chuc_nang/tong_hop_luong/danh_sach?thang='.date('m').'&nam='.date('Y').'&khuvuc=KVHCSN')}}">Bảng lương từ đơn vị cấp dưới</a>
                         </li>
                         <li>
                             <a href="{{url('chuc_nang/nang_luong/danh_sach')}}">Nâng lương</a>
@@ -188,10 +188,11 @@
 					<span class="arrow "></span>
 					</a>
 					<ul class="sub-menu">
-                        <li><a href="{{url('/nghiep_vu/ho_so/danh_sach')}}">Danh sách cán bộ</a></li>
+                        <li><a href="{{url('nghiep_vu/ho_so/danh_sach')}}">Danh sách cán bộ</a></li>
                         <li><a href="{{url('nghiep_vu/qua_trinh/luong/maso=all')}}">Quá trình hưởng lương</a></li>
                         <li><a href="{{url('nghiep_vu/qua_trinh/phu_cap/maso=all')}}">Quá trình phụ cấp</a></li>
                         <li><a href="{{url('nghiep_vu/quan_ly/dieu_dong/maso=all')}}">Luân chuyển cán bộ</a></li>
+                        <li><a href="{{url('nghiep_vu/quan_ly/chi_tieu/danh_sach')}}">Chỉ tiêu biên chế</a></li>
 					</ul>
 				</li>
 
@@ -222,16 +223,10 @@
                 <!-- dành cho đơn vị chủ quản -->
 
                     <li>
-                        <a href="javascript:;">
+                        <a href="{{url('tong_hop_bao_cao/danh_sach')}}">
                             <i class="fa fa-file-text"></i>
                             <span class="title">Báo cáo tổng hợp</span>
-                            <span class="arrow "></span>
                         </a>
-                        <ul class="sub-menu">
-                            <li><a href="{{url('tong_hop_bao_cao/don_vi')}}">Báo cáo số lượng, chất lượng cán bộ</a></li>
-                            <!--li><a href="{{url('tong_hop_bao_cao/mau_chuan')}}">Báo cáo theo thông tư, quyết định</a></li-->
-                            <li><a href="{{url('tong_hop_bao_cao/bang_luong')}}">Bảng lương</a></li>
-                        </ul>
                     </li>
 
 				<li class="last">
@@ -246,10 +241,8 @@
                                 <i class="fa fa-list-alt"></i> Danh mục <span class="arrow"></span>
                             </a>
                             <ul class="sub-menu" style="margin-left: 15px;">
-
-                                    <li><a href="{{url('danh_muc/bao_mat/index?&level=X')}}">Bảo mật hồ sơ</a></li>
-                                    <li><a href="{{url('danh_muc/khoi_pb/ma_so=H')}}">Khối, phòng ban</a></li>
-
+                                <!--li><a href="{{url('danh_muc/bao_mat/index?&level=X')}}">Bảo mật hồ sơ</a></li-->
+                                <li><a href="{{url('danh_muc/khoi_pb/ma_so=KVHCSN')}}">Lĩnh vực hoạt động</a></li>
                                 <li><a href="{{url('danh_muc/phong_ban/index')}}">Phòng ban</a></li>
                                 <li><a href="{{url('danh_muc/chuc_vu_cq/index')}}">Chức vụ chính quyền</a></li>
                                 <li><a href="{{url('danh_muc/chuc_vu_d/index')}}">Chức vụ đảng</a></li>

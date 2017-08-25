@@ -32,20 +32,22 @@
             <div class="portlet light bordered">
                 <div class="portlet-title">
                     <div class="caption">
-                        <i class="fa fa-list-alt"></i>DANH SÁCH HỒ SƠ THAM GIA LỰC LƯỢNG VŨ TRANG CỦA CÁN BỘ
+                        <i class="fa fa-list-alt"></i>DANH SÁCH CHỈ TIÊU BIÊN CHẾ CỦA ĐƠN VỊ
                     </div>
                     @include('includes.crumbs.bt_add')
                 </div>
                 <div class="portlet-body form-horizontal">
-                    @include('includes.crumbs.cb_canbo')
+
                     <table id="sample_3" class="table table-hover table-striped table-bordered" style="min-height: 230px">
                         <thead>
                             <tr>
                                 <th class="text-center" style="width: 5%">STT</th>
-                                <th class="text-center">Từ ngày</th>
-                                <th class="text-center">Đến ngày</th>
-                                <th class="text-center">Quân hàm</th>
-                                <th class="text-center">Chức vụ</th>
+                                <th class="text-center">Năm được giao</th>
+                                <th class="text-center">Số lượng biên</br>chế được giao</th>
+                                <th class="text-center">Số lượng biên</br>chế hiện có</th>
+                                <th class="text-center">Số lượng cán bộ</br>không chuyên trách<br>(nếu có)</th>
+                                <th class="text-center">Số lượng đại</br> biểu HĐND</th>
+                                <th class="text-center">Số lượng ủy viên</th>
                                 <th class="text-center">Thao tác</th>
                             </tr>
                         </thead>
@@ -55,10 +57,12 @@
                                 @foreach($model as $key=>$value)
                                     <tr>
                                         <td class="text-center">{{$key+1}}</td>
-                                        <td>{{getDayVn($value->ngaytu)}}</td>
-                                        <td>{{getDayVn($value->ngayden)}}</td>
-                                        <td>{{$value->quanham}}</td>
-                                        <td>{{$value->chucvu}}</td>
+                                        <td>{{$value->nam}}</td>
+                                        <td>{{$value->soluongduocgiao}}</td>
+                                        <td>{{$value->soluongbienche}}</td>
+                                        <td>{{$value->soluongkhongchuyentrach}}</td>
+                                        <td>{{$value->soluonguyvien}}</td>
+                                        <td>{{$value->soluongdaibieuhdnd}}</td>
                                         @include('includes.crumbs.bt_editdel')
                                     </tr>
                                 @endforeach
@@ -80,17 +84,40 @@
                 </div>
                 <div class="modal-body">
                     <div class="form-horizontal">
-                        @include('includes.crumbs.tudenngay')
                         <div class="form-group">
-                            <label class="col-md-4 control-label">Quân hàm</label>
+                            <label class="col-md-4 control-label">Năm được giao</label>
                             <div class="col-md-8">
-                                {!!Form::text('quanham', null, array('id' => 'quanham','class' => 'form-control'))!!}
+                                {!!Form::text('nam', null, array('id' => 'nam','class' => 'form-control'))!!}
                             </div>
                         </div>
                         <div class="form-group">
-                            <label class="col-md-4 control-label">Chức vụ</label>
+                            <label class="col-md-4 control-label">Số lượng biên chế được giao</label>
                             <div class="col-md-8">
-                                {!!Form::text('chucvu', null, array('id' => 'chucvu','class' => 'form-control'))!!}
+                                {!!Form::text('soluongduocgiao', null, array('id' => 'soluongduocgiao','class' => 'form-control'))!!}
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-md-4 control-label">Số lượng biên chế hiện có</label>
+                            <div class="col-md-8">
+                                {!!Form::text('soluongbienche', null, array('id' => 'soluongbienche','class' => 'form-control'))!!}
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-md-4 control-label">Số lượng cán bộ không chuyên trách (nếu có)</label>
+                            <div class="col-md-8">
+                                {!!Form::text('soluongkhongchuyentrach', null, array('id' => 'soluongkhongchuyentrach','class' => 'form-control'))!!}
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-md-4 control-label">Số lượng ủy viên</label>
+                            <div class="col-md-8">
+                                {!!Form::text('soluonguyvien', null, array('id' => 'soluonguyvien','class' => 'form-control'))!!}
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-md-4 control-label">Số lượng đại biểu HĐND</label>
+                            <div class="col-md-8">
+                                {!!Form::text('soluongdaibieuhdnd', null, array('id' => 'soluongdaibieuhdnd','class' => 'form-control'))!!}
                             </div>
                         </div>
                         <input type="hidden" id="id_ct" name="id_ct"/>
@@ -111,10 +138,12 @@
                 alert('Bạn cần chọn cán bộ để nhập thông tin.');
                 $('#cbmacb').focus();
             }else{
-                $('#ngaytu').val('');
-                $('#ngayden').val('');
-                $('#quanham').val('');
-                $('#chucvu').val('');
+                $('#nam').val(2017);
+                $('#soluongduocgiao').val(0);
+                $('#soluongbienche').val(0);
+                $('#soluongkhongchuyentrach').val(0);
+                $('#soluonguyvien').val(0);
+                $('#soluongdaibieuhdnd').val(0);
                 $('#id_ct').val(0);
                 $('#chitiet-modal').modal('show');
             }
@@ -135,10 +164,12 @@
                 },
                 dataType: 'JSON',
                 success: function (data) {
-                    $('#ngaytu').val(data.ngaytu);
-                    $('#ngayden').val(data.ngayden);
-                    $('#quanham').val(data.quanham);
-                    $('#chucvu').val(data.chucvu);
+                    $('#nam').val(data.nam);
+                    $('#soluongduocgiao').val(data.soluongduocgiao);
+                    $('#soluongbienche').val(data.soluongbienche);
+                    $('#soluongkhongchuyentrach').val(data.soluongkhongchuyentrach);
+                    $('#soluonguyvien').val(data.soluonguyvien);
+                    $('#soluongdaibieuhdnd').val(data.soluongdaibieuhdnd);
                 },
                 error: function (message) {
                     toastr.error(message, 'Lỗi!');
@@ -153,19 +184,8 @@
             var valid=true;
             var message='';
 
-            var macanbo = $('#cbmacb').val();
-
-            var ngaytu=$('#ngaytu').val();
-            var ngayden=$('#ngayden').val();
-            var quanham=$('#quanham').val();
-            var chucvu=$('#chucvu').val();
-
             var id=$('#id_ct').val();
 
-            if(ngaytu==''){
-                valid=false;
-                message +='Ngày bắt đầu không được bỏ trống \n';
-            }
 
             if(valid){
                 var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
@@ -175,12 +195,13 @@
                         type: 'GET',
                         data: {
                             _token: CSRF_TOKEN,
-                            macanbo: macanbo,
-                            ngaytu: ngaytu,
-                            ngayden: ngayden,
-                            quanham: quanham,
-                            chucvu: chucvu
-                },
+                            nam:$('#nam').val(),
+                            soluongduocgiao:$('#soluongduocgiao').val(),
+                            soluongbienche:$('#soluongbienche').val(),
+                            soluongkhongchuyentrach:$('#soluongkhongchuyentrach').val(),
+                            soluonguyvien:$('#soluonguyvien').val(),
+                            soluongdaibieuhdnd:$('#soluongdaibieuhdnd').val()
+                        },
                         dataType: 'JSON',
                         success: function (data) {
                             if (data.status == 'success') {
@@ -197,10 +218,12 @@
                         type: 'GET',
                         data: {
                             _token: CSRF_TOKEN,
-                            ngaytu: ngaytu,
-                            ngayden: ngayden,
-                            quanham: quanham,
-                            chucvu: chucvu,
+                            nam:$('#nam').val(),
+                            soluongduocgiao:$('#soluongduocgiao').val(),
+                            soluongbienche:$('#soluongbienche').val(),
+                            soluongkhongchuyentrach:$('#soluongkhongchuyentrach').val(),
+                            soluonguyvien:$('#soluonguyvien').val(),
+                            soluongdaibieuhdnd:$('#soluongdaibieuhdnd').val(),
                             id: id
                         },
                         dataType: 'JSON',

@@ -13,11 +13,7 @@ class dmkhoipbController extends Controller
 {
     public function index($level){
         if (Session::has('admin')) {
-
-            if(session('admin')->level !='SA' && session('admin')->level !='SSA'){
-                return view('errors.noperm');
-            }
-            $a_baomat=array('H'=>'Cấp huyện','T'=>'Cấp tỉnh');
+            $a_baomat=array('KVHCSN'=>'Khu vực HCSN, Đảng, Đoàn thể','KVXP'=>'Khu vực xã, phường, thị trấn');
             $model=dmkhoipb::where('level',$level)->get();
 
             return view('system.danhmuc.khoipb.index')

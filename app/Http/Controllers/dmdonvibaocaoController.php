@@ -125,7 +125,7 @@ class dmdonvibaocaoController extends Controller
         if (Session::has('admin')) {
             $model=dmdonvi::where('madv',$madonvi)->first();
             $model_dvbc=dmdonvibaocao::where('madvbc',$model->madvbc)->first();
-            $model_kpb =  array_column(dmkhoipb::select('makhoipb','tenkhoipb')->where('level',$model_dvbc->level)->get()->toarray(),'tenkhoipb','makhoipb');
+            $model_kpb =  array_column(dmkhoipb::select('makhoipb','tenkhoipb')->get()->toarray(),'tenkhoipb','makhoipb');
             return view('system.danhmuc.donvibaocao.edit_donvi')
                 ->with('model',$model)
                 ->with('model_kpb',$model_kpb)
@@ -150,7 +150,7 @@ class dmdonvibaocaoController extends Controller
     public function create_donvi($madvbc){
         if (Session::has('admin')) {
             $model=dmdonvibaocao::where('madvbc',$madvbc)->first();
-            $model_kpb =  array_column(dmkhoipb::select('makhoipb','tenkhoipb')->where('level',$model->level)->get()->toarray(),'tenkhoipb','makhoipb');
+            $model_kpb =  array_column(dmkhoipb::select('makhoipb','tenkhoipb')->get()->toarray(),'tenkhoipb','makhoipb');
             return view('system.danhmuc.donvibaocao.create_donvi')
                 ->with('url','/danh_muc/khu_vuc/')
                 ->with('model_kpb',$model_kpb)
@@ -255,18 +255,25 @@ class dmdonvibaocaoController extends Controller
             return view('errors.notlogin');
     }
 
-    public function donvi_luong($madv){
+    public function donvi_luong(Request $request){
         if (Session::has('admin')) {
-            //$model=dmdonvi::where('macqcq',$macqcq)->get();
-
-            $donvi= dmdonvi::where('madv', $madv)->first();
+            //$donvi=dmdonvi::where('madv',session('admin')->madv)->get();
+            $inputs=$request->all();
+            $donvi= dmdonvi::where('madv', session('admin')->madv)->first();
             $model_donvi = dmdonvi::select('madv', 'tendv')->where('macqcq', $donvi->macqcq)->get();
+            foreach($model_donvi as $donvi){
+                $model_bangluong = bangluong::where('madv', $donvi->madv)
+                    ->where('thang', $inputs['thang'])
+                    ->where('nam', $inputs['nam'])
+                    ->first();
 
-            $model_bangluong = bangluong::where('madv', $madv)->get();
+                $donvi->mabl= (isset($model_bangluong)?$model_bangluong->mabl:NULL);
+            }
+            //dd($model_donvi->toarray());
             return view('functions.tonghopluong.index_users')
-                ->with('model', $model_bangluong)
-                ->with('madv', $madv)
-                ->with('model_donvi', array_column($model_donvi->toarray(), 'tendv', 'madv'))
+                ->with('model', $model_donvi)
+
+               // ->with('model_donvi', array_column($model_donvi->toarray(), 'tendv', 'madv'))
                 ->with('furl','/chuc_nang/tong_hop_luong/')
                 ->with('pageTitle','Danh sách đơn vị tổng hợp lương');
 

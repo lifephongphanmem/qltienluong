@@ -17,7 +17,7 @@ use Illuminate\Support\Facades\Session;
 class baocaotonghopController extends Controller
 {
     //<editor-fold desc="Mẫu báo cáo đơn vị">
-    function donvi() {
+    function index() {
         if (Session::has('admin')) {
             if(session('admin')->level=='T'){
                 $model_kpb=dmkhoipb::get();

@@ -1,0 +1,327 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html lang="vi">
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title>{{$pageTitle}}</title>
+    <style type="text/css">
+        body {
+            font: normal 12px/14px time, serif;
+        }
+
+        .header tr td {
+            padding-top: 0px;
+            padding-bottom: 10px;
+        }
+
+        table, p {
+            width: 98%;
+            margin: auto;
+        }
+
+        table tr td:first-child {
+            text-align: center;
+        }
+
+        td, th {
+            padding: 10px;
+        }
+        p{
+            padding: 5px;
+        }
+        span{
+            text-transform: uppercase;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body style="font:normal 12px Times, serif;">
+
+<table class="header" width="96%" border="0" cellspacing="0" cellpadding="8" style="margin:0 auto 25px; text-align: center;">
+    <tr>
+        <td  style="text-align: left;width: 60%">
+
+        </td>
+        <td  style="text-align: center;">
+            <b>Biểu số C02a/1</b>
+        </td>
+    </tr>
+    <tr>
+        <td style="text-align: left;width: 60%">
+            <b>{{'ỦY BAN NHÂN DÂN TỈNH, THÀNH PHỐ: TỈNH KHÁNH HÒA'}}</b>
+        </td>
+        <td style="text-align: center; font-style: italic">
+
+        </td>
+    </tr>
+</table>
+<p style="text-align: center; font-weight: bold; font-size: 20px;">BÁO CÁO NHU CẦU KINH PHÍ THỰC HIỆN NGHỊ ĐỊNH 47/2017/NĐ-CP NĂM 2017</p>
+<p style="text-align: center; font-style: italic">(Ban hành kèm theo Thông tư số 67/2017/TT-BTC)</p>
+<p style="text-align: right; font-style: italic">Đơn vị: triệu đồng</p>
+<table cellspacing="0" cellpadding="0" border="1" style="margin: 20px auto; border-collapse: collapse;">
+    <tr style="padding-left: 2px;padding-right: 2px">
+        <th style="width: 2%;padding-left: 2px;padding-right: 2px" rowspan="3">STT</th>
+        <th style="padding-left: 2px;padding-right: 2px" rowspan="3">NỘI DUNG</th>
+        <th style="width: 6%;padding-left: 2px;padding-right: 2px" rowspan="3">BIÊN CHẾ ĐƯỢC</br>CẤP CÓ THẨM QUYỀN GIAO HOẶC PHÊ DUYỆT NĂM 2017</th>
+        <th style="width: 6%;padding-left: 2px;padding-right: 2px" rowspan="3">TỔNG SỐ</br>ĐỐI TƯỢNG HƯỞNG LƯƠNG CÓ MẶT ĐẾN 01/07/2017</th>
+        <th style="width: 6%;padding-left: 2px;padding-right: 2px" colspan="14">QUỸ LƯƠNG, PHỤ CẤP VÀ CÁC KHOẢN ĐÓP GÓP THÁNG 07/2017 THEO NGHỊ ĐỊNH SỐ 47/2016/NĐ-CP</th>
+
+    </tr>
+    <tr style="padding-left: 2px;padding-right: 2px">
+        <th style="width: 6%;padding-left: 2px;padding-right: 2px" rowspan="2">TỔNG CỘNG</th>
+        <th style="width: 6%;padding-left: 2px;padding-right: 2px" rowspan="2">LƯƠNG THEO NGẠCH, BẬC CHỨC VỤ</th>
+        <th style="width: 6%;" rowspan="2">TỔNG CÁC KHOẢN PHỤ CẤP</th>
+        <th style="width: 6%;padding-left: 2px;padding-right: 2px" colspan="10">TRONG ĐÓ</th>
+        <th rowspan="2">CÁC KHOẢN</br>ĐÓNG GÓP</br>BHXH,BHYT,</br>KPCĐ,KHTN</th>
+    </tr>
+    <tr style="padding-left: 2px;padding-right: 2px">
+        <th>PHỤ CẤP KHU VỰC</th>
+        <th>PHỤ CẤP CHỨC VỤ</th>
+        <th>PHỤ CẤP THÂM NIÊN VƯỢT KHUNG</th>
+        <th>PHỤ CẤP ƯU ĐÃI NGÀNH</th>
+        <th>PHỤ CẤP THU HÚT</th>
+        <th>PHỤ CẤP CÔNG TÁC LÂU NĂM</th>
+        <th>PHỤ CẤP CÔNG VỤ</th>
+        <th>PHỤ CẤP CÔNG TÁC ĐẢNG</th>
+        <th>PHỤ CẤP THÂM NIÊN NGHỀ</th>
+        <th>PHỤ CẤP KHÁC</th>
+    </tr>
+
+    <tr style="font-weight: bold; text-align: center">
+        <td>1</td>
+        <td>2</td>
+        <td>3</td>
+        <td>4</td>
+        <td>5=6+7+18</td>
+        <td>6</td>
+        <td>7=8+...+17</td>
+        <td>8</td>
+        <td>9</td>
+        <td>10</td>
+        <td>11</td>
+        <td>12</td>
+        <td>13</td>
+        <td>14</td>
+        <td>15</td>
+        <td>16</td>
+        <td>17</td>
+        <td>18</td>
+    </tr>
+
+    <tr style="font-weight: bold; text-align: center">
+        <th></th>
+        <th>TỔNG CỘNG (I+II+III+IV+V+VI)</th>
+        <th></th>
+        <th></th>
+        <th></th>
+        <th></th>
+        <th></th>
+        <th></th>
+        <th></th>
+        <th></th>
+        <th></th>
+        <th></th>
+        <th></th>
+        <th></th>
+        <th></th>
+        <th></th>
+        <th></th>
+        <th></th>
+    </tr>
+    <tr style="font-weight: bold; text-align: center">
+        <th>I</th>
+        <th>KHU VỰC HCSN, ĐẢNG, ĐOÀN THỂ</th>
+        <th></th>
+        <th></th>
+        <th></th>
+        <th></th>
+        <th></th>
+        <th></th>
+        <th></th>
+        <th></th>
+        <th></th>
+        <th></th>
+        <th></th>
+        <th></th>
+        <th></th>
+        <th></th>
+        <th></th>
+        <th></th>
+    </tr>
+
+    <tr style="font-style: italic;">
+        <td></td>
+        <td>Trong đó</td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+    </tr>
+    @foreach($ar_I as $dulieu)
+        <tr>
+            <td>{{$dulieu['tt']}}</td>
+            <td>{{$dulieu['noidung']}}</td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+    @endforeach
+
+    <tr style="font-weight: bold;">
+        <td>II</td>
+        <td>CÁN BỘ CHUYÊN TRÁCH, CÔNG CHỨC XÃ</td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+    </tr>
+    <tr style="font-weight: bold;">
+        <td>III</td>
+        <td>HOẠT ĐỘNG PHÍ ĐẠI BIỂU HĐND CÁC CẤP</td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+    </tr>
+
+    @foreach($ar_III as $dulieu)
+        <tr>
+            <td>{{$dulieu['tt']}}</td>
+            <td>{{$dulieu['noidung']}}</td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+    @endforeach
+
+    <tr style="font-weight: bold;">
+        <td>IV</td>
+        <td>PHỤ CẤP TRÁCH NHIỆM CẤP ỦY</td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+    </tr>
+    @foreach($ar_IV as $dulieu)
+        <tr>
+            <td>{{$dulieu['tt']}}</td>
+            <td>{{$dulieu['noidung']}}</td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+    @endforeach
+</table>
+
+<table class="header" width="96%" border="0" cellspacing="0" cellpadding="8" style="margin:20px auto; text-align: center;">
+    <tr>
+        <td style="text-align: left;" width="50%"></td>
+        <td style="text-align: center; font-style: italic" width="50%">........,Ngày......tháng.......năm..........</td>
+    </tr>
+    <tr style="font-weight: bold">
+        <td style="text-align: center;" width="50%"></td>
+        <td style="text-align: center;" width="50%">CHỦ TỊCH ỦY BAN NHÂN DÂN TỈNH, THÀNH PHỐ</td>
+    </tr>
+    <tr style="font-style: italic">
+        <td style="text-align: center;" width="50%"></td>
+        <td style="text-align: center;" width="50%">((Ký tên, đóng dấu))</td>
+    </tr>
+    <tr>
+        <td><br><br><br></td>
+    </tr>
+
+    <tr>
+        <td style="text-align: center;" width="50%">{{''}}</td>
+        <td style="text-align: center;" width="50%">{{$m_dv->lanhdao}}</td>
+    </tr>
+</table>
+
+</body>
+</html>
