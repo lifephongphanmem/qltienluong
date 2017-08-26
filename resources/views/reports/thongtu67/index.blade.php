@@ -42,17 +42,48 @@
                 </div>
                 <div class="modal-body">
                     <div class="form-horizontal">
-                        <div class="form-group">
-                            <label class="col-md-4 control-label"> Ngày báo cáo<span class="require">*</span></label>
-                            <div class="col-md-8">
-                                {!! Form::input('date','ngaybaocao',null,array('id' => 'ngaybaocao', 'class' => 'form-control'))!!}
-                            </div>
-                        </div>
+                        <div class="modal-body">
+                            <div class="form-horizontal">
+                                <div class="form-group">
+                                    <label class="col-md-4 control-label"> Tháng<span class="require">*</span></label>
+                                    <div class="col-md-8">
+                                        {!! Form::select(
+                                        'thang',
+                                        array(
+                                        '01' => '01',
+                                        '02' => '02',
+                                        '03' => '03',
+                                        '04' => '04',
+                                        '05' => '05',
+                                        '06' => '06',
+                                        '07' => '07',
+                                        '08' => '08',
+                                        '09' => '09',
+                                        '10' => '10',
+                                        '11' => '11',
+                                        '12' => '12',
+                                        ),null,
+                                        array('id' => 'thang', 'class' => 'form-control'))
+                                        !!}
+                                    </div>
+                                </div>
 
-                        <div class="form-group">
-                            <label class="col-md-4 control-label"></label>
-                            <div class="col-md-8">
-                                {!! Form::checkbox('dangct', 'value', true, array('id' => 'dangct'))!!} <label> Cán bộ đang công tác</label>
+                                <div class="form-group">
+                                    <label class="col-md-4 control-label"> Năm<span class="require">*</span></label>
+                                    <div class="col-md-8">
+                                        {!! Form::select(
+                                        'nam',
+                                        array(
+                                        '2015' => '2015',
+                                        '2016' => '2016',
+                                        '2017' => '2017'
+                                        ),null,
+                                        array('id' => 'nam', 'class' => 'form-control'))
+                                        !!}
+                                    </div>
+                                </div>
+
+                                <input type="hidden" name="_token" value="{{ csrf_token() }}">
                             </div>
                         </div>
                         <input type="hidden" name="_token" value="{{ csrf_token() }}">
@@ -75,7 +106,6 @@
             $('#thoaibc :submit').click(function() {
                 var valid=true;
                 var message='';
-                var ngaybc=$('#ngaybaocao').val();
 
 
 
