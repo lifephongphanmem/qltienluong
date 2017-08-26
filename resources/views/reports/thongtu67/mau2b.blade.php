@@ -43,7 +43,7 @@
 
         </td>
         <td  style="text-align: center;">
-            <b>Biểu số C02a/1</b>
+            <b>Biểu số C02b</b>
         </td>
     </tr>
     <tr>
