@@ -33,6 +33,7 @@ return array(
     'CreateDsnangluongChitietTable' => $baseDir . '/database/migrations/2017_06_15_090502_create_dsnangluong_chitiet_table.php',
     'CreateDsnangluongTable' => $baseDir . '/database/migrations/2016_06_19_102235_create_dsnangluong_table.php',
     'CreateDsthuyenchuyenTable' => $baseDir . '/database/migrations/2017_06_09_093945_create_dsthuyenchuyen_table.php',
+    'CreateDutoanluongTable' => $baseDir . '/database/migrations/2017_08_27_181308_create_dutoanluong_table.php',
     'CreateGeneralConfigsTable' => $baseDir . '/database/migrations/2016_06_21_163453_create_general_configs_table.php',
     'CreateHosobaohiemxahoiTable' => $baseDir . '/database/migrations/2017_06_26_144611_create_hosobaohiemxahoi_table.php',
     'CreateHosobaohiemyteTable' => $baseDir . '/database/migrations/2016_06_20_103244_create_hosobaohiemyte_table.php',

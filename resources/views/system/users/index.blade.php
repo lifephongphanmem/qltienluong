@@ -105,7 +105,7 @@
     <script>
         $(function(){
             $('#mucbaomat').change(function() {
-                window.location.href = '/danh_muc/khu_vuc/ma_so='+$('#mucbaomat').val();
+                window.location.href = '/danh_muc/tai_khoan/list_user?level='+$('#mucbaomat').val();
             });
         })
     </script>

@@ -163,6 +163,22 @@
 				</li>
                 <li>
                     <a href="javascript:;">
+                        <i class="fa fa-wrench"></i>
+                        <span class="title">Nghiệp vụ</span>
+                        <span class="arrow "></span>
+                    </a>
+                    <ul class="sub-menu">
+                        <li><a href="{{url('nghiep_vu/ho_so/danh_sach')}}">Danh sách cán bộ</a></li>
+                        <li><a href="{{url('nghiep_vu/qua_trinh/luong/maso=all')}}">Quá trình hưởng lương</a></li>
+                        <li><a href="{{url('nghiep_vu/qua_trinh/phu_cap/maso=all')}}">Quá trình phụ cấp</a></li>
+                        <li><a href="{{url('nghiep_vu/quan_ly/dieu_dong/maso=all')}}">Luân chuyển cán bộ</a></li>
+                        <li><a href="{{url('nghiep_vu/quan_ly/chi_tieu/danh_sach')}}">Chỉ tiêu biên chế</a></li>
+                        <li><a href="{{url('nghiep_vu/quan_ly/du_toan/danh_sach')}}">Dự toán lương</a></li>
+                    </ul>
+                </li>
+
+                <li>
+                    <a href="javascript:;">
                         <i class="fa fa-sitemap fa-fw"></i>
                         <span class="title">Chức năng</span>
                         <span class="arrow "></span>
@@ -181,20 +197,6 @@
 
                     </ul>
                 </li>
-				<li>
-					<a href="javascript:;">
-					<i class="fa fa-wrench"></i>
-					<span class="title">Nghiệp vụ</span>
-					<span class="arrow "></span>
-					</a>
-					<ul class="sub-menu">
-                        <li><a href="{{url('nghiep_vu/ho_so/danh_sach')}}">Danh sách cán bộ</a></li>
-                        <li><a href="{{url('nghiep_vu/qua_trinh/luong/maso=all')}}">Quá trình hưởng lương</a></li>
-                        <li><a href="{{url('nghiep_vu/qua_trinh/phu_cap/maso=all')}}">Quá trình phụ cấp</a></li>
-                        <li><a href="{{url('nghiep_vu/quan_ly/dieu_dong/maso=all')}}">Luân chuyển cán bộ</a></li>
-                        <li><a href="{{url('nghiep_vu/quan_ly/chi_tieu/danh_sach')}}">Chỉ tiêu biên chế</a></li>
-					</ul>
-				</li>
 
 				<li>
 					<a href="javascript:;">
@@ -206,6 +208,7 @@
                         <li><a href="{{url('/tra_cuu/ho_so')}}">Hồ sơ cán bộ</a></li>
                         <li><a href="{{url('/tra_cuu/luong')}}">Quá trình hưởng lương</a></li>
                         <li><a href="{{url('/tra_cuu/phu_cap')}}">Quá trình phụ cấp</a></li>
+                        <li><a href="{{url('/tra_cuu/phu_cap')}}">Bảng lương</a></li>
 					</ul>
 				</li>
 				<li>

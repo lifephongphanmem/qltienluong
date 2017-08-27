@@ -203,6 +203,10 @@ Route::group(['prefix'=>'nghiep_vu'],function(){
             Route::get('danh_sach','chitieubiencheController@index');
             Route::get('del/{id}','hosollvtController@destroy');
         });
+        Route::group(['prefix'=>'du_toan'],function(){
+            Route::get('danh_sach','dutoanluongController@index');
+            Route::get('del/{id}','dutoanluongController@destroy');
+        });
     });
 
     Route::group(['prefix'=>'qua_trinh'],function(){
@@ -348,10 +352,14 @@ Route::group(['prefix'=>'bao_cao'],function(){
         Route::post('mauc02ahd','baocaobangluongController@mauc02ahd');
         Route::post('mauc02x','baocaobangluongController@mauc02x');
         Route::post('maubaohiem','baocaobangluongController@maubaohiem');
+        Route::post('chitraluong','baocaobangluongController@chitraluong');
+        Route::get('dutoanluong','baocaobangluongController@dutoanluong');
 
+        Route::get('dutoanluong_th','baocaobangluongController@dutoanluong_th');
+        Route::post('chitraluong_th','baocaobangluongController@chitraluong_th');
         Route::post('mauc02ahd_th','baocaobangluongController@mauc02ahd_th');
-        Route::post('mauc02x_th','baocaobangluongController@mauc02x_th');
-        Route::post('maubaohiem_th','baocaobangluongController@maubaohiem_th');
+        Route::post('mauc02x_th','baocaobangluongController@mauc02ahd_th');//chưa xây dựng
+        Route::post('maubaohiem_th','baocaobangluongController@maubaohiem');//chưa xây dựng
     });
 });
 
@@ -361,6 +369,7 @@ Route::group(['prefix'=>'tong_hop_bao_cao'],function(){
     Route::post('mau2a1_tt67','baocaothongtu67Controller@mau2a1_tt67');
     Route::post('mau2a2_tt67','baocaothongtu67Controller@mau2a2_tt67');
     Route::post('mau2b_tt67','baocaothongtu67Controller@mau2b_tt67');
+
 });
 
 Route::group(['prefix'=>'tra_cuu'],function(){
@@ -511,6 +520,12 @@ Route::group(['prefix'=>'ajax'],function(){
         Route::get('add','dmkhoipbController@store');
         Route::get('update','dmkhoipbController@update');
         Route::get('get','dmkhoipbController@getinfo');
+    });
+
+    Route::group(['prefix'=>'du_toan'],function(){
+        Route::get('add','dutoanluongController@store');
+        Route::get('update','dutoanluongController@update');
+        Route::get('get','dutoanluongController@get_detail');
     });
 });
 
