@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\dmdonvi;
+use App\dmdonvibaocao;
 use Illuminate\Http\Request;
 
 use App\Http\Requests;
@@ -13,7 +14,13 @@ class baocaothongtu67Controller extends Controller
 {
     function index() {
         if (Session::has('admin')) {
+            $macqcq=session('admin')->madv;
+            $model_dv=dmdonvi::where('macqcq',$macqcq)->orwhere('madv',$macqcq)->get();
+            $model_dvbc=dmdonvibaocao::where('level','H')->get();
+
             return view('reports.thongtu67.index')
+                ->with('model_dv', $model_dv)
+                ->with('model_dvbc', $model_dvbc)
                 ->with('furl','/tong_hop_bao_cao/')
                 ->with('pageTitle','Báo cáo tổng hợp lương');
         } else
@@ -117,6 +124,43 @@ class baocaothongtu67Controller extends Controller
                 ->with('ar_I',$ar_I)
                 ->with('m_dv',$m_dv)
                 ->with('pageTitle','Báo cáo nhu cầu kinh phí thực hiện nghị định 47/2017/NĐ-CP');
+        } else
+            return view('errors.notlogin');
+    }
+
+    function mau2c_tt67() {
+        if (Session::has('admin')) {
+            return view('reports.thongtu67.Mau2c_BcNCCL')
+                ->with('pageTitle','BÁO CÁO NHU CẦU CHÊNH LỆCH');
+        } else
+            return view('errors.notlogin');
+    }
+
+    function mau2d_tt67() {
+        if (Session::has('admin')) {
+            return view('reports.thongtu67.Mau2d_ThKPTT')
+                ->with('pageTitle','TỔNG HỢP KINH PHÍ TĂNG THÊM ĐỂ THỰC HIỆN CHẾ ĐỘ PHỤ CẤP ĐỐI VỚI CÁN BỘ KHÔNG CHUYÊN TRÁCH');
+        } else
+            return view('errors.notlogin');
+    }
+    function mau2e_tt67() {
+        if (Session::has('admin')) {
+            return view('reports.thongtu67.Mau2e_ThKPTG')
+                ->with('pageTitle','TỔNG HỢP KINH PHÍ TĂNG, GIẢM DO ĐIỀU CHỈNH ĐỊA BÀN VÙNG KINH TẾ XÃ HỘI ĐẶC BIỆT KHÓ KHĂN');
+        } else
+            return view('errors.notlogin');
+    }
+    function mau2g_tt67() {
+        if (Session::has('admin')) {
+            return view('reports.thongtu67.Mau2g_ThPCUDTG')
+                ->with('pageTitle','TỔNG HỢP PHỤ CẤP ƯU ĐÃI TĂNG, GIẢM DO ĐIỀU CHỈNH ĐỊA BÀN VÙNG KINH TẾ XÃ HỘI ĐẶC BIỆT KHÓ KHĂN');
+        } else
+            return view('errors.notlogin');
+    }
+    function mau2h_tt67() {
+        if (Session::has('admin')) {
+            return view('reports.thongtu67.Mau2h_ThPCTHTG')
+                ->with('pageTitle','TỔNG HỢP PHỤ CẤP THU HÚT TĂNG, GIẢM DO ĐIỀU CHỈNH ĐỊA BÀN VÙNG KINH TẾ XÃ HỘI ĐẶC BIỆT KHÓ KHĂN');
         } else
             return view('errors.notlogin');
     }

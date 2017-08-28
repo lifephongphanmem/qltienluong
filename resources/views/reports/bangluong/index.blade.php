@@ -100,6 +100,37 @@
                             !!}
                         </div>
                     </div>
+                    @if(session('admin')->level=='H')
+                        <div class="form-group">
+                            <label class="col-md-4 control-label"> Đơn vị<span class="require">*</span></label>
+                            <div class="col-md-8">
+                                <select id="madv" name="madv" class="form-control">
+                                    <option value="">Tất cả các đơn vị</option>
+                                    @if(isset($model_dv))
+                                        @foreach($model_dv as $dv)
+                                            <option value="{{$dv->madv}}">{{$dv->tendv}}</option>
+                                        @endforeach
+                                    @endif
+                                </select>
+                            </div>
+                        </div>
+                    @endif
+
+                    @if(session('admin')->level=='T')
+                        <div class="form-group">
+                            <label class="col-md-4 control-label"> Khu vực, địa bàn<span class="require">*</span></label>
+                            <div class="col-md-8">
+                                <select id="madv" name="madv" class="form-control">
+                                    <option value="">Tất cả các đơn vị</option>
+                                    @if(isset($model_dvbc))
+                                        @foreach($model_dvbc as $dv)
+                                            <option value="{{$dv->madvbc}}">{{$dv->tendvbc}}</option>
+                                        @endforeach
+                                    @endif
+                                </select>
+                            </div>
+                        </div>
+                    @endif
 
                     <input type="hidden" name="_token" value="{{ csrf_token() }}">
                 </div>
@@ -199,6 +230,38 @@
                             !!}
                         </div>
                     </div>
+
+                    @if(session('admin')->level=='H')
+                        <div class="form-group">
+                            <label class="col-md-4 control-label"> Đơn vị<span class="require">*</span></label>
+                            <div class="col-md-8">
+                                <select id="madv" name="madv" class="form-control">
+                                    <option value="">Tất cả các đơn vị</option>
+                                    @if(isset($model_dv))
+                                        @foreach($model_dv as $dv)
+                                            <option value="{{$dv->madv}}">{{$dv->tendv}}</option>
+                                        @endforeach
+                                    @endif
+                                </select>
+                            </div>
+                        </div>
+                    @endif
+
+                    @if(session('admin')->level=='T')
+                        <div class="form-group">
+                            <label class="col-md-4 control-label"> Khu vực, địa bàn<span class="require">*</span></label>
+                            <div class="col-md-8">
+                                <select id="madv" name="madv" class="form-control">
+                                    <option value="">Tất cả các đơn vị</option>
+                                    @if(isset($model_dvbc))
+                                        @foreach($model_dvbc as $dv)
+                                            <option value="{{$dv->madvbc}}">{{$dv->tendvbc}}</option>
+                                        @endforeach
+                                    @endif
+                                </select>
+                            </div>
+                        </div>
+                    @endif
 
                     <input type="hidden" name="_token" value="{{ csrf_token() }}">
                 </div>

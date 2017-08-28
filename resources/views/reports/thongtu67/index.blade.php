@@ -25,6 +25,11 @@
                                 <li><a href="#" data-target="#chitiet-modal" data-toggle="modal" onclick="baocao('{{$furl.'mau2a2_tt67'}}')">Báo cáo nhu cầu kinh phí thực hiện nghị định 47/2017/NĐ-CP (Mẫu 2a/2)</a></li>
                                 <li><a href="#" data-target="#chitiet-modal" data-toggle="modal" onclick="baocao('{{$furl.'mau2b_tt67'}}')">Báo cáo tổng hợp quỹ trợ cấp tăng thêm của cán bộ xã, phường, thị trấn đã nghỉ việc (Mẫu 2b)</a></li>
 
+                                <li><a href="#" data-target="#chitiet-modal" data-toggle="modal" onclick="baocao('{{$furl.'mau2c_tt67'}}')">Báo cáo nhu cầu chênh lệch (Mẫu 2c)</a></li>
+                                <li><a href="#" data-target="#chitiet-modal" data-toggle="modal" onclick="baocao('{{$furl.'mau2d_tt67'}}')">Tổng hợp kinh phí tăng thêm để thực hiện chế độ phụ cấp đối với cán bộ không chuyên trách (Mẫu 2d)</a></li>
+                                <li><a href="#" data-target="#chitiet-modal" data-toggle="modal" onclick="baocao('{{$furl.'mau2e_tt67'}}')">Tổng hợp kinh phí tăng, giảm do điều chỉnh địa bàn vùng kinh tế xã hội đặc biệt khó khăn (Mẫu 2e)</a></li>
+                                <li><a href="#" data-target="#chitiet-modal" data-toggle="modal" onclick="baocao('{{$furl.'mau2g_tt67'}}')">Tổng hợp phụ cấp ưu đãi tăng, giảm do điều chỉnh địa bàn vùng kinh tế xã hội đặc biệt khó khăn (Mẫu 2g)</a></li>
+                                <li><a href="#" data-target="#chitiet-modal" data-toggle="modal" onclick="baocao('{{$furl.'mau2h_tt67'}}')">tổng hợp phụ cấp thu hút tăng, giảm do điều chỉnh địa bàn vùng kinh tế xã hội đặc biệt khó khăn (Mẫu 2h)</a></li>
                             </ol>
                         </div>
                     </div>
@@ -82,6 +87,38 @@
                                         !!}
                                     </div>
                                 </div>
+
+                                @if(session('admin')->level=='H')
+                                    <div class="form-group">
+                                        <label class="col-md-4 control-label"> Đơn vị<span class="require">*</span></label>
+                                        <div class="col-md-8">
+                                            <select id="madv" name="madv" class="form-control">
+                                                <option value="">Tất cả các đơn vị</option>
+                                                @if(isset($model_dv))
+                                                    @foreach($model_dv as $dv)
+                                                        <option value="{{$dv->madv}}">{{$dv->tendv}}</option>
+                                                    @endforeach
+                                                @endif
+                                            </select>
+                                        </div>
+                                    </div>
+                                @endif
+
+                                @if(session('admin')->level=='T')
+                                    <div class="form-group">
+                                        <label class="col-md-4 control-label"> Khu vực, địa bàn<span class="require">*</span></label>
+                                        <div class="col-md-8">
+                                            <select id="madv" name="madv" class="form-control">
+                                                <option value="">Tất cả các đơn vị</option>
+                                                @if(isset($model_dvbc))
+                                                    @foreach($model_dvbc as $dv)
+                                                        <option value="{{$dv->madvbc}}">{{$dv->tendvbc}}</option>
+                                                    @endforeach
+                                                @endif
+                                            </select>
+                                        </div>
+                                    </div>
+                                @endif
 
                                 <input type="hidden" name="_token" value="{{ csrf_token() }}">
                             </div>

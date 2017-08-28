@@ -6,6 +6,7 @@ use App\bangluong;
 use App\bangluong_ct;
 use App\dmchucvucq;
 use App\dmdonvi;
+use App\dmdonvibaocao;
 use App\dmkhoipb;
 use App\dutoanluong;
 use Illuminate\Http\Request;
@@ -18,8 +19,13 @@ class baocaobangluongController extends Controller
 {
     function index() {
         if (Session::has('admin')) {
+            $macqcq=session('admin')->madv;
+            $model_dv=dmdonvi::where('macqcq',$macqcq)->orwhere('madv',$macqcq)->get();
+            $model_dvbc=dmdonvibaocao::where('level','H')->get();
             return view('reports.bangluong.index')
                 ->with('furl','/bao_cao/bang_luong/')
+                ->with('model_dv',$model_dv)
+                ->with('model_dvbc', $model_dvbc)
                 ->with('pageTitle','Báo cáo số lượng, chất lượng cán bộ');
         } else
             return view('errors.notlogin');

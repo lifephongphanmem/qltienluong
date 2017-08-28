@@ -370,6 +370,12 @@ Route::group(['prefix'=>'tong_hop_bao_cao'],function(){
     Route::post('mau2a2_tt67','baocaothongtu67Controller@mau2a2_tt67');
     Route::post('mau2b_tt67','baocaothongtu67Controller@mau2b_tt67');
 
+    Route::post('mau2c_tt67','baocaothongtu67Controller@mau2c_tt67');
+    Route::post('mau2d_tt67','baocaothongtu67Controller@mau2d_tt67');
+    Route::post('mau2e_tt67','baocaothongtu67Controller@mau2e_tt67');
+    Route::post('mau2g_tt67','baocaothongtu67Controller@mau2g_tt67');
+    Route::post('mau2h_tt67','baocaothongtu67Controller@mau2h_tt67');
+
 });
 
 Route::group(['prefix'=>'tra_cuu'],function(){
