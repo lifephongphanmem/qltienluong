@@ -208,7 +208,7 @@
                         <li><a href="{{url('/tra_cuu/ho_so')}}">Hồ sơ cán bộ</a></li>
                         <li><a href="{{url('/tra_cuu/luong')}}">Quá trình hưởng lương</a></li>
                         <li><a href="{{url('/tra_cuu/phu_cap')}}">Quá trình phụ cấp</a></li>
-                        <li><a href="{{url('/tra_cuu/phu_cap')}}">Bảng lương</a></li>
+                        <li><a href="{{url('/tra_cuu/chi_luong')}}">Chi trả lương</a></li>
 					</ul>
 				</li>
 				<li>
@@ -218,9 +218,9 @@
 					<span class="arrow "></span>
 					</a>
 					<ul class="sub-menu">
-                        <li><a href="{{url('bao_cao/don_vi')}}">Báo cáo số lượng, chất lượng cán bộ</a></li>
+                        <li><a href="{{url('bao_cao/don_vi')}}">Báo cáo nhân sự</a></li>
                         <!--li><a href="{{url('bao_cao/mau_chuan')}}">Báo cáo theo thông tư, quyết định</a></li-->
-                        <li><a href="{{url('bao_cao/bang_luong')}}">Bảng lương</a></li>
+                        <li><a href="{{url('bao_cao/bang_luong')}}">Báo cáo chi trả lương</a></li>
 					</ul>
 				</li>
                 <!-- dành cho đơn vị chủ quản -->

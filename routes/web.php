@@ -395,6 +395,12 @@ Route::group(['prefix'=>'tra_cuu'],function(){
         Route::get('','hosoluongController@search');
         Route::post('ket_qua','hosoluongController@result');
     });
+
+    Route::group(['prefix'=>'chi_luong'],function(){
+        Route::get('','bangluongController@search');
+        Route::post('ket_qua','bangluongController@result');
+    });
+
     Route::group(['prefix'=>'phu_cap'],function(){
         Route::get('','hosophucapController@search');
         Route::post('ket_qua','hosophucapController@result');

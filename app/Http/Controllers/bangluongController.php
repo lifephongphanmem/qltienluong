@@ -7,6 +7,7 @@ use App\bangluong_ct;
 use App\bangluongphucap;
 use App\dmchucvucq;
 use App\dmdonvi;
+use App\dmdonvibaocao;
 use App\dmphucap;
 use App\hosocanbo;
 use App\ngachbac;
@@ -649,4 +650,37 @@ class bangluongController extends Controller
         );
         return Response::download($file, 'MauC02ahd.xlsx', $headers);
     }
+
+    //<editor-fold desc="Tra cứu">
+    function search(){
+        if (Session::has('admin')) {
+            $macqcq=session('admin')->madv;
+            $model_dv=dmdonvi::where('macqcq',$macqcq)->orwhere('madv',$macqcq)->get();
+            $model_dvbc=dmdonvibaocao::where('level','H')->get();
+            $m_pc=dmphucap::all('mapc','tenpc','hesopc')->toArray();
+            $m_pln=ngachbac::select('tennb','plnb','msngbac')->distinct()->get();
+            $m_plnb=ngachbac::select('plnb')->distinct()->get();
+
+            return view('search.chiluong.index')
+                ->with('model_dv', $model_dv)
+                ->with('model_dvbc', $model_dvbc)
+                ->with('m_pc',$m_pc)
+                ->with('m_pln',$m_pln)
+                ->with('m_plnb',$m_plnb)
+                ->with('pageTitle','Tra cứu chi trả lương');
+        } else
+            return view('errors.notlogin');
+    }
+
+    function result(Request $request){
+        if (Session::has('admin')) {
+            $model=bangluong::all();
+
+            return view('search.chiluong.result')
+                ->with('model',$model)
+                ->with('pageTitle','Kết quả tra cứu chi trả lương của cán bộ');
+        } else
+            return view('errors.notlogin');
+    }
+    //</editor-fold>
 }

@@ -35,11 +35,7 @@ class hosocanboController extends Controller
         if (Session::has('admin')) {
 
             //$m_hs=hosocanbo::where('madv',session('admin')->maxa)->get();
-            $m_hs=hosocanbo::join('dmchucvucq', 'hosocanbo.macvcq', '=', 'dmchucvucq.macvcq')
-                ->select('hosocanbo.*', 'dmchucvucq.sapxep')
-                ->where('hosocanbo.theodoi','1')
-                ->where('hosocanbo.madv',session('admin')->madv)
-                ->orderby('dmchucvucq.sapxep')
+            $m_hs=hosocanbo::where('madv',session('admin')->madv)
                 ->get();
 
             $dmphongban=dmphongban::all('mapb','tenpb')->toArray();
@@ -101,7 +97,7 @@ class hosocanboController extends Controller
             $model_dt=array_column(dmdantoc::select(DB::raw('dantoc as maso'),'dantoc')->get()->toarray(),'dantoc','maso');
             //$m_pb= dmphongban::where('madv',session('admin')->madv)->get();
             $m_pb= dmphongban::all();
-            $m_cvcq= dmchucvucq::where('makhoipb',$makhoipb)->get();
+            $m_cvcq= dmchucvucq::all();
             $m_cvd= dmchucvud::all();
             $m_plnb=ngachbac::select('plnb')->distinct()->get();
             $m_pln=ngachbac::select('tennb','plnb','msngbac')->distinct()->get();
@@ -179,7 +175,7 @@ class hosocanboController extends Controller
             $model_dt=array_column(dmdantoc::select(DB::raw('dantoc as maso'),'dantoc')->get()->toarray(),'dantoc','maso');
             //$m_pb= dmphongban::where('madv',session('admin')->madv)->get();
             $m_pb= dmphongban::all();
-            $m_cvcq= dmchucvucq::where('makhoipb',$makhoipb)->get();
+            $m_cvcq= dmchucvucq::all();
             $m_cvd= dmchucvud::all();
             $m_plnb=ngachbac::select('plnb')->distinct()->get();
             $m_pln=ngachbac::select('tennb','plnb','msngbac')->distinct()->get();
