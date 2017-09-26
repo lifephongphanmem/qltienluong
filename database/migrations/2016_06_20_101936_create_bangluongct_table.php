@@ -15,14 +15,8 @@ class CreateBangluongctTable extends Migration
         Schema::create('bangluong_ct', function (Blueprint $table) {
             $table->increments('id');
             $table->string('mabl', 50)->nullable();
-            $table->foreign('mabl')->references('mabl')->on('bangluong')->onUpdate('cascade')->onDelete('cascade');
             $table->string('macvcq', 50)->nullable();
-            $table->foreign('macvcq')->references('macvcq')->on('dmchucvucq')->onUpdate('cascade')->onDelete('set null');
             $table->string('mapb', 50)->nullable();
-            $table->foreign('mapb')->references('mapb')->on('dmphongban')->onUpdate('cascade')->onDelete('set null');
-           // $table->integer('id_nb', 50)->length(10)->unsigned();//tham chiếu bảng ngachbac lấy mã, bậc, hệ số,....
-            $table->integer('id_nb', false, true)->length(10)->nullable();//dung cái này do lỗi ->unsigned() tạo 2 khóa chính
-            $table->foreign('id_nb')->references('id')->on('ngachbac')->onUpdate('cascade')->onDelete('set null');
 
             $table->string('msngbac', 50)->nullable();
             $table->string('macanbo', 50)->nullable();
@@ -30,6 +24,7 @@ class CreateBangluongctTable extends Migration
             $table->string('masoms', 50)->nullable();
             $table->double('heso')->default(0);
             $table->double('vuotkhung')->default(0);
+
             $table->double('pcct')->default(0);
             $table->double('pckct')->default(0);
             $table->double('pck')->default(0);
@@ -51,10 +46,8 @@ class CreateBangluongctTable extends Migration
             $table->double('pclt')->default(0);
             $table->double('pcd')->default(0);
             $table->double('pctr')->default(0);
-            $table->double('ptbhxh')->default(0);
-            $table->double('ptbhyt')->default(0);
-            $table->double('ptkpcd')->default(0);
-            $table->double('ptbhtn')->default(0);
+            $table->double('pctnvk')->default(0);
+
             $table->double('tonghs')->default(0);
             $table->double('ttl')->default(0);
             $table->double('giaml')->default(0);

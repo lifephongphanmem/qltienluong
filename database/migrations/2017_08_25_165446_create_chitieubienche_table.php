@@ -34,6 +34,6 @@ class CreateChitieubiencheTable extends Migration
      */
     public function down()
     {
-        Schema::drop('bangluong_ct');
+        Schema::drop('chitieubienche');
     }
 }

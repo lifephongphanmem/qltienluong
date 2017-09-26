@@ -21,7 +21,27 @@ class CreateBangluongTable extends Migration
             $table->date('ngaylap')->nullable();
             $table->string('nguoilap')->nullable();
             $table->string('ghichu')->nullable();
-            $table->double('luongcb')->default(0)->nullable(); //lưu lại ko hiển thị ra màn hình
+            $table->string('manguonkp',50)->nullable();
+            $table->string('linhvuchoatdong')->nullable();
+
+            $table->double('phantramhuong')->default(100);
+            $table->double('luongcb')->default(0);
+            $table->double('luongnb')->default(0);//tổng lương ngạch bậc
+            $table->double('pckv')->default(0);//khu vực
+            $table->double('pccv')->default(0);//chưc vự
+            $table->double('pctn')->default(0);//thâm niên
+            $table->double('pctnvk')->default(0);//thâm niên vượt khung
+            $table->double('pcudn')->default(0);//ưu đãi ngành
+            $table->double('pcth')->default(0);//thu hút
+            $table->double('pctnn')->default(0);//thâm niên ngành
+            $table->double('pccovu')->default(0);//công vụ
+            $table->double('pcdang')->default(0);//đảng
+            $table->double('pckn')->default(0);//kiêm nhiệm
+            $table->double('pck')->default(0);//khác
+
+            $table->date('ngaygui')->nullable();
+            $table->string('nguoigui')->nullable();
+            $table->string('trangthai')->nullable();
             $table->string('madv',50);
             $table->timestamps();
         });

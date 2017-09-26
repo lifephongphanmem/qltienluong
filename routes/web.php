@@ -82,12 +82,6 @@ Route::group(['prefix'=>'danh_muc'],function(){
         Route::get('del/{id}','dmdantocController@destroy');
     });
 
-    Route::group(['prefix'=>'quan_he_gd'],function(){
-        Route::get('index','dmquanhegdController@index');
-        Route::get('store','dmquanhegdController@store');
-        Route::get('del/{id}','dmquanhegdController@destroy');
-    });
-
     Route::group(['prefix'=>'phu_cap'],function(){
         Route::get('index','dmphucapController@index');
         Route::get('store','dmphucapController@store');
@@ -111,14 +105,6 @@ Route::group(['prefix'=>'danh_muc'],function(){
         Route::get('ma_so={level}','dmkhoipbController@index');
         Route::get('store','dmkhoipbController@store');
         Route::get('del/{id}','dmkhoipbController@destroy');
-    });
-
-    Route::group(['prefix'=>'bao_mat'],function(){
-        Route::get('index','dmbaomatController@index');
-        Route::get('get','dmbaomatController@getinfo');
-        Route::get('add','dmbaomatController@store');
-        Route::get('update','dmbaomatController@update');
-        Route::get('del/{id}','dmbaomatController@destroy');
     });
 
     Route::group(['prefix'=>'khu_vuc'],function(){
@@ -147,6 +133,18 @@ Route::group(['prefix'=>'danh_muc'],function(){
         Route::get('ma_so={taikhoan}/permission','UsersController@permission');
         Route::post('ma_so={taikhoan}/uppermission','UsersController@uppermission');
         Route::get('del_taikhoan/{madv}','UsersController@destroy');
+    });
+
+    Route::group(['prefix'=>'nguon_kinh_phi'],function(){
+        Route::get('index','dmnguonkinhphiController@index');
+        Route::get('store','dmnguonkinhphiController@store');
+        Route::get('del/{id}','dmnguonkinhphiController@destroy');
+    });
+//chưa làm
+    Route::group(['prefix'=>'ngach_bac'],function(){
+        Route::get('index','nhomngachluongController@index');
+        Route::get('store','nhomngachluongController@store');
+        Route::get('del/{id}','nhomngachluongController@destroy');
     });
 });
 

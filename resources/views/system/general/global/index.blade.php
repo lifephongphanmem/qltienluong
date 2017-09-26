@@ -26,7 +26,7 @@
                     <div class="caption">
                     </div>
                     <div class="actions">
-                        @if(session('admin')->sadmin == 'sa' || session('admin')->sadmin == 'ssa')
+                        @if(session('admin')->sadmin == 'SA' || session('admin')->sadmin == 'SSA')
                             <a href="{{url($url.'maso='.$model->id.'/edit_global')}}" class="btn btn-default btn-sm">
                                 <i class="fa fa-edit"></i> Chỉnh sửa </a>
                         @endif

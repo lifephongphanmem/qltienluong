@@ -252,7 +252,8 @@
                                 <li><a href="{{url('danh_muc/cong_tac/index')}}">Phân loại công tác</a></li>
                                 <li><a href="{{url('danh_muc/phu_cap/index')}}">Phụ cấp</a></li>
                                 <li><a href="{{url('danh_muc/dan_toc/index')}}">Dân tộc</a></li>
-
+                                <li><a href="{{url('danh_muc/nguon_kinh_phi/index')}}">Nguồn kinh phí</a></li>
+                                <li><a href="{{url('danh_muc/ngach_bac/index')}}">Mã ngạch lương</a></li>
                             </ul>
                         </li>
                         <li>

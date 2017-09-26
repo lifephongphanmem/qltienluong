@@ -13,7 +13,19 @@ class CreateDutoanluongTable extends Migration
      */
     public function up()
     {
-        //
+        Schema::create('dutoanluong', function (Blueprint $table) {
+            $table->increments('id');
+            $table->string('madv')->nullable();
+            $table->string('namns')->nullable();
+            $table->double('luongnb')->default(0);
+            $table->double('luonghs')->default(0);
+            $table->double('luongbh')->default(0);
+            $table->double('luongnb_dt')->default(0);
+            $table->double('luonghs_dt')->default(0);
+            $table->double('luongbh_dt')->default(0);
+            $table->string('ghichu')->nullable();
+            $table->timestamps();
+        });
     }
 
     /**
@@ -23,6 +35,6 @@ class CreateDutoanluongTable extends Migration
      */
     public function down()
     {
-        //
+        Schema::drop('dutoanluong');
     }
 }

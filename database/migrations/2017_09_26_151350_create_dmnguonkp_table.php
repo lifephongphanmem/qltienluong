@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateDmbaomatTable extends Migration
+class CreateDmnguonkpTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,11 +13,11 @@ class CreateDmbaomatTable extends Migration
      */
     public function up()
     {
-        Schema::create('dmbaomat', function (Blueprint $table) {
+        Schema::create('dmnguonkinhphi', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('level')->nullable();
-            $table->string('macapdo')->nullable();
-            $table->string('tencapdo')->nullable();
+            $table->string('manguonkp')->nullable();
+            $table->string('tennguonkp')->nullable();
+            $table->string('linhvuchoatdong')->nullable();
             $table->string('ghichu')->nullable();
             $table->timestamps();
         });
@@ -30,6 +30,6 @@ class CreateDmbaomatTable extends Migration
      */
     public function down()
     {
-        //
+        Schema::drop('dmnguonkinhphi');
     }
 }

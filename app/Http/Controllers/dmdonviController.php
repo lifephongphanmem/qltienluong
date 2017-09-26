@@ -61,9 +61,9 @@ class dmdonviController extends Controller
 
     function edit_local($madv){
         if (Session::has('admin')) {
-            if((session('admin')->level=='X'&&session('admin')->maxa==$madv)
-                || (session('admin')->level=='T'&&session('admin')->matinh==$madv)
-                || (session('admin')->level=='H'&&session('admin')->mahuyen==$madv)){
+            if((session('admin')->level=='X'&&session('admin')->madv==$madv)
+                || (session('admin')->level=='T'&&session('admin')->madv==$madv)
+                || (session('admin')->level=='H'&&session('admin')->madv==$madv)){
                 $model=dmdonvi::where('madv',$madv)->first();
                 $makpb=getMaKhoiPB(session('admin')->maxa);
                 $model_kpb=dmkhoipb::select('makhoipb','tenkhoipb')->where('makhoipb',$makpb)->get()->toarray();
