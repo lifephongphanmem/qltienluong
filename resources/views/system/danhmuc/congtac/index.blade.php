@@ -32,10 +32,10 @@
             <div class="portlet light bordered">
                 <div class="portlet-title">
                     <div class="caption">
-                        <b>DANH MỤC PHÂN LOẠI CÔNG TÁC</b>
+                        <b>DANH MỤC NHÓM PHÂN LOẠI CÔNG TÁC</b>
                     </div>
                     <div class="actions">
-                        <button type="button" id="_btnaddPB" class="btn btn-success btn-xs" onclick="addCV()"><i class="fa fa-plus"></i>&nbsp;Thêm mới phân loại</button>
+                        <button type="button" id="_btnaddPB" class="btn btn-success btn-xs" onclick="add()"><i class="fa fa-plus"></i>&nbsp;Thêm mới phân loại</button>
                     </div>
                 </div>
                 <div class="portlet-body form-horizontal">
@@ -44,9 +44,8 @@
                             <tr>
                                 <th class="text-center" style="width: 10%">STT</th>
                                 <th class="text-center">Phân loại công tác</th>
-                                <th class="text-center">Kiểu công tác</th>
-                                <th class="text-center">Tên công tác</th>
-                                <th class="text-center" style="width: 10%">Nhóm công tác</th>
+                                <th class="text-center">Loại hình đơn vị</th>
+                                <th class="text-center">Ghi chú</th>
                                 <th class="text-center">Thao tác</th>
                             </tr>
                         </thead>
@@ -55,14 +54,15 @@
                                 @foreach($model as $key=>$value)
                                     <tr>
                                         <td class="text-center">{{$key+1}}</td>
-                                        <td name="phanloaict">{{$value->phanloaict}}</td>
-                                        <td name="kieuct">{{$value->kieuct}}</td>
-                                        <td name="tenct">{{$value->tenct}}</td>
-                                        <td class="text-center" name="nhomct">{{$value->nhomct}}</td>
+                                        <td>{{$value->tencongtac}}</td>
+                                        <td>{{$value->maphanloai}}</td>
+                                        <td>{{$value->ghichu}}</td>
                                         <td>
-                                            <button type="button" onclick="editCV(this, {{$value->id}})" class="btn btn-info btn-xs mbs">
+                                            <a href="{{url($furl.'ma_so='.$value->macongtac)}}" class="btn btn-default btn-xs">
+                                                <i class="fa fa-edit"></i>&nbsp; Chi tiết</a>
+                                            <button type="button" onclick="editCV('{{$value->macongtac}}')" class="btn btn-default btn-xs">
                                                 <i class="fa fa-edit"></i>&nbsp; Chỉnh sửa</button>
-                                            <button type="button" onclick="cfDel('/danh_muc/cong_tac/del/{{$value->id}}')" class="btn btn-danger btn-xs mbs" data-target="#delete-modal-confirm" data-toggle="modal">
+                                            <button type="button" onclick="cfDel('/danh_muc/cong_tac/del/{{$value->id}}')" class="btn btn-default btn-xs" data-target="#delete-modal-confirm" data-toggle="modal">
                                                 <i class="fa fa-trash-o"></i>&nbsp; Xóa</button>
                                         </td>
                                     </tr>
@@ -76,7 +76,7 @@
     </div>
 
     <!--Modal thông tin chức vụ -->
-    <div id="chucvu-modal" tabindex="-1" role="dialog" aria-hidden="true" class="modal fade">
+    <div id="create-modal" tabindex="-1" role="dialog" aria-hidden="true" class="modal fade">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header modal-header-primary">
@@ -85,99 +85,123 @@
                 </div>
                 <div class="modal-body">
                     <label class="form-control-label">Phân loại công tác<span class="require">*</span></label>
-                    {!!Form::text('phanloaict', null, array('id' => 'phanloaict','class' => 'form-control','required'=>'required','autofocus'=>'true'))!!}
+                    {!!Form::text('tencongtac', null, array('id' => 'tencongtac','class' => 'form-control','required'=>'required','autofocus'=>'true'))!!}
 
-                    <label class="form-control-label">Kiểu công tác<span class="require">*</span></label>
-                    {!!Form::text('kieuct', null, array('id' => 'kieuct','class' => 'form-control'))!!}
+                    <label class="form-control-label">Đơn vị áp dụng</label>
+                    {!!Form::text('maphanloai', null, array('id' => 'maphanloai','class' => 'form-control'))!!}
 
-                    <label class="form-control-label">Tên công tác<span class="require">*</span></label>
-                    {!!Form::text('tenct', null, array('id' => 'tenct','class' => 'form-control'))!!}
+                    <label class="form-control-label">Ghi chú</label>
+                    {!!Form::textarea('ghichu', null, array('id' => 'ghichu','class' => 'form-control','rows'=>'3'))!!}
 
-                    <label class="form-control-label">Nhóm công tác</label>
-                    {!!Form::text('nhomct', null, array('id' => 'nhomct','class' => 'form-control'))!!}
-
-                    <input type="hidden" id="id_ct" name="id_ct"/>
+                    <input type="hidden" id="id" name="id"/>
+                    <input type="hidden" id="macongtac" name="macongtac"/>
                 </div>
                 <div class="modal-footer">
                     <button type="button" data-dismiss="modal" class="btn btn-default">Hủy thao tác</button>
-                    <button type="submit" id="submit" name="submit" value="submit" class="btn btn-primary" onclick="cfCV()">Đồng ý</button>
+                    <button type="submit" id="submit" name="submit" value="submit" class="btn btn-primary" onclick="cfPB()">Đồng ý</button>
                 </div>
             </div>
         </div>
     </div>
 
     <script>
-        function addCV(){
-            var date=new Date();
-            $('#phanloaict').val('');
-            $('#kieuct').val('');
-            $('#nhomct').attr('value','99');
-            $('#tenct').val('');
-            $('#id_ct').val(0);
-            $('#chucvu-modal').modal('show');
+        function add(){
+            $('#tencongtac').val('');
+            $('#maphanloai').val('');
+            $('#macongtac').val('');
+            $('#id').val(0);
+            $('#create-modal').modal('show');
         }
 
-        function editCV(e, id){
-            var tr = $(e).closest('tr');
-            $('#phanloaict').val($(tr).find('td[name=phanloaict]').text());
-            $('#kieuct').val($(tr).find('td[name=kieuct]').text());
-            $('#tenct').val($(tr).find('td[name=tenct]').text());
-            $('#nhomct').attr('value',$(tr).find('td[name=nhomct]').text());
-            $('#id_ct').val(id);
-            $('#chucvu-modal').modal('show');
+        function editCV(macongtac){
+            var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
+            $.ajax({
+                url: '{{$furl}}' + 'get',
+                type: 'GET',
+                data: {
+                    _token: CSRF_TOKEN,
+                    macongtac: macongtac
+                },
+                dataType: 'JSON',
+                success: function (data) {
+                    $('#maphanloai').val(data.maphanloai);
+                    $('#tencongtac').val(data.tencongtac);
+                    $('#macongtac').val(data.macongtac);
+                    $('#ghichu').val(data.ghichu);
+                    $('#id').val(data.id);
+                },
+                error: function(message){
+                    toastr.error(message,'Lỗi!');
+                }
+            });
+            $('#create-modal').modal('show');
         }
 
-        function cfCV(){
+        function cfPB(){
             var valid=true;
             var message='';
 
-            var phanloaict=$('#phanloaict').val();
-            var kieuct=$('#kieuct').val();
-            var tenct=$('#tenct').val();
-            var nhomct=$('#nhomct').val();
-            var id=$('#id_ct').val();
+            var id = $('#id').val();
+            var maphanloai = $('#maphanloai').val();
+            var tencongtac = $('#tencongtac').val();
+            var macongtac = $('#macongtac').val();
+            var ghichu=$('#ghichu').val();
 
-            if(phanloaict==''){
+            if(tencongtac==''){
                 valid=false;
-                message +='Phân loại công tác không được bỏ trống \n';
-            }
-
-            if(kieuct==''){
-                valid=false;
-                message +='Kiểu công tác không được bỏ trống \n';
-            }
-            if(tenct==''){
-                valid=false;
-                message +='Tên công tác không được bỏ trống \n';
+                message +='Tên phân loại công tác không được bỏ trống \n';
             }
 
             if(valid){
                 var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
-                $.ajax({
-                    url: '/danh_muc/cong_tac/store',
-                    type: 'GET',
-                    data: {
-                        _token: CSRF_TOKEN,
-                        phanloaict: phanloaict,
-                        kieuct: kieuct,
-                        tenct: tenct,
-                        nhomct: nhomct,
-                        id: id
-                            },
-                    dataType: 'JSON',
-                    success: function (data) {
-                        if (data.status == 'success') {
-                            location.reload();
+                if(id==0){//Thêm mới
+                    $.ajax({
+                        url: '{{$furl}}' + 'add',
+                        type: 'GET',
+                        data: {
+                            _token: CSRF_TOKEN,
+                            maphanloai: maphanloai,
+                            macongtac: macongtac,
+                            tencongtac: tencongtac,
+                            ghichu: ghichu
+                        },
+                        dataType: 'JSON',
+                        success: function (data) {
+                            if (data.status == 'success') {
+                                location.reload();
+                            }
+                        },
+                        error: function(message){
+                            toastr.error(message);
                         }
-                    },
-                    error: function(message){
-                        alert(message);
-                    }
-                });
-                $('#chucvu-modal').modal('hide');
+                    });
+                }else{//Cập nhật
+                    $.ajax({
+                        url: '{{$furl}}' + 'update',
+                        type: 'GET',
+                        data: {
+                            _token: CSRF_TOKEN,
+                            macongtac: macongtac,
+                            maphanloai: maphanloai,
+                            tencongtac: tencongtac,
+                            ghichu: ghichu
+                        },
+                        dataType: 'JSON',
+                        success: function (data) {
+                            if (data.status == 'success') {
+                                location.reload();
+                            }
+                        },
+                        error: function(message){
+                            toastr.error(message,'Lỗi!!');
+                        }
+                    });
+                }
+                $('#create-modal').modal('hide');
             }else{
-                alert(message);
+                toastr.error(message,'Lỗi!.');
             }
+
             return valid;
         }
     </script>

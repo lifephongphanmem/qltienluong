@@ -15,8 +15,4 @@ class dmphucap extends Model
         'baohiem',
         'ghichu'
     ];
-
-    public function hosophucap() {
-        return $this->hasMany('App\hosophucap', 'mapc');
-    }
 }

@@ -71,9 +71,8 @@
                         </tbody>
                     </table>
                 </div>
-
                 <div class="row">
-                    <div class="col-md-offset-3 col-md-9">
+                    <div class="col-md-offset-4 col-md-8">
 
                         <div class="btn-group btn-group-solid">
                             <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="true">
@@ -90,13 +89,9 @@
                                 </li>
                             </ul>
                         </div>
-
-                        <button type="button" class="btn btn-default">
-                            <i class="fa fa-check"></i> Chốt bảng lương</button>
                         <a href="{{url('/chuc_nang/bang_luong/danh_sach')}}" class="btn btn-default"><i class="fa fa-reply"></i>&nbsp;Quay lại</a>
                     </div>
                 </div>
-
             </div>
         </div>
     </div>

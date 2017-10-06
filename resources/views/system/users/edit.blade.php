@@ -58,8 +58,8 @@
                                     <div class="form-group">
                                         <label class="control-label">Trạng thái</label>
                                         <select class="form-control" name="status" id="status">
-                                            <option value="Kích hoạt" {{($model->status == 'Kích hoat' ? 'selected' : '')}}>Kích hoạt</option>
-                                            <option value="Vô hiệu" {{($model->status == 'Vô hiệu' ? 'selected' : '')}}>Vô hiệu</option>
+                                            <option value="active" {{($model->status == 'active' ? 'selected' : '')}}>Kích hoạt</option>
+                                            <option value="disable" {{($model->status == 'disable' ? 'selected' : '')}}>Vô hiệu</option>
                                         </select>
                                     </div>
                                 </div>

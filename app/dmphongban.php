@@ -15,8 +15,4 @@ class dmphongban extends Model
         'sapxep',
         'madv'
     ];
-
-    public function bangluong_ct(){
-        return $this->hasMany('App\bangluong_ct','mapb');
-    }
 }

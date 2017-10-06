@@ -72,15 +72,9 @@
                 },
                 dataType: 'JSON',
                 success: function (data) {
-                    if(data.status == 'success'){
-                        var heso = data.message.split(';');
-                        $('#heso').val(heso[0]);
-                        $('#vuotkhung').val(heso[1]);
-                    }else{
-                        toastr.error('Không tìm thấy hệ số lương cho bậc lương này.','Lỗi!')
-                        $('#heso').val(0);
-                        $('#vuotkhung').val(0);
-                    }
+                    var heso = data.message.split(';');
+                    $('#heso').val(heso[0]);
+                    $('#vuotkhung').val(heso[1]);
                 }
             });
         } else {

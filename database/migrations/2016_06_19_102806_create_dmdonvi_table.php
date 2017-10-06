@@ -24,10 +24,11 @@ class CreateDmdonviTable extends Migration
             $table->string('diadanh')->nullable();
             $table->string('cdlanhdao')->nullable();
             $table->string('nguoilapbieu')->nullable();
-            $table->string('makhoipb')->nullable();
-            $table->string('level')->nullable();
+            $table->string('makhoipb')->nullable();//lĩnh vực hoạt động
+            $table->string('madvbc')->nullable();
 
             $table->string('capdonvi')->nullable();//đơn vị cấp X, H, T
+            $table->string('maphanloai')->nullable();//xác định đơn vị thuộc khối hcsn / xp
             $table->timestamps();
         });
     }

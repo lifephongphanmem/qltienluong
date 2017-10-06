@@ -72,7 +72,7 @@
                                 </div>
 
                                 <div class="tab-content">
-                                    @include('manage.hosocanbo.include.coban'))
+                                    @include('manage.hosocanbo.include.coban')
                                     @include('manage.hosocanbo.include.luong')
                                     @include('manage.hosocanbo.include.khac')
                                 </div>

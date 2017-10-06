@@ -58,8 +58,8 @@
                                     <div class="form-group">
                                         <label class="control-label">Trạng thái</label>
                                         <select class="form-control" name="status" id="status">
-                                            <option value="Kích hoạt" selected>Kích hoạt</option>
-                                            <option value="Vô hiệu">Vô hiệu</option>
+                                            <option value="active" selected>Kích hoạt</option>
+                                            <option value="disable">Vô hiệu</option>
                                         </select>
                                     </div>
                                 </div>

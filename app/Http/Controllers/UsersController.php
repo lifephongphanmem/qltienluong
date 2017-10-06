@@ -162,10 +162,28 @@ class UsersController extends Controller
         else{
             $ttuser = Users::where('username', $input['username'])->first();
 
-            $ttuser->macqcq='';
-            $ttuser->makhoipb='';
-            $ttuser->makhuvuc='';
-            $ttuser->madvbc='';
+            if($ttuser->level != 'SA'){
+                $model_donvi = dmdonvi::where('madv', $ttuser->madv)->first();
+                $model_donvibaocao = dmdonvibaocao::where('madvbc', $model_donvi->madvbc)->first();
+                $model_donvicapduoi = dmdonvi::where('macqcq', $ttuser->madv)->get();
+
+                //Kiểm tra xem có phải tài khoản thuộc đơn vị quản lý khu vực ko ?
+                if($model_donvibaocao->madvcq == $ttuser->madv){
+                    $ttuser->quanlykhuvuc=true;
+                }else{
+                    $ttuser->quanlykhuvuc=false;
+                }
+
+                //Kiểm tra xem đơn vị có quản lý đơn vị cấp dưới nào ko ?
+                if(count($model_donvicapduoi)>0){
+                    $ttuser->quanlynhom=true;
+                }else{
+                    $ttuser->quanlynhom=false;
+                }
+
+                $ttuser->macqcq=$model_donvi->macqcq;
+                $ttuser->madvbc=$model_donvi->madvbc;
+            }
             //kiểm tra xem user thuộc đơn vị nào, nếu ko thuộc đơn vị nào (trừ tài khoản quản trị) => đăng nhập ko thành công
         }
 
@@ -173,7 +191,7 @@ class UsersController extends Controller
         //thêm mã đơn vị báo cáo, mã khối phòng ban, mã cqcq
         //dd($ttuser);
         if (md5($input['password']) == $ttuser->password) {
-            if ($ttuser->status == "Kích hoạt") {
+            if ($ttuser->status == "active") {
                 Session::put('admin', $ttuser);
                 return redirect('')
                     ->with('pageTitle', 'Tổng quan');
@@ -287,23 +305,11 @@ class UsersController extends Controller
     {
         if (Session::has('admin')) {
             $model = Users::where('username',$username)->first();
-            $model_baomat=dmbaomat::select('macapdo','tencapdo','default_val')->where('level',$model->level)->get();
             $permission = json_decode(!empty($model->permission) ? $model->permission : getPermissionDefault($model->level));
-
-            //không dùng trực tiếp view do trường hợp người dùng thêm danh mục bảo mật
-            foreach($permission->view as $key=>$value){
-                foreach($model_baomat as $baomat){
-                    if($baomat->macapdo==$key){
-                        $baomat->default_val=$value;
-                    }
-                }
-            }
 
             return view('system.users.perms')
                 ->with('permission', $permission)
                 ->with('url', '/danh_muc/tai_khoan/')
-                ->with('model', $model)
-                ->with('model_baomat', $model_baomat)
                 ->with('model', $model)
                 ->with('pageTitle', 'Phân quyền cho tài khoản');
         } else

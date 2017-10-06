@@ -8,9 +8,12 @@ use App\bangluongphucap;
 use App\dmchucvucq;
 use App\dmdonvi;
 use App\dmdonvibaocao;
+use App\dmkhoipb;
+use App\dmnguonkinhphi;
 use App\dmphucap;
 use App\hosocanbo;
 use App\ngachbac;
+use App\ngachluong;
 use App\phucapdanghuong;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -27,191 +30,111 @@ class bangluongController extends Controller
 {
     function index(){
         if (Session::has('admin')) {
+            //khối phòng ban giờ là lĩnh vực hoạt động
+            $m_linhvuc=array_column(dmkhoipb::all()->toArray(),'tenkhoipb','makhoipb');
+            $m_nguonkp=array_column(dmnguonkinhphi::all()->toArray(),'tennguonkp','manguonkp');
+
             $model = bangluong::where('madv',session('admin')->maxa)->get();
+            foreach($model as $bl){
+                $bl->tennguonkp =isset($m_nguonkp[$bl->manguonkp]) ? $m_nguonkp[$bl->manguonkp]:'';
+            }
             return view('manage.bangluong.index')
                 ->with('furl','/chuc_nang/bang_luong/')
                 ->with('furl_ajax','/ajax/bang_luong/')
                 ->with('model',$model)
-                ->with('tendv',getTenDV(session('admin')->maxa))
+                ->with('m_linhvuc',$m_linhvuc)
+                ->with('m_nguonkp',$m_nguonkp)
                 ->with('pageTitle','Danh sách bảng lương');
         } else
             return view('errors.notlogin');
     }
 
+    //Insert + update bảng lương
     function store(Request $request){
-        if(!Session::has('admin')) {
-            $result = array(
-                'status' => 'fail',
-                'message' => 'permission denied',
-            );
-            die(json_encode($result));
+        $inputs=$request->all();
+        $model = bangluong::where('mabl',$inputs['mabl'])->first();
+
+        if(count($model)>0){
+            //update
+            $model->update($inputs);
+        }else{
+            //insert
+            $inputs['mabl']=session('admin')->madv .'_'.getdate()[0];
+            $inputs['madv']=session('admin')->madv;
+            $inputs['nguoilap']=session('admin')->name;
+            $inputs['ngaylap']=Carbon::now()->toDateTimeString();
+            $inputs['phantramhuong']=getDbl($inputs['phantramhuong']);
+
+            //Lấy tất cả cán bộ trong đơn vị
+            $m_cb=hosocanbo::where('madv',session('admin')->madv)
+                ->select('macanbo','tencanbo','macvcq','mapb','msngbac','heso','vuotkhung',DB::raw("'".$inputs['mabl']. "' as mabl"),
+                    'pck','pccv','pckv','pcth','pcdh','pcld','pcudn','pctn','pctnn','pcdbn','pcvk','pckn','pccovu','pcdbqh')
+                ->get();
+            $gnr=getGeneralConfigs();
+
+            foreach($m_cb as $cb){
+                //trong bảng danh mục là % vượt khung => sang bảng lương chuyển thành hệ số
+                $cb->vuotkhung=round((($cb->heso + $cb->pccv)*$cb->vuotkhung/100),2);
+
+                $ths=0;
+                $ths +=$cb->heso;
+                $ths +=$cb->vuotkhung;
+                $ths +=$cb->pck;
+                $ths +=$cb->pccv;
+                $ths +=$cb->pckv;
+                $ths +=$cb->pcth;
+                $ths +=$cb->pcdh;
+                $ths +=$cb->pcld;
+                $ths +=$cb->pcudn;
+                $ths +=$cb->pctn;
+                $ths +=$cb->pctnn;
+                $ths +=$cb->pcdbn;
+                $ths +=$cb->pcvk;
+                $ths +=$cb->pckn;
+                $ths +=$cb->pccovu;
+                $ths +=$cb->pcdbqh;
+                $ths +=$cb->pcbdhdcu;
+                $ths +=$cb->pctnvk;
+
+                $cb->tonghs=$ths;
+
+                $cb->ttl=$gnr['luongcb']*$ths*$inputs['phantramhuong']/100;
+                $luongnopbaohiem=$gnr['luongcb']*($cb->heso+$cb->pccv)*$inputs['phantramhuong']/100;
+
+                // chưa tính được các loại hệ số pải nộp bh
+                //tách bảng phụ cấp riêng ra - liên kết với bảng hosocanbo
+
+                $cb->stbhxh=$luongnopbaohiem*floatval($gnr['bhxh'])/100;
+                $cb->stbhyt=$luongnopbaohiem*floatval($gnr['bhyt'])/100;
+                $cb->stkpcd=$luongnopbaohiem*floatval($gnr['kpcd'])/100;
+                $cb->stbhtn=$luongnopbaohiem*floatval($gnr['bhtn'])/100;
+                $cb->ttbh=$cb->stbhxh+$cb->stbhyt+$cb->stkpcd + $cb->stbhtn;
+                $cb->luongtn=$cb->ttl - $cb->ttbh;
+
+                $cb->stbhxh_dv=$luongnopbaohiem*floatval($gnr['bhxh_dv'])/100;
+                $cb->stbhyt_dv=$luongnopbaohiem*floatval($gnr['bhyt_dv'])/100;
+                $cb->stkpcd_dv=$luongnopbaohiem*floatval($gnr['kpcd_dv'])/100;
+                $cb->stbhtn_dv=$luongnopbaohiem*floatval($gnr['bhtn_dv'])/100;
+                $cb->ttbh_dv=$cb->stbhxh_dv + $cb->stbhyt_dv + $cb->stkpcd_dv + $cb->stbhtn_dv;
+            }
+
+            bangluong::create($inputs);
+            bangluong_ct::insert($m_cb->toarray());
         }
 
-        $inputs=$request->all();
-        $mabl=session('admin')->madv .'.'.getdate()[0];
 
-        $ngaytu=$inputs['nam'].'-'.$inputs['thang'].'-01';
         /*
-        $m_cb=hosocanbo::where(function($query) use ($ngaytu){
-                $query->where('ngaytu','<=',$ngaytu)
-                    ->whereNull('ngayden');
-                })
-                ->orwhere(function($query) use ($ngaytu){
-                    $query->where('ngaytu','<=',$ngaytu)
-                        ->where('ngayden','>=',$ngaytu);
-                })
-            ->where('madv',session('admin')->madv)
-            ->get();
-        */
+         * $ngaytu=$inputs['nam'].'-'.$inputs['thang'].'-01';
         $m_cb=hosocanbo::where(function($query) use ($ngaytu){
             $query->where('ngaytu','<=',$ngaytu)
                 ->where('ngayden','>=',$ngaytu);
-            })->where('madv',session('admin')->madv)
-            ->select('macanbo','tencanbo','macvcq','mapb','msngbac','heso','vuotkhung',DB::raw($mabl. ' as mabl'))
+        })->where('madv',session('admin')->madv)
+            ->select('macanbo','tencanbo','macvcq','mapb','msngbac','heso','vuotkhung',DB::raw("'".$mabl. "' as mabl"),
+                'pck','pccv','pckv','pcth','pcdh','pcld','pcudn','pctn','pctnn','pcdbn','pcvk','pckn','pccovu','pcdbqh')
             ->get();
-
-        $m_pc=phucapdanghuong::where(function($query) use ($ngaytu){
-            $query->where('ngaytu','<=',$ngaytu)
-                ->where('ngayden','>=',$ngaytu);
-            })->where('madv',session('admin')->madv)
-            ->select('macanbo','mapc','hesopc','baohiem',DB::raw($mabl. ' as mabl'))
-            ->get();
-        $gnr=getGeneralConfigs();
-        //dd($m_pc);
-        $model = new bangluong();
-        $model->mabl=$mabl;
-        $model->madv=session('admin')->madv;
-        $model->thang=$inputs['thang'];
-        $model->nam=$inputs['nam'];
-        $model->noidung=$inputs['noidung'];
-        $model->nguoilap=session('admin')->name;
-        $model->ngaylap=Carbon::now()->toDateTimeString();
-        $model->save();
-
-        foreach($m_cb as $cb){
-            $pc_bh=$m_pc->where('macanbo',$cb->macanbo)->where('baohiem',1)->sum('hesopc');
-            $pc_kbh=$m_pc->where('macanbo',$cb->macanbo)->where('baohiem',0)->sum('hesopc');
-            $tonghs=$cb->heso+$pc_bh+$pc_kbh;
-            $cb->tonghs=$tonghs;
-            $cb->ttl=$tonghs*$gnr['luongcb'];
-
-            $nopbaohiem=($pc_kbh+$cb->heso)*$gnr['luongcb'];
-
-            $cb->stbhxh=$nopbaohiem*floatval($gnr['bhxh'])/100;
-            $cb->stbhyt=$nopbaohiem*floatval($gnr['bhyt'])/100;
-            $cb->stkpcd=$nopbaohiem*floatval($gnr['kpcd'])/100;
-            $cb->stbhtn=$nopbaohiem*floatval($gnr['bhtn'])/100;
-
-            $cb->ttbh=$cb->stbhxh+$cb->stbhyt+$cb->stkpcd + $cb->stbhtn;
-            $cb->luongtn=$cb->ttl - $cb->ttbh;
-
-            $cb->stbhxh_dv=$nopbaohiem*floatval($gnr['bhxh_dv'])/100;
-            $cb->stbhyt_dv=$nopbaohiem*floatval($gnr['bhyt_dv'])/100;
-            $cb->stkpcd_dv=$nopbaohiem*floatval($gnr['kpcd_dv'])/100;
-            $cb->stbhtn_dv=$nopbaohiem*floatval($gnr['bhtn_dv'])/100;
-            $cb->ttbh_dv=$cb->stbhxh_dv + $cb->stbhyt_dv + $cb->stkpcd_dv + $cb->stbhtn_dv;
-        }
-        bangluong_ct::insert($m_cb->toarray());
-        bangluongphucap::insert($m_pc->toarray());
-        /*
-        foreach($m_cb as $cb){
-            $ths=0;
-            $m_luongct=new bangluong_ct();
-            $m_luongct->mabl=$mabl;
-            $m_luongct->macanbo = $cb->macanbo;
-            $m_luongct->tencanbo  = $cb->tencanbo;
-            $m_luongct->macvcq = $cb->macvcq;
-            $m_luongct->mapb = $cb->mapb;
-            $m_luongct->msngbac = $cb->msngbac;
-
-            $m_luongct->heso=$cb->heso;
-            $ths +=$cb->heso;
-            $m_luongct->vuotkhung=$cb->vuotkhung;
-            $ths +=$cb->vuotkhung;
-            //$phucap=$m_pc->where('macanbo',$cb->macanbo);
-
-            //$m_luongct->pcct=$cb->pcct;
-            //$m_luongct->pckct=$cb->pckct;
-            $m_luongct->pck=$cb->pck;
-            $ths +=$cb->pck;
-            $m_luongct->pccv=$cb->pccv;
-            $ths +=$cb->pccv;
-            $m_luongct->pckv=$cb->pckv;
-            $ths +=$cb->pckv;
-            $m_luongct->pcth=$cb->pcth;
-            $ths +=$cb->pcth;
-            //$m_luongct->pcdd=$cb->pcdd;
-            $m_luongct->pcdh=$cb->pcdh;
-            $ths +=$cb->pcdh;
-            $m_luongct->pcld=$cb->pcld;
-            $ths +=$cb->pcld;
-            //$m_luongct->pcdbqh=$cb->pcdbqh;
-            $m_luongct->pcudn=$cb->pcudn;
-            $ths +=$cb->pcudn;
-            $m_luongct->pctn=$cb->pctn;
-            $ths +=$cb->pctn;
-            $m_luongct->pctnn=$cb->pctnn;
-            $ths +=$cb->pctnn;
-            $m_luongct->pcdbn=$cb->pcdbn;
-            $ths +=$cb->pcdbn;
-            $m_luongct->pcvk=$cb->pcvk;
-            $ths +=$cb->pcvk;
-            $m_luongct->pckn=$cb->pckn;
-            $ths +=$cb->pckn;
-            //$m_luongct->pcdang=$cb->pcdang;
-            //$m_luongct->pccovu=$cb->pccovu;
-            //$m_luongct->pclt=$cb->pclt;
-            //$m_luongct->pcd=$cb->pcd;
-            //$m_luongct->pctr=$cb->pctr;
-            $m_luongct->tonghs=$ths;
-            $ttl=$gnr['luongcb']*$ths;
-            $m_luongct->ttl=$ttl;
-               // chưa tính được các loại hệ số pải nộp bh
-               //tách bảng phụ cấp riêng ra - liên kết với bảng hosocanbo
-
-            $m_luongct->stbhxh=$ttl*floatval($gnr['bhxh'])/100;
-            $m_luongct->stbhyt=$ttl*floatval($gnr['bhyt'])/100;
-            $m_luongct->stkpcd=$ttl*floatval($gnr['kpcd'])/100;
-            $m_luongct->stbhtn=$ttl*floatval($gnr['bhtn'])/100;
-            $tbh=$m_luongct->stbhxh+$m_luongct->stbhyt+$m_luongct->stkpcd + $m_luongct->stbhtn;
-            $m_luongct->ttbh=$tbh;
-            $m_luongct->luongtn=$ttl-$tbh;
-
-            $m_luongct->stbhxh_dv=$ttl*floatval($gnr['bhxh_dv'])/100;
-            $m_luongct->stbhyt_dv=$ttl*floatval($gnr['bhyt_dv'])/100;
-            $m_luongct->stkpcd_dv=$ttl*floatval($gnr['kpcd_dv'])/100;
-            $m_luongct->stbhtn_dv=$ttl*floatval($gnr['bhtn_dv'])/100;
-            $m_luongct->ttbh_dv=$m_luongct->stbhxh_dv + $m_luongct->stbhyt_dv + $m_luongct->stkpcd_dv + $m_luongct->stbhtn_dv;
-
-            $m_luongct->save();
-        }
         */
-        $result['message'] = '/chuc_nang/bang_luong/maso='.$mabl;
-        $result['status'] = 'success';
-        die(json_encode($result));
-        //return redirect('/chucnang/luong/bangluong/'.$mabl);
 
-    }
-
-    function update(Request $request){
-        if(!Session::has('admin')) {
-            $result = array(
-                'status' => 'fail',
-                'message' => 'permission denied',
-            );
-            die(json_encode($result));
-        }
-
-        $inputs=$request->all();
-        $model = bangluong::find($inputs['id']);
-        $model->thang=$inputs['thang'];
-        $model->nam=$inputs['nam'];
-        $model->noidung=$inputs['noidung'];
-        $model->save();
-
-        $result['message'] = 'Cập nhật thành công.';
-        $result['status'] = 'success';
-        die(json_encode($result));
+        return redirect('/chuc_nang/bang_luong/maso='.$inputs['mabl']);
     }
 
     function show($mabl){
@@ -279,38 +202,21 @@ class bangluongController extends Controller
             die(json_encode($result));
         }
         $inputs = $request->all();
-        $model = bangluong::find($inputs['id']);
+        $model = bangluong::where('mabl',$inputs['mabl'])->first();
         die($model);
     }
 
     function detail($mabl){
         if (Session::has('admin')) {
             $model = bangluong_ct::where('mabl',$mabl)->first();
-
-            $m_nb = ngachbac::all('msngbac','plnb','tennb')->toArray();
-            $model->plnb = getInfoPLNB($model,$m_nb);
-            $model->tennb = getInfoTenNB($model,$m_nb);
+            $m_nb = ngachluong::where('msngbac',$model->msngbac)->first();
+            $model->tennb = $m_nb->tenngachluong;
             $model->tencanbo = Str::upper($model->tencanbo);
-
-            $model_phucap=bangluongphucap::join('dmphucap','bangluongphucap.mapc','dmphucap.mapc')
-                    ->select('bangluongphucap.*','dmphucap.tenpc')
-                    ->where('bangluongphucap.macanbo',$model->macanbo)
-                    ->where('bangluongphucap.mabl',$model->mabl)
-                    ->get();
-
-            $m_plnb = ngachbac::select('plnb')->distinct()->get();
-            $m_tennb = ngachbac::select('tennb')->where('plnb', '=', $model->plnb)->distinct()->get();
-            $m_bac = ngachbac::select('bac')->where('msngbac', '=', $model->msngbac)->get();
-            $m_pc=dmphucap::all('mapc','tenpc','hesopc')->toArray();
 
             return view('manage.bangluong.chitiet')
                 ->with('furl','/chuc_nang/bang_luong/')
                 ->with('model',$model)
-                ->with('m_plnb',$m_plnb)
-                ->with('m_tennb',$m_tennb)
-                ->with('model_phucap',$model_phucap)
-                ->with('m_bac',$m_bac)
-                ->with('m_pc',$m_pc)
+
                 ->with('pageTitle','Chi tiết bảng lương');
         } else
             return view('errors.notlogin');
@@ -318,49 +224,23 @@ class bangluongController extends Controller
 
     function updatect(Request $request, $id){
         if (Session::has('admin')) {
-            $inputs=$request->all();
-            $gnr=getGeneralConfigs();
-
-            $model=bangluong_ct::where('macanbo',$inputs['macanbo'])
-                ->where('mabl',$inputs['mabl'])
-                ->first();
-            $m_pc=bangluongphucap::where('macanbo',$inputs['macanbo'])
-                ->where('mabl',$inputs['mabl'])
-                ->get();
-
-            $pc_bh=$m_pc->where('macanbo',$model->macanbo)->where('baohiem',1)->sum('hesopc');
-            $pc_kbh=$m_pc->where('macanbo',$model->macanbo)->where('baohiem',0)->sum('hesopc');
-            $tonghs=$model->heso+$pc_bh+$pc_kbh;
-
-            $model->tonghs=$tonghs;
-
-
-            $nopbaohiem=($pc_kbh+$model->heso)*$gnr['luongcb'];
-
-            $model->stbhxh=$nopbaohiem*floatval($gnr['bhxh'])/100;
-            $model->stbhyt=$nopbaohiem*floatval($gnr['bhyt'])/100;
-            $model->stkpcd=$nopbaohiem*floatval($gnr['kpcd'])/100;
-            $model->stbhtn=$nopbaohiem*floatval($gnr['bhtn'])/100;
-
-            $model->ttbh=$model->stbhxh+$model->stbhyt+$model->stkpcd + $model->stbhtn;
-            $model->luongtn=$model->ttl - $model->ttbh;
-
-            $model->stbhxh_dv=$nopbaohiem*floatval($gnr['bhxh_dv'])/100;
-            $model->stbhyt_dv=$nopbaohiem*floatval($gnr['bhyt_dv'])/100;
-            $model->stkpcd_dv=$nopbaohiem*floatval($gnr['kpcd_dv'])/100;
-            $model->stbhtn_dv=$nopbaohiem*floatval($gnr['bhtn_dv'])/100;
-            $model->ttbh_dv=$model->stbhxh_dv + $model->stbhyt_dv + $model->stkpcd_dv + $model->stbhtn_dv;
-
-            $model->heso=$inputs['heso'];
-            $model->vuotkhung=$inputs['vuotkhung'];
-
-            $model->giaml=getDbl($inputs['giaml']);
-            $model->bhct=getDbl($inputs['bhct']);
-            $model->ttl=$tonghs * $gnr['luongcb'];
-            $model->luongtn=$tonghs * $gnr['luongcb'] + $model->bhct - $model->giaml - $model->ttbh;
-
-            $model->save();
-
+            $inputs=$request->all();            
+            $model=bangluong_ct::where('macanbo',$inputs['macanbo'])->where('mabl',$inputs['mabl'])->first();
+            $inputs['ttl'] = chkDbl($inputs['ttl']);
+            $inputs['giaml'] = chkDbl($inputs['giaml']);
+            $inputs['bhct'] = chkDbl($inputs['bhct']);
+            $inputs['stbhxh'] = chkDbl($inputs['stbhxh']);
+            $inputs['stbhyt'] = chkDbl($inputs['stbhyt']);
+            $inputs['stkpcd'] = chkDbl($inputs['stkpcd']);
+            $inputs['stbhtn'] = chkDbl($inputs['stbhtn']);
+            $inputs['ttbh'] = chkDbl( $inputs['ttbh']);
+            $inputs['stbhxh_dv'] = chkDbl($inputs['stbhxh_dv']);
+            $inputs['stbhyt_dv'] = chkDbl($inputs['stbhyt_dv']);
+            $inputs['stkpcd_dv'] = chkDbl($inputs['stkpcd_dv']);
+            $inputs['stbhtn_dv'] = chkDbl($inputs['stbhtn_dv']);
+            $inputs['ttbh_dv'] = chkDbl($inputs['ttbh_dv']);
+            $inputs['luongtn'] = chkDbl($inputs['luongtn']);
+            $model->update($inputs);
             return redirect('/chuc_nang/bang_luong/maso='.$model->mabl);
 
 

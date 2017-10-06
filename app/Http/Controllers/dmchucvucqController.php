@@ -4,40 +4,30 @@ namespace App\Http\Controllers;
 
 use App\dmchucvucq;
 use App\dmkhoipb;
+use App\dmphanloaidonvi;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
 
 
 class dmchucvucqController extends Controller
 {
-    public function index(){
+    public function index($maphanloai){
         if (Session::has('admin')) {
-            //Nếu là quyền X, H khi thêm mới tự động lấy makhoipb trong bảng dmdonvi
-            //Nếu là quyền T, quản trị =>full
-
-            switch(session('admin')->level){
-                case 'H':{
-                    $makpb=getMaKhoiPB(session('admin')->mahuyen);
-                    $model=dmchucvucq::where('makhoipb',$makpb)->orderby('sapxep')->get();
-                    $model_kpb=dmkhoipb::select('makhoipb','tenkhoipb')->where('makhoipb',$makpb)->get()->toarray();
-                    break;
-                }
-                case 'T':{
-                    $model=dmchucvucq::orderby('sapxep')->get();
-                    $model_kpb=dmkhoipb::select('makhoipb','tenkhoipb')->get()->toarray();
-                    break;
-                }
-                default:{
-                    $makpb=getMaKhoiPB(session('admin')->maxa);
-                    $model=dmchucvucq::where('makhoipb',$makpb)->orderby('sapxep')->get();
-                    $model_kpb=dmkhoipb::select('makhoipb','tenkhoipb')->where('makhoipb',$makpb)->get()->toarray();
-                    break;
-                }
+            //dd(session('admin'));
+            //neu quyen admin thi mo tat ca
+            if(session('admin')->level=='SA' || session('admin')->level=='SSA'){
+                $model_pl = dmphanloaidonvi::all();
+                if($maphanloai=='SA' || $maphanloai =='SSA'){$maphanloai= 'KVXP';}
+            }else{
+                $model_pl = dmphanloaidonvi::where('maphanloai',$maphanloai)->get();
             }
+
+            $model = dmchucvucq::where('maphanloai',$maphanloai)->get();
 
             return view('system.danhmuc.chucvucq.index')
                 ->with('model',$model)
-                ->with('model_kpb',array_column($model_kpb,'tenkhoipb','makhoipb'))
+                ->with('model_pl',array_column($model_pl->toArray(),'tenphanloai','maphanloai'))
+                ->with('mapl',$maphanloai)
                 ->with('furl','/danh_muc/chuc_vu_cq/')
                 ->with('pageTitle','Danh mục chức vụ');
         } else
@@ -58,14 +48,9 @@ class dmchucvucqController extends Controller
             die(json_encode($result));
         }
         $inputs = $request->all();
-        $model = new dmchucvucq();
-        $model->macvcq = session('admin')->madv .'.'.getdate()[0];
-        $model->tencv = $inputs['tencv'];
-        $model->ghichu = $inputs['ghichu'];
-        $model->sapxep = $inputs['sapxep'];
-        $model->makhoipb = $inputs['makhoipb'];
-        $model->save();
 
+        $inputs['macvcq'] = session('admin')->madv .'_'.getdate()[0];
+        dmchucvucq::create($inputs);
         //Trả lại kết quả
         $result['message'] = 'Thao tác thành công.';
         $result['status'] = 'success';
@@ -77,7 +62,7 @@ class dmchucvucqController extends Controller
         if (Session::has('admin')) {
             $model = dmchucvucq::findOrFail($id);
             $model->delete();
-            return redirect('/danh_muc/chuc_vu_cq/index');
+            return redirect('/danh_muc/chuc_vu_cq/ma_so='.session('admin')->level);
         }else
             return view('errors.notlogin');
     }
@@ -97,11 +82,7 @@ class dmchucvucqController extends Controller
 
         $inputs = $request->all();
         $model = dmchucvucq::where('macvcq',$inputs['macvcq'])->first();
-        $model->tencv = $inputs['tencv'];
-        $model->ghichu = $inputs['ghichu'];
-        $model->sapxep = $inputs['sapxep'];
-        $model->makhoipb = $inputs['makhoipb'];
-        $model->save();
+        $model->update($inputs);
 
         $result['message'] = "Cập nhật thành công.";
         $result['status'] = 'success';

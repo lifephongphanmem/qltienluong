@@ -40,8 +40,8 @@
         $('#mapb').val('{{$model->mapb}}').trigger('change');
         $('#nhommau').val('{{$model->nhommau}}').trigger('change');
         $('#macvd').val('{{$model->macvd}}').trigger('change');
-        $('#bac').val('{{$model->bac}}').trigger('change');
-        $('#tennb').val('{{$model->msngbac}}').trigger('change');
+        //$('#bac').val('{{$model->bac}}').trigger('change');
+        //$('#tennb').val('{{$model->msngbac}}').trigger('change');
     </script>
 
 
@@ -84,7 +84,7 @@
                         </div>
 
                         <div class="tab-content">
-                            @include('manage.hosocanbo.include.coban'))
+                            @include('manage.hosocanbo.include.coban')
                             @include('manage.hosocanbo.include.luong')
                             @include('manage.hosocanbo.include.khac')
                         </div>

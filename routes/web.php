@@ -63,7 +63,7 @@ Route::group(['prefix'=>'danh_muc'],function(){
     });
 
     Route::group(['prefix'=>'chuc_vu_cq'],function(){
-        Route::get('index','dmchucvucqController@index');
+        Route::get('ma_so={maphanloai}','dmchucvucqController@index');
         Route::get('del/{id}','dmchucvucqController@destroy');
         Route::get('add','dmchucvucqController@store');
         Route::get('update','dmchucvucqController@update');
@@ -90,8 +90,16 @@ Route::group(['prefix'=>'danh_muc'],function(){
 
     Route::group(['prefix'=>'cong_tac'],function(){
         Route::get('index','dmphanloaictController@index');
-        Route::get('store','dmphanloaictController@store');
         Route::get('del/{id}','dmphanloaictController@destroy');
+        Route::get('add','dmphanloaictController@store');
+        Route::get('update','dmphanloaictController@update');
+        Route::get('get','dmphanloaictController@getinfo');
+
+        Route::get('ma_so={macongtac}','dmphanloaictController@detail');
+        Route::get('del_detail/{id}','dmphanloaictController@destroy_detail');
+        Route::get('add_detail','dmphanloaictController@store_detail');
+        Route::get('update_detail','dmphanloaictController@update_detail');
+        Route::get('get_detail','dmphanloaictController@getinfo_detail');
     });
 
     Route::group(['prefix'=>'don_vi'],function(){
@@ -102,7 +110,7 @@ Route::group(['prefix'=>'danh_muc'],function(){
     });
 
     Route::group(['prefix'=>'khoi_pb'],function(){
-        Route::get('ma_so={level}','dmkhoipbController@index');
+        Route::get('index','dmkhoipbController@index');
         Route::get('store','dmkhoipbController@store');
         Route::get('del/{id}','dmkhoipbController@destroy');
     });
@@ -137,14 +145,30 @@ Route::group(['prefix'=>'danh_muc'],function(){
 
     Route::group(['prefix'=>'nguon_kinh_phi'],function(){
         Route::get('index','dmnguonkinhphiController@index');
-        Route::get('store','dmnguonkinhphiController@store');
         Route::get('del/{id}','dmnguonkinhphiController@destroy');
+        Route::get('add','dmnguonkinhphiController@store');
+        Route::get('update','dmnguonkinhphiController@update');
+        Route::get('get','dmnguonkinhphiController@getinfo');
     });
-//chưa làm
+
+    Route::group(['prefix'=>'pl_don_vi'],function(){
+        Route::get('index','dmphanloaidonviController@index');
+        Route::get('del/{id}','dmphanloaidonviController@destroy');
+        Route::get('add','dmphanloaidonviController@store');
+        Route::get('update','dmphanloaidonviController@update');
+        Route::get('get','dmphanloaidonviController@getinfo');
+    });
+
     Route::group(['prefix'=>'ngach_bac'],function(){
-        Route::get('index','nhomngachluongController@index');
-        Route::get('store','nhomngachluongController@store');
-        Route::get('del/{id}','nhomngachluongController@destroy');
+        Route::get('index','dmngachluongController@index');
+        Route::get('del/{id}','dmngachluongController@destroy');
+        Route::post('store','dmngachluongController@store');//insert + update
+        Route::get('get','dmngachluongController@getinfo');
+
+        Route::get('ma_so={macongtac}','dmngachluongController@detail');
+        Route::get('del_detail/{id}','dmngachluongController@destroy_detail');
+        Route::post('store_detail','dmngachluongController@store_detail');//insert + update
+        Route::get('get_detail','dmngachluongController@getinfo_detail');
     });
 });
 
@@ -169,34 +193,12 @@ Route::group(['prefix'=>'nghiep_vu'],function(){
     });
 
     Route::group(['prefix'=>'quan_ly'],function(){
-        Route::group(['prefix'=>'tai_lieu'],function(){
-            Route::get('/maso={macanbo}','hosotailieuController@index');
-            Route::get('del/{id}','hosotailieuController@destroy');
-        });
-        Route::group(['prefix'=>'quan_he_bt'],function(){
-            Route::get('/maso={macanbo}','hosoquanhegdController@index_bt');
-            Route::get('del/{id}','hosoquanhegdController@destroy_bt');
-        });
-        Route::group(['prefix'=>'quan_he_vc'],function(){
-            Route::get('/maso={macanbo}','hosoquanhegdController@index_vc');
-            Route::get('del/{id}','hosoquanhegdController@destroy_vc');
-        });
-        Route::group(['prefix'=>'dieu_dong'],function(){
+
+         Route::group(['prefix'=>'dieu_dong'],function(){
             Route::get('/maso={macanbo}','hosoluanchuyenController@index_dd');
             Route::get('del/{id}','hosoluanchuyenController@destroy_dd');
         });
-        Route::group(['prefix'=>'chuc_vu'],function(){
-            Route::get('/maso={macanbo}','hosochucvuController@index');
-            Route::get('del/{id}','hosochucvuController@destroy');
-        });
-        Route::group(['prefix'=>'bhyt'],function(){
-            Route::get('/maso={macanbo}','hosobaohiemyteController@index');
-            Route::get('del/{id}','hosobaohiemyteController@destroy');
-        });
-        Route::group(['prefix'=>'llvt'],function(){
-            Route::get('/maso={macanbo}','hosollvtController@index');
-            Route::get('del/{id}','hosollvtController@destroy');
-        });
+
         Route::group(['prefix'=>'chi_tieu'],function(){
             Route::get('danh_sach','chitieubiencheController@index');
             Route::get('del/{id}','hosollvtController@destroy');
@@ -204,6 +206,17 @@ Route::group(['prefix'=>'nghiep_vu'],function(){
         Route::group(['prefix'=>'du_toan'],function(){
             Route::get('danh_sach','dutoanluongController@index');
             Route::get('del/{id}','dutoanluongController@destroy');
+        });
+
+        Route::group(['prefix'=>'dia_ban_dbkk'],function(){
+            Route::get('index','dmdiabandbkkController@index');
+            Route::get('del/{id}','dmdiabandbkkController@destroy');
+            Route::post('store','dmdiabandbkkController@store');//insert + update
+            Route::get('get','dmdiabandbkkController@getinfo');
+
+            Route::get('ma_so={madiaban}','dmdiabandbkkController@detail');
+            Route::get('del_detail/{id}','dmdiabandbkkController@destroy_detail');
+            Route::get('add_canbo','dmdiabandbkkController@store_detail');
         });
     });
 
@@ -257,18 +270,15 @@ Route::group(['prefix'=>'nghiep_vu'],function(){
 Route::group(['prefix'=>'chuc_nang'],function(){
     Route::group(['prefix'=>'bang_luong'],function(){
         Route::get('danh_sach','bangluongController@index');
-        Route::get('update/{id}','bangluongController@update');
-        Route::get('create','bangluongController@create');
+        Route::post('store','bangluongController@store');
+
+
         Route::get('/maso={mabl}','bangluongController@show');
         Route::get('in/maso={mabl}','bangluongController@inbangluong');
         Route::get('in_bh/maso={mabl}','bangluongController@inbaohiem');
         Route::get('/maso={mabl}/can_bo','bangluongController@detail');
         Route::post('updatect/{id}','bangluongController@updatect');
         Route::get('del/{id}','bangluongController@destroy');
-
-        Route::get('get_phucap','bangluongController@get_phucap');
-        Route::get('phucap','bangluongController@phucap');
-        Route::get('del_phucap','bangluongController@detroys_phucap');
 
         Route::post('importexcel','bangluongController@importexcel');
 

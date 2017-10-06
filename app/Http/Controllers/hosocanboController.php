@@ -6,6 +6,8 @@ use App\dmchucvucq;
 use App\dmchucvud;
 use App\dmdantoc;
 use App\dmdonvi;
+use App\dmkhoipb;
+use App\dmphanloaicongtac;
 use App\dmphanloaict;
 use App\dmphongban;
 use App\dmphucap;
@@ -20,6 +22,8 @@ use App\hosoluong;
 use App\hosoquanhegd;
 use App\hosotinhtrangct;
 use App\ngachbac;
+use App\ngachluong;
+use App\nhomngachluong;
 use App\phucapdanghuong;
 use Illuminate\Http\Request;
 
@@ -91,33 +95,35 @@ class hosocanboController extends Controller
 
     function create(){
         if (Session::has('admin')) {
-            $makhoipb=getMaKhoiPB(session('admin')->madv);
-            $model_kieuct=dmphanloaict::select('kieuct')->distinct()->get();
-            $model_tenct=dmphanloaict::select('tenct','kieuct')->get();
+            //$makhoipb=getMaKhoiPB(session('admin')->madv);
+            $model_nhomct=dmphanloaicongtac::select('macongtac','tencongtac')->get();
+            $model_tenct=dmphanloaict::select('tenct','macongtac')->get();
             $model_dt=array_column(dmdantoc::select(DB::raw('dantoc as maso'),'dantoc')->get()->toarray(),'dantoc','maso');
             //$m_pb= dmphongban::where('madv',session('admin')->madv)->get();
-            $m_pb= dmphongban::all();
-            $m_cvcq= dmchucvucq::all();
+            $m_pb = dmphongban::all();
+            $m_cvcq = dmchucvucq::where('maphanloai',session('admin')->level)->get();
+            //khối phòng ban giờ là lĩnh vực hoạt động
+            $m_linhvuc=array_column(dmkhoipb::all()->toArray(),'tenkhoipb','makhoipb');
             $m_cvd= dmchucvud::all();
-            $m_plnb=ngachbac::select('plnb')->distinct()->get();
-            $m_pln=ngachbac::select('tennb','plnb','msngbac')->distinct()->get();
-            $m_bac=ngachbac::select('bac')->distinct()->get();
+            $m_plnb=nhomngachluong::select('manhom','tennhom')->distinct()->get();
+            $m_pln=ngachluong::select('tenngachluong','manhom','msngbac')->distinct()->get();
 
             $macanbo=session('admin')->madv . '_' . getdate()[0];
             $m_pc=dmphucap::all('mapc','tenpc','hesopc')->toArray();
 
             return view('manage.hosocanbo.create')
                 ->with('type','create')
+                ->with('macanbo',$macanbo)
+                //danh mục
+                ->with('m_linhvuc',$m_linhvuc)
                 ->with('model_dt',$model_dt)
                 ->with('m_pb',$m_pb)
                 ->with('m_cvcq',$m_cvcq)
                 ->with('m_cvd',$m_cvd)
-                ->with('model_kieuct',$model_kieuct)
+                ->with('model_nhomct',$model_nhomct)
                 ->with('model_tenct',$model_tenct)
                 ->with('m_plnb',$m_plnb)
                 ->with('m_pln',$m_pln)
-                ->with('m_bac',$m_bac)
-                ->with('macanbo',$macanbo)
                 ->with('m_pc',$m_pc)
                 ->with('pageTitle','Tạo hồ sơ cán bộ');
         } else
@@ -138,26 +144,40 @@ class hosocanboController extends Controller
                 $filename = $macanbo . '_' . $img->getClientOriginalExtension();
                 $img->move(public_path() . '/data/uploads/anh/', $filename);
             }
+
             $insert['anh']=($filename==''?'':'/data/uploads/anh/'. $filename);
-            $insert['macanbo']= $macanbo;
             $insert['madv'] = $madv;
 
-            list($theodoi, $kieuct) = getTheoDoi($insert['tenct']);
-            $insert['theodoi'] = $theodoi;
-            $insert['kieuct'] = $kieuct;
-
-
-            $insert['ngaycap']=($insert['ngaycap']==''?NULL:$insert['ngaycap']);
-            $insert['ngaytu']=($insert['ngaytu']==''?NULL:$insert['ngaytu']);
-            $insert['ngayden']=($insert['ngayden']==''?NULL:$insert['ngayden']);
-            $insert['ngayvd']=($insert['ngayvd']==''?NULL:$insert['ngayvd']);
-            $insert['ngayvdct']=($insert['ngayvdct']==''?NULL:$insert['ngayvdct']);
-            $insert['ngayvao']=($insert['ngayvao']==''?NULL:$insert['ngayvao']);
+            $insert['ngaysinh']=getDateTime($insert['ngaysinh']);
+            $insert['ngaycap']=getDateTime($insert['ngaycap']);
+            $insert['ngaytu']=getDateTime($insert['ngaytu']);
+            $insert['ngayden']=getDateTime($insert['ngayden']);
+            $insert['ngayvd']=getDateTime($insert['ngayvd']);
+            $insert['ngayvdct']=getDateTime($insert['ngayvdct']);
+            $insert['ngayvao']=getDateTime($insert['ngayvao']);
+            $insert['ngaybc']=getDateTime($insert['ngaybc']);
             $insert['macvd']=($insert['macvd']==''?NULL:$insert['macvd']);
 
+            $insert['heso'] = chkDbl($insert['pccv']);
+            $insert['vuotkhung'] = chkDbl($insert['pccv']);
+            $insert['pccv'] = chkDbl($insert['pccv']);
+            $insert['pckn'] = chkDbl($insert['pckn']);
+            $insert['pckv'] = chkDbl($insert['pckv']);
+            $insert['pccovu'] = chkDbl($insert['pccovu']);
+            $insert['pctn'] = chkDbl($insert['pctn']);
+            $insert['pctnn'] = chkDbl($insert['pctnn']);
+            $insert['pcvk'] = chkDbl($insert['pcvk']);
+            $insert['pcdbqh'] = chkDbl($insert['pcdbqh']);
+            $insert['pcth'] = chkDbl($insert['pcth']);
+            $insert['pcudn'] = chkDbl($insert['pcudn']);
+            $insert['pcdbn'] = chkDbl($insert['pcdbn']);
+            $insert['pcld'] = chkDbl($insert['pcld']);
+            $insert['pcdh'] = chkDbl($insert['pcdh']);
+            $insert['pck'] = chkDbl($insert['pck']);
+            $insert['pctnvk'] = chkDbl($insert['pctnvk']);
+            $insert['pcbdhdcu'] = chkDbl($insert['pcbdhdcu']);
             //dd($insert);
             hosocanbo::create($insert);
-
 
             return redirect('nghiep_vu/ho_so/danh_sach');
         }else
@@ -166,41 +186,35 @@ class hosocanboController extends Controller
 
     function show($id){
         if (Session::has('admin')) {
-            $makhoipb=getMaKhoiPB(session('admin')->madv);
+            //$makhoipb=getMaKhoiPB(session('admin')->madv);
             $model = hosocanbo::find($id);
             //$m_hosoct = hosotinhtrangct::where('macanbo',$model->macanbo)->where('hientai','1')->first();
 
-            $model_kieuct=dmphanloaict::select('kieuct')->distinct()->get();
-            $model_tenct=dmphanloaict::select('tenct','kieuct')->get();
+            $model_nhomct=dmphanloaicongtac::select('macongtac','tencongtac')->get();
+            $model_tenct=dmphanloaict::select('tenct','macongtac')->get();
             $model_dt=array_column(dmdantoc::select(DB::raw('dantoc as maso'),'dantoc')->get()->toarray(),'dantoc','maso');
             //$m_pb= dmphongban::where('madv',session('admin')->madv)->get();
-            $m_pb= dmphongban::all();
-            $m_cvcq= dmchucvucq::all();
+            //khối phòng ban giờ là lĩnh vực hoạt động
+            $m_linhvuc=array_column(dmkhoipb::all()->toArray(),'tenkhoipb','makhoipb');
+            $m_pb = dmphongban::all();
+            $m_cvcq = dmchucvucq::where('maphanloai',session('admin')->level)->get();
             $m_cvd= dmchucvud::all();
-            $m_plnb=ngachbac::select('plnb')->distinct()->get();
-            $m_pln=ngachbac::select('tennb','plnb','msngbac')->distinct()->get();
-            $m_bac=ngachbac::select('bac')->distinct()->get();
-            $m_pc=dmphucap::all('mapc','tenpc','hesopc')->toArray();
-            $model_phucap= phucapdanghuong::join('dmphucap','phucapdanghuong.mapc','dmphucap.mapc')
-                ->select('phucapdanghuong.*','dmphucap.tenpc')
-                ->where('phucapdanghuong.macanbo',$model->macanbo)->get();
+            $m_plnb=nhomngachluong::select('manhom','tennhom')->distinct()->get();
+            $m_pln=ngachluong::select('tenngachluong','manhom','msngbac')->distinct()->get();
 
-            //dd($m_hosoct);
+
             return view('manage.hosocanbo.edit')
-                ->with(compact('model',$model))
-                //->with(compact('m_hosoct',$m_hosoct))
+                ->with('model',$model)
                 ->with('type','edit')
                 ->with('model_dt',$model_dt)
                 ->with('m_pb',$m_pb)
                 ->with('m_cvcq',$m_cvcq)
                 ->with('m_cvd',$m_cvd)
-                ->with('model_kieuct',$model_kieuct)
+                ->with('model_nhomct',$model_nhomct)
                 ->with('model_tenct',$model_tenct)
                 ->with('m_plnb',$m_plnb)
+                ->with('m_linhvuc',$m_linhvuc)
                 ->with('m_pln',$m_pln)
-                ->with('m_bac',$m_bac)
-                ->with('m_pc',$m_pc)
-                ->with('model_phucap',$model_phucap)
                 ->with('pageTitle','Sửa thông tin hồ sơ cán bộ');
         } else
             return view('errors.notlogin');
@@ -224,20 +238,35 @@ class hosocanboController extends Controller
             }
 
             $insert['anh']=($filename==''?'':'/data/uploads/anh/'. $filename);
-
-
-            list($theodoi, $kieuct) = getTheoDoi($insert['tenct']);
-            $insert['theodoi'] = $theodoi;
-            $insert['kieuct'] = $kieuct;
-
-
-            $insert['ngaycap']=($insert['ngaycap']==''?NULL:$insert['ngaycap']);
-            $insert['ngaytu']=($insert['ngaytu']==''?NULL:$insert['ngaytu']);
-            $insert['ngayden']=($insert['ngayden']==''?NULL:$insert['ngayden']);
-            $insert['ngayvd']=($insert['ngayvd']==''?NULL:$insert['ngayvd']);
-            $insert['ngayvdct']=($insert['ngayvdct']==''?NULL:$insert['ngayvdct']);
-            $insert['ngayvao']=($insert['ngayvao']==''?NULL:$insert['ngayvao']);
+            $insert['ngaysinh']=getDateTime($insert['ngaysinh']);
+            $insert['ngaycap']=getDateTime($insert['ngaycap']);
+            $insert['ngaytu']=getDateTime($insert['ngaytu']);
+            $insert['ngayden']=getDateTime($insert['ngayden']);
+            $insert['ngayvd']=getDateTime($insert['ngayvd']);
+            $insert['ngayvdct']=getDateTime($insert['ngayvdct']);
+            $insert['ngayvao']=getDateTime($insert['ngayvao']);
+            $insert['ngaybc']=getDateTime($insert['ngaybc']);
             $insert['macvd']=($insert['macvd']==''?NULL:$insert['macvd']);
+
+            $insert['heso'] = chkDbl($insert['pccv']);
+            $insert['vuotkhung'] = chkDbl($insert['vuotkhung']);
+            $insert['pccv'] = chkDbl($insert['pccv']);
+            $insert['pckn'] = chkDbl($insert['pckn']);
+            $insert['pckv'] = chkDbl($insert['pckv']);
+            $insert['pccovu'] = chkDbl($insert['pccovu']);
+            $insert['pctn'] = chkDbl($insert['pctn']);
+            $insert['pctnn'] = chkDbl($insert['pctnn']);
+            $insert['pcvk'] = chkDbl($insert['pcvk']);
+            $insert['pcdbqh'] = chkDbl($insert['pcdbqh']);
+            $insert['pcth'] = chkDbl($insert['pcth']);
+            $insert['pcudn'] = chkDbl($insert['pcudn']);
+            $insert['pcdbn'] = chkDbl($insert['pcdbn']);
+            $insert['pcld'] = chkDbl($insert['pcld']);
+            $insert['pcdh'] = chkDbl($insert['pcdh']);
+            $insert['pck'] = chkDbl($insert['pck']);
+            $insert['pctnvk'] = chkDbl($insert['pctnvk']);
+            $insert['pcbdhdcu'] = chkDbl($insert['pcbdhdcu']);
+
             $model->update($insert);
 
             return redirect('nghiep_vu/ho_so/danh_sach');

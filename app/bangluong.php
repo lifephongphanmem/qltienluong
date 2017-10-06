@@ -16,10 +16,11 @@ class bangluong extends Model
         'ngaylap',
         'nguoilap',
         'ghichu',
+        'linhvuchoatdong', //Phân loại xã phường ko cần chọn lĩnh vực hoạt động
+        'manguonkp',
+        'phantramhuong',
         'madv'
     ];
 
-    public function bangluong_ct(){
-       return $this->hasMany('App\bangluong_ct','mabl');
-    }
+
 }

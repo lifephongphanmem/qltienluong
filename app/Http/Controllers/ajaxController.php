@@ -6,6 +6,8 @@ use App\dmdonvi;
 use App\dmphanloaict;
 use App\dmphucap;
 use App\ngachbac;
+use App\ngachluong;
+use App\nhomngachluong;
 use Illuminate\Http\Request;
 
 use App\Http\Requests;
@@ -153,20 +155,22 @@ class ajaxController extends Controller
             );
             die(json_encode($result));
         }
-
         $inputs = $request->all();
-        $model=ngachbac::select('heso', 'ptvk')
-            ->where('msngbac', '=', $inputs['msngbac'])
-            ->where('bac', '=', $inputs['bac'])
-            ->first();
-
-        if (count($model) > 0) {
-            $result['message'] = $model->heso . ';' . $model->ptvk;
-            $result['status'] = 'success';
-        }else{
-            $result['message'] = '0;0';
-            $result['status'] = 'error';
+        if ($inputs['msngbac']=='') {
+            $result = array(
+                'status' => 'fail',
+                'message' => '0;0',
+            );
+            die(json_encode($result));
         }
+
+
+        $manhom = ngachluong::where('msngbac',$inputs['msngbac'])->first()->manhom;
+        $model_nhomngachluong = nhomngachluong::where('manhom',$manhom)->first();
+        //dd($inputs);
+
+        $result['message'] = getLuongNgachBac($manhom,$inputs['bac']);
+        $result['status'] = 'success';
 
         die(json_encode($result));
     }

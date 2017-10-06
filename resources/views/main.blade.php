@@ -174,6 +174,7 @@
                         <li><a href="{{url('nghiep_vu/quan_ly/dieu_dong/maso=all')}}">Luân chuyển cán bộ</a></li>
                         <li><a href="{{url('nghiep_vu/quan_ly/chi_tieu/danh_sach')}}">Chỉ tiêu biên chế</a></li>
                         <li><a href="{{url('nghiep_vu/quan_ly/du_toan/danh_sach')}}">Dự toán lương</a></li>
+                        <li><a href="{{url('nghiep_vu/quan_ly/dia_ban_dbkk/index')}}">Danh sách thôn, tổ dân phố</a></li>
                     </ul>
                 </li>
 
@@ -188,8 +189,17 @@
                             <a href="{{url('chuc_nang/bang_luong/danh_sach')}}">Bảng lương</a>
                         </li>
                         <li>
-                            <a href="{{url('chuc_nang/tong_hop_luong/danh_sach?thang='.date('m').'&nam='.date('Y').'&khuvuc=KVHCSN')}}">Bảng lương từ đơn vị cấp dưới</a>
+                            <a href="{{url('chuc_nang/tong_hop_luong/danh_sach?thang='.date('m').'&nam='.date('Y').'&khuvuc=KVHCSN')}}">Tổng hợp lương tại đơn vị</a>
                         </li>
+                        @if(session('admin')->quanlynhom)
+                            <li>
+                                <a href="{{url('chuc_nang/tong_hop_luong/danh_sach?thang='.date('m').'&nam='.date('Y').'&khuvuc=KVHCSN')}}">Tổng hợp lương toàn khối</a>
+                            </li>
+                            <li>
+                                <a href="{{url('chuc_nang/tong_hop_luong/danh_sach?thang='.date('m').'&nam='.date('Y').'&khuvuc=KVHCSN')}}">Bảng lương từ đơn vị cấp dưới</a>
+                            </li>
+                        @endif
+
                         <li>
                             <a href="{{url('chuc_nang/nang_luong/danh_sach')}}">Nâng lương</a>
                         </li>
@@ -245,15 +255,17 @@
                             </a>
                             <ul class="sub-menu" style="margin-left: 15px;">
                                 <!--li><a href="{{url('danh_muc/bao_mat/index?&level=X')}}">Bảo mật hồ sơ</a></li-->
-                                <li><a href="{{url('danh_muc/khoi_pb/ma_so=KVHCSN')}}">Lĩnh vực hoạt động</a></li>
+                                <li><a href="{{url('danh_muc/khoi_pb/index')}}">Lĩnh vực hoạt động</a></li>
                                 <li><a href="{{url('danh_muc/phong_ban/index')}}">Phòng ban</a></li>
-                                <li><a href="{{url('danh_muc/chuc_vu_cq/index')}}">Chức vụ chính quyền</a></li>
+                                <li><a href="{{url('danh_muc/chuc_vu_cq/ma_so='.session('admin')->level)}}">Chức vụ chính quyền</a></li>
                                 <li><a href="{{url('danh_muc/chuc_vu_d/index')}}">Chức vụ đảng</a></li>
                                 <li><a href="{{url('danh_muc/cong_tac/index')}}">Phân loại công tác</a></li>
                                 <li><a href="{{url('danh_muc/phu_cap/index')}}">Phụ cấp</a></li>
                                 <li><a href="{{url('danh_muc/dan_toc/index')}}">Dân tộc</a></li>
                                 <li><a href="{{url('danh_muc/nguon_kinh_phi/index')}}">Nguồn kinh phí</a></li>
                                 <li><a href="{{url('danh_muc/ngach_bac/index')}}">Mã ngạch lương</a></li>
+
+                                <li><a href="{{url('danh_muc/pl_don_vi/index')}}">Phân loại đơn vị</a></li>
                             </ul>
                         </li>
                         <li>

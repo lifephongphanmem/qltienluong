@@ -44,6 +44,8 @@ class bangluong_ct extends Model
         'ptbhyt',
         'ptkpcd',
         'ptbhtn',
+        'pcbdhdcu',
+        'pctnvk',
         'tonghs',
         'ttl',
         'giaml',
@@ -57,20 +59,4 @@ class bangluong_ct extends Model
         'gttncn',
         'luongtn'
     ];
-
-    public function bangluong(){
-        $this->belongsTo('App\bangluong','mabl');
-    }
-
-    public function chucvucq(){
-        $this->belongsTo('App\dmchucvucd','macvcq');
-    }
-
-    public function phongban(){
-        $this->belongsTo('App\dmphongban','mapb');
-    }
-
-    public function ngachbac(){
-        $this->belongsTo('App\ngachbac','id_nb');
-    }
 }

@@ -75,11 +75,6 @@
                                     <td class="text-center">{{$hs->tenct}}</td>
                                 <td>
                                     <a href="{{url($url.'maso='.$hs->id.'')}}" class="btn btn-default btn-xs mbs"><i class="fa fa-edit"></i>&nbsp; Chỉnh sửa</a>
-                                    <a href="{{url($url.'syll/'.$hs->id)}}" target="_blank" class="btn btn-default btn-xs mbs"><i class="fa fa-credit-card"></i>&nbsp; Sơ yếu lý lịch</a>
-                                    <a href="{{url($url.'ttts/'.$hs->id)}}" target="_blank" class="btn btn-default btn-xs mbs"><i class="fa fa-file-text-o"></i>&nbsp; Tóm tắt tiểu sử</a>
-
-                                    <!--button type="button" onclick="cfChiTiet('{{$url.'bsll/'.$hs->id}}','{{$hs->id}}')" class="btn btn-default btn-xs mbs" data-target="#chitiet-modal" data-toggle="modal">
-                                        <i class="fa fa-navicon"></i>&nbsp; Bổ sung lý lịch</button-->
                                     <button type="button" onclick="cfDel('{{$url.'del/maso='.$hs->id}}')" class="btn btn-default btn-xs mbs" data-target="#delete-modal-confirm" data-toggle="modal">
                                         <i class="fa fa-times"></i>&nbsp; Xóa</button>
                                 </td>

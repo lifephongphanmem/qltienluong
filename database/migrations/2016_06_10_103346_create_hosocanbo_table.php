@@ -101,7 +101,7 @@ class CreateHosocanboTable extends Migration
             $table->double('pcd')->default(0);
             $table->double('pctr')->default(0);
             $table->double('pctnvk')->default(0);
-
+            $table->double('pcbdhdcu')->default(0);
             $table->string('phanloaict')->nullable();
 
             $table->string('theodoi',5)->default(1)->nullable();

@@ -39,6 +39,15 @@
                     </div>
                 </div>
                 <div class="portlet-body form-horizontal">
+                    <div class="row">
+                        <div class="form-group">
+                            <label class="control-label col-md-3">Phân loại đơn vị</label>
+                            <div class="col-md-5">
+                                {!! Form::select('mapl',$model_pl,$mapl,array('id' => 'mapl', 'class' => 'form-control'))!!}
+                            </div>
+                        </div>
+                    </div>
+
                     <table id="sample_3" class="table table-hover table-striped table-bordered" style="min-height: 230px">
                         <thead>
                             <tr>
@@ -93,6 +102,12 @@
     </div>
 
     <script>
+        $(function(){
+            $('#mapl').change(function() {
+                window.location.href = '/danh_muc/chuc_vu_cq/ma_so='+$('#mapl').val();
+            });
+        })
+
         function addCV(){
             var date=new Date();
             $('#tencv').val('');
@@ -131,7 +146,6 @@
             var valid=true;
             var message='';
             var macvcq=$('#macvcq').val();
-            var makhoipb=$('#makhoipb').val();
             var tencv=$('#tencv').val();
             var ghichu=$('#ghichu').val();
             var sapxep=$('#sapxep').val();
@@ -149,7 +163,7 @@
                         type: 'GET',
                         data: {
                             _token: CSRF_TOKEN,
-                            makhoipb: makhoipb,
+                            maphanloai: $('#mapl').val(),
                             tencv: tencv,
                             ghichu: ghichu,
                             sapxep: sapxep
@@ -171,7 +185,6 @@
                         data: {
                             _token: CSRF_TOKEN,
                             macvcq: macvcq,
-                            makhoipb: makhoipb,
                             tencv: tencv,
                             ghichu: ghichu,
                             sapxep: sapxep

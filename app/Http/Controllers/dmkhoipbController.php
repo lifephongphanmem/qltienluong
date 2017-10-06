@@ -11,18 +11,15 @@ use Illuminate\Support\Facades\Session;
 
 class dmkhoipbController extends Controller
 {
-    public function index($level){
+    public function index(){
         if (Session::has('admin')) {
-            $a_baomat=array('KVHCSN'=>'Khu vực HCSN, Đảng, Đoàn thể','KVXP'=>'Khu vực xã, phường, thị trấn');
-            $model=dmkhoipb::where('level',$level)->get();
-
+            //Chuyển khối phòng ban thành lĩnh vực hoạt động
+            $model=dmkhoipb::all();
             return view('system.danhmuc.khoipb.index')
                 ->with('model',$model)
-                ->with('a_baomat',$a_baomat)
-                ->with('level',$level)
                 ->with('furl','/danh_muc/khoi_pb/')
                 ->with('furl_ajax','/ajax/khoi_pb/')
-                ->with('pageTitle','Danh mục khối phòng ban');
+                ->with('pageTitle','Danh mục lĩnh vực hoạt động');
         } else
             return view('errors.notlogin');
     }
@@ -45,7 +42,6 @@ class dmkhoipbController extends Controller
         $model->makhoipb = $inputs['makhoipb'];
         $model->tenkhoipb = $inputs['tenkhoipb'];
         $model->ghichu = $inputs['ghichu'];
-        $model->level = $inputs['level'];
         $model->save();
 
         $result['message'] = "Thêm mới thành công.";

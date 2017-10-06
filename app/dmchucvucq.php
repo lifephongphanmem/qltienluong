@@ -15,14 +15,6 @@ class dmchucvucq extends Model
         'sapxep',
         'madv',
         'phannhom',
-        'makhoipb'
+        'maphanloai'
     ];
-
-    public function bangluong_ct(){
-        return $this->hasMany('App\bangluong_ct','macvcq');
-    }
-
-    public function hosochucvucq(){
-        return $this->hasMany('App\hosochucvu','macvcq');
-    }
 }

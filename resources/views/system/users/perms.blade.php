@@ -111,29 +111,6 @@
                                     </tbody>
                                 </table>
                             </div>
-
-                            <div class="col-md-3">
-                                <h4 style="text-align: center;color: #0000ff">Xem hồ sơ</h4>
-                                <table class="table table-striped table-bordered table-hover">
-                                    <thead class="action">
-                                    <tr>
-                                        <th class="table-checkbox" width="5%">
-                                            <!--input type="checkbox" class="group-checkable" data-set="#sample_3 .checkboxes"/-->
-                                        </th>
-                                        <th>Chức năng</th>
-                                    </tr>
-                                    </thead>
-                                    <tbody>
-                                    @foreach($model_baomat as $baomat)
-                                        <tr>
-                                            <td><input type="checkbox" {{ $baomat->default_val==1 ? 'checked' : '' }} value="1" name="roles[view][{{$baomat->macapdo}}]"/></td>
-                                            <td>{{$baomat->tencapdo}}</td>
-                                        </tr>
-                                    @endforeach
-
-                                    </tbody>
-                                </table>
-                            </div>
                         </div>
                     </div>
                     <div class="row">

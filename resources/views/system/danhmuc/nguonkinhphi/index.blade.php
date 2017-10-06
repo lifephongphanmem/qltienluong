@@ -35,7 +35,7 @@
                         DANH MỤC NGUỒN KINH PHÍ
                     </div>
                     <div class="actions">
-                        <button type="button" id="_btnaddPB" class="btn btn-success btn-xs" onclick="addPB()"><i class="fa fa-plus"></i>&nbsp;Thêm mới phòng ban</button>
+                        <button type="button" id="_btnaddPB" class="btn btn-success btn-xs" onclick="addPB()"><i class="fa fa-plus"></i>&nbsp;Thêm mới</button>
                     </div>
                 </div>
                 <div class="portlet-body form-horizontal">
@@ -84,7 +84,19 @@
                     <h4 id="modal-header-primary-label" class="modal-title">Thông tin nguồn kinh phí</h4>
                 </div>
                 <div class="modal-body">
+                    <label class="form-control-label">Mã số nguồn kinh phí</label>
+                    {!!Form::text('manguonkp', null, array('id' => 'manguonkp','class' => 'form-control'))!!}
 
+                    <label class="form-control-label">Tên nguồn kinh phí</label>
+                    {!!Form::text('tennguonkp', null, array('id' => 'tennguonkp','class' => 'form-control'))!!}
+
+                    <label class="form-control-label">Lĩnh vực hoạt động<span class="require">*</span></label>
+                    {!!Form::text('linhvuchoatdong', null, array('id' => 'linhvuchoatdong','class' => 'form-control required'))!!}
+
+                    <label class="form-control-label">Ghi chú</label>
+                    {!!Form::textarea('ghichu', null, array('id' => 'ghichu','class' => 'form-control','rows'=>'3'))!!}
+
+                    <input type="hidden" id="id" name="id"/>
                 </div>
                 <div class="modal-footer">
                     <button type="button" data-dismiss="modal" class="btn btn-default">Hủy thao tác</button>
@@ -104,7 +116,7 @@
             $('#create-modal').modal('show');
         }
 
-        function editPB(mapb){
+        function editPB(manguonkp){
             var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
             $.ajax({
                 url: '{{$furl}}' + 'get',
@@ -118,13 +130,13 @@
                     $('#manguonkp').val(data.manguonkp);
                     $('#linhvuchoatdong').val(data.linhvuchoatdong);
                     $('#tennguonkp').val(data.tennguonkp);
-                    $('#ghichu').val(ghichu);
+                    $('#ghichu').val(data.ghichu);
                 },
                 error: function(message){
                     toastr.error(message,'Lỗi!');
                 }
             });
-            //$('#id_pb').val(id);
+            $('#id').val(1);
             $('#create-modal').modal('show');
         }
 
@@ -132,9 +144,10 @@
             var valid=true;
             var message='';
 
-            var mapb=$('#mapb').val();
-            var tennguonkp=$('#tennguonkp').val();
-            var linhvuchoatdong=$('#linhvuchoatdong').val();
+            var id = $('#id').val();
+            var manguonkp = $('#manguonkp').val();
+            var tennguonkp = $('#tennguonkp').val();
+            var linhvuchoatdong = $('#linhvuchoatdong').val();
             var ghichu=$('#ghichu').val();
 
             if(tennguonkp==''){
@@ -144,15 +157,16 @@
 
             if(valid){
                 var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
-                if(mapb==''){//Thêm mới
+                if(id==0){//Thêm mới
                     $.ajax({
                         url: '{{$furl}}' + 'add',
                         type: 'GET',
                         data: {
                             _token: CSRF_TOKEN,
-                            tenpb: tennguonkp,
-                            diengiai: diengiai,
-                            sapxep: sapxep
+                            manguonkp: manguonkp,
+                            tennguonkp: tennguonkp,
+                            linhvuchoatdong: linhvuchoatdong,
+                            ghichu: ghichu
                         },
                         dataType: 'JSON',
                         success: function (data) {
@@ -170,10 +184,10 @@
                         type: 'GET',
                         data: {
                             _token: CSRF_TOKEN,
-                            mapb: mapb,
-                            tenpb: tenpb,
-                            diengiai: diengiai,
-                            sapxep: sapxep
+                            manguonkp: manguonkp,
+                            tennguonkp: tennguonkp,
+                            linhvuchoatdong: linhvuchoatdong,
+                            ghichu: ghichu
                         },
                         dataType: 'JSON',
                         success: function (data) {
@@ -186,7 +200,7 @@
                         }
                     });
                 }
-                $('#phongban-modal').modal('hide');
+                $('#create-modal').modal('hide');
             }else{
                 toastr.error(message,'Lỗi!.');
             }

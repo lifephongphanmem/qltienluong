@@ -2243,7 +2243,7 @@ Select2 Plugin
 .select2-container-multi .select2-choices {
   padding-left: 6px;
   min-height: 34px;
-  border: 1px solid #e5e5e5;
+  border: 1px solid #87cefa;
   background-image: none;
   background-color: #fff;
   filter: none;
@@ -2263,7 +2263,7 @@ Select2 Plugin
 .select2-container-multi .select2-choices .select2-search-choice {
   padding: 3px 5px 3px 18px;
   margin: 5px 0 3px 5px;
-  border: 1px solid #e5e5e5;
+  border: 1px solid #87cefa;
   background-image: none;
   background-color: #fff;
   filter: none;

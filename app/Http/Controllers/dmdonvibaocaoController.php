@@ -6,6 +6,7 @@ use App\bangluong;
 use App\dmdonvi;
 use App\dmdonvibaocao;
 use App\dmkhoipb;
+use App\dmphanloaidonvi;
 use App\Users;
 use Illuminate\Http\Request;
 
@@ -112,6 +113,13 @@ class dmdonvibaocaoController extends Controller
     public function list_donvi($madvbc){
         if (Session::has('admin')) {
             $model=dmdonvi::where('madvbc',$madvbc)->get();
+            $a_donvi=array_column($model->toarray(),'tendv','madv');
+            $a_phanloai=array_column(dmphanloaidonvi::all()->toarray(),'tenphanloai','maphanloai');
+            foreach($model as $donvi){
+                $donvi->tencqcq=isset($a_donvi[$donvi->macqcq])?$a_donvi[$donvi->macqcq]:'';
+                $donvi->phanloai=$a_phanloai[$donvi->maphanloai];
+            }
+
             return view('system.danhmuc.donvibaocao.index_donvi')
                 ->with('model',$model)
                 ->with('madvbc',$madvbc)
@@ -124,11 +132,17 @@ class dmdonvibaocaoController extends Controller
     public function show_donvi($madvbc, $madonvi){
         if (Session::has('admin')) {
             $model=dmdonvi::where('madv',$madonvi)->first();
-            $model_dvbc=dmdonvibaocao::where('madvbc',$model->madvbc)->first();
-            $model_kpb =  array_column(dmkhoipb::select('makhoipb','tenkhoipb')->get()->toarray(),'tenkhoipb','makhoipb');
+            $model_donvi = array_column(dmdonvi::select('madv','tendv')->where('madvbc',$madvbc)->get()->toarray(),'tendv','madv');
+            $model_donvi['NULL']= 'Chọn đơn vị chủ quản';
+            $a_phanloai=array_column(dmphanloaidonvi::all()->toarray(),'tenphanloai','maphanloai');
+            $model_plxa = array('NULL'=>'Chọn phân loại xã','XL1'=>'Xã loại 1','XL2'=>'Xã loại 2','XL3'=>'Xã loại 3');
+            //$model_dvbc=dmdonvibaocao::where('madvbc',$model->madvbc)->first();
+            //$model_kpb =  array_column(dmkhoipb::select('makhoipb','tenkhoipb')->get()->toarray(),'tenkhoipb','makhoipb');
             return view('system.danhmuc.donvibaocao.edit_donvi')
                 ->with('model',$model)
-                ->with('model_kpb',$model_kpb)
+                ->with('model_donvi',$model_donvi)
+                ->with('model_phanloai',$a_phanloai)
+                ->with('model_plxa',$model_plxa)
                 ->with('url','/danh_muc/khu_vuc/')
                 ->with('pageTitle','Chỉnh sửa thông tin đơn vị');
         } else
@@ -140,6 +154,9 @@ class dmdonvibaocaoController extends Controller
             $inputs = $request->all();
             $inputs['tendv']=removespace($inputs['tendv']);
             $model = dmdonvi::where('madv',$inputs['madv'])->first();
+            if($inputs['macqcq'] == 'NULL'){
+                $inputs['macqcq']=null;
+            }
             $model->update($inputs);
 
             return redirect('/danh_muc/khu_vuc/ma_so='.$model->madvbc.'/list_unit');
@@ -149,12 +166,16 @@ class dmdonvibaocaoController extends Controller
 
     public function create_donvi($madvbc){
         if (Session::has('admin')) {
-            $model=dmdonvibaocao::where('madvbc',$madvbc)->first();
-            $model_kpb =  array_column(dmkhoipb::select('makhoipb','tenkhoipb')->get()->toarray(),'tenkhoipb','makhoipb');
+            $model_donvi = array_column(dmdonvi::select('madv','tendv')->where('madvbc',$madvbc)->get()->toarray(),'tendv','madv');
+            $model_donvi['NULL']= 'Chọn đơn vị chủ quản';
+            $a_phanloai=array_column(dmphanloaidonvi::all()->toarray(),'tenphanloai','maphanloai');
+            $model_plxa = array('NULL'=>'Chọn phân loại xã','XL1'=>'Xã loại 1','XL2'=>'Xã loại 2','XL3'=>'Xã loại 3');
             return view('system.danhmuc.donvibaocao.create_donvi')
                 ->with('url','/danh_muc/khu_vuc/')
-                ->with('model_kpb',$model_kpb)
+                ->with('model_donvi',$model_donvi)
+                ->with('a_phanloai',$a_phanloai)
                 ->with('madvbc',$madvbc)
+                ->with('model_phanloai',$a_phanloai)
                 ->with('pageTitle','Thêm mới đơn vị');
         } else
             return view('errors.notlogin');
@@ -166,7 +187,9 @@ class dmdonvibaocaoController extends Controller
             if($inputs['madv'] == ''){
                 $inputs['madv']=getdate()[0];
             }
-
+            if($inputs['macqcq'] == 'NULL'){
+                $inputs['macqcq']=null;
+            }
             dmdonvi::create($inputs);
 
             return redirect('/danh_muc/khu_vuc/ma_so='.$inputs['madvbc'].'/list_unit');

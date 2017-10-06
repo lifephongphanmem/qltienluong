@@ -20,8 +20,8 @@
             </div>
             <div class="col-md-3">
                 <div class="form-group">
-                    <label class="control-label">Phòng ban <span class="require">*</span></label>
-                    <select name="mapb" id="mapb" class="form-control select2me" autofocus="autofocus" required="required">
+                    <label class="control-label">Phòng ban</label>
+                    <select name="mapb" id="mapb" class="form-control select2me">
                         @foreach($m_pb as $pb)
                             <option value="{{$pb->mapb}}">{{$pb->tenpb}}</option>
                         @endforeach
@@ -30,8 +30,8 @@
             </div>
             <div class="col-md-3">
                 <div class="form-group">
-                    <label class="control-label">Chức vụ <span class="require">*</span> </label>
-                    <select name="macvcq" id="macvcq" class="form-control select2me" required="required">
+                    <label class="control-label">Chức vụ</label>
+                    <select name="macvcq" id="macvcq" class="form-control select2me">
                         @foreach($m_cvcq as $cv)
                             <option value="{{$cv->macvcq}}">{{$cv->tencv}}</option>
                         @endforeach
@@ -157,6 +157,63 @@
         </div>
 
         <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label class="control-label">Ngày biên chế (trúng cử)</label>
+                    <input type="date" name="ngaybc" id="ngaybc" class="form-control" value="{{!isset($model)?'':$model->ngaybc}}" />
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label class="control-label">Ngày về cơ quan </label>
+                    <input type="date" name="ngayvao" id="ngayvao" class="form-control" value="{{!isset($model)?'':$model->ngayvao}}" />
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label class="control-label">Sự nghiệp cán bộ</label>
+                    <select class="form-control select2me" name="sunghiep" id="sunghiep" required="required">
+                        <option value="Công chức">Công chức</option>
+                        <option value="Viên chức">Viên chức</option>
+                        <option value="Khác">Khác</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label class="control-label">Phân loại công tác</label>
+                    <select class="form-control select2me" name="mact" id="mact" required="required">
+                        @foreach($model_nhomct as $kieuct)
+                            <optgroup label="{{$kieuct->tencongtac}}">
+                                <?php
+                                $mode_ct=$model_tenct->where('macongtac',$kieuct->macongtac);
+                                ?>
+                                @foreach($mode_ct as $ct)
+                                    <option value="{{$ct->tenct}}">{{$ct->tenct}}</option>
+                                @endforeach
+                            </optgroup>
+                        @endforeach
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-12">
+                <div class="form-group">
+                    <label class="control-label">Lĩnh vực công tác </label>
+                    {!!Form::select('linhvuc',$m_linhvuc, null, array('id' => 'linhvuc','class' => 'form-control','multiple'=>'multiple'))!!}
+
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
             <div class="col-md-12">
                 <div class="form-group">
                     <label class="control-label">Ảnh đại diện </label>
@@ -168,54 +225,29 @@
             </div>
         </div>
     </div>
+    <input type="hidden" id="lvhd" name="lvhd" value="{{isset($model)?$model->lvhd:''}}"/>
+
 </div>
 
 <script>
     $(function(){
+        //Multi select box
+        $("#linhvuc").select2();
+        $("#linhvuc").change(function(){
+            $("#lvhd").val( $("#linhvuc").val());
+        });
         $('#create_hscb :submit').click(function(){
-            var str = '',strb1='',strb2='';
+            var str = '';
             var ok = true;
 
-            if($('#mapb').val()==''){
-                strb1 += ' - Phòng ban \n';
-                $('#mapb').parent().addClass('state-error');
-                ok = false;
-            }
-
-            if($('#macvcq').val()==''){
-                strb1 += '  - Chức vụ \n';
-                $('#macvcq').parent().addClass('state-error');
-                ok = false;
-            }
-
             if(!$('#tencanbo').val()){
-                strb1 += '  - Họ tên \n';
+                str += '  - Họ tên \n';
                 $('#tencanbo').parent().addClass('state-error');
                 ok = false;
             }
 
-            if(!$('#ngaysinh').val()){
-                strb1 += '  - Ngày sinh \n';
-                $('#ngaysinh').parent().addClass('state-error');
-                ok = false;
-            }
-
-            //Bước 2
-            if(!$('#ngaybc').val()){
-                strb2 += ' - Ngày biên chế, hợp đồng \n';
-                $('#ngaybc').parent().addClass('state-error');
-                ok = false;
-            }
-
-
-
             //Kết quả
             if ( ok == false){
-                if(strb1!='')
-                    str+='Bước 1: \n '+strb1 ;
-                if(strb2!='')
-                    str+='Bước 2: \n '+strb2 ;
-
                 alert('Các trường: \n' + str + 'Không được để trống');
                 $("form").submit(function (e) {
                     e.preventDefault();

@@ -47,6 +47,7 @@ class CreateBangluongctTable extends Migration
             $table->double('pcd')->default(0);
             $table->double('pctr')->default(0);
             $table->double('pctnvk')->default(0);
+            $table->double('pcbdhdcu')->default(0);
 
             $table->double('tonghs')->default(0);
             $table->double('ttl')->default(0);

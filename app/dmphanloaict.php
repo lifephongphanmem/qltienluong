@@ -9,9 +9,9 @@ class dmphanloaict extends Model
     protected $table = 'dmphanloaict';
     protected $fillable = [
         'id',
-        'phanloaict',
-        'kieuct',
+        'macongtac',
+        'mact',
         'tenct',
-        'nhomct'
+        'ghichu'
     ];
 }

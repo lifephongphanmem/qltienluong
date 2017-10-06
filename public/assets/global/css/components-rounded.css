@@ -1979,12 +1979,12 @@ Customized Bootstrap Buttons
 .btn-default {
   color: #333;
   background-color: #fff;
-  border-color: #ccc;
+  border-color: #87cefa;
 }
 .btn-default:hover, .btn-default:focus, .btn-default:active, .btn-default.active {
   color: #333;
   background-color: #ededed;
-  border-color: #b3b3b3;
+  border-color: #87cefa;
 }
 .open .btn-default.dropdown-toggle {
   color: #333;

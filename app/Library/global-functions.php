@@ -1,7 +1,6 @@
 <?php
 function getPermissionDefault($level) {
     $roles = array();
-    $model = array_column( \App\dmbaomat::select('macapdo','default_val')->where('level',$level)->get()->toarray(),'default_val','macapdo');
     $roles[] = array(
         'data' => array(
             'units' => 0,
@@ -15,7 +14,13 @@ function getPermissionDefault($level) {
             'create' => 0,
             'edit' => 0,
             'delete' => 0
-        ),'view' =>$model
+        ),
+        'report' =>array(
+            'view' => 1,
+            'create' => 0,
+            'edit' => 0,
+            'delete' => 0
+        )
     );
     return json_encode($roles[0]);
 }
@@ -35,6 +40,13 @@ function getDateTime($date) {
         return NULL;
 }
 
+function getDateToDb($value){
+    if($value==''){return null;}
+    $str =  strtotime(str_replace('/', '-', $value));
+    $kq = date('Y-m-d', $str);
+    return $kq;
+}
+
 function getDbl($obj) {
     $obj=str_replace(',','',$obj);
     $obj=str_replace('.','',$obj);
@@ -47,7 +59,6 @@ function getDbl($obj) {
 
 function chkDbl($obj) {
     $obj=str_replace(',','',$obj);
-    $obj=str_replace('.','',$obj);
     if(is_numeric($obj)){
         return $obj;
     }else {

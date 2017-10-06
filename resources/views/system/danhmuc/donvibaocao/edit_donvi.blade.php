@@ -98,15 +98,24 @@
                             <div class="row">
                                 <div class="col-md-6">
                                     <div class="form-group">
-                                        <label class="control-label">Cấp đơn vị</label>
-                                        {!!Form::select('level', array('KVHCSN'=>'Khu vực HCSN, Đảng, Đoàn thể','KVXP'=>'Khu vực xã, phường, thị trấn'), null, array('id' => 'level','class' => 'form-control'))!!}
+                                        <label class="control-label">Phân loại đơn vị</label>
+                                        {!!Form::select('maphanloai', $model_phanloai, null, array('id' => 'maphanloai','class' => 'form-control'))!!}
                                     </div>
                                 </div>
 
                                 <div class="col-md-6">
                                     <div class="form-group">
-                                        <label class="control-label">Khối phòng ban</label>
-                                        {!!Form::select('makhoipb', $model_kpb,null,  array('id' => 'makhoipb','class' => 'form-control'))!!}
+                                        <label class="control-label">Đơn vị chủ quản</label>
+                                        {!!Form::select('macqcq', $model_donvi, null, array('id' => 'macqcq','class' => 'form-control'))!!}
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label class="control-label">Phân loại xã phường</label>
+                                        {!!Form::select('capdonvi', $model_plxa, null, array('id' => 'capdonvi','class' => 'form-control'))!!}
                                     </div>
                                 </div>
                             </div>

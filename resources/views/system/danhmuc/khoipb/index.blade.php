@@ -38,15 +38,6 @@
                         <button type="button" id="_btnaddPB" class="btn btn-success btn-xs" onclick="addPB()"><i class="fa fa-plus"></i>&nbsp;Thêm mới</button>
                     </div>
                 </div>
-                <div class="row">
-                    <div class="form-group">
-                        <label class="control-label col-md-3" style="text-align: right">Khu vực</label>
-                        <div class="col-md-5">
-                            {!! Form::select('mucbaomat',$a_baomat,$level,array('id' => 'mucbaomat', 'class' => 'form-control'))!!}
-                        </div>
-                        <input type="hidden" value="{{$level}}" name="level" id="level" />
-                    </div>
-                </div>
                 <div class="portlet-body form-horizontal">
                     <table id="sample_3" class="table table-hover table-striped table-bordered" style="min-height: 230px">
                         <thead>

@@ -123,4 +123,31 @@ function getMaKhoiPB($madv){
     return $kq;
 }
 
+function getLuongNgachBac($manhom,$bac=1){
+
+    $model = App\nhomngachluong::where('manhom',$manhom)->first();
+
+    $bac = $bac - 1; //do bắt đầu từ bậc 1.
+    if(count($model)>0){
+        if($bac>$model->baclonnhat){//bậc lương truyền vào > bậc max trong danh mục => lỗi.
+            return '0;0';
+        }else{
+            if($model->bacvuotkhung==0){
+                $heso=$model->heso + $bac * $model->hesochenhlech;
+                $vuotkhung = $model->vuotkhung;
+            }elseif($bac > $model->bacvuotkhung){//bao gồm cả trường hợp mã ngạch ko có vượt khung
+                $heso=$model->heso + $bac * $model->hesochenhlech;
+                $vuotkhung = $model->vuotkhung + ($bac - $model->bacvuotkhung) * $model->namnb;
+            }else{
+                $heso=$model->heso + $bac * $model->hesochenhlech;
+                $vuotkhung = 0;
+            }
+        }
+
+    }else{//Không tìm thấy mã ngạch lương
+        return '0;0';
+    }
+
+    return $heso.';'.$vuotkhung;
+}
 ?>

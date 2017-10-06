@@ -18,12 +18,4 @@
 <label class="form-control-label">Sắp xếp</label>
 {!!Form::text('sapxep', null, array('id' => 'sapxep','class' => 'form-control'))!!}
 
-<label class="form-control-label">Khối phòng ban<span class="require">*</span></label>
-
-{!! Form::select(
-'makhoipb',
-$model_kpb,null,
-array('id' => 'makhoipb', 'class' => 'form-control select2me','required'=>'required'))
-!!}
-
 <input type="hidden" id="id_cv" name="id_cv"/>

@@ -47,8 +47,9 @@
                                 <th class="text-center" style="width: 4%">STT</th>
                                 <th class="text-center">Mã đơn vị</th>
                                 <th class="text-center">Tên đơn vị</th>
+                                <th class="text-center">Đơn vị quản lý</th>
+                                <th class="text-center">Phân loại đơn vị</th>
                                 <th class="text-center">Địa chỉ</th>
-                                <th class="text-center">Số điện thoại</th>
                                 <th class="text-center">Thao tác</th>
                             </tr>
                             </thead>
@@ -59,8 +60,9 @@
                                             <td class="text-center">{{$key+1}}</td>
                                             <td>{{$value->madv}}</td>
                                             <td>{{$value->tendv}}</td>
+                                            <td>{{$value->tencqcq}}</td>
+                                            <td>{{$value->phanloai}}</td>
                                             <td>{{$value->diachi}}</td>
-                                            <td>{{$value->sodt}}</td>
                                             <td>
                                                 <a class="btn btn-default btn-xs mbs" href="{{url($url.'ma_so='.$value->madvbc.'&don_vi='.$value->madv.'/edit')}}">
                                                     <i class="fa fa-edit"></i> Chỉnh sửa
