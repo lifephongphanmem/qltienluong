@@ -189,11 +189,11 @@
                             <a href="{{url('chuc_nang/bang_luong/danh_sach')}}">Bảng lương</a>
                         </li>
                         <li>
-                            <a href="{{url('chuc_nang/tong_hop_luong/danh_sach?thang='.date('m').'&nam='.date('Y').'&khuvuc=KVHCSN')}}">Tổng hợp lương tại đơn vị</a>
+                            <a href="{{url('chuc_nang/tong_hop_luong/don_vi/index?nam='.date('Y'))}}">Tổng hợp lương tại đơn vị</a>
                         </li>
                         @if(session('admin')->quanlynhom)
                             <li>
-                                <a href="{{url('chuc_nang/tong_hop_luong/danh_sach?thang='.date('m').'&nam='.date('Y').'&khuvuc=KVHCSN')}}">Tổng hợp lương toàn khối</a>
+                                <a href="{{url('chuc_nang/tong_hop_luong/don_vi/index?thang='.date('m').'&nam='.date('Y').'&khuvuc=KVHCSN')}}">Tổng hợp lương toàn khối</a>
                             </li>
                             <li>
                                 <a href="{{url('chuc_nang/tong_hop_luong/danh_sach?thang='.date('m').'&nam='.date('Y').'&khuvuc=KVHCSN')}}">Bảng lương từ đơn vị cấp dưới</a>

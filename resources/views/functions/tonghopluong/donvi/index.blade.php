@@ -39,43 +39,35 @@
                     </div>
                 </div>
                 <div class="portlet-body form-horizontal">
-                    <div class="row">
-                        <div class="form-group">
-                            <label class="control-label col-md-3">Cấp độ quản lý </label>
-                            <div class="col-md-5">
-                                {!! Form::select('mucbaomat',$a_baomat,$level,array('id' => 'mucbaomat', 'class' => 'form-control'))!!}
-                            </div>
-                        </div>
-                    </div>
+
                     <table id="sample_3" class="table table-hover table-striped table-bordered" style="min-height: 230px">
                         <thead>
                             <tr>
                                 <th class="text-center" style="width: 10%">STT</th>
-                                <th class="text-center">Tên khu vực, địa bàn</th>
-                                <th class="text-center">Đơn vị quản lý</th>
+                                <th class="text-center">Tháng/Năm</th>
                                 <th class="text-center">Thao tác</th>
                             </tr>
                         </thead>
                         <tbody>
-                            @if(isset($model))
-                                @foreach($model as $key=>$value)
-                                    <tr>
-                                        <td class="text-center">{{$key+1}}</td>
-                                        <td>{{$value->tendvbc}}</td>
-                                        <td>{{$value->tendv}}</td>
-                                        <td>
-                                            <a href="{{url('/danh_muc/khu_vuc/ma_so='.$value->madvbc.'/list_unit')}}" class="btn btn-default btn-xs mbs">
-                                                <i class="fa fa-list-alt"></i>&nbsp; Danh sách đơn vị</a>
-                                            <button type="button" onclick="edit('{{$value->madvbc}}')" class="btn btn-default btn-xs mbs">
-                                                <i class="fa fa-edit"></i>&nbsp; Chỉnh sửa</button>
-                                            <button type="button" onclick="unit_manage('{{$value->madvbc}}')" class="btn btn-default btn-xs mbs">
-                                                <i class="fa fa-sitemap"></i>&nbsp; Đơn vị quản lý</button>
-                                            <button type="button" onclick="cfDel('{{$furl.'del/'.$value->madvbc}}')" class="btn btn-default btn-xs mbs" data-target="#delete-modal-confirm" data-toggle="modal">
-                                                <i class="fa fa-trash-o"></i>&nbsp; Xóa</button>
-                                        </td>
-                                    </tr>
-                                @endforeach
-                            @endif
+                        @if(isset($model))
+                            @foreach($model as $value)
+                                <tr>
+                                    <td class="text-center">{{$key+1}}</td>
+                                    <td>{{$value['thang'].$nam}}</td>
+                                    <td>
+                                        @if ($value['mabl'] != NULL)
+                                            <a href="{{url('/chuc_nang/bang_luong/in/maso='.$value->mabl)}}" class="btn btn-success btn-xs mbs" TARGET="_blank">
+                                                <i class="fa fa-print"></i>&nbsp; In bảng lương</a>
+                                            <a href="{{url('/chuc_nang/bang_luong/in_bh/maso='.$value->mabl)}}" class="btn btn-success btn-xs mbs" TARGET="_blank">
+                                                <i class="fa fa-print"></i>&nbsp; In bảo hiểm</a>
+                                        @else
+                                            <a href="{{url('/chuc_nang/bang_luong/in/maso='.$value->mabl)}}" class="btn btn-danger btn-xs mbs" TARGET="_blank">
+                                                <i class="fa fa-warning"></i>&nbsp; Đơn vị chưa có bảng lương</a>
+                                        @endif
+                                    </td>
+                                </tr>
+                            @endforeach
+                        @endif
                         </tbody>
                     </table>
                 </div>
@@ -95,8 +87,6 @@
                     <label class="form-control-label">Tên khu vực, địa bàn quản lý<span class="require">*</span></label>
                     {!!Form::text('tendvbc', null, array('id' => 'tendvbc','class' => 'form-control'))!!}
 
-                    <label class="form-control-label">Cấp độ quản lý</label>
-                    {!! Form::select('level',$a_baomat,$level,array('id' => 'level', 'class' => 'form-control'))!!}
 
                     <label class="form-control-label">Ghi chú</label>
                     {!!Form::textarea('ghichu', null, array('id' => 'ghichu','class' => 'form-control','rows'=>'3'))!!}
