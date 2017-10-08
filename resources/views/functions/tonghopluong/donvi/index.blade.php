@@ -45,25 +45,37 @@
                             <tr>
                                 <th class="text-center" style="width: 10%">STT</th>
                                 <th class="text-center">Tháng/Năm</th>
+                                <th class="text-center">Nội dung</th>
                                 <th class="text-center">Thao tác</th>
                             </tr>
                         </thead>
                         <tbody>
+                        <?php $i=1;?>
                         @if(isset($model))
                             @foreach($model as $value)
                                 <tr>
-                                    <td class="text-center">{{$key+1}}</td>
-                                    <td>{{$value['thang'].$nam}}</td>
+                                    <td class="text-center">{{$i++}}</td>
+                                    <td class="text-center">{{$value['thang'].'/'.$nam}}</td>
+                                    <td>{{$value['noidung']}}</td>
                                     <td>
-                                        @if ($value['mabl'] != NULL)
-                                            <a href="{{url('/chuc_nang/bang_luong/in/maso='.$value->mabl)}}" class="btn btn-success btn-xs mbs" TARGET="_blank">
-                                                <i class="fa fa-print"></i>&nbsp; In bảng lương</a>
-                                            <a href="{{url('/chuc_nang/bang_luong/in_bh/maso='.$value->mabl)}}" class="btn btn-success btn-xs mbs" TARGET="_blank">
-                                                <i class="fa fa-print"></i>&nbsp; In bảo hiểm</a>
+                                        @if ($value['bangluong'] != NULL)
+                                            @if ($value['mathdv'] != NULL)
+                                                <a href="{{url('/chuc_nang/bang_luong/in/maso='.$value['mathdv'])}}" class="btn btn-success btn-xs mbs" TARGET="_blank">
+                                                    <i class="fa fa-print"></i>&nbsp; Xem dữ liệu</a>
+                                                <a href="{{url('/chuc_nang/bang_luong/in_bh/maso='.$value['mathdv'])}}" class="btn btn-success btn-xs mbs" TARGET="_blank">
+                                                    <i class="fa fa-print"></i>&nbsp; Xem dữ liệu theo thôn, xóm</a>
+                                                <a href="{{url('/chuc_nang/bang_luong/in_bh/maso='.$value['mathdv'])}}" class="btn btn-success btn-xs mbs" TARGET="_blank">
+                                                    <i class="fa fa-print"></i>&nbsp; Gửi dữ liệu</a>
+                                            @else
+                                                <a href="{{url($furl.'tonghop?thang='.$value['thang'].'&nam='.$nam)}}" class="btn btn-danger btn-xs mbs" TARGET="_blank">
+                                                    <i class="fa fa-warning"></i>&nbsp; Tổng hợp dữ liệu</a>
+                                            @endif
                                         @else
-                                            <a href="{{url('/chuc_nang/bang_luong/in/maso='.$value->mabl)}}" class="btn btn-danger btn-xs mbs" TARGET="_blank">
-                                                <i class="fa fa-warning"></i>&nbsp; Đơn vị chưa có bảng lương</a>
+                                            <a href="" class="btn btn-danger btn-xs mbs" TARGET="_blank">
+                                                <i class="fa fa-warning"></i>&nbsp; Chưa có bảng lương</a>
                                         @endif
+
+
                                     </td>
                                 </tr>
                             @endforeach

@@ -296,6 +296,7 @@ Route::group(['prefix'=>'chuc_nang'],function(){
     Route::group(['prefix'=>'tong_hop_luong'],function(){
         Route::group(['prefix'=>'don_vi'],function(){
             Route::get('index','tonghopluong_donviController@index');
+            Route::get('tonghop','tonghopluong_donviController@tonghop');
         });
         Route::get('danh_sach','dmdonvibaocaoController@donvi_luong');
         //?&thang={thang}&nam={nam}&khuvuc={makv}&huyen={mahuyen}

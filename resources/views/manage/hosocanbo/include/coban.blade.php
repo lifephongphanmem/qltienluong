@@ -194,7 +194,7 @@
                                 $mode_ct=$model_tenct->where('macongtac',$kieuct->macongtac);
                                 ?>
                                 @foreach($mode_ct as $ct)
-                                    <option value="{{$ct->tenct}}">{{$ct->tenct}}</option>
+                                    <option value="{{$ct->mact}}">{{$ct->tenct}}</option>
                                 @endforeach
                             </optgroup>
                         @endforeach

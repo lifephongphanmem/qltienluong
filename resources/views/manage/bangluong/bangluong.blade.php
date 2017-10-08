@@ -62,7 +62,7 @@
                                     <td>{{$value->msngbac}}</td>
                                     <td>{{number_format($value->luongtn)}}</td>
                                     <td>
-                                        <a href="{{url($furl.'maso='.$value->mabl.'/can_bo')}}" class="btn btn-info btn-xs mbs">
+                                        <a href="{{url($furl.'maso='.$value->id.'/can_bo')}}" class="btn btn-info btn-xs mbs">
                                             <i class="fa fa-edit"></i>&nbsp; Chi tiết</a>
                                     </td>
                                 </tr>

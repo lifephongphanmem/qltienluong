@@ -18,7 +18,9 @@ class CreateTonghopluongDonviChitietTable extends Migration
             $table->string('mathdv',50)->nullable();
             $table->string('manguonkp',50)->nullable();
             $table->string('linhvuchoatdong')->nullable();//Phân loại xã phường ko cần chọn lĩnh vực hoạt động
-            $table->string('phanloaict')->nullable();
+            $table->string('macongtac')->nullable();
+            $table->double('heso')->default(0);
+            $table->double('vuotkhung')->default(0);
             $table->double('pcct')->default(0);
             $table->double('pckct')->default(0);
             $table->double('pck')->default(0);
@@ -60,6 +62,6 @@ class CreateTonghopluongDonviChitietTable extends Migration
      */
     public function down()
     {
-        //
+        Schema::drop('tonghopluong_donvi_chitiet');
     }
 }

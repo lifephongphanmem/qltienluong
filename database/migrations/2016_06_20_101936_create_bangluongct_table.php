@@ -19,6 +19,7 @@ class CreateBangluongctTable extends Migration
             $table->string('mapb', 50)->nullable();
 
             $table->string('msngbac', 50)->nullable();
+            $table->string('mact', 50)->nullable();
             $table->string('macanbo', 50)->nullable();
             $table->string('tencanbo', 50)->nullable();
             $table->string('masoms', 50)->nullable();

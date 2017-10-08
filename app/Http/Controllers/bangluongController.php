@@ -67,8 +67,8 @@ class bangluongController extends Controller
 
             //Lấy tất cả cán bộ trong đơn vị
             $m_cb=hosocanbo::where('madv',session('admin')->madv)
-                ->select('macanbo','tencanbo','macvcq','mapb','msngbac','heso','vuotkhung',DB::raw("'".$inputs['mabl']. "' as mabl"),
-                    'pck','pccv','pckv','pcth','pcdh','pcld','pcudn','pctn','pctnn','pcdbn','pcvk','pckn','pccovu','pcdbqh')
+                ->select('macanbo','tencanbo','mact','macvcq','mapb','msngbac','heso','vuotkhung',DB::raw("'".$inputs['mabl']. "' as mabl"),
+                    'pck','pccv','pckv','pcth','pcdh','pcld','pcudn','pctn','pctnn','pcdbn','pcvk','pckn','pccovu','pcdbqh','pctnvk','pcbdhdcu')
                 ->get();
             $gnr=getGeneralConfigs();
 
@@ -206,9 +206,9 @@ class bangluongController extends Controller
         die($model);
     }
 
-    function detail($mabl){
+    function detail($id){
         if (Session::has('admin')) {
-            $model = bangluong_ct::where('mabl',$mabl)->first();
+            $model = bangluong_ct::findorfail($id);
             $m_nb = ngachluong::where('msngbac',$model->msngbac)->first();
             $model->tennb = $m_nb->tenngachluong;
             $model->tencanbo = Str::upper($model->tencanbo);

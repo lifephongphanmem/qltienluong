@@ -32,7 +32,7 @@
         });
 
         <!--Gán các giá trị và các ô select box -->
-        $('#tenct').val('{{$model->tenct}}').trigger('change');
+        $('#mact').val('{{$model->mact}}').trigger('change');
         $('#lvhd').val('{{$model->lvhd}}').trigger('change');
         $('#lvtd').val('{{$model->lvtd}}').trigger('change');
         $('#sunghiep').val('{{$model->sunghiep}}').trigger('change');

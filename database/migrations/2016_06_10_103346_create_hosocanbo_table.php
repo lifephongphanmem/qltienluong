@@ -102,8 +102,8 @@ class CreateHosocanboTable extends Migration
             $table->double('pctr')->default(0);
             $table->double('pctnvk')->default(0);
             $table->double('pcbdhdcu')->default(0);
-            $table->string('phanloaict')->nullable();
 
+            $table->string('mact')->nullable();
             $table->string('theodoi',5)->default(1)->nullable();
             $table->string('sodinhdanhcanhan')->nullable();
             $table->string('macvcqkn', 50)->nullable();//chức vụ kiêm nhiệm

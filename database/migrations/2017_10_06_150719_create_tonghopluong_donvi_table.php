@@ -25,7 +25,9 @@ class CreateTonghopluongDonviTable extends Migration
             $table->date('ngaygui')->nullable();
             $table->string('nguoigui')->nullable();
             $table->string('trangthai')->nullable();
-            $table->string('madv',50);
+            $table->string('madv',50)->nullable();
+            $table->string('madvbc',50)->nullable();
+            $table->string('macqcq',50)->nullable();
             $table->timestamps();
         });
     }
@@ -37,6 +39,6 @@ class CreateTonghopluongDonviTable extends Migration
      */
     public function down()
     {
-        //
+        Schema::drop('tonghopluong_donvi');
     }
 }

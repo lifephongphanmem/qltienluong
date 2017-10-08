@@ -12,7 +12,7 @@ class bangluong_ct extends Model
         'mabl',
         'macvcq',
         'mapb',
-        'id_nb',
+        'mact',
         'msngbac',
         'macanbo',
         'tencanbo',

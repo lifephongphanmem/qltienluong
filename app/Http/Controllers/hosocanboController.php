@@ -97,7 +97,7 @@ class hosocanboController extends Controller
         if (Session::has('admin')) {
             //$makhoipb=getMaKhoiPB(session('admin')->madv);
             $model_nhomct=dmphanloaicongtac::select('macongtac','tencongtac')->get();
-            $model_tenct=dmphanloaict::select('tenct','macongtac')->get();
+            $model_tenct=dmphanloaict::select('tenct','macongtac','mact')->get();
             $model_dt=array_column(dmdantoc::select(DB::raw('dantoc as maso'),'dantoc')->get()->toarray(),'dantoc','maso');
             //$m_pb= dmphongban::where('madv',session('admin')->madv)->get();
             $m_pb = dmphongban::all();
@@ -158,8 +158,8 @@ class hosocanboController extends Controller
             $insert['ngaybc']=getDateTime($insert['ngaybc']);
             $insert['macvd']=($insert['macvd']==''?NULL:$insert['macvd']);
 
-            $insert['heso'] = chkDbl($insert['pccv']);
-            $insert['vuotkhung'] = chkDbl($insert['pccv']);
+            $insert['heso'] = chkDbl($insert['heso']);
+            $insert['vuotkhung'] = chkDbl($insert['vuotkhung']);
             $insert['pccv'] = chkDbl($insert['pccv']);
             $insert['pckn'] = chkDbl($insert['pckn']);
             $insert['pckv'] = chkDbl($insert['pckv']);
@@ -191,7 +191,7 @@ class hosocanboController extends Controller
             //$m_hosoct = hosotinhtrangct::where('macanbo',$model->macanbo)->where('hientai','1')->first();
 
             $model_nhomct=dmphanloaicongtac::select('macongtac','tencongtac')->get();
-            $model_tenct=dmphanloaict::select('tenct','macongtac')->get();
+            $model_tenct=dmphanloaict::select('tenct','macongtac','mact')->get();
             $model_dt=array_column(dmdantoc::select(DB::raw('dantoc as maso'),'dantoc')->get()->toarray(),'dantoc','maso');
             //$m_pb= dmphongban::where('madv',session('admin')->madv)->get();
             //khối phòng ban giờ là lĩnh vực hoạt động
@@ -248,7 +248,7 @@ class hosocanboController extends Controller
             $insert['ngaybc']=getDateTime($insert['ngaybc']);
             $insert['macvd']=($insert['macvd']==''?NULL:$insert['macvd']);
 
-            $insert['heso'] = chkDbl($insert['pccv']);
+            $insert['heso'] = chkDbl($insert['heso']);
             $insert['vuotkhung'] = chkDbl($insert['vuotkhung']);
             $insert['pccv'] = chkDbl($insert['pccv']);
             $insert['pckn'] = chkDbl($insert['pckn']);
