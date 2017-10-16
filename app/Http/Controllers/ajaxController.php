@@ -168,8 +168,12 @@ class ajaxController extends Controller
         $manhom = ngachluong::where('msngbac',$inputs['msngbac'])->first()->manhom;
         $model_nhomngachluong = nhomngachluong::where('manhom',$manhom)->first();
         //dd($inputs);
+        if($model_nhomngachluong->manhom !='CBCT'){
+            $result['message'] = getLuongNgachBac($manhom,$inputs['bac']);
+        }else{
+            $result['message'] = getLuongNgachBac_CBCT($inputs['msngbac'],$inputs['bac']);
+        }
 
-        $result['message'] = getLuongNgachBac($manhom,$inputs['bac']);
         $result['status'] = 'success';
 
         die(json_encode($result));

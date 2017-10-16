@@ -31,19 +31,23 @@
         <div class="col-md-12">
             <div class="portlet light bordered">
                 <div class="portlet-title">
-                    <div class="caption">DANH SÁCH CHI TIẾT NÂNG LƯƠNG ĐỊNH KỲ</div>
+                    <div class="caption">DANH SÁCH CHI TIẾT CÁC CÁN BỘ ĐƯỢC NÂNG LƯƠNG </div>
                     <div class="actions"></div>
                 </div>
                 <div class="portlet-body form-horizontal">
                     <table id="sample_3" class="table table-hover table-striped table-bordered" style="min-height: 230px">
                         <thead>
                             <tr>
-                                <th class="text-center" style="width: 5%">STT</th>
+                                <th class="text-center">STT</th>
                                 <th class="text-center">Họ tên</th>
                                 <th class="text-center">Chức vụ</th>
                                 <th class="text-center">Từ ngày</th>
                                 <th class="text-center">Đến ngày</th>
                                 <th class="text-center">Mã ngạch</th>
+                                <th class="text-center">Bậc</th>
+                                <th class="text-center">Hệ số</th>
+                                <th class="text-center">Vượt</br>khung</th>
+                                <th class="text-center">Hệ số</br>truy thu</th>
                                 <th class="text-center">Thao tác</th>
                             </tr>
                         </thead>
@@ -58,11 +62,18 @@
                                         <td>{{getDayVn($value->ngaytu)}}</td>
                                         <td>{{getDayVn($value->ngayden)}}</td>
                                         <td>{{$value->msngbac}}</td>
+                                        <td>{{$value->bac}}</td>
+                                        <td>{{$value->heso}}</td>
+                                        <td>{{$value->vuotkhung}}</td>
+                                        <td>{{$value->hesott}}</td>
                                         <td>
-                                            <button type="button" onclick="edit({{$value->id}})" class="btn btn-info btn-xs mbs">
-                                                <i class="fa fa-edit"></i>&nbsp;Chi tiết</button>
-                                            <button type="button" onclick="cfDel('{{$furl.'deldt/'.$value->id}}')" class="btn btn-danger btn-xs mbs" data-target="#delete-modal-confirm" data-toggle="modal">
-                                                <i class="fa fa-trash-o"></i>&nbsp; Xóa</button>
+
+                                            <a type="button" href="{{url($furl.'chi_tiet?maso='.$value->manl.'&canbo='.$value->macanbo)}}" class="btn btn-info btn-xs mbs">
+                                                <i class="fa fa-edit"></i>&nbsp;Chi tiết</a>
+                                            @if($model_nangluong->trangthai != 'Đã nâng lương')
+                                                <button type="button" onclick="cfDel('{{$furl.'deldt/'.$value->id}}')" class="btn btn-danger btn-xs mbs" data-target="#delete-modal-confirm" data-toggle="modal">
+                                                    <i class="fa fa-trash-o"></i>&nbsp; Xóa</button>
+                                            @endif
                                         </td>
                                     </tr>
                                 @endforeach
@@ -70,15 +81,20 @@
                         </tbody>
                     </table>
                 </div>
+
+                <div class="row">
+                    <div class="col-md-offset-4 col-md-8">
+                        @if($model_nangluong->trangthai != 'Đã nâng lương')
+                            <a href="{{url($furl.'nang_luong/maso='.$model_nangluong->manl)}}" class="btn btn-default"><i class="fa fa-check-square-o"></i>&nbsp;Nâng lương cán bộ</a>
+                        @endif
+                        <a href="{{url('/chuc_nang/nang_luong/danh_sach')}}" class="btn btn-default"><i class="fa fa-reply"></i>&nbsp;Quay lại</a>
+                    </div>
+                </div>
             </div>
+
         </div>
     </div>
 
-
     <!--Modal thông tin chi tiết -->
-
-    @include('includes.modal.luong_chitiet')
-    @include('includes.script.luong_ct')
-    @include('includes.script.func_msnb')
     @include('includes.modal.delete')
 @stop

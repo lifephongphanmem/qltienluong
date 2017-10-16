@@ -6,5 +6,44 @@ use Illuminate\Database\Eloquent\Model;
 
 class dsnangluong_chitiet extends Model
 {
-    //
+    protected $table = 'dsnangluong_chitiet';
+    protected $fillable = [
+        'id',
+        'manl',
+        'macanbo',
+        'phanloai',
+        'msngbac',
+        'ngaytu',
+        'ngayden',
+        'bac',
+        'heso',
+        'vuotkhung',
+        'pthuong',
+        'hesott',
+        'pcct',
+        'pckct',
+        'pck',
+        'pccv',
+        'pckv',
+        'pcth',
+        'pcdd',
+        'pcdh',
+        'pcld',
+        'pcdbqh',
+        'pcudn',
+        'pctn',
+        'pctnn',
+        'pcdbn',
+        'pcvk',
+        'pckn',
+        'pcdang',
+        'pccovu',
+        'pclt',
+        'pcd',
+        'pctr',
+        'pctnvk',
+        'pcbdhdcu',
+        'pcthni',
+        'ghichu'
+    ];
 }

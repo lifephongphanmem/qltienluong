@@ -243,12 +243,14 @@ function getConditions($inputs, $exists, $table)
     }
     return $s_sql;
 }
+
 function convert2date($ngaythang){
     if($ngaythang==''){
         return null;
     }
     return date('Y-m-d', strtotime(str_replace('/', '-', $ngaythang)));
 }
+
 function conver2Roman($num){
     $n = intval($num);
     $res = '';
@@ -282,5 +284,29 @@ function conver2Roman($num){
 
     // return the result
     return $res;
+}
+
+//$unit = 1 => đơn vị tính đồng
+//$unit = 2 => đơn vị tính nghìn đồng
+//$unit = 3 => đơn vị tính triệu đồng
+function dinhdangso ($number , $decimals = 0, $unit = '1' , $dec_point = ',' , $thousands_sep = '.' ) {
+    if(!is_numeric($number) || $number == 0){return '';}
+    $r = $unit;
+
+    switch ($unit) {
+        case 2:{
+            $decimals = 3;
+            $r = 1000;
+            break;
+        }
+        case 3:{
+            $decimals = 5;
+            $r = 1000000;
+            break;
+        }
+    }
+
+    $number = round( $number / $r , $decimals);
+    return number_format($number, $decimals ,$dec_point, $thousands_sep);
 }
 ?>

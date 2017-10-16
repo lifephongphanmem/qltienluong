@@ -286,10 +286,16 @@ Route::group(['prefix'=>'chuc_nang'],function(){
 
     Route::group(['prefix'=>'nang_luong'],function(){
         Route::get('danh_sach','dsnangluongController@index');
+        Route::post('store','dsnangluongController@store'); //insert + update danh sách nâng lương
+
         Route::get('update/{id}','dsnangluongController@update');
         Route::get('create','dsnangluongController@create');
+
         Route::get('/maso={manl}','dsnangluongController@show');
+        Route::get('chi_tiet','dsnangluongController@detail');
+        Route::post('store_detail','dsnangluongController@store_detail'); //insert + update danh sách nâng lương
         Route::get('del/{id}','dsnangluongController@destroy');
+        Route::get('nang_luong/maso={manl}','dsnangluongController@nang_luong');
         Route::get('deldt/{id}','dsnangluongController@destroydt');
     });
 
@@ -297,6 +303,13 @@ Route::group(['prefix'=>'chuc_nang'],function(){
         Route::group(['prefix'=>'don_vi'],function(){
             Route::get('index','tonghopluong_donviController@index');
             Route::get('tonghop','tonghopluong_donviController@tonghop');
+            Route::get('detail/ma_so={mathdv}','tonghopluong_donviController@detail');
+            Route::get('detail_diaban/ma_so={mathdv}','tonghopluong_donviController@detail_diaban');
+
+            Route::post('senddata','tonghopluong_donviController@senddata'); //gửi dữ liệu
+
+            Route::get('printf_data/ma_so={mathdv}','tonghopluong_donviController@printf_data');
+            Route::get('printf_data_diaban/ma_so={mathdv}','tonghopluong_donviController@printf_data_diaban');
         });
         Route::get('danh_sach','dmdonvibaocaoController@donvi_luong');
         //?&thang={thang}&nam={nam}&khuvuc={makv}&huyen={mahuyen}

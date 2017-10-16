@@ -23,6 +23,7 @@ class CreateDsnangluongTable extends Migration
             $table->string('noidung')->nullable();
             $table->date('ngayxet')->nullable();
             $table->string('kemtheo')->nullable();
+            $table->string('trangthai',50)->nullable();
             $table->string('madv',50)->nullable();
             $table->timestamps();
         });

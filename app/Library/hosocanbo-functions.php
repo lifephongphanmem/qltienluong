@@ -86,11 +86,9 @@ function getPhongBanX(){
 //Lấy thông tin cán bộ giao diện xã
 function getCanBoX(){
     $m_cb = \Illuminate\Support\Facades\DB::table('hosocanbo')
-        ->join('dmchucvucq', 'hosocanbo.macvcq', '=', 'dmchucvucq.macvcq')
-        ->select('hosocanbo.macanbo','hosocanbo.tencanbo','hosocanbo.mapb', 'dmchucvucq.sapxep')
+        ->select('hosocanbo.macanbo','hosocanbo.tencanbo','hosocanbo.mapb')
         ->where('hosocanbo.madv',session('admin')->madv)
         ->where('hosocanbo.theodoi','1')
-        ->orderby('dmchucvucq.sapxep')
         ->get();
     return $m_cb;
 }
@@ -124,22 +122,51 @@ function getMaKhoiPB($madv){
 }
 
 function getLuongNgachBac($manhom,$bac=1){
-
     $model = App\nhomngachluong::where('manhom',$manhom)->first();
+    //$bac = $bac - 1; //do bắt đầu từ bậc 1.
+    if(count($model)>0){
+        if($bac > $model->baclonnhat){//bậc lương truyền vào > bậc max trong danh mục => lỗi.
+            return '0;0';
+        }else{
+            if($model->bacvuotkhung==0 || $model->bacvuotkhung==1){
+                $heso=$model->heso + ($bac - 1) * $model->hesochenhlech;
+                $vuotkhung = $model->vuotkhung;
+            }elseif($bac >= $model->bacvuotkhung){//bao gồm cả trường hợp mã ngạch ko có vượt khung
+                //do bắt đầu từ bậc 1 và bắt đàu vượt khung thì heso = hệ số bậc lương trc
+                $heso=$model->heso + ($model->bacvuotkhung - 2) * $model->hesochenhlech;
 
-    $bac = $bac - 1; //do bắt đầu từ bậc 1.
+                $vuotkhung = $model->vuotkhung + ($bac - $model->bacvuotkhung) * $model->namnb;
+            }else{
+                $heso=$model->heso + ($bac - 1) * $model->hesochenhlech;
+                $vuotkhung = 0;
+            }
+        }
+
+    }else{//Không tìm thấy mã ngạch lương
+        return '0;0';
+    }
+
+    return $heso.';'.$vuotkhung;
+}
+
+function getLuongNgachBac_CBCT($msngbac,$bac=1){
+    $model = App\ngachluong::where('msngbac',$msngbac)->first();
+    //$bac = $bac - 1; //do bắt đầu từ bậc 1.
     if(count($model)>0){
         if($bac>$model->baclonnhat){//bậc lương truyền vào > bậc max trong danh mục => lỗi.
             return '0;0';
         }else{
-            if($model->bacvuotkhung==0){
-                $heso=$model->heso + $bac * $model->hesochenhlech;
+            //mặc định nếu ko có vượt khung bacvuotkhung=0, nhưng do form nhap de giá trị bacvuotkhung=0
+            if($model->bacvuotkhung==0 || $model->bacvuotkhung==1){
+                $heso=$model->heso + ($bac - 1) * $model->hesochenhlech;
                 $vuotkhung = $model->vuotkhung;
-            }elseif($bac > $model->bacvuotkhung){//bao gồm cả trường hợp mã ngạch ko có vượt khung
-                $heso=$model->heso + $bac * $model->hesochenhlech;
+            }elseif($bac >= $model->bacvuotkhung){//bao gồm cả trường hợp mã ngạch ko có vượt khung
+                //do bắt đầu từ bậc 1 và bắt đàu vượt khung thì heso = hệ số bậc lương trc
+                $heso=$model->heso + ($model->bacvuotkhung - 2) * $model->hesochenhlech;
+
                 $vuotkhung = $model->vuotkhung + ($bac - $model->bacvuotkhung) * $model->namnb;
             }else{
-                $heso=$model->heso + $bac * $model->hesochenhlech;
+                $heso=$model->heso + ($bac - 1) * $model->hesochenhlech;
                 $vuotkhung = 0;
             }
         }

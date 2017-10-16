@@ -13,6 +13,7 @@ class tonghopluong_donvi_diaban extends Model
         'mathdv',
         'madiaban',
         'heso',
+        'hesott',
         'vuotkhung',
         'pcct',
         'pckct',
@@ -37,6 +38,7 @@ class tonghopluong_donvi_diaban extends Model
         'pctr',
         'pctnvk',
         'pcbdhdcu',
+        'pcthni',
         'tonghs',
 
         'stbhxh_dv',

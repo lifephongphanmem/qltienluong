@@ -98,7 +98,6 @@
                 </div>
             </div>
         </div>
-
     </div>
 
     <div class="row">
@@ -114,6 +113,7 @@
 
                     </div>
                 </div>
+                <?php $i=1;?>
                 <div class="portlet-body">
                     <table id="sample_3" class="table table-hover table-striped table-bordered">
                         <thead>
@@ -128,7 +128,7 @@
                         @if(isset($m_nangluong))
                             @foreach($m_nangluong as $key=>$value)
                                 <tr>
-                                    <td>{{$key+1}}</td>
+                                    <td class="text-center">{{$i++}}</td>
                                     <td>{{$value->tencanbo}}</td>
                                     <td>{{$value->msngbac}}</td>
                                     <td>{{getDayVn($value->ngayden)}}</td>
@@ -154,6 +154,8 @@
 
                     </div>
                 </div>
+
+                <?php $i=1;?>
                 <div class="portlet-body">
                     <table id="sample_5" class="table table-hover table-striped table-bordered">
                         <thead>
@@ -167,12 +169,11 @@
                         @if(isset($m_sinhnhat))
                             @foreach($m_sinhnhat as $key=>$value)
                                 <tr>
-                                    <td>{{$key+1}}</td>
+                                    <td class="text-center">{{$i++}}</td>
                                     <td>{{$value->tencanbo}}</td>
                                     <td>{{getDayVn($value->ngaysinh)}}</td>
                                 </tr>
                             @endforeach
-
                         @endif
                         </tbody>
                     </table>

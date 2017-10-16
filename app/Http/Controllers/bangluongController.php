@@ -19,6 +19,7 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 use App\Http\Requests;
+use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Str;
@@ -67,17 +68,20 @@ class bangluongController extends Controller
 
             //Lấy tất cả cán bộ trong đơn vị
             $m_cb=hosocanbo::where('madv',session('admin')->madv)
-                ->select('macanbo','tencanbo','mact','macvcq','mapb','msngbac','heso','vuotkhung',DB::raw("'".$inputs['mabl']. "' as mabl"),
-                    'pck','pccv','pckv','pcth','pcdh','pcld','pcudn','pctn','pctnn','pcdbn','pcvk','pckn','pccovu','pcdbqh','pctnvk','pcbdhdcu')
+                ->select('macanbo','tencanbo','mact','macvcq','mapb','msngbac','heso','hesott','vuotkhung',DB::raw("'".$inputs['mabl']. "' as mabl"),
+                    'pck','pccv','pckv','pcth','pcdh','pcld','pcudn','pctn','pctnn','pcdbn','pcvk','pckn','pccovu','pcdbqh','pctnvk','pcbdhdcu','pcdang','pcthni')
                 ->get();
             $gnr=getGeneralConfigs();
 
+            $a_truythu = array();
             foreach($m_cb as $cb){
+                $a_truythu[] = $cb->macanbo;
                 //trong bảng danh mục là % vượt khung => sang bảng lương chuyển thành hệ số
                 $cb->vuotkhung=round((($cb->heso + $cb->pccv)*$cb->vuotkhung/100),2);
 
                 $ths=0;
                 $ths +=$cb->heso;
+                $ths +=$cb->hesott;
                 $ths +=$cb->vuotkhung;
                 $ths +=$cb->pck;
                 $ths +=$cb->pccv;
@@ -95,11 +99,13 @@ class bangluongController extends Controller
                 $ths +=$cb->pcdbqh;
                 $ths +=$cb->pcbdhdcu;
                 $ths +=$cb->pctnvk;
+                $ths +=$cb->pcdang;
+                $ths +=$cb->pcthni;
 
                 $cb->tonghs=$ths;
 
                 $cb->ttl=$gnr['luongcb']*$ths*$inputs['phantramhuong']/100;
-                $luongnopbaohiem=$gnr['luongcb']*($cb->heso+$cb->pccv)*$inputs['phantramhuong']/100;
+                $luongnopbaohiem=$gnr['luongcb']*($cb->heso + $cb->pccv + $cb->hesott + $cb->vuotkhung)*$inputs['phantramhuong']/100;
 
                 // chưa tính được các loại hệ số pải nộp bh
                 //tách bảng phụ cấp riêng ra - liên kết với bảng hosocanbo
@@ -117,7 +123,12 @@ class bangluongController extends Controller
                 $cb->stbhtn_dv=$luongnopbaohiem*floatval($gnr['bhtn_dv'])/100;
                 $cb->ttbh_dv=$cb->stbhxh_dv + $cb->stbhyt_dv + $cb->stkpcd_dv + $cb->stbhtn_dv;
             }
-
+            $model_canbo = $m_cb->where('hesott','>',0)->map(function ($data) {
+                return collect($data->toArray())
+                    ->only(['macanbo'])
+                    ->all();
+            });
+            hosocanbo::wherein('macanbo',$model_canbo->toarray())->update(['hesott'=>0]);
             bangluong::create($inputs);
             bangluong_ct::insert($m_cb->toarray());
         }

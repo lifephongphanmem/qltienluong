@@ -40,8 +40,6 @@
         $('#mapb').val('{{$model->mapb}}').trigger('change');
         $('#nhommau').val('{{$model->nhommau}}').trigger('change');
         $('#macvd').val('{{$model->macvd}}').trigger('change');
-        //$('#bac').val('{{$model->bac}}').trigger('change');
-        //$('#tennb').val('{{$model->msngbac}}').trigger('change');
     </script>
 
 
@@ -109,5 +107,4 @@
             </div>
         </div>
     </div>
-
 @stop

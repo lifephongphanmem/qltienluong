@@ -46,6 +46,7 @@
                                 <th class="text-center">Cơ quan quyết định</th>
                                 <th class="text-center">Nội dung quyết định</th>
                                 <th class="text-center">Ngày xét duyệt</th>
+                                <th class="text-center">Trạng thái</th>
                                 <th class="text-center">Thao tác</th>
                             </tr>
                         </thead>
@@ -59,6 +60,7 @@
                                     <td>{{$value->coquanqd}}</td>
                                     <td>{{$value->noidung}}</td>
                                     <td>{{getDayVn($value->ngayxet)}}</td>
+                                    <td>{{$value->trangthai}}</td>
                                     <td>
                                         <button type="button" onclick="edit({{$value->id}})" class="btn btn-info btn-xs mbs">
                                             <i class="fa fa-edit"></i>&nbsp; Chỉnh sửa</button>
@@ -78,6 +80,7 @@
     </div>
 
     <!--Modal thông tin chi tiết -->
+    {!! Form::open(['url'=>'/chuc_nang/nang_luong/store','method'=>'post', 'id' => 'create_ngachbac','enctype'=>'multipart/form-data']) !!}
     <div id="chitiet-modal" tabindex="-1" role="dialog" aria-hidden="true" class="modal fade">
         <div class="modal-dialog modal-content">
             <div class="modal-header modal-header-primary">
@@ -95,17 +98,17 @@
                             {!! Form::textarea('kemtheo',null,array('id' => 'kemtheo', 'class' => 'form-control','rows'=>'3'))!!}
                         </div>
                     </div>
-
+                    <input type="hidden" id="manl" name="manl"/>
                     <input type="hidden" id="id_ct" name="id_ct"/>
                 </div>
             </div>
             <div class="modal-footer">
                 <button type="button" data-dismiss="modal" class="btn btn-default">Hủy thao tác</button>
-                <button type="submit" id="submit" name="submit" value="submit" class="btn btn-primary" onclick="confirm()">Đồng ý</button>
+                <button type="submit" id="submit" name="submit" value="submit" class="btn btn-primary">Đồng ý</button>
             </div>
         </div>
     </div>
-
+    {!!Form::close()!!}
     <script>
         function add(){
             $('#soqd').val('');
@@ -115,6 +118,7 @@
             $('#noidung').val('');
             $('#ngayxet').val('');
             $('#kemtheo').val('');
+            $('#manl').val('');
             $('#id_ct').val(0);
             $('#chitiet-modal').modal('show');
         }
@@ -148,83 +152,28 @@
             $('#chitiet-modal').modal('show');
         }
 
-        function confirm(){
-            var valid=true;
-            var message='';
+        $(function(){
+            $('#create_ngachbac :submit').click(function(){
+                var ok = true;
+                //var ngayxet=$('#ngayxet').val();
 
-            var soqd=$('#soqd').val();
-            var ngayqd=$('#ngayqd').val();
-            var nguoiky=$('#nguoiky').val();
-            var coquanqd=$('#coquanqd').val();
-            var noidung=$('#noidung').val();
-            var ngayxet=$('#ngayxet').val();
-            var kemtheo=$('#kemtheo').val();
+                if($('#ngayxet').val()==''){
+                    ok = false;
+                }
 
-            var id=$('#id_ct').val();
-
-            if(ngayxet==''){
-                valid=false;
-                message +='Ngày xét duyệt không được bỏ trống \n';
-            }
-
-            if(valid){
-                var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
-                if(id==0){//Thêm mới
-                    $.ajax({
-                                url: '{{$furl_ajax}}' + 'add',
-                        type: 'GET',
-                        data: {
-                            _token: CSRF_TOKEN,
-                            soqd:soqd,
-                            ngayqd:ngayqd,
-                            nguoiky:nguoiky,
-                            coquanqd:coquanqd,
-                            noidung:noidung,
-                            ngayxet:ngayxet,
-                            kemtheo:kemtheo
-                        },
-                        dataType: 'JSON',
-                        success: function (data) {
-                            if (data.status == 'success') {
-                                window.location.href = data.message;
-                            }
-                        },
-                        error: function(message){
-                            toastr.error(message,'Lỗi!');
-                        }
-                    });
-                }else{//Cập nhật
-                    $.ajax({
-                        url: '{{$furl_ajax}}' + 'update',
-                        type: 'GET',
-                        data: {
-                            _token: CSRF_TOKEN,
-                            soqd:soqd,
-                            ngayqd:ngayqd,
-                            nguoiky:nguoiky,
-                            coquanqd:coquanqd,
-                            noidung:noidung,
-                            ngayxet:ngayxet,
-                            kemtheo:kemtheo,
-                            id: id
-                        },
-                        dataType: 'JSON',
-                        success: function (data) {
-                            if (data.status == 'success') {
-                                location.reload();
-                            }
-                        },
-                        error: function(message){
-                            toastr.error(message,'Lỗi!');
-                        }
+                //Kết quả
+                if ( ok == false){
+                    alert(' Ngày xét duyệt không được bỏ trống \n');
+                    $("form").submit(function (e) {
+                        e.preventDefault();
                     });
                 }
-                $('#chitiet-modal').modal('hide');
-            }else{
-                alert(message);
-            }
-            return valid;
-        }
+                else{
+                    $("form").unbind('submit').submit();
+                }
+            });
+        });
+
     </script>
 
     @include('includes.modal.delete')

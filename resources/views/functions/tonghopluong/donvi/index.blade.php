@@ -35,7 +35,7 @@
                         DANH SÁCH DỮ LIỆU TỔNG HỢP LƯƠNG TẠI ĐƠN VỊ
                     </div>
                     <div class="actions">
-                        <button type="button" id="_btnaddPB" class="btn btn-success btn-xs" onclick="addPB()"><i class="fa fa-plus"></i>&nbsp;Thêm mới</button>
+
                     </div>
                 </div>
                 <div class="portlet-body form-horizontal">
@@ -46,6 +46,7 @@
                                 <th class="text-center" style="width: 10%">STT</th>
                                 <th class="text-center">Tháng/Năm</th>
                                 <th class="text-center">Nội dung</th>
+                                <th class="text-center">Trạng thái</th>
                                 <th class="text-center">Thao tác</th>
                             </tr>
                         </thead>
@@ -57,25 +58,30 @@
                                     <td class="text-center">{{$i++}}</td>
                                     <td class="text-center">{{$value['thang'].'/'.$nam}}</td>
                                     <td>{{$value['noidung']}}</td>
+                                    <td class="text-center">{{$a_trangthai[$value['trangthai']]}}</td>
                                     <td>
                                         @if ($value['bangluong'] != NULL)
                                             @if ($value['mathdv'] != NULL)
-                                                <a href="{{url('/chuc_nang/bang_luong/in/maso='.$value['mathdv'])}}" class="btn btn-success btn-xs mbs" TARGET="_blank">
-                                                    <i class="fa fa-print"></i>&nbsp; Xem dữ liệu</a>
-                                                <a href="{{url('/chuc_nang/bang_luong/in_bh/maso='.$value['mathdv'])}}" class="btn btn-success btn-xs mbs" TARGET="_blank">
-                                                    <i class="fa fa-print"></i>&nbsp; Xem dữ liệu theo thôn, xóm</a>
-                                                <a href="{{url('/chuc_nang/bang_luong/in_bh/maso='.$value['mathdv'])}}" class="btn btn-success btn-xs mbs" TARGET="_blank">
-                                                    <i class="fa fa-print"></i>&nbsp; Gửi dữ liệu</a>
+                                                @if($value['trangthai'] !='DAGUI')
+                                                    <a href="{{url($furl.'detail/ma_so='.$value['mathdv'])}}" class="btn btn-default btn-sm">
+                                                        <i class="fa fa-list-alt"></i>&nbsp; Số liệu tổng hợp</a>
+                                                    <a href="{{url($furl.'detail_diaban/ma_so='.$value['mathdv'])}}" class="btn btn-default btn-sm">
+                                                        <i class="fa fa-list-alt"></i>&nbsp; Số liệu địa bàn</a>
+                                                    <button type="button" class="btn btn-success btn-sm" onclick="confirmChuyen('{{$value['mathdv']}}')" data-target="#chuyen-modal" data-toggle="modal"><i class="fa fa-share-square-o"></i>&nbsp;
+                                                        Gửi dữ liệu</button>
+                                                @else
+                                                    <a href="{{url($furl.'printf_data/ma_so='.$value['mathdv'])}}" class="btn btn-success btn-sm" TARGET="_blank">
+                                                        <i class="fa fa-print"></i>&nbsp; Số liệu tổng hợp</a>
+                                                    <a href="{{url($furl.'printf_data_diaban/ma_so='.$value['mathdv'])}}" class="btn btn-success btn-sm" TARGET="_blank">
+                                                        <i class="fa fa-print"></i>&nbsp; Số liệu địa bàn</a>
+                                                @endif
                                             @else
-                                                <a href="{{url($furl.'tonghop?thang='.$value['thang'].'&nam='.$nam)}}" class="btn btn-danger btn-xs mbs" TARGET="_blank">
-                                                    <i class="fa fa-warning"></i>&nbsp; Tổng hợp dữ liệu</a>
+                                                <a href="{{url($furl.'tonghop?thang='.$value['thang'].'&nam='.$nam)}}" class="btn btn-default btn-sm">
+                                                    <i class="fa fa-stack-overflow"></i>&nbsp; Tổng hợp dữ liệu</a>
                                             @endif
                                         @else
-                                            <a href="" class="btn btn-danger btn-xs mbs" TARGET="_blank">
-                                                <i class="fa fa-warning"></i>&nbsp; Chưa có bảng lương</a>
+
                                         @endif
-
-
                                     </td>
                                 </tr>
                             @endforeach
@@ -87,66 +93,36 @@
         </div>
     </div>
 
-    <!--Modal thêm mới -->
-    <div id="phongban-modal" tabindex="-1" role="dialog" aria-hidden="true" class="modal fade">
+    <!--Model chuyển-->
+    <div class="modal fade" id="chuyen-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
-                <div class="modal-header modal-header-primary">
-                    <button type="button" data-dismiss="modal" aria-hidden="true" class="close">&times;</button>
-                    <h4 id="modal-header-primary-label" class="modal-title">Thông tin khu vực, địa bàn quản lý</h4>
+                {!! Form::open(['url'=>$furl.'senddata','id' => 'frm_chuyen','method'=>'POST'])!!}
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+                    <h4 class="modal-title">Đồng ý chuyển số liệu?</h4>
                 </div>
                 <div class="modal-body">
-                    <label class="form-control-label">Tên khu vực, địa bàn quản lý<span class="require">*</span></label>
-                    {!!Form::text('tendvbc', null, array('id' => 'tendvbc','class' => 'form-control'))!!}
-
-
-                    <label class="form-control-label">Ghi chú</label>
-                    {!!Form::textarea('ghichu', null, array('id' => 'ghichu','class' => 'form-control','rows'=>'3'))!!}
-
-                    <input type="hidden" id="madvbc" name="madvbc"/>
-                </div>
+                    <div class="form-group">
+                        <label><b>Số liệu tổng hợp khi gửi đi sẽ không thể chỉnh sửa. Bạn hãy kiểm tra kỹ số liệu trước khi gửi.</b></label>
+                    </div>
+                <input type="hidden" name="mathdv" id="mathdv">
                 <div class="modal-footer">
-                    <button type="button" data-dismiss="modal" class="btn btn-default">Hủy thao tác</button>
-                    <button type="submit" id="submit" name="submit" value="submit" class="btn btn-primary" onclick="cfPB()">Đồng ý</button>
+                    <button type="button" class="btn default" data-dismiss="modal">Hủy</button>
+                    <button type="submit" class="btn blue">Đồng ý</button>
+
                 </div>
+                {!! Form::close() !!}
             </div>
+            <!-- /.modal-content -->
         </div>
+        <!-- /.modal-dialog -->
     </div>
 
-    <!--Modal đơn vị chủ quản -->
-    <div id="chuquan-modal" tabindex="-1" role="dialog" aria-hidden="true" class="modal fade">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header modal-header-primary">
-                    <button type="button" data-dismiss="modal" aria-hidden="true" class="close">&times;</button>
-                    <h4 id="modal-header-primary-label" class="modal-title">Thông tin đơn vị quản lý địa bàn</h4>
-                </div>
-                <div class="modal-body" id="donvichuquan">
-                    <label class="form-control-label">Chọn đơn vị quản lý</label>
-                    <select class="form-control select2me" name="madvcq_cq" id="madvcq_cq"></select>
-                </div>
-                <input type="hidden" id="madvbc_cq" name="madvbc_cq"/>
-                <div class="modal-footer">
-                    <button type="button" data-dismiss="modal" class="btn btn-default">Hủy thao tác</button>
-                    <button type="submit" id="submit" name="submit" value="submit" class="btn btn-primary" onclick="cfdvcq()">Đồng ý</button>
-                </div>
-            </div>
-        </div>
-    </div>
 
     <script>
-
-        $(function(){
-            $('#mucbaomat').change(function() {
-                window.location.href = '/danh_muc/khu_vuc/ma_so='+$('#mucbaomat').val();
-            });
-        })
-
-        function addPB(){
-            $('#tendvbc').val('');
-            $('#ghichu').val('');
-            $('#madvbc').val('');
-            $('#phongban-modal').modal('show');
+        function confirmChuyen(mathdv) {
+            document.getElementById("mathdv").value = mathdv;
         }
 
         function edit(madvbc){

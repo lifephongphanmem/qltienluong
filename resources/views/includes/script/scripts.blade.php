@@ -166,4 +166,18 @@
         //});
     }
     // </editor-fold>
+
+    function getdl(str){
+        var kq=0;
+        //str=str.replace(',',''); hàm này số dang 1,234,564 => 1234,564 (chỉ replace 1 lần)
+        str = str.replace(new RegExp(',', 'g'), '');
+
+        if(str == '' || str == null) {return 0;}
+
+        if(!isNaN(str) || str != ''){
+            kq=str;
+        }
+
+        return parseFloat(kq);
+    }
 </script>

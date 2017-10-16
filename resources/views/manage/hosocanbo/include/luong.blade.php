@@ -9,32 +9,63 @@
                 </div>
             </div>
 
-            <div class="col-md-3">
-                <div class="form-group">
-                    <label class="control-label">Ngạch bậc </label>
-                    <select class="form-control select2me" name="tennb" id="tennb" onchange="setMSNGBAC()">
-                        @foreach($m_plnb as $plnb)
-                            <optgroup label="{{$plnb->tennhom}}">
-                            <?php $mode_ct=$m_pln->where('manhom',$plnb->manhom); ?>
-                                @foreach($mode_ct as $ct)
-                                    <option value="{{$ct->msngbac}}">{{$ct->tenngachluong}}</option>
-                                @endforeach
-                            </optgroup>
-                        @endforeach
-                    </select>
+            @if(isset($model))
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label class="control-label">Ngạch bậc </label>
+                        <select class="form-control select2me" name="tennb" id="tennb" onchange="setMSNGBAC()">
+                            @foreach($m_plnb as $plnb)
+                                <optgroup label="{{$plnb->tennhom}}">
+                                    <?php $mode_ct=$m_pln->where('manhom',$plnb->manhom); ?>
+                                    @foreach($mode_ct as $ct)
+                                        <option value="{{$ct->msngbac}}" {{$model->msngbac == $ct->msngbac?'selected':''}}>{{$ct->tenngachluong}}</option>
+                                    @endforeach
+                                </optgroup>
+                            @endforeach
+                        </select>
+                    </div>
                 </div>
-            </div>
 
-            <div class="col-md-3">
-                <div class="form-group">
-                    <label class="control-label">Bậc lương </label>
-                    <select class="form-control select2me" name="bac" id="bac" onchange="getHS()">
-                        @for($i=1;$i<=16;$i++)
-                            <option value="{{$i}}">{{$i}}</option>
-                        @endfor
-                    </select>
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label class="control-label">Bậc lương </label>
+                        <select class="form-control select2me" name="bac" id="bac" onchange="getHS()">
+                            @for($i=1;$i<=16;$i++)
+                                <option value="{{$i}}" {{$i == $model->bac?'selected':''}}>{{$i}}</option>
+                            @endfor
+                        </select>
+                    </div>
                 </div>
-            </div>
+            @else
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label class="control-label">Ngạch bậc </label>
+                        <select class="form-control select2me" name="tennb" id="tennb" onchange="setMSNGBAC()">
+                            @foreach($m_plnb as $plnb)
+                                <optgroup label="{{$plnb->tennhom}}">
+                                <?php $mode_ct=$m_pln->where('manhom',$plnb->manhom); ?>
+                                    @foreach($mode_ct as $ct)
+                                        <option value="{{$ct->msngbac}}">{{$ct->tenngachluong}}</option>
+                                    @endforeach
+                                </optgroup>
+                            @endforeach
+                        </select>
+                    </div>
+                </div>
+
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label class="control-label">Bậc lương </label>
+                        <select class="form-control select2me" name="bac" id="bac" onchange="getHS()">
+                            @for($i=1;$i<=16;$i++)
+                                <option value="{{$i}}">{{$i}}</option>
+                            @endfor
+                        </select>
+                    </div>
+                </div>
+            @endif
+
+
             <div class="col-md-3">
                 <div class="form-group">
                     <label class="control-label">Hệ số lương </label>
@@ -187,8 +218,32 @@
 
             <div class="col-md-3">
                 <div class="form-group">
+                    <label class="control-label">Phụ cấp thâm niên </label>
+                    {!!Form::text('pcthni', null, array('id' => 'pcthni','class' => 'form-control', 'data-mask'=>'fdecimal'))!!}
+                </div>
+            </div>
+
+        </div>
+
+        <div class="row">
+            <div class="col-md-3">
+                <div class="form-group">
+                    <label class="control-label">Phụ cấp công tác Đảng </label>
+                    {!!Form::text('pcdang', null, array('id' => 'pcdang','class' => 'form-control', 'data-mask'=>'fdecimal'))!!}
+                </div>
+            </div>
+
+            <div class="col-md-3">
+                <div class="form-group">
                     <label class="control-label">Phụ cấp khác </label>
                     {!!Form::text('pck', null, array('id' => 'pck','class' => 'form-control', 'data-mask'=>'fdecimal'))!!}
+                </div>
+            </div>
+
+            <div class="col-md-3">
+                <div class="form-group">
+                    <label class="control-label">Hệ số lương truy thu</label>
+                    {!!Form::text('hesott', null, array('id' => 'hesott','class' => 'form-control', 'data-mask'=>'fdecimal'))!!}
                 </div>
             </div>
         </div>

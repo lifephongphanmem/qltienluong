@@ -24,6 +24,7 @@ class CreateBangluongctTable extends Migration
             $table->string('tencanbo', 50)->nullable();
             $table->string('masoms', 50)->nullable();
             $table->double('heso')->default(0);
+            $table->double('hesott')->default(0);//hệ số truy thu
             $table->double('vuotkhung')->default(0);
 
             $table->double('pcct')->default(0);
@@ -49,6 +50,7 @@ class CreateBangluongctTable extends Migration
             $table->double('pctr')->default(0);
             $table->double('pctnvk')->default(0);
             $table->double('pcbdhdcu')->default(0);
+            $table->double('pcthni')->default(0);
 
             $table->double('tonghs')->default(0);
             $table->double('ttl')->default(0);

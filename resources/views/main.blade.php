@@ -191,12 +191,17 @@
                         <li>
                             <a href="{{url('chuc_nang/tong_hop_luong/don_vi/index?nam='.date('Y'))}}">Tổng hợp lương tại đơn vị</a>
                         </li>
-                        @if(session('admin')->quanlynhom)
+                        <!-- Các tài khoản quản lý khu vực mới có tính năng tổng hợp dữ liệu từ đơn vị cấp dưới -->
+                        @if(session('admin')->quanlykhuvuc)
                             <li>
-                                <a href="{{url('chuc_nang/tong_hop_luong/don_vi/index?thang='.date('m').'&nam='.date('Y').'&khuvuc=KVHCSN')}}">Tổng hợp lương toàn khối</a>
+                                <a href="{{url('chuc_nang/tong_hop_luong/huyen/index?thang='.date('m').'&nam='.date('Y').'&khuvuc=KVHCSN')}}">Tổng hợp lương toàn khối</a>
                             </li>
+                        @endif
+
+                        <!--Chức năng xem dữ liệu tổng hợp lương của các đơn vị cấp dưới cho tài khoản quản lý -->
+                        @if(session('admin')->quanlynhom || session('admin')->quanlykhuvuc)
                             <li>
-                                <a href="{{url('chuc_nang/tong_hop_luong/danh_sach?thang='.date('m').'&nam='.date('Y').'&khuvuc=KVHCSN')}}">Bảng lương từ đơn vị cấp dưới</a>
+                                <a href="{{url('chuc_nang/tong_hop_luong/danh_sach?thang='.date('m').'&nam='.date('Y').'&khuvuc=KVHCSN')}}">Số liệu tổng hợp từ đơn vị cấp dưới</a>
                             </li>
                         @endif
 
@@ -228,7 +233,7 @@
 					<span class="arrow "></span>
 					</a>
 					<ul class="sub-menu">
-                        <li><a href="{{url('bao_cao/don_vi')}}">Báo cáo nhân sự</a></li>
+                        <!--li><a href="{{url('bao_cao/don_vi')}}">Báo cáo nhân sự</a></li  chưa fix -->
                         <!--li><a href="{{url('bao_cao/mau_chuan')}}">Báo cáo theo thông tư, quyết định</a></li-->
                         <li><a href="{{url('bao_cao/bang_luong')}}">Báo cáo chi trả lương</a></li>
 					</ul>

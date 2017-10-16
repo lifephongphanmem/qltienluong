@@ -39,14 +39,12 @@
 </div>
 <div class="row mbl">
     <br>
-    <br>
-    <h1><b>PHẦN MỀM QUẢN LÝ TIỀN LƯƠNG</b></h1>
+        <h1><b>PHẦN MỀM QUẢN LÝ LƯƠNG</br> VÀ BIÊN CHẾ</b></h1>
 
-    <br>
 </div>
 <div class="row mbxl">
     <a href="{{ url('/login') }}" class="btn btn-primary btn-lg">Đăng nhập tài khoản</a>
-    <br>
+
     <br>
     <br>
 </div>

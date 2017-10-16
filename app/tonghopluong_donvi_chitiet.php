@@ -14,6 +14,7 @@ class tonghopluong_donvi_chitiet extends Model
         'linhvuchoatdong',//Phân loại xã phường ko cần chọn lĩnh vực hoạt động
         'macongtac',
         'heso',
+        'hesott',
         'vuotkhung',
         'pcct',
         'pckct',
@@ -38,6 +39,7 @@ class tonghopluong_donvi_chitiet extends Model
         'pctr',
         'pctnvk',
         'pcbdhdcu',
+        'pcthni',
         'tonghs',
         'stbhxh_dv',
         'stbhyt_dv',

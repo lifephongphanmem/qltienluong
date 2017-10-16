@@ -15,18 +15,9 @@ class CreateDsnangluongChitietTable extends Migration
     {
         Schema::create('dsnangluong_chitiet', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('mads', 50)->unique();
+            $table->string('manl', 50)->unique();
             $table->string('macanbo', 50)->nullable();
             $table->string('phanloai')->nullable();
-
-            $table->string('msngbac_cu', 50)->nullable();
-            $table->date('ngaytu_cu')->nullable();
-            $table->date('ngayden_cu')->nullable();
-            $table->integer('bac_cu')->default(1);
-            $table->double('heso_cu')->default(0);
-            $table->double('vuotkhung_cu')->default(0);
-            $table->double('pthuong_cu')->default(100);
-
             $table->string('msngbac', 50)->nullable();
             $table->date('ngaytu')->nullable();
             $table->date('ngayden')->nullable();
@@ -34,8 +25,31 @@ class CreateDsnangluongChitietTable extends Migration
             $table->double('heso')->default(0);
             $table->double('vuotkhung')->default(0);
             $table->double('pthuong')->default(100);
-            $table->double('heso_truythu')->default(0);
-
+            $table->double('hesott')->default(0);
+            $table->double('pcct')->default(0);
+            $table->double('pckct')->default(0);
+            $table->double('pck')->default(0);
+            $table->double('pccv')->default(0);
+            $table->double('pckv')->default(0);
+            $table->double('pcth')->default(0);
+            $table->double('pcdd')->default(0);
+            $table->double('pcdh')->default(0);
+            $table->double('pcld')->default(0);
+            $table->double('pcdbqh')->default(0);
+            $table->double('pcudn')->default(0);
+            $table->double('pctn')->default(0);
+            $table->double('pctnn')->default(0);
+            $table->double('pcdbn')->default(0);
+            $table->double('pcvk')->default(0);
+            $table->double('pckn')->default(0);
+            $table->double('pcdang')->default(0);
+            $table->double('pccovu')->default(0);
+            $table->double('pclt')->default(0);
+            $table->double('pcd')->default(0);
+            $table->double('pctr')->default(0);
+            $table->double('pctnvk')->default(0);
+            $table->double('pcbdhdcu')->default(0);
+            $table->double('pcthni')->default(0);
             $table->text('ghichu')->nullable();
             $table->timestamps();
         });

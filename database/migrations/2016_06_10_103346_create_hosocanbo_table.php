@@ -102,6 +102,7 @@ class CreateHosocanboTable extends Migration
             $table->double('pctr')->default(0);
             $table->double('pctnvk')->default(0);
             $table->double('pcbdhdcu')->default(0);
+            $table->double('pcthni')->default(0);
 
             $table->string('mact')->nullable();
             $table->string('theodoi',5)->default(1)->nullable();
@@ -111,7 +112,7 @@ class CreateHosocanboTable extends Migration
             $table->date('ngaybonhiemlai')->nullable();//ngày bổ nhiệm lại chức vụ
             $table->string('nhiemky')->nullable();//nhiệm kỳ đối với cán bộ chuyên trách
             $table->string('capchuyenden')->nullable();//cán bộ luân chuyển cấp X, H, T
-            $table->double('heso_truythu')->default(0);//sau khi tạo bảng lương -> set = 0;
+            $table->double('hesott')->default(0);//hệ số truy thu, sau khi tạo bảng lương -> set = 0;
             $table->string('macq',50)->nullable();//dùng để cho trường hợp cán bộ thuộc đơn vị cấp trên quản lý mặc định là mã đơn vị
             $table->timestamps();
         });

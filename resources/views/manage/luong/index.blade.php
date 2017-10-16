@@ -112,7 +112,15 @@
                 },
                 dataType: 'JSON',
                 success: function (data) {
-                    $('#chitiet').replaceWith(data.message);
+                    $('#ngaytu').val(data.ngaytu);
+                    $('#ngayden').val(data.ngayden);
+                    $('#msngbac').val(data.msngbac);
+                    $('#tennb').val(data.msngbac).trigger('change');
+                    $('#bac').val(data.bac).trigger('change');
+                    $('#heso').val(data.heso);
+                    $('#vuotkhung').val(data.vuotkhung);
+                    $('#pthuong').val(data.pthuong);
+                    $('#id_ct').val(data.id);
                     $('#chitiet-modal').modal('show');
                 },
                 error: function (message) {

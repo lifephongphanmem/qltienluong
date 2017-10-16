@@ -20,6 +20,7 @@ class CreateTonghopluongDonviChitietTable extends Migration
             $table->string('linhvuchoatdong')->nullable();//Phân loại xã phường ko cần chọn lĩnh vực hoạt động
             $table->string('macongtac')->nullable();
             $table->double('heso')->default(0);
+            $table->double('hesott')->default(0);//hệ số truy thu
             $table->double('vuotkhung')->default(0);
             $table->double('pcct')->default(0);
             $table->double('pckct')->default(0);
@@ -44,6 +45,7 @@ class CreateTonghopluongDonviChitietTable extends Migration
             $table->double('pctr')->default(0);
             $table->double('pctnvk')->default(0);
             $table->double('pcbdhdcu')->default(0);
+            $table->double('pcthni')->default(0);
             $table->double('tonghs')->default(0);
 
             $table->double('stbhxh_dv')->default(0);

@@ -28,12 +28,10 @@
                         <div class="col-sm-8">
                             <select class="form-control select2me" name="tennb" id="tennb" onchange="setMSNGBAC()">
                                 @foreach($m_plnb as $plnb)
-                                    <optgroup label="{{$plnb->plnb}}">
-                                        <?php
-                                        $mode_ct=$m_pln->where('plnb',$plnb->plnb);
-                                        ?>
+                                    <optgroup label="{{$plnb->tennhom}}">
+                                        <?php $mode_ct=$m_pln->where('manhom',$plnb->manhom); ?>
                                         @foreach($mode_ct as $ct)
-                                            <option value="{{$ct->msngbac}}">{{$ct->tennb}}</option>
+                                            <option value="{{$ct->msngbac}}">{{$ct->tenngachluong}}</option>
                                         @endforeach
                                     </optgroup>
                                 @endforeach
@@ -46,9 +44,9 @@
 
                         <div class="col-sm-8 controls">
                             <select class="form-control select2me" name="bac" id="bac" onchange="getHS()">
-                                @foreach($m_bac as $nb)
-                                    <option value="{{$nb->bac}}">{{$nb->bac}}</option>
-                                @endforeach
+                                @for($i=1;$i<=16;$i++)
+                                    <option value="{{$i}}">{{$i}}</option>
+                                @endfor
                             </select>
                         </div>
                     </div>

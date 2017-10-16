@@ -19,6 +19,7 @@ class CreateTonghopluongDonviDiabanTable extends Migration
             $table->string('mathdv',50)->nullable();
             $table->string('madiaban')->nullable();
             $table->double('heso')->default(0);
+            $table->double('hesott')->default(0);//hệ số truy thu
             $table->double('vuotkhung')->default(0);
             $table->double('pcct')->default(0);
             $table->double('pckct')->default(0);
@@ -42,6 +43,7 @@ class CreateTonghopluongDonviDiabanTable extends Migration
             $table->double('pcd')->default(0);
             $table->double('pctr')->default(0);
             $table->double('pctnvk')->default(0);
+            $table->double('pcthni')->default(0);
             $table->double('pcbdhdcu')->default(0);
             $table->double('tonghs')->default(0);
 

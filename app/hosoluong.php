@@ -10,8 +10,6 @@ class hosoluong extends Model
     protected $fillable = [
         'id',
         'manl',
-        'mahts',
-        'id_nb',
         'macanbo',
         'phanloai',
         'msngbac',
@@ -24,20 +22,4 @@ class hosoluong extends Model
         'ketqua',
         'madv'
     ];
-
-    public function hosocanbo(){
-        $this->belongsTo('App\hosocanbo','macanbo');
-    }
-
-    public function dsnangluong(){
-        $this->belongsTo('App\dsnangluong','manl');
-    }
-
-    public function dshettapsu(){
-        $this->belongsTo('App\dshettapsu','mahts');
-    }
-
-    public function ngachbac(){
-        $this->belongsTo('App\ngachbac','id_nb');
-    }
 }

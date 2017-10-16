@@ -7,6 +7,8 @@ use App\dmphongban;
 use App\hosocanbo;
 use App\hosoluong;
 use App\ngachbac;
+use App\ngachluong;
+use App\nhomngachluong;
 use Illuminate\Http\Request;
 
 use App\Http\Requests;
@@ -20,9 +22,8 @@ class hosoluongController extends Controller
             $model = hosoluong::where('macanbo', $macanbo)->get();
             $m_pb = getPhongBanX();
             $m_cb = getCanBoX();
-            $m_plnb=ngachbac::select('plnb')->distinct()->get();
-            $m_pln=ngachbac::select('tennb','plnb','msngbac')->distinct()->get();
-            $m_bac=ngachbac::select('bac')->distinct()->get();
+            $m_plnb = nhomngachluong::select('manhom','tennhom')->distinct()->get();
+            $m_pln = ngachluong::select('tenngachluong','manhom','msngbac')->distinct()->get();
 
             return view('manage.luong.index')
                 ->with('furl', '/nghiep_vu/qua_trinh/luong/')
@@ -33,7 +34,6 @@ class hosoluongController extends Controller
                 ->with('model', $model)
                 ->with('m_plnb',$m_plnb)
                 ->with('m_pln',$m_pln)
-                ->with('m_bac',$m_bac)
                 ->with('pageTitle', 'Danh sách quá trình hưởng lương');
         } else
             return view('errors.notlogin');
@@ -122,6 +122,8 @@ class hosoluongController extends Controller
         }
         $inputs = $request->all();
         $model = hosoluong::find($inputs['id']);
+        die($model);
+        /*
         $m_nb = ngachbac::all('msngbac','plnb','tennb')->toArray();
         $model->plnb=getInfoPLNB($model,$m_nb);
         $model->tennb=getInfoTenNB($model,$m_nb);
@@ -129,8 +131,8 @@ class hosoluongController extends Controller
         $m_plnb = ngachbac::select('plnb')->distinct()->get();
         $m_tennb = ngachbac::select('tennb')->where('plnb', '=', $model->plnb)->distinct()->get();
         $m_bac = ngachbac::select('bac')->where('msngbac', '=', $model->msngbac)->get();
-        //die($model);
 
+        */
         $result['status'] = 'success';
 
         $result['message'] ='<div class="form-horizontal" id="chitiet">';

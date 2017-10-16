@@ -18,10 +18,7 @@ class dsnangluong extends Model
         'noidung',
         'ngayxet',
         'kemtheo',
+        'trangthai',
         'madv'
     ];
-
-    public function hosoluong(){
-        return $this->hasMany('App\hosoluong','manl');
-    }
 }

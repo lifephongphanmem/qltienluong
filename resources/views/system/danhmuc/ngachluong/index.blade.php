@@ -80,7 +80,7 @@
     </div>
 
     <!--Modal thông tin ngạch lương -->
-    {!! Form::open(['url'=>'danh_muc/ngach_bac/store','method'=>'post', 'id' => 'create_ngachbac','enctype'=>'multipart/form-data']) !!}
+    {!! Form::open(['url'=>'danh_muc/ngach_bac/store','method'=>'post', 'id' => 'create_ngachbac']) !!}
     <div id="create-modal" tabindex="-1" role="dialog" aria-hidden="true" class="modal fade">
         <div class="modal-dialog">
             <div class="modal-content">

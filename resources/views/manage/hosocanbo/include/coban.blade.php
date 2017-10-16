@@ -207,8 +207,17 @@
             <div class="col-md-12">
                 <div class="form-group">
                     <label class="control-label">Lĩnh vực công tác </label>
-                    {!!Form::select('linhvuc',$m_linhvuc, null, array('id' => 'linhvuc','class' => 'form-control','multiple'=>'multiple'))!!}
-
+                    <select class="form-control" id="linhvuc" name="linhvuc" multiple="multiple">
+                        @if(isset($a_linhvuc))
+                            @foreach($m_linhvuc as $key=>$value)
+                                <option value="{{$key}}" {{in_array($key,$a_linhvuc)?'selected':''}}>{{$value}}</option>
+                            @endforeach
+                        @else
+                            @foreach($m_linhvuc as $key=>$value)
+                                <option value="{{$key}}">{{$value}}</option>
+                            @endforeach
+                        @endif
+                    </select>
                 </div>
             </div>
         </div>
