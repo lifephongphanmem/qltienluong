@@ -42,6 +42,7 @@ class tonghopluong_donviController extends Controller
             $model = tonghopluong_donvi::where('madv',session('admin')->madv)->get();
             $model_bangluong = bangluong::where('madv',session('admin')->madv)->get();
             for($i=0;$i<count($a_data);$i++){
+                $a_data[$i]['maphanloai']=session('admin')->maphanloai;
                 $tonghop = $model->where('thang',$a_data[$i]['thang'])->where('nam',$inputs['nam'])->first();
                 $bangluong = $model_bangluong->where('thang',$a_data[$i]['thang'])->where('nam',$inputs['nam']);
                 if(count($bangluong)>0){
@@ -236,6 +237,35 @@ class tonghopluong_donviController extends Controller
                 ->with('furl','/chuc_nang/tong_hop_luong/don_vi/')
                 ->with('model',$model)
                 ->with('model_thongtin',$model_thongtin)
+                ->with('pageTitle','Chi tiết tổng hợp lương tại đơn vị');
+        } else
+            return view('errors.notlogin');
+    }
+
+    function edit_detail(Request $request){
+        if (Session::has('admin')) {
+            $inputs = $request->all();
+            $model = tonghopluong_donvi_chitiet::where('mathdv',$inputs['mathdv'])
+                ->where('manguonkp',$inputs['manguonkp'])
+                ->where('macongtac',$inputs['macongtac'])->first();
+            //dd($model);
+
+            $model_nguonkp = array_column(dmnguonkinhphi::all()->toArray(),'tennguonkp','manguonkp');
+            $model_phanloaict = array_column(dmphanloaicongtac::all()->toArray(),'tencongtac','macongtac');
+            $gnr=getGeneralConfigs();
+/*
+            foreach($model as $chitiet){
+                $chitiet->tennguonkp = isset($model_nguonkp[$chitiet->manguonkp])? $model_nguonkp[$chitiet->manguonkp]:'';
+                $chitiet->tencongtac = isset($model_phanloaict[$chitiet->macongtac])? $model_phanloaict[$chitiet->macongtac]:'';
+                $chitiet->tongtl=$gnr['luongcb'] * $chitiet->tonghs;
+                $chitiet->tongbh=$chitiet->stbhxh_dv + $chitiet->stbhyt_dv + $chitiet->stkpcd_dv + $chitiet->stbhtn_dv;
+            }
+*/
+
+            return view('functions.tonghopluong.donvi.edit_detail')
+                ->with('furl','/chuc_nang/tong_hop_luong/don_vi/')
+                ->with('model',$model)
+                //->with('model_thongtin',$model_thongtin)
                 ->with('pageTitle','Chi tiết tổng hợp lương tại đơn vị');
         } else
             return view('errors.notlogin');

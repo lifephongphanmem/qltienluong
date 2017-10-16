@@ -67,8 +67,8 @@
                                         <td>{{number_format($value->tongtl)}}</td>
                                         <td>{{number_format($value->tongbh)}}</td>
                                         <td>
-                                            <button type="button" onclick="edit('{{$value->id}}')" class="btn btn-info btn-xs mbs">
-                                                <i class="fa fa-edit"></i>&nbsp; Chỉnh sửa</button>
+                                            <a href="{{url($furl.'edit_detail?mathdv='.$value->mathdv.'&manguonkp='.$value->manguonkp.'&macongtac='.$value->macongtac)}}" class="btn btn-info btn-xs mbs">
+                                                <i class="fa fa-edit"></i>&nbsp; Chỉnh sửa</a>
                                             <button type="button" onclick="cfDel('{{$furl.'del_detail/'.$value->id}}')" class="btn btn-default btn-xs" data-target="#delete-modal-confirm" data-toggle="modal">
                                                 <i class="fa fa-trash-o"></i>&nbsp; Xóa</button>
                                         </td>
@@ -78,48 +78,15 @@
                         </tbody>
                     </table>
                 </div>
+
+                <div class="row">
+                    <div class="col-md-offset-5 col-md-2">
+                        <a href="{{url('/chuc_nang/tong_hop_luong/don_vi/index?nam=2017')}}" class="btn btn-default"><i class="fa fa-reply"></i>&nbsp;Quay lại</a>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
-
-    <script>
-        function add(){
-            var valid=true;
-            var message='';
-            var macanbo = $('#cbmacb').val();
-            var madiaban = $('#madiaban').val();
-            if(macanbo=='all'){
-                valid=false;
-                message ='Bạn cần chọn cán bộ để thêm vào địa bàn.';
-            }
-
-            if(valid){
-                var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
-                $.ajax({
-                    url: '{{$furl}}' + 'add_canbo',
-                    type: 'GET',
-                    data: {
-                        _token: CSRF_TOKEN,
-                        macanbo: macanbo,
-                        madiaban: madiaban
-                    },
-                    dataType: 'JSON',
-                    success: function (data) {
-                        if (data.status == 'success') {
-                            location.reload();
-                        }
-                    },
-                    error: function(message){
-                        toastr.error(message,'Lỗi lòi');
-                    }
-                });
-
-            }else{
-                toastr.error(message,'Lỗi!.');
-            }
-            return valid;
-        }
-    </script>
 
     @include('includes.modal.delete')
 @stop

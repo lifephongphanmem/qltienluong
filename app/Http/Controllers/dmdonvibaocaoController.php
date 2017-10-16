@@ -176,6 +176,7 @@ class dmdonvibaocaoController extends Controller
                 ->with('a_phanloai',$a_phanloai)
                 ->with('madvbc',$madvbc)
                 ->with('model_phanloai',$a_phanloai)
+                ->with('model_plxa',$model_plxa)
                 ->with('pageTitle','Thêm mới đơn vị');
         } else
             return view('errors.notlogin');

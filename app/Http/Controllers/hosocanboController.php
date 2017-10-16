@@ -468,6 +468,7 @@ class hosocanboController extends Controller
             return view('errors.notlogin');
     }
 
+    //Bỏ
     function phucap(Request $request){
         $result = array(
             'status' => 'fail',

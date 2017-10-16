@@ -201,7 +201,7 @@
                         <!--Chức năng xem dữ liệu tổng hợp lương của các đơn vị cấp dưới cho tài khoản quản lý -->
                         @if(session('admin')->quanlynhom || session('admin')->quanlykhuvuc)
                             <li>
-                                <a href="{{url('chuc_nang/tong_hop_luong/danh_sach?thang='.date('m').'&nam='.date('Y').'&khuvuc=KVHCSN')}}">Số liệu tổng hợp từ đơn vị cấp dưới</a>
+                                <a href="{{url('chuc_nang/xem_du_lieu/index?thang='.date('m').'&nam='.date('Y'))}}">Số liệu tổng hợp từ đơn vị cấp dưới</a>
                             </li>
                         @endif
 

@@ -181,8 +181,9 @@ class UsersController extends Controller
                     $ttuser->quanlynhom=false;
                 }
 
-                $ttuser->macqcq=$model_donvi->macqcq;
-                $ttuser->madvbc=$model_donvi->madvbc;
+                $ttuser->macqcq = $model_donvi->macqcq;
+                $ttuser->madvbc = $model_donvi->madvbc;
+                $ttuser->maphanloai = $model_donvi->maphanloai;
             }
             //kiểm tra xem user thuộc đơn vị nào, nếu ko thuộc đơn vị nào (trừ tài khoản quản trị) => đăng nhập ko thành công
         }

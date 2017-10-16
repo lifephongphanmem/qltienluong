@@ -306,14 +306,24 @@ Route::group(['prefix'=>'chuc_nang'],function(){
             Route::get('detail/ma_so={mathdv}','tonghopluong_donviController@detail');
             Route::get('detail_diaban/ma_so={mathdv}','tonghopluong_donviController@detail_diaban');
 
+            Route::get('edit_detail','tonghopluong_donviController@edit_detail');//chỉnh sửa dữ liêu
+            Route::get('edit_detail_diaban','tonghopluong_donviController@edit_detail_diaban');//chỉnh sửa dữ liêu
+
+            Route::post('store_detail','tonghopluong_donviController@store_detail');//chỉnh sửa dữ liêu
+            Route::post('store_detail_diaban','tonghopluong_donviController@store_detail_diaban');//chỉnh sửa dữ liêu
+
             Route::post('senddata','tonghopluong_donviController@senddata'); //gửi dữ liệu
 
             Route::get('printf_data/ma_so={mathdv}','tonghopluong_donviController@printf_data');
             Route::get('printf_data_diaban/ma_so={mathdv}','tonghopluong_donviController@printf_data_diaban');
         });
-        Route::get('danh_sach','dmdonvibaocaoController@donvi_luong');
-        //?&thang={thang}&nam={nam}&khuvuc={makv}&huyen={mahuyen}
+
+
         Route::get('/ma_so={macqcq}/don_vi','dmdonvibaocaoController@donvi_luong1');
+    });
+
+    Route::group(['prefix'=>'xem_du_lieu'],function(){
+        Route::get('index','xemdulieucapduoiController@donvi_luong');
     });
 
     Route::group(['prefix'=>'buoc_thoi_viec'],function(){

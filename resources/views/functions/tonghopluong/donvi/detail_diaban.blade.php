@@ -78,6 +78,11 @@
                         </tbody>
                     </table>
                 </div>
+                <div class="row">
+                    <div class="col-md-offset-5 col-md-2">
+                        <a href="{{url('/chuc_nang/tong_hop_luong/don_vi/index?nam=2017')}}" class="btn btn-default"><i class="fa fa-reply"></i>&nbsp;Quay lại</a>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
