@@ -132,7 +132,7 @@ class UsersController extends Controller
             $input = $request->all();
             $donvi = dmdonvi::where('madv',$input['madv'])->first();
             $input['maxa']=$donvi->madv;
-            $input['level']=$donvi->level;
+            $input['level']=isset($donvi->level)?'':isset($donvi->level);
             $input['password']= md5($input['password']);
             $input['permission']= getPermissionDefault($donvi->level);
             Users::create($input);
