@@ -15,20 +15,21 @@ class CreateDmdonviTable extends Migration
         Schema::create('dmdonvi', function (Blueprint $table) {
             $table->increments('id');
             $table->string('madv', 50)->unique();
-            $table->string('tendv')->unique();
-            $table->string('diachi')->nullable();
-            $table->string('sodt')->nullable();
-            $table->string('lanhdao')->nullable();
+            $table->string('tendv',100)->nullable();
+            $table->string('diachi',100)->nullable();
+            $table->string('sodt',50)->nullable();
+            $table->string('lanhdao',50)->nullable();
             $table->integer('songuoi')->default(0);
-            $table->string('macqcq')->nullable();
-            $table->string('diadanh')->nullable();
-            $table->string('cdlanhdao')->nullable();
-            $table->string('nguoilapbieu')->nullable();
-            $table->string('makhoipb')->nullable();//lĩnh vực hoạt động
-            $table->string('madvbc')->nullable();
-
-            $table->string('capdonvi')->nullable();//đơn vị cấp X, H, T
-            $table->string('maphanloai')->nullable();//xác định đơn vị thuộc khối hcsn / xp
+            $table->string('macqcq',50)->nullable();
+            $table->string('diadanh',50)->nullable();
+            $table->string('cdlanhdao',50)->nullable();
+            $table->string('nguoilapbieu',50)->nullable();
+            $table->string('makhoipb',50)->nullable();//trường hợp cần tổng hợp theo ngành
+            $table->string('madvbc',50)->nullable();
+            $table->string('capdonvi',50)->nullable();//cấp dư toán 1,2,3,4
+            $table->string('maphanloai',50)->nullable();//xác định đơn vị thuộc khối hcsn / xp
+            $table->string('phanloaixa',50)->nullable();//đơn vị cấp X, H, T
+            $table->string('linhvuchoatdong')->nullable();//lĩnh vực hoạt động
             $table->timestamps();
         });
     }

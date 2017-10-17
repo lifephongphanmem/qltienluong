@@ -134,8 +134,10 @@ class dmdonvibaocaoController extends Controller
             $model=dmdonvi::where('madv',$madonvi)->first();
             $model_donvi = array_column(dmdonvi::select('madv','tendv')->where('madvbc',$madvbc)->get()->toarray(),'tendv','madv');
             $model_donvi['NULL']= 'Chọn đơn vị chủ quản';
-            $a_phanloai=array_column(dmphanloaidonvi::all()->toarray(),'tenphanloai','maphanloai');
-            $model_plxa = array('NULL'=>'Chọn phân loại xã','XL1'=>'Xã loại 1','XL2'=>'Xã loại 2','XL3'=>'Xã loại 3');
+            $a_phanloai = array_column(dmphanloaidonvi::all()->toarray(),'tenphanloai','maphanloai');
+            $model_plxa = getPhanLoaiXa();
+            $model_capdv = getCapDonVi();
+            $model_linhvuc = array_column(dmkhoipb::all()->toarray(),'tenkhoipb','makhoipb');
             //$model_dvbc=dmdonvibaocao::where('madvbc',$model->madvbc)->first();
             //$model_kpb =  array_column(dmkhoipb::select('makhoipb','tenkhoipb')->get()->toarray(),'tenkhoipb','makhoipb');
             return view('system.danhmuc.donvibaocao.edit_donvi')
@@ -143,6 +145,8 @@ class dmdonvibaocaoController extends Controller
                 ->with('model_donvi',$model_donvi)
                 ->with('model_phanloai',$a_phanloai)
                 ->with('model_plxa',$model_plxa)
+                ->with('model_capdv',$model_capdv)
+                ->with('model_linhvuc',$model_linhvuc)
                 ->with('url','/danh_muc/khu_vuc/')
                 ->with('pageTitle','Chỉnh sửa thông tin đơn vị');
         } else
@@ -168,8 +172,9 @@ class dmdonvibaocaoController extends Controller
         if (Session::has('admin')) {
             $model_donvi = array_column(dmdonvi::select('madv','tendv')->where('madvbc',$madvbc)->get()->toarray(),'tendv','madv');
             $model_donvi['NULL']= 'Chọn đơn vị chủ quản';
-            $a_phanloai=array_column(dmphanloaidonvi::all()->toarray(),'tenphanloai','maphanloai');
-            $model_plxa = array('NULL'=>'Chọn phân loại xã','XL1'=>'Xã loại 1','XL2'=>'Xã loại 2','XL3'=>'Xã loại 3');
+            $a_phanloai = array_column(dmphanloaidonvi::all()->toarray(),'tenphanloai','maphanloai');
+            $model_plxa = getPhanLoaiXa();
+            $model_capdv = getCapDonVi();
             return view('system.danhmuc.donvibaocao.create_donvi')
                 ->with('url','/danh_muc/khu_vuc/')
                 ->with('model_donvi',$model_donvi)
@@ -177,6 +182,7 @@ class dmdonvibaocaoController extends Controller
                 ->with('madvbc',$madvbc)
                 ->with('model_phanloai',$a_phanloai)
                 ->with('model_plxa',$model_plxa)
+                ->with('model_capdv',$model_capdv)
                 ->with('pageTitle','Thêm mới đơn vị');
         } else
             return view('errors.notlogin');
@@ -191,6 +197,7 @@ class dmdonvibaocaoController extends Controller
             if($inputs['macqcq'] == 'NULL'){
                 $inputs['macqcq']=null;
             }
+
             dmdonvi::create($inputs);
 
             return redirect('/danh_muc/khu_vuc/ma_so='.$inputs['madvbc'].'/list_unit');
@@ -261,6 +268,8 @@ class dmdonvibaocaoController extends Controller
     }
     //end - đơn vị trực thuộc báo cáo
 
+
+    //bỏ
     public function list_donvi_luong($macqcq){
         if (Session::has('admin')) {
             //$model=dmdonvi::where('macqcq',$macqcq)->get();

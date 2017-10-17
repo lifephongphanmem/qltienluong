@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\dmdonvi;
+use App\dmkhoipb;
 use App\dmphanloaict;
 use App\dmphucap;
 use App\ngachbac;
@@ -233,6 +234,54 @@ class ajaxController extends Controller
         $model=dmphucap::where('mapc', $inputs['mapc'])->first();
         $model->status = 'success';
         die($model);
+    }
+
+    function getPhanLoai(Request $request)
+    {
+        $result = array(
+            'status' => 'fail',
+            'message' => 'error',
+        );
+        if (!Session::has('admin')) {
+            $result = array(
+                'status' => 'fail',
+                'message' => 'permission denied',
+            );
+            die(json_encode($result));
+        }
+
+        $inputs = $request->all();
+        $result['status'] = 'success';
+        if($inputs['maphanloai'] == 'KVXP'){
+            $model_plxa = getPhanLoaiXa();
+            $result['message'] = '<div id="plxa" class="col-md-6">';
+            $result['message'] .='<div class="form-group">';
+            $result['message'] .='<label class="control-label">Phân loại xã phường</label>';
+            $result['message'] .='<select class="form-control select2me" name="phanloaixa" id="phanloaixa" >';
+            foreach($model_plxa as $phanloai){
+                $result['message'] .='<option value="'.$phanloai.'">'.$phanloai.'</option>';
+            }
+
+            $result['message'] .='</seclect>';
+            $result['message'] .='</div>';
+            $result['message'] .='</div>';
+        }else{
+            $model_linhvuc = dmkhoipb::all();
+            $result['message'] = '<div id="plxa" class="col-md-6">';
+            $result['message'] .='<div class="form-group">';
+            $result['message'] .='<label class="control-label">Lĩnh vực hoạt động</label>';
+            $result['message'] .='<select class="form-control select2me" name="linhvuchoatdong" id="linhvuchoatdong" multiple="multiple">';
+            foreach($model_linhvuc as $linhvuc){
+                $result['message'] .='<option value="'.$linhvuc->makhoipb.'">'.$linhvuc->tenkhoipb.'</option>';
+            }
+
+
+            $result['message'] .='</seclect>';
+            $result['message'] .='</div>';
+
+        }
+
+        die(json_encode($result));
     }
 
 }

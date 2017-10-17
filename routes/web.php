@@ -131,6 +131,8 @@ Route::group(['prefix'=>'danh_muc'],function(){
         Route::get('del_donvi/{madv}','dmdonvibaocaoController@destroy_donvi');
         Route::get('get_list_unit','dmdonvibaocaoController@get_list_unit');
         Route::get('set_management','dmdonvibaocaoController@set_management');
+
+        Route::get('getPhanLoai','ajaxController@getPhanLoai');
     });
 
     Route::group(['prefix'=>'tai_khoan'],function(){

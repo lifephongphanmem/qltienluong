@@ -177,4 +177,18 @@ function getLuongNgachBac_CBCT($msngbac,$bac=1){
 
     return $heso.';'.$vuotkhung;
 }
+
+function getPhanLoaiXa(){
+    return array(''=>'Chọn phân loại xã',
+        'XL1'=>'Xã loại 1',
+        'XL2'=>'Xã loại 2',
+        'XL3'=>'Xã loại 3');
+}
+
+function getCapDonVi(){
+    return array('1'=>'Đơn vị dự toán cấp 1',
+        '2'=>'Đơn vị dự toán cấp 2',
+        '3'=>'Đơn vị dự toán cấp 3',
+        '4'=>'Đơn vị dự toán cấp 4');
+}
 ?>

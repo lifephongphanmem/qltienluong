@@ -96,15 +96,15 @@
                             <div class="row">
                                 <div class="col-md-6">
                                     <div class="form-group">
-                                        <label class="control-label">Phân loại đơn vị</label>
-                                        {!!Form::select('maphanloai', $model_phanloai, null, array('id' => 'maphanloai','class' => 'form-control'))!!}
+                                        <label class="control-label">Đơn vị chủ quản</label>
+                                        {!!Form::select('macqcq', $model_donvi, 'NULL', array('id' => 'macqcq','class' => 'form-control'))!!}
                                     </div>
                                 </div>
 
                                 <div class="col-md-6">
                                     <div class="form-group">
-                                        <label class="control-label">Đơn vị chủ quản</label>
-                                        {!!Form::select('macqcq', $model_donvi, 'NULL', array('id' => 'macqcq','class' => 'form-control'))!!}
+                                        <label class="control-label">Phân loại đơn vị</label>
+                                        {!!Form::select('maphanloai', $model_phanloai, 'KVXP', array('id' => 'maphanloai','class' => 'form-control'))!!}
                                     </div>
                                 </div>
                             </div>
@@ -112,10 +112,17 @@
                             <div class="row">
                                 <div class="col-md-6">
                                     <div class="form-group">
-                                        <label class="control-label">Phân loại xã phường</label>
-                                        {!!Form::select('capdonvi', $model_plxa, 'NULL', array('id' => 'capdonvi','class' => 'form-control'))!!}
+                                        <label class="control-label">Cấp dự toán</label>
+                                        {!!Form::select('capdonvi', $model_capdv, null, array('id' => 'capdonvi','class' => 'form-control'))!!}
                                     </div>
                                 </div>
+                                <div id="plxa" class="col-md-6">
+                                    <div class="form-group">
+                                        <label class="control-label">Phân loại xã phường</label>
+                                        {!!Form::select('phanloaixa', $model_plxa, null, array('id' => 'phanloaixa','class' => 'form-control'))!!}
+                                    </div>
+                                </div>
+
                             </div>
                         </div>
                 </div>
@@ -167,10 +174,29 @@
                                 $('input[name="madv"]').focus();
                             }
                         }
-
                     });
                 }
             })
+            $('#maphanloai').change (function(){
+                var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
+                $.ajax({
+                    url: '/danh_muc/khu_vuc/getPhanLoai',
+                    type: 'GET',
+                    data: {
+                        _token: CSRF_TOKEN,
+                        maphanloai: this.value
+                    },
+                    dataType: 'JSON',
+                    success: function (data) {
+                        $('#plxa').replaceWith(data.message);
+                        $("#linhvuchoatdong").select2();
+                    },
+                    error: function(message){
+                        toastr.error(message,'Lỗi!');
+                    }
+                });
+
+            });
         }(jQuery));
     </script>
 @stop

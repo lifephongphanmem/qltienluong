@@ -131,10 +131,10 @@ class UsersController extends Controller
         if (Session::has('admin')) {
             $input = $request->all();
             $donvi = dmdonvi::where('madv',$input['madv'])->first();
-            $input['maxa']=$donvi->madv;
-            $input['level']=isset($donvi->level)?'':isset($donvi->level);
-            $input['password']= md5($input['password']);
-            $input['permission']= getPermissionDefault($donvi->level);
+            $input['maxa'] = $donvi->madv;
+            $input['level'] = isset($donvi->level)?'':isset($donvi->level);
+            $input['password'] = md5($input['password']);
+            $input['permission'] = getPermissionDefault($donvi->level);
             Users::create($input);
 
             return redirect('/danh_muc/tai_khoan/list_user?&madv=' . $input['madv']);
