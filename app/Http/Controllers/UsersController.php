@@ -135,6 +135,7 @@ class UsersController extends Controller
             $input['level'] = isset($donvi->level)?'':isset($donvi->level);
             $input['password'] = md5($input['password']);
             $input['permission'] = getPermissionDefault($donvi->level);
+            $input['sadmin'] = isset($input['sadmin'])?$input['sadmin'] : 'NULL';
             Users::create($input);
 
             return redirect('/danh_muc/tai_khoan/list_user?&madv=' . $input['madv']);
@@ -184,6 +185,7 @@ class UsersController extends Controller
                 $ttuser->macqcq = $model_donvi->macqcq;
                 $ttuser->madvbc = $model_donvi->madvbc;
                 $ttuser->maphanloai = $model_donvi->maphanloai;
+                $ttuser->capdonvi = $model_donvi->capdonvi;
             }
             //kiểm tra xem user thuộc đơn vị nào, nếu ko thuộc đơn vị nào (trừ tài khoản quản trị) => đăng nhập ko thành công
         }

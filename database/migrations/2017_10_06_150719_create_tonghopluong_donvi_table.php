@@ -18,13 +18,15 @@ class CreateTonghopluongDonviTable extends Migration
             $table->string('mathdv',50)->unique();
             $table->string('thang',10)->nullable();
             $table->string('nam',10)->nullable();
-            $table->string('noidung')->nullable();
+            $table->text('noidung')->nullable();
             $table->date('ngaylap')->nullable();
-            $table->string('nguoilap')->nullable();
-            $table->string('ghichu')->nullable();
+            $table->string('nguoilap',50)->nullable();
+            $table->text('ghichu')->nullable();
             $table->date('ngaygui')->nullable();
-            $table->string('nguoigui')->nullable();
-            $table->string('trangthai')->nullable();
+            $table->string('nguoigui',50)->nullable();
+            $table->string('trangthai',50)->nullable();
+            $table->string('phanloai',50)->nullable(); //dữ liệu của đơn vị / dữ liệu của đơn vị cấp dưới; Bảng này chỉ để đơn vị
+            $table->double('luongcoban')->default(0);
             $table->string('madv',50)->nullable();
             $table->string('madvbc',50)->nullable();
             $table->string('macqcq',50)->nullable();

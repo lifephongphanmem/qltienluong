@@ -115,9 +115,11 @@ class dmdonvibaocaoController extends Controller
             $model=dmdonvi::where('madvbc',$madvbc)->get();
             $a_donvi=array_column($model->toarray(),'tendv','madv');
             $a_phanloai=array_column(dmphanloaidonvi::all()->toarray(),'tenphanloai','maphanloai');
+            $model_capdv = getCapDonVi();
             foreach($model as $donvi){
-                $donvi->tencqcq=isset($a_donvi[$donvi->macqcq])?$a_donvi[$donvi->macqcq]:'';
-                $donvi->phanloai=$a_phanloai[$donvi->maphanloai];
+                $donvi->tencqcq = isset($a_donvi[$donvi->macqcq])?$a_donvi[$donvi->macqcq]:'';
+                $donvi->phanloai = $a_phanloai[$donvi->maphanloai];
+                $donvi->capdutoan = isset($model_capdv[$donvi->capdonvi])?$model_capdv[$donvi->capdonvi]:'';
             }
 
             return view('system.danhmuc.donvibaocao.index_donvi')
@@ -175,6 +177,7 @@ class dmdonvibaocaoController extends Controller
             $a_phanloai = array_column(dmphanloaidonvi::all()->toarray(),'tenphanloai','maphanloai');
             $model_plxa = getPhanLoaiXa();
             $model_capdv = getCapDonVi();
+            $model_linhvuc = array_column(dmkhoipb::all()->toarray(),'tenkhoipb','makhoipb');
             return view('system.danhmuc.donvibaocao.create_donvi')
                 ->with('url','/danh_muc/khu_vuc/')
                 ->with('model_donvi',$model_donvi)
@@ -183,6 +186,7 @@ class dmdonvibaocaoController extends Controller
                 ->with('model_phanloai',$a_phanloai)
                 ->with('model_plxa',$model_plxa)
                 ->with('model_capdv',$model_capdv)
+                ->with('model_linhvuc',$model_linhvuc)
                 ->with('pageTitle','Thêm mới đơn vị');
         } else
             return view('errors.notlogin');

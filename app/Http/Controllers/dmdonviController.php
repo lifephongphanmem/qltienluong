@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\dmdonvi;
 use App\dmkhoipb;
+use App\dmphanloaidonvi;
 use App\GeneralConfigs;
 use App\Users;
 use Illuminate\Http\Request;
@@ -51,6 +52,9 @@ class dmdonviController extends Controller
     public function information_local(){
         if (Session::has('admin')) {
             $model=dmdonvi::where('madv',session('admin')->madv)->first();
+            $model_capdv = getCapDonVi();
+            $model->capdutoan = isset($model_capdv[$model->capdonvi])?$model_capdv[$model->capdonvi]:'';
+
             return view('system.general.local.index')
                 ->with('model',$model)
                 ->with('url','/he_thong/don_vi/')
@@ -61,16 +65,26 @@ class dmdonviController extends Controller
 
     function edit_local($madv){
         if (Session::has('admin')) {
-            if((session('admin')->level=='X'&&session('admin')->madv==$madv)
-                || (session('admin')->level=='T'&&session('admin')->madv==$madv)
-                || (session('admin')->level=='H'&&session('admin')->madv==$madv)){
+            if(session('admin')->level=='SA'|| session('admin')->madv == $madv){
                 $model=dmdonvi::where('madv',$madv)->first();
-                $makpb=getMaKhoiPB(session('admin')->maxa);
-                $model_kpb=dmkhoipb::select('makhoipb','tenkhoipb')->where('makhoipb',$makpb)->get()->toarray();
 
+                //$makpb=getMaKhoiPB(session('admin')->maxa);
+                //$model_kpb=dmkhoipb::select('makhoipb','tenkhoipb')->where('makhoipb',$makpb)->get()->toarray();
+                $model_donvi = array_column(dmdonvi::select('madv','tendv')->where('madvbc',$model->madvbc)->get()->toarray(),'tendv','madv');
+                $model_donvi['NULL']= 'Chọn đơn vị chủ quản';
+                $a_phanloai = array_column(dmphanloaidonvi::all()->toarray(),'tenphanloai','maphanloai');
+                $model_plxa = getPhanLoaiXa();
+                $model_capdv = getCapDonVi();
+                $model_linhvuc = array_column(dmkhoipb::all()->toarray(),'tenkhoipb','makhoipb');
+//dd($model);
                 return view('system.general.local.edit')
                     ->with('model',$model)
-                    ->with('model_kpb',array_column($model_kpb,'tenkhoipb','makhoipb'))
+                    ->with('model_donvi',$model_donvi)
+                    ->with('a_phanloai',$a_phanloai)
+                    ->with('model_phanloai',$a_phanloai)
+                    ->with('model_plxa',$model_plxa)
+                    ->with('model_capdv',$model_capdv)
+                    ->with('model_linhvuc',$model_linhvuc)
                     ->with('url','/he_thong/don_vi/')
                     ->with('pageTitle','Chỉnh sửa thông tin đơn vị');
             }else{return view('errors.noperm');}
@@ -81,21 +95,11 @@ class dmdonviController extends Controller
 
     function update_local(Request $request, $madv){
         if (Session::has('admin')) {
-            if((session('admin')->level=='X'&&session('admin')->maxa==$madv)
-                || (session('admin')->level=='T'&&session('admin')->matinh==$madv)
-                || (session('admin')->level=='H'&&session('admin')->mahuyen==$madv)){
+            if(session('admin')->level=='SA'|| session('admin')->madv == $madv){
                 $inputs=$request->all();
 
                 $model=dmdonvi::where('madv',$madv)->first();
-                $model->diachi=$inputs['diachi'];
-                $model->sodt=$inputs['sodt'];
-                $model->lanhdao=$inputs['lanhdao'];
-                $model->diadanh=$inputs['diadanh'];
-                $model->cdlanhdao=$inputs['cdlanhdao'];
-                $model->nguoilapbieu=$inputs['nguoilapbieu'];
-                $model->makhoipb=$inputs['makhoipb'];
-                $model->diadanh=$inputs['diadanh'];
-                $model->save();
+                $model->update($inputs);
                 return redirect('/he_thong/don_vi/don_vi');
             }else{return view('errors.noperm');}
 

@@ -1,11 +1,14 @@
 @extends('main')
 
 @section('custom-style')
-
+    <link rel="stylesheet" type="text/css" href="{{url('assets/global/plugins/select2/select2.css')}}"/>
+    <link rel="stylesheet" type="text/css" href="{{url('assets/global/plugins/select2/select2.css')}}"/>
 @stop
 
 
 @section('custom-script')
+    <script type="text/javascript" src="{{url('assets/global/plugins/select2/select2.min.js') }}"></script>
+    <script type="text/javascript" src="{{url('assets/global/plugins/select2/select2.min.js')}}"></script>
     <script type="text/javascript" src="{{url('assets/global/plugins/jquery-validation/js/jquery.validate.min.js')}}"></script>
     <!--cript src="{{url('assets/admin/pages/scripts/form-validation.js')}}"></script-->
 
@@ -28,43 +31,19 @@
                 </div-->
                 <div class="portlet-body form">
                     <!-- BEGIN FORM-->
-                    {!! Form::model($model,['url'=>$url. $model->madv, 'class'=>'horizontal-form','id'=>'update_tthethong']) !!}
-                            <meta name="csrf-token" content="{{ csrf_token() }}" />
-                            <input type="hidden" name="_method" value="PATCH">
-                            <input type="hidden" name="_token" value="{{ csrf_token()}}">
+                    {!! Form::model($model,['url'=>$url. $model->madv, 'class'=>'horizontal-form','id'=>'update_tthethong','method'=>'POST']) !!}
                         <div class="form-body">
                             <div class="row">
-                                <div class="col-md-6">
-                                    <div class="form-group">
-                                        <label class="control-label">Mã cơ quan chủ quản<span class="require">*</span></label>
-                                        {!!Form::text('macqcq', null, array('id' => 'macqcq','class' => 'form-control', 'readonly'))!!}
-                                    </div>
-                                </div>
-
                                 <div class="col-md-6">
                                     <div class="form-group">
                                         <label class="control-label">Mã quan đơn vị<span class="require">*</span></label>
                                         {!!Form::text('madv', null, array('id' => 'madv','class' => 'form-control', 'readonly'))!!}
                                     </div>
                                 </div>
-                            </div>
-
-                            <div class="row">
                                 <div class="col-md-6">
                                     <div class="form-group">
                                         <label class="control-label">Tên đơn vị<span class="require">*</span></label>
                                         {!!Form::text('tendv', null, array('id' => 'tendv','class' => 'form-control', 'readonly'))!!}
-                                    </div>
-                                </div>
-
-                                <div class="col-md-6">
-                                    <div class="form-group">
-                                        <label class="control-label">Khối phòng ban</label>
-                                        {!! Form::select(
-                                        'makhoipb',
-                                        $model_kpb,null,
-                                        array('id' => 'makhoipb', 'class' => 'form-control select2me','required'=>'required'))
-                                        !!}
                                     </div>
                                 </div>
                             </div>
@@ -116,6 +95,48 @@
                                     </div>
                                 </div>
                             </div>
+
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label class="control-label">Đơn vị chủ quản<span class="require">*</span></label>
+                                        {!!Form::select('macqcq', $model_donvi, 'NULL', array('id' => 'macqcq','class' => 'form-control'))!!}
+                                    </div>
+                                </div>
+
+
+
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label class="control-label">Phân loại đơn vị</label>
+                                        {!!Form::select('maphanloai', $model_phanloai, null, array('id' => 'maphanloai','class' => 'form-control'))!!}
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label class="control-label">Cấp dự toán</label>
+                                        {!!Form::select('capdonvi', $model_capdv, null, array('id' => 'capdonvi','class' => 'form-control'))!!}
+                                    </div>
+                                </div>
+                                @if($model->maphanloai == 'KVXP')
+                                    <div id="plxa" class="col-md-6">
+                                        <div class="form-group">
+                                            <label class="control-label">Phân loại xã phường</label>
+                                            {!!Form::select('phanloaixa', $model_plxa, null, array('id' => 'phanloaixa','class' => 'form-control','required'=>'required'))!!}
+                                        </div>
+                                    </div>
+                                @else
+                                    <div id="plxa" class="col-md-6">
+                                        <div class="form-group">
+                                            <label class="control-label">Lĩnh vực hoạt động</label>
+                                            {!!Form::select('linhvuchoatdong', $model_linhvuc, null, array('id' => 'linhvuchoatdong','class' => 'form-control','required'=>'required', 'multiple'=>'multiple'))!!}
+                                        </div>
+                                    </div>
+                                @endif
+                            </div>
                         </div>
 
                     <!-- END FORM-->
@@ -132,8 +153,31 @@
         </div>
     </div>
     <script type="text/javascript">
-        function validateForm(){
+        $(function(){
+            $('#maphanloai').change (function(){
+                var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
+                $.ajax({
+                    url: '/danh_muc/khu_vuc/getPhanLoai',
+                    type: 'GET',
+                    data: {
+                        _token: CSRF_TOKEN,
+                        maphanloai: this.value
+                    },
+                    dataType: 'JSON',
+                    success: function (data) {
+                        $('#plxa').replaceWith(data.message);
+                        $("#linhvuchoatdong").select2();
+                    },
+                    error: function(message){
+                        toastr.error(message,'Lỗi!');
+                    }
+                });
 
+            });
+            $("#linhvuchoatdong").select2();
+        });
+
+        function validateForm(){
             var validator = $("#update_tthethong").validate({
                 rules: {
                     ten:"required"

@@ -93,6 +93,7 @@ class hosocanbo extends Model
         'ngayden',
         'bac',
         'heso',
+        'hesopc',
         'hesott',
         'vuotkhung',
         'pthuong',

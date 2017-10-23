@@ -18,6 +18,7 @@ class Users extends Model
         'maxa',
         'mahuyen',
         'matinh',
+        'level',
         'sadmin',
         'permission',
         'pldv'

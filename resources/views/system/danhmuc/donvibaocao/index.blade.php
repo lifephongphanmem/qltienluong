@@ -52,7 +52,7 @@
                             <tr>
                                 <th class="text-center" style="width: 10%">STT</th>
                                 <th class="text-center">Tên khu vực, địa bàn</th>
-                                <th class="text-center">Đơn vị quản lý</th>
+                                <th class="text-center">Đơn vị tổng hợp số liệu</th>
                                 <th class="text-center">Thao tác</th>
                             </tr>
                         </thead>
@@ -69,9 +69,11 @@
                                             <button type="button" onclick="edit('{{$value->madvbc}}')" class="btn btn-default btn-xs mbs">
                                                 <i class="fa fa-edit"></i>&nbsp; Chỉnh sửa</button>
                                             <button type="button" onclick="unit_manage('{{$value->madvbc}}')" class="btn btn-default btn-xs mbs">
-                                                <i class="fa fa-sitemap"></i>&nbsp; Đơn vị quản lý</button>
-                                            <button type="button" onclick="cfDel('{{$furl.'del/'.$value->madvbc}}')" class="btn btn-default btn-xs mbs" data-target="#delete-modal-confirm" data-toggle="modal">
-                                                <i class="fa fa-trash-o"></i>&nbsp; Xóa</button>
+                                                <i class="fa fa-sitemap"></i>&nbsp; Đơn vị tổng hợp số liệu</button>
+                                            @if(session('admin')->level == 'SA')
+                                                <button type="button" onclick="cfDel('{{$furl.'del/'.$value->madvbc}}')" class="btn btn-default btn-xs mbs" data-target="#delete-modal-confirm" data-toggle="modal">
+                                                    <i class="fa fa-trash-o"></i>&nbsp; Xóa</button>
+                                            @endif
                                         </td>
                                     </tr>
                                 @endforeach

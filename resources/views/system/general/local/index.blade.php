@@ -68,6 +68,15 @@
                         </tr>
                         <tr>
                             <td style="width:15%">
+                                <b>Cấp dự toán</b>
+                            </td>
+                            <td style="width:35%">
+                                <span class="text-muted">{{$model->capdutoan}}
+                                </span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="width:15%">
                                 <b>Địa chỉ</b>
                             </td>
                             <td style="width:35%">

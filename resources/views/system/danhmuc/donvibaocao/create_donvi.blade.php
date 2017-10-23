@@ -96,7 +96,7 @@
                             <div class="row">
                                 <div class="col-md-6">
                                     <div class="form-group">
-                                        <label class="control-label">Đơn vị chủ quản</label>
+                                        <label class="control-label">Đơn vị gửi dữ liệu tổng hợp</label>
                                         {!!Form::select('macqcq', $model_donvi, 'NULL', array('id' => 'macqcq','class' => 'form-control'))!!}
                                     </div>
                                 </div>

@@ -246,6 +246,13 @@
                     {!!Form::text('hesott', null, array('id' => 'hesott','class' => 'form-control', 'data-mask'=>'fdecimal'))!!}
                 </div>
             </div>
+
+            <div class="col-md-3">
+                <div class="form-group">
+                    <label class="control-label">Hệ số phụ cấp</label>
+                    {!!Form::text('hesopc', null, array('id' => 'hesopc','class' => 'form-control', 'data-mask'=>'fdecimal'))!!}
+                </div>
+            </div>
         </div>
     </div>
 </div>

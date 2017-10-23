@@ -21,7 +21,7 @@
                     <div class="row">
                         <div class="col-lg-12">
                             <ol>
-                                <li><a href="#" data-target="#thoaibangluong-modal" data-toggle="modal" onclick="baocaobangluong('{{$furl.'mauc02ahd'}}')">Mẫu 1 (Mẫu C02a - HD)</a></li>
+                                <li><a href="#" data-target="#thoaibangluong-modal" data-toggle="modal" onclick="baocaobangluong('{{$furl.'don_vi/mauc02ahd'}}')">Mẫu 1 (Mẫu C02a - HD)</a></li>
                                 <li><a href="#" data-target="#thoaibangluong-modal" data-toggle="modal" onclick="baocaobangluong('{{$furl.'mauc02x'}}')">Mẫu 2 (Mẫu C02 - X)</a></li>
                                 <li><a href="#" data-target="#thoaibangluong-modal" data-toggle="modal" onclick="baocaobangluong('{{$furl.'maubaohiem'}}')">Mẫu bảo hiểm phải nộp theo lương</a></li>
                                 <li><a href="#" data-target="#thoaichitra-modal" data-toggle="modal" onclick="chitraluong('{{$furl.'chitraluong'}}')">Tổng hợp tình hình chi trả lương</a></li>
@@ -31,10 +31,31 @@
                     </div>
                 </div>
             </div>
-            @if(session('admin')->level=='H' || session('admin')->level=='T')
+            @if(session('admin')->quanlynhom)
                 <div class="portlet box">
                     <div class="portlet-header">
-                        MẪU BÁO CÁO TỔNG HỢP TỪ CÁC ĐƠN VỊ
+                        MẪU BÁO CÁO TỔNG HỢP TỪ CÁC ĐƠN VỊ CẤP DƯỚI
+                    </div>
+                    <div class="portlet-body">
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <ol>
+                                    <li><a href="#" data-target="#thoaibangluong-modal" data-toggle="modal" onclick="baocaobangluong('{{$furl.'mauc02ahd_th'}}')">Mẫu 1 (Mẫu C02a - HD)</a></li>
+                                    <li><a href="#" data-target="#thoaibangluong-modal" data-toggle="modal" onclick="baocaobangluong('{{$furl.'mauc02x_th'}}')">Mẫu 2 (Mẫu C02 - X)</a></li>
+                                    <li><a href="#" data-target="#thoaibangluong-modal" data-toggle="modal" onclick="baocaobangluong('{{$furl.'maubaohiem_th'}}')">Mẫu bảo hiểm phải nộp theo lương</a></li>
+                                    <li><a href="#" data-target="#thoaichitra-modal" data-toggle="modal" onclick="chitraluong('{{$furl.'chitraluong_th'}}')">Tổng hợp tình hình chi trả lương</a></li>
+                                    <li><a href="{{url('/bao_cao/bang_luong/dutoanluong_th')}}" target="_blank">Dự toán lương</a></li>
+                                </ol>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            @endif
+
+            @if(session('admin')->quanlykhuvuc)
+                <div class="portlet box">
+                    <div class="portlet-header">
+                        MẪU BÁO CÁO TỔNG HỢP TRÊN TOÀN ĐỊA BÀN
                     </div>
                     <div class="portlet-body">
                         <div class="row">

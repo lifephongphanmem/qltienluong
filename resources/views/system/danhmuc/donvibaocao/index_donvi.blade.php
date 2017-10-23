@@ -49,7 +49,7 @@
                                 <th class="text-center">Tên đơn vị</th>
                                 <th class="text-center">Đơn vị quản lý</th>
                                 <th class="text-center">Phân loại đơn vị</th>
-                                <th class="text-center">Địa chỉ</th>
+                                <th class="text-center">Cấp dự toán</th>
                                 <th class="text-center">Thao tác</th>
                             </tr>
                             </thead>
@@ -61,7 +61,7 @@
                                             <td>{{$value->madv}}</td>
                                             <td>{{$value->tendv}}</td>
                                             <td>{{$value->tencqcq}}</td>
-                                            <td>{{$value->phanloai}}</td>
+                                            <td>{{$value->capdutoan}}</td>
                                             <td>{{$value->diachi}}</td>
                                             <td>
                                                 <a class="btn btn-default btn-xs mbs" href="{{url($url.'ma_so='.$value->madvbc.'&don_vi='.$value->madv.'/edit')}}">

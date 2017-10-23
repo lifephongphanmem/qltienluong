@@ -18,6 +18,7 @@ class bangluong_ct extends Model
         'tencanbo',
         'masoms',
         'heso',
+        'hesopc',
         'hesott',
         'vuotkhung',
         'pcct',

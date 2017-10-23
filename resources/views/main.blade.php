@@ -191,17 +191,23 @@
                         <li>
                             <a href="{{url('chuc_nang/tong_hop_luong/don_vi/index?nam='.date('Y'))}}">Tổng hợp lương tại đơn vị</a>
                         </li>
-                        <!-- Các tài khoản quản lý khu vực mới có tính năng tổng hợp dữ liệu từ đơn vị cấp dưới -->
-                        @if(session('admin')->quanlykhuvuc)
+                        @if(session('admin')->quanlynhom)
                             <li>
-                                <a href="{{url('chuc_nang/tong_hop_luong/huyen/index?thang='.date('m').'&nam='.date('Y').'&khuvuc=KVHCSN')}}">Tổng hợp lương toàn khối</a>
+                                <a href="{{url('chuc_nang/tong_hop_luong/khoi/index?thang='.date('m').'&nam='.date('Y'))}}">Tổng hợp lương từ đơn vị cấp dưới</a>
                             </li>
-                        @endif
-
+                            @endif
+                        <!--Chức năng xem dữ liệu tổng hợp lương của các đơn vị cấp dưới cho tài khoản quản lý -->
                         <!--Chức năng xem dữ liệu tổng hợp lương của các đơn vị cấp dưới cho tài khoản quản lý -->
                         @if(session('admin')->quanlynhom || session('admin')->quanlykhuvuc)
                             <li>
                                 <a href="{{url('chuc_nang/xem_du_lieu/index?thang='.date('m').'&nam='.date('Y'))}}">Số liệu tổng hợp từ đơn vị cấp dưới</a>
+                            </li>
+                        @endif
+
+                        <!-- Các tài khoản quản lý khu vực mới có tính năng tổng hợp dữ liệu từ đơn vị cấp dưới -->
+                        @if(session('admin')->quanlykhuvuc)
+                            <li>
+                                <a href="{{url('chuc_nang/tong_hop_luong/huyen/index?thang='.date('m').'&nam='.date('Y').'&khuvuc=KVHCSN')}}">Tổng hợp lương toàn khối</a>
                             </li>
                         @endif
 
@@ -262,7 +268,7 @@
                                 <!--li><a href="{{url('danh_muc/bao_mat/index?&level=X')}}">Bảo mật hồ sơ</a></li-->
                                 <li><a href="{{url('danh_muc/khoi_pb/index')}}">Lĩnh vực hoạt động</a></li>
                                 <li><a href="{{url('danh_muc/phong_ban/index')}}">Phòng ban</a></li>
-                                <li><a href="{{url('danh_muc/chuc_vu_cq/ma_so='.session('admin')->level)}}">Chức vụ chính quyền</a></li>
+                                <li><a href="{{url('danh_muc/chuc_vu_cq/ma_so='.session('admin')->maphanloai)}}">Chức vụ chính quyền</a></li>
                                 <li><a href="{{url('danh_muc/chuc_vu_d/index')}}">Chức vụ đảng</a></li>
                                 <li><a href="{{url('danh_muc/cong_tac/index')}}">Phân loại công tác</a></li>
                                 <li><a href="{{url('danh_muc/phu_cap/index')}}">Phụ cấp</a></li>
@@ -294,11 +300,10 @@
 
                             </ul>
                         </li>
-
-
                         <li><a href="{{url('danh_muc/tai_khoan/list_user?level=H')}}"><i class="icon-book-open"></i>Quản lý tài khoản</a></li>
-                        <li><a href="{{url('danh_muc/khu_vuc/ma_so=H')}}"><i class="icon-book-open"></i>Danh sách khu vực, địa bàn quản lý</a></li>
-
+                        @if(session('admin')->level == 'SA')
+                            <li><a href="{{url('danh_muc/khu_vuc/ma_so=H')}}"><i class="icon-book-open"></i>Danh sách khu vực, địa bàn quản lý</a></li>
+                        @endif
 					</ul>
 				</li>
 			</ul>

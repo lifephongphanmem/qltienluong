@@ -112,7 +112,7 @@ class hosocanboController extends Controller
             $model_dt=array_column(dmdantoc::select(DB::raw('dantoc as maso'),'dantoc')->get()->toarray(),'dantoc','maso');
             //$m_pb= dmphongban::where('madv',session('admin')->madv)->get();
             $m_pb = dmphongban::all();
-            $m_cvcq = dmchucvucq::where('maphanloai',session('admin')->level)->get();
+            $m_cvcq = dmchucvucq::where('maphanloai',session('admin')->maphanloai)->get();
             //khối phòng ban giờ là lĩnh vực hoạt động
             $m_linhvuc=array_column(dmkhoipb::all()->toArray(),'tenkhoipb','makhoipb');
             $m_cvd= dmchucvud::all();
@@ -171,6 +171,7 @@ class hosocanboController extends Controller
 
             $insert['heso'] = chkDbl($insert['heso']);
             $insert['hesott'] = chkDbl($insert['hesott']);
+            $insert['hesopc'] = chkDbl($insert['hesopc']);
             $insert['vuotkhung'] = chkDbl($insert['vuotkhung']);
             $insert['pccv'] = chkDbl($insert['pccv']);
             $insert['pckn'] = chkDbl($insert['pckn']);
@@ -264,6 +265,7 @@ class hosocanboController extends Controller
             $insert['macvd']=($insert['macvd']==''?NULL:$insert['macvd']);
 
             $insert['heso'] = chkDbl($insert['heso']);
+            $insert['hesopc'] = chkDbl($insert['hesopc']);
             $insert['hesott'] = chkDbl($insert['hesott']);
             $insert['vuotkhung'] = chkDbl($insert['vuotkhung']);
             $insert['pccv'] = chkDbl($insert['pccv']);

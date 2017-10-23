@@ -320,6 +320,21 @@ Route::group(['prefix'=>'chuc_nang'],function(){
             Route::get('printf_data_diaban/ma_so={mathdv}','tonghopluong_donviController@printf_data_diaban');
         });
 
+        Route::group(['prefix'=>'khoi'],function(){
+            Route::get('index','tonghopluong_khoiController@index');
+            Route::get('tonghop','tonghopluong_khoiController@tonghop');
+            Route::get('detail/ma_so={mathdv}','tonghopluong_khoiController@detail');
+            Route::post('senddata','tonghopluong_khoiController@senddata'); //gửi dữ liệu
+
+            Route::get('detail_diaban/ma_so={mathdv}','tonghopluong_donviController@detail_diaban');
+            Route::get('edit_detail','tonghopluong_donviController@edit_detail');//chỉnh sửa dữ liêu
+            Route::get('edit_detail_diaban','tonghopluong_donviController@edit_detail_diaban');//chỉnh sửa dữ liêu
+            Route::post('store_detail','tonghopluong_donviController@store_detail');//chỉnh sửa dữ liêu
+            Route::post('store_detail_diaban','tonghopluong_donviController@store_detail_diaban');//chỉnh sửa dữ liêu
+
+            Route::get('printf_data/ma_so={mathdv}','tonghopluong_donviController@printf_data');
+            Route::get('printf_data_diaban/ma_so={mathdv}','tonghopluong_donviController@printf_data_diaban');
+        });
 
         Route::get('/ma_so={macqcq}/don_vi','dmdonvibaocaoController@donvi_luong1');
     });
@@ -368,12 +383,16 @@ Route::group(['prefix'=>'bao_cao'],function(){
     });
 
     Route::group(['prefix'=>'bang_luong'],function(){
-        Route::get('','baocaobangluongController@index');
-        Route::post('mauc02ahd','baocaobangluongController@mauc02ahd');
-        Route::post('mauc02x','baocaobangluongController@mauc02x');
-        Route::post('maubaohiem','baocaobangluongController@maubaohiem');
-        Route::post('chitraluong','baocaobangluongController@chitraluong');
-        Route::get('dutoanluong','baocaobangluongController@dutoanluong');
+        Route::get('','baocaobangluongController@index');//Form chung
+        //Các mẫu báo cáo tại đơn vị
+        Route::group(['prefix'=>'don_vi'],function(){
+            Route::post('mauc02ahd','baocaobangluongController@mauc02ahd');
+            Route::post('mauc02x','baocaobangluongController@mauc02x');
+            Route::post('maubaohiem','baocaobangluongController@maubaohiem');
+            Route::post('chitraluong','baocaobangluongController@chitraluong');
+            Route::get('dutoanluong','baocaobangluongController@dutoanluong');
+        });
+
 
         Route::get('dutoanluong_th','baocaobangluongController@dutoanluong_th');
         Route::post('chitraluong_th','baocaobangluongController@chitraluong_th');
@@ -571,7 +590,7 @@ Route::group(['prefix'=>'he_thong'],function(){
     Route::group(['prefix'=>'don_vi'],function(){
         Route::get('don_vi','dmdonviController@information_local');
         Route::get('maso={madv}/edit_local','dmdonviController@edit_local');
-        Route::patch('/{madv}','dmdonviController@update_local');
+        Route::post('/{madv}','dmdonviController@update_local');
 
         Route::get('chung','dmdonviController@information_global');
         Route::get('maso={id}/edit_global','dmdonviController@edit_global');

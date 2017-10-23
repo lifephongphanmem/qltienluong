@@ -251,7 +251,7 @@ function convert2date($ngaythang){
     return date('Y-m-d', strtotime(str_replace('/', '-', $ngaythang)));
 }
 
-function conver2Roman($num){
+function convert2Roman($num){
     $n = intval($num);
     $res = '';
 
@@ -309,4 +309,12 @@ function dinhdangso ($number , $decimals = 0, $unit = '1' , $dec_point = ',' , $
     $number = round( $number / $r , $decimals);
     return number_format($number, $decimals ,$dec_point, $thousands_sep);
 }
+    function unset_key ($data, $array_key){
+        foreach($array_key as $key){
+            if(array_key_exists($key,$data)){
+                unset($data[$key]);
+            }
+        }
+    return $data;
+    }
 ?>
