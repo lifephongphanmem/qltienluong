@@ -212,7 +212,7 @@ class hosocanboController extends Controller
             //khối phòng ban giờ là lĩnh vực hoạt động
             $m_linhvuc=array_column(dmkhoipb::all()->toArray(),'tenkhoipb','makhoipb');
             $m_pb = dmphongban::all();
-            $m_cvcq = dmchucvucq::where('maphanloai',session('admin')->level)->get();
+            $m_cvcq = dmchucvucq::where('maphanloai',session('admin')->maphanloai)->get();
             $m_cvd = dmchucvud::all();
             $m_plnb = nhomngachluong::select('manhom','tennhom')->distinct()->get();
             $m_pln = ngachluong::select('tenngachluong','manhom','msngbac')->distinct()->get();

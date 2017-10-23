@@ -310,11 +310,15 @@ function dinhdangso ($number , $decimals = 0, $unit = '1' , $dec_point = ',' , $
     return number_format($number, $decimals ,$dec_point, $thousands_sep);
 }
     function unset_key ($data, $array_key){
-        foreach($array_key as $key){
-            if(array_key_exists($key,$data)){
-                unset($data[$key]);
-            }
-        }
-    return $data;
+        $a_kq = array();
+       foreach($data as $dt){
+           foreach($array_key as $value){
+               if(array_key_exists($value,$dt)){
+                   unset($dt[$value]);
+               }
+           }
+           $a_kq[]=$dt;
+       }
+    return $a_kq;
     }
 ?>
