@@ -82,7 +82,7 @@
                                             @endif
                                         @else
                                             @if($value['trangthai'] == 'CHUADAYDU')
-                                                <button type="button" class="btn btn-warning btn-sm" onclick="confirmChuyen('{{$value['mathdv']}}')" data-target="#create-modal" data-toggle="modal"><i class="fa fa-stack-overflow"></i>&nbsp;
+                                                <button type="button" class="btn btn-warning btn-sm" onclick="confirmTonghop('{{url($furl.'tonghop_chuadaydu?thang='.$value['thang'].'&nam='.$nam)}}')" data-target="#create-modal" data-toggle="modal"><i class="fa fa-stack-overflow"></i>&nbsp;
                                                     Tổng hợp dữ liệu</button>
                                                 <a href="{{url($furl.'tonghop?thang='.$value['thang'].'&nam='.$nam)}}" class="btn btn-warning btn-sm">
                                                     <i class="fa fa-list-alt"></i>&nbsp; Đơn vị chưa gửi dữ liệu</a>
@@ -136,7 +136,7 @@
     <div class="modal fade" id="create-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
-                {!! Form::open(['url'=>$furl.'senddata','id' => 'frm_chuyen','method'=>'POST'])!!}
+                {!! Form::open(['url'=>'','id' => 'frm_tonghop','method'=>'POST'])!!}
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
                     <h4 class="modal-title">Đồng ý tổng hợp số liệu?</h4>
@@ -145,7 +145,6 @@
                     <div class="form-group">
                         <label><b>Một số đơn vị cấp dưới chưa gửi dữ liệu tổng hợp.</br>Bạn có chắc chắn muốn tổng hợp số liệu ?</b></label>
                     </div>
-                    <input type="hidden" name="mathdv" id="mathdv">
                     <div class="modal-footer">
                         <button type="button" class="btn default" data-dismiss="modal">Hủy</button>
                         <button type="submit" class="btn blue">Đồng ý</button>
@@ -162,6 +161,10 @@
     <script>
         function confirmChuyen(mathdv) {
             document.getElementById("mathdv").value = mathdv;
+        }
+
+        function confirmTonghop(url) {
+            $('#frm_tonghop').attr('action', url);
         }
     </script>
 

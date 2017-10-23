@@ -322,6 +322,7 @@ Route::group(['prefix'=>'chuc_nang'],function(){
         Route::group(['prefix'=>'khoi'],function(){
             Route::get('index','tonghopluong_khoiController@index');
             Route::get('tonghop','tonghopluong_khoiController@tonghop');
+            Route::post('tonghop_chuadaydu','tonghopluong_khoiController@tonghop_chuadaydu');
             Route::get('detail/ma_so={mathdv}','tonghopluong_khoiController@detail');
             Route::post('senddata','tonghopluong_khoiController@senddata'); //gửi dữ liệu
 

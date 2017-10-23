@@ -211,10 +211,18 @@ class tonghopluong_khoiController extends Controller
                     $model_db[] = $model_diaban[$i];
                 }
             }
+           
             tonghopluong_khoi_chitiet::insert($model_data);
             tonghopluong_khoi_diaban::insert($model_db);
             tonghopluong_khoi::create($inputs);
             return redirect('/chuc_nang/tong_hop_luong/khoi/detail/ma_so='.$mathdv);
+        } else
+            return view('errors.notlogin');
+    }
+
+    function tonghop_chuadaydu(Request $requests){
+        if (Session::has('admin')) {
+            return $this->tonghop($requests);
         } else
             return view('errors.notlogin');
     }
@@ -250,7 +258,9 @@ class tonghopluong_khoiController extends Controller
 
             //Kiểm tra xem đơn vị đã gửi dữ liệu chưa
             $chk = tonghopluong_huyen::where('thang',$model->thang)
-                ->where('nam',$model->nam)->where('phanloai',$model->phanloai)->count();
+                ->where('nam',$model->nam)
+                ->where('phanloai',$model->phanloai)->count();
+
             if($chk == 0){//chưa gửi => update dữ liệu từ bảng khoi=>huyen
                 $model_chitiet = tonghopluong_khoi_chitiet::where('mathdv',$model->mathdv)->get()->toarray();
                 $chitiet = unset_key($model_chitiet, array('mathdv','id','created_at','updated_at'));
