@@ -31,16 +31,7 @@
                                 <div class="col-md-4">
                                     <div class="form-group">
                                         <label class="control-label">Tên ngạch bậc </label>
-                                        <select class="form-control select2me" name="tennb" id="tennb" onchange="setMSNGBAC()">
-                                            @foreach($m_plnb as $plnb)
-                                                <optgroup label="{{$plnb->tennhom}}">
-                                                    <?php $mode_ct=$m_pln->where('manhom',$plnb->manhom); ?>
-                                                    @foreach($mode_ct as $ct)
-                                                        <option value="{{$ct->msngbac}}">{{$ct->tenngachluong}}</option>
-                                                    @endforeach
-                                                </optgroup>
-                                            @endforeach
-                                        </select>
+                                        {!!Form::text('tennb', null, array('id' => 'tennb','class' => 'form-control','readonly'=>'true'))!!}
                                     </div>
                                 </div>
 

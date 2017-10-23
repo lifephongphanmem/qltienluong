@@ -95,7 +95,7 @@ class tonghopluong_khoiController extends Controller
 
             //lấy danh sách các bảng tổng họp theo đơn vị
             $model_tonghop = tonghopluong_donvi::where('nam',$nam)->where('thang',$thang)->where('macqcq',$madv)->where('trangthai','DAGUI')->get();
-            $inputs['luongcoban'] = $model_tonghop->first()['luongcoban'];
+            $inputs['luongcoban'] = isset($model_tonghop) ? $model_tonghop->first()['luongcoban'] : getGeneralConfigs()['luongcb'];
 
             //lấy danh sách các chi tiết số liệu tổng họp theo đơn vị
             $model_tonghop_ct = tonghopluong_donvi_chitiet::wherein('mathdv',function($query) use($nam, $thang, $madv){

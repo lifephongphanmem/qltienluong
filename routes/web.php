@@ -274,11 +274,10 @@ Route::group(['prefix'=>'chuc_nang'],function(){
         Route::get('danh_sach','bangluongController@index');
         Route::post('store','bangluongController@store');
 
-
         Route::get('/maso={mabl}','bangluongController@show');
         Route::get('in/maso={mabl}','bangluongController@inbangluong');
         Route::get('in_bh/maso={mabl}','bangluongController@inbaohiem');
-        Route::get('/maso={mabl}/can_bo','bangluongController@detail');
+        Route::get('','bangluongController@detail');
         Route::post('updatect/{id}','bangluongController@updatect');
         Route::get('del/{id}','bangluongController@destroy');
 
@@ -392,7 +391,6 @@ Route::group(['prefix'=>'bao_cao'],function(){
             Route::post('chitraluong','baocaobangluongController@chitraluong');
             Route::get('dutoanluong','baocaobangluongController@dutoanluong');
         });
-
 
         Route::get('dutoanluong_th','baocaobangluongController@dutoanluong_th');
         Route::post('chitraluong_th','baocaobangluongController@chitraluong_th');

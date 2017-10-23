@@ -245,13 +245,14 @@
 					</ul>
 				</li>
                 <!-- dành cho đơn vị chủ quản -->
-
+                @if(session('admin')->quanlykhuvuc)
                     <li>
                         <a href="{{url('tong_hop_bao_cao/danh_sach')}}">
                             <i class="fa fa-file-text"></i>
                             <span class="title">Báo cáo tổng hợp</span>
                         </a>
                     </li>
+                @endif
 
 				<li class="last">
 					<a href="javascript:;">

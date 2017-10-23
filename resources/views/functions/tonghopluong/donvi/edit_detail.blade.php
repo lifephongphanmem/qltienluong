@@ -25,39 +25,10 @@
                     <input type="hidden" id="manl" name="manl" value="{{$model->manl}}" />
                     <div class="form-body">
                         <div class="row">
-                            <div class="col-md-3">
-                                <div class="form-group">
-                                    <label class="control-label">Mã ngạch <span class="require">*</span></label>
-                                    {!!Form::text('msngbac', null, array('id' => 'msngbac','class' => 'form-control','autofocus'=>'autofocus','readonly'=>'true'))!!}
-                                </div>
-                            </div>
 
-                            <div class="col-md-3">
-                                <div class="form-group">
-                                    <label class="control-label">Ngạch bậc </label>
-                                    <select class="form-control select2me" name="tennb" id="tennb" onchange="setMSNGBAC()">
-                                        @foreach($m_plnb as $plnb)
-                                            <optgroup label="{{$plnb->tennhom}}">
-                                            <?php $mode_ct=$m_pln->where('manhom',$plnb->manhom); ?>
-                                                @foreach($mode_ct as $ct)
-                                                    <option value="{{$ct->msngbac}}">{{$ct->tenngachluong}}</option>
-                                                @endforeach
-                                            </optgroup>
-                                        @endforeach
-                                    </select>
-                                </div>
-                            </div>
 
-                            <div class="col-md-3">
-                                <div class="form-group">
-                                    <label class="control-label">Bậc lương </label>
-                                    <select class="form-control select2me" name="bac" id="bac" onchange="getHS()">
-                                        @for($i=1;$i<=16;$i++)
-                                            <option value="{{$i}}">{{$i}}</option>
-                                        @endfor
-                                    </select>
-                                </div>
-                            </div>
+
+
                             <div class="col-md-3">
                                 <div class="form-group">
                                     <label class="control-label">Hệ số lương </label>
@@ -74,25 +45,6 @@
                                 </div>
                             </div>
 
-                            <div class="col-md-3">
-                                <div class="form-group">
-                                    <label class="control-label">Phần trăm hưởng </label>
-                                    {!!Form::text('pthuong', '100', array('id' => 'pthuong','class' => 'form-control', 'data-mask'=>'fdecimal'))!!}
-                                </div>
-                            </div>
-                            <div class="col-md-3">
-                                <div class="form-group">
-                                    <label class="control-label">Từ ngày <span class="require">*</span></label>
-                                    {!! Form::input('date','ngaytu',null,array('id' => 'ngaytu', 'class' => 'form-control'))!!}
-                                </div>
-                            </div>
-
-                            <div class="col-md-3">
-                                <div class="form-group">
-                                    <label class="control-label">Đến ngày <span class="require">*</span></label>
-                                    {!! Form::input('date','ngayden',null,array('id' => 'ngayden', 'class' => 'form-control'))!!}
-                                </div>
-                            </div>
                         </div>
 
                         <div class="row">
@@ -242,10 +194,10 @@
                     </div>
 
                         <div style="text-align: center; border-top: 1px solid #eee;">
-                            @if($model_nangluong->trangthai != 'Đã nâng lương')
-                                <button style="margin-top: 10px" type="submit" class="btn btn-default">Hoàn thành <i class="fa fa-save mlx"></i></button>
-                            @endif
-                            <a href="{{url('chuc_nang/nang_luong/maso='.$model->manl)}}" class="btn btn-default"><i class="fa fa-reply"></i>&nbsp;Quay lại</a>
+
+                                <button type="submit" class="btn btn-default">Hoàn thành <i class="fa fa-save mlx"></i></button>
+
+                            <a href="{{url('chuc_nang/nang_luong/maso=')}}" class="btn btn-default"><i class="fa fa-reply"></i>&nbsp;Quay lại</a>
                         </div>
 
                     {!! Form::close() !!}
@@ -254,5 +206,4 @@
         </div>
     </div>
 </div>
-@include('includes.script.func_msnb')
 @stop

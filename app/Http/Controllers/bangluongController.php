@@ -219,10 +219,13 @@ class bangluongController extends Controller
         die($model);
     }
 
-    function detail($id){
+    function detail(Request $request){
         if (Session::has('admin')) {
-            $model = bangluong_ct::findorfail($id);
+            $inputs = $request->all();
+            $model = bangluong_ct::where('mabl',$inputs['maso'])->where('macanbo',$inputs['macanbo'])->first();
+
             $m_nb = ngachluong::where('msngbac',$model->msngbac)->first();
+
             $model->tennb = $m_nb->tenngachluong;
             $model->tencanbo = Str::upper($model->tencanbo);
 

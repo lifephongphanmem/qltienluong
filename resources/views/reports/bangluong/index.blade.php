@@ -22,10 +22,10 @@
                         <div class="col-lg-12">
                             <ol>
                                 <li><a href="#" data-target="#thoaibangluong-modal" data-toggle="modal" onclick="baocaobangluong('{{$furl.'don_vi/mauc02ahd'}}')">Mẫu 1 (Mẫu C02a - HD)</a></li>
-                                <li><a href="#" data-target="#thoaibangluong-modal" data-toggle="modal" onclick="baocaobangluong('{{$furl.'mauc02x'}}')">Mẫu 2 (Mẫu C02 - X)</a></li>
-                                <li><a href="#" data-target="#thoaibangluong-modal" data-toggle="modal" onclick="baocaobangluong('{{$furl.'maubaohiem'}}')">Mẫu bảo hiểm phải nộp theo lương</a></li>
-                                <li><a href="#" data-target="#thoaichitra-modal" data-toggle="modal" onclick="chitraluong('{{$furl.'chitraluong'}}')">Tổng hợp tình hình chi trả lương</a></li>
-                                <li><a href="{{url('/bao_cao/bang_luong/dutoanluong')}}" target="_blank">Dự toán lương</a></li>
+                                <li><a href="#" data-target="#thoaibangluong-modal" data-toggle="modal" onclick="baocaobangluong('{{$furl.'don_vi/mauc02x'}}')">Mẫu 2 (Mẫu C02 - X)</a></li>
+                                <li><a href="#" data-target="#thoaibangluong-modal" data-toggle="modal" onclick="baocaobangluong('{{$furl.'don_vi/maubaohiem'}}')">Mẫu bảo hiểm phải nộp theo lương</a></li>
+                                <li><a href="#" data-target="#thoaichitra-modal" data-toggle="modal" onclick="chitraluong('{{$furl.'don_vi/chitraluong'}}')">Tổng hợp tình hình chi trả lương</a></li>
+                                <li><a href="{{url('/bao_cao/bang_luong/don_vi/dutoanluong')}}" target="_blank">Dự toán lương</a></li>
                             </ol>
                         </div>
                     </div>
