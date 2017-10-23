@@ -42,7 +42,6 @@
                                 <th class="text-center" style="width: 5%">STT</th>
                                 <th class="text-center">Mã công chức</th>
                                 <th class="text-center">Họ tên</th>
-                                <th class="text-center">Phòng ban</th>
                                 <th class="text-center">Chức vụ</th>
                                 <th class="text-center">Mã ngạch</th>
                                 <th class="text-center">Thực lĩnh</th>
@@ -55,9 +54,8 @@
                             @foreach($model as $key=>$value)
                                 <tr>
                                     <td class="text-center">{{$key+1}}</td>
-                                    <td>{{$value->masoms}}</td>
+                                    <td>{{$value->macongchuc}}</td>
                                     <td>{{$value->tencanbo}}</td>
-                                    <td>{{''}}</td>
                                     <td>{{$value->tencv}}</td>
                                     <td>{{$value->msngbac}}</td>
                                     <td>{{number_format($value->luongtn)}}</td>

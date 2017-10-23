@@ -43,6 +43,7 @@ class hosocanboController extends Controller
             $dmphongban=dmphongban::select('mapb','tenpb')->get();
             $dmchucvud=dmchucvud::select('tencv', 'macvd')->get();
             $dmchucvucq=dmchucvucq::select('tencv', 'macvcq','sapxep')->get();
+            $dmcongtac=dmphanloaict::select('mact', 'tenct')->get();
 
             foreach($m_hs as $hs){
                 $phongban = $dmphongban->where('mapb',$hs->mapb)->first();
@@ -60,6 +61,12 @@ class hosocanboController extends Controller
                     $hs->tencvcq = $chucvucq->tencv;
                     $hs->sapxep = $chucvucq->sapxep;
                 }
+
+                $congtac = $dmcongtac->where('mact',$hs->mact)->first();
+                if(count($congtac)>0){
+                    $hs->tenct = $congtac->tenct;
+                }
+
             }
 
             $model = $m_hs->sortBy('sapxep');

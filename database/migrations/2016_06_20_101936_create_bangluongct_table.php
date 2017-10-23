@@ -22,7 +22,7 @@ class CreateBangluongctTable extends Migration
             $table->string('mact', 50)->nullable();
             $table->string('macanbo', 50)->nullable();
             $table->string('tencanbo', 50)->nullable();
-            $table->string('masoms', 50)->nullable();
+            $table->string('macongchuc', 50)->nullable();
             $table->double('heso')->default(0);
             $table->double('hesott')->default(0);//hệ số truy thu
             $table->double('vuotkhung')->default(0);

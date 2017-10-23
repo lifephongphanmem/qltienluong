@@ -69,7 +69,7 @@ class bangluongController extends Controller
 
             //Lấy tất cả cán bộ trong đơn vị
             $m_cb=hosocanbo::where('madv',session('admin')->madv)
-                ->select('macanbo','tencanbo','mact','macvcq','mapb','msngbac','heso','hesopc','hesott','vuotkhung',DB::raw("'".$inputs['mabl']. "' as mabl"),
+                ->select('macanbo','macongchuc','tencanbo','mact','macvcq','mapb','msngbac','heso','hesopc','hesott','vuotkhung',DB::raw("'".$inputs['mabl']. "' as mabl"),
                     'pck','pccv','pckv','pcth','pcdh','pcld','pcudn','pctn','pctnn','pcdbn','pcvk','pckn','pccovu','pcdbqh','pctnvk','pcbdhdcu','pcdang','pcthni')
                 ->get();
             $gnr=getGeneralConfigs();
