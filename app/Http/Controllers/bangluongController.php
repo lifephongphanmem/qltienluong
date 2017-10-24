@@ -223,10 +223,8 @@ class bangluongController extends Controller
         if (Session::has('admin')) {
             $inputs = $request->all();
             $model = bangluong_ct::where('mabl',$inputs['maso'])->where('macanbo',$inputs['macanbo'])->first();
-
             $m_nb = ngachluong::where('msngbac',$model->msngbac)->first();
-
-            $model->tennb = $m_nb->tenngachluong;
+            $model->tennb = isset($m_nb)? $m_nb->tenngachluong:'';
             $model->tencanbo = Str::upper($model->tencanbo);
 
             return view('manage.bangluong.chitiet')

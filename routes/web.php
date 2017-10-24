@@ -341,6 +341,7 @@ Route::group(['prefix'=>'chuc_nang'],function(){
 
     Route::group(['prefix'=>'xem_du_lieu'],function(){
         Route::get('index','xemdulieucapduoiController@donvi_luong');
+        Route::get('huyen','xemdulieucapduoiController@index_huyen');
     });
 
     Route::group(['prefix'=>'buoc_thoi_viec'],function(){

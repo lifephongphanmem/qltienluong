@@ -283,6 +283,8 @@ class tonghopluong_khoiController extends Controller
                 $th_khoi->ngaylap=$model->ngaylap;
                 $th_khoi->macqcq = $model->macqcq;
                 $th_khoi->madvbc = $model->madvbc;
+                $th_khoi->thang = $model->thang;
+                $th_khoi->nam = $model->nam;
                 $th_khoi->nguoigui= session('admin')->name;
                 $th_khoi->ngaygui= Carbon::now()->toDateTimeString();
                 $th_khoi->save();

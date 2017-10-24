@@ -31,7 +31,7 @@
         <div class="col-md-12">
             <div class="portlet light bordered">
                 <div class="portlet-title">
-                    <div class="caption">DANH SÁCH CÁC ĐƠN VỊ</div>
+                    <div class="caption">DANH SÁCH CÁC ĐƠN VỊ BÁO CÁO VÀ ĐƠN VỊ QUẢN LÝ</div>
                     <div class="actions">
 
                     </div>
@@ -88,17 +88,18 @@
                         <tr>
                             <th class="text-center" style="width: 5%">STT</th>
                             <th class="text-center">Tên đơn vị</th>
-                            <th class="text-center">Tên đơn vị tổng hợp dữ liệu</th>
+                            <th class="text-center">Phân loại dữ liệu</th>
                             <th class="text-center">Thao tác</th>
                         </tr>
                         </thead>
                         <tbody>
+                        <?php $i=1;?>
                         @if(isset($model))
                             @foreach($model as $key=>$value)
                                 <tr>
-                                    <td class="text-center">{{$key+1}}</td>
+                                    <td class="text-center">{{$i++}}</td>
                                     <td>{{$value->tendv}}</td>
-                                    <td>{{$value->tendvcq}}</td>
+                                    <td>{{$value->tenphanloai}}</td>
                                     <td>
                                         @if ($value->mathdv != NULL)
                                             <a href="{{url('/chuc_nang/tong_hop_luong/don_vi/printf_data/ma_so='.$value['mathdv'])}}" class="btn btn-success btn-sm" TARGET="_blank">
@@ -128,7 +129,7 @@
             var thang = $('#thang').val();
             var nam = $('#nam').val();
             var trangthai = $('#trangthai').val();
-            return '/chuc_nang/xem_du_lieu/index?thang='+ thang +'&nam=' + nam + '&trangthai=' + trangthai;
+            return '/chuc_nang/xem_du_lieu/huyen?thang='+ thang +'&nam=' + nam + '&trangthai=' + trangthai;
         }
 
         $(function(){

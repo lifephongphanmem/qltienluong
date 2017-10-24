@@ -4,10 +4,12 @@ namespace App\Http\Controllers;
 
 use App\dmdonvi;
 use App\tonghopluong_donvi;
+use App\tonghopluong_huyen;
 use Illuminate\Http\Request;
 
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
 
 class xemdulieucapduoiController extends Controller
@@ -82,6 +84,73 @@ class xemdulieucapduoiController extends Controller
             }
             //dd($model_donvi->toarray());
             return view('functions.viewdata.index')
+                ->with('model', $model_donvi)
+                ->with('thang', $inputs['thang'])
+                ->with('nam', $inputs['nam'])
+                ->with('trangthai', $inputs['trangthai'])
+                ->with('a_trangthai', $a_trangthai)
+                ->with('furl','/chuc_nang/tong_hop_luong/')
+                ->with('pageTitle','Danh sách đơn vị tổng hợp lương');
+
+        } else
+            return view('errors.notlogin');
+    }
+
+    public function index_huyen(Request $request){
+        if (Session::has('admin')) {
+            //$donvi=dmdonvi::where('madv',session('admin')->madv)->get();
+            $inputs=$request->all();
+            $madv = session('admin')->madv;
+            $madvbc = session('admin')->madvbc;
+            $thang = $inputs['thang'];
+            $nam = $inputs['nam'];
+            $madvqlkv = session('admin')->madvqlkv;
+
+            $a_trangthai=array('ALL'=>'--Chọn trạng thái dữ liệu--','CHOGUI'=>'Chưa gửi dữ liệu','CHONHAN'=>'Đã gửi dữ liệu');
+            $a_phanloai=array('DONVI'=>'Dữ liệu tổng hợp của đơn vị','CAPDUOI'=>'Dữ liệu tổng hợp của các đơn vị cấp dưới');
+            $list_donvi= dmdonvi::select('madv', 'tendv')->where('madvbc', session('admin')->madvbc)->get();
+
+            //lấy danh sách đơn vị quản lý khối
+            $model_qlkhoi = dmdonvi::select('madv', 'tendv', DB::raw('"CAPDUOI" as phanloai'))
+                ->wherein('madv', function($query) use($madvbc){
+                    $query->select('macqcq')->from('dmdonvi')->where('madvbc',$madvbc)->distinct();
+                })->get();
+            //danh sách đơn vị gửi dữ liệu cho đơn vị quản lý khối và đơn vị quản lý khối.
+            $model_donvi = dmdonvi::select('madv', 'tendv',DB::raw('"DONVI" as phanloai'))
+                ->wherein('madv', function($query) use($madvqlkv){
+                    $query->select('madv')->from('dmdonvi')->where('macqcq',$madvqlkv)
+                        ->orwhere('madv',$madvqlkv)->get();
+                })->get();
+            //Gộp danh sách đơn vị
+            foreach($model_qlkhoi as $donvi){
+                $model_donvi->add($donvi);
+            }
+
+            foreach($model_donvi as $dv){
+                $donvi = $list_donvi->where('madv',$dv->macqcq)->first();
+                $dv->tendvcq =(isset($donvi)?$donvi->tendv:NULL);
+                $dulieu = tonghopluong_huyen::where('madv', $dv->madv)
+                    ->where('thang', $inputs['thang'])
+                    ->where('nam', $inputs['nam'])
+                    ->where('phanloai', $dv->phanloai)
+                    ->first();
+
+                $dv->mathdv = (isset($dulieu)?$dulieu->mathdv:NULL);
+                if(isset($dulieu)){$dv->phanloai = $dulieu->phanloai;}
+                $dv->tenphanloai = isset($a_phanloai[$dv->phanloai]) ? $a_phanloai[$dv->phanloai]: '';
+            }
+
+            $model_donvi = $model_donvi->sortby('madv');
+            if(isset($inputs['trangthai'])){
+                if($inputs['trangthai']=='CHONHAN'){
+                    $model_donvi = $model_donvi->where('mathdv','<>',null);
+                }
+                if($inputs['trangthai']=='CHOGUI'){
+                    $model_donvi = $model_donvi->where('mathdv',null);
+                }
+            }
+
+            return view('functions.viewdata.index_huyen')
                 ->with('model', $model_donvi)
                 ->with('thang', $inputs['thang'])
                 ->with('nam', $inputs['nam'])

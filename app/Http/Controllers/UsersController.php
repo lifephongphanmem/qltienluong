@@ -181,7 +181,8 @@ class UsersController extends Controller
                 }else{
                     $ttuser->quanlynhom=false;
                 }
-
+                $ttuser->level = $model_donvibaocao->level;
+                $ttuser->madvqlkv = $model_donvibaocao->madvcq;
                 $ttuser->macqcq = $model_donvi->macqcq;
                 $ttuser->madvbc = $model_donvi->madvbc;
                 $ttuser->maphanloai = $model_donvi->maphanloai;
