@@ -332,8 +332,8 @@ Route::group(['prefix'=>'chuc_nang'],function(){
             Route::post('store_detail','tonghopluong_donviController@store_detail');//chỉnh sửa dữ liêu
             Route::post('store_detail_diaban','tonghopluong_donviController@store_detail_diaban');//chỉnh sửa dữ liêu
 
-            Route::get('printf_data/ma_so={mathdv}','tonghopluong_donviController@printf_data');
-            Route::get('printf_data_diaban/ma_so={mathdv}','tonghopluong_donviController@printf_data_diaban');
+            Route::get('printf_data/ma_so={mathdv}','tonghopluong_khoiController@printf_data');
+            Route::get('printf_data_diaban/ma_so={mathdv}','tonghopluong_khoiController@printf_data_diaban');
         });
 
         Route::get('/ma_so={macqcq}/don_vi','dmdonvibaocaoController@donvi_luong1');

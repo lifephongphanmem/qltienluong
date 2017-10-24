@@ -25,7 +25,7 @@ class CreateBangluongTable extends Migration
             $table->string('linhvuchoatdong')->nullable();//Phân loại xã phường ko cần chọn lĩnh vực hoạt động
             $table->double('phantramhuong')->default(100);//Tùy theo nguồn kinh phí để tùy chọn % hưởng lương
 
-            $table->double('luongcb')->default(0);
+            $table->double('luongcoban')->default(0);
             $table->double('luongnb')->default(0);//tổng lương ngạch bậc
             $table->double('pckv')->default(0);//khu vực
             $table->double('pccv')->default(0);//chưc vự

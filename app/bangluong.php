@@ -19,7 +19,8 @@ class bangluong extends Model
         'linhvuchoatdong', //Phân loại xã phường ko cần chọn lĩnh vực hoạt động
         'manguonkp',
         'phantramhuong',
-        'madv'
+        'madv',
+        'luongcoban'
     ];
 
 

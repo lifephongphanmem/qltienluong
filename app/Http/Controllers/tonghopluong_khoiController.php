@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\dmdiabandbkk;
 use App\dmdonvi;
 use App\dmnguonkinhphi;
 use App\dmphanloaicongtac;
@@ -303,6 +304,70 @@ class tonghopluong_khoiController extends Controller
             }
 
             return redirect('/chuc_nang/tong_hop_luong/khoi/index?nam='.$model->nam);
+        } else
+            return view('errors.notlogin');
+    }
+
+    function printf_data($mathdv){
+        if (Session::has('admin')) {
+            //dd($mathdv);
+            $model = tonghopluong_khoi_chitiet::where('mathdv',$mathdv)->get();
+            $model_thongtin = tonghopluong_khoi::where('mathdv',$mathdv)->first();
+            $model_nguonkp = array_column(dmnguonkinhphi::all()->toArray(),'tennguonkp','manguonkp');
+            $model_phanloaict = array_column(dmphanloaicongtac::all()->toArray(),'tencongtac','macongtac');
+            //$gnr = getGeneralConfigs();
+
+            //cho trương hợp đơn vị cấp trên in dữ liệu dv câp dưới mà ko sai tên đơn vị
+            $m_dv = dmdonvi::where('madv',$model_thongtin->madv)->first();
+
+            foreach($model as $chitiet){
+                $chitiet->tennguonkp = isset($model_nguonkp[$chitiet->manguonkp])? $model_nguonkp[$chitiet->manguonkp]:'';
+                $chitiet->tencongtac = isset($model_phanloaict[$chitiet->macongtac])? $model_phanloaict[$chitiet->macongtac]:'';
+                $chitiet->tongtl = $chitiet->luongcoban * $chitiet->tonghs;
+                $chitiet->tongbh = $chitiet->stbhxh_dv + $chitiet->stbhyt_dv + $chitiet->stkpcd_dv + $chitiet->stbhtn_dv;
+            }
+
+            $thongtin=array('nguoilap'=>session('admin')->name,
+                'thang'=>$model_thongtin->thang,
+                'nam'=>$model_thongtin->nam);
+
+            return view('reports.tonghopluong.donvi.solieutonghop')
+                ->with('thongtin',$thongtin)
+                ->with('model',$model)
+                ->with('m_dv',$m_dv)
+                ->with('pageTitle','Chi tiết tổng hợp lương tại đơn vị theo địa bàn quản lý');
+        } else
+            return view('errors.notlogin');
+    }
+
+    function printf_data_diaban($mathdv){
+        if (Session::has('admin')) {
+            $model = tonghopluong_khoi_diaban::where('mathdv',$mathdv)->get();
+            $model_diaban = dmdiabandbkk::where('madv',session('admin')->madv)->get();
+            $model_thongtin = tonghopluong_khoi::where('mathdv',$mathdv)->first();
+            $a_diaban = array('DBKK'=>'Khu vực KTXH ĐBKK','BGHD'=>'Khu vực biên giới, hải đảo',
+                'DBTD'=>'Khu vực trọng điểm, phức tạp về an ninh trật tự');
+            //$gnr=getGeneralConfigs();
+
+            foreach($model as $chitiet){
+                $diaban = $model_diaban->where('madiaban',$chitiet->madiaban)->first();
+                $chitiet->tendiaban = $diaban->tendiaban;
+                $chitiet->phanloai = $a_diaban[$diaban->phanloai];
+                $chitiet->tongtl = $chitiet->luongcoban * $chitiet->tonghs;
+                $chitiet->tongbh = $chitiet->stbhxh_dv + $chitiet->stbhyt_dv + $chitiet->stkpcd_dv + $chitiet->stbhtn_dv;
+            }
+            //cho trương hợp đơn vị cấp trên in dữ liệu dv câp dưới mà ko sai tên đơn vị
+            $m_dv=dmdonvi::where('madv',$model_thongtin->madv)->first();
+
+            $thongtin=array('nguoilap'=>session('admin')->name,
+                'thang'=>$model_thongtin->thang,
+                'nam'=>$model_thongtin->nam);
+
+            return view('reports.tonghopluong.donvi.solieudiaban')
+                ->with('thongtin',$thongtin)
+                ->with('model',$model)
+                ->with('m_dv',$m_dv)
+                ->with('pageTitle','Chi tiết tổng hợp lương tại đơn vị theo địa bàn quản lý');
         } else
             return view('errors.notlogin');
     }

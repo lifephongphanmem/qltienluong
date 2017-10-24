@@ -19,6 +19,7 @@
     <script type="text/javascript" src="{{url('assets/global/plugins/datatables/plugins/bootstrap/dataTables.bootstrap.js')}}"></script>
 
     <script src="{{url('assets/admin/pages/scripts/table-managed.js')}}"></script>
+    @include('includes.script.scripts')
     <script>
         jQuery(document).ready(function() {
             TableManaged.init();
@@ -50,11 +51,12 @@
                                 <th class="text-center">Thao tác</th>
                             </tr>
                         </thead>
+                        <?php $i=1;?>
                         <tbody>
                             @if(isset($model))
                                 @foreach($model as $key=>$value)
                                     <tr>
-                                        <td class="text-center">{{$key+1}}</td>
+                                        <td class="text-center">{{$i++}}</td>
                                         <td class="text-center">{{$value->thang.'/'.$value->nam}}</td>
                                         <td>{{$value->tennguonkp}}</td>
                                         @if(session('admin')->level=!'KVXP')
@@ -128,6 +130,9 @@
 
                     <label class="control-label">Phần trăm hưởng</label>
                     {!!Form::text('phantramhuong', 100, array('id' => 'phantramhuong','class' => 'form-control', 'data-mask'=>'fdecimal'))!!}
+
+                    <label class="control-label">Mức lương cơ bản</label>
+                    {!!Form::text('luongcoban', $luongcb, array('id' => 'luongcoban','class' => 'form-control', 'data-mask'=>'fdecimal'))!!}
 
                     <input type="hidden" id="id_ct" name="id_ct"/>
                     <input type="hidden" id="mabl" name="mabl"/>

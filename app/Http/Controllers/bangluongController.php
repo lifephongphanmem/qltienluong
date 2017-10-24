@@ -15,12 +15,10 @@ use App\dmphucap;
 use App\hosocanbo;
 use App\ngachbac;
 use App\ngachluong;
-use App\phucapdanghuong;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 use App\Http\Requests;
-use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Str;
@@ -40,10 +38,12 @@ class bangluongController extends Controller
             foreach($model as $bl){
                 $bl->tennguonkp =isset($m_nguonkp[$bl->manguonkp]) ? $m_nguonkp[$bl->manguonkp]:'';
             }
+            $model = $model->sortby('nam')->sortby('thang');
             return view('manage.bangluong.index')
                 ->with('furl','/chuc_nang/bang_luong/')
                 ->with('furl_ajax','/ajax/bang_luong/')
                 ->with('model',$model)
+                ->with('luongcb',getGeneralConfigs()['luongcb'])
                 ->with('m_linhvuc',$m_linhvuc)
                 ->with('m_nguonkp',$m_nguonkp)
                 ->with('pageTitle','Danh sách bảng lương');
@@ -65,7 +65,9 @@ class bangluongController extends Controller
             $inputs['madv']=session('admin')->madv;
             $inputs['nguoilap']=session('admin')->name;
             $inputs['ngaylap']=Carbon::now()->toDateTimeString();
+
             $inputs['phantramhuong']=getDbl($inputs['phantramhuong']);
+            $inputs['luongcoban']=getDbl($inputs['luongcoban']);
 
             //Lấy tất cả cán bộ trong đơn vị
             $m_cb=hosocanbo::where('madv',session('admin')->madv)
@@ -106,8 +108,8 @@ class bangluongController extends Controller
 
                 $cb->tonghs=$ths;
 
-                $cb->ttl=$gnr['luongcb']*$ths*$inputs['phantramhuong']/100;
-                $luongnopbaohiem=$gnr['luongcb']*($cb->heso + $cb->pccv + $cb->hesott + $cb->vuotkhung)*$inputs['phantramhuong']/100;
+                $cb->ttl=$inputs['luongcoban']*$ths*$inputs['phantramhuong']/100;
+                $luongnopbaohiem=$inputs['luongcoban']*($cb->heso + $cb->pccv + $cb->hesott + $cb->vuotkhung)*$inputs['phantramhuong']/100;
 
                 // chưa tính được các loại hệ số pải nộp bh
                 //tách bảng phụ cấp riêng ra - liên kết với bảng hosocanbo
