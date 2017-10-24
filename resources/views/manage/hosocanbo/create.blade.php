@@ -31,7 +31,8 @@
             TableManaged.init();
         });
     //$('#tennb').val('').trigger('change');
-    $('#macanbo').val('{{$macanbo}}');
+        $('#macanbo').val('{{$macanbo}}');
+        $('#dantoc').val('Kinh').trigger('change');
     </script>
 @stop
 

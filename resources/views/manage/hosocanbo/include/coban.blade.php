@@ -255,6 +255,12 @@
                 ok = false;
             }
 
+            if(!$('#ngaysinh').val()){
+                str += '  - Ngày sinh \n';
+                $('#ngaysinh').parent().addClass('state-error');
+                ok = false;
+            }
+
             //Kết quả
             if ( ok == false){
                 alert('Các trường: \n' + str + 'Không được để trống');
