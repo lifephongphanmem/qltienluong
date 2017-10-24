@@ -19,7 +19,7 @@ class xemdulieucapduoiController extends Controller
             $madv = session('admin')->madv;
             $thang = $inputs['thang'];
             $nam = $inputs['nam'];
-            $a_trangthai=array('ALL'=>'--Chọn trạng thái dữ liệu--','CHOGUI'=>'Chưa gửi dữ liệu','DAGUI'=>'Đã gửi dữ liệu','TRALAI'=>'Trả lại dữ liệu');
+            $a_trangthai=array('ALL'=>'--Chọn trạng thái dữ liệu--','CHOGUI'=>'Chưa gửi dữ liệu','DAGUI'=>'Đã gửi dữ liệu');
             $list_donvi= dmdonvi::select('madv', 'tendv')->where('madvbc', session('admin')->madvbc)->get();
 
             if(!isset($inputs['trangthai']) || $inputs['trangthai']=='ALL'){
@@ -40,7 +40,7 @@ class xemdulieucapduoiController extends Controller
                         break;
                     }
                     default :{
-                        //thiếu trường hợp đơn vị chưa tạo dữ liệu =>ko có trong bang   tonghopluong_donvi
+                       //Đơn vị đã tổng hợp dữ liệu nhưng chưa gửi
                         $model_donvi = dmdonvi::select('madv', 'tendv','macqcq','maphanloai')
                             ->wherein('madv', function($query) use ($madv, $thang, $nam){
                                 $query->select('madv')->from('tonghopluong_donvi')
@@ -49,6 +49,21 @@ class xemdulieucapduoiController extends Controller
                                     ->where('thang', $thang)
                                     ->where('nam', $nam);
                             })->get();
+
+                        //Đơn vi chưa tổng hợp dữ liệu
+                        $model_donvi_chuatao = dmdonvi::select('madv', 'tendv','macqcq','maphanloai')
+                            ->where('macqcq',$madv)
+                            ->wherenotin('madv', function($query) use ($madv, $thang, $nam){
+                                $query->select('madv')->from('tonghopluong_donvi')
+                                    ->where('macqcq',$madv)
+                                    ->where('thang', $thang)
+                                    ->where('nam', $nam);
+                            })->get();
+
+                        foreach($model_donvi_chuatao as $donvi){
+                            $model_donvi->add($donvi);
+                        }
+
                         break;
                     }
                 }

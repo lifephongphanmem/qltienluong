@@ -32,7 +32,6 @@
         });
     //$('#tennb').val('').trigger('change');
         $('#macanbo').val('{{$macanbo}}');
-        $('#tongiao').val('Không');
         $('#dantoc').val('Kinh').trigger('change');
     </script>
 @stop

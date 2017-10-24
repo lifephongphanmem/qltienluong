@@ -167,7 +167,7 @@ class hosocanboController extends Controller
             $insert['madv'] = $madv;
 
             $insert['ngaysinh']=getDateTime($insert['ngaysinh']);
-            $insert['ngaycap']=getDateTime($insert['ngaycap']);
+            //$insert['ngaycap']=getDateTime($insert['ngaycap']);
             $insert['ngaytu']=getDateTime($insert['ngaytu']);
             $insert['ngayden']=getDateTime($insert['ngayden']);
             $insert['ngayvd']=getDateTime($insert['ngayvd']);
@@ -262,7 +262,7 @@ class hosocanboController extends Controller
 
             $insert['anh']=($filename==''?'':'/data/uploads/anh/'. $filename);
             $insert['ngaysinh']=getDateTime($insert['ngaysinh']);
-            $insert['ngaycap']=getDateTime($insert['ngaycap']);
+            //$insert['ngaycap']=getDateTime($insert['ngaycap']);
             $insert['ngaytu']=getDateTime($insert['ngaytu']);
             $insert['ngayden']=getDateTime($insert['ngayden']);
             $insert['ngayvd']=getDateTime($insert['ngayvd']);

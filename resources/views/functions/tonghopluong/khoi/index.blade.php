@@ -84,7 +84,7 @@
                                             @if($value['trangthai'] == 'CHUADAYDU')
                                                 <button type="button" class="btn btn-warning btn-sm" onclick="confirmTonghop('{{url($furl.'tonghop_chuadaydu?thang='.$value['thang'].'&nam='.$nam)}}')" data-target="#create-modal" data-toggle="modal"><i class="fa fa-stack-overflow"></i>&nbsp;
                                                     Tổng hợp dữ liệu</button>
-                                                <a href="{{url($furl.'tonghop?thang='.$value['thang'].'&nam='.$nam)}}" class="btn btn-warning btn-sm">
+                                                <a href="{{url('/chuc_nang/xem_du_lieu/index?thang='.$value['thang'].'&nam='.$nam.'&trangthai=CHOGUI')}}" class="btn btn-warning btn-sm">
                                                     <i class="fa fa-list-alt"></i>&nbsp; Đơn vị chưa gửi dữ liệu</a>
                                             @elseif($value['trangthai'] == 'CHUATAO')
                                                 <a href="{{url($furl.'tonghop?thang='.$value['thang'].'&nam='.$nam)}}" class="btn btn-default btn-sm">

@@ -98,12 +98,73 @@
 
             <div class="col-md-3">
                 <div class="form-group">
+                    <label class="control-label">Số điện thoại </label>
+                    {!!Form::text('sodt', null, array('id' => 'sodt','class' => 'form-control'))!!}
+                </div>
+            </div>
+
+            <div class="col-md-3">
+                <div class="form-group">
+                    <label class="control-label">Email </label>
+                    {!!Form::text('email', null, array('id' => 'email','class' => 'form-control'))!!}
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-3">
+                <div class="form-group">
+                    <label class="control-label">Số định danh cá nhân </label>
+                    {!!Form::text('sodinhdanhcanhan', null, array('id' => 'sodinhdanhcanhan','class' => 'form-control'))!!}
+                </div>
+            </div>
+
+            <div class="col-md-3">
+                <div class="form-group">
+                    <label class="control-label">Số CMTND </label>
+                    {!!Form::text('socmnd', null, array('id' => 'socmnd','class' => 'form-control'))!!}
+                </div>
+            </div>
+
+            <div class="col-md-3">
+                <div class="form-group">
+                    <label class="control-label">Ngày cấp </label>
+                    <input type="date" id="ngaycap" name="ngaycap" class="form-control" value="{{!isset($model)?'':$model->ngaycap}}" />
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="form-group">
+                    <label class="control-label">Nơi cấp </label>
+                    {!!Form::text('noicap', null, array('id' => 'noicap','class' => 'form-control'))!!}
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label class="control-label">Nơi ở hiện nay </label>
+                    {!!Form::text('noio', null, array('id' => 'noio','class' => 'form-control'))!!}
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label class="control-label">Hộ khẩu thường trú </label>
+                    {!!Form::text('hktt', null, array('id' => 'hktt','class' => 'form-control'))!!}
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
                     <label class="control-label">Ngày biên chế (trúng cử)</label>
                     <input type="date" name="ngaybc" id="ngaybc" class="form-control" value="{{!isset($model)?'':$model->ngaybc}}" />
                 </div>
             </div>
 
-            <div class="col-md-3">
+            <div class="col-md-6">
                 <div class="form-group">
                     <label class="control-label">Ngày về cơ quan </label>
                     <input type="date" name="ngayvao" id="ngayvao" class="form-control" value="{{!isset($model)?'':$model->ngayvao}}" />
@@ -112,7 +173,7 @@
         </div>
 
         <div class="row">
-            <div class="col-md-3">
+            <div class="col-md-6">
                 <div class="form-group">
                     <label class="control-label">Sự nghiệp cán bộ</label>
                     <select class="form-control select2me" name="sunghiep" id="sunghiep" required="required">
@@ -123,7 +184,7 @@
                 </div>
             </div>
 
-            <div class="col-md-3">
+            <div class="col-md-6">
                 <div class="form-group">
                     <label class="control-label">Phân loại công tác</label>
                     <select class="form-control select2me" name="mact" id="mact" required="required">
@@ -140,8 +201,10 @@
                     </select>
                 </div>
             </div>
+        </div>
 
-            <div class="col-md-6">
+        <div class="row">
+            <div class="col-md-12">
                 <div class="form-group">
                     <label class="control-label">Lĩnh vực công tác </label>
                     <select class="form-control" id="linhvuc" name="linhvuc" multiple="multiple">
