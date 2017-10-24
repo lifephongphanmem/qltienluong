@@ -193,14 +193,14 @@
                         </li>
                         @if(session('admin')->quanlynhom)
                             <li>
-                                <a href="{{url('chuc_nang/tong_hop_luong/khoi/index?thang='.date('m').'&nam='.date('Y'))}}">Tổng hợp lương từ đơn vị cấp dưới</a>
+                                <a href="{{url('chuc_nang/tong_hop_luong/khoi/index?nam='.date('Y'))}}">Tổng hợp lương từ đơn vị cấp dưới</a>
                             </li>
                             @endif
                         <!--Chức năng xem dữ liệu tổng hợp lương của các đơn vị cấp dưới cho tài khoản quản lý -->
                         <!--Chức năng xem dữ liệu tổng hợp lương của các đơn vị cấp dưới cho tài khoản quản lý -->
                         @if(session('admin')->quanlynhom || session('admin')->quanlykhuvuc)
                             <li>
-                                <a href="{{url('chuc_nang/xem_du_lieu/index?thang='.date('m').'&nam='.date('Y'))}}">Số liệu tổng hợp từ đơn vị cấp dưới</a>
+                                <a href="{{url('chuc_nang/xem_du_lieu/index?thang='.date('m').'&nam='.date('Y').'&trangthai=ALL')}}">Số liệu tổng hợp từ đơn vị cấp dưới</a>
                             </li>
                         @endif
 

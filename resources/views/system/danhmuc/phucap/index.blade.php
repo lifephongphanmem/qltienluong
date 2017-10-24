@@ -62,8 +62,10 @@
                                         <td>
                                             <button type="button" onclick="editCV(this,'{{$value->mapc}}', {{$value->id}})" class="btn btn-info btn-xs mbs">
                                                 <i class="fa fa-edit"></i>&nbsp; Chỉnh sửa</button>
+                                            <!--
                                             <button type="button" onclick="cfDel('/danh_muc/phu_cap/del/{{$value->id}}')" class="btn btn-danger btn-xs mbs" data-target="#delete-modal-confirm" data-toggle="modal">
                                                 <i class="fa fa-trash-o"></i>&nbsp; Xóa</button>
+                                                -->
                                         </td>
                                     </tr>
                                 @endforeach

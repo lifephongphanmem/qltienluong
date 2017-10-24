@@ -39,7 +39,7 @@
                 <div class="portlet-body form-horizontal">
                     <div class="row">
                         <div class="form-group">
-                            <label class="control-label col-md-offset-1 col-md-2" style="text-align: right">Tháng </label>
+                            <label class="control-label col-md-offset-1 col-md-1" style="text-align: right">Tháng </label>
                             <div class="col-md-2">
                                 {!! Form::select(
                                 'thang',
@@ -60,7 +60,7 @@
                                 array('id' => 'thang', 'class' => 'form-control'))
                                 !!}
                             </div>
-                            <label class="control-label col-md-2" style="text-align: right">Năm </label>
+                            <label class="control-label col-md-1" style="text-align: right">Năm </label>
                             <div class="col-md-2">
                                 {!! Form::select(
                                 'nam',
@@ -72,7 +72,15 @@
                                 array('id' => 'nam', 'class' => 'form-control'))
                                 !!}
                             </div>
-
+                            <div class="col-md-5">
+                                <label class="control-label col-md-3" style="text-align: right">Trang thái </label>
+                                <div class="col-md-7">
+                                    {!! Form::select(
+                                    'trangthai',$a_trangthai,$trangthai,
+                                    array('id' => 'trangthai', 'class' => 'form-control'))
+                                    !!}
+                                </div>
+                            </div>
                         </div>
                     </div>
                     <table id="sample_3" class="table table-hover table-striped table-bordered" style="min-height: 230px">
@@ -119,7 +127,8 @@
         function getLink(){
             var thang = $('#thang').val();
             var nam = $('#nam').val();
-            return '/chuc_nang/xem_du_lieu/index?thang='+ thang +'&nam=' + nam;
+            var trangthai = $('#trangthai').val();
+            return '/chuc_nang/xem_du_lieu/index?thang='+ thang +'&nam=' + nam + '&trangthai=' + trangthai;
         }
 
         $(function(){
@@ -127,6 +136,9 @@
                 window.location.href = getLink();
             });
             $('#nam').change(function() {
+                window.location.href = getLink();
+            });
+            $('#trangthai').change(function() {
                 window.location.href = getLink();
             });
         })
