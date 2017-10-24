@@ -40,7 +40,7 @@ class hosocanboController extends Controller
             //$m_hs=hosocanbo::where('madv',session('admin')->maxa)->get();
             $m_hs=hosocanbo::where('madv',session('admin')->madv)->get();
 
-            $dmphongban=dmphongban::select('mapb','tenpb')->get();
+            $dmphongban=dmphongban::select('mapb','tenpb')->where('madv',session('admin')->madv)->get();
             $dmchucvud=dmchucvud::select('tencv', 'macvd')->get();
             $dmchucvucq=dmchucvucq::select('tencv', 'macvcq','sapxep')->get();
             $dmcongtac=dmphanloaict::select('mact', 'tenct')->get();
@@ -118,7 +118,7 @@ class hosocanboController extends Controller
             $model_tenct=dmphanloaict::select('tenct','macongtac','mact')->get();
             $model_dt=array_column(dmdantoc::select(DB::raw('dantoc as maso'),'dantoc')->get()->toarray(),'dantoc','maso');
             //$m_pb= dmphongban::where('madv',session('admin')->madv)->get();
-            $m_pb = dmphongban::all();
+            $m_pb = dmphongban::where('madv',session('admin')->madv)->get();
             $m_cvcq = dmchucvucq::where('maphanloai',session('admin')->maphanloai)->get();
             //khối phòng ban giờ là lĩnh vực hoạt động
             $m_linhvuc=array_column(dmkhoipb::all()->toArray(),'tenkhoipb','makhoipb');
@@ -218,7 +218,7 @@ class hosocanboController extends Controller
             //$m_pb= dmphongban::where('madv',session('admin')->madv)->get();
             //khối phòng ban giờ là lĩnh vực hoạt động
             $m_linhvuc=array_column(dmkhoipb::all()->toArray(),'tenkhoipb','makhoipb');
-            $m_pb = dmphongban::all();
+            $m_pb = dmphongban::where('madv',session('admin')->madv)->get();
             $m_cvcq = dmchucvucq::where('maphanloai',session('admin')->maphanloai)->get();
             $m_cvd = dmchucvud::all();
             $m_plnb = nhomngachluong::select('manhom','tennhom')->distinct()->get();

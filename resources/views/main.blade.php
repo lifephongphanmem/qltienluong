@@ -169,8 +169,10 @@
                     </a>
                     <ul class="sub-menu">
                         <li><a href="{{url('nghiep_vu/ho_so/danh_sach')}}">Danh sách cán bộ</a></li>
+                        <!--
                         <li><a href="{{url('nghiep_vu/qua_trinh/luong/maso=all')}}">Quá trình hưởng lương</a></li>
                         <li><a href="{{url('nghiep_vu/qua_trinh/phu_cap/maso=all')}}">Quá trình phụ cấp</a></li>
+                        -->
                         <li><a href="{{url('nghiep_vu/quan_ly/dieu_dong/maso=all')}}">Luân chuyển cán bộ</a></li>
                         <li><a href="{{url('nghiep_vu/quan_ly/chi_tieu/danh_sach')}}">Chỉ tiêu biên chế</a></li>
                         <li><a href="{{url('nghiep_vu/quan_ly/du_toan/danh_sach')}}">Dự toán lương</a></li>

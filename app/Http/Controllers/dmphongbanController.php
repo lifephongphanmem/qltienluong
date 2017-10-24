@@ -26,7 +26,7 @@ class dmphongbanController extends Controller
                 }
             }
             */
-            $m_pb=dmphongban::all();
+            $m_pb=dmphongban::where('madv',session('admin')->madv)->get();
             return view('system.danhmuc.phongban.index')
                 ->with('model',$m_pb)
                 ->with('furl','/danh_muc/phong_ban/')
