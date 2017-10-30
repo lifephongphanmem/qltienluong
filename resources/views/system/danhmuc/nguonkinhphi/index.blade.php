@@ -42,10 +42,10 @@
                     <table id="sample_3" class="table table-hover table-striped table-bordered" style="min-height: 230px">
                         <thead>
                             <tr>
-                                <th class="text-center" style="width: 10%">STT</th>
+                                <th class="text-center" style="width: 5%">STT</th>
                                 <th class="text-center">Mã nguồn kinh phí</th>
                                 <th class="text-center">Tên nguồn kinh phí</th>
-                                <th class="text-center" >Lĩnh vực hoạt động</th>
+                                <th class="text-center" >Phân loại</th>
                                 <th class="text-center" >Ghi chú</th>
                                 <th class="text-center">Thao tác</th>
                             </tr>
@@ -57,7 +57,7 @@
                                         <td class="text-center">{{$key+1}}</td>
                                         <td>{{$value->manguonkp}}</td>
                                         <td>{{$value->tennguonkp}}</td>
-                                        <td>{{$value->linhvuchoatdong}}</td>
+                                        <td>{{$value->phanloai}}</td>
                                         <td>{{$value->ghichu}}</td>
                                         <td>
                                             <button type="button" onclick="editPB('{{$value->manguonkp}}')" class="btn btn-info btn-xs mbs">
@@ -92,8 +92,8 @@
                     <label class="form-control-label">Tên nguồn kinh phí</label>
                     {!!Form::text('tennguonkp', null, array('id' => 'tennguonkp','class' => 'form-control'))!!}
 
-                    <label class="form-control-label">Lĩnh vực hoạt động<span class="require">*</span></label>
-                    {!!Form::text('linhvuchoatdong', null, array('id' => 'linhvuchoatdong','class' => 'form-control required'))!!}
+                    <label class="form-control-label">Phân loại<span class="require">*</span></label>
+                    {!!Form::select('phanloai', $a_phanloai, null, array('id' => 'phanloai','class' => 'form-control required'))!!}
 
                     <label class="form-control-label">Ghi chú</label>
                     {!!Form::textarea('ghichu', null, array('id' => 'ghichu','class' => 'form-control','rows'=>'3'))!!}
@@ -111,6 +111,7 @@
     <script>
         function addPB(){
             //var date=new Date();
+            $('#manguonkp').prop('readonly', false);
             $('#manguonkp').val('');
             $('#tennguonkp').val('');
             $('#linhvuchoatdong').val('');
@@ -119,6 +120,7 @@
         }
 
         function editPB(manguonkp){
+            $('#manguonkp').prop('readonly', true);
             var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
             $.ajax({
                 url: '{{$furl}}' + 'get',
@@ -130,7 +132,7 @@
                 dataType: 'JSON',
                 success: function (data) {
                     $('#manguonkp').val(data.manguonkp);
-                    $('#linhvuchoatdong').val(data.linhvuchoatdong);
+                    $('#phanloai').val(data.phanloai);
                     $('#tennguonkp').val(data.tennguonkp);
                     $('#ghichu').val(data.ghichu);
                 },
@@ -149,7 +151,7 @@
             var id = $('#id').val();
             var manguonkp = $('#manguonkp').val();
             var tennguonkp = $('#tennguonkp').val();
-            var linhvuchoatdong = $('#linhvuchoatdong').val();
+            var phanloai = $('#phanloai').val();
             var ghichu=$('#ghichu').val();
 
             if(tennguonkp==''){
@@ -167,7 +169,7 @@
                             _token: CSRF_TOKEN,
                             manguonkp: manguonkp,
                             tennguonkp: tennguonkp,
-                            linhvuchoatdong: linhvuchoatdong,
+                            phanloai: phanloai,
                             ghichu: ghichu
                         },
                         dataType: 'JSON',
@@ -188,7 +190,7 @@
                             _token: CSRF_TOKEN,
                             manguonkp: manguonkp,
                             tennguonkp: tennguonkp,
-                            linhvuchoatdong: linhvuchoatdong,
+                            phanloai: phanloai,
                             ghichu: ghichu
                         },
                         dataType: 'JSON',

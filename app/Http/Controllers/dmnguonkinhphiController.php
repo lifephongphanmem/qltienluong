@@ -14,8 +14,13 @@ class dmnguonkinhphiController extends Controller
     public function index(){
         if (Session::has('admin')) {
             $model=dmnguonkinhphi::all();
+            $a_phanloai = getPhanLoaiNguon();
+            foreach($model as $ct){
+                $ct->phanloai = isset($a_phanloai[ $ct->phanloai])?$a_phanloai[ $ct->phanloai]:'';
+            }
             return view('system.danhmuc.nguonkinhphi.index')
                 ->with('model',$model)
+                ->with('a_phanloai',$a_phanloai)
                 ->with('furl','/danh_muc/nguon_kinh_phi/')
                 ->with('pageTitle','Danh mục nguồn kinh phí');
         } else

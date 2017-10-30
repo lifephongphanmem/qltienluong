@@ -11,7 +11,7 @@ class dmnguonkinhphi extends Model
         'id',
         'manguonkp',
         'tennguonkp',
-        'linhvuchoatdong',
+        'phanloai',
         'ghichu'
     ];
 }

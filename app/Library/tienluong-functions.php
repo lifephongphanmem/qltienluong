@@ -196,6 +196,13 @@ function getCapDonVi(){
         '3'=>'Đơn vị dự toán cấp 3',
         '4'=>'Đơn vị dự toán cấp 4');
 }
+
+function getPhanLoaiNguon(){
+    return array('NGANSACH'=>'Nguồn ngân sách',
+        'CHITXDT'=>'Nguồn đơn vị tự bảo đảm chi thường xuyên và chi đầu tư',
+        'CTX'=>'Nguồn đơn vị tự bảo đảm chi thường xuyên');
+}
+
 function getColTongHop(){
     return array('heso','vuotkhung','pcct',
         'pckct',

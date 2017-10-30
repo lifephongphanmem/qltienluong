@@ -17,7 +17,7 @@ class CreateDmnguonkpTable extends Migration
             $table->increments('id');
             $table->string('manguonkp')->nullable();
             $table->string('tennguonkp')->nullable();
-            $table->string('linhvuchoatdong')->nullable();
+            $table->string('phanloai')->nullable();
             $table->string('ghichu')->nullable();
             $table->timestamps();
         });

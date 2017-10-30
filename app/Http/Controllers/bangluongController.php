@@ -81,8 +81,6 @@ class bangluongController extends Controller
                 ->get();
 
             if (isset($inputs['linhvuc']) && $inputs['linhvuc'] != 'ALL') {
-                //Lấy danh sách cán bộ theo lĩnh vực hoạt động
-
                 //Dùng tìm kiếm các bộ nào phù hợp. Do lvhd là mảng nên pải lọc
                 foreach($m_cb as $canbo){
                     $a_lv = explode(',',$canbo->lvhd);
@@ -90,8 +88,10 @@ class bangluongController extends Controller
                         $canbo->lvhd = $inputs['linhvuc'];
                     }
                 }
+
+                $m_cb = $m_cb->where('lvhd',$inputs['linhvuc']);
             }
-            $m_cb = $m_cb->where('lvhd',$inputs['linhvuc']);
+
 
             $gnr = getGeneralConfigs();
 
