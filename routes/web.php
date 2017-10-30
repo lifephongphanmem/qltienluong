@@ -325,15 +325,32 @@ Route::group(['prefix'=>'chuc_nang'],function(){
             Route::post('tonghop_chuadaydu','tonghopluong_khoiController@tonghop_chuadaydu');
             Route::get('detail/ma_so={mathdv}','tonghopluong_khoiController@detail');
             Route::post('senddata','tonghopluong_khoiController@senddata'); //gửi dữ liệu
-
+            Route::get('printf_data/ma_so={mathdv}','tonghopluong_khoiController@printf_data');
+            Route::get('printf_data_diaban/ma_so={mathdv}','tonghopluong_khoiController@printf_data_diaban');
+//chưa làm
             Route::get('detail_diaban/ma_so={mathdv}','tonghopluong_donviController@detail_diaban');
             Route::get('edit_detail','tonghopluong_donviController@edit_detail');//chỉnh sửa dữ liêu
             Route::get('edit_detail_diaban','tonghopluong_donviController@edit_detail_diaban');//chỉnh sửa dữ liêu
             Route::post('store_detail','tonghopluong_donviController@store_detail');//chỉnh sửa dữ liêu
             Route::post('store_detail_diaban','tonghopluong_donviController@store_detail_diaban');//chỉnh sửa dữ liêu
+        });
 
-            Route::get('printf_data/ma_so={mathdv}','tonghopluong_khoiController@printf_data');
-            Route::get('printf_data_diaban/ma_so={mathdv}','tonghopluong_khoiController@printf_data_diaban');
+        Route::group(['prefix'=>'huyen'],function(){
+            Route::get('index','tonghopluong_huyenController@index');
+            Route::get('tonghop','tonghopluong_huyenController@tonghop');
+            Route::post('tonghop_chuadaydu','tonghopluong_huyenController@tonghop_chuadaydu');
+            //chưa làm
+            Route::get('detail/ma_so={mathdv}','tonghopluong_huyenController@detail');
+            Route::post('senddata','tonghopluong_huyenController@senddata'); //gửi dữ liệu
+
+            Route::get('printf_data/ma_so={mathdv}','tonghopluong_huyenController@printf_data');
+            Route::get('printf_data_diaban/ma_so={mathdv}','tonghopluong_huyenController@printf_data_diaban');
+
+            Route::get('detail_diaban/ma_so={mathdv}','tonghopluong_huyenController@detail_diaban');
+            Route::get('edit_detail','tonghopluong_huyenController@edit_detail');//chỉnh sửa dữ liêu
+            Route::get('edit_detail_diaban','tonghopluong_huyenController@edit_detail_diaban');//chỉnh sửa dữ liêu
+            Route::post('store_detail','tonghopluong_huyenController@store_detail');//chỉnh sửa dữ liêu
+            Route::post('store_detail_diaban','tonghopluong_huyenController@store_detail_diaban');//chỉnh sửa dữ liêu
         });
 
         Route::get('/ma_so={macqcq}/don_vi','dmdonvibaocaoController@donvi_luong1');

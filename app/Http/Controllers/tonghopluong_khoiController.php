@@ -96,7 +96,7 @@ class tonghopluong_khoiController extends Controller
 
             //lấy danh sách các bảng tổng họp theo đơn vị
             $model_tonghop = tonghopluong_donvi::where('nam',$nam)->where('thang',$thang)->where('macqcq',$madv)->where('trangthai','DAGUI')->get();
-            $inputs['luongcoban'] = isset($model_tonghop) ? $model_tonghop->first()['luongcoban'] : getGeneralConfigs()['luongcb'];
+            //$inputs['luongcoban'] = isset($model_tonghop) ? $model_tonghop->first()['luongcoban'] : getGeneralConfigs()['luongcb'];
 
             //lấy danh sách các chi tiết số liệu tổng họp theo đơn vị
             $model_tonghop_ct = tonghopluong_donvi_chitiet::wherein('mathdv',function($query) use($nam, $thang, $madv){
@@ -110,41 +110,19 @@ class tonghopluong_khoiController extends Controller
             //Lấy dữ liệu để lập
             $model_data = $model_tonghop_ct->map(function ($data) {
                 return collect($data->toArray())
-                    ->only(['macongtac','linhvuchoatdong','manguonkp'])
+                    ->only(['macongtac','linhvuchoatdong','manguonkp','luongcoban'])
                     ->all();
             });
             $model_data = a_unique($model_data);
             //
             //Tính toán dữ liệu
-            $a_col = array('heso','vuotkhung','pcct',
-                'pckct',
-                'pck',
-                'pccv',
-                'pckv',
-                'pcth',
-                'pcdd',
-                'pcdh',
-                'pcld',
-                'pcdbqh',
-                'pcudn',
-                'pctn',
-                'pctnn',
-                'pcdbn',
-                'pcvk',
-                'pckn',
-                'pcdang',
-                'pccovu',
-                'pclt',
-                'pcd',
-                'pctr',
-                'pctnvk',
-                'pcbdhdcu',
-                'pcthni');
+            $a_col = getColTongHop();
 
             for($i=0;$i<count($model_data);$i++){
                 $luongct = $model_tonghop_ct->where('manguonkp',$model_data[$i]['manguonkp'])
                     ->where('linhvuchoatdong',$model_data[$i]['linhvuchoatdong'])
-                    ->where('macongtac',$model_data[$i]['macongtac']);
+                    ->where('macongtac',$model_data[$i]['macongtac'])
+                    ->where('luongcoban',$model_data[$i]['luongcoban']);
 
                 $tonghs = 0;
                 $model_data[$i]['mathdv'] = $mathdv;
@@ -234,12 +212,12 @@ class tonghopluong_khoiController extends Controller
             $model_thongtin = tonghopluong_khoi::where('mathdv',$mathdv)->first();
             $model_nguonkp = array_column(dmnguonkinhphi::all()->toArray(),'tennguonkp','manguonkp');
             $model_phanloaict = array_column(dmphanloaicongtac::all()->toArray(),'tencongtac','macongtac');
-            $gnr=getGeneralConfigs();
+            //$gnr=getGeneralConfigs();
 
             foreach($model as $chitiet){
                 $chitiet->tennguonkp = isset($model_nguonkp[$chitiet->manguonkp])? $model_nguonkp[$chitiet->manguonkp]:'';
                 $chitiet->tencongtac = isset($model_phanloaict[$chitiet->macongtac])? $model_phanloaict[$chitiet->macongtac]:'';
-                $chitiet->tongtl=$gnr['luongcb'] * $chitiet->tonghs;
+                $chitiet->tongtl=$chitiet->luongcoban * $chitiet->tonghs;
                 $chitiet->tongbh=$chitiet->stbhxh_dv + $chitiet->stbhyt_dv + $chitiet->stkpcd_dv + $chitiet->stbhtn_dv;
             }
 //dd($model);
@@ -264,9 +242,17 @@ class tonghopluong_khoiController extends Controller
 
             if($chk == 0){//chưa gửi => update dữ liệu từ bảng khoi=>huyen
                 $model_chitiet = tonghopluong_khoi_chitiet::where('mathdv',$model->mathdv)->get()->toarray();
-                $chitiet = unset_key($model_chitiet, array('mathdv','id','created_at','updated_at'));
+                $chitiet = unset_key($model_chitiet, array('id','created_at','updated_at'));
                 $model_diaban = tonghopluong_khoi_diaban::where('mathdv',$model->mathdv)->get()->toarray();
-                $diaban = unset_key($model_diaban, array('mathdv','id','created_at','updated_at'));
+                $diaban = unset_key($model_diaban, array('id','created_at','updated_at'));
+
+                $mathdv =  getdate()[0];
+                for($i=0;$i<count($chitiet);$i++){
+                    $chitiet[$i]['mathdv'] = $mathdv;
+                }
+                for($i=0;$i<count($diaban);$i++){
+                    $diaban[$i]['mathdv'] = $mathdv;
+                }
 
                 if(isset($chitiet)){
                     tonghopluong_huyen_chitiet::insert($chitiet);
@@ -276,7 +262,7 @@ class tonghopluong_khoiController extends Controller
                 }
                 $th_khoi = new tonghopluong_huyen();
                 $th_khoi->madv = $model->madv;
-                $th_khoi->mathdv = getdate()[0];;
+                $th_khoi->mathdv = $mathdv;
                 $th_khoi->trangthai = 'CHONHAN';
                 $th_khoi->phanloai = $model->phanloai;
                 $th_khoi->noidung=$model->noidung;
@@ -297,7 +283,7 @@ class tonghopluong_khoiController extends Controller
                 $model->save();
 
             }else{//Đã gửi dữ liệu
-                $model->trangthai = 'GUILOI';
+                //$model->trangthai = 'GUILOI';
                 $model->ghichu = 'Gửi dữ liệu lỗi do đã có dữ liệu tổng hợp';
                 $model->save();
 
@@ -343,8 +329,8 @@ class tonghopluong_khoiController extends Controller
     function printf_data_diaban($mathdv){
         if (Session::has('admin')) {
             $model = tonghopluong_khoi_diaban::where('mathdv',$mathdv)->get();
-            $model_diaban = dmdiabandbkk::where('madv',session('admin')->madv)->get();
             $model_thongtin = tonghopluong_khoi::where('mathdv',$mathdv)->first();
+            $model_diaban = dmdiabandbkk::all();//nên lọc đia bàn
             $a_diaban = array('DBKK'=>'Khu vực KTXH ĐBKK','BGHD'=>'Khu vực biên giới, hải đảo',
                 'DBTD'=>'Khu vực trọng điểm, phức tạp về an ninh trật tự');
             //$gnr=getGeneralConfigs();

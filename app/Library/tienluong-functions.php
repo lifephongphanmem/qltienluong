@@ -98,6 +98,11 @@ function getTenDV($madv){
     return count($model)>0?Illuminate\Support\Str::upper($model->tendv):'';
 }
 
+function getTenDB($madvbc){
+    $model = App\dmdonvibaocao::select('tendvbc')->where('madvbc',$madvbc)->first();
+    return count($model)>0?Illuminate\Support\Str::upper($model->tendvbc):'';
+}
+
 function getTheoDoi($tenct){
     $kq=1;
     $kieuct='Biên chế';
@@ -191,4 +196,31 @@ function getCapDonVi(){
         '3'=>'Đơn vị dự toán cấp 3',
         '4'=>'Đơn vị dự toán cấp 4');
 }
+function getColTongHop(){
+    return array('heso','vuotkhung','pcct',
+        'pckct',
+        'pck',
+        'pccv',
+        'pckv',
+        'pcth',
+        'pcdd',
+        'pcdh',
+        'pcld',
+        'pcdbqh',
+        'pcudn',
+        'pctn',
+        'pctnn',
+        'pcdbn',
+        'pcvk',
+        'pckn',
+        'pcdang',
+        'pccovu',
+        'pclt',
+        'pcd',
+        'pctr',
+        'pctnvk',
+        'pcbdhdcu',
+        'pcthni');;
+}
+
 ?>

@@ -56,6 +56,8 @@ class bangluongController extends Controller
         $inputs=$request->all();
         $model = bangluong::where('mabl',$inputs['mabl'])->first();
 
+        //Chưa tính trường hợp chọn lĩnh vực hoạt động =>lấy cán bộ hoạt động trong lĩnh vực đó
+
         if(count($model)>0){
             //update
             $model->update($inputs);

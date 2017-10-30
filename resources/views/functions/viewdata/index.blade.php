@@ -73,7 +73,7 @@
                                 !!}
                             </div>
                             <div class="col-md-5">
-                                <label class="control-label col-md-3" style="text-align: right">Trang thái </label>
+                                <label class="control-label col-md-3" style="text-align: right">Trạng thái </label>
                                 <div class="col-md-7">
                                     {!! Form::select(
                                     'trangthai',$a_trangthai,$trangthai,
@@ -107,6 +107,8 @@
                                                 <a href="{{url('/chuc_nang/tong_hop_luong/don_vi/printf_data_diaban/ma_so='.$value['mathdv'])}}" class="btn btn-success btn-sm" TARGET="_blank">
                                                     <i class="fa fa-print"></i>&nbsp; Số liệu địa bàn</a>
                                             @endif
+                                            <a href="" class="btn btn-success btn-sm" TARGET="_blank">
+                                                <i class="fa icon-share-alt"></i>&nbsp; Trả lại dữ liệu</a>
                                         @else
                                             <a href="{{url('/chuc_nang/bang_luong/in/maso='.$value->mathdv)}}" class="btn btn-danger btn-xs mbs" TARGET="_blank">
                                                 <i class="fa fa-warning"></i>&nbsp; Đơn vị chưa tổng hợp dữ liệu</a>

@@ -18,6 +18,7 @@ class CreateTonghopluongDonviDiabanTable extends Migration
             $table->increments('id');
             $table->string('mathdv',50)->nullable();
             $table->string('madiaban')->nullable();
+            $table->double('luongcoban')->default(0);
             $table->double('heso')->default(0);
             $table->double('hesott')->default(0);//hệ số truy thu
             $table->double('vuotkhung')->default(0);

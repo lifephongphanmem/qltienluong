@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateTonghopluongHuyenTabale extends Migration
+class CreateTonghopHuyenTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,7 +13,7 @@ class CreateTonghopluongHuyenTabale extends Migration
      */
     public function up()
     {
-        Schema::create('tonghopluong_huyen', function (Blueprint $table) {
+        Schema::create('tonghop_huyen', function (Blueprint $table) {
             $table->increments('id');
             $table->string('mathdv',50)->unique();
             $table->string('thang',10)->nullable();
@@ -40,6 +40,6 @@ class CreateTonghopluongHuyenTabale extends Migration
      */
     public function down()
     {
-        Schema::drop('tonghopluong_huyen');
+        Schema::drop('tonghop_huyen');
     }
 }

@@ -208,7 +208,7 @@
                         <!-- Các tài khoản quản lý khu vực mới có tính năng tổng hợp dữ liệu từ đơn vị cấp dưới -->
                         @if(session('admin')->quanlykhuvuc)
                             <li>
-                                <a href="{{url('chuc_nang/tong_hop_luong/huyen/index?thang='.date('m').'&nam='.date('Y'))}}">Tổng hợp lương toàn địa bàn</a>
+                                <a href="{{url('chuc_nang/tong_hop_luong/huyen/index?nam='.date('Y'))}}">Tổng hợp lương toàn địa bàn</a>
                             </li>
                                 <li>
                                     <a href="{{url('chuc_nang/xem_du_lieu/huyen?thang='.date('m').'&nam='.date('Y').'&trangthai=ALL')}}">Xem số liệu tổng hợp toàn địa bàn</a>

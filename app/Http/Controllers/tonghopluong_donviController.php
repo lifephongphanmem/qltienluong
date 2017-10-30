@@ -102,6 +102,7 @@ class tonghopluong_donviController extends Controller
             //Lấy dữ liệu từ các bảng liên quan thêm vào bảng lương chi tiết để tính toán
             foreach($model_bangluong_ct as $ct){
                 $bangluong = $model_bangluong->where('mabl',$ct->mabl)->first();
+                $ct->luongcoban=$bangluong->luongcoban;
                 $ct->manguonkp=$bangluong->manguonkp;
                 $ct->linhvuchoatdong=$bangluong->linhvuchoatdong;//chỉ dùng cho khối HCSN
 
@@ -120,7 +121,7 @@ class tonghopluong_donviController extends Controller
             //Lấy dữ liệu để lập
             $model_data = $model_bangluong_ct->map(function ($data) {
                 return collect($data->toArray())
-                    ->only(['macongtac','linhvuchoatdong','manguonkp'])
+                    ->only(['macongtac','linhvuchoatdong','manguonkp','luongcoban'])
                     ->all();
             });
             $model_data = a_unique($model_data);
@@ -154,7 +155,8 @@ class tonghopluong_donviController extends Controller
             for($i=0;$i<count($model_data);$i++){
                 $luongct = $model_bangluong_ct->where('manguonkp',$model_data[$i]['manguonkp'])
                     ->where('linhvuchoatdong',$model_data[$i]['linhvuchoatdong'])
-                    ->where('macongtac',$model_data[$i]['macongtac']);
+                    ->where('macongtac',$model_data[$i]['macongtac'])
+                    ->where('luongcoban',$model_data[$i]['luongcoban']);
 
                 $tonghs = 0;
                 $model_data[$i]['mathdv'] = $mathdv;
@@ -178,13 +180,14 @@ class tonghopluong_donviController extends Controller
             //Tính toán theo địa bàn
             $model_diaban = $model_bangluong_ct->map(function ($data) {
                 return collect($data->toArray())
-                    ->only(['madiaban'])
+                    ->only(['madiaban','luongcoban'])
                     ->all();
             });
             $model_diaban = a_unique($model_diaban);
 
             for($i=0;$i<count($model_diaban);$i++){
-                $luongct = $model_bangluong_ct->where('madiaban',$model_diaban[$i]['madiaban']);
+                $luongct = $model_bangluong_ct->where('madiaban',$model_diaban[$i]['madiaban'])
+                    ->where('luongcoban',$model_diaban[$i]['luongcoban']);
 
                 $tonghs = 0;
                 $model_diaban[$i]['mathdv'] = $mathdv;
@@ -240,8 +243,8 @@ class tonghopluong_donviController extends Controller
             foreach($model as $chitiet){
                 $chitiet->tennguonkp = isset($model_nguonkp[$chitiet->manguonkp])? $model_nguonkp[$chitiet->manguonkp]:'';
                 $chitiet->tencongtac = isset($model_phanloaict[$chitiet->macongtac])? $model_phanloaict[$chitiet->macongtac]:'';
-                $chitiet->tongtl=$gnr['luongcb'] * $chitiet->tonghs;
-                $chitiet->tongbh=$chitiet->stbhxh_dv + $chitiet->stbhyt_dv + $chitiet->stkpcd_dv + $chitiet->stbhtn_dv;
+                $chitiet->tongtl= $chitiet->luongcoban * $chitiet->tonghs;
+                $chitiet->tongbh= $chitiet->stbhxh_dv + $chitiet->stbhyt_dv + $chitiet->stkpcd_dv + $chitiet->stbhtn_dv;
             }
 
             return view('functions.tonghopluong.donvi.detail')
@@ -295,7 +298,7 @@ class tonghopluong_donviController extends Controller
                 $diaban = $model_diaban->where('madiaban',$chitiet->madiaban)->first();
                 $chitiet->tendiaban = $diaban->tendiaban;
                 $chitiet->phanloai = $a_diaban[$diaban->phanloai];
-                $chitiet->tongtl=$gnr['luongcb'] * $chitiet->tonghs;
+                $chitiet->tongtl= $chitiet->luongcoban * $chitiet->tonghs;
                 $chitiet->tongbh=$chitiet->stbhxh_dv + $chitiet->stbhyt_dv + $chitiet->stkpcd_dv + $chitiet->stbhtn_dv;
             }
 
@@ -315,6 +318,7 @@ class tonghopluong_donviController extends Controller
         if (Session::has('admin')) {
             $inputs = $requests->all();
             $model = tonghopluong_donvi::where('mathdv', $inputs['mathdv'])->first();
+            $mathdv =  getdate()[0];//Mã mới
 
             if (session('admin')->macqcq == session('admin')->madvqlkv) {
                 //Trường hợp đơn vị báo cáo số liệu lên trực tiếp đơn vị quản lý khu vực (huyện, tỉnh)
@@ -328,9 +332,15 @@ class tonghopluong_donviController extends Controller
 
                     if ($chk == 0) {//chưa gửi => update dữ liệu từ bảng khoi=>huyen
                         $model_chitiet = tonghopluong_donvi_chitiet::where('mathdv', $model->mathdv)->get()->toarray();
-                        $chitiet = unset_key($model_chitiet, array('mathdv', 'id', 'created_at', 'updated_at'));
+                        $chitiet = unset_key($model_chitiet, array('mathdv','id', 'created_at', 'updated_at'));
                         $model_diaban = tonghopluong_donvi_diaban::where('mathdv', $model->mathdv)->get()->toarray();
-                        $diaban = unset_key($model_diaban, array('macongtac', 'manguonkp', 'mathdv', 'id', 'created_at', 'updated_at'));
+                        $diaban = unset_key($model_diaban, array('macongtac', 'manguonkp', 'id', 'created_at', 'updated_at'));
+                        for($i=0;$i<count($chitiet);$i++){
+                            $chitiet[$i]['mathdv'] = $mathdv;
+                        }
+                        for($i=0;$i<count($diaban);$i++){
+                            $diaban[$i]['mathdv'] = $mathdv;
+                        }
 
                         if (isset($chitiet)) {
                             tonghopluong_huyen_chitiet::insert($chitiet);
@@ -338,9 +348,10 @@ class tonghopluong_donviController extends Controller
                         if (isset($diaban)) {
                             tonghopluong_huyen_diaban::insert($diaban);
                         }
+
                         $th_khoi = new tonghopluong_huyen();
                         $th_khoi->madv = $model->madv;
-                        $th_khoi->mathdv = getdate()[0];;
+                        $th_khoi->mathdv = $mathdv;
                         $th_khoi->trangthai = 'CHONHAN';
                         $th_khoi->phanloai = $model->phanloai;
                         $th_khoi->noidung = $model->noidung;
@@ -373,19 +384,27 @@ class tonghopluong_donviController extends Controller
                         ->where('phanloai', $model->phanloai)->count();
                     if ($chk == 0) {//chưa gửi => update dữ liệu từ bảng khoi=>huyen
                         $model_chitiet = tonghopluong_donvi_chitiet::where('mathdv', $model->mathdv)->get()->toarray();
-                        $chitiet = unset_key($model_chitiet, array('mathdv', 'id', 'created_at', 'updated_at'));
+                        $chitiet = unset_key($model_chitiet, array('id', 'created_at', 'updated_at'));
                         $model_diaban = tonghopluong_donvi_diaban::where('mathdv', $model->mathdv)->get()->toarray();
-                        $diaban = unset_key($model_diaban, array('macongtac', 'manguonkp', 'mathdv', 'id', 'created_at', 'updated_at'));
+                        $diaban = unset_key($model_diaban, array('macongtac', 'manguonkp', 'id', 'created_at', 'updated_at'));
 
-                        if (isset($chitiet)) {
-                            tonghopluong_tinh_chitiet::insert($chitiet);
+                        for($i=0;$i<count($chitiet);$i++){
+                            $chitiet[$i]['mathdv'] = $mathdv;
                         }
-                        if (isset($diaban)) {
-                            tonghopluong_tinh_diaban::insert($diaban);
+                        for($i=0;$i<count($diaban);$i++){
+                            $diaban[$i]['mathdv'] = $mathdv;
                         }
+
+                        if(isset($chitiet)){
+                            tonghopluong_huyen_chitiet::insert($chitiet);
+                        }
+                        if(isset($diaban)){
+                            tonghopluong_huyen_diaban::insert($diaban);
+                        }
+
                         $th_khoi = new tonghopluong_tinh();
                         $th_khoi->madv = $model->madv;
-                        $th_khoi->mathdv = getdate()[0];;
+                        $th_khoi->mathdv = $mathdv;
                         $th_khoi->trangthai = 'CHONHAN';
                         $th_khoi->phanloai = $model->phanloai;
                         $th_khoi->noidung = $model->noidung;
@@ -472,7 +491,7 @@ class tonghopluong_donviController extends Controller
                 $diaban = $model_diaban->where('madiaban',$chitiet->madiaban)->first();
                 $chitiet->tendiaban = $diaban->tendiaban;
                 $chitiet->phanloai = $a_diaban[$diaban->phanloai];
-                $chitiet->tongtl=$chitiet->luongcoban * $chitiet->tonghs;
+                $chitiet->tongtl = $chitiet->luongcoban * $chitiet->tonghs;
                 $chitiet->tongbh=$chitiet->stbhxh_dv + $chitiet->stbhyt_dv + $chitiet->stkpcd_dv + $chitiet->stbhtn_dv;
             }
             //cho trương hợp đơn vị cấp trên in dữ liệu dv câp dưới mà ko sai tên đơn vị

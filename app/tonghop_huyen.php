@@ -4,9 +4,9 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class tonghopluong_khoi extends Model
+class tonghop_huyen extends Model
 {
-    protected $table = 'tonghopluong_khoi';
+    protected $table = 'tonghop_huyen';
     protected $fillable = [
         'id',
         'mathdv',

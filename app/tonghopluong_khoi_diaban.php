@@ -12,6 +12,7 @@ class tonghopluong_khoi_diaban extends Model
         'id',
         'mathdv',
         'madiaban',
+        'luongcoban',
         'heso',
         'hesopc',
         'hesott',

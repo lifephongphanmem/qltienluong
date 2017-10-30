@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateTonghopluongDonviChitietTable extends Migration
+class CreateTonghopHuyenChitietTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,7 +13,7 @@ class CreateTonghopluongDonviChitietTable extends Migration
      */
     public function up()
     {
-        Schema::create('tonghopluong_donvi_chitiet', function (Blueprint $table) {
+        Schema::create('tonghop_huyen_chitiet', function (Blueprint $table) {
             $table->increments('id');
             $table->string('mathdv',50)->nullable();
             $table->string('manguonkp',50)->nullable();
@@ -21,6 +21,7 @@ class CreateTonghopluongDonviChitietTable extends Migration
             $table->string('macongtac')->nullable();
             $table->double('luongcoban')->default(0);
             $table->double('heso')->default(0);
+            $table->double('hesopc')->default(0);
             $table->double('hesott')->default(0);//hệ số truy thu
             $table->double('vuotkhung')->default(0);
             $table->double('pcct')->default(0);
@@ -65,6 +66,6 @@ class CreateTonghopluongDonviChitietTable extends Migration
      */
     public function down()
     {
-        Schema::drop('tonghopluong_donvi_chitiet');
+        Schema::drop('tonghop_huyen_chitiet');
     }
 }

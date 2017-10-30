@@ -120,9 +120,14 @@
                     {!! Form::textarea('noidung',null,array('id' => 'noidung', 'class' => 'form-control','rows'=>'3'))!!}
 
                     <!-- Phân loại đơn vị xa phường ko cần lĩnh vực hoạt động -->
-                    @if(session('admin')->level=!'KVXP')
+                    @if(session('admin')->maphanloai != 'KVXP')
                         <label class="control-label">Lĩnh vực công tác </label>
-                        {!!Form::select('linhvuc',$m_linhvuc, null, array('id' => 'linhvuc','class' => 'form-control'))!!}
+                        <select id="linhvuc" name="linhvuc" class="form-control">
+                            <option value="all">--Chọn lĩnh vực hoạt động--</option>
+                            @foreach($m_linhvuc as $key => $val)
+                                <option value="{{$key}}">{{$val}}</option>
+                                @endforeach
+                        </select>
                     @endif
 
                     <label class="control-label">Nguồn kinh phí</label>

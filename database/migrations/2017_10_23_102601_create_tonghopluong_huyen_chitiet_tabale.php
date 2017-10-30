@@ -19,6 +19,7 @@ class CreateTonghopluongHuyenChitietTabale extends Migration
             $table->string('manguonkp',50)->nullable();
             $table->string('linhvuchoatdong')->nullable();//Phân loại xã phường ko cần chọn lĩnh vực hoạt động
             $table->string('macongtac')->nullable();
+            $table->double('luongcoban')->default(0);
             $table->double('heso')->default(0);
             $table->double('hesopc')->default(0);
             $table->double('hesott')->default(0);//hệ số truy thu

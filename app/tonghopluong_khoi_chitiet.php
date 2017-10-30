@@ -13,6 +13,7 @@ class tonghopluong_khoi_chitiet extends Model
         'manguonkp',
         'linhvuchoatdong',//Phân loại xã phường ko cần chọn lĩnh vực hoạt động
         'macongtac',
+        'luongcoban',
         'heso',
         'hesopc',
         'hesott',

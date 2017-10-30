@@ -26,7 +26,6 @@ class CreateTonghopluongDonviTable extends Migration
             $table->string('nguoigui',50)->nullable();
             $table->string('trangthai',50)->nullable();
             $table->string('phanloai',50)->nullable(); //dữ liệu của đơn vị / dữ liệu của đơn vị cấp dưới; Bảng này chỉ để đơn vị
-            $table->double('luongcoban')->default(0);
             $table->string('madv',50)->nullable();
             $table->string('madvbc',50)->nullable();
             $table->string('macqcq',50)->nullable();

@@ -127,8 +127,7 @@ class xemdulieucapduoiController extends Controller
             }
 
             foreach($model_donvi as $dv){
-                $donvi = $list_donvi->where('madv',$dv->macqcq)->first();
-                $dv->tendvcq =(isset($donvi)?$donvi->tendv:NULL);
+
                 $dulieu = tonghopluong_huyen::where('madv', $dv->madv)
                     ->where('thang', $inputs['thang'])
                     ->where('nam', $inputs['nam'])
@@ -138,6 +137,7 @@ class xemdulieucapduoiController extends Controller
                 $dv->mathdv = (isset($dulieu)?$dulieu->mathdv:NULL);
                 if(isset($dulieu)){$dv->phanloai = $dulieu->phanloai;}
                 $dv->tenphanloai = isset($a_phanloai[$dv->phanloai]) ? $a_phanloai[$dv->phanloai]: '';
+
             }
 
             $model_donvi = $model_donvi->sortby('madv');

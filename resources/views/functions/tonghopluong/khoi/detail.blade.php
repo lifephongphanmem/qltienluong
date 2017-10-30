@@ -81,7 +81,7 @@
 
                 <div class="row">
                     <div class="col-md-offset-5 col-md-2">
-                        <a href="{{url('/chuc_nang/tong_hop_luong/khoi/index?nam=2017')}}" class="btn btn-default"><i class="fa fa-reply"></i>&nbsp;Quay lại</a>
+                        <a href="{{url('/chuc_nang/tong_hop_luong/khoi/index?nam='.date('Y'))}}" class="btn btn-default"><i class="fa fa-reply"></i>&nbsp;Quay lại</a>
                     </div>
                 </div>
             </div>

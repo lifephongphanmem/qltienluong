@@ -4,15 +4,13 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class tonghopluong_donvi_chitiet extends Model
+class tonghop_huyen_diaban extends Model
 {
-    protected $table = 'tonghopluong_donvi_chitiet';
+    protected $table = 'tonghop_huyen_diaban';
     protected $fillable = [
         'id',
         'mathdv',
-        'manguonkp',
-        'linhvuchoatdong',//Phân loại xã phường ko cần chọn lĩnh vực hoạt động
-        'macongtac',
+        'madiaban',
         'luongcoban',
         'heso',
         'hesopc',
@@ -43,6 +41,7 @@ class tonghopluong_donvi_chitiet extends Model
         'pcbdhdcu',
         'pcthni',
         'tonghs',
+
         'stbhxh_dv',
         'stbhyt_dv',
         'stkpcd_dv',
