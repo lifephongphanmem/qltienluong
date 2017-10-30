@@ -52,93 +52,107 @@ class bangluongController extends Controller
     }
 
     //Insert + update bảng lương
-    function store(Request $request){
-        $inputs=$request->all();
-        $model = bangluong::where('mabl',$inputs['mabl'])->first();
+    function store(Request $request)
+    {
+        $inputs = $request->all();
+        $model = bangluong::where('mabl', $inputs['mabl'])->first();
 
         //Chưa tính trường hợp chọn lĩnh vực hoạt động =>lấy cán bộ hoạt động trong lĩnh vực đó
 
-        if(count($model)>0){
+        if (count($model) > 0) {
             //update
             $model->update($inputs);
-        }else{
+        } else {
             //insert
-            $inputs['mabl']=session('admin')->madv .'_'.getdate()[0];
-            $inputs['madv']=session('admin')->madv;
-            $inputs['nguoilap']=session('admin')->name;
-            $inputs['ngaylap']=Carbon::now()->toDateTimeString();
+            $madv = session('admin')->madv;
+            $inputs['mabl'] = $madv . '_' . getdate()[0];
+            $inputs['madv'] = $madv;
+            $inputs['nguoilap'] = session('admin')->name;
+            $inputs['ngaylap'] = Carbon::now()->toDateTimeString();
 
-            $inputs['phantramhuong']=getDbl($inputs['phantramhuong']);
-            $inputs['luongcoban']=getDbl($inputs['luongcoban']);
+            $inputs['phantramhuong'] = getDbl($inputs['phantramhuong']);
+            $inputs['luongcoban'] = getDbl($inputs['luongcoban']);
+
 
             //Lấy tất cả cán bộ trong đơn vị
-            $m_cb=hosocanbo::where('madv',session('admin')->madv)
-                ->select('macanbo','macongchuc','tencanbo','mact','macvcq','mapb','msngbac','heso','hesopc','hesott','vuotkhung',DB::raw("'".$inputs['mabl']. "' as mabl"),
-                    'pck','pccv','pckv','pcth','pcdh','pcld','pcudn','pctn','pctnn','pcdbn','pcvk','pckn','pccovu','pcdbqh','pctnvk','pcbdhdcu','pcdang','pcthni')
+            $m_cb = hosocanbo::where('madv', $madv)
+                ->select('macanbo', 'macongchuc', 'tencanbo', 'mact','lvhd', 'macvcq', 'mapb', 'msngbac', 'heso', 'hesopc', 'hesott', 'vuotkhung', DB::raw("'" . $inputs['mabl'] . "' as mabl"),
+                    'pck', 'pccv', 'pckv', 'pcth', 'pcdh', 'pcld', 'pcudn', 'pctn', 'pctnn', 'pcdbn', 'pcvk', 'pckn', 'pccovu', 'pcdbqh', 'pctnvk', 'pcbdhdcu', 'pcdang', 'pcthni')
                 ->get();
-            $gnr=getGeneralConfigs();
+
+            if (isset($inputs['linhvuc']) && $inputs['linhvuc'] != 'ALL') {
+                //Lấy danh sách cán bộ theo lĩnh vực hoạt động
+
+                //Dùng tìm kiếm các bộ nào phù hợp. Do lvhd là mảng nên pải lọc
+                foreach($m_cb as $canbo){
+                    $a_lv = explode(',',$canbo->lvhd);
+                    if(in_array($inputs['linhvuc'],$a_lv)){
+                        $canbo->lvhd = $inputs['linhvuc'];
+                    }
+                }
+            }
+            $m_cb = $m_cb->where('lvhd',$inputs['linhvuc']);
+
+            $gnr = getGeneralConfigs();
 
             $a_truythu = array();
-            foreach($m_cb as $cb){
+            foreach ($m_cb as $cb) {
                 $a_truythu[] = $cb->macanbo;
                 //trong bảng danh mục là % vượt khung => sang bảng lương chuyển thành hệ số
-                $cb->vuotkhung=round((($cb->heso + $cb->pccv)*$cb->vuotkhung/100),2);
+                $cb->vuotkhung = round((($cb->heso + $cb->pccv) * $cb->vuotkhung / 100), 2);
 
-                $ths=0;
-                $ths +=$cb->heso;
-                $ths +=$cb->hesott;
-                $ths +=$cb->hesopc;
-                $ths +=$cb->vuotkhung;
-                $ths +=$cb->pck;
-                $ths +=$cb->pccv;
-                $ths +=$cb->pckv;
-                $ths +=$cb->pcth;
-                $ths +=$cb->pcdh;
-                $ths +=$cb->pcld;
-                $ths +=$cb->pcudn;
-                $ths +=$cb->pctn;
-                $ths +=$cb->pctnn;
-                $ths +=$cb->pcdbn;
-                $ths +=$cb->pcvk;
-                $ths +=$cb->pckn;
-                $ths +=$cb->pccovu;
-                $ths +=$cb->pcdbqh;
-                $ths +=$cb->pcbdhdcu;
-                $ths +=$cb->pctnvk;
-                $ths +=$cb->pcdang;
-                $ths +=$cb->pcthni;
+                $ths = 0;
+                $ths += $cb->heso;
+                $ths += $cb->hesott;
+                $ths += $cb->hesopc;
+                $ths += $cb->vuotkhung;
+                $ths += $cb->pck;
+                $ths += $cb->pccv;
+                $ths += $cb->pckv;
+                $ths += $cb->pcth;
+                $ths += $cb->pcdh;
+                $ths += $cb->pcld;
+                $ths += $cb->pcudn;
+                $ths += $cb->pctn;
+                $ths += $cb->pctnn;
+                $ths += $cb->pcdbn;
+                $ths += $cb->pcvk;
+                $ths += $cb->pckn;
+                $ths += $cb->pccovu;
+                $ths += $cb->pcdbqh;
+                $ths += $cb->pcbdhdcu;
+                $ths += $cb->pctnvk;
+                $ths += $cb->pcdang;
+                $ths += $cb->pcthni;
 
-                $cb->tonghs=$ths;
+                $cb->tonghs = $ths;
 
-                $cb->ttl=$inputs['luongcoban']*$ths*$inputs['phantramhuong']/100;
-                $luongnopbaohiem=$inputs['luongcoban']*($cb->heso + $cb->pccv + $cb->hesott + $cb->vuotkhung)*$inputs['phantramhuong']/100;
+                $cb->ttl = $inputs['luongcoban'] * $ths * $inputs['phantramhuong'] / 100;
+                $luongnopbaohiem = $inputs['luongcoban'] * ($cb->heso + $cb->pccv + $cb->hesott + $cb->vuotkhung) * $inputs['phantramhuong'] / 100;
 
-                // chưa tính được các loại hệ số pải nộp bh
-                //tách bảng phụ cấp riêng ra - liên kết với bảng hosocanbo
+                $cb->stbhxh = $luongnopbaohiem * floatval($gnr['bhxh']) / 100;
+                $cb->stbhyt = $luongnopbaohiem * floatval($gnr['bhyt']) / 100;
+                $cb->stkpcd = $luongnopbaohiem * floatval($gnr['kpcd']) / 100;
+                $cb->stbhtn = $luongnopbaohiem * floatval($gnr['bhtn']) / 100;
+                $cb->ttbh = $cb->stbhxh + $cb->stbhyt + $cb->stkpcd + $cb->stbhtn;
+                $cb->luongtn = $cb->ttl - $cb->ttbh;
 
-                $cb->stbhxh=$luongnopbaohiem*floatval($gnr['bhxh'])/100;
-                $cb->stbhyt=$luongnopbaohiem*floatval($gnr['bhyt'])/100;
-                $cb->stkpcd=$luongnopbaohiem*floatval($gnr['kpcd'])/100;
-                $cb->stbhtn=$luongnopbaohiem*floatval($gnr['bhtn'])/100;
-                $cb->ttbh=$cb->stbhxh+$cb->stbhyt+$cb->stkpcd + $cb->stbhtn;
-                $cb->luongtn=$cb->ttl - $cb->ttbh;
-
-                $cb->stbhxh_dv=$luongnopbaohiem*floatval($gnr['bhxh_dv'])/100;
-                $cb->stbhyt_dv=$luongnopbaohiem*floatval($gnr['bhyt_dv'])/100;
-                $cb->stkpcd_dv=$luongnopbaohiem*floatval($gnr['kpcd_dv'])/100;
-                $cb->stbhtn_dv=$luongnopbaohiem*floatval($gnr['bhtn_dv'])/100;
-                $cb->ttbh_dv=$cb->stbhxh_dv + $cb->stbhyt_dv + $cb->stkpcd_dv + $cb->stbhtn_dv;
+                $cb->stbhxh_dv = $luongnopbaohiem * floatval($gnr['bhxh_dv']) / 100;
+                $cb->stbhyt_dv = $luongnopbaohiem * floatval($gnr['bhyt_dv']) / 100;
+                $cb->stkpcd_dv = $luongnopbaohiem * floatval($gnr['kpcd_dv']) / 100;
+                $cb->stbhtn_dv = $luongnopbaohiem * floatval($gnr['bhtn_dv']) / 100;
+                $cb->ttbh_dv = $cb->stbhxh_dv + $cb->stbhyt_dv + $cb->stkpcd_dv + $cb->stbhtn_dv;
             }
-            $model_canbo = $m_cb->where('hesott','>',0)->map(function ($data) {
+            $model_canbo = $m_cb->where('hesott', '>', 0)->map(function ($data) {
                 return collect($data->toArray())
                     ->only(['macanbo'])
                     ->all();
             });
-            hosocanbo::wherein('macanbo',$model_canbo->toarray())->update(['hesott'=>0]);
+            hosocanbo::wherein('macanbo', $model_canbo->toarray())->update(['hesott' => 0]);
             bangluong::create($inputs);
-            bangluong_ct::insert($m_cb->toarray());
+            $m_cb = unset_key($m_cb->toarray(), array('lvhd'));
+            bangluong_ct::insert($m_cb);
         }
-
 
         /*
          * $ngaytu=$inputs['nam'].'-'.$inputs['thang'].'-01';
@@ -151,7 +165,7 @@ class bangluongController extends Controller
             ->get();
         */
 
-        return redirect('/chuc_nang/bang_luong/maso='.$inputs['mabl']);
+        return redirect('/chuc_nang/bang_luong/maso=' . $inputs['mabl']);
     }
 
     function show($mabl){

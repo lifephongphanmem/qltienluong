@@ -96,49 +96,60 @@
             </div>
             <div class="modal-body">
                 <div class="form-horizontal">
-                    <label class="control-label"> Tháng<span class="require">*</span></label>
-                    {!! Form::select(
-                    'thang',
-                    array(
-                    '01' => '01','02' => '02','03' => '03','04' => '04',
-                    '05' => '05','06' => '06','07' => '07','08' => '08',
-                    '09' => '09','10' => '10','11' => '11','12' => '12',
-                    ),null,
-                    array('id' => 'thang', 'class' => 'form-control'))
-                    !!}
+                    <div class="row">
+                        <div class="col-md-6">
+                            <label class="control-label"> Tháng<span class="require">*</span></label>
+                            {!! Form::select(
+                            'thang',
+                            array(
+                            '01' => '01','02' => '02','03' => '03','04' => '04',
+                            '05' => '05','06' => '06','07' => '07','08' => '08',
+                            '09' => '09','10' => '10','11' => '11','12' => '12',
+                            ),null,
+                            array('id' => 'thang', 'class' => 'form-control'))
+                            !!}
+                        </div>
+                        <div class="col-md-6">
+                            <label class="control-label"> Năm<span class="require">*</span></label>
+                            {!! Form::select(
+                            'nam',
+                            array(
+                            '2016' => '2016','2017' => '2017','2018' => '2018',
+                            ),null,
+                            array('id' => 'nam', 'class' => 'form-control'))
+                            !!}
+                        </div>
+                    </div>
 
-                    <label class="control-label"> Năm<span class="require">*</span></label>
-                    {!! Form::select(
-                    'nam',
-                    array(
-                    '2016' => '2016','2017' => '2017','2018' => '2018',
-                    ),null,
-                    array('id' => 'nam', 'class' => 'form-control'))
-                    !!}
-
-                    <label class="control-label"> Nội dung</label>
-                    {!! Form::textarea('noidung',null,array('id' => 'noidung', 'class' => 'form-control','rows'=>'3'))!!}
-
+                    <div class="row">
+                        <div class="col-md-12">
+                            <label class="control-label"> Nội dung</label>
+                            {!! Form::textarea('noidung',null,array('id' => 'noidung', 'class' => 'form-control','rows'=>'3'))!!}
+                        </div>
+                    </div>
                     <!-- Phân loại đơn vị xa phường ko cần lĩnh vực hoạt động -->
                     @if(session('admin')->maphanloai != 'KVXP')
                         <label class="control-label">Lĩnh vực công tác </label>
                         <select id="linhvuc" name="linhvuc" class="form-control">
-                            <option value="all">--Chọn lĩnh vực hoạt động--</option>
+                            <option value="ALL">--Chọn lĩnh vực hoạt động--</option>
                             @foreach($m_linhvuc as $key => $val)
                                 <option value="{{$key}}">{{$val}}</option>
-                                @endforeach
+                            @endforeach
                         </select>
                     @endif
 
                     <label class="control-label">Nguồn kinh phí</label>
                     {!!Form::select('manguonkp',$m_nguonkp, null, array('id' => 'manguonkp','class' => 'form-control'))!!}
-
-                    <label class="control-label">Phần trăm hưởng</label>
-                    {!!Form::text('phantramhuong', 100, array('id' => 'phantramhuong','class' => 'form-control', 'data-mask'=>'fdecimal'))!!}
-
-                    <label class="control-label">Mức lương cơ bản</label>
-                    {!!Form::text('luongcoban', $luongcb, array('id' => 'luongcoban','class' => 'form-control', 'data-mask'=>'fdecimal'))!!}
-
+                    <div class="row">
+                        <div class="col-md-6">
+                            <label class="control-label">Phần trăm hưởng</label>
+                            {!!Form::text('phantramhuong', 100, array('id' => 'phantramhuong','class' => 'form-control', 'data-mask'=>'fdecimal'))!!}
+                        </div>
+                        <div class="col-md-6">
+                            <label class="control-label">Mức lương cơ bản</label>
+                            {!!Form::text('luongcoban', $luongcb, array('id' => 'luongcoban','class' => 'form-control', 'data-mask'=>'fdecimal'))!!}
+                        </div>
+                    </div>
                     <input type="hidden" id="id_ct" name="id_ct"/>
                     <input type="hidden" id="mabl" name="mabl"/>
                 </div>
