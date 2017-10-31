@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\chitieubienche;
+use App\hosocanbo;
 use Illuminate\Http\Request;
 
 use App\Http\Requests;
@@ -14,11 +15,12 @@ class chitieubiencheController extends Controller
     function index(){
         if (Session::has('admin')) {
             $model = chitieubienche::where('madv',session('admin')->madv)->get();
-
+            $soluongcanbo = hosocanbo::where('madv',session('admin')->madv)->count();
             return view('manage.chitieubienche.index')
                 ->with('furl','/nghiep_vu/quan_ly/chi_tieu/')
                 ->with('furl_ajax','/ajax/chi_tieu/')
                 ->with('model',$model)
+                ->with('soluongcanbo',$soluongcanbo)
                 ->with('pageTitle','Danh sách chỉ tiêu biên chế của đơn vị');
         } else
             return view('errors.notlogin');
@@ -108,5 +110,15 @@ class chitieubiencheController extends Controller
             return redirect('/nghiep_vu/quan_ly/chi_tieu/danh_sach');
         } else
             return view('errors.notlogin');
+    }
+
+    function getNamChiTieu(Request $request){
+        $inputs = $request->all();
+        $model = chitieubienche::where('nam',$inputs['nam'])->where('madv', session('admin')->madv)->first();
+        if (isset($model)) {
+            echo 'false';
+        } else {
+            echo 'true';
+        }
     }
 }
