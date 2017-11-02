@@ -161,9 +161,9 @@ class tonghopluong_donviController extends Controller
                 $tonghs = 0;
                 $model_data[$i]['mathdv'] = $mathdv;
                 //lưu hệ số truy thu nhưng ko tính toán trong báo cáo tổng hợp
-                $model_data[$i]['hesott']=$luongct->sum('hesott');
+                $model_data[$i]['hesott'] = $luongct->sum('hesott');
                 //hệ số phụ cấp cho cán bộ đã nghỉ hưu
-                $model_data[$i]['hesopc']=$luongct->sum('hesopc');
+                $model_data[$i]['hesopc'] = $luongct->sum('hesopc');
                 foreach($a_col as $col){
                     $model_data[$i][$col] = $luongct->sum($col);
                     $tonghs += chkDbl($model_data[$i][$col]);
@@ -238,7 +238,6 @@ class tonghopluong_donviController extends Controller
             $model_thongtin = tonghopluong_donvi::where('mathdv',$mathdv)->first();
             $model_nguonkp = array_column(dmnguonkinhphi::all()->toArray(),'tennguonkp','manguonkp');
             $model_phanloaict = array_column(dmphanloaicongtac::all()->toArray(),'tencongtac','macongtac');
-            $gnr=getGeneralConfigs();
 
             foreach($model as $chitiet){
                 $chitiet->tennguonkp = isset($model_nguonkp[$chitiet->manguonkp])? $model_nguonkp[$chitiet->manguonkp]:'';
@@ -259,28 +258,40 @@ class tonghopluong_donviController extends Controller
     function edit_detail(Request $request){
         if (Session::has('admin')) {
             $inputs = $request->all();
+
             $model = tonghopluong_donvi_chitiet::where('mathdv',$inputs['mathdv'])
                 ->where('manguonkp',$inputs['manguonkp'])
                 ->where('macongtac',$inputs['macongtac'])->first();
-            //dd($model);
 
-            $model_nguonkp = array_column(dmnguonkinhphi::all()->toArray(),'tennguonkp','manguonkp');
-            $model_phanloaict = array_column(dmphanloaicongtac::all()->toArray(),'tencongtac','macongtac');
-            $gnr=getGeneralConfigs();
-/*
-            foreach($model as $chitiet){
-                $chitiet->tennguonkp = isset($model_nguonkp[$chitiet->manguonkp])? $model_nguonkp[$chitiet->manguonkp]:'';
-                $chitiet->tencongtac = isset($model_phanloaict[$chitiet->macongtac])? $model_phanloaict[$chitiet->macongtac]:'';
-                $chitiet->tongtl=$gnr['luongcb'] * $chitiet->tonghs;
-                $chitiet->tongbh=$chitiet->stbhxh_dv + $chitiet->stbhyt_dv + $chitiet->stkpcd_dv + $chitiet->stbhtn_dv;
-            }
-*/
+            $model->ttbh_dv=$model->stbhxh_dv + $model->stbhyt_dv + $model->stkpcd_dv + $model->stbhtn_dv;
 
-            return view('functions.tonghopluong.donvi.edit_detail')
+            return view('functions.tonghopluong.templates.edit_detail')
                 ->with('furl','/chuc_nang/tong_hop_luong/don_vi/')
                 ->with('model',$model)
                 //->with('model_thongtin',$model_thongtin)
                 ->with('pageTitle','Chi tiết tổng hợp lương tại đơn vị');
+        } else
+            return view('errors.notlogin');
+    }
+
+    function store_detail(Request $request){
+        if (Session::has('admin')) {
+            $inputs = $request->all();
+            $model = tonghopluong_donvi_chitiet::findorfail($inputs['id']);
+            $inputs['luongcoban'] = chkDbl($inputs['luongcoban']);
+            $inputs['ttbh_dv'] = chkDbl($inputs['ttbh_dv']);
+            $inputs['vuotkhung'] = chkDbl($inputs['vuotkhung']);
+            unset($inputs['id']);
+            unset($inputs['_token']);
+
+            foreach(array_keys($inputs) as $key){
+               if(!strpos($key, 'st') || !strpos($key, 'pc') || !strpos($key, 'heso')) {
+                   $inputs[$key] = chkDbl($inputs[$key]);
+               }
+            }
+            $model->update($inputs);
+
+           return redirect('/chuc_nang/tong_hop_luong/don_vi/detail/ma_so='.$model->mathdv);
         } else
             return view('errors.notlogin');
     }
@@ -306,7 +317,47 @@ class tonghopluong_donviController extends Controller
                 ->with('furl','/chuc_nang/tong_hop_luong/don_vi/')
                 ->with('model',$model)
                 ->with('model_thongtin',$model_thongtin)
+                ->with('pageTitle','Chi tiết tổng hợp lương theo địa bàn tại đơn vị');
+        } else
+            return view('errors.notlogin');
+    }
+
+    function edit_detail_diaban(Request $request){
+        if (Session::has('admin')) {
+            $inputs = $request->all();
+            $a_diaban =array_column( dmdiabandbkk::where('madv',session('admin')->madv)->get()->toarray(),'tendiaban','madiaban');
+            $model = tonghopluong_donvi_diaban::where('mathdv',$inputs['mathdv'])
+                ->where('madiaban',$inputs['madiaban'])->first();
+
+            $model->ttbh_dv=$model->stbhxh_dv + $model->stbhyt_dv + $model->stkpcd_dv + $model->stbhtn_dv;
+
+            return view('functions.tonghopluong.templates.edit_diaban')
+                ->with('furl','/chuc_nang/tong_hop_luong/don_vi/')
+                ->with('model',$model)
+                ->with('a_diaban',$a_diaban)
                 ->with('pageTitle','Chi tiết tổng hợp lương tại đơn vị');
+        } else
+            return view('errors.notlogin');
+    }
+
+    function store_detail_diaban(Request $request){
+        if (Session::has('admin')) {
+            $inputs = $request->all();
+            $model = tonghopluong_donvi_diaban::findorfail($inputs['id']);
+            $inputs['luongcoban'] = chkDbl($inputs['luongcoban']);
+            $inputs['ttbh_dv'] = chkDbl($inputs['ttbh_dv']);
+            $inputs['vuotkhung'] = chkDbl($inputs['vuotkhung']);
+            unset($inputs['id']);
+            unset($inputs['_token']);
+
+            foreach(array_keys($inputs) as $key){
+                if(!strpos($key, 'st') || !strpos($key, 'pc') || !strpos($key, 'heso')) {
+                    $inputs[$key] = chkDbl($inputs[$key]);
+                }
+            }
+            $model->update($inputs);
+
+            return redirect('/chuc_nang/tong_hop_luong/don_vi/detail_diaban/ma_so='.$model->mathdv);
         } else
             return view('errors.notlogin');
     }

@@ -114,9 +114,9 @@ class hosocanboController extends Controller
     function create(){
         if (Session::has('admin')) {
             //$makhoipb=getMaKhoiPB(session('admin')->madv);
-            $model_nhomct=dmphanloaicongtac::select('macongtac','tencongtac')->get();
-            $model_tenct=dmphanloaict::select('tenct','macongtac','mact')->get();
-            $model_dt=array_column(dmdantoc::select(DB::raw('dantoc as maso'),'dantoc')->get()->toarray(),'dantoc','maso');
+            $model_nhomct = dmphanloaicongtac::select('macongtac','tencongtac')->get();
+            $model_tenct = dmphanloaict::select('tenct','macongtac','mact')->get();
+            $model_dt = array_column(dmdantoc::select(DB::raw('dantoc as maso'),'dantoc')->get()->toarray(),'dantoc','maso');
             //$m_pb= dmphongban::where('madv',session('admin')->madv)->get();
             $m_pb = dmphongban::where('madv',session('admin')->madv)->get();
             $m_cvcq = dmchucvucq::where('maphanloai',session('admin')->maphanloai)->get();

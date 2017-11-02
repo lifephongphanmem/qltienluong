@@ -203,6 +203,12 @@ function getPhanLoaiNguon(){
         'CTX'=>'Nguồn đơn vị tự bảo đảm chi thường xuyên');
 }
 
+function getDiaBan(){
+    return array(''=>'-- Chọn phân loại địa bàn --',
+        'DBKK'=>'Khu vực KTXH ĐBKK','BGHD'=>'Khu vực biên giới, hải đảo',
+        'DBTD'=>'Khu vực trọng điểm, phức tạp về an ninh trật tự');
+}
+
 function getColTongHop(){
     return array('heso','vuotkhung','pcct',
         'pckct',
@@ -229,5 +235,32 @@ function getColTongHop(){
         'pcbdhdcu',
         'pcthni');;
 }
+function getThang(){
+    return array('01' => '01','02' => '02','03' => '03',
+        '04' => '04','05' => '05','06' => '06',
+        '07' => '07','08' => '08','09' => '09',
+        '10' => '10','11' => '11','12' => '12');
+}
 
+function getNam(){
+    return array('2016' => '2016','2017' => '2017','2018' => '2018');
+}
+
+function getLinhVucHoatDong(){
+    $model = array_column(App\dmkhoipb::all()->toArray(),'tenkhoipb','makhoipb');
+    $a_kq = array(''=>'--Chọn lĩnh vực hoạt động--');
+    return array_merge($a_kq,$model);
+}
+
+function getNguonKP(){
+    $model = array_column(App\dmnguonkinhphi::all()->toArray(),'tennguonkp','manguonkp');
+    $a_kq = array(''=>'--Chọn nguồn kinh phí--');
+    return array_merge($a_kq,$model);
+}
+
+function getNhomCongTac(){
+    $model = array_column(App\dmphanloaicongtac::all()->toArray(),'tencongtac','macongtac');
+    $a_kq = array(''=>'--Chọn nhóm công tác--');
+    return array_merge($a_kq,$model);
+}
 ?>

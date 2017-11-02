@@ -22,7 +22,7 @@
                         <div class="col-lg-12">
                             <ol>
                                 <li><a href="#" data-target="#thoaibangluong-modal" data-toggle="modal" onclick="baocaobangluong('{{$furl.'don_vi/mauc02ahd'}}')">Mẫu 1 (Mẫu C02a - HD)</a></li>
-                                <li><a href="#" data-target="#thoaibangluong-modal" data-toggle="modal" onclick="baocaobangluong('{{$furl.'don_vi/mauc02x'}}')">Mẫu 2 (Mẫu C02 - X)</a></li>
+                                <!--li><a href="#" data-target="#thoaibangluong-modal" data-toggle="modal" onclick="baocaobangluong('{{$furl.'don_vi/mauc02x'}}')">Mẫu 2 (Mẫu C02 - X)</a></li-->
                                 <li><a href="#" data-target="#thoaibangluong-modal" data-toggle="modal" onclick="baocaobangluong('{{$furl.'don_vi/maubaohiem'}}')">Mẫu bảo hiểm phải nộp theo lương</a></li>
                                 <li><a href="#" data-target="#thoaichitra-modal" data-toggle="modal" onclick="chitraluong('{{$furl.'don_vi/chitraluong'}}')">Tổng hợp tình hình chi trả lương</a></li>
                                 <li><a href="{{url('/bao_cao/bang_luong/don_vi/dutoanluong')}}" target="_blank">Dự toán lương</a></li>
@@ -87,73 +87,16 @@
                     <div class="form-group">
                         <label class="col-md-4 control-label"> Tháng<span class="require">*</span></label>
                         <div class="col-md-8">
-                            {!! Form::select(
-                            'thang',
-                            array(
-                            '01' => '01',
-                            '02' => '02',
-                            '03' => '03',
-                            '04' => '04',
-                            '05' => '05',
-                            '06' => '06',
-                            '07' => '07',
-                            '08' => '08',
-                            '09' => '09',
-                            '10' => '10',
-                            '11' => '11',
-                            '12' => '12',
-                            ),null,
-                            array('id' => 'thang', 'class' => 'form-control'))
-                            !!}
+                            {!! Form::select('thang',getThang(),null,array('id' => 'thang', 'class' => 'form-control'))!!}
                         </div>
                     </div>
 
                     <div class="form-group">
                         <label class="col-md-4 control-label"> Năm<span class="require">*</span></label>
                         <div class="col-md-8">
-                            {!! Form::select(
-                            'nam',
-                            array(
-                            '2015' => '2015',
-                            '2016' => '2016',
-                            '2017' => '2017'
-                            ),null,
-                            array('id' => 'nam', 'class' => 'form-control'))
-                            !!}
+                            {!! Form::select('nam',getNam(),date('Y'),array('id' => 'nam', 'class' => 'form-control'))!!}
                         </div>
                     </div>
-                    @if(session('admin')->level=='H')
-                        <div class="form-group">
-                            <label class="col-md-4 control-label"> Đơn vị<span class="require">*</span></label>
-                            <div class="col-md-8">
-                                <select id="madv" name="madv" class="form-control">
-                                    <option value="">Tất cả các đơn vị</option>
-                                    @if(isset($model_dv))
-                                        @foreach($model_dv as $dv)
-                                            <option value="{{$dv->madv}}">{{$dv->tendv}}</option>
-                                        @endforeach
-                                    @endif
-                                </select>
-                            </div>
-                        </div>
-                    @endif
-
-                    @if(session('admin')->level=='T')
-                        <div class="form-group">
-                            <label class="col-md-4 control-label"> Khu vực, địa bàn<span class="require">*</span></label>
-                            <div class="col-md-8">
-                                <select id="madv" name="madv" class="form-control">
-                                    <option value="">Tất cả các đơn vị</option>
-                                    @if(isset($model_dvbc))
-                                        @foreach($model_dvbc as $dv)
-                                            <option value="{{$dv->madvbc}}">{{$dv->tendvbc}}</option>
-                                        @endforeach
-                                    @endif
-                                </select>
-                            </div>
-                        </div>
-                    @endif
-
                     <input type="hidden" name="_token" value="{{ csrf_token() }}">
                 </div>
             </div>
@@ -178,113 +121,30 @@
                     <div class="form-group">
                         <label class="col-md-4 control-label"> Từ tháng<span class="require">*</span></label>
                         <div class="col-md-8">
-                            {!! Form::select(
-                            'tuthang',
-                            array(
-                            '01' => '01',
-                            '02' => '02',
-                            '03' => '03',
-                            '04' => '04',
-                            '05' => '05',
-                            '06' => '06',
-                            '07' => '07',
-                            '08' => '08',
-                            '09' => '09',
-                            '10' => '10',
-                            '11' => '11',
-                            '12' => '12',
-                            ),'01',
-                            array('id' => 'tuthang', 'class' => 'form-control'))
-                            !!}
+                            {!! Form::select('tuthang',getThang(),'01',array('id' => 'tuthang', 'class' => 'form-control'))!!}
                         </div>
                     </div>
 
                     <div class="form-group">
                         <label class="col-md-4 control-label"> Từ năm<span class="require">*</span></label>
                         <div class="col-md-8">
-                            {!! Form::select(
-                            'tunam',
-                            array(
-                            '2015' => '2015',
-                            '2016' => '2016',
-                            '2017' => '2017'
-                            ),'2017',
-                            array('id' => 'tunam', 'class' => 'form-control'))
-                            !!}
+                            {!! Form::select('tunam',getNam(),date('Y'),array('id' => 'tunam', 'class' => 'form-control'))!!}
                         </div>
                     </div>
 
                     <div class="form-group">
                         <label class="col-md-4 control-label"> Đến tháng<span class="require">*</span></label>
                         <div class="col-md-8">
-                            {!! Form::select(
-                            'denthang',
-                            array(
-                            '01' => '01',
-                            '02' => '02',
-                            '03' => '03',
-                            '04' => '04',
-                            '05' => '05',
-                            '06' => '06',
-                            '07' => '07',
-                            '08' => '08',
-                            '09' => '09',
-                            '10' => '10',
-                            '11' => '11',
-                            '12' => '12',
-                            ),'12',
-                            array('id' => 'denthang', 'class' => 'form-control'))
-                            !!}
+                            {!! Form::select('denthang',getThang(),'12',array('id' => 'denthang', 'class' => 'form-control'))!!}
                         </div>
                     </div>
 
                     <div class="form-group">
                         <label class="col-md-4 control-label"> Đến năm<span class="require">*</span></label>
                         <div class="col-md-8">
-                            {!! Form::select(
-                            'dennam',
-                            array(
-                            '2015' => '2015',
-                            '2016' => '2016',
-                            '2017' => '2017'
-                            ),'2017',
-                            array('id' => 'dennam', 'class' => 'form-control'))
-                            !!}
+                            {!! Form::select('dennam',getNam(),date('Y'),array('id' => 'dennam', 'class' => 'form-control'))!!}
                         </div>
                     </div>
-
-                    @if(session('admin')->level=='H')
-                        <div class="form-group">
-                            <label class="col-md-4 control-label"> Đơn vị<span class="require">*</span></label>
-                            <div class="col-md-8">
-                                <select id="madv" name="madv" class="form-control">
-                                    <option value="">Tất cả các đơn vị</option>
-                                    @if(isset($model_dv))
-                                        @foreach($model_dv as $dv)
-                                            <option value="{{$dv->madv}}">{{$dv->tendv}}</option>
-                                        @endforeach
-                                    @endif
-                                </select>
-                            </div>
-                        </div>
-                    @endif
-
-                    @if(session('admin')->level=='T')
-                        <div class="form-group">
-                            <label class="col-md-4 control-label"> Khu vực, địa bàn<span class="require">*</span></label>
-                            <div class="col-md-8">
-                                <select id="madv" name="madv" class="form-control">
-                                    <option value="">Tất cả các đơn vị</option>
-                                    @if(isset($model_dvbc))
-                                        @foreach($model_dvbc as $dv)
-                                            <option value="{{$dv->madvbc}}">{{$dv->tendvbc}}</option>
-                                        @endforeach
-                                    @endif
-                                </select>
-                            </div>
-                        </div>
-                    @endif
-
                     <input type="hidden" name="_token" value="{{ csrf_token() }}">
                 </div>
             </div>

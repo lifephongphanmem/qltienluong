@@ -58,7 +58,7 @@
                                     <td>{{$value->tencanbo}}</td>
                                     <td>{{$value->tencv}}</td>
                                     <td>{{$value->msngbac}}</td>
-                                    <td>{{number_format($value->luongtn)}}</td>
+                                    <td class="text-right">{{number_format($value->luongtn)}}</td>
                                     <td>
                                         <a href="{{url($furl.'?maso='.$value->mabl.'&macanbo='.$value->macanbo)}}" class="btn btn-info btn-xs mbs">
                                             <i class="fa fa-edit"></i>&nbsp; Chi tiết</a>
