@@ -32,7 +32,7 @@
             <div class="portlet light bordered">
                 <div class="portlet-title">
                     <div class="caption">
-                        <b>DỮ LIỆU TỔNG HỢP CHI TRẢ LƯƠNG THÁNG {{$model_thongtin->thang}} NĂM {{$model_thongtin->nam}}</b>
+                        <b>DỮ LIỆU TỔNG HỢP CHI TRẢ LƯƠNG THÁNG {{$model_thongtin->thang}} NĂM {{$model_thongtin->nam}} THEO ĐỊA BÀN QUẢN LÝ</b>
                         <input type="hidden" id="mathdv" name="mathdv" value="{{$model_thongtin->mathdv}}"/> <!-- Mã mặc định thêm cán bộ -->
                     </div>
                     <div class="actions">
@@ -44,8 +44,8 @@
                         <thead>
                             <tr>
                                 <th class="text-center" style="width: 5%">STT</th>
-                                <th class="text-center">Nguồn kinh phí</th>
-                                <th class="text-center">Phân loại</br>công tác</th>
+                                <th class="text-center">Tên địa bàn</th>
+                                <th class="text-center">Phân loại</br>địa bàn</th>
                                 <th class="text-center">Hệ số</br>lương</th>
                                 <th class="text-center">Hệ số</br>vượt khung</th>
                                 <th class="text-center">Tổng hệ</br>số phụ cấp</th>
@@ -59,15 +59,15 @@
                                 @foreach($model as $key=>$value)
                                     <tr>
                                         <td class="text-center">{{$key+1}}</td>
-                                        <td>{{$value->tennguonkp}}</td>
-                                        <td>{{$value->tencongtac}}</td>
+                                        <td>{{$value->tendiaban}}</td>
+                                        <td>{{$value->phanloai}}</td>
                                         <td>{{$value->heso}}</td>
                                         <td>{{$value->vuotkhung}}</td>
                                         <td>{{$value->tonghs}}</td>
                                         <td>{{number_format($value->tongtl)}}</td>
                                         <td>{{number_format($value->tongbh)}}</td>
                                         <td>
-                                            <a href="{{url($furl.'edit_detail?mathdv='.$value->mathdv.'&manguonkp='.$value->manguonkp.'&macongtac='.$value->macongtac)}}" class="btn btn-info btn-xs mbs">
+                                            <a href="{{url($furl.'edit_detail_diaban?mathdv='.$value->mathdv.'&madiaban='.$value->madiaban)}}" class="btn btn-info btn-xs mbs">
                                                 <i class="fa fa-edit"></i>&nbsp; Chỉnh sửa</a>
                                             <button type="button" onclick="cfDel('{{$furl.'del_detail/'.$value->id}}')" class="btn btn-default btn-xs" data-target="#delete-modal-confirm" data-toggle="modal">
                                                 <i class="fa fa-trash-o"></i>&nbsp; Xóa</button>
@@ -78,7 +78,6 @@
                         </tbody>
                     </table>
                 </div>
-
                 <div class="row">
                     <div class="col-md-offset-5 col-md-2">
                         <a href="{{url($furl.'index?nam='.date('Y'))}}" class="btn btn-default"><i class="fa fa-reply"></i>&nbsp;Quay lại</a>
@@ -87,6 +86,45 @@
             </div>
         </div>
     </div>
+
+    <script>
+        function add(){
+            var valid=true;
+            var message='';
+            var macanbo = $('#cbmacb').val();
+            var madiaban = $('#madiaban').val();
+            if(macanbo=='all'){
+                valid=false;
+                message ='Bạn cần chọn cán bộ để thêm vào địa bàn.';
+            }
+
+            if(valid){
+                var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
+                $.ajax({
+                    url: '{{$furl}}' + 'add_canbo',
+                    type: 'GET',
+                    data: {
+                        _token: CSRF_TOKEN,
+                        macanbo: macanbo,
+                        madiaban: madiaban
+                    },
+                    dataType: 'JSON',
+                    success: function (data) {
+                        if (data.status == 'success') {
+                            location.reload();
+                        }
+                    },
+                    error: function(message){
+                        toastr.error(message,'Lỗi lòi');
+                    }
+                });
+
+            }else{
+                toastr.error(message,'Lỗi!.');
+            }
+            return valid;
+        }
+    </script>
 
     @include('includes.modal.delete')
 @stop

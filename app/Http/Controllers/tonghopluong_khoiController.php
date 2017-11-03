@@ -221,11 +221,118 @@ class tonghopluong_khoiController extends Controller
                 $chitiet->tongbh=$chitiet->stbhxh_dv + $chitiet->stbhyt_dv + $chitiet->stkpcd_dv + $chitiet->stbhtn_dv;
             }
 //dd($model);
-            return view('functions.tonghopluong.khoi.detail')
+            return view('functions.tonghopluong.templates.detail')
                 ->with('furl','/chuc_nang/tong_hop_luong/khoi/')
                 ->with('model',$model)
                 ->with('model_thongtin',$model_thongtin)
                 ->with('pageTitle','Chi tiết dữ liệu tổng hợp lương');
+        } else
+            return view('errors.notlogin');
+    }
+
+    function edit_detail(Request $request){
+        if (Session::has('admin')) {
+            $inputs = $request->all();
+
+            $model = tonghopluong_khoi_chitiet::where('mathdv',$inputs['mathdv'])
+                ->where('manguonkp',$inputs['manguonkp'])
+                ->where('macongtac',$inputs['macongtac'])->first();
+
+            $model->ttbh_dv=$model->stbhxh_dv + $model->stbhyt_dv + $model->stkpcd_dv + $model->stbhtn_dv;
+
+            return view('functions.tonghopluong.templates.edit_detail')
+                ->with('furl','/chuc_nang/tong_hop_luong/khoi/')
+                ->with('model',$model)
+                //->with('model_thongtin',$model_thongtin)
+                ->with('pageTitle','Chi tiết tổng hợp lương');
+        } else
+            return view('errors.notlogin');
+    }
+
+    function store_detail(Request $request){
+        if (Session::has('admin')) {
+            $inputs = $request->all();
+            $model = tonghopluong_khoi_chitiet::findorfail($inputs['id']);
+            $inputs['luongcoban'] = chkDbl($inputs['luongcoban']);
+            $inputs['ttbh_dv'] = chkDbl($inputs['ttbh_dv']);
+            $inputs['vuotkhung'] = chkDbl($inputs['vuotkhung']);
+            unset($inputs['id']);
+            unset($inputs['_token']);
+
+            foreach(array_keys($inputs) as $key){
+                if(!strpos($key, 'st') || !strpos($key, 'pc') || !strpos($key, 'heso')) {
+                    $inputs[$key] = chkDbl($inputs[$key]);
+                }
+            }
+            $model->update($inputs);
+
+            return redirect('/chuc_nang/tong_hop_luong/khoi/detail/ma_so='.$model->mathdv);
+        } else
+            return view('errors.notlogin');
+    }
+
+    function detail_diaban($mathdv){
+        if (Session::has('admin')) {
+            $model = tonghopluong_khoi_diaban::where('mathdv',$mathdv)->get();
+            $model_diaban = dmdiabandbkk::where('madv',session('admin')->madv)->get();
+            $model_thongtin = tonghopluong_khoi::where('mathdv',$mathdv)->first();
+
+            $a_diaban = array('DBKK'=>'Khu vực KTXH ĐBKK','BGHD'=>'Khu vực biên giới, hải đảo',
+                'DBTD'=>'Khu vực trọng điểm, phức tạp về an ninh trật tự');
+
+            foreach($model as $chitiet){
+                $diaban = $model_diaban->where('madiaban',$chitiet->madiaban)->first();
+                $chitiet->tendiaban = $diaban->tendiaban;
+                $chitiet->phanloai = $a_diaban[$diaban->phanloai];
+                $chitiet->tongtl= $chitiet->luongcoban * $chitiet->tonghs;
+                $chitiet->tongbh=$chitiet->stbhxh_dv + $chitiet->stbhyt_dv + $chitiet->stkpcd_dv + $chitiet->stbhtn_dv;
+            }
+
+            return view('functions.tonghopluong.templates.detail_diaban')
+                ->with('furl','/chuc_nang/tong_hop_luong/khoi/')
+                ->with('model',$model)
+                ->with('model_thongtin',$model_thongtin)
+                ->with('pageTitle','Chi tiết tổng hợp lương theo địa bàn');
+        } else
+            return view('errors.notlogin');
+    }
+
+    function edit_detail_diaban(Request $request){
+        if (Session::has('admin')) {
+            $inputs = $request->all();
+            $a_diaban =array_column( dmdiabandbkk::where('madv',session('admin')->madv)->get()->toarray(),'tendiaban','madiaban');
+            $model = tonghopluong_khoi_diaban::where('mathdv',$inputs['mathdv'])
+                ->where('madiaban',$inputs['madiaban'])->first();
+
+            $model->ttbh_dv=$model->stbhxh_dv + $model->stbhyt_dv + $model->stkpcd_dv + $model->stbhtn_dv;
+
+            return view('functions.tonghopluong.templates.edit_diaban')
+                ->with('furl','/chuc_nang/tong_hop_luong/khoi/')
+                ->with('model',$model)
+                ->with('a_diaban',$a_diaban)
+                ->with('pageTitle','Chi tiết tổng hợp lương theo địa bàn');
+        } else
+            return view('errors.notlogin');
+    }
+
+    function store_detail_diaban(Request $request){
+        if (Session::has('admin')) {
+            $inputs = $request->all();
+            $model = tonghopluong_khoi_diaban::findorfail($inputs['id']);
+            $inputs['luongcoban'] = chkDbl($inputs['luongcoban']);
+            $inputs['ttbh_dv'] = chkDbl($inputs['ttbh_dv']);
+            $inputs['vuotkhung'] = chkDbl($inputs['vuotkhung']);
+            unset($inputs['id']);
+            unset($inputs['_token']);
+
+            foreach(array_keys($inputs) as $key){
+                if(!strpos($key, 'st') || !strpos($key, 'pc') || !strpos($key, 'heso')) {
+                    $inputs[$key] = chkDbl($inputs[$key]);
+                }
+            }
+            $model->update($inputs);
+
+            return redirect('/chuc_nang/tong_hop_luong/khoi/detail_diaban/ma_so='.$model->mathdv);
         } else
             return view('errors.notlogin');
     }

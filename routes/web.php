@@ -307,12 +307,13 @@ Route::group(['prefix'=>'chuc_nang'],function(){
             Route::post('senddata','tonghopluong_khoiController@senddata'); //gửi dữ liệu
             Route::get('printf_data/ma_so={mathdv}','tonghopluong_khoiController@printf_data');
             Route::get('printf_data_diaban/ma_so={mathdv}','tonghopluong_khoiController@printf_data_diaban');
-//chưa làm
-            Route::get('detail_diaban/ma_so={mathdv}','tonghopluong_donviController@detail_diaban');
-            Route::get('edit_detail','tonghopluong_donviController@edit_detail');//chỉnh sửa dữ liêu
-            Route::get('edit_detail_diaban','tonghopluong_donviController@edit_detail_diaban');//chỉnh sửa dữ liêu
-            Route::post('store_detail','tonghopluong_donviController@store_detail');//chỉnh sửa dữ liêu
-            Route::post('store_detail_diaban','tonghopluong_donviController@store_detail_diaban');//chỉnh sửa dữ liêu
+
+            Route::get('detail_diaban/ma_so={mathdv}','tonghopluong_khoiController@detail_diaban');
+            Route::get('edit_detail','tonghopluong_khoiController@edit_detail');//chỉnh sửa dữ liêu
+
+            Route::get('edit_detail_diaban','tonghopluong_khoiController@edit_detail_diaban');//chỉnh sửa dữ liêu
+            Route::post('store_detail','tonghopluong_khoiController@store_detail');//chỉnh sửa dữ liêu
+            Route::post('store_detail_diaban','tonghopluong_khoiController@store_detail_diaban');//chỉnh sửa dữ liêu
         });
 
         Route::group(['prefix'=>'huyen'],function(){
