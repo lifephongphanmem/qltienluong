@@ -148,16 +148,16 @@
                 <td>{{$ct->pck}}</td>
                 <td>{{$ct->tonghs}}</td>
 
-                <td>{{number_format($ct->ttl)}}</td>
-                <td> {{number_format($ct->giaml)}}</td>
-                <td>{{number_format($ct->bhct)}}</td>
-                <td>{{number_format($ct->ttl - $ct->giaml + $ct->bhct)}}</td>
+                <td>{{dinhdangso($ct->ttl)}}</td>
+                <td> {{dinhdangso($ct->giaml)}}</td>
+                <td>{{dinhdangso($ct->bhct)}}</td>
+                <td>{{dinhdangso($ct->ttl - $ct->giaml + $ct->bhct)}}</td>
 
-                <td>{{number_format($ct->stbhxh)}}</td>
-                <td>{{number_format($ct->stbhyt)}}</td>
-                <td>{{number_format($ct->stkpcd)}}</td>
-                <td>{{number_format($ct->ttbh)}}</td>
-                <td>{{number_format($ct->luongtn)}}</td>
+                <td>{{dinhdangso($ct->stbhxh)}}</td>
+                <td>{{dinhdangso($ct->stbhyt)}}</td>
+                <td>{{dinhdangso($ct->stkpcd)}}</td>
+                <td>{{dinhdangso($ct->ttbh)}}</td>
+                <td>{{dinhdangso($ct->luongtn)}}</td>
                 <td></td>
             </tr>
         @endforeach
@@ -177,16 +177,16 @@
                 <td>{{$model_luong->sum('pck')}}</td>
                 <td>{{$model_luong->sum('tonghs')}}</td>
 
-                <td class="money">{{number_format($model_luong->sum('ttl'))}}</td>
-                <td class="money">{{number_format($model_luong->sum('giaml'))}}</td>
-                <td class="money">{{number_format($model_luong->sum('bhct'))}}</td>
-                <td class="money">{{number_format($model_luong->sum('ttl') - $model_luong->sum('giaml') + $model_luong->sum('bhct'))}}</td>
+                <td class="money">{{dinhdangso($model_luong->sum('ttl'))}}</td>
+                <td class="money">{{dinhdangso($model_luong->sum('giaml'))}}</td>
+                <td class="money">{{dinhdangso($model_luong->sum('bhct'))}}</td>
+                <td class="money">{{dinhdangso($model_luong->sum('ttl') - $model_luong->sum('giaml') + $model_luong->sum('bhct'))}}</td>
 
-                <td class="money">{{number_format($model_luong->sum('stbhxh'))}}</td>
-                <td class="money">{{number_format($model_luong->sum('stbhyt'))}}</td>
-                <td class="money">{{number_format($model_luong->sum('stkpcd'))}}</td>
-                <td class="money">{{number_format($model_luong->sum('ttbh'))}}</td>
-                <td class="money">{{number_format($model_luong->sum('luongtn'))}}</td>
+                <td class="money">{{dinhdangso($model_luong->sum('stbhxh'))}}</td>
+                <td class="money">{{dinhdangso($model_luong->sum('stbhyt'))}}</td>
+                <td class="money">{{dinhdangso($model_luong->sum('stkpcd'))}}</td>
+                <td class="money">{{dinhdangso($model_luong->sum('ttbh'))}}</td>
+                <td class="money">{{dinhdangso($model_luong->sum('luongtn'))}}</td>
 
                 <td></td>
             </tr>
@@ -207,10 +207,10 @@
         <td>{{$model->sum('pck')}}</td>
         <td>{{$model->sum('tonghs')}}</td>
 
-        <td class="money">{{number_format($model->sum('ttl'))}}</td>
-        <td class="money">{{number_format($model->sum('giaml'))}}</td>
-        <td class="money">{{number_format($model->sum('bhct'))}}</td>
-        <td class="money">{{number_format($model->sum('ttl') - $model->sum('giaml') + $model->sum('bhct'))}}</td>
+        <td class="money">{{dinhdangso($model->sum('ttl'))}}</td>
+        <td class="money">{{dinhdangso($model->sum('giaml'))}}</td>
+        <td class="money">{{dinhdangso($model->sum('bhct'))}}</td>
+        <td class="money">{{dinhdangso($model->sum('ttl') - $model->sum('giaml') + $model->sum('bhct'))}}</td>
 
         <td class="money">{{number_format($model->sum('stbhxh'))}}</td>
         <td class="money">{{number_format($model->sum('stbhyt'))}}</td>

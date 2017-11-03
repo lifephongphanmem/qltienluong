@@ -127,7 +127,6 @@ class xemdulieucapduoiController extends Controller
             }
 
             foreach($model_donvi as $dv){
-
                 $dulieu = tonghopluong_huyen::where('madv', $dv->madv)
                     ->where('thang', $inputs['thang'])
                     ->where('nam', $inputs['nam'])

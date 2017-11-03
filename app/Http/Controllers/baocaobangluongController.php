@@ -4,15 +4,25 @@ namespace App\Http\Controllers;
 
 use App\bangluong;
 use App\bangluong_ct;
+use App\chitieubienche;
 use App\dmchucvucq;
 use App\dmdonvi;
 use App\dmdonvibaocao;
 use App\dmkhoipb;
 use App\dutoanluong;
+use App\tonghop_huyen;
+use App\tonghop_huyen_chitiet;
+use App\tonghopluong_donvi;
+use App\tonghopluong_donvi_chitiet;
+use App\tonghopluong_huyen;
+use App\tonghopluong_huyen_chitiet;
+use App\tonghopluong_khoi;
+use App\tonghopluong_khoi_chitiet;
 use Illuminate\Http\Request;
 
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
 
 class baocaobangluongController extends Controller
@@ -22,7 +32,7 @@ class baocaobangluongController extends Controller
             //$macqcq=session('admin')->madv;
             //$model_dv=dmdonvi::where('macqcq',$macqcq)->orwhere('madv',$macqcq)->get();
             //$model_dvbc=dmdonvibaocao::where('level','H')->get();
-            return view('reports.bangluong.index')
+            return view('reports.index')
                 ->with('furl','/bao_cao/bang_luong/')
                 //->with('model_dv',$model_dv)
                 //->with('model_dvbc', $model_dvbc)
@@ -134,25 +144,39 @@ class baocaobangluongController extends Controller
     function chitraluong(Request $request) {
         if (Session::has('admin')) {
             $inputs = $request->all();
-            $model_bangluong=bangluong_ct::wherein('mabl',function ($query) {
-                $query->select('mabl')->from('bangluong')
-                    ->where('madv',session('admin')->madv)
-                    ->where('nam','2017');
-            })->get();
+            $tuthang = $inputs['tuthang'];
+            $tunam = $inputs['tunam'];
+            $denthang = $inputs['denthang'];
+            //$dennam = $inputs['dennam'];
+
+            $model_tonghop = tonghopluong_donvi::whereBetween('thang', array($tuthang,$denthang))
+                ->where('nam',$tunam)
+                ->where('madv',session('admin')->madv)->get();
+
+            $model_tonghop_chitiet = tonghopluong_donvi_chitiet::wherein('mathdv',function($qr)use($tuthang,$denthang,$tunam){
+                $qr->select('mathdv')->from('tonghopluong_donvi')->whereBetween('thang', array($tuthang,$denthang))
+                    ->where('nam',$tunam)
+                    ->where('madv',session('admin')->madv);
+            }) ->get();
+
+            $model_nguonkp = getNguonKP();
+            $model_phanloaict = getNhomCongTac();
+            foreach($model_tonghop_chitiet as $chitiet){
+                $chitiet->tennguonkp = isset($model_nguonkp[$chitiet->manguonkp])? $model_nguonkp[$chitiet->manguonkp]:'';
+                $chitiet->tencongtac = isset($model_phanloaict[$chitiet->macongtac])? $model_phanloaict[$chitiet->macongtac]:'';
+                $chitiet->tongtl = $chitiet->luongcoban * $chitiet->tonghs;
+                $chitiet->tongbh = $chitiet->stbhxh_dv + $chitiet->stbhyt_dv + $chitiet->stkpcd_dv + $chitiet->stbhtn_dv;
+            }
 
             $m_dv=dmdonvi::where('madv',session('admin')->madv)->first();
-
-            $m_dv->luongnb=$model_bangluong->sum('ttl');
-            $m_dv->ttbh=$model_bangluong->sum('ttbh_dv');
-            $m_dv->tpc=($model_bangluong->sum('tonghs')-$model_bangluong->sum('heso'))*1300000;
-            $m_dv->tongcong= $m_dv->luongnb + $m_dv->ttbh + $m_dv->tpc;
-
             $thongtin=array('nguoilap'=>session('admin')->name,
                 'tu'=>$inputs['tuthang'].'/'.$inputs['tunam'],
-                'den'=>$inputs['denthang'].'/'.$inputs['dennam']);
+                'den'=>$inputs['denthang'].'/'.$inputs['tunam']);
 
 
-            return view('reports.bangluong.chitraluong')
+            return view('reports.mauchung.donvi.chitraluong')
+                ->with('model_tonghop',$model_tonghop)
+                ->with('model_tonghop_chitiet',$model_tonghop_chitiet)
                 ->with('thongtin',$thongtin)
                 ->with('m_dv',$m_dv)
                 ->with('pageTitle','Báo cáo chi trả lương');
@@ -160,45 +184,100 @@ class baocaobangluongController extends Controller
             return view('errors.notlogin');
     }
 
-    function chitraluong_th(Request $request) {
+    function chitraluong_th_khoi(Request $request) {
         if (Session::has('admin')) {
             $inputs = $request->all();
+            $tuthang = $inputs['tuthang'];
+            $tunam = $inputs['tunam'];
+            $denthang = $inputs['denthang'];
+            //$dennam = $inputs['dennam'];
+            //$model_donvi = dmdonvi::where('macqcq',session('admin')->madv)->get();
 
-            $macqcq=session('admin')->madv;
-            $model_dv=dmdonvi::where('macqcq',$macqcq)->orwhere('madv',$macqcq)->get();
+            $model_tonghop = tonghopluong_khoi::whereBetween('thang', array($tuthang,$denthang))
+                ->where('nam',$tunam)
+                ->where('madv',session('admin')->madv)->get();
 
-            $makpb=array();
-            foreach( $model_dv as $donvi){
-                $madv=$donvi->madv;
-                $model_bangluong=bangluong_ct::wherein('mabl',function ($query) use ($madv){
-                    $query->select('mabl')->from('bangluong')
-                        ->where('madv',$madv)
-                        ->where('nam','2017');
-                })->get();
+            $model_tonghop_chitiet = tonghopluong_khoi_chitiet::wherein('mathdv',function($qr)use($tuthang,$denthang,$tunam){
+                $qr->select('mathdv')->from('tonghopluong_khoi')->whereBetween('thang', array($tuthang,$denthang))
+                    ->where('nam',$tunam)
+                    ->where('madv',session('admin')->madv);
+            }) ->get();
 
-                $donvi->bienche= rand(20,30);
-                $donvi->soluong=$donvi->bienche;
-                $donvi->luongnb=$model_bangluong->sum('ttl');
-                $donvi->ttbh=$model_bangluong->sum('ttbh_dv');
-                $donvi->tpc=($model_bangluong->sum('tonghs')-$model_bangluong->sum('heso'))*1300000;
-                $donvi->tongcong= $donvi->luongnb + $donvi->ttbh + $donvi->tpc;
-
-                $makpb[]=$donvi->makhoipb;
+            $model_nguonkp = getNguonKP();
+            $model_phanloaict = getNhomCongTac();
+            foreach($model_tonghop_chitiet as $chitiet){
+                $chitiet->tennguonkp = isset($model_nguonkp[$chitiet->manguonkp])? $model_nguonkp[$chitiet->manguonkp]:'';
+                $chitiet->tencongtac = isset($model_phanloaict[$chitiet->macongtac])? $model_phanloaict[$chitiet->macongtac]:'';
+                $chitiet->tongtl = $chitiet->luongcoban * $chitiet->tonghs;
+                $chitiet->tongbh = $chitiet->stbhxh_dv + $chitiet->stbhyt_dv + $chitiet->stkpcd_dv + $chitiet->stbhtn_dv;
             }
-            $model_khoipb=dmkhoipb::wherein('makhoipb',$makpb)->get();
+
             $m_dv=dmdonvi::where('madv',session('admin')->madv)->first();
-
-
-
             $thongtin=array('nguoilap'=>session('admin')->name,
                 'tu'=>$inputs['tuthang'].'/'.$inputs['tunam'],
-                'den'=>$inputs['denthang'].'/'.$inputs['dennam']);
+                'den'=>$inputs['denthang'].'/'.$inputs['tunam']);
 
 
-            return view('reports.bangluong.chitraluong_tonghop')
-                ->with('model_kpb',$model_khoipb)
+            return view('reports.mauchung.khoi.chitraluong')
+                //->with('model_dv',$model_dv)
+                ->with('model_tonghop',$model_tonghop)
+                ->with('model_tonghop_chitiet',$model_tonghop_chitiet)
                 ->with('thongtin',$thongtin)
-                ->with('model_dv',$model_dv)
+                ->with('m_dv',$m_dv)
+                ->with('pageTitle','Báo cáo chi trả lương');
+        } else
+            return view('errors.notlogin');
+    }
+
+    function chitraluong_ct_khoi(Request $request) {
+        if (Session::has('admin')) {
+            $inputs = $request->all();
+            $tuthang = $inputs['tuthang'];
+            $tunam = $inputs['tunam'];
+            $denthang = $inputs['denthang'];
+            $a_data = array();
+
+            for($i = (int)$tuthang;$i<=$denthang;$i++){
+                if($i<10){
+                    $a_data[] = array('thang'=>'0'.$i, 'nam'=>$tunam);
+                }else{
+                    $a_data[] = array('thang'=>$i, 'nam'=>$tunam);
+                }
+            }
+            $model_donvi = dmdonvi::where('macqcq',session('admin')->madv)->get();
+
+            $model_tonghop = tonghopluong_donvi::whereBetween('thang', array($tuthang,$denthang))
+                ->where('nam',$tunam)
+                ->where('macqcq',session('admin')->madv)->get();
+
+            $model_tonghop_chitiet = tonghopluong_donvi_chitiet::wherein('mathdv',function($qr)use($tuthang,$denthang,$tunam){
+                $qr->select('mathdv')->from('tonghopluong_donvi')->whereBetween('thang', array($tuthang,$denthang))
+                    ->where('nam',$tunam)
+                    ->where('trangthai','DAGUI')
+                    ->where('macqcq',session('admin')->madv);
+            }) ->get();
+
+            $model_nguonkp = getNguonKP();
+            $model_phanloaict = getNhomCongTac();
+            foreach($model_tonghop_chitiet as $chitiet){
+                $chitiet->tennguonkp = isset($model_nguonkp[$chitiet->manguonkp])? $model_nguonkp[$chitiet->manguonkp]:'';
+                $chitiet->tencongtac = isset($model_phanloaict[$chitiet->macongtac])? $model_phanloaict[$chitiet->macongtac]:'';
+                $chitiet->tongtl = $chitiet->luongcoban * $chitiet->tonghs;
+                $chitiet->tongbh = $chitiet->stbhxh_dv + $chitiet->stbhyt_dv + $chitiet->stkpcd_dv + $chitiet->stbhtn_dv;
+            }
+
+            $m_dv=dmdonvi::where('madv',session('admin')->madv)->first();
+            $thongtin=array('nguoilap'=>session('admin')->name,
+                'tu'=>$inputs['tuthang'].'/'.$inputs['tunam'],
+                'den'=>$inputs['denthang'].'/'.$inputs['tunam']);
+
+
+            return view('reports.mauchung.khoi.chitraluong_chitiet')
+                ->with('model_data',$a_data)
+                ->with('model_donvi',$model_donvi)
+                ->with('model_tonghop',$model_tonghop)
+                ->with('model_tonghop_chitiet',$model_tonghop_chitiet)
+                ->with('thongtin',$thongtin)
                 ->with('m_dv',$m_dv)
                 ->with('pageTitle','Báo cáo chi trả lương');
         } else
@@ -208,31 +287,44 @@ class baocaobangluongController extends Controller
     function dutoanluong(Request $request) {
         if (Session::has('admin')) {
             $inputs = $request->all();
-            $model_bangluong=bangluong_ct::wherein('mabl',function ($query) {
-                $query->select('mabl')->from('bangluong')
-                    ->where('madv',session('admin')->madv)
-                    ->where('nam','2017');
-            })->get();
-
-            $model_dutoan=dutoanluong::where('madv',session('admin')->madv)
-                ->where('namns','2018')->first();
-            $m_dv=dmdonvi::where('madv',session('admin')->madv)->first();
-
-            $m_dv->luongnb=$model_bangluong->sum('ttl');
-            $m_dv->luongbh=$model_bangluong->sum('ttbh_dv');
-            $m_dv->luonghs=($model_bangluong->sum('tonghs')-$model_bangluong->sum('heso'))*1300000;
-            $m_dv->tongcong= $m_dv->luongnb + $m_dv->ttbh + $m_dv->tpc;
-
-            if(isset($model_dutoan)) {
-                $m_dv->luongnb_dt = $model_dutoan->luongnb_dt;
-                $m_dv->luongbh_dt = $model_dutoan->luongbh_dt;
-                $m_dv->luonghs_dt = $model_dutoan->luonghs_dt;
-                $m_dv->tongcong_dt = $m_dv->luongnb_dt + $m_dv->luongbh_dt + $m_dv->luonghs_dt;
+            $model_dutoan=dutoanluong::where('namns',$inputs['namns'])
+                ->where('madv',session('admin')->madv)->first();
+            if(!isset($model_dutoan)){
+                $model_dutoan = new dutoanluong();
+                $model_dutoan->namns = $inputs['namns'];
+                $model_dutoan->luongnb = 0;
+                $model_dutoan->luonghs = 0;
+                $model_dutoan->luongbh = 0;
+                $model_dutoan->luongnb_dt = 0;
+                $model_dutoan->luonghs_dt = 0;
+                $model_dutoan->luongbh_dt = 0;
             }
-            $thongtin=array('nguoilap'=>session('admin')->name);
+            $model_bienche_dutoan=chitieubienche::where('nam',$inputs['namns'])
+                ->where('madv',session('admin')->madv)->first();
+            if(!isset($model_bienche_dutoan)){
+                $model_bienche_dutoan = new chitieubienche();
+                $model_bienche_dutoan->nam = $inputs['namns'];
+                $model_bienche_dutoan->soluongduocgiao = 0;
+                $model_bienche_dutoan->soluongbienche = 0;
+            }
+
+            $model_bienche_truoc=chitieubienche::where('nam',$inputs['namns'] - 1)
+                ->where('madv',session('admin')->madv)->first();
+            if(!isset($model_bienche_truoc)){
+                $model_bienche_truoc = new chitieubienche();
+                $model_bienche_truoc->nam = $inputs['namns'];
+                $model_bienche_truoc->soluongduocgiao = 0;
+                $model_bienche_truoc->soluongbienche = 0;
+            }
+            $m_dv=dmdonvi::where('madv',session('admin')->madv)->first();
+            $thongtin=array('nguoilap'=>session('admin')->name,
+                'namns'=>$inputs['namns']);
 
 
-            return view('reports.bangluong.dutoanluong')
+            return view('reports.mauchung.donvi.dutoanluong')
+                ->with('model_dutoan',$model_dutoan)
+                ->with('model_bienche_dutoan',$model_bienche_dutoan)
+                ->with('model_bienche_truoc',$model_bienche_truoc)
                 ->with('thongtin',$thongtin)
                 ->with('m_dv',$m_dv)
                 ->with('pageTitle','Báo cáo dự toán lương của đơn vị');
@@ -240,58 +332,174 @@ class baocaobangluongController extends Controller
             return view('errors.notlogin');
     }
 
-    function dutoanluong_th(Request $request) {
+    function dutoanluong_khoi(Request $request) {
         if (Session::has('admin')) {
             $inputs = $request->all();
+            $madv = session('admin')->madv;
 
-            $macqcq=session('admin')->madv;
-            $model_dv=dmdonvi::where('macqcq',$macqcq)->orwhere('madv',$macqcq)->get();
-
-            $makpb=array();
-            foreach( $model_dv as $donvi){
-                $madv=$donvi->madv;
-                $model_bangluong=bangluong_ct::wherein('mabl',function ($query) use ($madv){
-                    $query->select('mabl')->from('bangluong')
-                        ->where('madv',$madv)
-                        ->where('nam','2017');
+            $model_donvi = dmdonvi::where('macqcq',$madv)->get();
+            $model_dutoan=dutoanluong::where('namns',$inputs['namns'])
+                ->wherein('madv',function($qr)use($madv){
+                    $qr->select('madv')->from('dmdonvi')->where('macqcq',$madv);
+                })->get();
+            $model_bienche_dutoan=chitieubienche::where('nam',$inputs['namns'])
+                ->wherein('madv',function($qr)use($madv){
+                    $qr->select('madv')->from('dmdonvi')->where('macqcq',$madv);
+                })->get();
+            $model_bienche_truoc=chitieubienche::where('nam',$inputs['namns'] - 1)
+                ->wherein('madv',function($qr)use($madv){
+                    $qr->select('madv')->from('dmdonvi')->where('macqcq',$madv);
                 })->get();
 
-                $donvi->bienche= rand(20,30);
-                $donvi->soluong=$donvi->bienche;
-                $donvi->luongnb=$model_bangluong->sum('ttl');
-                $donvi->ttbh=$model_bangluong->sum('ttbh_dv');
-                $donvi->tpc=($model_bangluong->sum('tonghs')-$model_bangluong->sum('heso'))*1300000;
-                $donvi->tongcong= $donvi->luongnb + $donvi->ttbh + $donvi->tpc;
-
-                $model_dutoan=dutoanluong::where('madv',$donvi->madv)
-                    ->where('namns','2018')->first();
-
-                $donvi->luongnb=$model_bangluong->sum('ttl');
-                $donvi->luongbh=$model_bangluong->sum('ttbh_dv');
-                $donvi->luonghs=($model_bangluong->sum('tonghs')-$model_bangluong->sum('heso'))*1300000;
-                $donvi->tongcong= $donvi->luongnb + $donvi->ttbh + $donvi->tpc;
-
-                if(isset($model_dutoan)) {
-                    $donvi->luongnb_dt = $model_dutoan->luongnb_dt;
-                    $donvi->luongbh_dt = $model_dutoan->luongbh_dt;
-                    $donvi->luonghs_dt = $model_dutoan->luonghs_dt;
-                    $donvi->tongcong_dt = $donvi->luongnb_dt + $donvi->luongbh_dt + $donvi->luonghs_dt;
-                }
-
-                $makpb[]=$donvi->makhoipb;
-            }
-            $model_khoipb=dmkhoipb::wherein('makhoipb',$makpb)->get();
             $m_dv=dmdonvi::where('madv',session('admin')->madv)->first();
-            $thongtin=array('nguoilap'=>session('admin')->name);
+            $thongtin=array('nguoilap'=>session('admin')->name,
+                'namns'=>$inputs['namns']);
 
-            return view('reports.bangluong.dutoanluong_tonghop')
-                ->with('model_kpb',$model_khoipb)
+            return view('reports.mauchung.khoi.dutoanluong')
+                ->with('model_dutoan',$model_dutoan)
+                ->with('model_donvi',$model_donvi)
+                ->with('model_bienche_dutoan',$model_bienche_dutoan)
+                ->with('model_bienche_truoc',$model_bienche_truoc)
                 ->with('thongtin',$thongtin)
-                ->with('model_dv',$model_dv)
                 ->with('m_dv',$m_dv)
-                ->with('pageTitle','Báo cáo dự toán lương của đơn vị');
+                ->with('pageTitle','Báo cáo tổng hợp dự toán lương');
         } else
             return view('errors.notlogin');
     }
 
+    function chitraluong_th_huyen(Request $request) {
+        if (Session::has('admin')) {
+            $inputs = $request->all();
+            $tuthang = $inputs['tuthang'];
+            $tunam = $inputs['tunam'];
+            $denthang = $inputs['denthang'];
+            $madvbc = session('admin')->madvbc;
+
+            $model_tonghop = tonghop_huyen::whereBetween('thang', array($tuthang,$denthang))
+                ->where('nam',$tunam)
+                ->where('madvbc',$madvbc)->get();
+            //dd($model_tonghop->toarray());
+
+            $model_tonghop_chitiet = tonghop_huyen_chitiet::wherein('mathdv',function($qr)use($tuthang,$denthang,$tunam,$madvbc){
+                $qr->select('mathdv')->from('tonghop_huyen')->whereBetween('thang', array($tuthang,$denthang))
+                    ->where('nam',$tunam)
+                    ->where('madvbc',$madvbc);
+            }) ->get();
+
+            $model_nguonkp = getNguonKP();
+            $model_phanloaict = getNhomCongTac();
+            foreach($model_tonghop_chitiet as $chitiet){
+                $chitiet->tennguonkp = isset($model_nguonkp[$chitiet->manguonkp])? $model_nguonkp[$chitiet->manguonkp]:'';
+                $chitiet->tencongtac = isset($model_phanloaict[$chitiet->macongtac])? $model_phanloaict[$chitiet->macongtac]:'';
+                $chitiet->tongtl = $chitiet->luongcoban * $chitiet->tonghs;
+                $chitiet->tongbh = $chitiet->stbhxh_dv + $chitiet->stbhyt_dv + $chitiet->stkpcd_dv + $chitiet->stbhtn_dv;
+            }
+
+            $m_dv=dmdonvi::where('madv',session('admin')->madv)->first();
+            $thongtin=array('nguoilap'=>session('admin')->name,
+                'tu'=>$inputs['tuthang'].'/'.$inputs['tunam'],
+                'den'=>$inputs['denthang'].'/'.$inputs['tunam'],
+                'madvbc'=>$madvbc);
+
+
+            return view('reports.mauchung.huyen.chitraluong')
+                ->with('model_tonghop',$model_tonghop)
+                ->with('model_tonghop_chitiet',$model_tonghop_chitiet)
+                ->with('thongtin',$thongtin)
+                ->with('m_dv',$m_dv)
+                ->with('pageTitle','Báo cáo chi trả lương');
+        } else
+            return view('errors.notlogin');
+    }
+
+    function chitraluong_ct_huyen(Request $request) {
+        if (Session::has('admin')) {
+            $inputs = $request->all();
+            $tuthang = $inputs['tuthang'];
+            $tunam = $inputs['tunam'];
+            $denthang = $inputs['denthang'];
+            $a_data = array();
+
+            for($i = (int)$tuthang;$i<=$denthang;$i++){
+                if($i<10){
+                    $a_data[] = array('thang'=>'0'.$i, 'nam'=>$tunam);
+                }else{
+                    $a_data[] = array('thang'=>$i, 'nam'=>$tunam);
+                }
+            }
+            $model_donvi = dmdonvi::where('macqcq',session('admin')->madv)->get();
+
+            $model_tonghop = tonghopluong_donvi::whereBetween('thang', array($tuthang,$denthang))
+                ->where('nam',$tunam)
+                ->where('macqcq',session('admin')->madv)->get();
+
+            $model_tonghop_chitiet = tonghopluong_donvi_chitiet::wherein('mathdv',function($qr)use($tuthang,$denthang,$tunam){
+                $qr->select('mathdv')->from('tonghopluong_donvi')->whereBetween('thang', array($tuthang,$denthang))
+                    ->where('nam',$tunam)
+                    ->where('trangthai','DAGUI')
+                    ->where('macqcq',session('admin')->madv);
+            }) ->get();
+
+            $model_nguonkp = getNguonKP();
+            $model_phanloaict = getNhomCongTac();
+            foreach($model_tonghop_chitiet as $chitiet){
+                $chitiet->tennguonkp = isset($model_nguonkp[$chitiet->manguonkp])? $model_nguonkp[$chitiet->manguonkp]:'';
+                $chitiet->tencongtac = isset($model_phanloaict[$chitiet->macongtac])? $model_phanloaict[$chitiet->macongtac]:'';
+                $chitiet->tongtl = $chitiet->luongcoban * $chitiet->tonghs;
+                $chitiet->tongbh = $chitiet->stbhxh_dv + $chitiet->stbhyt_dv + $chitiet->stkpcd_dv + $chitiet->stbhtn_dv;
+            }
+
+            $m_dv=dmdonvi::where('madv',session('admin')->madv)->first();
+            $thongtin=array('nguoilap'=>session('admin')->name,
+                'tu'=>$inputs['tuthang'].'/'.$inputs['tunam'],
+                'den'=>$inputs['denthang'].'/'.$inputs['tunam']);
+
+
+            return view('reports.mauchung.khoi.chitraluong_chitiet')
+                ->with('model_data',$a_data)
+                ->with('model_donvi',$model_donvi)
+                ->with('model_tonghop',$model_tonghop)
+                ->with('model_tonghop_chitiet',$model_tonghop_chitiet)
+                ->with('thongtin',$thongtin)
+                ->with('m_dv',$m_dv)
+                ->with('pageTitle','Báo cáo chi trả lương');
+        } else
+            return view('errors.notlogin');
+    }
+
+    function dutoanluong_huyen(Request $request) {
+        if (Session::has('admin')) {
+            $inputs = $request->all();
+            $madvbc = session('admin')->madvbc;
+
+            $model_donvi = dmdonvi::where('madvbc',$madvbc)->get();
+            $model_dutoan=dutoanluong::where('namns',$inputs['namns'])
+                ->wherein('madv',function($qr)use($madvbc){
+                    $qr->select('madv')->from('dmdonvi')->where('madvbc',$madvbc);
+                })->get();
+            $model_bienche_dutoan=chitieubienche::where('nam',$inputs['namns'])
+                ->wherein('madv',function($qr)use($madvbc){
+                    $qr->select('madv')->from('dmdonvi')->where('madvbc',$madvbc);
+                })->get();
+            $model_bienche_truoc=chitieubienche::where('nam',$inputs['namns'] - 1)
+                ->wherein('madv',function($qr)use($madvbc){
+                    $qr->select('madv')->from('dmdonvi')->where('madvbc',$madvbc);
+                })->get();
+
+            $m_dv=dmdonvi::where('madv',session('admin')->madv)->first();
+            $thongtin=array('nguoilap'=>session('admin')->name,
+                'namns'=>$inputs['namns'],
+                'madvbc'=>$madvbc);
+
+            return view('reports.mauchung.huyen.dutoanluong')
+                ->with('model_dutoan',$model_dutoan)
+                ->with('model_donvi',$model_donvi)
+                ->with('model_bienche_dutoan',$model_bienche_dutoan)
+                ->with('model_bienche_truoc',$model_bienche_truoc)
+                ->with('thongtin',$thongtin)
+                ->with('m_dv',$m_dv)
+                ->with('pageTitle','Báo cáo tổng hợp dự toán lương');
+        } else
+            return view('errors.notlogin');
+    }
 }

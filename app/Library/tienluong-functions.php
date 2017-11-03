@@ -263,4 +263,8 @@ function getNhomCongTac(){
     $a_kq = array(''=>'--Chọn nhóm công tác--');
     return array_merge($a_kq,$model);
 }
+
+function getDonViTinh(){
+    return array('1' => 'Đồng','2' => 'Nghìn đồng','3' => 'Triệu đồng');
+}
 ?>
