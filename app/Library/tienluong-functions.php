@@ -267,4 +267,19 @@ function getNhomCongTac(){
 function getDonViTinh(){
     return array('1' => 'Đồng','2' => 'Nghìn đồng','3' => 'Triệu đồng');
 }
+
+function getTextStatus($status){
+    //text-danger; text-warning; text-success; text-info
+    $a_trangthai = array(
+        'CHUALUONG' => 'text-danger',
+        'CHUATAO' => 'text-danger',
+        'CHOGUI' => 'text-info',
+        'DAGUI' => 'text-success',
+        'TRALAI' => 'text-danger',
+        'CHUADAYDU' => 'text-warning',
+        'CHUAGUI' => 'text-danger'
+    );
+    return isset($a_trangthai[$status]) ? $a_trangthai[$status] : '';
+}
+
 ?>

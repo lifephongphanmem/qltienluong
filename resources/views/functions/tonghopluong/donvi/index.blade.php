@@ -54,11 +54,11 @@
                         <?php $i=1;?>
                         @if(isset($model))
                             @foreach($model as $value)
-                                <tr>
+                                <tr class="{{getTextStatus($value['trangthai'])}}">
                                     <td class="text-center">{{$i++}}</td>
                                     <td class="text-center">{{$value['thang'].'/'.$nam}}</td>
                                     <td>{{$value['noidung']}}</td>
-                                    <td class="text-center">{{$a_trangthai[$value['trangthai']]}}</td>
+                                    <td class="text-center bold">{{$a_trangthai[$value['trangthai']]}}</td>
                                     <td>
                                         @if ($value['bangluong'] != NULL)
                                             @if ($value['mathdv'] != NULL)
@@ -70,13 +70,13 @@
                                                         <a href="{{url($furl.'detail_diaban/ma_so='.$value['mathdv'])}}" class="btn btn-default btn-sm">
                                                             <i class="fa fa-list-alt"></i>&nbsp; Số liệu địa bàn</a>
                                                     @endif
-                                                    <button type="button" class="btn btn-success btn-sm" onclick="confirmChuyen('{{$value['mathdv']}}')" data-target="#chuyen-modal" data-toggle="modal"><i class="fa fa-share-square-o"></i>&nbsp;
+                                                    <button type="button" class="btn btn-default btn-sm" onclick="confirmChuyen('{{$value['mathdv']}}')" data-target="#chuyen-modal" data-toggle="modal"><i class="fa fa-share-square-o"></i>&nbsp;
                                                         Gửi dữ liệu</button>
                                                 @else
-                                                    <a href="{{url($furl.'printf_data/ma_so='.$value['mathdv'])}}" class="btn btn-success btn-sm" TARGET="_blank">
+                                                    <a href="{{url($furl.'printf_data/ma_so='.$value['mathdv'])}}" class="btn btn-default btn-sm" TARGET="_blank">
                                                         <i class="fa fa-print"></i>&nbsp; Số liệu tổng hợp</a>
                                                     @if($value['maphanloai'] == 'KVXP')
-                                                        <a href="{{url($furl.'printf_data_diaban/ma_so='.$value['mathdv'])}}" class="btn btn-success btn-sm" TARGET="_blank">
+                                                        <a href="{{url($furl.'printf_data_diaban/ma_so='.$value['mathdv'])}}" class="btn btn-default btn-sm" TARGET="_blank">
                                                             <i class="fa fa-print"></i>&nbsp; Số liệu địa bàn</a>
                                                     @endif
                                                 @endif

@@ -111,8 +111,8 @@
                                             <a href="" class="btn btn-default btn-sm">
                                                 <i class="fa icon-share-alt"></i>&nbsp; Trả lại dữ liệu</a>
                                         @else
-                                            <a href="{{url('/chuc_nang/bang_luong/in/maso='.$value->mathdv)}}" class="btn btn-danger btn-xs mbs" TARGET="_blank">
-                                                <i class="fa fa-warning"></i>&nbsp; Đơn vị chưa tổng hợp dữ liệu</a>
+                                            <button class="btn btn-danger btn-xs mbs">
+                                                <i class="fa fa-warning"></i>&nbsp; Đơn vị chưa tổng hợp dữ liệu</button>
                                         @endif
                                     </td>
                                 </tr>

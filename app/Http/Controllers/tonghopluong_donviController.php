@@ -29,6 +29,8 @@ class tonghopluong_donviController extends Controller
 {
     function index(Request $requests){
         if (Session::has('admin')) {
+
+            //text-danger; text-warning; text-success
             $a_data=array(array('thang'=>'01','mathdv'=>null),
                 array('thang'=>'02','mathdv'=>null),
                 array('thang'=>'03','mathdv'=>null),

@@ -54,11 +54,11 @@
                         <?php $i=1;?>
                         @if(isset($model))
                             @foreach($model as $value)
-                                <tr>
+                                <tr class="{{getTextStatus($value['trangthai'])}}">
                                     <td class="text-center">{{$i++}}</td>
                                     <td class="text-center">{{$value['thang'].'/'.$nam}}</td>
                                     <td>{{$value['noidung']}}</td>
-                                    <td class="text-center">{{$a_trangthai[$value['trangthai']]}}</td>
+                                    <td class="text-center bold">{{$a_trangthai[$value['trangthai']]}}</td>
                                     <td>
                                         @if ($value['mathdv'] != NULL)
                                             @if($value['trangthai'] !='DAGUI')
@@ -66,12 +66,12 @@
                                                     <i class="fa fa-list-alt"></i>&nbsp; Số liệu tổng hợp</a>
                                                 <a href="{{url($furl.'detail_diaban/ma_so='.$value['mathdv'])}}" class="btn btn-default btn-sm">
                                                     <i class="fa fa-list-alt"></i>&nbsp; Số liệu địa bàn</a>
-                                                <button type="button" class="btn btn-success btn-sm" onclick="confirmChuyen('{{$value['mathdv']}}')" data-target="#chuyen-modal" data-toggle="modal"><i class="fa fa-share-square-o"></i>&nbsp;
+                                                <button type="button" class="btn btn-default btn-sm" onclick="confirmChuyen('{{$value['mathdv']}}')" data-target="#chuyen-modal" data-toggle="modal"><i class="fa fa-share-square-o"></i>&nbsp;
                                                     Gửi dữ liệu</button>
                                             @else
-                                                <a href="{{url($furl.'printf_data/ma_so='.$value['mathdv'])}}" class="btn btn-success btn-sm" TARGET="_blank">
+                                                <a href="{{url($furl.'printf_data/ma_so='.$value['mathdv'])}}" class="btn btn-default btn-sm" TARGET="_blank">
                                                     <i class="fa fa-print"></i>&nbsp; Số liệu tổng hợp</a>
-                                                <a href="{{url($furl.'printf_data_diaban/ma_so='.$value['mathdv'])}}" class="btn btn-success btn-sm" TARGET="_blank">
+                                                <a href="{{url($furl.'printf_data_diaban/ma_so='.$value['mathdv'])}}" class="btn btn-default btn-sm" TARGET="_blank">
                                                     <i class="fa fa-print"></i>&nbsp; Số liệu địa bàn</a>
                                                 <!-- trường hợp phân loại đơn vị chủ quản # đơn vị cấp dưới
                                                     @if($value['maphanloai'] == 'KVXP')
@@ -82,15 +82,15 @@
                                             @endif
                                         @else
                                             @if($value['trangthai'] == 'CHUADAYDU')
-                                                <button type="button" class="btn btn-warning btn-sm" onclick="confirmTonghop('{{url($furl.'tonghop_chuadaydu?thang='.$value['thang'].'&nam='.$nam)}}')" data-target="#create-modal" data-toggle="modal"><i class="fa fa-stack-overflow"></i>&nbsp;
+                                                <button type="button" class="btn btn-default btn-sm" onclick="confirmTonghop('{{url($furl.'tonghop_chuadaydu?thang='.$value['thang'].'&nam='.$nam)}}')" data-target="#create-modal" data-toggle="modal"><i class="fa fa-stack-overflow"></i>&nbsp;
                                                     Tổng hợp dữ liệu</button>
-                                                <a href="{{url('/chuc_nang/xem_du_lieu/index?thang='.$value['thang'].'&nam='.$nam.'&trangthai=CHOGUI')}}" class="btn btn-warning btn-sm">
+                                                <a href="{{url('/chuc_nang/xem_du_lieu/index?thang='.$value['thang'].'&nam='.$nam.'&trangthai=CHOGUI')}}" class="btn btn-default btn-sm">
                                                     <i class="fa fa-list-alt"></i>&nbsp; Đơn vị chưa gửi dữ liệu</a>
                                             @elseif($value['trangthai'] == 'CHUATAO')
                                                 <a href="{{url($furl.'tonghop?thang='.$value['thang'].'&nam='.$nam)}}" class="btn btn-default btn-sm">
                                                     <i class="fa fa-stack-overflow"></i>&nbsp; Tổng hợp dữ liệu</a>
                                             @else
-                                                    <a href="" class="btn btn-danger btn-sm">
+                                                    <a href="{{url('/chuc_nang/xem_du_lieu/index?thang='.$value['thang'].'&nam='.$nam.'&trangthai=ALL')}}" class="btn btn-default btn-sm">
                                                         <i class="fa fa-stack-overflow"></i>&nbsp; Chưa có dữ liệu</a>
                                             @endif
                                         @endif

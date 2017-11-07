@@ -22,7 +22,7 @@
                 <div class="row">
                         <div class="col-md-12">
                             <!-- BEGIN PORTLET-->
-                            <div class="portlet box blue-steel">
+                            <div class="portlet box blue">
                                 <div class="portlet-title">
                                     <div class="caption">
                                         Thông tin chung
@@ -78,7 +78,7 @@
                 <div class="row">
                     <div class="col-md-12">
                         <!-- BEGIN PORTLET-->
-                        <div class="portlet box blue-steel">
+                        <div class="portlet box blue">
                             <div class="portlet-title">
                                 <div class="caption">
                                     Thông tin các khoản phụ cấp
@@ -232,7 +232,7 @@
                 <div class="row">
                     <div class="col-md-12">
                         <!-- BEGIN PORTLET-->
-                        <div class="portlet box blue-steel">
+                        <div class="portlet box blue">
                             <div class="portlet-title">
                                 <div class="caption">
                                     Thông tin các khoản nộp theo lương

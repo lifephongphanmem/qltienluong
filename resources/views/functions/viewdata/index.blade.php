@@ -41,36 +41,11 @@
                         <div class="form-group">
                             <label class="control-label col-md-offset-1 col-md-1" style="text-align: right">Tháng </label>
                             <div class="col-md-2">
-                                {!! Form::select(
-                                'thang',
-                                array(
-                                '01' => '01',
-                                '02' => '02',
-                                '03' => '03',
-                                '04' => '04',
-                                '05' => '05',
-                                '06' => '06',
-                                '07' => '07',
-                                '08' => '08',
-                                '09' => '09',
-                                '10' => '10',
-                                '11' => '11',
-                                '12' => '12',
-                                ),$thang,
-                                array('id' => 'thang', 'class' => 'form-control'))
-                                !!}
+                                {!! Form::select('thang',getThang(),$thang,array('id' => 'thang', 'class' => 'form-control'))!!}
                             </div>
                             <label class="control-label col-md-1" style="text-align: right">Năm </label>
                             <div class="col-md-2">
-                                {!! Form::select(
-                                'nam',
-                                array(
-                                '2015' => '2015',
-                                '2016' => '2016',
-                                '2017' => '2017'
-                                ),$nam,
-                                array('id' => 'nam', 'class' => 'form-control'))
-                                !!}
+                                {!! Form::select('nam',getNam(),$nam, array('id' => 'nam', 'class' => 'form-control'))!!}
                             </div>
                             <div class="col-md-5">
                                 <label class="control-label col-md-3" style="text-align: right">Trạng thái </label>
@@ -110,8 +85,8 @@
                                             <a href="" class="btn btn-success btn-sm" TARGET="_blank">
                                                 <i class="fa icon-share-alt"></i>&nbsp; Trả lại dữ liệu</a>
                                         @else
-                                            <a href="{{url('/chuc_nang/bang_luong/in/maso='.$value->mathdv)}}" class="btn btn-danger btn-xs mbs" TARGET="_blank">
-                                                <i class="fa fa-warning"></i>&nbsp; Đơn vị chưa tổng hợp dữ liệu</a>
+                                            <button class="btn btn-danger btn-xs mbs">
+                                                <i class="fa fa-warning"></i>&nbsp; Đơn vị chưa tổng hợp dữ liệu</button>
                                         @endif
                                     </td>
                                 </tr>
