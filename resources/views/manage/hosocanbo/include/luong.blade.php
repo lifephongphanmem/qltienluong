@@ -253,6 +253,13 @@
 
                             <div class="col-md-2">
                                 <div class="form-group">
+                                    <label class="control-label">Cấp ủy viên </label>
+                                    {!!Form::text('pcvk', null, array('id' => 'pcvk','class' => 'form-control', 'data-mask'=>'fdecimal'))!!}
+                                </div>
+                            </div>
+
+                            <div class="col-md-2">
+                                <div class="form-group">
                                     <label class="control-label">B.dưỡng HĐCU </label>
                                     {!!Form::text('pcbdhdcu', null, array('id' => 'pcbdhdcu','class' => 'form-control', 'data-mask'=>'fdecimal'))!!}
                                 </div>

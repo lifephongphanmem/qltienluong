@@ -39,22 +39,13 @@
                 <div class="portlet-body">
                     <table id="user" class="table table-bordered table-striped">
                         <tbody>
-                        <tr>
-                            <td style="width:15%">
-                                <b>Mã cơ quan chủ quản</b>
-                            </td>
-                            <td style="width:35%">
-                                <span class="text-muted">{{$model->macqcq}}
-                                </span>
-                            </td>
-                        </tr>
+
                         <tr>
                             <td style="width:15%">
                                 <b>Mã quan hệ ngân sách</b>
                             </td>
                             <td style="width:35%">
-                                <span class="text-muted">{{$model->madv}}
-                                </span>
+                                <span class="text-muted">{{$model->madv}}</span>
                             </td>
                         </tr>
                         <tr>
@@ -62,8 +53,15 @@
                                 <b>Tên đơn vị</b>
                             </td>
                             <td style="width:35%">
-                                <span class="text-muted">{{$model->tendv}}
-                                </span>
+                                <span class="text-muted">{{$model->tendv}}</span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="width:15%">
+                                <b>Đơn vị tổng hợp dữ liệu</b>
+                            </td>
+                            <td style="width:35%">
+                                <span class="text-muted">{{$model->donviquanly}}</span>
                             </td>
                         </tr>
                         <tr>
@@ -71,26 +69,51 @@
                                 <b>Cấp dự toán</b>
                             </td>
                             <td style="width:35%">
-                                <span class="text-muted">{{$model->capdutoan}}
-                                </span>
+                                <span class="text-muted">{{$model->capdutoan}}</span>
                             </td>
                         </tr>
+
+                        <tr>
+                            <td style="width:15%">
+                                <b>Phân loại mức độ tự chủ tài chính</b>
+                            </td>
+                            <td style="width:35%">
+                                <span class="text-muted">{{$model->phanloainguon}}</span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="width:15%">
+                                <b>Lĩnh vực hoạt động</b>
+                            </td>
+                            <td style="width:35%">
+                                <span class="text-muted">{{$model->lvhd}}</span>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td style="width:15%">
+                                <b>Phân loại xã</b>
+                            </td>
+                            <td style="width:35%">
+                                <span class="text-muted">{{$model->phanloaixa}}</span>
+                            </td>
+                        </tr>
+
                         <tr>
                             <td style="width:15%">
                                 <b>Địa chỉ</b>
                             </td>
                             <td style="width:35%">
-                                <span class="text-muted">{{$model->diachi}}
-                                </span>
+                                <span class="text-muted">{{$model->diachi}}</span>
                             </td>
                         </tr>
+
                         <tr>
                             <td style="width:15%">
                                 <b>Chức danh thủ trưởng</b>
                             </td>
                             <td style="width:35%">
-                                <span class="text-muted">{{$model->cdlanhdao}}
-                                </span>
+                                <span class="text-muted">{{$model->cdlanhdao}}</span>
                             </td>
                         </tr>
 
@@ -99,8 +122,7 @@
                                 <b>Thủ trưởng đơn vị</b>
                             </td>
                             <td style="width:35%">
-                                <span class="text-muted">{{$model->lanhdao}}
-                                </span>
+                                <span class="text-muted">{{$model->lanhdao}}</span>
                             </td>
                         </tr>
 
@@ -109,21 +131,9 @@
                                 <b>Người lập biểu</b>
                             </td>
                             <td style="width:35%">
-                                <span class="text-muted">{{$model->nguoilapbieu}}
-                                </span>
+                                <span class="text-muted">{{$model->nguoilapbieu}}</span>
                             </td>
                         </tr>
-                        <tr>
-                            <td style="width:15%">
-                                <b>Khối phòng ban</b>
-                            </td>
-                            <td style="width:35%">
-                                <span class="text-muted">{{$model->khoiphongban}}
-                                </span>
-                            </td>
-                        </tr>
-
-
                         </tbody>
                     </table>
                 </div>

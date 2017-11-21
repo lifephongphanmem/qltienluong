@@ -29,6 +29,7 @@ class CreateDmdonviTable extends Migration
             $table->string('capdonvi',50)->nullable();//cấp dư toán 1,2,3,4
             $table->string('maphanloai',50)->nullable();//xác định đơn vị thuộc khối hcsn / xp
             $table->string('phanloaixa',50)->nullable();//đơn vị cấp X, H, T
+            $table->string('phanloainguon')->nullable();
             $table->string('linhvuchoatdong')->nullable();//lĩnh vực hoạt động
             $table->timestamps();
         });

@@ -24,6 +24,7 @@ class dmdonvi extends Model
             'madvbc',
             'capdonvi',
             'phanloaixa',
+            'phanloainguon',
             'linhvuchoatdong'
         ];
 }

@@ -68,66 +68,6 @@
 
                             <tr>
                                 <td style="width:30%">
-                                    <b>BHXH người lao động đóng (%)</b>
-                                </td>
-                                <td style="width:20%">
-                                    <span class="text-muted">{{$model->bhxh}}</span>
-                                </td>
-                                <td style="width:30%">
-                                    <b>BHXH đơn vị đóng (%)</b>
-                                </td>
-                                <td style="width:20%">
-                                    <span class="text-muted">{{$model->bhxh_dv}} </span>
-                                </td>
-                            </tr>
-
-                            <tr>
-                                <td style="width:30%">
-                                    <b>BHYT người lao động đóng (%)</b>
-                                </td>
-                                <td style="width:20%">
-                                    <span class="text-muted">{{$model->bhyt}}</span>
-                                </td>
-                                <td style="width:30%">
-                                    <b>BHYT đơn vị đóng (%)</b>
-                                </td>
-                                <td style="width:20%">
-                                    <span class="text-muted">{{$model->bhyt_dv}} </span>
-                                </td>
-                            </tr>
-
-                            <tr>
-                                <td style="width:30%">
-                                    <b>BHTN người lao động đóng (%)</b>
-                                </td>
-                                <td style="width:20%">
-                                    <span class="text-muted">{{$model->bhtn}}</span>
-                                </td>
-                                <td style="width:30%">
-                                    <b>BHTN đơn vị đóng (%)</b>
-                                </td>
-                                <td style="width:20%">
-                                    <span class="text-muted">{{$model->bhtn_dv}} </span>
-                                </td>
-                            </tr>
-
-                            <tr>
-                                <td style="width:30%">
-                                    <b>KPCĐ người lao động đóng (%)</b>
-                                </td>
-                                <td style="width:20%">
-                                    <span class="text-muted">{{$model->kpcd}}</span>
-                                </td>
-                                <td style="width:30%">
-                                    <b>KPCĐ đơn vị đóng (%)</b>
-                                </td>
-                                <td style="width:20%">
-                                    <span class="text-muted">{{$model->kpcd_dv}} </span>
-                                </td>
-                            </tr>
-
-                            <tr>
-                                <td style="width:30%">
                                     <b>Lương cơ bản</b>
                                 </td>
                                 <td style="width:20%">

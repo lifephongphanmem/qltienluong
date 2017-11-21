@@ -129,30 +129,7 @@ class tonghopluong_donviController extends Controller
             $model_data = a_unique($model_data);
             //
             //Tính toán dữ liệu
-            $a_col = array('heso','vuotkhung','pcct',
-                'pckct',
-                'pck',
-                'pccv',
-                'pckv',
-                'pcth',
-                'pcdd',
-                'pcdh',
-                'pcld',
-                'pcdbqh',
-                'pcudn',
-                'pctn',
-                'pctnn',
-                'pcdbn',
-                'pcvk',
-                'pckn',
-                'pcdang',
-                'pccovu',
-                'pclt',
-                'pcd',
-                'pctr',
-                'pctnvk',
-                'pcbdhdcu',
-                'pcthni');
+            $a_col = getColTongHop();
 
             for($i=0;$i<count($model_data);$i++){
                 $luongct = $model_bangluong_ct->where('manguonkp',$model_data[$i]['manguonkp'])

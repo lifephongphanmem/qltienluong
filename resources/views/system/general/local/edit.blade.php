@@ -99,17 +99,24 @@
                             <div class="row">
                                 <div class="col-md-6">
                                     <div class="form-group">
-                                        <label class="control-label">Đơn vị chủ quản<span class="require">*</span></label>
-                                        {!!Form::select('macqcq', $model_donvi, 'NULL', array('id' => 'macqcq','class' => 'form-control'))!!}
+                                        <label class="control-label">Phân loại mức độ tự chủ tài chính</label>
+                                        {!!Form::select('phanloainguon', getPhanLoaiNguon(), 'NULL', array('id' => 'phanloainguon','class' => 'form-control'))!!}
                                     </div>
                                 </div>
-
-
 
                                 <div class="col-md-6">
                                     <div class="form-group">
                                         <label class="control-label">Phân loại đơn vị</label>
                                         {!!Form::select('maphanloai', $model_phanloai, null, array('id' => 'maphanloai','class' => 'form-control'))!!}
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <label class="control-label">Đơn vị tổng hợp dữ liệu<span class="require">*</span></label>
+                                        {!!Form::select('macqcq', $model_donvi, null, array('id' => 'macqcq','class' => 'form-control'))!!}
                                     </div>
                                 </div>
                             </div>
@@ -174,6 +181,7 @@
                 });
 
             });
+
             $("#linhvuchoatdong").select2();
         });
 

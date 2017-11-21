@@ -186,7 +186,7 @@ class hosocanboController extends Controller
             $insert['pccovu'] = chkDbl($insert['pccovu']);
             $insert['pctn'] = chkDbl($insert['pctn']);
             $insert['pctnn'] = chkDbl($insert['pctnn']);
-            $insert['pcvk'] = chkDbl($insert['pcvk']);
+            $insert['pcvk'] = chkDbl($insert['pcvk']); //lưu thông tin pc đảng ủy viên
             $insert['pcdbqh'] = chkDbl($insert['pcdbqh']);
             $insert['pcth'] = chkDbl($insert['pcth']);
             $insert['pcudn'] = chkDbl($insert['pcudn']);
@@ -281,7 +281,7 @@ class hosocanboController extends Controller
             $insert['pccovu'] = chkDbl($insert['pccovu']);
             $insert['pctn'] = chkDbl($insert['pctn']);
             $insert['pctnn'] = chkDbl($insert['pctnn']);
-            $insert['pcvk'] = chkDbl($insert['pcvk']);
+            $insert['pcvk'] = chkDbl($insert['pcvk']);//lưu thông tin pc đảng ủy viên
             $insert['pcdbqh'] = chkDbl($insert['pcdbqh']);
             $insert['pcth'] = chkDbl($insert['pcth']);
             $insert['pcudn'] = chkDbl($insert['pcudn']);

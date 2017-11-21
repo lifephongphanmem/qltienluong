@@ -123,7 +123,7 @@
         </div>
         <!-- /.modal-dialog -->
     </div>
-
+    </div>
 
     <script>
         function confirmChuyen(mathdv) {

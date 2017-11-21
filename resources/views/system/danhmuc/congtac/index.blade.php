@@ -35,7 +35,9 @@
                         <b>DANH MỤC NHÓM PHÂN LOẠI CÔNG TÁC</b>
                     </div>
                     <div class="actions">
-                        <button type="button" id="_btnaddPB" class="btn btn-success btn-xs" onclick="add()"><i class="fa fa-plus"></i>&nbsp;Thêm mới phân loại</button>
+                        @if(session('admin')->level == 'SA')
+                            <button type="button" id="_btnaddPB" class="btn btn-success btn-xs" onclick="add()"><i class="fa fa-plus"></i>&nbsp;Thêm mới phân loại</button>
+                        @endif
                     </div>
                 </div>
                 <div class="portlet-body form-horizontal">
@@ -44,7 +46,6 @@
                             <tr>
                                 <th class="text-center" style="width: 10%">STT</th>
                                 <th class="text-center">Phân loại công tác</th>
-                                <th class="text-center">Loại hình đơn vị</th>
                                 <th class="text-center">Ghi chú</th>
                                 <th class="text-center">Thao tác</th>
                             </tr>
@@ -55,13 +56,15 @@
                                     <tr>
                                         <td class="text-center">{{$key+1}}</td>
                                         <td>{{$value->tencongtac}}</td>
-                                        <td>{{$value->maphanloai}}</td>
                                         <td>{{$value->ghichu}}</td>
                                         <td>
+                                            @if(session('admin')->level == 'SA')
+                                                <button type="button" onclick="editCV('{{$value->macongtac}}')" class="btn btn-default btn-xs">
+                                                    <i class="fa fa-edit"></i>&nbsp; Chỉnh sửa</button>
+                                            @endif
                                             <a href="{{url($furl.'ma_so='.$value->macongtac)}}" class="btn btn-default btn-xs">
                                                 <i class="fa fa-edit"></i>&nbsp; Chi tiết</a>
-                                            <button type="button" onclick="editCV('{{$value->macongtac}}')" class="btn btn-default btn-xs">
-                                                <i class="fa fa-edit"></i>&nbsp; Chỉnh sửa</button>
+
                                             <!--
                                             <button type="button" onclick="cfDel('/danh_muc/cong_tac/del/{{$value->id}}')" class="btn btn-default btn-xs" data-target="#delete-modal-confirm" data-toggle="modal">
                                                 <i class="fa fa-trash-o"></i>&nbsp; Xóa</button>
@@ -86,15 +89,107 @@
                     <h4 id="modal-header-primary-label" class="modal-title">Thông tin phân loại công tác</h4>
                 </div>
                 <div class="modal-body">
-                    <label class="form-control-label">Phân loại công tác<span class="require">*</span></label>
-                    {!!Form::text('tencongtac', null, array('id' => 'tencongtac','class' => 'form-control','required'=>'required','autofocus'=>'true'))!!}
+                    <div class="row">
+                        <div class="col-md-12" style="margin-bottom: 5px;">
+                            <label class="form-control-label">Phân loại công tác<span class="require">*</span></label>
+                            {!!Form::text('tencongtac', null, array('id' => 'tencongtac','class' => 'form-control','required'=>'required','autofocus'=>'true'))!!}
+                        </div>
 
-                    <label class="form-control-label">Đơn vị áp dụng</label>
-                    {!!Form::text('maphanloai', null, array('id' => 'maphanloai','class' => 'form-control'))!!}
+                        <div class="col-md-12">
+                            <!-- BEGIN PORTLET-->
+                            <div class="portlet box blue" style="margin-bottom: 5px;">
+                                <div class="portlet-title">
+                                    <div class="caption">
+                                        Phần trăm bảo hiểm cá nhân nộp
+                                    </div>
+                                </div>
 
-                    <label class="form-control-label">Ghi chú</label>
-                    {!!Form::textarea('ghichu', null, array('id' => 'ghichu','class' => 'form-control','rows'=>'3'))!!}
+                                <div class="portlet-body" style="display: block;">
+                                    <div class="row">
+                                        <div class="col-md-3">
+                                            <div class="form-group">
+                                                <label class="control-label">BH xã hội </label>
+                                                {!!Form::text('bhxh', 0, array('id' => 'bhxh','class' => 'form-control', 'data-mask'=>'fdecimal'))!!}
+                                            </div>
+                                        </div>
 
+                                        <div class="col-md-3">
+                                            <div class="form-group">
+                                                <label class="control-label">BH y tế </label>
+                                                {!!Form::text('bhyt', 0, array('id' => 'bhyt','class' => 'form-control', 'data-mask'=>'fdecimal'))!!}
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-3">
+                                            <div class="form-group">
+                                                <label class="control-label">BH thất nghiệp </label>
+                                                {!!Form::text('bhtn', 0, array('id' => 'bhtn','class' => 'form-control', 'data-mask'=>'fdecimal'))!!}
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-3">
+                                            <div class="form-group">
+                                                <label class="control-label">KP công đoàn </label>
+                                                {!!Form::text('kpcd', 0, array('id' => 'kpcd','class' => 'form-control', 'data-mask'=>'fdecimal'))!!}
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                            <!-- END PORTLET-->
+                        </div>
+
+                        <div class="col-md-12">
+                            <!-- BEGIN PORTLET-->
+                            <div class="portlet box blue" style="margin-bottom: 5px;">
+                                <div class="portlet-title">
+                                    <div class="caption">
+                                        Phần trăm bảo hiểm đơn vị nộp
+                                    </div>
+                                </div>
+
+                                <div class="portlet-body" style="display: block;">
+                                    <div class="row">
+                                        <div class="col-md-3">
+                                            <div class="form-group">
+                                                <label class="control-label">BH xã hội </label>
+                                                {!!Form::text('bhxh_dv', 0, array('id' => 'bhxh_dv','class' => 'form-control', 'data-mask'=>'fdecimal'))!!}
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-3">
+                                            <div class="form-group">
+                                                <label class="control-label">BH y tế </label>
+                                                {!!Form::text('bhyt_dv', 0, array('id' => 'bhyt_dv','class' => 'form-control', 'data-mask'=>'fdecimal'))!!}
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-3">
+                                            <div class="form-group">
+                                                <label class="control-label">BH thất nghiệp </label>
+                                                {!!Form::text('bhtn_dv', 0, array('id' => 'bhtn_dv','class' => 'form-control', 'data-mask'=>'fdecimal'))!!}
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-3">
+                                            <div class="form-group">
+                                                <label class="control-label">KP công đoàn </label>
+                                                {!!Form::text('kpcd_dv', 0, array('id' => 'kpcd_dv','class' => 'form-control', 'data-mask'=>'fdecimal'))!!}
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                            <!-- END PORTLET-->
+                        </div>
+
+                        <div class="col-md-12">
+                            <label class="form-control-label">Ghi chú</label>
+                            {!!Form::textarea('ghichu', null, array('id' => 'ghichu','class' => 'form-control','rows'=>'3'))!!}
+                        </div>
+                    </div>
                     <input type="hidden" id="id" name="id"/>
                     <input type="hidden" id="macongtac" name="macongtac"/>
                 </div>
@@ -130,6 +225,15 @@
                     $('#tencongtac').val(data.tencongtac);
                     $('#macongtac').val(data.macongtac);
                     $('#ghichu').val(data.ghichu);
+                    $('#bhxh').val(data.bhxh);
+                    $('#bhyt').val(data.bhyt);
+                    $('#kpcd').val(data.kpcd);
+                    $('#bhtn').val(data.bhtn);
+                    $('#bhxh_dv').val(data.bhxh_dv);
+                    $('#bhyt_dv').val(data.bhyt_dv);
+                    $('#kpcd_dv').val(data.kpcd_dv);
+                    $('#bhtn_dv').val(data.bhtn_dv);
+
                     $('#id').val(data.id);
                 },
                 error: function(message){
@@ -165,6 +269,14 @@
                             maphanloai: maphanloai,
                             macongtac: macongtac,
                             tencongtac: tencongtac,
+                            bhxh: $('#bhxh').val(),
+                            bhyt: $('#bhyt').val(),
+                            kpcd: $('#kpcd').val(),
+                            bhtn: $('#bhtn').val(),
+                            bhxh_dv: $('#bhxh_dv').val(),
+                            bhyt_dv: $('#bhyt_dv').val(),
+                            kpcd_dv: $('#kpcd_dv').val(),
+                            bhtn_dv: $('#bhtn_dv').val(),
                             ghichu: ghichu
                         },
                         dataType: 'JSON',
@@ -186,6 +298,14 @@
                             macongtac: macongtac,
                             maphanloai: maphanloai,
                             tencongtac: tencongtac,
+                            bhxh: $('#bhxh').val(),
+                            bhyt: $('#bhyt').val(),
+                            kpcd: $('#kpcd').val(),
+                            bhtn: $('#bhtn').val(),
+                            bhxh_dv: $('#bhxh_dv').val(),
+                            bhyt_dv: $('#bhyt_dv').val(),
+                            kpcd_dv: $('#kpcd_dv').val(),
+                            bhtn_dv: $('#bhtn_dv').val(),
                             ghichu: ghichu
                         },
                         dataType: 'JSON',

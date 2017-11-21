@@ -12,6 +12,14 @@ class dmphanloaicongtac extends Model
         'maphanloai',
         'macongtac',
         'tencongtac',
+        'bhxh',
+        'bhyt',
+        'bhtn',
+        'kpcd',
+        'bhxh_dv',
+        'bhyt_dv',
+        'bhtn_dv',
+        'kpcd_dv',
         'sapxep',
         'ghichu'
     ];

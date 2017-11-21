@@ -249,6 +249,30 @@ Route::group(['prefix'=>'nghiep_vu'],function(){
 
 });
 
+Route::group(['prefix'=>'du_toan'],function(){
+    Route::group(['prefix'=>'luong'],function(){
+
+    });
+
+    Route::group(['prefix'=>'nguon_kinh_phi'],function(){
+        Route::get('danh_sach','nguonkinhphiController@index');
+        Route::post('create','nguonkinhphiController@create');
+        Route::get('get','nguonkinhphiController@getinfo');
+        Route::get('ma_so={masodv}','nguonkinhphiController@edit');
+        Route::post('update','nguonkinhphiController@update');
+        Route::post('senddata','nguonkinhphiController@senddata'); //gửi dữ liệu
+        Route::get('ma_so={masodv}/in','nguonkinhphiController@printf');
+
+        Route::get('del/{id}','dmdiabandbkkController@destroy');
+        Route::post('store','dmdiabandbkkController@store');//insert + update
+
+
+        Route::get('ma_so={madiaban}','dmdiabandbkkController@detail');
+        Route::get('del_detail/{id}','dmdiabandbkkController@destroy_detail');
+        Route::get('add_canbo','dmdiabandbkkController@store_detail');
+    });
+});
+
 Route::group(['prefix'=>'chuc_nang'],function(){
     Route::group(['prefix'=>'bang_luong'],function(){
         Route::get('danh_sach','bangluongController@index');
@@ -340,6 +364,12 @@ Route::group(['prefix'=>'chuc_nang'],function(){
     Route::group(['prefix'=>'xem_du_lieu'],function(){
         Route::get('index','xemdulieucapduoiController@donvi_luong');
         Route::get('huyen','xemdulieucapduoiController@index_huyen');
+    });
+
+    Route::group(['prefix'=>'tong_hop_nguon'],function(){
+        Route::get('index','tonghopnguonController@index');
+        Route::post('tralai','tonghopnguonController@tralai');
+        Route::get('ma_so={sohieu}/in_khoi','tonghopnguonController@printf_khoi');
     });
 
     Route::group(['prefix'=>'buoc_thoi_viec'],function(){

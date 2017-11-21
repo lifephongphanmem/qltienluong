@@ -113,10 +113,6 @@ function canDV($perm=null,$module = null, $action = null){
     }
 }
 
-function getGeneralConfigs() {
-    return \App\GeneralConfigs::all()->first()->toArray();
-}
-
 function getDouble($str)
 {
     $sKQ = 0;

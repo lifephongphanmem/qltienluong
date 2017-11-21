@@ -53,8 +53,17 @@ class dmdonviController extends Controller
         if (Session::has('admin')) {
             $model=dmdonvi::where('madv',session('admin')->madv)->first();
             $model_capdv = getCapDonVi();
+            $linhvuchoatdong = getLinhVucHoatDong(false);
+            $phanloainguon = getPhanLoaiNguon(false);
+            $phanloaixa = getPhanLoaiXa(false);
             $model->capdutoan = isset($model_capdv[$model->capdonvi])?$model_capdv[$model->capdonvi]:'';
-
+            $model->phanloainguon = isset($phanloainguon[$model->phanloainguon])?$phanloainguon[$model->phanloainguon]:'';
+            $model->phanloaixa = isset($phanloaixa[$model->phanloaixa])?$phanloaixa[$model->phanloaixa]:'';
+            $model->donviquanly = getTenDV($model->macqcq);
+            $a_lv = explode(';',$model->linhvuchoatdong);
+            foreach($a_lv as $lv){
+                $model->lvhd .= ($linhvuchoatdong[$model->linhvuchoatdong].';');
+            }
             return view('system.general.local.index')
                 ->with('model',$model)
                 ->with('url','/he_thong/don_vi/')
@@ -95,9 +104,9 @@ class dmdonviController extends Controller
 
     function update_local(Request $request, $madv){
         if (Session::has('admin')) {
+
             if(session('admin')->level=='SA'|| session('admin')->madv == $madv){
                 $inputs=$request->all();
-
                 $model=dmdonvi::where('madv',$madv)->first();
                 $model->update($inputs);
                 return redirect('/he_thong/don_vi/don_vi');

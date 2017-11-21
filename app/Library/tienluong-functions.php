@@ -183,11 +183,16 @@ function getLuongNgachBac_CBCT($msngbac,$bac=1){
     return $heso.';'.$vuotkhung;
 }
 
-function getPhanLoaiXa(){
-    return array(''=>'Chọn phân loại xã',
+function getPhanLoaiXa($val_null = true){
+    $model = array(
         'XL1'=>'Xã loại 1',
         'XL2'=>'Xã loại 2',
-        'XL3'=>'Xã loại 3');
+        'XL3'=>'Xã loại 3'
+    );
+    if($val_null){
+        return array_merge( array(''=>'--Chọn phân loại xã--'),$model);
+    }
+    return $model;
 }
 
 function getCapDonVi(){
@@ -198,15 +203,23 @@ function getCapDonVi(){
 }
 
 function getPhanLoaiNguon(){
-    return array('NGANSACH'=>'Nguồn ngân sách',
-        'CHITXDT'=>'Nguồn đơn vị tự bảo đảm chi thường xuyên và chi đầu tư',
-        'CTX'=>'Nguồn đơn vị tự bảo đảm chi thường xuyên');
+    //Theo Nghị định số 16/2015/NĐ-CP
+    return array('NGANSACH'=>'Nguồn kinh phí do Nhà nước bảo đảm chi thường xuyên',
+        'CHITXDT'=>'Nguồn kinh phí do đơn vị tự bảo đảm chi thường xuyên và chi đầu tư',
+        'CTX'=>'Nguồn kinh phí do đơn vị tự bảo đảm chi thường xuyên',
+        'CTXMP'=>'Nguồn kinh phí do đơn vị tự bảo đảm một phần chi thường xuyên');
 }
 
-function getDiaBan(){
-    return array(''=>'-- Chọn phân loại địa bàn --',
-        'DBKK'=>'Khu vực KTXH ĐBKK','BGHD'=>'Khu vực biên giới, hải đảo',
-        'DBTD'=>'Khu vực trọng điểm, phức tạp về an ninh trật tự');
+function getDiaBan($val_null = true){
+    $model = array(
+        'DBKK'=>'Khu vực KTXH ĐBKK',
+        'BGHD'=>'Khu vực biên giới, hải đảo',
+        'DBTD'=>'Khu vực trọng điểm, phức tạp về an ninh trật tự'
+    );
+    if($val_null){
+        return array_merge( array(''=>'--Chọn phân loại địa bàn--'),$model);
+    }
+    return $model;
 }
 
 function getColTongHop(){
@@ -235,6 +248,7 @@ function getColTongHop(){
         'pcbdhdcu',
         'pcthni');;
 }
+
 function getThang(){
     return array('01' => '01','02' => '02','03' => '03',
         '04' => '04','05' => '05','06' => '06',
@@ -246,22 +260,45 @@ function getNam(){
     return array('2016' => '2016','2017' => '2017','2018' => '2018');
 }
 
-function getLinhVucHoatDong(){
+function getGeneralConfigs() {
+    return \App\GeneralConfigs::all()->first()->toArray();
+}
+
+
+function getLinhVucHoatDong($val_null = true){
     $model = array_column(App\dmkhoipb::all()->toArray(),'tenkhoipb','makhoipb');
-    $a_kq = array(''=>'--Chọn lĩnh vực hoạt động--');
-    return array_merge($a_kq,$model);
+    if($val_null){
+        return array_merge( array(''=>'--Chọn lĩnh vực hoạt động--'),$model);
+    }
+    return $model;
 }
 
-function getNguonKP(){
+function getNguonKP($val_null = true){
     $model = array_column(App\dmnguonkinhphi::all()->toArray(),'tennguonkp','manguonkp');
-    $a_kq = array(''=>'--Chọn nguồn kinh phí--');
-    return array_merge($a_kq,$model);
+    if($val_null){
+        return array_merge(array(''=>'--Chọn nguồn kinh phí--'),$model);
+    }
+    return $model;
 }
 
-function getNhomCongTac(){
+function getNhomCongTac($val_null = true){
     $model = array_column(App\dmphanloaicongtac::all()->toArray(),'tencongtac','macongtac');
-    $a_kq = array(''=>'--Chọn nhóm công tác--');
-    return array_merge($a_kq,$model);
+    if($val_null){
+        $a_kq = array(''=>'--Chọn nhóm công tác--');
+        return array_merge($a_kq,$model);
+    }
+    return $model;
+
+}
+
+function getThongTuQD($val_null = true){
+    $model = array_column(App\dmthongtuquyetdinh::all()->toArray(),'tenttqd','sohieu');
+    if($val_null){
+        $a_kq = array(''=>'--Chọn thông tư quyết định--');
+        return array_merge($a_kq,$model);
+    }
+    return $model;
+
 }
 
 function getDonViTinh(){
@@ -280,6 +317,18 @@ function getTextStatus($status){
         'CHUAGUI' => 'text-danger'
     );
     return isset($a_trangthai[$status]) ? $a_trangthai[$status] : '';
+}
+
+function getStatus(){
+    return array(
+        'CHUALUONG' => 'Chưa tạo bảng lương',
+        'CHUATAO' => 'Dữ liệu chưa khởi tạo',
+        'CHOGUI' => 'Dữ liệu chờ gửi',
+        'DAGUI' => 'Dữ liệu đã gửi',
+        'TRALAI' => 'Dữ liệu bị trả lại',
+        'CHUADAYDU' => 'Dữ liệu chưa đầy đủ',
+        'CHUAGUI' => 'Dữ liệu chờ gửi'
+    );
 }
 
 ?>

@@ -164,19 +164,29 @@
                 <li>
                     <a href="javascript:;">
                         <i class="fa fa-wrench"></i>
-                        <span class="title">Nghiệp vụ</span>
+                        <span class="title">Quản lý</span>
                         <span class="arrow "></span>
                     </a>
                     <ul class="sub-menu">
-                        <li><a href="{{url('nghiep_vu/ho_so/danh_sach')}}">Danh sách cán bộ</a></li>
+                        <li><a href="{{url('nghiep_vu/ho_so/danh_sach')}}"><i class="fa fa-caret-right"></i>Danh sách cán bộ</a></li>
                         <!--
                         <li><a href="{{url('nghiep_vu/qua_trinh/luong/maso=all')}}">Quá trình hưởng lương</a></li>
                         <li><a href="{{url('nghiep_vu/qua_trinh/phu_cap/maso=all')}}">Quá trình phụ cấp</a></li>
                         -->
-                        <li><a href="{{url('nghiep_vu/quan_ly/dieu_dong/maso=all')}}">Luân chuyển cán bộ</a></li>
-                        <li><a href="{{url('nghiep_vu/quan_ly/chi_tieu/danh_sach')}}">Chỉ tiêu biên chế</a></li>
-                        <li><a href="{{url('nghiep_vu/quan_ly/du_toan/danh_sach')}}">Dự toán lương</a></li>
-                        <li><a href="{{url('nghiep_vu/quan_ly/dia_ban_dbkk/index')}}">Danh sách thôn, tổ dân phố</a></li>
+
+                        <li><a href="{{url('nghiep_vu/quan_ly/dia_ban_dbkk/index')}}"><i class="fa fa-caret-right"></i>Danh sách thôn, tổ dân phố</a></li>
+                    </ul>
+                </li>
+
+                <li>
+                    <a href="javascript:;">
+                        <i class="fa fa-wrench"></i>
+                        <span class="title">Nguồn và dự toán</span>
+                        <span class="arrow "></span>
+                    </a>
+                    <ul class="sub-menu">
+                        <li><a href="{{url('nghiep_vu/quan_ly/du_toan/danh_sach')}}"><i class="fa fa-caret-right"></i>Dự toán lương</a></li>
+                        <li><a href="{{url('du_toan/nguon_kinh_phi/danh_sach')}}"><i class="fa fa-caret-right"></i>Nguồn kinh phí</a></li>
                     </ul>
                 </li>
 
@@ -188,38 +198,51 @@
                     </a>
                     <ul class="sub-menu">
                         <li>
-                            <a href="{{url('chuc_nang/bang_luong/danh_sach')}}">Bảng lương</a>
+                            <a href="{{url('chuc_nang/bang_luong/danh_sach')}}"><i class="fa fa-caret-right"></i>Bảng lương</a>
                         </li>
                         <li>
-                            <a href="{{url('chuc_nang/tong_hop_luong/don_vi/index?nam='.date('Y'))}}">Tổng hợp lương tại đơn vị</a>
+                            <a href="{{url('chuc_nang/nang_luong/danh_sach')}}"><i class="fa fa-caret-right"></i>Nâng lương</a>
                         </li>
+                        <li>
+                            <a href="{{url('nghiep_vu/quan_ly/dieu_dong/maso=all')}}"><i class="fa fa-caret-right"></i>Luân chuyển cán bộ</a>
+                        </li>
+                        <li><a href="{{url('nghiep_vu/quan_ly/chi_tieu/danh_sach')}}"><i class="fa fa-caret-right"></i>Chỉ tiêu biên chế</a></li>
+                    </ul>
+                </li>
 
-                        <!--Chức năng xem dữ liệu tổng hợp lương của các đơn vị cấp dưới cho tài khoản quản lý -->
-                        <!--Chức năng xem dữ liệu tổng hợp lương của các đơn vị cấp dưới cho tài khoản quản lý -->
+                <li>
+                    <a href="javascript:;">
+                        <i class="fa fa-wrench"></i>
+                        <span class="title">Tổng hợp</span>
+                        <span class="arrow "></span>
+                    </a>
+                    <ul class="sub-menu">
+                        <li>
+                            <a href="{{url('chuc_nang/tong_hop_luong/don_vi/index?nam='.date('Y'))}}"><i class="fa fa-caret-right"></i>Tổng hợp lương tại đơn vị</a>
+                        </li>
                         @if(session('admin')->quanlynhom && !session('admin')->quanlykhuvuc)
                             <li>
-                                <a href="{{url('chuc_nang/tong_hop_luong/khoi/index?nam='.date('Y'))}}">Tổng hợp lương từ đơn vị cấp dưới</a>
+                                <a href="{{url('chuc_nang/tong_hop_luong/khoi/index?nam='.date('Y'))}}"><i class="fa fa-caret-right"></i>Tổng hợp lương từ đơn vị cấp dưới</a>
                             </li>
+
                             <li>
-                                <a href="{{url('chuc_nang/xem_du_lieu/index?thang='.date('m').'&nam='.date('Y').'&trangthai=ALL')}}">Xem số liệu tổng hợp từ đơn vị cấp dưới</a>
+                                <a href="{{url('chuc_nang/tong_hop_nguon/index?sohieu=TT67_2017')}}"><i class="fa fa-caret-right"></i>Tổng số liệu nguồn kinh phí</a>
+                            </li>
+
+                            <li>
+                                <a href="{{url('chuc_nang/xem_du_lieu/index?thang='.date('m').'&nam='.date('Y').'&trangthai=ALL')}}"><i class="fa fa-caret-right"></i>Xem số liệu tổng hợp từ đơn vị cấp dưới</a>
                             </li>
                         @endif
 
                         <!-- Các tài khoản quản lý khu vực mới có tính năng tổng hợp dữ liệu từ đơn vị cấp dưới -->
                         @if(session('admin')->quanlykhuvuc)
                             <li>
-                                <a href="{{url('chuc_nang/tong_hop_luong/huyen/index?nam='.date('Y'))}}">Tổng hợp lương toàn địa bàn</a>
+                                <a href="{{url('chuc_nang/tong_hop_luong/huyen/index?nam='.date('Y'))}}"><i class="fa fa-caret-right"></i>Tổng hợp lương toàn địa bàn</a>
                             </li>
-                                <li>
-                                    <a href="{{url('chuc_nang/xem_du_lieu/huyen?thang='.date('m').'&nam='.date('Y').'&trangthai=ALL')}}">Xem số liệu tổng hợp toàn địa bàn</a>
-                                </li>
+                            <li>
+                                <a href="{{url('chuc_nang/xem_du_lieu/huyen?thang='.date('m').'&nam='.date('Y').'&trangthai=ALL')}}"><i class="fa fa-caret-right"></i>Xem số liệu tổng hợp toàn địa bàn</a>
+                            </li>
                         @endif
-
-                        <li>
-                            <a href="{{url('chuc_nang/nang_luong/danh_sach')}}">Nâng lương</a>
-                        </li>
-
-
                     </ul>
                 </li>
 
@@ -230,10 +253,10 @@
 					<span class="arrow "></span>
 					</a>
 					<ul class="sub-menu">
-                        <li><a href="{{url('/tra_cuu/ho_so')}}">Hồ sơ cán bộ</a></li>
-                        <li><a href="{{url('/tra_cuu/luong')}}">Quá trình hưởng lương</a></li>
-                        <li><a href="{{url('/tra_cuu/phu_cap')}}">Quá trình phụ cấp</a></li>
-                        <li><a href="{{url('/tra_cuu/chi_luong')}}">Chi trả lương</a></li>
+                        <li><a href="{{url('/tra_cuu/ho_so')}}"><i class="fa fa-caret-right"></i>Hồ sơ cán bộ</a></li>
+                        <li><a href="{{url('/tra_cuu/luong')}}"><i class="fa fa-caret-right"></i>Quá trình hưởng lương</a></li>
+                        <li><a href="{{url('/tra_cuu/phu_cap')}}"><i class="fa fa-caret-right"></i>Quá trình phụ cấp</a></li>
+                        <li><a href="{{url('/tra_cuu/chi_luong')}}"><i class="fa fa-caret-right"></i>Chi trả lương</a></li>
 					</ul>
 				</li>
 				<li>
@@ -245,7 +268,7 @@
 					<ul class="sub-menu">
                         <!--li><a href="{{url('bao_cao/don_vi')}}">Báo cáo nhân sự</a></li  chưa fix -->
                         <!--li><a href="{{url('bao_cao/mau_chuan')}}">Báo cáo theo thông tư, quyết định</a></li-->
-                        <li><a href="{{url('bao_cao/bang_luong')}}">Báo cáo chi trả lương</a></li>
+                        <li><a href="{{url('bao_cao/bang_luong')}}"><i class="fa fa-caret-right"></i>Báo cáo chi trả lương</a></li>
 					</ul>
 				</li>
                 <!-- dành cho đơn vị chủ quản -->
@@ -271,17 +294,16 @@
                             </a>
                             <ul class="sub-menu" style="margin-left: 15px;">
                                 <!--li><a href="{{url('danh_muc/bao_mat/index?&level=X')}}">Bảo mật hồ sơ</a></li-->
-                                <li><a href="{{url('danh_muc/khoi_pb/index')}}">Lĩnh vực hoạt động</a></li>
-                                <li><a href="{{url('danh_muc/phong_ban/index')}}">Phòng ban</a></li>
-                                <li><a href="{{url('danh_muc/chuc_vu_cq/ma_so='.session('admin')->maphanloai)}}">Chức vụ chính quyền</a></li>
-                                <li><a href="{{url('danh_muc/chuc_vu_d/index')}}">Chức vụ đảng</a></li>
-                                <li><a href="{{url('danh_muc/cong_tac/index')}}">Phân loại công tác</a></li>
-                                <li><a href="{{url('danh_muc/phu_cap/index')}}">Phụ cấp</a></li>
-                                <li><a href="{{url('danh_muc/dan_toc/index')}}">Dân tộc</a></li>
-                                <li><a href="{{url('danh_muc/nguon_kinh_phi/index')}}">Nguồn kinh phí</a></li>
-                                <li><a href="{{url('danh_muc/ngach_bac/index')}}">Mã ngạch lương</a></li>
-
-                                <li><a href="{{url('danh_muc/pl_don_vi/index')}}">Phân loại đơn vị</a></li>
+                                <li><a href="{{url('danh_muc/khoi_pb/index')}}"><i class="fa fa-caret-right"></i>Lĩnh vực hoạt động</a></li>
+                                <li><a href="{{url('danh_muc/phong_ban/index')}}"><i class="fa fa-caret-right"></i>Phòng ban</a></li>
+                                <li><a href="{{url('danh_muc/chuc_vu_cq/ma_so='.session('admin')->maphanloai)}}"><i class="fa fa-caret-right"></i>Chức vụ chính quyền</a></li>
+                                <li><a href="{{url('danh_muc/chuc_vu_d/index')}}"><i class="fa fa-caret-right"></i>Chức vụ đảng</a></li>
+                                <li><a href="{{url('danh_muc/cong_tac/index')}}"><i class="fa fa-caret-right"></i>Phân loại công tác</a></li>
+                                <li><a href="{{url('danh_muc/phu_cap/index')}}"><i class="fa fa-caret-right"></i>Phụ cấp</a></li>
+                                <li><a href="{{url('danh_muc/dan_toc/index')}}"><i class="fa fa-caret-right"></i>Dân tộc</a></li>
+                                <li><a href="{{url('danh_muc/nguon_kinh_phi/index')}}"><i class="fa fa-caret-right"></i>Nguồn kinh phí</a></li>
+                                <li><a href="{{url('danh_muc/ngach_bac/index')}}"><i class="fa fa-caret-right"></i>Mã ngạch lương</a></li>
+                                <li><a href="{{url('danh_muc/pl_don_vi/index')}}"><i class="fa fa-caret-right"></i>Phân loại đơn vị</a></li>
                             </ul>
                         </li>
                         <li>
@@ -290,7 +312,7 @@
                             </a>
 
                             <ul class="sub-menu" style="margin-left: 15px;">
-                                <li><a href="{{url('change-password')}}">Đổi mật khẩu</a></li>
+                                <li><a href="{{url('change-password')}}"><i class="fa fa-caret-right"></i>Đổi mật khẩu</a></li>
                                 <!--li><a href="{{url('phanquyen')}}">Phân quyền</a></li-->
                             </ul>
                         </li>
@@ -300,8 +322,8 @@
                             </a>
 
                             <ul class="sub-menu" style="margin-left: 15px;">
-                                <li><a href="{{url('he_thong/don_vi/don_vi')}}">Thông tin đơn vị</a></li>
-                                <li><a href="{{url('he_thong/don_vi/chung')}}">Thông tin chung</a></li>
+                                <li><a href="{{url('he_thong/don_vi/don_vi')}}"><i class="fa fa-caret-right"></i>Thông tin đơn vị</a></li>
+                                <li><a href="{{url('he_thong/don_vi/chung')}}"><i class="fa fa-caret-right"></i>Thông tin chung</a></li>
 
                             </ul>
                         </li>
