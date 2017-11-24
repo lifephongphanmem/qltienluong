@@ -11,6 +11,9 @@ class tonghopluong_donvi_diaban extends Model
     protected $fillable = [
         'id',
         'mathdv',
+        'mathk',
+        'mathh',
+        'matht',
         'madiaban',
         'luongcoban',
         'heso',

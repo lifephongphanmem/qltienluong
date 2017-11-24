@@ -10,6 +10,9 @@ class tonghopluong_donvi_chitiet extends Model
     protected $fillable = [
         'id',
         'mathdv',
+        'mathk',
+        'mathh',
+        'matht',
         'manguonkp',
         'linhvuchoatdong',//Phân loại xã phường ko cần chọn lĩnh vực hoạt động
         'macongtac',

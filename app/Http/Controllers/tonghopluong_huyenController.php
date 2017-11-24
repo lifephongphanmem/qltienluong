@@ -9,9 +9,12 @@ use App\dmphanloaicongtac;
 use App\tonghop_huyen;
 use App\tonghop_huyen_chitiet;
 use App\tonghop_huyen_diaban;
+use App\tonghopluong_donvi_chitiet;
+use App\tonghopluong_donvi_diaban;
 use App\tonghopluong_huyen;
 use App\tonghopluong_huyen_chitiet;
 use App\tonghopluong_huyen_diaban;
+use App\tonghopluong_tinh;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 
@@ -24,25 +27,14 @@ class tonghopluong_huyenController extends Controller
 {
     function index(Request $requests){
         if (Session::has('admin')) {
-            $a_data=array(array('thang'=>'01','mathdv'=>null,'noidung'=>null,'trangthai'=>'CHOGUI'),
-                array('thang'=>'02','mathdv'=>null,'noidung'=>null,'trangthai'=>'CHOGUI'),
-                array('thang'=>'03','mathdv'=>null,'noidung'=>null,'trangthai'=>'CHOGUI'),
-                array('thang'=>'04','mathdv'=>null,'noidung'=>null,'trangthai'=>'CHOGUI'),
-                array('thang'=>'05','mathdv'=>null,'noidung'=>null,'trangthai'=>'CHOGUI'),
-                array('thang'=>'06','mathdv'=>null,'noidung'=>null,'trangthai'=>'CHOGUI'),
-                array('thang'=>'07','mathdv'=>null,'noidung'=>null,'trangthai'=>'CHOGUI'),
-                array('thang'=>'08','mathdv'=>null,'noidung'=>null,'trangthai'=>'CHOGUI'),
-                array('thang'=>'09','mathdv'=>null,'noidung'=>null,'trangthai'=>'CHOGUI'),
-                array('thang'=>'10','mathdv'=>null,'noidung'=>null,'trangthai'=>'CHOGUI'),
-                array('thang'=>'11','mathdv'=>null,'noidung'=>null,'trangthai'=>'CHOGUI'),
-                array('thang'=>'12','mathdv'=>null,'noidung'=>null,'trangthai'=>'CHOGUI')
-            );
 
+            /*
             $a_trangthai=array('CHOGUI'=>'Chưa gửi dữ liệu',
                 'DAGUI'=>'Đã gửi dữ liệu',
                 'TRALAI'=>'Trả lại dữ liệu',
                 'CHUADAYDU'=>'Chưa đầy đủ tổng hợp dữ liệu');
-
+            */
+            $a_trangthai = getStatus();
             $inputs = $requests->all();
             $madv = session('admin')->madv;
             $madvbc = session('admin')->madvbc;
@@ -67,6 +59,20 @@ class tonghopluong_huyenController extends Controller
             }
             $sldv = $model_donvi->count();
 
+            $a_data=array(array('thang'=>'01','mathdv'=>null,'noidung'=>null,'sldv'=>$sldv,'dvgui'=>0),
+                array('thang'=>'02','mathdv'=>null,'noidung'=>null,'sldv'=>$sldv,'dvgui'=>0),
+                array('thang'=>'03','mathdv'=>null,'noidung'=>null,'sldv'=>$sldv,'dvgui'=>0),
+                array('thang'=>'04','mathdv'=>null,'noidung'=>null,'sldv'=>$sldv,'dvgui'=>0),
+                array('thang'=>'05','mathdv'=>null,'noidung'=>null,'sldv'=>$sldv,'dvgui'=>0),
+                array('thang'=>'06','mathdv'=>null,'noidung'=>null,'sldv'=>$sldv,'dvgui'=>0),
+                array('thang'=>'07','mathdv'=>null,'noidung'=>null,'sldv'=>$sldv,'dvgui'=>0),
+                array('thang'=>'08','mathdv'=>null,'noidung'=>null,'sldv'=>$sldv,'dvgui'=>0),
+                array('thang'=>'09','mathdv'=>null,'noidung'=>null,'sldv'=>$sldv,'dvgui'=>0),
+                array('thang'=>'10','mathdv'=>null,'noidung'=>null,'sldv'=>$sldv,'dvgui'=>0),
+                array('thang'=>'11','mathdv'=>null,'noidung'=>null,'sldv'=>$sldv,'dvgui'=>0),
+                array('thang'=>'12','mathdv'=>null,'noidung'=>null,'sldv'=>$sldv,'dvgui'=>0)
+            );
+
             //Lấy danh sách các dữ liệu đã tổng hợp theo huyện
             $model_tonghop = tonghop_huyen::where('madvbc',$madvbc)->get();
             //Danh sách các đơn vị đã gửi dữ liệu
@@ -81,20 +87,23 @@ class tonghopluong_huyenController extends Controller
                     $a_data[$i]['noidung']=$tonghop->noidung;
                     $a_data[$i]['mathdv']=$tonghop->mathdv;
                     $a_data[$i]['trangthai']=$tonghop->trangthai;
+                    $a_data[$i]['dvgui'] = count($dulieu);
                 }else{//chưa tổng hợp dữ liệu
                     $a_data[$i]['noidung'] = 'Dữ liệu tổng hợp trên địa bàn '.$tendb.' tháng '.$a_data[$i]['thang'].' năm '.$inputs['nam'];
                     $a_data[$i]['mathdv'] = null;
 
                     //Kiểm tra xem đơn vị cấp dưới đã gửi dữ liệu khối chưa
                     if(count($dulieu) == 0){//chưa gửi
-                        $a_data[$i]['trangthai']='CHOGUI';
+                        $a_data[$i]['trangthai']='CHUADL';
+
                     }elseif(count($dulieu)== $sldv){
                         //kiểm tra xem có bao nhiêu đơn vị gửi / tổng số các đơn vị
-                        $a_data[$i]['trangthai'] = 'CHUATAO';
+                        $a_data[$i]['trangthai'] = 'CHUAGUI';
+                        $a_data[$i]['dvgui'] = $sldv;
                     }else{
                         $a_data[$i]['trangthai'] = 'CHUADAYDU';
+                        $a_data[$i]['dvgui'] = count($dulieu);
                     }
-
                 }
             }
             //dd($a_data);
@@ -172,7 +181,7 @@ class tonghopluong_huyenController extends Controller
             return view('errors.notlogin');
     }
 
-    function tonghop(Request $requests){
+    function tonghop_cu(Request $requests){
         if (Session::has('admin')) {
             $inputs = $requests->all();
             $thang = $inputs['thang'];
@@ -280,6 +289,146 @@ class tonghopluong_huyenController extends Controller
             tonghop_huyen_diaban::insert($model_db);
             tonghop_huyen::create($inputs);
             return redirect('/chuc_nang/tong_hop_luong/huyen/detail/ma_so='.$mathdv);
+        } else
+            return view('errors.notlogin');
+    }
+
+    function tonghop(Request $requests){
+        if (Session::has('admin')) {
+            $inputs = $requests->all();
+            $thang = $inputs['thang'];
+            $nam = $inputs['nam'];
+            $madvbc = session('admin')->madvbc;
+
+            //lấy danh sách các chi tiết số liệu tổng họp theo đơn vị
+            $model_tonghop_ct = tonghopluong_donvi_chitiet::wherein('mathdv',function($query) use($nam, $thang, $madvbc){
+                $query->select('mathdv')->from('tonghopluong_donvi')
+                    ->where('nam',$nam)
+                    ->where('thang',$thang)
+                    ->where('trangthai','DAGUI')
+                    ->where('madvbc',$madvbc)->distinct();
+            })->get();
+            //
+            //Tính toán dữ liệu
+            $a_col = getColTongHop();
+            $model_nguonkp = array_column(dmnguonkinhphi::all()->toArray(),'tennguonkp','manguonkp');
+            $model_phanloaict = array_column(dmphanloaicongtac::all()->toArray(),'tencongtac','macongtac');
+
+            //Lấy dữ liệu để lập
+            $model_data = $model_tonghop_ct->map(function ($data) {
+                return collect($data->toArray())
+                    ->only(['macongtac','linhvuchoatdong','manguonkp','luongcoban'])
+                    ->all();
+            });
+
+            $model_data = a_unique($model_data);
+            for($i=0;$i<count($model_data);$i++){
+                $luongct = $model_tonghop_ct->where('manguonkp',$model_data[$i]['manguonkp'])
+                    ->where('linhvuchoatdong',$model_data[$i]['linhvuchoatdong'])
+                    ->where('macongtac',$model_data[$i]['macongtac']);
+                $model_data[$i]['tennguonkp'] = isset($model_nguonkp[$model_data[$i]['manguonkp']])? $model_nguonkp[$model_data[$i]['manguonkp']]:'';
+                $model_data[$i]['tencongtac'] = isset($model_phanloaict[ $model_data[$i]['macongtac']])? $model_phanloaict[ $model_data[$i]['macongtac']]:'';
+
+                $tonghs = 0;
+                foreach($a_col as $col){
+                    $model_data[$i][$col] = $luongct->sum($col);
+                    $tonghs += chkDbl($model_data[$i][$col]);
+                }
+
+                $model_data[$i]['stbhxh_dv'] = $luongct->sum('stbhxh_dv');
+                $model_data[$i]['stbhyt_dv'] = $luongct->sum('stbhyt_dv');
+                $model_data[$i]['stkpcd_dv'] = $luongct->sum('stkpcd_dv');
+                $model_data[$i]['stbhtn_dv'] = $luongct->sum('stbhtn_dv');
+                $model_data[$i]['tongbh'] = $model_data[$i]['stbhxh_dv'] + $model_data[$i]['stbhyt_dv'] + $model_data[$i]['stkpcd_dv']+$model_data[$i]['stbhtn_dv'];
+                $model_data[$i]['tonghs'] = $tonghs;
+            }
+
+            //cho trương hợp đơn vị cấp trên in dữ liệu dv câp dưới mà ko sai tên đơn vị
+            $m_dv = dmdonvi::where('madv',session('admin')->madv)->first();
+
+            $thongtin=array('nguoilap'=>session('admin')->name,
+                'thang'=>$thang,
+                'nam'=>$nam);
+
+            return view('reports.tonghopluong.khoi.solieutonghop')
+                ->with('thongtin',$thongtin)
+                ->with('model',$model_data)
+                ->with('m_dv',$m_dv)
+                ->with('pageTitle','Chi tiết tổng hợp lương tại đơn vị cấp dưới');
+
+        } else
+            return view('errors.notlogin');
+    }
+
+    function tonghop_diaban(Request $requests){
+        if (Session::has('admin')) {
+            $inputs = $requests->all();
+            $thang = $inputs['thang'];
+            $nam = $inputs['nam'];
+            $madvbc = session('admin')->madvbc;
+
+            $model_diaban_ct = tonghopluong_donvi_diaban::wherein('mathdv',function($query) use($nam, $thang, $madvbc){
+                $query->select('mathdv')->from('tonghopluong_donvi')
+                    ->where('nam',$nam)
+                    ->where('thang',$thang)
+                    ->where('trangthai','DAGUI')
+                    ->where('madvbc',$madvbc)->distinct();
+            })->get();
+
+            //Tính toán dữ liệu
+            $a_col = getColTongHop();
+
+            //Tính toán theo địa bàn
+            $model_diaban = $model_diaban_ct->map(function ($data) {
+                return collect($data->toArray())
+                    ->only(['madiaban','luongcoban'])
+                    ->all();
+            });
+            $model_diaban = a_unique($model_diaban);
+            for($i=0;$i<count($model_diaban);$i++){
+                $luongct = $model_diaban_ct->where('madiaban',$model_diaban[$i]['madiaban'])
+                    ->where('luongcoban',$model_diaban[$i]['luongcoban']);;
+
+                $tonghs = 0;
+
+                foreach($a_col as $col){
+                    $model_diaban[$i][$col] = $luongct->sum($col);
+                    $tonghs += chkDbl($model_diaban[$i][$col]);
+                }
+
+                $model_diaban[$i]['stbhxh_dv']=$luongct->sum('stbhxh_dv');
+                $model_diaban[$i]['stbhyt_dv']=$luongct->sum('stbhyt_dv');
+                $model_diaban[$i]['stkpcd_dv']=$luongct->sum('stkpcd_dv');
+                $model_diaban[$i]['stbhtn_dv']=$luongct->sum('stbhtn_dv');
+                $model_diaban[$i]['tonghs']=$tonghs;
+                $model_diaban[$i]['tongbh'] = $model_diaban[$i]['stbhxh_dv'] + $model_diaban[$i]['stbhyt_dv'] + $model_diaban[$i]['stkpcd_dv'] + $model_diaban[$i]['stbhtn_dv'];
+            }
+
+
+            $model_db = array();
+            $dm_diaban = dmdiabandbkk::all();
+            $a_diaban = getDiaBan(false);
+            for($i=0;$i<count($model_diaban);$i++){
+                $diaban = $dm_diaban->where('madiaban',$model_diaban[$i]['madiaban'])->first();
+                $model_diaban[$i]['tendiaban'] = $diaban->tendiaban;
+                $model_diaban[$i]['phanloai'] = $a_diaban[$diaban->phanloai];
+
+                if($model_diaban[$i]['madiaban'] != null){
+                    $model_db[] = $model_diaban[$i];
+                }
+            }
+
+            $m_dv = dmdonvi::where('madv',session('admin')->madv)->first();
+
+            $thongtin=array('nguoilap'=>session('admin')->name,
+                'thang'=>$thang,
+                'nam'=>$nam);
+            return view('reports.tonghopluong.khoi.solieudiaban')
+                ->with('thongtin',$thongtin)
+                ->with('model',$model_db)
+                ->with('m_dv',$m_dv)
+                ->with('pageTitle','Chi tiết tổng hợp lương tại đơn vị cấp dưới');
+
         } else
             return view('errors.notlogin');
     }
@@ -418,6 +567,44 @@ class tonghopluong_huyenController extends Controller
             $model->update($inputs);
 
             return redirect('/chuc_nang/tong_hop_luong/huyen/detail_diaban/ma_so='.$model->mathdv);
+        } else
+            return view('errors.notlogin');
+    }
+
+    function senddata(Request $requests){
+        if (Session::has('admin')) {
+            $inputs = $requests->all();
+
+            $madvbc = session('admin')->madvbc;
+            $inputs['madv'] = session('admin')->madv;
+            $inputs['mathdv'] = getdate()[0];;
+            $inputs['trangthai'] = 'DAGUI';
+            $inputs['phanloai'] = 'TONGHOP';
+            $inputs['noidung']='Đơn vị '.getTenDV(session('admin')->madv) .' tổng hợp dữ liệu trên địa bàn '.getTenDB($madvbc).' thời điểm '.$inputs['thang'].'/'.$inputs['nam'];
+            $inputs['nguoilap']= session('admin')->name;
+            $inputs['ngaylap']= Carbon::now()->toDateTimeString();
+            $inputs['macqcq'] = session('admin')->macqcq;
+            $inputs['madvbc'] = session('admin')->madvbc;
+
+            $thang = $inputs['thang'];
+            $nam = $inputs['nam'];
+            $madv = session('admin')->madv;
+
+            tonghopluong_donvi_chitiet::wherein('mathdv',function($query) use($nam, $thang, $madvbc){
+                $query->select('mathdv')->from('tonghopluong_donvi')->where('nam',$nam)->where('thang',$thang)->where('madvbc',$madvbc)->distinct();
+            })->update(['mathh'=>$inputs['mathdv'],'matht'=>$inputs['mathdv']]);
+
+            //$model_tonghop_ct->update(['mathk'=>$inputs['mathdv']]);
+            tonghopluong_donvi_diaban::wherein('mathdv',function($query) use($nam, $thang, $madvbc){
+                $query->select('mathdv')->from('tonghopluong_donvi')->where('nam',$nam)->where('thang',$thang)->where('madvbc',$madvbc)->distinct();
+            })->update(['mathh'=>$inputs['mathdv'],'matht'=>$inputs['mathdv']]);
+
+
+
+            tonghopluong_tinh::create($inputs);
+            tonghop_huyen::create($inputs);
+
+            return redirect('/chuc_nang/tong_hop_luong/huyen/index?nam='.$nam);
         } else
             return view('errors.notlogin');
     }

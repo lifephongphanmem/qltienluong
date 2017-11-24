@@ -17,6 +17,9 @@ class CreateTonghopluongDonviDiabanTable extends Migration
             //Bảng dành cho đơn vị KVXP tổng hợp lương theo thôn, tổ dân phố
             $table->increments('id');
             $table->string('mathdv',50)->nullable();
+            $table->string('mathk',50)->nullable();
+            $table->string('mathh',50)->nullable();
+            $table->string('matht',50)->nullable();
             $table->string('madiaban')->nullable();
             $table->double('luongcoban')->default(0);
             $table->double('heso')->default(0);

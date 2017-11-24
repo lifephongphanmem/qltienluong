@@ -9,6 +9,10 @@
             font: normal 12px/14px time, serif;
         }
 
+        .money td{
+            text-align: right;
+        }
+
         .header tr td {
             padding-top: 0px;
             padding-bottom: 10px;
@@ -24,7 +28,7 @@
         }
 
         td, th {
-            padding: 10px;
+            padding: 5px;
         }
         p{
             padding: 5px;
@@ -74,16 +78,17 @@
         <th style="width: 2%;padding-left: 2px;padding-right: 2px" rowspan="2">STT</th>
         <th style="width: 7%;padding-left: 2px;padding-right: 2px" rowspan="2">Nguồn kinh phí</th>
         <th style="width: 7%;padding-left: 2px;padding-right: 2px" rowspan="2">Phân loại</br>công tác</th>
-        <th style="width: 6%;padding-left: 2px;padding-right: 2px" rowspan="2">Hệ số</br>lương</th>
-        <th style="width: 6%;padding-left: 2px;padding-right: 2px" rowspan="2">Vượt</br>khung</th>
+        <th style="width: 6%;padding-left: 2px;padding-right: 2px" rowspan="2">Lương ngạch</br>bậc</th>
+        <th style="width: 6%;padding-left: 2px;padding-right: 2px" rowspan="2">Phụ cấp</br>lương</th>
         <th style="width: 6%;padding-left: 2px;padding-right: 2px" rowspan="2">Tổng các</br>khoản phụ</br>cấp</th>
-        <th colspan="10">Các khoản phụ cấp khác</th>
+        <th colspan="11">Các khoản phụ cấp khác</th>
         <th style="width: 6%;padding-left: 2px;padding-right: 2px" rowspan="2">Tổng tiền lương</th>
         <th colspan="5">Các khoản phải đóng góp BHXH, BHYT, KPCĐ, BHTN </th>
         <th style="width: 6%;padding-left: 2px;padding-right: 2px" rowspan="2">Tổng cộng</th>
     </tr>
 
     <tr style="padding-left: 2px;padding-right: 2px">
+        <th>Phụ cấp</br>vượt khung</th>
         <th>Phụ cấp</br>khu vực</th>
         <th>Phụ cấp</br>chức vụ</th>
         <th>Phụ cấp</br>thâm niên</br>vượt khung</th>
@@ -103,65 +108,66 @@
     </tr>
 
     <tr>
-        @for($i=1;$i<=23;$i++)
+        @for($i=1;$i<=24;$i++)
         <th>{{$i}}</th>
         @endfor
     </tr>
 
     <?php $stt=1; ?>
     @foreach($model as $ct)
-        <tr>
-            <td>{{$stt++}}</td>
-            <td>{{$ct->tennguonkp}}</td>
-            <td>{{$ct->tencongtac}}</td>
-            <td>{{$ct->heso}}</td>
-            <td>{{$ct->vuotkhung}}</td>
-            <td>{{$ct->tonghs - $ct->heso - $ct->vuotkhung}}</td>
+        <tr class="money">
+            <td style="text-align: center">{{$stt++}}</td>
+            <td style="text-align: left">{{$ct->tennguonkp}}</td>
+            <td style="text-align: left">{{$ct->tencongtac}}</td>
+            <td>{{dinhdangso($ct->heso)}}</td>
+            <td>{{dinhdangso($ct->hesopc)}}</td>
+            <td>{{dinhdangso($ct->tonghs - $ct->heso - $ct->hesopc)}}</td>
 
-            <td>{{$ct->pckv}}</td>
-            <td>{{$ct->pccv}}</td>
-            <td>{{$ct->pctnvk}}</td>
-            <td>{{$ct->pcudn}}</td>
-            <td>{{$ct->pcth}}</td>
-            <td>{{$ct->pctn}}</td>
-            <td>{{$ct->pccovu}}</td>
-            <td>{{$ct->pcdang}}</td>
-            <td>{{$ct->pcthni}}</td>
-            <td>{{$ct->pck}}</td>
+            <td>{{dinhdangso($ct->vuotkhung)}}</td>
+            <td>{{dinhdangso($ct->pckv)}}</td>
+            <td>{{dinhdangso($ct->pccv)}}</td>
+            <td>{{dinhdangso($ct->pctnvk)}}</td>
+            <td>{{dinhdangso($ct->pcudn)}}</td>
+            <td>{{dinhdangso($ct->pcth)}}</td>
+            <td>{{dinhdangso($ct->pctn)}}</td>
+            <td>{{dinhdangso($ct->pccovu)}}</td>
+            <td>{{dinhdangso($ct->pcdang)}}</td>
+            <td>{{dinhdangso($ct->pcthni)}}</td>
+            <td>{{dinhdangso($ct->pck)}}</td>
 
-            <td>{{number_format($ct->tongtl)}}</td>
-            <td>{{number_format($ct->stbhxh_dv)}}</td>
-            <td>{{number_format($ct->stbhyt_dv)}}</td>
-            <td>{{number_format($ct->stkpcd_dv)}}</td>
-            <td>{{number_format($ct->stbhtn_dv)}}</td>
-            <td>{{number_format($ct->tongbh)}}</td>
-            <td>{{number_format($ct->tongbh + $ct->tongtl)}}</td>
+            <td>{{dinhdangso($ct->tonghs)}}</td>
+            <td>{{dinhdangso($ct->stbhxh_dv)}}</td>
+            <td>{{dinhdangso($ct->stbhyt_dv)}}</td>
+            <td>{{dinhdangso($ct->stkpcd_dv)}}</td>
+            <td>{{dinhdangso($ct->stbhtn_dv)}}</td>
+            <td>{{dinhdangso($ct->tongbh)}}</td>
+            <td>{{dinhdangso($ct->tongbh + $ct->tongtl)}}</td>
 
         </tr>
     @endforeach
-    <tr style="font-weight: bold; text-align: center">
+    <tr class="money" style="font-weight: bold">
         <td colspan="3">Tổng cộng</td>
-        <td>{{$model->sum('heso')}}</td>
-        <td>{{$model->sum('vuotkhung')}}</td>
-        <td>{{$model->sum('tonghs') - $model->sum('heso') - $model->sum('vuotkhung')}}</td>
-        <td>{{$model->sum('pckv')}}</td>
-        <td>{{$model->sum('pccv')}}</td>
-        <td>{{$model->sum('pctnvk')}}</td>
-        <td>{{$model->sum('pcudn')}}</td>
-        <td>{{$model->sum('pcth')}}</td>
-        <td>{{$model->sum('pctn')}}</td>
-        <td>{{$model->sum('pccovu')}}</td>
-        <td>{{$model->sum('pcdang')}}</td>
-        <td>{{$model->sum('pcthni')}}</td>
-        <td>{{$model->sum('pck')}}</td>
-        <td>{{number_format($model->sum('tongtl'))}}</td>
-        <td>{{number_format($model->sum('stbhxh_dv'))}}</td>
-        <td>{{number_format($model->sum('stbhyt_dv'))}}</td>
-        <td>{{number_format($model->sum('stkpcd_dv'))}}</td>
-        <td>{{number_format($model->sum('stbhtn_dv'))}}</td>
-        <td>{{number_format($model->sum('tongbh'))}}</td>
-        <td>{{number_format($model->sum('tongbh') + $model->sum('tongtl'))}}</td>
-
+        <td>{{dinhdangso($model->sum('heso'))}}</td>
+        <td>{{dinhdangso($model->sum('hesopc'))}}</td>
+        <td>{{dinhdangso($model->sum('tonghs') - $model->sum('heso') - $model->sum('hesopc'))}}</td>
+        <td>{{dinhdangso($model->sum('vuotkhung'))}}</td>
+        <td>{{dinhdangso($model->sum('pckv'))}}</td>
+        <td>{{dinhdangso($model->sum('pccv'))}}</td>
+        <td>{{dinhdangso($model->sum('pctnvk'))}}</td>
+        <td>{{dinhdangso($model->sum('pcudn'))}}</td>
+        <td>{{dinhdangso($model->sum('pcth'))}}</td>
+        <td>{{dinhdangso($model->sum('pctn'))}}</td>
+        <td>{{dinhdangso($model->sum('pccovu'))}}</td>
+        <td>{{dinhdangso($model->sum('pcdang'))}}</td>
+        <td>{{dinhdangso($model->sum('pcthni'))}}</td>
+        <td>{{dinhdangso($model->sum('pck'))}}</td>
+        <td>{{dinhdangso($model->sum('tonghs'))}}</td>
+        <td>{{dinhdangso($model->sum('stbhxh_dv'))}}</td>
+        <td>{{dinhdangso($model->sum('stbhyt_dv'))}}</td>
+        <td>{{dinhdangso($model->sum('stkpcd_dv'))}}</td>
+        <td>{{dinhdangso($model->sum('stbhtn_dv'))}}</td>
+        <td>{{dinhdangso($model->sum('tongbh'))}}</td>
+        <td>{{dinhdangso($model->sum('tongbh') + $model->sum('tongtl'))}}</td>
     </tr>
 </table>
 
@@ -172,7 +178,7 @@
     </tr>
     <tr style="font-weight: bold">
         <td style="text-align: center;" width="50%">Người lập bảng</td>
-        <td style="text-align: center;" width="50%">Thủ trưởng đơn vị</td>
+        <td style="text-align: center;" width="50%">{{strtoupper($m_dv->cdlanhdao)}}</td>
     </tr>
     <tr style="font-style: italic">
         <td style="text-align: center;" width="50%">(Ghi rõ họ tên)</td>

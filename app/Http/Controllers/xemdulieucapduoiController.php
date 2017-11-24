@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\dmdonvi;
 use App\tonghopluong_donvi;
+use App\tonghopluong_donvi_chitiet;
 use App\tonghopluong_huyen;
 use Illuminate\Http\Request;
 
@@ -29,6 +30,8 @@ class xemdulieucapduoiController extends Controller
             }else{
                 $trangthai = $inputs['trangthai'];
 
+                //có thời gian nên làm chỉ cần biết đơn vi cấp dưới gửi dữ liệu chưa
+                //ko cần chi tiết đơn vị đã tạo nhưng chưa gửi => mặc định là chưa gửi hết
                 switch($trangthai){
                     case 'DAGUI':{
                         $model_donvi = dmdonvi::select('madv', 'tendv','macqcq','maphanloai')
@@ -80,7 +83,14 @@ class xemdulieucapduoiController extends Controller
                     ->where('trangthai', 'DAGUI')
                     ->first();
 
-                $dv->mathdv = (isset($model_bangluong)?$model_bangluong->mathdv:NULL);
+                if(isset($model_bangluong)){
+                    $dv->mathdv = $model_bangluong->mathdv;
+                    $model_bangluong_ct = tonghopluong_donvi_chitiet::where('mathdv', $dv->mathdv)->first();
+                    $dv->tralai = $model_bangluong_ct->mathk != null?false:true;
+                }else{
+                    $dv->mathdv = NULL;
+                    $dv->tralai = true;
+                }
             }
             //dd($model_donvi->toarray());
             return view('functions.viewdata.index')

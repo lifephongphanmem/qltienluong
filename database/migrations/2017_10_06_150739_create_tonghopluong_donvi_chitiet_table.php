@@ -16,6 +16,9 @@ class CreateTonghopluongDonviChitietTable extends Migration
         Schema::create('tonghopluong_donvi_chitiet', function (Blueprint $table) {
             $table->increments('id');
             $table->string('mathdv',50)->nullable();
+            $table->string('mathk',50)->nullable();
+            $table->string('mathh',50)->nullable();
+            $table->string('matht',50)->nullable();
             $table->string('manguonkp',50)->nullable();
             $table->string('linhvuchoatdong')->nullable();//Phân loại xã phường ko cần chọn lĩnh vực hoạt động
             $table->string('macongtac')->nullable();

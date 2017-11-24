@@ -163,7 +163,7 @@
 				</li>
                 <li>
                     <a href="javascript:;">
-                        <i class="fa fa-wrench"></i>
+                        <i class="fa glyphicon glyphicon-folder-open"></i>
                         <span class="title">Quản lý</span>
                         <span class="arrow "></span>
                     </a>
@@ -173,14 +173,15 @@
                         <li><a href="{{url('nghiep_vu/qua_trinh/luong/maso=all')}}">Quá trình hưởng lương</a></li>
                         <li><a href="{{url('nghiep_vu/qua_trinh/phu_cap/maso=all')}}">Quá trình phụ cấp</a></li>
                         -->
-
-                        <li><a href="{{url('nghiep_vu/quan_ly/dia_ban_dbkk/index')}}"><i class="fa fa-caret-right"></i>Danh sách thôn, tổ dân phố</a></li>
+                        @if(session('admin')->maphanloai == 'KVXP')
+                            <li><a href="{{url('nghiep_vu/quan_ly/dia_ban_dbkk/index')}}"><i class="fa fa-caret-right"></i>Danh sách thôn, tổ dân phố</a></li>
+                        @endif
                     </ul>
                 </li>
 
                 <li>
                     <a href="javascript:;">
-                        <i class="fa fa-wrench"></i>
+                        <i class="fa glyphicon glyphicon-list-alt"></i>
                         <span class="title">Nguồn và dự toán</span>
                         <span class="arrow "></span>
                     </a>
@@ -212,7 +213,7 @@
 
                 <li>
                     <a href="javascript:;">
-                        <i class="fa fa-wrench"></i>
+                        <i class="fa icon-book-open"></i>
                         <span class="title">Tổng hợp</span>
                         <span class="arrow "></span>
                     </a>
@@ -236,12 +237,17 @@
 
                         <!-- Các tài khoản quản lý khu vực mới có tính năng tổng hợp dữ liệu từ đơn vị cấp dưới -->
                         @if(session('admin')->quanlykhuvuc)
-                            <li>
-                                <a href="{{url('chuc_nang/tong_hop_luong/huyen/index?nam='.date('Y'))}}"><i class="fa fa-caret-right"></i>Tổng hợp lương toàn địa bàn</a>
-                            </li>
-                            <li>
-                                <a href="{{url('chuc_nang/xem_du_lieu/huyen?thang='.date('m').'&nam='.date('Y').'&trangthai=ALL')}}"><i class="fa fa-caret-right"></i>Xem số liệu tổng hợp toàn địa bàn</a>
-                            </li>
+                                <li>
+                                    <a href="{{url('chuc_nang/tong_hop_luong/huyen/index?nam='.date('Y'))}}"><i class="fa fa-caret-right"></i>Tổng hợp lương toàn địa bàn</a>
+                                </li>
+
+                                <li>
+                                    <a href="{{url('chuc_nang/tong_hop_nguon/index?sohieu=TT67_2017')}}"><i class="fa fa-caret-right"></i>Tổng số liệu nguồn kinh phí</a>
+                                </li>
+
+                                <li>
+                                    <a href="{{url('chuc_nang/xem_du_lieu/huyen?thang='.date('m').'&nam='.date('Y').'&trangthai=ALL')}}"><i class="fa fa-caret-right"></i>Xem số liệu tổng hợp toàn địa bàn</a>
+                                </li>
                         @endif
                     </ul>
                 </li>

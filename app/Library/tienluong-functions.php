@@ -223,7 +223,7 @@ function getDiaBan($val_null = true){
 }
 
 function getColTongHop(){
-    return array('heso','vuotkhung','pcct',
+    return array('heso','hesopc','vuotkhung','pcct',
         'pckct',
         'pck',
         'pccv',
@@ -310,11 +310,12 @@ function getTextStatus($status){
     $a_trangthai = array(
         'CHUALUONG' => 'text-danger',
         'CHUATAO' => 'text-danger',
+        'CHUADL' => 'text-danger', //dùng cho đơn vị chủ quản - chưa có đơn vị cấp dưới nào gửi dữ liệu
         'CHOGUI' => 'text-info',
         'DAGUI' => 'text-success',
         'TRALAI' => 'text-danger',
         'CHUADAYDU' => 'text-warning',
-        'CHUAGUI' => 'text-danger'
+        'CHUAGUI' => 'text-info' //dùng cho đơn vị chủ quản - các đơn vị cấp dưới đã có dữ liệu nhưng chưa gửi đi
     );
     return isset($a_trangthai[$status]) ? $a_trangthai[$status] : '';
 }
@@ -327,7 +328,8 @@ function getStatus(){
         'DAGUI' => 'Dữ liệu đã gửi',
         'TRALAI' => 'Dữ liệu bị trả lại',
         'CHUADAYDU' => 'Dữ liệu chưa đầy đủ',
-        'CHUAGUI' => 'Dữ liệu chờ gửi'
+        'CHUAGUI' => 'Dữ liệu chờ gửi',
+        'CHUADL' => 'Dữ liệu chưa được gửi lên'
     );
 }
 

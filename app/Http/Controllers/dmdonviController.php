@@ -49,25 +49,28 @@ class dmdonviController extends Controller
             return view('errors.notlogin');
     }
 
-    public function information_local(){
+    public function information_local()
+    {
         if (Session::has('admin')) {
-            $model=dmdonvi::where('madv',session('admin')->madv)->first();
+            $model = dmdonvi::where('madv', session('admin')->madv)->first();
             $model_capdv = getCapDonVi();
             $linhvuchoatdong = getLinhVucHoatDong(false);
             $phanloainguon = getPhanLoaiNguon(false);
             $phanloaixa = getPhanLoaiXa(false);
-            $model->capdutoan = isset($model_capdv[$model->capdonvi])?$model_capdv[$model->capdonvi]:'';
-            $model->phanloainguon = isset($phanloainguon[$model->phanloainguon])?$phanloainguon[$model->phanloainguon]:'';
-            $model->phanloaixa = isset($phanloaixa[$model->phanloaixa])?$phanloaixa[$model->phanloaixa]:'';
+            $model->capdutoan = isset($model_capdv[$model->capdonvi]) ? $model_capdv[$model->capdonvi] : '';
+            $model->phanloainguon = isset($phanloainguon[$model->phanloainguon]) ? $phanloainguon[$model->phanloainguon] : '';
+            $model->phanloaixa = isset($phanloaixa[$model->phanloaixa]) ? $phanloaixa[$model->phanloaixa] : '';
             $model->donviquanly = getTenDV($model->macqcq);
-            $a_lv = explode(';',$model->linhvuchoatdong);
-            foreach($a_lv as $lv){
-                $model->lvhd .= ($linhvuchoatdong[$model->linhvuchoatdong].';');
+            $a_lv = explode(';', $model->linhvuchoatdong);
+
+            foreach ($a_lv as $lv) {
+                $model->lvhd .= isset($linhvuchoatdong[$model->linhvuchoatdong]) ? ($linhvuchoatdong[$model->linhvuchoatdong] . ';'):'';
             }
+
             return view('system.general.local.index')
-                ->with('model',$model)
-                ->with('url','/he_thong/don_vi/')
-                ->with('pageTitle','Thông tin đơn vị');
+                ->with('model', $model)
+                ->with('url', '/he_thong/don_vi/')
+                ->with('pageTitle', 'Thông tin đơn vị');
         } else
             return view('errors.notlogin');
     }

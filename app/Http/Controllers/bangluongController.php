@@ -10,6 +10,7 @@ use App\dmdonvi;
 use App\dmdonvibaocao;
 use App\dmkhoipb;
 use App\dmnguonkinhphi;
+use App\dmphanloaicongtac;
 use App\dmphanloaict;
 use App\dmphucap;
 use App\hosocanbo;
@@ -57,10 +58,9 @@ class bangluongController extends Controller
         $inputs = $request->all();
         $model = bangluong::where('mabl', $inputs['mabl'])->first();
 
-        //Chưa tính trường hợp chọn lĩnh vực hoạt động =>lấy cán bộ hoạt động trong lĩnh vực đó
-
         if (count($model) > 0) {
             //update
+            $inputs['luongcoban'] = getDbl($inputs['luongcoban']);
             $model->update($inputs);
         } else {
             //insert
@@ -73,7 +73,6 @@ class bangluongController extends Controller
             $inputs['phantramhuong'] = getDbl($inputs['phantramhuong']);
             $inputs['luongcoban'] = getDbl($inputs['luongcoban']);
 
-
             //Lấy tất cả cán bộ trong đơn vị
             $m_cb = hosocanbo::where('madv', $madv)
                 ->select('macanbo', 'macongchuc', 'tencanbo', 'mact','lvhd', 'macvcq', 'mapb', 'msngbac', 'heso', 'hesopc', 'hesott', 'vuotkhung', DB::raw("'" . $inputs['mabl'] . "' as mabl"),
@@ -84,7 +83,7 @@ class bangluongController extends Controller
                 //Dùng tìm kiếm các bộ nào phù hợp. Do lvhd là mảng nên pải lọc
                 foreach($m_cb as $canbo){
                     $a_lv = explode(',',$canbo->lvhd);
-                    if(in_array($inputs['linhvuc'],$a_lv)){
+                    if(in_array($inputs['linhvuc'],$a_lv) || $canbo->lvhd == null){
                         $canbo->lvhd = $inputs['linhvuc'];
                     }
                 }
@@ -92,11 +91,23 @@ class bangluongController extends Controller
                 $m_cb = $m_cb->where('lvhd',$inputs['linhvuc']);
             }
 
-
-            $gnr = getGeneralConfigs();
-
+            $model_congtac = dmphanloaict::all();
+            $model_phanloai = dmphanloaicongtac::all();
             $a_truythu = array();
             foreach ($m_cb as $cb) {
+                $congtac = $model_congtac->where('mact',$cb->mact)->first();
+                $cb->macongtac = isset($congtac) ? $congtac->macongtac : null;
+
+                $phanloai = $model_phanloai->where('macongtac',$cb->macongtac)->first();
+                $cb->bhxh = isset($phanloai) ? $phanloai->bhxh : 0;
+                $cb->bhyt = isset($phanloai) ? $phanloai->bhyt : 0;
+                $cb->kpcd = isset($phanloai) ? $phanloai->kpcd : 0;
+                $cb->bhtn = isset($phanloai) ? $phanloai->bhtn : 0;
+                $cb->bhxh_dv = isset($phanloai) ? $phanloai->bhxh_dv : 0;
+                $cb->bhyt_dv = isset($phanloai) ? $phanloai->bhyt_dv : 0;
+                $cb->kpcd_dv = isset($phanloai) ? $phanloai->kpcd_dv : 0;
+                $cb->bhtn_dv = isset($phanloai) ? $phanloai->bhtn_dv : 0;
+
                 $a_truythu[] = $cb->macanbo;
                 //trong bảng danh mục là % vượt khung => sang bảng lương chuyển thành hệ số
                 $cb->vuotkhung = round((($cb->heso + $cb->pccv) * $cb->vuotkhung / 100), 2);
@@ -130,17 +141,17 @@ class bangluongController extends Controller
                 $cb->ttl = $inputs['luongcoban'] * $ths * $inputs['phantramhuong'] / 100;
                 $luongnopbaohiem = $inputs['luongcoban'] * ($cb->heso + $cb->pccv + $cb->hesott + $cb->vuotkhung) * $inputs['phantramhuong'] / 100;
 
-                $cb->stbhxh = $luongnopbaohiem * floatval($gnr['bhxh']) / 100;
-                $cb->stbhyt = $luongnopbaohiem * floatval($gnr['bhyt']) / 100;
-                $cb->stkpcd = $luongnopbaohiem * floatval($gnr['kpcd']) / 100;
-                $cb->stbhtn = $luongnopbaohiem * floatval($gnr['bhtn']) / 100;
+                $cb->stbhxh = $luongnopbaohiem * floatval($cb->bhxh) / 100;
+                $cb->stbhyt = $luongnopbaohiem * floatval($cb->bhyt) / 100;
+                $cb->stkpcd = $luongnopbaohiem * floatval($cb->kpcd) / 100;
+                $cb->stbhtn = $luongnopbaohiem * floatval($cb->bhtn) / 100;
                 $cb->ttbh = $cb->stbhxh + $cb->stbhyt + $cb->stkpcd + $cb->stbhtn;
                 $cb->luongtn = $cb->ttl - $cb->ttbh;
 
-                $cb->stbhxh_dv = $luongnopbaohiem * floatval($gnr['bhxh_dv']) / 100;
-                $cb->stbhyt_dv = $luongnopbaohiem * floatval($gnr['bhyt_dv']) / 100;
-                $cb->stkpcd_dv = $luongnopbaohiem * floatval($gnr['kpcd_dv']) / 100;
-                $cb->stbhtn_dv = $luongnopbaohiem * floatval($gnr['bhtn_dv']) / 100;
+                $cb->stbhxh_dv = $luongnopbaohiem * floatval($cb->bhxh_dv) / 100;
+                $cb->stbhyt_dv = $luongnopbaohiem * floatval($cb->bhyt_dv) / 100;
+                $cb->stkpcd_dv = $luongnopbaohiem * floatval($cb->kpcd_dv) / 100;
+                $cb->stbhtn_dv = $luongnopbaohiem * floatval($cb->bhtn_dv) / 100;
                 $cb->ttbh_dv = $cb->stbhxh_dv + $cb->stbhyt_dv + $cb->stkpcd_dv + $cb->stbhtn_dv;
             }
             $model_canbo = $m_cb->where('hesott', '>', 0)->map(function ($data) {
@@ -148,9 +159,10 @@ class bangluongController extends Controller
                     ->only(['macanbo'])
                     ->all();
             });
+
             hosocanbo::wherein('macanbo', $model_canbo->toarray())->update(['hesott' => 0]);
             bangluong::create($inputs);
-            $m_cb = unset_key($m_cb->toarray(), array('lvhd'));
+            $m_cb = unset_key($m_cb->toarray(), array('lvhd','macongtac','bhxh','bhyt','kpcd','bhtn','bhxh_dv','bhyt_dv','kpcd_dv','bhtn_dv'));
             bangluong_ct::insert($m_cb);
         }
 

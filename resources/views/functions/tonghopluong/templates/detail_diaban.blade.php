@@ -46,11 +46,11 @@
                                 <th class="text-center" style="width: 5%">STT</th>
                                 <th class="text-center">Tên địa bàn</th>
                                 <th class="text-center">Phân loại</br>địa bàn</th>
-                                <th class="text-center">Hệ số</br>lương</th>
-                                <th class="text-center">Hệ số</br>vượt khung</th>
-                                <th class="text-center">Tổng hệ</br>số phụ cấp</th>
-                                <th class="text-center">Tổng tiền</br>lương</th>
-                                <th class="text-center">Tổng khoản nộp</br>theo lương</th>
+                                <th class="text-center">Lương ngạch</br>bậc</th>
+                                <th class="text-center">Phụ cấp</br>lương</th>
+                                <th class="text-center">Các khoản</br>phụ cấp</th>
+                                <th class="text-center">Tổng tiền</br>lương và phụ</br> cấp</th>
+                                <th class="text-center">Tổng khoản</br>nộp theo</br>lương</th>
                                 <th class="text-center">Thao tác</th>
                             </tr>
                         </thead>
@@ -61,11 +61,11 @@
                                         <td class="text-center">{{$key+1}}</td>
                                         <td>{{$value->tendiaban}}</td>
                                         <td>{{$value->phanloai}}</td>
-                                        <td>{{$value->heso}}</td>
-                                        <td>{{$value->vuotkhung}}</td>
-                                        <td>{{$value->tonghs}}</td>
-                                        <td>{{number_format($value->tongtl)}}</td>
-                                        <td>{{number_format($value->tongbh)}}</td>
+                                        <td class="text-right">{{dinhdangso($value->heso)}}</td>
+                                        <td class="text-right">{{dinhdangso($value->hesopc)}}</td>
+                                        <td class="text-right">{{dinhdangso($value->tonghs - $value->heso - $value->hesopc)}}</td>
+                                        <td class="text-right">{{dinhdangso($value->tonghs)}}</td>
+                                        <td class="text-right">{{dinhdangso($value->tongbh)}}</td>
                                         <td>
                                             <a href="{{url($furl.'edit_detail_diaban?mathdv='.$value->mathdv.'&madiaban='.$value->madiaban)}}" class="btn btn-info btn-xs mbs">
                                                 <i class="fa fa-edit"></i>&nbsp; Chỉnh sửa</a>

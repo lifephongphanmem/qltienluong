@@ -28,7 +28,7 @@
         }
 
         td, th {
-            padding: 10px;
+            padding: 5px;
         }
         p{
             padding: 5px;
@@ -48,6 +48,7 @@
 <div class="in" style="margin-right: 20px; text-align: right">
     <button type="submit" onclick=" window.print()"> In số liệu</button>
 </div>
+
 <body style="font:normal 12px Times, serif;">
 
 <table class="header" width="96%" border="0" cellspacing="0" cellpadding="8" style="margin:0 auto 25px; text-align: center;">
@@ -68,15 +69,15 @@
         </td>
     </tr>
 </table>
-<p style="text-align: center; font-weight: bold; font-size: 20px;">SỐ LIỆU TỔNG HỢP CHI TRẢ LƯƠNG TẠI ĐƠN VỊ THEO THÔN, TỔ DÂN PHỐ</p>
+<p style="text-align: center; font-weight: bold; font-size: 20px;">SỐ LIỆU TỔNG HỢP CHI TRẢ LƯƠNG TẠI ĐƠN VỊ CẤP DƯỚI</p>
 <p style="text-align: center; font-style: italic">Tháng {{$thongtin['thang']}} năm {{$thongtin['nam']}}</p>
 
 <p style="text-align: right; font-style: italic">Đơn vị tính: đồng</p>
 <table cellspacing="0" cellpadding="0" border="1" style="margin: 20px auto; border-collapse: collapse;">
     <tr style="padding-left: 2px;padding-right: 2px">
         <th style="width: 2%;padding-left: 2px;padding-right: 2px" rowspan="2">STT</th>
-        <th style="width: 7%;padding-left: 2px;padding-right: 2px" rowspan="2">Tên thôn, tổ dân phố</th>
-        <th style="width: 7%;padding-left: 2px;padding-right: 2px" rowspan="2">Phân loại</th>
+        <th style="width: 7%;padding-left: 2px;padding-right: 2px" rowspan="2">Nguồn kinh phí</th>
+        <th style="width: 7%;padding-left: 2px;padding-right: 2px" rowspan="2">Phân loại</br>công tác</th>
         <th style="width: 6%;padding-left: 2px;padding-right: 2px" rowspan="2">Lương ngạch</br>bậc</th>
         <th style="width: 6%;padding-left: 2px;padding-right: 2px" rowspan="2">Phụ cấp</br>lương</th>
         <th style="width: 6%;padding-left: 2px;padding-right: 2px" rowspan="2">Tổng các</br>khoản phụ</br>cấp</th>
@@ -116,58 +117,57 @@
     @foreach($model as $ct)
         <tr class="money">
             <td style="text-align: center">{{$stt++}}</td>
-            <td style="text-align: left">{{$ct->tendiaban}}</td>
-            <td style="text-align: left">{{$ct->phanloai}}</td>
-            <td>{{dinhdangso($ct->heso)}}</td>
-            <td>{{dinhdangso($ct->hesopc)}}</td>
-            <td>{{dinhdangso($ct->tonghs - $ct->heso - $ct->hesopc)}}</td>
+            <td style="text-align: left">{{$ct['tennguonkp']}}</td>
+            <td style="text-align: left">{{$ct['tencongtac']}}</td>
+            <td>{{dinhdangso($ct['heso'])}}</td>
+            <td>{{dinhdangso($ct['hesopc'])}}</td>
+            <td>{{dinhdangso($ct['tonghs'] - $ct['heso'] - $ct['hesopc'])}}</td>
 
-            <td>{{dinhdangso($ct->vuotkhung)}}</td>
-            <td>{{dinhdangso($ct->pckv)}}</td>
-            <td>{{dinhdangso($ct->pccv)}}</td>
-            <td>{{dinhdangso($ct->pctnvk)}}</td>
-            <td>{{dinhdangso($ct->pcudn)}}</td>
-            <td>{{dinhdangso($ct->pcth)}}</td>
-            <td>{{dinhdangso($ct->pctn)}}</td>
-            <td>{{dinhdangso($ct->pccovu)}}</td>
-            <td>{{dinhdangso($ct->pcdang)}}</td>
-            <td>{{dinhdangso($ct->pcthni)}}</td>
-            <td>{{dinhdangso($ct->pck)}}</td>
+            <td>{{dinhdangso($ct['vuotkhung'])}}</td>
+            <td>{{dinhdangso($ct['pckv'])}}</td>
+            <td>{{dinhdangso($ct['pccv'])}}</td>
+            <td>{{dinhdangso($ct['pctnvk'])}}</td>
+            <td>{{dinhdangso($ct['pcudn'])}}</td>
+            <td>{{dinhdangso($ct['pcth'])}}</td>
+            <td>{{dinhdangso($ct['pctn'])}}</td>
+            <td>{{dinhdangso($ct['pccovu'])}}</td>
+            <td>{{dinhdangso($ct['pcdang'])}}</td>
+            <td>{{dinhdangso($ct['pcthni'])}}</td>
+            <td>{{dinhdangso($ct['pck'])}}</td>
 
-            <td>{{dinhdangso($ct->tongtl)}}</td>
-            <td>{{dinhdangso($ct->stbhxh_dv)}}</td>
-            <td>{{dinhdangso($ct->stbhyt_dv)}}</td>
-            <td>{{dinhdangso($ct->stkpcd_dv)}}</td>
-            <td>{{dinhdangso($ct->stbhtn_dv)}}</td>
-            <td>{{dinhdangso($ct->tongbh)}}</td>
-            <td>{{dinhdangso($ct->tongbh + $ct->tongtl)}}</td>
+            <td>{{dinhdangso($ct['tonghs'])}}</td>
+            <td>{{dinhdangso($ct['stbhxh_dv'])}}</td>
+            <td>{{dinhdangso($ct['stbhyt_dv'])}}</td>
+            <td>{{dinhdangso($ct['stkpcd_dv'])}}</td>
+            <td>{{dinhdangso($ct['stbhtn_dv'])}}</td>
+            <td>{{dinhdangso($ct['tongbh'])}}</td>
+            <td>{{dinhdangso($ct['tongbh'] + $ct['tonghs'])}}</td>
 
         </tr>
     @endforeach
-    <tr style="font-weight: bold;" class="money">
+    <tr class="money" style="font-weight: bold">
         <td colspan="3">Tổng cộng</td>
-        <td>{{dinhdangso($model->sum('heso'))}}</td>
-        <td>{{dinhdangso($model->sum('hesopc'))}}</td>
-        <td>{{dinhdangso($model->sum('tonghs') - $model->sum('heso') - $model->sum('hesopc'))}}</td>
-        <td>{{dinhdangso($model->sum('vuotkhung'))}}</td>
-        <td>{{dinhdangso($model->sum('pckv'))}}</td>
-        <td>{{dinhdangso($model->sum('pccv'))}}</td>
-        <td>{{dinhdangso($model->sum('pctnvk'))}}</td>
-        <td>{{dinhdangso($model->sum('pcudn'))}}</td>
-        <td>{{dinhdangso($model->sum('pcth'))}}</td>
-        <td>{{dinhdangso($model->sum('pctn'))}}</td>
-        <td>{{dinhdangso($model->sum('pccovu'))}}</td>
-        <td>{{dinhdangso($model->sum('pcdang'))}}</td>
-        <td>{{dinhdangso($model->sum('pcthni'))}}</td>
-        <td>{{dinhdangso($model->sum('pck'))}}</td>
-        <td>{{dinhdangso($model->sum('tongtl'))}}</td>
-        <td>{{dinhdangso($model->sum('stbhxh_dv'))}}</td>
-        <td>{{dinhdangso($model->sum('stbhyt_dv'))}}</td>
-        <td>{{dinhdangso($model->sum('stkpcd_dv'))}}</td>
-        <td>{{dinhdangso($model->sum('stbhtn_dv'))}}</td>
-        <td>{{dinhdangso($model->sum('tongbh'))}}</td>
-        <td>{{dinhdangso($model->sum('tongbh') + $model->sum('tongtl'))}}</td>
-
+        <td>{{dinhdangso(array_sum(array_column($model,'heso')))}}</td>
+        <td>{{dinhdangso(array_sum(array_column($model,'hesopc')))}}</td>
+        <td>{{dinhdangso(array_sum(array_column($model,'tonghs')) - array_sum( array_column($model,'heso')) - array_sum(array_column($model,'hesopc')))}}</td>
+        <td>{{dinhdangso(array_sum(array_column($model,'vuotkhung')))}}</td>
+        <td>{{dinhdangso(array_sum(array_column($model,'pckv')))}}</td>
+        <td>{{dinhdangso(array_sum(array_column($model,'pccv')))}}</td>
+        <td>{{dinhdangso(array_sum(array_column($model,'pctnvk')))}}</td>
+        <td>{{dinhdangso(array_sum(array_column($model,'pcudn')))}}</td>
+        <td>{{dinhdangso(array_sum(array_column($model,'pcth')))}}</td>
+        <td>{{dinhdangso(array_sum(array_column($model,'pctn')))}}</td>
+        <td>{{dinhdangso(array_sum(array_column($model,'pccovu')))}}</td>
+        <td>{{dinhdangso(array_sum(array_column($model,'pcdang')))}}</td>
+        <td>{{dinhdangso(array_sum(array_column($model,'pcthni')))}}</td>
+        <td>{{dinhdangso(array_sum(array_column($model,'pck')))}}</td>
+        <td>{{dinhdangso(array_sum(array_column($model,'tonghs')))}}</td>
+        <td>{{dinhdangso(array_sum(array_column($model,'stbhxh_dv')))}}</td>
+        <td>{{dinhdangso(array_sum(array_column($model,'stbhyt_dv')))}}</td>
+        <td>{{dinhdangso(array_sum(array_column($model,'stkpcd_dv')))}}</td>
+        <td>{{dinhdangso(array_sum(array_column($model,'stbhtn_dv')))}}</td>
+        <td>{{dinhdangso(array_sum(array_column($model,'tongbh')))}}</td>
+        <td>{{dinhdangso(array_sum(array_column($model,'tongbh')) + array_sum(array_column($model,'tonghs')))}}</td>
     </tr>
 </table>
 

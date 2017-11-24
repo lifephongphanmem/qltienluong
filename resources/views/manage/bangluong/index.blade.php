@@ -44,7 +44,7 @@
                                 <th class="text-center" style="width: 5%">STT</th>
                                 <th class="text-center">Tháng/Năm</th>
                                 <th class="text-center">Nguồn kinh phí</th>
-                                @if(session('admin')->level=!'KVXP')
+                                @if(session('admin')->maphanloai != 'KVXP')
                                     <th class="text-center">Lĩnh vực hoạt động</th>
                                 @endif
                                 <th class="text-center">Nội dung bảng lương</th>
@@ -59,7 +59,7 @@
                                         <td class="text-center">{{$i++}}</td>
                                         <td class="text-center">{{$value->thang.'/'.$value->nam}}</td>
                                         <td>{{$value->tennguonkp}}</td>
-                                        @if(session('admin')->level=!'KVXP')
+                                        @if(session('admin')->maphanloai !='KVXP')
                                             <td>{{$value->linhvuchoatdong}}</td>
                                         @endif
                                         <td>{{$value->noidung}}</td>
@@ -130,8 +130,7 @@
                     <!-- Phân loại đơn vị xa phường ko cần lĩnh vực hoạt động -->
                     @if(session('admin')->maphanloai != 'KVXP')
                         <label class="control-label">Lĩnh vực công tác </label>
-                        <select id="linhvuc" name="linhvuc" class="form-control">
-                            <option value="ALL">--Chọn lĩnh vực hoạt động--</option>
+                        <select id="linhvuchoatdong" name="linhvuchoatdong" class="form-control">
                             @foreach($m_linhvuc as $key => $val)
                                 <option value="{{$key}}">{{$val}}</option>
                             @endforeach

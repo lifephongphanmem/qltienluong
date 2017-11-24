@@ -318,6 +318,7 @@ Route::group(['prefix'=>'chuc_nang'],function(){
             Route::post('store_detail_diaban','tonghopluong_donviController@store_detail_diaban');//chỉnh sửa dữ liêu
 
             Route::post('senddata','tonghopluong_donviController@senddata'); //gửi dữ liệu
+            Route::post('tralai','tonghopluong_donviController@tralai'); //trả lại dữ liệu
 
             Route::get('printf_data/ma_so={mathdv}','tonghopluong_donviController@printf_data');
             Route::get('printf_data_diaban/ma_so={mathdv}','tonghopluong_donviController@printf_data_diaban');
@@ -326,6 +327,8 @@ Route::group(['prefix'=>'chuc_nang'],function(){
         Route::group(['prefix'=>'khoi'],function(){
             Route::get('index','tonghopluong_khoiController@index');
             Route::get('tonghop','tonghopluong_khoiController@tonghop');
+            Route::get('tonghop_diaban','tonghopluong_khoiController@tonghop_diaban');
+
             Route::post('tonghop_chuadaydu','tonghopluong_khoiController@tonghop_chuadaydu');
             Route::get('detail/ma_so={mathdv}','tonghopluong_khoiController@detail');
             Route::post('senddata','tonghopluong_khoiController@senddata'); //gửi dữ liệu
@@ -343,9 +346,9 @@ Route::group(['prefix'=>'chuc_nang'],function(){
         Route::group(['prefix'=>'huyen'],function(){
             Route::get('index','tonghopluong_huyenController@index');
             Route::get('tonghop','tonghopluong_huyenController@tonghop');
+            Route::get('tonghop_diaban','tonghopluong_huyenController@tonghop_diaban');
             Route::post('tonghop_chuadaydu','tonghopluong_huyenController@tonghop_chuadaydu');
             //chưa làm
-            Route::get('detail/ma_so={mathdv}','tonghopluong_huyenController@detail');
             Route::post('senddata','tonghopluong_huyenController@senddata'); //gửi dữ liệu
 
             Route::get('printf_data/ma_so={mathdv}','tonghopluong_huyenController@printf_data');
@@ -409,6 +412,16 @@ Route::group(['prefix'=>'bao_cao'],function(){
         Route::post('BcDSCCCVCC','baocaoController@BcDSCCCVCC');
         Route::post('BcDSVCCVCC','baocaoController@BcDSVCCVCC');
         Route::post('BcSLCLCC_TT11','baocaoController@BcSLCLCC_TT11');
+    });
+
+    Route::group(['prefix'=>'thong_tu_67'],function(){
+        Route::group(['prefix'=>'don_vi'],function(){
+            Route::get('mau2a1','baocaothongtu67Controller@mau2a1_donvi');
+            Route::get('mau2a2','baocaothongtu67Controller@mau2a2_donvi');
+            Route::get('mau2c','baocaothongtu67Controller@mau2c_donvi');
+            Route::get('mau2d','baocaothongtu67Controller@mau2d_donvi');
+            Route::get('mau4b','baocaothongtu67Controller@mau4b_donvi');
+        });
     });
 
     Route::group(['prefix'=>'bang_luong'],function(){

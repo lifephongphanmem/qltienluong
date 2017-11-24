@@ -63,32 +63,37 @@
                                     <td class="text-center bold">{{$a_trangthai[$value['trangthai']]}}</td>
                                     <td>
                                         @if ($value['mathdv'] != NULL)
-                                            <a href="{{url($furl.'tonghop?thang='.$value['thang'].'&nam='.$nam)}}" class="btn btn-default btn-xs" target="_blank">
-                                                <i class="fa fa-print"></i>&nbsp; Số liệu tổng hợp</a>
-                                            <a href="{{url($furl.'tonghop_diaban?thang='.$value['thang'].'&nam='.$nam)}}" class="btn btn-default btn-xs" target="_blank">
-                                                <i class="fa fa-print"></i>&nbsp; Số liệu địa bàn</a>
-                                            <a href="{{url('/chuc_nang/xem_du_lieu/index?thang='.$value['thang'].'&nam='.$nam.'&trangthai=ALL')}}" class="btn btn-default btn-xs">
-                                                <i class="fa fa-list-alt"></i>&nbsp; Số liệu chi tiết</a>
-                                        @else
-                                            @if($value['trangthai'] != 'CHUADL')
-                                                <a href="{{url($furl.'tonghop?thang='.$value['thang'].'&nam='.$nam)}}" class="btn btn-default btn-xs" target="_blank">
-                                                    <i class="fa fa-print"></i>&nbsp; Số liệu tổng hợp</a>
-                                                <a href="{{url($furl.'tonghop_diaban?thang='.$value['thang'].'&nam='.$nam)}}" class="btn btn-default btn-xs" target="_blank">
-                                                    <i class="fa fa-print"></i>&nbsp; Số liệu địa bàn</a>
-
-                                                @if($value['trangthai'] != 'CHUADAYDU')
-                                                    <a href="{{url('/chuc_nang/xem_du_lieu/index?thang='.$value['thang'].'&nam='.$nam.'&trangthai=ALL')}}" class="btn btn-default btn-xs">
-                                                        <i class="fa fa-list-alt"></i>&nbsp; Số liệu chi tiết</a>
-                                                    <button type="button" class="btn btn-default btn-xs" onclick="confirmChuyen('{{$value['thang']}}','{{$nam}}')" data-target="#chuyen-modal" data-toggle="modal"><i class="fa fa-share-square-o"></i>&nbsp;
-                                                        Gửi dữ liệu</button>
-                                                @else
-                                                    <a href="{{url('/chuc_nang/xem_du_lieu/index?thang='.$value['thang'].'&nam='.$nam.'&trangthai=CHOGUI')}}" class="btn btn-default btn-xs">
-                                                        <i class="fa fa-list-alt"></i>&nbsp; Đơn vị chưa gửi dữ liệu</a>
-                                                @endif
-
+                                            @if($value['trangthai'] !='DAGUI')
+                                                <a href="{{url($furl.'detail/ma_so='.$value['mathdv'])}}" class="btn btn-default btn-sm">
+                                                    <i class="fa fa-list-alt"></i>&nbsp; Số liệu tổng hợp</a>
+                                                <a href="{{url($furl.'detail_diaban/ma_so='.$value['mathdv'])}}" class="btn btn-default btn-sm">
+                                                    <i class="fa fa-list-alt"></i>&nbsp; Số liệu địa bàn</a>
+                                                <button type="button" class="btn btn-default btn-sm" onclick="confirmChuyen('{{$value['mathdv']}}')" data-target="#chuyen-modal" data-toggle="modal"><i class="fa fa-share-square-o"></i>&nbsp;
+                                                    Gửi dữ liệu</button>
                                             @else
-                                                <a href="{{url('/chuc_nang/xem_du_lieu/index?thang='.$value['thang'].'&nam='.$nam.'&trangthai=ALL')}}" class="btn btn-default btn-xs">
-                                                            <i class="fa fa-stack-overflow"></i>&nbsp; Chưa có dữ liệu</a>
+                                                <a href="{{url($furl.'printf_data/ma_so='.$value['mathdv'])}}" class="btn btn-default btn-sm" TARGET="_blank">
+                                                    <i class="fa fa-print"></i>&nbsp; Số liệu tổng hợp</a>
+                                                <a href="{{url($furl.'printf_data_diaban/ma_so='.$value['mathdv'])}}" class="btn btn-default btn-sm" TARGET="_blank">
+                                                    <i class="fa fa-print"></i>&nbsp; Số liệu địa bàn</a>
+                                                <!-- trường hợp phân loại đơn vị chủ quản # đơn vị cấp dưới
+                                                    @if($value['maphanloai'] == 'KVXP')
+                                                        <a href="{{url($furl.'printf_data_diaban/ma_so='.$value['mathdv'])}}" class="btn btn-success btn-sm" TARGET="_blank">
+                                                            <i class="fa fa-print"></i>&nbsp; Số liệu địa bàn</a>
+                                                    @endif
+                                                -->
+                                            @endif
+                                        @else
+                                            @if($value['trangthai'] == 'CHUADAYDU')
+                                                <button type="button" class="btn btn-default btn-sm" onclick="confirmTonghop('{{url($furl.'tonghop_chuadaydu?thang='.$value['thang'].'&nam='.$nam)}}')" data-target="#create-modal" data-toggle="modal"><i class="fa fa-stack-overflow"></i>&nbsp;
+                                                    Tổng hợp dữ liệu</button>
+                                                <a href="{{url('/chuc_nang/xem_du_lieu/huyen?thang='.$value['thang'].'&nam='.$nam.'&trangthai=CHOGUI')}}" class="btn btn-default btn-sm">
+                                                    <i class="fa fa-list-alt"></i>&nbsp; Đơn vị chưa gửi dữ liệu</a>
+                                            @elseif($value['trangthai'] == 'CHUATAO')
+                                                <a href="{{url($furl.'tonghop?thang='.$value['thang'].'&nam='.$nam)}}" class="btn btn-default btn-sm">
+                                                    <i class="fa fa-stack-overflow"></i>&nbsp; Tổng hợp dữ liệu</a>
+                                            @else
+                                                    <a href="{{url('/chuc_nang/xem_du_lieu/huyen?thang='.$value['thang'].'&nam='.$nam.'&trangthai=ALL')}}" class="btn btn-default btn-sm">
+                                                        <i class="fa fa-stack-overflow"></i>&nbsp; Chưa có dữ liệu</a>
                                             @endif
                                         @endif
                                     </td>
@@ -115,8 +120,7 @@
                     <div class="form-group">
                         <label><b>Số liệu tổng hợp khi gửi đi sẽ không thể chỉnh sửa. Bạn hãy kiểm tra kỹ số liệu trước khi gửi.</b></label>
                     </div>
-                    <input type="hidden" name="thang" id="thang">
-                    <input type="hidden" name="nam" id="nam">
+                    <input type="hidden" name="mathdv" id="mathdv">
                     <div class="modal-footer">
                         <button type="button" class="btn default" data-dismiss="modal">Hủy</button>
                         <button type="submit" class="btn blue">Đồng ý</button>
@@ -157,9 +161,8 @@
     </div>
     @include('includes.modal.delete')
     <script>
-        function confirmChuyen(thang, nam) {
-            document.getElementById("thang").value = thang;
-            document.getElementById("nam").value = nam;
+        function confirmChuyen(mathdv) {
+            document.getElementById("mathdv").value = mathdv;
         }
 
         function confirmTonghop(url) {
