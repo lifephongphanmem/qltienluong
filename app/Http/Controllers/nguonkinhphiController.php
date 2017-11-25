@@ -21,6 +21,10 @@ class nguonkinhphiController extends Controller
     function index(){
         if (Session::has('admin')) {
             $model = nguonkinhphi::where('madv',session('admin')->madv)->get();
+            $lvhd = getLinhVucHoatDong(false);
+            foreach($model as $ct){
+                $ct->linhvuc = isset($lvhd[$ct->linhvuchoatdong])? $lvhd[$ct->linhvuchoatdong]:'' ;
+            }
             return view('manage.nguonkinhphi.index')
                 ->with('furl','/du_toan/nguon_kinh_phi/')
                 ->with('a_trangthai',getStatus())

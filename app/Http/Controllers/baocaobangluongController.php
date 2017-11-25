@@ -164,7 +164,7 @@ class baocaobangluongController extends Controller
             foreach($model_tonghop_chitiet as $chitiet){
                 $chitiet->tennguonkp = isset($model_nguonkp[$chitiet->manguonkp])? $model_nguonkp[$chitiet->manguonkp]:'';
                 $chitiet->tencongtac = isset($model_phanloaict[$chitiet->macongtac])? $model_phanloaict[$chitiet->macongtac]:'';
-                $chitiet->tongtl = $chitiet->luongcoban * $chitiet->tonghs;
+                $chitiet->tongtl = $chitiet->tonghs;
                 $chitiet->tongbh = $chitiet->stbhxh_dv + $chitiet->stbhyt_dv + $chitiet->stkpcd_dv + $chitiet->stbhtn_dv;
             }
 
@@ -197,18 +197,18 @@ class baocaobangluongController extends Controller
                 ->where('nam',$tunam)
                 ->where('madv',session('admin')->madv)->get();
 
-            $model_tonghop_chitiet = tonghopluong_khoi_chitiet::wherein('mathdv',function($qr)use($tuthang,$denthang,$tunam){
+            $model_tonghop_chitiet = tonghopluong_donvi_chitiet::wherein('mathk',function($qr)use($tuthang,$denthang,$tunam){
                 $qr->select('mathdv')->from('tonghopluong_khoi')->whereBetween('thang', array($tuthang,$denthang))
                     ->where('nam',$tunam)
                     ->where('madv',session('admin')->madv);
             }) ->get();
-
+            //dd($model_tonghop_chitiet);
             $model_nguonkp = getNguonKP();
             $model_phanloaict = getNhomCongTac();
             foreach($model_tonghop_chitiet as $chitiet){
                 $chitiet->tennguonkp = isset($model_nguonkp[$chitiet->manguonkp])? $model_nguonkp[$chitiet->manguonkp]:'';
                 $chitiet->tencongtac = isset($model_phanloaict[$chitiet->macongtac])? $model_phanloaict[$chitiet->macongtac]:'';
-                $chitiet->tongtl = $chitiet->luongcoban * $chitiet->tonghs;
+                $chitiet->tongtl = $chitiet->tonghs;
                 $chitiet->tongbh = $chitiet->stbhxh_dv + $chitiet->stbhyt_dv + $chitiet->stkpcd_dv + $chitiet->stbhtn_dv;
             }
 
@@ -246,23 +246,26 @@ class baocaobangluongController extends Controller
             }
             $model_donvi = dmdonvi::where('macqcq',session('admin')->madv)->get();
 
-            $model_tonghop = tonghopluong_donvi::whereBetween('thang', array($tuthang,$denthang))
-                ->where('nam',$tunam)
-                ->where('macqcq',session('admin')->madv)->get();
-
-            $model_tonghop_chitiet = tonghopluong_donvi_chitiet::wherein('mathdv',function($qr)use($tuthang,$denthang,$tunam){
-                $qr->select('mathdv')->from('tonghopluong_donvi')->whereBetween('thang', array($tuthang,$denthang))
+            $model_tonghop = tonghopluong_donvi::wherein('mathk',function($qr)use($tuthang,$denthang,$tunam){
+                $qr->select('mathdv')->from('tonghopluong_khoi')->whereBetween('thang', array($tuthang,$denthang))
                     ->where('nam',$tunam)
-                    ->where('trangthai','DAGUI')
-                    ->where('macqcq',session('admin')->madv);
+                    //->where('trangthai','DAGUI')
+                    ->where('madv',session('admin')->madv);
             }) ->get();
-
+            //dd($model_tonghop);
+            $model_tonghop_chitiet = tonghopluong_donvi_chitiet::wherein('mathk',function($qr)use($tuthang,$denthang,$tunam){
+                $qr->select('mathdv')->from('tonghopluong_khoi')->whereBetween('thang', array($tuthang,$denthang))
+                    ->where('nam',$tunam)
+                    //->where('trangthai','DAGUI')
+                    ->where('madv',session('admin')->madv);
+            }) ->get();
+//dd($model_tonghop_chitiet);
             $model_nguonkp = getNguonKP();
             $model_phanloaict = getNhomCongTac();
             foreach($model_tonghop_chitiet as $chitiet){
                 $chitiet->tennguonkp = isset($model_nguonkp[$chitiet->manguonkp])? $model_nguonkp[$chitiet->manguonkp]:'';
                 $chitiet->tencongtac = isset($model_phanloaict[$chitiet->macongtac])? $model_phanloaict[$chitiet->macongtac]:'';
-                $chitiet->tongtl = $chitiet->luongcoban * $chitiet->tonghs;
+                $chitiet->tongtl = $chitiet->tonghs;
                 $chitiet->tongbh = $chitiet->stbhxh_dv + $chitiet->stbhyt_dv + $chitiet->stkpcd_dv + $chitiet->stbhtn_dv;
             }
 

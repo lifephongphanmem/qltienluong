@@ -58,7 +58,10 @@ class UsersController extends Controller
             //Danh sách đơn vị theo địa bàn
             if(isset($inputs['madb'])) {
                 $model_donvi = dmdonvi::select('madv', 'tendv')->where('madvbc', $inputs['madb'])->get();
-                $madv = $model_donvi->first()->madv;
+                $madv = '';
+                if(count($model_donvi)> 0){
+                    $madv = $model_donvi->first()->madv;
+                }
                 $model = Users::where('madv', $madv)->get();
 
                 return view('system.users.index_users')

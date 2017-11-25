@@ -16,6 +16,9 @@ class CreateTonghopluongDonviTable extends Migration
         Schema::create('tonghopluong_donvi', function (Blueprint $table) {
             $table->increments('id');
             $table->string('mathdv',50)->unique();
+            $table->string('mathk',50)->nullable();
+            $table->string('mathh',50)->nullable();
+            $table->string('matht',50)->nullable();
             $table->string('thang',10)->nullable();
             $table->string('nam',10)->nullable();
             $table->text('noidung')->nullable();

@@ -391,6 +391,9 @@ class tonghopluong_khoiController extends Controller
             $nam = $inputs['nam'];
             $madv = session('admin')->madv;
 
+            tonghopluong_donvi::where('nam',$nam)->where('thang',$thang)->where('macqcq',$madv)
+                ->update(['mathk'=>$inputs['mathdv'],'mathh'=>$inputs['mathdv']]);
+
             tonghopluong_donvi_chitiet::wherein('mathdv',function($query) use($nam, $thang, $madv){
                 $query->select('mathdv')->from('tonghopluong_donvi')->where('nam',$nam)->where('thang',$thang)->where('macqcq',$madv)->distinct();
             })->update(['mathk'=>$inputs['mathdv'],'mathh'=>$inputs['mathdv']]);

@@ -10,6 +10,9 @@ class tonghopluong_donvi extends Model
     protected $fillable = [
         'id',
         'mathdv',
+        'mathk',
+        'mathh',
+        'matht',
         'thang',
         'nam',
         'noidung',

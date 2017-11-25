@@ -124,6 +124,21 @@
                                 </div>
 
                             </div>
+
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label class="control-label">Tài khoản đăng nhập</label>
+                                        {!!Form::text('username', null, array('id' => 'username','class' => 'form-control required'))!!}
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label class="control-label">Mật khẩu</label>
+                                        {!!Form::text('password', null, array('id' => 'password','class' => 'form-control required'))!!}
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                 </div>
             </div>

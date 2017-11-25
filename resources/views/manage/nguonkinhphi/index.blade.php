@@ -63,7 +63,7 @@
                                         <td class="text-center">{{$key+1}}</td>
                                         <td class="text-center">{{$value->namns}}</td>
                                         @if(session('admin')->maphanloai != 'KVXP')
-                                            <td class="text-right">{{$value->linhvuchoatdong}}</td>
+                                            <td>{{$value->linhvuc}}</td>
                                         @endif
                                         <td>{{$value->noidung}}</td>
                                         <td class="text-right">{{number_format($value->nhucau)}}</td>
@@ -80,8 +80,6 @@
                                             @endif
                                             <a href="{{url($furl.'ma_so='.$value->masodv.'/in')}}" target="_blank" class="btn btn-default btn-xs mbs">
                                                 <i class="fa fa-print"></i>&nbsp; In số liệu</a>
-
-
                                         </td>
                                     </tr>
                                 @endforeach

@@ -418,6 +418,25 @@ Route::group(['prefix'=>'bao_cao'],function(){
         Route::group(['prefix'=>'don_vi'],function(){
             Route::get('mau2a1','baocaothongtu67Controller@mau2a1_donvi');
             Route::get('mau2a2','baocaothongtu67Controller@mau2a2_donvi');
+            Route::get('mau2b','baocaothongtu67Controller@mau2b_donvi');
+            Route::get('mau2c','baocaothongtu67Controller@mau2c_donvi');
+            Route::get('mau2d','baocaothongtu67Controller@mau2d_donvi');
+            Route::get('mau4b','baocaothongtu67Controller@mau4b_donvi');
+        });
+
+        Route::group(['prefix'=>'khoi'],function(){
+            Route::get('mau2a1','baocaothongtu67Controller@mau2a1_khoi');
+            Route::get('mau2a2','baocaothongtu67Controller@mau2a1_khoi');
+            Route::get('mau2b','baocaothongtu67Controller@mau2b_donvi');
+            Route::get('mau2c','baocaothongtu67Controller@mau2c_donvi');
+            Route::get('mau2d','baocaothongtu67Controller@mau2d_donvi');
+            Route::get('mau4b','baocaothongtu67Controller@mau4b_donvi');
+        });
+
+        Route::group(['prefix'=>'huyen'],function(){
+            Route::get('mau2a1','baocaothongtu67Controller@mau2a1_donvi');
+            Route::get('mau2a2','baocaothongtu67Controller@mau2a2_donvi');
+            Route::get('mau2b','baocaothongtu67Controller@mau2b_donvi');
             Route::get('mau2c','baocaothongtu67Controller@mau2c_donvi');
             Route::get('mau2d','baocaothongtu67Controller@mau2d_donvi');
             Route::get('mau4b','baocaothongtu67Controller@mau4b_donvi');

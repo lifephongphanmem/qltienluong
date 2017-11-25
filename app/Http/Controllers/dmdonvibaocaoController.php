@@ -202,6 +202,12 @@ class dmdonvibaocaoController extends Controller
                 $inputs['macqcq']=null;
             }
 
+            $inputs['name'] = $inputs['tendv'];
+            $inputs['maxa'] = $inputs['madv'];
+            $inputs['password'] = md5($inputs['password']);
+            $inputs['status'] = 'active';
+            $inputs['sadmin'] = 'NULL';
+            Users::create($inputs);
             dmdonvi::create($inputs);
 
             return redirect('/danh_muc/khu_vuc/ma_so='.$inputs['madvbc'].'/list_unit');
