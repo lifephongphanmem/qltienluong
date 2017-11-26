@@ -57,6 +57,7 @@ class tonghopluong_huyenController extends Controller
             foreach($model_qlkhoi as $donvi){
                 $model_donvi->add($donvi);
             }
+            //dd($model_donvi);
             $sldv = $model_donvi->count();
 
             $a_data=array(array('thang'=>'01','mathdv'=>null,'noidung'=>null,'sldv'=>$sldv,'dvgui'=>0),

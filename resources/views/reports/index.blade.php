@@ -29,7 +29,7 @@
 
                                 <li><a href="{{url('/bao_cao/thong_tu_67/don_vi/mau2a1')}}" target="_blank">Báo cáo nhu cầu kinh phí thực hiện nghị định 47/2017/NĐ-CP (Mẫu 2a/1)</a></li>
                                 <li><a href="{{url('/bao_cao/thong_tu_67/don_vi/mau2a2')}}" target="_blank">Báo cáo nhu cầu kinh phí thực hiện nghị định 47/2017/NĐ-CP (Mẫu 2a/2)</a></li>
-                                <li><a href="{{url('/bao_cao/thong_tu_67/huyen/mau2b')}}" target="_blank">Báo cáo tổng hợp quỹ trợ cấp tăng thêm của cán bộ xã, phường, thị trấn đã nghỉ việc (Mẫu 2b)</a></li>
+                                <li><a href="{{url('/bao_cao/thong_tu_67/don_vi/mau2b')}}" target="_blank">Báo cáo tổng hợp quỹ trợ cấp tăng thêm của cán bộ xã, phường, thị trấn đã nghỉ việc (Mẫu 2b)</a></li>
                                 <li><a href="{{url('/bao_cao/thong_tu_67/don_vi/mau2c')}}" target="_blank">Báo cáo nhu cầu chênh lệch (Mẫu 2c)</a></li>
                                 <li><a href="{{url('/bao_cao/thong_tu_67/don_vi/mau2d')}}" target="_blank">Tổng hợp kinh phí tăng thêm để thực hiện chế độ phụ cấp đối với cán bộ không chuyên trách (Mẫu 2d)</a></li>
                                 <li><a href="{{url('/bao_cao/thong_tu_67/don_vi/mau4a')}}" target="_blank">Báo cáo nguồn kinh phí (Mẫu 4a)</a></li>
@@ -55,7 +55,7 @@
 
                                     <li><a href="{{url('/bao_cao/thong_tu_67/khoi/mau2a1')}}" target="_blank">Báo cáo nhu cầu kinh phí thực hiện nghị định 47/2017/NĐ-CP (Mẫu 2a/1)</a></li>
                                     <li><a href="{{url('/bao_cao/thong_tu_67/khoi/mau2a2')}}" target="_blank">Báo cáo nhu cầu kinh phí thực hiện nghị định 47/2017/NĐ-CP (Mẫu 2a/2)</a></li>
-                                    <li><a href="{{url('/bao_cao/thong_tu_67/huyen/mau2b')}}" target="_blank">Báo cáo tổng hợp quỹ trợ cấp tăng thêm của cán bộ xã, phường, thị trấn đã nghỉ việc (Mẫu 2b)</a></li>
+                                    <li><a href="{{url('/bao_cao/thong_tu_67/khoi/mau2b')}}" target="_blank">Báo cáo tổng hợp quỹ trợ cấp tăng thêm của cán bộ xã, phường, thị trấn đã nghỉ việc (Mẫu 2b)</a></li>
                                     <li><a href="{{url('/bao_cao/thong_tu_67/khoi/mau2c')}}" target="_blank">Báo cáo nhu cầu chênh lệch (Mẫu 2c)</a></li>
                                     <li><a href="{{url('/bao_cao/thong_tu_67/khoi/mau2d')}}" target="_blank">Tổng hợp kinh phí tăng thêm để thực hiện chế độ phụ cấp đối với cán bộ không chuyên trách (Mẫu 2d)</a></li>
                                     <li><a href="{{url('/bao_cao/thong_tu_67/khoi/mau4a')}}" target="_blank">Báo cáo nguồn kinh phí (Mẫu 4a)</a></li>

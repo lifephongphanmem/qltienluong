@@ -421,25 +421,28 @@ Route::group(['prefix'=>'bao_cao'],function(){
             Route::get('mau2b','baocaothongtu67Controller@mau2b_donvi');
             Route::get('mau2c','baocaothongtu67Controller@mau2c_donvi');
             Route::get('mau2d','baocaothongtu67Controller@mau2d_donvi');
+            Route::get('mau4a','baocaothongtu67Controller@mau4a_donvi');
             Route::get('mau4b','baocaothongtu67Controller@mau4b_donvi');
         });
 
         Route::group(['prefix'=>'khoi'],function(){
             Route::get('mau2a1','baocaothongtu67Controller@mau2a1_khoi');
-            Route::get('mau2a2','baocaothongtu67Controller@mau2a1_khoi');
+            Route::get('mau2a2','baocaothongtu67Controller@mau2a2_khoi');
             Route::get('mau2b','baocaothongtu67Controller@mau2b_donvi');
-            Route::get('mau2c','baocaothongtu67Controller@mau2c_donvi');
+            Route::get('mau2c','baocaothongtu67Controller@mau2c_khoi');
             Route::get('mau2d','baocaothongtu67Controller@mau2d_donvi');
-            Route::get('mau4b','baocaothongtu67Controller@mau4b_donvi');
+            Route::get('mau4a','baocaothongtu67Controller@mau4a_khoi');
+            Route::get('mau4b','baocaothongtu67Controller@mau4b_khoi');
         });
 
         Route::group(['prefix'=>'huyen'],function(){
-            Route::get('mau2a1','baocaothongtu67Controller@mau2a1_donvi');
-            Route::get('mau2a2','baocaothongtu67Controller@mau2a2_donvi');
+            Route::get('mau2a1','baocaothongtu67Controller@mau2a1_huyen');
+            Route::get('mau2a2','baocaothongtu67Controller@mau2a2_huyen');
             Route::get('mau2b','baocaothongtu67Controller@mau2b_donvi');
-            Route::get('mau2c','baocaothongtu67Controller@mau2c_donvi');
+            Route::get('mau2c','baocaothongtu67Controller@mau2c_huyen');
             Route::get('mau2d','baocaothongtu67Controller@mau2d_donvi');
-            Route::get('mau4b','baocaothongtu67Controller@mau4b_donvi');
+            Route::get('mau4a','baocaothongtu67Controller@mau4a_huyen');
+            Route::get('mau4b','baocaothongtu67Controller@mau4b_huyen');
         });
     });
 

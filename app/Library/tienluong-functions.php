@@ -315,7 +315,8 @@ function getTextStatus($status){
         'DAGUI' => 'text-success',
         'TRALAI' => 'text-danger',
         'CHUADAYDU' => 'text-warning',
-        'CHUAGUI' => 'text-info' //dùng cho đơn vị chủ quản - các đơn vị cấp dưới đã có dữ liệu nhưng chưa gửi đi
+        'CHUAGUI' => 'text-info', //dùng cho đơn vị chủ quản - các đơn vị cấp dưới đã có dữ liệu nhưng chưa gửi đi
+        'GUILOI' => 'text-danger',
     );
     return isset($a_trangthai[$status]) ? $a_trangthai[$status] : '';
 }
@@ -329,7 +330,8 @@ function getStatus(){
         'TRALAI' => 'Dữ liệu bị trả lại',
         'CHUADAYDU' => 'Dữ liệu chưa đầy đủ',
         'CHUAGUI' => 'Dữ liệu chờ gửi',
-        'CHUADL' => 'Dữ liệu chưa được gửi lên'
+        'CHUADL' => 'Dữ liệu chưa được gửi lên',
+        'GUILOI' => 'Dữ liệu bị lỗi'
     );
 }
 

@@ -34,7 +34,7 @@
 <table width="96%" border="0" cellspacing="0" cellpadding="4" style="margin:0 auto 20px;text-align: center">
     <tr>
         <td style="text-align: left">
-            <b>UỶ BAN NHÂN DÂN TỈNH, THÀNH PHỐ</b><br>
+            <b>{{'Đơn vị: '.$m_dv->tendv}}</b>
         </td>
         <td style="text-align: right">
             <b>Biểu số 2c</b><br>
@@ -54,11 +54,11 @@
         <td>
         </td>
         <td style="text-align: right">
-            <i>Đơn vị: Triệu đồng</i>
+            <i>Đơn vị: đồng</i>
         </td>
     </tr>
 </table>
-<table width="96%" border ="1" cellspacing="0" cellpadding="4" style="margin:0 auto 20px; text-align: center;">
+<table width="96%" border ="1" cellspacing="0" cellpadding="4" style="margin:0 auto 20px;">
     <tr >
         <th style="width: 5%">STT</th>
         <th style="width: 30%">Nội dung</th>
@@ -68,7 +68,7 @@
         <th>Bổ sung chênh lệch do điều chỉnh mức lương cơ sở 1,21 triệu đồng/ tháng để giữ bằng thu nhập thấp tháng 4/2016</th>
         <th>Nhu cầu bổ sung chênh lệch 6 tháng năm 2017</th>
     </tr>
-    <tr>
+    <tr style="text-align: center">
         <td>1</td>
         <td>2</td>
         <td>3</td>
@@ -87,7 +87,7 @@
         <td></td>
     </tr>
     <tr style="font-weight: bold;">
-        <td >I</td>
+        <td style="text-align: center">I</td>
         <td style="text-align: left">KHU VỰC HCSN, ĐẢNG, ĐOÀN THỂ</td>
         <td></td>
         <td></td>
@@ -95,151 +95,26 @@
         <td></td>
         <td></td>
     </tr>
-    <tr >
-        <td >1</td>
-        <td style="text-align: left">Sự nghiệp giáo dục - đào tạo</td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-    </tr>
-    <tr >
-        <td ></td>
-        <td style="text-align: left">- Giáo dục</td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-    </tr>
-    <tr >
-        <td ></td>
-        <td style="text-align: left">- Đào tạo</td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-    </tr>
-    <tr >
-        <td >2</td>
-        <td style="text-align: left">Sự nghiệp y tế</td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-    </tr>
-    <tr >
-        <td >3</td>
-        <td style="text-align: left">Sự nghiệp khoa học-công nghệ</td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-    </tr>
-    <tr >
-        <td >4</td>
-        <td style="text-align: left">Sự nghiệp văn hóa thông tin</td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-    </tr>
 
-
-    <tr >
-        <td >5</td>
-        <td style="text-align: left">Sự nghiệp phát thanh truyền hình</td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-    </tr>
-    <tr >
-        <td >6</td>
-        <td style="text-align: left">Sự nghiệp thể dục - thể thao</td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-    </tr>
-    <tr >
-        <td >7</td>
-        <td style="text-align: left">Sự nghiệp đảm bảo xã hội</td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-    </tr>
-    <tr >
-        <td>8</td>
-        <td style="text-align: left">Sự nghiệp kinh tế</td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-    </tr>
-    <tr >
-        <td >9</td>
-        <td style="text-align: left">Sự nghiệp môi trường</td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-    </tr>
-    <tr >
-        <td >10</td>
-        <td style="text-align: left">Quản lý nhà nước, đảng, đoàn thể</td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-    </tr>
-    <tr style="font-style: italic">
-        <td >4</td>
-        <td style="text-align: left">- Quản lý NN</td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-    </tr>
-    <tr style="font-style: italic">
-        <td ></td>
-        <td style="text-align: left">- Đảng, đoàn thể</td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-    </tr>
+    @foreach($ar_I as $dulieu)
+        <tr>
+            <td style="text-align: center">{{$dulieu['tt']}}</td>
+            <td>{{$dulieu['noidung']}}</td>
+            <td style="text-align: right">{{dinhdangso($dulieu['soluong'])}}</td>
+            <td style="text-align: right">{{dinhdangso($dulieu['luong'])}}</td>
+            <td style="text-align: right">{{dinhdangso($dulieu['phucap'])}}</td>
+            <td style="text-align: right">{{dinhdangso($dulieu['chenhlech'])}}</td>
+            <td style="text-align: right">{{dinhdangso($dulieu['chenhlech']*6)}}</td>
+        </tr>
+    @endforeach
     <tr style="font-weight: bold;">
-        <td >II</td>
+        <td style="text-align: center">II</td>
         <td style="text-align: left">CÁN BỘ CHUYÊN TRÁCH, CÔNG CHỨC XÃ</td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-    </tr>
-    <tr >
-        <td></td>
-        <td> </td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
+        <td style="text-align: right">{{dinhdangso($ar_II['soluong'])}}</td>
+        <td style="text-align: right">{{dinhdangso($ar_II['luong'])}}</td>
+        <td style="text-align: right">{{dinhdangso($dulieu['phucap'])}}</td>
+        <td style="text-align: right">{{dinhdangso($ar_II['chenhlech'])}}</td>
+        <td style="text-align: right">{{dinhdangso($ar_II['chenhlech']*6)}}</td>
     </tr>
 </table>
 
@@ -258,11 +133,18 @@
     </tr>
     <tr>
         <td></td>
-        <td style="font-weight: bold">CHỦ TỊCH ỦY BAN NHÂN DÂN TỈNH, THÀNH PHỐ</td>
+        <td style="text-align: center;" width="50%">{{strtoupper($m_dv->cdlanhdao)}}</td>
     </tr>
     <tr>
         <td></td>
         <td style="font-style: italic">(Ký tên, đóng dấu)</td>
+    </tr><tr>
+        <td><br><br><br></td>
+    </tr>
+
+    <tr>
+        <td style="text-align: center;" width="50%">{{''}}</td>
+        <td style="text-align: center;" width="50%">{{$m_dv->lanhdao}}</td>
     </tr>
 </table>
 
