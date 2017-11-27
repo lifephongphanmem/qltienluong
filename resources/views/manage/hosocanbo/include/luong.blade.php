@@ -23,7 +23,7 @@
                         </div>
 
                         @if(isset($model))
-                            <div class="col-md-2">
+                            <div class="col-md-4">
                                 <div class="form-group">
                                     <label class="control-label">Ngạch bậc </label>
                                     <select class="form-control select2me" name="tennb" id="tennb" onchange="setMSNGBAC()">
@@ -50,7 +50,7 @@
                                 </div>
                             </div>
                         @else
-                            <div class="col-md-2">
+                            <div class="col-md-4">
                                 <div class="form-group">
                                     <label class="control-label">Ngạch bậc </label>
                                     <select class="form-control select2me" name="tennb" id="tennb" onchange="setMSNGBAC()">
@@ -80,14 +80,14 @@
 
                         <div class="col-md-2">
                             <div class="form-group">
-                                <label class="control-label">Từ ngày <span class="require">*</span></label>
+                                <label class="control-label">Từ ngày</label>
                                 {!! Form::input('date','ngaytu',null,array('id' => 'ngaytu', 'class' => 'form-control'))!!}
                             </div>
                         </div>
 
                         <div class="col-md-2">
                             <div class="form-group">
-                                <label class="control-label">Đến ngày <span class="require">*</span></label>
+                                <label class="control-label">Đến ngày</label>
                                 {!! Form::input('date','ngayden',null,array('id' => 'ngayden', 'class' => 'form-control'))!!}
                             </div>
                         </div>
@@ -116,7 +116,7 @@
 
                         <div class="col-md-2">
                             <div class="form-group">
-                                <label class="control-label">Hệ số lương truy thu</label>
+                                <label class="control-label">Hệ số lương truy lĩnh</label>
                                 {!!Form::text('hesott', null, array('id' => 'hesott','class' => 'form-control', 'data-mask'=>'fdecimal'))!!}
                             </div>
                         </div>

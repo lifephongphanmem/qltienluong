@@ -181,18 +181,6 @@
 
                 <li>
                     <a href="javascript:;">
-                        <i class="fa glyphicon glyphicon-list-alt"></i>
-                        <span class="title">Nguồn và dự toán</span>
-                        <span class="arrow "></span>
-                    </a>
-                    <ul class="sub-menu">
-                        <li><a href="{{url('nghiep_vu/quan_ly/du_toan/danh_sach')}}"><i class="fa fa-caret-right"></i>Dự toán lương</a></li>
-                        <li><a href="{{url('du_toan/nguon_kinh_phi/danh_sach')}}"><i class="fa fa-caret-right"></i>Nguồn kinh phí</a></li>
-                    </ul>
-                </li>
-
-                <li>
-                    <a href="javascript:;">
                         <i class="fa fa-sitemap fa-fw"></i>
                         <span class="title">Chức năng</span>
                         <span class="arrow "></span>
@@ -208,6 +196,18 @@
                             <a href="{{url('nghiep_vu/quan_ly/dieu_dong/maso=all')}}"><i class="fa fa-caret-right"></i>Luân chuyển cán bộ</a>
                         </li>
                         <li><a href="{{url('nghiep_vu/quan_ly/chi_tieu/danh_sach')}}"><i class="fa fa-caret-right"></i>Chỉ tiêu biên chế</a></li>
+                    </ul>
+                </li>
+
+                <li>
+                    <a href="javascript:;">
+                        <i class="fa glyphicon glyphicon-list-alt"></i>
+                        <span class="title">Nguồn và dự toán</span>
+                        <span class="arrow "></span>
+                    </a>
+                    <ul class="sub-menu">
+                        <li><a href="{{url('nghiep_vu/quan_ly/du_toan/danh_sach')}}"><i class="fa fa-caret-right"></i>Dự toán lương</a></li>
+                        <li><a href="{{url('du_toan/nguon_kinh_phi/danh_sach')}}"><i class="fa fa-caret-right"></i>Nhu cầu kinh phí</a></li>
                     </ul>
                 </li>
 
@@ -300,16 +300,18 @@
                             </a>
                             <ul class="sub-menu" style="margin-left: 15px;">
                                 <!--li><a href="{{url('danh_muc/bao_mat/index?&level=X')}}">Bảo mật hồ sơ</a></li-->
-                                <li><a href="{{url('danh_muc/khoi_pb/index')}}"><i class="fa fa-caret-right"></i>Lĩnh vực hoạt động</a></li>
-                                <li><a href="{{url('danh_muc/phong_ban/index')}}"><i class="fa fa-caret-right"></i>Phòng ban</a></li>
+                                <!--li><a href="{{url('danh_muc/phong_ban/index')}}"><i class="fa fa-caret-right"></i>Phòng ban</a></li-->
                                 <li><a href="{{url('danh_muc/chuc_vu_cq/ma_so='.session('admin')->level)}}"><i class="fa fa-caret-right"></i>Chức vụ chính quyền</a></li>
                                 <li><a href="{{url('danh_muc/chuc_vu_d/index')}}"><i class="fa fa-caret-right"></i>Chức vụ đảng</a></li>
-                                <li><a href="{{url('danh_muc/cong_tac/index')}}"><i class="fa fa-caret-right"></i>Phân loại công tác</a></li>
-                                <li><a href="{{url('danh_muc/phu_cap/index')}}"><i class="fa fa-caret-right"></i>Phụ cấp</a></li>
+                                <!--li><a href="{{url('danh_muc/phu_cap/index')}}"><i class="fa fa-caret-right"></i>Phụ cấp</a></li-->
                                 <li><a href="{{url('danh_muc/dan_toc/index')}}"><i class="fa fa-caret-right"></i>Dân tộc</a></li>
-                                <li><a href="{{url('danh_muc/nguon_kinh_phi/index')}}"><i class="fa fa-caret-right"></i>Nguồn kinh phí</a></li>
-                                <li><a href="{{url('danh_muc/ngach_bac/index')}}"><i class="fa fa-caret-right"></i>Mã ngạch lương</a></li>
-                                <li><a href="{{url('danh_muc/pl_don_vi/index')}}"><i class="fa fa-caret-right"></i>Phân loại đơn vị</a></li>
+                                @if(session('admin')->level == 'SA' || session('admin')->level == 'SSA')
+                                    <li><a href="{{url('danh_muc/nguon_kinh_phi/index')}}"><i class="fa fa-caret-right"></i>Nguồn kinh phí</a></li>
+                                    <li><a href="{{url('danh_muc/khoi_pb/index')}}"><i class="fa fa-caret-right"></i>Lĩnh vực hoạt động</a></li>
+                                    <li><a href="{{url('danh_muc/ngach_bac/index')}}"><i class="fa fa-caret-right"></i>Mã ngạch lương</a></li>
+                                    <li><a href="{{url('danh_muc/pl_don_vi/index')}}"><i class="fa fa-caret-right"></i>Phân loại đơn vị</a></li>
+                                    <li><a href="{{url('danh_muc/cong_tac/index')}}"><i class="fa fa-caret-right"></i>Phân loại công tác</a></li>
+                                @endif
                             </ul>
                         </li>
                         <li>

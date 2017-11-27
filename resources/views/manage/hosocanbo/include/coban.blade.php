@@ -18,6 +18,7 @@
                     {!!Form::text('macongchuc', null, array('id' => 'macongchuc','class' => 'form-control'))!!}
                 </div>
             </div>
+            <!--
             <div class="col-md-3">
                 <div class="form-group">
                     <label class="control-label">Phòng ban</label>
@@ -28,6 +29,7 @@
                     </select>
                 </div>
             </div>
+            -->
             <div class="col-md-3">
                 <div class="form-group">
                     <label class="control-label">Chức vụ</label>
@@ -38,23 +40,24 @@
                     </select>
                 </div>
             </div>
-        </div>
 
-        <div class="row">
             <div class="col-md-3">
                 <div class="form-group">
                     <label class="control-label">Họ tên <span class="require">*</span></label>
                     {!!Form::text('tencanbo', null, array('id' => 'tencanbo','class' => 'form-control', 'required'=>'required'))!!}
                 </div>
             </div>
+        </div>
 
-            <div class="col-md-3">
-                <div class="form-group">
-                    <label class="control-label">Tên gọi khác </label>
-                    {!!Form::text('tenkhac', null, array('id' => 'tenkhac','class' => 'form-control'))!!}
-                </div>
-            </div>
-
+        <div class="row">
+            <!--
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label class="control-label">Tên gọi khác </label>
+                                {!!Form::text('tenkhac', null, array('id' => 'tenkhac','class' => 'form-control'))!!}
+                            </div>
+                        </div>
+                        -->
             <div class="col-md-3">
                 <div class="form-group">
                     <label class="control-label">Ngày sinh <span class="require">*</span></label>
@@ -75,9 +78,7 @@
                     !!}
                 </div>
             </div>
-        </div>
 
-        <div class="row">
             <div class="col-md-3">
                 <div class="form-group">
                     <label class="control-label">Dân tộc <span class="require">*</span></label>
@@ -95,7 +96,9 @@
                     {!!Form::text('tongiao', null, array('id' => 'tongiao','class' => 'form-control'))!!}
                 </div>
             </div>
+        </div>
 
+        <div class="row">
             <div class="col-md-3">
                 <div class="form-group">
                     <label class="control-label">Ngày biên chế (trúng cử)</label>
@@ -109,9 +112,7 @@
                     <input type="date" name="ngayvao" id="ngayvao" class="form-control" value="{{!isset($model)?'':$model->ngayvao}}" />
                 </div>
             </div>
-        </div>
 
-        <div class="row">
             <div class="col-md-3">
                 <div class="form-group">
                     <label class="control-label">Sự nghiệp cán bộ</label>
@@ -140,7 +141,9 @@
                     </select>
                 </div>
             </div>
+        </div>
 
+        <div class="row">
             <div class="col-md-6">
                 <div class="form-group">
                     <label class="control-label">Lĩnh vực công tác </label>
@@ -157,10 +160,8 @@
                     </select>
                 </div>
             </div>
-        </div>
 
-        <div class="row">
-            <div class="col-md-12">
+            <div class="col-md-6">
                 <div class="form-group">
                     <label class="control-label">Ảnh đại diện </label>
                     @if(isset($model))

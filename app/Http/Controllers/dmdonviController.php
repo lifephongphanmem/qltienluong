@@ -85,10 +85,10 @@ class dmdonviController extends Controller
 
                 $model_donvi = array_column(dmdonvi::select('madv','tendv')->where('madvbc',$model->madvbc)->get()->toarray(),'tendv','madv');
                 $a_kq = array(''=>'--Chọn đơn vị gửi dữ liệu--');
-                $model_donvi=  array_merge($a_kq,$model_donvi);
-                //dd($model_donvi);
-
-
+                //$model_donvi=  array_merge($a_kq,$model_donvi);
+                foreach($model_donvi as $key=>$val){
+                    $a_kq[$key]=$val;
+                }
                 $a_phanloai = array_column(dmphanloaidonvi::all()->toarray(),'tenphanloai','maphanloai');
                 $model_plxa = getPhanLoaiXa();
                 $model_capdv = getCapDonVi();
@@ -96,7 +96,7 @@ class dmdonviController extends Controller
 
                 return view('system.general.local.edit')
                     ->with('model',$model)
-                    ->with('model_donvi',$model_donvi)
+                    ->with('model_donvi',$a_kq)
                     ->with('a_phanloai',$a_phanloai)
                     ->with('model_phanloai',$a_phanloai)
                     ->with('model_plxa',$model_plxa)

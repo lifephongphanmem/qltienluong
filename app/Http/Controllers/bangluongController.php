@@ -123,7 +123,7 @@ class bangluongController extends Controller
                 $cb->kpcd_dv = isset($phanloai) ? $phanloai->kpcd_dv : 0;
                 $cb->bhtn_dv = isset($phanloai) ? $phanloai->bhtn_dv : 0;
 
-                $cb->tencanbo =  $cb->tencanbo . ' (truy thu lương)';
+                $cb->tencanbo =  $cb->tencanbo . ' (truy lĩnh lương)';
 
                 $cb->ttl = $inputs['luongcoban'] *  $cb->hesott * $inputs['phantramhuong'] / 100;
                 $luongnopbaohiem = $inputs['luongcoban'] * $cb->hesott * $inputs['phantramhuong'] / 100;
