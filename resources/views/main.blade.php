@@ -333,9 +333,10 @@
 
                             </ul>
                         </li>
-                        @if(session('admin')->quanlykhuvuc)
+                        @if(session('admin')->quanlykhuvuc || session('admin')->level == 'SA')
                             <li><a href="{{url('danh_muc/tai_khoan/list_user?level=H')}}"><i class="icon-book-open"></i>Quản lý tài khoản</a></li>
                         @endif
+
                         @if(session('admin')->level == 'SA')
                             <li><a href="{{url('danh_muc/khu_vuc/ma_so=H')}}"><i class="icon-book-open"></i>Danh sách khu vực, địa bàn quản lý</a></li>
                         @endif

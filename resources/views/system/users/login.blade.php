@@ -87,6 +87,10 @@ License: You must have a valid license purchased only from themeforest(the above
 			</div>
 		</div>
 		<div class="form-actions">
+            <a href="{{url('/danh_sach_tai_khoan?madiaban=ALL')}}" class="btn blue" target="_blank">
+                Danh sách tài khoản
+            </a>
+
 			<button type="submit" class="btn blue pull-right" id="login_button" onclick="validatePassword();">
 				Login <i class="m-icon-swapright m-icon-white"></i>
 			</button>

@@ -9,6 +9,7 @@ Route::get('/setting','HomeController@setting');
 Route::post('/setting','HomeController@upsetting');
 
 Route::get('register/dich_vu_luu_tru','HomeController@regdvlt');
+Route::get('danh_sach_tai_khoan','HomeController@listusers');
 Route::get('checkrgmasothue','HomeController@checkrgmasothue');
 Route::get('checkrguser','HomeController@checkrguser');
 Route::get('mauexcel','bangluongController@getDownload');

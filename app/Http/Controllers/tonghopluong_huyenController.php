@@ -121,7 +121,7 @@ class tonghopluong_huyenController extends Controller
     function printf_data($mathdv){
         if (Session::has('admin')) {
             //dd($mathdv);
-            $model = tonghopluong_huyen_chitiet::where('mathdv',$mathdv)->get();
+            $model = tonghopluong_donvi_chitiet::where('mathh',$mathdv)->get();
             $model_thongtin = tonghopluong_huyen::where('mathdv',$mathdv)->first();
             $model_nguonkp = array_column(dmnguonkinhphi::all()->toArray(),'tennguonkp','manguonkp');
             $model_phanloaict = array_column(dmphanloaicongtac::all()->toArray(),'tencongtac','macongtac');
@@ -133,7 +133,7 @@ class tonghopluong_huyenController extends Controller
             foreach($model as $chitiet){
                 $chitiet->tennguonkp = isset($model_nguonkp[$chitiet->manguonkp])? $model_nguonkp[$chitiet->manguonkp]:'';
                 $chitiet->tencongtac = isset($model_phanloaict[$chitiet->macongtac])? $model_phanloaict[$chitiet->macongtac]:'';
-                $chitiet->tongtl = $chitiet->luongcoban * $chitiet->tonghs;
+                $chitiet->tongtl = $chitiet->tonghs;
                 $chitiet->tongbh = $chitiet->stbhxh_dv + $chitiet->stbhyt_dv + $chitiet->stkpcd_dv + $chitiet->stbhtn_dv;
             }
 
@@ -152,7 +152,7 @@ class tonghopluong_huyenController extends Controller
 
     function printf_data_diaban($mathdv){
         if (Session::has('admin')) {
-            $model = tonghopluong_huyen_diaban::where('mathdv',$mathdv)->get();
+            $model = tonghopluong_donvi_diaban::where('mathh',$mathdv)->get();
             $model_diaban = dmdiabandbkk::all();
             $model_thongtin = tonghopluong_huyen::where('mathdv',$mathdv)->first();
             $a_diaban = array('DBKK'=>'Khu vực KTXH ĐBKK','BGHD'=>'Khu vực biên giới, hải đảo',
@@ -163,7 +163,7 @@ class tonghopluong_huyenController extends Controller
                 $diaban = $model_diaban->where('madiaban',$chitiet->madiaban)->first();
                 $chitiet->tendiaban = $diaban->tendiaban;
                 $chitiet->phanloai = $a_diaban[$diaban->phanloai];
-                $chitiet->tongtl=$chitiet->luongcoban * $chitiet->tonghs;
+                $chitiet->tongtl=$chitiet->tonghs;
                 $chitiet->tongbh=$chitiet->stbhxh_dv + $chitiet->stbhyt_dv + $chitiet->stkpcd_dv + $chitiet->stbhtn_dv;
             }
             //cho trương hợp đơn vị cấp trên in dữ liệu dv câp dưới mà ko sai tên đơn vị
