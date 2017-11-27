@@ -791,7 +791,7 @@ class baocaothongtu67Controller extends Controller
                 }
                 $model_bangluong_ct = $model_bangluong_ct->where('macongtac','BIENCHE')->where('heso','<=','2.34');
             }
-            dd($model_bangluong_ct->toarray());
+            //dd($model_bangluong_ct->toarray());
             $ar_I = array();
             $ar_I[]=array('val'=>'GD;DT','tt'=>'1','noidung'=>'Sự nghiệp giáo dục - đào tạo');
             $ar_I[]=array('val'=>'GD','tt'=>'-','noidung'=>'Giáo dục');
