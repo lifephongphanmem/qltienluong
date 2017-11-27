@@ -56,12 +56,13 @@
                                         <td>{{$value->tenct}}</td>
                                         <td>{{$value->ghichu}}</td>
                                         <td>
-                                            <button type="button" onclick="editCV('{{$value->mact}}')" class="btn btn-default btn-xs">
-                                                <i class="fa fa-edit"></i>&nbsp; Chỉnh sửa</button>
-                                            <!--
-                                            <button type="button" onclick="cfDel('/danh_muc/cong_tac/del_detail/{{$value->id}}')" class="btn btn-default btn-xs" data-target="#delete-modal-confirm" data-toggle="modal">
-                                                <i class="fa fa-trash-o"></i>&nbsp; Xóa</button>
-                                                -->
+                                            @if(session('admin')->level == 'SA' || session('admin')->level == 'SSA')
+                                                <button type="button" onclick="editCV('{{$value->mact}}')" class="btn btn-default btn-xs">
+                                                    <i class="fa fa-edit"></i>&nbsp; Chỉnh sửa</button>
+
+                                                <button type="button" onclick="cfDel('/danh_muc/cong_tac/del_detail/{{$value->id}}')" class="btn btn-default btn-xs" data-target="#delete-modal-confirm" data-toggle="modal">
+                                                    <i class="fa fa-trash-o"></i>&nbsp; Xóa</button>
+                                            @endif
                                         </td>
                                     </tr>
                                 @endforeach

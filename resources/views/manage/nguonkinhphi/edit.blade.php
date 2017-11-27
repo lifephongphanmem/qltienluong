@@ -69,7 +69,7 @@
                         <div class="portlet box blue">
                             <div class="portlet-title">
                                 <div class="caption">
-                                    Thông tin nhu cầu kinh phí
+                                    Thông tin nhu cầu kinh phí thức hiện cải cách tiền lương
                                 </div>
                                 <div class="tools">
                                     <a href="javascript:;" class="collapse" data-original-title="" title=""></a>
@@ -123,7 +123,66 @@
                                         <div class="col-md-6">
                                             <div class="form-group">
                                                 <label class="control-label">Tổng số</label>
-                                                {!!Form::text('nhucau', null, array('id' => 'nhucau','class' => 'form-control text-right', 'data-mask'=>'fdecimal','readonly'=>'true'))!!}
+                                                {!!Form::text('nhucaukp', null, array('id' => 'nhucaukp','class' => 'form-control text-right', 'data-mask'=>'fdecimal','readonly'=>'true'))!!}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+
+                            </div>
+                        </div>
+                        <!-- END PORTLET-->
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-12">
+                        <!-- BEGIN PORTLET-->
+                        <div class="portlet box blue">
+                            <div class="portlet-title">
+                                <div class="caption">
+                                    Thông tin nhu cầu thực hiện một số loại phụ cấp, trợ cấp
+                                </div>
+                                <div class="tools">
+                                    <a href="javascript:;" class="collapse" data-original-title="" title=""></a>
+                                </div>
+                            </div>
+                            <div class="portlet-body" style="display: block;">
+                                <div class="form-body">
+                                    <div class="row">
+                                        <div class="col-md-3">
+                                            <div class="form-group">
+                                                <label class="control-label">Hỗ trợ chênh lệch cho người có thu nhập thấp</label>
+                                                {!!Form::text('thunhapthap', null, array('id' => 'thunhapthap','class' => 'form-control nhucaupc text-right', 'data-mask'=>'fdecimal'))!!}
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-3">
+                                            <div class="form-group">
+                                                <label class="control-label">Kinh phí tăng, giảm do điều chỉnh địa bàn</label>
+                                                {!!Form::text('diaban', null, array('id' => 'diaban','class' => 'form-control nhucaupc text-right', 'data-mask'=>'fdecimal'))!!}
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-3">
+                                            <div class="form-group">
+                                                <label class="control-label">Kinh phí thực hiện chính sách tinh giản biên chế</label>
+                                                {!!Form::text('tinhgiam', null, array('id' => 'tinhgiam','class' => 'form-control nhucaupc text-right', 'data-mask'=>'fdecimal'))!!}
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-3">
+                                            <div class="form-group">
+                                                <label class="control-label">Kinh phí thực hiện chính sách nghỉ hưu trước tuổi</label>
+                                                {!!Form::text('nghihuusom', null, array('id' => 'nghihuusom','class' => 'form-control nhucaupc text-right', 'data-mask'=>'fdecimal'))!!}
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-12">
+                                            <div class="form-group">
+                                                <label class="control-label">Tổng số</label>
+                                                {!!Form::text('nhucaupc', null, array('id' => 'nhucaupc','class' => 'form-control text-right', 'data-mask'=>'fdecimal','readonly'=>'true'))!!}
                                             </div>
                                         </div>
                                     </div>
@@ -215,7 +274,15 @@
             $('.nhucaukp').each(function () {
                 tong += getdl($(this).val());
             });
-            $('#nhucau').val(tong);
+            $('#nhucaukp').val(tong);
+        })
+
+        $('.nhucaupc').change(function(){
+            var tong = 0;
+            $('.nhucaupc').each(function () {
+                tong += getdl($(this).val());
+            });
+            $('#nhucaupc').val(tong);
         })
 
 

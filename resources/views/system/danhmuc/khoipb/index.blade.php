@@ -35,7 +35,9 @@
                         DANH MỤC LĨNH VỰC HOẠT ĐỘNG
                     </div>
                     <div class="actions">
-                        <button type="button" id="_btnaddPB" class="btn btn-success btn-xs" onclick="addPB()"><i class="fa fa-plus"></i>&nbsp;Thêm mới</button>
+                        @if(session('admin')->level == 'SA' || session('admin')->level == 'SSA')
+                            <button type="button" id="_btnaddPB" class="btn btn-success btn-xs" onclick="addPB()"><i class="fa fa-plus"></i>&nbsp;Thêm mới</button>
+                        @endif
                     </div>
                 </div>
                 <div class="portlet-body form-horizontal">
@@ -57,7 +59,11 @@
                                         <td>{{$value->makhoipb}}</td>
                                         <td>{{$value->tenkhoipb}}</td>
                                         <td>{{$value->ghichu}}</td>
-                                        @include('includes.crumbs.bt_editdel')
+                                        @if(session('admin')->level == 'SA' || session('admin')->level == 'SSA')
+                                            @include('includes.crumbs.bt_editdel')
+                                        @else
+                                            <td></td>
+                                        @endif
                                     </tr>
                                 @endforeach
                             @endif

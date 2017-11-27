@@ -154,19 +154,25 @@ class nguonkinhphiController extends Controller
             return view('errors.notlogin');
     }
 
-    function edit($masodv){
+    function edit($masodv)
+    {
         if (Session::has('admin')) {
-            $model = nguonkinhphi::where('masodv',$masodv)->first();
-
+            $model = nguonkinhphi::where('masodv', $masodv)->first();
+            if (count($model) > 0) {
+                $model->nhucaukp = $model->luongphucap + $model->daibieuhdnd + $model->canbokct
+                    + $model->uyvien + $model->boiduong + $model->nghihuu;
+                $model->nhucaupc = $model->thunhapthap + $model->diaban
+                    + $model->tinhgiam + $model->nghihuusom;
+            }
             return view('manage.nguonkinhphi.edit')
-                ->with('furl','/du_toan/nguon_kinh_phi/')
-                ->with('model',$model)
-                ->with('pageTitle','Danh sách nguồn kinh phí của đơn vị');
+                ->with('furl', '/du_toan/nguon_kinh_phi/')
+                ->with('model', $model)
+                ->with('pageTitle', 'Danh sách nguồn kinh phí của đơn vị');
         } else
             return view('errors.notlogin');
     }
 
-    public function update(Request $request)
+    function update(Request $request)
     {
         if (Session::has('admin')) {
             $inputs = $request->all();
@@ -176,13 +182,21 @@ class nguonkinhphiController extends Controller
             $inputs['canbokct'] = chkDbl($inputs['canbokct']);
             $inputs['uyvien'] = chkDbl($inputs['uyvien']);
             $inputs['boiduong'] = chkDbl($inputs['boiduong']);
-            $inputs['nhucau'] = chkDbl($inputs['nhucau']);
+            $inputs['nghihuu'] = chkDbl($inputs['nghihuu']);
+
             $inputs['tietkiem'] = chkDbl($inputs['tietkiem']);
             $inputs['hocphi'] = chkDbl($inputs['hocphi']);
             $inputs['vienphi'] = chkDbl($inputs['vienphi']);
             $inputs['nguonthu'] = chkDbl($inputs['nguonthu']);
             $inputs['nguonkp'] = chkDbl($inputs['nguonkp']);
-            $inputs['nghihuu'] = chkDbl($inputs['nghihuu']);
+
+            $inputs['thunhapthap'] = chkDbl($inputs['thunhapthap']);
+            $inputs['diaban'] = chkDbl($inputs['diaban']);
+            $inputs['tinhgiam'] = chkDbl($inputs['tinhgiam']);
+            $inputs['nghihuusom'] = chkDbl($inputs['nghihuusom']);
+
+            $inputs['nhucau'] = chkDbl($inputs['nhucaukp']) + chkDbl($inputs['nhucaupc']);
+            //dd($inputs);
             $model->update($inputs);
 
             return redirect('/du_toan/nguon_kinh_phi/danh_sach');

@@ -54,12 +54,13 @@
                                             <td name="dantoc">{{$value->dantoc}}</td>
                                             <td class="text-center"><input name="thieuso" type="checkbox" value="{{$value->thieuso}}" {{$value->thieuso==1?'checked':''}} /></td>
                                             <td>
-                                                <button type="button" onclick="editCV(this,'{{$value->macvd}}', '{{$value->id}}')" class="btn btn-info btn-xs mbs">
-                                                    <i class="fa fa-edit"></i>&nbsp; Chỉnh sửa</button>
-                                                <!--
-                                                <button type="button" onclick="cfDel('/danh_muc/dan_toc/del/{{$value->id}}')" class="btn btn-danger btn-xs mbs" data-target="#delete-modal-confirm" data-toggle="modal">
-                                                    <i class="fa fa-trash-o"></i>&nbsp; Xóa</button>
-                                                    -->
+                                                @if(session('admin')->level == 'SA' || session('admin')->level == 'SSA')
+                                                    <button type="button" onclick="editCV(this,'{{$value->macvd}}', '{{$value->id}}')" class="btn btn-info btn-xs mbs">
+                                                        <i class="fa fa-edit"></i>&nbsp; Chỉnh sửa</button>
+
+                                                    <button type="button" onclick="cfDel('/danh_muc/dan_toc/del/{{$value->id}}')" class="btn btn-danger btn-xs mbs" data-target="#delete-modal-confirm" data-toggle="modal">
+                                                        <i class="fa fa-trash-o"></i>&nbsp; Xóa</button>
+                                                @endif
                                             </td>
                                         </tr>
                                     @endforeach

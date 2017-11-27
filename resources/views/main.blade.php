@@ -260,8 +260,8 @@
 					</a>
 					<ul class="sub-menu">
                         <li><a href="{{url('/tra_cuu/ho_so')}}"><i class="fa fa-caret-right"></i>Hồ sơ cán bộ</a></li>
-                        <li><a href="{{url('/tra_cuu/luong')}}"><i class="fa fa-caret-right"></i>Quá trình hưởng lương</a></li>
-                        <li><a href="{{url('/tra_cuu/phu_cap')}}"><i class="fa fa-caret-right"></i>Quá trình phụ cấp</a></li>
+                        <!--li><a href="{{url('/tra_cuu/luong')}}"><i class="fa fa-caret-right"></i>Quá trình hưởng lương</a></li>
+                        <li><a href="{{url('/tra_cuu/phu_cap')}}"><i class="fa fa-caret-right"></i>Quá trình phụ cấp</a></li-->
                         <li><a href="{{url('/tra_cuu/chi_luong')}}"><i class="fa fa-caret-right"></i>Chi trả lương</a></li>
 					</ul>
 				</li>
@@ -278,7 +278,7 @@
 					</ul>
 				</li>
                 <!-- dành cho đơn vị chủ quản -->
-                @if(session('admin')->quanlykhuvuc)
+                @if(session('admin')->quanlykhuvuc && session('admin')->level == 'T')
                     <li>
                         <a href="{{url('tong_hop_bao_cao/danh_sach')}}">
                             <i class="fa fa-file-text"></i>
@@ -302,7 +302,7 @@
                                 <!--li><a href="{{url('danh_muc/bao_mat/index?&level=X')}}">Bảo mật hồ sơ</a></li-->
                                 <li><a href="{{url('danh_muc/khoi_pb/index')}}"><i class="fa fa-caret-right"></i>Lĩnh vực hoạt động</a></li>
                                 <li><a href="{{url('danh_muc/phong_ban/index')}}"><i class="fa fa-caret-right"></i>Phòng ban</a></li>
-                                <li><a href="{{url('danh_muc/chuc_vu_cq/ma_so='.session('admin')->maphanloai)}}"><i class="fa fa-caret-right"></i>Chức vụ chính quyền</a></li>
+                                <li><a href="{{url('danh_muc/chuc_vu_cq/ma_so='.session('admin')->level)}}"><i class="fa fa-caret-right"></i>Chức vụ chính quyền</a></li>
                                 <li><a href="{{url('danh_muc/chuc_vu_d/index')}}"><i class="fa fa-caret-right"></i>Chức vụ đảng</a></li>
                                 <li><a href="{{url('danh_muc/cong_tac/index')}}"><i class="fa fa-caret-right"></i>Phân loại công tác</a></li>
                                 <li><a href="{{url('danh_muc/phu_cap/index')}}"><i class="fa fa-caret-right"></i>Phụ cấp</a></li>
@@ -329,62 +329,64 @@
 
                             <ul class="sub-menu" style="margin-left: 15px;">
                                 <li><a href="{{url('he_thong/don_vi/don_vi')}}"><i class="fa fa-caret-right"></i>Thông tin đơn vị</a></li>
-                                <li><a href="{{url('he_thong/don_vi/chung')}}"><i class="fa fa-caret-right"></i>Thông tin chung</a></li>
+                                <!--li><a href="{{url('he_thong/don_vi/chung')}}"><i class="fa fa-caret-right"></i>Thông tin chung</a></li-->
 
                             </ul>
                         </li>
-                        <li><a href="{{url('danh_muc/tai_khoan/list_user?level=H')}}"><i class="icon-book-open"></i>Quản lý tài khoản</a></li>
+                        @if(session('admin')->quanlykhuvuc)
+                            <li><a href="{{url('danh_muc/tai_khoan/list_user?level=H')}}"><i class="icon-book-open"></i>Quản lý tài khoản</a></li>
+                        @endif
                         @if(session('admin')->level == 'SA')
                             <li><a href="{{url('danh_muc/khu_vuc/ma_so=H')}}"><i class="icon-book-open"></i>Danh sách khu vực, địa bàn quản lý</a></li>
                         @endif
-					</ul>
-				</li>
-			</ul>
-			<!-- END SIDEBAR MENU -->
-		</div>
-	</div>
-	<!-- END SIDEBAR -->
-
-    <!-- BEGIN CONTENT -->
-	<div class="page-content-wrapper">
-        <div class="page-content"  style="padding-top: 0px;">
-            <!-- BEGIN PAGE BREADCRUMB -->
-            <!--div class="page-bar">
-                <ul class="page-breadcrumb breadcrumb">
-                    <li>
-                        <i class="fa fa-home"></i>
-                            <a href="{{url('')}}">Trang chủ</a>
-                        <i class="fa fa-angle-right"></i>
+                    </ul>
                     </li>
-                    <li>
-                        {{$pageTitle}}
-                    </li>
-                </ul>
+                    </ul>
+<!-- END SIDEBAR MENU -->
+</div>
+</div>
+<!-- END SIDEBAR -->
 
-                <div class="page-toolbar">
-                    <div class="page-toolbar">
-                        <b><div id="clock"></div></b>
-                    </div>
-                </div>
-            </div-->
-            <!-- END PAGE BREADCRUMB -->
-            @yield('content')
-        </div>
-	</div>
-	<!-- END CONTENT -->
+<!-- BEGIN CONTENT -->
+<div class="page-content-wrapper">
+<div class="page-content"  style="padding-top: 0px;">
+<!-- BEGIN PAGE BREADCRUMB -->
+<!--div class="page-bar">
+<ul class="page-breadcrumb breadcrumb">
+<li>
+<i class="fa fa-home"></i>
+    <a href="{{url('')}}">Trang chủ</a>
+<i class="fa fa-angle-right"></i>
+</li>
+<li>
+{{$pageTitle}}
+</li>
+</ul>
+
+<div class="page-toolbar">
+<div class="page-toolbar">
+<b><div id="clock"></div></b>
+</div>
+</div>
+</div-->
+<!-- END PAGE BREADCRUMB -->
+@yield('content')
+</div>
+</div>
+<!-- END CONTENT -->
 </div>
 <!-- END CONTAINER -->
 <!-- BEGIN FOOTER -->
 <div class="page-footer">
-    <div class="page-footer-tools">
-        2016 &copy; LifeSoft <a href="" >Tiện ích hơn - Hiệu quả hơn</a>
-        <!--Số đăng ký bản quyền: 282/2015/QTG, Khai Thác và Phần Phối bởi H2SOFT-->
-       </div>
-       <div class="scroll-to-top">
-           <i class="icon-arrow-up"></i>
-       </div>
-   </div>
-   <!-- END FOOTER -->
+<div class="page-footer-tools">
+2016 &copy; LifeSoft <a href="" >Tiện ích hơn - Hiệu quả hơn</a>
+<!--Số đăng ký bản quyền: 282/2015/QTG, Khai Thác và Phần Phối bởi H2SOFT-->
+</div>
+<div class="scroll-to-top">
+<i class="icon-arrow-up"></i>
+</div>
+</div>
+<!-- END FOOTER -->
 <!-- BEGIN JAVASCRIPTS(Load javascripts at bottom, this will reduce page load time) -->
 <!-- BEGIN CORE PLUGINS -->
 <!--[if lt IE 9]>
@@ -423,9 +425,9 @@
 <!-- END PAGE LEVEL SCRIPTS -->
 <script>
 jQuery(document).ready(function() {
-    Metronic.init(); // init metronic core componets
-    Layout.init(); // init layout
-    Demo.init(); // init demo features
+Metronic.init(); // init metronic core componets
+Layout.init(); // init layout
+Demo.init(); // init demo features
 });
 </script>
 <!-- END JAVASCRIPTS -->

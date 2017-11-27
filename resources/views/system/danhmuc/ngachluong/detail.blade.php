@@ -36,7 +36,9 @@
                     </div>
                     <div class="actions">
                         <a href="{{url('/danh_muc/ngach_bac/index')}}" class="btn btn-default"><i class="fa fa-reply"></i>&nbsp;Quay lại</a>
-                        <button type="button" id="_btnaddPB" class="btn btn-default" onclick="add()"><i class="fa fa-plus"></i>&nbsp;Thêm mới</button>
+                        @if(session('admin')->level == 'SA' || session('admin')->level == 'SSA')
+                            <button type="button" id="_btnaddPB" class="btn btn-default" onclick="add()"><i class="fa fa-plus"></i>&nbsp;Thêm mới</button>
+                        @endif
                     </div>
                 </div>
                 <div class="portlet-body form-horizontal">
@@ -57,12 +59,13 @@
                                         <td>{{$value->msngbac}}</td>
                                         <td>{{$value->tenngachluong}}</td>
                                         <td>
-                                            <button type="button" onclick="edit('{{$value->msngbac}}')" class="btn btn-default btn-xs">
-                                                <i class="fa fa-edit"></i>&nbsp; Chỉnh sửa</button>
-                                            <!--
-                                            <button type="button" onclick="cfDel('/danh_muc/cong_tac/del_detail/{{$value->id}}')" class="btn btn-default btn-xs" data-target="#delete-modal-confirm" data-toggle="modal">
-                                                <i class="fa fa-trash-o"></i>&nbsp; Xóa</button>
-                                                -->
+                                            @if(session('admin')->level == 'SA' || session('admin')->level == 'SSA')
+                                                <button type="button" onclick="edit('{{$value->msngbac}}')" class="btn btn-default btn-xs">
+                                                    <i class="fa fa-edit"></i>&nbsp; Chỉnh sửa</button>
+
+                                                <button type="button" onclick="cfDel('/danh_muc/cong_tac/del_detail/{{$value->id}}')" class="btn btn-default btn-xs" data-target="#delete-modal-confirm" data-toggle="modal">
+                                                    <i class="fa fa-trash-o"></i>&nbsp; Xóa</button>
+                                            @endif
                                         </td>
                                     </tr>
                                 @endforeach
