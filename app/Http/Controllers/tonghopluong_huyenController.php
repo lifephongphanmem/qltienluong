@@ -9,6 +9,7 @@ use App\dmphanloaicongtac;
 use App\tonghop_huyen;
 use App\tonghop_huyen_chitiet;
 use App\tonghop_huyen_diaban;
+use App\tonghopluong_donvi;
 use App\tonghopluong_donvi_chitiet;
 use App\tonghopluong_donvi_diaban;
 use App\tonghopluong_huyen;
@@ -613,5 +614,44 @@ class tonghopluong_huyenController extends Controller
             return view('errors.notlogin');
     }
 
+    public function tralai(Request $request){
+        //xem dữ liệu khối or đơn vị
+        //đơn vị =>trả, xóa bang tonghopluong_huyen
+        //khối =>trả, xóa bang tonghopluong_huyen, update trường mathh = null;
+        if (Session::has('admin')) {
+            $inputs=$request->all();
+            $model = tonghopluong_huyen::where('mathdv',$inputs['mathdv'])->first();
+            dd($model);
+            if($model->phanloai == 'DONVI'){
+                //đơn vị =>trả, xóa bang tonghopluong_luong
+                $model_ct = tonghopluong_donvi::where()->get();
+
+            }else{
+                //khối =>trả, xóa bang tonghopluong_luong, update trường mathh = null;
+
+            }
+
+            tonghopluong_donvi::where('mathdv',$inputs['mathdv'])
+                ->update(['trangthai'=>'TRALAI','lydo'=>$inputs['lydo']]);
+            return redirect('/chuc_nang/xem_du_lieu/index?thang='.$model->thang.'&nam='.$model->nam.'&trangthai=ALL');
+        } else
+            return view('errors.notlogin');
+    }
+
+    function getlydo(Request $request){
+        if(!Session::has('admin')) {
+            $result = array(
+                'status' => 'fail',
+                'message' => 'permission denied',
+            );
+            die(json_encode($result));
+        }
+
+        $inputs = $request->all();
+
+        $model = tonghopluong_donvi::select('lydo')->where('mathdv',$inputs['mathdv'])->first();
+        dd(die($model));
+        die($model);
+    }
 
 }

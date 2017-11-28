@@ -62,7 +62,6 @@ class tonghopnguonController extends Controller
             $model = nguonkinhphi::where('sohieu',$sohieu)
                 ->where('macqcq',session('admin')->madv)->get();
 
-
             $m_dv = dmdonvi::where('madv',session('admin')->madv)->first();
             $data = array();
             $data[]=array('val'=>'GDDT','tt'=>'a','noidung'=>'Sự nghiệp giáo dục - đào tạo');

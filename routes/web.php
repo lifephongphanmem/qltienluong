@@ -320,6 +320,7 @@ Route::group(['prefix'=>'chuc_nang'],function(){
 
             Route::post('senddata','tonghopluong_donviController@senddata'); //gửi dữ liệu
             Route::post('tralai','tonghopluong_donviController@tralai'); //trả lại dữ liệu
+            Route::get('getlydo','tonghopluong_donviController@getlydo');//lý do trả lại dữ liệu
 
             Route::get('printf_data/ma_so={mathdv}','tonghopluong_donviController@printf_data');
             Route::get('printf_data_diaban/ma_so={mathdv}','tonghopluong_donviController@printf_data_diaban');
@@ -351,6 +352,8 @@ Route::group(['prefix'=>'chuc_nang'],function(){
             Route::post('tonghop_chuadaydu','tonghopluong_huyenController@tonghop_chuadaydu');
             //chưa làm
             Route::post('senddata','tonghopluong_huyenController@senddata'); //gửi dữ liệu
+            Route::post('tralai','tonghopluong_huyenController@tralai'); //trả lại dữ liệu
+            Route::get('getlydo','tonghopluong_huyenController@getlydo');//lý do trả lại dữ liệu
 
             Route::get('printf_data/ma_so={mathdv}','tonghopluong_huyenController@printf_data');
             Route::get('printf_data_diaban/ma_so={mathdv}','tonghopluong_huyenController@printf_data_diaban');

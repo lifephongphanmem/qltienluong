@@ -101,7 +101,7 @@
     </div>
 
     <div class="row">
-        <div class="col-md-6 col-sm-12">
+        <div class="col-sm-12">
             <!-- BEGIN PORTLET-->
             <div class="portlet light ">
                 <div class="portlet-title">
@@ -142,45 +142,7 @@
             <!-- END PORTLET-->
         </div>
 
-        <div class="col-md-6 col-sm-12">
-            <!-- BEGIN PORTLET-->
-            <div class="portlet light ">
-                <div class="portlet-title">
-                    <div class="caption caption-md">
-                        <i class="icon-bar-chart theme-font-color hide"></i>
-                        <span class="caption-subject theme-font-color bold uppercase">danh sách sắp đến sinh nhật</span>
-                    </div>
-                    <div class="actions">
 
-                    </div>
-                </div>
-
-                <?php $i=1;?>
-                <div class="portlet-body">
-                    <table id="sample_5" class="table table-hover table-striped table-bordered">
-                        <thead>
-                        <tr>
-                            <th class="text-center">STT</th>
-                            <th class="text-center">Họ và tên</th>
-                            <th class="text-center">Ngày sinh nhật</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        @if(isset($m_sinhnhat))
-                            @foreach($m_sinhnhat as $key=>$value)
-                                <tr>
-                                    <td class="text-center">{{$i++}}</td>
-                                    <td>{{$value->tencanbo}}</td>
-                                    <td>{{getDayVn($value->ngaysinh)}}</td>
-                                </tr>
-                            @endforeach
-                        @endif
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-            <!-- END PORTLET-->
-        </div>
 
     </div>
     </div>

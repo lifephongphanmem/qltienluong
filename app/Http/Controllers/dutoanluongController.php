@@ -152,8 +152,8 @@ class dutoanluongController extends Controller
             $luonghs_dt = 0;
             $luongbh_dt = 0;
             foreach($model_luong as $luong){
-                $luongnb_dt += $luong->luongcoban *($luong->heso + $luong->hesopc);
-                $luonghs_dt += $luong->luongcoban *($luong->tonghs - $luong->heso);
+                $luongnb_dt += $luong->heso + $luong->hesopc;
+                $luonghs_dt += $luong->tonghs - $luong->heso;
                 $luongbh_dt += $luong->stbhxh_dv +$luong->stbhyt_dv + $luong->stkpcd_dv + $luong->stbhtn_dv;
             }
             $inputs['luongnb_dt']= $luongnb_dt * 12;
@@ -170,8 +170,8 @@ class dutoanluongController extends Controller
             $luonghs = 0;
             $luongbh = 0;
             foreach($model_luong_thucte as $luong){
-                $luongnb += $luong->luongcoban *($luong->heso + $luong->hesopc);
-                $luonghs += $luong->luongcoban *($luong->tonghs - $luong->heso);
+                $luongnb += $luong->heso + $luong->hesopc;
+                $luonghs += $luong->tonghs - $luong->heso;
                 $luongbh += $luong->stbhxh_dv +$luong->stbhyt_dv + $luong->stkpcd_dv + $luong->stbhtn_dv;
             }
             $inputs['luongnb']= $luongnb;

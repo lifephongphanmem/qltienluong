@@ -91,7 +91,7 @@
                             {!!Form::text('namdt', null, array('id' => 'namdt','class' => 'form-control'))!!}
                         </div>
                         <div class="col-md-6">
-                            <label class="control-label">Tháng lương mẫu</label>
+                            <label class="control-label">Tháng lương tổng hợp mẫu</label>
                             {!! Form::select(
                             'thang',
                             array('all'=>'--Chọn tháng--',
@@ -104,7 +104,7 @@
                         </div>
 
                         <div class="col-md-6">
-                            <label class="control-label">Năm lương mẫu</label>
+                            <label class="control-label">Năm lương tổng hợp mẫu</label>
                             {!! Form::select('nam',array('all'=>'--Chọn năm--','2016' => '2016','2017' => '2017','2018' => '2018')
                             ,null,array('id' => 'nam', 'class' => 'form-control'))
                             !!}

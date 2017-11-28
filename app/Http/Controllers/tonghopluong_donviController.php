@@ -515,4 +515,32 @@ class tonghopluong_donviController extends Controller
         } else
             return view('errors.notlogin');
     }
+
+    public function tralai(Request $request){
+        if (Session::has('admin')) {
+            $inputs=$request->all();
+            //dd($inputs);
+            $model = tonghopluong_donvi::where('mathdv',$inputs['mathdv'])->first();
+            tonghopluong_donvi::where('mathdv',$inputs['mathdv'])
+                ->update(['trangthai'=>'TRALAI','lydo'=>$inputs['lydo']]);
+            return redirect('/chuc_nang/xem_du_lieu/index?thang='.$model->thang.'&nam='.$model->nam.'&trangthai=ALL');
+        } else
+            return view('errors.notlogin');
+    }
+
+    function getlydo(Request $request){
+        if(!Session::has('admin')) {
+            $result = array(
+                'status' => 'fail',
+                'message' => 'permission denied',
+            );
+            die(json_encode($result));
+        }
+
+        $inputs = $request->all();
+
+        $model = tonghopluong_donvi::select('lydo')->where('mathdv',$inputs['mathdv'])->first();
+        dd(die($model));
+        die($model);
+    }
 }

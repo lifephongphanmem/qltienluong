@@ -72,6 +72,10 @@
                                                     @endif
                                                     <button type="button" class="btn btn-default btn-sm" onclick="confirmChuyen('{{$value['mathdv']}}')" data-target="#chuyen-modal" data-toggle="modal"><i class="fa fa-share-square-o"></i>&nbsp;
                                                         Gửi dữ liệu</button>
+                                                    @if($value['trangthai'] == 'TRALAI')
+                                                        <button type="button" class="btn btn-default btn-sm" onclick="getLyDo('{{$value['mathdv']}}')" data-target="#tralai-modal" data-toggle="modal"><i class="fa fa-share-square-o"></i>&nbsp;
+                                                            Lý do trả lại</button>
+                                                    @endif
                                                 @else
                                                     <a href="{{url($furl.'printf_data/ma_so='.$value['mathdv'])}}" class="btn btn-default btn-sm" TARGET="_blank">
                                                         <i class="fa fa-print"></i>&nbsp; Số liệu tổng hợp</a>
@@ -125,34 +129,60 @@
     </div>
     </div>
 
+    <!--Model Trả lại -->
+    <div class="modal fade" id="tralai-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+                    <h4 class="modal-title">Đồng ý chuyển số liệu?</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        {!!Form::textarea('lydo', null, array('id' => 'lydo','class' => 'form-control','rows'=>'3'))!!}
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="submit" class="btn blue">Đồng ý</button>
+
+                    </div>
+                    {!! Form::close() !!}
+                </div>
+                <!-- /.modal-content -->
+            </div>
+            <!-- /.modal-dialog -->
+        </div>
+    </div>
+
     <script>
         function confirmChuyen(mathdv) {
             document.getElementById("mathdv").value = mathdv;
         }
 
-        function edit(madvbc){
+        function getLyDo(mathdv){
             var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
             $.ajax({
-                url: '{{$furl}}' + 'get',
+                url: '{{$furl}}' + 'getlydo',
                 type: 'GET',
                 data: {
                     _token: CSRF_TOKEN,
-                    madvbc: madvbc
+                    mathdv: mathdv
                 },
                 dataType: 'JSON',
                 success: function (data) {
-                    $('#tendvbc').val(data.tendvbc);
-                    $('#level').val(data.level);
-                    $('#ghichu').val(data.ghichu);
+                    $('#lydo').val(data.lydo);
                 },
                 error: function(message){
                     toastr.error(message,'Lỗi!');
                 }
             });
 
-            $('#madvbc').val(madvbc);
-            $('#phongban-modal').modal('show');
+            //$('#madvbc').val(madvbc);
+            //$('#phongban-modal').modal('show');
         }
+
+
 
         function cfPB(){
             var valid=true;

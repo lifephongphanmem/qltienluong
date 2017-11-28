@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\dmdonvi;
+use App\tonghop_huyen;
 use App\tonghopluong_donvi;
 use App\tonghopluong_donvi_chitiet;
 use App\tonghopluong_huyen;
@@ -143,8 +144,22 @@ class xemdulieucapduoiController extends Controller
                     ->where('phanloai', $dv->phanloai)
                     ->first();
 
-                $dv->mathdv = (isset($dulieu)?$dulieu->mathdv:NULL);
-                if(isset($dulieu)){$dv->phanloai = $dulieu->phanloai;}
+                $tonghop = tonghop_huyen::where('madvbc',$madvbc)
+                    ->where('thang', $inputs['thang'])
+                    ->where('nam', $inputs['nam'])
+                    ->first();
+                $dv->tralai = true;
+                if(isset($tonghop)){
+                    $model_bangluong_ct = tonghopluong_donvi_chitiet::where('matht', $tonghop->madvth)->first();
+                    $dv->tralai =isset($model_bangluong_ct->mathh)?false:true;
+                }
+
+                if(isset($dulieu)){
+                    $dv->phanloai = $dulieu->phanloai;
+                    $dv->mathdv = $dulieu->mathdv;
+                }else{
+                    $dv->mathdv = NULL;
+                }
                 $dv->tenphanloai = isset($a_phanloai[$dv->phanloai]) ? $a_phanloai[$dv->phanloai]: '';
 
             }

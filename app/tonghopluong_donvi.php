@@ -20,6 +20,7 @@ class tonghopluong_donvi extends Model
         'nguoilap',
         'nguoigui',
         'trangthai',
+        'lydo',
         'phanloai',
         'ghichu',
         'madv',
