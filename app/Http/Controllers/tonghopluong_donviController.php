@@ -43,8 +43,11 @@ class tonghopluong_donviController extends Controller
                 array('thang'=>'11','mathdv'=>null),
                 array('thang'=>'12','mathdv'=>null)
             );
+            /*
             $a_trangthai=array('CHUALUONG'=>'Chưa tạo bảng lương','CHUATAO'=>'Chưa tổng hợp dữ liệu'
-            ,'CHOGUI'=>'Chưa gửi dữ liệu','DAGUI'=>'Đã gửi dữ liệu','TRALAI'=>'Trả lại dữ liệu');
+                ,'CHOGUI'=>'Chưa gửi dữ liệu','DAGUI'=>'Đã gửi dữ liệu','TRALAI'=>'Trả lại dữ liệu');
+            */
+            $a_trangthai = getStatus();
             $inputs=$requests->all();
             $model = tonghopluong_donvi::where('madv',session('admin')->madv)->get();
             $model_bangluong = bangluong::where('madv',session('admin')->madv)->get();
@@ -359,8 +362,10 @@ class tonghopluong_donviController extends Controller
                     //Kiểm tra xem đơn vị đã gửi dữ liệu chưa
                     $chk = tonghopluong_huyen::where('thang', $model->thang)
                         ->where('nam', $model->nam)
-                        ->where('phanloai', $model->phanloai)->count();
-
+                        ->where('phanloai', $model->phanloai)
+                        ->where('madv', $model->madv)
+                        ->count();
+//dd($chk);
                     if ($chk == 0) {//chưa gửi => update dữ liệu từ bảng khoi=>huyen
                         tonghopluong_donvi_chitiet::where('mathdv', $model->mathdv)->update(['mathh'=>$mathdv]);
                         tonghopluong_donvi_diaban::where('mathdv', $model->mathdv)->update(['mathh'=>$mathdv]);
@@ -397,6 +402,7 @@ class tonghopluong_donviController extends Controller
                     //Kiểm tra xem đơn vị đã gửi dữ liệu chưa
                     $chk = tonghopluong_tinh::where('thang', $model->thang)
                         ->where('nam', $model->nam)
+                        ->where('madv', $model->madv)
                         ->where('phanloai', $model->phanloai)->count();
                     if ($chk == 0) {//chưa gửi => update dữ liệu từ bảng khoi=>huyen
                         tonghopluong_donvi_chitiet::where('mathdv', $model->mathdv)->update(['matht'=>$mathdv]);

@@ -17,7 +17,9 @@ class dmchucvucqController extends Controller
             //neu quyen admin thi mo tat ca
             if(session('admin')->level=='SA' || session('admin')->level=='SSA'){
                 $model_pl = dmphanloaidonvi::all();
-                if($maphanloai=='SA' || $maphanloai =='SSA'){$maphanloai= 'KVXP';}
+                if($maphanloai=='SA' || $maphanloai =='SSA'){
+                    $maphanloai= 'KVXP';
+                }
             }else{
                 $model_pl = dmphanloaidonvi::where('maphanloai',$maphanloai)->get();
             }

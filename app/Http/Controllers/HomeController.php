@@ -2,13 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\DnDvLt;
-use App\DnDvLtReg;
-use App\DonViDvVt;
-use App\DonViDvVtReg;
+
+use App\dmdonvibaocao;
 use App\GeneralConfigs;
 use App\hosocanbo;
-use App\Register;
+use App\Users;
 use Illuminate\Foundation\Auth\User;
 use Illuminate\Http\Request;
 
@@ -112,5 +110,28 @@ class HomeController extends Controller
             return view('welcome');
     }
 
+    public function listusers(Request $request)
+    {
+        $inputs = $request->all();
+        $model_diaban = array_column(dmdonvibaocao::select('tendvbc','madvbc')->get()->toArray(),'tendvbc','madvbc');
+        $a_diaban = array('ALL'=>'--Chọn địa bàn, khu vực--');
+        foreach($model_diaban as $key=>$val){
+            $a_diaban[$key] = $val;
+        }
+
+        $madvbc = $inputs['madiaban'];
+        $model = Users::wherein('madv',function($qr)use($madvbc){
+            $qr->select('madv')->from('dmdonvi')->where('madvbc',$madvbc)->get();
+        })->get();
+
+
+        return view('manage.taikhoan.index_users')
+            ->with('a_diaban',$a_diaban)
+            ->with('model',$model)
+            ->with('madvbc',$madvbc)
+            ->with('pageTitle','Danh sách đơn vị');
+
+
+    }
 
 }

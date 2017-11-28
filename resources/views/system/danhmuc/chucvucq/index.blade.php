@@ -67,12 +67,13 @@
                                         <td name="ghichu">{{$value->ghichu}}</td>
                                         <td class="text-center" name="sapxep">{{$value->sapxep}}</td>
                                         <td>
-                                            <button type="button" onclick="editCV('{{$value->macvcq}}')" class="btn btn-info btn-xs mbs">
-                                                <i class="fa fa-edit"></i>&nbsp; Chỉnh sửa</button>
-                                            <!--
-                                            <button type="button" onclick="cfDel('/danh_muc/chuc_vu_cq/del/{{$value->id}}')" class="btn btn-danger btn-xs mbs" data-target="#delete-modal-confirm" data-toggle="modal">
-                                                <i class="fa fa-trash-o"></i>&nbsp; Xóa</button>
-                                                -->
+                                            @if(session('admin')->level == 'SA' || session('admin')->level == 'SSA')
+                                                <button type="button" onclick="editCV('{{$value->macvcq}}')" class="btn btn-info btn-xs mbs">
+                                                    <i class="fa fa-edit"></i>&nbsp; Chỉnh sửa</button>
+
+                                                <button type="button" onclick="cfDel('/danh_muc/chuc_vu_cq/del/{{$value->id}}')" class="btn btn-danger btn-xs mbs" data-target="#delete-modal-confirm" data-toggle="modal">
+                                                    <i class="fa fa-trash-o"></i>&nbsp; Xóa</button>
+                                            @endif
                                         </td>
                                     </tr>
                                 @endforeach

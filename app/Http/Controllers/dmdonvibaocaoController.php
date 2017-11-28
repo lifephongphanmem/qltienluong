@@ -135,7 +135,8 @@ class dmdonvibaocaoController extends Controller
         if (Session::has('admin')) {
             $model=dmdonvi::where('madv',$madonvi)->first();
             $model_donvi = array_column(dmdonvi::select('madv','tendv')->where('madvbc',$madvbc)->get()->toarray(),'tendv','madv');
-            $model_donvi['NULL']= 'Chọn đơn vị chủ quản';
+            $a_kq = array(''=>'--Chọn đơn vị chủ quản--');
+            $model_donvi=  array_merge($a_kq,$model_donvi);
             $a_phanloai = array_column(dmphanloaidonvi::all()->toarray(),'tenphanloai','maphanloai');
             $model_plxa = getPhanLoaiXa();
             $model_capdv = getCapDonVi();

@@ -67,7 +67,6 @@
                                 </td>
                                 <td>
                                     <a href="{{url($url.'maso='.$hs->id.'')}}"><b>{{$hs->tencanbo}}</b></a>
-                                    <p style="margin-top: 5px">Phòng ban: {{$hs->tenpb}}</p>
                                     <p style="margin-top: 5px">Chức vụ: {{$hs->tencvcq}}</p>
                                 </td>
                                     <td class="text-center">{{getDayVn($hs->ngaysinh)}}</td>

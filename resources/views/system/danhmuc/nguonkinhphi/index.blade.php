@@ -60,6 +60,7 @@
                                         <td>{{$value->phanloai}}</td>
                                         <td>{{$value->ghichu}}</td>
                                         <td>
+
                                             <button type="button" onclick="editPB('{{$value->manguonkp}}')" class="btn btn-info btn-xs mbs">
                                                 <i class="fa fa-edit"></i>&nbsp; Chỉnh sửa</button>
                                             <!--

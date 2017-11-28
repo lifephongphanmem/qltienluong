@@ -36,14 +36,14 @@
                             <div class="row">
                                 <div class="col-md-6">
                                     <div class="form-group">
-                                        <label class="control-label">Mã quan đơn vị<span class="require">*</span></label>
+                                        <label class="control-label">Mã đơn vị<span class="require">*</span></label>
                                         {!!Form::text('madv', null, array('id' => 'madv','class' => 'form-control', 'readonly'))!!}
                                     </div>
                                 </div>
                                 <div class="col-md-6">
                                     <div class="form-group">
                                         <label class="control-label">Tên đơn vị<span class="require">*</span></label>
-                                        {!!Form::text('tendv', null, array('id' => 'tendv','class' => 'form-control', 'readonly'))!!}
+                                        {!!Form::text('tendv', null, array('id' => 'tendv','class' => 'form-control'))!!}
                                     </div>
                                 </div>
                             </div>
