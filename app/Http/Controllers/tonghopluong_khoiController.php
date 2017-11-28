@@ -374,39 +374,47 @@ class tonghopluong_khoiController extends Controller
             return view('errors.notlogin');
     }
 
-    function senddata(Request $requests){
+    function senddata(Request $requests)
+    {
         if (Session::has('admin')) {
             $inputs = $requests->all();
-            $inputs['madv'] = session('admin')->madv;
-            $inputs['mathdv'] = getdate()[0];;
-            $inputs['trangthai'] = 'DAGUI';
-            $inputs['phanloai'] = 'CAPDUOI';
-            $inputs['noidung']='Đơn vị '.getTenDV(session('admin')->madv) .' tổng hợp dữ liệu từ các đơn vị cấp dưới thời điểm '.$inputs['thang'].'/'.$inputs['nam'];
-            $inputs['nguoilap']= session('admin')->name;
-            $inputs['ngaylap']= Carbon::now()->toDateTimeString();
-            $inputs['macqcq'] = session('admin')->macqcq;
-            $inputs['madvbc'] = session('admin')->madvbc;
-
             $thang = $inputs['thang'];
             $nam = $inputs['nam'];
             $madv = session('admin')->madv;
+            $model = tonghopluong_khoi::where('nam', $nam)->where('thang', $thang)->where('madv', $madv)->first();
+            if (count($model) > 0) {
+                //Trường hợp đơn vị bị trả lại dữ liệu muốn gửi lại
+                $model->trangthai = 'DAGUI';
+                $model->nguoilap = session('admin')->name;
+                $model->ngaylap = Carbon::now()->toDateTimeString();
+                $model->save();
+            } else {
+                $inputs['madv'] = session('admin')->madv;
+                $inputs['mathdv'] = getdate()[0];;
+                $inputs['trangthai'] = 'DAGUI';
+                $inputs['phanloai'] = 'CAPDUOI';
+                $inputs['noidung'] = 'Đơn vị ' . getTenDV(session('admin')->madv) . ' tổng hợp dữ liệu từ các đơn vị cấp dưới thời điểm ' . $inputs['thang'] . '/' . $inputs['nam'];
+                $inputs['nguoilap'] = session('admin')->name;
+                $inputs['ngaylap'] = Carbon::now()->toDateTimeString();
+                $inputs['macqcq'] = session('admin')->macqcq;
+                $inputs['madvbc'] = session('admin')->madvbc;
 
-            tonghopluong_donvi::where('nam',$nam)->where('thang',$thang)->where('macqcq',$madv)
-                ->update(['mathk'=>$inputs['mathdv'],'mathh'=>$inputs['mathdv']]);
+                tonghopluong_donvi::where('nam', $nam)->where('thang', $thang)->where('macqcq', $madv)
+                    ->update(['mathk' => $inputs['mathdv'], 'mathh' => $inputs['mathdv']]);
 
-            tonghopluong_donvi_chitiet::wherein('mathdv',function($query) use($nam, $thang, $madv){
-                $query->select('mathdv')->from('tonghopluong_donvi')->where('nam',$nam)->where('thang',$thang)->where('macqcq',$madv)->distinct();
-            })->update(['mathk'=>$inputs['mathdv'],'mathh'=>$inputs['mathdv']]);
+                tonghopluong_donvi_chitiet::wherein('mathdv', function ($query) use ($nam, $thang, $madv) {
+                    $query->select('mathdv')->from('tonghopluong_donvi')->where('nam', $nam)->where('thang', $thang)->where('macqcq', $madv)->distinct();
+                })->update(['mathk' => $inputs['mathdv'], 'mathh' => $inputs['mathdv']]);
 
-            //$model_tonghop_ct->update(['mathk'=>$inputs['mathdv']]);
-            tonghopluong_donvi_diaban::wherein('mathdv',function($query) use($nam, $thang, $madv){
-                $query->select('mathdv')->from('tonghopluong_donvi')->where('nam',$nam)->where('thang',$thang)->where('macqcq',$madv)->distinct();
-            })->update(['mathk'=>$inputs['mathdv'],'mathh'=>$inputs['mathdv']]);
+                //$model_tonghop_ct->update(['mathk'=>$inputs['mathdv']]);
+                tonghopluong_donvi_diaban::wherein('mathdv', function ($query) use ($nam, $thang, $madv) {
+                    $query->select('mathdv')->from('tonghopluong_donvi')->where('nam', $nam)->where('thang', $thang)->where('macqcq', $madv)->distinct();
+                })->update(['mathk' => $inputs['mathdv'], 'mathh' => $inputs['mathdv']]);
 
-            tonghopluong_khoi::create($inputs);
-            tonghopluong_huyen::create($inputs);
-
-            return redirect('/chuc_nang/tong_hop_luong/khoi/index?nam='.$nam);
+                tonghopluong_khoi::create($inputs);
+                tonghopluong_huyen::create($inputs);
+            }
+            return redirect('/chuc_nang/tong_hop_luong/khoi/index?nam=' . $nam);
         } else
             return view('errors.notlogin');
     }
@@ -473,5 +481,21 @@ class tonghopluong_khoiController extends Controller
                 ->with('pageTitle','Chi tiết tổng hợp lương tại đơn vị theo địa bàn quản lý');
         } else
             return view('errors.notlogin');
+    }
+
+    function getlydo(Request $request){
+        if(!Session::has('admin')) {
+            $result = array(
+                'status' => 'fail',
+                'message' => 'permission denied',
+            );
+            die(json_encode($result));
+        }
+
+        $inputs = $request->all();
+
+        $model = tonghopluong_donvi::select('lydo')->where('mathk',$inputs['mathdv'])->first();
+
+        die($model);
     }
 }

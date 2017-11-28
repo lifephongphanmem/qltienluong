@@ -298,4 +298,13 @@ class nguonkinhphiController extends Controller
         $model = nguonkinhphi::findorfail($inputs['id']);
         die($model);
     }
+
+    function destroy($id){
+        if (Session::has('admin')) {
+            $model = nguonkinhphi::find($id);
+            $model->delete();
+            return redirect('/du_toan/nguon_kinh_phi/danh_sach');
+        } else
+            return view('errors.notlogin');
+    }
 }

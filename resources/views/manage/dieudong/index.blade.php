@@ -46,7 +46,7 @@
                             <th class="text-center" style="width: 5%">STT</th>
                             <th class="text-center">Ngày điều động</th>
                             <th class="text-center">Đơn vị chuyển đến</th>
-                            <th class="text-center">Phòng ban chuyển đến</th>
+
                             <th class="text-center">Chức vụ mới</th>
                             <th class="text-center">Thao tác</th>
                         </tr>
@@ -58,7 +58,7 @@
                                         <td class="text-center">{{$key+1}}</td>
                                         <td>{{getDayVn($value->ngaylc)}}</td>
                                         <td>{{$value->tendv}}</td>
-                                        <td>{{$value->tenpb}}</td>
+
                                         <td>{{$value->tencvcq}}</td>
                                         @include('includes.crumbs.bt_editdel')
                                     </tr>
@@ -100,7 +100,6 @@
                                 </select>
                             </div>
                         </div>
-                        @include('includes.crumbs.phongban')
                         @include('includes.crumbs.chucvu')
                         @include('includes.crumbs.quyetdinh')
                         <input type="hidden" id="id_ct" name="id_ct"/>
@@ -123,7 +122,6 @@
             }else{
                 $('#ngaylc').val('');
                 $('#donvi').val('');
-                $('#mapb').val('');
                 $('#macvcq').val('');
                 $('#soqd').val('');
                 $('#ngayqd').val('');
@@ -151,7 +149,6 @@
                     if (data.status == 'success') {
                         $('#ngaylc').val(data.ngaylc);
                         $('#donvi').val(data.madv);
-                        $('#mapb').val(data.mapb);
                         $('#macvcq').val(data.macvcq);
                         $('#soqd').val(data.soqd);
                         $('#ngayqd').val(data.ngayqd);
@@ -174,7 +171,6 @@
 
             var ngaylc=$('#ngaylc').val();
             var donvi=$('#donvi').val();
-            var phongban=$('#mapb').val();
             var chucvu=$('#macvcq').val();
             var soqd=$('#soqd').val();
             var ngayqd=$('#ngayqd').val();
@@ -191,10 +187,7 @@
                 valid=false;
                 message +='Đơn vị mới không được bỏ trống \n';
             }
-            if(phongban==''){
-                valid=false;
-                message +='Phòng ban mới không được bỏ trống \n';
-            }
+
             if(chucvu==''){
                 valid=false;
                 message +='Chức vụ mới không được bỏ trống \n';
@@ -211,7 +204,6 @@
                             macanbo: macanbo,
                             ngaylc: ngaylc,
                             donvi: donvi,
-                            phongban: phongban,
                             chucvu: chucvu,
                             soqd: soqd,
                             ngayqd: ngayqd,
@@ -235,7 +227,6 @@
                             _token: CSRF_TOKEN,
                             ngaylc: ngaylc,
                             donvi: donvi,
-                            phongban: phongban,
                             chucvu: chucvu,
                             soqd: soqd,
                             ngayqd: ngayqd,

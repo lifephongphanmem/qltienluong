@@ -15,6 +15,7 @@ use App\tonghopluong_donvi_diaban;
 use App\tonghopluong_huyen;
 use App\tonghopluong_huyen_chitiet;
 use App\tonghopluong_huyen_diaban;
+use App\tonghopluong_khoi;
 use App\tonghopluong_tinh;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -614,26 +615,31 @@ class tonghopluong_huyenController extends Controller
             return view('errors.notlogin');
     }
 
-    public function tralai(Request $request){
+    function tralai(Request $request){
         //xem dữ liệu khối or đơn vị
         //đơn vị =>trả, xóa bang tonghopluong_huyen
         //khối =>trả, xóa bang tonghopluong_huyen, update trường mathh = null;
         if (Session::has('admin')) {
             $inputs=$request->all();
             $model = tonghopluong_huyen::where('mathdv',$inputs['mathdv'])->first();
-            dd($model);
-            if($model->phanloai == 'DONVI'){
-                //đơn vị =>trả, xóa bang tonghopluong_luong
-                $model_ct = tonghopluong_donvi::where()->get();
 
-            }else{
-                //khối =>trả, xóa bang tonghopluong_luong, update trường mathh = null;
+            tonghopluong_donvi::where('mathh',$inputs['mathdv'])
+                ->update(['mathh'=>null,'trangthai'=>'TRALAI','lydo'=>$inputs['lydo']]);
 
+            tonghopluong_donvi_chitiet::where('mathh',$inputs['mathdv'])
+                ->update(['mathh'=>null]);
+
+            tonghopluong_donvi_diaban::where('mathh',$inputs['mathdv'])
+                ->update(['mathh'=>null]);
+
+            if($model->phanloai == 'CAPDUOI'){
+                //do lúc chuyển tạo mã khối và ma huyện giống nhau
+                //ko lấy theo tháng, năm, mã khối
+                //nên tạo trường lý do ko nên lấy ở bảng đơn vị
+                tonghopluong_khoi::where('mathdv',$inputs['mathdv'])->update(['trangthai'=>'TRALAI']);
             }
-
-            tonghopluong_donvi::where('mathdv',$inputs['mathdv'])
-                ->update(['trangthai'=>'TRALAI','lydo'=>$inputs['lydo']]);
-            return redirect('/chuc_nang/xem_du_lieu/index?thang='.$model->thang.'&nam='.$model->nam.'&trangthai=ALL');
+            $model->delete();
+            return redirect('/chuc_nang/xem_du_lieu/huyen?thang='.$model->thang.'&nam='.$model->nam.'&trangthai=ALL');
         } else
             return view('errors.notlogin');
     }

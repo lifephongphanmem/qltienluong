@@ -262,7 +262,7 @@
                         <li><a href="{{url('/tra_cuu/ho_so')}}"><i class="fa fa-caret-right"></i>Hồ sơ cán bộ</a></li>
                         <!--li><a href="{{url('/tra_cuu/luong')}}"><i class="fa fa-caret-right"></i>Quá trình hưởng lương</a></li>
                         <li><a href="{{url('/tra_cuu/phu_cap')}}"><i class="fa fa-caret-right"></i>Quá trình phụ cấp</a></li-->
-                        <li><a href="{{url('/tra_cuu/chi_luong')}}"><i class="fa fa-caret-right"></i>Chi trả lương</a></li>
+                        <li><a href="{{url('/tra_cuu/chi_luong')}}"><i class="fa fa-caret-right"></i>Bảng lương tại đợn vị cấp dưới</a></li>
 					</ul>
 				</li>
 				<li>

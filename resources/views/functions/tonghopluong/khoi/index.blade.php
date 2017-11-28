@@ -69,6 +69,14 @@
                                                 <i class="fa fa-print"></i>&nbsp; Số liệu địa bàn</a>
                                             <a href="{{url('/chuc_nang/xem_du_lieu/index?thang='.$value['thang'].'&nam='.$nam.'&trangthai=ALL')}}" class="btn btn-default btn-xs">
                                                 <i class="fa fa-list-alt"></i>&nbsp; Số liệu chi tiết</a>
+
+                                            @if($value['trangthai'] == 'TRALAI')
+                                                <button type="button" class="btn btn-default btn-sm" onclick="getLyDo('{{$value['mathdv']}}')" data-target="#tralai-modal" data-toggle="modal"><i class="fa fa-share-square-o"></i>&nbsp;
+                                                    Lý do trả lại</button>
+                                                <button type="button" class="btn btn-default btn-xs" onclick="confirmChuyen('{{$value['thang']}}','{{$nam}}')" data-target="#chuyen-modal" data-toggle="modal"><i class="fa fa-share-square-o"></i>&nbsp;
+                                                    Gửi dữ liệu</button>
+                                            @endif
+
                                         @else
                                             @if($value['trangthai'] != 'CHUADL')
                                                 <a href="{{url($furl.'tonghop?thang='.$value['thang'].'&nam='.$nam)}}" class="btn btn-default btn-xs" target="_blank">
@@ -85,6 +93,7 @@
                                                     <a href="{{url('/chuc_nang/xem_du_lieu/index?thang='.$value['thang'].'&nam='.$nam.'&trangthai=CHOGUI')}}" class="btn btn-default btn-xs">
                                                         <i class="fa fa-list-alt"></i>&nbsp; Đơn vị chưa gửi dữ liệu</a>
                                                 @endif
+
 
                                             @else
                                                 <a href="{{url('/chuc_nang/xem_du_lieu/index?thang='.$value['thang'].'&nam='.$nam.'&trangthai=ALL')}}" class="btn btn-default btn-xs">
@@ -155,6 +164,34 @@
             <!-- /.modal-dialog -->
         </div>
     </div>
+
+    <!--Model Trả lại -->
+    <div class="modal fade" id="tralai-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+                    <h4 class="modal-title">Thông tin lý do trả lại dữ liệu</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        {!!Form::textarea('lydo', null, array('id' => 'lydo','class' => 'form-control','rows'=>'3'))!!}
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="submit" class="btn blue">Đồng ý</button>
+
+                    </div>
+                    {!! Form::close() !!}
+                </div>
+                <!-- /.modal-content -->
+            </div>
+            <!-- /.modal-dialog -->
+        </div>
+    </div>
+
+
     @include('includes.modal.delete')
     <script>
         function confirmChuyen(thang, nam) {
@@ -165,6 +202,29 @@
         function confirmTonghop(url) {
             $('#frm_tonghop').attr('action', url);
         }
+
+        function getLyDo(mathdv){
+            var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
+            $.ajax({
+                url: '{{$furl}}' + 'getlydo',
+                type: 'GET',
+                data: {
+                    _token: CSRF_TOKEN,
+                    mathdv: mathdv
+                },
+                dataType: 'JSON',
+                success: function (data) {
+                    $('#lydo').val(data.lydo);
+                },
+                error: function(message){
+                    toastr.error(message,'Lỗi!');
+                }
+            });
+
+            //$('#madvbc').val(madvbc);
+            //$('#phongban-modal').modal('show');
+        }
+
     </script>
 
 @stop

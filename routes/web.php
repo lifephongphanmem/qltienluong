@@ -264,7 +264,7 @@ Route::group(['prefix'=>'du_toan'],function(){
         Route::post('senddata','nguonkinhphiController@senddata'); //gửi dữ liệu
         Route::get('ma_so={masodv}/in','nguonkinhphiController@printf');
 
-        Route::get('del/{id}','dmdiabandbkkController@destroy');
+        Route::get('del/{id}','nguonkinhphiController@destroy');
         Route::post('store','dmdiabandbkkController@store');//insert + update
 
 
@@ -334,6 +334,9 @@ Route::group(['prefix'=>'chuc_nang'],function(){
             Route::post('tonghop_chuadaydu','tonghopluong_khoiController@tonghop_chuadaydu');
             Route::get('detail/ma_so={mathdv}','tonghopluong_khoiController@detail');
             Route::post('senddata','tonghopluong_khoiController@senddata'); //gửi dữ liệu
+            Route::post('tralai','tonghopluong_khoiController@tralai'); //trả lại dữ liệu
+            Route::get('getlydo','tonghopluong_khoiController@getlydo');//lý do trả lại dữ liệu
+
             Route::get('printf_data/ma_so={mathdv}','tonghopluong_khoiController@printf_data');
             Route::get('printf_data_diaban/ma_so={mathdv}','tonghopluong_khoiController@printf_data_diaban');
 

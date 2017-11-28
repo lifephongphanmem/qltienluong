@@ -636,19 +636,17 @@ class bangluongController extends Controller
     //<editor-fold desc="Tra cứu">
     function search(){
         if (Session::has('admin')) {
-            $macqcq=session('admin')->madv;
-            $model_dv=dmdonvi::where('macqcq',$macqcq)->orwhere('madv',$macqcq)->get();
-            $model_dvbc=dmdonvibaocao::where('level','H')->get();
-            $m_pc=dmphucap::all('mapc','tenpc','hesopc')->toArray();
-            $m_pln=ngachbac::select('tennb','plnb','msngbac')->distinct()->get();
-            $m_plnb=ngachbac::select('plnb')->distinct()->get();
+            $model_dv=dmdonvi::where('madv',session('admin')->madv)->get();
+            if(session('admin')->quanlynhom){
+                $model_dv=dmdonvi::where('macqcq',session('admin')->madv)->get();
+            }
+
+            if(session('admin')->quanlykhuvuc){
+                $model_dv=dmdonvi::where('madvbc',session('admin')->madvbc)->get();
+            }
 
             return view('search.chiluong.index')
                 ->with('model_dv', $model_dv)
-                ->with('model_dvbc', $model_dvbc)
-                ->with('m_pc',$m_pc)
-                ->with('m_pln',$m_pln)
-                ->with('m_plnb',$m_plnb)
                 ->with('pageTitle','Tra cứu chi trả lương');
         } else
             return view('errors.notlogin');
@@ -656,7 +654,8 @@ class bangluongController extends Controller
 
     function result(Request $request){
         if (Session::has('admin')) {
-            $model=bangluong::all();
+            $inputs = $request->all();
+            $model=bangluong::where('thang',$inputs['thang'])->where('nam',$inputs['nam'])->where('madv',$inputs['madv'])->get();
 
             return view('search.chiluong.result')
                 ->with('model',$model)

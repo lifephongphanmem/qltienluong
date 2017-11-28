@@ -21,12 +21,13 @@ class hosoluanchuyenController extends Controller
             $m_pb=getPhongBanX();
             $m_cb=getCanBoX();
 
-            $m_pbm=dmphongban::all('mapb','tenpb')->toArray();
+            //$m_pbm=dmphongban::all('mapb','tenpb')->toArray();
             $m_cvm=dmchucvucq::all('tencv', 'macvcq')->toArray();
-            $m_dvm=dmdonvi::all('tendv', 'madv')->toArray();
+
+            $m_dvm=dmdonvi::select('tendv', 'madv')->where('madvbc',session('admin')->madvbc)->get()->toArray();
 
             foreach($model as $hs){
-                $hs->tenpb=getInfoPhongBan($hs,$m_pbm);
+                //$hs->tenpb=getInfoPhongBan($hs,$m_pbm);
                 $hs->tencvcq=getInfoChucVuCQ($hs,$m_cvm);
                 $hs->tendv=getInfoDonVI($hs,$m_dvm);
             }
@@ -37,7 +38,7 @@ class hosoluanchuyenController extends Controller
                 ->with('m_pb',$m_pb)
                 ->with('m_cb',$m_cb)
                 ->with('m_dvm',$m_dvm)
-                ->with('m_pbm',$m_pbm)
+                //->with('m_pbm',$m_pbm)
                 ->with('m_cvm',$m_cvm)
                 ->with('model',$model)
                 ->with('pageTitle','Danh sách hồ sơ điều động cán bộ');
@@ -79,7 +80,6 @@ class hosoluanchuyenController extends Controller
         $model->madv = $inputs['donvi'];
         $model->macanbo = $inputs['macanbo'];
         $model->ngaylc = getDateTime($inputs['ngaylc']);
-        $model->mapb = $inputs['phongban'];
         $model->macvcq = $inputs['chucvu'];
         $model->soqd = $inputs['soqd'];
         $model->ngayqd = getDateTime($inputs['ngayqd']);
@@ -87,7 +87,6 @@ class hosoluanchuyenController extends Controller
 
         if($model->save()){
             $m_cb = hosocanbo::where('macanbo',$inputs['macanbo'])->first();
-            $m_cb->mapb=$inputs['phongban'];
             $m_cb->macvcq = $inputs['chucvu'];
             $m_cb->madv = $inputs['donvi'];
             $m_cb->save();
@@ -116,7 +115,6 @@ class hosoluanchuyenController extends Controller
 
         $model->ngaylc = getDateTime($inputs['ngaylc']);
         $model->madv = $inputs['donvi'];
-        $model->mapb = $inputs['phongban'];
         $model->macvcq = $inputs['chucvu'];
         $model->soqd = $inputs['soqd'];
         $model->ngayqd = getDateTime($inputs['ngayqd']);

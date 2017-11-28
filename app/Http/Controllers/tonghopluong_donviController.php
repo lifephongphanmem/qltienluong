@@ -350,6 +350,9 @@ class tonghopluong_donviController extends Controller
         //Không đơn vị chủ quản, tùy xem thuộc huyện, tỉnh để update lên bang tonghop_huyen, tonghop_tinh
         if (Session::has('admin')) {
             $inputs = $requests->all();
+            if(session('admin')->quanlykhuvuc && session('admin')->macqcq == ''){
+                return view('errors.chuacqcq');
+            }
             $model = tonghopluong_donvi::where('mathdv', $inputs['mathdv'])->first();
             $mathdv =  getdate()[0];//Mã mới
 //dd(session('admin'));
@@ -387,9 +390,12 @@ class tonghopluong_donviController extends Controller
                         $th_khoi->save();
 
                         //Lưu thông tin vào bảng khối
+
                         $inputs['nguoigui'] = session('admin')->name;
+
                         $inputs['ngaygui'] = Carbon::now()->toDateTimeString();
                         $model->trangthai = 'DAGUI';
+                        $model->mathh = $mathdv;
                         $model->save();
 
                     } else {//Đã gửi dữ liệu
@@ -429,6 +435,7 @@ class tonghopluong_donviController extends Controller
                         $inputs['nguoigui'] = session('admin')->name;
                         $inputs['ngaygui'] = Carbon::now()->toDateTimeString();
                         $model->trangthai = 'DAGUI';
+                        $model->matht = $mathdv;
                         $model->save();
 
                     } else {//Đã gửi dữ liệu
@@ -540,7 +547,7 @@ class tonghopluong_donviController extends Controller
         $inputs = $request->all();
 
         $model = tonghopluong_donvi::select('lydo')->where('mathdv',$inputs['mathdv'])->first();
-        dd(die($model));
+
         die($model);
     }
 }
