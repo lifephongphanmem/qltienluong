@@ -95,134 +95,17 @@
         <td></td>
         <td></td>
     </tr>
-    <tr >
-        <td >1</td>
-        <td style="text-align: left">Sự nghiệp giáo dục - đào tạo</td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-    </tr>
-    <tr >
-        <td ></td>
-        <td style="text-align: left">- Giáo dục</td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-    </tr>
-    <tr >
-        <td ></td>
-        <td style="text-align: left">- Đào tạo</td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-    </tr>
-    <tr >
-        <td >2</td>
-        <td style="text-align: left">Sự nghiệp y tế</td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-    </tr>
-    <tr >
-        <td >3</td>
-        <td style="text-align: left">Sự nghiệp khoa học-công nghệ</td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-    </tr>
-    <tr >
-        <td >4</td>
-        <td style="text-align: left">Sự nghiệp văn hóa thông tin</td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-    </tr>
-
-
-    <tr >
-        <td >5</td>
-        <td style="text-align: left">Sự nghiệp phát thanh truyền hình</td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-    </tr>
-    <tr >
-        <td >6</td>
-        <td style="text-align: left">Sự nghiệp thể dục - thể thao</td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-    </tr>
-    <tr >
-        <td >7</td>
-        <td style="text-align: left">Sự nghiệp đảm bảo xã hội</td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-    </tr>
-    <tr >
-        <td>8</td>
-        <td style="text-align: left">Sự nghiệp kinh tế</td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-    </tr>
-    <tr >
-        <td >9</td>
-        <td style="text-align: left">Sự nghiệp môi trường</td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-    </tr>
-    <tr >
-        <td >10</td>
-        <td style="text-align: left">Quản lý nhà nước, đảng, đoàn thể</td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-    </tr>
-    <tr style="font-style: italic">
-        <td >4</td>
-        <td style="text-align: left">- Quản lý NN</td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-    </tr>
-    <tr style="font-style: italic">
-        <td ></td>
-        <td style="text-align: left">- Đảng, đoàn thể</td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-    </tr>
+    @foreach($ar_I as $dulieu)
+        <tr style=" text-align: right">
+            <td style=" text-align: center">{{$dulieu['tt']}}</td>
+            <td style=" text-align: left">{{$dulieu['noidung']}}</td>
+            <td>{{dinhdangso($dulieu['dt'])}}</td>
+            <td>{{dinhdangso($dulieu['hstl'])}}</td>
+            <td>{{dinhdangso($dulieu['hspc'])}}</td>
+            <td>{{dinhdangso($dulieu['cl'])}}</td>
+            <td>{{dinhdangso($dulieu['nc'])}}</td>
+        </tr>
+    @endforeach
     <tr style="font-weight: bold;">
         <td >II</td>
         <td style="text-align: left">CÁN BỘ CHUYÊN TRÁCH, CÔNG CHỨC XÃ</td>
@@ -263,6 +146,14 @@
     <tr>
         <td></td>
         <td style="font-style: italic">(Ký tên, đóng dấu)</td>
+    </tr>
+    <tr>
+        <td><br><br><br></td>
+    </tr>
+
+    <tr>
+        <td style="text-align: center;" width="50%">{{''}}</td>
+        <td style="text-align: center;" width="50%">{{$m_dv->lanhdao}}</td>
     </tr>
 </table>
 

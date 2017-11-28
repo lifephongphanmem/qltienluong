@@ -83,134 +83,16 @@
         <td></td>
         <td></td>
     </tr>
-    <tr style="font-weight: bold;">
-        <td >I</td>
-        <td style="text-align: left">Xã, phường, thị trấn</td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-    </tr>
-    <tr >
-        <td >1</td>
-        <td style="text-align: left">Xã loại I</td>
-        <td></td>
-        <td style="font-weight: bold;">20,3</td>
-        <td></td>
-        <td></td>
-    </tr>
-    <tr >
-        <td >2</td>
-        <td style="text-align: left">Xã loại II</td>
-        <td></td>
-        <td style="font-weight: bold;">18,6</td>
-        <td></td>
-        <td></td>
-    </tr>
-    <tr >
-        <td >3</td>
-        <td style="text-align: left">Xã loại III</td>
-        <td></td>
-        <td style="font-weight: bold;">17,6</td>
-        <td></td>
-        <td></td>
-    </tr>
-    <tr style="font-weight: bold;">
-        <td >II</td>
-        <td style="text-align: left">Thôn, tổ dân phố<sup>(2)</sup></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-    </tr>
-    <tr >
-        <td >1</td>
-        <td style="text-align: left">Số xã biên giới, hải đảo</td>
-        <td></td>
-        <td style="font-weight: bold;">20,3</td>
-        <td></td>
-        <td></td>
-    </tr>
-    <tr >
-        <td ></td>
-        <td style="text-align: left">- Thôn thuộc xã biên giới, hải đảo</td>
-        <td></td>
-        <td style="font-weight: bold;">5,0</td>
-        <td></td>
-        <td></td>
-    </tr>
-    <tr >
-        <td >2</td>
-        <td style="text-align: left">Số xã khó khăn theo Quyết định 1049/QĐ-TTg ngày 26/6/2014</td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-    </tr>
-    <tr >
-        <td ></td>
-        <td style="text-align: left">-Thôn thuộc xã khó khăn theo Quyết định 1049/QĐ-TTg</td>
-        <td></td>
-        <td style="font-weight: bold;">5,0</td>
-        <td></td>
-        <td></td>
-    </tr>
-    <tr >
-        <td >3</td>
-        <td style="text-align: left">Số xã loại I, loại II (không bao gồm số xã thuộc khoản 1, 2 phần II)</td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-    </tr>
-    <tr >
-        <td ></td>
-        <td style="text-align: left">Thôn thuộc xã loại I, loại II</td>
-        <td></td>
-        <td style="font-weight: bold;">5,0</td>
-        <td></td>
-        <td></td>
-    </tr>
-    <tr >
-        <td >4</td>
-        <td style="text-align: left">Số xã trọng điểm, phức tạp về an ninh trật tự</td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-    </tr>
-    <tr >
-        <td ></td>
-        <td style="text-align: left">Số thôn thuộc xã trọng điểm, phức tạp về an ninh trật tự</td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-    </tr>
-    <tr >
-        <td >5</td>
-        <td style="text-align: left">Số xã, phường, thị trấn còn lại</td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-    </tr>
-    <tr >
-        <td ></td>
-        <td style="text-align: left">-Thôn còn lại</td>
-        <td></td>
-        <td style="font-weight: bold;">3,0</td>
-        <td></td>
-        <td></td>
-    </tr>
-    <tr >
-        <td ></td>
-        <td style="text-align: left">-Tổ dân phố</td>
-        <td></td>
-        <td style="font-weight: bold;">3,0</td>
-        <td></td>
-        <td></td>
-    </tr>
+    @foreach($ar_I as $dulieu)
+        <tr style=" text-align: right">
+            <td style=" text-align: center">{{$dulieu['tt']}}</td>
+            <td style=" text-align: left">{{$dulieu['noidung']}}</td>
+            <td>{{dinhdangso($dulieu['tdv'])}}</td>
+            <td>{{$dulieu['mk']}}</td>
+            <td>{{dinhdangso($dulieu['kp'])}}</td>
+            <td>{{dinhdangso($dulieu['bhxh'])}}</td>
+        </tr>
+    @endforeach
 </table>
 
 <table width="96%" border="0" cellspacing="0" cellpadding="4">

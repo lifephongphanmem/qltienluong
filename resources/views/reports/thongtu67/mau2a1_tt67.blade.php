@@ -108,45 +108,46 @@
         <td>18</td>
     </tr>
 
-    <tr style="font-weight: bold; text-align: center">
+    <tr style="font-weight: bold; text-align: right">
         <th></th>
         <th>TỔNG CỘNG (I+II+III+IV+V+VI)</th>
-        <th></th>
-        <th></th>
-        <th></th>
-        <th></th>
-        <th></th>
-        <th></th>
-        <th></th>
-        <th></th>
-        <th></th>
-        <th></th>
-        <th></th>
-        <th></th>
-        <th></th>
-        <th></th>
-        <th></th>
-        <th></th>
+
+        <th style="text-align: center"></th>
+        <th style="text-align: center"></th>
+        <td>{{dinhdangso($a_It['luong'] + $a_It['tongpc'] + $a_It['ttbh_dv'] + $ar_II['luong'] + $ar_II['tongpc'] + $ar_II['ttbh_dv'] + $a_IIIt['tongso'] + $a_IVt['tongso'])}}</td>
+        <td>{{dinhdangso($a_It['luong'] + $ar_II['luong'])}}</td>
+        <td>{{dinhdangso($a_It['tongpc'] + $ar_II['tongpc'])}}</td>
+        <td>{{dinhdangso($a_It['pckv'] + $ar_II['pckv'])}}</td>
+        <td>{{dinhdangso($a_It['pccv'] + $ar_II['pccv'])}}</td>
+        <td>{{dinhdangso($a_It['pctnvk'] + $ar_II['pctnvk'])}}</td>
+        <td>{{dinhdangso($a_It['pcudn'] + $ar_II['pcudn'])}}</td>
+        <td>{{dinhdangso($a_It['pcth'] + $ar_II['pcth'])}}</td>
+        <td>{{dinhdangso($a_It['pctn'] + $ar_II['pctn'])}}</td>
+        <td>{{dinhdangso($a_It['pccovu'] + $ar_II['pccovu'])}}</td>
+        <td>{{dinhdangso($a_It['pcdang'] + $ar_II['pcdang'])}}</td>
+        <td>{{dinhdangso($a_It['pcthni'] + $ar_II['pcthni'])}}</td>
+        <td>{{dinhdangso($a_It['pck'] + $ar_II['pck'])}}</td>
+        <td>{{dinhdangso($a_It['ttbh_dv'] + $ar_II['ttbh_dv'])}}</td>
     </tr>
-    <tr style="font-weight: bold; text-align: center">
+    <tr style="font-weight: bold; text-align: right">
         <th>I</th>
         <th>KHU VỰC HCSN, ĐẢNG, ĐOÀN THỂ</th>
-        <th></th>
-        <th></th>
-        <th></th>
-        <th></th>
-        <th></th>
-        <th></th>
-        <th></th>
-        <th></th>
-        <th></th>
-        <th></th>
-        <th></th>
-        <th></th>
-        <th></th>
-        <th></th>
-        <th></th>
-        <th></th>
+        <td>{{dinhdangso($a_It['soluongduocgiao'])}}</td>
+        <td>{{dinhdangso($a_It['soluongbienche'])}}</td>
+        <td>{{dinhdangso($a_It['luong'] + $a_It['tongpc'] + $a_It['ttbh_dv'])}}</td>
+        <td>{{dinhdangso($a_It['luong'])}}</td>
+        <td>{{dinhdangso($a_It['tongpc'])}}</td>
+        <td>{{dinhdangso($a_It['pckv'])}}</td>
+        <td>{{dinhdangso($a_It['pccv'])}}</td>
+        <td>{{dinhdangso($a_It['pctnvk'])}}</td>
+        <td>{{dinhdangso($a_It['pcudn'])}}</td>
+        <td>{{dinhdangso($a_It['pcth'])}}</td>
+        <td>{{dinhdangso($a_It['pctn'])}}</td>
+        <td>{{dinhdangso($a_It['pccovu'])}}</td>
+        <td>{{dinhdangso($a_It['pcdang'])}}</td>
+        <td>{{dinhdangso($a_It['pcthni'])}}</td>
+        <td>{{dinhdangso($a_It['pck'])}}</td>
+        <td>{{dinhdangso($a_It['ttbh_dv'])}}</td>
     </tr>
 
     <tr style="font-style: italic;">
@@ -170,54 +171,54 @@
         <td></td>
     </tr>
     @foreach($ar_I as $dulieu)
-        <tr>
+        <tr style=" text-align: right">
             <td>{{$dulieu['tt']}}</td>
             <td>{{$dulieu['noidung']}}</td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
+            <td>{{dinhdangso($dulieu['soluongduocgiao'])}}</td>
+            <td>{{dinhdangso($dulieu['soluongbienche'])}}</td>
+            <td>{{dinhdangso($dulieu['luong'] + $dulieu['tongpc'] + $dulieu['ttbh_dv'])}}</td>
+            <td>{{dinhdangso($dulieu['luong'])}}</td>
+            <td>{{dinhdangso($dulieu['tongpc'])}}</td>
+            <td>{{dinhdangso($dulieu['pckv'])}}</td>
+            <td>{{dinhdangso($dulieu['pccv'])}}</td>
+            <td>{{dinhdangso($dulieu['pctnvk'])}}</td>
+            <td>{{dinhdangso($dulieu['pcudn'])}}</td>
+            <td>{{dinhdangso($dulieu['pcth'])}}</td>
+            <td>{{dinhdangso($dulieu['pctn'])}}</td>
+            <td>{{dinhdangso($dulieu['pccovu'])}}</td>
+            <td>{{dinhdangso($dulieu['pcdang'])}}</td>
+            <td>{{dinhdangso($dulieu['pcthni'])}}</td>
+            <td>{{dinhdangso($dulieu['pck'])}}</td>
+            <td>{{dinhdangso($dulieu['ttbh_dv'])}}</td>
         </tr>
     @endforeach
 
     <tr style="font-weight: bold;">
         <td>II</td>
         <td>CÁN BỘ CHUYÊN TRÁCH, CÔNG CHỨC XÃ</td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
+        <td>{{dinhdangso($ar_II['soluongduocgiao'])}}</td>
+        <td>{{dinhdangso($ar_II['soluongbienche'])}}</td>
+        <td>{{dinhdangso($ar_II['luong'] + $ar_II['tongpc'] + $ar_II['ttbh_dv'])}}</td>
+        <td>{{dinhdangso($ar_II['luong'])}}</td>
+        <td>{{dinhdangso($ar_II['tongpc'])}}</td>
+        <td>{{dinhdangso($ar_II['pckv'])}}</td>
+        <td>{{dinhdangso($ar_II['pccv'])}}</td>
+        <td>{{dinhdangso($ar_II['pctnvk'])}}</td>
+        <td>{{dinhdangso($ar_II['pcudn'])}}</td>
+        <td>{{dinhdangso($ar_II['pcth'])}}</td>
+        <td>{{dinhdangso($ar_II['pctn'])}}</td>
+        <td>{{dinhdangso($ar_II['pccovu'])}}</td>
+        <td>{{dinhdangso($ar_II['pcdang'])}}</td>
+        <td>{{dinhdangso($ar_II['pcthni'])}}</td>
+        <td>{{dinhdangso($ar_II['pck'])}}</td>
+        <td>{{dinhdangso($ar_II['ttbh_dv'])}}</td>
     </tr>
     <tr style="font-weight: bold;">
         <td>III</td>
         <td>HOẠT ĐỘNG PHÍ ĐẠI BIỂU HĐND CÁC CẤP</td>
         <td></td>
         <td></td>
-        <td></td>
+        <td>{{dinhdangso($a_IIIt['tongso'])}}</td>
         <td></td>
         <td></td>
         <td></td>
@@ -239,7 +240,7 @@
             <td>{{$dulieu['noidung']}}</td>
             <td></td>
             <td></td>
-            <td></td>
+            <td>{{dinhdangso($dulieu['tongso'])}}</td>
             <td></td>
             <td></td>
             <td></td>
@@ -261,7 +262,7 @@
         <td>PHỤ CẤP TRÁCH NHIỆM CẤP ỦY</td>
         <td></td>
         <td></td>
-        <td></td>
+        <td>{{dinhdangso($a_IVt['tongso'])}}</td>
         <td></td>
         <td></td>
         <td></td>
@@ -282,7 +283,7 @@
             <td>{{$dulieu['noidung']}}</td>
             <td></td>
             <td></td>
-            <td></td>
+            <td>{{dinhdangso($dulieu['tongso'])}}</td>
             <td></td>
             <td></td>
             <td></td>
