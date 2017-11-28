@@ -40,7 +40,7 @@
                     </div>
                 </div>
             </div>
-            @if(session('admin')->quanlynhom)
+            @if(session('admin')->quanlynhom && !session('admin')->quanlykhuvuc)
                 <div class="portlet box">
                     <div class="portlet-header">
                         MẪU BÁO CÁO TỔNG HỢP TỪ CÁC ĐƠN VỊ CẤP DƯỚI

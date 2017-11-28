@@ -577,7 +577,9 @@ class tonghopluong_huyenController extends Controller
     function senddata(Request $requests){
         if (Session::has('admin')) {
             $inputs = $requests->all();
-
+            if(session('admin')->quanlykhuvuc && session('admin')->macqcq == ''){
+                return view('errors.chuacqcq');
+            }
             $madvbc = session('admin')->madvbc;
             $inputs['madv'] = session('admin')->madv;
             $inputs['mathdv'] = getdate()[0];;
