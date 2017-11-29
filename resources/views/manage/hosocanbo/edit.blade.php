@@ -41,7 +41,7 @@
         $('#nhommau').val('{{$model->nhommau}}').trigger('change');
         $('#macvd').val('{{$model->macvd}}').trigger('change');
     </script>
-
+    @include('includes.script.scripts')
 
 @stop
 

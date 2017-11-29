@@ -159,6 +159,10 @@ class bangluongController extends Controller
                 $a_truythu[] = $cb->macanbo;
                 //trong bảng danh mục là % vượt khung => sang bảng lương chuyển thành hệ số
                 $cb->vuotkhung = round((($cb->heso + $cb->pccv) * $cb->vuotkhung / 100), 2);
+                $cb->pccovu = round((($cb->heso + $cb->pccv) * $cb->pccovu / 100), 2);
+                $cb->pctnvk = round((($cb->heso + $cb->pccv) * $cb->pctnvk / 100), 2);
+                $cb->pctnn = round((($cb->heso + $cb->pccv) * $cb->pctnn / 100), 2);
+
                 $cb->hesott = 0;//set = 0 để sau này tổng hợp lọc các cán bộ này ra để tính
 
                 $ths = 0;

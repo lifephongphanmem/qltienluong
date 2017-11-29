@@ -141,6 +141,52 @@
             <div class="portlet box blue">
                 <div class="portlet-title">
                     <div class="caption">
+                        Thông tin các khoản phụ cấp (nhập phần trăm)
+                    </div>
+                    <div class="tools">
+                        <a href="javascript:;" class="collapse" data-original-title="" title=""></a>
+                    </div>
+                </div>
+                <div class="portlet-body" style="display: block;">
+
+                    <div class="form-body">
+                        <div class="row">
+                            <div class="col-md-2">
+                                <div class="form-group">
+                                    <label class="control-label">Công vụ </label>
+                                    {!!Form::text('pccovu', null, array('id' => 'pccovu','class' => 'form-control', 'data-mask'=>'fdecimal'))!!}
+                                </div>
+                            </div>
+
+                            <div class="col-md-2">
+                                <div class="form-group">
+                                    <label class="control-label">T.niên v.khung </label>
+                                    {!!Form::text('pctnvk', null, array('id' => 'pctnvk','class' => 'form-control', 'data-mask'=>'fdecimal'))!!}
+                                </div>
+                            </div>
+
+                            <div class="col-md-2">
+                                <div class="form-group">
+                                    <label class=" control-label">Thâm niên nghề </label>
+                                    {!!Form::text('pctnn', null, array('id' => 'pctnn','class' => 'form-control', 'data-mask'=>'fdecimal'))!!}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+                </div>
+            </div>
+            <!-- END PORTLET-->
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-12">
+            <!-- BEGIN PORTLET-->
+            <div class="portlet box blue">
+                <div class="portlet-title">
+                    <div class="caption">
                         Thông tin các khoản phụ cấp (nhập hệ số)
                     </div>
                     <div class="tools">
@@ -178,27 +224,6 @@
                                 <div class="form-group">
                                     <label class="control-label">Trách nhiệm </label>
                                     {!!Form::text('pctn', null, array('id' => 'pctn','class' => 'form-control', 'data-mask'=>'fdecimal'))!!}
-                                </div>
-                            </div>
-
-                            <div class="col-md-2">
-                                <div class="form-group">
-                                    <label class="control-label">Công vụ </label>
-                                    {!!Form::text('pccovu', null, array('id' => 'pccovu','class' => 'form-control', 'data-mask'=>'fdecimal'))!!}
-                                </div>
-                            </div>
-
-                            <div class="col-md-2">
-                                <div class="form-group">
-                                    <label class="control-label">T.niên v.khung </label>
-                                    {!!Form::text('pctnvk', null, array('id' => 'pctnvk','class' => 'form-control', 'data-mask'=>'fdecimal'))!!}
-                                </div>
-                            </div>
-
-                            <div class="col-md-2">
-                                <div class="form-group">
-                                    <label class=" control-label">Thâm niên nghề </label>
-                                    {!!Form::text('pctnn', null, array('id' => 'pctnn','class' => 'form-control', 'data-mask'=>'fdecimal'))!!}
                                 </div>
                             </div>
 

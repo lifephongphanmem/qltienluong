@@ -36,6 +36,7 @@
         $('#dantoc').val('Kinh').trigger('change');
     </script>
 @stop
+@include('includes.script.scripts')
 
 @section('content')
     <div class="row">
