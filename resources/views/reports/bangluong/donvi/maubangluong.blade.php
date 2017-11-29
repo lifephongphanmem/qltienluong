@@ -86,7 +86,7 @@
         <th style="width: 6%;" rowspan="2">Nghỉ việc</br>không được</br>hưởng lương</th>
         <th style="width: 6%;" rowspan="2">BHXH trả</br>thay lương</th>
         <th style="width: 6%;" rowspan="2">Tổng cộng</br>tiền lương</th>
-        <th colspan="4">Các khoản phải khấu trừ</th>
+        <th colspan="5">Các khoản phải khấu trừ</th>
         <th style="width: 6%;" rowspan="2">Còn lại</th>
         <th style="width: 6%;" rowspan="2">Ký nhận</th>
     </tr>
@@ -110,11 +110,12 @@
         <th>BHXH</th>
         <th>BHYT</th>
         <th>KPCĐ</th>
+        <th>BHTN</th>
         <th>Cộng</th>
     </tr>
 
     <tr>
-        @for($i=1;$i<=28;$i++)
+        @for($i=1;$i<=29;$i++)
         <th>{{$i}}</th>
         @endfor
     </tr>
@@ -124,7 +125,7 @@
         <?php $stt=1; ?>
             <tr style="font-weight: bold;">
                 <td>{{convert2Roman($i++)}}</td>
-                <td style="text-align: left;" colspan="27">{{$congtac->tenct}}</td>
+                <td style="text-align: left;" colspan="28">{{$congtac->tenct}}</td>
             </tr>
         <?php $model_luong = $model->where('mact',$congtac->mact)?>
         @foreach($model_luong as $ct)
@@ -156,6 +157,7 @@
                 <td>{{dinhdangso($ct->stbhxh)}}</td>
                 <td>{{dinhdangso($ct->stbhyt)}}</td>
                 <td>{{dinhdangso($ct->stkpcd)}}</td>
+                <td>{{dinhdangso($ct->stbhtn)}}</td>
                 <td>{{dinhdangso($ct->ttbh)}}</td>
                 <td>{{dinhdangso($ct->luongtn)}}</td>
                 <td></td>
@@ -185,6 +187,7 @@
                 <td class="money">{{dinhdangso($model_luong->sum('stbhxh'))}}</td>
                 <td class="money">{{dinhdangso($model_luong->sum('stbhyt'))}}</td>
                 <td class="money">{{dinhdangso($model_luong->sum('stkpcd'))}}</td>
+                <td class="money">{{dinhdangso($model_luong->sum('stbhtn'))}}</td>
                 <td class="money">{{dinhdangso($model_luong->sum('ttbh'))}}</td>
                 <td class="money">{{dinhdangso($model_luong->sum('luongtn'))}}</td>
 
@@ -215,6 +218,7 @@
         <td class="money">{{number_format($model->sum('stbhxh'))}}</td>
         <td class="money">{{number_format($model->sum('stbhyt'))}}</td>
         <td class="money">{{number_format($model->sum('stkpcd'))}}</td>
+        <td class="money">{{number_format($model->sum('stbhtn'))}}</td>
         <td class="money">{{number_format($model->sum('ttbh'))}}</td>
         <td class="money">{{number_format($model->sum('luongtn'))}}</td>
         <td></td>
