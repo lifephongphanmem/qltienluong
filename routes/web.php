@@ -496,6 +496,8 @@ Route::group(['prefix'=>'tong_hop_bao_cao'],function(){
     Route::post('mau2e_tt67','baocaothongtu67Controller@mau2e_tt67');
     Route::post('mau2g_tt67','baocaothongtu67Controller@mau2g_tt67');
     Route::post('mau2h_tt67','baocaothongtu67Controller@mau2h_tt67');
+    Route::post('mau4a_tt67','baocaothongtu67Controller@mau4a_tt67');
+    Route::post('mau4b_tt67','baocaothongtu67Controller@mau4b_tt67');
 
 });
 

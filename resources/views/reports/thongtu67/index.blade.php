@@ -29,7 +29,9 @@
                                 <li><a href="#" data-target="#chitiet-modal" data-toggle="modal" onclick="baocao('{{$furl.'mau2d_tt67'}}')">Tổng hợp kinh phí tăng thêm để thực hiện chế độ phụ cấp đối với cán bộ không chuyên trách (Mẫu 2d)</a></li>
                                 <li><a href="#" data-target="#chitiet-modal" data-toggle="modal" onclick="baocao('{{$furl.'mau2e_tt67'}}')">Tổng hợp kinh phí tăng, giảm do điều chỉnh địa bàn vùng kinh tế xã hội đặc biệt khó khăn (Mẫu 2e)</a></li>
                                 <li><a href="#" data-target="#chitiet-modal" data-toggle="modal" onclick="baocao('{{$furl.'mau2g_tt67'}}')">Tổng hợp phụ cấp ưu đãi tăng, giảm do điều chỉnh địa bàn vùng kinh tế xã hội đặc biệt khó khăn (Mẫu 2g)</a></li>
-                                <li><a href="#" data-target="#chitiet-modal" data-toggle="modal" onclick="baocao('{{$furl.'mau2h_tt67'}}')">tổng hợp phụ cấp thu hút tăng, giảm do điều chỉnh địa bàn vùng kinh tế xã hội đặc biệt khó khăn (Mẫu 2h)</a></li>
+                                <li><a href="#" data-target="#chitiet-modal" data-toggle="modal" onclick="baocao('{{$furl.'mau2h_tt67'}}')">Tổng hợp phụ cấp thu hút tăng, giảm do điều chỉnh địa bàn vùng kinh tế xã hội đặc biệt khó khăn (Mẫu 2h)</a></li>
+                                <li><a href="#" data-target="#chitiet-modal" data-toggle="modal" onclick="baocao('{{$furl.'mau4a_tt67'}}')">Báo cáo nguồn kinh phí để thực hiện cải cách tiền lương (Mẫu 4a)</a></li>
+                                <li><a href="#" data-target="#chitiet-modal" data-toggle="modal" onclick="baocao('{{$furl.'mau4b_tt67'}}')">Tổng hợp nhu cầu, nguồn thực hiện nghị định 47/2017/NĐ-CP (Mẫu 4b)</a></li>
                             </ol>
                         </div>
                     </div>
