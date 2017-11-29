@@ -21,11 +21,11 @@ class dmchucvucqController extends Controller
                     $maphanloai= 'KVXP';
                 }
             }else{
-                $model_pl = dmphanloaidonvi::where('maphanloai',$maphanloai)->get();
+                $model_pl = dmphanloaidonvi::where('maphanloai',session('admin')->maphanloai)->get();
             }
 
-            $model = dmchucvucq::where('maphanloai',$maphanloai)->get();
-
+            $model = dmchucvucq::where('maphanloai',session('admin')->maphanloai)->get();
+            //dd($model);
             return view('system.danhmuc.chucvucq.index')
                 ->with('model',$model)
                 ->with('model_pl',array_column($model_pl->toArray(),'tenphanloai','maphanloai'))
