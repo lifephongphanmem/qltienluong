@@ -7,6 +7,7 @@ use App\dmdonvibaocao;
 use App\GeneralConfigs;
 use App\hosocanbo;
 use App\Users;
+use Carbon\Carbon;
 use Illuminate\Foundation\Auth\User;
 use Illuminate\Http\Request;
 
@@ -55,10 +56,13 @@ class HomeController extends Controller
                     $ct->thang=date_format($dt,'m');
                     $ct->nam=$ct->gioitinh=='Nam'?date_format($dt,'Y')+$gen['tuoinam']:date_format($dt,'Y')+$gen['tuoinu'];
 
-                    $dt_luong = date_create($ct->ngayden);
+                    //$dt_luong = date_create($ct->ngayden);
+                    $dt_luong = Carbon::create($ct->ngayden);
+                    $ct->ngayden = isset($dt_luong)?  $dt_luong->addDay(): null;
+                    //$ct->ngayden = isset($dt_luong)?  $date->add: null;
                     $ct->nam_luong=date_format($dt_luong,'Y');
                 }
-                $m_nghihuu= $model->where('nam',$date['year']);
+                $m_nghihuu = $model->where('nam',$date['year']);
                 $m_nangluong = $model->where('nam_luong',$date['year']);
                 $m_sinhnhat=$model->where('thang',$date['mon']);
                 $m_hettapsu= $model->where('tenct','Hết tập sự');//Chưa làm
