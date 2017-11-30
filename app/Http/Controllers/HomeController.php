@@ -56,7 +56,9 @@ class HomeController extends Controller
                     $ct->thang=date_format($dt,'m');
                     $ct->nam=$ct->gioitinh=='Nam'?date_format($dt,'Y')+$gen['tuoinam']:date_format($dt,'Y')+$gen['tuoinu'];
 
-                    //$dt_luong = date_create($ct->ngayden);
+                    $dt_luong = date_create($ct->ngayden);
+                    $ct->nam_luong=date_format($dt_luong,'Y');
+                    /*
                     if(isset($ct->ngayden)){
                         $dt_luong = Carbon::create($ct->ngayden);
                         $ct->ngayden = isset($dt_luong)?  $dt_luong->addDay(): null;
@@ -65,7 +67,7 @@ class HomeController extends Controller
                         $dt_luong = null;
                         $ct->nam_luong = null;
                     }
-
+*/
 
                     //$ct->ngayden = isset($dt_luong)?  $date->add: null;
 
