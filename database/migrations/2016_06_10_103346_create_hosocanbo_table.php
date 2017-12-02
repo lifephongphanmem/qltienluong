@@ -97,7 +97,7 @@ class CreateHosocanboTable extends Migration
             $table->double('pckn')->default(0);
             $table->double('pcdang')->default(0);
             $table->double('pccovu')->default(0);
-            $table->double('pclt')->default(0);
+            $table->double('pclt')->default(0); //lưu thay phụ cấp phân loại xã
             $table->double('pcd')->default(0);
             $table->double('pctr')->default(0);
             $table->double('pctnvk')->default(0);

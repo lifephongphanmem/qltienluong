@@ -16,6 +16,16 @@
                     </div>
                 </div>
                 <div class="portlet-body">
+                    <input type="hidden" id="bhxh" name="bhxh" value="{{$model->bhxh}}" />
+                    <input type="hidden" id="bhyt" name="bhyt" value="{{$model->bhyt}}" />
+                    <input type="hidden" id="bhtn" name="bhtn" value="{{$model->bhtn}}" />
+                    <input type="hidden" id="kpcd" name="kpcd" value="{{$model->kpcd}}" />
+                    <input type="hidden" id="bhxh_dv" name="bhxh_dv" value="{{$model->bhxh_dv}}" />
+                    <input type="hidden" id="bhyt_dv" name="bhyt_dv" value="{{$model->bhyt_dv}}" />
+                    <input type="hidden" id="bhtn_dv" name="bhtn_dv" value="{{$model->bhtn_dv}}" />
+                    <input type="hidden" id="kpcd_dv" name="kpcd_dv" value="{{$model->kpcd_dv}}" />
+                    <input type="hidden" id="luongcoban" name="luongcoban" value="{{$model->luongcoban}}" />
+
                     {!! Form::model($model, ['url'=>'/chuc_nang/bang_luong/updatect/'.$model->id, 'method' => 'POST', 'files'=>true, 'id' => 'create-hscb', 'class'=>'horizontal-form form-validate']) !!}
                     <input type="hidden" id="macanbo" name="macanbo" value="{{$model->macanbo}}" />
                     <input type="hidden" id="mabl" name="mabl" value="{{$model->mabl}}" />
@@ -102,7 +112,7 @@
                                     <div class="portlet box blue">
                                         <div class="portlet-title">
                                             <div class="caption">
-                                                Thông tin các loại hệ số (nhập hệ số)
+                                                Thông tin các loại hệ số
                                             </div>
                                             <div class="tools">
                                                 <a href="javascript:;" class="collapse" data-original-title="" title=""></a>
@@ -132,7 +142,7 @@
                                                 </div>
                                                 <div class="col-md-2">
                                                     <div class="form-group">
-                                                        <label class="control-label">Hệ số truy thu</label>
+                                                        <label class="control-label">Hệ số truy lĩnh</label>
                                                         {!!Form::text('hesott', null, array('id' => 'hesott','class' => 'form-control heso', 'data-mask'=>'fdecimal'))!!}
                                                     </div>
                                                 </div>
@@ -149,7 +159,7 @@
                                     <div class="portlet box blue">
                                         <div class="portlet-title">
                                             <div class="caption">
-                                                Thông tin các loại phụ cấp (nhập hệ số)
+                                                Thông tin các loại phụ cấp (nhập hệ số hoặc số tiền)
                                             </div>
                                             <div class="tools">
                                                 <a href="javascript:;" class="collapse" data-original-title="" title=""></a>
@@ -166,7 +176,7 @@
 
                                                 <div class="col-md-2">
                                                     <div class="form-group">
-                                                        <label class="control-label">Thâm niên </label>
+                                                        <label class="control-label">Lâu năm </label>
                                                         {!!Form::text('pcthni', null, array('id' => 'pcthni','class' => 'form-control heso', 'data-mask'=>'fdecimal'))!!}
                                                     </div>
                                                 </div>
@@ -278,6 +288,20 @@
 
                                                 <div class="col-md-2">
                                                     <div class="form-group">
+                                                        <label class="control-label">Phân loại xã </label>
+                                                            {!!Form::text('pclt', null, array('id' => 'pclt','class' => 'form-control heso', 'data-mask'=>'fdecimal'))!!}
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-md-2">
+                                                    <div class="form-group">
+                                                        <label class="control-label">Đắt đỏ </label>
+                                                        {!!Form::text('pcdd', null, array('id' => 'pcdd','class' => 'form-control heso', 'data-mask'=>'fdecimal'))!!}
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-md-2">
+                                                    <div class="form-group">
                                                         <label class="control-label">Phụ cấp khác </label>
                                                         {!!Form::text('pck', null, array('id' => 'pck','class' => 'form-control heso', 'data-mask'=>'fdecimal'))!!}
                                                     </div>
@@ -308,28 +332,28 @@
                                 <div class="col-md-2">
                                     <div class="form-group">
                                         <label class="control-label">Số tiền BHXH </label>
-                                        {!!Form::text('stbhxh', null, array('id' => 'stbhxh','class' => 'form-control tienluong text-right', 'data-mask'=>'fdecimal'))!!}
+                                        {!!Form::text('stbhxh', null, array('id' => 'stbhxh','class' => 'form-control baohiem text-right', 'data-mask'=>'fdecimal'))!!}
                                     </div>
                                 </div>
 
                                 <div class="col-md-2">
                                     <div class="form-group">
                                         <label class="control-label">Số tiền BHYT </label>
-                                        {!!Form::text('stbhyt', null, array('id' => 'stbhyt','class' => 'form-control tienluong text-right', 'data-mask'=>'fdecimal'))!!}
+                                        {!!Form::text('stbhyt', null, array('id' => 'stbhyt','class' => 'form-control baohiem text-right', 'data-mask'=>'fdecimal'))!!}
                                     </div>
                                 </div>
 
                                 <div class="col-md-2">
                                     <div class="form-group">
                                         <label class="control-label">Số tiền KPCĐ </label>
-                                        {!!Form::text('stkpcd', null, array('id' => 'stkpcd','class' => 'form-control tienluong text-right', 'data-mask'=>'fdecimal'))!!}
+                                        {!!Form::text('stkpcd', null, array('id' => 'stkpcd','class' => 'form-control baohiem text-right', 'data-mask'=>'fdecimal'))!!}
                                     </div>
                                 </div>
 
                                 <div class="col-md-2">
                                     <div class="form-group">
                                         <label class="control-label">Số tiền BHTN </label>
-                                        {!!Form::text('stbhtn', null, array('id' => 'stbhtn','class' => 'form-control tienluong text-right', 'data-mask'=>'fdecimal'))!!}
+                                        {!!Form::text('stbhtn', null, array('id' => 'stbhtn','class' => 'form-control baohiem text-right', 'data-mask'=>'fdecimal'))!!}
                                     </div>
                                 </div>
 
@@ -384,8 +408,12 @@
                                 <!-- END PORTLET-->
                             </div>
                         </div>
-                        <div style="text-align: center; border-top: 1px solid #eee;">
-                            <button style="margin-top: 10px" type="submit" class="btn btn-default">Hoàn thành <i class="fa fa-save mlx"></i></button>
+                    <hr>
+                        <div style="text-align: center;">
+
+                            <button type="submit" class="btn btn-default">Hoàn thành <i class="fa fa-save mlx"></i></button>
+
+                            <a href="{{url('/chuc_nang/bang_luong/maso='.$model->mabl)}}" class="btn btn-default"><i class="fa fa-reply mlx"></i> Quay lại</a>
                         </div>
                     {!! Form::close() !!}
                 </div>
@@ -399,25 +427,58 @@
         function tonghs() {
             var hs = 0;
             $('.heso').each(function () {
-                hs += getdl($(this).val());
+                if(getdl($(this).val()) < 500){
+                    hs += getdl($(this).val());
+                }
             });
-            $('#tonghs').val(hs.toFixed(2));
+            $('#tonghs').val(parseFloat(hs));
         }
 
         function tongtl(){
             var hs=$('#tonghs').val();
-            var luong = '{{getGeneralConfigs()['luongcb']}}';
-            return (hs*luong);
+            var tpc=0;
+            $('.heso').each(function () {
+                if(getdl($(this).val()) > 500){
+                    tpc += getdl($(this).val());
+                }
+            });
+            var luong = $('#luongcoban').val();
+            return (hs*luong + tpc);
         }
 
         function baohiem(){
-            var stbhxh=getdl($('#stbhxh').val());
-            var stbhyt=getdl($('#stbhyt').val());
-            var stkpcd=getdl($('#stkpcd').val());
-            var stbhtn=getdl($('#stbhtn').val());
+            //chạy khi hệ số thay đổi
+            var heso = getdl($('#heso').val()) + getdl($('#vuotkhung').val()) + getdl($('#pccv').val());
+            var luong = $('#luongcoban').val();
+            var tienbh = heso * luong;
 
-            return stbhxh+stbhyt+stkpcd+stbhtn;
+            var stbhxh= ($('#bhxh').val() * tienbh /100).toFixed(0);
+            $('#stbhxh').val(stbhxh);
+
+            var stbhyt=($('#bhyt').val() * tienbh /100).toFixed(0);
+            $('#stbhyt').val(stbhyt);
+
+            var stkpcd=($('#kpcd').val() * tienbh /100).toFixed(0);
+            $('#stkpcd').val(stkpcd);
+
+            var stbhtn=($('#bhtn').val() * tienbh /100).toFixed(0);
+            $('#stbhtn').val(stbhtn);
+
+            var stbhxh_dv=($('#bhxh_dv').val() * tienbh /100).toFixed(0);
+            $('#stbhxh_dv').val(stbhxh_dv);
+            var stbhyt_dv=($('#bhyt_dv').val() * tienbh /100).toFixed(0);
+            $('#stbhyt_dv').val(stbhyt_dv);
+            var stkpcd_dv=($('#kpcd_dv').val() * tienbh /100).toFixed(0);
+            $('#stkpcd_dv').val(stkpcd_dv);
+            var stbhtn_dv=($('#bhtn_dv').val() * tienbh /100).toFixed(0);
+            $('#stbhtn_dv').val(stbhtn_dv);
+
+            $('#ttbh_dv').val(parseFloat(stbhxh_dv) + parseFloat(stbhyt_dv) + parseFloat(stkpcd_dv) + parseFloat(stbhtn_dv));
+
+            return parseFloat(stbhxh) + parseFloat(stbhyt) + parseFloat(stkpcd) + parseFloat(stbhtn);
         }
+
+
 
         function giamtru(){
             var giaml=getdl($('#giaml').val());
@@ -449,6 +510,19 @@
             var stkpcd_dv=getdl($('#stkpcd_dv').val());
             var stbhtn_dv=getdl($('#stbhtn_dv').val());
             $('#ttbh_dv').val(stbhxh_dv + stbhyt_dv + stkpcd_dv + stbhtn_dv);
+        })
+
+        $('.baohiem').change(function(){
+            var stbhxh_dv=getdl($('#stbhxh').val());
+            var stbhyt_dv=getdl($('#stbhyt').val());
+            var stkpcd_dv=getdl($('#stkpcd').val());
+            var stbhtn_dv=getdl($('#stbhtn').val());
+            var ttl = getdl($('#ttl').val());
+            var bh = stbhxh_dv + stbhyt_dv + stkpcd_dv + stbhtn_dv;
+            var gt = giamtru();
+            $('#ttbh').val(bh);
+            $('#tbh').val(bh);
+            $('#luongtn').val(ttl + gt - bh);
         })
 
     </script>

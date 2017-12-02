@@ -19,6 +19,7 @@ return array(
     'CreateDmkhoipbTable' => $baseDir . '/database/migrations/2017_05_25_160123_create_dmkhoipb_table.php',
     'CreateDmngachccTable' => $baseDir . '/database/migrations/2016_06_20_102913_create_dmngachcc_table.php',
     'CreateDmnguonkpTable' => $baseDir . '/database/migrations/2017_09_26_151350_create_dmnguonkp_table.php',
+    'CreateDmphanloaicongtacBaohiemTable' => $baseDir . '/database/migrations/2017_12_02_100231_create_dmphanloaicongtac_baohiem_table.php',
     'CreateDmphanloaicongtacTable' => $baseDir . '/database/migrations/2017_09_28_155801_create_dmphanloaicongtac_table.php',
     'CreateDmphanloaictTable' => $baseDir . '/database/migrations/2016_06_20_102959_create_dmphanloaict_table.php',
     'CreateDmphanloaidonviTable' => $baseDir . '/database/migrations/2017_09_28_155748_create_dmphanloaidonvi_table.php',

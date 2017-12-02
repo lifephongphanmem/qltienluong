@@ -135,19 +135,19 @@
                 <td style="text-align: left">{{$ct->tencanbo}}</td>
                 <td style="text-align: left">{{$ct->tenchucvu}}</td>
                 <td style="text-align: left">{{$ct->msngbac}}</td>
-                <td>{{$ct->heso + $ct->hesott}}</td>
-                <td>{{$ct->hesopc}}</td>
-                <td>{{$ct->pckv}}</td>
-                <td>{{$ct->pccv}}</td>
-                <td>{{$ct->pctnvk}}</td>
-                <td>{{$ct->pcudn}}</td>
-                <td>{{$ct->pcth}}</td>
-                <td>{{$ct->pctn}}</td>
-                <td>{{$ct->pccovu}}</td>
-                <td>{{$ct->pcdang}}</td>
-                <td>{{$ct->pcthni}}</td>
-                <td>{{$ct->pck}}</td>
-                <td>{{$ct->tonghs}}</td>
+                <td>{{dinhdangsothapphan(($ct->heso + $ct->hesott),5)}}</td>
+                <td>{{dinhdangsothapphan($ct->hesopc,5)}}</td>
+                <td>{{dinhdangsothapphan($ct->pckv,5)}}</td>
+                <td>{{dinhdangsothapphan($ct->pccv,5)}}</td>
+                <td>{{dinhdangsothapphan($ct->pctnvk,5)}}</td>
+                <td>{{dinhdangsothapphan($ct->pcudn,5)}}</td>
+                <td>{{dinhdangsothapphan($ct->pcth,5)}}</td>
+                <td>{{dinhdangsothapphan($ct->pcthni,5)}}</td>
+                <td>{{dinhdangsothapphan($ct->pccovu,5)}}</td>
+                <td>{{dinhdangsothapphan($ct->pcdang,5)}}</td>
+                <td>{{dinhdangsothapphan($ct->pctnn,5)}}</td>
+                <td>{{dinhdangsothapphan($ct->pck,5)}}</td>
+                <td>{{dinhdangsothapphan($ct->tonghs,5)}}</td>
 
                 <td>{{dinhdangso($ct->ttl)}}</td>
                 <td> {{dinhdangso($ct->giaml)}}</td>
@@ -165,19 +165,19 @@
         @endforeach
             <tr style="font-weight: bold; text-align: center; font-style: italic">
                 <td colspan="5">Cộng</td>
-                <td>{{$model_luong->sum('heso') + $model_luong->sum('hesott')}}</td>
-                <td>{{$model_luong->sum('hesopc')}}</td>
-                <td>{{$model_luong->sum('pckv')}}</td>
-                <td>{{$model_luong->sum('pccv')}}</td>
-                <td>{{$model_luong->sum('pctnvk')}}</td>
-                <td>{{$model_luong->sum('pcudn')}}</td>
-                <td>{{$model_luong->sum('pcth')}}</td>
-                <td>{{$model_luong->sum('pctn')}}</td>
-                <td>{{$model_luong->sum('pccovu')}}</td>
-                <td>{{$model_luong->sum('pcdang')}}</td>
-                <td>{{$model_luong->sum('pcthni')}}</td>
-                <td>{{$model_luong->sum('pck')}}</td>
-                <td>{{$model_luong->sum('tonghs')}}</td>
+                <td>{{dinhdangsothapphan($model_luong->sum('heso') + $model_luong->sum('hesott') ,5)}}</td>
+                <td>{{dinhdangsothapphan($model_luong->sum('hesopc') ,5)}}</td>
+                <td>{{dinhdangsothapphan($model_luong->sum('pckv') ,5)}}</td>
+                <td>{{dinhdangsothapphan($model_luong->sum('pccv') ,5)}}</td>
+                <td>{{dinhdangsothapphan($model_luong->sum('pctnvk') ,5)}}</td>
+                <td>{{dinhdangsothapphan($model_luong->sum('pcudn') ,5)}}</td>
+                <td>{{dinhdangsothapphan($model_luong->sum('pcth') ,5)}}</td>
+                <td>{{dinhdangsothapphan($model_luong->sum('pcthni') ,5)}}</td>
+                <td>{{dinhdangsothapphan($model_luong->sum('pccovu') ,5)}}</td>
+                <td>{{dinhdangsothapphan($model_luong->sum('pcdang') ,5)}}</td>
+                <td>{{dinhdangsothapphan($model_luong->sum('pctnn') ,5)}}</td>
+                <td>{{dinhdangsothapphan($model_luong->sum('pck') ,5)}}</td>
+                <td>{{dinhdangsothapphan($model_luong->sum('tonghs') ,5)}}</td>
 
                 <td class="money">{{dinhdangso($model_luong->sum('ttl'))}}</td>
                 <td class="money">{{dinhdangso($model_luong->sum('giaml'))}}</td>
@@ -196,31 +196,31 @@
     @endforeach
     <tr style="font-weight: bold; text-align: center;">
         <td colspan="5">Tổng cộng</td>
-        <td>{{$model->sum('heso') + $model->sum('hesott')}}</td>
-        <td>{{$model->sum('hesopc')}}</td>
-        <td>{{$model->sum('pckv')}}</td>
-        <td>{{$model->sum('pccv')}}</td>
-        <td>{{$model->sum('pctnvk')}}</td>
-        <td>{{$model->sum('pcudn')}}</td>
-        <td>{{$model->sum('pcth')}}</td>
-        <td>{{$model->sum('pctn')}}</td>
-        <td>{{$model->sum('pccovu')}}</td>
-        <td>{{$model->sum('pcdang')}}</td>
-        <td>{{$model->sum('pcthni')}}</td>
-        <td>{{$model->sum('pck')}}</td>
-        <td>{{$model->sum('tonghs')}}</td>
+        <td>{{dinhdangsothapphan($model->sum('heso') + $model->sum('hesott') ,5)}}</td>
+        <td>{{dinhdangsothapphan($model->sum('hesopc') ,5)}}</td>
+        <td>{{dinhdangsothapphan($model->sum('pckv') ,5)}}</td>
+        <td>{{dinhdangsothapphan($model->sum('pccv') ,5)}}</td>
+        <td>{{dinhdangsothapphan($model->sum('pctnvk') ,5)}}</td>
+        <td>{{dinhdangsothapphan($model->sum('pcudn') ,5)}}</td>
+        <td>{{dinhdangsothapphan($model->sum('pcth') ,5)}}</td>
+        <td>{{dinhdangsothapphan($model->sum('pcthni') ,5)}}</td>
+        <td>{{dinhdangsothapphan($model->sum('pccovu') ,5)}}</td>
+        <td>{{dinhdangsothapphan($model->sum('pcdang') ,5)}}</td>
+        <td>{{dinhdangsothapphan($model->sum('pctnn') ,5)}}</td>
+        <td>{{dinhdangsothapphan($model->sum('pck') ,5)}}</td>
+        <td>{{dinhdangsothapphan($model->sum('tonghs') ,5)}}</td>
 
         <td class="money">{{dinhdangso($model->sum('ttl'))}}</td>
         <td class="money">{{dinhdangso($model->sum('giaml'))}}</td>
         <td class="money">{{dinhdangso($model->sum('bhct'))}}</td>
         <td class="money">{{dinhdangso($model->sum('ttl') - $model->sum('giaml') + $model->sum('bhct'))}}</td>
 
-        <td class="money">{{number_format($model->sum('stbhxh'))}}</td>
-        <td class="money">{{number_format($model->sum('stbhyt'))}}</td>
-        <td class="money">{{number_format($model->sum('stkpcd'))}}</td>
-        <td class="money">{{number_format($model->sum('stbhtn'))}}</td>
-        <td class="money">{{number_format($model->sum('ttbh'))}}</td>
-        <td class="money">{{number_format($model->sum('luongtn'))}}</td>
+        <td class="money">{{dinhdangso($model->sum('stbhxh'))}}</td>
+        <td class="money">{{dinhdangso($model->sum('stbhyt'))}}</td>
+        <td class="money">{{dinhdangso($model->sum('stkpcd'))}}</td>
+        <td class="money">{{dinhdangso($model->sum('stbhtn'))}}</td>
+        <td class="money">{{dinhdangso($model->sum('ttbh'))}}</td>
+        <td class="money">{{dinhdangso($model->sum('luongtn'))}}</td>
         <td></td>
     </tr>
 </table>
@@ -232,7 +232,7 @@
     </tr>
     <tr style="font-weight: bold">
         <td style="text-align: center;" width="50%">Người lập bảng</td>
-        <td style="text-align: center;" width="50%">Thủ trưởng đơn vị</td>
+        <td style="text-align: center;" width="50%">{{$m_dv->cdlanhdao}}</td>
     </tr>
     <tr style="font-style: italic">
         <td style="text-align: center;" width="50%">(Ghi rõ họ tên)</td>
@@ -243,7 +243,7 @@
     </tr>
 
     <tr>
-        <td style="text-align: center;" width="50%">{{''}}</td>
+        <td style="text-align: center;" width="50%">{{$m_dv->nguoilapbieu}}</td>
         <td style="text-align: center;" width="50%">{{$m_dv->lanhdao}}</td>
     </tr>
 </table>

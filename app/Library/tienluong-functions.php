@@ -246,7 +246,7 @@ function getColTongHop(){
         'pctr',
         'pctnvk',
         'pcbdhdcu',
-        'pcthni');;
+        'pcthni');
 }
 
 function getThang(){

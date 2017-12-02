@@ -199,22 +199,11 @@
                     </ul>
                 </li>
 
-                <li>
-                    <a href="javascript:;">
-                        <i class="fa glyphicon glyphicon-list-alt"></i>
-                        <span class="title">Nguồn và dự toán</span>
-                        <span class="arrow "></span>
-                    </a>
-                    <ul class="sub-menu">
-                        <li><a href="{{url('nghiep_vu/quan_ly/du_toan/danh_sach')}}"><i class="fa fa-caret-right"></i>Dự toán lương</a></li>
-                        <li><a href="{{url('du_toan/nguon_kinh_phi/danh_sach')}}"><i class="fa fa-caret-right"></i>Nhu cầu kinh phí</a></li>
-                    </ul>
-                </li>
 
                 <li>
                     <a href="javascript:;">
                         <i class="fa icon-book-open"></i>
-                        <span class="title">Tổng hợp</span>
+                        <span class="title">Tổng hợp dữ liệu</span>
                         <span class="arrow "></span>
                     </a>
                     <ul class="sub-menu">
@@ -236,19 +225,43 @@
                         @endif
 
                         <!-- Các tài khoản quản lý khu vực mới có tính năng tổng hợp dữ liệu từ đơn vị cấp dưới -->
-                        @if(session('admin')->quanlykhuvuc)
+                        @if(session('admin')->quanlykhuvuc && session('admin')->level == 'H')
                                 <li>
                                     <a href="{{url('chuc_nang/tong_hop_luong/huyen/index?nam='.date('Y'))}}"><i class="fa fa-caret-right"></i>Tổng hợp lương toàn địa bàn</a>
                                 </li>
 
                                 <li>
-                                    <a href="{{url('chuc_nang/tong_hop_nguon/index?sohieu=TT67_2017')}}"><i class="fa fa-caret-right"></i>Tổng số liệu nguồn kinh phí</a>
+                                    <a href="{{url('chuc_nang/tong_hop_nguon/huyen?sohieu=TT67_2017')}}"><i class="fa fa-caret-right"></i>Tổng số liệu nguồn kinh phí</a>
                                 </li>
 
                                 <li>
                                     <a href="{{url('chuc_nang/xem_du_lieu/huyen?thang='.date('m').'&nam='.date('Y').'&trangthai=ALL')}}"><i class="fa fa-caret-right"></i>Xem số liệu tổng hợp toàn địa bàn</a>
                                 </li>
+                        @else
+                                <li>
+                                    <a href="{{url('chuc_nang/tong_hop_luong/tinh/index?nam='.date('Y'))}}"><i class="fa fa-caret-right"></i>Tổng hợp lương toàn địa bàn quản lý</a>
+                                </li>
+
+                                <li>
+                                    <a href="{{url('chuc_nang/tong_hop_nguon/tinh?sohieu=TT67_2017&madiaban='.session('admin')->madvbc)}}"><i class="fa fa-caret-right"></i>Tổng số liệu nguồn kinh phí  toàn tỉnh</a>
+                                </li>
+
+                                <li>
+                                    <a href="{{url('chuc_nang/xem_du_lieu/tinh?thang='.date('m').'&nam='.date('Y').'&trangthai=ALL&madiaban='.session('admin')->madvbc)}}"><i class="fa fa-caret-right"></i>Xem số liệu tổng hợp toàn tỉnh</a>
+                                </li>
                         @endif
+                    </ul>
+                </li>
+
+                <li>
+                    <a href="javascript:;">
+                        <i class="fa glyphicon glyphicon-list-alt"></i>
+                        <span class="title">Nguồn và dự toán</span>
+                        <span class="arrow "></span>
+                    </a>
+                    <ul class="sub-menu">
+                        <li><a href="{{url('nghiep_vu/quan_ly/du_toan/danh_sach')}}"><i class="fa fa-caret-right"></i>Dự toán lương</a></li>
+                        <li><a href="{{url('du_toan/nguon_kinh_phi/danh_sach')}}"><i class="fa fa-caret-right"></i>Nhu cầu kinh phí</a></li>
                     </ul>
                 </li>
 
@@ -305,6 +318,7 @@
                                 <li><a href="{{url('danh_muc/chuc_vu_d/index')}}"><i class="fa fa-caret-right"></i>Chức vụ đảng</a></li>
                                 <!--li><a href="{{url('danh_muc/phu_cap/index')}}"><i class="fa fa-caret-right"></i>Phụ cấp</a></li-->
                                 <li><a href="{{url('danh_muc/dan_toc/index')}}"><i class="fa fa-caret-right"></i>Dân tộc</a></li>
+                                <!--Cho đơn vị chủ quản set phân loại bảo hiểm-->
                                 @if(session('admin')->level == 'SA' || session('admin')->level == 'SSA')
                                     <li><a href="{{url('danh_muc/nguon_kinh_phi/index')}}"><i class="fa fa-caret-right"></i>Nguồn kinh phí</a></li>
                                     <li><a href="{{url('danh_muc/khoi_pb/index')}}"><i class="fa fa-caret-right"></i>Lĩnh vực hoạt động</a></li>
@@ -312,6 +326,7 @@
                                     <li><a href="{{url('danh_muc/pl_don_vi/index')}}"><i class="fa fa-caret-right"></i>Phân loại đơn vị</a></li>
                                     <li><a href="{{url('danh_muc/cong_tac/index')}}"><i class="fa fa-caret-right"></i>Phân loại công tác</a></li>
                                 @endif
+                                <li><a href="{{url('danh_muc/bao_hiem/index?phanloai='.session('admin')->maphanloai)}}"><i class="fa fa-caret-right"></i>Mức đóng bảo hiểm</a></li>
                             </ul>
                         </li>
                         <li>
@@ -331,6 +346,7 @@
 
                             <ul class="sub-menu" style="margin-left: 15px;">
                                 <li><a href="{{url('he_thong/don_vi/don_vi')}}"><i class="fa fa-caret-right"></i>Thông tin đơn vị</a></li>
+                                <!--li><a href="{{url('he_thong/don_vi/bao_hiem')}}"><i class="fa fa-caret-right"></i>Thông tin nộp bảo hiểm</a></li-->
                                 <!--li><a href="{{url('he_thong/don_vi/chung')}}"><i class="fa fa-caret-right"></i>Thông tin chung</a></li-->
 
                             </ul>

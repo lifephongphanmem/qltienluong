@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\dmdonvi;
+use App\dmdonvibaocao;
 use App\tonghop_huyen;
 use App\tonghopluong_donvi;
 use App\tonghopluong_donvi_chitiet;
@@ -179,6 +180,90 @@ class xemdulieucapduoiController extends Controller
                 ->with('thang', $inputs['thang'])
                 ->with('nam', $inputs['nam'])
                 ->with('trangthai', $inputs['trangthai'])
+                ->with('a_trangthai', $a_trangthai)
+                ->with('furl','/chuc_nang/tong_hop_luong/')
+                ->with('pageTitle','Danh sách đơn vị tổng hợp lương');
+
+        } else
+            return view('errors.notlogin');
+    }
+
+    public function index_tinh(Request $request){
+        if (Session::has('admin')) {
+            //$donvi=dmdonvi::where('madv',session('admin')->madv)->get();
+            $inputs=$request->all();
+            //$madv = session('admin')->madv;
+            $madvbc = $inputs['madiaban'];
+            //$thang = $inputs['thang'];
+            //$nam = $inputs['nam'];
+
+            $madvqlkv = dmdonvibaocao::where('madvbc',$madvbc)->first()->madvcq;
+
+            $a_trangthai=array('ALL'=>'--Chọn trạng thái dữ liệu--','CHOGUI'=>'Chưa gửi dữ liệu','CHONHAN'=>'Đã gửi dữ liệu');
+            $a_phanloai=array('DONVI'=>'Dữ liệu tổng hợp của đơn vị','CAPDUOI'=>'Dữ liệu tổng hợp của các đơn vị cấp dưới');
+            //$list_donvi= dmdonvi::select('madv', 'tendv')->where('madvbc', $madvbc)->get();
+            $model_dvbc = dmdonvibaocao::all();
+
+            //lấy danh sách đơn vị quản lý khối
+            $model_qlkhoi = dmdonvi::select('madv', 'tendv', DB::raw('"CAPDUOI" as phanloai'))
+                ->wherein('madv', function($query) use($madvbc){
+                    $query->select('macqcq')->from('dmdonvi')->where('madvbc',$madvbc)->distinct();
+                })->get();
+            //danh sách đơn vị gửi dữ liệu cho đơn vị quản lý khối và đơn vị quản lý khối.
+            $model_donvi = dmdonvi::select('madv', 'tendv',DB::raw('"DONVI" as phanloai'))
+                ->wherein('madv', function($query) use($madvqlkv){
+                    $query->select('madv')->from('dmdonvi')->where('macqcq',$madvqlkv)
+                        ->orwhere('madv',$madvqlkv)->get();
+                })->get();
+            //Gộp danh sách đơn vị
+            foreach($model_qlkhoi as $donvi){
+                $model_donvi->add($donvi);
+            }
+
+            foreach($model_donvi as $dv){
+                $dulieu = tonghopluong_huyen::where('madv', $dv->madv)
+                    ->where('thang', $inputs['thang'])
+                    ->where('nam', $inputs['nam'])
+                    ->where('phanloai', $dv->phanloai)
+                    ->first();
+
+                $tonghop = tonghop_huyen::where('madvbc',$madvbc)
+                    ->where('thang', $inputs['thang'])
+                    ->where('nam', $inputs['nam'])
+                    ->first();
+                $dv->tralai = true;
+                if(isset($tonghop)){
+                    $model_bangluong_ct = tonghopluong_donvi_chitiet::where('matht', $tonghop->madvth)->first();
+                    $dv->tralai =isset($model_bangluong_ct->mathh)?false:true;
+                }
+
+                if(isset($dulieu)){
+                    $dv->phanloai = $dulieu->phanloai;
+                    $dv->mathdv = $dulieu->mathdv;
+                }else{
+                    $dv->mathdv = NULL;
+                }
+                $dv->tenphanloai = isset($a_phanloai[$dv->phanloai]) ? $a_phanloai[$dv->phanloai]: '';
+
+            }
+
+            $model_donvi = $model_donvi->sortby('madv');
+            if(isset($inputs['trangthai'])){
+                if($inputs['trangthai']=='CHONHAN'){
+                    $model_donvi = $model_donvi->where('mathdv','<>',null);
+                }
+                if($inputs['trangthai']=='CHOGUI'){
+                    $model_donvi = $model_donvi->where('mathdv',null);
+                }
+            }
+
+            return view('functions.viewdata.index_tinh')
+                ->with('model', $model_donvi)
+                ->with('thang', $inputs['thang'])
+                ->with('nam', $inputs['nam'])
+                ->with('madvbc',$madvbc)
+                ->with('trangthai', $inputs['trangthai'])
+                ->with('a_dvbc',array_column( $model_dvbc->toArray(),'tendvbc','madvbc'))
                 ->with('a_trangthai', $a_trangthai)
                 ->with('furl','/chuc_nang/tong_hop_luong/')
                 ->with('pageTitle','Danh sách đơn vị tổng hợp lương');

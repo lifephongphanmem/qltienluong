@@ -313,6 +313,7 @@ class ComposerStaticInitd7de3fb6aaadd474bf447891cb3bef8d
         'CreateDmkhoipbTable' => __DIR__ . '/../..' . '/database/migrations/2017_05_25_160123_create_dmkhoipb_table.php',
         'CreateDmngachccTable' => __DIR__ . '/../..' . '/database/migrations/2016_06_20_102913_create_dmngachcc_table.php',
         'CreateDmnguonkpTable' => __DIR__ . '/../..' . '/database/migrations/2017_09_26_151350_create_dmnguonkp_table.php',
+        'CreateDmphanloaicongtacBaohiemTable' => __DIR__ . '/../..' . '/database/migrations/2017_12_02_100231_create_dmphanloaicongtac_baohiem_table.php',
         'CreateDmphanloaicongtacTable' => __DIR__ . '/../..' . '/database/migrations/2017_09_28_155801_create_dmphanloaicongtac_table.php',
         'CreateDmphanloaictTable' => __DIR__ . '/../..' . '/database/migrations/2016_06_20_102959_create_dmphanloaict_table.php',
         'CreateDmphanloaidonviTable' => __DIR__ . '/../..' . '/database/migrations/2017_09_28_155748_create_dmphanloaidonvi_table.php',

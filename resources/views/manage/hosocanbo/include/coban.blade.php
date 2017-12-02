@@ -60,8 +60,8 @@
                         -->
             <div class="col-md-3">
                 <div class="form-group">
-                    <label class="control-label">Ngày sinh <span class="require">*</span></label>
-                    <input type="date" name="ngaysinh" id="ngaysinh" class="form-control" required="required" value="{{!isset($model)?'':$model->ngaysinh}}"/>
+                    <label class="control-label">Ngày sinh</label>
+                    <input type="date" name="ngaysinh" id="ngaysinh" class="form-control" value="{{!isset($model)?'':$model->ngaysinh}}"/>
                 </div>
             </div>
 
@@ -192,13 +192,13 @@
                 $('#tencanbo').parent().addClass('state-error');
                 ok = false;
             }
-
+            /*
             if(!$('#ngaysinh').val()){
                 str += '  - Ngày sinh \n';
                 $('#ngaysinh').parent().addClass('state-error');
                 ok = false;
             }
-
+             */
             //Kết quả
             if ( ok == false){
                 alert('Các trường: \n' + str + 'Không được để trống');

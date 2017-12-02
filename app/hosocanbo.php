@@ -115,7 +115,7 @@ class hosocanbo extends Model
         'pckn',
         'pcdang',
         'pccovu',
-        'pclt',
+        'pclt', //lưu thay phụ cấp phân loại xã
         'pcd',
         'pctr',
         'pctnvk',

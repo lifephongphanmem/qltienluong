@@ -27,7 +27,6 @@
                                 <div class="form-group">
                                     <label class="control-label">Ngạch bậc </label>
                                     <select class="form-control select2me" name="tennb" id="tennb" onchange="setMSNGBAC()">
-                                        <option value="">--Chọn mã ngạch lương--</option>
                                         @foreach($m_plnb as $plnb)
                                             <optgroup label="{{$plnb->tennhom}}">
                                                 <?php $mode_ct=$m_pln->where('manhom',$plnb->manhom); ?>
@@ -55,7 +54,6 @@
                                 <div class="form-group">
                                     <label class="control-label">Ngạch bậc </label>
                                     <select class="form-control select2me" name="tennb" id="tennb" onchange="setMSNGBAC()">
-                                        <option value="">--Chọn mã ngạch lương--</option>
                                         @foreach($m_plnb as $plnb)
                                             <optgroup label="{{$plnb->tennhom}}">
                                                 <?php $mode_ct=$m_pln->where('manhom',$plnb->manhom); ?>
@@ -104,23 +102,17 @@
                         <div class="col-md-2">
                             <div class="form-group">
                                 <label class="control-label">Phần trăm v.khung </label>
-                                <div class="input-group bootstrap-touchspin">
-                                    {!!Form::text('vuotkhung', null, array('id' => 'vuotkhung','class' => 'form-control', 'data-mask'=>'fdecimal'))!!}
-                                    <span class="input-group-addon bootstrap-touchspin-postfix">%</span>
-                                </div>
-
+                                {!!Form::text('vuotkhung', null, array('id' => 'vuotkhung','class' => 'form-control', 'data-mask'=>'fdecimal'))!!}
                             </div>
                         </div>
 
-                        <!--div class="col-md-2">
+                        <div class="col-md-2">
                             <div class="form-group">
-                                <label class="control-label">Tỷ lệ hưởng lương</label>
-                                <div class="input-group bootstrap-touchspin">
-                                    {!!Form::text('pthuong', '100', array('id' => 'pthuong','class' => 'form-control', 'data-mask'=>'fdecimal'))!!}
-                                    <span class="input-group-addon bootstrap-touchspin-postfix">%</span>
-                                </div>
+                                <label class="control-label">Phần trăm hưởng </label>
+                                {!!Form::text('pthuong', '100', array('id' => 'pthuong','class' => 'form-control', 'data-mask'=>'fdecimal'))!!}
                             </div>
-                        </div-->
+                        </div>
+
 
                         <div class="col-md-2">
                             <div class="form-group">
@@ -143,14 +135,13 @@
         </div>
     </div>
 
-
     <div class="row">
         <div class="col-md-12">
             <!-- BEGIN PORTLET-->
             <div class="portlet box blue">
                 <div class="portlet-title">
                     <div class="caption">
-                        Thông tin các khoản phụ cấp
+                        Thông tin các khoản phụ cấp (nhập phần trăm)
                     </div>
                     <div class="tools">
                         <a href="javascript:;" class="collapse" data-original-title="" title=""></a>
@@ -163,33 +154,50 @@
                             <div class="col-md-2">
                                 <div class="form-group">
                                     <label class="control-label">Công vụ </label>
-                                    <div class="input-group bootstrap-touchspin">
-                                        {!!Form::text('pccovu', null, array('id' => 'pccovu','class' => 'form-control', 'data-mask'=>'fdecimal'))!!}
-                                        <span class="input-group-addon bootstrap-touchspin-postfix">%</span>
-                                    </div>
+                                    {!!Form::text('pccovu', null, array('id' => 'pccovu','class' => 'form-control', 'data-mask'=>'fdecimal'))!!}
                                 </div>
                             </div>
 
                             <div class="col-md-2">
                                 <div class="form-group">
                                     <label class="control-label">T.niên v.khung </label>
-                                    <div class="input-group bootstrap-touchspin">
-                                        {!!Form::text('pctnvk', null, array('id' => 'pctnvk','class' => 'form-control', 'data-mask'=>'fdecimal'))!!}
-                                        <span class="input-group-addon bootstrap-touchspin-postfix">%</span>
-                                    </div>
+                                    {!!Form::text('pctnvk', null, array('id' => 'pctnvk','class' => 'form-control', 'data-mask'=>'fdecimal'))!!}
                                 </div>
                             </div>
 
                             <div class="col-md-2">
                                 <div class="form-group">
                                     <label class=" control-label">Thâm niên nghề </label>
-                                    <div class="input-group bootstrap-touchspin">
-                                        {!!Form::text('pctnn', null, array('id' => 'pctnn','class' => 'form-control', 'data-mask'=>'fdecimal'))!!}
-                                        <span class="input-group-addon bootstrap-touchspin-postfix">%</span>
-                                    </div>
+                                    {!!Form::text('pctnn', null, array('id' => 'pctnn','class' => 'form-control', 'data-mask'=>'fdecimal'))!!}
                                 </div>
                             </div>
+                        </div>
+                    </div>
 
+
+                </div>
+            </div>
+            <!-- END PORTLET-->
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-12">
+            <!-- BEGIN PORTLET-->
+            <div class="portlet box blue">
+                <div class="portlet-title">
+                    <div class="caption">
+                        Thông tin các khoản phụ cấp (nhập hệ số)
+                    </div>
+                    <div class="tools">
+                        <a href="javascript:;" class="collapse" data-original-title="" title=""></a>
+                    </div>
+                </div>
+                <div class="portlet-body" style="display: block;">
+
+                    <div class="form-body">
+
+                        <div class="row">
                             <div class="col-md-2">
                                 <div class="form-group">
                                     <label class="control-label">Chức vụ </label>
@@ -199,7 +207,7 @@
 
                             <div class="col-md-2">
                                 <div class="form-group">
-                                    <label class="control-label">Lâu năm </label>
+                                    <label class="control-label">Thâm niên </label>
                                     {!!Form::text('pcthni', null, array('id' => 'pcthni','class' => 'form-control', 'data-mask'=>'fdecimal'))!!}
                                 </div>
                             </div>
@@ -208,10 +216,7 @@
                             <div class="col-md-2">
                                 <div class="form-group">
                                     <label class="control-label">Kiêm nhiệm </label>
-                                    <div class="input-group bootstrap-touchspin">
-                                        {!!Form::text('pckn', null, array('id' => 'pckn','class' => 'form-control', 'data-mask'=>'fdecimal'))!!}
-                                        <span class="input-group-addon bootstrap-touchspin-postfix">%</span>
-                                    </div>
+                                    {!!Form::text('pckn', null, array('id' => 'pckn','class' => 'form-control', 'data-mask'=>'fdecimal'))!!}
                                 </div>
                             </div>
 
@@ -225,10 +230,7 @@
                             <div class="col-md-2">
                                 <div class="form-group">
                                     <label class="control-label">Ưu đãi ngành</label>
-                                    <div class="input-group bootstrap-touchspin">
-                                        {!!Form::text('pcudn', null, array('id' => 'pcudn','class' => 'form-control', 'data-mask'=>'fdecimal'))!!}
-                                        <span class="input-group-addon bootstrap-touchspin-postfix">%</span>
-                                    </div>
+                                    {!!Form::text('pcudn', null, array('id' => 'pcudn','class' => 'form-control', 'data-mask'=>'fdecimal'))!!}
                                 </div>
                             </div>
 
@@ -292,23 +294,6 @@
                                 <div class="form-group">
                                     <label class="control-label">Công tác Đảng </label>
                                     {!!Form::text('pcdang', null, array('id' => 'pcdang','class' => 'form-control', 'data-mask'=>'fdecimal'))!!}
-                                </div>
-                            </div>
-
-                            <div class="col-md-2">
-                                <div class="form-group">
-                                    <label class="control-label">Phân loại xã </label>
-                                    <div class="input-group bootstrap-touchspin">
-                                        {!!Form::text('pclt', null, array('id' => 'pclt','class' => 'form-control', 'data-mask'=>'fdecimal'))!!}
-                                        <span class="input-group-addon bootstrap-touchspin-postfix">%</span>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="col-md-2">
-                                <div class="form-group">
-                                    <label class="control-label">Đắt đỏ </label>
-                                    {!!Form::text('pcdd', null, array('id' => 'pcdd','class' => 'form-control', 'data-mask'=>'fdecimal'))!!}
                                 </div>
                             </div>
 

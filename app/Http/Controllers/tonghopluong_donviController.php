@@ -350,9 +350,12 @@ class tonghopluong_donviController extends Controller
         //Không đơn vị chủ quản, tùy xem thuộc huyện, tỉnh để update lên bang tonghop_huyen, tonghop_tinh
         if (Session::has('admin')) {
             $inputs = $requests->all();
-            if(session('admin')->quanlykhuvuc && session('admin')->macqcq == ''){
+
+            if(!session('admin')->quanlykhuvuc && session('admin')->macqcq == ''){
                 return view('errors.chuacqcq');
             }
+
+
             $model = tonghopluong_donvi::where('mathdv', $inputs['mathdv'])->first();
             $mathdv =  getdate()[0];//Mã mới
 //dd(session('admin'));
@@ -410,10 +413,10 @@ class tonghopluong_donviController extends Controller
                         ->where('nam', $model->nam)
                         ->where('madv', $model->madv)
                         ->where('phanloai', $model->phanloai)->count();
+
                     if ($chk == 0) {//chưa gửi => update dữ liệu từ bảng khoi=>huyen
                         tonghopluong_donvi_chitiet::where('mathdv', $model->mathdv)->update(['matht'=>$mathdv]);
                         tonghopluong_donvi_diaban::where('mathdv', $model->mathdv)->update(['matht'=>$mathdv]);
-
 
                         $th_khoi = new tonghopluong_tinh();
                         $th_khoi->madv = $model->madv;
