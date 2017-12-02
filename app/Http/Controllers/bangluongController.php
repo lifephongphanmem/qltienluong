@@ -168,13 +168,14 @@ class bangluongController extends Controller
 
                 $a_truythu[] = $cb->macanbo;
                 //trong bảng danh mục là % vượt khung => sang bảng lương chuyển thành hệ số
-                $cb->vuotkhung = ($cb->heso + $cb->pccv) * $cb->vuotkhung / 100;
-                $cb->pccovu = ($cb->heso + $cb->pccv) * $cb->pccovu / 100;
-                $cb->pctnvk = $cb->heso * $cb->pctnvk / 100;
-                $cb->pctnn = ($cb->heso + $cb->pccv) * $cb->pctnn / 100;
-                $cb->pclt = ($cb->heso + $cb->pccv) * $cb->pclt / 100; //phụ cấp phân loại xã
-                $cb->pckn = ($cb->heso + $cb->pccv) * $cb->pckn / 100;
-                $cb->pcudn = ($cb->heso + $cb->pccv) * $cb->pcudn / 100;
+                $cb->vuotkhung = $cb->heso * $cb->vuotkhung / 100;
+                //$cb->vuotkhung = ($cb->heso + $cb->pccv) * $cb->vuotkhung / 100;
+                $cb->pccovu = ($cb->heso + $cb->pccv + $cb->vuotkhung) * $cb->pccovu / 100;
+                $cb->pctnvk = ($cb->heso + $cb->vuotkhung) * $cb->pctnvk / 100;
+                $cb->pctnn = ($cb->heso + $cb->pccv + $cb->vuotkhung) * $cb->pctnn / 100;
+                $cb->pclt = ($cb->heso + $cb->pccv + $cb->vuotkhung) * $cb->pclt / 100; //phụ cấp phân loại xã
+                $cb->pckn = ($cb->heso + $cb->pccv + $cb->vuotkhung) * $cb->pckn / 100;
+                $cb->pcudn = ($cb->heso + $cb->pccv + $cb->vuotkhung) * $cb->pcudn / 100;
                 $cb->hesott = 0;//set = 0 để sau này tổng hợp lọc các cán bộ này ra để tính
                 //Do đơn vị nhập cả hệ số lẫn số tiền
                 //>500 => số tiền  còn lại là hệ số
