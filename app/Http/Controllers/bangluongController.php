@@ -215,9 +215,9 @@ class bangluongController extends Controller
 
             hosocanbo::wherein('macanbo', $model_canbo->toarray())->update(['hesott' => 0]);
             bangluong::create($inputs);
-            $m_cb = unset_key($m_cb->toarray(), array('lvhd','macongtac','bhxh','bhyt','kpcd','bhtn','bhxh_dv','bhyt_dv','kpcd_dv','bhtn_dv'));
+            $m_cb = unset_key($m_cb->toarray(), array('lvhd','macongtac','bhxh','bhyt','kpcd','bhtn','bhxh_dv','bhyt_dv','kpcd_dv','bhtn_dv','sunghiep'));
             bangluong_ct::insert($m_cb);
-            $model_canbo_tt = unset_key($model_canbo_tt->toarray(), array('lvhd','macongtac','bhxh','bhyt','kpcd','bhtn','bhxh_dv','bhyt_dv','kpcd_dv','bhtn_dv'));
+            $model_canbo_tt = unset_key($model_canbo_tt->toarray(), array('lvhd','macongtac','bhxh','bhyt','kpcd','bhtn','bhxh_dv','bhyt_dv','kpcd_dv','bhtn_dv','sunghiep'));
             bangluong_ct::insert($model_canbo_tt);
         }
 

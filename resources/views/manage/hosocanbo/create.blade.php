@@ -35,8 +35,9 @@
         $('#tongiao').val('Không');
         $('#dantoc').val('Kinh').trigger('change');
     </script>
+    @include('includes.script.scripts')
 @stop
-@include('includes.script.scripts')
+
 
 @section('content')
     <div class="row">
