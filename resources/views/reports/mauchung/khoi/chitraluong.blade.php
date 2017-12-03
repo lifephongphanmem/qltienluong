@@ -118,34 +118,38 @@
 
         </tr>
             <?php $i=1; ?>
-        @foreach($chitiet as $ct)
+        @foreach($model_data as $data)
+            <?php $ct = $chitiet->where('macongtac',$data['macongtac'])
+                ->where('manguonkp',$data['manguonkp']);
+
+            ?>
             <tr>
                 <td>{{$i++}}</td>
-                <td>{{$ct->tennguonkp}}</td>
-                <td>{{$ct->tencongtac}}</td>
-                <td>{{dinhdangso($ct->heso)}}</td>
-                <td>{{dinhdangso($ct->hesopc)}}</td>
-                <td>{{dinhdangso($ct->tonghs - $ct->heso - $ct->hesopc)}}</td>
+                <td>{{$data['tennguonkp']}}</td>
+                <td>{{$data['tencongtac']}}</td>
+                <td>{{dinhdangso($ct->sum('heso'))}}</td>
+                <td>{{dinhdangso($ct->sum('hesopc'))}}</td>
+                <td>{{dinhdangso($ct->sum('tonghs') - $ct->sum('heso') - $ct->sum('hesopc'))}}</td>
 
-                <td>{{dinhdangso($ct->vuotkhung)}}</td>
-                <td>{{dinhdangso($ct->pckv)}}</td>
-                <td>{{dinhdangso($ct->pccv)}}</td>
-                <td>{{dinhdangso($ct->pctnvk)}}</td>
-                <td>{{dinhdangso($ct->pcudn)}}</td>
-                <td>{{dinhdangso($ct->pcth)}}</td>
-                <td>{{dinhdangso($ct->pctn)}}</td>
-                <td>{{dinhdangso($ct->pccovu)}}</td>
-                <td>{{dinhdangso($ct->pcdang)}}</td>
-                <td>{{dinhdangso($ct->pcthni)}}</td>
-                <td>{{dinhdangso($ct->pck)}}</td>
+                <td>{{dinhdangso($ct->sum('vuotkhung'))}}</td>
+                <td>{{dinhdangso($ct->sum('pckv'))}}</td>
+                <td>{{dinhdangso($ct->sum('pccv'))}}</td>
+                <td>{{dinhdangso($ct->sum('pctnvk'))}}</td>
+                <td>{{dinhdangso($ct->sum('pcudn'))}}</td>
+                <td>{{dinhdangso($ct->sum('pcth'))}}</td>
+                <td>{{dinhdangso($ct->sum('pcthni'))}}</td>
+                <td>{{dinhdangso($ct->sum('pccovu'))}}</td>
+                <td>{{dinhdangso($ct->sum('pcdang'))}}</td>
+                <td>{{dinhdangso($ct->sum('pcthni'))}}</td>
+                <td>{{dinhdangso($ct->sum('pck'))}}</td>
 
-                <td>{{dinhdangso($ct->tongtl)}}</td>
-                <td>{{dinhdangso($ct->stbhxh_dv)}}</td>
-                <td>{{dinhdangso($ct->stbhyt_dv)}}</td>
-                <td>{{dinhdangso($ct->stkpcd_dv)}}</td>
-                <td>{{dinhdangso($ct->stbhtn_dv)}}</td>
-                <td>{{dinhdangso($ct->tongbh)}}</td>
-                <td>{{dinhdangso($ct->tongbh + $ct->tongtl)}}</td>
+                <td>{{dinhdangso($ct->sum('tongtl'))}}</td>
+                <td>{{dinhdangso($ct->sum('stbhxh_dv'))}}</td>
+                <td>{{dinhdangso($ct->sum('stbhyt_dv'))}}</td>
+                <td>{{dinhdangso($ct->sum('stkpcd_dv'))}}</td>
+                <td>{{dinhdangso($ct->sum('stbhtn_dv'))}}</td>
+                <td>{{dinhdangso($ct->sum('tongbh'))}}</td>
+                <td>{{dinhdangso($ct->sum('tongbh') + $ct->sum('tongtl'))}}</td>
 
         </tr>
         @endforeach

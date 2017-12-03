@@ -621,10 +621,12 @@ class tonghopluong_huyenController extends Controller
         //xem dữ liệu khối or đơn vị
         //đơn vị =>trả, xóa bang tonghopluong_huyen
         //khối =>trả, xóa bang tonghopluong_huyen, update trường mathh = null;
+
         if (Session::has('admin')) {
             $inputs=$request->all();
-            $model = tonghopluong_huyen::where('mathdv',$inputs['mathdv'])->first();
 
+            $model = tonghopluong_huyen::where('mathdv',$inputs['mathdv'])->first();
+            //dd($model);
             tonghopluong_donvi::where('mathh',$inputs['mathdv'])
                 ->update(['mathh'=>null,'trangthai'=>'TRALAI','lydo'=>$inputs['lydo']]);
 
@@ -636,9 +638,10 @@ class tonghopluong_huyenController extends Controller
 
             if($model->phanloai == 'CAPDUOI'){
                 //do lúc chuyển tạo mã khối và ma huyện giống nhau
-                //ko lấy theo tháng, năm, mã khối
+                //hoặc lấy theo tháng, năm, mã khối, phân loại
                 //nên tạo trường lý do ko nên lấy ở bảng đơn vị
-                tonghopluong_khoi::where('mathdv',$inputs['mathdv'])->update(['trangthai'=>'TRALAI']);
+                tonghopluong_khoi::where('mathdv',$inputs['mathdv'])
+                    ->update(['trangthai'=>'TRALAI']);
             }
             $model->delete();
             return redirect('/chuc_nang/xem_du_lieu/huyen?thang='.$model->thang.'&nam='.$model->nam.'&trangthai=ALL');

@@ -306,13 +306,16 @@ function dinhdangso ($number , $decimals = 0, $unit = '1' , $dec_point = ',' , $
     return number_format($number, $decimals ,$dec_point, $thousands_sep);
 }
 
+function trim_zeros($str) {
+    if(!is_string($str)) return $str;
+    return preg_replace(array('`\.0+$`','`(\.\d+?)0+$`'),array('','$1'),$str);
+}
+
 function dinhdangsothapphan ($number , $decimals = 0) {
     if(!is_numeric($number) || $number == 0){return '';}
     $number = round($number , $decimals);
-    $str_kq = floatval(number_format($number, $decimals ));
+    $str_kq = trim_zeros(number_format($number, $decimals ));
     $str_kq = str_replace(".", ",", $str_kq);
-    //$t = 10000.7534;
-    //dd(floatval(number_format($t,5)));
     return $str_kq;
     //return number_format($number, $decimals ,$dec_point, $thousands_sep);
     //làm lại hàm chú ý đo khi các số thập phân nếu làm tròn thi ko bỏ dc số 0 đằng sau dấu ,

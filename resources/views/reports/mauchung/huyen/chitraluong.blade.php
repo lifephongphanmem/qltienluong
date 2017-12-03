@@ -110,7 +110,9 @@
 
     <?php $stt=1; ?>
     @foreach($model_tonghop as $tonghop)
-        <?php $chitiet = $model_tonghop_chitiet->where('mathdv',$tonghop->mathdv); ?>
+        <?php
+            $chitiet = $model_tonghop_chitiet->where('mathh',$tonghop->mathdv);
+        ?>
         <tr style="font-weight: bold;">
             <td>{{convert2Roman($stt++)}}</td>
             <td colspan="22">{{$tonghop->noidung}}</td>
@@ -131,7 +133,7 @@
                 <td>{{$ct->pctnvk}}</td>
                 <td>{{$ct->pcudn}}</td>
                 <td>{{$ct->pcth}}</td>
-                <td>{{$ct->pctn}}</td>
+                <td>{{$ct->pcthni}}</td>
                 <td>{{$ct->pccovu}}</td>
                 <td>{{$ct->pcdang}}</td>
                 <td>{{$ct->pcthni}}</td>

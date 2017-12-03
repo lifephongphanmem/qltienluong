@@ -67,8 +67,8 @@
                                                         <i class="fa fa-list-alt"></i>&nbsp; Số liệu tổng hợp</a>
                                                 <!-- chưa phân trường hợp -->
                                                     @if($value['maphanloai'] == 'KVXP')
-                                                        <a href="{{url($furl.'detail_diaban/ma_so='.$value['mathdv'])}}" class="btn btn-default btn-sm">
-                                                            <i class="fa fa-list-alt"></i>&nbsp; Số liệu địa bàn</a>
+                                                        <!--a href="{{url($furl.'detail_diaban/ma_so='.$value['mathdv'])}}" class="btn btn-default btn-sm">
+                                                            <i class="fa fa-list-alt"></i>&nbsp; Số liệu địa bàn</a-->
                                                     @endif
                                                     <button type="button" class="btn btn-default btn-sm" onclick="confirmChuyen('{{$value['mathdv']}}')" data-target="#chuyen-modal" data-toggle="modal"><i class="fa fa-share-square-o"></i>&nbsp;
                                                         Gửi dữ liệu</button>
@@ -80,8 +80,8 @@
                                                     <a href="{{url($furl.'printf_data/ma_so='.$value['mathdv'])}}" class="btn btn-default btn-sm" TARGET="_blank">
                                                         <i class="fa fa-print"></i>&nbsp; Số liệu tổng hợp</a>
                                                     @if($value['maphanloai'] == 'KVXP')
-                                                        <a href="{{url($furl.'printf_data_diaban/ma_so='.$value['mathdv'])}}" class="btn btn-default btn-sm" TARGET="_blank">
-                                                            <i class="fa fa-print"></i>&nbsp; Số liệu địa bàn</a>
+                                                        <!--a href="{{url($furl.'printf_data_diaban/ma_so='.$value['mathdv'])}}" class="btn btn-default btn-sm" TARGET="_blank">
+                                                            <i class="fa fa-print"></i>&nbsp; Số liệu địa bàn</a-->
                                                     @endif
                                                 @endif
                                             @else

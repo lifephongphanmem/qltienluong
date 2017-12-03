@@ -161,6 +161,7 @@
 					<span class="title">Tổng quan</span>
 					</a>
 				</li>
+
                 <li>
                     <a href="javascript:;">
                         <i class="fa glyphicon glyphicon-folder-open"></i>
@@ -226,29 +227,30 @@
 
                         <!-- Các tài khoản quản lý khu vực mới có tính năng tổng hợp dữ liệu từ đơn vị cấp dưới -->
                         @if(session('admin')->quanlykhuvuc && session('admin')->level == 'H')
-                                <li>
-                                    <a href="{{url('chuc_nang/tong_hop_luong/huyen/index?nam='.date('Y'))}}"><i class="fa fa-caret-right"></i>Tổng hợp lương toàn địa bàn</a>
-                                </li>
+                            <li>
+                                <a href="{{url('chuc_nang/tong_hop_luong/huyen/index?nam='.date('Y'))}}"><i class="fa fa-caret-right"></i>Tổng hợp lương toàn địa bàn</a>
+                            </li>
 
-                                <li>
-                                    <a href="{{url('chuc_nang/tong_hop_nguon/huyen?sohieu=TT67_2017')}}"><i class="fa fa-caret-right"></i>Tổng số liệu nguồn kinh phí</a>
-                                </li>
+                            <li>
+                                <a href="{{url('chuc_nang/tong_hop_nguon/huyen?sohieu=TT67_2017')}}"><i class="fa fa-caret-right"></i>Tổng số liệu nguồn kinh phí</a>
+                            </li>
 
-                                <li>
-                                    <a href="{{url('chuc_nang/xem_du_lieu/huyen?thang='.date('m').'&nam='.date('Y').'&trangthai=ALL')}}"><i class="fa fa-caret-right"></i>Xem số liệu tổng hợp toàn địa bàn</a>
-                                </li>
-                        @else
-                                <li>
-                                    <a href="{{url('chuc_nang/tong_hop_luong/tinh/index?nam='.date('Y'))}}"><i class="fa fa-caret-right"></i>Tổng hợp lương toàn địa bàn quản lý</a>
-                                </li>
+                            <li>
+                                <a href="{{url('chuc_nang/xem_du_lieu/huyen?thang='.date('m').'&nam='.date('Y').'&trangthai=ALL')}}"><i class="fa fa-caret-right"></i>Xem số liệu tổng hợp toàn địa bàn</a>
+                            </li>
+                            @endif
+                        @if(session('admin')->quanlykhuvuc && session('admin')->level == 'T')
+                            <li>
+                                <a href="{{url('chuc_nang/tong_hop_luong/tinh/index?nam='.date('Y'))}}"><i class="fa fa-caret-right"></i>Tổng hợp lương toàn địa bàn quản lý</a>
+                            </li>
 
-                                <li>
-                                    <a href="{{url('chuc_nang/tong_hop_nguon/tinh?sohieu=TT67_2017&madiaban='.session('admin')->madvbc)}}"><i class="fa fa-caret-right"></i>Tổng số liệu nguồn kinh phí  toàn tỉnh</a>
-                                </li>
+                            <li>
+                                <a href="{{url('chuc_nang/tong_hop_nguon/tinh?sohieu=TT67_2017&madiaban='.session('admin')->madvbc)}}"><i class="fa fa-caret-right"></i>Tổng số liệu nguồn kinh phí  toàn tỉnh</a>
+                            </li>
 
-                                <li>
-                                    <a href="{{url('chuc_nang/xem_du_lieu/tinh?thang='.date('m').'&nam='.date('Y').'&trangthai=ALL&madiaban='.session('admin')->madvbc)}}"><i class="fa fa-caret-right"></i>Xem số liệu tổng hợp toàn tỉnh</a>
-                                </li>
+                            <li>
+                                <a href="{{url('chuc_nang/xem_du_lieu/tinh?thang='.date('m').'&nam='.date('Y').'&trangthai=ALL&madiaban='.session('admin')->madvbc)}}"><i class="fa fa-caret-right"></i>Xem số liệu tổng hợp toàn tỉnh</a>
+                            </li>
                         @endif
                     </ul>
                 </li>
@@ -278,7 +280,8 @@
                         <li><a href="{{url('/tra_cuu/chi_luong')}}"><i class="fa fa-caret-right"></i>Bảng lương tại đợn vị cấp dưới</a></li>
 					</ul>
 				</li>
-				<li>
+
+                <li>
 					<a href="javascript:;">
 					<i class="fa fa-file-text"></i>
 					<span class="title">Báo cáo</span>

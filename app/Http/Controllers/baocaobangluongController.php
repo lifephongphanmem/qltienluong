@@ -211,6 +211,13 @@ class baocaobangluongController extends Controller
                 $chitiet->tongtl = $chitiet->tonghs;
                 $chitiet->tongbh = $chitiet->stbhxh_dv + $chitiet->stbhyt_dv + $chitiet->stkpcd_dv + $chitiet->stbhtn_dv;
             }
+            //Lấy dữ liệu để lập
+            $model_data = $model_tonghop_chitiet->map(function ($data) {
+                return collect($data->toArray())
+                    ->only(['macongtac','manguonkp','luongcoban','tennguonkp','tencongtac'])
+                    ->all();
+            });
+            $model_data = a_unique($model_data);
 
             $m_dv=dmdonvi::where('madv',session('admin')->madv)->first();
             $thongtin=array('nguoilap'=>session('admin')->name,
@@ -219,7 +226,7 @@ class baocaobangluongController extends Controller
 
 
             return view('reports.mauchung.khoi.chitraluong')
-                //->with('model_dv',$model_dv)
+                ->with('model_data',$model_data)
                 ->with('model_tonghop',$model_tonghop)
                 ->with('model_tonghop_chitiet',$model_tonghop_chitiet)
                 ->with('thongtin',$thongtin)

@@ -430,7 +430,7 @@ class bangluongController extends Controller
             $thongtin=array('nguoilap'=>$m_bl->nguoilap,
                 'thang'=>$m_bl->thang,
                 'nam'=>$m_bl->nam);
-            //dd($m_dv);
+            //dd($model);
             return view('reports.bangluong.donvi.maubangluong')
                 ->with('model',$model)
                 ->with('m_dv',$m_dv)

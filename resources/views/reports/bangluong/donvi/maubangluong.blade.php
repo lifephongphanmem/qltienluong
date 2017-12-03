@@ -82,7 +82,7 @@
         <th style="width: 10%;" rowspan="2">Họ và tên</th>
         <th style="width: 6%;" rowspan="2">Cấp bậc</br>chức vụ</th>
         <th style="width: 6%;" rowspan="2">Mã số</br>ngạch</br>bậc</th>
-        <th colspan="14">Lương hệ số</th>
+        <th colspan="18">Lương hệ số</th>
         <th style="width: 6%;" rowspan="2">Nghỉ việc</br>không được</br>hưởng lương</th>
         <th style="width: 6%;" rowspan="2">BHXH trả</br>thay lương</th>
         <th style="width: 6%;" rowspan="2">Tổng cộng</br>tiền lương</th>
@@ -99,10 +99,16 @@
         <th>PCTN</br>vượt khung</th>
         <th>Phụ cấp</br>ưu đãi ngành</th>
         <th>Phụ cấp</br>thu hút</th>
-        <th>Phụ cấp</br>công tác lâu năm</th>
+        <th>Phụ cấp</br>công tác</br>lâu năm</th>
         <th>Phụ cấp</br>công vụ</th>
         <th>Phụ cấp</br>công tác Đảng</th>
         <th>Phụ cấp</br>thâm niên nghề</th>
+
+        <th>Phụ cấp</br>trách nhiệm</th>
+        <th>Phụ cấp</br>kiêm nhiệm</th>
+        <th>Phụ cấp</br>phân loại</br>xã</th>
+        <th>Phụ cấp</br>đắt đỏ</th>
+
         <th>Phụ cấp</br>khác</th>
         <th>Cộng</br>hệ số</th>
         <th>Thành tiền</th>
@@ -146,6 +152,11 @@
                 <td>{{dinhdangsothapphan($ct->pccovu,5)}}</td>
                 <td>{{dinhdangsothapphan($ct->pcdang,5)}}</td>
                 <td>{{dinhdangsothapphan($ct->pctnn,5)}}</td>
+
+                <td>{{dinhdangsothapphan($ct->pctn,5)}}</td>
+                <td>{{dinhdangsothapphan($ct->pckn,5)}}</td>
+                <td>{{dinhdangsothapphan($ct->pclt,5)}}</td>
+                <td>{{dinhdangsothapphan($ct->pcdd,5)}}</td>
                 <td>{{dinhdangsothapphan($ct->pck,5)}}</td>
                 <td>{{dinhdangsothapphan($ct->tonghs,5)}}</td>
 
@@ -176,6 +187,12 @@
                 <td>{{dinhdangsothapphan($model_luong->sum('pccovu') ,5)}}</td>
                 <td>{{dinhdangsothapphan($model_luong->sum('pcdang') ,5)}}</td>
                 <td>{{dinhdangsothapphan($model_luong->sum('pctnn') ,5)}}</td>
+
+                <td>{{dinhdangsothapphan($model_luong->sum('pctn') ,5)}}</td>
+                <td>{{dinhdangsothapphan($model_luong->sum('pckn') ,5)}}</td>
+                <td>{{dinhdangsothapphan($model_luong->sum('pclt') ,5)}}</td>
+                <td>{{dinhdangsothapphan($model_luong->sum('pcdd') ,5)}}</td>
+
                 <td>{{dinhdangsothapphan($model_luong->sum('pck') ,5)}}</td>
                 <td>{{dinhdangsothapphan($model_luong->sum('tonghs') ,5)}}</td>
 
@@ -207,6 +224,12 @@
         <td>{{dinhdangsothapphan($model->sum('pccovu') ,5)}}</td>
         <td>{{dinhdangsothapphan($model->sum('pcdang') ,5)}}</td>
         <td>{{dinhdangsothapphan($model->sum('pctnn') ,5)}}</td>
+
+        <td>{{dinhdangsothapphan($model->sum('pctn') ,5)}}</td>
+        <td>{{dinhdangsothapphan($model->sum('pckn') ,5)}}</td>
+        <td>{{dinhdangsothapphan($model->sum('pclt') ,5)}}</td>
+        <td>{{dinhdangsothapphan($model->sum('pcdd') ,5)}}</td>
+
         <td>{{dinhdangsothapphan($model->sum('pck') ,5)}}</td>
         <td>{{dinhdangsothapphan($model->sum('tonghs') ,5)}}</td>
 
