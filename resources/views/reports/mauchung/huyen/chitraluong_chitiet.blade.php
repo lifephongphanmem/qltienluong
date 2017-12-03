@@ -65,7 +65,7 @@
         </td>
     </tr>
 </table>
-<p style="text-align: center; font-weight: bold; font-size: 20px;">CHI TIẾT SỐ LIỆU TỔNG HỢP CHI TRẢ LƯƠNG TẠI ĐƠN VỊ CẤP DƯỚI</p>
+<p style="text-align: center; font-weight: bold; font-size: 20px;">CHI TIẾT SỐ LIỆU TỔNG HỢP CHI TRẢ LƯƠNG TRÊN ĐỊA BÀN</p>
 <p style="text-align: center; font-style: italic">Từ {{$thongtin['tu']}} đến {{$thongtin['den']}}</p>
 
 <p style="text-align: right; font-style: italic">Đơn vị tính: đồng</p>
@@ -112,89 +112,72 @@
     <?php $stt=1; ?>
     @foreach($model_data as $data)
         <!-- Ko in các tháng ko có dữ liệu -->
-        <?php
-            $tonghop = $model_tonghop->where('thang',$data['thang'])->where('nam',$data['nam']);
-            if(count($tonghop) == 0){
-                continue;
-            }
-        ?>
         <tr style="font-weight: bold;">
             <td>{{convert2Roman($stt++)}}</td>
             <td colspan="23">{{'Thời điểm tháng '. $data['thang'] . ' năm '. $data['nam'] }}</td>
         </tr>
-        <?php $i=1; ?>
-        @foreach($model_donvi as $dv)
-            <tr style="font-weight: bold; font-style: italic">
-                <td>{{$i++}}</td>
-                <td colspan="23">{{$dv->tendv}}</td>
-            </tr>
 
+        <?php
+            $i=1;
+            $chitiet = $model_tonghop_chitiet->where('thang',$data['thang'])->where('nam',$data['nam']);
+        ?>
+        @foreach($model_dulieu as $dv)
             <?php
-                $th = $tonghop->where('madv', $dv->madv)->first();
-                if(count($th)>0){
-                    $chitiet = $model_tonghop_chitiet->where('mathdv',$th->mathdv);
-                }else{
-                    continue;
-                }
-
+                $ct = $chitiet ->where('macongtac',$dv['macongtac'])->where('manguonkp',$dv['manguonkp']);
             ?>
-            @if(count($chitiet)>0)
-                @foreach($chitiet as $ct)
-                    <tr>
-                        <td>-</td>
-                        <td>{{$ct->tennguonkp}}</td>
-                        <td>{{$ct->tencongtac}}</td>
-                        <td>{{dinhdangso($ct->heso)}}</td>
-                        <td>{{dinhdangso($ct->hesopc)}}</td>
-                        <td>{{dinhdangso($ct->tonghs - $ct->heso - $ct->hesopc)}}</td>
-                        <td>{{dinhdangso($ct->vuotkhung)}}</td>
-                        <td>{{dinhdangso($ct->pckv)}}</td>
-                        <td>{{dinhdangso($ct->pccv)}}</td>
-                        <td>{{dinhdangso($ct->pctnvk)}}</td>
-                        <td>{{dinhdangso($ct->pcudn)}}</td>
-                        <td>{{dinhdangso($ct->pcth)}}</td>
-                        <td>{{dinhdangso($ct->pctn)}}</td>
-                        <td>{{dinhdangso($ct->pccovu)}}</td>
-                        <td>{{dinhdangso($ct->pcdang)}}</td>
-                        <td>{{dinhdangso($ct->pcthni)}}</td>
-                        <td>{{dinhdangso($ct->pck)}}</td>
+            <tr>
+                <td>{{$i++}}</td>
+                <td>{{$dv['tennguonkp']}}</td>
+                <td>{{$dv['tencongtac']}}</td>
+                <td>{{dinhdangso($ct->sum('heso'))}}</td>
+                <td>{{dinhdangso($ct->sum('hesopc'))}}</td>
+                <td>{{dinhdangso($ct->sum('tonghs') - $ct->sum('heso') - $ct->sum('hesopc'))}}</td>
 
-                        <td>{{dinhdangso($ct->tongtl)}}</td>
-                        <td>{{dinhdangso($ct->stbhxh_dv)}}</td>
-                        <td>{{dinhdangso($ct->stbhyt_dv)}}</td>
-                        <td>{{dinhdangso($ct->stkpcd_dv)}}</td>
-                        <td>{{dinhdangso($ct->stbhtn_dv)}}</td>
-                        <td>{{dinhdangso($ct->tongbh)}}</td>
-                        <td>{{dinhdangso($ct->tongbh + $ct->tongtl)}}</td>
-                    </tr>
-                @endforeach
-                        <!--Cộng theo nhóm-->
-                <tr style="font-weight: bold; text-align: center;font-style: italic">
-                    <td colspan="3">Cộng</td>
-                    <td>{{dinhdangso($chitiet->sum('heso'))}}</td>
-                    <td>{{dinhdangso($chitiet->sum('hesopc'))}}</td>
-                    <td>{{dinhdangso($chitiet->sum('tonghs') - $chitiet->sum('heso') - $chitiet->sum('hesopc'))}}</td>
-                    <td>{{dinhdangso($chitiet->sum('vuotkhung'))}}</td>
-                    <td>{{dinhdangso($chitiet->sum('pckv'))}}</td>
-                    <td>{{dinhdangso($chitiet->sum('pccv'))}}</td>
-                    <td>{{dinhdangso($chitiet->sum('pctnvk'))}}</td>
-                    <td>{{dinhdangso($chitiet->sum('pcudn'))}}</td>
-                    <td>{{dinhdangso($chitiet->sum('pcth'))}}</td>
-                    <td>{{dinhdangso($chitiet->sum('pctn'))}}</td>
-                    <td>{{dinhdangso($chitiet->sum('pccovu'))}}</td>
-                    <td>{{dinhdangso($chitiet->sum('pcdang'))}}</td>
-                    <td>{{dinhdangso($chitiet->sum('pcthni'))}}</td>
-                    <td>{{dinhdangso($chitiet->sum('pck'))}}</td>
-                    <td>{{dinhdangso($chitiet->sum('tongtl'))}}</td>
-                    <td>{{dinhdangso($chitiet->sum('stbhxh_dv'))}}</td>
-                    <td>{{dinhdangso($chitiet->sum('stbhyt_dv'))}}</td>
-                    <td>{{dinhdangso($chitiet->sum('stkpcd_dv'))}}</td>
-                    <td>{{dinhdangso($chitiet->sum('stbhtn_dv'))}}</td>
-                    <td>{{dinhdangso($chitiet->sum('tongbh'))}}</td>
-                    <td>{{dinhdangso($chitiet->sum('tongbh') + $chitiet->sum('tongtl'))}}</td>
-                </tr>
-            @endif
+                <td>{{dinhdangso($ct->sum('vuotkhung'))}}</td>
+                <td>{{dinhdangso($ct->sum('pckv'))}}</td>
+                <td>{{dinhdangso($ct->sum('pccv'))}}</td>
+                <td>{{dinhdangso($ct->sum('pctnvk'))}}</td>
+                <td>{{dinhdangso($ct->sum('pcudn'))}}</td>
+                <td>{{dinhdangso($ct->sum('pcth'))}}</td>
+                <td>{{dinhdangso($ct->sum('pcthni'))}}</td>
+                <td>{{dinhdangso($ct->sum('pccovu'))}}</td>
+                <td>{{dinhdangso($ct->sum('pcdang'))}}</td>
+                <td>{{dinhdangso($ct->sum('pcthni'))}}</td>
+                <td>{{dinhdangso($ct->sum('pck'))}}</td>
+
+                <td>{{dinhdangso($ct->sum('tongtl'))}}</td>
+                <td>{{dinhdangso($ct->sum('stbhxh_dv'))}}</td>
+                <td>{{dinhdangso($ct->sum('stbhyt_dv'))}}</td>
+                <td>{{dinhdangso($ct->sum('stkpcd_dv'))}}</td>
+                <td>{{dinhdangso($ct->sum('stbhtn_dv'))}}</td>
+                <td>{{dinhdangso($ct->sum('tongbh'))}}</td>
+                <td>{{dinhdangso($ct->sum('tongbh') + $ct->sum('tongtl'))}}</td>
+            </tr>
         @endforeach
+        <tr style="font-weight: bold; text-align: center;font-style: italic">
+            <td colspan="3">Cộng</td>
+            <td>{{dinhdangso($chitiet->sum('heso'))}}</td>
+            <td>{{dinhdangso($chitiet->sum('hesopc'))}}</td>
+            <td>{{dinhdangso($chitiet->sum('tonghs') - $chitiet->sum('heso') - $chitiet->sum('hesopc'))}}</td>
+            <td>{{dinhdangso($chitiet->sum('vuotkhung'))}}</td>
+            <td>{{dinhdangso($chitiet->sum('pckv'))}}</td>
+            <td>{{dinhdangso($chitiet->sum('pccv'))}}</td>
+            <td>{{dinhdangso($chitiet->sum('pctnvk'))}}</td>
+            <td>{{dinhdangso($chitiet->sum('pcudn'))}}</td>
+            <td>{{dinhdangso($chitiet->sum('pcth'))}}</td>
+            <td>{{dinhdangso($chitiet->sum('pctn'))}}</td>
+            <td>{{dinhdangso($chitiet->sum('pccovu'))}}</td>
+            <td>{{dinhdangso($chitiet->sum('pcdang'))}}</td>
+            <td>{{dinhdangso($chitiet->sum('pcthni'))}}</td>
+            <td>{{dinhdangso($chitiet->sum('pck'))}}</td>
+            <td>{{dinhdangso($chitiet->sum('tongtl'))}}</td>
+            <td>{{dinhdangso($chitiet->sum('stbhxh_dv'))}}</td>
+            <td>{{dinhdangso($chitiet->sum('stbhyt_dv'))}}</td>
+            <td>{{dinhdangso($chitiet->sum('stkpcd_dv'))}}</td>
+            <td>{{dinhdangso($chitiet->sum('stbhtn_dv'))}}</td>
+            <td>{{dinhdangso($chitiet->sum('tongbh'))}}</td>
+            <td>{{dinhdangso($chitiet->sum('tongbh') + $chitiet->sum('tongtl'))}}</td>
+        </tr>
     @endforeach
     <tr style="font-weight: bold; text-align: center">
         <td colspan="3">Tổng cộng</td>

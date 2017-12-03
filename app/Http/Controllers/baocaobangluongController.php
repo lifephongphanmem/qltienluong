@@ -214,7 +214,7 @@ class baocaobangluongController extends Controller
             //Lấy dữ liệu để lập
             $model_data = $model_tonghop_chitiet->map(function ($data) {
                 return collect($data->toArray())
-                    ->only(['macongtac','manguonkp','luongcoban','tennguonkp','tencongtac'])
+                    ->only(['macongtac','manguonkp','tennguonkp','tencongtac'])
                     ->all();
             });
             $model_data = a_unique($model_data);
@@ -224,6 +224,7 @@ class baocaobangluongController extends Controller
                 'tu'=>$inputs['tuthang'].'/'.$inputs['tunam'],
                 'den'=>$inputs['denthang'].'/'.$inputs['tunam']);
 
+            $model_tonghop =  $model_tonghop->sortby('nam')->sortby('thang');
 
             return view('reports.mauchung.khoi.chitraluong')
                 ->with('model_data',$model_data)
@@ -378,6 +379,8 @@ class baocaobangluongController extends Controller
     }
 
     function chitraluong_th_huyen(Request $request) {
+        //lấy từng tháng năm = > ra số liệu tổng hợp
+        //group theo tháng, năm
         if (Session::has('admin')) {
             $inputs = $request->all();
             $tuthang = $inputs['tuthang'];
@@ -385,23 +388,32 @@ class baocaobangluongController extends Controller
             $denthang = $inputs['denthang'];
             $madvbc = session('admin')->madvbc;
 
-            $model_tonghop = tonghop_huyen::whereBetween('thang', array($tuthang,$denthang))
+            $model_tonghop = tonghopluong_huyen::whereBetween('thang', array($tuthang,$denthang))
                 ->where('nam',$tunam)
                 ->where('madvbc',$madvbc)->get();
             //dd($model_tonghop->toarray());
 
-            $model_tonghop_chitiet = tonghop_huyen_chitiet::wherein('mathdv',function($qr)use($tuthang,$denthang,$tunam,$madvbc){
-                $qr->select('mathdv')->from('tonghop_huyen')->whereBetween('thang', array($tuthang,$denthang))
+            $model_tonghop_chitiet = tonghopluong_donvi_chitiet::wherein('mathh',function($qr)use($tuthang,$denthang,$tunam,$madvbc){
+                $qr->select('mathdv')->from('tonghopluong_huyen')->whereBetween('thang', array($tuthang,$denthang))
                     ->where('nam',$tunam)
                     ->where('madvbc',$madvbc);
             }) ->get();
-
+            //dd($model_tonghop_chitiet);
             $model_nguonkp = getNguonKP();
             $model_phanloaict = getNhomCongTac();
             foreach($model_tonghop_chitiet as $chitiet){
+                $tonghop = $model_tonghop->where('mathdv',$chitiet->mathh)->first();
+                if(count($tonghop)>0){
+                    $chitiet->thang = $tonghop->thang;
+                    $chitiet->nam = $tonghop->nam;
+                }else{
+                    $chitiet->thang = 0;
+                    $chitiet->nam = 0;
+                }
+
                 $chitiet->tennguonkp = isset($model_nguonkp[$chitiet->manguonkp])? $model_nguonkp[$chitiet->manguonkp]:'';
                 $chitiet->tencongtac = isset($model_phanloaict[$chitiet->macongtac])? $model_phanloaict[$chitiet->macongtac]:'';
-                $chitiet->tongtl = $chitiet->luongcoban * $chitiet->tonghs;
+                $chitiet->tongtl = $chitiet->tonghs;
                 $chitiet->tongbh = $chitiet->stbhxh_dv + $chitiet->stbhyt_dv + $chitiet->stkpcd_dv + $chitiet->stbhtn_dv;
             }
 
@@ -411,9 +423,26 @@ class baocaobangluongController extends Controller
                 'den'=>$inputs['denthang'].'/'.$inputs['tunam'],
                 'madvbc'=>$madvbc);
 
+            //Lấy dữ liệu để lập
+            $model_dulieu = $model_tonghop_chitiet->map(function ($data) {
+                return collect($data->toArray())
+                    ->only(['macongtac','manguonkp','tennguonkp','tencongtac'])
+                    ->all();
+            });
+            $model_dulieu = a_unique($model_dulieu);
 
-            return view('reports.mauchung.huyen.chitraluong')
-                ->with('model_tonghop',$model_tonghop)
+            $model_tonghop=  $model_tonghop->sortby('nam')->sortby('thang');
+            $a_data = $model_tonghop->map(function ($data) {
+                return collect($data->toArray())
+                    ->only(['thang','nam'])
+                    ->all();
+            });
+            $a_data = a_unique($a_data);
+
+            return view('reports.mauchung.huyen.chitraluong_chitiet')
+                ->with('model_data',$a_data)
+                ->with('model_dulieu',$model_dulieu)
+                //->with('model_tonghop',$model_tonghop)
                 ->with('model_tonghop_chitiet',$model_tonghop_chitiet)
                 ->with('thongtin',$thongtin)
                 ->with('m_dv',$m_dv)
@@ -455,7 +484,7 @@ class baocaobangluongController extends Controller
             foreach($model_tonghop_chitiet as $chitiet){
                 $chitiet->tennguonkp = isset($model_nguonkp[$chitiet->manguonkp])? $model_nguonkp[$chitiet->manguonkp]:'';
                 $chitiet->tencongtac = isset($model_phanloaict[$chitiet->macongtac])? $model_phanloaict[$chitiet->macongtac]:'';
-                $chitiet->tongtl = $chitiet->luongcoban * $chitiet->tonghs;
+                $chitiet->tongtl = $chitiet->tonghs;
                 $chitiet->tongbh = $chitiet->stbhxh_dv + $chitiet->stbhyt_dv + $chitiet->stkpcd_dv + $chitiet->stbhtn_dv;
             }
 
