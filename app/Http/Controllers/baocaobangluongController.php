@@ -62,6 +62,27 @@ class baocaobangluongController extends Controller
 
     }
 
+    function mauc02ahd_mau2(Request $request){
+        if (Session::has('admin')) {
+
+            $inputs=$request->all();
+
+            $model_bangluong = bangluong::where('madv',session('admin')->madv)
+                ->where('thang',$inputs['thang'])
+                ->where('nam',$inputs['nam'])->first();
+
+            if(!isset($model_bangluong)){
+                return view('errors.nodata');
+            }
+
+            $bl=new bangluongController();
+            return $bl->inbangluong_sotien($model_bangluong->mabl);
+
+
+        } else{return view('errors.notlogin');}
+
+    }
+
     function mauc02x(Request $request){
         if (Session::has('admin')) {
 

@@ -129,10 +129,10 @@
             <td>{{dinhdangso($ct['pctnvk'])}}</td>
             <td>{{dinhdangso($ct['pcudn'])}}</td>
             <td>{{dinhdangso($ct['pcth'])}}</td>
-            <td>{{dinhdangso($ct['pctn'])}}</td>
+            <td>{{dinhdangso($ct['pcthni'])}}</td>
             <td>{{dinhdangso($ct['pccovu'])}}</td>
             <td>{{dinhdangso($ct['pcdang'])}}</td>
-            <td>{{dinhdangso($ct['pcthni'])}}</td>
+            <td>{{dinhdangso($ct['pctnn'])}}</td>
             <td>{{dinhdangso($ct['pck'])}}</td>
 
             <td>{{dinhdangso($ct['tonghs'])}}</td>
@@ -156,10 +156,10 @@
         <td>{{dinhdangso(array_sum(array_column($model,'pctnvk')))}}</td>
         <td>{{dinhdangso(array_sum(array_column($model,'pcudn')))}}</td>
         <td>{{dinhdangso(array_sum(array_column($model,'pcth')))}}</td>
-        <td>{{dinhdangso(array_sum(array_column($model,'pctn')))}}</td>
+        <td>{{dinhdangso(array_sum(array_column($model,'pcthni')))}}</td>
         <td>{{dinhdangso(array_sum(array_column($model,'pccovu')))}}</td>
         <td>{{dinhdangso(array_sum(array_column($model,'pcdang')))}}</td>
-        <td>{{dinhdangso(array_sum(array_column($model,'pcthni')))}}</td>
+        <td>{{dinhdangso(array_sum(array_column($model,'pctnn')))}}</td>
         <td>{{dinhdangso(array_sum(array_column($model,'pck')))}}</td>
         <td>{{dinhdangso(array_sum(array_column($model,'tonghs')))}}</td>
         <td>{{dinhdangso(array_sum(array_column($model,'stbhxh_dv')))}}</td>

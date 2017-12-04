@@ -1742,6 +1742,60 @@ class baocaothongtu67Controller extends Controller
             return view('errors.notlogin');
     }
 
+    function mau2e_donvi() {
+        if (Session::has('admin')) {
+            $m_dv=dmdonvi::where('madv',session('admin')->madv)->first();
+
+            $ar_I = array();
+            $ar_I[]=array('tt'=>'1','noidung'=>'Nguyên bí thư, chủ tịch');
+            $ar_I[]=array('tt'=>'2','noidung'=>'Nguyên Phó bí thư, phó chủ tịch, Thường trực Đảng ủy, Ủy viên, Thư ký UBND Thư ký HĐND, xã đội trưởng');
+            $ar_I[]=array('tt'=>'3','noidung'=>'Các chức danh còn lại');
+
+            return view('reports.thongtu67.Mau2e_ThKPTG')
+                ->with('furl','/tong_hop_bao_cao/')
+                ->with('ar_I',$ar_I)
+                ->with('m_dv',$m_dv)
+                ->with('pageTitle','Báo cáo nhu cầu kinh phí thực hiện nghị định 47/2017/NĐ-CP');
+        } else
+            return view('errors.notlogin');
+    }
+
+    function mau2g_donvi() {
+        if (Session::has('admin')) {
+            $m_dv=dmdonvi::where('madv',session('admin')->madv)->first();
+
+            $ar_I = array();
+            $ar_I[]=array('tt'=>'1','noidung'=>'Nguyên bí thư, chủ tịch');
+            $ar_I[]=array('tt'=>'2','noidung'=>'Nguyên Phó bí thư, phó chủ tịch, Thường trực Đảng ủy, Ủy viên, Thư ký UBND Thư ký HĐND, xã đội trưởng');
+            $ar_I[]=array('tt'=>'3','noidung'=>'Các chức danh còn lại');
+
+            return view('reports.thongtu67.Mau2g_ThPCUDTG')
+                ->with('furl','/tong_hop_bao_cao/')
+                ->with('ar_I',$ar_I)
+                ->with('m_dv',$m_dv)
+                ->with('pageTitle','Báo cáo nhu cầu kinh phí thực hiện nghị định 47/2017/NĐ-CP');
+        } else
+            return view('errors.notlogin');
+    }
+
+    function mau2h_donvi() {
+        if (Session::has('admin')) {
+            $m_dv=dmdonvi::where('madv',session('admin')->madv)->first();
+
+            $ar_I = array();
+            $ar_I[]=array('tt'=>'1','noidung'=>'Nguyên bí thư, chủ tịch');
+            $ar_I[]=array('tt'=>'2','noidung'=>'Nguyên Phó bí thư, phó chủ tịch, Thường trực Đảng ủy, Ủy viên, Thư ký UBND Thư ký HĐND, xã đội trưởng');
+            $ar_I[]=array('tt'=>'3','noidung'=>'Các chức danh còn lại');
+
+            return view('reports.thongtu67.Mau2h_ThPCTHTG')
+                ->with('furl','/tong_hop_bao_cao/')
+                ->with('ar_I',$ar_I)
+                ->with('m_dv',$m_dv)
+                ->with('pageTitle','Báo cáo nhu cầu kinh phí thực hiện nghị định 47/2017/NĐ-CP');
+        } else
+            return view('errors.notlogin');
+    }
+
     function mau4a_donvi()
     {
         //Kiểm tra cấp đơn vị xem đơn vị để update trường masoh hoặc masot

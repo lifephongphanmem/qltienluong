@@ -94,7 +94,7 @@
         <th>Phụ cấp</br>thâm niên</br>vượt khung</th>
         <th>Phụ cấp</br>ưu đãi ngành</th>
         <th>Phụ cấp</br>thu hút</th>
-        <th>Phụ cấp</br>công tác lâu năm</th>
+        <th>Phụ cấp</br>công tác</br>lâu năm</th>
         <th>Phụ cấp</br>công vụ</th>
         <th>Phụ cấp</br>công tác Đảng</th>
         <th>Phụ cấp</br>thâm niên nghề</th>
@@ -129,10 +129,10 @@
             <td>{{dinhdangso($ct->pctnvk)}}</td>
             <td>{{dinhdangso($ct->pcudn)}}</td>
             <td>{{dinhdangso($ct->pcth)}}</td>
-            <td>{{dinhdangso($ct->pctn)}}</td>
+            <td>{{dinhdangso($ct->pcthni)}}</td>
             <td>{{dinhdangso($ct->pccovu)}}</td>
             <td>{{dinhdangso($ct->pcdang)}}</td>
-            <td>{{dinhdangso($ct->pcthni)}}</td>
+            <td>{{dinhdangso($ct->pctnn)}}</td>
             <td>{{dinhdangso($ct->pck)}}</td>
 
             <td>{{dinhdangso($ct->tonghs)}}</td>
@@ -156,10 +156,10 @@
         <td>{{dinhdangso($model->sum('pctnvk'))}}</td>
         <td>{{dinhdangso($model->sum('pcudn'))}}</td>
         <td>{{dinhdangso($model->sum('pcth'))}}</td>
-        <td>{{dinhdangso($model->sum('pctn'))}}</td>
+        <td>{{dinhdangso($model->sum('pcthni'))}}</td>
         <td>{{dinhdangso($model->sum('pccovu'))}}</td>
         <td>{{dinhdangso($model->sum('pcdang'))}}</td>
-        <td>{{dinhdangso($model->sum('pcthni'))}}</td>
+        <td>{{dinhdangso($model->sum('pctnn'))}}</td>
         <td>{{dinhdangso($model->sum('pck'))}}</td>
         <td>{{dinhdangso($model->sum('tonghs'))}}</td>
         <td>{{dinhdangso($model->sum('stbhxh_dv'))}}</td>

@@ -288,6 +288,7 @@ Route::group(['prefix'=>'chuc_nang'],function(){
 
         Route::get('/maso={mabl}','bangluongController@show');
         Route::get('in/maso={mabl}','bangluongController@inbangluong');
+        Route::get('inbangluong/maso={mabl}','bangluongController@inbangluong_sotien');
         Route::get('in_bh/maso={mabl}','bangluongController@inbaohiem');
         Route::get('','bangluongController@detail');
         Route::post('updatect/{id}','bangluongController@updatect');
@@ -329,6 +330,8 @@ Route::group(['prefix'=>'chuc_nang'],function(){
             Route::post('senddata','tonghopluong_donviController@senddata'); //gửi dữ liệu
             Route::post('tralai','tonghopluong_donviController@tralai'); //trả lại dữ liệu
             Route::get('getlydo','tonghopluong_donviController@getlydo');//lý do trả lại dữ liệu
+
+            Route::get('del/maso={mathdv}','tonghopluong_donviController@destroy');//lý do trả lại dữ liệu
 
             Route::get('printf_data/ma_so={mathdv}','tonghopluong_donviController@printf_data');
             Route::get('printf_data_diaban/ma_so={mathdv}','tonghopluong_donviController@printf_data_diaban');
@@ -467,6 +470,10 @@ Route::group(['prefix'=>'bao_cao'],function(){
             Route::get('mau2d','baocaothongtu67Controller@mau2d_donvi');
             Route::get('mau4a','baocaothongtu67Controller@mau4a_donvi');
             Route::get('mau4b','baocaothongtu67Controller@mau4b_donvi');
+
+            Route::get('mau2e','baocaothongtu67Controller@mau2e_donvi');
+            Route::get('mau2g','baocaothongtu67Controller@mau2g_donvi');
+            Route::get('mau2h','baocaothongtu67Controller@mau2h_donvi');
         });
 
         Route::group(['prefix'=>'khoi'],function(){
@@ -495,6 +502,7 @@ Route::group(['prefix'=>'bao_cao'],function(){
         //Các mẫu báo cáo tại đơn vị
         Route::group(['prefix'=>'don_vi'],function(){
             Route::post('mauc02ahd','baocaobangluongController@mauc02ahd');
+            Route::post('mauc02ahd_mau2','baocaobangluongController@mauc02ahd_mau2');
             Route::post('mauc02x','baocaobangluongController@mauc02x');
             Route::post('maubaohiem','baocaobangluongController@maubaohiem');
             Route::post('chitraluong','baocaobangluongController@chitraluong');
