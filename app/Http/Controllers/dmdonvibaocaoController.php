@@ -135,8 +135,12 @@ class dmdonvibaocaoController extends Controller
         if (Session::has('admin')) {
             $model=dmdonvi::where('madv',$madonvi)->first();
             $model_donvi = array_column(dmdonvi::select('madv','tendv')->where('madvbc',$madvbc)->get()->toarray(),'tendv','madv');
-            $a_kq = array(''=>'--Chọn đơn vị chủ quản--');
-            $model_donvi=  array_merge($a_kq,$model_donvi);
+            $a_kq = array(''=>'--Chọn đơn vị gửi dữ liệu--');
+            //$model_donvi=  array_merge($a_kq,$model_donvi);
+            foreach($model_donvi as $key=>$val){
+                $a_kq[$key]=$val;
+            }
+
             $a_phanloai = array_column(dmphanloaidonvi::all()->toarray(),'tenphanloai','maphanloai');
             $model_plxa = getPhanLoaiXa();
             $model_capdv = getCapDonVi();
@@ -145,7 +149,7 @@ class dmdonvibaocaoController extends Controller
             //$model_kpb =  array_column(dmkhoipb::select('makhoipb','tenkhoipb')->get()->toarray(),'tenkhoipb','makhoipb');
             return view('system.danhmuc.donvibaocao.edit_donvi')
                 ->with('model',$model)
-                ->with('model_donvi',$model_donvi)
+                ->with('model_donvi',$a_kq)
                 ->with('model_phanloai',$a_phanloai)
                 ->with('model_plxa',$model_plxa)
                 ->with('model_capdv',$model_capdv)
@@ -174,14 +178,18 @@ class dmdonvibaocaoController extends Controller
     public function create_donvi($madvbc){
         if (Session::has('admin')) {
             $model_donvi = array_column(dmdonvi::select('madv','tendv')->where('madvbc',$madvbc)->get()->toarray(),'tendv','madv');
-            $model_donvi['NULL']= 'Chọn đơn vị chủ quản';
+            $a_kq = array(''=>'--Chọn đơn vị gửi dữ liệu--');
+            //$model_donvi=  array_merge($a_kq,$model_donvi);
+            foreach($model_donvi as $key=>$val){
+                $a_kq[$key]=$val;
+            }
             $a_phanloai = array_column(dmphanloaidonvi::all()->toarray(),'tenphanloai','maphanloai');
             $model_plxa = getPhanLoaiXa();
             $model_capdv = getCapDonVi();
             $model_linhvuc = array_column(dmkhoipb::all()->toarray(),'tenkhoipb','makhoipb');
             return view('system.danhmuc.donvibaocao.create_donvi')
                 ->with('url','/danh_muc/khu_vuc/')
-                ->with('model_donvi',$model_donvi)
+                ->with('model_donvi',$a_kq)
                 ->with('a_phanloai',$a_phanloai)
                 ->with('madvbc',$madvbc)
                 ->with('model_phanloai',$a_phanloai)
