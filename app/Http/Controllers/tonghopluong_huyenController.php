@@ -139,12 +139,21 @@ class tonghopluong_huyenController extends Controller
                 $chitiet->tongbh = $chitiet->stbhxh_dv + $chitiet->stbhyt_dv + $chitiet->stkpcd_dv + $chitiet->stbhtn_dv;
             }
 
+            //Lấy dữ liệu để lập
+            $model_dulieu = $model->map(function ($data) {
+                return collect($data->toArray())
+                    ->only(['macongtac','manguonkp','tennguonkp','tencongtac'])
+                    ->all();
+            });
+            $model_dulieu = a_unique($model_dulieu);
+
             $thongtin=array('nguoilap'=>session('admin')->name,
                 'thang'=>$model_thongtin->thang,
                 'nam'=>$model_thongtin->nam);
-
-            return view('reports.tonghopluong.donvi.solieutonghop')
+            //dd($model_dulieu);
+            return view('reports.tonghopluong.huyen.solieutonghop')
                 ->with('thongtin',$thongtin)
+                ->with('model_dulieu',$model_dulieu)
                 ->with('model',$model)
                 ->with('m_dv',$m_dv)
                 ->with('pageTitle','Chi tiết tổng hợp lương');
@@ -320,14 +329,13 @@ class tonghopluong_huyenController extends Controller
             //Lấy dữ liệu để lập
             $model_data = $model_tonghop_ct->map(function ($data) {
                 return collect($data->toArray())
-                    ->only(['macongtac','linhvuchoatdong','manguonkp','luongcoban'])
+                    ->only(['macongtac','manguonkp'])
                     ->all();
             });
 
             $model_data = a_unique($model_data);
             for($i=0;$i<count($model_data);$i++){
                 $luongct = $model_tonghop_ct->where('manguonkp',$model_data[$i]['manguonkp'])
-                    ->where('linhvuchoatdong',$model_data[$i]['linhvuchoatdong'])
                     ->where('macongtac',$model_data[$i]['macongtac']);
                 $model_data[$i]['tennguonkp'] = isset($model_nguonkp[$model_data[$i]['manguonkp']])? $model_nguonkp[$model_data[$i]['manguonkp']]:'';
                 $model_data[$i]['tencongtac'] = isset($model_phanloaict[ $model_data[$i]['macongtac']])? $model_phanloaict[ $model_data[$i]['macongtac']]:'';

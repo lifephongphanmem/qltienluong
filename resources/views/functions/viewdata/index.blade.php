@@ -79,8 +79,8 @@
                                             <a href="{{url('/chuc_nang/tong_hop_luong/don_vi/printf_data/ma_so='.$value['mathdv'])}}" class="btn btn-default btn-sm" TARGET="_blank">
                                                 <i class="fa fa-print"></i>&nbsp; Số liệu tổng hợp</a>
                                             @if($value->maphanloai == 'KVXP')
-                                                <a href="{{url('/chuc_nang/tong_hop_luong/don_vi/printf_data_diaban/ma_so='.$value['mathdv'])}}" class="btn btn-default btn-sm" TARGET="_blank">
-                                                    <i class="fa fa-print"></i>&nbsp; Số liệu địa bàn</a>
+                                                <!--a href="{{url('/chuc_nang/tong_hop_luong/don_vi/printf_data_diaban/ma_so='.$value['mathdv'])}}" class="btn btn-default btn-sm" TARGET="_blank">
+                                                    <i class="fa fa-print"></i>&nbsp; Số liệu địa bàn</a-->
                                             @endif
                                             @if($value->tralai)
                                                 <button type="button" class="btn btn-default btn-sm" onclick="confirmChuyen('{{$value['mathdv']}}')" data-target="#chuyen-modal" data-toggle="modal"><i class="fa icon-share-alt"></i>&nbsp;

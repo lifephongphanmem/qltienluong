@@ -406,6 +406,7 @@ Route::group(['prefix'=>'chuc_nang'],function(){
         Route::get('index','xemdulieucapduoiController@donvi_luong');
         Route::get('huyen','xemdulieucapduoiController@index_huyen');
         Route::get('tinh','xemdulieucapduoiController@index_tinh');
+        Route::get('tinh/solieu','xemdulieucapduoiController@tonghop_huyen');
     });
 
     Route::group(['prefix'=>'tong_hop_nguon'],function(){
