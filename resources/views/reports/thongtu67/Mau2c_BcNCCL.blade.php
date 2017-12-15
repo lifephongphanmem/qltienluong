@@ -54,7 +54,7 @@
         <td>
         </td>
         <td style="text-align: right">
-            <i>Đơn vị: Triệu đồng</i>
+            <i>Đơn vị: {{($inputs['donvitinh']==1?"Đồng":($inputs['donvitinh']==2?"Nghìn đồng":"Triệu đồng"))}}</i>
         </td>
     </tr>
 </table>
@@ -102,8 +102,8 @@
             <td>{{dinhdangso($dulieu['dt'])}}</td>
             <td>{{dinhdangso($dulieu['hstl'])}}</td>
             <td>{{dinhdangso($dulieu['hspc'])}}</td>
-            <td>{{dinhdangso($dulieu['cl'])}}</td>
-            <td>{{dinhdangso($dulieu['nc'])}}</td>
+            <td>{{dinhdangso($dulieu['cl'],0,$inputs['donvitinh'])}}</td>
+            <td>{{dinhdangso($dulieu['nc'],0,$inputs['donvitinh'])}}</td>
         </tr>
     @endforeach
     <tr style="font-weight: bold;">

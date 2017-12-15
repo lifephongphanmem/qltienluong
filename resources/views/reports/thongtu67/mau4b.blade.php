@@ -61,7 +61,7 @@
 </table>
 <p style="text-align: center; font-weight: bold; font-size: 20px;">TỔNG HỢP NHU CẦU, NGUỒN THỰC HIỆN NGHỊ ĐỊNH 47/2017/NĐ-CP NĂM 2017</p>
 <p style="text-align: center; font-style: italic">(Ban hành kèm theo Thông tư số 67/2017/TT-BTC)</p>
-<p style="text-align: right; font-style: italic">Đơn vị: đồng</p>
+<p style="text-align: right; font-style: italic">Đơn vị: {{($inputs['donvitinh']==1?"Đồng":($inputs['donvitinh']==2?"Nghìn đồng":"Triệu đồng"))}}</p>
 <table cellspacing="0" cellpadding="0" border="1" style="margin: 10px auto; border-collapse: collapse;">
     <tr style="padding-left: 2px;padding-right: 2px">
         <th style="width: 5%;padding-left: 2px;padding-right: 2px" rowspan="2">TT</th>
@@ -93,12 +93,12 @@
         <tr>
             <td>{{$dulieu['tt']}}</td>
             <td>{{$dulieu['noidung']}}</td>
-            <td class="money">{{dinhdangso($dulieu['nhucau'])}}</td>
-            <td class="money">{{dinhdangso($dulieu['nguonkp'])}}</td>
-            <td class="money">{{dinhdangso($dulieu['tietkiem'])}}</td>
-            <td class="money">{{dinhdangso($dulieu['hocphi'])}}</td>
-            <td class="money">{{dinhdangso($dulieu['vienphi'])}}</td>
-            <td class="money">{{dinhdangso($dulieu['nguonthu'])}}</td>
+            <td class="money">{{dinhdangso($dulieu['nhucau'],0,$inputs['donvitinh'])}}</td>
+            <td class="money">{{dinhdangso($dulieu['nguonkp'],0,$inputs['donvitinh'])}}</td>
+            <td class="money">{{dinhdangso($dulieu['tietkiem'],0,$inputs['donvitinh'])}}</td>
+            <td class="money">{{dinhdangso($dulieu['hocphi'],0,$inputs['donvitinh'])}}</td>
+            <td class="money">{{dinhdangso($dulieu['vienphi'],0,$inputs['donvitinh'])}}</td>
+            <td class="money">{{dinhdangso($dulieu['nguonthu'],0,$inputs['donvitinh'])}}</td>
         </tr>
     @endforeach
 

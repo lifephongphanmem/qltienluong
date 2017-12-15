@@ -61,7 +61,7 @@
 </table>
 <p style="text-align: center; font-weight: bold; font-size: 20px;">BÁO CÁO NGUỒN KINH PHÍ ĐỂ THỰC HIỆN CẢI CÁCH TIỀN LƯƠNG NĂM 2017</p>
 <p style="text-align: center; font-style: italic">(Ban hành kèm theo Thông tư số 67/2017/TT-BTC)</p>
-<p style="text-align: right; font-style: italic">Đơn vị: đồng</p>
+<p style="text-align: right; font-style: italic">Đơn vị: {{($inputs['donvitinh']==1?"Đồng":($inputs['donvitinh']==2?"Nghìn đồng":"Triệu đồng"))}}</p>
 <table cellspacing="0" cellpadding="0" border="1" style="margin: 10px auto; border-collapse: collapse;">
     <tr style="padding-left: 2px;padding-right: 2px">
         <th style="width: 5%;padding-left: 2px;padding-right: 2px">STT</th>
@@ -79,50 +79,50 @@
     <tr style="font-weight: bold;">
         <td>A</td>
         <td>NGUỒN THỰC HIỆN CẢI CÁCH TIỀN LƯƠNG NĂM 2017</td>
-        <td class="money">{{dinhdangso($a_TC['A'])}}</td>
+        <td class="money">{{dinhdangso($a_TC['A'],0,$inputs['donvitinh'])}}</td>
     </tr>
     @foreach($a_A as $dulieu)
         <tr>
             <td>{{$dulieu['tt']}}</td>
             <td>{{$dulieu['noidung']}}</td>
-            <td class="money">{{dinhdangso($dulieu['sotien'])}}</td>
+            <td class="money">{{dinhdangso($dulieu['sotien'],0,$inputs['donvitinh'])}}</td>
         </tr>
     @endforeach
     <tr style="font-weight: bold;">
         <td>B</td>
         <td>TỔNG NHU CẦU NĂM 2017</td>
-        <td class="money">{{dinhdangso($a_TC['BI'] + $a_TC['BII'])}}</td>
+        <td class="money">{{dinhdangso($a_TC['BI'] + $a_TC['BII'],0,$inputs['donvitinh'])}}</td>
     </tr>
 
     <tr style="font-weight: bold;">
         <td>I</td>
         <td>Tổng nhu cầu kinh phí tăng thêm để thực hiện cải cách tiền lương theo Nghị định số
             47/2017/NĐ-CP và Nghị định số 76/2017/NĐ-CP</td>
-        <td class="money">{{dinhdangso($a_TC['BI'])}}</td>
+        <td class="money">{{dinhdangso($a_TC['BI'],0,$inputs['donvitinh'])}}</td>
     </tr>
     @foreach($a_BI as $dulieu)
         <tr>
             <td>{{$dulieu['tt']}}</td>
             <td>{{$dulieu['noidung']}}</td>
-            <td class="money">{{dinhdangso($dulieu['sotien'])}}</td>
+            <td class="money">{{dinhdangso($dulieu['sotien'],0,$inputs['donvitinh'])}}</td>
         </tr>
     @endforeach
     <tr style="font-weight: bold;">
         <td>II</td>
         <td>Nhu cầu thực hiện một số loại phụ cấp, trợ cấp theo quy định</td>
-        <td class="money">{{dinhdangso($a_TC['BII'])}}</td>
+        <td class="money">{{dinhdangso($a_TC['BII'],0,$inputs['donvitinh'])}}</td>
     </tr>
         @foreach($a_BII as $dulieu)
             <tr>
                 <td>{{$dulieu['tt']}}</td>
                 <td>{{$dulieu['noidung']}}</td>
-                <td class="money">{{dinhdangso($dulieu['sotien'])}}</td>
+                <td class="money">{{dinhdangso($dulieu['sotien'],0,$inputs['donvitinh'])}}</td>
             </tr>
         @endforeach
     <tr style="font-weight: bold;">
         <td>C</td>
         <td>CHÊNH LỆCH NHU CẦU VÀ NGUỒN NĂM 2017</td>
-        <td class="money">{{dinhdangso($a_TC['A'] -$a_TC['BI'] - $a_TC['BII'])}}</td>
+        <td class="money">{{dinhdangso($a_TC['A'] -$a_TC['BI'] - $a_TC['BII'],0,$inputs['donvitinh'])}}</td>
     </tr>
     <tr>
         <td>1</td>

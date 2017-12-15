@@ -38,20 +38,23 @@ class baocaothongtu67Controller extends Controller
     }
     //Tính bảng lương của toàn tỉnh
 
-    function mau2a1_tt67() {
+    function mau2a1_tt67(Request $request) {
         //Test trên huyện nên sau này sửa lại leve "T"
         if (Session::has('admin') && session('admin')->quanlykhuvuc == true) {
+            $inputs=$request->all();
             $m_dv = dmdonvi::where('madv',session('admin')->madv)->first();
             $model_bienche = chitieubienche::where('nam','2017')->where('madv',session('admin')->madv)->get();
             $luongcb = 1210000;
             //nếu đơn vị đã tạo bảng lương tháng 07/2017 =>xuất kết quả
-            $model_tonghop_ct = tonghopluong_donvi_chitiet::wherein('mathdv',function($qr){
+            $model_tonghop_ct = tonghopluong_donvi_chitiet::join('tonghopluong_donvi', 'tonghopluong_donvi_chitiet.mathdv', '=', 'tonghopluong_donvi.mathdv')
+                ->where('tonghopluong_donvi.madvbc','like',$inputs['madv'].'%')
+                ->wherein('tonghopluong_donvi_chitiet.mathdv',function($qr){
                 $qr->select('mathdv')->from('tonghopluong_donvi')->where('thang','07')->where('nam','2017')
                     ->distinct()->get();
             })->get();
 
             $model_bangluong_ct = $model_tonghop_ct->where('macongtac','BIENCHE');
-            dd($model_bangluong_ct);
+            //dd($model_bangluong_ct);
             $ar_I = array();
             $ar_I[]=array('val'=>'GD;DT','tt'=>'1','noidung'=>'Sự nghiệp giáo dục - đào tạo');
             $ar_I[]=array('val'=>'GD','tt'=>'-','noidung'=>'Giáo dục');
@@ -84,7 +87,6 @@ class baocaothongtu67Controller extends Controller
                 'soluongduocgiao' => 0,
                 'soluongbienche'=> 0,
             );
-
             for($i=0;$i<count($ar_I);$i++){
                 if(isset($model_bangluong_ct)){
                     $chitiet = $model_bangluong_ct->where('linhvuchoatdong',$ar_I[$i]['val']);
@@ -102,8 +104,8 @@ class baocaothongtu67Controller extends Controller
                     $a_It['luong'] += $ar_I[$i]['luong'];
 
                     $ar_I[$i]['ttbh_dv'] = $chitiet->sum('ttbh_dv');
-                    $ar_I[$i]['ttbh_dv'] = $chitiet->sum('stbhxh_dv') + $chitiet->sum('stbhyt_dv')
-                        + $chitiet->sum('stkpcd_dv') + $chitiet->sum('stbhtn_dv');
+                    $ar_I[$i]['ttbh_dv'] = ($chitiet->sum('stbhxh_dv') + $chitiet->sum('stbhyt_dv')
+                        + $chitiet->sum('stkpcd_dv') + $chitiet->sum('stbhtn_dv'));
                     $a_It['ttbh_dv'] += $ar_I[$i]['ttbh_dv'];
 
                     $ar_I[$i]['pckv'] = $chitiet->sum('pckv') * $luongcb;
@@ -276,7 +278,7 @@ class baocaothongtu67Controller extends Controller
                 }
             }
 
-            return view('reports.thongtu67.khoi.mau2a1')
+            return view('reports.thongtu67.mau2a1_tt67')
                 ->with('furl','/tong_hop_bao_cao/')
                 ->with('ar_I',$ar_I)
                 ->with('ar_II',$ar_II)
@@ -286,18 +288,22 @@ class baocaothongtu67Controller extends Controller
                 ->with('a_IIIt',$a_IIIt)
                 ->with('a_IVt',$a_IVt)
                 ->with('m_dv',$m_dv)
+                ->with('inputs',$inputs)
                 ->with('pageTitle','Báo cáo nhu cầu kinh phí thực hiện nghị định 47/2017/NĐ-CP');
         } else
             return view('errors.notlogin');
     }
 
-    function mau2a2_tt67() {
+    function mau2a2_tt67(Request $request) {
         if (Session::has('admin') && session('admin')->quanlykhuvuc == true) {
+            $inputs=$request->all();
             $m_dv = dmdonvi::where('madv',session('admin')->madv)->first();
             $model_bienche = chitieubienche::where('nam','2017')->where('madv',session('admin')->madv)->get();
             $luongcb = 1210000;
             //nếu đơn vị đã tạo bảng lương tháng 07/2017 =>xuất kết quả
-            $model_tonghop_ct = tonghopluong_donvi_chitiet::wherein('mathdv',function($qr){
+            $model_tonghop_ct = tonghopluong_donvi_chitiet::join('tonghopluong_donvi', 'tonghopluong_donvi_chitiet.mathdv', '=', 'tonghopluong_donvi.mathdv')
+                ->where('tonghopluong_donvi.madvbc','like',$inputs['madv'].'%')
+                ->wherein('tonghopluong_donvi_chitiet.mathdv',function($qr){
                 $qr->select('mathdv')->from('tonghopluong_donvi')->where('thang','07')->where('nam','2017')
                     ->distinct()->get();
             })->get();
@@ -537,7 +543,7 @@ class baocaothongtu67Controller extends Controller
                 }
             }
 
-            return view('reports.thongtu67.khoi.mau2a2')
+            return view('reports.thongtu67.mau2a2_tt67')
                 ->with('furl','/tong_hop_bao_cao/')
                 ->with('ar_I',$ar_I)
                 ->with('ar_II',$ar_II)
@@ -547,6 +553,7 @@ class baocaothongtu67Controller extends Controller
                 ->with('a_IIIt',$a_IIIt)
                 ->with('a_IVt',$a_IVt)
                 ->with('m_dv',$m_dv)
+                ->with('inputs',$inputs)
                 ->with('pageTitle','Báo cáo nhu cầu kinh phí thực hiện nghị định 47/2017/NĐ-CP');
         } else
             return view('errors.notlogin');
@@ -571,11 +578,15 @@ class baocaothongtu67Controller extends Controller
             return view('errors.notlogin');
     }
 
-    function mau2c_tt67() {
+    function mau2c_tt67(Request $request) {
         if (Session::has('admin') && session('admin')->quanlykhuvuc == true) {
+            $inputs=$request->all();
             $m_dv = dmdonvi::where('madv',session('admin')->madv)->first();
             $m_cb =hosocanbo::join('dmdonvi', 'hosocanbo.madv', '=', 'dmdonvi.madv')
-                ->select('macanbo','linhvuchoatdong', 'heso', 'pck', 'pccv', 'pckv', 'pcth', 'pcdh', 'pcld', 'pcudn', 'pctn', 'pctnn', 'pcdbn', 'pcvk', 'pckn', 'pccovu', 'pcdbqh', 'pctnvk', 'pcbdhdcu', 'pcdang', 'pcthni')
+                ->select('macanbo','linhvuchoatdong', 'heso', 'pck', 'pccv', 'pckv', 'pcth', 'pcdh',
+                    'pcld', 'pcudn', 'pctn', 'pctnn', 'pcdbn', 'pcvk', 'pckn', 'pccovu', 'pcdbqh',
+                    'pctnvk', 'pcbdhdcu', 'pcdang', 'pcthni')
+                ->where('dmdonvi.madvbc','like',$inputs['madv'].'%')
                 ->where('heso','<=', 2.34)
                 ->get();
             $luongcb = 60000;
@@ -648,16 +659,19 @@ class baocaothongtu67Controller extends Controller
                 ->with('m_dv',$m_dv)
                 ->with('ar_I',$ar_I)
                 ->with('a_It',$a_It)
+                ->with('inputs',$inputs)
                 ->with('pageTitle','BÁO CÁO NHU CẦU CHÊNH LỆCH');
         } else
             return view('errors.notlogin');
     }
 
-    function mau2d_tt67() {
+    function mau2d_tt67(Request $request) {
         if (Session::has('admin') && session('admin')->quanlykhuvuc == true) {
+            $inputs=$request->all();
             $m_dv = dmdonvi::where('madv',session('admin')->madv)->first();
             $m_thon =dmdiabandbkk::join('dmdonvi', 'dmdiabandbkk.madv', '=', 'dmdonvi.madv')
                 ->select('dmdiabandbkk.id','phanloai')
+                ->where('dmdonvi.madvbc','like',$inputs['madv'].'%')
                 ->where('maphanloai','KVXP')
                 ->get();
             $m_dt = dmdiabandbkk_chitiet::join('dmdiabandbkk','dmdiabandbkk_chitiet.madiaban' ,'=', 'dmdiabandbkk.madiaban')
@@ -727,10 +741,9 @@ class baocaothongtu67Controller extends Controller
                     }
                     else
                         $ar_I[$i]['mk'] = "";
-                    $ar_I[$i]['kp'] = $a_It['tdv']* $kpk * 6 * 0.09;
+                    $ar_I[$i]['kp'] = $a_It['tdv']* $kpk * 6 * 900000;
                     $a_It['kp'] += $ar_I[$i]['kp'];
                     $ar_I[$i]['bhxh'] = 0;
-                    //$ar_I[$i]['bh'] = $m_dt->where('phanloai',$ar_I[$i]['val'])*0.14*0.09*6;
                     $a_It['bhxh'] += $ar_I[$i]['bhxh'];
 
                 }else{
@@ -746,12 +759,27 @@ class baocaothongtu67Controller extends Controller
                 ->with('m_dv',$m_dv)
                 ->with('ar_I',$ar_I)
                 ->with('a_It',$a_It)
+                ->with('inputs',$inputs)
                 ->with('pageTitle','TỔNG HỢP KINH PHÍ TĂNG THÊM ĐỂ THỰC HIỆN CHẾ ĐỘ PHỤ CẤP ĐỐI VỚI CÁN BỘ KHÔNG CHUYÊN TRÁCH');
         } else
             return view('errors.notlogin');
     }
     function mau2e_tt67() {
-        if (Session::has('admin') && session('admin')->quanlykhuvuc == true) {
+        if (Session::has('admin') && session('admin')->quanlykhuvuc == true && session('admin')->level == "T") {
+            $m_dv = dmdonvi::where('madv',session('admin')->madv)->first();
+            $m_dsh = dmdonvibaocao::where('level','H')->distinct()->get();
+            $m_xa = dmdiabandbkk::join('dmdonvi','dmdonvi.madv', '=', 'dmdiabandbkk.madv')
+                ->join('dmdonvibaocao','dmdonvibaocao.madvbc','=','dmdonvi.madvbc')->get();
+            $ar_h = array();
+            $tt = 0;
+            foreach ($m_dsh as $h) {
+                for ($i = 0; $i < count($m_dsh); $i++) {
+                    $tt++;
+                    $ar_h[$i]['tt'] = $tt;
+                    $ar_h[$i]['noidung'] = $h['tendvbc'];
+            }
+            }
+            dd($ar_h);
             return view('reports.thongtu67.Mau2e_ThKPTG')
                 ->with('pageTitle','TỔNG HỢP KINH PHÍ TĂNG, GIẢM DO ĐIỀU CHỈNH ĐỊA BÀN VÙNG KINH TẾ XÃ HỘI ĐẶC BIỆT KHÓ KHĂN');
         } else
@@ -771,11 +799,12 @@ class baocaothongtu67Controller extends Controller
         } else
             return view('errors.notlogin');
     }
-    function mau4a_tt67()
+    function mau4a_tt67(Request $request)
     {
         //Kiểm tra cấp đơn vị xem đơn vị để update trường masoh hoặc masot
         if (Session::has('admin')) {
-            $model = nguonkinhphi::where('madvbc',session('admin')->madvbc)
+            $inputs = $request->all();
+            $model = nguonkinhphi::where('madvbc','like',$inputs['madv'].'%')
                 ->where('sohieu','TT67_2017')->get();
             $model_donvi = dmdonvi::where('madvbc',session('admin')->madvbc)->get();
             if(count($model) == 0){
@@ -856,23 +885,25 @@ class baocaothongtu67Controller extends Controller
                 'BII'=>(array_sum(array_column($a_BII,'sotien')))
             );
 
-            return view('reports.thongtu67.donvi.mau4a')
+            return view('reports.thongtu67.mau4a')
                 ->with('model',$model)
                 ->with('a_A',$a_A)
                 ->with('a_BI',$a_BI)
                 ->with('a_BII',$a_BII)
                 ->with('a_TC',$a_TC)
                 ->with('m_dv',$m_dv)
+                ->with('inputs',$inputs)
                 ->with('pageTitle','Danh sách nguồn kinh phí của đơn vị');
         } else
             return view('errors.notlogin');
     }
 
-    function mau4b_tt67()
+    function mau4b_tt67(Request $request)
     {
         //Kiểm tra cấp đơn vị xem đơn vị để update trường masoh hoặc masot
         if (Session::has('admin')) {
-            $model = nguonkinhphi::where('madvbc',session('admin')->madvbc)
+            $inputs = $request->all();
+            $model = nguonkinhphi::where('madvbc','like',$inputs['madv'].'%')
                 ->where('sohieu','TT67_2017')->get();
             //dd($model);
             if(count($model) == 0){
@@ -913,10 +944,11 @@ class baocaothongtu67Controller extends Controller
             $data[4]['vienphi'] = $model->sum('vienphi') - $data[0]['vienphi']- $data[5]['vienphi']- $data[3]['vienphi'];
             $data[4]['nguonthu'] = $model->sum('nguonthu')- $data[0]['nguonthu'] - $data[5]['nguonthu'] - $data[3]['nguonthu'];
 
-            return view('reports.thongtu67.huyen.mau4b')
+            return view('reports.thongtu67.mau4b')
                 ->with('model',$model)
                 ->with('data',$data)
                 ->with('m_dv',$m_dv)
+                ->with('inputs',$inputs)
                 ->with('pageTitle','Danh sách nguồn kinh phí của đơn vị');
         } else
             return view('errors.notlogin');

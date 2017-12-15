@@ -51,6 +51,7 @@
                     <div class="form-horizontal">
                         <div class="modal-body">
                             <div class="form-horizontal">
+                                <!--
                                 <div class="form-group">
                                     <label class="col-md-4 control-label"> Tháng<span class="require">*</span></label>
                                     <div class="col-md-8">
@@ -83,13 +84,14 @@
                                         array(
                                         '2015' => '2015',
                                         '2016' => '2016',
-                                        '2017' => '2017'
+                                        '2017' => '2017',
+                                        '2018' => '2018'
                                         ),null,
                                         array('id' => 'nam', 'class' => 'form-control'))
                                         !!}
                                     </div>
                                 </div>
-
+                                -->
                                 @if(session('admin')->level=='H')
                                     <div class="form-group">
                                         <label class="col-md-4 control-label"> Đơn vị<span class="require">*</span></label>
@@ -121,7 +123,12 @@
                                         </div>
                                     </div>
                                 @endif
-
+                                <div class="form-group">
+                                    <label class="col-md-4 control-label"> Đơn vị tính</label>
+                                    <div class="col-md-8">
+                                        {!! Form::select('donvitinh',getDonViTinh(),'1',array('id' => 'donvitinh', 'class' => 'form-control'))!!}
+                                    </div>
+                                </div>
                                 <input type="hidden" name="_token" value="{{ csrf_token() }}">
                             </div>
                         </div>
