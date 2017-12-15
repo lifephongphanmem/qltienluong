@@ -47,7 +47,7 @@
                                 <th class="text-center">Bậc</th>
                                 <th class="text-center">Hệ số</th>
                                 <th class="text-center">Vượt</br>khung</th>
-                                <th class="text-center">Hệ số</br>truy thu</th>
+                                <th class="text-center">Hệ số</br>truy lĩnh</th>
                                 <th class="text-center">Thao tác</th>
                             </tr>
                         </thead>

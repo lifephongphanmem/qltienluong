@@ -198,6 +198,8 @@ class hosocanboController extends Controller
             $insert['pcbdhdcu'] = chkDbl($insert['pcbdhdcu']);
             $insert['pcdang'] = chkDbl($insert['pcdang']);
             $insert['pcthni'] = chkDbl($insert['pcthni']);
+            $insert['pclt'] = chkDbl($insert['pclt']);
+            $insert['pcdd'] = chkDbl($insert['pcdd']);
             //dd($insert);
             hosocanbo::create($insert);
 
@@ -293,6 +295,9 @@ class hosocanboController extends Controller
             $insert['pcbdhdcu'] = chkDbl($insert['pcbdhdcu']);
             $insert['pcdang'] = chkDbl($insert['pcdang']);
             $insert['pcthni'] = chkDbl($insert['pcthni']);
+            $insert['pclt'] = chkDbl($insert['pclt']);
+            $insert['pcdd'] = chkDbl($insert['pcdd']);
+
             $model->update($insert);
 
             return redirect('nghiep_vu/ho_so/danh_sach');
@@ -345,128 +350,7 @@ class hosocanboController extends Controller
     }
     //</editor-fold>
 
-    function syll($id){
-        if (Session::has('admin')) {
-            $model=hosocanbo::find($id);
-            $macanbo=$model->macanbo;
-            $m_pb=dmphongban::all('mapb','tenpb')->toArray();
-            $m_cvcq=dmchucvucq::all('tencv', 'macvcq')->toArray();
-            $m_nb=ngachbac::select('tennb', 'msngbac')->distinct()->get()->toArray();
 
-            $model->tenpb=getInfoPhongBan($model,$m_pb);
-            $model->tencvcq=getInfoChucVuCQ($model,$m_cvcq);
-            $model->tenviethoa=Str::upper($model->tencanbo);
-            $model->tennb=getInfoTenNB($model,$m_nb);
-
-            $m_llvt=hosollvt::where('macanbo',$macanbo)->first();
-
-            $m_daotao=hosodaotao::where('macanbo',$macanbo)->orderby('ngaytu')->get();
-            $m_congtac=hosocongtac::where('macanbo',$macanbo)->orderby('ngaytu')->get();
-            $m_qhbt=hosoquanhegd::join('dmquanhegd', 'hosoquanhegd.quanhe', '=', 'dmquanhegd.quanhe')
-                ->where('hosoquanhegd.macanbo',$macanbo)
-                ->where('hosoquanhegd.phanloai','Bản thân')
-                ->orderby('dmquanhegd.sapxep')->get();
-            $m_qhvc=hosoquanhegd::join('dmquanhegd', 'hosoquanhegd.quanhe', '=', 'dmquanhegd.quanhe')
-                ->where('hosoquanhegd.macanbo',$macanbo)
-                ->where('hosoquanhegd.phanloai','Vợ chồng')
-                ->orderby('dmquanhegd.sapxep')->get();
-
-            $luong=hosoluong::select('ngaytu',DB::raw('CONCAT(msngbac, "/", bac) AS ngachbac'),'heso')->where('macanbo',$macanbo)->orderby('ngaytu')->get()->toarray();
-
-            $thang=array_column($luong,'ngaytu');
-            $msngbac=array_column($luong,'ngachbac');
-            $heso=array_column($luong,'heso');
-
-            $m_luong=array();
-            $m_luong[]=$thang;
-            $m_luong[]=$msngbac;
-            $m_luong[]=$heso;
-
-            $m_donvi=dmdonvi::where('madv',session('admin')->madv)->first();
-            //dd($model);
-            return view('reports.QD02.soyeulylich')
-                ->with('model',$model)
-                ->with('m_llvt',$m_llvt)
-                ->with('m_daotao',$m_daotao)
-                ->with('m_congtac',$m_congtac)
-                ->with('m_qhbt',$m_qhbt)
-                ->with('m_qhvc',$m_qhvc)
-                ->with('m_luong',$m_luong)
-                ->with('m_donvi',$m_donvi)
-                ->with('pageTitle','Sơ yếu lý lịch');
-        } else
-            return view('errors.notlogin');
-    }
-
-    function tomtatts($id){
-        if (Session::has('admin')) {
-            $model=hosocanbo::find($id);
-            $macanbo=$model->macanbo;
-            $m_pb=dmphongban::all('mapb','tenpb')->toArray();
-            $m_cvcq=dmchucvucq::all('tencv', 'macvcq')->toArray();
-            $m_nb=ngachbac::select('tennb', 'msngbac')->distinct()->get()->toArray();
-
-            $model->tenpb=getInfoPhongBan($model,$m_pb);
-            $model->tencvcq=getInfoChucVuCQ($model,$m_cvcq);
-            $model->tenviethoa=Str::upper($model->tencanbo);
-            $model->tennb=getInfoTenNB($model,$m_nb);
-
-            $m_llvt=hosollvt::where('macanbo',$macanbo)->first();
-            $m_congtac=hosocongtac::where('macanbo',$macanbo)->orderby('ngaytu')->get();
-
-            $m_donvi=dmdonvi::where('madv',session('admin')->madv)->first();
-            //dd($m_congtac);
-            return view('reports.QD02.tomtattieusu')
-                ->with('model',$model)
-                ->with('m_llvt',$m_llvt)
-                ->with('m_congtac',$m_congtac)
-                ->with('m_donvi',$m_donvi)
-                ->with('pageTitle','Tóm tắt tiểu sử');
-        } else
-            return view('errors.notlogin');
-    }
-
-    function bsll(Request $request){
-        if (Session::has('admin')) {
-            $inputs=$request->all();
-            $ngaytu=$inputs['ngaytu'];
-            $ngayden=$inputs['ngayden'];
-
-            $model=hosocanbo::find($inputs['idct']);
-            $macanbo=$model->macanbo;
-            $m_pb=dmphongban::all('mapb','tenpb')->toArray();
-            $m_cvcq=dmchucvucq::all('tencv', 'macvcq')->toArray();
-            $m_nb=ngachbac::select('tennb', 'msngbac')->distinct()->get()->toArray();
-
-            $model->tenpb=getInfoPhongBan($model,$m_pb);
-            $model->tencvcq=getInfoChucVuCQ($model,$m_cvcq);
-            $model->tenviethoa=Str::upper($model->tencanbo);
-            $model->tennb=getInfoTenNB($model,$m_nb);
-
-            $m_cv=hosochucvu::where('macanbo',$macanbo)->where('ngayden','>=',$ngaytu)->get();
-            foreach($m_cv as $cv){
-                $cv->tencvcq=getInfoChucVuCQ($cv,$m_cvcq);
-            }
-            //Chỉ lấy bằng cấp nào đã học xong trong khoảng thời gian kết xuất
-            $m_daotao=hosodaotao::where('macanbo',$macanbo)->wherebetween('ngayden',array($ngaytu,$ngayden))->orderby('ngaytu')->get();
-            $m_kt=hosokhenthuong::where('macanbo',$macanbo)->wherebetween('ngaythang',array($ngaytu,$ngayden))->orderby('ngaythang')->get();
-            $m_kl=hosokyluat::where('macanbo',$macanbo)->wherebetween('ngaythang',array($ngaytu,$ngayden))->orderby('ngaythang')->get();
-
-            $m_donvi=dmdonvi::where('madv',session('admin')->madv)->first();
-            $m_donvi->ngaytu=$ngaytu;
-            $m_donvi->ngayden=$ngayden;
-            //dd($model);
-            return view('reports.QD02.bosunglylich')
-                ->with('model',$model)
-                ->with('m_cv',$m_cv)
-                ->with('m_daotao',$m_daotao)
-                ->with('m_kt',$m_kt)
-                ->with('m_kl',$m_kl)
-                ->with('m_donvi',$m_donvi)
-                ->with('pageTitle','Phiếu bổ sung lý lịch');
-        } else
-            return view('errors.notlogin');
-    }
 
     function destroy($id){
         if (Session::has('admin')) {

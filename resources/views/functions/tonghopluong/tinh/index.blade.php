@@ -66,7 +66,8 @@
                                             <a href="{{url($furl.'tonghop?thang='.$value['thang'].'&nam='.$nam)}}" class="btn btn-default btn-xs" target="_blank">
                                                 <i class="fa fa-print"></i>&nbsp; Số liệu tổng hợp</a>
                                             <!--a href="{{url($furl.'tonghop_diaban?thang='.$value['thang'].'&nam='.$nam)}}" class="btn btn-default btn-xs" target="_blank">
-                                                <i class="fa fa-print"></i>&nbsp; Số liệu địa bàn</a-->
+                                                    <i class="fa fa-print"></i>&nbsp; Số liệu địa bàn</a-->
+                                            <!-- làm xem dữ liệu mặc định là tỉnh -->
                                             <a href="{{url('/chuc_nang/xem_du_lieu/huyen?thang='.$value['thang'].'&nam='.$nam.'&trangthai=ALL')}}" class="btn btn-default btn-xs">
                                                 <i class="fa fa-list-alt"></i>&nbsp; Số liệu chi tiết</a>
 

@@ -134,7 +134,7 @@
                                     <div id="plxa" class="col-md-6">
                                         <div class="form-group">
                                             <label class="control-label">Lĩnh vực hoạt động</label>
-                                            {!!Form::select('linhvuchoatdong', $model_linhvuc, null, array('id' => 'linhvuchoatdong','class' => 'form-control','required'=>'required', 'multiple'=>'multiple'))!!}
+                                            {!!Form::select('linhvuchoatdong', $model_linhvuc, null, array('id' => 'linhvuchoatdong','class' => 'form-control', 'multiple'=>'multiple'))!!}
                                         </div>
                                     </div>
                                 @endif

@@ -138,7 +138,7 @@
                 }
 
             ?>
-            @if(count($chitiet)>0){
+            @if(count($chitiet)>0)
                 @foreach($chitiet as $ct)
                     <tr>
                         <td>-</td>

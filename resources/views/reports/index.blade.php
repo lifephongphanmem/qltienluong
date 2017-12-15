@@ -21,7 +21,8 @@
                     <div class="row">
                         <div class="col-lg-12">
                             <ol>
-                                <li><a href="#" data-target="#thoaibangluong-modal" data-toggle="modal" onclick="baocaobangluong('{{$furl.'don_vi/mauc02ahd'}}')">Bảng lương (Mẫu C02a - HD)</a></li>
+                                <li><a href="#" data-target="#thoaibangluong-modal" data-toggle="modal" onclick="baocaobangluong('{{$furl.'don_vi/mauc02ahd'}}')">Bảng lương mẫu 1 (C02a - HD)</a></li>
+                                <li><a href="#" data-target="#thoaibangluong-modal" data-toggle="modal" onclick="baocaobangluong('{{$furl.'don_vi/mauc02ahd_mau2'}}')">Bảng lương mẫu 2 (C02a - HD)</a></li>
                                 <!--li><a href="#" data-target="#thoaibangluong-modal" data-toggle="modal" onclick="baocaobangluong('{{$furl.'don_vi/mauc02x'}}')">Mẫu 2 (Mẫu C02 - X)</a></li-->
                                 <li><a href="#" data-target="#thoaibangluong-modal" data-toggle="modal" onclick="baocaobangluong('{{$furl.'don_vi/maubaohiem'}}')">Mẫu bảo hiểm phải nộp theo lương</a></li>
                                 <li><a href="#" data-target="#thoaichitra-modal" data-toggle="modal" onclick="chitraluong('{{$furl.'don_vi/chitraluong'}}')">Tổng hợp tình hình chi trả lương</a></li>
@@ -32,6 +33,11 @@
                                 <li><a href="{{url('/bao_cao/thong_tu_67/don_vi/mau2b')}}" target="_blank">Báo cáo tổng hợp quỹ trợ cấp tăng thêm của cán bộ xã, phường, thị trấn đã nghỉ việc (Mẫu 2b)</a></li>
                                 <li><a href="{{url('/bao_cao/thong_tu_67/don_vi/mau2c')}}" target="_blank">Báo cáo nhu cầu chênh lệch (Mẫu 2c)</a></li>
                                 <li><a href="{{url('/bao_cao/thong_tu_67/don_vi/mau2d')}}" target="_blank">Tổng hợp kinh phí tăng thêm để thực hiện chế độ phụ cấp đối với cán bộ không chuyên trách (Mẫu 2d)</a></li>
+                                @if(session('admin')->maphanloai == 'KVXP')
+                                    <li><a href="{{url('/bao_cao/thong_tu_67/don_vi/mau2e')}}" target="_blank">Tổng hợp kinh phí tăng, giảm do điều chỉnh địa bàn vùng kinh tế xã hội đặc biệt khó khăn (Mẫu 2e)</a></li>
+                                    <li><a href="{{url('/bao_cao/thong_tu_67/don_vi/mau2g')}}" target="_blank">Tổng hợp phụ cấp ưu đãi tăng, giảm do điều chỉnh địa bàn vùng kinh tế xã hội đặc biệt khó khăn (Mẫu 2g)</a></li>
+                                    <li><a href="{{url('/bao_cao/thong_tu_67/don_vi/mau2h')}}" target="_blank">Tổng hợp phụ cấp thu hút tăng, giảm do điều chỉnh địa bàn vùng kinh tế xã hội đặc biệt khó khăn (Mẫu 2h)</a></li>
+                                @endif
                                 <li><a href="{{url('/bao_cao/thong_tu_67/don_vi/mau4a')}}" target="_blank">Báo cáo nguồn kinh phí (Mẫu 4a)</a></li>
                                 <li><a href="{{url('/bao_cao/thong_tu_67/don_vi/mau4b')}}" target="_blank">Tổng hợp nhu cầu, nguồn kinh phí (Mẫu 4b)</a></li>
 
@@ -86,6 +92,11 @@
                                     <li><a href="{{url('/bao_cao/thong_tu_67/huyen/mau2b')}}" target="_blank">Báo cáo tổng hợp quỹ trợ cấp tăng thêm của cán bộ xã, phường, thị trấn đã nghỉ việc (Mẫu 2b)</a></li>
                                     <li><a href="{{url('/bao_cao/thong_tu_67/huyen/mau2c')}}" target="_blank">Báo cáo nhu cầu chênh lệch (Mẫu 2c)</a></li>
                                     <li><a href="{{url('/bao_cao/thong_tu_67/huyen/mau2d')}}" target="_blank">Tổng hợp kinh phí tăng thêm để thực hiện chế độ phụ cấp đối với cán bộ không chuyên trách (Mẫu 2d)</a></li>
+
+                                    <li><a href="{{url('/bao_cao/thong_tu_67/don_vi/mau2e')}}" target="_blank">Tổng hợp kinh phí tăng, giảm do điều chỉnh địa bàn vùng kinh tế xã hội đặc biệt khó khăn (Mẫu 2e)</a></li>
+                                    <li><a href="{{url('/bao_cao/thong_tu_67/don_vi/mau2g')}}" target="_blank">Tổng hợp phụ cấp ưu đãi tăng, giảm do điều chỉnh địa bàn vùng kinh tế xã hội đặc biệt khó khăn (Mẫu 2g)</a></li>
+                                    <li><a href="{{url('/bao_cao/thong_tu_67/don_vi/mau2h')}}" target="_blank">Tổng hợp phụ cấp thu hút tăng, giảm do điều chỉnh địa bàn vùng kinh tế xã hội đặc biệt khó khăn (Mẫu 2h)</a></li>
+
                                     <li><a href="{{url('/bao_cao/thong_tu_67/huyen/mau4a')}}" target="_blank">Báo cáo nguồn kinh phí (Mẫu 4a)</a></li>
                                     <li><a href="{{url('/bao_cao/thong_tu_67/huyen/mau4b')}}" target="_blank">Tổng hợp nhu cầu, nguồn kinh phí (Mẫu 4b)</a></li>
 

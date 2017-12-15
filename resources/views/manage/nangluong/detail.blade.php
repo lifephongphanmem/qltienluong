@@ -234,7 +234,7 @@
 
                             <div class="col-md-3">
                                 <div class="form-group">
-                                    <label class="control-label">Hệ số lương truy thu</label>
+                                    <label class="control-label">Hệ số lương truy lĩnh</label>
                                     {!!Form::text('hesott', null, array('id' => 'hesott','class' => 'form-control', 'data-mask'=>'fdecimal'))!!}
                                 </div>
                             </div>

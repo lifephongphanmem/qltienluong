@@ -133,7 +133,7 @@
                 <td>{{dinhdangso($ct->pctnvk)}}</td>
                 <td>{{dinhdangso($ct->pcudn)}}</td>
                 <td>{{dinhdangso($ct->pcth)}}</td>
-                <td>{{dinhdangso($ct->pctn)}}</td>
+                <td>{{dinhdangso($ct->pcthni)}}</td>
                 <td>{{dinhdangso($ct->pccovu)}}</td>
                 <td>{{dinhdangso($ct->pcdang)}}</td>
                 <td>{{dinhdangso($ct->pcthni)}}</td>

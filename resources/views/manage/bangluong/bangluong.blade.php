@@ -60,8 +60,10 @@
                                     <td>{{$value->msngbac}}</td>
                                     <td class="text-right">{{number_format($value->luongtn)}}</td>
                                     <td>
-                                        <a href="{{url($furl.'?maso='.$value->mabl.'&macanbo='.$value->macanbo)}}" class="btn btn-info btn-xs mbs">
+                                        <a href="{{url($furl.'?maso='.$value->id)}}" class="btn btn-info btn-xs mbs">
                                             <i class="fa fa-edit"></i>&nbsp; Chi tiết</a>
+                                        <!--a href="{{url($furl.'?maso='.$value->mabl.'&macanbo='.$value->macanbo)}}" class="btn btn-info btn-xs mbs">
+                                            <i class="fa fa-edit"></i>&nbsp; Chi tiết</a-->
                                     </td>
                                 </tr>
                             @endforeach

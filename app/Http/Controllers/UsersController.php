@@ -198,8 +198,10 @@ class UsersController extends Controller
         //thêm mã đơn vị báo cáo, mã khối phòng ban, mã cqcq
         //dd($ttuser);
         if (md5($input['password']) == $ttuser->password) {
+
             if ($ttuser->status == "active") {
                 Session::put('admin', $ttuser);
+                //dd(session('admin'));
                 return redirect('')
                     ->with('pageTitle', 'Tổng quan');
             } else
@@ -374,6 +376,5 @@ class UsersController extends Controller
             }
         }
         return redirect('users/pl='.$pl);
-
     }
 }

@@ -764,6 +764,7 @@ class baocaothongtu67Controller extends Controller
         } else
             return view('errors.notlogin');
     }
+
     function mau2e_tt67() {
         if (Session::has('admin') && session('admin')->quanlykhuvuc == true && session('admin')->level == "T") {
             $m_dv = dmdonvi::where('madv',session('admin')->madv)->first();
@@ -1676,13 +1677,152 @@ class baocaothongtu67Controller extends Controller
             return view('errors.notlogin');
     }
 
-    function mau2d_donvi()
-    {
-        //Kiểm tra cấp đơn vị xem đơn vị để update trường masoh hoặc masot
+    function mau2d_donvi() {
         if (Session::has('admin')) {
+            $m_dv = dmdonvi::where('madv',session('admin')->madv)->first();
+            $m_thon =dmdiabandbkk::join('dmdonvi', 'dmdiabandbkk.madv', '=', 'dmdonvi.madv')
+                ->select('dmdiabandbkk.id','phanloai')
+                ->where('maphanloai','KVXP')
+                ->get();
 
-            return view('reports.thongtu67.donvi.mau2d')
-                ->with('pageTitle','Danh sách nguồn kinh phí của đơn vị');
+            $ar_I = array();
+            $ar_I[]=array('val'=>'XL1;XL2;XL3','tt'=>'I','noidung'=>'Xã, phường, thị trấn');
+            $ar_I[]=array('val'=>'XL1','tt'=>'1','noidung'=>'Xã loại I');
+            $ar_I[]=array('val'=>'XL2','tt'=>'2','noidung'=>'Xã loại II');
+            $ar_I[]=array('val'=>'XL3','tt'=>'3','noidung'=>'Xã loại III');
+            $ar_I[]=array('val'=>'DBKK;BGHD;DBTD','tt'=>'II','noidung'=>'Thôn, tổ dân phố');
+            $ar_I[]=array('val'=>'BGHD','tt'=>'1','noidung'=>'Số xã biên giới, hải đảo');
+            $ar_I[]=array('val'=>'BGHD','tt'=>'','noidung'=>'- Thôn thuộc xã biên giới, hải đảo');
+            $ar_I[]=array('val'=>'DBKK','tt'=>'2','noidung'=>'Số xã khó khăn theo Quyết định 1049/QĐ-TTg ngày 26/6/2014');
+            $ar_I[]=array('val'=>'DBKK','tt'=>'','noidung'=>'- Thôn thuộc xã khó khăn theo Quyết định 1049/QĐ-TTg');
+            $ar_I[]=array('val'=>'XL12K','tt'=>'3','noidung'=>'Số xã loại I, loại II (không bao gồm số xã thuộc khoản 1, 2 phần II)');
+            $ar_I[]=array('val'=>'TXL12K','tt'=>'','noidung'=>'- Thôn thuộc xã loại I, loại II');
+            $ar_I[]=array('val'=>'DBTD','tt'=>'4','noidung'=>'Số xã trọng điểm, phức tạp về an ninh trật tự');
+            $ar_I[]=array('val'=>'DBTD','tt'=>'','noidung'=>'- Số thôn thuộc xã trọng điểm, phức tạp về an ninh');
+            $ar_I[]=array('val'=>'TK,TDP','tt'=>'5','noidung'=>'Số xã, phường, thị trấn còn lại');
+            $ar_I[]=array('val'=>'TK','tt'=>'','noidung'=>'- Thôn còn lại');
+            $ar_I[]=array('val'=>'TDP','tt'=>'','noidung'=>'- Tổ dân phố');
+
+            $a_It = array('tdv' => 0,
+                'mk' => 0,
+                'kp' => 0,
+                'bhxh' => 0
+            );
+
+            for($i=0;$i<count($ar_I);$i++){
+                if(isset($m_thon)){
+                    $chitiet = $m_thon->where('phanloai',$ar_I[$i]['val']);
+                }
+
+                if(isset($chitiet)>0){
+                    $tongdv = 0;
+                    $tongkp = 0;
+                    $tongbh = 0;
+                    $kpk = 0;
+                    $ar_I[$i]['tdv'] = $chitiet->count('id');
+                    $a_It['tdv'] += $ar_I[$i]['tdv'];
+                    if($ar_I[$i]['val'] == "XL1")
+                    {
+                        $ar_I[$i]['mk'] = "20,3";
+                        $kpk = 20.3;
+                    }
+                    elseif($ar_I[$i]['val'] == "XL2")
+                    {
+                        $ar_I[$i]['mk'] = "18,6";
+                        $kpk = 18.6;
+                    }
+                    elseif($ar_I[$i]['val'] == "XL3")
+                    {
+                        $ar_I[$i]['mk'] = "17,6";
+                        $kpk = 17.6;
+                    }
+
+                    elseif($ar_I[$i]['val'] == "TBGHD" || $ar_I[$i]['val'] == "TDBKK" || $ar_I[$i]['val'] == "TXL12K" )
+                    {
+                        $ar_I[$i]['mk'] = "5,0";
+                        $kpk = 5;
+                    }
+                    elseif($ar_I[$i]['val'] == "TK" || $ar_I[$i]['val'] == "TDP")
+                    {
+                        $ar_I[$i]['mk'] = "3,0";
+                        $kpk = 3;
+                    }
+                    else
+                        $ar_I[$i]['mk'] = "";
+                    $ar_I[$i]['kp'] = $a_It['tdv']* $kpk * 6 * 0.09;
+                    $a_It['kp'] += $ar_I[$i]['kp'];
+                    $ar_I[$i]['bhxh'] = 0;
+                    //$ar_I[$i]['bh'] = $m_dt->where('phanloai',$ar_I[$i]['val'])*0.14*0.09*6;
+                    $a_It['bhxh'] += $ar_I[$i]['bhxh'];
+
+                }else{
+                    $ar_I[$i]['tdv'] = 0;
+                    $ar_I[$i]['mk'] = 0;
+                    $ar_I[$i]['kp'] = 0;
+                    $ar_I[$i]['bh'] = 0;
+                }
+            }
+            //dd($ar_I);
+
+            return view('reports.thongtu67.Mau2d_ThKPTT')
+                ->with('m_dv',$m_dv)
+                ->with('ar_I',$ar_I)
+                ->with('a_It',$a_It)
+                ->with('pageTitle','TỔNG HỢP KINH PHÍ TĂNG THÊM ĐỂ THỰC HIỆN CHẾ ĐỘ PHỤ CẤP ĐỐI VỚI CÁN BỘ KHÔNG CHUYÊN TRÁCH');
+        } else
+            return view('errors.notlogin');
+    }
+
+    function mau2e_donvi() {
+        if (Session::has('admin')) {
+            $m_dv=dmdonvi::where('madv',session('admin')->madv)->first();
+
+            $ar_I = array();
+            $ar_I[]=array('tt'=>'1','noidung'=>'Nguyên bí thư, chủ tịch');
+            $ar_I[]=array('tt'=>'2','noidung'=>'Nguyên Phó bí thư, phó chủ tịch, Thường trực Đảng ủy, Ủy viên, Thư ký UBND Thư ký HĐND, xã đội trưởng');
+            $ar_I[]=array('tt'=>'3','noidung'=>'Các chức danh còn lại');
+
+            return view('reports.thongtu67.Mau2e_ThKPTG')
+                ->with('furl','/tong_hop_bao_cao/')
+                ->with('ar_I',$ar_I)
+                ->with('m_dv',$m_dv)
+                ->with('pageTitle','Báo cáo nhu cầu kinh phí thực hiện nghị định 47/2017/NĐ-CP');
+        } else
+            return view('errors.notlogin');
+    }
+
+    function mau2g_donvi() {
+        if (Session::has('admin')) {
+            $m_dv=dmdonvi::where('madv',session('admin')->madv)->first();
+
+            $ar_I = array();
+            $ar_I[]=array('tt'=>'1','noidung'=>'Nguyên bí thư, chủ tịch');
+            $ar_I[]=array('tt'=>'2','noidung'=>'Nguyên Phó bí thư, phó chủ tịch, Thường trực Đảng ủy, Ủy viên, Thư ký UBND Thư ký HĐND, xã đội trưởng');
+            $ar_I[]=array('tt'=>'3','noidung'=>'Các chức danh còn lại');
+
+            return view('reports.thongtu67.Mau2g_ThPCUDTG')
+                ->with('furl','/tong_hop_bao_cao/')
+                ->with('ar_I',$ar_I)
+                ->with('m_dv',$m_dv)
+                ->with('pageTitle','Báo cáo nhu cầu kinh phí thực hiện nghị định 47/2017/NĐ-CP');
+        } else
+            return view('errors.notlogin');
+    }
+
+    function mau2h_donvi() {
+        if (Session::has('admin')) {
+            $m_dv=dmdonvi::where('madv',session('admin')->madv)->first();
+
+            $ar_I = array();
+            $ar_I[]=array('tt'=>'1','noidung'=>'Nguyên bí thư, chủ tịch');
+            $ar_I[]=array('tt'=>'2','noidung'=>'Nguyên Phó bí thư, phó chủ tịch, Thường trực Đảng ủy, Ủy viên, Thư ký UBND Thư ký HĐND, xã đội trưởng');
+            $ar_I[]=array('tt'=>'3','noidung'=>'Các chức danh còn lại');
+
+            return view('reports.thongtu67.Mau2h_ThPCTHTG')
+                ->with('furl','/tong_hop_bao_cao/')
+                ->with('ar_I',$ar_I)
+                ->with('m_dv',$m_dv)
+                ->with('pageTitle','Báo cáo nhu cầu kinh phí thực hiện nghị định 47/2017/NĐ-CP');
         } else
             return view('errors.notlogin');
     }

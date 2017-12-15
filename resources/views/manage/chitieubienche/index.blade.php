@@ -128,7 +128,7 @@
                     },
                     dataType: 'JSON',
                     success: function (data) {
-                        if(data !='true'){
+                        if(data == false ){
                             toastr.error('Năm chỉ tiêu đã tồn tại. \n Bạn cần nhập lại năm khác.', 'Lỗi!');
                             $('#nam').val(0);
                             $('#nam').focus();

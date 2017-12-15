@@ -65,7 +65,7 @@
         </td>
     </tr>
 </table>
-<p style="text-align: center; font-weight: bold; font-size: 20px;">SỐ LIỆU TỔNG HỢP CHI TRẢ LƯƠNG TẠI ĐƠN VỊ CẤP DƯỚI</p>
+<p style="text-align: center; font-weight: bold; font-size: 20px;">CHI TIẾT SỐ LIỆU TỔNG HỢP CHI TRẢ LƯƠNG TRÊN ĐỊA BÀN</p>
 <p style="text-align: center; font-style: italic">Từ {{$thongtin['tu']}} đến {{$thongtin['den']}}</p>
 
 <p style="text-align: right; font-style: italic">Đơn vị tính: đồng</p>
@@ -74,7 +74,7 @@
         <th style="width: 2%;padding-left: 2px;padding-right: 2px" rowspan="2">STT</th>
         <th style="width: 7%;padding-left: 2px;padding-right: 2px" rowspan="2">Nguồn kinh phí</th>
         <th style="width: 7%;padding-left: 2px;padding-right: 2px" rowspan="2">Phân loại</br>công tác</th>
-        <th style="width: 6%;padding-left: 2px;padding-right: 2px" rowspan="2">Lương ngạch</br>bậc</th>
+        <th style="width: 6%;padding-left: 2px;padding-right: 2px" rowspan="2">Lương ngạch</br>bâc</th>
         <th style="width: 6%;padding-left: 2px;padding-right: 2px" rowspan="2">Phụ cấp</br>lương</th>
         <th style="width: 6%;padding-left: 2px;padding-right: 2px" rowspan="2">Tổng các</br>khoản phụ</br>cấp</th>
         <th colspan="11">Các khoản phụ cấp khác</th>
@@ -110,23 +110,25 @@
     </tr>
 
     <?php $stt=1; ?>
-    @foreach($model_tonghop as $tonghop)
-        <?php $chitiet = $model_tonghop_chitiet->where('mathk',$tonghop->mathdv); ?>
+    @foreach($model_data as $data)
+        <!-- Ko in các tháng ko có dữ liệu -->
         <tr style="font-weight: bold;">
             <td>{{convert2Roman($stt++)}}</td>
-            <td colspan="23">{{$tonghop->noidung}}</td>
-
+            <td colspan="23">{{'Thời điểm tháng '. $data['thang'] . ' năm '. $data['nam'] }}</td>
         </tr>
-            <?php $i=1; ?>
-        @foreach($model_data as $data)
-            <?php $ct = $chitiet->where('macongtac',$data['macongtac'])
-                ->where('manguonkp',$data['manguonkp']);
 
+        <?php
+            $i=1;
+            $chitiet = $model_tonghop_chitiet->where('thang',$data['thang'])->where('nam',$data['nam']);
+        ?>
+        @foreach($model_dulieu as $dv)
+            <?php
+                $ct = $chitiet ->where('macongtac',$dv['macongtac'])->where('manguonkp',$dv['manguonkp']);
             ?>
             <tr>
                 <td>{{$i++}}</td>
-                <td>{{$data['tennguonkp']}}</td>
-                <td>{{$data['tencongtac']}}</td>
+                <td>{{$dv['tennguonkp']}}</td>
+                <td>{{$dv['tencongtac']}}</td>
                 <td>{{dinhdangso($ct->sum('heso'))}}</td>
                 <td>{{dinhdangso($ct->sum('hesopc'))}}</td>
                 <td>{{dinhdangso($ct->sum('tonghs') - $ct->sum('heso') - $ct->sum('hesopc'))}}</td>
@@ -150,16 +152,13 @@
                 <td>{{dinhdangso($ct->sum('stbhtn_dv'))}}</td>
                 <td>{{dinhdangso($ct->sum('tongbh'))}}</td>
                 <td>{{dinhdangso($ct->sum('tongbh') + $ct->sum('tongtl'))}}</td>
-
-        </tr>
+            </tr>
         @endforeach
-        <!--Cộng theo nhóm-->
-        <tr style="font-weight: bold; text-align: center">
+        <tr style="font-weight: bold; text-align: center;font-style: italic">
             <td colspan="3">Cộng</td>
             <td>{{dinhdangso($chitiet->sum('heso'))}}</td>
             <td>{{dinhdangso($chitiet->sum('hesopc'))}}</td>
             <td>{{dinhdangso($chitiet->sum('tonghs') - $chitiet->sum('heso') - $chitiet->sum('hesopc'))}}</td>
-
             <td>{{dinhdangso($chitiet->sum('vuotkhung'))}}</td>
             <td>{{dinhdangso($chitiet->sum('pckv'))}}</td>
             <td>{{dinhdangso($chitiet->sum('pccv'))}}</td>
@@ -184,7 +183,6 @@
         <td colspan="3">Tổng cộng</td>
         <td>{{dinhdangso($model_tonghop_chitiet->sum('heso'))}}</td>
         <td>{{dinhdangso($model_tonghop_chitiet->sum('hesopc'))}}</td>
-
         <td>{{dinhdangso($model_tonghop_chitiet->sum('tonghs') - $model_tonghop_chitiet->sum('heso') - $model_tonghop_chitiet->sum('hesopc'))}}</td>
         <td>{{dinhdangso($model_tonghop_chitiet->sum('vuotkhung'))}}</td>
         <td>{{dinhdangso($model_tonghop_chitiet->sum('pckv'))}}</td>
