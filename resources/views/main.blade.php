@@ -161,8 +161,8 @@
 					<span class="title">Tổng quan</span>
 					</a>
 				</li>
-
-                <li>
+                @if(session('admin')->username != 'khthso' && session('admin')->username != 'khthstc')
+                <li >
                     <a href="javascript:;">
                         <i class="fa glyphicon glyphicon-folder-open"></i>
                         <span class="title">Quản lý</span>
@@ -199,7 +199,7 @@
                         <li><a href="{{url('nghiep_vu/quan_ly/chi_tieu/danh_sach')}}"><i class="fa fa-caret-right"></i>Chỉ tiêu biên chế</a></li>
                     </ul>
                 </li>
-
+                @endif
 
                 <li>
                     <a href="javascript:;">
@@ -239,6 +239,7 @@
                                 <a href="{{url('chuc_nang/xem_du_lieu/huyen?thang='.date('m').'&nam='.date('Y').'&trangthai=ALL')}}"><i class="fa fa-caret-right"></i>Xem số liệu tổng hợp toàn địa bàn</a>
                             </li>
                             @endif
+                        <!--
                         @if(session('admin')->quanlykhuvuc && session('admin')->level == 'T')
                             <li>
                                 <a href="{{url('chuc_nang/tong_hop_luong/tinh/index?nam='.date('Y'))}}"><i class="fa fa-caret-right"></i>Tổng hợp lương toàn địa bàn quản lý</a>
@@ -252,6 +253,7 @@
                                 <a href="{{url('chuc_nang/xem_du_lieu/tinh?thang='.date('m').'&nam='.date('Y').'&trangthai=ALL&madiaban='.session('admin')->madvbc)}}"><i class="fa fa-caret-right"></i>Xem số liệu tổng hợp toàn tỉnh</a>
                             </li>
                         @endif
+                                    -->
                     </ul>
                 </li>
 
@@ -294,7 +296,7 @@
 					</ul>
 				</li>
                 <!-- dành cho đơn vị chủ quản -->
-                @if(session('admin')->quanlykhuvuc && session('admin')->level == 'T')
+                @if(session('admin')->username == 'khthstc' || session('admin')->username == 'khthso' )
                     <li>
                         <a href="{{url('tong_hop_bao_cao/danh_sach')}}">
                             <i class="fa fa-file-text"></i>

@@ -114,11 +114,17 @@
                                         <div class="col-md-8">
                                             <select id="madv" name="madv" class="form-control">
                                                 <option value="">Tất cả các đơn vị</option>
-                                                @if(isset($model_dvbc))
-                                                    @foreach($model_dvbc as $dv)
-                                                        <option value="{{$dv->madvbc}}">{{$dv->tendvbc}}</option>
-                                                    @endforeach
-                                                @endif
+
+                                                    @if(session('admin')->username != 'khthso' && isset($model_dvbc))
+                                                        @foreach($model_dvbc as $dv)
+                                                            <option value="{{$dv->madvbc}}">{{$dv->tendvbc}}</option>
+                                                        @endforeach
+                                                    @endif
+                                                    @if(session('admin')->username == 'khthso' && isset($model_dvbcT))
+                                                        @foreach($model_dvbcT as $dvT)
+                                                            <option value="{{$dvT->madvbc}}">{{$dvT->tendvbc}}</option>
+                                                        @endforeach
+                                                    @endif
                                             </select>
                                         </div>
                                     </div>
