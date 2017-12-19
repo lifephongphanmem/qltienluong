@@ -239,8 +239,7 @@
                                 <a href="{{url('chuc_nang/xem_du_lieu/huyen?thang='.date('m').'&nam='.date('Y').'&trangthai=ALL')}}"><i class="fa fa-caret-right"></i>Xem số liệu tổng hợp toàn địa bàn</a>
                             </li>
                             @endif
-                        <!--
-                        @if(session('admin')->quanlykhuvuc && session('admin')->level == 'T')
+                        @if(session('admin')->username == 'khthso' && session('admin')->username == 'khthstc')
                             <li>
                                 <a href="{{url('chuc_nang/tong_hop_luong/tinh/index?nam='.date('Y'))}}"><i class="fa fa-caret-right"></i>Tổng hợp lương toàn địa bàn quản lý</a>
                             </li>
@@ -253,7 +252,6 @@
                                 <a href="{{url('chuc_nang/xem_du_lieu/tinh?thang='.date('m').'&nam='.date('Y').'&trangthai=ALL&madiaban='.session('admin')->madvbc)}}"><i class="fa fa-caret-right"></i>Xem số liệu tổng hợp toàn tỉnh</a>
                             </li>
                         @endif
-                                    -->
                     </ul>
                 </li>
 
