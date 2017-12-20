@@ -872,11 +872,11 @@ class baocaothongtu67Controller extends Controller
             if(count($model) == 0){
                 return view('errors.nodata');
             }
-            foreach($model as $ct){
-                $donvi = $model_donvi->where('madv',$ct->madv)->first();
-                $ct->phanloainguon = $donvi->phanloainguon;
-                $ct->maphanloai = $donvi->maphanloai;
-            }
+            //foreach($model as $ct){
+            //    $donvi = $model_donvi->where('madv',$ct->madv)->first();
+            //    $ct->phanloainguon = $donvi->phanloainguon;
+            //    $ct->maphanloai = $donvi->maphanloai;
+            //}
             $m_dv = dmdonvi::where('madv',session('admin')->madv)->first();
 
             $a_A = array();
