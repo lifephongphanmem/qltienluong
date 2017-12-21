@@ -34,10 +34,10 @@
                     </div>
                 </div>
                 <div class="">
-                    <li class="list-group-item">Công chức<span
-                                class="badge badge-info pull-right">{{number_format($a_ketqua['congchuc'])}}</span></li>
-                    <li class="list-group-item">Viên chức<span
-                                class="badge badge-info pull-right">{{number_format($a_ketqua['vienchuc'])}}</span></li>
+                    <li class="list-group-item">Công chức<span class="badge badge-info pull-right">
+                            {{number_format($a_ketqua['congchuc'])}}</span></li>
+                    <li class="list-group-item">Viên chức<span class="badge badge-info pull-right">
+                            {{number_format($a_ketqua['vienchuc'])}}</span></li>
                 </div>
             </div>
         </div>
@@ -121,6 +121,8 @@
                             <th class="text-center">STT</th>
                             <th class="text-center">Họ và tên</th>
                             <th class="text-center">Mã ngạch</th>
+                            <th class="text-center">Từ ngày</th>
+                            <th class="text-center">Đến ngày</th>
                             <th class="text-center">Ngày nâng lương</th>
                         </tr>
                         </thead>
@@ -131,7 +133,9 @@
                                     <td class="text-center">{{$i++}}</td>
                                     <td>{{$value->tencanbo}}</td>
                                     <td>{{$value->msngbac}}</td>
+                                    <td>{{getDayVn($value->ngaytu)}}</td>
                                     <td>{{getDayVn($value->ngayden)}}</td>
+                                    <td>{{getDayVn($value->ngaynangluong)}}</td>
                                 </tr>
                             @endforeach
                         @endif

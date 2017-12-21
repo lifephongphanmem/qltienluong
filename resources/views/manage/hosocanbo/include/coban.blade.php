@@ -4,32 +4,11 @@
         <div class="row">
             <div class="col-md-3">
                 <div class="form-group">
-                    <label class="control-label">Mã số cán bộ </label>
-                    @if($type=='create')
-                        {!!Form::text('macanbo', $macanbo, array('id' => 'macanbo','class' => 'form-control','readonly'=>'true'))!!}
-                    @else
-                        {!!Form::text('macanbo', null, array('id' => 'macanbo','class' => 'form-control','readonly'=>'true'))!!}
-                    @endif
-                </div>
-            </div>
-            <div class="col-md-3">
-                <div class="form-group">
                     <label class="control-label">Mã công chức/viên chức </label>
                     {!!Form::text('macongchuc', null, array('id' => 'macongchuc','class' => 'form-control'))!!}
                 </div>
             </div>
-            <!--
-            <div class="col-md-3">
-                <div class="form-group">
-                    <label class="control-label">Phòng ban</label>
-                    <select name="mapb" id="mapb" class="form-control select2me">
-                        @foreach($m_pb as $pb)
-                            <option value="{{$pb->mapb}}">{{$pb->tenpb}}</option>
-                        @endforeach
-                    </select>
-                </div>
-            </div>
-            -->
+
             <div class="col-md-3">
                 <div class="form-group">
                     <label class="control-label">Chức vụ</label>
@@ -50,14 +29,6 @@
         </div>
 
         <div class="row">
-            <!--
-                        <div class="col-md-3">
-                            <div class="form-group">
-                                <label class="control-label">Tên gọi khác </label>
-                                {!!Form::text('tenkhac', null, array('id' => 'tenkhac','class' => 'form-control'))!!}
-                            </div>
-                        </div>
-                        -->
             <div class="col-md-3">
                 <div class="form-group">
                     <label class="control-label">Ngày sinh</label>
@@ -69,12 +40,8 @@
                 <div class="form-group">
                     <label class="control-label">Giới tính</label>
                     {!! Form::select(
-                    'gioitinh',
-                    array(
-                    'Nam' => 'Nam',
-                    'Nữ' => 'Nữ'
-                    ),null,
-                    array('id' => 'gioitinh', 'class' => 'form-control'))
+                        'gioitinh',array('Nam' => 'Nam','Nữ' => 'Nữ'),null,
+                        array('id' => 'gioitinh', 'class' => 'form-control'))
                     !!}
                 </div>
             </div>
@@ -173,6 +140,7 @@
         </div>
     </div>
     <input type="hidden" id="lvhd" name="lvhd" value="{{isset($model)?$model->lvhd:''}}"/>
+    <input type="hidden" id="macanbo" name="macanbo" value="{{isset($model) ? $model->macanbo : ''}}"/>
 
 </div>
 

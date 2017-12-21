@@ -96,8 +96,8 @@ License: You must have a valid license purchased only from themeforest(the above
     <hr>
     <div class="forget-password">
         <p>
-            Danh sách tài khoản truy cập?  <a href="{{url('/danh_sach_tai_khoan?madiaban=ALL')}}" target="_blank">
-                Click here </a>
+           <a href="{{url('/danh_sach_tai_khoan?madiaban=ALL')}}" target="_blank">
+               Danh sách tài khoản truy cập</a>
         </p>
     </div>
 </div>

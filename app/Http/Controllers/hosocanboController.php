@@ -118,8 +118,9 @@ class hosocanboController extends Controller
             $model_tenct = dmphanloaict::select('tenct','macongtac','mact')->get();
             $model_dt = array_column(dmdantoc::select(DB::raw('dantoc as maso'),'dantoc')->get()->toarray(),'dantoc','maso');
             //$m_pb= dmphongban::where('madv',session('admin')->madv)->get();
-            $m_pb = dmphongban::where('madv',session('admin')->madv)->get();
-            $m_cvcq = dmchucvucq::where('maphanloai',session('admin')->maphanloai)->get();
+            //$m_pb = dmphongban::where('madv',session('admin')->madv)->get();
+            $m_cvcq = dmchucvucq::where('maphanloai',session('admin')->maphanloai)
+                ->wherein('madv',['SA',session('admin')->madv])->get();
             //khối phòng ban giờ là lĩnh vực hoạt động
             $m_linhvuc=array_column(dmkhoipb::all()->toArray(),'tenkhoipb','makhoipb');
             $m_cvd= dmchucvud::all();
@@ -135,7 +136,7 @@ class hosocanboController extends Controller
                 //danh mục
                 ->with('m_linhvuc',$m_linhvuc)
                 ->with('model_dt',$model_dt)
-                ->with('m_pb',$m_pb)
+                //->with('m_pb',$m_pb)
                 ->with('m_cvcq',$m_cvcq)
                 ->with('m_cvd',$m_cvd)
                 ->with('model_nhomct',$model_nhomct)
@@ -252,7 +253,7 @@ class hosocanboController extends Controller
             $model = hosocanbo::find($id);
             //Xử lý file ảnh
             $img=$request->file('anh');
-            $filename='';
+
             if(isset($img)) {
                 //Xóa ảnh cũ
                 if(File::exists($model->anh))
@@ -260,9 +261,9 @@ class hosocanboController extends Controller
 
                 $filename = $model->macanbo . '.' . $img->getClientOriginalExtension();
                 $img->move(public_path() . '/data/uploads/anh/', $filename);
+                $insert['anh']='/data/uploads/anh/'. $filename;
             }
 
-            $insert['anh']=($filename==''?'':'/data/uploads/anh/'. $filename);
             $insert['ngaysinh']=getDateTime($insert['ngaysinh']);
             //$insert['ngaycap']=getDateTime($insert['ngaycap']);
             $insert['ngaytu']=getDateTime($insert['ngaytu']);
