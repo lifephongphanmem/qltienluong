@@ -26,7 +26,7 @@ class baocaothongtu67Controller extends Controller
         if (Session::has('admin')) {
             $macqcq=session('admin')->madv;
             $model_dv=dmdonvi::where('macqcq',$macqcq)->orwhere('madv',$macqcq)->get();
-            $model_dvbc=dmdonvibaocao::where('level','H')->get();
+            $model_dvbc=dmdonvibaocao::where('level','H')->orwhere('level','T')->get();
             $model_dvbcT=dmdonvibaocao::where('level','T')->get();
 
             return view('reports.thongtu67.index')
@@ -73,7 +73,7 @@ class baocaothongtu67Controller extends Controller
                     })->get();
             }
             $model_bangluong_ct = $model_tonghop_ct->where('macongtac','BIENCHE');
-            //dd($model_bangluong_ct);
+            //dd($model_bangluong_ct->toarray());
             $ar_I = array();
             $ar_I[]=array('val'=>'GD;DT','tt'=>'1','noidung'=>'Sự nghiệp giáo dục - đào tạo');
             $ar_I[]=array('val'=>'GD','tt'=>'-','noidung'=>'Giáo dục');
@@ -122,9 +122,9 @@ class baocaothongtu67Controller extends Controller
                     $ar_I[$i]['luong'] = $chitiet->sum('heso') * $luongcb;
                     $a_It['luong'] += $ar_I[$i]['luong'];
 
-                    $ar_I[$i]['ttbh_dv'] = $chitiet->sum('ttbh_dv');
-                    $ar_I[$i]['ttbh_dv'] = ($chitiet->sum('stbhxh_dv') + $chitiet->sum('stbhyt_dv')
-                        + $chitiet->sum('stkpcd_dv') + $chitiet->sum('stbhtn_dv'));
+                    //$ar_I[$i]['ttbh_dv'] = $chitiet->sum('ttbh_dv');
+                    $ar_I[$i]['ttbh_dv'] = $chitiet->sum('stbhxh_dv') + $chitiet->sum('stbhyt_dv')
+                        + $chitiet->sum('stkpcd_dv') + $chitiet->sum('stbhtn_dv');
                     $a_It['ttbh_dv'] += $ar_I[$i]['ttbh_dv'];
 
                     $ar_I[$i]['pckv'] = $chitiet->sum('pckv') * $luongcb;
@@ -132,8 +132,8 @@ class baocaothongtu67Controller extends Controller
                     $a_It['pckv'] += $ar_I[$i]['pckv'];
 
                     $ar_I[$i]['pccv'] = $chitiet->sum('pccv') * $luongcb;
-                    $tongpc += $ar_I[$i]['pckv'];
-                    $a_It['pckv'] += $ar_I[$i]['pckv'];
+                    $tongpc += $ar_I[$i]['pccv'];
+                    $a_It['pccv'] += $ar_I[$i]['pccv'];
 
                     $ar_I[$i]['pctnvk'] = $chitiet->sum('pctnvk') * $luongcb;
                     $tongpc += $ar_I[$i]['pctnvk'];
@@ -326,6 +326,7 @@ class baocaothongtu67Controller extends Controller
                 $qr->select('mathdv')->from('tonghopluong_donvi')->where('thang','07')->where('nam','2017')
                     ->distinct()->get();
             })->get();
+
             if(session('admin')->username == 'khthso')
             {
                 //nếu đơn vị đã tạo bảng lương tháng 07/2017 =>xuất kết quả
@@ -391,8 +392,8 @@ class baocaothongtu67Controller extends Controller
                     $a_It['pckv'] += $ar_I[$i]['pckv'];
 
                     $ar_I[$i]['pccv'] = $chitiet->sum('pccv') * $luongcb;
-                    $tongpc += $ar_I[$i]['pckv'];
-                    $a_It['pckv'] += $ar_I[$i]['pckv'];
+                    $tongpc += $ar_I[$i]['pccv'];
+                    $a_It['pccv'] += $ar_I[$i]['pccv'];
 
                     $ar_I[$i]['pctnvk'] = $chitiet->sum('pctnvk') * $luongcb;
                     $tongpc += $ar_I[$i]['pctnvk'];
@@ -589,15 +590,33 @@ class baocaothongtu67Controller extends Controller
             return view('errors.notlogin');
     }
 
-    function mau2b_tt67() {
-        if (Session::has('admin')) {
+    function mau2b_tt67(Request $request) {
+        if ((Session::has('admin') && session('admin')->username == 'khthstc') || (Session::has('admin') && session('admin')->username == 'khthso')) {
+            $inputs=$request->all();
             $m_dv=dmdonvi::where('madv',session('admin')->madv)->first();
-
+            $m_hscb = hosocanbo::join('dmphanloaict','dmphanloaict.mact','=','hosocanbo.mact')
+                ->join('dmchucvucq','dmchucvucq.macvcq','=','hosocanbo.macvcq')
+                ->where('dmphanloaict.macongtac','NGHIHUU')
+                ->get();
             $ar_I = array();
-            $ar_I[]=array('tt'=>'1','noidung'=>'Nguyên bí thư, chủ tịch');
-            $ar_I[]=array('tt'=>'2','noidung'=>'Nguyên Phó bí thư, phó chủ tịch, Thường trực Đảng ủy, Ủy viên, Thư ký UBND Thư ký HĐND, xã đội trưởng');
-            $ar_I[]=array('tt'=>'3','noidung'=>'Các chức danh còn lại');
+            $ar_I[]=array('val'=>'BT','tt'=>'1','noidung'=>'Nguyên bí thư, chủ tịch');
+            $ar_I[]=array('val'=>'P','tt'=>'2','noidung'=>'Nguyên Phó bí thư, phó chủ tịch, Thường trực Đảng ủy, Ủy viên, Thư ký UBND Thư ký HĐND, xã đội trưởng');
+            $ar_I[]=array('val'=>'K','tt'=>'3','noidung'=>'Các chức danh còn lại');
 
+            $a_It = array('cb' => 0,
+                'quy09' => 0,
+                'quy76' => 0,
+                'quytang' => 0,
+                'bhyt' => 0,
+                'tongquy' => 0
+            );
+
+            for($i=0;$i<count($ar_I);$i++)
+            {
+                if(isset($m_hscb)){
+                    $chitiet = $m_hscb->where('linhvuchoatdong',$ar_I[$i]['val']);
+                }
+            }
             return view('reports.thongtu67.mau2b')
                 ->with('furl','/tong_hop_bao_cao/')
                 ->with('ar_I',$ar_I)
