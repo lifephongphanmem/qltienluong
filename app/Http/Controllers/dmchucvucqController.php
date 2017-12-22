@@ -17,14 +17,16 @@ class dmchucvucqController extends Controller
             //neu quyen admin thi mo tat ca
             if(session('admin')->level=='SA' || session('admin')->level=='SSA'){
                 $model_pl = dmphanloaidonvi::all();
+                $model = dmchucvucq::all();
                 if($maphanloai=='SA' || $maphanloai =='SSA'){
                     $maphanloai= 'KVXP';
                 }
             }else{
                 $model_pl = dmphanloaidonvi::where('maphanloai',session('admin')->maphanloai)->get();
+                $model = dmchucvucq::where('maphanloai',session('admin')->maphanloai)
+                    ->wherein('madv',['SA',session('admin')->madv])->get();
             }
 
-            $model = dmchucvucq::where('maphanloai',session('admin')->maphanloai)->get();
             //dd($model);
             return view('system.danhmuc.chucvucq.index')
                 ->with('model',$model)
@@ -52,6 +54,7 @@ class dmchucvucqController extends Controller
         $inputs = $request->all();
 
         $inputs['macvcq'] = session('admin')->madv .'_'.getdate()[0];
+        $inputs['madv'] = session('admin')->madv;
         dmchucvucq::create($inputs);
         //Trả lại kết quả
         $result['message'] = 'Thao tác thành công.';
