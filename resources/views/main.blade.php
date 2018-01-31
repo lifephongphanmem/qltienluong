@@ -179,7 +179,8 @@
                         <li><a href="{{url('nghiep_vu/qua_trinh/phu_cap/maso=all')}}">Quá trình phụ cấp</a></li>
                         -->
                         @if(session('admin')->maphanloai == 'KVXP')
-                            <li><a href="{{url('nghiep_vu/quan_ly/dia_ban_dbkk/index')}}"><i class="fa fa-caret-right"></i>Danh sách thôn, tổ dân phố</a></li>
+                            <!-- Tạm thời bỏ để triển khai lạng sơn -->
+                            <!--li><a href="{{url('nghiep_vu/quan_ly/dia_ban_dbkk/index')}}"><i class="fa fa-caret-right"></i>Danh sách thôn, tổ dân phố</a></li-->
                         @endif
                     </ul>
                 </li>
