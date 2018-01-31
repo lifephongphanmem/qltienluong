@@ -20,6 +20,8 @@ class dsnangluong_chitiet extends Model
         'vuotkhung',
         'pthuong',
         'hesott',
+        'truylinhtungay',
+        'truylinhdenngay',
         'pcct',
         'pckct',
         'pck',

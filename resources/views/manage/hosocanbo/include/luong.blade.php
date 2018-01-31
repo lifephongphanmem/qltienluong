@@ -124,13 +124,6 @@
 
                         <div class="col-md-2">
                             <div class="form-group">
-                                <label class="control-label">Hệ số lương truy lĩnh</label>
-                                {!!Form::text('hesott', null, array('id' => 'hesott','class' => 'form-control', 'data-mask'=>'fdecimal'))!!}
-                            </div>
-                        </div>
-
-                        <div class="col-md-2">
-                            <div class="form-group">
                                 <label class="control-label">Hệ số phụ cấp</label>
                                 {!!Form::text('hesopc', null, array('id' => 'hesopc','class' => 'form-control', 'data-mask'=>'fdecimal'))!!}
                             </div>
@@ -142,7 +135,6 @@
             <!-- END PORTLET-->
         </div>
     </div>
-
 
     <div class="row">
         <div class="col-md-12">
@@ -204,7 +196,6 @@
                                 </div>
                             </div>
 
-
                             <div class="col-md-2">
                                 <div class="form-group">
                                     <label class="control-label">Kiêm nhiệm </label>
@@ -248,7 +239,7 @@
 
                             <div class="col-md-2">
                                 <div class="form-group">
-                                    <label class="control-label">Đặc biệt </label>
+                                    <label class="control-label">Đặc biệt(đặc thù)</label>
                                     {!!Form::text('pcdbn', null, array('id' => 'pcdbn','class' => 'form-control', 'data-mask'=>'fdecimal'))!!}
                                 </div>
                             </div>
@@ -321,6 +312,51 @@
                         </div>
                     </div>
 
+
+                </div>
+            </div>
+            <!-- END PORTLET-->
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-12">
+            <!-- BEGIN PORTLET-->
+            <div class="portlet box blue">
+                <div class="portlet-title">
+                    <div class="caption">
+                        Thông tin truy lĩnh lương
+                    </div>
+                    <div class="tools">
+                        <a href="javascript:;" class="collapse" data-original-title="" title=""></a>
+                    </div>
+                </div>
+                <div class="portlet-body" style="display: block;">
+                    <div class="row">
+
+                        <div class="col-md-2">
+                            <div class="form-group">
+                                <label class="control-label">Truy lĩnh từ ngày</label>
+                                {!! Form::input('date','truylinhtungay',null,array('id' => 'truylinhtungay', 'class' => 'form-control'))!!}
+                            </div>
+                        </div>
+
+                        <div class="col-md-2">
+                            <div class="form-group">
+                                <label class="control-label">Truy lĩnh đến ngày</label>
+                                {!! Form::input('date','truylinhdenngay',null,array('id' => 'truylinhdenngay', 'class' => 'form-control'))!!}
+                            </div>
+                        </div>
+
+                        <div class="col-md-2">
+                            <div class="form-group">
+                                <label class="control-label">Hệ số lương truy lĩnh</label>
+                                {!!Form::text('hesott', null, array('id' => 'hesott','class' => 'form-control', 'data-mask'=>'fdecimal'))!!}
+                            </div>
+                        </div>
+
+
+                    </div>
 
                 </div>
             </div>

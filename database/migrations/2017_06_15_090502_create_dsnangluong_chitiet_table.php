@@ -51,6 +51,9 @@ class CreateDsnangluongChitietTable extends Migration
             $table->double('pcbdhdcu')->default(0);
             $table->double('pcthni')->default(0);
             $table->text('ghichu')->nullable();
+
+            $table->date('truylinhtungay')->nullable();
+            $table->date('truylinhdenngay')->nullable();
             $table->timestamps();
         });
     }

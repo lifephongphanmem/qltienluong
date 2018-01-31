@@ -45,7 +45,7 @@
                                 <b>Mã quan hệ ngân sách</b>
                             </td>
                             <td style="width:35%">
-                                <span class="text-muted">{{$model->madv}}</span>
+                                <span class="text-muted">{{$model->maqhns}}</span>
                             </td>
                         </tr>
                         <tr>
@@ -89,16 +89,16 @@
                                 <span class="text-muted">{{$model->lvhd}}</span>
                             </td>
                         </tr>
-
-                        <tr>
-                            <td style="width:15%">
-                                <b>Phân loại xã</b>
-                            </td>
-                            <td style="width:35%">
-                                <span class="text-muted">{{$model->phanloaixa}}</span>
-                            </td>
-                        </tr>
-
+                        @if($model->maphanloai == 'KVXP')
+                            <tr>
+                                <td style="width:15%">
+                                    <b>Phân loại xã</b>
+                                </td>
+                                <td style="width:35%">
+                                    <span class="text-muted">{{$model->phanloaixa}}</span>
+                                </td>
+                            </tr>
+                        @endif
                         <tr>
                             <td style="width:15%">
                                 <b>Địa chỉ</b>

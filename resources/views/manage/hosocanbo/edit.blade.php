@@ -34,12 +34,12 @@
         <!--Gán các giá trị và các ô select box -->
         $('#mact').val('{{$model->mact}}').trigger('change');
         $('#lvhd').val('{{$model->lvhd}}').trigger('change');
-        $('#lvtd').val('{{$model->lvtd}}').trigger('change');
         $('#sunghiep').val('{{$model->sunghiep}}').trigger('change');
         $('#macvcq').val('{{$model->macvcq}}').trigger('change');
-        $('#mapb').val('{{$model->mapb}}').trigger('change');
-        $('#nhommau').val('{{$model->nhommau}}').trigger('change');
-        $('#macvd').val('{{$model->macvd}}').trigger('change');
+        //$('#lvtd').val('{{$model->lvtd}}').trigger('change');
+        //$('#mapb').val('{{$model->mapb}}').trigger('change');
+        //$('#nhommau').val('{{$model->nhommau}}').trigger('change');
+        //$('#macvd').val('{{$model->macvd}}').trigger('change');
     </script>
     @include('includes.script.scripts')
 

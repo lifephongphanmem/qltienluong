@@ -15,6 +15,7 @@ class CreateDmdonviTable extends Migration
         Schema::create('dmdonvi', function (Blueprint $table) {
             $table->increments('id');
             $table->string('madv', 50)->unique();
+            $table->string('maqhns', 50)->nullable();
             $table->string('tendv',100)->nullable();
             $table->string('diachi',100)->nullable();
             $table->string('sodt',50)->nullable();

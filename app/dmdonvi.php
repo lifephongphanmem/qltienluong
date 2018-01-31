@@ -10,6 +10,7 @@ class dmdonvi extends Model
     protected $fillable = [
             'id',
             'madv',
+            'maqhns',
             'tendv',
             'diachi',
             'sodt',

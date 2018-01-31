@@ -41,13 +41,13 @@
                                 <th class="text-center">STT</th>
                                 <th class="text-center">Họ tên</th>
                                 <th class="text-center">Chức vụ</th>
-                                <th class="text-center">Từ ngày</th>
-                                <th class="text-center">Đến ngày</th>
+                                <th class="text-center">Thời gian</br>hưởng lương</th>
                                 <th class="text-center">Mã ngạch</th>
                                 <th class="text-center">Bậc</th>
                                 <th class="text-center">Hệ số</th>
-                                <th class="text-center">Vượt</br>khung</th>
-                                <th class="text-center">Hệ số</br>truy lĩnh</th>
+                                <th class="text-center">Phần</br>trăm</br>vượt</br>khung</th>
+                                <th class="text-center">Hệ số</br>(phần trăm)</br>truy lĩnh</br>một tháng</th>
+                                <th class="text-center">Thời gian</br>truy lĩnh</th>
                                 <th class="text-center">Thao tác</th>
                             </tr>
                         </thead>
@@ -59,13 +59,13 @@
                                         <td class="text-center">{{$key+1}}</td>
                                         <td>{{$value->tencanbo}}</td>
                                         <td>{{$value->tencv}}</td>
-                                        <td>{{getDayVn($value->ngaytu)}}</td>
-                                        <td>{{getDayVn($value->ngayden)}}</td>
-                                        <td>{{$value->msngbac}}</td>
-                                        <td>{{$value->bac}}</td>
-                                        <td>{{$value->heso}}</td>
-                                        <td>{{$value->vuotkhung}}</td>
-                                        <td>{{$value->hesott}}</td>
+                                        <td class="text-center">{{'Từ '.getDayVn($value->ngaytu).' đến '.getDayVn($value->ngayden)}}</td>
+                                        <td class="text-center">{{$value->msngbac}}</td>
+                                        <td class="text-center">{{$value->bac}}</td>
+                                        <td class="text-center">{{$value->heso}}</td>
+                                        <td class="text-center">{{$value->vuotkhung}}</td>
+                                        <td class="text-center">{{$value->hesott}}</td>
+                                        <td class="text-center">{{'Từ '.getDayVn($value->truylinhtungay).' đến '.getDayVn($value->truylinhdenngay)}}</td>
                                         <td>
 
                                             <a type="button" href="{{url($furl.'chi_tiet?maso='.$value->manl.'&canbo='.$value->macanbo)}}" class="btn btn-info btn-xs mbs">

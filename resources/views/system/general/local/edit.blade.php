@@ -36,8 +36,8 @@
                             <div class="row">
                                 <div class="col-md-6">
                                     <div class="form-group">
-                                        <label class="control-label">Mã đơn vị<span class="require">*</span></label>
-                                        {!!Form::text('madv', null, array('id' => 'madv','class' => 'form-control', 'readonly'))!!}
+                                        <label class="control-label">Mã quan hệ ngân sách<span class="require">*</span></label>
+                                        {!!Form::text('maqhns', null, array('id' => 'maqhns','class' => 'form-control'))!!}
                                     </div>
                                 </div>
                                 <div class="col-md-6">
@@ -139,9 +139,21 @@
                                     <div id="plxa" class="col-md-6">
                                         <div class="form-group">
                                             <label class="control-label">Lĩnh vực hoạt động</label>
-                                            {!!Form::select('linhvuchoatdong', $model_linhvuc, null, array('id' => 'linhvuchoatdong','class' => 'form-control', 'multiple'=>'multiple'))!!}
+                                            <select class="form-control" id="linhvuc" name="linhvuc" multiple="multiple">
+                                                @if(isset($a_linhvuc))
+                                                    @foreach($model_linhvuc as $key=>$value)
+                                                        <option value="{{$key}}" {{in_array($key,$a_linhvuc)?'selected':''}}>{{$value}}</option>
+                                                    @endforeach
+                                                @else
+                                                    @foreach($model_linhvuc as $key=>$value)
+                                                        <option value="{{$key}}">{{$value}}</option>
+                                                    @endforeach
+                                                @endif
+                                            </select>
+
                                         </div>
                                     </div>
+                                    <input type="hidden" id="linhvuchoatdong" name="linhvuchoatdong" value="{{isset($model)?$model->linhvuchoatdong:''}}"/>
                                 @endif
                             </div>
                         </div>
@@ -182,7 +194,10 @@
 
             });
 
-            $("#linhvuchoatdong").select2();
+            $("#linhvuc").select2();
+            $("#linhvuc").change(function(){
+                $("#linhvuchoatdong").val( $("#linhvuc").val());
+            });
         });
 
         function validateForm(){

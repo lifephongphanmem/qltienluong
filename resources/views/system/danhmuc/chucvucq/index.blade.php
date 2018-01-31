@@ -67,7 +67,7 @@
                                         <td name="ghichu">{{$value->ghichu}}</td>
                                         <td class="text-center" name="sapxep">{{$value->sapxep}}</td>
                                         <td>
-                                            @if(session('admin')->level == 'SA' || session('admin')->level == 'SSA')
+                                            @if(session('admin')->level == 'SA' || session('admin')->level == 'SSA' || session('admin')->madv == $value->madv)
                                                 <button type="button" onclick="editCV('{{$value->macvcq}}')" class="btn btn-info btn-xs mbs">
                                                     <i class="fa fa-edit"></i>&nbsp; Chỉnh sửa</button>
 
@@ -94,7 +94,21 @@
                     <h4 id="modal-header-primary-label" class="modal-title">Thông tin chức vụ chính quyền</h4>
                 </div>
                 <div class="modal-body">
-                @include('templates.tem_chucvucq')
+
+                    <label class="control-label">Phân loại đơn vị</label>
+                    {!! Form::select('maphanloai',$model_pl,$mapl,array('id' => 'maphanloai', 'class' => 'form-control', 'readonly'))!!}
+
+                    <label class="form-control-label">Tên chức vụ<span class="require">*</span></label>
+                    {!!Form::text('tencv', null, array('id' => 'tencv','class' => 'form-control','required'=>'required'))!!}
+
+                    <label class="form-control-label">Mô tả chức vụ</label>
+                    {!!Form::textarea('ghichu', null, array('id' => 'ghichu','class' => 'form-control','rows'=>'3'))!!}
+
+                    <label class="form-control-label">Sắp xếp</label>
+                    {!!Form::text('sapxep', null, array('id' => 'sapxep','class' => 'form-control'))!!}
+
+                    <input type="hidden" id="macvcq" name="macvcq"/>
+                    <input type="hidden" id="id_cv" name="id_cv"/>
                 </div>
                 <div class="modal-footer">
                     <button type="button" data-dismiss="modal" class="btn btn-default">Hủy thao tác</button>
@@ -112,7 +126,7 @@
         })
 
         function addCV(){
-            var date=new Date();
+            //var date=new Date();
             $('#tencv').val('');
             $('#ghichu').val('');
             $('#sapxep').attr('value','99');
@@ -135,6 +149,7 @@
                     $('#tencv').val(data.tencv);
                     $('#ghichu').val(data.ghichu);
                     $('#sapxep').val(data.sapxep);
+                    $('#maphanloai').val(data.maphanloai);
                     $('#macvcq').val(macvcq);
                 },
                 error: function(message){

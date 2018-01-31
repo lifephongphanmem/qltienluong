@@ -66,7 +66,7 @@
                                     </li>
 
                                     <li><a href="#tab5" data-toggle="tab" class="step">
-                                            <p class="description"><i class="glyphicon glyphicon-paperclip"></i> Thông tin khác</p></a>
+                                            <p class="description"><i class="glyphicon glyphicon-paperclip"></i> Thông tin khac</p></a>
                                     </li>
                                 </ul>
 

@@ -61,10 +61,10 @@ class dmdonviController extends Controller
             $model->phanloainguon = isset($phanloainguon[$model->phanloainguon]) ? $phanloainguon[$model->phanloainguon] : '';
             $model->phanloaixa = isset($phanloaixa[$model->phanloaixa]) ? $phanloaixa[$model->phanloaixa] : '';
             $model->donviquanly = getTenDV($model->macqcq);
-            $a_lv = explode(';', $model->linhvuchoatdong);
-
+            $a_lv = explode(',', $model->linhvuchoatdong);
+            //dd($a_lv);
             foreach ($a_lv as $lv) {
-                $model->lvhd .= isset($linhvuchoatdong[$model->linhvuchoatdong]) ? ($linhvuchoatdong[$model->linhvuchoatdong] . ';'):'';
+                $model->lvhd .= isset($linhvuchoatdong[$lv]) ? ($linhvuchoatdong[$lv] . ';'):'';
             }
 
             return view('system.general.local.index')
@@ -93,6 +93,7 @@ class dmdonviController extends Controller
                 $model_plxa = getPhanLoaiXa();
                 $model_capdv = getCapDonVi();
                 $model_linhvuc = array_column(dmkhoipb::all()->toarray(),'tenkhoipb','makhoipb');
+                $a_linhvuc = explode(',',$model->linhvuchoatdong);
 
                 return view('system.general.local.edit')
                     ->with('model',$model)
@@ -102,6 +103,7 @@ class dmdonviController extends Controller
                     ->with('model_plxa',$model_plxa)
                     ->with('model_capdv',$model_capdv)
                     ->with('model_linhvuc',$model_linhvuc)
+                    ->with('a_linhvuc',$a_linhvuc)
                     ->with('url','/he_thong/don_vi/')
                     ->with('pageTitle','Chỉnh sửa thông tin đơn vị');
             }else{return view('errors.noperm');}
