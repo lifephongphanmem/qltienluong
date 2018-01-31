@@ -80,14 +80,14 @@
                             </div>
                         @endif
 
-                        <div class="col-md-2">
+                        <div class="col-md-3">
                             <div class="form-group">
                                 <label class="control-label">Từ ngày</label>
                                 {!! Form::input('date','ngaytu',null,array('id' => 'ngaytu', 'class' => 'form-control'))!!}
                             </div>
                         </div>
 
-                        <div class="col-md-2">
+                        <div class="col-md-3">
                             <div class="form-group">
                                 <label class="control-label">Đến ngày</label>
                                 {!! Form::input('date','ngayden',null,array('id' => 'ngayden', 'class' => 'form-control'))!!}
@@ -124,7 +124,7 @@
 
                         <div class="col-md-2">
                             <div class="form-group">
-                                <label class="control-label">Hệ số phụ cấp</label>
+                                <label class="control-label">Phụ cấp (hưu trí)</label>
                                 {!!Form::text('hesopc', null, array('id' => 'hesopc','class' => 'form-control', 'data-mask'=>'fdecimal'))!!}
                             </div>
                         </div>
@@ -334,14 +334,14 @@
                 <div class="portlet-body" style="display: block;">
                     <div class="row">
 
-                        <div class="col-md-2">
+                        <div class="col-md-3">
                             <div class="form-group">
                                 <label class="control-label">Truy lĩnh từ ngày</label>
                                 {!! Form::input('date','truylinhtungay',null,array('id' => 'truylinhtungay', 'class' => 'form-control'))!!}
                             </div>
                         </div>
 
-                        <div class="col-md-2">
+                        <div class="col-md-3">
                             <div class="form-group">
                                 <label class="control-label">Truy lĩnh đến ngày</label>
                                 {!! Form::input('date','truylinhdenngay',null,array('id' => 'truylinhdenngay', 'class' => 'form-control'))!!}
