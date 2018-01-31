@@ -210,7 +210,7 @@ class bangluongController extends Controller
                 $cb->tonghs = $ths;
                 $cb->ttl = round($inputs['luongcoban'] * $ths * $inputs['phantramhuong'] / 100
                     + $tt);
-                $luongnopbaohiem = $inputs['luongcoban'] * ($cb->heso + $cb->pccv + $cb->vuotkhung) * $inputs['phantramhuong'] / 100;
+                $luongnopbaohiem = $inputs['luongcoban'] * ($cb->heso + $cb->pccv + $cb->vuotkhung + $cb->pctnn) * $inputs['phantramhuong'] / 100;
 
                 $cb->stbhxh = $luongnopbaohiem * floatval($cb->bhxh) / 100;
                 $cb->stbhyt = $luongnopbaohiem * floatval($cb->bhyt) / 100;
