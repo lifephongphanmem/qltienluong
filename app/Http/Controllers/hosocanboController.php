@@ -176,6 +176,8 @@ class hosocanboController extends Controller
             $insert['ngayvao']=getDateTime($insert['ngayvao']);
             $insert['ngaybc']=getDateTime($insert['ngaybc']);
             $insert['macvd']=($insert['macvd']==''?NULL:$insert['macvd']);
+            $insert['truylinhtungay']=getDateTime($insert['truylinhtungay']);
+            $insert['truylinhdenngay']=getDateTime($insert['truylinhdenngay']);
 
             $insert['heso'] = chkDbl($insert['heso']);
             $insert['hesott'] = chkDbl($insert['hesott']);
