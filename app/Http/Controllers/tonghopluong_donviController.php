@@ -556,9 +556,11 @@ class tonghopluong_donviController extends Controller
 
     function destroy($mathdv){
         if (Session::has('admin')) {
+            $model = tonghopluong_donvi::where('mathdv',$mathdv)->get();
+            $model->delete();
             tonghopluong_donvi_chitiet::where('mathdv',$mathdv)->delete();
-            tonghopluong_donvi::where('mathdv',$mathdv)->delete();
-            return redirect('/chuc_nang/tong_hop_luong/don_vi/index?nam=2017');
+            //tonghopluong_donvi::where('mathdv',$mathdv)->delete();
+            return redirect('/chuc_nang/tong_hop_luong/don_vi/index?nam='.$model->nam);
         } else
             return view('errors.notlogin');
     }

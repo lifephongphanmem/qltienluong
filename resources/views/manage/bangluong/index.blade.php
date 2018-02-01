@@ -64,14 +64,34 @@
                                         @endif
                                         <td>{{$value->noidung}}</td>
                                         <td>
-                                            <button type="button" onclick="edit('{{$value->mabl}}')" class="btn btn-info btn-xs mbs">
+                                            <button type="button" onclick="edit('{{$value->mabl}}')" class="btn btn-default btn-xs mbs">
                                                 <i class="fa fa-edit"></i>&nbsp; Chỉnh sửa</button>
-                                            <a href="{{url($furl.'maso='.$value->mabl)}}" class="btn btn-warning btn-xs mbs">
+                                            <a href="{{url($furl.'maso='.$value->mabl)}}" class="btn btn-default btn-xs mbs">
                                                 <i class="fa fa-th-list"></i>&nbsp; Chi tiết</a>
-                                            <a href="{{url($furl.'in/maso='.$value->mabl)}}" class="btn btn-success btn-xs mbs" TARGET="_blank">
-                                                <i class="fa fa-print"></i>&nbsp; In bảng lương</a>
-                                            <a href="{{url($furl.'in_bh/maso='.$value->mabl)}}" class="btn btn-success btn-xs mbs" TARGET="_blank">
-                                                <i class="fa fa-print"></i>&nbsp; In bảo hiểm</a>
+                                            <div class="btn-group btn-group-solid">
+                                                <button type="button" class="btn btn-default btn-xs mbs dropdown-toggle" data-toggle="dropdown" aria-expanded="true">
+                                                    <i class="fa fa-ellipsis-horizontal"></i> In bảng lương <i class="fa fa-angle-down"></i>
+                                                </button>
+                                                <ul class="dropdown-menu">
+                                                    <li>
+                                                        <a href="{{url($furl.'in/maso='.$value->mabl)}}" class="btn btn-default btn-xs mbs" TARGET="_blank" style="padding-top: 4px; padding-bottom: 4px;">
+                                                            <i class="fa fa-print"></i>&nbsp; Bảng lương mẫu 1</a>
+                                                    </li>
+                                                    <li>
+                                                        <a href="{{url($furl.'inbangluong/maso='.$value->mabl)}}" class="btn btn-default btn-xs mbs" TARGET="_blank" style="padding-top: 4px; padding-bottom: 4px;">
+                                                            <i class="fa fa-print"></i>&nbsp; Bảng lương mẫu 2</a>
+                                                    </li>
+                                                    <li>
+                                                        <a href="{{url($furl.'inmau3/maso='.$value->mabl)}}" class="btn btn-default btn-xs mbs" TARGET="_blank" style="padding-top: 4px; padding-bottom: 4px;">
+                                                            <i class="fa fa-print"></i>&nbsp; Bảng lương mẫu 3</a>
+                                                    </li>
+                                                    <li>
+                                                        <a href="{{url($furl.'in_bh/maso='.$value->mabl)}}" class="btn btn-default btn-xs mbs" TARGET="_blank" style="padding-top: 4px; padding-bottom: 4px;">
+                                                            <i class="fa fa-print"></i>&nbsp; Bảo hiểm</a>
+                                                    </li>
+                                                </ul>
+                                            </div>
+
                                             <button type="button" onclick="cfDel('{{$furl.'del/'.$value->id}}')" class="btn btn-danger btn-xs mbs" data-target="#delete-modal-confirm" data-toggle="modal">
                                                 <i class="fa fa-trash-o"></i>&nbsp; Xóa</button>
                                         </td>

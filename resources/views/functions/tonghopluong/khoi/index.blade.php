@@ -23,6 +23,13 @@
         jQuery(document).ready(function() {
             TableManaged.init();
         });
+        $(function(){
+            $('#nambc').change(function() {
+                var nambc = $('#nambc').val();
+                var url = '{{$furl}}'+'index?nam='+nambc;
+                window.location.href = url;
+            });
+        })
     </script>
 @stop
 
@@ -39,7 +46,24 @@
                     </div>
                 </div>
                 <div class="portlet-body form-horizontal">
-
+                    <div class="row">
+                        <div class="col-md-offset-2 col-md-1">
+                            <div class="form-group">
+                                <label class="control-label">Năm dữ liệu </label>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <select name="nambc" id="nambc" class="form-control">
+                                    @if ($nam_start = intval(date('Y')) - 2 ) @endif
+                                    @if ($nam_stop = intval(date('Y'))) @endif
+                                    @for($i = $nam_start; $i <= $nam_stop; $i++)
+                                        <option value="{{$i}}" {{$i == $nam ? 'selected' : ''}}>{{$i}}</option>
+                                    @endfor
+                                </select>
+                            </div>
+                        </div>
+                    </div>
                     <table id="sample_3" class="table table-hover table-striped table-bordered" style="min-height: 230px">
                         <thead>
                             <tr>

@@ -210,7 +210,7 @@ class bangluongController extends Controller
                 $cb->tonghs = $ths;
                 $cb->ttl = round($inputs['luongcoban'] * $ths * $inputs['phantramhuong'] / 100
                     + $tt);
-                $luongnopbaohiem = $inputs['luongcoban'] * ($cb->heso + $cb->pccv + $cb->vuotkhung + $cb->pctnn) * $inputs['phantramhuong'] / 100;
+                $luongnopbaohiem = $inputs['luongcoban'] * ($cb->heso + $cb->pccv + $cb->vuotkhung + $cb->pctnn + $cb->pctnvk) * $inputs['phantramhuong'] / 100;
 
                 $cb->stbhxh = $luongnopbaohiem * floatval($cb->bhxh) / 100;
                 $cb->stbhyt = $luongnopbaohiem * floatval($cb->bhyt) / 100;
@@ -483,6 +483,39 @@ class bangluongController extends Controller
                 'nam'=>$m_bl->nam);
             //dd($model);
             return view('reports.bangluong.donvi.maubangluong_sotien')
+                ->with('model',$model)
+                ->with('m_dv',$m_dv)
+                ->with('thongtin',$thongtin)
+                ->with('model_congtac',$model_congtac)
+                ->with('pageTitle','Bảng lương chi tiết');
+        } else
+            return view('errors.notlogin');
+    }
+
+    public function inbangluongmau3($mabl){
+        if (Session::has('admin')) {
+            $model = bangluong_ct::where('mabl',$mabl)->get();
+            $m_bl = bangluong::select('thang','nam','mabl','madv')->where('mabl',$mabl)->first();
+            $mabl = $m_bl->mabl;
+            $m_dv = dmdonvi::where('madv',$m_bl->madv)->first();
+
+            $model_congtac = dmphanloaict::select('mact','tenct')
+                ->wherein('mact', function($query) use($mabl){
+                    $query->select('mact')->from('bangluong_ct')->where('mabl',$mabl);
+                })->get();
+
+            //dd($model_congtac);
+            //$model_congtac = dmphanloaict::select('mact','tenct')->get();
+            $dmchucvucq=array_column(dmchucvucq::all('tencv', 'macvcq')->toArray(),'tencv', 'macvcq');
+            //dd($dmchucvucq);
+            foreach($model as $hs){
+                $hs->tencv = isset($dmchucvucq[$hs->macvcq])? $dmchucvucq[$hs->macvcq] : '';
+            }
+            $thongtin=array('nguoilap'=>$m_bl->nguoilap,
+                'thang'=>$m_bl->thang,
+                'nam'=>$m_bl->nam);
+            //dd($model);
+            return view('reports.bangluong.donvi.maulangson')
                 ->with('model',$model)
                 ->with('m_dv',$m_dv)
                 ->with('thongtin',$thongtin)
