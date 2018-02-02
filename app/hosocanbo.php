@@ -18,6 +18,8 @@ class hosocanbo extends Model
         'sunghiep',
         'tencanbo',
         'tenkhac',
+        'dantoc',
+        'tongiao',
         'ngaysinh',
         'gioitinh',
         'socmnd',

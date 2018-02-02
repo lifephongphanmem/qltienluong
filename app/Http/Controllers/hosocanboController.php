@@ -229,7 +229,7 @@ class hosocanboController extends Controller
             $m_plnb = nhomngachluong::select('manhom','tennhom')->distinct()->get();
             $m_pln = ngachluong::select('tenngachluong','manhom','msngbac')->distinct()->get();
             $a_linhvuc = explode(',',$model->lvhd);
-
+            //dd($model);
             return view('manage.hosocanbo.edit')
                 ->with('model',$model)
                 ->with('type','edit')
@@ -304,7 +304,6 @@ class hosocanboController extends Controller
             $insert['pcdd'] = chkDbl($insert['pcdd']);
 
             $model->update($insert);
-
             return redirect('nghiep_vu/ho_so/danh_sach');
         }else
             return view('errors.notlogin');
