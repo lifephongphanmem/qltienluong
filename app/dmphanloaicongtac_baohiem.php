@@ -9,7 +9,7 @@ class dmphanloaicongtac_baohiem extends Model
     protected $table = 'dmphanloaicongtac_baohiem';
     protected $fillable = [
         'id',
-        'maphanloai',
+        'madv',
         'macongtac',
         'bhxh',
         'bhyt',

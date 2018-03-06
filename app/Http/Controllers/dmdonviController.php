@@ -14,7 +14,7 @@ use Illuminate\Support\Facades\Session;
 
 class dmdonviController extends Controller
 {
-    public function index($makhoipb){
+    function index($makhoipb){
         if (Session::has('admin')) {
             if(session('admin')->level=='T'){
                 $model_kpb=dmkhoipb::all();
@@ -38,18 +38,7 @@ class dmdonviController extends Controller
             return view('errors.notlogin');
     }
 
-    public function change($madv){
-        if (Session::has('admin')) {
-            $model = Users::find(session('admin')->id);
-            $model->madv=$madv;
-            $model->save();
-            session('admin')->madv=$madv;
-            return redirect('danh_muc/don_vi/maso=all');
-        } else
-            return view('errors.notlogin');
-    }
-
-    public function information_local()
+    function information_local()
     {
         if (Session::has('admin')) {
             $model = dmdonvi::where('madv', session('admin')->madv)->first();
@@ -122,6 +111,177 @@ class dmdonviController extends Controller
                 return redirect('/he_thong/don_vi/don_vi');
             }else{return view('errors.noperm');}
 
+        } else
+            return view('errors.notlogin');
+    }
+
+    function edit_information($madv){
+        if (Session::has('admin')) {
+            $model=dmdonvi::where('madv',$madv)->first();
+            $model_cqcq=dmdonvi::where('level','H')->get();
+            $model_kpb=array_column(dmkhoipb::select('makhoipb','tenkhoipb')->get()->toarray(),'tenkhoipb','makhoipb');
+            return view('system.manage.edit_information')
+                ->with('model',$model)
+                ->with('model_cqcq',$model_cqcq)
+                ->with('model_kpb',$model_kpb)
+                ->with('url','/he_thong/quan_tri/')
+                ->with('pageTitle','Chỉnh sửa thông tin đơn vị');
+        } else
+            return view('errors.notlogin');
+    }
+
+    function update_information(Request $request, $madv){
+        if (Session::has('admin')) {
+            $inputs=$request->all();
+            $model=dmdonvi::where('madv',$madv)->first();
+            $model->macqcq=$inputs['macqcq']=='all'?'':$inputs['macqcq'];
+            $model->tendv=$inputs['tendv'];
+            $model->diachi=$inputs['diachi'];
+            $model->sodt=$inputs['sodt'];
+            $model->lanhdao=$inputs['lanhdao'];
+            $model->diadanh=$inputs['diadanh'];
+            $model->cdlanhdao=$inputs['cdlanhdao'];
+            $model->nguoilapbieu=$inputs['nguoilapbieu'];
+            $model->makhoipb=$inputs['makhoipb'];
+            $model->diadanh=$inputs['diadanh'];
+            $model->save();
+            return redirect('/he_thong/quan_tri/don_vi');
+
+        } else
+            return view('errors.notlogin');
+    }
+
+    function list_account($madv){
+        if (Session::has('admin')) {
+            $model_donvi=dmdonvi::where('madv',$madv)->first();
+            $model=Users::where('maxa',$madv)->get();
+            return view('system.manage.list_account')
+                ->with('model',$model)
+                ->with('model_donvi',$model_donvi)
+                ->with('url','/he_thong/quan_tri/')
+                ->with('pageTitle','Danh sách tài khoản người dùng');
+        } else
+            return view('errors.notlogin');
+    }
+
+    function create_account($madv){
+        if (Session::has('admin')) {
+            return view('system.manage.create_account')
+                ->with('madv',$madv)
+                ->with('url','/he_thong/quan_tri/')
+                ->with('pageTitle','Thêm mới tài khoản người dùng');
+        } else
+            return view('errors.notlogin');
+    }
+
+    function store_account(Request $request){
+        if (Session::has('admin')) {
+            $inputs = $request->all();
+            $model_donvi=dmdonvi::where('madv',$inputs['madv'])->first();
+            $model=new Users();
+            $model->level=$model_donvi->level;
+            $model->maxa=$inputs['madv'];
+            $model->madv=$inputs['madv'];
+            $model->name=$inputs['name'];
+            $model->username=$inputs['username'];
+            $model->password=md5($inputs['password']);
+            $model->phone=$inputs['phone'];
+            $model->email=$inputs['email'];
+            $model->status=$inputs['status'];
+            $model->save();
+
+            return redirect('/he_thong/quan_tri/don_vi/maso='.$inputs['madv']);
+        } else
+            return view('errors.notlogin');
+    }
+
+    function edit_account($id){
+        if (Session::has('admin')) {
+            $model=Users::findorfail($id);
+            return view('system.manage.edit_account')
+                ->with('model',$model)
+                ->with('url','/he_thong/quan_tri/')
+                ->with('pageTitle','Chỉnh sửa thông tin tài khoản');
+        } else
+            return view('errors.notlogin');
+    }
+
+    function update_account(Request $request, $id){
+        if (Session::has('admin')) {
+            $inputs = $request->all();
+
+            $model=Users::findorfail($id);
+            $model->name=$inputs['name'];
+            $model->username=$inputs['username'];
+
+            if($inputs['newpass']!=''){
+                $model->password= md5($inputs['newpass']);
+            }
+            $model->phone=$inputs['phone'];
+            $model->email=$inputs['email'];
+            $model->status=$inputs['status'];
+            $model->save();
+
+            return redirect('/he_thong/quan_tri/don_vi/maso='.$model->maxa);
+        } else
+            return view('errors.notlogin');
+    }
+
+    function destroy_account(Request $request){
+        if (Session::has('admin')) {
+            $inputs = $request->all();
+            $model = Users::findOrFail($inputs['iddelete']);
+            $maxa=$model->madv;
+            $model->delete();
+            return redirect('/he_thong/quan_tri/don_vi/maso='.$maxa);
+        }else
+            return view('errors.notlogin');
+    }
+
+    function permission_list($id){
+        if (Session::has('admin')) {
+            $model=Users::findorfail($id);
+            $permission = !empty($model->permission)  ? $model->permission : getPermissionDefault($model->level);
+            return view('system.users.perms')
+                ->with('model',$model)
+                ->with('permission',json_decode($permission))
+                ->with('url','/he_thong/quan_tri/')
+                ->with('pageTitle','Phân quyền cho tài khoản');
+        } else
+            return view('errors.notlogin');
+    }
+
+    function permission_update(Request $request){
+        if (Session::has('admin')) {
+            $update = $request->all();
+            $id = $request['id'];
+
+            $model = Users::findOrFail($id);
+            //dd($model);
+            if(isset($model)){
+
+                $update['roles'] = isset($update['roles']) ? $update['roles'] : null;
+                $model->permission = json_encode($update['roles']);
+                $model->save();
+
+                return redirect('he_thong/quan_tri/don_vi/maso='.$model->maxa);
+
+            }else
+                dd('Tài khoản không tồn tại');
+
+        }else
+            return view('errors.notlogin');
+
+    }
+
+    // <editor-fold defaultstate="collapsed" desc="--Không dùng--">
+    public function change($madv){
+        if (Session::has('admin')) {
+            $model = Users::find(session('admin')->id);
+            $model->madv=$madv;
+            $model->save();
+            session('admin')->madv=$madv;
+            return redirect('danh_muc/don_vi/maso=all');
         } else
             return view('errors.notlogin');
     }
@@ -219,9 +379,9 @@ class dmdonviController extends Controller
                 $model->level=$inputs['level'];
                 $model->maxa=$inputs['madv'];
                 $model->madv=$inputs['madv'];
-                  if($inputs['level']=='H'){
-                      $model->mahuyen=$inputs['madv'];
-                  }
+                if($inputs['level']=='H'){
+                    $model->mahuyen=$inputs['madv'];
+                }
                 $model->username=$inputs['username'];
                 $model->password=md5($inputs['password']);
                 $model->status="Kích hoạt";
@@ -232,163 +392,5 @@ class dmdonviController extends Controller
         } else
             return view('errors.notlogin');
     }
-
-    public function edit_information($madv){
-        if (Session::has('admin')) {
-            $model=dmdonvi::where('madv',$madv)->first();
-            $model_cqcq=dmdonvi::where('level','H')->get();
-            $model_kpb=array_column(dmkhoipb::select('makhoipb','tenkhoipb')->get()->toarray(),'tenkhoipb','makhoipb');
-            return view('system.manage.edit_information')
-                ->with('model',$model)
-                ->with('model_cqcq',$model_cqcq)
-                ->with('model_kpb',$model_kpb)
-                ->with('url','/he_thong/quan_tri/')
-                ->with('pageTitle','Chỉnh sửa thông tin đơn vị');
-        } else
-            return view('errors.notlogin');
-    }
-
-    function update_information(Request $request, $madv){
-        if (Session::has('admin')) {
-            $inputs=$request->all();
-            $model=dmdonvi::where('madv',$madv)->first();
-            $model->macqcq=$inputs['macqcq']=='all'?'':$inputs['macqcq'];
-            $model->tendv=$inputs['tendv'];
-            $model->diachi=$inputs['diachi'];
-            $model->sodt=$inputs['sodt'];
-            $model->lanhdao=$inputs['lanhdao'];
-            $model->diadanh=$inputs['diadanh'];
-            $model->cdlanhdao=$inputs['cdlanhdao'];
-            $model->nguoilapbieu=$inputs['nguoilapbieu'];
-            $model->makhoipb=$inputs['makhoipb'];
-            $model->diadanh=$inputs['diadanh'];
-            $model->save();
-            return redirect('/he_thong/quan_tri/don_vi');
-
-        } else
-            return view('errors.notlogin');
-    }
-
-    public function list_account($madv){
-        if (Session::has('admin')) {
-            $model_donvi=dmdonvi::where('madv',$madv)->first();
-            $model=Users::where('maxa',$madv)->get();
-            return view('system.manage.list_account')
-                ->with('model',$model)
-                ->with('model_donvi',$model_donvi)
-                ->with('url','/he_thong/quan_tri/')
-                ->with('pageTitle','Danh sách tài khoản người dùng');
-        } else
-            return view('errors.notlogin');
-    }
-
-    public function create_account($madv){
-        if (Session::has('admin')) {
-            return view('system.manage.create_account')
-                ->with('madv',$madv)
-                ->with('url','/he_thong/quan_tri/')
-                ->with('pageTitle','Thêm mới tài khoản người dùng');
-        } else
-            return view('errors.notlogin');
-    }
-
-    public function store_account(Request $request){
-        if (Session::has('admin')) {
-            $inputs = $request->all();
-            $model_donvi=dmdonvi::where('madv',$inputs['madv'])->first();
-            $model=new Users();
-            $model->level=$model_donvi->level;
-            $model->maxa=$inputs['madv'];
-            $model->madv=$inputs['madv'];
-            $model->name=$inputs['name'];
-            $model->username=$inputs['username'];
-            $model->password=md5($inputs['password']);
-            $model->phone=$inputs['phone'];
-            $model->email=$inputs['email'];
-            $model->status=$inputs['status'];
-            $model->save();
-
-            return redirect('/he_thong/quan_tri/don_vi/maso='.$inputs['madv']);
-        } else
-            return view('errors.notlogin');
-    }
-
-    public function edit_account($id){
-        if (Session::has('admin')) {
-            $model=Users::findorfail($id);
-            return view('system.manage.edit_account')
-                ->with('model',$model)
-                ->with('url','/he_thong/quan_tri/')
-                ->with('pageTitle','Chỉnh sửa thông tin tài khoản');
-        } else
-            return view('errors.notlogin');
-    }
-
-    public function update_account(Request $request, $id){
-        if (Session::has('admin')) {
-            $inputs = $request->all();
-
-            $model=Users::findorfail($id);
-            $model->name=$inputs['name'];
-            $model->username=$inputs['username'];
-
-            if($inputs['newpass']!=''){
-                $model->password= md5($inputs['newpass']);
-            }
-            $model->phone=$inputs['phone'];
-            $model->email=$inputs['email'];
-            $model->status=$inputs['status'];
-            $model->save();
-
-            return redirect('/he_thong/quan_tri/don_vi/maso='.$model->maxa);
-        } else
-            return view('errors.notlogin');
-    }
-
-    function destroy_account(Request $request){
-        if (Session::has('admin')) {
-            $inputs = $request->all();
-            $model = Users::findOrFail($inputs['iddelete']);
-            $maxa=$model->madv;
-            $model->delete();
-            return redirect('/he_thong/quan_tri/don_vi/maso='.$maxa);
-        }else
-            return view('errors.notlogin');
-    }
-
-    public function permission_list($id){
-        if (Session::has('admin')) {
-            $model=Users::findorfail($id);
-            $permission = !empty($model->permission)  ? $model->permission : getPermissionDefault($model->level);
-            return view('system.users.perms')
-                ->with('model',$model)
-                ->with('permission',json_decode($permission))
-                ->with('url','/he_thong/quan_tri/')
-                ->with('pageTitle','Phân quyền cho tài khoản');
-        } else
-            return view('errors.notlogin');
-    }
-
-    public function permission_update(Request $request){
-        if (Session::has('admin')) {
-            $update = $request->all();
-            $id = $request['id'];
-
-            $model = Users::findOrFail($id);
-            //dd($model);
-            if(isset($model)){
-
-                $update['roles'] = isset($update['roles']) ? $update['roles'] : null;
-                $model->permission = json_encode($update['roles']);
-                $model->save();
-
-                return redirect('he_thong/quan_tri/don_vi/maso='.$model->maxa);
-
-            }else
-                dd('Tài khoản không tồn tại');
-
-        }else
-            return view('errors.notlogin');
-
-    }
+    // </editor-fold>
 }

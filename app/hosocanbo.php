@@ -56,7 +56,7 @@ class hosocanbo extends Model
         'pctn',
         'pctnn',
         'pcdbn',
-        'pcvk',
+        'pcvk',//dùng để thay thế phụ cấp Đảng uy viên
         'pckn',
         'pcdang',
         'pccovu',

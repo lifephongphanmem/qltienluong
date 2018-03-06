@@ -39,14 +39,8 @@
             <div class="col-md-6">
                 <div class="form-group">
                     <label class="col-sm-4 control-label">Chức vụ Đảng </label>
-
                     <div class="col-sm-8">
-                        <select class="form-control select2me" name="macvd" id="macvd">
-                            <option value="">-- Chọn chức vụ --</option>
-                            @foreach($m_cvd as $cv)
-                                <option value="{{$cv->macvd}}">{{$cv->tencv}}</option>
-                            @endforeach
-                        </select>
+                        {!!Form::text('macvd', null, array('id' => 'macvd','class' => 'form-control'))!!}
                     </div>
                 </div>
             </div>

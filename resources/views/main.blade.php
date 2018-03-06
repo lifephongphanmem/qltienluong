@@ -320,7 +320,7 @@
                                 <i class="fa fa-list-alt"></i> Danh mục <span class="arrow"></span>
                             </a>
                             <ul class="sub-menu" style="margin-left: 15px;">
-                                <!--li><a href="{{url('danh_muc/bao_mat/index?&level=X')}}">Bảo mật hồ sơ</a></li-->
+
                                 <!--li><a href="{{url('danh_muc/phong_ban/index')}}"><i class="fa fa-caret-right"></i>Phòng ban</a></li-->
                                 <li><a href="{{url('danh_muc/chuc_vu_cq/ma_so='.session('admin')->level)}}"><i class="fa fa-caret-right"></i>Chức vụ chính quyền</a></li>
                                 <li><a href="{{url('danh_muc/chuc_vu_d/index')}}"><i class="fa fa-caret-right"></i>Chức vụ đảng</a></li>
@@ -334,7 +334,7 @@
                                     <li><a href="{{url('danh_muc/pl_don_vi/index')}}"><i class="fa fa-caret-right"></i>Phân loại đơn vị</a></li>
                                     <li><a href="{{url('danh_muc/cong_tac/index')}}"><i class="fa fa-caret-right"></i>Phân loại công tác</a></li>
                                 @endif
-                                <li><a href="{{url('danh_muc/bao_hiem/index?phanloai='.session('admin')->maphanloai)}}"><i class="fa fa-caret-right"></i>Mức đóng bảo hiểm</a></li>
+                                <!--li><a href="{{url('danh_muc/bao_hiem/index?phanloai='.session('admin')->maphanloai)}}"><i class="fa fa-caret-right"></i>Mức đóng bảo hiểm</a></li-->
                             </ul>
                         </li>
                         <li>
@@ -349,13 +349,13 @@
                         </li>
                         <li>
                             <a href="javascript:;">
-                                <i class="icon-user"></i> Quản trị hệ thống <span class="arrow"></span>
+                                <i class="icon-grid"></i> Quản trị hệ thống <span class="arrow"></span>
                             </a>
 
                             <ul class="sub-menu" style="margin-left: 15px;">
                                 <li><a href="{{url('he_thong/don_vi/don_vi')}}"><i class="fa fa-caret-right"></i>Thông tin đơn vị</a></li>
-                                <!--li><a href="{{url('he_thong/don_vi/bao_hiem')}}"><i class="fa fa-caret-right"></i>Thông tin nộp bảo hiểm</a></li-->
-                                <!--li><a href="{{url('he_thong/don_vi/chung')}}"><i class="fa fa-caret-right"></i>Thông tin chung</a></li-->
+                                <li><a href="{{url('he_thong/don_vi/bao_hiem')}}"><i class="fa fa-caret-right"></i>Thông tin nộp bảo hiểm</a></li>
+                                <li><a href="{{url('he_thong/don_vi/phu_cap')}}"><i class="fa fa-caret-right"></i>Thông tin phụ cấp</a></li>
 
                             </ul>
                         </li>

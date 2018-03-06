@@ -173,13 +173,6 @@ Route::group(['prefix'=>'danh_muc'],function(){
         Route::post('store_detail','dmngachluongController@store_detail');//insert + update
         Route::get('get_detail','dmngachluongController@getinfo_detail');
     });
-
-    Route::group(['prefix'=>'bao_hiem'],function(){
-        Route::get('index','dmphanloaictController@index_baohiem');
-        Route::get('update_baohiem','dmphanloaictController@update_baohiem');
-        Route::get('get','dmphanloaictController@getinfo_baohiem');
-    });
-
 });
 
 Route::group(['prefix'=>'nghiep_vu'],function(){
@@ -729,9 +722,12 @@ Route::group(['prefix'=>'he_thong'],function(){
         Route::get('maso={id}/edit_global','dmdonviController@edit_global');
         Route::patch('/{id}/global','dmdonviController@update_global');
 
-        Route::get('bao_hiem','dmdonviController@information_baohiem');
-        Route::get('maso={madv}/edit_local','dmdonviController@edit_local');
-        Route::post('/{madv}','dmdonviController@update_local');
+        Route::get('bao_hiem','dmphanloaicongtac_baohiemController@index');
+        Route::get('update_bh','dmphanloaicongtac_baohiemController@update');
+        Route::get('get_bh','dmphanloaicongtac_baohiemController@getinfo');
+
+        Route::get('phu_cap','phanloaiphucapController@index');
+        Route::patch('update_pc','phanloaiphucapController@update');
     });
 
     Route::group(['prefix'=>'quan_tri'],function(){

@@ -32,28 +32,27 @@
             <div class="portlet light bordered">
                 <div class="portlet-title">
                     <div class="caption">
-                        <b>DANH MỤC NHÓM PHÂN LOẠI CÔNG TÁC</b>
+                        <b>THÔNG TIN HỆ SỐ BẢO HIỂM PHẢI NỘP </b>
                     </div>
                     <div class="actions">
 
                     </div>
                 </div>
                 <div class="portlet-body form-horizontal">
-                    <div class="row">
-                        <div class="form-group">
-                            <label class="control-label col-md-3">Phân loại đơn vị</label>
-                            <div class="col-md-5">
-                                {!! Form::select('mapl',$model_pl,$mapl,array('id' => 'mapl', 'class' => 'form-control'))!!}
-                            </div>
-                        </div>
-                    </div>
-
                     <table id="sample_3" class="table table-hover table-striped table-bordered" style="min-height: 230px">
                         <thead>
                             <tr>
-                                <th class="text-center" style="width: 10%">STT</th>
-                                <th class="text-center">Phân loại công tác</th>
-                                <th class="text-center">Ghi chú</th>
+                                <th class="text-center" style="width: 5%">STT</th>
+                                <th class="text-center">Phân loại</br>công tác</th>
+                                <th class="text-center">BHXH</br>cá nhân</br>đóng</th>
+                                <th class="text-center">BHYT</br>cá nhân</br>đóng</th>
+                                <th class="text-center">KPCĐ</br>cá nhân</br>đóng</th>
+                                <th class="text-center">BHTN</br>cá nhân</br>đóng</th>
+
+                                <th class="text-center">BHXH</br>đơn vị</br>đóng</th>
+                                <th class="text-center">BHYT</br>đơn vị</br>đóng</th>
+                                <th class="text-center">KPCĐ</br>đơn vị</br>đóng</th>
+                                <th class="text-center">BHTN</br>đơn vị</br>đóng</th>
                                 <th class="text-center">Thao tác</th>
                             </tr>
                         </thead>
@@ -63,10 +62,18 @@
                                     <tr>
                                         <td class="text-center">{{$key+1}}</td>
                                         <td>{{$value->tencongtac}}</td>
-                                        <td>{{$value->ghichu}}</td>
+                                        <td class="text-center">{{$value->bhxh}}</td>
+                                        <td class="text-center">{{$value->bhyt}}</td>
+                                        <td class="text-center">{{$value->kpcd}}</td>
+                                        <td class="text-center">{{$value->bhtn}}</td>
+
+                                        <td class="text-center">{{$value->bhxh_dv}}</td>
+                                        <td class="text-center">{{$value->bhyt_dv}}</td>
+                                        <td class="text-center">{{$value->kpcd_dv}}</td>
+                                        <td class="text-center">{{$value->bhtn_dv}}</td>
                                         <td>
                                             <button type="button" onclick="editCV('{{$value->macongtac}}')" class="btn btn-default btn-xs">
-                                                <i class="fa fa-edit"></i>&nbsp; Mức đóng</button>
+                                                <i class="fa fa-edit"></i>&nbsp; Sửa</button>
                                         </td>
                                     </tr>
                                 @endforeach
@@ -189,37 +196,22 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" data-dismiss="modal" class="btn btn-default">Hủy thao tác</button>
-                    @if(session('admin')->level == 'SA' || session('admin')->level == 'SSA')
-                        <button type="submit" id="submit" name="submit" value="submit" class="btn btn-primary" onclick="cfPB()">Đồng ý</button>
-                    @endif
+                    <button type="submit" id="submit" name="submit" value="submit" class="btn btn-primary" onclick="cfPB()">Đồng ý</button>
                 </div>
             </div>
         </div>
     </div>
 
     <script>
-        $(function(){
-            $('#mapl').change(function() {
-                window.location.href = '/danh_muc/bao_hiem/index?phanloai='+$('#mapl').val();
-            });
-        })
-        function add(){
-            $('#tencongtac').val('');
-            $('#maphanloai').val('');
-            $('#macongtac').val('');
-            $('#id').val(0);
-            $('#create-modal').modal('show');
-        }
-
         function editCV(macongtac){
             var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
             $.ajax({
-                url: '{{$furl}}' + 'get',
+                url: '{{$furl}}' + 'get_bh',
                 type: 'GET',
                 data: {
                     _token: CSRF_TOKEN,
                     macongtac: macongtac,
-                    maphanloai: $('#mapl').val()
+                    madv: '{{session('admin')->madv}}'
                 },
                 dataType: 'JSON',
                 success: function (data) {
@@ -245,40 +237,35 @@
 
         function cfPB(){
             var valid=true;
-            var maphanloai = $('#mapl').val();
             var macongtac = $('#macongtac').val();
+            var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
 
-
-                var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
-
-                    $.ajax({
-                        url: '{{$furl}}' + 'update_baohiem',
-                        type: 'GET',
-                        data: {
-                            _token: CSRF_TOKEN,
-                            macongtac: macongtac,
-                            maphanloai: maphanloai,
-                            bhxh: $('#bhxh').val(),
-                            bhyt: $('#bhyt').val(),
-                            kpcd: $('#kpcd').val(),
-                            bhtn: $('#bhtn').val(),
-                            bhxh_dv: $('#bhxh_dv').val(),
-                            bhyt_dv: $('#bhyt_dv').val(),
-                            kpcd_dv: $('#kpcd_dv').val(),
-                            bhtn_dv: $('#bhtn_dv').val()
-                        },
-                        dataType: 'JSON',
-                        success: function (data) {
-                            if (data.status == 'success') {
-                                location.reload();
-                            }
-                        },
-                        error: function(message){
-                            toastr.error(message,'Lỗi!!');
-                        }
-                    });
-
-
+            $.ajax({
+                url: '{{$furl}}' + 'update_bh',
+                type: 'GET',
+                data: {
+                    _token: CSRF_TOKEN,
+                    macongtac: macongtac,
+                    madv: '{{session('admin')->madv}}',
+                    bhxh: $('#bhxh').val(),
+                    bhyt: $('#bhyt').val(),
+                    kpcd: $('#kpcd').val(),
+                    bhtn: $('#bhtn').val(),
+                    bhxh_dv: $('#bhxh_dv').val(),
+                    bhyt_dv: $('#bhyt_dv').val(),
+                    kpcd_dv: $('#kpcd_dv').val(),
+                    bhtn_dv: $('#bhtn_dv').val()
+                },
+                dataType: 'JSON',
+                success: function (data) {
+                    if (data.status == 'success') {
+                        location.reload();
+                    }
+                },
+                error: function(message){
+                    toastr.error(message,'Lỗi!!');
+                }
+            });
             return valid;
         }
     </script>

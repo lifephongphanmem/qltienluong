@@ -335,4 +335,37 @@ function getStatus(){
     );
 }
 
+function getPhanLoaiPhuCap(){
+    return array('0' => 'Hệ số','1' => 'Tiền','2' => 'Phần trăm');
+}
+
+function getColPhuCap(){
+    return array(
+        'pccovu'=>'Công vụ',
+        'pctnvk'=>'T.niên v.khung',
+        'pctnn'=>'Thâm niên nghề',
+        'pccv'=>'Chức vụ',
+        'pcthni'=>'Lâu năm',
+        'pckn'=>'Kiêm nhiệm',
+        'pctn'=>'Trách nhiệm',
+        'pcudn'=>'Ưu đãi ngành',
+        'pckv'=>'Khu vực',
+        'pcth'=>'Thu hút',
+        'pcdbn'=>'Đặc biệt(đặc thù)',
+        'pcld'=>'Lưu động',
+        'pcdh'=>'Độc hại',
+        'pcdbqh'=>'Đại biểu HĐND',
+        'pcvk'=>'Cấp ủy viên',
+        'pcbdhdcu'=>'B.dưỡng HĐCU',
+        'pcdang'=>'Công tác Đảng',
+        'pclt'=>'Phân loại xã',
+        'pcdd'=>'Đắt đỏ',
+        'pck'=>'Phụ cấp khác'
+        //'pcct'=>'',
+        //'pckct'=>'',
+        //'pcd'=>'',
+        //'pctr'=>'',
+    );
+}
+
 ?>

@@ -99,7 +99,11 @@ class bangluongController extends Controller
             }
 
             $model_congtac = dmphanloaict::all();
-            $model_phanloai = dmphanloaicongtac_baohiem::all();
+            $model_phanloai = dmphanloaicongtac_baohiem::where('madv',session('madv')->madv)->get();
+            if(count($model_phanloai) == 0){
+                //Nếu đơn vị chưa set thông tin bảo hiểm thì lấy mặc định
+                $model_phanloai = $model_congtac;
+            }
             $a_truythu = array();
 
 

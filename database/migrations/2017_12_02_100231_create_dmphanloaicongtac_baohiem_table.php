@@ -15,7 +15,7 @@ class CreateDmphanloaicongtacBaohiemTable extends Migration
     {
         Schema::create('dmphanloaicongtac_baohiem', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('maphanloai')->nullable();
+            $table->string('madv')->nullable();
             $table->string('macongtac')->nullable();
             $table->double('bhxh')->default(0);
             $table->double('bhyt')->default(0);

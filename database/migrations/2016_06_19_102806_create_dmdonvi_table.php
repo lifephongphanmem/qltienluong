@@ -32,6 +32,32 @@ class CreateDmdonviTable extends Migration
             $table->string('phanloaixa',50)->nullable();//đơn vị cấp X, H, T
             $table->string('phanloainguon')->nullable();
             $table->string('linhvuchoatdong')->nullable();//lĩnh vực hoạt động
+            //theo dõi phụ cấp tại đơn vị 0:hệ số; 1:phần trăm; 2: số tiền
+            $table->double('pcct')->default(0);
+            $table->double('pckct')->default(0);
+            $table->double('pck')->default(0);
+            $table->double('pccv')->default(0);
+            $table->double('pckv')->default(0);
+            $table->double('pcth')->default(0);
+            $table->double('pcdd')->default(0);
+            $table->double('pcdh')->default(0);
+            $table->double('pcld')->default(0);
+            $table->double('pcdbqh')->default(0);
+            $table->double('pcudn')->default(0);
+            $table->double('pctn')->default(0);
+            $table->double('pctnn')->default(0);
+            $table->double('pcdbn')->default(0);
+            $table->double('pcvk')->default(0);//dùng để thay thế phụ cấp Đảng ủy viên
+            $table->double('pckn')->default(0);
+            $table->double('pcdang')->default(0);
+            $table->double('pccovu')->default(0);
+            $table->double('pclt')->default(0); //lưu thay phụ cấp phân loại xã
+            $table->double('pcd')->default(0);
+            $table->double('pctr')->default(0);
+            $table->double('pctnvk')->default(0);
+            $table->double('pcbdhdcu')->default(0);
+            $table->double('pcthni')->default(0);
+
             $table->timestamps();
         });
     }

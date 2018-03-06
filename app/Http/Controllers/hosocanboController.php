@@ -123,12 +123,13 @@ class hosocanboController extends Controller
                 ->wherein('madv',['SA',session('admin')->madv])->get();
             //khối phòng ban giờ là lĩnh vực hoạt động
             $m_linhvuc=array_column(dmkhoipb::all()->toArray(),'tenkhoipb','makhoipb');
-            $m_cvd= dmchucvud::all();
+            //$m_cvd= dmchucvud::all();
             $m_plnb=nhomngachluong::select('manhom','tennhom')->distinct()->get();
             $m_pln=ngachluong::select('tenngachluong','manhom','msngbac')->distinct()->get();
 
             $macanbo=session('admin')->madv . '_' . getdate()[0];
-            $m_pc=dmphucap::all('mapc','tenpc','hesopc')->toArray();
+            //$m_pc=dmphucap::all('mapc','tenpc','hesopc')->toArray();
+            $a_donvi = dmdonvi::where('madv',session('admin')->madv)->first()->toarray();
 
             return view('manage.hosocanbo.create')
                 ->with('type','create')
@@ -138,12 +139,14 @@ class hosocanboController extends Controller
                 ->with('model_dt',$model_dt)
                 //->with('m_pb',$m_pb)
                 ->with('m_cvcq',$m_cvcq)
-                ->with('m_cvd',$m_cvd)
+                //->with('m_cvd',$m_cvd)
                 ->with('model_nhomct',$model_nhomct)
                 ->with('model_tenct',$model_tenct)
                 ->with('m_plnb',$m_plnb)
                 ->with('m_pln',$m_pln)
-                ->with('m_pc',$m_pc)
+                //->with('m_pc',$m_pc)
+                ->with('a_phucap',getColPhuCap())
+                ->with('a_donvi',$a_donvi)
                 ->with('pageTitle','Tạo hồ sơ cán bộ');
         } else
             return view('errors.notlogin');
@@ -217,32 +220,35 @@ class hosocanboController extends Controller
             $model = hosocanbo::find($id);
             //$m_hosoct = hosotinhtrangct::where('macanbo',$model->macanbo)->where('hientai','1')->first();
 
-            $model_nhomct=dmphanloaicongtac::select('macongtac','tencongtac')->get();
-            $model_tenct=dmphanloaict::select('tenct','macongtac','mact')->get();
-            $model_dt=array_column(dmdantoc::select(DB::raw('dantoc as maso'),'dantoc')->get()->toarray(),'dantoc','maso');
+            $model_nhomct = dmphanloaicongtac::select('macongtac','tencongtac')->get();
+            $model_tenct = dmphanloaict::select('tenct','macongtac','mact')->get();
+            $model_dt = array_column(dmdantoc::select(DB::raw('dantoc as maso'),'dantoc')->get()->toarray(),'dantoc','maso');
             //$m_pb= dmphongban::where('madv',session('admin')->madv)->get();
             //khối phòng ban giờ là lĩnh vực hoạt động
-            $m_linhvuc=array_column(dmkhoipb::all()->toArray(),'tenkhoipb','makhoipb');
+            $m_linhvuc = array_column(dmkhoipb::all()->toArray(),'tenkhoipb','makhoipb');
             $m_pb = dmphongban::where('madv',session('admin')->madv)->get();
             $m_cvcq = dmchucvucq::where('maphanloai',session('admin')->maphanloai)->get();
-            $m_cvd = dmchucvud::all();
+            //$m_cvd = dmchucvud::all();
             $m_plnb = nhomngachluong::select('manhom','tennhom')->distinct()->get();
             $m_pln = ngachluong::select('tenngachluong','manhom','msngbac')->distinct()->get();
             $a_linhvuc = explode(',',$model->lvhd);
-            //dd($model);
+            $a_donvi = dmdonvi::where('madv',session('admin')->madv)->first()->toarray();
+
             return view('manage.hosocanbo.edit')
                 ->with('model',$model)
                 ->with('type','edit')
                 ->with('model_dt',$model_dt)
                 ->with('m_pb',$m_pb)
                 ->with('m_cvcq',$m_cvcq)
-                ->with('m_cvd',$m_cvd)
+                //->with('m_cvd',$m_cvd)
                 ->with('model_nhomct',$model_nhomct)
                 ->with('model_tenct',$model_tenct)
                 ->with('m_linhvuc',$m_linhvuc)
                 ->with('a_linhvuc',$a_linhvuc)
                 ->with('m_plnb',$m_plnb)
                 ->with('m_pln',$m_pln)
+                ->with('a_phucap',getColPhuCap())
+                ->with('a_donvi',$a_donvi)
                 ->with('pageTitle','Sửa thông tin hồ sơ cán bộ');
         } else
             return view('errors.notlogin');
