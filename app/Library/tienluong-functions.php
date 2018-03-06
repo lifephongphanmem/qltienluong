@@ -336,13 +336,13 @@ function getStatus(){
 }
 
 function getPhanLoaiPhuCap(){
-    return array('0' => 'Hệ số','1' => 'Tiền','2' => 'Phần trăm');
+    return array('0' => 'Hệ số','1' => 'Số tiền','2' => 'Phần trăm','3' => 'Ẩn');
 }
 
 function getColPhuCap(){
     return array(
         'pccovu'=>'Công vụ',
-        'pctnvk'=>'T.niên v.khung',
+        'pctnvk'=>'Thâm niên vượt khung',
         'pctnn'=>'Thâm niên nghề',
         'pccv'=>'Chức vụ',
         'pcthni'=>'Lâu năm',
@@ -356,7 +356,7 @@ function getColPhuCap(){
         'pcdh'=>'Độc hại',
         'pcdbqh'=>'Đại biểu HĐND',
         'pcvk'=>'Cấp ủy viên',
-        'pcbdhdcu'=>'B.dưỡng HĐCU',
+        'pcbdhdcu'=>'Bồi dưỡng HĐCU',
         'pcdang'=>'Công tác Đảng',
         'pclt'=>'Phân loại xã',
         'pcdd'=>'Đắt đỏ',
@@ -368,4 +368,29 @@ function getColPhuCap(){
     );
 }
 
+function getColPhuCap_BaoCao()
+{
+    return array(
+        'pckv' => 'Phụ cấp</br>khu vực',
+        'pccv' => 'Phụ cấp</br>chức vụ',
+        'pctnvk' => 'Phụ cấp</br>thâm niên</br>vượt khung',
+        'pcudn' => 'Phụ cấp</br>ưu đãi</br>ngành',
+        'pcth' => 'Phụ cấp</br>thu hút',
+        'pcthni' => 'Phụ cấp</br>công tác</br>lâu năm',
+        'pccovu' => 'Phụ cấp</br>công vụ',
+        'pcdang' => 'Phụ cấp</br>công tác</br>Đảng',
+        'pctnn' => 'Phụ cấp</br>thâm niên</br>nghề',
+        'pctn' => 'Phụ cấp</br>trách nhiệm',
+        'pckn' => 'Phụ cấp</br>kiêm nhiệm',
+        'pclt' => 'Phụ cấp</br>phân loại</br>xã',
+        'pcdd' => 'Phụ cấp</br>đắt đỏ',
+        'pcdbqh'=>'Phụ cấp</br>Đại biểu</br>HĐND',
+        'pcvk'=>'Phụ cấp</br>cấp ủy</br>viên',
+        'pcbdhdcu'=>'Phụ cấp</br>bồi dưỡng</br>HĐCU',
+        'pcdbn'=>'Phụ cấp</br>đặc biệt</br>(đặc thù)',
+        'pcld'=>'Phụ cấp</br>lưu động',
+        'pcdh'=>'Phụ cấp</br>độc hại',
+        'pck' => 'Phụ cấp</br>khác'
+    );
+}
 ?>

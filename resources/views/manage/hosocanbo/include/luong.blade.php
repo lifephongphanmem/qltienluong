@@ -143,7 +143,6 @@
                 <div class="portlet-title">
                     <div class="caption">
                         Thông tin các khoản phụ cấp
-                        (for theo mang)
                     </div>
                     <div class="tools">
                         <a href="javascript:;" class="collapse" data-original-title="" title=""></a>
@@ -154,8 +153,10 @@
                     <div class="form-body">
                         <div class="row">
                             @foreach($a_phucap as $key=>$val)
-                                @if($a_donvi[$key] == 2)
-                                    <div class="col-md-2">
+                                @if($a_donvi[$key] == 3)
+                                    {!!Form::hidden($key, null, array('id' =>$key, 'class' => 'form-control', 'data-mask'=>'fdecimal'))!!}
+                                @elseif($a_donvi[$key] == 2)
+                                    <div class="col-md-3">
                                         <div class="form-group">
                                             <label class="control-label">{{$val}}</label>
                                             <div class="input-group bootstrap-touchspin">
@@ -165,23 +166,20 @@
                                         </div>
                                     </div>
                                 @elseif($a_donvi[$key] == 1)
-                                    <div class="col-md-2">
+                                    <div class="col-md-3">
                                         <div class="form-group">
                                             <label class="control-label">{{$val}}</label>
                                             <div class="input-group bootstrap-touchspin">
                                                 {!!Form::text($key, null, array('id' =>$key, 'class' => 'form-control', 'data-mask'=>'fdecimal'))!!}
-                                                <span class="input-group-addon bootstrap-touchspin-postfix">Đ</span>
+                                                <span class="input-group-addon bootstrap-touchspin-postfix">VNĐ</span>
                                             </div>
                                         </div>
                                     </div>
                                 @else
-                                    <div class="col-md-2">
+                                    <div class="col-md-3">
                                         <div class="form-group">
                                             <label class="control-label">{{$val}}</label>
-                                            <div class="input-group bootstrap-touchspin">
-                                                {!!Form::text($key, null, array('id' =>$key, 'class' => 'form-control', 'data-mask'=>'fdecimal'))!!}
-                                                <span class="input-group-addon bootstrap-touchspin-postfix">0.0</span>
-                                            </div>
+                                            {!!Form::text($key, null, array('id' =>$key, 'class' => 'form-control', 'data-mask'=>'fdecimal'))!!}
                                         </div>
                                     </div>
                                 @endif
@@ -189,51 +187,6 @@
                         </div>
                     </div>
 
-
-                </div>
-            </div>
-            <!-- END PORTLET-->
-        </div>
-    </div>
-
-    <div class="row">
-        <div class="col-md-12">
-            <!-- BEGIN PORTLET-->
-            <div class="portlet box blue">
-                <div class="portlet-title">
-                    <div class="caption">
-                        Thông tin truy lĩnh lương
-                    </div>
-                    <div class="tools">
-                        <a href="javascript:;" class="collapse" data-original-title="" title=""></a>
-                    </div>
-                </div>
-                <div class="portlet-body" style="display: block;">
-                    <div class="row">
-
-                        <div class="col-md-3">
-                            <div class="form-group">
-                                <label class="control-label">Truy lĩnh từ ngày</label>
-                                {!! Form::input('date','truylinhtungay',null,array('id' => 'truylinhtungay', 'class' => 'form-control'))!!}
-                            </div>
-                        </div>
-
-                        <div class="col-md-3">
-                            <div class="form-group">
-                                <label class="control-label">Truy lĩnh đến ngày</label>
-                                {!! Form::input('date','truylinhdenngay',null,array('id' => 'truylinhdenngay', 'class' => 'form-control'))!!}
-                            </div>
-                        </div>
-
-                        <div class="col-md-2">
-                            <div class="form-group">
-                                <label class="control-label">Hệ số lương truy lĩnh</label>
-                                {!!Form::text('hesott', null, array('id' => 'hesott','class' => 'form-control', 'data-mask'=>'fdecimal'))!!}
-                            </div>
-                        </div>
-
-
-                    </div>
 
                 </div>
             </div>

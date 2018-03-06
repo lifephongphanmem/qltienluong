@@ -82,7 +82,7 @@
         <th style="width: 10%;" rowspan="2">Họ và tên</th>
         <th style="width: 6%;" rowspan="2">Cấp bậc</br>chức vụ</th>
         <th style="width: 6%;" rowspan="2">Mã số</br>ngạch</br>bậc</th>
-        <th colspan="17">Lương hệ số</th>
+        <th colspan="{{$col + 3}}">Lương hệ số</th>
         <th style="width: 6%;" rowspan="2">Nghỉ việc</br>không được</br>hưởng lương</th>
         <th style="width: 6%;" rowspan="2">BHXH trả</br>thay lương</th>
         <th style="width: 6%;" rowspan="2">Tổng cộng</br>tiền lương</th>
@@ -94,22 +94,11 @@
     <tr style="padding-left: 2px;padding-right: 2px">
         <th>Hệ số</br>lương</th>
         <th>Hệ số</br>phụ</br>cấp</th>
-        <th>Phụ cấp</br>khu vực</th>
-        <th>Phụ cấp</br>chức vụ</th>
-        <th>PCTN</br>vượt khung</th>
-        <th>Phụ cấp</br>ưu đãi ngành</th>
-        <th>Phụ cấp</br>thu hút</th>
-        <th>Phụ cấp</br>công tác</br>lâu năm</th>
-        <th>Phụ cấp</br>công vụ</th>
-        <th>Phụ cấp</br>công tác Đảng</th>
-        <th>Phụ cấp</br>thâm niên nghề</th>
 
-        <th>Phụ cấp</br>trách nhiệm</th>
-        <th>Phụ cấp</br>kiêm nhiệm</th>
-        <th>Phụ cấp</br>phân loại</br>xã</th>
-        <th>Phụ cấp</br>đắt đỏ</th>
+        @foreach($a_phucap as $key=>$val)
+            <th>{!!$val!!}</th>
+        @endforeach
 
-        <th>Phụ cấp</br>khác</th>
         <th>Cộng</br>hệ số</th>
 
         <th>BHXH</th>
@@ -120,7 +109,7 @@
     </tr>
 
     <tr>
-        @for($i=1;$i<=33;$i++)
+        @for($i=1;$i<=18 + $col;$i++)
         <th>{{$i}}</th>
         @endfor
     </tr>
@@ -130,7 +119,7 @@
         <?php $stt=1; ?>
             <tr style="font-weight: bold;">
                 <td>{{convert2Roman($i++)}}</td>
-                <td style="text-align: left;" colspan="32">{{$congtac->tenct}}</td>
+                <td style="text-align: left;" colspan="{{17 + $col}}">{{$congtac->tenct}}</td>
             </tr>
         <?php $model_luong = $model->where('mact',$congtac->mact)?>
         @foreach($model_luong as $ct)
@@ -142,21 +131,11 @@
                 <td style="text-align: left">{{$ct->msngbac}}</td>
                 <td>{{dinhdangso(($ct->heso + $ct->hesott))}}</td>
                 <td>{{dinhdangso($ct->hesopc)}}</td>
-                <td>{{dinhdangso($ct->pckv)}}</td>
-                <td>{{dinhdangso($ct->pccv)}}</td>
-                <td>{{dinhdangso($ct->pctnvk)}}</td>
-                <td>{{dinhdangso($ct->pcudn)}}</td>
-                <td>{{dinhdangso($ct->pcth)}}</td>
-                <td>{{dinhdangso($ct->pcthni)}}</td>
-                <td>{{dinhdangso($ct->pccovu)}}</td>
-                <td>{{dinhdangso($ct->pcdang)}}</td>
-                <td>{{dinhdangso($ct->pctnn)}}</td>
 
-                <td>{{dinhdangso($ct->pctn)}}</td>
-                <td>{{dinhdangso($ct->pckn)}}</td>
-                <td>{{dinhdangso($ct->pclt)}}</td>
-                <td>{{dinhdangso($ct->pcdd)}}</td>
-                <td>{{dinhdangso($ct->pck)}}</td>
+                @foreach($a_phucap as $key=>$val)
+                    <td>{{dinhdangso($ct->$key)}}</td>
+                @endforeach
+
                 <td>{{dinhdangso($ct->tonghs)}}</td>
 
                 <td> {{dinhdangso($ct->giaml)}}</td>
@@ -176,22 +155,11 @@
                 <td colspan="5">Cộng</td>
                 <td>{{dinhdangso($model_luong->sum('heso') + $model_luong->sum('hesott'))}}</td>
                 <td>{{dinhdangso($model_luong->sum('hesopc'))}}</td>
-                <td>{{dinhdangso($model_luong->sum('pckv'))}}</td>
-                <td>{{dinhdangso($model_luong->sum('pccv'))}}</td>
-                <td>{{dinhdangso($model_luong->sum('pctnvk'))}}</td>
-                <td>{{dinhdangso($model_luong->sum('pcudn'))}}</td>
-                <td>{{dinhdangso($model_luong->sum('pcth'))}}</td>
-                <td>{{dinhdangso($model_luong->sum('pcthni'))}}</td>
-                <td>{{dinhdangso($model_luong->sum('pccovu'))}}</td>
-                <td>{{dinhdangso($model_luong->sum('pcdang'))}}</td>
-                <td>{{dinhdangso($model_luong->sum('pctnn'))}}</td>
 
-                <td>{{dinhdangso($model_luong->sum('pctn'))}}</td>
-                <td>{{dinhdangso($model_luong->sum('pckn'))}}</td>
-                <td>{{dinhdangso($model_luong->sum('pclt'))}}</td>
-                <td>{{dinhdangso($model_luong->sum('pcdd'))}}</td>
+                @foreach($a_phucap as $key=>$val)
+                    <td>{{dinhdangso($model_luong->sum($key))}}</td>
+                @endforeach
 
-                <td>{{dinhdangso($model_luong->sum('pck'))}}</td>
                 <td>{{dinhdangso($model_luong->sum('tonghs'))}}</td>
 
                 <td class="money">{{dinhdangso($model_luong->sum('giaml'))}}</td>
@@ -212,22 +180,11 @@
         <td colspan="5">Tổng cộng</td>
         <td>{{dinhdangso($model->sum('heso') + $model->sum('hesott'))}}</td>
         <td>{{dinhdangso($model->sum('hesopc'))}}</td>
-        <td>{{dinhdangso($model->sum('pckv'))}}</td>
-        <td>{{dinhdangso($model->sum('pccv'))}}</td>
-        <td>{{dinhdangso($model->sum('pctnvk'))}}</td>
-        <td>{{dinhdangso($model->sum('pcudn'))}}</td>
-        <td>{{dinhdangso($model->sum('pcth'))}}</td>
-        <td>{{dinhdangso($model->sum('pcthni'))}}</td>
-        <td>{{dinhdangso($model->sum('pccovu'))}}</td>
-        <td>{{dinhdangso($model->sum('pcdang'))}}</td>
-        <td>{{dinhdangso($model->sum('pctnn'))}}</td>
 
-        <td>{{dinhdangso($model->sum('pctn'))}}</td>
-        <td>{{dinhdangso($model->sum('pckn'))}}</td>
-        <td>{{dinhdangso($model->sum('pclt'))}}</td>
-        <td>{{dinhdangso($model->sum('pcdd'))}}</td>
+        @foreach($a_phucap as $key=>$val)
+            <td>{{dinhdangso($model->sum($key))}}</td>
+        @endforeach
 
-        <td>{{dinhdangso($model->sum('pck'))}}</td>
         <td>{{dinhdangso($model->sum('tonghs'))}}</td>
 
         <td class="money">{{dinhdangso($model->sum('giaml'))}}</td>

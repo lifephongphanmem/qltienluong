@@ -179,11 +179,11 @@ class hosocanboController extends Controller
             $insert['ngayvao']=getDateTime($insert['ngayvao']);
             $insert['ngaybc']=getDateTime($insert['ngaybc']);
             $insert['macvd']=($insert['macvd']==''?NULL:$insert['macvd']);
-            $insert['truylinhtungay']=getDateTime($insert['truylinhtungay']);
-            $insert['truylinhdenngay']=getDateTime($insert['truylinhdenngay']);
+            //$insert['truylinhtungay']=getDateTime($insert['truylinhtungay']);
+            //$insert['truylinhdenngay']=getDateTime($insert['truylinhdenngay']);
 
             $insert['heso'] = chkDbl($insert['heso']);
-            $insert['hesott'] = chkDbl($insert['hesott']);
+            //$insert['hesott'] = chkDbl($insert['hesott']);
             $insert['hesopc'] = chkDbl($insert['hesopc']);
             $insert['vuotkhung'] = chkDbl($insert['vuotkhung']);
             $insert['pccv'] = chkDbl($insert['pccv']);
@@ -281,12 +281,12 @@ class hosocanboController extends Controller
             $insert['ngayvao']=getDateTime($insert['ngayvao']);
             $insert['ngaybc']=getDateTime($insert['ngaybc']);
             $insert['macvd']=($insert['macvd']==''?NULL:$insert['macvd']);
-            $insert['truylinhtungay']=getDateTime($insert['truylinhtungay']);
-            $insert['truylinhdenngay']=getDateTime($insert['truylinhdenngay']);
+            //$insert['truylinhtungay']=getDateTime($insert['truylinhtungay']);
+            //$insert['truylinhdenngay']=getDateTime($insert['truylinhdenngay']);
 
             $insert['heso'] = chkDbl($insert['heso']);
             $insert['hesopc'] = chkDbl($insert['hesopc']);
-            $insert['hesott'] = chkDbl($insert['hesott']);
+            //$insert['hesott'] = chkDbl($insert['hesott']);
             $insert['vuotkhung'] = chkDbl($insert['vuotkhung']);
             $insert['pccv'] = chkDbl($insert['pccv']);
             $insert['pckn'] = chkDbl($insert['pckn']);

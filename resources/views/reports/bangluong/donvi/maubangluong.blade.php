@@ -57,7 +57,7 @@
 <table class="header" width="96%" border="0" cellspacing="0" cellpadding="8" style="margin:0 auto 25px; text-align: center;">
     <tr>
         <td  style="text-align: left;width: 60%">
-            <b>Đơn vị chủ quản: {{$m_dv->tenct}}</b>
+            <b>Đơn vị chủ quản: {{$m_dv['tenct']}}</b>
         </td>
         <td  style="text-align: center;">
             <b>Mẫu số C02a - HD</b>
@@ -65,7 +65,7 @@
     </tr>
     <tr>
         <td style="text-align: left;width: 60%">
-            <b>Đơn vị: {{$m_dv->tendv}}</b>
+            <b>Đơn vị: {{$m_dv['tendv']}}</b>
         </td>
         <td style="text-align: center; font-style: italic">
             (Ban hành kèm theo QĐ số 19/2006/QĐ-BTC ngày 30/3/2006 và Thông tư số 185/2010/TT-BTC ngày 15/11/2010 của Bộ Tài chính)
@@ -82,7 +82,7 @@
         <th style="width: 10%;" rowspan="2">Họ và tên</th>
         <th style="width: 6%;" rowspan="2">Cấp bậc</br>chức vụ</th>
         <th style="width: 6%;" rowspan="2">Mã số</br>ngạch</br>bậc</th>
-        <th colspan="18">Lương hệ số</th>
+        <th colspan="{{$col + 4}}">Lương hệ số</th>
         <th style="width: 6%;" rowspan="2">Nghỉ việc</br>không được</br>hưởng lương</th>
         <th style="width: 6%;" rowspan="2">BHXH trả</br>thay lương</th>
         <th style="width: 6%;" rowspan="2">Tổng cộng</br>tiền lương</th>
@@ -94,22 +94,11 @@
     <tr style="padding-left: 2px;padding-right: 2px">
         <th>Hệ số</br>lương</th>
         <th>Hệ số</br>phụ</br>cấp</th>
-        <th>Phụ cấp</br>khu vực</th>
-        <th>Phụ cấp</br>chức vụ</th>
-        <th>PCTN</br>vượt khung</th>
-        <th>Phụ cấp</br>ưu đãi ngành</th>
-        <th>Phụ cấp</br>thu hút</th>
-        <th>Phụ cấp</br>công tác</br>lâu năm</th>
-        <th>Phụ cấp</br>công vụ</th>
-        <th>Phụ cấp</br>công tác Đảng</th>
-        <th>Phụ cấp</br>thâm niên nghề</th>
 
-        <th>Phụ cấp</br>trách nhiệm</th>
-        <th>Phụ cấp</br>kiêm nhiệm</th>
-        <th>Phụ cấp</br>phân loại</br>xã</th>
-        <th>Phụ cấp</br>đắt đỏ</th>
+        @foreach($a_phucap as $key=>$val)
+            <th>{!!$val!!}</th>
+        @endforeach
 
-        <th>Phụ cấp</br>khác</th>
         <th>Cộng</br>hệ số</th>
         <th>Thành tiền</th>
 
@@ -121,8 +110,8 @@
     </tr>
 
     <tr>
-        @for($i=1;$i<=33;$i++)
-        <th>{{$i}}</th>
+        @for($i=1;$i<=19 + $col;$i++)
+            <th>{{$i}}</th>
         @endfor
     </tr>
 
@@ -131,7 +120,7 @@
         <?php $stt=1; ?>
             <tr style="font-weight: bold;">
                 <td>{{convert2Roman($i++)}}</td>
-                <td style="text-align: left;" colspan="32">{{$congtac->tenct}}</td>
+                <td style="text-align: left;" colspan="{{18+ $col}}">{{$congtac->tenct}}</td>
             </tr>
         <?php $model_luong = $model->where('mact',$congtac->mact)?>
         @foreach($model_luong as $ct)
@@ -143,23 +132,12 @@
                 <td style="text-align: left">{{$ct->msngbac}}</td>
                 <td>{{dinhdangsothapphan(($ct->heso + $ct->hesott),5)}}</td>
                 <td>{{dinhdangsothapphan($ct->hesopc,5)}}</td>
-                <td>{{dinhdangsothapphan($ct->pckv,5)}}</td>
-                <td>{{dinhdangsothapphan($ct->pccv,5)}}</td>
-                <td>{{dinhdangsothapphan($ct->pctnvk,5)}}</td>
-                <td>{{dinhdangsothapphan($ct->pcudn,5)}}</td>
-                <td>{{dinhdangsothapphan($ct->pcth,5)}}</td>
-                <td>{{dinhdangsothapphan($ct->pcthni,5)}}</td>
-                <td>{{dinhdangsothapphan($ct->pccovu,5)}}</td>
-                <td>{{dinhdangsothapphan($ct->pcdang,5)}}</td>
-                <td>{{dinhdangsothapphan($ct->pctnn,5)}}</td>
 
-                <td>{{dinhdangsothapphan($ct->pctn,5)}}</td>
-                <td>{{dinhdangsothapphan($ct->pckn,5)}}</td>
-                <td>{{dinhdangsothapphan($ct->pclt,5)}}</td>
-                <td>{{dinhdangsothapphan($ct->pcdd,5)}}</td>
-                <td>{{dinhdangsothapphan($ct->pck,5)}}</td>
+                @foreach($a_phucap as $key=>$val)
+                    <td>{{dinhdangsothapphan($ct->$key,5)}}</td>
+                @endforeach
+
                 <td>{{dinhdangsothapphan($ct->tonghs,5)}}</td>
-
                 <td>{{dinhdangso($ct->ttl)}}</td>
                 <td> {{dinhdangso($ct->giaml)}}</td>
                 <td>{{dinhdangso($ct->bhct)}}</td>
@@ -178,22 +156,11 @@
                 <td colspan="5">Cộng</td>
                 <td>{{dinhdangsothapphan($model_luong->sum('heso') + $model_luong->sum('hesott') ,5)}}</td>
                 <td>{{dinhdangsothapphan($model_luong->sum('hesopc') ,5)}}</td>
-                <td>{{dinhdangsothapphan($model_luong->sum('pckv') ,5)}}</td>
-                <td>{{dinhdangsothapphan($model_luong->sum('pccv') ,5)}}</td>
-                <td>{{dinhdangsothapphan($model_luong->sum('pctnvk') ,5)}}</td>
-                <td>{{dinhdangsothapphan($model_luong->sum('pcudn') ,5)}}</td>
-                <td>{{dinhdangsothapphan($model_luong->sum('pcth') ,5)}}</td>
-                <td>{{dinhdangsothapphan($model_luong->sum('pcthni') ,5)}}</td>
-                <td>{{dinhdangsothapphan($model_luong->sum('pccovu') ,5)}}</td>
-                <td>{{dinhdangsothapphan($model_luong->sum('pcdang') ,5)}}</td>
-                <td>{{dinhdangsothapphan($model_luong->sum('pctnn') ,5)}}</td>
 
-                <td>{{dinhdangsothapphan($model_luong->sum('pctn') ,5)}}</td>
-                <td>{{dinhdangsothapphan($model_luong->sum('pckn') ,5)}}</td>
-                <td>{{dinhdangsothapphan($model_luong->sum('pclt') ,5)}}</td>
-                <td>{{dinhdangsothapphan($model_luong->sum('pcdd') ,5)}}</td>
+                @foreach($a_phucap as $key=>$val)
+                    <td>{{dinhdangsothapphan($model_luong->sum($key) ,5)}}</td>
+                @endforeach
 
-                <td>{{dinhdangsothapphan($model_luong->sum('pck') ,5)}}</td>
                 <td>{{dinhdangsothapphan($model_luong->sum('tonghs') ,5)}}</td>
 
                 <td class="money">{{dinhdangso($model_luong->sum('ttl'))}}</td>
@@ -215,22 +182,11 @@
         <td colspan="5">Tổng cộng</td>
         <td>{{dinhdangsothapphan($model->sum('heso') + $model->sum('hesott') ,5)}}</td>
         <td>{{dinhdangsothapphan($model->sum('hesopc') ,5)}}</td>
-        <td>{{dinhdangsothapphan($model->sum('pckv') ,5)}}</td>
-        <td>{{dinhdangsothapphan($model->sum('pccv') ,5)}}</td>
-        <td>{{dinhdangsothapphan($model->sum('pctnvk') ,5)}}</td>
-        <td>{{dinhdangsothapphan($model->sum('pcudn') ,5)}}</td>
-        <td>{{dinhdangsothapphan($model->sum('pcth') ,5)}}</td>
-        <td>{{dinhdangsothapphan($model->sum('pcthni') ,5)}}</td>
-        <td>{{dinhdangsothapphan($model->sum('pccovu') ,5)}}</td>
-        <td>{{dinhdangsothapphan($model->sum('pcdang') ,5)}}</td>
-        <td>{{dinhdangsothapphan($model->sum('pctnn') ,5)}}</td>
 
-        <td>{{dinhdangsothapphan($model->sum('pctn') ,5)}}</td>
-        <td>{{dinhdangsothapphan($model->sum('pckn') ,5)}}</td>
-        <td>{{dinhdangsothapphan($model->sum('pclt') ,5)}}</td>
-        <td>{{dinhdangsothapphan($model->sum('pcdd') ,5)}}</td>
+        @foreach($a_phucap as $key=>$val)
+            <td>{{dinhdangsothapphan($model->sum($key) ,5)}}</td>
+        @endforeach
 
-        <td>{{dinhdangsothapphan($model->sum('pck') ,5)}}</td>
         <td>{{dinhdangsothapphan($model->sum('tonghs') ,5)}}</td>
 
         <td class="money">{{dinhdangso($model->sum('ttl'))}}</td>
@@ -255,7 +211,7 @@
     </tr>
     <tr style="font-weight: bold">
         <td style="text-align: center;" width="50%">Người lập bảng</td>
-        <td style="text-align: center;" width="50%">{{$m_dv->cdlanhdao}}</td>
+        <td style="text-align: center;" width="50%">{{$m_dv['cdlanhdao']}}</td>
     </tr>
     <tr style="font-style: italic">
         <td style="text-align: center;" width="50%">(Ghi rõ họ tên)</td>
@@ -266,8 +222,8 @@
     </tr>
 
     <tr>
-        <td style="text-align: center;" width="50%">{{$m_dv->nguoilapbieu}}</td>
-        <td style="text-align: center;" width="50%">{{$m_dv->lanhdao}}</td>
+        <td style="text-align: center;" width="50%">{{$m_dv['nguoilapbieu']}}</td>
+        <td style="text-align: center;" width="50%">{{$m_dv['lanhdao']}}</td>
     </tr>
 </table>
 

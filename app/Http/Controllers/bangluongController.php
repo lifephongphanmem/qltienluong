@@ -356,9 +356,12 @@ class bangluongController extends Controller
                 $model->kpcd_dv = 0;
             }
             //dd($model);
+            $a_donvi = dmdonvi::where('madv',session('admin')->madv)->first()->toarray();
             return view('manage.bangluong.chitiet')
                 ->with('furl','/chuc_nang/bang_luong/')
                 ->with('model',$model)
+                ->with('a_phucap',getColPhuCap())
+                ->with('a_donvi',$a_donvi)
                 //->with('model_baohiem',$model_baohiem)
                 ->with('pageTitle','Chi tiết bảng lương');
         } else
@@ -442,12 +445,24 @@ class bangluongController extends Controller
             $thongtin=array('nguoilap'=>$m_bl->nguoilap,
                 'thang'=>$m_bl->thang,
                 'nam'=>$m_bl->nam);
-            //dd($model);
+            //xử lý ẩn hiện cột phụ cấp => biết tổng số cột hiện => colspan trên báo cáo
+            $a_phucapbc = getColPhuCap_BaoCao();
+            $a_phucap = array();
+            $col = 0;
+            foreach($a_phucapbc as $key=>$val){
+                if($m_dv->$key <3) {
+                    $a_phucap[$key] = $val;
+                    $col++;
+                }
+            }
+
             return view('reports.bangluong.donvi.maubangluong')
                 ->with('model',$model)
                 ->with('m_dv',$m_dv)
                 ->with('thongtin',$thongtin)
+                ->with('col',$col)
                 ->with('model_congtac',$model_congtac)
+                ->with('a_phucap',$a_phucap)
                 ->with('pageTitle','Bảng lương chi tiết');
         } else
             return view('errors.notlogin');
@@ -485,12 +500,24 @@ class bangluongController extends Controller
             $thongtin=array('nguoilap'=>$m_bl->nguoilap,
                 'thang'=>$m_bl->thang,
                 'nam'=>$m_bl->nam);
-            //dd($model);
+            //xử lý ẩn hiện cột phụ cấp => biết tổng số cột hiện => colspan trên báo cáo
+            $a_phucapbc = getColPhuCap_BaoCao();
+            $a_phucap = array();
+            $col = 0;
+            foreach($a_phucapbc as $key=>$val){
+                if($m_dv->$key <3) {
+                    $a_phucap[$key] = $val;
+                    $col++;
+                }
+            }
+
             return view('reports.bangluong.donvi.maubangluong_sotien')
                 ->with('model',$model)
                 ->with('m_dv',$m_dv)
                 ->with('thongtin',$thongtin)
                 ->with('model_congtac',$model_congtac)
+                ->with('a_phucap',$a_phucap)
+                ->with('col',$col)
                 ->with('pageTitle','Bảng lương chi tiết');
         } else
             return view('errors.notlogin');
