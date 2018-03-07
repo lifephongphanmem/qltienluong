@@ -67,6 +67,9 @@ class hosocanbo extends Model
         'pcbdhdcu',
         'pcthni',
         'theodoi',
-        'mact'
+        'mact',
+        'ngaybc',
+        'ngayvao',
+        'lvhd'
     ];
 }
