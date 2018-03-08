@@ -124,9 +124,17 @@ class hosocanboController extends Controller
             //khối phòng ban giờ là lĩnh vực hoạt động
             $m_linhvuc=array_column(dmkhoipb::all()->toArray(),'tenkhoipb','makhoipb');
             //$m_cvd= dmchucvud::all();
-            $m_plnb=nhomngachluong::select('manhom','tennhom')->distinct()->get();
-            $m_pln=ngachluong::select('tenngachluong','manhom','msngbac')->distinct()->get();
+            $m_plnb=nhomngachluong::select('manhom','tennhom','heso','namnb' )->distinct()->get();
+            $m_pln=ngachluong::select('tenngachluong','manhom','msngbac','heso','namnb')
+                ->distinct()->get();
+            foreach($m_pln as $mangach){
+                $nhomnb = $m_plnb->where('manhom',$mangach->manhom)->first();
+                if(count($nhomnb) > 0 && $mangach->manhom != 'CBCT'){
+                    $mangach->heso = $nhomnb->heso;
+                    $mangach->namnb = $nhomnb->namnb;
+                }
 
+            }
             $macanbo=session('admin')->madv . '_' . getdate()[0];
             //$m_pc=dmphucap::all('mapc','tenpc','hesopc')->toArray();
             $a_donvi = dmdonvi::where('madv',session('admin')->madv)->first()->toarray();
