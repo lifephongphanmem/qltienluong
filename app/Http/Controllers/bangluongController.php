@@ -171,7 +171,9 @@ class bangluongController extends Controller
             //dd($model_canbo_tl);
             //Tính toán lương cho cán bộ
             // hệ số truy lĩnh > 1 =>phân
-            $a_col = getColTongHop();
+            $a_col = getColPhuCap(); //lấy theo phụ cấp => tự tính phụ cấp vượt khung, hệ số lương
+            $m_donvi = dmdonvi::where('madv',session('admin')->madv)->first();
+
             foreach ($m_cb as $cb) {
                 $congtac = $model_congtac->where('mact', $cb->mact)->first();
                 $cb->macongtac = isset($congtac) ? $congtac->macongtac : null;
@@ -192,23 +194,45 @@ class bangluongController extends Controller
                 $a_truythu[] = $cb->macanbo;
                 //trong bảng danh mục là % vượt khung => sang bảng lương chuyển thành hệ số
                 $cb->vuotkhung = $cb->heso * $cb->vuotkhung / 100;
+                $hesobaohiem = $cb->heso + $cb->pccv + $cb->vuotkhung;
                 //$cb->vuotkhung = ($cb->heso + $cb->pccv) * $cb->vuotkhung / 100;
+                /*
                 $cb->pccovu = ($cb->heso + $cb->pccv + $cb->vuotkhung) * $cb->pccovu / 100;
-                $cb->pctnvk = ($cb->heso + $cb->vuotkhung) * $cb->pctnvk / 100;
                 $cb->pctnn = ($cb->heso + $cb->pccv + $cb->vuotkhung) * $cb->pctnn / 100;
                 $cb->pclt = ($cb->heso + $cb->pccv + $cb->vuotkhung) * $cb->pclt / 100; //phụ cấp phân loại xã
                 $cb->pckn = ($cb->heso + $cb->pccv + $cb->vuotkhung) * $cb->pckn / 100;
                 $cb->pcudn = ($cb->heso + $cb->pccv + $cb->vuotkhung) * $cb->pcudn / 100;
+                */
                 $cb->hesott = 0;//set = 0 để sau này tổng hợp lọc các cán bộ này ra để tính
+
                 //Do đơn vị nhập cả hệ số lẫn số tiền
                 //>500 => số tiền  còn lại là hệ số
                 $tt = 0;
-                $ths = 0;
-                foreach ($a_col as $col) {
-                    if (chkDbl($cb->$col) > 500) {
-                        $tt += chkDbl($cb->$col);
-                    } else {
-                        $ths += $cb->$col;
+                $ths = $cb->heso + $cb->vuotkhung;
+                foreach ($a_col as $col=>$val) {
+                    $pl = getDbl($m_donvi->$col);
+                    switch($pl){
+                        case 0:{//hệ số
+                            $ths += $cb->$col;
+                            break;
+                        }
+                        case 1:{//số tiền
+                            $tt += chkDbl($cb->$col);
+                            break;
+                        }
+                        case 2:{//phần trăm
+                            if($col == 'pctnvk'){
+                                $cb->$col = ($cb->heso + $cb->vuotkhung) * $cb->$col / 100; //tính riêng
+                            }else{
+                                $cb->$col = $hesobaohiem * $cb->$col / 100;
+                            }
+                            $ths += $cb->$col;
+                            break;
+                        }
+                        default:{//trường hợp còn lại (ẩn,...)
+                            $cb->$col = 0;
+                            break;
+                        }
                     }
                 }
 
