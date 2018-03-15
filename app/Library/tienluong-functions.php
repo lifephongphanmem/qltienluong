@@ -349,6 +349,7 @@ function getColPhuCap(){
         'pckn'=>'Kiêm nhiệm',
         'pctn'=>'Trách nhiệm',
         'pcudn'=>'Ưu đãi ngành',
+        'pcct'=>'Ghép lớp',
         'pckv'=>'Khu vực',
         'pcth'=>'Thu hút',
         'pcdbn'=>'Đặc biệt(đặc thù)',
@@ -371,26 +372,54 @@ function getColPhuCap(){
 function getColPhuCap_BaoCao()
 {
     return array(
-        'pckv' => 'Phụ cấp</br>khu vực',
-        'pccv' => 'Phụ cấp</br>chức vụ',
+        'pckv' =>   'Phụ cấp</br>khu vực',
+        'pccv' =>   'Phụ cấp</br>chức vụ',
         'pctnvk' => 'Phụ cấp</br>thâm niên</br>vượt khung',
-        'pcudn' => 'Phụ cấp</br>ưu đãi</br>ngành',
-        'pcth' => 'Phụ cấp</br>thu hút',
+        'pcudn' =>  'Phụ cấp</br>ưu đãi</br>ngành',
+        'pcth' =>   'Phụ cấp</br>thu hút',
         'pcthni' => 'Phụ cấp</br>công tác</br>lâu năm',
         'pccovu' => 'Phụ cấp</br>công vụ',
         'pcdang' => 'Phụ cấp</br>công tác</br>Đảng',
-        'pctnn' => 'Phụ cấp</br>thâm niên</br>nghề',
-        'pctn' => 'Phụ cấp</br>trách nhiệm',
-        'pckn' => 'Phụ cấp</br>kiêm nhiệm',
-        'pclt' => 'Phụ cấp</br>phân loại</br>xã',
-        'pcdd' => 'Phụ cấp</br>đắt đỏ',
-        'pcdbqh'=>'Phụ cấp</br>Đại biểu</br>HĐND',
-        'pcvk'=>'Phụ cấp</br>cấp ủy</br>viên',
+        'pctnn' =>  'Phụ cấp</br>thâm niên</br>nghề',
+        'pcct'=>    'Phụ cấp</br>ghép lớp',
+        'pctn' =>   'Phụ cấp</br>trách nhiệm',
+        'pckn' =>   'Phụ cấp</br>kiêm nhiệm',
+        'pclt' =>   'Phụ cấp</br>phân loại</br>xã',
+        'pcdd' =>   'Phụ cấp</br>đắt đỏ',
+        'pcdbqh'=>  'Phụ cấp</br>đại biểu</br>HĐND',
+        'pcvk'=>    'Phụ cấp</br>cấp ủy</br>viên',
         'pcbdhdcu'=>'Phụ cấp</br>bồi dưỡng</br>HĐCU',
-        'pcdbn'=>'Phụ cấp</br>đặc biệt</br>(đặc thù)',
-        'pcld'=>'Phụ cấp</br>lưu động',
-        'pcdh'=>'Phụ cấp</br>độc hại',
-        'pck' => 'Phụ cấp</br>khác'
+        'pcdbn'=>   'Phụ cấp</br>đặc biệt</br>(đặc thù)',
+        'pcld'=>    'Phụ cấp</br>lưu động',
+        'pcdh'=>    'Phụ cấp</br>độc hại',
+        'pck' =>    'Phụ cấp</br>khác'
+    );
+}
+
+function getColPhuCap_Excel()
+{
+    return array(
+        'pckv' =>   array('infor'=> 'Khu vực', 'col'=>null),
+        'pccv' =>   array('infor'=> 'Chức vụ', 'col'=>null),
+        'pctnvk' => array('infor'=> 'Thâm niên vượt khung', 'col'=>null),
+        'pcudn' =>  array('infor'=> 'Ưu đãi ngành', 'col'=>null),
+        'pcth' =>   array('infor'=> 'Thu hút', 'col'=>null),
+        'pcthni' => array('infor'=> 'Công tác lâu năm', 'col'=>null),
+        'pccovu' => array('infor'=> 'Công vụ', 'col'=>null),
+        'pcdang' => array('infor'=> 'Công tác Đảng', 'col'=>null),
+        'pctnn' =>  array('infor'=> 'Thâm niên nghề', 'col'=>null),
+        'pcct'=>    array('infor'=> 'Ghép lớp', 'col'=>null),
+        'pctn' =>   array('infor'=> 'Trách nhiệm', 'col'=>null),
+        'pckn' =>   array('infor'=> 'Kiêm nhiệm', 'col'=>null),
+        'pclt' =>   array('infor'=> 'Khân loại xã', 'col'=>null),
+        'pcdd' =>   array('infor'=> 'Đắt đỏ', 'col'=>null),
+        'pcdbqh'=>  array('infor'=> 'Đại biểu HĐND', 'col'=>null),
+        'pcvk'=>    array('infor'=> 'Cấp ủy viên', 'col'=>null),
+        'pcbdhdcu'=> array('infor'=> 'Bồi dưỡng HĐCU', 'col'=>null),
+        'pcdbn'=>   array('infor'=> 'Đặc biệt (đặc thù)', 'col'=>null),
+        'pcld'=>    array('infor'=> 'Lưu động', 'col'=>null),
+        'pcdh'=>    array('infor'=> 'Độc hại', 'col'=>null),
+        'pck' =>    array('infor'=> 'Phụ cấp khác', 'col'=>null)
     );
 }
 ?>

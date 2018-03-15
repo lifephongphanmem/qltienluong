@@ -42,7 +42,7 @@ class hosocanbo extends Model
         'truylinhdenngay',
         'vuotkhung',
         'pthuong',
-        'pcct',
+        'pcct',//dùng để thay thế phụ cấp ghép lớp
         'pckct',
         'pck',
         'pccv',

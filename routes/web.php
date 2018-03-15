@@ -184,6 +184,8 @@ Route::group(['prefix'=>'nghiep_vu'],function(){
         Route::get('del/maso={id}','hosocanboController@destroy');
         Route::post('store','hosocanboController@store');
 
+        Route::get('nhan_excel','hosocanboController@infor_excel');
+
         Route::get('phucap','hosocanboController@phucap');
         Route::get('get_phucap','hosocanboController@get_phucap');
         Route::get('del_phucap','hosocanboController@detroys_phucap');
@@ -203,7 +205,7 @@ Route::group(['prefix'=>'nghiep_vu'],function(){
 
         Route::group(['prefix'=>'chi_tieu'],function(){
             Route::get('danh_sach','chitieubiencheController@index');
-            Route::get('del/{id}','hosollvtController@destroy');
+            Route::get('del/{id}','chitieubiencheController@destroy');
         });
         Route::group(['prefix'=>'du_toan'],function(){
             Route::get('danh_sach','dutoanluongController@index');

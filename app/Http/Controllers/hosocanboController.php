@@ -262,6 +262,15 @@ class hosocanboController extends Controller
             return view('errors.notlogin');
     }
 
+    function destroy($id){
+        if (Session::has('admin')) {
+            $model = hosocanbo::find($id);
+            $model->delete();
+            return redirect('nghiep_vu/ho_so/danh_sach');
+        } else
+            return view('errors.notlogin');
+    }
+
     public function update(Request $request, $id)
     {
         if (Session::has('admin')) {
@@ -368,134 +377,19 @@ class hosocanboController extends Controller
     }
     //</editor-fold>
 
+    //<editor-fold desc="Nhận danh sách cán bộ từ file Excel">
+    public function infor_excel(){
+        if(Session::has('admin')){
+            $a_donvi = dmdonvi::where('madv',session('admin')->madv)->first()->toarray();
+            $a_phucap = getColPhuCap_Excel();
+            return view('manage.hosocanbo.excel.information')
+                ->with('a_phucap',$a_phucap)
+                ->with('a_donvi',$a_donvi)
+                ->with('url','/nghiep_vu/ho_so/')
+                ->with('pageTitle','Thông tin nhận danh sách cán bộ từ file Excel');
 
-
-    function destroy($id){
-        if (Session::has('admin')) {
-            $model = hosocanbo::find($id);
-            $model->delete();
-            return redirect('nghiep_vu/ho_so/danh_sach');
-        } else
+        }else
             return view('errors.notlogin');
     }
-
-    //Bỏ
-    function phucap(Request $request){
-        $result = array(
-            'status' => 'fail',
-            'message' => 'error',
-        );
-        if(!Session::has('admin')) {
-            $result = array(
-                'status' => 'fail',
-                'message' => 'permission denied',
-            );
-            die(json_encode($result));
-        }
-
-        $inputs = $request->all();
-        $model=phucapdanghuong::where('macanbo',$inputs['macanbo'])->where('mapc',$inputs['mapc'])->first();
-
-        if(count($model)>0){
-            $model->ngaytu = $inputs['ngaytu'];
-            $model->ngayden = $inputs['ngayden'];
-            $model->hesopc = $inputs['hesopc'];
-            $model->baohiem =$inputs['baohiem'];
-            $model->save();
-        }else {
-            $model = new phucapdanghuong();
-            $model->macanbo = $inputs['macanbo'];
-            $model->mapc = $inputs['mapc'];
-            $model->ngaytu = $inputs['ngaytu'];
-            $model->ngayden = $inputs['ngayden'];
-            $model->hesopc = $inputs['hesopc'];
-            $model->baohiem =$inputs['baohiem'];
-            $model->madv = session('admin')->madv;
-            $model->save();
-        }
-        $model = phucapdanghuong::join('dmphucap','phucapdanghuong.mapc','dmphucap.mapc')
-            ->select('phucapdanghuong.*','dmphucap.tenpc')
-            ->where('phucapdanghuong.macanbo',$inputs['macanbo'])->get();
-        $result = $this->return_html($result, $model);
-
-        die(json_encode($result));
-    }
-
-    function detroys_phucap(Request $request){
-        $result = array(
-            'status' => 'fail',
-            'message' => 'error',
-        );
-        if(!Session::has('admin')) {
-            $result = array(
-                'status' => 'fail',
-                'message' => 'permission denied',
-            );
-            die(json_encode($result));
-        }
-        $inputs = $request->all();
-        $model = phucapdanghuong::findOrFail($inputs['id']);
-        $model->delete();
-        $model = phucapdanghuong::where('macanbo',$inputs['macanbo'])->get();
-        $result = $this->return_html($result, $model);
-
-        die(json_encode($result));
-    }
-
-    function get_phucap(Request $request){
-        if(!Session::has('admin')) {
-            $result = array(
-                'status' => 'fail',
-                'message' => 'permission denied',
-            );
-            die(json_encode($result));
-        }
-
-        $inputs = $request->all();
-        $model = phucapdanghuong::find($inputs['id']);
-        die($model);
-    }
-
-    public function return_html($result, $model)
-    {
-        $result['message'] = '<div class="col-md-12" id="thongtinphucap">';
-        $result['message'] .= '<table class="table table-striped table-bordered table-hover" id="sample_3">';
-        $result['message'] .= '<thead>';
-        $result['message'] .= '<tr>';
-        $result['message'] .= '<th width="5%" style="text-align: center">STT</th>';
-        $result['message'] .= '<th class="text-center">Từ ngày</th>';
-        $result['message'] .= '<th class="text-center">Đến ngày</th>';
-        $result['message'] .= '<th class="text-center">Tên phụ cấp</th>';
-        $result['message'] .= '<th class="text-center">Hệ số</th>';
-        $result['message'] .= '<th class="text-center">Thao tác</th>';
-        $result['message'] .= '</tr>';
-        $result['message'] .= '</thead>';
-
-        $stt=1;
-        $result['message'] .= '<tbody>';
-        if (count($model) > 0) {
-            foreach ($model as $key => $ct) {
-                $result['message'] .= '<tr>';
-                $result['message'] .= '<td style="text-align: center">' . $stt++ . '</td>';
-                $result['message'] .= '<td style="text-align: right">' . getDayVn($ct->ngaytu) . '</td>';
-                $result['message'] .= '<td style="text-align: right">' . getDayVn($ct->ngayden) . '</td>';
-                $result['message'] .= '<td style="text-align: right">' . $ct->tenpc . '</td>';
-                $result['message'] .= '<td style="text-align: right">' . $ct->hesopc . '</td>';
-                $result['message'] .= '<td>
-                                    <button type="button" onclick="edit_phucap('.$ct->id.')" class="btn btn-info btn-xs mbs">
-                                        <i class="fa fa-edit"></i>&nbsp;Chỉnh sửa</button>
-                                    <button type="button" onclick="del_phucap('.$ct->id.')" class="btn btn-danger btn-xs mbs" data-target="#modal-delete" data-toggle="modal">
-                                        <i class="fa fa-trash-o"></i>&nbsp;Xóa</button>
-                </td>';
-                $result['message'] .= '</tr>';
-            }
-            $result['message'] .= '</tbody>';
-            $result['message'] .= '</table>';
-            $result['message'] .= '</div>';
-            $result['message'] .= '</div>';
-            $result['status'] = 'success';
-            return $result;
-        }
-        return $result;
-    }
+    //</editor-fold>
 }

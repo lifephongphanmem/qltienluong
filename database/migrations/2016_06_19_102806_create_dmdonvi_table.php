@@ -33,7 +33,7 @@ class CreateDmdonviTable extends Migration
             $table->string('phanloainguon')->nullable();
             $table->string('linhvuchoatdong')->nullable();//lĩnh vực hoạt động
             //theo dõi phụ cấp tại đơn vị 0:hệ số; 1:phần trăm; 2: số tiền
-            $table->double('pcct')->default(0);
+            $table->double('pcct')->default(0);//dùng để thay thế phụ cấp ghép lớp
             $table->double('pckct')->default(0);
             $table->double('pck')->default(0);
             $table->double('pccv')->default(0);

@@ -27,7 +27,7 @@ class CreateBangluongctTable extends Migration
             $table->double('hesott')->default(0);//hệ số truy thu
             $table->double('vuotkhung')->default(0);
 
-            $table->double('pcct')->default(0);
+            $table->double('pcct')->default(0);//dùng để thay thế phụ cấp ghép lớp
             $table->double('pckct')->default(0);
             $table->double('pck')->default(0);
             $table->double('pccv')->default(0);
@@ -41,11 +41,11 @@ class CreateBangluongctTable extends Migration
             $table->double('pctn')->default(0);
             $table->double('pctnn')->default(0);
             $table->double('pcdbn')->default(0);
-            $table->double('pcvk')->default(0);
+            $table->double('pcvk')->default(0);//dùng để thay thế phụ cấp Đảng uy viên
             $table->double('pckn')->default(0);
             $table->double('pcdang')->default(0);
             $table->double('pccovu')->default(0);
-            $table->double('pclt')->default(0);
+            $table->double('pclt')->default(0);//lưu thay phụ cấp phân loại xã
             $table->double('pcd')->default(0);
             $table->double('pctr')->default(0);
             $table->double('pctnvk')->default(0);

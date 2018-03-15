@@ -177,7 +177,11 @@
 
                         <li><a href="{{url('nghiep_vu/qua_trinh/luong/maso=all')}}">Quá trình hưởng lương</a></li>
                         <li><a href="{{url('nghiep_vu/qua_trinh/phu_cap/maso=all')}}">Quá trình phụ cấp</a></li>
+
+                        <li><a href="{{url('nghiep_vu/ho_so/danh_sach')}}"><i class="fa fa-caret-right"></i>Danh sách cán bộ tạm ngừng theo dõi</a></li>
                         -->
+
+
                         @if(session('admin')->maphanloai == 'KVXP')
                             <!-- Tạm thời bỏ để triển khai lạng sơn -->
                             <!--li><a href="{{url('nghiep_vu/quan_ly/dia_ban_dbkk/index')}}"><i class="fa fa-caret-right"></i>Danh sách thôn, tổ dân phố</a></li-->
