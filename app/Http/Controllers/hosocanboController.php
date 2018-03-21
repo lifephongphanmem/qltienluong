@@ -487,7 +487,7 @@ class hosocanboController extends Controller
                 if(isset($msngbac)){
                     $nhomngbac = $model_nhomngbac->where('manhom',$msngbac->manhom)->first();
                     if(isset($nhomngbac)){
-                        $model->bac =(int)(($model->heso - $nhomngbac->heso)/$nhomngbac->hesochenhlech);
+                        $model->bac =(int)(($model->heso - $nhomngbac->heso)/$nhomngbac->hesochenhlech) + 1;
                     }
                 }else{
                     $model->msngbac = null;
