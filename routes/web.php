@@ -185,6 +185,7 @@ Route::group(['prefix'=>'nghiep_vu'],function(){
         Route::post('store','hosocanboController@store');
 
         Route::get('nhan_excel','hosocanboController@infor_excel');
+        Route::post('create_excel','hosocanboController@create_excel');
 
         Route::get('phucap','hosocanboController@phucap');
         Route::get('get_phucap','hosocanboController@get_phucap');

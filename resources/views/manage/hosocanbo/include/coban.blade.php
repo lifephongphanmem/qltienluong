@@ -157,7 +157,7 @@
 
             if(!$('#tencanbo').val()){
                 str += '  - Họ tên \n';
-                $('#tencanbo').parent().addClass('state-error');
+                $('#tencanbo').parent().addClass('has-error');
                 ok = false;
             }
             /*

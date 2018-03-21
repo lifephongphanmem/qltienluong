@@ -59,6 +59,7 @@ function getDbl($obj) {
 
 function chkDbl($obj) {
     $obj=str_replace(',','',$obj);
+    $obj=str_replace('%','',$obj);
     if(is_numeric($obj)){
         return $obj;
     }else {

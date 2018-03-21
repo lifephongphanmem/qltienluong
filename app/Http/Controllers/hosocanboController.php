@@ -31,6 +31,7 @@ use App\Http\Requests;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Session;
+use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Support\Str;
 
 class hosocanboController extends Controller
@@ -133,7 +134,6 @@ class hosocanboController extends Controller
                     $mangach->heso = $nhomnb->heso;
                     $mangach->namnb = $nhomnb->namnb;
                 }
-
             }
             $macanbo=session('admin')->madv . '_' . getdate()[0];
             //$m_pc=dmphucap::all('mapc','tenpc','hesopc')->toArray();
@@ -388,6 +388,120 @@ class hosocanboController extends Controller
                 ->with('url','/nghiep_vu/ho_so/')
                 ->with('pageTitle','Thông tin nhận danh sách cán bộ từ file Excel');
 
+        }else
+            return view('errors.notlogin');
+    }
+
+    function create_excel(Request $request){
+        if(Session::has('admin')){
+            $madv=session('admin')->madv;
+            $inputs=$request->all();
+
+            $ar_sheet = explode(',',$inputs['sheet']);
+            if(count($ar_sheet) == 0){
+                $ar_sheet[] = '0';
+            }else{
+                for($i=0;$i<count($ar_sheet);$i++){
+                    $ar_sheet[$i] = $ar_sheet[$i] - 1;
+                }
+            }
+
+            $bd=$inputs['tudong'];
+            $sd=$inputs['sodong'];
+            $filename = $madv . date('YmdHis');
+            $request->file('fexcel')->move(public_path() . '/data/uploads/excels/', $filename . '.xls');
+            $path = public_path() . '/data/uploads/excels/' . $filename . '.xls';
+
+            $data = [];
+            //dd ($ar_sheet);
+            Excel::load($path, function($reader) use (&$data,$bd,$sd,$ar_sheet) {
+                $obj = $reader->getExcel();
+                $sheetCount = $obj->getSheetCount();
+
+                foreach($ar_sheet as $sheetNumber){
+                    //if($sheetNumber == 1){dd($sheetNumber);}
+                    //dd($sheetNumber);
+                    if($sheetNumber <= $sheetCount - 1){
+                        $sheet = $obj->getSheet($sheetNumber);
+                        //$sheet = $obj->getSheet(0);
+                        $Row = $sheet->getHighestRow();
+                        $Row = $sd+$bd > $Row ? $Row : ($sd+$bd);
+                        $Col = $sheet->getHighestColumn();
+
+                        for ($r = $bd; $r <= $Row; $r++)
+                        {
+                            //$rowData = $sheet->toArray(null,true,true,true) giữ lại tiêu đề A=>'val'
+                            $rowData = $sheet->rangeToArray('A' . $r . ':' . $Col . $r, NULL, TRUE, FALSE);//'0'=>'val'
+                            $data[] = $rowData[0];
+                        }
+                    }
+                }
+            });
+
+            //chuyển từ A=>0; B=>1,...
+            foreach($inputs as $key=>$val) {
+                $ma=ord($val);
+                if($ma>=65 && $ma<=90){
+                    $inputs[$key]=$ma-65;
+                }
+                if($ma>=97 && $ma<=122){
+                    $inputs[$key]=$ma-97;
+                }
+            }
+
+            //nhận dữ liệu vào bảng hồ sơ cán bộ
+            $model_donvi = dmdonvi::where('madv',$madv)->first();
+            $model_msngbac = ngachluong::all();
+            $model_nhomngbac = nhomngachluong::all();
+            $model_chucvu = dmchucvucq::all();
+
+            $a_col = array(
+                    '0'=>'heso','1'=>'vuotkhung'
+                );
+            foreach(getColPhuCap() as $key=>$val){
+                if($model_donvi->$key < 3){
+                    $a_col[] = $key;
+                }
+            }
+            //dd($a_col);
+            $i=0; //lấy 1 số thêm vào ngày giờ vì for chạy xong trong 1s
+            foreach ($data as $row) {
+                if ($row[$inputs['tencanbo']] == '') {
+                    //Tên cán bộ rỗng => thoát
+                    continue;
+                }
+                $model = new hosocanbo();
+                $model->madv = $madv;
+                $model->macanbo = $madv. '_' . (getdate()[0] + $i++);
+                $model->macongchuc = $row[$inputs['macongchuc']];
+                $model->tencanbo = $row[$inputs['tencanbo']];
+                $model->macvcq = $row[$inputs['macvcq']];
+                $model->msngbac = $row[$inputs['msngbac']];
+                $model->bac = 1;
+                //Tính bậc lương (mặc định 1), lấy mã chức vụ cho cán bộ (mặc định chức vụ không xác định)
+                foreach ($a_col as $key => $val) {
+                    $model->$val = isset($row[$inputs[$val]]) ? chkDbl($row[$inputs[$val]]) : 0;
+                }
+                // Từ hệ số lương tính ra bậc lương của cán bộ
+                $msngbac = $model_msngbac->where('msngbac',$model->msngbac)->first();
+                if(isset($msngbac)){
+                    $nhomngbac = $model_nhomngbac->where('manhom',$msngbac->manhom)->first();
+                    if(isset($nhomngbac)){
+                        $model->bac =(int)(($model->heso - $nhomngbac->heso)/$nhomngbac->hesochenhlech);
+                    }
+                }else{
+                    $model->msngbac = null;
+                }
+                //Lấy mã chức vụ nếu có
+                $chucvu = $model_chucvu->where('macvcq',$model->macvcq)->first();
+                if(isset($chucvu)) {
+                    $model->macvcq = isset($chucvu) ? $chucvu->macvcq : null;
+                }
+                $model->save();
+            }
+
+            File::Delete($path);
+            return redirect('nghiep_vu/ho_so/danh_sach');
         }else
             return view('errors.notlogin');
     }

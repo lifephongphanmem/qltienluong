@@ -43,15 +43,13 @@
                                 <li>
                                     <a href="{{url($url.'create')}}" class="btn btn-default btn-xs"><i class="fa fa-plus"></i>Thêm mới hồ sơ</a>
                                 </li>
-                                <!--
                                 <li>
                                     <a href="{{url($url.'nhan_excel')}}" class="btn btn-default btn-xs mbs"><i class="fa fa-print"></i>Nhận từ file Excel</a>
                                 </li>
 
                                 <li>
-                                    <a href="{{url($url.'mauexcel')}}" class="btn btn-default btn-xs"><i class="fa fa-download"></i>Tải file Excel mẫu</a>
+                                    <a href="{{url('/data/download/MAU DS CAN BO.xls')}}" class="btn btn-default btn-xs"><i class="fa fa-download"></i>Tải file Excel mẫu</a>
                                 </li>
-                                -->
                             </ul>
                         </div>
                     </div>
