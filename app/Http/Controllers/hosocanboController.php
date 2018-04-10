@@ -214,6 +214,7 @@ class hosocanboController extends Controller
             $insert['pcthni'] = chkDbl($insert['pcthni']);
             $insert['pclt'] = chkDbl($insert['pclt']);
             $insert['pcdd'] = chkDbl($insert['pcdd']);
+            $insert['pcct'] = chkDbl($insert['pcct']);
             //dd($insert);
             hosocanbo::create($insert);
 
@@ -325,6 +326,7 @@ class hosocanboController extends Controller
             $insert['pcthni'] = chkDbl($insert['pcthni']);
             $insert['pclt'] = chkDbl($insert['pclt']);
             $insert['pcdd'] = chkDbl($insert['pcdd']);
+            $insert['pcct'] = chkDbl($insert['pcct']);
 
             $model->update($insert);
             return redirect('nghiep_vu/ho_so/danh_sach');
