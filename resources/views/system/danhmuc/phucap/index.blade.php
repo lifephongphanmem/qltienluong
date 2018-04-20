@@ -56,12 +56,12 @@
                                 </div>
                             </div>
 
-                            <div class="col-md-2">
+                            <!--div class="col-md-2">
                                 <div class="form-group">
                                     <label class="control-label">Thâm niên VK </label>
                                     {!!Form::select('pctnvk', getPhanLoaiPhuCap(),null, array('id' => 'pctnvk','class' => 'form-control'))!!}
                                 </div>
-                            </div>
+                            </div-->
 
                             <div class="col-md-2">
                                 <div class="form-group">
@@ -88,6 +88,13 @@
                                 <div class="form-group">
                                     <label class="control-label">Ưu đãi </label>
                                     {!!Form::select('pcudn', getPhanLoaiPhuCap(),null, array('id' => 'pcudn','class' => 'form-control'))!!}
+                                </div>
+                            </div>
+
+                            <div class="col-md-2">
+                                <div class="form-group">
+                                    <label class="control-label">Ghép lớp </label>
+                                    {!!Form::select('pcct', getPhanLoaiPhuCap(),null, array('id' => 'pcct','class' => 'form-control'))!!}
                                 </div>
                             </div>
 

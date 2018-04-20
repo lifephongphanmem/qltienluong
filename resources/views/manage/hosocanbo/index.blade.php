@@ -68,11 +68,11 @@
                             <th>Thao tác</th>
                         </tr>
                     </thead>
-                    <?php $stt =0;?>
+
                     <tbody>
                         @foreach($model as $hs)
                             <tr>
-                                <td class="text-center">{{++$stt}}</td>
+                                <td class="text-center">{{$hs->stt}}</td>
                                 <td name="anh">
                                     <a href="{{url($url.'maso='.$hs->id.'')}}">
                                         @if($hs->anh != '')

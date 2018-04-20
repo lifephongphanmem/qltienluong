@@ -22,6 +22,13 @@
 
             <div class="col-md-3">
                 <div class="form-group">
+                    <label class="control-label">Thứ tự (sắp xếp)</label>
+                    {!!Form::text('stt', null, array('id' => 'stt','class' => 'form-control', 'data-mask'=>'fdecimal'))!!}
+                </div>
+            </div>
+
+            <div class="col-md-3">
+                <div class="form-group">
                     <label class="control-label">Họ tên <span class="require">*</span></label>
                     {!!Form::text('tencanbo', null, array('id' => 'tencanbo','class' => 'form-control', 'required'=>'required'))!!}
                 </div>

@@ -107,16 +107,16 @@
                             </div>
                         </div>
 
-                        <div class="col-md-2">
+                        <div class="col-md-3">
                             <div class="form-group">
                                 <label class="control-label">Hệ số lương </label>
                                 {!!Form::text('heso', null, array('id' => 'heso','class' => 'form-control', 'data-mask'=>'fdecimal'))!!}
                             </div>
                         </div>
 
-                        <div class="col-md-2">
+                        <div class="col-md-3">
                             <div class="form-group">
-                                <label class="control-label">Phần trăm v.khung </label>
+                                <label class="control-label">Thâm niên vượt khung </label>
                                 <div class="input-group bootstrap-touchspin">
                                     {!!Form::text('vuotkhung', null, array('id' => 'vuotkhung','class' => 'form-control', 'data-mask'=>'fdecimal'))!!}
                                     <span class="input-group-addon bootstrap-touchspin-postfix">%</span>
@@ -135,7 +135,7 @@
                             </div>
                         </div-->
 
-                        <div class="col-md-2">
+                        <div class="col-md-3">
                             <div class="form-group">
                                 <label class="control-label">Phụ cấp (hưu trí)</label>
                                 {!!Form::text('hesopc', null, array('id' => 'hesopc','class' => 'form-control', 'data-mask'=>'fdecimal'))!!}

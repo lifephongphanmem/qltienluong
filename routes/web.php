@@ -8,11 +8,7 @@ Route::get('test', function(){
 Route::get('/setting','HomeController@setting');
 Route::post('/setting','HomeController@upsetting');
 
-Route::get('register/dich_vu_luu_tru','HomeController@regdvlt');
-Route::get('danh_sach_tai_khoan','HomeController@listusers');
-Route::get('checkrgmasothue','HomeController@checkrgmasothue');
-Route::get('checkrguser','HomeController@checkrguser');
-Route::get('mauexcel','bangluongController@getDownload');
+//Route::get('mauexcel','bangluongController@getDownload');
 
 
 // <editor-fold defaultstate="collapsed" desc="--Hệ thống--">
@@ -249,6 +245,13 @@ Route::group(['prefix'=>'nghiep_vu'],function(){
             Route::get('/maso={macanbo}','hosophucapController@index');
             Route::get('del/{id}','hosophucapController@destroy');
         });
+    });
+
+    Route::group(['prefix'=>'tam_ngung'],function(){
+        Route::get('danh_sach','hosotamngungtheodoiController@index');
+        Route::get('del/maso={id}','hosotamngungtheodoiController@destroy');
+        Route::post('store','hosotamngungtheodoiController@store');
+        Route::get('get','hosotamngungtheodoiController@getinfo');
     });
 
 });

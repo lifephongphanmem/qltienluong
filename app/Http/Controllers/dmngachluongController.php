@@ -45,7 +45,8 @@ class dmngachluongController extends Controller
     function destroy($id){
         if (Session::has('admin')) {
             $model = nhomngachluong::findOrFail($id);
-            $model->delete();
+            dd($model);
+            //$model->delete();
             return redirect('/danh_muc/ngach_bac/index');
         }else
             return view('errors.notlogin');

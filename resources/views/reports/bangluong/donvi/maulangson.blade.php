@@ -89,47 +89,55 @@
 
 <table class="money" cellspacing="0" cellpadding="0" border="1" style="margin: 20px auto; border-collapse: collapse;">
     <tr style="padding-left: 2px;padding-right: 2px">
-        <th style="width: 2%;" rowspan="3">S</br>T</br>T</th>
-        <th style="width: 6%;" rowspan="3">Mã số</br>CBCC, viên</br>chức</th>
-        <th style="width: 10%;" rowspan="3">Họ và tên</th>
-        <th style="width: 6%;" rowspan="3">Cấp bậc</br>chức vụ</th>
-        <th colspan="10">Lương hệ số</th>
-        <th style="width: 6%;" rowspan="3">Nghỉ việc</br>không được</br>hưởng lương</th>
-        <th style="width: 6%;" rowspan="3">BHXH trả</br>thay lương</th>
-        <th style="width: 6%;" rowspan="3">Tổng cộng</br>tiền lương</th>
+        <th style="width: 2%;" rowspan="4">S</br>T</br>T</th>
+        <th style="width: 6%;" rowspan="4">Mã số</br>CBCC, viên</br>chức</th>
+        <th style="width: 10%;" rowspan="4">Họ và tên</th>
+        <th style="width: 6%;" rowspan="4">Cấp bậc</br>chức vụ</th>
+        <th colspan="14">Lương hệ số</th>
+        <th style="width: 6%;" rowspan="4">Nghỉ việc</br>không được</br>hưởng lương</th>
+        <th style="width: 6%;" rowspan="4">BHXH trả</br>thay lương</th>
+        <th style="width: 6%;" rowspan="4">Tổng cộng</br>tiền lương</th>
         <th colspan="5">Các khoản phải khấu trừ</th>
-        <th style="width: 6%;" rowspan="3">Tổng tiền</br>lương và BHXH</br>còn được nhận</th>
+        <th style="width: 6%;" rowspan="4">Tổng tiền</br>lương và BHXH</br>còn được nhận</th>
     </tr>
 
     <tr style="padding-left: 2px;padding-right: 2px">
-        <th rowspan="2">Hệ số</br>lương</th>
-        <th rowspan="2">Phụ cấp</br>chức vụ</th>
-        <th colspan="6">Hệ số phụ cấp khác</th>
-        <th rowspan="2">Cộng</br>hệ số</th>
-        <th rowspan="2">Thành tiền</th>
-        <th rowspan="2">BHXH</th>
-        <th rowspan="2">BHYT</th>
-        <th rowspan="2">BHTN</th>
-        <th rowspan="2">Thuế</br>thu</br>nhập</th>
-        <th rowspan="2">Cộng</th>
+        <th rowspan="3">Hệ số</br>lương</th>
+        <th rowspan="3">Phụ cấp</br>chức vụ</th>
+        <th colspan="10">Hệ số phụ cấp khác</th>
+        <th rowspan="3">Cộng</br>hệ số</th>
+        <th rowspan="3">Thành tiền</th>
+        <th rowspan="3">BHXH</th>
+        <th rowspan="3">BHYT</th>
+        <th rowspan="3">BHTN</th>
+        <th rowspan="3">Thuế</br>thu</br>nhập</th>
+        <th rowspan="3">Cộng</th>
     </tr>
 
     <tr style="padding-left: 2px;padding-right: 2px">
-        <th>Phụ cấp</br>khu vực</th>
-        <th>Phụ cấp</br>trách nhiệm</th>
-        <th>PCTN</br>vượt khung</th>
-        <th>Phụ cấp</br>ưu đãi ngành</th>
-        <th>Phụ cấp</br>thâm niên nghề</th>
-        <th>Phụ cấp</br>độc hại</th>
+        <th rowspan="2">Phụ cấp</br>khu vực</th>
+        <th rowspan="2">Phụ cấp</br>thu hút</th>
+        <th rowspan="2">Phụ cấp</br>ưu đãi</th>
+        <th rowspan="2">Phụ cấp</br>trách nhiệm</th>
+        <th colspan="2">PCTNVK</th>
+        <th colspan="2">PCTNNG</th>
+        <th rowspan="2">Phụ cấp</br>lâu năm</th>
+        <th rowspan="2">Phụ cấp</br>độc hại</th>
     </tr>
 
+    <tr style="padding-left: 2px;padding-right: 2px">
+        <th>%</th>
+        <th>HS</th>
+        <th>%</th>
+        <th>H</th>
+    </tr>
 
     <tr>
         <th>A</th>
         <th>B</th>
         <th>C</th>
         <th>D</th>
-        @for($i=1;$i<=12;$i++)
+        @for($i=1;$i<=16;$i++)
             <th>{{$i}}</th>
         @endfor
         <th>13=10-11-12</th>
@@ -156,10 +164,17 @@
                 <td>{{dinhdangsothapphan(($ct->heso + $ct->hesott),5)}}</td>
                 <td>{{dinhdangsothapphan($ct->pccv,5)}}</td>
                 <td>{{dinhdangsothapphan($ct->pckv,5)}}</td>
-                <td>{{dinhdangsothapphan($ct->pctn,5)}}</td>
-                <td>{{dinhdangsothapphan($ct->pctnvk,5)}}</td>
+
                 <td>{{dinhdangsothapphan($ct->pcudn,5)}}</td>
+                <td>{{dinhdangsothapphan($ct->pcth,5)}}</td>
+
+                <td>{{dinhdangsothapphan($ct->pctn,5)}}</td>
+                <td>{{dinhdangsothapphan($ct->vk,5)}}</td>
+                <td>{{dinhdangsothapphan($ct->vuotkhung,5)}}</td>
+
+                <td>{{dinhdangsothapphan($ct->tnn,5)}}</td>
                 <td>{{dinhdangsothapphan($ct->pctnn,5)}}</td>
+                <td>{{dinhdangsothapphan($ct->pcthni,5)}}</td>
                 <td>{{dinhdangsothapphan($ct->pcdh,5)}}</td>
                 <td>{{dinhdangsothapphan($ct->tonghs,5)}}</td>
                 <td>{{dinhdangso($ct->ttl)}}</td>
@@ -181,12 +196,16 @@
                 <td>{{dinhdangsothapphan($model_luong->sum('heso') + $model_luong->sum('hesott'),5)}}</td>
                 <td>{{dinhdangsothapphan($model_luong->sum('pccv'),5)}}</td>
                 <td>{{dinhdangsothapphan($model_luong->sum('pckv'),5)}}</td>
+
+                <td>{{dinhdangsothapphan($model_luong->sum('pcth'),5)}}</td>
+                <td>{{dinhdangsothapphan($model_luong->sum('pcudn'),5)}}</td>
                 <td>{{dinhdangsothapphan($model_luong->sum('pctn'),5)}}</td>
 
-                <td>{{dinhdangsothapphan($model_luong->sum('pctnvk'),5)}}</td>
-                <td>{{dinhdangsothapphan($model_luong->sum('pcudn'),5)}}</td>
-
+                <td></td>
+                <td>{{dinhdangsothapphan($model_luong->sum('vuotkhung'),5)}}</td>
+                <td></td>
                 <td>{{dinhdangsothapphan($model_luong->sum('pctnn'),5)}}</td>
+                <td>{{dinhdangsothapphan($model_luong->sum('pcthni'),5)}}</td>
                 <td>{{dinhdangsothapphan($model_luong->sum('pcdh'),5)}}</td>
 
                 <td>{{dinhdangsothapphan($model_luong->sum('tonghs'),5)}}</td>
@@ -208,11 +227,14 @@
         <td>{{dinhdangsothapphan($model->sum('heso') + $model->sum('hesott'),5)}}</td>
         <td>{{dinhdangsothapphan($model->sum('pccv'),5)}}</td>
         <td>{{dinhdangsothapphan($model->sum('pckv'),5)}}</td>
-        <td>{{dinhdangsothapphan($model->sum('pctn'),5)}}</td>
-
-        <td>{{dinhdangsothapphan($model->sum('pctnvk'),5)}}</td>
+        <td>{{dinhdangsothapphan($model->sum('pcth'),5)}}</td>
         <td>{{dinhdangsothapphan($model->sum('pcudn'),5)}}</td>
+        <td>{{dinhdangsothapphan($model->sum('pctn'),5)}}</td>
+        <td></td>
+        <td>{{dinhdangsothapphan($model->sum('vuotkhung'),5)}}</td>
+        <td></td>
         <td>{{dinhdangsothapphan($model->sum('pctnn'),5)}}</td>
+        <td>{{dinhdangsothapphan($model->sum('pcthni'),5)}}</td>
         <td>{{dinhdangsothapphan($model->sum('pcdh'),5)}}</td>
         <td>{{dinhdangsothapphan($model->sum('tonghs'),5)}}</td>
         <td class="money">{{dinhdangso($model->sum('ttl'))}}</td>

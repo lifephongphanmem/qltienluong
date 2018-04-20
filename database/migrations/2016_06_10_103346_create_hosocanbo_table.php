@@ -14,7 +14,7 @@ class CreateHosocanboTable extends Migration
     {
         Schema::create('hosocanbo', function (Blueprint $table) {
             $table->increments('id');
-
+            $table->string('stt', 10)->nullable();
             $table->string('mapb', 50)->nullable();
             $table->string('macvcq', 50)->nullable();
             $table->string('macvd', 50)->nullable();

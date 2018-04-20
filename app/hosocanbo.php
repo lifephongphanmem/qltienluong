@@ -9,6 +9,7 @@ class hosocanbo extends Model
     protected $table = 'hosocanbo';
     protected $fillable = [
         'id',
+        'stt',
         'mapb',
         'macvcq',
         'macvd',

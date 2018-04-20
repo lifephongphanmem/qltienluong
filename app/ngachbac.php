@@ -18,12 +18,4 @@ class ngachbac extends Model
         'ptvk',
         'vk'
     ];
-
-    public function hosoluong(){
-        return $this->hasMany('App\hosoluong','id');
-    }
-
-    public function bangluong_ct(){
-        return $this->hasMany('App\bangluong_ct','id');
-    }
 }

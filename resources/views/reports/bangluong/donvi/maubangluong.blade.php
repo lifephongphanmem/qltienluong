@@ -93,7 +93,7 @@
 
     <tr style="padding-left: 2px;padding-right: 2px">
         <th>Hệ số</br>lương</th>
-        <th>Hệ số</br>phụ</br>cấp</th>
+        <th>Phụ cấp</br>thâm niên</br>vượt khung</th>
 
         @foreach($a_phucap as $key=>$val)
             <th>{!!$val!!}</th>
@@ -131,7 +131,7 @@
                 <td style="text-align: left">{{$ct->tencv}}</td>
                 <td style="text-align: left">{{$ct->msngbac}}</td>
                 <td>{{dinhdangsothapphan(($ct->heso + $ct->hesott),5)}}</td>
-                <td>{{dinhdangsothapphan($ct->hesopc,5)}}</td>
+                <td>{{dinhdangsothapphan($ct->vuotkhung,5)}}</td>
 
                 @foreach($a_phucap as $key=>$val)
                     <td>{{dinhdangsothapphan($ct->$key,5)}}</td>
@@ -155,7 +155,7 @@
             <tr style="font-weight: bold; text-align: center; font-style: italic">
                 <td colspan="5">Cộng</td>
                 <td>{{dinhdangsothapphan($model_luong->sum('heso') + $model_luong->sum('hesott') ,5)}}</td>
-                <td>{{dinhdangsothapphan($model_luong->sum('hesopc') ,5)}}</td>
+                <td>{{dinhdangsothapphan($model_luong->sum('vuotkhung') ,5)}}</td>
 
                 @foreach($a_phucap as $key=>$val)
                     <td>{{dinhdangsothapphan($model_luong->sum($key) ,5)}}</td>
@@ -181,7 +181,7 @@
     <tr style="font-weight: bold; text-align: center;">
         <td colspan="5">Tổng cộng</td>
         <td>{{dinhdangsothapphan($model->sum('heso') + $model->sum('hesott') ,5)}}</td>
-        <td>{{dinhdangsothapphan($model->sum('hesopc') ,5)}}</td>
+        <td>{{dinhdangsothapphan($model->sum('vuotkhung') ,5)}}</td>
 
         @foreach($a_phucap as $key=>$val)
             <td>{{dinhdangsothapphan($model->sum($key) ,5)}}</td>

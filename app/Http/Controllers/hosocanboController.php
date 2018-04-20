@@ -10,16 +10,9 @@ use App\dmkhoipb;
 use App\dmphanloaicongtac;
 use App\dmphanloaict;
 use App\dmphongban;
-use App\dmphucap;
 use App\hosocanbo;
 use App\hosochucvu;
-use App\hosocongtac;
-use App\hosodaotao;
-use App\hosokhenthuong;
-use App\hosokyluat;
-use App\hosollvt;
 use App\hosoluong;
-use App\hosoquanhegd;
 use App\hosotinhtrangct;
 use App\ngachbac;
 use App\ngachluong;
@@ -70,7 +63,7 @@ class hosocanboController extends Controller
 
             }
 
-            $model = $m_hs->sortBy('sapxep');
+            $model = $m_hs->sortBy('stt');
             return view('manage.hosocanbo.index')
                 ->with('model',$model)
                 ->with('url','/nghiep_vu/ho_so/')
@@ -208,7 +201,7 @@ class hosocanboController extends Controller
             $insert['pcld'] = chkDbl($insert['pcld']);
             $insert['pcdh'] = chkDbl($insert['pcdh']);
             $insert['pck'] = chkDbl($insert['pck']);
-            $insert['pctnvk'] = chkDbl($insert['pctnvk']);
+            //$insert['pctnvk'] = chkDbl($insert['pctnvk']);
             $insert['pcbdhdcu'] = chkDbl($insert['pcbdhdcu']);
             $insert['pcdang'] = chkDbl($insert['pcdang']);
             $insert['pcthni'] = chkDbl($insert['pcthni']);
@@ -320,7 +313,7 @@ class hosocanboController extends Controller
             $insert['pcld'] = chkDbl($insert['pcld']);
             $insert['pcdh'] = chkDbl($insert['pcdh']);
             $insert['pck'] = chkDbl($insert['pck']);
-            $insert['pctnvk'] = chkDbl($insert['pctnvk']);
+            //$insert['pctnvk'] = chkDbl($insert['pctnvk']);
             $insert['pcbdhdcu'] = chkDbl($insert['pcbdhdcu']);
             $insert['pcdang'] = chkDbl($insert['pcdang']);
             $insert['pcthni'] = chkDbl($insert['pcthni']);

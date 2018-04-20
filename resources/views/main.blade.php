@@ -170,7 +170,11 @@
                     </a>
                     <ul class="sub-menu">
                         <li><a href="{{url('nghiep_vu/ho_so/danh_sach')}}"><i class="fa fa-caret-right"></i>Danh sách cán bộ</a></li>
+                        <!--li>
+                            <a href="{{url('nghiep_vu/tam_ngung/danh_sach')}}"><i class="fa fa-caret-right"></i>Cán bộ không chuyên trách và đã nghỉ hưu</a>
+                        </li-->
 
+                        <li><a href="{{url('nghiep_vu/tam_ngung/danh_sach')}}"><i class="fa fa-caret-right"></i>Danh sách cán bộ tạm ngừng theo dõi</a></li>
                         <!--
                         <li><a href="{{url('nghiep_vu/ho_so/danh_sach')}}"><i class="fa fa-caret-right"></i>Cán bộ biên chế và chuyên trách</a></li>
                         <li><a href="{{url('nghiep_vu/ho_so/danh_sach')}}"><i class="fa fa-caret-right"></i>Cán bộ không chuyên trách và đã nghỉ hưu</a></li>
@@ -178,7 +182,7 @@
                         <li><a href="{{url('nghiep_vu/qua_trinh/luong/maso=all')}}">Quá trình hưởng lương</a></li>
                         <li><a href="{{url('nghiep_vu/qua_trinh/phu_cap/maso=all')}}">Quá trình phụ cấp</a></li>
 
-                        <li><a href="{{url('nghiep_vu/ho_so/danh_sach')}}"><i class="fa fa-caret-right"></i>Danh sách cán bộ tạm ngừng theo dõi</a></li>
+
                         -->
 
 

@@ -342,7 +342,6 @@ function getPhanLoaiPhuCap(){
 function getColPhuCap(){
     return array(
         'pccovu'=>'Công vụ',
-        'pctnvk'=>'Thâm niên vượt khung',
         'pctnn'=>'Thâm niên nghề',
         'pccv'=>'Chức vụ',
         'pcthni'=>'Lâu năm',
@@ -361,8 +360,9 @@ function getColPhuCap(){
         'pcdang'=>'Công tác Đảng',
         'pclt'=>'Phân loại xã',
         'pcdd'=>'Đắt đỏ',
+        'pcct'=>'Ghép lớp',
         'pck'=>'Phụ cấp khác'
-        //'pcct'=>'',
+        //'pctnvk'=>'Thâm niên vượt khung',
         //'pckct'=>'',
         //'pcd'=>'',
         //'pctr'=>'',
@@ -374,7 +374,7 @@ function getColPhuCap_BaoCao()
     return array(
         'pckv' =>   'Phụ cấp</br>khu vực',
         'pccv' =>   'Phụ cấp</br>chức vụ',
-        'pctnvk' => 'Phụ cấp</br>thâm niên</br>vượt khung',
+        //'pctnvk' => 'Phụ cấp</br>thâm niên</br>vượt khung',
         'pcudn' =>  'Phụ cấp</br>ưu đãi</br>ngành',
         'pcth' =>   'Phụ cấp</br>thu hút',
         'pcthni' => 'Phụ cấp</br>công tác</br>lâu năm',
@@ -401,7 +401,7 @@ function getColPhuCap_Excel()
     return array(
         'pckv' =>   array('infor'=> 'Khu vực', 'col'=>null),
         'pccv' =>   array('infor'=> 'Chức vụ', 'col'=>null),
-        'pctnvk' => array('infor'=> 'Thâm niên vượt khung', 'col'=>null),
+        //'pctnvk' => array('infor'=> 'Thâm niên vượt khung', 'col'=>null),
         'pcudn' =>  array('infor'=> 'Ưu đãi ngành', 'col'=>null),
         'pcth' =>   array('infor'=> 'Thu hút', 'col'=>null),
         'pcthni' => array('infor'=> 'Công tác lâu năm', 'col'=>null),
@@ -421,5 +421,11 @@ function getColPhuCap_Excel()
         'pcdh'=>    array('infor'=> 'Độc hại', 'col'=>null),
         'pck' =>    array('infor'=> 'Phụ cấp khác', 'col'=>null)
     );
+}
+
+function getPhanLoaiTamNgungTheoDoi(){
+    return array('THAISAN' => 'Nghỉ thai sản',
+        'DINHCHI' => 'Đình chỉ công tác',
+        'KYLUAT' => 'Kỷ luật');
 }
 ?>
