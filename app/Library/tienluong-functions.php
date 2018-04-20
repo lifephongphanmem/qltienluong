@@ -426,6 +426,8 @@ function getColPhuCap_Excel()
 function getPhanLoaiTamNgungTheoDoi(){
     return array('THAISAN' => 'Nghỉ thai sản',
         'DINHCHI' => 'Đình chỉ công tác',
-        'KYLUAT' => 'Kỷ luật');
+        'KYLUAT' => 'Kỷ luật',
+        'NGHIPHEP'=> 'Nghỉ phép',
+        'NGHIOM'=> 'Nghỉ ốm');
 }
 ?>
