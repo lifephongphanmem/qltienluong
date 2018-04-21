@@ -165,8 +165,8 @@
                 <td>{{dinhdangsothapphan($ct->pccv,5)}}</td>
                 <td>{{dinhdangsothapphan($ct->pckv,5)}}</td>
 
-                <td>{{dinhdangsothapphan($ct->pcudn,5)}}</td>
                 <td>{{dinhdangsothapphan($ct->pcth,5)}}</td>
+                <td>{{dinhdangsothapphan($ct->pcudn,5)}}</td>
 
                 <td>{{dinhdangsothapphan($ct->pctn,5)}}</td>
                 <td>{{dinhdangsothapphan($ct->vk,5)}}</td>
