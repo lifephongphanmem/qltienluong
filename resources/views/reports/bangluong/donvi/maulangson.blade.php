@@ -137,14 +137,10 @@
         <th>B</th>
         <th>C</th>
         <th>D</th>
-        @for($i=1;$i<=16;$i++)
+        @for($i=1;$i<=23;$i++)
             <th>{{$i}}</th>
         @endfor
-        <th>13=10-11-12</th>
-        @for($i=14;$i<=18;$i++)
-            <th>{{$i}}</th>
-        @endfor
-        <th>19=13-18</th>
+
     </tr>
 
     <?php $i=1; ?>
@@ -152,7 +148,7 @@
         <?php $stt=1; ?>
             <tr style="font-weight: bold;">
                 <td>{{convert2Roman($i++)}}</td>
-                <td style="text-align: left;" colspan="22">{{$congtac->tenct}}</td>
+                <td style="text-align: left;" colspan="27">{{$congtac->tenct}}</td>
             </tr>
         <?php $model_luong = $model->where('mact',$congtac->mact)?>
         @foreach($model_luong as $ct)

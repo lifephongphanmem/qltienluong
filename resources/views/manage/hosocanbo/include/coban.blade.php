@@ -22,7 +22,7 @@
 
             <div class="col-md-3">
                 <div class="form-group">
-                    <label class="control-label">Thứ tự (sắp xếp)</label>
+                    <label class="control-label">Thứ tự (sắp xếp) trên bảng lương</label>
                     {!!Form::text('stt', null, array('id' => 'stt','class' => 'form-control', 'data-mask'=>'fdecimal'))!!}
                 </div>
             </div>
