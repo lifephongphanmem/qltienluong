@@ -131,10 +131,11 @@ class hosocanboController extends Controller
             $macanbo=session('admin')->madv . '_' . getdate()[0];
             //$m_pc=dmphucap::all('mapc','tenpc','hesopc')->toArray();
             $a_donvi = dmdonvi::where('madv',session('admin')->madv)->first()->toarray();
-
+            $max_stt =getDbl((hosocanbo::where('madv',session('admin')->madv)->max('stt'))) +1;
             return view('manage.hosocanbo.create')
                 ->with('type','create')
                 ->with('macanbo',$macanbo)
+                ->with('max_stt',$max_stt)
                 //danh mục
                 ->with('m_linhvuc',$m_linhvuc)
                 ->with('model_dt',$model_dt)

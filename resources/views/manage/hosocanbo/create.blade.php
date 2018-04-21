@@ -31,6 +31,7 @@
             TableManaged.init();
         });
     //$('#tennb').val('').trigger('change');
+        $('#stt').val('{{$max_stt}}');
         $('#macanbo').val('{{$macanbo}}');
         $('#tongiao').val('Không');
         $('#dantoc').val('Kinh').trigger('change');

@@ -641,7 +641,7 @@ class bangluongController extends Controller
             foreach($model as $hs){
                 $cb =$model_cb->where('macanbo',$hs->macanbo)->first();
                 $hs->tencv = isset($dmchucvucq[$hs->macvcq])? $dmchucvucq[$hs->macvcq] : '';
-                if(count($cb)>0){
+                if(count($cb)>0 &&  $hs->heso>0){
                     $hs->vk = $cb->vuotkhung;
                     $hs->tnn = $cb->pctnn;
                 }else{
