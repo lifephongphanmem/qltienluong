@@ -65,4 +65,14 @@ class hosotamngungtheodoiController extends Controller
         $model = hosotamngungtheodoi::where('maso',$inputs['maso'])->first();
         die($model);
     }
+
+    function destroy($id){
+        if (Session::has('admin')) {
+            $model = hosotamngungtheodoi::find($id);
+            //$macanbo = $model->macanbo;
+            $model->delete();
+            return redirect('/nghiep_vu/tam_ngung/danh_sach');
+        } else
+            return view('errors.notlogin');
+    }
 }
