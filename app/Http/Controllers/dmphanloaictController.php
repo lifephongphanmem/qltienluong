@@ -69,9 +69,7 @@ class dmphanloaictController extends Controller
 
         $inputs = $request->all();
         $model = dmphanloaicongtac::where('macongtac',$inputs['macongtac'])->first();
-
         $model->update($inputs);
-
         $result['message'] = "Cập nhật thành công.";
         $result['status'] = 'success';
         die(json_encode($result));
@@ -87,7 +85,9 @@ class dmphanloaictController extends Controller
         }
         $inputs = $request->all();
         $model = dmphanloaicongtac::where('macongtac',$inputs['macongtac'])->first();
-        $model_bh = dmphanloaicongtac_baohiem::where('maphanloai',session('admin')->maphanloai)->where('macongtac',$inputs['macongtac'])->first();
+        /*
+        //$model_bh = dmphanloaicongtac_baohiem::where('maphanloai',session('admin')->maphanloai)->where('macongtac',$inputs['macongtac'])->first();
+        $model_bh = dmphanloaicongtac_baohiem::where('macongtac',$inputs['macongtac'])->first();
         if(count($model_bh)>0){
             $model->bhxh = $model_bh->bhxh;
             $model->bhyt = $model_bh->bhyt;
@@ -98,7 +98,7 @@ class dmphanloaictController extends Controller
             $model->kpcd_dv = $model_bh->kpcd_dv;
             $model->bhtn_dv = $model_bh->bhtn_dv;
         }
-
+        */
         die($model);
     }
 
@@ -160,6 +160,7 @@ class dmphanloaictController extends Controller
         }
 
         $inputs = $request->all();
+
         $model = dmphanloaict::where('mact',$inputs['mact'])->first();
         $model->update($inputs);
 

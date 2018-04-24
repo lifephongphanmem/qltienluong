@@ -59,7 +59,8 @@ class dmphanloaicongtac_baohiemController extends Controller
         }
         $inputs = $request->all();
         $model = dmphanloaicongtac::where('macongtac',$inputs['macongtac'])->first();
-        $model_bh = dmphanloaicongtac_baohiem::where('madv',$inputs['madv'])->where('macongtac',$inputs['macongtac'])->first();
+        $model_bh = dmphanloaicongtac_baohiem::where('madv',$inputs['madv'])
+            ->where('macongtac',$inputs['macongtac'])->first();
         if(count($model_bh)>0){
             $model->bhxh = $model_bh->bhxh;
             $model->bhyt = $model_bh->bhyt;

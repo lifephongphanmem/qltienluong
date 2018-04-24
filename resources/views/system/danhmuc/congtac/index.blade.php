@@ -230,7 +230,6 @@
                     $('#bhyt_dv').val(data.bhyt_dv);
                     $('#kpcd_dv').val(data.kpcd_dv);
                     $('#bhtn_dv').val(data.bhtn_dv);
-
                     $('#id').val(data.id);
                 },
                 error: function(message){
@@ -238,6 +237,7 @@
                 }
             });
             $('#create-modal').modal('show');
+
         }
 
         function cfPB(){
