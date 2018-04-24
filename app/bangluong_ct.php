@@ -60,6 +60,11 @@ class bangluong_ct extends Model
         'stkpcd',
         'stbhtn',
         'ttbh',
+        'stbhxh_dv',
+        'stbhyt_dv',
+        'stkpcd_dv',
+        'stbhtn_dv',
+        'ttbh_dv',
         'gttncn',
         'luongtn'
     ];

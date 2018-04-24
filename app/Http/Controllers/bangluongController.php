@@ -127,7 +127,7 @@ class bangluongController extends Controller
 
             if(count($model_phanloai) == 0){
                 //Nếu đơn vị chưa set thông tin bảo hiểm thì lấy mặc định
-                $model_phanloai = $model_congtac;
+                $model_phanloai = dmphanloaicongtac::all();
             }
             $a_truythu = array();
 
@@ -138,6 +138,7 @@ class bangluongController extends Controller
             //Xem lại có cần truy lĩnh các loại phụ cấp ko
             //ngày công mặc định là 24 ngày
             foreach ($model_canbo_tl as $cb) {
+
                 $tungay = new Carbon($cb->truylinhtungay);
                 $denngay = new Carbon($cb->truylinhdenngay);
 
@@ -240,9 +241,9 @@ class bangluongController extends Controller
             $a_col = getColPhuCap(); //lấy theo phụ cấp => tự tính phụ cấp vượt khung, hệ số lương
 
             foreach ($m_cb as $cb) {
+
                 $congtac = $model_congtac->where('mact', $cb->mact)->first();
                 $cb->macongtac = isset($congtac) ? $congtac->macongtac : null;
-
                 $phanloai = $model_phanloai->where('macongtac', $cb->macongtac)->first();
                 $cb->bhxh = isset($phanloai) ? $phanloai->bhxh : 0;
                 $cb->bhyt = isset($phanloai) ? $phanloai->bhyt : 0;
@@ -318,6 +319,7 @@ class bangluongController extends Controller
                 $cb->stkpcd_dv = $luongnopbaohiem * floatval($cb->kpcd_dv) / 100;
                 $cb->stbhtn_dv = $luongnopbaohiem * floatval($cb->bhtn_dv) / 100;
                 $cb->ttbh_dv = $cb->stbhxh_dv + $cb->stbhyt_dv + $cb->stkpcd_dv + $cb->stbhtn_dv;
+
 
                 //lưu vào db
                 bangluong_ct::create($cb->toarray());
