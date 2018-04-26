@@ -11,10 +11,10 @@
 
             <div class="col-md-3">
                 <div class="form-group">
-                    <label class="control-label">Chức vụ</label>
-                    <select name="macvcq" id="macvcq" class="form-control select2me">
-                        @foreach($m_cvcq as $cv)
-                            <option value="{{$cv->macvcq}}">{{$cv->tencv}}</option>
+                    <label class="control-label">Khối/Tổ công tác</label>
+                    <select name="mapb" id="mapb" class="form-control select2me">
+                        @foreach(getPhongBan() as $key=>$val)
+                            <option value="{{$key}}">{{$val}}</option>
                         @endforeach
                     </select>
                 </div>
@@ -22,10 +22,11 @@
 
             <div class="col-md-3">
                 <div class="form-group">
-                    <label class="control-label">Thứ tự (sắp xếp) trên bảng lương</label>
-                    {!!Form::text('stt', null, array('id' => 'stt','class' => 'form-control', 'data-mask'=>'fdecimal'))!!}
+                    <label class="control-label">Chức vụ</label>
+                    {!!Form::select('macvcq',getChucVuCQ(false), null, array('id' => 'macvcq','class' => 'form-control select2me'))!!}
                 </div>
             </div>
+
 
             <div class="col-md-3">
                 <div class="form-group">
@@ -118,6 +119,13 @@
         </div>
 
         <div class="row">
+            <div class="col-md-3">
+                <div class="form-group">
+                    <label class="control-label">Thứ tự (sắp xếp) trên bảng lương</label>
+                    {!!Form::text('stt', null, array('id' => 'stt','class' => 'form-control', 'data-mask'=>'fdecimal'))!!}
+                </div>
+            </div>
+
             <div class="col-md-6">
                 <div class="form-group">
                     <label class="control-label">Lĩnh vực công tác </label>
@@ -135,7 +143,7 @@
                 </div>
             </div>
 
-            <div class="col-md-6">
+            <div class="col-md-3">
                 <div class="form-group">
                     <label class="control-label">Ảnh đại diện </label>
                     @if(isset($model))

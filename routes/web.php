@@ -289,6 +289,7 @@ Route::group(['prefix'=>'chuc_nang'],function(){
         Route::get('in/maso={mabl}','bangluongController@inbangluong');
         Route::get('inbangluong/maso={mabl}','bangluongController@inbangluong_sotien');
         Route::get('inmau3/maso={mabl}','bangluongController@inbangluongmau3'); //mẫu làm theo y.c lạng sơn
+        Route::get('inmau4/maso={mabl}','bangluongController@inbangluongmau4'); //mẫu làm theo y.c lạng sơn
         Route::get('in_bh/maso={mabl}','bangluongController@inbaohiem');
         Route::get('','bangluongController@detail');
         Route::post('updatect/{id}','bangluongController@updatect');

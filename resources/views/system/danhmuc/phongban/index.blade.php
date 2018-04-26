@@ -32,10 +32,10 @@
             <div class="portlet light bordered">
                 <div class="portlet-title">
                     <div class="caption">
-                        DANH MỤC PHÒNG BAN
+                        DANH MỤC KHỐI (TỔ) CÔNG TÁC
                     </div>
                     <div class="actions">
-                        <button type="button" id="_btnaddPB" class="btn btn-success btn-xs" onclick="addPB()"><i class="fa fa-plus"></i>&nbsp;Thêm mới phòng ban</button>
+                        <button type="button" id="_btnaddPB" class="btn btn-success btn-xs" onclick="addPB()"><i class="fa fa-plus"></i>&nbsp;Thêm mới</button>
                     </div>
                 </div>
                 <div class="portlet-body form-horizontal">
@@ -43,8 +43,8 @@
                         <thead>
                             <tr>
                                 <th class="text-center" style="width: 10%">STT</th>
-                                <th class="text-center">Tên phòng ban</th>
-                                <th class="text-center">Mô tả phòng ban</th>
+                                <th class="text-center">Tên khối/tổ công tác</th>
+                                <th class="text-center">Mô tả</th>
                                 <th class="text-center" >Sắp xếp</th>
                                 <th class="text-center">Thao tác</th>
                             </tr>
@@ -58,13 +58,11 @@
                                         <td name="diengiai">{{$value->diengiai}}</td>
                                         <td class="text-center" name="sapxep">{{$value->sapxep}}</td>
                                         <td>
-                                            @if(session('admin')->level == 'SA' || session('admin')->level == 'SSA')
-                                                <button type="button" onclick="editPB('{{$value->mapb}}')" class="btn btn-info btn-xs mbs">
-                                                    <i class="fa fa-edit"></i>&nbsp; Chỉnh sửa</button>
+                                            <button type="button" onclick="editPB('{{$value->mapb}}')" class="btn btn-info btn-xs mbs">
+                                                <i class="fa fa-edit"></i>&nbsp; Chỉnh sửa</button>
 
-                                                <button type="button" onclick="cfDel('/danh_muc/phong_ban/del/{{$value->id}}')" class="btn btn-danger btn-xs mbs" data-target="#delete-modal-confirm" data-toggle="modal">
-                                                    <i class="fa fa-trash-o"></i>&nbsp; Xóa</button>
-                                            @endif
+                                            <button type="button" onclick="cfDel('/danh_muc/phong_ban/del/{{$value->id}}')" class="btn btn-danger btn-xs mbs" data-target="#delete-modal-confirm" data-toggle="modal">
+                                                <i class="fa fa-trash-o"></i>&nbsp; Xóa</button>
                                         </td>
                                     </tr>
                                 @endforeach
@@ -82,7 +80,7 @@
             <div class="modal-content">
                 <div class="modal-header modal-header-primary">
                     <button type="button" data-dismiss="modal" aria-hidden="true" class="close">&times;</button>
-                    <h4 id="modal-header-primary-label" class="modal-title">Thông tin phòng ban</h4>
+                    <h4 id="modal-header-primary-label" class="modal-title">Thông tin khối/tổ công tác</h4>
                 </div>
                 <div class="modal-body">
                 @include('templates.tem_phongban')

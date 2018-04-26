@@ -111,7 +111,7 @@ class hosocanboController extends Controller
             $model_nhomct = dmphanloaicongtac::select('macongtac','tencongtac')->get();
             $model_tenct = dmphanloaict::select('tenct','macongtac','mact')->get();
             $model_dt = array_column(dmdantoc::select(DB::raw('dantoc as maso'),'dantoc')->get()->toarray(),'dantoc','maso');
-            //$m_pb= dmphongban::where('madv',session('admin')->madv)->get();
+            $m_pb= dmphongban::where('madv',session('admin')->madv)->get();
             //$m_pb = dmphongban::where('madv',session('admin')->madv)->get();
             $m_cvcq = dmchucvucq::where('maphanloai',session('admin')->maphanloai)
                 ->wherein('madv',['SA',session('admin')->madv])->get();
@@ -140,7 +140,7 @@ class hosocanboController extends Controller
                 ->with('m_linhvuc',$m_linhvuc)
                 ->with('model_dt',$model_dt)
                 //->with('m_pb',$m_pb)
-                ->with('m_cvcq',$m_cvcq)
+                //->with('m_cvcq',$m_cvcq)
                 //->with('m_cvd',$m_cvd)
                 ->with('model_nhomct',$model_nhomct)
                 ->with('model_tenct',$model_tenct)
@@ -229,20 +229,21 @@ class hosocanboController extends Controller
             //$m_pb= dmphongban::where('madv',session('admin')->madv)->get();
             //khối phòng ban giờ là lĩnh vực hoạt động
             $m_linhvuc = array_column(dmkhoipb::all()->toArray(),'tenkhoipb','makhoipb');
-            $m_pb = dmphongban::where('madv',session('admin')->madv)->get();
-            $m_cvcq = dmchucvucq::where('maphanloai',session('admin')->maphanloai)->get();
+            //$m_pb = dmphongban::where('madv',session('admin')->madv)->get();
+            //$m_cvcq = dmchucvucq::where('maphanloai',session('admin')->maphanloai)->get();
             //$m_cvd = dmchucvud::all();
+            //dd(getPhongBan(false));
             $m_plnb = nhomngachluong::select('manhom','tennhom')->distinct()->get();
             $m_pln = ngachluong::select('tenngachluong','manhom','msngbac')->distinct()->get();
             $a_linhvuc = explode(',',$model->lvhd);
             $a_donvi = dmdonvi::where('madv',session('admin')->madv)->first()->toarray();
-
+            //dd($model);
             return view('manage.hosocanbo.edit')
                 ->with('model',$model)
                 ->with('type','edit')
                 ->with('model_dt',$model_dt)
-                ->with('m_pb',$m_pb)
-                ->with('m_cvcq',$m_cvcq)
+                //->with('m_pb',$m_pb)
+                //->with('m_cvcq',$m_cvcq)
                 //->with('m_cvd',$m_cvd)
                 ->with('model_nhomct',$model_nhomct)
                 ->with('model_tenct',$model_tenct)

@@ -329,7 +329,7 @@
                             </a>
                             <ul class="sub-menu" style="margin-left: 15px;">
 
-                                <!--li><a href="{{url('danh_muc/phong_ban/index')}}"><i class="fa fa-caret-right"></i>Phòng ban</a></li-->
+                                <li><a href="{{url('danh_muc/phong_ban/index')}}"><i class="fa fa-caret-right"></i>Khối(tổ) công tác</a></li>
                                 <li><a href="{{url('danh_muc/chuc_vu_cq/ma_so='.session('admin')->level)}}"><i class="fa fa-caret-right"></i>Chức vụ chính quyền</a></li>
                                 <li><a href="{{url('danh_muc/chuc_vu_d/index')}}"><i class="fa fa-caret-right"></i>Chức vụ đảng</a></li>
                                 <!--li><a href="{{url('danh_muc/phu_cap/index')}}"><i class="fa fa-caret-right"></i>Phụ cấp</a></li-->

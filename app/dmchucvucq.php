@@ -11,6 +11,7 @@ class dmchucvucq extends Model
         'id',
         'macvcq',
         'tencv',
+        'tenvt',
         'ghichu',
         'sapxep',
         'madv',

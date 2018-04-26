@@ -32,11 +32,7 @@
         $('#mact').val('{{$model->mact}}').trigger('change');
         $('#lvhd').val('{{$model->lvhd}}').trigger('change');
         $('#sunghiep').val('{{$model->sunghiep}}').trigger('change');
-        $('#macvcq').val('{{$model->macvcq}}').trigger('change');
-        //$('#lvtd').val('{{$model->lvtd}}').trigger('change');
-        //$('#mapb').val('{{$model->mapb}}').trigger('change');
-        //$('#nhommau').val('{{$model->nhommau}}').trigger('change');
-        //$('#macvd').val('{{$model->macvd}}').trigger('change');
+        $('#mapb').val('{{$model->mapb}}').trigger('change');
     </script>
     @include('includes.script.scripts')
 

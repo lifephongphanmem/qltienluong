@@ -53,6 +53,7 @@
                             <tr>
                                 <th class="text-center" style="width: 10%">STT</th>
                                 <th class="text-center">Tên chức vụ</th>
+                                <th class="text-center">Tên viết tắt<br>(trên bảng lương)</th>
                                 <th class="text-center">Mô tả chức vụ</th>
                                 <th class="text-center" style="width: 10%">Sắp xếp</th>
                                 <th class="text-center">Thao tác</th>
@@ -64,6 +65,7 @@
                                     <tr>
                                         <td class="text-center">{{$key+1}}</td>
                                         <td name="tencv">{{$value->tencv}}</td>
+                                        <td name="tenvt">{{$value->tenvt}}</td>
                                         <td name="ghichu">{{$value->ghichu}}</td>
                                         <td class="text-center" name="sapxep">{{$value->sapxep}}</td>
                                         <td>
@@ -101,6 +103,9 @@
                     <label class="form-control-label">Tên chức vụ<span class="require">*</span></label>
                     {!!Form::text('tencv', null, array('id' => 'tencv','class' => 'form-control','required'=>'required'))!!}
 
+                    <label class="form-control-label">Tên chức vụ viết tắt</label>
+                    {!!Form::text('tenvt', null, array('id' => 'tenvt','class' => 'form-control'))!!}
+
                     <label class="form-control-label">Mô tả chức vụ</label>
                     {!!Form::textarea('ghichu', null, array('id' => 'ghichu','class' => 'form-control','rows'=>'3'))!!}
 
@@ -128,6 +133,7 @@
         function addCV(){
             //var date=new Date();
             $('#tencv').val('');
+            $('#tenvt').val('');
             $('#ghichu').val('');
             $('#sapxep').attr('value','99');
             $('#macvcq').val('');
@@ -147,6 +153,7 @@
                 dataType: 'JSON',
                 success: function (data) {
                     $('#tencv').val(data.tencv);
+                    $('#tenvt').val(data.tenvt);
                     $('#ghichu').val(data.ghichu);
                     $('#sapxep').val(data.sapxep);
                     $('#maphanloai').val(data.maphanloai);
@@ -183,6 +190,7 @@
                             _token: CSRF_TOKEN,
                             maphanloai: $('#mapl').val(),
                             tencv: tencv,
+                            tenvt: $('#tenvt').val(),
                             ghichu: ghichu,
                             sapxep: sapxep
                         },
@@ -203,6 +211,7 @@
                         data: {
                             _token: CSRF_TOKEN,
                             macvcq: macvcq,
+                            tenvt: $('#tenvt').val(),
                             tencv: tencv,
                             ghichu: ghichu,
                             sapxep: sapxep

@@ -60,7 +60,7 @@
             <b>Đơn vị chủ quản: {{$m_dv->tenct}}</b>
         </td>
         <td  style="text-align: center;">
-            <b>Mẫu số C02a - HD</b>
+
         </td>
 
     </tr>
@@ -71,7 +71,7 @@
         </td>
 
         <td style="text-align: center; font-style: italic">
-            (Ban hành kèm theo QĐ số 19/2006/QĐ-BTC ngày 30/3/2006 và Thông tư số 185/2010/TT-BTC ngày 15/11/2010 của Bộ Tài chính)
+
         </td>
     </tr>
     <tr>

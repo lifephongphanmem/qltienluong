@@ -301,6 +301,26 @@ function getThongTuQD($val_null = true){
 
 }
 
+function getPhongBan($val_null = true){
+    $model = array_column(App\dmphongban::all()->toArray(),'tenpb','mapb');
+    if($val_null){
+        $a_kq = array(''=>'-- Chọn khối/tổ công tác --');
+        return array_merge($a_kq,$model);
+    }
+    return $model;
+
+}
+
+function getChucVuCQ($val_null = true){
+    $model = array_column(App\dmchucvucq::where('maphanloai',session('admin')->maphanloai)->get()->toArray(),'tencv','macvcq');
+    if($val_null){
+        $a_kq = array(''=>'-- Chọn chức vụ --');
+        return array_merge($a_kq,$model);
+    }
+    return $model;
+
+}
+
 function getDonViTinh(){
     return array('1' => 'Đồng','2' => 'Nghìn đồng','3' => 'Triệu đồng');
 }

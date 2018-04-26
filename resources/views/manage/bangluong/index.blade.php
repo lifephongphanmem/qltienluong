@@ -66,31 +66,12 @@
                                         <td>
                                             <button type="button" onclick="edit('{{$value->mabl}}')" class="btn btn-default btn-xs mbs">
                                                 <i class="fa fa-edit"></i>&nbsp; Chỉnh sửa</button>
+
                                             <a href="{{url($furl.'maso='.$value->mabl)}}" class="btn btn-default btn-xs mbs">
                                                 <i class="fa fa-th-list"></i>&nbsp; Chi tiết</a>
-                                            <div class="btn-group btn-group-solid">
-                                                <button type="button" class="btn btn-default btn-xs mbs dropdown-toggle" data-toggle="dropdown" aria-expanded="true">
-                                                    <i class="fa fa-ellipsis-horizontal"></i> In bảng lương <i class="fa fa-angle-down"></i>
-                                                </button>
-                                                <ul class="dropdown-menu">
-                                                    <li>
-                                                        <a href="{{url($furl.'in/maso='.$value->mabl)}}" class="btn btn-default btn-xs mbs" TARGET="_blank" style="padding-top: 4px; padding-bottom: 4px;">
-                                                            <i class="fa fa-print"></i>&nbsp; Bảng lương mẫu 1</a>
-                                                    </li>
-                                                    <li>
-                                                        <a href="{{url($furl.'inbangluong/maso='.$value->mabl)}}" class="btn btn-default btn-xs mbs" TARGET="_blank" style="padding-top: 4px; padding-bottom: 4px;">
-                                                            <i class="fa fa-print"></i>&nbsp; Bảng lương mẫu 2</a>
-                                                    </li>
-                                                    <li>
-                                                        <a href="{{url($furl.'inmau3/maso='.$value->mabl)}}" class="btn btn-default btn-xs mbs" TARGET="_blank" style="padding-top: 4px; padding-bottom: 4px;">
-                                                            <i class="fa fa-print"></i>&nbsp; Bảng lương mẫu 3</a>
-                                                    </li>
-                                                    <li>
-                                                        <a href="{{url($furl.'in_bh/maso='.$value->mabl)}}" class="btn btn-default btn-xs mbs" TARGET="_blank" style="padding-top: 4px; padding-bottom: 4px;">
-                                                            <i class="fa fa-print"></i>&nbsp; Bảo hiểm</a>
-                                                    </li>
-                                                </ul>
-                                            </div>
+
+                                            <button type="button" onclick="inbl('{{$value->mabl}}','{{$value->thang}}','{{$value->nam}}')" class="btn btn-default btn-xs mbs">
+                                                <i class="fa fa-print"></i>&nbsp; In bảng lương</button>
 
                                             <button type="button" onclick="cfDel('{{$furl.'del/'.$value->id}}')" class="btn btn-danger btn-xs mbs" data-target="#delete-modal-confirm" data-toggle="modal">
                                                 <i class="fa fa-trash-o"></i>&nbsp; Xóa</button>
@@ -182,6 +163,50 @@
     </div>
     {!! Form::close() !!}
 
+    <!--Modal thông tin tùy chọn in bảng lương -->
+    <div id="inbl-modal" tabindex="-1" role="dialog" aria-hidden="true" class="modal fade">
+        <div class="modal-dialog modal-content">
+            <div class="modal-header modal-header-primary">
+                <button type="button" data-dismiss="modal" aria-hidden="true" class="close">&times;</button>
+                <h4 id="hd-inbl" class="modal-title">In bảng lương</h4>
+            </div>
+            <div class="modal-body">
+                <div class="form-horizontal">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <a id="inbl_m1" href="{{url($furl.'in/maso=')}}" TARGET="_blank" title="Bảng lương theo mẫu Mẫu số C02a - HD">
+                                <i class="fa fa-print"></i>&nbsp; Bảng lương mẫu 1</a>
+                        </div>
+
+                        <div class="col-md-12">
+                            <a id="inbl_m2" href="{{url($furl.'inbangluong/maso=')}}" TARGET="_blank" title="Bảng lương theo mẫu Mẫu số C02a - HD (hiển thị số tiền tại cột phụ cấp)">
+                                <i class="fa fa-print"></i>&nbsp; Bảng lương mẫu 2</a>
+                        </div>
+
+                        <div class="col-md-12">
+                            <a id="inbl_m3" href="{{url($furl.'inmau3/maso=')}}" TARGET="_blank" title="Bảng lương theo mẫu đặc thù của đơn vị">
+                                <i class="fa fa-print"></i>&nbsp; Bảng lương mẫu 3</a>
+                        </div>
+
+                        <div class="col-md-12">
+                            <a id="inbl_m4" href="{{url($furl.'inmau3/maso=')}}" TARGET="_blank" title="Bảng lương theo mẫu đặc thù của đơn vị (nhóm theo khối/tổ công tác)">
+                                <i class="fa fa-print"></i>&nbsp; Bảng lương mẫu 4</a>
+                        </div>
+
+                        <div class="col-md-12">
+                            <a id="inbl_mbh" href="{{url($furl.'in_bh/maso=')}}" TARGET="_blank" title="Bảng tính bảo hiểm phải nộp của cán bộ">
+                                <i class="fa fa-print"></i>&nbsp; Bảo hiểm</a>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" data-dismiss="modal" class="btn btn-default">Hủy thao tác</button>
+            </div>
+        </div>
+    </div>
 
     <script>
         function add(){
@@ -218,6 +243,18 @@
                 }
             });
             $('#chitiet-modal').modal('show');
+        }
+
+        function inbl(mabl,thang,nam){
+            var url = '{{$furl}}';
+            document.getElementById("hd-inbl").innerHTML="In bảng lương tháng " + thang + ' năm ' + nam;
+            $("#inbl_m1").attr("href", url + 'in/maso=' +mabl);
+            $("#inbl_m2").attr("href", url + 'inbangluong/maso=' +mabl);
+            $("#inbl_m3").attr("href", url + 'inmau3/maso=' +mabl);
+            $("#inbl_m4").attr("href", url + 'inmau4/maso=' +mabl);
+            $("#inbl_mbh").attr("href", url + 'in_bh/maso=' +mabl);
+
+            $('#inbl-modal').modal('show');
         }
 
         $(function(){

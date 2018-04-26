@@ -537,7 +537,7 @@ class bangluongController extends Controller
 
             //dd($model_congtac);
             //$model_congtac = dmphanloaict::select('mact','tenct')->get();
-            $dmchucvucq=array_column(dmchucvucq::all('tencv', 'macvcq')->toArray(),'tencv', 'macvcq');
+            $dmchucvucq=array_column(dmchucvucq::all('tenvt', 'macvcq')->toArray(),'tenvt', 'macvcq');
             //dd($dmchucvucq);
             foreach($model as $hs){
                 $hs->tencv = isset($dmchucvucq[$hs->macvcq])? $dmchucvucq[$hs->macvcq] : '';
@@ -583,7 +583,7 @@ class bangluongController extends Controller
 
             //dd($model_congtac);
             //$model_congtac = dmphanloaict::select('mact','tenct')->get();
-            $dmchucvucq=array_column(dmchucvucq::all('tencv', 'macvcq')->toArray(),'tencv', 'macvcq');
+            $dmchucvucq=array_column(dmchucvucq::all('tenvt', 'macvcq')->toArray(),'tenvt', 'macvcq');
             $a_col = getColTongHop();
             foreach($model as $hs){
                 $hs->tencv = isset($dmchucvucq[$hs->macvcq])? $dmchucvucq[$hs->macvcq] : '';
@@ -637,7 +637,7 @@ class bangluongController extends Controller
 
             //dd($model_congtac);
             //$model_congtac = dmphanloaict::select('mact','tenct')->get();
-            $dmchucvucq=array_column(dmchucvucq::all('tencv', 'macvcq')->toArray(),'tencv', 'macvcq');
+            $dmchucvucq=array_column(dmchucvucq::all('tenvt', 'macvcq')->toArray(),'tenvt', 'macvcq');
             //dd($dmchucvucq);
             $model_cb =hosocanbo::where('madv',$m_bl->madv)->get();
             foreach($model as $hs){
@@ -661,6 +661,53 @@ class bangluongController extends Controller
                 ->with('m_dv',$m_dv)
                 ->with('thongtin',$thongtin)
                 ->with('model_congtac',$model_congtac)
+                ->with('pageTitle','Bảng lương chi tiết');
+        } else
+            return view('errors.notlogin');
+    }
+
+    //Mẫu group theo khối/tổ công tác
+    public function inbangluongmau4($mabl){
+        if (Session::has('admin')) {
+            $model = bangluong_ct::where('mabl',$mabl)->get();
+            $m_bl = bangluong::select('thang','nam','mabl','madv')->where('mabl',$mabl)->first();
+            $mabl = $m_bl->mabl;
+            $m_dv = dmdonvi::where('madv',$m_bl->madv)->first();
+
+            $model_congtac = dmphanloaict::select('mact','tenct')
+                ->wherein('mact', function($query) use($mabl){
+                    $query->select('mact')->from('bangluong_ct')->where('mabl',$mabl);
+                })->get();
+
+            //dd($model_congtac);
+            //$model_congtac = dmphanloaict::select('mact','tenct')->get();
+            $dmchucvucq=array_column(dmchucvucq::all('tenvt', 'macvcq')->toArray(),'tenvt', 'macvcq');
+            //dd($dmchucvucq);
+            foreach($model as $hs){
+                $hs->tencv = isset($dmchucvucq[$hs->macvcq])? $dmchucvucq[$hs->macvcq] : '';
+            }
+            $thongtin=array('nguoilap'=>$m_bl->nguoilap,
+                'thang'=>$m_bl->thang,
+                'nam'=>$m_bl->nam);
+            //xử lý ẩn hiện cột phụ cấp => biết tổng số cột hiện => colspan trên báo cáo
+            $a_phucapbc = getColPhuCap_BaoCao();
+            $a_phucap = array();
+            $col = 0;
+            foreach($a_phucapbc as $key=>$val){
+                if($m_dv->$key <3) {
+                    $a_phucap[$key] = $val;
+                    $col++;
+                }
+            }
+
+            return view('reports.bangluong.donvi.maubangluong_phongban')
+                ->with('model',$model->sortBy('stt'))
+                ->with('model_pb',getPhongBan())
+                ->with('m_dv',$m_dv)
+                ->with('thongtin',$thongtin)
+                ->with('col',$col)
+                ->with('model_congtac',$model_congtac)
+                ->with('a_phucap',$a_phucap)
                 ->with('pageTitle','Bảng lương chi tiết');
         } else
             return view('errors.notlogin');
