@@ -75,7 +75,7 @@
         </tr>
         <tr>
             <td style="text-align: left;width: 60%">
-                <b>Mã đơn vị SDND: {{''}}</b>
+                <b>Mã đơn vị SDND: {{$m_dv['maqhns']}}</b>
             </td>
             <td style="text-align: center; font-style: italic">
 
@@ -92,7 +92,6 @@
             <th style="width: 6%;" rowspan="2">Mã số</br>công chức</th>
             <th style="width: 10%;" rowspan="2">Họ và tên</th>
             <th style="width: 6%;" rowspan="2">Cấp bậc</br>chức vụ</th>
-            <th style="width: 6%;" rowspan="2">Mã số</br>ngạch</br>bậc</th>
             <th colspan="{{$col + 4}}">Lương hệ số</th>
             <th style="width: 6%;" rowspan="2">Nghỉ việc</br>không được</br>hưởng lương</th>
             <th style="width: 6%;" rowspan="2">BHXH trả</br>thay lương</th>
@@ -121,7 +120,7 @@
         </tr>
 
         <tr>
-            @for($i=1;$i<=19 + $col;$i++)
+            @for($i=1;$i<=18 + $col;$i++)
                 <th>{{$i}}</th>
             @endfor
         </tr>
@@ -132,16 +131,16 @@
             <?php $stt=1; ?>
                 <tr style="font-weight: bold;">
                     <td>{{convert2Roman($i++)}}</td>
-                    <td style="text-align: left;" colspan="{{18+ $col}}">{{$congtac->tenct}}</td>
+                    <td style="text-align: left;" colspan="{{17+ $col}}">{{$congtac->tenct}}</td>
                 </tr>
             <?php $model_luong = $model_lpb->where('mact',$congtac->mact)?>
             @foreach($model_luong as $ct)
                 <tr>
                     <td>{{$stt++}}</td>
-                    <td style="text-align: left">{{$ct->macongchuc}}</td>
+                    <td style="text-align: left">{{$ct->msngbac}}</td>
                     <td style="text-align: left">{{$ct->tencanbo}}</td>
                     <td style="text-align: left">{{$ct->tencv}}</td>
-                    <td style="text-align: left">{{$ct->msngbac}}</td>
+
                     <td>{{dinhdangsothapphan(($ct->heso + $ct->hesott),5)}}</td>
                     <td>{{dinhdangsothapphan($ct->vuotkhung,5)}}</td>
 
@@ -165,7 +164,7 @@
                 </tr>
             @endforeach
                 <tr style="font-weight: bold; text-align: center; font-style: italic">
-                    <td colspan="5">Cộng</td>
+                    <td colspan="4">Cộng</td>
                     <td>{{dinhdangsothapphan($model_luong->sum('heso') + $model_luong->sum('hesott') ,5)}}</td>
                     <td>{{dinhdangsothapphan($model_luong->sum('vuotkhung') ,5)}}</td>
 
@@ -191,7 +190,7 @@
                 </tr>
         @endforeach
         <tr style="font-weight: bold; text-align: center;">
-            <td colspan="5">Tổng cộng</td>
+            <td colspan="4">Tổng cộng</td>
             <td>{{dinhdangsothapphan($model_lpb->sum('heso') + $model_lpb->sum('hesott') ,5)}}</td>
             <td>{{dinhdangsothapphan($model_lpb->sum('vuotkhung') ,5)}}</td>
 

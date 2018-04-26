@@ -247,7 +247,7 @@
 
     </tr>
 </table>
-
+<p style="text-align: left; font-weight:bold;font-style: italic ">Tổng số tiền bằng chữ:</p>
 <table class="header" width="96%" border="0" cellspacing="0" cellpadding="8" style="margin:20px auto; text-align: center;">
     <tr>
         <td style="text-align: left;" width="50%"></td>
