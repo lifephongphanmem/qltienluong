@@ -98,7 +98,7 @@ class bangluongController extends Controller
 
             //Lấy cán bộ tạm ngưng theo dõi
             //Nếu phân loai = THAISAN && pcttn >0 =>đưa vào bảng lương
-            $model_canbo_tn = hosocanbo::select('stt','macanbo', 'macongchuc', 'sunghiep', 'tencanbo', 'mact', 'lvhd', 'macvcq', 'mapb', 'msngbac', 'heso', 'hesopc', 'hesott', 'vuotkhung', 'pcudn', DB::raw("'" . $inputs['mabl'] . "' as mabl"))
+            $model_canbo_tn = hosocanbo::select('stt','macanbo', 'macongchuc', 'sunghiep', 'tencanbo', 'mact', 'lvhd', 'macvcq', 'mapb', 'msngbac', 'heso', 'pccv', 'vuotkhung', 'pcudn', DB::raw("'" . $inputs['mabl'] . "' as mabl"))
                 ->wherein('macanbo', $m_tamngung->toarray())
                 ->where('pcudn','>','0')
                 ->get();
@@ -226,8 +226,9 @@ class bangluongController extends Controller
                     }
                 }
 
-                $cb->vuotkhung = 0;
-                $cb->heso = 0;
+                //đơn vị y.c giữ hệ số, chức vụ trên bảng lương nhưng ko tính lương
+                //$cb->vuotkhung = 0;
+                //$cb->heso = 0;
                 $cb->ttl = $inputs['luongcoban'] * $cb->pcudn * $inputs['phantramhuong'] / 100;
                 $cb->luongtn = $cb->ttl;
 
