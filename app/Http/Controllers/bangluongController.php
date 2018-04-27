@@ -490,7 +490,7 @@ class bangluongController extends Controller
             $inputs['pcld'] = chkDbl($inputs['pcld']);
             $inputs['pcdh'] = chkDbl($inputs['pcdh']);
             $inputs['pck'] = chkDbl($inputs['pck']);
-            $inputs['pctnvk'] = chkDbl($inputs['pctnvk']);
+            //$inputs['pctnvk'] = chkDbl($inputs['pctnvk']);
             $inputs['pcbdhdcu'] = chkDbl($inputs['pcbdhdcu']);
             $inputs['pcdang'] = chkDbl($inputs['pcdang']);
             $inputs['pcthni'] = chkDbl($inputs['pcthni']);
