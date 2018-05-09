@@ -302,7 +302,7 @@ function getThongTuQD($val_null = true){
 }
 
 function getPhongBan($val_null = true){
-    $model = array_column(App\dmphongban::all()->toArray(),'tenpb','mapb');
+    $model = array_column(App\dmphongban::where('madv',session('admin')->madv)->get()->toArray(),'tenpb','mapb');
     if($val_null){
         $a_kq = array(''=>'-- Chọn khối/tổ công tác --');
         return array_merge($a_kq,$model);

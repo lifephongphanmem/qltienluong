@@ -32,7 +32,7 @@
             <div class="portlet light bordered">
                 <div class="portlet-title">
                     <div class="caption">
-                        <b>DANH MỤC CHỨC VỤ CHÍNH QUYỀN</b>
+                        <b>DANH MỤC CHỨC VỤ</b>
                     </div>
                     <div class="actions">
                         <button type="button" id="_btnaddPB" class="btn btn-success btn-xs" onclick="addCV()"><i class="fa fa-plus"></i>&nbsp;Thêm mới chức vụ</button>
@@ -93,28 +93,47 @@
             <div class="modal-content">
                 <div class="modal-header modal-header-primary">
                     <button type="button" data-dismiss="modal" aria-hidden="true" class="close">&times;</button>
-                    <h4 id="modal-header-primary-label" class="modal-title">Thông tin chức vụ chính quyền</h4>
+                    <h4 id="modal-header-primary-label" class="modal-title">Thông tin chức vụ</h4>
                 </div>
+
                 <div class="modal-body">
+                    <div class="form-horizontal">
+                        <div class="row">
+                    <div class="col-md-12">
+                        <label class="control-label">Phân loại đơn vị</label>
+                        {!! Form::select('maphanloai',$model_pl,$mapl,array('id' => 'maphanloai', 'class' => 'form-control', 'readonly'))!!}
+                    </div>
 
-                    <label class="control-label">Phân loại đơn vị</label>
-                    {!! Form::select('maphanloai',$model_pl,$mapl,array('id' => 'maphanloai', 'class' => 'form-control', 'readonly'))!!}
-
+                    <div class="col-md-12">
                     <label class="form-control-label">Tên chức vụ<span class="require">*</span></label>
                     {!!Form::text('tencv', null, array('id' => 'tencv','class' => 'form-control','required'=>'required'))!!}
+                    </div>
 
+                    <div class="col-md-12">
                     <label class="form-control-label">Tên chức vụ viết tắt</label>
                     {!!Form::text('tenvt', null, array('id' => 'tenvt','class' => 'form-control'))!!}
+                    </div>
 
+
+
+                    <div class="col-md-12">
                     <label class="form-control-label">Mô tả chức vụ</label>
                     {!!Form::textarea('ghichu', null, array('id' => 'ghichu','class' => 'form-control','rows'=>'3'))!!}
+                    </div>
 
+                    <div class="col-md-12">
                     <label class="form-control-label">Sắp xếp</label>
                     {!!Form::text('sapxep', null, array('id' => 'sapxep','class' => 'form-control'))!!}
-
+                    </div>
+                            <div class="col-md-12">&nbsp;</div>
+                            <div class="col-md-offset-4 col-md-8" >
+                                <input type="checkbox" id="ttdv" name="ttdv" class="form-control"/>
+                                <label>Thủ trưởng đơn vị</label>
+                            </div>
                     <input type="hidden" id="macvcq" name="macvcq"/>
                     <input type="hidden" id="id_cv" name="id_cv"/>
-                </div>
+                </div></div></div>
+
                 <div class="modal-footer">
                     <button type="button" data-dismiss="modal" class="btn btn-default">Hủy thao tác</button>
                     <button type="submit" id="submit" name="submit" value="submit" class="btn btn-primary" onclick="cfCV()">Đồng ý</button>
@@ -137,6 +156,7 @@
             $('#ghichu').val('');
             $('#sapxep').attr('value','99');
             $('#macvcq').val('');
+            $('#ttdv').attr('checked',false);
             $('#id_cv').val(0);
             $('#chucvu-modal').modal('show');
         }
@@ -157,6 +177,7 @@
                     $('#ghichu').val(data.ghichu);
                     $('#sapxep').val(data.sapxep);
                     $('#maphanloai').val(data.maphanloai);
+                    $('#ttdv').prop('checked', data.ttdv == 1 ? true : false);
                     $('#macvcq').val(macvcq);
                 },
                 error: function(message){
@@ -175,6 +196,7 @@
             var ghichu=$('#ghichu').val();
             var sapxep=$('#sapxep').val();
             var id=$('#id_cv').val();
+            var ttdv=$('#ttdv').prop('checked')==true?1:0;
 
             if(tencv==''){
                 valid=false;
@@ -191,6 +213,7 @@
                             maphanloai: $('#mapl').val(),
                             tencv: tencv,
                             tenvt: $('#tenvt').val(),
+                            ttdv: ttdv,
                             ghichu: ghichu,
                             sapxep: sapxep
                         },
@@ -213,6 +236,7 @@
                             macvcq: macvcq,
                             tenvt: $('#tenvt').val(),
                             tencv: tencv,
+                            ttdv: ttdv,
                             ghichu: ghichu,
                             sapxep: sapxep
                         },

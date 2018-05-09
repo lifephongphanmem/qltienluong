@@ -87,8 +87,9 @@ class dmchucvucqController extends Controller
 
         $inputs = $request->all();
         $model = dmchucvucq::where('macvcq',$inputs['macvcq'])->first();
-        $model->update($inputs);
 
+        $model->update($inputs);
+        //dd($inputs);
         $result['message'] = "Cập nhật thành công.";
         $result['status'] = 'success';
         die(json_encode($result));

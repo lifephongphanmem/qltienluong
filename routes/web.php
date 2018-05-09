@@ -254,6 +254,13 @@ Route::group(['prefix'=>'nghiep_vu'],function(){
         Route::get('get','hosotamngungtheodoiController@getinfo');
     });
 
+    Route::group(['prefix'=>'truy_linh'],function(){
+        Route::get('danh_sach','hosotruylinhController@index');
+        Route::get('del/{id}','hosotruylinhController@destroy');
+        Route::post('store','hosotruylinhController@store');
+        Route::get('get','hosotruylinhController@getinfo');
+    });
+
 });
 
 Route::group(['prefix'=>'du_toan'],function(){

@@ -73,38 +73,6 @@ class hosocanboController extends Controller
             return view('errors.notlogin');
     }
 
-    //Bỏ
-    function index_thoicongtac(){
-        if (Session::has('admin')) {
-
-            //$m_hs=hosocanbo::where('madv',session('admin')->maxa)->get();
-            $m_hs=hosocanbo::join('dmchucvucq', 'hosocanbo.macvcq', '=', 'dmchucvucq.macvcq')
-                ->select('hosocanbo.*', 'dmchucvucq.sapxep')
-                ->where('hosocanbo.theodoi','0')
-                ->where('hosocanbo.madv',session('admin')->madv)
-                ->orderby('dmchucvucq.sapxep')
-                ->get();
-
-            $dmphongban=dmphongban::all('mapb','tenpb')->toArray();
-            $dmchucvud=dmchucvud::all('tencv', 'macvd')->toArray();
-            $dmchucvucq=dmchucvucq::all('tencv', 'macvcq')->toArray();
-
-            foreach($m_hs as $hs){
-                $hs->tenpb=getInfoPhongBan($hs,$dmphongban);
-                $hs->tencvd=getInfoChucVuD($hs,$dmchucvud);
-                $hs->tencvcq=getInfoChucVuCQ($hs,$dmchucvucq);
-            }
-            //dd($m_hs);
-
-            return view('manage.hosocanbo.index_thoicongtac')
-                ->with('model',$m_hs)
-                ->with('url','/nghiep_vu/ho_so/')
-                ->with('tendv',getTenDV(session('admin')->madv))
-                ->with('pageTitle','Danh sách cán bộ đã thôi công tác');
-        } else
-            return view('errors.notlogin');
-    }
-
     function create(){
         if (Session::has('admin')) {
             //$makhoipb=getMaKhoiPB(session('admin')->madv);

@@ -16,6 +16,7 @@ class dmchucvucq extends Model
         'sapxep',
         'madv',
         'phannhom',
-        'maphanloai'
+        'maphanloai',
+        'ttdv'
     ];
 }

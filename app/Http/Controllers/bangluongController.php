@@ -369,32 +369,6 @@ class bangluongController extends Controller
             return view('errors.notlogin');
     }
 
-    function show_old($mabl){
-        if (Session::has('admin')) {
-            $model=DB::table('bangluong_ct')
-                ->join('dmchucvucq', 'bangluong_ct.macvcq', '=', 'dmchucvucq.macvcq')
-                ->select('bangluong_ct.*', 'dmchucvucq.sapxep')
-                ->where('bangluong_ct.mabl',$mabl)
-                ->orderby('dmchucvucq.sapxep')
-                ->get();
-            //$model=$model->orderby('dmchucvucq.sapxep');
-
-            $m_bl=bangluong::select('thang','nam','mabl')->where('mabl',$mabl)->first();
-            $dmchucvucq=dmchucvucq::all('tencv', 'macvcq')->toArray();
-
-            foreach($model as $hs){
-                $hs->tencv=getInfoChucVuCQ($hs,$dmchucvucq);
-            }
-            return view('manage.bangluong.bangluong')
-                ->with('furl','/chuc_nang/bang_luong/')
-                ->with('model',$model)
-
-                ->with('m_bl',$m_bl)
-                ->with('pageTitle','Bảng lương chi tiết');
-        } else
-            return view('errors.notlogin');
-    }
-
     function destroy($id){
         if (Session::has('admin')) {
             $model = bangluong::find($id);

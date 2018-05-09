@@ -170,19 +170,14 @@
                     </a>
                     <ul class="sub-menu">
                         <li><a href="{{url('nghiep_vu/ho_so/danh_sach')}}"><i class="fa fa-caret-right"></i>Danh sách cán bộ</a></li>
-                        <!--li>
-                            <a href="{{url('nghiep_vu/tam_ngung/danh_sach')}}"><i class="fa fa-caret-right"></i>Cán bộ không chuyên trách và đã nghỉ hưu</a>
-                        </li-->
-
                         <li><a href="{{url('nghiep_vu/tam_ngung/danh_sach')}}"><i class="fa fa-caret-right"></i>Danh sách cán bộ tạm ngừng theo dõi</a></li>
+                        <!--li><a href="{{url('nghiep_vu/truy_linh/danh_sach')}}"><i class="fa fa-caret-right"></i>Danh sách cán bộ được truy lĩnh lương</a></li-->
                         <!--
                         <li><a href="{{url('nghiep_vu/ho_so/danh_sach')}}"><i class="fa fa-caret-right"></i>Cán bộ biên chế và chuyên trách</a></li>
                         <li><a href="{{url('nghiep_vu/ho_so/danh_sach')}}"><i class="fa fa-caret-right"></i>Cán bộ không chuyên trách và đã nghỉ hưu</a></li>
 
                         <li><a href="{{url('nghiep_vu/qua_trinh/luong/maso=all')}}">Quá trình hưởng lương</a></li>
                         <li><a href="{{url('nghiep_vu/qua_trinh/phu_cap/maso=all')}}">Quá trình phụ cấp</a></li>
-
-
                         -->
 
 
@@ -330,8 +325,8 @@
                             <ul class="sub-menu" style="margin-left: 15px;">
 
                                 <li><a href="{{url('danh_muc/phong_ban/index')}}"><i class="fa fa-caret-right"></i>Khối(tổ) công tác</a></li>
-                                <li><a href="{{url('danh_muc/chuc_vu_cq/ma_so='.session('admin')->level)}}"><i class="fa fa-caret-right"></i>Chức vụ chính quyền</a></li>
-                                <li><a href="{{url('danh_muc/chuc_vu_d/index')}}"><i class="fa fa-caret-right"></i>Chức vụ đảng</a></li>
+                                <li><a href="{{url('danh_muc/chuc_vu_cq/ma_so='.session('admin')->level)}}"><i class="fa fa-caret-right"></i>Chức vụ</a></li>
+                                <!--li><a href="{{url('danh_muc/chuc_vu_d/index')}}"><i class="fa fa-caret-right"></i>Chức vụ đảng</a></li-->
                                 <!--li><a href="{{url('danh_muc/phu_cap/index')}}"><i class="fa fa-caret-right"></i>Phụ cấp</a></li-->
                                 <li><a href="{{url('danh_muc/dan_toc/index')}}"><i class="fa fa-caret-right"></i>Dân tộc</a></li>
                                 <!--Cho đơn vị chủ quản set phân loại bảo hiểm-->

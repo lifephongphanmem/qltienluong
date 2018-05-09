@@ -126,7 +126,7 @@
                 </div>
             </div>
 
-            <div class="col-md-6">
+            <div class="col-md-9">
                 <div class="form-group">
                     <label class="control-label">Lĩnh vực công tác </label>
                     <select class="form-control" id="linhvuc" name="linhvuc" multiple="multiple">
@@ -142,8 +142,10 @@
                     </select>
                 </div>
             </div>
+        </div>
 
-            <div class="col-md-3">
+        <div class="row">
+            <div class="col-md-12">
                 <div class="form-group">
                     <label class="control-label">Ảnh đại diện </label>
                     @if(isset($model))

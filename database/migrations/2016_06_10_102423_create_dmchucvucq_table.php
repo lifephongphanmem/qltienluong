@@ -21,6 +21,8 @@ class CreateDmchucvucqTable extends Migration
             $table->string('madv', 50)->nullable();
             $table->string('maphanloai', 50)->nullable();
             $table->string('phannhom', 50)->nullable();
+            $table->string('tenvt', 100)->nullable();
+            $table->integer('ttdv')->default(0);
             $table->timestamps();
         });
     }
