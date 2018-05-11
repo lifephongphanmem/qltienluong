@@ -35,7 +35,7 @@
                     <div class="caption">DANH SÁCH BẢNG LƯƠNG CỦA ĐƠN VỊ</div>
                     <div class="actions">
                         <button type="button" class="btn btn-default btn-xs" onclick="add()"><i class="fa fa-plus"></i>&nbsp;Thêm mới bảng lương</button>
-                        <button type="button" class="btn btn-default btn-xs" onclick="add_truylinh()"><i class="fa fa-plus"></i>&nbsp;Thêm mới bảng truy lĩnh</button>
+                        <!--button type="button" class="btn btn-default btn-xs" onclick="add_truylinh()"><i class="fa fa-plus"></i>&nbsp;Thêm mới bảng truy lĩnh</button-->
                     </div>
                 </div>
                 <div class="portlet-body form-horizontal">
