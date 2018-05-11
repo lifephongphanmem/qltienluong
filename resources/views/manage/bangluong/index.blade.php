@@ -32,9 +32,10 @@
         <div class="col-md-12">
             <div class="portlet light bordered">
                 <div class="portlet-title">
-                    <div class="caption">DANH SÁCH BẢNG LƯƠNG</div>
+                    <div class="caption">DANH SÁCH BẢNG LƯƠNG CỦA ĐƠN VỊ</div>
                     <div class="actions">
-                        <button type="button" id="_btnadd" class="btn btn-default btn-xs" onclick="add()"><i class="fa fa-plus"></i>&nbsp;Thêm mới</button>
+                        <button type="button" class="btn btn-default btn-xs" onclick="add()"><i class="fa fa-plus"></i>&nbsp;Thêm mới bảng lương</button>
+                        <button type="button" class="btn btn-default btn-xs" onclick="add_truylinh()"><i class="fa fa-plus"></i>&nbsp;Thêm mới bảng truy lĩnh</button>
                     </div>
                 </div>
                 <div class="portlet-body form-horizontal">
@@ -43,10 +44,8 @@
                             <tr>
                                 <th class="text-center" style="width: 5%">STT</th>
                                 <th class="text-center">Tháng/Năm</th>
+                                <th class="text-center">Phân loại</th>
                                 <th class="text-center">Nguồn kinh phí</th>
-                                @if(session('admin')->maphanloai != 'KVXP')
-                                    <th class="text-center">Lĩnh vực hoạt động</th>
-                                @endif
                                 <th class="text-center">Nội dung bảng lương</th>
                                 <th class="text-center">Thao tác</th>
                             </tr>
@@ -58,13 +57,11 @@
                                     <tr>
                                         <td class="text-center">{{$i++}}</td>
                                         <td class="text-center">{{$value->thang.'/'.$value->nam}}</td>
+                                        <td>{{$value->tenphanloai}}</td>
                                         <td>{{$value->tennguonkp}}</td>
-                                        @if(session('admin')->maphanloai !='KVXP')
-                                            <td>{{$value->linhvuchoatdong}}</td>
-                                        @endif
                                         <td>{{$value->noidung}}</td>
                                         <td>
-                                            <button type="button" onclick="edit('{{$value->mabl}}')" class="btn btn-default btn-xs mbs">
+                                            <button type="button" onclick="edit('{{$value->mabl}}','{{$value->phanloai}}')" class="btn btn-default btn-xs mbs">
                                                 <i class="fa fa-edit"></i>&nbsp; Chỉnh sửa</button>
 
                                             <a href="{{url($furl.'maso='.$value->mabl)}}" class="btn btn-default btn-xs mbs">
@@ -100,25 +97,11 @@
                     <div class="row">
                         <div class="col-md-6">
                             <label class="control-label"> Tháng<span class="require">*</span></label>
-                            {!! Form::select(
-                            'thang',
-                            array(
-                            '01' => '01','02' => '02','03' => '03','04' => '04',
-                            '05' => '05','06' => '06','07' => '07','08' => '08',
-                            '09' => '09','10' => '10','11' => '11','12' => '12',
-                            ),date('m'),
-                            array('id' => 'thang', 'class' => 'form-control'))
-                            !!}
+                            {!! Form::select('thang',getThang(),date('m'),array('id' => 'thang', 'class' => 'form-control'))!!}
                         </div>
                         <div class="col-md-6">
                             <label class="control-label"> Năm<span class="require">*</span></label>
-                            {!! Form::select(
-                            'nam',
-                            array(
-                            '2016' => '2016','2017' => '2017','2018' => '2018',
-                            ),date('Y'),
-                            array('id' => 'nam', 'class' => 'form-control'))
-                            !!}
+                            {!! Form::select('nam',getNam(),date('Y'),array('id' => 'nam', 'class' => 'form-control'))!!}
                         </div>
                     </div>
 
@@ -152,6 +135,56 @@
                     </div>
                     <input type="hidden" id="id_ct" name="id_ct"/>
                     <input type="hidden" id="mabl" name="mabl"/>
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" data-dismiss="modal" class="btn btn-default">Hủy thao tác</button>
+                <button type="submit" id="submit" name="submit" value="submit" class="btn btn-primary">Đồng ý</button>
+            </div>
+        </div>
+    </div>
+    {!! Form::close() !!}
+
+    {!! Form::open(['url'=>'/chuc_nang/bang_luong/store_truylinh','method'=>'post' , 'files'=>true, 'id' => 'create_bangluong_truylinh']) !!}
+    <div id="truylinh-modal" tabindex="-1" role="dialog" aria-hidden="true" class="modal fade">
+        <div class="modal-dialog modal-content">
+            <div class="modal-header modal-header-primary">
+                <button type="button" data-dismiss="modal" aria-hidden="true" class="close">&times;</button>
+                <h4 id="modal-header-primary-label" class="modal-title">Tạo bảng truy lĩnh lương</h4>
+            </div>
+            <div class="modal-body">
+                <div class="form-horizontal">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <label class="control-label"> Tháng<span class="require">*</span></label>
+                            {!! Form::select('thang_truylinh',getThang(),date('m'),array('id' => 'thang_truylinh', 'class' => 'form-control'))!!}
+                        </div>
+                        <div class="col-md-6">
+                            <label class="control-label"> Năm<span class="require">*</span></label>
+                            {!! Form::select('nam_truylinh',getNam(),date('Y'),array('id' => 'nam_truylinh', 'class' => 'form-control'))!!}
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-12">
+                            <label class="control-label"> Nội dung</label>
+                            {!! Form::textarea('noidung_truylinh',null,array('id' => 'noidung_truylinh', 'class' => 'form-control','rows'=>'3'))!!}
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <label class="control-label">Nguồn kinh phí</label>
+                            {!!Form::select('manguonkp_truylinh',$m_nguonkp, null, array('id' => 'manguonkp_truylinh','class' => 'form-control'))!!}
+                        </div>
+                        <div class="col-md-6">
+                            <label class="control-label">Mức lương cơ bản</label>
+                            {!!Form::text('luongcoban_truylinh', $luongcb, array('id' => 'luongcoban_truylinh','class' => 'form-control', 'data-mask'=>'fdecimal'))!!}
+                        </div>
+                    </div>
+                    <input type="hidden" id="mabl_truylinh" name="mabl_truylinh"/>
+                    <input type="hidden" id="phanloai_truylinh" name="phanloai_truylinh"/>
                 </div>
             </div>
 
@@ -210,39 +243,71 @@
 
     <script>
         function add(){
-            //$('#thang').val('');
-            //$('#nam').val('');
             $('#noidung').val('');
             $('#phantramhuong').val(100);
+            $('#phanloai').val('BANGLUONG');
             $('#mabl').val('');
             $('#id_ct').val(0);
             $('#chitiet-modal').modal('show');
         }
 
-        function edit(mabl){
+        function add_truylinh(){
+            $('#phanloai_truylinh').val('TRUYLINH');
+            $('#noidung_truylinh').val('');
+            $('#mabl_truylinh').val('');
+            $('#truylinh-modal').modal('show');
+        }
+
+        function edit(mabl,phanloai){
             //var tr = $(e).closest('tr');
             var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
-            $.ajax({
-                url: '{{$furl_ajax}}' + 'get',
-                type: 'GET',
-                data: {
-                    _token: CSRF_TOKEN,
-                    mabl: mabl
-                },
-                dataType: 'JSON',
-                success: function (data) {
-                    $('#thang').val(data.thang);
-                    $('#nam').val(data.nam);
-                    $('#noidung').val(data.noidung);
-                    $('#manguonkp').val(data.manguonkp);
-                    $('#phantramhuong').val(data.phantramhuong);
-                    $('#mabl').val(data.mabl);
-                },
-                error: function(message){
-                    toastr.error(message,'Lỗi!');
-                }
-            });
-            $('#chitiet-modal').modal('show');
+            if(phanloai == 'TRUYLINH'){
+                $.ajax({
+                    url: '{{$furl_ajax}}' + 'get',
+                    type: 'GET',
+                    data: {
+                        _token: CSRF_TOKEN,
+                        mabl: mabl
+                    },
+                    dataType: 'JSON',
+                    success: function (data) {
+                        $('#thang_truylinh').val(data.thang);
+                        $('#nam_truylinh').val(data.nam);
+                        $('#noidung_truylinh').val(data.noidung);
+                        $('#manguonkp_truylinh').val(data.manguonkp);
+                        $('#mabl_truylinh').val(data.mabl);
+                        $('#phanloai_truylinh').val(data.phanloai);
+                    },
+                    error: function(message){
+                        toastr.error(message,'Lỗi!');
+                    }
+                });
+                $('#truylinh-modal').modal('show');
+            }else{
+                $.ajax({
+                    url: '{{$furl_ajax}}' + 'get',
+                    type: 'GET',
+                    data: {
+                        _token: CSRF_TOKEN,
+                        mabl: mabl
+                    },
+                    dataType: 'JSON',
+                    success: function (data) {
+                        $('#thang').val(data.thang);
+                        $('#nam').val(data.nam);
+                        $('#noidung').val(data.noidung);
+                        $('#manguonkp').val(data.manguonkp);
+                        $('#phantramhuong').val(data.phantramhuong);
+                        $('#mabl').val(data.mabl);
+                        $('#phanloai').val(data.phanloai);
+                    },
+                    error: function(message){
+                        toastr.error(message,'Lỗi!');
+                    }
+                });
+                $('#chitiet-modal').modal('show');
+            }
+
         }
 
         function inbl(mabl,thang,nam){

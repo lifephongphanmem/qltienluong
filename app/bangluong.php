@@ -18,6 +18,7 @@ class bangluong extends Model
         'ghichu',
         'linhvuchoatdong', //Phân loại xã phường ko cần chọn lĩnh vực hoạt động
         'manguonkp',
+        'phanloai',
         'phantramhuong',
         'madv',
         'luongcoban'

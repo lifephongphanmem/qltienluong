@@ -24,6 +24,7 @@
             TableManaged.init();
         });
     </script>
+    @include('includes.script.scripts')
 @stop
 
 @section('content')
@@ -78,7 +79,7 @@
     </div>
 
     <!--Modal thông tin chức vụ -->
-    {!! Form::open(['url'=>'/nghiep_vu/tam_ngung/store','method'=>'post', 'id' => 'create']) !!}
+    {!! Form::open(['url'=>'/nghiep_vu/truy_linh/store','method'=>'post', 'id' => 'create']) !!}
     <div id="create-modal" tabindex="-1" role="dialog" aria-hidden="true" class="modal fade">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -88,26 +89,26 @@
                 </div>
                 <div class="modal-body">
                     <label class="form-control-label">Họ và tên cán bộ</label>
-                    {!!Form::select('macanbo',$a_canbo, null, array('id' => 'macanbo','class' => 'form-control'))!!}
+                    <select name="macanbo" id="macanbo" class="form-control">
+                        <option value="">--Chọn cán bộ --</option>
+                        @foreach($a_canbo as $key=>$val)
+                            <option value="{{$key}}">{{$val}}</option>
+                        @endforeach
+                    </select>
 
-                    <label class="form-control-label">Phân loại</label>
-                    {!!Form::select('maphanloai',getPhanLoaiTamNgungTheoDoi(), null, array('id' => 'maphanloai','class' => 'form-control'))!!}
-
-                    <label class="form-control-label">Từ ngày</label>
+                    <label class="form-control-label">Ngày bắt đầu truy lĩnh</label>
                     <input type="date" name="ngaytu" id="ngaytu" class="form-control" />
 
-                    <label class="form-control-label">Đến ngày</label>
-                    <input type="date" name="ngayden" id="ngayden" class="form-control" />
+                    <label class="form-control-label">Hệ số (phần trăm) truy lĩnh</label>
+                    {!!Form::text('heso', null, array('id' => 'heso','class' => 'form-control', 'data-mask'=>'fdecimal'))!!}
 
-                    <label class="form-control-label">Nội dung chi tiết</label>
-                    {!!Form::textarea('noidung', null, array('id' => 'noidung','class' => 'form-control','rows'=>'3'))!!}
 
                     <input type="hidden" id="maso" name="maso"/>
                     <input type="hidden" id="madv" name="madv" value="{{session('admin')->madv}}" />
                 </div>
                 <div class="modal-footer">
                     <button type="button" data-dismiss="modal" class="btn btn-default">Hủy thao tác</button>
-                    <button type="submit" id="submit" name="submit" value="submit" class="btn btn-primary" onclick="cfPB()">Đồng ý</button>
+                    <button type="submit" id="submit" name="submit" value="submit" class="btn btn-primary">Đồng ý</button>
                 </div>
             </div>
         </div>
@@ -132,10 +133,8 @@
                 dataType: 'JSON',
                 success: function (data) {
                     $('#macanbo').val(data.macanbo);
-                    $('#maphanloai').val(data.maphanloai);
                     $('#ngaytu').val(data.ngaytu);
-                    $('#ngayden').val(data.ngayden);
-                    $('#noidung').val(data.noidung);
+                    $('#heso').val(data.heso);
                     $('#maso').val(data.maso);
                 },
                 error: function(message){
@@ -147,15 +146,20 @@
 
         $(function(){
             $('#create :submit').click(function(){
-                var ok = true, str_message='';
+                var ok = true, str='';
 
-                if($('#ngaytu').val()=='' || $('#ngayden').val()==''){
+                if($('#macanbo').val()==''){
                     ok = false;
-                    str_message += 'Thời gian tạm ngừng theo dõi không được bỏ trống \n'
+                    str += ' - Họ tên cán bộ \n'
+                }
+
+                if($('#ngaytu').val()==''){
+                    ok = false;
+                    str += ' - Thời gian truy lĩnh \n'
                 }
 
                 if ( ok == false){
-                    alert(str_message);
+                    alert('Các trường: \n' + str + 'Không được để trống');
                     $("form").submit(function (e) {
                         e.preventDefault();
                     });
@@ -168,4 +172,5 @@
     </script>
 
     @include('includes.modal.delete')
+    @include('includes.script.scripts')
 @stop

@@ -450,4 +450,9 @@ function getPhanLoaiTamNgungTheoDoi(){
         'NGHIPHEP'=> 'Nghỉ phép',
         'NGHIOM'=> 'Nghỉ ốm');
 }
+
+function getPhanLoaiBangLuong(){
+    return array('BANGLUONG' => 'Bảng lương cán bộ',
+        'TRUYLINH' => 'Bảng truy lĩnh lương');
+}
 ?>

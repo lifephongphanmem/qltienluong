@@ -79,20 +79,21 @@ class xemdulieucapduoiController extends Controller
                 }
             }
 
-            foreach($model_donvi as $dv){
-                $donvi = $list_donvi->where('madv',$dv->macqcq)->first();
-                $dv->tendvcq =(isset($donvi)?$donvi->tendv:NULL);
+            foreach($model_donvi as $dv) {
+                $donvi = $list_donvi->where('madv', $dv->macqcq)->first();
+                $dv->tendvcq = (isset($donvi) ? $donvi->tendv : NULL);
                 $model_bangluong = tonghopluong_donvi::where('madv', $dv->madv)
                     ->where('thang', $inputs['thang'])
                     ->where('nam', $inputs['nam'])
                     ->where('trangthai', 'DAGUI')
                     ->first();
 
-                if(isset($model_bangluong)){
+                if (isset($model_bangluong)) {
                     $dv->mathdv = $model_bangluong->mathdv;
                     $model_bangluong_ct = tonghopluong_donvi_chitiet::where('mathdv', $dv->mathdv)->first();
-                    $dv->tralai = $model_bangluong_ct->mathk != null?false:true;
-                }else{
+                    $dv->tralai = count($model_bangluong_ct->mathk) > 0 ? false : true;
+                    //$dv->tralai = $model_bangluong_ct->mathk != null?false:true;
+                } else {
                     $dv->mathdv = NULL;
                     $dv->tralai = true;
                 }

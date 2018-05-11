@@ -36,10 +36,11 @@ class bangluongController extends Controller
             //khối phòng ban giờ là lĩnh vực hoạt động
             $m_linhvuc=array_column(dmkhoipb::all()->toArray(),'tenkhoipb','makhoipb');
             $m_nguonkp=array_column(dmnguonkinhphi::all()->toArray(),'tennguonkp','manguonkp');
-
+            $a_phanloai = getPhanLoaiBangLuong();
             $model = bangluong::where('madv',session('admin')->maxa)->get();
             foreach($model as $bl){
                 $bl->tennguonkp =isset($m_nguonkp[$bl->manguonkp]) ? $m_nguonkp[$bl->manguonkp]:'';
+                $bl->tenphanloai =isset($a_phanloai[$bl->phanloai]) ? $a_phanloai[$bl->phanloai]:'Bảng lương cán bộ';
             }
             $model = $model->sortby('nam')->sortby('thang');
             return view('manage.bangluong.index')
@@ -64,6 +65,7 @@ class bangluongController extends Controller
             //update
             $inputs['luongcoban'] = getDbl($inputs['luongcoban']);
             $model->update($inputs);
+            return redirect('/chuc_nang/bang_luong/danh_sach');
         } else {
             //insert
             $madv = session('admin')->madv;
@@ -345,6 +347,141 @@ class bangluongController extends Controller
         }
 
         return redirect('/chuc_nang/bang_luong/maso=' . $inputs['mabl']);
+    }
+
+    //
+    function store_truylinh(Request $request)
+    {
+
+        if (Session::has('admin')) {
+            $inputs = $request->all();
+            $inputs['mabl'] = $inputs['mabl_truylinh'];
+            $inputs['thang'] = $inputs['thang_truylinh'];
+            $inputs['nam']= $inputs['nam_truylinh'];
+            $inputs['noidung'] = $inputs['noidung_truylinh'];
+            $inputs['manguonkp'] = $inputs['manguonkp_truylinh'];
+            $inputs['luongcoban'] = $inputs['luongcoban_truylinh'];
+            $inputs['phanloai'] = $inputs['phanloai_truylinh'];
+            $inputs['phantramhuong'] = 100;
+
+            $model = bangluong::where('mabl', $inputs['mabl'])->first();
+            if (count($model) > 0) {
+                $inputs['luongcoban'] = getDbl($inputs['luongcoban']);
+                $model->update($inputs);
+                return redirect('/chuc_nang/bang_luong/danh_sach');
+            } else {
+                //insert
+
+                $madv = session('admin')->madv;
+                $inputs['mabl'] = $madv . '_' . getdate()[0];
+                $inputs['madv'] = $madv;
+                $inputs['nguoilap'] = session('admin')->name;
+                $inputs['ngaylap'] = Carbon::now()->toDateTimeString();
+
+                $inputs['phantramhuong'] = getDbl($inputs['phantramhuong']);
+                $inputs['luongcoban'] = getDbl($inputs['luongcoban']);
+                $ngaylap = Carbon::create($inputs['nam'],$inputs['thang'],'01');
+                //$ngaylap = Carbon::create('2018','04','01');
+
+
+                $model_canbo_tl = hosocanbo::where('madv', $madv)
+                    ->select('stt','macanbo', 'macongchuc', 'sunghiep', 'tencanbo', 'mact', 'lvhd', 'macvcq', 'mapb', 'msngbac', 'hesott', 'truylinhtungay', 'truylinhdenngay', DB::raw("'" . $inputs['mabl'] . "' as mabl"))
+                    ->where('truylinhtungay', '<=', $ngaylap)
+                    ->where('theodoi', '1')
+                    ->get();
+
+                $model_congtac = dmphanloaict::all();
+                $model_phanloai = dmphanloaicongtac_baohiem::where('madv',session('admin')->madv)->get();
+
+                if(count($model_phanloai) == 0){
+                    //Nếu đơn vị chưa set thông tin bảo hiểm thì lấy mặc định
+                    $model_phanloai = dmphanloaicongtac::all();
+                }
+                $a_truythu = array();
+
+                //Tạo bảng lương
+                bangluong::create($inputs);
+
+                //Tính toán lương cho cán bộ truy lĩnh
+                //Xem lại có cần truy lĩnh các loại phụ cấp ko
+                //ngày công mặc định là 24 ngày
+                foreach ($model_canbo_tl as $cb) {
+                    $cb->truylinhdenngay = $ngaylap;
+                    $tungay = new Carbon($cb->truylinhtungay);
+                    $denngay = new Carbon($cb->truylinhdenngay);
+
+                    //tính toán sau
+                    $ngaycuoi = (new Carbon($cb->truylinhdenngay))->lastOfMonth()->day;
+                    $ngay_tu = $tungay->day;
+                    $thang_tu = $tungay->month;
+                    $nam_tu = $tungay->year;
+                    $ngay_den = $denngay->day;
+                    $thang_den = $denngay->month;
+                    $nam_den = $denngay->year;
+
+                    $thang_den += 12 * ($nam_den - $nam_tu);
+
+                    $thang_tl = $thang_den - $thang_tu > 0 ? ($thang_den - $thang_tu) : 1;
+
+                    //nếu tháng đến = tháng từ => +1
+                    $cb->hesott = $cb->hesott >= 1 ? ($cb->hesott / 100) : $cb->hesott;
+
+                    $congtac = $model_congtac->where('mact', $cb->mact)->first();
+                    $cb->macongtac = isset($congtac) ? $congtac->macongtac : null;
+
+                    $phanloai = $model_phanloai->where('macongtac', $cb->macongtac)
+                        ->where('maphanloai', session('admin')->maphanloai)->first();
+                    $cb->bhxh = isset($phanloai) ? $phanloai->bhxh : 0;
+                    $cb->bhyt = isset($phanloai) ? $phanloai->bhyt : 0;
+                    $cb->kpcd = isset($phanloai) ? $phanloai->kpcd : 0;
+                    $cb->bhtn = isset($phanloai) ? $phanloai->bhtn : 0;
+                    //cán bộ lãnh đạo đơn vi + cán bộ công chức ko pai nộp bảo hiểm thất nghiệp
+                    if ($cb->sunghiep == 'Công chức') {
+                        $cb->bhtn = 0;
+                    }
+                    $cb->bhxh_dv = isset($phanloai) ? $phanloai->bhxh_dv : 0;
+                    $cb->bhyt_dv = isset($phanloai) ? $phanloai->bhyt_dv : 0;
+                    $cb->kpcd_dv = isset($phanloai) ? $phanloai->kpcd_dv : 0;
+                    $cb->bhtn_dv = isset($phanloai) ? $phanloai->bhtn_dv : 0;
+
+                    $cb->tencanbo = $cb->tencanbo;
+
+                    $cb->ttl = $inputs['luongcoban'] * $cb->hesott * $thang_tl;
+                    $luongnopbaohiem = $inputs['luongcoban'] * $cb->hesott;
+
+                    $cb->stbhxh = $luongnopbaohiem * floatval($cb->bhxh) / 100;
+                    $cb->stbhyt = $luongnopbaohiem * floatval($cb->bhyt) / 100;
+                    $cb->stkpcd = $luongnopbaohiem * floatval($cb->kpcd) / 100;
+                    $cb->stbhtn = $luongnopbaohiem * floatval($cb->bhtn) / 100;
+                    $cb->ttbh = $cb->stbhxh + $cb->stbhyt + $cb->stkpcd + $cb->stbhtn;
+                    $cb->luongtn = $cb->ttl - $cb->ttbh;
+
+                    $cb->stbhxh_dv = $luongnopbaohiem * floatval($cb->bhxh_dv) / 100;
+                    $cb->stbhyt_dv = $luongnopbaohiem * floatval($cb->bhyt_dv) / 100;
+                    $cb->stkpcd_dv = $luongnopbaohiem * floatval($cb->kpcd_dv) / 100;
+                    $cb->stbhtn_dv = $luongnopbaohiem * floatval($cb->bhtn_dv) / 100;
+                    $cb->ttbh_dv = $cb->stbhxh_dv + $cb->stbhyt_dv + $cb->stkpcd_dv + $cb->stbhtn_dv;
+
+                    //lưu vào db
+                    bangluong_ct::create($cb->toarray());
+                }
+
+                $model_canbo = $model_canbo_tl->map(function ($data) {
+                    return collect($data->toArray())
+                        ->only(['macanbo'])
+                        ->all();
+                });
+                hosocanbo::wherein('macanbo', $model_canbo->toarray())->update(['hesott' => 0, 'truylinhtungay' => NULL, 'truylinhdenngay' => NULL]);
+            }
+
+            return redirect('/chuc_nang/bang_luong/maso=' . $inputs['mabl']);
+        } else
+            return view('errors.notlogin');
+
+
+
+
+
     }
 
     function show($mabl){
