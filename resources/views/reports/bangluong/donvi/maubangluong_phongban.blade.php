@@ -132,12 +132,15 @@
             <?php $i=1; ?>
 
             @foreach($model_congtac as $congtac)
+
+                <?php $model_luong = $model_lpb->where('mact',$congtac->mact)?>
+                @if(count($model_luong)>0)
                 <?php $stt=1; ?>
-                    <tr style="font-weight: bold;">
+                <tr style="font-weight: bold;">
                         <td>{{convert2Roman($i++)}}</td>
                         <td style="text-align: left;" colspan="{{17+ $col}}">{{$congtac->tenct}}</td>
                     </tr>
-                <?php $model_luong = $model_lpb->where('mact',$congtac->mact)?>
+
                 @foreach($model_luong as $ct)
                     <tr>
                         <td>{{$stt++}}</td>
@@ -167,7 +170,8 @@
                         <td></td>
                     </tr>
                 @endforeach
-                    <tr style="font-weight: bold; text-align: center; font-style: italic">
+
+                <tr style="font-weight: bold; text-align: center; font-style: italic">
                         <td colspan="4">Cộng</td>
                         <td>{{dinhdangsothapphan($model_luong->sum('heso') + $model_luong->sum('hesott') ,5)}}</td>
                         <td>{{dinhdangsothapphan($model_luong->sum('vuotkhung') ,5)}}</td>
@@ -192,7 +196,9 @@
 
                         <td></td>
                     </tr>
+                @endif
             @endforeach
+
             <tr style="font-weight: bold; text-align: center;">
                 <td colspan="4">Tổng cộng</td>
                 <td>{{dinhdangsothapphan($model_lpb->sum('heso') + $model_lpb->sum('hesott') ,5)}}</td>
