@@ -47,7 +47,8 @@ class baocaothongtu67Controller extends Controller
             $inputs=$request->all();
             $m_dv = dmdonvi::where('madv',session('admin')->madv)->first();
             $model_bienche = chitieubienche::where('nam','2017')->where('madv',session('admin')->madv)->get();
-            $luongcb = 1210000;
+            //$luongcb = 1210000;
+            $luongcb = 1;
             //nếu đơn vị đã tạo bảng lương tháng 07/2017 =>xuất kết quả
             $model_tonghop_ct = tonghopluong_donvi_chitiet::join('tonghopluong_donvi', 'tonghopluong_donvi_chitiet.mathdv', '=', 'tonghopluong_donvi.mathdv')
                 ->where('tonghopluong_donvi.madvbc','like',$inputs['madv'].'%')
