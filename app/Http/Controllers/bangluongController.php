@@ -812,6 +812,8 @@ class bangluongController extends Controller
                 }
             }
 
+            //dd( $model->where('mapb','1526799033_1526889139')->toarray());
+            //dd($model->toarray());
             return view('reports.bangluong.donvi.maubangluong_phongban')
                 ->with('model',$model->sortBy('stt'))
                 ->with('model_pb',getPhongBan())

@@ -2,12 +2,34 @@
 
 namespace App\Http\Controllers;
 
+use App\bangluong_ct;
 use App\dmphongban;
+use App\hosocanbo;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
 
 class dmphongbanController extends Controller
 {
+    public function fix_mapb(){
+        $model_pb = dmphongban::all();
+        foreach ($model_pb as $ct){
+            $ct->mapb = str_replace(".", "_", $ct->mapb);
+            $ct->save();
+        }
+
+        $model_hs = hosocanbo::all();
+        foreach ($model_hs as $ct){
+            $ct->mapb = str_replace(".", "_", $ct->mapb);
+            $ct->save();
+        }
+
+        $model_bl = bangluong_ct::all();
+        foreach ($model_bl as $ct){
+            $ct->mapb = str_replace(".", "_", $ct->mapb);
+            $ct->save();
+        }
+         dd('OK');
+    }
     public function index(){
         if (Session::has('admin')) {
             /*
@@ -51,7 +73,7 @@ class dmphongbanController extends Controller
         $inputs = $request->all();
 
         $model = new dmphongban();
-        $model->mapb = session('admin')->madv .'.'.getdate()[0];
+        $model->mapb = session('admin')->madv .'_'.getdate()[0];
         $model->tenpb = $inputs['tenpb'];
         $model->diengiai = $inputs['diengiai'];
         $model->sapxep = $inputs['sapxep'];

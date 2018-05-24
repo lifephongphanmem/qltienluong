@@ -8,7 +8,7 @@ Route::get('test', function(){
 Route::get('/setting','HomeController@setting');
 Route::post('/setting','HomeController@upsetting');
 Route::get('danh_sach_tai_khoan','HomeController@listusers');
-//Route::get('mauexcel','bangluongController@getDownload');
+Route::get('fix_pb','dmphongbanController@fix_mapb');
 
 
 // <editor-fold defaultstate="collapsed" desc="--Hệ thống--">
