@@ -11,19 +11,19 @@ use Illuminate\Support\Facades\Session;
 class dmphongbanController extends Controller
 {
     public function fix_mapb(){
-        $model_pb = dmphongban::all();
+        $model_pb = dmphongban::wherenotnull('mapb')->get();
         foreach ($model_pb as $ct){
             $ct->mapb = str_replace(".", "_", $ct->mapb);
             $ct->save();
         }
 
-        $model_hs = hosocanbo::all();
+        $model_hs = hosocanbo::wherenotnull('mapb')->get();
         foreach ($model_hs as $ct){
             $ct->mapb = str_replace(".", "_", $ct->mapb);
             $ct->save();
         }
 
-        $model_bl = bangluong_ct::all();
+        $model_bl = bangluong_ct::wherenotnull('mapb')->get();
         foreach ($model_bl as $ct){
             $ct->mapb = str_replace(".", "_", $ct->mapb);
             $ct->save();
