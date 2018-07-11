@@ -32,7 +32,7 @@
             <div class="portlet light bordered">
                 <div class="portlet-title">
                     <div class="caption">
-                        DANH SÁCH QUÁ TRÌNH HƯỞNG PHỤ CẤP CỦA CÁN BỘ
+                        DANH SÁCH CÁC LOẠI PHỤ CẤP
                     </div>
                     @include('includes.crumbs.bt_add')
                 </div>

@@ -73,51 +73,54 @@ class hosocanboController extends Controller
             return view('errors.notlogin');
     }
 
-    function create(){
+    function create()
+    {
         if (Session::has('admin')) {
             //$makhoipb=getMaKhoiPB(session('admin')->madv);
-            $model_nhomct = dmphanloaicongtac::select('macongtac','tencongtac')->get();
-            $model_tenct = dmphanloaict::select('tenct','macongtac','mact')->get();
-            $model_dt = array_column(dmdantoc::select(DB::raw('dantoc as maso'),'dantoc')->get()->toarray(),'dantoc','maso');
-            $m_pb= dmphongban::where('madv',session('admin')->madv)->get();
+            $model_nhomct = dmphanloaicongtac::select('macongtac', 'tencongtac')->get();
+            $model_tenct = dmphanloaict::select('tenct', 'macongtac', 'mact')->get();
+            $model_dt = array_column(dmdantoc::select(DB::raw('dantoc as maso'), 'dantoc')->get()->toarray(), 'dantoc', 'maso');
+            /*
+            $m_pb = dmphongban::where('madv', session('admin')->madv)->get();
             //$m_pb = dmphongban::where('madv',session('admin')->madv)->get();
-            $m_cvcq = dmchucvucq::where('maphanloai',session('admin')->maphanloai)
-                ->wherein('madv',['SA',session('admin')->madv])->get();
+            $m_cvcq = dmchucvucq::where('maphanloai', session('admin')->maphanloai)
+                ->wherein('madv', ['SA', session('admin')->madv])->get();
+            */
             //khối phòng ban giờ là lĩnh vực hoạt động
-            $m_linhvuc=array_column(dmkhoipb::all()->toArray(),'tenkhoipb','makhoipb');
+            $m_linhvuc = array_column(dmkhoipb::all()->toArray(), 'tenkhoipb', 'makhoipb');
             //$m_cvd= dmchucvud::all();
-            $m_plnb=nhomngachluong::select('manhom','tennhom','heso','namnb' )->distinct()->get();
-            $m_pln=ngachluong::select('tenngachluong','manhom','msngbac','heso','namnb')
+            $m_plnb = nhomngachluong::select('manhom', 'tennhom', 'heso', 'namnb')->distinct()->get();
+            $m_pln = ngachluong::select('tenngachluong', 'manhom', 'msngbac', 'heso', 'namnb')
                 ->distinct()->get();
-            foreach($m_pln as $mangach){
-                $nhomnb = $m_plnb->where('manhom',$mangach->manhom)->first();
-                if(count($nhomnb) > 0 && $mangach->manhom != 'CBCT'){
+            foreach ($m_pln as $mangach) {
+                $nhomnb = $m_plnb->where('manhom', $mangach->manhom)->first();
+                if (count($nhomnb) > 0 && $mangach->manhom != 'CBCT') {
                     $mangach->heso = $nhomnb->heso;
                     $mangach->namnb = $nhomnb->namnb;
                 }
             }
-            $macanbo=session('admin')->madv . '_' . getdate()[0];
+            $macanbo = session('admin')->madv . '_' . getdate()[0];
             //$m_pc=dmphucap::all('mapc','tenpc','hesopc')->toArray();
-            $a_donvi = dmdonvi::where('madv',session('admin')->madv)->first()->toarray();
-            $max_stt =getDbl((hosocanbo::where('madv',session('admin')->madv)->max('stt'))) +1;
+            $a_donvi = dmdonvi::where('madv', session('admin')->madv)->first()->toarray();
+            $max_stt = getDbl((hosocanbo::where('madv', session('admin')->madv)->max('stt'))) + 1;
             return view('manage.hosocanbo.create')
-                ->with('type','create')
-                ->with('macanbo',$macanbo)
-                ->with('max_stt',$max_stt)
+                ->with('type', 'create')
+                ->with('macanbo', $macanbo)
+                ->with('max_stt', $max_stt)
                 //danh mục
-                ->with('m_linhvuc',$m_linhvuc)
-                ->with('model_dt',$model_dt)
+                ->with('m_linhvuc', $m_linhvuc)
+                ->with('model_dt', $model_dt)
                 //->with('m_pb',$m_pb)
                 //->with('m_cvcq',$m_cvcq)
                 //->with('m_cvd',$m_cvd)
-                ->with('model_nhomct',$model_nhomct)
-                ->with('model_tenct',$model_tenct)
-                ->with('m_plnb',$m_plnb)
-                ->with('m_pln',$m_pln)
+                ->with('model_nhomct', $model_nhomct)
+                ->with('model_tenct', $model_tenct)
+                ->with('m_plnb', $m_plnb)
+                ->with('m_pln', $m_pln)
                 //->with('m_pc',$m_pc)
-                ->with('a_phucap',getColPhuCap())
-                ->with('a_donvi',$a_donvi)
-                ->with('pageTitle','Tạo hồ sơ cán bộ');
+                ->with('a_phucap', getColPhuCap())
+                ->with('a_donvi', $a_donvi)
+                ->with('pageTitle', 'Tạo hồ sơ cán bộ');
         } else
             return view('errors.notlogin');
     }

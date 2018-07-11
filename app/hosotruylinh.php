@@ -10,6 +10,7 @@ class hosotruylinh extends Model
     protected $fillable = [
         'id',
         'maso',
+        'stt',
         'macanbo',
         'tencanbo',
         'soqd',//chưa dùng
@@ -21,8 +22,10 @@ class hosotruylinh extends Model
         'ngayden',
         'madv',
 
-        'heso',
+        'msngbac',
+        'hesott',
         //chưa dùng, cho trường hợp truy lĩnh cả phụ cấp
+        'heso',
         'vuotkhung',
         'pcct',
         'pckct',

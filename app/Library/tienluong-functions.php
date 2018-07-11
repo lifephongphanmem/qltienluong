@@ -98,6 +98,13 @@ function getTenDV($madv){
     return count($model)>0?Illuminate\Support\Str::upper($model->tendv):'';
 }
 
+function getPhanLoaiDonVi(){
+    $model = App\dmphanloaidonvi::select('tenphanloai', 'maphanloai')->get()->toarray();
+    return array_column($model,'tenphanloai','maphanloai');
+}
+
+
+
 function getTenDB($madvbc){
     $model = App\dmdonvibaocao::select('tendvbc')->where('madvbc',$madvbc)->first();
     return count($model)>0?Illuminate\Support\Str::upper($model->tendvbc):'';
@@ -359,7 +366,11 @@ function getPhanLoaiPhuCap(){
     return array('0' => 'Hệ số','1' => 'Số tiền','2' => 'Phần trăm','3' => 'Ẩn');
 }
 
-function getColPhuCap(){
+function getCongThucTinhPC(){
+    return array('heso' => 'Lương ngạch bậc','vuotkhung' => 'Thâm niên vượt khung','pccv' => 'Phụ cấp chức vụ');
+}
+
+function getColPhuCap(){//xem bỏ đi vì có danh mục phụ cấp
     return array(
         'pccovu'=>'Công vụ',
         'pctnn'=>'Thâm niên nghề',
@@ -454,5 +465,9 @@ function getPhanLoaiTamNgungTheoDoi(){
 function getPhanLoaiBangLuong(){
     return array('BANGLUONG' => 'Bảng lương cán bộ',
         'TRUYLINH' => 'Bảng truy lĩnh lương');
+}
+
+function getPhuCapNopBH(){
+    return array('heso','pccv','vuotkhung','pctnn','pctnvk');
 }
 ?>

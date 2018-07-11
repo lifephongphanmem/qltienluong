@@ -40,7 +40,8 @@ class hosotamngungtheodoiController extends Controller
             $insert = $request->all();
             $model = hosotamngungtheodoi::where('maso', $insert['maso'])->first();
 
-            if(!isset($model)){
+            if(count($model)==0){
+                $insert['maso'] = session('admin')->madv .'_'.getdate()[0];
                 hosotamngungtheodoi::create($insert);
             }else{
                 $model->update($insert);

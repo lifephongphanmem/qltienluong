@@ -227,7 +227,7 @@
         <table class="header" width="96%" border="0" cellspacing="0" cellpadding="8" style="margin:20px auto; text-align: center;">
             <tr>
                 <td style="text-align: left;" width="50%"></td>
-                <td style="text-align: center; font-style: italic" width="50%">........,Ngày......tháng.......năm..........</td>
+                <td style="text-align: center; font-style: italic" width="50%">{{$m_dv->diadanh .', '.Date2Str($thongtin['ngaylap'])}}</td>
             </tr>
             <tr style="font-weight: bold">
                 <td style="text-align: center;" width="50%">Người lập bảng</td>

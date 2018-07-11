@@ -34,86 +34,100 @@
                     {!! Form::model($model,['url'=>$url. $model->madv, 'class'=>'horizontal-form','id'=>'update_tthethong','method'=>'POST']) !!}
                         <div class="form-body">
                             <div class="row">
-                                <div class="col-md-6">
+                                <div class="col-md-3">
                                     <div class="form-group">
                                         <label class="control-label">Mã quan hệ ngân sách<span class="require">*</span></label>
                                         {!!Form::text('maqhns', null, array('id' => 'maqhns','class' => 'form-control'))!!}
                                     </div>
                                 </div>
-                                <div class="col-md-6">
+                                <div class="col-md-5">
                                     <div class="form-group">
                                         <label class="control-label">Tên đơn vị<span class="require">*</span></label>
                                         {!!Form::text('tendv', null, array('id' => 'tendv','class' => 'form-control'))!!}
                                     </div>
                                 </div>
-                            </div>
 
-                            <div class="row">
-                                <div class="col-md-6">
+                                <div class="col-md-4">
                                     <div class="form-group">
                                         <label class="control-label">Địa chỉ</label>
                                         {!!Form::text('diachi', null, array('id' => 'diachi','class' => 'form-control'))!!}
                                     </div>
                                 </div>
 
-                                <div class="col-md-6">
-                                    <div class="form-group">
-                                        <label class="control-label">Địa danh</label>
-                                        {!!Form::text('diadanh', null, array('id' => 'diadanh','class' => 'form-control'))!!}
-                                    </div>
-                                </div>
+
                             </div>
 
-                            <div class="row">
-                                <div class="col-md-6">
-                                    <div class="form-group">
-                                        <label class="control-label">Số điện thoại</label>
-                                        {!!Form::text('sodt', null, array('id' => 'sodt','class' => 'form-control'))!!}
-                                    </div>
-                                </div>
 
-                                <div class="col-md-6">
+                            <div class="row">
+                                <div class="col-md-3">
                                     <div class="form-group">
                                         <label class="control-label">Chức danh thủ trưởng</label>
                                         {!!Form::text('cdlanhdao', null, array('id' => 'cdlanhdao','class' => 'form-control'))!!}
                                     </div>
                                 </div>
-                            </div>
 
-                            <div class="row">
-                                <div class="col-md-6">
+                                <div class="col-md-3">
                                     <div class="form-group">
                                         <label class="control-label">Thủ trưởng đơn vị</label>
                                         {!!Form::text('lanhdao', null, array('id' => 'lanhdao','class' => 'form-control'))!!}
                                     </div>
                                 </div>
 
-                                <div class="col-md-6">
+                                <div class="col-md-3">
                                     <div class="form-group">
-                                        <label class="control-label">Người lập biểu</label>
-                                        {!!Form::text('nguoilapbieu', null, array('id' => 'nguoilapbieu','class' => 'form-control'))!!}
+                                        <label class="control-label">Chức danh kế toán</label>
+                                        {!!Form::text('cdketoan', null, array('id' => 'cdketoan','class' => 'form-control'))!!}
+                                    </div>
+                                </div>
+
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label class="control-label">Kế toán đơn vị</label>
+                                        {!!Form::text('ketoan', null, array('id' => 'ketoan','class' => 'form-control'))!!}
                                     </div>
                                 </div>
                             </div>
 
                             <div class="row">
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label class="control-label">Người lập biểu</label>
+                                        {!!Form::text('nguoilapbieu', null, array('id' => 'nguoilapbieu','class' => 'form-control'))!!}
+                                    </div>
+                                </div>
+
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label class="control-label">Địa danh</label>
+                                        {!!Form::text('diadanh', null, array('id' => 'diadanh','class' => 'form-control'))!!}
+                                    </div>
+                                </div>
+
                                 <div class="col-md-6">
                                     <div class="form-group">
                                         <label class="control-label">Phân loại mức độ tự chủ tài chính</label>
                                         {!!Form::select('phanloainguon', getPhanLoaiNguon(), 'NULL', array('id' => 'phanloainguon','class' => 'form-control'))!!}
                                     </div>
                                 </div>
-
-                                <div class="col-md-6">
-                                    <div class="form-group">
-                                        <label class="control-label">Phân loại đơn vị</label>
-                                        {!!Form::select('maphanloai', $model_phanloai, null, array('id' => 'maphanloai','class' => 'form-control'))!!}
-                                    </div>
-                                </div>
                             </div>
 
                             <div class="row">
-                                <div class="col-md-12">
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label class="control-label">Phân loại đơn vị</label>
+                                        {!!Form::select('maphanloai', $a_phanloai, null, array('id' => 'maphanloai','class' => 'form-control'))!!}
+                                    </div>
+                                </div>
+
+
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label class="control-label">Cấp dự toán</label>
+                                        {!!Form::select('capdonvi', $model_capdv, null, array('id' => 'capdonvi','class' => 'form-control'))!!}
+                                    </div>
+                                </div>
+
+                                <div class="col-md-6">
                                     <div class="form-group">
                                         <label class="control-label">Đơn vị tổng hợp dữ liệu<span class="require">*</span></label>
                                         {!!Form::select('macqcq', $model_donvi, null, array('id' => 'macqcq','class' => 'form-control'))!!}
@@ -122,21 +136,15 @@
                             </div>
 
                             <div class="row">
-                                <div class="col-md-6">
-                                    <div class="form-group">
-                                        <label class="control-label">Cấp dự toán</label>
-                                        {!!Form::select('capdonvi', $model_capdv, null, array('id' => 'capdonvi','class' => 'form-control'))!!}
-                                    </div>
-                                </div>
                                 @if($model->maphanloai == 'KVXP')
-                                    <div id="plxa" class="col-md-6">
+                                    <div id="plxa" class="col-md-12">
                                         <div class="form-group">
                                             <label class="control-label">Phân loại xã phường</label>
                                             {!!Form::select('phanloaixa', $model_plxa, null, array('id' => 'phanloaixa','class' => 'form-control','required'=>'required'))!!}
                                         </div>
                                     </div>
                                 @else
-                                    <div id="plxa" class="col-md-6">
+                                    <div id="plxa" class="col-md-12">
                                         <div class="form-group">
                                             <label class="control-label">Lĩnh vực hoạt động</label>
                                             <select class="form-control" id="linhvuc" name="linhvuc" multiple="multiple">

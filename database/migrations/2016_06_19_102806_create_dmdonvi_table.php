@@ -19,11 +19,13 @@ class CreateDmdonviTable extends Migration
             $table->string('tendv',100)->nullable();
             $table->string('diachi',100)->nullable();
             $table->string('sodt',50)->nullable();
+            $table->string('cdlanhdao',50)->nullable();
             $table->string('lanhdao',50)->nullable();
+            $table->string('cdketoan',50)->nullable();
+            $table->string('ketoan',50)->nullable();
             $table->integer('songuoi')->default(0);
             $table->string('macqcq',50)->nullable();
             $table->string('diadanh',50)->nullable();
-            $table->string('cdlanhdao',50)->nullable();
             $table->string('nguoilapbieu',50)->nullable();
             $table->string('makhoipb',50)->nullable();//trường hợp cần tổng hợp theo ngành
             $table->string('madvbc',50)->nullable();

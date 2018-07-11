@@ -64,10 +64,11 @@ class dmdonviController extends Controller
             return view('errors.notlogin');
     }
 
-    function edit_local($madv){
+    function edit_local(Request $request){
         if (Session::has('admin')) {
-            if(session('admin')->level=='SA'|| session('admin')->madv == $madv){
-                $model=dmdonvi::where('madv',$madv)->first();
+            $inputs = $request->all();
+            if(session('admin')->level=='SA'|| session('admin')->madv == $inputs['maso']){
+                $model=dmdonvi::where('madv',$inputs['maso'])->first();
 
                 //$makpb=getMaKhoiPB(session('admin')->maxa);
                 //$model_kpb=dmkhoipb::select('makhoipb','tenkhoipb')->where('makhoipb',$makpb)->get()->toarray();
@@ -87,12 +88,12 @@ class dmdonviController extends Controller
                 return view('system.general.local.edit')
                     ->with('model',$model)
                     ->with('model_donvi',$a_kq)
-                    ->with('a_phanloai',$a_phanloai)
-                    ->with('model_phanloai',$a_phanloai)
-                    ->with('model_plxa',$model_plxa)
-                    ->with('model_capdv',$model_capdv)
-                    ->with('model_linhvuc',$model_linhvuc)
-                    ->with('a_linhvuc',$a_linhvuc)
+                    //->with('a_phanloai',$a_phanloai)
+                    ->with('a_phanloai',getPhanLoaiDonVi())
+                    ->with('model_plxa',getPhanLoaiXa())
+                    ->with('model_capdv',getCapDonVi())
+                    ->with('model_linhvuc',array_column(dmkhoipb::all()->toarray(),'tenkhoipb','makhoipb'))
+                    ->with('a_linhvuc',explode(',',$model->linhvuchoatdong))
                     ->with('url','/he_thong/don_vi/')
                     ->with('pageTitle','Chỉnh sửa thông tin đơn vị');
             }else{return view('errors.noperm');}
@@ -130,21 +131,27 @@ class dmdonviController extends Controller
             return view('errors.notlogin');
     }
 
-    function update_information(Request $request, $madv){
+    function update_information(Request $request, $madv)
+    {
         if (Session::has('admin')) {
-            $inputs=$request->all();
-            $model=dmdonvi::where('madv',$madv)->first();
-            $model->macqcq=$inputs['macqcq']=='all'?'':$inputs['macqcq'];
-            $model->tendv=$inputs['tendv'];
-            $model->diachi=$inputs['diachi'];
-            $model->sodt=$inputs['sodt'];
-            $model->lanhdao=$inputs['lanhdao'];
-            $model->diadanh=$inputs['diadanh'];
-            $model->cdlanhdao=$inputs['cdlanhdao'];
-            $model->nguoilapbieu=$inputs['nguoilapbieu'];
-            $model->makhoipb=$inputs['makhoipb'];
-            $model->diadanh=$inputs['diadanh'];
+            $inputs = $request->all();
+            $model = dmdonvi::where('madv', $madv)->first();
+            $model->macqcq = $inputs['macqcq'] == 'all' ? '' : $inputs['macqcq'];
+            $model->update($inputs);
+            /*
+            $model->tendv = $inputs['tendv'];
+            $model->diachi = $inputs['diachi'];
+            $model->sodt = $inputs['sodt'];
+            $model->lanhdao = $inputs['lanhdao'];
+            $model->diadanh = $inputs['diadanh'];
+            $model->cdlanhdao = $inputs['cdlanhdao'];
+            $model->ketoan = $inputs['ketoan'];
+            $model->cdketoan = $inputs['cdketoan'];
+            $model->nguoilapbieu = $inputs['nguoilapbieu'];
+            $model->makhoipb = $inputs['makhoipb'];
+            $model->diadanh = $inputs['diadanh'];
             $model->save();
+            */
             return redirect('/he_thong/quan_tri/don_vi');
 
         } else
@@ -174,23 +181,24 @@ class dmdonviController extends Controller
             return view('errors.notlogin');
     }
 
-    function store_account(Request $request){
+    function store_account(Request $request)
+    {
         if (Session::has('admin')) {
             $inputs = $request->all();
-            $model_donvi=dmdonvi::where('madv',$inputs['madv'])->first();
-            $model=new Users();
-            $model->level=$model_donvi->level;
-            $model->maxa=$inputs['madv'];
-            $model->madv=$inputs['madv'];
-            $model->name=$inputs['name'];
-            $model->username=$inputs['username'];
-            $model->password=md5($inputs['password']);
-            $model->phone=$inputs['phone'];
-            $model->email=$inputs['email'];
-            $model->status=$inputs['status'];
+            $model_donvi = dmdonvi::where('madv', $inputs['madv'])->first();
+            $model = new Users();
+            $model->level = $model_donvi->level;
+            $model->maxa = $inputs['madv'];
+            $model->madv = $inputs['madv'];
+            $model->name = $inputs['name'];
+            $model->username = $inputs['username'];
+            $model->password = md5($inputs['password']);
+            $model->phone = $inputs['phone'];
+            $model->email = $inputs['email'];
+            $model->status = $inputs['status'];
             $model->save();
 
-            return redirect('/he_thong/quan_tri/don_vi/maso='.$inputs['madv']);
+            return redirect('/he_thong/quan_tri/don_vi/maso=' . $inputs['madv']);
         } else
             return view('errors.notlogin');
     }

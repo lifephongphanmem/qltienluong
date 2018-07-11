@@ -26,7 +26,7 @@
                     <div class="caption">
                     </div>
                     <div class="actions">
-                        <a href="{{url($url.'maso='.$model->madv.'/edit_local')}}" class="btn btn-default btn-sm">
+                        <a href="{{url($url.'thong_tin?maso='.$model->madv)}}" class="btn btn-default btn-sm">
                             <i class="fa fa-edit"></i> Chỉnh sửa </a>
                         <!--a href="" class="btn btn-default btn-sm">
                             <i class="fa fa-print"></i> Print </a-->

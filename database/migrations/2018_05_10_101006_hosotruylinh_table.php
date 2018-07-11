@@ -16,6 +16,7 @@ class HosotruylinhTable extends Migration
         Schema::create('hosotruylinh', function (Blueprint $table) {
             $table->increments('id');
             $table->string('maso', 50)->unique();
+            $table->string('stt', 10)->nullable();
             $table->string('macanbo', 50)->nullable();
             $table->string('tencanbo', 50)->nullable();
             $table->string('soqd', 50)->nullable();//chưa dùng
@@ -27,8 +28,10 @@ class HosotruylinhTable extends Migration
             $table->date('ngayden')->nullable();
             $table->string('madv')->nullable();
 
-            $table->double('heso')->default(0);
+            $table->string('msngbac', 50)->nullable();
+            $table->double('hesott')->default(0);
             //chưa dùng, cho trường hợp truy lĩnh cả phụ cấp
+            $table->double('heso')->default(0);
             $table->double('vuotkhung')->default(0);
             $table->double('pcct')->default(0);
             $table->double('pckct')->default(0);

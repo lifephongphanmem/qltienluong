@@ -60,7 +60,7 @@
 
         </td>
         <td  style="text-align: center;">
-            <b>Mẫu số C02a - HD</b>
+
         </td>
     </tr>
     <tr>
@@ -68,7 +68,7 @@
             <b>Đơn vị: {{$m_dv['tendv']}}</b>
         </td>
         <td style="text-align: center; font-style: italic">
-            (Ban hành kèm theo QĐ số 19/2006/QĐ-BTC ngày 30/3/2006 và Thông tư số 185/2010/TT-BTC ngày 15/11/2010 của Bộ Tài chính)
+
         </td>
     </tr>
     <tr>
@@ -83,6 +83,7 @@
 </table>
 <p style="text-align: center; font-weight: bold; font-size: 20px;">BẢNG THANH TOÁN TIỀN LƯƠNG VÀ PHỤ CẤP</p>
 <p style="text-align: center; font-style: italic">Tháng {{$thongtin['thang']}} năm {{$thongtin['nam']}}</p>
+
 
 <table class="money" cellspacing="0" cellpadding="0" border="1" style="margin: 20px auto; border-collapse: collapse;">
     <tr style="padding-left: 2px;padding-right: 2px">
@@ -140,7 +141,7 @@
                     <td style="text-align: left">{{$ct->tencanbo}}</td>
                     <td style="text-align: left">{{$ct->tencv}}</td>
                     <td style="text-align: left">{{$ct->msngbac}}</td>
-                    <td>{{dinhdangsothapphan(($ct->heso + $ct->hesott),5)}}</td>
+                    <td>{{dinhdangsothapphan($ct->heso,5)}}</td>
                     <td>{{dinhdangsothapphan($ct->vuotkhung,5)}}</td>
 
                     @foreach($a_phucap as $key=>$val)
@@ -192,7 +193,7 @@
     @endforeach
     <tr style="font-weight: bold; text-align: center;">
         <td colspan="5">Tổng cộng</td>
-        <td>{{dinhdangsothapphan($model->sum('heso') + $model->sum('hesott') ,5)}}</td>
+        <td>{{dinhdangsothapphan($model->sum('heso'),5)}}</td>
         <td>{{dinhdangsothapphan($model->sum('vuotkhung') ,5)}}</td>
 
         @foreach($a_phucap as $key=>$val)
@@ -216,7 +217,50 @@
     </tr>
 </table>
 
-<table class="header" width="96%" border="0" cellspacing="0" cellpadding="8" style="margin:20px auto; text-align: center;">
+<table class="money" cellspacing="0" cellpadding="0" border="1" style="margin: 20px auto; border-collapse: collapse;">
+    <tr style="padding-left: 2px;padding-right: 2px">
+        <th style="width: 5%;" >Mục</th>
+        <th style="width: 5%;" >Tiểu mục</th>
+        <th>Hệ số</th>
+        <th>Số tiền</th>
+        <th>BHXH</th>
+        <th>BHYT</th>
+        <th>KPCĐ</th>
+        <th>BHTN</th>
+        <th>Tổng cộng</th>
+        <th>Còn lại</th>
+    </tr>
+
+    @foreach($model_tm as $ct)
+        <tr>
+            <td style="text-align: left">{{$ct->muc}}</td>
+            <td style="text-align: left">{{$ct->tieumuc}}</td>
+            <td>{{dinhdangsothapphan($ct->heso,5)}}</td>
+            <td>{{dinhdangso($ct->sotien)}}</td>
+            <td>{{dinhdangso($ct->stbhxh)}}</td>
+            <td>{{dinhdangso($ct->stbhyt)}}</td>
+            <td>{{dinhdangso($ct->stkpcd)}}</td>
+            <td>{{dinhdangso($ct->stbhtn)}}</td>
+            <td>{{dinhdangso($ct->ttbh)}}</td>
+            <td>{{dinhdangso($ct->sotien - $ct->ttbh)}}</td>
+        </tr>
+    @endforeach
+    <tr style="font-weight: bold; text-align: center;">
+        <td colspan="2">Tổng cộng</td>
+        <td>{{dinhdangsothapphan($model_tm->sum('heso'),5)}}</td>
+        <td class="money">{{dinhdangso($model_tm->sum('sotien'))}}</td>
+        <td class="money">{{dinhdangso($model_tm->sum('stbhxh'))}}</td>
+        <td class="money">{{dinhdangso($model_tm->sum('stbhyt'))}}</td>
+        <td class="money">{{dinhdangso($model_tm->sum('stkpcd'))}}</td>
+        <td class="money">{{dinhdangso($model_tm->sum('stbhtn'))}}</td>
+        <td class="money">{{dinhdangso($model_tm->sum('ttbh'))}}</td>
+        <td class="money">{{dinhdangso($model_tm->sum('sotien') - $model_tm->sum('ttbh'))}}</td>
+    </tr>
+</table>
+
+
+
+<table class="header" border="0" cellspacing="0" cellpadding="8" style="margin:20px auto; text-align: center;">
     <tr>
         <td style="text-align: left;" width="50%"></td>
         <td style="text-align: center; font-style: italic" width="50%">{{$m_dv->diadanh .', '.Date2Str($thongtin['ngaylap'])}}</td>

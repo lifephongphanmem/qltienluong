@@ -116,7 +116,6 @@
             $('#nguoiky').val('');
             $('#coquanqd').val('');
             $('#noidung').val('');
-            $('#ngayxet').val('');
             $('#kemtheo').val('');
             $('#manl').val('');
             $('#id_ct').val(0);

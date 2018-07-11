@@ -36,43 +36,7 @@
     <link href="{{url('assets/admin/layout4/css/themes/light.css')}}" rel="stylesheet" type="text/css" id="style_color"/>
     <link href="{{url('assets/global/plugins/bootstrap-toastr/toastr.min.css')}}" rel="stylesheet" type="text/css" />
 <!-- END THEME STYLES -->
-    <script type="text/javascript">
-        function time() {
-            var today = new Date();
-            var weekday=new Array(7);
-            weekday[0]="Chủ nhật";
-            weekday[1]="Thứ hai";
-            weekday[2]="Thứ ba";
-            weekday[3]="Thứ tư";
-            weekday[4]="Thứ năm";
-            weekday[5]="Thứ sáu";
-            weekday[6]="Thứ bảy";
-            var day = weekday[today.getDay()];
-            var dd = today.getDate();
-            var mm = today.getMonth()+1; //January is 0!
-            var yyyy = today.getFullYear();
-            var h=today.getHours();
-            var m=today.getMinutes();
-            var s=today.getSeconds();
-            m=checkTime(m);
-            s=checkTime(s);
-            nowTime = h+":"+m+":"+s;
-            if(dd<10){dd='0'+dd} if(mm<10){mm='0'+mm} today = day+', '+ dd+'/'+mm+'/'+yyyy;
 
-            tmp='<span class="date"> '+today+' | '+nowTime+'</span>';
-
-            document.getElementById("clock").innerHTML=tmp;
-
-            clocktime=setTimeout("time()","1000","JavaScript");
-            function checkTime(i)
-            {
-                if(i<10){
-                    i="0" + i;
-                }
-                return i;
-            }
-        }
-    </script>
     <!--link rel="shortcut icon" href="{{ url('images/logovang.png')}}" type="image/x-icon"-->
     <link rel="shortcut icon" href="{{ url('images/LIFESOFT.png')}}" type="image/x-icon">
 </head>
@@ -171,7 +135,7 @@
                     <ul class="sub-menu">
                         <li><a href="{{url('nghiep_vu/ho_so/danh_sach')}}"><i class="fa fa-caret-right"></i>Danh sách cán bộ</a></li>
                         <li><a href="{{url('nghiep_vu/tam_ngung/danh_sach')}}"><i class="fa fa-caret-right"></i>Danh sách cán bộ tạm ngừng theo dõi</a></li>
-                        <!--li><a href="{{url('nghiep_vu/truy_linh/danh_sach')}}"><i class="fa fa-caret-right"></i>Danh sách cán bộ được truy lĩnh lương</a></li-->
+                        <li><a href="{{url('nghiep_vu/truy_linh/danh_sach')}}"><i class="fa fa-caret-right"></i>Danh sách cán bộ được truy lĩnh lương</a></li>
                         <!--
                         <li><a href="{{url('nghiep_vu/ho_so/danh_sach')}}"><i class="fa fa-caret-right"></i>Cán bộ biên chế và chuyên trách</a></li>
                         <li><a href="{{url('nghiep_vu/ho_so/danh_sach')}}"><i class="fa fa-caret-right"></i>Cán bộ không chuyên trách và đã nghỉ hưu</a></li>
@@ -327,10 +291,11 @@
                                 <li><a href="{{url('danh_muc/phong_ban/index')}}"><i class="fa fa-caret-right"></i>Khối(tổ) công tác</a></li>
                                 <li><a href="{{url('danh_muc/chuc_vu_cq/ma_so='.session('admin')->level)}}"><i class="fa fa-caret-right"></i>Chức vụ</a></li>
                                 <!--li><a href="{{url('danh_muc/chuc_vu_d/index')}}"><i class="fa fa-caret-right"></i>Chức vụ đảng</a></li-->
-                                <!--li><a href="{{url('danh_muc/phu_cap/index')}}"><i class="fa fa-caret-right"></i>Phụ cấp</a></li-->
+
                                 <li><a href="{{url('danh_muc/dan_toc/index')}}"><i class="fa fa-caret-right"></i>Dân tộc</a></li>
                                 <!--Cho đơn vị chủ quản set phân loại bảo hiểm-->
                                 @if(session('admin')->level == 'SA' || session('admin')->level == 'SSA')
+                                    <li><a href="{{url('danh_muc/phu_cap/index')}}"><i class="fa fa-caret-right"></i>Phụ cấp</a></li>
                                     <li><a href="{{url('danh_muc/nguon_kinh_phi/index')}}"><i class="fa fa-caret-right"></i>Nguồn kinh phí</a></li>
                                     <li><a href="{{url('danh_muc/khoi_pb/index')}}"><i class="fa fa-caret-right"></i>Lĩnh vực hoạt động</a></li>
                                     <li><a href="{{url('danh_muc/ngach_bac/index')}}"><i class="fa fa-caret-right"></i>Mã ngạch lương</a></li>
@@ -354,13 +319,19 @@
                             <a href="javascript:;">
                                 <i class="icon-grid"></i> Quản trị hệ thống <span class="arrow"></span>
                             </a>
+                            @if(session('admin')->level == 'SA' || session('admin')->level == 'SSA')
+                                <ul class="sub-menu" style="margin-left: 15px;">
+                                    <li><a href="{{url('/danh_muc/tieu_muc/index')}}"><i class="fa fa-caret-right"></i>Công thức mục-tiểu mục</a></li>
+                                </ul>
+                            @else
+                                <ul class="sub-menu" style="margin-left: 15px;">
+                                    <li><a href="{{url('/he_thong/don_vi/don_vi')}}"><i class="fa fa-caret-right"></i>Thông tin đơn vị</a></li>
+                                    <li><a href="{{url('/he_thong/don_vi/bao_hiem')}}"><i class="fa fa-caret-right"></i>Thông tin nộp bảo hiểm</a></li>
+                                    <li><a href="{{url('/danh_muc/phu_cap/don_vi')}}"><i class="fa fa-caret-right"></i>Thông tin phụ cấp</a></li>
+                                </ul>
+                            @endif
 
-                            <ul class="sub-menu" style="margin-left: 15px;">
-                                <li><a href="{{url('he_thong/don_vi/don_vi')}}"><i class="fa fa-caret-right"></i>Thông tin đơn vị</a></li>
-                                <li><a href="{{url('he_thong/don_vi/bao_hiem')}}"><i class="fa fa-caret-right"></i>Thông tin nộp bảo hiểm</a></li>
-                                <li><a href="{{url('he_thong/don_vi/phu_cap')}}"><i class="fa fa-caret-right"></i>Thông tin phụ cấp</a></li>
 
-                            </ul>
                         </li>
                         @if(session('admin')->quanlykhuvuc || session('admin')->level == 'SA')
                             <li><a href="{{url('danh_muc/tai_khoan/list_user?level=H')}}"><i class="icon-book-open"></i>Quản lý tài khoản</a></li>

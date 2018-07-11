@@ -1,21 +1,22 @@
 <?php
 
+use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateDmphucapTable extends Migration
+class CreateDmphucapDonviTable extends Migration
 {
     /**
-     * Dùng chung cho các đơn vị
      * Run the migrations.
      *
      * @return void
      */
     public function up()
     {
-        Schema::create('dmphucap', function (Blueprint $table) {
+        Schema::create('dmphucap_donvi', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('mapc', 50)->unique();
+            $table->string('madv', 50)->nullable();
+            $table->string('mapc', 50)->nullable();
             $table->string('tenpc', 100)->nullable();
             $table->boolean('baohiem')->nullable();//chưa dùng
             $table->string('form')->nullable(); //tiêu đề trên Form
@@ -34,6 +35,6 @@ class CreateDmphucapTable extends Migration
      */
     public function down()
     {
-        Schema::drop('dmphucap');
+        Schema::drop('dmphucap_donvi');
     }
 }

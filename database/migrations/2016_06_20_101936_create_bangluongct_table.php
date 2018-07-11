@@ -25,7 +25,8 @@ class CreateBangluongctTable extends Migration
             $table->string('tencanbo', 50)->nullable();
             $table->string('macongchuc', 50)->nullable();
             $table->double('heso')->default(0);
-            $table->double('hesott')->default(0);//hệ số truy thu
+            $table->double('hesott')->default(0);//hệ số truy lĩnh
+            $table->double('thangtl')->default(0);//số tháng được truy lĩnh lương
             $table->double('vuotkhung')->default(0);
 
             $table->double('pcct')->default(0);//dùng để thay thế phụ cấp ghép lớp

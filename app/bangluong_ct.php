@@ -66,6 +66,7 @@ class bangluong_ct extends Model
         'stbhtn_dv',
         'ttbh_dv',
         'gttncn',
-        'luongtn'
+        'luongtn',
+        'thangtl'
     ];
 }

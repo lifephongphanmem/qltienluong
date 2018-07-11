@@ -7,6 +7,7 @@ use App\dsnangluong;
 use App\dsnangluong_chitiet;
 use App\hosocanbo;
 use App\hosoluong;
+use App\hosotruylinh;
 use App\ngachbac;
 use App\ngachluong;
 use App\nhomngachluong;
@@ -100,30 +101,26 @@ class dsnangluongController extends Controller
                 if(count($nhomngluong) == 0){continue;}
 
                 if($b_vuotkhung){
-                    //tinh he so vuot khung, năm + 1
-                    $cb->vuotkhung = $cb->vuotkhung + 1;
+                    if($cb->vuotkhung < $nhomngluong->vuotkhung){
+                        $cb->vuotkhung = $nhomngluong->vuotkhung;
+                        $cb->hesott = ($nhomngluong->vuotkhung * $cb->heso) / 100;
+                    }else{
+                        $cb->vuotkhung = $cb->vuotkhung + 1;
+                        $cb->hesott = $cb->heso / 100;
+                    }
+
                     $date = new Carbon($cb->ngayden);
                     $cb->ngaytu = $date->addDay('1');
                     $date1 = new Carbon($cb->ngayden);
                     $cb->ngayden = $date1->addYear('1');
 
-                    //lưu thông tin truy lĩnh lương
-                    $cb->hesott = 1; //mặc định truy lĩnh 1%
                     $cb->truylinhtungay = $date->addDay('1');
-                    $cb->truylinhdenngay = $inputs['ngayxet'];
+                    //$cb->truylinhdenngay = $inputs['ngayxet'];
                 }else{
                     //Tính lại hệ số lương + phụ cấp + hệ số truy lĩnh
                     $a_hsl = explode(';',$hsl);
-                    $date_ngayden = new Carbon($cb->ngayden);
-                    $date_ngaynl = new Carbon($inputs['ngayxet']);
-
                     $cb->heso = $a_hsl[0];
                     $cb->vuotkhung = $a_hsl[1];
-                    if(date_format($date_ngaynl,'Y') > date_format($date_ngayden,'Y')){
-                        $cb->hesott = 12 + date_format($date_ngaynl,'m') - date_format($date_ngayden,'m');
-                    }else{
-                        $cb->hesott = date_format($date_ngaynl,'m') - date_format($date_ngayden,'m');
-                    }
 
                     $date = new Carbon($cb->ngayden);
                     $cb->ngaytu = $date->addDay('1');
@@ -133,17 +130,8 @@ class dsnangluongController extends Controller
                     //lưu thông tin truy lĩnh lương
                     $cb->hesott = $nhomngluong->hesochenhlech;
                     $cb->truylinhtungay = $date->addDay('1');
-                    $cb->truylinhdenngay = $date_ngaynl;
+                    //$cb->truylinhdenngay = $date_ngaynl;
                 }
-                /*
-                //Lưu thông tin lương mới vào hồ sơ lương
-
-                $data = $cb->toarray();
-                hosoluong::create($data);
-                //Lưu thông tin vào hồ sơ cán bộ
-                unset($data['manl']);
-                //hosocanbo::where('macanbo',$cb->macanbo)->update($data);
-                */
             }
             //dd($m_canbo->toarray());
             $inputs['trangthai'] = 'Tạo danh sách';
@@ -235,15 +223,30 @@ class dsnangluongController extends Controller
         if (Session::has('admin')) {
            $model = dsnangluong_chitiet::where('manl',$manl)->get();
 
-            foreach($model as $canbo){
+            foreach($model as $canbo) {
+                $hoso = hosocanbo::where('macanbo', $canbo->macanbo)->first();
                 $data = $canbo->toarray();
                 unset($data['id']);
                 unset($data['phanloai']);
                 hosoluong::create($data);
+                if ($canbo->hesott > 0) {
+                    $truylinh = hosotruylinh::where('macanbo',$canbo->macanbo)->first();
+                    if(count($truylinh) == 0){
+                        $truylinh = new hosotruylinh();
+                        $truylinh->maso = session('admin')->madv . '_' . getdate()[0];
+                    }
+                    $truylinh->macanbo = $canbo->macanbo;
+                    $truylinh->tencanbo = $hoso->tencanbo;
+                    $truylinh->ngaytu = $canbo->truylinhtungay;
+                    $truylinh->madv = session('admin')->madv;
+                    $truylinh->msngbac = $canbo->msngbac;
+                    $truylinh->hesott = $canbo->hesott;
+                    $truylinh->save();
+                }
                 //Lưu thông tin vào hồ sơ cán bộ
                 unset($data['manl']);
                 unset($data['ghichu']);
-                hosocanbo::where('macanbo',$canbo->macanbo)->update($data);
+                $hoso->update($data);
             }
             dsnangluong::where('manl',$manl)->update(['trangthai'=>'Đã nâng lương']);
             return redirect('/chuc_nang/nang_luong/danh_sach');

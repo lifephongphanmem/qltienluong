@@ -95,15 +95,8 @@
 
                             <div class="col-md-3">
                                 <div class="form-group">
-                                    <label class="control-label">Truy lĩnh từ ngày <span class="require">*</span></label>
+                                    <label class="control-label">Truy lĩnh từ ngày </label>
                                     {!! Form::input('date','truylinhtungay',null,array('id' => 'truylinhtungay', 'class' => 'form-control'))!!}
-                                </div>
-                            </div>
-
-                            <div class="col-md-3">
-                                <div class="form-group">
-                                    <label class="control-label">Truy lĩnh đến ngày <span class="require">*</span></label>
-                                    {!! Form::input('date','truylinhdenngay',null,array('id' => 'truylinhdenngay', 'class' => 'form-control'))!!}
                                 </div>
                             </div>
 

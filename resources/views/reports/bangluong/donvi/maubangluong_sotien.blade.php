@@ -57,7 +57,7 @@
 <table class="header" width="96%" border="0" cellspacing="0" cellpadding="8" style="margin:0 auto 25px; text-align: center;">
     <tr>
         <td  style="text-align: left;width: 60%">
-            <b>Đơn vị chủ quản: {{$m_dv->tenct}}</b>
+
         </td>
         <td  style="text-align: center;">
             <b>Mẫu số C02a - HD</b>
@@ -69,6 +69,15 @@
         </td>
         <td style="text-align: center; font-style: italic">
             (Ban hành kèm theo QĐ số 19/2006/QĐ-BTC ngày 30/3/2006 và Thông tư số 185/2010/TT-BTC ngày 15/11/2010 của Bộ Tài chính)
+        </td>
+    </tr>
+    <tr>
+        <td style="text-align: left;width: 60%">
+            <b>Mã đơn vị SDNS: {{$m_dv->maqhns}}</b>
+        </td>
+
+        <td style="text-align: center; font-style: italic">
+
         </td>
     </tr>
 </table>
@@ -116,41 +125,43 @@
 
     <?php $i=1; ?>
     @foreach($model_congtac as $congtac)
-        <?php $stt=1; ?>
-            <tr style="font-weight: bold;">
-                <td>{{convert2Roman($i++)}}</td>
-                <td style="text-align: left;" colspan="{{17 + $col}}">{{$congtac->tenct}}</td>
-            </tr>
         <?php $model_luong = $model->where('mact',$congtac->mact)?>
-        @foreach($model_luong as $ct)
-            <tr>
-                <td>{{$stt++}}</td>
-                <td style="text-align: left">{{$ct->macongchuc}}</td>
-                <td style="text-align: left">{{$ct->tencanbo}}</td>
-                <td style="text-align: left">{{$ct->tencv}}</td>
-                <td style="text-align: left">{{$ct->msngbac}}</td>
-                <td>{{dinhdangso(($ct->heso + $ct->hesott))}}</td>
-                <td>{{dinhdangso($ct->hesopc)}}</td>
+        @if(count($model_luong) > 0)
+            <?php $stt=1; ?>
+                <tr style="font-weight: bold;">
+                    <td>{{convert2Roman($i++)}}</td>
+                    <td style="text-align: left;" colspan="{{17 + $col}}">{{$congtac->tenct}}</td>
+                </tr>
 
-                @foreach($a_phucap as $key=>$val)
-                    <td>{{dinhdangso($ct->$key)}}</td>
-                @endforeach
+            @foreach($model_luong as $ct)
+                <tr>
+                    <td>{{$stt++}}</td>
+                    <td style="text-align: left">{{$ct->macongchuc}}</td>
+                    <td style="text-align: left">{{$ct->tencanbo}}</td>
+                    <td style="text-align: left">{{$ct->tencv}}</td>
+                    <td style="text-align: left">{{$ct->msngbac}}</td>
+                    <td>{{dinhdangso(($ct->heso + $ct->hesott))}}</td>
+                    <td>{{dinhdangso($ct->hesopc)}}</td>
 
-                <td>{{dinhdangso($ct->tonghs)}}</td>
+                    @foreach($a_phucap as $key=>$val)
+                        <td>{{dinhdangso($ct->$key)}}</td>
+                    @endforeach
 
-                <td> {{dinhdangso($ct->giaml)}}</td>
-                <td>{{dinhdangso($ct->bhct)}}</td>
-                <td>{{dinhdangso($ct->ttl - $ct->giaml + $ct->bhct)}}</td>
+                    <td>{{dinhdangso($ct->tonghs)}}</td>
 
-                <td>{{dinhdangso($ct->stbhxh)}}</td>
-                <td>{{dinhdangso($ct->stbhyt)}}</td>
-                <td>{{dinhdangso($ct->stkpcd)}}</td>
-                <td>{{dinhdangso($ct->stbhtn)}}</td>
-                <td>{{dinhdangso($ct->ttbh)}}</td>
-                <td>{{dinhdangso($ct->luongtn)}}</td>
-                <td></td>
-            </tr>
-        @endforeach
+                    <td> {{dinhdangso($ct->giaml)}}</td>
+                    <td>{{dinhdangso($ct->bhct)}}</td>
+                    <td>{{dinhdangso($ct->ttl - $ct->giaml + $ct->bhct)}}</td>
+
+                    <td>{{dinhdangso($ct->stbhxh)}}</td>
+                    <td>{{dinhdangso($ct->stbhyt)}}</td>
+                    <td>{{dinhdangso($ct->stkpcd)}}</td>
+                    <td>{{dinhdangso($ct->stbhtn)}}</td>
+                    <td>{{dinhdangso($ct->ttbh)}}</td>
+                    <td>{{dinhdangso($ct->luongtn)}}</td>
+                    <td></td>
+                </tr>
+            @endforeach
             <tr style="font-weight: bold; text-align: center; font-style: italic">
                 <td colspan="5">Cộng</td>
                 <td>{{dinhdangso($model_luong->sum('heso') + $model_luong->sum('hesott'))}}</td>
@@ -175,6 +186,7 @@
 
                 <td></td>
             </tr>
+        @endif
     @endforeach
     <tr style="font-weight: bold; text-align: center;">
         <td colspan="5">Tổng cộng</td>
@@ -204,7 +216,7 @@
 <table class="header" width="96%" border="0" cellspacing="0" cellpadding="8" style="margin:20px auto; text-align: center;">
     <tr>
         <td style="text-align: left;" width="50%"></td>
-        <td style="text-align: center; font-style: italic" width="50%">........,Ngày......tháng.......năm..........</td>
+        <td style="text-align: center; font-style: italic" width="50%">{{$m_dv->diadanh .', '.Date2Str($thongtin['ngaylap'])}}</td>
     </tr>
     <tr style="font-weight: bold">
         <td style="text-align: center;" width="50%">Người lập bảng</td>

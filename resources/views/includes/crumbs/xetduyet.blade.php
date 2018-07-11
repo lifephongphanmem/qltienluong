@@ -22,6 +22,6 @@
 <div class="form-group">
     <label class="col-md-4 control-label"> Ngày xét duyệt (ngày hưởng lương)<span class="require">*</span></label>
     <div class="col-md-8">
-        {!! Form::input('date','ngayxet',null,array('id' => 'ngayxet', 'class' => 'form-control'))!!}
+        {!! Form::date('ngayxet', date('Y-m-d'), array('id' => 'ngayxet', 'class' => 'form-control'))!!}
     </div>
 </div>

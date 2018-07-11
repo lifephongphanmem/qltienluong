@@ -148,12 +148,15 @@ class UsersController extends Controller
         }
     }
 
-    public function login()
+    public function login(Request $request)
     {
         if (Session::has('admin')) {
             Session::flush();
         }
+        $input = $request->all();
+        $username = isset($input['user']) ? $input['user']: null;
         return view('system.users.login')
+            ->with('username', $username)
             ->with('pageTitle', 'Đăng nhập hệ thống');
     }
 
@@ -166,7 +169,7 @@ class UsersController extends Controller
         else{
             $ttuser = Users::where('username', $input['username'])->first();
 
-            if($ttuser->level != 'SA'){
+            if($ttuser->level != 'SA' && $ttuser->level != 'SSA'){
                 $model_donvi = dmdonvi::where('madv', $ttuser->madv)->first();
                 $model_donvibaocao = dmdonvibaocao::where('madvbc', $model_donvi->madvbc)->first();
                 $model_donvicapduoi = dmdonvi::where('macqcq', $ttuser->madv)->get();
@@ -184,6 +187,14 @@ class UsersController extends Controller
                 }else{
                     $ttuser->quanlynhom=false;
                 }
+
+                $ttuser->diadanh = $model_donvi->diadanh;
+                $ttuser->cdlanhdao = $model_donvi->cdlanhdao;
+                $ttuser->lanhdao = $model_donvi->lanhdao;
+                $ttuser->cdketoan = $model_donvi->cdketoan;
+                $ttuser->ketoan = $model_donvi->ketoan;
+                $ttuser->nguoilapbieu = $model_donvi->nguoilapbieu;
+
                 $ttuser->level = $model_donvibaocao->level;
                 $ttuser->madvqlkv = $model_donvibaocao->madvcq;
                 $ttuser->macqcq = $model_donvi->macqcq;

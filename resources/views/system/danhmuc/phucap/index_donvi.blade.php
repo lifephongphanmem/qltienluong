@@ -34,11 +34,7 @@
                     <div class="caption">
                         DANH SÁCH CÁC LOẠI PHỤ CẤP
                     </div>
-                    @if(session('admin')->level == 'SA' || session('admin')->level == 'SSA')
-                        <div class="actions">
-                            <a href="{{url($furl.'create')}}" class="btn btn-default btn-xs"><i class="fa fa-plus"></i>&nbsp;Thêm mới</a>
-                        </div>
-                    @endif
+
                 </div>
                 <div class="portlet-body form-horizontal">
                     <table id="sample_3" class="table table-hover table-striped table-bordered" style="min-height: 230px">
@@ -65,8 +61,6 @@
                                     <td>
                                         <a href="{{$furl.'edit?maso='.$value->mapc}}" class="btn btn-default btn-xs">
                                             <i class="fa fa-edit"></i>&nbsp; Sửa</a>
-                                        <!--button type="button" onclick="cfDel('{{$furl.'del/'.$value->id}}')" class="btn btn-default btn-xs" data-target="#delete-modal-confirm" data-toggle="modal">
-                                            <i class="fa fa-trash-o"></i>&nbsp; Xóa</button-->
                                     </td>
                                 </tr>
                             @endforeach

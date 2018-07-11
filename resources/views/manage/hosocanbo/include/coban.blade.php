@@ -126,7 +126,14 @@
                 </div>
             </div>
 
-            <div class="col-md-9">
+            <div class="col-md-3">
+                <div class="form-group">
+                    <label class="control-label">Số tài khoản ngân hàng</label>
+                    {!!Form::text('sotk', null, array('id' => 'sotk','class' => 'form-control'))!!}
+                </div>
+            </div>
+
+            <div class="col-md-6">
                 <div class="form-group">
                     <label class="control-label">Lĩnh vực công tác </label>
                     <select class="form-control" id="linhvuc" name="linhvuc" multiple="multiple">

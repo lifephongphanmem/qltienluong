@@ -46,7 +46,7 @@
                                 <th class="text-center">Bậc</th>
                                 <th class="text-center">Hệ số</th>
                                 <th class="text-center">Phần</br>trăm</br>vượt</br>khung</th>
-                                <th class="text-center">Hệ số</br>(phần trăm)</br>truy lĩnh</br>một tháng</th>
+                                <th class="text-center">Hệ số</br>truy lĩnh</th>
                                 <th class="text-center">Thời gian</br>truy lĩnh</th>
                                 <th class="text-center">Thao tác</th>
                             </tr>
@@ -65,7 +65,7 @@
                                         <td class="text-center">{{$value->heso}}</td>
                                         <td class="text-center">{{$value->vuotkhung}}</td>
                                         <td class="text-center">{{$value->hesott}}</td>
-                                        <td class="text-center">{{'Từ '.getDayVn($value->truylinhtungay).' đến '.getDayVn($value->truylinhdenngay)}}</td>
+                                        <td class="text-center">{{'Từ '.getDayVn($value->truylinhtungay)}}</td>
                                         <td>
 
                                             <a type="button" href="{{url($furl.'chi_tiet?maso='.$value->manl.'&canbo='.$value->macanbo)}}" class="btn btn-info btn-xs mbs">

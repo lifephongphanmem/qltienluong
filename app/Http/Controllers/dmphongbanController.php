@@ -30,6 +30,7 @@ class dmphongbanController extends Controller
         }
          dd('OK');
     }
+
     public function index(){
         if (Session::has('admin')) {
             /*
