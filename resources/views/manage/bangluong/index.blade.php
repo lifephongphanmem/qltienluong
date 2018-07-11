@@ -284,16 +284,6 @@
                 </div>
 
                 <div class="row">
-
-                    <div class="col-md-6">
-                        <div class="form-group">
-                            <button type="button" style="border-width: 0px" onclick="inblm8()" class="btn btn-default btn-xs mbs">
-                                <i class="fa fa-print"></i>&nbsp; Bảng lương mẫu 8--</button>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="row">
                     <div class="col-md-6">
                         <div class="form-group">
                             <button type="button" style="border-width: 0px" onclick="inds()" class="btn btn-default btn-xs mbs"
@@ -309,12 +299,7 @@
                         </div>
                     </div>
 
-                    <div class="col-md-6">
-                        <div class="form-group">
-                            <a id="inbl_mbh" href="{{url($furl.'in_bh/maso=')}}" class="btn btn-default btn-xs mbs" TARGET="_blank" title="Bảng tính bảo hiểm phải nộp của cán bộ">
-                                <i class="fa fa-print"></i>&nbsp; Bảo hiểm---</a>
-                        </div>
-                    </div>
+
                 </div>
 
                 <input type="hidden" id="nam_in" name="nam_in"/>

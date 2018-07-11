@@ -97,26 +97,36 @@
         <th>{{$i}}</th>
         @endfor
     </tr>
+    <?php $tt=1; ?>
+    @foreach($model_congtac as $congtac)
+        <?php $model_luong = $model->where('mact',$congtac->mact)?>
 
-    <?php $stt=1; ?>
-    @foreach($model as $ct)
-        <tr>
-            <td>{{$stt++}}</td>
-            <td>{{$ct->tencanbo}}</td>
-            <td>{{$ct->msngbac}}</td>
-            <td style="text-align: right">{{number_format($ct->stbhxh)}}</td>
-            <td style="text-align: right">{{number_format($ct->stbhyt)}}</td>
-            <td style="text-align: right">{{number_format($ct->stkpcd)}}</td>
-            <td style="text-align: right">{{number_format($ct->stbhtn)}}</td>
-            <td style="text-align: right; font-weight: bold; font-style: italic">{{number_format($ct->ttbh)}}</td>
-            <td style="text-align: right">{{number_format($ct->stbhxh_dv)}}</td>
-            <td style="text-align: right">{{number_format($ct->stbhyt_dv)}}</td>
-            <td style="text-align: right">{{number_format($ct->stkpcd_dv)}}</td>
-            <td style="text-align: right">{{number_format($ct->stbhtn_dv)}}</td>
-            <td style="text-align: right; font-weight: bold; font-style: italic">{{number_format($ct->ttbh_dv)}}</td>
-            <td style="font-weight: bold; text-align: right">{{number_format($ct->ttbh_dv+$ct->ttbh)}}</td>
-            <td></td>
-        </tr>
+        @if(count($model_luong)> 0)
+            <?php $stt=1; ?>
+            <tr style="font-weight: bold;">
+                <td>{{convert2Roman($tt++)}}</td>
+                <td style="text-align: left;" colspan="{{18}}">{{$congtac->tenct}}</td>
+            </tr>
+            @foreach($model_luong as $ct)
+                <tr>
+                    <td>{{$stt++}}</td>
+                    <td>{{$ct->tencanbo}}</td>
+                    <td>{{$ct->msngbac}}</td>
+                    <td style="text-align: right">{{number_format($ct->stbhxh)}}</td>
+                    <td style="text-align: right">{{number_format($ct->stbhyt)}}</td>
+                    <td style="text-align: right">{{number_format($ct->stkpcd)}}</td>
+                    <td style="text-align: right">{{number_format($ct->stbhtn)}}</td>
+                    <td style="text-align: right; font-weight: bold; font-style: italic">{{number_format($ct->ttbh)}}</td>
+                    <td style="text-align: right">{{number_format($ct->stbhxh_dv)}}</td>
+                    <td style="text-align: right">{{number_format($ct->stbhyt_dv)}}</td>
+                    <td style="text-align: right">{{number_format($ct->stkpcd_dv)}}</td>
+                    <td style="text-align: right">{{number_format($ct->stbhtn_dv)}}</td>
+                    <td style="text-align: right; font-weight: bold; font-style: italic">{{number_format($ct->ttbh_dv)}}</td>
+                    <td style="font-weight: bold; text-align: right">{{number_format($ct->ttbh_dv+$ct->ttbh)}}</td>
+                    <td></td>
+                </tr>
+            @endforeach
+        @endif
     @endforeach
     <tr style="font-weight: bold; text-align: right">
         <td colspan="3">Tổng cộng</td>

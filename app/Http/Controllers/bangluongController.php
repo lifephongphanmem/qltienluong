@@ -1173,7 +1173,6 @@ class bangluongController extends Controller
                 }
             }
 
-
             foreach($model_tm as $tm) {
                 $m_tinhtoan = $model;
                 //check sự nghiệp
@@ -1257,6 +1256,47 @@ class bangluongController extends Controller
                 ->with('thongtin',$thongtin)
                 ->with('model_congtac',$model_congtac)
                 ->with('pageTitle','Bảng lương chi tiết');
+        } else
+            return view('errors.notlogin');
+    }
+
+    function printf_maubh(Request $request){
+        if (Session::has('admin')) {
+
+            $inputs = $request->all();
+            $inputs['mabl'] = $inputs['mabl_maubh'];
+            $inputs['mapb'] = $inputs['mapb_maubh'];
+            $inputs['macvcq'] = $inputs['macvcq_maubh'];
+            $inputs['mact'] = $inputs['mact_maubh'];
+
+            $mabl = $inputs['mabl'];
+            $m_bl = bangluong::select('thang','nam','mabl','madv','ngaylap')->where('mabl',$mabl)->first();
+            $model = $this->getBangLuong($inputs);
+            //$model_hoso = hosocanbo::where('madv',$m_bl->madv)->get();
+            $model_congtac = dmphanloaict::select('mact','tenct')
+                ->wherein('mact', function($query) use($mabl){
+                    $query->select('mact')->from('bangluong_ct')->where('mabl',$mabl);
+                })->get();
+
+
+            //dd($request->all());
+
+            $m_dv=dmdonvi::where('madv',$m_bl->madv)->first();
+
+            $dmchucvucq=dmchucvucq::all('tencv', 'macvcq')->toArray();
+            foreach($model as $hs){
+                $hs->tencv=getInfoChucVuCQ($hs,$dmchucvucq);
+            }
+            $thongtin=array('nguoilap'=>session('admin')->name,
+                'thang'=>$m_bl->thang,
+                'nam'=>$m_bl->nam);
+            return view('reports.bangluong.maubaohiem')
+                ->with('model',$model->sortBy('stt'))
+                ->with('model_pb',getPhongBan())
+                ->with('m_dv',$m_dv)
+                ->with('thongtin',$thongtin)
+                ->with('model_congtac',$model_congtac)
+                ->with('pageTitle','Bảng trích nộp bảo hiểm chi tiết');
         } else
             return view('errors.notlogin');
     }
