@@ -271,7 +271,7 @@
     </tr>
     <tr style="font-style: italic">
         <td style="text-align: center;" width="50%">(Ghi rõ họ tên)</td>
-        <td style="text-align: center;" width="50%">((Ký tên, đóng dấu))</td>
+        <td style="text-align: center;" width="50%">(Ký tên, đóng dấu)</td>
     </tr>
     <tr>
         <td><br><br><br></td>

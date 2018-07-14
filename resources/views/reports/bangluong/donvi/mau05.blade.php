@@ -57,37 +57,47 @@
 <table class="header" width="96%" border="0" cellspacing="0" cellpadding="8" style="margin:0 auto 25px; text-align: center;">
     <tr>
         <td style="text-align: left;width: 60%">
-            <b>Đơn vị: {{$m_dv->tendv}}</b>
+            <b>{{$m_dv->tendvcq}}</b>
         </td>
 
         <td style="text-align: center; font-weight: bold">
-            Số: {{$thongtin['thang']}}
+            Mẫu số C02- HD
         </td>
     </tr>
     <tr>
         <td style="text-align: left;width: 60%">
-            <b>Mã đơn vị SDNS: {{$m_dv->maqhns}}</b>
+            <b>{{$m_dv->tendv}}</b>
         </td>
 
         <td style="text-align: center; font-style: italic">
-
+            Ban hành kèm theo Thông tư số 107/2017/TT- BTC ngày 10/10/2017 của Bộ Tài chính
         </td>
     </tr>
+
+    <tr>
+        <td style="text-align: left;width: 60%">
+            <b>Mã đơn vị SDNS: {{$m_dv->maqhns}}</b>
+        </td>
+        <td style="text-align: center; font-weight: bold">
+            Số: {{$thongtin['thang']}}
+        </td>
+
+    </tr>
 </table>
-<p style="text-align: center; font-weight: bold; font-size: 20px;">BẢNG THANH TOÁN TIỀN LƯƠNG VÀ PHỤ CẤP</p>
+<p style="text-align: center; font-weight: bold; font-size: 20px;">BẢNG THANH TOÁN TIỀN LƯƠNG VÀ CÁC KHOẢN PHỤ CẤP THEO LƯƠNG, CÁC KHOẢN TRÍCH NỘP THEO LƯƠNG</p>
 <p style="text-align: center; font-style: italic">Tháng {{$thongtin['thang']}} năm {{$thongtin['nam']}}</p>
 
 <table class="money" cellspacing="0" cellpadding="0" border="1" style="margin: 20px auto; border-collapse: collapse;">
     <tr style="padding-left: 2px;padding-right: 2px">
         <th style="width: 2%;" rowspan="4">S</br>T</br>T</th>
         <th rowspan="4">Mã số</br>CBCC,</br>viên</br>chức</th>
-        <th style="width: 10%;" rowspan="4">Họ và tên</th>
+        <th style="width: 15%;" rowspan="4">Họ và tên</th>
         <th rowspan="4">Mã</br>ngạch</br>lương</th>
         <th colspan="13">Lương hệ số</th>
-        <th style="width: 6%;" rowspan="4">Tiền lương</br>tháng</th>
-        <th colspan="4">Các khoản phải khấu trừ vào lương</th>
-        <th style="width: 6%;" rowspan="4">Tổng tiền</br>thực lĩnh</th>
-        <th style="width: 6%;" rowspan="4">Ghi chú</th>
+        <th rowspan="4">Tiền lương</br>tháng</th>
+        <th colspan="4">Các khoản trừ vào lương</th>
+        <th rowspan="4">Tổng số tiền</br>thực lĩnh</th>
+        <th rowspan="4">Ghi chú</th>
     </tr>
 
     <tr style="padding-left: 2px;padding-right: 2px">
@@ -98,7 +108,7 @@
         <th rowspan="3">BHXH</th>
         <th rowspan="3">BHYT</th>
         <th rowspan="3">BHTN</th>
-        <th rowspan="3">Cộng</th>
+        <th rowspan="3">Cộng số</br>phải nộp</th>
     </tr>
 
     <tr style="padding-left: 2px;padding-right: 2px">
@@ -226,7 +236,7 @@
         <td></td>
     </tr>
 </table>
-<p style="text-align: left; font-weight:bold;font-style: italic ">Tổng số tiền bằng chữ: {{Dbl2Str($model->sum('luongtn'))}}</p>
+<p style="text-align: left; font-weight:bold;font-style: italic ">Tổng số tiền (Viết bằng chữ): {{Dbl2Str($model->sum('luongtn'))}}</p>
 <table class="header" width="96%" border="0" cellspacing="0" cellpadding="8" style="margin:20px auto; text-align: center;">
     <tr>
         <td style="text-align: left;" width="35%"></td>

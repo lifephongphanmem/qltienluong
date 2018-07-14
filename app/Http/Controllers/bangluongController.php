@@ -1104,6 +1104,8 @@ class bangluongController extends Controller
             $mabl = $inputs['mabl'];
             $m_bl = bangluong::select('thang','nam','mabl','madv','ngaylap')->where('mabl',$mabl)->first();
             $m_dv = dmdonvi::where('madv',$m_bl->madv)->first();
+            $m_dv->tendvcq = getTenDB($m_dv->madvbc);
+
 
             $model_congtac = dmphanloaict::select('mact','tenct')
                 ->wherein('mact', function($query) use($mabl){
