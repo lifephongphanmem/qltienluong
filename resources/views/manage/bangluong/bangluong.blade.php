@@ -32,8 +32,9 @@
             <div class="portlet light bordered">
                 <div class="portlet-title">
                     <div class="caption">
-                        CHI TIẾT BẢNG LƯƠNG THÁNG {{$m_bl->thang}} NĂM {{$m_bl->nam}}
+                        CHI TIẾT BẢNG LƯƠNG THÁNG {{$m_bl->thang}} NĂM {{$m_bl->nam}} 123
                     </div>
+                    <div class="actions"></div>
                 </div>
                 <div class="portlet-body form-horizontal">
                     <table id="sample_3" class="table table-hover table-striped table-bordered" style="min-height: 230px">
@@ -72,24 +73,9 @@
                     </table>
                 </div>
                 <div class="row">
-                    <div class="col-md-offset-4 col-md-8">
-
-                        <div class="btn-group btn-group-solid">
-                            <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="true">
-                                <i class="fa fa-ellipsis-horizontal"></i> In bảng lương <i class="fa fa-angle-down"></i>
-                            </button>
-                            <ul class="dropdown-menu">
-                                <li>
-                                    <a href="{{url('/chuc_nang/bang_luong/in/maso='.$m_bl->mabl)}}" TARGET="_blank">
-                                        Bảng lương </a>
-                                </li>
-                                <li>
-                                    <a href="{{url('/chuc_nang/bang_luong/in_bh/maso='.$m_bl->mabl)}}" TARGET="_blank">
-                                        Bảo hiểm </a>
-                                </li>
-                            </ul>
-                        </div>
+                    <div class="col-md-offset-5 col-md-8">
                         <a href="{{url('/chuc_nang/bang_luong/danh_sach')}}" class="btn btn-default"><i class="fa fa-reply"></i>&nbsp;Quay lại</a>
+
                     </div>
                 </div>
             </div>

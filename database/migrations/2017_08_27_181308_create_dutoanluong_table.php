@@ -16,6 +16,7 @@ class CreateDutoanluongTable extends Migration
         Schema::create('dutoanluong', function (Blueprint $table) {
             $table->increments('id');
             $table->string('madv')->nullable();
+            $table->string('maso')->nullable();
             $table->string('namns')->nullable();
             $table->double('luongnb')->default(0);
             $table->double('luonghs')->default(0);
