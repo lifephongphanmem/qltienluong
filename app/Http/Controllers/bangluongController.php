@@ -141,15 +141,12 @@ class bangluongController extends Controller
             //$m_donvi = dmdonvi::where('madv',session('admin')->madv)->first();
             foreach ($model_canbo_tn as $cb) {
                 $pcudn = $model_phucap->where('mapc', 'pcudn')->first();
+                $pcudn->heso_goc = $cb->pcudn;
                 $cb->tencanbo = $cb->tencanbo . ' (nghỉ thai sản)';
                 $cb->vuotkhung = $cb->heso * $cb->vuotkhung / 100;
-
                 $heso = 0;
-                foreach (explode(',', $pcudn->congthuc) as $ct) {
-                    $heso += $cb->$ct;
-                }
-                //$heso = $cb->heso + $cb->pccv + $cb->vuotkhung;
 
+                //$heso = $cb->heso + $cb->pccv + $cb->vuotkhung;
                 $pl = getDbl($pcudn->phanloai);
                 switch ($pl) {
                     case 0: {//hệ số
@@ -161,6 +158,10 @@ class bangluongController extends Controller
                         break;
                     }
                     case 2: {//phần trăm
+                        foreach (explode(',', $pcudn->congthuc) as $ct) {
+                            if ($ct != '')
+                                $heso += $cb->$ct;
+                        }
                         $cb->pcudn = $heso * $cb->pcudn / 100;
                         break;
                     }
@@ -177,13 +178,14 @@ class bangluongController extends Controller
                 $cb->luongtn = $cb->ttl;
 
                 //tính toán lưu vào bảng phụ cấp theo lương
-                $ct->mabl = $inputs['mabl'];
-                $ct->macanbo = $cb->macanbo;
-                $ct->tencanbo = $cb->tencanbo;
-                $ct->maso = $pcudn->mapc;
-                $ct->ten = $pcudn->tenpc;
-                $ct->heso = $cb->pcudn;
-                $ct->sotien = round($cb->ttl, 0);
+                $pcudn->mabl = $inputs['mabl'];
+
+                $pcudn->macanbo = $cb->macanbo;
+                $pcudn->tencanbo = $cb->tencanbo;
+                $pcudn->maso = $pcudn->mapc;
+                $pcudn->ten = $pcudn->tenpc;
+                $pcudn->heso = $cb->pcudn;
+                $pcudn->sotien = round($cb->ttl, 0);
                 $a_kq = $pcudn->toarray();
                 unset($a_kq['id']);
                 bangluong_phucap::create($a_kq);
@@ -231,18 +233,10 @@ class bangluongController extends Controller
 
                 //trong bảng danh mục là % vượt khung => sang bảng lương chuyển thành hệ số
                 $cb->vuotkhung = $cb->heso * $cb->vuotkhung / 100;
-                //$hesobaohiem = $cb->heso + $cb->pccv + $cb->vuotkhung;
-                //$cb->vuotkhung = ($cb->heso + $cb->pccv) * $cb->vuotkhung / 100;
-                /*
-                $cb->pccovu = ($cb->heso + $cb->pccv + $cb->vuotkhung) * $cb->pccovu / 100;
-                $cb->pctnn = ($cb->heso + $cb->pccv + $cb->vuotkhung) * $cb->pctnn / 100;
-                $cb->pclt = ($cb->heso + $cb->pccv + $cb->vuotkhung) * $cb->pclt / 100; //phụ cấp phân loại xã
-                $cb->pckn = ($cb->heso + $cb->pccv + $cb->vuotkhung) * $cb->pckn / 100;
-                $cb->pcudn = ($cb->heso + $cb->pccv + $cb->vuotkhung) * $cb->pcudn / 100;
-                */
 
                 $tt = 0;
                 $ths = 0;
+
                 foreach ($model_phucap as $ct) {
                     $mapc = $ct->mapc;
                     $ct->heso_goc = $cb->$mapc;
@@ -256,11 +250,14 @@ class bangluongController extends Controller
                     $ct->stbhyt_dv = 0;
                     $ct->stkpcd_dv = 0;
                     $ct->stbhtn_dv = 0;
-
-                    foreach (explode(',', $ct->congthuc) as $cthuc) {
-                        $heso += $cb->$cthuc;
-                    }
                     $pl = getDbl($ct->phanloai);
+
+                    if($pl == 2){
+                        foreach (explode(',', $ct->congthuc) as $cthuc) {
+                            if ($cthuc != '')
+                                $heso += $cb->$cthuc;
+                        }
+                    }
 
                     switch ($pl) {
                         case 0: {//hệ số
@@ -274,9 +271,11 @@ class bangluongController extends Controller
                             break;
                         }
                         case 2: {//phần trăm
-                            $cb->$mapc = $heso * $cb->$mapc / 100;
-                            $ths += $cb->$mapc;
-                            $sotien = $cb->$mapc * $inputs['luongcoban'];
+                            if($mapc !='vuotkhung'){//vượt khung đã tính ở trên
+                                $cb->$mapc = $heso * $cb->$mapc / 100;
+                                $ths += $cb->$mapc;
+                                $sotien = $cb->$mapc * $inputs['luongcoban'];
+                            }
                             break;
                         }
                         default: {//trường hợp còn lại (ẩn,...)
@@ -312,6 +311,7 @@ class bangluongController extends Controller
                         bangluong_phucap::create($a_kq);
                     }
                 }
+
                 $cb->tonghs = $ths;
                 $cb->ttl = round($inputs['luongcoban'] * $ths * $inputs['phantramhuong'] / 100 + $tt);
 
@@ -331,6 +331,7 @@ class bangluongController extends Controller
                 //lưu vào db
                 bangluong_ct::create($cb->toarray());
             }
+
 
             /*
             //chạy ngay trong vòng for

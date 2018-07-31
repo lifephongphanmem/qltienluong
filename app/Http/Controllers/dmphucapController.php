@@ -116,7 +116,8 @@ class dmphucapController extends Controller
                 if (count($m_donvi) > 0)
                     foreach ($model as $ct) {
                         $mapc = $ct->mapc;
-                        $ct->phanloai =getDbl($m_donvi->$mapc);
+                        $ct->phanloai = getDbl($m_donvi->$mapc);
+                        $ct->congthuc = $ct->phanloai == 2 ? "heso,vuotkhung,pccv" : "";
                     }
                 dmphucap_donvi::insert($model->toarray());
             }
@@ -133,7 +134,7 @@ class dmphucapController extends Controller
             }
             return view('system.danhmuc.phucap.index_donvi')
                 ->with('model', $model)
-                ->with('a_lock', array('heso','vuotkhung','hesott'))
+                ->with('a_lock', array('heso', 'vuotkhung', 'hesott'))
                 ->with('furl', '/danh_muc/phu_cap/don_vi/')
                 ->with('pageTitle', 'Thông tin phân loại phụ cấp');
         } else

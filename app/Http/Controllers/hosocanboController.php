@@ -10,6 +10,7 @@ use App\dmkhoipb;
 use App\dmphanloaicongtac;
 use App\dmphanloaict;
 use App\dmphongban;
+use App\dmphucap_donvi;
 use App\hosocanbo;
 use App\hosochucvu;
 use App\hosoluong;
@@ -76,7 +77,21 @@ class hosocanboController extends Controller
     function create()
     {
         if (Session::has('admin')) {
-            //$makhoipb=getMaKhoiPB(session('admin')->madv);
+            //kiểm tra nếu đơn vị chưa cập nhập danh mục phụ cấp thì tự động lấy danh mục thêm vào
+            $model_pc = dmphucap_donvi::where('madv', session('admin')->madv)->get();
+            if (count($model_pc) == 0) {//đơn vị chưa tạo phụ cấp
+                $m_donvi = dmdonvi::where('madv', session('admin')->madv)->first();
+                $model_dmpc = dmphucap::select('mapc', 'tenpc', 'baohiem', 'form', 'report', 'phanloai', 'congthuc', DB::raw(session('admin')->madv . ' as madv'))->get();
+                //dành cho các đơn vị đã cập nhật danh mục phụ cấp
+                if (count($m_donvi) > 0)
+                    foreach ($model_dmpc as $ct) {
+                        $mapc = $ct->mapc;
+                        $ct->phanloai = getDbl($m_donvi->$mapc);
+                        $ct->congthuc = $ct->phanloai == 2 ? "heso,vuotkhung,pccv" : "";
+                    }
+                dmphucap_donvi::insert($model_dmpc->toarray());
+            }
+
             $model_nhomct = dmphanloaicongtac::select('macongtac', 'tencongtac')->get();
             $model_tenct = dmphanloaict::select('tenct', 'macongtac', 'mact')->get();
             $model_dt = array_column(dmdantoc::select(DB::raw('dantoc as maso'), 'dantoc')->get()->toarray(), 'dantoc', 'maso');
@@ -105,9 +120,7 @@ class hosocanboController extends Controller
             $max_stt = getDbl((hosocanbo::where('madv', session('admin')->madv)->max('stt'))) + 1;
 
             //lấy phụ cấp ở danh mục phụ cấp đơn vị mapc => tenform
-            $a_phucap = array();
-            $a_donvi = dmdonvi::where('madv', session('admin')->madv)->first()->toarray();//cũ; nghiên cứu lấy mới vào để thay trên form nhập
-            //kiểm tra như danh mục
+            $model_pc = dmphucap_donvi::where('madv', session('admin')->madv)->get();
 
             return view('manage.hosocanbo.create')
                 ->with('type', 'create')
@@ -123,9 +136,8 @@ class hosocanboController extends Controller
                 ->with('model_tenct', $model_tenct)
                 ->with('m_plnb', $m_plnb)
                 ->with('m_pln', $m_pln)
-                //->with('m_pc',$m_pc)
-                ->with('a_phucap', $a_phucap)
-                ->with('a_donvi', $a_donvi)
+                ->with('a_heso', array('heso', 'vuotkhung', 'hesopc', 'hesott'))
+                ->with('model_pc', $model_pc)
                 ->with('pageTitle', 'Tạo hồ sơ cán bộ');
         } else
             return view('errors.notlogin');
@@ -196,6 +208,21 @@ class hosocanboController extends Controller
 
     function show($id){
         if (Session::has('admin')) {
+            //kiểm tra nếu đơn vị chưa cập nhập danh mục phụ cấp thì tự động lấy danh mục thêm vào
+            $model_pc = dmphucap_donvi::where('madv', session('admin')->madv)->get();
+            if (count($model_pc) == 0) {//đơn vị chưa tạo phụ cấp
+                $m_donvi = dmdonvi::where('madv', session('admin')->madv)->first();
+                $model_dmpc = dmphucap::select('mapc', 'tenpc', 'baohiem', 'form', 'report', 'phanloai', 'congthuc', DB::raw(session('admin')->madv . ' as madv'))->get();
+                //dành cho các đơn vị đã cập nhật danh mục phụ cấp
+                if (count($m_donvi) > 0)
+                    foreach ($model_dmpc as $ct) {
+                        $mapc = $ct->mapc;
+                        $ct->phanloai = getDbl($m_donvi->$mapc);
+                        $ct->congthuc = $ct->phanloai == 2 ? "heso,vuotkhung,pccv" : "";
+                    }
+                dmphucap_donvi::insert($model_dmpc->toarray());
+            }
+
             //$makhoipb=getMaKhoiPB(session('admin')->madv);
             $model = hosocanbo::find($id);
             //$m_hosoct = hosotinhtrangct::where('macanbo',$model->macanbo)->where('hientai','1')->first();
@@ -213,8 +240,11 @@ class hosocanboController extends Controller
             $m_plnb = nhomngachluong::select('manhom','tennhom')->distinct()->get();
             $m_pln = ngachluong::select('tenngachluong','manhom','msngbac')->distinct()->get();
             $a_linhvuc = explode(',',$model->lvhd);
-            $a_donvi = dmdonvi::where('madv',session('admin')->madv)->first()->toarray();
+
             //dd($model);
+            //lấy phụ cấp ở danh mục phụ cấp đơn vị mapc => tenform
+            $model_pc = dmphucap_donvi::where('madv', session('admin')->madv)->get();
+
             return view('manage.hosocanbo.edit')
                 ->with('model',$model)
                 ->with('type','edit')
@@ -228,8 +258,8 @@ class hosocanboController extends Controller
                 ->with('a_linhvuc',$a_linhvuc)
                 ->with('m_plnb',$m_plnb)
                 ->with('m_pln',$m_pln)
-                ->with('a_phucap',getColPhuCap())
-                ->with('a_donvi',$a_donvi)
+                ->with('a_heso', array('heso', 'vuotkhung', 'hesopc', 'hesott'))
+                ->with('model_pc',$model_pc)
                 ->with('pageTitle','Sửa thông tin hồ sơ cán bộ');
         } else
             return view('errors.notlogin');

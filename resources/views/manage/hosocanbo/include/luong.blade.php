@@ -134,13 +134,41 @@
                                 </div>
                             </div>
                         </div-->
-
-                        <div class="col-md-3">
-                            <div class="form-group">
-                                <label class="control-label">Phụ cấp (hưu trí)</label>
-                                {!!Form::text('hesopc', null, array('id' => 'hesopc','class' => 'form-control', 'data-mask'=>'fdecimal'))!!}
+                        <?php
+                            $hesopc = $model_pc->where('mapc','hesopc')->first();
+                        ?>
+                        
+                        @if($hesopc->phanloai == 3)
+                            {!!Form::hidden($hesopc->mapc, null, array('id' =>$hesopc->mapc, 'class' => 'form-control', 'data-mask'=>'fdecimal'))!!}
+                        @elseif($hesopc->phanloai == 2)
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label class="control-label">{{$hesopc->form}}</label>
+                                    <div class="input-group bootstrap-touchspin">
+                                        {!!Form::text($hesopc->mapc, null, array('id' =>$hesopc->mapc, 'class' => 'form-control', 'data-mask'=>'fdecimal'))!!}
+                                        <span class="input-group-addon bootstrap-touchspin-postfix">%</span>
+                                    </div>
+                                </div>
                             </div>
-                        </div>
+                        @elseif($hesopc->phanloai == 1)
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label class="control-label">{{$hesopc->form}}</label>
+                                    <div class="input-group bootstrap-touchspin">
+                                        {!!Form::text($hesopc->mapc, null, array('id' =>$hesopc->mapc, 'class' => 'form-control', 'data-mask'=>'fdecimal'))!!}
+                                        <span class="input-group-addon bootstrap-touchspin-postfix">VNĐ</span>
+                                    </div>
+                                </div>
+                            </div>
+                        @else
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label class="control-label">{{$hesopc->form}}</label>
+                                    {!!Form::text($hesopc->mapc, null, array('id' =>$hesopc->mapc, 'class' => 'form-control', 'data-mask'=>'fdecimal'))!!}
+                                </div>
+                            </div>
+                        @endif
+
                     </div>
 
                 </div>
@@ -165,25 +193,29 @@
 
                     <div class="form-body">
                         <div class="row">
-                            @foreach($a_phucap as $key=>$val)
-                                @if($a_donvi[$key] == 3)
-                                    {!!Form::hidden($key, null, array('id' =>$key, 'class' => 'form-control', 'data-mask'=>'fdecimal'))!!}
-                                @elseif($a_donvi[$key] == 2)
+                            @foreach($model_pc as $pc)
+                                @if(in_array($pc->mapc,$a_heso))
+                                    @continue
+                                @endif
+
+                                @if($pc->phanloai == 3)
+                                    {!!Form::hidden($pc->mapc, null, array('id' =>$pc->mapc, 'class' => 'form-control', 'data-mask'=>'fdecimal'))!!}
+                                @elseif($pc->phanloai == 2)
                                     <div class="col-md-3">
                                         <div class="form-group">
-                                            <label class="control-label">{{$val}}</label>
+                                            <label class="control-label">{{$pc->form}}</label>
                                             <div class="input-group bootstrap-touchspin">
-                                                {!!Form::text($key, null, array('id' =>$key, 'class' => 'form-control', 'data-mask'=>'fdecimal'))!!}
+                                                {!!Form::text($pc->mapc, null, array('id' =>$pc->mapc, 'class' => 'form-control', 'data-mask'=>'fdecimal'))!!}
                                                 <span class="input-group-addon bootstrap-touchspin-postfix">%</span>
                                             </div>
                                         </div>
                                     </div>
-                                @elseif($a_donvi[$key] == 1)
+                                @elseif($pc->phanloai == 1)
                                     <div class="col-md-3">
                                         <div class="form-group">
-                                            <label class="control-label">{{$val}}</label>
+                                            <label class="control-label">{{$pc->form}}</label>
                                             <div class="input-group bootstrap-touchspin">
-                                                {!!Form::text($key, null, array('id' =>$key, 'class' => 'form-control', 'data-mask'=>'fdecimal'))!!}
+                                                {!!Form::text($pc->mapc, null, array('id' =>$pc->mapc, 'class' => 'form-control', 'data-mask'=>'fdecimal'))!!}
                                                 <span class="input-group-addon bootstrap-touchspin-postfix">VNĐ</span>
                                             </div>
                                         </div>
@@ -191,8 +223,8 @@
                                 @else
                                     <div class="col-md-3">
                                         <div class="form-group">
-                                            <label class="control-label">{{$val}}</label>
-                                            {!!Form::text($key, null, array('id' =>$key, 'class' => 'form-control', 'data-mask'=>'fdecimal'))!!}
+                                            <label class="control-label">{{$pc->form}}</label>
+                                            {!!Form::text($pc->mapc, null, array('id' =>$pc->mapc, 'class' => 'form-control', 'data-mask'=>'fdecimal'))!!}
                                         </div>
                                     </div>
                                 @endif
