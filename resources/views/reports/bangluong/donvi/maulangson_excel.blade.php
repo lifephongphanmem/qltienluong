@@ -5,142 +5,150 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
     <title>{{$pageTitle}}</title>
     <style type="text/css">
-        body {
-            font: normal 12px/14px time, serif;
-        }
-
-        .header tr td {
-            padding-top: 0px;
-            padding-bottom: 5px;
-        }
-
-        .money tr td{
-            text-align: right;
-        }
-
-        table, p {
-            width: 98%;
-            margin: auto;
-        }
-
-        table tr td:first-child {
-            text-align: center;
-        }
-
-        td, th {
-            padding: 5px;
-        }
-
-        p{
-            padding: 5px;
-        }
-
-        span{
-            text-transform: uppercase;
-            font-weight: bold;
-        }
-
-        @media print {
-            .in{
-                display: none !important;
-            }
+        tr > td {
+            border: 1px solid;
         }
     </style>
 </head>
 
-<div class="in" style="margin-right: 20px; text-align: right">
-    <button type="submit" onclick=" window.print()"> In bảng lương</button>
-</div>
 
 <body style="font:normal 12px Times, serif;">
 
 <table class="header" width="96%" border="0" cellspacing="0" cellpadding="8" style="margin:0 auto 25px; text-align: center;">
     <tr>
-        <td  style="text-align: left;width: 60%">
-            <b>Đơn vị chủ quản: {{$m_dv->tenct}}</b>
-        </td>
-        <td  style="text-align: center;">
-
-        </td>
-
+        <th colspan="12">
+            Đơn vị chủ quản: {{$m_dv->tenct}}
+        </th>
     </tr>
 
     <tr>
-        <td style="text-align: left;width: 60%">
-            <b>Đơn vị: {{$m_dv->tendv}}</b>
-        </td>
+        <th colspan="12">
+            Đơn vị: {{$m_dv->tendv}}
+        </th>
+    </tr>
 
-        <td style="text-align: center; font-style: italic">
+    <tr>
+        <th colspan="12">
+            Mã đơn vị SDNS: {{$m_dv->maqhns}}
+        </th>
+    </tr>
 
-        </td>
+    <tr>
+        <th colspan="12">
+            BẢNG THANH TOÁN TIỀN LƯƠNG VÀ PHỤ CẤP
+        </th>
     </tr>
     <tr>
-        <td style="text-align: left;width: 60%">
-            <b>Mã đơn vị SDNS: {{$m_dv->maqhns}}</b>
-        </td>
-
-        <td style="text-align: center; font-style: italic">
-
-        </td>
+        <th colspan="12">
+            Tháng {{$thongtin['thang']}} năm {{$thongtin['nam']}}
+        </th>
     </tr>
 </table>
-<p style="text-align: center; font-weight: bold; font-size: 20px;">BẢNG THANH TOÁN TIỀN LƯƠNG VÀ PHỤ CẤP</p>
-<p style="text-align: center; font-style: italic">Tháng {{$thongtin['thang']}} năm {{$thongtin['nam']}}</p>
 
 <table class="money" cellspacing="0" cellpadding="0" border="1" style="margin: 20px auto; border-collapse: collapse;">
-    <tr style="padding-left: 2px;padding-right: 2px">
-        <th style="width: 2%;" rowspan="4">S</br>T</br>T</th>
-        <th style="width: 6%;" rowspan="4">Mã số</br>CBCC, viên</br>chức</th>
-        <th style="width: 10%;" rowspan="4">Họ và tên</th>
-        <th style="width: 6%;" rowspan="4">Cấp bậc</br>chức vụ</th>
-        <th colspan="14">Lương hệ số</th>
-        <th style="width: 6%;" rowspan="4">Nghỉ việc</br>không được</br>hưởng lương</th>
-        <th style="width: 6%;" rowspan="4">BHXH trả</br>thay lương</th>
-        <th style="width: 6%;" rowspan="4">Tổng cộng</br>tiền lương</th>
-        <th colspan="5">Các khoản phải khấu trừ</th>
-        <th style="width: 6%;" rowspan="4">Tổng tiền</br>lương và BHXH</br>còn được nhận</th>
-    </tr>
-
-    <tr style="padding-left: 2px;padding-right: 2px">
-        <th rowspan="3">Hệ số</br>lương</th>
-        <th rowspan="3">Phụ cấp</br>chức vụ</th>
-        <th colspan="10">Hệ số phụ cấp khác</th>
-        <th rowspan="3">Cộng</br>hệ số</th>
-        <th rowspan="3">Thành tiền</th>
-        <th rowspan="3">BHXH</th>
-        <th rowspan="3">BHYT</th>
-        <th rowspan="3">BHTN</th>
-        <th rowspan="3">Thuế</br>thu</br>nhập</th>
-        <th rowspan="3">Cộng</th>
-    </tr>
-
-    <tr style="padding-left: 2px;padding-right: 2px">
-        <th rowspan="2">Phụ cấp</br>khu vực</th>
-        <th rowspan="2">Phụ cấp</br>thu hút</th>
-        <th rowspan="2">Phụ cấp</br>ưu đãi</th>
-        <th rowspan="2">Phụ cấp</br>trách nhiệm</th>
-        <th colspan="2">PCTNVK</th>
-        <th colspan="2">PCTNNG</th>
-        <th rowspan="2">Phụ cấp</br>lâu năm</th>
-        <th rowspan="2">Phụ cấp</br>độc hại</th>
-    </tr>
-
-    <tr style="padding-left: 2px;padding-right: 2px">
-        <th>%</th>
-        <th>HS</th>
-        <th>%</th>
-        <th>H</th>
+    <tr>
+        <td>STT</td>
+        <td>Mã số</br>CBCC, viên</br>chức</td>
+        <td>Họ và tên</td>
+        <td>Cấp bậc</br>chức vụ</td>
+        <td colspan="14">Lương hệ số</td>
+        <td>Nghỉ việc</br>không được</br>hưởng lương</td>
+        <td>BHXH trả</br>thay lương</td>
+        <td>Tổng cộng</br>tiền lương</td>
+        <td colspan="5">Các khoản phải khấu trừ</td>
+        <td>Tổng tiền lương và BHXH còn được nhận</td>
     </tr>
 
     <tr>
-        <th>A</th>
-        <th>B</th>
-        <th>C</th>
-        <th>D</th>
-        @for($i=1;$i<=23;$i++)
-            <th>{{$i}}</th>
-        @endfor
+        <th></th>
+        <th></th>
+        <th></th>
+        <th></th>
+        <td>Hệ số</br>lương</td>
+        <td>Phụ cấp</br>chức vụ</td>
+        <td colspan="10">Hệ số phụ cấp khác</td>
+        <td>Cộng</br>hệ số</td>
+        <td>Thành tiền</td>
+        <th></th>
+        <th></th>
+        <th></th>
 
+        <td>BHXH</td>
+        <td>BHYT</td>
+        <td>BHTN</td>
+        <td>Thuế</br>thu</br>nhập</td>
+        <td>Cộng</td>
+        <th></th>
+
+    </tr>
+
+    <tr>
+        <th></th>
+        <th></th>
+        <th></th>
+        <th></th>
+        <th></th>
+        <th></th>
+        <td>Phụ cấp</br>khu vực</td>
+        <td>Phụ cấp</br>thu hút</td>
+        <td>Phụ cấp</br>ưu đãi</td>
+        <td>Phụ cấp</br>trách nhiệm</td>
+        <td colspan="2">PCTNVK</td>
+        <td colspan="2">PCTNNG</td>
+        <td>Phụ cấp</br>lâu năm</td>
+        <td>Phụ cấp</br>độc hại</td>
+        <th></th>
+        <th></th>
+        <th></th>
+        <th></th>
+        <th></th>
+        <th></th>
+        <th></th>
+
+        <th></th>
+        <th></th>
+        <th></th>
+        <th></th>
+    </tr>
+
+    <tr>
+        <th></th>
+        <th></th>
+        <th></th>
+        <th></th>
+        <th></th>
+        <th></th>
+        <th></th>
+        <th></th>
+        <th></th>
+        <th></th>
+        <td>%</td>
+        <td>HS</td>
+        <td>%</td>
+        <td>H</td>
+        <th></th>
+        <th></th>
+        <th></th>
+        <th></th>
+        <th></th>
+        <th></th>
+        <th></th>
+        <th></th>
+        <th></th>
+        <th></th>
+        <th></th>
+        <th></th>
+        <th></th>
+    </tr>
+
+    <tr>
+        <td>A</td>
+        <td>B</td>
+        <td>C</td>
+        <td>D</td>
+        @for($i=1;$i<=23;$i++)
+            <td>{{$i}}</td>
+        @endfor
     </tr>
 
     <?php $i=1; ?>
@@ -150,14 +158,14 @@
             <?php $stt=1; ?>
             <tr style="font-weight: bold;">
                 <td>{{convert2Roman($i++)}}</td>
-                <td style="text-align: left;" colspan="26">{{$congtac->tenct}}</td>
+                <td colspan="26">{{$congtac->tenct}}</td>
             </tr>
             @foreach($model_luong as $ct)
                 <tr>
                     <td>{{$stt++}}</td>
-                    <td style="text-align: left">{{$ct->msngbac}}</td>
-                    <td style="text-align: left">{{$ct->tencanbo}}</td>
-                    <td style="text-align: left">{{$ct->tencv}}</td>
+                    <td>{{$ct->msngbac}}</td>
+                    <td>{{$ct->tencanbo}}</td>
+                    <td>{{$ct->tencv}}</td>
                     <td>{{dinhdangsothapphan(($ct->heso + $ct->hesott),5)}}</td>
                     <td>{{dinhdangsothapphan($ct->pccv,5)}}</td>
                     <td>{{dinhdangsothapphan($ct->pckv,5)}}</td>
@@ -188,7 +196,7 @@
                     <td>{{dinhdangso($ct->luongtn)}}</td>
                 </tr>
             @endforeach
-            <tr style="font-weight: bold; text-align: center; font-style: italic">
+            <tr>
                 <td colspan="4">Cộng</td>
                 <td>{{dinhdangsothapphan($model_luong->sum('heso') + $model_luong->sum('hesott'),5)}}</td>
                 <td>{{dinhdangsothapphan($model_luong->sum('pccv'),5)}}</td>
@@ -220,7 +228,7 @@
             </tr>
         @endif
     @endforeach
-    <tr style="font-weight: bold; text-align: center;">
+    <tr>
         <td colspan="4">Tổng cộng</td>
         <td>{{dinhdangsothapphan($model->sum('heso') + $model->sum('hesott'),5)}}</td>
         <td>{{dinhdangsothapphan($model->sum('pccv'),5)}}</td>
@@ -250,26 +258,26 @@
     </tr>
 </table>
 <p style="text-align: left; font-weight:bold;font-style: italic ">Tổng số tiền bằng chữ: {{Dbl2Str($model->sum('luongtn'))}}</p>
-<table class="header" width="96%" border="0" cellspacing="0" cellpadding="8" style="margin:20px auto; text-align: center;">
+<table>
     <tr>
-        <td style="text-align: left;" width="50%"></td>
-        <td style="text-align: center; font-style: italic" width="50%">{{$m_dv->diadanh .', '.Date2Str($thongtin['ngaylap'])}}</td>
+        <th colspan="6"></th>
+        <th colspan="6">{{$m_dv->diadanh .', '.Date2Str($thongtin['ngaylap'])}}</th>
     </tr>
     <tr style="font-weight: bold">
-        <td style="text-align: center;" width="50%">Người lập bảng</td>
-        <td style="text-align: center;" width="50%">{{$m_dv->cdlanhdao}}</td>
+        <th colspan="6">Người lập bảng</th>
+        <th colspan="6">{{$m_dv['cdlanhdao']}}</th>
     </tr>
     <tr style="font-style: italic">
-        <td style="text-align: center;" width="50%">(Ghi rõ họ tên)</td>
-        <td style="text-align: center;" width="50%">(Ký tên, đóng dấu)</td>
+        <th colspan="6">(Ghi rõ họ tên)</th>
+        <th colspan="6">(Ký tên, đóng dấu)</th>
     </tr>
     <tr>
-        <td><br><br><br></td>
+        <th></th>
     </tr>
 
     <tr>
-        <td style="text-align: center;" width="50%">{{$m_dv->nguoilapbieu}}</td>
-        <td style="text-align: center;" width="50%">{{$m_dv->lanhdao}}</td>
+        <th colspan="6">{{$m_dv['nguoilapbieu']}}</th>
+        <th colspan="6">{{$m_dv['lanhdao']}}</th>
     </tr>
 </table>
 

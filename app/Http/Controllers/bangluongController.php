@@ -957,6 +957,62 @@ class bangluongController extends Controller
             return view('errors.notlogin');
     }
 
+    public function printf_mau01_excel(Request $request){
+        if (Session::has('admin')) {
+            $inputs = $request->all();
+            $inputs['mabl'] = $inputs['mabl_mau1'];
+            $inputs['mapb'] = $inputs['mapb_mau1'];
+            $inputs['macvcq'] = $inputs['macvcq_mau1'];
+            $inputs['mact'] = $inputs['mact_mau1'];
+            $model = $this->getBangLuong($inputs);
+            //dd($inputs);
+            $mabl = $inputs['mabl'];
+            $m_bl = bangluong::select('thang','nam','mabl','madv','ngaylap')->where('mabl',$mabl)->first();
+            $m_dv = dmdonvi::where('madv',$m_bl->madv)->first();
+
+            $model_congtac = dmphanloaict::select('mact','tenct')
+                ->wherein('mact', function($query) use($mabl){
+                    $query->select('mact')->from('bangluong_ct')->where('mabl',$mabl);
+                })->get();
+
+            $thongtin=array('nguoilap'=>$m_bl->nguoilap,
+                'thang'=>$m_bl->thang,
+                'nam'=>$m_bl->nam,
+                'ngaylap'=>$m_bl->ngaylap);
+            //xử lý ẩn hiện cột phụ cấp => biết tổng số cột hiện => colspan trên báo cáo
+            $a_phucapbc = getColPhuCap_BaoCao();
+            $a_phucap = array();
+            $col = 0;
+            foreach($a_phucapbc as $key=>$val){
+                if($m_dv->$key <3) {
+                    $a_phucap[$key] = $val;
+                    $col++;
+                }
+            }
+
+            Excel::create('BANGLUONG_01',function($excel) use($m_dv,$thongtin,$model,$col,$model_congtac,$a_phucap){
+                $excel->sheet('New sheet', function($sheet) use($m_dv,$thongtin,$model,$col,$model_congtac,$a_phucap){
+                    $sheet->loadView('reports.bangluong.donvi.maubangluong_excel')
+                        ->with('model',$model->sortBy('stt'))
+                        ->with('model_pb',getPhongBan())
+                        ->with('m_dv',$m_dv)
+                        ->with('thongtin',$thongtin)
+                        ->with('col',$col)
+                        ->with('model_congtac',$model_congtac)
+                        ->with('a_phucap',$a_phucap)
+                        ->with('pageTitle','Bảng lương chi tiết');
+                    //$sheet->setPageMargin(0.25);
+                    $sheet->setAutoSize(false);
+                    $sheet->setFontFamily('Tahoma');
+                    $sheet->setFontBold(false);
+
+                    //$sheet->setColumnFormat(array('D' => '#,##0.00'));
+                });
+            })->download('xls');
+        } else
+            return view('errors.notlogin');
+    }
+
     public function printf_mau02(Request $request){
         if (Session::has('admin')) {
             $inputs = $request->all();
@@ -998,6 +1054,63 @@ class bangluongController extends Controller
                 ->with('model_congtac',$model_congtac)
                 ->with('a_phucap',$a_phucap)
                 ->with('pageTitle','Bảng lương chi tiết');
+        } else
+            return view('errors.notlogin');
+    }
+
+    public function printf_mau02_excel(Request $request){
+        if (Session::has('admin')) {
+            $inputs = $request->all();
+            $inputs['mabl'] = $inputs['mabl_mau2'];
+            $inputs['mapb'] = $inputs['mapb_mau2'];
+            $inputs['macvcq'] = $inputs['macvcq_mau2'];
+            $inputs['mact'] = $inputs['mact_mau2'];
+            $model = $this->getBangLuong($inputs,1);
+            //dd($inputs);
+            $mabl = $inputs['mabl'];
+            $m_bl = bangluong::select('thang','nam','mabl','madv','ngaylap')->where('mabl',$mabl)->first();
+            $m_dv = dmdonvi::where('madv',$m_bl->madv)->first();
+
+            $model_congtac = dmphanloaict::select('mact','tenct')
+                ->wherein('mact', function($query) use($mabl){
+                    $query->select('mact')->from('bangluong_ct')->where('mabl',$mabl);
+                })->get();
+
+            $thongtin=array('nguoilap'=>$m_bl->nguoilap,
+                'thang'=>$m_bl->thang,
+                'nam'=>$m_bl->nam,
+                'ngaylap'=>$m_bl->ngaylap);
+            //xử lý ẩn hiện cột phụ cấp => biết tổng số cột hiện => colspan trên báo cáo
+            $a_phucapbc = getColPhuCap_BaoCao();
+            $a_phucap = array();
+            $col = 0;
+            foreach($a_phucapbc as $key=>$val){
+                if($m_dv->$key <3) {
+                    $a_phucap[$key] = $val;
+                    $col++;
+                }
+            }
+
+            Excel::create('BANGLUONG_02',function($excel) use($m_dv,$thongtin,$model,$col,$model_congtac,$a_phucap){
+                $excel->sheet('New sheet', function($sheet) use($m_dv,$thongtin,$model,$col,$model_congtac,$a_phucap){
+                    $sheet->loadView('reports.bangluong.donvi.maubangluong_sotien_excel')
+                        ->with('model',$model->sortBy('stt'))
+                        ->with('model_pb',getPhongBan())
+                        ->with('m_dv',$m_dv)
+                        ->with('thongtin',$thongtin)
+                        ->with('col',$col)
+                        ->with('model_congtac',$model_congtac)
+                        ->with('a_phucap',$a_phucap)
+                        ->with('pageTitle','Bảng lương chi tiết');
+                    //$sheet->setPageMargin(0.25);
+                    $sheet->setAutoSize(false);
+                    $sheet->setFontFamily('Tahoma');
+                    $sheet->setFontBold(false);
+
+                    //$sheet->setColumnFormat(array('D' => '#,##0.00'));
+                });
+            })->download('xls');
+
         } else
             return view('errors.notlogin');
     }
@@ -1047,6 +1160,63 @@ class bangluongController extends Controller
             return view('errors.notlogin');
     }
 
+    public function printf_mau03_excel(Request $request){
+        if (Session::has('admin')) {
+            $inputs = $request->all();
+            $inputs['mabl'] = $inputs['mabl_mau3'];
+            $inputs['mapb'] = $inputs['mapb_mau3'];
+            $inputs['macvcq'] = $inputs['macvcq_mau3'];
+            $inputs['mact'] = $inputs['mact_mau3'];
+            $model = $this->getBangLuong($inputs);
+            //dd($inputs);
+            $mabl = $inputs['mabl'];
+            $m_bl = bangluong::select('thang','nam','mabl','madv','ngaylap')->where('mabl',$mabl)->first();
+            $m_dv = dmdonvi::where('madv',$m_bl->madv)->first();
+
+            $model_congtac = dmphanloaict::select('mact','tenct')
+                ->wherein('mact', function($query) use($mabl){
+                    $query->select('mact')->from('bangluong_ct')->where('mabl',$mabl);
+                })->get();
+
+            $thongtin=array('nguoilap'=>$m_bl->nguoilap,
+                'thang'=>$m_bl->thang,
+                'nam'=>$m_bl->nam,
+                'ngaylap'=>$m_bl->ngaylap);
+            //xử lý ẩn hiện cột phụ cấp => biết tổng số cột hiện => colspan trên báo cáo
+            $a_phucapbc = getColPhuCap_BaoCao();
+            $a_phucap = array();
+            $col = 0;
+            foreach($a_phucapbc as $key=>$val){
+                if($m_dv->$key <3) {
+                    $a_phucap[$key] = $val;
+                    $col++;
+                }
+            }
+
+            Excel::create('BANGLUONG_03',function($excel) use($m_dv,$thongtin,$model,$col,$model_congtac,$a_phucap){
+                $excel->sheet('New sheet', function($sheet) use($m_dv,$thongtin,$model,$col,$model_congtac,$a_phucap){
+                    $sheet->loadView('reports.bangluong.donvi.maulangson_excel')
+                        ->with('model',$model->sortBy('stt'))
+                        ->with('model_pb',getPhongBan())
+                        ->with('m_dv',$m_dv)
+                        ->with('thongtin',$thongtin)
+                        ->with('col',$col)
+                        ->with('model_congtac',$model_congtac)
+                        ->with('a_phucap',$a_phucap)
+                        ->with('pageTitle','Bảng lương chi tiết');
+                    //$sheet->setPageMargin(0.25);
+                    $sheet->setAutoSize(false);
+                    $sheet->setFontFamily('Tahoma');
+                    $sheet->setFontBold(false);
+
+                    //$sheet->setColumnFormat(array('D' => '#,##0.00'));
+                });
+            })->download('xls');
+
+        } else
+            return view('errors.notlogin');
+    }
+
     public function printf_mau04(Request $request){
         if (Session::has('admin')) {
             $inputs = $request->all();
@@ -1092,6 +1262,63 @@ class bangluongController extends Controller
             return view('errors.notlogin');
     }
 
+    public function printf_mau04_excel(Request $request){
+        if (Session::has('admin')) {
+            $inputs = $request->all();
+            $inputs['mabl'] = $inputs['mabl_mau4'];
+            $inputs['mapb'] = $inputs['mapb_mau4'];
+            $inputs['macvcq'] = $inputs['macvcq_mau4'];
+            $inputs['mact'] = $inputs['mact_mau4'];
+            $model = $this->getBangLuong($inputs);
+            //dd($inputs);
+            $mabl = $inputs['mabl'];
+            $m_bl = bangluong::select('thang','nam','mabl','madv','ngaylap')->where('mabl',$mabl)->first();
+            $m_dv = dmdonvi::where('madv',$m_bl->madv)->first();
+
+            $model_congtac = dmphanloaict::select('mact','tenct')
+                ->wherein('mact', function($query) use($mabl){
+                    $query->select('mact')->from('bangluong_ct')->where('mabl',$mabl);
+                })->get();
+
+            $thongtin=array('nguoilap'=>$m_bl->nguoilap,
+                'thang'=>$m_bl->thang,
+                'nam'=>$m_bl->nam,
+                'ngaylap'=>$m_bl->ngaylap);
+            //xử lý ẩn hiện cột phụ cấp => biết tổng số cột hiện => colspan trên báo cáo
+            $a_phucapbc = getColPhuCap_BaoCao();
+            $a_phucap = array();
+            $col = 0;
+            foreach($a_phucapbc as $key=>$val){
+                if($m_dv->$key <3) {
+                    $a_phucap[$key] = $val;
+                    $col++;
+                }
+            }
+
+            Excel::create('BANGLUONG_04',function($excel) use($m_dv,$thongtin,$model,$col,$model_congtac,$a_phucap){
+                $excel->sheet('New sheet', function($sheet) use($m_dv,$thongtin,$model,$col,$model_congtac,$a_phucap){
+                    $sheet->loadView('reports.bangluong.donvi.maubangluong_phongban_excel')
+                        ->with('model',$model->sortBy('stt'))
+                        ->with('model_pb',getPhongBan())
+                        ->with('m_dv',$m_dv)
+                        ->with('thongtin',$thongtin)
+                        ->with('col',$col)
+                        ->with('model_congtac',$model_congtac)
+                        ->with('a_phucap',$a_phucap)
+                        ->with('pageTitle','Bảng lương chi tiết');
+                    //$sheet->setPageMargin(0.25);
+                    $sheet->setAutoSize(false);
+                    $sheet->setFontFamily('Tahoma');
+                    $sheet->setFontBold(false);
+
+                    //$sheet->setColumnFormat(array('D' => '#,##0.00'));
+                });
+            })->download('xls');
+
+        } else
+            return view('errors.notlogin');
+    }
+
     public function printf_mau05(Request $request){
         if (Session::has('admin')) {
             $inputs = $request->all();
@@ -1105,7 +1332,6 @@ class bangluongController extends Controller
             $m_bl = bangluong::select('thang','nam','mabl','madv','ngaylap')->where('mabl',$mabl)->first();
             $m_dv = dmdonvi::where('madv',$m_bl->madv)->first();
             $m_dv->tendvcq = getTenDB($m_dv->madvbc);
-
 
             $model_congtac = dmphanloaict::select('mact','tenct')
                 ->wherein('mact', function($query) use($mabl){
@@ -1140,6 +1366,79 @@ class bangluongController extends Controller
             return view('errors.notlogin');
     }
 
+    public function printf_mau05_excel(Request $request){
+        if (Session::has('admin')) {
+            $inputs = $request->all();
+            $inputs['mabl'] = $inputs['mabl_mau5'];
+            $inputs['mapb'] = $inputs['mapb_mau5'];
+            $inputs['macvcq'] = $inputs['macvcq_mau5'];
+            $inputs['mact'] = $inputs['mact_mau5'];
+            $model = $this->getBangLuong($inputs);
+            //dd($inputs);
+            $mabl = $inputs['mabl'];
+            $m_bl = bangluong::select('thang','nam','mabl','madv','ngaylap')->where('mabl',$mabl)->first();
+            $m_dv = dmdonvi::where('madv',$m_bl->madv)->first();
+            $m_dv->tendvcq = getTenDB($m_dv->madvbc);
+
+            $model_congtac = dmphanloaict::select('mact','tenct')
+                ->wherein('mact', function($query) use($mabl){
+                    $query->select('mact')->from('bangluong_ct')->where('mabl',$mabl);
+                })->get();
+
+            $thongtin=array('nguoilap'=>$m_bl->nguoilap,
+                'thang'=>$m_bl->thang,
+                'nam'=>$m_bl->nam,
+                'ngaylap'=>$m_bl->ngaylap);
+            //xử lý ẩn hiện cột phụ cấp => biết tổng số cột hiện => colspan trên báo cáo
+            $a_phucapbc = getColPhuCap_BaoCao();
+            $a_phucap = array();
+            $col = 0;
+            foreach($a_phucapbc as $key=>$val){
+                if($m_dv->$key <3) {
+                    $a_phucap[$key] = $val;
+                    $col++;
+                }
+            }
+
+            Excel::create('BANGLUONG_05',function($excel) use($m_dv,$thongtin,$model,$col,$model_congtac,$a_phucap){
+                $excel->sheet('New sheet', function($sheet) use($m_dv,$thongtin,$model,$col,$model_congtac,$a_phucap){
+                    $sheet->loadView('reports.bangluong.donvi.mau05_excel')
+                        ->with('model',$model->sortBy('stt'))
+                        ->with('model_pb',getPhongBan())
+                        ->with('m_dv',$m_dv)
+                        ->with('thongtin',$thongtin)
+                        ->with('col',$col)
+                        ->with('model_congtac',$model_congtac)
+                        ->with('a_phucap',$a_phucap)
+                        ->with('pageTitle','Bảng lương chi tiết');
+                    //$sheet->setPageMargin(0.25);
+                    //$sheet->setAutoSize(false);
+                    $sheet->setFontFamily('Tahoma');
+                    $sheet->setFontBold(false);
+                    //$sheet->setAllBorders('thin');
+
+                    $sheet->setWidth('C', 10);
+                    $sheet->setWidth('D', 30);
+                    $sheet->setWidth('E', 15);
+
+                    /*
+                    $sheet->mergeCells('Q20:R20');
+                    $sheet->setMergeColumn(array(
+                        'columns' => ['Q'],
+                        'rows' => [
+                            [20, 21]
+                        ]
+                    ));
+                    */
+
+                    //$sheet->setColumnFormat(array('D' => '#,##0.00'));
+                });
+            })->download('xls');
+
+        } else
+            return view('errors.notlogin');
+    }
+
     public function printf_mau06(Request $request){
         if (Session::has('admin')) {
             $inputs = $request->all();
@@ -1153,6 +1452,7 @@ class bangluongController extends Controller
             $model_phucap = bangluong_phucap::where('mabl', $mabl)->get();
             $m_bl = bangluong::select('thang','nam','mabl','madv','ngaylap','luongcoban')->where('mabl',$mabl)->first();
             $m_dv = dmdonvi::where('madv',$m_bl->madv)->first();
+            $m_dv->tendvcq = getTenDB($m_dv->madvbc);
             $model_tm = dmtieumuc_default::all();
 
             $model_congtac = dmphanloaict::select('mact','tenct')
@@ -1223,6 +1523,100 @@ class bangluongController extends Controller
             return view('errors.notlogin');
     }
 
+    public function printf_mau06_excel(Request $request){
+        if (Session::has('admin')) {
+            $inputs = $request->all();
+            $inputs['mabl'] = $inputs['mabl_mau6'];
+            $inputs['mapb'] = $inputs['mapb_mau6'];
+            $inputs['macvcq'] = $inputs['macvcq_mau6'];
+            $inputs['mact'] = $inputs['mact_mau6'];
+            $model = $this->getBangLuong($inputs);
+            //dd($inputs);
+            $mabl = $inputs['mabl'];
+            $model_phucap = bangluong_phucap::where('mabl', $mabl)->get();
+            $m_bl = bangluong::select('thang','nam','mabl','madv','ngaylap','luongcoban')->where('mabl',$mabl)->first();
+            $m_dv = dmdonvi::where('madv',$m_bl->madv)->first();
+            $m_dv->tendvcq = getTenDB($m_dv->madvbc);
+            $model_tm = dmtieumuc_default::all();
+
+            $model_congtac = dmphanloaict::select('mact','tenct')
+                ->wherein('mact', function($query) use($mabl){
+                    $query->select('mact')->from('bangluong_ct')->where('mabl',$mabl);
+                })->get();
+
+            $thongtin=array('nguoilap'=>$m_bl->nguoilap,
+                'thang'=>$m_bl->thang,
+                'nam'=>$m_bl->nam,
+                'ngaylap'=>$m_bl->ngaylap);
+            //xử lý ẩn hiện cột phụ cấp => biết tổng số cột hiện => colspan trên báo cáo
+            $a_phucapbc = getColPhuCap_BaoCao();
+            $a_phucap = array();
+            $col = 0;
+            foreach($a_phucapbc as $key=>$val){
+                if($m_dv->$key <3) {
+                    $a_phucap[$key] = $val;
+                    $col++;
+                }
+            }
+
+            foreach($model_tm as $tm) {
+                $m_tinhtoan = $model;
+                //check sự nghiệp
+                if ($tm->sunghiep != 'ALL' && $tm->sunghiep != 'null') {
+                    $m_tinhtoan = $m_tinhtoan->where('sunghiep', $tm->sunghiep);
+                }
+
+                //check mã công tác
+                if ($tm->macongtac != 'ALL' && $tm->macongtac != 'null') {
+                    $m_tinhtoan = $m_tinhtoan->where('macongtac', $tm->macongtac);
+                }
+                $a_canbo = (array_column($m_tinhtoan->toarray(), 'macanbo'));
+                //check loại phụ cấp
+                if($tm->mapc == 'heso'){
+                    $phucap = $model_phucap->wherein('macanbo', $a_canbo)->wherein('maso', ['heso','vuotkhung']);
+                }else{
+                    $phucap = $model_phucap->wherein('macanbo', $a_canbo)->wherein('maso', $tm->mapc);
+                }
+
+                $tm->heso = $phucap->sum('heso');
+                $tm->sotien = $phucap->sum('sotien');
+                $tm->stbhxh = $phucap->sum('stbhxh');
+                $tm->stbhyt = $phucap->sum('stbhyt');
+                $tm->stkpcd = $phucap->sum('stkpcd');
+                $tm->stbhtn = $phucap->sum('stbhtn');
+                $tm->ttbh = $phucap->sum('ttbh');
+                $tm->stbhxh_dv = $phucap->sum('stbhxh_dv');
+                $tm->stbhyt_dv = $phucap->sum('stbhyt_dv');
+                $tm->stkpcd_dv = $phucap->sum('stkpcd_dv');
+                $tm->stbhtn_dv = $phucap->sum('stbhtn_dv');
+                $tm->ttbh_dv = $phucap->sum('ttbh_dv');
+            }
+
+            Excel::create('BANGLUONG_06',function($excel) use($m_dv,$thongtin,$model,$col,$model_congtac,$a_phucap, $model_tm){
+                $excel->sheet('New sheet', function($sheet) use($m_dv,$thongtin,$model,$col,$model_congtac,$a_phucap, $model_tm){
+                    $sheet->loadView('reports.bangluong.donvi.mau06_excel')
+                        ->with('model',$model->sortBy('stt'))
+                        ->with('model_tm',$model_tm->where('sotien','>',0))
+                        ->with('model_pb',getPhongBan())
+                        ->with('m_dv',$m_dv)
+                        ->with('thongtin',$thongtin)
+                        ->with('col',$col)
+                        ->with('model_congtac',$model_congtac)
+                        ->with('a_phucap',$a_phucap)
+                        ->with('pageTitle','Bảng lương chi tiết');
+                    //$sheet->setPageMargin(0.25);
+                    $sheet->setAutoSize(false);
+                    $sheet->setFontFamily('Tahoma');
+                    $sheet->setFontBold(false);
+
+                    //$sheet->setColumnFormat(array('D' => '#,##0.00'));
+                });
+            })->download('xls');
+
+        } else
+            return view('errors.notlogin');
+    }
+
     public function printf_mauds(Request $request){
         if (Session::has('admin')) {
             $inputs = $request->all();
@@ -1262,6 +1656,59 @@ class bangluongController extends Controller
             return view('errors.notlogin');
     }
 
+    public function printf_mauds_excel(Request $request){
+        if (Session::has('admin')) {
+            $inputs = $request->all();
+            $inputs['mabl'] = $inputs['mabl_mauds'];
+            $inputs['mapb'] = $inputs['mapb_mauds'];
+            $inputs['macvcq'] = $inputs['macvcq_mauds'];
+            $inputs['mact'] = $inputs['mact_mauds'];
+
+            $mabl = $inputs['mabl'];
+            $m_bl = bangluong::select('thang','nam','mabl','madv','ngaylap')->where('mabl',$mabl)->first();
+            $model = bangluong_ct::where('mabl',$mabl)->get();
+            $model_hoso = hosocanbo::where('madv',$m_bl->madv)->get();
+            foreach($model as $ct) {
+                $hoso = $model_hoso->where('macanbo', $ct->macanbo)->first();
+                $ct->sotk = count($hoso) > 0 ? $hoso->sotk : null;
+            }
+            $m_dv = dmdonvi::where('madv',$m_bl->madv)->first();
+
+            $model_congtac = dmphanloaict::select('mact','tenct')
+                ->wherein('mact', function($query) use($mabl){
+                    $query->select('mact')->from('bangluong_ct')->where('mabl',$mabl);
+                })->get();
+
+            $thongtin=array('nguoilap'=>$m_bl->nguoilap,
+                'thang'=>$m_bl->thang,
+                'nam'=>$m_bl->nam,
+                'ngaylap'=>$m_bl->ngaylap);
+
+
+
+            Excel::create('DSCHITRA',function($excel) use($m_dv,$thongtin,$model,$model_congtac){
+                $excel->sheet('New sheet', function($sheet) use($m_dv,$thongtin,$model,$model_congtac){
+                    $sheet->loadView('reports.bangluong.donvi.maudschitra')
+                        ->with('model',$model->sortBy('stt'))
+                        ->with('model_pb',getPhongBan())
+                        ->with('m_dv',$m_dv)
+                        ->with('thongtin',$thongtin)
+                        ->with('model_congtac',$model_congtac)
+                        ->with('pageTitle','DS CHI TRA');
+                    //$sheet->setPageMargin(0.25);
+                    $sheet->setAutoSize(false);
+                    $sheet->setFontFamily('Tahoma');
+                    $sheet->setFontBold(false);
+
+                    //$sheet->setColumnFormat(array('D' => '#,##0.00'));
+                });
+            })->download('xls');
+
+        } else
+            return view('errors.notlogin');
+
+    }
+
     function printf_maubh(Request $request){
         if (Session::has('admin')) {
 
@@ -1299,6 +1746,241 @@ class bangluongController extends Controller
                 ->with('thongtin',$thongtin)
                 ->with('model_congtac',$model_congtac)
                 ->with('pageTitle','Bảng trích nộp bảo hiểm chi tiết');
+        } else
+            return view('errors.notlogin');
+    }
+
+    //chưa làm xuất bh ra excel
+    function printf_maubh_excel(Request $request){
+        if (Session::has('admin')) {
+
+            $inputs = $request->all();
+            $inputs['mabl'] = $inputs['mabl_maubh'];
+            $inputs['mapb'] = $inputs['mapb_maubh'];
+            $inputs['macvcq'] = $inputs['macvcq_maubh'];
+            $inputs['mact'] = $inputs['mact_maubh'];
+
+            $mabl = $inputs['mabl'];
+            $m_bl = bangluong::select('thang','nam','mabl','madv','ngaylap')->where('mabl',$mabl)->first();
+            $model = $this->getBangLuong($inputs);
+            //$model_hoso = hosocanbo::where('madv',$m_bl->madv)->get();
+            $model_congtac = dmphanloaict::select('mact','tenct')
+                ->wherein('mact', function($query) use($mabl){
+                    $query->select('mact')->from('bangluong_ct')->where('mabl',$mabl);
+                })->get();
+
+
+            //dd($request->all());
+
+            $m_dv=dmdonvi::where('madv',$m_bl->madv)->first();
+
+            $dmchucvucq=dmchucvucq::all('tencv', 'macvcq')->toArray();
+            foreach($model as $hs){
+                $hs->tencv=getInfoChucVuCQ($hs,$dmchucvucq);
+            }
+            $thongtin=array('nguoilap'=>session('admin')->name,
+                'thang'=>$m_bl->thang,
+                'nam'=>$m_bl->nam);
+            return view('reports.bangluong.maubaohiem')
+                ->with('model',$model->sortBy('stt'))
+                ->with('model_pb',getPhongBan())
+                ->with('m_dv',$m_dv)
+                ->with('thongtin',$thongtin)
+                ->with('model_congtac',$model_congtac)
+                ->with('pageTitle','Bảng trích nộp bảo hiểm chi tiết');
+        } else
+            return view('errors.notlogin');
+    }
+
+    public function printf_maudbhdnd(Request $request){
+        if (Session::has('admin')) {
+            $inputs = $request->all();
+            $inputs['mabl'] = $inputs['mabl_maudbhdnd'];
+            //$inputs['mapb'] = $inputs['mapb_maudbhdnd'];
+            //$inputs['macvcq'] = $inputs['macvcq_maudbhdnd'];
+            //$inputs['mact'] = $inputs['mact_maudbhdnd'];
+
+            $mabl = $inputs['mabl'];
+            $m_bl = bangluong::select('thang','nam','mabl','madv','ngaylap','luongcoban')->where('mabl',$mabl)->first();
+            $model = bangluong_ct::where('mabl',$mabl)->get();
+            $model_hoso = hosocanbo::where('madv',$m_bl->madv)->get();
+
+            foreach($model as $ct) {
+                $ct->luongcb = $m_bl->luongcoban;
+                $hoso = $model_hoso->where('macanbo', $ct->macanbo)->first();
+                $ct->sotk = count($hoso) > 0 ? $hoso->sotk : null;
+                $ct->lvtd = count($hoso) > 0 ? $hoso->lvtd : null;
+                $ct->hspc = count($hoso) > 0 ? $hoso->pcdbqh : null;
+            }
+            $model = $model->where('hspc','>',0);
+            $m_dv = dmdonvi::where('madv',$m_bl->madv)->first();
+            $m_dv->tendvcq = getTenDB($m_dv->madvbc);
+
+            $thongtin=array('nguoilap'=>$m_bl->nguoilap,
+                'thang'=>$m_bl->thang,
+                'nam'=>$m_bl->nam,
+                'ngaylap'=>$m_bl->ngaylap,
+                'luongcb' => $m_bl->luongcoban);
+
+            return view('reports.bangluong.donvi.maudbhdnd')
+                ->with('model',$model->sortBy('stt'))
+                ->with('m_dv',$m_dv)
+                ->with('thongtin',$thongtin)
+                ->with('pageTitle','Bảng lương chi tiết');
+        } else
+            return view('errors.notlogin');
+    }
+
+    public function printf_maudbhdnd_excel(Request $request){
+        if (Session::has('admin')) {
+            $inputs = $request->all();
+            $inputs['mabl'] = $inputs['mabl_maudbhdnd'];
+            //$inputs['mapb'] = $inputs['mapb_maudbhdnd'];
+            //$inputs['macvcq'] = $inputs['macvcq_maudbhdnd'];
+            //$inputs['mact'] = $inputs['mact_maudbhdnd'];
+
+            $mabl = $inputs['mabl'];
+            $m_bl = bangluong::select('thang','nam','mabl','madv','ngaylap','luongcoban')->where('mabl',$mabl)->first();
+            $model = bangluong_ct::where('mabl',$mabl)->get();
+            $model_hoso = hosocanbo::where('madv',$m_bl->madv)->get();
+
+            foreach($model as $ct) {
+                $ct->luongcb = $m_bl->luongcoban;
+                $hoso = $model_hoso->where('macanbo', $ct->macanbo)->first();
+                $ct->sotk = count($hoso) > 0 ? $hoso->sotk : null;
+                $ct->lvtd = count($hoso) > 0 ? $hoso->lvtd : null;
+                $ct->hspc = count($hoso) > 0 ? $hoso->pcdbqh : null;
+            }
+            $model = $model->where('hspc','>',0);
+
+            $m_dv = dmdonvi::where('madv',$m_bl->madv)->first();
+            $m_dv->tendvcq = getTenDB($m_dv->madvbc);
+
+            $thongtin=array('nguoilap'=>$m_bl->nguoilap,
+                'thang'=>$m_bl->thang,
+                'nam'=>$m_bl->nam,
+                'ngaylap'=>$m_bl->ngaylap,
+                'luongcb' => $m_bl->luongcoban);
+
+            Excel::create('PC ĐBHĐND',function($excel) use($m_dv,$thongtin,$model){
+                $excel->sheet('New sheet', function($sheet) use($m_dv,$thongtin,$model){
+                    $sheet->loadView('reports.bangluong.donvi.maudbhdnd')
+                        ->with('model',$model->sortBy('stt'))
+                        ->with('m_dv',$m_dv)
+                        ->with('thongtin',$thongtin)
+                        ->with('pageTitle','DS CHI TRA');
+                    //$sheet->setPageMargin(0.25);
+                    $sheet->setAutoSize(false);
+                    $sheet->setFontFamily('Tahoma');
+                    $sheet->setFontBold(false);
+
+                    //$sheet->setColumnFormat(array('D' => '#,##0.00'));
+                });
+            })->download('xls');
+
+        } else
+            return view('errors.notlogin');
+    }
+
+    public function printf_maublpc(Request $request)
+    {
+        if (Session::has('admin')) {
+            $inputs = $request->all();
+            $inputs['mabl'] = $inputs['mabl_maublpc'];
+            $inputs['mapb'] = $inputs['mapb_maublpc'];
+            $inputs['macvcq'] = $inputs['macvcq_maublpc'];
+            $inputs['mact'] = $inputs['mact_maublpc'];
+            $model = $this->getBangLuong($inputs);
+
+            $mabl = $inputs['mabl'];
+            $m_bl = bangluong::select('thang', 'nam', 'mabl', 'madv', 'ngaylap', 'luongcoban')->where('mabl', $mabl)->first();
+
+            //$model = bangluong_ct::where('mabl', $mabl)->get();
+            $model_hoso = hosocanbo::where('madv', $m_bl->madv)->get();
+            $a_chucvu = getChucVuCQ();
+
+            $tencv = isset($a_chucvu[$inputs['macvcq']]) ? $a_chucvu[$inputs['macvcq']]:'';
+            $tencv = strlen($inputs['macvcq'])==0? 'Tất cả các chức vụ':$tencv;
+
+            foreach ($model as $ct) {
+                $ct->luongcb = $m_bl->luongcoban;
+                $hoso = $model_hoso->where('macanbo', $ct->macanbo)->first();
+                $ct->sotk = count($hoso) > 0 ? $hoso->sotk : null;
+                $ct->lvtd = count($hoso) > 0 ? $hoso->lvtd : null;
+            }
+            $model = $model->where('heso', '>', 0);
+            $m_dv = dmdonvi::where('madv', $m_bl->madv)->first();
+            $m_dv->tendvcq = getTenDB($m_dv->madvbc);
+
+            $thongtin = array('nguoilap' => $m_bl->nguoilap,
+                'thang' => $m_bl->thang,
+                'nam' => $m_bl->nam,
+                'ngaylap' => $m_bl->ngaylap,
+                'luongcb' => $m_bl->luongcoban,
+                'tencv' => Str::upper($tencv));
+
+            return view('reports.bangluong.donvi.maublpc')
+                ->with('model', $model->sortBy('stt'))
+                ->with('m_dv', $m_dv)
+                ->with('thongtin', $thongtin)
+                ->with('pageTitle', 'Bảng lương chi tiết');
+        } else
+            return view('errors.notlogin');
+    }
+
+    public function printf_maublpc_excel(Request $request)
+    {
+        if (Session::has('admin')) {
+            $inputs = $request->all();
+            $inputs['mabl'] = $inputs['mabl_maublpc'];
+            $inputs['mapb'] = $inputs['mapb_maublpc'];
+            $inputs['macvcq'] = $inputs['macvcq_maublpc'];
+            $inputs['mact'] = $inputs['mact_maublpc'];
+            $model = $this->getBangLuong($inputs);
+
+            $mabl = $inputs['mabl'];
+            $m_bl = bangluong::select('thang', 'nam', 'mabl', 'madv', 'ngaylap', 'luongcoban')->where('mabl', $mabl)->first();
+
+            //$model = bangluong_ct::where('mabl', $mabl)->get();
+            $model_hoso = hosocanbo::where('madv', $m_bl->madv)->get();
+            $a_chucvu = getChucVuCQ();
+
+            $tencv = isset($a_chucvu[$inputs['macvcq']]) ? $a_chucvu[$inputs['macvcq']]:'';
+            $tencv = strlen($inputs['macvcq'])==0? 'Tất cả các chức vụ':$tencv;
+
+            foreach ($model as $ct) {
+                $ct->luongcb = $m_bl->luongcoban;
+                $hoso = $model_hoso->where('macanbo', $ct->macanbo)->first();
+                $ct->sotk = count($hoso) > 0 ? $hoso->sotk : null;
+                $ct->lvtd = count($hoso) > 0 ? $hoso->lvtd : null;
+            }
+            $model = $model->where('heso', '>', 0);
+            $m_dv = dmdonvi::where('madv', $m_bl->madv)->first();
+            $m_dv->tendvcq = getTenDB($m_dv->madvbc);
+
+            $thongtin = array('nguoilap' => $m_bl->nguoilap,
+                'thang' => $m_bl->thang,
+                'nam' => $m_bl->nam,
+                'ngaylap' => $m_bl->ngaylap,
+                'luongcb' => $m_bl->luongcoban,
+                'tencv' => Str::upper($tencv));
+
+            Excel::create('BANGLUONG',function($excel) use($m_dv,$thongtin,$model){
+                $excel->sheet('New sheet', function($sheet) use($m_dv,$thongtin,$model){
+                    $sheet->loadView('reports.bangluong.donvi.maublpc')
+                        ->with('model', $model->sortBy('stt'))
+                        ->with('m_dv', $m_dv)
+                        ->with('thongtin', $thongtin)
+                        ->with('pageTitle','DS CHI TRA');
+                    //$sheet->setPageMargin(0.25);
+                    $sheet->setAutoSize(false);
+                    $sheet->setFontFamily('Tahoma');
+                    $sheet->setFontBold(false);
+
+                    //$sheet->setColumnFormat(array('D' => '#,##0.00'));
+                });
+            })->download('xls');
+
         } else
             return view('errors.notlogin');
     }
@@ -1543,4 +2225,95 @@ class bangluongController extends Controller
             return view('errors.notlogin');
     }
     //</editor-fold>
+
+    public function dvltbc1_excel(Request $request){
+        if (Session::has('admin')) {
+            $input = $request->all();
+            if(session('admin')->level == 'T'){
+                if($input['cqcq']=='all') {
+                    $m_cqcq = DmDvQl::where('plql','TC')->get();
+                    $modelcqcq = DmDvQl::where('maqhns',session('admin')->cqcq)->first();
+                } else {
+                    $m_cqcq = DmDvQl::where('maqhns',$input['cqcq'])->get();
+                    $modelcqcq = DmDvQl::where('maqhns',$input['cqcq'])->first();
+                }
+            }else{
+                $m_cqcq = DmDvQl::where('maqhns',session('admin')->cqcq)->get();
+                $modelcqcq = DmDvQl::where('maqhns',session('admin')->cqcq)->first();
+            }
+
+            $model=$this->get_KKG_TH($input);
+            Excel::create('BaoCao1',function($excel) use($modelcqcq,$input,$model,$m_cqcq){
+                $excel->sheet('New sheet', function($sheet) use($modelcqcq,$input,$model,$m_cqcq){
+                    $sheet->loadView('reports.kkgdvlt.bcth.BC1')
+                        ->with('modelcqcq',$modelcqcq)
+                        ->with('input',$input)
+                        ->with('model',$model)
+                        ->with('m_cqcq',$m_cqcq)
+                        ->with('pageTitle','Báo cáo thống kê');
+                    //$sheet->setPageMargin(0.25);
+                    $sheet->setAutoSize(false);
+                    $sheet->setFontFamily('Tahoma');
+                    $sheet->setFontBold(false);
+
+                    $sheet->setWidth('C', 10);
+                    $sheet->setWidth('D', 30);
+                    $sheet->setWidth('E', 15);
+                    $sheet->setWidth('F', 15);
+                    $sheet->setWidth('G', 15);
+                    $sheet->setWidth('H', 15);
+                    $sheet->setWidth('I', 15);
+                    //$sheet->setColumnFormat(array('D' => '#,##0.00'));
+                });
+            })->download('xls');
+
+        }else
+            return view('errors.notlogin');
+    }
+
+    public function dvltbc2_excel(Request $request){
+        if (Session::has('admin')) {
+            $input = $request->all();
+            //dd($input);
+            if(session('admin')->level == 'T'){
+                if($input['cqcq']=='all') {
+                    $m_cqcq = DmDvQl::where('plql','TC')->get();
+                    $modelcqcq = DmDvQl::where('maqhns',session('admin')->cqcq)->first();
+                } else {
+                    $m_cqcq = DmDvQl::where('maqhns',$input['cqcq'])->get();
+                    $modelcqcq = DmDvQl::where('maqhns',$input['cqcq'])->first();
+                }
+            }else{
+                $m_cqcq = DmDvQl::where('maqhns',session('admin')->cqcq)->get();
+                $modelcqcq = DmDvQl::where('maqhns',session('admin')->cqcq)->first();
+            }
+            $model=$this->get_KKG_TH($input);
+
+            $mahss = '';
+            foreach($model as $kk){
+                $mahss = $mahss.$kk->mahs.',';
+            }
+            $modelctkk = KkGDvLtCt::whereIn('mahs',explode(',',$mahss))->get();
+
+            Excel::create('BaoCao2',function($excel) use($modelcqcq,$input,$model,$m_cqcq,$modelctkk){
+                $excel->sheet('New sheet', function($sheet) use($modelcqcq,$input,$model,$m_cqcq,$modelctkk){
+                    $sheet->loadView('reports.kkgdvlt.bcth.BC2')
+                        ->with('modelcqcq',$modelcqcq)
+                        ->with('input',$input)
+                        ->with('model',$model)
+                        ->with('m_cqcq',$m_cqcq)
+                        ->with('modelctkk',$modelctkk)
+                        ->with('pageTitle','Báo cáo');
+                    //$sheet->setPageMargin(0.25);
+                    $sheet->setAutoSize(false);
+                    $sheet->setFontFamily('Tahoma');
+                    $sheet->setFontBold(false);
+
+                    //$sheet->setColumnFormat(array('D' => '#,##0.00'));
+                });
+            })->download('xls');
+
+        }else
+            return view('errors.notlogin');
+    }
 }

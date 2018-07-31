@@ -9,10 +9,11 @@ class dutoanluong extends Model
     protected $table = 'dutoanluong';
     protected $fillable = [
         'id',
+        'masodv',
+        'masok',
+        'masoh',
+        'masot',
         'namns',
-        'luongnb',
-        'luonghs',
-        'luongbh',
         'luongnb_dt',
         'luonghs_dt',
         'luongbh_dt',

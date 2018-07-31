@@ -45,119 +45,167 @@
                 display: none !important;
             }
         }
+
+        tr > td {
+            border: 1px solid;
+        }
     </style>
 </head>
 
-<div class="in" style="margin-right: 20px; text-align: right">
-    <button type="submit" onclick=" window.print()"> In bảng lương</button>
-</div>
 
 <body style="font:normal 12px Times, serif;">
 
 <table class="header" width="96%" border="0" cellspacing="0" cellpadding="8" style="margin:0 auto 25px; text-align: center;">
     <tr>
-        <td  style="text-align: left;width: 60%">
-            <b>Đơn vị chủ quản: {{$m_dv->tenct}}</b>
-        </td>
-        <td  style="text-align: center;">
+        <th colspan="6" style="text-align: left;width: 60%">
+            <b>{{$m_dv->tendvcq}}</b>
+        </th>
 
-        </td>
+        <th colspan="6" style="text-align: center; font-weight: bold">
+            Mẫu số C02- HD
+        </th>
+    </tr>
+    <tr>
+        <th colspan="6" style="text-align: left;width: 60%">
+            <b>{{$m_dv->tendv}}</b>
+        </th>
 
+        <th colspan="6" style="text-align: center; font-style: italic">
+            Ban hành kèm theo Thông tư số 107/2017/TT- BTC ngày 10/10/2017 của Bộ Tài chính
+        </th>
     </tr>
 
     <tr>
-        <td style="text-align: left;width: 60%">
-            <b>Đơn vị: {{$m_dv->tendv}}</b>
-        </td>
-
-        <td style="text-align: center; font-style: italic">
-
-        </td>
-    </tr>
-    <tr>
-        <td style="text-align: left;width: 60%">
+        <th colspan="6" style="text-align: left;width: 60%">
             <b>Mã đơn vị SDNS: {{$m_dv->maqhns}}</b>
-        </td>
-
-        <td style="text-align: center; font-style: italic">
-
-        </td>
-    </tr>
-</table>
-<p style="text-align: center; font-weight: bold; font-size: 20px;">BẢNG THANH TOÁN TIỀN LƯƠNG VÀ PHỤ CẤP</p>
-<p style="text-align: center; font-style: italic">Tháng {{$thongtin['thang']}} năm {{$thongtin['nam']}}</p>
-
-<table class="money" cellspacing="0" cellpadding="0" border="1" style="margin: 20px auto; border-collapse: collapse;">
-    <tr style="padding-left: 2px;padding-right: 2px">
-        <th style="width: 2%;" rowspan="4">S</br>T</br>T</th>
-        <th style="width: 6%;" rowspan="4">Mã số</br>CBCC, viên</br>chức</th>
-        <th style="width: 10%;" rowspan="4">Họ và tên</th>
-        <th style="width: 6%;" rowspan="4">Cấp bậc</br>chức vụ</th>
-        <th colspan="14">Lương hệ số</th>
-        <th style="width: 6%;" rowspan="4">Nghỉ việc</br>không được</br>hưởng lương</th>
-        <th style="width: 6%;" rowspan="4">BHXH trả</br>thay lương</th>
-        <th style="width: 6%;" rowspan="4">Tổng cộng</br>tiền lương</th>
-        <th colspan="5">Các khoản phải khấu trừ</th>
-        <th style="width: 6%;" rowspan="4">Tổng tiền</br>lương và BHXH</br>còn được nhận</th>
-    </tr>
-
-    <tr style="padding-left: 2px;padding-right: 2px">
-        <th rowspan="3">Hệ số</br>lương</th>
-        <th rowspan="3">Phụ cấp</br>chức vụ</th>
-        <th colspan="10">Hệ số phụ cấp khác</th>
-        <th rowspan="3">Cộng</br>hệ số</th>
-        <th rowspan="3">Thành tiền</th>
-        <th rowspan="3">BHXH</th>
-        <th rowspan="3">BHYT</th>
-        <th rowspan="3">BHTN</th>
-        <th rowspan="3">Thuế</br>thu</br>nhập</th>
-        <th rowspan="3">Cộng</th>
-    </tr>
-
-    <tr style="padding-left: 2px;padding-right: 2px">
-        <th rowspan="2">Phụ cấp</br>khu vực</th>
-        <th rowspan="2">Phụ cấp</br>thu hút</th>
-        <th rowspan="2">Phụ cấp</br>ưu đãi</th>
-        <th rowspan="2">Phụ cấp</br>trách nhiệm</th>
-        <th colspan="2">PCTNVK</th>
-        <th colspan="2">PCTNNG</th>
-        <th rowspan="2">Phụ cấp</br>lâu năm</th>
-        <th rowspan="2">Phụ cấp</br>độc hại</th>
-    </tr>
-
-    <tr style="padding-left: 2px;padding-right: 2px">
-        <th>%</th>
-        <th>HS</th>
-        <th>%</th>
-        <th>H</th>
+        </th>
+        <th colspan="6" style="text-align: center; font-weight: bold">
+            Số: {{$thongtin['thang']}}
+        </th>
     </tr>
 
     <tr>
-        <th>A</th>
-        <th>B</th>
-        <th>C</th>
-        <th>D</th>
-        @for($i=1;$i<=23;$i++)
-            <th>{{$i}}</th>
-        @endfor
+        <th colspan="12" style="text-align: center; font-weight: bold; font-size: 20px;">
+            BẢNG THANH TOÁN TIỀN LƯƠNG VÀ CÁC KHOẢN PHỤ CẤP THEO LƯƠNG, CÁC KHOẢN TRÍCH NỘP THEO LƯƠNG
+        </th>
+    </tr>
 
+    <tr>
+        <th colspan="12" style="text-align: center; font-style: italic">
+            Tháng {{$thongtin['thang']}} năm {{$thongtin['nam']}}
+        </th>
+    </tr>
+
+</table>
+
+<table class="money" cellspacing="0" cellpadding="0" border="1px;" style="margin: 20px auto; border-collapse: collapse;">
+    <tr>
+        <td>S</br>T</br>T</td>
+        <td>Mã số</br>CBCC,</br>viên</br>chức</td>
+        <td>Họ và tên</td>
+        <td>Mã</br>ngạch</br>lương</td>
+        <td colspan="12">Lương hệ số</td>
+        <td>Tiền lương</br>tháng</td>
+        <td colspan="4">Các khoản trừ vào lương</td>
+        <td>Tổng số tiền</br>thực lĩnh</td>
+        <td>Ghi chú</td>
+    </tr>
+
+    <tr>
+        <th></th>
+        <th></th>
+        <th></th>
+        <th></th>
+        <td>Hệ số</br>lương</td>
+        <td>Phụ cấp</br>chức vụ</td>
+        <td colspan="9">Hệ số phụ cấp khác</td>
+        <td>Cộng</br>hệ số</td>
+        <th></th>
+        <td>BHXH</td>
+        <td>BHYT</td>
+        <td>BHTN</td>
+        <td>Cộng số</br>phải nộp</td>
+        <th></th>
+        <th></th>
+    </tr>
+
+    <tr>
+        <th></th>
+        <th></th>
+        <th></th>
+        <th></th>
+        <th></th>
+        <th></th>
+        <td>Phụ cấp</br>khu vực</td>
+        <td>Phụ cấp</br>thu hút</td>
+        <td>Phụ cấp</br>ưu đãi</td>
+        <td>Phụ cấp</br>trách</br>nhiệm</td>
+        <td colspan="2">PCTNVK</td>
+        <td colspan="2">PCTNNG</td>
+        <td>Phụ cấp</br>lâu năm</td>
+        <th></th>
+        <th></th>
+        <th></th>
+        <th></th>
+        <th></th>
+        <th></th>
+
+        <th></th>
+        <th></th>
+        <!--th rowspan="2">Phụ cấp</br>độc hại</th-->
+    </tr>
+
+    <tr>
+        <th></th>
+        <th></th>
+        <th></th>
+        <th></th>
+        <th></th>
+        <th></th>
+        <th></th>
+        <th></th>
+        <th></th>
+        <th></th>
+        <td>%</td>
+        <td>HS</td>
+        <td>%</td>
+        <td>H</td>
+        <th></th>
+        <th></th>
+        <th></th>
+        <th></th>
+        <th></th>
+        <th></th>
+        <th></th>
+        <th></th>
+        <th></th>
+    </tr>
+
+    <tr>
+        <td>A</td>
+        <td>B</td>
+        <td>C</td>
+        <td>D</td>
+        @for($i=1;$i<=19;$i++)
+            <td>{{$i}}</td>
+        @endfor
     </tr>
 
     <?php $i=1; ?>
     @foreach($model_congtac as $congtac)
-        <?php $model_luong = $model->where('mact',$congtac->mact)?>
+        <?php $model_luong = $model->where('mact',$congtac->mact) ?>
         @if(count($model_luong) > 0)
             <?php $stt=1; ?>
-            <tr style="font-weight: bold;">
-                <td>{{convert2Roman($i++)}}</td>
-                <td style="text-align: left;" colspan="26">{{$congtac->tenct}}</td>
-            </tr>
+                <tr style="font-weight: bold;">
+                    <td>{{convert2Roman($i++)}}</td>
+                    <td style="text-align: left;" colspan="22">{{$congtac->tenct}}</td>
+                </tr>
             @foreach($model_luong as $ct)
                 <tr>
                     <td>{{$stt++}}</td>
-                    <td style="text-align: left">{{$ct->msngbac}}</td>
+                    <td style="text-align: left">{{$ct->macongchuc}}</td>
                     <td style="text-align: left">{{$ct->tencanbo}}</td>
-                    <td style="text-align: left">{{$ct->tencv}}</td>
+                    <td style="text-align: left">{{$ct->msngbac}}</td>
                     <td>{{dinhdangsothapphan(($ct->heso + $ct->hesott),5)}}</td>
                     <td>{{dinhdangsothapphan($ct->pccv,5)}}</td>
                     <td>{{dinhdangsothapphan($ct->pckv,5)}}</td>
@@ -172,20 +220,16 @@
                     <td>{{dinhdangsothapphan($ct->tnn,5)}}</td>
                     <td>{{dinhdangsothapphan($ct->pctnn,5)}}</td>
                     <td>{{dinhdangsothapphan($ct->pcthni,5)}}</td>
-                    <td>{{dinhdangsothapphan($ct->pcdh,5)}}</td>
+                    <!--td>{{dinhdangsothapphan($ct->pcdh,5)}}</td-->
                     <td>{{dinhdangsothapphan($ct->tonghs,5)}}</td>
                     <td>{{dinhdangso($ct->ttl)}}</td>
-
-                    <td> {{dinhdangso($ct->giaml)}}</td>
-                    <td>{{dinhdangso($ct->bhct)}}</td>
-                    <td>{{dinhdangso($ct->ttl - $ct->giaml + $ct->bhct)}}</td>
 
                     <td>{{dinhdangso($ct->stbhxh)}}</td>
                     <td>{{dinhdangso($ct->stbhyt)}}</td>
                     <td>{{dinhdangso($ct->stbhtn)}}</td>
-                    <td class="money"></td>
                     <td>{{dinhdangso($ct->ttbh)}}</td>
                     <td>{{dinhdangso($ct->luongtn)}}</td>
+                    <td></td>
                 </tr>
             @endforeach
             <tr style="font-weight: bold; text-align: center; font-style: italic">
@@ -203,20 +247,17 @@
                 <td></td>
                 <td>{{dinhdangsothapphan($model_luong->sum('pctnn'),5)}}</td>
                 <td>{{dinhdangsothapphan($model_luong->sum('pcthni'),5)}}</td>
-                <td>{{dinhdangsothapphan($model_luong->sum('pcdh'),5)}}</td>
+                <!--td>{{dinhdangsothapphan($model_luong->sum('pcdh'),5)}}</td-->
 
                 <td>{{dinhdangsothapphan($model_luong->sum('tonghs'),5)}}</td>
                 <td class="money">{{dinhdangso($model_luong->sum('ttl'))}}</td>
-                <td class="money">{{dinhdangso($model_luong->sum('giaml'))}}</td>
-                <td class="money">{{dinhdangso($model_luong->sum('bhct'))}}</td>
-                <td class="money">{{dinhdangso($model_luong->sum('ttl') - $model_luong->sum('giaml') - $model_luong->sum('bhct'))}}</td>
 
                 <td class="money">{{dinhdangso($model_luong->sum('stbhxh'))}}</td>
                 <td class="money">{{dinhdangso($model_luong->sum('stbhyt'))}}</td>
                 <td class="money">{{dinhdangso($model_luong->sum('stbhtn'))}}</td>
-                <td class="money"></td>
                 <td class="money">{{dinhdangso($model_luong->sum('ttbh'))}}</td>
                 <td class="money">{{dinhdangso($model_luong->sum('ttl') - $model_luong->sum('giaml') - $model_luong->sum('bhct')- $model_luong->sum('ttbh'))}}</td>
+                <td></td>
             </tr>
         @endif
     @endforeach
@@ -233,43 +274,43 @@
         <td></td>
         <td>{{dinhdangsothapphan($model->sum('pctnn'),5)}}</td>
         <td>{{dinhdangsothapphan($model->sum('pcthni'),5)}}</td>
-        <td>{{dinhdangsothapphan($model->sum('pcdh'),5)}}</td>
+        <!--td>{{dinhdangsothapphan($model->sum('pcdh'),5)}}</td-->
         <td>{{dinhdangsothapphan($model->sum('tonghs'),5)}}</td>
+
         <td class="money">{{dinhdangso($model->sum('ttl'))}}</td>
-        <td class="money">{{dinhdangso($model->sum('giaml'))}}</td>
-        <td class="money">{{dinhdangso($model->sum('bhct'))}}</td>
-        <td class="money">{{dinhdangso($model->sum('ttl') - $model->sum('giaml') - $model->sum('bhct'))}}</td>
 
         <td class="money">{{dinhdangso($model->sum('stbhxh'))}}</td>
         <td class="money">{{dinhdangso($model->sum('stbhyt'))}}</td>
         <td class="money">{{dinhdangso($model->sum('stbhtn'))}}</td>
-        <td class="money"></td>
         <td class="money">{{dinhdangso($model->sum('ttbh'))}}</td>
         <td class="money">{{dinhdangso($model->sum('ttl') - $model->sum('giaml') - $model->sum('bhct') - $model->sum('ttbh'))}}</td>
-
+        <td></td>
     </tr>
 </table>
-<p style="text-align: left; font-weight:bold;font-style: italic ">Tổng số tiền bằng chữ: {{Dbl2Str($model->sum('luongtn'))}}</p>
+<p style="text-align: left; font-weight:bold;font-style: italic ">Tổng số tiền (Viết bằng chữ): {{Dbl2Str($model->sum('luongtn'))}}</p>
 <table class="header" width="96%" border="0" cellspacing="0" cellpadding="8" style="margin:20px auto; text-align: center;">
     <tr>
-        <td style="text-align: left;" width="50%"></td>
-        <td style="text-align: center; font-style: italic" width="50%">{{$m_dv->diadanh .', '.Date2Str($thongtin['ngaylap'])}}</td>
+        <th colspan="6"></th>
+        <th colspan="6">{{$m_dv->diadanh .', '.Date2Str($thongtin['ngaylap'])}}</th>
     </tr>
     <tr style="font-weight: bold">
-        <td style="text-align: center;" width="50%">Người lập bảng</td>
-        <td style="text-align: center;" width="50%">{{$m_dv->cdlanhdao}}</td>
+        <th colspan="4">Người lập bảng</th>
+        <th colspan="4">{{$m_dv->cdketoan}}</th>
+        <th colspan="4">{{$m_dv->cdlanhdao}}</th>
     </tr>
     <tr style="font-style: italic">
-        <td style="text-align: center;" width="50%">(Ghi rõ họ tên)</td>
-        <td style="text-align: center;" width="50%">(Ký tên, đóng dấu)</td>
+        <th colspan="4">(Ghi rõ họ tên)</th>
+        <th colspan="4">(Ghi rõ họ tên)</th>
+        <th colspan="4">(Ký tên, đóng dấu)</th>
     </tr>
     <tr>
-        <td><br><br><br></td>
+        <th><br><br><br></th>
     </tr>
 
     <tr>
-        <td style="text-align: center;" width="50%">{{$m_dv->nguoilapbieu}}</td>
-        <td style="text-align: center;" width="50%">{{$m_dv->lanhdao}}</td>
+        <th colspan="4">{{$m_dv->nguoilapbieu}}</th>
+        <th colspan="4">{{$m_dv->ketoan}}</th>
+        <th colspan="4">{{$m_dv->lanhdao}}</th>
     </tr>
 </table>
 

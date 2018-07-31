@@ -31,6 +31,7 @@ class hosocanbo extends Model
         'sotk',
         'tennganhang',
         'madv',
+        'lvtd',//nơi công tác
         //thông tin lương hiện tại
         'msngbac',
         'ngaytu',

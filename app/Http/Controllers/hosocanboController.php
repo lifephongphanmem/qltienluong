@@ -101,8 +101,14 @@ class hosocanboController extends Controller
             }
             $macanbo = session('admin')->madv . '_' . getdate()[0];
             //$m_pc=dmphucap::all('mapc','tenpc','hesopc')->toArray();
-            $a_donvi = dmdonvi::where('madv', session('admin')->madv)->first()->toarray();
+
             $max_stt = getDbl((hosocanbo::where('madv', session('admin')->madv)->max('stt'))) + 1;
+
+            //lấy phụ cấp ở danh mục phụ cấp đơn vị mapc => tenform
+            $a_phucap = array();
+            $a_donvi = dmdonvi::where('madv', session('admin')->madv)->first()->toarray();//cũ; nghiên cứu lấy mới vào để thay trên form nhập
+            //kiểm tra như danh mục
+
             return view('manage.hosocanbo.create')
                 ->with('type', 'create')
                 ->with('macanbo', $macanbo)
@@ -118,7 +124,7 @@ class hosocanboController extends Controller
                 ->with('m_plnb', $m_plnb)
                 ->with('m_pln', $m_pln)
                 //->with('m_pc',$m_pc)
-                ->with('a_phucap', getColPhuCap())
+                ->with('a_phucap', $a_phucap)
                 ->with('a_donvi', $a_donvi)
                 ->with('pageTitle', 'Tạo hồ sơ cán bộ');
         } else
@@ -149,8 +155,8 @@ class hosocanboController extends Controller
             $insert['ngayden']=getDateTime($insert['ngayden']);
             $insert['ngayvd']=getDateTime($insert['ngayvd']);
             $insert['ngayvdct']=getDateTime($insert['ngayvdct']);
-            $insert['ngayvao']=getDateTime($insert['ngayvao']);
-            $insert['ngaybc']=getDateTime($insert['ngaybc']);
+            //$insert['ngayvao']=getDateTime($insert['ngayvao']);
+            //$insert['ngaybc']=getDateTime($insert['ngaybc']);
             $insert['macvd']=($insert['macvd']==''?NULL:$insert['macvd']);
             //$insert['truylinhtungay']=getDateTime($insert['truylinhtungay']);
             //$insert['truylinhdenngay']=getDateTime($insert['truylinhdenngay']);
@@ -262,8 +268,8 @@ class hosocanboController extends Controller
             $insert['ngayden']=getDateTime($insert['ngayden']);
             $insert['ngayvd']=getDateTime($insert['ngayvd']);
             $insert['ngayvdct']=getDateTime($insert['ngayvdct']);
-            $insert['ngayvao']=getDateTime($insert['ngayvao']);
-            $insert['ngaybc']=getDateTime($insert['ngaybc']);
+            //$insert['ngayvao']=getDateTime($insert['ngayvao']);
+            //$insert['ngaybc']=getDateTime($insert['ngaybc']);
             $insert['macvd']=($insert['macvd']==''?NULL:$insert['macvd']);
             //$insert['truylinhtungay']=getDateTime($insert['truylinhtungay']);
             //$insert['truylinhdenngay']=getDateTime($insert['truylinhdenngay']);
@@ -294,6 +300,7 @@ class hosocanboController extends Controller
             $insert['pcdd'] = chkDbl($insert['pcdd']);
             $insert['pcct'] = chkDbl($insert['pcct']);
 
+            //dd($insert);
             $model->update($insert);
             return redirect('nghiep_vu/ho_so/danh_sach');
         }else

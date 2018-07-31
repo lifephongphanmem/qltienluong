@@ -334,7 +334,21 @@ Route::group(['prefix'=>'chuc_nang'],function(){
         Route::post('mau06','bangluongController@printf_mau06');
         Route::post('mauds','bangluongController@printf_mauds');
         Route::post('maubh','bangluongController@printf_maubh');
+        Route::post('maudbhdnd','bangluongController@printf_maudbhdnd');
+        Route::post('maublpc','bangluongController@printf_maublpc');
+
+        Route::post('mau01_excel','bangluongController@printf_mau01_excel');
+        Route::post('mau02_excel','bangluongController@printf_mau02_excel');
+        Route::post('mau03_excel','bangluongController@printf_mau03_excel');
+        Route::post('mau04_excel','bangluongController@printf_mau04_excel');
+        Route::post('mau05_excel','bangluongController@printf_mau05_excel');
+        Route::post('mau06_excel','bangluongController@printf_mau06_excel');
+        Route::post('mauds_excel','bangluongController@printf_mauds_excel');
+        Route::post('maubh_excel','bangluongController@printf_maubh_excel');
+        Route::post('maudbhdnd_excel','bangluongController@printf_maudbhdnd_excel');
+        Route::post('maublpc_excel','bangluongController@printf_maublpc_excel');
     });
+
 
     Route::group(['prefix'=>'nang_luong'],function(){
         Route::get('danh_sach','dsnangluongController@index');

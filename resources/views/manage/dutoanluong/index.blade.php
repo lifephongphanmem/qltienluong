@@ -63,7 +63,16 @@
                                         <td class="text-right">{{number_format($value->luongnb_dt)}}</td>
                                         <td class="text-right">{{number_format($value->luonghs_dt)}}</td>
                                         <td class="text-right">{{number_format($value->luongbh_dt)}}</td>
-                                        @include('includes.crumbs.bt_editdel')
+                                        <td>
+                                            <a href="{{url($furl.'maso='.$value->maso)}}" class="btn btn-default btn-xs mbs">
+                                                <i class="fa fa-th-list"></i>&nbsp; Chi tiết</a>
+
+                                            <button type="button" onclick="inbl('{{$value->maso}}','{{$value->thang}}','{{$value->nam}}')" class="btn btn-default btn-xs mbs">
+                                                <i class="fa fa-share-square-o"></i>&nbsp; Gửi dữ liệu</button>
+
+                                            <button type="button" onclick="cfDel('{{$furl.'del/'.$value->maso}}')" class="btn btn-default btn-xs mbs" data-target="#delete-modal-confirm" data-toggle="modal">
+                                                <i class="fa fa-trash-o"></i>&nbsp; Xóa</button>
+                                        </td>
                                     </tr>
                                 @endforeach
                             @endif

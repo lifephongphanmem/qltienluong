@@ -46,6 +46,10 @@
                 display: none !important;
             }
         }
+        
+        tr > td {
+            border: 1px solid;
+        }
     </style>
 </head>
 
@@ -57,22 +61,22 @@
 
 <table class="header" width="96%" border="0" cellspacing="0" cellpadding="8" style="margin:0 auto 25px; text-align: center;">
     <tr>
-        <td style="text-align: left;width: 60%">
+        <th style="text-align: left;width: 60%">
             <b>Đơn vị: {{$m_dv->tendv}}</b>
-        </td>
+        </th>
 
-        <td style="text-align: center; font-weight: bold">
+        <th style="text-align: center; font-weight: bold">
 
-        </td>
+        </th>
     </tr>
     <tr>
-        <td style="text-align: left;width: 60%">
+        <th style="text-align: left;width: 60%">
             <b>Mã đơn vị SDNS: {{$m_dv->maqhns}}</b>
-        </td>
+        </th>
 
-        <td style="text-align: center; font-style: italic">
+        <th style="text-align: center; font-style: italic">
 
-        </td>
+        </th>
     </tr>
 </table>
 <p style="text-align: center; font-weight: bold; font-size: 20px;">DANH SÁCH CHI TRẢ CÁ NHÂN</p>
@@ -121,28 +125,28 @@
 
 <table class="header" width="96%" border="0" cellspacing="0" cellpadding="8" style="margin:20px auto; text-align: center;">
     <tr>
-        <td style="text-align: left;" width="35%"></td>
-        <td style="text-align: left;" width="30%"></td>
-        <td style="text-align: center; font-style: italic" width="35%">{{$m_dv->diadanh .', '.Date2Str($thongtin['ngaylap'])}}</td>
+        <th style="text-align: left;" width="35%"></th>
+        <th style="text-align: left;" width="30%"></th>
+        <th style="text-align: center; font-style: italic" width="35%">{{$m_dv->diadanh .', '.Date2Str($thongtin['ngaylap'])}}</th>
     </tr>
     <tr style="font-weight: bold">
-        <td style="text-align: center;" width="35%">Người lập bảng</td>
-        <td style="text-align: center;" width="35%">{{$m_dv->cdketoan}}</td>
-        <td style="text-align: center;" width="35%">{{$m_dv->cdlanhdao}}</td>
+        <th style="text-align: center;" width="35%">Người lập bảng</th>
+        <th style="text-align: center;" width="35%">{{$m_dv->cdketoan}}</th>
+        <th style="text-align: center;" width="35%">{{$m_dv->cdlanhdao}}</th>
     </tr>
     <tr style="font-style: italic">
-        <td style="text-align: center;" width="35%">(Ghi rõ họ tên)</td>
-        <td style="text-align: center;" width="30%">(Ghi rõ họ tên)</td>
-        <td style="text-align: center;" width="35%">(Ký tên, đóng dấu)</td>
+        <th style="text-align: center;" width="35%">(Ghi rõ họ tên)</th>
+        <th style="text-align: center;" width="30%">(Ghi rõ họ tên)</th>
+        <th style="text-align: center;" width="35%">(Ký tên, đóng dấu)</th>
     </tr>
     <tr>
-        <td><br><br><br></td>
+        <th><br><br><br></th>
     </tr>
 
     <tr>
-        <td style="text-align: center;" width="35%">{{$m_dv->nguoilapbieu}}</td>
-        <td style="text-align: center;" width="30%">{{$m_dv->ketoan}}</td>
-        <td style="text-align: center;" width="35%">{{$m_dv->lanhdao}}</td>
+        <th style="text-align: center;" width="35%">{{$m_dv->nguoilapbieu}}</th>
+        <th style="text-align: center;" width="30%">{{$m_dv->ketoan}}</th>
+        <th style="text-align: center;" width="35%">{{$m_dv->lanhdao}}</th>
     </tr>
 </table>
 

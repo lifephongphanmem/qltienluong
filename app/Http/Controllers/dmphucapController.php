@@ -50,6 +50,7 @@ class dmphucapController extends Controller
     {
         if (Session::has('admin')) {
             $inputs = $request->all();
+            $inputs['congthuc'] = getDbl($inputs['phanloai']) == 2 ? $inputs['congthuc'] : '';
             dmphucap::create($inputs);
             return redirect('/danh_muc/phu_cap/index');
         } else
@@ -60,6 +61,7 @@ class dmphucapController extends Controller
     {
         if (Session::has('admin')) {
             $inputs = $request->all();
+            $inputs['congthuc'] = getDbl($inputs['phanloai']) == 2 ? $inputs['congthuc'] : '';
             dmphucap::where('mapc',$inputs['mapc'])->first()->update($inputs);
             return redirect('/danh_muc/phu_cap/index');
         } else
@@ -131,6 +133,7 @@ class dmphucapController extends Controller
             }
             return view('system.danhmuc.phucap.index_donvi')
                 ->with('model', $model)
+                ->with('a_lock', array('heso','vuotkhung','hesott'))
                 ->with('furl', '/danh_muc/phu_cap/don_vi/')
                 ->with('pageTitle', 'Thông tin phân loại phụ cấp');
         } else
@@ -154,7 +157,8 @@ class dmphucapController extends Controller
     {
         if (Session::has('admin')) {
             $inputs = $request->all();
-            dmphucap_donvi::where('mapc',$inputs['mapc'])->where('madv', session('admin')->madv)->first()->update($inputs);
+            $inputs['congthuc'] = getDbl($inputs['phanloai']) == 2 ? $inputs['congthuc'] : '';
+            dmphucap_donvi::where('mapc', $inputs['mapc'])->where('madv', session('admin')->madv)->first()->update($inputs);
             return redirect('/danh_muc/phu_cap/don_vi');
         } else
             return view('errors.notlogin');

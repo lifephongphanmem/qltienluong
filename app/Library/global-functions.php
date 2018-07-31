@@ -351,7 +351,7 @@ function dinhdangsothapphan ($number , $decimals = 0) {
     {
         if($amount <=0)
         {
-            return 0;
+            return '';
         }
         $amount = (int)chkDbl($amount);
         $Text=array("không", "một", "hai", "ba", "bốn", "năm", "sáu", "bảy", "tám", "chín");

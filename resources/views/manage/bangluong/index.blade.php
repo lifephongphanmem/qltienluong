@@ -286,6 +286,24 @@
                 <div class="row">
                     <div class="col-md-6">
                         <div class="form-group">
+                            <button type="button" style="border-width: 0px" onclick="indbhdnd()" class="btn btn-default btn-xs mbs"
+                                    title="Bảng thanh toán phụ cấp ĐBHDND">
+                                <i class="fa fa-print"></i>&nbsp; Bảng thanh toán phụ cấp ĐBHDND</button>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <button type="button" style="border-width: 0px" onclick="inblpc()" class="btn btn-default btn-xs mbs">
+                                <i class="fa fa-print"></i>&nbsp; Bảng thanh toán tiền lương, phụ cấp</button>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
                             <button type="button" style="border-width: 0px" onclick="inds()" class="btn btn-default btn-xs mbs"
                                     title="Danh sách chi trả cá nhân">
                                 <i class="fa fa-print"></i>&nbsp; Danh sách chi trả cá nhân</button>

@@ -71,7 +71,7 @@
                             <div class="col-md-12">
                                 <div class="form-group">
                                     <label class="form-control-label">Gồm các loại hệ số<span class="require">*</span></label>
-                                    <select class="form-control select2me" id="ctpc" name="ctpc" multiple="multiple" required="required">
+                                    <select class="form-control select2me" id="ctpc" name="ctpc" multiple="multiple">
                                         @foreach(getCongThucTinhPC() as $key=>$value)
                                             <option value="{{$key}}" {{in_array($key,$a_congthuc)?'selected':''}}>{{$value}}</option>
                                         @endforeach

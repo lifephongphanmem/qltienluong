@@ -74,19 +74,6 @@
         </div>
 
         <div class="row">
-            <div class="col-md-3">
-                <div class="form-group">
-                    <label class="control-label">Ngày biên chế (trúng cử)</label>
-                    <input type="date" name="ngaybc" id="ngaybc" class="form-control" value="{{!isset($model)?'':$model->ngaybc}}" />
-                </div>
-            </div>
-
-            <div class="col-md-3">
-                <div class="form-group">
-                    <label class="control-label">Ngày về cơ quan </label>
-                    <input type="date" name="ngayvao" id="ngayvao" class="form-control" value="{{!isset($model)?'':$model->ngayvao}}" />
-                </div>
-            </div>
 
             <div class="col-md-3">
                 <div class="form-group">
@@ -116,9 +103,14 @@
                     </select>
                 </div>
             </div>
-        </div>
 
-        <div class="row">
+            <div class="col-md-3">
+                <div class="form-group">
+                    <label class="control-label">Nơi công tác</label>
+                    {!!Form::text('lvtd', null, array('id' => 'lvtd','class' => 'form-control'))!!}
+                </div>
+            </div>
+
             <div class="col-md-3">
                 <div class="form-group">
                     <label class="control-label">Thứ tự (sắp xếp) trên bảng lương</label>
@@ -126,6 +118,9 @@
                 </div>
             </div>
 
+        </div>
+
+        <div class="row">
             <div class="col-md-3">
                 <div class="form-group">
                     <label class="control-label">Số tài khoản ngân hàng</label>
@@ -133,7 +128,7 @@
                 </div>
             </div>
 
-            <div class="col-md-6">
+            <div class="col-md-9">
                 <div class="form-group">
                     <label class="control-label">Lĩnh vực công tác </label>
                     <select class="form-control" id="linhvuc" name="linhvuc" multiple="multiple">
