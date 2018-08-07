@@ -27,7 +27,7 @@ class CreateDmdonviTable extends Migration
             $table->string('macqcq',50)->nullable();
             $table->string('diadanh',50)->nullable();
             $table->string('nguoilapbieu',50)->nullable();
-            $table->string('makhoipb',50)->nullable();//trường hợp cần tổng hợp theo ngành
+            $table->string('makhoipb',50)->nullable();//phân loại đơn vị tổng hợp; đơn vị sử dụng
             $table->string('madvbc',50)->nullable();
             $table->string('capdonvi',50)->nullable();//cấp dư toán 1,2,3,4
             $table->string('maphanloai',50)->nullable();//xác định đơn vị thuộc khối hcsn / xp

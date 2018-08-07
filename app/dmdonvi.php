@@ -22,7 +22,7 @@ class dmdonvi extends Model
         'macqcq',
         'diadanh',
         'nguoilapbieu',
-        'makhoipb',
+        'makhoipb', //phân loại đơn vị tổng hợp; đơn vị sử dụng
         'maphanloai',
         'madvbc',
         'capdonvi',

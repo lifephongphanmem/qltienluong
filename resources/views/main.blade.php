@@ -125,8 +125,9 @@
 					<span class="title">Tổng quan</span>
 					</a>
 				</li>
+
                 @if(session('admin')->username != 'khthso' && session('admin')->username != 'khthstc')
-                <li >
+                    <li >
                     <a href="javascript:;">
                         <i class="fa glyphicon glyphicon-folder-open"></i>
                         <span class="title">Quản lý</span>
@@ -152,7 +153,7 @@
                     </ul>
                 </li>
 
-                <li>
+                    <li>
                     <a href="javascript:;">
                         <i class="fa fa-sitemap fa-fw"></i>
                         <span class="title">Chức năng</span>
@@ -171,63 +172,50 @@
                         <li><a href="{{url('nghiep_vu/quan_ly/chi_tieu/danh_sach')}}"><i class="fa fa-caret-right"></i>Chỉ tiêu biên chế</a></li>
                     </ul>
                 </li>
-                @endif
 
-                <li>
-                    <a href="javascript:;">
-                        <i class="fa icon-book-open"></i>
-                        <span class="title">Tổng hợp dữ liệu</span>
-                        <span class="arrow "></span>
-                    </a>
-                    <ul class="sub-menu">
-                        <li>
-                            <a href="{{url('chuc_nang/tong_hop_luong/don_vi/index?nam='.date('Y'))}}"><i class="fa fa-caret-right"></i>Tổng hợp lương tại đơn vị</a>
-                        </li>
-                        @if(session('admin')->quanlynhom && !session('admin')->quanlykhuvuc)
+                    <li>
+                        <a href="javascript:;">
+                            <i class="fa icon-book-open"></i>
+                            <span class="title">Tổng hợp dữ liệu</span>
+                            <span class="arrow "></span>
+                        </a>
+                        <ul class="sub-menu">
                             <li>
-                                <a href="{{url('chuc_nang/tong_hop_luong/khoi/index?nam='.date('Y'))}}"><i class="fa fa-caret-right"></i>Tổng hợp lương từ đơn vị cấp dưới</a>
+                                <a href="{{url('chuc_nang/tong_hop_luong/don_vi/index?nam='.date('Y'))}}"><i class="fa fa-caret-right"></i>Tổng hợp lương tại đơn vị</a>
                             </li>
+                            @if(session('admin')->quanlynhom && !session('admin')->quanlykhuvuc)
+                                <li>
+                                    <a href="{{url('chuc_nang/tong_hop_luong/khoi/index?nam='.date('Y'))}}"><i class="fa fa-caret-right"></i>Tổng hợp lương từ đơn vị cấp dưới</a>
+                                </li>
 
-                            <li>
-                                <a href="{{url('chuc_nang/tong_hop_nguon/index?sohieu=TT67_2017')}}"><i class="fa fa-caret-right"></i>Tổng số liệu nguồn kinh phí</a>
-                            </li>
+                                <li>
+                                    <a href="{{url('chuc_nang/tong_hop_nguon/index?sohieu=TT67_2017')}}"><i class="fa fa-caret-right"></i>Tổng số liệu nguồn kinh phí</a>
+                                </li>
 
-                            <li>
-                                <a href="{{url('chuc_nang/xem_du_lieu/index?thang='.date('m').'&nam='.date('Y').'&trangthai=ALL')}}"><i class="fa fa-caret-right"></i>Xem số liệu tổng hợp từ đơn vị cấp dưới</a>
-                            </li>
-                        @endif
-
-                        <!-- Các tài khoản quản lý khu vực mới có tính năng tổng hợp dữ liệu từ đơn vị cấp dưới -->
-                        @if(session('admin')->quanlykhuvuc && session('admin')->level == 'H')
-                            <li>
-                                <a href="{{url('chuc_nang/tong_hop_luong/huyen/index?nam='.date('Y'))}}"><i class="fa fa-caret-right"></i>Tổng hợp lương toàn địa bàn</a>
-                            </li>
-
-                            <li>
-                                <a href="{{url('chuc_nang/tong_hop_nguon/huyen?sohieu=TT67_2017')}}"><i class="fa fa-caret-right"></i>Tổng số liệu nguồn kinh phí</a>
-                            </li>
-
-                            <li>
-                                <a href="{{url('chuc_nang/xem_du_lieu/huyen?thang='.date('m').'&nam='.date('Y').'&trangthai=ALL')}}"><i class="fa fa-caret-right"></i>Xem số liệu tổng hợp toàn địa bàn</a>
-                            </li>
+                                <li>
+                                    <a href="{{url('chuc_nang/xem_du_lieu/index?thang='.date('m').'&nam='.date('Y').'&trangthai=ALL')}}"><i class="fa fa-caret-right"></i>Xem số liệu tổng hợp từ đơn vị cấp dưới</a>
+                                </li>
                             @endif
-                        @if(session('admin')->username == 'khthso' && session('admin')->username == 'khthstc')
-                            <li>
-                                <a href="{{url('chuc_nang/tong_hop_luong/tinh/index?nam='.date('Y'))}}"><i class="fa fa-caret-right"></i>Tổng hợp lương toàn địa bàn quản lý</a>
-                            </li>
 
-                            <li>
-                                <a href="{{url('chuc_nang/tong_hop_nguon/tinh?sohieu=TT67_2017&madiaban='.session('admin')->madvbc)}}"><i class="fa fa-caret-right"></i>Tổng số liệu nguồn kinh phí  toàn tỉnh</a>
-                            </li>
+                            <!-- Các tài khoản quản lý khu vực mới có tính năng tổng hợp dữ liệu từ đơn vị cấp dưới -->
+                            @if(session('admin')->quanlykhuvuc && session('admin')->level == 'H')
+                                <li>
+                                    <a href="{{url('chuc_nang/tong_hop_luong/huyen/index?nam='.date('Y'))}}"><i class="fa fa-caret-right"></i>Tổng hợp lương toàn địa bàn</a>
+                                </li>
 
-                            <li>
-                                <a href="{{url('chuc_nang/xem_du_lieu/tinh?thang='.date('m').'&nam='.date('Y').'&trangthai=ALL&madiaban='.session('admin')->madvbc)}}"><i class="fa fa-caret-right"></i>Xem số liệu tổng hợp toàn tỉnh</a>
-                            </li>
-                        @endif
-                    </ul>
-                </li>
+                                <li>
+                                    <a href="{{url('chuc_nang/tong_hop_nguon/huyen?sohieu=TT67_2017')}}"><i class="fa fa-caret-right"></i>Tổng số liệu nguồn kinh phí</a>
+                                </li>
 
-                <li>
+                                <li>
+                                    <a href="{{url('chuc_nang/xem_du_lieu/huyen?thang='.date('m').'&nam='.date('Y').'&trangthai=ALL')}}"><i class="fa fa-caret-right"></i>Xem số liệu tổng hợp toàn địa bàn</a>
+                                </li>
+                            @endif
+
+                        </ul>
+                    </li>
+
+                    <li>
                     <a href="javascript:;">
                         <i class="fa glyphicon glyphicon-list-alt"></i>
                         <span class="title">Nguồn và dự toán</span>
@@ -239,11 +227,10 @@
                     </ul>
                 </li>
 
-				<li>
+				    <li>
 					<a href="javascript:;">
 					<i class="fa fa-search"></i>
-					<span class="title">Tra cứu</span>
-					<span class="arrow "></span>
+					<span class="title">Tra cứu</span><span class="arrow "></span>
 					</a>
 					<ul class="sub-menu">
                         <li><a href="{{url('/tra_cuu/ho_so')}}"><i class="fa fa-caret-right"></i>Hồ sơ cán bộ</a></li>
@@ -253,11 +240,10 @@
 					</ul>
 				</li>
 
-                <li>
+                    <li>
 					<a href="javascript:;">
 					<i class="fa fa-file-text"></i>
-					<span class="title">Báo cáo</span>
-					<span class="arrow "></span>
+					<span class="title">Báo cáo</span><span class="arrow "></span>
 					</a>
 					<ul class="sub-menu">
                         <!--li><a href="{{url('bao_cao/don_vi')}}">Báo cáo nhân sự</a></li  chưa fix -->
@@ -265,21 +251,11 @@
                         <li><a href="{{url('bao_cao/bang_luong')}}"><i class="fa fa-caret-right"></i>Báo cáo chi trả lương</a></li>
 					</ul>
 				</li>
-                <!-- dành cho đơn vị chủ quản -->
-                @if(session('admin')->username == 'khthstc' || session('admin')->username == 'khthso' )
-                    <li>
-                        <a href="{{url('tong_hop_bao_cao/danh_sach')}}">
-                            <i class="fa fa-file-text"></i>
-                            <span class="title">Báo cáo tổng hợp</span>
-                        </a>
-                    </li>
-                @endif
 
-				<li class="last">
+				    <li class="last">
 					<a href="javascript:;">
-					<i class="fa fa-gear"></i>
-					<span class="title">Hệ thống</span>
-					<span class="arrow "></span>
+                        <i class="fa fa-gear"></i>
+                        <span class="title">Hệ thống</span><span class="arrow "></span>
 					</a>
 					<ul class="sub-menu">
                         <li>
@@ -341,10 +317,56 @@
                             <li><a href="{{url('danh_muc/khu_vuc/ma_so=H')}}"><i class="icon-book-open"></i>Danh sách khu vực, địa bàn quản lý</a></li>
                         @endif
                     </ul>
+                </li>
+
+                <!-- dành cho đơn vị chủ quản -->
+
+                @else
+                    <li>
+                        <a href="javascript:;">
+                            <i class="fa icon-book-open"></i>
+                            <span class="title">Tổng hợp dữ liệu</span>
+                            <span class="arrow "></span>
+                        </a>
+                        <ul class="sub-menu">
+
+                            <li>
+                                <a href="{{url('chuc_nang/tong_hop_luong/tinh/index?nam='.date('Y'))}}"><i class="fa fa-caret-right"></i>Tổng hợp lương toàn địa bàn quản lý</a>
+                            </li>
+
+                            <li>
+                                <a href="{{url('chuc_nang/tong_hop_nguon/tinh?sohieu=TT67_2017&madiaban='.session('admin')->madvbc)}}"><i class="fa fa-caret-right"></i>Tổng số liệu nguồn kinh phí  toàn tỉnh</a>
+                            </li>
+
+                            <li>
+                                <a href="{{url('chuc_nang/xem_du_lieu/tinh?thang='.date('m').'&nam='.date('Y').'&trangthai=ALL&madiaban='.session('admin')->madvbc)}}"><i class="fa fa-caret-right"></i>Xem số liệu tổng hợp toàn tỉnh</a>
+                            </li>
+
+                        </ul>
                     </li>
-                    </ul>
+
+                    <li>
+                        <a href="{{url('tong_hop_bao_cao/danh_sach')}}">
+                            <i class="fa fa-file-text"></i>
+                            <span class="title">Báo cáo tổng hợp</span>
+                        </a>
+                    </li>
+
+                    <li>
+                        <a href="javascript:;">
+                            <i class="fa fa-search"></i>
+                            <span class="title">Tra cứu</span><span class="arrow "></span>
+                        </a>
+                        <ul class="sub-menu">
+                            <li><a href="{{url('/tra_cuu/chi_luong')}}"><i class="fa fa-caret-right"></i>Bảng lương tại đơn vị</a></li>
+                        </ul>
+                    </li>
+                @endif
+            </ul>
+
+
 <!-- END SIDEBAR MENU -->
-</div>
+    </div>
 </div>
 <!-- END SIDEBAR -->
 
