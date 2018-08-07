@@ -77,21 +77,6 @@ class hosocanboController extends Controller
     function create()
     {
         if (Session::has('admin')) {
-            //kiểm tra nếu đơn vị chưa cập nhập danh mục phụ cấp thì tự động lấy danh mục thêm vào
-            $model_pc = dmphucap_donvi::where('madv', session('admin')->madv)->get();
-            if (count($model_pc) == 0) {//đơn vị chưa tạo phụ cấp
-                $m_donvi = dmdonvi::where('madv', session('admin')->madv)->first();
-                $model_dmpc = dmphucap::select('mapc', 'tenpc', 'baohiem', 'form', 'report', 'phanloai', 'congthuc', DB::raw(session('admin')->madv . ' as madv'))->get();
-                //dành cho các đơn vị đã cập nhật danh mục phụ cấp
-                if (count($m_donvi) > 0)
-                    foreach ($model_dmpc as $ct) {
-                        $mapc = $ct->mapc;
-                        $ct->phanloai = getDbl($m_donvi->$mapc);
-                        $ct->congthuc = $ct->phanloai == 2 ? "heso,vuotkhung,pccv" : "";
-                    }
-                dmphucap_donvi::insert($model_dmpc->toarray());
-            }
-
             $model_nhomct = dmphanloaicongtac::select('macongtac', 'tencongtac')->get();
             $model_tenct = dmphanloaict::select('tenct', 'macongtac', 'mact')->get();
             $model_dt = array_column(dmdantoc::select(DB::raw('dantoc as maso'), 'dantoc')->get()->toarray(), 'dantoc', 'maso');
@@ -208,21 +193,6 @@ class hosocanboController extends Controller
 
     function show($id){
         if (Session::has('admin')) {
-            //kiểm tra nếu đơn vị chưa cập nhập danh mục phụ cấp thì tự động lấy danh mục thêm vào
-            $model_pc = dmphucap_donvi::where('madv', session('admin')->madv)->get();
-            if (count($model_pc) == 0) {//đơn vị chưa tạo phụ cấp
-                $m_donvi = dmdonvi::where('madv', session('admin')->madv)->first();
-                $model_dmpc = dmphucap::select('mapc', 'tenpc', 'baohiem', 'form', 'report', 'phanloai', 'congthuc', DB::raw(session('admin')->madv . ' as madv'))->get();
-                //dành cho các đơn vị đã cập nhật danh mục phụ cấp
-                if (count($m_donvi) > 0)
-                    foreach ($model_dmpc as $ct) {
-                        $mapc = $ct->mapc;
-                        $ct->phanloai = getDbl($m_donvi->$mapc);
-                        $ct->congthuc = $ct->phanloai == 2 ? "heso,vuotkhung,pccv" : "";
-                    }
-                dmphucap_donvi::insert($model_dmpc->toarray());
-            }
-
             //$makhoipb=getMaKhoiPB(session('admin')->madv);
             $model = hosocanbo::find($id);
             //$m_hosoct = hosotinhtrangct::where('macanbo',$model->macanbo)->where('hientai','1')->first();

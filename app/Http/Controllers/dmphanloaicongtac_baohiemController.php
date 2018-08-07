@@ -18,24 +18,6 @@ class dmphanloaicongtac_baohiemController extends Controller
         if (Session::has('admin')) {
             $model = dmphanloaicongtac_baohiem::where('madv', session('admin')->madv)->get();
             $model_phanloai = dmphanloaicongtac::all();
-            if (count($model) == 0) {
-                foreach ($model_phanloai as $ct) {
-                    $new = new dmphanloaicongtac_baohiem();
-                    $new->madv = session('admin')->madv;
-                    $new->macongtac = $ct->macongtac;
-                    $new->bhxh = $ct->bhxh;
-                    $new->bhyt = $ct->bhyt;
-                    $new->bhyt = $ct->bhyt;
-                    $new->bhtn = $ct->bhtn;
-                    $new->kpcd = $ct->kpcd;
-                    $new->bhxh_dv = $ct->bhxh_dv;
-                    $new->bhyt_dv = $ct->bhyt_dv;
-                    $new->bhtn_dv = $ct->bhtn_dv;
-                    $new->kpcd_dv = $ct->kpcd_dv;
-                    $new->save();
-                }
-                $model = dmphanloaicongtac_baohiem::where('madv', session('admin')->madv)->get();
-            }
             $a_pl = array_column($model_phanloai->toArray(),'tencongtac','macongtac');
 
             foreach($model as $ct) {

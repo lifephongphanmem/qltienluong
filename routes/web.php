@@ -222,6 +222,7 @@ Route::group(['prefix'=>'nghiep_vu'],function(){
             Route::get('del/{id}','chitieubiencheController@destroy');
         });
         Route::group(['prefix'=>'du_toan'],function(){
+            Route::get('','dutoanluongController@show');
             Route::get('danh_sach','dutoanluongController@index');
             Route::get('del/{id}','dutoanluongController@destroy');
             Route::post('create','dutoanluongController@create');

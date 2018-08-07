@@ -5,6 +5,10 @@ namespace App\Http\Controllers;
 use App\dmbaomat;
 use App\dmdonvi;
 use App\dmdonvibaocao;
+use App\dmphanloaicongtac;
+use App\dmphanloaicongtac_baohiem;
+use App\dmphucap;
+use App\dmphucap_donvi;
 use App\DnDvLt;
 use App\DnDvLtReg;
 use App\DonViDvVt;
@@ -201,15 +205,39 @@ class UsersController extends Controller
                 $ttuser->madvbc = $model_donvi->madvbc;
                 $ttuser->maphanloai = $model_donvi->maphanloai;
                 $ttuser->capdonvi = $model_donvi->capdonvi;
+
+                //kiểm tra lại hệ thống danh mục nếu danh mục nào chưa có thì tự động lấy vào
+                //trường hợp đơn vị tổng hợp thì bỏ qua
+
+                //phân loại công tác
+                $model_phanloai = dmphanloaicongtac_baohiem::where('madv', $ttuser->madv)->get();
+                if (count($model_phanloai) == 0) {
+                    $model_phanloai = dmphanloaicongtac::select('macongtac', 'bhxh', 'bhyt', 'bhtn', 'kpcd', 'bhxh_dv', 'bhyt_dv', 'bhtn_dv', 'kpcd_dv', DB::raw($ttuser->madv . ' as madv'))->get();
+                    dmphanloaicongtac_baohiem::insert($model_phanloai->toarray());
+                }
+                //phụ cấp
+                $model_phucap = dmphucap_donvi::where('madv', $ttuser->madv)->get();
+                if (count($model_phucap) == 0) {
+                    $m_donvi = dmdonvi::where('madv', $ttuser->madv)->first();
+                    $model_dmpc = dmphucap::select('mapc', 'tenpc', 'baohiem', 'form', 'report', 'phanloai', 'congthuc', DB::raw($ttuser->madv . ' as madv'))->get();
+                    //dành cho các đơn vị đã cập nhật danh mục phụ cấp
+                    if (count($m_donvi) > 0)
+                        foreach ($model_dmpc as $ct) {
+                            $mapc = $ct->mapc;
+                            $ct->phanloai = getDbl($m_donvi->$mapc);
+                            $ct->congthuc = $ct->phanloai == 2 ? "heso,vuotkhung,pccv" : "";
+                        }
+
+                    dmphucap_donvi::insert($model_dmpc->toarray());
+                }
+
             }
             //kiểm tra xem user thuộc đơn vị nào, nếu ko thuộc đơn vị nào (trừ tài khoản quản trị) => đăng nhập ko thành công
         }
 
-
         //thêm mã đơn vị báo cáo, mã khối phòng ban, mã cqcq
         //dd($ttuser);
         if (md5($input['password']) == $ttuser->password) {
-
             if ($ttuser->status == "active") {
                 Session::put('admin', $ttuser);
                 //dd(session('admin'));

@@ -17,7 +17,7 @@ class CreateDutoanluongChitietTable extends Migration
 
         Schema::create('dutoanluong_chitiet', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('masodv',50)->unique();
+            $table->string('masodv',50)->nullable();
             $table->string('masok',50)->nullable();
             $table->string('masoh',50)->nullable();
             $table->string('masot',50)->nullable();

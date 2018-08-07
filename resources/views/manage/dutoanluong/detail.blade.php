@@ -32,10 +32,7 @@
             <div class="portlet light bordered">
                 <div class="portlet-title">
                     <div class="caption">
-                        <i class="fa fa-list-alt"></i>DANH SÁCH DỰ TOÁN LƯƠNG CỦA ĐƠN VỊ
-                    </div>
-                    <div class="actions">
-                        <button type="button" id="_btnadd" class="btn btn-default btn-xs" onclick="add()"><i class="fa fa-plus"></i>&nbsp;Thêm mới dự toán</button>
+                        <i class="fa fa-list-alt"></i>CHI TIẾT DỰ TOÁN LƯƠNG CỦA ĐƠN VỊ NĂM {{$model_dutoan->namns}}
                     </div>
                 </div>
                 <div class="portlet-body form-horizontal">
@@ -44,8 +41,10 @@
                         <thead>
                             <tr>
                                 <th class="text-center" style="width: 5%">STT</th>
-                                <th class="text-center">Năm ngân</br>sách</th>
-                                <th class="text-center">Tổng số</th>
+                                <th class="text-center">Phân loại</br>công tác</th>
+                                <th class="text-center">Số lượng</br>cán bộ</br>hiện có</th>
+                                <th class="text-center">Số lượng</br>cán bộ</br>dự toán</th>
+                                <th class="text-center">Tổng số</br>dự toán</th>
                                 <th class="text-center">Lương theo</br>ngạch bậc</th>
                                 <th class="text-center">Tổng các khoản</br>phụ cấp</th>
                                 <th class="text-center">Các khoản</br>đóng góp</th>
@@ -58,19 +57,18 @@
                                 @foreach($model as $key=>$value)
                                     <tr>
                                         <td class="text-center">{{$key+1}}</td>
-                                        <td  class="text-center">{{$value->namns}}</td>
-                                        <td class="text-right">{{number_format($value->luongnb_dt + $value->luonghs_dt + $value->luongbh_dt)}}</td>
+                                        <td>{{$value->tencongtac}}</td>
+                                        <td class="text-center">{{$value->canbo_congtac}}</td>
+                                        <td class="text-center">{{$value->canbo_dutoan}}</td>
+                                        <td class="text-right">{{number_format($value->tongcong)}}</td>
                                         <td class="text-right">{{number_format($value->luongnb_dt)}}</td>
                                         <td class="text-right">{{number_format($value->luonghs_dt)}}</td>
                                         <td class="text-right">{{number_format($value->luongbh_dt)}}</td>
                                         <td>
-                                            <a href="{{url($furl.'?maso='.$value->masodv)}}" class="btn btn-default btn-xs mbs">
-                                                <i class="fa fa-th-list"></i>&nbsp; Chi tiết</a>
-
                                             <button type="button" onclick="inbl('{{$value->maso}}','{{$value->thang}}','{{$value->nam}}')" class="btn btn-default btn-xs mbs">
-                                                <i class="fa fa-share-square-o"></i>&nbsp; Gửi dữ liệu</button>
+                                                <i class="fa fa-edit"></i>&nbsp; Sửa</button>
 
-                                            <button type="button" onclick="cfDel('{{$furl.'del/'.$value->id}}')" class="btn btn-default btn-xs mbs" data-target="#delete-modal-confirm" data-toggle="modal">
+                                            <button type="button" onclick="cfDel('{{$furl.'del/'.$value->maso}}')" class="btn btn-default btn-xs mbs" data-target="#delete-modal-confirm" data-toggle="modal">
                                                 <i class="fa fa-trash-o"></i>&nbsp; Xóa</button>
                                         </td>
                                     </tr>
@@ -78,42 +76,17 @@
                             @endif
                         </tbody>
                     </table>
-                </div>
-                </div>
-            </div>
-    </div>
 
-    <!--Modal thêm mới -->
-
-    {!! Form::open(['url'=>$furl.'create', 'id' => 'create_dutoan', 'class'=>'horizontal-form']) !!}
-    <div id="create-modal" tabindex="-1" role="dialog" aria-hidden="true" class="modal fade">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header modal-header-primary">
-                    <button type="button" data-dismiss="modal" aria-hidden="true" class="close">&times;</button>
-                    <h4 id="modal-header-primary-label" class="modal-title">Thông tin dự toán lương</h4>
-                </div>
-                <div class="modal-body">
                     <div class="row">
-                        <div class="col-md-6">
-                            <label class="control-label">Năm được giao dự toán</label>
-                            {!!Form::text('namdt', date('Y') + 1, array('id' => 'namdt','class' => 'form-control'))!!}
-                        </div>
+                        <div class="col-md-offset-5 col-md-8">
+                            <a href="{{url($furl.'danh_sach')}}" class="btn btn-default"><i class="fa fa-reply"></i>&nbsp;Quay lại</a>
 
-                        <div class="col-md-6">
-                            <label class="control-label">Mức lương cơ bản</label>
-                            {!!Form::text('luongcoban', getGeneralConfigs()['luongcb'], array('id' => 'luongcoban','class' => 'form-control', 'data-mask'=>'fdecimal'))!!}
                         </div>
                     </div>
                 </div>
-                <div class="modal-footer">
-                    <button type="button" data-dismiss="modal" class="btn btn-default">Hủy thao tác</button>
-                    <button type="submit" id="submit" name="submit" value="submit" class="btn btn-primary" onclick="confirm_create()">Đồng ý</button>
                 </div>
             </div>
-        </div>
     </div>
-    {!!Form::close()!!}
 
     <!--Modal chinh sửa -->
     <div id="chitiet-modal" tabindex="-1" role="dialog" aria-hidden="true" class="modal fade">
@@ -157,7 +130,7 @@
         function edit(id){
             var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
             $.ajax({
-                url: '{{$furl_ajax}}' + 'get',
+                url: '{{$furl}}' + 'get',
                 type: 'GET',
                 data: {
                     _token: CSRF_TOKEN,
@@ -186,7 +159,7 @@
             }
             var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
             $.ajax({
-                url: '{{$furl_ajax}}' + 'update',
+                url: '{{$furl}}' + 'update',
                 type: 'GET',
                 data: {
                     _token: CSRF_TOKEN,
