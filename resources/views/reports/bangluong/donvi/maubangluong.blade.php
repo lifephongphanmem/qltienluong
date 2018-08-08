@@ -49,6 +49,7 @@
 </head>
 
 
+
 <body style="font:normal 11px Times, serif;">
     <table class="header" width="96%" border="0" cellspacing="0" cellpadding="8" style="margin:0 auto 25px; text-align: center;">
         <tr>
@@ -91,20 +92,20 @@
 
     </table>
 
-    <table class="money" cellspacing="0" cellpadding="0" border="1" style="margin: 20px auto; border-collapse: collapse;">
+    <table class="money" cellspacing="0" cellpadding="0" border="1" style="margin: 20px auto; border-collapse: collapse;font:normal {{$thongtin['cochu']}}px Times, serif;">
         <tr style="padding-left: 2px;padding-right: 2px">
             <th style="width: 2%;" rowspan="2">S</br>T</br>T</th>
-            <th style="width: 6%;" rowspan="2">Mã số</br>công chức</th>
-            <th style="width: 10%;" rowspan="2">Họ và tên</th>
-            <th style="width: 6%;" rowspan="2">Cấp bậc</br>chức vụ</th>
-            <th style="width: 6%;" rowspan="2">Mã số</br>ngạch</br>bậc</th>
+            <th style="width: 3%;" rowspan="2">Mã</br>số</br>công</br>chức</th>
+            <th style="width: 12%;" rowspan="2">Họ và tên</th>
+            <th rowspan="2">Cấp</br>bậc</br>chức</br>vụ</th>
+            <th rowspan="2">Mã số</br>ngạch</br>bậc</th>
             <th colspan="{{$col + 4}}">Lương hệ số</th>
-            <th style="width: 6%;" rowspan="2">Nghỉ việc</br>không được</br>hưởng lương</th>
-            <th style="width: 6%;" rowspan="2">BHXH trả</br>thay lương</th>
-            <th style="width: 6%;" rowspan="2">Tổng cộng</br>tiền lương</th>
+            <th rowspan="2">Nghỉ việc</br>không được</br>hưởng lương</th>
+            <th rowspan="2">BHXH trả</br>thay lương</th>
+            <th rowspan="2">Tổng cộng</br>tiền lương</th>
             <th colspan="5">Các khoản phải khấu trừ</th>
-            <th style="width: 6%;" rowspan="2">Còn lại</th>
-            <th style="width: 6%;" rowspan="2">Ký nhận</th>
+            <th rowspan="2">Còn lại</th>
+            <th style="width: 3%;"rowspan="2">Ký nhận</th>
         </tr>
 
         <tr style="padding-left: 2px;padding-right: 2px">

@@ -87,16 +87,16 @@
 <p style="text-align: center; font-weight: bold; font-size: 20px;">BẢNG THANH TOÁN TIỀN LƯƠNG VÀ PHỤ CẤP</p>
 <p style="text-align: center; font-style: italic">Tháng {{$thongtin['thang']}} năm {{$thongtin['nam']}}</p>
 
-<table class="money" cellspacing="0" cellpadding="0" border="1" style="margin: 20px auto; border-collapse: collapse;">
+<table class="money" cellspacing="0" cellpadding="0" border="1" style="margin: 20px auto; border-collapse: collapse;font:normal {{$thongtin['cochu']}}px Times, serif;">
     <tr style="padding-left: 2px;padding-right: 2px">
         <th style="width: 2%;" rowspan="4">S</br>T</br>T</th>
-        <th style="width: 6%;" rowspan="4">Mã số</br>CBCC, viên</br>chức</th>
-        <th style="width: 10%;" rowspan="4">Họ và tên</th>
-        <th style="width: 6%;" rowspan="4">Cấp bậc</br>chức vụ</th>
+        <th style="width: 4%;" rowspan="4">Mã số</br>CBCC, viên</br>chức</th>
+        <th style="width: 15%;" rowspan="4">Họ và tên</th>
+        <th style="width: 3%;" rowspan="4">Cấp</br>bậc</br>chức</br>vụ</th>
         <th colspan="14">Lương hệ số</th>
-        <th style="width: 6%;" rowspan="4">Nghỉ việc</br>không được</br>hưởng lương</th>
-        <th style="width: 6%;" rowspan="4">BHXH trả</br>thay lương</th>
-        <th style="width: 6%;" rowspan="4">Tổng cộng</br>tiền lương</th>
+        <th style="width: 5%;" rowspan="4">Nghỉ việc</br>không được</br>hưởng lương</th>
+        <th style="width: 5%;" rowspan="4">BHXH trả</br>thay lương</th>
+        <th rowspan="4">Tổng cộng</br>tiền lương</th>
         <th colspan="5">Các khoản phải khấu trừ</th>
         <th style="width: 6%;" rowspan="4">Tổng tiền</br>lương và BHXH</br>còn được nhận</th>
     </tr>

@@ -88,7 +88,7 @@
         <th>Họ và tên</th>
         <th style="width: 15%;">Số tài khoản</th>
         <th style="width: 15%;">Số tiền</th>
-        <th style="width: 10%;">Ghi chú</th>
+        <th style="width: 20%;">Ghi chú</th>
     </tr>
 
     <?php $i=1; ?>
@@ -104,7 +104,7 @@
                 <tr>
                     <td>{{$stt++}}</td>
                     <td style="text-align: left">{{$ct->tencanbo}}</td>
-                    <td style="text-align: left">{{$ct->sotk}}</td>
+                    <td style="text-align: center">{{$ct->sotk}}</td>
                     <td>{{dinhdangso($ct->luongtn)}}</td>
                     <td></td>
                 </tr>

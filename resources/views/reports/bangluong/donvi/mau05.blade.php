@@ -52,8 +52,7 @@
     <button type="submit" onclick=" window.print()"> In bảng lương</button>
 </div>
 
-<!--body style="font:normal 11px Times, serif;"-->
-<body style="font-size: {{11}}px">
+<body style="font:normal 11px Times, serif;">
 
 <table class="header" width="96%" border="0" cellspacing="0" cellpadding="8" style="margin:0 auto 25px; text-align: center;">
     <tr>
@@ -85,14 +84,14 @@
 
     </tr>
 </table>
-<p style="text-align: center; font-weight: bold; font-size: 20px;">BẢNG THANH TOÁN TIỀN LƯƠNG VÀ CÁC KHOẢN PHỤ CẤP THEO LƯƠNG, CÁC KHOẢN TRÍCH NỘP THEO LƯƠNG</p>
+<p style="text-align: center; font-weight: bold; font-size: 20px;">BẢNG THANH TOÁN TIỀN LƯƠNG VÀ CÁC KHOẢN PHỤ CẤP</br>THEO LƯƠNG, CÁC KHOẢN TRÍCH NỘP THEO LƯƠNG</p>
 <p style="text-align: center; font-style: italic">Tháng {{$thongtin['thang']}} năm {{$thongtin['nam']}}</p>
 
-<table class="money" cellspacing="0" cellpadding="0" border="1" style="margin: 20px auto; border-collapse: collapse;">
+<table class="money" cellspacing="0" cellpadding="0" border="1" style="margin: 20px auto; border-collapse: collapse;font:normal {{$thongtin['cochu']}}px Times, serif;">
     <tr style="padding-left: 2px;padding-right: 2px">
         <th style="width: 2%;" rowspan="4">S</br>T</br>T</th>
         <th rowspan="4">Mã số</br>CBCC,</br>viên</br>chức</th>
-        <th style="width: 10%;" rowspan="4">Họ và tên</th>
+        <th style="width: 15%;" rowspan="4">Họ và tên</th>
         <th rowspan="4">Mã</br>ngạch</br>lương</th>
         <th colspan="12">Lương hệ số</th>
         <th rowspan="4">Tiền lương</br>tháng</th>

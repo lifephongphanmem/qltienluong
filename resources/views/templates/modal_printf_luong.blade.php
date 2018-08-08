@@ -45,6 +45,11 @@
                             @endforeach
                         </select>
                     </div>
+
+                    <div class="col-md-12">
+                        <label class="control-label">Cỡ chữ</label>
+                        {!!Form::select('cochu',getCoChu(), null, array('id' => 'cochu','class' => 'form-control select2me'))!!}
+                    </div>
                 </div>
             </div>
 
@@ -97,6 +102,11 @@
                                 </optgroup>
                             @endforeach
                         </select>
+                    </div>
+
+                    <div class="col-md-12">
+                        <label class="control-label">Cỡ chữ</label>
+                        {!!Form::select('cochu',getCoChu(), null, array('id' => 'cochu','class' => 'form-control select2me'))!!}
                     </div>
                 </div>
             </div>
@@ -152,6 +162,11 @@
                             @endforeach
                         </select>
                     </div>
+
+                    <div class="col-md-12">
+                        <label class="control-label">Cỡ chữ</label>
+                        {!!Form::select('cochu',getCoChu(), null, array('id' => 'cochu','class' => 'form-control select2me'))!!}
+                    </div>
                 </div>
             </div>
 
@@ -204,6 +219,11 @@
                                 </optgroup>
                             @endforeach
                         </select>
+                    </div>
+
+                    <div class="col-md-12">
+                        <label class="control-label">Cỡ chữ</label>
+                        {!!Form::select('cochu',getCoChu(), null, array('id' => 'cochu','class' => 'form-control select2me'))!!}
                     </div>
                 </div>
             </div>
@@ -263,6 +283,11 @@
                             @endforeach
                         </select>
                     </div>
+
+                    <div class="col-md-12">
+                        <label class="control-label">Cỡ chữ</label>
+                        {!!Form::select('cochu',getCoChu(), null, array('id' => 'cochu','class' => 'form-control select2me'))!!}
+                    </div>
                 </div>
             </div>
 
@@ -288,7 +313,6 @@
         <div class="modal-body">
             <div class="form-horizontal">
                 <div class="row">
-
                     <div class="col-md-12">
                         <label class="control-label">Khối/Tổ công tác</label>
                         <select name="mapb_mau6" id="mapb_mau6" class="form-control select2me">
@@ -296,13 +320,11 @@
                                 <option value="{{$key}}">{{$val}}</option>
                             @endforeach
                         </select>
-
                     </div>
 
                     <div class="col-md-12">
                         <label class="control-label">Chức vụ</label>
                         {!!Form::select('macvcq_mau6',getChucVuCQ(true), null, array('id' => 'macvcq_mau6','class' => 'form-control select2me'))!!}
-
                     </div>
 
                     <div class="col-md-12">
@@ -320,6 +342,11 @@
                                 </optgroup>
                             @endforeach
                         </select>
+                    </div>
+
+                    <div class="col-md-12">
+                        <label class="control-label">Cỡ chữ</label>
+                        {!!Form::select('cochu',getCoChu(), null, array('id' => 'cochu','class' => 'form-control select2me'))!!}
                     </div>
                 </div>
             </div>
@@ -543,6 +570,11 @@
                                 </optgroup>
                             @endforeach
                         </select>
+                    </div>
+
+                    <div class="col-md-12">
+                        <label class="control-label">Cỡ chữ</label>
+                        {!!Form::select('cochu',getCoChu(), null, array('id' => 'cochu','class' => 'form-control select2me'))!!}
                     </div>
                 </div>
             </div>

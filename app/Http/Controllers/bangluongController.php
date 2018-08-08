@@ -911,6 +911,7 @@ class bangluongController extends Controller
             $inputs['mapb'] = $inputs['mapb_mau1'];
             $inputs['macvcq'] = $inputs['macvcq_mau1'];
             $inputs['mact'] = $inputs['mact_mau1'];
+            //$inputs['cochu'] = $inputs['cochu_mau1'];
             $model = $this->getBangLuong($inputs);
             //dd($inputs);
             $mabl = $inputs['mabl'];
@@ -925,7 +926,8 @@ class bangluongController extends Controller
             $thongtin=array('nguoilap'=>$m_bl->nguoilap,
                 'thang'=>$m_bl->thang,
                 'nam'=>$m_bl->nam,
-                'ngaylap'=>$m_bl->ngaylap);
+                'ngaylap'=>$m_bl->ngaylap,
+                'cochu'=>$inputs['cochu']);
             //xử lý ẩn hiện cột phụ cấp => biết tổng số cột hiện => colspan trên báo cáo
             $a_phucapbc = getColPhuCap_BaoCao();
             $a_phucap = array();
@@ -936,7 +938,7 @@ class bangluongController extends Controller
                     $col++;
                 }
             }
-
+            //dd($thongtin);
             return view('reports.bangluong.donvi.maubangluong')
                 ->with('model',$model->sortBy('stt'))
                 ->with('model_pb',getPhongBan())
@@ -1027,7 +1029,8 @@ class bangluongController extends Controller
             $thongtin=array('nguoilap'=>$m_bl->nguoilap,
                 'thang'=>$m_bl->thang,
                 'nam'=>$m_bl->nam,
-                'ngaylap'=>$m_bl->ngaylap);
+                'ngaylap'=>$m_bl->ngaylap,
+                'cochu'=>$inputs['cochu']);
             //xử lý ẩn hiện cột phụ cấp => biết tổng số cột hiện => colspan trên báo cáo
             $a_phucapbc = getColPhuCap_BaoCao();
             $a_phucap = array();
@@ -1129,7 +1132,8 @@ class bangluongController extends Controller
             $thongtin=array('nguoilap'=>$m_bl->nguoilap,
                 'thang'=>$m_bl->thang,
                 'nam'=>$m_bl->nam,
-                'ngaylap'=>$m_bl->ngaylap);
+                'ngaylap'=>$m_bl->ngaylap,
+                'cochu'=>$inputs['cochu']);
             //xử lý ẩn hiện cột phụ cấp => biết tổng số cột hiện => colspan trên báo cáo
             $a_phucapbc = getColPhuCap_BaoCao();
             $a_phucap = array();
@@ -1231,7 +1235,8 @@ class bangluongController extends Controller
             $thongtin=array('nguoilap'=>$m_bl->nguoilap,
                 'thang'=>$m_bl->thang,
                 'nam'=>$m_bl->nam,
-                'ngaylap'=>$m_bl->ngaylap);
+                'ngaylap'=>$m_bl->ngaylap,
+                'cochu'=>$inputs['cochu']);
             //xử lý ẩn hiện cột phụ cấp => biết tổng số cột hiện => colspan trên báo cáo
             $a_phucapbc = getColPhuCap_BaoCao();
             $a_phucap = array();
@@ -1334,7 +1339,8 @@ class bangluongController extends Controller
             $thongtin=array('nguoilap'=>$m_bl->nguoilap,
                 'thang'=>$m_bl->thang,
                 'nam'=>$m_bl->nam,
-                'ngaylap'=>$m_bl->ngaylap);
+                'ngaylap'=>$m_bl->ngaylap,
+                'cochu'=>$inputs['cochu']);
             //xử lý ẩn hiện cột phụ cấp => biết tổng số cột hiện => colspan trên báo cáo
             $a_phucapbc = getColPhuCap_BaoCao();
             $a_phucap = array();
@@ -1456,7 +1462,8 @@ class bangluongController extends Controller
             $thongtin=array('nguoilap'=>$m_bl->nguoilap,
                 'thang'=>$m_bl->thang,
                 'nam'=>$m_bl->nam,
-                'ngaylap'=>$m_bl->ngaylap);
+                'ngaylap'=>$m_bl->ngaylap,
+                'cochu'=>$inputs['cochu']);
             //xử lý ẩn hiện cột phụ cấp => biết tổng số cột hiện => colspan trên báo cáo
             $a_phucapbc = getColPhuCap_BaoCao();
             $a_phucap = array();
@@ -1731,7 +1738,9 @@ class bangluongController extends Controller
             }
             $thongtin=array('nguoilap'=>session('admin')->name,
                 'thang'=>$m_bl->thang,
-                'nam'=>$m_bl->nam);
+                'nam'=>$m_bl->nam,
+                'cochu'=>$inputs['cochu']);
+
             return view('reports.bangluong.maubaohiem')
                 ->with('model',$model->sortBy('stt'))
                 ->with('model_pb',getPhongBan())
@@ -1804,6 +1813,7 @@ class bangluongController extends Controller
                 $ct->sotk = count($hoso) > 0 ? $hoso->sotk : null;
                 $ct->lvtd = count($hoso) > 0 ? $hoso->lvtd : null;
                 $ct->hspc = count($hoso) > 0 ? $hoso->pcdbqh : null;
+                $ct->sotien = $ct->hspc * $ct->luongcb;
             }
             $model = $model->where('hspc','>',0);
             $m_dv = dmdonvi::where('madv',$m_bl->madv)->first();
@@ -1843,6 +1853,7 @@ class bangluongController extends Controller
                 $ct->sotk = count($hoso) > 0 ? $hoso->sotk : null;
                 $ct->lvtd = count($hoso) > 0 ? $hoso->lvtd : null;
                 $ct->hspc = count($hoso) > 0 ? $hoso->pcdbqh : null;
+                $ct->sotien = $ct->hspc * $ct->luongcb;
             }
             $model = $model->where('hspc','>',0);
 
@@ -1900,6 +1911,7 @@ class bangluongController extends Controller
                 $hoso = $model_hoso->where('macanbo', $ct->macanbo)->first();
                 $ct->sotk = count($hoso) > 0 ? $hoso->sotk : null;
                 $ct->lvtd = count($hoso) > 0 ? $hoso->lvtd : null;
+                $ct->sotien = $ct->heso * $ct->luongcb;
             }
             $model = $model->where('heso', '>', 0);
             $m_dv = dmdonvi::where('madv', $m_bl->madv)->first();
@@ -1946,6 +1958,7 @@ class bangluongController extends Controller
                 $hoso = $model_hoso->where('macanbo', $ct->macanbo)->first();
                 $ct->sotk = count($hoso) > 0 ? $hoso->sotk : null;
                 $ct->lvtd = count($hoso) > 0 ? $hoso->lvtd : null;
+                $ct->sotien = $ct->heso * $ct->luongcb;
             }
             $model = $model->where('heso', '>', 0);
             $m_dv = dmdonvi::where('madv', $m_bl->madv)->first();

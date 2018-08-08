@@ -98,12 +98,12 @@
 <table class="money" cellspacing="0" cellpadding="0" border="1" style="margin: 20px auto; border-collapse: collapse;">
     <tr style="padding-left: 2px;padding-right: 2px; text-align: center">
         <td style="width: 5%;font-weight: bold" >STT</td>
-        <td style="text-align: center;font-weight: bold">Họ và tên</td>
+        <td style="width: 30%;text-align: center;font-weight: bold">Họ và tên</td>
         <td style="width: 10%; text-align: center;font-weight: bold">Địa chỉ</td>
         <td style="width: 10%; text-align: center;font-weight: bold">Hệ số</br>lương</td>
         <td style="width: 10%; text-align: center;font-weight: bold">Mức lương</br>tối tdiểu</td>
         <td style="width: 10%; text-align: center;font-weight: bold">Thành tiền</td>
-        <td style="width: 10%; text-align: center;font-weight: bold">Ký nhận</td>
+        <td style="width: 15%; text-align: center;font-weight: bold">Ký nhận</td>
     </tr>
 
     <?php $i=1; ?>
@@ -114,7 +114,7 @@
             <td style="text-align: left">{{$ct->lvtd}}</td>
             <td style="text-align: center">{{$ct->heso}}</td>
             <td style="text-align: right">{{dinhdangso($ct->luongcb)}}</td>
-            <td style="text-align: right">{{dinhdangso($ct->ttl)}}</td>
+            <td style="text-align: right">{{dinhdangso($ct->sotien)}}</td>
             <td></td>
         </tr>
     @endforeach
@@ -122,11 +122,11 @@
         <td colspan="3">Tổng cộng</td>
         <td class="money" style="text-align: center">{{$model->sum('heso')}}</td>
         <td class="money">{{dinhdangso($thongtin['luongcb'])}}</td>
-        <td class="money">{{dinhdangso($model->sum('ttl'))}}</td>
+        <td class="money">{{dinhdangso($model->sum('sotien'))}}</td>
         <td></td>
     </tr>
 </table>
-<p style="text-align: left; font-weight:bold;font-style: italic ">Tổng số tiền (Viết bằng chữ): {{Dbl2Str($model->sum('ttl'))}}</p>
+<p style="text-align: left; font-weight:bold;font-style: italic ">Tổng số tiền (Viết bằng chữ): {{Dbl2Str($model->sum('sotien'))}}</p>
 <table class="header" width="96%" border="0" cellspacing="0" cellpadding="8" style="margin:20px auto; text-align: center;">
     <tr>
         <th style="text-align: left;" width="50%"></th>

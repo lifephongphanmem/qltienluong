@@ -218,16 +218,17 @@ class UsersController extends Controller
                 //phụ cấp
                 $model_phucap = dmphucap_donvi::where('madv', $ttuser->madv)->get();
                 if (count($model_phucap) == 0) {
-                    $m_donvi = dmdonvi::where('madv', $ttuser->madv)->first();
                     $model_dmpc = dmphucap::select('mapc', 'tenpc', 'baohiem', 'form', 'report', 'phanloai', 'congthuc', DB::raw($ttuser->madv . ' as madv'))->get();
                     //dành cho các đơn vị đã cập nhật danh mục phụ cấp
+                    /*
+                    $m_donvi = dmdonvi::where('madv', $ttuser->madv)->first();
                     if (count($m_donvi) > 0)
                         foreach ($model_dmpc as $ct) {
                             $mapc = $ct->mapc;
                             $ct->phanloai = getDbl($m_donvi->$mapc);
                             $ct->congthuc = $ct->phanloai == 2 ? "heso,vuotkhung,pccv" : "";
                         }
-
+                    */
                     dmphucap_donvi::insert($model_dmpc->toarray());
                 }
 

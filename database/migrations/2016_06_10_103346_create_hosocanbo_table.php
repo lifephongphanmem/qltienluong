@@ -77,6 +77,7 @@ class CreateHosocanboTable extends Migration
             $table->date('ngayden')->nullable();
             $table->integer('bac')->default(1);
             $table->double('heso')->default(0);
+            $table->double('hesopc')->default(0);
             $table->double('vuotkhung')->default(0);
             $table->double('pthuong')->default(100);
             $table->double('pcct')->default(0);//dùng để thay thế phụ cấp ghép lớp
