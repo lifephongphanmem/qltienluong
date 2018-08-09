@@ -17,7 +17,7 @@ class CreateDmdonvibaocaoTable extends Migration
             $table->increments('id');
             $table->string('madvbc', 50)->nullable();
             $table->string('tendvbc')->nullable();
-            $table->string('level')->nullable(); //Cấp H; T
+            $table->string('level')->nullable(); //đơn vị sử dụng, tổng hợp dữ liệu huyện, sở ban ngành; đơn vị tổng hợp, kết xuất báo cáo toàn tỉnh
             $table->string('ghichu')->nullable();
             $table->string('madvcq', 50)->nullable();// đơn vị chủ quản, quản lý của khối báo cáo
             //vào đây để tạo các đơn vị thuộc khối này

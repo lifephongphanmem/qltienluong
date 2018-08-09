@@ -209,6 +209,31 @@ function getCapDonVi(){
         '4'=>'Đơn vị dự toán cấp 4');
 }
 
+
+function getPhanLoaiTaiKhoan(){
+    $model = array(
+        'SD'=>'Đơn vị sử dụng (nhập liệu)',
+        'TH'=>'Đơn vị tổng hợp dữ liệu'
+    );
+    return $model;
+}
+
+function getPhamViTongHop(){
+    $model = array(
+        'KHOI'=>'Khối; Sở, ban ngành',
+        'HUYEN'=>'Toàn huyện; Tất cả các sở, ban ngành'
+    );
+    return $model;
+}
+
+function getNhomDonVi(){
+    $model = array(
+        'H'=>'Đơn vị nhập liệu, tổng hợp dữ liệu',
+        'T'=>'Đơn vị tổng hợp, thống kê dữ liệu toàn tỉnh'
+    );
+    return $model;
+}
+
 function getPhanLoaiNguon(){
     //Theo Nghị định số 16/2015/NĐ-CP
     return array('NGANSACH'=>'Nguồn kinh phí do Nhà nước bảo đảm chi thường xuyên',

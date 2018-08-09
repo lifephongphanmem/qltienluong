@@ -314,7 +314,7 @@
                         @endif
 
                         @if(session('admin')->level == 'SA')
-                            <li><a href="{{url('danh_muc/khu_vuc/ma_so=H')}}"><i class="icon-book-open"></i>Danh sách khu vực, địa bàn quản lý</a></li>
+                            <li><a href="{{url('danh_muc/khu_vuc/danh_sach?level=H')}}"><i class="icon-book-open"></i>Danh sách khu vực, địa bàn quản lý</a></li>
                         @endif
                     </ul>
                 </li>

@@ -43,27 +43,28 @@ class UsersController extends Controller
             return view('errors.notlogin');
     }
 
-    public function list_users(Request $request){
+    public function list_users(Request $request)
+    {
         if (Session::has('admin')) {
-            $inputs=$request->all();
+            $inputs = $request->all();
 
             //Danh sách khu vực địa bàn
-            if(isset($inputs['level'])){
-                $a_baomat=array('H'=>'Cấp huyện','T'=>'Cấp tỉnh');
-                $model=dmdonvibaocao::where('level',$inputs['level'])->get();
+            if (isset($inputs['level'])) {
+                $a_baomat = getNhomDonVi();
+                $model = dmdonvibaocao::where('level', $inputs['level'])->get();
                 return view('system.users.index')
-                    ->with('model',$model)
-                    ->with('level',$inputs['level'])
-                    ->with('a_baomat',$a_baomat)
-                    ->with('furl','/danh_muc/tai_khoan/')
-                    ->with('pageTitle','Danh mục khu vực, địa bàn quản lý');
+                    ->with('model', $model)
+                    ->with('level', $inputs['level'])
+                    ->with('a_baomat', $a_baomat)
+                    ->with('furl', '/danh_muc/tai_khoan/')
+                    ->with('pageTitle', 'Danh mục khu vực, địa bàn quản lý');
             }
 
             //Danh sách đơn vị theo địa bàn
-            if(isset($inputs['madb'])) {
+            if (isset($inputs['madb'])) {
                 $model_donvi = dmdonvi::select('madv', 'tendv')->where('madvbc', $inputs['madb'])->get();
                 $madv = '';
-                if(count($model_donvi)> 0){
+                if (count($model_donvi) > 0) {
                     $madv = $model_donvi->first()->madv;
                 }
                 $model = Users::where('madv', $madv)->get();
@@ -77,8 +78,8 @@ class UsersController extends Controller
             }
 
             //Danh sách tài khoản theo đơn vị
-            if(isset($inputs['madv'])) {
-                $donvi= dmdonvi::where('madv', $inputs['madv'])->first();
+            if (isset($inputs['madv'])) {
+                $donvi = dmdonvi::where('madv', $inputs['madv'])->first();
                 $model_donvi = dmdonvi::select('madv', 'tendv')->where('madvbc', $donvi->madvbc)->get();
                 $model = Users::where('madv', $inputs['madv'])->get();
                 return view('system.users.index_users')
@@ -90,7 +91,7 @@ class UsersController extends Controller
             }
 
             //Chỉnh sửa thông tin người dùng
-            if(isset($inputs['username'])) {
+            if (isset($inputs['username'])) {
                 $model = Users::where('username', $inputs['username'])->first();
                 return view('system.users.edit')
                     ->with('model', $model)

@@ -16,24 +16,19 @@ use Illuminate\Support\Facades\Session;
 class dmdonvibaocaoController extends Controller
 {
     //begin - đơn vị báo cáo
-    public function index($level){
+    public function index(Request $request)
+    {
         if (Session::has('admin')) {
-            /*
-            if(session('admin')->level !='SA' && session('admin')->level !='SSA'){
-                return view('errors.noperm');
-            }
-            */
-            $a_baomat=array('H'=>'Cấp huyện','T'=>'Cấp tỉnh');
-            $model=dmdonvibaocao::where('level',$level)->get();
-            foreach($model as $donvi){
-                $donvi->tendv=getTenDV($donvi->madvcq);
+            $inputs = $request->all();
+            $model = dmdonvibaocao::where('level', $inputs['level'])->get();
+            foreach ($model as $donvi) {
+                $donvi->tendv = getTenDV($donvi->madvcq);
             }
             return view('system.danhmuc.donvibaocao.index')
-                ->with('model',$model)
-                ->with('level',$level)
-                ->with('a_baomat',$a_baomat)
-                ->with('furl','/danh_muc/khu_vuc/')
-                ->with('pageTitle','Danh mục khu vực, địa bàn quản lý');
+                ->with('model', $model)
+                ->with('level', $inputs['level'])
+                ->with('furl', '/danh_muc/khu_vuc/')
+                ->with('pageTitle', 'Danh mục khu vực, địa bàn quản lý');
         } else
             return view('errors.notlogin');
     }
@@ -110,52 +105,53 @@ class dmdonvibaocaoController extends Controller
     //end - đơn vị báo cáo
 
     //begin - đơn vị thuộc khu vực báo cáo
-    public function list_donvi($madvbc){
+    public function list_donvi(Request $request)
+    {
         if (Session::has('admin')) {
-            $model=dmdonvi::where('madvbc',$madvbc)->get();
-            $a_donvi=array_column($model->toarray(),'tendv','madv');
-            $a_phanloai=array_column(dmphanloaidonvi::all()->toarray(),'tenphanloai','maphanloai');
+            $inputs = $request->all();
+            $model = dmdonvi::where('madvbc', $inputs['ma_so'])->where('phanloaitaikhoan', $inputs['phan_loai'])->get();
+            $a_donvi = array_column(dmdonvi::where('madvbc', $inputs['ma_so'])->where('phanloaitaikhoan', 'TH')->get()->toarray(), 'tendv', 'madv');
+            //$a_donvi = array_column($model->toarray(), 'tendv', 'madv');
+            $a_phanloai = getPhanLoaiDonVi();
+            $a_phamvi = getPhamViTongHop();
             $model_capdv = getCapDonVi();
-            foreach($model as $donvi){
-                $donvi->tencqcq = isset($a_donvi[$donvi->macqcq])?$a_donvi[$donvi->macqcq]:'';
-                $donvi->phanloai = $a_phanloai[$donvi->maphanloai];
-                $donvi->capdutoan = isset($model_capdv[$donvi->capdonvi])?$model_capdv[$donvi->capdonvi]:'';
+            foreach ($model as $donvi) {
+                $donvi->tencqcq = isset($a_donvi[$donvi->macqcq]) ? $a_donvi[$donvi->macqcq] : '';
+                $donvi->phanloai = isset($a_phanloai[$donvi->maphanloai])?$a_phanloai[$donvi->maphanloai]:'';
+                $donvi->capdutoan = isset($model_capdv[$donvi->capdonvi]) ? $model_capdv[$donvi->capdonvi] : '';
+                $donvi->phamvi = isset($a_phamvi[$donvi->phamvitonghop])?$a_phamvi[$donvi->phamvitonghop]:'';
             }
 
             return view('system.danhmuc.donvibaocao.index_donvi')
-                ->with('model',$model)
-                ->with('madvbc',$madvbc)
-                ->with('url','/danh_muc/khu_vuc/')
-                ->with('pageTitle','Danh mục đơn vị');
+                ->with('model', $model)
+                ->with('a_donvi', $a_donvi)
+                ->with('inputs', $inputs)
+                ->with('url', '/danh_muc/khu_vuc/')
+                ->with('pageTitle', 'Danh mục đơn vị');
         } else
             return view('errors.notlogin');
     }
 
-    public function show_donvi($madvbc, $madonvi){
+    public function show_donvi($madvbc, $madonvi)
+    {
         if (Session::has('admin')) {
-            $model=dmdonvi::where('madv',$madonvi)->first();
-            $model_donvi = array_column(dmdonvi::select('madv','tendv')->where('madvbc',$madvbc)->get()->toarray(),'tendv','madv');
-            $a_kq = array(''=>'--Chọn đơn vị gửi dữ liệu--');
-            //$model_donvi=  array_merge($a_kq,$model_donvi);
-            foreach($model_donvi as $key=>$val){
-                $a_kq[$key]=$val;
-            }
-
-            $a_phanloai = array_column(dmphanloaidonvi::all()->toarray(),'tenphanloai','maphanloai');
+            $model = dmdonvi::where('madv', $madonvi)->first();
+            //$model_donvi = array_column(dmdonvi::select('madv','tendv')->where('madvbc',$madvbc)->get()->toarray(),'tendv','madv');
+            $model_donvi = array_column(dmdonvi::select('madv', 'tendv')->where('madvbc', $madvbc)->where('phanloaitaikhoan', 'TH')->get()->toarray(), 'tendv', 'madv');
+            $a_phanloai = array_column(dmphanloaidonvi::all()->toarray(), 'tenphanloai', 'maphanloai');
             $model_plxa = getPhanLoaiXa();
             $model_capdv = getCapDonVi();
-            $model_linhvuc = array_column(dmkhoipb::all()->toarray(),'tenkhoipb','makhoipb');
-            //$model_dvbc=dmdonvibaocao::where('madvbc',$model->madvbc)->first();
-            //$model_kpb =  array_column(dmkhoipb::select('makhoipb','tenkhoipb')->get()->toarray(),'tenkhoipb','makhoipb');
-            return view('system.danhmuc.donvibaocao.edit_donvi')
-                ->with('model',$model)
-                ->with('model_donvi',$a_kq)
-                ->with('model_phanloai',$a_phanloai)
-                ->with('model_plxa',$model_plxa)
-                ->with('model_capdv',$model_capdv)
-                ->with('model_linhvuc',$model_linhvuc)
-                ->with('url','/danh_muc/khu_vuc/')
-                ->with('pageTitle','Chỉnh sửa thông tin đơn vị');
+            $model_linhvuc = getLinhVucHoatDong(false);
+
+            return view('system.danhmuc.donvibaocao.edit_donvi_nhaplieu')
+                ->with('model', $model)
+                ->with('model_donvi', $model_donvi)
+                ->with('model_phanloai', $a_phanloai)
+                ->with('model_plxa', $model_plxa)
+                ->with('model_capdv', $model_capdv)
+                ->with('model_linhvuc', $model_linhvuc)
+                ->with('url', '/danh_muc/khu_vuc/')
+                ->with('pageTitle', 'Chỉnh sửa thông tin đơn vị');
         } else
             return view('errors.notlogin');
     }
@@ -170,33 +166,51 @@ class dmdonvibaocaoController extends Controller
             }
             $model->update($inputs);
 
-            return redirect('/danh_muc/khu_vuc/ma_so='.$model->madvbc.'/list_unit');
+            return redirect('/danh_muc/khu_vuc/chi_tiet?ma_so='.$model->madvbc.'&phan_loai='.$model->phanloaitaikhoan);
         }else
             return view('errors.notlogin');
     }
 
-    public function create_donvi($madvbc){
+    public function create_donvi(Request $request){
         if (Session::has('admin')) {
-            $model_donvi = array_column(dmdonvi::select('madv','tendv')->where('madvbc',$madvbc)->get()->toarray(),'tendv','madv');
-            $a_kq = array(''=>'--Chọn đơn vị gửi dữ liệu--');
-            //$model_donvi=  array_merge($a_kq,$model_donvi);
-            foreach($model_donvi as $key=>$val){
-                $a_kq[$key]=$val;
-            }
-            $a_phanloai = array_column(dmphanloaidonvi::all()->toarray(),'tenphanloai','maphanloai');
-            $model_plxa = getPhanLoaiXa();
+            $inputs = $request->all();
+
+            $model_donvi = array_column(dmdonvi::select('madv','tendv')->where('madvbc', $inputs['ma_so'])->where('phanloaitaikhoan', 'TH')->get()->toarray(),'tendv','madv');
+            $a_phanloai = getPhanLoaiDonVi();
+            $model_plxa = getPhanLoaiXa(false);
             $model_capdv = getCapDonVi();
-            $model_linhvuc = array_column(dmkhoipb::all()->toarray(),'tenkhoipb','makhoipb');
-            return view('system.danhmuc.donvibaocao.create_donvi')
-                ->with('url','/danh_muc/khu_vuc/')
-                ->with('model_donvi',$a_kq)
-                ->with('a_phanloai',$a_phanloai)
-                ->with('madvbc',$madvbc)
-                ->with('model_phanloai',$a_phanloai)
-                ->with('model_plxa',$model_plxa)
-                ->with('model_capdv',$model_capdv)
-                ->with('model_linhvuc',$model_linhvuc)
-                ->with('pageTitle','Thêm mới đơn vị');
+            $model_linhvuc = getLinhVucHoatDong(false);
+            if($inputs['phan_loai'] == 'SD'){
+                return view('system.danhmuc.donvibaocao.create_donvi_nhaplieu')
+                    ->with('url','/danh_muc/khu_vuc/')
+                    ->with('model_donvi',$model_donvi)
+                    ->with('a_phanloai',$a_phanloai)
+                    ->with('inputs',$inputs)
+                    ->with('model_phanloai',$a_phanloai)
+                    ->with('model_plxa',$model_plxa)
+                    ->with('model_capdv',$model_capdv)
+                    ->with('model_linhvuc',$model_linhvuc)
+                    ->with('pageTitle','Thêm mới đơn vị');
+            }else{
+                //một địa bàn chỉ có 1 tài khoản TH tổng
+
+                $count_donvi = dmdonvi::where('madvbc', $inputs['ma_so'])->where('phamvitonghop', 'HUYEN')->count();
+                if($count_donvi == 0){//chưa có đơn vị tổng hơp 'Toàn huyện; Tất cả các sở, ban ngành'
+                    $a_phamvi = array(
+                        'KHOI'=>'Khối; Sở, ban ngành',
+                        'HUYEN'=>'Toàn huyện; Tất cả các sở, ban ngành'
+                    );
+                }else{//Đã có
+                    $a_phamvi = array('KHOI'=>'Khối; Sở, ban ngành');
+                }
+                return view('system.danhmuc.donvibaocao.create_donvi_tonghop')
+                    ->with('url','/danh_muc/khu_vuc/')
+                    ->with('model_donvi',$model_donvi)
+                    ->with('a_phamvi',$a_phamvi)
+                    ->with('inputs',$inputs)
+                    ->with('pageTitle','Thêm mới đơn vị');
+            }
+
         } else
             return view('errors.notlogin');
     }
@@ -204,13 +218,7 @@ class dmdonvibaocaoController extends Controller
     public function store_donvi(Request $request){
         if (Session::has('admin')) {
             $inputs = $request->all();
-            if($inputs['madv'] == ''){
-                $inputs['madv']=getdate()[0];
-            }
-            if($inputs['macqcq'] == 'NULL'){
-                $inputs['macqcq']=null;
-            }
-
+            $inputs['madv']=getdate()[0];
             $inputs['name'] = $inputs['tendv'];
             $inputs['maxa'] = $inputs['madv'];
             $inputs['password'] = md5($inputs['password']);
@@ -219,7 +227,7 @@ class dmdonvibaocaoController extends Controller
             Users::create($inputs);
             dmdonvi::create($inputs);
 
-            return redirect('/danh_muc/khu_vuc/ma_so='.$inputs['madvbc'].'/list_unit');
+            return redirect('/danh_muc/khu_vuc/chi_tiet?ma_so='.$inputs['madvbc'].'&phan_loai='.$inputs['phanloaitaikhoan']);
         } else
             return view('errors.notlogin');
     }
@@ -229,7 +237,7 @@ class dmdonvibaocaoController extends Controller
             $model = dmdonvi::where('madv',$madv)->first();
             $model->delete();
             Users::where('madv',$madv)->delete();
-            return redirect('/danh_muc/khu_vuc/ma_so='.$model->madvbc.'/list_unit');
+            return redirect('/danh_muc/khu_vuc/chi_tiet?ma_so='.$model->madvbc.'&phan_loai='.$model->phanloaitaikhoan);
         } else
             return view('errors.notlogin');
     }
@@ -244,7 +252,7 @@ class dmdonvibaocaoController extends Controller
         }
 
         $inputs = $request->all();
-        $model = dmdonvi::where('madvbc',$inputs['madvbc'])->get();
+        $model = dmdonvi::where('madvbc',$inputs['madvbc'])->where('phamvitonghop','HUYEN')->get();
         $madvcq = dmdonvibaocao::where('madvbc',$inputs['madvbc'])->first()->madvcq;
         if(count($model)==0){
             $result['status']='fail';

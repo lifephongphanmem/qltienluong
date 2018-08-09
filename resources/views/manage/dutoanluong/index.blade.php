@@ -67,8 +67,8 @@
                                             <a href="{{url($furl.'?maso='.$value->masodv)}}" class="btn btn-default btn-xs mbs">
                                                 <i class="fa fa-th-list"></i>&nbsp; Chi tiết</a>
 
-                                            <button type="button" onclick="inbl('{{$value->maso}}','{{$value->thang}}','{{$value->nam}}')" class="btn btn-default btn-xs mbs">
-                                                <i class="fa fa-share-square-o"></i>&nbsp; Gửi dữ liệu</button>
+                                            <!--button type="button" onclick="inbl('{{$value->maso}}','{{$value->thang}}','{{$value->nam}}')" class="btn btn-default btn-xs mbs">
+                                                <i class="fa fa-share-square-o"></i>&nbsp; Gửi dữ liệu</button-->
 
                                             <button type="button" onclick="cfDel('{{$furl.'del/'.$value->id}}')" class="btn btn-default btn-xs mbs" data-target="#delete-modal-confirm" data-toggle="modal">
                                                 <i class="fa fa-trash-o"></i>&nbsp; Xóa</button>

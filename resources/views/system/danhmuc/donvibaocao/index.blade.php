@@ -35,7 +35,7 @@
                         DANH MỤC KHU VỰC, ĐỊA BÀN QUẢN LÝ
                     </div>
                     <div class="actions">
-                        <button type="button" id="_btnaddPB" class="btn btn-success btn-xs" onclick="addPB()"><i class="fa fa-plus"></i>&nbsp;Thêm mới</button>
+                        <button type="button" id="_btnaddPB" class="btn btn-default" onclick="addPB()"><i class="fa fa-plus"></i>&nbsp;Thêm mới</button>
                     </div>
                 </div>
                 <div class="portlet-body form-horizontal">
@@ -43,7 +43,7 @@
                         <div class="form-group">
                             <label class="control-label col-md-3">Cấp độ quản lý </label>
                             <div class="col-md-5">
-                                {!! Form::select('mucbaomat',$a_baomat,$level,array('id' => 'mucbaomat', 'class' => 'form-control'))!!}
+                                {!! Form::select('mucbaomat',getNhomDonVi(),$level,array('id' => 'mucbaomat', 'class' => 'form-control'))!!}
                             </div>
                         </div>
                     </div>
@@ -64,12 +64,15 @@
                                         <td>{{$value->tendvbc}}</td>
                                         <td>{{$value->tendv}}</td>
                                         <td>
-                                            <a href="{{url('/danh_muc/khu_vuc/ma_so='.$value->madvbc.'/list_unit')}}" class="btn btn-default btn-xs mbs">
+                                            <a href="{{url('/danh_muc/khu_vuc/chi_tiet?ma_so='.$value->madvbc.'&phan_loai=SD')}}" class="btn btn-default btn-xs mbs">
                                                 <i class="fa fa-list-alt"></i>&nbsp; Danh sách đơn vị</a>
-                                            <button type="button" onclick="edit('{{$value->madvbc}}')" class="btn btn-default btn-xs mbs">
-                                                <i class="fa fa-edit"></i>&nbsp; Chỉnh sửa</button>
-                                            <button type="button" onclick="unit_manage('{{$value->madvbc}}')" class="btn btn-default btn-xs mbs">
-                                                <i class="fa fa-sitemap"></i>&nbsp; Đơn vị tổng hợp số liệu</button>
+                                            @if($value->level != 'T')
+                                                <button type="button" onclick="edit('{{$value->madvbc}}')" class="btn btn-default btn-xs mbs">
+                                                    <i class="fa fa-edit"></i>&nbsp; Chỉnh sửa</button>
+                                                <button type="button" onclick="unit_manage('{{$value->madvbc}}')" class="btn btn-default btn-xs mbs">
+                                                    <i class="fa fa-sitemap"></i>&nbsp; Đơn vị tổng hợp số liệu</button>
+                                            @endif
+
                                             @if(session('admin')->level == 'SA')
                                                 <button type="button" onclick="cfDel('{{$furl.'del/'.$value->madvbc}}')" class="btn btn-default btn-xs mbs" data-target="#delete-modal-confirm" data-toggle="modal">
                                                     <i class="fa fa-trash-o"></i>&nbsp; Xóa</button>
@@ -98,7 +101,7 @@
                     {!!Form::text('tendvbc', null, array('id' => 'tendvbc','class' => 'form-control'))!!}
 
                     <label class="form-control-label">Cấp độ quản lý</label>
-                    {!! Form::select('level',$a_baomat,$level,array('id' => 'level', 'class' => 'form-control'))!!}
+                    {!! Form::select('level',getNhomDonVi(),$level,array('id' => 'level', 'class' => 'form-control','readonly'))!!}
 
                     <label class="form-control-label">Ghi chú</label>
                     {!!Form::textarea('ghichu', null, array('id' => 'ghichu','class' => 'form-control','rows'=>'3'))!!}
@@ -138,7 +141,7 @@
 
         $(function(){
             $('#mucbaomat').change(function() {
-                window.location.href = '/danh_muc/khu_vuc/ma_so='+$('#mucbaomat').val();
+                window.location.href = '/danh_muc/khu_vuc/danh_sach?level='+$('#mucbaomat').val();
             });
         })
 
@@ -251,7 +254,7 @@
                     if(data.status=='success'){
                         $('#donvichuquan').replaceWith(data.message);
                     }else{
-                        toastr.error('Khu vực, địa bàn này chưa có đơn vị nào.','Lỗi!');
+                        toastr.error('Khu vực, địa bàn này chưa có đơn vị tổng hợp dữ liệu toàn địa bàn.','Lỗi!');
                         $('#donvichuquan').replaceWith(data.message);
                     }
                 },

@@ -24,6 +24,7 @@ class CreateTonghopluongDonviDiabanTable extends Migration
             $table->double('luongcoban')->default(0);
             $table->double('heso')->default(0);
             $table->double('hesott')->default(0);//hệ số truy thu
+            $table->double('hesopc')->default(0);
             $table->double('vuotkhung')->default(0);
             $table->double('pcct')->default(0);
             $table->double('pckct')->default(0);

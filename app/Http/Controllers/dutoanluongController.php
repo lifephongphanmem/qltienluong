@@ -44,7 +44,7 @@ class dutoanluongController extends Controller
         }
 
         $inputs = $request->all();
-        $model = dutoanluong::find($inputs['id']);
+        $model = dutoanluong_chitiet::where('masodv',$inputs['masodv'])->where('macongtac',$inputs['macongtac'])->first();
         die($model);
     }
 
@@ -308,6 +308,45 @@ class dutoanluongController extends Controller
                 ->with('model', $model)
                 ->with('model_dutoan', $model_dutoan)
                 ->with('pageTitle', 'Dự toán lương chi tiết');
+        } else
+            return view('errors.notlogin');
+    }
+
+    function update_detail(Request $request)
+    {
+        if (Session::has('admin')) {
+            $inputs = $request->all();
+            $inputs['luongnb'] = getDbl($inputs['luongnb']);
+            $inputs['luonghs'] = getDbl($inputs['luonghs']);
+            $inputs['luongbh'] = getDbl($inputs['luongbh']);
+            $inputs['luongnb_dt'] = getDbl($inputs['luongnb_dt']);
+            $inputs['luonghs_dt'] = getDbl($inputs['luonghs_dt']);
+            $inputs['luongbh_dt'] = getDbl($inputs['luongbh_dt']);
+
+            $model = dutoanluong_chitiet::find($inputs['id_ct']);
+            $model->update($inputs);
+            $this->duToan($model->masodv);
+            return redirect('/nghiep_vu/quan_ly/du_toan?maso='.$model->masodv);
+
+        } else
+            return view('errors.notlogin');
+    }
+
+    function duToan($masodv){
+        $m_chitiet = dutoanluong_chitiet::where('masodv',$masodv)->get();
+        $inputs = array();
+        $inputs['luongnb_dt'] = $m_chitiet->sum('luongnb_dt');
+        $inputs['luonghs_dt'] = $m_chitiet->sum('luonghs_dt');
+        $inputs['luongbh_dt'] = $m_chitiet->sum('luongbh_dt');
+        dutoanluong::where('masodv',$masodv)->first()->update($inputs);
+    }
+
+    function destroy_detail($id){
+        if (Session::has('admin')) {
+            $model = dutoanluong_chitiet::find($id);
+            $model->delete();
+            $this->duToan($model->masodv);
+            return redirect('/nghiep_vu/quan_ly/du_toan?maso='.$model->masodv);
         } else
             return view('errors.notlogin');
     }

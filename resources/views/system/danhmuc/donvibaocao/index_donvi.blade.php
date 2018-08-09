@@ -34,22 +34,34 @@
                     <div class="caption">DANH SÁCH CÁC ĐƠN VỊ</div>
                     <div class="actions">
                         <div class="actions">
-                            <a class="btn btn-default" href="{{url($url.'ma_so='.$madvbc.'/create')}}">
-                                <i class="fa fa-plus"></i> Thêm mới đơn vị
+                            <a class="btn btn-default" href="{{url($url.'create?ma_so='.$inputs['ma_so'].'&phan_loai='.$inputs['phan_loai'])}}">
+                                <i class="fa fa-plus"></i> Thêm mới
                             </a>
                         </div>
                     </div>
                 </div>
                 <div class="portlet-body form-horizontal">
+                    <div class="row">
+                        <div class="form-group">
+                            <label class="control-label col-md-3">Nhóm đơn vị sử dụng </label>
+                            <div class="col-md-5">
+                                {!! Form::select('phanloaitaikhoan',getPhanLoaiTaiKhoan(),$inputs['phan_loai'],array('id' => 'phanloaitaikhoan', 'class' => 'form-control'))!!}
+                            </div>
+                        </div>
+                    </div>
+
                     <table id="sample_3" class="table table-hover table-striped table-bordered" style="min-height: 230px">
                         <thead>
                             <tr>
                                 <th class="text-center" style="width: 4%">STT</th>
                                 <th class="text-center">Mã đơn vị</th>
                                 <th class="text-center">Tên đơn vị</th>
-                                <th class="text-center">Đơn vị quản lý</th>
-                                <th class="text-center">Phân loại đơn vị</th>
-                                <th class="text-center">Cấp dự toán</th>
+                                <th class="text-center">Đơn vị gửi dữ</br>liệu tổng hợp</th>
+                                @if($inputs['phan_loai'] == 'TH')
+                                    <th class="text-center">Phạm vị tổng</br>hợp dữ liệu</th>
+                                @else
+                                    <th class="text-center">Phân loại đơn vị</th>
+                                @endif
                                 <th class="text-center">Thao tác</th>
                             </tr>
                             </thead>
@@ -61,8 +73,11 @@
                                             <td>{{$value->madv}}</td>
                                             <td>{{$value->tendv}}</td>
                                             <td>{{$value->tencqcq}}</td>
-                                            <td>{{$value->capdutoan}}</td>
-                                            <td>{{$value->diachi}}</td>
+                                            @if($inputs['phan_loai'] == 'TH')
+                                                <td>{{$value->phamvi}}</td>
+                                            @else
+                                                <td>{{$value->phanloai}}</td>
+                                            @endif
                                             <td>
                                                 <a class="btn btn-default btn-xs mbs" href="{{url($url.'ma_so='.$value->madvbc.'&don_vi='.$value->madv.'/edit')}}">
                                                     <i class="fa fa-edit"></i> Chỉnh sửa
@@ -77,9 +92,21 @@
                             </tbody>
                     </table>
                 </div>
+                <div class="row">
+                    <div class="col-md-offset-5 col-md-8">
+                        <a href="{{url('/danh_muc/khu_vuc/danh_sach?level=H')}}" class="btn btn-default"><i class="fa fa-reply"></i>&nbsp;Quay lại</a>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
 
+    <script>
+        $(function(){
+            $('#phanloaitaikhoan').change(function() {
+                window.location.href = '/danh_muc/khu_vuc/chi_tiet?ma_so='+'{{$inputs['ma_so']}}'+'&phan_loai='+$('#phanloaitaikhoan').val();
+            });
+        })
+    </script>
     @include('includes.modal.delete')
 @stop

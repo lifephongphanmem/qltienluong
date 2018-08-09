@@ -122,15 +122,15 @@ Route::group(['prefix'=>'danh_muc'],function(){
     });
 
     Route::group(['prefix'=>'khu_vuc'],function(){
-        Route::get('ma_so={level}','dmdonvibaocaoController@index');
+        Route::get('danh_sach','dmdonvibaocaoController@index');
         Route::get('get','dmdonvibaocaoController@getinfo');
         Route::get('add','dmdonvibaocaoController@store');
         Route::get('update','dmdonvibaocaoController@update');
         Route::get('del/{maso}','dmdonvibaocaoController@destroy');
 
-        Route::get('ma_so={makhuvuc}/list_unit','dmdonvibaocaoController@list_donvi');
+        Route::get('chi_tiet','dmdonvibaocaoController@list_donvi');
         Route::get('ma_so={makhuvuc}&don_vi={madonvi}/edit','dmdonvibaocaoController@show_donvi');
-        Route::get('ma_so={makhuvuc}/create','dmdonvibaocaoController@create_donvi');
+        Route::get('create','dmdonvibaocaoController@create_donvi');
 
         Route::patch('update_donvi','dmdonvibaocaoController@update_donvi');
         Route::post('store_donvi','dmdonvibaocaoController@store_donvi');
@@ -228,6 +228,10 @@ Route::group(['prefix'=>'nghiep_vu'],function(){
             Route::post('create','dutoanluongController@create');
             Route::get('checkNamDuToan','dutoanluongController@checkNamDT');
             Route::get('checkBangLuong','dutoanluongController@checkBangLuong');
+
+            Route::get('detail/del/{id}','dutoanluongController@destroy_detail');
+            Route::post('detail/update','dutoanluongController@update_detail');
+            Route::get('detail/get','dutoanluongController@get_detail');
         });
 
         Route::group(['prefix'=>'dia_ban_dbkk'],function(){

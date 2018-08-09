@@ -22,37 +22,14 @@ class dmdonvi extends Model
         'macqcq',
         'diadanh',
         'nguoilapbieu',
-        'makhoipb', //phân loại đơn vị tổng hợp; đơn vị sử dụng
+        'makhoipb',
         'maphanloai',
+        'phanloaitaikhoan', //phân loại đơn vị tổng hợp; đơn vị sử dụng
+        'phamvitonghop',
         'madvbc',
         'capdonvi',
         'phanloaixa',
         'phanloainguon',
-        'linhvuchoatdong',
-        //
-        'pcct',
-        'pckct',
-        'pck',
-        'pccv',
-        'pckv',
-        'pcth',
-        'pcdd',
-        'pcdh',
-        'pcld',
-        'pcdbqh',
-        'pcudn',
-        'pctn',
-        'pctnn',
-        'pcdbn',
-        'pcvk',//dùng để thay thế phụ cấp Đảng ủy viên
-        'pckn',
-        'pcdang',
-        'pccovu',
-        'pclt', //lưu thay phụ cấp phân loại xã
-        'pcd',
-        'pctr',
-        'pctnvk',
-        'pcbdhdcu',
-        'pcthni'
+        'linhvuchoatdong'
     ];
 }

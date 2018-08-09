@@ -37,12 +37,6 @@
                     <input type="hidden" name="madv" id="madv" value="{{$model->madv}}" />
                         <div class="form-body">
                             <div class="row">
-                                <div class="col-md-6">
-                                    <div class="form-group">
-                                        <label class="control-label">Mã đơn vị<span class="require">*</span></label>
-                                        {!!Form::text('madv', null, array('id' => 'madv','class' => 'form-control','readonly'))!!}
-                                    </div>
-                                </div>
 
                                 <div class="col-md-6">
                                     <div class="form-group">
@@ -50,17 +44,15 @@
                                         {!!Form::text('tendv', null, array('id' => 'tendv','class' => 'form-control required'))!!}
                                     </div>
                                 </div>
-                            </div>
 
-                            <div class="row">
-                                <div class="col-md-6">
+                                <div class="col-md-4">
                                     <div class="form-group">
                                         <label class="control-label">Địa chỉ</label>
                                         {!!Form::text('diachi', null, array('id' => 'diachi','class' => 'form-control'))!!}
                                     </div>
                                 </div>
 
-                                <div class="col-md-6">
+                                <div class="col-md-2">
                                     <div class="form-group">
                                         <label class="control-label">Địa danh</label>
                                         {!!Form::text('diadanh', null, array('id' => 'diadanh','class' => 'form-control'))!!}
@@ -147,7 +139,7 @@
             <div class="row" style="text-align: center">
                 <div class="col-md-12">
                     <button type="submit" class="btn green" onclick="validateForm()"><i class="fa fa-check"></i> Cập nhật</button>
-                    <a href="{{url('/danh_muc/khu_vuc/ma_so='.$model->madvbc.'/list_unit')}}" class="btn default">Hủy</a>
+                    <a href="{{url('/danh_muc/khu_vuc/chi_tiet?ma_so='.$model->madvbc.'&phan_loai='.$model->phanloaitaikhoan)}}" class="btn default">Hủy</a>
                 </div>
             </div>
             {!! Form::close() !!}
