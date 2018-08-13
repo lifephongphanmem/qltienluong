@@ -10,6 +10,7 @@ class nguonkinhphi extends Model
     protected $fillable = [
         'id',
         'masodv',
+        'masok',
         'masoh',
         'masot',
         'sohieu',

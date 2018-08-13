@@ -472,13 +472,26 @@ Route::group(['prefix'=>'chuc_nang'],function(){
         Route::post('tralai','tonghopnguonController@tralai');
         Route::get('ma_so={sohieu}/in_khoi','tonghopnguonController@printf_khoi');
 
-        Route::get('huyen','tonghopnguonController@index_huyen');
+        //Route::get('huyen','tonghopnguonController@index_huyen');
         Route::post('tralai_huyen','tonghopnguonController@tralai_huyen');
         Route::get('ma_so={sohieu}/in_huyen','tonghopnguonController@printf_huyen');
 
         Route::get('tinh','tonghopnguonController@index_tinh');
         Route::post('tralai_tinh','tonghopnguonController@tralai_tinh');
         Route::get('/in_tinh','tonghopnguonController@printf_tinh');
+
+        Route::group(['prefix'=>'huyen'],function(){
+            Route::get('index','tonghopnguon_huyenController@index');
+            Route::post('tralai','tonghopnguon_huyenController@tralai');
+            Route::get('ma_so={sohieu}/in','tonghopnguon_huyenController@printf');
+        });
+
+        Route::group(['prefix'=>'khoi'],function(){
+            Route::get('index','tonghopnguon_khoiController@index');
+            Route::post('tralai','tonghopnguon_khoiController@tralai');
+            Route::get('ma_so={sohieu}/in','tonghopnguon_khoiController@printf');
+        });
+
     });
 
     Route::group(['prefix'=>'buoc_thoi_viec'],function(){

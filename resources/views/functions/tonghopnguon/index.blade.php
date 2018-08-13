@@ -52,8 +52,9 @@
                         <thead>
                         <tr>
                             <th class="text-center" style="width: 5%">STT</th>
-                            <th class="text-center">Tên đơn vị</th>
-                            <th class="text-center">Tên đơn vị tổng hợp dữ liệu</th>
+                            <th class="text-center">Căn cứ thông tư, quyết định</th>
+                            <th class="text-center">Đơn vị gửi</br>số liệu</th>
+                            <th class="text-center">Trạng thái</th>
                             <th class="text-center">Thao tác</th>
                         </tr>
                         </thead>
@@ -62,8 +63,9 @@
                             @foreach($model as $key=>$value)
                                 <tr>
                                     <td class="text-center">{{$key+1}}</td>
-                                    <td>{{$value->tendv}}</td>
-                                    <td>{{$value->tendvcq}}</td>
+                                    <td>{{$value->tenttqd}}</td>
+                                    <td class="text-center">{{$value->sldv}}</td>
+                                    <td class="text-center bold">{{$a_trangthai[$value['trangthai']]}}</td>
                                     <td>
                                         @if ($value->masodv != NULL)
                                             <a href="{{url('/du_toan/nguon_kinh_phi/ma_so='.$value['masodv'].'/in')}}" class="btn btn-default btn-sm" TARGET="_blank">

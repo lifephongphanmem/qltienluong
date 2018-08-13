@@ -16,6 +16,7 @@ class CreateNguonkinhphiTable extends Migration
         Schema::create('nguonkinhphi', function (Blueprint $table) {
             $table->increments('id');
             $table->string('masodv',50)->nullable();
+            $table->string('masok',50)->nullable();
             $table->string('masoh',50)->nullable();
             $table->string('masot',50)->nullable();
             $table->string('sohieu')->nullable();
