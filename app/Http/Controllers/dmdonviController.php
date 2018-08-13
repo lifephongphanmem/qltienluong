@@ -64,39 +64,41 @@ class dmdonviController extends Controller
             return view('errors.notlogin');
     }
 
-    function edit_local(Request $request){
+    function edit_local(Request $request)
+    {
         if (Session::has('admin')) {
             $inputs = $request->all();
-            if(session('admin')->level=='SA'|| session('admin')->madv == $inputs['maso']){
-                $model=dmdonvi::where('madv',$inputs['maso'])->first();
-
-                //$makpb=getMaKhoiPB(session('admin')->maxa);
-                //$model_kpb=dmkhoipb::select('makhoipb','tenkhoipb')->where('makhoipb',$makpb)->get()->toarray();
-
-                $model_donvi = array_column(dmdonvi::select('madv','tendv')->where('madvbc',$model->madvbc)->get()->toarray(),'tendv','madv');
-                $a_kq = array(''=>'--Chọn đơn vị gửi dữ liệu--');
-                //$model_donvi=  array_merge($a_kq,$model_donvi);
-                foreach($model_donvi as $key=>$val){
-                    $a_kq[$key]=$val;
-                }
-                $a_phanloai = array_column(dmphanloaidonvi::all()->toarray(),'tenphanloai','maphanloai');
-                $model_plxa = getPhanLoaiXa();
-                $model_capdv = getCapDonVi();
-                $model_linhvuc = array_column(dmkhoipb::all()->toarray(),'tenkhoipb','makhoipb');
-                $a_linhvuc = explode(',',$model->linhvuchoatdong);
-
+            if (session('admin')->level == 'SA' || session('admin')->madv == $inputs['maso']) {
+                $model = dmdonvi::where('madv', $inputs['maso'])->first();
+                $model_donvi = array_column(dmdonvi::select('madv', 'tendv')->where('madvbc', $model->madvbc)->where('phanloaitaikhoan', 'TH')->get()->toarray(), 'tendv', 'madv');
+                /*
+                    $model_donvi = array_column(dmdonvi::select('madv','tendv')->where('madvbc',$model->madvbc)->get()->toarray(),'tendv','madv');
+                    $a_kq = array(''=>'--Chọn đơn vị gửi dữ liệu--');
+                    //$model_donvi=  array_merge($a_kq,$model_donvi);
+                    foreach($model_donvi as $key=>$val){
+                      $a_kq[$key]=$val;
+                    }
+                    /*
+                    $a_phanloai = array_column(dmphanloaidonvi::all()->toarray(),'tenphanloai','maphanloai');
+                    $model_plxa = getPhanLoaiXa();
+                    $model_capdv = getCapDonVi();
+                    $model_linhvuc = array_column(dmkhoipb::all()->toarray(),'tenkhoipb','makhoipb');
+                    $a_linhvuc = explode(',',$model->linhvuchoatdong);
+                */
                 return view('system.general.local.edit')
-                    ->with('model',$model)
-                    ->with('model_donvi',$a_kq)
+                    ->with('model', $model)
+                    ->with('model_donvi', $model_donvi)
                     //->with('a_phanloai',$a_phanloai)
-                    ->with('a_phanloai',getPhanLoaiDonVi())
-                    ->with('model_plxa',getPhanLoaiXa())
-                    ->with('model_capdv',getCapDonVi())
-                    ->with('model_linhvuc',array_column(dmkhoipb::all()->toarray(),'tenkhoipb','makhoipb'))
-                    ->with('a_linhvuc',explode(',',$model->linhvuchoatdong))
-                    ->with('url','/he_thong/don_vi/')
-                    ->with('pageTitle','Chỉnh sửa thông tin đơn vị');
-            }else{return view('errors.noperm');}
+                    ->with('a_phanloai', getPhanLoaiDonVi())
+                    ->with('model_plxa', getPhanLoaiXa())
+                    ->with('model_capdv', getCapDonVi())
+                    ->with('model_linhvuc', array_column(dmkhoipb::all()->toarray(), 'tenkhoipb', 'makhoipb'))
+                    ->with('a_linhvuc', explode(',', $model->linhvuchoatdong))
+                    ->with('url', '/he_thong/don_vi/')
+                    ->with('pageTitle', 'Chỉnh sửa thông tin đơn vị');
+            } else {
+                return view('errors.noperm');
+            }
 
         } else
             return view('errors.notlogin');

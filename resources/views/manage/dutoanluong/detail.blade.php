@@ -65,11 +65,13 @@
                                         <td class="text-right">{{number_format($value->luonghs_dt)}}</td>
                                         <td class="text-right">{{number_format($value->luongbh_dt)}}</td>
                                         <td>
-                                            <button type="button" onclick="getDuToan('{{$value->masodv}}','{{$value->macongtac}}')" class="btn btn-default btn-xs mbs">
-                                                <i class="fa fa-edit"></i>&nbsp; Sửa</button>
+                                            @if($model_dutoan->trangthai == 'CHUAGUI')
+                                                <button type="button" onclick="getDuToan('{{$value->masodv}}','{{$value->macongtac}}')" class="btn btn-default btn-xs mbs">
+                                                    <i class="fa fa-edit"></i>&nbsp; Sửa</button>
 
-                                            <button type="button" onclick="cfDel('{{$furl.'detail/del/'.$value->id}}')" class="btn btn-default btn-xs mbs" data-target="#delete-modal-confirm" data-toggle="modal">
-                                                <i class="fa fa-trash-o"></i>&nbsp; Xóa</button>
+                                                <button type="button" onclick="cfDel('{{$furl.'detail/del/'.$value->id}}')" class="btn btn-default btn-xs mbs" data-target="#delete-modal-confirm" data-toggle="modal">
+                                                    <i class="fa fa-trash-o"></i>&nbsp; Xóa</button>
+                                            @endif
                                         </td>
                                     </tr>
                                 @endforeach

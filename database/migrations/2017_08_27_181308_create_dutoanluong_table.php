@@ -25,6 +25,16 @@ class CreateDutoanluongTable extends Migration
             $table->double('luongbh_dt')->default(0);
             $table->string('ghichu')->nullable();
             $table->string('madv')->nullable();
+
+            $table->string('trangthai',50)->default('CHUAGUI');
+            $table->text('lydo')->nullable();
+
+            //Đơn vị tổng hợp sau đó tùy level mà gửi lên huyện hoặc tỉnh
+            $table->date('ngayguidv')->nullable();
+            $table->string('nguoiguidv',50)->nullable();
+            //Thông tin người gửi cấp huyện (huyện kết xuất báo cáo xem dữ liệu)
+            $table->date('ngayguih')->nullable();
+            $table->string('nguoiguih',50)->nullable();
             $table->timestamps();
         });
     }

@@ -66,12 +66,20 @@
                                         <td>
                                             <a href="{{url($furl.'?maso='.$value->masodv)}}" class="btn btn-default btn-xs mbs">
                                                 <i class="fa fa-th-list"></i>&nbsp; Chi tiết</a>
+                                            @if($value->trangthai == 'CHUAGUI' || $value->trangthai == 'TRALAI')
+                                                <button type="button" class="btn btn-default btn-xs" onclick="confirmChuyen('{{$value->masodv}}')" data-target="#chuyen-modal" data-toggle="modal"><i class="fa fa-share-square-o"></i>&nbsp;
+                                                    Gửi dữ liệu</button>
 
-                                            <!--button type="button" onclick="inbl('{{$value->maso}}','{{$value->thang}}','{{$value->nam}}')" class="btn btn-default btn-xs mbs">
-                                                <i class="fa fa-share-square-o"></i>&nbsp; Gửi dữ liệu</button-->
+                                                <button type="button" onclick="cfDel('{{$furl.'del/'.$value->id}}')" class="btn btn-default btn-xs mbs" data-target="#delete-modal-confirm" data-toggle="modal">
+                                                    <i class="fa fa-trash-o"></i>&nbsp; Xóa</button>
+                                            @endif
 
-                                            <button type="button" onclick="cfDel('{{$furl.'del/'.$value->id}}')" class="btn btn-default btn-xs mbs" data-target="#delete-modal-confirm" data-toggle="modal">
-                                                <i class="fa fa-trash-o"></i>&nbsp; Xóa</button>
+                                            @if($value->trangthai == 'TRALAI')
+                                                <button type="button" class="btn btn-default btn-xs" onclick="getLyDo('{{$value['masodv']}}')" data-target="#tralai-modal" data-toggle="modal"><i class="fa fa-share-square-o"></i>&nbsp;
+                                                    Lý do trả lại</button>
+                                            @endif
+
+
                                         </td>
                                     </tr>
                                 @endforeach
@@ -115,100 +123,89 @@
     </div>
     {!!Form::close()!!}
 
-    <!--Modal chinh sửa -->
-    <div id="chitiet-modal" tabindex="-1" role="dialog" aria-hidden="true" class="modal fade">
+    <!--Model chuyển-->
+    <div class="modal fade" id="chuyen-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
-                <div class="modal-header modal-header-primary">
-                    <button type="button" data-dismiss="modal" aria-hidden="true" class="close">&times;</button>
-                    <h4 id="modal-header-primary-label" class="modal-title">Thông tin dự toán lương</h4>
+                {!! Form::open(['url'=>$furl.'senddata','id' => 'frm_chuyen','method'=>'POST'])!!}
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+                    <h4 class="modal-title">Đồng ý chuyển số liệu?</h4>
                 </div>
                 <div class="modal-body">
-                    <div class="form-horizontal">
-                        <label class="control-label">Năm được giao</label>
-                        {!!Form::text('namns', null, array('id' => 'namns','class' => 'form-control text-right','readonly'=>'true'))!!}
-
-                        <label class="control-label">Lương theo ngạch bậc dự toán</label>
-                        {!!Form::text('luongnb_dt', null, array('id' => 'luongnb_dt','class' => 'form-control text-right', 'data-mask'=>'fdecimal'))!!}
-
-                        <label class="control-label">Tổng các khoản phụ cấp dự toán</label>
-                        {!!Form::text('luonghs_dt', null, array('id' => 'luonghs_dt','class' => 'form-control text-right', 'data-mask'=>'fdecimal'))!!}
-
-                        <label class="control-label">Các khoản đóng góp dự toán</label>
-                        {!!Form::text('luongbh_dt', null, array('id' => 'luongbh_dt','class' => 'form-control text-right', 'data-mask'=>'fdecimal'))!!}
+                    <div class="form-group">
+                        <label><b>Số liệu tổng hợp khi gửi đi sẽ không thể chỉnh sửa. Bạn hãy kiểm tra kỹ số liệu trước khi gửi.</b></label>
+                    </div>
+                    <input type="hidden" name="masodv" id="masodv">
+                    <div class="modal-footer">
+                        <button type="button" class="btn default" data-dismiss="modal">Hủy</button>
+                        <button type="submit" class="btn blue">Đồng ý</button>
 
                     </div>
-                    <input type="hidden" id="id_ct" name="id_ct"/>
+                    {!! Form::close() !!}
                 </div>
-
-                <div class="modal-footer">
-                    <button type="button" data-dismiss="modal" class="btn btn-default">Hủy thao tác</button>
-                    <button type="submit" id="submit" name="submit" value="submit" class="btn btn-primary" onclick="confirm()">Đồng ý</button>
-                </div>
+                <!-- /.modal-content -->
             </div>
+            <!-- /.modal-dialog -->
         </div>
     </div>
+
+    <!--Model Trả lại -->
+    <div class="modal fade" id="tralai-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+                    <h4 class="modal-title">Thông tin lý do trả lại dữ liệu</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        {!!Form::textarea('lydo', null, array('id' => 'lydo','class' => 'form-control','rows'=>'3'))!!}
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="submit" class="btn blue">Đồng ý</button>
+
+                    </div>
+                    {!! Form::close() !!}
+                </div>
+                <!-- /.modal-content -->
+            </div>
+            <!-- /.modal-dialog -->
+        </div>
+    </div>
+
 
     <script>
         function add(){
             $('#create-modal').modal('show');
         }
 
-        function edit(id){
-            var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
-            $.ajax({
-                url: '{{$furl_ajax}}' + 'get',
-                type: 'GET',
-                data: {
-                    _token: CSRF_TOKEN,
-                    id: id
-                },
-                dataType: 'JSON',
-                success: function (data) {
-                    $('#namns').val(data.namns);
-                    $('#luongnb_dt').val(data.luongnb_dt);
-                    $('#luonghs_dt').val(data.luonghs_dt);
-                    $('#luongbh_dt').val(data.luongbh_dt);
-                },
-                error: function (message) {
-                    toastr.error(message, 'Lỗi!');
-                }
-            });
-
-            $('#id_ct').val(id);
-            $('#chitiet-modal').modal('show');
+        function confirmChuyen(masodv) {
+            document.getElementById("masodv").value = masodv;
         }
 
-        function confirm(){
-            if( $('#namns').val() == 0 || $('#nam').val() ==''){
-                toastr.error('Năm dự toán không được bỏ trống.', 'Lỗi!');
-                return false;
-            }
+        function getLyDo(masodv){
             var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
             $.ajax({
-                url: '{{$furl_ajax}}' + 'update',
+                url: '{{$furl}}' + 'getlydo',
                 type: 'GET',
                 data: {
                     _token: CSRF_TOKEN,
-                    namns:$('#namns').val(),
-                    luongnb_dt:$('#luongnb_dt').val(),
-                    luonghs_dt:$('#luonghs_dt').val(),
-                    luongbh_dt:$('#luongbh_dt').val(),
-                    id: $('#id_ct').val()
+                    masodv: masodv
                 },
                 dataType: 'JSON',
                 success: function (data) {
-                    if (data.status == 'success') {
-                        location.reload();
-                    }
+                    $('#lydo').val(data.lydo);
                 },
                 error: function(message){
-                    toastr.error(message, 'Lỗi!');
+                    toastr.error(message,'Lỗi!');
                 }
             });
-            $('#chitiet-modal').modal('hide');
-            //Trả lại kết quả
-            return true;
+
+            //$('#madvbc').val(madvbc);
+            //$('#phongban-modal').modal('show');
         }
 
         $(function(){

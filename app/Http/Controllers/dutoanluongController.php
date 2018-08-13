@@ -13,6 +13,7 @@ use App\dutoanluong_chitiet;
 use App\hosocanbo;
 use App\tonghopluong_donvi;
 use App\tonghopluong_donvi_chitiet;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 use App\Http\Requests;
@@ -23,7 +24,7 @@ class dutoanluongController extends Controller
 {
     function index(){
         if (Session::has('admin')) {
-            $model = dutoanluong::where('madv',session('admin')->madv)->get();
+            $model = dutoanluong::where('madv',session('admin')->madv)->orderby('namns')->get();
 
             return view('manage.dutoanluong.index')
                 ->with('furl','/nghiep_vu/quan_ly/du_toan/')
@@ -349,5 +350,56 @@ class dutoanluongController extends Controller
             return redirect('/nghiep_vu/quan_ly/du_toan?maso='.$model->masodv);
         } else
             return view('errors.notlogin');
+    }
+
+    function senddata(Request $requests)
+    {
+        if (Session::has('admin')) {
+            $inputs = $requests->all();
+            if (session('admin')->macqcq == '') {
+                return view('errors.chuacqcq');
+            }
+            $model = dutoanluong::where('masodv', $inputs['masodv'])->first();
+            $model->nguoiguidv = session('admin')->name;
+            $model->ngayguidv = Carbon::now()->toDateTimeString();
+            $model->trangthai = 'DAGUI';
+            $model->save();
+
+            return redirect('/nghiep_vu/quan_ly/du_toan/danh_sach');
+        } else
+            return view('errors.notlogin');
+    }
+
+    //chưa làm
+    public function tralai(Request $request)
+    {
+        if (Session::has('admin')) {
+            $inputs = $request->all();
+            //dd($inputs);
+            $model = dutoanluong::where('mathdv', $inputs['masodv'])->first();
+            $model->trangthai = 'TRALAI';
+            $model->lydo = $inputs['lydo'];
+            $model->save();
+            //chưa có view
+            return redirect('/chuc_nang/xem_du_lieu/index?thang=' . $model->thang . '&nam=' . $model->nam . '&trangthai=ALL');
+        } else
+            return view('errors.notlogin');
+    }
+
+    function getlydo(Request $request)
+    {
+        if (!Session::has('admin')) {
+            $result = array(
+                'status' => 'fail',
+                'message' => 'permission denied',
+            );
+            die(json_encode($result));
+        }
+
+        $inputs = $request->all();
+
+        $model = dutoanluong::select('lydo')->where('masodv', $inputs['masodv'])->first();
+
+        die($model);
     }
 }

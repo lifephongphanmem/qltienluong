@@ -17,6 +17,12 @@ class dutoanluong extends Model
         'luongnb_dt',
         'luonghs_dt',
         'luongbh_dt',
-        'madv'
+        'madv',
+        'trangthai',
+        'ngayguidv',
+        'nguoiguidv',
+        'ngayguih',
+        'nguoiguih',
+        'lydo'
     ];
 }

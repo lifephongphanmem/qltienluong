@@ -723,7 +723,7 @@ class bangluongController extends Controller
                     $col++;
                 }
             }
-
+            dd($model);
             return view('reports.bangluong.donvi.maubangluong')
                 ->with('model',$model->sortBy('stt'))
                 ->with('m_dv',$m_dv)

@@ -171,27 +171,19 @@ class UsersController extends Controller
         $check = Users::where('username', $input['username'])->count();
         if ($check == 0)
             return view('errors.invalid-user');
-        else{
+        else {
             $ttuser = Users::where('username', $input['username'])->first();
 
-            if($ttuser->level != 'SA' && $ttuser->level != 'SSA'){
+            if ($ttuser->level != 'SA' && $ttuser->level != 'SSA') {
                 $model_donvi = dmdonvi::where('madv', $ttuser->madv)->first();
-                $model_donvibaocao = dmdonvibaocao::where('madvbc', $model_donvi->madvbc)->first();
-                $model_donvicapduoi = dmdonvi::where('macqcq', $ttuser->madv)->get();
 
-                //Kiểm tra xem có phải tài khoản thuộc đơn vị quản lý khu vực ko ?
-                if($model_donvibaocao->madvcq == $ttuser->madv){
-                    $ttuser->quanlykhuvuc=true;
-                }else{
-                    $ttuser->quanlykhuvuc=false;
-                }
+                $ttuser->phanloaitaikhoan = $model_donvi->phanloaitaikhoan;
+                $ttuser->phamvitonghop = $model_donvi->phamvitonghop;
 
-                //Kiểm tra xem đơn vị có quản lý đơn vị cấp dưới nào ko ?
-                if(count($model_donvicapduoi)>0){
-                    $ttuser->quanlynhom=true;
-                }else{
-                    $ttuser->quanlynhom=false;
-                }
+                //kt 2 biến 'phanloaitaikhoan' == TH && 'phamvitonghop' để xem tk có là tk tổng hợp ko.
+                //Giữ 2 biến cũ cho đỡ lỗi, tìm và thay thế
+                $ttuser->quanlykhuvuc = $model_donvi->phamvitonghop == 'KHOI'? false : true;
+                $ttuser->quanlynhom = $model_donvi->phamvitonghop == 'HUYEN'? false : true;
 
                 $ttuser->diadanh = $model_donvi->diadanh;
                 $ttuser->cdlanhdao = $model_donvi->cdlanhdao;
@@ -200,8 +192,8 @@ class UsersController extends Controller
                 $ttuser->ketoan = $model_donvi->ketoan;
                 $ttuser->nguoilapbieu = $model_donvi->nguoilapbieu;
 
-                $ttuser->level = $model_donvibaocao->level;
-                $ttuser->madvqlkv = $model_donvibaocao->madvcq;
+                $ttuser->level = dmdonvibaocao::where('madvbc', $model_donvi->madvbc)->first()->level;
+                //$ttuser->madvqlkv = $model_donvibaocao->madvcq;
                 $ttuser->macqcq = $model_donvi->macqcq;
                 $ttuser->madvbc = $model_donvi->madvbc;
                 $ttuser->maphanloai = $model_donvi->maphanloai;
@@ -242,7 +234,6 @@ class UsersController extends Controller
         if (md5($input['password']) == $ttuser->password) {
             if ($ttuser->status == "active") {
                 Session::put('admin', $ttuser);
-                //dd(session('admin'));
                 return redirect('')
                     ->with('pageTitle', 'Tổng quan');
             } else

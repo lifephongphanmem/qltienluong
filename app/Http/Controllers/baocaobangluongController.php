@@ -41,24 +41,32 @@ class baocaobangluongController extends Controller
             return view('errors.notlogin');
     }
 
-    function mauc02ahd(Request $request){
+    function mauc02ahd(Request $request)
+    {
         if (Session::has('admin')) {
 
-            $inputs=$request->all();
+            $inputs = $request->all();
 
-            $model_bangluong = bangluong::where('madv',session('admin')->madv)
-                ->where('thang',$inputs['thang'])
-                ->where('nam',$inputs['nam'])->first();
+            $model_bangluong = bangluong::where('madv', session('admin')->madv)
+                ->where('thang', $inputs['thang'])
+                ->where('nam', $inputs['nam'])->first();
 
-            if(!isset($model_bangluong)){
+            $request['mabl_mau1'] = $model_bangluong->mabl;
+            $request['mapb_mau1'] = '';
+            $request['macvcq_mau1'] = '';
+            $request['mact_mau1'] = '';
+            $request['cochu'] = '10';
+
+            if (!isset($model_bangluong)) {
                 return view('errors.nodata');
             }
+            $bl = new bangluongController();
+            return $bl->printf_mau01($request);
 
-            $bl=new bangluongController();
-            return $bl->inbangluong($model_bangluong->mabl);
 
-
-        } else{return view('errors.notlogin');}
+        } else {
+            return view('errors.notlogin');
+        }
 
     }
 
@@ -71,12 +79,18 @@ class baocaobangluongController extends Controller
                 ->where('thang',$inputs['thang'])
                 ->where('nam',$inputs['nam'])->first();
 
+            $request['mabl_mau2'] = $model_bangluong->mabl;
+            $request['mapb_mau2'] = '';
+            $request['macvcq_mau2'] = '';
+            $request['mact_mau2'] = '';
+            $request['cochu'] = '10';
+
             if(!isset($model_bangluong)){
                 return view('errors.nodata');
             }
 
             $bl=new bangluongController();
-            return $bl->inbangluong_sotien($model_bangluong->mabl);
+            return $bl->printf_mau02($request);
 
 
         } else{return view('errors.notlogin');}
@@ -91,13 +105,17 @@ class baocaobangluongController extends Controller
             $model_bangluong = bangluong::where('madv',session('admin')->madv)
                 ->where('thang',$inputs['thang'])
                 ->where('nam',$inputs['nam'])->first();
-
+            $request['mabl_mau3'] = $model_bangluong->mabl;
+            $request['mapb_mau3'] = '';
+            $request['macvcq_mau3'] = '';
+            $request['mact_mau3'] = '';
+            $request['cochu'] = '10';
             if(!isset($model_bangluong)){
                 return view('errors.nodata');
             }
 
             $bl=new bangluongController();
-            return $bl->inbangluongmau3($model_bangluong->mabl);
+            return $bl->printf_mau03($request);
 
 
         } else{return view('errors.notlogin');}
@@ -134,8 +152,14 @@ class baocaobangluongController extends Controller
             if(!isset($model_bangluong)){
                 return view('errors.nodata');
             }
+            $request['mabl_maubh'] = $model_bangluong->mabl;
+            $request['mapb_maubh'] = '';
+            $request['macvcq_maubh'] = '';
+            $request['mact_maubh'] = '';
+            $request['cochu'] = '10';
+
             $bl=new bangluongController();
-            return $bl->inbaohiem($model_bangluong->mabl);
+            return $bl->printf_maubh($request);
 
         } else{return view('errors.notlogin');}
 
