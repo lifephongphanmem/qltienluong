@@ -32,22 +32,9 @@
             <div class="portlet light bordered">
                 <div class="portlet-title">
                     <div class="caption">DANH SÁCH CÁC ĐƠN VỊ</div>
-                    <div class="actions">
-                        <a href="{{url($furl.'ma_so=TT67_2017/in_khoi')}}" class="btn btn-default btn-sm" TARGET="_blank">
-                            <i class="fa fa-print"></i>&nbsp; Số liệu tổng hợp ({{$soluong}} đơn vị)</a>
-                    </div>
                 </div>
                 <div class="portlet-body form-horizontal">
-                    <div class="row">
-                        <div class="form-group">
-                            <div class="col-md-8">
-                                <label class="control-label col-md-6" style="text-align: right">Căn cứ thông tư, quyết định </label>
-                                <div class="col-md-6">
-                                    {!! Form::select('sohieu',getThongTuQD(false),null,array('id' => 'sohieu', 'class' => 'form-control'))!!}
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+
                     <table id="sample_3" class="table table-hover table-striped table-bordered" style="min-height: 230px">
                         <thead>
                         <tr>
@@ -67,18 +54,45 @@
                                     <td class="text-center">{{$value->sldv}}</td>
                                     <td class="text-center bold">{{$a_trangthai[$value['trangthai']]}}</td>
                                     <td>
-                                        @if ($value->masodv != NULL)
+                                        @if ($value['masodv'] != NULL)
                                             <a href="{{url('/du_toan/nguon_kinh_phi/ma_so='.$value['masodv'].'/in')}}" class="btn btn-default btn-sm" TARGET="_blank">
                                                 <i class="fa fa-print"></i>&nbsp; Số liệu chi tiết</a>
 
-                                            <button type="button" class="btn btn-default btn-xs mbs" onclick="confirmChuyen('{{$value['masodv']}}')" data-target="#chuyen-modal" data-toggle="modal"><i class="fa icon-share-alt"></i>&nbsp;
-                                                Trả lại dữ liệu</button>
+                                            <a href="{{url('/chuc_nang/xem_du_lieu/index?sohieu='.$value->sohieu)}}" class="btn btn-default btn-xs">
+                                                <i class="fa fa-list-alt"></i>&nbsp; Số liệu chi tiết</a>
+
+                                            @if($value['trangthai'] == 'TRALAI')
+                                                <button type="button" class="btn btn-default btn-sm" onclick="getLyDo('{{$value['masodv']}}')" data-target="#tralai-modal" data-toggle="modal"><i class="fa fa-share-square-o"></i>&nbsp;
+                                                    Lý do trả lại</button>
+                                                <button type="button" class="btn btn-default btn-xs" onclick="confirmChuyen('{{$value->sohieu}}')" data-target="#chuyen-modal" data-toggle="modal"><i class="fa fa-share-square-o"></i>&nbsp;
+                                                    Gửi dữ liệu</button>
+                                            @endif
 
                                         @else
-                                            <button class="btn btn-danger btn-xs mbs">
-                                                <i class="fa fa-warning"></i>&nbsp; Đơn vị chưa tổng hợp dữ liệu</button>
+                                            @if($value['trangthai'] != 'CHUADL')
+                                                <a href="{{url($furl.'tonghop?sohieu='.$value->sohieu)}}" class="btn btn-default btn-xs" target="_blank">
+                                                    <i class="fa fa-print"></i>&nbsp; Số liệu tổng hợp</a>
+
+                                                <button type="button" class="btn btn-default btn-xs" onclick="confirmChuyen('{{$value->sohieu}}')" data-target="#chuyen-modal" data-toggle="modal"><i class="fa fa-share-square-o"></i>&nbsp;
+                                                    Gửi dữ liệu</button>
+                                                @if($value['trangthai'] != 'CHUADAYDU')
+                                                    <a href="{{url('/chuc_nang/xem_du_lieu/index??sohieu='.$value->sohieu)}}" class="btn btn-default btn-xs">
+                                                        <i class="fa fa-list-alt"></i>&nbsp; Số liệu chi tiết</a>
+                                                    <button type="button" class="btn btn-default btn-xs" onclick="confirmChuyen('{{$value->sohieu}}')" data-target="#chuyen-modal" data-toggle="modal"><i class="fa fa-share-square-o"></i>&nbsp;
+                                                        Gửi dữ liệu</button>
+                                                @else
+                                                    <a href="{{url('/chuc_nang/xem_du_lieu/index??sohieu='.$value->sohieu.'&trangthai=CHOGUI')}}" class="btn btn-default btn-xs">
+                                                        <i class="fa fa-list-alt"></i>&nbsp; Đơn vị chưa gửi dữ liệu</a>
+                                                @endif
+
+
+                                            @else
+                                                <a href="{{url('/chuc_nang/xem_du_lieu/index??sohieu='.$value->sohieu.'&trangthai=ALL')}}" class="btn btn-default btn-xs">
+                                                    <i class="fa fa-stack-overflow"></i>&nbsp; Chưa có dữ liệu</a>
+                                            @endif
                                         @endif
                                     </td>
+
                                 </tr>
                             @endforeach
                         @endif
