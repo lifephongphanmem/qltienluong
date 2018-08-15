@@ -716,24 +716,23 @@ class tonghopluong_huyenController extends Controller
             $inputs=$request->all();
 
             $model = tonghopluong_huyen::where('mathdv',$inputs['mathdv'])->first();
-            //dd($model);
-            tonghopluong_donvi::where('mathh',$inputs['mathdv'])
-                ->update(['mathh'=>null,'trangthai'=>'TRALAI','lydo'=>$inputs['lydo']]);
+            $model->trangthai = 'TRALAI';
+            $model->lydo = $inputs['lydo'];
+            $model->save();
+            $madv = $model->madv;
+            $phanloai = dmdonvi::where('madv', $madv)->first()->phanloaitaikhoan;
 
-            tonghopluong_donvi_chitiet::where('mathh',$inputs['mathdv'])
-                ->update(['mathh'=>null]);
-
-            tonghopluong_donvi_diaban::where('mathh',$inputs['mathdv'])
-                ->update(['mathh'=>null]);
-
-            if($model->phanloai == 'CAPDUOI'){
+            if($phanloai == 'SD'){
+                tonghopluong_donvi::where('mathh',$inputs['mathdv'])
+                    ->update(['trangthai'=>'TRALAI','lydo'=>$inputs['lydo']]);
+            }else{
                 //do lúc chuyển tạo mã khối và ma huyện giống nhau
                 //hoặc lấy theo tháng, năm, mã khối, phân loại
                 //nên tạo trường lý do ko nên lấy ở bảng đơn vị
                 tonghopluong_khoi::where('mathdv',$inputs['mathdv'])
-                    ->update(['trangthai'=>'TRALAI']);
+                    ->update(['trangthai'=>'TRALAI','lydo'=>$inputs['lydo']]);
             }
-            $model->delete();
+
             return redirect('/chuc_nang/xem_du_lieu/huyen?thang='.$model->thang.'&nam='.$model->nam.'&trangthai=ALL');
         } else
             return view('errors.notlogin');
@@ -751,7 +750,7 @@ class tonghopluong_huyenController extends Controller
         $inputs = $request->all();
 
         $model = tonghopluong_donvi::select('lydo')->where('mathdv',$inputs['mathdv'])->first();
-        dd(die($model));
+
         die($model);
     }
 

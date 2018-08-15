@@ -382,16 +382,24 @@ class tonghopluong_khoiController extends Controller
     {
         if (Session::has('admin')) {
             $inputs = $requests->all();
+            if (session('admin')->macqcq == '') {
+                return view('errors.chuacqcq');
+            }
             $thang = $inputs['thang'];
             $nam = $inputs['nam'];
             $madv = session('admin')->madv;
             $model = tonghopluong_khoi::where('nam', $nam)->where('thang', $thang)->where('madv', $madv)->first();
+
+
             if (count($model) > 0) {
                 //Trường hợp đơn vị bị trả lại dữ liệu muốn gửi lại
                 $model->trangthai = 'DAGUI';
                 $model->nguoilap = session('admin')->name;
                 $model->ngaylap = Carbon::now()->toDateTimeString();
                 $model->save();
+                //cập nhật cả bảng huyện khi gửi tạo đồng thời 2 bảng
+                tonghopluong_huyen::where('nam', $nam)->where('thang', $thang)->where('madv', $madv)
+                    ->update(['trangthai' => 'DAGUI', 'nguoilap' => session('admin')->name,'ngaylap'=> Carbon::now()->toDateTimeString()]);
             } else {
                 $inputs['madv'] = session('admin')->madv;
                 $inputs['mathdv'] = getdate()[0];;
@@ -410,15 +418,29 @@ class tonghopluong_khoiController extends Controller
                     $query->select('mathdv')->from('tonghopluong_donvi')->where('nam', $nam)->where('thang', $thang)->where('macqcq', $madv)->distinct();
                 })->update(['mathk' => $inputs['mathdv'], 'mathh' => $inputs['mathdv']]);
 
+                /*
                 //$model_tonghop_ct->update(['mathk'=>$inputs['mathdv']]);
                 tonghopluong_donvi_diaban::wherein('mathdv', function ($query) use ($nam, $thang, $madv) {
                     $query->select('mathdv')->from('tonghopluong_donvi')->where('nam', $nam)->where('thang', $thang)->where('macqcq', $madv)->distinct();
                 })->update(['mathk' => $inputs['mathdv'], 'mathh' => $inputs['mathdv']]);
-
+                */
                 tonghopluong_khoi::create($inputs);
                 tonghopluong_huyen::create($inputs);
             }
             return redirect('/chuc_nang/tong_hop_luong/khoi/index?nam=' . $nam);
+        } else
+            return view('errors.notlogin');
+    }
+
+    public function tralai(Request $request)
+    {
+        if (Session::has('admin')) {
+            $inputs = $request->all();
+            $model = tonghopluong_donvi::where('mathdv', $inputs['mathdv'])->first();
+            $model->trangthai = 'TRALAI';
+            $model->lydo = $inputs['lydo'];
+            $model->save();
+            return redirect('/chuc_nang/xem_du_lieu/khoi?thang='.$model->thang.'&nam=' . $model->nam . '&trangthai=ALL');
         } else
             return view('errors.notlogin');
     }

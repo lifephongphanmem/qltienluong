@@ -10,6 +10,7 @@ use App\dmphanloaict;
 use App\dmthongtuquyetdinh;
 use App\hosocanbo;
 use App\nguonkinhphi;
+use App\nguonkinhphi_huyen;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 
@@ -209,23 +210,46 @@ class nguonkinhphiController extends Controller
         //Kiểm tra cấp đơn vị xem đơn vị để update trường masoh hoặc masot
         if (Session::has('admin')) {
             $inputs = $requests->all();
-            $model = nguonkinhphi::where('masodv', $inputs['masodv'])->first();
-            $maso =  getdate()[0];//Mã mới có thể là mã huyện hoặc tỉnh
-
-            if (session('admin')->level == 'H') {
-                $model->masoh = $maso;
-                $model->nguoiguih = session('admin')->name;
-                $model->ngayguih = Carbon::now()->toDateTimeString();
-                $model->trangthai = 'DAGUI';
-                $model->save();
-            }else{
-                $model->masot = $maso;
-                $model->nguoiguit = session('admin')->name;
-                $model->ngayguit = Carbon::now()->toDateTimeString();
-                $model->trangthai = 'DAGUI';
-                $model->save();
+            if (session('admin')->macqcq == '') {
+                return view('errors.chuacqcq');
             }
-            //dd($model);
+            $model = nguonkinhphi::where('masodv', $inputs['masodv'])->first();
+
+            //kiểm tra xem gửi lên khối hay lên huyện
+            //lên khối=> chuyển trạng thái do nguonkinhphi(SD) = nguonkinhphi_khoi(TH)
+            //lên huyện => phát sinh bản ghi mới tại bảng nguonkinhphi_huyen
+
+            //check đơn vị chủ quản là gửi lên huyện => chuyển trạng thái; import bản ghi vào bảng huyện
+                //khối => chuyển trạng thái
+            if(session('admin')->macqcq == session('admin')->madvqlkv){//đơn vị chủ quản là huyện
+                //kiểm tra xem đã có bản ghi chưa (trường hợp trả lại)
+                $model_huyen = nguonkinhphi_huyen::where('masodv', $model->masoh)->first();
+                if(count($model_huyen) == 0){
+                    $masoh = getdate()[0];
+                    $model->masoh = $masoh;
+
+                    $inputs['sohieu'] = $model->sohieu;
+                    $inputs['madv'] = $model->madv;
+                    $inputs['masodv'] = $masoh;
+                    $inputs['trangthai'] = 'DAGUI';
+                    $inputs['noidung'] = 'Đơn vị ' . getTenDV(session('admin')->madv) . ' tổng hợp dữ liệu dự toán lương.';
+                    $inputs['nguoilap'] = session('admin')->name;
+                    $inputs['ngaylap'] = Carbon::now()->toDateTimeString();
+                    $inputs['macqcq'] = session('admin')->macqcq;
+                    $inputs['madvbc'] = session('admin')->madvbc;
+                    nguonkinhphi_huyen::create($inputs);
+                }else{
+                    $model_huyen->trangthai = 'DAGUI';
+                    $model_huyen->nguoilap = session('admin')->name;
+                    $model_huyen->ngaylap = Carbon::now()->toDateTimeString();
+                    $model_huyen->save();
+                }
+            }
+
+            $model->nguoiguidv = session('admin')->name;
+            $model->ngayguidv = Carbon::now()->toDateTimeString();
+            $model->trangthai = 'DAGUI';
+            $model->save();
 
             return redirect('du_toan/nguon_kinh_phi/danh_sach');
         } else

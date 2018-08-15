@@ -289,7 +289,7 @@ function getThang(){
 }
 
 function getNam(){
-    return array('2016' => '2016','2017' => '2017','2018' => '2018');
+    return array('2017' => '2017','2018' => '2018','2019' => '2019','2020' => '2020');
 }
 
 function getGeneralConfigs() {

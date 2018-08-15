@@ -192,8 +192,9 @@ class UsersController extends Controller
                 $ttuser->ketoan = $model_donvi->ketoan;
                 $ttuser->nguoilapbieu = $model_donvi->nguoilapbieu;
 
-                $ttuser->level = dmdonvibaocao::where('madvbc', $model_donvi->madvbc)->first()->level;
-                //$ttuser->madvqlkv = $model_donvibaocao->madvcq;
+                $model_donvibaocao = dmdonvibaocao::where('madvbc', $model_donvi->madvbc)->first();
+                $ttuser->level = $model_donvibaocao->level;
+                $ttuser->madvqlkv = $model_donvibaocao->madvcq;
                 $ttuser->macqcq = $model_donvi->macqcq;
                 $ttuser->madvbc = $model_donvi->madvbc;
                 $ttuser->maphanloai = $model_donvi->maphanloai;
@@ -212,16 +213,6 @@ class UsersController extends Controller
                 $model_phucap = dmphucap_donvi::where('madv', $ttuser->madv)->get();
                 if (count($model_phucap) == 0) {
                     $model_dmpc = dmphucap::select('mapc', 'tenpc', 'baohiem', 'form', 'report', 'phanloai', 'congthuc', DB::raw($ttuser->madv . ' as madv'))->get();
-                    //dành cho các đơn vị đã cập nhật danh mục phụ cấp
-                    /*
-                    $m_donvi = dmdonvi::where('madv', $ttuser->madv)->first();
-                    if (count($m_donvi) > 0)
-                        foreach ($model_dmpc as $ct) {
-                            $mapc = $ct->mapc;
-                            $ct->phanloai = getDbl($m_donvi->$mapc);
-                            $ct->congthuc = $ct->phanloai == 2 ? "heso,vuotkhung,pccv" : "";
-                        }
-                    */
                     dmphucap_donvi::insert($model_dmpc->toarray());
                 }
 

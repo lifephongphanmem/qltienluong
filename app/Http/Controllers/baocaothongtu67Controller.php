@@ -2832,7 +2832,7 @@ class baocaothongtu67Controller extends Controller
         if (Session::has('admin')) {
             $model = nguonkinhphi::where('macqcq',session('admin')->madv)
                 ->where('sohieu','TT67_2017')->get();
-            $model_donvi = dmdonvi::where('macqcq',session('admin')->madv)->get();
+            $model_donvi = dmdonvi::where('madvbc',session('admin')->madvbc)->get();
             if(count($model) == 0){
                 return view('errors.nodata');
             }

@@ -304,12 +304,13 @@ Route::group(['prefix'=>'du_toan'],function(){
         Route::get('ma_so={masodv}/in','nguonkinhphiController@printf');
 
         Route::get('del/{id}','nguonkinhphiController@destroy');
-        Route::post('store','dmdiabandbkkController@store');//insert + update
 
 
-        Route::get('ma_so={madiaban}','dmdiabandbkkController@detail');
-        Route::get('del_detail/{id}','dmdiabandbkkController@destroy_detail');
-        Route::get('add_canbo','dmdiabandbkkController@store_detail');
+        Route::group(['prefix'=>'khoi'],function(){
+            Route::post('senddata','tonghopluong_khoiController@senddata'); //gửi dữ liệu
+            Route::post('tralai','tonghopluong_khoiController@tralai'); //trả lại dữ liệu
+            Route::get('getlydo','tonghopluong_khoiController@getlydo');//lý do trả lại dữ liệu
+        });
     });
 });
 
@@ -355,7 +356,6 @@ Route::group(['prefix'=>'chuc_nang'],function(){
         Route::post('maudbhdnd_excel','bangluongController@printf_maudbhdnd_excel');
         Route::post('maublpc_excel','bangluongController@printf_maublpc_excel');
     });
-
 
     Route::group(['prefix'=>'nang_luong'],function(){
         Route::get('danh_sach','dsnangluongController@index');
@@ -465,6 +465,19 @@ Route::group(['prefix'=>'chuc_nang'],function(){
         Route::get('huyen','xemdulieucapduoiController@index_huyen');
         Route::get('tinh','xemdulieucapduoiController@index_tinh');
         Route::get('tinh/solieu','xemdulieucapduoiController@tonghop_huyen');
+
+        Route::group(['prefix'=>'nguon'],function(){
+            Route::get('khoi','xemdulieu_nguonController@index_khoi');
+            Route::get('huyen','xemdulieu_nguonController@index_huyen');
+            Route::get('tinh','xemdulieu_nguonController@index_tinh');
+        });
+
+        Route::group(['prefix'=>'du_toan'],function(){
+            Route::get('khoi','xemdulieu_dutoanController@index_khoi');
+            Route::get('huyen','xemdulieu_dutoanController@index_huyen');
+            Route::get('tinh','xemdulieu_dutoanController@index_tinh');
+        });
+
     });
 
     Route::group(['prefix'=>'tong_hop_nguon'],function(){
@@ -484,12 +497,40 @@ Route::group(['prefix'=>'chuc_nang'],function(){
             Route::get('index','tonghopnguon_huyenController@index');
             Route::post('tralai','tonghopnguon_huyenController@tralai');
             Route::get('ma_so={sohieu}/in','tonghopnguon_huyenController@printf');
+
+            Route::post('senddata','tonghopnguon_huyenController@senddata'); //gửi dữ liệu lên tỉnh
         });
 
         Route::group(['prefix'=>'khoi'],function(){
             Route::get('index','tonghopnguon_khoiController@index');
-            Route::post('tralai','tonghopnguon_khoiController@tralai');
+            Route::post('tralai','tonghopnguon_khoiController@tralai');//trả về đơn vị
             Route::get('ma_so={sohieu}/in','tonghopnguon_khoiController@printf');
+
+            Route::post('senddata','tonghopnguon_khoiController@senddata'); //gửi dữ liệu lên huyện
+
+            Route::get('tonghop','tonghopnguon_khoiController@tonghop');//tạm
+        });
+
+    });
+
+    Route::group(['prefix'=>'du_toan_luong'],function(){
+
+        Route::group(['prefix'=>'huyen'],function(){
+            Route::get('index','dutoanluong_huyenController@index');
+            Route::post('tralai','dutoanluong_huyenController@tralai');
+            Route::post('senddata','dutoanluong_huyenController@senddata'); //gửi dữ liệu lên tỉnh
+
+            Route::get('tonghop','dutoanluong_huyenController@tonghop');
+            Route::get('printf','dutoanluong_huyenController@printf');//in một khối trong khối
+        });
+
+        Route::group(['prefix'=>'khoi'],function(){
+            Route::get('index','dutoanluong_khoiController@index');
+            Route::post('tralai','dutoanluong_khoiController@tralai');//trả về đơn vị
+            Route::post('senddata','dutoanluong_khoiController@senddata'); //gửi dữ liệu lên huyện
+
+            Route::get('tonghop','dutoanluong_khoiController@tonghop');
+            Route::get('printf','dutoanluong_khoiController@printf');//in một đơn vị trong khối
         });
 
     });

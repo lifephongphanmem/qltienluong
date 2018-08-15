@@ -8,6 +8,7 @@ use App\tonghop_huyen;
 use App\tonghopluong_donvi;
 use App\tonghopluong_donvi_chitiet;
 use App\tonghopluong_huyen;
+use App\tonghopluong_tinh;
 use Illuminate\Http\Request;
 use App\dmnguonkinhphi;
 use App\dmphanloaicongtac;
@@ -210,41 +211,37 @@ class xemdulieucapduoiController extends Controller
                     $query->select('madv')->from('dmdonvi')->where('macqcq',$madv)->where('madv','<>',$madv)->get();
                 })->get();
 
+            $model_nguon = tonghopluong_huyen::wherein('madv', function($query) use($madv){
+                $query->select('madv')->from('dmdonvi')->where('macqcq',$madv)->where('madv','<>',$madv)->get();
+            })
+                ->where('thang', $inputs['thang'])
+                ->where('nam', $inputs['nam'])
+                ->where('trangthai', 'DAGUI')
+                ->get();
+
+            $model_nguon_khoi = tonghopluong_tinh::where('madv', $madv)->where('thang', $inputs['thang'])
+                ->where('nam', $inputs['nam'])->first();
+
             foreach ($model_donvi as $dv) {
-                $dulieu = tonghopluong_huyen::where('madv', $dv->madv)
-                    ->where('thang', $inputs['thang'])
-                    ->where('nam', $inputs['nam'])
-                    ->where('phanloai', $dv->phanloai)
-                    ->first();
-
-                $tonghop = tonghop_huyen::where('madvbc', $madvbc)
-                    ->where('thang', $inputs['thang'])
-                    ->where('nam', $inputs['nam'])
-                    ->first();
-                $dv->tralai = true;
-                if (isset($tonghop)) {
-                    $model_bangluong_ct = tonghopluong_donvi_chitiet::where('matht', $tonghop->madvth)->first();
-                    $dv->tralai = isset($model_bangluong_ct->mathh) ? false : true;
+                //kiểm tra xem đã tổng hợp thành dữ liệu huyện gửi lên tỉnh chưa?
+                if(count($model_nguon_khoi)>0 && $model_nguon_khoi->trangthai == 'DAGUI'){
+                    $dv->tralai = false;
+                }else{
+                    $dv->tralai = true;
                 }
 
-                if (isset($dulieu)) {
-                    $dv->phanloai = $dulieu->phanloai;
-                    $dv->mathdv = $dulieu->mathdv;
-                } else {
-                    $dv->mathdv = NULL;
+                $nguon = $model_nguon->where('madv',$dv->madv)->first();
+                if(count($nguon)> 0 && $nguon->trangthai == 'DAGUI'){
+                    $dv->mathdv = $nguon->mathdv;
+                    $dv->trangthai = 'DAGUI';
+                }else{
+                    $dv->trangthai = 'CHOGUI';
+                    $dv->mathdv = null;
                 }
-                $dv->tenphanloai = isset($a_phanloai[$dv->phanloai]) ? $a_phanloai[$dv->phanloai] : '';
 
             }
-
-            $model_donvi = $model_donvi->sortby('madv');
-            if (isset($inputs['trangthai'])) {
-                if ($inputs['trangthai'] == 'CHONHAN') {
-                    $model_donvi = $model_donvi->where('mathdv', '<>', null);
-                }
-                if ($inputs['trangthai'] == 'CHOGUI') {
-                    $model_donvi = $model_donvi->where('mathdv', null);
-                }
+            if (!isset($inputs['trangthai']) || $inputs['trangthai'] != 'ALL') {
+                $model_donvi = $model_donvi->where('trangthai',$inputs['trangthai']);
             }
 
             return view('functions.viewdata.index_huyen')

@@ -369,11 +369,21 @@
                         </a>
                         <ul class="sub-menu">
                             @if(session('admin')->level == 'H' && session('admin')->phamvitonghop == 'KHOI')
-
+                                <li>
+                                    <a href="{{url('chuc_nang/du_toan_luong/khoi/index')}}"><i class="fa fa-caret-right"></i>Tổng số liệu dự toán</a>
+                                </li>
+                                <li>
+                                    <a href="{{url('chuc_nang/xem_du_lieu/du_toan/khoi?namns='.date('Y').'&trangthai=ALL')}}"><i class="fa fa-caret-right"></i>Xem số liệu tổng hợp từ đơn vị cấp dưới</a>
+                                </li>
                             @endif
 
                             @if(session('admin')->level == 'H' && session('admin')->phamvitonghop == 'HUYEN')
-
+                                    <li>
+                                        <a href="{{url('chuc_nang/du_toan_luong/huyen/index')}}"><i class="fa fa-caret-right"></i>Tổng số liệu dự toán</a>
+                                    </li>
+                                    <li>
+                                        <a href="{{url('chuc_nang/xem_du_lieu/du_toan/huyen?namns='.date('Y').'&trangthai=ALL')}}"><i class="fa fa-caret-right"></i>Xem số liệu tổng hợp từ đơn vị cấp dưới</a>
+                                    </li>
                             @endif
 
                             @if(session('admin')->level == 'T')
@@ -393,12 +403,18 @@
                                 <li>
                                     <a href="{{url('chuc_nang/tong_hop_nguon/khoi/index')}}"><i class="fa fa-caret-right"></i>Tổng số liệu nguồn kinh phí</a>
                                 </li>
+                                <li>
+                                    <a href="{{url('chuc_nang/xem_du_lieu/nguon/khoi?sohieu=TT67_2017&trangthai=ALL')}}"><i class="fa fa-caret-right"></i>Xem số liệu tổng hợp từ đơn vị cấp dưới</a>
+                                </li>
                             @endif
 
                             @if(session('admin')->level == 'H' && session('admin')->phamvitonghop == 'HUYEN')
                                 <li>
                                     <a href="{{url('chuc_nang/tong_hop_nguon/huyen/index')}}"><i class="fa fa-caret-right"></i>Tổng số liệu nguồn kinh phí</a>
                                 </li>
+                                    <li>
+                                        <a href="{{url('chuc_nang/xem_du_lieu/nguon/huyen?sohieu=TT67_2017&trangthai=ALL')}}"><i class="fa fa-caret-right"></i>Xem số liệu tổng hợp từ đơn vị cấp dưới</a>
+                                    </li>
                             @endif
 
                             @if(session('admin')->level == 'T')

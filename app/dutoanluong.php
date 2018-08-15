@@ -18,6 +18,8 @@ class dutoanluong extends Model
         'luonghs_dt',
         'luongbh_dt',
         'madv',
+        'madvbc',
+        'macqcq',
         'trangthai',
         'ngayguidv',
         'nguoiguidv',

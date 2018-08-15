@@ -78,8 +78,6 @@
                                                 <button type="button" class="btn btn-default btn-xs" onclick="getLyDo('{{$value['masodv']}}')" data-target="#tralai-modal" data-toggle="modal"><i class="fa fa-share-square-o"></i>&nbsp;
                                                     Lý do trả lại</button>
                                             @endif
-
-
                                         </td>
                                     </tr>
                                 @endforeach

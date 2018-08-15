@@ -18,6 +18,7 @@ class tonghopluong_huyen extends Model
         'nguoigui',
         'trangthai',
         'phanloai',
+        'lydo',
         'ghichu',
         'madv',
         'macqcq',

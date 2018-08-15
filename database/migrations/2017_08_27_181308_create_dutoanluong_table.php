@@ -25,7 +25,8 @@ class CreateDutoanluongTable extends Migration
             $table->double('luongbh_dt')->default(0);
             $table->string('ghichu')->nullable();
             $table->string('madv')->nullable();
-
+            $table->string('madvbc',50)->nullable();
+            $table->string('macqcq',50)->nullable();
             $table->string('trangthai',50)->default('CHUAGUI');
             $table->text('lydo')->nullable();
 

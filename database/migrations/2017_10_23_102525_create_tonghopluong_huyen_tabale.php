@@ -26,6 +26,7 @@ class CreateTonghopluongHuyenTabale extends Migration
             $table->string('nguoigui',50)->nullable();
             $table->string('trangthai',50)->nullable();
             $table->string('phanloai',50)->nullable(); //dữ liệu của đơn vị / dữ liệu của đơn vị cấp dưới
+            $table->text('lydo')->nullable();
             $table->string('madv',50)->nullable();
             $table->string('madvbc',50)->nullable();
             $table->string('macqcq',50)->nullable();

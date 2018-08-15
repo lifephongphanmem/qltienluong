@@ -362,110 +362,38 @@ class tonghopluong_donviController extends Controller
             if (!session('admin')->quanlykhuvuc && session('admin')->macqcq == '') {
                 return view('errors.chuacqcq');
             }
-
-
             $model = tonghopluong_donvi::where('mathdv', $inputs['mathdv'])->first();
-            $mathdv = getdate()[0];//Mã mới
-//dd(session('admin'));
-            if (session('admin')->macqcq == session('admin')->madvqlkv
-                || session('admin')->madv == session('admin')->madvqlkv
-            ) {
-                //Trường hợp đơn vị báo cáo số liệu lên trực tiếp đơn vị quản lý khu vực (huyện, tỉnh)
-                // => update dữ liệu lên thẳng bảng tổng hợp tỉnh, huyện
 
-                if (session('admin')->level == 'H') {
-                    //Kiểm tra xem đơn vị đã gửi dữ liệu chưa
-                    $chk = tonghopluong_huyen::where('thang', $model->thang)
-                        ->where('nam', $model->nam)
-                        ->where('phanloai', $model->phanloai)
-                        ->where('madv', $model->madv)
-                        ->count();
-//dd($chk);
-                    if ($chk == 0) {//chưa gửi => update dữ liệu từ bảng khoi=>huyen
-                        tonghopluong_donvi_chitiet::where('mathdv', $model->mathdv)->update(['mathh' => $mathdv]);
-                        tonghopluong_donvi_diaban::where('mathdv', $model->mathdv)->update(['mathh' => $mathdv]);
+            if(session('admin')->macqcq == session('admin')->madvqlkv){//đơn vị chủ quản là huyện
+                //kiểm tra xem đã có bản ghi chưa (trường hợp trả lại)
+                $model_huyen = tonghopluong_huyen::where('mathdv', $model->mathh)->first();
+                if(count($model_huyen) == 0){
+                    $masoh = getdate()[0];
+                    $model->mathh = $masoh;
 
-                        $th_khoi = new tonghopluong_huyen();
-                        $th_khoi->madv = $model->madv;
-                        $th_khoi->mathdv = $mathdv;
-                        $th_khoi->trangthai = 'CHONHAN';
-                        $th_khoi->phanloai = $model->phanloai;
-                        $th_khoi->noidung = $model->noidung;
-                        $th_khoi->nguoilap = $model->nguoilap;
-                        $th_khoi->ngaylap = $model->ngaylap;
-                        $th_khoi->macqcq = $model->macqcq;
-                        $th_khoi->madvbc = $model->madvbc;
-                        $th_khoi->thang = $model->thang;
-                        $th_khoi->nam = $model->nam;
-                        $th_khoi->nguoigui = session('admin')->name;
-                        $th_khoi->ngaygui = Carbon::now()->toDateTimeString();
-                        $th_khoi->save();
-
-                        //Lưu thông tin vào bảng khối
-
-                        $inputs['nguoigui'] = session('admin')->name;
-
-                        $inputs['ngaygui'] = Carbon::now()->toDateTimeString();
-                        $model->trangthai = 'DAGUI';
-                        $model->mathh = $mathdv;
-                        $model->save();
-
-                    } else {//Đã gửi dữ liệu
-                        $model->trangthai = 'GUILOI';
-                        $model->ghichu = 'Gửi dữ liệu lỗi do đã có dữ liệu tổng hợp';
-                        $model->save();
-                    }
-
-                } else {
-                    //Kiểm tra xem đơn vị đã gửi dữ liệu chưa
-                    $chk = tonghopluong_tinh::where('thang', $model->thang)
-                        ->where('nam', $model->nam)
-                        ->where('madv', $model->madv)
-                        ->where('phanloai', $model->phanloai)->count();
-
-                    if ($chk == 0) {//chưa gửi => update dữ liệu từ bảng khoi=>huyen
-                        tonghopluong_donvi_chitiet::where('mathdv', $model->mathdv)->update(['matht' => $mathdv]);
-                        tonghopluong_donvi_diaban::where('mathdv', $model->mathdv)->update(['matht' => $mathdv]);
-
-                        $th_khoi = new tonghopluong_tinh();
-                        $th_khoi->madv = $model->madv;
-                        $th_khoi->mathdv = $mathdv;
-                        $th_khoi->trangthai = 'CHONHAN';
-                        $th_khoi->phanloai = $model->phanloai;
-                        $th_khoi->noidung = $model->noidung;
-                        $th_khoi->nguoilap = $model->nguoilap;
-                        $th_khoi->ngaylap = $model->ngaylap;
-                        $th_khoi->macqcq = $model->macqcq;
-                        $th_khoi->madvbc = $model->madvbc;
-                        $th_khoi->thang = $model->thang;
-                        $th_khoi->nam = $model->nam;
-                        $th_khoi->nguoigui = session('admin')->name;
-                        $th_khoi->ngaygui = Carbon::now()->toDateTimeString();
-                        $th_khoi->save();
-
-                        //Lưu thông tin vào bảng khối
-                        $inputs['nguoigui'] = session('admin')->name;
-                        $inputs['ngaygui'] = Carbon::now()->toDateTimeString();
-                        $model->trangthai = 'DAGUI';
-                        $model->matht = $mathdv;
-                        $model->save();
-
-                    } else {//Đã gửi dữ liệu
-                        $model->trangthai = 'GUILOI';
-                        $model->ghichu = 'Gửi dữ liệu lỗi do đã có dữ liệu tổng hợp';
-                        $model->save();
-                    }
+                    $inputs['thang'] = $model->thang;
+                    $inputs['nam'] = $model->nam;
+                    $inputs['madv'] = $model->madv;
+                    $inputs['mathdv'] = $masoh;
+                    $inputs['trangthai'] = 'DAGUI';
+                    $inputs['noidung'] = 'Đơn vị ' . getTenDV(session('admin')->madv) . ' tổng hợp dữ liệu chi trả lương.';
+                    $inputs['nguoilap'] = session('admin')->name;
+                    $inputs['ngaylap'] = Carbon::now()->toDateTimeString();
+                    $inputs['macqcq'] = session('admin')->macqcq;
+                    $inputs['madvbc'] = session('admin')->madvbc;
+                    tonghopluong_huyen::create($inputs);
+                }else{
+                    $model_huyen->trangthai = 'DAGUI';
+                    $model_huyen->nguoilap = session('admin')->name;
+                    $model_huyen->ngaylap = Carbon::now()->toDateTimeString();
+                    $model_huyen->save();
                 }
-            } else {
-                //Trường hợp đơn vị báo cáo số liệu lên đơn vị quản lý khối
-                // => update trạng thái của dữ liệu
-
-                $inputs['nguoigui'] = session('admin')->name;
-                $inputs['ngaygui'] = Carbon::now()->toDateTimeString();
-                $model->trangthai = 'DAGUI';
-                $model->save();
             }
 
+            $model->nguoigui = session('admin')->name;
+            $model->ngaygui = Carbon::now()->toDateTimeString();
+            $model->trangthai = 'DAGUI';
+            $model->save();
 
             return redirect('/chuc_nang/tong_hop_luong/don_vi/index?nam=' . $model->nam);
         } else

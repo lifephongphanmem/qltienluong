@@ -10,6 +10,7 @@ use App\dmphanloaict;
 use App\dmphucap_donvi;
 use App\dutoanluong;
 use App\dutoanluong_chitiet;
+use App\dutoanluong_huyen;
 use App\hosocanbo;
 use App\tonghopluong_donvi;
 use App\tonghopluong_donvi_chitiet;
@@ -279,6 +280,8 @@ class dutoanluongController extends Controller
             dutoanluong_chitiet::insert($m_data);
 
             $inputs['masodv'] = $masodv;
+            $inputs['macqcq'] = session('admin')->macqcq;
+            $inputs['madvbc'] = session('admin')->madvbc;
             $inputs['luongnb_dt'] = $luongnb;
             $inputs['luonghs_dt'] = $luonghs;
             $inputs['luongbh_dt'] = $luongbh;
@@ -356,10 +359,38 @@ class dutoanluongController extends Controller
     {
         if (Session::has('admin')) {
             $inputs = $requests->all();
+
             if (session('admin')->macqcq == '') {
                 return view('errors.chuacqcq');
             }
             $model = dutoanluong::where('masodv', $inputs['masodv'])->first();
+
+            //check đơn vị chủ quản là gửi lên huyện => chuyển trạng thái; import bản ghi vào bảng huyện
+                //khối => chuyển trạng thái
+            if(session('admin')->macqcq == session('admin')->madvqlkv){//đơn vị chủ quản là huyện
+                //kiểm tra xem đã có bản ghi chưa (trường hợp trả lại)
+                $model_huyen = dutoanluong_huyen::where('masodv', $model->masoh)->first();
+                if(count($model_huyen) == 0){
+                    $masoh = getdate()[0];
+                    $inputs['namns'] = $model->namns;
+                    $inputs['madv'] = $model->madv;
+                    $inputs['masodv'] = $masoh;
+                    $inputs['trangthai'] = 'DAGUI';
+                    $inputs['noidung'] = 'Đơn vị ' . getTenDV(session('admin')->madv) . ' tổng hợp dữ liệu dự toán lương.';
+                    $inputs['nguoilap'] = session('admin')->name;
+                    $inputs['ngaylap'] = Carbon::now()->toDateTimeString();
+                    $inputs['macqcq'] = session('admin')->macqcq;
+                    $inputs['madvbc'] = session('admin')->madvbc;
+                    $model->masoh = $masoh;
+                    dutoanluong_huyen::create($inputs);
+                }else{
+                    $model_huyen->trangthai = 'DAGUI';
+                    $model_huyen->nguoilap = session('admin')->name;
+                    $model_huyen->ngaylap = Carbon::now()->toDateTimeString();
+                    $model_huyen->save();
+                }
+            }
+
             $model->nguoiguidv = session('admin')->name;
             $model->ngayguidv = Carbon::now()->toDateTimeString();
             $model->trangthai = 'DAGUI';
@@ -395,9 +426,7 @@ class dutoanluongController extends Controller
             );
             die(json_encode($result));
         }
-
         $inputs = $request->all();
-
         $model = dutoanluong::select('lydo')->where('masodv', $inputs['masodv'])->first();
 
         die($model);

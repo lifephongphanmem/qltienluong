@@ -39,7 +39,7 @@
                         <thead>
                         <tr>
                             <th class="text-center" style="width: 5%">STT</th>
-                            <th class="text-center">Căn cứ thông tư, quyết định</th>
+                            <th class="text-center">Năm ngân sách</th>
                             <th class="text-center">Đơn vị gửi</br>số liệu</th>
                             <th class="text-center">Trạng thái</th>
                             <th class="text-center">Thao tác</th>
@@ -50,14 +50,14 @@
                             @foreach($model as $key=>$value)
                                 <tr>
                                     <td class="text-center">{{$key+1}}</td>
-                                    <td>{{$value->tenttqd}}</td>
+                                    <td class="text-center">{{$value->namns}}</td>
                                     <td class="text-center">{{$value->sldv}}</td>
                                     <td class="text-center bold">{{$a_trangthai[$value['trangthai']]}}</td>
                                     <td>
-                                        <a href="{{url($furl_th.'tonghop?sohieu='.$value->sohieu)}}" class="btn btn-default btn-xs" target="_blank">
+                                        <a href="{{url($furl_th.'tonghop?namns='.$value->namns)}}" class="btn btn-default btn-xs" target="_blank">
                                             <i class="fa fa-print"></i>&nbsp; Số liệu tổng hợp</a>
                                         @if ($value['masodv'] == NULL)
-                                            <button type="button" class="btn btn-default btn-xs" onclick="confirmChuyen('{{$value->sohieu}}')" data-target="#chuyen-modal" data-toggle="modal"><i class="fa fa-share-square-o"></i>&nbsp;
+                                            <button type="button" class="btn btn-default btn-xs" onclick="confirmChuyen('{{$value->namns}}')" data-target="#chuyen-modal" data-toggle="modal"><i class="fa fa-share-square-o"></i>&nbsp;
                                                 Gửi dữ liệu</button>
                                         @endif
 
@@ -66,7 +66,7 @@
                                                 Lý do trả lại</button>
                                         @endif
 
-                                        <a href="{{url($furl_xem.'?sohieu='.$value->sohieu.'&trangthai=ALL')}}" class="btn btn-default btn-xs">
+                                        <a href="{{url($furl_xem.'?namns='.$value->namns.'&trangthai=ALL')}}" class="btn btn-default btn-xs">
                                             <i class="fa fa-list-alt"></i>&nbsp; Số liệu chi tiết</a>
                                     </td>
 
@@ -93,7 +93,7 @@
                     <div class="form-group">
                         <label><b>Số liệu tổng hợp khi gửi đi sẽ không thể chỉnh sửa. Bạn hãy kiểm tra kỹ số liệu trước khi gửi.</b></label>
                     </div>
-                    <input type="hidden" name="sohieu" id="sohieu">
+                    <input type="hidden" name="namns" id="namns">
                     <div class="modal-footer">
                         <button type="button" class="btn default" data-dismiss="modal">Hủy</button>
                         <button type="submit" class="btn blue">Đồng ý</button>
@@ -108,8 +108,8 @@
     </div>
 
     <script>
-        function confirmChuyen(sohieu) {
-            document.getElementById("sohieu").value = sohieu;
+        function confirmChuyen(namns) {
+            document.getElementById("namns").value = namns;
         }
     </script>
 
