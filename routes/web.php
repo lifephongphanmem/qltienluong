@@ -497,7 +497,7 @@ Route::group(['prefix'=>'chuc_nang'],function(){
             Route::get('index','tonghopnguon_huyenController@index');
             Route::post('tralai','tonghopnguon_huyenController@tralai');
             Route::get('ma_so={sohieu}/in','tonghopnguon_huyenController@printf');
-
+            Route::get('tonghop','tonghopnguon_khoiController@tonghop');//tạm
             Route::post('senddata','tonghopnguon_huyenController@senddata'); //gửi dữ liệu lên tỉnh
         });
 

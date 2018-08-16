@@ -125,7 +125,7 @@ class xemdulieucapduoiController extends Controller
             $nam = $inputs['nam'];
             $madvqlkv = session('admin')->madvqlkv;
 
-            $a_trangthai = array('ALL' => '--Chọn trạng thái dữ liệu--', 'CHOGUI' => 'Chưa gửi dữ liệu', 'CHONHAN' => 'Đã gửi dữ liệu');
+            $a_trangthai = array('ALL' => '--Chọn trạng thái dữ liệu--', 'CHOGUI' => 'Chưa gửi dữ liệu', 'DAGUI' => 'Đã gửi dữ liệu');
             $a_phanloai = array('DONVI' => 'Dữ liệu tổng hợp của đơn vị', 'CAPDUOI' => 'Dữ liệu tổng hợp của các đơn vị cấp dưới');
             $list_donvi = dmdonvi::select('madv', 'tendv')->where('madvbc', session('admin')->madvbc)->get();
 
@@ -203,7 +203,7 @@ class xemdulieucapduoiController extends Controller
             $madv = session('admin')->madv;
             $madvbc = session('admin')->madvbc;
 
-            $a_trangthai = array('ALL' => '--Chọn trạng thái dữ liệu--', 'CHOGUI' => 'Chưa gửi dữ liệu', 'CHONHAN' => 'Đã gửi dữ liệu');
+            $a_trangthai = array('ALL' => '--Chọn trạng thái dữ liệu--', 'CHOGUI' => 'Chưa gửi dữ liệu', 'DAGUI' => 'Đã gửi dữ liệu');
             $a_phanloai = array('DONVI' => 'Dữ liệu tổng hợp của đơn vị', 'CAPDUOI' => 'Dữ liệu tổng hợp của các đơn vị cấp dưới');
 
             $model_donvi = dmdonvi::select('madv', 'tendv')
@@ -240,6 +240,7 @@ class xemdulieucapduoiController extends Controller
                 }
 
             }
+            //dd($model_donvi->toarray());
             if (!isset($inputs['trangthai']) || $inputs['trangthai'] != 'ALL') {
                 $model_donvi = $model_donvi->where('trangthai',$inputs['trangthai']);
             }

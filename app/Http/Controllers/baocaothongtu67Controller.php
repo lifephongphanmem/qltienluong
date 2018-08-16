@@ -43,7 +43,8 @@ class baocaothongtu67Controller extends Controller
     function mau2a1_tt67(Request $request) {
         //Test trên huyện nên sau này sửa lại leve "T"
         //if ((Session::has('admin') && session('admin')->quanlykhuvuc == true) || (Session::has('admin') && session('admin')->username == 'khthso') ) {
-        if ((Session::has('admin') && session('admin')->username == 'khthstc') || (Session::has('admin') && session('admin')->username == 'khthso') ) {
+        //if ((Session::has('admin') && session('admin')->username == 'khthstc') || (Session::has('admin') && session('admin')->username == 'khthso') ) {
+        if (Session::has('admin')  ) {
             $inputs=$request->all();
             $m_dv = dmdonvi::where('madv',session('admin')->madv)->first();
             $model_bienche = chitieubienche::where('nam','2017')->where('madv',session('admin')->madv)->get();
@@ -317,7 +318,8 @@ class baocaothongtu67Controller extends Controller
 
     function mau2a2_tt67(Request $request) {
         //if (Session::has('admin') && session('admin')->quanlykhuvuc == true) {
-        if ((Session::has('admin') && session('admin')->username == 'khthstc') || (Session::has('admin') && session('admin')->username == 'khthso') ) {
+        if (Session::has('admin')  ) {
+        //if ((Session::has('admin') && session('admin')->username == 'khthstc') || (Session::has('admin') && session('admin')->username == 'khthso') ) {
             $inputs=$request->all();
             $m_dv = dmdonvi::where('madv',session('admin')->madv)->first();
             //$luongcb = 1300000;; tạm thời bỏ vì bang lương đã nhân lcb
@@ -594,7 +596,8 @@ class baocaothongtu67Controller extends Controller
     }
 
     function mau2b_tt67(Request $request) {
-        if ((Session::has('admin') && session('admin')->username == 'khthstc') || (Session::has('admin') && session('admin')->username == 'khthso')) {
+        if (Session::has('admin')  ) {
+        //if ((Session::has('admin') && session('admin')->username == 'khthstc') || (Session::has('admin') && session('admin')->username == 'khthso')) {
             $inputs=$request->all();
             $m_dv=dmdonvi::where('madv',session('admin')->madv)->first();
             $m_hscb = hosocanbo::join('dmphanloaict','dmphanloaict.mact','=','hosocanbo.mact')
@@ -631,7 +634,8 @@ class baocaothongtu67Controller extends Controller
 
     function mau2c_tt67(Request $request) {
         //if (Session::has('admin') && session('admin')->quanlykhuvuc == true) {
-        if ((Session::has('admin') && session('admin')->username == 'khthstc') || (Session::has('admin') && session('admin')->username == 'khthso') ) {
+        if (Session::has('admin')  ) {
+        //if ((Session::has('admin') && session('admin')->username == 'khthstc') || (Session::has('admin') && session('admin')->username == 'khthso') ) {
             $inputs=$request->all();
             $m_dv = dmdonvi::where('madv',session('admin')->madv)->first();
             $m_cb =hosocanbo::join('dmdonvi', 'hosocanbo.madv', '=', 'dmdonvi.madv')
@@ -731,7 +735,8 @@ class baocaothongtu67Controller extends Controller
 
     function mau2d_tt67(Request $request) {
         //if (Session::has('admin') && session('admin')->quanlykhuvuc == true) {
-        if ((Session::has('admin') && session('admin')->username == 'khthstc') || (Session::has('admin') && session('admin')->username == 'khthso') ) {
+        if (Session::has('admin')  ) {
+        //if ((Session::has('admin') && session('admin')->username == 'khthstc') || (Session::has('admin') && session('admin')->username == 'khthso') ) {
             $inputs=$request->all();
             $m_dv = dmdonvi::where('madv',session('admin')->madv)->first();
             $m_thon =dmdiabandbkk::join('dmdonvi', 'dmdiabandbkk.madv', '=', 'dmdonvi.madv')
@@ -841,7 +846,8 @@ class baocaothongtu67Controller extends Controller
     }
 
     function mau2e_tt67() {
-        if (Session::has('admin') && session('admin')->quanlykhuvuc == true && session('admin')->level == "T") {
+        if (Session::has('admin')  ) {
+        //if (Session::has('admin') && session('admin')->quanlykhuvuc == true && session('admin')->level == "T") {
             $m_dv = dmdonvi::where('madv',session('admin')->madv)->first();
             $m_dsh = dmdonvibaocao::where('level','H')->distinct()->get();
             $m_xa = dmdiabandbkk::join('dmdonvi','dmdonvi.madv', '=', 'dmdiabandbkk.madv')
@@ -861,6 +867,7 @@ class baocaothongtu67Controller extends Controller
         } else
             return view('errors.notlogin');
     }
+
     function mau2g_tt67() {
         if (Session::has('admin')) {
             return view('reports.thongtu67.Mau2g_ThPCUDTG')
@@ -878,8 +885,8 @@ class baocaothongtu67Controller extends Controller
     function mau4a_tt67(Request $request)
     {
         //Kiểm tra cấp đơn vị xem đơn vị để update trường masoh hoặc masot
-        //if (Session::has('admin')) {
-        if ((Session::has('admin') && session('admin')->username == 'khthstc') || (Session::has('admin') && session('admin')->username == 'khthso') ) {
+        if (Session::has('admin')) {
+        ///if ((Session::has('admin') && session('admin')->username == 'khthstc') || (Session::has('admin') && session('admin')->username == 'khthso') ) {
             $inputs = $request->all();
             $model = nguonkinhphi::where('madvbc','like',$inputs['madv'].'%')
                 ->where('sohieu','TT67_2017')->get();
@@ -985,8 +992,8 @@ class baocaothongtu67Controller extends Controller
     function mau4b_tt67(Request $request)
     {
         //Kiểm tra cấp đơn vị xem đơn vị để update trường masoh hoặc masot
-        //if (Session::has('admin')) {
-        if ((Session::has('admin') && session('admin')->username == 'khthstc') || (Session::has('admin') && session('admin')->username == 'khthso') ) {
+        if (Session::has('admin')) {
+        //if ((Session::has('admin') && session('admin')->username == 'khthstc') || (Session::has('admin') && session('admin')->username == 'khthso') ) {
             $inputs = $request->all();
             $model = nguonkinhphi::where('madvbc','like',$inputs['madv'].'%')
                 ->where('sohieu','TT67_2017')->get();
