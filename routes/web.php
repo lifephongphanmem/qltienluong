@@ -209,6 +209,14 @@ Route::group(['prefix'=>'nghiep_vu'],function(){
         Route::post('bsll/{id}','hosocanboController@bsll');
 
         Route::get('thoi_cong_tac','hosocanboController@index_thoicongtac');
+
+        Route::get('store_kiemnhiem','hosocanboController@store_kiemnhiem');
+        Route::get('getinfor_kn','hosocanboController@getinfor_kn');
+        Route::get('delete_kn','hosocanboController@delete_kn');
+
+        Route::get('temp/store_kiemnhiem','hosocanboController@store_kiemnhiem_temp');
+        Route::get('temp/getinfor_kn','hosocanboController@getinfor_kn_temp');
+        Route::get('temp/delete_kn','hosocanboController@delete_kn_temp');
     });
 
     Route::group(['prefix'=>'quan_ly'],function(){

@@ -506,4 +506,11 @@ function getPhuCapNopBH(){
 function getCoChu(){
     return array('7'=>'7','8'=>'8','9'=>'9','10'=>'10','11'=>'11','12'=>'12');
 }
+
+function getPhanLoaiKiemNhiem(){
+    return array('QUANSU' => 'Kiêm nhiệm quân sự',
+        'DBHDND' => 'Kiêm nhiệm đại biều HĐND',
+        'CAPUY' => 'Kiêm nhiệm cấp ủy viên',
+        'KHAC'=> 'Kiêm nhiệm khác');
+}
 ?>

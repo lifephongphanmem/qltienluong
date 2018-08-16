@@ -12,13 +12,12 @@ use App\dmphanloaict;
 use App\dmphongban;
 use App\dmphucap_donvi;
 use App\hosocanbo;
+use App\hosocanbo_kiemnhiem;
+use App\hosocanbo_kiemnhiem_temp;
 use App\hosochucvu;
-use App\hosoluong;
 use App\hosotinhtrangct;
-use App\ngachbac;
 use App\ngachluong;
 use App\nhomngachluong;
-use App\phucapdanghuong;
 use Illuminate\Http\Request;
 
 use App\Http\Requests;
@@ -121,6 +120,7 @@ class hosocanboController extends Controller
                 ->with('model_tenct', $model_tenct)
                 ->with('m_plnb', $m_plnb)
                 ->with('m_pln', $m_pln)
+                ->with('furl_kn', '/nghiep_vu/ho_so/temp/')
                 ->with('a_heso', array('heso', 'vuotkhung', 'hesopc', 'hesott'))
                 ->with('model_pc', $model_pc)
                 ->with('pageTitle', 'Tạo hồ sơ cán bộ');
@@ -128,33 +128,33 @@ class hosocanboController extends Controller
             return view('errors.notlogin');
     }
 
-    function store(Request $request){
+    function store(Request $request)
+    {
         if (Session::has('admin')) {
             $insert = $request->all();
-            $madv=session('admin')->madv;
-            $macanbo=$insert['macanbo'];
+            $madv = session('admin')->madv;
+            $macanbo = $insert['macanbo'];
 
             //Xử lý file ảnh
             //dd($request->file('anh'));
-            $img=$request->file('anh');
-            $filename='';
-            if(isset($img)) {
+            $img = $request->file('anh');
+            $filename = '';
+            if (isset($img)) {
                 $filename = $macanbo . '_' . $img->getClientOriginalExtension();
                 $img->move(public_path() . '/data/uploads/anh/', $filename);
             }
 
-            $insert['anh']=($filename==''?'':'/data/uploads/anh/'. $filename);
+            $insert['anh'] = ($filename == '' ? '' : '/data/uploads/anh/' . $filename);
             $insert['madv'] = $madv;
 
-            $insert['ngaysinh']=getDateTime($insert['ngaysinh']);
-            //$insert['ngaycap']=getDateTime($insert['ngaycap']);
-            $insert['ngaytu']=getDateTime($insert['ngaytu']);
-            $insert['ngayden']=getDateTime($insert['ngayden']);
-            $insert['ngayvd']=getDateTime($insert['ngayvd']);
-            $insert['ngayvdct']=getDateTime($insert['ngayvdct']);
+            $insert['ngaysinh'] = getDateTime($insert['ngaysinh']);
+            $insert['ngaytu'] = getDateTime($insert['ngaytu']);
+            $insert['ngayden'] = getDateTime($insert['ngayden']);
+            //$insert['ngayvd'] = getDateTime($insert['ngayvd']);
+            //$insert['ngayvdct'] = getDateTime($insert['ngayvdct']);
             //$insert['ngayvao']=getDateTime($insert['ngayvao']);
             //$insert['ngaybc']=getDateTime($insert['ngaybc']);
-            $insert['macvd']=($insert['macvd']==''?NULL:$insert['macvd']);
+            //$insert['macvd'] = ($insert['macvd'] == '' ? NULL : $insert['macvd']);
             //$insert['truylinhtungay']=getDateTime($insert['truylinhtungay']);
             //$insert['truylinhdenngay']=getDateTime($insert['truylinhdenngay']);
 
@@ -186,8 +186,14 @@ class hosocanboController extends Controller
             //dd($insert);
             hosocanbo::create($insert);
 
+            $model_kn = hosocanbo_kiemnhiem_temp::where('macanbo',$macanbo)->get();
+            foreach($model_kn as $ct){
+                $a_kq = $ct->toarray();
+                unset($a_kq['id']);
+                hosocanbo_kiemnhiem::create($a_kq);
+            }
             return redirect('nghiep_vu/ho_so/danh_sach');
-        }else
+        } else
             return view('errors.notlogin');
     }
 
@@ -214,7 +220,13 @@ class hosocanboController extends Controller
             //dd($model);
             //lấy phụ cấp ở danh mục phụ cấp đơn vị mapc => tenform
             $model_pc = dmphucap_donvi::where('madv', session('admin')->madv)->get();
-
+            $model_kn = hosocanbo_kiemnhiem::where('macanbo',$model->macanbo)->get();
+            $a_pl = getPhanLoaiKiemNhiem();
+            $a_cv = getChucVuCQ(false);
+            foreach($model_kn as $ct) {
+                $ct->tenphanloai = isset($a_pl[$ct->phanloai]) ? $a_pl[$ct->phanloai] : '';
+                $ct->tenchucvu = isset($a_cv[$ct->macvcq]) ? $a_cv[$ct->macvcq] : '';
+            }
             return view('manage.hosocanbo.edit')
                 ->with('model',$model)
                 ->with('type','edit')
@@ -222,12 +234,14 @@ class hosocanboController extends Controller
                 //->with('m_pb',$m_pb)
                 //->with('m_cvcq',$m_cvcq)
                 //->with('m_cvd',$m_cvd)
+                ->with('model_kn',$model_kn)
                 ->with('model_nhomct',$model_nhomct)
                 ->with('model_tenct',$model_tenct)
                 ->with('m_linhvuc',$m_linhvuc)
                 ->with('a_linhvuc',$a_linhvuc)
                 ->with('m_plnb',$m_plnb)
                 ->with('m_pln',$m_pln)
+                ->with('furl_kn', '/nghiep_vu/ho_so/')
                 ->with('a_heso', array('heso', 'vuotkhung', 'hesopc', 'hesott'))
                 ->with('model_pc',$model_pc)
                 ->with('pageTitle','Sửa thông tin hồ sơ cán bộ');
@@ -266,11 +280,11 @@ class hosocanboController extends Controller
             //$insert['ngaycap']=getDateTime($insert['ngaycap']);
             $insert['ngaytu']=getDateTime($insert['ngaytu']);
             $insert['ngayden']=getDateTime($insert['ngayden']);
-            $insert['ngayvd']=getDateTime($insert['ngayvd']);
-            $insert['ngayvdct']=getDateTime($insert['ngayvdct']);
+            //$insert['ngayvd']=getDateTime($insert['ngayvd']);
+            //$insert['ngayvdct']=getDateTime($insert['ngayvdct']);
             //$insert['ngayvao']=getDateTime($insert['ngayvao']);
             //$insert['ngaybc']=getDateTime($insert['ngaybc']);
-            $insert['macvd']=($insert['macvd']==''?NULL:$insert['macvd']);
+            //$insert['macvd']=($insert['macvd']==''?NULL:$insert['macvd']);
             //$insert['truylinhtungay']=getDateTime($insert['truylinhtungay']);
             //$insert['truylinhdenngay']=getDateTime($insert['truylinhdenngay']);
 
@@ -307,7 +321,6 @@ class hosocanboController extends Controller
             return view('errors.notlogin');
     }
 
-    //<editor-fold desc="Tra cứu">
     function search(){
         if (Session::has('admin')) {
             $m_pb=dmphongban::all('mapb','tenpb');
@@ -323,36 +336,205 @@ class hosocanboController extends Controller
             return view('errors.notlogin');
     }
 
-    function result(Request $request){
+    function result(Request $request)
+    {
         if (Session::has('admin')) {
-            $_sql="select hosocanbo.id,hosocanbo.macanbo,hosocanbo.tencanbo,hosocanbo.anh,hosocanbo.macvcq,hosocanbo.mapb,hosocanbo.gioitinh,dmchucvucq.sapxep,hosocanbo.ngaysinh
+            $_sql = "select hosocanbo.id,hosocanbo.macanbo,hosocanbo.tencanbo,hosocanbo.anh,hosocanbo.macvcq,hosocanbo.mapb,hosocanbo.gioitinh,dmchucvucq.sapxep,hosocanbo.ngaysinh
                    from hosocanbo, dmchucvucq
                    Where hosocanbo.macvcq=dmchucvucq.macvcq and
                       hosocanbo.theodoi ='1'";
 
-            $inputs=$request->all();
+            $inputs = $request->all();
             $s_dk = getConditions($inputs, array('_token'), 'hosocanbo');
-            if($s_dk!='') {$_sql .=' and '.$s_dk;}
+            if ($s_dk != '') {
+                $_sql .= ' and ' . $s_dk;
+            }
 
-            $model=DB::select(DB::raw($_sql));
+            $model = DB::select(DB::raw($_sql));
 
-            $m_pb=dmphongban::all('mapb','tenpb')->toArray();
-            $m_cvcq=dmchucvucq::all('tencv', 'macvcq')->toArray();
+            $m_pb = dmphongban::all('mapb', 'tenpb')->toArray();
+            $m_cvcq = dmchucvucq::all('tencv', 'macvcq')->toArray();
 
-            foreach($model as $hs){
-                $hs->tenpb=getInfoPhongBan($hs,$m_pb);
-                $hs->tencvcq=getInfoChucVuCQ($hs,$m_cvcq);
+            foreach ($model as $hs) {
+                $hs->tenpb = getInfoPhongBan($hs, $m_pb);
+                $hs->tencvcq = getInfoChucVuCQ($hs, $m_cvcq);
             }
 
             return view('search.hosocanbo.result')
-                ->with('model',$model)
-                ->with('pageTitle','Kết quả tra cứu hồ sơ cán bộ');
+                ->with('model', $model)
+                ->with('pageTitle', 'Kết quả tra cứu hồ sơ cán bộ');
         } else
             return view('errors.notlogin');
     }
-    //</editor-fold>
 
-    //<editor-fold desc="Nhận danh sách cán bộ từ file Excel">
+    public function store_kiemnhiem(Request $request)
+    {
+        $result = array(
+            'status' => 'fail',
+            'message' => 'error',
+        );
+        if (!Session::has('admin')) {
+            $result = array(
+                'status' => 'fail',
+                'message' => 'permission denied',
+            );
+            die(json_encode($result));
+        }
+
+        $inputs = $request->all();
+
+        $inputs['hesopc'] = chkDbl($inputs['hesopc']);
+        $inputs['pctn'] = chkDbl($inputs['pctn']);
+        $inputs['pckn'] = chkDbl($inputs['pckn']);
+        $inputs['pctnn'] = chkDbl($inputs['pctnn']);
+        $inputs['pcdbn'] = chkDbl($inputs['pcdbn']);
+        $inputs['pck'] = chkDbl($inputs['pck']);
+
+        if ($inputs['id_kn'] > 0) {
+            hosocanbo_kiemnhiem::find($inputs['id_kn'])->update($inputs);
+        } else {
+            hosocanbo_kiemnhiem::create($inputs);
+        }
+        $model = hosocanbo_kiemnhiem::where('macanbo', $inputs['macanbo'])->get();
+        $a_pl = getPhanLoaiKiemNhiem();
+        $a_cv = getChucVuCQ(false);
+        foreach($model as $ct) {
+            $ct->tenphanloai = isset($a_pl[$ct->phanloai]) ? $a_pl[$ct->phanloai] : '';
+            $ct->tenchucvu = isset($a_cv[$ct->macvcq]) ? $a_cv[$ct->macvcq] : '';
+        }
+        $result = $this->retun_html_kn($result, $model);
+
+        die(json_encode($result));
+    }
+
+    public function delete_kn(Request $request)
+    {
+        $result = array(
+            'status' => 'fail',
+            'message' => 'error',
+        );
+        if (!Session::has('admin')) {
+            $result = array(
+                'status' => 'fail',
+                'message' => 'permission denied',
+            );
+            die(json_encode($result));
+        }
+
+        $inputs = $request->all();
+        $model = hosocanbo_kiemnhiem::find($inputs['id']);
+        $model->delete();
+        $model = hosocanbo_kiemnhiem::where('macanbo', $model->macanbo)->get();
+        $a_pl = getPhanLoaiKiemNhiem();
+        $a_cv = getChucVuCQ(false);
+        foreach($model as $ct) {
+            $ct->tenphanloai = isset($a_pl[$ct->phanloai]) ? $a_pl[$ct->phanloai] : '';
+            $ct->tenchucvu = isset($a_cv[$ct->macvcq]) ? $a_cv[$ct->macvcq] : '';
+        }
+
+        $result = $this->retun_html_kn($result, $model);
+
+        die(json_encode($result));
+    }
+
+    function getinfor_kn(Request $request){
+        if(!Session::has('admin')) {
+            $result = array(
+                'status' => 'fail',
+                'message' => 'permission denied',
+            );
+            die(json_encode($result));
+        }
+
+        $inputs = $request->all();
+        $model = hosocanbo_kiemnhiem::find($inputs['id']);
+        die($model);
+    }
+
+    public function store_kiemnhiem_temp(Request $request)
+    {
+        $result = array(
+            'status' => 'fail',
+            'message' => 'error',
+        );
+        if (!Session::has('admin')) {
+            $result = array(
+                'status' => 'fail',
+                'message' => 'permission denied',
+            );
+            die(json_encode($result));
+        }
+
+        $inputs = $request->all();
+
+        $inputs['hesopc'] = chkDbl($inputs['hesopc']);
+        $inputs['pctn'] = chkDbl($inputs['pctn']);
+        $inputs['pckn'] = chkDbl($inputs['pckn']);
+        $inputs['pctnn'] = chkDbl($inputs['pctnn']);
+        $inputs['pcdbn'] = chkDbl($inputs['pcdbn']);
+        $inputs['pck'] = chkDbl($inputs['pck']);
+
+        if ($inputs['id_kn'] > 0) {
+            hosocanbo_kiemnhiem_temp::find($inputs['id_kn'])->update($inputs);
+        } else {
+            hosocanbo_kiemnhiem_temp::create($inputs);
+        }
+        $model = hosocanbo_kiemnhiem_temp::where('macanbo', $inputs['macanbo'])->get();
+        $a_pl = getPhanLoaiKiemNhiem();
+        $a_cv = getChucVuCQ(false);
+        foreach($model as $ct) {
+            $ct->tenphanloai = isset($a_pl[$ct->phanloai]) ? $a_pl[$ct->phanloai] : '';
+            $ct->tenchucvu = isset($a_cv[$ct->macvcq]) ? $a_cv[$ct->macvcq] : '';
+        }
+        $result = $this->retun_html_kn($result, $model);
+
+        die(json_encode($result));
+    }
+
+    public function delete_kn_temp(Request $request)
+    {
+        $result = array(
+            'status' => 'fail',
+            'message' => 'error',
+        );
+        if (!Session::has('admin')) {
+            $result = array(
+                'status' => 'fail',
+                'message' => 'permission denied',
+            );
+            die(json_encode($result));
+        }
+
+        $inputs = $request->all();
+        $model = hosocanbo_kiemnhiem_temp::find($inputs['id']);
+        $model->delete();
+        $model = hosocanbo_kiemnhiem_temp::where('macanbo', $model->macanbo)->get();
+        $a_pl = getPhanLoaiKiemNhiem();
+        $a_cv = getChucVuCQ(false);
+        foreach($model as $ct) {
+            $ct->tenphanloai = isset($a_pl[$ct->phanloai]) ? $a_pl[$ct->phanloai] : '';
+            $ct->tenchucvu = isset($a_cv[$ct->macvcq]) ? $a_cv[$ct->macvcq] : '';
+        }
+
+        $result = $this->retun_html_kn($result, $model);
+
+        die(json_encode($result));
+    }
+
+    function getinfor_kn_temp(Request $request){
+        if(!Session::has('admin')) {
+            $result = array(
+                'status' => 'fail',
+                'message' => 'permission denied',
+            );
+            die(json_encode($result));
+        }
+
+        $inputs = $request->all();
+        $model = hosocanbo_kiemnhiem_temp::find($inputs['id']);
+        die($model);
+    }
+
     public function infor_excel(){
         if(Session::has('admin')){
             $a_donvi = dmdonvi::where('madv',session('admin')->madv)->first()->toarray();
@@ -480,5 +662,57 @@ class hosocanboController extends Controller
         }else
             return view('errors.notlogin');
     }
-    //</editor-fold>
+
+    /**
+     * @param $result
+     * @param $model
+     * @return mixed
+     */
+    public function retun_html_kn($result, $model)
+    {
+        $result['message'] = '<div class="row" id="dskn">';
+        $result['message'] .= '<div class="col-md-12">';
+        $result['message'] .= '<table class="table table-striped table-bordered table-hover" id="sample_4">';
+        $result['message'] .= '<thead>';
+        $result['message'] .= '<tr>';
+        $result['message'] .= '<th class="text-center" style="width: 5%">STT</th>';
+        $result['message'] .= '<th class="text-center">Phân loại</th>';
+        $result['message'] .= '<th class="text-center">Chức vụ</br>kiêm nhiệm</th>';
+        $result['message'] .= '<th class="text-center">Hệ số</br>phụ cấp</th>';
+        $result['message'] .= '<th class="text-center">Phụ cấp</br>trách nhiệm</th>';
+        $result['message'] .= '<th class="text-center">Phụ cấp</br>kiêm nhiệm</th>';
+        $result['message'] .= '<th class="text-center">Phụ cấp</br>đặc thù</th>';
+        $result['message'] .= '<th class="text-center">Thao tác</th>';
+
+
+        $result['message'] .= '</tr>';
+        $result['message'] .= '</thead>';
+        $result['message'] .= '<tbody>';
+        if (count($model) > 0) {
+            foreach ($model as $key => $value) {
+                $result['message'] .= '<tr>';
+                $result['message'] .= '<td style="text-align: center">' . ($key + 1) . '</td>';
+                $result['message'] .= '<td>' . $value->tenphanloai . '</td>';
+                $result['message'] .= '<td>' . $value->tenchucvu . '</td>';
+                $result['message'] .= '<td>' . $value->hesopc . '</td>';
+                $result['message'] .= '<td>' . $value->pctn . '</td>';
+                $result['message'] .= '<td>' . $value->pckn . '</td>';
+                $result['message'] .= '<td>' . $value->pcdbn . '</td>';
+                $result['message'] .= '<td>' .
+                    '<button type="button" data-target="#kiemnhiem-modal" data-toggle="modal" class="btn btn-default btn-xs mbs" onclick="edit_kn(' . $value->id . ');"><i class="fa fa-edit"></i>&nbsp;Chỉnh sửa</button>' .
+                    '<button type="button" class="btn btn-default btn-xs mbs" onclick="deleteRow(' . $value->id . ')" ><i class="fa fa-trash-o"></i>&nbsp;Xóa</button>'
+
+                    . '</td>';
+                $result['message'] .= '</tr>';
+            }
+            $result['message'] .= '</tbody>';
+            $result['message'] .= '</table>';
+            $result['message'] .= '</div>';
+            $result['message'] .= '</div>';
+            $result['status'] = 'success';
+            return $result;
+        }
+        return $result;
+    }
+
 }

@@ -17,6 +17,7 @@ class hosocanbo_kiemnhiem extends Model
         'hesopc',
         'pcdbn',
         'pctn',
+        'pckn',
         'pctnn',
         'pck'
     ];

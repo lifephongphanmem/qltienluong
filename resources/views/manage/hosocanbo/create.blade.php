@@ -67,7 +67,7 @@
                                     </li>
 
                                     <li><a href="#tab5" data-toggle="tab" class="step">
-                                            <p class="description"><i class="glyphicon glyphicon-paperclip"></i> Thông tin khác</p></a>
+                                            <p class="description"><i class="glyphicon glyphicon-paperclip"></i> Thông tin chức vụ kiêm nhiệm</p></a>
                                     </li>
                                 </ul>
 
@@ -79,7 +79,7 @@
                                 <div class="tab-content">
                                     @include('manage.hosocanbo.include.coban')
                                     @include('manage.hosocanbo.include.luong')
-                                    @include('manage.hosocanbo.include.khac')
+                                    @include('manage.hosocanbo.include.kiemnhiem')
                                 </div>
                             </div>
 
