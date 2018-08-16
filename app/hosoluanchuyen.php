@@ -19,8 +19,4 @@ class hosoluanchuyen extends Model
         'ngayqd',
         'nguoiky'
     ];
-
-    public function hosocanbo(){
-        $this->belongsTo('App\hosocanbo','macanbo');
-    }
 }
