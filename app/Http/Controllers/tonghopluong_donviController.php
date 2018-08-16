@@ -364,8 +364,9 @@ class tonghopluong_donviController extends Controller
             }
             $model = tonghopluong_donvi::where('mathdv', $inputs['mathdv'])->first();
 
+            dd(session('admin')->macqcq == session('admin')->madvqlkv);
             if(session('admin')->macqcq == session('admin')->madvqlkv){//đơn vị chủ quản là huyện
-                dd(session('admin')->macqcq == session('admin')->madvqlkv);
+
                 //kiểm tra xem đã có bản ghi chưa (trường hợp trả lại)
                 $model_huyen = tonghopluong_huyen::where('mathdv', $model->mathh)->first();
                 if(count($model_huyen) == 0){
