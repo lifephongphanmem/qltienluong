@@ -18,7 +18,8 @@ class hosocanbo_kiemnhiem extends Model
         'pcdbn',
         'pctn',
         'pckn',
-        'pctnn',
-        'pck'
+        'pcthni',
+        'pck',
+        'madv'
     ];
 }

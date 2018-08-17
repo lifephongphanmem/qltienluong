@@ -183,6 +183,7 @@ class hosocanboController extends Controller
             $insert['pclt'] = chkDbl($insert['pclt']);
             $insert['pcdd'] = chkDbl($insert['pcdd']);
             $insert['pcct'] = chkDbl($insert['pcct']);
+            $insert['pckct'] = chkDbl($insert['pckct']);
             //dd($insert);
             hosocanbo::create($insert);
 
@@ -265,7 +266,6 @@ class hosocanboController extends Controller
             $model = hosocanbo::find($id);
             //Xử lý file ảnh
             $img=$request->file('anh');
-
             if(isset($img)) {
                 //Xóa ảnh cũ
                 if(File::exists($model->anh))
@@ -313,6 +313,7 @@ class hosocanboController extends Controller
             $insert['pclt'] = chkDbl($insert['pclt']);
             $insert['pcdd'] = chkDbl($insert['pcdd']);
             $insert['pcct'] = chkDbl($insert['pcct']);
+            $insert['pckct'] = chkDbl($insert['pckct']);
 
             //dd($insert);
             $model->update($insert);
@@ -383,10 +384,11 @@ class hosocanboController extends Controller
 
         $inputs = $request->all();
 
+        $inputs['madv'] = session('admin')->madv;
         $inputs['hesopc'] = chkDbl($inputs['hesopc']);
         $inputs['pctn'] = chkDbl($inputs['pctn']);
         $inputs['pckn'] = chkDbl($inputs['pckn']);
-        $inputs['pctnn'] = chkDbl($inputs['pctnn']);
+        $inputs['pcthni'] = chkDbl($inputs['pcthni']);
         $inputs['pcdbn'] = chkDbl($inputs['pcdbn']);
         $inputs['pck'] = chkDbl($inputs['pck']);
 
@@ -466,11 +468,11 @@ class hosocanboController extends Controller
         }
 
         $inputs = $request->all();
-
+        $inputs['madv'] = session('admin')->madv;
         $inputs['hesopc'] = chkDbl($inputs['hesopc']);
         $inputs['pctn'] = chkDbl($inputs['pctn']);
         $inputs['pckn'] = chkDbl($inputs['pckn']);
-        $inputs['pctnn'] = chkDbl($inputs['pctnn']);
+        $inputs['pcthni'] = chkDbl($inputs['pcthni']);
         $inputs['pcdbn'] = chkDbl($inputs['pcdbn']);
         $inputs['pck'] = chkDbl($inputs['pck']);
 

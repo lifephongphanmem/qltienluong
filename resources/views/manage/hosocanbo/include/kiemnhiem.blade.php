@@ -73,15 +73,23 @@
                         </div>
                     </div>
 
+
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label class="control-label">Khối/Tổ công tác</label>
+                            {!!Form::select('mapb_kn',getPhongBan(), null, array('id' => 'mapb_kn','class' => 'form-control select2me'))!!}
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
                     <div class="col-md-4">
                         <div class="form-group">
                             <label class="control-label">Hệ số phụ cấp</label>
                             {!!Form::text('hesopc_kn', null, array('id' => 'hesopc_kn','class' => 'form-control', 'data-mask'=>'fdecimal'))!!}
                         </div>
                     </div>
-                </div>
 
-                <div class="row">
                     <div class="col-md-4">
                         <div class="form-group">
                             <label class="control-label">Phụ cấp trách nhiệm</label>
@@ -95,16 +103,16 @@
                             {!!Form::text('pckn_kn', null, array('id' => 'pckn_kn','class' => 'form-control', 'data-mask'=>'fdecimal'))!!}
                         </div>
                     </div>
-
-                    <div class="col-md-4">
-                        <div class="form-group">
-                            <label class="control-label">Phụ cấp thâm niên</label>
-                            {!!Form::text('pctnn_kn', null, array('id' => 'pctnn_kn','class' => 'form-control', 'data-mask'=>'fdecimal'))!!}
-                        </div>
-                    </div>
                 </div>
 
                 <div class="row">
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label class="control-label">Phụ cấp thâm niên</label>
+                            {!!Form::text('pcthni_kn', null, array('id' => 'pcthni_kn','class' => 'form-control', 'data-mask'=>'fdecimal'))!!}
+                        </div>
+                    </div>
+
                     <div class="col-md-4">
                         <div class="form-group">
                             <label class="control-label">Phụ cấp đặc thù</label>
@@ -175,10 +183,11 @@
                 $('#id_kn').val(data.id);
                 $('#hesopc_kn').val(data.hesopc);
                 $('#phanloai_kn').val(data.phanloai).trigger('change');
+                $('#mapb_kn').val(data.mapb).trigger('change');
                 $('#pctn_kn').val(data.pctn);
                 $('#pckn_kn').val(data.pckn);
                 $('#macvcq_kn').val(data.macvcq).trigger('change');
-                $('#pctnn_kn').val(data.pctnn);
+                $('#pcthni_kn').val(data.pcthni);
                 $('#pcdbn_kn').val(data.pcdbn);
                 $('#pck_kn').val(data.pck);
             }
@@ -195,13 +204,14 @@
                 data: {
                     _token: CSRF_TOKEN,
                     macanbo : $('#macanbo').val(),
+                    mapb : $('#mapb_kn').val(),
                     id_kn: $('#id_kn').val(),
                     hesopc: $('#hesopc_kn').val(),
                     phanloai: $('#phanloai_kn').val(),
                     pctn: $('#pctn_kn').val(),
                     pckn: $('#pckn_kn').val(),
                     macvcq: $('#macvcq_kn').val(),
-                    pctnn: $('#pctnn_kn').val(),
+                    pcthni: $('#pcthni_kn').val(),
                     pcdbn: $('#pcdbn_kn').val(),
                     pck: $('#pck_kn').val()
 

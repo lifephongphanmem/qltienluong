@@ -81,7 +81,7 @@ class CreateHosocanboTable extends Migration
             $table->double('vuotkhung')->default(0);
             $table->double('pthuong')->default(100);
             $table->double('pcct')->default(0);//dùng để thay thế phụ cấp ghép lớp
-            $table->double('pckct')->default(0);
+            $table->double('pckct')->default(0);//dùng để thay thế phụ cấp bằng cấp cho cán bộ không chuyên trách
             $table->double('pck')->default(0);
             $table->double('pccv')->default(0);
             $table->double('pckv')->default(0);

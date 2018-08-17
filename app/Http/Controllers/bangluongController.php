@@ -15,6 +15,7 @@ use App\dmphanloaict;
 use App\dmphucap_donvi;
 use App\dmtieumuc_default;
 use App\hosocanbo;
+use App\hosocanbo_kiemnhiem;
 use App\hosotamngungtheodoi;
 use App\hosotruylinh;
 use App\ngachluong;
@@ -76,39 +77,28 @@ class bangluongController extends Controller
             $madv = session('admin')->madv;
             $inputs['mabl'] = $madv . '_' . getdate()[0];
             $inputs['madv'] = $madv;
+            $inputs['luongcoban'] = (getDbl($inputs['luongcoban']) * getDbl($inputs['phantramhuong'])) / 100;
 
-            $inputs['phantramhuong'] = getDbl($inputs['phantramhuong']);
-            $inputs['luongcoban'] = getDbl($inputs['luongcoban']);
             $ngaylap = Carbon::create($inputs['nam'], $inputs['thang'], '01');
             //$ngaylap = Carbon::create('2018','04','01');
             $m_tamngung = hosotamngungtheodoi::select('macanbo')
-                ->where('madv', $madv)
-                ->where('maphanloai', 'THAISAN')
-                ->where('ngaytu', '<=', $ngaylap)
-                ->where('ngayden', '>=', $ngaylap)
+                ->where('madv', $madv)->where('maphanloai', 'THAISAN')
+                ->where('ngaytu', '<=', $ngaylap)->where('ngayden', '>=', $ngaylap)
                 ->get();
-            /*
-            $m_cb = hosocanbo::wherein('macanbo', function($query)use($ngaylap){
-                $query->select('macanbo')->from('hosotamngungtheodoi')->get();
-            })->get();
-            */
 
             //Lấy tất cả cán bộ trong đơn vị
             $m_cb = hosocanbo::where('madv', $madv)
                 ->select('stt', 'macanbo', 'macongchuc', 'sunghiep', 'tencanbo', 'mact', 'lvhd', 'macvcq', 'mapb', 'msngbac', 'heso', 'hesopc', 'hesott', 'vuotkhung', DB::raw("'" . $inputs['mabl'] . "' as mabl"),
                     'pclt', 'pcdd', 'pck', 'pccv', 'pckv', 'pcth', 'pcdh', 'pcld', 'pcudn', 'pctn', 'pctnn', 'pcdbn', 'pcvk', 'pckn', 'pccovu', 'pcdbqh', 'pctnvk', 'pcbdhdcu', 'pcdang', 'pcthni', 'pcct')
-                ->where('theodoi', '1')
-                ->wherenotin('macanbo', $m_tamngung->toarray())
-                ->get();
+                ->where('theodoi', '1')->wherenotin('macanbo', $m_tamngung->toarray())->get();
 
             //Lấy cán bộ tạm ngưng theo dõi
             //Nếu phân loai = THAISAN && pcttn >0 =>đưa vào bảng lương
             $model_canbo_tn = hosocanbo::select('stt', 'macanbo', 'macongchuc', 'sunghiep', 'tencanbo', 'mact', 'lvhd', 'macvcq', 'mapb', 'msngbac', 'heso', 'pccv', 'vuotkhung', 'pcudn', DB::raw("'" . $inputs['mabl'] . "' as mabl"))
-                ->wherein('macanbo', $m_tamngung->toarray())
-                ->where('pcudn', '>', '0')
-                ->get();
+                ->wherein('macanbo', $m_tamngung->toarray())->where('pcudn', '>', '0')->get();
 
-            //dd($model_canbo_tn);
+            //Lấy danh sách cán bộ kiêm nhiệm
+            $model_canbo_kn = hosocanbo_kiemnhiem::where('madv', $madv)->get();
 
             if (isset($inputs['linhvuc']) && $inputs['linhvuc'] != 'ALL') {
                 //Dùng tìm kiếm các bộ nào phù hợp. Do lvhd là mảng nên pải lọc
@@ -129,7 +119,6 @@ class bangluongController extends Controller
             bangluong::create($inputs);
 
             //Tính toán lương cho cán bộ nghỉ thai sản
-            //$m_donvi = dmdonvi::where('madv',session('admin')->madv)->first();
             foreach ($model_canbo_tn as $cb) {
                 $pcudn = $model_phucap->where('mapc', 'pcudn')->first();
                 $pcudn->heso_goc = $cb->pcudn;
@@ -165,7 +154,7 @@ class bangluongController extends Controller
                 //đơn vị y.c giữ hệ số, chức vụ trên bảng lương nhưng ko tính lương
                 //$cb->vuotkhung = 0;
                 //$cb->heso = 0;
-                $cb->ttl = $inputs['luongcoban'] * $cb->pcudn * $inputs['phantramhuong'] / 100;
+                $cb->ttl = $inputs['luongcoban'] * $cb->pcudn;
                 $cb->luongtn = $cb->ttl;
 
                 //tính toán lưu vào bảng phụ cấp theo lương
@@ -185,6 +174,25 @@ class bangluongController extends Controller
                 bangluong_ct::create($cb->toarray());
             }
 
+            //Tính toán lương cho cán bộ kiêm nhiệm
+            //$m_donvi = dmdonvi::where('madv',session('admin')->madv)->first();
+
+            foreach ($model_canbo_kn as $cb) {
+                $cb->mabl = $inputs['mabl'];
+                $ths = 0;
+                foreach ($model_phucap as $ct) {
+                    $mapc = $ct->mapc;
+                    $ths += $cb->$mapc;
+                }
+
+                $cb->tonghs = $ths;
+                $cb->ttl = round($inputs['luongcoban'] * $ths);
+
+                $cb->luongtn = $cb->ttl;
+                $a_k = $cb->toarray();
+                unset($a_k['id']);
+                bangluong_ct::create($a_k);
+            }
             //Tính toán lương cho cán bộ
             //$a_col = getColPhuCap(); //lấy theo phụ cấp => tự tính phụ cấp vượt khung, hệ số lương
             //$a_baohiem = getPhuCapNopBH();
@@ -481,23 +489,23 @@ class bangluongController extends Controller
             return view('errors.notlogin');
     }
 
-    function show($mabl){
+    function show($mabl)
+    {
         if (Session::has('admin')) {
-            $model=bangluong_ct::where('mabl',$mabl)->get();
-
-            $m_bl=bangluong::select('thang','nam','mabl')->where('mabl',$mabl)->first();
-            $dmchucvucq=dmchucvucq::all('tencv', 'macvcq')->toArray();
-
-            foreach($model as $hs){
-                //$hs->tencv=$hs->macvcq;
-                $hs->tencv=getInfoChucVuCQ($hs,$dmchucvucq);
+            $model = bangluong_ct::where('mabl', $mabl)->get();
+            $m_bl = bangluong::select('thang', 'nam', 'mabl')->where('mabl', $mabl)->first();
+            $dmchucvucq = dmchucvucq::all('tencv', 'macvcq')->toArray();
+            $model_cb = hosocanbo::where('madv', session('admin')->madv)->get();
+            foreach ($model as $hs) {
+                $cb = $model_cb->where('macanbo', $hs->macanbo)->first();
+                $hs->tencanbo = count($cb) > 0 ? $cb->tencanbo : '';
+                $hs->tencv = getInfoChucVuCQ($hs, $dmchucvucq);
             }
             return view('manage.bangluong.bangluong')
-                ->with('furl','/chuc_nang/bang_luong/')
-                ->with('model',$model)
-
-                ->with('m_bl',$m_bl)
-                ->with('pageTitle','Bảng lương chi tiết');
+                ->with('furl', '/chuc_nang/bang_luong/')
+                ->with('model', $model)
+                ->with('m_bl', $m_bl)
+                ->with('pageTitle', 'Bảng lương chi tiết');
         } else
             return view('errors.notlogin');
     }

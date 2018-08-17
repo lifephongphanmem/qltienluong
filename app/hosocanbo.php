@@ -45,7 +45,7 @@ class hosocanbo extends Model
         'vuotkhung',
         'pthuong',
         'pcct',//dùng để thay thế phụ cấp ghép lớp
-        'pckct',
+        'pckct',//dùng để thay thế phụ cấp bằng cấp cho cán bộ không chuyên trách
         'pck',
         'pccv',
         'pckv',
