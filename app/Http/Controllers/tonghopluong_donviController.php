@@ -10,6 +10,7 @@ use App\dmdonvi;
 use App\dmnguonkinhphi;
 use App\dmphanloaicongtac;
 use App\dmphanloaict;
+use App\hosocanbo;
 use App\tonghopluong_donvi;
 use App\tonghopluong_donvi_chitiet;
 use App\tonghopluong_donvi_diaban;
@@ -100,13 +101,15 @@ class tonghopluong_donviController extends Controller
                 $query->select('mabl')->from('bangluong')->where('nam', $nam)->where('thang', $thang)->where('madv', $madv);
             })->get();
             $model_congtac = dmphanloaict::all();
-
+            $model_hoso = hosocanbo::where('madv', $madv)->get();
             //$model_diaban = dmdiabandbkk::where('madv',$madv)->get();
             $model_diaban_ct = dmdiabandbkk_chitiet::wherein('madiaban', function ($query) use ($madv) {
                 $query->select('madiaban')->from('dmdiabandbkk')->where('madv', $madv)->where('phanloai', '<>', '');
             })->get();
             //Lấy dữ liệu từ các bảng liên quan thêm vào bảng lương chi tiết để tính toán
             foreach ($model_bangluong_ct as $ct) {
+                $hoso = $model_hoso->where('macanbo',$ct->macanbo)->first();
+                $ct->mact = $hoso->mact;
                 $bangluong = $model_bangluong->where('mabl', $ct->mabl)->first();
                 $ct->luongcoban = $bangluong->luongcoban;
                 $ct->manguonkp = $bangluong->manguonkp;
@@ -208,7 +211,7 @@ class tonghopluong_donviController extends Controller
                 }
             }
             tonghopluong_donvi_chitiet::insert($model_data);
-            tonghopluong_donvi_diaban::insert($model_db);
+            //tonghopluong_donvi_diaban::insert($model_db);
             tonghopluong_donvi::create($inputs);
             return redirect('/chuc_nang/tong_hop_luong/don_vi/detail/ma_so=' . $mathdv);
         } else

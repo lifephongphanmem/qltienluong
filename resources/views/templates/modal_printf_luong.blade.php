@@ -528,6 +528,119 @@
 {!! Form::close() !!}
 
 
+
+<!--Mẫu ban chấp hành Đảng ủy -->
+{!! Form::open(['url'=>'','method'=>'post' ,'target'=>'_blank', 'files'=>true, 'id' => 'printf_maubchd']) !!}
+<div id="maubchd-modal" tabindex="-1" role="dialog" aria-hidden="true" class="modal fade">
+    <div class="modal-dialog modal-content">
+        <div class="modal-header modal-header-primary">
+            <button type="button" data-dismiss="modal" aria-hidden="true" class="close">&times;</button>
+            <h4 id="header-inbl" class="modal-title">Bảng thanh toán phụ cấp BCH Đảng ủy</h4>
+        </div>
+        <div class="modal-body">
+            <div class="form-horizontal">
+                <div class="row">
+                    <div class="col-md-12">
+                        <label class="control-label">Khối/Tổ công tác</label>
+                        <select name="mapb_maubchd" id="mapb_maubchd" class="form-control select2me" disabled>
+                            @foreach(getPhongBan(true) as $key=>$val)
+                                <option value="{{$key}}">{{$val}}</option>
+                            @endforeach
+                        </select>
+                    </div>
+
+                    <div class="col-md-12">
+                        <label class="control-label">Chức vụ</label>
+                        {!!Form::select('macvcq_maubchd',getChucVuCQ(true), null, array('id' => 'macvcq_maubchd','class' => 'form-control select2me','disabled'))!!}
+                    </div>
+
+                    <div class="col-md-12">
+                        <label class="control-label">Phân loại công tác</label>
+                        <select class="form-control select2me" name="mact_maubchd" id="mact_maubchd" disabled>
+                            @foreach($model_nhomct as $kieuct)
+                                <option value="">-- Tất cả các phân loại công tác --</option>
+                                <optgroup label="{{$kieuct->tencongtac}}">
+                                    <?php
+                                    $mode_ct=$model_tenct->where('macongtac',$kieuct->macongtac);
+                                    ?>
+                                    @foreach($mode_ct as $ct)
+                                        <option value="{{$ct->mact}}">{{$ct->tenct}}</option>
+                                    @endforeach
+                                </optgroup>
+                            @endforeach
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <input type="hidden" id="mabl_maubchd" name="mabl_maubchd"/>
+        </div>
+        <div class="modal-footer">
+            <button type="button" data-dismiss="modal" class="btn btn-default">Hủy thao tác</button>
+            <button type="submit" data-dismiss="modal" class="btn btn-success" onclick="ClickBCbchd()">Đồng ý</button>
+            <button type="submit" data-dismiss="modal" class="btn btn-primary" onclick="ClickBCbchd_excel()">Xuất Excel</button>
+        </div>
+    </div>
+</div>
+{!! Form::close() !!}
+
+
+<!--Mẫu ban chỉ huy quân sự -->
+{!! Form::open(['url'=>'','method'=>'post' ,'target'=>'_blank', 'files'=>true, 'id' => 'printf_mauqs']) !!}
+<div id="mauqs-modal" tabindex="-1" role="dialog" aria-hidden="true" class="modal fade">
+    <div class="modal-dialog modal-content">
+        <div class="modal-header modal-header-primary">
+            <button type="button" data-dismiss="modal" aria-hidden="true" class="close">&times;</button>
+            <h4 id="header-inbl" class="modal-title">Bảng thanh toán phụ cấp ban chỉ huy quân sự</h4>
+        </div>
+        <div class="modal-body">
+            <div class="form-horizontal">
+                <div class="row">
+                    <div class="col-md-12">
+                        <label class="control-label">Khối/Tổ công tác</label>
+                        <select name="mapb_mauqs" id="mapb_mauqs" class="form-control select2me">
+                            @foreach(getPhongBan(true) as $key=>$val)
+                                <option value="{{$key}}">{{$val}}</option>
+                            @endforeach
+                        </select>
+                    </div>
+
+                    <div class="col-md-12">
+                        <label class="control-label">Chức vụ</label>
+                        {!!Form::select('macvcq_mauqs',getChucVuCQ(true), null, array('id' => 'macvcq_mauqs','class' => 'form-control select2me','disabled'))!!}
+                    </div>
+
+                    <div class="col-md-12">
+                        <label class="control-label">Phân loại công tác</label>
+                        <select class="form-control select2me" name="mact_mauqs" id="mact_mauqs" disabled>
+                            @foreach($model_nhomct as $kieuct)
+                                <option value="">-- Tất cả các phân loại công tác --</option>
+                                <optgroup label="{{$kieuct->tencongtac}}">
+                                    <?php
+                                    $mode_ct=$model_tenct->where('macongtac',$kieuct->macongtac);
+                                    ?>
+                                    @foreach($mode_ct as $ct)
+                                        <option value="{{$ct->mact}}">{{$ct->tenct}}</option>
+                                    @endforeach
+                                </optgroup>
+                            @endforeach
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <input type="hidden" id="mabl_mauqs" name="mabl_mauqs"/>
+        </div>
+        <div class="modal-footer">
+            <button type="button" data-dismiss="modal" class="btn btn-default">Hủy thao tác</button>
+            <button type="submit" data-dismiss="modal" class="btn btn-success" onclick="ClickBCqs()">Đồng ý</button>
+            <button type="submit" data-dismiss="modal" class="btn btn-primary" onclick="ClickBCqs_excel()">Xuất Excel</button>
+        </div>
+    </div>
+</div>
+{!! Form::close() !!}
+
+
 <!--Mẫu bảo hiểm -->
 {!! Form::open(['url'=>(isset($furl)?$furl : '').'maubh','method'=>'post' ,'target'=>'_blank', 'files'=>true, 'id' => 'printf_maubh']) !!}
 <div id="maubh-modal" tabindex="-1" role="dialog" aria-hidden="true" class="modal fade">
@@ -622,7 +735,6 @@
         $('#mabl_maubh').val($('#mabl_in').val());
         $('#maubh-modal').modal('show');
     }
-
     function indbhdnd(){
         $('#mabl_maudbhdnd').val($('#mabl_in').val());
         $('#maudbhdnd-modal').modal('show');
@@ -631,6 +743,15 @@
         $('#mabl_maublpc').val($('#mabl_in').val());
         $('#maublpc-modal').modal('show');
     }
+    function inbchd(){
+        $('#mabl_maubchd').val($('#mabl_in').val());
+        $('#maubchd-modal').modal('show');
+    }
+    function inqs(){
+        $('#mabl_mauqs').val($('#mabl_in').val());
+        $('#mauqs-modal').modal('show');
+    }
+
     $(function(){
         $('#printf_mau1 :submit').click(function(){
             $('#mau1-modal').modal('hide');
@@ -667,8 +788,13 @@
         $('#printf_maudbhdnd :submit').click(function(){
             $('#maudbhdnd-modal').modal('hide');
         });
+
         $('#printf_maublpc :submit').click(function(){
             $('#maublpc-modal').modal('hide');
+        });
+
+        $('#printf_maubchd :submit').click(function(){
+            $('#maubchd-modal').modal('hide');
         });
     });
 
@@ -737,17 +863,6 @@
         $('#printf_mau6').attr('action',url);
         $('#printf_mau6').submit();
     }
-    
-    function ClickBC1() {
-        var url = '{{(isset($furl)?$furl : '').'mau01'}}'
-        $('#printf_mau1').attr('action', url);
-        $('#printf_mau1').submit();
-    }
-    function ClickBC1_excel(){
-        var url = '{{(isset($furl)?$furl : '').'mau01_excel'}}'
-        $('#printf_mau1').attr('action',url);
-        $('#printf_mau1').submit();
-    }
 
     function ClickBCbh() {
         var url = '{{(isset($furl)?$furl : '').'maubh'}}'
@@ -791,5 +906,27 @@
         var url = '{{(isset($furl)?$furl : '').'maublpc_excel'}}'
         $('#printf_maublpc').attr('action',url);
         $('#printf_maublpc').submit();
+    }
+
+    function ClickBCbchd() {
+        var url = '{{(isset($furl)?$furl : '').'maubchd'}}'
+        $('#printf_maubchd').attr('action', url);
+        $('#printf_maubchd').submit();
+    }
+    function ClickBCbchd_excel(){
+        var url = '{{(isset($furl)?$furl : '').'maubchd_excel'}}'
+        $('#printf_maubchd').attr('action',url);
+        $('#printf_maubchd').submit();
+    }
+
+    function ClickBCqs() {
+        var url = '{{(isset($furl)?$furl : '').'mauqs'}}'
+        $('#printf_mauqs').attr('action', url);
+        $('#printf_mauqs').submit();
+    }
+    function ClickBCqs_excel(){
+        var url = '{{(isset($furl)?$furl : '').'mauqs_excel'}}'
+        $('#printf_mauqs').attr('action',url);
+        $('#printf_mauqs').submit();
     }
 </script>

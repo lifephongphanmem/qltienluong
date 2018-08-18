@@ -15,6 +15,7 @@ class bangluong_ct extends Model
         'mact',
         'msngbac',
         'stt',
+        'phanloai',
         'macanbo',
         'tencanbo',
         'macongchuc',

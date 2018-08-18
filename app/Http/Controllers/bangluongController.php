@@ -345,7 +345,6 @@ class bangluongController extends Controller
 
         return redirect('/chuc_nang/bang_luong/maso=' . $inputs['mabl']);
     }
-
     //
     function store_truylinh(Request $request)
     {
@@ -1995,6 +1994,178 @@ class bangluongController extends Controller
                 });
             })->download('xls');
 
+        } else
+            return view('errors.notlogin');
+    }
+
+    public function printf_maubchd(Request $request){
+        if (Session::has('admin')) {
+            $inputs = $request->all();
+            $inputs['mabl'] = $inputs['mabl_maubchd'];
+            //$inputs['mapb'] = $inputs['mapb_maudbhdnd'];
+            //$inputs['macvcq'] = $inputs['macvcq_maudbhdnd'];
+            //$inputs['mact'] = $inputs['mact_maudbhdnd'];
+
+            $mabl = $inputs['mabl'];
+            $m_bl = bangluong::select('thang','nam','mabl','madv','ngaylap','luongcoban')->where('mabl',$mabl)->first();
+            $model = bangluong_ct::where('mabl',$mabl)->get();
+            $model_hoso = hosocanbo::where('madv',$m_bl->madv)->get();
+            $a_cv = getChucVuCQ(false);
+
+            foreach($model as $ct) {
+                $ct->luongcb = $m_bl->luongcoban;
+                $hoso = $model_hoso->where('macanbo', $ct->macanbo)->first();
+                $ct->tencanbo = $hoso->tencanbo;
+                $ct->chucvu = isset($a_cv[$hoso->macvcq])? $a_cv[$hoso->macvcq]:'';
+                $ct->chucvukn = isset($a_cv[$ct->macvcq])? $a_cv[$ct->macvcq]:'';
+                $ct->sotk = count($hoso) > 0 ? $hoso->sotk : null;
+                $ct->lvtd = count($hoso) > 0 ? $hoso->lvtd : null;
+
+                if($ct->phanloai == 'CAPUY'){
+                    $ct->pcvk = $ct->hesopc;
+                    //$ct->pckn = $ct->hesopc;
+                }
+                $ct->sotien = ($ct->pcvk + $ct->pckn) * $ct->luongcb;
+            }
+
+            $model_cvc = $model->where('pcvk','>',0)->where('phanloai','CVCHINH');
+            $model_kn = $model->where('hesopc','>',0)->where('phanloai','CAPUY');
+            foreach($model_kn as $ct){
+                $model_cvc->add($ct);
+            }
+
+            $m_dv = dmdonvi::where('madv',$m_bl->madv)->first();
+            $m_dv->tendvcq = getTenDB($m_dv->madvbc);
+
+            $thongtin=array('nguoilap'=>$m_bl->nguoilap,
+                'thang'=>$m_bl->thang,
+                'nam'=>$m_bl->nam,
+                'ngaylap'=>$m_bl->ngaylap,
+                'luongcb' => $m_bl->luongcoban);
+
+            return view('reports.bangluong.donvi.maubchd')
+                ->with('model',$model_cvc->sortBy('stt'))
+                ->with('m_dv',$m_dv)
+                ->with('thongtin',$thongtin)
+                ->with('pageTitle','Bảng lương chi tiết');
+        } else
+            return view('errors.notlogin');
+    }
+
+    public function printf_maubchd_excel(Request $request){
+        if (Session::has('admin')) {
+            $inputs = $request->all();
+            $inputs['mabl'] = $inputs['mabl_maubchd'];
+            //$inputs['mapb'] = $inputs['mapb_maudbhdnd'];
+            //$inputs['macvcq'] = $inputs['macvcq_maudbhdnd'];
+            //$inputs['mact'] = $inputs['mact_maudbhdnd'];
+
+            $mabl = $inputs['mabl'];
+            $m_bl = bangluong::select('thang','nam','mabl','madv','ngaylap','luongcoban')->where('mabl',$mabl)->first();
+            $model = bangluong_ct::where('mabl',$mabl)->get();
+            $model_hoso = hosocanbo::where('madv',$m_bl->madv)->get();
+            $a_cv = getChucVuCQ(false);
+
+            foreach($model as $ct) {
+                $ct->luongcb = $m_bl->luongcoban;
+                $hoso = $model_hoso->where('macanbo', $ct->macanbo)->first();
+                $ct->tencanbo = $hoso->tencanbo;
+                $ct->chucvu = isset($a_cv[$hoso->macvcq])? $a_cv[$hoso->macvcq]:'';
+                $ct->chucvukn = isset($a_cv[$ct->macvcq])? $a_cv[$ct->macvcq]:'';
+                $ct->sotk = count($hoso) > 0 ? $hoso->sotk : null;
+                $ct->lvtd = count($hoso) > 0 ? $hoso->lvtd : null;
+
+                if($ct->phanloai == 'CAPUY'){
+                    $ct->pcvk = $ct->hesopc;
+                    //$ct->pckn = $ct->hesopc;
+                }
+                $ct->sotien = ($ct->pcvk + $ct->pckn) * $ct->luongcb;
+            }
+
+            $model_cvc = $model->where('pcvk','>',0)->where('phanloai','CVCHINH');
+            $model_kn = $model->where('hesopc','>',0)->where('phanloai','CAPUY');
+            foreach($model_kn as $ct){
+                $model_cvc->add($ct);
+            }
+            $model = $model_cvc;
+            $m_dv = dmdonvi::where('madv',$m_bl->madv)->first();
+            $m_dv->tendvcq = getTenDB($m_dv->madvbc);
+
+            $thongtin=array('nguoilap'=>$m_bl->nguoilap,
+                'thang'=>$m_bl->thang,
+                'nam'=>$m_bl->nam,
+                'ngaylap'=>$m_bl->ngaylap,
+                'luongcb' => $m_bl->luongcoban);
+
+            Excel::create('BCH DANGUY',function($excel) use($m_dv,$thongtin,$model){
+                $excel->sheet('New sheet', function($sheet) use($m_dv,$thongtin,$model){
+                    $sheet->loadView('reports.bangluong.donvi.maubchd')
+                        ->with('model', $model->sortBy('stt'))
+                        ->with('m_dv', $m_dv)
+                        ->with('thongtin', $thongtin)
+                        ->with('pageTitle','DS CHI TRA');
+                    //$sheet->setPageMargin(0.25);
+                    $sheet->setAutoSize(false);
+                    $sheet->setFontFamily('Tahoma');
+                    $sheet->setFontBold(false);
+
+                    //$sheet->setColumnFormat(array('D' => '#,##0.00'));
+                });
+            })->download('xls');
+        } else
+            return view('errors.notlogin');
+    }
+
+    public function printf_mauqs(Request $request){
+        if (Session::has('admin')) {
+            $inputs = $request->all();
+            $inputs['mabl'] = $inputs['mabl_mauqs'];
+            //$inputs['mapb'] = $inputs['mapb_maudbhdnd'];
+            //$inputs['macvcq'] = $inputs['macvcq_maudbhdnd'];
+            //$inputs['mact'] = $inputs['mact_maudbhdnd'];
+
+            $mabl = $inputs['mabl'];
+            $m_bl = bangluong::select('thang','nam','mabl','madv','ngaylap','luongcoban')->where('mabl',$mabl)->first();
+            $model = bangluong_ct::where('mabl',$mabl)->get();
+            $model_hoso = hosocanbo::where('madv',$m_bl->madv)->get();
+            $a_cv = getChucVuCQ(false);
+
+            foreach($model as $ct) {
+                $ct->luongcb = $m_bl->luongcoban;
+                $hoso = $model_hoso->where('macanbo', $ct->macanbo)->first();
+                $ct->tencanbo = $hoso->tencanbo;
+                $ct->chucvu = isset($a_cv[$hoso->macvcq])? $a_cv[$hoso->macvcq]:'';
+                $ct->chucvukn = isset($a_cv[$ct->macvcq])? $a_cv[$ct->macvcq]:'';
+                $ct->sotk = count($hoso) > 0 ? $hoso->sotk : null;
+                $ct->lvtd = count($hoso) > 0 ? $hoso->lvtd : null;
+
+                if($ct->phanloai == 'CAPUY'){
+                    $ct->pcvk = $ct->hesopc;
+                    //$ct->pckn = $ct->hesopc;
+                }
+                $ct->sotien = ($ct->pcvk + $ct->pckn) * $ct->luongcb;
+            }
+
+            $model_cvc = $model->where('pcvk','>',0)->where('phanloai','CVCHINH');
+            $model_kn = $model->where('hesopc','>',0)->where('phanloai','CAPUY');
+            foreach($model_kn as $ct){
+                $model_cvc->add($ct);
+            }
+
+            $m_dv = dmdonvi::where('madv',$m_bl->madv)->first();
+            $m_dv->tendvcq = getTenDB($m_dv->madvbc);
+
+            $thongtin=array('nguoilap'=>$m_bl->nguoilap,
+                'thang'=>$m_bl->thang,
+                'nam'=>$m_bl->nam,
+                'ngaylap'=>$m_bl->ngaylap,
+                'luongcb' => $m_bl->luongcoban);
+
+            return view('reports.bangluong.donvi.mauqs')
+                ->with('model',$model_cvc->sortBy('stt'))
+                ->with('m_dv',$m_dv)
+                ->with('thongtin',$thongtin)
+                ->with('pageTitle','Bảng lương chi tiết');
         } else
             return view('errors.notlogin');
     }

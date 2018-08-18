@@ -216,7 +216,7 @@ Route::group(['prefix'=>'nghiep_vu'],function(){
 
         Route::get('temp/store_kiemnhiem','hosocanboController@store_kiemnhiem_temp');
         Route::get('temp/getinfor_kn','hosocanboController@getinfor_kn_temp');
-        Route::get('temp/delete_kn','hosocanboController@delete_kn_temp');
+        Route::get('temp/delete_kn','hosocanboController@delete_kn_temp_temp');
     });
 
     Route::group(['prefix'=>'quan_ly'],function(){
@@ -352,6 +352,8 @@ Route::group(['prefix'=>'chuc_nang'],function(){
         Route::post('maubh','bangluongController@printf_maubh');
         Route::post('maudbhdnd','bangluongController@printf_maudbhdnd');
         Route::post('maublpc','bangluongController@printf_maublpc');
+        Route::post('maubchd','bangluongController@printf_maubchd');
+        Route::post('mauqs','bangluongController@printf_mauqs');
 
         Route::post('mau01_excel','bangluongController@printf_mau01_excel');
         Route::post('mau02_excel','bangluongController@printf_mau02_excel');
@@ -363,6 +365,8 @@ Route::group(['prefix'=>'chuc_nang'],function(){
         Route::post('maubh_excel','bangluongController@printf_maubh_excel');
         Route::post('maudbhdnd_excel','bangluongController@printf_maudbhdnd_excel');
         Route::post('maublpc_excel','bangluongController@printf_maublpc_excel');
+        Route::post('maubchd_excel','bangluongController@printf_maubchd_excel');
+        Route::post('mauqs_excel','bangluongController@printf_mauqs_excel');
     });
 
     Route::group(['prefix'=>'nang_luong'],function(){
