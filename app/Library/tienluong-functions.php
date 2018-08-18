@@ -509,7 +509,7 @@ function getCoChu(){
 
 function getPhanLoaiKiemNhiem(){
     return array('QUANSU' => 'Kiêm nhiệm quân sự',
-        'DBHDND' => 'Kiêm nhiệm đại biều HĐND',
+        'DBHDND' => 'Kiêm nhiệm đại biểu HĐND',
         'CAPUY' => 'Kiêm nhiệm cấp ủy viên',
         'KHAC'=> 'Kiêm nhiệm khác');
 }

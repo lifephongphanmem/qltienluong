@@ -10,7 +10,6 @@
             font: normal 12px/14px time, serif;
         }
 
-
         .title {
             text-align: right;
         }
@@ -96,28 +95,35 @@
 
 <table class="money" cellspacing="0" cellpadding="0" border="1" style="margin: 20px auto; border-collapse: collapse;">
     <tr style="padding-left: 2px;padding-right: 2px; text-align: center">
-        <th rowspan="2" span="2" style="width: 3%;font-weight: bold" >STT</th>
-        <th rowspan="2" style="width: 15%;text-align: center;font-weight: bold">Họ và tên</th>
-        <th rowspan="2" style="width: 10%; text-align: center;font-weight: bold">Chức danh chính</th>
-        <th rowspan="2" style="width: 10%; text-align: center;font-weight: bold">Chức danh hưởng</br>phụ cấp</th>
-        <th rowspan="2" style="width: 6%; text-align: center;font-weight: bold">Mức lương</br>tối thiểu</th>
+        <td>STT</td>
+        <td>Họ và tên</td>
+        <td>Chức danh chính</td>
+        <td>Chức danh hưởng phụ cấp</td>
+        <td>Mức lương tối thiểu</td>
 
-        <th colspan="4" style="text-align: center;font-weight: bold">Phụ cấp</th>
-        <th colspan="4" style="text-align: center;font-weight: bold">Số tiền</th>
-        <th rowspan="2" style="width: 8%; text-align: center;font-weight: bold">Tổng phụ cấp</br>được nhận</th>
-        <th rowspan="2" style="text-align: center;font-weight: bold">Ký nhận</th>
+        <td colspan="4">Phụ cấp</td>
+        <td colspan="4">Số tiền</td>
+        <td>Tổng phụ cấp</br>được nhận</td>
+        <td>Ký nhận</td>
     </tr>
 
     <tr style="padding-left: 2px;padding-right: 2px; text-align: center">
-        <th style="text-align: center;font-weight: bold">Hệ số phụ cấp</th>
-        <th style="text-align: center;font-weight: bold">Phụ cấp đặc thù</th>
-        <th style="text-align: center;font-weight: bold">Phụ cấp trách nhiệm</th>
-        <th style="text-align: center;font-weight: bold">Phụ cấp thâm niên</th>
+        <th></th>
+        <th></th>
+        <th></th>
+        <th></th>
+        <th></th>
+        <td>Hệ số phụ cấp</td>
+        <td>Phụ cấp đặc thù</td>
+        <td>Phụ cấp trách nhiệm</td>
+        <td>Phụ cấp thâm niên</td>
 
-        <th style="text-align: center;font-weight: bold">Hệ số phụ cấp</th>
-        <th style="text-align: center;font-weight: bold">Phụ cấp đặc thù</th>
-        <th style="text-align: center;font-weight: bold">Phụ cấp trách nhiệm</th>
-        <th style="text-align: center;font-weight: bold">Phụ cấp thâm niên</th>
+        <td>Hệ số phụ cấp</td>
+        <td>Phụ cấp đặc thù</td>
+        <td>Phụ cấp trách nhiệm</td>
+        <td>Phụ cấp thâm niên</td>
+        <th></th>
+        <th></th>
     </tr>
 
     <?php $i=1; ?>
@@ -127,31 +133,31 @@
             <td style="text-align: left">{{$ct->tencanbo}}</td>
             <td style="text-align: left">{{$ct->chucvu}}</td>
             <td style="text-align: left">{{$ct->chucvukn}}</td>
-            <td style="text-align: right">{{dinhdangso($ct->luongcb)}}</td>
+            <td style="text-align: right">{{$ct->luongcb}}</td>
             <td style="text-align: center">{{$ct->hesopc}}</td>
             <td style="text-align: center">{{$ct->pcdbn}}</td>
             <td style="text-align: center">{{$ct->pctn}}</td>
             <td style="text-align: center">{{$ct->pcthni}}</td>
-            <td style="text-align: right">{{dinhdangso($ct->st_hesopc)}}</td>
-            <td style="text-align: right">{{dinhdangso($ct->st_pcdbn)}}</td>
-            <td style="text-align: right">{{dinhdangso($ct->st_pctn)}}</td>
-            <td style="text-align: right">{{dinhdangso($ct->st_pcthni)}}</td>
-            <td style="text-align: right">{{dinhdangso($ct->sotien)}}</td>
+            <td style="text-align: right">{{$ct->st_hesopc}}</td>
+            <td style="text-align: right">{{$ct->st_pcdbn}}</td>
+            <td style="text-align: right">{{$ct->st_pctn}}</td>
+            <td style="text-align: right">{{$ct->st_pcthni}}</td>
+            <td style="text-align: right">{{$ct->sotien}}</td>
             <td></td>
         </tr>
     @endforeach
     <tr style="font-weight: bold; text-align: center;">
         <td colspan="4">Tổng cộng</td>
-        <td class="money">{{dinhdangso($thongtin['luongcb'])}}</td>
-        <td style="text-align: center">{{$model->sum('hesopc')}}</td>
-        <td style="text-align: center">{{$model->sum('pcdbn')}}</td>
-        <td style="text-align: center">{{$model->sum('pctn')}}</td>
-        <td style="text-align: center">{{$model->sum('pcthni')}}</td>
-        <td class="money">{{dinhdangso($model->sum('st_hesopc'))}}</td>
-        <td class="money">{{dinhdangso($model->sum('st_pcdbn'))}}</td>
-        <td class="money">{{dinhdangso($model->sum('st_pctn'))}}</td>
-        <td class="money">{{dinhdangso($model->sum('st_pcthni'))}}</td>
-        <td class="money">{{dinhdangso($model->sum('sotien'))}}</td>
+        <td>{{dinhdangso($thongtin['luongcb'])}}</td>
+        <td>{{$model->sum('hesopc')}}</td>
+        <td>{{$model->sum('pcdbn')}}</td>
+        <td>{{$model->sum('pctn')}}</td>
+        <td>{{$model->sum('pcthni')}}</td>
+        <td>{{$model->sum('st_hesopc')}}</td>
+        <td>{{$model->sum('st_pcdbn')}}</td>
+        <td>{{$model->sum('st_pctn')}}</td>
+        <td>{{$model->sum('st_pcthni')}}</td>
+        <td>{{$model->sum('sotien')}}</td>
         <td></td>
     </tr>
 </table>

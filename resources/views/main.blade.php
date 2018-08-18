@@ -183,35 +183,6 @@
                             <li>
                                 <a href="{{url('chuc_nang/tong_hop_luong/don_vi/index?nam='.date('Y'))}}"><i class="fa fa-caret-right"></i>Tổng hợp lương tại đơn vị</a>
                             </li>
-                            @if(session('admin')->quanlynhom && !session('admin')->quanlykhuvuc)
-                                <li>
-                                    <a href="{{url('chuc_nang/tong_hop_luong/khoi/index?nam='.date('Y'))}}"><i class="fa fa-caret-right"></i>Tổng hợp lương từ đơn vị cấp dưới</a>
-                                </li>
-
-                                <li>
-                                    <a href="{{url('chuc_nang/tong_hop_nguon/index?sohieu=TT67_2017')}}"><i class="fa fa-caret-right"></i>Tổng số liệu nguồn kinh phí</a>
-                                </li>
-
-                                <li>
-                                    <a href="{{url('chuc_nang/xem_du_lieu/index?thang='.date('m').'&nam='.date('Y').'&trangthai=ALL')}}"><i class="fa fa-caret-right"></i>Xem số liệu tổng hợp từ đơn vị cấp dưới</a>
-                                </li>
-                            @endif
-
-                            <!-- Các tài khoản quản lý khu vực mới có tính năng tổng hợp dữ liệu từ đơn vị cấp dưới -->
-                            @if(session('admin')->quanlykhuvuc && session('admin')->level == 'H')
-                                <li>
-                                    <a href="{{url('chuc_nang/tong_hop_luong/huyen/index?nam='.date('Y'))}}"><i class="fa fa-caret-right"></i>Tổng hợp lương toàn địa bàn</a>
-                                </li>
-
-                                <li>
-                                    <a href="{{url('chuc_nang/tong_hop_nguon/huyen?sohieu=TT67_2017')}}"><i class="fa fa-caret-right"></i>Tổng số liệu nguồn kinh phí</a>
-                                </li>
-
-                                <li>
-                                    <a href="{{url('chuc_nang/xem_du_lieu/huyen?thang='.date('m').'&nam='.date('Y').'&trangthai=ALL')}}"><i class="fa fa-caret-right"></i>Xem số liệu tổng hợp toàn địa bàn</a>
-                                </li>
-                            @endif
-
                         </ul>
                     </li>
 
