@@ -23,6 +23,7 @@ class CreateDmphucapTable extends Migration
             $table->string('phanloai')->nullable();
             $table->string('congthuc')->nullable();//
             $table->string('ghichu')->nullable();
+            $table->integer('stt')->default(99);
             $table->timestamps();
         });
     }

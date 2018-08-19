@@ -9,6 +9,7 @@ class dmphucap_donvi extends Model
     protected $table = 'dmphucap_donvi';
     protected $fillable = [
         'id',
+        'stt',
         'mapc',
         'tenpc',
         'baohiem',//chưa dùng

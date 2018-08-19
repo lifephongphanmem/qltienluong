@@ -276,6 +276,9 @@ class bangluongController extends Controller
                                 $cb->$mapc = $heso * $cb->$mapc / 100;
                                 $ths += $cb->$mapc;
                                 $sotien = $cb->$mapc * $inputs['luongcoban'];
+                            }else{
+                                $ths += $cb->$mapc;
+                                $sotien = $cb->$mapc * $inputs['luongcoban'];
                             }
                             break;
                         }
@@ -919,7 +922,7 @@ class bangluongController extends Controller
             $inputs['macvcq'] = $inputs['macvcq_mau1'];
             $inputs['mact'] = $inputs['mact_mau1'];
             //$inputs['cochu'] = $inputs['cochu_mau1'];
-            $model = $this->getBangLuong($inputs);
+            $model = $this->getBangLuong($inputs)->where('phanloai','CVCHINH');
             //dd($inputs);
             $mabl = $inputs['mabl'];
             $m_bl = bangluong::select('thang','nam','mabl','madv','ngaylap')->where('mabl',$mabl)->first();
@@ -936,14 +939,15 @@ class bangluongController extends Controller
                 'ngaylap'=>$m_bl->ngaylap,
                 'cochu'=>$inputs['cochu']);
             //xử lý ẩn hiện cột phụ cấp => biết tổng số cột hiện => colspan trên báo cáo
-            $a_phucapbc = getColPhuCap_BaoCao();
+            //$a_phucapbc = getColPhuCap_BaoCao();
+            $a_goc = array('heso','vuotkhung','hesott');
+            $model_pc = dmphucap_donvi::where('madv',$m_bl->madv)->where('phanloai','<','3')->wherenotin('mapc',$a_goc)->get();
             $a_phucap = array();
             $col = 0;
-            foreach($a_phucapbc as $key=>$val){
-                if($m_dv->$key <3) {
-                    $a_phucap[$key] = $val;
-                    $col++;
-                }
+
+            foreach($model_pc as $ct){
+                $a_phucap[$ct->mapc] = $ct->report;
+                $col++;
             }
             //dd($thongtin);
             return view('reports.bangluong.donvi.maubangluong')
@@ -966,7 +970,7 @@ class bangluongController extends Controller
             $inputs['mapb'] = $inputs['mapb_mau1'];
             $inputs['macvcq'] = $inputs['macvcq_mau1'];
             $inputs['mact'] = $inputs['mact_mau1'];
-            $model = $this->getBangLuong($inputs);
+            $model = $this->getBangLuong($inputs)->where('phanloai','CVCHINH');
             //dd($inputs);
             $mabl = $inputs['mabl'];
             $m_bl = bangluong::select('thang','nam','mabl','madv','ngaylap')->where('mabl',$mabl)->first();
@@ -982,14 +986,14 @@ class bangluongController extends Controller
                 'nam'=>$m_bl->nam,
                 'ngaylap'=>$m_bl->ngaylap);
             //xử lý ẩn hiện cột phụ cấp => biết tổng số cột hiện => colspan trên báo cáo
-            $a_phucapbc = getColPhuCap_BaoCao();
+            $a_goc = array('heso','vuotkhung','hesott');
+            $model_pc = dmphucap_donvi::where('madv',$m_bl->madv)->where('phanloai','<','3')->wherenotin('mapc',$a_goc)->get();
             $a_phucap = array();
             $col = 0;
-            foreach($a_phucapbc as $key=>$val){
-                if($m_dv->$key <3) {
-                    $a_phucap[$key] = $val;
-                    $col++;
-                }
+
+            foreach($model_pc as $ct){
+                $a_phucap[$ct->mapc] = $ct->report;
+                $col++;
             }
 
             Excel::create('BANGLUONG_01',function($excel) use($m_dv,$thongtin,$model,$col,$model_congtac,$a_phucap){
@@ -1022,7 +1026,7 @@ class bangluongController extends Controller
             $inputs['mapb'] = $inputs['mapb_mau2'];
             $inputs['macvcq'] = $inputs['macvcq_mau2'];
             $inputs['mact'] = $inputs['mact_mau2'];
-            $model = $this->getBangLuong($inputs,1);
+            $model = $this->getBangLuong($inputs,1)->where('phanloai','CVCHINH');
             //dd($inputs);
             $mabl = $inputs['mabl'];
             $m_bl = bangluong::select('thang','nam','mabl','madv','ngaylap')->where('mabl',$mabl)->first();
@@ -1039,14 +1043,14 @@ class bangluongController extends Controller
                 'ngaylap'=>$m_bl->ngaylap,
                 'cochu'=>$inputs['cochu']);
             //xử lý ẩn hiện cột phụ cấp => biết tổng số cột hiện => colspan trên báo cáo
-            $a_phucapbc = getColPhuCap_BaoCao();
+            $a_goc = array('heso','vuotkhung','hesott');
+            $model_pc = dmphucap_donvi::where('madv',$m_bl->madv)->where('phanloai','<','3')->wherenotin('mapc',$a_goc)->get();
             $a_phucap = array();
             $col = 0;
-            foreach($a_phucapbc as $key=>$val){
-                if($m_dv->$key <3) {
-                    $a_phucap[$key] = $val;
-                    $col++;
-                }
+
+            foreach($model_pc as $ct){
+                $a_phucap[$ct->mapc] = $ct->report;
+                $col++;
             }
             return view('reports.bangluong.donvi.maubangluong_sotien')
                 ->with('model',$model->sortBy('stt'))
@@ -1068,7 +1072,7 @@ class bangluongController extends Controller
             $inputs['mapb'] = $inputs['mapb_mau2'];
             $inputs['macvcq'] = $inputs['macvcq_mau2'];
             $inputs['mact'] = $inputs['mact_mau2'];
-            $model = $this->getBangLuong($inputs,1);
+            $model = $this->getBangLuong($inputs,1)->where('phanloai','CVCHINH');
             //dd($inputs);
             $mabl = $inputs['mabl'];
             $m_bl = bangluong::select('thang','nam','mabl','madv','ngaylap')->where('mabl',$mabl)->first();
@@ -1084,16 +1088,15 @@ class bangluongController extends Controller
                 'nam'=>$m_bl->nam,
                 'ngaylap'=>$m_bl->ngaylap);
             //xử lý ẩn hiện cột phụ cấp => biết tổng số cột hiện => colspan trên báo cáo
-            $a_phucapbc = getColPhuCap_BaoCao();
+            $a_goc = array('heso','vuotkhung','hesott');
+            $model_pc = dmphucap_donvi::where('madv',$m_bl->madv)->where('phanloai','<','3')->wherenotin('mapc',$a_goc)->get();
             $a_phucap = array();
             $col = 0;
-            foreach($a_phucapbc as $key=>$val){
-                if($m_dv->$key <3) {
-                    $a_phucap[$key] = $val;
-                    $col++;
-                }
-            }
 
+            foreach($model_pc as $ct){
+                $a_phucap[$ct->mapc] = $ct->report;
+                $col++;
+            }
             Excel::create('BANGLUONG_02',function($excel) use($m_dv,$thongtin,$model,$col,$model_congtac,$a_phucap){
                 $excel->sheet('New sheet', function($sheet) use($m_dv,$thongtin,$model,$col,$model_congtac,$a_phucap){
                     $sheet->loadView('reports.bangluong.donvi.maubangluong_sotien_excel')
@@ -1125,7 +1128,7 @@ class bangluongController extends Controller
             $inputs['mapb'] = $inputs['mapb_mau3'];
             $inputs['macvcq'] = $inputs['macvcq_mau3'];
             $inputs['mact'] = $inputs['mact_mau3'];
-            $model = $this->getBangLuong($inputs);
+            $model = $this->getBangLuong($inputs)->where('phanloai','CVCHINH');
             //dd($inputs);
             $mabl = $inputs['mabl'];
             $m_bl = bangluong::select('thang','nam','mabl','madv','ngaylap')->where('mabl',$mabl)->first();
@@ -1142,14 +1145,14 @@ class bangluongController extends Controller
                 'ngaylap'=>$m_bl->ngaylap,
                 'cochu'=>$inputs['cochu']);
             //xử lý ẩn hiện cột phụ cấp => biết tổng số cột hiện => colspan trên báo cáo
-            $a_phucapbc = getColPhuCap_BaoCao();
+            $a_goc = array('heso','vuotkhung','hesott');
+            $model_pc = dmphucap_donvi::where('madv',$m_bl->madv)->where('phanloai','<','3')->wherenotin('mapc',$a_goc)->get();
             $a_phucap = array();
             $col = 0;
-            foreach($a_phucapbc as $key=>$val){
-                if($m_dv->$key <3) {
-                    $a_phucap[$key] = $val;
-                    $col++;
-                }
+
+            foreach($model_pc as $ct){
+                $a_phucap[$ct->mapc] = $ct->report;
+                $col++;
             }
             return view('reports.bangluong.donvi.maulangson')
                 ->with('model',$model->sortBy('stt'))
@@ -1171,7 +1174,7 @@ class bangluongController extends Controller
             $inputs['mapb'] = $inputs['mapb_mau3'];
             $inputs['macvcq'] = $inputs['macvcq_mau3'];
             $inputs['mact'] = $inputs['mact_mau3'];
-            $model = $this->getBangLuong($inputs);
+            $model = $this->getBangLuong($inputs)->where('phanloai','CVCHINH');
             //dd($inputs);
             $mabl = $inputs['mabl'];
             $m_bl = bangluong::select('thang','nam','mabl','madv','ngaylap')->where('mabl',$mabl)->first();
@@ -1187,14 +1190,14 @@ class bangluongController extends Controller
                 'nam'=>$m_bl->nam,
                 'ngaylap'=>$m_bl->ngaylap);
             //xử lý ẩn hiện cột phụ cấp => biết tổng số cột hiện => colspan trên báo cáo
-            $a_phucapbc = getColPhuCap_BaoCao();
+            $a_goc = array('heso','vuotkhung','hesott');
+            $model_pc = dmphucap_donvi::where('madv',$m_bl->madv)->where('phanloai','<','3')->wherenotin('mapc',$a_goc)->get();
             $a_phucap = array();
             $col = 0;
-            foreach($a_phucapbc as $key=>$val){
-                if($m_dv->$key <3) {
-                    $a_phucap[$key] = $val;
-                    $col++;
-                }
+
+            foreach($model_pc as $ct){
+                $a_phucap[$ct->mapc] = $ct->report;
+                $col++;
             }
 
             Excel::create('BANGLUONG_03',function($excel) use($m_dv,$thongtin,$model,$col,$model_congtac,$a_phucap){
@@ -1228,7 +1231,7 @@ class bangluongController extends Controller
             $inputs['mapb'] = $inputs['mapb_mau4'];
             $inputs['macvcq'] = $inputs['macvcq_mau4'];
             $inputs['mact'] = $inputs['mact_mau4'];
-            $model = $this->getBangLuong($inputs);
+            $model = $this->getBangLuong($inputs)->where('phanloai','CVCHINH');
             //dd($inputs);
             $mabl = $inputs['mabl'];
             $m_bl = bangluong::select('thang','nam','mabl','madv','ngaylap')->where('mabl',$mabl)->first();
@@ -1245,14 +1248,14 @@ class bangluongController extends Controller
                 'ngaylap'=>$m_bl->ngaylap,
                 'cochu'=>$inputs['cochu']);
             //xử lý ẩn hiện cột phụ cấp => biết tổng số cột hiện => colspan trên báo cáo
-            $a_phucapbc = getColPhuCap_BaoCao();
+            $a_goc = array('heso','vuotkhung','hesott');
+            $model_pc = dmphucap_donvi::where('madv',$m_bl->madv)->where('phanloai','<','3')->wherenotin('mapc',$a_goc)->get();
             $a_phucap = array();
             $col = 0;
-            foreach($a_phucapbc as $key=>$val){
-                if($m_dv->$key <3) {
-                    $a_phucap[$key] = $val;
-                    $col++;
-                }
+
+            foreach($model_pc as $ct){
+                $a_phucap[$ct->mapc] = $ct->report;
+                $col++;
             }
             return view('reports.bangluong.donvi.maubangluong_phongban')
                 ->with('model',$model->sortBy('stt'))
@@ -1274,7 +1277,7 @@ class bangluongController extends Controller
             $inputs['mapb'] = $inputs['mapb_mau4'];
             $inputs['macvcq'] = $inputs['macvcq_mau4'];
             $inputs['mact'] = $inputs['mact_mau4'];
-            $model = $this->getBangLuong($inputs);
+            $model = $this->getBangLuong($inputs)->where('phanloai','CVCHINH');
             //dd($inputs);
             $mabl = $inputs['mabl'];
             $m_bl = bangluong::select('thang','nam','mabl','madv','ngaylap')->where('mabl',$mabl)->first();
@@ -1290,16 +1293,15 @@ class bangluongController extends Controller
                 'nam'=>$m_bl->nam,
                 'ngaylap'=>$m_bl->ngaylap);
             //xử lý ẩn hiện cột phụ cấp => biết tổng số cột hiện => colspan trên báo cáo
-            $a_phucapbc = getColPhuCap_BaoCao();
+            $a_goc = array('heso','vuotkhung','hesott');
+            $model_pc = dmphucap_donvi::where('madv',$m_bl->madv)->where('phanloai','<','3')->wherenotin('mapc',$a_goc)->get();
             $a_phucap = array();
             $col = 0;
-            foreach($a_phucapbc as $key=>$val){
-                if($m_dv->$key <3) {
-                    $a_phucap[$key] = $val;
-                    $col++;
-                }
-            }
 
+            foreach($model_pc as $ct){
+                $a_phucap[$ct->mapc] = $ct->report;
+                $col++;
+            }
             Excel::create('BANGLUONG_04',function($excel) use($m_dv,$thongtin,$model,$col,$model_congtac,$a_phucap){
                 $excel->sheet('New sheet', function($sheet) use($m_dv,$thongtin,$model,$col,$model_congtac,$a_phucap){
                     $sheet->loadView('reports.bangluong.donvi.maubangluong_phongban_excel')
@@ -1331,7 +1333,7 @@ class bangluongController extends Controller
             $inputs['mapb'] = $inputs['mapb_mau5'];
             $inputs['macvcq'] = $inputs['macvcq_mau5'];
             $inputs['mact'] = $inputs['mact_mau5'];
-            $model = $this->getBangLuong($inputs);
+            $model = $this->getBangLuong($inputs)->where('phanloai','CVCHINH');
             //dd($inputs);
             $mabl = $inputs['mabl'];
             $m_bl = bangluong::select('thang','nam','mabl','madv','ngaylap')->where('mabl',$mabl)->first();
@@ -1349,14 +1351,14 @@ class bangluongController extends Controller
                 'ngaylap'=>$m_bl->ngaylap,
                 'cochu'=>$inputs['cochu']);
             //xử lý ẩn hiện cột phụ cấp => biết tổng số cột hiện => colspan trên báo cáo
-            $a_phucapbc = getColPhuCap_BaoCao();
+            $a_goc = array('heso','vuotkhung','hesott');
+            $model_pc = dmphucap_donvi::where('madv',$m_bl->madv)->where('phanloai','<','3')->wherenotin('mapc',$a_goc)->get();
             $a_phucap = array();
             $col = 0;
-            foreach($a_phucapbc as $key=>$val){
-                if($m_dv->$key <3) {
-                    $a_phucap[$key] = $val;
-                    $col++;
-                }
+
+            foreach($model_pc as $ct){
+                $a_phucap[$ct->mapc] = $ct->report;
+                $col++;
             }
 
             return view('reports.bangluong.donvi.mau05')
@@ -1379,7 +1381,7 @@ class bangluongController extends Controller
             $inputs['mapb'] = $inputs['mapb_mau5'];
             $inputs['macvcq'] = $inputs['macvcq_mau5'];
             $inputs['mact'] = $inputs['mact_mau5'];
-            $model = $this->getBangLuong($inputs);
+            $model = $this->getBangLuong($inputs)->where('phanloai','CVCHINH');
             //dd($inputs);
             $mabl = $inputs['mabl'];
             $m_bl = bangluong::select('thang','nam','mabl','madv','ngaylap')->where('mabl',$mabl)->first();
@@ -1396,16 +1398,15 @@ class bangluongController extends Controller
                 'nam'=>$m_bl->nam,
                 'ngaylap'=>$m_bl->ngaylap);
             //xử lý ẩn hiện cột phụ cấp => biết tổng số cột hiện => colspan trên báo cáo
-            $a_phucapbc = getColPhuCap_BaoCao();
+            $a_goc = array('heso','vuotkhung','hesott');
+            $model_pc = dmphucap_donvi::where('madv',$m_bl->madv)->where('phanloai','<','3')->wherenotin('mapc',$a_goc)->get();
             $a_phucap = array();
             $col = 0;
-            foreach($a_phucapbc as $key=>$val){
-                if($m_dv->$key <3) {
-                    $a_phucap[$key] = $val;
-                    $col++;
-                }
-            }
 
+            foreach($model_pc as $ct){
+                $a_phucap[$ct->mapc] = $ct->report;
+                $col++;
+            }
             Excel::create('BANGLUONG_05',function($excel) use($m_dv,$thongtin,$model,$col,$model_congtac,$a_phucap){
                 $excel->sheet('New sheet', function($sheet) use($m_dv,$thongtin,$model,$col,$model_congtac,$a_phucap){
                     $sheet->loadView('reports.bangluong.donvi.mau05_excel')
@@ -1452,7 +1453,7 @@ class bangluongController extends Controller
             $inputs['mapb'] = $inputs['mapb_mau6'];
             $inputs['macvcq'] = $inputs['macvcq_mau6'];
             $inputs['mact'] = $inputs['mact_mau6'];
-            $model = $this->getBangLuong($inputs);
+            $model = $this->getBangLuong($inputs)->where('phanloai','CVCHINH');
             //dd($inputs);
             $mabl = $inputs['mabl'];
             $model_phucap = bangluong_phucap::where('mabl', $mabl)->get();
@@ -1472,14 +1473,14 @@ class bangluongController extends Controller
                 'ngaylap'=>$m_bl->ngaylap,
                 'cochu'=>$inputs['cochu']);
             //xử lý ẩn hiện cột phụ cấp => biết tổng số cột hiện => colspan trên báo cáo
-            $a_phucapbc = getColPhuCap_BaoCao();
+            $a_goc = array('heso','vuotkhung','hesott');
+            $model_pc = dmphucap_donvi::where('madv',$m_bl->madv)->where('phanloai','<','3')->wherenotin('mapc',$a_goc)->get();
             $a_phucap = array();
             $col = 0;
-            foreach($a_phucapbc as $key=>$val){
-                if($m_dv->$key <3) {
-                    $a_phucap[$key] = $val;
-                    $col++;
-                }
+
+            foreach($model_pc as $ct){
+                $a_phucap[$ct->mapc] = $ct->report;
+                $col++;
             }
 
             foreach($model_tm as $tm) {
@@ -1537,7 +1538,7 @@ class bangluongController extends Controller
             $inputs['mapb'] = $inputs['mapb_mau6'];
             $inputs['macvcq'] = $inputs['macvcq_mau6'];
             $inputs['mact'] = $inputs['mact_mau6'];
-            $model = $this->getBangLuong($inputs);
+            $model = $this->getBangLuong($inputs)->where('phanloai','CVCHINH');
             //dd($inputs);
             $mabl = $inputs['mabl'];
             $model_phucap = bangluong_phucap::where('mabl', $mabl)->get();
@@ -1556,14 +1557,14 @@ class bangluongController extends Controller
                 'nam'=>$m_bl->nam,
                 'ngaylap'=>$m_bl->ngaylap);
             //xử lý ẩn hiện cột phụ cấp => biết tổng số cột hiện => colspan trên báo cáo
-            $a_phucapbc = getColPhuCap_BaoCao();
+            $a_goc = array('heso','vuotkhung','hesott');
+            $model_pc = dmphucap_donvi::where('madv',$m_bl->madv)->where('phanloai','<','3')->wherenotin('mapc',$a_goc)->get();
             $a_phucap = array();
             $col = 0;
-            foreach($a_phucapbc as $key=>$val){
-                if($m_dv->$key <3) {
-                    $a_phucap[$key] = $val;
-                    $col++;
-                }
+
+            foreach($model_pc as $ct){
+                $a_phucap[$ct->mapc] = $ct->report;
+                $col++;
             }
 
             foreach($model_tm as $tm) {
@@ -1620,6 +1621,59 @@ class bangluongController extends Controller
                 });
             })->download('xls');
 
+        } else
+            return view('errors.notlogin');
+    }
+
+    public function printf_mau07(Request $request)
+    {
+        if (Session::has('admin')) {
+            $inputs = $request->all();
+            $inputs['mabl'] = $inputs['mabl_mau7'];
+            $inputs['mapb'] = $inputs['mapb_mau7'];
+            $inputs['macvcq'] = $inputs['macvcq_mau7'];
+            $inputs['mact'] = $inputs['mact_mau7'];
+            //$inputs['cochu'] = $inputs['cochu_mau1'];
+            $model = $this->getBangLuong($inputs)->where('phanloai', 'CVCHINH');
+            //dd($inputs);
+            $mabl = $inputs['mabl'];
+            $m_bl = bangluong::select('thang', 'nam', 'mabl', 'madv', 'ngaylap')->where('mabl', $mabl)->first();
+            $m_dv = dmdonvi::where('madv', $m_bl->madv)->first();
+
+            $model_congtac = dmphanloaict::select('mact', 'tenct')
+                ->wherein('mact', function ($query) use ($mabl) {
+                    $query->select('mact')->from('bangluong_ct')->where('mabl', $mabl);
+                })->get();
+
+            $thongtin = array('nguoilap' => $m_bl->nguoilap,
+                'thang' => $m_bl->thang,
+                'nam' => $m_bl->nam,
+                'ngaylap' => $m_bl->ngaylap,
+                'cochu' => $inputs['cochu']);
+            //xử lý ẩn hiện cột phụ cấp => biết tổng số cột hiện => colspan trên báo cáo
+            //$a_phucapbc = getColPhuCap_BaoCao();
+            $a_goc = array('heso', 'vuotkhung', 'hesott');
+            $model_pc = dmphucap_donvi::where('madv', $m_bl->madv)->where('phanloai', '<', '3')->wherenotin('mapc', $a_goc)->get();
+            $a_phucap = array();
+            $col = 0;
+
+            foreach ($model_pc as $ct) {
+
+                if ($model->sum($ct->mapc) > 0) {
+                    $a_phucap[$ct->mapc] = $ct->report;
+                    $col++;
+                }
+            }
+            //dd($thongtin);
+            return view('reports.bangluong.donvi.mau07')
+                ->with('model', $model->sortBy('stt'))
+                ->with('model_pb', getPhongBan())
+                ->with('m_dv', $m_dv)
+                ->with('thongtin', $thongtin)
+                ->with('col', $col)
+                ->with('model_congtac', $model_congtac)
+                ->with('a_phucap', $a_phucap)
+                ->with('pageTitle', 'Bảng lương chi tiết');
         } else
             return view('errors.notlogin');
     }

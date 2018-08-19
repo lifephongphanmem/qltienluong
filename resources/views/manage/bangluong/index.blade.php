@@ -283,6 +283,15 @@
                     </div>
                 </div>
 
+                <!--div class="row">
+                    <div class="col-md-7">
+                        <div class="form-group">
+                            <button type="button" style="border-width: 0px" onclick="inblm7()" class="btn btn-default btn-xs mbs">
+                                <i class="fa fa-print"></i>&nbsp; Bảng lương mẫu 7</button>
+                        </div>
+                    </div>
+                </div-->
+
                 <div class="row">
                     <div class="col-md-6">
                         <div class="form-group">

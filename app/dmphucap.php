@@ -9,6 +9,7 @@ class dmphucap extends Model
     protected $table = 'dmphucap';
     protected $fillable = [
         'id',
+        'stt',
         'mapc',
         'tenpc',
         'baohiem',//chưa dùng
