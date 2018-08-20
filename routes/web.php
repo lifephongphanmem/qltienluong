@@ -625,6 +625,7 @@ Route::group(['prefix'=>'bao_cao'],function(){
     });
 
     Route::group(['prefix'=>'bang_luong'],function(){
+        Route::get('tong_hop','baocaobangluongController@index_th');//tạm
         Route::get('','baocaobangluongController@index');//Form chung
         //Các mẫu báo cáo tại đơn vị
         Route::group(['prefix'=>'don_vi'],function(){

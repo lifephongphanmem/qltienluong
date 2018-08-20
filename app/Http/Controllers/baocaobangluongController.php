@@ -41,6 +41,19 @@ class baocaobangluongController extends Controller
             return view('errors.notlogin');
     }
 
+    function index_th() {
+        if (Session::has('admin')) {
+            //$macqcq=session('admin')->madv;
+            //$model_dv=dmdonvi::where('macqcq',$macqcq)->orwhere('madv',$macqcq)->get();
+            //$model_dvbc=dmdonvibaocao::where('level','H')->get();
+            return view('reports.index_th')
+                ->with('furl','/bao_cao/bang_luong/')
+                //->with('model_dv',$model_dv)
+                //->with('model_dvbc', $model_dvbc)
+                ->with('pageTitle','Báo cáo chi trả lương');
+        } else
+            return view('errors.notlogin');
+    }
     function mauc02ahd(Request $request)
     {
         if (Session::has('admin')) {

@@ -211,7 +211,7 @@
 					</ul>
 				</li>
 
-                    <li>
+                <li>
 					<a href="javascript:;">
 					<i class="fa fa-file-text"></i>
 					<span class="title">Báo cáo</span><span class="arrow "></span>
@@ -395,10 +395,14 @@
                     </li>
 
                     <li>
-                        <a href="{{url('tong_hop_bao_cao/danh_sach')}}">
+                        <a href="javascript:;">
                             <i class="fa fa-file-text"></i>
-                            <span class="title">Báo cáo tổng hợp</span>
+                            <span class="title">Báo cáo</span><span class="arrow "></span>
                         </a>
+                        <ul class="sub-menu">
+                            <li><a href="{{url('tong_hop_bao_cao/danh_sach')}}"><i class="fa fa-caret-right"></i>Báo cáo tổng hợp</a></li>
+                            <li><a href="{{url('bao_cao/bang_luong/tong_hop')}}"><i class="fa fa-caret-right"></i>Báo cáo chi trả lương</a></li>
+                        </ul>
                     </li>
 
                     <li>
