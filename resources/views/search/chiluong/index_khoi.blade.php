@@ -89,7 +89,7 @@
                                     <div class="form-group">
                                         <label class="col-md-4 control-label"> Khu vực, địa bàn<span class="require">*</span></label>
                                         <div class="col-md-8">
-                                            <select id="madv" name="madv" class="form-control">
+                                            <select id="madv" name="madv" class="form-control select2me">
                                                 <option value="">Tất cả các đơn vị</option>
                                                 @if(isset($model_dvbc))
                                                     @foreach($model_dvbc as $dv)

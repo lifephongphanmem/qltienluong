@@ -88,7 +88,7 @@
                                 <div class="form-group">
                                     <label class="col-md-4 control-label">Tên đơn vị</label>
                                     <div class="col-md-8">
-                                        <select id="madv" name="madv" class="form-control">
+                                        <select id="madv" name="madv" class="form-control select2me">
 
                                             @if(isset($model_dv))
                                                 @foreach($model_dv as $dv)
