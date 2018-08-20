@@ -704,7 +704,7 @@ class bangluongController extends Controller
     public function inbangluong($mabl){
         if (Session::has('admin')) {
             $model = bangluong_ct::where('mabl',$mabl)->get();
-            $m_bl = bangluong::select('thang','nam','mabl','madv')->where('mabl',$mabl)->first();
+            $m_bl = bangluong::select('thang','nam','mabl','madv','nguoilap','ngaylap')->where('mabl',$mabl)->first();
             $mabl = $m_bl->mabl;
             $m_dv = dmdonvi::where('madv',$m_bl->madv)->first();
 
@@ -720,9 +720,12 @@ class bangluongController extends Controller
             foreach($model as $hs){
                 $hs->tencv = isset($dmchucvucq[$hs->macvcq])? $dmchucvucq[$hs->macvcq] : '';
             }
+
             $thongtin=array('nguoilap'=>$m_bl->nguoilap,
                 'thang'=>$m_bl->thang,
-                'nam'=>$m_bl->nam);
+                'nam'=>$m_bl->nam,
+                'ngaylap'=>$m_bl->ngaylap,
+                'cochu'=>11);
             //xử lý ẩn hiện cột phụ cấp => biết tổng số cột hiện => colspan trên báo cáo
             $a_phucapbc = getColPhuCap_BaoCao();
             $a_phucap = array();
@@ -733,7 +736,7 @@ class bangluongController extends Controller
                     $col++;
                 }
             }
-            dd($model);
+
             return view('reports.bangluong.donvi.maubangluong')
                 ->with('model',$model->sortBy('stt'))
                 ->with('m_dv',$m_dv)
@@ -2564,20 +2567,21 @@ class bangluongController extends Controller
     }
 
     //<editor-fold desc="Tra cứu">
-    function search(){
+    function search()
+    {
         if (Session::has('admin')) {
-            $model_dv=dmdonvi::where('madv',session('admin')->madv)->get();
-            if(session('admin')->quanlynhom){
-                $model_dv=dmdonvi::where('macqcq',session('admin')->madv)->get();
+            $model_dv = dmdonvi::where('madv', session('admin')->madv)->get();
+            if (session('admin')->quanlynhom) {
+                $model_dv = dmdonvi::where('macqcq', session('admin')->madv)->get();
             }
 
-            if(session('admin')->quanlykhuvuc){
-                $model_dv=dmdonvi::where('madvbc',session('admin')->madvbc)->get();
+            if (session('admin')->quanlykhuvuc) {
+                $model_dv = dmdonvi::where('madvbc', session('admin')->madvbc)->get();
             }
 
             return view('search.chiluong.index')
                 ->with('model_dv', $model_dv)
-                ->with('pageTitle','Tra cứu chi trả lương');
+                ->with('pageTitle', 'Tra cứu chi trả lương');
         } else
             return view('errors.notlogin');
     }
