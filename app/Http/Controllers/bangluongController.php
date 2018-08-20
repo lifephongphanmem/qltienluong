@@ -1639,6 +1639,7 @@ class bangluongController extends Controller
             $inputs['mact'] = $inputs['mact_mau7'];
             //$inputs['cochu'] = $inputs['cochu_mau1'];
             $model = $this->getBangLuong($inputs)->where('phanloai', 'CVCHINH');
+            $model_st = $this->getBangLuong($inputs,1)->where('phanloai','CVCHINH');
             //dd($inputs);
             $mabl = $inputs['mabl'];
             $m_bl = bangluong::select('thang', 'nam', 'mabl', 'madv', 'ngaylap','luongcoban')->where('mabl', $mabl)->first();
@@ -1663,7 +1664,6 @@ class bangluongController extends Controller
             $col = 0;
 
             foreach ($model_pc as $ct) {
-
                 if ($model->sum($ct->mapc) > 0) {
                     $a_phucap[$ct->mapc] = $ct->report;
                     $col++;
@@ -1672,6 +1672,7 @@ class bangluongController extends Controller
             //dd($thongtin);
             return view('reports.bangluong.donvi.mau07')
                 ->with('model', $model->sortBy('stt'))
+                ->with('model_st', $model_st)
                 ->with('model_pb', getPhongBan())
                 ->with('m_dv', $m_dv)
                 ->with('thongtin', $thongtin)

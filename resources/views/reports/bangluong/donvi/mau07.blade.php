@@ -128,7 +128,10 @@
 
         <?php $i=1; ?>
         @foreach($model_congtac as $congtac)
-            <?php $model_luong = $model->where('mact',$congtac->mact)?>
+            <?php
+                $model_luong = $model->where('mact',$congtac->mact);
+                $model_luong_st = $model_st->where('mact',$congtac->mact);
+            ?>
             @if(count($model_luong)> 0)
                 <?php $stt=1; ?>
                 <tr style="font-weight: bold;">
@@ -147,7 +150,11 @@
                         @endforeach
 
                         @foreach($a_phucap as $key=>$val)
-                            <td>{{dinhdangso($ct->$key * $thongtin['luongcb'])}}</td>
+                            @if($ct->$key > 1000)
+                                <td>{{dinhdangso($ct->$key)}}</td>
+                            @else
+                                <td>{{dinhdangso($ct->$key * $thongtin['luongcb'])}}</td>
+                            @endif
                         @endforeach
 
 
@@ -169,7 +176,7 @@
                     @endforeach
 
                     @foreach($a_phucap as $key=>$val)
-                        <td>{{dinhdangso($model_luong->sum($key) *  $thongtin['luongcb'])}}</td>
+                        <td>{{dinhdangso($model_luong_st->sum($key))}}</td>
                     @endforeach
                     <td class="money">{{dinhdangso($model_luong->sum('ttl') - $model_luong->sum('giaml') + $model_luong->sum('bhct'))}}</td>
 
@@ -191,7 +198,7 @@
             @endforeach
 
             @foreach($a_phucap as $key=>$val)
-                <td>{{dinhdangsothapphan($model->sum($key) ,5)}}</td>
+                <td>{{dinhdangso($model_st->sum($key))}}</td>
             @endforeach
             <td class="money">{{dinhdangso($model->sum('ttl') - $model->sum('giaml') + $model->sum('bhct'))}}</td>
 
