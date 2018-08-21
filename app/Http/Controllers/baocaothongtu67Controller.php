@@ -47,21 +47,21 @@ class baocaothongtu67Controller extends Controller
         if (Session::has('admin')  ) {
             $inputs=$request->all();
             $m_dv = dmdonvi::where('madv',session('admin')->madv)->first();
-            $model_bienche = chitieubienche::where('nam','2017')->where('madv',session('admin')->madv)->get();
+            $model_bienche = chitieubienche::where('nam','2018')->where('madv',session('admin')->madv)->get();
             //$luongcb = 1210000;
             $luongcb = 1;
             //nếu đơn vị đã tạo bảng lương tháng 07/2017 =>xuất kết quả
             $model_tonghop_ct = tonghopluong_donvi_chitiet::join('tonghopluong_donvi', 'tonghopluong_donvi_chitiet.mathdv', '=', 'tonghopluong_donvi.mathdv')
                 ->where('tonghopluong_donvi.madvbc','like',$inputs['madv'].'%')
                 ->wherein('tonghopluong_donvi_chitiet.mathdv',function($qr){
-                $qr->select('mathdv')->from('tonghopluong_donvi')->where('thang','07')->where('nam','2017')
+                $qr->select('mathdv')->from('tonghopluong_donvi')->where('thang','08')->where('nam','2018')
                     ->distinct()->get();
             })->get();
             if(session('admin')->username == 'khthso')
             {
                 $model_bienche = chitieubienche::join('dmdonvi','dmdonvi.madv','=','chitieubienche.madv')
                     ->join('dmdonvibaocao','dmdonvibaocao.madvbc','=','dmdonvi.madvbc')
-                    ->where('chitieubienche.nam','2017')->where('dmdonvi.madvbc','like',$inputs['madv'].'%')
+                    ->where('chitieubienche.nam','2018')->where('dmdonvi.madvbc','like',$inputs['madv'].'%')
                     ->where('dmdonvibaocao.level','T')->get();
                 //$luongcb = 1210000; tạm thời bỏ vì bang lương đã nhân lcb
                 $luongcb = 1;
@@ -71,7 +71,7 @@ class baocaothongtu67Controller extends Controller
                     ->where('tonghopluong_donvi.madvbc','like',$inputs['madv'].'%')
                     ->where('dmdonvibaocao.level','T')
                     ->wherein('tonghopluong_donvi_chitiet.mathdv',function($qr){
-                        $qr->select('mathdv')->from('tonghopluong_donvi')->where('thang','07')->where('nam','2017')
+                        $qr->select('mathdv')->from('tonghopluong_donvi')->where('thang','08')->where('nam','2018')
                             ->distinct()->get();
                     })->get();
             }
@@ -328,7 +328,7 @@ class baocaothongtu67Controller extends Controller
             $model_tonghop_ct = tonghopluong_donvi_chitiet::join('tonghopluong_donvi', 'tonghopluong_donvi_chitiet.mathdv', '=', 'tonghopluong_donvi.mathdv')
                 ->where('tonghopluong_donvi.madvbc','like',$inputs['madv'].'%')
                 ->wherein('tonghopluong_donvi_chitiet.mathdv',function($qr){
-                $qr->select('mathdv')->from('tonghopluong_donvi')->where('thang','07')->where('nam','2017')
+                $qr->select('mathdv')->from('tonghopluong_donvi')->where('thang','08')->where('nam','2018')
                     ->distinct()->get();
             })->get();
 
@@ -340,7 +340,7 @@ class baocaothongtu67Controller extends Controller
                     ->where('tonghopluong_donvi.madvbc','like',$inputs['madv'].'%')
                     ->where('dmdonvibaocao.level','T')
                     ->wherein('tonghopluong_donvi_chitiet.mathdv',function($qr){
-                        $qr->select('mathdv')->from('tonghopluong_donvi')->where('thang','07')->where('nam','2017')
+                        $qr->select('mathdv')->from('tonghopluong_donvi')->where('thang','08')->where('nam','2018')
                             ->distinct()->get();
                     })->get();
             }
@@ -2382,7 +2382,7 @@ class baocaothongtu67Controller extends Controller
             $model_tonghop = tonghopluong_donvi::where('thang','07')->where('nam','2017')
                 ->where('macqcq',session('admin')->madv)->get();
             $luongcb = 1300000;
-            //nếu đơn vị đã tạo bảng lương tháng 07/2017 =>xuất kết quả
+            //nếu đơn vị đã tạo bảng lương tháng 07/2018 =>xuất kết quả
 
             $model_tonghop_ct = tonghopluong_donvi_chitiet::wherein('mathdv',function($qr) use($macqcq){
                 $qr->select('mathdv')->from('tonghopluong_donvi')->where('thang','07')->where('nam','2017')
