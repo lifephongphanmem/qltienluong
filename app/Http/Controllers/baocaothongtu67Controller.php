@@ -54,7 +54,7 @@ class baocaothongtu67Controller extends Controller
             $model_tonghop_ct = tonghopluong_donvi_chitiet::join('tonghopluong_donvi', 'tonghopluong_donvi_chitiet.mathdv', '=', 'tonghopluong_donvi.mathdv')
                 ->where('tonghopluong_donvi.mathdv','like',$inputs['madv'].'%')
                 ->wherein('tonghopluong_donvi_chitiet.mathdv',function($qr){
-                $qr->select('mathdv')->from('tonghopluong_donvi')->where('thang','08')->where('nam','2018')->where('trangthai','DAGUI')
+                $qr->select('mathdv')->from('tonghopluong_donvi')->where('thang','08')->where('nam','2018')
                     ->distinct()->get();
             })->get();
 
