@@ -3390,8 +3390,8 @@ class baocaothongtu67Controller extends Controller
                     $a_It['pckv'] += $ar_I[$i]['pckv'];
 
                     $ar_I[$i]['pccv'] = $chitiet->sum('pccv') * $luongcb;
-                    $tongpc += $ar_I[$i]['pckv'];
-                    $a_It['pckv'] += $ar_I[$i]['pckv'];
+                    $tongpc += $ar_I[$i]['pccv'];
+                    $a_It['pccv'] += $ar_I[$i]['pccv'];
 
                     $ar_I[$i]['pctnvk'] = $chitiet->sum('pctnvk') * $luongcb;
                     $tongpc += $ar_I[$i]['pctnvk'];
