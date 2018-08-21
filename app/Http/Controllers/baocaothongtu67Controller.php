@@ -341,10 +341,32 @@ class baocaothongtu67Controller extends Controller
 
             //nếu đơn vị đã tạo bảng lương tháng 07/2017 =>xuất kết quả
 
-            $model_tonghop_ct = tonghopluong_donvi_chitiet::wherein('mathdv',function($qr){
-                $qr->select('mathdv')->from('tonghopluong_donvi')->where('thang','08')->where('nam','2018')->where('trangthai','DAGUI')
-                    ->where('macqcq',session('admin')->madv)->get();
-            })->get();
+            $model_tonghop_ct = tonghopluong_donvi_chitiet::join('tonghopluong_donvi', 'tonghopluong_donvi_chitiet.mathdv', '=', 'tonghopluong_donvi.mathdv')
+                ->where('tonghopluong_donvi.madvbc','like',$inputs['madv'].'%')
+                ->wherein('tonghopluong_donvi_chitiet.mathdv',function($qr){
+                    $qr->select('mathdv')->from('tonghopluong_donvi')->where('thang','08')->where('nam','2018')->where('trangthai','DAGUI')
+                        ->distinct()->get();
+                })->get();
+
+            if(session('admin')->username == 'khthso')
+            {
+                $model_bienche = chitieubienche::join('dmdonvi','dmdonvi.madv','=','chitieubienche.madv')
+                    ->join('dmdonvibaocao','dmdonvibaocao.madvbc','=','dmdonvi.madvbc')
+                    ->where('chitieubienche.nam','2018')->where('dmdonvi.madvbc','like',$inputs['madv'].'%')
+                    ->where('dmdonvibaocao.level','T')->get();
+                //$luongcb = 1210000; tạm thời bỏ vì bang lương đã nhân lcb
+                $luongcb = 0.935;
+                //nếu đơn vị đã tạo bảng lương tháng 07/2017 =>xuất kết quả
+                $model_tonghop_ct = tonghopluong_donvi_chitiet::join('tonghopluong_donvi', 'tonghopluong_donvi_chitiet.mathdv', '=', 'tonghopluong_donvi.mathdv')
+                    ->join('dmdonvibaocao','dmdonvibaocao.madvbc','=','tonghopluong_donvi.madvbc')
+                    ->where('tonghopluong_donvi.madvbc','like',$inputs['madv'].'%')
+                    ->where('dmdonvibaocao.level','T')
+                    ->wherein('tonghopluong_donvi_chitiet.mathdv',function($qr){
+                        $qr->select('mathdv')->from('tonghopluong_donvi')->where('thang','08')->where('nam','2018')->where('trangthai','DAGUI')
+                            ->distinct()->get();
+                    })->get();
+            }
+
 
             foreach($model_tonghop_ct as $ct){
                 $tonghop = $model_tonghop->where('mathdv',$ct->mathdv)->first();
