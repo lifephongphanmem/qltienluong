@@ -3718,8 +3718,8 @@ class baocaothongtu67Controller extends Controller
                     $a_It['pckv'] += $ar_I[$i]['pckv'];
 
                     $ar_I[$i]['pccv'] = $chitiet->sum('pccv') * $luongcb;
-                    $tongpc += $ar_I[$i]['pckv'];
-                    $a_It['pckv'] += $ar_I[$i]['pckv'];
+                    $tongpc += $ar_I[$i]['pccv'];
+                    $a_It['pccv'] += $ar_I[$i]['pccv'];
 
                     $ar_I[$i]['pctnvk'] = $chitiet->sum('pctnvk') * $luongcb;
                     $tongpc += $ar_I[$i]['pctnvk'];
@@ -3791,6 +3791,7 @@ class baocaothongtu67Controller extends Controller
             $ar_I[11]['pck'] = $ar_I[12]['pck'] +$ar_I[13]['pck'];
             $ar_I[11]['tongpc'] = $ar_I[12]['tongpc'] +$ar_I[13]['tongpc'];
             $ar_I[11]['ttbh_dv'] = $ar_I[12]['ttbh_dv'] +$ar_I[13]['ttbh_dv'];
+            $ar_I[11]['chenhlech'] = $ar_I[12]['chenhlech'] +$ar_I[13]['chenhlech'];
 
             $ar_I[0]['luong'] = $ar_I[1]['luong'] +$ar_I[2]['luong'];
             $ar_I[0]['pckv'] = $ar_I[1]['pckv'] +$ar_I[2]['pckv'];
@@ -3805,6 +3806,7 @@ class baocaothongtu67Controller extends Controller
             $ar_I[0]['pck'] = $ar_I[1]['pck'] +$ar_I[2]['pck'];
             $ar_I[0]['tongpc'] = $ar_I[1]['tongpc'] +$ar_I[2]['tongpc'];
             $ar_I[0]['ttbh_dv'] = $ar_I[1]['ttbh_dv'] +$ar_I[2]['ttbh_dv'];
+            $ar_I[0]['chenhlech'] = $ar_I[1]['chenhlech'] +$ar_I[2]['chenhlech'];
             //dd($ar_I);
 
             $ar_II = array();
@@ -3817,7 +3819,7 @@ class baocaothongtu67Controller extends Controller
             //dd($chitiet);
             if(isset($chitiet)){
                 $tongpc = 0;
-                $ar_II['luong'] = $model_bangluong_ct->sum('heso')* $luongcb;
+                $ar_II['luong'] = $chitiet->sum('heso')* $luongcb;
                 $ar_II['ttbh_dv'] = round($chitiet->sum('ttbh_dv') * $luongcb);
 
                 $ar_II['pckv'] = $chitiet->sum('pckv')* $luongcb;
