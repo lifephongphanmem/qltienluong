@@ -390,7 +390,7 @@ class baocaothongtu67Controller extends Controller
                     $ar_I[$i]['luong'] = $chitiet->sum('heso') * $luongcb;
                     $a_It['luong'] += $ar_I[$i]['luong'];
 
-                    $ar_I[$i]['ttbh_dv'] = round(($chitiet->sum('ttbh_dv') /1300000 ) * $luongcb);
+                    $ar_I[$i]['ttbh_dv'] = round(($chitiet->sum('ttbh_dv')) * $luongcb);
                     $a_It['ttbh_dv'] += $ar_I[$i]['ttbh_dv'];
 
                     $ar_I[$i]['pckv'] = $chitiet->sum('pckv') * $luongcb;
@@ -435,7 +435,7 @@ class baocaothongtu67Controller extends Controller
 
                     $ar_I[$i]['tongpc'] = $tongpc;
                     $a_It['tongpc'] += $ar_I[$i]['tongpc'];
-                    $ar_I[$i]['chenhlech'] = round(($tongpc +$ar_I[$i]['ttbh_dv'] +$ar_I[$i]['luong'])*90000/1300000);
+                    $ar_I[$i]['chenhlech'] = round(($tongpc +$ar_I[$i]['ttbh_dv'] +$ar_I[$i]['luong'])*0.065);
                     $a_It['chenhlech'] += $ar_I[$i]['chenhlech'];
 
                 }else{
@@ -461,7 +461,7 @@ class baocaothongtu67Controller extends Controller
             if(session('admin')->maphanloai == 'KVXP' && isset($model_bangluong_ct)){
                 $tongpc = 0;
                 $ar_II['luong'] = $model_bangluong_ct->sum('heso') * $luongcb;
-                $ar_II['ttbh_dv'] = round(($model_bangluong_ct->sum('ttbh_dv') /1300000 ) * $luongcb);
+                $ar_II['ttbh_dv'] = round(($model_bangluong_ct->sum('ttbh_dv')) * $luongcb);
 
                 $ar_II['pckv'] = $model_bangluong_ct->sum('pckv') * $luongcb;
                 $tongpc += $ar_II['pckv'];
@@ -485,7 +485,7 @@ class baocaothongtu67Controller extends Controller
                 $tongpc += $ar_II['pck'];
                 $ar_II['tongpc'] = $tongpc;
 
-                $ar_II['chenhlech'] = round(($tongpc +$ar_II['ttbh_dv'] +$ar_II['luong'])*90000/1300000);
+                $ar_II['chenhlech'] = round(($tongpc +$ar_II['ttbh_dv'] +$ar_II['luong'])*0.065);
 
             }else{
                 $ar_II['luong'] = 0;
@@ -526,9 +526,9 @@ class baocaothongtu67Controller extends Controller
                 if($m_dv->capdonvi >= 3){
                     if(isset($model_bangluong_ct)){
                         $ar_III[2]['tongso'] = $model_bangluong_ct->sum('pcdbqh') * $luongcb;
-                        $ar_III[2]['chenhlech'] = $model_bangluong_ct->sum('pcdbqh') * 90000/1300000;
+                        $ar_III[2]['chenhlech'] = $model_bangluong_ct->sum('pcdbqh') * 0.065;
                         $ar_IV[2]['tongso'] = $model_bangluong_ct->sum('pcvk') * $luongcb;
-                        $ar_IV[2]['chenhlech'] = $model_bangluong_ct->sum('pcvk') * 90000/1300000;
+                        $ar_IV[2]['chenhlech'] = $model_bangluong_ct->sum('pcvk') * 0.065;
                     }
 
                     $a_IIIt['tongso'] += $ar_III[2]['tongso'];
@@ -538,9 +538,9 @@ class baocaothongtu67Controller extends Controller
                 }else{
                     if(isset($model_bangluong_ct)){
                         $ar_III[1]['tongso'] = $model_bangluong_ct->sum('pcdbqh') * $luongcb;
-                        $ar_III[1]['chenhlech'] = $model_bangluong_ct->sum('pcdbqh') * 90000/1300000;
+                        $ar_III[1]['chenhlech'] = $model_bangluong_ct->sum('pcdbqh') * 0.065;
                         $ar_IV[1]['tongso'] = $model_bangluong_ct->sum('pcvk') * $luongcb;
-                        $ar_IV[1]['chenhlech'] = $model_bangluong_ct->sum('pcvk') * 90000/1300000;
+                        $ar_IV[1]['chenhlech'] = $model_bangluong_ct->sum('pcvk') * 0.065;
                     }
 
                     $a_IIIt['tongso'] += $ar_III[1]['tongso'];
@@ -552,10 +552,10 @@ class baocaothongtu67Controller extends Controller
                 if($m_dv->capdonvi >= 3){
                     if(isset($model_bangluong_ct)){
                         $ar_III[1]['tongso'] = $model_bangluong_ct->sum('pcdbqh') * $luongcb;
-                        $ar_III[1]['chenhlech'] = $model_bangluong_ct->sum('pcdbqh') * 90000/1300000;
+                        $ar_III[1]['chenhlech'] = $model_bangluong_ct->sum('pcdbqh') * 0.065;
 
                         $ar_IV[1]['tongso'] = $model_bangluong_ct->sum('pcvk') * $luongcb;
-                        $ar_IV[1]['chenhlech'] = $model_bangluong_ct->sum('pcvk') * 90000/1300000;
+                        $ar_IV[1]['chenhlech'] = $model_bangluong_ct->sum('pcvk') * 0.065;
                     }
 
                     $a_IIIt['tongso'] += $ar_III[1]['tongso'];
@@ -566,10 +566,10 @@ class baocaothongtu67Controller extends Controller
                 }else{
                     if(isset($model_bangluong_ct)){
                         $ar_III[0]['tongso'] = $model_bangluong_ct->sum('pcdbqh') * $luongcb;
-                        $ar_III[0]['chenhlech'] = $model_bangluong_ct->sum('pcdbqh') * 90000/1300000;
+                        $ar_III[0]['chenhlech'] = $model_bangluong_ct->sum('pcdbqh') * 0.065;
 
                         $ar_IV[0]['tongso'] = $model_bangluong_ct->sum('pcvk') * $luongcb;
-                        $ar_IV[0]['chenhlech'] = $model_bangluong_ct->sum('pcvk') * 90000/1300000;
+                        $ar_IV[0]['chenhlech'] = $model_bangluong_ct->sum('pcvk') * 0.065;
                     }
 
                     $a_IIIt['tongso'] += $ar_III[0]['tongso'];
