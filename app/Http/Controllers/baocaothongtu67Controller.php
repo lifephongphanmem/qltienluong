@@ -195,9 +195,9 @@ class baocaothongtu67Controller extends Controller
             $ar_II['soluongduocgiao'] = isset($model_bienche->soluongduocgiao) ? $model_bienche->soluongduocgiao : 0;
             $ar_II['soluongbienche'] = isset($model_bienche->soluongbienche) ? $model_bienche->soluongbienche : 0;
 
-            $model_bangluong_ct = $model_tonghop_ct->where('maphanloai','KVXP');
+            //$model_bangluong_ct = $model_tonghop_ct->where('maphanloai','KVXP');
             //
-            if(count($model_bangluong_ct)>0){
+                if(session('admin')->maphanloai == 'KVXP' && isset($model_bangluong_ct)){
                 //dd($model_tonghop_ct);
 
 
@@ -265,7 +265,7 @@ class baocaothongtu67Controller extends Controller
             $a_IIIt = array('tongso'=>0);
             $a_IVt = array('tongso'=>0);
             //dd(session('admin')->maphanloai);
-            if(session('admin')->level=='H'){
+            if(session('admin')->level=='T'){
                 if($m_dv->capdonvi > 2){
                     if(isset($model_bangluong_ct)){
                         $ar_III[2]['tongso'] = $model_bangluong_ct->sum('pcdbqh');
@@ -390,7 +390,7 @@ class baocaothongtu67Controller extends Controller
                     $ar_I[$i]['luong'] = $chitiet->sum('heso') * $luongcb;
                     $a_It['luong'] += $ar_I[$i]['luong'];
 
-                    $ar_I[$i]['ttbh_dv'] = round(($chitiet->sum('ttbh_dv') /1210000 ) * $luongcb);
+                    $ar_I[$i]['ttbh_dv'] = round(($chitiet->sum('ttbh_dv') /1300000 ) * $luongcb);
                     $a_It['ttbh_dv'] += $ar_I[$i]['ttbh_dv'];
 
                     $ar_I[$i]['pckv'] = $chitiet->sum('pckv') * $luongcb;
@@ -461,7 +461,7 @@ class baocaothongtu67Controller extends Controller
             if(session('admin')->maphanloai == 'KVXP' && isset($model_bangluong_ct)){
                 $tongpc = 0;
                 $ar_II['luong'] = $model_bangluong_ct->sum('heso') * $luongcb;
-                $ar_II['ttbh_dv'] = round(($model_bangluong_ct->sum('ttbh_dv') /1210000 ) * $luongcb);
+                $ar_II['ttbh_dv'] = round(($model_bangluong_ct->sum('ttbh_dv') /1300000 ) * $luongcb);
 
                 $ar_II['pckv'] = $model_bangluong_ct->sum('pckv') * $luongcb;
                 $tongpc += $ar_II['pckv'];
