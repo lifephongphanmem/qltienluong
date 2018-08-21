@@ -400,8 +400,13 @@
                             <span class="title">Báo cáo</span><span class="arrow "></span>
                         </a>
                         <ul class="sub-menu">
-                            <!--li><a href="{{url('tong_hop_bao_cao/danh_sach')}}"><i class="fa fa-caret-right"></i>Báo cáo tổng hợp</a></li-->
-                            <li><a href="{{url('bao_cao/bang_luong/tong_hop')}}"><i class="fa fa-caret-right"></i>Báo cáo chi trả lương</a></li>
+                            @if(session('admin')->level == 'T')
+                                <li><a href="{{url('tong_hop_bao_cao/danh_sach')}}"><i class="fa fa-caret-right"></i>Báo cáo tổng hợp</a></li>
+                            @endif
+
+                            @if(session('admin')->level == 'H')
+                                <li><a href="{{url('bao_cao/bang_luong/tong_hop')}}"><i class="fa fa-caret-right"></i>Báo cáo chi trả lương</a></li>
+                            @endif
                         </ul>
                     </li>
 
