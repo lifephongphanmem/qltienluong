@@ -3006,7 +3006,7 @@ class baocaothongtu67Controller extends Controller
             foreach($model_tonghop_ct as $ct){
                 $tonghop = $model_tonghop->where('madvth',$ct->madvth)->first();
                 $ct->maphanloai = $model_donvi->where('madv',$tonghop->madv)->first()->maphanloai;
-
+                /*
                 $ct->heso = ($ct->heso / $ct->luongcoban)* $luongcb;
                 $ct->pckv = ($ct->pckv / $ct->luongcoban)* $luongcb;
                 $ct->pccv = ($ct->pccv / $ct->luongcoban)* $luongcb;
@@ -3020,6 +3020,7 @@ class baocaothongtu67Controller extends Controller
                 $ct->pck = ($ct->pck / $ct->luongcoban)* $luongcb;
                 $ct->pcdbqh = ($ct->pcdbqh / $ct->luongcoban)* $luongcb;
                 $ct->pcvk = ($ct->pcvk / $ct->luongcoban)* $luongcb;
+                */
             }
             $model_bangluong_ct = $model_tonghop_ct->where('macongtac','BIENCHE');
 
