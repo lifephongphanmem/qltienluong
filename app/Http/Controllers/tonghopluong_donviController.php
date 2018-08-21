@@ -141,12 +141,7 @@ class tonghopluong_donviController extends Controller
             //
             //Tính toán dữ liệu
             $model_pc = dmphucap_donvi::where('madv', $madv)->where('phanloai', '<', '3')->get();
-            $a_phucap = array();
 
-            foreach ($model_pc as $ct) {
-                $a_phucap[$ct->mapc] = $ct->report;
-
-            }
 
             for ($i = 0; $i < count($model_data); $i++) {
                 $luongct = $model_bangluong_ct->where('manguonkp', $model_data[$i]['manguonkp'])
@@ -158,14 +153,13 @@ class tonghopluong_donviController extends Controller
                 $model_data[$i]['mathdv'] = $mathdv;
 
                 //hệ số phụ cấp cho cán bộ đã nghỉ hưu
-                $model_data[$i]['hesopc'] = $luongct->sum('hesopc') * $model_data[$i]['luongcoban'];
+                //$model_data[$i]['hesopc'] = $luongct->sum('hesopc') * $model_data[$i]['luongcoban'];
                 foreach ($model_pc as $ct) {
                     if($ct->phanloai == 1){
                         $model_data[$i][$ct->mapc] = $luongct->sum($ct->mapc);
                     }else{
                         $model_data[$i][$ct->mapc] = $luongct->sum($ct->mapc) * $model_data[$i]['luongcoban'];
                     }
-                    $a_phucap[$ct->mapc] = $ct->report;
                     $tonghs += chkDbl($model_data[$i][$ct->mapc]);
                 }
 

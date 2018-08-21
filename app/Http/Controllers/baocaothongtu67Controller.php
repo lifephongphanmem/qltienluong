@@ -3575,7 +3575,7 @@ class baocaothongtu67Controller extends Controller
             //dd($chitiet);
             if(isset($chitiet)){
                 $tongpc = 0;
-                $ar_II['luong'] = $model_bangluong_ct->sum('heso')* $luongcb;
+                $ar_II['luong'] = $chitiet->sum('heso')* $luongcb;
                 $ar_II['ttbh_dv'] = round($chitiet->sum('ttbh_dv') * $luongcb);
 
                 $ar_II['pckv'] = $chitiet->sum('pckv')* $luongcb;
