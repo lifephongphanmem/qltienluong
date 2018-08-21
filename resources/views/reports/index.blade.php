@@ -50,66 +50,6 @@
                     </div>
                 </div>
             </div>
-            @if(session('admin')->quanlynhom && !session('admin')->quanlykhuvuc)
-                <div class="portlet box">
-                    <div class="portlet-header">
-                        MẪU BÁO CÁO TỔNG HỢP TỪ CÁC ĐƠN VỊ CẤP DƯỚI
-                    </div>
-                    <div class="portlet-body">
-                        <div class="row">
-                            <div class="col-lg-12">
-                                <ol>
-                                    <li><a href="#" data-target="#thoaichitra-khoi-modal" data-toggle="modal" onclick="chitraluong_khoi('{{$furl.'khoi/chitraluong_th'}}')">Tổng hợp tình hình chi trả lương (Mẫu tổng hợp)</a></li>
-                                    <li><a href="#" data-target="#thoaichitra-khoi-modal" data-toggle="modal" onclick="chitraluong_khoi('{{$furl.'khoi/chitraluong_ct'}}')">Tổng hợp tình hình chi trả lương (Mẫu chi tiết)</a></li>
-                                    <li><a href="#" data-target="#thoaidutoan-khoi-modal" data-toggle="modal" onclick="dutoanluong_khoi('{{$furl.'khoi/dutoanluong'}}')">Dự toán lương</a></li>
-
-                                    <li><a href="{{url('/bao_cao/thong_tu_67/khoi/mau2a1')}}" target="_blank">Báo cáo nhu cầu kinh phí thực hiện nghị định 47/2017/NĐ-CP (Mẫu 2a/1)</a></li>
-                                    <li><a href="{{url('/bao_cao/thong_tu_67/khoi/mau2a2')}}" target="_blank">Báo cáo nhu cầu kinh phí thực hiện nghị định 47/2017/NĐ-CP (Mẫu 2a/2)</a></li>
-                                    <li><a href="{{url('/bao_cao/thong_tu_67/khoi/mau2b')}}" target="_blank">Báo cáo tổng hợp quỹ trợ cấp tăng thêm của cán bộ xã, phường, thị trấn đã nghỉ việc (Mẫu 2b)</a></li>
-                                    <li><a href="{{url('/bao_cao/thong_tu_67/khoi/mau2c')}}" target="_blank">Báo cáo nhu cầu chênh lệch (Mẫu 2c)</a></li>
-                                    <li><a href="{{url('/bao_cao/thong_tu_67/khoi/mau2d')}}" target="_blank">Tổng hợp kinh phí tăng thêm để thực hiện chế độ phụ cấp đối với cán bộ không chuyên trách (Mẫu 2d)</a></li>
-                                    <li><a href="{{url('/bao_cao/thong_tu_67/khoi/mau4a')}}" target="_blank">Báo cáo nguồn kinh phí (Mẫu 4a)</a></li>
-                                    <li><a href="{{url('/bao_cao/thong_tu_67/khoi/mau4b')}}" target="_blank">Tổng hợp nhu cầu, nguồn kinh phí (Mẫu 4b)</a></li>
-
-                                </ol>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            @endif
-
-            @if(session('admin')->quanlykhuvuc)
-                <div class="portlet box">
-                    <div class="portlet-header">
-                        MẪU BÁO CÁO TỔNG HỢP TRÊN TOÀN ĐỊA BÀN
-                    </div>
-                    <div class="portlet-body">
-                        <div class="row">
-                            <div class="col-lg-12">
-                                <ol>
-                                    <li><a href="#" data-target="#thoaichitra-huyen-modal" data-toggle="modal" onclick="chitraluong_huyen('{{$furl.'huyen/chitraluong_th'}}')">Tổng hợp tình hình chi trả lương (Mẫu tổng hợp)</a></li>
-                                    <li><a href="#" data-target="#thoaichitra-huyen-modal" data-toggle="modal" onclick="chitraluong_huyen('{{$furl.'huyen/chitraluong_ct'}}')">Tổng hợp tình hình chi trả lương (Mẫu chi tiết)</a></li>
-                                    <li><a href="#" data-target="#thoaidutoan-huyen-modal" data-toggle="modal" onclick="dutoanluong_huyen('{{$furl.'huyen/dutoanluong'}}')">Dự toán lương</a></li>
-
-                                    <li><a href="{{url('/bao_cao/thong_tu_67/huyen/mau2a1')}}" target="_blank">Báo cáo nhu cầu kinh phí thực hiện nghị định 47/2017/NĐ-CP (Mẫu 2a/1)</a></li>
-                                    <li><a href="{{url('/bao_cao/thong_tu_67/huyen/mau2a2')}}" target="_blank">Báo cáo nhu cầu kinh phí thực hiện nghị định 47/2017/NĐ-CP (Mẫu 2a/2)</a></li>
-                                    <li><a href="{{url('/bao_cao/thong_tu_67/huyen/mau2b')}}" target="_blank">Báo cáo tổng hợp quỹ trợ cấp tăng thêm của cán bộ xã, phường, thị trấn đã nghỉ việc (Mẫu 2b)</a></li>
-                                    <li><a href="{{url('/bao_cao/thong_tu_67/huyen/mau2c')}}" target="_blank">Báo cáo nhu cầu chênh lệch (Mẫu 2c)</a></li>
-                                    <li><a href="{{url('/bao_cao/thong_tu_67/huyen/mau2d')}}" target="_blank">Tổng hợp kinh phí tăng thêm để thực hiện chế độ phụ cấp đối với cán bộ không chuyên trách (Mẫu 2d)</a></li>
-
-                                    <li><a href="{{url('/bao_cao/thong_tu_67/don_vi/mau2e')}}" target="_blank">Tổng hợp kinh phí tăng, giảm do điều chỉnh địa bàn vùng kinh tế xã hội đặc biệt khó khăn (Mẫu 2e)</a></li>
-                                    <li><a href="{{url('/bao_cao/thong_tu_67/don_vi/mau2g')}}" target="_blank">Tổng hợp phụ cấp ưu đãi tăng, giảm do điều chỉnh địa bàn vùng kinh tế xã hội đặc biệt khó khăn (Mẫu 2g)</a></li>
-                                    <li><a href="{{url('/bao_cao/thong_tu_67/don_vi/mau2h')}}" target="_blank">Tổng hợp phụ cấp thu hút tăng, giảm do điều chỉnh địa bàn vùng kinh tế xã hội đặc biệt khó khăn (Mẫu 2h)</a></li>
-
-                                    <li><a href="{{url('/bao_cao/thong_tu_67/huyen/mau4a')}}" target="_blank">Báo cáo nguồn kinh phí (Mẫu 4a)</a></li>
-                                    <li><a href="{{url('/bao_cao/thong_tu_67/huyen/mau4b')}}" target="_blank">Tổng hợp nhu cầu, nguồn kinh phí (Mẫu 4b)</a></li>
-
-                                </ol>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            @endif
         </div>
     </div>
 
