@@ -2992,20 +2992,38 @@ class baocaothongtu67Controller extends Controller
                 $bienche->maphanloai = $model_donvi->where('madv',$bienche->madv)->first()->maphanloai;
             }
             //dd($model_bienche);
+
             $model_tonghop = tonghopluong_donvi::where('thang','08')->where('nam','2018')
                 ->where('madvbc',$madvbc)->get();
-            $luongcb = 1390000;
+
+            $luongcb = 0.935;
+            //$luongcb = 1390000;
 
             //nếu đơn vị đã tạo bảng lương tháng 07/2017 =>xuất kết quả
 
             $model_tonghop_ct = tonghopluong_donvi_chitiet::wherein('mathdv',function($qr) use($madvbc){
-                $qr->select('mathdv')->from('tonghopluong_donvi')->where('thang','08')->where('nam','2018')
-                    ->where('madvbc',$madvbc)->distinct()->get();
+                $qr->select('mathdv')->from('tonghopluong_donvi')->where('thang','08')->where('nam','2018')->where('trangthai','DAGUI')
+                    ->where('macqcq',session('admin')->madv)->distinct()->get();
             })->get();
 
+            //dd($model_tonghop_ct);
             foreach($model_tonghop_ct as $ct){
                 $tonghop = $model_tonghop->where('madvth',$ct->madvth)->first();
                 $ct->maphanloai = $model_donvi->where('madv',$tonghop->madv)->first()->maphanloai;
+                $ct->heso = $ct->heso * $luongcb;
+                $ct->pckv = $ct->pckv * $luongcb;
+                $ct->pccv = $ct->pccv * $luongcb;
+                $ct->pctnvk = $ct->pctnvk * $luongcb;
+                $ct->pcudn = $ct->pcudn * $luongcb;
+                $ct->pcth = $ct->pcth * $luongcb;
+                $ct->pctn = $ct->pctn * $luongcb;
+                $ct->pccovu = $ct->pccovu * $luongcb;
+                $ct->pcdang = $ct->pcdang * $luongcb;
+                $ct->pcthni = $ct->pcthni * $luongcb;
+                $ct->pck = $ct->pck * $luongcb;
+                $ct->pcdbqh = $ct->pcdbqh * $luongcb;
+                $ct->pcvk = $ct->pcvk * $luongcb;
+                $ct->ttbh_dv = ($ct->stbhxh_dv + $ct->stbhyt_dv +$ct->stkpcd_dv + $ct->stbhtn_dv) * $luongcb;
                 /*
                 $ct->heso = ($ct->heso / $ct->luongcoban)* $luongcb;
                 $ct->pckv = ($ct->pckv / $ct->luongcoban)* $luongcb;
@@ -3022,7 +3040,8 @@ class baocaothongtu67Controller extends Controller
                 $ct->pcvk = ($ct->pcvk / $ct->luongcoban)* $luongcb;
                 */
             }
-            $model_bangluong_ct = $model_tonghop_ct->where('macongtac','BIENCHE');
+
+            $model_bangluong_ct = $model_tonghop_ct->where('macongtac','BIENCHE')->where('maphanloai','<>','KVXP');
 
             //dd($model_tonghop_ct);
             $ar_I = array();
@@ -3173,6 +3192,7 @@ class baocaothongtu67Controller extends Controller
             $ar_II['soluongbienche'] = isset($model_bienche->soluongbienche) ? $model_bienche->soluongbienche : 0;
 
             $model_bangluong_ct = $model_tonghop_ct->where('maphanloai','KVXP');
+            //dd($model_bangluong_ct);
             //
             if(count($model_bangluong_ct)>0){
                 //dd($model_tonghop_ct);
@@ -3211,7 +3231,7 @@ class baocaothongtu67Controller extends Controller
 
                 $ar_II['tongpc'] = $tongpc;
 
-                $ar_II['ttbh_dv'] =round(($ar_II['luong'] + $ar_II['pccv'])*0.24);
+                $ar_II['ttbh_dv'] =$model_bangluong_ct->sum('ttbh_dv') ;
             }
             else{
                 $ar_II['luong'] = 0;
@@ -3306,34 +3326,21 @@ class baocaothongtu67Controller extends Controller
             $model_donvi = dmdonvi::where('madvbc',$madvbc)->get();
             $model_tonghop = tonghopluong_donvi::where('thang','08')->where('nam','2018')
                 ->where('madvbc',$madvbc)->get();
-            $luongcb = 1390000;
+            $luongcb = 1;
             //nếu đơn vị đã tạo bảng lương tháng 07/2017 =>xuất kết quả
 
             $model_tonghop_ct = tonghopluong_donvi_chitiet::wherein('mathdv',function($qr) use($madvbc){
-                $qr->select('mathdv')->from('tonghopluong_donvi')->where('thang','08')->where('nam','2018')
-                    ->where('madvbc',$madvbc)->distinct()->get();
+                $qr->select('mathdv')->from('tonghopluong_donvi')->where('thang','08')->where('nam','2018')->where('trangthai','DAGUI')
+                    ->where('macqcq',session('admin')->madv)->get();
             })->get();
+
             foreach($model_tonghop_ct as $ct){
                 $tonghop = $model_tonghop->where('madvth',$ct->madvth)->first();
                 $ct->maphanloai = $model_donvi->where('madv',$tonghop->madv)->first()->maphanloai;
-
-                $ct->heso = $ct->heso / $ct->luongcoban;
-                $ct->pckv = $ct->pckv / $ct->luongcoban;
-                $ct->pccv = $ct->pccv / $ct->luongcoban;
-                $ct->pctnvk = $ct->pctnvk / $ct->luongcoban;
-                $ct->pcudn = $ct->pcudn / $ct->luongcoban;
-                $ct->pcth = $ct->pcth / $ct->luongcoban;
-                $ct->pctn = $ct->pctn / $ct->luongcoban;
-                $ct->pccovu = $ct->pccovu / $ct->luongcoban;
-                $ct->pcdang = $ct->pcdang / $ct->luongcoban;
-                $ct->pcthni = $ct->pcthni / $ct->luongcoban;
-                $ct->pck = $ct->pck / $ct->luongcoban;
-                $ct->pcdbqh = $ct->pcdbqh / $ct->luongcoban;
-                $ct->pcvk = $ct->pcvk / $ct->luongcoban;
-
-                $ct->ttbh_dv = ($ct->stbhxh_dv+$ct->stbhyt_dv+$ct->stkpcd_dv+$ct->stbhtn_dv)/ $ct->luongcoban;
+                $ct->ttbh_dv = ($ct->stbhxh_dv+$ct->stbhyt_dv+$ct->stkpcd_dv+$ct->stbhtn_dv);
             }
-            $model_bangluong_ct = $model_tonghop_ct->where('macongtac','BIENCHE');
+
+            $model_bangluong_ct = $model_tonghop_ct->where('macongtac','BIENCHE')->where('maphanloai','<>', 'KVXP');
             //dd($model_bangluong_ct->toarray());
             $ar_I = array();
             $ar_I[]=array('val'=>'GD;DT','tt'=>'1','noidung'=>'Sự nghiệp giáo dục - đào tạo');
@@ -3417,12 +3424,12 @@ class baocaothongtu67Controller extends Controller
                     $tongpc += $ar_I[$i]['pck'];
                     $a_It['pck'] += $ar_I[$i]['pck'];
 
-                    $ar_I[$i]['ttbh_dv'] = round(($ar_I[$i]['luong'] + $ar_I[$i]['pccv'])*0.24);
+                    $ar_I[$i]['ttbh_dv'] = round($chitiet->sum('ttbh_dv') * $luongcb);
                     $a_It['ttbh_dv'] += $ar_I[$i]['ttbh_dv'];
 
                     $ar_I[$i]['tongpc'] = $tongpc;
                     $a_It['tongpc'] += $ar_I[$i]['tongpc'];
-                    $ar_I[$i]['chenhlech'] = round(($tongpc +$ar_I[$i]['ttbh_dv'] +$ar_I[$i]['luong'])*90000/ $luongcb);
+                    $ar_I[$i]['chenhlech'] = round(($tongpc +$ar_I[$i]['ttbh_dv'] +$ar_I[$i]['luong'])*90000/ 1390000);
                     $a_It['chenhlech'] += $ar_I[$i]['chenhlech'];
 
                 }else{
@@ -3472,9 +3479,12 @@ class baocaothongtu67Controller extends Controller
             //dd($ar_I);
 
             $ar_II = array();
+            /*
             if(isset($model_bangluong_ct)){
                 $chitiet = $model_bangluong_ct->where('maphanloai', 'KVXP');
             }
+            */
+            $chitiet = $model_tonghop_ct->where('maphanloai', 'KVXP');
             //dd($chitiet);
             if(isset($chitiet)){
                 $tongpc = 0;
@@ -3503,7 +3513,7 @@ class baocaothongtu67Controller extends Controller
                 $tongpc += $ar_II['pck'];
                 $ar_II['tongpc'] = $tongpc;
 
-                $ar_II['chenhlech'] = round(($tongpc +$ar_II['ttbh_dv'] +$ar_II['luong'])*90000/$luongcb);
+                $ar_II['chenhlech'] = round(($tongpc +$ar_II['ttbh_dv'] +$ar_II['luong'])*90000/1390000);
 
             }else{
                 $ar_II['luong'] = 0;
@@ -3544,7 +3554,7 @@ class baocaothongtu67Controller extends Controller
                 if($m_dv->capdonvi >= 3){
                     if(isset($model_bangluong_ct)){
                         $ar_III[2]['tongso'] = $model_bangluong_ct->sum('pcdbqh') * $luongcb;
-                        $ar_III[2]['chenhlech'] = $model_bangluong_ct->sum('pcdbqh') * 90000;
+                        $ar_III[2]['chenhlech'] = $model_bangluong_ct->sum('pcdbqh') * 90000 / 1390000;
                         $ar_IV[2]['tongso'] = $model_bangluong_ct->sum('pcvk') * $luongcb;
                         $ar_IV[2]['chenhlech'] = $model_bangluong_ct->sum('pcvk') * 90000;
                     }
@@ -3556,9 +3566,9 @@ class baocaothongtu67Controller extends Controller
                 }else{
                     if(isset($model_bangluong_ct)){
                         $ar_III[1]['tongso'] = $model_bangluong_ct->sum('pcdbqh') * $luongcb;
-                        $ar_III[1]['chenhlech'] = $model_bangluong_ct->sum('pcdbqh') * 90000;
+                        $ar_III[1]['chenhlech'] = $model_bangluong_ct->sum('pcdbqh') * 90000/ 1390000;
                         $ar_IV[1]['tongso'] = $model_bangluong_ct->sum('pcvk') * $luongcb;
-                        $ar_IV[1]['chenhlech'] = $model_bangluong_ct->sum('pcvk') * 90000;
+                        $ar_IV[1]['chenhlech'] = $model_bangluong_ct->sum('pcvk') * 90000/ 1390000;
                     }
 
                     $a_IIIt['tongso'] += $ar_III[1]['tongso'];
@@ -3570,10 +3580,10 @@ class baocaothongtu67Controller extends Controller
                 if($m_dv->capdonvi >= 3){
                     if(isset($model_bangluong_ct)){
                         $ar_III[1]['tongso'] = $model_bangluong_ct->sum('pcdbqh') * $luongcb;
-                        $ar_III[1]['chenhlech'] = $model_bangluong_ct->sum('pcdbqh') * 90000;
+                        $ar_III[1]['chenhlech'] = $model_bangluong_ct->sum('pcdbqh') * 90000/ 1390000;
 
                         $ar_IV[1]['tongso'] = $model_bangluong_ct->sum('pcvk') * $luongcb;
-                        $ar_IV[1]['chenhlech'] = $model_bangluong_ct->sum('pcvk') * 90000;
+                        $ar_IV[1]['chenhlech'] = $model_bangluong_ct->sum('pcvk') * 90000/ 1390000;
                     }
 
                     $a_IIIt['tongso'] += $ar_III[1]['tongso'];
@@ -3584,10 +3594,10 @@ class baocaothongtu67Controller extends Controller
                 }else{
                     if(isset($model_bangluong_ct)){
                         $ar_III[0]['tongso'] = $model_bangluong_ct->sum('pcdbqh') * $luongcb;
-                        $ar_III[0]['chenhlech'] = $model_bangluong_ct->sum('pcdbqh') * 90000;
+                        $ar_III[0]['chenhlech'] = $model_bangluong_ct->sum('pcdbqh') * 90000/ 1390000;
 
                         $ar_IV[0]['tongso'] = $model_bangluong_ct->sum('pcvk') * $luongcb;
-                        $ar_IV[0]['chenhlech'] = $model_bangluong_ct->sum('pcvk') * 90000;
+                        $ar_IV[0]['chenhlech'] = $model_bangluong_ct->sum('pcvk') * 90000/ 1390000;
                     }
 
                     $a_IIIt['tongso'] += $ar_III[0]['tongso'];
