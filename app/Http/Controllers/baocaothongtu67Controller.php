@@ -334,7 +334,7 @@ class baocaothongtu67Controller extends Controller
             //dd($model_bienche);
 
             $model_tonghop = tonghopluong_donvi::where('thang','08')->where('nam','2018')
-                ->where('madvbc',$madvbc)->get();
+                ->where('madvbc','like',$inputs['madv'].'%')->get();
 
             $luongcb = 0.935;
             //$luongcb = 1390000;
@@ -368,7 +368,7 @@ class baocaothongtu67Controller extends Controller
 
             $model_bangluong_ct = $model_tonghop_ct->where('macongtac','BIENCHE')->where('maphanloai','<>','KVXP');
 
-            dd($model_bangluong_ct);
+            //dd($model_bangluong_ct);
             $ar_I = array();
             $ar_I[0]=array('val'=>'GD;DT','tt'=>'1','noidung'=>'Sự nghiệp giáo dục - đào tạo');
             $ar_I[1]=array('val'=>'GD','tt'=>'-','noidung'=>'Giáo dục');
