@@ -341,12 +341,24 @@ class baocaothongtu67Controller extends Controller
 
             //nếu đơn vị đã tạo bảng lương tháng 07/2017 =>xuất kết quả
 
-            $model_tonghop_ct = tonghopluong_donvi_chitiet::join('tonghopluong_donvi', 'tonghopluong_donvi_chitiet.mathdv', '=', 'tonghopluong_donvi.mathdv')
-                ->where('tonghopluong_donvi.madvbc','like',$inputs['madv'].'%')
-                ->wherein('tonghopluong_donvi_chitiet.mathdv',function($qr){
-                    $qr->select('mathdv')->from('tonghopluong_donvi')->where('thang','08')->where('nam','2018')->where('trangthai','DAGUI')
-                        ->distinct()->get();
-                })->get();
+            if($inputs['madv'] == "")
+            {
+                $model_tonghop_ct = tonghopluong_donvi_chitiet::join('tonghopluong_donvi', 'tonghopluong_donvi_chitiet.mathdv', '=', 'tonghopluong_donvi.mathdv')
+                    ->where('tonghopluong_donvi.madvbc','like','%')
+                    ->wherein('tonghopluong_donvi_chitiet.mathdv',function($qr){
+                        $qr->select('mathdv')->from('tonghopluong_donvi')->where('thang','08')->where('nam','2018')->where('trangthai','DAGUI')
+                            ->distinct()->get();
+                    })->get();
+            }
+            else
+            {
+                $model_tonghop_ct = tonghopluong_donvi_chitiet::join('tonghopluong_donvi', 'tonghopluong_donvi_chitiet.mathdv', '=', 'tonghopluong_donvi.mathdv')
+                    ->where('tonghopluong_donvi.madvbc',$inputs['madv'])
+                    ->wherein('tonghopluong_donvi_chitiet.mathdv',function($qr){
+                        $qr->select('mathdv')->from('tonghopluong_donvi')->where('thang','08')->where('nam','2018')->where('trangthai','DAGUI')
+                            ->distinct()->get();
+                    })->get();
+            }
 
             if(session('admin')->username == 'khthso')
             {
@@ -615,7 +627,7 @@ class baocaothongtu67Controller extends Controller
             $a_IIIt = array('tongso'=>0);
             $a_IVt = array('tongso'=>0);
             //dd(session('admin')->maphanloai);
-            if(session('admin')->level=='H'){
+            if(session('admin')->level=='T'){
                 if($m_dv->capdonvi > 2){
                     if(isset($model_bangluong_ct)){
                         $ar_III[2]['tongso'] = $model_bangluong_ct->sum('pcdbqh');
