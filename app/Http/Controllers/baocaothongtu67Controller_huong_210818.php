@@ -47,21 +47,21 @@ class baocaothongtu67Controller extends Controller
         if (Session::has('admin')  ) {
             $inputs=$request->all();
             $m_dv = dmdonvi::where('madv',session('admin')->madv)->first();
-            $model_bienche = chitieubienche::where('nam','2018')->where('madv',session('admin')->madv)->get();
+            $model_bienche = chitieubienche::where('nam','2017')->where('madv',session('admin')->madv)->get();
             //$luongcb = 1210000;
             $luongcb = 1;
             //nếu đơn vị đã tạo bảng lương tháng 07/2017 =>xuất kết quả
             $model_tonghop_ct = tonghopluong_donvi_chitiet::join('tonghopluong_donvi', 'tonghopluong_donvi_chitiet.mathdv', '=', 'tonghopluong_donvi.mathdv')
                 ->where('tonghopluong_donvi.madvbc','like',$inputs['madv'].'%')
                 ->wherein('tonghopluong_donvi_chitiet.mathdv',function($qr){
-                $qr->select('mathdv')->from('tonghopluong_donvi')->where('thang','08')->where('nam','2018')
+                $qr->select('mathdv')->from('tonghopluong_donvi')->where('thang','07')->where('nam','2017')
                     ->distinct()->get();
             })->get();
             if(session('admin')->username == 'khthso')
             {
                 $model_bienche = chitieubienche::join('dmdonvi','dmdonvi.madv','=','chitieubienche.madv')
                     ->join('dmdonvibaocao','dmdonvibaocao.madvbc','=','dmdonvi.madvbc')
-                    ->where('chitieubienche.nam','2018')->where('dmdonvi.madvbc','like',$inputs['madv'].'%')
+                    ->where('chitieubienche.nam','2017')->where('dmdonvi.madvbc','like',$inputs['madv'].'%')
                     ->where('dmdonvibaocao.level','T')->get();
                 //$luongcb = 1210000; tạm thời bỏ vì bang lương đã nhân lcb
                 $luongcb = 1;
@@ -71,7 +71,7 @@ class baocaothongtu67Controller extends Controller
                     ->where('tonghopluong_donvi.madvbc','like',$inputs['madv'].'%')
                     ->where('dmdonvibaocao.level','T')
                     ->wherein('tonghopluong_donvi_chitiet.mathdv',function($qr){
-                        $qr->select('mathdv')->from('tonghopluong_donvi')->where('thang','08')->where('nam','2018')
+                        $qr->select('mathdv')->from('tonghopluong_donvi')->where('thang','07')->where('nam','2017')
                             ->distinct()->get();
                     })->get();
             }
@@ -328,7 +328,7 @@ class baocaothongtu67Controller extends Controller
             $model_tonghop_ct = tonghopluong_donvi_chitiet::join('tonghopluong_donvi', 'tonghopluong_donvi_chitiet.mathdv', '=', 'tonghopluong_donvi.mathdv')
                 ->where('tonghopluong_donvi.madvbc','like',$inputs['madv'].'%')
                 ->wherein('tonghopluong_donvi_chitiet.mathdv',function($qr){
-                $qr->select('mathdv')->from('tonghopluong_donvi')->where('thang','08')->where('nam','2018')
+                $qr->select('mathdv')->from('tonghopluong_donvi')->where('thang','07')->where('nam','2017')
                     ->distinct()->get();
             })->get();
 
@@ -340,7 +340,7 @@ class baocaothongtu67Controller extends Controller
                     ->where('tonghopluong_donvi.madvbc','like',$inputs['madv'].'%')
                     ->where('dmdonvibaocao.level','T')
                     ->wherein('tonghopluong_donvi_chitiet.mathdv',function($qr){
-                        $qr->select('mathdv')->from('tonghopluong_donvi')->where('thang','08')->where('nam','2018')
+                        $qr->select('mathdv')->from('tonghopluong_donvi')->where('thang','07')->where('nam','2017')
                             ->distinct()->get();
                     })->get();
             }
@@ -639,9 +639,9 @@ class baocaothongtu67Controller extends Controller
             $inputs=$request->all();
             $m_dv = dmdonvi::where('madv',session('admin')->madv)->first();
             $m_cb =hosocanbo::join('dmdonvi', 'hosocanbo.madv', '=', 'dmdonvi.madv')
-                ->select('macanbo','linhvuchoatdong', 'heso', 'hosocanbo'.'pck', 'hosocanbo'.'pccv', 'hosocanbo'.'pckv', 'hosocanbo'.'pcth', 'hosocanbo'.'pcdh',
-                    'hosocanbo'.'pcld', 'hosocanbo'.'pcudn', 'hosocanbo'.'pctn', 'hosocanbo'.'pctnn', 'hosocanbo'.'pcdbn', 'hosocanbo'.'pcvk', 'hosocanbo'.'pckn', 'hosocanbo'.'pccovu', 'hosocanbo'.'pcdbqh',
-                    'hosocanbo'.'pctnvk', 'hosocanbo'.'pcbdhdcu', 'hosocanbo'.'pcdang', 'hosocanbo'.'pcthni')
+                ->select('macanbo','linhvuchoatdong', 'heso', 'pck', 'pccv', 'pckv', 'pcth', 'pcdh',
+                    'pcld', 'pcudn', 'pctn', 'pctnn', 'pcdbn', 'pcvk', 'pckn', 'pccovu', 'pcdbqh',
+                    'pctnvk', 'pcbdhdcu', 'pcdang', 'pcthni')
                 ->where('dmdonvi.madvbc','like',$inputs['madv'].'%')
                 ->where('heso','<=', 2.34)
                 ->get();
@@ -649,9 +649,9 @@ class baocaothongtu67Controller extends Controller
             {
                 $m_cb =hosocanbo::join('dmdonvi', 'hosocanbo.madv', '=', 'dmdonvi.madv')
                     ->join('dmdonvibaocao','dmdonvibaocao.madvbc','=','dmdonvi.madvbc')
-                    ->select('macanbo','linhvuchoatdong', 'heso', 'hosocanbo'.'pck', 'hosocanbo'.'pccv', 'hosocanbo'.'pckv', 'hosocanbo'.'pcth', 'hosocanbo'.'pcdh',
-                        'hosocanbo'.'pcld', 'hosocanbo'.'pcudn', 'hosocanbo'.'pctn', 'hosocanbo'.'pctnn', 'hosocanbo'.'pcdbn', 'hosocanbo'.'pcvk', 'hosocanbo'.'pckn', 'hosocanbo'.'pccovu', 'hosocanbo'.'pcdbqh',
-                        'hosocanbo'.'pctnvk', 'hosocanbo'.'pcbdhdcu', 'hosocanbo'.'pcdang', 'hosocanbo'.'pcthni')
+                    ->select('macanbo','linhvuchoatdong', 'heso', 'pck', 'pccv', 'pckv', 'pcth', 'pcdh',
+                        'pcld', 'pcudn', 'pctn', 'pctnn', 'pcdbn', 'pcvk', 'pckn', 'pccovu', 'pcdbqh',
+                        'pctnvk', 'pcbdhdcu', 'pcdang', 'pcthni')
                     ->where('dmdonvi.madvbc','like',$inputs['madv'].'%')
                     ->where('dmdonvi.heso','<=', 2.34)
                     ->where('dmdonvibaocao.level','T')
@@ -2373,7 +2373,7 @@ class baocaothongtu67Controller extends Controller
             $model_tonghop = tonghopluong_donvi::where('thang','07')->where('nam','2017')
                 ->where('macqcq',session('admin')->madv)->get();
             $luongcb = 1300000;
-            //nếu đơn vị đã tạo bảng lương tháng 07/2018 =>xuất kết quả
+            //nếu đơn vị đã tạo bảng lương tháng 07/2017 =>xuất kết quả
 
             $model_tonghop_ct = tonghopluong_donvi_chitiet::wherein('mathdv',function($qr) use($macqcq){
                 $qr->select('mathdv')->from('tonghopluong_donvi')->where('thang','07')->where('nam','2017')
@@ -2990,17 +2990,16 @@ class baocaothongtu67Controller extends Controller
                 $bienche->maphanloai = $model_donvi->where('madv',$bienche->madv)->first()->maphanloai;
             }
             //dd($model_bienche);
-            $model_tonghop = tonghopluong_donvi::where('thang','08')->where('nam','2018')
+            $model_tonghop = tonghopluong_donvi::where('thang','07')->where('nam','2017')
                 ->where('madvbc',$madvbc)->get();
-            $luongcb = 1300000;
+            $luongcb = 1210000;
 
             //nếu đơn vị đã tạo bảng lương tháng 07/2017 =>xuất kết quả
 
             $model_tonghop_ct = tonghopluong_donvi_chitiet::wherein('mathdv',function($qr) use($madvbc){
-                $qr->select('mathdv')->from('tonghopluong_donvi')->where('thang','08')->where('nam','2018')
+                $qr->select('mathdv')->from('tonghopluong_donvi')->where('thang','07')->where('nam','2017')
                     ->where('madvbc',$madvbc)->distinct()->get();
             })->get();
-
             foreach($model_tonghop_ct as $ct){
                 $tonghop = $model_tonghop->where('madvth',$ct->madvth)->first();
                 $ct->maphanloai = $model_donvi->where('madv',$tonghop->madv)->first()->maphanloai;
@@ -3301,13 +3300,13 @@ class baocaothongtu67Controller extends Controller
             $madvbc = session('admin')->madvbc;
             $m_dv = dmdonvi::where('madv',session('admin')->madv)->first();
             $model_donvi = dmdonvi::where('madvbc',$madvbc)->get();
-            $model_tonghop = tonghopluong_donvi::where('thang','08')->where('nam','2018')
+            $model_tonghop = tonghopluong_donvi::where('thang','07')->where('nam','2017')
                 ->where('madvbc',$madvbc)->get();
-            $luongcb = 1390000;
+            $luongcb = 1300000;
             //nếu đơn vị đã tạo bảng lương tháng 07/2017 =>xuất kết quả
 
             $model_tonghop_ct = tonghopluong_donvi_chitiet::wherein('mathdv',function($qr) use($madvbc){
-                $qr->select('mathdv')->from('tonghopluong_donvi')->where('thang','08')->where('nam','2018')
+                $qr->select('mathdv')->from('tonghopluong_donvi')->where('thang','07')->where('nam','2017')
                     ->where('madvbc',$madvbc)->distinct()->get();
             })->get();
             foreach($model_tonghop_ct as $ct){

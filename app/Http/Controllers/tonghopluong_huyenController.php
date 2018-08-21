@@ -125,12 +125,6 @@ class tonghopluong_huyenController extends Controller
     function index(Request $requests)
     {
         if (Session::has('admin')) {
-            /*
-            $a_trangthai=array('CHOGUI'=>'Chưa gửi dữ liệu',
-                'DAGUI'=>'Đã gửi dữ liệu',
-                'TRALAI'=>'Trả lại dữ liệu',
-                'CHUADAYDU'=>'Chưa đầy đủ tổng hợp dữ liệu');
-            */
             $a_trangthai = getStatus();
             $inputs = $requests->all();
             $madv = session('admin')->madv;
@@ -164,7 +158,8 @@ class tonghopluong_huyenController extends Controller
             $model_tonghop = tonghopluong_tinh::where('madvbc', $madvbc)->get();
             //Danh sách các đơn vị đã gửi dữ liệu
             //$model_dulieu = tonghopluong_huyen::where('madvbc',$madvbc)->get();
-            $model_dulieu = tonghopluong_huyen::where('macqcq', $madv)->get();
+            $model_dulieu = tonghopluong_huyen::where('macqcq', $madv)->where('trangthai','DAGUI')->get();
+            //dd($model_dulieu);
             //dd($model_dulieu);
             for ($i = 0; $i < count($a_data); $i++) {
                 //$a_data[$i]['maphanloai'] = session('admin')->maphanloai;
@@ -360,6 +355,8 @@ class tonghopluong_huyenController extends Controller
             $inputs = $requests->all();
             $thang = $inputs['thang'];
             $nam = $inputs['nam'];
+            /*
+             lấy macqcq vì sợ dv th khối chưa gửi dữ liệu
             $madvbc = session('admin')->madvbc;
 
             //lấy danh sách các chi tiết số liệu tổng họp theo đơn vị
@@ -370,6 +367,16 @@ class tonghopluong_huyenController extends Controller
                     ->where('trangthai','DAGUI')
                     ->where('madvbc',$madvbc)->distinct();
             })->get();
+             * */
+
+            $model_tonghop_ct = tonghopluong_donvi_chitiet::wherein('mathdv',function($query) use ($inputs){
+                $query->select('mathdv')->from('tonghopluong_donvi')
+                    ->where('nam', $inputs['nam'])
+                    ->where('thang',$inputs['thang'])
+                    ->where('trangthai', 'DAGUI')
+                    ->where('macqcq',session('admin')->madv)->get();
+            })->get();
+
             //
             //Tính toán dữ liệu
             $a_col = getColTongHop();

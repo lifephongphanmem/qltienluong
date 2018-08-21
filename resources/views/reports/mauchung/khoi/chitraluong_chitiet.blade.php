@@ -124,11 +124,6 @@
         </tr>
         <?php $i=1; ?>
         @foreach($model_donvi as $dv)
-            <tr style="font-weight: bold; font-style: italic">
-                <td>{{$i++}}</td>
-                <td colspan="23">{{$dv->tendv}}</td>
-            </tr>
-
             <?php
                 $th = $tonghop->where('madv', $dv->madv)->first();
                 if(count($th)>0){
@@ -136,9 +131,12 @@
                 }else{
                     continue;
                 }
-
             ?>
             @if(count($chitiet)>0)
+                <tr style="font-weight: bold; font-style: italic">
+                    <td>{{$i++}}</td>
+                    <td colspan="23">{{$dv->tendv}}</td>
+                </tr>
                 @foreach($chitiet as $ct)
                     <tr>
                         <td>-</td>
