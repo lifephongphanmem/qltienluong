@@ -49,7 +49,7 @@ class baocaothongtu67Controller extends Controller
             $m_dv = dmdonvi::where('madv',session('admin')->madv)->first();
             $model_bienche = chitieubienche::where('nam','2018')->where('madv',session('admin')->madv)->get();
             //$luongcb = 1210000;
-            $luongcb = 1;
+            $luongcb = 0.935;
             //nếu đơn vị đã tạo bảng lương tháng 07/2017 =>xuất kết quả
             $model_tonghop_ct = tonghopluong_donvi_chitiet::join('tonghopluong_donvi', 'tonghopluong_donvi_chitiet.mathdv', '=', 'tonghopluong_donvi.mathdv')
                 ->where('tonghopluong_donvi.madvbc','like',$inputs['madv'].'%')
@@ -64,7 +64,7 @@ class baocaothongtu67Controller extends Controller
                     ->where('chitieubienche.nam','2018')->where('dmdonvi.madvbc','like',$inputs['madv'].'%')
                     ->where('dmdonvibaocao.level','T')->get();
                 //$luongcb = 1210000; tạm thời bỏ vì bang lương đã nhân lcb
-                $luongcb = 1;
+                $luongcb = 0.935;
                 //nếu đơn vị đã tạo bảng lương tháng 07/2017 =>xuất kết quả
                 $model_tonghop_ct = tonghopluong_donvi_chitiet::join('tonghopluong_donvi', 'tonghopluong_donvi_chitiet.mathdv', '=', 'tonghopluong_donvi.mathdv')
                     ->join('dmdonvibaocao','dmdonvibaocao.madvbc','=','tonghopluong_donvi.madvbc')
