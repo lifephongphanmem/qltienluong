@@ -1196,7 +1196,7 @@ class baocaothongtu67Controller extends Controller
 
             $a_IIIt = array('tongso'=>0,'chenhlech'=>0);
             $a_IVt = array('tongso'=>0,'chenhlech'=>0);
-            if(session('admin')->level=='H'){
+            if(session('admin')->level=='T'){
                 if($m_dv->capdonvi >= 3){
 
                     $ar_III[2]['tongso'] = $model_tonghop_ct->sum('pcdbqh') * $luongcb;
