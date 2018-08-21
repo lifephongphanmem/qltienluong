@@ -390,13 +390,8 @@ class baocaothongtu67Controller extends Controller
                     $ar_I[$i]['luong'] = $chitiet->sum('heso') * $luongcb;
                     $a_It['luong'] += $ar_I[$i]['luong'];
 
-                    $ar_I[$i]['ttbh_dv'] = $chitiet->sum('stbhxh_dv') + $chitiet->sum('stbhyt_dv')
-                        + $chitiet->sum('stkpcd_dv') + $chitiet->sum('stbhtn_dv');
-                    $a_It['ttbh_dv'] += $ar_I[$i]['ttbh_dv'];
-
-
-                    $ar_I[$i]['ttbh_dv'] = $chitiet->sum('stbhxh_dv') + $chitiet->sum('stbhyt_dv')
-                        + $chitiet->sum('stkpcd_dv') + $chitiet->sum('stbhtn_dv');
+                    $ar_I[$i]['ttbh_dv'] = $chitiet-(sum('stbhxh_dv') + $chitiet->sum('stbhyt_dv')
+                        + $chitiet->sum('stkpcd_dv') + $chitiet->sum('stbhtn_dv'))* $luongcb;
                     $a_It['ttbh_dv'] += $ar_I[$i]['ttbh_dv'];
 
                     $ar_I[$i]['pckv'] = $chitiet->sum('pckv') * $luongcb;
