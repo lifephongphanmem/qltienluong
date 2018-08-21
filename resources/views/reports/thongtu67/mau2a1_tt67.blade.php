@@ -48,7 +48,7 @@
     </tr>
     <tr>
         <td style="text-align: left;width: 60%">
-            <b>{{'ỦY BAN NHÂN DÂN TỈNH, THÀNH PHỐ: TỈNH LẠNG SƠN'}}</b>
+            <b>{{'Đơn vị: '.$m_dv->tendv}}</b>
         </td>
         <td style="text-align: center; font-style: italic">
 
