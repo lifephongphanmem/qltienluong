@@ -201,10 +201,10 @@ class xemdulieucapduoiController extends Controller
             //$donvi=dmdonvi::where('madv',session('admin')->madv)->get();
             $inputs = $request->all();
             $madv = session('admin')->madv;
-            $madvbc = session('admin')->madvbc;
+            //$madvbc = session('admin')->madvbc;
 
             $a_trangthai = array('ALL' => '--Chọn trạng thái dữ liệu--', 'CHOGUI' => 'Chưa gửi dữ liệu', 'DAGUI' => 'Đã gửi dữ liệu');
-            $a_phanloai = array('DONVI' => 'Dữ liệu tổng hợp của đơn vị', 'CAPDUOI' => 'Dữ liệu tổng hợp của các đơn vị cấp dưới');
+            //$a_phanloai = array('DONVI' => 'Dữ liệu tổng hợp của đơn vị', 'CAPDUOI' => 'Dữ liệu tổng hợp của các đơn vị cấp dưới');
 
             $model_donvi = dmdonvi::select('madv', 'tendv')
                 ->wherein('madv', function($query) use($madv){
@@ -219,18 +219,19 @@ class xemdulieucapduoiController extends Controller
                 ->where('trangthai', 'DAGUI')
                 ->get();
 
-            $model_nguon_khoi = tonghopluong_tinh::where('madv', $madv)->where('thang', $inputs['thang'])
+            $model_nguon_tinh = tonghopluong_tinh::where('madv', $madv)->where('thang', $inputs['thang'])
                 ->where('nam', $inputs['nam'])->first();
+            //kiểm tra xem đã tổng hợp thành dữ liệu huyện gửi lên tỉnh chưa?
+            if(count($model_nguon_tinh)>0 && $model_nguon_tinh->trangthai == 'DAGUI'){
+                $tralai = false;
+            }else{
+                $tralai = true;
+            }
 
             foreach ($model_donvi as $dv) {
-                //kiểm tra xem đã tổng hợp thành dữ liệu huyện gửi lên tỉnh chưa?
-                if(count($model_nguon_khoi)>0 && $model_nguon_khoi->trangthai == 'DAGUI'){
-                    $dv->tralai = false;
-                }else{
-                    $dv->tralai = true;
-                }
-
+                $dv->tralai = $tralai;
                 $nguon = $model_nguon->where('madv',$dv->madv)->first();
+
                 if(count($nguon)> 0 && $nguon->trangthai == 'DAGUI'){
                     $dv->mathdv = $nguon->mathdv;
                     $dv->trangthai = 'DAGUI';
@@ -238,7 +239,6 @@ class xemdulieucapduoiController extends Controller
                     $dv->trangthai = 'CHOGUI';
                     $dv->mathdv = null;
                 }
-
             }
             //dd($model_donvi->toarray());
             if (!isset($inputs['trangthai']) || $inputs['trangthai'] != 'ALL') {

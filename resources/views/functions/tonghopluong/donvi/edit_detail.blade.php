@@ -26,9 +26,6 @@
                     <div class="form-body">
                         <div class="row">
 
-
-
-
                             <div class="col-md-3">
                                 <div class="form-group">
                                     <label class="control-label">Hệ số lương </label>
