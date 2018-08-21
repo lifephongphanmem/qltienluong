@@ -639,9 +639,9 @@ class baocaothongtu67Controller extends Controller
             $inputs=$request->all();
             $m_dv = dmdonvi::where('madv',session('admin')->madv)->first();
             $m_cb =hosocanbo::join('dmdonvi', 'hosocanbo.madv', '=', 'dmdonvi.madv')
-                ->select('macanbo','linhvuchoatdong', 'heso', 'pck', 'pccv', 'pckv', 'pcth', 'pcdh',
-                    'pcld', 'pcudn', 'pctn', 'pctnn', 'pcdbn', 'pcvk', 'pckn', 'pccovu', 'pcdbqh',
-                    'pctnvk', 'pcbdhdcu', 'pcdang', 'pcthni')
+                ->select('macanbo','linhvuchoatdong', 'heso', 'hosocanbo'.'pck', 'hosocanbo'.'pccv', 'hosocanbo'.'pckv', 'hosocanbo'.'pcth', 'hosocanbo'.'pcdh',
+                    'hosocanbo'.'pcld', 'hosocanbo'.'pcudn', 'hosocanbo'.'pctn', 'hosocanbo'.'pctnn', 'hosocanbo'.'pcdbn', 'hosocanbo'.'pcvk', 'hosocanbo'.'pckn', 'hosocanbo'.'pccovu', 'hosocanbo'.'pcdbqh',
+                    'hosocanbo'.'pctnvk', 'hosocanbo'.'pcbdhdcu', 'hosocanbo'.'pcdang', 'hosocanbo'.'pcthni')
                 ->where('dmdonvi.madvbc','like',$inputs['madv'].'%')
                 ->where('heso','<=', 2.34)
                 ->get();
