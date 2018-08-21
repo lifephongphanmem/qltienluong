@@ -1780,6 +1780,8 @@ class baocaothongtu67Controller extends Controller
     {
         if (Session::has('admin')) {
             $inputs=$request->all();
+            $inputs['donvitinh'] = 2;
+            //dd($inputs);
             $m_dv = dmdonvi::where('madv', session('admin')->madv)->first();
             $m_thon = dmdiabandbkk::join('dmdonvi', 'dmdiabandbkk.madv', '=', 'dmdonvi.madv')
                 ->select('dmdiabandbkk.id', 'phanloai')
@@ -1857,6 +1859,7 @@ class baocaothongtu67Controller extends Controller
                 ->with('m_dv', $m_dv)
                 ->with('ar_I', $ar_I)
                 ->with('a_It', $a_It)
+                ->with('inputs', $inputs)
                 ->with('pageTitle', 'TỔNG HỢP KINH PHÍ TĂNG THÊM ĐỂ THỰC HIỆN CHẾ ĐỘ PHỤ CẤP ĐỐI VỚI CÁN BỘ KHÔNG CHUYÊN TRÁCH');
         } else
             return view('errors.notlogin');
@@ -2981,8 +2984,7 @@ class baocaothongtu67Controller extends Controller
             $m_dv = dmdonvi::where('madv',session('admin')->madv)->first();
             $model_donvi = dmdonvi::where('madvbc',$madvbc)->get();
 
-
-            $model_bienche = chitieubienche::where('nam','2017')->wherein('madv',function($qr)use($madvbc){
+            $model_bienche = chitieubienche::where('nam','2018')->wherein('madv',function($qr)use($madvbc){
                 $qr->select('madv')->from('dmdonvi')->where('madvbc',$madvbc)->distinct()->get();
             })->get();
 
@@ -2992,7 +2994,7 @@ class baocaothongtu67Controller extends Controller
             //dd($model_bienche);
             $model_tonghop = tonghopluong_donvi::where('thang','08')->where('nam','2018')
                 ->where('madvbc',$madvbc)->get();
-            $luongcb = 1300000;
+            $luongcb = 1390000;
 
             //nếu đơn vị đã tạo bảng lương tháng 07/2017 =>xuất kết quả
 
@@ -3004,7 +3006,7 @@ class baocaothongtu67Controller extends Controller
             foreach($model_tonghop_ct as $ct){
                 $tonghop = $model_tonghop->where('madvth',$ct->madvth)->first();
                 $ct->maphanloai = $model_donvi->where('madv',$tonghop->madv)->first()->maphanloai;
-
+                /*
                 $ct->heso = ($ct->heso / $ct->luongcoban)* $luongcb;
                 $ct->pckv = ($ct->pckv / $ct->luongcoban)* $luongcb;
                 $ct->pccv = ($ct->pccv / $ct->luongcoban)* $luongcb;
@@ -3018,6 +3020,7 @@ class baocaothongtu67Controller extends Controller
                 $ct->pck = ($ct->pck / $ct->luongcoban)* $luongcb;
                 $ct->pcdbqh = ($ct->pcdbqh / $ct->luongcoban)* $luongcb;
                 $ct->pcvk = ($ct->pcvk / $ct->luongcoban)* $luongcb;
+                */
             }
             $model_bangluong_ct = $model_tonghop_ct->where('macongtac','BIENCHE');
 
