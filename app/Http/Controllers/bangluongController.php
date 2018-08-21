@@ -1669,7 +1669,7 @@ class bangluongController extends Controller
                     $col++;
                 }
             }
-            //dd($thongtin);
+            //dd($model_st);
             return view('reports.bangluong.donvi.mau07')
                 ->with('model', $model->sortBy('stt'))
                 ->with('model_st', $model_st)
@@ -2371,16 +2371,17 @@ class bangluongController extends Controller
         $nhomct = array_column(dmphanloaict::all('macongtac', 'mact')->toArray(), 'macongtac', 'mact');
 
         //xử lý ẩn hiện cột phụ cấp => biết tổng số cột hiện => colspan trên báo cáo
-        $a_phucapbc = getColPhuCap_BaoCao();
+        //$a_phucapbc = getColPhuCap_BaoCao();
+        //$a_goc = array('heso','vuotkhung','hesott');
+        $a_goc = array();
+        $model_pc = dmphucap_donvi::where('madv', $m_bl->madv)->where('phanloai', '<', '3')->wherenotin('mapc', $a_goc)->get();
         $a_phucap = array();
         $col = 0;
-        foreach ($a_phucapbc as $key => $val) {
-            if ($m_dv->$key < 3) {
-                $a_phucap[$key] = $val;
-                $col++;
-            }
+        foreach ($model_pc as $ct) {
+            $a_phucap[$ct->mapc] = $ct->report;
+            $col++;
         }
-        $a_col = getColTongHop();
+        //$a_col = getColTongHop();
         $luongcb = $m_bl->luongcoban;
 
         foreach ($model as $hs) {
@@ -2389,19 +2390,22 @@ class bangluongController extends Controller
             $hs->macongtac = isset($nhomct[$hs->mact]) ? $nhomct[$hs->mact] : '';
             if ($phanloai == 1) {
                 $ths = 0;
-                foreach ($a_col as $col) {
-                    $pl = getDbl($m_dv->$col);
+                foreach ($model_pc as $col) {
+                    $mapc = $col->mapc;
+                    //$pl = getDbl($m_dv->$col);
+                    $pl = getDbl($col->phanloai);
+
                     switch ($pl) {
                         case 1: {//số tiền
                             //giữ nguyên ko pai làm gì
                             break;
                         }
                         default: {//trường hợp còn lại (ẩn,...)
-                            $hs->$col = $hs->$col * $luongcb;
+                            $hs->$mapc = $hs->$mapc * $luongcb;
                             break;
                         }
                     }
-                    $ths += $hs->$col;
+                    $ths += $hs->$mapc;
                     $hs->tonghs = $ths;
                 }
             }

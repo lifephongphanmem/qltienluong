@@ -103,9 +103,11 @@ class tonghopluong_donviController extends Controller
             $model_congtac = dmphanloaict::all();
             $model_hoso = hosocanbo::where('madv', $madv)->get();
             //$model_diaban = dmdiabandbkk::where('madv',$madv)->get();
+            /*
             $model_diaban_ct = dmdiabandbkk_chitiet::wherein('madiaban', function ($query) use ($madv) {
                 $query->select('madiaban')->from('dmdiabandbkk')->where('madv', $madv)->where('phanloai', '<>', '');
             })->get();
+            */
             //Lấy dữ liệu từ các bảng liên quan thêm vào bảng lương chi tiết để tính toán
             foreach ($model_bangluong_ct as $ct) {
                 $hoso = $model_hoso->where('macanbo',$ct->macanbo)->first();
@@ -117,7 +119,7 @@ class tonghopluong_donviController extends Controller
 
                 $congtac = $model_congtac->where('mact', $ct->mact)->first();
                 $ct->macongtac = $congtac->macongtac;
-
+                /*
                 $diaban_ct = $model_diaban_ct->where('macanbo', $ct->macanbo)->first();
                 if (count($diaban_ct) > 0) {
                     //$diaban = $model_diaban->where('madiaban',$diaban_ct->madiaban)->first();
@@ -125,6 +127,7 @@ class tonghopluong_donviController extends Controller
                 } else {
                     $ct->madiaban = null;
                 }
+                */
             }
             //
             //Lấy dữ liệu để lập
@@ -136,7 +139,13 @@ class tonghopluong_donviController extends Controller
             $model_data = a_unique($model_data);
             //
             //Tính toán dữ liệu
-            $a_col = getColTongHop();
+            $model_pc = dmphucap_donvi::where('madv', $madv)->where('phanloai', '<', '3')->get();
+            $a_phucap = array();
+
+            foreach ($model_pc as $ct) {
+                $a_phucap[$ct->mapc] = $ct->report;
+
+            }
 
             for ($i = 0; $i < count($model_data); $i++) {
                 $luongct = $model_bangluong_ct->where('manguonkp', $model_data[$i]['manguonkp'])
@@ -149,9 +158,14 @@ class tonghopluong_donviController extends Controller
 
                 //hệ số phụ cấp cho cán bộ đã nghỉ hưu
                 $model_data[$i]['hesopc'] = $luongct->sum('hesopc') * $model_data[$i]['luongcoban'];
-                foreach ($a_col as $col) {
-                    $model_data[$i][$col] = $luongct->sum($col) * $model_data[$i]['luongcoban'];
-                    $tonghs += chkDbl($model_data[$i][$col]);
+                foreach ($model_pc as $ct) {
+                    if($ct->phanloai == 1){
+                        $model_data[$i][$ct->mapc] = $luongct->sum($ct->mapc);
+                    }else{
+                        $model_data[$i][$ct->mapc] = $luongct->sum($ct->mapc) * $model_data[$i]['luongcoban'];
+                    }
+                    $a_phucap[$ct->mapc] = $ct->report;
+                    $tonghs += chkDbl($model_data[$i][$ct->mapc]);
                 }
 
                 $model_data[$i]['stbhxh_dv'] = $luongct->sum('stbhxh_dv');
@@ -161,7 +175,7 @@ class tonghopluong_donviController extends Controller
 
                 $model_data[$i]['tonghs'] = $tonghs;
             }
-            //
+            /*
 
             //Tính toán theo địa bàn
             $model_diaban = $model_bangluong_ct->map(function ($data) {
@@ -192,7 +206,7 @@ class tonghopluong_donviController extends Controller
                 $model_diaban[$i]['tonghs'] = $tonghs;
             }
             //
-
+                */
             //Thêm báo cáo tổng hợp
             $inputs['madv'] = session('admin')->madv;
             $inputs['mathdv'] = $mathdv;
@@ -203,13 +217,14 @@ class tonghopluong_donviController extends Controller
             $inputs['ngaylap'] = Carbon::now()->toDateTimeString();
             $inputs['macqcq'] = session('admin')->macqcq;
             $inputs['madvbc'] = session('admin')->madvbc;
-
+            /*
             $model_db = array();
             for ($i = 0; $i < count($model_diaban); $i++) {
                 if ($model_diaban[$i]['madiaban'] != null) {
                     $model_db[] = $model_diaban[$i];
                 }
             }
+            */
             tonghopluong_donvi_chitiet::insert($model_data);
             //tonghopluong_donvi_diaban::insert($model_db);
             tonghopluong_donvi::create($inputs);
