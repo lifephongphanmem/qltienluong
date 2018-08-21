@@ -3003,14 +3003,13 @@ class baocaothongtu67Controller extends Controller
 
             //nếu đơn vị đã tạo bảng lương tháng 07/2017 =>xuất kết quả
 
-            $model_tonghop_ct = tonghopluong_donvi_chitiet::wherein('mathdv',function($qr) use($madvbc){
+            $model_tonghop_ct = tonghopluong_donvi_chitiet::wherein('mathdv',function($qr){
                 $qr->select('mathdv')->from('tonghopluong_donvi')->where('thang','08')->where('nam','2018')->where('trangthai','DAGUI')
-                    ->where('macqcq',session('admin')->madv)->distinct()->get();
+                    ->where('macqcq',session('admin')->madv)->get();
             })->get();
 
-            //dd($model_tonghop_ct);
             foreach($model_tonghop_ct as $ct){
-                $tonghop = $model_tonghop->where('madvth',$ct->madvth)->first();
+                $tonghop = $model_tonghop->where('mathdv',$ct->mathdv)->first();
                 $ct->maphanloai = $model_donvi->where('madv',$tonghop->madv)->first()->maphanloai;
                 $ct->heso = $ct->heso * $luongcb;
                 $ct->pckv = $ct->pckv * $luongcb;
@@ -3045,7 +3044,7 @@ class baocaothongtu67Controller extends Controller
 
             $model_bangluong_ct = $model_tonghop_ct->where('macongtac','BIENCHE')->where('maphanloai','<>','KVXP');
 
-            //dd($model_tonghop_ct);
+            //dd($model_bangluong_ct);
             $ar_I = array();
             $ar_I[0]=array('val'=>'GD;DT','tt'=>'1','noidung'=>'Sự nghiệp giáo dục - đào tạo');
             $ar_I[1]=array('val'=>'GD','tt'=>'-','noidung'=>'Giáo dục');
@@ -3331,13 +3330,13 @@ class baocaothongtu67Controller extends Controller
             $luongcb = 1;
             //nếu đơn vị đã tạo bảng lương tháng 07/2017 =>xuất kết quả
 
-            $model_tonghop_ct = tonghopluong_donvi_chitiet::wherein('mathdv',function($qr) use($madvbc){
+            $model_tonghop_ct = tonghopluong_donvi_chitiet::wherein('mathdv',function($qr){
                 $qr->select('mathdv')->from('tonghopluong_donvi')->where('thang','08')->where('nam','2018')->where('trangthai','DAGUI')
                     ->where('macqcq',session('admin')->madv)->get();
             })->get();
 
             foreach($model_tonghop_ct as $ct){
-                $tonghop = $model_tonghop->where('madvth',$ct->madvth)->first();
+                $tonghop = $model_tonghop->where('mathdv',$ct->mathdv)->first();
                 $ct->maphanloai = $model_donvi->where('madv',$tonghop->madv)->first()->maphanloai;
                 $ct->ttbh_dv = ($ct->stbhxh_dv+$ct->stbhyt_dv+$ct->stkpcd_dv+$ct->stbhtn_dv);
             }
@@ -3554,24 +3553,24 @@ class baocaothongtu67Controller extends Controller
             $a_IVt = array('tongso'=>0,'chenhlech'=>0);
             if(session('admin')->level=='H'){
                 if($m_dv->capdonvi >= 3){
-                    if(isset($model_bangluong_ct)){
-                        $ar_III[2]['tongso'] = $model_bangluong_ct->sum('pcdbqh') * $luongcb;
-                        $ar_III[2]['chenhlech'] = $model_bangluong_ct->sum('pcdbqh') * 90000 / 1390000;
-                        $ar_IV[2]['tongso'] = $model_bangluong_ct->sum('pcvk') * $luongcb;
-                        $ar_IV[2]['chenhlech'] = $model_bangluong_ct->sum('pcvk') * 90000;
-                    }
+
+                        $ar_III[2]['tongso'] = $model_tonghop_ct->sum('pcdbqh') * $luongcb;
+                        $ar_III[2]['chenhlech'] = $model_tonghop_ct->sum('pcdbqh') * 90000 / 1390000;
+                        $ar_IV[2]['tongso'] = $model_tonghop_ct->sum('pcvk') * $luongcb;
+                        $ar_IV[2]['chenhlech'] = $model_tonghop_ct->sum('pcvk') * 90000;
+
 
                     $a_IIIt['tongso'] += $ar_III[2]['tongso'];
                     $a_IIIt['chenhlech'] += $ar_III[2]['chenhlech'];
                     $a_IVt['tongso'] += $ar_IV[2]['tongso'];
                     $a_IVt['chenhlech'] += $ar_IV[2]['chenhlech'];
                 }else{
-                    if(isset($model_bangluong_ct)){
-                        $ar_III[1]['tongso'] = $model_bangluong_ct->sum('pcdbqh') * $luongcb;
-                        $ar_III[1]['chenhlech'] = $model_bangluong_ct->sum('pcdbqh') * 90000/ 1390000;
-                        $ar_IV[1]['tongso'] = $model_bangluong_ct->sum('pcvk') * $luongcb;
-                        $ar_IV[1]['chenhlech'] = $model_bangluong_ct->sum('pcvk') * 90000/ 1390000;
-                    }
+
+                        $ar_III[1]['tongso'] = $model_tonghop_ct->sum('pcdbqh') * $luongcb;
+                        $ar_III[1]['chenhlech'] = $model_tonghop_ct->sum('pcdbqh') * 90000/ 1390000;
+                        $ar_IV[1]['tongso'] = $model_tonghop_ct->sum('pcvk') * $luongcb;
+                        $ar_IV[1]['chenhlech'] = $model_tonghop_ct->sum('pcvk') * 90000/ 1390000;
+
 
                     $a_IIIt['tongso'] += $ar_III[1]['tongso'];
                     $a_IIIt['chenhlech'] += $ar_III[1]['chenhlech'];
