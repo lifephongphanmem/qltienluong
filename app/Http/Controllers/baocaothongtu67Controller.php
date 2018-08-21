@@ -51,7 +51,8 @@ class baocaothongtu67Controller extends Controller
             //$luongcb = 1210000;
             $luongcb = 0.935;
             //nếu đơn vị đã tạo bảng lương tháng 07/2017 =>xuất kết quả
-            $model_tonghop_ct = tonghopluong_donvi_chitiet::where('tonghopluong_donvi_chitiet.mathdv','like',$inputs['madv'].'%')
+            $model_tonghop_ct = tonghopluong_donvi_chitiet::join('tonghopluong_donvi', 'tonghopluong_donvi_chitiet.mathdv', '=', 'tonghopluong_donvi.mathdv')
+                ->where('tonghopluong_donvi.mathdv','like',$inputs['madv'].'%')
                 ->wherein('tonghopluong_donvi_chitiet.mathdv',function($qr){
                 $qr->select('mathdv')->from('tonghopluong_donvi')->where('thang','08')->where('nam','2018')->where('trangthai','DAGUI')
                     ->distinct()->get();
