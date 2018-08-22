@@ -121,7 +121,7 @@
             <td style="text-align: left">{{$ct['tencongtac']}}</td>
             <td>{{dinhdangso($ct['heso'])}}</td>
             <td>{{dinhdangso($ct['hesopc'])}}</td>
-            <td>{{dinhdangso($ct['tonghs'] - $ct['heso'] - $ct['hesopc'])}}</td>
+            <td>{{dinhdangso($ct['tonghs'])}}</td>
 
             <td>{{dinhdangso($ct['vuotkhung'])}}</td>
             <td>{{dinhdangso($ct['pckv'])}}</td>
@@ -149,7 +149,7 @@
         <td colspan="3">Tổng cộng</td>
         <td>{{dinhdangso(array_sum(array_column($model,'heso')))}}</td>
         <td>{{dinhdangso(array_sum(array_column($model,'hesopc')))}}</td>
-        <td>{{dinhdangso(array_sum(array_column($model,'tonghs')) - array_sum( array_column($model,'heso')) - array_sum(array_column($model,'hesopc')))}}</td>
+        <td>{{dinhdangso(array_sum(array_column($model,'tonghs')))}}</td>
         <td>{{dinhdangso(array_sum(array_column($model,'vuotkhung')))}}</td>
         <td>{{dinhdangso(array_sum(array_column($model,'pckv')))}}</td>
         <td>{{dinhdangso(array_sum(array_column($model,'pccv')))}}</td>

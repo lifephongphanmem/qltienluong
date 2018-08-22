@@ -260,14 +260,103 @@ class xemdulieucapduoiController extends Controller
 
     public function index_tinh(Request $request){
         if (Session::has('admin')) {
-            //$donvi=dmdonvi::where('madv',session('admin')->madv)->get();
             $inputs=$request->all();
-            //$madv = session('admin')->madv;
-            $madvbc = $inputs['madiaban'];
-            //$thang = $inputs['thang'];
-            //$nam = $inputs['nam'];
 
-            $madvqlkv = dmdonvibaocao::where('madvbc',$madvbc)->first()->madvcq;
+                $madvbc = $inputs['madiaban'];
+                $model_dvbc = dmdonvibaocao::where('madvbc',$madvbc)->first();
+                $madvqlkv = $model_dvbc->madvcq;
+
+                $model_donvi = dmdonvi::select('madv', 'tendv')
+                    ->wherein('madv', function($query) use($madvqlkv){
+                        $query->select('madv')->from('dmdonvi')->where('macqcq',$madvqlkv)->where('madv','<>',$madvqlkv)->get();
+                    })->get();
+
+            $a_trangthai=array('ALL'=>'--Chọn trạng thái dữ liệu--','CHUAGUI'=>'Chưa gửi dữ liệu','DAGUI'=>'Đã gửi dữ liệu');
+            $a_phanloai=array('DONVI'=>'Dữ liệu tổng hợp của đơn vị','CAPDUOI'=>'Dữ liệu tổng hợp của các đơn vị cấp dưới');
+            //$list_donvi= dmdonvi::select('madv', 'tendv')->where('madvbc', $madvbc)->get();
+            $model_dvbc = dmdonvibaocao::all();
+
+
+
+            $model_dulieu = tonghopluong_huyen::where('thang', $inputs['thang'])
+                ->where('nam', $inputs['nam'])
+                ->where('trangthai','DAGUI')
+                ->where('madvbc',$madvbc)
+                ->get();
+
+            $model_tonghop = tonghopluong_tinh::where('thang', $inputs['thang'])
+                ->where('nam', $inputs['nam'])
+                ->where('trangthai','DAGUI')
+                ->where('madvbc',$madvbc)
+                ->get();
+
+            //dd($model_dulieu);
+
+            foreach($model_donvi as $dv){
+                $dv->trangthai = 'CHUAGUI';
+                $dulieu = $model_dulieu->where('madv', $dv->madv)
+                    ->first();
+
+                $tonghop = $model_tonghop->where('madv', $dv->madv)->first();
+                $dv->tralai = true;
+                if(isset($tonghop)){
+                    $model_bangluong_ct = tonghopluong_donvi_chitiet::where('matht', $tonghop->madvth)->first();
+                    $dv->tralai =isset($model_bangluong_ct->mathh)?false:true;
+                }
+
+                if(isset($dulieu)){
+                    $dv->phanloai = $dulieu->phanloai;
+                    $dv->trangthai = $dulieu->trangthai;
+                    $dv->mathdv = $dulieu->mathdv;
+                }else{
+                    $dv->mathdv = NULL;
+                }
+                $dv->tenphanloai = isset($a_phanloai[$dv->phanloai]) ? $a_phanloai[$dv->phanloai]: '';
+
+            }
+            /*
+            $model_donvi = $model_donvi->sortby('madv');
+            if(isset($inputs['trangthai'])){
+                if($inputs['trangthai']=='CHONHAN'){
+                    $model_donvi = $model_donvi->where('mathdv','<>',null);
+                }
+                if($inputs['trangthai']=='CHOGUI'){
+                    $model_donvi = $model_donvi->where('mathdv',null);
+                }
+            }
+            */
+            //$model_donvi = $model_donvi->sortby('madv');
+            $soluong = $model_dulieu->count('madv').'/'.$model_donvi->count('madv');
+            if (!isset($inputs['trangthai']) || $inputs['trangthai'] != 'ALL') {
+                $model_donvi = $model_donvi->where('trangthai',$inputs['trangthai']);
+            }
+
+            return view('functions.viewdata.index_tinh')
+                ->with('model', $model_donvi)
+                ->with('thang', $inputs['thang'])
+                ->with('nam', $inputs['nam'])
+                ->with('madvbc',$madvbc)
+                ->with('trangthai', $inputs['trangthai'])
+                ->with('a_dvbc',array_column( $model_dvbc->toArray(),'tendvbc','madvbc'))
+                ->with('a_trangthai', $a_trangthai)
+                ->with('soluong',$soluong)
+                ->with('furl','/chuc_nang/tong_hop_luong/')
+                ->with('pageTitle','Danh sách đơn vị tổng hợp lương');
+
+        } else
+            return view('errors.notlogin');
+    }
+
+    public function index_tinh_220818(Request $request){
+        if (Session::has('admin')) {
+            $inputs=$request->all();
+
+            $madvbc = $inputs['madiaban'];
+            $model_dvbc = dmdonvibaocao::where('madvbc',$madvbc)->first();
+
+            $madvqlkv = $model_dvbc->madvcq;
+
+
 
             $a_trangthai=array('ALL'=>'--Chọn trạng thái dữ liệu--','CHOGUI'=>'Chưa gửi dữ liệu','CHONHAN'=>'Đã gửi dữ liệu');
             $a_phanloai=array('DONVI'=>'Dữ liệu tổng hợp của đơn vị','CAPDUOI'=>'Dữ liệu tổng hợp của các đơn vị cấp dưới');
@@ -323,7 +412,7 @@ class xemdulieucapduoiController extends Controller
                 $dv->tenphanloai = isset($a_phanloai[$dv->phanloai]) ? $a_phanloai[$dv->phanloai]: '';
 
             }
-
+            /*
             $model_donvi = $model_donvi->sortby('madv');
             if(isset($inputs['trangthai'])){
                 if($inputs['trangthai']=='CHONHAN'){
@@ -332,6 +421,11 @@ class xemdulieucapduoiController extends Controller
                 if($inputs['trangthai']=='CHOGUI'){
                     $model_donvi = $model_donvi->where('mathdv',null);
                 }
+            }
+            */
+            //$model_donvi = $model_donvi->sortby('madv');
+            if (!isset($inputs['trangthai']) || $inputs['trangthai'] != 'ALL') {
+                $model_donvi = $model_donvi->where('trangthai',$inputs['trangthai']);
             }
 
             return view('functions.viewdata.index_tinh')
@@ -366,6 +460,7 @@ class xemdulieucapduoiController extends Controller
                     ->where('trangthai','DAGUI')
                     ->where('madvbc',$madvbc)->distinct();
             })->get();
+
             //
             //Tính toán dữ liệu
             $a_col = getColTongHop();
@@ -380,17 +475,20 @@ class xemdulieucapduoiController extends Controller
             });
 
             $model_data = a_unique($model_data);
+            //dd($model_tonghop_ct->sum('pcth'));
             for($i=0;$i<count($model_data);$i++){
-                $luongct = $model_tonghop_ct->where('manguonkp',$model_data[$i]['manguonkp'])
-                    ->where('macongtac',$model_data[$i]['macongtac']);
+                $luongct = $model_tonghop_ct->where('manguonkp',$model_data[$i]['manguonkp'])->where('macongtac',$model_data[$i]['macongtac']);
                 $model_data[$i]['tennguonkp'] = isset($model_nguonkp[$model_data[$i]['manguonkp']])? $model_nguonkp[$model_data[$i]['manguonkp']]:'';
                 $model_data[$i]['tencongtac'] = isset($model_phanloaict[ $model_data[$i]['macongtac']])? $model_phanloaict[ $model_data[$i]['macongtac']]:'';
 
                 $tonghs = 0;
                 foreach($a_col as $col){
                     $model_data[$i][$col] = $luongct->sum($col);
-                    $tonghs += chkDbl($model_data[$i][$col]);
+                    if($col != 'heso' && $col != 'hesopc'){
+                        $tonghs += chkDbl($model_data[$i][$col]);
+                    }
                 }
+
 
                 $model_data[$i]['stbhxh_dv'] = $luongct->sum('stbhxh_dv');
                 $model_data[$i]['stbhyt_dv'] = $luongct->sum('stbhyt_dv');

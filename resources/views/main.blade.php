@@ -321,9 +321,9 @@
                             @endif
 
                             @if(session('admin')->level == 'T')
-                                <li>
+                                <!--li>
                                     <a href="{{url('chuc_nang/tong_hop_luong/tinh/index?nam='.date('Y'))}}"><i class="fa fa-caret-right"></i>Tổng hợp chi trả lương</a>
-                                </li>
+                                </li-->
 
                                 <li>
                                     <a href="{{url('chuc_nang/xem_du_lieu/tinh?thang='.date('m').'&nam='.date('Y').'&trangthai=ALL&madiaban='.session('admin')->madvbc)}}"><i class="fa fa-caret-right"></i>Xem số liệu tại đơn vị</a>
