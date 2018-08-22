@@ -153,25 +153,5 @@
         function baocao(url){
             $('#thoaibc').attr('action',url);
         }
-
-        $(function(){
-            $('#thoaibc :submit').click(function() {
-                var valid=true;
-                var message='';
-
-
-
-                if (valid == false){
-                    alert(message);
-                    $("form").submit(function (e) {
-                        e.preventDefault();
-                    });
-                }
-                else{
-                    $("form").unbind('submit').submit();
-                    //$('#chitiet-modal').modal('hiden');
-                }
-            });
-        });
     </script>
 @stop
