@@ -37,7 +37,7 @@
             <b>UỶ BAN NHÂN DÂN TỈNH, THÀNH PHỐ</b><br>
         </td>
         <td style="text-align: right">
-            <b>Biểu số 2G</b><br>
+            <b>Biểu số 2g</b><br>
         </td>
     </tr>
     <tr>
