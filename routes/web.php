@@ -639,7 +639,7 @@ Route::group(['prefix'=>'bao_cao'],function(){
         });
 
         Route::group(['prefix'=>'khoi'],function(){
-            Route::post('chitraluong_ct','baocaobangluongController@chitraluong_th_huyen');
+            Route::post('chitraluong_ct','baocaobangluongController@chitraluong_ct_huyen');
             //Route::post('chitraluong_ct','baocaobangluongController@chitraluong_ct_khoi');
             //Route::post('chitraluong_th','baocaobangluongController@chitraluong_th_khoi');
             Route::post('chitraluong_th','baocaobangluongController@chitraluong_th_huyen');
