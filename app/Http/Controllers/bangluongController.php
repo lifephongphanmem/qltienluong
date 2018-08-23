@@ -239,6 +239,7 @@ class bangluongController extends Controller
                 $ths = 0;
 
                 foreach ($model_phucap as $ct) {
+
                     $mapc = $ct->mapc;
                     $ct->heso_goc = $cb->$mapc;
                     $heso = 0;
@@ -332,6 +333,7 @@ class bangluongController extends Controller
                 $cb->stkpcd_dv = $model_phucap->sum('stkpcd_dv');
                 $cb->stbhtn_dv = $model_phucap->sum('stbhtn_dv');
                 $cb->ttbh_dv = $cb->stbhxh_dv + $cb->stbhyt_dv + $cb->stkpcd_dv + $cb->stbhtn_dv;
+                
                 //lưu vào db
                 bangluong_ct::create($cb->toarray());
             }
