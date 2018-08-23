@@ -47,7 +47,7 @@
 
         </td>
         <td  style="text-align: center;">
-            <b>Biểu số 4b</b>
+            <b>Biểu số 4a</b>
         </td>
     </tr>
     <tr>
