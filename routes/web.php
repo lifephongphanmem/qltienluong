@@ -415,7 +415,8 @@ Route::group(['prefix'=>'chuc_nang'],function(){
             //Route::get('tonghop','tonghopluong_khoiController@tonghop');
             Route::get('tonghop_diaban','tonghopluong_khoiController@tonghop_diaban');
 
-            Route::post('tonghop_chuadaydu','tonghopluong_khoiController@tonghop_chuadaydu');
+            Route::post('tonghop_chuadaydu','tonghopluong_huyenController@tonghop_chuadaydu');
+            //Route::post('tonghop_chuadaydu','tonghopluong_khoiController@tonghop_chuadaydu');
             Route::get('detail/ma_so={mathdv}','tonghopluong_khoiController@detail');
             Route::post('senddata','tonghopluong_khoiController@senddata'); //gửi dữ liệu
             Route::post('tralai','tonghopluong_khoiController@tralai'); //trả lại dữ liệu
