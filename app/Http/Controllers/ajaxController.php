@@ -232,6 +232,7 @@ class ajaxController extends Controller
 
         $inputs = $request->all();
         $model=dmphucap::where('mapc', $inputs['mapc'])->first();
+        //$model=dmphucap::where('mapc', $inputs['mapc'])->first();
         $model->status = 'success';
         die($model);
     }

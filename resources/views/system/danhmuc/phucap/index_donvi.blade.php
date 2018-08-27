@@ -59,10 +59,8 @@
                                     <td>{{$value->tenphanloai}}</td>
                                     <td>{{$value->tencongthuc}}</td>
                                     <td>
-                                        @if(!in_array($value->mapc,$a_lock))
-                                            <a href="{{$furl.'edit?maso='.$value->mapc}}" class="btn btn-default btn-xs">
-                                                <i class="fa fa-edit"></i>&nbsp; Sửa</a>
-                                        @endif
+                                        <a href="{{$furl.'edit?maso='.$value->mapc}}" class="btn btn-default btn-xs">
+                                            <i class="fa fa-edit"></i>&nbsp; Sửa</a>
                                     </td>
                                 </tr>
                             @endforeach

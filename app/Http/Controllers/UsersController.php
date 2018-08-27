@@ -2,18 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\dmbaomat;
 use App\dmdonvi;
 use App\dmdonvibaocao;
 use App\dmphanloaicongtac;
 use App\dmphanloaicongtac_baohiem;
 use App\dmphucap;
 use App\dmphucap_donvi;
-use App\DnDvLt;
-use App\DnDvLtReg;
-use App\DonViDvVt;
-use App\DonViDvVtReg;
-use App\Register;
 use App\Users;
 use Illuminate\Foundation\Auth\User;
 use Illuminate\Http\Request;

@@ -108,7 +108,10 @@ class dmphucapController extends Controller
     function index_donvi()
     {
         if (Session::has('admin')) {
-            $model = dmphucap_donvi::where('madv', session('admin')->madv)->get();
+            $a_lock = array('heso', 'vuotkhung', 'hesott');
+            $model = dmphucap_donvi::where('madv', session('admin')->madv)->wherenotin('mapc',$a_lock)->get();
+            /*
+            //dd($model);
             $m_donvi = dmdonvi::where('madv', session('admin')->madv)->first();
             if (count($model) == 0) {//đơn vị chưa tạo phụ cấp
                 $model = dmphucap::select('mapc', 'tenpc', 'baohiem', 'form', 'report', 'phanloai', 'congthuc', DB::raw(session('admin')->madv . ' as madv'))->get();
@@ -122,6 +125,7 @@ class dmphucapController extends Controller
                 dmphucap_donvi::insert($model->toarray());
             }
             $model = dmphucap_donvi::where('madv', session('admin')->madv)->get();
+            */
             $a_pl = getPhanLoaiPhuCap();
             $a_ct = getCongThucTinhPC();
             foreach ($model as $ct) {
@@ -134,7 +138,7 @@ class dmphucapController extends Controller
             }
             return view('system.danhmuc.phucap.index_donvi')
                 ->with('model', $model)
-                ->with('a_lock', array('heso', 'vuotkhung', 'hesott'))
+                //->with('a_lock', )
                 ->with('furl', '/danh_muc/phu_cap/don_vi/')
                 ->with('pageTitle', 'Thông tin phân loại phụ cấp');
         } else
