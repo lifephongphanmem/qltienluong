@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Session;
 
 class dmchucvucqController extends Controller
 {
+
     public function index($maphanloai){
         if (Session::has('admin')) {
             //dd(session('admin'));

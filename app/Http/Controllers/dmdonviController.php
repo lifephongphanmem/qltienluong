@@ -104,15 +104,22 @@ class dmdonviController extends Controller
             return view('errors.notlogin');
     }
 
-    function update_local(Request $request, $madv){
+    function update_local(Request $request, $madv)
+    {
         if (Session::has('admin')) {
 
-            if(session('admin')->level=='SA'|| session('admin')->madv == $madv){
-                $inputs=$request->all();
-                $model=dmdonvi::where('madv',$madv)->first();
+            if (session('admin')->level == 'SA' || session('admin')->madv == $madv) {
+                $inputs = $request->all();
+                $model = dmdonvi::where('madv', $madv)->first();
                 $model->update($inputs);
+
+                session('admin')->maphanloai = $inputs['maphanloai'];
+                session('admin')->macqcq = $inputs['macqcq'];
+
                 return redirect('/he_thong/don_vi/don_vi');
-            }else{return view('errors.noperm');}
+            } else {
+                return view('errors.noperm');
+            }
 
         } else
             return view('errors.notlogin');
