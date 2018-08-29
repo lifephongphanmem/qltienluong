@@ -60,6 +60,11 @@ class dmphucapController extends Controller
     function update(Request $request)
     {
         if (Session::has('admin')) {
+            //kiểm tra lại quyền của User (đi tập huấn một số đơn vị ko hiểu sao lại cập nhật luôn vào danh mục
+            if(session('admin')->level !='SA' && session('admin')->level !='SSA'){
+                return view('errors.noperm');
+            }
+
             $inputs = $request->all();
             $inputs['congthuc'] = getDbl($inputs['phanloai']) == 2 ? $inputs['congthuc'] : '';
             dmphucap::where('mapc',$inputs['mapc'])->first()->update($inputs);
@@ -145,11 +150,17 @@ class dmphucapController extends Controller
             return view('errors.notlogin');
     }
 
-    function edit_donvi(Request $request){
+    function edit_donvi(Request $request)
+    {
         if (Session::has('admin')) {
-            $inputs = $request->all();
-            $model = dmphucap_donvi::where('mapc',$inputs['maso'])->where('madv', session('admin')->madv)->first();
+            //kiểm tra lại quyền của User (đi tập huấn một số đơn vị ko hiểu sao lại cập nhật luôn vào danh mục
+            if(session('admin')->level =='SA' || session('admin')->level == 'SSA'){
+                Session::flush();
+                return view('errors.notlogin');
+            }
 
+            $inputs = $request->all();
+            $model = dmphucap_donvi::where('mapc', $inputs['maso'])->where('madv', session('admin')->madv)->first();
             return view('system.danhmuc.phucap.edit_donvi')
                 ->with('model', $model)
                 ->with('furl', '/danh_muc/phu_cap/don_vi/')
@@ -161,6 +172,10 @@ class dmphucapController extends Controller
     function update_donvi(Request $request)
     {
         if (Session::has('admin')) {
+            if(session('admin')->level =='SA' || session('admin')->level == 'SSA'){
+                Session::flush();
+                return view('errors.notlogin');
+            }
             $inputs = $request->all();
             $inputs['congthuc'] = getDbl($inputs['phanloai']) == 2 ? $inputs['congthuc'] : '';
             dmphucap_donvi::where('mapc', $inputs['mapc'])->where('madv', session('admin')->madv)->first()->update($inputs);

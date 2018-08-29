@@ -99,11 +99,8 @@ class hosocanboController extends Controller
                 }
             }
             $macanbo = session('admin')->madv . '_' . getdate()[0];
-            //$m_pc=dmphucap::all('mapc','tenpc','hesopc')->toArray();
 
-            $max_stt = getDbl((hosocanbo::where('madv', session('admin')->madv)->max('stt'))) + 1;
-
-            //lấy phụ cấp ở danh mục phụ cấp đơn vị mapc => tenform
+            $max_stt = getDbl((hosocanbo::where('madv', session('admin')->madv)->get()->max('stt'))) + 1;
             $model_pc = dmphucap_donvi::where('madv', session('admin')->madv)->get();
 
             return view('manage.hosocanbo.create')

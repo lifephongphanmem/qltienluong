@@ -63,15 +63,6 @@ function getInfoTenNB($hoso, $dmngachbac) {
     }
 }
 
-function getInfoPhuCap($hoso, $dmphucap) {
-    $phucap = array_column($dmphucap, 'tenpc', 'mapc');
-    if(array_search($hoso->mapc, array_keys($phucap))===false){
-        return '';
-    }else{
-        return $phucap[$hoso->mapc];
-    }
-}
-
 //Lấy thông tin các phòng ban có cán bộ giao diện xã
 function getPhongBanX(){
    $m_pb = App\dmphongban::select('mapb','tenpb')->wherein('mapb',function($query){

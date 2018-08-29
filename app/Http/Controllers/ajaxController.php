@@ -218,6 +218,7 @@ class ajaxController extends Controller
 
     function getPhuCap(Request $request)
     {
+        /* Ngay 29/08/2018
         $result = array(
             'status' => 'fail',
             'message' => 'error',
@@ -235,6 +236,8 @@ class ajaxController extends Controller
         //$model=dmphucap::where('mapc', $inputs['mapc'])->first();
         $model->status = 'success';
         die($model);
+        */
+
     }
 
     function getPhanLoai(Request $request)
