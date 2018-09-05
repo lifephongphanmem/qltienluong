@@ -30,7 +30,7 @@ class dmphucapController extends Controller
             }
             return view('system.danhmuc.phucap.index')
                 ->with('model', $model)
-                ->with('furl', '/danh_muc/phu_cap/')
+                ->with('furl', '/he_thong/phu_cap/')
                 ->with('pageTitle', 'Danh mục phụ cấp');
         } else
             return view('errors.notlogin');
@@ -40,7 +40,7 @@ class dmphucapController extends Controller
     {
         if (Session::has('admin')) {
             return view('system.danhmuc.phucap.create')
-                ->with('furl', '/danh_muc/phu_cap/')
+                ->with('furl', '/he_thong/phu_cap/')
                 ->with('pageTitle', 'Thêm mới phụ cấp');
         } else
             return view('errors.notlogin');
@@ -52,7 +52,7 @@ class dmphucapController extends Controller
             $inputs = $request->all();
             $inputs['congthuc'] = getDbl($inputs['phanloai']) == 2 ? $inputs['congthuc'] : '';
             dmphucap::create($inputs);
-            return redirect('/danh_muc/phu_cap/index');
+            return redirect('/he_thong/phu_cap/index');
         } else
             return view('errors.notlogin');
     }
@@ -68,7 +68,7 @@ class dmphucapController extends Controller
             $inputs = $request->all();
             $inputs['congthuc'] = getDbl($inputs['phanloai']) == 2 ? $inputs['congthuc'] : '';
             dmphucap::where('mapc',$inputs['mapc'])->first()->update($inputs);
-            return redirect('/danh_muc/phu_cap/index');
+            return redirect('/he_thong/phu_cap/index');
         } else
             return view('errors.notlogin');
     }
@@ -81,7 +81,7 @@ class dmphucapController extends Controller
             ///dd($model);
             return view('system.danhmuc.phucap.edit')
                 ->with('model', $model)
-                ->with('furl', '/danh_muc/phu_cap/')
+                ->with('furl', '/he_thong/phu_cap/')
                 ->with('pageTitle', 'Sửa thông tin phụ cấp');
         } else
             return view('errors.notlogin');
@@ -105,7 +105,7 @@ class dmphucapController extends Controller
         if (Session::has('admin')) {
             $model = dmphucap::findOrFail($id);
             $model->delete();
-            return redirect('/danh_muc/phu_cap/index');
+            return redirect('/he_thong/phu_cap/index');
         }else
             return view('errors.notlogin');
     }
@@ -153,6 +153,7 @@ class dmphucapController extends Controller
     function edit_donvi(Request $request)
     {
         if (Session::has('admin')) {
+
             //kiểm tra lại quyền của User (đi tập huấn một số đơn vị ko hiểu sao lại cập nhật luôn vào danh mục
             if(session('admin')->level =='SA' || session('admin')->level == 'SSA'){
                 Session::flush();

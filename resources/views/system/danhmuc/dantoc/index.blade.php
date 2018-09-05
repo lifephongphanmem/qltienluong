@@ -32,9 +32,11 @@
             <div class="portlet light bordered">
                 <div class="portlet-title">
                     <div class="caption">DANH MỤC DÂN TỘC</div>
-                    <div class="actions">
-                        <button type="button" id="_btnaddPB" class="btn btn-success btn-xs" onclick="addCV()"><i class="fa fa-plus"></i>&nbsp;Thêm mới dân tộc</button>
-                    </div>
+                    @if(session('admin')->level == 'SA' || session('admin')->level == 'SSA')
+                        <div class="actions">
+                            <button type="button" id="_btnaddPB" class="btn btn-success btn-xs" onclick="addCV()"><i class="fa fa-plus"></i>&nbsp;Thêm mới dân tộc</button>
+                        </div>
+                    @endif
                 </div>
                 <div class="portlet-body form-horizontal">
                     <table id="sample_3" class="table table-hover table-striped table-bordered" style="min-height: 230px">

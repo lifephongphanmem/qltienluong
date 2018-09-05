@@ -32,30 +32,18 @@
         <div class="col-md-12">
             <div class="portlet light bordered">
                 <div class="portlet-title">
-                    <div class="caption">DANH SÁCH CHI TRẢ LƯƠNG CỦA ĐƠN VỊ</div>
+                    <div class="caption">DANH SÁCH BẢNG LƯƠNG CỦA ĐƠN VỊ</div>
                     <div class="actions">
                         <button type="button" class="btn btn-default btn-xs" onclick="add()"><i class="fa fa-plus"></i>&nbsp;Thêm mới bảng lương</button>
                         <button type="button" class="btn btn-default btn-xs" onclick="add_truylinh()"><i class="fa fa-plus"></i>&nbsp;Thêm mới bảng truy lĩnh</button>
                     </div>
                 </div>
                 <div class="portlet-body form-horizontal">
-                    <div class="row">
-                        <div class="form-group">
-                            <label class="control-label col-md-offset-2 col-md-1" style="text-align: right">Tháng </label>
-                            <div class="col-md-2">
-                                {!! Form::select('thangct',getThang(),$inputs['thang'],array('id' => 'thangct', 'class' => 'form-control'))!!}
-                            </div>
-                            <label class="control-label col-md-1" style="text-align: right">Năm </label>
-                            <div class="col-md-2">
-                                {!! Form::select('namct',getNam(),$inputs['nam'], array('id' => 'namct', 'class' => 'form-control'))!!}
-                            </div>
-                        </div>
-                    </div>
-
                     <table id="sample_3" class="table table-hover table-striped table-bordered" style="min-height: 230px">
                         <thead>
                             <tr>
                                 <th class="text-center" style="width: 5%">STT</th>
+                                <th class="text-center">Tháng/Năm</th>
                                 <th class="text-center">Phân loại</th>
                                 <th class="text-center">Nguồn kinh phí</th>
                                 <th class="text-center">Nội dung bảng lương</th>
@@ -68,6 +56,7 @@
                                 @foreach($model as $key=>$value)
                                     <tr>
                                         <td class="text-center">{{$i++}}</td>
+                                        <td class="text-center">{{$value->thang.'/'.$value->nam}}</td>
                                         <td>{{$value->tenphanloai}}</td>
                                         <td>{{$value->tennguonkp}}</td>
                                         <td>{{$value->noidung}}</td>
@@ -105,6 +94,17 @@
             </div>
             <div class="modal-body">
                 <div class="form-horizontal">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <label class="control-label"> Tháng<span class="require">*</span></label>
+                            {!! Form::select('thang',getThang(),date('m'),array('id' => 'thang', 'class' => 'form-control'))!!}
+                        </div>
+                        <div class="col-md-6">
+                            <label class="control-label"> Năm<span class="require">*</span></label>
+                            {!! Form::select('nam',getNam(),date('Y'),array('id' => 'nam', 'class' => 'form-control'))!!}
+                        </div>
+                    </div>
+
                     <div class="row">
                         <div class="col-md-12">
                             <label class="control-label"> Nội dung</label>
@@ -145,8 +145,6 @@
                         </div>
                     </div>
 
-                    <input type="hidden" id="thang" name="thang" value="{{$inputs['thang']}}"/>
-                    <input type="hidden" id="nam" name="nam" value="{{$inputs['nam']}}"/>
                     <input type="hidden" id="phantramhuong" name="phantramhuong" value="100"/>
                     <input type="hidden" id="id_ct" name="id_ct"/>
                     <input type="hidden" id="mabl" name="mabl"/>
@@ -363,28 +361,6 @@
     @include('templates.modal_printf_luong')
 
     <script>
-        function getLink(){
-            var thang = $("#thangct").val();
-            var nam = $("#namct").val();
-            return '{{$furl}}'+'chi_tra?thang='+thang +'&nam='+nam;
-        }
-        $(function(){
-
-            $('#thangct').change(function() {
-                window.location.href = getLink();
-            });
-
-            $('#thangct').change(function(){
-
-                window.location.href = getLink();
-            });
-
-            $('#namct').change(function(){
-                window.location.href = getLink();
-            });
-        })
-
-
         function add(){
             $('#noidung').val('');
             //$('#phantramhuong').val(100);

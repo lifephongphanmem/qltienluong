@@ -286,8 +286,9 @@ class UsersController extends Controller
     public function logout()
     {
         if (Session::has('admin')) {
+            $url = '/login?user='.session('admin')->username;
             Session::flush();
-            return redirect('/login');
+            return redirect($url);
         } else {
             return redirect('');
         }

@@ -137,14 +137,6 @@
                         <li><a href="{{url('nghiep_vu/ho_so/danh_sach')}}"><i class="fa fa-caret-right"></i>Danh sách cán bộ</a></li>
                         <li><a href="{{url('nghiep_vu/tam_ngung/danh_sach')}}"><i class="fa fa-caret-right"></i>Danh sách cán bộ tạm ngừng theo dõi</a></li>
                         <li><a href="{{url('nghiep_vu/truy_linh/danh_sach')}}"><i class="fa fa-caret-right"></i>Danh sách cán bộ được truy lĩnh lương</a></li>
-                        <!--
-                        <li><a href="{{url('nghiep_vu/ho_so/danh_sach')}}"><i class="fa fa-caret-right"></i>Cán bộ biên chế và chuyên trách</a></li>
-                        <li><a href="{{url('nghiep_vu/ho_so/danh_sach')}}"><i class="fa fa-caret-right"></i>Cán bộ không chuyên trách và đã nghỉ hưu</a></li>
-
-                        <li><a href="{{url('nghiep_vu/qua_trinh/luong/maso=all')}}">Quá trình hưởng lương</a></li>
-                        <li><a href="{{url('nghiep_vu/qua_trinh/phu_cap/maso=all')}}">Quá trình phụ cấp</a></li>
-                        -->
-
 
                         @if(session('admin')->maphanloai == 'KVXP')
                             <!-- Tạm thời bỏ để triển khai lạng sơn -->
@@ -161,15 +153,24 @@
                     </a>
                     <ul class="sub-menu">
                         <li>
-                            <a href="{{url('chuc_nang/bang_luong/danh_sach')}}"><i class="fa fa-caret-right"></i>Bảng lương</a>
+                            <a href="{{url('chuc_nang/dang_ky_luong/danh_sach')}}"><i class="fa fa-caret-right"></i>Đăng ký lương</a>
                         </li>
+
+                        <li>
+                            <a href="{{url('chuc_nang/bang_luong/chi_tra?thang='.date('m').'&nam='.date('Y'))}}"><i class="fa fa-caret-right"></i>Chi trả lương</a>
+                        </li>
+
                         <li>
                             <a href="{{url('chuc_nang/nang_luong/danh_sach')}}"><i class="fa fa-caret-right"></i>Nâng lương</a>
                         </li>
+
                         <li>
                             <a href="{{url('nghiep_vu/quan_ly/dieu_dong/maso=all')}}"><i class="fa fa-caret-right"></i>Luân chuyển cán bộ</a>
                         </li>
-                        <li><a href="{{url('nghiep_vu/quan_ly/chi_tieu/danh_sach')}}"><i class="fa fa-caret-right"></i>Chỉ tiêu biên chế</a></li>
+
+                        <li>
+                            <a href="{{url('nghiep_vu/quan_ly/chi_tieu/danh_sach')}}"><i class="fa fa-caret-right"></i>Chỉ tiêu biên chế</a>
+                        </li>
                     </ul>
                 </li>
 
@@ -234,22 +235,9 @@
                                     <i class="fa fa-list-alt"></i> Danh mục <span class="arrow"></span>
                                 </a>
                                 <ul class="sub-menu" style="margin-left: 15px;">
-
                                     <li><a href="{{url('danh_muc/phong_ban/index')}}"><i class="fa fa-caret-right"></i>Khối(tổ) công tác</a></li>
-                                    <li><a href="{{url('danh_muc/chuc_vu_cq/ma_so='.session('admin')->level)}}"><i class="fa fa-caret-right"></i>Chức vụ</a></li>
-                                    <!--li><a href="{{url('danh_muc/chuc_vu_d/index')}}"><i class="fa fa-caret-right"></i>Chức vụ đảng</a></li-->
-
+                                    <li><a href="{{url('danh_muc/chuc_vu/index')}}"><i class="fa fa-caret-right"></i>Chức vụ</a></li>
                                     <li><a href="{{url('danh_muc/dan_toc/index')}}"><i class="fa fa-caret-right"></i>Dân tộc</a></li>
-                                    <!--Cho đơn vị chủ quản set phân loại bảo hiểm-->
-                                    @if(session('admin')->level == 'SA' || session('admin')->level == 'SSA')
-                                        <li><a href="{{url('danh_muc/phu_cap/index')}}"><i class="fa fa-caret-right"></i>Phụ cấp</a></li>
-                                        <li><a href="{{url('danh_muc/nguon_kinh_phi/index')}}"><i class="fa fa-caret-right"></i>Nguồn kinh phí</a></li>
-                                        <li><a href="{{url('danh_muc/khoi_pb/index')}}"><i class="fa fa-caret-right"></i>Lĩnh vực hoạt động</a></li>
-                                        <li><a href="{{url('danh_muc/ngach_bac/index')}}"><i class="fa fa-caret-right"></i>Mã ngạch lương</a></li>
-                                        <li><a href="{{url('danh_muc/pl_don_vi/index')}}"><i class="fa fa-caret-right"></i>Phân loại đơn vị</a></li>
-                                        <li><a href="{{url('danh_muc/cong_tac/index')}}"><i class="fa fa-caret-right"></i>Phân loại công tác</a></li>
-                                        @endif
-                                                <!--li><a href="{{url('danh_muc/bao_hiem/index?phanloai='.session('admin')->maphanloai)}}"><i class="fa fa-caret-right"></i>Mức đóng bảo hiểm</a></li-->
                                 </ul>
                             </li>
                             <li>
@@ -266,27 +254,12 @@
                                 <a href="javascript:;">
                                     <i class="icon-grid"></i> Quản trị hệ thống <span class="arrow"></span>
                                 </a>
-                                @if(session('admin')->level == 'SA' || session('admin')->level == 'SSA')
-                                    <ul class="sub-menu" style="margin-left: 15px;">
-                                        <li><a href="{{url('/danh_muc/tieu_muc/index')}}"><i class="fa fa-caret-right"></i>Công thức mục-tiểu mục</a></li>
-                                    </ul>
-                                @else
-                                    <ul class="sub-menu" style="margin-left: 15px;">
-                                        <li><a href="{{url('/he_thong/don_vi/don_vi')}}"><i class="fa fa-caret-right"></i>Thông tin đơn vị</a></li>
-                                        <li><a href="{{url('/he_thong/don_vi/bao_hiem')}}"><i class="fa fa-caret-right"></i>Thông tin nộp bảo hiểm</a></li>
-                                        <li><a href="{{url('/danh_muc/phu_cap/don_vi')}}"><i class="fa fa-caret-right"></i>Thông tin phụ cấp</a></li>
-                                    </ul>
-                                @endif
-
-
+                                <ul class="sub-menu" style="margin-left: 15px;">
+                                    <li><a href="{{url('/he_thong/don_vi/don_vi')}}"><i class="fa fa-caret-right"></i>Thông tin đơn vị</a></li>
+                                    <li><a href="{{url('/he_thong/don_vi/bao_hiem')}}"><i class="fa fa-caret-right"></i>Thông tin nộp bảo hiểm</a></li>
+                                    <li><a href="{{url('/danh_muc/phu_cap/don_vi')}}"><i class="fa fa-caret-right"></i>Thông tin phụ cấp</a></li>
+                                </ul>
                             </li>
-                            @if(session('admin')->quanlykhuvuc || session('admin')->level == 'SA')
-                                <li><a href="{{url('danh_muc/tai_khoan/list_user?level=H')}}"><i class="icon-book-open"></i>Quản lý tài khoản</a></li>
-                            @endif
-
-                            @if(session('admin')->level == 'SA')
-                                <li><a href="{{url('danh_muc/khu_vuc/danh_sach?level=H')}}"><i class="icon-book-open"></i>Danh sách khu vực, địa bàn quản lý</a></li>
-                            @endif
                         </ul>
                     </li>
 
@@ -431,59 +404,26 @@
                                     <i class="fa fa-list-alt"></i> Danh mục <span class="arrow"></span>
                                 </a>
                                 <ul class="sub-menu" style="margin-left: 15px;">
-
-                                    <li><a href="{{url('danh_muc/phong_ban/index')}}"><i class="fa fa-caret-right"></i>Khối(tổ) công tác</a></li>
-                                    <li><a href="{{url('danh_muc/chuc_vu_cq/ma_so='.session('admin')->level)}}"><i class="fa fa-caret-right"></i>Chức vụ</a></li>
-                                    <!--li><a href="{{url('danh_muc/chuc_vu_d/index')}}"><i class="fa fa-caret-right"></i>Chức vụ đảng</a></li-->
-
-                                    <li><a href="{{url('danh_muc/dan_toc/index')}}"><i class="fa fa-caret-right"></i>Dân tộc</a></li>
-                                    <!--Cho đơn vị chủ quản set phân loại bảo hiểm-->
-                                    @if(session('admin')->level == 'SA' || session('admin')->level == 'SSA')
-                                        <li><a href="{{url('danh_muc/phu_cap/index')}}"><i class="fa fa-caret-right"></i>Phụ cấp</a></li>
-                                        <li><a href="{{url('danh_muc/nguon_kinh_phi/index')}}"><i class="fa fa-caret-right"></i>Nguồn kinh phí</a></li>
-                                        <li><a href="{{url('danh_muc/khoi_pb/index')}}"><i class="fa fa-caret-right"></i>Lĩnh vực hoạt động</a></li>
-                                        <li><a href="{{url('danh_muc/ngach_bac/index')}}"><i class="fa fa-caret-right"></i>Mã ngạch lương</a></li>
-                                        <li><a href="{{url('danh_muc/pl_don_vi/index')}}"><i class="fa fa-caret-right"></i>Phân loại đơn vị</a></li>
-                                        <li><a href="{{url('danh_muc/cong_tac/index')}}"><i class="fa fa-caret-right"></i>Phân loại công tác</a></li>
-                                        @endif
-                                                <!--li><a href="{{url('danh_muc/bao_hiem/index?phanloai='.session('admin')->maphanloai)}}"><i class="fa fa-caret-right"></i>Mức đóng bảo hiểm</a></li-->
+                                    <li><a href="{{url('he_thong/chuc_vu/index')}}"><i class="fa fa-caret-right"></i>Chức vụ</a></li>
+                                    <li><a href="{{url('he_thong/phu_cap/index')}}"><i class="fa fa-caret-right"></i>Phụ cấp</a></li>
+                                    <li><a href="{{url('danh_muc/nguon_kinh_phi/index')}}"><i class="fa fa-caret-right"></i>Nguồn kinh phí</a></li>
+                                    <li><a href="{{url('danh_muc/khoi_pb/index')}}"><i class="fa fa-caret-right"></i>Lĩnh vực hoạt động</a></li>
+                                    <li><a href="{{url('danh_muc/ngach_bac/index')}}"><i class="fa fa-caret-right"></i>Mã ngạch lương</a></li>
+                                    <li><a href="{{url('danh_muc/pl_don_vi/index')}}"><i class="fa fa-caret-right"></i>Phân loại đơn vị</a></li>
+                                    <li><a href="{{url('danh_muc/cong_tac/index')}}"><i class="fa fa-caret-right"></i>Phân loại công tác</a></li>
                                 </ul>
                             </li>
-                            <li>
-                                <a href="javascript:;">
-                                    <i class="icon-user"></i> Người dùng <span class="arrow"></span>
-                                </a>
 
-                                <ul class="sub-menu" style="margin-left: 15px;">
-                                    <li><a href="{{url('change-password')}}"><i class="fa fa-caret-right"></i>Đổi mật khẩu</a></li>
-                                    <!--li><a href="{{url('phanquyen')}}">Phân quyền</a></li-->
-                                </ul>
-                            </li>
                             <li>
                                 <a href="javascript:;">
                                     <i class="icon-grid"></i> Quản trị hệ thống <span class="arrow"></span>
                                 </a>
-                                @if(session('admin')->level == 'SA' || session('admin')->level == 'SSA')
-                                    <ul class="sub-menu" style="margin-left: 15px;">
-                                        <li><a href="{{url('/danh_muc/tieu_muc/index')}}"><i class="fa fa-caret-right"></i>Công thức mục-tiểu mục</a></li>
-                                    </ul>
-                                @else
-                                    <ul class="sub-menu" style="margin-left: 15px;">
-                                        <li><a href="{{url('/he_thong/don_vi/don_vi')}}"><i class="fa fa-caret-right"></i>Thông tin đơn vị</a></li>
-                                        <li><a href="{{url('/he_thong/don_vi/bao_hiem')}}"><i class="fa fa-caret-right"></i>Thông tin nộp bảo hiểm</a></li>
-                                        <li><a href="{{url('/danh_muc/phu_cap/don_vi')}}"><i class="fa fa-caret-right"></i>Thông tin phụ cấp</a></li>
-                                    </ul>
-                                @endif
-
-
+                                <ul class="sub-menu" style="margin-left: 15px;">
+                                    <li><a href="{{url('/danh_muc/tieu_muc/index')}}"><i class="fa fa-caret-right"></i>Công thức mục-tiểu mục</a></li>
+                                </ul>
                             </li>
-                            @if(session('admin')->quanlykhuvuc || session('admin')->level == 'SA')
                                 <li><a href="{{url('danh_muc/tai_khoan/list_user?level=H')}}"><i class="icon-book-open"></i>Quản lý tài khoản</a></li>
-                            @endif
-
-                            @if(session('admin')->level == 'SA')
                                 <li><a href="{{url('danh_muc/khu_vuc/danh_sach?level=H')}}"><i class="icon-book-open"></i>Danh sách khu vực, địa bàn quản lý</a></li>
-                            @endif
                         </ul>
                     </li>
                 @endif

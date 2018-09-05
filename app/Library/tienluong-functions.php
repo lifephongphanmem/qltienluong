@@ -367,6 +367,7 @@ function getTextStatus($status){
         'CHUADAYDU' => 'text-warning',
         'CHUAGUI' => 'text-info', //dùng cho đơn vị chủ quản - các đơn vị cấp dưới đã có dữ liệu nhưng chưa gửi đi
         'GUILOI' => 'text-danger',
+        'BANGLUONG' => 'text-success',
     );
     return isset($a_trangthai[$status]) ? $a_trangthai[$status] : '';
 }
@@ -381,7 +382,8 @@ function getStatus(){
         'CHUADAYDU' => 'Dữ liệu chưa đầy đủ',
         'CHUAGUI' => 'Dữ liệu chờ gửi',
         'CHUADL' => 'Dữ liệu chưa được gửi lên',
-        'GUILOI' => 'Dữ liệu bị lỗi'
+        'GUILOI' => 'Dữ liệu bị lỗi',
+        'BANGLUONG' => 'Đã có chi trả lương'
     );
 }
 
@@ -495,7 +497,7 @@ function getPhuCapNopBH(){
 }
 
 function getCoChu(){
-    return array('7'=>'7','8'=>'8','9'=>'9','10'=>'10','11'=>'11','12'=>'12');
+    return array('8'=>'8','9'=>'9','10'=>'10','11'=>'11','12'=>'12');
 }
 
 function getPhanLoaiKiemNhiem(){
@@ -503,5 +505,10 @@ function getPhanLoaiKiemNhiem(){
         'DBHDND' => 'Kiêm nhiệm đại biểu HĐND',
         'CAPUY' => 'Kiêm nhiệm cấp ủy viên',
         'KHAC'=> 'Kiêm nhiệm khác');
+}
+
+function getPhanLoaiNhanVien(){
+    return array('0' => 'Cán bộ (Nhân viên)',
+        '1' => 'Thủ trưởng (lãnh đạo)');
 }
 ?>

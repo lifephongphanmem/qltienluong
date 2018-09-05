@@ -4,8 +4,8 @@
         <div class="row">
             <div class="col-md-3">
                 <div class="form-group">
-                    <label class="control-label">Mã công chức/viên chức </label>
-                    {!!Form::text('macongchuc', null, array('id' => 'macongchuc','class' => 'form-control'))!!}
+                    <label class="control-label">Họ tên <span class="require">*</span></label>
+                    {!!Form::text('tencanbo', null, array('id' => 'tencanbo','class' => 'form-control', 'required'=>'required'))!!}
                 </div>
             </div>
 
@@ -27,11 +27,10 @@
                 </div>
             </div>
 
-
             <div class="col-md-3">
                 <div class="form-group">
-                    <label class="control-label">Họ tên <span class="require">*</span></label>
-                    {!!Form::text('tencanbo', null, array('id' => 'tencanbo','class' => 'form-control', 'required'=>'required'))!!}
+                    <label class="control-label">Mã công chức/viên chức </label>
+                    {!!Form::text('macongchuc', null, array('id' => 'macongchuc','class' => 'form-control'))!!}
                 </div>
             </div>
         </div>

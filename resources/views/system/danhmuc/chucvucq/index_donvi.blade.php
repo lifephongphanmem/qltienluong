@@ -66,12 +66,15 @@
                                         <td>{{$value->tencv}}</td>
                                         <td>{{$value->tenvt}}</td>
                                         <td>{{$value->phanloai}}</td>
-                                        <td>
-                                            <button type="button" onclick="editCV('{{$value->macvcq}}')" class="btn btn-info btn-xs mbs">
-                                                <i class="fa fa-edit"></i>&nbsp; Chỉnh sửa</button>
 
-                                            <button type="button" onclick="cfDel('{{$furl.'del/'.$value->id}}')" class="btn btn-danger btn-xs mbs" data-target="#delete-modal-confirm" data-toggle="modal">
-                                                <i class="fa fa-trash-o"></i>&nbsp; Xóa</button>
+                                        <td>
+                                            @if(session('admin')->level == 'SA' || session('admin')->level == 'SSA' || session('admin')->madv == $value->madv)
+                                                <button type="button" onclick="editCV('{{$value->macvcq}}')" class="btn btn-info btn-xs mbs">
+                                                    <i class="fa fa-edit"></i>&nbsp; Chỉnh sửa</button>
+
+                                                <button type="button" onclick="cfDel('{{$furl.'del/'.$value->id}}')" class="btn btn-danger btn-xs mbs" data-target="#delete-modal-confirm" data-toggle="modal">
+                                                    <i class="fa fa-trash-o"></i>&nbsp; Xóa</button>
+                                            @endif
                                         </td>
                                     </tr>
                                 @endforeach
@@ -95,29 +98,31 @@
                 <div class="modal-body">
                     <div class="form-horizontal">
                         <div class="row">
-                    <div class="col-md-12">
-                        <label class="control-label">Phân loại đơn vị</label>
-                        {!! Form::select('maphanloai',$model_pl,$mapl,array('id' => 'maphanloai', 'class' => 'form-control', 'readonly'))!!}
-                    </div>
+                            <div class="col-md-12">
+                                <label class="control-label">Phân loại đơn vị</label>
+                                {!! Form::select('maphanloai',$model_pl,$mapl,array('id' => 'maphanloai', 'class' => 'form-control', 'readonly'))!!}
+                            </div>
 
-                    <div class="col-md-12">
-                    <label class="form-control-label">Tên chức vụ<span class="require">*</span></label>
-                    {!!Form::text('tencv', null, array('id' => 'tencv','class' => 'form-control','required'=>'required'))!!}
-                    </div>
+                            <div class="col-md-12">
+                                <label class="form-control-label">Tên chức vụ<span class="require">*</span></label>
+                                {!!Form::text('tencv', null, array('id' => 'tencv','class' => 'form-control','required'=>'required'))!!}
+                            </div>
 
-                    <div class="col-md-12">
-                    <label class="form-control-label">Tên chức vụ viết tắt</label>
-                    {!!Form::text('tenvt', null, array('id' => 'tenvt','class' => 'form-control'))!!}
-                    </div>
+                            <div class="col-md-12">
+                                <label class="form-control-label">Tên chức vụ viết tắt</label>
+                                {!!Form::text('tenvt', null, array('id' => 'tenvt','class' => 'form-control'))!!}
+                            </div>
 
-                    <div class="col-md-12">
-                        <label class="control-label">Phân loại cán bộ</label>
-                        {!! Form::select('ttdv',getPhanLoaiNhanVien(),null,array('id' => 'ttdv', 'class' => 'form-control'))!!}
-                    </div>
+                            <div class="col-md-12">
+                                <label class="control-label">Phân loại cán bộ</label>
+                                {!! Form::select('ttdv',getPhanLoaiNhanVien(),null,array('id' => 'ttdv', 'class' => 'form-control'))!!}
+                            </div>
 
-                    <input type="hidden" id="macvcq" name="macvcq"/>
-                    <input type="hidden" id="id_cv" name="id_cv"/>
-                </div></div></div>
+                            <input type="hidden" id="macvcq" name="macvcq"/>
+                            <input type="hidden" id="id_cv" name="id_cv"/>
+                        </div>
+                    </div>
+                </div>
 
                 <div class="modal-footer">
                     <button type="button" data-dismiss="modal" class="btn btn-default">Hủy thao tác</button>
@@ -128,11 +133,7 @@
     </div>
 
     <script>
-        $(function(){
-            $('#mapl').change(function() {
-                window.location.href = '{{$furl}}' + 'index?maso='+$('#mapl').val();
-            });
-        })
+
 
         function addCV(){
             //var date=new Date();
@@ -163,7 +164,6 @@
                     //$('#sapxep').val(data.sapxep);
                     $('#maphanloai').val(data.maphanloai);
                     $('#ttdv').val(data.ttdv).trigger('change');
-                    //$('#ttdv').prop('checked', data.ttdv == 1 ? true : false);
                     $('#macvcq').val(macvcq);
                 },
                 error: function(message){
@@ -181,7 +181,7 @@
             var tencv=$('#tencv').val();
             var ghichu=$('#ghichu').val();
             var sapxep=$('#sapxep').val();
-            var id=$('#id_cv').val();
+            //var id=$('#id_cv').val();
             var ttdv=$('#ttdv').val();
 
             if(tencv==''){

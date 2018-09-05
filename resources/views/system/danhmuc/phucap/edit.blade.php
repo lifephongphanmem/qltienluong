@@ -71,11 +71,7 @@
                             <div class="col-md-12">
                                 <div class="form-group">
                                     <label class="form-control-label">Gồm các loại hệ số</label>
-                                    <select class="form-control select2me" id="ctpc" name="ctpc" multiple="multiple">
-                                        @foreach(getCongThucTinhPC() as $key=>$value)
-                                            <option value="{{$key}}" {{in_array($key,$a_congthuc)?'selected':''}}>{{$value}}</option>
-                                        @endforeach
-                                    </select>
+                                    {!!Form::select('ctpc', getCongThucTinhPC(), null, array('id' => 'ctpc','class' => 'form-control select2me','multiple'=>'multiple'))!!}
                                 </div>
                             </div>
                         </div>
@@ -107,8 +103,7 @@
             </div>
                 <div style="text-align: center">
                     <button type="submit" class="btn green" onclick="validateForm()"><i class="fa fa-check"></i> Hoàn thành</button>
-                    <button type="reset" class="btn btn-default"><i class="fa fa-refresh"></i>&nbsp;Nhập lại</button>
-                    <a href="{{url('/danh_muc/phu_cap/index')}}" class="btn btn-danger"><i class="fa fa-reply"></i>&nbsp;Quay lại</a>
+                    <a href="{{url($furl.'index')}}" class="btn btn-danger"><i class="fa fa-reply"></i>&nbsp;Quay lại</a>
                 </div>
                 {!! Form::close() !!}
                 <!-- END FORM-->
@@ -117,6 +112,21 @@
         </div>
     </div>
     <script type="text/javascript">
+        $("#phanloai").change(function(){
+            var congthuc = '{{$model->congthuc}}';
+            if(congthuc == ''){
+                congthuc = 'heso,vuotkhung,pccv';
+            }
+            var selectedValuesTest = congthuc.split(',');
+
+            if($("#phanloai").val() == '2'){
+                $('#ctpc').val(selectedValuesTest).trigger("change");
+            }else{
+                $('#ctpc').val('').trigger("change");
+            }
+
+        });
+
         function validateForm(){
             var validator = $("#create_tttaikhoan").validate({
                 rules: {

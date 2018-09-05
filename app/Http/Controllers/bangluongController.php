@@ -32,16 +32,59 @@ use Illuminate\Support\Facades\Response;
 
 class bangluongController extends Controller
 {
-    function index()
+    function index(Request $request)
+    {
+        if (Session::has('admin')) {
+            $inputs = $request->all();
+            $nam = isset($inputs['nam'])? $inputs['nam'] : date('Y');
+            $a_trangthai = getStatus();
+            $model_bangluong = bangluong::where('madv', session('admin')->madv)->get();
+            $a_data = array(array('thang' => '01', 'mathdv' => null),
+                array('thang' => '02', 'mathdv' => null),
+                array('thang' => '03', 'mathdv' => null),
+                array('thang' => '04', 'mathdv' => null),
+                array('thang' => '05', 'mathdv' => null),
+                array('thang' => '06', 'mathdv' => null),
+                array('thang' => '07', 'mathdv' => null),
+                array('thang' => '08', 'mathdv' => null),
+                array('thang' => '09', 'mathdv' => null),
+                array('thang' => '10', 'mathdv' => null),
+                array('thang' => '11', 'mathdv' => null),
+                array('thang' => '12', 'mathdv' => null)
+            );
+            for ($i = 0; $i < count($a_data); $i++) {
+                $a_data[$i]['maphanloai'] = session('admin')->maphanloai;
+                $bangluong = $model_bangluong->where('thang', $a_data[$i]['thang'])->where('nam', $nam);
+                if (count($bangluong) > 0) {
+                    $a_data[$i]['trangthai'] = 'BANGLUONG';
+                } else {
+                    $a_data[$i]['trangthai'] = 'CHUALUONG';
+                }
+            }
+
+            return view('manage.bangluong.danhsach')
+                ->with('furl', '/chuc_nang/bang_luong/')
+                ->with('model', $a_data)
+                ->with('nam', $nam)
+                ->with('a_trangthai', $a_trangthai)
+                ->with('pageTitle', 'Danh sách bảng lương');
+        } else
+            return view('errors.notlogin');
+    }
+
+    function chitra(Request $request)
     {
         if (Session::has('admin')) {
             //khối phòng ban giờ là lĩnh vực hoạt động
             //$m_linhvuc = array_column(dmkhoipb::all()->toArray(), 'tenkhoipb', 'makhoipb');
+            $inputs = $request->all();
+
             $m_nguonkp = array_column(dmnguonkinhphi::all()->toArray(), 'tennguonkp', 'manguonkp');
             $a_phanloai = getPhanLoaiBangLuong();
             $model_nhomct = dmphanloaicongtac::select('macongtac', 'tencongtac')->get();
             $model_tenct = dmphanloaict::select('tenct', 'macongtac', 'mact')->get();
-            $model = bangluong::where('madv', session('admin')->madv)->get();
+            $model = bangluong::where('madv', session('admin')->madv)->where('thang', $inputs['thang'])->where('nam', $inputs['nam'])->get();
+
             foreach ($model as $bl) {
                 $bl->tennguonkp = isset($m_nguonkp[$bl->manguonkp]) ? $m_nguonkp[$bl->manguonkp] : '';
                 $bl->tenphanloai = isset($a_phanloai[$bl->phanloai]) ? $a_phanloai[$bl->phanloai] : 'Bảng lương cán bộ';
@@ -51,8 +94,9 @@ class bangluongController extends Controller
                 ->with('furl', '/chuc_nang/bang_luong/')
                 ->with('furl_ajax', '/ajax/bang_luong/')
                 ->with('model', $model)
+                ->with('inputs', $inputs)
                 ->with('luongcb', getGeneralConfigs()['luongcb'])
-                ->with('m_linhvuc', array_column(dmkhoipb::all()->toArray(), 'tenkhoipb', 'makhoipb'))
+                ->with('m_linhvuc', getLinhVucHoatDong(false))
                 ->with('model_nhomct', $model_nhomct)
                 ->with('model_tenct', $model_tenct)
                 ->with('m_nguonkp', $m_nguonkp)
@@ -65,14 +109,25 @@ class bangluongController extends Controller
     function store(Request $request)
     {
         $inputs = $request->all();
+        $inputs['luongcoban'] = getDbl($inputs['luongcoban']);
         $model = bangluong::where('mabl', $inputs['mabl'])->first();
 
         if (count($model) > 0) {
             //update
-            $inputs['luongcoban'] = getDbl($inputs['luongcoban']);
+
             $model->update($inputs);
             return redirect('/chuc_nang/bang_luong/danh_sach');
         } else {
+            //kiểm tra bảng lương cùng nguồn, lĩnh vực hoạt động, lương cơ bản =>ko cho tạo
+            $model_chk = bangluong::where('thang', $inputs['thang'])->where('nam', $inputs['nam'])
+                //->where('luongcoban', $inputs['luongcoban'])
+                ->where('manguonkp', $inputs['manguonkp'])
+                ->first();
+
+            if(count($model_chk)>0){
+                return view('errors.trungbangluong');
+            }
+
             //insert
             $madv = session('admin')->madv;
             $inputs['mabl'] = $madv . '_' . getdate()[0];

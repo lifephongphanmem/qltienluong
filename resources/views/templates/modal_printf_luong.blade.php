@@ -48,7 +48,7 @@
 
                     <div class="col-md-12">
                         <label class="control-label">Cỡ chữ</label>
-                        {!!Form::select('cochu',getCoChu(), null, array('id' => 'cochu','class' => 'form-control select2me'))!!}
+                        {!!Form::select('cochu',getCoChu(), 10, array('id' => 'cochu','class' => 'form-control select2me'))!!}
                     </div>
                 </div>
             </div>
@@ -106,7 +106,7 @@
 
                     <div class="col-md-12">
                         <label class="control-label">Cỡ chữ</label>
-                        {!!Form::select('cochu',getCoChu(), null, array('id' => 'cochu','class' => 'form-control select2me'))!!}
+                        {!!Form::select('cochu',getCoChu(), 10, array('id' => 'cochu','class' => 'form-control select2me'))!!}
                     </div>
                 </div>
             </div>
@@ -165,7 +165,7 @@
 
                     <div class="col-md-12">
                         <label class="control-label">Cỡ chữ</label>
-                        {!!Form::select('cochu',getCoChu(), null, array('id' => 'cochu','class' => 'form-control select2me'))!!}
+                        {!!Form::select('cochu',getCoChu(), 10, array('id' => 'cochu','class' => 'form-control select2me'))!!}
                     </div>
                 </div>
             </div>
@@ -223,7 +223,7 @@
 
                     <div class="col-md-12">
                         <label class="control-label">Cỡ chữ</label>
-                        {!!Form::select('cochu',getCoChu(), null, array('id' => 'cochu','class' => 'form-control select2me'))!!}
+                        {!!Form::select('cochu',getCoChu(), 10, array('id' => 'cochu','class' => 'form-control select2me'))!!}
                     </div>
                 </div>
             </div>
@@ -286,7 +286,7 @@
 
                     <div class="col-md-12">
                         <label class="control-label">Cỡ chữ</label>
-                        {!!Form::select('cochu',getCoChu(), null, array('id' => 'cochu','class' => 'form-control select2me'))!!}
+                        {!!Form::select('cochu',getCoChu(), 10, array('id' => 'cochu','class' => 'form-control select2me'))!!}
                     </div>
                 </div>
             </div>
@@ -346,7 +346,7 @@
 
                     <div class="col-md-12">
                         <label class="control-label">Cỡ chữ</label>
-                        {!!Form::select('cochu',getCoChu(), null, array('id' => 'cochu','class' => 'form-control select2me'))!!}
+                        {!!Form::select('cochu',getCoChu(), 10, array('id' => 'cochu','class' => 'form-control select2me'))!!}
                     </div>
                 </div>
             </div>
@@ -683,7 +683,7 @@
 
                     <div class="col-md-12">
                         <label class="control-label">Cỡ chữ</label>
-                        {!!Form::select('cochu',getCoChu(), null, array('id' => 'cochu','class' => 'form-control select2me'))!!}
+                        {!!Form::select('cochu',getCoChu(), 10, array('id' => 'cochu','class' => 'form-control select2me'))!!}
                     </div>
                 </div>
             </div>
@@ -743,7 +743,7 @@
 
                     <div class="col-md-12">
                         <label class="control-label">Cỡ chữ</label>
-                        {!!Form::select('cochu',getCoChu(), null, array('id' => 'cochu','class' => 'form-control select2me'))!!}
+                        {!!Form::select('cochu',getCoChu(), 10, array('id' => 'cochu','class' => 'form-control select2me'))!!}
                     </div>
                 </div>
             </div>

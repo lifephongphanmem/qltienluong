@@ -70,38 +70,41 @@
                         <div class="row">
                             <div class="col-md-12">
                                 <div class="form-group">
-                                    <label class="form-control-label">Gồm các loại hệ số<span class="require">*</span></label>
-                                    <select class="form-control select2me" id="ctpc" name="ctpc" multiple="multiple">
-                                        @foreach(getCongThucTinhPC() as $key=>$value)
-                                            <option value="{{$key}}" {{in_array($key,$a_congthuc)?'selected':''}}>{{$value}}</option>
-                                        @endforeach
-                                    </select>
+                                    <label class="form-control-label">Gồm các loại hệ số, phụ cấp</label>
+                                    {!!Form::select('ctpc', getCongThucTinhPC(), null, array('id' => 'ctpc','class' => 'form-control select2me','multiple'=>'multiple'))!!}
+
                                 </div>
                             </div>
                         </div>
 
                         <div class="row">
-                            <div class="col-md-6">
+                            <div class="col-md-4">
                                 <div class="form-group">
                                     <label class="form-control-label">Tiêu đề trên Form<span class="require">*</span></label>
                                     {!!Form::text('form', null, array('id' => 'form','class' => 'form-control','required'=>'required'))!!}
                                 </div>
                             </div>
 
-                            <div class="col-md-6">
+                            <div class="col-md-4">
                                 <div class="form-group">
                                     <label class="form-control-label">Tiêu đề trên báo cáo<span class="require">*</span></label>
                                     {!!Form::text('report', null, array('id' => 'report','class' => 'form-control','required'=>'required'))!!}
                                 </div>
                             </div>
+
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label class="form-control-label">Nộp bảo hiểm</label>
+                                    {!!Form::select('baohiem',array('0'=>'Không nộp hiểm','1'=>'Có nộp hiểm'), null, array('id' => 'baohiem','class' => 'form-control'))!!}
+                                </div>
+                            </div>
                         </div>
-                        </div>
+                    </div>
                 </div>
             </div>
                 <div style="text-align: center">
                     <button type="submit" class="btn green" onclick="validateForm()"><i class="fa fa-check"></i> Hoàn thành</button>
-                    <button type="reset" class="btn btn-default"><i class="fa fa-refresh"></i>&nbsp;Nhập lại</button>
-                    <a href="{{url('/danh_muc/phu_cap/index')}}" class="btn btn-danger"><i class="fa fa-reply"></i>&nbsp;Quay lại</a>
+                    <a href="{{url($furl)}}" class="btn btn-danger"><i class="fa fa-reply"></i>&nbsp;Quay lại</a>
                 </div>
                 {!! Form::close() !!}
                 <!-- END FORM-->
@@ -110,6 +113,20 @@
         </div>
     </div>
     <script type="text/javascript">
+        $("#phanloai").change(function(){
+            var congthuc = '{{$model->congthuc}}';
+            if(congthuc == ''){
+                congthuc = 'heso,vuotkhung,pccv';
+            }
+            var selectedValuesTest = congthuc.split(',');
+
+            if($("#phanloai").val() == '2'){
+                $('#ctpc').val(selectedValuesTest).trigger("change");
+            }else{
+                $('#ctpc').val('').trigger("change");
+            }
+
+        });
         function validateForm(){
             var validator = $("#create_tttaikhoan").validate({
                 rules: {

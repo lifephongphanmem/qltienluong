@@ -63,6 +63,8 @@
                                     <td>
                                         <a href="{{url($furl.'?maso='.$value->id)}}" class="btn btn-info btn-xs mbs">
                                             <i class="fa fa-edit"></i>&nbsp; Chi tiết</a>
+                                        <!--a href="{{url($furl.'?maso='.$value->mabl.'&macanbo='.$value->macanbo)}}" class="btn btn-info btn-xs mbs">
+                                            <i class="fa fa-edit"></i>&nbsp; Chi tiết</a-->
                                     </td>
                                 </tr>
                             @endforeach
@@ -72,7 +74,7 @@
                 </div>
                 <div class="row">
                     <div class="col-md-offset-5 col-md-8">
-                        <a href="{{url($furl.'chi_tra?thang='.$m_bl->thang.'&nam='. $m_bl->nam)}}" class="btn btn-default"><i class="fa fa-reply"></i>&nbsp;Quay lại</a>
+                        <a href="{{url('/chuc_nang/bang_luong/danh_sach')}}" class="btn btn-default"><i class="fa fa-reply"></i>&nbsp;Quay lại</a>
 
                     </div>
                 </div>
