@@ -32,7 +32,7 @@ class hosocanboController extends Controller
     function index(){
         if (Session::has('admin')) {
             //$m_hs=hosocanbo::where('madv',session('admin')->maxa)->get();
-            $m_hs=hosocanbo::where('madv',session('admin')->madv)->get();
+            $m_hs=hosocanbo::where('madv',session('admin')->madv)->where('theodoi','<','9')->get();
 
             $dmphongban=dmphongban::select('mapb','tenpb')->where('madv',session('admin')->madv)->get();
             $dmchucvud=dmchucvud::select('tencv', 'macvd')->get();
@@ -339,8 +339,7 @@ class hosocanboController extends Controller
         if (Session::has('admin')) {
             $_sql = "select hosocanbo.id,hosocanbo.macanbo,hosocanbo.tencanbo,hosocanbo.anh,hosocanbo.macvcq,hosocanbo.mapb,hosocanbo.gioitinh,dmchucvucq.sapxep,hosocanbo.ngaysinh
                    from hosocanbo, dmchucvucq
-                   Where hosocanbo.macvcq=dmchucvucq.macvcq and
-                      hosocanbo.theodoi ='1'";
+                   Where hosocanbo.macvcq=dmchucvucq.macvcq and hosocanbo.theodoi < '9' and hosocanbo.madv ='".session('admin')->madv."'";
 
             $inputs = $request->all();
             $s_dk = getConditions($inputs, array('_token'), 'hosocanbo');

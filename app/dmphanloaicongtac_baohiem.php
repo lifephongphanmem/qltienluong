@@ -11,6 +11,7 @@ class dmphanloaicongtac_baohiem extends Model
         'id',
         'madv',
         'macongtac',
+        'mact',
         'bhxh',
         'bhyt',
         'bhtn',

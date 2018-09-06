@@ -72,7 +72,7 @@
                                         <td class="text-center">{{$value->kpcd_dv}}</td>
                                         <td class="text-center">{{$value->bhtn_dv}}</td>
                                         <td>
-                                            <button type="button" onclick="editCV('{{$value->macongtac}}')" class="btn btn-default btn-xs">
+                                            <button type="button" onclick="editCV('{{$value->mact}}')" class="btn btn-default btn-xs">
                                                 <i class="fa fa-edit"></i>&nbsp; Sửa</button>
                                         </td>
                                     </tr>
@@ -192,7 +192,7 @@
                         </div>
                     </div>
                     <input type="hidden" id="id" name="id"/>
-                    <input type="hidden" id="macongtac" name="macongtac"/>
+                    <input type="hidden" id="mact" name="mact"/>
                 </div>
                 <div class="modal-footer">
                     <button type="button" data-dismiss="modal" class="btn btn-default">Hủy thao tác</button>
@@ -203,19 +203,19 @@
     </div>
 
     <script>
-        function editCV(macongtac){
+        function editCV(mact){
             var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
             $.ajax({
                 url: '{{$furl}}' + 'get_bh',
                 type: 'GET',
                 data: {
                     _token: CSRF_TOKEN,
-                    macongtac: macongtac,
+                    mact: mact,
                     madv: '{{session('admin')->madv}}'
                 },
                 dataType: 'JSON',
                 success: function (data) {
-                    $('#macongtac').val(data.macongtac);
+                    $('#mact').val(data.mact);
                     $('#ghichu').val(data.ghichu);
                     $('#bhxh').val(data.bhxh);
                     $('#bhyt').val(data.bhyt);
@@ -237,7 +237,7 @@
 
         function cfPB(){
             var valid=true;
-            var macongtac = $('#macongtac').val();
+            var mact = $('#mact').val();
             var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
 
             $.ajax({
@@ -245,7 +245,7 @@
                 type: 'GET',
                 data: {
                     _token: CSRF_TOKEN,
-                    macongtac: macongtac,
+                    mact: mact,
                     madv: '{{session('admin')->madv}}',
                     bhxh: $('#bhxh').val(),
                     bhyt: $('#bhyt').val(),

@@ -18,12 +18,15 @@ class hosotruylinhController extends Controller
     {
         if (Session::has('admin')) {
             //Khi chon cán bộ lấy mã ngach lương set lại trên form nhập
+            /*
             $model_canbo = hosocanbo::where('madv', session('admin')->madv)
                 ->wherenotin('macanbo', function ($qr) {
                     $qr->select('macanbo')->from('hosotruylinh')
                         ->whereNull('mabl')
                         ->where('madv', session('admin')->madv)->get();
                 })->get();
+            */
+            $model_canbo=hosocanbo::where('madv',session('admin')->madv)->where('theodoi','<','9')->get();
             $m_plnb = nhomngachluong::select('manhom', 'tennhom', 'heso', 'namnb')->distinct()->get();
             $m_pln = ngachluong::select('tenngachluong', 'manhom', 'msngbac', 'heso', 'namnb')->get();
             $model = hosotruylinh::where('madv', session('admin')->madv)->get();

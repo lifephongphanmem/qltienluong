@@ -32,20 +32,30 @@
         <div class="col-md-12">
             <div class="portlet light bordered">
                 <div class="portlet-title">
-                    <div class="caption">DANH SÁCH BẢNG LƯƠNG CỦA ĐƠN VỊ</div>
+                    <div class="caption">DANH SÁCH BẢNG ĐĂNG KÝ LƯƠNG CỦA ĐƠN VỊ</div>
                     <div class="actions">
-                        <button type="button" class="btn btn-default btn-xs" onclick="add()"><i class="fa fa-plus"></i>&nbsp;Thêm mới bảng lương</button>
-                        <button type="button" class="btn btn-default btn-xs" onclick="add_truylinh()"><i class="fa fa-plus"></i>&nbsp;Thêm mới bảng truy lĩnh</button>
+                        <button type="button" class="btn btn-default btn-xs" onclick="add()"><i class="fa fa-plus"></i>&nbsp;Thêm mới</button>
                     </div>
                 </div>
                 <div class="portlet-body form-horizontal">
+                    <div class="row">
+                        <div class="form-group">
+                            <label class="control-label col-md-offset-2 col-md-1" style="text-align: right">Tháng </label>
+                            <div class="col-md-2">
+                                {!! Form::select('thangct',getThang(),$inputs['thang'],array('id' => 'thangct', 'class' => 'form-control'))!!}
+                            </div>
+                            <label class="control-label col-md-1" style="text-align: right">Năm </label>
+                            <div class="col-md-2">
+                                {!! Form::select('namct',getNam(),$inputs['nam'], array('id' => 'namct', 'class' => 'form-control'))!!}
+                            </div>
+                        </div>
+                    </div>
+
                     <table id="sample_3" class="table table-hover table-striped table-bordered" style="min-height: 230px">
                         <thead>
                             <tr>
                                 <th class="text-center" style="width: 5%">STT</th>
                                 <th class="text-center">Tháng/Năm</th>
-                                <th class="text-center">Phân loại</th>
-                                <th class="text-center">Nguồn kinh phí</th>
                                 <th class="text-center">Nội dung bảng lương</th>
                                 <th class="text-center">Thao tác</th>
                             </tr>
@@ -57,11 +67,9 @@
                                     <tr>
                                         <td class="text-center">{{$i++}}</td>
                                         <td class="text-center">{{$value->thang.'/'.$value->nam}}</td>
-                                        <td>{{$value->tenphanloai}}</td>
-                                        <td>{{$value->tennguonkp}}</td>
                                         <td>{{$value->noidung}}</td>
                                         <td>
-                                            <button type="button" onclick="edit('{{$value->mabl}}','{{$value->phanloai}}')" class="btn btn-default btn-xs mbs">
+                                            <button type="button" onclick="edit('{{$value->mabl}}')" class="btn btn-default btn-xs mbs">
                                                 <i class="fa fa-edit"></i>&nbsp; Sửa</button>
 
                                             <a href="{{url($furl.'maso='.$value->mabl)}}" class="btn btn-default btn-xs mbs">
@@ -85,7 +93,7 @@
 
     <!--Modal thông tin chi tiết -->
 
-    {!! Form::open(['url'=>'/chuc_nang/bang_luong/store','method'=>'post' , 'files'=>true, 'id' => 'create_bangluong']) !!}
+    {!! Form::open(['url'=>$furl.'store','method'=>'post' , 'files'=>true, 'id' => 'create_bangluong']) !!}
     <div id="chitiet-modal" tabindex="-1" role="dialog" aria-hidden="true" class="modal fade">
         <div class="modal-dialog modal-content">
             <div class="modal-header modal-header-primary">
@@ -94,16 +102,6 @@
             </div>
             <div class="modal-body">
                 <div class="form-horizontal">
-                    <div class="row">
-                        <div class="col-md-6">
-                            <label class="control-label"> Tháng<span class="require">*</span></label>
-                            {!! Form::select('thang',getThang(),date('m'),array('id' => 'thang', 'class' => 'form-control'))!!}
-                        </div>
-                        <div class="col-md-6">
-                            <label class="control-label"> Năm<span class="require">*</span></label>
-                            {!! Form::select('nam',getNam(),date('Y'),array('id' => 'nam', 'class' => 'form-control'))!!}
-                        </div>
-                    </div>
 
                     <div class="row">
                         <div class="col-md-12">
@@ -111,23 +109,10 @@
                             {!! Form::textarea('noidung',null,array('id' => 'noidung', 'class' => 'form-control','rows'=>'3'))!!}
                         </div>
                     </div>
-                    <!-- Phân loại đơn vị xa phường ko cần lĩnh vực hoạt động -->
-                    @if(session('admin')->maphanloai != 'KVXP')
-                        <label class="control-label">Lĩnh vực công tác </label>
-                        <select id="linhvuchoatdong" name="linhvuchoatdong" class="form-control">
-                            @foreach($m_linhvuc as $key => $val)
-                                <option value="{{$key}}">{{$val}}</option>
-                            @endforeach
-                        </select>
-                    @endif
+
 
                     <div class="row">
-                        <div class="col-md-6">
-                            <label class="control-label">Nguồn kinh phí</label>
-                            {!!Form::select('manguonkp',$m_nguonkp, null, array('id' => 'manguonkp','class' => 'form-control'))!!}
-                        </div>
-
-                        <div class="col-md-6">
+                        <div class="col-md-12">
                             <label class="control-label">Mức lương cơ bản</label>
                             {!!Form::text('luongcoban', $luongcb, array('id' => 'luongcoban','class' => 'form-control', 'data-mask'=>'fdecimal'))!!}
                         </div>
@@ -145,72 +130,11 @@
                         </div>
                     </div>
 
+                    <input type="hidden" id="thang" name="thang" value="{{$inputs['thang']}}"/>
+                    <input type="hidden" id="nam" name="nam" value="{{$inputs['nam']}}"/>
                     <input type="hidden" id="phantramhuong" name="phantramhuong" value="100"/>
                     <input type="hidden" id="id_ct" name="id_ct"/>
                     <input type="hidden" id="mabl" name="mabl"/>
-                </div>
-            </div>
-
-            <div class="modal-footer">
-                <button type="button" data-dismiss="modal" class="btn btn-default">Hủy thao tác</button>
-                <button type="submit" id="submit" name="submit" value="submit" class="btn btn-primary">Đồng ý</button>
-            </div>
-        </div>
-    </div>
-    {!! Form::close() !!}
-
-    {!! Form::open(['url'=>'/chuc_nang/bang_luong/store_truylinh','method'=>'post' , 'files'=>true, 'id' => 'create_bangluong_truylinh']) !!}
-    <div id="truylinh-modal" tabindex="-1" role="dialog" aria-hidden="true" class="modal fade">
-        <div class="modal-dialog modal-content">
-            <div class="modal-header modal-header-primary">
-                <button type="button" data-dismiss="modal" aria-hidden="true" class="close">&times;</button>
-                <h4 id="modal-header-primary-label" class="modal-title">Thông tin bảng truy lĩnh lương</h4>
-            </div>
-            <div class="modal-body">
-                <div class="form-horizontal">
-                    <div class="row">
-                        <div class="col-md-6">
-                            <label class="control-label"> Tháng<span class="require">*</span></label>
-                            {!! Form::select('thang_truylinh',getThang(),date('m'),array('id' => 'thang_truylinh', 'class' => 'form-control'))!!}
-                        </div>
-                        <div class="col-md-6">
-                            <label class="control-label"> Năm<span class="require">*</span></label>
-                            {!! Form::select('nam_truylinh',getNam(),date('Y'),array('id' => 'nam_truylinh', 'class' => 'form-control'))!!}
-                        </div>
-                    </div>
-
-                    <div class="row">
-                        <div class="col-md-12">
-                            <label class="control-label"> Nội dung</label>
-                            {!! Form::textarea('noidung_truylinh',null,array('id' => 'noidung_truylinh', 'class' => 'form-control','rows'=>'3'))!!}
-                        </div>
-                    </div>
-
-                    <div class="row">
-                        <div class="col-md-6">
-                            <label class="control-label">Nguồn kinh phí</label>
-                            {!!Form::select('manguonkp_truylinh',$m_nguonkp, null, array('id' => 'manguonkp_truylinh','class' => 'form-control'))!!}
-                        </div>
-                        <div class="col-md-6">
-                            <label class="control-label">Mức lương cơ bản</label>
-                            {!!Form::text('luongcoban_truylinh', $luongcb, array('id' => 'luongcoban_truylinh','class' => 'form-control', 'data-mask'=>'fdecimal'))!!}
-                        </div>
-                    </div>
-
-                    <div class="row">
-                        <div class="col-md-6">
-                            <label class="control-label">Ngày lập bảng lương</label>
-                            <input type="date" name="ngaylap_truylinh" id="ngaylap_truylinh" class="form-control" value="{{date('Y-m-d')}}"/>
-
-                        </div>
-                        <div class="col-md-6">
-                            <label class="control-label">Người lập bảng lương</label>
-                            {!!Form::text('nguoilap_truylinh', session('admin')->nguoilapbieu, array('id' => 'nguoilap_truylinh','class' => 'form-control'))!!}
-                        </div>
-                    </div>
-
-                    <input type="hidden" id="mabl_truylinh" name="mabl_truylinh"/>
-                    <input type="hidden" id="phanloai_truylinh" name="phanloai_truylinh"/>
                 </div>
             </div>
 
@@ -363,73 +287,54 @@
     <script>
         function add(){
             $('#noidung').val('');
-            //$('#phantramhuong').val(100);
-            $('#phanloai').val('BANGLUONG');
             $('#mabl').val('');
             $('#id_ct').val(0);
             $('#chitiet-modal').modal('show');
         }
-
-        function add_truylinh(){
-            $('#phanloai_truylinh').val('TRUYLINH');
-            $('#noidung_truylinh').val('');
-            $('#mabl_truylinh').val('');
-            $('#truylinh-modal').modal('show');
+        function getLink(){
+            var thang = $("#thangct").val();
+            var nam = $("#namct").val();
+            return '{{$furl}}'+'danh_sach?thang='+thang +'&nam='+nam;
         }
+        $(function(){
 
-        function edit(mabl,phanloai){
+            $('#thangct').change(function() {
+                window.location.href = getLink();
+            });
+
+            $('#thangct').change(function(){
+
+                window.location.href = getLink();
+            });
+
+            $('#namct').change(function(){
+                window.location.href = getLink();
+            });
+        })
+
+
+        function edit(mabl){
             //var tr = $(e).closest('tr');
             var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
-            if(phanloai == 'TRUYLINH'){
-                $.ajax({
-                    url: '{{$furl_ajax}}' + 'get',
-                    type: 'GET',
-                    data: {
-                        _token: CSRF_TOKEN,
-                        mabl: mabl
-                    },
-                    dataType: 'JSON',
-                    success: function (data) {
-                        $('#thang_truylinh').val(data.thang);
-                        $('#nam_truylinh').val(data.nam);
-                        $('#noidung_truylinh').val(data.noidung);
-                        $('#manguonkp_truylinh').val(data.manguonkp);
-                        $('#mabl_truylinh').val(data.mabl);
-                        $('#phanloai_truylinh').val(data.phanloai);
-                        $('#ngaylap_truylinh').val(data.ngaylap);
-                        $('#nguoilap_truylinh').val(data.nguoilap);
-                    },
-                    error: function(message){
-                        toastr.error(message,'Lỗi!');
-                    }
-                });
-                $('#truylinh-modal').modal('show');
-            }else{
-                $.ajax({
-                    url: '{{$furl_ajax}}' + 'get',
-                    type: 'GET',
-                    data: {
-                        _token: CSRF_TOKEN,
-                        mabl: mabl
-                    },
-                    dataType: 'JSON',
-                    success: function (data) {
-                        $('#thang').val(data.thang);
-                        $('#nam').val(data.nam);
-                        $('#noidung').val(data.noidung);
-                        $('#manguonkp').val(data.manguonkp);
-                        $('#phantramhuong').val(data.phantramhuong);
-                        $('#mabl').val(data.mabl);
-                        $('#phanloai').val(data.phanloai);
-                        $('#ngaylap').val(data.ngaylap);
-                        $('#nguoilap').val(data.nguoilap);
-                    },
-                    error: function(message){
-                        toastr.error(message,'Lỗi!');
-                    }
-                });
-                $('#chitiet-modal').modal('show');
-            }
+            $.ajax({
+                url: '{{$furl}}' + 'get',
+                type: 'GET',
+                data: {
+                    _token: CSRF_TOKEN,
+                    mabl: mabl
+                },
+                dataType: 'JSON',
+                success: function (data) {
+                    $('#noidung').val(data.noidung);
+                    $('#mabl').val(data.mabl);
+                    $('#ngaylap').val(data.ngaylap);
+                    $('#nguoilap').val(data.nguoilap);
+                },
+                error: function(message){
+                    toastr.error(message,'Lỗi!');
+                }
+            });
+            $('#chitiet-modal').modal('show');
 
         }
 
@@ -442,33 +347,6 @@
             $('#inbl-modal').modal('show');
             //$('#inbl-modal').modal('hide');
         }
-        $(function(){
-            $('#create_bangluong :submit').click(function(){
-                var ok = true, message='';
-                var thang=$('#thang').val();
-                var nam=$('#nam').val();
-
-                if(thang==null){
-                    ok=false;
-                    message +='Tháng bảng lương không được bỏ trống. \n';
-                }
-                if(nam==null){
-                    ok=false;
-                    message +='Năm bảng lương không được bỏ trống. \n';
-                }
-
-                //Kết quả
-                if ( ok == false){
-                    toastr.error(message,"Lỗi!");
-                    $("form").submit(function (e) {
-                        e.preventDefault();
-                    });
-                }
-                else{
-                    $("form").unbind('submit').submit();
-                }
-            });
-        });
     </script>
     @include('includes.modal.delete')
 @stop

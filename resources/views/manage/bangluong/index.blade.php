@@ -72,17 +72,19 @@
                                         <td>{{$value->tennguonkp}}</td>
                                         <td>{{$value->noidung}}</td>
                                         <td>
-                                            <button type="button" onclick="edit('{{$value->mabl}}','{{$value->phanloai}}')" class="btn btn-default btn-xs mbs">
-                                                <i class="fa fa-edit"></i>&nbsp; Sửa</button>
+                                            @if(!$value->thaotac)
+                                                <button type="button" onclick="edit('{{$value->mabl}}','{{$value->phanloai}}')" class="btn btn-default btn-xs mbs">
+                                                    <i class="fa fa-edit"></i>&nbsp; Sửa</button>
 
-                                            <a href="{{url($furl.'maso='.$value->mabl)}}" class="btn btn-default btn-xs mbs">
-                                                <i class="fa fa-th-list"></i>&nbsp; Chi tiết</a>
+                                                <a href="{{url($furl.'maso='.$value->mabl)}}" class="btn btn-default btn-xs mbs">
+                                                    <i class="fa fa-th-list"></i>&nbsp; Chi tiết</a>
 
+
+                                                <button type="button" onclick="cfDel('{{$furl.'del/'.$value->id}}')" class="btn btn-danger btn-xs mbs" data-target="#delete-modal-confirm" data-toggle="modal">
+                                                    <i class="fa fa-trash-o"></i>&nbsp; Xóa</button>
+                                            @endif
                                             <button type="button" onclick="inbl('{{$value->mabl}}','{{$value->thang}}','{{$value->nam}}')" class="btn btn-default btn-xs mbs">
-                                                <i class="fa fa-print"></i>&nbsp; In</button>
-
-                                            <button type="button" onclick="cfDel('{{$furl.'del/'.$value->id}}')" class="btn btn-danger btn-xs mbs" data-target="#delete-modal-confirm" data-toggle="modal">
-                                                <i class="fa fa-trash-o"></i>&nbsp; Xóa</button>
+                                                <i class="fa fa-print"></i>&nbsp; In bảng lương</button>
                                         </td>
                                     </tr>
                                 @endforeach
@@ -383,7 +385,6 @@
                 window.location.href = getLink();
             });
         })
-
 
         function add(){
             $('#noidung').val('');

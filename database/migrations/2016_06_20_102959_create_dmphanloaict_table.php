@@ -18,6 +18,14 @@ class CreateDmphanloaictTable extends Migration
             $table->string('macongtac', 50)->nullable();
             $table->string('mact', 50)->nullable();
             $table->string('tenct', 50)->nullable();
+            $table->double('bhxh')->default(0);
+            $table->double('bhyt')->default(0);
+            $table->double('bhtn')->default(0);
+            $table->double('kpcd')->default(0);
+            $table->double('bhxh_dv')->default(0);
+            $table->double('bhyt_dv')->default(0);
+            $table->double('bhtn_dv')->default(0);
+            $table->double('kpcd_dv')->default(0);
             $table->string('ghichu')->nullable();
             $table->timestamps();
         });

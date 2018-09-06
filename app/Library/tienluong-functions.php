@@ -511,4 +511,20 @@ function getPhanLoaiNhanVien(){
     return array('0' => 'Cán bộ (Nhân viên)',
         '1' => 'Thủ trưởng (lãnh đạo)');
 }
+
+function getPhanLoaiCanBo()
+{
+    return array('1' => 'Cán bộ đang công tác',
+        '2' => 'Cán bộ tạm ngưng theo dõi',
+        '3' => 'Cán bộ đang điều động',
+        '4' => 'Cán bộ được điều động',
+        '9' => 'Cán bộ đã thôi công tác');
+}
+
+function getPhanLoaiThoiCongTac(){
+    return array('NGHIHUU' => 'Nghỉ hưu',
+        'NGHIVIEC' => 'Xin nghỉ việc',
+        'BUOCNGHI' => 'Buộc thôi việc',
+        'KHAC'=> 'Khác');
+}
 ?>

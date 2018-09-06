@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\dmphanloaicongtac;
 use App\dmphanloaicongtac_baohiem;
+use App\dmphanloaict;
 use Illuminate\Http\Request;
 
 use App\Http\Requests;
@@ -17,11 +18,11 @@ class dmphanloaicongtac_baohiemController extends Controller
     {
         if (Session::has('admin')) {
             $model = dmphanloaicongtac_baohiem::where('madv', session('admin')->madv)->get();
-            $model_phanloai = dmphanloaicongtac::all();
-            $a_pl = array_column($model_phanloai->toArray(),'tencongtac','macongtac');
+            $model_phanloai = dmphanloaict::all();
+            $a_pl = array_column($model_phanloai->toArray(),'tenct','mact');
 
             foreach($model as $ct) {
-                $ct->tencongtac = isset($a_pl[$ct->macongtac]) ? $a_pl[$ct->macongtac] : '';
+                $ct->tencongtac = isset($a_pl[$ct->mact]) ? $a_pl[$ct->mact] : '';
             }
             return view('system.danhmuc.mucbaohiem.index')
                 ->with('model', $model)
@@ -40,9 +41,9 @@ class dmphanloaicongtac_baohiemController extends Controller
             die(json_encode($result));
         }
         $inputs = $request->all();
-        $model = dmphanloaicongtac::where('macongtac',$inputs['macongtac'])->first();
+        $model = dmphanloaict::where('mact',$inputs['mact'])->first();
         $model_bh = dmphanloaicongtac_baohiem::where('madv',$inputs['madv'])
-            ->where('macongtac',$inputs['macongtac'])->first();
+            ->where('mact',$inputs['mact'])->first();
         if(count($model_bh)>0){
             $model->bhxh = $model_bh->bhxh;
             $model->bhyt = $model_bh->bhyt;
@@ -71,7 +72,7 @@ class dmphanloaicongtac_baohiemController extends Controller
         }
 
         $inputs = $request->all();
-        $model_bh = dmphanloaicongtac_baohiem::where('madv',$inputs['madv'])->where('macongtac',$inputs['macongtac'])->first();
+        $model_bh = dmphanloaicongtac_baohiem::where('madv',$inputs['madv'])->where('mact',$inputs['mact'])->first();
         $model_bh->update($inputs);
         $result['message'] = "Cập nhật thành công.";
         $result['status'] = 'success';

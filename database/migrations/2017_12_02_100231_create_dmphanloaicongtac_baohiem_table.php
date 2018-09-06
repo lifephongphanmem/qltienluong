@@ -17,6 +17,7 @@ class CreateDmphanloaicongtacBaohiemTable extends Migration
             $table->increments('id');
             $table->string('madv')->nullable();
             $table->string('macongtac')->nullable();
+            $table->string('mact', 50)->nullable();
             $table->double('bhxh')->default(0);
             $table->double('bhyt')->default(0);
             $table->double('bhtn')->default(0);

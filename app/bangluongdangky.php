@@ -4,9 +4,9 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class bangluong extends Model
+class bangluongdangky extends Model
 {
-    protected $table = 'bangluong';
+    protected $table = 'bangluongdangky';
     protected $fillable = [
         'id',
         'mabl',
@@ -16,10 +16,9 @@ class bangluong extends Model
         'ngaylap',
         'nguoilap',
         'ghichu',
-        'linhvuchoatdong', //Phân loại xã phường ko cần chọn lĩnh vực hoạt động
+        'linhvuchoatdong',
         'manguonkp',
         'phanloai',
-        'phantramhuong',
         'madv',
         'luongcoban'
     ];

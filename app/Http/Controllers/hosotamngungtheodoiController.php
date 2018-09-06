@@ -16,9 +16,8 @@ class hosotamngungtheodoiController extends Controller
     {
         if (Session::has('admin')) {
             $model = hosotamngungtheodoi::where('madv', session('admin')->madv)->get();
-
             $a_phanloai = getPhanLoaiTamNgungTheoDoi();
-            $a_canbo = array_column(hosocanbo::where('madv', session('admin')->madv)->get()->toarray(), 'tencanbo', 'macanbo');
+            $a_canbo = array_column(hosocanbo::where('madv', session('admin')->madv)->where('theodoi','<','9')->get()->toarray(), 'tencanbo', 'macanbo');
             foreach ($model as $hs) {
                 $hs->phanloai = isset($a_phanloai[$hs->maphanloai]) ? $a_phanloai[$hs->maphanloai] : "";
                 $hs->tencanbo = isset($a_canbo[$hs->macanbo]) ? $a_canbo[$hs->macanbo] : "";

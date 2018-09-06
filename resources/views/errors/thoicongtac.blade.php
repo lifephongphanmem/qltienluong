@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
-<head><title>Trùng dữ liệu</title>
+<head><title>Lỗi trùng cán bộ</title>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -17,8 +17,8 @@
     <link rel="stylesheet" href="{{ url('css/style-responsive.css') }}">
 </head>
 <body id="error-page" class="animated bounceInLeft">
-<div id="error-page-content"><h1>Lỗi!</h1><h2>Hệ thống đã có bảng lương với nguồn kinh phí này!</h2>
-    <p><a href='{{url('chuc_nang/bang_luong/chi_tra?thang='.date('m').'&nam='.date('Y'))}}'>Bấm vào đây</a> để quay lại.</p>
+<div id="error-page-content"><h1>Lỗi!</h1><h2>Cán bộ này đã thôi công tác!</h2>
+    <p><a href='{{url('/nghiep_vu/da_nghi/danh_sach')}}'>Bấm vào đây</a> để quay lại.</p>
 </div>
 <script src="{{ url('js/jquery-1.9.1.js') }}"></script>
 <script src="{{ url('js/jquery-migrate-1.2.1.min.js') }}"></script>

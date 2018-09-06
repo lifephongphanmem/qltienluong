@@ -6,6 +6,7 @@ use App\dmdonvi;
 use App\dmdonvibaocao;
 use App\dmphanloaicongtac;
 use App\dmphanloaicongtac_baohiem;
+use App\dmphanloaict;
 use App\dmphucap;
 use App\dmphucap_donvi;
 use App\Users;
@@ -200,7 +201,7 @@ class UsersController extends Controller
                 //phân loại công tác
                 $model_phanloai = dmphanloaicongtac_baohiem::where('madv', $ttuser->madv)->get();
                 if (count($model_phanloai) == 0) {
-                    $model_phanloai = dmphanloaicongtac::select('macongtac', 'bhxh', 'bhyt', 'bhtn', 'kpcd', 'bhxh_dv', 'bhyt_dv', 'bhtn_dv', 'kpcd_dv', DB::raw($ttuser->madv . ' as madv'))->get();
+                    $model_phanloai = dmphanloaict::select('macongtac','mact', 'bhxh', 'bhyt', 'bhtn', 'kpcd', 'bhxh_dv', 'bhyt_dv', 'bhtn_dv', 'kpcd_dv', DB::raw($ttuser->madv . ' as madv'))->get();
                     dmphanloaicongtac_baohiem::insert($model_phanloai->toarray());
                 }
                 //phụ cấp

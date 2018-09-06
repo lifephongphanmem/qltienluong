@@ -17,8 +17,8 @@
     <link rel="stylesheet" href="{{ url('css/style-responsive.css') }}">
 </head>
 <body id="error-page" class="animated bounceInLeft">
-<div id="error-page-content"><h1>Lỗi!</h1><h2>Hệ thống đã có bảng lương với nguồn kinh phí này!</h2>
-    <p><a href='{{url('chuc_nang/bang_luong/chi_tra?thang='.date('m').'&nam='.date('Y'))}}'>Bấm vào đây</a> để quay lại.</p>
+<div id="error-page-content"><h1>Lỗi!</h1><h2>Hệ thống đã có bảng đăng ký lương này!</h2>
+    <p><a href='{{url('chuc_nang/bang_luong/dang_ky_luong?thang='.date('m').'&nam='.date('Y'))}}'>Bấm vào đây</a> để quay lại.</p>
 </div>
 <script src="{{ url('js/jquery-1.9.1.js') }}"></script>
 <script src="{{ url('js/jquery-migrate-1.2.1.min.js') }}"></script>

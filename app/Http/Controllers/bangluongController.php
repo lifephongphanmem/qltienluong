@@ -19,6 +19,7 @@ use App\hosocanbo_kiemnhiem;
 use App\hosotamngungtheodoi;
 use App\hosotruylinh;
 use App\ngachluong;
+use App\tonghopluong_donvi;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 
@@ -84,8 +85,11 @@ class bangluongController extends Controller
             $model_nhomct = dmphanloaicongtac::select('macongtac', 'tencongtac')->get();
             $model_tenct = dmphanloaict::select('tenct', 'macongtac', 'mact')->get();
             $model = bangluong::where('madv', session('admin')->madv)->where('thang', $inputs['thang'])->where('nam', $inputs['nam'])->get();
-
+            $model_tonghop = tonghopluong_donvi::where('madv', session('admin')->madv)
+                ->where('thang', $inputs['thang'])->where('nam', $inputs['nam'])->first();
+            $thaotac = count($model_tonghop)> 0 ? false :true;
             foreach ($model as $bl) {
+                $model->thaotac = $thaotac;
                 $bl->tennguonkp = isset($m_nguonkp[$bl->manguonkp]) ? $m_nguonkp[$bl->manguonkp] : '';
                 $bl->tenphanloai = isset($a_phanloai[$bl->phanloai]) ? $a_phanloai[$bl->phanloai] : 'Bảng lương cán bộ';
             }
@@ -146,7 +150,7 @@ class bangluongController extends Controller
             $m_cb = hosocanbo::where('madv', $madv)
                 ->select('stt', 'macanbo', 'macongchuc', 'sunghiep', 'tencanbo', 'mact', 'lvhd', 'macvcq', 'mapb', 'msngbac', 'heso', 'hesopc', 'hesott', 'vuotkhung', DB::raw("'" . $inputs['mabl'] . "' as mabl"),
                     'pclt', 'pcdd', 'pck', 'pccv', 'pckv', 'pcth', 'pcdh', 'pcld', 'pcudn', 'pctn', 'pctnn', 'pcdbn', 'pcvk', 'pckn', 'pccovu', 'pcdbqh', 'pctnvk', 'pcbdhdcu', 'pcdang', 'pcthni', 'pcct')
-                ->where('theodoi', '1')->wherenotin('macanbo', $m_tamngung->toarray())->get();
+                ->where('theodoi','<', '9')->wherenotin('macanbo', $m_tamngung->toarray())->get();
 
             //Lấy cán bộ tạm ngưng theo dõi
             //Nếu phân loai = THAISAN && pcttn >0 =>đưa vào bảng lương
@@ -1770,7 +1774,7 @@ class bangluongController extends Controller
                 'luongcb' => $m_bl->luongcoban);
             //xử lý ẩn hiện cột phụ cấp => biết tổng số cột hiện => colspan trên báo cáo
             //$a_phucapbc = getColPhuCap_BaoCao();
-            $a_goc = array('heso', 'vuotkhung', 'hesott');
+            $a_goc = array('hesott');
             $model_pc = dmphucap_donvi::where('madv', $m_bl->madv)->where('phanloai', '<', '3')->wherenotin('mapc', $a_goc)->get();
             $a_phucap = array();
             $col = 0;
@@ -1883,8 +1887,6 @@ class bangluongController extends Controller
                 'thang'=>$m_bl->thang,
                 'nam'=>$m_bl->nam,
                 'ngaylap'=>$m_bl->ngaylap);
-
-
 
             Excel::create('DSCHITRA',function($excel) use($m_dv,$thongtin,$model,$model_congtac){
                 $excel->sheet('New sheet', function($sheet) use($m_dv,$thongtin,$model,$model_congtac){

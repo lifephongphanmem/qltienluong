@@ -1,9 +1,10 @@
 <?php
 
+use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateBangluongTable extends Migration
+class CreateBangluongdangkyTable extends Migration
 {
     /**
      * Run the migrations.
@@ -12,7 +13,7 @@ class CreateBangluongTable extends Migration
      */
     public function up()
     {
-        Schema::create('bangluong', function (Blueprint $table) {
+        Schema::create('bangluongdangky', function (Blueprint $table) {
             $table->increments('id');
             $table->string('mabl',50)->unique();
             $table->string('thang',10)->nullable();
@@ -24,7 +25,6 @@ class CreateBangluongTable extends Migration
             $table->string('manguonkp',50)->nullable();
             $table->string('phanloai',50)->nullable();//bảng lương cán bộ /  bảng truy lĩnh lương
             $table->string('linhvuchoatdong')->nullable();//Phân loại xã phường ko cần chọn lĩnh vực hoạt động
-            $table->double('phantramhuong')->default(100);//Tùy theo nguồn kinh phí để tùy chọn % hưởng lương
             $table->double('luongcoban')->default(0);
             $table->date('ngaygui')->nullable();
             $table->string('nguoigui')->nullable();
@@ -41,6 +41,6 @@ class CreateBangluongTable extends Migration
      */
     public function down()
     {
-        Schema::drop('bangluong');
+        Schema::drop('bangluongdangky');
     }
 }

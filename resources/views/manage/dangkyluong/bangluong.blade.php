@@ -32,7 +32,7 @@
             <div class="portlet light bordered">
                 <div class="portlet-title">
                     <div class="caption">
-                        CHI TIẾT BẢNG LƯƠNG THÁNG {{$m_bl->thang}} NĂM {{$m_bl->nam}}
+                        CHI TIẾT BẢNG ĐĂNG KÝ LƯƠNG THÁNG {{$m_bl->thang}} NĂM {{$m_bl->nam}}
                     </div>
                     <div class="actions"></div>
                 </div>
@@ -74,7 +74,7 @@
                 </div>
                 <div class="row">
                     <div class="col-md-offset-5 col-md-8">
-                        <a href="{{url('/chuc_nang/bang_luong/danh_sach')}}" class="btn btn-default"><i class="fa fa-reply"></i>&nbsp;Quay lại</a>
+                        <a href="{{url($furl.'danh_sach?thang='.date('m').'&nam='.date('Y'))}}" class="btn btn-default"><i class="fa fa-reply"></i>&nbsp;Quay lại</a>
 
                     </div>
                 </div>

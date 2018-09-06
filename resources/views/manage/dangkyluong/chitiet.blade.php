@@ -26,7 +26,7 @@
                     <input type="hidden" id="kpcd_dv" name="kpcd_dv" value="{{$model->kpcd_dv}}" />
                     <input type="hidden" id="luongcoban" name="luongcoban" value="{{$model->luongcoban}}" />
 
-                    {!! Form::model($model, ['url'=>'/chuc_nang/bang_luong/updatect/'.$model->id, 'method' => 'POST', 'files'=>true, 'id' => 'create-hscb', 'class'=>'horizontal-form form-validate']) !!}
+                    {!! Form::model($model, ['url'=>$furl.'updatect/'.$model->id, 'method' => 'POST', 'files'=>true, 'id' => 'create-hscb', 'class'=>'horizontal-form form-validate']) !!}
                     <input type="hidden" id="macanbo" name="macanbo" value="{{$model->macanbo}}" />
                     <input type="hidden" id="mabl" name="mabl" value="{{$model->mabl}}" />
                         <div class="form-body">
