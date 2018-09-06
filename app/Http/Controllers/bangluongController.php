@@ -448,7 +448,7 @@ class bangluongController extends Controller
                     ->get();
 
                 $model_hoso = hosocanbo::select('sunghiep', 'mact','macanbo', 'macvcq')->where('madv',session('admin')->madv)->get();
-                $model_congtac = dmphanloaict::all();
+                //$model_congtac = dmphanloaict::all();
                 $model_phanloai = dmphanloaicongtac_baohiem::where('madv', session('admin')->madv)->get();
                 $model_chucvu = dmchucvucq::where('maphanloai',session('admin')->maphanloai)
                     ->wherein('madv',['SA',session('admin')->madv])->get();
@@ -483,10 +483,10 @@ class bangluongController extends Controller
                         $cb->macvcq = $hoso->macvcq;
                     }
 
-                    $congtac = $model_congtac->where('mact', $cb->mact)->first();
-                    if(count($congtac)>0){$cb->macongtac = $congtac->macongtac;}
+                    //$congtac = $model_congtac->where('mact', $cb->mact)->first();
+                    //if(count($congtac)>0){$cb->macongtac = $congtac->macongtac;}
 
-                    $phanloai = $model_phanloai->where('macongtac', $cb->macongtac)->first();
+                    $phanloai = $model_phanloai->where('mact', $cb->mact)->first();
                     if(count($phanloai) > 0) {
                         $cb->bhxh = floatval($phanloai->bhxh);
                         $cb->bhyt = floatval($phanloai->bhyt);

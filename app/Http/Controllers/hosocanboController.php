@@ -60,7 +60,6 @@ class hosocanboController extends Controller
                 if(count($congtac)>0){
                     $hs->tenct = $congtac->tenct;
                 }
-
             }
 
             $model = $m_hs->sortBy('stt');
