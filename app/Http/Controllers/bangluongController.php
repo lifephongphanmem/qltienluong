@@ -122,6 +122,7 @@ class bangluongController extends Controller
             $model_chk = bangluong::where('thang', $inputs['thang'])->where('nam', $inputs['nam'])
                 //->where('luongcoban', $inputs['luongcoban'])
                 ->where('manguonkp', $inputs['manguonkp'])
+                ->where('madv',session('admin')->madv)
                 ->first();
 
             if(count($model_chk)>0){

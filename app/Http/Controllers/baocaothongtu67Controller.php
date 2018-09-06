@@ -1559,6 +1559,14 @@ class baocaothongtu67Controller extends Controller
             return view('errors.notlogin');
     }
 
+    function maubckpbhtn() {
+        if (Session::has('admin')) {
+            return view('reports.thongtu67.BcNCKPTHBHTN')
+                ->with('pageTitle','BÁO CÁO NHU CẦU KINH PHÍ THỰC HIỆN BẢO HIỂM THẤT NGHIỆP THEO NGHỊ ĐỊNH 28/2015/NĐ-CP');
+        } else
+            return view('errors.notlogin');
+    }
+
     function mau4a_tt67(Request $request)
     {
         //Kiểm tra cấp đơn vị xem đơn vị để update trường masoh hoặc masot

@@ -152,9 +152,9 @@
                         <span class="arrow "></span>
                     </a>
                     <ul class="sub-menu">
-                        <li>
+                        <!--li>
                             <a href="{{url('chuc_nang/dang_ky_luong/danh_sach')}}"><i class="fa fa-caret-right"></i>Đăng ký lương</a>
-                        </li>
+                        </li-->
 
                         <li>
                             <a href="{{url('chuc_nang/bang_luong/chi_tra?thang='.date('m').'&nam='.date('Y'))}}"><i class="fa fa-caret-right"></i>Chi trả lương</a>
