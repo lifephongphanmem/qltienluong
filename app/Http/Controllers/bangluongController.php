@@ -584,7 +584,7 @@ class bangluongController extends Controller
             bangluong_ct::where('mabl', $model->mabl)->delete();
             bangluong_phucap::where('mabl', $model->mabl)->delete();
             $model->delete();
-            return redirect('/chuc_nang/bang_luong/danh_sach');
+            return redirect('/chuc_nang/bang_luong/chi_tra?thang='.$model->thang.'&nam='. $model->nam);
         } else
             return view('errors.notlogin');
     }
