@@ -155,8 +155,8 @@ class dutoanluongController extends Controller
             //thiếu mã đơn vị, lương cơ bản
             $m_cb = hosocanbo::where('madv', session('admin')->madv)
                 ->select('stt', 'macanbo', 'macongchuc', 'sunghiep', 'tencanbo', 'mact', 'lvhd', 'macvcq', 'mapb', 'msngbac', 'heso', 'hesopc', 'hesott', 'vuotkhung',
-                    'pclt', 'pcdd', 'pck', 'pccv', 'pckv', 'pcth', 'pcdh', 'pcld', 'pcudn', 'pctn', 'pctnn', 'pcdbn', 'pcvk', 'pckn', 'pccovu', 'pcdbqh', 'pctnvk', 'pcbdhdcu', 'pcdang', 'pcthni', 'pcct')
-                ->where('theodoi', '1')
+                    'pclt', 'pcdd', 'pck', 'pccv', 'pckv', 'pcth', 'pcdh', 'pcld', 'pcudn', 'pctn', 'pctnn', 'pcdbn', 'pcvk', 'pckn', 'pccovu', 'pcdbqh', 'pctnvk', 'pcbdhdcu', 'pcdang', 'pcthni', 'pcct', 'pckct')
+                ->where('theodoi','<', '9')
                 ->get();
 
             $a_congtac = array_column(dmphanloaict::all()->toArray(), 'macongtac', 'mact');

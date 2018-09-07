@@ -64,9 +64,9 @@
 </div>
 {!! Form::close() !!}
 
-<!--Mẫu 2 -->
-{!! Form::open(['url'=>(isset($furl)?$furl : '').'mau02','method'=>'post' ,'target'=>'_blank', 'files'=>true, 'id' => 'printf_mau2']) !!}
-<div id="mau2-modal" tabindex="-1" role="dialog" aria-hidden="true" class="modal fade">
+<!--Mẫu TT107 -->
+{!! Form::open(['url'=>(isset($furl)?$furl : '').'mautt107','method'=>'post' ,'target'=>'_blank', 'files'=>true, 'id' => 'printf_mautt107']) !!}
+<div id="mautt107-modal" tabindex="-1" role="dialog" aria-hidden="true" class="modal fade">
     <div class="modal-dialog modal-content">
         <div class="modal-header modal-header-primary">
             <button type="button" data-dismiss="modal" aria-hidden="true" class="close">&times;</button>
@@ -77,7 +77,7 @@
                 <div class="row">
                     <div class="col-md-12">
                         <label class="control-label">Khối/Tổ công tác</label>
-                        <select name="mapb_mau2" id="mapb_mau2" class="form-control select2me">
+                        <select name="mapb" id="mapb" class="form-control select2me">
                             @foreach(getPhongBan(true) as $key=>$val)
                                 <option value="{{$key}}">{{$val}}</option>
                             @endforeach
@@ -86,12 +86,12 @@
 
                     <div class="col-md-12">
                         <label class="control-label">Chức vụ</label>
-                        {!!Form::select('macvcq_mau2',getChucVuCQ(true), null, array('id' => 'macvcq_mau2','class' => 'form-control select2me'))!!}
+                        {!!Form::select('macvcq',getChucVuCQ(true), null, array('id' => 'macvcq','class' => 'form-control select2me'))!!}
                     </div>
 
                     <div class="col-md-12">
                         <label class="control-label">Phân loại công tác</label>
-                        <select class="form-control select2me" name="mact_mau2" id="mact_mau2">
+                        <select class="form-control select2me" name="mact" id="mact">
                             <option value="">-- Tất cả các phân loại công tác --</option>
                             @foreach($model_nhomct as $kieuct)
                                 <optgroup label="{{$kieuct->tencongtac}}">
@@ -111,11 +111,11 @@
                 </div>
             </div>
 
-            <input type="hidden" id="mabl_mau2" name="mabl_mau2"/>
+            <input type="hidden" id="mabl_mautt107" name="mabl_mautt107"/>
         </div>
         <div class="modal-footer">
             <button type="button" data-dismiss="modal" class="btn btn-default">Hủy thao tác</button>
-            <button type="submit" data-dismiss="modal" class="btn btn-success" onclick="ClickBC2()">Đồng ý</button>
+            <button type="submit" data-dismiss="modal" class="btn btn-success" onclick="ClickBCtt107()">Đồng ý</button>
             <button type="submit" data-dismiss="modal" class="btn btn-primary" onclick="ClickBC2_excel()">Xuất Excel</button>
 
         </div>
@@ -764,9 +764,9 @@
         $('#mabl_mau1').val($('#mabl_in').val());
         $('#mau1-modal').modal('show');
     }
-    function inblm2(){
-        $('#mabl_mau2').val($('#mabl_in').val());
-        $('#mau2-modal').modal('show');
+    function inblmtt107(){
+        $('#mabl_mautt107').val($('#mabl_in').val());
+        $('#mautt107-modal').modal('show');
     }
     function inblm3(){
         $('#mabl_mau3').val($('#mabl_in').val());
@@ -818,8 +818,8 @@
             $('#mau1-modal').modal('hide');
         });
 
-        $('#printf_mau2 :submit').click(function(){
-            $('#mau2-modal').modal('hide');
+        $('#printf_mautt107 :submit').click(function(){
+            $('#mautt107-modal').modal('hide');
         });
 
         $('#printf_mau3 :submit').click(function(){
@@ -874,15 +874,15 @@
         $('#printf_mau1').submit();
     }
 
-    function ClickBC2() {
-        var url = '{{(isset($furl)?$furl : '').'mau02'}}'
-        $('#printf_mau2').attr('action', url);
-        $('#printf_mau2').submit();
+    function ClickBCtt107() {
+        var url = '{{(isset($furl)?$furl : '').'mautt107'}}'
+        $('#printf_mautt107').attr('action', url);
+        $('#printf_mautt107').submit();
     }
-    function ClickBC2_excel(){
-        var url = '{{(isset($furl)?$furl : '').'mau02_excel'}}'
-        $('#printf_mau2').attr('action',url);
-        $('#printf_mau2').submit();
+    function ClickBCtt107_excel(){
+        var url = '{{(isset($furl)?$furl : '').'mautt107_excel'}}'
+        $('#printf_mautt107').attr('action',url);
+        $('#printf_mautt107').submit();
     }
     
     function ClickBC3() {

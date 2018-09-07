@@ -1085,14 +1085,12 @@ class bangluongController extends Controller
             return view('errors.notlogin');
     }
 
-    public function printf_mau02(Request $request){
+    public function printf_mautt107(Request $request){
         if (Session::has('admin')) {
             $inputs = $request->all();
-            $inputs['mabl'] = $inputs['mabl_mau2'];
-            $inputs['mapb'] = $inputs['mapb_mau2'];
-            $inputs['macvcq'] = $inputs['macvcq_mau2'];
-            $inputs['mact'] = $inputs['mact_mau2'];
-            $model = $this->getBangLuong($inputs,1)->where('phanloai','CVCHINH');
+
+            $inputs['mabl'] = $inputs['mabl_mautt107'];
+            $model = $this->getBangLuong($inputs)->where('phanloai','CVCHINH');
             //dd($inputs);
             $mabl = $inputs['mabl'];
             $m_bl = bangluong::select('thang','nam','mabl','madv','ngaylap')->where('mabl',$mabl)->first();
@@ -1109,16 +1107,18 @@ class bangluongController extends Controller
                 'ngaylap'=>$m_bl->ngaylap,
                 'cochu'=>$inputs['cochu']);
             //xử lý ẩn hiện cột phụ cấp => biết tổng số cột hiện => colspan trên báo cáo
-            $a_goc = array('heso','vuotkhung','hesott');
+            $a_goc = array('hesott');
             $model_pc = dmphucap_donvi::where('madv',$m_bl->madv)->where('phanloai','<','3')->wherenotin('mapc',$a_goc)->get();
             $a_phucap = array();
             $col = 0;
 
-            foreach($model_pc as $ct){
-                $a_phucap[$ct->mapc] = $ct->report;
-                $col++;
+            foreach($model_pc as $ct) {
+                if ($model->sum($ct->mapc) > 0) {
+                    $a_phucap[$ct->mapc] = $ct->report;
+                    $col++;
+                }
             }
-            return view('reports.bangluong.donvi.maubangluong_sotien')
+            return view('reports.bangluong.donvi.mautt107')
                 ->with('model',$model->sortBy('stt'))
                 ->with('model_pb',getPhongBan())
                 ->with('m_dv',$m_dv)

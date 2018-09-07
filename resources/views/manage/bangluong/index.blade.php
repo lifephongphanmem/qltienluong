@@ -228,7 +228,7 @@
 
     <!--Modal thông tin tùy chọn in bảng lương -->
     <div id="inbl-modal" tabindex="-1" role="dialog" aria-hidden="true" class="modal fade">
-        <div class="modal-dialog modal-content">
+        <div class="modal-lg modal-dialog modal-content">
             <div class="modal-header modal-header-primary">
                 <button type="button" data-dismiss="modal" aria-hidden="true" class="close">&times;</button>
                 <h4 id="hd-inbl" class="modal-title">In bảng lương</h4>
@@ -238,18 +238,20 @@
                 <div class="row">
                     <div class="col-md-6">
                         <div class="form-group">
-                            <button type="button" style="border-width: 0px" onclick="inblm1()" class="btn btn-default btn-xs mbs"
-                                 title="Bảng lương của cán bộ theo mẫu C02-HD">
-                                <i class="fa fa-print"></i>&nbsp; Bảng lương mẫu 1</button>
+                            <button type="button" style="border-width: 0px" onclick="inblmtt107()" class="btn btn-default btn-xs mbs"
+                                    title="Bảng lương của cán bộ theo mẫu C02-HD hệ số phụ cấp hiển thị số tiền">
+                                <i class="fa fa-print"></i>&nbsp; Bảng lương mẫu C02-HD (TT107/2017/TT-BTC)</button>
                         </div>
                     </div>
+
                     <div class="col-md-6">
                         <div class="form-group">
-                            <button type="button" style="border-width: 0px" onclick="inblm2()" class="btn btn-default btn-xs mbs"
-                                title="Bảng lương của cán bộ theo mẫu C02-HD hệ số phụ cấp hiển thị số tiền">
-                                <i class="fa fa-print"></i>&nbsp; Bảng lương mẫu 2</button>
+                            <button type="button" style="border-width: 0px" onclick="inblm1()" class="btn btn-default btn-xs mbs"
+                                 title="Bảng lương của cán bộ theo mẫu C02-HD">
+                                <i class="fa fa-print"></i>&nbsp; Bảng lương mẫu C02-HD (TT185/2010/TT-BTC)</button>
                         </div>
                     </div>
+
                 </div>
 
                 <div class="row">
