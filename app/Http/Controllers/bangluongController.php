@@ -276,7 +276,7 @@ class bangluongController extends Controller
                     $cb->macongtac = $congtac->macongtac;
                 }
 
-                $phanloai = $model_phanloai->where('macongtac', $cb->macongtac)->first();
+                $phanloai = $model_phanloai->where('mact', $cb->mact)->first();
 
                 if (count($phanloai) > 0) {
                     $cb->bhxh = floatval($phanloai->bhxh) / 100;
