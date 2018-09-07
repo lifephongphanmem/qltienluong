@@ -173,7 +173,9 @@ class bangluongController extends Controller
 
             $model_congtac = dmphanloaict::all();
             $model_phanloai = dmphanloaicongtac_baohiem::where('madv', session('admin')->madv)->get();
-            $model_phucap = dmphucap_donvi::where('madv', session('admin')->madv)->get();
+            //Không tính truy lĩnh
+            $a_goc = array('hesott');
+            $model_phucap = dmphucap_donvi::where('madv', session('admin')->madv)->wherenotin('mapc', $a_goc)->get();
 
             //Tạo bảng lương
             bangluong::create($inputs);
@@ -644,12 +646,13 @@ class bangluongController extends Controller
                 $model->bhtn_dv = $model_baohiem->bhtn_dv;
                 $model->kpcd_dv = $model_baohiem->kpcd_dv;
             }
-            //dd($model);
-            $a_donvi = dmdonvi::where('madv',session('admin')->madv)->first()->toarray();
+
+            //$a_donvi = dmdonvi::where('madv',session('admin')->madv)->first()->toarray();
 
             $a_goc = array('heso','vuotkhung','hesott','hesopc');
             $model_pc = dmphucap_donvi::where('madv', $model_bangluong->madv)->where('phanloai', '<', '3')
-                ->wherenotin('mapc', $a_goc)->get()->toarray();
+                ->wherenotin('mapc', $a_goc)->get();
+            //dd($model_pc);
 
             if($model_bangluong->phanloai == 'TRUYLINH'){
                 $model_truylinh = hosotruylinh::where('macanbo',$model->macanbo)->where('mabl',$model->mabl)->first();
@@ -658,17 +661,12 @@ class bangluongController extends Controller
                 return view('manage.bangluong.chitiet_truylinh')
                     ->with('furl','/chuc_nang/bang_luong/')
                     ->with('model',$model)
-                    ->with('a_phucap',array_column($model_pc,'form','mapc'))
-                    ->with('a_donvi',$a_donvi)
-                    //->with('model_baohiem',$model_baohiem)
                     ->with('pageTitle','Chi tiết bảng lương');
             }else{
                 return view('manage.bangluong.chitiet')
                     ->with('furl','/chuc_nang/bang_luong/')
                     ->with('model',$model)
-                    ->with('a_phucap',array_column($model_pc,'form','mapc'))
-                    ->with('a_donvi',$a_donvi)
-                    //->with('model_baohiem',$model_baohiem)
+                    ->with('model_pc',$model_pc)
                     ->with('pageTitle','Chi tiết bảng lương');
             }
 

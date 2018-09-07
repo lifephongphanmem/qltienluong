@@ -142,7 +142,6 @@ class tonghopluong_donviController extends Controller
             //Tính toán dữ liệu
             $model_pc = dmphucap_donvi::where('madv', $madv)->where('phanloai', '<', '3')->get();
 
-
             for ($i = 0; $i < count($model_data); $i++) {
                 $luongct = $model_bangluong_ct->where('manguonkp', $model_data[$i]['manguonkp'])
                     ->where('linhvuchoatdong', $model_data[$i]['linhvuchoatdong'])
