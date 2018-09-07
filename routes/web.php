@@ -7,7 +7,7 @@ Route::get('ajaxtest','ajaxController@test');
 Route::get('/setting','HomeController@setting');
 Route::post('/setting','HomeController@upsetting');
 Route::get('danh_sach_tai_khoan','HomeController@listusers');
-Route::get('fix_pb','dmphongbanController@fix_mapb');
+Route::get('fix_pc','dmphucapController@fix_mapc');
 
 
 // <editor-fold defaultstate="collapsed" desc="--Hệ thống--">

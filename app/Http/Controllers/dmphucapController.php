@@ -14,6 +14,20 @@ use Illuminate\Support\Facades\DB;
 
 class dmphucapController extends Controller
 {
+    public function fix_mapc(){
+        $model_donvi = dmdonvi::all();
+        $model_dmpc = dmphucap::select('mapc', 'tenpc', 'baohiem', 'form', 'report', 'phanloai', 'congthuc')->where('mapc','hesobl')->first();
+        //$phucap = dmphucap::where('mapc','hesobl')->first();
+        foreach($model_donvi as $donvi){
+            $model_phucap = dmphucap_donvi::where('madv',$donvi->madv)->get();
+            if(count($model_phucap)>0){
+                $model_dmpc->madv = $donvi->madv;
+                dmphucap_donvi::insert($model_dmpc->toarray());
+            }
+
+        }
+
+    }
     public function index()
     {
         if (Session::has('admin')) {
