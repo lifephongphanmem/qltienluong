@@ -34,6 +34,7 @@
         $('#stt').val('{{$max_stt}}');
         $('#macanbo').val('{{$macanbo}}');
         $('#tongiao').val('Không');
+        $('#pthuong').val('100');
         $('#dantoc').val('Kinh').trigger('change');
     </script>
     @include('includes.script.scripts')

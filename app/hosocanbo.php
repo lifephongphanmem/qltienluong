@@ -36,6 +36,8 @@ class hosocanbo extends Model
         'msngbac',
         'ngaytu',
         'ngayden',
+        'tnntungay',
+        'tnndenngay',
         'bac',
         'heso',
         'hesopc',

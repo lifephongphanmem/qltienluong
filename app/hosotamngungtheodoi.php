@@ -20,6 +20,7 @@ class hosotamngungtheodoi extends Model
         'noidung',
         'ngaytu',
         'ngayden',
+        'songaynghi',
         'madv'
     ];
 }

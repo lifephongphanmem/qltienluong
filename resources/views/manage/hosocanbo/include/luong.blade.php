@@ -93,19 +93,7 @@
                             </div>
                         @endif
 
-                        <div class="col-md-3">
-                            <div class="form-group">
-                                <label class="control-label">Từ ngày</label>
-                                {!! Form::input('date','ngaytu',null,array('id' => 'ngaytu', 'class' => 'form-control'))!!}
-                            </div>
-                        </div>
 
-                        <div class="col-md-3">
-                            <div class="form-group">
-                                <label class="control-label">Đến ngày</label>
-                                {!! Form::input('date','ngayden',null,array('id' => 'ngayden', 'class' => 'form-control'))!!}
-                            </div>
-                        </div>
 
                         <div class="col-md-3">
                             <div class="form-group">
@@ -168,6 +156,34 @@
                                     {!!Form::text('pthuong', null, array('id' => 'pthuong','class' => 'form-control', 'data-mask'=>'fdecimal'))!!}
                                     <span class="input-group-addon bootstrap-touchspin-postfix">%</span>
                                 </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label class="control-label">Ngạch bậc - Từ ngày</label>
+                                {!! Form::input('date','ngaytu',null,array('id' => 'ngaytu', 'class' => 'form-control'))!!}
+                            </div>
+                        </div>
+
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label class="control-label">Ngạch bậc - Đến ngày</label>
+                                {!! Form::input('date','ngayden',null,array('id' => 'ngayden', 'class' => 'form-control'))!!}
+                            </div>
+                        </div>
+
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label class="control-label">TN nghề - Từ ngày</label>
+                                {!! Form::input('date','tnntungay',null,array('id' => 'tnntungay', 'class' => 'form-control'))!!}
+                            </div>
+                        </div>
+
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label class="control-label">TN nghề - Đến ngày</label>
+                                {!! Form::input('date','tnndenngay',null,array('id' => 'tnndenngay', 'class' => 'form-control'))!!}
                             </div>
                         </div>
 

@@ -111,6 +111,9 @@ class CreateHosocanboTable extends Migration
             $table->date('truylinhdenngay')->nullable();
             $table->double('hesott')->default(0);//hệ số truy thu, sau khi tạo bảng lương -> set = 0;
 
+            $table->date('tnntungay')->nullable();
+            $table->date('ttnndenngay')->nullable();
+
             $table->string('mact')->nullable();
             $table->string('theodoi',5)->default(1)->nullable();
             $table->string('sodinhdanhcanhan')->nullable();

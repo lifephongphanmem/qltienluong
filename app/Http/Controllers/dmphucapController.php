@@ -79,7 +79,8 @@ class dmphucapController extends Controller
         if (Session::has('admin')) {
             //kiểm tra lại quyền của User (đi tập huấn một số đơn vị ko hiểu sao lại cập nhật luôn vào danh mục
             if(session('admin')->level !='SA' && session('admin')->level !='SSA'){
-                return view('errors.noperm');
+                Session::flush();
+                return view('errors.notlogin');
             }
 
             $inputs = $request->all();

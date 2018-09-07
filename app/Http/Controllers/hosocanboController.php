@@ -146,6 +146,8 @@ class hosocanboController extends Controller
             $insert['ngaysinh'] = getDateTime($insert['ngaysinh']);
             $insert['ngaytu'] = getDateTime($insert['ngaytu']);
             $insert['ngayden'] = getDateTime($insert['ngayden']);
+            $insert['tnntungay'] = getDateTime($insert['tnntungay']);
+            $insert['tnndenngay'] = getDateTime($insert['tnndenngay']);
             //$insert['ngayvd'] = getDateTime($insert['ngayvd']);
             //$insert['ngayvdct'] = getDateTime($insert['ngayvdct']);
             //$insert['ngayvao']=getDateTime($insert['ngayvao']);
@@ -283,7 +285,8 @@ class hosocanboController extends Controller
             $insert['ngaytu']=getDateTime($insert['ngaytu']);
             $insert['ngayden']=getDateTime($insert['ngayden']);
             $insert['pthuong']=chkDbl($insert['pthuong']) == 0 ? 100 :chkDbl($insert['pthuong']) ;
-
+            $insert['tnntungay'] = getDateTime($insert['tnntungay']);
+            $insert['tnndenngay'] = getDateTime($insert['tnndenngay']);
             $model_pc = dmphucap_donvi::where('madv', session('admin')->madv)->get();
             foreach($model_pc as $pc){
                 if(isset($insert[$pc->mapc])){

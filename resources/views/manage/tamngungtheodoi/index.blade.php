@@ -35,7 +35,20 @@
                         <b>DANH SÁCH CÁN BỘ TẠM NGỪNG THEO DÕI</b>
                     </div>
                     <div class="actions">
-                        <button type="button" id="_btnaddPB" class="btn btn-default btn-xs" onclick="add()"><i class="fa fa-plus"></i>&nbsp;Thêm mới</button>
+
+                        <div class="btn-group btn-group-solid col-md-pull-6">
+                            <button type="button" class="btn btn-lg btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="true">
+                                Thêm mới <i class="fa fa-angle-down"></i>
+                            </button>
+                            <ul class="dropdown-menu">
+                                <li>
+                                    <a href="{{url($furl.'create?phanloai=THAISAN')}}" class="btn btn-default btn-xs"> Nghỉ thai sản</a>
+                                </li>
+                                <li>
+                                    <a href="{{url($furl.'create?phanloai=NGHIPHEP')}}" class="btn btn-default btn-xs"> Nghỉ ốm/Nghỉ phép</a>
+                                </li>
+                            </ul>
+                        </div>
                     </div>
                 </div>
                 <div class="portlet-body form-horizontal">
@@ -60,8 +73,8 @@
                                         <td>{{getDayVn($value->ngaytu)}}</td>
                                         <td>{{getDayVn($value->ngayden)}}</td>
                                         <td>
-                                            <button type="button" onclick="editCV('{{$value->maso}}')" class="btn btn-default btn-xs">
-                                                <i class="fa fa-edit"></i>&nbsp; Chỉnh sửa</button>
+                                            <a href="{{url($furl.'edit?maso='.$value->maso.'')}}" class="btn btn-default btn-xs mbs"><i class="fa fa-edit"></i>&nbsp; Chỉnh sửa</a>
+
                                             <button type="button" onclick="cfDel('{{$furl.'del/'.$value->id}}')" class="btn btn-default btn-xs" data-target="#delete-modal-confirm" data-toggle="modal">
                                                 <i class="fa fa-trash-o"></i>&nbsp; Xóa</button>
                                         </td>
