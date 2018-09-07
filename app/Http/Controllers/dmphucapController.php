@@ -21,8 +21,11 @@ class dmphucapController extends Controller
         foreach($model_donvi as $donvi){
             $model_phucap = dmphucap_donvi::where('madv',$donvi->madv)->get();
             if(count($model_phucap)>0){
-                $model_dmpc->madv = $donvi->madv;
-                dmphucap_donvi::insert($model_dmpc->toarray());
+                $chekbl = $model_phucap->where('mapc','hesobl');
+                if($chekbl== 0){
+                    $model_dmpc->madv = $donvi->madv;
+                    dmphucap_donvi::insert($model_dmpc->toarray());
+                }
             }
 
         }
