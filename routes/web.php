@@ -756,11 +756,7 @@ Route::group(['prefix'=>'ajax'],function(){
         Route::get('update_vc','hosoquanhegdController@update_vc');
         Route::get('get','hosoquanhegdController@get_detail');
     });
-    Route::group(['prefix'=>'dieu_dong'],function(){
-        Route::get('add','hosoluanchuyenController@store_dd');
-        Route::get('update','hosoluanchuyenController@update_dd');
-        Route::get('get','hosoluanchuyenController@get_detail');
-    });
+
     Route::group(['prefix'=>'chuc_vu'],function(){
         Route::get('add','hosochucvuController@store');
         Route::get('update','hosochucvuController@update');
@@ -849,6 +845,12 @@ Route::group(['prefix'=>'ajax'],function(){
         Route::get('get','dshuutriController@getinfo');
     });
     */
+    Route::group(['prefix'=>'dieu_dong'],function(){
+        Route::get('add','hosoluanchuyenController@store_dd');
+        Route::get('update','hosoluanchuyenController@update_dd');
+        Route::get('get','hosoluanchuyenController@get_detail');
+    });
+
     Route::group(['prefix'=>'bang_luong'],function(){
         Route::get('add','bangluongController@store');
         Route::get('update','bangluongController@update');
