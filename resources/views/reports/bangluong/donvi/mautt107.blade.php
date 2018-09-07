@@ -65,7 +65,7 @@
                 <b>Đơn vị: {{$m_dv['tendv']}}</b>
             </td>
             <td style="text-align: center; font-style: italic">
-                (Ban hành kèm theo QĐ số 19/2006/QĐ-BTC ngày 30/3/2006 và Thông tư số 185/2010/TT-BTC ngày 15/11/2010 của Bộ Tài chính)
+                Ban hành kèm theo Thông tư số 107/2017/TT- BTC ngày 10/10/2017 của Bộ Tài chính
             </td>
         </tr>
         <tr>
@@ -80,7 +80,7 @@
 
         <tr>
             <td colspan="2" style="text-align: center; font-weight: bold; font-size: 20px;">
-                BẢNG THANH TOÁN TIỀN LƯƠNG VÀ PHỤ CẤP
+                BẢNG THANH TOÁN TIỀN LƯƠNG VÀ CÁC KHOẢN PHỤ CẤP THEO LƯƠNG,</br>CÁC KHOẢN TRÍCH NỘP THEO LƯƠNG
             </td>
         </tr>
 
@@ -95,17 +95,21 @@
     <table class="money" cellspacing="0" cellpadding="0" border="1" style="margin: 20px auto; border-collapse: collapse;font:normal {{$thongtin['cochu']}}px Times, serif;">
         <tr style="padding-left: 2px;padding-right: 2px">
             <th style="width: 2%;" rowspan="2">S</br>T</br>T</th>
-            <th style="width: 3%;" rowspan="2">Mã</br>số</br>công</br>chức</th>
             <th style="width: 12%;" rowspan="2">Họ và tên</th>
-            <th rowspan="2">Cấp</br>bậc</br>chức</br>vụ</th>
-            <th rowspan="2">Mã số</br>ngạch</br>bậc</th>
-            <th colspan="{{$col + 4}}">Lương hệ số</th>
-            <th rowspan="2">Nghỉ việc</br>không được</br>hưởng lương</th>
-            <th rowspan="2">BHXH trả</br>thay lương</th>
-            <th rowspan="2">Tổng cộng</br>tiền lương</th>
-            <th colspan="5">Các khoản phải khấu trừ</th>
+            <th style="width: 3%;" rowspan="2">Mã ngạch</th>
+            @foreach($a_phucap as $key=>$val)
+                <th rowspan="2">{!!$val!!}</th>
+            @endforeach
+            <th rowspan="2">Cộng hệ số</th>
+            <th rowspan="2">Tiền lương tháng</th>
+            <th rowspan="2">Ngày hưởnglương thực tế</th>
+
+            <th colspan="2">BHXH</th>
+            <th colspan="2">BHYT</th>
+            <th colspan="2">BHTN</th>
+            <th colspan="4">KPCĐ</th>
             <th rowspan="2">Còn lại</th>
-            <th style="width: 3%;"rowspan="2">Ký nhận</th>
+            <th rowspan="2">Ghi chú</th>
         </tr>
 
         <tr style="padding-left: 2px;padding-right: 2px">
