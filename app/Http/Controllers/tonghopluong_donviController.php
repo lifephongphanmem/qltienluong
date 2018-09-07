@@ -412,7 +412,7 @@ class tonghopluong_donviController extends Controller
             $model->nguoigui = session('admin')->name;
             $model->ngaygui = Carbon::now()->toDateTimeString();
             $model->trangthai = 'DAGUI';
-            //$model->save();
+            $model->save();
 
             return redirect('/chuc_nang/tong_hop_luong/don_vi/index?nam=' . $model->nam);
         } else
