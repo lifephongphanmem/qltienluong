@@ -367,6 +367,7 @@ class tonghopluong_donviController extends Controller
 
     function senddata(Request $requests)
     {
+
         //Kiểm tra xem đơn vị có đơn vị chủ quản => ko cần update đi đâu chỉ cần chuyên trạng thái
         //Không đơn vị chủ quản, tùy xem thuộc huyện, tỉnh để update lên bang tonghop_huyen, tonghop_tinh
         if (Session::has('admin')) {
@@ -378,7 +379,11 @@ class tonghopluong_donviController extends Controller
             $model = tonghopluong_donvi::where('mathdv', $inputs['mathdv'])->first();
 
             //dd(session('admin')->macqcq == session('admin')->madvqlkv);
-            if(session('admin')->macqcq == session('admin')->madvqlkv){//đơn vị chủ quản là huyện
+            //đơn vị chủ quản là huyện
+            //thiếu trường hợp chủ quản lỗi
+            //khu vực chưa có đơn vị chủ quản / chủ quản lỗi
+            if(session('admin')->macqcq == session('admin')->madvqlkv){
+
                 //kiểm tra xem đã có bản ghi chưa (trường hợp trả lại)
                 $model_huyen = tonghopluong_huyen::where('mathdv', $model->mathh)->first();
                 if(count($model_huyen) == 0){
@@ -407,7 +412,7 @@ class tonghopluong_donviController extends Controller
             $model->nguoigui = session('admin')->name;
             $model->ngaygui = Carbon::now()->toDateTimeString();
             $model->trangthai = 'DAGUI';
-            $model->save();
+            //$model->save();
 
             return redirect('/chuc_nang/tong_hop_luong/don_vi/index?nam=' . $model->nam);
         } else

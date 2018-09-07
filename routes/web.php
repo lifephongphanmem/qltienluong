@@ -738,8 +738,8 @@ Route::group(['prefix'=>'ajax'],function(){
     //Route::get('kieuct','ajaxController@getKieuCT');
     //Route::get('tenct','ajaxController@getTenCT');
     //Route::get('tennb','ajaxController@getTenNB');
-    //Route::get('bac','ajaxController@getBac');
-    //Route::get('heso','ajaxController@getHS');
+    Route::get('bac','ajaxController@getBac');
+    Route::get('heso','ajaxController@getHS');
     //Route::get('msnb','ajaxController@getMSNB');
     Route::get('checkmadv','ajaxController@checkmadv');
     //Route::get('phucap','ajaxController@getPhuCap');
