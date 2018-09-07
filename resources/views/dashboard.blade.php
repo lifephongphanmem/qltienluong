@@ -99,7 +99,6 @@
             </div>
         </div>
     </div>
-
     <div class="row">
         <div class="col-sm-12">
             <!-- BEGIN PORTLET-->
@@ -107,7 +106,7 @@
                 <div class="portlet-title">
                     <div class="caption caption-md">
                         <i class="icon-bar-chart theme-font-color hide"></i>
-                        <span class="caption-subject theme-font-color bold uppercase">danh sách sắp đến kỳ nâng lương</span>
+                        <span class="caption-subject theme-font-color bold uppercase">danh sách cán bộ sắp đến kỳ nâng lương</span>
                     </div>
                     <div class="actions">
 
@@ -149,5 +148,45 @@
 
 
     </div>
+    <div class="row">
+        <div class="col-sm-12">
+            <!-- BEGIN PORTLET-->
+            <div class="portlet light ">
+                <div class="portlet-title">
+                    <div class="caption caption-md">
+                        <i class="icon-bar-chart theme-font-color hide"></i>
+                        <span class="caption-subject theme-font-color bold uppercase">danh sách cán bộ sắp đến tuổi nghỉ hưu</span>
+                    </div>
+                    <div class="actions">
+
+                    </div>
+                </div>
+                <?php $i=1;?>
+                <div class="portlet-body">
+                    <table id="sample_4" class="table table-hover table-striped table-bordered">
+                        <thead>
+                        <tr>
+                            <th class="text-center">STT</th>
+                            <th class="text-center">Họ và tên</th>
+                            <th class="text-center">Ngày nghỉ hưu</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        @if(isset($m_nghihuu))
+                            @foreach($m_nghihuu as $key=>$value)
+                                <tr>
+                                    <td class="text-center">{{$i++}}</td>
+                                    <td>{{$value->tencanbo}}</td>
+                                    <td>{{getDayVn($value->ngaynghi)}}</td>
+                                </tr>
+                            @endforeach
+
+                        @endif
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <!-- END PORTLET-->
+        </div>
     </div>
 @stop

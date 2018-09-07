@@ -154,8 +154,14 @@ class hosocanboController extends Controller
             //$insert['truylinhtungay']=getDateTime($insert['truylinhtungay']);
             //$insert['truylinhdenngay']=getDateTime($insert['truylinhdenngay']);
 
+            $model_pc = dmphucap_donvi::where('madv', session('admin')->madv)->get();
+            foreach($model_pc as $pc){
+                if(isset($insert[$pc->mapc])){
+                    $insert[$pc->mapc] = chkDbl($insert[$pc->mapc]);
+                }
+            }
+            /*
             $insert['heso'] = chkDbl($insert['heso']);
-            //$insert['hesott'] = chkDbl($insert['hesott']);
             $insert['hesopc'] = chkDbl($insert['hesopc']);
             $insert['vuotkhung'] = chkDbl($insert['vuotkhung']);
             $insert['pccv'] = chkDbl($insert['pccv']);
@@ -181,6 +187,7 @@ class hosocanboController extends Controller
             $insert['pcct'] = chkDbl($insert['pcct']);
             $insert['pckct'] = chkDbl($insert['pckct']);
             //dd($insert);
+            */
             hosocanbo::create($insert);
 
             $model_kn = hosocanbo_kiemnhiem_temp::where('macanbo',$macanbo)->get();
@@ -284,6 +291,13 @@ class hosocanboController extends Controller
             //$insert['truylinhtungay']=getDateTime($insert['truylinhtungay']);
             //$insert['truylinhdenngay']=getDateTime($insert['truylinhdenngay']);
 
+            $model_pc = dmphucap_donvi::where('madv', session('admin')->madv)->get();
+            foreach($model_pc as $pc){
+                if(isset($insert[$pc->mapc])){
+                    $insert[$pc->mapc] = chkDbl($insert[$pc->mapc]);
+                }
+            }
+            /*
             $insert['heso'] = chkDbl($insert['heso']);
             $insert['hesopc'] = chkDbl($insert['hesopc']);
             //$insert['hesott'] = chkDbl($insert['hesott']);
@@ -310,7 +324,7 @@ class hosocanboController extends Controller
             $insert['pcdd'] = chkDbl($insert['pcdd']);
             $insert['pcct'] = chkDbl($insert['pcct']);
             $insert['pckct'] = chkDbl($insert['pckct']);
-
+            */
             //dd($insert);
             $model->update($insert);
             return redirect('nghiep_vu/ho_so/danh_sach');

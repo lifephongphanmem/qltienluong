@@ -20,9 +20,9 @@ class HomeController extends Controller
     public function index()
     {
         if (Session::has('admin')) {
-            if(session('admin')->username == 'sa')
+            if (session('admin')->username == 'sa')
                 return redirect('cau_hinh_he_thong');
-            else{
+            else {
                 /*
                 $model=hosocanbo::join('hosotinhtrangct', 'hosocanbo.macanbo', '=', 'hosotinhtrangct.macanbo')
                     ->select('hosocanbo.macanbo','hosocanbo.tencanbo','hosocanbo.ngaysinh','hosocanbo.gioitinh',
@@ -32,37 +32,42 @@ class HomeController extends Controller
                     ->where('hosocanbo.madv',session('admin')->madv)
                     ->get();
                 */
-                $model=hosocanbo::select('macanbo','tencanbo','msngbac','sunghiep','gioitinh','ngayvd','ngaytu','ngayden')
-                    ->where('theodoi','1')
-                    ->where('madv',session('admin')->madv)
+                $model = hosocanbo::select('macanbo', 'tencanbo', 'msngbac', 'sunghiep', 'gioitinh', 'ngayvd', 'ngaytu', 'ngayden','ngaysinh')
+                    ->where('theodoi','<' ,'9')
+                    ->where('madv', session('admin')->madv)
                     ->get();
-                $a_ketqua=array();
-                $a_ketqua['congchuc']=$model->where('sunghiep','Công chức')->count();
-                $a_ketqua['vienchuc']=$model->where('sunghiep','Viên chức')->count();
-                $a_ketqua['tapsu']=$model->where('tenct','Tập sự')->count();
-                $a_ketqua['chinhthuc']=$model->count()-$a_ketqua['tapsu'];
-                $a_ketqua['dv_nam']=$model->where('ngayvd','','0000-00-00')
-                    ->where('ngayvd','<>',null)
-                    ->where('gioitinh','Nam')->count();
-                $a_ketqua['dv_nu']=$model->where('ngayvd','','0000-00-00')
-                    ->where('ngayvd','<>',null)
-                    ->where('gioitinh','Nữ')->count();
-                $a_ketqua['gt_nam']=$model->where('gioitinh','Nam')->count();
-                $a_ketqua['gt_nu']=$model->where('gioitinh','Nữ')->count();
+                $a_ketqua = array();
+                $a_ketqua['congchuc'] = $model->where('sunghiep', 'Công chức')->count();
+                $a_ketqua['vienchuc'] = $model->where('sunghiep', 'Viên chức')->count();
+                $a_ketqua['tapsu'] = $model->where('tenct', 'Tập sự')->count();
+                $a_ketqua['chinhthuc'] = $model->count() - $a_ketqua['tapsu'];
+                $a_ketqua['dv_nam'] = $model->where('ngayvd', '', '0000-00-00')
+                    ->where('ngayvd', '<>', null)
+                    ->where('gioitinh', 'Nam')->count();
+                $a_ketqua['dv_nu'] = $model->where('ngayvd', '', '0000-00-00')
+                    ->where('ngayvd', '<>', null)
+                    ->where('gioitinh', 'Nữ')->count();
+                $a_ketqua['gt_nam'] = $model->where('gioitinh', 'Nam')->count();
+                $a_ketqua['gt_nu'] = $model->where('gioitinh', 'Nữ')->count();
 
                 $date = getdate();
-                //$gen=getGeneralConfigs();
-                foreach ($model as $ct){
-                    //$dt = date_create($ct->ngaysinh);
-                    //$ct->thang=date_format($dt,'m');
-                    //$ct->nam=$ct->gioitinh=='Nam'?date_format($dt,'Y')+$gen['tuoinam']:date_format($dt,'Y')+$gen['tuoinu'];
-                    if(isset($ct->ngayden)){
+                $gen = getGeneralConfigs();
+
+                foreach ($model as $ct) {
+                    $dt = date_create($ct->ngaysinh);
+
+                    $ct->thang = date_format($dt, 'm');
+                    $ct->nam = $ct->gioitinh == 'Nam' ? date_format($dt, 'Y') + $gen['tuoinam'] : date_format($dt, 'Y') + $gen['tuoinu'];
+                    if (isset($ct->ngayden)) {
                         $dt_luong = date_create($ct->ngayden);
-                        $ct->nam_luong = date_format($dt_luong,'Y');
+                        $ct->nam_luong = date_format($dt_luong, 'Y');
                         $ct->ngaynangluong = $dt_luong->modify('+1 days')->format('Y-m-d');
-                    }else{
+                    } else {
                         $ct->nam_luong = null;
                         $ct->ngaynangluong = null;
+                    }
+                    if(isset($ct->ngaysinh)){
+                        $ct->ngaynghi = $dt->modify(' +'.($ct->gioitinh == 'Nam' ?$gen['tuoinam']: $gen['tuoinu'] ).' year')->format('Y-m-d');;
                     }
                     /*
                     if(isset($ct->ngayden)){
@@ -78,21 +83,22 @@ class HomeController extends Controller
                     //$ct->ngayden = isset($dt_luong)?  $date->add: null;
 
                 }
-                //$m_nghihuu = $model->where('nam',$date['year']);
-                $m_nangluong = $model->where('nam_luong',$date['year']);
+
+                $m_nghihuu = $model->where('nam','<=' ,$date['year']);
+                $m_nangluong = $model->where('nam_luong', $date['year']);
                 //$m_sinhnhat=$model->where('thang',$date['mon']);
                 //$m_hettapsu= $model->where('tenct','Hết tập sự');//Chưa làm
                 //dd($m_nangluong->toarray());
                 return view('dashboard')
-                    ->with('m_nangluong',$m_nangluong)
-                    //->with('m_nghihuu',$m_nghihuu)
+                    ->with('m_nangluong', $m_nangluong)
+                    ->with('m_nghihuu', $m_nghihuu)
                     //->with('m_sinhnhat',$m_sinhnhat)
                     //->with('m_hettapsu',$m_hettapsu)
-                    ->with('a_ketqua',$a_ketqua)
-                    ->with('pageTitle','Tổng quan');
+                    ->with('a_ketqua', $a_ketqua)
+                    ->with('pageTitle', 'Tổng quan');
             }
 
-        }else
+        } else
             return view('welcome');
 
     }
