@@ -153,7 +153,7 @@ class hosocanboController extends Controller
             //$insert['macvd'] = ($insert['macvd'] == '' ? NULL : $insert['macvd']);
             //$insert['truylinhtungay']=getDateTime($insert['truylinhtungay']);
             //$insert['truylinhdenngay']=getDateTime($insert['truylinhdenngay']);
-
+            $insert['pthuong']=chkDbl($insert['pthuong']) == 0 ? 100 :chkDbl($insert['pthuong']) ;
             $model_pc = dmphucap_donvi::where('madv', session('admin')->madv)->get();
             foreach($model_pc as $pc){
                 if(isset($insert[$pc->mapc])){
