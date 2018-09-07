@@ -137,7 +137,7 @@
                         <li><a href="{{url('nghiep_vu/ho_so/danh_sach')}}"><i class="fa fa-caret-right"></i>Danh sách cán bộ đang công tác</a></li>
                         <li><a href="{{url('nghiep_vu/tam_ngung/danh_sach')}}"><i class="fa fa-caret-right"></i>Danh sách cán bộ tạm ngừng theo dõi</a></li>
                         <li><a href="{{url('nghiep_vu/truy_linh/danh_sach')}}"><i class="fa fa-caret-right"></i>Danh sách cán bộ được truy lĩnh lương</a></li>
-                        <li><a href="{{url('nghiep_vu/da_nghi/danh_sach')}}"><i class="fa fa-caret-right"></i>Danh sách cán bộ đã thôi công tác</a></li>
+                        <!--li><a href="{{url('nghiep_vu/da_nghi/danh_sach')}}"><i class="fa fa-caret-right"></i>Danh sách cán bộ đã thôi công tác</a></li-->
 
                         @if(session('admin')->maphanloai == 'KVXP')
                             <!-- Tạm thời bỏ để triển khai lạng sơn -->
@@ -153,9 +153,9 @@
                         <span class="arrow "></span>
                     </a>
                     <ul class="sub-menu">
-                        <li>
+                        <!--li>
                             <a href="{{url('chuc_nang/dang_ky_luong/danh_sach?thang='.date('m').'&nam='.date('Y'))}}"><i class="fa fa-caret-right"></i>Đăng ký lương</a>
-                        </li>
+                        </li-->
 
                         <li>
                             <a href="{{url('chuc_nang/bang_luong/chi_tra?thang='.date('m').'&nam='.date('Y'))}}"><i class="fa fa-caret-right"></i>Chi trả lương</a>

@@ -57,6 +57,7 @@ class bangluongdangkyController extends Controller
         } else {
             //kiểm tra bảng lương cùng nguồn, lĩnh vực hoạt động, lương cơ bản =>ko cho tạo
             $model_chk = bangluongdangky::where('thang', $inputs['thang'])->where('nam', $inputs['nam'])
+                ->where('madv',session('admin')->madv)
                 ->first();
 
             if(count($model_chk)>0){
