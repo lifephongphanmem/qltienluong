@@ -2012,12 +2012,21 @@ class bangluongController extends Controller
             foreach($model as $ct) {
                 $ct->luongcb = $m_bl->luongcoban;
                 $hoso = $model_hoso->where('macanbo', $ct->macanbo)->first();
+                $ct->tencanbo = $hoso->tencanbo;
+                $ct->lvtd = $hoso->lvtd;
                 $ct->sotk = count($hoso) > 0 ? $hoso->sotk : null;
                 $ct->lvtd = count($hoso) > 0 ? $hoso->lvtd : null;
-                $ct->hspc = count($hoso) > 0 ? $hoso->pcdbqh : null;
+                $ct->hspc = $ct->pcdbqh + $ct->hesopc;
                 $ct->sotien = $ct->hspc * $ct->luongcb;
             }
-            $model = $model->where('hspc','>',0);
+
+            $model_ct = $model->where('pcdbqh','>',0);
+            $model_kn = $model->where('phanloai','DBHDND');
+            foreach ($model_kn as $kn) {
+                $model_ct->add($kn);
+            }
+            //dd($model_ct);
+            //$model = $model->where('hspc','>',0);
             $m_dv = dmdonvi::where('madv',$m_bl->madv)->first();
             $m_dv->tendvcq = getTenDB($m_dv->madvbc);
 
@@ -2028,7 +2037,7 @@ class bangluongController extends Controller
                 'luongcb' => $m_bl->luongcoban);
 
             return view('reports.bangluong.donvi.maudbhdnd')
-                ->with('model',$model->sortBy('stt'))
+                ->with('model',$model_ct->sortBy('stt'))
                 ->with('m_dv',$m_dv)
                 ->with('thongtin',$thongtin)
                 ->with('pageTitle','Bảng lương chi tiết');

@@ -101,7 +101,7 @@
         <td style="width: 30%;text-align: center;font-weight: bold">Họ và tên</td>
         <td style="width: 10%; text-align: center;font-weight: bold">Địa chỉ</td>
         <td style="width: 10%; text-align: center;font-weight: bold">Hệ số</br>lương</td>
-        <td style="width: 10%; text-align: center;font-weight: bold">Mức lương</br>tối tdiểu</td>
+        <td style="width: 10%; text-align: center;font-weight: bold">Mức lương</br>tối thiểu</td>
         <td style="width: 10%; text-align: center;font-weight: bold">Thành tiền</td>
         <td style="width: 15%; text-align: center;font-weight: bold">Ký nhận</td>
     </tr>
