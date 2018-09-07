@@ -2120,14 +2120,18 @@ class bangluongController extends Controller
             foreach ($model as $ct) {
                 $ct->luongcb = $m_bl->luongcoban;
                 $hoso = $model_hoso->where('macanbo', $ct->macanbo)->first();
+                $ct->tencanbo = $hoso->tencanbo;
+                $ct->lvtd = $hoso->lvtd;
                 $ct->sotk = count($hoso) > 0 ? $hoso->sotk : null;
                 $ct->lvtd = count($hoso) > 0 ? $hoso->lvtd : null;
-                $ct->sotien = $ct->heso * $ct->luongcb;
+                $ct->hspc = $ct->phanloai == 'KHAC'? $ct->hesopc : $ct->heso;
+                $ct->sotien = $ct->hspc * $ct->luongcb;
             }
-            $model = $model->where('heso', '>', 0);
+
+            //$model = $model->where('heso', '>', 0);
             $m_dv = dmdonvi::where('madv', $m_bl->madv)->first();
             $m_dv->tendvcq = getTenDB($m_dv->madvbc);
-
+            //dd($model);
             $thongtin = array('nguoilap' => $m_bl->nguoilap,
                 'thang' => $m_bl->thang,
                 'nam' => $m_bl->nam,

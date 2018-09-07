@@ -112,7 +112,7 @@
             <td>{{$i++}}</td>
             <td style="text-align: left">{{$ct->tencanbo}}</td>
             <td style="text-align: left">{{$ct->lvtd}}</td>
-            <td style="text-align: center">{{$ct->heso}}</td>
+            <td style="text-align: center">{{$ct->hspc}}</td>
             <td style="text-align: right">{{dinhdangso($ct->luongcb)}}</td>
             <td style="text-align: right">{{dinhdangso($ct->sotien)}}</td>
             <td></td>
@@ -120,7 +120,7 @@
     @endforeach
     <tr style="font-weight: bold; text-align: center;">
         <td colspan="3">Tổng cộng</td>
-        <td class="money" style="text-align: center">{{$model->sum('heso')}}</td>
+        <td class="money" style="text-align: center">{{$model->sum('hspc')}}</td>
         <td class="money">{{dinhdangso($thongtin['luongcb'])}}</td>
         <td class="money">{{dinhdangso($model->sum('sotien'))}}</td>
         <td></td>
