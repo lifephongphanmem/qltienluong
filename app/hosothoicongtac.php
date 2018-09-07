@@ -33,6 +33,7 @@ class hosothoicongtac extends Model
         'ngayden',
         'bac',
         'hesott',
+        'hesobl',
         'vuotkhung',
         'pthuong',
         'pcct',

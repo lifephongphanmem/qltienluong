@@ -27,7 +27,6 @@ class dmphucapController extends Controller
                     dmphucap_donvi::insert($model_dmpc->toarray());
                 }
             }
-
         }
         dd('ok');
 

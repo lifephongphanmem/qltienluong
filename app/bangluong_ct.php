@@ -22,6 +22,7 @@ class bangluong_ct extends Model
         'heso',
         'hesopc',
         'hesott',
+        'hesobl',
         'vuotkhung',
         'pcct',
         'pckct',

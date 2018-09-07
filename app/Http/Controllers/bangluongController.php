@@ -647,6 +647,10 @@ class bangluongController extends Controller
             //dd($model);
             $a_donvi = dmdonvi::where('madv',session('admin')->madv)->first()->toarray();
 
+            $a_goc = array('heso','vuotkhung','hesott','hesopc');
+            $model_pc = dmphucap_donvi::where('madv', $model_bangluong->madv)->where('phanloai', '<', '3')
+                ->wherenotin('mapc', $a_goc)->get()->toarray();
+
             if($model_bangluong->phanloai == 'TRUYLINH'){
                 $model_truylinh = hosotruylinh::where('macanbo',$model->macanbo)->where('mabl',$model->mabl)->first();
                 $model->ngaytu = $model_truylinh->ngaytu;
@@ -654,7 +658,7 @@ class bangluongController extends Controller
                 return view('manage.bangluong.chitiet_truylinh')
                     ->with('furl','/chuc_nang/bang_luong/')
                     ->with('model',$model)
-                    ->with('a_phucap',getColPhuCap())
+                    ->with('a_phucap',array_column($model_pc,'form','mapc'))
                     ->with('a_donvi',$a_donvi)
                     //->with('model_baohiem',$model_baohiem)
                     ->with('pageTitle','Chi tiết bảng lương');
@@ -662,7 +666,7 @@ class bangluongController extends Controller
                 return view('manage.bangluong.chitiet')
                     ->with('furl','/chuc_nang/bang_luong/')
                     ->with('model',$model)
-                    ->with('a_phucap',getColPhuCap())
+                    ->with('a_phucap',array_column($model_pc,'form','mapc'))
                     ->with('a_donvi',$a_donvi)
                     //->with('model_baohiem',$model_baohiem)
                     ->with('pageTitle','Chi tiết bảng lương');
@@ -1088,7 +1092,6 @@ class bangluongController extends Controller
     public function printf_mautt107(Request $request){
         if (Session::has('admin')) {
             $inputs = $request->all();
-
             $inputs['mabl'] = $inputs['mabl_mautt107'];
             $model = $this->getBangLuong($inputs)->where('phanloai','CVCHINH');
             //dd($inputs);
@@ -1134,11 +1137,8 @@ class bangluongController extends Controller
     public function printf_mau02_excel(Request $request){
         if (Session::has('admin')) {
             $inputs = $request->all();
-            $inputs['mabl'] = $inputs['mabl_mau2'];
-            $inputs['mapb'] = $inputs['mapb_mau2'];
-            $inputs['macvcq'] = $inputs['macvcq_mau2'];
-            $inputs['mact'] = $inputs['mact_mau2'];
-            $model = $this->getBangLuong($inputs,1)->where('phanloai','CVCHINH');
+            $inputs['mabl'] = $inputs['mabl_mautt107'];
+            $model = $this->getBangLuong($inputs)->where('phanloai','CVCHINH');
             //dd($inputs);
             $mabl = $inputs['mabl'];
             $m_bl = bangluong::select('thang','nam','mabl','madv','ngaylap')->where('mabl',$mabl)->first();
@@ -1152,20 +1152,24 @@ class bangluongController extends Controller
             $thongtin=array('nguoilap'=>$m_bl->nguoilap,
                 'thang'=>$m_bl->thang,
                 'nam'=>$m_bl->nam,
-                'ngaylap'=>$m_bl->ngaylap);
+                'ngaylap'=>$m_bl->ngaylap,
+                'cochu'=>$inputs['cochu']);
             //xử lý ẩn hiện cột phụ cấp => biết tổng số cột hiện => colspan trên báo cáo
-            $a_goc = array('heso','vuotkhung','hesott');
+            $a_goc = array('hesott');
             $model_pc = dmphucap_donvi::where('madv',$m_bl->madv)->where('phanloai','<','3')->wherenotin('mapc',$a_goc)->get();
             $a_phucap = array();
             $col = 0;
 
-            foreach($model_pc as $ct){
-                $a_phucap[$ct->mapc] = $ct->report;
-                $col++;
+            foreach($model_pc as $ct) {
+                if ($model->sum($ct->mapc) > 0) {
+                    $a_phucap[$ct->mapc] = $ct->report;
+                    $col++;
+                }
             }
+
             Excel::create('BANGLUONG_02',function($excel) use($m_dv,$thongtin,$model,$col,$model_congtac,$a_phucap){
                 $excel->sheet('New sheet', function($sheet) use($m_dv,$thongtin,$model,$col,$model_congtac,$a_phucap){
-                    $sheet->loadView('reports.bangluong.donvi.maubangluong_sotien_excel')
+                    $sheet->loadView('reports.bangluong.donvi.mautt107')
                         ->with('model',$model->sortBy('stt'))
                         ->with('model_pb',getPhongBan())
                         ->with('m_dv',$m_dv)

@@ -125,15 +125,7 @@
                             </div>
                         </div>
 
-                        <!--div class="col-md-2">
-                            <div class="form-group">
-                                <label class="control-label">Tỷ lệ hưởng lương</label>
-                                <div class="input-group bootstrap-touchspin">
-                                    {!!Form::text('pthuong', '100', array('id' => 'pthuong','class' => 'form-control', 'data-mask'=>'fdecimal'))!!}
-                                    <span class="input-group-addon bootstrap-touchspin-postfix">%</span>
-                                </div>
-                            </div>
-                        </div-->
+
                         <?php
                             $hesopc = $model_pc->where('mapc','hesopc')->first();
                         ?>
@@ -168,6 +160,16 @@
                                 </div>
                             </div>
                         @endif
+
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label class="control-label">Tỷ lệ hưởng lương</label>
+                                <div class="input-group bootstrap-touchspin">
+                                    {!!Form::text('pthuong', null, array('id' => 'pthuong','class' => 'form-control', 'data-mask'=>'fdecimal'))!!}
+                                    <span class="input-group-addon bootstrap-touchspin-postfix">%</span>
+                                </div>
+                            </div>
+                        </div>
 
                     </div>
 

@@ -39,6 +39,7 @@ class hosocanbo extends Model
         'bac',
         'heso',
         'hesopc',
+        'hesobl',
         'hesott',
         'truylinhtungay',
         'truylinhdenngay',

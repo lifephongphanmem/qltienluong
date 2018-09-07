@@ -29,6 +29,7 @@ class CreateHosothoicongtacTable extends Migration
             $table->string('mapb', 50)->nullable();
             $table->string('macvcq', 50)->nullable();
             $table->double('heso')->default(0);
+            $table->double('hesobl')->default(0);
             $table->double('hesopc')->default(0);
             $table->double('pcdbn')->default(0);
             $table->double('pctn')->default(0);

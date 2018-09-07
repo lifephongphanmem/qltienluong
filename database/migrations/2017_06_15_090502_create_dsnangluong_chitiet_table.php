@@ -15,7 +15,7 @@ class CreateDsnangluongChitietTable extends Migration
     {
         Schema::create('dsnangluong_chitiet', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('manl', 50)->unique();
+            $table->string('manl', 50)->nullable();
             $table->string('macanbo', 50)->nullable();
             $table->string('phanloai')->nullable();
             $table->string('msngbac', 50)->nullable();

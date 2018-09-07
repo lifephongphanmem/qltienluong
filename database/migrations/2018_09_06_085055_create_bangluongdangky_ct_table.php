@@ -26,6 +26,7 @@ class CreateBangluongdangkyCtTable extends Migration
             $table->string('tencanbo', 50)->nullable();
             $table->string('macongchuc', 50)->nullable();
             $table->double('heso')->default(0);
+            $table->double('hesobl')->default(0);
             $table->double('hesopc')->default(0);
             $table->double('hesott')->default(0);//hệ số truy lĩnh
             $table->double('thangtl')->default(0);//số tháng được truy lĩnh lương

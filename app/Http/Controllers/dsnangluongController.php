@@ -266,7 +266,7 @@ class dsnangluongController extends Controller
 
     function destroydt($id){
         if (Session::has('admin')) {
-            $model = hosoluong::find($id);
+            $model = dsnangluong_chitiet::find($id);
             $manl= $model->manl;
             $model->delete();
             return redirect('/chuc_nang/nang_luong/maso='.$manl);
