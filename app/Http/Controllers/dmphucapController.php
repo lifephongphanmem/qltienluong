@@ -29,6 +29,7 @@ class dmphucapController extends Controller
             }
 
         }
+        dd('ok');
 
     }
     public function index()
