@@ -176,7 +176,6 @@ class bangluongController extends Controller
                 $m_cb = $m_cb->where('lvhd', $inputs['linhvuc']);
             }
 
-
             $model_congtac = dmphanloaict::all();
             $model_phanloai = dmphanloaicongtac_baohiem::where('madv', session('admin')->madv)->get();
             //Không tính truy lĩnh
@@ -381,8 +380,8 @@ class bangluongController extends Controller
                         $cb->giaml = $nghi->songaynghi >= $ngaycong ?$cb->ttl : ($tiencong * $nghi->songaynghi);
                     }
 
-                    $cb->luongtn = $cb->ttl - $cb->ttbh - $cb->giaml;
                 }
+                $cb->luongtn = $cb->ttl - $cb->ttbh - $cb->giaml;
 
                 $kq = $cb->toarray();
                 unset($kq['id']);
@@ -996,6 +995,14 @@ class bangluongController extends Controller
             $inputs=$request->all();
 
             $model=bangluong_ct::where('macanbo',$inputs['macanbo'])->where('mabl',$inputs['mabl'])->first();
+
+            $model_pc = dmphucap_donvi::where('madv', session('admin')->madv)->get();
+            foreach($model_pc as $pc){
+                if(isset($inputs[$pc->mapc])){
+                    $inputs[$pc->mapc] = chkDbl($inputs[$pc->mapc]);
+                }
+            }
+            /*
             $inputs['heso'] = chkDbl($inputs['heso']);
             $inputs['hesopc'] = chkDbl($inputs['hesopc']);
             $inputs['vuotkhung'] = chkDbl($inputs['vuotkhung']);
@@ -1019,7 +1026,7 @@ class bangluongController extends Controller
             $inputs['pclt'] = chkDbl($inputs['pclt']);
             $inputs['pcdd'] = chkDbl($inputs['pcdd']);
             $inputs['pcct'] = chkDbl($inputs['pcct']);
-
+            */
             $inputs['ttl'] = chkDbl($inputs['ttl']);
             $inputs['giaml'] = chkDbl($inputs['giaml']);
             $inputs['bhct'] = chkDbl($inputs['bhct']);
