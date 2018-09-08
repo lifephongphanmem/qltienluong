@@ -186,7 +186,7 @@ class bangluongController extends Controller
             bangluong::create($inputs);
 
             //Tính toán lương cho cán bộ kiêm nhiệm
-            //$m_donvi = dmdonvi::where('madv',session('admin')->madv)->first();
+            //$m_donvi = dmdonvi::where('madv',$madv)->first();
 
             foreach ($model_canbo_kn as $cb) {
                 $cb->mabl = $inputs['mabl'];
@@ -209,7 +209,7 @@ class bangluongController extends Controller
             //$a_baohiem = getPhuCapNopBH();
             $model_chucvu = dmchucvucq::where('maphanloai', session('admin')->maphanloai)->wherein('madv', ['SA', session('admin')->madv])->get();
 
-            $ngaycong = 22;
+            $ngaycong = dmdonvi::where('madv',$madv)->first()->songaycong;
             foreach ($m_cb as $cb) {
                 $cb->mabl = $inputs['mabl'];
                 $cb->macongtac = null;

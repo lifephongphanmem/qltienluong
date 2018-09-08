@@ -30,6 +30,7 @@ class dmdonvi extends Model
         'capdonvi',
         'phanloaixa',
         'phanloainguon',
-        'linhvuchoatdong'
+        'linhvuchoatdong',
+        'songaycong'
     ];
 }

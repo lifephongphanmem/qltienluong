@@ -36,7 +36,7 @@
                             <div class="row">
                                 <div class="col-md-3">
                                     <div class="form-group">
-                                        <label class="control-label">Mã quan hệ ngân sách<span class="require">*</span></label>
+                                        <label class="control-label">Mã quan hệ ngân sách</label>
                                         {!!Form::text('maqhns', null, array('id' => 'maqhns','class' => 'form-control'))!!}
                                     </div>
                                 </div>
@@ -53,10 +53,7 @@
                                         {!!Form::text('diachi', null, array('id' => 'diachi','class' => 'form-control'))!!}
                                     </div>
                                 </div>
-
-
                             </div>
-
 
                             <div class="row">
                                 <div class="col-md-3">
@@ -136,15 +133,22 @@
                             </div>
 
                             <div class="row">
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label class="control-label">Số ngày công trong tháng</label>
+                                        {!!Form::text('songaycong', null, array('id' =>'songaycong', 'class' => 'form-control', 'data-mask'=>'fdecimal'))!!}
+                                    </div>
+                                </div>
+
                                 @if($model->maphanloai == 'KVXP')
-                                    <div id="plxa" class="col-md-12">
+                                    <div id="plxa" class="col-md-9">
                                         <div class="form-group">
                                             <label class="control-label">Phân loại xã phường</label>
                                             {!!Form::select('phanloaixa', $model_plxa, null, array('id' => 'phanloaixa','class' => 'form-control','required'=>'required'))!!}
                                         </div>
                                     </div>
                                 @else
-                                    <div id="plxa" class="col-md-12">
+                                    <div id="plxa" class="col-md-9">
                                         <div class="form-group">
                                             <label class="control-label">Lĩnh vực hoạt động</label>
                                             <select class="form-control" id="linhvuc" name="linhvuc" multiple="multiple">
