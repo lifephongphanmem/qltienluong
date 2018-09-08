@@ -506,10 +506,14 @@ function getCoChu(){
 }
 
 function getPhanLoaiKiemNhiem(){
-    return array('QUANSU' => 'Kiêm nhiệm quân sự',
+    return array(
+        'KHONGCT' => 'Không chuyên trách',
+        'QUANSU' => 'Kiêm nhiệm quân sự',
         'DBHDND' => 'Kiêm nhiệm đại biểu HĐND',
         'CAPUY' => 'Kiêm nhiệm cấp ủy viên',
-        'KHAC'=> 'Kiêm nhiệm khác');
+        'CONGDONG'=> 'Kiêm nhiệm cộng đồng',
+        'MOTCUA'=> 'Kiêm nhiệm một cửa',
+    );
 }
 
 function getPhanLoaiNhanVien(){

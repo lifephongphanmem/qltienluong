@@ -337,15 +337,15 @@ class bangluongController extends Controller
                         $ct->heso = $cb->$mapc;
                         $ct->sotien = round($sotien, 0);
                         if ($ct->baohiem == 1) {
-                            $ct->stbhxh = $ct->sotien * $cb->bhxh;
-                            $ct->stbhyt = $ct->sotien * $cb->bhyt;
-                            $ct->stkpcd = $ct->sotien * $cb->kpcd;
-                            $ct->stbhtn = $ct->sotien * $cb->bhtn;
+                            $ct->stbhxh = round($ct->sotien * $cb->bhxh, 0);
+                            $ct->stbhyt = round($ct->sotien * $cb->bhyt, 0);
+                            $ct->stkpcd = round($ct->sotien * $cb->kpcd, 0);
+                            $ct->stbhtn = round($ct->sotien * $cb->bhtn, 0);
                             $ct->ttbh = $ct->stbhxh + $ct->stbhyt + $ct->stkpcd + $ct->stbhtn;
-                            $ct->stbhxh_dv = $ct->sotien * $cb->bhxh_dv;
-                            $ct->stbhyt_dv = $ct->sotien * $cb->bhyt_dv;
-                            $ct->stkpcd_dv = $ct->sotien * $cb->kpcd_dv;
-                            $ct->stbhtn_dv = $ct->sotien * $cb->bhtn_dv;
+                            $ct->stbhxh_dv = round($ct->sotien * $cb->bhxh_dv, 0);
+                            $ct->stbhyt_dv = round($ct->sotien * $cb->bhyt_dv, 0);
+                            $ct->stkpcd_dv = round($ct->sotien * $cb->kpcd_dv, 0);
+                            $ct->stbhtn_dv = round($ct->sotien * $cb->bhtn_dv, 0);
                             $ct->ttbh_dv = $ct->stbhxh_dv + $ct->stbhyt_dv + $ct->stkpcd_dv + $ct->stbhtn_dv;
                         }
 
@@ -362,17 +362,31 @@ class bangluongController extends Controller
                     $cb->ttl = round($inputs['luongcoban'] * ($cb->pccovu + $cb->pcudn) * $cb->pthuong / 100);
                 }else {
                     $cb->ttl = round($inputs['luongcoban'] * $ths * $cb->pthuong / 100 + $tt);
+                    //kiểm tra cán bộ ko chuyên trách thì tự động lấy lương cơ bản * % bảo hiểm
+                    if($cb->macongtac == 'KHONGCT'){
+                        $cb->stbhxh = round($inputs['luongcoban'] * $cb->bhxh, 0);
+                        $cb->stbhyt = round($inputs['luongcoban'] * $cb->bhyt, 0);
+                        $cb->stkpcd = round($inputs['luongcoban'] * $cb->kpcd, 0);
+                        $cb->stbhtn = round($inputs['luongcoban'] * $cb->bhtn, 0);
+                        $cb->ttbh = $cb->stbhxh + $cb->stbhyt + $cb->stkpcd + $cb->stbhtn;
+                        $cb->stbhxh_dv = round($inputs['luongcoban'] * $cb->bhxh_dv, 0);
+                        $cb->stbhyt_dv = round($inputs['luongcoban'] * $cb->bhyt_dv, 0);
+                        $cb->stkpcd_dv = round($inputs['luongcoban'] * $cb->kpcd_dv, 0);
+                        $cb->stbhtn_dv = round($inputs['luongcoban'] * $cb->bhtn_dv, 0);
+                        $cb->ttbh_dv = $cb->stbhxh_dv + $cb->stbhyt_dv + $cb->stkpcd_dv + $cb->stbhtn_dv;
+                    }else{
+                        $cb->stbhxh = $model_phucap->sum('stbhxh');
+                        $cb->stbhyt = $model_phucap->sum('stbhyt');
+                        $cb->stkpcd = $model_phucap->sum('stkpcd');
+                        $cb->stbhtn = $model_phucap->sum('stbhtn');
+                        $cb->ttbh = $cb->stbhxh + $cb->stbhyt + $cb->stkpcd + $cb->stbhtn;
+                        $cb->stbhxh_dv = $model_phucap->sum('stbhxh_dv');
+                        $cb->stbhyt_dv = $model_phucap->sum('stbhyt_dv');
+                        $cb->stkpcd_dv = $model_phucap->sum('stkpcd_dv');
+                        $cb->stbhtn_dv = $model_phucap->sum('stbhtn_dv');
+                        $cb->ttbh_dv = $cb->stbhxh_dv + $cb->stbhyt_dv + $cb->stkpcd_dv + $cb->stbhtn_dv;
+                    }
 
-                    $cb->stbhxh = $model_phucap->sum('stbhxh');
-                    $cb->stbhyt = $model_phucap->sum('stbhyt');
-                    $cb->stkpcd = $model_phucap->sum('stkpcd');
-                    $cb->stbhtn = $model_phucap->sum('stbhtn');
-                    $cb->ttbh = $cb->stbhxh + $cb->stbhyt + $cb->stkpcd + $cb->stbhtn;
-                    $cb->stbhxh_dv = $model_phucap->sum('stbhxh_dv');
-                    $cb->stbhyt_dv = $model_phucap->sum('stbhyt_dv');
-                    $cb->stkpcd_dv = $model_phucap->sum('stkpcd_dv');
-                    $cb->stbhtn_dv = $model_phucap->sum('stbhtn_dv');
-                    $cb->ttbh_dv = $cb->stbhxh_dv + $cb->stbhyt_dv + $cb->stkpcd_dv + $cb->stbhtn_dv;
                     //nếu cán bộ nghỉ phép
                     $nghi = $m_nghiphep->where('macanbo', $cb->macanbo)->first();
                     if (count($nghi) > 0) {
