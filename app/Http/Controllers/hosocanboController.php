@@ -109,9 +109,6 @@ class hosocanboController extends Controller
                 //danh mục
                 ->with('m_linhvuc', $m_linhvuc)
                 ->with('model_dt', $model_dt)
-                //->with('m_pb',$m_pb)
-                //->with('m_cvcq',$m_cvcq)
-                //->with('m_cvd',$m_cvd)
                 ->with('model_nhomct', $model_nhomct)
                 ->with('model_tenct', $model_tenct)
                 ->with('m_plnb', $m_plnb)
@@ -396,7 +393,6 @@ class hosocanboController extends Controller
         $inputs['pckct'] = chkDbl($inputs['pckct']);
         $inputs['pcthni'] = chkDbl($inputs['pcthni']);
 
-
         if ($inputs['id'] > 0) {
             hosocanbo_kiemnhiem::find($inputs['id'])->update($inputs);
         } else {
@@ -567,7 +563,7 @@ class hosocanboController extends Controller
         die(json_encode($result));
     }
 
-    public function store_kiemnhiem(Request $request)
+    public function store_mc(Request $request)
     {
         $result = array(
             'status' => 'fail',
@@ -584,15 +580,11 @@ class hosocanboController extends Controller
         $inputs = $request->all();
 
         $inputs['madv'] = session('admin')->madv;
-        $inputs['hesopc'] = chkDbl($inputs['hesopc']);
-        $inputs['pctn'] = chkDbl($inputs['pctn']);
-        $inputs['pckn'] = chkDbl($inputs['pckn']);
-        $inputs['pcthni'] = chkDbl($inputs['pcthni']);
-        $inputs['pcdbn'] = chkDbl($inputs['pcdbn']);
-        $inputs['pck'] = chkDbl($inputs['pck']);
+        $inputs['pcdh'] = chkDbl($inputs['pcdh']);
+        $inputs['pcd'] = chkDbl($inputs['pcd']);
 
-        if ($inputs['id_kn'] > 0) {
-            hosocanbo_kiemnhiem::find($inputs['id_kn'])->update($inputs);
+        if ($inputs['id'] > 0) {
+            hosocanbo_kiemnhiem::find($inputs['id'])->update($inputs);
         } else {
             hosocanbo_kiemnhiem::create($inputs);
         }
@@ -652,7 +644,7 @@ class hosocanboController extends Controller
         die($model);
     }
 
-    public function store_kiemnhiem_temp(Request $request)
+    public function store_kct_temp(Request $request)
     {
         $result = array(
             'status' => 'fail',
@@ -667,16 +659,207 @@ class hosocanboController extends Controller
         }
 
         $inputs = $request->all();
+
+        $inputs['madv'] = session('admin')->madv;
+        $inputs['hesopc'] = chkDbl($inputs['hesopc']);
+        $inputs['pckn'] = chkDbl($inputs['pckn']);
+        $inputs['pclt'] = chkDbl($inputs['pclt']);
+        $inputs['pckct'] = chkDbl($inputs['pckct']);
+        $inputs['pcthni'] = chkDbl($inputs['pcthni']);
+
+
+        if ($inputs['id'] > 0) {
+            hosocanbo_kiemnhiem_temp::find($inputs['id'])->update($inputs);
+        } else {
+            hosocanbo_kiemnhiem_temp::create($inputs);
+        }
+        $model = hosocanbo_kiemnhiem_temp::where('macanbo', $inputs['macanbo'])->get();
+        $a_pl = getPhanLoaiKiemNhiem();
+        $a_cv = getChucVuCQ(false);
+        foreach($model as $ct) {
+            $ct->tenphanloai = isset($a_pl[$ct->phanloai]) ? $a_pl[$ct->phanloai] : '';
+            $ct->tenchucvu = isset($a_cv[$ct->macvcq]) ? $a_cv[$ct->macvcq] : '';
+        }
+        $result = $this->retun_html_kn($result, $model);
+
+        die(json_encode($result));
+    }
+
+    public function store_dbhdnd_temp(Request $request)
+    {
+        $result = array(
+            'status' => 'fail',
+            'message' => 'error',
+        );
+        if (!Session::has('admin')) {
+            $result = array(
+                'status' => 'fail',
+                'message' => 'permission denied',
+            );
+            die(json_encode($result));
+        }
+
+        $inputs = $request->all();
+
+        $inputs['madv'] = session('admin')->madv;
+        $inputs['hesopc'] = chkDbl($inputs['hesopc']);
+        $inputs['pckn'] = chkDbl($inputs['pckn']);
+
+
+        if ($inputs['id'] > 0) {
+            hosocanbo_kiemnhiem_temp::find($inputs['id'])->update($inputs);
+        } else {
+            hosocanbo_kiemnhiem_temp::create($inputs);
+        }
+        $model = hosocanbo_kiemnhiem_temp::where('macanbo', $inputs['macanbo'])->get();
+        $a_pl = getPhanLoaiKiemNhiem();
+        $a_cv = getChucVuCQ(false);
+        foreach($model as $ct) {
+            $ct->tenphanloai = isset($a_pl[$ct->phanloai]) ? $a_pl[$ct->phanloai] : '';
+            $ct->tenchucvu = isset($a_cv[$ct->macvcq]) ? $a_cv[$ct->macvcq] : '';
+        }
+        $result = $this->retun_html_kn($result, $model);
+
+        die(json_encode($result));
+    }
+
+    public function store_qs_temp(Request $request)
+    {
+        $result = array(
+            'status' => 'fail',
+            'message' => 'error',
+        );
+        if (!Session::has('admin')) {
+            $result = array(
+                'status' => 'fail',
+                'message' => 'permission denied',
+            );
+            die(json_encode($result));
+        }
+
+        $inputs = $request->all();
+
         $inputs['madv'] = session('admin')->madv;
         $inputs['hesopc'] = chkDbl($inputs['hesopc']);
         $inputs['pctn'] = chkDbl($inputs['pctn']);
-        $inputs['pckn'] = chkDbl($inputs['pckn']);
-        $inputs['pcthni'] = chkDbl($inputs['pcthni']);
         $inputs['pcdbn'] = chkDbl($inputs['pcdbn']);
+        $inputs['pcthni'] = chkDbl($inputs['pcthni']);
         $inputs['pck'] = chkDbl($inputs['pck']);
 
-        if ($inputs['id_kn'] > 0) {
-            hosocanbo_kiemnhiem_temp::find($inputs['id_kn'])->update($inputs);
+        if ($inputs['id'] > 0) {
+            hosocanbo_kiemnhiem_temp::find($inputs['id'])->update($inputs);
+        } else {
+            hosocanbo_kiemnhiem_temp::create($inputs);
+        }
+        $model = hosocanbo_kiemnhiem_temp::where('macanbo', $inputs['macanbo'])->get();
+        $a_pl = getPhanLoaiKiemNhiem();
+        $a_cv = getChucVuCQ(false);
+        foreach($model as $ct) {
+            $ct->tenphanloai = isset($a_pl[$ct->phanloai]) ? $a_pl[$ct->phanloai] : '';
+            $ct->tenchucvu = isset($a_cv[$ct->macvcq]) ? $a_cv[$ct->macvcq] : '';
+        }
+        $result = $this->retun_html_kn($result, $model);
+
+        die(json_encode($result));
+    }
+
+    public function store_cuv_temp(Request $request)
+    {
+        $result = array(
+            'status' => 'fail',
+            'message' => 'error',
+        );
+        if (!Session::has('admin')) {
+            $result = array(
+                'status' => 'fail',
+                'message' => 'permission denied',
+            );
+            die(json_encode($result));
+        }
+
+        $inputs = $request->all();
+
+        $inputs['madv'] = session('admin')->madv;
+        $inputs['hesopc'] = chkDbl($inputs['hesopc']);
+        $inputs['pckn'] = chkDbl($inputs['pckn']);
+
+
+        if ($inputs['id'] > 0) {
+            hosocanbo_kiemnhiem_temp::find($inputs['id'])->update($inputs);
+        } else {
+            hosocanbo_kiemnhiem_temp::create($inputs);
+        }
+        $model = hosocanbo_kiemnhiem_temp::where('macanbo', $inputs['macanbo'])->get();
+        $a_pl = getPhanLoaiKiemNhiem();
+        $a_cv = getChucVuCQ(false);
+        foreach($model as $ct) {
+            $ct->tenphanloai = isset($a_pl[$ct->phanloai]) ? $a_pl[$ct->phanloai] : '';
+            $ct->tenchucvu = isset($a_cv[$ct->macvcq]) ? $a_cv[$ct->macvcq] : '';
+        }
+        $result = $this->retun_html_kn($result, $model);
+
+        die(json_encode($result));
+    }
+
+    public function store_cd_temp(Request $request)
+    {
+        $result = array(
+            'status' => 'fail',
+            'message' => 'error',
+        );
+        if (!Session::has('admin')) {
+            $result = array(
+                'status' => 'fail',
+                'message' => 'permission denied',
+            );
+            die(json_encode($result));
+        }
+
+        $inputs = $request->all();
+
+        $inputs['madv'] = session('admin')->madv;
+        $inputs['pckn'] = chkDbl($inputs['pckn']);
+
+
+        if ($inputs['id'] > 0) {
+            hosocanbo_kiemnhiem_temp::find($inputs['id'])->update($inputs);
+        } else {
+            hosocanbo_kiemnhiem_temp::create($inputs);
+        }
+        $model = hosocanbo_kiemnhiem_temp::where('macanbo', $inputs['macanbo'])->get();
+        $a_pl = getPhanLoaiKiemNhiem();
+        $a_cv = getChucVuCQ(false);
+        foreach($model as $ct) {
+            $ct->tenphanloai = isset($a_pl[$ct->phanloai]) ? $a_pl[$ct->phanloai] : '';
+            $ct->tenchucvu = isset($a_cv[$ct->macvcq]) ? $a_cv[$ct->macvcq] : '';
+        }
+        $result = $this->retun_html_kn($result, $model);
+
+        die(json_encode($result));
+    }
+
+    public function store_mc_temp(Request $request)
+    {
+        $result = array(
+            'status' => 'fail',
+            'message' => 'error',
+        );
+        if (!Session::has('admin')) {
+            $result = array(
+                'status' => 'fail',
+                'message' => 'permission denied',
+            );
+            die(json_encode($result));
+        }
+
+        $inputs = $request->all();
+
+        $inputs['madv'] = session('admin')->madv;
+        $inputs['pcdh'] = chkDbl($inputs['pcdh']);
+        $inputs['pcd'] = chkDbl($inputs['pcd']);
+
+        if ($inputs['id'] > 0) {
+            hosocanbo_kiemnhiem_temp::find($inputs['id'])->update($inputs);
         } else {
             hosocanbo_kiemnhiem_temp::create($inputs);
         }

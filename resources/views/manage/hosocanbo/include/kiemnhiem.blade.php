@@ -2,7 +2,7 @@
 <div id="tab5" class="tab-pane" >
     <div class="form-horizontal">
         <div class="row">
-            <div class="col-md-offset-9 col-md-3">
+            <div class="col-md-offset-10 col-md-2">
 
 
                 <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="true">
@@ -13,7 +13,7 @@
                         <button style="border-width: 0px" type="button" class="btn btn-default" onclick="add_kct()"><i class="fa fa-plus"></i>&nbsp;Cán bộ không chuyên trách</button>
                     </li>
                     <li>
-                        <button style="border-width: 0px" type="button" class="btn btn-default" onclick="add_dbhdnd()"><i class="fa fa-plus"></i>&nbsp;Đại biểu hội đồng nhân dân</button>
+                        <button style="border-width: 0px" type="button" class="btn btn-default" onclick="add_dbhdnd()"><i class="fa fa-plus"></i>&nbsp;Đại biểu hội đồng ND</button>
                     </li>
                     <li>
                         <button style="border-width: 0px" type="button" class="btn btn-default" onclick="add_qs()"><i class="fa fa-plus"></i>&nbsp;Cán bộ quân sự</button>
@@ -59,7 +59,7 @@
                             <td class="text-right">{{$value->pckn}}</td>
                             <td class="text-right">{{$value->pcdbn}}</td>
                             <td>
-                                <button type="button" data-target="#kiemnhiem-modal" data-toggle="modal" class="btn btn-default btn-xs mbs" onclick="edit_kn({{$value->id}});"><i class="fa fa-edit"></i>&nbsp;Chỉnh sửa</button>
+                                <button type="button" class="btn btn-default btn-xs mbs" onclick="edit_kn({{$value->id}});"><i class="fa fa-edit"></i>&nbsp;Chỉnh sửa</button>
                                 <button type="button" class="btn btn-default btn-xs mbs" onclick="deleteRow({{$value->id}})" ><i class="fa fa-trash-o"></i>&nbsp;Xóa</button>
                             </td>
                         </tr>

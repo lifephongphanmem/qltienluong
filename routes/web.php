@@ -199,10 +199,16 @@ Route::group(['prefix'=>'nghiep_vu'],function(){
         Route::get('store_qs','hosocanboController@store_qs');
         Route::get('store_cuv','hosocanboController@store_cuv');
         Route::get('store_cd','hosocanboController@store_cd');
+        Route::get('store_mc','hosocanboController@store_mc');
         Route::get('getinfor_kn','hosocanboController@getinfor_kn');
         Route::get('delete_kn','hosocanboController@delete_kn');
 
-        Route::get('temp/store_kiemnhiem','hosocanboController@store_kiemnhiem_temp');
+        Route::get('temp/store_kct','hosocanboController@store_kct_temp');
+        Route::get('temp/store_dbhdnd','hosocanboController@store_dbhdnd_temp');
+        Route::get('temp/store_qs','hosocanboController@store_qs_temp');
+        Route::get('temp/store_cuv','hosocanboController@store_cuv_temp');
+        Route::get('temp/store_cd','hosocanboController@store_cd_temp');
+        Route::get('temp/store_mc','hosocanboController@store_mc_temp');
         Route::get('temp/getinfor_kn','hosocanboController@getinfor_kn_temp');
         Route::get('temp/delete_kn','hosocanboController@delete_kn_temp_temp');
     });
