@@ -114,9 +114,9 @@
     </div>
     <script type="text/javascript">
         $("#phanloai").change(function(){
-            var congthuc = '{{$model->congthuc}}';
-            if(congthuc == ''){
-                congthuc = 'heso,vuotkhung,pccv';
+            var congthuc = 'heso,vuotkhung,pccv';
+            if('{{$model->congthuc}}' != ''){
+                congthuc = '{{$model->congthuc}}';
             }
             var selectedValuesTest = congthuc.split(',');
 

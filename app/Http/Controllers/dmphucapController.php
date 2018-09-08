@@ -131,24 +131,9 @@ class dmphucapController extends Controller
     function index_donvi()
     {
         if (Session::has('admin')) {
-            $a_lock = array('heso', 'vuotkhung', 'hesott');
+            $a_lock = array('heso', 'vuotkhung', 'hesott','hesobl');
             $model = dmphucap_donvi::where('madv', session('admin')->madv)->wherenotin('mapc',$a_lock)->get();
-            /*
-            //dd($model);
-            $m_donvi = dmdonvi::where('madv', session('admin')->madv)->first();
-            if (count($model) == 0) {//đơn vị chưa tạo phụ cấp
-                $model = dmphucap::select('mapc', 'tenpc', 'baohiem', 'form', 'report', 'phanloai', 'congthuc', DB::raw(session('admin')->madv . ' as madv'))->get();
-                //dành cho các đơn vị đã cập nhật danh mục phụ cấp
-                if (count($m_donvi) > 0)
-                    foreach ($model as $ct) {
-                        $mapc = $ct->mapc;
-                        $ct->phanloai = getDbl($m_donvi->$mapc);
-                        $ct->congthuc = $ct->phanloai == 2 ? "heso,vuotkhung,pccv" : "";
-                    }
-                dmphucap_donvi::insert($model->toarray());
-            }
-            $model = dmphucap_donvi::where('madv', session('admin')->madv)->get();
-            */
+
             $a_pl = getPhanLoaiPhuCap();
             $a_ct = getCongThucTinhPC();
             foreach ($model as $ct) {

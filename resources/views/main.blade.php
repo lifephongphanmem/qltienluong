@@ -164,7 +164,11 @@
                         </li>
 
                         <li>
-                            <a href="{{url('chuc_nang/nang_luong/danh_sach')}}"><i class="fa fa-caret-right"></i>Nâng lương</a>
+                            <a href="{{url('chuc_nang/nang_luong/danh_sach')}}"><i class="fa fa-caret-right"></i>Nâng lương ngạch bậc</a>
+                        </li>
+
+                        <li>
+                            <a href="{{url('chuc_nang/tham_nien/danh_sach')}}"><i class="fa fa-caret-right"></i>Nâng lương thâm niên nghề</a>
                         </li>
 
                         <li>

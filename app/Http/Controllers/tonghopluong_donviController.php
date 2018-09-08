@@ -110,9 +110,11 @@ class tonghopluong_donviController extends Controller
             })->get();
             */
             //Lấy dữ liệu từ các bảng liên quan thêm vào bảng lương chi tiết để tính toán
+            //dd($model_bangluong_ct);
             foreach ($model_bangluong_ct as $ct) {
                 $hoso = $model_hoso->where('macanbo',$ct->macanbo)->first();
-                $ct->mact = $hoso->mact;
+                //chưa tính trường hợp kiêm nhiệm, bảng lương chưa có mã công tác, cán bộ tạo bản luong xong xóa
+                //$ct->mact = $hoso->mact;
                 $bangluong = $model_bangluong->where('mabl', $ct->mabl)->first();
                 $ct->luongcoban = $bangluong->luongcoban;
                 $ct->manguonkp = $bangluong->manguonkp;

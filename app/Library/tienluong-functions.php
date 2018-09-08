@@ -392,7 +392,12 @@ function getPhanLoaiPhuCap(){
 }
 
 function getCongThucTinhPC(){
-    return array('heso' => 'Lương ngạch bậc','vuotkhung' => 'Thâm niên vượt khung','pccv' => 'Phụ cấp chức vụ');
+    return array('heso' => 'Lương ngạch bậc',
+        'vuotkhung' => 'Thâm niên vượt khung',
+        'pccv' => 'Phụ cấp chức vụ',
+        'hesobl' => 'Hệ số bảo lưu',
+        'pctnn' => 'Phụ cấp thâm niên nghề',
+    );
 }
 
 function getColPhuCap(){//xem bỏ đi vì có danh mục phụ cấp
