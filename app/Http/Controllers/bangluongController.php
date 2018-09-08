@@ -591,6 +591,15 @@ class bangluongController extends Controller
             return view('errors.notlogin');
     }
 
+    function destroy_ct($id){
+        if (Session::has('admin')) {
+            $model = bangluong_ct::find($id);
+            $model->delete();
+            return redirect('/chuc_nang/bang_luong/maso='.$model->mabl);
+        } else
+            return view('errors.notlogin');
+    }
+
     function getinfo(Request $request){
         if(!Session::has('admin')) {
             $result = array(

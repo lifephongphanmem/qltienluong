@@ -311,6 +311,7 @@ Route::group(['prefix'=>'chuc_nang'],function(){
         Route::post('updatect/{id}','bangluongController@updatect');
         Route::post('updatect_truylinh','bangluongController@updatect_truylinh');
         Route::get('del/{id}','bangluongController@destroy');
+        Route::get('del_ct/{id}','bangluongController@destroy_ct');
         //Route::get('cal','bangluongController@cal'); //Tính toán lại lương cán bộ
         Route::post('importexcel','bangluongController@importexcel');
 

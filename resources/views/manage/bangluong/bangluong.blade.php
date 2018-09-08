@@ -63,6 +63,8 @@
                                     <td>
                                         <a href="{{url($furl.'?maso='.$value->id)}}" class="btn btn-info btn-xs mbs">
                                             <i class="fa fa-edit"></i>&nbsp; Chi tiết</a>
+                                        <button type="button" onclick="cfDel('{{$furl.'del_ct/'.$value->id}}')" class="btn btn-danger btn-xs mbs" data-target="#delete-modal-confirm" data-toggle="modal">
+                                            <i class="fa fa-trash-o"></i>&nbsp; Xóa</button>
                                     </td>
                                 </tr>
                             @endforeach
