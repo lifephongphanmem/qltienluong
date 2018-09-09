@@ -31,7 +31,7 @@
         <div class="col-md-12">
             <div class="portlet light bordered">
                 <div class="portlet-title">
-                    <div class="caption"> DANH SÁCH NÂNG LƯƠNG ĐỊNH KỲ - {{$tendv}}</div>
+                    <div class="caption"> DANH SÁCH NÂNG THÂM NIÊN NGHỀ - {{$tendv}}</div>
                     <div class="actions">
                         <button type="button" id="_btnadd" class="btn btn-success btn-xs" onclick="add()"><i class="fa fa-plus"></i>&nbsp;Tạo danh sách</button>
                     </div>
@@ -80,12 +80,12 @@
     </div>
 
     <!--Modal thông tin chi tiết -->
-    {!! Form::open(['url'=>'/chuc_nang/nang_luong/store','method'=>'post', 'id' => 'create_ngachbac','enctype'=>'multipart/form-data']) !!}
+    {!! Form::open(['url'=>$furl.'store','method'=>'post', 'id' => 'create_ngachbac','enctype'=>'multipart/form-data']) !!}
     <div id="chitiet-modal" tabindex="-1" role="dialog" aria-hidden="true" class="modal fade">
         <div class="modal-dialog modal-content">
             <div class="modal-header modal-header-primary">
                 <button type="button" data-dismiss="modal" aria-hidden="true" class="close">&times;</button>
-                <h4 id="modal-header-primary-label" class="modal-title">Tạo danh sách nâng lương</h4>
+                <h4 id="modal-header-primary-label" class="modal-title">Tạo danh sách nâng thâm niên nghề</h4>
             </div>
             <div class="modal-body">
                 <div class="form-horizontal">
@@ -126,7 +126,7 @@
             //var tr = $(e).closest('tr');
             var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
             $.ajax({
-                url: '{{$furl_ajax}}' + 'get',
+                url: '{{$furl}}' + 'get',
                 type: 'GET',
                 data: {
                     _token: CSRF_TOKEN,

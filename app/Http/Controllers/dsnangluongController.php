@@ -41,6 +41,7 @@ class dsnangluongController extends Controller
         if (count($model) > 0) {
             //update
             $model->update($inputs);
+            return redirect('/chuc_nang/nang_luong/danh_sach');
         } else {
 
             $madv = session('admin')->madv;
@@ -53,14 +54,16 @@ class dsnangluongController extends Controller
             $model_nhomngluong = nhomngachluong::all();
 
             /*
-             * ->select('macanbo','tencanbo','mact','macvcq','mapb','msngbac','heso','hesott','vuotkhung',DB::raw("'".$inputs['mabl']. "' as mabl"),
-                    'pck','pccv','pckv','pcth','pcdh','pcld','pcudn','pctn','pctnn','pcdbn','pcvk','pckn','pccovu','pcdbqh','pctnvk','pcbdhdcu','pcdang','pcthni')
-                ->get();
-             * */
             $m_canbo = hosocanbo::select('macanbo','msngbac','bac','ngaytu','ngayden','msngbac','heso','hesott','vuotkhung',DB::raw("'".$inputs['manl']. "' as manl"),
                     'pck','pccv','pckv','pcth','pcdh','pcld','pcudn','pctn','pctnn','pcdbn','pcvk','pckn','pccovu','pcdbqh','pctnvk','pcbdhdcu','pcdang','pcthni')
                 ->where('ngayden', '<', $inputs['ngayxet'])
                 ->where('theodoi',1)
+                ->where('madv', $madv)->get();
+             * */
+            $m_canbo = hosocanbo::select('macanbo','msngbac','bac','ngaytu','ngayden','msngbac','heso','hesott','vuotkhung',DB::raw("'".$inputs['manl']. "' as manl"),
+                    'pck','pccv','pckv','pcth','pcdh','pcld','pcudn','pctn','pctnn','pcdbn','pcvk','pckn','pccovu','pcdbqh','pctnvk','pcbdhdcu','pcdang','pcthni')
+                ->where('ngayden', '<=', $inputs['ngayxet'])
+                ->where('theodoi','<','9')
                 ->where('madv', $madv)->get();
 
             //dd($model_nhomngluong->toarray());
@@ -109,12 +112,19 @@ class dsnangluongController extends Controller
                         $cb->hesott = $cb->heso / 100;
                     }
 
+                    $cb->ngaytu = new Carbon($cb->ngayden);
+                    //$cb->ngaytu = $date->addDay('1');
+                    //$date1 = new Carbon($cb->ngayden);
+                    //$cb->ngayden = $date1->addYear('1');
                     $date = new Carbon($cb->ngayden);
-                    $cb->ngaytu = $date->addDay('1');
-                    $date1 = new Carbon($cb->ngayden);
-                    $cb->ngayden = $date1->addYear('1');
+                    $cb->ngayden = $date->addYear('1');
+                    //kiểm tra truy lĩnh nếu ngày xét = ngày nâng lương = > ko truy lĩnh
+                    if($inputs['ngayxet']>$cb->ngayden) {
+                        $cb->truylinhtungay = new Carbon($cb->ngayden);
+                    }else{
+                        $cb->truylinhtungay = null;
+                    }
 
-                    $cb->truylinhtungay = $date->addDay('1');
                     //$cb->truylinhdenngay = $inputs['ngayxet'];
                 }else{
                     //Tính lại hệ số lương + phụ cấp + hệ số truy lĩnh
@@ -122,15 +132,19 @@ class dsnangluongController extends Controller
                     $cb->heso = $a_hsl[0];
                     $cb->vuotkhung = $a_hsl[1];
 
+                    //$cb->ngaytu = $date->addDay('1');
+                    $cb->ngaytu = new Carbon($cb->ngayden);
+                    //$date1 = new Carbon($cb->ngayden);
+                    //$cb->ngayden = $date1->addYear($nhomngluong->namnb)->addDay('1');
+                    //kiểm tra truy lĩnh nếu ngày xét = ngày nâng lương = > ko truy lĩnh
+                    if($inputs['ngayxet']>$cb->ngayden) {
+                        $cb->truylinhtungay = new Carbon($cb->ngayden);
+                        $cb->hesott = $nhomngluong->hesochenhlech;
+                    }else{
+                        $cb->truylinhtungay = null;
+                    }
                     $date = new Carbon($cb->ngayden);
-                    $cb->ngaytu = $date->addDay('1');
-                    $date1 = new Carbon($cb->ngayden);
-                    $cb->ngayden = $date1->addYear($nhomngluong->namnb)->addDay('1');
-
-                    //lưu thông tin truy lĩnh lương
-                    $cb->hesott = $nhomngluong->hesochenhlech;
-                    $cb->truylinhtungay = $date->addDay('1');
-                    //$cb->truylinhdenngay = $date_ngaynl;
+                    $cb->ngayden = $date->addYear($nhomngluong->namnb);
                 }
             }
             //dd($m_canbo->toarray());
@@ -212,6 +226,7 @@ class dsnangluongController extends Controller
     function store_detail(Request $request){
         if (Session::has('admin')) {
             $inputs = $request->all();
+            $inputs['truylinhtungay'] = getDateTime($inputs['truylinhtungay']);
             $model = dsnangluong_chitiet::where('manl',$inputs['manl'])->where('macanbo',$inputs['macanbo'])->first();
             $model->update($inputs);
            return redirect('chuc_nang/nang_luong/maso='.$model->manl);
@@ -229,7 +244,7 @@ class dsnangluongController extends Controller
                 unset($data['id']);
                 unset($data['phanloai']);
                 hosoluong::create($data);
-                if ($canbo->hesott > 0) {
+                if (isset($canbo->truylinhtungay) && $canbo->hesott > 0) {
                     $truylinh = hosotruylinh::where('macanbo',$canbo->macanbo)->first();
                     if(count($truylinh) == 0){
                         $truylinh = new hosotruylinh();

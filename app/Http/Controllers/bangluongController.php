@@ -201,7 +201,7 @@ class bangluongController extends Controller
 
                 $cb->tonghs = $ths;
                 $cb->ttl = round($inputs['luongcoban'] * $ths);
-                $cb->luongtn = $cb->ttl;
+
                 if ($cb->baohiem) {
                     $phanloai = $model_phanloai->where('mact', $cb->mact)->first();
                     if (count($phanloai) > 0) {//do trc nhập chưa lưu mact
@@ -217,6 +217,7 @@ class bangluongController extends Controller
                         $cb->ttbh_dv = $cb->stbhxh_dv + $cb->stbhyt_dv + $cb->stkpcd_dv + $cb->stbhtn_dv;
                     }
                 }
+                $cb->luongtn = $cb->ttl - $cb->ttbh;
                 $a_k = $cb->toarray();
                 unset($a_k['id']);
                 bangluong_ct::create($a_k);
@@ -252,13 +253,16 @@ class bangluongController extends Controller
                     $cb->bhyt = floatval($phanloai->bhyt) / 100;
                     $cb->kpcd = floatval($phanloai->kpcd) / 100;
                     $cb->bhtn = floatval($phanloai->bhtn) / 100;
-                    if ($cb->sunghiep == 'Công chức' || (count($chucvu) > 0 && $chucvu->ttdv == 1)) {
-                        $cb->bhtn = 0;
-                    }
+
                     $cb->bhxh_dv = floatval($phanloai->bhxh_dv) / 100;
                     $cb->bhyt_dv = floatval($phanloai->bhyt_dv) / 100;
                     $cb->kpcd_dv = floatval($phanloai->kpcd_dv) / 100;
                     $cb->bhtn_dv = floatval($phanloai->bhtn_dv) / 100;
+
+                    if ($cb->sunghiep == 'Công chức' || (count($chucvu) > 0 && $chucvu->ttdv == 1)) {
+                        $cb->bhtn = 0;
+                        $cb->bhtn_dv = 0;
+                    }
                 }
 
                 //trong bảng danh mục là % vượt khung => sang bảng lương chuyển thành hệ số

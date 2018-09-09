@@ -373,18 +373,18 @@ Route::group(['prefix'=>'chuc_nang'],function(){
     });
 
     Route::group(['prefix'=>'tham_nien'],function(){
-        Route::get('danh_sach','dsnangluongController@index');
-        Route::post('store','dsnangluongController@store'); //insert + update danh sách nâng lương
+        Route::get('danh_sach','dsnangthamnienController@index');
+        Route::post('store','dsnangthamnienController@store'); //insert + update danh sách nâng lương
+        Route::get('get','dsnangthamnienController@getinfo');
+        Route::get('update/{id}','dsnangthamnienController@update');
+        Route::get('create','dsnangthamnienController@create');
 
-        Route::get('update/{id}','dsnangluongController@update');
-        Route::get('create','dsnangluongController@create');
-
-        Route::get('/maso={manl}','dsnangluongController@show');
-        Route::get('chi_tiet','dsnangluongController@detail');
-        Route::post('store_detail','dsnangluongController@store_detail'); //insert + update danh sách nâng lương
-        Route::get('del/{id}','dsnangluongController@destroy');
-        Route::get('nang_luong/maso={manl}','dsnangluongController@nang_luong');
-        Route::get('deldt/{id}','dsnangluongController@destroydt');
+        Route::get('/maso={manl}','dsnangthamnienController@show');
+        Route::get('chi_tiet','dsnangthamnienController@detail');
+        Route::post('store_detail','dsnangthamnienController@store_detail'); //insert + update danh sách nâng lương
+        Route::get('del/{id}','dsnangthamnienController@destroy');
+        Route::get('nang_luong/maso={manl}','dsnangthamnienController@nang_luong');
+        Route::get('deldt/{id}','dsnangthamnienController@destroydt');
     });
 
     Route::group(['prefix'=>'tong_hop_luong'],function(){
@@ -854,11 +854,7 @@ Route::group(['prefix'=>'ajax'],function(){
         Route::get('get','hosonhanxetdgController@getinfo');
     });
 
-    Route::group(['prefix'=>'nang_luong'],function(){
-        Route::get('add','dsnangluongController@store');
-        Route::get('update','dsnangluongController@update');
-        Route::get('get','dsnangluongController@getinfo');
-    });
+
     Route::group(['prefix'=>'het_tap_su'],function(){
         Route::get('add','dshettapsuController@store');
         Route::get('update','dshettapsuController@update');
@@ -870,6 +866,12 @@ Route::group(['prefix'=>'ajax'],function(){
         Route::get('get','dshuutriController@getinfo');
     });
     */
+    Route::group(['prefix'=>'nang_luong'],function(){
+        Route::get('add','dsnangluongController@store');
+        Route::get('update','dsnangluongController@update');
+        Route::get('get','dsnangluongController@getinfo');
+    });
+
     Route::group(['prefix'=>'dieu_dong'],function(){
         Route::get('add','hosoluanchuyenController@store_dd');
         Route::get('update','hosoluanchuyenController@update_dd');
