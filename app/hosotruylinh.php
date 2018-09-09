@@ -20,6 +20,7 @@ class hosotruylinh extends Model
         'mabl',
         'ngaytu',
         'ngayden',
+        'noidung',
         'madv',
 
         'msngbac',

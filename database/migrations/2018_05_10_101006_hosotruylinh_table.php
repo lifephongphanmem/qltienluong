@@ -26,6 +26,7 @@ class HosotruylinhTable extends Migration
             $table->string('mabl', 50)->nullable();
             $table->date('ngaytu')->nullable();
             $table->date('ngayden')->nullable();
+            $table->text('noidung')->nullable();
             $table->string('madv')->nullable();
 
             $table->string('msngbac', 50)->nullable();

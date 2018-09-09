@@ -243,7 +243,7 @@ class dsnangluongController extends Controller
                 $data = $canbo->toarray();
                 unset($data['id']);
                 unset($data['phanloai']);
-                hosoluong::create($data);
+                //hosoluong::create($data);
                 if (isset($canbo->truylinhtungay) && $canbo->hesott > 0) {
                     $truylinh = hosotruylinh::where('macanbo',$canbo->macanbo)->first();
                     if(count($truylinh) == 0){
@@ -254,6 +254,7 @@ class dsnangluongController extends Controller
                     $truylinh->tencanbo = $hoso->tencanbo;
                     $truylinh->ngaytu = $canbo->truylinhtungay;
                     $truylinh->madv = session('admin')->madv;
+                    $truylinh->noidung = 'Truy lĩnh nâng lương ngạch bậc';
                     $truylinh->msngbac = $canbo->msngbac;
                     $truylinh->hesott = $canbo->hesott;
                     $truylinh->save();
