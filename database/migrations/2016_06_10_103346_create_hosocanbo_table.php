@@ -116,6 +116,7 @@ class CreateHosocanboTable extends Migration
 
             $table->string('mact')->nullable();
             $table->string('theodoi',5)->default(1)->nullable();
+            $table->double('baohiem')->default(1);
             $table->string('sodinhdanhcanhan')->nullable();
             $table->string('macvcqkn', 50)->nullable();//chức vụ kiêm nhiệm
             $table->date('ngaybonhiemlandau')->nullable();//ngày bổ nhiệm lần đầu chức vụ chính quyền

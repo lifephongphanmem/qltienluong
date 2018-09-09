@@ -43,6 +43,13 @@
                         </div>
                     </div>
 
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label class="control-label">Nộp bảo hiểm</label>
+                            {!!Form::select('baohiem_kct',getNopBaoHiem(), null, array('id' => 'baohiem_kct','class' => 'form-control select2me'))!!}
+                        </div>
+                    </div>
+
                     <div class="col-md-3">
                         <div class="form-group">
                             <label class="control-label">Hệ số phụ cấp</label>
@@ -588,6 +595,7 @@
 <script>
     function add_kct(){
         $('#mact_kct').val('1506673695').trigger('change');
+        $('#baohiem_kct').val('0').trigger('change');
         $('#id_kct').val(0);
         $('#kct-modal').modal('show');
     }
@@ -659,6 +667,7 @@
             success: function (data) {
                 if(data.phanloai == 'KHONGCT'){
                      $('#mact_kct').val(data.mact).trigger('change');
+                     $('#baohiem_kct').val(data.baohiem).trigger('change');
                      $('#mapb_kct').val(data.mapb).trigger('change');
                      $('#macvcq_kct').val(data.macvcq).trigger('change');
                      $('#id_kct').val(data.id);
@@ -731,6 +740,7 @@
                     _token: CSRF_TOKEN,
                     macanbo : $('#macanbo').val(),
                     mact : $('#mact_kct').val(),
+                    baohiem : $('#baohiem_kct').val(),
                     mapb : $('#mapb_kct').val(),
                     macvcq : $('#macvcq_kct').val(),
                     id: $('#id_kct').val(),

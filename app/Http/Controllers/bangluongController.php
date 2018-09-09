@@ -163,7 +163,10 @@ class bangluongController extends Controller
             $m_cb = hosocanbo::where('madv', $madv)->where('theodoi','<', '9')->get();
 
             //Lấy danh sách cán bộ kiêm nhiệm
-            $model_canbo_kn = hosocanbo_kiemnhiem::where('madv', $madv)->get();
+            $model_canbo_kn = hosocanbo_kiemnhiem::wherein('macanbo', function($qr){
+                $qr->select('macanbo')->from('hosocanbo')->where('madv',session('admin')->madv)->where('theodoi','<', '9')->get();
+            })->get();
+
 
             if (isset($inputs['linhvuc']) && $inputs['linhvuc'] != 'ALL') {
                 //Dùng tìm kiếm các bộ nào phù hợp. Do lvhd là mảng nên pải lọc
@@ -198,8 +201,22 @@ class bangluongController extends Controller
 
                 $cb->tonghs = $ths;
                 $cb->ttl = round($inputs['luongcoban'] * $ths);
-
                 $cb->luongtn = $cb->ttl;
+                if ($cb->baohiem) {
+                    $phanloai = $model_phanloai->where('mact', $cb->mact)->first();
+                    if (count($phanloai) > 0) {//do trc nhập chưa lưu mact
+                        $cb->stbhxh = round($inputs['luongcoban'] * floatval($phanloai->bhxh) / 100, 0);
+                        $cb->stbhyt = round($inputs['luongcoban'] * floatval($phanloai->bhyt) / 100, 0);
+                        $cb->stkpcd = round($inputs['luongcoban'] * floatval($phanloai->kpcd) / 100, 0);
+                        $cb->stbhtn = round($inputs['luongcoban'] * floatval($phanloai->bhtn) / 100, 0);
+                        $cb->ttbh = $cb->stbhxh + $cb->stbhyt + $cb->stkpcd + $cb->stbhtn;
+                        $cb->stbhxh_dv = round($inputs['luongcoban'] * floatval($phanloai->bhxh_dv) / 100, 0);
+                        $cb->stbhyt_dv = round($inputs['luongcoban'] * floatval($phanloai->bhyt_dv) / 100, 0);
+                        $cb->stkpcd_dv = round($inputs['luongcoban'] * floatval($phanloai->kpcd_dv), 0);
+                        $cb->stbhtn_dv = round($inputs['luongcoban'] * floatval($phanloai->bhtn_dv), 0);
+                        $cb->ttbh_dv = $cb->stbhxh_dv + $cb->stbhyt_dv + $cb->stkpcd_dv + $cb->stbhtn_dv;
+                    }
+                }
                 $a_k = $cb->toarray();
                 unset($a_k['id']);
                 bangluong_ct::create($a_k);
@@ -363,7 +380,7 @@ class bangluongController extends Controller
                 }else {
                     $cb->ttl = round($inputs['luongcoban'] * $ths * $cb->pthuong / 100 + $tt);
                     //kiểm tra cán bộ ko chuyên trách thì tự động lấy lương cơ bản * % bảo hiểm
-                    if($cb->macongtac == 'KHONGCT'){
+                    if($cb->baohiem && $cb->macongtac == 'KHONGCT'){
                         $cb->stbhxh = round($inputs['luongcoban'] * $cb->bhxh, 0);
                         $cb->stbhyt = round($inputs['luongcoban'] * $cb->bhyt, 0);
                         $cb->stkpcd = round($inputs['luongcoban'] * $cb->kpcd, 0);
@@ -374,7 +391,7 @@ class bangluongController extends Controller
                         $cb->stkpcd_dv = round($inputs['luongcoban'] * $cb->kpcd_dv, 0);
                         $cb->stbhtn_dv = round($inputs['luongcoban'] * $cb->bhtn_dv, 0);
                         $cb->ttbh_dv = $cb->stbhxh_dv + $cb->stbhyt_dv + $cb->stkpcd_dv + $cb->stbhtn_dv;
-                    }else{
+                    }elseif($cb->baohiem){
                         $cb->stbhxh = $model_phucap->sum('stbhxh');
                         $cb->stbhyt = $model_phucap->sum('stbhyt');
                         $cb->stkpcd = $model_phucap->sum('stkpcd');
@@ -388,6 +405,7 @@ class bangluongController extends Controller
                     }
 
                     //nếu cán bộ nghỉ phép
+                    //ngày công = lương co + chuc vu + ....
                     $nghi = $m_nghiphep->where('macanbo', $cb->macanbo)->first();
                     if (count($nghi) > 0) {
                         $tiencong = round($cb->ttl / $ngaycong, 0);

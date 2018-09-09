@@ -536,4 +536,10 @@ function getPhanLoaiThoiCongTac(){
         'BUOCNGHI' => 'Buộc thôi việc',
         'KHAC'=> 'Khác');
 }
+
+function getNopBaoHiem(){
+    return array('0' => 'Không nộp bảo hiểm',
+        '1' => 'Có nộp bảo hiểm',
+        );
+}
 ?>

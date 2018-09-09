@@ -73,6 +73,7 @@ class hosocanbo extends Model
         'pcthni',
         'theodoi',
         'mact',
+        'baohiem',
         'ngaybc',
         'ngayvao',
         'lvhd'

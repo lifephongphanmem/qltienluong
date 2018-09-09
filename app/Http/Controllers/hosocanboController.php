@@ -394,7 +394,7 @@ class hosocanboController extends Controller
         }
 
         $inputs = $request->all();
-
+        $inputs['baohiem'] = isset($inputs['baohiem'])?$inputs['baohiem'] : 0;
         $inputs['madv'] = session('admin')->madv;
         $inputs['hesopc'] = chkDbl($inputs['hesopc']);
         $inputs['pckn'] = chkDbl($inputs['pckn']);
@@ -434,7 +434,7 @@ class hosocanboController extends Controller
         }
 
         $inputs = $request->all();
-
+        $inputs['baohiem'] = isset($inputs['baohiem'])?$inputs['baohiem'] : 0;
         $inputs['madv'] = session('admin')->madv;
         $inputs['hesopc'] = chkDbl($inputs['hesopc']);
         $inputs['pckn'] = chkDbl($inputs['pckn']);
@@ -472,7 +472,7 @@ class hosocanboController extends Controller
         }
 
         $inputs = $request->all();
-
+        $inputs['baohiem'] = isset($inputs['baohiem'])?$inputs['baohiem'] : 0;
         $inputs['madv'] = session('admin')->madv;
         $inputs['hesopc'] = chkDbl($inputs['hesopc']);
         $inputs['pctn'] = chkDbl($inputs['pctn']);
@@ -512,7 +512,7 @@ class hosocanboController extends Controller
         }
 
         $inputs = $request->all();
-
+        $inputs['baohiem'] = isset($inputs['baohiem'])?$inputs['baohiem'] : 0;
         $inputs['madv'] = session('admin')->madv;
         $inputs['hesopc'] = chkDbl($inputs['hesopc']);
         $inputs['pckn'] = chkDbl($inputs['pckn']);
@@ -550,7 +550,7 @@ class hosocanboController extends Controller
         }
 
         $inputs = $request->all();
-
+        $inputs['baohiem'] = isset($inputs['baohiem'])?$inputs['baohiem'] : 0;
         $inputs['madv'] = session('admin')->madv;
         $inputs['pckn'] = chkDbl($inputs['pckn']);
 
@@ -587,7 +587,7 @@ class hosocanboController extends Controller
         }
 
         $inputs = $request->all();
-
+        $inputs['baohiem'] = isset($inputs['baohiem'])?$inputs['baohiem'] : 0;
         $inputs['madv'] = session('admin')->madv;
         $inputs['pcdh'] = chkDbl($inputs['pcdh']);
         $inputs['pcd'] = chkDbl($inputs['pcd']);

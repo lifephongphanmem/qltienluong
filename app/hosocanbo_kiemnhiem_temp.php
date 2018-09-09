@@ -12,6 +12,7 @@ class hosocanbo_kiemnhiem_temp extends Model
         'phanloai',
         'mapb',
         'mact',
+        'baohiem',
         'macvcq',
         'macanbo',
         'heso',

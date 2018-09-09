@@ -55,6 +55,7 @@ class CreateHosocanboKiemnhiemTable extends Migration
             $table->double('pcbdhdcu')->default(0);
             $table->double('pcthni')->default(0);
             $table->string('mact')->nullable();
+            $table->double('baohiem')->default(1);
             $table->string('madv',50)->nullable();
             $table->timestamps();
         });
