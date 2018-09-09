@@ -90,36 +90,21 @@
         </th>
     </tr-->
 </table>
-<p style="text-align: center; font-weight: bold; font-size: 20px;">DANH SÁCH CÁN BỘ QUÂN SỰ NHẬN TIỀN PHỤ CẤP</p>
+<p style="text-align: center; font-weight: bold; font-size: 20px;">DANH SÁCH CÁN BỘ NHẬN TIỀN PHỤ CẤP UV BAN CHẤP HÀNH ĐẢNG VÀ CẤP ỦY VIÊN</p>
 <p style="text-align: center; font-style: italic">Tháng {{$thongtin['thang']}} năm {{$thongtin['nam']}}</p>
 
 
 <table class="money" cellspacing="0" cellpadding="0" border="1" style="margin: 20px auto; border-collapse: collapse;">
     <tr style="padding-left: 2px;padding-right: 2px; text-align: center">
-        <th rowspan="2" span="2" style="width: 3%;font-weight: bold" >STT</th>
-        <th rowspan="2" style="width: 12%;text-align: center;font-weight: bold">Họ và tên</th>
-        <th rowspan="2" style="width: 8%; text-align: center;font-weight: bold">Chức danh chính</th>
-        <th rowspan="2" style="width: 8%; text-align: center;font-weight: bold">Chức danh hưởng</br>phụ cấp</th>
-        <th rowspan="2" style="width: 6%; text-align: center;font-weight: bold">Mức lương</br>tối thiểu</th>
-
-        <th colspan="4" style="text-align: center;font-weight: bold">Phụ cấp</th>
-        <th colspan="4" style="text-align: center;font-weight: bold">Số tiền</th>
-        <th rowspan="2" style="width: 8%; text-align: center;font-weight: bold">Tổng phụ cấp</br>được nhận</th>
-        <th rowspan="2" style="text-align: center;font-weight: bold">Ký nhận</th>
-    </tr>
-
-    <tr style="padding-left: 2px;padding-right: 2px; text-align: center">
-
-        <th style="width: 6%;text-align: center;font-weight: bold">Phụ cấp đặc thù</th>
-        <th style="width: 6%;text-align: center;font-weight: bold">Phụ cấp trách nhiệm</th>
-        <th style="width: 6%;text-align: center;font-weight: bold">Phụ cấp thâm niên</th>
-        <th style="width: 6%;text-align: center;font-weight: bold">Hệ số khác (PC TĐ Trưởng)</th>
-
-
-        <th style="width: 6%;text-align: center;font-weight: bold">Phụ cấp đặc thù</th>
-        <th style="width: 6%;text-align: center;font-weight: bold">Phụ cấp trách nhiệm</th>
-        <th style="width: 6%;text-align: center;font-weight: bold">Phụ cấp thâm niên</th>
-        <th style="width: 6%;text-align: center;font-weight: bold">Hệ số khác (PC TĐ Trưởng)</th>
+        <td style="width: 5%;font-weight: bold" >STT</td>
+        <td style="width: 20%;text-align: center;font-weight: bold">Họ và tên</td>
+        <td style="width: 15%; text-align: center;font-weight: bold">Chức danh chính</td>
+        <td style="width: 15%; text-align: center;font-weight: bold">Chức danh hưởng</br>phụ cấp</td>
+        <td style="width: 10%; text-align: center;font-weight: bold">Mức lương</br>tối thiểu</td>
+        <td style="width: 5%; text-align: center;font-weight: bold">PCUVBCH Đảng ủy</td>
+        <td style="width: 5%; text-align: center;font-weight: bold">Phụ cấp</br>kiêm nhiệm</td>
+        <td style="width: 10%; text-align: center;font-weight: bold">Thành tiền</td>
+        <td style="text-align: center;font-weight: bold">Ký nhận</td>
     </tr>
 
     <?php $i=1; ?>
@@ -130,16 +115,8 @@
             <td style="text-align: left">{{$ct->chucvu}}</td>
             <td style="text-align: left">{{$ct->chucvukn}}</td>
             <td style="text-align: right">{{dinhdangso($ct->luongcb)}}</td>
-
-            <td style="text-align: center">{{$ct->pcdbn}}</td>
-            <td style="text-align: center">{{$ct->pctn}}</td>
-            <td style="text-align: center">{{$ct->pcthni}}</td>
-            <td style="text-align: center">{{$ct->pck}}</td>
-
-            <td style="text-align: right">{{dinhdangso($ct->st_pcdbn)}}</td>
-            <td style="text-align: right">{{dinhdangso($ct->st_pctn)}}</td>
-            <td style="text-align: right">{{dinhdangso($ct->st_pcthni)}}</td>
-            <td style="text-align: right">{{dinhdangso($ct->st_pck)}}</td>
+            <td style="text-align: right">{{$ct->pcvk}}</td>
+            <td style="text-align: right">{{$ct->pckn}}</td>
             <td style="text-align: right">{{dinhdangso($ct->sotien)}}</td>
             <td></td>
         </tr>
@@ -147,15 +124,8 @@
     <tr style="font-weight: bold; text-align: center;">
         <td colspan="4">Tổng cộng</td>
         <td class="money">{{dinhdangso($thongtin['luongcb'])}}</td>
-
-        <td style="text-align: center">{{$model->sum('pcdbn')}}</td>
-        <td style="text-align: center">{{$model->sum('pctn')}}</td>
-        <td style="text-align: center">{{$model->sum('pcthni')}}</td>
-        <td style="text-align: center">{{$model->sum('pck')}}</td>
-        <td class="money">{{dinhdangso($model->sum('st_pcdbn'))}}</td>
-        <td class="money">{{dinhdangso($model->sum('st_pctn'))}}</td>
-        <td class="money">{{dinhdangso($model->sum('st_pcthni'))}}</td>
-        <td class="money">{{dinhdangso($model->sum('st_pck'))}}</td>
+        <td class="money">{{$model->sum('pcvk')}}</td>
+        <td class="money">{{$model->sum('pckn')}}</td>
         <td class="money">{{dinhdangso($model->sum('sotien'))}}</td>
         <td></td>
     </tr>

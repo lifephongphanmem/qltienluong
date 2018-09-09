@@ -587,32 +587,38 @@
 
 <script>
     function add_kct(){
+        $('#mact_kct').val('1506673695').trigger('change');
         $('#id_kct').val(0);
         $('#kct-modal').modal('show');
     }
 
     function add_dbhdnd(){
         $('#id_dbhdnd').val(0);
+        $('#mact_dbhdnd').val('1536402868').trigger('change');
         $('#dbhdnd-modal').modal('show');
     }
 
     function add_qs(){
         $('#id_qs').val(0);
+        $('#mact_qs').val('1536402878').trigger('change');
         $('#qs-modal').modal('show');
     }
 
     function add_cuv(){
         $('#id_cuv').val(0);
+        $('#mact_cuv').val('1536459380').trigger('change');
         $('#cuv-modal').modal('show');
     }
 
     function add_cd(){
         $('#id_cd').val(0);
+        $('#mact_cd').val('1536402895').trigger('change');
         $('#cd-modal').modal('show');
     }
 
     function add_mc(){
         $('#id_mc').val(0);
+        $('#mact_mc').val('1536459160').trigger('change');
         $('#mc-modal').modal('show');
     }
 
@@ -874,7 +880,7 @@
             })
         });
 
-        $('button[name="capnhat_cd"]').click(function(){
+        $('button[name="capnhat_mc"]').click(function(){
             var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
 
             $.ajax({
@@ -888,7 +894,7 @@
                     macvcq : $('#macvcq_mc').val(),
                     id: $('#id_mc').val(),
                     phanloai: $('#phanloai_mc').val(),
-                    pckn: $('#pckn_mc').val(),
+                    pcd: $('#pcd_mc').val(),
                     pcdh: $('#pcdh_mc').val()
                 },
                 dataType: 'JSON',

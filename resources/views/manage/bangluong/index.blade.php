@@ -251,7 +251,6 @@
                                 <i class="fa fa-print"></i>&nbsp; Bảng lương mẫu C02-HD (TT185/2010/TT-BTC)</button>
                         </div>
                     </div>
-
                 </div>
 
                 <div class="row">
@@ -299,13 +298,6 @@
                 </div>
 
                 <div class="row">
-                    <div class="col-md-6">
-                        <div class="form-group">
-                            <button type="button" style="border-width: 0px" onclick="indbhdnd()" class="btn btn-default btn-xs mbs"
-                                    title="Bảng thanh toán phụ cấp ĐBHDND">
-                                <i class="fa fa-print"></i>&nbsp; Bảng thanh toán phụ cấp ĐBHDND</button>
-                        </div>
-                    </div>
 
                     <div class="col-md-6">
                         <div class="form-group">
@@ -318,16 +310,43 @@
                 <div class="row">
                     <div class="col-md-6">
                         <div class="form-group">
-                            <button type="button" style="border-width: 0px" onclick="inbchd()" class="btn btn-default btn-xs mbs"
-                                    title="Bảng thanh toán phụ cấp BCH Đảng Ủy">
-                                <i class="fa fa-print"></i>&nbsp; Bảng thanh toán phụ cấp BCH Đảng Ủy</button>
+                            <button type="button" style="border-width: 0px" onclick="indbhdnd()" class="btn btn-default btn-xs mbs"
+                                    title="Bảng thanh toán phụ cấp ĐBHDND">
+                                <i class="fa fa-print"></i>&nbsp; Bảng thanh toán phụ cấp ĐBHDND</button>
                         </div>
                     </div>
 
                     <div class="col-md-6">
                         <div class="form-group">
+                            <button type="button" style="border-width: 0px" onclick="inbchd()" class="btn btn-default btn-xs mbs"
+                                    title="Bảng thanh toán phụ cấp BCH Đảng Ủy">
+                                <i class="fa fa-print"></i>&nbsp; Bảng thanh toán phụ cấp BCH Đảng Ủy</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
                             <button type="button" style="border-width: 0px" onclick="inqs()" class="btn btn-default btn-xs mbs">
                                 <i class="fa fa-print"></i>&nbsp; Bảng thanh toán phụ cấp quân sự</button>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <a id="in_cd" href="" onclick="incd()" style="border-width: 0px" target="_blank">
+                                <i class="fa fa-print"></i>&nbsp; Bảng thanh toán phụ trung tâm học tập cấp cộng đồng</a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <a id="in_mc" href="" onclick="inmc()" style="border-width: 0px" target="_blank">
+                                <i class="fa fa-print"></i>&nbsp; Bảng thanh toán phụ một cửa</a>
                         </div>
                     </div>
                 </div>
@@ -468,6 +487,13 @@
             $("#nam_in").val(nam);
             $('#inbl-modal').modal('show');
             //$('#inbl-modal').modal('hide');
+        }
+        function incd(){
+            $("#in_cd").attr("href", '/chuc_nang/bang_luong/maucd?mabl=' + $('#mabl_in').val());
+        }
+
+        function inmc(){
+            $("#in_mc").attr("href", '/chuc_nang/bang_luong/maumc?mabl=' + $('#mabl_in').val());
         }
         $(function(){
             $('#create_bangluong :submit').click(function(){

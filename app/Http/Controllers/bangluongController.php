@@ -2346,27 +2346,22 @@ class bangluongController extends Controller
 
             $mabl = $inputs['mabl'];
             $m_bl = bangluong::select('thang','nam','mabl','madv','ngaylap','luongcoban')->where('mabl',$mabl)->first();
-            $model = bangluong_ct::where('mabl',$mabl)->get();
+            $model = bangluong_ct::where('mabl',$mabl)->where('mact','1536402868')->get();
             $model_hoso = hosocanbo::where('madv',$m_bl->madv)->get();
-
+            $a_cv = getChucVuCQ(false);
             foreach($model as $ct) {
                 $ct->luongcb = $m_bl->luongcoban;
+                $ct->tenchucvu = isset($a_cv[$ct->macvcq]) ? $a_cv[$ct->macvcq] : '';
                 $hoso = $model_hoso->where('macanbo', $ct->macanbo)->first();
                 $ct->tencanbo = $hoso->tencanbo;
+                $ct->sotk = $hoso->sotk;
                 $ct->lvtd = $hoso->lvtd;
-                $ct->sotk = count($hoso) > 0 ? $hoso->sotk : null;
-                $ct->lvtd = count($hoso) > 0 ? $hoso->lvtd : null;
                 $ct->hspc = $ct->pcdbqh + $ct->hesopc;
-                $ct->sotien = $ct->hspc * $ct->luongcb;
+                $ct->sotienpc = $ct->hspc * $ct->luongcb;
+                $ct->sotienkn = $ct->pckn * $ct->luongcb;
+                $ct->sotien = $ct->sotienpc + $ct->sotienkn;
             }
 
-            $model_ct = $model->where('pcdbqh','>',0);
-            $model_kn = $model->where('phanloai','DBHDND');
-            foreach ($model_kn as $kn) {
-                $model_ct->add($kn);
-            }
-            //dd($model_ct);
-            //$model = $model->where('hspc','>',0);
             $m_dv = dmdonvi::where('madv',$m_bl->madv)->first();
             $m_dv->tendvcq = getTenDB($m_dv->madvbc);
 
@@ -2377,7 +2372,7 @@ class bangluongController extends Controller
                 'luongcb' => $m_bl->luongcoban);
 
             return view('reports.bangluong.donvi.maudbhdnd')
-                ->with('model',$model_ct->sortBy('stt'))
+                ->with('model',$model->sortBy('stt'))
                 ->with('m_dv',$m_dv)
                 ->with('thongtin',$thongtin)
                 ->with('pageTitle','Bảng lương chi tiết');
@@ -2556,13 +2551,14 @@ class bangluongController extends Controller
 
             $mabl = $inputs['mabl'];
             $m_bl = bangluong::select('thang','nam','mabl','madv','ngaylap','luongcoban')->where('mabl',$mabl)->first();
-            $model = bangluong_ct::where('mabl',$mabl)->get();
+            $model = bangluong_ct::where('mabl',$mabl)->where('mact','1536459380')->get();
             $model_hoso = hosocanbo::where('madv',$m_bl->madv)->get();
             $a_cv = getChucVuCQ(false);
 
             foreach($model as $ct) {
                 $ct->luongcb = $m_bl->luongcoban;
                 $hoso = $model_hoso->where('macanbo', $ct->macanbo)->first();
+
                 $ct->tencanbo = $hoso->tencanbo;
                 $ct->chucvu = isset($a_cv[$hoso->macvcq])? $a_cv[$hoso->macvcq]:'';
                 $ct->chucvukn = isset($a_cv[$ct->macvcq])? $a_cv[$ct->macvcq]:'';
@@ -2672,7 +2668,7 @@ class bangluongController extends Controller
 
             $mabl = $inputs['mabl'];
             $m_bl = bangluong::select('thang','nam','mabl','madv','ngaylap','luongcoban')->where('mabl',$mabl)->first();
-            $model = bangluong_ct::where('mabl',$mabl)->get();
+            $model = bangluong_ct::where('mabl',$mabl)->where('mact','1536402878')->get();
             if (isset($inputs['mapb']) && $inputs['mapb'] != '') {
                 $model = $model->where('mapb', $inputs['mapb']);
             }
@@ -2687,11 +2683,11 @@ class bangluongController extends Controller
                 $ct->tencanbo = $hoso->tencanbo;
                 $ct->chucvu = isset($a_cv[$hoso->macvcq]) ? $a_cv[$hoso->macvcq] : '';
                 $ct->chucvukn = isset($a_cv[$ct->macvcq]) ? $a_cv[$ct->macvcq] : '';
-                $ct->st_hesopc = $ct->hesopc * $ct->luongcb;
+                $ct->st_pck = $ct->pck * $ct->luongcb;
                 $ct->st_pcdbn = $ct->pcdbn * $ct->luongcb;
                 $ct->st_pctn = $ct->pctn * $ct->luongcb;
                 $ct->st_pcthni = $ct->pcthni * $ct->luongcb;
-                $ct->sotien = $ct->st_hesopc + $ct->st_pcdbn + $ct->st_pctn + $ct->st_pcthni;
+                $ct->sotien = $ct->st_pck + $ct->st_pcdbn + $ct->st_pctn + $ct->st_pcthni;
             }
 
             $m_dv = dmdonvi::where('madv',$m_bl->madv)->first();
@@ -2772,6 +2768,85 @@ class bangluongController extends Controller
             return view('errors.notlogin');
     }
 
+    public function printf_maucd(Request $request){
+        if (Session::has('admin')) {
+            $inputs = $request->all();
+            $mabl = $inputs['mabl'];
+            $m_bl = bangluong::select('thang','nam','mabl','madv','ngaylap','luongcoban')->where('mabl',$mabl)->first();
+            $model = bangluong_ct::where('mabl',$mabl)->where('mact','1536402895')->get();
+            $model_hoso = hosocanbo::where('madv',$m_bl->madv)->get();
+            $a_cv = getChucVuCQ(false);
+
+            foreach($model as $ct) {
+                $ct->luongcb = $m_bl->luongcoban;
+                $hoso = $model_hoso->where('macanbo', $ct->macanbo)->first();
+
+                $ct->tencanbo = $hoso->tencanbo;
+                $ct->chucvu = isset($a_cv[$hoso->macvcq])? $a_cv[$hoso->macvcq]:'';
+                $ct->chucvukn = isset($a_cv[$ct->macvcq])? $a_cv[$ct->macvcq]:'';
+
+                $ct->sotienkn = $ct->pckn * $ct->luongcb;
+                $ct->sotienk = $ct->pck * $ct->luongcb;
+                $ct->sotien = ($ct->pck + $ct->pckn) * $ct->luongcb;
+            }
+
+            $m_dv = dmdonvi::where('madv',$m_bl->madv)->first();
+            $m_dv->tendvcq = getTenDB($m_dv->madvbc);
+
+            $thongtin=array('nguoilap'=>$m_bl->nguoilap,
+                'thang'=>$m_bl->thang,
+                'nam'=>$m_bl->nam,
+                'ngaylap'=>$m_bl->ngaylap,
+                'luongcb' => $m_bl->luongcoban);
+
+            return view('reports.bangluong.donvi.maucd')
+                ->with('model',$model->sortBy('stt'))
+                ->with('m_dv',$m_dv)
+                ->with('thongtin',$thongtin)
+                ->with('pageTitle','Bảng lương chi tiết');
+        } else
+            return view('errors.notlogin');
+    }
+
+    public function printf_maumc(Request $request){
+        if (Session::has('admin')) {
+            $inputs = $request->all();
+            $mabl = $inputs['mabl'];
+            $m_bl = bangluong::select('thang','nam','mabl','madv','ngaylap','luongcoban')->where('mabl',$mabl)->first();
+            $model = bangluong_ct::where('mabl',$mabl)->where('mact','1536459160')->get();
+            $model_hoso = hosocanbo::where('madv',$m_bl->madv)->get();
+            $a_cv = getChucVuCQ(false);
+
+            foreach($model as $ct) {
+                $ct->luongcb = $m_bl->luongcoban;
+                $hoso = $model_hoso->where('macanbo', $ct->macanbo)->first();
+
+                $ct->tencanbo = $hoso->tencanbo;
+                $ct->chucvu = isset($a_cv[$hoso->macvcq])? $a_cv[$hoso->macvcq]:'';
+                $ct->chucvukn = isset($a_cv[$ct->macvcq])? $a_cv[$ct->macvcq]:'';
+
+                $ct->sotiendh = $ct->pcdh * $ct->luongcb;
+                $ct->sotienk = $ct->pck * $ct->luongcb;
+                $ct->sotien = $ct->sotiendh + $ct->pcd;
+            }
+
+            $m_dv = dmdonvi::where('madv',$m_bl->madv)->first();
+            $m_dv->tendvcq = getTenDB($m_dv->madvbc);
+
+            $thongtin=array('nguoilap'=>$m_bl->nguoilap,
+                'thang'=>$m_bl->thang,
+                'nam'=>$m_bl->nam,
+                'ngaylap'=>$m_bl->ngaylap,
+                'luongcb' => $m_bl->luongcoban);
+
+            return view('reports.bangluong.donvi.maumc')
+                ->with('model',$model->sortBy('stt'))
+                ->with('m_dv',$m_dv)
+                ->with('thongtin',$thongtin)
+                ->with('pageTitle','Bảng lương chi tiết');
+        } else
+            return view('errors.notlogin');
+    }
     //Phân loai = 0: hệ sô; 1: số tiền
     function getBangLuong($inputs, $phanloai=0)
     {

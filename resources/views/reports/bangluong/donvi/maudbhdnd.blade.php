@@ -97,31 +97,46 @@
 
 <table class="money" cellspacing="0" cellpadding="0" border="1" style="margin: 20px auto; border-collapse: collapse;">
     <tr style="padding-left: 2px;padding-right: 2px; text-align: center">
-        <td style="width: 5%;font-weight: bold" >STT</td>
-        <td style="width: 30%;text-align: center;font-weight: bold">Họ và tên</td>
-        <td style="width: 15%; text-align: center;font-weight: bold">Địa chỉ</td>
-        <td style="width: 10%; text-align: center;font-weight: bold">Hệ số</br>phụ cấp</td>
-        <td style="width: 10%; text-align: center;font-weight: bold">Mức lương</br>tối thiểu</td>
-        <td style="width: 10%; text-align: center;font-weight: bold">Thành tiền</td>
-        <td style="text-align: center;font-weight: bold">Ký nhận</td>
+        <td rowspan="2" style="width: 5%;font-weight: bold" >STT</td>
+        <td rowspan="2" style="width: 15%;text-align: center;font-weight: bold">Họ và tên</td>
+        <td rowspan="2" style="width: 10%; text-align: center;font-weight: bold">Chức danh chính</td>
+        <td rowspan="2" style="width: 10%; text-align: center;font-weight: bold">Chức danh hưởng</br>phụ cấp</td>
+        <td rowspan="2" style="width: 10%; text-align: center;font-weight: bold">Mức lương</br>tối thiểu</td>
+        <td colspan="2" style="text-align: center;font-weight: bold">Hệ số</td>
+        <td colspan="2" style="text-align: center;font-weight: bold">Số tiền</td>
+        <td rowspan="2" style="width: 10%; text-align: center;font-weight: bold">Thành tiền</td>
+        <td rowspan="2" style="text-align: center;font-weight: bold">Ký nhận</td>
     </tr>
+    <tr style="padding-left: 2px;padding-right: 2px; text-align: center">
+        <td style="text-align: center;font-weight: bold">Hệ số phụ cấp</td>
+        <td style="text-align: center;font-weight: bold">Hệ số kiêm nhiệm</td>
 
+        <td style="text-align: center;font-weight: bold">Hệ số phụ cấp</td>
+        <td style="text-align: center;font-weight: bold">Hệ số kiêm nhiệm</td>
+    </tr>
     <?php $i=1; ?>
     @foreach($model as $ct)
         <tr>
             <td>{{$i++}}</td>
             <td style="text-align: left">{{$ct->tencanbo}}</td>
-            <td style="text-align: left">{{$ct->lvtd}}</td>
-            <td style="text-align: center">{{$ct->hspc}}</td>
+            <td style="text-align: left">{{$ct->tenchucvu}}</td>
+            <td style="text-align: center">{{'ĐBHĐND'}}</td>
             <td style="text-align: right">{{dinhdangso($ct->luongcb)}}</td>
+            <td style="text-align: center">{{$ct->hspc}}</td>
+            <td style="text-align: center">{{dinhdangsothapphan($ct->pckn,5)}}</td>
+            <td style="text-align: right">{{dinhdangso($ct->sotienpc)}}</td>
+            <td style="text-align: right">{{dinhdangso($ct->sotienkn)}}</td>
             <td style="text-align: right">{{dinhdangso($ct->sotien)}}</td>
             <td></td>
         </tr>
     @endforeach
     <tr style="font-weight: bold; text-align: center;">
-        <td colspan="3">Tổng cộng</td>
-        <td class="money" style="text-align: center">{{$model->sum('hspc')}}</td>
+        <td colspan="4">Tổng cộng</td>
         <td class="money">{{dinhdangso($thongtin['luongcb'])}}</td>
+        <td class="money" style="text-align: center">{{$model->sum('hspc')}}</td>
+        <td class="money" style="text-align: center">{{$model->sum('pckn')}}</td>
+        <td class="money">{{dinhdangso($model->sum('sotienpc'))}}</td>
+        <td class="money">{{dinhdangso($model->sum('sotienkn'))}}</td>
         <td class="money">{{dinhdangso($model->sum('sotien'))}}</td>
         <td></td>
     </tr>
