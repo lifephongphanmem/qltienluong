@@ -372,6 +372,21 @@ Route::group(['prefix'=>'chuc_nang'],function(){
         Route::get('deldt/{id}','dsnangluongController@destroydt');
     });
 
+    Route::group(['prefix'=>'tham_nien'],function(){
+        Route::get('danh_sach','dsnangluongController@index');
+        Route::post('store','dsnangluongController@store'); //insert + update danh sách nâng lương
+
+        Route::get('update/{id}','dsnangluongController@update');
+        Route::get('create','dsnangluongController@create');
+
+        Route::get('/maso={manl}','dsnangluongController@show');
+        Route::get('chi_tiet','dsnangluongController@detail');
+        Route::post('store_detail','dsnangluongController@store_detail'); //insert + update danh sách nâng lương
+        Route::get('del/{id}','dsnangluongController@destroy');
+        Route::get('nang_luong/maso={manl}','dsnangluongController@nang_luong');
+        Route::get('deldt/{id}','dsnangluongController@destroydt');
+    });
+
     Route::group(['prefix'=>'tong_hop_luong'],function(){
         Route::group(['prefix'=>'don_vi'],function(){
             Route::get('index','tonghopluong_donviController@index');
@@ -535,14 +550,6 @@ Route::group(['prefix'=>'chuc_nang'],function(){
             Route::get('printf','dutoanluong_khoiController@printf');//in một đơn vị trong khối
         });
 
-    });
-
-    Route::group(['prefix'=>'buoc_thoi_viec'],function(){
-        Route::get('danh_sach','dshettapsuController@index');
-        Route::get('update/{id}','dshettapsuController@update');
-        Route::get('create','dshettapsuController@create');
-        Route::get('/maso={mahts}','dshettapsuController@show');
-        Route::get('del/{id}','dshettapsuController@destroy');
     });
 
     Route::group(['prefix'=>'thuyen_chuyen'],function(){

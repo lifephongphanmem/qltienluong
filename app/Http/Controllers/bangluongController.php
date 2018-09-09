@@ -1328,7 +1328,7 @@ class bangluongController extends Controller
             $inputs['macvcq'] = $inputs['macvcq_mau1'];
             $inputs['mact'] = $inputs['mact_mau1'];
             //$inputs['cochu'] = $inputs['cochu_mau1'];
-            $model = $this->getBangLuong($inputs)->where('phanloai','CVCHINH');
+            $model = $this->getBangLuong($inputs)->wherein('phanloai', ['CVCHINH','KHONGCT']);
             //dd($inputs);
             $mabl = $inputs['mabl'];
             $m_bl = bangluong::select('thang','nam','mabl','madv','ngaylap')->where('mabl',$mabl)->first();
@@ -1376,7 +1376,7 @@ class bangluongController extends Controller
             $inputs['mapb'] = $inputs['mapb_mau1'];
             $inputs['macvcq'] = $inputs['macvcq_mau1'];
             $inputs['mact'] = $inputs['mact_mau1'];
-            $model = $this->getBangLuong($inputs)->where('phanloai','CVCHINH');
+            $model = $this->getBangLuong($inputs)->wherein('phanloai', ['CVCHINH','KHONGCT']);
             //dd($inputs);
             $mabl = $inputs['mabl'];
             $m_bl = bangluong::select('thang','nam','mabl','madv','ngaylap')->where('mabl',$mabl)->first();
@@ -1429,7 +1429,7 @@ class bangluongController extends Controller
         if (Session::has('admin')) {
             $inputs = $request->all();
             $inputs['mabl'] = $inputs['mabl_mautt107'];
-            $model = $this->getBangLuong($inputs)->where('phanloai','CVCHINH');
+            $model = $this->getBangLuong($inputs)->wherein('phanloai', ['CVCHINH','KHONGCT']);
             //dd($inputs);
             $mabl = $inputs['mabl'];
             $m_bl = bangluong::select('thang','nam','mabl','madv','ngaylap')->where('mabl',$mabl)->first();
@@ -1474,7 +1474,7 @@ class bangluongController extends Controller
         if (Session::has('admin')) {
             $inputs = $request->all();
             $inputs['mabl'] = $inputs['mabl_mautt107'];
-            $model = $this->getBangLuong($inputs)->where('phanloai','CVCHINH');
+            $model = $this->getBangLuong($inputs)->wherein('phanloai', ['CVCHINH','KHONGCT']);
             //dd($inputs);
             $mabl = $inputs['mabl'];
             $m_bl = bangluong::select('thang','nam','mabl','madv','ngaylap')->where('mabl',$mabl)->first();
@@ -1534,7 +1534,7 @@ class bangluongController extends Controller
             $inputs['mapb'] = $inputs['mapb_mau3'];
             $inputs['macvcq'] = $inputs['macvcq_mau3'];
             $inputs['mact'] = $inputs['mact_mau3'];
-            $model = $this->getBangLuong($inputs)->where('phanloai','CVCHINH');
+            $model = $this->getBangLuong($inputs)->wherein('phanloai', ['CVCHINH','KHONGCT']);
             //dd($inputs);
             $mabl = $inputs['mabl'];
             $m_bl = bangluong::select('thang','nam','mabl','madv','ngaylap')->where('mabl',$mabl)->first();
@@ -1580,7 +1580,7 @@ class bangluongController extends Controller
             $inputs['mapb'] = $inputs['mapb_mau3'];
             $inputs['macvcq'] = $inputs['macvcq_mau3'];
             $inputs['mact'] = $inputs['mact_mau3'];
-            $model = $this->getBangLuong($inputs)->where('phanloai','CVCHINH');
+            $model = $this->getBangLuong($inputs)->wherein('phanloai', ['CVCHINH','KHONGCT']);
             //dd($inputs);
             $mabl = $inputs['mabl'];
             $m_bl = bangluong::select('thang','nam','mabl','madv','ngaylap')->where('mabl',$mabl)->first();
@@ -1637,7 +1637,7 @@ class bangluongController extends Controller
             $inputs['mapb'] = $inputs['mapb_mau4'];
             $inputs['macvcq'] = $inputs['macvcq_mau4'];
             $inputs['mact'] = $inputs['mact_mau4'];
-            $model = $this->getBangLuong($inputs)->where('phanloai','CVCHINH');
+            $model = $this->getBangLuong($inputs)->wherein('phanloai', ['CVCHINH','KHONGCT']);
             //dd($inputs);
             $mabl = $inputs['mabl'];
             $m_bl = bangluong::select('thang','nam','mabl','madv','ngaylap')->where('mabl',$mabl)->first();
@@ -1683,7 +1683,7 @@ class bangluongController extends Controller
             $inputs['mapb'] = $inputs['mapb_mau4'];
             $inputs['macvcq'] = $inputs['macvcq_mau4'];
             $inputs['mact'] = $inputs['mact_mau4'];
-            $model = $this->getBangLuong($inputs)->where('phanloai','CVCHINH');
+            $model = $this->getBangLuong($inputs)->wherein('phanloai', ['CVCHINH','KHONGCT']);
             //dd($inputs);
             $mabl = $inputs['mabl'];
             $m_bl = bangluong::select('thang','nam','mabl','madv','ngaylap')->where('mabl',$mabl)->first();
@@ -1739,7 +1739,7 @@ class bangluongController extends Controller
             $inputs['mapb'] = $inputs['mapb_mau5'];
             $inputs['macvcq'] = $inputs['macvcq_mau5'];
             $inputs['mact'] = $inputs['mact_mau5'];
-            $model = $this->getBangLuong($inputs)->where('phanloai','CVCHINH');
+            $model = $this->getBangLuong($inputs)->wherein('phanloai', ['CVCHINH','KHONGCT']);
             //dd($inputs);
             $mabl = $inputs['mabl'];
             $m_bl = bangluong::select('thang','nam','mabl','madv','ngaylap')->where('mabl',$mabl)->first();
@@ -1787,7 +1787,7 @@ class bangluongController extends Controller
             $inputs['mapb'] = $inputs['mapb_mau5'];
             $inputs['macvcq'] = $inputs['macvcq_mau5'];
             $inputs['mact'] = $inputs['mact_mau5'];
-            $model = $this->getBangLuong($inputs)->where('phanloai','CVCHINH');
+            $model = $this->getBangLuong($inputs)->wherein('phanloai', ['CVCHINH','KHONGCT']);
             //dd($inputs);
             $mabl = $inputs['mabl'];
             $m_bl = bangluong::select('thang','nam','mabl','madv','ngaylap')->where('mabl',$mabl)->first();
@@ -1859,7 +1859,7 @@ class bangluongController extends Controller
             $inputs['mapb'] = $inputs['mapb_mau6'];
             $inputs['macvcq'] = $inputs['macvcq_mau6'];
             $inputs['mact'] = $inputs['mact_mau6'];
-            $model = $this->getBangLuong($inputs)->where('phanloai','CVCHINH');
+            $model = $this->getBangLuong($inputs)->wherein('phanloai', ['CVCHINH','KHONGCT']);
             //dd($inputs);
             $mabl = $inputs['mabl'];
             $model_phucap = bangluong_phucap::where('mabl', $mabl)->get();
@@ -1944,7 +1944,7 @@ class bangluongController extends Controller
             $inputs['mapb'] = $inputs['mapb_mau6'];
             $inputs['macvcq'] = $inputs['macvcq_mau6'];
             $inputs['mact'] = $inputs['mact_mau6'];
-            $model = $this->getBangLuong($inputs)->where('phanloai','CVCHINH');
+            $model = $this->getBangLuong($inputs)->wherein('phanloai', ['CVCHINH','KHONGCT']);
             //dd($inputs);
             $mabl = $inputs['mabl'];
             $model_phucap = bangluong_phucap::where('mabl', $mabl)->get();
@@ -2040,8 +2040,8 @@ class bangluongController extends Controller
             $inputs['macvcq'] = $inputs['macvcq_mau7'];
             $inputs['mact'] = $inputs['mact_mau7'];
             //$inputs['cochu'] = $inputs['cochu_mau1'];
-            $model = $this->getBangLuong($inputs)->where('phanloai', 'CVCHINH');
-            $model_st = $this->getBangLuong($inputs,1)->where('phanloai','CVCHINH');
+            $model = $this->getBangLuong($inputs)->wherein('phanloai', ['CVCHINH','KHONGCT']);
+            $model_st = $this->getBangLuong($inputs,1)->wherein('phanloai', ['CVCHINH','KHONGCT']);
             //dd($inputs);
             $mabl = $inputs['mabl'];
             $m_bl = bangluong::select('thang', 'nam', 'mabl', 'madv', 'ngaylap','luongcoban')->where('mabl', $mabl)->first();
@@ -2095,7 +2095,7 @@ class bangluongController extends Controller
             $inputs['macvcq'] = $inputs['macvcq_mau7'];
             $inputs['mact'] = $inputs['mact_mau7'];
             //$inputs['cochu'] = $inputs['cochu_mau1'];
-            $model = $this->getBangLuong($inputs)->where('phanloai', 'CVCHINH');
+            $model = $this->getBangLuong($inputs)->wherein('phanloai', ['CVCHINH','KHONGCT']);
             //dd($inputs);
             $mabl = $inputs['mabl'];
             $m_bl = bangluong::select('thang', 'nam', 'mabl', 'madv', 'ngaylap','luongcoban')->where('mabl', $mabl)->first();
