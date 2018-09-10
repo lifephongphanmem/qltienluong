@@ -26,7 +26,7 @@
                                 <li><a href="#" data-target="#chitiet-modal" data-toggle="modal" onclick="baocao('{{$furl.'mau2b_tt67'}}')">Báo cáo tổng hợp quỹ trợ cấp tăng thêm của cán bộ xã, phường, thị trấn đã nghỉ việc (Mẫu 2b)</a></li>
 
                                 <li><a href="#" data-target="#chitiet-modal" data-toggle="modal" onclick="baocao('{{$furl.'mau2c_tt67'}}')">Báo cáo nhu cầu chênh lệch (Mẫu 2c)</a></li>
-                                <li><a href="#" data-target="#chitiet-modal" data-toggle="modal" onclick="baocao('{{$furl.'maubckpbhtn'}}')">Báo cáo nhu cầu kinh phí thực hiện bảo hiểm thất nghiệp theo nghị định 28/2015/NĐ-CP</a></li>
+                                <!--li><a href="#" data-target="#chitiet-modal" data-toggle="modal" onclick="baocao('{{$furl.'maubckpbhtn'}}')">Báo cáo nhu cầu kinh phí thực hiện bảo hiểm thất nghiệp theo nghị định 28/2015/NĐ-CP</a></li-->
                                 <li><a href="#" data-target="#chitiet-modal" data-toggle="modal" onclick="baocao('{{$furl.'mau2d_tt67'}}')">Tổng hợp kinh phí tăng thêm để thực hiện chế độ phụ cấp đối với cán bộ không chuyên trách (Mẫu 2d)</a></li>
                                 <li><a href="#" data-target="#chitiet-modal" data-toggle="modal" onclick="baocao('{{$furl.'mau2e_tt67'}}')">Tổng hợp kinh phí tăng, giảm do điều chỉnh địa bàn vùng kinh tế xã hội đặc biệt khó khăn (Mẫu 2e)</a></li>
                                 <li><a href="#" data-target="#chitiet-modal" data-toggle="modal" onclick="baocao('{{$furl.'mau2g_tt67'}}')">Tổng hợp phụ cấp ưu đãi tăng, giảm do điều chỉnh địa bàn vùng kinh tế xã hội đặc biệt khó khăn (Mẫu 2g)</a></li>
@@ -123,7 +123,7 @@
                                                     @endif
                                                     @if(session('admin')->username == 'khthso' && isset($model_dvbcT))
                                                         @foreach($model_dvbcT as $dvT)
-                                                            <option value="{{$dvT->madvbc}}">{{$dvT->tendvbc}}</option>
+                                                            <option value="{{$dvT->madv}}">{{$dvT->tendv}}</option>
                                                         @endforeach
                                                     @endif
                                             </select>
@@ -135,6 +135,12 @@
                                     <div class="col-md-8">
                                         {!! Form::select('donvitinh',getDonViTinh(),'1',array('id' => 'donvitinh', 'class' => 'form-control'))!!}
                                     </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-md-4 control-label"> </label>
+                                    <input type="checkbox" name="inchitiet" />
+                                    <label  > In chi tiết các đơn vị</label>
+
                                 </div>
                                 <input type="hidden" name="_token" value="{{ csrf_token() }}">
                             </div>
