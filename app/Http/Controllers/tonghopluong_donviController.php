@@ -101,6 +101,10 @@ class tonghopluong_donviController extends Controller
             $model_bangluong_ct = bangluong_ct::wherein('mabl', function ($query) use ($nam, $thang, $madv) {
                 $query->select('mabl')->from('bangluong')->where('nam', $nam)->where('thang', $thang)->where('madv', $madv);
             })->get();
+            $a_goc = array('hesott');
+            $model_phucap = dmphucap_donvi::where('madv', session('admin')->madv)->wherenotin('mapc', $a_goc)->get();
+            $model_bh = $model_phucap->where('baohiem','1')->toarray();
+            $a_bh = array_column($model_bh,'mapc');
             $model_congtac = dmphanloaict::all();
             $model_hoso = hosocanbo::where('madv', $madv)->get();
             //$model_diaban = dmdiabandbkk::where('madv',$madv)->get();
@@ -112,16 +116,24 @@ class tonghopluong_donviController extends Controller
             //Lấy dữ liệu từ các bảng liên quan thêm vào bảng lương chi tiết để tính toán
             //dd($model_bangluong_ct);
             foreach ($model_bangluong_ct as $ct) {
-                $hoso = $model_hoso->where('macanbo',$ct->macanbo)->first();
+                //bỏ cán bộ nộp bảo hiểm thai sản vì con hs tren bang luong
+                if($ct->congtac != 'CONGTAC'){
+                    foreach($a_bh as $bh){
+                        $ct->$bh = 0;
+                    }
+                }
+
+                //$hoso = $model_hoso->where('macanbo',$ct->macanbo)->first();
                 //chưa tính trường hợp kiêm nhiệm, bảng lương chưa có mã công tác, cán bộ tạo bản luong xong xóa
                 //$ct->mact = $hoso->mact;
                 $bangluong = $model_bangluong->where('mabl', $ct->mabl)->first();
                 $ct->luongcoban = $bangluong->luongcoban;
                 $ct->manguonkp = $bangluong->manguonkp;
                 $ct->linhvuchoatdong = $bangluong->linhvuchoatdong;//chỉ dùng cho khối HCSN
-
                 $congtac = $model_congtac->where('mact', $ct->mact)->first();
-                $ct->macongtac = $congtac->macongtac;
+                //do kiêm nhiệm trc chưa chọn mã công tác
+                $ct->macongtac = count($congtac) > 0 ? $congtac->macongtac : null;
+
                 /*
                 $diaban_ct = $model_diaban_ct->where('macanbo', $ct->macanbo)->first();
                 if (count($diaban_ct) > 0) {
@@ -132,6 +144,7 @@ class tonghopluong_donviController extends Controller
                 }
                 */
             }
+
             //
             //Lấy dữ liệu để lập
             $model_data = $model_bangluong_ct->map(function ($data) {
@@ -140,6 +153,7 @@ class tonghopluong_donviController extends Controller
                     ->all();
             });
             $model_data = a_unique($model_data);
+
             //
             //Tính toán dữ liệu
             $model_pc = dmphucap_donvi::where('madv', $madv)->where('phanloai', '<', '3')->get();

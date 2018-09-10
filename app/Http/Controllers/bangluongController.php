@@ -184,7 +184,9 @@ class bangluongController extends Controller
             //Không tính truy lĩnh
             $a_goc = array('hesott');
             $model_phucap = dmphucap_donvi::where('madv', session('admin')->madv)->wherenotin('mapc', $a_goc)->get();
-
+            $model_ts = $model_phucap->where('baohiem','0')->toarray();
+            $a_ts = array_column($model_ts,'mapc');
+            //dd($a_ts);
             //Tạo bảng lương
             bangluong::create($inputs);
 
@@ -266,7 +268,9 @@ class bangluongController extends Controller
                 }
 
                 //trong bảng danh mục là % vượt khung => sang bảng lương chuyển thành hệ số
+                $cb->heso = $cb->heso * $cb->pthuong / 100; //(tập sự hưởng theo %)
                 $cb->vuotkhung = $cb->heso * $cb->vuotkhung / 100;
+
                 //tính thâm niên nghề
                 $pctnn = $model_phucap->where('mapc', 'pctnn')->first();
                 $pl = getDbl($pctnn->phanloai);
@@ -298,6 +302,7 @@ class bangluongController extends Controller
 
                 foreach ($model_phucap as $ct) {
                     $mapc = $ct->mapc;
+                    $cb->congtac = 'CONGTAC';
                     $ct->heso_goc = $cb->$mapc;
                     $heso = 0;
                     //gán số tiền bảo hiểm  = 0 khi tính để ko trùng với giá trị cán bộ trc
@@ -348,7 +353,7 @@ class bangluongController extends Controller
                     }
 
                     if (($cb->$mapc > 0 && !$thaisan) ||
-                            ($thaisan && (($mapc == 'pcudn' && $cb->pcudn >0) || ($mapc == 'pccovu' && $cb->pccovu >0)))
+                            ($thaisan && in_array($mapc,$a_ts))
                             ) {//lưu vào bảng lương phụ cấp (chi luu số tiền >0)
                         $ct->mabl = $inputs['mabl'];
                         $ct->macanbo = $cb->macanbo;
@@ -381,8 +386,9 @@ class bangluongController extends Controller
                 if($thaisan){
                     $cb->tencanbo = $cb->tencanbo . ' (nghỉ thai sản)';
                     $cb->ttl = round($inputs['luongcoban'] * ($cb->pccovu + $cb->pcudn) * $cb->pthuong / 100);
+                    $cb->congtac = 'THAISAN';
                 }else {
-                    $cb->ttl = round($inputs['luongcoban'] * $ths * $cb->pthuong / 100 + $tt);
+                    $cb->ttl = round($inputs['luongcoban'] * $ths / 100 + $tt);
                     //kiểm tra cán bộ ko chuyên trách thì tự động lấy lương cơ bản * % bảo hiểm
                     if($cb->baohiem && $cb->macongtac == 'KHONGCT'){
                         $cb->stbhxh = round($inputs['luongcoban'] * $cb->bhxh, 0);
@@ -412,8 +418,10 @@ class bangluongController extends Controller
                     //ngày công = lương co + chuc vu + ....
                     $nghi = $m_nghiphep->where('macanbo', $cb->macanbo)->first();
                     if (count($nghi) > 0) {
-                        $tiencong = round($cb->ttl / $ngaycong, 0);
-                        $cb->giaml = $nghi->songaynghi >= $ngaycong ?$cb->ttl : ($tiencong * $nghi->songaynghi);
+                        $cb->congtac = 'NGHIPHEP';
+                        $sotiencong = $inputs['luongcoban'] * ($cb->heso + $cb->vuotkhung + $cb->pccv + $cb->hesobl);
+                        $tiencong = round($sotiencong / $ngaycong, 0);
+                        $cb->giaml = $nghi->songaynghi >= $ngaycong ? $sotiencong : ($tiencong * $nghi->songaynghi);
                     }
 
                 }
