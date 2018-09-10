@@ -265,6 +265,7 @@ Route::group(['prefix'=>'nghiep_vu'],function(){
     Route::group(['prefix'=>'truy_linh'],function(){
         Route::get('danh_sach','hosotruylinhController@index');
         Route::get('del/{id}','hosotruylinhController@destroy');
+        Route::get('create','hosotruylinhController@create');
         Route::post('store','hosotruylinhController@store');
         Route::post('update','hosotruylinhController@update');
         Route::get('get','hosotruylinhController@getinfo');
@@ -569,46 +570,10 @@ Route::group(['prefix'=>'chuc_nang'],function(){
         Route::get('','bangluongdangkyController@detail');
         Route::post('updatect/{id}','bangluongdangkyController@updatect');
 
-        Route::get('in/maso={mabl}','bangluongController@inbangluong');
-        Route::get('inbangluong/maso={mabl}','bangluongController@inbangluong_sotien');
-        Route::get('inmau3/maso={mabl}','bangluongController@inbangluongmau3'); //mẫu làm theo y.c lạng sơn
-        Route::get('inmau4/maso={mabl}','bangluongController@inbangluongmau4'); //mẫu làm theo y.c lạng sơn
-        Route::get('in_bh/maso={mabl}','bangluongController@inbaohiem');
-
-
-        Route::post('updatect_truylinh','bangluongController@updatect_truylinh');
-
-        //Route::get('cal','bangluongController@cal'); //Tính toán lại lương cán bộ
-        Route::post('importexcel','bangluongController@importexcel');
-
         //Tạo in bảng lương theo cách mới
-        Route::post('mau01','bangluongController@printf_mau01');
-        Route::post('mau02','bangluongController@printf_mau02');
-        Route::post('mau03','bangluongController@printf_mau03');
-        Route::post('mau04','bangluongController@printf_mau04');
-        Route::post('mau05','bangluongController@printf_mau05');
-        Route::post('mau06','bangluongController@printf_mau06');
-        Route::post('mau07','bangluongController@printf_mau07');
-        Route::post('mauds','bangluongController@printf_mauds');
-        Route::post('maubh','bangluongController@printf_maubh');
-        Route::post('maudbhdnd','bangluongController@printf_maudbhdnd');
-        Route::post('maublpc','bangluongController@printf_maublpc');
-        Route::post('maubchd','bangluongController@printf_maubchd');
-        Route::post('mauqs','bangluongController@printf_mauqs');
+        Route::post('mau01','bangluongdangkyController@printf_mau01');
+        Route::post('mautt107','bangluongdangkyController@printf_mautt107');
 
-        Route::post('mau01_excel','bangluongController@printf_mau01_excel');
-        Route::post('mau02_excel','bangluongController@printf_mau02_excel');
-        Route::post('mau03_excel','bangluongController@printf_mau03_excel');
-        Route::post('mau04_excel','bangluongController@printf_mau04_excel');
-        Route::post('mau05_excel','bangluongController@printf_mau05_excel');
-        Route::post('mau07_excel','bangluongController@printf_mau07_excel');
-        Route::post('mau06_excel','bangluongController@printf_mau06_excel');
-        Route::post('mauds_excel','bangluongController@printf_mauds_excel');
-        Route::post('maubh_excel','bangluongController@printf_maubh_excel');
-        Route::post('maudbhdnd_excel','bangluongController@printf_maudbhdnd_excel');
-        Route::post('maublpc_excel','bangluongController@printf_maublpc_excel');
-        Route::post('maubchd_excel','bangluongController@printf_maubchd_excel');
-        Route::post('mauqs_excel','bangluongController@printf_mauqs_excel');
     });
 });
 

@@ -45,21 +45,8 @@
                                         </div>
                                         <div class="portlet-body" style="display: block;">
                                             <div class="row">
+
                                                 <div class="col-md-2">
-                                                    <div class="form-group">
-                                                        <label class="control-label">Mã ngạch </label>
-                                                        {!!Form::text('msngbac', null, array('id' => 'msngbac','class' => 'form-control','readonly'=>'true'))!!}
-                                                    </div>
-                                                </div>
-
-                                                <div class="col-md-4">
-                                                    <div class="form-group">
-                                                        <label class="control-label">Tên ngạch bậc </label>
-                                                        {!!Form::text('tennb', null, array('id' => 'tennb','class' => 'form-control','readonly'=>'true'))!!}
-                                                    </div>
-                                                </div>
-
-                                                <div class="col-md-4">
                                                     <div class="form-group">
                                                         <label class="control-label" style="font-weight: bold">Lương cơ bản</label>
                                                         {!!Form::text('luongcoban', null, array('id' => 'luongcoban','class' => 'form-control', 'data-mask'=>'fdecimal','readonly'=>'true','style'=>'font-weight:bold'))!!}
@@ -69,9 +56,17 @@
                                                 <div class="col-md-2">
                                                     <div class="form-group">
                                                         <label class="control-label" style="font-weight: bold">Hệ số truy lĩnh </label>
-                                                        {!!Form::text('hesott', null, array('id' => 'hesott','class' => 'form-control heso', 'data-mask'=>'fdecimal', 'style'=>'font-weight:bold'))!!}
+                                                        {!!Form::text('heso', null, array('id' => 'heso','class' => 'form-control heso', 'data-mask'=>'fdecimal', 'style'=>'font-weight:bold'))!!}
                                                     </div>
                                                 </div>
+
+                                                <div class="col-md-2">
+                                                    <div class="form-group">
+                                                        <label class="control-label" style="font-weight: bold">Tổng hệ số </label>
+                                                        {!!Form::text('tonghs', null, array('id' => 'tonghs','class' => 'form-control', 'data-mask'=>'fdecimal','readonly'=>'true','style'=>'font-weight:bold'))!!}
+                                                    </div>
+                                                </div>
+
 
                                                 <div class="col-md-3">
                                                     <div class="form-group">
@@ -116,6 +111,40 @@
                                                         {!!Form::text('luongtn', null, array('id' => 'luongtn','class' => 'form-control text-right', 'data-mask'=>'fdecimal','readonly'=>'true','style'=>'font-weight:bold'))!!}
                                                     </div>
                                                 </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- END PORTLET-->
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <!-- BEGIN PORTLET-->
+                                    <div class="portlet box blue">
+                                        <div class="portlet-title">
+                                            <div class="caption">
+                                                Thông tin các loại phụ cấp
+                                            </div>
+                                            <div class="tools">
+                                                <a href="javascript:;" class="collapse" data-original-title="" title=""></a>
+                                            </div>
+                                        </div>
+                                        <div class="portlet-body" style="display: block;">
+                                            <div class="row">
+                                                @foreach($model_pc as $pc)
+                                                    @if($pc->phanloai == 3)
+                                                        {!!Form::hidden($pc->mapc, null, array('id' =>$pc->mapc, 'class' => 'form-control heso', 'data-mask'=>'fdecimal'))!!}
+                                                    @else
+                                                        <div class="col-md-3">
+                                                            <div class="form-group">
+                                                                <label class="control-label">{{$pc->form}}</label>
+                                                                {!!Form::text($pc->mapc, null, array('id' =>$pc->mapc, 'class' => 'form-control heso', 'data-mask'=>'fdecimal'))!!}
+                                                            </div>
+                                                        </div>
+                                                    @endif
+                                                @endforeach
+
                                             </div>
                                         </div>
                                     </div>

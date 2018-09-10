@@ -60,7 +60,6 @@ class hosotamngungtheodoiController extends Controller
             return view('errors.notlogin');
     }
 
-
     function getinfo(Request $request){
         if(!Session::has('admin')) {
             $result = array(

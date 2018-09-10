@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\dmphucap_donvi;
 use App\hosocanbo;
 use App\hosotruylinh;
 use App\ngachluong;
@@ -54,12 +55,17 @@ class hosotruylinhController extends Controller
     {
         if (Session::has('admin')) {
             $insert = $request->all();
-            $a_canbo = hosocanbo::select('tencanbo')->where('macanbo', $insert['macanbo'])->first();
-            if(count($a_canbo) == 0){return redirect('nghiep_vu/truy_linh/danh_sach');}
-            $insert['tencanbo'] = $a_canbo->tencanbo;
-            $insert['stt'] = $a_canbo->stt;
-            $insert['maso'] = session('admin')->madv . '_' . getdate()[0];
-            hosotruylinh::create($insert);
+
+            if($insert['maso'] == 'ADD'){
+                $insert['madv'] = session('admin')->madv;
+                $insert['maso'] = session('admin')->madv . '_' . getdate()[0];
+                hosotruylinh::create($insert);
+            }else{
+                //$model = hosotruylinh::where('maso',$insert['maso'])->first();
+                //dd($model);
+                hosotruylinh::where('maso',$insert['maso'])->first()->update($insert);
+            }
+
             return redirect('nghiep_vu/truy_linh/danh_sach');
         } else
             return view('errors.notlogin');
@@ -147,6 +153,34 @@ class hosotruylinhController extends Controller
             //$macanbo = $model->macanbo;
             $model->delete();
             return redirect('/nghiep_vu/truy_linh/danh_sach');
+        } else
+            return view('errors.notlogin');
+    }
+
+    function create(Request $request)
+    {
+        if (Session::has('admin')) {
+
+            $inputs = $request->all();
+            if(isset($inputs['maso'])){
+                $model = hosotruylinh::where('maso',$inputs['maso'])->first();
+            }else{
+                $model = hosocanbo::where('macanbo',$inputs['macanbo'])->first();
+                $model->heso = 0;
+                $model->vuotkhung = 0;
+                $model->ngaytu = null;
+                $model->ngayden = null;
+                $model->maso = 'ADD';
+            }
+
+            $model_pc = dmphucap_donvi::where('madv', session('admin')->madv)->get();
+            return view('manage.truylinh.create')
+                ->with('furl', '/nghiep_vu/truy_linh/')
+                ->with('inputs',$inputs)
+                ->with('model',$model)
+                ->with('a_heso', array('heso', 'vuotkhung', 'hesopc', 'hesott'))
+                ->with('model_pc', $model_pc)
+                ->with('pageTitle', 'Thêm mới cán bộ truy lĩnh lương');
         } else
             return view('errors.notlogin');
     }

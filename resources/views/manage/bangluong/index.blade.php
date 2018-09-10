@@ -72,13 +72,12 @@
                                         <td>{{$value->tennguonkp}}</td>
                                         <td>{{$value->noidung}}</td>
                                         <td>
-                                            @if(!$value->thaotac)
+                                            @if($value->thaotac)
                                                 <button type="button" onclick="edit('{{$value->mabl}}','{{$value->phanloai}}')" class="btn btn-default btn-xs mbs">
                                                     <i class="fa fa-edit"></i>&nbsp; Sửa</button>
 
                                                 <a href="{{url($furl.'maso='.$value->mabl)}}" class="btn btn-default btn-xs mbs">
                                                     <i class="fa fa-th-list"></i>&nbsp; Chi tiết</a>
-
 
                                                 <button type="button" onclick="cfDel('{{$furl.'del/'.$value->id}}')" class="btn btn-danger btn-xs mbs" data-target="#delete-modal-confirm" data-toggle="modal">
                                                     <i class="fa fa-trash-o"></i>&nbsp; Xóa</button>
@@ -289,15 +288,12 @@
                 </div>
 
                 <div class="row">
-                    <div class="col-md-7">
+                    <div class="col-md-6">
                         <div class="form-group">
                             <button type="button" style="border-width: 0px" onclick="inblm7()" class="btn btn-default btn-xs mbs">
                                 <i class="fa fa-print"></i>&nbsp; Bảng lương mẫu 7</button>
                         </div>
                     </div>
-                </div>
-
-                <div class="row">
 
                     <div class="col-md-6">
                         <div class="form-group">
@@ -346,7 +342,7 @@
                     <div class="col-md-6">
                         <div class="form-group">
                             <a id="in_mc" href="" onclick="inmc()" style="border-width: 0px" target="_blank">
-                                <i class="fa fa-print"></i>&nbsp; Bảng thanh toán phụ một cửa</a>
+                                <i class="fa fa-print"></i>&nbsp; Bảng thanh toán phụ cấp trách nhiệm</a>
                         </div>
                     </div>
                 </div>

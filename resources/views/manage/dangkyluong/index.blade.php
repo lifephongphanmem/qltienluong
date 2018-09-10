@@ -75,8 +75,8 @@
                                             <a href="{{url($furl.'maso='.$value->mabl)}}" class="btn btn-default btn-xs mbs">
                                                 <i class="fa fa-th-list"></i>&nbsp; Chi tiết</a>
 
-                                            <!--button type="button" onclick="inbl('{{$value->mabl}}','{{$value->thang}}','{{$value->nam}}')" class="btn btn-default btn-xs mbs">
-                                                <i class="fa fa-print"></i>&nbsp; In</button-->
+                                            <button type="button" onclick="inbl('{{$value->mabl}}','{{$value->thang}}','{{$value->nam}}')" class="btn btn-default btn-xs mbs">
+                                                <i class="fa fa-print"></i>&nbsp; In</button>
 
                                             <button type="button" onclick="cfDel('{{$furl.'del/'.$value->id}}')" class="btn btn-danger btn-xs mbs" data-target="#delete-modal-confirm" data-toggle="modal">
                                                 <i class="fa fa-trash-o"></i>&nbsp; Xóa</button>
@@ -148,7 +148,7 @@
 
     <!--Modal thông tin tùy chọn in bảng lương -->
     <div id="inbl-modal" tabindex="-1" role="dialog" aria-hidden="true" class="modal fade">
-        <div class="modal-dialog modal-content">
+        <div class="modal-lg modal-dialog modal-content">
             <div class="modal-header modal-header-primary">
                 <button type="button" data-dismiss="modal" aria-hidden="true" class="close">&times;</button>
                 <h4 id="hd-inbl" class="modal-title">In bảng lương</h4>
@@ -158,116 +158,19 @@
                 <div class="row">
                     <div class="col-md-6">
                         <div class="form-group">
+                            <button type="button" style="border-width: 0px" onclick="inblmtt107()" class="btn btn-default btn-xs mbs"
+                                    title="Bảng lương của cán bộ theo mẫu C02-HD hệ số phụ cấp hiển thị số tiền">
+                                <i class="fa fa-print"></i>&nbsp; Bảng lương mẫu C02-HD (TT107/2017/TT-BTC)</button>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <div class="form-group">
                             <button type="button" style="border-width: 0px" onclick="inblm1()" class="btn btn-default btn-xs mbs"
-                                 title="Bảng lương của cán bộ theo mẫu C02-HD">
-                                <i class="fa fa-print"></i>&nbsp; Bảng lương mẫu 1</button>
+                                    title="Bảng lương của cán bộ theo mẫu C02-HD">
+                                <i class="fa fa-print"></i>&nbsp; Bảng lương mẫu C02-HD (TT185/2010/TT-BTC)</button>
                         </div>
                     </div>
-                    <div class="col-md-6">
-                        <div class="form-group">
-                            <button type="button" style="border-width: 0px" onclick="inblm2()" class="btn btn-default btn-xs mbs"
-                                title="Bảng lương của cán bộ theo mẫu C02-HD hệ số phụ cấp hiển thị số tiền">
-                                <i class="fa fa-print"></i>&nbsp; Bảng lương mẫu 2</button>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="row">
-                    <div class="col-md-6">
-                        <div class="form-group">
-                            <button type="button" style="border-width: 0px" onclick="inblm3()" class="btn btn-default btn-xs mbs"
-                                title="Bảng lương của cán bộ thiết kế theo mẫu đặc thù">
-                                <i class="fa fa-print"></i>&nbsp; Bảng lương mẫu 3</button>
-                        </div>
-                    </div>
-
-                    <div class="col-md-6">
-                        <div class="form-group">
-                            <button type="button" style="border-width: 0px" onclick="inblm4()" class="btn btn-default btn-xs mbs"
-                                title="Bảng lương của cán bộ theo nhóm/tổ công tác">
-                                <i class="fa fa-print"></i>&nbsp; Bảng lương mẫu 4</button>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="row">
-                    <div class="col-md-6">
-                        <div class="form-group">
-                            <button type="button" style="border-width: 0px" onclick="inblm5()" class="btn btn-default btn-xs mbs"
-                                title="Bảng lương của cán bộ thiết kế theo mẫu đặc thù">
-                                <i class="fa fa-print"></i>&nbsp; Bảng lương mẫu 5</button>
-                        </div>
-                    </div>
-
-                    <div class="col-md-6">
-                        <div class="form-group">
-                            <button type="button" style="border-width: 0px" onclick="inblm6()" class="btn btn-default btn-xs mbs">
-                                <i class="fa fa-print"></i>&nbsp; Bảng lương mẫu 6</button>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="row">
-                    <div class="col-md-7">
-                        <div class="form-group">
-                            <button type="button" style="border-width: 0px" onclick="inblm7()" class="btn btn-default btn-xs mbs">
-                                <i class="fa fa-print"></i>&nbsp; Bảng lương mẫu 7</button>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="row">
-                    <div class="col-md-6">
-                        <div class="form-group">
-                            <button type="button" style="border-width: 0px" onclick="indbhdnd()" class="btn btn-default btn-xs mbs"
-                                    title="Bảng thanh toán phụ cấp ĐBHDND">
-                                <i class="fa fa-print"></i>&nbsp; Bảng thanh toán phụ cấp ĐBHDND</button>
-                        </div>
-                    </div>
-
-                    <div class="col-md-6">
-                        <div class="form-group">
-                            <button type="button" style="border-width: 0px" onclick="inblpc()" class="btn btn-default btn-xs mbs">
-                                <i class="fa fa-print"></i>&nbsp; Bảng thanh toán tiền lương, phụ cấp</button>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="row">
-                    <div class="col-md-6">
-                        <div class="form-group">
-                            <button type="button" style="border-width: 0px" onclick="inbchd()" class="btn btn-default btn-xs mbs"
-                                    title="Bảng thanh toán phụ cấp BCH Đảng Ủy">
-                                <i class="fa fa-print"></i>&nbsp; Bảng thanh toán phụ cấp BCH Đảng Ủy</button>
-                        </div>
-                    </div>
-
-                    <div class="col-md-6">
-                        <div class="form-group">
-                            <button type="button" style="border-width: 0px" onclick="inqs()" class="btn btn-default btn-xs mbs">
-                                <i class="fa fa-print"></i>&nbsp; Bảng thanh toán phụ cấp quân sự</button>
-                        </div>
-                    </div>
-                </div>
-
-
-                <div class="row">
-                    <div class="col-md-6">
-                        <div class="form-group">
-                            <button type="button" style="border-width: 0px" onclick="inds()" class="btn btn-default btn-xs mbs"
-                                    title="Danh sách chi trả cá nhân">
-                                <i class="fa fa-print"></i>&nbsp; Danh sách chi trả cá nhân</button>
-                        </div>
-                    </div>
-
-                    <div class="col-md-6">
-                        <div class="form-group">
-                            <button type="button" style="border-width: 0px" onclick="inbh()" class="btn btn-default btn-xs mbs" title="Bảng tính bảo hiểm phải nộp của cán bộ">
-                                <i class="fa fa-print"></i>&nbsp; Bảo hiểm </button>
-                        </div>
-                    </div>
-
-
                 </div>
 
                 <input type="hidden" id="nam_in" name="nam_in"/>
@@ -282,7 +185,122 @@
         </div>
     </div>
 
-    @include('templates.modal_printf_luong')
+    <!--Mẫu 1 -->
+    {!! Form::open(['url'=>(isset($furl)?$furl : '').'mau01','method'=>'post' ,'target'=>'_blank', 'files'=>true, 'id' => 'printf_mau1']) !!}
+    <div id="mau1-modal" tabindex="-1" role="dialog" aria-hidden="true" class="modal fade">
+        <div class="modal-dialog modal-content">
+            <div class="modal-header modal-header-primary">
+                <button type="button" data-dismiss="modal" aria-hidden="true" class="close">&times;</button>
+                <h4 id="header-inbl" class="modal-title">In bảng lương</h4>
+            </div>
+            <div class="modal-body">
+                <div class="form-horizontal">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <label class="control-label">Khối/Tổ công tác</label>
+                            <select name="mapb_mau1" id="mapb_mau1" class="form-control select2me">
+                                @foreach(getPhongBan(true) as $key=>$val)
+                                    <option value="{{$key}}">{{$val}}</option>
+                                @endforeach
+                            </select>
+                        </div>
+
+                        <div class="col-md-12">
+                            <label class="control-label">Chức vụ</label>
+                            {!!Form::select('macvcq_mau1',getChucVuCQ(true), null, array('id' => 'macvcq_mau1','class' => 'form-control select2me'))!!}
+                        </div>
+
+                        <div class="col-md-12">
+                            <label class="control-label">Phân loại công tác</label>
+                            <select class="form-control select2me" name="mact_mau1" id="mact_mau1">
+                                <option value="">-- Tất cả các phân loại công tác --</option>
+                                @foreach($model_nhomct as $kieuct)
+                                    <optgroup label="{{$kieuct->tencongtac}}">
+                                        <?php $mode_ct=$model_tenct->where('macongtac',$kieuct->macongtac); ?>
+                                        @foreach($mode_ct as $ct)
+                                            <option value="{{$ct->mact}}">{{$ct->tenct}}</option>
+                                        @endforeach
+                                    </optgroup>
+                                @endforeach
+                            </select>
+                        </div>
+
+                        <div class="col-md-12">
+                            <label class="control-label">Cỡ chữ</label>
+                            {!!Form::select('cochu',getCoChu(), 10, array('id' => 'cochu','class' => 'form-control select2me'))!!}
+                        </div>
+                    </div>
+                </div>
+
+                <input type="hidden" id="mabl_mau1" name="mabl_mau1"/>
+            </div>
+            <div class="modal-footer">
+                <button type="button" data-dismiss="modal" class="btn btn-default">Hủy thao tác</button>
+                <button type="submit" data-dismiss="modal" class="btn btn-success" onclick="ClickBC1()">Đồng ý</button>
+                <button type="submit" data-dismiss="modal" class="btn btn-primary" onclick="ClickBC1_excel()">Xuất Excel</button>
+            </div>
+        </div>
+    </div>
+    {!! Form::close() !!}
+
+    <!--Mẫu TT107 -->
+    {!! Form::open(['url'=>(isset($furl)?$furl : '').'mautt107','method'=>'post' ,'target'=>'_blank', 'files'=>true, 'id' => 'printf_mautt107']) !!}
+    <div id="mautt107-modal" tabindex="-1" role="dialog" aria-hidden="true" class="modal fade">
+        <div class="modal-dialog modal-content">
+            <div class="modal-header modal-header-primary">
+                <button type="button" data-dismiss="modal" aria-hidden="true" class="close">&times;</button>
+                <h4 id="header-inbl" class="modal-title">In bảng lương</h4>
+            </div>
+            <div class="modal-body">
+                <div class="form-horizontal">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <label class="control-label">Khối/Tổ công tác</label>
+                            <select name="mapb" id="mapb" class="form-control select2me">
+                                @foreach(getPhongBan(true) as $key=>$val)
+                                    <option value="{{$key}}">{{$val}}</option>
+                                @endforeach
+                            </select>
+                        </div>
+
+                        <div class="col-md-12">
+                            <label class="control-label">Chức vụ</label>
+                            {!!Form::select('macvcq',getChucVuCQ(true), null, array('id' => 'macvcq','class' => 'form-control select2me'))!!}
+                        </div>
+
+                        <div class="col-md-12">
+                            <label class="control-label">Phân loại công tác</label>
+                            <select class="form-control select2me" name="mact" id="mact">
+                                <option value="">-- Tất cả các phân loại công tác --</option>
+                                @foreach($model_nhomct as $kieuct)
+                                    <optgroup label="{{$kieuct->tencongtac}}">
+                                        <?php $mode_ct=$model_tenct->where('macongtac',$kieuct->macongtac); ?>
+                                        @foreach($mode_ct as $ct)
+                                            <option value="{{$ct->mact}}">{{$ct->tenct}}</option>
+                                        @endforeach
+                                    </optgroup>
+                                @endforeach
+                            </select>
+                        </div>
+
+                        <div class="col-md-12">
+                            <label class="control-label">Cỡ chữ</label>
+                            {!!Form::select('cochu',getCoChu(), 10, array('id' => 'cochu','class' => 'form-control select2me'))!!}
+                        </div>
+                    </div>
+                </div>
+
+                <input type="hidden" id="mabl_mautt107" name="mabl_mautt107"/>
+            </div>
+            <div class="modal-footer">
+                <button type="button" data-dismiss="modal" class="btn btn-default">Hủy thao tác</button>
+                <button type="submit" data-dismiss="modal" class="btn btn-success" onclick="ClickBCtt107()">Đồng ý</button>
+                <button type="submit" data-dismiss="modal" class="btn btn-primary" onclick="ClickBC2_excel()">Xuất Excel</button>
+
+            </div>
+        </div>
+    </div>
+    {!! Form::close() !!}
 
     <script>
         function add(){
@@ -346,6 +364,38 @@
             $("#nam_in").val(nam);
             $('#inbl-modal').modal('show');
             //$('#inbl-modal').modal('hide');
+        }
+
+        function inblm1(){
+            $('#mabl_mau1').val($('#mabl_in').val());
+            $('#mau1-modal').modal('show');
+        }
+        function inblmtt107(){
+            $('#mabl_mautt107').val($('#mabl_in').val());
+            $('#mautt107-modal').modal('show');
+        }
+
+        $(function(){
+            $('#printf_mau1 :submit').click(function(){
+                $('#mau1-modal').modal('hide');
+            });
+
+            $('#printf_mautt107 :submit').click(function(){
+                $('#mautt107-modal').modal('hide');
+            });
+        });
+
+        function ClickBC1() {
+            var url = '{{(isset($furl)?$furl : '').'mau01'}}'
+            $('#printf_mau1').attr('action', url);
+            $('#printf_mau1').submit();
+        }
+
+        function ClickBCtt107() {
+            var url = '{{(isset($furl)?$furl : '').'mautt107'}}'
+            $('#printf_mautt107').attr('action', url);
+            $('#printf_mautt107').submit();
+
         }
     </script>
     @include('includes.modal.delete')

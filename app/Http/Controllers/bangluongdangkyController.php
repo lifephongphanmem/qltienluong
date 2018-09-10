@@ -432,4 +432,176 @@ class bangluongdangkyController extends Controller
             return view('errors.notlogin');
     }
 
+    public function printf_mau01(Request $request){
+        if (Session::has('admin')) {
+            $inputs = $request->all();
+            $inputs['mabl'] = $inputs['mabl_mau1'];
+            $inputs['mapb'] = $inputs['mapb_mau1'];
+            $inputs['macvcq'] = $inputs['macvcq_mau1'];
+            $inputs['mact'] = $inputs['mact_mau1'];
+            //$inputs['cochu'] = $inputs['cochu_mau1'];
+            $model = $this->getBangLuong($inputs)->wherein('phanloai', ['CVCHINH','KHONGCT']);
+            //dd($inputs);
+            $mabl = $inputs['mabl'];
+            $m_bl = bangluongdangky::select('thang','nam','mabl','madv','ngaylap')->where('mabl',$mabl)->first();
+            $m_dv = dmdonvi::where('madv',$m_bl->madv)->first();
+
+            $model_congtac = dmphanloaict::select('mact','tenct')
+                ->wherein('mact', function($query) use($mabl){
+                    $query->select('mact')->from('bangluongdangky_ct')->where('mabl',$mabl);
+                })->get();
+
+            $model_hoso = hosocanbo::where('madv', $m_bl->madv)->get();
+            foreach ($model as $ct) {
+                if ($ct->phanloai == 'KHONGCT') {
+                    $hoso = $model_hoso->where('macanbo', $ct->macanbo)->first();
+                    $ct->tencanbo = count($hoso) > 0 ? $hoso->tencanbo : null;
+                }
+            }
+
+            $thongtin=array('nguoilap'=>$m_bl->nguoilap,
+                'thang'=>$m_bl->thang,
+                'nam'=>$m_bl->nam,
+                'ngaylap'=>$m_bl->ngaylap,
+                'cochu'=>$inputs['cochu']);
+            //xử lý ẩn hiện cột phụ cấp => biết tổng số cột hiện => colspan trên báo cáo
+            //$a_phucapbc = getColPhuCap_BaoCao();
+            $a_goc = array('heso','vuotkhung','hesott');
+            $model_pc = dmphucap_donvi::where('madv',$m_bl->madv)->where('phanloai','<','3')->wherenotin('mapc',$a_goc)->get();
+            $a_phucap = array();
+            $col = 0;
+
+            foreach($model_pc as $ct){
+                $a_phucap[$ct->mapc] = $ct->report;
+                $col++;
+            }
+            //dd($thongtin);
+            return view('reports.bangluong.donvi.maubangluong')
+                ->with('model',$model->sortBy('stt'))
+                ->with('model_pb',getPhongBan())
+                ->with('m_dv',$m_dv)
+                ->with('thongtin',$thongtin)
+                ->with('col',$col)
+                ->with('model_congtac',$model_congtac)
+                ->with('a_phucap',$a_phucap)
+                ->with('pageTitle','Bảng lương chi tiết');
+        } else
+            return view('errors.notlogin');
+    }
+
+    public function printf_mautt107(Request $request){
+        if (Session::has('admin')) {
+            $inputs = $request->all();
+            $inputs['mabl'] = $inputs['mabl_mautt107'];
+            $model = $this->getBangLuong($inputs)->wherein('phanloai', ['CVCHINH','KHONGCT']);
+            //dd($inputs);
+            $mabl = $inputs['mabl'];
+            $m_bl = bangluongdangky::select('thang','nam','mabl','madv','ngaylap')->where('mabl',$mabl)->first();
+            $m_dv = dmdonvi::where('madv',$m_bl->madv)->first();
+
+            $model_congtac = dmphanloaict::select('mact','tenct')
+                ->wherein('mact', function($query) use($mabl){
+                    $query->select('mact')->from('bangluongdangky_ct')->where('mabl',$mabl);
+                })->get();
+
+            $model_hoso = hosocanbo::where('madv', $m_bl->madv)->get();
+            foreach ($model as $ct) {
+                if ($ct->phanloai == 'KHONGCT') {
+                    $hoso = $model_hoso->where('macanbo', $ct->macanbo)->first();
+                    $ct->tencanbo = count($hoso) > 0 ? $hoso->tencanbo : null;
+                }
+            }
+
+            $thongtin=array('nguoilap'=>$m_bl->nguoilap,
+                'thang'=>$m_bl->thang,
+                'nam'=>$m_bl->nam,
+                'ngaylap'=>$m_bl->ngaylap,
+                'cochu'=>$inputs['cochu']);
+            //xử lý ẩn hiện cột phụ cấp => biết tổng số cột hiện => colspan trên báo cáo
+            $a_goc = array('hesott');
+            $model_pc = dmphucap_donvi::where('madv',$m_bl->madv)->where('phanloai','<','3')->wherenotin('mapc',$a_goc)->get();
+            $a_phucap = array();
+            $col = 0;
+
+            foreach($model_pc as $ct) {
+                if ($model->sum($ct->mapc) > 0) {
+                    $a_phucap[$ct->mapc] = $ct->report;
+                    $col++;
+                }
+            }
+            return view('reports.bangluong.donvi.mautt107')
+                ->with('model',$model->sortBy('stt'))
+                ->with('model_pb',getPhongBan())
+                ->with('m_dv',$m_dv)
+                ->with('thongtin',$thongtin)
+                ->with('col',$col)
+                ->with('model_congtac',$model_congtac)
+                ->with('a_phucap',$a_phucap)
+                ->with('pageTitle','Bảng lương chi tiết');
+        } else
+            return view('errors.notlogin');
+    }
+
+    function getBangLuong($inputs, $phanloai=0)
+    {
+        $mabl = $inputs['mabl'];
+        $model = bangluongdangky_ct::where('mabl', $mabl)->get();
+        $m_bl = bangluongdangky::select('thang', 'nam', 'mabl', 'madv', 'ngaylap', 'luongcoban')->where('mabl', $mabl)->first();
+        $m_dv = dmdonvi::where('madv', $m_bl->madv)->first();
+        $dmchucvucq = getChucVuCQ(false);
+        $sunghiep = array_column(hosocanbo::select('sunghiep', 'macanbo')->where('madv', $m_bl->madv)->get()->toArray(), 'sunghiep', 'macanbo');
+        $nhomct = array_column(dmphanloaict::all('macongtac', 'mact')->toArray(), 'macongtac', 'mact');
+
+        //xử lý ẩn hiện cột phụ cấp => biết tổng số cột hiện => colspan trên báo cáo
+        //$a_phucapbc = getColPhuCap_BaoCao();
+        //$a_goc = array('heso','vuotkhung','hesott');
+        $a_goc = array();
+        $model_pc = dmphucap_donvi::where('madv', $m_bl->madv)->where('phanloai', '<', '3')->wherenotin('mapc', $a_goc)->get();
+        $a_phucap = array();
+        $col = 0;
+        foreach ($model_pc as $ct) {
+            $a_phucap[$ct->mapc] = $ct->report;
+            $col++;
+        }
+        //$a_col = getColTongHop();
+        $luongcb = $m_bl->luongcoban;
+
+        foreach ($model as $hs) {
+            $hs->tencv = isset($dmchucvucq[$hs->macvcq]) ? $dmchucvucq[$hs->macvcq] : '';
+            $hs->sunghiep = isset($sunghiep[$hs->macanbo]) ? $sunghiep[$hs->macanbo] : '';
+            $hs->macongtac = isset($nhomct[$hs->mact]) ? $nhomct[$hs->mact] : '';
+            if ($phanloai == 1) {
+                $ths = 0;
+                foreach ($model_pc as $col) {
+                    $mapc = $col->mapc;
+                    //$pl = getDbl($m_dv->$col);
+                    $pl = getDbl($col->phanloai);
+
+                    switch ($pl) {
+                        case 1: {//số tiền
+                            //giữ nguyên ko pai làm gì
+                            break;
+                        }
+                        default: {//trường hợp còn lại (ẩn,...)
+                            $hs->$mapc = $hs->$mapc * $luongcb;
+                            break;
+                        }
+                    }
+                    $ths += $hs->$mapc;
+                    $hs->tonghs = $ths;
+                }
+            }
+        }
+
+        if (isset($inputs['mapb']) && $inputs['mapb'] != '') {
+            $model = $model->where('mapb', $inputs['mapb']);
+        }
+        if (isset($inputs['macvcq']) && $inputs['macvcq'] != '') {
+            $model = $model->where('macvcq', $inputs['macvcq']);
+        }
+        if (isset($inputs['mact']) && $inputs['mact'] != '') {
+            $model = $model->where('mact', $inputs['mact']);
+        }
+        return $model;
+    }
 }
