@@ -203,7 +203,6 @@ class bangluongController extends Controller
 
                 $cb->tonghs = $ths;
                 $cb->ttl = round($inputs['luongcoban'] * $ths);
-
                 if ($cb->baohiem) {
                     $phanloai = $model_phanloai->where('mact', $cb->mact)->first();
                     if (count($phanloai) > 0) {//do trc nhập chưa lưu mact
@@ -384,11 +383,11 @@ class bangluongController extends Controller
                 $cb->tonghs = $ths;
                 //nếu cán bộ nghỉ thai sản
                 if($thaisan){
-                    $cb->tencanbo = $cb->tencanbo . ' (nghỉ thai sản)';
+                    $cb->tencanbo = $cb->tencanbo . '(nghỉ thai sản)';
                     $cb->ttl = round($inputs['luongcoban'] * ($cb->pccovu + $cb->pcudn) * $cb->pthuong / 100);
                     $cb->congtac = 'THAISAN';
                 }else {
-                    $cb->ttl = round($inputs['luongcoban'] * $ths / 100 + $tt);
+                    $cb->ttl = round($inputs['luongcoban'] * $ths + $tt);
                     //kiểm tra cán bộ ko chuyên trách thì tự động lấy lương cơ bản * % bảo hiểm
                     if($cb->baohiem && $cb->macongtac == 'KHONGCT'){
                         $cb->stbhxh = round($inputs['luongcoban'] * $cb->bhxh, 0);
@@ -428,6 +427,7 @@ class bangluongController extends Controller
                 $cb->luongtn = $cb->ttl - $cb->ttbh - $cb->giaml;
 
                 $kq = $cb->toarray();
+                //dd($kq);
                 unset($kq['id']);
                 //lưu vào db
                 bangluong_ct::create($kq);
