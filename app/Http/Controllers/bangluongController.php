@@ -218,7 +218,7 @@ class bangluongController extends Controller
                     if ($pl == 2) {
                         foreach (explode(',', $ct->congthuc) as $cthuc) {
                             if ($cthuc != '')
-                                $heso += $cb->$cthuc;
+                                $heso += $canbo->$cthuc;
                         }
                     }
 
@@ -265,6 +265,7 @@ class bangluongController extends Controller
                 unset($a_k['id']);
                 bangluong_ct::create($a_k);
             }
+            //dd($model_canbo_kn);
             //Tính toán lương cho cán bộ
             //$a_col = getColPhuCap(); //lấy theo phụ cấp => tự tính phụ cấp vượt khung, hệ số lương
             //$a_baohiem = getPhuCapNopBH();
