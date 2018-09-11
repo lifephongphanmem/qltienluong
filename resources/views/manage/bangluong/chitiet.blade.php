@@ -29,6 +29,7 @@
                     {!! Form::model($model, ['url'=>'/chuc_nang/bang_luong/updatect/'.$model->id, 'method' => 'POST', 'files'=>true, 'id' => 'create-hscb', 'class'=>'horizontal-form form-validate']) !!}
                     <input type="hidden" id="macanbo" name="macanbo" value="{{$model->macanbo}}" />
                     <input type="hidden" id="mabl" name="mabl" value="{{$model->mabl}}" />
+                    <input type="hidden" id="id" name="id" value="{{$model->id}}" />
                         <div class="form-body">
                             <div class="row">
                                 <div class="col-md-12">

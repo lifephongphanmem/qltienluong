@@ -1120,7 +1120,9 @@ class bangluongController extends Controller
         if (Session::has('admin')) {
             $inputs=$request->all();
 
-            $model=bangluong_ct::where('macanbo',$inputs['macanbo'])->where('mabl',$inputs['mabl'])->first();
+            $model=bangluong_ct::findorfail($inputs['id']);
+
+            //$model=bangluong_ct::where('macanbo',$inputs['macanbo'])->where('mabl',$inputs['mabl'])->first();
 
             $model_pc = dmphucap_donvi::where('madv', session('admin')->madv)->get();
             foreach($model_pc as $pc){
