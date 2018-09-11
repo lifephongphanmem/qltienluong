@@ -346,6 +346,14 @@ class bangluongController extends Controller
                 foreach ($model_phucap as $ct) {
                     $mapc = $ct->mapc;
                     if($cb->$mapc <= 0){
+                        $ct->stbhxh = 0;
+                        $ct->stbhyt = 0;
+                        $ct->stkpcd = 0;
+                        $ct->stbhtn = 0;
+                        $ct->stbhxh_dv = 0;
+                        $ct->stbhyt_dv = 0;
+                        $ct->stkpcd_dv = 0;
+                        $ct->stbhtn_dv = 0;
                         continue;
                     }
                     $ct->heso_goc = $cb->$mapc;
@@ -397,9 +405,7 @@ class bangluongController extends Controller
                         }
                     }
 
-                    if (($cb->$mapc > 0 && !$thaisan) ||
-                            ($thaisan && in_array($mapc,$a_ts))
-                            ) {//lưu vào bảng lương phụ cấp (chi luu số tiền >0)
+                    if (!$thaisan ||($thaisan && in_array($mapc,$a_ts)) ) {//lưu vào bảng lương phụ cấp (chi luu số tiền >0)
                         $ct->mabl = $inputs['mabl'];
                         $ct->macanbo = $cb->macanbo;
                         $ct->tencanbo = $cb->tencanbo;
