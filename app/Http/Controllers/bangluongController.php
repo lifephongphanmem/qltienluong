@@ -311,7 +311,8 @@ class bangluongController extends Controller
                 }
 
                 //trong bảng danh mục là % vượt khung => sang bảng lương chuyển thành hệ số
-                $cb->heso = $cb->heso * $cb->pthuong / 100; //(tập sự hưởng theo %)
+                $heso_goc = $cb->heso * $cb->pthuong / 100;
+                //$cb->heso = $cb->heso; //(tập sự hưởng theo %)
                 $cb->vuotkhung = $cb->heso * $cb->vuotkhung / 100;
 
                 //tính thâm niên nghề
@@ -345,19 +346,6 @@ class bangluongController extends Controller
 
                 foreach ($model_phucap as $ct) {
                     $mapc = $ct->mapc;
-                    if($cb->$mapc <= 0){
-                        $ct->stbhxh = 0;
-                        $ct->stbhyt = 0;
-                        $ct->stkpcd = 0;
-                        $ct->stbhtn = 0;
-                        $ct->stbhxh_dv = 0;
-                        $ct->stbhyt_dv = 0;
-                        $ct->stkpcd_dv = 0;
-                        $ct->stbhtn_dv = 0;
-                        continue;
-                    }
-                    $ct->heso_goc = $cb->$mapc;
-                    $heso = 0;
                     //gán số tiền bảo hiểm  = 0 khi tính để ko trùng với giá trị cán bộ trc
                     $ct->stbhxh = 0;
                     $ct->stbhyt = 0;
@@ -367,6 +355,12 @@ class bangluongController extends Controller
                     $ct->stbhyt_dv = 0;
                     $ct->stkpcd_dv = 0;
                     $ct->stbhtn_dv = 0;
+                    if($cb->$mapc <= 0){
+                        continue;
+                    }
+                    $ct->heso_goc = $cb->$mapc;
+                    $heso = 0;
+
                     $pl = getDbl($ct->phanloai);
 
                     if ($pl == 2) {
@@ -432,11 +426,11 @@ class bangluongController extends Controller
                     }
                 }
 
-                $cb->tonghs = $ths;
+                $cb->tonghs = $ths + $heso_goc - $cb->heso; //đo chỉ lương nb hưởng 85%, các hệ số hưởng %, bảo hiểm thì lấy 100% để tính
                 //nếu cán bộ nghỉ thai sản
                 if($thaisan){
                     $cb->tencanbo = $cb->tencanbo . '(nghỉ thai sản)';
-                    $cb->ttl = round($inputs['luongcoban'] * ($cb->pccovu + $cb->pcudn) * $cb->pthuong / 100);
+                    $cb->ttl = round($inputs['luongcoban'] * ($cb->pccovu + $cb->pcudn + $cb->pctn)); //đang sai công thức (lấy số tiền nhóm khong đóng ts
                     $cb->congtac = 'THAISAN';
                 }else {
                     $cb->ttl = round($inputs['luongcoban'] * $ths + $tt);
