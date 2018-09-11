@@ -162,7 +162,7 @@ class bangluongController extends Controller
                 ->where('theodoi','<', '9')->get();
             */
             $m_cb = hosocanbo::where('madv', $madv)->where('theodoi','<', '9')->get();
-
+            $m_cbkn = hosocanbo::where('madv', $madv)->where('theodoi','<', '9')->get();
             //Lấy danh sách cán bộ kiêm nhiệm
             $model_canbo_kn = hosocanbo_kiemnhiem::wherein('macanbo', function($qr){
                 $qr->select('macanbo')->from('hosocanbo')->where('madv',session('admin')->madv)->where('theodoi','<', '9')->get();
@@ -185,9 +185,11 @@ class bangluongController extends Controller
             //Không tính truy lĩnh
             $a_goc = array('hesott');
             $model_phucap = dmphucap_donvi::where('madv', session('admin')->madv)->wherenotin('mapc', $a_goc)->get();
+
             $model_ts = $model_phucap->where('baohiem','0')->toarray();
             $a_ts = array_column($model_ts,'mapc');
-            //dd($a_ts);
+
+            //dd($m_cb->where('hesobl','>',0));
             //Tạo bảng lương
             bangluong::create($inputs);
 
@@ -196,13 +198,13 @@ class bangluongController extends Controller
 
             foreach ($model_canbo_kn as $cb) {
                 //lấy thông tin ở bảng hồ sơ cán bộ để lấy thông tin lương, phụ cấp
-                $canbo = $m_cb->where('macanbo',$cb->macanbo)->first();
+                $canbo = $m_cbkn->where('macanbo',$cb->macanbo)->first();
                 if(count($canbo) == 0){
                     continue;
                 }
+
                 $canbo->vuotkhung = 0;
                 $canbo->pctnn = 0;
-                $canbo->hesobl = 0;
                 $cb->mabl = $inputs['mabl'];
                 $ths = 0;
                 $tt = 0;
@@ -292,7 +294,6 @@ class bangluongController extends Controller
                 }
 
                 $phanloai = $model_phanloai->where('mact', $cb->mact)->first();
-
                 if (count($phanloai) > 0) {
                     $cb->bhxh = floatval($phanloai->bhxh) / 100;
                     $cb->bhyt = floatval($phanloai->bhyt) / 100;
@@ -362,7 +363,6 @@ class bangluongController extends Controller
                     $heso = 0;
 
                     $pl = getDbl($ct->phanloai);
-
                     if ($pl == 2) {
                         foreach (explode(',', $ct->congthuc) as $cthuc) {
                             if ($cthuc != '')
@@ -474,9 +474,9 @@ class bangluongController extends Controller
 
                 $kq = $cb->toarray();
                 unset($kq['id']);
-                //lưu vào db
                 bangluong_ct::create($kq);
             }
+
         }
 
         return redirect('/chuc_nang/bang_luong/maso=' . $inputs['mabl']);
