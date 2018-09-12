@@ -278,6 +278,14 @@ Route::group(['prefix'=>'nghiep_vu'],function(){
         Route::post('store','hosothoicongtacController@store');
         Route::get('get','hosothoicongtacController@getinfo');
     });
+
+    Route::group(['prefix'=>'truc'],function(){
+        Route::get('danh_sach','hosotrucController@index');
+        Route::get('del/{id}','hosotrucController@destroy');
+        Route::post('store','hosotrucController@store');
+        Route::get('get','hosotrucController@getinfo');
+    });
+
 });
 
 Route::group(['prefix'=>'du_toan'],function(){
@@ -311,6 +319,7 @@ Route::group(['prefix'=>'chuc_nang'],function(){
         Route::get('chi_tra','bangluongController@chitra');
         Route::post('store','bangluongController@store');
         Route::post('store_truylinh','bangluongController@store_truylinh');
+        Route::post('store_truc','bangluongController@store_truc');
 
         Route::get('/maso={mabl}','bangluongController@show');
         Route::get('in/maso={mabl}','bangluongController@inbangluong');
@@ -342,6 +351,7 @@ Route::group(['prefix'=>'chuc_nang'],function(){
         Route::post('mauqs','bangluongController@printf_mauqs');
         Route::get('maucd','bangluongController@printf_maucd');
         Route::get('maumc','bangluongController@printf_maumc');
+        Route::get('mautruc','bangluongController@printf_mautruc');
 
         Route::post('mau01_excel','bangluongController@printf_mau01_excel');
         Route::post('mautt107_excel','bangluongController@printf_mautt107_excel');

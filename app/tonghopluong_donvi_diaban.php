@@ -41,6 +41,7 @@ class tonghopluong_donvi_diaban extends Model
         'pclt',
         'pcd',
         'pctr',
+        'pctdt',
         'pctnvk',
         'pcbdhdcu',
         'pcthni',

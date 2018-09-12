@@ -47,6 +47,7 @@ class CreateDsnangluongChitietTable extends Migration
             $table->double('pclt')->default(0);
             $table->double('pcd')->default(0);
             $table->double('pctr')->default(0);
+            $table->double('pctdt')->default(0);
             $table->double('pctnvk')->default(0);
             $table->double('pcbdhdcu')->default(0);
             $table->double('pcthni')->default(0);

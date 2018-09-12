@@ -94,8 +94,6 @@ function getPhanLoaiDonVi(){
     return array_column($model,'tenphanloai','maphanloai');
 }
 
-
-
 function getTenDB($madvbc){
     $model = App\dmdonvibaocao::select('tendvbc')->where('madvbc',$madvbc)->first();
     return count($model)>0?Illuminate\Support\Str::upper($model->tendvbc):'';
@@ -199,7 +197,6 @@ function getCapDonVi(){
         '3'=>'Đơn vị dự toán cấp 3',
         '4'=>'Đơn vị dự toán cấp 4');
 }
-
 
 function getPhanLoaiTaiKhoan(){
     $model = array(
@@ -396,7 +393,8 @@ function getCongThucTinhPC(){
         'vuotkhung' => 'Thâm niên vượt khung',
         'pccv' => 'Phụ cấp chức vụ',
         'hesobl' => 'Hệ số bảo lưu',
-        'pctnn' => 'Phụ cấp thâm niên nghề',
+        'pcthni' => 'Phụ cấp thâm niên',
+        'pctn' => 'Phụ cấp trách nhiệm',
     );
 }
 
@@ -494,7 +492,8 @@ function getPhanLoaiTamNgungTheoDoi(){
 
 function getPhanLoaiBangLuong(){
     return array('BANGLUONG' => 'Bảng lương cán bộ',
-        'TRUYLINH' => 'Bảng truy lĩnh lương');
+        'TRUYLINH' => 'Bảng truy lĩnh lương',
+        'TRUC'=>'Bảng phụ cấp trực');
 }
 
 function getPhuCapNopBH(){

@@ -30,6 +30,8 @@ class CreateBangluongctTable extends Migration
             $table->double('hesopc')->default(0);
             $table->double('hesott')->default(0);//hệ số truy lĩnh
             $table->double('thangtl')->default(0);//số tháng được truy lĩnh lương
+            $table->double('ngaytl')->default(0);//số tháng được truy lĩnh lương
+            $table->double('songaytruc')->default(0);//số tháng được truy lĩnh lương
             $table->double('vuotkhung')->default(0);
 
             $table->double('pcct')->default(0);//dùng để thay thế phụ cấp ghép lớp
@@ -53,6 +55,7 @@ class CreateBangluongctTable extends Migration
             $table->double('pclt')->default(0);//lưu thay phụ cấp phân loại xã
             $table->double('pcd')->default(0);
             $table->double('pctr')->default(0);
+            $table->double('pctdt')->default(0);
             $table->double('pctnvk')->default(0);
             $table->double('pcbdhdcu')->default(0);
             $table->double('pcthni')->default(0);

@@ -43,6 +43,7 @@ class dsnangthamnien_ct extends Model
         'pclt',
         'pcd',
         'pctr',
+        'pctdt',
         'pctnvk',
         'pcbdhdcu',
         'pcthni',

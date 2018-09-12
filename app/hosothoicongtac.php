@@ -53,6 +53,7 @@ class hosothoicongtac extends Model
         'pclt',
         'pcd',
         'pctr',
+        'pctdt',
         'pctnvk',
         'pcbdhdcu',
         'pcthni',

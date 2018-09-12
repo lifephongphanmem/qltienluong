@@ -36,6 +36,7 @@
         $('#tongiao').val('Không');
         $('#pthuong').val('100');
         $('#dantoc').val('Kinh').trigger('change');
+        $('#baohiem').val('1').trigger('change');
     </script>
     @include('includes.script.scripts')
 @stop

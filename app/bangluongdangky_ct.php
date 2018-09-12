@@ -45,6 +45,7 @@ class bangluongdangky_ct extends Model
         'pclt',
         'pcd',
         'pctr',
+        'pctdt',
         'ptbhxh',
         'ptbhyt',
         'ptkpcd',

@@ -43,6 +43,7 @@ class dsnangluong_chitiet extends Model
         'pclt',
         'pcd',
         'pctr',
+        'pctdt',
         'pctnvk',
         'pcbdhdcu',
         'pcthni',

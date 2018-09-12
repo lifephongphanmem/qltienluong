@@ -46,6 +46,7 @@ class bangluong_ct extends Model
         'pclt',
         'pcd',
         'pctr',
+        'pctdt',
         'ptbhxh',
         'ptbhyt',
         'ptkpcd',
@@ -70,6 +71,9 @@ class bangluong_ct extends Model
         'ttbh_dv',
         'gttncn',
         'luongtn',
-        'thangtl'
+        'thangtl',
+        'ngaytl',
+        'songaytruc',
+
     ];
 }

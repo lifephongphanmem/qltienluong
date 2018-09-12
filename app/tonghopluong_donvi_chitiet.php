@@ -43,6 +43,7 @@ class tonghopluong_donvi_chitiet extends Model
         'pclt',
         'pcd',
         'pctr',
+        'pctdt',
         'pctnvk',
         'pcbdhdcu',
         'pcthni',

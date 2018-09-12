@@ -38,6 +38,7 @@ class hosocanbo_kiemnhiem extends Model
         'pclt', //lưu thay phụ cấp phân loại xã
         'pcd',
         'pctr',
+        'pctdt',
         'pctnvk',
         'pcbdhdcu',
         'pcthni',

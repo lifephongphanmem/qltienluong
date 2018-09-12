@@ -36,6 +36,7 @@
                     <div class="actions">
                         <button type="button" class="btn btn-default btn-xs" onclick="add()"><i class="fa fa-plus"></i>&nbsp;Thêm mới bảng lương</button>
                         <button type="button" class="btn btn-default btn-xs" onclick="add_truylinh()"><i class="fa fa-plus"></i>&nbsp;Thêm mới bảng truy lĩnh</button>
+                        <button type="button" class="btn btn-default btn-xs" onclick="add_truc()"><i class="fa fa-plus"></i>&nbsp;Thêm mới bảng trực</button>
                     </div>
                 </div>
                 <div class="portlet-body form-horizontal">
@@ -172,17 +173,6 @@
             <div class="modal-body">
                 <div class="form-horizontal">
                     <div class="row">
-                        <div class="col-md-6">
-                            <label class="control-label"> Tháng<span class="require">*</span></label>
-                            {!! Form::select('thang_truylinh',getThang(),date('m'),array('id' => 'thang_truylinh', 'class' => 'form-control'))!!}
-                        </div>
-                        <div class="col-md-6">
-                            <label class="control-label"> Năm<span class="require">*</span></label>
-                            {!! Form::select('nam_truylinh',getNam(),date('Y'),array('id' => 'nam_truylinh', 'class' => 'form-control'))!!}
-                        </div>
-                    </div>
-
-                    <div class="row">
                         <div class="col-md-12">
                             <label class="control-label"> Nội dung</label>
                             {!! Form::textarea('noidung_truylinh',null,array('id' => 'noidung_truylinh', 'class' => 'form-control','rows'=>'3'))!!}
@@ -212,8 +202,64 @@
                         </div>
                     </div>
 
+                    <input type="hidden" id="thang_truylinh" name="thang_truylinh" value="{{$inputs['thang']}}"/>
+                    <input type="hidden" id="nam_truylinh" name="nam_truylinh" value="{{$inputs['nam']}}"/>
                     <input type="hidden" id="mabl_truylinh" name="mabl_truylinh"/>
                     <input type="hidden" id="phanloai_truylinh" name="phanloai_truylinh"/>
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" data-dismiss="modal" class="btn btn-default">Hủy thao tác</button>
+                <button type="submit" id="submit" name="submit" value="submit" class="btn btn-primary">Đồng ý</button>
+            </div>
+        </div>
+    </div>
+    {!! Form::close() !!}
+
+    {!! Form::open(['url'=>'/chuc_nang/bang_luong/store_truc','method'=>'post' , 'files'=>true, 'id' => 'create_bangluong_truylinh']) !!}
+    <div id="truc-modal" tabindex="-1" role="dialog" aria-hidden="true" class="modal fade">
+        <div class="modal-dialog modal-content">
+            <div class="modal-header modal-header-primary">
+                <button type="button" data-dismiss="modal" aria-hidden="true" class="close">&times;</button>
+                <h4 id="modal-header-primary-label" class="modal-title">Thông tin bảng lương trực cán bộ</h4>
+            </div>
+            <div class="modal-body">
+                <div class="form-horizontal">
+
+                    <div class="row">
+                        <div class="col-md-12">
+                            <label class="control-label"> Nội dung</label>
+                            {!! Form::textarea('noidung_truc',null,array('id' => 'noidung_truylinh', 'class' => 'form-control','rows'=>'3'))!!}
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <label class="control-label">Số ngày công</label>
+                            {!!Form::text('songay_truc', date('t'), array('id' => 'songay_truc','class' => 'form-control'))!!}
+                        </div>
+                        <div class="col-md-6">
+                            <label class="control-label">Mức lương cơ bản</label>
+                            {!!Form::text('luongcoban_truc', $luongcb, array('id' => 'luongcoban_truc','class' => 'form-control', 'data-mask'=>'fdecimal'))!!}
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <label class="control-label">Ngày lập bảng lương</label>
+                            <input type="date" name="ngaylap_truc" id="ngaylap_truc" class="form-control" value="{{date('Y-m-d')}}"/>
+
+                        </div>
+                        <div class="col-md-6">
+                            <label class="control-label">Người lập bảng lương</label>
+                            {!!Form::text('nguoilap_truc', session('admin')->nguoilapbieu, array('id' => 'nguoilap_truc','class' => 'form-control'))!!}
+                        </div>
+                    </div>
+                    <input type="hidden" id="thang_truc" name="thang_truc" value="{{$inputs['thang']}}"/>
+                    <input type="hidden" id="nam_truc" name="nam_truc" value="{{$inputs['nam']}}"/>
+                    <input type="hidden" id="mabl_truc" name="mabl_truc"/>
+                    <input type="hidden" id="phanloai_truc" name="phanloai_truc"/>
                 </div>
             </div>
 
@@ -338,11 +384,17 @@
                 </div>
 
                 <div class="row">
-
                     <div class="col-md-6">
                         <div class="form-group">
                             <a id="in_mc" href="" onclick="inmc()" style="border-width: 0px" target="_blank">
                                 <i class="fa fa-print"></i>&nbsp; Bảng thanh toán phụ cấp trách nhiệm</a>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <a id="in_truc" href="" onclick="intruc()" style="border-width: 0px" target="_blank">
+                                <i class="fa fa-print"></i>&nbsp; Bảng thanh toán phụ cấp trực</a>
                         </div>
                     </div>
                 </div>
@@ -419,6 +471,13 @@
             $('#truylinh-modal').modal('show');
         }
 
+        function add_truc(){
+            $('#phanloai_truc').val('TRUC');
+            $('#noidung_truc').val('');
+            $('#mabl_truc').val('');
+            $('#truc-modal').modal('show');
+        }
+
         function edit(mabl,phanloai){
             //var tr = $(e).closest('tr');
             var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
@@ -490,6 +549,10 @@
 
         function inmc(){
             $("#in_mc").attr("href", '/chuc_nang/bang_luong/maumc?mabl=' + $('#mabl_in').val());
+        }
+
+        function intruc(){
+            $("#in_truc").attr("href", '/chuc_nang/bang_luong/mautruc?mabl=' + $('#mabl_in').val());
         }
         $(function(){
             $('#create_bangluong :submit').click(function(){
