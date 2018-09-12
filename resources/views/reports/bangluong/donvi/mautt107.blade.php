@@ -244,7 +244,7 @@
         </tr>
         <tr style="font-weight: bold">
             <td style="text-align: center;" width="35%">Người lập bảng</td>
-            <td style="text-align: center;" width="30%">Người lập bảng</td>
+            <th style="text-align: center;" width="50%">{{$m_dv->cdketoan}}</th>
             <td style="text-align: center;" width="35%">{{$m_dv['cdlanhdao']}}</td>
         </tr>
         <tr style="font-style: italic">
