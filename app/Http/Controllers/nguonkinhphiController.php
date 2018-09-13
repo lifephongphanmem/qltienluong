@@ -261,6 +261,10 @@ class nguonkinhphiController extends Controller
         //Kiểm tra cấp đơn vị xem đơn vị để update trường masoh hoặc masot
         if (Session::has('admin')) {
             $model = nguonkinhphi::where('masodv',$masodv)->first();
+            if(count($model) == 0){
+                $model = nguonkinhphi::where('masoh',$masodv)->first();
+            }
+
             $m_dv = dmdonvi::where('madv',$model->madv)->first();
             $data = array();
             $data[]=array('val'=>'GDDT','tt'=>'a','noidung'=>'Sự nghiệp giáo dục - đào tạo','nhucau'=>0,'nguonkp'=>0,'tietkiem'=>0,'hocphi'=>0,'vienphi'=>0,'nguonthu'=>0);
