@@ -372,6 +372,7 @@ function getTextStatus($status){
 function getStatus(){
     return array(
         'CHUALUONG' => 'Chưa tạo bảng lương',
+        'CHONHAN' => 'Dữ liệu chờ nhận',
         'CHUATAO' => 'Dữ liệu chưa khởi tạo',
         'CHOGUI' => 'Dữ liệu chờ gửi',
         'DAGUI' => 'Dữ liệu đã gửi',
