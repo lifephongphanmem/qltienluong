@@ -1332,7 +1332,7 @@ class bangluongController extends Controller
     public function inbangluong($mabl){
         if (Session::has('admin')) {
             $model = bangluong_ct::where('mabl',$mabl)->get();
-            $m_bl = bangluong::select('thang','nam','mabl','madv','nguoilap','ngaylap')->where('mabl',$mabl)->first();
+            $m_bl = bangluong::select('thang','nam','mabl','madv','nguoilap','ngaylap','phanloai')->where('mabl',$mabl)->first();
             $mabl = $m_bl->mabl;
             $m_dv = dmdonvi::where('madv',$m_bl->madv)->first();
 
@@ -1350,7 +1350,7 @@ class bangluongController extends Controller
             }
 
             $thongtin=array('nguoilap'=>$m_bl->nguoilap,
-                'thang'=>$m_bl->thang,
+                'thang'=>$m_bl->thang,'phanloai'=>$m_bl->phanloai,
                 'nam'=>$m_bl->nam,
                 'ngaylap'=>$m_bl->ngaylap,
                 'cochu'=>11);
@@ -1380,7 +1380,7 @@ class bangluongController extends Controller
     public function inbangluong_sotien($mabl){
         if (Session::has('admin')) {
             $model = bangluong_ct::where('mabl',$mabl)->get();
-            $m_bl = bangluong::select('thang','nam','mabl','madv','luongcoban')->where('mabl',$mabl)->first();
+            $m_bl = bangluong::select('thang','nam','mabl','madv','luongcoban','phanloai')->where('mabl',$mabl)->first();
             $mabl = $m_bl->mabl;
             $luongcb = $m_bl->luongcoban;
             $m_dv = dmdonvi::where('madv',$m_bl->madv)->first();
@@ -1407,7 +1407,7 @@ class bangluongController extends Controller
             }
             //dd($m_bl);
             $thongtin=array('nguoilap'=>$m_bl->nguoilap,
-                'thang'=>$m_bl->thang,
+                'thang'=>$m_bl->thang,'phanloai'=>$m_bl->phanloai,
                 'nam'=>$m_bl->nam);
             //xử lý ẩn hiện cột phụ cấp => biết tổng số cột hiện => colspan trên báo cáo
             $a_phucapbc = getColPhuCap_BaoCao();
