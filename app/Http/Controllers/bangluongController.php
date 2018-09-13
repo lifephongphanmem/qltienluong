@@ -1531,9 +1531,15 @@ class bangluongController extends Controller
 
             $m_bl=bangluong::select('thang','nam')->where('mabl',$mabl)->first();
             $dmchucvucq=dmchucvucq::all('tencv', 'macvcq')->toArray();
+            $model_congtac = dmphanloaict::select('mact','tenct')
+                ->wherein('mact', function($query) use($mabl){
+                    $query->select('mact')->from('bangluong_ct')->where('mabl',$mabl);
+                })->get();
+
             foreach($model as $hs){
                 $hs->tencv=getInfoChucVuCQ($hs,$dmchucvucq);
             }
+
             $thongtin=array('nguoilap'=>session('admin')->name,
                 'thang'=>$m_bl->thang,
                 'nam'=>$m_bl->nam,
@@ -1542,6 +1548,7 @@ class bangluongController extends Controller
                 ->with('model',$model)
                 ->with('m_dv',$m_dv)
                 ->with('thongtin',$thongtin)
+                ->with('model_congtac',$model_congtac)
                 ->with('pageTitle','Bảng trích nộp bảo hiểm chi tiết');
         } else
             return view('errors.notlogin');
