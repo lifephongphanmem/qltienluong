@@ -63,7 +63,7 @@
                                                 <button type="button" onclick="edit('{{$value->msngbac}}')" class="btn btn-default btn-xs">
                                                     <i class="fa fa-edit"></i>&nbsp; Chỉnh sửa</button>
 
-                                                <button type="button" onclick="cfDel('/danh_muc/ngach_bac/del/{{$value->id}}')" class="btn btn-default btn-xs" data-target="#delete-modal-confirm" data-toggle="modal">
+                                                <button type="button" onclick="cfDel('/danh_muc/ngach_bac/del_detail/{{$value->id}}')" class="btn btn-default btn-xs" data-target="#delete-modal-confirm" data-toggle="modal">
                                                     <i class="fa fa-trash-o"></i>&nbsp; Xóa</button>
                                             @endif
                                         </td>

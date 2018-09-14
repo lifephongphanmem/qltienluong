@@ -45,8 +45,6 @@ class dmngachluongController extends Controller
     function destroy($id){
         if (Session::has('admin')) {
             $model = nhomngachluong::findOrFail($id);
-            dd($model);
-            //$model->delete();
             return redirect('/danh_muc/ngach_bac/index');
         }else
             return view('errors.notlogin');
@@ -95,9 +93,9 @@ class dmngachluongController extends Controller
 
     function destroy_detail($id){
         if (Session::has('admin')) {
-            $model = dmphanloaict::findOrFail($id);
+            $model = ngachluong::findOrFail($id);
             $model->delete();
-            return redirect('/danh_muc/cong_tac/index');
+            return redirect('/danh_muc/ngach_bac/ma_so='.$model->manhom);
         }else
             return view('errors.notlogin');
     }
