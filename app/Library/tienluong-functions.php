@@ -459,27 +459,27 @@ function getColPhuCap_BaoCao()
 function getColPhuCap_Excel()
 {
     return array(
-        'pckv' =>   array('infor'=> 'Khu vực', 'col'=>null),
-        'pccv' =>   array('infor'=> 'Chức vụ', 'col'=>null),
+        'pckv' => array('infor' => 'Khu vực', 'col' => null),
+        'pccv' => array('infor' => 'Chức vụ', 'col' => null),
         //'pctnvk' => array('infor'=> 'Thâm niên vượt khung', 'col'=>null),
-        'pcudn' =>  array('infor'=> 'Ưu đãi ngành', 'col'=>null),
-        'pcth' =>   array('infor'=> 'Thu hút', 'col'=>null),
-        'pcthni' => array('infor'=> 'Công tác lâu năm', 'col'=>null),
-        'pccovu' => array('infor'=> 'Công vụ', 'col'=>null),
-        'pcdang' => array('infor'=> 'Công tác Đảng', 'col'=>null),
-        'pctnn' =>  array('infor'=> 'Thâm niên nghề', 'col'=>null),
-        'pcct'=>    array('infor'=> 'Ghép lớp', 'col'=>null),
-        'pctn' =>   array('infor'=> 'Trách nhiệm', 'col'=>null),
-        'pckn' =>   array('infor'=> 'Kiêm nhiệm', 'col'=>null),
-        'pclt' =>   array('infor'=> 'Khân loại xã', 'col'=>null),
-        'pcdd' =>   array('infor'=> 'Đắt đỏ', 'col'=>null),
-        'pcdbqh'=>  array('infor'=> 'Đại biểu HĐND', 'col'=>null),
-        'pcvk'=>    array('infor'=> 'Cấp ủy viên', 'col'=>null),
-        'pcbdhdcu'=> array('infor'=> 'Bồi dưỡng HĐCU', 'col'=>null),
-        'pcdbn'=>   array('infor'=> 'Đặc biệt (đặc thù)', 'col'=>null),
-        'pcld'=>    array('infor'=> 'Lưu động', 'col'=>null),
-        'pcdh'=>    array('infor'=> 'Độc hại', 'col'=>null),
-        'pck' =>    array('infor'=> 'Phụ cấp khác', 'col'=>null)
+        'pcudn' => array('infor' => 'Ưu đãi ngành', 'col' => null),
+        'pcth' => array('infor' => 'Thu hút', 'col' => null),
+        'pcthni' => array('infor' => 'Công tác lâu năm', 'col' => null),
+        'pccovu' => array('infor' => 'Công vụ', 'col' => null),
+        'pcdang' => array('infor' => 'Công tác Đảng', 'col' => null),
+        'pctnn' => array('infor' => 'Thâm niên nghề', 'col' => null),
+        'pcct' => array('infor' => 'Ghép lớp', 'col' => null),
+        'pctn' => array('infor' => 'Trách nhiệm', 'col' => null),
+        'pckn' => array('infor' => 'Kiêm nhiệm', 'col' => null),
+        'pclt' => array('infor' => 'Khân loại xã', 'col' => null),
+        'pcdd' => array('infor' => 'Đắt đỏ', 'col' => null),
+        'pcdbqh' => array('infor' => 'Đại biểu HĐND', 'col' => null),
+        'pcvk' => array('infor' => 'Cấp ủy viên', 'col' => null),
+        'pcbdhdcu' => array('infor' => 'Bồi dưỡng HĐCU', 'col' => null),
+        'pcdbn' => array('infor' => 'Đặc biệt (đặc thù)', 'col' => null),
+        'pcld' => array('infor' => 'Lưu động', 'col' => null),
+        'pcdh' => array('infor' => 'Độc hại', 'col' => null),
+        'pck' => array('infor' => 'Phụ cấp khác', 'col' => null)
     );
 }
 
@@ -488,7 +488,8 @@ function getPhanLoaiTamNgungTheoDoi(){
         'DINHCHI' => 'Đình chỉ công tác',
         'KYLUAT' => 'Kỷ luật',
         'NGHIPHEP'=> 'Nghỉ phép',
-        'NGHIOM'=> 'Nghỉ ốm');
+        'NGHIOM'=> 'Nghỉ ốm',
+        'KHONGLUONG'=>'Nghỉ không lương',);
 }
 
 function getPhanLoaiBangLuong(){

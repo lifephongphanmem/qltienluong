@@ -150,7 +150,8 @@ class bangluongController extends Controller
             //$ngaylap = Carbon::create('2018','04','01');
             $m_tamngung = hosotamngungtheodoi::select('macanbo')
                 ->where('madv', $madv)->where('maphanloai', 'THAISAN')
-                ->where('ngaytu', '<=', $ngaylap)->where('ngayden', '>=', $ngaylap)
+                ->where('ngaytu', '<=', $ngaylap)
+                ->where('ngayden', '>=', $ngaylap)
                 ->get();
 
             $m_nghiphep = hosotamngungtheodoi::where('madv', $madv)
@@ -167,7 +168,7 @@ class bangluongController extends Controller
                 ->where('theodoi','<', '9')->get();
             */
             $m_cb = hosocanbo::where('madv', $madv)->where('theodoi','<', '9')->get();
-            $m_cbkn = hosocanbo::where('madv', $madv)->where('theodoi','<', '9')->get();
+            //$m_cbkn = hosocanbo::where('madv', $madv)->where('theodoi','<', '9')->get();
             //Lấy danh sách cán bộ kiêm nhiệm
             $model_canbo_kn = hosocanbo_kiemnhiem::wherein('macanbo', function($qr){
                 $qr->select('macanbo')->from('hosocanbo')->where('madv',session('admin')->madv)->where('theodoi','<', '9')->get();
@@ -396,8 +397,20 @@ class bangluongController extends Controller
                     $nghi = $m_nghiphep->where('macanbo', $cb->macanbo)->first();
                     if (count($nghi) > 0) {
                         $cb->congtac = 'NGHIPHEP';
-                        $sotiencong = $inputs['luongcoban'] * ($cb->heso + $cb->vuotkhung + $cb->pccv + $cb->hesobl);
+                        $sotiencong = $inputs['luongcoban'] * ($cb->heso + $cb->vuotkhung + $cb->pccv + $cb->hesobl + $cb->pctnn);
                         $tiencong = round($sotiencong / $ngaycong, 0);
+                        if($nghi->songaynghi >= 15){//nghỉ quá 15 ngày thì ko đóng bảo hiểm
+                            $cb->stbhxh = 0;
+                            $cb->stbhyt = 0;
+                            $cb->stkpcd = 0;
+                            $cb->stbhtn = 0;
+                            $cb->ttbh = 0;
+                            $cb->stbhxh_dv = 0;
+                            $cb->stbhyt_dv = 0;
+                            $cb->stkpcd_dv = 0;
+                            $cb->stbhtn_dv = 0;
+                            $cb->ttbh_dv = 0;
+                        }
                         $cb->giaml = $nghi->songaynghi >= $ngaycong ? $sotiencong : ($tiencong * $nghi->songaynghi);
                     }
 
