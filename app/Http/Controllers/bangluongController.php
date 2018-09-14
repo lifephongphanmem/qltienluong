@@ -363,7 +363,7 @@ class bangluongController extends Controller
                     $ttts = 0;
                     foreach($a_ts as $val){
                         if($cb->$val > 10000){//sô tiền
-                            $ttts += $ttts;
+                            $ttts += $cb->$val;
                         }else{
                             $hesots += $cb->$val;
                         }
