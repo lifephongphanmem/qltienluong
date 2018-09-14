@@ -14,6 +14,7 @@ use App\dmphanloaicongtac;
 use App\dmphanloaicongtac_baohiem;
 use App\dmphanloaict;
 use App\dmphucap_donvi;
+use App\dmphucap_thaisan;
 use App\dmtieumuc_default;
 use App\hosocanbo;
 use App\hosocanbo_kiemnhiem;
@@ -187,16 +188,12 @@ class bangluongController extends Controller
             $model_congtac = dmphanloaict::all();
             $model_phanloai = dmphanloaicongtac_baohiem::where('madv', session('admin')->madv)->get();
             //Không tính truy lĩnh
-            $a_goc = array('hesott');
-            $model_phucap = dmphucap_donvi::where('madv', session('admin')->madv)->wherenotin('mapc', $a_goc)->get();
+            //$a_goc = array('hesott');
+            $model_phucap = dmphucap_donvi::where('madv', session('admin')->madv)->wherenotin('mapc', ['hesott'])->get();
+            $a_ts =array_column(dmphucap_thaisan::where('madv', session('admin')->madv)->get()->toarray(), 'mapc');
 
-            $model_ts = $model_phucap->where('baohiem','0')->toarray();
-            $a_ts = array_column($model_ts,'mapc');
-
-            //dd($m_cb->where('hesobl','>',0));
             //Tạo bảng lương
             bangluong::create($inputs);
-
 
             //dd($model_canbo_kn);
             //Tính toán lương cho cán bộ
@@ -361,7 +358,11 @@ class bangluongController extends Controller
                 //nếu cán bộ nghỉ thai sản
                 if($thaisan){
                     $cb->tencanbo = $cb->tencanbo . '(nghỉ thai sản)';
-                    $cb->ttl = round($inputs['luongcoban'] * ($cb->pccovu + $cb->pcudn + $cb->pctn)); //đang sai công thức (lấy số tiền nhóm khong đóng ts
+                    $hesots = 0;
+                    foreach($a_ts as $val){
+                        $hesots += $cb->$val;
+                    }
+                    $cb->ttl = round($inputs['luongcoban'] * $hesots);
                     $cb->congtac = 'THAISAN';
                 }else {
                     $cb->ttl = round($inputs['luongcoban'] * $ths + $tt);

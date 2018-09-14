@@ -9,6 +9,7 @@ use App\dmphanloaicongtac_baohiem;
 use App\dmphanloaict;
 use App\dmphucap;
 use App\dmphucap_donvi;
+use App\dmphucap_thaisan;
 use App\Users;
 use Illuminate\Foundation\Auth\User;
 use Illuminate\Http\Request;
@@ -209,6 +210,15 @@ class UsersController extends Controller
                 if (count($model_phucap) == 0) {
                     $model_dmpc = dmphucap::select('mapc', 'tenpc', 'baohiem', 'form', 'report', 'phanloai', 'congthuc', DB::raw($ttuser->madv . ' as madv'))->get();
                     dmphucap_donvi::insert($model_dmpc->toarray());
+                }
+
+                //phụ cấp thai sản
+                $model_ts = dmphucap_thaisan::where('madv', $ttuser->madv)->get();
+                if (count($model_ts) == 0) {
+                    $model_dmpc = dmphucap::select('mapc', 'tenpc', DB::raw($ttuser->madv . ' as madv'))
+                        ->wherein('mapc',['pccovu','pcudn','pctn'])
+                        ->get();
+                    dmphucap_thaisan::insert($model_dmpc->toarray());
                 }
 
             }

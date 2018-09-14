@@ -170,6 +170,12 @@ Route::group(['prefix'=>'danh_muc'],function(){
         Route::get('del/{id}','dmtieumuc_defaultController@destroy');
         Route::get('get','dmtieumuc_defaultController@getinfo');
     });
+
+    Route::group(['prefix'=>'thai_san'],function(){
+        Route::get('danh_sach','dmphucap_thaisanController@index');
+        Route::post('store','dmphucap_thaisanController@store');
+        Route::get('del/{id}','dmphucap_thaisanController@destroy');
+    });
 });
 
 Route::group(['prefix'=>'nghiep_vu'],function(){

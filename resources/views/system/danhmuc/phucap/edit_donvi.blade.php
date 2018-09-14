@@ -55,7 +55,7 @@
                             <div class="col-md-4">
                                 <div class="form-group">
                                     <label class="form-control-label">Tên phụ cấp<span class="require">*</span></label>
-                                    {!!Form::text('tenpc', null, array('id' => 'tenpc','class' => 'form-control','required'=>'required'))!!}
+                                    {!!Form::text('tenpc', null, array('id' => 'tenpc','class' => 'form-control','readonly'))!!}
                                 </div>
                             </div>
 
