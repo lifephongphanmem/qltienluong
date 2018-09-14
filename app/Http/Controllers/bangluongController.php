@@ -360,10 +360,15 @@ class bangluongController extends Controller
                 if($thaisan){
                     $cb->tencanbo = $cb->tencanbo . '(nghỉ thai sản)';
                     $hesots = 0;
+                    $ttts = 0;
                     foreach($a_ts as $val){
-                        $hesots += $cb->$val;
+                        if($cb->$val > 10000){//sô tiền
+                            $ttts += $ttts;
+                        }else{
+                            $hesots += $cb->$val;
+                        }
                     }
-                    $cb->ttl = round($inputs['luongcoban'] * $hesots);
+                    $cb->ttl = round($inputs['luongcoban'] * $hesots + $ttts);
                     $cb->congtac = 'THAISAN';
                 }else {
                     $cb->ttl = round($inputs['luongcoban'] * $ths + $tt);
