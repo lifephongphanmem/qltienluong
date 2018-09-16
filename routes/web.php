@@ -327,7 +327,8 @@ Route::group(['prefix'=>'chuc_nang'],function(){
         Route::post('store_truylinh','bangluongController@store_truylinh');
         Route::post('store_truc','bangluongController@store_truc');
 
-        Route::get('/maso={mabl}','bangluongController@show');
+        Route::get('bang_luong','bangluongController@show');
+        //Route::get('/maso={mabl}','bangluongController@show');
         Route::get('in/maso={mabl}','bangluongController@inbangluong');
         Route::get('inbangluong/maso={mabl}','bangluongController@inbangluong_sotien');
         Route::get('inmau3/maso={mabl}','bangluongController@inbangluongmau3'); //mẫu làm theo y.c lạng sơn

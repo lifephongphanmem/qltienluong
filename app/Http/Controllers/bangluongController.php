@@ -761,7 +761,44 @@ class bangluongController extends Controller
             return view('errors.notlogin');
     }
 
-    function show($mabl)
+    function show(Request $request)
+    {
+        if (Session::has('admin')) {
+            $inputs = $request->all();
+
+            $m_bl = bangluong::select('thang', 'nam', 'mabl','phanloai')->where('mabl', $inputs['mabl'])->first();
+            if($m_bl->phanloai == 'TRUC'){
+                $model = bangluong_truc::where('mabl', $inputs['mabl'])->get();
+                return view('manage.bangluong.bangluong_truc')
+                    ->with('furl', '/chuc_nang/bang_luong/')
+                    ->with('model', $model)
+                    ->with('m_bl', $m_bl)
+                    ->with('pageTitle', 'Bảng lương chi tiết');
+            }else{
+                $model = bangluong_ct::where('mabl', $inputs['mabl'])->get();
+            }
+            if($inputs['mapb'] != ''){
+                $model = $model->where('mapb',$inputs['mapb']);
+            }
+            //getPhongBan()
+            $dmchucvucq = dmchucvucq::all('tencv', 'macvcq')->toArray();
+            $model_cb = hosocanbo::where('madv', session('admin')->madv)->get();
+            foreach ($model as $hs) {
+                $cb = $model_cb->where('macanbo', $hs->macanbo)->first();
+                $hs->tencanbo = count($cb) > 0 ? $cb->tencanbo : '';
+                $hs->tencv = getInfoChucVuCQ($hs, $dmchucvucq);
+            }
+            return view('manage.bangluong.bangluong')
+                ->with('furl', '/chuc_nang/bang_luong/')
+                ->with('model', $model)
+                ->with('m_bl', $m_bl)
+                ->with('inputs', $inputs)
+                ->with('pageTitle', 'Bảng lương chi tiết');
+        } else
+            return view('errors.notlogin');
+    }
+
+    function show_cu($mabl)
     {
         if (Session::has('admin')) {
             $m_bl = bangluong::select('thang', 'nam', 'mabl','phanloai')->where('mabl', $mabl)->first();
@@ -812,7 +849,8 @@ class bangluongController extends Controller
         if (Session::has('admin')) {
             $model = bangluong_ct::find($id);
             $model->delete();
-            return redirect('/chuc_nang/bang_luong/maso='.$model->mabl);
+            return redirect('/chuc_nang/bang_luong/bang_luong?mabl='.$model->mabl.'&mapb='.$model->mapb);
+            //return redirect('/chuc_nang/bang_luong/maso='.$model->mabl);
         } else
             return view('errors.notlogin');
     }
@@ -962,7 +1000,7 @@ class bangluongController extends Controller
 
             //dd($inputs);
             $model->update($inputs);
-            return redirect('/chuc_nang/bang_luong/maso='.$model->mabl);
+            return redirect('/chuc_nang/bang_luong/bang_luong?mabl='.$model->mabl.'&mapb='.$model->mapb);
 
 
         } else
@@ -1006,7 +1044,7 @@ class bangluongController extends Controller
 
             //dd($inputs);
             $model->update($inputs);
-            return redirect('/chuc_nang/bang_luong/maso='.$model->mabl);
+            return redirect('/chuc_nang/bang_luong/bang_luong?mabl='.$model->mabl.'&mapb='.$model->mapb);
 
 
         } else

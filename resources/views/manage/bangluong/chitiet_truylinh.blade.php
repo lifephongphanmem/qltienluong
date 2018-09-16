@@ -250,8 +250,8 @@
                         <div style="text-align: center;">
 
                             <button type="submit" class="btn btn-default">Hoàn thành <i class="fa fa-save mlx"></i></button>
-
-                            <a href="{{url('/chuc_nang/bang_luong/maso='.$model->mabl)}}" class="btn btn-default"><i class="fa fa-reply mlx"></i> Quay lại</a>
+                            <a href="{{url('/chuc_nang/bang_luong/bang_luong?mabl='.$model->mabl.'&mapb='.$model->mapb)}}" class="btn btn-default"><i class="fa fa-reply mlx"></i> Quay lại</a>
+                            <!--a href="{{url('/chuc_nang/bang_luong/maso='.$model->mabl)}}" class="btn btn-default"><i class="fa fa-reply mlx"></i> Quay lại</a-->
                         </div>
                     {!! Form::close() !!}
                 </div>

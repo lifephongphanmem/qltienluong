@@ -37,6 +37,16 @@
                     <div class="actions"></div>
                 </div>
                 <div class="portlet-body form-horizontal">
+                    <div class="row">
+                        <div class="form-group">
+                            <label class="control-label col-md-offset-1 col-md-2" style="text-align: right">Khối(tổ) công tác </label>
+                            <div class="col-md-6">
+                                {!! Form::select('mapb',getPhongBan(),$inputs['mapb'],array('id' => 'mapb', 'class' => 'form-control'))!!}
+                            </div>
+
+                        </div>
+                    </div>
+
                     <table id="sample_3" class="table table-hover table-striped table-bordered" style="min-height: 230px">
                         <thead>
                             <tr>
@@ -81,81 +91,21 @@
             </div>
         </div>
     </div>
-
-    <!--Modal thông tin chi tiết -->
-    <div id="chitiet-modal" tabindex="-1" role="dialog" aria-hidden="true" class="modal fade">
-        <form id="frmADD" method="GET" action="{{url('/chucnang/luong/create')}}" accept-charset="UTF-8">
-            <div class="modal-dialog modal-content">
-                <div class="modal-header modal-header-primary">
-                    <button type="button" data-dismiss="modal" aria-hidden="true" class="close">&times;</button>
-                    <h4 id="modal-header-primary-label" class="modal-title">Tạo bảng lương</h4>
-                </div>
-                <div class="modal-body">
-                    <div class="form-horizontal">
-                        <div class="form-group">
-                            <label class="col-md-4 control-label"> Tháng<span class="require">*</span></label>
-                            <div class="col-md-8">
-                                {!! Form::select(
-                                'thang',
-                                array(
-                                '01' => '01',
-                                '02' => '02',
-                                '03' => '03',
-                                '04' => '04',
-                                '05' => '05',
-                                '06' => '06',
-                                '07' => '07',
-                                '08' => '08',
-                                '09' => '09',
-                                '10' => '10',
-                                '11' => '11',
-                                '12' => '12',
-                                ),null,
-                                array('id' => 'thang', 'class' => 'form-control'))
-                                !!}
-                            </div>
-                        </div>
-
-                        <div class="form-group">
-                            <label class="col-md-4 control-label"> Năm<span class="require">*</span></label>
-                            <div class="col-md-8">
-                                {!! Form::select(
-                                'nam',
-                                array(
-                                '2015' => '2015',
-                                '2016' => '2016',
-                                '2017' => '2017'
-                                ),null,
-                                array('id' => 'nam', 'class' => 'form-control'))
-                                !!}
-                            </div>
-                        </div>
-
-                        <div class="form-group">
-                            <label class="col-md-4 control-label"> Nội dung</label>
-                            <div class="col-md-8">
-                                {!! Form::textarea('noidung',null,array('id' => 'noidung', 'class' => 'form-control','rows'=>'3'))!!}
-                            </div>
-                        </div>
-
-                        <input type="hidden" id="id_ct" name="id_ct"/>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" data-dismiss="modal" class="btn btn-default">Hủy thao tác</button>
-                    <button type="submit" id="submit" name="submit" value="submit" class="btn btn-primary">Đồng ý</button>
-                </div>
-            </div>
-        </form>
-    </div>
     <script>
-        function add(){
-            $('#thang').val('');
-            $('#nam').val('');
-            $('#noidung').val('');
-            $('#id_ct').val(0);
-            $('#chitiet-modal').modal('show');
+        function getLink(){
+            var mapb = $('#mapb').val();
+            var mabl = '{{$m_bl->mabl}}';
+            return '/chuc_nang/bang_luong/bang_luong?mabl='+ mabl +'&mapb=' + mapb;
         }
+
+        $(function(){
+            $('#mapb').change(function() {
+                window.location.href = getLink();
+            });
+
+        })
+
+
     </script>
 
     @include('includes.modal.delete')

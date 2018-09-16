@@ -77,7 +77,7 @@
                                                 <button type="button" onclick="edit('{{$value->mabl}}','{{$value->phanloai}}')" class="btn btn-default btn-xs mbs">
                                                     <i class="fa fa-edit"></i>&nbsp; Sửa</button>
 
-                                                <a href="{{url($furl.'maso='.$value->mabl)}}" class="btn btn-default btn-xs mbs">
+                                                <a href="{{url($furl.'bang_luong?mabl='.$value->mabl.'&mapb=')}}" class="btn btn-default btn-xs mbs">
                                                     <i class="fa fa-th-list"></i>&nbsp; Chi tiết</a>
 
                                                 <button type="button" onclick="cfDel('{{$furl.'del/'.$value->id}}')" class="btn btn-danger btn-xs mbs" data-target="#delete-modal-confirm" data-toggle="modal">
