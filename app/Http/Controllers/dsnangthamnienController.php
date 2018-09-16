@@ -59,12 +59,14 @@ class dsnangthamnienController extends Controller
                 $cb->ngaytu = new Carbon($cb->tnndenngay);
                 $date = new Carbon($cb->tnndenngay);
                 $cb->ngayden = $date->addYear('1');
-                $cb->hesott = ($cb->vuotkhung + $cb->heso + $cb->pccv) / 100;
+                $cb->heso = ($cb->vuotkhung + $cb->heso + $cb->pccv) / 100;
                 //kiểm tra truy lĩnh nếu ngày xét = ngày nâng lương = > ko truy lĩnh
                 if($inputs['ngayxet']>$cb->tnndenngay) {
                     $cb->truylinhtungay = new Carbon($cb->tnndenngay);
+                    $cb->truylinhdenngay = new Carbon($inputs['ngayxet']);
                 }else{
                     $cb->truylinhtungay = null;
+                    $cb->truylinhdenngay = null;
                 }
                 dsnangthamnien_ct::create($cb->toarray());
             }
@@ -124,7 +126,8 @@ class dsnangthamnienController extends Controller
         if (Session::has('admin')) {
             $inputs = $request->all();
             $inputs['truylinhtungay'] = getDateTime($inputs['truylinhtungay']);
-            $inputs['hesott'] = getDbl($inputs['hesott']);
+            $inputs['truylinhdenngay'] = getDateTime($inputs['truylinhdenngay']);
+            $inputs['heso'] = chkDbl($inputs['heso']);
             $model = dsnangthamnien_ct::where('manl',$inputs['manl'])->where('macanbo',$inputs['macanbo'])->first();
             $model->update($inputs);
             return redirect('chuc_nang/tham_nien/maso='.$model->manl);
@@ -141,16 +144,17 @@ class dsnangthamnienController extends Controller
                 $hoso->tnntungay = $canbo->ngaytu;
                 $hoso->tnndenngay = $canbo->ngayden;
                 $hoso->save();
-                if (isset($canbo->truylinhtungay) && $canbo->hesott > 0) {
+                if (isset($canbo->truylinhtungay) && $canbo->heso > 0) {
                     $truylinh = new hosotruylinh();
                     $truylinh->maso = session('admin')->madv . '_' . getdate()[0];
                     $truylinh->macanbo = $canbo->macanbo;
                     $truylinh->tencanbo = $hoso->tencanbo;
                     $truylinh->ngaytu = $canbo->truylinhtungay;
+                    $truylinh->ngayden = $canbo->truylinhdenngay;
                     $truylinh->madv = session('admin')->madv;
                     $truylinh->noidung = 'Truy lĩnh nâng thâm niên nghề';
                     //$truylinh->msngbac = $canbo->msngbac;
-                    $truylinh->hesott = $canbo->hesott;
+                    $truylinh->heso = $canbo->heso;
                     $truylinh->save();
                 }
                 //Lưu thông tin vào hồ sơ cán bộ

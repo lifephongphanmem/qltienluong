@@ -51,6 +51,13 @@
 
                             <div class="col-md-3">
                                 <div class="form-group">
+                                    <label class="control-label">Hệ số lương truy lĩnh</label>
+                                    {!!Form::text('heso', null, array('id' => 'heso','class' => 'form-control', 'data-mask'=>'fdecimal'))!!}
+                                </div>
+                            </div>
+
+                            <div class="col-md-3">
+                                <div class="form-group">
                                     <label class="control-label">Truy lĩnh từ ngày </label>
                                     {!! Form::input('date','truylinhtungay',null,array('id' => 'truylinhtungay', 'class' => 'form-control'))!!}
                                 </div>
@@ -58,10 +65,11 @@
 
                             <div class="col-md-3">
                                 <div class="form-group">
-                                    <label class="control-label">Hệ số lương truy lĩnh</label>
-                                    {!!Form::text('hesott', null, array('id' => 'hesott','class' => 'form-control', 'data-mask'=>'fdecimal'))!!}
+                                    <label class="control-label">Truy lĩnh đến ngày </label>
+                                    {!! Form::input('date','truylinhdenngay',null,array('id' => 'truylinhdenngay', 'class' => 'form-control'))!!}
                                 </div>
                             </div>
+
                         </div>
                     </div>
 

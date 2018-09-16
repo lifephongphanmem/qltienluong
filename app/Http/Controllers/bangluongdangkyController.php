@@ -547,7 +547,7 @@ class bangluongdangkyController extends Controller
         $mabl = $inputs['mabl'];
         $model = bangluongdangky_ct::where('mabl', $mabl)->get();
         $m_bl = bangluongdangky::select('thang', 'nam', 'mabl', 'madv', 'ngaylap', 'luongcoban')->where('mabl', $mabl)->first();
-        $m_dv = dmdonvi::where('madv', $m_bl->madv)->first();
+        //$m_dv = dmdonvi::where('madv', $m_bl->madv)->first();
         $dmchucvucq = getChucVuCQ(false);
         $sunghiep = array_column(hosocanbo::select('sunghiep', 'macanbo')->where('madv', $m_bl->madv)->get()->toArray(), 'sunghiep', 'macanbo');
         $nhomct = array_column(dmphanloaict::all('macongtac', 'mact')->toArray(), 'macongtac', 'mact');

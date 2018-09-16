@@ -58,7 +58,7 @@
                                         <td>{{$value->tencv}}</td>
                                         <td class="text-center">{{'Từ '.getDayVn($value->ngaytu).' đến '.getDayVn($value->ngayden)}}</td>
                                         <td class="text-center">{{$value->pctnn.'%'}}</td>
-                                        <td class="text-center">{{dinhdangsothapphan( $value->hesott,3)}}</td>
+                                        <td class="text-center">{{dinhdangsothapphan( $value->heso,5)}}</td>
                                         <td class="text-center">{{isset($value->truylinhtungay)? 'Từ '.getDayVn($value->truylinhtungay):''}}</td>
                                         <td>
 
