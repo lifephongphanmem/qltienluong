@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\dmchucvucq;
+use App\dmphucap_donvi;
 use App\dsnangluong;
 use App\dsnangluong_chitiet;
 use App\hosocanbo;
@@ -53,13 +54,6 @@ class dsnangluongController extends Controller
             })->get();
             $model_nhomngluong = nhomngachluong::all();
 
-            /*
-            $m_canbo = hosocanbo::select('macanbo','msngbac','bac','ngaytu','ngayden','msngbac','heso','hesott','vuotkhung',DB::raw("'".$inputs['manl']. "' as manl"),
-                    'pck','pccv','pckv','pcth','pcdh','pcld','pcudn','pctn','pctnn','pcdbn','pcvk','pckn','pccovu','pcdbqh','pctnvk','pcbdhdcu','pcdang','pcthni')
-                ->where('ngayden', '<', $inputs['ngayxet'])
-                ->where('theodoi',1)
-                ->where('madv', $madv)->get();
-             * */
             $m_canbo = hosocanbo::select('macanbo','msngbac','bac','ngaytu','ngayden','msngbac','heso','hesott','vuotkhung',DB::raw("'".$inputs['manl']. "' as manl"),
                     'pck','pccv','pckv','pcth','pcdh','pcld','pcudn','pctn','pctnn','pcdbn','pcvk','pckn','pccovu','pcdbqh','pctnvk','pcbdhdcu','pcdang','pcthni')
                 ->where('ngayden', '<=', $inputs['ngayxet'])
@@ -121,8 +115,10 @@ class dsnangluongController extends Controller
                     //kiểm tra truy lĩnh nếu ngày xét = ngày nâng lương = > ko truy lĩnh
                     if($inputs['ngayxet']>$cb->ngayden) {
                         $cb->truylinhtungay = new Carbon($cb->ngayden);
+                        $cb->truylinhdenngay = new Carbon($inputs['ngayxet']);
                     }else{
                         $cb->truylinhtungay = null;
+                        $cb->truylinhdenngay = null;
                     }
 
                     //$cb->truylinhdenngay = $inputs['ngayxet'];
@@ -139,9 +135,11 @@ class dsnangluongController extends Controller
                     //kiểm tra truy lĩnh nếu ngày xét = ngày nâng lương = > ko truy lĩnh
                     if($inputs['ngayxet']>$cb->ngayden) {
                         $cb->truylinhtungay = new Carbon($cb->ngayden);
+                        $cb->truylinhdenngay = new Carbon($inputs['ngayxet']);
                         $cb->hesott = $nhomngluong->hesochenhlech;
                     }else{
                         $cb->truylinhtungay = null;
+                        $cb->truylinhdenngay = null;
                     }
                     $date = new Carbon($cb->ngayden);
                     $cb->ngayden = $date->addYear($nhomngluong->namnb);
@@ -226,7 +224,15 @@ class dsnangluongController extends Controller
     function store_detail(Request $request){
         if (Session::has('admin')) {
             $inputs = $request->all();
+            $inputs['truylinhdenngay'] = getDateTime($inputs['truylinhdenngay']);
             $inputs['truylinhtungay'] = getDateTime($inputs['truylinhtungay']);
+            $model_pc = dmphucap_donvi::where('madv', session('admin')->madv)->get();
+            foreach($model_pc as $pc){
+                if(isset($inputs[$pc->mapc])){
+                    $inputs[$pc->mapc] = chkDbl($inputs[$pc->mapc]);
+                }
+            }
+
             $model = dsnangluong_chitiet::where('manl',$inputs['manl'])->where('macanbo',$inputs['macanbo'])->first();
             $model->update($inputs);
            return redirect('chuc_nang/nang_luong/maso='.$model->manl);
@@ -253,10 +259,11 @@ class dsnangluongController extends Controller
                     $truylinh->macanbo = $canbo->macanbo;
                     $truylinh->tencanbo = $hoso->tencanbo;
                     $truylinh->ngaytu = $canbo->truylinhtungay;
+                    $truylinh->ngayden = $canbo->truylinhdenngay;
                     $truylinh->madv = session('admin')->madv;
                     $truylinh->noidung = 'Truy lĩnh nâng lương ngạch bậc';
                     $truylinh->msngbac = $canbo->msngbac;
-                    $truylinh->hesott = $canbo->hesott;
+                    $truylinh->heso = $canbo->hesott; //hệ số truy lĩnh đều đưa vào hệ số
                     $truylinh->save();
                 }
                 //Lưu thông tin vào hồ sơ cán bộ
