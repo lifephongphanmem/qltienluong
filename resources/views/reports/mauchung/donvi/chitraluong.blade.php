@@ -87,13 +87,13 @@
         <th>Phụ cấp</br>vượt khung</th>
         <th>Phụ cấp</br>khu vực</th>
         <th>Phụ cấp</br>chức vụ</th>
-        <th>Phụ cấp</br>thâm niên</br>vượt khung</th>
         <th>Phụ cấp</br>ưu đãi ngành</th>
         <th>Phụ cấp</br>thu hút</th>
         <th>Phụ cấp</br>công tác lâu năm</th>
         <th>Phụ cấp</br>công vụ</th>
         <th>Phụ cấp</br>công tác Đảng</th>
         <th>Phụ cấp</br>thâm niên nghề</th>
+        <th>Phụ cấp</br>trách nhiệm</th>
         <th>Phụ cấp</br>khác</th>
 
         <th>BHXH</th>
@@ -130,13 +130,13 @@
                 <td>{{dinhdangso($ct->vuotkhung)}}</td>
                 <td>{{dinhdangso($ct->pckv)}}</td>
                 <td>{{dinhdangso($ct->pccv)}}</td>
-                <td>{{dinhdangso($ct->pctnvk)}}</td>
                 <td>{{dinhdangso($ct->pcudn)}}</td>
                 <td>{{dinhdangso($ct->pcth)}}</td>
                 <td>{{dinhdangso($ct->pcthni)}}</td>
                 <td>{{dinhdangso($ct->pccovu)}}</td>
                 <td>{{dinhdangso($ct->pcdang)}}</td>
-                <td>{{dinhdangso($ct->pcthni)}}</td>
+                <td>{{dinhdangso($ct->pctnn)}}</td>
+                <td>{{dinhdangso($ct->pctn)}}</td>
                 <td>{{dinhdangso($ct->pck)}}</td>
 
                 <td>{{dinhdangso($ct->tongtl)}}</td>
@@ -159,13 +159,13 @@
             <td>{{dinhdangso($chitiet->sum('vuotkhung'))}}</td>
             <td>{{dinhdangso($chitiet->sum('pckv'))}}</td>
             <td>{{dinhdangso($chitiet->sum('pccv'))}}</td>
-            <td>{{dinhdangso($chitiet->sum('pctnvk'))}}</td>
             <td>{{dinhdangso($chitiet->sum('pcudn'))}}</td>
             <td>{{dinhdangso($chitiet->sum('pcth'))}}</td>
-            <td>{{dinhdangso($chitiet->sum('pctn'))}}</td>
+            <td>{{dinhdangso($chitiet->sum('pcthni'))}}</td>
             <td>{{dinhdangso($chitiet->sum('pccovu'))}}</td>
             <td>{{dinhdangso($chitiet->sum('pcdang'))}}</td>
-            <td>{{dinhdangso($chitiet->sum('pcthni'))}}</td>
+            <td>{{dinhdangso($chitiet->sum('pctnn'))}}</td>
+            <td>{{dinhdangso($chitiet->sum('pctn'))}}</td>
             <td>{{dinhdangso($chitiet->sum('pck'))}}</td>
             <td>{{dinhdangso($chitiet->sum('tongtl'))}}</td>
             <td>{{dinhdangso($chitiet->sum('stbhxh_dv'))}}</td>
@@ -184,13 +184,13 @@
         <td>{{dinhdangso($model_tonghop_chitiet->sum('vuotkhung'))}}</td>
         <td>{{dinhdangso($model_tonghop_chitiet->sum('pckv'))}}</td>
         <td>{{dinhdangso($model_tonghop_chitiet->sum('pccv'))}}</td>
-        <td>{{dinhdangso($model_tonghop_chitiet->sum('pctnvk'))}}</td>
         <td>{{dinhdangso($model_tonghop_chitiet->sum('pcudn'))}}</td>
         <td>{{dinhdangso($model_tonghop_chitiet->sum('pcth'))}}</td>
-        <td>{{dinhdangso($model_tonghop_chitiet->sum('pctn'))}}</td>
+        <td>{{dinhdangso($model_tonghop_chitiet->sum('pcthni'))}}</td>
         <td>{{dinhdangso($model_tonghop_chitiet->sum('pccovu'))}}</td>
         <td>{{dinhdangso($model_tonghop_chitiet->sum('pcdang'))}}</td>
-        <td>{{dinhdangso($model_tonghop_chitiet->sum('pcthni'))}}</td>
+        <td>{{dinhdangso($model_tonghop_chitiet->sum('pctnn'))}}</td>
+        <td>{{dinhdangso($model_tonghop_chitiet->sum('pctn'))}}</td>
         <td>{{dinhdangso($model_tonghop_chitiet->sum('pck'))}}</td>
         <td>{{dinhdangso($model_tonghop_chitiet->sum('tongtl'))}}</td>
         <td>{{dinhdangso($model_tonghop_chitiet->sum('stbhxh_dv'))}}</td>

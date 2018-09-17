@@ -2212,6 +2212,97 @@ class bangluongController extends Controller
             return view('errors.notlogin');
     }
 
+    public function printf_mau08(Request $request)
+    {
+        if (Session::has('admin')) {
+            $inputs = $request->all();
+            $inputs['mabl'] = $inputs['mabl_mau8'];
+            $inputs['mapb'] = $inputs['mapb_mau8'];
+            $inputs['macvcq'] = $inputs['macvcq_mau8'];
+            $inputs['mact'] = $inputs['mact_mau8'];
+            //$inputs['cochu'] = $inputs['cochu_mau1'];
+            $model = $this->getBangLuong($inputs)->wherein('phanloai', ['CVCHINH','KHONGCT']);
+            $model_st = $this->getBangLuong($inputs,1)->wherein('phanloai', ['CVCHINH','KHONGCT']);
+            //dd($inputs);
+            $mabl = $inputs['mabl'];
+            $m_bl = bangluong::select('thang', 'nam', 'mabl', 'madv', 'ngaylap','luongcoban')->where('mabl', $mabl)->first();
+            $m_dv = dmdonvi::where('madv', $m_bl->madv)->first();
+
+            $model_congtac = dmphanloaict::select('mact', 'tenct')
+                ->wherein('mact', function ($query) use ($mabl) {
+                    $query->select('mact')->from('bangluong_ct')->where('mabl', $mabl);
+                })->get();
+            $model_hoso = hosocanbo::where('madv', $m_bl->madv)->get();
+            $model_ts =array_column( dmphucap_thaisan::select('mapc')->where('madv', $m_bl->madv)->get()->toarray(),'mapc');
+            $a_goc = array('hesott');
+            $model_pc = dmphucap_donvi::where('madv', $m_bl->madv)->where('phanloai', '<', '3')->wherenotin('mapc', $a_goc)->get();
+            $a_phucap = array();
+            $col = 0;
+            foreach ($model_pc as $ct) {
+                if ($model->sum($ct->mapc) > 0) {
+                    $a_phucap[$ct->mapc] = $ct->report;
+                    $col++;
+                }
+            }
+            foreach ($model as $ct) {
+                if ($ct->phanloai == 'KHONGCT') {
+                    $hoso = $model_hoso->where('macanbo', $ct->macanbo)->first();
+                    $ct->tencanbo = count($hoso) > 0 ? $hoso->tencanbo : null;
+                }
+
+                if ($ct->congtac == 'THAISAN') {
+                    foreach ($model_pc as $pc) {
+                        if (!in_array($pc->mapc,$model_ts)) {
+                            $mapc = $pc->mapc;
+                            $ct->tonghs = $ct->tonghs - $ct->$mapc;
+                            $ct->$mapc = 0;
+                        }
+                    }
+
+                }
+            }
+
+            foreach ($model_st as $ct) {
+                if ($ct->congtac == 'THAISAN') {
+                    foreach ($model_pc as $pc) {
+                        if (!in_array($pc->mapc,$model_ts)) {
+                            $mapc = $pc->mapc;
+                            $ct->tonghs = $ct->tonghs - $ct->$mapc;
+                            $ct->$mapc = 0;
+                        }
+                    }
+
+                }
+            }
+
+            //dd($model->where('congtac','<>','CONGTAC'));
+            $thongtin = array('nguoilap' => $m_bl->nguoilap,
+                'thang' => $m_bl->thang,
+                'nam' => $m_bl->nam,
+                'ngaylap'=>$m_bl->ngaylap,'phanloai'=>$m_bl->phanloai,
+                'cochu' => $inputs['cochu'],
+                'luongcb' => $m_bl->luongcoban);
+            //xử lý ẩn hiện cột phụ cấp => biết tổng số cột hiện => colspan trên báo cáo
+            //$a_phucapbc = get            ColPhuCap_BaoCao();
+
+
+
+
+            //dd($model_st);
+            return view('reports.bangluong.donvi.mau08')
+                ->with('model', $model->sortBy('stt'))
+                ->with('model_st', $model_st)
+                ->with('model_pb', getPhongBan())
+                ->with('m_dv', $m_dv)
+                ->with('thongtin', $thongtin)
+                ->with('col', $col)
+                ->with('model_congtac', $model_congtac)
+                ->with('a_phucap', $a_phucap)
+                ->with('pageTitle', 'Bảng lương chi tiết');
+        } else
+            return view('errors.notlogin');
+    }
+
     public function printf_mauds(Request $request){
         if (Session::has('admin')) {
             $inputs = $request->all();

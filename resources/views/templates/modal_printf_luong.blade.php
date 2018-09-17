@@ -698,7 +698,6 @@
 </div>
 {!! Form::close() !!}
 
-
 <!--Mẫu 7 -->
 {!! Form::open(['url'=>(isset($furl)?$furl : '').'mau06','method'=>'post' ,'target'=>'_blank', 'files'=>true, 'id' => 'printf_mau7']) !!}
 <div id="mau7-modal" tabindex="-1" role="dialog" aria-hidden="true" class="modal fade">
@@ -759,6 +758,66 @@
 </div>
 {!! Form::close() !!}
 
+<!--Mẫu 8 -->
+{!! Form::open(['url'=>(isset($furl)?$furl : '').'mau08','method'=>'post' ,'target'=>'_blank', 'files'=>true, 'id' => 'printf_mau8']) !!}
+<div id="mau8-modal" tabindex="-1" role="dialog" aria-hidden="true" class="modal fade">
+    <div class="modal-dialog modal-content">
+        <div class="modal-header modal-header-primary">
+            <button type="button" data-dismiss="modal" aria-hidden="true" class="close">&times;</button>
+            <h4 id="header-inbl" class="modal-title">In bảng lương</h4>
+        </div>
+        <div class="modal-body">
+            <div class="form-horizontal">
+                <div class="row">
+                    <div class="col-md-12">
+                        <label class="control-label">Khối/Tổ công tác</label>
+                        <select name="mapb_mau8" id="mapb_mau8" class="form-control select2me">
+                            @foreach(getPhongBan(true) as $key=>$val)
+                                <option value="{{$key}}">{{$val}}</option>
+                            @endforeach
+                        </select>
+                    </div>
+
+                    <div class="col-md-12">
+                        <label class="control-label">Chức vụ</label>
+                        {!!Form::select('macvcq_mau8',getChucVuCQ(true), null, array('id' => 'macvcq_mau8','class' => 'form-control select2me'))!!}
+                    </div>
+
+                    <div class="col-md-12">
+                        <label class="control-label">Phân loại công tác</label>
+                        <select class="form-control select2me" name="mact_mau8" id="mact_mau8">
+                            <option value="">-- Tất cả các phân loại công tác --</option>
+                            @foreach($model_nhomct as $kieuct)
+                                <optgroup label="{{$kieuct->tencongtac}}">
+                                    <?php
+                                    $mode_ct=$model_tenct->where('macongtac',$kieuct->macongtac);
+                                    ?>
+                                    @foreach($mode_ct as $ct)
+                                        <option value="{{$ct->mact}}">{{$ct->tenct}}</option>
+                                    @endforeach
+                                </optgroup>
+                            @endforeach
+                        </select>
+                    </div>
+
+                    <div class="col-md-12">
+                        <label class="control-label">Cỡ chữ</label>
+                        {!!Form::select('cochu',getCoChu(), 10, array('id' => 'cochu','class' => 'form-control select2me'))!!}
+                    </div>
+                </div>
+            </div>
+
+            <input type="hidden" id="mabl_mau8" name="mabl_mau8"/>
+        </div>
+        <div class="modal-footer">
+            <button type="button" data-dismiss="modal" class="btn btn-default">Hủy thao tác</button>
+            <button type="submit" data-dismiss="modal" class="btn btn-success" onclick="ClickBC8()">Đồng ý</button>
+            <button type="submit" data-dismiss="modal" class="btn btn-primary" onclick="ClickBC8_excel()">Xuất Excel</button>
+        </div>
+    </div>
+</div>
+{!! Form::close() !!}
+
 <script>
     function inblm1(){
         $('#mabl_mau1').val($('#mabl_in').val());
@@ -788,6 +847,12 @@
         $('#mabl_mau7').val($('#mabl_in').val());
         $('#mau7-modal').modal('show');
     }
+
+    function inblm8(){
+        $('#mabl_mau8').val($('#mabl_in').val());
+        $('#mau8-modal').modal('show');
+    }
+    
     function inds(){
         $('#mabl_mauds').val($('#mabl_in').val());
         $('#mauds-modal').modal('show');
@@ -840,6 +905,10 @@
 
         $('#printf_mau7 :submit').click(function(){
             $('#mau7-modal').modal('hide');
+        });
+
+        $('#printf_mau8 :submit').click(function(){
+            $('#mau8-modal').modal('hide');
         });
 
         $('#printf_maubh :submit').click(function(){
@@ -940,6 +1009,17 @@
         $('#printf_mau7').submit();
     }
 
+    function ClickBC8() {
+        var url = '{{(isset($furl)?$furl : '').'mau08'}}'
+        $('#printf_mau8').attr('action', url);
+        $('#printf_mau8').submit();
+    }
+    function ClickBC8_excel(){
+        var url = '{{(isset($furl)?$furl : '').'mau08_excel'}}'
+        $('#printf_mau8').attr('action',url);
+        $('#printf_mau8').submit();
+    }
+    
     function ClickBCbh() {
         var url = '{{(isset($furl)?$furl : '').'maubh'}}'
         $('#printf_maubh').attr('action', url);

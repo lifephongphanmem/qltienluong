@@ -18,6 +18,7 @@ class tonghopluong_donvi_chitiet extends Model
         'macongtac',
         'mact',
         'luongcoban',
+        'soluong',
         'heso',
         'hesopc',
         'hesott',

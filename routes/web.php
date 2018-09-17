@@ -350,6 +350,7 @@ Route::group(['prefix'=>'chuc_nang'],function(){
         Route::post('mau05','bangluongController@printf_mau05');
         Route::post('mau06','bangluongController@printf_mau06');
         Route::post('mau07','bangluongController@printf_mau07');
+        Route::post('mau08','bangluongController@printf_mau08');
         Route::post('mauds','bangluongController@printf_mauds');
         Route::post('maubh','bangluongController@printf_maubh');
         Route::post('maudbhdnd','bangluongController@printf_maudbhdnd');
@@ -366,6 +367,7 @@ Route::group(['prefix'=>'chuc_nang'],function(){
         Route::post('mau04_excel','bangluongController@printf_mau04_excel');
         Route::post('mau05_excel','bangluongController@printf_mau05_excel');
         Route::post('mau07_excel','bangluongController@printf_mau07_excel');
+        Route::post('mau08_excel','bangluongController@printf_mau08_excel');
         Route::post('mau06_excel','bangluongController@printf_mau06_excel');
         Route::post('mauds_excel','bangluongController@printf_mauds_excel');
         Route::post('maubh_excel','bangluongController@printf_maubh_excel');
