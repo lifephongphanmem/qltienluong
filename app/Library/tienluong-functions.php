@@ -295,8 +295,13 @@ function getLinhVucHoatDong($val_null = true){
 
 function getNguonKP($val_null = true){
     $model = array_column(App\dmnguonkinhphi::all()->toArray(),'tennguonkp','manguonkp');
+
     if($val_null){
-        return array_merge(array(''=>'--Chọn nguồn kinh phí--'),$model);
+        $a_kq = array(''=>'--Chọn nguồn kinh phí--');
+        foreach($model as $key=>$val){
+            $a_kq[$key]=$val;
+        }
+        return $a_kq;
     }
     return $model;
 }

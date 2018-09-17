@@ -495,6 +495,7 @@
                         $('#nam_truylinh').val(data.nam);
                         $('#noidung_truylinh').val(data.noidung);
                         $('#manguonkp_truylinh').val(data.manguonkp);
+                        $('#luongcoban_truylinh').val(data.luongcoban);
                         $('#mabl_truylinh').val(data.mabl);
                         $('#phanloai_truylinh').val(data.phanloai);
                         $('#ngaylap_truylinh').val(data.ngaylap);
@@ -520,6 +521,7 @@
                         $('#noidung').val(data.noidung);
                         $('#manguonkp').val(data.manguonkp);
                         $('#phantramhuong').val(data.phantramhuong);
+                        $('#luongcoban').val(data.luongcoban);
                         $('#mabl').val(data.mabl);
                         $('#phanloai').val(data.phanloai);
                         $('#ngaylap').val(data.ngaylap);

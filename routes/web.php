@@ -896,8 +896,6 @@ Route::group(['prefix'=>'he_thong'],function(){
         Route::get('bao_hiem','dmphanloaicongtac_baohiemController@index');
         Route::get('update_bh','dmphanloaicongtac_baohiemController@update');
         Route::get('get_bh','dmphanloaicongtac_baohiemController@getinfo');
-        //Route::get('phu_cap','phanloaiphucapController@index');
-        //Route::patch('update_pc','phanloaiphucapController@update');
     });
 
     Route::group(['prefix'=>'quan_tri'],function(){
@@ -936,6 +934,17 @@ Route::group(['prefix'=>'he_thong'],function(){
         Route::get('add','dmchucvucqController@store');
         Route::get('update','dmchucvucqController@update');
         Route::get('get','dmchucvucqController@getinfo');
+    });
+
+    Route::group(['prefix'=>'dinh_muc'],function(){
+        Route::get('danh_sach','nguonkinhphi_dinhmucController@index');
+        Route::get('get','nguonkinhphi_dinhmucController@getinfo');
+        Route::get('update','nguonkinhphi_dinhmucController@update');
+
+        Route::get('del/{id}','dmphucapController@destroy');
+        Route::get('create','dmphucapController@create');
+        Route::get('edit','dmphucapController@edit');
+        Route::post('store','dmphucapController@store');
     });
 });
 

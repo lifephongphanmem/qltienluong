@@ -33,6 +33,7 @@
         $('#lvhd').val('{{$model->lvhd}}').trigger('change');
         $('#sunghiep').val('{{$model->sunghiep}}').trigger('change');
         $('#mapb').val('{{$model->mapb}}').trigger('change');
+
     </script>
     @include('includes.script.scripts')
 

@@ -11,6 +11,7 @@ class hosocanbo_kiemnhiem extends Model
         'id',
         'phanloai',
         'mapb',
+        'manguonkp',
         'mact',
         'baohiem',
         'macvcq',

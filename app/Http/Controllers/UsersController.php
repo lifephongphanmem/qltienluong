@@ -4,12 +4,14 @@ namespace App\Http\Controllers;
 
 use App\dmdonvi;
 use App\dmdonvibaocao;
+use App\dmnguonkinhphi;
 use App\dmphanloaicongtac;
 use App\dmphanloaicongtac_baohiem;
 use App\dmphanloaict;
 use App\dmphucap;
 use App\dmphucap_donvi;
 use App\dmphucap_thaisan;
+use App\nguonkinhphi_dinhmuc;
 use App\Users;
 use Illuminate\Foundation\Auth\User;
 use Illuminate\Http\Request;
@@ -219,6 +221,34 @@ class UsersController extends Controller
                         ->wherein('mapc',['pccovu','pcudn','pctn'])
                         ->get();
                     dmphucap_thaisan::insert($model_dmpc->toarray());
+                }
+
+                //định mức nguồn kinh phí
+                $model_dmn = nguonkinhphi_dinhmuc::where('madv', $ttuser->madv)->get();
+                if (count($model_dmn) == 0) {
+                    $maso = getdate()[0];
+                    $model_nguon = dmnguonkinhphi::select('manguonkp')->get();
+                    foreach($model_nguon as $nguon){
+                        $maso++;
+                        $nguon->maso = $ttuser->madv . '_' . $maso;
+                        $nguon->madv = $ttuser->madv;
+                        switch($nguon->manguonkp){
+                            case '13':{
+                                $nguon->luongcoban = 1300000;
+                                break;
+                            }
+                            case '14':{
+                                $nguon->luongcoban = 90000;
+                                break;
+                            }
+                            default:{
+                                $nguon->luongcoban = 1390000;
+                                break;
+                            }
+                        }
+                        nguonkinhphi_dinhmuc::insert($nguon->toarray());
+                    }
+
                 }
 
             }

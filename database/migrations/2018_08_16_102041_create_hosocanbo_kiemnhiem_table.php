@@ -17,6 +17,7 @@ class CreateHosocanboKiemnhiemTable extends Migration
             $table->increments('id');
             $table->string('phanloai', 50)->nullable();
             $table->string('mapb', 50)->nullable();
+            $table->string('manguonkp',50)->default('0');//nguồn kinh phí lấy lương (do combo nên 0=>tất cả)
             $table->string('macvcq', 50)->nullable();
             $table->string('macanbo', 50)->nullable();
             $table->double('heso')->default(0);

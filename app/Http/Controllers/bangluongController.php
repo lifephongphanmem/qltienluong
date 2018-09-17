@@ -172,19 +172,25 @@ class bangluongController extends Controller
             //Lấy danh sách cán bộ kiêm nhiệm
             $model_canbo_kn = hosocanbo_kiemnhiem::wherein('macanbo', function($qr){
                 $qr->select('macanbo')->from('hosocanbo')->where('madv',session('admin')->madv)->where('theodoi','<', '9')->get();
-            })->get();
+            })->wherein('manguonkp',[$inputs['manguonkp'],''])->get();
 
-
-            if (isset($inputs['linhvuc']) && $inputs['linhvuc'] != 'ALL') {
+            foreach ($m_cb as $canbo) {
                 //Dùng tìm kiếm các bộ nào phù hợp. Do lvhd là mảng nên pải lọc
-                foreach ($m_cb as $canbo) {
-                    $a_lv = explode(',', $canbo->lvhd);
-                    if (in_array($inputs['linhvuc'], $a_lv) || $canbo->lvhd == null) {
-                        $canbo->lvhd = $inputs['linhvuc'];
-                    }
+                /*
+                $a_lv = explode(',', $canbo->lvhd);
+
+                if (in_array($inputs['linhvuc'], $a_lv) || $canbo->lvhd == null) {
+                    $canbo->lvhd = $inputs['linhvuc'];
                 }
-                $m_cb = $m_cb->where('lvhd', $inputs['linhvuc']);
+                */
+                $a_nguon = explode(',', $canbo->manguonkp);
+                //nếu cán bộ ko set nguồn (null, '') hoặc trong nguồn thì sét luôn =  ma nguồn để tạo bang lương
+                if (in_array($inputs['manguonkp'], $a_nguon) || $canbo->manguonkp == null || $canbo->manguonkp == '') {
+                    $canbo->manguonkp = $inputs['manguonkp'];
+                }
             }
+            //$m_cb = $m_cb->where('lvhd', $inputs['linhvuc']);
+            $m_cb = $m_cb->where('manguonkp', $inputs['manguonkp']);
 
             $model_congtac = dmphanloaict::all();
             $model_phanloai = dmphanloaicongtac_baohiem::where('madv', session('admin')->madv)->get();

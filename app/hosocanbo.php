@@ -10,6 +10,7 @@ class hosocanbo extends Model
     protected $fillable = [
         'id',
         'stt',
+        'manguonkp',
         'mapb',
         'macvcq',
         'macvd',

@@ -17,6 +17,7 @@ class CreateHosocanboKiemnhiemTempTable extends Migration
             $table->increments('id');
             $table->string('phanloai', 50)->nullable();
             $table->string('mapb', 50)->nullable();
+            $table->string('manguonkp',50)->nullable();//nguồn kinh phí lấy lương
             $table->string('macvcq', 50)->nullable();
             $table->string('macanbo', 50)->nullable();
             $table->double('heso')->default(0);

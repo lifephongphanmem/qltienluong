@@ -223,13 +223,15 @@ class hosocanboController extends Controller
             $m_plnb = nhomngachluong::select('manhom','tennhom')->distinct()->get();
             $m_pln = ngachluong::select('tenngachluong','manhom','msngbac')->distinct()->get();
             $a_linhvuc = explode(',',$model->lvhd);
-
-            //dd($model);
+            $a_nguonkp = explode(',',$model->manguonkp);
             //lấy phụ cấp ở danh mục phụ cấp đơn vị mapc => tenform
             $model_pc = dmphucap_donvi::where('madv', session('admin')->madv)->get();
             $model_kn = hosocanbo_kiemnhiem::where('macanbo',$model->macanbo)->get();
             $a_pl = getPhanLoaiKiemNhiem();
             $a_cv = getChucVuCQ(false);
+
+
+
             foreach($model_kn as $ct) {
                 $ct->tenphanloai = isset($a_pl[$ct->phanloai]) ? $a_pl[$ct->phanloai] : '';
                 $ct->tenchucvu = isset($a_cv[$ct->macvcq]) ? $a_cv[$ct->macvcq] : '';
@@ -238,14 +240,12 @@ class hosocanboController extends Controller
                 ->with('model',$model)
                 ->with('type','edit')
                 ->with('model_dt',$model_dt)
-                //->with('m_pb',$m_pb)
-                //->with('m_cvcq',$m_cvcq)
-                //->with('m_cvd',$m_cvd)
                 ->with('model_kn',$model_kn)
                 ->with('model_nhomct',$model_nhomct)
                 ->with('model_tenct',$model_tenct)
                 ->with('m_linhvuc',$m_linhvuc)
                 ->with('a_linhvuc',$a_linhvuc)
+                ->with('a_nguonkp',$a_nguonkp)
                 ->with('m_plnb',$m_plnb)
                 ->with('m_pln',$m_pln)
                 ->with('furl_kn', '/nghiep_vu/ho_so/')

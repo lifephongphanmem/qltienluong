@@ -269,6 +269,7 @@
                                     <li><a href="{{url('/he_thong/don_vi/bao_hiem')}}"><i class="fa fa-caret-right"></i>Thông tin nộp bảo hiểm</a></li>
                                     <li><a href="{{url('/danh_muc/phu_cap/don_vi')}}"><i class="fa fa-caret-right"></i>Thông tin phụ cấp</a></li>
                                     <li><a href="{{url('/danh_muc/thai_san/danh_sach')}}"><i class="fa fa-caret-right"></i>Thông tin phụ cấp thai sản</a></li>
+                                    <li><a href="{{url('/he_thong/dinh_muc/danh_sach')}}"><i class="fa fa-caret-right"></i>Thông tin định mức nguồn kinh phí</a></li>
                                 </ul>
                             </li>
                         </ul>

@@ -122,20 +122,6 @@
         </div>
 
         <div class="row">
-            <div class="col-md-3">
-                <div class="form-group">
-                    <label class="control-label">Số tài khoản ngân hàng</label>
-                    {!!Form::text('sotk', null, array('id' => 'sotk','class' => 'form-control'))!!}
-                </div>
-            </div>
-
-            <div class="col-md-3">
-                <div class="form-group">
-                    <label class="control-label">Nộp bảo hiểm</label>
-                    {!! Form::select('baohiem',getNopBaoHiem(),null,array('id' => 'baohiem', 'class' => 'form-control select2me'))!!}
-                </div>
-            </div>
-
             <div class="col-md-6">
                 <div class="form-group">
                     <label class="control-label">Lĩnh vực công tác </label>
@@ -152,10 +138,41 @@
                     </select>
                 </div>
             </div>
+
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label class="control-label">Nguồn kinh phí hưởng lương </label>
+                    <select class="form-control" id="nguonkp" name="nguonkp" multiple="multiple">
+                        @if(isset($a_nguonkp))
+                            @foreach(getNguonKP(false) as $key=>$value)
+                                <option value="{{$key}}" {{in_array($key,$a_nguonkp)?'selected':''}}>{{$value}}</option>
+                            @endforeach
+                        @else
+                            @foreach(getNguonKP(false) as $key=>$value)
+                                <option value="{{$key}}">{{$value}}</option>
+                            @endforeach
+                        @endif
+                    </select>
+
+                </div>
+            </div>
         </div>
 
         <div class="row">
-            <div class="col-md-12">
+            <div class="col-md-3">
+                <div class="form-group">
+                    <label class="control-label">Số tài khoản ngân hàng</label>
+                    {!!Form::text('sotk', null, array('id' => 'sotk','class' => 'form-control'))!!}
+                </div>
+            </div>
+
+            <div class="col-md-3">
+                <div class="form-group">
+                    <label class="control-label">Nộp bảo hiểm</label>
+                    {!! Form::select('baohiem',getNopBaoHiem(),null,array('id' => 'baohiem', 'class' => 'form-control select2me'))!!}
+                </div>
+            </div>
+            <div class="col-md-6">
                 <div class="form-group">
                     <label class="control-label">Ảnh đại diện </label>
                     @if(isset($model))
@@ -167,6 +184,7 @@
         </div>
     </div>
     <input type="hidden" id="lvhd" name="lvhd" value="{{isset($model)?$model->lvhd:''}}"/>
+    <input type="hidden" id="manguonkp" name="manguonkp" value="{{isset($model)?$model->manguonkp:''}}"/>
     <input type="hidden" id="macanbo" name="macanbo" value="{{isset($model) ? $model->macanbo : ''}}"/>
 
 </div>
@@ -175,8 +193,12 @@
     $(function(){
         //Multi select box
         $("#linhvuc").select2();
+        $("#nguonkp").select2();
         $("#linhvuc").change(function(){
             $("#lvhd").val( $("#linhvuc").val());
+        });
+        $("#nguonkp").change(function(){
+            $("#manguonkp").val( $("#nguonkp").val());
         });
         $('#create_hscb :submit').click(function(){
             var str = '';

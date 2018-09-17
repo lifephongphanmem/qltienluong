@@ -16,6 +16,7 @@ class CreateHosocanboTable extends Migration
             $table->increments('id');
             $table->string('stt', 10)->nullable();
             $table->string('mapb', 50)->nullable();
+            $table->string('manguonkp',50)->nullable();//nguồn kinh phí lấy lương
             $table->string('macvcq', 50)->nullable();
             $table->string('macvd', 50)->nullable();
             $table->string('macanbo', 50)->unique();
