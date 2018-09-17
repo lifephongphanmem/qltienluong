@@ -539,7 +539,7 @@ class bangluongController extends Controller
             }
         }
 
-        return redirect('/chuc_nang/bang_luong/maso=' . $inputs['mabl']);
+        return redirect('/chuc_nang/bang_luong/bang_luong?mabl=' . $inputs['mabl'].'&mapb=');
     }
 
     function store_truylinh(Request $request)
@@ -706,7 +706,7 @@ class bangluongController extends Controller
                 hosotruylinh::wherein('maso', $model_canbo->toarray())->update(['mabl' => $inputs['mabl']]);
             }
 
-            return redirect('/chuc_nang/bang_luong/maso=' . $inputs['mabl']);
+            return redirect('/chuc_nang/bang_luong/bang_luong?mabl=' . $inputs['mabl'].'&mapb=');
         } else
             return view('errors.notlogin');
     }
@@ -756,7 +756,7 @@ class bangluongController extends Controller
                 }
             }
 
-            return redirect('/chuc_nang/bang_luong/maso=' . $inputs['mabl']);
+            return redirect('/chuc_nang/bang_luong/bang_luong?mabl=' . $inputs['mabl'].'&mapb=');
         } else
             return view('errors.notlogin');
     }
