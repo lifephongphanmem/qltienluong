@@ -85,6 +85,13 @@
                                                 {!!Form::text('tongbaohiem', $model->ttbh_dv, array('id' => 'tongbaohiem','class' => 'form-control', 'data-mask'=>'fdecimal','readonly'=>'true'))!!}
                                             </div>
                                         </div>
+
+                                        <div class="col-md-3">
+                                            <div class="form-group">
+                                                <label class="control-label">Các khoản giảm trừ</label>
+                                                {!!Form::text('giaml', null, array('id' => 'giaml','class' => 'form-control', 'data-mask'=>'fdecimal'))!!}
+                                            </div>
+                                        </div>
                                     </div>
 
                                 </div>

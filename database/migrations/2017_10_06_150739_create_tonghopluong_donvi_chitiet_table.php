@@ -56,7 +56,8 @@ class CreateTonghopluongDonviChitietTable extends Migration
             $table->double('pcbdhdcu')->default(0);
             $table->double('pcthni')->default(0);
             $table->double('tonghs')->default(0);
-
+            $table->double('giaml')->default(0);
+            $table->double('luongtn')->default(0);
             $table->double('stbhxh_dv')->default(0);
             $table->double('stbhyt_dv')->default(0);
             $table->double('stkpcd_dv')->default(0);

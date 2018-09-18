@@ -49,6 +49,8 @@ class tonghopluong_donvi_chitiet extends Model
         'pcbdhdcu',
         'pcthni',
         'tonghs',
+        'giaml',
+        'luongtn',
         'stbhxh_dv',
         'stbhyt_dv',
         'stkpcd_dv',

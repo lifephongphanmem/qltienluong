@@ -29,6 +29,11 @@ class HosotruylinhTable extends Migration
             $table->text('noidung')->nullable();
             $table->string('madv')->nullable();
 
+            $table->string('manguonkp',50)->nullable();
+            $table->double('luongcoban')->default(0);
+            $table->double('thangtl')->default(0);//số tháng được truy lĩnh lương
+            $table->double('ngaytl')->default(0);//số tháng được truy lĩnh lương
+
             $table->string('msngbac', 50)->nullable();
             $table->double('hesott')->default(0);
             //chưa dùng, cho trường hợp truy lĩnh cả phụ cấp

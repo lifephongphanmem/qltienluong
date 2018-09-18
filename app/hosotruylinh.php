@@ -18,11 +18,14 @@ class hosotruylinh extends Model
         'nguoiky',//chưa dùng
         'coquanqd',//chưa dùng
         'mabl',
+        'manguonkp',
+        'luongcoban',
+        'thangtl',
+        'ngaytl',
         'ngaytu',
         'ngayden',
         'noidung',
         'madv',
-
         'msngbac',
         'hesott',
         //chưa dùng, cho trường hợp truy lĩnh cả phụ cấp

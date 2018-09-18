@@ -78,27 +78,26 @@
         <th style="width: 2%;padding-left: 2px;padding-right: 2px" rowspan="2">STT</th>
         <th style="width: 7%;padding-left: 2px;padding-right: 2px" rowspan="2">Nguồn kinh phí</th>
         <th style="width: 7%;padding-left: 2px;padding-right: 2px" rowspan="2">Phân loại</br>công tác</th>
-        <th style="width: 6%;padding-left: 2px;padding-right: 2px" rowspan="2">Lương ngạch</br>bậc</th>
-        <th style="width: 6%;padding-left: 2px;padding-right: 2px" rowspan="2">Phụ cấp</br>lương</th>
-        <th style="width: 6%;padding-left: 2px;padding-right: 2px" rowspan="2">Tổng các</br>khoản phụ</br>cấp</th>
-        <th colspan="11">Các khoản phụ cấp khác</th>
+        <th style="width: 7%;padding-left: 2px;padding-right: 2px" rowspan="2">Số lượng</br>cán bộ</th>
+        <th colspan="{{$col}}">Hệ số</th>
+        <th colspan="{{$col}}">Số tiền</th>
         <th style="width: 6%;padding-left: 2px;padding-right: 2px" rowspan="2">Tổng tiền lương</th>
+        <th style="width: 6%;padding-left: 2px;padding-right: 2px" rowspan="2">Các khoản</br>giảm trừ</br>lương</th>
+        <th style="width: 6%;padding-left: 2px;padding-right: 2px" rowspan="2">Tiền lương</br>thực lĩnh</th>
+
         <th colspan="5">Các khoản phải đóng góp BHXH, BHYT, KPCĐ, BHTN </th>
         <th style="width: 6%;padding-left: 2px;padding-right: 2px" rowspan="2">Tổng cộng</th>
     </tr>
 
     <tr style="padding-left: 2px;padding-right: 2px">
-        <th>Phụ cấp</br>vượt khung</th>
-        <th>Phụ cấp</br>khu vực</th>
-        <th>Phụ cấp</br>chức vụ</th>
-        <th>Phụ cấp</br>thâm niên</br>vượt khung</th>
-        <th>Phụ cấp</br>ưu đãi ngành</th>
-        <th>Phụ cấp</br>thu hút</th>
-        <th>Phụ cấp</br>công tác</br>lâu năm</th>
-        <th>Phụ cấp</br>công vụ</th>
-        <th>Phụ cấp</br>công tác Đảng</th>
-        <th>Phụ cấp</br>thâm niên nghề</th>
-        <th>Phụ cấp</br>khác</th>
+        @foreach($a_phucap as $key=>$val)
+            <th>{!!$val!!}</th>
+        @endforeach
+
+        @foreach($a_phucap as $key=>$val)
+            <th>{!!$val!!}</th>
+        @endforeach
+
 
         <th>BHXH</th>
         <th>BHYT</th>
@@ -108,7 +107,7 @@
     </tr>
 
     <tr>
-        @for($i=1;$i<=24;$i++)
+        @for($i=1;$i<=13 + $col*2;$i++)
         <th>{{$i}}</th>
         @endfor
     </tr>
@@ -119,23 +118,21 @@
             <td style="text-align: center">{{$stt++}}</td>
             <td style="text-align: left">{{$ct->tennguonkp}}</td>
             <td style="text-align: left">{{$ct->tencongtac}}</td>
-            <td>{{dinhdangso($ct->heso)}}</td>
-            <td>{{dinhdangso($ct->hesopc)}}</td>
-            <td>{{dinhdangso($ct->tonghs - $ct->heso - $ct->hesopc)}}</td>
+            <td style="text-align: center">{{$ct->soluong}}</td>
 
-            <td>{{dinhdangso($ct->vuotkhung)}}</td>
-            <td>{{dinhdangso($ct->pckv)}}</td>
-            <td>{{dinhdangso($ct->pccv)}}</td>
-            <td>{{dinhdangso($ct->pctnvk)}}</td>
-            <td>{{dinhdangso($ct->pcudn)}}</td>
-            <td>{{dinhdangso($ct->pcth)}}</td>
-            <td>{{dinhdangso($ct->pcthni)}}</td>
-            <td>{{dinhdangso($ct->pccovu)}}</td>
-            <td>{{dinhdangso($ct->pcdang)}}</td>
-            <td>{{dinhdangso($ct->pctnn)}}</td>
-            <td>{{dinhdangso($ct->pck)}}</td>
+            @foreach($a_phucap as $key=>$val)
+                <td>{{dinhdangsothapphan($ct->$key/$ct->luongcoban,5)}}</td>
+            @endforeach
+
+            @foreach($a_phucap as $key=>$val)
+                <td>{{dinhdangso($ct->$key)}}</td>
+            @endforeach
 
             <td>{{dinhdangso($ct->tonghs)}}</td>
+            <td>{{dinhdangso($ct->giaml)}}</td>
+            <td>{{dinhdangso($ct->tongtl)}}</td>
+
+
             <td>{{dinhdangso($ct->stbhxh_dv)}}</td>
             <td>{{dinhdangso($ct->stbhyt_dv)}}</td>
             <td>{{dinhdangso($ct->stkpcd_dv)}}</td>
@@ -147,21 +144,19 @@
     @endforeach
     <tr class="money" style="font-weight: bold">
         <td colspan="3">Tổng cộng</td>
-        <td>{{dinhdangso($model->sum('heso'))}}</td>
-        <td>{{dinhdangso($model->sum('hesopc'))}}</td>
-        <td>{{dinhdangso($model->sum('tonghs') - $model->sum('heso') - $model->sum('hesopc'))}}</td>
-        <td>{{dinhdangso($model->sum('vuotkhung'))}}</td>
-        <td>{{dinhdangso($model->sum('pckv'))}}</td>
-        <td>{{dinhdangso($model->sum('pccv'))}}</td>
-        <td>{{dinhdangso($model->sum('pctnvk'))}}</td>
-        <td>{{dinhdangso($model->sum('pcudn'))}}</td>
-        <td>{{dinhdangso($model->sum('pcth'))}}</td>
-        <td>{{dinhdangso($model->sum('pcthni'))}}</td>
-        <td>{{dinhdangso($model->sum('pccovu'))}}</td>
-        <td>{{dinhdangso($model->sum('pcdang'))}}</td>
-        <td>{{dinhdangso($model->sum('pctnn'))}}</td>
-        <td>{{dinhdangso($model->sum('pck'))}}</td>
+        <td style="text-align: center">{{dinhdangso($model->sum('soluong'))}}</td>
+        @foreach($a_phucap as $key=>$val)
+            <td>{{dinhdangsothapphan($model->sum('hs'.$key) ,5)}}</td>
+        @endforeach
+
+        @foreach($a_phucap as $key=>$val)
+            <td>{{dinhdangso($model->sum($key))}}</td>
+        @endforeach
+
         <td>{{dinhdangso($model->sum('tonghs'))}}</td>
+        <td>{{dinhdangso($model->sum('giaml'))}}</td>
+        <td>{{dinhdangso($model->sum('tongtl'))}}</td>
+
         <td>{{dinhdangso($model->sum('stbhxh_dv'))}}</td>
         <td>{{dinhdangso($model->sum('stbhyt_dv'))}}</td>
         <td>{{dinhdangso($model->sum('stkpcd_dv'))}}</td>
@@ -178,11 +173,11 @@
     </tr>
     <tr style="font-weight: bold">
         <td style="text-align: center;" width="50%">Người lập bảng</td>
-        <td style="text-align: center;" width="50%">{{strtoupper($m_dv->cdlanhdao)}}</td>
+        <td style="text-align: center;" width="50%">{{$m_dv['cdlanhdao']}}</td>
     </tr>
     <tr style="font-style: italic">
         <td style="text-align: center;" width="50%">(Ghi rõ họ tên)</td>
-        <td style="text-align: center;" width="50%">((Ký tên, đóng dấu))</td>
+        <td style="text-align: center;" width="50%">(Ký tên, đóng dấu)</td>
     </tr>
     <tr>
         <td><br><br><br></td>

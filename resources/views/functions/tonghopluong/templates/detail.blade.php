@@ -43,13 +43,14 @@
                     <table id="sample_3" class="table table-hover table-striped table-bordered" style="min-height: 230px">
                         <thead>
                             <tr>
-                                <th class="text-center" style="width: 5%">STT</th>
+                                <th class="text-center" style="width: 3%">STT</th>
                                 <th class="text-center">Nguồn kinh phí</th>
                                 <th class="text-center">Phân loại</br>công tác</th>
                                 <th class="text-center">Lương ngạch</br>bậc</th>
                                 <th class="text-center">Phụ cấp</br>lương</th>
                                 <th class="text-center">Các khoản</br>phụ cấp</th>
                                 <th class="text-center">Tổng tiền</br>lương và phụ</br> cấp</th>
+                                <th class="text-center">Các khoản</br>giảm trừ</br>lương</th>
                                 <th class="text-center">Tổng khoản</br>nộp theo</br>lương</th>
                                 <th class="text-center">Thao tác</th>
                             </tr>
@@ -65,10 +66,11 @@
                                         <td class="text-right">{{dinhdangso($value->hesopc)}}</td>
                                         <td class="text-right">{{dinhdangso($value->tonghs - $value->heso - $value->hesopc)}}</td>
                                         <td class="text-right">{{dinhdangso($value->tonghs)}}</td>
+                                        <td class="text-right">{{dinhdangso($value->giaml)}}</td>
                                         <td class="text-right">{{dinhdangso($value->tongbh)}}</td>
                                         <td>
                                             <a href="{{url($furl.'edit_detail?mathdv='.$value->mathdv.'&manguonkp='.$value->manguonkp.'&macongtac='.$value->macongtac)}}" class="btn btn-info btn-xs mbs">
-                                                <i class="fa fa-edit"></i>&nbsp; Chỉnh sửa</a>
+                                                <i class="fa fa-edit"></i>&nbsp; Sửa</a>
                                             <button type="button" onclick="cfDel('{{$furl.'del_detail/'.$value->id}}')" class="btn btn-default btn-xs" data-target="#delete-modal-confirm" data-toggle="modal">
                                                 <i class="fa fa-trash-o"></i>&nbsp; Xóa</button>
                                         </td>
