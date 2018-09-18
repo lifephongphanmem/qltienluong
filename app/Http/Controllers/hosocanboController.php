@@ -1109,7 +1109,7 @@ class hosocanboController extends Controller
         return $result;
     }
 
-    function upd_dm()
+public function upd_dm()
     {
         $madv_c = '1511709071';
         $madv_m = '1411709071';
