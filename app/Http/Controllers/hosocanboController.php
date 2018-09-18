@@ -20,6 +20,7 @@ use App\hosocanbo;
 use App\hosocanbo_kiemnhiem;
 use App\hosocanbo_kiemnhiem_temp;
 use App\hosochucvu;
+use App\hosothoicongtac;
 use App\hosotinhtrangct;
 use App\ngachluong;
 use App\nhomngachluong;
@@ -1149,7 +1150,7 @@ public function upd_dm()
             unset($a_kq['id']);
             dmchucvucq::create($a_kq);
         }
-        */
+
         $m_hs = hosocanbo::where('madv', $madv_c)->get();
         foreach($m_hs  as $ct) {
             //$maso = explode('_', $ct->macanbo);
@@ -1160,6 +1161,35 @@ public function upd_dm()
             $a_kq = $ct->toarray();
             unset($a_kq['id']);
             hosocanbo::create($a_kq);
+        }
+        */
+
+        $m_kn = hosocanbo_kiemnhiem::where('madv', $madv_c)->get();
+        foreach($m_kn  as $ct) {
+            //$maso = explode('_', $ct->macanbo);
+            $ct->macanbo = $madv_m . '_' . explode('_', $ct->macanbo)[1];
+            $ct->macvcq = $madv_m . '_' . explode('_', $ct->macvcq)[1];
+            if($ct->mapb != '' && $ct->mapb != null){
+                $ct->mapb = $madv_m . '_' . explode('_', $ct->mapb)[1];
+            }
+            $ct->madv = $madv_m;
+            $a_kq = $ct->toarray();
+            unset($a_kq['id']);
+            hosocanbo_kiemnhiem::create($a_kq);
+        }
+        //dd($m_kn->where('mapb','<>',''));
+        $m_nh = hosothoicongtac::where('madv', $madv_c)->get();
+
+        foreach($m_nh  as $ct) {
+            //$maso = explode('_', $ct->macanbo);
+            $ct->maso = getdate()[0];
+            $ct->macanbo = $madv_m . '_' . explode('_', $ct->macanbo)[1];
+            $ct->macvcq = $madv_m . '_' . explode('_', $ct->macvcq)[1];
+            $ct->mapb = $madv_m . '_' . explode('_', $ct->mapb)[1];
+            $ct->madv = $madv_m;
+            $a_kq = $ct->toarray();
+            unset($a_kq['id']);
+            hosothoicongtac::create($a_kq);
         }
         dd('ok');
     }
