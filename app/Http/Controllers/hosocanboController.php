@@ -1128,7 +1128,7 @@ public function upd_dm()
             unset($a_kq['id']);
             dmphucap_donvi::create($a_kq);
         }
-        */
+
         $m_pb = dmphongban::where('madv', $madv_c)->get();
         foreach($m_pb as $ct){
             $maso =explode('_',$ct->mapb);
@@ -1139,7 +1139,6 @@ public function upd_dm()
             dmphongban::create($a_kq);
         }
 
-
         $m_cv = dmchucvucq::where('madv', $madv_c)->get();
 
         foreach($m_cv as $ct){
@@ -1149,6 +1148,18 @@ public function upd_dm()
             $a_kq = $ct->toarray();
             unset($a_kq['id']);
             dmchucvucq::create($a_kq);
+        }
+        */
+        $m_hs = hosocanbo::where('madv', $madv_c)->get();
+        foreach($m_hs  as $ct) {
+            //$maso = explode('_', $ct->macanbo);
+            $ct->macanbo = $madv_m . '_' . explode('_', $ct->macanbo)[1];
+            $ct->macvcq = $madv_m . '_' . explode('_', $ct->macvcq)[1];
+            $ct->mapb = $madv_m . '_' . explode('_', $ct->mapb)[1];
+            $ct->madv = $madv_m;
+            $a_kq = $ct->toarray();
+            unset($a_kq['id']);
+            hosocanbo::create($a_kq);
         }
         dd('ok');
     }
