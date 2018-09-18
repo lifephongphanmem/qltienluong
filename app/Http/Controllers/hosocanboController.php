@@ -1113,7 +1113,7 @@ public function upd_dm()
     {
         $madv_c = '1511709071';
         $madv_m = '1411709071';
-
+        /*
         $m_pc = dmphucap_donvi::where('madv', $madv_c)->get();
         foreach($m_pc  as $ct){
             $ct->madv = $madv_m;
@@ -1128,8 +1128,29 @@ public function upd_dm()
             unset($a_kq['id']);
             dmphucap_donvi::create($a_kq);
         }
+        */
         $m_pb = dmphongban::where('madv', $madv_c)->get();
+        foreach($m_pb as $ct){
+            $maso =explode('_',$ct->mapb);
+            $ct->mapb =$madv_m .'_'.$maso[1];
+            $ct->madv = $madv_m;
+            $a_kq = $ct->toarray();
+            unset($a_kq['id']);
+            dmphongban::create($a_kq);
+        }
+
+
         $m_cv = dmchucvucq::where('madv', $madv_c)->get();
+
+        foreach($m_cv as $ct){
+            $maso =explode('_',$ct->macvcq);
+            $ct->macvcq =$madv_m .'_'.$maso[1];
+            $ct->madv = $madv_m;
+            $a_kq = $ct->toarray();
+            unset($a_kq['id']);
+            dmchucvucq::create($a_kq);
+        }
+        dd('ok');
     }
 
 }
