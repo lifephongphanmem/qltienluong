@@ -20,6 +20,7 @@ class bangluong_ct extends Model
         'macanbo',
         'tencanbo',
         'macongchuc',
+        'luongcoban',
         'heso',
         'hesopc',
         'hesott',

@@ -551,13 +551,14 @@ class bangluongController extends Controller
     function store_truylinh(Request $request)
     {
         if (Session::has('admin')) {
+            //lương cơ bản và nguồn lấy trong chi tiết truy lĩnh
             $inputs = $request->all();
             $inputs['mabl'] = $inputs['mabl_truylinh'];
             $inputs['thang'] = $inputs['thang_truylinh'];
             $inputs['nam'] = $inputs['nam_truylinh'];
             $inputs['noidung'] = $inputs['noidung_truylinh'];
-            $inputs['manguonkp'] = $inputs['manguonkp_truylinh'];
-            $inputs['luongcoban'] = $inputs['luongcoban_truylinh'];
+            //$inputs['manguonkp'] = $inputs['manguonkp_truylinh'];
+            //$inputs['luongcoban'] = $inputs['luongcoban_truylinh'];
             $inputs['phanloai'] = $inputs['phanloai_truylinh'];
             $inputs['nguoilap'] = $inputs['nguoilap_truylinh'];
             $inputs['ngaylap'] = $inputs['ngaylap_truylinh'];
@@ -565,7 +566,7 @@ class bangluongController extends Controller
 
             $model = bangluong::where('mabl', $inputs['mabl'])->first();
             if (count($model) > 0) {
-                $inputs['luongcoban'] = getDbl($inputs['luongcoban']);
+                //$inputs['luongcoban'] = getDbl($inputs['luongcoban']);
                 $model->update($inputs);
                 return redirect('/chuc_nang/bang_luong/danh_sach');
             } else {
@@ -574,7 +575,7 @@ class bangluongController extends Controller
                 $inputs['mabl'] = $madv . '_' . getdate()[0];
                 $inputs['madv'] = $madv;
 
-                $inputs['luongcoban'] = getDbl($inputs['luongcoban']);
+                //$inputs['luongcoban'] = getDbl($inputs['luongcoban']);
                 $ngaylap = $inputs['nam'] . '-' . $inputs['thang'] . '-01';
                 //$ngaylap = Carbon::create($inputs['nam'],$inputs['thang'],'01');
 
@@ -584,8 +585,7 @@ class bangluongController extends Controller
                     ->wherenull('mabl')
                     ->get();
 
-                $model_hoso = hosocanbo::select('sunghiep', 'mact','macanbo', 'macvcq')
-                    ->where('madv',session('admin')->madv)->get();
+                $model_hoso = hosocanbo::select('sunghiep', 'mact','macanbo', 'macvcq')->where('madv',session('admin')->madv)->get();
                 //$model_congtac = dmphanloaict::all();
                 $model_phanloai = dmphanloaicongtac_baohiem::where('madv', session('admin')->madv)->get();
                 $model_chucvu = dmchucvucq::where('maphanloai',session('admin')->maphanloai)
@@ -683,8 +683,8 @@ class bangluongController extends Controller
                         }
                     }
                     $cb->tonghs = $ths;
-                    $cb->ttl = $inputs['luongcoban'] * $ths * $cb->thangtl;
-                    $baohiem = $inputs['luongcoban'] * ($cb->heso + $cb->pctnn) * $cb->thangtl;
+                    $cb->ttl = $cb->luongcoban * $ths * $cb->thangtl;
+                    $baohiem = $cb->luongcoban * ($cb->heso + $cb->pctnn) * $cb->thangtl;
 
                     $cb->stbhxh = round($baohiem * $cb->bhxh, 0);
                     $cb->stbhyt = round($baohiem * $cb->bhyt, 0);
@@ -887,6 +887,7 @@ class bangluongController extends Controller
         if (Session::has('admin')) {
             $inputs = $request->all();
             $model = bangluong_ct::findorfail($inputs['maso']);
+
             $model_canbo = hosocanbo::where('macanbo',$model->macanbo)->first();
             $model_bangluong = bangluong::where('mabl',$model->mabl)->first();
 
@@ -894,7 +895,6 @@ class bangluongController extends Controller
             //$model_bl = bangluong::where('mabl',$model->mabl)->first();
             $model->tennb = isset($m_nb)? $m_nb->tenngachluong:'';
             $model->tencanbo = Str::upper($model->tencanbo);
-            $model->luongcoban = $model_bangluong->luongcoban;
 
             $model->bhxh = 0;
             $model->bhyt = 0;
@@ -916,14 +916,16 @@ class bangluongController extends Controller
                 $model->bhxh = $model_baohiem->bhxh;
                 $model->bhyt = $model_baohiem->bhyt;
                 $model->bhtn = $model_baohiem->bhtn;
-                if($model->sunghiep == 'Công chức' || (count($chucvu) > 0 && $chucvu->ttdv == 1)){
-                    $model->bhtn = 0;
-                }
                 $model->kpcd = $model_baohiem->kpcd;
                 $model->bhxh_dv = $model_baohiem->bhxh_dv;
                 $model->bhyt_dv = $model_baohiem->bhyt_dv;
                 $model->bhtn_dv = $model_baohiem->bhtn_dv;
                 $model->kpcd_dv = $model_baohiem->kpcd_dv;
+
+                if($model->sunghiep == 'Công chức' || (count($chucvu) > 0 && $chucvu->ttdv == 1)){
+                    $model->bhtn = 0;
+                    $model->bhtn_dv =  0;
+                }
             }
 
             //$a_donvi = dmdonvi::where('madv',session('admin')->madv)->first()->toarray();
@@ -937,12 +939,14 @@ class bangluongController extends Controller
                 $model_truylinh = hosotruylinh::where('macanbo',$model->macanbo)->where('mabl',$model->mabl)->first();
                 $model->ngaytu = $model_truylinh->ngaytu;
                 $model->ngayden = $model_truylinh->ngayden;
+
                 return view('manage.bangluong.chitiet_truylinh')
                     ->with('furl','/chuc_nang/bang_luong/')
                     ->with('model',$model)
                     ->with('model_pc',$model_pc)
                     ->with('pageTitle','Chi tiết bảng lương');
             }else{
+                $model->luongcoban = $model_bangluong->luongcoban;
                 return view('manage.bangluong.chitiet')
                     ->with('furl','/chuc_nang/bang_luong/')
                     ->with('model',$model)

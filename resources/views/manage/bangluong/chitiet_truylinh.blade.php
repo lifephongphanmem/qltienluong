@@ -90,7 +90,7 @@
                                                 </div>
 
 
-                                                <div class="col-md-4">
+                                                <div class="col-md-3">
                                                     <div class="form-group">
                                                         <label class="control-label" style="font-weight: bold">Lương hệ số</label>
                                                         {!!Form::text('ttl', null, array('id' => 'ttl','class' => 'form-control', 'data-mask'=>'fdecimal','readonly'=>'true','style'=>'font-weight:bold'))!!}
@@ -105,7 +105,7 @@
                                                     </div>
                                                 </div>
 
-                                                <div class="col-md-4">
+                                                <div class="col-md-3">
                                                     <div class="form-group">
                                                         <label class="control-label"><b>Lương thực nhận </b></label>
                                                         {!!Form::text('luongtn', null, array('id' => 'luongtn','class' => 'form-control text-right', 'data-mask'=>'fdecimal','readonly'=>'true','style'=>'font-weight:bold'))!!}
@@ -166,79 +166,79 @@
                                         </div>
                                         <div class="portlet-body" style="display: block;">
 
-                            <div class="row">
-                                <div class="col-md-2">
-                                    <div class="form-group">
-                                        <label class="control-label">Số tiền BHXH </label>
-                                        {!!Form::text('stbhxh', null, array('id' => 'stbhxh','class' => 'form-control baohiem text-right', 'data-mask'=>'fdecimal'))!!}
-                                    </div>
-                                </div>
+                                        <div class="row">
+                                            <div class="col-md-2">
+                                                <div class="form-group">
+                                                    <label class="control-label">Số tiền BHXH </label>
+                                                    {!!Form::text('stbhxh', null, array('id' => 'stbhxh','class' => 'form-control baohiem text-right', 'data-mask'=>'fdecimal'))!!}
+                                                </div>
+                                            </div>
 
-                                <div class="col-md-2">
-                                    <div class="form-group">
-                                        <label class="control-label">Số tiền BHYT </label>
-                                        {!!Form::text('stbhyt', null, array('id' => 'stbhyt','class' => 'form-control baohiem text-right', 'data-mask'=>'fdecimal'))!!}
-                                    </div>
-                                </div>
+                                            <div class="col-md-2">
+                                                <div class="form-group">
+                                                    <label class="control-label">Số tiền BHYT </label>
+                                                    {!!Form::text('stbhyt', null, array('id' => 'stbhyt','class' => 'form-control baohiem text-right', 'data-mask'=>'fdecimal'))!!}
+                                                </div>
+                                            </div>
 
-                                <div class="col-md-2">
-                                    <div class="form-group">
-                                        <label class="control-label">Số tiền KPCĐ </label>
-                                        {!!Form::text('stkpcd', null, array('id' => 'stkpcd','class' => 'form-control baohiem text-right', 'data-mask'=>'fdecimal'))!!}
-                                    </div>
-                                </div>
+                                            <div class="col-md-2">
+                                                <div class="form-group">
+                                                    <label class="control-label">Số tiền KPCĐ </label>
+                                                    {!!Form::text('stkpcd', null, array('id' => 'stkpcd','class' => 'form-control baohiem text-right', 'data-mask'=>'fdecimal'))!!}
+                                                </div>
+                                            </div>
 
-                                <div class="col-md-2">
-                                    <div class="form-group">
-                                        <label class="control-label">Số tiền BHTN </label>
-                                        {!!Form::text('stbhtn', null, array('id' => 'stbhtn','class' => 'form-control baohiem text-right', 'data-mask'=>'fdecimal'))!!}
-                                    </div>
-                                </div>
+                                            <div class="col-md-2">
+                                                <div class="form-group">
+                                                    <label class="control-label">Số tiền BHTN </label>
+                                                    {!!Form::text('stbhtn', null, array('id' => 'stbhtn','class' => 'form-control baohiem text-right', 'data-mask'=>'fdecimal'))!!}
+                                                </div>
+                                            </div>
 
-                                <div class="col-md-4">
-                                    <div class="form-group">
-                                        <label class="control-label" style="font-weight: bold">Tổng tiền cá nhân nộp bảo hiểm </label>
-                                        {!!Form::text('ttbh', null, array('id' => 'ttbh','class' => 'form-control text-right', 'data-mask'=>'fdecimal','readonly'=>'true','style'=>'font-weight:bold'))!!}
-                                    </div>
-                                </div>
-                            </div>
+                                            <div class="col-md-4">
+                                                <div class="form-group">
+                                                    <label class="control-label" style="font-weight: bold">Tổng tiền cá nhân nộp bảo hiểm </label>
+                                                    {!!Form::text('ttbh', null, array('id' => 'ttbh','class' => 'form-control text-right', 'data-mask'=>'fdecimal','readonly'=>'true','style'=>'font-weight:bold'))!!}
+                                                </div>
+                                            </div>
+                                        </div>
 
-                            <div class="row">
-                                <div class="col-md-2">
-                                    <div class="form-group">
-                                        <label class="control-label">BHXH đơn vị nộp</label>
-                                        {!!Form::text('stbhxh_dv', null, array('id' => 'stbhxh_dv','class' => 'form-control baohiem_dv text-right', 'data-mask'=>'fdecimal'))!!}
-                                    </div>
-                                </div>
+                                        <div class="row">
+                                            <div class="col-md-2">
+                                                <div class="form-group">
+                                                    <label class="control-label">BHXH đơn vị nộp</label>
+                                                    {!!Form::text('stbhxh_dv', null, array('id' => 'stbhxh_dv','class' => 'form-control baohiem_dv text-right', 'data-mask'=>'fdecimal'))!!}
+                                                </div>
+                                            </div>
 
-                                <div class="col-md-2">
-                                    <div class="form-group">
-                                        <label class="control-label">BHYT đơn vị nộp</label>
-                                        {!!Form::text('stbhyt_dv', null, array('id' => 'stbhyt_dv','class' => 'form-control baohiem_dv text-right', 'data-mask'=>'fdecimal'))!!}
-                                    </div>
-                                </div>
+                                            <div class="col-md-2">
+                                                <div class="form-group">
+                                                    <label class="control-label">BHYT đơn vị nộp</label>
+                                                    {!!Form::text('stbhyt_dv', null, array('id' => 'stbhyt_dv','class' => 'form-control baohiem_dv text-right', 'data-mask'=>'fdecimal'))!!}
+                                                </div>
+                                            </div>
 
-                                <div class="col-md-2">
-                                    <div class="form-group">
-                                        <label class="control-label">KPCĐ đơn vị nộp</label>
-                                        {!!Form::text('stkpcd_dv', null, array('id' => 'stkpcd_dv','class' => 'form-control baohiem_dv text-right', 'data-mask'=>'fdecimal'))!!}
-                                    </div>
-                                </div>
+                                            <div class="col-md-2">
+                                                <div class="form-group">
+                                                    <label class="control-label">KPCĐ đơn vị nộp</label>
+                                                    {!!Form::text('stkpcd_dv', null, array('id' => 'stkpcd_dv','class' => 'form-control baohiem_dv text-right', 'data-mask'=>'fdecimal'))!!}
+                                                </div>
+                                            </div>
 
-                                <div class="col-md-2">
-                                    <div class="form-group">
-                                        <label class="control-label">BHTN đơn vị nộp</label>
-                                        {!!Form::text('stbhtn_dv', null, array('id' => 'stbhtn_dv','class' => 'form-control baohiem_dv text-right', 'data-mask'=>'fdecimal'))!!}
-                                    </div>
-                                </div>
+                                            <div class="col-md-2">
+                                                <div class="form-group">
+                                                    <label class="control-label">BHTN đơn vị nộp</label>
+                                                    {!!Form::text('stbhtn_dv', null, array('id' => 'stbhtn_dv','class' => 'form-control baohiem_dv text-right', 'data-mask'=>'fdecimal'))!!}
+                                                </div>
+                                            </div>
 
-                                <div class="col-md-4">
-                                    <div class="form-group">
-                                        <label class="control-label" style="font-weight: bold">Tổng tiền đơn vị nộp bảo hiểm</label>
-                                        {!!Form::text('ttbh_dv', null, array('id' => 'ttbh_dv','class' => 'form-control text-right', 'data-mask'=>'fdecimal','readonly'=>'true','style'=>'font-weight:bold'))!!}
-                                    </div>
-                                </div>
-                            </div>
+                                            <div class="col-md-4">
+                                                <div class="form-group">
+                                                    <label class="control-label" style="font-weight: bold">Tổng tiền đơn vị nộp bảo hiểm</label>
+                                                    {!!Form::text('ttbh_dv', null, array('id' => 'ttbh_dv','class' => 'form-control text-right', 'data-mask'=>'fdecimal','readonly'=>'true','style'=>'font-weight:bold'))!!}
+                                                </div>
+                                            </div>
+                                        </div>
 
                                         </div>
                                     </div>

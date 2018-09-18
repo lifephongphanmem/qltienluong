@@ -179,7 +179,7 @@
                         </div>
                     </div>
 
-                    <div class="row">
+                    <!--div class="row">
                         <div class="col-md-6">
                             <label class="control-label">Nguồn kinh phí</label>
                             {!!Form::select('manguonkp_truylinh',$m_nguonkp, null, array('id' => 'manguonkp_truylinh','class' => 'form-control'))!!}
@@ -188,7 +188,7 @@
                             <label class="control-label">Mức lương cơ bản</label>
                             {!!Form::text('luongcoban_truylinh', $luongcb, array('id' => 'luongcoban_truylinh','class' => 'form-control', 'data-mask'=>'fdecimal'))!!}
                         </div>
-                    </div>
+                    </div-->
 
                     <div class="row">
                         <div class="col-md-6">
@@ -504,8 +504,8 @@
                         $('#thang_truylinh').val(data.thang);
                         $('#nam_truylinh').val(data.nam);
                         $('#noidung_truylinh').val(data.noidung);
-                        $('#manguonkp_truylinh').val(data.manguonkp);
-                        $('#luongcoban_truylinh').val(data.luongcoban);
+                        //$('#manguonkp_truylinh').val(data.manguonkp);
+                        //$('#luongcoban_truylinh').val(data.luongcoban);
                         $('#mabl_truylinh').val(data.mabl);
                         $('#phanloai_truylinh').val(data.phanloai);
                         $('#ngaylap_truylinh').val(data.ngaylap);

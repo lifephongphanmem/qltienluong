@@ -316,6 +316,7 @@
 
         function baohiem(){
             //chạy khi hệ số thay đổi
+            //truyền các loại phụ cấp đóng bảo hiểm thành pc,pc,pc => split() =>for để cộng
             var heso = getdl($('#heso').val()) + getdl($('#vuotkhung').val()) + getdl($('#pccv').val());
             var luong = $('#luongcoban').val();
             var tienbh = heso * luong;

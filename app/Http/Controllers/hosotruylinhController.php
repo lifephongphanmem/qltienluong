@@ -55,7 +55,9 @@ class hosotruylinhController extends Controller
     {
         if (Session::has('admin')) {
             $insert = $request->all();
-
+            $insert['luongcoban'] = getDbl($insert['luongcoban']);
+            $insert['thangtl'] = getDbl($insert['thangtl']);
+            $insert['ngaytl'] = getDbl($insert['ngaytl']);
             if($insert['maso'] == 'ADD'){
                 $insert['madv'] = session('admin')->madv;
                 $insert['maso'] = session('admin')->madv . '_' . getdate()[0];
@@ -79,6 +81,9 @@ class hosotruylinhController extends Controller
             $insert['ngaytu'] = $insert['ngaytu_edit'];
             $insert['msngbac'] = $insert['msngbac_edit'];
             $insert['hesott'] = $insert['hesott_edit'];
+            $insert['luongcoban'] = getDbl($insert['luongcoban']);
+            $insert['thangtl'] = getDbl($insert['thangtl']);
+            $insert['ngaytl'] = getDbl($insert['ngaytl']);
             $model->update($insert);
             return redirect('nghiep_vu/truy_linh/danh_sach');
         } else
