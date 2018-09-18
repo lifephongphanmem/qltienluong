@@ -12,6 +12,7 @@ use App\dmdantoc;
 use App\dmdonvi;
 use App\dmkhoipb;
 use App\dmphanloaicongtac;
+use App\dmphanloaicongtac_baohiem;
 use App\dmphanloaict;
 use App\dmphongban;
 use App\dmphucap_donvi;
@@ -1106,6 +1107,29 @@ class hosocanboController extends Controller
             return $result;
         }
         return $result;
+    }
+
+    function upd_dm()
+    {
+        $madv_c = '1511709071';
+        $madv_m = '1411709071';
+
+        $m_pc = dmphucap_donvi::where('madv', $madv_c)->get();
+        foreach($m_pc  as $ct){
+            $ct->madv = $madv_m;
+            $a_kq = $ct->toarray();
+            unset($a_kq['id']);
+            dmphucap_donvi::create($a_kq);
+        }
+        $m_bh = dmphanloaicongtac_baohiem::where('madv', $madv_c)->get();
+        foreach($m_bh  as $ct){
+            $ct->madv = $madv_m;
+            $a_kq = $ct->toarray();
+            unset($a_kq['id']);
+            dmphucap_donvi::create($a_kq);
+        }
+        $m_pb = dmphongban::where('madv', $madv_c)->get();
+        $m_cv = dmchucvucq::where('madv', $madv_c)->get();
     }
 
 }
