@@ -206,7 +206,8 @@
             var ngaytu = $('#ngaytu').val();
             var ngayden = $('#ngayden').val();
             if(ngaytu =='' || ngayden ==''){
-                alert('0');
+                $('#thangtl').val(0);
+                $('#ngaytl').val(0);
             }else{
                 var tungay = new Date(ngaytu);
                 var denngay = new Date(ngayden);
