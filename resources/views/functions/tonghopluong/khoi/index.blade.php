@@ -39,7 +39,7 @@
             <div class="portlet light bordered">
                 <div class="portlet-title">
                     <div class="caption">
-                        DANH SÁCH DỮ LIỆU TỔNG HỢP LƯƠNG TỪ ĐƠN VỊ CẤP DƯỚI
+                        DANH SÁCH DỮ LIỆU TỔNG HỢP LƯƠNG TỪ ĐƠN VỊ CẤP DƯỚI 123
                     </div>
                     <div class="actions">
 

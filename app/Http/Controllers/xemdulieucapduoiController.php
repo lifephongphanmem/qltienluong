@@ -8,6 +8,7 @@ use App\tonghop_huyen;
 use App\tonghopluong_donvi;
 use App\tonghopluong_donvi_chitiet;
 use App\tonghopluong_huyen;
+use App\tonghopluong_khoi;
 use App\tonghopluong_tinh;
 use Illuminate\Http\Request;
 use App\dmnguonkinhphi;
@@ -26,11 +27,15 @@ class xemdulieucapduoiController extends Controller
             //$donvi=dmdonvi::where('madv',session('admin')->madv)->get();
             $inputs=$request->all();
             $madv = session('admin')->madv;
-            $thang = $inputs['thang'];
-            $nam = $inputs['nam'];
             $a_trangthai=array('ALL'=>'--Chọn trạng thái dữ liệu--','CHOGUI'=>'Chưa gửi dữ liệu','DAGUI'=>'Đã gửi dữ liệu');
             $list_donvi= dmdonvi::select('madv', 'tendv')->where('madvbc', session('admin')->madvbc)->get();
+            $model_donvi = dmdonvi::select('madv', 'tendv','macqcq','maphanloai')->where('macqcq', $madv)->where('madv','<>',$madv)->get();
+            $model_tonghop = tonghopluong_donvi::where('macqcq', $madv)
+                ->where('thang', $inputs['thang'])
+                ->where('nam', $inputs['nam'])
+                ->where('trangthai', 'DAGUI')->get();
 
+            /*
             if(!isset($inputs['trangthai']) || $inputs['trangthai']=='ALL'){
                 $model_donvi = dmdonvi::select('madv', 'tendv','macqcq','maphanloai')->where('macqcq', $madv)->get();
             }else{
@@ -61,6 +66,7 @@ class xemdulieucapduoiController extends Controller
                                     ->where('nam', $nam);
                             })->get();
 
+                         bỏ kiểm tra đơn vị chưa tạo tổng hợp
                         //Đơn vi chưa tổng hợp dữ liệu
                         $model_donvi_chuatao = dmdonvi::select('madv', 'tendv','macqcq','maphanloai')
                             ->where('macqcq',$madv)
@@ -79,28 +85,31 @@ class xemdulieucapduoiController extends Controller
                     }
                 }
             }
-
+            */
+            //kiểm tra tonghopkhôi và tonghophuyện đều dc
+            $model = tonghopluong_khoi::where('madv', $madv)
+                ->where('thang', $inputs['thang'])
+                ->where('nam', $inputs['nam'])
+                ->where('trangthai', 'DAGUI')->first();
+            //dd(count($model));
+            $tralai = count($model)>0? false : true;
             foreach($model_donvi as $dv) {
                 $donvi = $list_donvi->where('madv', $dv->macqcq)->first();
                 $dv->tendvcq = (isset($donvi) ? $donvi->tendv : NULL);
-                $model_bangluong = tonghopluong_donvi::where('madv', $dv->madv)
-                    ->where('thang', $inputs['thang'])
-                    ->where('nam', $inputs['nam'])
-                    ->where('trangthai', 'DAGUI')
-                    ->first();
-
-                if (count($model_bangluong)>0) {
-                    $dv->mathdv = $model_bangluong->mathdv;
-                    $model_bangluong_ct = tonghopluong_donvi_chitiet::where('mathdv', $dv->mathdv)->first();
-                    //dd($model_bangluong_ct->mathk);
-                    $dv->tralai = (count($model_bangluong_ct) > 0 && $model_bangluong->mathk != null) ? false : true;
-                    //$dv->tralai = (count($model_bangluong_ct) > 0 && $model_bangluong_ct->mathk != null) ? false : true;
-                    //$dv->tralai = $model_bangluong_ct->mathk != null?false:true;
+                $tonghop = $model_tonghop->where('madv', $dv->madv)->first();
+                $dv->tralai =$tralai;
+                if (count($tonghop)>0) {
+                    $dv->mathdv = $tonghop->mathdv;
+                    $dv->trangthai = $tonghop->trangthai;
                 } else {
                     $dv->mathdv = NULL;
-                    $dv->tralai = true;
+                    $dv->trangthai = 'CHOGUI';
                 }
             }
+            if($inputs['trangthai'] !='ALL'){
+                $model_donvi = $model_donvi->where('trangthai', $inputs['trangthai']);
+            }
+
             //dd($model_donvi->toarray());
             return view('functions.viewdata.index')
                 ->with('model', $model_donvi)
@@ -214,8 +223,7 @@ class xemdulieucapduoiController extends Controller
 
             $model_nguon = tonghopluong_huyen::wherein('madv', function($query) use($madv){
                 $query->select('madv')->from('dmdonvi')->where('macqcq',$madv)->where('madv','<>',$madv)->get();
-            })
-                ->where('thang', $inputs['thang'])
+                })->where('thang', $inputs['thang'])
                 ->where('nam', $inputs['nam'])
                 ->where('trangthai', 'DAGUI')
                 ->get();

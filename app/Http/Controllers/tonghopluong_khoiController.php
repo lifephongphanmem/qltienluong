@@ -67,13 +67,15 @@ class tonghopluong_khoiController extends Controller
                 $dulieu = $model_donvi->where('thang', $a_data[$i]['thang'])->where('nam', $inputs['nam']);
 
                 //Kiểm tra xem đơn vị đã tổng hợp dữ liệu khối chưa
-                if (count($tonghop) > 0) {//lấy dữ liệu đã tổng hợp đưa ra kết quản
+                if (count($tonghop) > 0) {//lấy dữ liệu đã tổng hợp đưa ra kết quả
                     $a_data[$i]['noidung'] = $tonghop->noidung;
                     $a_data[$i]['mathdv'] = $tonghop->mathdv;
                     $a_data[$i]['trangthai'] = $tonghop->trangthai;
                     $a_data[$i]['dvgui'] = $sldvcapduoi;
+                    $a_data[$i]['ngaylap'] = $tonghop->ngaylap;
                 } else {//chưa tổng hợp dữ liệu
                     $a_data[$i]['noidung'] = 'Đơn vị ' . $tendv . ' tổng hợp dữ liệu từ các đơn vị cấp dưới thời điểm ' . $a_data[$i]['thang'] . '/' . $inputs['nam'];
+                    $a_data[$i]['ngaylap'] = null;
                     //Kiểm tra xem đơn vị cấp dưới đã gửi dữ liệu khối chưa
                     if (count($dulieu) == 0) {//chưa gửi
                         $a_data[$i]['trangthai'] = 'CHUADL';
@@ -400,6 +402,8 @@ class tonghopluong_khoiController extends Controller
                 //cập nhật cả bảng huyện khi gửi tạo đồng thời 2 bảng
                 tonghopluong_huyen::where('nam', $nam)->where('thang', $thang)->where('madv', $madv)
                     ->update(['trangthai' => 'DAGUI', 'nguoilap' => session('admin')->name,'ngaylap'=> Carbon::now()->toDateTimeString()]);
+                tonghopluong_donvi::where('nam', $nam)->where('thang', $thang)->where('macqcq', $madv)
+                    ->update(['mathk' => $model->mathdv, 'mathh' => $model->mathdv]);
             } else {
                 $inputs['madv'] = session('admin')->madv;
                 $inputs['mathdv'] = getdate()[0];;

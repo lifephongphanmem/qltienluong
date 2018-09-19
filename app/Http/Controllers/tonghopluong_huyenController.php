@@ -705,8 +705,10 @@ class tonghopluong_huyenController extends Controller
                 //do lúc chuyển tạo mã khối và ma huyện giống nhau
                 //hoặc lấy theo tháng, năm, mã khối, phân loại
                 //nên tạo trường lý do ko nên lấy ở bảng đơn vị
+                tonghopluong_donvi::where('mathk', $inputs['mathdv'])
+                    ->update(['mathh'=>null,'matht'=>null,'mathk'=>null]);
                 tonghopluong_khoi::where('mathdv',$inputs['mathdv'])
-                    ->update(['trangthai'=>'TRALAI','lydo'=>$inputs['lydo'],'mathh'=>null,'matht'=>null,'mathk'=>null]);
+                    ->update(['trangthai'=>'TRALAI','lydo'=>$inputs['lydo']]);
             }
 
             return redirect('/chuc_nang/xem_du_lieu/huyen?thang='.$model->thang.'&nam='.$model->nam.'&trangthai=ALL');
