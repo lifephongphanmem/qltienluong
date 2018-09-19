@@ -524,7 +524,8 @@ class tonghopluong_donviController extends Controller
             //dd($inputs);
             $model = tonghopluong_donvi::where('mathdv', $inputs['mathdv'])->first();
             tonghopluong_donvi::where('mathdv', $inputs['mathdv'])
-                ->update(['trangthai' => 'TRALAI', 'lydo' => $inputs['lydo']]);
+                //->update(['trangthai' => 'TRALAI', 'lydo' => $inputs['lydo']]);
+                ->update(['trangthai'=>'TRALAI','lydo'=>$inputs['lydo'],'mathh'=>null,'matht'=>null,'mathk'=>null]);
             return redirect('/chuc_nang/xem_du_lieu/index?thang=' . $model->thang . '&nam=' . $model->nam . '&trangthai=ALL');
         } else
             return view('errors.notlogin');
@@ -539,11 +540,9 @@ class tonghopluong_donviController extends Controller
             );
             die(json_encode($result));
         }
-
         $inputs = $request->all();
 
         $model = tonghopluong_donvi::select('lydo')->where('mathdv', $inputs['mathdv'])->first();
-
         die($model);
     }
 

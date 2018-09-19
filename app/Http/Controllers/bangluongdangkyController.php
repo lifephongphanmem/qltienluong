@@ -476,7 +476,7 @@ class bangluongdangkyController extends Controller
                 $col++;
             }
             //dd($thongtin);
-            return view('reports.bangluong.donvi.maubangluong')
+            return view('reports.bangluong.donvi.maubangluong_dk')
                 ->with('model',$model->sortBy('stt'))
                 ->with('model_pb',getPhongBan())
                 ->with('m_dv',$m_dv)
@@ -529,7 +529,7 @@ class bangluongdangkyController extends Controller
                     $col++;
                 }
             }
-            return view('reports.bangluong.donvi.mautt107')
+            return view('reports.bangluong.donvi.mautt107_dk')
                 ->with('model',$model->sortBy('stt'))
                 ->with('model_pb',getPhongBan())
                 ->with('m_dv',$m_dv)

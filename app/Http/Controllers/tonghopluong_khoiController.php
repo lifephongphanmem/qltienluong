@@ -438,6 +438,9 @@ class tonghopluong_khoiController extends Controller
             $inputs = $request->all();
             $model = tonghopluong_donvi::where('mathdv', $inputs['mathdv'])->first();
             $model->trangthai = 'TRALAI';
+            $model->mathk = null;
+            $model->mathh = null;
+            $model->matht = null;
             $model->lydo = $inputs['lydo'];
             $model->save();
             return redirect('/chuc_nang/xem_du_lieu/khoi?thang='.$model->thang.'&nam=' . $model->nam . '&trangthai=ALL');

@@ -699,13 +699,14 @@ class tonghopluong_huyenController extends Controller
 
             if($phanloai == 'SD'){
                 tonghopluong_donvi::where('mathh',$inputs['mathdv'])
-                    ->update(['trangthai'=>'TRALAI','lydo'=>$inputs['lydo']]);
+                    ->update(['trangthai'=>'TRALAI','lydo'=>$inputs['lydo'],'mathh'=>null,'matht'=>null,'mathk'=>null]);
+                    //thừa mã khối
             }else{
                 //do lúc chuyển tạo mã khối và ma huyện giống nhau
                 //hoặc lấy theo tháng, năm, mã khối, phân loại
                 //nên tạo trường lý do ko nên lấy ở bảng đơn vị
                 tonghopluong_khoi::where('mathdv',$inputs['mathdv'])
-                    ->update(['trangthai'=>'TRALAI','lydo'=>$inputs['lydo']]);
+                    ->update(['trangthai'=>'TRALAI','lydo'=>$inputs['lydo'],'mathh'=>null,'matht'=>null,'mathk'=>null]);
             }
 
             return redirect('/chuc_nang/xem_du_lieu/huyen?thang='.$model->thang.'&nam='.$model->nam.'&trangthai=ALL');
