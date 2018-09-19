@@ -168,11 +168,12 @@ class bangluongController extends Controller
                 ->where('theodoi','<', '9')->get();
             */
             $m_cb = hosocanbo::where('madv', $madv)->where('theodoi','<', '9')->get();
-            //$m_cbkn = hosocanbo::where('madv', $madv)->where('theodoi','<', '9')->get();
+            $m_cbkn = hosocanbo::where('madv', $madv)->where('theodoi','<', '9')->get();
             //Lấy danh sách cán bộ kiêm nhiệm
             $model_canbo_kn = hosocanbo_kiemnhiem::wherein('macanbo', function($qr){
                 $qr->select('macanbo')->from('hosocanbo')->where('madv',session('admin')->madv)->where('theodoi','<', '9')->get();
             })->wherein('manguonkp',[$inputs['manguonkp'],''])->get();
+            //dd($model_canbo_kn->where('macanbo','1511582352_1536502779')->toarray());
 
             foreach ($m_cb as $canbo) {
                 //Dùng tìm kiếm các bộ nào phù hợp. Do lvhd là mảng nên pải lọc
@@ -384,12 +385,13 @@ class bangluongController extends Controller
                         $baohiem = ($cb->hesopc < 1 ? 1 : $cb->hesopc) * ($inputs['luongcoban']);
                         $cb->stbhxh = round($baohiem * $cb->bhxh, 0);
                         $cb->stbhyt = round($baohiem * $cb->bhyt, 0);
-                        $cb->stkpcd = round($baohiem * $cb->kpcd, 0);
+                        $cb->stkpcd = round($cb->hesopc * $inputs['luongcoban'] * $cb->kpcd, 0);
+                        //$cb->stkpcd = round($baohiem * $cb->kpcd, 0);
                         $cb->stbhtn = round($baohiem * $cb->bhtn, 0);
                         $cb->ttbh = $cb->stbhxh + $cb->stbhyt + $cb->stkpcd + $cb->stbhtn;
                         $cb->stbhxh_dv = round($baohiem * $cb->bhxh_dv, 0);
                         $cb->stbhyt_dv = round($baohiem * $cb->bhyt_dv, 0);
-                        $cb->stkpcd_dv = round($baohiem * $cb->kpcd_dv, 0);
+                        $cb->stkpcd_dv = round($cb->hesopc * $inputs['luongcoban'] * $cb->kpcd_dv, 0);
                         $cb->stbhtn_dv = round($baohiem * $cb->bhtn_dv, 0);
                         $cb->ttbh_dv = $cb->stbhxh_dv + $cb->stbhyt_dv + $cb->stkpcd_dv + $cb->stbhtn_dv;
                     }elseif($cb->baohiem){
@@ -442,8 +444,8 @@ class bangluongController extends Controller
                 //đặc thù tính
                 //lấy thông tin ở bảng hồ sơ cán bộ để lấy thông tin lương, phụ cấp
                 //công thức hệ số (lấy thêm hệ số phụ cấp do cán bộ không chuyên trách nhập hệ số vào hesopc)
-                //$canbo = $m_cbkn->where('macanbo',$cb->macanbo)->first();
-                $canbo = $m_cb->where('macanbo',$cb->macanbo)->first();
+                $canbo = $m_cbkn->where('macanbo',$cb->macanbo)->first();
+                //$canbo = $m_cb->where('macanbo',$cb->macanbo)->first(); không dùng được do khi lọc nguồn bỏ mất cán bộ này
                 if(count($canbo) == 0){
                     continue;
                 }
@@ -488,7 +490,6 @@ class bangluongController extends Controller
                     }
 
                     $pl = getDbl($ct->phanloai);
-
 
                     switch ($pl) {
                         case 0: {//hệ số
