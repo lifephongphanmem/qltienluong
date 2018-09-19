@@ -55,6 +55,10 @@ class CreateDsnangluongChitietTable extends Migration
 
             $table->date('truylinhtungay')->nullable();
             $table->date('truylinhdenngay')->nullable();
+            $table->double('thangtl')->default(0);//số tháng được truy lĩnh lương
+            $table->double('ngaytl')->default(0);//số tháng được truy lĩnh lương
+            $table->double('luongcoban')->default(0);//mức lương co bản được truy lĩnh lương
+            $table->string('manguonkp',50)->nullable();
             $table->timestamps();
         });
     }

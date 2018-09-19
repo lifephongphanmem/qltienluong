@@ -89,6 +89,12 @@
                                                     </div>
                                                 </div>
 
+                                                <div class="col-md-2">
+                                                    <div class="form-group">
+                                                        <label class="control-label" style="font-weight: bold">Số ngày truy lĩnh</label>
+                                                        {!!Form::text('ngaytl', null, array('id' => 'ngaytl','class' => 'form-control heso', 'data-mask'=>'fdecimal','readonly'=>'true','style'=>'font-weight:bold'))!!}
+                                                    </div>
+                                                </div>
 
                                                 <div class="col-md-3">
                                                     <div class="form-group">
@@ -268,7 +274,7 @@
         function getLuong(){
             //getBaoHiem();
             var luong = getdl($('#luongcoban').val());
-            var heso = parseFloat($('#hesott').val());
+            var heso = parseFloat($('#heso').val());
             var thang = parseFloat($('#thangtl').val());
             var ttl = luong * heso * thang;
 

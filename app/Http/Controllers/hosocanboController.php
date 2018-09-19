@@ -39,33 +39,13 @@ class hosocanboController extends Controller
         if (Session::has('admin')) {
             //$m_hs=hosocanbo::where('madv',session('admin')->maxa)->get();
             $m_hs=hosocanbo::where('madv',session('admin')->madv)->where('theodoi','<','9')->get();
-
-            $dmphongban=dmphongban::select('mapb','tenpb')->where('madv',session('admin')->madv)->get();
-            $dmchucvud=dmchucvud::select('tencv', 'macvd')->get();
-            $dmchucvucq=dmchucvucq::select('tencv', 'macvcq','sapxep')->get();
-            $dmcongtac=dmphanloaict::select('mact', 'tenct')->get();
-
+            $a_ct = array_column(dmphanloaict::all()->toArray(), 'tenct', 'mact');
+            $a_pb = getPhongBan(false);
+            $a_cv = getChucVuCQ(false);
             foreach($m_hs as $hs){
-                $phongban = $dmphongban->where('mapb',$hs->mapb)->first();
-                if(count($phongban)>0){
-                    $hs->tenpb = $phongban->tenpb;
-                }
-
-                $chucvud = $dmchucvud->where('macvd',$hs->macvd)->first();
-                if(count($chucvud)>0){
-                    $hs->tencvd = $chucvud->tencv;
-                }
-
-                $chucvucq = $dmchucvucq->where('macvcq',$hs->macvcq)->first();
-                if(count($chucvucq)>0){
-                    $hs->tencvcq = $chucvucq->tencv;
-                    $hs->sapxep = $chucvucq->sapxep;
-                }
-
-                $congtac = $dmcongtac->where('mact',$hs->mact)->first();
-                if(count($congtac)>0){
-                    $hs->tenct = $congtac->tenct;
-                }
+                $hs->tenpb = isset($a_pb[$hs->mapb])?$a_pb[$hs->mapb] : '';
+                $hs->tencvcq = isset($a_cv[$hs->macvcq])?$a_cv[$hs->macvcq] : '';
+                $hs->tenct = isset($a_ct[$hs->mact])?$a_ct[$hs->mact] : '';
             }
 
             $model = $m_hs->sortBy('stt');
@@ -1193,15 +1173,32 @@ public function upd_dm()
         }
         */
 
+        $m_kn = hosocanbo_kiemnhiem::where('madv', $madv_c)->get();
+        foreach($m_kn  as $ct) {
+            //$maso = explode('_', $ct->macanbo);
+            $maso = explode('_', $ct->macvcq);
+            if($maso[0] == $madv_c){
+                $ct->macvcq = $madv_m . '_' . explode('_', $ct->macvcq)[1];
+            }
+            $ct->macanbo = $madv_m . '_' . explode('_', $ct->macanbo)[1];
+            //$ct->macvcq = $madv_m . '_' . explode('_', $ct->macvcq)[1];
+            if($ct->mapb != '' && $ct->mapb != null){
+                $ct->mapb = $madv_m . '_' . explode('_', $ct->mapb)[1];
+            }
+            $ct->madv = $madv_m;
+            $a_kq = $ct->toarray();
+            unset($a_kq['id']);
+            hosocanbo_kiemnhiem::create($a_kq);
+        }
+
         $m_hs = hosocanbo::where('madv', $madv_c)->get();
         foreach($m_hs  as $ct) {
             //$maso = explode('_', $ct->macanbo);
-            $maso = explode('_', $ct->macvcq);{
+            $maso = explode('_', $ct->macvcq);
+            if($maso[0] == $madv_c){
                 $ct->macvcq = $madv_m . '_' . explode('_', $ct->macvcq)[1];
             }
-            if($maso[0] == $madv_c)
             $ct->macanbo = $madv_m . '_' . explode('_', $ct->macanbo)[1];
-
             //$ct->macvcq = $madv_m . '_' . explode('_', $ct->macvcq)[1];
             $ct->mapb = $madv_m . '_' . explode('_', $ct->mapb)[1];
             $ct->madv = $madv_m;

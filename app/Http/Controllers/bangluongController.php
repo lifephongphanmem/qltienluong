@@ -595,7 +595,7 @@ class bangluongController extends Controller
                 $model_phucap = dmphucap_donvi::where('madv', session('admin')->madv)->wherenotin('mapc', $a_goc)->get();
                 //Tạo bảng lương
                 bangluong::create($inputs);
-
+                $ngaycong = dmdonvi::where('madv',$madv)->first()->songaycong;
                 foreach ($model_canbo as $cb) {
                     $hoso = $model_hoso->where('macanbo', $cb->macanbo)->first();
                     $chucvu = $model_chucvu->where('macvcq', $cb->macvcq)->first();
@@ -654,11 +654,12 @@ class bangluongController extends Controller
                     $nam_den = $denngay->year;
                     $thang_den += 12 * ($nam_den - $nam_tu);
                     $thang_tl = $thang_den - $thang_tu > 0 ? ($thang_den - $thang_tu) : 1;
-                     * */
+                     *
 
                     $cb->thangtl = $denngay->month - $tungay->month + 12 * ($denngay->year - $tungay->year);
                     $cb->thangtl = $cb->thangtl > 0 ? $cb->thangtl : 1;
                     $cb->ngaytl = 0;
+                    */
                     $ths = 0;
                     foreach ($model_phucap as $ct) {
                         $mapc = $ct->mapc;
@@ -683,8 +684,17 @@ class bangluongController extends Controller
                         }
                     }
                     $cb->tonghs = $ths;
-                    $cb->ttl = $cb->luongcoban * $ths * $cb->thangtl;
-                    $baohiem = $cb->luongcoban * ($cb->heso + $cb->pctnn) * $cb->thangtl;
+                    $thangtl = $cb->luongcoban * $ths;
+                    $ngaytl =round(($cb->luongcoban * $ths)/$ngaycong,0);
+                    if($cb->ngaytl>15) {
+                        $baohiem = $cb->luongcoban * ($cb->heso + $cb->pctnn) * $cb->thangtl
+                            + round(($cb->luongcoban * ($cb->heso + $cb->pctnn) * $cb->ngaytl) / $ngaycong, 0);
+                    }else {
+                        $baohiem = $cb->luongcoban * ($cb->heso + $cb->pctnn) * $cb->thangtl;
+                    }
+
+
+                    $cb->ttl = round($thangtl * $cb->thangtl + $cb->ngaytl * $ngaytl,0);
 
                     $cb->stbhxh = round($baohiem * $cb->bhxh, 0);
                     $cb->stbhyt = round($baohiem * $cb->bhyt, 0);
