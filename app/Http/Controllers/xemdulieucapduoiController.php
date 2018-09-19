@@ -93,7 +93,8 @@ class xemdulieucapduoiController extends Controller
                     $dv->mathdv = $model_bangluong->mathdv;
                     $model_bangluong_ct = tonghopluong_donvi_chitiet::where('mathdv', $dv->mathdv)->first();
                     //dd($model_bangluong_ct->mathk);
-                    $dv->tralai = (count($model_bangluong_ct) > 0 && $model_bangluong_ct->mathk != null) ? false : true;
+                    $dv->tralai = (count($model_bangluong_ct) > 0 && $model_bangluong->mathk != null) ? false : true;
+                    //$dv->tralai = (count($model_bangluong_ct) > 0 && $model_bangluong_ct->mathk != null) ? false : true;
                     //$dv->tralai = $model_bangluong_ct->mathk != null?false:true;
                 } else {
                     $dv->mathdv = NULL;
