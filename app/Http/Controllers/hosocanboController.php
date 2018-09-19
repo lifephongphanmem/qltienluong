@@ -1171,7 +1171,6 @@ public function upd_dm()
             unset($a_kq['id']);
             hosothoicongtac::create($a_kq);
         }
-        */
 
         $m_kn = hosocanbo_kiemnhiem::where('madv', $madv_c)->get();
         foreach($m_kn  as $ct) {
@@ -1190,6 +1189,7 @@ public function upd_dm()
             unset($a_kq['id']);
             hosocanbo_kiemnhiem::create($a_kq);
         }
+        */
 
         $m_hs = hosocanbo::where('madv', $madv_c)->get();
         foreach($m_hs  as $ct) {
@@ -1204,7 +1204,7 @@ public function upd_dm()
             $ct->madv = $madv_m;
             $a_kq = $ct->toarray();
             unset($a_kq['id']);
-            //hosocanbo::create($a_kq);
+            hosocanbo::create($a_kq);
         }
 
         dd('ok');

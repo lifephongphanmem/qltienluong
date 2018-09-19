@@ -380,16 +380,17 @@ class bangluongController extends Controller
                 }else {
                     $cb->ttl = round($inputs['luongcoban'] * $ths + $tt);
                     //kiểm tra cán bộ ko chuyên trách thì tự động lấy lương cơ bản * % bảo hiểm
-                    if($cb->baohiem && $cb->macongtac == 'KHONGCT'){
-                        $cb->stbhxh = round($inputs['luongcoban'] * $cb->bhxh, 0);
-                        $cb->stbhyt = round($inputs['luongcoban'] * $cb->bhyt, 0);
-                        $cb->stkpcd = round($inputs['luongcoban'] * $cb->kpcd, 0);
-                        $cb->stbhtn = round($inputs['luongcoban'] * $cb->bhtn, 0);
+                    if($cb->baohiem && $cb->macongtac == 'KHONGCT') {
+                        $baohiem = ($cb->hesopc < 1 ? 1 : $cb->hesopc) * ($inputs['luongcoban']);
+                        $cb->stbhxh = round($baohiem * $cb->bhxh, 0);
+                        $cb->stbhyt = round($baohiem * $cb->bhyt, 0);
+                        $cb->stkpcd = round($baohiem * $cb->kpcd, 0);
+                        $cb->stbhtn = round($baohiem * $cb->bhtn, 0);
                         $cb->ttbh = $cb->stbhxh + $cb->stbhyt + $cb->stkpcd + $cb->stbhtn;
-                        $cb->stbhxh_dv = round($inputs['luongcoban'] * $cb->bhxh_dv, 0);
-                        $cb->stbhyt_dv = round($inputs['luongcoban'] * $cb->bhyt_dv, 0);
-                        $cb->stkpcd_dv = round($inputs['luongcoban'] * $cb->kpcd_dv, 0);
-                        $cb->stbhtn_dv = round($inputs['luongcoban'] * $cb->bhtn_dv, 0);
+                        $cb->stbhxh_dv = round($baohiem * $cb->bhxh_dv, 0);
+                        $cb->stbhyt_dv = round($baohiem * $cb->bhyt_dv, 0);
+                        $cb->stkpcd_dv = round($baohiem * $cb->kpcd_dv, 0);
+                        $cb->stbhtn_dv = round($baohiem * $cb->bhtn_dv, 0);
                         $cb->ttbh_dv = $cb->stbhxh_dv + $cb->stbhyt_dv + $cb->stkpcd_dv + $cb->stbhtn_dv;
                     }elseif($cb->baohiem){
                         $cb->stbhxh = $model_phucap->sum('stbhxh');
