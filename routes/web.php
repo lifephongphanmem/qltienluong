@@ -944,10 +944,10 @@ Route::group(['prefix'=>'he_thong'],function(){
         Route::get('get','nguonkinhphi_dinhmucController@getinfo');
         Route::get('update','nguonkinhphi_dinhmucController@update');
 
-        Route::get('del/{id}','dmphucapController@destroy');
-        Route::get('create','dmphucapController@create');
-        Route::get('edit','dmphucapController@edit');
-        Route::post('store','dmphucapController@store');
+        Route::get('phu_cap','nguonkinhphi_dinhmucController@phucap');
+        Route::post('store_pc','nguonkinhphi_dinhmucController@store_pc');
+        Route::get('del/{id}','nguonkinhphi_dinhmucController@destroy_pc');
+
     });
 });
 

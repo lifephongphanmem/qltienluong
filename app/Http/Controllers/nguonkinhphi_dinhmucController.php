@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\dmphucap_donvi;
 use App\nguonkinhphi;
 use App\nguonkinhphi_dinhmuc;
+use App\nguonkinhphi_dinhmuc_ct;
 use Illuminate\Http\Request;
 
 use App\Http\Requests;
@@ -67,4 +69,46 @@ class nguonkinhphi_dinhmucController extends Controller
         die(json_encode($result));
     }
 
+    public function phucap(Request $request)
+    {
+        if (Session::has('admin')) {
+            $inputs = $request->all();
+            $model_nguon = nguonkinhphi_dinhmuc::where('maso', $inputs['maso'])->first();
+
+            $model = nguonkinhphi_dinhmuc_ct::where('maso', $inputs['maso'])->get();
+            $a_pc =  array_column($model->toarray(), 'mapc');
+
+            $model_phucap = dmphucap_donvi::where('madv', session('admin')->madv)->wherenotin('mapc', $a_pc)->get();
+            //$model_phucap = dmphucap_donvi::wherenotin('mapc', $a_pc)->get();
+            return view('system.danhmuc.dinhmucnguon.details')
+                ->with('model', $model)
+                ->with('model_nguon', $model_nguon)
+                ->with('model_phucap', array_column($model_phucap->toarray(), 'tenpc', 'mapc'))
+                ->with('furl', '/he_thong/dinh_muc/')
+                ->with('pageTitle', 'Danh mục định mức nguồn');
+        } else
+            return view('errors.notlogin');
+    }
+
+    function store_pc(Request $request)
+    {
+        if (Session::has('admin')) {
+            $inputs = $request->all();
+            $inputs['tenpc'] = dmphucap_donvi::where('madv', session('admin')->madv)->where('mapc',$inputs['mapc'])->first()->tenpc;
+            $inputs['madv'] = session('admin')->madv;
+            nguonkinhphi_dinhmuc_ct::create($inputs);
+            return redirect('/he_thong/dinh_muc/phu_cap?maso='.$inputs['maso']);
+        } else
+            return view('errors.notlogin');
+    }
+
+
+    function destroy_pc($id){
+        if (Session::has('admin')) {
+            $model = nguonkinhphi_dinhmuc_ct::findOrFail($id);
+            $model->delete();
+            return redirect('/he_thong/dinh_muc/phu_cap?maso='.$model->maso);
+        }else
+            return view('errors.notlogin');
+    }
 }

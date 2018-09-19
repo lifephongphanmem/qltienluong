@@ -36,7 +36,7 @@
                         <b>THÔNG TIN ĐỊNH MỨC NGUỒN KINH PHÍ TẠI ĐƠN VỊ</b>
                     </div>
                     <div class="actions">
-                        <button type="button" id="_btnaddPB" class="btn btn-default btn-xs" onclick="addCV()"><i class="fa fa-plus"></i>&nbsp;Thêm mới</button>
+
                     </div>
                 </div>
                 <div class="portlet-body form-horizontal">
@@ -62,8 +62,8 @@
                                         <td>
                                             <button type="button" onclick="editCV('{{$value->maso}}')" class="btn btn-default btn-xs">
                                                 <i class="fa fa-edit"></i>&nbsp; Sửa</button>
-                                            <button type="button" onclick="editCV('{{$value->maso}}')" class="btn btn-default btn-xs">
-                                                <i class="fa fa-edit"></i>&nbsp; Phụ cấp</button>
+                                            <a href="{{url($furl.'phu_cap?maso='.$value->maso)}}" class="btn btn-default btn-xs">
+                                                <i class="fa fa-edit"></i>&nbsp; Phụ cấp</a>
                                         </td>
                                     </tr>
                                 @endforeach
