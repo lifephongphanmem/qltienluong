@@ -158,13 +158,18 @@ class tonghopluong_huyenController extends Controller
             $model_tonghop = tonghopluong_tinh::where('madvbc', $madvbc)->get();
             //Danh sách các đơn vị đã gửi dữ liệu
             //$model_dulieu = tonghopluong_huyen::where('madvbc',$madvbc)->get();
-            $model_dulieu = tonghopluong_huyen::where('macqcq', $madv)->where('trangthai','DAGUI')->get();
+            //$model_dulieu = tonghopluong_huyen::where('macqcq', $madv)->where('trangthai','DAGUI')->get();
+            $model_dulieu = tonghopluong_huyen::wherein('madv', function ($query) use ($madv) {
+                $query->select('madv')->from('dmdonvi')->where('macqcq', $madv)->where('madv', '<>', $madv)->get();
+            })->where('trangthai','DAGUI')->get();
+
             //dd($model_dulieu);
             //dd($model_dulieu);
             for ($i = 0; $i < count($a_data); $i++) {
                 //$a_data[$i]['maphanloai'] = session('admin')->maphanloai;
                 $tonghop = $model_tonghop->where('thang', $a_data[$i]['thang'])->where('nam', $inputs['nam'])->first();
                 $dulieu = $model_dulieu->where('thang', $a_data[$i]['thang'])->where('nam', $inputs['nam']);
+                //dd($dulieu);
                 //Kiểm tra xem đơn vị đã tổng hợp dữ liệu khối chưa
                 if (count($tonghop) > 0) {//lấy dữ liệu đã tổng hợp đưa ra kết quản
                     $a_data[$i]['noidung'] = $tonghop->noidung;

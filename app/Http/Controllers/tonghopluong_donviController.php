@@ -436,7 +436,10 @@ class tonghopluong_donviController extends Controller
             if(session('admin')->macqcq == session('admin')->madvqlkv){
 
                 //kiểm tra xem đã có bản ghi chưa (trường hợp trả lại)
-                $model_huyen = tonghopluong_huyen::where('mathdv', $model->mathh)->first();
+                //$model_huyen = tonghopluong_huyen::where('mathdv', $model->mathh)->first();
+                //khi trả  lại tonghophuyen set mathh = null =>tìm theo mã + thang + năm tổng hợp
+                $model_huyen = tonghopluong_huyen::where('thang', $model->thang)->where('nam', $model->nam)
+                    ->where('madv', $model->madv)->first();
                 if(count($model_huyen) == 0){
                     $masoh = getdate()[0];
                     $model->mathh = $masoh;
@@ -453,6 +456,7 @@ class tonghopluong_donviController extends Controller
                     $inputs['madvbc'] = session('admin')->madvbc;
                     tonghopluong_huyen::create($inputs);
                 }else{
+                    $model->mathh = $model_huyen->mathdv;//set lại mã vào tonghopdv
                     $model_huyen->trangthai = 'DAGUI';
                     $model_huyen->nguoilap = session('admin')->name;
                     $model_huyen->ngaylap = Carbon::now()->toDateTimeString();
