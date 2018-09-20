@@ -202,11 +202,11 @@ class bangluongController extends Controller
             //$model_phucap = dmphucap_donvi::where('madv', session('admin')->madv)->wherenotin('mapc', ['hesott'])->get();
             $a_ts =array_column(dmphucap_thaisan::where('madv', session('admin')->madv)->get()->toarray(), 'mapc');
             $manguonkp = $inputs['manguonkp'];
-            /*
+
             $a_nguonpc =array_column(nguonkinhphi_dinhmuc_ct::wherein('maso',function($qr) use ($manguonkp){
                     $qr->select('maso')->from('nguonkinhphi_dinhmuc')->where('madv', session('admin')->madv)->where('manguonkp', $manguonkp)->get();
-                })->toarray(), 'mapc');
-            */
+                })->get()->toarray(), 'mapc');
+
             //Tạo bảng lương
             bangluong::create($inputs);
 
@@ -382,10 +382,34 @@ class bangluongController extends Controller
                             $hesots += $cb->$val;
                         }
                     }
+                    if(count($a_nguonpc) > 0){
+                        $hesots = 0;
+                        $ttts = 0;
+                        foreach($a_nguonpc as $val){
+                            if($cb->$val > 10000){//sô tiền
+                                $ttts += $cb->$val;
+                            }else{
+                                $hesots += $cb->$val;
+                            }
+                        }
+                    }
                     $cb->tonghs = $hesots;
                     $cb->ttl = round($inputs['luongcoban'] * $hesots + $ttts);
                     $cb->congtac = 'THAISAN';
                 }else {
+                    if(count($a_nguonpc) > 0){
+                        //dd($a_nguonpc);
+                        $ths = 0;
+                        $tt = 0;
+                        foreach($a_nguonpc as $val){
+                            if($cb->$val > 10000){//sô tiền
+                                $tt += $cb->$val;
+                            }else{
+                                $ths += $cb->$val;
+                            }
+                        }
+                        $cb->tonghs = $ths;
+                    }
                     $cb->ttl = round($inputs['luongcoban'] * $ths + $tt);
                     //kiểm tra cán bộ ko chuyên trách thì tự động lấy lương cơ bản * % bảo hiểm
                     if($cb->baohiem && $cb->macongtac == 'KHONGCT') {
