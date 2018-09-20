@@ -22,6 +22,7 @@ use App\hosotamngungtheodoi;
 use App\hosotruc;
 use App\hosotruylinh;
 use App\ngachluong;
+use App\nguonkinhphi_dinhmuc_ct;
 use App\tonghopluong_donvi;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -198,8 +199,13 @@ class bangluongController extends Controller
             //Không tính truy lĩnh
             //$a_goc = array('hesott');
             $model_phucap = dmphucap_donvi::where('madv', session('admin')->madv)->wherenotin('mapc', ['hesott'])->get();
+            //$model_phucap = dmphucap_donvi::where('madv', session('admin')->madv)->wherenotin('mapc', ['hesott'])->get();
             $a_ts =array_column(dmphucap_thaisan::where('madv', session('admin')->madv)->get()->toarray(), 'mapc');
-
+            $manguonkp = $inputs['manguonkp'];
+            $a_nguonpc =array_column(nguonkinhphi_dinhmuc_ct::wherein('maso',function($qr) use ($manguonkp){
+                    $qr->select('maso')->from('nguonkinhphi_dinhmuc')->where('madv', session('admin')->madv)->where('manguonkp', $manguonkp)->get();
+                })->toarray(), 'mapc');
+            dd($a_nguonpc);
             //Tạo bảng lương
             bangluong::create($inputs);
 
@@ -1053,6 +1059,7 @@ class bangluongController extends Controller
                 }
             }
             //$inputs['hesott'] = chkDbl($inputs['hesott']);
+            $inputs['luongcoban'] = chkDbl($inputs['luongcoban']);
             $inputs['ttl'] = chkDbl($inputs['ttl']);
             $inputs['stbhxh'] = chkDbl($inputs['stbhxh']);
             $inputs['stbhyt'] = chkDbl($inputs['stbhyt']);
