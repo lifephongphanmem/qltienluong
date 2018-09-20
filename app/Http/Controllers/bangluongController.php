@@ -373,8 +373,8 @@ class bangluongController extends Controller
                         bangluong_phucap::create($a_kq);
                     }
                 }
-
-                $cb->tonghs = $ths + $heso_goc - $cb->heso; //đo chỉ lương nb hưởng 85%, các hệ số hưởng %, bảo hiểm thì lấy 100% để tính
+                $ths = $ths + $heso_goc - $cb->heso;//do chỉ lương nb hưởng 85%, các hệ số hưởng %, bảo hiểm thì lấy 100% để tính
+                $cb->tonghs = $ths;
                 //nếu cán bộ nghỉ thai sản
                 if($thaisan){
                     $cb->tencanbo = $cb->tencanbo . '(nghỉ thai sản)';
