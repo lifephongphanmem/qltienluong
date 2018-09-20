@@ -8,7 +8,8 @@ Route::get('/setting','HomeController@setting');
 Route::post('/setting','HomeController@upsetting');
 Route::get('danh_sach_tai_khoan','HomeController@listusers');
 Route::get('fix_pc','dmphucapController@fix_mapc');
-Route::get('fix_dv','hosocanboController@upd_dm');
+Route::get('fix_ct','dmphucapController@fix_ct');
+//Route::get('fix_dv','hosocanboController@upd_dm');
 
 
 // <editor-fold defaultstate="collapsed" desc="--Hệ thống--">
