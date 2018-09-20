@@ -202,10 +202,11 @@ class bangluongController extends Controller
             //$model_phucap = dmphucap_donvi::where('madv', session('admin')->madv)->wherenotin('mapc', ['hesott'])->get();
             $a_ts =array_column(dmphucap_thaisan::where('madv', session('admin')->madv)->get()->toarray(), 'mapc');
             $manguonkp = $inputs['manguonkp'];
+            /*
             $a_nguonpc =array_column(nguonkinhphi_dinhmuc_ct::wherein('maso',function($qr) use ($manguonkp){
                     $qr->select('maso')->from('nguonkinhphi_dinhmuc')->where('madv', session('admin')->madv)->where('manguonkp', $manguonkp)->get();
                 })->toarray(), 'mapc');
-            dd($a_nguonpc);
+            */
             //Tạo bảng lương
             bangluong::create($inputs);
 
