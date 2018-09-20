@@ -197,7 +197,7 @@ class bangluongController extends Controller
             $model_congtac = dmphanloaict::all();
             $model_phanloai = dmphanloaicongtac_baohiem::where('madv', session('admin')->madv)->get();
             //Không tính truy lĩnh
-            //$a_goc = array('hesott');
+            $a_goc = array('heso','vuotkhung','pccv'); //mảng phụ cấp làm công thức tính
             $model_phucap = dmphucap_donvi::where('madv', session('admin')->madv)->wherenotin('mapc', ['hesott'])->get();
             //$model_phucap = dmphucap_donvi::where('madv', session('admin')->madv)->wherenotin('mapc', ['hesott'])->get();
             $a_ts =array_column(dmphucap_thaisan::where('madv', session('admin')->madv)->get()->toarray(), 'mapc');
@@ -302,6 +302,11 @@ class bangluongController extends Controller
                     if($cb->$mapc <= 0){
                         continue;
                     }
+
+                    if(count($a_nguonpc) > 0 && !in_array($mapc, $a_nguonpc) && !in_array($mapc, $a_goc)){
+                        $cb->$mapc = 0;
+                    }
+
                     $ct->heso_goc = $cb->$mapc;
                     $heso = 0;
 
