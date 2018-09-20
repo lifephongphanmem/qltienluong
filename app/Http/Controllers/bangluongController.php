@@ -440,6 +440,19 @@ class bangluongController extends Controller
                         $cb->ttbh_dv = $cb->stbhxh_dv + $cb->stbhyt_dv + $cb->stkpcd_dv + $cb->stbhtn_dv;
                     }
 
+                    if(count($a_nguonpc) > 0 && $manguonkp == '12'){//chưa xử lý dc
+                        $cb->stbhxh = 0;
+                        $cb->stbhyt = 0;
+                        $cb->stkpcd = 0;
+                        $cb->stbhtn = 0;
+                        $cb->ttbh = 0;
+                        $cb->stbhxh_dv = 0;
+                        $cb->stbhyt_dv = 0;
+                        $cb->stkpcd_dv = 0;
+                        $cb->stbhtn_dv = 0;
+                        $cb->ttbh_dv = 0;
+                    }
+
                     //nếu cán bộ nghỉ phép
                     //ngày công = lương co + chuc vu + ....
                     $nghi = $m_nghiphep->where('macanbo', $cb->macanbo)->first();
