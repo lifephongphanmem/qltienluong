@@ -521,6 +521,7 @@ function getPhanLoaiKiemNhiem(){
         'CAPUY' => 'Kiêm nhiệm cấp ủy viên',
         'CONGDONG'=> 'Kiêm nhiệm cộng đồng',
         'MOTCUA'=> 'Kiêm nhiệm một cửa',
+        'TINHNGUYEN'=> 'Đội thanh niên tình nguyện',
     );
 }
 

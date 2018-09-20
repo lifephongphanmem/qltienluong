@@ -591,6 +591,42 @@ class hosocanboController extends Controller
         die(json_encode($result));
     }
 
+    public function store_tn(Request $request)
+    {
+        $result = array(
+            'status' => 'fail',
+            'message' => 'error',
+        );
+        if (!Session::has('admin')) {
+            $result = array(
+                'status' => 'fail',
+                'message' => 'permission denied',
+            );
+            die(json_encode($result));
+        }
+
+        $inputs = $request->all();
+        $inputs['baohiem'] = isset($inputs['baohiem'])?$inputs['baohiem'] : 0;
+        $inputs['madv'] = session('admin')->madv;
+        $inputs['hesopc'] = chkDbl($inputs['hesopc']);
+
+        if ($inputs['id'] > 0) {
+            hosocanbo_kiemnhiem::find($inputs['id'])->update($inputs);
+        } else {
+            hosocanbo_kiemnhiem::create($inputs);
+        }
+        $model = hosocanbo_kiemnhiem::where('macanbo', $inputs['macanbo'])->get();
+        $a_pl = getPhanLoaiKiemNhiem();
+        $a_cv = getChucVuCQ(false);
+        foreach($model as $ct) {
+            $ct->tenphanloai = isset($a_pl[$ct->phanloai]) ? $a_pl[$ct->phanloai] : '';
+            $ct->tenchucvu = isset($a_cv[$ct->macvcq]) ? $a_cv[$ct->macvcq] : '';
+        }
+        $result = $this->retun_html_kn($result, $model);
+
+        die(json_encode($result));
+    }
+
     public function delete_kn(Request $request)
     {
         $result = array(
@@ -866,6 +902,42 @@ class hosocanboController extends Controller
         die(json_encode($result));
     }
 
+    public function store_tn_temp(Request $request)
+    {
+        $result = array(
+            'status' => 'fail',
+            'message' => 'error',
+        );
+        if (!Session::has('admin')) {
+            $result = array(
+                'status' => 'fail',
+                'message' => 'permission denied',
+            );
+            die(json_encode($result));
+        }
+
+        $inputs = $request->all();
+
+        $inputs['madv'] = session('admin')->madv;
+        $inputs['hesopc'] = chkDbl($inputs['hesopc']);
+
+        if ($inputs['id'] > 0) {
+            hosocanbo_kiemnhiem_temp::find($inputs['id'])->update($inputs);
+        } else {
+            hosocanbo_kiemnhiem_temp::create($inputs);
+        }
+        $model = hosocanbo_kiemnhiem_temp::where('macanbo', $inputs['macanbo'])->get();
+        $a_pl = getPhanLoaiKiemNhiem();
+        $a_cv = getChucVuCQ(false);
+        foreach($model as $ct) {
+            $ct->tenphanloai = isset($a_pl[$ct->phanloai]) ? $a_pl[$ct->phanloai] : '';
+            $ct->tenchucvu = isset($a_cv[$ct->macvcq]) ? $a_cv[$ct->macvcq] : '';
+        }
+        $result = $this->retun_html_kn($result, $model);
+
+        die(json_encode($result));
+    }
+
     public function delete_kn_temp(Request $request)
     {
         $result = array(
@@ -1057,6 +1129,7 @@ class hosocanboController extends Controller
         $result['message'] .= '<th class="text-center">Phụ cấp</br>trách nhiệm</th>';
         $result['message'] .= '<th class="text-center">Phụ cấp</br>kiêm nhiệm</th>';
         $result['message'] .= '<th class="text-center">Phụ cấp</br>đặc thù</th>';
+        $result['message'] .= '<th class="text-center">Phụ cấp</br>khác</th>';
         $result['message'] .= '<th class="text-center">Thao tác</th>';
 
 
@@ -1073,6 +1146,7 @@ class hosocanboController extends Controller
                 $result['message'] .= '<td>' . $value->pctn . '</td>';
                 $result['message'] .= '<td>' . $value->pckn . '</td>';
                 $result['message'] .= '<td>' . $value->pcdbn . '</td>';
+                $result['message'] .= '<td>' . $value->pck . '</td>';
                 $result['message'] .= '<td>' .
                     '<button type="button" data-target="#kiemnhiem-modal" data-toggle="modal" class="btn btn-default btn-xs mbs" onclick="edit_kn(' . $value->id . ');"><i class="fa fa-edit"></i>&nbsp;Chỉnh sửa</button>' .
                     '<button type="button" class="btn btn-default btn-xs mbs" onclick="deleteRow(' . $value->id . ')" ><i class="fa fa-trash-o"></i>&nbsp;Xóa</button>'

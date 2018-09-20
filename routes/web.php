@@ -7,8 +7,8 @@ Route::get('ajaxtest','ajaxController@test');
 Route::get('/setting','HomeController@setting');
 Route::post('/setting','HomeController@upsetting');
 Route::get('danh_sach_tai_khoan','HomeController@listusers');
-Route::get('fix_pc','dmphucapController@fix_mapc');
-Route::get('fix_ct','dmphucapController@fix_ct');
+//Route::get('fix_pc','dmphucapController@fix_mapc');
+//Route::get('fix_ct','dmphucapController@fix_ct');
 //Route::get('fix_dv','hosocanboController@upd_dm');
 
 
@@ -208,6 +208,7 @@ Route::group(['prefix'=>'nghiep_vu'],function(){
         Route::get('store_cuv','hosocanboController@store_cuv');
         Route::get('store_cd','hosocanboController@store_cd');
         Route::get('store_mc','hosocanboController@store_mc');
+        Route::get('store_tn','hosocanboController@store_tn');
         Route::get('getinfor_kn','hosocanboController@getinfor_kn');
         Route::get('delete_kn','hosocanboController@delete_kn');
 
@@ -217,6 +218,7 @@ Route::group(['prefix'=>'nghiep_vu'],function(){
         Route::get('temp/store_cuv','hosocanboController@store_cuv_temp');
         Route::get('temp/store_cd','hosocanboController@store_cd_temp');
         Route::get('temp/store_mc','hosocanboController@store_mc_temp');
+        Route::get('temp/store_tn','hosocanboController@store_tn_temp');
         Route::get('temp/getinfor_kn','hosocanboController@getinfor_kn_temp');
         Route::get('temp/delete_kn','hosocanboController@delete_kn_temp_temp');
     });
@@ -362,6 +364,7 @@ Route::group(['prefix'=>'chuc_nang'],function(){
         Route::get('maucd','bangluongController@printf_maucd');
         Route::get('maumc','bangluongController@printf_maumc');
         Route::get('mautruc','bangluongController@printf_mautruc');
+        Route::get('mautinhnguyen','bangluongController@printf_mautinhnguyen');
 
         Route::post('mau01_excel','bangluongController@printf_mau01_excel');
         Route::post('mautt107_excel','bangluongController@printf_mautt107_excel');

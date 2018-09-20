@@ -409,6 +409,14 @@
                     </div>
                 </div>
 
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <a id="in_tn" href="" onclick="intn()" style="border-width: 0px" target="_blank">
+                                <i class="fa fa-print"></i>&nbsp; Bảng thanh toán phụ cấp đội tình nguyện</a>
+                        </div>
+                    </div>
+                </div>
 
                 <div class="row">
                     <div class="col-md-6">
@@ -565,6 +573,10 @@
 
         function intruc(){
             $("#in_truc").attr("href", '/chuc_nang/bang_luong/mautruc?mabl=' + $('#mabl_in').val());
+        }
+
+        function intn(){
+            $("#in_tn").attr("href", '/chuc_nang/bang_luong/mautinhnguyen?mabl=' + $('#mabl_in').val());
         }
         $(function(){
             $('#create_bangluong :submit').click(function(){

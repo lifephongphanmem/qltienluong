@@ -634,6 +634,78 @@
     <!-- /.modal-dialog -->
 </div>
 
+
+<!-- Kiêm nhiệm đội tình nguyện -->
+<div class="modal fade bs-modal-lg" id="tn-modal" tabindex="-1" aria-labelledby="myModalLabel" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+                <h4 class="modal-title">Thông tin kiêm nhiệm đội thanh niên tình nguyện</h4>
+            </div>
+
+            <div class="modal-body">
+                <div class="row">
+                    {!!Form::hidden('phanloai_tn', 'TINHNGUYEN', array('id' => 'phanloai_tn','class' => 'form-control'))!!}
+
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label class="control-label">Phân loại công tác</label>
+                            <select class="form-control select2me" name="mact_tn" id="mact_tn" required="required">
+                                @foreach($model_nhomct as $kieuct)
+                                    <optgroup label="{{$kieuct->tencongtac}}">
+                                        <?php
+                                        $mode_ct=$model_tenct->where('macongtac',$kieuct->macongtac);
+                                        ?>
+                                        @foreach($mode_ct as $ct)
+                                            <option value="{{$ct->mact}}">{{$ct->tenct}}</option>
+                                        @endforeach
+                                    </optgroup>
+                                @endforeach
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label class="control-label">Chức vụ kiêm nhiệm</label>
+                            {!!Form::select('macvcq_tn',getChucVuCQ(false), null, array('id' => 'macvcq_tn','class' => 'form-control select2me'))!!}
+                        </div>
+                    </div>
+
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label class="control-label">Khối/Tổ công tác</label>
+                            {!!Form::select('mapb_tn',getPhongBan(), null, array('id' => 'mapb_tn','class' => 'form-control select2me'))!!}
+                        </div>
+                    </div>
+
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label class="control-label">Nguồn KP hưởng lương</label>
+                            {!!Form::select('manguonkp_tn',getNguonKP(), null, array('id' => 'manguonkp_tn','class' => 'form-control select2me'))!!}
+                        </div>
+                    </div>
+
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label class="control-label">Hệ số phụ cấp</label>
+                            {!!Form::text('hesopc_tn', null, array('id' => 'hesopc_tn','class' => 'form-control', 'data-mask'=>'fdecimal'))!!}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <input type="hidden" name="id_tn" id="id_tn" />
+            <div class="modal-footer">
+                <button type="button" data-dismiss="modal" class="btn btn-default">Thoát</button>
+                <button type="button" id="capnhat_tn" name="capnhat_tn" class="btn btn-primary">Hoàn thành</button>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+
 <script>
     function add_kct(){
         $('#mact_kct').val('1506673695').trigger('change');
@@ -646,36 +718,43 @@
     function add_dbhdnd(){
         $('#id_dbhdnd').val(0);
         $('#mact_dbhdnd').val('1536402868').trigger('change');
-        $('#manguonkp_dbhdnd').val('13').trigger('change');
+        $('#manguonkp_dbhdnd').val('12').trigger('change');
         $('#dbhdnd-modal').modal('show');
     }
 
     function add_qs(){
         $('#id_qs').val(0);
         $('#mact_qs').val('1536402878').trigger('change');
-        $('#manguonkp_qs').val('13').trigger('change');
+        $('#manguonkp_qs').val('12').trigger('change');
         $('#qs-modal').modal('show');
     }
 
     function add_cuv(){
         $('#id_cuv').val(0);
         $('#mact_cuv').val('1536459380').trigger('change');
-        $('#manguonkp_cuv').val('13').trigger('change');
+        $('#manguonkp_cuv').val('12').trigger('change');
         $('#cuv-modal').modal('show');
     }
 
     function add_cd(){
         $('#id_cd').val(0);
         $('#mact_cd').val('1536402895').trigger('change');
-        $('#manguonkp_cd').val('13').trigger('change');
+        $('#manguonkp_cd').val('12').trigger('change');
         $('#cd-modal').modal('show');
     }
 
     function add_mc(){
         $('#id_mc').val(0);
         $('#mact_mc').val('1536459160').trigger('change');
-        $('#manguonkp_mc').val('13').trigger('change');
+        $('#manguonkp_mc').val('12').trigger('change');
         $('#mc-modal').modal('show');
+    }
+
+    function add_tn(){
+        $('#id_tn').val(0);
+        $('#mact_tn').val('1537427170').trigger('change');
+        $('#manguonkp_tn').val('12').trigger('change');
+        $('#tn-modal').modal('show');
     }
 
     function deleteRow(id){
@@ -778,6 +857,15 @@
                     $('#pckn_mc').val(data.pckn);
                     $('#pcdh_mc').val(data.pcdh);
                     $('#mc-modal').modal('show');
+                }
+                if(data.phanloai == 'TINHNGUYEN'){
+                    $('#mact_tn').val(data.mact).trigger('change');
+                    $('#mapb_tn').val(data.mapb).trigger('change');
+                    $('#macvcq_tn').val(data.macvcq).trigger('change');
+                    $('#manguonkp_tn').val(data.manguonkp).trigger('change');
+                    $('#id_tn').val(data.id);
+                    $('#hesopc_tn').val(data.hesopc);
+                    $('#tn-modal').modal('show');
                 }
             }
         })
@@ -981,6 +1069,36 @@
             })
         });
 
+        $('button[name="capnhat_tn"]').click(function(){
+            var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
+
+            $.ajax({
+                url: '{{$furl_kn}}'+'store_tn',
+                type: 'GET',
+                data: {
+                    _token: CSRF_TOKEN,
+                    macanbo : $('#macanbo').val(),
+                    mact : $('#mact_tn').val(),
+                    manguonkp : $('#manguonkp_tn').val(),
+                    mapb : $('#mapb_tn').val(),
+                    macvcq : $('#macvcq_tn').val(),
+                    id: $('#id_tn').val(),
+                    hesopc: $('#hesopc_tn').val(),
+                    phanloai: $('#phanloai_tn').val()
+                },
+                dataType: 'JSON',
+                success: function (data) {
+                    if(data.status == 'success') {
+                        toastr.success("Cập nhật thông tin thành công", "Thành công!");
+                        $('#dskn').replaceWith(data.message);
+                        $('#tn-modal').modal('hide');
+                    }
+                    else {
+                        toastr.error("Bạn cần kiểm tra lại thông tin vừa nhập!", "Lỗi!");
+                    }
+                }
+            })
+        });
 
     }(jQuery));
 </script>

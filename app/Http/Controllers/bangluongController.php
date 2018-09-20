@@ -3084,6 +3084,44 @@ class bangluongController extends Controller
         } else
             return view('errors.notlogin');
     }
+
+    public function printf_mautinhnguyen(Request $request){
+        if (Session::has('admin')) {
+            $inputs = $request->all();
+            $mabl = $inputs['mabl'];
+            $m_bl = bangluong::select('thang','nam','mabl','madv','ngaylap','luongcoban')->where('mabl',$mabl)->first();
+            $model = bangluong_ct::where('mabl',$mabl)->where('mact','1537427170')->get();
+            $model_hoso = hosocanbo::where('madv',$m_bl->madv)->get();
+            $a_cv = getChucVuCQ(false);
+
+            foreach($model as $ct) {
+                $ct->luongcb = $m_bl->luongcoban;
+                $hoso = $model_hoso->where('macanbo', $ct->macanbo)->first();
+
+                $ct->tencanbo = $hoso->tencanbo;
+                $ct->chucvu = isset($a_cv[$hoso->macvcq])? $a_cv[$hoso->macvcq]:'';
+                $ct->chucvukn = isset($a_cv[$ct->macvcq])? $a_cv[$ct->macvcq]:'';
+
+                $ct->sotien = $ct->hesopc * $ct->luongcb;
+            }
+
+            $m_dv = dmdonvi::where('madv',$m_bl->madv)->first();
+            $m_dv->tendvcq = getTenDB($m_dv->madvbc);
+
+            $thongtin=array('nguoilap'=>$m_bl->nguoilap,
+                'thang'=>$m_bl->thang,
+                'nam'=>$m_bl->nam,
+                'ngaylap'=>$m_bl->ngaylap,
+                'luongcb' => $m_bl->luongcoban);
+
+            return view('reports.bangluong.donvi.mautinhnguyen')
+                ->with('model',$model->sortBy('stt'))
+                ->with('m_dv',$m_dv)
+                ->with('thongtin',$thongtin)
+                ->with('pageTitle','Bảng lương chi tiết');
+        } else
+            return view('errors.notlogin');
+    }
     //Phân loai = 0: hệ sô; 1: số tiền
     function getBangLuong($inputs, $phanloai=0)
     {

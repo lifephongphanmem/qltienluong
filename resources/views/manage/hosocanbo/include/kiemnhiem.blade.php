@@ -10,7 +10,7 @@
                 </button>
                 <ul class="dropdown-menu">
                     <li>
-                        <button style="border-width: 0px" type="button" class="btn btn-default" onclick="add_kct()"><i class="fa fa-plus"></i>&nbsp;Cán bộ không chuyên trách</button>
+                        <button style="border-width: 0px" type="button" class="btn btn-default" onclick="add_kct()"><i class="fa fa-plus"></i>&nbsp;Cán bộ không CT</button>
                     </li>
                     <li>
                         <button style="border-width: 0px" type="button" class="btn btn-default" onclick="add_dbhdnd()"><i class="fa fa-plus"></i>&nbsp;Đại biểu hội đồng ND</button>
@@ -26,6 +26,9 @@
                     </li>
                     <li>
                         <button style="border-width: 0px" type="button" class="btn btn-default" onclick="add_mc()"><i class="fa fa-plus"></i>&nbsp;Văn phòng một cửa</button>
+                    </li>
+                    <li>
+                        <button style="border-width: 0px" type="button" class="btn btn-default" onclick="add_tn()"><i class="fa fa-plus"></i>&nbsp;Đội tình nguyện</button>
                     </li>
                 </ul>
             </div>
@@ -43,6 +46,7 @@
                         <th class="text-center">Phụ cấp</br>trách nhiệm</th>
                         <th class="text-center">Phụ cấp</br>kiêm nhiệm</th>
                         <th class="text-center">Phụ cấp</br>đặc thù</th>
+                        <th class="text-center">Phụ cấp</br>khác</th>
                         <th class="text-center">Thao tác</th>
                     </tr>
                 </thead>
@@ -58,6 +62,7 @@
                             <td class="text-right">{{$value->pctn}}</td>
                             <td class="text-right">{{$value->pckn}}</td>
                             <td class="text-right">{{$value->pcdbn}}</td>
+                            <td class="text-right">{{$value->pck}}</td>
                             <td>
                                 <button type="button" class="btn btn-default btn-xs mbs" onclick="edit_kn({{$value->id}});"><i class="fa fa-edit"></i>&nbsp;Chỉnh sửa</button>
                                 <button type="button" class="btn btn-default btn-xs mbs" onclick="deleteRow({{$value->id}})" ><i class="fa fa-trash-o"></i>&nbsp;Xóa</button>
