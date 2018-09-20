@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\dmdonvi;
+use App\dmphanloaicongtac_baohiem;
+use App\dmphanloaict;
 use App\dmphucap;
 use App\dmphucap_donvi;
 use Illuminate\Http\Request;
@@ -33,8 +35,29 @@ class dmphucapController extends Controller
             }
         }
         dd('ok');
-
     }
+
+    public function fix_ct(){
+        //chạy update cho cao bằng, lạng sơn
+        $model_donvi = dmdonvi::all();
+        //$model_dmpc = dmphucap::select('mapc', 'tenpc', 'baohiem', 'form', 'report', 'phanloai', 'congthuc')->where('mapc','hesobl')->first();
+        //$model_dmpc = dmphucap::select('mapc', 'tenpc', 'baohiem', 'form', 'report', 'phanloai', 'congthuc')->where('mapc','pcd')->first();
+        $model_dmpc = dmphanloaict::select('mact', 'macongtac')->where('mact','1537427170')->first();
+        //$phucap = dmphucap::where('mapc','hesobl')->first();
+        foreach($model_donvi as $donvi){
+            $model_phucap = dmphanloaicongtac_baohiem::where('madv',$donvi->madv)->get();
+            if(count($model_phucap)>0){
+                $chekbl = $model_phucap->where('mact','1537427170');
+                //$chekbl = $model_phucap->where('mapc','hesobl');
+                if(count($chekbl)== 0){
+                    $model_dmpc->madv = $donvi->madv;
+                    dmphanloaicongtac_baohiem::insert($model_dmpc->toarray());
+                }
+            }
+        }
+        dd('ok');
+    }
+
     public function index()
     {
         if (Session::has('admin')) {
