@@ -131,7 +131,7 @@ class tonghopluong_donviController extends Controller
                 $ct->mathdv = $mathdv;
                 foreach ($model_pc as $pc) {
                     $mapc = $pc->mapc;
-                    if (!in_array($pc->mapc, $a_bh) && $ct->congtac != 'CONGTAC') {
+                    if (!in_array($pc->mapc, $a_bh) && $ct->congtac == 'THAISAN') {
                         $ct->$mapc = 0;
                         continue;
                     }
@@ -176,11 +176,11 @@ class tonghopluong_donviController extends Controller
             //group mact đã bao gồm macongtac; manguonkp bao gồm luongcoban
             $model_data = a_unique($model_data);
             $a_th = getColTongHop();
+
             for ($i = 0; $i < count($model_data); $i++) {
                 $luongct = $model_bangluong_ct->where('manguonkp', $model_data[$i]['manguonkp'])
                     ->where('linhvuchoatdong', $model_data[$i]['linhvuchoatdong'])
                     ->where('mact', $model_data[$i]['mact']);
-
                 $tonghs = 0;
                 $model_data[$i]['mathdv'] = $mathdv;
 
