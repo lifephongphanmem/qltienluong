@@ -31,39 +31,60 @@
         <div class="col-md-12">
             <div class="portlet light bordered">
                 <div class="portlet-title">
-                    <div class="caption">DANH SÁCH CÁC ĐƠN VỊ</div>
+                    <div class="caption">DANH SÁCH CÁC ĐƠN VỊ CẤP DƯỚI</div>
                     <div class="actions">
 
                     </div>
                 </div>
                 <div class="portlet-body form-horizontal">
+
                     <div class="row">
                         <div class="form-group">
-                            <label class="control-label col-md-offset-1 col-md-1" style="text-align: right">Tháng </label>
                             <div class="col-md-2">
-                                {!! Form::select('thang',getThang(),$thang,array('id' => 'thang', 'class' => 'form-control'))!!}
+                                <div class="col-md-4">
+                                    <label class="control-label " style="text-align: right">Tháng </label>
+                                </div>
+                                <div class="col-md-8">
+                                    {!! Form::select('thang',getThang(),$thang,array('id' => 'thang', 'class' => 'form-control'))!!}
+                                </div>
                             </div>
-                            <label class="control-label col-md-1" style="text-align: right">Năm </label>
+
                             <div class="col-md-2">
-                                {!! Form::select('nam',getNam(),$nam, array('id' => 'nam', 'class' => 'form-control'))!!}
+                                <div class="col-md-3">
+                                    <label class="control-label " style="text-align: right">Năm </label>
+                                </div>
+                                <div class="col-md-9">
+                                    {!! Form::select('nam',getNam(),$nam, array('id' => 'nam', 'class' => 'form-control'))!!}
+                                </div>
                             </div>
-                            <div class="col-md-5">
-                                <label class="control-label col-md-3" style="text-align: right">Trạng thái </label>
+
+                            <div class="col-md-4">
+                                <div class="col-md-4">
+                                    <label class="control-label " style="text-align: right">Trạng thái </label>
+                                </div>
+                                <div class="col-md-8">
+                                    {!! Form::select('trangthai',$a_trangthai,$trangthai,array('id' => 'trangthai', 'class' => 'form-control'))!!}
+                                </div>
+                            </div>
+
+                            <div class="col-md-4">
+                                <div class="col-md-5">
+                                    <label class="control-label " style="text-align: right">Phân loại đơn vị</label>
+                                </div>
                                 <div class="col-md-7">
-                                    {!! Form::select(
-                                    'trangthai',$a_trangthai,$trangthai,
-                                    array('id' => 'trangthai', 'class' => 'form-control'))
-                                    !!}
+                                    {!! Form::select('phanloai',$a_phanloai,null, array('id' => 'phanloai', 'class' => 'form-control'))!!}
                                 </div>
                             </div>
                         </div>
                     </div>
+
                     <table id="sample_3" class="table table-hover table-striped table-bordered" style="min-height: 230px">
                         <thead>
                         <tr>
                             <th class="text-center" style="width: 5%">STT</th>
                             <th class="text-center">Tên đơn vị</th>
-                            <th class="text-center">Tên đơn vị tổng hợp dữ liệu</th>
+                            <th class="text-center">Trạng thái</th>
+                            <th class="text-center">Ngày gửi</th>
                             <th class="text-center">Thao tác</th>
                         </tr>
                         </thead>
@@ -73,14 +94,23 @@
                                 <tr>
                                     <td class="text-center">{{$key+1}}</td>
                                     <td>{{$value->tendv}}</td>
-                                    <td>{{$value->tendvcq}}</td>
+                                    <td>{{$value->trangthai}}</td>
+                                    <td>{{getDayVn($value->ngaygui)}}</td>
                                     <td>
                                         @if ($value->mathdv != NULL)
                                             <a href="{{url('/chuc_nang/tong_hop_luong/don_vi/printf_data/ma_so='.$value['mathdv'])}}" class="btn btn-default btn-sm" TARGET="_blank">
                                                 <i class="fa fa-print"></i>&nbsp; Số liệu tổng hợp</a>
+
+                                            <a href="{{url('/chuc_nang/tong_hop_luong/don_vi/printf_bl/ma_so='.$value['mathdv'])}}" class="btn btn-default btn-sm" TARGET="_blank">
+                                                <i class="fa fa-print"></i>&nbsp; Số liệu chi tiết</a>
+
                                             @if($value->maphanloai == 'KVXP')
                                                 <!--a href="{{url('/chuc_nang/tong_hop_luong/don_vi/printf_data_diaban/ma_so='.$value['mathdv'])}}" class="btn btn-default btn-sm" TARGET="_blank">
                                                     <i class="fa fa-print"></i>&nbsp; Số liệu địa bàn</a-->
+                                            @endif
+                                            @if($value->trangthai == 'CHOKHOINHAN')
+                                                <button type="button" class="btn btn-default btn-sm" onclick="confirmNhan('{{$value['mathdv']}}')" data-target="#nhan-modal" data-toggle="modal"><i class="fa icon-share-alt"></i>&nbsp;
+                                                    Nhận dữ liệu</button>
                                             @endif
                                             @if($value->tralai)
                                                 <button type="button" class="btn btn-default btn-sm" onclick="confirmChuyen('{{$value['mathdv']}}')" data-target="#chuyen-modal" data-toggle="modal"><i class="fa icon-share-alt"></i>&nbsp;
@@ -126,9 +156,42 @@
         </div>
     </div>
 
+    <div class="modal fade" id="nhan-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                {!! Form::open(['url'=>$furl.'khoi/nhan','id' => 'frm_nhan','method'=>'POST'])!!}
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+                    <h4 class="modal-title">Đồng ý nhận số liệu?</h4>
+
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <label class="control-label">Ngày nhận dữ liệu</label>
+                            <input type="date" name="ngaykhoinhan_nhan" id="ngaykhoinhan_nhan" class="form-control" value="{{date('Y-m-d')}}"/>
+                            <input type="hidden" name="mathdv_nhan" id="mathdv_nhan">
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn default" data-dismiss="modal">Hủy</button>
+                        <button type="submit" class="btn blue">Đồng ý</button>
+                    </div>
+                    {!! Form::close() !!}
+                </div>
+                <!-- /.modal-content -->
+            </div>
+            <!-- /.modal-dialog -->
+        </div>
+    </div>
+
     <script>
         function confirmChuyen(mathdv) {
             document.getElementById("mathdv").value = mathdv;
+        }
+
+        function confirmNhan(mathdv) {
+            document.getElementById("mathdv_nhan").value = mathdv;
         }
 
         $(function(){

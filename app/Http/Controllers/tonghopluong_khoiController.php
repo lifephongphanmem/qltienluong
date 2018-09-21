@@ -56,9 +56,14 @@ class tonghopluong_khoiController extends Controller
             $a_trangthai = getStatus();
 
             //Lấy dữ liệu các đơn vị cấp dưới đã gửi lên
+            /*
             $model_donvi = tonghopluong_donvi::wherein('madv', function ($query) use ($madv) {
                 $query->select('madv')->from('dmdonvi')->where('macqcq', $madv)->distinct();
             })->get();
+            */
+            $model_donvi = tonghopluong_donvi::where('macqcq', $madv)
+                ->where('trangthai', 'DAGUI')->get();
+
             //Lấy danh sách các dữ liệu đã tổng hợp theo khối
             $model_khoi = tonghopluong_khoi::where('madv', $madv)->get();
             for ($i = 0; $i < count($a_data); $i++) {

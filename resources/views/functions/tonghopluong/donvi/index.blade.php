@@ -69,8 +69,9 @@
                             <tr>
                                 <th class="text-center" style="width: 10%">STT</th>
                                 <th class="text-center">Tháng/Năm</th>
-                                <th class="text-center">Nội dung</th>
                                 <th class="text-center">Trạng thái</th>
+                                <th class="text-center">Đơn vị nhận</br>dữ liệu</th>
+                                <th class="text-center">Ngày gửi</th>
                                 <th class="text-center">Thao tác</th>
                             </tr>
                         </thead>
@@ -81,8 +82,9 @@
                                 <tr class="{{getTextStatus($value['trangthai'])}}">
                                     <td class="text-center">{{$i++}}</td>
                                     <td class="text-center">{{$value['thang'].'/'.$nam}}</td>
-                                    <td>{{$value['noidung']}}</td>
                                     <td class="text-center bold">{{$a_trangthai[$value['trangthai']]}}</td>
+                                    <td>{{$value['tendvcq']}}</td>
+                                    <td>{{getDayVn($value['ngaygui'])}}</td>
                                     <td>
                                         @if ($value['bangluong'] != NULL)
                                             @if ($value['mathdv'] != NULL)
@@ -103,12 +105,14 @@
                                                     <button type="button" onclick="cfDel('{{$furl.'del/maso='.$value['mathdv']}}')" class="btn btn-default btn-sm mbs" data-target="#delete-modal-confirm" data-toggle="modal">
                                                         <i class="fa fa-times"></i>&nbsp; Xóa</button>
                                                 @endif
-                                                    <a href="{{url($furl.'printf_data/ma_so='.$value['mathdv'])}}" class="btn btn-default btn-sm" TARGET="_blank">
-                                                        <i class="fa fa-print"></i>&nbsp; In tổng hợp</a>
-                                                    @if($value['maphanloai'] == 'KVXP')
-                                                        <!--a href="{{url($furl.'printf_data_diaban/ma_so='.$value['mathdv'])}}" class="btn btn-default btn-sm" TARGET="_blank">
-                                                            <i class="fa fa-print"></i>&nbsp; Số liệu địa bàn</a-->
-                                                    @endif
+                                                <a href="{{url($furl.'printf_data/ma_so='.$value['mathdv'])}}" class="btn btn-default btn-sm" TARGET="_blank">
+                                                    <i class="fa fa-print"></i>&nbsp; In tổng hợp</a>
+                                                <a href="{{url($furl.'printf_bl/ma_so='.$value['mathdv'])}}" class="btn btn-default btn-sm" TARGET="_blank">
+                                                    <i class="fa fa-print"></i>&nbsp; In chi tiết</a>
+                                                @if($value['maphanloai'] == 'KVXP')
+                                                    <!--a href="{{url($furl.'printf_data_diaban/ma_so='.$value['mathdv'])}}" class="btn btn-default btn-sm" TARGET="_blank">
+                                                        <i class="fa fa-print"></i>&nbsp; Số liệu địa bàn</a-->
+                                                @endif
                                             @else
                                                 <a href="{{url($furl.'tonghop?thang='.$value['thang'].'&nam='.$nam)}}" class="btn btn-default btn-sm">
                                                     <i class="fa fa-stack-overflow"></i>&nbsp; Tổng hợp dữ liệu</a>

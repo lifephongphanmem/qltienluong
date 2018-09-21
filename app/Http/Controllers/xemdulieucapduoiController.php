@@ -27,8 +27,8 @@ class xemdulieucapduoiController extends Controller
             //$donvi=dmdonvi::where('madv',session('admin')->madv)->get();
             $inputs=$request->all();
             $madv = session('admin')->madv;
-            $a_trangthai=array('ALL'=>'--Chọn trạng thái dữ liệu--','CHOGUI'=>'Chưa gửi dữ liệu','DAGUI'=>'Đã gửi dữ liệu');
-            $list_donvi= dmdonvi::select('madv', 'tendv')->where('madvbc', session('admin')->madvbc)->get();
+            $a_trangthai=array('ALL'=>'Tất cả dữ liệu','CHOGUI'=>'Chưa gửi dữ liệu','DAGUI'=>'Đã gửi dữ liệu');
+            //$list_donvi= dmdonvi::select('madv', 'tendv')->where('madvbc', session('admin')->madvbc)->get();
             $model_donvi = dmdonvi::select('madv', 'tendv','macqcq','maphanloai')->where('macqcq', $madv)->where('madv','<>',$madv)->get();
             $model_tonghop = tonghopluong_donvi::where('macqcq', $madv)
                 ->where('thang', $inputs['thang'])
@@ -94,22 +94,22 @@ class xemdulieucapduoiController extends Controller
             //dd(count($model));
             $tralai = count($model)>0? false : true;
             foreach($model_donvi as $dv) {
-                $donvi = $list_donvi->where('madv', $dv->macqcq)->first();
-                $dv->tendvcq = (isset($donvi) ? $donvi->tendv : NULL);
+                $dv->tendvcq = getTenDV($dv->macqcq);
                 $tonghop = $model_tonghop->where('madv', $dv->madv)->first();
                 $dv->tralai =$tralai;
+                $dv->mathdv = NULL;
+                $dv->ngaygui = '';
+                $dv->trangthai = 'CHOGUI';
                 if (count($tonghop)>0) {
                     $dv->mathdv = $tonghop->mathdv;
                     $dv->trangthai = $tonghop->trangthai;
-                } else {
-                    $dv->mathdv = NULL;
-                    $dv->trangthai = 'CHOGUI';
+                    $dv->ngaygui = $tonghop->ngaygui;
                 }
             }
             if($inputs['trangthai'] !='ALL'){
                 $model_donvi = $model_donvi->where('trangthai', $inputs['trangthai']);
             }
-
+            $a_phanloai = array('ALL'=>'Tất cả các đơn vị','MAMNON'=>'Trường Mầm non','TIEUHOC'=>'Trường Tiểu học', 'THCS'=>'Trường Trung học cơ sở');
             //dd($model_donvi->toarray());
             return view('functions.viewdata.index')
                 ->with('model', $model_donvi)
@@ -117,6 +117,7 @@ class xemdulieucapduoiController extends Controller
                 ->with('nam', $inputs['nam'])
                 ->with('trangthai', $inputs['trangthai'])
                 ->with('a_trangthai', $a_trangthai)
+                ->with('a_phanloai', $a_phanloai)
                 ->with('furl','/chuc_nang/tong_hop_luong/')
                 ->with('pageTitle','Danh sách đơn vị tổng hợp lương');
 

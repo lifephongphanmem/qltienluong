@@ -52,6 +52,9 @@ class tonghopluong_donviController extends Controller
             $model_bangluong = bangluong::where('madv', session('admin')->madv)->get();
             for ($i = 0; $i < count($a_data); $i++) {
                 $a_data[$i]['maphanloai'] = session('admin')->maphanloai;
+                $a_data[$i]['ngaygui'] = '';
+                $a_data[$i]['macqcq'] = '';
+                $a_data[$i]['tendvcq'] = '';
                 $tonghop = $model->where('thang', $a_data[$i]['thang'])->where('nam', $inputs['nam'])->first();
                 $bangluong = $model_bangluong->where('thang', $a_data[$i]['thang'])->where('nam', $inputs['nam']);
                 if (count($bangluong) > 0) {
@@ -60,7 +63,12 @@ class tonghopluong_donviController extends Controller
                         $a_data[$i]['noidung'] = $tonghop->noidung;
                         $a_data[$i]['mathdv'] = $tonghop->mathdv;
                         $a_data[$i]['trangthai'] = $tonghop->trangthai;
-
+                        $a_data[$i]['ngaygui'] = $tonghop->ngaygui;
+                        $a_data[$i]['macqcq'] = $tonghop->macqcq;
+                        $a_data[$i]['tendvcq'] = getTenDV($a_data[$i]['macqcq']);
+                        if($a_data[$i]['tendvcq'] == ''){
+                            $a_data[$i]['tendvcq'] = $a_data[$i]['macqcq']; //trường hợp đơn vị gửi nhưng ko pải đơn vị trong hệ thống => đưa mã để kiểm tra
+                        }
                     } else {
                         $a_data[$i]['noidung'] = 'Dữ liệu tổng hợp của ' . getTenDV(session('admin')->madv) . ' thời điểm ' . $a_data[$i]['thang'] . '/' . $inputs['nam'];
                         $a_data[$i]['trangthai'] = 'CHUATAO';
@@ -70,6 +78,7 @@ class tonghopluong_donviController extends Controller
                     $a_data[$i]['bangluong'] = null;
                     $a_data[$i]['trangthai'] = 'CHUALUONG';
                 }
+
             }
             //dd($a_data);
             return view('functions.tonghopluong.donvi.index')
@@ -518,6 +527,70 @@ class tonghopluong_donviController extends Controller
                 ->with('col', $col)
                 ->with('a_phucap', $a_phucap)
                 ->with('pageTitle', 'Chi tiết tổng hợp lương tại đơn vị theo địa bàn quản lý');
+        } else
+            return view('errors.notlogin');
+    }
+
+    function printf_bl($mathdv)
+    {
+        if (Session::has('admin')) {
+            //dd($mathdv);
+            //$model = tonghopluong_donvi_chitiet::where('mathdv', $mathdv)->get();
+            $model = tonghopluong_donvi_bangluong::where('mathdv', $mathdv)->get();
+            $model_thongtin = tonghopluong_donvi::where('mathdv', $mathdv)->first();
+            $model_nguonkp = array_column(dmnguonkinhphi::all()->toArray(), 'tennguonkp', 'manguonkp');
+            $model_ct = array_column(dmphanloaict::all()->toArray(), 'tenct', 'mact');
+            //$gnr = getGeneralConfigs();
+
+            //cho trương hợp đơn vị cấp trên in dữ liệu dv câp dưới mà ko sai tên đơn vị
+            $m_dv = dmdonvi::where('madv', $model_thongtin->madv)->first();
+
+            foreach ($model as $chitiet) {
+                $chitiet->tennguonkp = isset($model_nguonkp[$chitiet->manguonkp]) ? $model_nguonkp[$chitiet->manguonkp] : '';
+                $chitiet->tenct = isset($model_ct[$chitiet->mact]) ? $model_ct[$chitiet->mact] : '';
+                $chitiet->tongtl = $chitiet->tonghs * $chitiet->luongcoban;
+            }
+            //dd($model);
+
+            $a_phucap = array();
+            $col = 0;
+            $m_pc = array_column(dmphucap_donvi::where('madv', $model_thongtin->madv)->get()->toarray(),'report','mapc');
+            foreach (getColTongHop() as $ct) {
+                if ($model->sum($ct) > 0) {
+                    $a_phucap[$ct] = isset($m_pc[$ct]) ? $m_pc[$ct] : '';
+                    $col++;
+                }
+            }
+            //dd($a_phucap);
+            $thongtin = array('nguoilap' => session('admin')->name,
+                'thang' => $model_thongtin->thang,
+                'nam' => $model_thongtin->nam);
+
+            //Lấy dữ liệu để lập
+            $model_congtac = $model->map(function ($data) {
+                return collect($data->toArray())
+                    ->only(['mact','manguonkp','tennguonkp','tenct'])
+                    ->all();
+            });
+            //group mact đã bao gồm macongtac; manguonkp bao gồm luongcoban
+            $a_congtac = a_unique($model_congtac);
+
+            $model_nguon = $model->map(function ($data) {
+                return collect($data->toArray())
+                    ->only(['manguonkp','tennguonkp'])
+                    ->all();
+            });
+            $a_nguon = a_unique($model_nguon);
+
+            return view('reports.tonghopluong.donvi.bangluong')
+                ->with('thongtin', $thongtin)
+                ->with('model', $model)
+                ->with('m_dv', $m_dv)
+                ->with('col', $col)
+                ->with('a_phucap', $a_phucap)
+                ->with('a_nguon', $a_nguon)
+                ->with('a_congtac', $a_congtac)
+                ->with('pageTitle', 'Chi tiết tổng hợp lương tại đơn vị');
         } else
             return view('errors.notlogin');
     }
