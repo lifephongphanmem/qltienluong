@@ -50,7 +50,7 @@
                                                     {!!Form::select('macongtac',getNhomCongTac(), null, array('id' => 'macongtac','class' => 'form-control', 'disabled'=>'true'))!!}
                                                 </div>
                                             </div>
-                                            <input type="hidden" name="madvbc" id="madvbc" value="{{$madvbc}}" />
+                                            <input type="hidden" name="madvbc" id="madvbc" value="{{$model->mact}}" />
                                         @endif
 
 

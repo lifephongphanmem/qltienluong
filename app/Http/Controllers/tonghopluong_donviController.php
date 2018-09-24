@@ -344,13 +344,14 @@ class tonghopluong_donviController extends Controller
                     ->where('macongtac', $inputs['macongtac'])->first();
             }
 
+            $model_thongtin = tonghopluong_donvi::where('mathdv',$model->mathdv)->first();
             $model->tongpc = $model->tonghs - $model->heso - $model->hesopc;
             $model->ttbh_dv = $model->stbhxh_dv + $model->stbhyt_dv + $model->stkpcd_dv + $model->stbhtn_dv;
 
             return view('functions.tonghopluong.templates.edit_detail')
                 ->with('furl', '/chuc_nang/tong_hop_luong/don_vi/')
                 ->with('model', $model)
-                //->with('model_thongtin',$model_thongtin)
+                ->with('model_thongtin',$model_thongtin)
                 ->with('pageTitle', 'Chi tiết tổng hợp lương tại đơn vị');
         } else
             return view('errors.notlogin');
