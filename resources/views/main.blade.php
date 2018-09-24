@@ -159,7 +159,7 @@
                     </a>
                     <ul class="sub-menu">
                         <li>
-                            <a href="{{url('chuc_nang/dang_ky_luong/danh_sach?thang='.date('m').'&nam='.date('Y'))}}"><i class="fa fa-caret-right"></i>Đăng ký lương ()</a>
+                            <a href="{{url('chuc_nang/dang_ky_luong/danh_sach?thang='.date('m').'&nam='.date('Y'))}}"><i class="fa fa-caret-right"></i>Đăng ký lương</a>
                         </li>
 
                         <li>
