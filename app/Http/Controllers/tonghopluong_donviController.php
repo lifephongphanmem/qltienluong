@@ -344,14 +344,14 @@ class tonghopluong_donviController extends Controller
                     ->where('macongtac', $inputs['macongtac'])->first();
             }
 
-            $model_thongtin = tonghopluong_donvi::where('mathdv',$model->mathdv)->first();
+            //$model_thongtin = tonghopluong_donvi::where('mathdv',$model->mathdv)->first();
             $model->tongpc = $model->tonghs - $model->heso - $model->hesopc;
             $model->ttbh_dv = $model->stbhxh_dv + $model->stbhyt_dv + $model->stkpcd_dv + $model->stbhtn_dv;
 
             return view('functions.tonghopluong.templates.edit_detail')
                 ->with('furl', '/chuc_nang/tong_hop_luong/don_vi/')
                 ->with('model', $model)
-                ->with('model_thongtin',$model_thongtin)
+                //->with('model_thongtin',$model_thongtin)
                 ->with('pageTitle', 'Chi tiết tổng hợp lương tại đơn vị');
         } else
             return view('errors.notlogin');
@@ -574,18 +574,24 @@ class tonghopluong_donviController extends Controller
 
             //cho trương hợp đơn vị cấp trên in dữ liệu dv câp dưới mà ko sai tên đơn vị
             $m_dv = dmdonvi::where('madv', $model_thongtin->madv)->first();
+            $a_phucap = array();
+            $col = 0;
+            $m_pc = array_column(dmphucap_donvi::where('madv', $model_thongtin->madv)->get()->toarray(),'report','mapc');
 
             foreach ($model as $chitiet) {
                 $chitiet->tennguonkp = isset($model_nguonkp[$chitiet->manguonkp]) ? $model_nguonkp[$chitiet->manguonkp] : '';
                 $chitiet->tenct = isset($model_ct[$chitiet->mact]) ? $model_ct[$chitiet->mact] : '';
-                $chitiet->tongtl = $chitiet->tonghs * $chitiet->luongcoban;
+                $thanhtien = 0;
+                foreach (getColTongHop() as $ct) {
+                    if ($chitiet->$ct > 50000) {
+                        $thanhtien +=  $chitiet->$ct;
+                    }
+                }
+                $chitiet->tongtl = $chitiet->tonghs * $chitiet->luongcoban + $thanhtien;
             }
             //dd($model);
 
-            $a_phucap = array();
-            $col = 0;
-            $m_pc = array_column(dmphucap_donvi::where('madv', $model_thongtin->madv)->get()->toarray(),'report','mapc');
-            foreach (getColTongHop() as $ct) {
+           foreach (getColTongHop() as $ct) {
                 if ($model->sum($ct) > 0) {
                     $a_phucap[$ct] = isset($m_pc[$ct]) ? $m_pc[$ct] : '';
                     $col++;
