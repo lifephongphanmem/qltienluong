@@ -46,7 +46,7 @@
                     <div class="col-md-4">
                         <div class="form-group">
                             <label class="control-label">Nguồn KP hưởng lương</label>
-                            {!!Form::select('manguonkp_kct',getNguonKP(), null, array('id' => 'manguonkp_kct','class' => 'form-control select2me'))!!}
+                            {!!Form::select('manguonkp_kct',getNguonKP(true), null, array('id' => 'manguonkp_kct','class' => 'form-control select2me'))!!}
                         </div>
                     </div>
 
@@ -161,7 +161,7 @@
                     <div class="col-md-4">
                         <div class="form-group">
                             <label class="control-label">Nguồn KP hưởng lương</label>
-                            {!!Form::select('manguonkp_dbhdnd',getNguonKP(), null, array('id' => 'manguonkp_dbhdnd','class' => 'form-control select2me'))!!}
+                            {!!Form::select('manguonkp_dbhdnd',getNguonKP(true), null, array('id' => 'manguonkp_dbhdnd','class' => 'form-control select2me'))!!}
                         </div>
                     </div>
 
@@ -268,7 +268,7 @@
                     <div class="col-md-4">
                         <div class="form-group">
                             <label class="control-label">Nguồn KP hưởng lương</label>
-                            {!!Form::select('manguonkp_qs',getNguonKP(), null, array('id' => 'manguonkp_qs','class' => 'form-control select2me'))!!}
+                            {!!Form::select('manguonkp_qs',getNguonKP(true), null, array('id' => 'manguonkp_qs','class' => 'form-control select2me'))!!}
                         </div>
                     </div>
 
@@ -375,7 +375,7 @@
                     <div class="col-md-4">
                         <div class="form-group">
                             <label class="control-label">Nguồn KP hưởng lương</label>
-                            {!!Form::select('manguonkp_cuv',getNguonKP(), null, array('id' => 'manguonkp_cuv','class' => 'form-control select2me'))!!}
+                            {!!Form::select('manguonkp_cuv',getNguonKP(true), null, array('id' => 'manguonkp_cuv','class' => 'form-control select2me'))!!}
                         </div>
                     </div>
 
@@ -482,7 +482,7 @@
                     <div class="col-md-4">
                         <div class="form-group">
                             <label class="control-label">Nguồn KP hưởng lương</label>
-                            {!!Form::select('manguonkp_cd',getNguonKP(), null, array('id' => 'manguonkp_cd','class' => 'form-control select2me'))!!}
+                            {!!Form::select('manguonkp_cd',getNguonKP(true), null, array('id' => 'manguonkp_cd','class' => 'form-control select2me'))!!}
                         </div>
                     </div>
 
@@ -582,7 +582,7 @@
                     <div class="col-md-4">
                         <div class="form-group">
                             <label class="control-label">Nguồn KP hưởng lương</label>
-                            {!!Form::select('manguonkp_mc',getNguonKP(), null, array('id' => 'manguonkp_mc','class' => 'form-control select2me'))!!}
+                            {!!Form::select('manguonkp_mc',getNguonKP(true), null, array('id' => 'manguonkp_mc','class' => 'form-control select2me'))!!}
                         </div>
                     </div>
 
@@ -683,7 +683,7 @@
                     <div class="col-md-4">
                         <div class="form-group">
                             <label class="control-label">Nguồn KP hưởng lương</label>
-                            {!!Form::select('manguonkp_tn',getNguonKP(), null, array('id' => 'manguonkp_tn','class' => 'form-control select2me'))!!}
+                            {!!Form::select('manguonkp_tn',getNguonKP(true), null, array('id' => 'manguonkp_tn','class' => 'form-control select2me'))!!}
                         </div>
                     </div>
 
@@ -710,7 +710,7 @@
     function add_kct(){
         $('#mact_kct').val('1506673695').trigger('change');
         $('#baohiem_kct').val('0').trigger('change');
-        $('#manguonkp_kct').val('13').trigger('change');
+        $('#manguonkp_kct').val('').trigger('change');
         $('#id_kct').val(0);
         $('#kct-modal').modal('show');
     }
@@ -718,42 +718,42 @@
     function add_dbhdnd(){
         $('#id_dbhdnd').val(0);
         $('#mact_dbhdnd').val('1536402868').trigger('change');
-        $('#manguonkp_dbhdnd').val('12').trigger('change');
+        $('#manguonkp_dbhdnd').val('').trigger('change');
         $('#dbhdnd-modal').modal('show');
     }
 
     function add_qs(){
         $('#id_qs').val(0);
         $('#mact_qs').val('1536402878').trigger('change');
-        $('#manguonkp_qs').val('12').trigger('change');
+        $('#manguonkp_qs').val('').trigger('change');
         $('#qs-modal').modal('show');
     }
 
     function add_cuv(){
         $('#id_cuv').val(0);
         $('#mact_cuv').val('1536459380').trigger('change');
-        $('#manguonkp_cuv').val('12').trigger('change');
+        $('#manguonkp_cuv').val('').trigger('change');
         $('#cuv-modal').modal('show');
     }
 
     function add_cd(){
         $('#id_cd').val(0);
         $('#mact_cd').val('1536402895').trigger('change');
-        $('#manguonkp_cd').val('12').trigger('change');
+        $('#manguonkp_cd').val('').trigger('change');
         $('#cd-modal').modal('show');
     }
 
     function add_mc(){
         $('#id_mc').val(0);
         $('#mact_mc').val('1536459160').trigger('change');
-        $('#manguonkp_mc').val('12').trigger('change');
+        $('#manguonkp_mc').val('').trigger('change');
         $('#mc-modal').modal('show');
     }
 
     function add_tn(){
         $('#id_tn').val(0);
         $('#mact_tn').val('1537427170').trigger('change');
-        $('#manguonkp_tn').val('12').trigger('change');
+        $('#manguonkp_tn').val('').trigger('change');
         $('#tn-modal').modal('show');
     }
 

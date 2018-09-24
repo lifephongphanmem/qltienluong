@@ -6,7 +6,9 @@ use App\dmdiabandbkk;
 use App\dmdonvi;
 use App\dmnguonkinhphi;
 use App\dmphanloaicongtac;
+use App\dmphanloaict;
 use App\dmphanloaidonvi;
+use App\dmphucap;
 use App\tonghopluong_donvi;
 use App\tonghopluong_donvi_chitiet;
 use App\tonghopluong_donvi_diaban;
@@ -112,27 +114,67 @@ class tonghopluong_khoiController extends Controller
             $thang = $inputs['thang'];
             $nam = $inputs['nam'];
             $madv = session('admin')->madv;
-            $model_phanloai = dmphanloaidonvi::all();
-            $model_donvi = dmdonvi::where('macqcq',$madv )->get();
+            $model_donvi = dmdonvi::where('macqcq',$madv)->get();
+            $model_phanloai = dmphanloaidonvi::wherein('maphanloai',array_column($model_donvi->toarray(),'maphanloai'))->get();
+            $m_pc = array_column(dmphucap::all()->toarray(),'report','mapc');
+            $a_phucap = array();
+            $col = 0;
             $model_tonghop = tonghopluong_donvi::where('macqcq',$madv)
                 ->where('nam', $nam)
                 ->where('thang', $thang)
                 ->where('trangthai', 'DAGUI')->get();
+            $a_dv = array_column($model_tonghop->toarray(),'madv','mathdv');
+            $a_pl = array_column($model_donvi->toarray(),'maphanloai','madv');
             $model = tonghopluong_donvi_chitiet::wherein('mathdv', array_column($model_tonghop->toarray(),'mathdv'))->get();
-    dd($model_phanloai);
+            $model_nguonkp = array_column(dmnguonkinhphi::all()->toArray(), 'tennguonkp', 'manguonkp');
+            $model_phanloaict = array_column(dmphanloaicongtac::all()->toArray(), 'tencongtac', 'macongtac');
+            $model_ct = array_column(dmphanloaict::all()->toArray(), 'tenct', 'mact');
+            foreach ($model as $chitiet) {
+                $chitiet->madv = $a_dv[$chitiet->mathdv];
+                $chitiet->maphanloai = $a_pl[$chitiet->madv];
+                $chitiet->tennguonkp = isset($model_nguonkp[$chitiet->manguonkp]) ? $model_nguonkp[$chitiet->manguonkp] : '';
+                if($chitiet->mact == null){
+                    $chitiet->tencongtac = isset($model_phanloaict[$chitiet->macongtac]) ? $model_phanloaict[$chitiet->macongtac] : '';
+                }else{
+                    $chitiet->tencongtac = isset($model_ct[$chitiet->mact]) ? $model_ct[$chitiet->mact] : '';
+                }
+                $chitiet->tongtl = $chitiet->tonghs - $chitiet->giaml;
+                $chitiet->tongbh = $chitiet->stbhxh_dv + $chitiet->stbhyt_dv + $chitiet->stkpcd_dv + $chitiet->stbhtn_dv;
+                foreach (getColTongHop() as $ct) {
+                    $ma = 'hs'.$ct;
+                    $chitiet->$ma = $chitiet->$ct / $chitiet->luongcoban;
+                }
+            }
+            $model_data = $model->map(function ($data) {
+                return collect($data->toArray())
+                    ->only(['mact', 'soluong', 'madv', 'maphanloai'])
+                    ->all();
+            });
+
+            $a_soluong = a_unique($model_data);
+            //dd($a_soluong);
             //cho trương hợp đơn vị cấp trên in dữ liệu dv câp dưới mà ko sai tên đơn vị
             $m_dv = dmdonvi::where('madv', $madv)->first();
 
             $thongtin = array('nguoilap' => session('admin')->name,
                 'thang' => $thang,
                 'nam' => $nam);
-
-            return view('reports.tonghopluong.khoi.solieutonghop')
+            foreach (getColTongHop() as $ct) {
+                if ($model->sum($ct) > 0) {
+                    $a_phucap[$ct] = isset($m_pc[$ct]) ? $m_pc[$ct] : '';
+                    $col++;
+                }
+            }
+            return view('reports.tonghopluong.khoi.solieu')
                 ->with('thongtin', $thongtin)
                 ->with('model', $model)
                 ->with('model_tonghop', $model_tonghop)
+                ->with('model_phanloai', $model_phanloai)
                 ->with('model_donvi', $model_donvi)
+                ->with('a_soluong', $a_soluong)
                 ->with('m_dv', $m_dv)
+                ->with('col', $col)
+                ->with('a_phucap', $a_phucap)
                 ->with('pageTitle', 'Chi tiết tổng hợp lương tại đơn vị cấp dưới');
 
         } else
