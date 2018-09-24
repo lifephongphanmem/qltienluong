@@ -69,8 +69,13 @@
                                         <td class="text-right">{{dinhdangso($value->giaml)}}</td>
                                         <td class="text-right">{{dinhdangso($value->tongbh)}}</td>
                                         <td>
-                                            <a href="{{url($furl.'edit_detail?mathdv='.$value->mathdv.'&manguonkp='.$value->manguonkp.'&macongtac='.$value->macongtac)}}" class="btn btn-info btn-xs mbs">
-                                                <i class="fa fa-edit"></i>&nbsp; Sửa</a>
+                                            @if($value->mact == null)
+                                                <a href="{{url($furl.'edit_detail?mathdv='.$value->mathdv.'&manguonkp='.$value->manguonkp.'&macongtac='.$value->macongtac)}}" class="btn btn-info btn-xs mbs">
+                                                    <i class="fa fa-edit"></i>&nbsp; Sửa</a>
+                                            @else
+                                                <a href="{{url($furl.'edit_detail?mathdv='.$value->mathdv.'&manguonkp='.$value->manguonkp.'&mact='.$value->mact)}}" class="btn btn-info btn-xs mbs">
+                                                    <i class="fa fa-edit"></i>&nbsp; Sửa</a>
+                                            @endif
                                             <button type="button" onclick="cfDel('{{$furl.'del_detail/'.$value->id}}')" class="btn btn-default btn-xs" data-target="#delete-modal-confirm" data-toggle="modal">
                                                 <i class="fa fa-trash-o"></i>&nbsp; Xóa</button>
                                         </td>

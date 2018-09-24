@@ -12,6 +12,8 @@ use App\dmphanloaict;
 use App\dmphucap_donvi;
 use App\dmphucap_thaisan;
 use App\hosocanbo;
+use App\nguonkinhphi_dinhmuc;
+use App\nguonkinhphi_dinhmuc_ct;
 use App\tonghopluong_donvi;
 use App\tonghopluong_donvi_bangluong;
 use App\tonghopluong_donvi_chitiet;
@@ -111,7 +113,12 @@ class tonghopluong_donviController extends Controller
                 $query->select('mabl')->from('bangluong')->where('nam', $nam)->where('thang', $thang)->where('madv', $madv)->where('phanloai', 'BANGLUONG');
             })->get();
             */
-
+            $model_nguondm = nguonkinhphi_dinhmuc::where('madv',$madv)->get();
+            $model_nguondm_ct = nguonkinhphi_dinhmuc_ct::wherein('maso',array_column($model_nguondm->toarray(),'maso'))->get();
+            foreach($model_nguondm_ct as $ct){
+                $nguondm = $model_nguondm->where('maso',$ct->maso)->first();
+                $ct->manguonkp = $nguondm->manguonkp;
+            }
             $model_bangluong_ct = bangluong_ct::wherein('mabl', array_column($model_bangluong->toarray(),'mabl'))->get();
 
             $model_pc = dmphucap_donvi::where('madv', $madv)->wherenotin('mapc',['hesott'])->get();
@@ -126,18 +133,32 @@ class tonghopluong_donviController extends Controller
                 $bangluong = $model_bangluong->where('mabl', $ct->mabl)->first();
                 $ct->luongcoban = $bangluong->luongcoban;
                 $ct->manguonkp = $bangluong->manguonkp;
+                $dmnguon = $model_nguondm_ct->where('manguonkp', $ct->manguonkp);
+                $a_nguon = array();
+                if(count($dmnguon)>0){
+                    $a_nguon = array_column($dmnguon->toarray(),'mapc');
+                }
                 $ct->linhvuchoatdong = $bangluong->linhvuchoatdong;//chỉ dùng cho khối HCSN
                 $congtac = $model_congtac->where('mact', $ct->mact)->first();
                 //do kiêm nhiệm trc chưa chọn mã công tác
                 $ct->macongtac = count($congtac) > 0 ? $congtac->macongtac : null;
                 //bỏ cán bộ nộp bảo hiểm thai sản vì con hs tren bang luong
                 $ct->mathdv = $mathdv;
+
                 foreach ($model_pc as $pc) {
                     $mapc = $pc->mapc;
                     if (!in_array($pc->mapc, $a_bh) && $ct->congtac == 'THAISAN') {
                         $ct->$mapc = 0;
                         continue;
                     }
+
+                    //lấy loại phụ cấp được hưởng trong nguồn
+                    if(count($a_nguon)>0){
+                        if (!in_array($pc->mapc, $a_nguon)) {
+                            $ct->$mapc = 0;
+                        }
+                    }
+
                     if ($pc->phanloai != 1) {
                         $ct->$mapc = $ct->$mapc * $ct->luongcoban;
                     }
@@ -312,9 +333,17 @@ class tonghopluong_donviController extends Controller
         if (Session::has('admin')) {
             $inputs = $request->all();
 
-            $model = tonghopluong_donvi_chitiet::where('mathdv', $inputs['mathdv'])
-                ->where('manguonkp', $inputs['manguonkp'])
-                ->where('macongtac', $inputs['macongtac'])->first();
+            //dùng tạm khi đồng bộ lại dữ liệu thì xóa macongtac đi
+            if(isset($inputs['mact'])){
+                $model = tonghopluong_donvi_chitiet::where('mathdv', $inputs['mathdv'])
+                    ->where('manguonkp', $inputs['manguonkp'])
+                    ->where('mact', $inputs['mact'])->first();
+            }else{
+                $model = tonghopluong_donvi_chitiet::where('mathdv', $inputs['mathdv'])
+                    ->where('manguonkp', $inputs['manguonkp'])
+                    ->where('macongtac', $inputs['macongtac'])->first();
+            }
+
             $model->tongpc = $model->tonghs - $model->heso - $model->hesopc;
             $model->ttbh_dv = $model->stbhxh_dv + $model->stbhyt_dv + $model->stkpcd_dv + $model->stbhtn_dv;
 
@@ -665,6 +694,24 @@ class tonghopluong_donviController extends Controller
             $model->delete();
             //tonghopluong_donvi::where('mathdv',$mathdv)->delete();
             return redirect('/chuc_nang/tong_hop_luong/don_vi/index?nam=' . $model->nam);
+        } else
+            return view('errors.notlogin');
+    }
+
+    function destroy_detail($id)
+    {
+        if (Session::has('admin')) {
+            $model = tonghopluong_donvi_chitiet::find($id);
+
+            tonghopluong_donvi_bangluong::where('mathdv', $model->mathdv)
+                ->where('mathdv', $model->mathdv)
+                ->where('manguonkp', $model->manguonkp)
+                ->where('mact', $model->mact)
+                ->delete();
+
+            $model->delete();
+            //tonghopluong_donvi::where('mathdv',$mathdv)->delete();
+            return redirect('/chuc_nang/tong_hop_luong/don_vi/detail/ma_so=' . $model->mathdv);
         } else
             return view('errors.notlogin');
     }

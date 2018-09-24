@@ -6,6 +6,7 @@ use App\dmdiabandbkk;
 use App\dmdonvi;
 use App\dmnguonkinhphi;
 use App\dmphanloaicongtac;
+use App\dmphanloaidonvi;
 use App\tonghopluong_donvi;
 use App\tonghopluong_donvi_chitiet;
 use App\tonghopluong_donvi_diaban;
@@ -110,52 +111,15 @@ class tonghopluong_khoiController extends Controller
             $inputs = $requests->all();
             $thang = $inputs['thang'];
             $nam = $inputs['nam'];
-
             $madv = session('admin')->madv;
-            //lấy danh sách các chi tiết số liệu tổng họp theo đơn vị
-            $model_tonghop_ct = tonghopluong_donvi_chitiet::wherein('mathdv', function ($query) use ($nam, $thang, $madv) {
-                $query->select('mathdv')->from('tonghopluong_donvi')
-                    ->where('nam', $nam)
-                    ->where('thang', $thang)
-                    ->where('trangthai', 'DAGUI')
-                    ->where('macqcq', $madv)->distinct();
-            })->get();
-
-            //Lấy dữ liệu để lập
-            $model_data = $model_tonghop_ct->map(function ($data) {
-                return collect($data->toArray())
-                    ->only(['macongtac', 'linhvuchoatdong', 'manguonkp', 'luongcoban'])
-                    ->all();
-            });
-            $model_data = a_unique($model_data);
-            //
-            //Tính toán dữ liệu
-            $a_col = getColTongHop();
-
-            $model_nguonkp = array_column(dmnguonkinhphi::all()->toArray(), 'tennguonkp', 'manguonkp');
-            $model_phanloaict = array_column(dmphanloaicongtac::all()->toArray(), 'tencongtac', 'macongtac');
-
-            for ($i = 0; $i < count($model_data); $i++) {
-                $luongct = $model_tonghop_ct->where('manguonkp', $model_data[$i]['manguonkp'])
-                    ->where('linhvuchoatdong', $model_data[$i]['linhvuchoatdong'])
-                    ->where('macongtac', $model_data[$i]['macongtac']);
-                $tonghs = 0;
-                $model_data[$i]['tennguonkp'] = isset($model_nguonkp[$model_data[$i]['manguonkp']]) ? $model_nguonkp[$model_data[$i]['manguonkp']] : '';
-                $model_data[$i]['tencongtac'] = isset($model_phanloaict[$model_data[$i]['macongtac']]) ? $model_phanloaict[$model_data[$i]['macongtac']] : '';
-                foreach ($a_col as $col) {
-                    $model_data[$i][$col] = $luongct->sum($col);
-                    $tonghs += chkDbl($model_data[$i][$col]);
-                }
-
-                $model_data[$i]['stbhxh_dv'] = $luongct->sum('stbhxh_dv');
-                $model_data[$i]['stbhyt_dv'] = $luongct->sum('stbhyt_dv');
-                $model_data[$i]['stkpcd_dv'] = $luongct->sum('stkpcd_dv');
-                $model_data[$i]['stbhtn_dv'] = $luongct->sum('stbhtn_dv');
-                $model_data[$i]['tongbh'] = $model_data[$i]['stbhxh_dv'] + $model_data[$i]['stbhyt_dv'] + $model_data[$i]['stkpcd_dv'] + $model_data[$i]['stbhtn_dv'];
-                $model_data[$i]['tonghs'] = $tonghs;
-            }
-            //
-
+            $model_phanloai = dmphanloaidonvi::all();
+            $model_donvi = dmdonvi::where('macqcq',$madv )->get();
+            $model_tonghop = tonghopluong_donvi::where('macqcq',$madv)
+                ->where('nam', $nam)
+                ->where('thang', $thang)
+                ->where('trangthai', 'DAGUI')->get();
+            $model = tonghopluong_donvi_chitiet::wherein('mathdv', array_column($model_tonghop->toarray(),'mathdv'))->get();
+    dd($model_phanloai);
             //cho trương hợp đơn vị cấp trên in dữ liệu dv câp dưới mà ko sai tên đơn vị
             $m_dv = dmdonvi::where('madv', $madv)->first();
 
@@ -165,7 +129,9 @@ class tonghopluong_khoiController extends Controller
 
             return view('reports.tonghopluong.khoi.solieutonghop')
                 ->with('thongtin', $thongtin)
-                ->with('model', $model_data)
+                ->with('model', $model)
+                ->with('model_tonghop', $model_tonghop)
+                ->with('model_donvi', $model_donvi)
                 ->with('m_dv', $m_dv)
                 ->with('pageTitle', 'Chi tiết tổng hợp lương tại đơn vị cấp dưới');
 

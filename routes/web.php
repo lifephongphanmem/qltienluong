@@ -430,6 +430,7 @@ Route::group(['prefix'=>'chuc_nang'],function(){
             Route::get('getlydo','tonghopluong_donviController@getlydo');//lý do trả lại dữ liệu
 
             Route::get('del/maso={mathdv}','tonghopluong_donviController@destroy');//lý do trả lại dữ liệu
+            Route::get('del_detail/{id}','tonghopluong_donviController@destroy_detail');//lý do trả lại dữ liệu
 
             Route::get('printf_data/ma_so={mathdv}','tonghopluong_donviController@printf_data');
             Route::get('printf_bl/ma_so={mathdv}','tonghopluong_donviController@printf_bl');
@@ -438,7 +439,7 @@ Route::group(['prefix'=>'chuc_nang'],function(){
 
         Route::group(['prefix'=>'khoi'],function(){
             Route::get('index','tonghopluong_khoiController@index');
-            Route::get('tonghop','tonghopluong_huyenController@tonghop');
+            Route::get('tonghop','tonghopluong_khoiController@tonghop');
             //Route::get('tonghop','tonghopluong_khoiController@tonghop');
             Route::get('tonghop_diaban','tonghopluong_khoiController@tonghop_diaban');
 

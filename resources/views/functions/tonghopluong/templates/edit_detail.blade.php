@@ -35,13 +35,24 @@
                                                 {!!Form::select('manguonkp', getNguonKP(), null, array('id' => 'manguonkp','class' => 'form-control', 'disabled'=>'true'))!!}
                                             </div>
                                         </div>
-
-                                        <div class="col-md-3">
-                                            <div class="form-group">
-                                                <label class="control-label">Phân loại công tác </label>
-                                                {!!Form::select('macongtac',getNhomCongTac(), null, array('id' => 'macongtac','class' => 'form-control', 'disabled'=>'true'))!!}
+                                        @if($model->mact == null)
+                                            <div class="col-md-3">
+                                                <div class="form-group">
+                                                    <label class="control-label">Phân loại công tác </label>
+                                                    {!!Form::select('macongtac',getNhomCongTac(), null, array('id' => 'macongtac','class' => 'form-control', 'disabled'=>'true'))!!}
+                                                </div>
                                             </div>
-                                        </div>
+                                            <input type="hidden" name="mact" id="mact" value="{{$model->mact}}" />
+                                        @else
+                                            <div class="col-md-3">
+                                                <div class="form-group">
+                                                    <label class="control-label">Phân loại công tác </label>
+                                                    {!!Form::select('macongtac',getNhomCongTac(), null, array('id' => 'macongtac','class' => 'form-control', 'disabled'=>'true'))!!}
+                                                </div>
+                                            </div>
+                                            <input type="hidden" name="madvbc" id="madvbc" value="{{$madvbc}}" />
+                                        @endif
+
 
                                         <!-- Ẩn / hiện element in form (không mất trường trên form)-->
                                         <div class="col-md-3" {{session('admin')->maphanloai != 'KVXP'?'':'style=display:none'}}>
