@@ -19,14 +19,15 @@ class dmphucapController extends Controller
     public function fix_mapc(){
         //chạy update cho cao bằng, lạng sơn
         $model_donvi = dmdonvi::all();
+        $model_dmpc = dmphucap::select('mapc', 'tenpc', 'baohiem', 'form', 'report', 'phanloai', 'congthuc')->where('mapc','pckct')->first();
         //$model_dmpc = dmphucap::select('mapc', 'tenpc', 'baohiem', 'form', 'report', 'phanloai', 'congthuc')->where('mapc','hesobl')->first();
         //$model_dmpc = dmphucap::select('mapc', 'tenpc', 'baohiem', 'form', 'report', 'phanloai', 'congthuc')->where('mapc','pcd')->first();
-        $model_dmpc = dmphucap::select('mapc', 'tenpc', 'baohiem', 'form', 'report', 'phanloai', 'congthuc')->where('mapc','pctdt')->first();
+        //$model_dmpc = dmphucap::select('mapc', 'tenpc', 'baohiem', 'form', 'report', 'phanloai', 'congthuc')->where('mapc','pctdt')->first();
         //$phucap = dmphucap::where('mapc','hesobl')->first();
         foreach($model_donvi as $donvi){
             $model_phucap = dmphucap_donvi::where('madv',$donvi->madv)->get();
             if(count($model_phucap)>0){
-                $chekbl = $model_phucap->where('mapc','pctdt');
+                $chekbl = $model_phucap->where('mapc','pckct');
                 //$chekbl = $model_phucap->where('mapc','hesobl');
                 if(count($chekbl)== 0){
                     $model_dmpc->madv = $donvi->madv;
