@@ -12,6 +12,7 @@ class nguonkinhphi_dinhmuc_ct extends Model
         'maso',
         'mapc',
         'tenpc',
+        'luongcoban',
         'ghichu'
     ];
 }

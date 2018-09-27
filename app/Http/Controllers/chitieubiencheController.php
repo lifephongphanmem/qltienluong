@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\chitieubienche;
+use App\dmphanloaicongtac;
+use App\dmphanloaict;
 use App\hosocanbo;
 use Illuminate\Http\Request;
 
@@ -15,12 +17,13 @@ class chitieubiencheController extends Controller
     function index(){
         if (Session::has('admin')) {
             $model = chitieubienche::where('madv',session('admin')->madv)->get();
-            $soluongcanbo = hosocanbo::where('madv',session('admin')->madv)->count();
+            $model_nhomct = dmphanloaicongtac::select('macongtac', 'tencongtac')->get();
+            $model_tenct = dmphanloaict::select('tenct', 'macongtac', 'mact')->get();
             return view('manage.chitieubienche.index')
                 ->with('furl','/nghiep_vu/quan_ly/chi_tieu/')
-                ->with('furl_ajax','/ajax/chi_tieu/')
                 ->with('model',$model)
-                ->with('soluongcanbo',$soluongcanbo)
+                ->with('model_nhomct', $model_nhomct)
+                ->with('model_tenct', $model_tenct)
                 ->with('pageTitle','Danh sách chỉ tiêu biên chế của đơn vị');
         } else
             return view('errors.notlogin');
@@ -40,12 +43,13 @@ class chitieubiencheController extends Controller
         die($model);
     }
 
-    function store(Request $request){
+    function store(Request $request)
+    {
         $result = array(
             'status' => 'fail',
             'message' => 'error',
         );
-        if(!Session::has('admin')) {
+        if (!Session::has('admin')) {
             $result = array(
                 'status' => 'fail',
                 'message' => 'permission denied',
@@ -54,71 +58,33 @@ class chitieubiencheController extends Controller
         }
 
         $inputs = $request->all();
-        $inputs['madv']=session('admin')->madv;
-        chitieubienche::create($inputs);
-        /*
-        $model = new chitieubienche();
-
-        $model->macanbo = $inputs['macanbo'];
-        $model->ngaytu = getDateTime($inputs['ngaytu']);
-        $model->ngayden = getDateTime($inputs['ngayden']);
-        $model->quanham = $inputs['quanham'];
-        $model->chucvu = $inputs['chucvu'];
-
-        $model->save();
-        */
+        $inputs['soluongduocgiao'] = chkDbl($inputs['soluongduocgiao']);
+        $inputs['soluongbienche'] = chkDbl($inputs['soluongbienche']);
+        $inputs['soluongkhongchuyentrach'] = chkDbl($inputs['soluongkhongchuyentrach']);
+        $inputs['soluonguyvien'] = chkDbl($inputs['soluonguyvien']);
+        $inputs['soluongdaibieuhdnd'] = chkDbl($inputs['soluongdaibieuhdnd']);
+        if ($inputs['id'] == 'ADD') {
+            //chưa bắt trùng nam + mact + madv
+            $inputs['madv'] = session('admin')->madv;
+            unset($inputs['id']);
+            chitieubienche::create($inputs);
+        } else {
+            //unset($inputs['id']);
+            chitieubienche::find($inputs['id'])->update($inputs);
+        }
         $result['message'] = "Thêm mới thành công.";
         $result['status'] = 'success';
         die(json_encode($result));
     }
 
-    function update(Request $request){
-        $result = array(
-            'status' => 'fail',
-            'message' => 'error',
-        );
-        if(!Session::has('admin')) {
-            $result = array(
-                'status' => 'fail',
-                'message' => 'permission denied',
-            );
-            die(json_encode($result));
-        }
 
-        $inputs = $request->all();
-        $model = chitieubienche::find($inputs['id']);
-        $model->update($inputs);
-        /*
-        $model->ngaytu = getDateTime($inputs['ngaytu']);
-        $model->ngayden = getDateTime($inputs['ngayden']);
-        $model->quanham = $inputs['quanham'];
-        $model->chucvu = $inputs['chucvu'];
-         $model->save();
-        */
-
-
-        $result['message'] = "Cập nhật thành công.";
-        $result['status'] = 'success';
-        die(json_encode($result));
-    }
 
     function destroy($id){
         if (Session::has('admin')) {
             $model = chitieubienche::find($id);
-            $macanbo = $model->macanbo;
             $model->delete();
             return redirect('/nghiep_vu/quan_ly/chi_tieu/danh_sach');
         } else
             return view('errors.notlogin');
-    }
-
-    function getNamChiTieu(Request $request){
-        $inputs = $request->all();
-        $model = chitieubienche::where('nam',$inputs['nam'])->where('madv', session('admin')->madv)->first();
-        if (isset($model)) {
-            echo 'false';
-        } else {
-            echo 'true';
-        }
     }
 }

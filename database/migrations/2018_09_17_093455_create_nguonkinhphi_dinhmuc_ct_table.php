@@ -18,6 +18,7 @@ class CreateNguonkinhphiDinhmucCtTable extends Migration
             $table->string('maso', 50)->nullable();
             $table->string('mapc', 50)->nullable();
             $table->string('tenpc', 100)->nullable();
+            $table->double('luongcoban')->default(0);
             $table->string('ghichu')->nullable();
             $table->timestamps();
         });

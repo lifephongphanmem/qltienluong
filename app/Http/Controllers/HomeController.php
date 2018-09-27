@@ -23,30 +23,19 @@ class HomeController extends Controller
             if (session('admin')->username == 'sa')
                 return redirect('cau_hinh_he_thong');
             else {
-                /*
-                $model=hosocanbo::join('hosotinhtrangct', 'hosocanbo.macanbo', '=', 'hosotinhtrangct.macanbo')
-                    ->select('hosocanbo.macanbo','hosocanbo.tencanbo','hosocanbo.ngaysinh','hosocanbo.gioitinh',
-                        'hosotinhtrangct.tenct','hosocanbo.sunghiep','hosocanbo.ngayvd','hosocanbo.ngayden','hosocanbo.msngbac')
-                    ->where('hosotinhtrangct.hientai','1')
-                    ->where('hosotinhtrangct.phanloaict','Đang công tác')
-                    ->where('hosocanbo.madv',session('admin')->madv)
-                    ->get();
-                */
-                $model = hosocanbo::select('macanbo', 'tencanbo', 'msngbac', 'sunghiep', 'gioitinh', 'ngayvd', 'ngaytu', 'ngayden','ngaysinh')
+                //thêm phân loại công tác
+                //chia ra màn hình đơn vị; màn hình đơn vị tổng hợp
+                $model = hosocanbo::select('macanbo', 'tencanbo', 'msngbac', 'sunghiep', 'gioitinh', 'ngaytu', 'ngayden','ngaysinh','mact')
                     ->where('theodoi','<' ,'9')
                     ->where('madv', session('admin')->madv)
                     ->get();
                 $a_ketqua = array();
                 $a_ketqua['congchuc'] = $model->where('sunghiep', 'Công chức')->count();
                 $a_ketqua['vienchuc'] = $model->where('sunghiep', 'Viên chức')->count();
+                $a_ketqua['khac'] = $model->where('sunghiep', 'Khác')->count();
                 $a_ketqua['tapsu'] = $model->where('tenct', 'Tập sự')->count();
                 $a_ketqua['chinhthuc'] = $model->count() - $a_ketqua['tapsu'];
-                $a_ketqua['dv_nam'] = $model->where('ngayvd', '', '0000-00-00')
-                    ->where('ngayvd', '<>', null)
-                    ->where('gioitinh', 'Nam')->count();
-                $a_ketqua['dv_nu'] = $model->where('ngayvd', '', '0000-00-00')
-                    ->where('ngayvd', '<>', null)
-                    ->where('gioitinh', 'Nữ')->count();
+
                 $a_ketqua['gt_nam'] = $model->where('gioitinh', 'Nam')->count();
                 $a_ketqua['gt_nu'] = $model->where('gioitinh', 'Nữ')->count();
 
@@ -61,7 +50,7 @@ class HomeController extends Controller
                     if (isset($ct->ngayden)) {
                         $dt_luong = date_create($ct->ngayden);
                         $ct->nam_luong = date_format($dt_luong, 'Y');
-                        $ct->ngaynangluong = $dt_luong->modify('+1 days')->format('Y-m-d');
+                        $ct->ngaynangluong = $dt_luong->format('Y-m-d');
                     } else {
                         $ct->nam_luong = null;
                         $ct->ngaynangluong = null;

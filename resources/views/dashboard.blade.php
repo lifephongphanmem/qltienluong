@@ -38,6 +38,8 @@
                             {{number_format($a_ketqua['congchuc'])}}</span></li>
                     <li class="list-group-item">Viên chức<span class="badge badge-info pull-right">
                             {{number_format($a_ketqua['vienchuc'])}}</span></li>
+                    <li class="list-group-item">Khác<span class="badge badge-info pull-right">
+                            {{number_format($a_ketqua['khac'])}}</span></li>
                 </div>
             </div>
         </div>
@@ -57,28 +59,10 @@
                                 class="badge badge-info pull-right">{{number_format($a_ketqua['chinhthuc'])}}</span></li>
                     <li class="list-group-item">Tập sự<span
                                 class="badge badge-info pull-right">{{number_format($a_ketqua['tapsu'])}}</span></li>
+
                 </div>
             </div>
         </div>
-
-        <!--div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
-            <div class="dashboard-stat2">
-                <div class="display">
-                    <div class="number">
-                        <small>ĐẢNG VIÊN</small>
-                    </div>
-                    <div class="icon">
-                        <i class="icon-pie-chart"></i>
-                    </div>
-                </div>
-                <div class="">
-                    <li class="list-group-item">Nam<span
-                                class="badge badge-info pull-right">{{number_format($a_ketqua['dv_nam'])}}</span></li>
-                    <li class="list-group-item">Nữ<span
-                                class="badge badge-info pull-right">{{number_format($a_ketqua['dv_nu'])}}</span></li>
-                </div>
-            </div>
-        </div-->
 
         <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
             <div class="dashboard-stat2">
@@ -106,7 +90,7 @@
                 <div class="portlet-title">
                     <div class="caption caption-md">
                         <i class="icon-bar-chart theme-font-color hide"></i>
-                        <span class="caption-subject theme-font-color bold uppercase">danh sách cán bộ sắp đến kỳ nâng lương</span>
+                        <span class="caption-subject theme-font-color bold uppercase">danh sách cán bộ sắp đến kỳ nâng lương ngạch bậc</span>
                     </div>
                     <div class="actions">
 

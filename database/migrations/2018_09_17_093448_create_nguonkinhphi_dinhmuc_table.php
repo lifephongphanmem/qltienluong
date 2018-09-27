@@ -23,7 +23,7 @@ class CreateNguonkinhphiDinhmucTable extends Migration
             $table->string('manguonkp', 50)->nullable();
             $table->date('tungay')->nullable();//chưa dùng
             $table->date('denngay')->nullable();//chưa dùng
-            $table->double('luongcoban')->default(0);
+            $table->double('luongcoban')->default(0);//dùng làm mốc khi thay đổi lương cơ bản => các loại pc tự cập nhập
             $table->string('madv',50)->nullable();
             $table->timestamps();
         });

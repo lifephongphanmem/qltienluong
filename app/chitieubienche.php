@@ -11,6 +11,10 @@ class chitieubienche extends Model
         'id',
         'madv',
         'nam',
+        'mact',
+        'macongtac',
+        'ngaylap',//chưa dùng
+        'linhvuchoatdong',//chưa dùng
         'soluongduocgiao',
         'soluongbienche',
         'soluongkhongchuyentrach',

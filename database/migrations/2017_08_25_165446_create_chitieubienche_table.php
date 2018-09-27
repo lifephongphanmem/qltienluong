@@ -16,7 +16,10 @@ class CreateChitieubiencheTable extends Migration
         Schema::create('chitieubienche', function (Blueprint $table) {
             $table->increments('id');
             $table->string('madv')->nullable();
-            $table->string('nam')->nullable();
+            $table->double('nam')->default(0);
+            $table->string('linhvuchoatdong',50)->nullable();
+            $table->string('mact',50)->nullable();
+            $table->string('macongtac',50)->nullable();
             $table->double('soluongduocgiao')->default(0);
             $table->double('soluongbienche')->default(0);
             $table->double('soluongkhongchuyentrach')->default(0);

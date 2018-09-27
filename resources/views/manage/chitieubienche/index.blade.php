@@ -35,21 +35,21 @@
                         <i class="fa fa-list-alt"></i>DANH SÁCH CHỈ TIÊU BIÊN CHẾ CỦA ĐƠN VỊ
                     </div>
                     <div class="actions">
-                        <button type="button" id="_btnadd" class="btn btn-default btn-xs" onclick="add()"><i class="fa fa-plus"></i>&nbsp;Thêm mới chỉ tiêu</button>
+                        <button type="button" id="_btnadd" class="btn btn-default btn-xs" onclick="add()"><i class="fa fa-plus"></i>&nbsp;Thêm mới</button>
                     </div>
                 </div>
                 <div class="portlet-body form-horizontal">
-                    <input type="hidden" id="soluongcanbo" name="soluongcanbo" value="{{$soluongcanbo}}">
                     <table id="sample_3" class="table table-hover table-striped table-bordered" style="min-height: 230px">
                         <thead>
                             <tr>
                                 <th class="text-center" style="width: 5%">STT</th>
-                                <th class="text-center">Năm được giao</th>
-                                <th class="text-center">Số lượng biên</br>chế được giao</th>
-                                <th class="text-center">Số lượng biên</br>chế hiện có</th>
-                                <th class="text-center">Số lượng cán</br>bộ không chuyên<br>trách(nếu có)</th>
-                                <th class="text-center">Số lượng đại</br> biểu HĐND</th>
-                                <th class="text-center">Số lượng ủy viên</th>
+                                <th class="text-center">Năm</br>được</br>giao</th>
+                                <th class="text-center">Phân loại</br>công tác</th>
+                                <th class="text-center">Số lượng</br>biên chế</br>được giao</th>
+                                <th class="text-center">Số lượng</br>biên chế</br>hiện có</th>
+                                <th class="text-center">Số lượng</br>cán bộ không</br>chuyên trách</br>(nếu có)</th>
+                                <th class="text-center">Số lượng</br>đại biểu</br>HĐND</th>
+                                <th class="text-center">Số lượng</br>ủy viên</th>
                                 <th class="text-center">Thao tác</th>
                             </tr>
                         </thead>
@@ -60,12 +60,18 @@
                                     <tr class="text-center">
                                         <td class="text-center">{{$key+1}}</td>
                                         <td>{{$value->nam}}</td>
+                                        <td>{{$value->nam}}</td>
                                         <td>{{$value->soluongduocgiao}}</td>
                                         <td>{{$value->soluongbienche}}</td>
                                         <td>{{$value->soluongkhongchuyentrach}}</td>
                                         <td>{{$value->soluonguyvien}}</td>
                                         <td>{{$value->soluongdaibieuhdnd}}</td>
-                                        @include('includes.crumbs.bt_editdel')
+                                        <td>
+                                            <button type="button" onclick="edit({{$value->id}})" class="btn btn-info btn-xs mbs">
+                                                <i class="fa fa-edit"></i>&nbsp;Sửa</button>
+                                            <button type="button" onclick="cfDel('{{$furl.'del/'.$value->id}}')" class="btn btn-danger btn-xs mbs" data-target="#delete-modal-confirm" data-toggle="modal">
+                                                <i class="fa fa-trash-o"></i>&nbsp;Xóa</button>
+                                        </td>
                                     </tr>
                                 @endforeach
                             @endif
@@ -86,24 +92,57 @@
                 </div>
                 <div class="modal-body">
                     <div class="form-horizontal">
-                        <label class="control-label">Năm được giao</label>
-                        {!!Form::text('nam', null, array('id' => 'nam','class' => 'form-control text-right'))!!}
+                        <div class="row">
+                            <div class="col-md-4">
+                                <label class="control-label">Năm được giao</label>
+                                {!!Form::select('nam', getNam(), date('Y') + 1, array('id' => 'nam','class' => 'form-control text-right'))!!}
+                            </div>
 
-                        <label class="control-label">Số lượng biên chế được giao</label>
-                        {!!Form::text('soluongduocgiao', null, array('id' => 'soluongduocgiao','class' => 'form-control text-right'))!!}
+                            <div class="col-md-8">
+                                <label class="control-label">Phân loại công tác</label>
+                                <select class="form-control select2me" name="mact" id="mact" required="required">
+                                    @foreach($model_nhomct as $kieuct)
+                                        <optgroup label="{{$kieuct->tencongtac}}">
+                                            <?php $mode_ct=$model_tenct->where('macongtac',$kieuct->macongtac); ?>
+                                            @foreach($mode_ct as $ct)
+                                                <option value="{{$ct->mact}}">{{$ct->tenct}}</option>
+                                            @endforeach
+                                        </optgroup>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
 
-                        <label class="control-label">Số lượng biên chế hiện có</label>
-                        {!!Form::text('soluongbienche', null, array('id' => 'soluongbienche','class' => 'form-control text-right'))!!}
+                        <div class="row">
+                            <div class="col-md-6">
+                                <label class="control-label">Biên chế được giao</label>
+                                {!!Form::text('soluongduocgiao', null, array('id' => 'soluongduocgiao','class' => 'form-control text-right'))!!}
+                            </div>
 
-                        <label class="control-label">Số lượng cán bộ không chuyên trách (nếu có)</label>
-                        {!!Form::text('soluongkhongchuyentrach', null, array('id' => 'soluongkhongchuyentrach','class' => 'form-control text-right'))!!}
+                            <div class="col-md-6">
+                                <label class="control-label">Biên chế hiện có</label>
+                                {!!Form::text('soluongbienche', null, array('id' => 'soluongbienche','class' => 'form-control text-right'))!!}
+                            </div>
+                        </div>
 
-                        <label class="control-label">Số lượng ủy viên</label>
-                        {!!Form::text('soluonguyvien', null, array('id' => 'soluonguyvien','class' => 'form-control text-right'))!!}
+                        <div class="row">
+                            <div class="col-md-6">
+                                <label class="control-label">Cán bộ không chuyên trách</label>
+                                {!!Form::text('soluongkhongchuyentrach', null, array('id' => 'soluongkhongchuyentrach','class' => 'form-control text-right'))!!}
+                            </div>
 
-                        <label class="control-label">Số lượng đại biểu HĐND</label>
-                        {!!Form::text('soluongdaibieuhdnd', null, array('id' => 'soluongdaibieuhdnd','class' => 'form-control text-right'))!!}
+                            <div class="col-md-6">
+                                <label class="control-label">Cán bộ cấp ủy viên</label>
+                                {!!Form::text('soluonguyvien', null, array('id' => 'soluonguyvien','class' => 'form-control text-right'))!!}
+                            </div>
+                        </div>
 
+                        <div class="row">
+                            <div class="col-md-6">
+                                <label class="control-label">Cán bộ đại biểu HĐND</label>
+                                {!!Form::text('soluongdaibieuhdnd', null, array('id' => 'soluongdaibieuhdnd','class' => 'form-control text-right'))!!}
+                            </div>
+                        </div>
                         <input type="hidden" id="id_ct" name="id_ct"/>
                     </div>
                 </div>
@@ -116,39 +155,15 @@
     </div>
 
     <script>
-        $(function(){
-            $('#nam').change(function(){
-                var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
-                $.ajax({
-                    url: '{{$furl_ajax}}' + 'getNamChiTieu',
-                    type: 'GET',
-                    data: {
-                        _token: CSRF_TOKEN,
-                        nam: $(this).val()
-                    },
-                    dataType: 'JSON',
-                    success: function (data) {
-                        if(data == false ){
-                            toastr.error('Năm chỉ tiêu đã tồn tại. \n Bạn cần nhập lại năm khác.', 'Lỗi!');
-                            $('#nam').val(0);
-                            $('#nam').focus();
-                        }
-                    },
-                    error: function (message) {
-                        toastr.error(message, 'Lỗi!');
-                    }
-                });
-            });
-        });
         function add(){
             $('#nam').prop('readonly',false);
-            $('#nam').val(0);
+            //$('#nam').val(0);
             $('#soluongduocgiao').val(0);
-            $('#soluongbienche').val($('#soluongcanbo').val());
+            $('#soluongbienche').val(0);
             $('#soluongkhongchuyentrach').val(0);
             $('#soluonguyvien').val(0);
             $('#soluongdaibieuhdnd').val(0);
-            $('#id_ct').val(0);
+            $('#id_ct').val('ADD');
             $('#chitiet-modal').modal('show');
         }
 
@@ -156,7 +171,7 @@
             $('#nam').prop('readonly',true);
             var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
             $.ajax({
-                url: '{{$furl_ajax}}' + 'get',
+                url: '{{$furl}}' + 'get',
                 type: 'GET',
                 data: {
                     _token: CSRF_TOKEN,
@@ -167,6 +182,7 @@
                     $('#nam').val(data.nam);
                     $('#soluongduocgiao').val(data.soluongduocgiao);
                     $('#soluongbienche').val(data.soluongbienche);
+                    $('#mact').val(data.mact).trigger('change');
                     $('#soluongkhongchuyentrach').val(data.soluongkhongchuyentrach);
                     $('#soluonguyvien').val(data.soluonguyvien);
                     $('#soluongdaibieuhdnd').val(data.soluongdaibieuhdnd);
@@ -182,67 +198,33 @@
 
         function confirm(){
             var valid=true;
-            var message='';
-            var id=$('#id_ct').val();
-            if( $('#nam').val() == 0 || $('#nam').val() ==''){
-                toastr.error('Năm chỉ tiêu không được bỏ trống.', 'Lỗi!');
-                return false;
-            }
 
-            if(valid){
-                var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
-                if(id==0){//Thêm mới
-                    $.ajax({
-                        url: '{{$furl_ajax}}' + 'add',
-                        type: 'GET',
-                        data: {
-                            _token: CSRF_TOKEN,
-                            nam:$('#nam').val(),
-                            soluongduocgiao:$('#soluongduocgiao').val(),
-                            soluongbienche:$('#soluongbienche').val(),
-                            soluongkhongchuyentrach:$('#soluongkhongchuyentrach').val(),
-                            soluonguyvien:$('#soluonguyvien').val(),
-                            soluongdaibieuhdnd:$('#soluongdaibieuhdnd').val()
-                        },
-                        dataType: 'JSON',
-                        success: function (data) {
-                            if (data.status == 'success') {
-                                location.reload();
-                            }
-                        },
-                        error: function(message){
-                            toastr.error(message, 'Lỗi!');
-                        }
-                    });
-                }else{//Cập nhật
-                    $.ajax({
-                        url: '{{$furl_ajax}}' + 'update',
-                        type: 'GET',
-                        data: {
-                            _token: CSRF_TOKEN,
-                            nam:$('#nam').val(),
-                            soluongduocgiao:$('#soluongduocgiao').val(),
-                            soluongbienche:$('#soluongbienche').val(),
-                            soluongkhongchuyentrach:$('#soluongkhongchuyentrach').val(),
-                            soluonguyvien:$('#soluonguyvien').val(),
-                            soluongdaibieuhdnd:$('#soluongdaibieuhdnd').val(),
-                            id: id
-                        },
-                        dataType: 'JSON',
-                        success: function (data) {
-                            if (data.status == 'success') {
-                                location.reload();
-                            }
-                        },
-                        error: function(message){
-                            toastr.error(message, 'Lỗi!');
-                        }
-                    });
+            var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
+            $.ajax({
+                url: '{{$furl}}' + 'store',
+                type: 'GET',
+                data: {
+                    _token: CSRF_TOKEN,
+                    id: $('#id_ct').val(),
+                    mact: $('#mact').val(),
+                    nam:$('#nam').val(),
+                    soluongduocgiao:$('#soluongduocgiao').val(),
+                    soluongbienche:$('#soluongbienche').val(),
+                    soluongkhongchuyentrach:$('#soluongkhongchuyentrach').val(),
+                    soluonguyvien:$('#soluonguyvien').val(),
+                    soluongdaibieuhdnd:$('#soluongdaibieuhdnd').val()
+                },
+                dataType: 'JSON',
+                success: function (data) {
+                    if (data.status == 'success') {
+                        location.reload();
+                    }
+                },
+                error: function(message){
+                    toastr.error(message, 'Lỗi!');
                 }
-                $('#chitiet-modal').modal('hide');
-            }else{
-                toastr.error(message, 'Lỗi!');
-            }
+            });
+
             return valid;
         }
     </script>

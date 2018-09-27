@@ -19,7 +19,7 @@ class dmphucapController extends Controller
     public function fix_mapc(){
         //chạy update cho cao bằng, lạng sơn
         $model_donvi = dmdonvi::all();
-        $a_pc = array('pckct','hesobl','pcd','pctdt');
+        $a_pc = array('pckct','hesobl','pcd','pctdt','pcud61');
         $model_dmpc = dmphucap::select('mapc', 'tenpc', 'baohiem', 'form', 'report', 'phanloai', 'congthuc')->wherein('mapc',$a_pc)->get();
         //$model_dmpc = dmphucap::select('mapc', 'tenpc', 'baohiem', 'form', 'report', 'phanloai', 'congthuc')->where('mapc','pckct')->first();
         //$model_dmpc = dmphucap::select('mapc', 'tenpc', 'baohiem', 'form', 'report', 'phanloai', 'congthuc')->where('mapc','hesobl')->first();
