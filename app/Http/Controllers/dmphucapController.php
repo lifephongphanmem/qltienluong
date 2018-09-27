@@ -29,7 +29,7 @@ class dmphucapController extends Controller
         //$phucap = dmphucap::where('mapc','hesobl')->first();
 
         foreach($model_donvi as $donvi){
-            $model_phucap = dmphucap_donvi::where('madv',$donvi->madv)->get();
+            $model_phucap = dmphucap_donvi::where('madv',$donvi->madv)->wherein('mapc',$a_pc)->get();
             if(count($model_phucap)>0){
                 foreach($model_dmpc as $pc){
                     $chekbl = $model_phucap->where('mapc',$pc->mapc);
