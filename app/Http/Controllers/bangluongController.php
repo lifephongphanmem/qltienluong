@@ -1851,7 +1851,7 @@ class bangluongController extends Controller
                     $ct->tnn = $hoso->pctnn;
                 }else{
                     $ct->vk = 0;
-                    $hs->tnn = 0;
+                    $ct->tnn = 0;
                 }
                 if ($ct->phanloai == 'KHONGCT') {
                     $ct->tencanbo = count($hoso) > 0 ? $hoso->tencanbo : null;
