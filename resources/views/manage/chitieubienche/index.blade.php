@@ -58,9 +58,9 @@
                             @if(isset($model))
                                 @foreach($model as $key=>$value)
                                     <tr class="text-center">
-                                        <td class="text-center">{{$key+1}}</td>
+                                        <td>{{$key+1}}</td>
                                         <td>{{$value->nam}}</td>
-                                        <td>{{$value->nam}}</td>
+                                        <td class="text-left">{{$value->tenct}}</td>
                                         <td>{{$value->soluongduocgiao}}</td>
                                         <td>{{$value->soluongbienche}}</td>
                                         <td>{{$value->soluongkhongchuyentrach}}</td>
@@ -222,6 +222,7 @@
                     if (data.status == 'error') {
                         toastr.error(data.message, 'Lỗi!');
                     }
+
                 },
                 error: function(message){
                     toastr.error(message, 'Lỗi!');
