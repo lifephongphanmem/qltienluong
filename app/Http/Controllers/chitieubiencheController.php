@@ -64,8 +64,17 @@ class chitieubiencheController extends Controller
         $inputs['soluonguyvien'] = chkDbl($inputs['soluonguyvien']);
         $inputs['soluongdaibieuhdnd'] = chkDbl($inputs['soluongdaibieuhdnd']);
         if ($inputs['id'] == 'ADD') {
-            //chưa bắt trùng nam + mact + madv
             $inputs['madv'] = session('admin')->madv;
+            //chưa bắt trùng nam + mact + madv
+            $chk = chitieubienche::where('nam',$inputs['nam'])->where('mact',$inputs['mact'])->where('madv',$inputs['madv'])->first();
+            if(count($chk) > 0){
+                $result = array(
+                    'status' => 'Đã tồn tại chỉ tiêu biên chế này.',
+                    'message' => 'error',
+                );
+                die(json_encode($result));
+            }
+
             unset($inputs['id']);
             chitieubienche::create($inputs);
         } else {

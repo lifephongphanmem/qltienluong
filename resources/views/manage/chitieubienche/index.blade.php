@@ -17,7 +17,7 @@
     <script type="text/javascript" src="{{url('assets/global/plugins/select2/select2.min.js')}}"></script>
     <script type="text/javascript" src="{{url('assets/global/plugins/datatables/media/js/jquery.dataTables.min.js')}}"></script>
     <script type="text/javascript" src="{{url('assets/global/plugins/datatables/plugins/bootstrap/dataTables.bootstrap.js')}}"></script>
-
+    @include('includes.script.scripts')
     <script src="{{url('assets/admin/pages/scripts/table-managed.js')}}"></script>
     <script>
         jQuery(document).ready(function() {
@@ -116,31 +116,31 @@
                         <div class="row">
                             <div class="col-md-6">
                                 <label class="control-label">Biên chế được giao</label>
-                                {!!Form::text('soluongduocgiao', null, array('id' => 'soluongduocgiao','class' => 'form-control text-right'))!!}
+                                {!!Form::text('soluongduocgiao', null, array('id' => 'soluongduocgiao','class' => 'form-control text-right', 'data-mask'=>'fdecimal'))!!}
                             </div>
 
                             <div class="col-md-6">
                                 <label class="control-label">Biên chế hiện có</label>
-                                {!!Form::text('soluongbienche', null, array('id' => 'soluongbienche','class' => 'form-control text-right'))!!}
+                                {!!Form::text('soluongbienche', null, array('id' => 'soluongbienche','class' => 'form-control text-right', 'data-mask'=>'fdecimal'))!!}
                             </div>
                         </div>
 
                         <div class="row">
                             <div class="col-md-6">
                                 <label class="control-label">Cán bộ không chuyên trách</label>
-                                {!!Form::text('soluongkhongchuyentrach', null, array('id' => 'soluongkhongchuyentrach','class' => 'form-control text-right'))!!}
+                                {!!Form::text('soluongkhongchuyentrach', null, array('id' => 'soluongkhongchuyentrach','class' => 'form-control text-right', 'data-mask'=>'fdecimal'))!!}
                             </div>
 
                             <div class="col-md-6">
                                 <label class="control-label">Cán bộ cấp ủy viên</label>
-                                {!!Form::text('soluonguyvien', null, array('id' => 'soluonguyvien','class' => 'form-control text-right'))!!}
+                                {!!Form::text('soluonguyvien', null, array('id' => 'soluonguyvien','class' => 'form-control text-right', 'data-mask'=>'fdecimal'))!!}
                             </div>
                         </div>
 
                         <div class="row">
                             <div class="col-md-6">
                                 <label class="control-label">Cán bộ đại biểu HĐND</label>
-                                {!!Form::text('soluongdaibieuhdnd', null, array('id' => 'soluongdaibieuhdnd','class' => 'form-control text-right'))!!}
+                                {!!Form::text('soluongdaibieuhdnd', null, array('id' => 'soluongdaibieuhdnd','class' => 'form-control text-right', 'data-mask'=>'fdecimal'))!!}
                             </div>
                         </div>
                         <input type="hidden" id="id_ct" name="id_ct"/>
@@ -218,6 +218,9 @@
                 success: function (data) {
                     if (data.status == 'success') {
                         location.reload();
+                    }
+                    if (data.status == 'error') {
+                        toastr.error(data.message, 'Lỗi!');
                     }
                 },
                 error: function(message){

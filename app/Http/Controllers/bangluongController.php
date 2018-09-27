@@ -1845,8 +1845,15 @@ class bangluongController extends Controller
             $col = 0;
             $model_hoso = hosocanbo::where('madv', $m_bl->madv)->get();
             foreach ($model as $ct) {
+                $hoso = $model_hoso->where('macanbo', $ct->macanbo)->first();
+                if(count($hoso)>0 &&  $ct->heso>0){
+                    $ct->vk = $hoso->vuotkhung;
+                    $ct->tnn = $hoso->pctnn;
+                }else{
+                    $ct->vk = 0;
+                    $hs->tnn = 0;
+                }
                 if ($ct->phanloai == 'KHONGCT') {
-                    $hoso = $model_hoso->where('macanbo', $ct->macanbo)->first();
                     $ct->tencanbo = count($hoso) > 0 ? $hoso->tencanbo : null;
                 }
             }
