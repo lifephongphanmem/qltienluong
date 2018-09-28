@@ -875,6 +875,7 @@ Route::group(['prefix'=>'ajax'],function(){
         Route::get('add','bangluongController@store');
         Route::get('update','bangluongController@update');
         Route::get('get','bangluongController@getinfo');
+        Route::get('get_nguonkp','bangluongController@getinfor_nguonkp');
     });
 
     Route::group(['prefix'=>'khoi_pb'],function(){
@@ -951,6 +952,8 @@ Route::group(['prefix'=>'he_thong'],function(){
         Route::get('danh_sach','nguonkinhphi_dinhmucController@index');
         Route::get('get','nguonkinhphi_dinhmucController@getinfo');
         Route::get('update','nguonkinhphi_dinhmucController@update');
+        Route::get('get_ct','nguonkinhphi_dinhmucController@getinfor_ct');
+        Route::get('update_ct','nguonkinhphi_dinhmucController@update_ct');
 
         Route::get('phu_cap','nguonkinhphi_dinhmucController@phucap');
         Route::post('store_pc','nguonkinhphi_dinhmucController@store_pc');
