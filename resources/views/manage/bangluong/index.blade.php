@@ -488,12 +488,16 @@
         })
 
         function add(){
+            var dm = '{{$inputs['dinhmuc']}}';
             $('#noidung').val('');
             //$('#phantramhuong').val(100);
             $('#phanloai').val('BANGLUONG');
             $('#mabl').val('');
             $('#id_ct').val(0);
-            $('#luongcoban').prop('readonly','{{$inputs['dinhmuc']}}');
+            if(dm == 1){//do khi đm = 0 (false) ct set = "readonly" ~ readonly = true =>sai
+                $('#luongcoban').prop('readonly',true);
+            }
+
             $('#chitiet-modal').modal('show');
         }
 
