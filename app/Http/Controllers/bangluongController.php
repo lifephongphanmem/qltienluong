@@ -3399,7 +3399,7 @@ class bangluongController extends Controller
                 //do khi nhap trong chuc vu chinh (nhap vap hesopc)
                 $ct->sotienkn = ($ct->pckn + $ct->hesopc) * $ct->luongcb;
                 $ct->sotienk = $ct->pck * $ct->luongcb;
-                $ct->sotien = ($ct->pck + $ct->pckn) * $ct->luongcb;
+                $ct->sotien = ($ct->pck + $ct->pckn + + $ct->hesopc) * $ct->luongcb;
             }
 
             $m_dv = dmdonvi::where('madv',$m_bl->madv)->first();
