@@ -539,6 +539,21 @@ function getPhanLoaiCanBo()
         '9' => 'Cán bộ đã thôi công tác');
 }
 
+function getPhanLoaiCanBo_CongTac()
+{
+    return array('1' => 'Cán bộ đang công tác',
+        '3' => 'Cán bộ đang điều động',
+        '4' => 'Cán bộ được điều động đến',
+    );
+}
+
+function getPhanLoaiLuanChuyen()
+{
+    return array('DIEUDONG' => 'Điều động cán bộ',
+        'LUANCHUYEN' => 'Luân chuyển cán bộ',
+    );
+}
+
 function getPhanLoaiThoiCongTac(){
     return array('NGHIHUU' => 'Nghỉ hưu',
         'NGHIVIEC' => 'Xin nghỉ việc',

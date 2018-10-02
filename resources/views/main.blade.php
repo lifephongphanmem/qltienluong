@@ -175,7 +175,7 @@
                         </li>
 
                         <li>
-                            <a href="{{url('nghiep_vu/quan_ly/dieu_dong/maso=all')}}"><i class="fa fa-caret-right"></i>Luân chuyển cán bộ</a>
+                            <a href="{{url('nghiep_vu/dieu_dong/danh_sach')}}"><i class="fa fa-caret-right"></i>Luân chuyển cán bộ</a>
                         </li>
 
                         <li>

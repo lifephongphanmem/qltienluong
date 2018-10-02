@@ -456,7 +456,8 @@ class hosocanboController extends Controller
         $inputs = $request->all();
         $inputs['baohiem'] = isset($inputs['baohiem'])?$inputs['baohiem'] : 0;
         $inputs['madv'] = session('admin')->madv;
-        $inputs['hesopc'] = chkDbl($inputs['hesopc']);
+        $inputs['pctdt'] = chkDbl($inputs['pctdt']);
+        //$inputs['hesopc'] = chkDbl($inputs['hesopc']);
         $inputs['pctn'] = chkDbl($inputs['pctn']);
         $inputs['pcdbn'] = chkDbl($inputs['pcdbn']);
         $inputs['pcthni'] = chkDbl($inputs['pcthni']);

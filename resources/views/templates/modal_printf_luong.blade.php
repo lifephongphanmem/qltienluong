@@ -123,6 +123,44 @@
 </div>
 {!! Form::close() !!}
 
+
+<!--Mẫu TT107 theo phòng ban -->
+{!! Form::open(['url'=>'','method'=>'post' ,'target'=>'_blank', 'files'=>true, 'id' => 'printf_mautt107_pb']) !!}
+<div id="mautt107_pb-modal" tabindex="-1" role="dialog" aria-hidden="true" class="modal fade">
+    <div class="modal-dialog modal-content">
+        <div class="modal-header modal-header-primary">
+            <button type="button" data-dismiss="modal" aria-hidden="true" class="close">&times;</button>
+            <h4 id="header-inbl" class="modal-title">In bảng lương</h4>
+        </div>
+        <div class="modal-body">
+            <div class="form-horizontal">
+                <div class="row">
+                    <div class="col-md-12">
+                        <label class="control-label">Khối/Tổ công tác</label>
+                        <select name="mapb" id="mapb" class="form-control select2me">
+                            @foreach(getPhongBan(true) as $key=>$val)
+                                <option value="{{$key}}">{{$val}}</option>
+                            @endforeach
+                        </select>
+                    </div>
+
+                    <div class="col-md-12">
+                        <label class="control-label">Cỡ chữ</label>
+                        {!!Form::select('cochu',getCoChu(), 10, array('id' => 'cochu','class' => 'form-control select2me'))!!}
+                    </div>
+                </div>
+            </div>
+
+            <input type="hidden" id="mabl_mautt107_pb" name="mabl_mautt107_pb"/>
+        </div>
+        <div class="modal-footer">
+            <button type="button" data-dismiss="modal" class="btn btn-default">Hủy thao tác</button>
+            <button type="submit" data-dismiss="modal" class="btn btn-success" onclick="ClickBCtt107_pb()">Đồng ý</button>
+        </div>
+    </div>
+</div>
+{!! Form::close() !!}
+
 <!--Mẫu 3 -->
 {!! Form::open(['url'=>(isset($furl)?$furl : '').'mau03','method'=>'post' ,'target'=>'_blank', 'files'=>true, 'id' => 'printf_mau3']) !!}
 <div id="mau3-modal" tabindex="-1" role="dialog" aria-hidden="true" class="modal fade">
@@ -827,6 +865,12 @@
         $('#mabl_mautt107').val($('#mabl_in').val());
         $('#mautt107-modal').modal('show');
     }
+
+    function inblmtt107_pb(){
+        $('#mabl_mautt107_pb').val($('#mabl_in').val());
+        $('#mautt107_pb-modal').modal('show');
+    }
+
     function inblm3(){
         $('#mabl_mau3').val($('#mabl_in').val());
         $('#mau3-modal').modal('show');
@@ -953,7 +997,13 @@
         $('#printf_mautt107').attr('action',url);
         $('#printf_mautt107').submit();
     }
-    
+
+    function ClickBCtt107_pb() {
+        var url = '{{(isset($furl)?$furl : '').'mautt107_pb'}}'
+        $('#printf_mautt107_pb').attr('action', url);
+        $('#printf_mautt107_pb').submit();
+    }
+
     function ClickBC3() {
         var url = '{{(isset($furl)?$furl : '').'mau03'}}'
         $('#printf_mau3').attr('action', url);

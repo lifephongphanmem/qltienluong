@@ -271,15 +271,7 @@
                             {!!Form::select('manguonkp_qs',getNguonKP(true), null, array('id' => 'manguonkp_qs','class' => 'form-control select2me'))!!}
                         </div>
                     </div>
-
-                    <div class="col-md-3">
-                        <div class="form-group">
-                            <label class="control-label">Hệ số phụ cấp</label>
-                            {!!Form::text('hesopc_qs', null, array('id' => 'hesopc_qs','class' => 'form-control', 'data-mask'=>'fdecimal'))!!}
-                        </div>
-                    </div>
-
-                    <?php $a_kct = array('pcdbn','pcthni','pctn','pck'); ?>
+                    <?php $a_kct = array('pcdbn','pcthni','pctn','pck', 'pctdt'); ?>
                     @foreach($model_pc as $pc)
                         @if(!in_array($pc->mapc,$a_kct))
                             @continue
@@ -822,8 +814,9 @@
                     $('#macvcq_qs').val(data.macvcq).trigger('change');
                     $('#manguonkp_qs').val(data.manguonkp).trigger('change');
                     $('#id_qs').val(data.id);
-                    $('#hesopc_qs').val(data.hesopc);
+                    //$('#hesopc_qs').val(data.hesopc);
                     $('#pctn_qs').val(data.pctn);
+                    $('#pctdt_qs').val(data.pctdt);
                     $('#pcdbn_qs').val(data.pcdbn);
                     $('#pck_qs').val(data.pck);
                     $('#pcthni_qs').val(data.pcthni);
@@ -953,7 +946,8 @@
                     manguonkp : $('#manguonkp_qs').val(),
                     macvcq : $('#macvcq_qs').val(),
                     id: $('#id_qs').val(),
-                    hesopc: $('#hesopc_qs').val(),
+                    //hesopc: $('#hesopc_qs').val(),
+                    pctdt: $('#pctdt_qs').val(),
                     phanloai: $('#phanloai_qs').val(),
                     pctn: $('#pctn_qs').val(),
                     pcdbn: $('#pcdbn_qs').val(),

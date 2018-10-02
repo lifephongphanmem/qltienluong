@@ -123,7 +123,7 @@
             <td style="text-align: left">{{$ct->chucvu}}</td>
             <td style="text-align: center">{{$ct->chucvukn}}</td>
             <td style="text-align: right">{{dinhdangso($ct->luongcb)}}</td>
-            <td style="text-align: center">{{dinhdangsothapphan($ct->pckn,5)}}</td>
+            <td style="text-align: center">{{dinhdangsothapphan(($ct->pckn + $ct->hesopc),5)}}</td>
             <td style="text-align: center">{{dinhdangsothapphan($ct->pck,5)}}</td>
             <td style="text-align: right">{{dinhdangso($ct->sotienkn)}}</td>
             <td style="text-align: right">{{dinhdangso($ct->sotienk)}}</td>
@@ -134,7 +134,7 @@
     <tr style="font-weight: bold; text-align: center;">
         <td colspan="4">Tổng cộng</td>
         <td class="money">{{dinhdangso($thongtin['luongcb'])}}</td>
-        <td class="money" style="text-align: center">{{$model->sum('pckn')}}</td>
+        <td class="money" style="text-align: center">{{$model->sum('pckn') + $model->sum('hesopc')}}</td>
         <td class="money" style="text-align: center">{{$model->sum('pck')}}</td>
         <td class="money">{{dinhdangso($model->sum('sotienkn'))}}</td>
         <td class="money">{{dinhdangso($model->sum('sotienk'))}}</td>

@@ -29,7 +29,7 @@
 
             <div class="col-md-3">
                 <div class="form-group">
-                    <label class="control-label">Chức vụ</label>
+                    <label class="control-label">Chức vụ (chức danh)</label>
                     {!!Form::select('macvcq',getChucVuCQ(false), null, array('id' => 'macvcq','class' => 'form-control select2me'))!!}
                 </div>
             </div>
@@ -54,27 +54,6 @@
                     !!}
                 </div>
             </div>
-
-            <div class="col-md-3">
-                <div class="form-group">
-                    <label class="control-label">Dân tộc</label>
-                    {!! Form::select(
-                    'dantoc',
-                    $model_dt,null,
-                    array('id' => 'dantoc', 'class' => 'form-control select2me'))
-                    !!}
-                </div>
-            </div>
-
-            <div class="col-md-3">
-                <div class="form-group">
-                    <label class="control-label">Tôn giáo </label>
-                    {!!Form::text('tongiao', null, array('id' => 'tongiao','class' => 'form-control'))!!}
-                </div>
-            </div>
-        </div>
-
-        <div class="row">
 
             <div class="col-md-3">
                 <div class="form-group">
@@ -104,21 +83,29 @@
                     </select>
                 </div>
             </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-3">
+                <div class="form-group">
+                    <label class="control-label">Phân loại theo dõi</label>
+                    {!!Form::select('theodoi', getPhanLoaiCanBo_CongTac(), null, array('id' => 'theodoi','class' => 'form-control'))!!}
+                </div>
+            </div>
 
             <div class="col-md-3">
+                <div class="form-group">
+                    <label class="control-label">Số thứ tự (sắp xếp)</label>
+                    {!!Form::text('stt', null, array('id' => 'stt','class' => 'form-control', 'data-mask'=>'fdecimal'))!!}
+                </div>
+            </div>
+
+            <div class="col-md-6">
                 <div class="form-group">
                     <label class="control-label">Nơi công tác</label>
                     {!!Form::text('lvtd', null, array('id' => 'lvtd','class' => 'form-control'))!!}
                 </div>
             </div>
-
-            <div class="col-md-3">
-                <div class="form-group">
-                    <label class="control-label">Thứ tự (sắp xếp) trên bảng lương</label>
-                    {!!Form::text('stt', null, array('id' => 'stt','class' => 'form-control', 'data-mask'=>'fdecimal'))!!}
-                </div>
-            </div>
-
         </div>
 
         <div class="row">

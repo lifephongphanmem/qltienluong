@@ -284,6 +284,16 @@
 
                     <div class="col-md-6">
                         <div class="form-group">
+                            <button type="button" style="border-width: 0px" onclick="inblmtt107_pb()" class="btn btn-default btn-xs mbs"
+                                    title="Bảng lương của cán bộ theo mẫu C02-HD hệ số phụ cấp hiển thị số tiền">
+                                <i class="fa fa-print"></i>&nbsp; Bảng lương mẫu C02-HD (TT107) - theo khối, tổ công tác</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
                             <button type="button" style="border-width: 0px" onclick="inblm1()" class="btn btn-default btn-xs mbs"
                                  title="Bảng lương của cán bộ theo mẫu C02-HD">
                                 <i class="fa fa-print"></i>&nbsp; Bảng lương mẫu C02-HD (TT185/2010/TT-BTC)</button>

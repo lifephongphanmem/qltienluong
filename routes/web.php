@@ -224,10 +224,7 @@ Route::group(['prefix'=>'nghiep_vu'],function(){
     });
 
     Route::group(['prefix'=>'quan_ly'],function(){
-         Route::group(['prefix'=>'dieu_dong'],function(){
-            Route::get('/maso={macanbo}','hosoluanchuyenController@index_dd');
-            Route::get('del/{id}','hosoluanchuyenController@destroy_dd');
-        });
+
 
         Route::group(['prefix'=>'chi_tieu'],function(){
             Route::get('danh_sach','chitieubiencheController@index');
@@ -298,6 +295,14 @@ Route::group(['prefix'=>'nghiep_vu'],function(){
         Route::get('get','hosotrucController@getinfo');
     });
 
+    Route::group(['prefix'=>'dieu_dong'],function(){
+        Route::get('danh_sach','hosodieudongController@index');
+        Route::get('create','hosodieudongController@create');
+        Route::post('store','hosodieudongController@store');
+        Route::get('del/{id}','hosodieudongController@destroy');
+
+        Route::get('/maso={macanbo}','hosoluanchuyenController@index_dd');
+    });
 });
 
 Route::group(['prefix'=>'du_toan'],function(){
@@ -351,6 +356,7 @@ Route::group(['prefix'=>'chuc_nang'],function(){
         //Tạo in bảng lương theo cách mới
         Route::post('mau01','bangluongController@printf_mau01');
         Route::post('mautt107','bangluongController@printf_mautt107');
+        Route::post('mautt107_pb','bangluongController@printf_mautt107_pb');
         Route::post('mau03','bangluongController@printf_mau03');
         Route::post('mau04','bangluongController@printf_mau04');
         Route::post('mau05','bangluongController@printf_mau05');
