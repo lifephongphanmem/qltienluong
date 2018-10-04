@@ -78,6 +78,9 @@ Route::group(['prefix'=>'danh_muc'],function(){
         Route::get('don_vi','dmphucapController@index_donvi');
         Route::get('don_vi/edit','dmphucapController@edit_donvi');
         Route::post('don_vi/update','dmphucapController@update_donvi');
+
+        Route::get('don_vi/anhien','dmphucapController@anhien');
+        Route::post('don_vi/default_pc','dmphucapController@default_pc');
     });
 
     Route::group(['prefix'=>'cong_tac'],function(){
@@ -151,6 +154,11 @@ Route::group(['prefix'=>'danh_muc'],function(){
         Route::get('add','dmphanloaidonviController@store');
         Route::get('update','dmphanloaidonviController@update');
         Route::get('get','dmphanloaidonviController@getinfo');
+
+        Route::get('','dmphanloaidonviController@phucap');
+        Route::get('edit','dmphanloaidonviController@edit_phucap');
+        Route::post('phu_cap/update','dmphanloaidonviController@update_phucap');
+        Route::get('anhien','dmphanloaidonviController@anhien');
     });
 
     Route::group(['prefix'=>'ngach_bac'],function(){

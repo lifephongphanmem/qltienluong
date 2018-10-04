@@ -100,7 +100,7 @@ class hosocanboController extends Controller
                 ->with('m_plnb', $m_plnb)
                 ->with('m_pln', $m_pln)
                 ->with('furl_kn', '/nghiep_vu/ho_so/temp/')
-                ->with('a_heso', array('heso', 'vuotkhung', 'hesopc', 'hesott'))
+                ->with('a_heso', array('heso', 'vuotkhung', 'luonghd', 'hesott'))
                 ->with('model_pc', $model_pc)
                 ->with('pageTitle', 'Tạo hồ sơ cán bộ');
         } else
@@ -208,16 +208,16 @@ class hosocanboController extends Controller
             $a_nguonkp = explode(',',$model->manguonkp);
             //lấy phụ cấp ở danh mục phụ cấp đơn vị mapc => tenform
             $model_pc = dmphucap_donvi::where('madv', session('admin')->madv)->get();
+
             $model_kn = hosocanbo_kiemnhiem::where('macanbo',$model->macanbo)->get();
             $a_pl = getPhanLoaiKiemNhiem();
             $a_cv = getChucVuCQ(false);
-
-
 
             foreach($model_kn as $ct) {
                 $ct->tenphanloai = isset($a_pl[$ct->phanloai]) ? $a_pl[$ct->phanloai] : '';
                 $ct->tenchucvu = isset($a_cv[$ct->macvcq]) ? $a_cv[$ct->macvcq] : '';
             }
+
             return view('manage.hosocanbo.edit')
                 ->with('model',$model)
                 ->with('type','edit')
@@ -231,8 +231,8 @@ class hosocanboController extends Controller
                 ->with('m_plnb',$m_plnb)
                 ->with('m_pln',$m_pln)
                 ->with('furl_kn', '/nghiep_vu/ho_so/')
-                ->with('a_heso', array('heso', 'vuotkhung', 'hesopc', 'hesott'))
-                ->with('model_pc',$model_pc)
+                ->with('a_heso', array('heso', 'vuotkhung', 'luonghd', 'hesott'))
+                ->with('model_pc',$model_pc->sortby('stt'))
                 ->with('pageTitle','Sửa thông tin hồ sơ cán bộ');
         } else
             return view('errors.notlogin');

@@ -184,6 +184,7 @@
         $("#linhvuc").change(function(){
             $("#lvhd").val( $("#linhvuc").val());
         });
+
         $("#nguonkp").change(function(){
             $("#manguonkp").val( $("#nguonkp").val());
         });

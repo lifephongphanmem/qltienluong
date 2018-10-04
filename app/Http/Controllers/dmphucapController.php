@@ -7,6 +7,7 @@ use App\dmphanloaicongtac_baohiem;
 use App\dmphanloaict;
 use App\dmphucap;
 use App\dmphucap_donvi;
+use App\dmphucap_phanloai;
 use Illuminate\Http\Request;
 
 use App\Http\Requests;
@@ -220,6 +221,36 @@ class dmphucapController extends Controller
             $inputs = $request->all();
             $inputs['congthuc'] = getDbl($inputs['phanloai']) == 2 ? $inputs['congthuc'] : '';
             dmphucap_donvi::where('mapc', $inputs['mapc'])->where('madv', session('admin')->madv)->first()->update($inputs);
+            return redirect('/danh_muc/phu_cap/don_vi');
+        } else
+            return view('errors.notlogin');
+    }
+
+    function anhien(Request $request){
+        if (Session::has('admin')) {
+            $inputs = $request->all();
+            $model = dmphucap_donvi::find($inputs['id']);
+            $model->congthuc = '';
+            if($model->phanloai == 3){
+                $model->phanloai = 0;
+            }else{
+                $model->phanloai = 3;
+            }
+            $model->save();
+            return redirect('/danh_muc/phu_cap/don_vi');
+        } else
+            return view('errors.notlogin');
+    }
+
+    function default_pc(Request $request){
+        if (Session::has('admin')) {
+            $inputs = $request->all();
+            $model_phanloai = dmphucap_phanloai::where('maphanloai', session('admin')->maphanloai)->get();
+            foreach($model_phanloai as $pl){
+                dmphucap_donvi::where('mapc',$pl->mapc)
+                    ->where('madv',session('admin')->madv)
+                    ->update(['phanloai'=>$pl->phanloai, 'congthuc'=>$pl->congthuc]);
+            }
             return redirect('/danh_muc/phu_cap/don_vi');
         } else
             return view('errors.notlogin');

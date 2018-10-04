@@ -32,13 +32,9 @@
             <div class="portlet light bordered">
                 <div class="portlet-title">
                     <div class="caption">
-                        DANH SÁCH CÁC LOẠI PHỤ CẤP
+                        PHỤ CẤP MẶC ĐỊNH NHÓM: {{$inputs['tenphanloai']}}
                     </div>
 
-                    <div class="actions">
-                        <button type="button" class="btn btn-default btn-sm"  data-target="#chuyen-modal" data-toggle="modal"><i class="fa fa-share-square-o"></i>&nbsp;
-                            Khôi phục mặc định</button>
-                    </div>
                 </div>
                 <div class="portlet-body form-horizontal">
                     <table id="sample_3" class="table table-hover table-striped table-bordered" style="min-height: 230px">
@@ -49,7 +45,6 @@
                                 <th class="text-center">Phụ cấp</th>
                                 <th class="text-center">Phân loại</th>
                                 <th class="text-center">Bao gồm các</br>loại hệ số</th>
-                                <th class="text-center">Nộp bảo hiểm</th>
                                 <th class="text-center">Thao tác</th>
                             </tr>
                         </thead>
@@ -63,11 +58,9 @@
                                     <td>{{$value->tenpc}}</td>
                                     <td>{{$value->tenphanloai}}</td>
                                     <td>{{$value->tencongthuc}}</td>
-                                    <td>{{$value->baohiem == 0 ? 'Không nộp bảo hiểm': 'Có nộp bảo hiểm'}}</td>
                                     <td>
-                                        <a href="{{$furl.'edit?maso='.$value->mapc}}" class="btn btn-default btn-xs">
+                                        <a href="{{$furl.'edit?id='.$value->id}}" class="btn btn-default btn-xs">
                                             <i class="fa fa-edit"></i>&nbsp; Sửa</a>
-
                                         <a href="{{$furl.'anhien?id='.$value->id}}" class="btn btn-default btn-xs">
                                             <i class="fa fa-edit"></i>&nbsp; {{$value->phanloai == 3? 'Hiện' : 'Ẩn'}}</a>
                                     </td>
@@ -76,35 +69,17 @@
                         @endif
                         </tbody>
                     </table>
+
+                    <div class="row">
+                        <div class="col-md-offset-5 col-md-5">
+                            <a href="{{url('/danh_muc/pl_don_vi/index')}}" class="btn btn-default"><i class="fa fa-reply"></i>&nbsp;Quay lại</a>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 
-    <!--Model chuyển-->
-    <div class="modal fade" id="chuyen-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                {!! Form::open(['url'=>$furl.'default_pc','id' => 'frm_chuyen','method'=>'POST'])!!}
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
-                    <h4 class="modal-title">Đồng ý khôi phục thiết lập mặc định?</h4>
-                </div>
-                <div class="modal-body">
-                    <div class="form-group">
-                        <label><b>Các thiết đặt về phụ cấp của bạn sẽ thiết đặt lại. Bạn có chắc chắn muốn khôi khục?</b></label>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn default" data-dismiss="modal">Hủy</button>
-                        <button type="submit" class="btn blue">Đồng ý</button>
-                    </div>
-                    {!! Form::close() !!}
-                </div>
-                <!-- /.modal-content -->
-            </div>
-            <!-- /.modal-dialog -->
-        </div>
-    </div>
 
 
     <script>

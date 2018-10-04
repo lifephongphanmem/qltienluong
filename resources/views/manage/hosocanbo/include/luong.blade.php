@@ -111,10 +111,21 @@
                             </div>
                         </div>
 
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label class="control-label">Ngạch bậc - Từ ngày</label>
+                                {!! Form::input('date','ngaytu',null,array('id' => 'ngaytu', 'class' => 'form-control'))!!}
+                            </div>
+                        </div>
 
-                        <?php
-                            $hesopc = $model_pc->where('mapc','hesopc')->first();
-                        ?>
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label class="control-label">Ngạch bậc - Đến ngày</label>
+                                {!! Form::input('date','ngayden',null,array('id' => 'ngayden', 'class' => 'form-control'))!!}
+                            </div>
+                        </div>
+
+                        <?php $hesopc = $model_pc->where('mapc','luonghd')->first(); ?>
                         
                         @if($hesopc->phanloai == 3)
                             {!!Form::hidden($hesopc->mapc, null, array('id' =>$hesopc->mapc, 'class' => 'form-control', 'data-mask'=>'fdecimal'))!!}
@@ -157,33 +168,7 @@
                             </div>
                         </div>
 
-                        <div class="col-md-3">
-                            <div class="form-group">
-                                <label class="control-label">Ngạch bậc - Từ ngày</label>
-                                {!! Form::input('date','ngaytu',null,array('id' => 'ngaytu', 'class' => 'form-control'))!!}
-                            </div>
-                        </div>
 
-                        <div class="col-md-3">
-                            <div class="form-group">
-                                <label class="control-label">Ngạch bậc - Đến ngày</label>
-                                {!! Form::input('date','ngayden',null,array('id' => 'ngayden', 'class' => 'form-control'))!!}
-                            </div>
-                        </div>
-
-                        <div class="col-md-3">
-                            <div class="form-group">
-                                <label class="control-label">TN nghề - Từ ngày</label>
-                                {!! Form::input('date','tnntungay',null,array('id' => 'tnntungay', 'class' => 'form-control'))!!}
-                            </div>
-                        </div>
-
-                        <div class="col-md-3">
-                            <div class="form-group">
-                                <label class="control-label">TN nghề - Đến ngày</label>
-                                {!! Form::input('date','tnndenngay',null,array('id' => 'tnndenngay', 'class' => 'form-control'))!!}
-                            </div>
-                        </div>
 
                     </div>
 
@@ -241,6 +226,22 @@
                                         <div class="form-group">
                                             <label class="control-label">{{$pc->form}}</label>
                                             {!!Form::text($pc->mapc, null, array('id' =>$pc->mapc, 'class' => 'form-control', 'data-mask'=>'fdecimal'))!!}
+                                        </div>
+                                    </div>
+                                @endif
+
+                                @if($pc->mapc == 'pctnn')
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label class="control-label">TN nghề - Từ ngày</label>
+                                            {!! Form::input('date','tnntungay',null,array('id' => 'tnntungay', 'class' => 'form-control'))!!}
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label class="control-label">TN nghề - Đến ngày</label>
+                                            {!! Form::input('date','tnndenngay',null,array('id' => 'tnndenngay', 'class' => 'form-control'))!!}
                                         </div>
                                     </div>
                                 @endif

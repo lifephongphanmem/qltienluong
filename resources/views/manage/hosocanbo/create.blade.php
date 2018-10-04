@@ -47,7 +47,7 @@
             <div class="col-md-12">
                 <div class="portlet box blue" id="form_wizard_1">
                     <div class="portlet-title">
-                        <div class="caption">
+                        <div class="caption text-uppercase">
                             THÊM MỚI HỒ SƠ CÁN BỘ
                         </div>
                         <div class="tools hidden-xs">

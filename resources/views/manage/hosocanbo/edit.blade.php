@@ -39,13 +39,12 @@
 
 @stop
 
-
 @section('content')
     <div class="row">
         <div class="col-md-12">
             <div class="portlet box blue" id="form_wizard_1">
                 <div class="portlet-title">
-                    <div class="caption">SỬA THÔNG TIN HỒ SƠ CÁN BỘ</div>
+                    <div class="caption text-uppercase">SỬA THÔNG TIN HỒ SƠ CÁN BỘ - {{$model->tencanbo}}</div>
                     <div class="tools hidden-xs">
                         <a href="javascript:;" class="collapse">
                         </a>
