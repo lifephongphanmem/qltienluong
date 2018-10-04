@@ -35,7 +35,7 @@
                     <div class="actions">
                         <div class="actions">
                             <a class="btn btn-default" href="{{url($url.'ma_so='.$madv.'/create')}}">
-                                <i class="fa fa-plus"></i> Thêm mới tài khoản
+                                <i class="fa fa-plus"></i> Thêm mới
                             </a>
                         </div>
                     </div>
@@ -45,7 +45,7 @@
                         <div class="form-group">
                             <label class="control-label col-md-3">Đơn vị sử dụng </label>
                             <div class="col-md-5">
-                                {!! Form::select('madv',$model_donvi,$madv,array('id' => 'madv', 'class' => 'form-control'))!!}
+                                {!! Form::select('madv',$model_donvi,$madv,array('id' => 'madv', 'class' => 'form-control select2me'))!!}
                             </div>
                         </div>
                     </div>
@@ -72,9 +72,9 @@
                                                     <i class="fa fa-edit"></i> Chỉnh sửa
                                                 </a>
 
-                                                <a class="btn btn-default btn-xs mbs" href="{{url($url.'ma_so='.$value->username.'/permission')}}">
+                                                <!--a class="btn btn-default btn-xs mbs" href="{{url($url.'ma_so='.$value->username.'/permission')}}">
                                                     <i class="fa fa-list-ul"></i> Phân quyền
-                                                </a>
+                                                </a-->
 
                                                 <button type="button" onclick="cfDel('{{$url.'del_taikhoan/'.$value->username}}')" class="btn btn-default btn-xs mbs" data-target="#delete-modal-confirm" data-toggle="modal">
                                                     <i class="fa fa-trash-o"></i>&nbsp; Xóa</button>
