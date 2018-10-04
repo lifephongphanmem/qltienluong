@@ -55,6 +55,14 @@ class bangluong_ct extends Model
         'pcbdhdcu',
         'pctnvk',
         'pcthni',
+
+        'pclade',
+        'pcud61',
+        'pcxaxe',
+        'pcdith',
+        'luonghd',
+        'pcphth',
+
         'tonghs',
         'ttl',
         'giaml',

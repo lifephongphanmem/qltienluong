@@ -91,8 +91,7 @@ class CreateHosodieudongTable extends Migration
             $table->double('pcud61')->default(0); //ưu đãi theo tt61
             $table->double('pcxaxe')->default(0); //điện thoại
             $table->double('pcdith')->default(0); //điện thoại
-            $table->double('luonghd')->default(0); //lương hợp đồng (số tiền)
-
+            $table->double('luonghd')->default(0); //lương hợp đồng, lương khoán (số tiền)
             $table->double('pcphth')->default(0); //phẫu thuật, thủ thuật
 
             $table->date('tnntungay')->nullable();

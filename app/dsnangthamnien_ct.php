@@ -51,6 +51,12 @@ class dsnangthamnien_ct extends Model
         'pctnvk',
         'pcbdhdcu',
         'pcthni',
+        'pclade',
+        'pcud61',
+        'pcxaxe',
+        'pcdith',
+        'luonghd',
+        'pcphth',
         'ghichu'
     ];
 }

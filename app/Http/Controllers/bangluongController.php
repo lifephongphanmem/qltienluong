@@ -8,7 +8,6 @@ use App\bangluong_phucap;
 use App\bangluong_truc;
 use App\dmchucvucq;
 use App\dmdonvi;
-use App\dmkhoipb;
 use App\dmnguonkinhphi;
 use App\dmphanloaicongtac;
 use App\dmphanloaicongtac_baohiem;
@@ -184,11 +183,12 @@ class bangluongController extends Controller
 
         foreach ($m_cb as $canbo) {
             //Dùng tìm kiếm các bộ nào phù hợp. Do lvhd là mảng nên pải lọc
+            /*
             $a_lv = explode(',', $canbo->lvhd);
             if (in_array($inputs['linhvuchoatdong'], $a_lv) || $canbo->lvhd == null) {
                 $canbo->lvhd = $inputs['linhvuchoatdong'];
             }
-
+            */
             $a_nguon = explode(',', $canbo->manguonkp);
             //nếu cán bộ ko set nguồn (null, '') hoặc trong nguồn thì sét luôn =  ma nguồn để tạo bang lương
             if (in_array($inputs['manguonkp'], $a_nguon) || $canbo->manguonkp == null || $canbo->manguonkp == '') {

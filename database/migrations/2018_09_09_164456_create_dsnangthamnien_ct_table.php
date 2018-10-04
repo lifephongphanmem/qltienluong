@@ -51,8 +51,15 @@ class CreateDsnangthamnienCtTable extends Migration
             $table->double('pctnvk')->default(0);
             $table->double('pcbdhdcu')->default(0);
             $table->double('pcthni')->default(0);
-            $table->text('ghichu')->nullable();
 
+            $table->double('pclade')->default(0); //làm đêm
+            $table->double('pcud61')->default(0); //ưu đãi theo tt61
+            $table->double('pcxaxe')->default(0); //điện thoại
+            $table->double('pcdith')->default(0); //điện thoại
+            $table->double('luonghd')->default(0); //lương hợp đồng, lương khoán (số tiền)
+            $table->double('pcphth')->default(0); //phẫu thuật, thủ thuật
+
+            $table->text('ghichu')->nullable();
             $table->date('truylinhtungay')->nullable();
             $table->date('truylinhdenngay')->nullable();
             $table->double('thangtl')->default(0);//số tháng được truy lĩnh lương
