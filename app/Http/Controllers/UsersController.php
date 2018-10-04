@@ -210,10 +210,10 @@ class UsersController extends Controller
                 //phụ cấp
                 $model_phucap = dmphucap_donvi::where('madv', $ttuser->madv)->get();
                 if (count($model_phucap) == 0) {
-                    $model_dmpc = dmphucap::select('mapc', 'tenpc', 'baohiem', 'form', 'report', 'phanloai', 'congthuc', DB::raw($ttuser->madv . ' as madv'))->get();
+                    $model_dmpc = dmphucap::select('stt','mapc', 'tenpc', 'baohiem', 'form', 'report', 'phanloai', 'congthuc', DB::raw($ttuser->madv . ' as madv'))->get();
                     dmphucap_donvi::insert($model_dmpc->toarray());
                 }else{//tự cập nhật các phụ cấp thiếu
-                    $model_dmpc = dmphucap::select('mapc', 'tenpc', 'baohiem', 'form', 'report', 'phanloai', 'congthuc', DB::raw($ttuser->madv . ' as madv'))
+                    $model_dmpc = dmphucap::select('stt','mapc', 'tenpc', 'baohiem', 'form', 'report', 'phanloai', 'congthuc', DB::raw($ttuser->madv . ' as madv'))
                         ->wherenotin('mapc', array_column($model_phucap->toarray(),'mapc'))->get();
                     dmphucap_donvi::insert($model_dmpc->toarray());
                 }
