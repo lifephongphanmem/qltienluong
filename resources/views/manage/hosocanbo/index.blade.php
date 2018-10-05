@@ -35,23 +35,22 @@
                         <i class="fa fa-list-alt"></i>DANH SÁCH HỒ SƠ CÁN BỘ - {{$tendv}}
                     </div>
                     <div class="actions">
-                        <div class="btn-group btn-group-solid col-md-pull-6">
+                        <!--div class="btn-group btn-group-solid">
                             <button type="button" class="btn btn-lg btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="true">
-                                Thêm mới <i class="fa fa-angle-down"></i>
+                                Excel <i class="fa fa-angle-down"></i>
                             </button>
+
                             <ul class="dropdown-menu">
                                 <li>
-                                    <a href="{{url($url.'create')}}" class="btn btn-default btn-xs"><i class="fa fa-plus"></i>Thêm mới hồ sơ</a>
-                                </li>
-                                <!--li>
                                     <a href="{{url($url.'nhan_excel')}}" class="btn btn-default btn-xs mbs"><i class="fa fa-print"></i>Nhận từ file Excel</a>
                                 </li>
 
                                 <li>
                                     <a href="{{url('/data/download/MAU DS CAN BO.xls')}}" class="btn btn-default btn-xs"><i class="fa fa-download"></i>Tải file Excel mẫu</a>
-                                </li-->
+                                </li>
                             </ul>
-                        </div>
+                        </div-->
+                        <a href="{{url($url.'create')}}" class="btn btn-default btn-xs"> Thêm mới hồ sơ</a>
                     </div>
 
                 </div>

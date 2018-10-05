@@ -1896,7 +1896,8 @@ class bangluongController extends Controller
                 'thang' => $m_bl->thang,
                 'nam' => $m_bl->nam,
                 'ngaylap' => $m_bl->ngaylap, 'phanloai' => $m_bl->phanloai,
-                'cochu' => $inputs['cochu']);
+                'cochu' => $inputs['cochu']
+            );
             //xử lý ẩn hiện cột phụ cấp => biết tổng số cột hiện => colspan trên báo cáo
             $a_goc = array('hesott');
             $model_pc = dmphucap_donvi::where('madv', $m_bl->madv)->where('phanloai', '<', '3')->wherenotin('mapc', $a_goc)->get();
@@ -2359,40 +2360,42 @@ class bangluongController extends Controller
             $inputs['mapb'] = $inputs['mapb_mau6'];
             $inputs['macvcq'] = $inputs['macvcq_mau6'];
             $inputs['mact'] = $inputs['mact_mau6'];
-            $model = $this->getBangLuong($inputs)->wherein('phanloai', ['CVCHINH','KHONGCT']);
-            //dd($inputs);
+            //$model = $this->getBangLuong($inputs)->wherein('phanloai', ['CVCHINH','KHONGCT']);
+
             $mabl = $inputs['mabl'];
             $model_phucap = bangluong_phucap::where('mabl', $mabl)->get();
-            $m_bl = bangluong::select('thang','nam','mabl','madv','ngaylap','luongcoban')->where('mabl',$mabl)->first();
-            $m_dv = dmdonvi::where('madv',$m_bl->madv)->first();
+            $m_bl = bangluong::select('thang', 'nam', 'mabl', 'madv', 'ngaylap', 'phanloai','luongcoban')->where('mabl', $mabl)->first();
+            $m_dv = dmdonvi::where('madv', $m_bl->madv)->first();
             $m_dv->tendvcq = getTenDB($m_dv->madvbc);
-            $model_tm = dmtieumuc_default::all();
+            $inputs['madv'] = $m_dv->madv;
+            $model = $this->getBangLuong_moi($inputs);
+            //dd($model);
 
+            $model_tm = dmtieumuc_default::all();
             $model_congtac = dmphanloaict::select('mact','tenct')
                 ->wherein('mact', function($query) use($mabl){
                     $query->select('mact')->from('bangluong_ct')->where('mabl',$mabl);
                 })->get();
-            $model_hoso = hosocanbo::where('madv', $m_bl->madv)->get();
-            foreach ($model as $ct) {
-                if ($ct->phanloai == 'KHONGCT') {
-                    $hoso = $model_hoso->where('macanbo', $ct->macanbo)->first();
-                    $ct->tencanbo = count($hoso) > 0 ? $hoso->tencanbo : null;
-                }
-            }
+            $a_pb = getPhongBan();
             $thongtin=array('nguoilap'=>$m_bl->nguoilap,
                 'thang'=>$m_bl->thang,
                 'nam'=>$m_bl->nam,
                 'ngaylap'=>$m_bl->ngaylap,'phanloai'=>$m_bl->phanloai,
-                'cochu'=>$inputs['cochu']);
+                'cochu'=>$inputs['cochu'],
+                'mapb' => $inputs['mapb'],
+                'tenpb' => $a_pb[$inputs['mapb']],
+            );
             //xử lý ẩn hiện cột phụ cấp => biết tổng số cột hiện => colspan trên báo cáo
-            $a_goc = array('heso','vuotkhung','hesott');
-            $model_pc = dmphucap_donvi::where('madv',$m_bl->madv)->where('phanloai','<','3')->wherenotin('mapc',$a_goc)->get();
+            //$a_goc = array('heso','vuotkhung','hesott');
+            $model_pc = dmphucap_donvi::where('madv',$m_bl->madv)->where('phanloai','<','3')->orderby('stt')->get();
             $a_phucap = array();
             $col = 0;
 
             foreach($model_pc as $ct){
-                $a_phucap[$ct->mapc] = $ct->report;
-                $col++;
+                if ($model->sum($ct->mapc) > 0) {
+                    $a_phucap[$ct->mapc] = $ct->report;
+                    $col++;
+                }
             }
 
             foreach($model_tm as $tm) {
@@ -2427,11 +2430,19 @@ class bangluongController extends Controller
                 $tm->stbhtn_dv = $phucap->sum('stbhtn_dv');
                 $tm->ttbh_dv = $phucap->sum('ttbh_dv');
             }
-            //dd($m_bl);
-            //dd($model_tm->where('sotien','>',0));
+            $model_tm = $model_tm->where('sotien','>',0);
+
+            $a_muc = $model_tm->map(function ($data) {
+                return collect($data->toArray())
+                    ->only(['muc'])
+                    ->all();
+            });
+            $a_muc = a_unique($a_muc);
+            //dd($a_muc);
             return view('reports.bangluong.donvi.mau06')
                 ->with('model',$model->sortBy('stt'))
-                ->with('model_tm',$model_tm->where('sotien','>',0))
+                ->with('model_tm',$model_tm)
+                ->with('a_muc',$a_muc)
                 ->with('model_pb',getPhongBan())
                 ->with('m_dv',$m_dv)
                 ->with('thongtin',$thongtin)

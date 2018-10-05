@@ -247,7 +247,7 @@
                                 <ul class="sub-menu" style="margin-left: 15px;">
                                     <li><a href="{{url('danh_muc/phong_ban/index')}}"><i class="fa fa-caret-right"></i>Khối(tổ) công tác</a></li>
                                     <li><a href="{{url('danh_muc/chuc_vu/index')}}"><i class="fa fa-caret-right"></i>Chức vụ</a></li>
-                                    <li><a href="{{url('danh_muc/dan_toc/index')}}"><i class="fa fa-caret-right"></i>Dân tộc</a></li>
+                                    <!--li><a href="{{url('danh_muc/dan_toc/index')}}"><i class="fa fa-caret-right"></i>Dân tộc</a></li-->
                                 </ul>
                             </li>
                             <li>

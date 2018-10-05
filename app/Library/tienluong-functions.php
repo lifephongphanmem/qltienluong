@@ -245,7 +245,7 @@ function getDiaBan($val_null = true){
 function getColTongHop(){
     //các loại phụ cấp mới thêm như: bảo lưu,...
     //chưa có
-    return array('heso','hesopc','vuotkhung','pcct',
+    return array('heso','hesopc','vuotkhung','pcct','hesobl',
         'pckct',
         'pck',
         'pccv',
