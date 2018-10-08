@@ -243,7 +243,7 @@
                                             {!! Form::input('date','tnndenngay',null,array('id' => 'tnndenngay', 'class' => 'form-control'))!!}
                                         </div>
                                     </div>
-                                @else
+                                @elseif($pc->mapc == 'pctnn' && $pc->phanloai == 3)
                                     {!!Form::hidden('tnntungay', null, array('id' =>'tnntungay', 'class' => 'form-control'))!!}
                                     {!!Form::hidden('tnndenngay', null, array('id' =>'tnndenngay', 'class' => 'form-control'))!!}
                                 @endif

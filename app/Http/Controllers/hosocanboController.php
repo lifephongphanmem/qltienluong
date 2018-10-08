@@ -1117,7 +1117,7 @@ class hosocanboController extends Controller
                     $model->msngbac = $msngbac;
                     $nhom = $a_nhomnb[$a_nb[$model->msngbac]];
                     $bac = ($model->heso - $nhom['heso'])/$nhom['hesochenhlech'];
-                    $model->bac =chkDbl($bac);
+                    $model->bac = chkDbl($bac) + 1;//do bắt đầu từ 1
                 }
                 $macv = '-' . chuanhoachuoi(trim($data[$i][$inputs['macvcq']])) . '-';
                 foreach($a_chucvu as $key=>$val) {
