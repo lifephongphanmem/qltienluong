@@ -243,7 +243,12 @@
                                             {!! Form::input('date','tnndenngay',null,array('id' => 'tnndenngay', 'class' => 'form-control'))!!}
                                         </div>
                                     </div>
+                                @else
+                                    {!!Form::hidden('tnntungay', null, array('id' =>'tnntungay', 'class' => 'form-control'))!!}
+                                    {!!Form::hidden('tnndenngay', null, array('id' =>'tnndenngay', 'class' => 'form-control'))!!}
                                 @endif
+
+
                             @endforeach
                         </div>
                     </div>

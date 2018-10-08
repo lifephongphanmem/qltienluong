@@ -878,7 +878,6 @@ class bangluongController extends Controller
         }
 
         //Tính toán lương cho cán bộ kiêm nhiệm
-        //$m_donvi = dmdonvi::where('madv',$madv)->first();
         foreach ($model_canbo_kn as $cb) {
             //trong kiêm nhiệm: thâm niên lấy  % lương hệ số
             //đặc thù tính

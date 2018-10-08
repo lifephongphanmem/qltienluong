@@ -1043,9 +1043,7 @@ class hosocanboController extends Controller
                 $data = $sheet->toArray(null,true,true,true);// giữ lại tiêu đề A=>'val';
             });
 
-
-            //dd($a_col);
-            $j=1; //lấy 1 số thêm vào ngày giờ vì for chạy xong trong 1s
+            $j = getDbl((hosocanbo::where('madv', session('admin')->madv)->get()->max('stt'))) + 1;
             for($i=$inputs['tudong'];$i < ($inputs['tudong'] + $inputs['sodong']); $i++){
                 //dd($data[$i]);
                 if (!isset($data[$i][$inputs['tencanbo']]) || $data[$i][$inputs['tencanbo']] == '') {
