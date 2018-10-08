@@ -67,74 +67,81 @@
 
                                             <div class="form-body">
                                                 <div class="row">
-                                                    <div class="col-md-4">
-                                                        <div class="form-group">
-                                                            <label class="control-label">Mã số công chức/viên chức</label>
-                                                            {!!Form::text('macongchuc', 'B', array('id' => 'macongchuc','class' => 'form-control','autofocus' => 'autofocus'))!!}
-                                                        </div>
-                                                    </div>
-
-                                                    <div class="col-md-4">
+                                                    <div class="col-md-2">
                                                         <div class="form-group">
                                                             <label class="control-label">Họ tên cán bộ<span class="require">*</span></label>
-                                                            {!!Form::text('tencanbo', 'C', array('id' => 'tencanbo','class' => 'form-control required'))!!}
+                                                            {!!Form::text('tencanbo', 'B', array('id' => 'tencanbo','class' => 'form-control required'))!!}
                                                         </div>
                                                     </div>
 
-                                                    <div class="col-md-4">
+                                                    <div class="col-md-2">
                                                         <div class="form-group">
-                                                            <label class="control-label">Chức vụ</label>
-                                                            {!!Form::text('macvcq', 'D', array('id' => 'macvcq','class' => 'form-control'))!!}
+                                                            <label class="control-label">Ngày sinh<span class="require">*</span></label>
+                                                            {!!Form::text('ngaysinh', 'C', array('id' => 'ngaysinh','class' => 'form-control required'))!!}
                                                         </div>
                                                     </div>
-                                                    <div class="col-md-4">
+
+                                                    <div class="col-md-2">
+                                                        <div class="form-group">
+                                                            <label class="control-label">Giới tính<span class="require">*</span></label>
+                                                            {!!Form::text('gioitinh', 'D', array('id' => 'gioitinh','class' => 'form-control required'))!!}
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="col-md-2">
+                                                        <div class="form-group">
+                                                            <label class="control-label">Sự nghiệp<span class="require">*</span></label>
+                                                            {!!Form::text('sunghiep', 'E', array('id' => 'sunghiep','class' => 'form-control required'))!!}
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="col-md-2">
+                                                        <div class="form-group">
+                                                            <label class="control-label">Phân loại c.tác<span class="require">*</span></label>
+                                                            {!!Form::text('mact', 'F', array('id' => 'mact','class' => 'form-control required'))!!}
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="col-md-2">
+                                                        <div class="form-group">
+                                                            <label class="control-label">Khối(tổ) công tác<span class="require">*</span></label>
+                                                            {!!Form::text('mapb', 'G', array('id' => 'mapb','class' => 'form-control required'))!!}
+                                                        </div>
+                                                    </div>
+
+
+                                                    <div class="col-md-2">
+                                                        <div class="form-group">
+                                                            <label class="control-label">Chức vụ<span class="require">*</span></label>
+                                                            {!!Form::text('macvcq', 'H', array('id' => 'macvcq','class' => 'form-control required'))!!}
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="col-md-2">
                                                         <div class="form-group">
                                                             <label class="control-label">Mã ngạch bậc<span class="require">*</span></label>
-                                                            {!!Form::text('msngbac', 'E', array('id' => 'msngbac','class' => 'form-control required'))!!}
-                                                        </div>
-                                                    </div>
-
-                                                    <div class="col-md-4">
-                                                        <div class="form-group">
-                                                            <label class="control-label">Hệ số lương<span class="require">*</span></label>
-                                                            {!!Form::text('heso', 'F', array('id' => 'heso','class' => 'form-control required'))!!}
-                                                        </div>
-                                                    </div>
-                                                    <!--/span-->
-                                                    <div class="col-md-4">
-                                                        <div class="form-group">
-                                                            <label class="control-label">Phần trăm vượt khung<span class="require">*</span></label>
-                                                            {!!Form::text('vuotkhung', 'G', array('id' => 'vuotkhung','class' => 'form-control required'))!!}
+                                                            {!!Form::text('msngbac', 'I', array('id' => 'msngbac','class' => 'form-control required'))!!}
                                                         </div>
                                                     </div>
                                                     <!--/span-->
 
 
-
-
-                                                    <div class="col-md-6">
+                                                    <div class="col-md-2">
                                                         <div class="form-group">
                                                             <label class="control-label">Nhận từ dòng<span class="require">*</span></label>
                                                             {!!Form::text('tudong', '5', array('id' => 'tudong','class' => 'form-control required','data-mask'=>'fdecimal'))!!}
                                                         </div>
                                                     </div>
                                                     <!--/span-->
-                                                    <div class="col-md-6">
+                                                    <div class="col-md-2">
                                                         <div class="form-group">
-                                                            <label class="control-label">Số lượng cán bộ (dòng dữ liệu)<span class="require">*</span></label>
+                                                            <label class="control-label">Số lượng cán bộ</label>
                                                             {!!Form::text('sodong', '100', array('id' => 'sodong','class' => 'form-control','data-mask'=>'fdecimal'))!!}
                                                         </div>
                                                     </div>
                                                     <!--/span-->
 
-                                                    <div class="col-md-6">
-                                                        <div class="form-group">
-                                                            <label class="control-label">Sheet lấy dữ liệu<span class="require">*</span></label>
-                                                            {!!Form::text('sheet', '1', array('id' => 'sheet','class' => 'form-control required','data-mask'=>'fdecimal'))!!}
-                                                        </div>
-                                                    </div>
-
-                                                    <div class="col-md-6">
+                                                    <div class="col-md-12">
                                                         <div class="form-group">
                                                             <label class="control-label">File thông tin<span class="require">*</span></label>
                                                             <input id="fexcel" name="fexcel" type="file" class="form-control required" accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel">
@@ -165,14 +172,14 @@
 
                                             <div class="form-body">
                                                 <div class="row">
-                                                    @foreach($a_phucap as $key=>$val)
-                                                        @if($a_donvi[$key] == 3)
-                                                            {!!Form::hidden($key, null, array('id' =>$key, 'class' => 'form-control', 'data-mask'=>'fdecimal'))!!}
+                                                    @foreach($model_pc as $pc)
+                                                        @if($pc->phanloai == 3)
+                                                            {!!Form::hidden($pc->mapc, null, array('id' =>$pc->mapc, 'class' => 'form-control'))!!}
                                                         @else
                                                             <div class="col-md-3">
                                                                 <div class="form-group">
-                                                                    <label class="control-label">{{$val['infor']}}</label>
-                                                                    {!!Form::text($key, $val['col'], array('id' =>$key, 'class' => 'form-control'))!!}
+                                                                    <label class="control-label">{{$pc->form}}</label>
+                                                                    {!!Form::text($pc->mapc, null, array('id' =>$pc->mapc, 'class' => 'form-control'))!!}
                                                                 </div>
                                                             </div>
                                                         @endif
@@ -241,15 +248,51 @@
                 ok = false;
             }
 
-            if (!$('#sheet').val()) {
-                str += '  - Bảng tính lấy dữ liệu \n';
-                $('#sheet').parent().addClass('has-error');
-                ok = false;
-            }
-
             if (!$('#fexcel').val()) {
                 str += '  - File Excel \n';
                 $('#fexcel').parent().addClass('has-error');
+                ok = false;
+            }
+
+            if (!$('#ngaysinh').val()) {
+                str += '  - Ngày sinh \n';
+                $('#ngaysinh').parent().addClass('has-error');
+                ok = false;
+            }
+
+            if (!$('#gioitinh').val()) {
+                str += '  - Giới tính \n';
+                $('#gioitinh').parent().addClass('has-error');
+                ok = false;
+            }
+
+            if (!$('#sunghiep').val()) {
+                str += '  - Sự nghiệp công tác \n';
+                $('#sunghiep').parent().addClass('has-error');
+                ok = false;
+            }
+
+            if (!$('#mact').val()) {
+                str += '  - Phân loại công tác \n';
+                $('#mact').parent().addClass('has-error');
+                ok = false;
+            }
+
+            if (!$('#mapb').val()) {
+                str += '  - Khối(tổ) công tác \n';
+                $('#mapb').parent().addClass('has-error');
+                ok = false;
+            }
+
+            if (!$('#macvcq').val()) {
+                str += '  - Chức vụ (chức danh) \n';
+                $('#macvcq').parent().addClass('has-error');
+                ok = false;
+            }
+
+            if (!$('#sodong').val()) {
+                str += '  - Số dòng dữ liệu \n';
+                $('#sodong').parent().addClass('has-error');
                 ok = false;
             }
 

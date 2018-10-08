@@ -19,7 +19,6 @@
         }
 
         table, p {
-            width: 98%;
             margin: auto;
         }
 
@@ -90,7 +89,7 @@
     <p style="text-align: center; font-style: italic">Khối/Tổ công tác: {{$thongtin['tenpb']}}</p>
 @endif
 
-<table class="money" cellspacing="0" cellpadding="0" border="1" style="margin: 20px auto; border-collapse: collapse;font:normal {{$thongtin['cochu']}}px Times, serif;">
+<table width="97%" class="money" cellspacing="0" cellpadding="0" border="1" style="margin: 20px auto; border-collapse: collapse;font:normal {{$thongtin['cochu']}}px Times, serif;">
     <tr style="padding-left: 2px;padding-right: 2px">
         <th style="width: 2%;" rowspan="2">S</br>T</br>T</th>
         <th style="width: 15%;" rowspan="2">Họ và tên</th>
@@ -202,7 +201,7 @@
     </tr>
 </table>
 
-<table class="money" cellspacing="0" cellpadding="0" border="1" style="margin: 20px auto; border-collapse: collapse;">
+<table class="money" width="90%"  cellspacing="0" cellpadding="0" border="1" style="margin: 20px auto; border-collapse: collapse;">
     <tr style="padding-left: 2px;padding-right: 2px">
         <th style="width: 5%;" >Mục</th>
         <th style="width: 5%;" >Tiểu mục</th>
@@ -259,13 +258,13 @@
 
 
 
-<table class="header" border="0" cellspacing="0" cellpadding="8" style="margin:20px auto; text-align: center;">
+<table class="header" width="90%" border="0" cellspacing="0" cellpadding="8" style="margin:20px auto; text-align: center;">
     <tr>
         <td style="text-align: left;" width="50%"></td>
         <td style="text-align: center; font-style: italic" width="50%">{{$m_dv->diadanh .', '.Date2Str($thongtin['ngaylap'])}}</td>
     </tr>
     <tr style="font-weight: bold">
-        <td style="text-align: center;" width="50%">Người lập bảng</td>
+        <td style="text-align: center;" width="50%">{{$m_dv['cdketoan']}}</td>
         <td style="text-align: center;" width="50%">{{$m_dv['cdlanhdao']}}</td>
     </tr>
     <tr style="font-style: italic">
@@ -277,7 +276,7 @@
     </tr>
 
     <tr>
-        <td style="text-align: center;" width="50%">{{$m_dv['nguoilapbieu']}}</td>
+        <td style="text-align: center;" width="50%">{{$m_dv['ketoan']}}</td>
         <td style="text-align: center;" width="50%">{{$m_dv['lanhdao']}}</td>
     </tr>
 </table>

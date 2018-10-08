@@ -985,11 +985,9 @@ class hosocanboController extends Controller
 
     public function infor_excel(){
         if(Session::has('admin')){
-            $a_donvi = dmdonvi::where('madv',session('admin')->madv)->first()->toarray();
-            $a_phucap = getColPhuCap_Excel();
+            $model_pc = dmphucap_donvi::where('madv', session('admin')->madv)->orderBy('stt')->get();
             return view('manage.hosocanbo.excel.information')
-                ->with('a_phucap',$a_phucap)
-                ->with('a_donvi',$a_donvi)
+                ->with('model_pc',$model_pc)
                 ->with('url','/nghiep_vu/ho_so/')
                 ->with('pageTitle','Thông tin nhận danh sách cán bộ từ file Excel');
 
@@ -999,50 +997,194 @@ class hosocanboController extends Controller
 
     function create_excel(Request $request){
         if(Session::has('admin')){
+            //Nguyên tắc: chuyển chức vụ, mact về tiếng việt ko dấu để tìm kiếm, lấy đầu tiên tìm đc ko gán = mặc định
+            //chức vụ ko tìm dc trong mảng chính => tìm trong bảng viết tắt
             $madv=session('admin')->madv;
             $inputs=$request->all();
 
-            $ar_sheet = explode(',',$inputs['sheet']);
-            if(count($ar_sheet) == 0){
-                $ar_sheet[] = '0';
-            }else{
-                for($i=0;$i<count($ar_sheet);$i++){
-                    $ar_sheet[$i] = $ar_sheet[$i] - 1;
-                }
+            //$model_donvi = dmdonvi::where('madv',$madv)->first();
+            //$a_nb_chk = array_column(ngachluong::all()->toArray(),'msngbac');
+            $a_nb = array_column(ngachluong::all()->toArray(), 'manhom','msngbac');
+            $a_pc = array_column(dmphucap_donvi::where('madv', session('admin')->madv)->where('phanloai','<','3')->get()->toArray(),'mapc');
+            $a_nhomnb = nhomngachluong::all()->keyBy('manhom')->toArray();
+
+            $a_chucvu = getChucVuCQ(false);
+            foreach($a_chucvu as $key=>$val){
+                $a_chucvu[$key] = '-' . chuanhoachuoi(trim($val)) . '-';
             }
 
-            $bd=$inputs['tudong'];
-            $sd=$inputs['sodong'];
+            $a_chucvu_vt = array_column( dmchucvucq::where('maphanloai',session('admin')->maphanloai)
+                ->wherein('madv',['SA',session('admin')->madv])->get()->toArray(),'tenvt','macvcq');
+            foreach($a_chucvu_vt as $key=>$val){
+                $a_chucvu_vt[$key] = '-' . chuanhoachuoi(trim($val)) . '-';
+            }
+
+            $a_phanloaict = array_column(dmphanloaict::all()->toArray(),'tenct','mact');
+            foreach($a_phanloaict as $key=>$val) {
+                $a_phanloaict[$key] = '-' . chuanhoachuoi(trim($val)) . '-';
+            }
+
+            $a_pb = getPhongBan(false);
+            foreach($a_pb as $key=>$val) {
+                $a_pb[$key] = '-' . chuanhoachuoi(trim($val)) . '-';
+            }
+
+            $macv_df = key($a_chucvu);  // do khi chạy các vòng for thì hàm key() trả lại ở vị trí đang dừng
+            $mact_df = key($a_phanloaict);
             $filename = $madv . date('YmdHis');
             $request->file('fexcel')->move(public_path() . '/data/uploads/excels/', $filename . '.xls');
             $path = public_path() . '/data/uploads/excels/' . $filename . '.xls';
 
             $data = [];
             //dd ($ar_sheet);
-            Excel::load($path, function($reader) use (&$data,$bd,$sd,$ar_sheet) {
+            Excel::load($path, function($reader) use (&$data, $inputs) {
                 $obj = $reader->getExcel();
-                $sheetCount = $obj->getSheetCount();
-
-                foreach($ar_sheet as $sheetNumber){
-                    //if($sheetNumber == 1){dd($sheetNumber);}
-                    //dd($sheetNumber);
-                    if($sheetNumber <= $sheetCount - 1){
-                        $sheet = $obj->getSheet($sheetNumber);
-                        //$sheet = $obj->getSheet(0);
-                        $Row = $sheet->getHighestRow();
-                        $Row = $sd+$bd > $Row ? $Row : ($sd+$bd);
-                        $Col = $sheet->getHighestColumn();
-
-                        for ($r = $bd; $r <= $Row; $r++)
-                        {
-                            //$rowData = $sheet->toArray(null,true,true,true) giữ lại tiêu đề A=>'val'
-                            $rowData = $sheet->rangeToArray('A' . $r . ':' . $Col . $r, NULL, TRUE, FALSE);//'0'=>'val'
-                            $data[] = $rowData[0];
-                        }
-                    }
-                }
+                $sheet = $obj->getSheet(0);
+                $data = $sheet->toArray(null,true,true,true);// giữ lại tiêu đề A=>'val';
             });
 
+
+            //dd($a_col);
+            $j=1; //lấy 1 số thêm vào ngày giờ vì for chạy xong trong 1s
+            for($i=$inputs['tudong'];$i < ($inputs['tudong'] + $inputs['sodong']); $i++){
+                //dd($data[$i]);
+                if (!isset($data[$i][$inputs['tencanbo']]) || $data[$i][$inputs['tencanbo']] == '') {
+                    continue;//Tên cán bộ rỗng => thoát
+                }
+                $model = new hosocanbo();
+                $model->stt = $j++;
+                $model->madv = $madv;
+                $model->macanbo = $madv. '_' . (getdate()[0] + $i);
+                $model->tencanbo = $data[$i][$inputs['tencanbo']];
+                $date = $data[$i][$inputs['ngaysinh']];
+                $model->ngaysinh = getDateToDb($date);
+                $model->gioitinh = $data[$i][$inputs['gioitinh']];
+                /*
+                $timestamp = strtotime($date);
+                if ($timestamp !== FALSE) {
+                    $model->ngaysinh = getDayVn($date) $timestamp;
+                    //$timestamp = strtotime(str_replace('/', '-', $date));
+                }
+                */
+                $model->bac = 1;
+                $sunghiep = '-' . chuanhoachuoi(trim($data[$i][$inputs['sunghiep']])) . '-';
+                switch($sunghiep){
+                    case '-cong-chuc-':{
+                        $model->sunghiep = 'Công chức';
+                        break;
+                    }
+                    case '-vien-chuc-':{
+                        $model->sunghiep = 'Viên chức';
+                        break;
+                    }
+                    default:{
+                        $model->sunghiep = 'Khác';
+                        break;
+                    }
+                }
+                //$model->mact = 1;//default
+                foreach ($a_pc as $key => $val) {
+                    $col = strtoupper($inputs[$val]);
+                    if($col == ''){continue;}
+                    $model->$val = chkDbl($data[$i][$col]);
+                }
+                //khối tổ công tác
+                $mapb = '-' . chuanhoachuoi(trim($data[$i][$inputs['mapb']])) . '-';
+                foreach($a_phanloaict as $key=>$val){
+                    if($val == $mapb ) {
+                        $model->mapb = $key;
+                        break;
+                    }
+                    if( strpos( $val, $mapb ) !== false) {//mã chứa trong chuỗi => tìm tiếp
+                        $model->$mapb = $key;
+                    }
+                }
+
+                $mact = '-' . chuanhoachuoi(trim($data[$i][$inputs['mact']])) . '-';
+                foreach($a_phanloaict as $key=>$val){
+                    if($val == $mact ) {
+                        $model->mact = $key;
+                        break;
+                    }
+                    if( strpos( $val, $mact ) !== false) {//mã chứa trong chuỗi => tìm tiếp
+                        $model->mact = $key;
+                    }
+                }
+                if($model->mact == null){//tìm trong mảng ko dc => set mặc định
+                    $model->mact = $mact_df;
+                }
+
+                $msngbac = $data[$i][$inputs['msngbac']];
+                if(array_key_exists($msngbac, $a_nb)){
+                    $model->msngbac = $msngbac;
+                    $nhom = $a_nhomnb[$a_nb[$model->msngbac]];
+                    $bac = ($model->heso - $nhom['heso'])/$nhom['hesochenhlech'];
+                    $model->bac =chkDbl($bac);
+                }
+                $macv = '-' . chuanhoachuoi(trim($data[$i][$inputs['macvcq']])) . '-';
+                foreach($a_chucvu as $key=>$val) {
+                    if ($val == $macv) {
+                        $model->macvcq = $key;
+                        break;
+                    }
+                    if (strpos($val, $macv) !== false) {
+                        $model->macvcq = $key;
+                    }
+                }
+
+                if($model->macvcq == null|| $model->macvcq == ''){//tìm trong mảng chức vụ viết tắt ko dc => set mặc định
+                    $mavt = '-' . chuanhoachuoi(trim($data[$i][$inputs['macvcq']])) . '-';
+                    foreach($a_chucvu_vt as $key=>$val) {
+                        if ($val == $mavt) {
+                            $model->macvcq = $key;
+                            break;
+                        }
+                        if (strpos($val, $mavt) !== false) {
+                            $model->macvcq = $key;
+                        }
+                    }
+
+                }
+
+                if($model->macvcq == null || $model->macvcq == ''){//tìm trong mảng chức vụ ko dc => set mặc định
+                    $model->macvcq = $macv_df;
+                }
+                //dd($model);
+                $model->save();
+            }
+            File::Delete($path);
+            return redirect('nghiep_vu/ho_so/danh_sach');
+        }else
+            return view('errors.notlogin');
+    }
+
+    function create_excel_051018(Request $request){
+        if(Session::has('admin')){
+            $madv=session('admin')->madv;
+            $inputs=$request->all();
+
+            $filename = $madv . date('YmdHis');
+            $request->file('fexcel')->move(public_path() . '/data/uploads/excels/', $filename . '.xls');
+            $path = public_path() . '/data/uploads/excels/' . $filename . '.xls';
+
+            $data = [];
+            //dd ($ar_sheet);
+            Excel::load($path, function($reader) use (&$data, $inputs) {
+                $obj = $reader->getExcel();
+                $sheet = $obj->getSheet(0);
+                $data = $sheet->toArray(null,true,true,true);// giữ lại tiêu đề A=>'val';
+                /*
+                $Row = $sheet->getHighestRow();
+                $Row = $inputs['sodong']+$inputs['tudong'] > $Row ? $Row : ($inputs['sodong']+$inputs['tudong']);
+                $Col = $sheet->getHighestColumn();
+                for ($r = $inputs['tudong']; $r <= $Row; $r++)
+                {
+                    $rowData = $sheet->rangeToArray('A' . $r . ':' . $Col . $r, NULL, TRUE, FALSE);//'0'=>'val'
+                    $data[] = $rowData[0];
+                }
+                */
+            });
+            dd($data);
             //chuyển từ A=>0; B=>1,...
             foreach($inputs as $key=>$val) {
                 $ma=ord($val);
@@ -1061,8 +1203,8 @@ class hosocanboController extends Controller
             $model_chucvu = dmchucvucq::all();
 
             $a_col = array(
-                    '0'=>'heso','1'=>'vuotkhung'
-                );
+                '0'=>'heso','1'=>'vuotkhung'
+            );
             foreach(getColPhuCap() as $key=>$val){
                 if($model_donvi->$key < 3){
                     $a_col[] = $key;
@@ -1110,7 +1252,6 @@ class hosocanboController extends Controller
         }else
             return view('errors.notlogin');
     }
-
     /**
      * @param $result
      * @param $model
