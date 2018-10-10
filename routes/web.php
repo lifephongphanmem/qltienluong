@@ -678,17 +678,20 @@ Route::group(['prefix'=>'bao_cao'],function(){
         });
 
         Route::group(['prefix'=>'khoi'],function(){
-            Route::post('chitraluong_ct','baocaobangluongController@chitraluong_ct_huyen');
+            Route::post('chitraluong_ct','baocaobangluongController@chitraluong_ct_khoim');
             //Route::post('chitraluong_ct','baocaobangluongController@chitraluong_ct_khoi');
             //Route::post('chitraluong_th','baocaobangluongController@chitraluong_th_khoi');
-            Route::post('chitraluong_th','baocaobangluongController@chitraluong_th_huyen');
+            Route::post('chitraluong_th','baocaobangluongController@chitraluong_th_khoim');
             Route::post('dutoanluong','baocaobangluongController@dutoanluong_khoi');
+            Route::post('baocaohesoluong','baocaobangluongController@baocaohesoluong_khoi');
         });
 
         Route::group(['prefix'=>'huyen'],function(){
             Route::post('chitraluong_ct','baocaobangluongController@chitraluong_ct_huyen');
             Route::post('chitraluong_th','baocaobangluongController@chitraluong_th_huyen');
             Route::post('dutoanluong','baocaobangluongController@dutoanluong_huyen');
+            Route::post('baocaohesoluong','baocaobangluongController@baocaohesoluong');
+
         });
 
         Route::get('dutoanluong_th','baocaobangluongController@dutoanluong_th');

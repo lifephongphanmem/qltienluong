@@ -6,6 +6,9 @@ use App\dmdiabandbkk;
 use App\dmdonvi;
 use App\dmnguonkinhphi;
 use App\dmphanloaicongtac;
+use App\dmphanloaict;
+use App\dmphanloaidonvi;
+use App\dmphucap;
 use App\tonghop_huyen;
 use App\tonghop_huyen_chitiet;
 use App\tonghop_huyen_diaban;
@@ -134,8 +137,8 @@ class tonghopluong_huyenController extends Controller
 
             //Danh sách đơn vi = macqcq&(SD;TH&KHOI); bỏ đi TH&HUYEN
             $model_donvi = dmdonvi::select('madv', 'tendv')
-                ->wherein('madv', function ($query) use ($madv) {
-                    $query->select('madv')->from('dmdonvi')->where('macqcq', $madv)->where('madv', '<>', $madv)->get();
+                ->wherein('madv', function ($query) use ($madv,$madvbc) {
+                    $query->select('madv')->from('dmdonvi')->where('madvbc', $madvbc)->where('madv', '<>', $madv)->get();
                 })->get();
 
             $sldv = $model_donvi->count();
@@ -159,11 +162,10 @@ class tonghopluong_huyenController extends Controller
             //Danh sách các đơn vị đã gửi dữ liệu
             //$model_dulieu = tonghopluong_huyen::where('madvbc',$madvbc)->get();
             //$model_dulieu = tonghopluong_huyen::where('macqcq', $madv)->where('trangthai','DAGUI')->get();
-            $model_dulieu = tonghopluong_huyen::wherein('madv', function ($query) use ($madv) {
-                $query->select('madv')->from('dmdonvi')->where('macqcq', $madv)->where('madv', '<>', $madv)->get();
+            $model_dulieu = tonghopluong_donvi::wherein('madv', function ($query) use ($madv,$madvbc) {
+                $query->select('madv')->from('dmdonvi')->where('madvbc', $madvbc)->where('madv', '<>', $madv)->get();
             })->where('trangthai','DAGUI')->get();
 
-            //dd($model_dulieu);
             //dd($model_dulieu);
             for ($i = 0; $i < count($a_data); $i++) {
                 //$a_data[$i]['maphanloai'] = session('admin')->maphanloai;
@@ -206,7 +208,7 @@ class tonghopluong_huyenController extends Controller
     }
 
     function printf_data($mathdv){
-        $model = tonghopluong_donvi::where('mathh',$mathdv)->first();
+        $model = tonghopluong_donvi::where('mathdv',$mathdv)->first();
         $in = new tonghopluong_donviController();
         return $in->printf_data($model->mathdv);
     }
@@ -356,6 +358,7 @@ class tonghopluong_huyenController extends Controller
     }
 
     function tonghop(Request $requests){
+        /*
         if (Session::has('admin')) {
             $inputs = $requests->all();
             $thang = $inputs['thang'];
@@ -372,7 +375,7 @@ class tonghopluong_huyenController extends Controller
                     ->where('trangthai','DAGUI')
                     ->where('madvbc',$madvbc)->distinct();
             })->get();
-             * */
+             * * (bỏ)
 
             $model_tonghop_ct = tonghopluong_donvi_chitiet::wherein('mathdv',function($query) use ($inputs){
                 $query->select('mathdv')->from('tonghopluong_donvi')
@@ -428,6 +431,78 @@ class tonghopluong_huyenController extends Controller
                 ->with('model',$model_data)
                 ->with('m_dv',$m_dv)
                 ->with('pageTitle','Chi tiết tổng hợp lương tại đơn vị cấp dưới');
+
+        } else
+            return view('errors.notlogin');
+        */
+        if (Session::has('admin')) {
+            $inputs = $requests->all();
+            $thang = $inputs['thang'];
+            $nam = $inputs['nam'];
+            $madv = session('admin')->madv;
+            $madvbc = session('admin')->madvbc;
+            $model_donvi = dmdonvi::where('madvbc',$madvbc)->get();
+            $model_phanloai = dmphanloaidonvi::wherein('maphanloai',array_column($model_donvi->toarray(),'maphanloai'))->get();
+            $m_pc = array_column(dmphucap::all()->toarray(),'report','mapc');
+            $a_phucap = array();
+            $col = 0;
+            $model_tonghop = tonghopluong_donvi::where('madvbc',$madvbc)
+                ->where('nam', $nam)
+                ->where('thang', $thang)
+                ->where('trangthai', 'DAGUI')->get();
+            $a_dv = array_column($model_tonghop->toarray(),'madv','mathdv');
+            $a_pl = array_column($model_donvi->toarray(),'maphanloai','madv');
+            $model = tonghopluong_donvi_chitiet::wherein('mathdv', array_column($model_tonghop->toarray(),'mathdv'))->get();
+            $model_nguonkp = array_column(dmnguonkinhphi::all()->toArray(), 'tennguonkp', 'manguonkp');
+            $model_phanloaict = array_column(dmphanloaicongtac::all()->toArray(), 'tencongtac', 'macongtac');
+            $model_ct = array_column(dmphanloaict::all()->toArray(), 'tenct', 'mact');
+            foreach ($model as $chitiet) {
+                $chitiet->madv = $a_dv[$chitiet->mathdv];
+                $chitiet->maphanloai = $a_pl[$chitiet->madv];
+                $chitiet->tennguonkp = isset($model_nguonkp[$chitiet->manguonkp]) ? $model_nguonkp[$chitiet->manguonkp] : '';
+                if($chitiet->mact == null){
+                    $chitiet->tencongtac = isset($model_phanloaict[$chitiet->macongtac]) ? $model_phanloaict[$chitiet->macongtac] : '';
+                }else{
+                    $chitiet->tencongtac = isset($model_ct[$chitiet->mact]) ? $model_ct[$chitiet->mact] : '';
+                }
+                $chitiet->tongtl = $chitiet->tonghs - $chitiet->giaml;
+                $chitiet->tongbh = $chitiet->stbhxh_dv + $chitiet->stbhyt_dv + $chitiet->stkpcd_dv + $chitiet->stbhtn_dv;
+                foreach (getColTongHop() as $ct) {
+                    $ma = 'hs'.$ct;
+                    $chitiet->$ma = $chitiet->$ct / $chitiet->luongcoban;
+                }
+            }
+            $model_data = $model->map(function ($data) {
+                return collect($data->toArray())
+                    ->only(['mact', 'soluong', 'madv', 'maphanloai'])
+                    ->all();
+            });
+
+            $a_soluong = a_unique($model_data);
+            //dd($a_soluong);
+            //cho trương hợp đơn vị cấp trên in dữ liệu dv câp dưới mà ko sai tên đơn vị
+            $m_dv = dmdonvi::where('madv', $madv)->first();
+
+            $thongtin = array('nguoilap' => session('admin')->name,
+                'thang' => $thang,
+                'nam' => $nam);
+            foreach (getColTongHop() as $ct) {
+                if ($model->sum($ct) > 0) {
+                    $a_phucap[$ct] = isset($m_pc[$ct]) ? $m_pc[$ct] : '';
+                    $col++;
+                }
+            }
+            return view('reports.tonghopluong.huyen.solieu')
+                ->with('thongtin', $thongtin)
+                ->with('model', $model)
+                ->with('model_tonghop', $model_tonghop)
+                ->with('model_phanloai', $model_phanloai)
+                ->with('model_donvi', $model_donvi)
+                ->with('a_soluong', $a_soluong)
+                ->with('m_dv', $m_dv)
+                ->with('col', $col)
+                ->with('a_phucap', $a_phucap)
+                ->with('pageTitle', 'Chi tiết tổng hợp lương tại đơn vị cấp dưới');
 
         } else
             return view('errors.notlogin');
