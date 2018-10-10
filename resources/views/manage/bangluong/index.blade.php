@@ -34,9 +34,11 @@
                 <div class="portlet-title">
                     <div class="caption">DANH SÁCH CHI TRẢ LƯƠNG CỦA ĐƠN VỊ</div>
                     <div class="actions">
-                        <button type="button" class="btn btn-default btn-xs" onclick="add()"><i class="fa fa-plus"></i>&nbsp;Thêm mới bảng lương</button>
-                        <button type="button" class="btn btn-default btn-xs" onclick="add_truylinh()"><i class="fa fa-plus"></i>&nbsp;Thêm mới bảng truy lĩnh</button>
-                        <button type="button" class="btn btn-default btn-xs" onclick="add_truc()"><i class="fa fa-plus"></i>&nbsp;Thêm mới bảng trực</button>
+                        @if($inputs['thaotac'])
+                            <button type="button" class="btn btn-default btn-xs" onclick="add()"><i class="fa fa-plus"></i>&nbsp;Thêm mới bảng lương</button>
+                            <button type="button" class="btn btn-default btn-xs" onclick="add_truylinh()"><i class="fa fa-plus"></i>&nbsp;Thêm mới bảng truy lĩnh</button>
+                            <button type="button" class="btn btn-default btn-xs" onclick="add_truc()"><i class="fa fa-plus"></i>&nbsp;Thêm mới bảng trực</button>
+                        @endif
                     </div>
                 </div>
                 <div class="portlet-body form-horizontal">
@@ -77,10 +79,10 @@
                                                 <button type="button" onclick="edit('{{$value->mabl}}','{{$value->phanloai}}')" class="btn btn-default btn-xs mbs">
                                                     <i class="fa fa-edit"></i>&nbsp; Sửa</button>
 
-                                                <a href="{{url($furl.'bang_luong?mabl='.$value->mabl.'&mapb=')}}" class="btn btn-default btn-xs mbs">
+                                                <a href="{{url($inputs['furl'].'bang_luong?mabl='.$value->mabl.'&mapb=')}}" class="btn btn-default btn-xs mbs">
                                                     <i class="fa fa-th-list"></i>&nbsp; Chi tiết</a>
 
-                                                <button type="button" onclick="cfDel('{{$furl.'del/'.$value->id}}')" class="btn btn-danger btn-xs mbs" data-target="#delete-modal-confirm" data-toggle="modal">
+                                                <button type="button" onclick="cfDel('{{$inputs['furl'].'del/'.$value->id}}')" class="btn btn-danger btn-xs mbs" data-target="#delete-modal-confirm" data-toggle="modal">
                                                     <i class="fa fa-trash-o"></i>&nbsp; Xóa</button>
                                             @endif
                                             <button type="button" onclick="inbl('{{$value->mabl}}','{{$value->thang}}','{{$value->nam}}')" class="btn btn-default btn-xs mbs">
@@ -126,12 +128,12 @@
                     <div class="row">
                         <div class="col-md-6">
                             <label class="control-label">Nguồn kinh phí</label>
-                            {!!Form::select('manguonkp',$m_nguonkp, null, array('id' => 'manguonkp','class' => 'form-control'))!!}
+                            {!!Form::select('manguonkp',$m_nguonkp, $inputs['manguonkp'], array('id' => 'manguonkp','class' => 'form-control'))!!}
                         </div>
 
                         <div class="col-md-6">
                             <label class="control-label">Mức lương cơ bản</label>
-                            {!!Form::text('luongcoban', $luongcb, array('id' => 'luongcoban','class' => 'form-control', 'data-mask'=>'fdecimal'))!!}
+                            {!!Form::text('luongcoban', $inputs['luongcb'], array('id' => 'luongcoban','class' => 'form-control', 'data-mask'=>'fdecimal'))!!}
                         </div>
                     </div>
 
@@ -147,6 +149,7 @@
                         </div>
                     </div>
 
+                    <input type="hidden" id="dinhmuc" name="dinhmuc" value="{{$inputs['dinhmuc']}}"/>
                     <input type="hidden" id="thang" name="thang" value="{{$inputs['thang']}}"/>
                     <input type="hidden" id="nam" name="nam" value="{{$inputs['nam']}}"/>
                     <input type="hidden" id="phantramhuong" name="phantramhuong" value="100"/>
@@ -179,16 +182,6 @@
                         </div>
                     </div>
 
-                    <!--div class="row">
-                        <div class="col-md-6">
-                            <label class="control-label">Nguồn kinh phí</label>
-                            {!!Form::select('manguonkp_truylinh',$m_nguonkp, null, array('id' => 'manguonkp_truylinh','class' => 'form-control'))!!}
-                        </div>
-                        <div class="col-md-6">
-                            <label class="control-label">Mức lương cơ bản</label>
-                            {!!Form::text('luongcoban_truylinh', $luongcb, array('id' => 'luongcoban_truylinh','class' => 'form-control', 'data-mask'=>'fdecimal'))!!}
-                        </div>
-                    </div-->
 
                     <div class="row">
                         <div class="col-md-6">
@@ -241,7 +234,7 @@
                         </div>
                         <div class="col-md-6">
                             <label class="control-label">Mức lương cơ bản</label>
-                            {!!Form::text('luongcoban_truc', $luongcb, array('id' => 'luongcoban_truc','class' => 'form-control', 'data-mask'=>'fdecimal'))!!}
+                            {!!Form::text('luongcoban_truc', $inputs['luongcb'], array('id' => 'luongcoban_truc','class' => 'form-control', 'data-mask'=>'fdecimal'))!!}
                         </div>
                     </div>
 
@@ -289,6 +282,16 @@
                         </div>
                     </div>
 
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <button type="button" style="border-width: 0px" onclick="inblmtt107_pb()" class="btn btn-default btn-xs mbs"
+                                    title="Bảng lương của cán bộ theo mẫu C02-HD hệ số phụ cấp hiển thị số tiền">
+                                <i class="fa fa-print"></i>&nbsp; Bảng lương mẫu C02-HD (TT107) - theo khối, tổ công tác</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
                     <div class="col-md-6">
                         <div class="form-group">
                             <button type="button" style="border-width: 0px" onclick="inblm1()" class="btn btn-default btn-xs mbs"
@@ -455,7 +458,7 @@
         function getLink(){
             var thang = $("#thangct").val();
             var nam = $("#namct").val();
-            return '{{$furl}}'+'chi_tra?thang='+thang +'&nam='+nam;
+            return '{{$inputs['furl']}}'+'chi_tra?thang='+thang +'&nam='+nam;
         }
         $(function(){
 
@@ -464,21 +467,47 @@
             });
 
             $('#thangct').change(function(){
-
                 window.location.href = getLink();
             });
 
             $('#namct').change(function(){
                 window.location.href = getLink();
             });
+
+            $('#manguonkp').change(function(){
+                var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
+                $.ajax({
+                    url: '{{$inputs['furl_ajax']}}' + 'get_nguonkp',
+                    type: 'GET',
+                    data: {
+                        _token: CSRF_TOKEN,
+                        manguonkp: $('#manguonkp').val()
+                    },
+                    dataType: 'JSON',
+                    success: function (data) {
+                        $('#luongcoban').prop('readonly',false);
+                        $('#luongcoban').val(data['luongcb']);
+                        $('#dinhmuc').val(data['dinhmuc']);
+                        $('#luongcoban').prop('readonly',data['dinhmuc']);
+                    },
+                    error: function(message){
+                        toastr.error(message,'Lỗi!');
+                    }
+                });
+            });
         })
 
         function add(){
+            var dm = '{{$inputs['dinhmuc']}}';
             $('#noidung').val('');
             //$('#phantramhuong').val(100);
             $('#phanloai').val('BANGLUONG');
             $('#mabl').val('');
             $('#id_ct').val(0);
+            if(dm == 1){//do khi đm = 0 (false) ct set = "readonly" ~ readonly = true =>sai
+                $('#luongcoban').prop('readonly',true);
+            }
+
             $('#chitiet-modal').modal('show');
         }
 
@@ -501,7 +530,7 @@
             var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
             if(phanloai == 'TRUYLINH'){
                 $.ajax({
-                    url: '{{$furl_ajax}}' + 'get',
+                    url: '{{$inputs['furl_ajax']}}' + 'get',
                     type: 'GET',
                     data: {
                         _token: CSRF_TOKEN,
@@ -526,7 +555,7 @@
                 $('#truylinh-modal').modal('show');
             }else{
                 $.ajax({
-                    url: '{{$furl_ajax}}' + 'get',
+                    url: '{{$inputs['furl_ajax']}}' + 'get',
                     type: 'GET',
                     data: {
                         _token: CSRF_TOKEN,
@@ -555,7 +584,6 @@
         }
 
         function inbl(mabl,thang,nam){
-            var url = '{{$furl}}';
             document.getElementById("hd-inbl").innerHTML="In bảng lương tháng " + thang + ' năm ' + nam;
             $("#mabl_in").val(mabl);
             $("#thang_in").val(thang);

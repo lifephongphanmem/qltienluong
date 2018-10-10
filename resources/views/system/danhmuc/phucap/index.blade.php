@@ -34,7 +34,7 @@
                     <div class="caption">
                         DANH SÁCH CÁC LOẠI PHỤ CẤP
                     </div>
-                    @if(session('admin')->level == 'SA' || session('admin')->level == 'SSA')
+                    @if(session('admin')->level == 'SSA' || session('admin')->username == 'huongvu')
                         <div class="actions">
                             <a href="{{url($furl.'create')}}" class="btn btn-default btn-xs"><i class="fa fa-plus"></i>&nbsp;Thêm mới</a>
                         </div>

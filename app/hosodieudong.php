@@ -4,48 +4,55 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class hosocanbo extends Model
+class hosodieudong extends Model
 {
-    protected $table = 'hosocanbo';
+    protected $table = 'hosodieudong';
     protected $fillable = [
         'id',
+        'maso',
+        'soqd',  //chưa dùng
+        'ngayqd', //chưa dùng
+        'nguoiky',  //chưa dùng
+        'coquanqd',  //chưa dùng
+        'ngaylc',
+        'ngaylctu',
+        'ngaylcden',
+        'maphanloai',//thuyên chuyển / điều động (có ngày tháng)
+        'trangthai',
+        'madv_dd',
+        'macvcq_dd',
+        'noidung',
+
         'stt',
-        'manguonkp',
         'mapb',
+        'manguonkp',//nguồn kinh phí lấy lương
         'macvcq',
-        'macvd',
         'macanbo',
         'anh',
         'macongchuc',
         'sunghiep',
         'tencanbo',
         'tenkhac',
-        'dantoc',
-        'tongiao',
         'ngaysinh',
         'gioitinh',
+        'dantoc',
+        'tongiao',
+        'lvtd',//nơi công tác
+        'lvhd',//lĩnh vực hoạt động
         'socmnd',
         'ngaycap',
         'noicap',
-        'sodt',
-        'email',
         'sotk',
         'tennganhang',
         'madv',
-        'lvtd',//nơi công tác
-        //thông tin lương hiện tại
+        //Thông tin lương hiện tại
         'msngbac',
         'ngaytu',
         'ngayden',
-        'tnntungay',
-        'tnndenngay',
         'bac',
         'heso',
-        'hesopc',
         'hesobl',
-        'hesott',
-        'truylinhtungay',
-        'truylinhdenngay',
+        'hesopc',
         'vuotkhung',
         'pthuong',
         'pcct',//dùng để thay thế phụ cấp ghép lớp
@@ -73,8 +80,15 @@ class hosocanbo extends Model
         'pctnvk',
         'pcbdhdcu',
         'pcthni',
-        'theodoi',
+        'pclade', //làm đêm
+        'pcud61', //ưu đãi theo tt61
+        'pcxaxe', //điện thoại
+        'pcdith', //điện thoại
+        'luonghd', //lương hợp đồng (số tiền)
+        'tnntungay',
+        'ttnndenngay',
         'mact',
+        'theodoi',
         'baohiem',
         'bhxh',
         'bhyt',
@@ -87,8 +101,6 @@ class hosocanbo extends Model
         'bhtnld_dv',
         'kpcd_dv',
         'nguoiphuthuoc',
-        'ngaybc',
-        'ngayvao',
-        'lvhd'
+        'sodinhdanhcanhan'
     ];
 }

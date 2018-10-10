@@ -29,7 +29,7 @@
 
             <div class="col-md-3">
                 <div class="form-group">
-                    <label class="control-label">Chức vụ</label>
+                    <label class="control-label">Chức vụ (chức danh)</label>
                     {!!Form::select('macvcq',getChucVuCQ(false), null, array('id' => 'macvcq','class' => 'form-control select2me'))!!}
                 </div>
             </div>
@@ -55,70 +55,30 @@
                 </div>
             </div>
 
-            <div class="col-md-3">
-                <div class="form-group">
-                    <label class="control-label">Dân tộc</label>
-                    {!! Form::select(
-                    'dantoc',
-                    $model_dt,null,
-                    array('id' => 'dantoc', 'class' => 'form-control select2me'))
-                    !!}
-                </div>
-            </div>
 
-            <div class="col-md-3">
-                <div class="form-group">
-                    <label class="control-label">Tôn giáo </label>
-                    {!!Form::text('tongiao', null, array('id' => 'tongiao','class' => 'form-control'))!!}
-                </div>
-            </div>
         </div>
 
         <div class="row">
-
             <div class="col-md-3">
                 <div class="form-group">
-                    <label class="control-label">Sự nghiệp cán bộ</label>
-                    <select class="form-control select2me" name="sunghiep" id="sunghiep" required="required">
-                        <option value="Công chức">Công chức</option>
-                        <option value="Viên chức">Viên chức</option>
-                        <option value="Khác">Khác</option>
-                    </select>
+                    <label class="control-label">Phân loại theo dõi</label>
+                    {!!Form::select('theodoi', getPhanLoaiCanBo_CongTac(), null, array('id' => 'theodoi','class' => 'form-control'))!!}
                 </div>
             </div>
 
             <div class="col-md-3">
                 <div class="form-group">
-                    <label class="control-label">Phân loại công tác</label>
-                    <select class="form-control select2me" name="mact" id="mact" required="required">
-                        @foreach($model_nhomct as $kieuct)
-                            <optgroup label="{{$kieuct->tencongtac}}">
-                                <?php
-                                $mode_ct=$model_tenct->where('macongtac',$kieuct->macongtac);
-                                ?>
-                                @foreach($mode_ct as $ct)
-                                    <option value="{{$ct->mact}}">{{$ct->tenct}}</option>
-                                @endforeach
-                            </optgroup>
-                        @endforeach
-                    </select>
+                    <label class="control-label">Số thứ tự (sắp xếp)</label>
+                    {!!Form::text('stt', null, array('id' => 'stt','class' => 'form-control', 'data-mask'=>'fdecimal'))!!}
                 </div>
             </div>
 
-            <div class="col-md-3">
+            <div class="col-md-6">
                 <div class="form-group">
                     <label class="control-label">Nơi công tác</label>
                     {!!Form::text('lvtd', null, array('id' => 'lvtd','class' => 'form-control'))!!}
                 </div>
             </div>
-
-            <div class="col-md-3">
-                <div class="form-group">
-                    <label class="control-label">Thứ tự (sắp xếp) trên bảng lương</label>
-                    {!!Form::text('stt', null, array('id' => 'stt','class' => 'form-control', 'data-mask'=>'fdecimal'))!!}
-                </div>
-            </div>
-
         </div>
 
         <div class="row">
@@ -166,12 +126,6 @@
                 </div>
             </div>
 
-            <div class="col-md-3">
-                <div class="form-group">
-                    <label class="control-label">Nộp bảo hiểm</label>
-                    {!! Form::select('baohiem',getNopBaoHiem(),null,array('id' => 'baohiem', 'class' => 'form-control select2me'))!!}
-                </div>
-            </div>
             <div class="col-md-6">
                 <div class="form-group">
                     <label class="control-label">Ảnh đại diện </label>
@@ -197,6 +151,7 @@
         $("#linhvuc").change(function(){
             $("#lvhd").val( $("#linhvuc").val());
         });
+
         $("#nguonkp").change(function(){
             $("#manguonkp").val( $("#nguonkp").val());
         });

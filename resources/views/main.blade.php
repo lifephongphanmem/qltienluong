@@ -175,7 +175,7 @@
                         </li>
 
                         <li>
-                            <a href="{{url('nghiep_vu/quan_ly/dieu_dong/maso=all')}}"><i class="fa fa-caret-right"></i>Luân chuyển cán bộ</a>
+                            <a href="{{url('nghiep_vu/dieu_dong/danh_sach')}}"><i class="fa fa-caret-right"></i>Luân chuyển cán bộ</a>
                         </li>
 
                         <li>
@@ -247,7 +247,7 @@
                                 <ul class="sub-menu" style="margin-left: 15px;">
                                     <li><a href="{{url('danh_muc/phong_ban/index')}}"><i class="fa fa-caret-right"></i>Khối(tổ) công tác</a></li>
                                     <li><a href="{{url('danh_muc/chuc_vu/index')}}"><i class="fa fa-caret-right"></i>Chức vụ</a></li>
-                                    <li><a href="{{url('danh_muc/dan_toc/index')}}"><i class="fa fa-caret-right"></i>Dân tộc</a></li>
+                                    <!--li><a href="{{url('danh_muc/dan_toc/index')}}"><i class="fa fa-caret-right"></i>Dân tộc</a></li-->
                                 </ul>
                             </li>
                             <li>

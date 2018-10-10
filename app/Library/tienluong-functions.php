@@ -245,7 +245,7 @@ function getDiaBan($val_null = true){
 function getColTongHop(){
     //các loại phụ cấp mới thêm như: bảo lưu,...
     //chưa có
-    return array('heso','hesopc','vuotkhung','pcct',
+    return array('heso','hesopc','vuotkhung','pcct','hesobl',
         'pckct',
         'pck',
         'pccv',
@@ -539,10 +539,29 @@ function getPhanLoaiCanBo()
         '9' => 'Cán bộ đã thôi công tác');
 }
 
+function getPhanLoaiCanBo_CongTac()
+{
+    return array('1' => 'Cán bộ đang công tác',
+        '3' => 'Cán bộ đang điều động',
+        '4' => 'Cán bộ được điều động đến',
+    );
+}
+
+function getPhanLoaiLuanChuyen()
+{
+    return array('DIEUDONG' => 'Điều động cán bộ',
+        'LUANCHUYEN' => 'Luân chuyển cán bộ',
+        'DIEUDONGDEN' => 'Được điều động đến',
+        'LUANCHUYENDEN' => 'Được luân chuyển đến',
+    );
+}
+
 function getPhanLoaiThoiCongTac(){
     return array('NGHIHUU' => 'Nghỉ hưu',
         'NGHIVIEC' => 'Xin nghỉ việc',
         'BUOCNGHI' => 'Buộc thôi việc',
+        'DIEUDONG' => 'Hết thời gian điều động',
+        'LUANCHUYEN' => 'Luân chuyển cán bộ',
         'KHAC'=> 'Khác');
 }
 

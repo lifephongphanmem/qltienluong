@@ -61,7 +61,7 @@
                                         <td class="text-right">{{dinhdangso($value->luongcoban)}}</td>
                                         <td>
                                             <button type="button" onclick="editCV('{{$value->maso}}')" class="btn btn-default btn-xs">
-                                                <i class="fa fa-edit"></i>&nbsp; Sửa</button>
+                                                <i class="fa fa-edit"></i>&nbsp; Cập nhật mức lương</button>
                                             <a href="{{url($furl.'phu_cap?maso='.$value->maso)}}" class="btn btn-default btn-xs">
                                                 <i class="fa fa-edit"></i>&nbsp; Phụ cấp</a>
                                         </td>

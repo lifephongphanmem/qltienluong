@@ -35,7 +35,7 @@
                         DANH MỤC PHÂN LOẠI ĐƠN VỊ QUẢN LÝ
                     </div>
                     <div class="actions">
-                        @if(session('admin')->level == 'SA' || session('admin')->level == 'SSA')
+                        @if(session('admin')->username == 'huongvu' || session('admin')->level == 'SSA')
                             <button type="button" id="_btnaddPB" class="btn btn-success btn-xs" onclick="addPB()"><i class="fa fa-plus"></i>&nbsp;Thêm mới</button>
                         @endif
                     </div>
@@ -47,7 +47,7 @@
                                 <th class="text-center" style="width: 10%">STT</th>
                                 <th class="text-center">Mã phân loại</th>
                                 <th class="text-center">Tên phân loại</th>
-                                <th class="text-center" >Ghi chú</th>
+
                                 <th class="text-center">Thao tác</th>
                             </tr>
                         </thead>
@@ -58,14 +58,17 @@
                                         <td class="text-center">{{$key+1}}</td>
                                         <td>{{$value->maphanloai}}</td>
                                         <td>{{$value->tenphanloai}}</td>
-                                        <td>{{$value->ghichu}}</td>
+
                                         <td>
-                                            @if(session('admin')->level == 'SA' || session('admin')->level == 'SSA')
-                                                <button type="button" onclick="editPB('{{$value->maphanloai}}')" class="btn btn-info btn-xs mbs">
-                                                    <i class="fa fa-edit"></i>&nbsp; Chỉnh sửa</button>
+                                            <a href="{{url($furl.'?maso='.$value->maphanloai)}}" class="btn btn-default btn-xs">
+                                                <i class="fa fa-edit"></i>&nbsp; Phụ cấp</a>
+                                            @if(session('admin')->username == 'huongvu' || session('admin')->level == 'SSA')
+                                                <button type="button" onclick="editPB('{{$value->maphanloai}}')" class="btn btn-default btn-xs mbs">
+                                                    <i class="fa fa-edit"></i>&nbsp; Sửa</button>
                                                 <button type="button" onclick="cfDel('/danh_muc/nguon_kinh_phi/del/{{$value->id}}')" class="btn btn-danger btn-xs mbs" data-target="#delete-modal-confirm" data-toggle="modal">
                                                     <i class="fa fa-trash-o"></i>&nbsp; Xóa</button>
                                             @endif
+
                                         </td>
                                     </tr>
                                 @endforeach

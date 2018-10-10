@@ -78,6 +78,9 @@ Route::group(['prefix'=>'danh_muc'],function(){
         Route::get('don_vi','dmphucapController@index_donvi');
         Route::get('don_vi/edit','dmphucapController@edit_donvi');
         Route::post('don_vi/update','dmphucapController@update_donvi');
+
+        Route::get('don_vi/anhien','dmphucapController@anhien');
+        Route::post('don_vi/default_pc','dmphucapController@default_pc');
     });
 
     Route::group(['prefix'=>'cong_tac'],function(){
@@ -151,6 +154,11 @@ Route::group(['prefix'=>'danh_muc'],function(){
         Route::get('add','dmphanloaidonviController@store');
         Route::get('update','dmphanloaidonviController@update');
         Route::get('get','dmphanloaidonviController@getinfo');
+
+        Route::get('','dmphanloaidonviController@phucap');
+        Route::get('edit','dmphanloaidonviController@edit_phucap');
+        Route::post('phu_cap/update','dmphanloaidonviController@update_phucap');
+        Route::get('anhien','dmphanloaidonviController@anhien');
     });
 
     Route::group(['prefix'=>'ngach_bac'],function(){
@@ -192,6 +200,11 @@ Route::group(['prefix'=>'nghiep_vu'],function(){
         Route::get('nhan_excel','hosocanboController@infor_excel');
         Route::post('create_excel','hosocanboController@create_excel');
 
+        //ajax
+        Route::get('get_congtac','hosocanboController@get_congtac');
+        Route::get('get_chucvu_bh','hosocanboController@get_chucvu_bh');
+
+        /*
         Route::get('phucap','hosocanboController@phucap');
         Route::get('get_phucap','hosocanboController@get_phucap');
         Route::get('del_phucap','hosocanboController@detroys_phucap');
@@ -199,7 +212,7 @@ Route::group(['prefix'=>'nghiep_vu'],function(){
         Route::get('syll/{id}','hosocanboController@syll');
         Route::get('ttts/{id}','hosocanboController@tomtatts');
         Route::post('bsll/{id}','hosocanboController@bsll');
-
+        */
         Route::get('thoi_cong_tac','hosocanboController@index_thoicongtac');
 
         Route::get('store_kct','hosocanboController@store_kct');
@@ -224,10 +237,7 @@ Route::group(['prefix'=>'nghiep_vu'],function(){
     });
 
     Route::group(['prefix'=>'quan_ly'],function(){
-         Route::group(['prefix'=>'dieu_dong'],function(){
-            Route::get('/maso={macanbo}','hosoluanchuyenController@index_dd');
-            Route::get('del/{id}','hosoluanchuyenController@destroy_dd');
-        });
+
 
         Route::group(['prefix'=>'chi_tieu'],function(){
             Route::get('danh_sach','chitieubiencheController@index');
@@ -298,6 +308,14 @@ Route::group(['prefix'=>'nghiep_vu'],function(){
         Route::get('get','hosotrucController@getinfo');
     });
 
+    Route::group(['prefix'=>'dieu_dong'],function(){
+        Route::get('danh_sach','hosodieudongController@index');
+        Route::get('create','hosodieudongController@create');
+        Route::post('store','hosodieudongController@store');
+        Route::get('del/{id}','hosodieudongController@destroy');
+
+        Route::get('/maso={macanbo}','hosoluanchuyenController@index_dd');
+    });
 });
 
 Route::group(['prefix'=>'du_toan'],function(){
@@ -351,6 +369,7 @@ Route::group(['prefix'=>'chuc_nang'],function(){
         //Tạo in bảng lương theo cách mới
         Route::post('mau01','bangluongController@printf_mau01');
         Route::post('mautt107','bangluongController@printf_mautt107');
+        Route::post('mautt107_pb','bangluongController@printf_mautt107_pb');
         Route::post('mau03','bangluongController@printf_mau03');
         Route::post('mau04','bangluongController@printf_mau04');
         Route::post('mau05','bangluongController@printf_mau05');
@@ -878,6 +897,7 @@ Route::group(['prefix'=>'ajax'],function(){
         Route::get('add','bangluongController@store');
         Route::get('update','bangluongController@update');
         Route::get('get','bangluongController@getinfo');
+        Route::get('get_nguonkp','bangluongController@getinfor_nguonkp');
     });
 
     Route::group(['prefix'=>'khoi_pb'],function(){
@@ -954,6 +974,8 @@ Route::group(['prefix'=>'he_thong'],function(){
         Route::get('danh_sach','nguonkinhphi_dinhmucController@index');
         Route::get('get','nguonkinhphi_dinhmucController@getinfo');
         Route::get('update','nguonkinhphi_dinhmucController@update');
+        Route::get('get_ct','nguonkinhphi_dinhmucController@getinfor_ct');
+        Route::get('update_ct','nguonkinhphi_dinhmucController@update_ct');
 
         Route::get('phu_cap','nguonkinhphi_dinhmucController@phucap');
         Route::post('store_pc','nguonkinhphi_dinhmucController@store_pc');

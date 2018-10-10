@@ -25,7 +25,7 @@ class HomeController extends Controller
             else {
                 //thêm phân loại công tác
                 //chia ra màn hình đơn vị; màn hình đơn vị tổng hợp
-                $model = hosocanbo::select('macanbo', 'tencanbo', 'msngbac', 'sunghiep', 'gioitinh', 'ngaytu', 'ngayden','ngaysinh','mact')
+                $model = hosocanbo::select('macanbo', 'tencanbo', 'msngbac', 'sunghiep', 'gioitinh', 'tnndenngay', 'ngaytu', 'ngayden','ngaysinh','mact')
                     ->where('theodoi','<' ,'9')
                     ->where('madv', session('admin')->madv)
                     ->get();
@@ -55,33 +55,32 @@ class HomeController extends Controller
                         $ct->nam_luong = null;
                         $ct->ngaynangluong = null;
                     }
+
+                    if (isset($ct->tnndenngay)) {
+                        $dt_luong = date_create($ct->tnndenngay);
+                        $ct->nam_nghe = date_format($dt_luong, 'Y');
+                        //$ct->ngaynangluong = $dt_luong->format('Y-m-d');
+                    } else {
+                        $ct->nam_nghe = null;
+                        //$ct->ngaynangluong = null;
+                    }
+
                     if(isset($ct->ngaysinh)){
                         $ct->ngaynghi = $dt->modify(' +'.($ct->gioitinh == 'Nam' ?$gen['tuoinam']: $gen['tuoinu'] ).' year')->format('Y-m-d');;
                     }
-                    /*
-                    if(isset($ct->ngayden)){
-                        $dt_luong = Carbon::create($ct->ngayden);
-                        $ct->ngayden = isset($dt_luong)?  $dt_luong->addDay(): null;
-                        $ct->nam_luong=date_format($dt_luong,'Y');
-                    }else{
-                        $dt_luong = null;
-                        $ct->nam_luong = null;
-                    }
-*/
-
-                    //$ct->ngayden = isset($dt_luong)?  $date->add: null;
-
                 }
 
                 $m_nghihuu = $model->where('nam','<=' ,$date['year']);
                 $m_nangluong = $model->where('nam_luong', $date['year']);
+                $m_nghe = $model->where('nam_nghe', $date['year']);
+
                 //$m_sinhnhat=$model->where('thang',$date['mon']);
                 //$m_hettapsu= $model->where('tenct','Hết tập sự');//Chưa làm
                 //dd($m_nangluong->toarray());
                 return view('dashboard')
-                    ->with('m_nangluong', $m_nangluong)
-                    ->with('m_nghihuu', $m_nghihuu)
-                    //->with('m_sinhnhat',$m_sinhnhat)
+                    ->with('m_nangluong', $m_nangluong->sortby('ngayden'))
+                    ->with('m_nghihuu', $m_nghihuu->sortby('ngaysinh'))
+                    ->with('m_nghe',$m_nghe->sortby('tnndenngay'))
                     //->with('m_hettapsu',$m_hettapsu)
                     ->with('a_ketqua', $a_ketqua)
                     ->with('pageTitle', 'Tổng quan');

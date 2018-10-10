@@ -62,6 +62,7 @@ class nguonkinhphi_dinhmucController extends Controller
         $inputs = $request->all();
         $inputs['luongcoban'] = chkDbl($inputs['luongcoban']);
         $model = nguonkinhphi_dinhmuc::where('maso',$inputs['maso'])->first();
+        nguonkinhphi_dinhmuc_ct::where('maso',$inputs['maso'])->update(['luongcoban'=>$inputs['luongcoban']]);
         $model->update($inputs);
 
         $result['message'] = "Cập nhật thành công.";
@@ -96,12 +97,12 @@ class nguonkinhphi_dinhmucController extends Controller
             $inputs = $request->all();
             $inputs['tenpc'] = dmphucap_donvi::where('madv', session('admin')->madv)->where('mapc',$inputs['mapc'])->first()->tenpc;
             $inputs['madv'] = session('admin')->madv;
+            $inputs['luongcoban'] = chkDbl($inputs['luongcoban']);
             nguonkinhphi_dinhmuc_ct::create($inputs);
             return redirect('/he_thong/dinh_muc/phu_cap?maso='.$inputs['maso']);
         } else
             return view('errors.notlogin');
     }
-
 
     function destroy_pc($id){
         if (Session::has('admin')) {
@@ -110,5 +111,45 @@ class nguonkinhphi_dinhmucController extends Controller
             return redirect('/he_thong/dinh_muc/phu_cap?maso='.$model->maso);
         }else
             return view('errors.notlogin');
+    }
+
+    function getinfor_ct(Request $request)
+    {
+        if (!Session::has('admin')) {
+            $result = array(
+                'status' => 'fail',
+                'message' => 'permission denied',
+            );
+            die(json_encode($result));
+        }
+
+        $inputs = $request->all();
+        $model = nguonkinhphi_dinhmuc_ct::find($inputs['id']);
+        $a_pc = array_column(dmphucap_donvi::where('madv', session('admin')->madv)->get()->toarray(), 'tenpc', 'mapc');
+
+        $model->tenpc = isset($a_pc[$model->mapc]) ? $a_pc[$model->mapc] : '';
+        die($model);
+    }
+
+    function update_ct(Request $request){
+        $result = array(
+            'status' => 'fail',
+            'message' => 'error',
+        );
+        if(!Session::has('admin')) {
+            $result = array(
+                'status' => 'fail',
+                'message' => 'permission denied',
+            );
+            die(json_encode($result));
+        }
+
+        $inputs = $request->all();
+        $inputs['luongcoban'] = chkDbl($inputs['luongcoban']);
+        nguonkinhphi_dinhmuc_ct::find($inputs['id'])->update(['luongcoban'=>$inputs['luongcoban']]);
+
+        $result['message'] = "Cập nhật thành công.";
+        $result['status'] = 'success';
+        die(json_encode($result));
     }
 }

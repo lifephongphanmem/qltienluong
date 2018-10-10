@@ -17,7 +17,7 @@
     <script type="text/javascript" src="{{url('assets/global/plugins/select2/select2.min.js')}}"></script>
     <script type="text/javascript" src="{{url('assets/global/plugins/datatables/media/js/jquery.dataTables.min.js')}}"></script>
     <script type="text/javascript" src="{{url('assets/global/plugins/datatables/plugins/bootstrap/dataTables.bootstrap.js')}}"></script>
-
+    @include('includes.script.scripts')
     <script src="{{url('assets/admin/pages/scripts/table-managed.js')}}"></script>
     <script>
         jQuery(document).ready(function() {
@@ -47,6 +47,7 @@
                                 <th class="text-center" style="width: 5%">STT</th>
                                 <th class="text-center">Mã số</th>
                                 <th class="text-center">Phụ cấp</th>
+                                <th class="text-center">Lương cơ bản</th>
                                 <th class="text-center">Thao tác</th>
                             </tr>
                         </thead>
@@ -58,10 +59,14 @@
                                     <td class="text-center">{{$key+1}}</td>
                                     <td>{{$value->mapc}}</td>
                                     <td>{{$value->tenpc}}</td>
+                                    <td class="text-right">{{dinhdangso($value->luongcoban)}}</td>
                                        <td>
+                                           <button type="button" onclick="editCV('{{$value->id}}')" class="btn btn-default btn-xs">
+                                               <i class="fa fa-edit"></i>&nbsp; Sửa mức lương</button>
+
                                            <button type="button" onclick="cfDel('{{$furl.'del/'.$value->id}}')" class="btn btn-default btn-xs" data-target="#delete-modal-confirm" data-toggle="modal">
                                             <i class="fa fa-trash-o"></i>&nbsp; Xóa</button>
-                                        </td>
+                                       </td>
                                 </tr>
                             @endforeach
                         @endif
@@ -74,11 +79,7 @@
                     </div>
                 </div>
             </div>
-
-
         </div>
-
-
     </div>
 
 
@@ -95,6 +96,8 @@
                     <label class="form-control-label">Chọn phụ cấp<span class="require">*</span></label>
                     {!!Form::select('mapc',$model_phucap ,null, array('id' => 'mapc','class' => 'form-control','required'=>'required'))!!}
 
+                    <label class="control-label">Mức lương cơ bản</label>
+                    {!!Form::text('luongcoban', $model_nguon->luongcoban, array('id' => 'luongcoban','class' => 'form-control', 'data-mask'=>'fdecimal'))!!}
                 </div>
                 <input type="hidden" id="maso" name="maso" value="{{$model_nguon->maso}}"/>
                 <div class="modal-footer">
@@ -106,11 +109,100 @@
     </div>
     {!! Form::close() !!}
 
+
+    <!--Modal thông tin chức vụ -->
+    <div id="chucvu-modal" tabindex="-1" role="dialog" aria-hidden="true" class="modal fade">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header modal-header-primary">
+                    <button type="button" data-dismiss="modal" aria-hidden="true" class="close">&times;</button>
+                    <h4 id="modal-header-primary-label" class="modal-title">Thông tin định mức nguồn kinh phí</h4>
+                </div>
+
+                <div class="modal-body">
+                    <div class="form-horizontal">
+                        <div class="row">
+
+                            <div class="col-md-12">
+                                <label class="form-control-label">Mã số</label>
+                                {!!Form::text('mapc_ct', null, array('id' => 'mapc_ct','class' => 'form-control','readonly'))!!}
+                            </div>
+
+                            <div class="col-md-12">
+                                <label class="form-control-label">Tên nguồn kinh phí</label>
+                                {!!Form::text('tenpc_ct', null, array('id' => 'tenpc_ct','class' => 'form-control','readonly'))!!}
+                            </div>
+
+                            <div class="col-md-12">
+                                <label class="control-label">Mức lương cơ bản</label>
+                                {!!Form::text('luongcoban_ct', null, array('id' => 'luongcoban_ct','class' => 'form-control', 'data-mask'=>'fdecimal'))!!}
+                            </div>
+
+                            <input type="hidden" id="id_ct" name="id_ct"/>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" data-dismiss="modal" class="btn btn-default">Hủy thao tác</button>
+                    <button type="submit" id="submit" name="submit" value="submit" class="btn btn-primary" onclick="cfCV_ct()">Đồng ý</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script>
+        function editCV(id){
+            var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
+            $.ajax({
+                url: '{{$furl}}' + 'get_ct',
+                type: 'GET',
+                data: {
+                    _token: CSRF_TOKEN,
+                    id: id
+                },
+                dataType: 'JSON',
+                success: function (data) {
+                    $('#mapc_ct').val(data.mapc);
+                    $('#tenpc_ct').val(data.tenpc);
+                    $('#luongcoban_ct').val(data.luongcoban);
+                    $('#id_ct').val(id);
+                },
+                error: function(message){
+                    toastr.error(message,'Lỗi!');
+                }
+            });
+
+            $('#chucvu-modal').modal('show');
+        }
+
+        function cfCV_ct(){
+            var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
+            $.ajax({
+                url: '{{$furl}}' + 'update_ct',
+                type: 'GET',
+                data: {
+                    _token: CSRF_TOKEN,
+                    id: $('#id_ct').val(),
+                    luongcoban: $('#luongcoban_ct').val()
+                },
+                dataType: 'JSON',
+                success: function (data) {
+                    if (data.status == 'success') {
+                        location.reload();
+                    }
+                },
+                error: function(message){
+                    toastr.error(message,'Lỗi!!');
+                }
+            });
+        }
+
         function addCV(){
             $('#chitiet-modal').modal('show');
         }
     </script>
 
     @include('includes.modal.delete')
+
 @stop

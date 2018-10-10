@@ -54,6 +54,12 @@ class hosotruylinh extends Model
         'pctr',
         'pctnvk',
         'pcthni',
-        'pcbdhdcu'
+        'pcbdhdcu',
+        'pclade',
+        'pcud61',
+        'pcxaxe',
+        'pcdith',
+        'luonghd',
+        'pcphth',
     ];
 }

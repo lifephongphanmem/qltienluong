@@ -19,6 +19,10 @@ class chitieubiencheController extends Controller
             $model = chitieubienche::where('madv',session('admin')->madv)->get();
             $model_nhomct = dmphanloaicongtac::select('macongtac', 'tencongtac')->get();
             $model_tenct = dmphanloaict::select('tenct', 'macongtac', 'mact')->get();
+            $a_ct = array_column($model_tenct->toarray(),'tenct','mact');
+            foreach($model as $ct) {
+                $ct->tenct = isset($a_ct[$ct->mact]) ? $a_ct[$ct->mact] : '';
+            }
             return view('manage.chitieubienche.index')
                 ->with('furl','/nghiep_vu/quan_ly/chi_tieu/')
                 ->with('model',$model)
@@ -64,8 +68,17 @@ class chitieubiencheController extends Controller
         $inputs['soluonguyvien'] = chkDbl($inputs['soluonguyvien']);
         $inputs['soluongdaibieuhdnd'] = chkDbl($inputs['soluongdaibieuhdnd']);
         if ($inputs['id'] == 'ADD') {
-            //chưa bắt trùng nam + mact + madv
             $inputs['madv'] = session('admin')->madv;
+            //chưa bắt trùng nam + mact + madv
+            $chk = chitieubienche::where('nam',$inputs['nam'])->where('mact',$inputs['mact'])->where('madv',$inputs['madv'])->first();
+            if(count($chk) > 0){
+                $result = array(
+                    'message' => 'Đã tồn tại chỉ tiêu biên chế này.',
+                    'status' => 'error',
+                );
+                die(json_encode($result));
+            }
+
             unset($inputs['id']);
             chitieubienche::create($inputs);
         } else {

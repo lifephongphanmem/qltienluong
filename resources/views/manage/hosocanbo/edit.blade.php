@@ -39,13 +39,12 @@
 
 @stop
 
-
 @section('content')
     <div class="row">
         <div class="col-md-12">
             <div class="portlet box blue" id="form_wizard_1">
                 <div class="portlet-title">
-                    <div class="caption">SỬA THÔNG TIN HỒ SƠ CÁN BỘ</div>
+                    <div class="caption text-uppercase">SỬA THÔNG TIN HỒ SƠ CÁN BỘ - {{$model->tencanbo}}</div>
                     <div class="tools hidden-xs">
                         <a href="javascript:;" class="collapse">
                         </a>
@@ -68,6 +67,10 @@
                             <li><a href="#tab5" data-toggle="tab" class="step">
                                     <p class="description"><i class="glyphicon glyphicon-paperclip"></i> Thông tin chức vụ kiêm nhiệm</p></a>
                             </li>
+
+                            <li><a href="#tab6" data-toggle="tab" class="step">
+                                    <p class="description"><i class="glyphicon glyphicon-paperclip"></i> Tỷ lệ đóng bảo hiểm</p></a>
+                            </li>
                         </ul>
 
                         <div id="bar" class="progress progress-striped" role="progressbar">
@@ -79,6 +82,7 @@
                             @include('manage.hosocanbo.include.coban')
                             @include('manage.hosocanbo.include.luong')
                             @include('manage.hosocanbo.include.kiemnhiem')
+                            @include('manage.hosocanbo.include.baohiem')
                         </div>
                     </div>
 

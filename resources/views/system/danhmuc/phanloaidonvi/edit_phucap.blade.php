@@ -40,8 +40,9 @@
                 </div-->
                 <div class="portlet-body form">
                     <!-- BEGIN FORM-->
-                    {!! Form::model($model,['url'=>$furl.'update', 'id' => 'create_tttaikhoan','method' => 'post', 'class'=>'horizontal-form']) !!}
-
+                    {!! Form::model($model,['url'=>$furl.'phu_cap/update', 'id' => 'create_tttaikhoan','method' => 'post', 'class'=>'horizontal-form']) !!}
+                    <input type="hidden" id="id" name="id" value="{{$model->id}}"/>
+                    <input type="hidden" id="maphanloai" name="maphanloai" value="{{$model->maphanloai}}"/>
                     <input type="hidden" id="congthuc" name="congthuc" value="{{$model->congthuc}}"/>
                     <div class="form-body">
                         <div class="row">
@@ -62,7 +63,7 @@
                             <div class="col-md-4">
                                 <div class="form-group">
                                     <label class="form-control-label">Phân loại</label>
-                                    {!!Form::select('phanloai', $a_pl, null, array('id' => 'phanloai','class' => 'form-control select2me'))!!}
+                                    {!!Form::select('phanloai', getPhanLoaiPhuCap(), null, array('id' => 'phanloai','class' => 'form-control select2me'))!!}
                                 </div>
                             </div>
                         </div>
@@ -72,30 +73,6 @@
                                 <div class="form-group">
                                     <label class="form-control-label">Gồm các loại hệ số, phụ cấp</label>
                                     {!!Form::select('ctpc', getCongThucTinhPC(), null, array('id' => 'ctpc','class' => 'form-control select2me','multiple'=>'multiple'))!!}
-
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="row">
-                            <div class="col-md-4">
-                                <div class="form-group">
-                                    <label class="form-control-label">Tiêu đề trên Form<span class="require">*</span></label>
-                                    {!!Form::text('form', null, array('id' => 'form','class' => 'form-control','required'=>'required'))!!}
-                                </div>
-                            </div>
-
-                            <div class="col-md-4">
-                                <div class="form-group">
-                                    <label class="form-control-label">Tiêu đề trên báo cáo<span class="require">*</span></label>
-                                    {!!Form::text('report', null, array('id' => 'report','class' => 'form-control','required'=>'required'))!!}
-                                </div>
-                            </div>
-
-                            <div class="col-md-4">
-                                <div class="form-group">
-                                    <label class="form-control-label">Nộp bảo hiểm</label>
-                                    {!!Form::select('baohiem',array('0'=>'Không nộp hiểm','1'=>'Có nộp hiểm'), null, array('id' => 'baohiem','class' => 'form-control'))!!}
                                 </div>
                             </div>
                         </div>
@@ -104,7 +81,7 @@
             </div>
                 <div style="text-align: center">
                     <button type="submit" class="btn green" onclick="validateForm()"><i class="fa fa-check"></i> Hoàn thành</button>
-                    <a href="{{url($furl)}}" class="btn btn-danger"><i class="fa fa-reply"></i>&nbsp;Quay lại</a>
+                    <a href="{{url($furl.'?maso='.$model->maphanloai)}}" class="btn btn-danger"><i class="fa fa-reply"></i>&nbsp;Quay lại</a>
                 </div>
                 {!! Form::close() !!}
                 <!-- END FORM-->

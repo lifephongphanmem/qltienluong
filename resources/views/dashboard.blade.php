@@ -84,13 +84,13 @@
         </div>
     </div>
     <div class="row">
-        <div class="col-sm-12">
+        <div class="col-sm-6">
             <!-- BEGIN PORTLET-->
             <div class="portlet light ">
                 <div class="portlet-title">
                     <div class="caption caption-md">
                         <i class="icon-bar-chart theme-font-color hide"></i>
-                        <span class="caption-subject theme-font-color bold uppercase">danh sách cán bộ sắp đến kỳ nâng lương ngạch bậc</span>
+                        <span class="caption-subject theme-font-color bold uppercase">Cán bộ nâng lương thâm niên nghề</span>
                     </div>
                     <div class="actions">
 
@@ -104,21 +104,17 @@
                             <th class="text-center">STT</th>
                             <th class="text-center">Họ và tên</th>
                             <th class="text-center">Mã ngạch</th>
-                            <th class="text-center">Từ ngày</th>
-                            <th class="text-center">Đến ngày</th>
                             <th class="text-center">Ngày nâng lương</th>
                         </tr>
                         </thead>
                         <tbody>
-                        @if(isset($m_nangluong))
-                            @foreach($m_nangluong as $key=>$value)
+                        @if(isset($m_nghe))
+                            @foreach($m_nghe as $key=>$value)
                                 <tr>
                                     <td class="text-center">{{$i++}}</td>
                                     <td>{{$value->tencanbo}}</td>
                                     <td>{{$value->msngbac}}</td>
-                                    <td>{{getDayVn($value->ngaytu)}}</td>
-                                    <td>{{getDayVn($value->ngayden)}}</td>
-                                    <td>{{getDayVn($value->ngaynangluong)}}</td>
+                                    <td>{{getDayVn($value->tnndenngay)}}</td>
                                 </tr>
                             @endforeach
                         @endif
@@ -129,11 +125,90 @@
             <!-- END PORTLET-->
         </div>
 
+        <div class="col-sm-6">
+            <!-- BEGIN PORTLET-->
+            <div class="portlet light ">
+                <div class="portlet-title">
+                    <div class="caption caption-md">
+                        <i class="icon-bar-chart theme-font-color hide"></i>
+                        <span class="caption-subject theme-font-color bold uppercase">cán bộ nâng lương ngạch bậc</span>
+                    </div>
+                    <div class="actions">
 
-
+                    </div>
+                </div>
+                <?php $i=1;?>
+                <div class="portlet-body">
+                    <table id="sample_4" class="table table-hover table-striped table-bordered">
+                        <thead>
+                        <tr>
+                            <th class="text-center">STT</th>
+                            <th class="text-center">Họ và tên</th>
+                            <th class="text-center">Mã ngạch</th>
+                            <th class="text-center">Ngày nâng lương</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        @if(isset($m_nangluong))
+                            @foreach($m_nangluong as $key=>$value)
+                                <tr>
+                                    <td class="text-center">{{$i++}}</td>
+                                    <td>{{$value->tencanbo}}</td>
+                                    <td>{{$value->msngbac}}</td>
+                                    <td>{{getDayVn($value->ngayden)}}</td>
+                                </tr>
+                            @endforeach
+                        @endif
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <!-- END PORTLET-->
+        </div>
     </div>
+
     <div class="row">
-        <div class="col-sm-12">
+        <div class="col-sm-6">
+            <!-- BEGIN PORTLET-->
+            <div class="portlet light ">
+                <div class="portlet-title">
+                    <div class="caption caption-md">
+                        <i class="icon-bar-chart theme-font-color hide"></i>
+                        <span class="caption-subject theme-font-color bold uppercase">danh sách cán bộ chờ nhận</span>
+                    </div>
+                    <div class="actions">
+
+                    </div>
+                </div>
+                <?php $i=1;?>
+                <div class="portlet-body">
+                    <table id="sample_6" class="table table-hover table-striped table-bordered">
+                        <thead>
+                        <tr>
+                            <th class="text-center">STT</th>
+                            <th class="text-center">Họ và tên</th>
+                            <th class="text-center">Ngày chuyển</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        @if(isset($m_nhancb))
+                            @foreach($m_nhancb as $key=>$value)
+                                <tr>
+                                    <td class="text-center">{{$i++}}</td>
+                                    <td>{{$value->tencanbo}}</td>
+                                    <td>{{getDayVn($value->ngaynghi)}}</td>
+                                </tr>
+                            @endforeach
+
+                        @endif
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <!-- END PORTLET-->
+        </div>
+
+        <div class="col-sm-6">
             <!-- BEGIN PORTLET-->
             <div class="portlet light ">
                 <div class="portlet-title">
@@ -147,7 +222,7 @@
                 </div>
                 <?php $i=1;?>
                 <div class="portlet-body">
-                    <table id="sample_4" class="table table-hover table-striped table-bordered">
+                    <table id="sample_5" class="table table-hover table-striped table-bordered">
                         <thead>
                         <tr>
                             <th class="text-center">STT</th>

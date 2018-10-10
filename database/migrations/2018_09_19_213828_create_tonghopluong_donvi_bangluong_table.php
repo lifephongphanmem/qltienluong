@@ -59,6 +59,15 @@ class CreateTonghopluongDonviBangluongTable extends Migration
             $table->double('pctnvk')->default(0);
             $table->double('pcbdhdcu')->default(0);
             $table->double('pcthni')->default(0);
+
+            //thêm vào chưa dùng => các loại phụ cấp ko tổng hợp
+            $table->double('pclade')->default(0); //làm đêm
+            $table->double('pcud61')->default(0); //ưu đãi theo tt61
+            $table->double('pcxaxe')->default(0); //điện thoại
+            $table->double('pcdith')->default(0); //điện thoại
+            $table->double('luonghd')->default(0); //lương hợp đồng, lương khoán (số tiền)
+            $table->double('pcphth')->default(0); //phẫu thuật, thủ thuật
+
             $table->double('tonghs')->default(0);
             $table->double('giaml')->default(0);
             $table->double('luongtn')->default(0);

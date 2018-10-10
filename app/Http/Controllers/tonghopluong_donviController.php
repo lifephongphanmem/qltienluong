@@ -467,7 +467,6 @@ class tonghopluong_donviController extends Controller
             //thiếu trường hợp chủ quản lỗi
             //khu vực chưa có đơn vị chủ quản / chủ quản lỗi
             if(session('admin')->macqcq == session('admin')->madvqlkv){
-
                 //kiểm tra xem đã có bản ghi chưa (trường hợp trả lại)
                 //$model_huyen = tonghopluong_huyen::where('mathdv', $model->mathh)->first();
                 //khi trả  lại tonghophuyen set mathh = null =>tìm theo mã + thang + năm tổng hợp
@@ -490,13 +489,15 @@ class tonghopluong_donviController extends Controller
                     tonghopluong_huyen::create($inputs);
                 }else{
                     $model->mathh = $model_huyen->mathdv;//set lại mã vào tonghopdv
+
+                    $model_huyen->macqcq = session('admin')->macqcq;
                     $model_huyen->trangthai = 'DAGUI';
                     $model_huyen->nguoilap = session('admin')->name;
                     $model_huyen->ngaylap = Carbon::now()->toDateTimeString();
                     $model_huyen->save();
                 }
             }
-
+            $model->macqcq = session('admin')->macqcq;
             $model->nguoigui = session('admin')->name;
             $model->ngaygui = Carbon::now()->toDateTimeString();
             $model->trangthai = 'DAGUI';
@@ -667,11 +668,10 @@ class tonghopluong_donviController extends Controller
     {
         if (Session::has('admin')) {
             $inputs = $request->all();
-            //dd($inputs);
             $model = tonghopluong_donvi::where('mathdv', $inputs['mathdv'])->first();
             tonghopluong_donvi::where('mathdv', $inputs['mathdv'])
                 //->update(['trangthai' => 'TRALAI', 'lydo' => $inputs['lydo']]);
-                ->update(['trangthai'=>'TRALAI','lydo'=>$inputs['lydo'],'mathh'=>null,'matht'=>null,'mathk'=>null]);
+                ->update(['trangthai' => 'TRALAI', 'lydo' => $inputs['lydo'], 'mathh' => null, 'matht' => null, 'mathk' => null, 'macqcq' => null]);
             return redirect('/chuc_nang/xem_du_lieu/index?thang=' . $model->thang . '&nam=' . $model->nam . '&trangthai=ALL');
         } else
             return view('errors.notlogin');
