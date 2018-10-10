@@ -551,6 +551,8 @@ function getPhanLoaiLuanChuyen()
 {
     return array('DIEUDONG' => 'Điều động cán bộ',
         'LUANCHUYEN' => 'Luân chuyển cán bộ',
+        'DIEUDONGDEN' => 'Được điều động đến',
+        'LUANCHUYENDEN' => 'Được luân chuyển đến',
     );
 }
 
@@ -558,6 +560,8 @@ function getPhanLoaiThoiCongTac(){
     return array('NGHIHUU' => 'Nghỉ hưu',
         'NGHIVIEC' => 'Xin nghỉ việc',
         'BUOCNGHI' => 'Buộc thôi việc',
+        'DIEUDONG' => 'Hết thời gian điều động',
+        'LUANCHUYEN' => 'Luân chuyển cán bộ',
         'KHAC'=> 'Khác');
 }
 

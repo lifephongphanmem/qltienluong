@@ -200,6 +200,11 @@ Route::group(['prefix'=>'nghiep_vu'],function(){
         Route::get('nhan_excel','hosocanboController@infor_excel');
         Route::post('create_excel','hosocanboController@create_excel');
 
+        //ajax
+        Route::get('get_congtac','hosocanboController@get_congtac');
+        Route::get('get_chucvu_bh','hosocanboController@get_chucvu_bh');
+
+        /*
         Route::get('phucap','hosocanboController@phucap');
         Route::get('get_phucap','hosocanboController@get_phucap');
         Route::get('del_phucap','hosocanboController@detroys_phucap');
@@ -207,7 +212,7 @@ Route::group(['prefix'=>'nghiep_vu'],function(){
         Route::get('syll/{id}','hosocanboController@syll');
         Route::get('ttts/{id}','hosocanboController@tomtatts');
         Route::post('bsll/{id}','hosocanboController@bsll');
-
+        */
         Route::get('thoi_cong_tac','hosocanboController@index_thoicongtac');
 
         Route::get('store_kct','hosocanboController@store_kct');

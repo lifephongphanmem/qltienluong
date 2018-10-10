@@ -100,6 +100,19 @@ class CreateHosodieudongTable extends Migration
             $table->string('theodoi',5)->default(1)->nullable();
             $table->double('baohiem')->default(1);
             $table->string('sodinhdanhcanhan')->nullable();
+
+            $table->double('bhxh')->default(0);
+            $table->double('bhyt')->default(0);
+            $table->double('kpcd')->default(0);
+            $table->double('bhtn')->default(0);
+            $table->double('bhtnld')->default(0);
+            $table->double('bhxh_dv')->default(0);
+            $table->double('bhyt_dv')->default(0);
+            $table->double('kpcd_dv')->default(0);
+            $table->double('bhtn_dv')->default(0);
+            $table->double('bhtnld_dv')->default(0);
+            $table->double('nguoiphuthuoc')->default(0);
+
            $table->timestamps();
         });
     }

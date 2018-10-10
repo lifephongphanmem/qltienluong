@@ -800,6 +800,17 @@ class bangluongController extends Controller
                     }
                 }
 
+                // được điều động đến
+                if($cb->theodoi == 3){
+                    foreach($a_dd as $val){
+                        if($cb->$val > 10000){//sô tiền
+                            $ttts -= $cb->$val;
+                        }else{
+                            $hesots -= $cb->$val;
+                        }
+                    }
+                }
+
                 $cb->tonghs = $hesots;
                 $cb->ttl = round($inputs['luongcoban'] * $hesots + $ttts);
                 $cb->congtac = 'THAISAN';
@@ -813,6 +824,16 @@ class bangluongController extends Controller
                             $tt += $cb->$val;
                         }else{
                             $ths += $cb->$val;
+                        }
+                    }
+                }
+                // được điều động đến
+                if($cb->theodoi == 3){
+                    foreach($a_dd as $val){
+                        if($cb->$val > 10000){//sô tiền
+                            $tt -= $cb->$val;
+                        }else{
+                            $ths -= $cb->$val;
                         }
                     }
                 }

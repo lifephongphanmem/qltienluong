@@ -125,54 +125,26 @@ class hosocanboController extends Controller
 
             $insert['anh'] = ($filename == '' ? '' : '/data/uploads/anh/' . $filename);
             $insert['madv'] = $madv;
-
             $insert['ngaysinh'] = getDateTime($insert['ngaysinh']);
             $insert['ngaytu'] = getDateTime($insert['ngaytu']);
             $insert['ngayden'] = getDateTime($insert['ngayden']);
             $insert['tnntungay'] = getDateTime($insert['tnntungay']);
             $insert['tnndenngay'] = getDateTime($insert['tnndenngay']);
-            //$insert['ngayvd'] = getDateTime($insert['ngayvd']);
-            //$insert['ngayvdct'] = getDateTime($insert['ngayvdct']);
-            //$insert['ngayvao']=getDateTime($insert['ngayvao']);
-            //$insert['ngaybc']=getDateTime($insert['ngaybc']);
-            //$insert['macvd'] = ($insert['macvd'] == '' ? NULL : $insert['macvd']);
-            //$insert['truylinhtungay']=getDateTime($insert['truylinhtungay']);
-            //$insert['truylinhdenngay']=getDateTime($insert['truylinhdenngay']);
+
             $insert['pthuong']=chkDbl($insert['pthuong']) == 0 ? 100 :chkDbl($insert['pthuong']) ;
-            $model_pc = dmphucap_donvi::where('madv', session('admin')->madv)->get();
-            foreach($model_pc as $pc){
-                if(isset($insert[$pc->mapc])){
-                    $insert[$pc->mapc] = chkDbl($insert[$pc->mapc]);
+            $a_pc = dmphucap_donvi::select('mapc')->where('madv', session('admin')->madv)->get()->toarray();
+            foreach($a_pc as $pc){
+                if(isset($insert[$pc['mapc']])){
+                    $insert[$pc['mapc']] = chkDbl($insert[$pc['mapc']]);
                 }
             }
-            /*
-            $insert['heso'] = chkDbl($insert['heso']);
-            $insert['hesopc'] = chkDbl($insert['hesopc']);
-            $insert['vuotkhung'] = chkDbl($insert['vuotkhung']);
-            $insert['pccv'] = chkDbl($insert['pccv']);
-            $insert['pckn'] = chkDbl($insert['pckn']);
-            $insert['pckv'] = chkDbl($insert['pckv']);
-            $insert['pccovu'] = chkDbl($insert['pccovu']);
-            $insert['pctn'] = chkDbl($insert['pctn']);
-            $insert['pctnn'] = chkDbl($insert['pctnn']);
-            $insert['pcvk'] = chkDbl($insert['pcvk']); //lưu thông tin pc đảng ủy viên
-            $insert['pcdbqh'] = chkDbl($insert['pcdbqh']);
-            $insert['pcth'] = chkDbl($insert['pcth']);
-            $insert['pcudn'] = chkDbl($insert['pcudn']);
-            $insert['pcdbn'] = chkDbl($insert['pcdbn']);
-            $insert['pcld'] = chkDbl($insert['pcld']);
-            $insert['pcdh'] = chkDbl($insert['pcdh']);
-            $insert['pck'] = chkDbl($insert['pck']);
-            //$insert['pctnvk'] = chkDbl($insert['pctnvk']);
-            $insert['pcbdhdcu'] = chkDbl($insert['pcbdhdcu']);
-            $insert['pcdang'] = chkDbl($insert['pcdang']);
-            $insert['pcthni'] = chkDbl($insert['pcthni']);
-            $insert['pclt'] = chkDbl($insert['pclt']);
-            $insert['pcdd'] = chkDbl($insert['pcdd']);
-            $insert['pcct'] = chkDbl($insert['pcct']);
-            $insert['pckct'] = chkDbl($insert['pckct']);
-            //dd($insert);
-            */
+            $a_bh = array('nguoiphuthuoc','bhxh','bhyt','bhtn','kpcd','bhxh_dv','bhyt_dv','bhtn_dv','kpcd_dv',);
+            foreach($a_bh as $bh){
+                if(isset($insert[$bh])){
+                    $insert[$bh] = chkDbl($insert[$bh]);
+                }
+            }
+
             hosocanbo::create($insert);
 
             $model_kn = hosocanbo_kiemnhiem_temp::where('macanbo',$macanbo)->get();
@@ -198,10 +170,6 @@ class hosocanboController extends Controller
             //$m_pb= dmphongban::where('madv',session('admin')->madv)->get();
             //khối phòng ban giờ là lĩnh vực hoạt động
             $m_linhvuc = array_column(dmkhoipb::all()->toArray(),'tenkhoipb','makhoipb');
-            //$m_pb = dmphongban::where('madv',session('admin')->madv)->get();
-            //$m_cvcq = dmchucvucq::where('maphanloai',session('admin')->maphanloai)->get();
-            //$m_cvd = dmchucvud::all();
-            //dd(getPhongBan(false));
             $m_plnb = nhomngachluong::select('manhom','tennhom')->distinct()->get();
             $m_pln = ngachluong::select('tenngachluong','manhom','msngbac')->distinct()->get();
             $a_linhvuc = explode(',',$model->lvhd);
@@ -275,41 +243,20 @@ class hosocanboController extends Controller
             $insert['pthuong']=chkDbl($insert['pthuong']) == 0 ? 100 :chkDbl($insert['pthuong']) ;
             $insert['tnntungay'] = getDateTime($insert['tnntungay']);
             $insert['tnndenngay'] = getDateTime($insert['tnndenngay']);
-            $model_pc = dmphucap_donvi::where('madv', session('admin')->madv)->get();
+            $model_pc = dmphucap_donvi::select('mapc')->where('madv', session('admin')->madv)->get()->toarray();
             foreach($model_pc as $pc){
-                if(isset($insert[$pc->mapc])){
-                    $insert[$pc->mapc] = chkDbl($insert[$pc->mapc]);
+                if(isset($insert[$pc['mapc']])){
+                    $insert[$pc['mapc']] = chkDbl($insert[$pc['mapc']]);
                 }
             }
-            /*
-            $insert['heso'] = chkDbl($insert['heso']);
-            $insert['hesopc'] = chkDbl($insert['hesopc']);
-            //$insert['hesott'] = chkDbl($insert['hesott']);
-            $insert['vuotkhung'] = chkDbl($insert['vuotkhung']);
-            $insert['pccv'] = chkDbl($insert['pccv']);
-            $insert['pckn'] = chkDbl($insert['pckn']);
-            $insert['pckv'] = chkDbl($insert['pckv']);
-            $insert['pccovu'] = chkDbl($insert['pccovu']);
-            $insert['pctn'] = chkDbl($insert['pctn']);
-            $insert['pctnn'] = chkDbl($insert['pctnn']);
-            $insert['pcvk'] = chkDbl($insert['pcvk']);//lưu thông tin pc đảng ủy viên
-            $insert['pcdbqh'] = chkDbl($insert['pcdbqh']);
-            $insert['pcth'] = chkDbl($insert['pcth']);
-            $insert['pcudn'] = chkDbl($insert['pcudn']);
-            $insert['pcdbn'] = chkDbl($insert['pcdbn']);
-            $insert['pcld'] = chkDbl($insert['pcld']);
-            $insert['pcdh'] = chkDbl($insert['pcdh']);
-            $insert['pck'] = chkDbl($insert['pck']);
-            //$insert['pctnvk'] = chkDbl($insert['pctnvk']);
-            $insert['pcbdhdcu'] = chkDbl($insert['pcbdhdcu']);
-            $insert['pcdang'] = chkDbl($insert['pcdang']);
-            $insert['pcthni'] = chkDbl($insert['pcthni']);
-            $insert['pclt'] = chkDbl($insert['pclt']);
-            $insert['pcdd'] = chkDbl($insert['pcdd']);
-            $insert['pcct'] = chkDbl($insert['pcct']);
-            $insert['pckct'] = chkDbl($insert['pckct']);
-            */
-            //dd($insert);
+
+            $a_bh = array('nguoiphuthuoc','bhxh','bhyt','bhtn','kpcd','bhxh_dv','bhyt_dv','bhtn_dv','kpcd_dv',);
+            foreach($a_bh as $bh){
+                if(isset($insert[$bh])){
+                    $insert[$bh] = chkDbl($insert[$bh]);
+                }
+            }
+
             $model->update($insert);
             return redirect('nghiep_vu/ho_so/danh_sach');
         }else
@@ -1002,8 +949,6 @@ class hosocanboController extends Controller
             $madv=session('admin')->madv;
             $inputs=$request->all();
 
-            //$model_donvi = dmdonvi::where('madv',$madv)->first();
-            //$a_nb_chk = array_column(ngachluong::all()->toArray(),'msngbac');
             $a_nb = array_column(ngachluong::all()->toArray(), 'manhom','msngbac');
             $a_pc = array_column(dmphucap_donvi::where('madv', session('admin')->madv)->where('phanloai','<','3')->get()->toArray(),'mapc');
             $a_nhomnb = nhomngachluong::all()->keyBy('manhom')->toArray();
@@ -1156,6 +1101,7 @@ class hosocanboController extends Controller
             return view('errors.notlogin');
     }
 
+
     function create_excel_051018(Request $request){
         if(Session::has('admin')){
             $madv=session('admin')->madv;
@@ -1304,124 +1250,32 @@ class hosocanboController extends Controller
         return $result;
     }
 
-public function upd_dm()
-    {
-        $madv_c = '1511709071';
-        $madv_m = '1411709071';
-        /*
-        $m_pc = dmphucap_donvi::where('madv', $madv_c)->get();
-        foreach($m_pc  as $ct){
-            $ct->madv = $madv_m;
-            $a_kq = $ct->toarray();
-            unset($a_kq['id']);
-            dmphucap_donvi::create($a_kq);
-        }
-        $m_bh = dmphanloaicongtac_baohiem::where('madv', $madv_c)->get();
-        foreach($m_bh  as $ct){
-            $ct->madv = $madv_m;
-            $a_kq = $ct->toarray();
-            unset($a_kq['id']);
-            dmphucap_donvi::create($a_kq);
+    function get_congtac(Request $request){
+        if(!Session::has('admin')) {
+            $result = array(
+                'status' => 'fail',
+                'message' => 'permission denied',
+            );
+            die(json_encode($result));
         }
 
-        $m_pb = dmphongban::where('madv', $madv_c)->get();
-        foreach($m_pb as $ct){
-            $maso =explode('_',$ct->mapb);
-            $ct->mapb =$madv_m .'_'.$maso[1];
-            $ct->madv = $madv_m;
-            $a_kq = $ct->toarray();
-            unset($a_kq['id']);
-            dmphongban::create($a_kq);
+        $inputs = $request->all();
+        $model = dmphanloaicongtac_baohiem::where('madv',session('admin')->madv)->where('mact',$inputs['mact'])->first();
+        die($model);
+    }
+
+    function get_chucvu_bh(Request $request){
+        if(!Session::has('admin')) {
+            $result = array(
+                'status' => 'fail',
+                'message' => 'permission denied',
+            );
+            die(json_encode($result));
         }
 
-        $m_cv = dmchucvucq::where('madv', $madv_c)->get();
-
-        foreach($m_cv as $ct){
-            $maso =explode('_',$ct->macvcq);
-            $ct->macvcq =$madv_m .'_'.$maso[1];
-            $ct->madv = $madv_m;
-            $a_kq = $ct->toarray();
-            unset($a_kq['id']);
-            dmchucvucq::create($a_kq);
-        }
-
-        $m_hs = hosocanbo::where('madv', $madv_c)->get();
-        foreach($m_hs  as $ct) {
-            //$maso = explode('_', $ct->macanbo);
-            $ct->macanbo = $madv_m . '_' . explode('_', $ct->macanbo)[1];
-            $ct->macvcq = $madv_m . '_' . explode('_', $ct->macvcq)[1];
-            $ct->mapb = $madv_m . '_' . explode('_', $ct->mapb)[1];
-            $ct->madv = $madv_m;
-            $a_kq = $ct->toarray();
-            unset($a_kq['id']);
-            hosocanbo::create($a_kq);
-        }
-
-
-        $m_kn = hosocanbo_kiemnhiem::where('madv', $madv_c)->get();
-        foreach($m_kn  as $ct) {
-            //$maso = explode('_', $ct->macanbo);
-            $ct->macanbo = $madv_m . '_' . explode('_', $ct->macanbo)[1];
-            $ct->macvcq = $madv_m . '_' . explode('_', $ct->macvcq)[1];
-            if($ct->mapb != '' && $ct->mapb != null){
-                $ct->mapb = $madv_m . '_' . explode('_', $ct->mapb)[1];
-            }
-            $ct->madv = $madv_m;
-            $a_kq = $ct->toarray();
-            unset($a_kq['id']);
-            hosocanbo_kiemnhiem::create($a_kq);
-        }
-        //dd($m_kn->where('mapb','<>',''));
-        $m_nh = hosothoicongtac::where('madv', $madv_c)->get();
-
-        foreach($m_nh  as $ct) {
-            //$maso = explode('_', $ct->macanbo);
-            $ct->maso = getdate()[0];
-            $ct->macanbo = $madv_m . '_' . explode('_', $ct->macanbo)[1];
-            $ct->macvcq = $madv_m . '_' . explode('_', $ct->macvcq)[1];
-            $ct->mapb = $madv_m . '_' . explode('_', $ct->mapb)[1];
-            $ct->madv = $madv_m;
-            $a_kq = $ct->toarray();
-            unset($a_kq['id']);
-            hosothoicongtac::create($a_kq);
-        }
-
-        $m_kn = hosocanbo_kiemnhiem::where('madv', $madv_c)->get();
-        foreach($m_kn  as $ct) {
-            //$maso = explode('_', $ct->macanbo);
-            $maso = explode('_', $ct->macvcq);
-            if($maso[0] == $madv_c){
-                $ct->macvcq = $madv_m . '_' . explode('_', $ct->macvcq)[1];
-            }
-            $ct->macanbo = $madv_m . '_' . explode('_', $ct->macanbo)[1];
-            //$ct->macvcq = $madv_m . '_' . explode('_', $ct->macvcq)[1];
-            if($ct->mapb != '' && $ct->mapb != null){
-                $ct->mapb = $madv_m . '_' . explode('_', $ct->mapb)[1];
-            }
-            $ct->madv = $madv_m;
-            $a_kq = $ct->toarray();
-            unset($a_kq['id']);
-            hosocanbo_kiemnhiem::create($a_kq);
-        }
-        */
-
-        $m_hs = hosocanbo::where('madv', $madv_c)->get();
-        foreach($m_hs  as $ct) {
-            //$maso = explode('_', $ct->macanbo);
-            $maso = explode('_', $ct->macvcq);
-            if($maso[0] == $madv_c){
-                $ct->macvcq = $madv_m . '_' . explode('_', $ct->macvcq)[1];
-            }
-            $ct->macanbo = $madv_m . '_' . explode('_', $ct->macanbo)[1];
-            //$ct->macvcq = $madv_m . '_' . explode('_', $ct->macvcq)[1];
-            $ct->mapb = $madv_m . '_' . explode('_', $ct->mapb)[1];
-            $ct->madv = $madv_m;
-            $a_kq = $ct->toarray();
-            unset($a_kq['id']);
-            hosocanbo::create($a_kq);
-        }
-
-        dd('ok');
+        $inputs = $request->all();
+        $model = dmchucvucq::where('macvcq',$inputs['macvcq'])->first();
+        die($model);
     }
 
 }

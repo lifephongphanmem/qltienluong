@@ -90,6 +90,17 @@ class hosodieudong extends Model
         'mact',
         'theodoi',
         'baohiem',
+        'bhxh',
+        'bhyt',
+        'bhtn',
+        'bhtnld',
+        'kpcd',
+        'bhxh_dv',
+        'bhyt_dv',
+        'bhtn_dv',
+        'bhtnld_dv',
+        'kpcd_dv',
+        'nguoiphuthuoc',
         'sodinhdanhcanhan'
     ];
 }

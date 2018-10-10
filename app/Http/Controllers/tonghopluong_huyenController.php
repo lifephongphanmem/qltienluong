@@ -687,36 +687,37 @@ class tonghopluong_huyenController extends Controller
             return view('errors.notlogin');
     }
 
-    function tralai(Request $request){
+    function tralai(Request $request)
+    {
         //xem dữ liệu khối or đơn vị
         //đơn vị =>trả, xóa bang tonghopluong_huyen
         //khối =>trả, xóa bang tonghopluong_huyen, update trường mathh = null;
 
         if (Session::has('admin')) {
-            $inputs=$request->all();
+            $inputs = $request->all();
 
-            $model = tonghopluong_huyen::where('mathdv',$inputs['mathdv'])->first();
+            $model = tonghopluong_huyen::where('mathdv', $inputs['mathdv'])->first();
             $model->trangthai = 'TRALAI';
             $model->lydo = $inputs['lydo'];
             $model->save();
             $madv = $model->madv;
             $phanloai = dmdonvi::where('madv', $madv)->first()->phanloaitaikhoan;
 
-            if($phanloai == 'SD'){
-                tonghopluong_donvi::where('mathh',$inputs['mathdv'])
-                    ->update(['trangthai'=>'TRALAI','lydo'=>$inputs['lydo'],'mathh'=>null,'matht'=>null,'mathk'=>null]);
-                    //thừa mã khối
-            }else{
+            if ($phanloai == 'SD') {
+                tonghopluong_donvi::where('mathh', $inputs['mathdv'])
+                    ->update(['trangthai' => 'TRALAI', 'lydo' => $inputs['lydo'], 'mathh' => null, 'matht' => null, 'mathk' => null, 'macqcq' => null]);
+                //thừa mã khối
+            } else {
                 //do lúc chuyển tạo mã khối và ma huyện giống nhau
                 //hoặc lấy theo tháng, năm, mã khối, phân loại
                 //nên tạo trường lý do ko nên lấy ở bảng đơn vị
                 tonghopluong_donvi::where('mathk', $inputs['mathdv'])
-                    ->update(['mathh'=>null,'matht'=>null,'mathk'=>null]);
-                tonghopluong_khoi::where('mathdv',$inputs['mathdv'])
-                    ->update(['trangthai'=>'TRALAI','lydo'=>$inputs['lydo']]);
+                    ->update(['mathh' => null, 'matht' => null, 'mathk' => null]);
+                tonghopluong_khoi::where('mathdv', $inputs['mathdv'])
+                    ->update(['trangthai' => 'TRALAI', 'lydo' => $inputs['lydo']]);
             }
 
-            return redirect('/chuc_nang/xem_du_lieu/huyen?thang='.$model->thang.'&nam='.$model->nam.'&trangthai=ALL');
+            return redirect('/chuc_nang/xem_du_lieu/huyen?thang=' . $model->thang . '&nam=' . $model->nam . '&trangthai=ALL');
         } else
             return view('errors.notlogin');
     }

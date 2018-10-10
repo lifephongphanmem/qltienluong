@@ -169,8 +169,8 @@ class dmphucapController extends Controller
     function index_donvi()
     {
         if (Session::has('admin')) {
-            $a_lock = array('heso', 'vuotkhung', 'hesott','hesobl');
-            $model = dmphucap_donvi::where('madv', session('admin')->madv)->wherenotin('mapc',$a_lock)->get();
+            //$model = dmphucap_donvi::where('madv', session('admin')->madv)->wherenotin('mapc',$a_lock)->get();
+            $model = dmphucap_donvi::where('madv', session('admin')->madv)->orderby('stt')->get();
 
             $a_pl = getPhanLoaiPhuCap();
             $a_ct = getCongThucTinhPC();
@@ -184,7 +184,6 @@ class dmphucapController extends Controller
             }
             return view('system.danhmuc.phucap.index_donvi')
                 ->with('model', $model)
-                //->with('a_lock', )
                 ->with('furl', '/danh_muc/phu_cap/don_vi/')
                 ->with('pageTitle', 'Thông tin phân loại phụ cấp');
         } else
@@ -201,10 +200,21 @@ class dmphucapController extends Controller
                 return view('errors.notlogin');
             }
 
+            $a_lock = array('heso', 'hesott','hesobl');
+
             $inputs = $request->all();
+            $a_pl = getPhanLoaiPhuCap();
             $model = dmphucap_donvi::where('mapc', $inputs['maso'])->where('madv', session('admin')->madv)->first();
+            if(in_array($inputs['maso'],$a_lock)){
+                $a_pl =  array('0' => 'Hệ số','3' => 'Ẩn');
+            }
+
+            if($inputs['maso']=='vuotkhung'){
+                $a_pl =  array('2' => 'Phần trăm','3' => 'Ẩn');
+            }
             return view('system.danhmuc.phucap.edit_donvi')
                 ->with('model', $model)
+                ->with('a_pl', $a_pl)
                 ->with('furl', '/danh_muc/phu_cap/don_vi/')
                 ->with('pageTitle', 'Sửa thông tin phụ cấp');
         } else
@@ -231,10 +241,21 @@ class dmphucapController extends Controller
             $inputs = $request->all();
             $model = dmphucap_donvi::find($inputs['id']);
             $model->congthuc = '';
-            if($model->phanloai == 3){
-                $model->phanloai = 0;
+
+            //Tính riêng vượt khung
+            if($model->mapc == 'vuotkhung'){
+                if($model->phanloai == 3){
+                    $model->phanloai = 2;
+                    $model->congthuc = 'heso';
+                }else{
+                    $model->phanloai = 3;
+                }
             }else{
-                $model->phanloai = 3;
+                if($model->phanloai == 3){
+                    $model->phanloai = 0;
+                }else{
+                    $model->phanloai = 3;
+                }
             }
             $model->save();
             return redirect('/danh_muc/phu_cap/don_vi');

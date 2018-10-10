@@ -62,7 +62,7 @@
                             <div class="col-md-4">
                                 <div class="form-group">
                                     <label class="form-control-label">Phân loại</label>
-                                    {!!Form::select('phanloai', getPhanLoaiPhuCap(), null, array('id' => 'phanloai','class' => 'form-control select2me'))!!}
+                                    {!!Form::select('phanloai', $a_pl, null, array('id' => 'phanloai','class' => 'form-control select2me'))!!}
                                 </div>
                             </div>
                         </div>

@@ -18,10 +18,16 @@ use Illuminate\Support\Facades\Session;
 
 class hosodieudongController extends Controller
 {
-    function index(){
+    function index()
+    {
         if (Session::has('admin')) {
-            $model = hosodieudong::where('madv',session('admin')->madv)->get();
-            $model_canbo=hosocanbo::where('madv',session('admin')->madv)->where('theodoi','<','9')->get();
+            //lấy danh sách cán bộ luân chuyển trong đơn
+
+            //lấy cán bộ đơn vị # chuyển đến (trạng thái, phân loại)
+            $model = hosodieudong::where('madv', session('admin')->madv)->get();
+            $model_canbo = hosocanbo::where('madv', session('admin')->madv)->where('theodoi', '<', '9')->get();
+            //tuywf theo phan laoi mà có chức năng tương ứng
+            // + được điều động, lc dến => nhận cán bộ
             /*
             //$m_pbm=dmphongban::all('mapb','tenpb')->toArray();
             $m_cvm=dmchucvucq::all('tencv', 'macvcq')->toArray();
@@ -34,10 +40,10 @@ class hosodieudongController extends Controller
             }
             */
             return view('manage.dieudong.index')
-                ->with('furl','/nghiep_vu/dieu_dong/')
+                ->with('furl', '/nghiep_vu/dieu_dong/')
                 ->with('a_canbo', array_column($model_canbo->toarray(), 'tencanbo', 'macanbo'))
-                ->with('model',$model)
-                ->with('pageTitle','Danh sách hồ sơ điều động cán bộ');
+                ->with('model', $model)
+                ->with('pageTitle', 'Danh sách hồ sơ điều động cán bộ');
         } else
             return view('errors.notlogin');
     }
@@ -60,7 +66,7 @@ class hosodieudongController extends Controller
             $model_tenct = dmphanloaict::select('tenct', 'macongtac', 'mact')->get();
             $model_diaban = dmdonvibaocao::where('level','H')->get();
             $model_donvi = dmdonvi::where('phanloaitaikhoan','SD')->get();
-
+            $a_phanloai = getPhanLoaiLuanChuyen();
             return view('manage.dieudong.create')
                 ->with('furl', '/nghiep_vu/dieu_dong/')
                 ->with('inputs',$inputs)
@@ -70,6 +76,7 @@ class hosodieudongController extends Controller
                 ->with('model_diaban', $model_diaban)
                 ->with('model_donvi', $model_donvi)
                 ->with('a_heso', array('hesott'))
+                ->with('a_phanloai', $a_phanloai)
                 //->with('a_heso', array('heso', 'vuotkhung', 'hesopc', 'hesott'))
                 ->with('model_pc', $model_pc)
                 ->with('pageTitle', 'Thêm mới cán bộ luân chuyển, điều động');
@@ -82,7 +89,7 @@ class hosodieudongController extends Controller
         if (Session::has('admin')) {
             $insert = $request->all();
             //DONVIKHAC: nếu đơn vị ngoài hệ thống => cập nhật vào thông tin cán bộ
-            //DONVI: trong hệ thống => trạng thái chuyển về chờ nhận
+            //DONVI: trong hệ thống => trạng thái chuyển về chờ nhận (trạng thái, phân loai)
 
             //if(madv_dd == DONVIKHAC)
             $insert['ngaylc'] = getDateTime($insert['ngaylc']);

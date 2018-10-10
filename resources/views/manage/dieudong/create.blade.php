@@ -53,7 +53,7 @@
                                             <div class="col-md-3">
                                                 <div class="form-group">
                                                     <label class="form-control-label">Phân loại<span class="require">*</span></label>
-                                                    {!!Form::select('maphanloai', getPhanLoaiLuanChuyen(), null, array('id' => 'maphanloai','class' => 'form-control','required'))!!}
+                                                    {!!Form::select('maphanloai', $a_phanloai, null, array('id' => 'maphanloai','class' => 'form-control','required'))!!}
                                                 </div>
                                             </div>
 

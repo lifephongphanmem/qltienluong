@@ -55,34 +55,7 @@
                 </div>
             </div>
 
-            <div class="col-md-3">
-                <div class="form-group">
-                    <label class="control-label">Sự nghiệp cán bộ</label>
-                    <select class="form-control select2me" name="sunghiep" id="sunghiep" required="required">
-                        <option value="Công chức">Công chức</option>
-                        <option value="Viên chức">Viên chức</option>
-                        <option value="Khác">Khác</option>
-                    </select>
-                </div>
-            </div>
 
-            <div class="col-md-3">
-                <div class="form-group">
-                    <label class="control-label">Phân loại công tác</label>
-                    <select class="form-control select2me" name="mact" id="mact" required="required">
-                        @foreach($model_nhomct as $kieuct)
-                            <optgroup label="{{$kieuct->tencongtac}}">
-                                <?php
-                                $mode_ct=$model_tenct->where('macongtac',$kieuct->macongtac);
-                                ?>
-                                @foreach($mode_ct as $ct)
-                                    <option value="{{$ct->mact}}">{{$ct->tenct}}</option>
-                                @endforeach
-                            </optgroup>
-                        @endforeach
-                    </select>
-                </div>
-            </div>
         </div>
 
         <div class="row">
@@ -153,12 +126,6 @@
                 </div>
             </div>
 
-            <div class="col-md-3">
-                <div class="form-group">
-                    <label class="control-label">Nộp bảo hiểm</label>
-                    {!! Form::select('baohiem',getNopBaoHiem(),null,array('id' => 'baohiem', 'class' => 'form-control select2me'))!!}
-                </div>
-            </div>
             <div class="col-md-6">
                 <div class="form-group">
                     <label class="control-label">Ảnh đại diện </label>
