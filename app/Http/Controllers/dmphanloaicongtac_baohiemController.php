@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\dmphanloaicongtac;
 use App\dmphanloaicongtac_baohiem;
 use App\dmphanloaict;
+use App\hosocanbo;
 use Illuminate\Http\Request;
 
 use App\Http\Requests;
@@ -14,8 +15,7 @@ use Illuminate\Support\Facades\Session;
 class dmphanloaicongtac_baohiemController extends Controller
 {
     // <editor-fold defaultstate="collapsed" desc="--Bảo hiểm--">
-    function index()
-    {
+    function index(){
         if (Session::has('admin')) {
             $model = dmphanloaicongtac_baohiem::where('madv', session('admin')->madv)->get();
             $model_phanloai = dmphanloaict::all();
@@ -77,6 +77,42 @@ class dmphanloaicongtac_baohiemController extends Controller
         $result['message'] = "Cập nhật thành công.";
         $result['status'] = 'success';
         die(json_encode($result));
+    }
+
+    function capnhat(Request $request)
+    {
+        if (Session::has('admin')) {
+            $inputs = $request->all();
+            $model_bh = dmphanloaicongtac_baohiem::where('madv', session('admin')->madv)->where('mact', $inputs['mact_bh'])->first();
+            //chia làm 2 nhóm
+            //công chức
+            hosocanbo::where('madv', session('admin')->madv)->where('mact', $inputs['mact_bh'])->where('sunghiep', 'Công chức')
+                ->update([
+                        'bhxh' => $model_bh->bhxh,
+                        'bhyt' => $model_bh->bhyt,
+                        'bhtn' => 0,
+                        'kpcd' => $model_bh->kpcd,
+                        'bhxh_dv' => $model_bh->bhxh_dv,
+                        'bhyt_dv' => $model_bh->bhyt_dv,
+                        'bhtn_dv' => 0,
+                        'kpcd_dv' => $model_bh->kpcd_dv
+                    ]);
+            //viên chức
+            hosocanbo::where('madv', session('admin')->madv)->where('mact', $inputs['mact_bh'])->where('sunghiep','<>','Công chức')
+                ->update([
+                    'bhxh' => $model_bh->bhxh,
+                    'bhyt' => $model_bh->bhyt,
+                    'bhtn' => $model_bh->bhtn,
+                    'kpcd' => $model_bh->kpcd,
+                    'bhxh_dv' => $model_bh->bhxh_dv,
+                    'bhyt_dv' => $model_bh->bhyt_dv,
+                    'bhtn_dv' => $model_bh->bhtn_dv,
+                    'kpcd_dv' => $model_bh->kpcd_dv
+                ]);
+
+            return redirect('/he_thong/don_vi/bao_hiem');
+        } else
+            return view('errors.notlogin');
     }
     // </editor-fold>
 }

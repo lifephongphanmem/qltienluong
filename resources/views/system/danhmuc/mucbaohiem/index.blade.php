@@ -74,6 +74,8 @@
                                         <td>
                                             <button type="button" onclick="editCV('{{$value->mact}}')" class="btn btn-default btn-xs">
                                                 <i class="fa fa-edit"></i>&nbsp; Sửa</button>
+                                            <button type="button" onclick="updateCV('{{$value->mact}}')" class="btn btn-default btn-xs">
+                                                <i class="fa fa-share-square-o"></i>&nbsp; Cập nhật</button>
                                         </td>
                                     </tr>
                                 @endforeach
@@ -85,7 +87,7 @@
         </div>
     </div>
 
-    <!--Modal thông tin chức vụ -->
+    <!--Modal thông tin-->
     <div id="create-modal" tabindex="-1" role="dialog" aria-hidden="true" class="modal fade">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -202,7 +204,39 @@
         </div>
     </div>
 
+    <!--Modal cập nhật -->
+    <div class="modal fade" id="update-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                {!! Form::open(['url'=>$furl.'capnhat_bh','id' => 'frm_chuyen','method'=>'GET'])!!}
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+                    <h4 class="modal-title">Đồng ý cập nhật?</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label><b>Tỷ lệ bảo hiểm của các cán bộ ứng với phân loại công tác này sẽ được cập nhật lại.</b></label>
+                    </div>
+                    <input type="hidden" name="mact_bh" id="mact_bh">
+                    <div class="modal-footer">
+                        <button type="button" class="btn default" data-dismiss="modal">Hủy</button>
+                        <button type="submit" class="btn blue">Đồng ý</button>
+
+                    </div>
+                    {!! Form::close() !!}
+                </div>
+                <!-- /.modal-content -->
+            </div>
+            <!-- /.modal-dialog -->
+        </div>
+    </div>
+
     <script>
+        function updateCV(mact){
+            $('#mact_bh').val(mact);
+            $('#update-modal').modal('show');
+        }
+
         function editCV(mact){
             var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
             $.ajax({

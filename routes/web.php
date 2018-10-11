@@ -1,6 +1,6 @@
 <?php
 Route::get('', 'HomeController@index');
-Route::get('test', 'dmchucvucqController@test');
+Route::get('test', 'bangluong_inController@test');
 Route::get('ajaxtest','ajaxController@test');
 
 
@@ -927,6 +927,7 @@ Route::group(['prefix'=>'he_thong'],function(){
         Route::get('chung','dmdonviController@information_global');
         Route::get('maso={id}/edit_global','dmdonviController@edit_global');
         Route::patch('/{id}/global','dmdonviController@update_global');
+        Route::get('capnhat_bh','dmphanloaicongtac_baohiemController@capnhat');
         Route::get('bao_hiem','dmphanloaicongtac_baohiemController@index');
         Route::get('update_bh','dmphanloaicongtac_baohiemController@update');
         Route::get('get_bh','dmphanloaicongtac_baohiemController@getinfo');
