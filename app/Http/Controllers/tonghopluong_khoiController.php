@@ -165,7 +165,7 @@ class tonghopluong_khoiController extends Controller
                     $col++;
                 }
             }
-            return view('reports.tonghopluong.khoi.solieu')
+            return view('reports.tonghopluong.khoi.solieuth')
                 ->with('thongtin', $thongtin)
                 ->with('model', $model)
                 ->with('model_tonghop', $model_tonghop)

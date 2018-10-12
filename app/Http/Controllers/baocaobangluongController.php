@@ -60,16 +60,19 @@ class baocaobangluongController extends Controller
             {
                 $model_donvi = dmdonvi::where('madvbc',session('admin')->madvbc)->get();
                 $model_phanloai = dmphanloaidonvi::wherein('maphanloai',array_column($model_donvi->toarray(),'maphanloai'))->get();
+                $model_phanloaict = dmphanloaict::All();
             }
             else
             {
                 $model_donvi = dmdonvi::where('macqcq',session('admin')->madv)->get();
                 $model_phanloai = dmphanloaidonvi::wherein('maphanloai',array_column($model_donvi->toarray(),'maphanloai'))->get();
+                $model_phanloaict = dmphanloaict::All();
             }
             return view('reports.index_th')
                 ->with('furl','/bao_cao/bang_luong/')
                 ->with('model_phanloai',$model_phanloai)
                 ->with('model_dv',$model_donvi)
+                ->with('model_phanloaict',$model_phanloaict)
                 //->with('model_dvbc', $model_dvbc)
                 ->with('pageTitle','Báo cáo chi trả lương');
         } else
@@ -590,7 +593,7 @@ class baocaobangluongController extends Controller
                 })->get();
             $a_dv = array_column($model_tonghop->toarray(),'madv','mathdv');
             $a_pl = array_column($model_donvi->toarray(),'maphanloai','madv');
-            $model = tonghopluong_donvi_chitiet::wherein('mathdv', array_column($model_tonghop->toarray(),'mathdv'))->get();
+            $model = tonghopluong_donvi_chitiet::where('mact','like',$inputs['phanloaict'].'%')-> wherein('mathdv', array_column($model_tonghop->toarray(),'mathdv'))->get();
             $model_nguonkp = array_column(dmnguonkinhphi::all()->toArray(), 'tennguonkp', 'manguonkp');
             $model_phanloaict = array_column(dmphanloaicongtac::all()->toArray(), 'tencongtac', 'macongtac');
             $model_ct = array_column(dmphanloaict::all()->toArray(), 'tenct', 'mact');

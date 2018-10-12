@@ -218,12 +218,12 @@ class xemdulieucapduoiController extends Controller
             //$a_phanloai = array('DONVI' => 'Dữ liệu tổng hợp của đơn vị', 'CAPDUOI' => 'Dữ liệu tổng hợp của các đơn vị cấp dưới');
 
             $model_donvi = dmdonvi::select('madv', 'tendv')
-                ->wherein('madv', function($query) use($madv,$madvbc){
-                    $query->select('madv')->from('dmdonvi')->where('madvbc',$madvbc)->where('madv','<>',$madv)->get();
+                ->wherein('madv', function($query) use($madv){
+                    $query->select('madv')->from('dmdonvi')->where('macqcq',$madv)->where('madv','<>',$madv)->get();
                 })->get();
 
-            $model_nguon = tonghopluong_donvi::wherein('madv', function($query) use($madv,$madvbc){
-                $query->select('madv')->from('dmdonvi')->where('madvbc',$madvbc)->where('madv','<>',$madv)->get();
+            $model_nguon = tonghopluong_donvi::wherein('madv', function($query) use($madv){
+                $query->select('madv')->from('dmdonvi')->where('macqcq',$madv)->where('madv','<>',$madv)->get();
                 })->where('thang', $inputs['thang'])
                 ->where('nam', $inputs['nam'])
                 ->where('trangthai', 'DAGUI')

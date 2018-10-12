@@ -121,6 +121,19 @@
                             </select>
                             </div>
                         </div>
+                    @if(!session('admin')->quanlykhuvuc)
+                    <div class="form-group">
+                        <label class="col-md-4 control-label">Phân loại công tác<span class="require">*</span></label>
+                        <div class="col-md-8">
+                            <select class="form-control" id="phanloaict" name="phanloaict">
+                                @foreach($model_phanloaict as $phanloaict)
+                                    <option value="{{$phanloaict['mact']}}">{{$phanloaict['tenct']}}</option>
+                                @endforeach
+                                    <option value="">--Chọn tất cả--</option>
+                            </select>
+                        </div>
+                    </div>
+                    @endif
                     <div class="form-group">
                         <label class="col-md-4 control-label"> Đơn vị tính</label>
                         <div class="col-md-8">

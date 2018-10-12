@@ -137,8 +137,8 @@ class tonghopluong_huyenController extends Controller
 
             //Danh sách đơn vi = macqcq&(SD;TH&KHOI); bỏ đi TH&HUYEN
             $model_donvi = dmdonvi::select('madv', 'tendv')
-                ->wherein('madv', function ($query) use ($madv,$madvbc) {
-                    $query->select('madv')->from('dmdonvi')->where('madvbc', $madvbc)->where('madv', '<>', $madv)->get();
+                ->wherein('madv', function ($query) use ($madv) {
+                    $query->select('madv')->from('dmdonvi')->where('macqcq', $madv)->where('madv', '<>', $madv)->get();
                 })->get();
 
             $sldv = $model_donvi->count();
@@ -162,8 +162,8 @@ class tonghopluong_huyenController extends Controller
             //Danh sách các đơn vị đã gửi dữ liệu
             //$model_dulieu = tonghopluong_huyen::where('madvbc',$madvbc)->get();
             //$model_dulieu = tonghopluong_huyen::where('macqcq', $madv)->where('trangthai','DAGUI')->get();
-            $model_dulieu = tonghopluong_donvi::wherein('madv', function ($query) use ($madv,$madvbc) {
-                $query->select('madv')->from('dmdonvi')->where('madvbc', $madvbc)->where('madv', '<>', $madv)->get();
+            $model_dulieu = tonghopluong_donvi::wherein('madv', function ($query) use ($madv) {
+                $query->select('madv')->from('dmdonvi')->where('macqcq', $madv)->where('madv', '<>', $madv)->get();
             })->where('trangthai','DAGUI')->get();
 
             //dd($model_dulieu);
