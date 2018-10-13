@@ -157,12 +157,12 @@ class dutoanluongController extends Controller
             $masodv = session('admin')->madv . '_' . getdate()[0];
             //dd($inputs);
             //1536402868: Đại biểu hội đồng nhân dân; 1536459380: Cán bộ cấp ủy viên; 1506673695: KCT cấp xã; 1535613221: kct cấp thôn
-            $a_th = array_merge(array('macanbo','tencanbo', 'mact', 'macvcq', 'mapb', 'ngayden'),getColTongHop());
+            $a_th = array_merge(array('macanbo', 'mact', 'macvcq', 'mapb', 'ngayden'),getColTongHop());
             $m_cb_kn = hosocanbo_kiemnhiem::select($a_th)
                 ->where('madv', session('admin')->madv)
                 ->wherein('mact',['1536402868','1536459380','1535613221', '1506673695'])
                 ->get()->keyBy('macanbo')->toarray();
-            $a_th = array_merge(array('ngaysinh', 'tnndenngay', 'gioitinh', 'msngbac', 'bac', 'bhxh_dv', 'bhyt_dv', 'bhtn_dv', 'kpcd_dv'),$a_th);
+            $a_th = array_merge(array('ngaysinh','tencanbo', 'tnndenngay', 'gioitinh', 'msngbac', 'bac', 'bhxh_dv', 'bhyt_dv', 'bhtn_dv', 'kpcd_dv'),$a_th);
             $model = hosocanbo::select($a_th)->where('madv', session('admin')->madv)
                 ->where('theodoi','<', '9')
                 ->get();
