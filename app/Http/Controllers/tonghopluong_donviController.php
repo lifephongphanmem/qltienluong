@@ -182,9 +182,9 @@ class tonghopluong_donviController extends Controller
 
             //nhóm đơn vị xã phương thị trấn
             if(session('admin')->maphanloai == 'KVXP'){
-                //1536402868: Đại biểu hội đồng nhân dân; 1536459380: Cán bộ cấp ủy viên
+                //1536402868: Đại biểu hội đồng nhân dân; 1536459380: Cán bộ cấp ủy viên; 1506673695: KCT cấp xã; 1535613221: kct cấp thôn
                 //BIENCHE; KHONGCT
-                $model_khac = $model_bangluong_ct->wherein('mact',['1536402868','1536459380']);
+                $model_khac = $model_bangluong_ct->wherein('mact',['1536402868','1536459380','1535613221', '1506673695']);
                 $model_bangluong_ct = $model_bangluong_ct->wherein('macongtac',['BIENCHE','KHONGCT']);
                 foreach ($model_khac as $khac){
                     $model_bangluong_ct->add($khac);

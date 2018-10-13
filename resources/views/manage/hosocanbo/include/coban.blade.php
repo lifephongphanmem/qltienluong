@@ -56,9 +56,6 @@
             </div>
 
 
-        </div>
-
-        <div class="row">
             <div class="col-md-3">
                 <div class="form-group">
                     <label class="control-label">Phân loại theo dõi</label>
@@ -72,17 +69,24 @@
                     {!!Form::text('stt', null, array('id' => 'stt','class' => 'form-control', 'data-mask'=>'fdecimal'))!!}
                 </div>
             </div>
+        </div>
 
-            <div class="col-md-6">
+        <div class="row">
+            <div class="col-md-3">
+                <div class="form-group">
+                    <label class="control-label">Số tài khoản ngân hàng</label>
+                    {!!Form::text('sotk', null, array('id' => 'sotk','class' => 'form-control'))!!}
+                </div>
+            </div>
+
+            <div class="col-md-3">
                 <div class="form-group">
                     <label class="control-label">Nơi công tác</label>
                     {!!Form::text('lvtd', null, array('id' => 'lvtd','class' => 'form-control'))!!}
                 </div>
             </div>
-        </div>
 
-        <div class="row">
-            <div class="col-md-6">
+            <div class="col-md-3">
                 <div class="form-group">
                     <label class="control-label">Lĩnh vực công tác </label>
                     <select class="form-control" id="linhvuc" name="linhvuc" multiple="multiple">
@@ -99,7 +103,7 @@
                 </div>
             </div>
 
-            <div class="col-md-6">
+            <div class="col-md-3">
                 <div class="form-group">
                     <label class="control-label">Nguồn kinh phí hưởng lương </label>
                     <select class="form-control" id="nguonkp" name="nguonkp" multiple="multiple">
@@ -119,12 +123,6 @@
         </div>
 
         <div class="row">
-            <div class="col-md-3">
-                <div class="form-group">
-                    <label class="control-label">Số tài khoản ngân hàng</label>
-                    {!!Form::text('sotk', null, array('id' => 'sotk','class' => 'form-control'))!!}
-                </div>
-            </div>
 
             <div class="col-md-6">
                 <div class="form-group">

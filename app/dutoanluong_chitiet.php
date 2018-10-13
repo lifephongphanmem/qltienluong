@@ -16,6 +16,7 @@ class dutoanluong_chitiet extends Model
         'canbo_congtac',//lấy số lượng thực tế tại đơn vị
         'canbo_dutoan',
         'macongtac',
+        'mact',
         'luongnb',
         'luonghs',
         'luongbh',

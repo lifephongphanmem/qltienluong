@@ -60,6 +60,9 @@
                             <li><a href="#tab1" data-toggle="tab" class="step">
                                     <p class="description"><i class="glyphicon glyphicon-user"></i> Thông tin cơ bản</p></a>
                             </li>
+                            <li><a href="#tab6" data-toggle="tab" class="step">
+                                    <p class="description"><i class="glyphicon glyphicon-paperclip"></i> Tỷ lệ đóng bảo hiểm</p></a>
+                            </li>
                             <li><a href="#tab4" data-toggle="tab" class="step">
                                     <p class="description"> <i class="glyphicon glyphicon-check"></i> Thông tin lương và phụ cấp</p></a>
                             </li>
@@ -68,9 +71,7 @@
                                     <p class="description"><i class="glyphicon glyphicon-paperclip"></i> Thông tin chức vụ kiêm nhiệm</p></a>
                             </li>
 
-                            <li><a href="#tab6" data-toggle="tab" class="step">
-                                    <p class="description"><i class="glyphicon glyphicon-paperclip"></i> Tỷ lệ đóng bảo hiểm</p></a>
-                            </li>
+
                         </ul>
 
                         <div id="bar" class="progress progress-striped" role="progressbar">

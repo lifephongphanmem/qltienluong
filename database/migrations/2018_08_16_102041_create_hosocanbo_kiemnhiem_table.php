@@ -56,7 +56,7 @@ class CreateHosocanboKiemnhiemTable extends Migration
             $table->double('pctnvk')->default(0);
             $table->double('pcbdhdcu')->default(0);
             $table->double('pcthni')->default(0);
-
+            $table->double('hesobl')->default(0);
             $table->double('pclade')->default(0); //làm đêm
             $table->double('pcud61')->default(0); //ưu đãi theo tt61
             $table->double('pcxaxe')->default(0); //điện thoại

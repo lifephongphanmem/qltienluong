@@ -24,9 +24,12 @@ class CreateDutoanluongChitietTable extends Migration
             $table->double('canbo_congtac')->default(0);//lấy số lượng thực tế tại đơn vị
             $table->double('canbo_dutoan')->default(0);
             $table->string('macongtac', 50)->nullable();
+            $table->string('mact', 50)->nullable();
+            //dự toán cho cán bộ chưa tuyển
             $table->double('luongnb')->default(0);
             $table->double('luonghs')->default(0);
             $table->double('luongbh')->default(0);
+            //dự toán cho cán bộ đang công tác
             $table->double('luongnb_dt')->default(0);
             $table->double('luonghs_dt')->default(0);
             $table->double('luongbh_dt')->default(0);
