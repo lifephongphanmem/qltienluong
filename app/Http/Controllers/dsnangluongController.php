@@ -174,25 +174,23 @@ class dsnangluongController extends Controller
                 ->orderby('dmchucvucq.sapxep')
                 ->get();
             */
-            $model_canbo=hosocanbo::select('macanbo', 'macvcq','tencanbo')->get();
-            $model_dmchucvucq=dmchucvucq::select('tencv', 'macvcq','sapxep')->get();
+
+            $a_cv = getChucVuCQ(false);
+            $a_cb = hosocanbo::select('macanbo', 'macvcq','tencanbo')
+                ->where('madv', session('admin')->madv)->get()->keyby('macanbo')->toarray();
 
             foreach($model as $hs){
-                $canbo = $model_canbo->where('macanbo',$hs->macanbo)->first();
-                if(count($canbo)>0){
-                    $hs->tencanbo = $canbo->tencanbo;
-                    $chucvucq = $model_dmchucvucq->where('macvcq',$canbo->macvcq)->first();
-                    if(count($chucvucq)>0){
-                        $hs->tencv = $chucvucq->tencv;
-                        $hs->sapxep = $chucvucq->sapxep;
-                    }
+                if(isset($a_cb[$hs->macanbo])){
+                    $canbo = $a_cb[$hs->macanbo];
+                    $hs->tencanbo = $canbo['tencanbo'];
+                    $hs->tencv = isset($a_cv[$canbo['macvcq']])? $a_cv[$canbo['macvcq']] : '';
                 }
             }
-            $data = $model->sortBy('sapxep');
-           $model_nangluong = dsnangluong::where('manl',$manl)->first();
+
+               $model_nangluong = dsnangluong::where('manl',$manl)->first();
             return view('manage.nangluong.nangluong')
                 ->with('furl','/chuc_nang/nang_luong/')
-                ->with('model',$data)
+                ->with('model',$model)
                 ->with('model_nangluong',$model_nangluong)
                 ->with('pageTitle','Chi tiết danh sách nâng lương');
         } else
