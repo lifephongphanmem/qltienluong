@@ -162,37 +162,28 @@ class dsnangluongController extends Controller
         }
     }
 
-    function show($manl){
+    function show($manl)
+    {
         if (Session::has('admin')) {
-            $model = dsnangluong_chitiet::where('manl',$manl)->get();
-            /*
-            $model=DB::table('hosoluong')
-                ->join('hosocanbo', 'hosoluong.macanbo', '=', 'hosocanbo.macanbo')
-                ->join('dmchucvucq', 'hosocanbo.macvcq', '=', 'dmchucvucq.macvcq')
-                ->select('hosoluong.*', 'dmchucvucq.sapxep','hosocanbo.tencanbo','hosocanbo.macanbo','hosocanbo.macvcq')
-                ->where('hosoluong.manl',$manl)
-                ->orderby('dmchucvucq.sapxep')
-                ->get();
-            */
-
+            $model = dsnangluong_chitiet::where('manl', $manl)->get();
             $a_cv = getChucVuCQ(false);
-            $a_cb = hosocanbo::select('macanbo', 'macvcq','tencanbo')
+            $a_cb = hosocanbo::select('macanbo', 'macvcq', 'tencanbo')
                 ->where('madv', session('admin')->madv)->get()->keyby('macanbo')->toarray();
 
-            foreach($model as $hs){
-                if(isset($a_cb[$hs->macanbo])){
+            foreach ($model as $hs) {
+                if (isset($a_cb[$hs->macanbo])) {
                     $canbo = $a_cb[$hs->macanbo];
                     $hs->tencanbo = $canbo['tencanbo'];
-                    $hs->tencv = isset($a_cv[$canbo['macvcq']])? $a_cv[$canbo['macvcq']] : '';
+                    $hs->tencv = isset($a_cv[$canbo['macvcq']]) ? $a_cv[$canbo['macvcq']] : '';
                 }
             }
 
-               $model_nangluong = dsnangluong::where('manl',$manl)->first();
+            $model_nangluong = dsnangluong::where('manl', $manl)->first();
             return view('manage.nangluong.nangluong')
-                ->with('furl','/chuc_nang/nang_luong/')
-                ->with('model',$model)
-                ->with('model_nangluong',$model_nangluong)
-                ->with('pageTitle','Chi tiết danh sách nâng lương');
+                ->with('furl', '/chuc_nang/nang_luong/')
+                ->with('model', $model)
+                ->with('model_nangluong', $model_nangluong)
+                ->with('pageTitle', 'Chi tiết danh sách nâng lương');
         } else
             return view('errors.notlogin');
     }

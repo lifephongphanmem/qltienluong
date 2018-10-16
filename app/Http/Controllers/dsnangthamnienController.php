@@ -81,6 +81,7 @@ class dsnangthamnienController extends Controller
     function show($manl){
         if (Session::has('admin')) {
             $model = dsnangthamnien_ct::where('manl',$manl)->get();
+            /*
             $model_canbo=hosocanbo::select('macanbo', 'macvcq','tencanbo')->get();
             $a_cv = getChucVuCQ(false);
             foreach($model as $hs){
@@ -92,7 +93,19 @@ class dsnangthamnienController extends Controller
 
                 }
             }
+            */
+            $a_cv = getChucVuCQ(false);
+            $a_cb = hosocanbo::select('macanbo', 'macvcq', 'tencanbo', 'stt')
+                ->where('madv', session('admin')->madv)->get()->keyby('macanbo')->toarray();
 
+            foreach ($model as $hs) {
+                if (isset($a_cb[$hs->macanbo])) {
+                    $canbo = $a_cb[$hs->macanbo];
+                    $hs->tencanbo = $canbo['tencanbo'];
+                    $hs->stt = $canbo['stt'];
+                    $hs->tencv = isset($a_cv[$canbo['macvcq']]) ? $a_cv[$canbo['macvcq']] : '';
+                }
+            }
             $model_nangluong = dsnangthamnien::where('manl',$manl)->first();
             return view('manage.thamnien.nangluong')
                 ->with('furl','/chuc_nang/tham_nien/')
