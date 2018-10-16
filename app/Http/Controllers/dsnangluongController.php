@@ -144,11 +144,12 @@ class dsnangluongController extends Controller
                     $date = new Carbon($cb->ngayden);
                     $cb->ngayden = $date->addYear($nhomngluong->namnb);
                 }
+                dsnangluong_chitiet::create($cb->toarray());
             }
             //dd($m_canbo->toarray());
             $inputs['trangthai'] = 'Tạo danh sách';
             dsnangluong::create($inputs);
-            dsnangluong_chitiet::insert($m_canbo->toarray());
+            //dsnangluong_chitiet::insert($m_canbo->toarray());
            return redirect('/chuc_nang/nang_luong/maso='.$manl);
         }
     }

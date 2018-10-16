@@ -1360,6 +1360,7 @@ class bangluong_inController extends Controller
         $ngaylap = Carbon::create($inputs['nam'], $inputs['thang'], '01');
         $m_tamngung = hosotamngungtheodoi::where('madv', $inputs['madv'])->where('maphanloai', 'THAISAN')->where('ngaytu', '<=', $ngaylap)->where('ngayden', '>=', $ngaylap)->get();
         $m_nghiphep = hosotamngungtheodoi::where('madv', $inputs['madv'])->wherein('maphanloai',['NGHIPHEP','NGHIOM'])->whereYear('ngaytu', $inputs['nam'])->whereMonth('ngaytu', $inputs['thang'])->get();
+        $m_khongluong = hosotamngungtheodoi::where('madv', $inputs['madv'])->where('maphanloai', 'KHONGLUONG')->where('ngaytu', '<=', $ngaylap)->where('ngayden', '>=', $ngaylap)->get();
 
         $m_cb = hosocanbo::where('madv', $inputs['madv'])->where('theodoi','<', '9')->get();
         $a_cbkn = hosocanbo::where('madv', $inputs['madv'])->where('theodoi','<', '9')->get()->keyBy('macanbo')->toArray();
@@ -1439,6 +1440,7 @@ class bangluong_inController extends Controller
             $ths = 0;
             //nếu cán bộ nghỉ thai sản
             $thaisan = count($m_tamngung->where('macanbo',$cb->macanbo))>0? true : false;
+            $khongluong = count($m_khongluong->where('macanbo',$cb->macanbo))>0? true : false;
             $a_luupc = array();
 
             foreach ($model_phucap as $ct) {
@@ -1503,7 +1505,7 @@ class bangluong_inController extends Controller
                     }
                 }
 
-                if (!$thaisan || ($thaisan && in_array($mapc, $a_ts))) {//lưu vào bảng lương phụ cấp (chi luu số tiền >0)
+                if (!$khongluong || !$thaisan || ($thaisan && in_array($mapc, $a_ts))) {//lưu vào bảng lương phụ cấp (chi luu số tiền >0)
                     $ct->mabl = $inputs['mabl'];
                     $ct->luongcoban = $inputs['luongcoban'];
                     $ct->macanbo = $cb->macanbo;
@@ -1535,12 +1537,21 @@ class bangluong_inController extends Controller
 
             $a_luupc = unset_key($a_luupc,$a_col_pc);
             bangluong_phucap::insert($a_luupc);
-
+            if($khongluong){//tính không lương rồi thoát
+                $cb->tencanbo = $cb->tencanbo . ' (nghỉ không lương)';
+                $cb->tonghs = 0;
+                $cb->ttl = 0;
+                $kq = $cb->toarray();
+                unset($kq['id']);
+                //dd($kq);
+                bangluong_ct::create($kq);
+                continue;
+            }
             //$ths = $ths + $heso_goc - $cb->heso;//do chỉ lương nb hưởng 85%, các hệ số hưởng %, bảo hiểm thì lấy 100% để tính
             $cb->tonghs = $ths;
             //nếu cán bộ nghỉ thai sản
             if($thaisan){
-                $cb->tencanbo = $cb->tencanbo . '(nghỉ thai sản)';
+                $cb->tencanbo = $cb->tencanbo . ' (nghỉ thai sản)';
                 $hesots = 0;
                 $ttts = 0;
                 //thai sản
@@ -1772,6 +1783,7 @@ class bangluong_inController extends Controller
             bangluong_ct::create($a_k);
         }
     }
+
 
     public function inbangluong($mabl){
         if (Session::has('admin')) {
