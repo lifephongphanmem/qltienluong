@@ -66,6 +66,10 @@
                                         <td>
                                             <a href="{{url($furl.'?maso='.$value->masodv)}}" class="btn btn-default btn-xs mbs">
                                                 <i class="fa fa-th-list"></i>&nbsp; Chi tiết</a>
+                                            <!--a href="{{url($furl.'printf/ma_so='.$value->masodv)}}" class="btn btn-default btn-xs mbs" TARGET="_blank">
+                                                <i class="fa fa-print"></i>&nbsp; In dự toán</a-->
+                                            <a href="{{url($furl.'printf_bl/ma_so='.$value->masodv)}}" class="btn btn-default btn-xs mbs" TARGET="_blank">
+                                                <i class="fa fa-print"></i>&nbsp; In bảng lương</a>
                                             @if($value->trangthai == 'CHUAGUI' || $value->trangthai == 'TRALAI')
                                                 <button type="button" class="btn btn-default btn-xs" onclick="confirmChuyen('{{$value->masodv}}')" data-target="#chuyen-modal" data-toggle="modal"><i class="fa fa-share-square-o"></i>&nbsp;
                                                     Gửi dữ liệu</button>
@@ -205,32 +209,6 @@
             //$('#madvbc').val(madvbc);
             //$('#phongban-modal').modal('show');
         }
-
-        $(function(){
-            $('#namdt').change(function(){
-                var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
-                $.ajax({
-                    url: '{{$furl}}' + 'checkNamDuToan',
-                    type: 'GET',
-                    data: {
-                        _token: CSRF_TOKEN,
-                        namdt: $(this).val()
-                    },
-                    dataType: 'JSON',
-                    success: function (data) {
-                        if(data.status == 'false'){
-                            toastr.error(data.message, 'Lỗi!');
-                            $('#namdt').val(0);
-                            $('#namdt').focus();
-                        }
-                    },
-                    error: function (message) {
-                        toastr.error(message, 'Lỗi!');
-                    }
-                });
-
-            });
-        });
 
         function confirm_create() {
             if ($('#namdt').val() == 0 || $('#namdt').val() == '') {

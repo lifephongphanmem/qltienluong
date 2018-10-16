@@ -250,14 +250,17 @@ Route::group(['prefix'=>'nghiep_vu'],function(){
             Route::get('danh_sach','dutoanluongController@index');
             Route::get('del/{id}','dutoanluongController@destroy');
             Route::post('create','dutoanluongController@create');
-            Route::get('checkNamDuToan','dutoanluongController@checkNamDT');
-            Route::get('checkBangLuong','dutoanluongController@checkBangLuong');
+            //Route::get('checkNamDuToan','dutoanluongController@checkNamDT');
+            //Route::get('checkBangLuong','dutoanluongController@checkBangLuong');
             Route::post('senddata','dutoanluongController@senddata'); //gửi dữ liệu
             Route::post('tralai','dutoanluongController@tralai'); //trả lại dữ liệu
             Route::get('getlydo','dutoanluongController@getlydo');//lý do trả lại dữ liệu
             Route::get('detail/del/{id}','dutoanluongController@destroy_detail');
             Route::post('detail/update','dutoanluongController@update_detail');
             Route::get('detail/get','dutoanluongController@get_detail');
+
+            Route::get('printf/ma_so={masodv}','dutoanluongController@printf_data');
+            Route::get('printf_bl/ma_so={masodv}','dutoanluongController@printf_bl');
         });
 
         Route::group(['prefix'=>'dia_ban_dbkk'],function(){

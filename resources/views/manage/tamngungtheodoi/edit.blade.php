@@ -62,7 +62,8 @@
                                     {!! Form::input('date','ngaytu',null,array('id' => 'ngaytu', 'class' => 'form-control','required'))!!}
                                 </div>
                             </div>
-                            @if($inputs['phanloai'] != 'THAISAN')
+
+                            @if(!in_array($model->maphanloai, array('THAISAN','KHONGLUONG')))
                                 <div class="col-md-6">
                                     <div class="form-group">
                                         <label class="form-control-label">Số ngày nghỉ</label>

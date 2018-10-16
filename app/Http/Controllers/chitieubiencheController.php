@@ -63,7 +63,7 @@ class chitieubiencheController extends Controller
 
         $inputs = $request->all();
         $inputs['soluongduocgiao'] = chkDbl($inputs['soluongduocgiao']);
-        $inputs['soluongbienche'] = chkDbl($inputs['soluongbienche']);
+        //$inputs['soluongbienche'] = chkDbl($inputs['soluongbienche']);
         $inputs['soluongkhongchuyentrach'] = chkDbl($inputs['soluongkhongchuyentrach']);
         $inputs['soluonguyvien'] = chkDbl($inputs['soluonguyvien']);
         $inputs['soluongdaibieuhdnd'] = chkDbl($inputs['soluongdaibieuhdnd']);

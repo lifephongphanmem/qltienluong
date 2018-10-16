@@ -46,7 +46,6 @@
                                 <th class="text-center">Năm</br>được</br>giao</th>
                                 <th class="text-center">Phân loại</br>công tác</th>
                                 <th class="text-center">Số lượng</br>biên chế</br>được giao</th>
-                                <th class="text-center">Số lượng</br>biên chế</br>hiện có</th>
                                 <th class="text-center">Số lượng</br>cán bộ không</br>chuyên trách</br>(nếu có)</th>
                                 <th class="text-center">Số lượng</br>đại biểu</br>HĐND</th>
                                 <th class="text-center">Số lượng</br>ủy viên</th>
@@ -62,7 +61,6 @@
                                         <td>{{$value->nam}}</td>
                                         <td class="text-left">{{$value->tenct}}</td>
                                         <td>{{$value->soluongduocgiao}}</td>
-                                        <td>{{$value->soluongbienche}}</td>
                                         <td>{{$value->soluongkhongchuyentrach}}</td>
                                         <td>{{$value->soluonguyvien}}</td>
                                         <td>{{$value->soluongdaibieuhdnd}}</td>
@@ -120,24 +118,17 @@
                             </div>
 
                             <div class="col-md-6">
-                                <label class="control-label">Biên chế hiện có</label>
-                                {!!Form::text('soluongbienche', null, array('id' => 'soluongbienche','class' => 'form-control text-right', 'data-mask'=>'fdecimal'))!!}
+                                <label class="control-label">Cán bộ không chuyên trách</label>
+                                {!!Form::text('soluongkhongchuyentrach', null, array('id' => 'soluongkhongchuyentrach','class' => 'form-control text-right', 'data-mask'=>'fdecimal'))!!}
                             </div>
                         </div>
 
                         <div class="row">
-                            <div class="col-md-6">
-                                <label class="control-label">Cán bộ không chuyên trách</label>
-                                {!!Form::text('soluongkhongchuyentrach', null, array('id' => 'soluongkhongchuyentrach','class' => 'form-control text-right', 'data-mask'=>'fdecimal'))!!}
-                            </div>
-
                             <div class="col-md-6">
                                 <label class="control-label">Cán bộ cấp ủy viên</label>
                                 {!!Form::text('soluonguyvien', null, array('id' => 'soluonguyvien','class' => 'form-control text-right', 'data-mask'=>'fdecimal'))!!}
                             </div>
-                        </div>
 
-                        <div class="row">
                             <div class="col-md-6">
                                 <label class="control-label">Cán bộ đại biểu HĐND</label>
                                 {!!Form::text('soluongdaibieuhdnd', null, array('id' => 'soluongdaibieuhdnd','class' => 'form-control text-right', 'data-mask'=>'fdecimal'))!!}
@@ -159,7 +150,6 @@
             $('#nam').prop('readonly',false);
             //$('#nam').val(0);
             $('#soluongduocgiao').val(0);
-            $('#soluongbienche').val(0);
             $('#soluongkhongchuyentrach').val(0);
             $('#soluonguyvien').val(0);
             $('#soluongdaibieuhdnd').val(0);
@@ -181,7 +171,6 @@
                 success: function (data) {
                     $('#nam').val(data.nam);
                     $('#soluongduocgiao').val(data.soluongduocgiao);
-                    $('#soluongbienche').val(data.soluongbienche);
                     $('#mact').val(data.mact).trigger('change');
                     $('#soluongkhongchuyentrach').val(data.soluongkhongchuyentrach);
                     $('#soluonguyvien').val(data.soluonguyvien);
@@ -209,7 +198,6 @@
                     mact: $('#mact').val(),
                     nam:$('#nam').val(),
                     soluongduocgiao:$('#soluongduocgiao').val(),
-                    soluongbienche:$('#soluongbienche').val(),
                     soluongkhongchuyentrach:$('#soluongkhongchuyentrach').val(),
                     soluonguyvien:$('#soluonguyvien').val(),
                     soluongdaibieuhdnd:$('#soluongdaibieuhdnd').val()

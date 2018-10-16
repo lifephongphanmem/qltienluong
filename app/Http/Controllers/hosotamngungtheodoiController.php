@@ -92,6 +92,13 @@ class hosotamngungtheodoiController extends Controller
                         ->where('theodoi', '<', '9')->get()->toarray(), 'tencanbo', 'macanbo');
                     break;
                 }
+                case 'KHONGLUONG': {
+                    $a_phanloai = array(
+                        'KHONGLUONG' => 'Nghỉ không lương');
+                    $a_canbo = array_column(hosocanbo::where('madv', session('admin')->madv)
+                        ->where('theodoi', '<', '9')->get()->toarray(), 'tencanbo', 'macanbo');
+                    break;
+                }
                 default: {//Nghỉ ko lưởng
                     $a_phanloai = array(
                         'NGHIPHEP' => 'Nghỉ phép',
@@ -139,6 +146,37 @@ class hosotamngungtheodoiController extends Controller
         if (Session::has('admin')) {
             $inputs = $request->all();
             $model = hosotamngungtheodoi::where('maso',$inputs['maso'])->first();
+            $phanloai = $model->maphanloai;
+            switch($phanloai) {
+                case 'THAISAN': {
+                    $a_phanloai = array('THAISAN' => 'Nghỉ thai sản');
+                    $a_canbo = array_column(hosocanbo::where('madv', session('admin')->madv)->where('theodoi','<','9')->where('gioitinh','Nữ')->get()->toarray(), 'tencanbo', 'macanbo');
+                    break;
+                }
+                case 'NGHIPHEP': {
+                    $a_phanloai = array(
+                        'NGHIPHEP' => 'Nghỉ phép',
+                        'NGHIOM' => 'Nghỉ ốm');
+                    $a_canbo = array_column(hosocanbo::where('madv', session('admin')->madv)
+                        ->where('theodoi', '<', '9')->get()->toarray(), 'tencanbo', 'macanbo');
+                    break;
+                }
+                case 'KHONGLUONG': {
+                    $a_phanloai = array(
+                        'KHONGLUONG' => 'Nghỉ không lương');
+                    $a_canbo = array_column(hosocanbo::where('madv', session('admin')->madv)
+                        ->where('theodoi', '<', '9')->get()->toarray(), 'tencanbo', 'macanbo');
+                    break;
+                }
+                default: {//Nghỉ ko lưởng
+                    $a_phanloai = array(
+                        'NGHIPHEP' => 'Nghỉ phép',
+                        'NGHIOM' => 'Nghỉ ốm');
+                    $a_canbo = array_column(hosocanbo::where('madv', session('admin')->madv)
+                        ->where('theodoi', '<', '9')->get()->toarray(), 'tencanbo', 'macanbo');
+                }
+            }
+            /*
             if($model->maphanloai == 'THAISAN'){
                 $a_phanloai = array('THAISAN' => 'Nghỉ thai sản');
                 $a_canbo = array_column(hosocanbo::where('madv', session('admin')->madv)->where('theodoi','<','9')->where('gioitinh','Nữ')->get()->toarray(), 'tencanbo', 'macanbo');
@@ -148,7 +186,8 @@ class hosotamngungtheodoiController extends Controller
                     'NGHIOM'=> 'Nghỉ ốm');
                 $a_canbo = array_column(hosocanbo::where('madv', session('admin')->madv)->where('theodoi','<','9')->get()->toarray(), 'tencanbo', 'macanbo');
             }
-            $inputs['phanloai'] = $model->maphanloai;
+            */
+            $inputs['phanloai'] = $phanloai;
 
             return view('manage.tamngungtheodoi.edit')
                 ->with('model', $model)
