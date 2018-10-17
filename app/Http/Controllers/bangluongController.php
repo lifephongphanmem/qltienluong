@@ -574,434 +574,6 @@ class bangluongController extends Controller
 
     function tinhluong_khongdinhmuc($inputs){
         $ngaylap = Carbon::create($inputs['nam'], $inputs['thang'], '01');
-        $m_tamngung = hosotamngungtheodoi::where('madv', $inputs['madv'])->where('maphanloai', 'THAISAN')->where('ngaytu', '<=', $ngaylap)->where('ngayden', '>=', $ngaylap)->get();
-        $m_nghiphep = hosotamngungtheodoi::where('madv', $inputs['madv'])->wherein('maphanloai',['NGHIPHEP','NGHIOM'])->whereYear('ngaytu', $inputs['nam'])->whereMonth('ngaytu', $inputs['thang'])->get();
-        $m_khongluong = hosotamngungtheodoi::where('madv', $inputs['madv'])->where('maphanloai', 'KHONGLUONG')->where('ngaytu', '<=', $ngaylap)->where('ngayden', '>=', $ngaylap)->get();
-
-        $m_cb = hosocanbo::where('madv', $inputs['madv'])->where('theodoi','<', '9')->get();
-        $a_cbkn = hosocanbo::where('madv', $inputs['madv'])->where('theodoi','<', '9')->get()->keyBy('macanbo')->toArray();
-
-
-        //Lấy danh sách cán bộ kiêm nhiệm
-        $model_canbo_kn = hosocanbo_kiemnhiem::where('madv',session('admin')->madv)->wherein('manguonkp',[$inputs['manguonkp'],''])->get();
-
-        foreach ($m_cb as $canbo) {
-            //Dùng tìm kiếm các bộ nào phù hợp. Do lvhd là mảng nên pải lọc
-            /*
-            $a_lv = explode(',', $canbo->lvhd);
-            if (in_array($inputs['linhvuchoatdong'], $a_lv) || $canbo->lvhd == null) {
-                $canbo->lvhd = $inputs['linhvuchoatdong'];
-            }
-            */
-            $a_nguon = explode(',', $canbo->manguonkp);
-            //nếu cán bộ ko set nguồn (null, '') hoặc trong nguồn thì sét luôn =  ma nguồn để tạo bang lương
-            if (in_array($inputs['manguonkp'], $a_nguon) || $canbo->manguonkp == null || $canbo->manguonkp == '') {
-                $canbo->manguonkp = $inputs['manguonkp'];
-            }
-        }
-        //$m_cb = $m_cb->where('lvhd', $inputs['linhvuc']);
-        $m_cb = $m_cb->where('manguonkp', $inputs['manguonkp']);
-        $model_phanloai = dmphanloaicongtac_baohiem::where('madv', session('admin')->madv)->get();
-        $model_phucap = dmphucap_donvi::select('mapc','phanloai','congthuc','baohiem','tenpc')
-            ->where('madv', session('admin')->madv)->wherenotin('mapc', ['hesott'])->get();
-
-        $a_ts = array_column(dmphucap_thaisan::where('madv', session('admin')->madv)->get()->toarray(), 'mapc');
-        //các loại phụ cấp cán bộ được điều động động đến được hưởng (chưa làm cho định mức)
-        $a_dd = array('pclt');
-        $a_goc = array('heso','vuotkhung','pccv'); //mảng phụ cấp làm công thức tính
-
-        //Mảng chứa các cột bỏ để chạy hàm insert
-        $a_col_pc = array('id','baohiem','mapc','luongcoban','tenpc');
-        $ngaycong = dmdonvi::where('madv',$inputs['madv'])->first()->songaycong;
-        foreach ($m_cb as $cb) {
-            $cb->mabl = $inputs['mabl'];
-            $cb->congtac = 'CONGTAC';
-            //trong bảng danh mục là % vượt khung => sang bảng lương chuyển thành hệ số
-            //$heso_goc = $cb->heso * $cb->pthuong / 100;
-            $cb->heso = $cb->heso * $cb->pthuong / 100;
-            $cb->vuotkhung = $cb->heso * $cb->vuotkhung / 100;
-            $cb->bhxh = floatval($cb->bhxh) / 100;
-            $cb->bhyt = floatval($cb->bhyt) / 100;
-            $cb->kpcd = floatval($cb->kpcd) / 100;
-            $cb->bhtn = floatval($cb->bhtn) / 100;
-            $cb->bhxh_dv = floatval($cb->bhxh_dv) / 100;
-            $cb->bhyt_dv = floatval($cb->bhyt_dv) / 100;
-            $cb->kpcd_dv = floatval($cb->kpcd_dv) / 100;
-            $cb->bhtn_dv = floatval($cb->bhtn_dv) / 100;
-            //tính thâm niên nghề
-            $pctnn = $model_phucap->where('mapc', 'pctnn')->first();
-            $pl = getDbl($pctnn->phanloai);
-            switch ($pl) {
-                case 0:
-                case 1: {//số tiền
-                    //giữ nguyên ko cần tính
-                    break;
-                }
-                case 2: {//phần trăm
-                    $heso = 0;
-                    foreach (explode(',', $pctnn->congthuc) as $ct) {
-                        if ($ct != '' && $ct != 'pctnn')
-                            $heso += $cb->$ct;
-                    }
-                    $cb->pctnn = $heso * $cb->pctnn / 100;
-                    break;
-                }
-                default: {//trường hợp còn lại (ẩn,...)
-                    $cb->pctnn = 0;
-                    break;
-                }
-            }
-
-            $tt = 0;
-            $ths = 0;
-            //nếu cán bộ nghỉ thai sản
-            $thaisan = count($m_tamngung->where('macanbo',$cb->macanbo))>0? true : false;
-            $khongluong = count($m_khongluong->where('macanbo',$cb->macanbo))>0? true : false;
-            $a_luupc = array();
-
-            foreach ($model_phucap as $ct) {
-                $mapc = $ct->mapc;
-                //gán số tiền bảo hiểm  = 0 khi tính để ko trùng với giá trị cán bộ trc
-                $ct->stbhxh = 0;
-                $ct->stbhyt = 0;
-                $ct->stkpcd = 0;
-                $ct->stbhtn = 0;
-                $ct->ttbh = 0;
-                $ct->stbhxh_dv = 0;
-                $ct->stbhyt_dv = 0;
-                $ct->stkpcd_dv = 0;
-                $ct->stbhtn_dv = 0;
-                $ct->ttbh_dv = 0;
-                if ($cb->$mapc <= 0) {
-                    continue;
-                }
-
-                //cán bộ được điều động đến
-                if ($cb->theodoi == 4 && !in_array($mapc, $a_dd) && !in_array($mapc, $a_goc)) {
-                    $cb->$mapc = 0;
-                }
-
-                $ct->heso_goc = $cb->$mapc;
-                $heso = 0;
-
-                $pl = getDbl($ct->phanloai);
-                if ($pl == 2) {
-                    foreach (explode(',', $ct->congthuc) as $cthuc) {
-                        if ($cthuc != '')
-                            $heso += $cb->$cthuc;
-                    }
-                }
-
-                switch ($pl) {
-                    case 0: {//hệ số
-                        $ths += $cb->$mapc;
-                        $sotien = $cb->$mapc * $inputs['luongcoban'];
-                        break;
-                    }
-                    case 1: {//số tiền
-                        $tt += chkDbl($cb->$mapc);
-                        $sotien = chkDbl($cb->$mapc);
-                        break;
-                    }
-                    case 2: {//phần trăm
-                        if ($mapc != 'vuotkhung' && $mapc != 'pctnn') {//vượt khung đã tính ở trên
-                            $cb->$mapc = $heso * $cb->$mapc / 100;
-                            $ths += $cb->$mapc;
-                            $sotien = $cb->$mapc * $inputs['luongcoban'];
-                        } else {
-                            $ths += $cb->$mapc;
-                            $sotien = $cb->$mapc * $inputs['luongcoban'];
-                        }
-                        break;
-                    }
-                    default: {//trường hợp còn lại (ẩn,...)
-                        $cb->$mapc = 0;
-                        $sotien = 0;
-                        break;
-                    }
-                }
-
-                if (!$khongluong || !$thaisan || ($thaisan && in_array($mapc, $a_ts))) {//lưu vào bảng lương phụ cấp (chi luu số tiền >0)
-                    $ct->mabl = $inputs['mabl'];
-                    $ct->luongcoban = $inputs['luongcoban'];
-                    $ct->macanbo = $cb->macanbo;
-                    $ct->tencanbo = $cb->tencanbo;
-                    $ct->maso = $mapc;
-                    $ct->ten = $ct->tenpc;
-                    $ct->heso = $cb->$mapc;
-                    $ct->sotien = round($sotien, 0);
-                    if ($ct->baohiem == 1) {
-                        $ct->stbhxh = round($ct->sotien * $cb->bhxh, 0);
-                        $ct->stbhyt = round($ct->sotien * $cb->bhyt, 0);
-                        $ct->stkpcd = round($ct->sotien * $cb->kpcd, 0);
-                        $ct->stbhtn = round($ct->sotien * $cb->bhtn, 0);
-                        $ct->ttbh = $ct->stbhxh + $ct->stbhyt + $ct->stkpcd + $ct->stbhtn;
-                        $ct->stbhxh_dv = round($ct->sotien * $cb->bhxh_dv, 0);
-                        $ct->stbhyt_dv = round($ct->sotien * $cb->bhyt_dv, 0);
-                        $ct->stkpcd_dv = round($ct->sotien * $cb->kpcd_dv, 0);
-                        $ct->stbhtn_dv = round($ct->sotien * $cb->bhtn_dv, 0);
-                        $ct->ttbh_dv = $ct->stbhxh_dv + $ct->stbhyt_dv + $ct->stkpcd_dv + $ct->stbhtn_dv;
-                    }
-
-                    //$a_kq = $ct->toarray();
-                    //unset($a_kq['id']);
-                    $a_luupc[]= $ct->toarray();
-                    //bangluong_phucap::create($a_kq); //test chay tren mảng xem có nhanh hơn chay tưng cán bộ ko
-
-                }
-            }
-
-            $a_luupc = unset_key($a_luupc,$a_col_pc);
-            bangluong_phucap::insert($a_luupc);
-            if($khongluong){//tính không lương rồi thoát
-                $cb->tencanbo = $cb->tencanbo . ' (nghỉ không lương)';
-                $cb->tonghs = 0;
-                $cb->ttl = 0;
-                $kq = $cb->toarray();
-                unset($kq['id']);
-                //dd($kq);
-                bangluong_ct::create($kq);
-                continue;
-            }
-            //$ths = $ths + $heso_goc - $cb->heso;//do chỉ lương nb hưởng 85%, các hệ số hưởng %, bảo hiểm thì lấy 100% để tính
-            $cb->tonghs = $ths;
-            //nếu cán bộ nghỉ thai sản
-            if($thaisan){
-                $cb->tencanbo = $cb->tencanbo . ' (nghỉ thai sản)';
-                $hesots = 0;
-                $ttts = 0;
-                //thai sản
-                foreach($a_ts as $val){
-                    if($cb->$val > 10000){//sô tiền
-                        $ttts += $cb->$val;
-                    }else{
-                        $hesots += $cb->$val;
-                    }
-                }
-                //điều động
-                if($cb->theodoi == 4){
-                    $hesots = 0;
-                    $ttts = 0;
-                    foreach($a_dd as $val){
-                        if($cb->$val > 10000){//sô tiền
-                            $ttts += $cb->$val;
-                        }else{
-                            $hesots += $cb->$val;
-                        }
-                    }
-                }
-
-                // được điều động đến
-                if($cb->theodoi == 3){
-                    foreach($a_dd as $val){
-                        if($cb->$val > 10000){//sô tiền
-                            $ttts -= $cb->$val;
-                        }else{
-                            $hesots -= $cb->$val;
-                        }
-                    }
-                }
-
-                $cb->tonghs = $hesots;
-                $cb->ttl = round($inputs['luongcoban'] * $hesots + $ttts);
-                $cb->congtac = 'THAISAN';
-            }else {
-                //điều động
-                if($cb->theodoi == 4){
-                    $ths = 0;
-                    $tt = 0;
-                    foreach($a_dd as $val){
-                        if($cb->$val > 10000){//sô tiền
-                            $tt += $cb->$val;
-                        }else{
-                            $ths += $cb->$val;
-                        }
-                    }
-                }
-                // được điều động đến
-                if($cb->theodoi == 3){
-                    foreach($a_dd as $val){
-                        if($cb->$val > 10000){//sô tiền
-                            $tt -= $cb->$val;
-                        }else{
-                            $ths -= $cb->$val;
-                        }
-                    }
-                }
-                $cb->ttl = round($inputs['luongcoban'] * $ths + $tt);
-                //kiểm tra cán bộ ko chuyên trách thì tự động lấy lương cơ bản * % bảo hiểm
-
-                if($cb->macongtac == 'KHONGCT') {
-                    $baohiem = $inputs['luongcoban'];
-                    //$baohiem = ($cb->hesopc < 1 ? 1 : $cb->hesopc) * ($inputs['luongcoban']);
-                    $cb->stbhxh = round($baohiem * $cb->bhxh, 0);
-                    $cb->stbhyt = round($baohiem * $cb->bhyt, 0);
-                    //$cb->stkpcd = round($cb->hesopc * $inputs['luongcoban'] * $cb->kpcd, 0);
-                    $cb->stkpcd = round($baohiem * $cb->kpcd, 0);
-                    $cb->stbhtn = round($baohiem * $cb->bhtn, 0);
-                    $cb->ttbh = $cb->stbhxh + $cb->stbhyt + $cb->stkpcd + $cb->stbhtn;
-                    $cb->stbhxh_dv = round($baohiem * $cb->bhxh_dv, 0);
-                    $cb->stbhyt_dv = round($baohiem * $cb->bhyt_dv, 0);
-                    $cb->stkpcd_dv = round($baohiem * $cb->kpcd_dv, 0);
-                    //$cb->stkpcd_dv = round($cb->hesopc * $inputs['luongcoban'] * $cb->kpcd_dv, 0);
-                    $cb->stbhtn_dv = round($baohiem * $cb->bhtn_dv, 0);
-                    $cb->ttbh_dv = $cb->stbhxh_dv + $cb->stbhyt_dv + $cb->stkpcd_dv + $cb->stbhtn_dv;
-                }else{
-                    $cb->stbhxh = $model_phucap->sum('stbhxh');
-                    $cb->stbhyt = $model_phucap->sum('stbhyt');
-                    $cb->stkpcd = $model_phucap->sum('stkpcd');
-                    $cb->stbhtn = $model_phucap->sum('stbhtn');
-                    $cb->ttbh = $cb->stbhxh + $cb->stbhyt + $cb->stkpcd + $cb->stbhtn;
-                    $cb->stbhxh_dv = $model_phucap->sum('stbhxh_dv');
-                    $cb->stbhyt_dv = $model_phucap->sum('stbhyt_dv');
-                    $cb->stkpcd_dv = $model_phucap->sum('stkpcd_dv');
-                    $cb->stbhtn_dv = $model_phucap->sum('stbhtn_dv');
-                    $cb->ttbh_dv = $cb->stbhxh_dv + $cb->stbhyt_dv + $cb->stkpcd_dv + $cb->stbhtn_dv;
-                }
-
-                //nếu cán bộ nghỉ phép
-                //ngày công = lương co + chuc vu + ....
-                $nghi = $m_nghiphep->where('macanbo', $cb->macanbo)->first();
-                if (count($nghi) > 0) {
-                    $cb->congtac = 'NGHIPHEP';
-                    $sotiencong = $inputs['luongcoban'] * ($cb->heso + $cb->vuotkhung + $cb->pccv + $cb->hesobl + $cb->pctnn);
-                    $tiencong = round($sotiencong / $ngaycong, 0);
-                    if($nghi->songaynghi >= 15){//nghỉ quá 15 ngày thì ko đóng bảo hiểm
-                        $cb->stbhxh = 0;
-                        $cb->stbhyt = 0;
-                        $cb->stkpcd = 0;
-                        $cb->stbhtn = 0;
-                        $cb->ttbh = 0;
-                        $cb->stbhxh_dv = 0;
-                        $cb->stbhyt_dv = 0;
-                        $cb->stkpcd_dv = 0;
-                        $cb->stbhtn_dv = 0;
-                        $cb->ttbh_dv = 0;
-                    }
-                    $cb->giaml = $nghi->songaynghi >= $ngaycong ? $sotiencong : ($tiencong * $nghi->songaynghi);
-                }
-
-            }
-            $cb->luongtn = $cb->ttl - $cb->ttbh - $cb->giaml;
-
-            $kq = $cb->toarray();
-            unset($kq['id']);
-            bangluong_ct::create($kq);
-        }
-
-        //Tính toán lương cho cán bộ kiêm nhiệm
-        foreach ($model_canbo_kn as $cb) {
-            //trong kiêm nhiệm: thâm niên lấy  % lương hệ số
-            //đặc thù tính
-            //lấy thông tin ở bảng hồ sơ cán bộ để lấy thông tin lương, phụ cấp
-            //công thức hệ số (lấy thêm hệ số phụ cấp do cán bộ không chuyên trách nhập hệ số vào hesopc)
-
-            //$canbo = $m_cb->where('macanbo',$cb->macanbo)->first(); không dùng được do khi lọc nguồn bỏ mất cán bộ này
-            if(!array_key_exists($cb->macanbo,$a_cbkn)){
-                continue;
-            }
-
-            $canbo = $a_cbkn[$cb->macanbo];
-
-            $cb->mabl = $inputs['mabl'];
-            $ths = 0;
-            $tt = 0;
-
-            //tính thâm niên
-            $pctn = $model_phucap->where('mapc', 'pcthni')->first();
-            $pl = getDbl($pctn->phanloai);
-            switch ($pl) {
-                case 0:
-                case 1: {//số tiền
-                    //giữ nguyên ko cần tính
-                    break;
-                }
-                case 2: {//phần trăm
-                    $heso = 0;
-                    foreach (explode(',', $pctn->congthuc) as $ct) {
-                        if ($ct != '' && $ct != 'pcthni')
-                            $heso += $canbo[$ct];
-                    }
-                    //công thức hệ số (lấy thêm hệ số phụ cấp do cán bộ không chuyên trách nhập hệ số vào hesopc)
-                    $heso += $canbo['hesopc'];
-                    $cb->pcthni = $heso * $cb->pcthni / 100;
-                    break;
-                }
-                default: {//trường hợp còn lại (ẩn,...)
-                    $cb->pcthni = 0;
-                    break;
-                }
-            }
-
-            //
-            $canbo['pcthni'] = $cb->pcthni; //set vao hồ sơ cán bộ để tính công thức lương
-            $canbo['pctn'] = $cb->pctn;
-            foreach ($model_phucap as $ct) {
-                $mapc = $ct->mapc;
-                if($cb->$mapc <= 0){
-                    continue;
-                }
-
-                $pl = getDbl($ct->phanloai);
-
-                switch ($pl) {
-                    case 0: {//hệ số
-                        $ths += $cb->$mapc;
-                        break;
-                    }
-                    case 1: {//số tiền
-                        $tt += chkDbl($cb->$mapc);
-                        break;
-                    }
-                    case 2: {//phần trăm
-                        if($mapc != 'pcthni'){
-                            $heso = 0;
-                            if ($pl == 2) {
-                                foreach (explode(',', $ct->congthuc) as $cthuc) {
-                                    if ($cthuc != '')
-                                        $heso += $canbo[$cthuc];
-                                }
-                            }
-                            //công thức hệ số (lấy thêm hệ số phụ cấp do cán bộ không chuyên trách nhập hệ số vào hesopc)
-                            $heso += $canbo['hesopc'];
-                            $cb->$mapc = $heso * $cb->$mapc / 100;
-                            $ths += $cb->$mapc;
-                        }
-                        break;
-                    }
-                    default: {//trường hợp còn lại (ẩn,...)
-                        $cb->$mapc = 0;
-                        break;
-                    }
-                }
-            }
-
-            $cb->tonghs = $ths;
-            $cb->ttl = round($inputs['luongcoban'] * $ths + $tt);
-            if ($cb->baohiem) {
-                $phanloai = $model_phanloai->where('mact', $cb->mact)->first();
-                if (count($phanloai) > 0) {//do trc nhập chưa lưu mact
-                    $cb->stbhxh = round($inputs['luongcoban'] * floatval($phanloai->bhxh) / 100, 0);
-                    $cb->stbhyt = round($inputs['luongcoban'] * floatval($phanloai->bhyt) / 100, 0);
-                    $cb->stkpcd = round($inputs['luongcoban'] * floatval($phanloai->kpcd) / 100, 0);
-                    $cb->stbhtn = round($inputs['luongcoban'] * floatval($phanloai->bhtn) / 100, 0);
-                    $cb->ttbh = $cb->stbhxh + $cb->stbhyt + $cb->stkpcd + $cb->stbhtn;
-                    $cb->stbhxh_dv = round($inputs['luongcoban'] * floatval($phanloai->bhxh_dv) / 100, 0);
-                    $cb->stbhyt_dv = round($inputs['luongcoban'] * floatval($phanloai->bhyt_dv) / 100, 0);
-                    $cb->stkpcd_dv = round($inputs['luongcoban'] * floatval($phanloai->kpcd_dv), 0);
-                    $cb->stbhtn_dv = round($inputs['luongcoban'] * floatval($phanloai->bhtn_dv), 0);
-                    $cb->ttbh_dv = $cb->stbhxh_dv + $cb->stbhyt_dv + $cb->stkpcd_dv + $cb->stbhtn_dv;
-                }
-            }
-            $cb->luongtn = $cb->ttl - $cb->ttbh;
-            $a_k = $cb->toarray();
-            unset($a_k['id']);
-            bangluong_ct::create($a_k);
-        }
-    }
-
-    function tinhluong_khongdinhmuc_luu($inputs){
-        $ngaylap = Carbon::create($inputs['nam'], $inputs['thang'], '01');
 
         $a_thaisan =array_column(hosotamngungtheodoi::where('madv', $inputs['madv'])->where('maphanloai', 'THAISAN')
                 ->where('ngaytu', '<=', $ngaylap)->where('ngayden', '>=', $ngaylap)->get()->toarray(),'macanbo');
@@ -1019,7 +591,7 @@ class bangluongController extends Controller
             array_column($model_phucap->toarray(),'mapc'));
         $m_cb_kn = hosocanbo_kiemnhiem::select(array_merge($a_th,array('phanloai')))->where('madv',$inputs['madv'])->wherein('manguonkp',[$inputs['manguonkp'],'',null])->get()->toArray();;
         //công tác
-        $a_th = array_merge(array('tencanbo', 'msngbac', 'bac', 'pthuong','theodoi',
+        $a_th = array_merge(array('stt','tencanbo', 'msngbac', 'bac', 'pthuong','theodoi',
             'bhxh', 'bhyt', 'bhtn', 'kpcd','bhxh_dv', 'bhyt_dv', 'bhtn_dv', 'kpcd_dv'),
             $a_th);
         $m_cb = hosocanbo::select($a_th)->where('madv', $inputs['madv'])->where('theodoi','<', '9')->get()->keyBy('macanbo')->toArray();
@@ -1152,7 +724,12 @@ class bangluongController extends Controller
                     $a_pc[$k]['maso'] = $mapc;
                     $a_pc[$k]['ten'] = $a_pc[$k]['tenpc'];
                     $a_pc[$k]['heso'] = $m_cb[$key][$mapc];
-                    $a_pc[$k]['sotien'] = round($inputs['luongcoban'] * $tonghs + $tien, 0);
+                    if ($a_pc[$k]['heso'] > 10000) {//sô tiền
+                        $a_pc[$k]['sotien'] = round($a_pc[$k]['heso'], 0);
+                    } else {
+                        $a_pc[$k]['sotien'] = round($inputs['luongcoban'] * $a_pc[$k]['heso'], 0);
+                    }
+
                     if ($a_pc[$k]['baohiem'] == 1) {
                         $a_pc[$k]['stbhxh'] = round($a_pc[$k]['sotien'] * $m_cb[$key]['bhxh'], 0);
                         $a_pc[$k]['stbhyt'] = round($a_pc[$k]['sotien'] * $m_cb[$key]['bhyt'], 0);
@@ -1259,6 +836,21 @@ class bangluongController extends Controller
                 }
             }
 
+            if($khongluong){//tính không lương rồi thoát
+                $m_cb[$key]['tencanbo'] .= ' (nghỉ không lương)';
+                $m_cb[$key]['stbhxh'] = 0;
+                $m_cb[$key]['stbhyt'] = 0;
+                $m_cb[$key]['stkpcd'] = 0;
+                $m_cb[$key]['stbhtn'] = 0;
+                $m_cb[$key]['ttbh'] = 0;
+                $m_cb[$key]['stbhxh_dv'] = 0;
+                $m_cb[$key]['stbhyt_dv'] = 0;
+                $m_cb[$key]['stkpcd_dv'] = 0;
+                $m_cb[$key]['stbhtn_dv'] = 0;
+                $m_cb[$key]['ttbh_dv'] = 0;
+                $tonghs = $tien = 0;
+            }
+
             $m_cb[$key]['tonghs'] = $tonghs;
             $m_cb[$key]['ttl'] = round($inputs['luongcoban'] * $tonghs + $tien);
             $m_cb[$key]['luongtn'] = $m_cb[$key]['ttl'] - $m_cb[$key]['ttbh'] - $m_cb[$key]['giaml'];
@@ -1269,13 +861,13 @@ class bangluongController extends Controller
         $a_data_phucap = unset_key($a_data_phucap,$a_col_pc);
         //$a_chunk = array_chunk($a_data_phucap, 100);
         foreach(array_chunk($a_data_phucap, 100)  as $data){
-            //bangluong_phucap::insert($data);
+            bangluong_phucap::insert($data);
         }
-        $a_col_cb = array('id','bac','bhxh_dv', 'bhtn_dv', 'kpcd_dv', 'bhyt_dv','bhxh',
+        $a_col_cb = array('id','bac','bhxh_dv', 'bhtn_dv', 'kpcd_dv', 'bhyt_dv','bhxh','baohiem',
             'bhtn', 'kpcd', 'bhyt', 'macongtac','manguonkp','pthuong','theodoi');
         $a_data_canbo = unset_key($a_data_canbo,$a_col_cb);
         foreach(array_chunk($a_data_canbo, 50)  as $data){
-            //bangluong_ct::insert($data);
+            bangluong_ct::insert($data);
         }
         //dd($a_data_canbo);
 
@@ -1287,7 +879,10 @@ class bangluongController extends Controller
                 continue;
             }
             $canbo = $m_cb[$m_cb_kn[$i]['macanbo']];
+            $m_cb_kn[$i]['tencanbo'] = $canbo['tencanbo'];
+            $m_cb_kn[$i]['stt'] = $canbo['stt'];
             $m_cb_kn[$i]['mabl'] = $inputs['mabl'];
+            $m_cb_kn[$i]['congtac'] = $m_cb_kn[$i]['phanloai'];
             $tonghs = $tien = 0;
 
             if(isset($a_pc['pcthni'])){
@@ -1334,6 +929,8 @@ class bangluongController extends Controller
                 $m_cb_kn[$i]['stkpcd_dv'] = 0;
                 $m_cb_kn[$i]['stbhtn_dv'] = 0;
                 $m_cb_kn[$i]['ttbh_dv'] = 0;
+                $a_pc[$k]['heso_goc'] =$m_cb_kn[$i][$mapc];//lưu lại hệ số gốc
+
                 switch ($v['phanloai']) {
                     case 0: {//hệ số
                         $tonghs += $m_cb_kn[$i][$mapc];
@@ -1363,8 +960,17 @@ class bangluongController extends Controller
                         break;
                     }
                 }
+                $a_pc[$k]['mabl'] = $inputs['mabl'];
+                $a_pc[$k]['luongcoban'] = $inputs['luongcoban'];
+                $a_pc[$k]['macanbo'] = $m_cb[$key]['macanbo'];
+                $a_pc[$k]['tencanbo'] = $m_cb[$key]['tencanbo'];
+                $a_pc[$k]['maso'] = $mapc;
+                $a_pc[$k]['ten'] = $a_pc[$k]['tenpc'];
+                $a_pc[$k]['heso'] = $m_cb[$key][$mapc];
+                $a_pc[$k]['sotien'] = round($inputs['luongcoban'] * $tonghs + $tien, 0);
                 $a_kn_phucap[] = $a_pc[$k];
             }
+
             $m_cb_kn[$i]['tonghs'] = $tonghs;
             $m_cb_kn[$i]['ttl'] = round($inputs['luongcoban'] * $tonghs + $tien);
            
@@ -1395,15 +1001,16 @@ class bangluongController extends Controller
         foreach(array_chunk($a_kn_phucap, 100)  as $data){
             bangluong_phucap::insert($data);
         }
-        dd('lam dem day');
-        $a_col_cb = array('id','bac','bhxh_dv', 'bhtn_dv', 'kpcd_dv', 'bhyt_dv','bhxh',
-            'bhtn', 'kpcd', 'bhyt', 'macongtac','manguonkp','pthuong','theodoi');
-        $a_data_canbo = unset_key($a_data_canbo,$a_col_cb);
-        foreach(array_chunk($a_data_canbo, 50)  as $data){
-            //bangluong_ct::insert($data);
+
+        $a_col_cbkn = array('id','bac','bhxh_dv', 'bhtn_dv', 'kpcd_dv', 'bhyt_dv','bhxh','baohiem',
+            'bhtn', 'kpcd', 'bhyt', 'macongtac','manguonkp','pthuong','theodoi','phanloai');
+        $a_kn_canbo = unset_key($a_kn_canbo,$a_col_cbkn);
+
+        foreach(array_chunk($a_kn_canbo, 50)  as $data){
+            bangluong_ct::insert($data);
         }
         //dd($a_data_canbo);
-        dd($a_kn_canbo);
+        //dd($a_kn_canbo);
     }
 
     function store_truylinh(Request $request)

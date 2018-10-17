@@ -157,9 +157,11 @@ class dsnangthamnienController extends Controller
                 $hoso->tnntungay = $canbo->ngaytu;
                 $hoso->tnndenngay = $canbo->ngayden;
                 $hoso->save();
+                $ma = getdate()[0];
                 if (isset($canbo->truylinhtungay) && $canbo->heso > 0) {
+                    $ma = $ma + 1;
                     $truylinh = new hosotruylinh();
-                    $truylinh->maso = session('admin')->madv . '_' . getdate()[0];
+                    $truylinh->maso = session('admin')->madv . '_' . $ma;
                     $truylinh->macanbo = $canbo->macanbo;
                     $truylinh->tencanbo = $hoso->tencanbo;
                     $truylinh->ngaytu = $canbo->truylinhtungay;

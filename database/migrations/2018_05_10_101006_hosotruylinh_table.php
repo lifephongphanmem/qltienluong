@@ -17,6 +17,7 @@ class HosotruylinhTable extends Migration
             $table->increments('id');
             $table->string('maso', 50)->unique();
             $table->string('stt', 10)->nullable();
+            $table->string('maphanloai', 50)->nullable();
             $table->string('macanbo', 50)->nullable();
             $table->string('tencanbo', 50)->nullable();
             $table->string('soqd', 50)->nullable();//chưa dùng

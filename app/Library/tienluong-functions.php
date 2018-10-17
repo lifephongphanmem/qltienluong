@@ -570,4 +570,12 @@ function getNopBaoHiem(){
         '1' => 'Có nộp bảo hiểm',
         );
 }
+
+function getPhanLoaiTruyLinh(){
+    return array('MSNGBAC' => 'Truy lĩnh lương ngạch bậc; vượt khung',
+        'TNN' => 'Truy lĩnh thâm niên nghề',
+        //'NGAYLV' => 'Truy lĩnh ngày công làm việc', //chưa nghiên cứu chức năng này
+        'KHAC'=>'Truy lĩnh khác',
+    );
+}
 ?>

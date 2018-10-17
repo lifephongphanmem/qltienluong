@@ -1784,7 +1784,6 @@ class bangluong_inController extends Controller
         }
     }
 
-
     public function inbangluong($mabl){
         if (Session::has('admin')) {
             $model = bangluong_ct::where('mabl',$mabl)->get();

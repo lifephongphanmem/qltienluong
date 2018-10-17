@@ -27,9 +27,9 @@ class hosotruylinhController extends Controller
                         ->where('madv', session('admin')->madv)->get();
                 })->get();
             */
-            $model_canbo=hosocanbo::where('madv',session('admin')->madv)->where('theodoi','<','9')->get();
-            $m_plnb = nhomngachluong::select('manhom', 'tennhom', 'heso', 'namnb')->distinct()->get();
-            $m_pln = ngachluong::select('tenngachluong', 'manhom', 'msngbac', 'heso', 'namnb')->get();
+            $model_canbo = hosocanbo::where('madv', session('admin')->madv)->where('theodoi', '<', '9')->get();
+            //$m_plnb = nhomngachluong::select('manhom', 'tennhom', 'heso', 'namnb')->distinct()->get();
+            //$m_pln = ngachluong::select('tenngachluong', 'manhom', 'msngbac', 'heso', 'namnb')->get();
             $model = hosotruylinh::where('madv', session('admin')->madv)->get();
             /* Hiển thị mã ngạch dễ nhớ hơn tên ngạch lương
             foreach ($model as $ct) {
@@ -40,8 +40,8 @@ class hosotruylinhController extends Controller
             //dd($m_pln);
             return view('manage.truylinh.index')
                 ->with('model', $model)
-                ->with('m_plnb', $m_plnb)
-                ->with('m_pln', $m_pln)
+                //->with('m_plnb', $m_plnb)
+                //->with('m_pln', $m_pln)
                 //->with('a_phanloai', $a_phanloai)
                 ->with('a_canbo', array_column($model_canbo->toarray(), 'tencanbo', 'macanbo'))
                 ->with('furl', '/nghiep_vu/truy_linh/')
@@ -165,20 +165,59 @@ class hosotruylinhController extends Controller
     function create(Request $request)
     {
         if (Session::has('admin')) {
-
             $inputs = $request->all();
-            if(isset($inputs['maso'])){
+
+            //msngbac: kiểm tra xem mã ngạch bậc: xem lấy mã số xem truy lĩnh hệ số hay vượt khung
+            //tnn: tính 1% thâm niên nghề. Các hệ số ko có
+            $model_pc = dmphucap_donvi::where('madv', session('admin')->madv)->get();
+            if(isset($inputs['maso'])){//tách ra edit
                 $model = hosotruylinh::where('maso',$inputs['maso'])->first();
             }else{
                 $model = hosocanbo::where('macanbo',$inputs['macanbo'])->first();
-                $model->heso = 0;
-                $model->vuotkhung = 0;
                 $model->ngaytu = null;
                 $model->ngayden = null;
                 $model->maso = 'ADD';
+                /*
+                switch($inputs['maphanloai']){
+                    case 'MSNGBAC':{
+                        //$model_pc = dmphucap_donvi::where('madv', session('admin')->madv)->get();
+                        $a_nhomnb = ngachluong::all()->keyBy('msngbac')->toarray();
+                        $msngbac = $model->msngbac;
+                        if(isset($a_nhomnb[$msngbac])) {
+                            $nhomnb = $a_nhomnb[$msngbac];
+                            $hesomax = $nhomnb['heso'] + ($nhomnb['heso'] * $nhomnb['hesochenhlech']);
+                            if ($model->heso >= $hesomax) {
+                                $vuotkhung = $model->vuotkhung == 0 ? $nhomnb['vuotkhung'] : 1;
+                                $heso = $vuotkhung / 100;
+                            } else {
+                                $heso = $nhomnb['hesochenhlech'];
+                            }
+                        }
+                        foreach($model_pc as $pc){
+                            if($pc->phanloai != 2){
+                                $mapc = $pc->mapc;
+                                $model->$mapc = 0;
+                            }
+
+                        }
+                        dd($model);
+                        break;
+
+                    }
+                    case 'TNN':{
+                        break;
+                    }
+                    case 'NGAYLV':{
+                        break;
+                    }
+                    case 'KHAC':{
+                        break;
+                    }
+                }
+                */
             }
 
-            $model_pc = dmphucap_donvi::where('madv', session('admin')->madv)->get();
+
             return view('manage.truylinh.create')
                 ->with('furl', '/nghiep_vu/truy_linh/')
                 ->with('inputs',$inputs)

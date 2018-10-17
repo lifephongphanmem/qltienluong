@@ -90,6 +90,9 @@
                     <h4 id="modal-header-primary-label" class="modal-title">Thông tin truy lĩnh lương của cán bộ</h4>
                 </div>
                 <div class="modal-body">
+                    <label class="form-control-label">Phân loại</label>
+                    {!!Form::select('maphanloai',getPhanLoaiTruyLinh(), null, array('id' => 'maphanloai','class' => 'form-control select2me'))!!}
+
                     <label class="form-control-label">Họ và tên cán bộ</label>
                     <select name="macanbo" id="macanbo" class="form-control select2me">
                         @foreach($a_canbo as $key=>$val)

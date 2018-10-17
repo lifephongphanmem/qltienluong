@@ -11,6 +11,7 @@ class hosotruylinh extends Model
         'id',
         'maso',
         'stt',
+        'maphanloai',
         'macanbo',
         'tencanbo',
         'soqd',//chưa dùng
