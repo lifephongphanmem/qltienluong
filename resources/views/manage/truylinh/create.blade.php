@@ -67,6 +67,27 @@
 
                                             <div class="col-md-3">
                                                 <div class="form-group">
+                                                    <label class="control-label">Nguồn KP hưởng lương</label>
+                                                    {!!Form::select('manguonkp',getNguonKP(), null, array('id' => 'manguonkp','class' => 'form-control select2me'))!!}
+                                                </div>
+                                            </div>
+
+                                            <div class="col-md-3">
+                                                <div class="form-group">
+                                                    <label class="control-label">Mức lương truy lĩnh </label>
+                                                    {!!Form::text('luongcoban', null, array('id' => 'luongcoban','class' => 'form-control', 'data-mask'=>'fdecimal'))!!}
+                                                </div>
+                                            </div>
+
+                                            <div class="col-md-3">
+                                                <div class="form-group">
+                                                    <label class="control-label">Hệ số truy lĩnh </label>
+                                                    {!!Form::text('heso', null, array('id' => 'heso','class' => 'form-control', 'data-mask'=>'fdecimal'))!!}
+                                                </div>
+                                            </div>
+
+                                            <div class="col-md-3">
+                                                <div class="form-group">
                                                     <label class="form-control-label">Từ ngày<span class="require">*</span></label>
                                                     {!! Form::input('date','ngaytu',null,array('id' => 'ngaytu', 'class' => 'form-control ngaythang','required'))!!}
                                                 </div>
@@ -92,32 +113,13 @@
                                                     {!!Form::text('ngaytl', null, array('id' => 'ngaytl','class' => 'form-control', 'data-mask'=>'fdecimal'))!!}
                                                 </div>
                                             </div>
-                                            <div class="col-md-3">
-                                                <div class="form-group">
-                                                    <label class="control-label">Hệ số truy lĩnh </label>
-                                                    {!!Form::text('heso', null, array('id' => 'heso','class' => 'form-control', 'data-mask'=>'fdecimal'))!!}
-                                                </div>
-                                            </div>
-                                            <div class="col-md-3">
-                                                <div class="form-group">
-                                                    <label class="control-label">Nguồn KP hưởng lương</label>
-                                                    {!!Form::select('manguonkp',getNguonKP(false), null, array('id' => 'manguonkp','class' => 'form-control select2me'))!!}
-                                                </div>
-                                            </div>
-
-                                            <div class="col-md-3">
-                                                <div class="form-group">
-                                                    <label class="control-label">Mức lương truy lĩnh </label>
-                                                    {!!Form::text('luongcoban', null, array('id' => 'luongcoban','class' => 'form-control', 'data-mask'=>'fdecimal'))!!}
-                                                </div>
-                                            </div>
-
                                             <div class="col-md-12">
                                                 <div class="form-group">
                                                     <label class="control-label">Nội dung truy lĩnh </label>
                                                     {!!Form::text('noidung', null, array('id' => 'noidung','class' => 'form-control'))!!}
                                                 </div>
                                             </div>
+
                                         </div>
                                     </div>
                                 </div>

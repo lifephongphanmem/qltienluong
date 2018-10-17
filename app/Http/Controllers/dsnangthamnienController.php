@@ -151,15 +151,15 @@ class dsnangthamnienController extends Controller
     function nang_luong($manl){
         if (Session::has('admin')) {
             $model = dsnangthamnien_ct::where('manl',$manl)->get();
+            $ma = getdate()[0];
             foreach($model as $canbo) {
+                $ma = $ma + 1;
                 $hoso = hosocanbo::where('macanbo', $canbo->macanbo)->first();
                 $hoso->pctnn = $canbo->pctnn;
                 $hoso->tnntungay = $canbo->ngaytu;
                 $hoso->tnndenngay = $canbo->ngayden;
                 $hoso->save();
-                $ma = getdate()[0];
                 if (isset($canbo->truylinhtungay) && $canbo->heso > 0) {
-                    $ma = $ma + 1;
                     $truylinh = new hosotruylinh();
                     $truylinh->maso = session('admin')->madv . '_' . $ma;
                     $truylinh->macanbo = $canbo->macanbo;

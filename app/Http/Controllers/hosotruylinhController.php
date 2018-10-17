@@ -177,7 +177,7 @@ class hosotruylinhController extends Controller
                 $model->ngaytu = null;
                 $model->ngayden = null;
                 $model->maso = 'ADD';
-                /*
+
                 switch($inputs['maphanloai']){
                     case 'MSNGBAC':{
                         //$model_pc = dmphucap_donvi::where('madv', session('admin')->madv)->get();
@@ -200,7 +200,9 @@ class hosotruylinhController extends Controller
                             }
 
                         }
-                        dd($model);
+                        $model->heso = $heso;
+                        $model_pc = $model_pc->where('phanloai',2);
+
                         break;
 
                     }
@@ -214,7 +216,7 @@ class hosotruylinhController extends Controller
                         break;
                     }
                 }
-                */
+
             }
 
 
@@ -222,7 +224,7 @@ class hosotruylinhController extends Controller
                 ->with('furl', '/nghiep_vu/truy_linh/')
                 ->with('inputs',$inputs)
                 ->with('model',$model)
-                ->with('a_heso', array('heso', 'vuotkhung', 'hesopc', 'hesott'))
+                ->with('a_heso', array('heso','vuotkhung'))
                 ->with('model_pc', $model_pc)
                 ->with('pageTitle', 'Thêm mới cán bộ truy lĩnh lương');
         } else
