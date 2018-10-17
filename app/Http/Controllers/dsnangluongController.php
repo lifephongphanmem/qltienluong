@@ -233,8 +233,9 @@ class dsnangluongController extends Controller
     function nang_luong($manl){
         if (Session::has('admin')) {
            $model = dsnangluong_chitiet::where('manl',$manl)->get();
-
+            $ma = getdate()[0];
             foreach($model as $canbo) {
+                $ma = $ma + 1;
                 $hoso = hosocanbo::where('macanbo', $canbo->macanbo)->first();
                 $data = $canbo->toarray();
                 unset($data['id']);
@@ -244,7 +245,7 @@ class dsnangluongController extends Controller
                     $truylinh = hosotruylinh::where('macanbo',$canbo->macanbo)->first();
                     if(count($truylinh) == 0){
                         $truylinh = new hosotruylinh();
-                        $truylinh->maso = session('admin')->madv . '_' . getdate()[0];
+                        $truylinh->maso = session('admin')->madv . '_' . $ma;
                     }
                     $truylinh->macanbo = $canbo->macanbo;
                     $truylinh->tencanbo = $hoso->tencanbo;

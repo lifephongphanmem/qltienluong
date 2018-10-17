@@ -43,12 +43,12 @@
                     <table id="sample_3" class="table table-hover table-striped table-bordered" style="min-height: 230px">
                         <thead>
                             <tr>
-                                <th class="text-center" style="width: 10%">STT</th>
+                                <th class="text-center" style="width: 5%">STT</th>
                                 <th class="text-center">Họ và tên</th>
                                 <th class="text-center">Từ ngày</th>
                                 <th class="text-center">Đến ngày</th>
                                 <th class="text-center">Nội dung</th>
-                                <th class="text-center">Hệ số</br>(phần trăm)</br>truy lĩnh</th>
+                                <th class="text-center">Hệ số</br>truy lĩnh</th>
                                 <th class="text-center">Thao tác</th>
                             </tr>
                         </thead>
@@ -58,10 +58,10 @@
                                     <tr>
                                         <td class="text-center">{{$key+1}}</td>
                                         <td>{{$value->tencanbo}}</td>
-                                        <td>{{getDayVn($value->ngaytu)}}</td>
-                                        <td>{{getDayVn($value->ngayden)}}</td>
+                                        <td class="text-center">{{getDayVn($value->ngaytu)}}</td>
+                                        <td class="text-center">{{getDayVn($value->ngayden)}}</td>
                                         <td>{{$value->noidung}}</td>
-                                        <td>{{$value->heso}}</td>
+                                        <td class="text-center">{{$value->heso}}</td>
                                         <td>
 
                                             <a href="{{url($furl.'create?maso='.$value->maso)}}" class="btn btn-default btn-xs">

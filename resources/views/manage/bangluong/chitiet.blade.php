@@ -9,7 +9,7 @@
             <div class="portlet light bordered">
                 <div class="portlet-title">
                     <div class="caption">
-                        THÔNG TIN CHI TIẾT LƯƠNG CỦA CÁN BỘ {{$model->tencanbo}}
+                        THÔNG TIN CHI TIẾT LƯƠNG CỦA CÁN BỘ: {{$model->tencanbo}}
                     </div>
                     <div class="actions">
 
@@ -306,7 +306,7 @@
             var hs=$('#tonghs').val();
             var tpc=0;
             $('.heso').each(function () {
-                if(getdl($(this).val()) > 500){
+                if(getdl($(this).val()) > 5000){
                     tpc += getdl($(this).val());
                 }
             });
@@ -351,10 +351,11 @@
             return parseFloat(stbhxh) + parseFloat(stbhyt) + parseFloat(stkpcd) + parseFloat(stbhtn);
         }
 
-        function giamtru(){
-            var giaml=getdl($('#giaml').val());
-            var bhct=getdl($('#bhct').val());
-            return bhct-giaml;
+        function giamtru() {
+            var giaml = getdl($('#giaml').val());
+            var bhct = getdl($('#bhct').val());
+            return bhct - giaml;
+
         }
 
         function luongtn() {

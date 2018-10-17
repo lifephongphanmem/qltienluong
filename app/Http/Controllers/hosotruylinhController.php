@@ -39,7 +39,7 @@ class hosotruylinhController extends Controller
             */
             //dd($m_pln);
             return view('manage.truylinh.index')
-                ->with('model', $model)
+                ->with('model', $model->sortby('ngaytu'))
                 //->with('m_plnb', $m_plnb)
                 //->with('m_pln', $m_pln)
                 //->with('a_phanloai', $a_phanloai)
@@ -170,17 +170,49 @@ class hosotruylinhController extends Controller
             //msngbac: kiểm tra xem mã ngạch bậc: xem lấy mã số xem truy lĩnh hệ số hay vượt khung
             //tnn: tính 1% thâm niên nghề. Các hệ số ko có
             $model_pc = dmphucap_donvi::where('madv', session('admin')->madv)->get();
-            if(isset($inputs['maso'])){//tách ra edit
+            if(isset($inputs['maso'])){
                 $model = hosotruylinh::where('maso',$inputs['maso'])->first();
+                switch($model->maphanloai){
+                    case 'MSNGBAC':{
+                        $model_pc = $model_pc->where('phanloai',2);
+                        return view('manage.truylinh.create')
+                            ->with('furl', '/nghiep_vu/truy_linh/')
+                            ->with('inputs',$inputs)
+                            ->with('model',$model)
+                            ->with('a_heso', array('heso','vuotkhung'))
+                            ->with('model_pc', $model_pc)
+                            ->with('pageTitle', 'Thêm mới cán bộ truy lĩnh lương');
+                        break;
+                    }
+                    case 'TNN':{
+                        return view('manage.truylinh.create_tnn')
+                            ->with('furl', '/nghiep_vu/truy_linh/')
+                            ->with('inputs',$inputs)
+                            ->with('model',$model)
+                            ->with('pageTitle', 'Thêm mới cán bộ truy lĩnh lương');
+                        break;
+                    }
+
+                    default:{
+                        return view('manage.truylinh.create')
+                            ->with('furl', '/nghiep_vu/truy_linh/')
+                            ->with('inputs',$inputs)
+                            ->with('model',$model)
+                            ->with('a_heso', array('heso','vuotkhung'))
+                            ->with('model_pc', $model_pc)
+                            ->with('pageTitle', 'Thêm mới cán bộ truy lĩnh lương');
+                        break;
+                    }
+                }
             }else{
+            //thêm mới
                 $model = hosocanbo::where('macanbo',$inputs['macanbo'])->first();
                 $model->ngaytu = null;
                 $model->ngayden = null;
                 $model->maso = 'ADD';
-
+                $model->maphanloai = $inputs['maphanloai'];
                 switch($inputs['maphanloai']){
                     case 'MSNGBAC':{
-                        //$model_pc = dmphucap_donvi::where('madv', session('admin')->madv)->get();
                         $a_nhomnb = ngachluong::all()->keyBy('msngbac')->toarray();
                         $msngbac = $model->msngbac;
                         if(isset($a_nhomnb[$msngbac])) {
@@ -201,32 +233,54 @@ class hosotruylinhController extends Controller
 
                         }
                         $model->heso = $heso;
+                        $model->luongcoban = getGeneralConfigs()['luongcb'];
                         $model_pc = $model_pc->where('phanloai',2);
-
+                        return view('manage.truylinh.create')
+                            ->with('furl', '/nghiep_vu/truy_linh/')
+                            ->with('inputs',$inputs)
+                            ->with('model',$model)
+                            ->with('a_heso', array('heso','vuotkhung'))
+                            ->with('model_pc', $model_pc)
+                            ->with('pageTitle', 'Thêm mới cán bộ truy lĩnh lương');
                         break;
 
                     }
                     case 'TNN':{
+                        $heso = ($model->heso + ($model->heso * $model->vuotkhung)/100 + $model->pccv)/100;
+                        foreach($model_pc as $pc){
+                            $mapc = $pc->mapc;
+                            $model->$mapc = 0;
+                        }
+                        $model->heso = $heso;
+                        $model->luongcoban = getGeneralConfigs()['luongcb'];
+                        $model_pc = null;
+                        return view('manage.truylinh.create_tnn')
+                            ->with('furl', '/nghiep_vu/truy_linh/')
+                            ->with('inputs',$inputs)
+                            ->with('model',$model)
+                            ->with('pageTitle', 'Thêm mới cán bộ truy lĩnh lương');
                         break;
                     }
                     case 'NGAYLV':{
-                        break;
+                        //break;
                     }
                     case 'KHAC':{
+                        //break;
+                    }
+
+                    default:{
+                        return view('manage.truylinh.create')
+                            ->with('furl', '/nghiep_vu/truy_linh/')
+                            ->with('inputs',$inputs)
+                            ->with('model',$model)
+                            ->with('a_heso', array('heso','vuotkhung'))
+                            ->with('model_pc', $model_pc)
+                            ->with('pageTitle', 'Thêm mới cán bộ truy lĩnh lương');
                         break;
                     }
                 }
 
             }
-
-
-            return view('manage.truylinh.create')
-                ->with('furl', '/nghiep_vu/truy_linh/')
-                ->with('inputs',$inputs)
-                ->with('model',$model)
-                ->with('a_heso', array('heso','vuotkhung'))
-                ->with('model_pc', $model_pc)
-                ->with('pageTitle', 'Thêm mới cán bộ truy lĩnh lương');
         } else
             return view('errors.notlogin');
     }
