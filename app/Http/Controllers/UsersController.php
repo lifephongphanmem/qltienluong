@@ -206,6 +206,10 @@ class UsersController extends Controller
                 if (count($model_phanloai) == 0) {
                     $model_phanloai = dmphanloaict::select('macongtac','mact', 'bhxh', 'bhyt', 'bhtn', 'kpcd', 'bhxh_dv', 'bhyt_dv', 'bhtn_dv', 'kpcd_dv', DB::raw($ttuser->madv . ' as madv'))->get();
                     dmphanloaicongtac_baohiem::insert($model_phanloai->toarray());
+                }else{//tự cập nhật các phụ cấp thiếu
+                    $model_dm = dmphanloaict::select('macongtac','mact', 'bhxh', 'bhyt', 'bhtn', 'kpcd', 'bhxh_dv', 'bhyt_dv', 'bhtn_dv', 'kpcd_dv', DB::raw($ttuser->madv . ' as madv'))
+                    ->wherenotin('mact', array_column($model_phanloai->toarray(),'mact'))->get();
+                    dmphanloaicongtac_baohiem::insert($model_dm->toarray());
                 }
                 //phụ cấp
                 $model_phucap = dmphucap_donvi::where('madv', $ttuser->madv)->get();
