@@ -15,13 +15,12 @@ class dmphucap_thaisanController extends Controller
     function index()
     {
         if (Session::has('admin')) {
-
             $model = dmphucap_thaisan::where('madv', session('admin')->madv)->get();
             $a_pc = array('heso', 'vuotkhung', 'hesott','hesobl');
             $a_pc = array_merge($a_pc, array_column($model->toarray(), 'mapc'));
 
             $model_phucap = dmphucap_donvi::wherenotin('mapc', $a_pc)->get();
-            //dd($model_phucap);
+            dd($model_phucap);
             return view('system.danhmuc.phucapthaisan.index')
                 ->with('model', $model)
                 ->with('model_phucap', array_column($model_phucap->toarray(), 'tenpc', 'mapc'))
