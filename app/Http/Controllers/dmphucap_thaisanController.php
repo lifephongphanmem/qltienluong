@@ -16,6 +16,7 @@ class dmphucap_thaisanController extends Controller
     {
         if (Session::has('admin')) {
             $model = dmphucap_thaisan::where('madv', session('admin')->madv)->get();
+            dd($model);
             $a_pc = array('heso', 'vuotkhung', 'hesott','hesobl');
             $a_pc = array_merge($a_pc, array_column($model->toarray(), 'mapc'));
 
