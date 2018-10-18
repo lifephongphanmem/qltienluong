@@ -239,8 +239,8 @@ class dsnangluongController extends Controller
                 $hoso = hosocanbo::where('macanbo', $canbo->macanbo)->first();
                 $hoso->heso = $canbo->heso;
                 $hoso->vuotkhung = $canbo->vuotkhung;
-                $hoso->tungay = $canbo->ngaytu;
-                $hoso->denngay = $canbo->ngayden;
+                $hoso->ngaytu = $canbo->ngaytu;
+                $hoso->ngayden = $canbo->ngayden;
                 $hoso->save();
                 $data = $canbo->toarray();
                 unset($data['id']);
