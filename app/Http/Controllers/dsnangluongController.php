@@ -237,6 +237,11 @@ class dsnangluongController extends Controller
             foreach($model as $canbo) {
                 $ma = $ma + 1;
                 $hoso = hosocanbo::where('macanbo', $canbo->macanbo)->first();
+                $hoso->heso = $canbo->heso;
+                $hoso->vuotkhung = $canbo->vuotkhung;
+                $hoso->tungay = $canbo->ngaytu;
+                $hoso->denngay = $canbo->ngayden;
+                $hoso->save();
                 $data = $canbo->toarray();
                 unset($data['id']);
                 unset($data['phanloai']);
@@ -257,10 +262,13 @@ class dsnangluongController extends Controller
                     $truylinh->heso = $canbo->hesott; //hệ số truy lĩnh đều đưa vào hệ số
                     $truylinh->save();
                 }
+                /*
                 //Lưu thông tin vào hồ sơ cán bộ
                 unset($data['manl']);
                 unset($data['ghichu']);
+                unset($data['manguonkp']);
                 $hoso->update($data);
+                */
             }
             dsnangluong::where('manl',$manl)->update(['trangthai'=>'Đã nâng lương']);
             return redirect('/chuc_nang/nang_luong/danh_sach');

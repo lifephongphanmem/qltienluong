@@ -262,8 +262,7 @@ class bangluongController extends Controller
                 }
             }
 
-            $tt = 0;
-            $ths = 0;
+            $tt = $ths = 0;
             //nếu cán bộ nghỉ thai sản
             $thaisan = count($m_tamngung->where('macanbo',$cb->macanbo))>0? true : false;
 
@@ -292,15 +291,7 @@ class bangluongController extends Controller
                 }
 
                 $ct->heso_goc = $cb->$mapc;
-                $heso = 0;
-
                 $pl = getDbl($ct->phanloai);
-                if ($pl == 2) {
-                    foreach (explode(',', $ct->congthuc) as $cthuc) {
-                        if ($cthuc != '')
-                            $heso += $cb->$cthuc;
-                    }
-                }
 
                 switch ($pl) {
                     case 0: {//hệ số
@@ -314,14 +305,17 @@ class bangluongController extends Controller
                         break;
                     }
                     case 2: {//phần trăm
+                        $heso = 0;
+                        foreach (explode(',', $ct->congthuc) as $cthuc) {
+                            if ($cthuc != '')
+                                $heso += $cb->$cthuc;
+                        }
+
                         if ($mapc != 'vuotkhung' && $mapc != 'pctnn') {//vượt khung đã tính ở trên
                             $cb->$mapc = $heso * $cb->$mapc / 100;
-                            $ths += $cb->$mapc;
-                            $sotien = $cb->$mapc * $ct->luongcoban;
-                        }else{
-                            $ths += $cb->$mapc;
-                            $sotien = $cb->$mapc * $ct->luongcoban;
                         }
+                        $ths += $cb->$mapc;
+                        $sotien = $cb->$mapc * $ct->luongcoban;
                         break;
                     }
                     default: {//trường hợp còn lại (ẩn,...)
