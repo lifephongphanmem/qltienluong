@@ -63,7 +63,7 @@
                                 </div>
                             </div>
 
-                            @if(!in_array($inputs['phanloai'], array('THAISAN','KHONGLUONG')))
+                            @if(!in_array($inputs['phanloai'], array('THAISAN','KHONGLUONG','DAINGAY')))
                                 <div class="col-md-6">
                                     <div class="form-group">
                                         <label class="form-control-label">Số ngày nghỉ</label>

@@ -48,6 +48,9 @@
                                     <a href="{{url($furl.'create?phanloai=NGHIPHEP')}}" class="btn btn-default btn-xs"> Nghỉ ốm/Nghỉ phép</a>
                                 </li>
                                 <li>
+                                    <a href="{{url($furl.'create?phanloai=DAINGAY')}}" class="btn btn-default btn-xs"> Nghỉ dài ngày</a>
+                                </li>
+                                <li>
                                     <a href="{{url($furl.'create?phanloai=KHONGLUONG')}}" class="btn btn-default btn-xs"> Nghỉ không lương</a>
                                 </li>
                             </ul>

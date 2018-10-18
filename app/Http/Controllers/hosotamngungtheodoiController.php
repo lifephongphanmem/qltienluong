@@ -99,6 +99,13 @@ class hosotamngungtheodoiController extends Controller
                         ->where('theodoi', '<', '9')->get()->toarray(), 'tencanbo', 'macanbo');
                     break;
                 }
+                case 'DAINGAY': {
+                    $a_phanloai = array(
+                        'DAINGAY' => 'Nghỉ dài ngày');
+                    $a_canbo = array_column(hosocanbo::where('madv', session('admin')->madv)
+                        ->where('theodoi', '<', '9')->get()->toarray(), 'tencanbo', 'macanbo');
+                    break;
+                }
                 default: {//Nghỉ ko lưởng
                     $a_phanloai = array(
                         'NGHIPHEP' => 'Nghỉ phép',
@@ -168,7 +175,14 @@ class hosotamngungtheodoiController extends Controller
                         ->where('theodoi', '<', '9')->get()->toarray(), 'tencanbo', 'macanbo');
                     break;
                 }
-                default: {//Nghỉ ko lưởng
+                case 'DAINGAY': {
+                    $a_phanloai = array(
+                        'DAINGAY' => 'Nghỉ dài ngày');
+                    $a_canbo = array_column(hosocanbo::where('madv', session('admin')->madv)
+                        ->where('theodoi', '<', '9')->get()->toarray(), 'tencanbo', 'macanbo');
+                    break;
+                }
+                default: {
                     $a_phanloai = array(
                         'NGHIPHEP' => 'Nghỉ phép',
                         'NGHIOM' => 'Nghỉ ốm');

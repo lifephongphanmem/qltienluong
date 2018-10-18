@@ -581,8 +581,12 @@ class bangluongController extends Controller
             ->whereYear('ngaytu', $inputs['nam'])->whereMonth('ngaytu', $inputs['thang'])->get()->toarray(),'songaynghi','macanbo');
 
         $a_khongluong = array_column(hosotamngungtheodoi::where('madv', $inputs['madv'])
-            ->where('maphanloai', 'KHONGLUONG')->where('ngaytu', '<=', $ngaylap)
-            ->where('ngayden', '>=', $ngaylap)->get()->toarray(),'macanbo');
+            ->where('ngaytu', '<=', $ngaylap)->where('ngayden', '>=', $ngaylap)
+            ->where('maphanloai', 'KHONGLUONG')->get()->toarray(),'macanbo');
+
+        $a_daingay = array_column(hosotamngungtheodoi::where('madv', $inputs['madv'])
+            ->where('ngaytu', '<=', $ngaylap)->where('ngayden', '>=', $ngaylap)
+            ->where('maphanloai', 'DAINGAY')->get()->toarray(),'macanbo');
 
         $model_phucap = dmphucap_donvi::select('mapc','phanloai','congthuc','baohiem','tenpc')
             ->where('madv', session('admin')->madv)->wherenotin('mapc', ['hesott'])->get();
@@ -603,8 +607,9 @@ class bangluongController extends Controller
         $a_nhomct = array_column(dmphanloaict::all()->toarray(), 'macongtac','mact');
         //dd($a_nhomct);
         $a_ts = array_column(dmphucap_thaisan::where('madv', session('admin')->madv)->get()->toarray(), 'mapc');
-        //các loại phụ cấp cán bộ được điều động động đến được hưởng (chưa làm cho định mức)
-        $a_dd = array('pclt');
+        $a_dd = array('pclt');//các loại phụ cấp cán bộ được điều động động đến được hưởng (chưa làm cho định mức)
+        $a_dn = array('pckv','pcudn');//các loại phụ cấp cán bộ nghỉ dài ngày đến được hưởng (chưa làm cho định mức)
+        $ptdn = 0.5;//cán bộ nghỉ dài ngày hưởng 50% lương
         $a_goc = array('heso','vuotkhung','pccv'); //mảng phụ cấp làm công thức tính
         $a_pc = $model_phucap->keyby('mapc')->toarray();
 
@@ -667,6 +672,9 @@ class bangluongController extends Controller
             //nếu cán bộ nghỉ thai sản
             $thaisan = in_array($m_cb[$key]['macanbo'],$a_thaisan) ? true : false;
             $khongluong = in_array($m_cb[$key]['macanbo'],$a_khongluong) ? true : false;
+            $daingay = in_array($m_cb[$key]['macanbo'],$a_daingay) ? true : false;
+            $nghi = isset($a_nghiphep[$m_cb[$key]['macanbo']]) ? true : false;
+
             //Tính phụ cấp
             foreach ($a_pc as $k=>$v) {
                 $mapc = $v['mapc'];
@@ -716,7 +724,10 @@ class bangluongController extends Controller
                     }
                 }
 
-                if (!$khongluong || !$thaisan || ($thaisan && in_array($mapc, $a_ts))) {//lưu vào bảng lương phụ cấp (chi luu số tiền >0)
+                if (!$khongluong || !$thaisan
+                    || ($thaisan && in_array($mapc, $a_ts))
+                    || ($daingay && in_array($mapc, $a_dn))
+                ) {//lưu vào bảng lương phụ cấp
                     $a_pc[$k]['mabl'] = $inputs['mabl'];
                     $a_pc[$k]['luongcoban'] = $inputs['luongcoban'];
                     $a_pc[$k]['macanbo'] = $m_cb[$key]['macanbo'];
@@ -725,12 +736,12 @@ class bangluongController extends Controller
                     $a_pc[$k]['ten'] = $a_pc[$k]['tenpc'];
                     $a_pc[$k]['heso'] = $m_cb[$key][$mapc];
                     if ($a_pc[$k]['heso'] > 10000) {//sô tiền
-                        $a_pc[$k]['sotien'] = round($a_pc[$k]['heso'], 0);
+                        $a_pc[$k]['sotien'] = $daingay ? round($a_pc[$k]['heso'] * $ptdn, 0) : round($a_pc[$k]['heso'], 0);
                     } else {
-                        $a_pc[$k]['sotien'] = round($inputs['luongcoban'] * $a_pc[$k]['heso'], 0);
+                        $a_pc[$k]['sotien'] = $daingay ? round($inputs['luongcoban'] * $a_pc[$k]['heso'] * $ptdn, 0) : round($inputs['luongcoban'] * $a_pc[$k]['heso'], 0);
                     }
 
-                    if ($a_pc[$k]['baohiem'] == 1) {
+                    if ($a_pc[$k]['baohiem'] == 1 && !$thaisan && !$daingay) {//nghỉ thai sản + dài ngày ko đóng bảo biểm
                         $a_pc[$k]['stbhxh'] = round($a_pc[$k]['sotien'] * $m_cb[$key]['bhxh'], 0);
                         $a_pc[$k]['stbhyt'] = round($a_pc[$k]['sotien'] * $m_cb[$key]['bhyt'], 0);
                         $a_pc[$k]['stkpcd'] = round($a_pc[$k]['sotien'] * $m_cb[$key]['kpcd'], 0);
@@ -800,13 +811,12 @@ class bangluongController extends Controller
                 }
             }
 
-            $nghi = isset($a_nghiphep[$m_cb[$key]['macanbo']]) ? true : false;
             if($nghi) {
                 $cb_nghi = $a_nghiphep[$m_cb[$key]['macanbo']];
                 $m_cb[$key]['congtac'] = 'NGHIPHEP';
                 $sotiencong = $inputs['luongcoban'] * ($m_cb[$key]['heso'] + $m_cb[$key]['vuotkhung'] + $m_cb[$key]['pccv'] + $m_cb[$key]['hesobl'] + $m_cb[$key]['pctnn']);
                 $tiencong = round($sotiencong / $ngaycong, 0);
-                if($cb_nghi['songaynghi'] >= 15) {//nghỉ quá 15 ngày thì ko đóng bảo hiểm
+                if($cb_nghi >= 15) {//nghỉ quá 15 ngày thì ko đóng bảo hiểm
                     $m_cb[$key]['stbhxh'] = 0;
                     $m_cb[$key]['stbhyt'] = 0;
                     $m_cb[$key]['stkpcd'] = 0;
@@ -818,10 +828,9 @@ class bangluongController extends Controller
                     $m_cb[$key]['stbhtn_dv'] = 0;
                     $m_cb[$key]['ttbh_dv'] = 0;
                 }
-                $m_cb[$key]['giaml'] = $cb_nghi['songaynghi'] >= $ngaycong ? $sotiencong : ($tiencong * $cb_nghi['songaynghi']);
+                $m_cb[$key]['giaml'] = $cb_nghi >= $ngaycong ? $sotiencong : ($tiencong * $cb_nghi);
             }
 
-            //kiểm tra nghỉ thai sản
             if($thaisan) {
                 $m_cb[$key]['tencanbo'] .= ' (nghỉ thai sản)';
                 $m_cb[$key]['congtac'] = 'THAISAN';
@@ -834,16 +843,6 @@ class bangluongController extends Controller
                         $tonghs += $m_cb[$key][$val];
                     }
                 }
-                $m_cb[$key]['stbhxh'] = 0;
-                $m_cb[$key]['stbhyt'] = 0;
-                $m_cb[$key]['stkpcd'] = 0;
-                $m_cb[$key]['stbhtn'] = 0;
-                $m_cb[$key]['ttbh'] = 0;
-                $m_cb[$key]['stbhxh_dv'] = 0;
-                $m_cb[$key]['stbhyt_dv'] = 0;
-                $m_cb[$key]['stkpcd_dv'] = 0;
-                $m_cb[$key]['stbhtn_dv'] = 0;
-                $m_cb[$key]['ttbh_dv'] = 0;
             }
 
             if($khongluong){//tính không lương rồi thoát
@@ -859,8 +858,10 @@ class bangluongController extends Controller
                 $m_cb[$key]['stbhtn_dv'] = 0;
                 $m_cb[$key]['ttbh_dv'] = 0;
                 $tonghs = $tien = 0;
+                $m_cb[$key]['congtac'] = 'KHONGLUONG';
             }
 
+            tinhluong:
             $m_cb[$key]['tonghs'] = $tonghs;
             $m_cb[$key]['ttl'] = round($inputs['luongcoban'] * $tonghs + $tien);
             $m_cb[$key]['luongtn'] = $m_cb[$key]['ttl'] - $m_cb[$key]['ttbh'] - $m_cb[$key]['giaml'];

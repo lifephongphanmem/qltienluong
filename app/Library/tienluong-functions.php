@@ -245,7 +245,7 @@ function getDiaBan($val_null = true){
 function getColTongHop(){
     //các loại phụ cấp mới thêm như: bảo lưu,...
     //chưa có
-    return array('heso','hesopc','vuotkhung','pcct','hesobl',
+    return array('heso','hesopc','vuotkhung','pcct','hesobl', 'luonghd',
         'pckct',
         'pck',
         'pccv',
@@ -496,7 +496,9 @@ function getPhanLoaiTamNgungTheoDoi(){
         'KYLUAT' => 'Kỷ luật',
         'NGHIPHEP'=> 'Nghỉ phép',
         'NGHIOM'=> 'Nghỉ ốm',
-        'KHONGLUONG'=>'Nghỉ không lương',);
+        'DAINGAY'=> 'Nghỉ dài ngày',
+        'KHONGLUONG'=>'Nghỉ không lương',
+        );
 }
 
 function getPhanLoaiBangLuong(){

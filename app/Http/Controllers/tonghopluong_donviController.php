@@ -105,9 +105,10 @@ class tonghopluong_donviController extends Controller
             $a_hs = array_column(hosocanbo::where('madv',session('admin')->madv)->where('theodoi','<','9')->get()->toArray(), 'tencanbo', 'macanbo');
 
             //lấy bảng lương
-            //$model_bangluong = bangluong::where('nam', $nam)->where('thang', $thang)->where('madv', $madv)->get();
-            $model_bangluong = bangluong::where('nam', $nam)->where('thang', $thang)->where('madv', $madv)->where('phanloai', 'BANGLUONG')->get();
+            $model_bangluong = bangluong::where('nam', $nam)->where('thang', $thang)
+                ->where('madv', $madv)->where('phanloai', 'BANGLUONG')->get();
             //bảng lương chi tiết
+            $model_bangluong_ct = bangluong_ct::wherein('mabl', array_column($model_bangluong->toarray(),'mabl'))->get();
             /*
             $model_bangluong_ct = bangluong_ct::wherein('mabl', function ($query) use ($nam, $thang, $madv) {
                 $query->select('mabl')->from('bangluong')->where('nam', $nam)->where('thang', $thang)->where('madv', $madv)->where('phanloai', 'BANGLUONG');
@@ -119,7 +120,6 @@ class tonghopluong_donviController extends Controller
                 $nguondm = $model_nguondm->where('maso',$ct->maso)->first();
                 $ct->manguonkp = $nguondm->manguonkp;
             }
-            $model_bangluong_ct = bangluong_ct::wherein('mabl', array_column($model_bangluong->toarray(),'mabl'))->get();
 
             $model_pc = dmphucap_donvi::where('madv', $madv)->wherenotin('mapc',['hesott'])->get();
             //$model_pc = dmphucap_donvi::where('madv', $madv)->where('phanloai', '<', '3')->wherenotin('mapc',['hesott'])->get();
