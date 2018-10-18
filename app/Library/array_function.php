@@ -61,4 +61,31 @@ function a_getelement($array, $indexs, $justvals = false){
     }
     return $newarray;
 }
+
+function a_getelement_equal($array, $indexs, $justvals = false){
+    $newarray = array();
+    if(is_array($array) && count($array)>0){
+        if(is_array($indexs) && count($indexs)>0) {
+            //Tổng số điều kiện
+            $ninds = count($indexs);
+        }
+        else return $newarray;
+
+        foreach(array_keys($array) as $key){
+            //số phần tử thỏa mãn điều kiện
+            $count = 0;
+            foreach($indexs as $indx => $val){
+                if($array[$key][$indx] == $val){
+                    $count++;
+                }
+            }
+
+            if($count == $ninds){
+                if($justvals) return $array[$key];
+                else $newarray[$key] = $array[$key];
+            }
+        }
+    }
+    return $newarray;
+}
 ?>

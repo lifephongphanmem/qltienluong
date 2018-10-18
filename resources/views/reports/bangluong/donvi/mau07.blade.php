@@ -137,7 +137,6 @@
         @foreach($model_congtac as $congtac)
             <?php
                 $model_luong = $model->where('mact',$congtac->mact);
-                $model_luong_st = $model_st->where('mact',$congtac->mact);
             ?>
             @if(count($model_luong)> 0)
                 <?php $stt=1; ?>
@@ -151,19 +150,13 @@
                         <td style="text-align: left">{{$ct->tencanbo}}</td>
                         <td style="text-align: left">{{$ct->tencv}}</td>
 
-
                         @foreach($a_phucap as $key=>$val)
                             <td>{{dinhdangsothapphan($ct->$key,5)}}</td>
                         @endforeach
 
-                        @foreach($a_phucap as $key=>$val)
-                            @if($ct->$key > 1000)
-                                <td>{{dinhdangso($ct->$key)}}</td>
-                            @else
-                                <td>{{dinhdangso($ct->$key * $thongtin['luongcb'])}}</td>
-                            @endif
+                        @foreach($a_phucap_st as $key=>$val)
+                            <td>{{dinhdangso($ct->$key)}}</td>
                         @endforeach
-
 
                         <td>{{dinhdangso($ct->ttl - $ct->giaml + $ct->bhct)}}</td>
 
@@ -183,7 +176,7 @@
                     @endforeach
 
                     @foreach($a_phucap as $key=>$val)
-                        <td>{{dinhdangso($model_luong_st->sum($key))}}</td>
+                        <td>{{dinhdangso($model_luong->sum('st_'.$key))}}</td>
                     @endforeach
                     <td class="money">{{dinhdangso($model_luong->sum('ttl') - $model_luong->sum('giaml') + $model_luong->sum('bhct'))}}</td>
 
@@ -205,7 +198,7 @@
             @endforeach
 
             @foreach($a_phucap as $key=>$val)
-                <td>{{dinhdangso($model_st->sum($key))}}</td>
+                <td>{{dinhdangso($model->sum('st_'.$key))}}</td>
             @endforeach
             <td class="money">{{dinhdangso($model->sum('ttl') - $model->sum('giaml') + $model->sum('bhct'))}}</td>
 
