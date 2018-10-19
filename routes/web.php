@@ -186,6 +186,13 @@ Route::group(['prefix'=>'danh_muc'],function(){
         Route::post('store','dmphucap_thaisanController@store');
         Route::get('del/{id}','dmphucap_thaisanController@destroy');
     });
+
+    Route::group(['prefix'=>'thong_tu'],function(){
+        Route::get('index','dmthongtuquyetdinhController@index');
+        Route::get('del/{id}','dmthongtuquyetdinhController@destroy');
+        Route::get('store','dmthongtuquyetdinhController@store');
+        Route::get('get','dmthongtuquyetdinhController@getinfo');
+    });
 });
 
 Route::group(['prefix'=>'nghiep_vu'],function(){

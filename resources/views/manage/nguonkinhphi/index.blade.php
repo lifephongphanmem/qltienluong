@@ -49,8 +49,8 @@
                                     <th class="text-center">Lĩnh vực hoạt động</th>
                                 @endif
                                 <th class="text-center">Nội dung</th>
-                                <th class="text-center">Nhu cầu kinh phí</th>
-                                <th class="text-center">Kinh phí thực hiện</th>
+                                <th class="text-center">Nhu cầu</br>kinh phí</th>
+                                <th class="text-center">Kinh phí</br>thực hiện</th>
                                 <th class="text-center">Trạng thái</th>
                                 <th class="text-center">Thao tác</th>
                             </tr>

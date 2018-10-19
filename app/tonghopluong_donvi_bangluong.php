@@ -26,6 +26,7 @@ class tonghopluong_donvi_bangluong extends Model
         'soluong',
         'heso',
         'hesopc',
+        'hesobl',
         'hesott',
         'vuotkhung',
         'pcct',

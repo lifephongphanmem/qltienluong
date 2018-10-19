@@ -120,8 +120,8 @@
             <td style="text-align: left">{{$ct->tencongtac}}</td>
             <td style="text-align: center">{{$ct->soluong}}</td>
 
-            @foreach($a_phucap as $key=>$val)
-                <td>{{dinhdangsothapphan($ct->$key/$ct->luongcoban,5)}}</td>
+            @foreach($a_phucap_hs as $key=>$val)
+                <td>{{dinhdangsothapphan($ct->$key,5)}}</td>
             @endforeach
 
             @foreach($a_phucap as $key=>$val)

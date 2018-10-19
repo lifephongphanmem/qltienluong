@@ -423,6 +423,7 @@
                                     <li><a href="{{url('danh_muc/ngach_bac/index')}}"><i class="fa fa-caret-right"></i>Mã ngạch lương</a></li>
                                     <li><a href="{{url('danh_muc/pl_don_vi/index')}}"><i class="fa fa-caret-right"></i>Phân loại đơn vị</a></li>
                                     <li><a href="{{url('danh_muc/cong_tac/index')}}"><i class="fa fa-caret-right"></i>Phân loại công tác</a></li>
+                                    <li><a href="{{url('danh_muc/thong_tu/index')}}"><i class="fa fa-caret-right"></i>Thông tư, quyết định</a></li>
                                 </ul>
                             </li>
 
