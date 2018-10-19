@@ -788,12 +788,14 @@ class bangluongController extends Controller
             }
 
             if($daingay){
+                $m_cb[$key]['tencanbo'] .= ' (nghỉ dài ngày)';
+                $m_cb[$key]['congtac'] = 'DAINGAY';
                 $tien = $tonghs = 0;
                 foreach($a_dn as $val){
                     if ($m_cb[$key][$val] > 10000) {//sô tiền
-                        $tien += $m_cb[$key][$val];
+                        $tien += $m_cb[$key][$val] * $ptdn;
                     } else {
-                        $tonghs += $m_cb[$key][$val];
+                        $tonghs += $m_cb[$key][$val * $ptdn];
                     }
                 }
                 goto tinhluong;
@@ -806,9 +808,9 @@ class bangluongController extends Controller
                 $tien = $tonghs = 0;
                 foreach ($a_ts as $val) {
                     if ($m_cb[$key][$val] > 10000) {//sô tiền
-                        $tien += $m_cb[$key][$val] * $ptdn;
+                        $tien += $m_cb[$key][$val];
                     } else {
-                        $tonghs += $m_cb[$key][$val] * $ptdn;
+                        $tonghs += $m_cb[$key][$val];
                     }
                 }
                 goto tinhluong;
