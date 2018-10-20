@@ -354,6 +354,7 @@ class tonghopluong_donviController extends Controller
                 $ct->macongtac = isset($a_congtac[$ct->mact])? $a_congtac[$ct->mact] : null;
                 $bangluong = $a_bangluong[$ct->mabl];
                 $ct->manguonkp = $bangluong['manguonkp'];
+                $ct->luongcoban = $bangluong['luongcoban'];
                 $ct->linhvuchoatdong = $bangluong['linhvuchoatdong'];//chỉ dùng cho khối HCSN
                 $ct->mathdv = $mathdv;
                 $a_nguon = array_column(a_getelement_equal($a_nguondm, array('manguonkp'=>$ct->manguonkp)) ,'mapc');

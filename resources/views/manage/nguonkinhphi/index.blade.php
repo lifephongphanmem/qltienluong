@@ -113,6 +113,21 @@
                         </div>
 
                         <div class="col-md-12">
+                            <label class="control-label">Mức lương định mức</label>
+                            {!!Form::text('muccu',getThongTuQD(false), null, array('id' => 'sohieu','class' => 'form-control'))!!}
+                        </div>
+
+                        <div class="col-md-12">
+                            <label class="control-label">Mức lương áp dụng</label>
+                            {!!Form::text('mucapdung',getThongTuQD(false), null, array('id' => 'mucapdung','class' => 'form-control'))!!}
+                        </div>
+
+                        <div class="col-md-12">
+                            <label class="control-label">Mức chênh lệch</label>
+                            {!!Form::text('chenhlech',getThongTuQD(false), null, array('id' => 'chenhlech','class' => 'form-control'))!!}
+                        </div>
+
+                        <div class="col-md-12">
                             <label class="control-label">Nội dung</label>
                             {!!Form::textarea('noidung', null, array('id' => 'noidung','class' => 'form-control','rows'=>'3'))!!}
                         </div>

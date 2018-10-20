@@ -205,7 +205,7 @@
                     </a>
                     <ul class="sub-menu">
                         <li><a href="{{url('nghiep_vu/quan_ly/du_toan/danh_sach')}}"><i class="fa fa-caret-right"></i>Dự toán lương</a></li>
-                        <li><a href="{{url('du_toan/nguon_kinh_phi/danh_sach')}}"><i class="fa fa-caret-right"></i>Nhu cầu kinh phí</a></li>
+                        <li><a href="{{url('nguon_kinh_phi/danh_sach')}}"><i class="fa fa-caret-right"></i>Nhu cầu kinh phí</a></li>
                     </ul>
                 </li>
 

@@ -245,7 +245,6 @@ Route::group(['prefix'=>'nghiep_vu'],function(){
 
     Route::group(['prefix'=>'quan_ly'],function(){
 
-
         Route::group(['prefix'=>'chi_tieu'],function(){
             Route::get('danh_sach','chitieubiencheController@index');
             Route::get('del/{id}','chitieubiencheController@destroy');
@@ -328,29 +327,31 @@ Route::group(['prefix'=>'nghiep_vu'],function(){
     });
 });
 
+Route::group(['prefix'=>'nguon_kinh_phi'],function(){
+    Route::get('danh_sach','nguonkinhphiController@index');
+    Route::post('create','nguonkinhphiController@create');
+    Route::get('get','nguonkinhphiController@getinfo');
+    Route::get('ma_so={masodv}','nguonkinhphiController@edit');
+    Route::post('update','nguonkinhphiController@update');
+    Route::post('senddata','nguonkinhphiController@senddata'); //gửi dữ liệu
+    Route::get('ma_so={masodv}/in','nguonkinhphiController@printf');
+
+    Route::get('del/{id}','nguonkinhphiController@destroy');
+
+
+    Route::group(['prefix'=>'khoi'],function(){
+        Route::post('senddata','tonghopluong_khoiController@senddata'); //gửi dữ liệu
+        Route::post('tralai','tonghopluong_khoiController@tralai'); //trả lại dữ liệu
+        Route::get('getlydo','tonghopluong_khoiController@getlydo');//lý do trả lại dữ liệu
+    });
+});
+
 Route::group(['prefix'=>'du_toan'],function(){
     Route::group(['prefix'=>'luong'],function(){
 
     });
 
-    Route::group(['prefix'=>'nguon_kinh_phi'],function(){
-        Route::get('danh_sach','nguonkinhphiController@index');
-        Route::post('create','nguonkinhphiController@create');
-        Route::get('get','nguonkinhphiController@getinfo');
-        Route::get('ma_so={masodv}','nguonkinhphiController@edit');
-        Route::post('update','nguonkinhphiController@update');
-        Route::post('senddata','nguonkinhphiController@senddata'); //gửi dữ liệu
-        Route::get('ma_so={masodv}/in','nguonkinhphiController@printf');
 
-        Route::get('del/{id}','nguonkinhphiController@destroy');
-
-
-        Route::group(['prefix'=>'khoi'],function(){
-            Route::post('senddata','tonghopluong_khoiController@senddata'); //gửi dữ liệu
-            Route::post('tralai','tonghopluong_khoiController@tralai'); //trả lại dữ liệu
-            Route::get('getlydo','tonghopluong_khoiController@getlydo');//lý do trả lại dữ liệu
-        });
-    });
 });
 
 Route::group(['prefix'=>'chuc_nang'],function(){
