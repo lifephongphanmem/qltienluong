@@ -338,6 +338,8 @@ Route::group(['prefix'=>'nguon_kinh_phi'],function(){
 
     Route::get('del/{id}','nguonkinhphiController@destroy');
 
+    Route::get('get_thongtu','nguonkinhphiController@getinfor_thongtu');
+
 
     Route::group(['prefix'=>'khoi'],function(){
         Route::post('senddata','tonghopluong_khoiController@senddata'); //gửi dữ liệu

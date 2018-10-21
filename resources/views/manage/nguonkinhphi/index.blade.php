@@ -72,7 +72,9 @@
                                         <td>
                                             @if($value->trangthai != 'DAGUI')
                                                 <a href="{{url($furl.'ma_so='.$value->masodv)}}" class="btn btn-default btn-xs mbs">
-                                                    <i class="fa fa-edit"></i>&nbsp; Chỉnh sửa</a>
+                                                    <i class="fa fa-edit"></i>&nbsp; Chi tiết</a>
+                                                <a href="{{url($furl.'printf_bl/ma_so='.$value->masodv)}}" class="btn btn-default btn-xs mbs" TARGET="_blank">
+                                                    <i class="fa fa-print"></i>&nbsp; In bảng lương</a>
                                                 <button type="button" class="btn btn-default btn-xs mbs" onclick="confirmChuyen('{{$value['masodv']}}')" data-target="#chuyen-modal" data-toggle="modal"><i class="fa fa-share-square-o"></i>&nbsp;
                                                     Gửi dữ liệu</button>
                                                 <button type="button" onclick="cfDel('{{$furl.'del/'.$value->id}}')" class="btn btn-default btn-xs mbs" data-target="#delete-modal-confirm" data-toggle="modal">
@@ -109,22 +111,22 @@
 
                         <div class="col-md-12">
                             <label class="control-label">Căn cứ thông tư, quyết định</label>
-                            {!!Form::select('sohieu',getThongTuQD(false), null, array('id' => 'sohieu','class' => 'form-control'))!!}
+                            {!!Form::select('sohieu',getThongTuQD(), null, array('id' => 'sohieu','class' => 'form-control'))!!}
                         </div>
 
                         <div class="col-md-12">
                             <label class="control-label">Mức lương định mức</label>
-                            {!!Form::text('muccu',getThongTuQD(false), null, array('id' => 'sohieu','class' => 'form-control'))!!}
+                            {!!Form::text('muccu', null, array('id' => 'muccu','class' => 'form-control', 'data-mask'=>'fdecimal', 'readonly'))!!}
                         </div>
 
                         <div class="col-md-12">
                             <label class="control-label">Mức lương áp dụng</label>
-                            {!!Form::text('mucapdung',getThongTuQD(false), null, array('id' => 'mucapdung','class' => 'form-control'))!!}
+                            {!!Form::text('mucapdung', null, array('id' => 'mucapdung','class' => 'form-control', 'data-mask'=>'fdecimal', 'readonly'))!!}
                         </div>
 
                         <div class="col-md-12">
                             <label class="control-label">Mức chênh lệch</label>
-                            {!!Form::text('chenhlech',getThongTuQD(false), null, array('id' => 'chenhlech','class' => 'form-control'))!!}
+                            {!!Form::text('chenhlech', null, array('id' => 'chenhlech','class' => 'form-control', 'data-mask'=>'fdecimal', 'readonly'))!!}
                         </div>
 
                         <div class="col-md-12">
@@ -170,11 +172,54 @@
     </div>
 
     <script>
+        $(function(){
+            $("#sohieu").change(function(){
+                var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
+                $.ajax({
+                    url: '/nguon_kinh_phi/get_thongtu',
+                    type: 'GET',
+                    data: {
+                        _token: CSRF_TOKEN,
+                        sohieu: $("#sohieu").val()
+                    },
+                    dataType: 'JSON',
+                    success: function (data) {
+                        $("#muccu").val(data.muccu);
+                        $("#mucapdung").val(data.mucapdung);
+                        $("#chenhlech").val(data.chenhlech);
+                    }
+                });
+            });
+
+            $('#create_dutoan :submit').click(function(){
+                var str = '';
+                var ok = true;
+
+                if(!$('#sohieu').val()){
+                    str += '  - Số hiệu thông tư, quyết định \n';
+                    $('#sohieu').parent().addClass('has-error');
+                    ok = false;
+                }
+
+                //Kết quả
+                if ( ok == false){
+                    alert('Các trường: \n' + str + 'Không được để trống');
+                    $("form").submit(function (e) {
+                        e.preventDefault();
+                    });
+                }
+                else{
+                    $("form").unbind('submit').submit();
+                }
+            });
+        });
+
         function confirmChuyen(masodv) {
             document.getElementById("masodv").value = masodv;
         }
 
         function add(){
+            $("#sohieu").val('').trigger('change');
             $('#create-modal').modal('show');
         }
     </script>
