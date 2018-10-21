@@ -1301,6 +1301,7 @@ class bangluongController extends Controller
                                 break;
                             }
                         }
+                        $ct->sotien = $cb->$mapc * $cb->luongcoban;
                         //tính bảo hiểm
                         if ($ct->baohiem == 1 &&
                             ($cb->maphanloai != 'KHAC' || ($cb->maphanloai == 'KHAC' && !in_array($mapc,$a_goc)))) {
@@ -1314,8 +1315,10 @@ class bangluongController extends Controller
                             $ct->stkpcd_dv = round($ct->sotien * $cb->kpcd_dv, 0);
                             $ct->stbhtn_dv = round($ct->sotien * $cb->bhtn_dv, 0);
                             $ct->ttbh_dv = $ct->stbhxh_dv + $ct->stbhyt_dv + $ct->stkpcd_dv + $ct->stbhtn_dv;
+
                         }
                     }
+
                     //phân loại truy lĩnh khác : hệ số cơ sở set = 0;heso, vuotkhung, pccv
                     if($cb->maphanloai == 'KHAC'){
                         $tonghs = $tonghs - $cb->heso - $cb->vuotkhung - $cb->pccv;
@@ -1334,25 +1337,26 @@ class bangluongController extends Controller
                     $stbhtn_dv = $model_phucap->sum('stbhtn_dv');
 
                     if ($cb->ngaytl > 15) {
-                        $stbhxh = round(($stbhxh * $cb->ngaytl) / $ngaycong + $stbhxh * $cb->thangtl, 0);
-                        $stbhyt = round(($stbhyt * $cb->ngaytl) / $ngaycong + $stbhyt * $cb->thangtl, 0);
-                        $stkpcd = round(($stkpcd * $cb->ngaytl) / $ngaycong + $stkpcd * $cb->thangtl, 0);
-                        $stbhtn = round(($stbhxh * $cb->ngaytl) / $ngaycong + $stbhtn * $cb->thangtl, 0);
+                        $cb->stbhxh = round(($stbhxh * $cb->ngaytl) / $ngaycong + $stbhxh * $cb->thangtl, 0);
+                        $cb->stbhyt = round(($stbhyt * $cb->ngaytl) / $ngaycong + $stbhyt * $cb->thangtl, 0);
+                        $cb->stkpcd = round(($stkpcd * $cb->ngaytl) / $ngaycong + $stkpcd * $cb->thangtl, 0);
+                        $cb->stbhtn = round(($stbhxh * $cb->ngaytl) / $ngaycong + $stbhtn * $cb->thangtl, 0);
 
-                        $stbhxh_dv = round(($stbhxh_dv * $cb->ngaytl) / $ngaycong + $stbhxh_dv * $cb->thangtl, 0);
-                        $stbhyt_dv = round(($stbhyt_dv * $cb->ngaytl) / $ngaycong + $stbhyt_dv * $cb->thangtl, 0);
-                        $stkpcd_dv = round(($stkpcd_dv * $cb->ngaytl) / $ngaycong + $stkpcd_dv * $cb->thangtl, 0);
-                        $stbhtn_dv = round(($stbhtn_dv * $cb->ngaytl) / $ngaycong + $stbhtn_dv * $cb->thangtl, 0);
+                        $cb->stbhxh_dv = round(($stbhxh_dv * $cb->ngaytl) / $ngaycong + $stbhxh_dv * $cb->thangtl, 0);
+                        $cb->stbhyt_dv = round(($stbhyt_dv * $cb->ngaytl) / $ngaycong + $stbhyt_dv * $cb->thangtl, 0);
+                        $cb->stkpcd_dv = round(($stkpcd_dv * $cb->ngaytl) / $ngaycong + $stkpcd_dv * $cb->thangtl, 0);
+                        $cb->stbhtn_dv = round(($stbhtn_dv * $cb->ngaytl) / $ngaycong + $stbhtn_dv * $cb->thangtl, 0);
+                    } else{
+                        $cb->stbhxh = round($stbhxh * $cb->thangtl, 0);
+                        $cb->stbhyt = round($stbhyt * $cb->thangtl, 0);
+                        $cb->stkpcd = round($stkpcd * $cb->thangtl, 0);
+                        $cb->stbhtn = round($stbhtn * $cb->thangtl, 0);
+
+                        $cb->stbhxh_dv = round($stbhxh_dv * $cb->thangtl, 0);
+                        $cb->stbhyt_dv = round($stbhyt_dv * $cb->thangtl, 0);
+                        $cb->stkpcd_dv = round($stkpcd_dv * $cb->thangtl, 0);
+                        $cb->stbhtn_dv = round($stbhtn_dv * $cb->thangtl, 0);
                     }
-                    $cb->stbhxh = $stbhxh;
-                    $cb->stbhyt = $stbhyt;
-                    $cb->stkpcd = $stkpcd;
-                    $cb->stbhtn = $stbhtn;
-
-                    $cb->stbhxh_dv = $stbhxh_dv;
-                    $cb->stbhyt_dv = $stbhyt_dv;
-                    $cb->stkpcd_dv = $stkpcd_dv;
-                    $cb->stbhtn_dv = $stbhtn_dv;
 
                     $cb->ttbh = $cb->stbhxh + $cb->stbhyt + $cb->stkpcd + $cb->stbhtn;
                     $cb->ttbh_dv = $cb->stbhxh_dv + $cb->stbhyt_dv + $cb->stkpcd_dv + $cb->stbhtn_dv;
