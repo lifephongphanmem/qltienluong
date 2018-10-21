@@ -44,10 +44,10 @@
                         <thead>
                             <tr>
                                 <th class="text-center" style="width: 5%">STT</th>
+                                <th class="text-center">Phân loại</th>
                                 <th class="text-center">Họ và tên</th>
                                 <th class="text-center">Từ ngày</th>
                                 <th class="text-center">Đến ngày</th>
-                                <th class="text-center">Nội dung</th>
                                 <th class="text-center">Hệ số</br>truy lĩnh</th>
                                 <th class="text-center">Thao tác</th>
                             </tr>
@@ -57,10 +57,10 @@
                                 @foreach($model as $key=>$value)
                                     <tr>
                                         <td class="text-center">{{$key+1}}</td>
+                                        <td>{{isset($a_pl[$value->maphanloai])? $a_pl[$value->maphanloai]:'' }}</td>
                                         <td>{{$value->tencanbo}}</td>
                                         <td class="text-center">{{getDayVn($value->ngaytu)}}</td>
                                         <td class="text-center">{{getDayVn($value->ngayden)}}</td>
-                                        <td>{{$value->noidung}}</td>
                                         <td class="text-center">{{$value->heso}}</td>
                                         <td>
 

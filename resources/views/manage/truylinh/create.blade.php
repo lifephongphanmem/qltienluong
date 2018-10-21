@@ -27,7 +27,7 @@
 
 
     <h3 class="page-title">
-        Thông tin truy lĩnh lương của cán bộ
+        Thông tin truy lĩnh lương của cán bộ - {{$model->tencanbo}}
     </h3>
     <!-- END PAGE HEADER-->
 
@@ -42,6 +42,7 @@
                     <!-- BEGIN FORM-->
                     {!! Form::model($model,['url'=>$furl.'store', 'id' => 'create_tttaikhoan', 'class'=>'horizontal-form']) !!}
                     <input type="hidden" id="macanbo" name="macanbo" value="{{$model->macanbo}}"/>
+                    <input type="hidden" id="tencanbo" name="tencanbo" value="{{$model->tencanbo}}"/>
                     <input type="hidden" id="maso" name="maso" value="{{$model->maso}}"/>
                     <input type="hidden" id="maphanloai" name="maphanloai" value="{{$model->maphanloai}}"/>
                     <div class="form-body">
@@ -61,8 +62,8 @@
                                         <div class="row">
                                             <div class="col-md-3">
                                                 <div class="form-group">
-                                                    <label class="form-control-label">Họ tên cán bộ<span class="require">*</span></label>
-                                                    {!!Form::text('tencanbo', null, array('id' => 'tencanbo','class' => 'form-control','required','readonly'))!!}
+                                                    <label class="form-control-label">Phân loại truy lĩnh</label>
+                                                    {!!Form::text('tentruylinh', null, array('id' => 'tentruylinh','class' => 'form-control', 'readonly'))!!}
                                                 </div>
                                             </div>
 
@@ -260,11 +261,11 @@
 
         //chạy hàm khi đơn vị trc chưa tính theo ngày tháng
         function tinhtoan_load() {
-            if($('#thangtl').val() ==0 || $('#ngaytl').val() ==0){
+            if($('#thangtl').val() == 0 && $('#ngaytl').val() ==0){
                 //cùng năm => so sánh tháng
                 var ngaytu = $('#ngaytu').val();
                 var ngayden = $('#ngayden').val();
-                if(ngaytu =='' || ngayden ==''){
+                if(ngaytu == '' || ngayden == ''){
                     $('#thangtl').val(0);
                     $('#ngaytl').val(0);
                 }else{

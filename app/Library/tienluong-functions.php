@@ -574,9 +574,11 @@ function getNopBaoHiem(){
 }
 
 function getPhanLoaiTruyLinh(){
-    return array('MSNGBAC' => 'Truy lĩnh lương ngạch bậc; vượt khung',
+    return array(
+        'MSNGBAC' => 'Truy lĩnh lương ngạch bậc; vượt khung',
+        'CHUCVU' => 'Truy lĩnh hệ số chức vụ',
         'TNN' => 'Truy lĩnh thâm niên nghề',
-        //'NGAYLV' => 'Truy lĩnh ngày công làm việc', //chưa nghiên cứu chức năng này
+        'NGAYLV' => 'Truy lĩnh ngày công làm việc', //chưa nghiên cứu chức năng này
         'KHAC'=>'Truy lĩnh khác',
     );
 }
