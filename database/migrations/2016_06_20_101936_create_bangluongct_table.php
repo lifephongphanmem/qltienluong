@@ -80,12 +80,56 @@ class CreateBangluongctTable extends Migration
             $table->double('ttbh')->default(0);
             $table->double('gttncn')->default(0);
             $table->double('luongtn')->default(0);
-
             $table->double('stbhxh_dv')->default(0);
             $table->double('stbhyt_dv')->default(0);
             $table->double('stkpcd_dv')->default(0);
             $table->double('stbhtn_dv')->default(0);
             $table->double('ttbh_dv')->default(0);
+            //lưu theo số tiền
+            $table->double('st_heso')->default(0);
+            $table->double('st_hesobl')->default(0);
+            $table->double('st_hesopc')->default(0);            
+            $table->double('st_vuotkhung')->default(0);
+            $table->double('st_pcct')->default(0);
+            $table->double('st_pckct')->default(0);
+            $table->double('st_pck')->default(0);
+            $table->double('st_pccv')->default(0);
+            $table->double('st_pckv')->default(0);
+            $table->double('st_pcth')->default(0);
+            $table->double('st_pcdd')->default(0);
+            $table->double('st_pcdh')->default(0);
+            $table->double('st_pcld')->default(0);
+            $table->double('st_pcdbqh')->default(0);
+            $table->double('st_pcudn')->default(0);
+            $table->double('st_pctn')->default(0);
+            $table->double('st_pctnn')->default(0);
+            $table->double('st_pcdbn')->default(0);
+            $table->double('st_pcvk')->default(0);
+            $table->double('st_pckn')->default(0);
+            $table->double('st_pcdang')->default(0);
+            $table->double('st_pccovu')->default(0);
+            $table->double('st_pclt')->default(0);
+            $table->double('st_pcd')->default(0);
+            $table->double('st_pctr')->default(0);
+            $table->double('st_pctdt')->default(0);
+            $table->double('st_pctnvk')->default(0);
+            $table->double('st_pcbdhdcu')->default(0);
+            $table->double('st_pcthni')->default(0);
+            $table->double('st_pclade')->default(0); 
+            $table->double('st_pcud61')->default(0);
+            $table->double('st_pcxaxe')->default(0);
+            $table->double('st_pcdith')->default(0);
+            $table->double('st_luonghd')->default(0);
+            $table->double('st_pcphth')->default(0);
+            //lưu tỷ lệ bảo hiểm (đã quy về hệ số)
+            $table->double('bhxh')->default(0);
+            $table->double('bhyt')->default(0);
+            $table->double('bhtn')->default(0);
+            $table->double('kpcd')->default(0);
+            $table->double('bhxh_dv')->default(0);
+            $table->double('bhyt_dv')->default(0);
+            $table->double('bhtn_dv')->default(0);
+            $table->double('kpcd_dv')->default(0);
             $table->timestamps();
         });
     }
