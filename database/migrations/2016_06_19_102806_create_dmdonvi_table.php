@@ -37,6 +37,7 @@ class CreateDmdonviTable extends Migration
             $table->string('phanloaitaikhoan',50)->default('SD');//đơn vị nhập liệu; đơn vị tổng hợp
             $table->string('phamvitonghop',50)->default('KHOI');//Khối, sở ban ngành; Cả huyện, tất cả các sở ban ngành(chỉ có 1 tài khoản 1 huyện)
             $table->double('songaycong')->default(24);
+            $table->double('ptdaingay')->default(100);
             $table->timestamps();
         });
     }
