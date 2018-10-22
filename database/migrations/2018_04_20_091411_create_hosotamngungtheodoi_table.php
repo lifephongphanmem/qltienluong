@@ -27,6 +27,7 @@ class CreateHosotamngungtheodoiTable extends Migration
             $table->date('ngaytu')->nullable();
             $table->date('ngayden')->nullable();
             $table->double('songaynghi')->default(0);
+            $table->double('songaycong')->default(0);
             $table->string('madv')->nullable();
             $table->timestamps();
         });

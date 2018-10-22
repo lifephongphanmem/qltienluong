@@ -92,6 +92,13 @@ class hosotamngungtheodoiController extends Controller
                         ->where('theodoi', '<', '9')->get()->toarray(), 'tencanbo', 'macanbo');
                     break;
                 }
+                case 'DUONGSUC': {
+                    $a_phanloai = array(
+                        'DUONGSUC' => 'Nghỉ dưỡng sức sau sinh');
+                    $a_canbo = array_column(hosocanbo::where('madv', session('admin')->madv)
+                        ->where('theodoi', '<', '9')->where('gioitinh', 'Nữ')->get()->toarray(), 'tencanbo', 'macanbo');
+                    break;
+                }
                 case 'KHONGLUONG': {
                     $a_phanloai = array(
                         'KHONGLUONG' => 'Nghỉ không lương');

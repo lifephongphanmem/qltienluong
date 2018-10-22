@@ -553,6 +553,10 @@ class bangluongController extends Controller
 
         $a_thaisan =array_column(hosotamngungtheodoi::where('madv', $inputs['madv'])->where('maphanloai', 'THAISAN')
                 ->where('ngaytu', '<=', $ngaylap)->where('ngayden', '>=', $ngaylap)->get()->toarray(),'macanbo');
+
+        $a_duongsuc = hosotamngungtheodoi::select('songaycong','songaynghi','macanbo')->where('madv', $inputs['madv'])->where('maphanloai','DUONGSUC')
+            ->whereYear('ngaytu', $inputs['nam'])->whereMonth('ngaytu', $inputs['thang'])->get()->keyBy('macanbo')->toarray();
+
         $a_nghiphep = array_column(hosotamngungtheodoi::where('madv', $inputs['madv'])->wherein('maphanloai',['NGHIPHEP','NGHIOM'])
             ->whereYear('ngaytu', $inputs['nam'])->whereMonth('ngaytu', $inputs['thang'])->get()->toarray(),'songaynghi','macanbo');
 
@@ -650,6 +654,7 @@ class bangluongController extends Controller
             $khongluong = in_array($m_cb[$key]['macanbo'],$a_khongluong) ? true : false;
             $daingay = in_array($m_cb[$key]['macanbo'],$a_daingay) ? true : false;
             $nghi = isset($a_nghiphep[$m_cb[$key]['macanbo']]) ? true : false;
+            $duongsuc = isset($a_duongsuc[$m_cb[$key]['macanbo']]) ? true : false;
 
             //Tính phụ cấp
             foreach ($a_pc as $k=>$v) {
@@ -816,6 +821,27 @@ class bangluongController extends Controller
                 goto tinhluong;
             }
 
+            if($khongluong){//tính không lương rồi thoát
+                $m_cb[$key]['tencanbo'] .= ' (nghỉ không lương)';
+                $m_cb[$key]['stbhxh'] = 0;
+                $m_cb[$key]['stbhyt'] = 0;
+                $m_cb[$key]['stkpcd'] = 0;
+                $m_cb[$key]['stbhtn'] = 0;
+                $m_cb[$key]['ttbh'] = 0;
+                $m_cb[$key]['stbhxh_dv'] = 0;
+                $m_cb[$key]['stbhyt_dv'] = 0;
+                $m_cb[$key]['stkpcd_dv'] = 0;
+                $m_cb[$key]['stbhtn_dv'] = 0;
+                $m_cb[$key]['ttbh_dv'] = 0;
+                $tonghs = $tien = 0;
+                $m_cb[$key]['congtac'] = 'KHONGLUONG';
+                goto tinhluong;
+            }
+
+            if($duongsuc) { //đang làm
+
+            }
+
             if($nghi) {
                 $cb_nghi = $a_nghiphep[$m_cb[$key]['macanbo']];
                 $m_cb[$key]['congtac'] = 'NGHIPHEP';
@@ -834,22 +860,6 @@ class bangluongController extends Controller
                     $m_cb[$key]['ttbh_dv'] = 0;
                 }
                 $m_cb[$key]['giaml'] = $cb_nghi >= $ngaycong ? $sotiencong : ($tiencong * $cb_nghi);
-            }
-
-            if($khongluong){//tính không lương rồi thoát
-                $m_cb[$key]['tencanbo'] .= ' (nghỉ không lương)';
-                $m_cb[$key]['stbhxh'] = 0;
-                $m_cb[$key]['stbhyt'] = 0;
-                $m_cb[$key]['stkpcd'] = 0;
-                $m_cb[$key]['stbhtn'] = 0;
-                $m_cb[$key]['ttbh'] = 0;
-                $m_cb[$key]['stbhxh_dv'] = 0;
-                $m_cb[$key]['stbhyt_dv'] = 0;
-                $m_cb[$key]['stkpcd_dv'] = 0;
-                $m_cb[$key]['stbhtn_dv'] = 0;
-                $m_cb[$key]['ttbh_dv'] = 0;
-                $tonghs = $tien = 0;
-                $m_cb[$key]['congtac'] = 'KHONGLUONG';
             }
 
             tinhluong:
@@ -885,6 +895,16 @@ class bangluongController extends Controller
             $m_cb_kn[$i]['stt'] = $canbo['stt'];
             $m_cb_kn[$i]['mabl'] = $inputs['mabl'];
             $m_cb_kn[$i]['congtac'] = $m_cb_kn[$i]['phanloai'];
+            $m_cb_kn[$i]['stbhxh'] = 0;
+            $m_cb_kn[$i]['stbhyt'] = 0;
+            $m_cb_kn[$i]['stkpcd'] = 0;
+            $m_cb_kn[$i]['stbhtn'] = 0;
+            $m_cb_kn[$i]['ttbh'] = 0;
+            $m_cb_kn[$i]['stbhxh_dv'] = 0;
+            $m_cb_kn[$i]['stbhyt_dv'] = 0;
+            $m_cb_kn[$i]['stkpcd_dv'] = 0;
+            $m_cb_kn[$i]['stbhtn_dv'] = 0;
+            $m_cb_kn[$i]['ttbh_dv'] = 0;
             $tonghs = $tien = 0;
 
             if(isset($a_pc['pcthni'])){
@@ -921,16 +941,6 @@ class bangluongController extends Controller
                 if($m_cb_kn[$i][$mapc] <= 0){
                     continue;
                 }
-                $m_cb_kn[$i]['stbhxh'] = 0;
-                $m_cb_kn[$i]['stbhyt'] = 0;
-                $m_cb_kn[$i]['stkpcd'] = 0;
-                $m_cb_kn[$i]['stbhtn'] = 0;
-                $m_cb_kn[$i]['ttbh'] = 0;
-                $m_cb_kn[$i]['stbhxh_dv'] = 0;
-                $m_cb_kn[$i]['stbhyt_dv'] = 0;
-                $m_cb_kn[$i]['stkpcd_dv'] = 0;
-                $m_cb_kn[$i]['stbhtn_dv'] = 0;
-                $m_cb_kn[$i]['ttbh_dv'] = 0;
                 $a_pc[$k]['heso_goc'] =$m_cb_kn[$i][$mapc];//lưu lại hệ số gốc
 
                 switch ($v['phanloai']) {
@@ -979,19 +989,17 @@ class bangluongController extends Controller
             if ($m_cb_kn[$i]['baohiem'] == 1) {
                 if (isset($a_phanloai[$m_cb_kn[$i]['mact']])) {//do trc nhập chưa lưu mact
                     $phanloai = $a_phanloai[$m_cb_kn[$i]['mact']];
-
                     $m_cb_kn[$i]['stbhxh'] = round($inputs['luongcoban'] * floatval($phanloai['bhxh']) / 100, 0);
                     $m_cb_kn[$i]['stbhyt'] = round($inputs['luongcoban'] * floatval($phanloai['bhyt']) / 100, 0);
                     $m_cb_kn[$i]['stkpcd'] = round($inputs['luongcoban'] * floatval($phanloai['kpcd']) / 100, 0);
                     $m_cb_kn[$i]['stbhtn'] = round($inputs['luongcoban'] * floatval($phanloai['bhtn']) / 100, 0);
-                    $m_cb_kn[$i]['ttbh'] = $m_cb_kn[$i]['stbhxh'] + $m_cb_kn[$i]['stbhyt']
-                        + $m_cb_kn[$i]['stkpcd'] + $m_cb_kn[$i]['stbhtn'];
                     $m_cb_kn[$i]['stbhxh_dv'] = round($inputs['luongcoban'] * floatval($phanloai['bhxh_dv']) / 100, 0);
                     $m_cb_kn[$i]['stbhyt_dv'] = round($inputs['luongcoban'] * floatval($phanloai['bhyt_dv']) / 100, 0);
                     $m_cb_kn[$i]['stkpcd_dv'] = round($inputs['luongcoban'] * floatval($phanloai['kpcd_dv']), 0);
                     $m_cb_kn[$i]['stbhtn_dv'] = round($inputs['luongcoban'] * floatval($phanloai['bhtn_dv']), 0);
-                    $m_cb_kn[$i]['ttbh_dv'] = $m_cb_kn[$i]['stbhxh_dv'] + $m_cb_kn[$i]['stbhyt_dv']
-                        + $m_cb_kn[$i]['stkpcd_dv'] + $m_cb_kn[$i]['stbhtn_dv'];
+
+                    $m_cb_kn[$i]['ttbh'] = $m_cb_kn[$i]['stbhxh'] + $m_cb_kn[$i]['stbhyt'] + $m_cb_kn[$i]['stkpcd'] + $m_cb_kn[$i]['stbhtn'];
+                    $m_cb_kn[$i]['ttbh_dv'] = $m_cb_kn[$i]['stbhxh_dv'] + $m_cb_kn[$i]['stbhyt_dv'] + $m_cb_kn[$i]['stkpcd_dv'] + $m_cb_kn[$i]['stbhtn_dv'];
                 }
             }
             $m_cb_kn[$i]['luongtn'] =  $m_cb_kn[$i]['ttl'] -  $m_cb_kn[$i]['ttbh'];

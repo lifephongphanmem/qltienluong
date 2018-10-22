@@ -45,6 +45,9 @@
                                     <a href="{{url($furl.'create?phanloai=THAISAN')}}" class="btn btn-default btn-xs"> Nghỉ thai sản</a>
                                 </li>
                                 <li>
+                                    <a href="{{url($furl.'create?phanloai=DUONGSUC')}}" class="btn btn-default btn-xs"> Nghỉ dưỡng sức</a>
+                                </li>
+                                <li>
                                     <a href="{{url($furl.'create?phanloai=NGHIPHEP')}}" class="btn btn-default btn-xs"> Nghỉ ốm/Nghỉ phép</a>
                                 </li>
                                 <li>
