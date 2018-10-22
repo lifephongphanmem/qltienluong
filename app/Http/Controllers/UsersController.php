@@ -200,7 +200,9 @@ class UsersController extends Controller
 
                 //kiểm tra lại hệ thống danh mục nếu danh mục nào chưa có thì tự động lấy vào
                 //trường hợp đơn vị tổng hợp thì bỏ qua
-                /*
+
+
+                /* tạm thời bỏ để đỡ lag
                 //phân loại công tác
                 $model_phanloai = dmphanloaicongtac_baohiem::where('madv', $ttuser->madv)->get();
                 if (count($model_phanloai) == 0) {

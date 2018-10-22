@@ -373,7 +373,6 @@ class tonghopluong_donviController extends Controller
                     }
 
                     if (count($a_nguon)> 0 && !in_array($pc->mapc, $a_nguon)) {
-                        dd('1');
                         $ct->$mapc = 0;
                         $ct->$mapc_st = 0;
                     }
