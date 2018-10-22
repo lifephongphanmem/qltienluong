@@ -61,6 +61,7 @@ class tonghopluong_donvi_bangluong extends Model
         'luonghd',
         'pcphth',
         'tonghs',
+        'ttl',
         'giaml',
         'luongtn',
         'stbhxh_dv',

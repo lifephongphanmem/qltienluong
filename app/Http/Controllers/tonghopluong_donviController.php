@@ -314,7 +314,7 @@ class tonghopluong_donviController extends Controller
             return view('errors.notlogin');
     }
 
-    function tonghop(Request $requests)
+    function tonghop_221018(Request $requests)
     {
         if (Session::has('admin')) {
             $inputs = $requests->all();
@@ -351,6 +351,7 @@ class tonghopluong_donviController extends Controller
             }
 
             //ng cứu lương thực nhận
+            $a_data = array();
             foreach ($model_bangluong_ct as $ct) {
                 $ct->macongtac = isset($a_congtac[$ct->mact]) ? $a_congtac[$ct->mact] : null;
                 $bangluong = $a_bangluong[$ct->mabl];
@@ -434,6 +435,123 @@ class tonghopluong_donviController extends Controller
             $inputs['macqcq'] = session('admin')->macqcq;
             $inputs['madvbc'] = session('admin')->madvbc;
 
+            tonghopluong_donvi_chitiet::insert($model_data);
+            tonghopluong_donvi::create($inputs);
+            return redirect('/chuc_nang/tong_hop_luong/don_vi/detail/ma_so=' . $mathdv);
+        } else
+            return view('errors.notlogin');
+    }
+
+    function tonghop(Request $requests)
+    {
+        if (Session::has('admin')) {
+            $inputs = $requests->all();
+            $thang = $inputs['thang'];
+            $nam = $inputs['nam'];
+            $mathdv = getdate()[0];
+            $madv = session('admin')->madv;
+            $a_congtac = array_column(dmphanloaict::all()->toArray(), 'macongtac', 'mact');
+            //$a_hs = array_column(hosocanbo::where('madv',session('admin')->madv)->where('theodoi','<','9')->get()->toArray(), 'tencanbo', 'macanbo');
+
+            //lấy bảng lương
+            $a_bangluong = bangluong::where('nam', $nam)->where('thang', $thang)
+                ->where('madv', $madv)->where('phanloai', 'BANGLUONG')->get()->keyby('mabl')->toarray();
+
+            //bảng lương chi tiết
+            $a_th = array_merge(array('macanbo','tencanbo','msngbac', 'mact', 'macvcq', 'mapb', 'mabl','congtac','stbhxh_dv','stbhyt_dv','stkpcd_dv','stbhtn_dv','tonghs','ttl'),getColTongHop());
+
+            $a_ct = bangluong_ct::select($a_th)->wherein('mabl', array_column($a_bangluong,'mabl'))->get()->toarray();
+            $a_bangluong_phucap = bangluong_phucap::wherein('mabl', array_column($a_bangluong,'mabl'))->get()->toarray();
+
+            //$model_nguondm = nguonkinhphi_dinhmuc::where('madv',$madv)->get();
+            $a_nguondm = nguonkinhphi_dinhmuc_ct::join('nguonkinhphi_dinhmuc','nguonkinhphi_dinhmuc_ct.maso','nguonkinhphi_dinhmuc.maso')
+                ->where('nguonkinhphi_dinhmuc.madv',$madv)->get()->toarray();
+
+            $a_pc = dmphucap_donvi::where('madv', $madv)->wherenotin('mapc',['hesott'])->get()->keyby('mapc')->toarray();
+
+            $a_bh = array_column(dmphucap_thaisan::select('mapc')->where('madv', session('admin')->madv)->get()->toarray(), 'mapc');
+
+            $a_data = array();
+            $a_col_pc_st = array();
+            $a_plct = array('1536402868','1536459380','1535613221', '1506673695');
+            $a_plcongtac = array('BIENCHE','KHONGCT');
+            for($i=0; $i< count($a_ct); $i++){
+                $a_ct[$i]['macongtac'] = isset($a_congtac[$a_ct[$i]['mact']]) ? $a_congtac[$a_ct[$i]['mact']] : null;
+                $bangluong = $a_bangluong[$a_ct[$i]['mabl']];
+                $a_ct[$i]['manguonkp'] = $bangluong['manguonkp'];
+                $a_ct[$i]['luongcoban'] = $bangluong['luongcoban'];
+                $a_ct[$i]['linhvuchoatdong'] = $bangluong['linhvuchoatdong'];//chỉ dùng cho khối HCSN
+                $a_ct[$i]['mathdv'] = $mathdv;
+                $a_nguon = array_column(a_getelement_equal($a_nguondm, array('manguonkp' => $a_ct[$i]['manguonkp'])), 'mapc');
+                foreach ($a_pc as $k=>$v) {
+                    $mapc = $v['mapc'];
+                    $mapc_st = 'st_' . $mapc;
+                    $phucap = a_getelement_equal($a_bangluong_phucap, array('macanbo' => $a_ct[$i]['macanbo'], 'mabl' => $a_ct[$i]['mabl'], 'maso' => $mapc), true);
+                    $a_ct[$i][$mapc_st] = count($phucap) > 0 ? $phucap['sotien'] : 0;
+                    $a_ct[$i][$mapc] = count($phucap) > 0 ? $phucap['heso'] : 0;
+                    if ($a_ct[$i]['congtac'] == 'THAISAN' && !in_array($mapc, $a_bh) ) {
+                        $a_ct[$i][$mapc] = 0;
+                        $a_ct[$i][$mapc_st] = 0;
+                    }
+
+                    if (count($a_nguon)> 0 && !in_array($mapc, $a_nguon)) {
+                        $a_ct[$i][$mapc] = 0;
+                        $a_ct[$i][$mapc_st] = 0;
+                    }
+
+                    if($i == 0){//chỉ lấy 1 lần
+                        $a_col_pc_st[] = $mapc_st;
+                    }
+                }
+                if(in_array($a_ct[$i]['macongtac'],$a_plcongtac) || in_array($a_ct[$i]['mact'],$a_plct)){
+                    $a_data[] = $a_ct[$i];
+                }
+
+            }
+
+
+            //Lấy dữ liệu để lập
+            $model_data = a_split($a_data,array('mact', 'linhvuchoatdong', 'manguonkp', 'macongtac', 'luongcoban'));
+            $model_data = a_unique($model_data);
+
+            for ($i = 0; $i < count($model_data); $i++) {
+                $luongct = a_getelement_equal($a_data, array('manguonkp'=> $model_data[$i]['manguonkp'],'mact'=>$model_data[$i]['mact'],'linhvuchoatdong'=>$model_data[$i]['linhvuchoatdong']));
+
+                $tonghs = 0;
+                $model_data[$i]['mathdv'] = $mathdv;
+                foreach (getColTongHop() as $ct) {
+                    $model_data[$i][$ct] = array_sum(array_column($luongct,'st_'.$ct));
+                    $tonghs += chkDbl($model_data[$i][$ct]);
+
+                }
+                $model_data[$i]['stbhxh_dv'] = array_sum(array_column($luongct,'stbhxh_dv'));
+                $model_data[$i]['stbhyt_dv'] = array_sum(array_column($luongct,'stbhyt_dv'));
+                $model_data[$i]['stkpcd_dv'] = array_sum(array_column($luongct,'stkpcd_dv'));
+                $model_data[$i]['stbhtn_dv'] = array_sum(array_column($luongct,'stbhtn_dv'));
+                $model_data[$i]['soluong'] = count($luongct);
+                $model_data[$i]['giaml'] = array_sum(array_column($luongct,'giaml'));
+                $model_data[$i]['tonghs'] = $tonghs;
+                $model_data[$i]['luongtn'] = $model_data[$i]['tonghs'] - $model_data[$i]['giaml'];
+
+            }
+            //Mảng chứa các cột bỏ để chạy hàm insert
+            $a_col_pc = array('id','baohiem','bhxh','baohiem','bhtn', 'kpcd', 'bhyt', 'bhct','congtac', 'mabl');
+            $a_data = unset_key($a_data,$a_col_pc);
+            $a_data = unset_key($a_data,$a_col_pc_st);
+
+            foreach(array_chunk($a_data, 50)  as $data){
+                tonghopluong_donvi_bangluong::insert($data);
+            }
+            $inputs['madv'] = session('admin')->madv;
+            $inputs['mathdv'] = $mathdv;
+            $inputs['trangthai'] = 'CHOGUI';
+            $inputs['phanloai'] = 'DONVI';
+            $inputs['noidung'] = 'Dữ liệu tổng hợp của ' . getTenDV(session('admin')->madv) . ' thời điểm ' . $inputs['thang'] . '/' . $inputs['nam'];
+            $inputs['nguoilap'] = session('admin')->name;
+            $inputs['ngaylap'] = Carbon::now()->toDateTimeString();
+            $inputs['macqcq'] = session('admin')->macqcq;
+            $inputs['madvbc'] = session('admin')->madvbc;
+            $model_data = unset_key($model_data,array('congtac','mabl','macanbo', 'macvcq', 'mapb'));
             tonghopluong_donvi_chitiet::insert($model_data);
             tonghopluong_donvi::create($inputs);
             return redirect('/chuc_nang/tong_hop_luong/don_vi/detail/ma_so=' . $mathdv);

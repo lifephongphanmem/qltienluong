@@ -71,6 +71,7 @@ class CreateNguonkinhphiBangluongTable extends Migration
             $table->double('pcphth')->default(0); //phẫu thuật, thủ thuật
 
             $table->double('tonghs')->default(0);
+            $table->double('ttl')->default(0);
             $table->double('giaml')->default(0);
             $table->double('luongtn')->default(0);
             $table->double('stbhxh_dv')->default(0);

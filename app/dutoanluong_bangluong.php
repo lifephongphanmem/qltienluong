@@ -65,6 +65,7 @@ class dutoanluong_bangluong extends Model
         'luonghd', //đã thêm vào tổng hợp=> ko dự toán =>thừa
 
         'tonghs',
+        'ttl',
         'giaml',
         'luongtn',
         'stbhxh_dv',
