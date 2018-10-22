@@ -131,6 +131,7 @@ class bangluong_ct extends Model
     ];
 }
 /*
+ *
         ALTER TABLE `bangluong_ct` ADD `st_heso` FLOAT NOT NULL DEFAULT '0' AFTER `kpcd_dv`;
         ALTER TABLE `bangluong_ct` ADD `st_hesobl` FLOAT NOT NULL DEFAULT '0' AFTER `kpcd_dv`;
         ALTER TABLE `bangluong_ct` ADD `st_hesopc` FLOAT NOT NULL DEFAULT '0' AFTER `kpcd_dv`;
