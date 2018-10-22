@@ -349,34 +349,38 @@ class tonghopluong_donviController extends Controller
                     $model_bangluong_ct->add($khac);
                 }
             }
+
             //ng cứu lương thực nhận
             foreach ($model_bangluong_ct as $ct) {
-                $ct->macongtac = isset($a_congtac[$ct->mact])? $a_congtac[$ct->mact] : null;
+                $ct->macongtac = isset($a_congtac[$ct->mact]) ? $a_congtac[$ct->mact] : null;
                 $bangluong = $a_bangluong[$ct->mabl];
                 $ct->manguonkp = $bangluong['manguonkp'];
                 $ct->luongcoban = $bangluong['luongcoban'];
                 $ct->linhvuchoatdong = $bangluong['linhvuchoatdong'];//chỉ dùng cho khối HCSN
                 $ct->mathdv = $mathdv;
-                $a_nguon = array_column(a_getelement_equal($a_nguondm, array('manguonkp'=>$ct->manguonkp)) ,'mapc');
+                $a_nguon = array_column(a_getelement_equal($a_nguondm, array('manguonkp' => $ct->manguonkp)), 'mapc');
                 foreach ($model_pc as $pc) {
                     $mapc = $pc->mapc;
-                    $mapc_st = 'st_'.$pc->mapc;
-                    $phucap = a_getelement_equal($a_bangluong_phucap,array('macanbo'=>$ct->macanbo,'mabl'=>$ct->mabl,'maso'=>$mapc),true);
-                    $ct->$mapc_st = count($phucap)>0? $phucap['sotien'] : 0;
-                    $ct->$mapc = count($phucap)>0? $phucap['heso'] : 0;
+                    $mapc_st = 'st_' . $pc->mapc;
+                    $phucap = a_getelement_equal($a_bangluong_phucap, array('macanbo' => $ct->macanbo, 'mabl' => $ct->mabl, 'maso' => $mapc), true);
+                    $ct->$mapc_st = count($phucap) > 0 ? $phucap['sotien'] : 0;
+                    $ct->$mapc = count($phucap) > 0 ? $phucap['heso'] : 0;
 
+                    //dd($phucap);
                     if (!in_array($pc->mapc, $a_bh) && $ct->congtac == 'THAISAN') {
                         $ct->$mapc = 0;
                         $ct->$mapc_st = 0;
                     }
 
-                    if (!in_array($pc->mapc, $a_nguon)) {
+                    if (count($a_nguon)> 0 && !in_array($pc->mapc, $a_nguon)) {
+                        dd('1');
                         $ct->$mapc = 0;
                         $ct->$mapc_st = 0;
                     }
                 }
-            }
 
+            }
+            //dd($model_bangluong_ct);
             //nhóm đơn vị xã phương thị trấn
 
             //
@@ -399,6 +403,7 @@ class tonghopluong_donviController extends Controller
 
                 //hệ số phụ cấp cho cán bộ đã nghỉ hưu
                 //$model_data[$i]['hesopc'] = $luongct->sum('hesopc') * $model_data[$i]['luongcoban'];
+                //xem kiểm tra nguồn ở đây để chạy it for
                 foreach ($a_th as $ct) {
                     $model_data[$i][$ct] = $luongct->sum('st_'.$ct);
                     $tonghs += chkDbl($model_data[$i][$ct]);
@@ -412,9 +417,8 @@ class tonghopluong_donviController extends Controller
                 $model_data[$i]['tonghs'] = $tonghs;
                 $model_data[$i]['luongtn'] = $model_data[$i]['tonghs'] - $model_data[$i]['giaml'];
             }
-
+            //dd($model_data);
             foreach ($model_bangluong_ct as $ct){
-
                 $a_kq = $ct->toarray();
                 unset($a_kq['id']);
                 tonghopluong_donvi_bangluong::create($a_kq);

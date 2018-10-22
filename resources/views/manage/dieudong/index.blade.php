@@ -58,10 +58,10 @@
                                     <tr>
                                         <td class="text-center">{{$key+1}}</td>
                                         <td>{{$value->tencanbo}}</td>
-                                        <td>{{$value->phanloai}}</td>
-                                        <td>{{getDayVn($value->ngaylc)}}</td>
-                                        <td>{{$value->tendv}}</td>
-                                        <td>{{$value->trangthai}}</td>
+                                        <td>{{$value->tenphanloai}}</td>
+                                        <td class="text-center">{{getDayVn($value->ngaylc)}}</td>
+                                        <td>{{$value->tendv_dd}}</td>
+                                        <td>{{$value->tentrangthai}}</td>
                                         <td>
                                             <!-- Kiểm tra trạng thái trc khi xóa -->
                                             <a href="{{url($furl.'create?maso='.$value->maso)}}" class="btn btn-default btn-xs">

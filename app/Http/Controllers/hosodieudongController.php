@@ -26,6 +26,9 @@ class hosodieudongController extends Controller
             //lấy cán bộ đơn vị # chuyển đến (trạng thái, phân loại)
             $model = hosodieudong::where('madv', session('admin')->madv)->get();
             $model_canbo = hosocanbo::where('madv', session('admin')->madv)->where('theodoi', '<', '9')->get();
+            $a_pl = getPhanLoaiLuanChuyen();
+            $a_tt = getStatus();
+
             //tuywf theo phan laoi mà có chức năng tương ứng
             // + được điều động, lc dến => nhận cán bộ
             /*
@@ -33,15 +36,19 @@ class hosodieudongController extends Controller
             $m_cvm=dmchucvucq::all('tencv', 'macvcq')->toArray();
             $m_dvm=dmdonvi::select('tendv', 'madv')->where('madvbc',session('admin')->madvbc)->get()->toArray();
 
-            foreach($model as $hs){
-                //$hs->tenpb=getInfoPhongBan($hs,$m_pbm);
-                $hs->tencvcq=getInfoChucVuCQ($hs,$m_cvm);
-                $hs->tendv=getInfoDonVI($hs,$m_dvm);
-            }
+
             */
+            foreach($model as $ct){
+                //$hs->tenpb=getInfoPhongBan($hs,$m_pbm);
+                $ct->tenphanloai = isset($a_pl[$ct->maphanloai])? $a_pl[$ct->maphanloai] : '';
+                $ct->tentrangthai = isset($a_tt[$ct->trangthai])? $a_tt[$ct->trangthai] : '';
+                $ct->tendv_dd=getTenDV($ct->madv_dd);
+            }
+
             return view('manage.dieudong.index')
                 ->with('furl', '/nghiep_vu/dieu_dong/')
                 ->with('a_canbo', array_column($model_canbo->toarray(), 'tencanbo', 'macanbo'))
+                ->with('a_pl', $a_pl)
                 ->with('model', $model)
                 ->with('pageTitle', 'Danh sách hồ sơ điều động cán bộ');
         } else
@@ -51,11 +58,11 @@ class hosodieudongController extends Controller
     function create(Request $request)
     {
         if (Session::has('admin')) {
-
             $inputs = $request->all();
 
             if(isset($inputs['maso'])){
                 $model = hosodieudong::where('maso',$inputs['maso'])->first();
+                //dd($model);
             }else{
                 $model = hosocanbo::where('macanbo',$inputs['macanbo'])->first();
                 $model->maso = 'ADD';

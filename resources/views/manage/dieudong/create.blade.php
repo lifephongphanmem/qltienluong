@@ -11,6 +11,7 @@
     @include('includes.script.scripts')
     <script>
         $('#sunghiep').val('{{$model->sunghiep}}').trigger('change');
+        $('#madv_dd').val('{{$model->madv_dd}}').trigger('change');
         $('#mact').val('{{$model->mact}}').trigger('change');
     </script>
 @stop
@@ -19,7 +20,7 @@
 
 
     <h3 class="page-title">
-        Thông tin hồ sơ của cán bộ
+        Thông tin hồ sơ của cán bộ - {{$model->tencanbo}}
     </h3>
     <!-- END PAGE HEADER-->
 
@@ -34,6 +35,7 @@
                     <!-- BEGIN FORM-->
                     {!! Form::model($model,['url'=>$furl.'store', 'id' => 'create_tttaikhoan', 'class'=>'horizontal-form']) !!}
                     <input type="hidden" id="macanbo" name="macanbo" value="{{$model->macanbo}}"/>
+                    <input type="hidden" id="gioitinh" name="macanbo" value="{{$model->gioitinh}}"/>
                     <input type="hidden" id="maso" name="maso" value="{{$model->maso}}"/>
                     <div class="form-body">
                         <div class="row">
