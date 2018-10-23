@@ -64,7 +64,13 @@
                             </div>
 
                             @if(!in_array($model->maphanloai, array('THAISAN','KHONGLUONG','DAINGAY')))
-                                <div class="col-md-6">
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label class="form-control-label">Số ngày công</label>
+                                        {!!Form::text('songaycong', null, array('id' =>'songaycong', 'class' => 'form-control', 'data-mask'=>'fdecimal'))!!}
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
                                     <div class="form-group">
                                         <label class="form-control-label">Số ngày nghỉ</label>
                                         {!!Form::text('songaynghi', null, array('id' =>'songaynghi', 'class' => 'form-control', 'data-mask'=>'fdecimal'))!!}
@@ -79,6 +85,7 @@
                                     </div>
                                 </div>
                                 <input type="hidden" id="songaynghi" name="songaynghi" value="0" />
+                                <input type="hidden" id="songaycong" name="songaycong" value="0" />
                             @endif
                         </div>
 

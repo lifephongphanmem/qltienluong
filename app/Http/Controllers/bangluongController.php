@@ -978,10 +978,13 @@ class bangluongController extends Controller
 
         $a_duongsuc = hosotamngungtheodoi::select('songaycong','songaynghi','macanbo')->where('madv', $inputs['madv'])->where('maphanloai','DUONGSUC')
             ->whereYear('ngaytu', $inputs['nam'])->whereMonth('ngaytu', $inputs['thang'])->get()->keyBy('macanbo')->toarray();
+        $a_nghiphep = hosotamngungtheodoi::select('songaycong','songaynghi','macanbo')->where('madv', $inputs['madv'])->wherein('maphanloai',['NGHIPHEP','NGHIOM'])
+            ->whereYear('ngaytu', $inputs['nam'])->whereMonth('ngaytu', $inputs['thang'])->get()->keyBy('macanbo')->toarray();
 
+        /*
         $a_nghiphep = array_column(hosotamngungtheodoi::where('madv', $inputs['madv'])->wherein('maphanloai',['NGHIPHEP','NGHIOM'])
             ->whereYear('ngaytu', $inputs['nam'])->whereMonth('ngaytu', $inputs['thang'])->get()->toarray(),'songaynghi','macanbo');
-
+        */
         $a_khongluong = array_column(hosotamngungtheodoi::where('madv', $inputs['madv'])
             ->where('ngaytu', '<=', $ngaylap)->where('ngayden', '>=', $ngaylap)
             ->where('maphanloai', 'KHONGLUONG')->get()->toarray(),'macanbo');
@@ -1274,6 +1277,7 @@ class bangluongController extends Controller
 
             if($nghi) {
                 $cb_nghi = $a_nghiphep[$m_cb[$key]['macanbo']];
+                $ngaycong = $cb_nghi['songaycong'] > 0 ? $cb_nghi['songaycong'] : $ngaycong;
                 $m_cb[$key]['congtac'] = 'NGHIPHEP';
                 $sotiencong = $inputs['luongcoban'] * ($m_cb[$key]['heso'] + $m_cb[$key]['vuotkhung'] + $m_cb[$key]['pccv'] + $m_cb[$key]['hesobl'] + $m_cb[$key]['pctnn']);
                 $tiencong = round($sotiencong / $ngaycong, 0);
@@ -1930,9 +1934,9 @@ class bangluongController extends Controller
                 hosotruylinh::where('mabl', $model->mabl)
                     ->update(['mabl' => null]);
             }
-            bangluong_ct::where('mabl', $model->mabl)->delete();
-            bangluong_phucap::where('mabl', $model->mabl)->delete();
-            bangluong_truc::where('mabl', $model->mabl)->delete();
+            //bangluong_ct::where('mabl', $model->mabl)->delete();
+            //bangluong_phucap::where('mabl', $model->mabl)->delete();
+            //bangluong_truc::where('mabl', $model->mabl)->delete();
             $model->delete();
             return redirect('/chuc_nang/bang_luong/chi_tra?thang='.$model->thang.'&nam='. $model->nam);
         } else
