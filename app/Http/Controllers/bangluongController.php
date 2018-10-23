@@ -13,6 +13,7 @@ use App\dmphanloaicongtac;
 use App\dmphanloaicongtac_baohiem;
 use App\dmphanloaict;
 use App\dmphongban;
+use App\dmphucap;
 use App\dmphucap_donvi;
 use App\dmphucap_thaisan;
 use App\dmtieumuc_default;
@@ -1994,6 +1995,25 @@ class bangluongController extends Controller
         die($model);
     }
 
+    function get_chitiet(Request $request){
+        if(!Session::has('admin')) {
+            $result = array(
+                'status' => 'fail',
+                'message' => 'permission denied',
+            );
+            die(json_encode($result));
+        }
+        $inputs = $request->all();
+
+        $inputs['st'] = 'st_'.$inputs['mapc'];
+        $model_luong = bangluong_ct::find($inputs['id']);
+        $model = dmphucap::where('mapc',$inputs['mapc'])->first();
+        $model->heso = $model_luong->$inputs['mapc'];
+        $model->sotien = $model_luong->$inputs['st'];
+        $model->luongcoban = $model_luong->$inputs['mapc'];
+        die($model);
+    }
+
     function detail(Request $request){
         if (Session::has('admin')) {
             $inputs = $request->all();
@@ -2017,9 +2037,9 @@ class bangluongController extends Controller
             $model->kpcd_dv = $model_canbo->kpcd_dv;
             //$a_donvi = dmdonvi::where('madv',session('admin')->madv)->first()->toarray();
 
-            $a_goc = array('heso','vuotkhung','hesott','hesopc');
+            //$a_goc = array('heso','vuotkhung','hesott','hesopc');
             $model_pc = dmphucap_donvi::where('madv', $model_bangluong->madv)->where('phanloai', '<', '3')
-                ->wherenotin('mapc', $a_goc)->get();
+                ->get();
             //dd($model_pc);
 
             if($model_bangluong->phanloai == 'TRUYLINH'){
@@ -2027,18 +2047,35 @@ class bangluongController extends Controller
                 $model->ngaytu = $model_truylinh->ngaytu;
                 $model->ngayden = $model_truylinh->ngayden;
 
+                foreach($model_pc as $pc){
+                    $mapc = $pc->mapc;
+                    $mapc_st ='st_'. $mapc;
+                    $pc->heso = $model->$mapc;
+                    $pc->sotien = $model->$mapc_st;
+                    $pc->macanbo = $model->macanbo;
+                    $pc->mabl = $model->mabl;
+                }
+
                 return view('manage.bangluong.chitiet_truylinh')
                     ->with('furl','/chuc_nang/bang_luong/')
                     ->with('model',$model)
-                    ->with('model_pc',$model_pc)
+                    ->with('model_pc',$model_pc->sortby('stt'))
                     ->with('pageTitle','Chi tiết bảng lương');
             }else{
                 $model->luongcoban = $model_bangluong->luongcoban;
 
+                foreach($model_pc as $pc){
+                    $mapc = $pc->mapc;
+                    $mapc_st ='st_'. $mapc;
+                    $pc->heso = $model->$mapc;
+                    $pc->sotien = $model->$mapc_st;
+                    $pc->macanbo = $model->macanbo;
+                    $pc->mabl = $model->mabl;
+                }
                 return view('manage.bangluong.chitiet')
                     ->with('furl','/chuc_nang/bang_luong/')
                     ->with('model',$model)
-                    ->with('model_pc',$model_pc)
+                    ->with('model_pc',$model_pc->sortby('stt'))
                     ->with('pageTitle','Chi tiết bảng lương');
             }
 
@@ -2119,6 +2156,47 @@ class bangluongController extends Controller
 
             //dd($inputs);
             $model->update($inputs);
+            return redirect('/chuc_nang/bang_luong/bang_luong?mabl='.$model->mabl.'&mapb='.$model->mapb);
+
+
+        } else
+            return view('errors.notlogin');
+    }
+
+    function update_chitiet(Request $request){
+        if (Session::has('admin')) {
+            $inputs=$request->all();
+            $model = bangluong_ct::findorfail($inputs['id_hs']);
+            $mapc = $inputs['mapc'];
+            $mapc_st ='st_'. $inputs['mapc'];
+
+            $inputs['heso'] = chkDbl($inputs['heso']);
+            $inputs['luongcb'] = chkDbl($inputs['luongcb']);
+            $inputs['sotien'] = chkDbl($inputs['sotien']);
+
+
+
+            //Tính lương mới
+            $sotien_cl = $inputs['sotien'] - $model->$mapc_st;
+            $heso_cl = $inputs['heso'] - $model->$mapc;
+            $model->$mapc_st = $inputs['sotien'];
+            $model->$mapc = $inputs['heso'];
+            //Tính lại bao hiểm
+            $baohiem = $model->st_heso + $model->st_vuotkhung + $model->st_pccv + $model->st_pctnn;
+            $model->stbhxh = round($model->bhxh * $baohiem, 0);
+            $model->stbhyt = round($model->bhyt * $baohiem, 0);
+            $model->stkpcd = round($model->kpcd * $baohiem, 0);
+            $model->stbhtn = round($model->bhtn * $baohiem, 0);
+            $model->ttbh = $model->stbhxh + $model->stbhyt + $model->stkpcd + $model->stbhtn;
+            $model->stbhxh_dv = round($model->bhxh_dv * $baohiem, 0);
+            $model->stbhyt_dv = round($model->bhyt_dv * $baohiem, 0);
+            $model->stkpcd_dv = round($model->kpcd_dv * $baohiem, 0);
+            $model->stbhtn_dv = round($model->bhtn_dv * $baohiem, 0);
+            $model->ttbh_dv = $model->stbhxh_dv + $model->stbhyt_dv + $model->stkpcd_dv + $model->stbhtn_dv;
+            $model->tonghs += $heso_cl;
+            $model->ttl += $sotien_cl;
+            $model->luongtn = $model->ttl -  $model->ttbh - $model->giaml + $model->bhct;
+            $model->save();
             return redirect('/chuc_nang/bang_luong/bang_luong?mabl='.$model->mabl.'&mapb='.$model->mapb);
 
 

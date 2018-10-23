@@ -376,8 +376,11 @@ Route::group(['prefix'=>'chuc_nang'],function(){
         Route::post('updatect_truylinh','bangluongController@updatect_truylinh');
         Route::get('del/{id}','bangluongController@destroy');
         Route::get('del_ct/{id}','bangluongController@destroy_ct');
+
+        Route::get('get_chitiet','bangluongController@get_chitiet');
+        Route::post('update_chitiet','bangluongController@update_chitiet');
         //Route::get('cal','bangluongController@cal'); //Tính toán lại lương cán bộ
-        Route::post('importexcel','bangluongController@importexcel');
+        //Route::post('importexcel','bangluongController@importexcel');
 
         //Tạo in bảng lương theo cách mới
         Route::post('mau01','bangluongController@printf_mau01');
