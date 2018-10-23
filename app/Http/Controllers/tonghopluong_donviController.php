@@ -477,7 +477,6 @@ class tonghopluong_donviController extends Controller
             $a_bh = array_column(dmphucap_thaisan::select('mapc')->where('madv', session('admin')->madv)->get()->toarray(), 'mapc');
 
             $a_data = array();
-            $a_col_pc_st = array();
             $a_plct = array('1536402868','1536459380','1535613221', '1506673695');
             $a_plcongtac = array('BIENCHE','KHONGCT','HOPDONG');
             for($i=0; $i< count($a_ct); $i++){
@@ -504,9 +503,6 @@ class tonghopluong_donviController extends Controller
                         $a_ct[$i][$mapc_st] = 0;
                     }
 
-                    if($i == 0){//chỉ lấy 1 lần
-                        $a_col_pc_st[] = $mapc_st;
-                    }
                 }
                 if(in_array($a_ct[$i]['macongtac'],$a_plcongtac) || in_array($a_ct[$i]['mact'],$a_plct)){
                     $a_data[] = $a_ct[$i];
@@ -541,10 +537,14 @@ class tonghopluong_donviController extends Controller
             $a_col_pc = array('id','baohiem','bhxh','baohiem','bhtn', 'kpcd', 'bhyt', 'bhct','congtac', 'mabl');
             $a_data = unset_key($a_data,$a_col_pc);
             $a_data = unset_key($a_data,$col_st);
+            $a_data = unset_key($a_data,array('st_pcud61','st_pctdt','pcud61', 'pctdt'));//tạm
+
 
             foreach(array_chunk($a_data, 50)  as $data){
                 tonghopluong_donvi_bangluong::insert($data);
+
             }
+
             $inputs['madv'] = session('admin')->madv;
             $inputs['mathdv'] = $mathdv;
             $inputs['trangthai'] = 'CHOGUI';
