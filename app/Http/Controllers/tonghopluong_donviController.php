@@ -466,7 +466,7 @@ class tonghopluong_donviController extends Controller
             $a_th = array_merge(array('macanbo','tencanbo','msngbac', 'mact', 'macvcq', 'mapb', 'mabl','congtac','stbhxh_dv','stbhyt_dv','stkpcd_dv','stbhtn_dv','tonghs','ttl'),$col);
             $a_th = array_merge($a_th,$col_st);
             $a_ct = bangluong_ct::select($a_th)->wherein('mabl', array_column($a_bangluong,'mabl'))->get()->toarray();
-
+            //dd($a_ct);
             //$a_bangluong_phucap = bangluong_phucap::wherein('mabl', array_column($a_bangluong,'mabl'))->get()->toarray();
 
             //$model_nguondm = nguonkinhphi_dinhmuc::where('madv',$madv)->get();
@@ -531,18 +531,16 @@ class tonghopluong_donviController extends Controller
                 $model_data[$i]['giaml'] = array_sum(array_column($luongct,'giaml'));
                 $model_data[$i]['tonghs'] = $tonghs;
                 $model_data[$i]['luongtn'] = $model_data[$i]['tonghs'] - $model_data[$i]['giaml'];
-
             }
             //Mảng chứa các cột bỏ để chạy hàm insert
             $a_col_pc = array('id','baohiem','bhxh','baohiem','bhtn', 'kpcd', 'bhyt', 'bhct','congtac', 'mabl');
             $a_data = unset_key($a_data,$a_col_pc);
             $a_data = unset_key($a_data,$col_st);
-            $a_data = unset_key($a_data,array('st_pcud61','st_pctdt','pcud61', 'pctdt'));//tạm
-
+            $a_data = unset_key($a_data,array('st_pcud61','st_pctdt','pcud61', 'pctdt','st_pcxaxe',
+                'pcxaxe','st_pcdith','pcdith','st_pcphth','pcphth','pclade', 'st_pclade'));//tạm
 
             foreach(array_chunk($a_data, 50)  as $data){
                 tonghopluong_donvi_bangluong::insert($data);
-
             }
 
             $inputs['madv'] = session('admin')->madv;
