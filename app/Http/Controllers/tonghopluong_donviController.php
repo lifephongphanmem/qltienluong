@@ -458,23 +458,28 @@ class tonghopluong_donviController extends Controller
                 ->where('madv', $madv)->where('phanloai', 'BANGLUONG')->get()->keyby('mabl')->toarray();
 
             //bảng lương chi tiết
-            $a_th = array_merge(array('macanbo','tencanbo','msngbac', 'mact', 'macvcq', 'mapb', 'mabl','congtac','stbhxh_dv','stbhyt_dv','stkpcd_dv','stbhtn_dv','tonghs','ttl'),getColTongHop());
-
+            $col = getColTongHop();
+            $col_st = array();
+            for($i=0; $i<count($col); $i++){
+                $col_st[] ='st_'. $col[$i];
+            }
+            $a_th = array_merge(array('macanbo','tencanbo','msngbac', 'mact', 'macvcq', 'mapb', 'mabl','congtac','stbhxh_dv','stbhyt_dv','stkpcd_dv','stbhtn_dv','tonghs','ttl'),$col);
+            $a_th = array_merge($a_th,$col_st);
             $a_ct = bangluong_ct::select($a_th)->wherein('mabl', array_column($a_bangluong,'mabl'))->get()->toarray();
-            $a_bangluong_phucap = bangluong_phucap::wherein('mabl', array_column($a_bangluong,'mabl'))->get()->toarray();
+
+            //$a_bangluong_phucap = bangluong_phucap::wherein('mabl', array_column($a_bangluong,'mabl'))->get()->toarray();
 
             //$model_nguondm = nguonkinhphi_dinhmuc::where('madv',$madv)->get();
             $a_nguondm = nguonkinhphi_dinhmuc_ct::join('nguonkinhphi_dinhmuc','nguonkinhphi_dinhmuc_ct.maso','nguonkinhphi_dinhmuc.maso')
                 ->where('nguonkinhphi_dinhmuc.madv',$madv)->get()->toarray();
 
             $a_pc = dmphucap_donvi::where('madv', $madv)->wherenotin('mapc',['hesott'])->get()->keyby('mapc')->toarray();
-
             $a_bh = array_column(dmphucap_thaisan::select('mapc')->where('madv', session('admin')->madv)->get()->toarray(), 'mapc');
 
             $a_data = array();
             $a_col_pc_st = array();
             $a_plct = array('1536402868','1536459380','1535613221', '1506673695');
-            $a_plcongtac = array('BIENCHE','KHONGCT');
+            $a_plcongtac = array('BIENCHE','KHONGCT','HOPDONG');
             for($i=0; $i< count($a_ct); $i++){
                 $a_ct[$i]['macongtac'] = isset($a_congtac[$a_ct[$i]['mact']]) ? $a_congtac[$a_ct[$i]['mact']] : null;
                 $bangluong = $a_bangluong[$a_ct[$i]['mabl']];
@@ -486,9 +491,9 @@ class tonghopluong_donviController extends Controller
                 foreach ($a_pc as $k=>$v) {
                     $mapc = $v['mapc'];
                     $mapc_st = 'st_' . $mapc;
-                    $phucap = a_getelement_equal($a_bangluong_phucap, array('macanbo' => $a_ct[$i]['macanbo'], 'mabl' => $a_ct[$i]['mabl'], 'maso' => $mapc), true);
-                    $a_ct[$i][$mapc_st] = count($phucap) > 0 ? $phucap['sotien'] : 0;
-                    $a_ct[$i][$mapc] = count($phucap) > 0 ? $phucap['heso'] : 0;
+                    //$phucap = a_getelement_equal($a_bangluong_phucap, array('macanbo' => $a_ct[$i]['macanbo'], 'mabl' => $a_ct[$i]['mabl'], 'maso' => $mapc), true);
+                    //$a_ct[$i][$mapc_st] = count($phucap) > 0 ? $phucap['sotien'] : 0;
+                    //$a_ct[$i][$mapc] = count($phucap) > 0 ? $phucap['heso'] : 0;
                     if ($a_ct[$i]['congtac'] == 'THAISAN' && !in_array($mapc, $a_bh) ) {
                         $a_ct[$i][$mapc] = 0;
                         $a_ct[$i][$mapc_st] = 0;
@@ -506,9 +511,7 @@ class tonghopluong_donviController extends Controller
                 if(in_array($a_ct[$i]['macongtac'],$a_plcongtac) || in_array($a_ct[$i]['mact'],$a_plct)){
                     $a_data[] = $a_ct[$i];
                 }
-
             }
-
 
             //Lấy dữ liệu để lập
             $model_data = a_split($a_data,array('mact', 'linhvuchoatdong', 'manguonkp', 'macongtac', 'luongcoban'));
@@ -537,7 +540,7 @@ class tonghopluong_donviController extends Controller
             //Mảng chứa các cột bỏ để chạy hàm insert
             $a_col_pc = array('id','baohiem','bhxh','baohiem','bhtn', 'kpcd', 'bhyt', 'bhct','congtac', 'mabl');
             $a_data = unset_key($a_data,$a_col_pc);
-            $a_data = unset_key($a_data,$a_col_pc_st);
+            $a_data = unset_key($a_data,$col_st);
 
             foreach(array_chunk($a_data, 50)  as $data){
                 tonghopluong_donvi_bangluong::insert($data);

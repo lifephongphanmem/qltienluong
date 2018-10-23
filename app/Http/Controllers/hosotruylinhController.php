@@ -230,6 +230,7 @@ class hosotruylinhController extends Controller
                 $model->tentruylinh = isset($a_pl[$model->maphanloai]) ? $a_pl[$model->maphanloai] : '';
                 switch($inputs['maphanloai']){
                     case 'MSNGBAC':{
+                        $heso = 0;
                         $a_nhomnb = ngachluong::all()->keyBy('msngbac')->toarray();
                         $msngbac = $model->msngbac;
                         if(isset($a_nhomnb[$msngbac])) {
