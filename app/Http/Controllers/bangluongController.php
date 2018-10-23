@@ -1900,17 +1900,22 @@ class bangluongController extends Controller
                 $model = $model->where('mapb',$inputs['mapb']);
             }
             //getPhongBan()
-            $dmchucvucq = dmchucvucq::all('tencv', 'macvcq')->toArray();
+
+            /*
+             * $dmchucvucq = dmchucvucq::all('tencv', 'macvcq')->toArray();
             $model_cb = hosocanbo::where('madv', session('admin')->madv)->get();
             foreach ($model as $hs) {
                 $cb = $model_cb->where('macanbo', $hs->macanbo)->first();
                 $hs->tencanbo = count($cb) > 0 ? $cb->tencanbo : '';
                 $hs->tencv = getInfoChucVuCQ($hs, $dmchucvucq);
             }
+            */
+            //dd(getChucVuCQ(false));
             return view('manage.bangluong.bangluong')
                 ->with('furl', '/chuc_nang/bang_luong/')
                 ->with('model', $model)
                 ->with('m_bl', $m_bl)
+                ->with('a_cv', getChucVuCQ(false))
                 ->with('inputs', $inputs)
                 ->with('pageTitle', 'Bảng lương chi tiết');
         } else

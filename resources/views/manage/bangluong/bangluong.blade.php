@@ -67,7 +67,7 @@
                                     <td class="text-center">{{$key+1}}</td>
                                     <td>{{$value->macongchuc}}</td>
                                     <td>{{$value->tencanbo}}</td>
-                                    <td>{{$value->tencv}}</td>
+                                    <td>{{isset($a_cv[$value->macvcq])? $a_cv[$value->macvcq]: ''}}</td>
                                     <td>{{$value->msngbac}}</td>
                                     <td class="text-right">{{number_format($value->luongtn)}}</td>
                                     <td>

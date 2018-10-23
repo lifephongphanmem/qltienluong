@@ -1,6 +1,21 @@
 @extends('main')
+@section('custom-style')
+    <link rel="stylesheet" type="text/css" href="{{url('assets/global/plugins/datatables/plugins/bootstrap/dataTables.bootstrap.css')}}"/>
+    <link rel="stylesheet" type="text/css" href="{{url('assets/global/plugins/select2/select2.css')}}"/>
+@stop
+
 @section('custom-script')
+    <script type="text/javascript" src="{{url('assets/global/plugins/select2/select2.min.js')}}"></script>
+    <script type="text/javascript" src="{{url('assets/global/plugins/datatables/media/js/jquery.dataTables.min.js')}}"></script>
+    <script type="text/javascript" src="{{url('assets/global/plugins/datatables/plugins/bootstrap/dataTables.bootstrap.js')}}"></script>
+
+    <script src="{{url('assets/admin/pages/scripts/table-managed.js')}}"></script>
     @include('includes.script.scripts')
+    <script>
+        jQuery(document).ready(function() {
+            TableManaged.init();
+        });
+    </script>
 @stop
 
 @section('content')
@@ -9,7 +24,7 @@
             <div class="portlet light bordered">
                 <div class="portlet-title">
                     <div class="caption">
-                        THÔNG TIN CHI TIẾT LƯƠNG CỦA CÁN BỘ : {{$model->tencanbo}}
+                        THÔNG TIN CHI TIẾT LƯƠNG CỦA CÁN BỘ: {{$model->tencanbo}}
                     </div>
                     <div class="actions">
 
@@ -107,80 +122,46 @@
                                 </div>
                             </div>
 
-                            <div class="row">
-                                <div class="col-md-12">
-                                    <!-- BEGIN PORTLET-->
-                                    <div class="portlet box blue">
-                                        <div class="portlet-title">
-                                            <div class="caption">
-                                                Thông tin các loại hệ số
-                                            </div>
-                                            <div class="tools">
-                                                <a href="javascript:;" class="collapse" data-original-title="" title=""></a>
-                                            </div>
-                                        </div>
-                                        <div class="portlet-body" style="display: block;">
-                                            <div class="row">
-                                                <div class="col-md-2">
-                                                    <div class="form-group">
-                                                        <label class="control-label">Hệ số lương </label>
-                                                        {!!Form::text('heso', null, array('id' => 'heso','class' => 'form-control heso', 'data-mask'=>'fdecimal'))!!}
-                                                    </div>
-                                                </div>
+                            <table id="sample_3" class="table table-hover table-striped table-bordered" style="min-height: 230px">
+                                <thead>
+                                <tr>
+                                    <th class="text-center" style="width: 5%">STT</th>
+                                    <th class="text-center">Tên phụ cấp</th>
+                                    <th class="text-center" style="width: 15%">Hệ số</th>
+                                    <th class="text-center" style="width: 15%">Số tiền</th>
+                                    <th class="text-center">Thao tác</th>
+                                </tr>
+                                </thead>
+                                <?php $i=1;?>
+                                <tbody>
+                                @if(isset($model_pc))
+                                    @foreach($model_pc as $key=>$value)
+                                        <tr>
+                                            <td class="text-center">{{$i++}}</td>
+                                            <td>{{$value->tenphanloai}}</td>
+                                            <td>{{$value->tennguonkp}}</td>
+                                            <td>{{$value->noidung}}</td>
+                                            <td>
+                                                @if($value->thaotac)
+                                                    <button type="button" onclick="edit('{{$value->mabl}}','{{$value->phanloai}}')" class="btn btn-default btn-xs mbs">
+                                                        <i class="fa fa-edit"></i>&nbsp; Sửa</button>
 
-                                                <div class="col-md-2">
-                                                    <div class="form-group">
-                                                        <label class="control-label">Hệ số v.khung </label>
-                                                        {!!Form::text('vuotkhung', null, array('id' => 'vuotkhung','class' => 'form-control heso', 'data-mask'=>'fdecimal'))!!}
-                                                    </div>
-                                                </div>
+                                                    <a href="{{url($inputs['furl'].'bang_luong?mabl='.$value->mabl.'&mapb=')}}" class="btn btn-default btn-xs mbs">
+                                                        <i class="fa fa-th-list"></i>&nbsp; Chi tiết</a>
 
-                                                <div class="col-md-2">
-                                                    <div class="form-group">
-                                                        <label class="control-label">Hệ số phụ cấp</label>
-                                                        {!!Form::text('hesopc', null, array('id' => 'hesopc','class' => 'form-control heso', 'data-mask'=>'fdecimal'))!!}
-                                                    </div>
-                                                </div>
-                                            </div>
-                                    </div>
-                                </div>
-                                <!-- END PORTLET-->
-                            </div>
-                        </div>
+                                                    <button type="button" onclick="cfDel('{{$inputs['furl'].'del/'.$value->id}}')" class="btn btn-danger btn-xs mbs" data-target="#delete-modal-confirm" data-toggle="modal">
+                                                        <i class="fa fa-trash-o"></i>&nbsp; Xóa</button>
+                                                @endif
+                                                <button type="button" onclick="inbl('{{$value->mabl}}','{{$value->thang}}','{{$value->nam}}')" class="btn btn-default btn-xs mbs">
+                                                    <i class="fa fa-print"></i>&nbsp; In bảng lương</button>
+                                            </td>
+                                        </tr>
+                                    @endforeach
+                                @endif
+                                </tbody>
+                            </table>
 
-                            <div class="row">
-                                <div class="col-md-12">
-                                    <!-- BEGIN PORTLET-->
-                                    <div class="portlet box blue">
-                                        <div class="portlet-title">
-                                            <div class="caption">
-                                                Thông tin các loại phụ cấp
-                                            </div>
-                                            <div class="tools">
-                                                <a href="javascript:;" class="collapse" data-original-title="" title=""></a>
-                                            </div>
-                                        </div>
-                                        <div class="portlet-body" style="display: block;">
-                                            <div class="row">
-                                                @foreach($model_pc as $pc)
-                                                    @if($pc->phanloai == 3)
-                                                        {!!Form::hidden($pc->mapc, null, array('id' =>$pc->mapc, 'class' => 'form-control heso', 'data-mask'=>'fdecimal'))!!}
-                                                    @else
-                                                        <div class="col-md-3">
-                                                            <div class="form-group">
-                                                                <label class="control-label">{{$pc->form}}</label>
-                                                                {!!Form::text($pc->mapc, null, array('id' =>$pc->mapc, 'class' => 'form-control heso', 'data-mask'=>'fdecimal'))!!}
-                                                            </div>
-                                                        </div>
-                                                    @endif
-                                                @endforeach
 
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <!-- END PORTLET-->
-                                </div>
-                            </div>
 
                             <div class="row">
                                 <div class="col-md-12">
