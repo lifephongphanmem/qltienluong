@@ -210,10 +210,10 @@ class hosocanboController extends Controller
         if (Session::has('admin')) {
             $model = hosocanbo::find($id);
             hosocanbo_kiemnhiem::where('macanbo',$model->macanbo)->delete();
-            bangluong_ct::where('macanbo',$model->macanbo)->delete();
-            bangluong_phucap::where('macanbo',$model->macanbo)->delete();
-            bangluongdangky_ct::where('macanbo',$model->macanbo)->delete();
-            bangluongdangky_phucap::where('macanbo',$model->macanbo)->delete();
+            //bangluong_ct::where('macanbo',$model->macanbo)->delete();
+            //bangluong_phucap::where('macanbo',$model->macanbo)->delete();
+            //bangluongdangky_ct::where('macanbo',$model->macanbo)->delete();
+            //bangluongdangky_phucap::where('macanbo',$model->macanbo)->delete();
             $model->delete();
             return redirect('nghiep_vu/ho_so/danh_sach');
         } else
