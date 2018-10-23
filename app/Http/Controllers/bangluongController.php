@@ -349,7 +349,7 @@ class bangluongController extends Controller
 
                     $a_kq = $ct->toarray();
                     unset($a_kq['id']);
-                    bangluong_phucap::create($a_kq);
+                    //bangluong_phucap::create($a_kq);
                 }
             }
             //$ths = $ths + $heso_goc - $cb->heso;//do chỉ lương nb hưởng 85%, các hệ số hưởng %, bảo hiểm thì lấy 100% để tính
@@ -1279,7 +1279,9 @@ class bangluongController extends Controller
                 $cb_nghi = $a_nghiphep[$m_cb[$key]['macanbo']];
                 $ngaycong = $cb_nghi['songaycong'] > 0 ? $cb_nghi['songaycong'] : $ngaycong;
                 $m_cb[$key]['congtac'] = 'NGHIPHEP';
-                $sotiencong = $inputs['luongcoban'] * ($m_cb[$key]['heso'] + $m_cb[$key]['vuotkhung'] + $m_cb[$key]['pccv'] + $m_cb[$key]['hesobl'] + $m_cb[$key]['pctnn']);
+                $sotiencong = $inputs['luongcoban'] *
+                    ($m_cb[$key]['heso'] + $m_cb[$key]['vuotkhung'] + $m_cb[$key]['pccv']
+                        + $m_cb[$key]['hesobl'] + $m_cb[$key]['pctnn']);
                 $tiencong = round($sotiencong / $ngaycong, 0);
                 if($cb_nghi >= 15) {//nghỉ quá 15 ngày thì ko đóng bảo hiểm
                     $m_cb[$key]['stbhxh'] = 0;
