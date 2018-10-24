@@ -66,6 +66,7 @@ class bangluong_ct_07 extends Model
         'tonghs',
         'ttl',
         'giaml',
+        'thuetn',
         'bhct',
         'tluong',
         'stbhxh',

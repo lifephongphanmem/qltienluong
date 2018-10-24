@@ -72,6 +72,7 @@ class CreateBangluongCt02Table extends Migration
             $table->double('tonghs')->default(0);
             $table->double('ttl')->default(0);
             $table->double('giaml')->default(0);
+            $table->double('thuetn')->default(0);
             $table->double('bhct')->default(0);
             $table->double('tluong')->default(0);
             $table->double('stbhxh')->default(0);

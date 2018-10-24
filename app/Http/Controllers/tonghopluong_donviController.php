@@ -779,7 +779,7 @@ class tonghopluong_donviController extends Controller
 
             $model_thongtin = tonghopluong_donvi::where('mathdv', $mathdv)->first();
             $model_nguonkp = array_column(dmnguonkinhphi::all()->toArray(), 'tennguonkp', 'manguonkp');
-            $model_phanloaict = array_column(dmphanloaicongtac::all()->toArray(), 'tencongtac', 'macongtac');
+            //$model_phanloaict = array_column(dmphanloaicongtac::all()->toArray(), 'tencongtac', 'macongtac');
             $model_ct = array_column(dmphanloaict::all()->toArray(), 'tenct', 'mact');
             //$gnr = getGeneralConfigs();
 

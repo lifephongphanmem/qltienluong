@@ -3296,7 +3296,7 @@ class bangluongController extends Controller
             $inputs['mact'] = $inputs['mact_mau7'];
             //$inputs['cochu'] = $inputs['cochu_mau1'];
             $model = $this->getBangLuong($inputs)->wherein('phanloai', ['CVCHINH','KHONGCT']);
-            $data_phucap = bangluong_phucap::where('mabl', $inputs['mabl'])->get()->toarray();
+            //$data_phucap = bangluong_phucap::where('mabl', $inputs['mabl'])->get()->toarray();
             //$model_st = $this->getBangLuong($inputs,1)->wherein('phanloai', ['CVCHINH','KHONGCT']);
 
             $mabl = $inputs['mabl'];
@@ -3328,14 +3328,6 @@ class bangluongController extends Controller
                     $a_phucap[$ct->mapc] = $ct->report;
                     $a_phucap_st['st_'.$ct->mapc] = $ct->report;
                     $col++;
-                }
-            }
-
-            foreach ($model as $ct) {
-                foreach ($a_phucap as $k=>$v) {
-                    $mapc = 'st_'.$k;
-                    $phucap = a_getelement_equal($data_phucap,array('macanbo'=>$ct->macanbo,'maso'=>$k),true);
-                    $ct->$mapc = count($phucap)>0? $phucap['sotien'] : 0;
                 }
             }
             //dd($model);

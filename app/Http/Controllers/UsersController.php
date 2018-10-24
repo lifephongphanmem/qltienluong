@@ -202,66 +202,66 @@ class UsersController extends Controller
                 //trường hợp đơn vị tổng hợp thì bỏ qua
 
 
-
-                //phân loại công tác
-                $model_phanloai = dmphanloaicongtac_baohiem::where('madv', $ttuser->madv)->get();
-                if (count($model_phanloai) == 0) {
-                    $model_phanloai = dmphanloaict::select('macongtac','mact', 'bhxh', 'bhyt', 'bhtn', 'kpcd', 'bhxh_dv', 'bhyt_dv', 'bhtn_dv', 'kpcd_dv', DB::raw($ttuser->madv . ' as madv'))->get();
-                    dmphanloaicongtac_baohiem::insert($model_phanloai->toarray());
-                }else{//tự cập nhật các phụ cấp thiếu
-                    $model_dm = dmphanloaict::select('macongtac','mact', 'bhxh', 'bhyt', 'bhtn', 'kpcd', 'bhxh_dv', 'bhyt_dv', 'bhtn_dv', 'kpcd_dv', DB::raw($ttuser->madv . ' as madv'))
-                    ->wherenotin('mact', array_column($model_phanloai->toarray(),'mact'))->get();
-                    dmphanloaicongtac_baohiem::insert($model_dm->toarray());
-                }
-                //phụ cấp
-                $model_phucap = dmphucap_donvi::where('madv', $ttuser->madv)->get();
-                if (count($model_phucap) == 0) {
-                    $model_dmpc = dmphucap::select('stt','mapc', 'tenpc', 'baohiem', 'form', 'report', 'phanloai', 'congthuc', DB::raw($ttuser->madv . ' as madv'))->get();
-                    dmphucap_donvi::insert($model_dmpc->toarray());
-                }else{//tự cập nhật các phụ cấp thiếu
-                    $model_dmpc = dmphucap::select('stt','mapc', 'tenpc', 'baohiem', 'form', 'report', 'phanloai', 'congthuc', DB::raw($ttuser->madv . ' as madv'))
-                        ->wherenotin('mapc', array_column($model_phucap->toarray(),'mapc'))->get();
-                    dmphucap_donvi::insert($model_dmpc->toarray());
-                }
-
-                //phụ cấp thai sản
-                $model_ts = dmphucap_thaisan::where('madv', $ttuser->madv)->get();
-                if (count($model_ts) == 0) {
-                    $model_dmpc = dmphucap::select('mapc', 'tenpc', DB::raw($ttuser->madv . ' as madv'))
-                        ->wherein('mapc',['pccovu','pcudn','pctn'])
-                        ->get();
-                    dmphucap_thaisan::insert($model_dmpc->toarray());
-                }
-
-                //định mức nguồn kinh phí
-                $model_dmn = nguonkinhphi_dinhmuc::where('madv', $ttuser->madv)->get();
-                if (count($model_dmn) == 0) {
-                    $maso = getdate()[0];
-                    $model_nguon = dmnguonkinhphi::select('manguonkp')->get();
-                    foreach($model_nguon as $nguon){
-                        $maso++;
-                        $nguon->maso = $ttuser->madv . '_' . $maso;
-                        $nguon->madv = $ttuser->madv;
-                        switch($nguon->manguonkp){
-                            case '13':{
-                                $nguon->luongcoban = 1300000;
-                                break;
-                            }
-                            case '14':{
-                                $nguon->luongcoban = 90000;
-                                break;
-                            }
-                            default:{
-                                $nguon->luongcoban = 1390000;
-                                break;
-                            }
-                        }
-                        nguonkinhphi_dinhmuc::insert($nguon->toarray());
-                    }
-
-                }
                 /* tạm thời bỏ để đỡ lag
-            */
+                                //phân loại công tác
+                                $model_phanloai = dmphanloaicongtac_baohiem::where('madv', $ttuser->madv)->get();
+                                if (count($model_phanloai) == 0) {
+                                    $model_phanloai = dmphanloaict::select('macongtac','mact', 'bhxh', 'bhyt', 'bhtn', 'kpcd', 'bhxh_dv', 'bhyt_dv', 'bhtn_dv', 'kpcd_dv', DB::raw($ttuser->madv . ' as madv'))->get();
+                                    dmphanloaicongtac_baohiem::insert($model_phanloai->toarray());
+                                }else{//tự cập nhật các phụ cấp thiếu
+                                    $model_dm = dmphanloaict::select('macongtac','mact', 'bhxh', 'bhyt', 'bhtn', 'kpcd', 'bhxh_dv', 'bhyt_dv', 'bhtn_dv', 'kpcd_dv', DB::raw($ttuser->madv . ' as madv'))
+                                    ->wherenotin('mact', array_column($model_phanloai->toarray(),'mact'))->get();
+                                    dmphanloaicongtac_baohiem::insert($model_dm->toarray());
+                                }
+                                //phụ cấp
+                                $model_phucap = dmphucap_donvi::where('madv', $ttuser->madv)->get();
+                                if (count($model_phucap) == 0) {
+                                    $model_dmpc = dmphucap::select('stt','mapc', 'tenpc', 'baohiem', 'form', 'report', 'phanloai', 'congthuc', DB::raw($ttuser->madv . ' as madv'))->get();
+                                    dmphucap_donvi::insert($model_dmpc->toarray());
+                                }else{//tự cập nhật các phụ cấp thiếu
+                                    $model_dmpc = dmphucap::select('stt','mapc', 'tenpc', 'baohiem', 'form', 'report', 'phanloai', 'congthuc', DB::raw($ttuser->madv . ' as madv'))
+                                        ->wherenotin('mapc', array_column($model_phucap->toarray(),'mapc'))->get();
+                                    dmphucap_donvi::insert($model_dmpc->toarray());
+                                }
+
+                                //phụ cấp thai sản
+                                $model_ts = dmphucap_thaisan::where('madv', $ttuser->madv)->get();
+                                if (count($model_ts) == 0) {
+                                    $model_dmpc = dmphucap::select('mapc', 'tenpc', DB::raw($ttuser->madv . ' as madv'))
+                                        ->wherein('mapc',['pccovu','pcudn','pctn'])
+                                        ->get();
+                                    dmphucap_thaisan::insert($model_dmpc->toarray());
+                                }
+
+                                //định mức nguồn kinh phí
+                                $model_dmn = nguonkinhphi_dinhmuc::where('madv', $ttuser->madv)->get();
+                                if (count($model_dmn) == 0) {
+                                    $maso = getdate()[0];
+                                    $model_nguon = dmnguonkinhphi::select('manguonkp')->get();
+                                    foreach($model_nguon as $nguon){
+                                        $maso++;
+                                        $nguon->maso = $ttuser->madv . '_' . $maso;
+                                        $nguon->madv = $ttuser->madv;
+                                        switch($nguon->manguonkp){
+                                            case '13':{
+                                                $nguon->luongcoban = 1300000;
+                                                break;
+                                            }
+                                            case '14':{
+                                                $nguon->luongcoban = 90000;
+                                                break;
+                                            }
+                                            default:{
+                                                $nguon->luongcoban = 1390000;
+                                                break;
+                                            }
+                                        }
+                                        nguonkinhphi_dinhmuc::insert($nguon->toarray());
+                                    }
+
+                                }
+
+                            */
             }
             //kiểm tra xem user thuộc đơn vị nào, nếu ko thuộc đơn vị nào (trừ tài khoản quản trị) => đăng nhập ko thành công
         }
