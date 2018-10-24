@@ -815,7 +815,7 @@
                     $('#macvcq_qs').val(data.macvcq).trigger('change');
                     $('#manguonkp_qs').val(data.manguonkp).trigger('change');
                     $('#id_qs').val(data.id);
-                    //$('#hesopc_qs').val(data.hesopc);
+                    $('#hesopc_qs').val(data.hesopc);
                     $('#pctn_qs').val(data.pctn);
                     $('#pctdt_qs').val(data.pctdt);
                     $('#pcdbn_qs').val(data.pcdbn);
@@ -947,7 +947,7 @@
                     manguonkp : $('#manguonkp_qs').val(),
                     macvcq : $('#macvcq_qs').val(),
                     id: $('#id_qs').val(),
-                    //hesopc: $('#hesopc_qs').val(),
+                    hesopc: $('#hesopc_qs').val(),
                     pctdt: $('#pctdt_qs').val(),
                     phanloai: $('#phanloai_qs').val(),
                     pctn: $('#pctn_qs').val(),

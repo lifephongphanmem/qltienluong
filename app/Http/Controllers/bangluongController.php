@@ -82,19 +82,17 @@ class bangluongController extends Controller
     function chitra(Request $request)
     {
         if (Session::has('admin')) {
-            //khối phòng ban giờ là lĩnh vực hoạt động
-            //$m_linhvuc = array_column(dmkhoipb::all()->toArray(), 'tenkhoipb', 'makhoipb');
-            //kiểm tra xem nguồn kp có định mức ko
-            //đưa các thông tin vào mảng inputs rồi chuyển
             $inputs = $request->all();
             $inputs['manguonkp']= '13';
             $inputs['luongcb']= getGeneralConfigs()['luongcb'];
             $inputs['furl']= '/chuc_nang/bang_luong/';
             $inputs['furl_ajax']= '/ajax/bang_luong/';
             $inputs['dinhmuc']= 0;
+
             $dinhmuc = nguonkinhphi_dinhmuc::where('manguonkp',$inputs['manguonkp'])->where('madv',session('admin')->madv)->first();
             $maso = count($dinhmuc)> 0 ? $dinhmuc->maso : '';
             $dinhmuc_ct = nguonkinhphi_dinhmuc_ct::where('maso',$maso)->get();
+
             if(count($dinhmuc_ct)>0){
                 $inputs['dinhmuc']= 1;
                 $inputs['luongcb']= $dinhmuc->luongcoban;

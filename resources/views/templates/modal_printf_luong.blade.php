@@ -729,7 +729,7 @@
             <input type="hidden" id="mabl_maubh" name="mabl_maubh"/>
         </div>
         <div class="modal-footer">
-            <button type="submit" class="btn btn-default">In bảo hiểm </button>
+            <button type="submit" class="btn btn-default" onclick="ClickBCbh()">In bảo hiểm </button>
             <button type="button" data-dismiss="modal" class="btn btn-default">Hủy thao tác</button>
         </div>
     </div>
@@ -1072,6 +1072,7 @@
     
     function ClickBCbh() {
         var url = '{{(isset($furl)?$furl : '').'maubh'}}'
+        //alert(url);
         $('#printf_maubh').attr('action', url);
         $('#printf_maubh').submit();
     }

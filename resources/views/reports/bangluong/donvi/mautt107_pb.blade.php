@@ -174,7 +174,7 @@
                         <td>{{dinhdangso($ct->stkpcd)}}</td>
                         <td>{{dinhdangso($ct->stkpcd_dv)}}</td>
                         <td>{{dinhdangso($ct->stkpcd)}}</td>
-                        <td></td>
+                        <td>{{dinhdangso($ct->thuetn)}}</td>
                         <td></td>
                         <td>{{dinhdangso($ct->luongtn)}}</td>
                         <td></td>
@@ -202,7 +202,7 @@
                     <td class="money">{{dinhdangso($model_luong->sum('stkpcd'))}}</td>
                     <td class="money">{{dinhdangso($model_luong->sum('stkpcd_dv'))}}</td>
                     <td class="money">{{dinhdangso($model_luong->sum('stkpcd'))}}</td>
-                    <td></td>
+                    <td class="money">{{dinhdangso($model_luong->sum('thuetn'))}}</td>
                     <td></td>
                     <td class="money">{{dinhdangso($model_luong->sum('luongtn'))}}</td>
                     <td></td>
@@ -229,7 +229,7 @@
             <td class="money">{{dinhdangso($model->sum('stkpcd'))}}</td>
             <td class="money">{{dinhdangso($model->sum('stkpcd_dv'))}}</td>
             <td class="money">{{dinhdangso($model->sum('stkpcd'))}}</td>
-            <td></td>
+            <td class="money">{{dinhdangso($model->sum('thuetn'))}}</td>
             <td></td>
             <td class="money">{{dinhdangso($model->sum('luongtn'))}}</td>
             <td></td>

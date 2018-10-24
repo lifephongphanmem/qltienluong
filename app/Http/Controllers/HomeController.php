@@ -23,7 +23,7 @@ class HomeController extends Controller
             if (session('admin')->username == 'sa')
                 return redirect('cau_hinh_he_thong');
             else {
-                /* tạm thời bỏ đi để chay cho nhanh
+
                 //thêm phân loại công tác
                 //chia ra màn hình đơn vị; màn hình đơn vị tổng hợp
                 $model = hosocanbo::select('macanbo', 'tencanbo', 'msngbac', 'sunghiep', 'gioitinh', 'tnndenngay', 'ngaytu', 'ngayden','ngaysinh','mact')
@@ -86,23 +86,7 @@ class HomeController extends Controller
                     //->with('m_hettapsu',$m_hettapsu)
                     ->with('a_ketqua', $a_ketqua)
                     ->with('pageTitle', 'Tổng quan');
-                */
-                $a_ketqua = array();
-                $a_ketqua['congchuc'] = 0;
-                $a_ketqua['vienchuc'] = 0;
-                $a_ketqua['khac'] = 0;
-                $a_ketqua['tapsu'] = 0;
-                $a_ketqua['chinhthuc'] = 0;
 
-                $a_ketqua['gt_nam'] = 0;
-                $a_ketqua['gt_nu'] = 0;
-                return view('dashboard')
-                    //->with('m_nangluong', $m_nangluong->sortby('ngayden'))
-                    //->with('m_nghihuu', $m_nghihuu->sortby('ngaysinh'))
-                    //->with('m_nghe',$m_nghe->sortby('tnndenngay'))
-                    //->with('m_hettapsu',$m_hettapsu)
-                    ->with('a_ketqua', $a_ketqua)
-                    ->with('pageTitle', 'Tổng quan');
             }
 
         } else
