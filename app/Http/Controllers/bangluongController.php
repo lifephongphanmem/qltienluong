@@ -269,6 +269,8 @@ class bangluongController extends Controller
 
             foreach ($model_phucap as $ct) {
                 $mapc = $ct->mapc;
+                $mapc_st ='st_'.$mapc;
+                $cb->$mapc_st = 0;
                 //gán số tiền bảo hiểm  = 0 khi tính để ko trùng với giá trị cán bộ trc
                 $ct->stbhxh = 0;
                 $ct->stbhyt = 0;
@@ -328,12 +330,13 @@ class bangluongController extends Controller
 
                 if (!$thaisan ||($thaisan && in_array($mapc,$a_ts)) ) {//lưu vào bảng lương phụ cấp (chi luu số tiền >0)
                     $ct->mabl = $inputs['mabl'];
-                    $ct->macanbo = $cb->macanbo;
-                    $ct->tencanbo = $cb->tencanbo;
-                    $ct->maso = $mapc;
-                    $ct->ten = $ct->tenpc;
-                    $ct->heso = $cb->$mapc;
+                    //$ct->macanbo = $cb->macanbo;
+                    //$ct->tencanbo = $cb->tencanbo;
+                    //$ct->maso = $mapc;
+                    //$ct->ten = $ct->tenpc;
+                    //$ct->heso = $cb->$mapc;
                     $ct->sotien = round($sotien, 0);
+                    $cb->$mapc_st = $ct->sotien;
                     if ($ct->baohiem == 1) {
                         $ct->stbhxh = round($ct->sotien * $cb->bhxh, 0);
                         $ct->stbhyt = round($ct->sotien * $cb->bhyt, 0);
@@ -347,8 +350,8 @@ class bangluongController extends Controller
                         $ct->ttbh_dv = $ct->stbhxh_dv + $ct->stbhyt_dv + $ct->stkpcd_dv + $ct->stbhtn_dv;
                     }
 
-                    $a_kq = $ct->toarray();
-                    unset($a_kq['id']);
+                    //$a_kq = $ct->toarray();
+                    //unset($a_kq['id']);
                     //bangluong_phucap::create($a_kq);
                 }
             }
@@ -426,7 +429,6 @@ class bangluongController extends Controller
                 }
                 $cb->giaml = $nghi->songaynghi >= $ngaycong ? $sotiencong : ($tiencong * $nghi->songaynghi);
             }
-
 
             $cb->luongtn = $cb->ttl - $cb->ttbh - $cb->giaml;
 
