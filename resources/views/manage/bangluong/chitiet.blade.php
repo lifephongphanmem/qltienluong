@@ -104,12 +104,19 @@
 
                                             <div class="col-md-2">
                                                 <div class="form-group">
+                                                    <label class="control-label">Thuế thu nhập </label>
+                                                    {!!Form::text('thuetn', null, array('id' => 'thuetn','class' => 'form-control tienluong text-right', 'data-mask'=>'fdecimal'))!!}
+                                                </div>
+                                            </div>
+
+                                            <div class="col-md-2">
+                                                <div class="form-group">
                                                     <label class="control-label" style="font-weight: bold">Nộp theo lương</label>
                                                     {!!Form::text('tbh', $model->ttbh, array('id' => 'tbh','class' => 'form-control text-right', 'data-mask'=>'fdecimal','readonly'=>'true','style'=>'font-weight:bold'))!!}
                                                 </div>
                                             </div>
 
-                                            <div class="col-md-6">
+                                            <div class="col-md-4">
                                                 <div class="form-group">
                                                     <label class="control-label"><b>Lương thực nhận </b></label>
                                                     {!!Form::text('luongtn', null, array('id' => 'luongtn','class' => 'form-control text-right', 'data-mask'=>'fdecimal','readonly'=>'true','style'=>'font-weight:bold'))!!}
@@ -342,7 +349,8 @@
         function giamtru() {
             var giaml = getdl($('#giaml').val());
             var bhct = getdl($('#bhct').val());
-            return bhct - giaml;
+            var thuetn = getdl($('#thuetn').val());
+            return bhct - giaml - thuetn;
 
         }
 
@@ -350,7 +358,6 @@
             var ttl = getdl($('#ttl').val());
             var bh = getdl($('#ttbh').val());
             var gt = giamtru();
-
             $('#luongtn').val(ttl + gt - bh);
         }
 
@@ -366,8 +373,8 @@
         })
 
         $('#luongcb').change(function(){
-            var luongcb=getdl($('#heso').val());
-            var heso=getdl($('#luongcb').val());
+            var luongcb = getdl($('#heso').val());
+            var heso = getdl($('#luongcb').val());
             $('#sotien').val(heso * luongcb);
         })
 

@@ -2108,6 +2108,7 @@ class bangluongController extends Controller
 
             $inputs['ttl'] = chkDbl($inputs['ttl']);
             $inputs['giaml'] = chkDbl($inputs['giaml']);
+            $inputs['thuetn'] = chkDbl($inputs['thuetn']);
             $inputs['bhct'] = chkDbl($inputs['bhct']);
             $inputs['stbhxh'] = chkDbl($inputs['stbhxh']);
             $inputs['stbhyt'] = chkDbl($inputs['stbhyt']);
@@ -2207,7 +2208,7 @@ class bangluongController extends Controller
             $model->ttbh_dv = $model->stbhxh_dv + $model->stbhyt_dv + $model->stkpcd_dv + $model->stbhtn_dv;
             $model->tonghs += $heso_cl;
             $model->ttl += $sotien_cl;
-            $model->luongtn = $model->ttl -  $model->ttbh - $model->giaml + $model->bhct;
+            $model->luongtn = $model->ttl -  $model->ttbh - $model->giaml - $model->thuetn + $model->bhct;
             $model->save();
             return redirect('/chuc_nang/bang_luong/bang_luong?mabl='.$model->mabl.'&mapb='.$model->mapb);
 
