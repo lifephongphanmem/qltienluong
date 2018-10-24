@@ -571,6 +571,7 @@ class bangluongController extends Controller
             ->where('ngaytu', '<=', $ngaylap)->where('ngayden', '>=', $ngaylap)
             ->where('maphanloai', 'DAINGAY')->get()->toarray(),'macanbo');
 
+
         $model_phucap = dmphucap_donvi::select('mapc','phanloai','congthuc','baohiem','tenpc')
             ->where('madv', session('admin')->madv)->wherenotin('mapc', ['hesott'])->get();
         //kiêm nhiệm
@@ -1000,6 +1001,8 @@ class bangluongController extends Controller
         //kiêm nhiệm
         $a_th = array_merge(array('macanbo', 'macvcq', 'mapb', 'manguonkp','mact','baohiem'),
             array_column($model_phucap->toarray(),'mapc'));
+
+
         $m_cb_kn = hosocanbo_kiemnhiem::select(array_merge($a_th,array('phanloai')))->where('madv',$inputs['madv'])->wherein('manguonkp',[$inputs['manguonkp'],'',null])->get()->toArray();;
         //công tác
         $a_th = array_merge(array('stt','tencanbo', 'msngbac', 'bac', 'pthuong','theodoi',
@@ -1285,6 +1288,7 @@ class bangluongController extends Controller
                     ($m_cb[$key]['heso'] + $m_cb[$key]['vuotkhung'] + $m_cb[$key]['pccv']
                         + $m_cb[$key]['hesobl'] + $m_cb[$key]['pctnn']);
                 $tiencong = round($sotiencong / $ngaycong, 0);
+
                 if($cb_nghi >= 15) {//nghỉ quá 15 ngày thì ko đóng bảo hiểm
                     $m_cb[$key]['stbhxh'] = 0;
                     $m_cb[$key]['stbhyt'] = 0;
@@ -1297,7 +1301,7 @@ class bangluongController extends Controller
                     $m_cb[$key]['stbhtn_dv'] = 0;
                     $m_cb[$key]['ttbh_dv'] = 0;
                 }
-                $m_cb[$key]['giaml'] = $cb_nghi >= $ngaycong ? $sotiencong : ($tiencong * $cb_nghi);
+                $m_cb[$key]['giaml'] = $cb_nghi['songaynghi'] >= $ngaycong ? $sotiencong : ($tiencong * $cb_nghi['songaynghi']);
             }
 
             tinhluong:
