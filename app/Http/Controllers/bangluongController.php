@@ -2030,15 +2030,14 @@ class bangluongController extends Controller
         if (Session::has('admin')) {
             $inputs = $request->all();
             $model = bangluong_ct::findorfail($inputs['maso']);
-
-            $model_canbo = hosocanbo::where('macanbo',$model->macanbo)->first();
             $model_bangluong = bangluong::where('mabl',$model->mabl)->first();
 
             $m_nb = ngachluong::where('msngbac',$model->msngbac)->first();
             //$model_bl = bangluong::where('mabl',$model->mabl)->first();
             $model->tennb = isset($m_nb)? $m_nb->tenngachluong:'';
             $model->tencanbo = Str::upper($model->tencanbo);
-
+            /*
+            $model_canbo = hosocanbo::where('macanbo',$model->macanbo)->first();
             $model->bhxh = $model_canbo->bhxh;
             $model->bhyt = $model_canbo->bhyt;
             $model->bhtn = $model_canbo->bhtn;
@@ -2047,6 +2046,7 @@ class bangluongController extends Controller
             $model->bhyt_dv = $model_canbo->bhyt_dv;
             $model->bhtn_dv = $model_canbo->bhtn_dv;
             $model->kpcd_dv = $model_canbo->kpcd_dv;
+            */
             //$a_donvi = dmdonvi::where('madv',session('admin')->madv)->first()->toarray();
 
             //$a_goc = array('heso','vuotkhung','hesott','hesopc');
@@ -2075,7 +2075,7 @@ class bangluongController extends Controller
                     ->with('pageTitle','Chi tiết bảng lương');
             }else{
                 $model->luongcoban = $model_bangluong->luongcoban;
-
+                //dd($model);
                 foreach($model_pc as $pc){
                     $mapc = $pc->mapc;
                     $mapc_st ='st_'. $mapc;
@@ -2084,6 +2084,7 @@ class bangluongController extends Controller
                     $pc->macanbo = $model->macanbo;
                     $pc->mabl = $model->mabl;
                 }
+
                 return view('manage.bangluong.chitiet')
                     ->with('furl','/chuc_nang/bang_luong/')
                     ->with('model',$model)
@@ -2187,8 +2188,6 @@ class bangluongController extends Controller
             $inputs['luongcb'] = chkDbl($inputs['luongcb']);
             $inputs['sotien'] = chkDbl($inputs['sotien']);
 
-
-
             //Tính lương mới
             $sotien_cl = $inputs['sotien'] - $model->$mapc_st;
             $heso_cl = $inputs['heso'] - $model->$mapc;
@@ -2209,6 +2208,7 @@ class bangluongController extends Controller
             $model->tonghs += $heso_cl;
             $model->ttl += $sotien_cl;
             $model->luongtn = $model->ttl -  $model->ttbh - $model->giaml - $model->thuetn + $model->bhct;
+            //dd($model);
             $model->save();
             return redirect('/chuc_nang/bang_luong/bang_luong?mabl='.$model->mabl.'&mapb='.$model->mapb);
 

@@ -233,7 +233,7 @@
                 <div class="row">
                     {!!Form::hidden('phanloai_qs', 'QUANSU', array('id' => 'phanloai_qs','class' => 'form-control'))!!}
 
-                    <div class="col-md-4">
+                    <div class="col-md-3">
                         <div class="form-group">
                             <label class="control-label">Phân loại công tác</label>
                             <select class="form-control select2me" name="mact_qs" id="mact_qs" required="required">
@@ -251,27 +251,28 @@
                         </div>
                     </div>
 
-                    <div class="col-md-4">
+                    <div class="col-md-3">
                         <div class="form-group">
                             <label class="control-label">Chức vụ kiêm nhiệm</label>
                             {!!Form::select('macvcq_qs',getChucVuCQ(false), null, array('id' => 'macvcq_qs','class' => 'form-control select2me'))!!}
                         </div>
                     </div>
 
-                    <div class="col-md-4">
+                    <div class="col-md-3">
                         <div class="form-group">
                             <label class="control-label">Khối/Tổ công tác</label>
                             {!!Form::select('mapb_qs',getPhongBan(), null, array('id' => 'mapb_qs','class' => 'form-control select2me'))!!}
                         </div>
                     </div>
 
-                    <div class="col-md-4">
+                    <div class="col-md-3">
                         <div class="form-group">
                             <label class="control-label">Nguồn KP hưởng lương</label>
                             {!!Form::select('manguonkp_qs',getNguonKP(true), null, array('id' => 'manguonkp_qs','class' => 'form-control select2me'))!!}
                         </div>
                     </div>
-                    <?php $a_kct = array('pcdbn','pcthni','pctn','pck', 'pctdt'); ?>
+
+                    <?php $a_kct = array('hesopc','pcdbn','pcthni','pctn','pck', 'pctdt'); ?>
                     @foreach($model_pc as $pc)
                         @if(!in_array($pc->mapc,$a_kct))
                             @continue
