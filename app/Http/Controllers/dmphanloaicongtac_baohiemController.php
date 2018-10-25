@@ -110,6 +110,14 @@ class dmphanloaicongtac_baohiemController extends Controller
                     'kpcd_dv' => $model_bh->kpcd_dv
                 ]);
 
+            //thủ trương đơn vị (ko cần phân loại công tác)
+            $a_chucvu_vt =  dmchucvucq::select('macvcq')->where('maphanloai',session('admin')->maphanloai)->where('ttdv','1')
+                ->wherein('madv',['SA',session('admin')->madv])->get()->toArray();
+            hosocanbo::where('madv', session('admin')->madv)->wherein('macvcq', $a_chucvu_vt)
+                ->update([
+                    'bhtn' => 0,
+                    'bhtn_dv' => 0
+                ]);
             return redirect('/he_thong/don_vi/bao_hiem');
         } else
             return view('errors.notlogin');

@@ -123,8 +123,41 @@
                                                             {!!Form::text('msngbac', 'I', array('id' => 'msngbac','class' => 'form-control required'))!!}
                                                         </div>
                                                     </div>
-                                                    <!--/span-->
 
+                                                    <div class="col-md-2">
+                                                        <div class="form-group">
+                                                            <label class="control-label">Ngạch bậc - Từ <span class="require">*</span></label>
+                                                            {!!Form::text('ngaytu', 'J', array('id' => 'ngaytu','class' => 'form-control required'))!!}
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="col-md-2">
+                                                        <div class="form-group">
+                                                            <label class="control-label">Ngạch bậc - Đến <span class="require">*</span></label>
+                                                            {!!Form::text('ngayden', 'K', array('id' => 'ngayden','class' => 'form-control required'))!!}
+                                                        </div>
+                                                    </div>
+                                                    <!--/span-->
+                                                    <div class="col-md-2">
+                                                        <div class="form-group">
+                                                            <label class="control-label">TN Nghề - Từ <span class="require">*</span></label>
+                                                            {!!Form::text('tnntungay', 'L', array('id' => 'tnntungay','class' => 'form-control required'))!!}
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="col-md-2">
+                                                        <div class="form-group">
+                                                            <label class="control-label">TN Nghề - Đến <span class="require">*</span></label>
+                                                            {!!Form::text('tnndenngay', 'M', array('id' => 'tnndenngay','class' => 'form-control required'))!!}
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="col-md-2">
+                                                        <div class="form-group">
+                                                            <label class="control-label">Số tài khoản <span class="require">*</span></label>
+                                                            {!!Form::text('sotk', 'N', array('id' => 'sotk','class' => 'form-control required'))!!}
+                                                        </div>
+                                                    </div>
 
                                                     <div class="col-md-2">
                                                         <div class="form-group">

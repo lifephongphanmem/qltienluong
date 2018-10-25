@@ -999,9 +999,14 @@ class hosocanboController extends Controller
                 $model->madv = $madv;
                 $model->macanbo = $madv. '_' . (getdate()[0] + $i);
                 $model->tencanbo = $data[$i][$inputs['tencanbo']];
-                $date = $data[$i][$inputs['ngaysinh']];
-                $model->ngaysinh = getDateToDb($date);
+                $model->ngaysinh = getDateToDb($data[$i][$inputs['ngaysinh']]);
                 $model->gioitinh = $data[$i][$inputs['gioitinh']];
+
+                $model->ngaytu =  getDateToDb($data[$i][$inputs['ngaytu']]);
+                $model->ngayden =  getDateToDb($data[$i][$inputs['ngayden']]);
+                $model->tnntungay =  getDateToDb($data[$i][$inputs['tnntungay']]);
+                $model->tnndenngay =  getDateToDb($data[$i][$inputs['tnndenngay']]);
+                $model->sotk = $data[$i][$inputs['sotk']];
                 /*
                 $timestamp = strtotime($date);
                 if ($timestamp !== FALSE) {
@@ -1057,7 +1062,8 @@ class hosocanboController extends Controller
                     $model->mact = $mact_df;
                 }
 
-                $msngbac = $data[$i][$inputs['msngbac']];
+                $msngbac =(string) $data[$i][$inputs['msngbac']];
+                //dd($msngbac);
                 if(array_key_exists($msngbac, $a_nb)){
                     $model->msngbac = $msngbac;
                     $nhom = $a_nhomnb[$a_nb[$model->msngbac]];
