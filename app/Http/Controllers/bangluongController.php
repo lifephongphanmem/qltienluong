@@ -979,13 +979,10 @@ class bangluongController extends Controller
 
         $a_duongsuc = hosotamngungtheodoi::select('songaycong','songaynghi','macanbo')->where('madv', $inputs['madv'])->where('maphanloai','DUONGSUC')
             ->whereYear('ngaytu', $inputs['nam'])->whereMonth('ngaytu', $inputs['thang'])->get()->keyBy('macanbo')->toarray();
+
         $a_nghiphep = hosotamngungtheodoi::select('songaycong','songaynghi','macanbo')->where('madv', $inputs['madv'])->wherein('maphanloai',['NGHIPHEP','NGHIOM'])
             ->whereYear('ngaytu', $inputs['nam'])->whereMonth('ngaytu', $inputs['thang'])->get()->keyBy('macanbo')->toarray();
 
-        /*
-        $a_nghiphep = array_column(hosotamngungtheodoi::where('madv', $inputs['madv'])->wherein('maphanloai',['NGHIPHEP','NGHIOM'])
-            ->whereYear('ngaytu', $inputs['nam'])->whereMonth('ngaytu', $inputs['thang'])->get()->toarray(),'songaynghi','macanbo');
-        */
         $a_khongluong = array_column(hosotamngungtheodoi::where('madv', $inputs['madv'])
             ->where('ngaytu', '<=', $ngaylap)->where('ngayden', '>=', $ngaylap)
             ->where('maphanloai', 'KHONGLUONG')->get()->toarray(),'macanbo');
@@ -999,7 +996,6 @@ class bangluongController extends Controller
         //kiêm nhiệm
         $a_th = array_merge(array('macanbo', 'macvcq', 'mapb', 'manguonkp','mact','baohiem'),
             array_column($model_phucap->toarray(),'mapc'));
-
 
         $m_cb_kn = hosocanbo_kiemnhiem::select(array_merge($a_th,array('phanloai')))->where('madv',$inputs['madv'])->wherein('manguonkp',[$inputs['manguonkp'],'',null])->get()->toArray();;
         //công tác
@@ -1016,7 +1012,7 @@ class bangluongController extends Controller
         //dd($a_nhomct);
         $a_ts = array_column(dmphucap_thaisan::where('madv', session('admin')->madv)->get()->toarray(), 'mapc');
         $a_dd = array('pclt');//các loại phụ cấp cán bộ được điều động động đến được hưởng (chưa làm cho định mức)
-        $a_dn = array('pckv','pcudn');//các loại phụ cấp cán bộ nghỉ dài ngày đến được hưởng (chưa làm cho định mức)
+        //$a_dn = array('pckv','pcudn');//các loại phụ cấp cán bộ nghỉ dài ngày đến được hưởng (chưa làm cho định mức)
         $ptdn = $m_dv->ptdaingay / 100;//cán bộ nghỉ dài ngày hưởng 50% lương
         $a_goc = array('heso','vuotkhung','pccv'); //mảng phụ cấp làm công thức tính
         $a_pc = $model_phucap->keyby('mapc')->toarray();
@@ -1110,6 +1106,7 @@ class bangluongController extends Controller
                 switch ($a_pc[$k]['phanloai']) {
                     case 0: {//hệ số
                         $tonghs += $m_cb[$key][$mapc];
+                        $tien += round($m_cb[$key][$mapc] * $inputs['luongcoban'], 0);
                         break;
                     }
                     case 1: {//số tiền
@@ -1126,6 +1123,7 @@ class bangluongController extends Controller
                             $m_cb[$key][$mapc] = $heso * $m_cb[$key][$mapc] / 100;
                         }
                         $tonghs += $m_cb[$key][$mapc];
+                        $tien += round($m_cb[$key][$mapc] * $inputs['luongcoban'], 0);
                         break;
                     }
                     default: {//trường hợp còn lại (ẩn,...)

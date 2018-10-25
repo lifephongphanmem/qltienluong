@@ -1044,7 +1044,7 @@ class hosocanboController extends Controller
                         break;
                     }
                     if( strpos( $val, $mapb ) !== false) {//mã chứa trong chuỗi => tìm tiếp
-                        $model->$mapb = $key;
+                        $model->mapb = $key;
                     }
                 }
 
