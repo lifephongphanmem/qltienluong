@@ -11,6 +11,13 @@ class ngachluong extends Model
         'id',
         'msngbac',
         'manhom',
-        'tenngachluong'
+        'tenngachluong',
+        'namnb',
+        'baclonnhat',
+        'bacvuotkhung',
+        'heso',
+        'hesolonnhat',
+        'vuotkhung',
+        'hesochenhlech',
     ];
 }

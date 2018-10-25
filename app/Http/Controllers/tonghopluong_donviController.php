@@ -498,6 +498,11 @@ class tonghopluong_donviController extends Controller
                         $a_ct[$i][$mapc_st] = 0;
                     }
 
+                    if ($a_ct[$i]['congtac'] == 'KHONGLUONG') {
+                        $a_ct[$i][$mapc] = 0;
+                        $a_ct[$i][$mapc_st] = 0;
+                    }
+
                     if (count($a_nguon)> 0 && !in_array($mapc, $a_nguon)) {
                         $a_ct[$i][$mapc] = 0;
                         $a_ct[$i][$mapc_st] = 0;
