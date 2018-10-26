@@ -41,11 +41,8 @@
                         <thead>
                             <tr>
                                 <th class="text-center" style="width: 5%">STT</th>
-                                <th class="text-center">Số quyết định</th>
-                                <th class="text-center">Ngày quyết định</th>
-                                <th class="text-center">Cơ quan quyết định</th>
-                                <th class="text-center">Nội dung quyết định</th>
                                 <th class="text-center">Ngày xét duyệt</th>
+                                <th class="text-center">Nội dung</th>
                                 <th class="text-center">Trạng thái</th>
                                 <th class="text-center">Thao tác</th>
                             </tr>
@@ -55,11 +52,8 @@
                             @foreach($model as $key=>$value)
                                 <tr>
                                     <td class="text-center">{{$key+1}}</td>
-                                    <td>{{$value->soqd}}</td>
-                                    <td>{{getDayVn($value->ngayqd)}}</td>
-                                    <td>{{$value->coquanqd}}</td>
-                                    <td>{{$value->noidung}}</td>
                                     <td>{{getDayVn($value->ngayxet)}}</td>
+                                    <td>{{$value->kemtheo}}</td>
                                     <td>{{$value->trangthai}}</td>
                                     <td>
                                         <button type="button" onclick="edit({{$value->id}})" class="btn btn-info btn-xs mbs">
@@ -89,15 +83,11 @@
             </div>
             <div class="modal-body">
                 <div class="form-horizontal">
-                    @include('includes.crumbs.quyetdinh')
-                    @include('includes.crumbs.xetduyet')
+                    <label class="control-label"> Ngày xét duyệt (ngày hưởng lương)<span class="require">*</span></label>
+                    {!! Form::date('ngayxet', date('Y-m-d'), array('id' => 'ngayxet', 'class' => 'form-control'))!!}
 
-                    <div class="form-group">
-                        <label class="col-md-4 control-label"> Nội dung kèm theo</label>
-                        <div class="col-md-8">
-                            {!! Form::textarea('kemtheo',null,array('id' => 'kemtheo', 'class' => 'form-control','rows'=>'3'))!!}
-                        </div>
-                    </div>
+                    <label class="control-label"> Nội dung kèm theo</label>
+                    {!! Form::textarea('kemtheo',null,array('id' => 'kemtheo', 'class' => 'form-control','rows'=>'3'))!!}
                     <input type="hidden" id="manl" name="manl"/>
                     <input type="hidden" id="id_ct" name="id_ct"/>
                 </div>
@@ -111,11 +101,6 @@
     {!!Form::close()!!}
     <script>
         function add(){
-            $('#soqd').val('');
-            $('#ngayqd').val('');
-            $('#nguoiky').val('');
-            $('#coquanqd').val('');
-            $('#noidung').val('');
             $('#kemtheo').val('');
             $('#manl').val('');
             $('#id_ct').val(0);
@@ -134,12 +119,7 @@
                 },
                 dataType: 'JSON',
                 success: function (data) {
-                    $('#soqd').val(data.soqd);
                     $('#manl').val(data.manl);
-                    $('#ngayqd').val(data.ngayqd);
-                    $('#nguoiky').val(data.nguoiky);
-                    $('#coquanqd').val(data.coquanqd);
-                    $('#noidung').val(data.noidung);
                     $('#ngayxet').val(data.ngayxet);
                     $('#kemtheo').val(data.kemtheo);
                 },

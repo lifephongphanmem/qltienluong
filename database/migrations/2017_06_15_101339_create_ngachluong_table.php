@@ -18,6 +18,13 @@ class CreateNgachluongTable extends Migration
             $table->string('manhom', 50)->nullable();
             $table->string('msngbac', 50)->nullable();
             $table->string('tenngachluong')->nullable();
+            $table->integer('namnb')->default(0);
+            $table->integer('baclonnhat')->default(1);
+            $table->integer('bacvuotkhung')->default(0);
+            $table->double('heso')->default(0);
+            $table->double('hesolonnhat')->default(0);
+            $table->double('vuotkhung')->default(0);
+            $table->double('hesochenhlech')->default(0);
             $table->timestamps();
         });
     }

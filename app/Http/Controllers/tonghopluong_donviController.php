@@ -463,7 +463,8 @@ class tonghopluong_donviController extends Controller
             for($i=0; $i<count($col); $i++){
                 $col_st[] ='st_'. $col[$i];
             }
-            $a_th = array_merge(array('macanbo','tencanbo','msngbac', 'mact', 'macvcq', 'mapb', 'mabl','congtac','stbhxh_dv','stbhyt_dv','stkpcd_dv','stbhtn_dv','tonghs','ttl', 'giaml'),$col);
+            $a_th = array_merge(array('macanbo','tencanbo','msngbac', 'mact', 'macvcq', 'mapb', 'mabl'
+                ,'congtac','stbhxh_dv','stbhyt_dv','stkpcd_dv','stbhtn_dv','tonghs','ttl', 'giaml','ttbh_dv'),$col);
             $a_th = array_merge($a_th,$col_st);
             $a_ct = bangluong_ct::select($a_th)->wherein('mabl', array_column($a_bangluong,'mabl'))->get()->toarray();
             //dd($a_ct);
@@ -494,6 +495,11 @@ class tonghopluong_donviController extends Controller
                     //$a_ct[$i][$mapc_st] = count($phucap) > 0 ? $phucap['sotien'] : 0;
                     //$a_ct[$i][$mapc] = count($phucap) > 0 ? $phucap['heso'] : 0;
                     if ($a_ct[$i]['congtac'] == 'THAISAN' && !in_array($mapc, $a_bh) ) {
+                        $a_ct[$i][$mapc] = 0;
+                        $a_ct[$i][$mapc_st] = 0;
+                    }
+
+                    if ($a_ct[$i]['congtac'] == 'KHONGLUONG') {
                         $a_ct[$i][$mapc] = 0;
                         $a_ct[$i][$mapc_st] = 0;
                     }
