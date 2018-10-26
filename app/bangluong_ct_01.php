@@ -132,39 +132,43 @@ class bangluong_ct_01 extends Model
     ];
 }
 /* 1534853505_1540178256
-UPDATE bangluong_ct set st_heso = heso * if(heso> 100, 1, luongcoban) WHERE mabl = '1534853505_1540178256';
-UPDATE bangluong_ct set st_hesobl = hesobl * if(hesobl> 100, 1, luongcoban) WHERE mabl = '1534853505_1540178256';
-UPDATE bangluong_ct set st_hesopc = hesopc * if(hesopc> 100, 1, luongcoban) WHERE mabl = '1534853505_1540178256';
-UPDATE bangluong_ct set st_vuotkhung = vuotkhung * if(vuotkhung> 100, 1, luongcoban) WHERE mabl = '1534853505_1540178256';
-UPDATE bangluong_ct set st_pcct = pcct * if(pcct> 100, 1, luongcoban) WHERE mabl = '1534853505_1540178256';
-UPDATE bangluong_ct set st_pckct = pckct * if(pckct> 100, 1, luongcoban) WHERE mabl = '1534853505_1540178256';
-UPDATE bangluong_ct set st_pck = pck * if(pck> 100, 1, luongcoban) WHERE mabl = '1534853505_1540178256';
-UPDATE bangluong_ct set st_pccv = pccv * if(pccv> 100, 1, luongcoban) WHERE mabl = '1534853505_1540178256';
-UPDATE bangluong_ct set st_pckv = pckv * if(pckv> 100, 1, luongcoban) WHERE mabl = '1534853505_1540178256';
-UPDATE bangluong_ct set st_pcth = pcth * if(pcth> 100, 1, luongcoban) WHERE mabl = '1534853505_1540178256';
-UPDATE bangluong_ct set st_pcdd = pcdd * if(pcdd> 100, 1, luongcoban) WHERE mabl = '1534853505_1540178256';
-UPDATE bangluong_ct set st_pcdh = pcdh * if(pcdh> 100, 1, luongcoban) WHERE mabl = '1534853505_1540178256';
-UPDATE bangluong_ct set st_pcld = pcld * if(pcld> 100, 1, luongcoban) WHERE mabl = '1534853505_1540178256';
-UPDATE bangluong_ct set st_pcdbqh = pcdbqh * if(pcdbqh> 100, 1, luongcoban) WHERE mabl = '1534853505_1540178256';
-UPDATE bangluong_ct set st_pcudn = pcudn * if(pcudn> 100, 1, luongcoban) WHERE mabl = '1534853505_1540178256';
-UPDATE bangluong_ct set st_pctn = pctn * if(pctn> 100, 1, luongcoban) WHERE mabl = '1534853505_1540178256';
-UPDATE bangluong_ct set st_pctnn = pctnn * if(pctnn> 100, 1, luongcoban) WHERE mabl = '1534853505_1540178256';
-UPDATE bangluong_ct set st_pcdbn = pcdbn * if(pcdbn> 100, 1, luongcoban) WHERE mabl = '1534853505_1540178256';
-UPDATE bangluong_ct set st_pcvk = pcvk * if(pcvk> 100, 1, luongcoban) WHERE mabl = '1534853505_1540178256';
-UPDATE bangluong_ct set st_pckn = pckn * if(pckn> 100, 1, luongcoban) WHERE mabl = '1534853505_1540178256';
-UPDATE bangluong_ct set st_pcdang = pcdang * if(pcdang> 100, 1, luongcoban) WHERE mabl = '1534853505_1540178256';
-UPDATE bangluong_ct set st_pccovu = pccovu * if(pccovu> 100, 1, luongcoban) WHERE mabl = '1534853505_1540178256';
-UPDATE bangluong_ct set st_pclt = pclt * if(pclt> 100, 1, luongcoban) WHERE mabl = '1534853505_1540178256';
-UPDATE bangluong_ct set st_pcd = pcd * if(pcd> 100, 1, luongcoban) WHERE mabl = '1534853505_1540178256';
-UPDATE bangluong_ct set st_pctr = pctr * if(pctr> 100, 1, luongcoban) WHERE mabl = '1534853505_1540178256';
-UPDATE bangluong_ct set st_pctdt = pctdt * if(pctdt> 100, 1, luongcoban) WHERE mabl = '1534853505_1540178256';
-UPDATE bangluong_ct set st_pctnvk = pctnvk * if(pctnvk> 100, 1, luongcoban) WHERE mabl = '1534853505_1540178256';
-UPDATE bangluong_ct set st_pcbdhdcu = pcbdhdcu * if(pcbdhdcu> 100, 1, luongcoban) WHERE mabl = '1534853505_1540178256';
-UPDATE bangluong_ct set st_pcthni = pcthni * if(pcthni> 100, 1, luongcoban) WHERE mabl = '1534853505_1540178256';
-UPDATE bangluong_ct set st_pclade = pclade * if(pclade> 100, 1, luongcoban) WHERE mabl = '1534853505_1540178256';
-UPDATE bangluong_ct set st_pcud61 = pcud61 * if(pcud61> 100, 1, luongcoban) WHERE mabl = '1534853505_1540178256';
-UPDATE bangluong_ct set st_pcxaxe = pcxaxe * if(pcxaxe> 100, 1, luongcoban) WHERE mabl = '1534853505_1540178256';
-UPDATE bangluong_ct set st_pcdith = pcdith * if(pcdith> 100, 1, luongcoban) WHERE mabl = '1534853505_1540178256';
-UPDATE bangluong_ct set st_luonghd = luonghd * if(luonghd> 100, 1, luongcoban) WHERE mabl = '1534853505_1540178256';
-UPDATE bangluong_ct set st_pcphth = pcphth * if(pcphth> 100, 1, luongcoban) WHERE mabl = '1534853505_1540178256';
+UPDATE bangluong_ct set st_heso = heso * if(heso> 100, 1, luongcoban) WHERE st_heso = 0;
+UPDATE bangluong_ct set st_hesobl = hesobl * if(hesobl> 100, 1, luongcoban) WHERE st_hesobl = 0;
+UPDATE bangluong_ct set st_hesopc = hesopc * if(hesopc> 100, 1, luongcoban) WHERE st_hesopc = 0;
+UPDATE bangluong_ct set st_vuotkhung = vuotkhung * if(vuotkhung> 100, 1, luongcoban) WHERE st_vuotkhung = 0;
+UPDATE bangluong_ct set st_pcct = pcct * if(pcct> 100, 1, luongcoban) WHERE st_pcct = 0;
+UPDATE bangluong_ct set st_pckct = pckct * if(pckct> 100, 1, luongcoban) WHERE st_pckct = 0;
+UPDATE bangluong_ct set st_pck = pck * if(pck> 100, 1, luongcoban) WHERE st_pck = 0;
+
+UPDATE bangluong_ct set st_pccv = pccv * if(pccv> 100, 1, luongcoban) WHERE st_pccv = 0;
+UPDATE bangluong_ct set st_pckv = pckv * if(pckv> 100, 1, luongcoban) WHERE st_pckv = 0;
+UPDATE bangluong_ct set st_pcth = pcth * if(pcth> 100, 1, luongcoban) WHERE st_pcth = 0;
+UPDATE bangluong_ct set st_pcdd = pcdd * if(pcdd> 100, 1, luongcoban) WHERE st_pcdd = 0;
+UPDATE bangluong_ct set st_pcdh = pcdh * if(pcdh> 100, 1, luongcoban) WHERE st_pcdh = 0;
+UPDATE bangluong_ct set st_pcld = pcld * if(pcld> 100, 1, luongcoban) WHERE st_pcld = 0;
+UPDATE bangluong_ct set st_pcdbqh = pcdbqh * if(pcdbqh> 100, 1, luongcoban) WHERE st_pcdbqh = 0;
+
+UPDATE bangluong_ct set st_pcudn = pcudn * if(pcudn> 100, 1, luongcoban) WHERE st_pcudn = 0;
+UPDATE bangluong_ct set st_pctn = pctn * if(pctn> 100, 1, luongcoban) WHERE st_pctn = 0;
+UPDATE bangluong_ct set st_pctnn = pctnn * if(pctnn> 100, 1, luongcoban) WHERE st_pctnn = 0;
+UPDATE bangluong_ct set st_pcdbn = pcdbn * if(pcdbn> 100, 1, luongcoban) WHERE st_pcdbn = 0;
+UPDATE bangluong_ct set st_pcvk = pcvk * if(pcvk> 100, 1, luongcoban) WHERE st_pcvk = 0;
+UPDATE bangluong_ct set st_pckn = pckn * if(pckn> 100, 1, luongcoban) WHERE st_pckn = 0;
+UPDATE bangluong_ct set st_pcdang = pcdang * if(pcdang> 100, 1, luongcoban) WHERE st_pcdang = 0;
+
+UPDATE bangluong_ct set st_pccovu = pccovu * if(pccovu> 100, 1, luongcoban) WHERE st_pccovu = 0;
+UPDATE bangluong_ct set st_pclt = pclt * if(pclt> 100, 1, luongcoban) WHERE st_pclt = 0;
+UPDATE bangluong_ct set st_pcd = pcd * if(pcd> 100, 1, luongcoban) WHERE st_pcd = 0;
+UPDATE bangluong_ct set st_pctr = pctr * if(pctr> 100, 1, luongcoban) WHERE st_pctr = 0;
+UPDATE bangluong_ct set st_pctdt = pctdt * if(pctdt> 100, 1, luongcoban) WHERE st_pctdt = 0;
+UPDATE bangluong_ct set st_pctnvk = pctnvk * if(pctnvk> 100, 1, luongcoban) WHERE st_pctnvk = 0;
+UPDATE bangluong_ct set st_pcbdhdcu = pcbdhdcu * if(pcbdhdcu> 100, 1, luongcoban) WHERE st_pcbdhdcu = 0;
+
+UPDATE bangluong_ct set st_pcthni = pcthni * if(pcthni> 100, 1, luongcoban) WHERE st_pcthni = 0;
+UPDATE bangluong_ct set st_pclade = pclade * if(pclade> 100, 1, luongcoban) WHERE st_pclade = 0;
+UPDATE bangluong_ct set st_pcud61 = pcud61 * if(pcud61> 100, 1, luongcoban) WHERE st_pcud61 = 0;
+UPDATE bangluong_ct set st_pcxaxe = pcxaxe * if(pcxaxe> 100, 1, luongcoban) WHERE st_pcxaxe = 0;
+UPDATE bangluong_ct set st_pcdith = pcdith * if(pcdith> 100, 1, luongcoban) WHERE st_pcdith = 0;
+UPDATE bangluong_ct set st_luonghd = luonghd * if(luonghd> 100, 1, luongcoban) WHERE st_luonghd = 0;
+UPDATE bangluong_ct set st_pcphth = pcphth * if(pcphth> 100, 1, luongcoban) WHERE st_pcphth = 0;
 */
