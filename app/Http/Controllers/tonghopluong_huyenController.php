@@ -772,6 +772,7 @@ class tonghopluong_huyenController extends Controller
             $inputs = $request->all();
 
             $model = tonghopluong_huyen::where('mathdv', $inputs['mathdv'])->first();
+            //dd($model);
             $model->trangthai = 'TRALAI';
             $model->lydo = $inputs['lydo'];
             $model->save();

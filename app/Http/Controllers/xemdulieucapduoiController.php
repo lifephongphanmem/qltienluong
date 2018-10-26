@@ -217,18 +217,17 @@ class xemdulieucapduoiController extends Controller
             $a_trangthai = array('ALL' => '--Chọn trạng thái dữ liệu--', 'CHOGUI' => 'Chưa gửi dữ liệu', 'DAGUI' => 'Đã gửi dữ liệu');
             //$a_phanloai = array('DONVI' => 'Dữ liệu tổng hợp của đơn vị', 'CAPDUOI' => 'Dữ liệu tổng hợp của các đơn vị cấp dưới');
 
-            $model_donvi = dmdonvi::select('madv', 'tendv')
-                ->wherein('madv', function($query) use($madv){
+            $model_donvi = dmdonvi::wherein('madv', function($query) use($madv){
                     $query->select('madv')->from('dmdonvi')->where('macqcq',$madv)->where('madv','<>',$madv)->get();
                 })->get();
-
+            //dd($model_donvi);
             $model_nguon = tonghopluong_donvi::wherein('madv', function($query) use($madv){
                 $query->select('madv')->from('dmdonvi')->where('macqcq',$madv)->where('madv','<>',$madv)->get();
                 })->where('thang', $inputs['thang'])
                 ->where('nam', $inputs['nam'])
                 ->where('trangthai', 'DAGUI')
                 ->get();
-
+            //dd($model_nguon);
             $model_nguon_tinh = tonghopluong_tinh::where('madv', $madv)->where('thang', $inputs['thang'])
                 ->where('nam', $inputs['nam'])->first();
             //kiểm tra xem đã tổng hợp thành dữ liệu huyện gửi lên tỉnh chưa?

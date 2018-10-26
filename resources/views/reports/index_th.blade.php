@@ -118,6 +118,7 @@
                                 @foreach($model_phanloai as $phanloaict)
                                     <option value="{{$phanloaict['maphanloai']}}">{{$phanloaict['tenphanloai']}}</option>
                                 @endforeach
+                                    <option value="">--Chọn tất cả--</option>
                             </select>
                             </div>
                         </div>
