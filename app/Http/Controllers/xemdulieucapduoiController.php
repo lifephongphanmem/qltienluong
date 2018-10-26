@@ -216,18 +216,42 @@ class xemdulieucapduoiController extends Controller
 
             $a_trangthai = array('ALL' => '--Chọn trạng thái dữ liệu--', 'CHOGUI' => 'Chưa gửi dữ liệu', 'DAGUI' => 'Đã gửi dữ liệu');
             //$a_phanloai = array('DONVI' => 'Dữ liệu tổng hợp của đơn vị', 'CAPDUOI' => 'Dữ liệu tổng hợp của các đơn vị cấp dưới');
-
-            $model_donvi = dmdonvi::select('madv', 'tendv')
-                ->wherein('madv', function($query) use($madv){
+            /*$model_donvi = dmdonvi::select('madv', 'tendv')
+                    ->wherein('madv', function($query) use($madv){
+                        $query->select('madv')->from('dmdonvi')->where('macqcq',$madv)->where('madv','<>',$madv)->get();
+                    })->get();*/
+            if(session('admin')->quanlykhuvuc)
+            {
+                $model_donvi = tonghopluong_donvi::join('dmdonvi','tonghopluong_donvi.madv','dmdonvi.madv')
+                    ->select('dmdonvi.madv', 'dmdonvi.tendv')
+                    ->wherein('tonghopluong_donvi.madv', function($query) use($madv){
+                        $query->select('madv')->from('dmdonvi')->where('macqcq',$madv)->where('madv','<>',$madv)->get();
+                    })->get();
+                $model_nguon = tonghopluong_donvi::wherein('madv', function($query) use($madv){
                     $query->select('madv')->from('dmdonvi')->where('macqcq',$madv)->where('madv','<>',$madv)->get();
-                })->get();
-
-            $model_nguon = tonghopluong_donvi::wherein('madv', function($query) use($madv){
-                $query->select('madv')->from('dmdonvi')->where('macqcq',$madv)->where('madv','<>',$madv)->get();
                 })->where('thang', $inputs['thang'])
-                ->where('nam', $inputs['nam'])
-                ->where('trangthai', 'DAGUI')
-                ->get();
+                    ->where('nam', $inputs['nam'])
+                    ->where('trangthai', 'DAGUI')
+                    ->get();
+            }
+
+            else
+            {
+                $model_donvi = tonghopluong_huyen::join('dmdonvi','tonghopluong_huyen.madv','dmdonvi.madv')
+                    ->select('dmdonvi.madv', 'dmdonvi.tendv')
+                    ->wherein('tonghopluong_huyen.madv', function($query) use($madv){
+                        $query->select('madv')->from('dmdonvi')->where('macqcq',$madv)->where('madv','<>',$madv)->get();
+                    })->get();
+                $model_nguon = tonghopluong_huyen::wherein('madv', function($query) use($madv){
+                    $query->select('madv')->from('dmdonvi')->where('macqcq',$madv)->where('madv','<>',$madv)->get();
+                })->where('thang', $inputs['thang'])
+                    ->where('nam', $inputs['nam'])
+                    ->where('trangthai', 'DAGUI')
+                    ->get();
+            }
+
+
+
 
             $model_nguon_tinh = tonghopluong_tinh::where('madv', $madv)->where('thang', $inputs['thang'])
                 ->where('nam', $inputs['nam'])->first();
@@ -242,15 +266,19 @@ class xemdulieucapduoiController extends Controller
                 $dv->tralai = $tralai;
                 $nguon = $model_nguon->where('madv',$dv->madv)->first();
 
-                if(count($nguon)> 0 && $nguon->trangthai == 'DAGUI'){
+                if(count($nguon)> 0 && $nguon->trangthai == 'DAGUI' ) {
+                    $dv->mathdv = $nguon->mathh;
+                    $dv->trangthai = 'DAGUI';
+                }elseif(count($nguon)> 0 && $nguon->trangthai == 'DAGUI' && session('admin')->quanlykhuvuc ){
                     $dv->mathdv = $nguon->mathdv;
                     $dv->trangthai = 'DAGUI';
-                }else{
+                }
+                else{
                     $dv->trangthai = 'CHOGUI';
                     $dv->mathdv = null;
                 }
             }
-            //dd($model_donvi->toarray());
+            dd($model_donvi->toarray());
             if (!isset($inputs['trangthai']) || $inputs['trangthai'] != 'ALL') {
                 $model_donvi = $model_donvi->where('trangthai',$inputs['trangthai']);
             }
