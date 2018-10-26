@@ -202,9 +202,8 @@ class bangluongController extends Controller
         //Không tính truy lĩnh
         $a_goc = array('heso','vuotkhung','pccv'); //mảng phụ cấp làm công thức tính
         //=> lấy phụ cấp theo nguồn chứ ko pải phụ cấp toàn hệ thống
-        $model_dimhmuc = nguonkinhphi_dinhmuc_ct::wherein('maso',function($qr) use ($inputs){
-            $qr->select('maso')->from('nguonkinhphi_dinhmuc')->where('madv', session('admin')->madv)->where('manguonkp', $inputs['manguonkp'])->get();
-        })->get();
+        $m_dm = nguonkinhphi_dinhmuc::where('madv', session('admin')->madv)->where('manguonkp', $inputs['manguonkp'])->first();
+        $model_dimhmuc = nguonkinhphi_dinhmuc_ct::wherein('maso',$m_dm->maso)->get();
         $a_nguonpc = array_column($model_dimhmuc->toarray(), 'mapc');
         $a_mucluong = array_column($model_dimhmuc->toarray(),'luongcoban', 'mapc');
         $model_phucap = dmphucap_donvi::where('madv', session('admin')->madv)->where('phanloai','<','3')->get();
@@ -392,7 +391,8 @@ class bangluongController extends Controller
                 $cb->ttbh_dv = $cb->stbhxh_dv + $cb->stbhyt_dv + $cb->stkpcd_dv + $cb->stbhtn_dv;
             }
 
-            if(count($a_nguonpc) > 0 && $inputs['manguonkp'] == '12'){//chưa xử lý dc
+            //if(count($a_nguonpc) > 0 && $inputs['manguonkp'] == '12'){//chưa xử lý dc
+            if($m_dm->baohiem == 0){//xem để lồng lên tren đõ 1 vong for
                 $cb->stbhxh = 0;
                 $cb->stbhyt = 0;
                 $cb->stkpcd = 0;
