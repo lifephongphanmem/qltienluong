@@ -235,7 +235,9 @@ class hosotruylinhController extends Controller
                         $msngbac = $model->msngbac;
                         if(isset($a_nhomnb[$msngbac])) {
                             $nhomnb = $a_nhomnb[$msngbac];
-                            $hesomax = $nhomnb['heso'] + ($nhomnb['heso'] * $nhomnb['hesochenhlech']);
+                            //hesolonnhat
+                            //$hesomax = $nhomnb['heso'] + ($nhomnb['heso'] * $nhomnb['hesochenhlech']);
+                            $hesomax = $nhomnb['hesolonnhat'];
                             if ($model->heso >= $hesomax) {
                                 $vuotkhung = $model->vuotkhung == 0 ? $nhomnb['vuotkhung'] : 1;
                                 $heso = $vuotkhung / 100;
