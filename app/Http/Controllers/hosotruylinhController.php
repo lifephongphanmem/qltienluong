@@ -240,7 +240,7 @@ class hosotruylinhController extends Controller
                             $hesomax = $nhomnb['hesolonnhat'];
                             if ($model->heso >= $hesomax) {
                                 $vuotkhung = $model->vuotkhung == 0 ? $nhomnb['vuotkhung'] : 1;
-                                $heso = $vuotkhung / 100;
+                                $heso = ($vuotkhung * $model->heso) / 100;
                             } else {
                                 $heso = $nhomnb['hesochenhlech'];
                             }
