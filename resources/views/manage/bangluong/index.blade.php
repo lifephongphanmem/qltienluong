@@ -52,6 +52,10 @@
                             <div class="col-md-2">
                                 {!! Form::select('namct',getNam(),$inputs['nam'], array('id' => 'namct', 'class' => 'form-control'))!!}
                             </div>
+                            <!--div class="col-md-offset-1 col-md-2">
+                            <button type="button" onclick="inbl('{{$inputs['thang']}}','{{$inputs['nam']}}')" class="btn btn-default mbs">
+                                <i class="fa fa-print"></i>&nbsp; In bảng lương tổng hợp</button>
+                            </div-->
                         </div>
                     </div>
 
@@ -461,10 +465,6 @@
             return '{{$inputs['furl']}}'+'chi_tra?thang='+thang +'&nam='+nam;
         }
         $(function(){
-
-            $('#thangct').change(function() {
-                window.location.href = getLink();
-            });
 
             $('#thangct').change(function(){
                 window.location.href = getLink();
