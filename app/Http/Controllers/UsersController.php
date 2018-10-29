@@ -263,6 +263,12 @@ class UsersController extends Controller
             //kiểm tra xem user thuộc đơn vị nào, nếu ko thuộc đơn vị nào (trừ tài khoản quản trị) => đăng nhập ko thành công
         }
 
+        //nếu pass là 123456(e10adc3949ba59abbe56e057f20f883e) =>đổi pass
+        if($ttuser->password == 'e10adc3949ba59abbe56e057f20f883e' && $ttuser->level != 'SA' && $ttuser->level != 'SSA' ){
+
+            //return view('system.users.change_pass_default')
+                //->with('pageTitle', 'Thay đổi mật khẩu');
+        }
         //thêm mã đơn vị báo cáo, mã khối phòng ban, mã cqcq
         //dd($ttuser);
         //if (md5($input['password']) == $ttuser->password) {
@@ -290,6 +296,27 @@ class UsersController extends Controller
     public function cpw(Request $request)
     {
         $update = $request->all();
+        $username = session('admin')->username;
+        $password = session('admin')->password;
+        $newpass2 = $update['newpassword2'];
+        $currentPassword = $update['current-password'];
+
+        if (md5($currentPassword) == $password) {
+            $ttuser = Users::where('username', $username)->first();
+            $ttuser->password = md5($newpass2);
+            if ($ttuser->save()) {
+                Session::flush();
+                return view('errors.changepassword-success');
+            }
+        } else {
+            dd('Mật khẩu cũ không đúng???');
+        }
+    }
+
+    public function change_password_df(Request $request)
+    {
+        $update = $request->all();
+
         $username = session('admin')->username;
         $password = session('admin')->password;
         $newpass2 = $update['newpassword2'];

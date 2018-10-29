@@ -10,8 +10,6 @@
 @stop
 
 @section('content')
-
-
     <h3 class="page-title">
         Quản lý thông tin tài khoản<small> thay đổi mật khẩu</small>
     </h3>

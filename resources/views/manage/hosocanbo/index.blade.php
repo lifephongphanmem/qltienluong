@@ -90,8 +90,8 @@
                                     <td class="text-center">{{$hs->tenct}}</td>
                                 <td>
                                     <a href="{{url($url.'maso='.$hs->id.'')}}" class="btn btn-default btn-xs mbs"><i class="fa fa-edit"></i>&nbsp; Chỉnh sửa</a>
-                                    <button type="button" onclick="cfDel('{{$url.'del/maso='.$hs->id}}')" class="btn btn-default btn-xs mbs" data-target="#delete-modal-confirm" data-toggle="modal">
-                                        <i class="fa fa-times"></i>&nbsp; Xóa</button>
+                                    <!--button type="button" onclick="cfDel('{{$url.'del/maso='.$hs->id}}')" class="btn btn-default btn-xs mbs" data-target="#delete-modal-confirm" data-toggle="modal">
+                                        <i class="fa fa-times"></i>&nbsp; Xóa</button-->
                                 </td>
                         </tr>
                         @endforeach
