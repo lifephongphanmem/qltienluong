@@ -578,7 +578,7 @@ class baocaobangluongController extends Controller
             $madv = session('admin')->madv;
             $maphanloai = $inputs['phanloai'];
             $model_donvi = dmdonvi::where('macqcq',$madv)->get();
-            $model_phanloai = dmphanloaidonvi::where('maphanloai',$maphanloai)->get();
+            $model_phanloai = dmphanloaidonvi::where('maphanloai','like',$maphanloai.'%')->get();
             $m_pc = array_column(dmphucap::all()->toarray(),'report','mapc');
             $a_phucap = array();
             $col = 0;
@@ -588,7 +588,7 @@ class baocaobangluongController extends Controller
                 ->where('trangthai', 'DAGUI')
                 ->wherein('madv', function ($query) use ($maphanloai) {
                     $query->select('madv')->from('dmdonvi')
-                        ->where('maphanloai', $maphanloai)
+                        ->where('maphanloai','like', $maphanloai.'%')
                         ->get();
                 })->get();
             $a_dv = array_column($model_tonghop->toarray(),'madv','mathdv');
@@ -778,7 +778,6 @@ class baocaobangluongController extends Controller
                     $ma = 'hs'.$ct;
                     $chitiet->$ma = $chitiet->$ct;
                 }
-
             }
             //dd($model->toarray());
             $model_data = $model->map(function ($data) {
