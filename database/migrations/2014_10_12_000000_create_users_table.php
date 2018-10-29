@@ -26,6 +26,7 @@ class CreateUsersTable extends Migration
             $table->string('matinh')->nullable();
             $table->string('sadmin');
             $table->string('permission')->nullable();
+            $table->string('ip',50)->nullable();
             $table->timestamps();
         });
     }

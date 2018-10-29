@@ -106,6 +106,7 @@
                 <div class="portlet-body form">
                     <!-- BEGIN FORM-->
                     {!! Form::open(['url'=>'/change_password_df', 'id' => 'form-changepass', 'class'=>'form-horizontal form-validate']) !!}
+                    <input type="hidden" id="username" name="username" value="{{$username}}"/>
                     <div class="form-body">
                         <div class="form-group">
                             <label for="newpassword" class="col-sm-5 control-label">Mật khẩu mới <span class="require">*</span></label>

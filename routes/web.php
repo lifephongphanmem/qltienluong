@@ -30,7 +30,7 @@ Route::patch('cau_hinh_he_thong/{id}','GeneralConfigsController@update');
 //Users
 Route::get('login','UsersController@login');
 Route::post('signin','UsersController@signin');
-Route::get('/change_password_df','UsersController@change_password_df');
+Route::post('/change_password_df','UsersController@change_password_df');
 Route::get('/change-password','UsersController@cp');
 Route::post('/change-password','UsersController@cpw');
 Route::get('/checkpass','UsersController@checkpass');

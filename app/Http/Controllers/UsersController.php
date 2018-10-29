@@ -265,9 +265,9 @@ class UsersController extends Controller
 
         //nếu pass là 123456(e10adc3949ba59abbe56e057f20f883e) =>đổi pass
         if($ttuser->password == 'e10adc3949ba59abbe56e057f20f883e' && $ttuser->level != 'SA' && $ttuser->level != 'SSA' ){
-
-            //return view('system.users.change_pass_default')
-                //->with('pageTitle', 'Thay đổi mật khẩu');
+            return view('system.users.change_pass_default')
+                ->with('username', $input['username'])
+                ->with('pageTitle', 'Thay đổi mật khẩu');
         }
         //thêm mã đơn vị báo cáo, mã khối phòng ban, mã cqcq
         //dd($ttuser);
@@ -316,21 +316,17 @@ class UsersController extends Controller
     public function change_password_df(Request $request)
     {
         $update = $request->all();
+        $newpass = md5($update['newpassword']);
+        //if($newpass == 'e10adc3949ba59abbe56e057f20f883e'){
 
-        $username = session('admin')->username;
-        $password = session('admin')->password;
-        $newpass2 = $update['newpassword2'];
-        $currentPassword = $update['current-password'];
-
-        if (md5($currentPassword) == $password) {
-            $ttuser = Users::where('username', $username)->first();
-            $ttuser->password = md5($newpass2);
-            if ($ttuser->save()) {
-                Session::flush();
-                return view('errors.changepassword-success');
-            }
-        } else {
-            dd('Mật khẩu cũ không đúng???');
+        //}
+        $ip = isset($_SERVER["REMOTE_ADDR"]) ? $_SERVER["REMOTE_ADDR"] : '';        ;
+        $ttuser = Users::where('username', $update['username'])->first();
+        $ttuser->password = $newpass;
+        $ttuser->ip = $ip;
+        if ($ttuser->save()) {
+            Session::flush();
+            return view('errors.changepassword-success');
         }
     }
 

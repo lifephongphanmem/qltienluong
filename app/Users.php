@@ -21,6 +21,7 @@ class Users extends Model
         'level',
         'sadmin',
         'permission',
-        'pldv'
+        'pldv',
+        'ip'
     ];
 }
