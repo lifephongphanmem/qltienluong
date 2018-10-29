@@ -367,6 +367,7 @@ class dsnangluongController extends Controller
                 $ma = $ma + 1;
                 $hoso = hosocanbo::where('macanbo', $canbo->macanbo)->first();
                 $hoso->heso = $canbo->heso;
+                $hoso->bac = $canbo->bac;
                 $hoso->vuotkhung = $canbo->vuotkhung;
                 $hoso->ngaytu = $canbo->ngaytu;
                 $hoso->ngayden = $canbo->ngayden;
@@ -389,6 +390,7 @@ class dsnangluongController extends Controller
                     $truylinh->noidung = 'Truy lĩnh nâng lương ngạch bậc';
                     $truylinh->msngbac = $canbo->msngbac;
                     $truylinh->heso = $canbo->hesott; //hệ số truy lĩnh đều đưa vào hệ số
+                    $truylinh->maphanloai = 'MSNGBAC'; //hệ số truy lĩnh đều đưa vào hệ số
                     $truylinh->save();
                 }
                 /*

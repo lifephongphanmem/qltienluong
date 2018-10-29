@@ -170,6 +170,7 @@ class dsnangthamnienController extends Controller
                     $truylinh->noidung = 'Truy lĩnh nâng thâm niên nghề';
                     //$truylinh->msngbac = $canbo->msngbac;
                     $truylinh->heso = $canbo->heso;
+                    $truylinh->maphanloai = 'TNN';
                     $truylinh->save();
                 }
                 //Lưu thông tin vào hồ sơ cán bộ
