@@ -15,6 +15,7 @@ class nguonkinhphi_dinhmuc extends Model
         'tungay',
         'denngay',
         'luongcoban',
+        'baohiem',
         'madv'
     ];
 }

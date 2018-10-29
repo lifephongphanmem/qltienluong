@@ -48,6 +48,7 @@
                                 <th class="text-center">Mã nguồn</th>
                                 <th class="text-center">Tên nguồn kinh phí</th>
                                 <th class="text-center">Mức lương cơ bản</th>
+                                <th class="text-center">Nộp bảo hiểm</th>
                                 <th class="text-center">Thao tác</th>
                             </tr>
                         </thead>
@@ -59,6 +60,7 @@
                                         <td>{{$value->manguonkp}}</td>
                                         <td>{{$value->tennguonkp}}</td>
                                         <td class="text-right">{{dinhdangso($value->luongcoban)}}</td>
+                                        <td>{{$value->baohiem == 0 ? 'Không nộp bảo hiểm': 'Có nộp bảo hiểm'}}</td>
                                         <td>
                                             <button type="button" onclick="editCV('{{$value->maso}}')" class="btn btn-default btn-xs">
                                                 <i class="fa fa-edit"></i>&nbsp; Cập nhật mức lương</button>
