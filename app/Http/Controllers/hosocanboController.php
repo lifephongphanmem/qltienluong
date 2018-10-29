@@ -214,7 +214,8 @@ class hosocanboController extends Controller
             //bangluong_phucap::where('macanbo',$model->macanbo)->delete();
             //bangluongdangky_ct::where('macanbo',$model->macanbo)->delete();
             //bangluongdangky_phucap::where('macanbo',$model->macanbo)->delete();
-            $model->delete();
+
+            //$model->delete();
             return redirect('nghiep_vu/ho_so/danh_sach');
         } else
             return view('errors.notlogin');
