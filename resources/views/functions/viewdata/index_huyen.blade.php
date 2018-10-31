@@ -84,8 +84,14 @@
                                                 <i class="fa fa-print"></i>&nbsp; Số liệu địa bàn</a-->
 
                                             @if($value->tralai)
-                                                <button type="button" class="btn btn-default btn-sm" onclick="confirmChuyen('{{$value['mathdv']}}')" data-target="#chuyen-modal" data-toggle="modal"><i class="fa icon-share-alt"></i>&nbsp;
-                                                    Trả lại dữ liệu</button>
+                                                @if(session('admin')->phamvitonghop == 'KHOI')
+                                                    <button type="button" class="btn btn-default btn-sm" onclick="confirmChuyen('{{$value['mathdv']}}')" data-target="#chuyen-modal" data-toggle="modal"><i class="fa icon-share-alt"></i>&nbsp;
+                                                        Trả lại dữ liệu</button>
+                                                @endif
+                                                @if(session('admin')->phamvitonghop == 'HUYEN')
+                                                    <button type="button" class="btn btn-default btn-sm" onclick="confirmChuyen('{{$value['mathh']}}')" data-target="#chuyen-modal" data-toggle="modal"><i class="fa icon-share-alt"></i>&nbsp;
+                                                        Trả lại dữ liệu</button>
+                                                @endif
                                             @endif
                                         @else
                                             <button class="btn btn-danger btn-xs mbs">
@@ -116,6 +122,7 @@
                         {!!Form::textarea('lydo', null, array('id' => 'lydo','class' => 'form-control','rows'=>'3'))!!}
                     </div>
                     <input type="hidden" name="mathdv" id="mathdv">
+                    <input type="hidden" name="mathdv" id="mathh">
                     <div class="modal-footer">
                         <button type="button" class="btn default" data-dismiss="modal">Hủy</button>
                         <button type="submit" class="btn blue">Đồng ý</button>
@@ -129,8 +136,9 @@
     </div>
 
     <script>
-        function confirmChuyen(mathdv) {
-            document.getElementById("mathdv").value = mathdv;
+        function confirmChuyen(math) {
+            document.getElementById("mathdv").value = math;
+            document.getElementById("mathh").value = math;
         }
 
         function getLink(){

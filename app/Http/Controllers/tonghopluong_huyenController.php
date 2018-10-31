@@ -140,7 +140,7 @@ class tonghopluong_huyenController extends Controller
                 ->wherein('madv', function ($query) use ($madv) {
                     $query->select('madv')->from('dmdonvi')->where('macqcq', $madv)->where('madv', '<>', $madv)->get();
                 })->get();
-
+            //dd($model_donvi->toarray());
             $sldv = $model_donvi->count();
 
             $a_data = array(array('thang' => '01', 'mathdv' => null, 'noidung' => null, 'sldv' => $sldv, 'dvgui' => 0),
@@ -208,9 +208,9 @@ class tonghopluong_huyenController extends Controller
     }
 
     function printf_data($mathdv){
-        $model = tonghopluong_donvi::where('mathdv',$mathdv)->first();
+        $model = tonghopluong_donvi::where('mathdv',$mathdv)->orwhere('mathh',$mathdv)->first();
         $in = new tonghopluong_donviController();
-        return $in->printf_data($model->mathdv);
+        return $in->printf_data_khoi($model->mathh);
     }
 
     function printf_data_diaban($mathdv){
