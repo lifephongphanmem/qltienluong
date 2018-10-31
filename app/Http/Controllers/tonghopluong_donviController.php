@@ -467,7 +467,7 @@ class tonghopluong_donviController extends Controller
                 ,'congtac','stbhxh_dv','stbhyt_dv','stkpcd_dv','stbhtn_dv','tonghs','ttl', 'giaml','ttbh_dv'),$col);
             $a_th = array_merge($a_th,$col_st);
             $a_ct = bangluong_ct::select($a_th)->wherein('mabl', array_column($a_bangluong,'mabl'))->get()->toarray();
-            //dd($a_ct);
+
             //$a_bangluong_phucap = bangluong_phucap::wherein('mabl', array_column($a_bangluong,'mabl'))->get()->toarray();
 
             //$model_nguondm = nguonkinhphi_dinhmuc::where('madv',$madv)->get();
@@ -542,7 +542,7 @@ class tonghopluong_donviController extends Controller
             $a_col_pc = array('id','baohiem','bhxh','baohiem','bhtn', 'kpcd', 'bhyt', 'bhct','congtac', 'mabl');
             $a_data = unset_key($a_data,$a_col_pc);
             $a_data = unset_key($a_data,$col_st);
-            $a_data = unset_key($a_data,array('st_pcud61','st_pctdt','pcud61', 'pctdt','st_pcxaxe',
+            $a_data = unset_key($a_data,array('st_pctdt', 'pctdt','st_pcxaxe',
                 'pcxaxe','st_pcdith','pcdith','st_pcphth','pcphth','pclade', 'st_pclade'));//tạm
 
             foreach(array_chunk($a_data, 50)  as $data){
