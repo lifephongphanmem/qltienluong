@@ -196,17 +196,25 @@ class bangluongController extends Controller
         }
         //$m_cb = $m_cb->where('lvhd', $inputs['linhvuc']);
         $m_cb = $m_cb->where('manguonkp', $inputs['manguonkp']);
-
         $a_ct = array_column(dmphanloaict::all()->toArray(),'macongtac','mact');
         $model_phanloai = dmphanloaicongtac_baohiem::where('madv', session('admin')->madv)->get();
+
         //Không tính truy lĩnh
         $a_goc = array('heso','vuotkhung','pccv'); //mảng phụ cấp làm công thức tính
         //=> lấy phụ cấp theo nguồn chứ ko pải phụ cấp toàn hệ thống
         $m_dm = nguonkinhphi_dinhmuc::where('madv', session('admin')->madv)->where('manguonkp', $inputs['manguonkp'])->first();
-        $model_dimhmuc = nguonkinhphi_dinhmuc_ct::wherein('maso',$m_dm->maso)->get();
+        $model_dimhmuc = nguonkinhphi_dinhmuc_ct::where('maso',$m_dm->maso)->get();
+        /*
+        $model_dimhmuc = nguonkinhphi_dinhmuc_ct::join('nguonkinhphi_dinhmuc','nguonkinhphi_dinhmuc.maso','=','nguonkinhphi_dinhmuc_ct.maso')
+            ->where('madv', session('admin')->madv)
+            ->where('manguonkp', $inputs['manguonkp'])
+            ->select('nguonkinhphi_dinhmuc_ct.*')->get();
+        */
+        //dd($model_dimhmuc);
         $a_nguonpc = array_column($model_dimhmuc->toarray(), 'mapc');
         $a_mucluong = array_column($model_dimhmuc->toarray(),'luongcoban', 'mapc');
         $model_phucap = dmphucap_donvi::where('madv', session('admin')->madv)->where('phanloai','<','3')->get();
+
         foreach($model_phucap as $pc){
             $pc->luongcoban = isset($a_mucluong[$pc->mapc])? $a_mucluong[$pc->mapc] : 0;
         }

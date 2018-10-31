@@ -317,10 +317,7 @@ class UsersController extends Controller
     {
         $update = $request->all();
         $newpass = md5($update['newpassword']);
-        //if($newpass == 'e10adc3949ba59abbe56e057f20f883e'){
-
-        //}
-        $ip = isset($_SERVER["REMOTE_ADDR"]) ? $_SERVER["REMOTE_ADDR"] : '';        ;
+        $ip = isset($_SERVER["REMOTE_ADDR"]) ? $_SERVER["REMOTE_ADDR"] : '';
         $ttuser = Users::where('username', $update['username'])->first();
         $ttuser->password = $newpass;
         $ttuser->ip = $ip;
@@ -330,8 +327,7 @@ class UsersController extends Controller
         }
     }
 
-    public function checkpass(Request $request)
-    {
+    public function checkpass(Request $request){
         $input = $request->all();
         $passmd5 = md5($input['pass']);
 
