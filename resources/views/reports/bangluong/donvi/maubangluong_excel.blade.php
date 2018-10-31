@@ -21,7 +21,7 @@
     <table>
         <tr>
             <th colspan="6"><b>Đơn vị: {{$m_dv['tendv']}}</b></th>
-            <th colspan="6">
+            <th colspan="9">
                 <b>Mẫu số C02a - HD</b>
             </th>
         </tr>
@@ -30,7 +30,7 @@
             <th colspan="6">
                 <b>Mã đơn vị SDNS: {{$m_dv->maqhns}}</b>
             </th>
-            <th colspan="6">
+            <th colspan="9">
                 (Ban hành kèm theo QĐ số 19/2006/QĐ-BTC ngày 30/3/2006 và Thông tư số 185/2010/TT-BTC ngày 15/11/2010 của Bộ Tài chính)
             </th>
         </tr>
@@ -38,13 +38,13 @@
 
 
         <tr>
-            <th colspan="12" style="text-align: center; font-weight: bold; font-size: 20px;">
+            <th colspan="15" style="text-align: center; font-weight: bold; font-size: 20px;">
                 BẢNG THANH TOÁN TIỀN LƯƠNG VÀ PHỤ CẤP
             </th>
         </tr>
 
         <tr>
-            <th colspan="12" style="text-align: center; font-style: italic">
+            <th colspan="15" style="text-align: center; font-style: italic">
                 Tháng {{$thongtin['thang']}} năm {{$thongtin['nam']}}
             </th>
         </tr>
@@ -194,24 +194,28 @@
 
     <table>
         <tr>
-            <th colspan="6"></th>
-            <th colspan="6">{{$m_dv->diadanh .', '.Date2Str($thongtin['ngaylap'])}}</th>
+            <th colspan="5"></th>
+            <th colspan="5"></th>
+            <th colspan="5">{{$m_dv->diadanh .', '.Date2Str($thongtin['ngaylap'])}}</th>
         </tr>
         <tr style="font-weight: bold">
-            <th colspan="6">Người lập bảng</th>
-            <th colspan="6">{{$m_dv['cdlanhdao']}}</th>
+            <th colspan="5">Người lập bảng</th>
+            <th colspan="5">{{$m_dv->cdketoan}}</th>
+            <th colspan="5">{{$m_dv['cdlanhdao']}}</th>
         </tr>
         <tr style="font-style: italic">
-            <th colspan="6">(Ghi rõ họ tên)</th>
-            <th colspan="6">(Ký tên, đóng dấu)</th>
+            <th colspan="5">(Ghi rõ họ tên)</th>
+            <th colspan="5">(Ghi rõ họ tên)</th>
+            <th colspan="5">(Ký tên, đóng dấu)</th>
         </tr>
         <tr>
             <th></th>
         </tr>
 
         <tr>
-            <th colspan="6">{{$m_dv['nguoilapbieu']}}</th>
-            <th colspan="6">{{$m_dv['lanhdao']}}</th>
+            <th colspan="5">{{$m_dv['nguoilapbieu']}}</th>
+            <th colspan="5">{{$m_dv['ketoan']}}</th>
+            <th colspan="5">{{$m_dv['lanhdao']}}</th>
         </tr>
     </table>
 
