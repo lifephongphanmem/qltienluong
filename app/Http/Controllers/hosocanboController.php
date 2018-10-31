@@ -209,14 +209,22 @@ class hosocanboController extends Controller
     function destroy($id){
         if (Session::has('admin')) {
             $model = hosocanbo::find($id);
-            hosocanbo_kiemnhiem::where('macanbo',$model->macanbo)->delete();
+            $chk_bl = bangluong_ct::where('macanbo',$model->macanbo)->count();
+            if($chk_bl > 0){
+                return view('errors.del_canbo')
+                    ->with('furl', '/nghiep_vu/ho_so/danh_sach');
+            }else{
+                hosocanbo_kiemnhiem::where('macanbo',$model->macanbo)->delete();
+                $model->delete();
+                return redirect('nghiep_vu/ho_so/danh_sach');
+            }
+
+
             //bangluong_ct::where('macanbo',$model->macanbo)->delete();
             //bangluong_phucap::where('macanbo',$model->macanbo)->delete();
             //bangluongdangky_ct::where('macanbo',$model->macanbo)->delete();
             //bangluongdangky_phucap::where('macanbo',$model->macanbo)->delete();
 
-            //$model->delete();
-            return redirect('nghiep_vu/ho_so/danh_sach');
         } else
             return view('errors.notlogin');
     }

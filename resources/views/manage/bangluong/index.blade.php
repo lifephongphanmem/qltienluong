@@ -53,7 +53,7 @@
                                 {!! Form::select('namct',getNam(),$inputs['nam'], array('id' => 'namct', 'class' => 'form-control'))!!}
                             </div>
                             <!--div class="col-md-offset-1 col-md-2">
-                            <button type="button" onclick="inbl('{{$inputs['thang']}}','{{$inputs['nam']}}')" class="btn btn-default mbs">
+                            <button type="button" onclick="inbl_th('{{$inputs['thang']}}','{{$inputs['nam']}}')" class="btn btn-default mbs">
                                 <i class="fa fa-print"></i>&nbsp; In bảng lương tổng hợp</button>
                             </div-->
                         </div>
@@ -456,6 +456,74 @@
         </div>
     </div>
 
+    <!--Modal thông tin tùy chọn in bảng lương -->
+    <div id="inbl_th-modal" tabindex="-1" role="dialog" aria-hidden="true" class="modal fade">
+        <div class="modal-lg modal-dialog modal-content">
+            <div class="modal-header modal-header-primary">
+                <button type="button" data-dismiss="modal" aria-hidden="true" class="close">&times;</button>
+                <h4 id="hd-inbl" class="modal-title">In bảng lương tổng hợp</h4>
+            </div>
+
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <button type="button" style="border-width: 0px" onclick="th_inblmtt107()" class="btn btn-default btn-xs mbs"
+                                    title="Bảng lương của cán bộ theo mẫu C02-HD hệ số phụ cấp hiển thị số tiền">
+                                <i class="fa fa-print"></i>&nbsp; Bảng lương mẫu C02-HD (TT107/2017/TT-BTC)</button>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <button type="button" style="border-width: 0px" onclick="th_inblmtt107_pb()" class="btn btn-default btn-xs mbs"
+                                    title="Bảng lương của cán bộ theo mẫu C02-HD hệ số phụ cấp hiển thị số tiền">
+                                <i class="fa fa-print"></i>&nbsp; Bảng lương mẫu C02-HD (TT107) - theo khối, tổ công tác</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <button type="button" style="border-width: 0px" onclick="th_inblm1()" class="btn btn-default btn-xs mbs"
+                                    title="Bảng lương của cán bộ theo mẫu C02-HD">
+                                <i class="fa fa-print"></i>&nbsp; Bảng lương mẫu C02-HD (TT185/2010/TT-BTC)</button>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <button type="button" style="border-width: 0px" onclick="th_inblm7()" class="btn btn-default btn-xs mbs">
+                                <i class="fa fa-print"></i>&nbsp; Bảng lương mẫu 7</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <button type="button" style="border-width: 0px" onclick="th_inds()" class="btn btn-default btn-xs mbs"
+                                    title="Danh sách chi trả cá nhân">
+                                <i class="fa fa-print"></i>&nbsp; Danh sách chi trả cá nhân</button>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <button type="button" style="border-width: 0px" onclick="th_inbh()" class="btn btn-default btn-xs mbs" title="Bảng tính bảo hiểm phải nộp của cán bộ">
+                                <i class="fa fa-print"></i>&nbsp; Bảo hiểm </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" data-dismiss="modal" class="btn btn-default">Hủy thao tác</button>
+            </div>
+        </div>
+    </div>
+
     @include('templates.modal_printf_luong')
 
     <script>
@@ -591,6 +659,13 @@
             $('#inbl-modal').modal('show');
             //$('#inbl-modal').modal('hide');
         }
+
+        function inbl_th(mabl,thang,nam){
+            //document.getElementById("hd-inbl").innerHTML="In bảng lương tháng " + thang + ' năm ' + nam;
+            $('#inbl_th-modal').modal('show');
+            //$('#inbl-modal').modal('hide');
+        }
+
         function incd(){
             $("#in_cd").attr("href", '/chuc_nang/bang_luong/maucd?mabl=' + $('#mabl_in').val());
         }
