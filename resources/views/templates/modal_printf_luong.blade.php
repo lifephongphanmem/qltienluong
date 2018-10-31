@@ -116,7 +116,7 @@
         <div class="modal-footer">
             <button type="button" data-dismiss="modal" class="btn btn-default">Hủy thao tác</button>
             <button type="submit" data-dismiss="modal" class="btn btn-success" onclick="ClickBCtt107()">Đồng ý</button>
-            <button type="submit" data-dismiss="modal" class="btn btn-primary" onclick="ClickBC2_excel()">Xuất Excel</button>
+            <button type="submit" data-dismiss="modal" class="btn btn-primary" onclick="ClickBCtt107_excel()">Xuất Excel</button>
 
         </div>
     </div>

@@ -253,7 +253,9 @@
             <td style="text-align: center;" width="35%">(Ký tên, đóng dấu)</td>
         </tr>
         <tr>
-            <td><br><br><br></td>
+            <td>
+                <br><br><br><br><br><br><br>
+            </td>
         </tr>
 
         <tr>
