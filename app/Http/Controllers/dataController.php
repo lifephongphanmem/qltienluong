@@ -17,7 +17,9 @@ class dataController extends Controller
             ->where('bangluong.nam', $nam)
             ->where('bangluong.madv',$madv)
             ->where('bangluong.phanloai', 'BANGLUONG')
-            ->select('bangluong_ct.*')->get()->toarray();
+            ->select('bangluong_ct.*')
+            //->orderby('bangluong_ct.stt')
+            ->get()->sortby('stt')->toarray();
         /*
         $model = bangluong_ct::where('mabl', $inputs['mabl'])->get();
         $m_hoso = hosocanbo::where('madv', $inputs['madv'])->get();

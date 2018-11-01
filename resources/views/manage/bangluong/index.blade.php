@@ -53,9 +53,9 @@
                                 {!! Form::select('namct',getNam(),$inputs['nam'], array('id' => 'namct', 'class' => 'form-control'))!!}
                             </div>
                             <div class="col-md-offset-1 col-md-2">
-                            <!--button type="button" onclick="inbl_th('{{$inputs['thang']}}','{{$inputs['nam']}}')" class="btn btn-default mbs">
+                            <button type="button" onclick="inbl_th('{{$inputs['thang']}}','{{$inputs['nam']}}')" class="btn btn-default mbs">
                                 <i class="fa fa-print"></i>&nbsp; In bảng lương tổng hợp</button>
-                            </div-->
+                            </div>
                         </div>
                     </div>
 
@@ -504,7 +504,7 @@
                     </div>
                 </div>
 
-                <div class="row">
+                <!--div class="row">
                     <div class="col-md-6">
                         <div class="form-group">
                             <button type="button" style="border-width: 0px" class="btn btn-default btn-xs mbs"
@@ -520,7 +520,7 @@
                                 <i class="fa fa-print"></i>&nbsp; Bảo hiểm </button>
                         </div>
                     </div>
-                </div>
+                </div-->
             </div>
 
             <div class="modal-footer">

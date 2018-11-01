@@ -316,6 +316,16 @@ function getPhongBan($val_null = true){
 
 }
 
+function getPhanLoaiCT($val_null = true){
+    $model = array_column(App\dmphanloaict::all()->toArray(),'tenct','mact');
+    if($val_null){
+        $a_kq = array(''=>'-- Chọn phân loại công tác --');
+        return array_merge($a_kq,$model);
+    }
+    return $model;
+
+}
+
 function getChucVuCQ($val_null = true){
     if(session('admin')->level=='SA' || session('admin')->level=='SSA'){
         $model = App\dmchucvucq::where('maphanloai',session('admin')->maphanloai)->get()->toArray();

@@ -21,54 +21,9 @@ class bangluong_inController extends Controller
         if (Session::has('admin')) {
             $inputs = $request->all();
             $inputs['madv'] = session('admin')->madv;
-            $model = $this->getBangluong_ct($inputs);
-
-            //lấy danh sách cán bộ
-            $a_canbo = a_split($model,array('macanbo','macvcq','mapb','mact'));
-            $a_canbo = a_unique($a_canbo);
-
-            $a_pc = dmphucap_donvi::where('madv',$inputs['madv'])->where('phanloai','<','3')
-                ->wherenotin('mapc',array('hesott'))->get()->keyby('mapc')->toarray();
-
-            for($i=0;$i< count($a_canbo); $i++){
-                $data = a_getelement_equal($model,$a_canbo[$i]);
-                if(count($data) > 0){
-                    foreach($a_pc as $k=>$v){
-                        $a_canbo[$i][$k] = array_sum(array_column($data,$k));
-                        $a_canbo[$i]['st_'.$k] = array_sum(array_column($data,'st_'.$k));
-                    }
-
-                    $first = array_shift($data);
-                    $a_canbo[$i]['tencanbo'] = $first['tencanbo'];
-                    $a_canbo[$i]['stt'] = $first['stt'];
-                }else{//không có trường hợp này do $a_canbo = a_split($model)
-                    $a_canbo[$i]['tencanbo'] = '';
-                    $a_canbo[$i]['stt'] = 0;
-                    foreach($a_pc as $k=>$v){
-                        $a_canbo[$i][$k] = 0;
-                        $a_canbo[$i]['st_'.$k] = 0;
-                    }
-                }
-                $a_canbo[$i]['ttl'] = array_sum(array_column($data,'ttl'));
-                $a_canbo[$i]['giaml'] = array_sum(array_column($data,'giaml'));
-                $a_canbo[$i]['bhct'] = array_sum(array_column($data,'bhct'));
-                $a_canbo[$i]['thuetn'] = array_sum(array_column($data,'thuetn'));
-                $a_canbo[$i]['luongtn'] = array_sum(array_column($data,'luongtn'));
-
-                $a_canbo[$i]['stbhxh'] = array_sum(array_column($data,'stbhxh'));
-                $a_canbo[$i]['stbhyt'] = array_sum(array_column($data,'stbhyt'));
-                $a_canbo[$i]['stkpcd'] = array_sum(array_column($data,'stkpcd'));
-                $a_canbo[$i]['stbhtn'] = array_sum(array_column($data,'stbhtn'));
-                $a_canbo[$i]['ttbh'] = array_sum(array_column($data,'ttbh'));
-                $a_canbo[$i]['stbhxh_dv'] = array_sum(array_column($data,'stbhxh_dv'));
-                $a_canbo[$i]['stbhyt_dv'] = array_sum(array_column($data,'stbhyt_dv'));
-                $a_canbo[$i]['stkpcd_dv'] = array_sum(array_column($data,'stkpcd_dv'));
-                $a_canbo[$i]['stbhtn_dv'] = array_sum(array_column($data,'stbhtn_dv'));
-                $a_canbo[$i]['ttbh_dv'] = array_sum(array_column($data,'ttbh_dv'));
-            }
+            list($a_canbo, $a_pc) = $this->getData($inputs);
 
             $m_dv = dmdonvi::where('madv',$inputs['madv'])->first();
-
             $m_bl = bangluong::select('thang', 'nam', 'mabl', 'madv', 'ngaylap')
                 ->where('thang',$inputs['thang_th'])
                 ->where('nam',$inputs['nam_th'])
@@ -83,29 +38,22 @@ class bangluong_inController extends Controller
             //xử lý ẩn hiện cột phụ cấp => biết tổng số cột hiện => colspan trên báo cáo
             $a_phucap = array();
             $col = 0;
-            dd($a_pc);
+
             foreach($a_pc as $k=>$v){
-
-                if ($model->sum($ct->mapc) > 0) {
-                    $a_phucap[$ct->mapc] = $ct->report;
-                    $col++;
-                }
-
-            }
-
-            foreach($model_pc as $ct) {
-                if ($model->sum($ct->mapc) > 0) {
-                    $a_phucap[$ct->mapc] = $ct->report;
+                $st = array_sum(array_column($a_canbo,$k));;
+                if ($st > 0) {
+                    $a_phucap[$k] = $v['report'];
                     $col++;
                 }
             }
-            return view('reports.bangluong.donvi.mautt107')
-                ->with('model',$model->sortBy('stt'))
-                ->with('model_pb',getPhongBan())
+
+            return view('reports.bangluong.tonghopbangluong.mautt107')
+                ->with('a_canbo',$a_canbo)
                 ->with('m_dv',$m_dv)
                 ->with('thongtin',$thongtin)
                 ->with('col',$col)
-                ->with('model_congtac',$model_congtac)
+                ->with('a_ct',getPhanLoaiCT(false))
+                ->with('a_congtac',a_unique(a_split($a_canbo,array('mact'))))
                 ->with('a_phucap',$a_phucap)
                 ->with('pageTitle','Bảng lương chi tiết');
         } else
@@ -170,11 +118,141 @@ class bangluong_inController extends Controller
             return view('errors.notlogin');
     }
 
+    public function printf_mautt107_pb_th(Request $request){
+        if (Session::has('admin')) {
+            $inputs = $request->all();
+            $inputs['madv'] = session('admin')->madv;
+            list($a_canbo, $a_pc) = $this->getData($inputs);
+
+            $m_dv = dmdonvi::where('madv',$inputs['madv'])->first();
+            $m_bl = bangluong::select('thang', 'nam', 'mabl', 'madv', 'ngaylap')
+                ->where('thang',$inputs['thang_th'])
+                ->where('nam',$inputs['nam_th'])
+                ->where('madv',$inputs['madv'])
+                ->where('phanloai', 'BANGLUONG')->first();
+
+            $thongtin = array('nguoilap'=>$m_bl->nguoilap,
+                'thang'=>$m_bl->thang,
+                'nam'=>$m_bl->nam,
+                'ngaylap'=>$m_bl->ngaylap,
+                'cochu'=>$inputs['cochu']);
+            //xử lý ẩn hiện cột phụ cấp => biết tổng số cột hiện => colspan trên báo cáo
+            $a_phucap = array();
+            $col = 0;
+
+            foreach($a_pc as $k=>$v){
+                $st = array_sum(array_column($a_canbo,$k));;
+                if ($st > 0) {
+                    $a_phucap[$k] = $v['report'];
+                    $col++;
+                }
+            }
+            //dd($a_canbo);
+            return view('reports.bangluong.tonghopbangluong.mautt107_pb')
+                ->with('a_canbo',$a_canbo)
+                ->with('m_dv',$m_dv)
+                ->with('thongtin',$thongtin)
+                ->with('col',$col)
+                ->with('a_pb',getPhongBan(false))
+                ->with('a_phongban',a_unique(a_split($a_canbo,array('mapb'))))
+                ->with('a_phucap',$a_phucap)
+                ->with('pageTitle','Bảng lương chi tiết');
+        } else
+            return view('errors.notlogin');
+    }
+
+    public function printf_mau185_th(Request $request){
+        if (Session::has('admin')) {
+            $inputs = $request->all();
+            $inputs['madv'] = session('admin')->madv;
+            list($a_canbo, $a_pc) = $this->getData($inputs);
+
+            $m_dv = dmdonvi::where('madv',$inputs['madv'])->first();
+            $m_bl = bangluong::select('thang', 'nam', 'mabl', 'madv', 'ngaylap')
+                ->where('thang',$inputs['thang_th'])
+                ->where('nam',$inputs['nam_th'])
+                ->where('madv',$inputs['madv'])
+                ->where('phanloai', 'BANGLUONG')->first();
+
+            $thongtin = array('nguoilap'=>$m_bl->nguoilap,
+                'thang'=>$m_bl->thang,
+                'nam'=>$m_bl->nam,
+                'ngaylap'=>$m_bl->ngaylap,
+                'cochu'=>$inputs['cochu']);
+            //xử lý ẩn hiện cột phụ cấp => biết tổng số cột hiện => colspan trên báo cáo
+            $a_phucap = array();
+            $col = 0;
+
+            foreach($a_pc as $k=>$v){
+                $st = array_sum(array_column($a_canbo,$k));;
+                if ($st > 0) {
+                    $a_phucap[$k] = $v['report'];
+                    $col++;
+                }
+            }
+
+
+            return view('reports.bangluong.tonghopbangluong.maubangluong')
+                ->with('a_canbo',$a_canbo)
+                ->with('m_dv',$m_dv)
+                ->with('thongtin',$thongtin)
+                ->with('col',$col)
+                ->with('a_ct',getPhanLoaiCT(false))
+                ->with('a_congtac',a_unique(a_split($a_canbo,array('mact'))))
+                ->with('a_phucap',$a_phucap)
+                ->with('pageTitle','Bảng lương chi tiết');
+        } else
+            return view('errors.notlogin');
+    }
+
+    public function printf_mau07_th(Request $request){
+        if (Session::has('admin')) {
+            $inputs = $request->all();
+            $inputs['madv'] = session('admin')->madv;
+            list($a_canbo, $a_pc) = $this->getData($inputs);
+
+            $m_dv = dmdonvi::where('madv',$inputs['madv'])->first();
+            $m_bl = bangluong::select('thang', 'nam', 'mabl', 'madv', 'ngaylap')
+                ->where('thang',$inputs['thang_th'])
+                ->where('nam',$inputs['nam_th'])
+                ->where('madv',$inputs['madv'])
+                ->where('phanloai', 'BANGLUONG')->first();
+
+            $thongtin = array('nguoilap'=>$m_bl->nguoilap,
+                'thang'=>$m_bl->thang,
+                'nam'=>$m_bl->nam,
+                'ngaylap'=>$m_bl->ngaylap,
+                'cochu'=>$inputs['cochu']);
+            //xử lý ẩn hiện cột phụ cấp => biết tổng số cột hiện => colspan trên báo cáo
+            $a_phucap = array();
+            $col = 0;
+
+            foreach($a_pc as $k=>$v){
+                $st = array_sum(array_column($a_canbo,$k));;
+                if ($st > 0) {
+                    $a_phucap[$k] = $v['report'];
+                    $col++;
+                }
+            }
+
+            return view('reports.bangluong.tonghopbangluong.mau07')
+                ->with('a_canbo',$a_canbo)
+                ->with('m_dv',$m_dv)
+                ->with('thongtin',$thongtin)
+                ->with('col',$col)
+                ->with('a_ct',getPhanLoaiCT(false))
+                ->with('a_congtac',a_unique(a_split($a_canbo,array('mact'))))
+                ->with('a_phucap',$a_phucap)
+                ->with('pageTitle','Bảng lương chi tiết');
+        } else
+            return view('errors.notlogin');
+    }
     /**
-     * @param Request $request
+     * @param $inputs
      * @return array
      */
-    public function getBangluong_ct($inputs){
+    public function getData($inputs)
+    {
         $getData = new data();
         $model = $getData->getBangluong_ct_th($inputs['thang_th'], $inputs['nam_th'], $inputs['madv']);
         if (isset($inputs['mapb']) && $inputs['mapb'] != '') {
@@ -187,7 +265,44 @@ class bangluong_inController extends Controller
             $model = a_getelement_equal($model, array('mact' => $inputs['mact']));
             return array($inputs, $model);
         }
-        return $model;
+
+        //lấy danh sách cán bộ
+        $a_canbo = a_split($model, array('macanbo', 'macvcq', 'mapb', 'mact', 'msngbac'));
+        $a_canbo = a_unique($a_canbo);
+
+        $a_pc = dmphucap_donvi::where('madv', $inputs['madv'])->where('phanloai', '<', '3')
+            ->wherenotin('mapc', array('hesott'))->get()->keyby('mapc')->toarray();
+        //dd($a_canbo);
+        for ($i = 0; $i < count($a_canbo); $i++) {
+            $data = a_getelement_equal($model, $a_canbo[$i]);
+            $a_canbo[$i]['ttl'] = array_sum(array_column($data, 'ttl'));
+            $a_canbo[$i]['giaml'] = array_sum(array_column($data, 'giaml'));
+            $a_canbo[$i]['bhct'] = array_sum(array_column($data, 'bhct'));
+            $a_canbo[$i]['thuetn'] = array_sum(array_column($data, 'thuetn'));
+            $a_canbo[$i]['luongtn'] = array_sum(array_column($data, 'luongtn'));
+
+            $a_canbo[$i]['stbhxh'] = array_sum(array_column($data, 'stbhxh'));
+            $a_canbo[$i]['stbhyt'] = array_sum(array_column($data, 'stbhyt'));
+            $a_canbo[$i]['stkpcd'] = array_sum(array_column($data, 'stkpcd'));
+            $a_canbo[$i]['stbhtn'] = array_sum(array_column($data, 'stbhtn'));
+            $a_canbo[$i]['ttbh'] = array_sum(array_column($data, 'ttbh'));
+            $a_canbo[$i]['stbhxh_dv'] = array_sum(array_column($data, 'stbhxh_dv'));
+            $a_canbo[$i]['stbhyt_dv'] = array_sum(array_column($data, 'stbhyt_dv'));
+            $a_canbo[$i]['stkpcd_dv'] = array_sum(array_column($data, 'stkpcd_dv'));
+            $a_canbo[$i]['stbhtn_dv'] = array_sum(array_column($data, 'stbhtn_dv'));
+            $a_canbo[$i]['ttbh_dv'] = array_sum(array_column($data, 'ttbh_dv'));
+
+            $first = array_shift($data);
+            $a_canbo[$i]['tencanbo'] = $first['tencanbo'];
+            $a_canbo[$i]['stt'] = $first['stt'];
+            foreach ($a_pc as $k => $v) {
+                $a_canbo[$i][$k] = $first[$k];
+                $a_canbo[$i]['st_' . $k] = $first['st_' . $k];
+            }
+            $a_canbo[$i]['tonghs'] = $first['tonghs'];
+        }
+
+        return array($a_canbo, $a_pc);
     }
 
 }
