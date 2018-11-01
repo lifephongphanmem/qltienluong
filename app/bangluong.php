@@ -24,3 +24,4 @@ class bangluong extends Model
         'luongcoban'
     ];
 }
+//DELETE FROM `bangluong_ct` WHERE mabl not in (SELECT mabl FROM bangluong);
