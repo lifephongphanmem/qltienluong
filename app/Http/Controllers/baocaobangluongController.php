@@ -1086,7 +1086,7 @@ class baocaobangluongController extends Controller
             $madv = $inputs['donvi'];
             $thang = $inputs['thang'];
             $nam = $inputs['nam'];
-            $m_mathdv = tonghopluong_donvi::where('madv', $madv)->where('thang',$thang)->where('nam',$nam)->first();
+            $m_mathdv = tonghopluong_donvi::where('madv', $madv)->where('thang',$thang)->where('nam',$nam)->where('trangthai', 'DAGUI')->first();
             if(isset($m_mathdv)) {
                 $model = tonghopluong_donvi_bangluong::where('mathdv', $m_mathdv->mathdv)->get();
                 $model_thongtin = tonghopluong_donvi::where('mathdv', $m_mathdv->mathdv)->first();
