@@ -403,6 +403,13 @@ Route::group(['prefix'=>'chuc_nang'],function(){
         Route::get('maumc','bangluongController@printf_maumc');
         Route::get('mautruc','bangluongController@printf_mautruc');
         Route::get('mautinhnguyen','bangluongController@printf_mautinhnguyen');
+        //tổng hợp
+        Route::post('mau185_th','bangluong_inController@printf_mau185_th');
+        Route::post('mautt107_th','bangluong_inController@printf_mautt107_th');
+        Route::post('mautt107_pb_th','bangluong_inController@printf_mautt107_pb_th');
+        Route::post('mau07_th','bangluong_inController@printf_mau07_th');
+        Route::post('mauds_th','bangluong_inController@printf_mauds_th');
+        Route::post('maubh_th','bangluong_inController@printf_maubh_th');
 
         Route::post('mau01_excel','bangluongController@printf_mau01_excel');
         Route::post('mautt107_excel','bangluongController@printf_mautt107_excel');

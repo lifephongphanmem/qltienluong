@@ -52,10 +52,10 @@
                             <div class="col-md-2">
                                 {!! Form::select('namct',getNam(),$inputs['nam'], array('id' => 'namct', 'class' => 'form-control'))!!}
                             </div>
-                            <!--div class="col-md-offset-1 col-md-2">
+                            <div class="col-md-offset-1 col-md-2">
                             <button type="button" onclick="inbl_th('{{$inputs['thang']}}','{{$inputs['nam']}}')" class="btn btn-default mbs">
                                 <i class="fa fa-print"></i>&nbsp; In bảng lương tổng hợp</button>
-                            </div-->
+                            </div>
                         </div>
                     </div>
 
@@ -456,7 +456,7 @@
         </div>
     </div>
 
-    <!--Modal thông tin tùy chọn in bảng lương -->
+    <!--Modal thông tin tùy chọn in tổng hợp bảng lương -->
     <div id="inbl_th-modal" tabindex="-1" role="dialog" aria-hidden="true" class="modal fade">
         <div class="modal-lg modal-dialog modal-content">
             <div class="modal-header modal-header-primary">
@@ -468,7 +468,8 @@
                 <div class="row">
                     <div class="col-md-6">
                         <div class="form-group">
-                            <button type="button" style="border-width: 0px" onclick="th_inblmtt107()" class="btn btn-default btn-xs mbs"
+                            <button type="button" style="border-width: 0px" class="btn btn-default btn-xs mbs"
+                                    data-toggle="modal" data-target="#mautt107_th-modal"
                                     title="Bảng lương của cán bộ theo mẫu C02-HD hệ số phụ cấp hiển thị số tiền">
                                 <i class="fa fa-print"></i>&nbsp; Bảng lương mẫu C02-HD (TT107/2017/TT-BTC)</button>
                         </div>
@@ -476,7 +477,8 @@
 
                     <div class="col-md-6">
                         <div class="form-group">
-                            <button type="button" style="border-width: 0px" onclick="th_inblmtt107_pb()" class="btn btn-default btn-xs mbs"
+                            <button type="button" style="border-width: 0px" class="btn btn-default btn-xs mbs"
+                                    data-toggle="modal" data-target="#mautt107_pb_th-modal"
                                     title="Bảng lương của cán bộ theo mẫu C02-HD hệ số phụ cấp hiển thị số tiền">
                                 <i class="fa fa-print"></i>&nbsp; Bảng lương mẫu C02-HD (TT107) - theo khối, tổ công tác</button>
                         </div>
@@ -486,7 +488,8 @@
                 <div class="row">
                     <div class="col-md-6">
                         <div class="form-group">
-                            <button type="button" style="border-width: 0px" onclick="th_inblm1()" class="btn btn-default btn-xs mbs"
+                            <button type="button" style="border-width: 0px" class="btn btn-default btn-xs mbs"
+                                    data-toggle="modal" data-target="#mau185_th-modal"
                                     title="Bảng lương của cán bộ theo mẫu C02-HD">
                                 <i class="fa fa-print"></i>&nbsp; Bảng lương mẫu C02-HD (TT185/2010/TT-BTC)</button>
                         </div>
@@ -494,28 +497,30 @@
 
                     <div class="col-md-6">
                         <div class="form-group">
-                            <button type="button" style="border-width: 0px" onclick="th_inblm7()" class="btn btn-default btn-xs mbs">
+                            <button type="button" style="border-width: 0px" class="btn btn-default btn-xs mbs"
+                                data-toggle="modal" data-target="#mau7_th-modal">
                                 <i class="fa fa-print"></i>&nbsp; Bảng lương mẫu 7</button>
                         </div>
                     </div>
                 </div>
 
-                <div class="row">
+                <!--div class="row">
                     <div class="col-md-6">
                         <div class="form-group">
-                            <button type="button" style="border-width: 0px" onclick="th_inds()" class="btn btn-default btn-xs mbs"
-                                    title="Danh sách chi trả cá nhân">
+                            <button type="button" style="border-width: 0px" class="btn btn-default btn-xs mbs"
+                                    data-toggle="modal" data-target="#mauds_th-modal">
                                 <i class="fa fa-print"></i>&nbsp; Danh sách chi trả cá nhân</button>
                         </div>
                     </div>
 
                     <div class="col-md-6">
                         <div class="form-group">
-                            <button type="button" style="border-width: 0px" onclick="th_inbh()" class="btn btn-default btn-xs mbs" title="Bảng tính bảo hiểm phải nộp của cán bộ">
+                            <button type="button" style="border-width: 0px" class="btn btn-default btn-xs mbs"
+                                    data-toggle="modal" data-target="#maubh_th-modal">
                                 <i class="fa fa-print"></i>&nbsp; Bảo hiểm </button>
                         </div>
                     </div>
-                </div>
+                </div-->
             </div>
 
             <div class="modal-footer">
@@ -525,7 +530,7 @@
     </div>
 
     @include('templates.modal_printf_luong')
-
+    @include('templates.modal_printf_th_luong')
     <script>
         function getLink(){
             var thang = $("#thangct").val();

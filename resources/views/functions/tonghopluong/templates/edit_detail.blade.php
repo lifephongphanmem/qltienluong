@@ -248,11 +248,17 @@
                                             </div>
                                         </div>
 
-
                                         <div class="col-md-2">
                                             <div class="form-group">
                                                 <label class="control-label">Công tác Đảng </label>
                                                 {!!Form::text('pcdang', null, array('id' => 'pcdang','class' => 'form-control text-right heso', 'data-mask'=>'fdecimal'))!!}
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-2">
+                                            <div class="form-group">
+                                                <label class="control-label">Ưu đãi ND 61</label>
+                                                {!!Form::text('pcud61', null, array('id' => 'pcud61','class' => 'form-control text-right heso', 'data-mask'=>'fdecimal'))!!}
                                             </div>
                                         </div>
 
