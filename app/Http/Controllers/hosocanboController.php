@@ -209,7 +209,7 @@ class hosocanboController extends Controller
     function destroy($id){
         if (Session::has('admin')) {
             $model = hosocanbo::find($id);
-            $chk_bl = bangluong_ct::where('macanbo',$model->macanbo)->count();
+            $chk_bl = bangluong_ct::where('macanbo',$model->macanbo)->get()->count();
             if($chk_bl > 0){
                 return view('errors.del_canbo')
                     ->with('furl', '/nghiep_vu/ho_so/danh_sach');
