@@ -261,12 +261,11 @@ class xemdulieucapduoiController extends Controller
             foreach ($model_donvi as $dv) {
                 $dv->tralai = $tralai;
                 $nguon = $model_nguon->where('madv',$dv->madv)->first();
-
-                if(count($nguon)> 0 && $nguon->trangthai == 'DAGUI' ) {
+                if(count($nguon)> 0 && $nguon->trangthai == 'DAGUI' && session('admin')->phamvitonghop == 'HUYEN' ) {
                     $dv->mathdv = $nguon->mathdv;
-                    $dv->mathh = $nguon->mathh;
+                    $dv->mathh = $nguon->mathdv;
                     $dv->trangthai = 'DAGUI';
-                }elseif(count($nguon)> 0 && $nguon->trangthai == 'DAGUI' && session('admin')->quanlykhuvuc ){
+                }elseif(count($nguon)> 0 && $nguon->trangthai == 'DAGUI' && session('admin')->phamvitonghop == 'KHOI' ){
                     $dv->mathdv = $nguon->mathdv;
                     $dv->trangthai = 'DAGUI';
                 }

@@ -2243,6 +2243,7 @@ class bangluongController extends Controller
             //$model_congtac = dmphanloaict::select('mact','tenct')->get();
             $dmchucvucq=array_column(dmchucvucq::all('tenvt', 'macvcq')->toArray(),'tenvt', 'macvcq');
             //dd($dmchucvucq);
+            //dd($model);
             foreach($model as $hs){
                 $hs->tencv = isset($dmchucvucq[$hs->macvcq])? $dmchucvucq[$hs->macvcq] : '';
             }
