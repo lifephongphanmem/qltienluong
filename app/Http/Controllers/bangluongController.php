@@ -1952,7 +1952,7 @@ class bangluongController extends Controller
                 hosotruylinh::where('mabl', $model->mabl)
                     ->update(['mabl' => null]);
             }
-            //bangluong_ct::where('mabl', $model->mabl)->delete();
+            bangluong_ct::where('mabl', $model->mabl)->delete();
             //bangluong_phucap::where('mabl', $model->mabl)->delete();
             //bangluong_truc::where('mabl', $model->mabl)->delete();
             $model->delete();
