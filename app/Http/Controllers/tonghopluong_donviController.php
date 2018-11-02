@@ -20,6 +20,7 @@ use App\tonghopluong_donvi_bangluong;
 use App\tonghopluong_donvi_chitiet;
 use App\tonghopluong_donvi_diaban;
 use App\tonghopluong_huyen;
+use App\tonghopluong_khoi;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 
@@ -1015,10 +1016,18 @@ class tonghopluong_donviController extends Controller
     {
         if (Session::has('admin')) {
             $inputs = $request->all();
-            $model = tonghopluong_donvi::where('mathdv', $inputs['mathdv'])->first();
-            tonghopluong_donvi::where('mathdv', $inputs['mathdv'])
-                //->update(['trangthai' => 'TRALAI', 'lydo' => $inputs['lydo']]);
-                ->update(['trangthai' => 'TRALAI', 'lydo' => $inputs['lydo'], 'mathh' => null, 'matht' => null, 'mathk' => null, 'macqcq' => null]);
+            $model = tonghopluong_khoi::join('dmdonvi','dmdonvi.madv','tonghopluong_khoi.madv')
+                ->where('mathdv',$inputs['mathdv'])->first();
+            if(count($model)>0) {
+                tonghopluong_khoi::where('mathdv', $inputs['mathdv'])
+                    ->update(['trangthai' => 'TRALAI', 'lydo' => $inputs['lydo']]);
+            }
+            else {
+                $model = tonghopluong_donvi::where('mathdv', $inputs['mathdv'])->first();
+                tonghopluong_donvi::where('mathdv', $inputs['mathdv'])
+                    //->update(['trangthai' => 'TRALAI', 'lydo' => $inputs['lydo']]);
+                    ->update(['trangthai' => 'TRALAI', 'lydo' => $inputs['lydo'], 'mathh' => null, 'matht' => null, 'mathk' => null]);
+            }
             return redirect('/chuc_nang/xem_du_lieu/index?thang=' . $model->thang . '&nam=' . $model->nam . '&trangthai=ALL');
         } else
             return view('errors.notlogin');
