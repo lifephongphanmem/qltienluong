@@ -320,7 +320,7 @@ class bangluongController extends Controller
                                 $heso += $cb->$cthuc;
                         }
 
-                        if ($mapc != 'vuotkhung' && !in_array($a_pc_coth,$mapc) ) {//vượt khung đã tính ở trên
+                        if ($mapc != 'vuotkhung' && !in_array($mapc,$a_pc_coth) ) {//vượt khung đã tính ở trên
                             $cb->$mapc = $heso * $cb->$mapc / 100;
                         }
                         $ths += $cb->$mapc;
