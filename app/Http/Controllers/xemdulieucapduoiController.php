@@ -34,6 +34,11 @@ class xemdulieucapduoiController extends Controller
                 ->where('thang', $inputs['thang'])
                 ->where('nam', $inputs['nam'])
                 ->where('trangthai', 'DAGUI')->get();
+            //
+            $model_tonghopkhoi = tonghopluong_khoi::where('macqcq', $madv)
+                ->where('thang', $inputs['thang'])
+                ->where('nam', $inputs['nam'])
+                ->where('trangthai', 'DAGUI')->get();
 
             /*
             if(!isset($inputs['trangthai']) || $inputs['trangthai']=='ALL'){
@@ -96,16 +101,23 @@ class xemdulieucapduoiController extends Controller
             foreach($model_donvi as $dv) {
                 $dv->tendvcq = getTenDV($dv->macqcq);
                 $tonghop = $model_tonghop->where('madv', $dv->madv)->first();
+                $tonghopkhoi = $model_tonghopkhoi->where('madv', $dv->madv)->first();
                 $dv->tralai =$tralai;
                 $dv->mathdv = NULL;
                 $dv->ngaygui = '';
                 $dv->trangthai = 'CHOGUI';
-                if (count($tonghop)>0) {
+                if (count($tonghop)>0 ) {
                     $dv->mathdv = $tonghop->mathdv;
                     $dv->trangthai = $tonghop->trangthai;
                     $dv->ngaygui = $tonghop->ngaygui;
                 }
+                if (count($tonghopkhoi)>0) {
+                    $dv->mathdv = $tonghopkhoi->mathdv;
+                    $dv->trangthai = $tonghopkhoi->trangthai;
+                    $dv->ngaygui = $tonghopkhoi->ngaygui;
+                }
             }
+            //dd($model_donvi->toarray());
             if($inputs['trangthai'] !='ALL'){
                 $model_donvi = $model_donvi->where('trangthai', $inputs['trangthai']);
             }
@@ -233,6 +245,12 @@ class xemdulieucapduoiController extends Controller
                     ->where('nam', $inputs['nam'])
                     ->where('trangthai', 'DAGUI')
                     ->get();
+                $model_nguonkhoi = tonghopluong_khoi::wherein('madv', function($query) use($madv){
+                    $query->select('madv')->from('dmdonvi')->where('macqcq',$madv)->where('madv','<>',$madv)->get();
+                })->where('thang', $inputs['thang'])
+                    ->where('nam', $inputs['nam'])
+                    ->where('trangthai', 'DAGUI')
+                    ->get();
             }
             if(session('admin')->phamvitonghop == 'HUYEN')
             {
@@ -261,12 +279,12 @@ class xemdulieucapduoiController extends Controller
             foreach ($model_donvi as $dv) {
                 $dv->tralai = $tralai;
                 $nguon = $model_nguon->where('madv',$dv->madv)->first();
-
-                if(count($nguon)> 0 && $nguon->trangthai == 'DAGUI' ) {
+                $nguonkhoi = $model_nguonkhoi->where('madv',$dv->madv)->first();
+                if(count($nguon)> 0 && $nguon->trangthai == 'DAGUI' && session('admin')->phamvitonghop == 'HUYEN' ) {
                     $dv->mathdv = $nguon->mathdv;
-                    $dv->mathh = $nguon->mathh;
+                    $dv->mathh = $nguon->mathdv;
                     $dv->trangthai = 'DAGUI';
-                }elseif(count($nguon)> 0 && $nguon->trangthai == 'DAGUI' && session('admin')->quanlykhuvuc ){
+                }elseif((count($nguon)> 0 && $nguon->trangthai == 'DAGUI' && session('admin')->phamvitonghop == 'KHOI') || (count($nguonkhoi)> 0 && $nguonkhoi->trangthai == 'DAGUI' && session('admin')->phamvitonghop == 'KHOI')  ){
                     $dv->mathdv = $nguon->mathdv;
                     $dv->trangthai = 'DAGUI';
                 }
@@ -275,7 +293,7 @@ class xemdulieucapduoiController extends Controller
                     $dv->mathdv = null;
                 }
             }
-            //dd($model_donvi->toarray());
+            dd($model_donvi->toarray());
             if (!isset($inputs['trangthai']) || $inputs['trangthai'] != 'ALL') {
                 $model_donvi = $model_donvi->where('trangthai',$inputs['trangthai']);
             }

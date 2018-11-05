@@ -7,7 +7,27 @@
  */
         ?>
 @extends('main')
+@section('custom-style')
+    <link href="{{url('assets/global/css/plugins.css')}}" rel="stylesheet" type="text/css"/>
+    <link rel="stylesheet" type="text/css" href="{{url('assets/global/plugins/select2/select2.css')}}"/>
+    <link rel="stylesheet" type="text/css" href="{{url('assets/global/plugins/datatables/plugins/bootstrap/dataTables.bootstrap.css')}}"/>
+    <link rel="stylesheet" type="text/css" href="{{url('assets/global/plugins/select2/select2.css')}}"/>
+@stop
 
+
+@section('custom-script')
+    <script type="text/javascript" src="{{url('assets/global/plugins/bootstrap-wizard/jquery.bootstrap.wizard.js') }}"></script>
+    <script type="text/javascript" src="{{url('assets/global/plugins/select2/select2.min.js') }}"></script>
+    <script type="text/javascript" src="{{url('assets/admin/pages/scripts/form-wizard.js')}}"></script>
+
+    <script type="text/javascript" src="{{url('assets/global/plugins/select2/select2.min.js')}}"></script>
+    <script type="text/javascript" src="{{url('assets/global/plugins/datatables/media/js/jquery.dataTables.min.js')}}"></script>
+    <script type="text/javascript" src="{{url('assets/global/plugins/datatables/plugins/bootstrap/dataTables.bootstrap.js')}}"></script>
+
+    <script src="{{url('assets/admin/pages/scripts/table-managed.js')}}"></script>
+
+    @include('includes.script.scripts')
+    @stop
 @section('content')
 
     <div class="row">
@@ -110,27 +130,26 @@
                             {!! Form::select('tunam',getNam(),date('Y'),array('id' => 'tunam', 'class' => 'form-control'))!!}
                         </div>
                     </div>
-
                     <div class="form-group">
-                        <label class="col-md-4 control-label">Phân loại<span class="require">*</span></label>
-                        <div class="col-md-8">
-                            <select class="form-control" id="phanloai" name="phanloai">
-                                @foreach($model_phanloai as $phanloaict)
-                                    <option value="{{$phanloaict['maphanloai']}}">{{$phanloaict['tenphanloai']}}</option>
-                                @endforeach
+                            <label class="col-md-4 control-label">Phân loại<span class="require">*</span></label>
+                            <div class="col-md-8">
+                                <select class="form-control select2me" name="phanloai" id="phanloai" >
                                     <option value="">--Chọn tất cả--</option>
-                            </select>
+                                    @foreach($model_phanloai as $phanloaict)
+                                        <option value="{{$phanloaict['maphanloai']}}">{{$phanloaict['tenphanloai']}}</option>
+                                    @endforeach
+                                </select>
                             </div>
                         </div>
                     @if(!session('admin')->quanlykhuvuc)
                     <div class="form-group">
                         <label class="col-md-4 control-label">Phân loại công tác<span class="require">*</span></label>
                         <div class="col-md-8">
-                            <select class="form-control" id="phanloaict" name="phanloaict">
+                            <select class="form-control select2me" id="phanloaict" name="phanloaict">
+                                <option value="">--Chọn tất cả--</option>
                                 @foreach($model_phanloaict as $phanloaict)
                                     <option value="{{$phanloaict['mact']}}">{{$phanloaict['tenct']}}</option>
                                 @endforeach
-                                    <option value="">--Chọn tất cả--</option>
                             </select>
                         </div>
                     </div>
@@ -178,7 +197,7 @@
                     <div class="form-group">
                         <label class="col-md-4 control-label">Đơn vị<span class="require">*</span></label>
                         <div class="col-md-8">
-                            <select class="form-control" id="donvi" name="donvi">
+                            <select class="form-control select2me" id="donvi" name="donvi">
                                 @foreach($model_dv as $donvi)
                                     <option value="{{$donvi['madv']}}">{{$donvi['tendv']}}</option>
                                 @endforeach
