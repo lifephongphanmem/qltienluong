@@ -110,6 +110,7 @@ class bangluongdangkyController extends Controller
             $model_chucvu = dmchucvucq::where('maphanloai', session('admin')->maphanloai)
                 ->wherein('madv', ['SA', session('admin')->madv])->get();
 
+            $a_pc_coth = array('pcudn','pctnn');
             foreach ($m_cb as $cb) {
                 $cb->mabl = $inputs['mabl'];
                 $cb->macongtac = null;
@@ -141,29 +142,34 @@ class bangluongdangkyController extends Controller
 
                 //trong bảng danh mục là % vượt khung => sang bảng lương chuyển thành hệ số
                 $cb->vuotkhung = $cb->heso * $cb->vuotkhung / 100;
-                //tính thâm niên nghề
-                $pctnn = $model_phucap->where('mapc', 'pctnn')->first();
-                $pl = getDbl($pctnn->phanloai);
-                switch ($pl) {
-                    case 0:
-                    case 1: {//số tiền
-                        //giữ nguyên ko cần tính
-                        break;
-                    }
-                    case 2: {//phần trăm
-                        $heso = 0;
-                        foreach (explode(',', $pctnn->congthuc) as $ct) {
-                            if ($ct != '' && $ct != 'pctnn')
-                                $heso += $cb->$ct;
+
+                foreach($a_pc_coth as $phca){//tính trc 1 số phụ cấp làm phụ cấp cơ sở
+                    $pctnn = $model_phucap->where('mapc', $phca)->first();
+                    if(count($pctnn)>0){//do 1 số nguồn ko lấy thâm niên nghề làm cơ sở
+                        $pl = getDbl($pctnn->phanloai);
+                        switch ($pl) {
+                            case 0:
+                            case 1: {//số tiền
+                                //giữ nguyên ko cần tính
+                                break;
+                            }
+                            case 2: {//phần trăm
+                                $heso = 0;
+                                foreach (explode(',', $pctnn->congthuc) as $ct) {
+                                    if ($ct != '' && $ct != $phca)
+                                        $heso += $cb->$ct;
+                                }
+                                $cb->$phca = $heso * $cb->pctnn / 100;
+                                break;
+                            }
+                            default: {//trường hợp còn lại (ẩn,...)
+                                $cb->$phca = 0;
+                                break;
+                            }
                         }
-                        $cb->pctnn = $heso * $cb->pctnn / 100;
-                        break;
-                    }
-                    default: {//trường hợp còn lại (ẩn,...)
-                        $cb->pctnn = 0;
-                        break;
                     }
                 }
+
                 $tt = 0;
                 $ths = 0;
 
@@ -194,7 +200,7 @@ class bangluongdangkyController extends Controller
                             break;
                         }
                         case 2: {//phần trăm
-                            if ($mapc != 'vuotkhung' && $mapc != 'pctnn') {//vượt khung + ttn đã tính ở trên
+                            if ($mapc != 'vuotkhung' && !in_array($a_pc_coth,$mapc)) {//vượt khung + ttn đã tính ở trên
 
                                 foreach (explode(',', $ct->congthuc) as $cthuc) {
                                     if ($cthuc != '')
@@ -240,7 +246,7 @@ class bangluongdangkyController extends Controller
 
                         $a_kq = $ct->toarray();
                         unset($a_kq['id']);
-                        bangluongdangky_phucap::create($a_kq);
+                        //bangluongdangky_phucap::create($a_kq);
                     }
                 }
 
