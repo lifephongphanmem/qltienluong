@@ -391,6 +391,7 @@ function getCongThucTinhPC(){
         'hesobl' => 'Hệ số bảo lưu',
         'pcthni' => 'Phụ cấp thâm niên',
         'pctn' => 'Phụ cấp trách nhiệm',
+        'pcudn' => 'Phụ cấp ưu đãi ngành',
     );
 }
 

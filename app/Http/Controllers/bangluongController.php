@@ -711,7 +711,7 @@ class bangluongController extends Controller
                         break;
                     }
                     case 2: {//phần trăm
-                        if ($mapc != 'vuotkhung' && !in_array($a_pc_coth, $mapc)) {
+                        if ($mapc != 'vuotkhung' && !in_array( $mapc,$a_pc_coth)) {
                             $heso = 0;
                             foreach (explode(',', $a_pc[$k]['congthuc']) as $ct) {
                                 if ($ct != '')
