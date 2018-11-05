@@ -281,21 +281,25 @@ class xemdulieucapduoiController extends Controller
             foreach ($model_donvi as $dv) {
                 $dv->tralai = $tralai;
                 $nguon = $model_nguon->where('madv',$dv->madv)->first();
-                $nguonkhoi = $model_nguonkhoi->where('madv',$dv->madv)->first();
+                if(session('admin')->phamvitonghop == 'KHOI')
+                    $nguonkhoi = $model_nguonkhoi->where('madv',$dv->madv)->first();
                 if(count($nguon)> 0 && $nguon->trangthai == 'DAGUI' && session('admin')->phamvitonghop == 'HUYEN' ) {
                     $dv->mathdv = $nguon->mathdv;
                     $dv->mathh = $nguon->mathdv;
                     $dv->trangthai = 'DAGUI';
-                }elseif((count($nguon)> 0 && $nguon->trangthai == 'DAGUI' && session('admin')->phamvitonghop == 'KHOI') || (count($nguonkhoi)> 0 && $nguonkhoi->trangthai == 'DAGUI' && session('admin')->phamvitonghop == 'KHOI')  ){
-                    $dv->mathdv = $nguon->mathdv;
-                    $dv->trangthai = 'DAGUI';
+                }elseif(session('admin')->phamvitonghop == 'KHOI') {
+                    if ((count($nguon) > 0 && $nguon->trangthai == 'DAGUI') || (count($nguonkhoi) > 0 && $nguonkhoi->trangthai == 'DAGUI')) {
+                        $dv->mathdv = $nguon->mathdv;
+                        $dv->trangthai = 'DAGUI';
+
+                    }
                 }
                 else{
                     $dv->trangthai = 'CHOGUI';
                     $dv->mathdv = null;
                 }
             }
-            dd($model_donvi->toarray());
+            //dd($model_donvi->toarray());
             if (!isset($inputs['trangthai']) || $inputs['trangthai'] != 'ALL') {
                 $model_donvi = $model_donvi->where('trangthai',$inputs['trangthai']);
             }
