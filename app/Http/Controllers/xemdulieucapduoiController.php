@@ -29,7 +29,7 @@ class xemdulieucapduoiController extends Controller
             $madv = session('admin')->madv;
             $a_trangthai=array('ALL'=>'Tất cả dữ liệu','CHOGUI'=>'Chưa gửi dữ liệu','DAGUI'=>'Đã gửi dữ liệu');
             //$list_donvi= dmdonvi::select('madv', 'tendv')->where('madvbc', session('admin')->madvbc)->get();
-            $model_donvi = dmdonvi::select('madv', 'tendv','macqcq','maphanloai')->where('macqcq', $madv)->where('madv','<>',$madv)->get();
+            $model_donvi = dmdonvi::select('madv', 'tendv','macqcq','maphanloai','phanloaitaikhoan')->where('macqcq', $madv)->where('madv','<>',$madv)->get();
             $model_tonghop = tonghopluong_donvi::where('macqcq', $madv)
                 ->where('thang', $inputs['thang'])
                 ->where('nam', $inputs['nam'])
@@ -115,6 +115,8 @@ class xemdulieucapduoiController extends Controller
                     $dv->mathdv = $tonghopkhoi->mathdv;
                     $dv->trangthai = $tonghopkhoi->trangthai;
                     $dv->ngaygui = $tonghopkhoi->ngaygui;
+                    $dv->thang = $tonghopkhoi->thang;
+                    $dv->nam = $tonghopkhoi->nam;
                 }
             }
             //dd($model_donvi->toarray());

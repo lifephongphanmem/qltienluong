@@ -479,6 +479,7 @@ Route::group(['prefix'=>'chuc_nang'],function(){
 
             Route::get('printf_data/ma_so={mathdv}','tonghopluong_donviController@printf_data');
             Route::get('printf_bl/ma_so={mathdv}','tonghopluong_donviController@printf_bl');
+            Route::get('printf_bl_khoi/ma_so={mathdv}','tonghopluong_donviController@printf_bl_khoi');
             Route::get('printf_data_diaban/ma_so={mathdv}','tonghopluong_donviController@printf_data_diaban');
         });
 

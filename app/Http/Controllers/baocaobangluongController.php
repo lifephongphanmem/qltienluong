@@ -1086,10 +1086,26 @@ class baocaobangluongController extends Controller
             $madv = $inputs['donvi'];
             $thang = $inputs['thang'];
             $nam = $inputs['nam'];
-            $m_mathdv = tonghopluong_donvi::where('madv', $madv)->where('thang',$thang)->where('nam',$nam)->where('trangthai', 'DAGUI')->first();
+            $check = dmdonvi::where('madv',$madv)->where('phanloaitaikhoan','TH')->first();
+            if(count($check)>0)
+                $m_mathdv = tonghopluong_khoi::where('madv', $madv)->where('thang',$thang)->where('nam',$nam)->where('trangthai', 'DAGUI')->first();
+            else
+                $m_mathdv = tonghopluong_donvi::where('madv', $madv)->where('thang',$thang)->where('nam',$nam)->where('trangthai', 'DAGUI')->first();
             if(isset($m_mathdv)) {
-                $model = tonghopluong_donvi_bangluong::where('mathdv', $m_mathdv->mathdv)->get();
-                $model_thongtin = tonghopluong_donvi::where('mathdv', $m_mathdv->mathdv)->first();
+                if(count($check)>0) {
+                    $mathh = $m_mathdv->mathdv;
+                    $model = tonghopluong_donvi_bangluong::where('mathh', $mathh)->get();
+                    $model_thongtin = tonghopluong_donvi::where('mathh', $mathh)->first();
+                    $m_pc = array_column(dmphucap_donvi::wherein('madv', function($query) use($mathh){
+                        $query->select('dmdonvi.madv')->from('dmdonvi')->join('tonghopluong_khoi','dmdonvi.madv','tonghopluong_khoi.madv')->where('mathdv',$mathh)
+                            ->get();
+                    })->get()->toarray(),'report','mapc');
+                }else{
+                    $model = tonghopluong_donvi_bangluong::where('mathdv', $m_mathdv->mathdv)->get();
+                    $model_thongtin = tonghopluong_donvi::where('mathdv', $m_mathdv->mathdv)->first();
+                    $m_pc = array_column(dmphucap_donvi::where('madv', $madv)->get()->toarray(), 'report', 'mapc');
+                }
+
                 $model_nguonkp = array_column(dmnguonkinhphi::all()->toArray(), 'tennguonkp', 'manguonkp');
                 $model_ct = array_column(dmphanloaict::all()->toArray(), 'tenct', 'mact');
                 //$gnr = getGeneralConfigs();
@@ -1098,7 +1114,7 @@ class baocaobangluongController extends Controller
                 $m_dv = dmdonvi::where('madv', $madv)->first();
                 $a_phucap = array();
                 $col = 0;
-                $m_pc = array_column(dmphucap_donvi::where('madv', $madv)->get()->toarray(), 'report', 'mapc');
+                //$m_pc = array_column(dmphucap_donvi::where('madv', $madv)->get()->toarray(), 'report', 'mapc');
 
                 foreach ($model as $chitiet) {
                     $chitiet->tennguonkp = isset($model_nguonkp[$chitiet->manguonkp]) ? $model_nguonkp[$chitiet->manguonkp] : '';

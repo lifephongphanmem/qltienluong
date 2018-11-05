@@ -98,11 +98,17 @@
                                     <td>{{getDayVn($value->ngaygui)}}</td>
                                     <td>
                                         @if ($value->mathdv != NULL)
-                                            <a href="{{url('/chuc_nang/tong_hop_luong/don_vi/printf_data/ma_so='.$value['mathdv'])}}" class="btn btn-default btn-sm" TARGET="_blank">
-                                                <i class="fa fa-print"></i>&nbsp; Số liệu tổng hợp</a>
-
-                                            <a href="{{url('/chuc_nang/tong_hop_luong/don_vi/printf_bl/ma_so='.$value['mathdv'])}}" class="btn btn-default btn-sm" TARGET="_blank">
-                                                <i class="fa fa-print"></i>&nbsp; Số liệu chi tiết</a>
+                                            @if($value->phanloaitaikhoan == 'TH')
+                                                <a href="{{url('/chuc_nang/tong_hop_luong/khoi/tonghop?thang='.$value['thang'].'&nam='.$nam)}}" class="btn btn-default btn-sm" TARGET="_blank">
+                                                    <i class="fa fa-print"></i>&nbsp; Số liệu tổng hợp khối</a>
+                                                <a href="{{url('/chuc_nang/tong_hop_luong/don_vi/printf_bl_khoi/ma_so='.$value['mathdv'])}}" class="btn btn-default btn-sm" TARGET="_blank">
+                                                    <i class="fa fa-print"></i>&nbsp; Số liệu chi tiết khối</a>
+                                            @else
+                                                <a href="{{url('/chuc_nang/tong_hop_luong/don_vi/printf_data/ma_so='.$value['mathdv'])}}" class="btn btn-default btn-sm" TARGET="_blank">
+                                                    <i class="fa fa-print"></i>&nbsp; Số liệu tổng hợp</a>
+                                                <a href="{{url('/chuc_nang/tong_hop_luong/don_vi/printf_bl/ma_so='.$value['mathdv'])}}" class="btn btn-default btn-sm" TARGET="_blank">
+                                                    <i class="fa fa-print"></i>&nbsp; Số liệu chi tiết</a>
+                                            @endif
 
                                             @if($value->maphanloai == 'KVXP')
                                                 <!--a href="{{url('/chuc_nang/tong_hop_luong/don_vi/printf_data_diaban/ma_so='.$value['mathdv'])}}" class="btn btn-default btn-sm" TARGET="_blank">
