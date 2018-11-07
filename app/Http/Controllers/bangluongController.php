@@ -320,7 +320,7 @@ class bangluongController extends Controller
                                 $heso += $cb->$cthuc;
                         }
 
-                        if ($mapc != 'vuotkhung' && !in_array($mapc,$a_pc_coth) ) {//vượt khung đã tính ở trên
+                        if ($mapc != 'vuotkhung' && !in_array($mapc, $a_pc_coth)) {//vượt khung đã tính ở trên
                             $cb->$mapc = $heso * $cb->$mapc / 100;
                         }
                         $ths += $cb->$mapc;
@@ -711,7 +711,7 @@ class bangluongController extends Controller
                         break;
                     }
                     case 2: {//phần trăm
-                        if ($mapc != 'vuotkhung' && !in_array( $mapc,$a_pc_coth)) {
+                        if ($mapc != 'vuotkhung' && !in_array($mapc, $a_pc_coth)) {
                             $heso = 0;
                             foreach (explode(',', $a_pc[$k]['congthuc']) as $ct) {
                                 if ($ct != '')
@@ -1275,7 +1275,9 @@ class bangluongController extends Controller
                 $model_phucap = dmphucap_donvi::where('madv', session('admin')->madv)->wherenotin('mapc', array('hesott'))->get();
                 //Tạo bảng lương
 
-                $ngaycong = dmdonvi::where('madv', $madv)->first()->songaycong;
+                $ngaycong = session('admin')->songaycong;
+                //$ngaycong = dmdonvi::where('madv', $madv)->first()->songaycong;
+
                 foreach ($model_canbo as $cb) {
                     if (!isset($a_hoso[$cb->macanbo])) {
                         continue;
@@ -1377,11 +1379,11 @@ class bangluongController extends Controller
                     $stkpcd_dv = $model_phucap->sum('stkpcd_dv');
                     $stbhtn_dv = $model_phucap->sum('stbhtn_dv');
 
-                    if ($cb->ngaytl > 15) {
+                    if ($cb->ngaytl >= $ngaycong/2) {
                         $cb->stbhxh = round(($stbhxh * $cb->ngaytl) / $ngaycong + $stbhxh * $cb->thangtl, 0);
                         $cb->stbhyt = round(($stbhyt * $cb->ngaytl) / $ngaycong + $stbhyt * $cb->thangtl, 0);
                         $cb->stkpcd = round(($stkpcd * $cb->ngaytl) / $ngaycong + $stkpcd * $cb->thangtl, 0);
-                        $cb->stbhtn = round(($stbhxh * $cb->ngaytl) / $ngaycong + $stbhtn * $cb->thangtl, 0);
+                        $cb->stbhtn = round(($stbhtn * $cb->ngaytl) / $ngaycong + $stbhtn * $cb->thangtl, 0);
 
                         $cb->stbhxh_dv = round(($stbhxh_dv * $cb->ngaytl) / $ngaycong + $stbhxh_dv * $cb->thangtl, 0);
                         $cb->stbhyt_dv = round(($stbhyt_dv * $cb->ngaytl) / $ngaycong + $stbhyt_dv * $cb->thangtl, 0);

@@ -115,6 +115,7 @@ class dmdonviController extends Controller
 
                 session('admin')->maphanloai = $inputs['maphanloai'];
                 session('admin')->macqcq = $inputs['macqcq'];
+                session('admin')->songaycong = $inputs['songaycong'];
 
                 return redirect('/he_thong/don_vi/don_vi');
             } else {
