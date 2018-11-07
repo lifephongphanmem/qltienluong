@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\dmdonvi;
+use App\dmphanloaicongtac;
+use App\dmphanloaict;
 use App\dutoanluong;
 use App\dutoanluong_chitiet;
 use App\dutoanluong_huyen;
@@ -127,11 +129,21 @@ class dutoanluong_khoiController extends Controller
             $model_thongtin = dutoanluong::where('masodv', $inputs['maso'])->first();
             $model = dutoanluong_chitiet::where('masodv', $inputs['maso'])->get();
 
+            $model_phanloaict = array_column(dmphanloaicongtac::all()->toArray(), 'tencongtac', 'macongtac');
+            $model_ct = array_column(dmphanloaict::all()->toArray(), 'tenct', 'mact');
+
             $a_nhomct = getNhomCongTac(false);
             foreach($model as $ct){
-                $ct->tencongtac = isset($a_nhomct[$ct->macongtac])? $a_nhomct[$ct->macongtac]:'';
+                //$ct->tencongtac = isset($a_nhomct[$ct->macongtac])? $a_nhomct[$ct->macongtac]:'';
                 $ct->tongcong = $ct->luongnb_dt + $ct->luonghs_dt + $ct->luongbh_dt;
+
+                if($ct->mact == null){
+                    $ct->tencongtac = isset($model_phanloaict[$ct->macongtac]) ? $model_phanloaict[$ct->macongtac] : '';
+                }else{
+                    $ct->tencongtac = isset($model_ct[$ct->mact]) ? $model_ct[$ct->mact] : '';
+                }
             }
+
             //cho trương hợp đơn vị cấp trên in dữ liệu dv câp dưới mà ko sai tên đơn vị
             $m_dv = dmdonvi::where('madv', $model_thongtin->madv)->first();
             $thongtin = array('nam' => $model_thongtin->namns);

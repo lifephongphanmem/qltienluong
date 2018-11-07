@@ -404,6 +404,22 @@
                             <li><a href="{{url('/tra_cuu/chi_luong')}}"><i class="fa fa-caret-right"></i>Bảng lương tại đơn vị</a></li>
                         </ul>
                     </li>
+                    <li class="last">
+                        <a href="javascript:;">
+                            <i class="fa fa-gear"></i>
+                            <span class="title">Hệ thống</span><span class="arrow "></span>
+                        </a>
+                        <ul class="sub-menu">
+                            <li>
+                                <a href="javascript:;">
+                                    <i class="icon-grid"></i> Quản trị hệ thống <span class="arrow"></span>
+                                </a>
+                                <ul class="sub-menu" style="margin-left: 15px;">
+                                    <li><a href="{{url('/he_thong/don_vi/don_vi')}}"><i class="fa fa-caret-right"></i>Thông tin đơn vị</a></li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </li>
                 @else
                     <li class="last">
                         <a href="javascript:;">

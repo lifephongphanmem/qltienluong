@@ -26,8 +26,8 @@
                     <div class="caption">
                     </div>
                     <div class="actions">
-                        <a href="{{url($url.'thong_tin?maso='.$model->madv)}}" class="btn btn-default btn-sm">
-                            <i class="fa fa-edit"></i> Chỉnh sửa </a>
+                        <a @if(session('admin')->phanloaitaikhoan == 'TH') style='display: none' @endif href="{{url($url.'thong_tin?maso='.$model->madv)}}" class="btn btn-default btn-sm">
+                            <i  class="fa fa-edit"></i> Chỉnh sửa </a>
                         <!--a href="" class="btn btn-default btn-sm">
                             <i class="fa fa-print"></i> Print </a-->
                         @if(session('admin')->sadmin == 'ssa')

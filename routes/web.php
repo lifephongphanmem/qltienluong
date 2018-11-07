@@ -612,6 +612,7 @@ Route::group(['prefix'=>'chuc_nang'],function(){
 
             Route::get('tonghop','dutoanluong_huyenController@tonghop');
             Route::get('printf','dutoanluong_huyenController@printf');//in một khối trong khối
+            Route::get('chitietbl','dutoanluong_huyenController@chitietbl');//in chi tiết bảng lương đơn vị
         });
 
         Route::group(['prefix'=>'khoi'],function(){
@@ -760,6 +761,7 @@ Route::group(['prefix'=>'tong_hop_bao_cao'],function(){
     Route::post('mau2h_tt67','baocaothongtu67Controller@mau2h_tt67');
     Route::post('mau4a_tt67','baocaothongtu67Controller@mau4a_tt67');
     Route::post('mau4b_tt67','baocaothongtu67Controller@mau4b_tt67');
+    Route::post('mau4b_tt67bs','baocaothongtu67Controller@mau4b_tt67bs');
 
 });
 

@@ -74,6 +74,8 @@
                                         @if ($value->masodv != NULL)
                                             <a href="{{url($furl_th.'printf?maso='.$value['masodv'])}}" class="btn btn-default btn-sm" TARGET="_blank">
                                                 <i class="fa fa-print"></i>&nbsp; Số liệu tổng hợp</a>
+                                            <a href="{{url($furl_th.'chitietbl?maso='.$value['masodv'])}}" class="btn btn-default btn-sm" TARGET="_blank">
+                                                <i class="fa fa-print"></i>&nbsp; Số liệu chi tiết</a>
 
                                             @if($value->tralai)
                                                 <button type="button" class="btn btn-default btn-sm" onclick="confirmChuyen('{{$value['masodv']}}')" data-target="#chuyen-modal" data-toggle="modal"><i class="fa icon-share-alt"></i>&nbsp;
