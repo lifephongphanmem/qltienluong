@@ -189,6 +189,7 @@ class UsersController extends Controller
                 $ttuser->cdketoan = $model_donvi->cdketoan;
                 $ttuser->ketoan = $model_donvi->ketoan;
                 $ttuser->nguoilapbieu = $model_donvi->nguoilapbieu;
+                $ttuser->songaycong = $model_donvi->songaycong;
 
                 $model_donvibaocao = dmdonvibaocao::where('madvbc', $model_donvi->madvbc)->first();
                 $ttuser->level = $model_donvibaocao->level;

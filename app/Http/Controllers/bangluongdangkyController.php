@@ -200,7 +200,7 @@ class bangluongdangkyController extends Controller
                             break;
                         }
                         case 2: {//phần trăm
-                            if ($mapc != 'vuotkhung' && !in_array($a_pc_coth,$mapc)) {//vượt khung + ttn đã tính ở trên
+                            if ($mapc != 'vuotkhung' && !in_array($mapc, $a_pc_coth)) {//vượt khung + ttn đã tính ở trên
 
                                 foreach (explode(',', $ct->congthuc) as $cthuc) {
                                     if ($cthuc != '')
