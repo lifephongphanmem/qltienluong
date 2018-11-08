@@ -972,7 +972,7 @@ class bangluongController extends Controller
 
             foreach ($a_pc as $k=>$v) {
                 $mapc = $v['mapc'];
-                $m_cb[$key]['st_'.$mapc] = 0;
+                $m_cb_kn[$i]['st_'.$mapc] = 0;
                 if($m_cb_kn[$i][$mapc] <= 0){
                     continue;
                 }
@@ -1015,7 +1015,7 @@ class bangluongController extends Controller
                 $a_pc[$k]['ten'] = $a_pc[$k]['tenpc'];
                 $a_pc[$k]['heso'] = $m_cb[$key][$mapc];
                 $a_pc[$k]['sotien'] = round($inputs['luongcoban'] * $tonghs + $tien, 0);
-                $m_cb[$key]['st_'.$mapc] = $a_pc[$k]['sotien'];
+                $m_cb_kn[$i]['st_'.$mapc] = $a_pc[$k]['sotien'];
                 $a_kn_phucap[] = $a_pc[$k];
             }
 
