@@ -80,6 +80,7 @@
         <th style="width: 7%;padding-left: 2px;padding-right: 2px" rowspan="3">Biên chế được giao năm {{$thongtin['nam']}}</th>
         <th style="width: 7%;padding-left: 2px;padding-right: 2px;font-weight: bold" colspan="4">Biên chế có mặt</th>
         <th colspan="{{$col+4}}">Tiền lương tháng {{$thongtin["thang"]}} năm {{$thongtin["nam"]}}</th>
+        <th style="width: 6%;padding-left: 2px;padding-right: 2px" rowspan="3">Hệ số</th>
         <th style="width: 6%;padding-left: 2px;padding-right: 2px" rowspan="3">Quỹ lương năm {{$thongtin["nam"] + 1}}</th>
     </tr>
 
@@ -104,24 +105,23 @@
     <tr>
         <th>A</th>
         <th>B</th>
-        @for($i=1;$i<=10 + $col;$i++)
+        @for($i=1;$i<=11 + $col;$i++)
             <th>{{$i}}</th>
         @endfor
     </tr>
-    <?php $i=1; ?>
+    <?php $i=1; $Tbienche = 0;
+    $Thopdong68 = 0;
+    $Tkhac = 0;?>
     @foreach($model_phanloai as $pl)
         <!--tr style="font-weight: bold;">
             <td style="text-align: left;">{{convert2Roman($i++)}}</td>
-            <td style="text-align: left;" colspan="{{11 + $col}}">{{$pl->tenphanloai}}</td>
+            <td style="text-align: left;" colspan="{{12 + $col}}">{{$pl->tenphanloai}}</td>
         </tr-->
         <?php
             $j=1;
             $a_pl = a_getelement($a_soluong,array('maphanloai'=>$pl->maphanloai));
             $phanloai = $model->where('maphanloai',$pl->maphanloai);
             $donvi = $model_donvi->where('maphanloai',$pl->maphanloai);
-            $Tbienche = 0;
-            $Thopdong68 = 0;
-            $Tkhac = 0;
             $bienche = 0;
             $hopdong68 = 0;
             $khac = 0;
@@ -129,7 +129,7 @@
         @foreach($donvi as $dv)
             <tr style="font-weight: bold; font-style: italic">
                 <td style="text-align: center;">{{$j++}}</td>
-                <td style="text-align: left;" colspan="{{11 + $col}}">{{$dv->tendv}}</td>
+                <td style="text-align: left;" colspan="{{12 + $col}}">{{$dv->tendv}}</td>
             </tr>
             <?php
                 $tongpc = 0;
@@ -176,6 +176,7 @@
                     @endforeach
 
                     <td>{{dinhdangso($ct->tongbh,0,3)}}</td>
+                    <td>{{$ct->hesoluong}}</td>
                     <td>{{dinhdangso($ct->tonghs *12*1.3,0,3)}}</td>
 
                 </tr>
@@ -197,6 +198,7 @@
                     @endforeach
 
                     <td>{{dinhdangso($chitiet->sum('tongbh'),0,3)}}</td>
+                    <td>{{$chitiet->sum('hesoluong')}}</td>
                     <td>{{dinhdangso($chitiet->sum('tonghs')*12*1.3,0,3)}}</td>
                 </tr>
             @endif
@@ -217,6 +219,7 @@
                     <td>{{dinhdangso($phanloai->sum($key),0,3)}}</td>
                 @endforeach
                 <td>{{dinhdangso($phanloai->sum('tongbh'),0,3)}}</td>
+                <td>{{$phanloai->sum('hesoluong')}}</td>
                 <td>{{dinhdangso($phanloai->sum('tonghs')*12*1.3,0,3)}}</td>
             </tr>
         @endif
@@ -229,14 +232,15 @@
         <td style="text-align: center">{{dinhdangso($Thopdong68)}}</td>
         <td style="text-align: center">{{dinhdangso($Tkhac)}}</td>
 
-        <td style="text-align: right">{{dinhdangso($phanloai->sum('tonghs'),0,3)}}</td>
-        <td style="text-align: right">{{dinhdangso($phanloai->sum('heso'),0,3)}}</td>
-        <td>{{dinhdangso($phanloai->sum('tonghs') - $phanloai->sum('heso'),0,3)}}</td>
+        <td style="text-align: right">{{dinhdangso($model->sum('tonghs'),0,3)}}</td>
+        <td style="text-align: right">{{dinhdangso($model->sum('heso'),0,3)}}</td>
+        <td>{{dinhdangso($model->sum('tonghs') - $model->sum('heso'),0,3)}}</td>
         @foreach($a_phucap as $key=>$val)
-            <td>{{dinhdangso($phanloai->sum($key),0,3)}}</td>
+            <td>{{dinhdangso($model->sum($key),0,3)}}</td>
         @endforeach
-        <td>{{dinhdangso($phanloai->sum('tongbh'),0,3)}}</td>
-        <td>{{dinhdangso($phanloai->sum('tonghs')*12*1.3,0,3)}}</td>
+        <td>{{dinhdangso($model->sum('tongbh'),0,3)}}</td>
+        <td>{{$model->sum('hesoluong')}}</td>
+        <td>{{dinhdangso($model->sum('tonghs')*12*1.3,0,3)}}</td>
     </tr>
 </table>
 
