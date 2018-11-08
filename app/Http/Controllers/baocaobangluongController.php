@@ -856,6 +856,7 @@ class baocaobangluongController extends Controller
                 ->groupby('mathdv','macongtac','mact')
                 ->get();
             $a_luongcb = array_column(tonghopluong_donvi_chitiet::select('mathdv','luongcoban')
+                ->wherein('mathdv', array_column($model_tonghop->toarray(),'mathdv'))
                 ->distinct()->get()->toarray(),'luongcoban','mathdv');
             //dd($a_luongcb);
             $model_nguonkp = array_column(dmnguonkinhphi::all()->toArray(), 'tennguonkp', 'manguonkp');
