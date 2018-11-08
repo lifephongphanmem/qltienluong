@@ -89,14 +89,15 @@ License: You must have a valid license purchased only from themeforest(the above
 		<div class="form-actions">
            <button type="submit" class="btn blue pull-right" id="login_button" onclick="validatePassword();">
 				Login <i class="m-icon-swapright m-icon-white"></i>
-			</button>
-			<br>
+           </button>
+            <!--a href="{{url('/danh_sach_tai_khoan?madiaban=ALL')}}">
+                Danh sách tài khoản truy cập</a-->
 		</div>
 		{!! Form::close() !!}
     <hr>
     <div class="forget-password">
         <p>
-           <a href="{{url('/danh_sach_tai_khoan?madiaban=ALL')}}" target="_blank">
+           <a href="{{url('/danh_sach_tai_khoan?madiaban=ALL')}}">
                Danh sách tài khoản truy cập</a>
         </p>
     </div>

@@ -35,7 +35,7 @@
                     <!-- BEGIN FORM-->
                     {!! Form::model($model,['url'=>$furl.'store', 'id' => 'create_tttaikhoan', 'class'=>'horizontal-form']) !!}
                     <input type="hidden" id="macanbo" name="macanbo" value="{{$model->macanbo}}"/>
-                    <input type="hidden" id="gioitinh" name="macanbo" value="{{$model->gioitinh}}"/>
+                    <input type="hidden" id="gioitinh" name="gioitinh" value="{{$model->gioitinh}}"/>
                     <input type="hidden" id="maso" name="maso" value="{{$model->maso}}"/>
                     <div class="form-body">
                         <div class="row">

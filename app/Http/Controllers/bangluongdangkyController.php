@@ -144,9 +144,9 @@ class bangluongdangkyController extends Controller
                 $cb->vuotkhung = $cb->heso * $cb->vuotkhung / 100;
 
                 foreach($a_pc_coth as $phca){//tính trc 1 số phụ cấp làm phụ cấp cơ sở
-                    $pctnn = $model_phucap->where('mapc', $phca)->first();
-                    if(count($pctnn)>0){//do 1 số nguồn ko lấy thâm niên nghề làm cơ sở
-                        $pl = getDbl($pctnn->phanloai);
+                    $pc = $model_phucap->where('mapc', $phca)->first();
+                    if(count($pc)>0){//do 1 số nguồn ko lấy thâm niên nghề làm cơ sở
+                        $pl = getDbl($pc->phanloai);
                         switch ($pl) {
                             case 0:
                             case 1: {//số tiền
@@ -155,11 +155,11 @@ class bangluongdangkyController extends Controller
                             }
                             case 2: {//phần trăm
                                 $heso = 0;
-                                foreach (explode(',', $pctnn->congthuc) as $ct) {
+                                foreach (explode(',', $pc->congthuc) as $ct) {
                                     if ($ct != '' && $ct != $phca)
                                         $heso += $cb->$ct;
                                 }
-                                $cb->$phca = $heso * $cb->pctnn / 100;
+                                $cb->$phca = $heso * $cb->$phca / 100;
                                 break;
                             }
                             default: {//trường hợp còn lại (ẩn,...)
