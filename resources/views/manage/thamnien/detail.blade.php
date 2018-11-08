@@ -70,6 +70,41 @@
                                 </div>
                             </div>
 
+                            <div class="col-md-2">
+                                <div class="form-group">
+                                    <label class="control-label">Số tháng truy lĩnh </label>
+                                    {!!Form::text('thangtl', null, array('id' => 'thangtl','class' => 'form-control', 'data-mask'=>'fdecimal'))!!}
+                                </div>
+                            </div>
+
+                            <div class="col-md-2">
+                                <div class="form-group">
+                                    <label class="control-label">Số ngày truy lĩnh </label>
+                                    {!!Form::text('ngaytl', null, array('id' => 'ngaytl','class' => 'form-control', 'data-mask'=>'fdecimal'))!!}
+                                </div>
+                            </div>
+
+                            <div class="col-md-2">
+                                <div class="form-group">
+                                    <label class="control-label">Hệ số lương truy lĩnh</label>
+                                    {!!Form::text('hesott', null, array('id' => 'hesott','class' => 'form-control', 'data-mask'=>'fdecimal'))!!}
+                                </div>
+                            </div>
+
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label class="control-label">Nguồn KP hưởng lương</label>
+                                    {!!Form::select('manguonkp',getNguonKP(false), null, array('id' => 'manguonkp','class' => 'form-control select2me'))!!}
+                                </div>
+                            </div>
+
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label class="control-label">Mức lương truy lĩnh </label>
+                                    {!!Form::text('luongcoban', null, array('id' => 'luongcoban','class' => 'form-control', 'data-mask'=>'fdecimal'))!!}
+                                </div>
+                            </div>
+
                         </div>
                     </div>
 

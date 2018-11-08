@@ -258,7 +258,7 @@ class bangluongController extends Controller
                                 if ($ct != '' && $ct != $phca)
                                     $heso += $cb->$ct;
                             }
-                            $cb->$phca = $heso * $cb->pctnn / 100;
+                            $cb->$phca = $heso * $cb->$phca / 100;
                             break;
                         }
                         default: {//trường hợp còn lại (ẩn,...)
@@ -1775,6 +1775,7 @@ class bangluongController extends Controller
     function update_chitiet(Request $request){
         if (Session::has('admin')) {
             $inputs=$request->all();
+
             $model = bangluong_ct::findorfail($inputs['id_hs']);
             $mapc = $inputs['mapc'];
             $mapc_st ='st_'. $inputs['mapc'];
@@ -1782,7 +1783,7 @@ class bangluongController extends Controller
             $inputs['heso'] = chkDbl($inputs['heso']);
             $inputs['luongcb'] = chkDbl($inputs['luongcb']);
             $inputs['sotien'] = chkDbl($inputs['sotien']);
-
+            //dd($inputs);
             //Tính lương mới
             $sotien_cl = $inputs['sotien'] - $model->$mapc_st;
             $heso_cl = $inputs['heso'] - $model->$mapc;

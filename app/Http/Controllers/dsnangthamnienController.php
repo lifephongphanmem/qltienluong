@@ -53,18 +53,18 @@ class dsnangthamnienController extends Controller
             $inputs['trangthai'] = 'Tạo danh sách';
             dsnangthamnien::create($inputs);
             foreach ($m_canbo as $cb) {
-                $cb->manl=$manl;
+                $cb->manl = $manl;
                 $cb->vuotkhung = $cb->heso * $cb->vuotkhung / 100;
-                $cb->pctnn++;
+                $cb->pctnn = $cb->pctnn == 0 ? 5 : $cb->pctnn + 1;
                 $cb->ngaytu = new Carbon($cb->tnndenngay);
                 $date = new Carbon($cb->tnndenngay);
                 $cb->ngayden = $date->addYear('1');
                 $cb->heso = ($cb->vuotkhung + $cb->heso + $cb->pccv) / 100;
                 //kiểm tra truy lĩnh nếu ngày xét = ngày nâng lương = > ko truy lĩnh
-                if($inputs['ngayxet']>$cb->tnndenngay) {
+                if ($inputs['ngayxet'] > $cb->tnndenngay) {
                     $cb->truylinhtungay = new Carbon($cb->tnndenngay);
                     $cb->truylinhdenngay = new Carbon($inputs['ngayxet']);
-                }else{
+                } else {
                     $cb->truylinhtungay = null;
                     $cb->truylinhdenngay = null;
                 }
@@ -116,21 +116,22 @@ class dsnangthamnienController extends Controller
             return view('errors.notlogin');
     }
 
-    function detail(Request $request){
+    function detail(Request $request)
+    {
         if (Session::has('admin')) {
             $inputs = $request->all();
-            $model = dsnangthamnien_ct::where('manl',$inputs['maso'])->where('macanbo',$inputs['canbo'])->first();
+            $model = dsnangthamnien_ct::where('manl', $inputs['maso'])->where('macanbo', $inputs['canbo'])->first();
             //dd($model);
-            $model_canbo=hosocanbo::select('macanbo', 'macvcq','tencanbo')->where('macanbo',$model->macanbo)->first();
-            if(count($model_canbo)>0){
+            $model_canbo = hosocanbo::select('macanbo', 'macvcq', 'tencanbo')->where('macanbo', $model->macanbo)->first();
+            if (count($model_canbo) > 0) {
                 $model->tencanbo = $model_canbo->tencanbo;
             }
-            $model_nangluong = dsnangthamnien::where('manl',$inputs['maso'])->first();
+            $model_nangluong = dsnangthamnien::where('manl', $inputs['maso'])->first();
             return view('manage.thamnien.detail')
-                ->with('furl','/chuc_nang/tham_nien/')
-                ->with('model',$model)
-                ->with('model_nangluong',$model_nangluong)
-                ->with('pageTitle','Chi tiết danh sách nâng thâm niên nghề');
+                ->with('furl', '/chuc_nang/tham_nien/')
+                ->with('model', $model)
+                ->with('model_nangluong', $model_nangluong)
+                ->with('pageTitle', 'Chi tiết danh sách nâng thâm niên nghề');
         } else
             return view('errors.notlogin');
     }
