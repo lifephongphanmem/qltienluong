@@ -132,7 +132,6 @@ class hosodieudongController extends Controller
             }else{
                 // kiểm tra mã đơn vị mới : //DONVIKHAC: nếu đơn vị ngoài hệ thống => cập nhật vào thông tin cán bộ
                 //DONVI: trong hệ thống => trạng thái chuyển về chờ nhận
-
                 //dd($model);
                 hosodieudong::where('maso',$insert['maso'])->first()->update($insert);
             }
