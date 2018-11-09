@@ -951,7 +951,11 @@ class tonghopluong_donviController extends Controller
                         $thanhtien +=  $chitiet->$ct;
                     }
                 }
-                $chitiet->tongtl = $chitiet->tonghs * $chitiet->luongcoban + $thanhtien;
+                if($chitiet->ttl == 0){
+                    $chitiet->tongtl = $chitiet->tonghs * $chitiet->luongcoban + $thanhtien;
+                }else{
+                    $chitiet->tongtl = $chitiet->ttl;
+                }
             }
             //dd($model);
 
