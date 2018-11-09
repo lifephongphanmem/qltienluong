@@ -76,8 +76,8 @@ class dmphongbanController extends Controller
         $model = new dmphongban();
         $model->mapb = session('admin')->madv .'_'.getdate()[0];
         $model->tenpb = $inputs['tenpb'];
-        $model->diengiai = $inputs['diengiai'];
-        $model->sapxep = $inputs['sapxep'];
+        //$model->diengiai = $inputs['diengiai'];
+        //$model->sapxep = $inputs['sapxep'];
         $model->madv = session('admin')->madv;
         $model->save();
 
@@ -113,8 +113,8 @@ class dmphongbanController extends Controller
         $inputs = $request->all();
         $model = dmphongban::where('mapb',$inputs['mapb'])->first();
         $model->tenpb = $inputs['tenpb'];
-        $model->diengiai = $inputs['diengiai'];
-        $model->sapxep = $inputs['sapxep'];
+        //$model->diengiai = $inputs['diengiai'];
+        //$model->sapxep = $inputs['sapxep'];
         $model->save();
 
         $result['message'] = "Cập nhật thành công.";

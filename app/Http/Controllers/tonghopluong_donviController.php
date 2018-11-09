@@ -951,7 +951,7 @@ class tonghopluong_donviController extends Controller
                         $thanhtien +=  $chitiet->$ct;
                     }
                 }
-                if($chitiet->ttl == 0){
+                if($chitiet->ttl == 0){//trường hop dinh mức ko nhân dc với hệ số
                     $chitiet->tongtl = $chitiet->tonghs * $chitiet->luongcoban + $thanhtien;
                 }else{
                     $chitiet->tongtl = $chitiet->ttl;
