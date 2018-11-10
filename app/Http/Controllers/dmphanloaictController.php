@@ -104,12 +104,14 @@ class dmphanloaictController extends Controller
 
     public function detail($macongtac){
         if (Session::has('admin')) {
-            $m_pb=dmphanloaict::where('macongtac',$macongtac)->get();
+            $m_pb = dmphanloaict::where('macongtac', $macongtac)->get();
+            $m_nhom = dmphanloaicongtac::where('macongtac', $macongtac)->first();
             return view('system.danhmuc.congtac.detail')
-                ->with('model',$m_pb)
-                ->with('macongtac',$macongtac)
-                ->with('furl','/danh_muc/cong_tac/')
-                ->with('pageTitle','Danh mục phân loại công tác');
+                ->with('model', $m_pb)
+                ->with('m_nhom', $m_nhom)
+                ->with('macongtac', $macongtac)
+                ->with('furl', '/danh_muc/cong_tac/')
+                ->with('pageTitle', 'Danh mục phân loại công tác');
         } else
             return view('errors.notlogin');
     }

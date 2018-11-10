@@ -777,7 +777,8 @@ class bangluongController extends Controller
             //nếu cán bộ nghỉ thai sản (không gộp vào phần tính phụ cấp do trên bảng lương hiển thị hệ số nhưng ko có tiền)
             //$cb->tonghs = $tonghs;
 
-            if($m_cb[$key]['macongtac'] == 'KHONGCT') {
+            //if($m_cb[$key]['macongtac'] == 'KHONGCT') {
+            if($m_cb[$key]['macongtac'] == 'KHONGCT' || $m_cb[$key]['macongtac'] == 'KHAC') { //cán bộ quân sự, đại biểu hội đồng nd đóng theo mức lương co ban
                 $baohiem = $inputs['luongcoban'];
                 $m_cb[$key]['stbhxh'] = round($baohiem * $m_cb[$key]['bhxh'], 0);
                 $m_cb[$key]['stbhyt'] = round($baohiem * $m_cb[$key]['bhyt'], 0);
@@ -1800,17 +1801,20 @@ class bangluongController extends Controller
             $model->$mapc_st = $inputs['sotien'];
             $model->$mapc = $inputs['heso'];
             //Tính lại bao hiểm
-            $baohiem = $model->st_heso + $model->st_vuotkhung + $model->st_pccv + $model->st_pctnn;
-            $model->stbhxh = round($model->bhxh * $baohiem, 0);
-            $model->stbhyt = round($model->bhyt * $baohiem, 0);
-            $model->stkpcd = round($model->kpcd * $baohiem, 0);
-            $model->stbhtn = round($model->bhtn * $baohiem, 0);
-            $model->ttbh = $model->stbhxh + $model->stbhyt + $model->stkpcd + $model->stbhtn;
-            $model->stbhxh_dv = round($model->bhxh_dv * $baohiem, 0);
-            $model->stbhyt_dv = round($model->bhyt_dv * $baohiem, 0);
-            $model->stkpcd_dv = round($model->kpcd_dv * $baohiem, 0);
-            $model->stbhtn_dv = round($model->bhtn_dv * $baohiem, 0);
-            $model->ttbh_dv = $model->stbhxh_dv + $model->stbhyt_dv + $model->stkpcd_dv + $model->stbhtn_dv;
+            if($model->congtac != 'THAISAN' && $model->congtac != 'DAINGAY' && $model->congtac != 'KHONGLUONG' ){
+                $baohiem = $model->st_heso + $model->st_vuotkhung + $model->st_pccv + $model->st_pctnn;
+                $model->stbhxh = round($model->bhxh * $baohiem, 0);
+                $model->stbhyt = round($model->bhyt * $baohiem, 0);
+                $model->stkpcd = round($model->kpcd * $baohiem, 0);
+                $model->stbhtn = round($model->bhtn * $baohiem, 0);
+                $model->ttbh = $model->stbhxh + $model->stbhyt + $model->stkpcd + $model->stbhtn;
+                $model->stbhxh_dv = round($model->bhxh_dv * $baohiem, 0);
+                $model->stbhyt_dv = round($model->bhyt_dv * $baohiem, 0);
+                $model->stkpcd_dv = round($model->kpcd_dv * $baohiem, 0);
+                $model->stbhtn_dv = round($model->bhtn_dv * $baohiem, 0);
+                $model->ttbh_dv = $model->stbhxh_dv + $model->stbhyt_dv + $model->stkpcd_dv + $model->stbhtn_dv;
+            }
+
             $model->tonghs += $heso_cl;
             $model->ttl += $sotien_cl;
             $model->luongtn = $model->ttl -  $model->ttbh - $model->giaml - $model->thuetn + $model->bhct;

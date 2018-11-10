@@ -24,6 +24,7 @@ class CreateNhomngachluongTable extends Migration
             $table->double('heso')->default(0);
             $table->double('vuotkhung')->default(0);
             $table->double('hesochenhlech')->default(0);
+            $table->double('hesolonnhat')->default(0);
             $table->text('ghichu')->nullable();
             $table->timestamps();
         });

@@ -44,7 +44,6 @@
                             <tr>
                                 <th class="text-center" style="width: 10%">STT</th>
                                 <th class="text-center">Phân loại công tác</th>
-                                <th class="text-center">Ghi chú</th>
                                 <th class="text-center">Thao tác</th>
                             </tr>
                         </thead>
@@ -54,7 +53,6 @@
                                     <tr>
                                         <td class="text-center">{{$key+1}}</td>
                                         <td>{{$value->tenct}}</td>
-                                        <td>{{$value->ghichu}}</td>
                                         <td>
                                             @if(session('admin')->level == 'SA' || session('admin')->level == 'SSA')
                                                 <button type="button" onclick="editCV('{{$value->mact}}')" class="btn btn-default btn-xs">
@@ -83,12 +81,104 @@
                     <h4 id="modal-header-primary-label" class="modal-title">Thông tin phân loại công tác</h4>
                 </div>
                 <div class="modal-body">
-                    <label class="form-control-label">Phân loại công tác<span class="require">*</span></label>
-                    {!!Form::text('tenct', null, array('id' => 'tenct','class' => 'form-control','required'=>'required','autofocus'=>'true'))!!}
+                    <div class="row">
+                        <div class="col-md-12" style="margin-bottom: 5px;">
+                            <label class="form-control-label">Phân loại công tác<span class="require">*</span></label>
+                            {!!Form::text('tenct', null, array('id' => 'tenct','class' => 'form-control','required'=>'required','autofocus'=>'true'))!!}
+                        </div>
 
-                    <label class="form-control-label">Ghi chú</label>
-                    {!!Form::textarea('ghichu', null, array('id' => 'ghichu','class' => 'form-control','rows'=>'3'))!!}
+                        <div class="col-md-12">
+                            <!-- BEGIN PORTLET-->
+                            <div class="portlet box blue" style="margin-bottom: 5px;">
+                                <div class="portlet-title">
+                                    <div class="caption">
+                                        Phần trăm bảo hiểm cá nhân nộp
+                                    </div>
+                                </div>
 
+                                <div class="portlet-body" style="display: block;">
+                                    <div class="row">
+                                        <div class="col-md-3">
+                                            <div class="form-group">
+                                                <label class="control-label">BH xã hội </label>
+                                                {!!Form::text('bhxh', $m_nhom->bhxh, array('id' => 'bhxh','class' => 'form-control', 'data-mask'=>'fdecimal'))!!}
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-3">
+                                            <div class="form-group">
+                                                <label class="control-label">BH y tế </label>
+                                                {!!Form::text('bhyt', $m_nhom->bhyt, array('id' => 'bhyt','class' => 'form-control', 'data-mask'=>'fdecimal'))!!}
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-3">
+                                            <div class="form-group">
+                                                <label class="control-label">BH thất nghiệp </label>
+                                                {!!Form::text('bhtn', $m_nhom->bhtn, array('id' => 'bhtn','class' => 'form-control', 'data-mask'=>'fdecimal'))!!}
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-3">
+                                            <div class="form-group">
+                                                <label class="control-label">KP công đoàn </label>
+                                                {!!Form::text('kpcd', $m_nhom->kpcd, array('id' => 'kpcd','class' => 'form-control', 'data-mask'=>'fdecimal'))!!}
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                            <!-- END PORTLET-->
+                        </div>
+
+                        <div class="col-md-12">
+                            <!-- BEGIN PORTLET-->
+                            <div class="portlet box blue" style="margin-bottom: 5px;">
+                                <div class="portlet-title">
+                                    <div class="caption">
+                                        Phần trăm bảo hiểm đơn vị nộp
+                                    </div>
+                                </div>
+
+                                <div class="portlet-body" style="display: block;">
+                                    <div class="row">
+                                        <div class="col-md-3">
+                                            <div class="form-group">
+                                                <label class="control-label">BH xã hội </label>
+                                                {!!Form::text('bhxh_dv', $m_nhom->bhxh_dv, array('id' => 'bhxh_dv','class' => 'form-control', 'data-mask'=>'fdecimal'))!!}
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-3">
+                                            <div class="form-group">
+                                                <label class="control-label">BH y tế </label>
+                                                {!!Form::text('bhyt_dv', $m_nhom->bhyt_dv, array('id' => 'bhyt_dv','class' => 'form-control', 'data-mask'=>'fdecimal'))!!}
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-3">
+                                            <div class="form-group">
+                                                <label class="control-label">BH thất nghiệp </label>
+                                                {!!Form::text('bhtn_dv', $m_nhom->bhtn_dv, array('id' => 'bhtn_dv','class' => 'form-control', 'data-mask'=>'fdecimal'))!!}
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-3">
+                                            <div class="form-group">
+                                                <label class="control-label">KP công đoàn </label>
+                                                {!!Form::text('kpcd_dv', $m_nhom->kpcd_dv, array('id' => 'kpcd_dv','class' => 'form-control', 'data-mask'=>'fdecimal'))!!}
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                            <!-- END PORTLET-->
+                        </div>
+
+
+                    </div>
                     <input type="hidden" id="id" name="id"/>
                     <input type="hidden" id="mact" name="mact"/>
                     <input type="hidden" id="macongtac" name="macongtac" value="{{$macongtac}}"/>
@@ -123,8 +213,15 @@
                 success: function (data) {
                     $('#mact').val(data.mact);
                     $('#tenct').val(data.tenct);
-                    $('#ghichu').val(data.ghichu);
                     $('#id').val(data.id);
+                    $('#bhxh').val(data.bhxh);
+                    $('#bhyt').val(data.bhyt);
+                    $('#kpcd').val(data.kpcd);
+                    $('#bhtn').val(data.bhtn);
+                    $('#bhxh_dv').val(data.bhxh_dv);
+                    $('#bhyt_dv').val(data.bhyt_dv);
+                    $('#kpcd_dv').val(data.kpcd_dv);
+                    $('#bhtn_dv').val(data.bhtn_dv);
                 },
                 error: function(message){
                     toastr.error(message,'Lỗi!');
@@ -141,7 +238,6 @@
             var mact = $('#mact').val();
             var tenct = $('#tenct').val();
             var macongtac = $('#macongtac').val();
-            var ghichu=$('#ghichu').val();
 
             if(tenct==''){
                 valid=false;
@@ -159,7 +255,14 @@
                             mact: mact,
                             macongtac: macongtac,
                             tenct: tenct,
-                            ghichu: ghichu
+                            bhxh:$('#bhxh').val(),
+                            bhyt:$('#bhyt').val(),
+                            kpcd:$('#kpcd').val(),
+                            bhtn:$('#bhtn').val(),
+                            bhxh_dv:$('#bhxh_dv').val(),
+                            bhyt_dv:$('#bhyt_dv').val(),
+                            kpcd_dv:$('#kpcd_dv').val(),
+                            bhtn_dv:$('#bhtn_dv').val()
                         },
                         dataType: 'JSON',
                         success: function (data) {
@@ -179,7 +282,14 @@
                             _token: CSRF_TOKEN,
                             mact: mact,
                             tenct: tenct,
-                            ghichu: ghichu
+                            bhxh:$('#bhxh').val(),
+                            bhyt:$('#bhyt').val(),
+                            kpcd:$('#kpcd').val(),
+                            bhtn:$('#bhtn').val(),
+                            bhxh_dv:$('#bhxh_dv').val(),
+                            bhyt_dv:$('#bhyt_dv').val(),
+                            kpcd_dv:$('#kpcd_dv').val(),
+                            bhtn_dv:$('#bhtn_dv').val()
                         },
                         dataType: 'JSON',
                         success: function (data) {

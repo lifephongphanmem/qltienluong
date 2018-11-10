@@ -64,14 +64,17 @@ class dmngachluongController extends Controller
         die($model);
     }
 
-    public function detail($manhom){
+    public function detail($manhom)
+    {
         if (Session::has('admin')) {
-            $m_pb=ngachluong::where('manhom',$manhom)->get();
+            $m_pb = ngachluong::where('manhom', $manhom)->get();
+            $model_nhom = nhomngachluong::where('manhom', $manhom)->first();
             return view('system.danhmuc.ngachluong.detail')
-                ->with('model',$m_pb)
-                ->with('manhom',$manhom)
-                ->with('furl','/danh_muc/ngach_bac/')
-                ->with('pageTitle','Danh mục ngạch bậc lương');
+                ->with('model', $m_pb)
+                ->with('model_nhom', $model_nhom)
+                ->with('manhom', $manhom)
+                ->with('furl', '/danh_muc/ngach_bac/')
+                ->with('pageTitle', 'Danh mục ngạch bậc lương');
         } else
             return view('errors.notlogin');
     }
@@ -80,6 +83,8 @@ class dmngachluongController extends Controller
     function store_detail(Request $request)
     {
         $inputs = $request->all();
+        //$model_nhom = nhomngachluong::where('manhom',$inputs['manhom'])->first();
+
         $model = ngachluong::where('msngbac',$inputs['msngbac'])->first();
         if(count($model)>0){
             //update

@@ -97,6 +97,36 @@
                             <label class="form-control-label">Tên ngạch bậc</label>
                             {!!Form::text('tenngachluong', null, array('id' => 'tenngachluong','class' => 'form-control'))!!}
                         </div>
+
+                        <div class="col-md-6">
+                            <label class="form-control-label">Hệ số lương</label>
+                            {!!Form::text('heso', $model_nhom->heso, array('id' => 'heso','class' => 'form-control','data-mask'=>'fdecimal'))!!}
+                        </div>
+
+                        <div class="col-md-6">
+                            <label class="form-control-label">Hệ số lương lớn nhất</label>
+                            {!!Form::text('hesolonnhat', $model_nhom->hesolonnhat, array('id' => 'hesolonnhat','class' => 'form-control','data-mask'=>'fdecimal'))!!}
+                        </div>
+
+                        <div class="col-md-6">
+                            <label class="form-control-label">Phần trăm vượt khung</label>
+                            {!!Form::text('vuotkhung', $model_nhom->vuotkhung, array('id' => 'vuotkhung','class' => 'form-control','data-mask'=>'fdecimal'))!!}
+                        </div>
+
+                        <div class="col-md-6">
+                            <label class="form-control-label">Bậc lương cao nhất</label>
+                            {!!Form::text('baclonnhat', $model_nhom->baclonnhat, array('id' => 'baclonnhat','class' => 'form-control','data-mask'=>'fdecimal'))!!}
+                        </div>
+
+                        <div class="col-md-6">
+                            <label class="form-control-label">Hệ số chênh lệnh</label>
+                            {!!Form::text('hesochenhlech', $model_nhom->hesochenhlech, array('id' => 'hesochenhlech','class' => 'form-control','data-mask'=>'fdecimal'))!!}
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-control-label">Năm nâng lương</label>
+                            {!!Form::text('namnb', $model_nhom->namnb, array('id' => 'namnb','class' => 'form-control','data-mask'=>'fdecimal'))!!}
+                        </div>
+
                     </div>
                     <input type="hidden" id="id_del" name="id_del"/>
                     <input type="hidden" id="manhom" name="manhom" value="{{$manhom}}"/>
@@ -132,6 +162,12 @@
                 success: function (data) {
                     $('#msngbac').val(data.msngbac);
                     $('#tenngachluong').val(data.tenngachluong);
+                    $('#heso').val(data.heso);
+                    $('#vuotkhung').val(data.vuotkhung);
+                    $('#baclonnhat').val(data.baclonnhat);
+                    $('#hesolonnhat').val(data.hesolonnhat);
+                    $('#hesochenhlech').val(data.hesochenhlech);
+                    $('#namnb').val(data.namnb);
                 },
                 error: function(message){
                     toastr.error(message,'Lỗi!');
