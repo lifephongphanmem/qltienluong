@@ -237,7 +237,7 @@ class xemdulieucapduoiController extends Controller
             if(session('admin')->phamvitonghop == 'KHOI')
             {
                 $model_donvi = tonghopluong_donvi::join('dmdonvi','tonghopluong_donvi.madv','dmdonvi.madv')
-                    ->select('dmdonvi.madv', 'dmdonvi.tendv')
+                    ->select('dmdonvi.madv', 'dmdonvi.tendv','phanloaitaikhoan')
                     ->wherein('tonghopluong_donvi.madv', function($query) use($madv){
                         $query->select('madv')->from('dmdonvi')->where('macqcq',$madv)->where('madv','<>',$madv)->get();
                     })->distinct()->get();
@@ -257,7 +257,7 @@ class xemdulieucapduoiController extends Controller
             if(session('admin')->phamvitonghop == 'HUYEN')
             {
                 $model_donvi = tonghopluong_huyen::join('dmdonvi','tonghopluong_huyen.madv','dmdonvi.madv')
-                    ->select('dmdonvi.madv', 'dmdonvi.tendv')
+                    ->select('dmdonvi.madv', 'dmdonvi.tendv','phanloaitaikhoan')
                     ->wherein('tonghopluong_huyen.madv', function($query) use($madv){
                         $query->select('madv')->from('dmdonvi')->where('macqcq',$madv)->where('madv','<>',$madv)->get();
                     })->distinct()->get();
@@ -287,10 +287,14 @@ class xemdulieucapduoiController extends Controller
                     $dv->mathdv = $nguon->mathdv;
                     $dv->mathh = $nguon->mathdv;
                     $dv->trangthai = 'DAGUI';
+                    $dv->thang = $nguon->thang;
+                    $dv->nam = $nguon->nam;
                 }elseif(session('admin')->phamvitonghop == 'KHOI') {
                     if ((count($nguon) > 0 && $nguon->trangthai == 'DAGUI') || (count($nguonkhoi) > 0 && $nguonkhoi->trangthai == 'DAGUI')) {
                         $dv->mathdv = $nguon->mathdv;
                         $dv->trangthai = 'DAGUI';
+                        $dv->thang = $nguonkhoi->thang;
+                        $dv->nam = $nguonkhoi->nam;
 
                     }
                 }

@@ -30,6 +30,12 @@ class HomeController extends Controller
                     ->where('theodoi','<' ,'9')
                     ->where('madv', session('admin')->madv)
                     ->get();
+                if(session('admin')->phanloaitaikhoan =='TH')
+                    $model = hosocanbo::join('dmdonvi','hosocanbo.madv','dmdonvi.madv')
+                ->select('macanbo', 'tencanbo', 'msngbac', 'sunghiep', 'gioitinh', 'tnndenngay', 'ngaytu', 'ngayden','ngaysinh','mact')
+                        ->where('theodoi','<' ,'9')
+                        ->where('dmdonvi.macqcq', session('admin')->madv)
+                        ->get();
                 $a_ketqua = array();
                 $a_ketqua['congchuc'] = $model->where('sunghiep', 'Công chức')->count();
                 $a_ketqua['vienchuc'] = $model->where('sunghiep', 'Viên chức')->count();

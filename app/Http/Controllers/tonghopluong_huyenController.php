@@ -156,7 +156,22 @@ class tonghopluong_huyenController extends Controller
                 array('thang' => '11', 'mathdv' => null, 'noidung' => null, 'sldv' => $sldv, 'dvgui' => 0),
                 array('thang' => '12', 'mathdv' => null, 'noidung' => null, 'sldv' => $sldv, 'dvgui' => 0)
             );
-
+            if(session('admin')->phamvitonghop == 'HUYEN')
+                $model_nguon = tonghopluong_huyen::wherein('madv', function($query) use($madv){
+                    $query->select('madv')->from('dmdonvi')->where('macqcq',$madv)->where('madv','<>',$madv)->get();
+                })->where('trangthai', 'DAGUI')
+                    ->get();
+            if(session('admin')->phamvitonghop == 'KHOI')
+            {
+                $model_nguon = tonghopluong_donvi::wherein('madv', function($query) use($madv){
+                    $query->select('madv')->from('dmdonvi')->where('macqcq',$madv)->where('madv','<>',$madv)->get();
+                })->where('trangthai', 'DAGUI')
+                    ->get();
+                $model_nguonkhoi = tonghopluong_khoi::wherein('madv', function($query) use($madv){
+                    $query->select('madv')->from('dmdonvi')->where('macqcq',$madv)->where('madv','<>',$madv)->get();
+                }) ->where('trangthai', 'DAGUI')
+                    ->get();
+            }
             //Lấy danh sách các dữ liệu đã tổng hợp theo huyện
             $model_tonghop = tonghopluong_tinh::where('madvbc', $madvbc)->get();
             //Danh sách các đơn vị đã gửi dữ liệu
@@ -170,14 +185,23 @@ class tonghopluong_huyenController extends Controller
             for ($i = 0; $i < count($a_data); $i++) {
                 //$a_data[$i]['maphanloai'] = session('admin')->maphanloai;
                 $tonghop = $model_tonghop->where('thang', $a_data[$i]['thang'])->where('nam', $inputs['nam'])->first();
-                $dulieu = $model_dulieu->where('thang', $a_data[$i]['thang'])->where('nam', $inputs['nam']);
+                if(session('admin')->phamvitonghop == 'HUYEN')
+                    $dulieu = $model_nguon->where('thang', $a_data[$i]['thang'])->where('nam', $inputs['nam']);
+                if(session('admin')->phamvitonghop == 'KHOI'){
+                    $dulieu = $model_nguon->where('thang', $a_data[$i]['thang'])->where('nam', $inputs['nam']);
+                    $dulieukhoi = $model_nguonkhoi->where('thang', $a_data[$i]['thang'])->where('nam', $inputs['nam']);
+                }
                 //dd($dulieu);
                 //Kiểm tra xem đơn vị đã tổng hợp dữ liệu khối chưa
                 if (count($tonghop) > 0) {//lấy dữ liệu đã tổng hợp đưa ra kết quản
                     $a_data[$i]['noidung'] = $tonghop->noidung;
                     $a_data[$i]['mathdv'] = $tonghop->mathdv;
                     $a_data[$i]['trangthai'] = $tonghop->trangthai;
-                    $a_data[$i]['dvgui'] = count($dulieu);
+                    if(session('admin')->phamvitonghop == 'HUYEN')
+                        $a_data[$i]['dvgui'] = count($dulieu);
+                    if(session('admin')->phamvitonghop == 'KHOI'){
+                        $a_data[$i]['dvgui'] = count($dulieu) + count($dulieukhoi);
+                    }
                 } else {//chưa tổng hợp dữ liệu
                     $a_data[$i]['noidung'] = 'Dữ liệu tổng hợp trên địa bàn ' . $tendb . ' tháng ' . $a_data[$i]['thang'] . ' năm ' . $inputs['nam'];
                     $a_data[$i]['mathdv'] = null;
@@ -441,7 +465,7 @@ class tonghopluong_huyenController extends Controller
             $nam = $inputs['nam'];
             $madv = session('admin')->madv;
             $madvbc = session('admin')->madvbc;
-            $model_donvi = dmdonvi::where('madvbc',$madvbc)->get();
+            $model_donvi = dmdonvi::where('madvbc',$madvbc)->where('phanloaitaikhoan','SD')->get();
             $model_phanloai = dmphanloaidonvi::wherein('maphanloai',array_column($model_donvi->toarray(),'maphanloai'))->get();
             $m_pc = array_column(dmphucap::all()->toarray(),'report','mapc');
             $a_phucap = array();

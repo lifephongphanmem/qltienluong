@@ -66,13 +66,36 @@ class tonghopluong_khoiController extends Controller
             */
             $model_donvi = tonghopluong_donvi::where('macqcq', $madv)
                 ->where('trangthai', 'DAGUI')->get();
-
+            if(session('admin')->phamvitonghop == 'KHOI')
+            {
+                $model_donvi = tonghopluong_donvi::wherein('madv', function($query) use($madv){
+                    $query->select('madv')->from('dmdonvi')->where('macqcq',$madv)->where('madv','<>',$madv)->get();
+                })->where('trangthai', 'DAGUI')
+                    ->get();
+                /*
+                $model_donvikhoi = tonghopluong_khoi::wherein('madv', function($query) use($madv){
+                    $query->select('madv')->from('dmdonvi')->where('macqcq',$madv)->where('madv','<>',$madv)->get();
+                })->where('trangthai', 'DAGUI')
+                    ->get();
+                */
+            }
             //Lấy danh sách các dữ liệu đã tổng hợp theo khối
             $model_khoi = tonghopluong_khoi::where('madv', $madv)->get();
             for ($i = 0; $i < count($a_data); $i++) {
                 $a_data[$i]['maphanloai'] = session('admin')->maphanloai;
                 $tonghop = $model_khoi->where('thang', $a_data[$i]['thang'])->where('nam', $inputs['nam'])->first();
-                $dulieu = $model_donvi->where('thang', $a_data[$i]['thang'])->where('nam', $inputs['nam']);
+                $thang = $a_data[$i]['thang'];
+                $nam = $inputs['nam'];
+                if(session('admin')->phamvitonghop == 'KHOI'){
+                    $dulieu =  tonghopluong_donvi::wherein('madv', function($query) use($madv,$thang,$nam){
+                        $query->select('madv')->from('tonghopluong_donvi')->where('macqcq',$madv)->where('madv','<>',$madv)
+                            ->where('thang', $thang)->where('nam', $nam)->where('trangthai','DAGUI')->get();
+                    })->where('trangthai', 'DAGUI')
+                        ->where('thang', $a_data[$i]['thang'])->where('nam', $inputs['nam'])
+                        ->get();
+                    //$dulieu = $model_donvi->where('thang', $a_data[$i]['thang'])->where('nam', $inputs['nam']);
+                    //$dulieukhoi = $model_donvikhoi->where('thang', $a_data[$i]['thang'])->where('nam', $inputs['nam']);
+                }
 
                 //Kiểm tra xem đơn vị đã tổng hợp dữ liệu khối chưa
                 if (count($tonghop) > 0) {//lấy dữ liệu đã tổng hợp đưa ra kết quả
@@ -80,7 +103,10 @@ class tonghopluong_khoiController extends Controller
                     $a_data[$i]['mathdv'] = $tonghop->mathdv;
                     $a_data[$i]['trangthai'] = $tonghop->trangthai;
                     $a_data[$i]['dvgui'] = $sldvcapduoi;
+                    if(session('admin')->phamvitonghop == 'KHOI')
+                        $a_data[$i]['dvgui'] = count($dulieu) ;
                     $a_data[$i]['ngaylap'] = $tonghop->ngaylap;
+
                 } else {//chưa tổng hợp dữ liệu
                     $a_data[$i]['noidung'] = 'Đơn vị ' . $tendv . ' tổng hợp dữ liệu từ các đơn vị cấp dưới thời điểm ' . $a_data[$i]['thang'] . '/' . $inputs['nam'];
                     $a_data[$i]['ngaylap'] = null;
@@ -135,9 +161,14 @@ class tonghopluong_khoiController extends Controller
             $model = tonghopluong_donvi_chitiet::join('tonghopluong_donvi','tonghopluong_donvi_chitiet.mathdv','tonghopluong_donvi.mathdv')
             ->join('dmdonvi','dmdonvi.madv','tonghopluong_donvi.madv')
             ->select('dmdonvi.madv','maphanloai','mact','manguonkp','luongcoban','soluong','heso','hesobl','hesopc','hesott','vuotkhung','tonghopluong_donvi_chitiet.pcct'
-                , 'tonghopluong_donvi_chitiet.pckct', 'tonghopluong_donvi_chitiet.pck', 'tonghopluong_donvi_chitiet.pccv', 'tonghopluong_donvi_chitiet.pckv', 'tonghopluong_donvi_chitiet.pcth', 'tonghopluong_donvi_chitiet.pcdd', 'tonghopluong_donvi_chitiet.pcdh', 'tonghopluong_donvi_chitiet.pcld', 'tonghopluong_donvi_chitiet.pcdbqh', 'tonghopluong_donvi_chitiet.pcudn', 'tonghopluong_donvi_chitiet.pctn',
-                'tonghopluong_donvi_chitiet.pctnn', 'tonghopluong_donvi_chitiet.pcdbn', 'tonghopluong_donvi_chitiet.pcvk', 'tonghopluong_donvi_chitiet.pckn', 'tonghopluong_donvi_chitiet.pcdang', 'tonghopluong_donvi_chitiet.pccovu', 'tonghopluong_donvi_chitiet.pclt', 'tonghopluong_donvi_chitiet.pcd', 'tonghopluong_donvi_chitiet.pctr', 'tonghopluong_donvi_chitiet.pctdt', 'tonghopluong_donvi_chitiet.pctnvk',
-                'tonghopluong_donvi_chitiet.pcbdhdcu', 'tonghopluong_donvi_chitiet.pcthni', 'tonghopluong_donvi_chitiet.tonghs', 'tonghopluong_donvi_chitiet.giaml', 'tonghopluong_donvi_chitiet.luongtn', 'tonghopluong_donvi_chitiet.stbhxh_dv', 'tonghopluong_donvi_chitiet.stbhyt_dv', 'tonghopluong_donvi_chitiet.stkpcd_dv',
+                , 'tonghopluong_donvi_chitiet.pckct', 'tonghopluong_donvi_chitiet.pck', 'tonghopluong_donvi_chitiet.pccv', 'tonghopluong_donvi_chitiet.pckv',
+                'tonghopluong_donvi_chitiet.pcth', 'tonghopluong_donvi_chitiet.pcdd', 'tonghopluong_donvi_chitiet.pcdh', 'tonghopluong_donvi_chitiet.pcld',
+                'tonghopluong_donvi_chitiet.pcdbqh', 'tonghopluong_donvi_chitiet.pcudn', 'tonghopluong_donvi_chitiet.pctn',
+                'tonghopluong_donvi_chitiet.pctnn', 'tonghopluong_donvi_chitiet.pcdbn', 'tonghopluong_donvi_chitiet.pcvk', 'tonghopluong_donvi_chitiet.pckn',
+                'tonghopluong_donvi_chitiet.pcdang', 'tonghopluong_donvi_chitiet.pccovu', 'tonghopluong_donvi_chitiet.pclt', 'tonghopluong_donvi_chitiet.pcd',
+                'tonghopluong_donvi_chitiet.pctr', 'tonghopluong_donvi_chitiet.pctdt', 'tonghopluong_donvi_chitiet.pctnvk',
+                'tonghopluong_donvi_chitiet.pcbdhdcu', 'tonghopluong_donvi_chitiet.pcthni', 'tonghopluong_donvi_chitiet.tonghs', 'tonghopluong_donvi_chitiet.giaml',
+                'tonghopluong_donvi_chitiet.luongtn', 'tonghopluong_donvi_chitiet.stbhxh_dv', 'tonghopluong_donvi_chitiet.stbhyt_dv', 'tonghopluong_donvi_chitiet.stkpcd_dv',
                 'tonghopluong_donvi_chitiet.stbhtn_dv', 'tonghopluong_donvi_chitiet.ttbh_dv')
             ->wherein('tonghopluong_donvi_chitiet.mathdv', array_column($model_tonghop->toarray(),'mathdv'))
                 ->groupby('mact','maphanloai','dmdonvi.madv','luongcoban','manguonkp')
@@ -145,7 +176,7 @@ class tonghopluong_khoiController extends Controller
             $m_pl = tonghopluong_donvi_chitiet::join('tonghopluong_donvi','tonghopluong_donvi_chitiet.mathdv','tonghopluong_donvi.mathdv')
                 ->join('dmdonvi','dmdonvi.madv','tonghopluong_donvi.madv')
                 ->join('dmphanloaict','dmphanloaict.mact','tonghopluong_donvi_chitiet.mact')
-                ->select('maphanloai','tenct','dmphanloaict.mact')
+                ->select('maphanloai','tenct','dmphanloaict.mact','manguonkp')
                 ->wherein('tonghopluong_donvi_chitiet.mathdv', array_column($model_tonghop->toarray(),'mathdv'))
                 ->orderby('maphanloai')
                 ->distinct()
@@ -153,6 +184,9 @@ class tonghopluong_khoiController extends Controller
             $model_nguonkp = array_column(dmnguonkinhphi::all()->toArray(), 'tennguonkp', 'manguonkp');
             $model_phanloaict = array_column(dmphanloaicongtac::all()->toArray(), 'tencongtac', 'macongtac');
             $model_ct = array_column(dmphanloaict::all()->toArray(), 'tenct', 'mact');
+            foreach ($m_pl as $chitiet) {
+                $chitiet->tennguonkp = isset($model_nguonkp[$chitiet->manguonkp]) ? $model_nguonkp[$chitiet->manguonkp] : '';
+            }
             foreach ($model as $chitiet) {
                 //$chitiet->madv = $a_dv[$chitiet->mathdv];
                 //$chitiet->maphanloai = $a_plth[$chitiet->mathdv];
@@ -174,7 +208,7 @@ class tonghopluong_khoiController extends Controller
                     ->only(['mact', 'soluong', 'madv', 'maphanloai'])
                     ->all();
             });
-
+            //dd($model->toarray());
             $a_soluong = a_unique($model_data);
             //dd($a_soluong);
             //cho trương hợp đơn vị cấp trên in dữ liệu dv câp dưới mà ko sai tên đơn vị
