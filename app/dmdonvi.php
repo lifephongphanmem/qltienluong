@@ -32,6 +32,7 @@ class dmdonvi extends Model
         'phanloainguon',
         'linhvuchoatdong',
         'songaycong',
-        'ptdaingay'
+        'ptdaingay',
+        'lamtron'
     ];
 }

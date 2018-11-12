@@ -998,6 +998,7 @@ class hosocanboController extends Controller
             });
 
             $j = getDbl((hosocanbo::where('madv', session('admin')->madv)->get()->max('stt'))) + 1;
+            //dd($data);
             for($i=$inputs['tudong'];$i < ($inputs['tudong'] + $inputs['sodong']); $i++){
                 //dd($data[$i]);
                 if (!isset($data[$i][$inputs['tencanbo']]) || $data[$i][$inputs['tencanbo']] == '') {
@@ -1047,7 +1048,7 @@ class hosocanboController extends Controller
                 }
                 //khối tổ công tác
                 $mapb = '-' . chuanhoachuoi(trim($data[$i][$inputs['mapb']])) . '-';
-                foreach($a_phanloaict as $key=>$val){
+                foreach($a_pb as $key=>$val){
                     if($val == $mapb ) {
                         $model->mapb = $key;
                         break;

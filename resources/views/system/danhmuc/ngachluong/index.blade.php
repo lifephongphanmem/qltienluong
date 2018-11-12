@@ -110,6 +110,11 @@
                         </div>
 
                         <div class="col-md-6">
+                            <label class="form-control-label">Hệ số lương lớn nhất</label>
+                            {!!Form::text('hesolonnhat', 0, array('id' => 'hesolonnhat','class' => 'form-control','data-mask'=>'fdecimal'))!!}
+                        </div>
+
+                        <div class="col-md-6">
                             <label class="form-control-label">Phần trăm vượt khung</label>
                             {!!Form::text('vuotkhung', 0, array('id' => 'vuotkhung','class' => 'form-control','data-mask'=>'fdecimal'))!!}
                         </div>
@@ -118,10 +123,7 @@
                             <label class="form-control-label">Bậc lương cao nhất</label>
                             {!!Form::text('baclonnhat', 1, array('id' => 'baclonnhat','class' => 'form-control','data-mask'=>'fdecimal'))!!}
                         </div>
-                        <div class="col-md-6">
-                            <label class="form-control-label">Bậc hưởng vượt khung</label>
-                            {!!Form::text('bacvuotkhung', 0, array('id' => 'bacvuotkhung','class' => 'form-control','data-mask'=>'fdecimal'))!!}
-                        </div>
+
                         <div class="col-md-6">
                             <label class="form-control-label">Hệ số chênh lệnh</label>
                             {!!Form::text('hesochenhlech', 0, array('id' => 'hesochenhlech','class' => 'form-control','data-mask'=>'fdecimal'))!!}
@@ -178,7 +180,7 @@
                     $('#heso').val(data.heso);
                     $('#vuotkhung').val(data.vuotkhung);
                     $('#baclonnhat').val(data.baclonnhat);
-                    $('#bacvuotkhung').val(data.bacvuotkhung);
+                    $('#hesolonnhat').val(data.hesolonnhat);
                     $('#hesochenhlech').val(data.hesochenhlech);
                     $('#namnb').val(data.namnb);
                 },

@@ -16,6 +16,7 @@ class nhomngachluong extends Model
         'baclonnhat',
         'bacvuotkhung',
         'heso',
+        'hesolonnhat',
         'vuotkhung',
         'hesochenhlech',
         'ghichu'

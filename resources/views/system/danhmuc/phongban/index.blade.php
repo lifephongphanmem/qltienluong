@@ -44,8 +44,6 @@
                             <tr>
                                 <th class="text-center" style="width: 10%">STT</th>
                                 <th class="text-center">Tên khối/tổ công tác</th>
-                                <th class="text-center">Mô tả</th>
-                                <th class="text-center" >Sắp xếp</th>
                                 <th class="text-center">Thao tác</th>
                             </tr>
                         </thead>
@@ -55,8 +53,6 @@
                                     <tr>
                                         <td class="text-center">{{$key+1}}</td>
                                         <td name="tenpb">{{$value->tenpb}}</td>
-                                        <td name="diengiai">{{$value->diengiai}}</td>
-                                        <td class="text-center" name="sapxep">{{$value->sapxep}}</td>
                                         <td>
                                             <button type="button" onclick="editPB('{{$value->mapb}}')" class="btn btn-info btn-xs mbs">
                                                 <i class="fa fa-edit"></i>&nbsp; Chỉnh sửa</button>
@@ -97,8 +93,6 @@
         function addPB(){
             //var date=new Date();
             $('#tenpb').val('');
-            $('#diengiai').val('');
-            $('#sapxep').attr('value','99');
             $('#mapb').val('');
             $('#id_pb').val(0);
             $('#phongban-modal').modal('show');
@@ -116,8 +110,6 @@
                 dataType: 'JSON',
                 success: function (data) {
                     $('#tenpb').val(data.tenpb);
-                    $('#diengiai').val(data.diengiai);
-                    $('#sapxep').val(data.sapxep);
                     $('#mapb').val(mapb);
                 },
                 error: function(message){
@@ -131,11 +123,8 @@
         function cfPB(){
             var valid=true;
             var message='';
-
             var mapb=$('#mapb').val();
             var tenpb=$('#tenpb').val();
-            var diengiai=$('#diengiai').val();
-            var sapxep=$('#sapxep').val();
             var id=$('#id_pb').val();
 
             if(tenpb==''){
@@ -151,9 +140,7 @@
                         type: 'GET',
                         data: {
                             _token: CSRF_TOKEN,
-                            tenpb: tenpb,
-                            diengiai: diengiai,
-                            sapxep: sapxep
+                            tenpb: tenpb
                         },
                         dataType: 'JSON',
                         success: function (data) {
@@ -172,9 +159,7 @@
                         data: {
                             _token: CSRF_TOKEN,
                             mapb: mapb,
-                            tenpb: tenpb,
-                            diengiai: diengiai,
-                            sapxep: sapxep
+                            tenpb: tenpb
                         },
                         dataType: 'JSON',
                         success: function (data) {

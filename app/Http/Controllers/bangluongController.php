@@ -258,7 +258,7 @@ class bangluongController extends Controller
                                 if ($ct != '' && $ct != $phca)
                                     $heso += $cb->$ct;
                             }
-                            $cb->$phca = $heso * $cb->pctnn / 100;
+                            $cb->$phca = $heso * $cb->$phca / 100;
                             break;
                         }
                         default: {//trường hợp còn lại (ẩn,...)
@@ -777,7 +777,8 @@ class bangluongController extends Controller
             //nếu cán bộ nghỉ thai sản (không gộp vào phần tính phụ cấp do trên bảng lương hiển thị hệ số nhưng ko có tiền)
             //$cb->tonghs = $tonghs;
 
-            if($m_cb[$key]['macongtac'] == 'KHONGCT') {
+            //if($m_cb[$key]['macongtac'] == 'KHONGCT') {
+            if($m_cb[$key]['macongtac'] == 'KHONGCT' || $m_cb[$key]['macongtac'] == 'KHAC') { //cán bộ quân sự, đại biểu hội đồng nd đóng theo mức lương co ban
                 $baohiem = $inputs['luongcoban'];
                 $m_cb[$key]['stbhxh'] = round($baohiem * $m_cb[$key]['bhxh'], 0);
                 $m_cb[$key]['stbhyt'] = round($baohiem * $m_cb[$key]['bhyt'], 0);
@@ -903,6 +904,7 @@ class bangluongController extends Controller
             $m_cb[$key]['luongtn'] = $m_cb[$key]['ttl'] - $m_cb[$key]['ttbh'] - $m_cb[$key]['giaml'];
             $a_data_canbo[]= $m_cb[$key];
         }
+
         //Mảng chứa các cột bỏ để chạy hàm insert
         $a_col_pc = array('id','baohiem','mapc','luongcoban','tenpc');
         $a_data_phucap = unset_key($a_data_phucap,$a_col_pc);
@@ -939,7 +941,7 @@ class bangluongController extends Controller
             $m_cb_kn[$i]['stkpcd_dv'] = 0;
             $m_cb_kn[$i]['stbhtn_dv'] = 0;
             $m_cb_kn[$i]['ttbh_dv'] = 0;
-            $tonghs = $tien = 0;
+
 
             if(isset($a_pc['pcthni'])){
                 $pctn = $a_pc['pcthni'];
@@ -966,24 +968,28 @@ class bangluongController extends Controller
                     }
                 }
             }
-
+            $tonghs = $tien = 0;
             $canbo['pcthni'] = $m_cb_kn[$i]['pcthni']; //set vao hồ sơ cán bộ để tính công thức lương
             $canbo['pctn'] = $m_cb_kn[$i]['pctn'];
 
             foreach ($a_pc as $k=>$v) {
                 $mapc = $v['mapc'];
+                $m_cb_kn[$i]['st_'.$mapc] = 0;
                 if($m_cb_kn[$i][$mapc] <= 0){
                     continue;
                 }
-                $a_pc[$k]['heso_goc'] =$m_cb_kn[$i][$mapc];//lưu lại hệ số gốc
+                //$a_pc[$k]['heso_goc'] =$m_cb_kn[$i][$mapc];//lưu lại hệ số gốc
 
                 switch ($v['phanloai']) {
                     case 0: {//hệ số
                         $tonghs += $m_cb_kn[$i][$mapc];
+                        $m_cb_kn[$i]['st_'.$mapc] = round($m_cb_kn[$i][$mapc] * $inputs['luongcoban']);
+                        $tien += $m_cb_kn[$i]['st_'.$mapc];
                         break;
                     }
                     case 1: {//số tiền
                         $tien += chkDbl($m_cb_kn[$i][$mapc]);
+                        $m_cb_kn[$i]['st_'.$mapc] = chkDbl($m_cb_kn[$i][$mapc]);
                         break;
                     }
                     case 2: {//phần trăm
@@ -998,11 +1004,14 @@ class bangluongController extends Controller
                             $heso += $canbo['hesopc'];
                             $m_cb_kn[$i][$mapc] = $heso * $m_cb_kn[$i][$mapc] / 100;
                             $tonghs += $m_cb_kn[$i][$mapc];
+                            $m_cb_kn[$i]['st_'.$mapc] = round($m_cb_kn[$i][$mapc] * $inputs['luongcoban']);
+                            $tien += $m_cb_kn[$i]['st_'.$mapc];
                         }
                         break;
                     }
                     default: {//trường hợp còn lại (ẩn,...)
                         $m_cb_kn[$i][$mapc] = 0;
+                        $a_pc[$k]['sotien'] = 0;
                         break;
                     }
                 }
@@ -1013,12 +1022,14 @@ class bangluongController extends Controller
                 $a_pc[$k]['maso'] = $mapc;
                 $a_pc[$k]['ten'] = $a_pc[$k]['tenpc'];
                 $a_pc[$k]['heso'] = $m_cb[$key][$mapc];
-                $a_pc[$k]['sotien'] = round($inputs['luongcoban'] * $tonghs + $tien, 0);
+                //$m_cb_kn[$i]['st_'.$mapc] = $a_pc[$k]['sotien']; round($inputs['luongcoban'] * $tonghs
+                //$a_pc[$k]['sotien'] = round($inputs['luongcoban'] * $tonghs + $tien, 0);
+
                 $a_kn_phucap[] = $a_pc[$k];
             }
 
             $m_cb_kn[$i]['tonghs'] = $tonghs;
-            $m_cb_kn[$i]['ttl'] = round($inputs['luongcoban'] * $tonghs + $tien);
+            $m_cb_kn[$i]['ttl'] = $tien;
 
             if ($m_cb_kn[$i]['baohiem'] == 1) {
                 if (isset($a_phanloai[$m_cb_kn[$i]['mact']])) {//do trc nhập chưa lưu mact
@@ -1775,6 +1786,7 @@ class bangluongController extends Controller
     function update_chitiet(Request $request){
         if (Session::has('admin')) {
             $inputs=$request->all();
+
             $model = bangluong_ct::findorfail($inputs['id_hs']);
             $mapc = $inputs['mapc'];
             $mapc_st ='st_'. $inputs['mapc'];
@@ -1782,24 +1794,27 @@ class bangluongController extends Controller
             $inputs['heso'] = chkDbl($inputs['heso']);
             $inputs['luongcb'] = chkDbl($inputs['luongcb']);
             $inputs['sotien'] = chkDbl($inputs['sotien']);
-
+            //dd($inputs);
             //Tính lương mới
             $sotien_cl = $inputs['sotien'] - $model->$mapc_st;
             $heso_cl = $inputs['heso'] - $model->$mapc;
             $model->$mapc_st = $inputs['sotien'];
             $model->$mapc = $inputs['heso'];
             //Tính lại bao hiểm
-            $baohiem = $model->st_heso + $model->st_vuotkhung + $model->st_pccv + $model->st_pctnn;
-            $model->stbhxh = round($model->bhxh * $baohiem, 0);
-            $model->stbhyt = round($model->bhyt * $baohiem, 0);
-            $model->stkpcd = round($model->kpcd * $baohiem, 0);
-            $model->stbhtn = round($model->bhtn * $baohiem, 0);
-            $model->ttbh = $model->stbhxh + $model->stbhyt + $model->stkpcd + $model->stbhtn;
-            $model->stbhxh_dv = round($model->bhxh_dv * $baohiem, 0);
-            $model->stbhyt_dv = round($model->bhyt_dv * $baohiem, 0);
-            $model->stkpcd_dv = round($model->kpcd_dv * $baohiem, 0);
-            $model->stbhtn_dv = round($model->bhtn_dv * $baohiem, 0);
-            $model->ttbh_dv = $model->stbhxh_dv + $model->stbhyt_dv + $model->stkpcd_dv + $model->stbhtn_dv;
+            if($model->congtac != 'THAISAN' && $model->congtac != 'DAINGAY' && $model->congtac != 'KHONGLUONG' ){
+                $baohiem = $model->st_heso + $model->st_vuotkhung + $model->st_pccv + $model->st_pctnn;
+                $model->stbhxh = round($model->bhxh * $baohiem, 0);
+                $model->stbhyt = round($model->bhyt * $baohiem, 0);
+                $model->stkpcd = round($model->kpcd * $baohiem, 0);
+                $model->stbhtn = round($model->bhtn * $baohiem, 0);
+                $model->ttbh = $model->stbhxh + $model->stbhyt + $model->stkpcd + $model->stbhtn;
+                $model->stbhxh_dv = round($model->bhxh_dv * $baohiem, 0);
+                $model->stbhyt_dv = round($model->bhyt_dv * $baohiem, 0);
+                $model->stkpcd_dv = round($model->kpcd_dv * $baohiem, 0);
+                $model->stbhtn_dv = round($model->bhtn_dv * $baohiem, 0);
+                $model->ttbh_dv = $model->stbhxh_dv + $model->stbhyt_dv + $model->stkpcd_dv + $model->stbhtn_dv;
+            }
+
             $model->tonghs += $heso_cl;
             $model->ttl += $sotien_cl;
             $model->luongtn = $model->ttl -  $model->ttbh - $model->giaml - $model->thuetn + $model->bhct;
@@ -3527,7 +3542,7 @@ class bangluongController extends Controller
                 $ct->lvtd = $hoso->lvtd;
                 $ct->sotk = count($hoso) > 0 ? $hoso->sotk : null;
                 $ct->lvtd = count($hoso) > 0 ? $hoso->lvtd : null;
-                $ct->hspc = $ct->phanloai == 'KHAC'? $ct->hesopc : $ct->heso;
+                $ct->hspc = ($ct->phanloai == 'KHAC' || $ct->congtac == 'KHONGCT') ? $ct->hesopc : $ct->heso;
                 $ct->sotien = $ct->hspc * $ct->luongcb;
             }
 
