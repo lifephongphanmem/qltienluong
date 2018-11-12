@@ -3542,7 +3542,7 @@ class bangluongController extends Controller
                 $ct->lvtd = $hoso->lvtd;
                 $ct->sotk = count($hoso) > 0 ? $hoso->sotk : null;
                 $ct->lvtd = count($hoso) > 0 ? $hoso->lvtd : null;
-                $ct->hspc = $ct->phanloai == 'KHAC'? $ct->hesopc : $ct->heso;
+                $ct->hspc = ($ct->phanloai == 'KHAC' || $ct->congtac == 'KHONGCT') ? $ct->hesopc : $ct->heso;
                 $ct->sotien = $ct->hspc * $ct->luongcb;
             }
 
