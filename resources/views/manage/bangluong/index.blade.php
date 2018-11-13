@@ -86,6 +86,9 @@
                                                 <a href="{{url($inputs['furl'].'bang_luong?mabl='.$value->mabl.'&mapb=')}}" class="btn btn-default btn-xs mbs">
                                                     <i class="fa fa-th-list"></i>&nbsp; Chi tiết</a>
 
+                                                <!--a href="{{url($inputs['furl'].'cap_nhat?mabl='.$value->mabl)}}" class="btn btn-default btn-xs mbs">
+                                                    <i class="fa fa-th-list"></i>&nbsp; Cập nhật lương</a-->
+
                                                 <button type="button" onclick="cfDel('{{$inputs['furl'].'del/'.$value->id}}')" class="btn btn-danger btn-xs mbs" data-target="#delete-modal-confirm" data-toggle="modal">
                                                     <i class="fa fa-trash-o"></i>&nbsp; Xóa</button>
                                             @endif
@@ -103,7 +106,6 @@
     </div>
 
     <!--Modal thông tin chi tiết -->
-
     {!! Form::open(['url'=>'/chuc_nang/bang_luong/store','method'=>'post' , 'files'=>true, 'id' => 'create_bangluong']) !!}
     <div id="chitiet-modal" tabindex="-1" role="dialog" aria-hidden="true" class="modal fade">
         <div class="modal-dialog modal-content">
