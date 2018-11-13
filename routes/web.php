@@ -366,6 +366,7 @@ Route::group(['prefix'=>'chuc_nang'],function(){
         Route::post('store_truc','bangluongController@store_truc');
 
         Route::get('bang_luong','bangluongController@show');
+        Route::get('cap_nhat','bangluongController@capnhat');
         //Route::get('/maso={mabl}','bangluongController@show');
         Route::get('in/maso={mabl}','bangluongController@inbangluong');
         Route::get('inbangluong/maso={mabl}','bangluongController@inbangluong_sotien');

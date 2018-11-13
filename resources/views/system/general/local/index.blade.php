@@ -64,6 +64,7 @@
                                 <span class="text-muted">{{$model->donviquanly}}</span>
                             </td>
                         </tr>
+
                         <tr>
                             <td style="width:15%">
                                 <b>Cấp dự toán</b>
@@ -73,14 +74,6 @@
                             </td>
                         </tr>
 
-                        <tr>
-                            <td style="width:15%">
-                                <b>Phân loại mức độ tự chủ tài chính</b>
-                            </td>
-                            <td style="width:35%">
-                                <span class="text-muted">{{$model->phanloainguon}}</span>
-                            </td>
-                        </tr>
                         <tr>
                             <td style="width:15%">
                                 <b>Lĩnh vực hoạt động</b>

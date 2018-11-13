@@ -491,6 +491,14 @@ function getPhanLoaiTamNgungTheoDoi(){
         );
 }
 
+function getTronSo(){
+    $a_kq = array();
+    for($i = -3; $i < 6; $i++){
+        $a_kq[$i] = $i;
+    }
+    return $a_kq;
+}
+
 function getPhanLoaiBangLuong(){
     return array('BANGLUONG' => 'Bảng lương cán bộ',
         'TRUYLINH' => 'Bảng truy lĩnh lương',

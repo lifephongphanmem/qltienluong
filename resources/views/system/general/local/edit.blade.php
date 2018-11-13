@@ -10,6 +10,7 @@
     <script type="text/javascript" src="{{url('assets/global/plugins/select2/select2.min.js') }}"></script>
     <script type="text/javascript" src="{{url('assets/global/plugins/select2/select2.min.js')}}"></script>
     <script type="text/javascript" src="{{url('assets/global/plugins/jquery-validation/js/jquery.validate.min.js')}}"></script>
+    @include('includes.script.scripts')
     <!--cript src="{{url('assets/admin/pages/scripts/form-validation.js')}}"></script-->
 
 @stop
@@ -40,17 +41,11 @@
                                         {!!Form::text('maqhns', null, array('id' => 'maqhns','class' => 'form-control'))!!}
                                     </div>
                                 </div>
-                                <div class="col-md-5">
+
+                                <div class="col-md-9">
                                     <div class="form-group">
                                         <label class="control-label">Tên đơn vị<span class="require">*</span></label>
                                         {!!Form::text('tendv', null, array('id' => 'tendv','class' => 'form-control'))!!}
-                                    </div>
-                                </div>
-
-                                <div class="col-md-4">
-                                    <div class="form-group">
-                                        <label class="control-label">Địa chỉ</label>
-                                        {!!Form::text('diachi', null, array('id' => 'diachi','class' => 'form-control'))!!}
                                     </div>
                                 </div>
                             </div>
@@ -95,8 +90,38 @@
 
                                 <div class="col-md-3">
                                     <div class="form-group">
+                                        <label class="control-label">Địa chỉ</label>
+                                        {!!Form::text('diachi', null, array('id' => 'diachi','class' => 'form-control'))!!}
+                                    </div>
+                                </div>
+
+                                <div class="col-md-3">
+                                    <div class="form-group">
                                         <label class="control-label">Địa danh</label>
                                         {!!Form::text('diadanh', null, array('id' => 'diadanh','class' => 'form-control'))!!}
+                                    </div>
+                                </div>
+
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label class="control-label">Số điện thoại<span class="require">*</span></label>
+                                        {!!Form::text('sodt', null, array('id' => 'sodt','class' => 'form-control required'))!!}
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label class="control-label">Phần trăm dài ngày<span class="require">*</span></label>
+                                        {!!Form::text('ptdaingay', null, array('id' => 'ptdaingay','class' => 'form-control required', 'data-mask'=>'fdecimal'))!!}
+                                    </div>
+                                </div>
+
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label class="control-label">Làm tròn số<span class="require">*</span></label>
+                                        {!!Form::select('lamtron',getTronSo(), null, array('id' => 'lamtron','class' => 'form-control required'))!!}
                                     </div>
                                 </div>
 
