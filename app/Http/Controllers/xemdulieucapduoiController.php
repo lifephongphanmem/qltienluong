@@ -277,7 +277,7 @@ class xemdulieucapduoiController extends Controller
                     ->where('trangthai', 'DAGUI')
                     ->get();
             }
-            //dd($model_donvi->toarray());
+            //dd($model_nguon->toarray());
             $model_nguon_tinh = tonghopluong_tinh::where('madv', $madv)->where('thang', $inputs['thang'])
                 ->where('nam', $inputs['nam'])->first();
             //kiểm tra xem đã tổng hợp thành dữ liệu huyện gửi lên tỉnh chưa?

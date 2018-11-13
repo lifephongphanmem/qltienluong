@@ -519,6 +519,7 @@ Route::group(['prefix'=>'chuc_nang'],function(){
             Route::get('getlydo','tonghopluong_huyenController@getlydo');//lý do trả lại dữ liệu
 
             Route::get('printf_data/ma_so={mathdv}','tonghopluong_huyenController@printf_data');
+            Route::get('printf_bl_huyen/ma_so={mathdv}','tonghopluong_huyenController@printf_bl_huyen');
             Route::get('printf_data_diaban/ma_so={mathdv}','tonghopluong_huyenController@printf_data_diaban');
 
             Route::get('detail_diaban/ma_so={mathdv}','tonghopluong_huyenController@detail_diaban');
