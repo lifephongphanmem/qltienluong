@@ -9,10 +9,12 @@ use App\dmphanloaicongtac;
 use App\dmphanloaict;
 use App\dmphanloaidonvi;
 use App\dmphucap;
+use App\dmphucap_donvi;
 use App\tonghop_huyen;
 use App\tonghop_huyen_chitiet;
 use App\tonghop_huyen_diaban;
 use App\tonghopluong_donvi;
+use App\tonghopluong_donvi_bangluong;
 use App\tonghopluong_donvi_chitiet;
 use App\tonghopluong_donvi_diaban;
 use App\tonghopluong_huyen;
@@ -380,7 +382,81 @@ class tonghopluong_huyenController extends Controller
         } else
             return view('errors.notlogin');
     }
+    function printf_bl_huyen($mathdv)
+    {
+        if (Session::has('admin')) {
+            //dd($mathdv);
+            //$model = tonghopluong_donvi_chitiet::where('mathdv', $mathdv)->get();
+            $model = tonghopluong_donvi_bangluong::wherein('mathdv',function($query) use($mathdv){
+                $query->select('mathdv')->from('tonghopluong_donvi')->where('mathh',$mathdv)->get();
+            })->get();
+            $model_thongtin = tonghopluong_huyen::where('mathdv', $mathdv)->first();
+            $model_nguonkp = array_column(dmnguonkinhphi::all()->toArray(), 'tennguonkp', 'manguonkp');
+            $model_ct = array_column(dmphanloaict::all()->toArray(), 'tenct', 'mact');
+            //$gnr = getGeneralConfigs();
 
+            //cho trương hợp đơn vị cấp trên in dữ liệu dv câp dưới mà ko sai tên đơn vị
+            $m_dv = dmdonvi::where('madv', $model_thongtin->madv)->first();
+            $a_phucap = array();
+            $col = 0;
+            $m_pc = array_column(dmphucap_donvi::where('madv', $model_thongtin->madv)->get()->toarray(),'report','mapc');
+
+            foreach ($model as $chitiet) {
+                $chitiet->tennguonkp = isset($model_nguonkp[$chitiet->manguonkp]) ? $model_nguonkp[$chitiet->manguonkp] : '';
+                $chitiet->tenct = isset($model_ct[$chitiet->mact]) ? $model_ct[$chitiet->mact] : '';
+                $thanhtien = 0;
+                foreach (getColTongHop() as $ct) {
+                    if ($chitiet->$ct > 50000) {
+                        $thanhtien +=  $chitiet->$ct;
+                    }
+                }
+                if($chitiet->ttl == 0){//trường hop dinh mức ko nhân dc với hệ số
+                    $chitiet->tongtl = $chitiet->tonghs * $chitiet->luongcoban + $thanhtien;
+                }else{
+                    $chitiet->tongtl = $chitiet->ttl;
+                }
+            }
+            //dd($model);
+
+            foreach (getColTongHop() as $ct) {
+                if ($model->sum($ct) > 0) {
+                    $a_phucap[$ct] = isset($m_pc[$ct]) ? $m_pc[$ct] : '';
+                    $col++;
+                }
+            }
+            //dd($a_phucap);
+            $thongtin = array('nguoilap' => session('admin')->name,
+                'thang' => $model_thongtin->thang,
+                'nam' => $model_thongtin->nam);
+
+            //Lấy dữ liệu để lập
+            $model_congtac = $model->map(function ($data) {
+                return collect($data->toArray())
+                    ->only(['mact','manguonkp','tennguonkp','tenct'])
+                    ->all();
+            });
+            //group mact đã bao gồm macongtac; manguonkp bao gồm luongcoban
+            $a_congtac = a_unique($model_congtac);
+
+            $model_nguon = $model->map(function ($data) {
+                return collect($data->toArray())
+                    ->only(['manguonkp','tennguonkp'])
+                    ->all();
+            });
+            $a_nguon = a_unique($model_nguon);
+
+            return view('reports.tonghopluong.donvi.bangluong')
+                ->with('thongtin', $thongtin)
+                ->with('model', $model)
+                ->with('m_dv', $m_dv)
+                ->with('col', $col)
+                ->with('a_phucap', $a_phucap)
+                ->with('a_nguon', $a_nguon)
+                ->with('a_congtac', $a_congtac)
+                ->with('pageTitle', 'Chi tiết tổng hợp lương tại đơn vị');
+        } else
+            return view('errors.notlogin');
+    }
     function tonghop(Request $requests){
         /*
         if (Session::has('admin')) {
