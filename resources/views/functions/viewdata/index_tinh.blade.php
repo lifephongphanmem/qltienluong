@@ -98,6 +98,17 @@
                                     <td>{{$value->tenphanloai}}</td>
                                     <td>
                                         @if ($value->mathdv != NULL)
+                                            @if($value->phanloaitaikhoan == 'TH')
+                                                <a href="{{url('/chuc_nang/tong_hop_luong/khoi/tonghop_khoi?thang='.$value['thang'].'&nam='.$nam.'&madv='.$value['madv'])}}" class="btn btn-default btn-sm" TARGET="_blank">
+                                                    <i class="fa fa-print"></i>&nbsp; Số liệu tổng hợp khối</a>
+                                                <a href="{{url('/chuc_nang/tong_hop_luong/don_vi/printf_bl_khoi/ma_so='.$value['mathdv'])}}" class="btn btn-default btn-sm" TARGET="_blank">
+                                                    <i class="fa fa-print"></i>&nbsp; Số liệu chi tiết khối</a>
+                                            @else
+                                                <a href="{{url('/chuc_nang/tong_hop_luong/huyen/printf_data/ma_so='.$value['mathdv'])}}" class="btn btn-default btn-sm" TARGET="_blank">
+                                                    <i class="fa fa-print"></i>&nbsp; Số liệu tổng hợp</a>
+                                                <a href="{{url('/chuc_nang/tong_hop_luong/don_vi/printf_bl/ma_so='.$value['mathdv'])}}" class="btn btn-default btn-sm" TARGET="_blank">
+                                                    <i class="fa fa-print"></i>&nbsp; Số liệu chi tiết</a>
+                                            @endif
                                             <a href="{{url('/chuc_nang/tong_hop_luong/huyen/printf_data/ma_so='.$value['mathdv'])}}" class="btn btn-default btn-sm" TARGET="_blank">
                                                 <i class="fa fa-print"></i>&nbsp; Số liệu tổng hợp</a>
 
