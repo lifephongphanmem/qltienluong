@@ -507,6 +507,11 @@ class bangluongController extends Controller
         //Tính toán lương cho cán bộ kiêm nhiệm
         //$m_donvi = dmdonvi::where('madv',$madv)->first();
         foreach ($model_canbo_kn as $cb) {
+            $a_nguon = explode(',', $cb->manguonkp);
+            //nếu cán bộ ko set nguồn (null, '') hoặc trong nguồn thì sét luôn =  ma nguồn để tạo bang lương
+            if ($canbo->manguonkp != '' && !in_array($inputs['manguonkp'], $a_nguon) && $canbo->manguonkp != null ) {
+                continue;
+            }
             //trong kiêm nhiệm: thâm niên lấy  % lương hệ số
             //đặc thù tính
             //lấy thông tin ở bảng hồ sơ cán bộ để lấy thông tin lương, phụ cấp
@@ -518,7 +523,6 @@ class bangluongController extends Controller
             }
 
             $cb->mabl = $inputs['mabl'];
-
 
             //tính thâm niên
             $pctn = $model_phucap->where('mapc', 'pcthni')->first();
@@ -984,6 +988,11 @@ class bangluongController extends Controller
         $a_kn_phucap = array();
         for($i=0; $i<count($m_cb_kn); $i++){
             if(!array_key_exists($m_cb_kn[$i]['macanbo'],$m_cb)){
+                continue;
+            }
+            $a_nguon = explode(',', $m_cb_kn[$i]['manguonkp']);
+            //nếu cán bộ ko set nguồn (null, '') hoặc trong nguồn thì sét luôn =  ma nguồn để tạo bang lương
+            if ($m_cb_kn[$i]['manguonkp'] != '' && !in_array($inputs['manguonkp'], $a_nguon) && $m_cb_kn[$i]['manguonkp'] != null ) {
                 continue;
             }
             $canbo = $m_cb[$m_cb_kn[$i]['macanbo']];

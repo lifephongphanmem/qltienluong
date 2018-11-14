@@ -339,7 +339,7 @@ class hosocanboController extends Controller
         $inputs['pclt'] = chkDbl($inputs['pclt']);
         $inputs['pckct'] = chkDbl($inputs['pckct']);
         $inputs['pcthni'] = chkDbl($inputs['pcthni']);
-
+        $inputs['manguonkp'] = (implode(',',$inputs['manguonkp']));
         if ($inputs['id'] > 0) {
             hosocanbo_kiemnhiem::find($inputs['id'])->update($inputs);
         } else {
@@ -376,7 +376,7 @@ class hosocanboController extends Controller
         $inputs['madv'] = session('admin')->madv;
         $inputs['hesopc'] = chkDbl($inputs['hesopc']);
         $inputs['pckn'] = chkDbl($inputs['pckn']);
-
+        $inputs['manguonkp'] = (implode(',',$inputs['manguonkp']));
 
         if ($inputs['id'] > 0) {
             hosocanbo_kiemnhiem::find($inputs['id'])->update($inputs);
@@ -418,6 +418,7 @@ class hosocanboController extends Controller
         $inputs['pcdbn'] = chkDbl($inputs['pcdbn']);
         $inputs['pcthni'] = chkDbl($inputs['pcthni']);
         $inputs['pck'] = chkDbl($inputs['pck']);
+        $inputs['manguonkp'] = (implode(',',$inputs['manguonkp']));
 
         if ($inputs['id'] > 0) {
             hosocanbo_kiemnhiem::find($inputs['id'])->update($inputs);
@@ -455,8 +456,7 @@ class hosocanboController extends Controller
         $inputs['madv'] = session('admin')->madv;
         $inputs['hesopc'] = chkDbl($inputs['hesopc']);
         $inputs['pckn'] = chkDbl($inputs['pckn']);
-
-
+        $inputs['manguonkp'] = (implode(',',$inputs['manguonkp']));
         if ($inputs['id'] > 0) {
             hosocanbo_kiemnhiem::find($inputs['id'])->update($inputs);
         } else {
@@ -492,7 +492,7 @@ class hosocanboController extends Controller
         $inputs['baohiem'] = isset($inputs['baohiem'])?$inputs['baohiem'] : 0;
         $inputs['madv'] = session('admin')->madv;
         $inputs['pckn'] = chkDbl($inputs['pckn']);
-
+        $inputs['manguonkp'] = (implode(',',$inputs['manguonkp']));
 
         if ($inputs['id'] > 0) {
             hosocanbo_kiemnhiem::find($inputs['id'])->update($inputs);
@@ -530,7 +530,7 @@ class hosocanboController extends Controller
         $inputs['madv'] = session('admin')->madv;
         $inputs['pcdh'] = chkDbl($inputs['pcdh']);
         $inputs['pcd'] = chkDbl($inputs['pcd']);
-
+        $inputs['manguonkp'] = (implode(',',$inputs['manguonkp']));
         if ($inputs['id'] > 0) {
             hosocanbo_kiemnhiem::find($inputs['id'])->update($inputs);
         } else {
@@ -566,7 +566,7 @@ class hosocanboController extends Controller
         $inputs['baohiem'] = isset($inputs['baohiem'])?$inputs['baohiem'] : 0;
         $inputs['madv'] = session('admin')->madv;
         $inputs['hesopc'] = chkDbl($inputs['hesopc']);
-
+        $inputs['manguonkp'] = (implode(',',$inputs['manguonkp']));
         if ($inputs['id'] > 0) {
             hosocanbo_kiemnhiem::find($inputs['id'])->update($inputs);
         } else {
@@ -650,7 +650,7 @@ class hosocanboController extends Controller
         $inputs['pclt'] = chkDbl($inputs['pclt']);
         $inputs['pckct'] = chkDbl($inputs['pckct']);
         $inputs['pcthni'] = chkDbl($inputs['pcthni']);
-
+        $inputs['manguonkp'] = (implode(',',$inputs['manguonkp']));
 
         if ($inputs['id'] > 0) {
             hosocanbo_kiemnhiem_temp::find($inputs['id'])->update($inputs);
@@ -688,8 +688,7 @@ class hosocanboController extends Controller
         $inputs['madv'] = session('admin')->madv;
         $inputs['hesopc'] = chkDbl($inputs['hesopc']);
         $inputs['pckn'] = chkDbl($inputs['pckn']);
-
-
+        $inputs['manguonkp'] = (implode(',',$inputs['manguonkp']));
         if ($inputs['id'] > 0) {
             hosocanbo_kiemnhiem_temp::find($inputs['id'])->update($inputs);
         } else {
@@ -729,7 +728,7 @@ class hosocanboController extends Controller
         $inputs['pcdbn'] = chkDbl($inputs['pcdbn']);
         $inputs['pcthni'] = chkDbl($inputs['pcthni']);
         $inputs['pck'] = chkDbl($inputs['pck']);
-
+        $inputs['manguonkp'] = (implode(',',$inputs['manguonkp']));
         if ($inputs['id'] > 0) {
             hosocanbo_kiemnhiem_temp::find($inputs['id'])->update($inputs);
         } else {
@@ -766,7 +765,7 @@ class hosocanboController extends Controller
         $inputs['madv'] = session('admin')->madv;
         $inputs['hesopc'] = chkDbl($inputs['hesopc']);
         $inputs['pckn'] = chkDbl($inputs['pckn']);
-
+        $inputs['manguonkp'] = (implode(',',$inputs['manguonkp']));
 
         if ($inputs['id'] > 0) {
             hosocanbo_kiemnhiem_temp::find($inputs['id'])->update($inputs);
@@ -803,7 +802,7 @@ class hosocanboController extends Controller
 
         $inputs['madv'] = session('admin')->madv;
         $inputs['pckn'] = chkDbl($inputs['pckn']);
-
+        $inputs['manguonkp'] = (implode(',',$inputs['manguonkp']));
 
         if ($inputs['id'] > 0) {
             hosocanbo_kiemnhiem_temp::find($inputs['id'])->update($inputs);
@@ -841,7 +840,7 @@ class hosocanboController extends Controller
         $inputs['madv'] = session('admin')->madv;
         $inputs['pcdh'] = chkDbl($inputs['pcdh']);
         $inputs['pcd'] = chkDbl($inputs['pcd']);
-
+        $inputs['manguonkp'] = (implode(',',$inputs['manguonkp']));
         if ($inputs['id'] > 0) {
             hosocanbo_kiemnhiem_temp::find($inputs['id'])->update($inputs);
         } else {
@@ -877,7 +876,7 @@ class hosocanboController extends Controller
 
         $inputs['madv'] = session('admin')->madv;
         $inputs['hesopc'] = chkDbl($inputs['hesopc']);
-
+        $inputs['manguonkp'] = (implode(',',$inputs['manguonkp']));
         if ($inputs['id'] > 0) {
             hosocanbo_kiemnhiem_temp::find($inputs['id'])->update($inputs);
         } else {
