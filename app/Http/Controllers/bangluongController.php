@@ -238,7 +238,8 @@ class bangluongController extends Controller
         $m_cbkn = hosocanbo::where('madv', $inputs['madv'])->where('theodoi','<', '9')->get();
 
         //Lấy danh sách cán bộ kiêm nhiệm
-        $model_canbo_kn = hosocanbo_kiemnhiem::where('madv',session('admin')->madv)->wherein('manguonkp',[$inputs['manguonkp'],''])->get();
+        //$model_canbo_kn = hosocanbo_kiemnhiem::where('madv',session('admin')->madv)->wherein('manguonkp',[$inputs['manguonkp'],''])->get();
+        $model_canbo_kn = hosocanbo_kiemnhiem::where('madv',session('admin')->madv)->get();
 
         foreach ($m_cb as $canbo) {
             //Dùng tìm kiếm các bộ nào phù hợp. Do lvhd là mảng nên pải lọc
@@ -652,7 +653,8 @@ class bangluongController extends Controller
         $a_th = array_merge(array('macanbo', 'macvcq', 'mapb', 'manguonkp','mact','baohiem'),
             array_column($model_phucap->toarray(),'mapc'));
 
-        $m_cb_kn = hosocanbo_kiemnhiem::select(array_merge($a_th,array('phanloai')))->where('madv',$inputs['madv'])->wherein('manguonkp',[$inputs['manguonkp'],'',null])->get()->toArray();;
+        //$m_cb_kn = hosocanbo_kiemnhiem::select(array_merge($a_th,array('phanloai')))->where('madv',$inputs['madv'])->wherein('manguonkp',[$inputs['manguonkp'],'',null])->get()->toArray();;
+        $m_cb_kn = hosocanbo_kiemnhiem::select(array_merge($a_th,array('phanloai')))->where('madv',$inputs['madv'])->get()->toArray();;
 
         //công tác
         $a_th = array_merge(array('stt','tencanbo', 'msngbac', 'bac', 'pthuong','theodoi',
