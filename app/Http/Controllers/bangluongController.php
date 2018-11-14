@@ -3538,13 +3538,13 @@ class bangluongController extends Controller
                 }
                 $ct->sotien = ($ct->pcvk + $ct->pckn) * $ct->luongcb;
             }
-
+            /*
             $model_cvc = $model->where('pcvk','>',0)->where('phanloai','CVCHINH');
             $model_kn = $model->where('hesopc','>',0)->where('phanloai','CAPUY');
             foreach($model_kn as $ct){
                 $model_cvc->add($ct);
             }
-
+            */
             $m_dv = dmdonvi::where('madv',$m_bl->madv)->first();
             $m_dv->tendvcq = getTenDB($m_dv->madvbc);
 
@@ -3555,7 +3555,8 @@ class bangluongController extends Controller
                 'luongcb' => $m_bl->luongcoban);
 
             return view('reports.bangluong.donvi.maubchd')
-                ->with('model',$model_cvc->sortBy('stt'))
+                //->with('model',$model_cvc->sortBy('stt'))
+                ->with('model',$model->sortBy('stt'))
                 ->with('m_dv',$m_dv)
                 ->with('thongtin',$thongtin)
                 ->with('pageTitle','Bảng lương chi tiết');
