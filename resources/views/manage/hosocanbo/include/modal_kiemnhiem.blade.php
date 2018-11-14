@@ -46,7 +46,7 @@
                     <div class="col-md-4">
                         <div class="form-group">
                             <label class="control-label">Nguồn KP hưởng lương</label>
-                            {!!Form::select('manguonkp_kct',getNguonKP(true), null, array('id' => 'manguonkp_kct','class' => 'form-control select2me'))!!}
+                            {!!Form::select('manguonkp_kct',getNguonKP(true), null, array('id' => 'manguonkp_kct','class' => 'form-control select2me', 'multiple'=>'multiple'))!!}
                         </div>
                     </div>
 
@@ -161,7 +161,7 @@
                     <div class="col-md-4">
                         <div class="form-group">
                             <label class="control-label">Nguồn KP hưởng lương</label>
-                            {!!Form::select('manguonkp_dbhdnd',getNguonKP(true), null, array('id' => 'manguonkp_dbhdnd','class' => 'form-control select2me'))!!}
+                            {!!Form::select('manguonkp_dbhdnd',getNguonKP(true), null, array('id' => 'manguonkp_dbhdnd','class' => 'form-control select2me', 'multiple'=>'multiple'))!!}
                         </div>
                     </div>
 
@@ -268,7 +268,7 @@
                     <div class="col-md-3">
                         <div class="form-group">
                             <label class="control-label">Nguồn KP hưởng lương</label>
-                            {!!Form::select('manguonkp_qs',getNguonKP(true), null, array('id' => 'manguonkp_qs','class' => 'form-control select2me'))!!}
+                            {!!Form::select('manguonkp_qs',getNguonKP(true), null, array('id' => 'manguonkp_qs','class' => 'form-control select2me', 'multiple'=>'multiple'))!!}
                         </div>
                     </div>
 
@@ -368,7 +368,7 @@
                     <div class="col-md-4">
                         <div class="form-group">
                             <label class="control-label">Nguồn KP hưởng lương</label>
-                            {!!Form::select('manguonkp_cuv',getNguonKP(true), null, array('id' => 'manguonkp_cuv','class' => 'form-control select2me'))!!}
+                            {!!Form::select('manguonkp_cuv',getNguonKP(true), null, array('id' => 'manguonkp_cuv','class' => 'form-control select2me', 'multiple'=>'multiple'))!!}
                         </div>
                     </div>
 
@@ -475,7 +475,7 @@
                     <div class="col-md-4">
                         <div class="form-group">
                             <label class="control-label">Nguồn KP hưởng lương</label>
-                            {!!Form::select('manguonkp_cd',getNguonKP(true), null, array('id' => 'manguonkp_cd','class' => 'form-control select2me'))!!}
+                            {!!Form::select('manguonkp_cd',getNguonKP(true), null, array('id' => 'manguonkp_cd','class' => 'form-control select2me', 'multiple'=>'multiple'))!!}
                         </div>
                     </div>
 
@@ -575,7 +575,7 @@
                     <div class="col-md-4">
                         <div class="form-group">
                             <label class="control-label">Nguồn KP hưởng lương</label>
-                            {!!Form::select('manguonkp_mc',getNguonKP(true), null, array('id' => 'manguonkp_mc','class' => 'form-control select2me'))!!}
+                            {!!Form::select('manguonkp_mc',getNguonKP(true), null, array('id' => 'manguonkp_mc','class' => 'form-control select2me', 'multiple'=>'multiple'))!!}
                         </div>
                     </div>
 
@@ -676,7 +676,7 @@
                     <div class="col-md-4">
                         <div class="form-group">
                             <label class="control-label">Nguồn KP hưởng lương</label>
-                            {!!Form::select('manguonkp_tn',getNguonKP(true), null, array('id' => 'manguonkp_tn','class' => 'form-control select2me'))!!}
+                            {!!Form::select('manguonkp_tn',getNguonKP(true), null, array('id' => 'manguonkp_tn','class' => 'form-control select2me', 'multiple'=>'multiple'))!!}
                         </div>
                     </div>
 
@@ -788,7 +788,7 @@
                 if(data.phanloai == 'KHONGCT'){
                      $('#mact_kct').val(data.mact).trigger('change');
                      $('#baohiem_kct').val(data.baohiem).trigger('change');
-                     $('#manguonkp_kct').val(data.manguonkp).trigger('change');
+                     $('#manguonkp_kct').val(data.manguonkp.split(',')).trigger('change');
                      $('#mapb_kct').val(data.mapb).trigger('change');
                      $('#macvcq_kct').val(data.macvcq).trigger('change');
                      $('#id_kct').val(data.id);
@@ -803,7 +803,7 @@
                      $('#mact_dbhdnd').val(data.mact).trigger('change');
                      $('#mapb_dbhdnd').val(data.mapb).trigger('change');
                      $('#macvcq_dbhdnd').val(data.macvcq).trigger('change');
-                     $('#manguonkp_dbhdnd').val(data.manguonkp).trigger('change');
+                     $('#manguonkp_dbhdnd').val(data.manguonkp.split(',')).trigger('change');
                      $('#id_dbhdnd').val(data.id);
                      $('#hesopc_dbhdnd').val(data.hesopc);
                      $('#pckn_dbhdnd').val(data.pckn);
@@ -813,7 +813,7 @@
                     $('#mact_qs').val(data.mact).trigger('change');
                     $('#mapb_qs').val(data.mapb).trigger('change');
                     $('#macvcq_qs').val(data.macvcq).trigger('change');
-                    $('#manguonkp_qs').val(data.manguonkp).trigger('change');
+                    $('#manguonkp_qs').val(data.manguonkp.split(',')).trigger('change');
                     $('#id_qs').val(data.id);
                     $('#hesopc_qs').val(data.hesopc);
                     $('#pctn_qs').val(data.pctn);
@@ -827,7 +827,7 @@
                     $('#mact_cuv').val(data.mact).trigger('change');
                     $('#mapb_cuv').val(data.mapb).trigger('change');
                     $('#macvcq_cuv').val(data.macvcq).trigger('change');
-                    $('#manguonkp_cuv').val(data.manguonkp).trigger('change');
+                    $('#manguonkp_cuv').val(data.manguonkp.split(',')).trigger('change');
                     $('#id_cuv').val(data.id);
                     $('#hesopc_cuv').val(data.hesopc);
                     $('#pckn_cuv').val(data.pckn);
@@ -837,7 +837,7 @@
                     $('#mact_cd').val(data.mact).trigger('change');
                     $('#mapb_cd').val(data.mapb).trigger('change');
                     $('#macvcq_cd').val(data.macvcq).trigger('change');
-                    $('#manguonkp_cd').val(data.manguonkp).trigger('change');
+                    $('#manguonkp_cd').val(data.manguonkp.split(',')).trigger('change');
                     $('#id_cd').val(data.id);
                     $('#pckn_cd').val(data.pckn);
                     $('#cd-modal').modal('show');
@@ -846,7 +846,7 @@
                     $('#mact_mc').val(data.mact).trigger('change');
                     $('#mapb_mc').val(data.mapb).trigger('change');
                     $('#macvcq_mc').val(data.macvcq).trigger('change');
-                    $('#manguonkp_mc').val(data.manguonkp).trigger('change');
+                    $('#manguonkp_mc').val(data.manguonkp.split(',')).trigger('change');
                     $('#id_mc').val(data.id);
                     $('#pckn_mc').val(data.pckn);
                     $('#pcdh_mc').val(data.pcdh);
@@ -856,7 +856,7 @@
                     $('#mact_tn').val(data.mact).trigger('change');
                     $('#mapb_tn').val(data.mapb).trigger('change');
                     $('#macvcq_tn').val(data.macvcq).trigger('change');
-                    $('#manguonkp_tn').val(data.manguonkp).trigger('change');
+                    $('#manguonkp_tn').val(data.manguonkp.split(',')).trigger('change');
                     $('#id_tn').val(data.id);
                     $('#hesopc_tn').val(data.hesopc);
                     $('#tn-modal').modal('show');

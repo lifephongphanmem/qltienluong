@@ -238,7 +238,8 @@ class bangluongController extends Controller
         $m_cbkn = hosocanbo::where('madv', $inputs['madv'])->where('theodoi','<', '9')->get();
 
         //Lấy danh sách cán bộ kiêm nhiệm
-        $model_canbo_kn = hosocanbo_kiemnhiem::where('madv',session('admin')->madv)->wherein('manguonkp',[$inputs['manguonkp'],''])->get();
+        //$model_canbo_kn = hosocanbo_kiemnhiem::where('madv',session('admin')->madv)->wherein('manguonkp',[$inputs['manguonkp'],''])->get();
+        $model_canbo_kn = hosocanbo_kiemnhiem::where('madv',session('admin')->madv)->get();
 
         foreach ($m_cb as $canbo) {
             //Dùng tìm kiếm các bộ nào phù hợp. Do lvhd là mảng nên pải lọc
@@ -507,6 +508,11 @@ class bangluongController extends Controller
         //Tính toán lương cho cán bộ kiêm nhiệm
         //$m_donvi = dmdonvi::where('madv',$madv)->first();
         foreach ($model_canbo_kn as $cb) {
+            $a_nguon = explode(',', $cb->manguonkp);
+            //nếu cán bộ ko set nguồn (null, '') hoặc trong nguồn thì sét luôn =  ma nguồn để tạo bang lương
+            if ($canbo->manguonkp != '' && !in_array($inputs['manguonkp'], $a_nguon) && $canbo->manguonkp != null ) {
+                continue;
+            }
             //trong kiêm nhiệm: thâm niên lấy  % lương hệ số
             //đặc thù tính
             //lấy thông tin ở bảng hồ sơ cán bộ để lấy thông tin lương, phụ cấp
@@ -518,7 +524,6 @@ class bangluongController extends Controller
             }
 
             $cb->mabl = $inputs['mabl'];
-
 
             //tính thâm niên
             $pctn = $model_phucap->where('mapc', 'pcthni')->first();
@@ -648,7 +653,8 @@ class bangluongController extends Controller
         $a_th = array_merge(array('macanbo', 'macvcq', 'mapb', 'manguonkp','mact','baohiem'),
             array_column($model_phucap->toarray(),'mapc'));
 
-        $m_cb_kn = hosocanbo_kiemnhiem::select(array_merge($a_th,array('phanloai')))->where('madv',$inputs['madv'])->wherein('manguonkp',[$inputs['manguonkp'],'',null])->get()->toArray();;
+        //$m_cb_kn = hosocanbo_kiemnhiem::select(array_merge($a_th,array('phanloai')))->where('madv',$inputs['madv'])->wherein('manguonkp',[$inputs['manguonkp'],'',null])->get()->toArray();;
+        $m_cb_kn = hosocanbo_kiemnhiem::select(array_merge($a_th,array('phanloai')))->where('madv',$inputs['madv'])->get()->toArray();;
 
         //công tác
         $a_th = array_merge(array('stt','tencanbo', 'msngbac', 'bac', 'pthuong','theodoi',
@@ -984,6 +990,11 @@ class bangluongController extends Controller
         $a_kn_phucap = array();
         for($i=0; $i<count($m_cb_kn); $i++){
             if(!array_key_exists($m_cb_kn[$i]['macanbo'],$m_cb)){
+                continue;
+            }
+            $a_nguon = explode(',', $m_cb_kn[$i]['manguonkp']);
+            //nếu cán bộ ko set nguồn (null, '') hoặc trong nguồn thì sét luôn =  ma nguồn để tạo bang lương
+            if ($m_cb_kn[$i]['manguonkp'] != '' && !in_array($inputs['manguonkp'], $a_nguon) && $m_cb_kn[$i]['manguonkp'] != null ) {
                 continue;
             }
             $canbo = $m_cb[$m_cb_kn[$i]['macanbo']];
@@ -3532,22 +3543,24 @@ class bangluongController extends Controller
                 $ct->sotk = count($hoso) > 0 ? $hoso->sotk : null;
                 $ct->lvtd = count($hoso) > 0 ? $hoso->lvtd : null;
 
-                if($ct->phanloai == 'CAPUY'){
+                //if($ct->phanloai == 'CAPUY'){
+                if($ct->congtac == 'CAPUY'){
                     $ct->pcvk = $ct->hesopc;
                     //$ct->pckn = $ct->hesopc;
                 }
                 $ct->sotien = ($ct->pcvk + $ct->pckn) * $ct->luongcb;
             }
-
+            /*
+             *
             $model_cvc = $model->where('pcvk','>',0)->where('phanloai','CVCHINH');
             $model_kn = $model->where('hesopc','>',0)->where('phanloai','CAPUY');
             foreach($model_kn as $ct){
                 $model_cvc->add($ct);
             }
-
+            */
             $m_dv = dmdonvi::where('madv',$m_bl->madv)->first();
             $m_dv->tendvcq = getTenDB($m_dv->madvbc);
-
+            //dd($model);
             $thongtin=array('nguoilap'=>$m_bl->nguoilap,
                 'thang'=>$m_bl->thang,
                 'nam'=>$m_bl->nam,
@@ -3555,7 +3568,8 @@ class bangluongController extends Controller
                 'luongcb' => $m_bl->luongcoban);
 
             return view('reports.bangluong.donvi.maubchd')
-                ->with('model',$model_cvc->sortBy('stt'))
+                //->with('model',$model_cvc->sortBy('stt'))
+                ->with('model',$model->sortBy('stt'))
                 ->with('m_dv',$m_dv)
                 ->with('thongtin',$thongtin)
                 ->with('pageTitle','Bảng lương chi tiết');
