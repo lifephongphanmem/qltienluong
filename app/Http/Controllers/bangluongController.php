@@ -3532,13 +3532,15 @@ class bangluongController extends Controller
                 $ct->sotk = count($hoso) > 0 ? $hoso->sotk : null;
                 $ct->lvtd = count($hoso) > 0 ? $hoso->lvtd : null;
 
-                if($ct->phanloai == 'CAPUY'){
+                //if($ct->phanloai == 'CAPUY'){
+                if($ct->congtac == 'CAPUY'){
                     $ct->pcvk = $ct->hesopc;
                     //$ct->pckn = $ct->hesopc;
                 }
                 $ct->sotien = ($ct->pcvk + $ct->pckn) * $ct->luongcb;
             }
             /*
+             *
             $model_cvc = $model->where('pcvk','>',0)->where('phanloai','CVCHINH');
             $model_kn = $model->where('hesopc','>',0)->where('phanloai','CAPUY');
             foreach($model_kn as $ct){
@@ -3547,7 +3549,7 @@ class bangluongController extends Controller
             */
             $m_dv = dmdonvi::where('madv',$m_bl->madv)->first();
             $m_dv->tendvcq = getTenDB($m_dv->madvbc);
-
+            //dd($model);
             $thongtin=array('nguoilap'=>$m_bl->nguoilap,
                 'thang'=>$m_bl->thang,
                 'nam'=>$m_bl->nam,
