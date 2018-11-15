@@ -86,8 +86,8 @@
                                                 <a href="{{url($inputs['furl'].'bang_luong?mabl='.$value->mabl.'&mapb=')}}" class="btn btn-default btn-xs mbs">
                                                     <i class="fa fa-th-list"></i>&nbsp; Chi tiết</a>
 
-                                                <!--a href="{{url($inputs['furl'].'cap_nhat?mabl='.$value->mabl)}}" class="btn btn-default btn-xs mbs">
-                                                    <i class="fa fa-th-list"></i>&nbsp; Cập nhật lương</a-->
+                                                <button onclick="capnhat('{{$value->mabl}}')" class="btn btn-default btn-xs mbs" data-target="#capnhat-modal-confirm" data-toggle="modal">
+                                                    <i class="fa fa-th-list"></i>&nbsp; Cập nhật lương</button>
 
                                                 <button type="button" onclick="cfDel('{{$inputs['furl'].'del/'.$value->id}}')" class="btn btn-danger btn-xs mbs" data-target="#delete-modal-confirm" data-toggle="modal">
                                                     <i class="fa fa-trash-o"></i>&nbsp; Xóa</button>
@@ -270,6 +270,38 @@
     </div>
     {!! Form::close() !!}
 
+    {!! Form::open(['url'=>'/chuc_nang/bang_luong/cap_nhat','method'=>'get' , 'files'=>true, 'id' => 'create_bangluong_truylinh']) !!}
+    <div id="capnhat-modal-confirm" tabindex="-1" role="dialog" aria-hidden="true" class="modal fade">
+        <form id="frmcapnhat" method="GET" action="#" accept-charset="UTF-8">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header modal-header-primary">
+                        <button type="button" data-dismiss="modal" aria-hidden="true"
+                                class="close">&times;</button>
+                        <h4 id="modal-header-primary-label" class="modal-title">Đồng ý cập nhật lại bảng lương ?</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <label><b>Chi tiết bảng lương sẽ được cập nhật lại theo thông tin cán bộ mới nhấ. Bạn có chắc chắn muốn cập nhật ?</b></label>
+                        </div>
+                    </div>
+
+                    <input type="hidden" id="mabl_capnhat" name="mabl_capnhat"/>
+                    <div class="modal-footer">
+                        <button type="button" data-dismiss="modal" class="btn btn-default">Hủy thao tác</button>
+                        <button type="submit" id="submit" name="submit" value="submit" class="btn btn-primary">Đồng ý</button>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+    {!! Form::close() !!}
+    <script>
+        function capnhat(mabl){
+            $('#mabl_capnhat').val(mabl);
+        }
+
+    </script>
     <!--Modal thông tin tùy chọn in bảng lương -->
     <div id="inbl-modal" tabindex="-1" role="dialog" aria-hidden="true" class="modal fade">
         <div class="modal-lg modal-dialog modal-content">

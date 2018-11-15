@@ -132,62 +132,34 @@ class bangluongController extends Controller
     function capnhat(Request $request)
     {
         $inputs = $request->all();
-        $mabl_cu = $inputs['mabl'];
+        $mabl_cu = $inputs['mabl_capnhat'];
         $model = bangluong::where('mabl', $mabl_cu)->first();
         $inputs['luongcoban'] = $model->luongcoban;
-        $mabl = session('admin')->madv. '_' . getdate()[0];
+        $mabl = session('admin')->madv . '_' . getdate()[0];
         $inputs['mabl'] = $mabl;
+        $inputs['thang'] = $model->thang;
+        $inputs['nam'] = $model->nam;
         $inputs['madv'] = $model->madv;
         $inputs['luongcoban'] = $model->luongcoban;
         $inputs['phanloai'] = $model->phanloai;
         $inputs['manguonkp'] = $model->manguonkp;
         $inputs['linhvuchoatdong'] = $model->linhvuchoatdong;
 
-        dd($inputs);
-        $dinhmuc = nguonkinhphi_dinhmuc::where('manguonkp',$model->manguonkp)->where('madv',session('admin')->madv)->first();
-        $maso = count($dinhmuc)> 0 ? $dinhmuc->maso : '';
-        $dinhmuc_ct = nguonkinhphi_dinhmuc_ct::where('maso',$maso)->get();
-        //kiểm tra xem có định mức ko
+        $dinhmuc = nguonkinhphi_dinhmuc::join('nguonkinhphi_dinhmuc_ct', 'nguonkinhphi_dinhmuc.maso', '=', 'nguonkinhphi_dinhmuc_ct.maso')
+            ->select('nguonkinhphi_dinhmuc_ct.mapc')
+            ->where('nguonkinhphi_dinhmuc.manguonkp', $model->manguonkp)->where('nguonkinhphi_dinhmuc.madv', session('admin')->madv)
+            ->get()->count();
 
-        if(count($dinhmuc_ct)>0){
-            $inputs['dinhmuc']= 1;
-            $inputs['luongcb']= $dinhmuc->luongcoban;
-        }
-
-        if(boolval($inputs['dinhmuc'])){
+        if ($dinhmuc > 0) {
             $this->tinhluong_dinhmuc($inputs);
-        }else{
+        } else {
             $this->tinhluong_khongdinhmuc($inputs);
         }
 
         //Tạo bảng lương
         $model->mabl = $mabl;
         $model->save();
-        return redirect('/chuc_nang/bang_luong/bang_luong?mabl=' . $inputs['mabl'].'&mapb=');
-
-        dd($model);
-        dd($inputs);
-        if (count($model) > 0) {
-            //update
-            $model->update($inputs);
-            return redirect('/chuc_nang/bang_luong/chi_tra?thang=' . $inputs['thang'] . '&nam=' . $inputs['nam']);
-        } else {
-            //kiểm tra bảng lương cùng nguồn, lĩnh vực hoạt động, lương cơ bản =>ko cho tạo
-            $model_chk = bangluong::where('thang', $inputs['thang'])->where('nam', $inputs['nam'])
-                ->where('phanloai', 'BANGLUONG')
-                ->where('manguonkp', $inputs['manguonkp'])
-                ->where('madv',session('admin')->madv)
-                ->first();
-
-            if(count($model_chk)>0){
-                return view('errors.trungbangluong');
-            }
-
-
-
-
-        }
-
+        return redirect('/chuc_nang/bang_luong/bang_luong?mabl=' . $inputs['mabl'] . '&mapb=');
     }
 
     //Insert + update bảng lương
