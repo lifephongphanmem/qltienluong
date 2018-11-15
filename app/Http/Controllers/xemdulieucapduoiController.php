@@ -346,7 +346,7 @@ class xemdulieucapduoiController extends Controller
             $a_trangthai=array('ALL'=>'--Chọn trạng thái dữ liệu--','CHUAGUI'=>'Chưa gửi dữ liệu','DAGUI'=>'Đã gửi dữ liệu');
             $a_phanloai=array('DONVI'=>'Dữ liệu tổng hợp của đơn vị','CAPDUOI'=>'Dữ liệu tổng hợp của các đơn vị cấp dưới');
             //$list_donvi= dmdonvi::select('madv', 'tendv')->where('madvbc', $madvbc)->get();
-            $model_dvbc = dmdonvibaocao::all();
+            $model_dvbc = dmdonvibaocao::where('level','H')->get();
 
 
 
@@ -380,6 +380,8 @@ class xemdulieucapduoiController extends Controller
                     $dv->phanloai = $dulieu->phanloai;
                     $dv->trangthai = $dulieu->trangthai;
                     $dv->mathdv = $dulieu->mathdv;
+                    $dv->thang = $dulieu->thang;
+                    $dv->nam = $dulieu->nam;
                 }else{
                     $dv->mathdv = NULL;
                 }
