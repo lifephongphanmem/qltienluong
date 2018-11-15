@@ -335,7 +335,7 @@ class baocaothongtu67Controller extends Controller
             }
             //dd($model_bienche);
 
-            $model_tonghop = tonghopluong_donvi::where('thang','10')->where('nam','2018')
+            $model_tonghop = tonghopluong_donvi::where('thang','08')->where('nam','2018')
                 ->where('madvbc','like',$inputs['madv'].'%')->get();
 
             $luongcb = 0.935;
@@ -346,7 +346,7 @@ class baocaothongtu67Controller extends Controller
             $model_tonghop_ct = tonghopluong_donvi_chitiet::join('tonghopluong_donvi', 'tonghopluong_donvi_chitiet.mathdv', '=', 'tonghopluong_donvi.mathdv')
                 ->where('tonghopluong_donvi.madvbc','like',$inputs['madv'].'%')
                 ->wherein('tonghopluong_donvi_chitiet.mathdv',function($qr){
-                    $qr->select('mathdv')->from('tonghopluong_donvi')->where('thang','10')->where('nam','2018')->where('trangthai','DAGUI')
+                    $qr->select('mathdv')->from('tonghopluong_donvi')->where('thang','08')->where('nam','2018')->where('trangthai','DAGUI')
                         ->distinct()->get();
                 })->get();
 
@@ -364,7 +364,7 @@ class baocaothongtu67Controller extends Controller
                     ->where('tonghopluong_donvi.madvbc','like',$inputs['madv'].'%')
                     ->where('dmdonvibaocao.level','T')
                     ->wherein('tonghopluong_donvi_chitiet.mathdv',function($qr){
-                        $qr->select('mathdv')->from('tonghopluong_donvi')->where('thang','10')->where('nam','2018')->where('trangthai','DAGUI')
+                        $qr->select('mathdv')->from('tonghopluong_donvi')->where('thang','08')->where('nam','2018')->where('trangthai','DAGUI')
                             ->distinct()->get();
                     })->get();
             }
@@ -375,8 +375,7 @@ class baocaothongtu67Controller extends Controller
                 //dd($model_tonghop_ct->toarray());
                 $a_th =  array_column($tonghop->toarray(),'mathdv','maphanloai');
                 //$ct->maphanloai = $model_donvi->where('madv',$tonghop->madv)->first()->maphanloai;
-                //$ct->maphanloai =  $a_th[$ct->mathdv];
-                $ct->maphanloai =  "";
+                $ct->maphanloai =  $a_th[$ct->mathdv];
                 $ct->heso = $ct->heso * $luongcb;
                 $ct->pckv = $ct->pckv * $luongcb;
                 $ct->pccv = $ct->pccv * $luongcb;
@@ -1153,7 +1152,7 @@ class baocaothongtu67Controller extends Controller
             $madvbc = session('admin')->madvbc;
             $m_dv = dmdonvi::where('madv',session('admin')->madv)->first();
             $model_donvi = dmdonvi::where('madvbc','like',$inputs['madv'].'%')->get();
-            $model_tonghop = tonghopluong_donvi::where('thang','10')->where('nam','2018')
+            $model_tonghop = tonghopluong_donvi::where('thang','08')->where('nam','2018')
                 ->where('madvbc','like',$inputs['madv'].'%')->get();
             $luongcb = 1;
             //nếu đơn vị đã tạo bảng lương tháng 07/2017 =>xuất kết quả
@@ -1161,7 +1160,7 @@ class baocaothongtu67Controller extends Controller
             $model_tonghop_ct = tonghopluong_donvi_chitiet::join('tonghopluong_donvi', 'tonghopluong_donvi_chitiet.mathdv', '=', 'tonghopluong_donvi.mathdv')
                 ->where('tonghopluong_donvi.madvbc','like',$inputs['madv'].'%')
                 ->wherein('tonghopluong_donvi_chitiet.mathdv',function($qr){
-                    $qr->select('mathdv')->from('tonghopluong_donvi')->where('thang','10')->where('nam','2018')->where('trangthai','DAGUI')
+                    $qr->select('mathdv')->from('tonghopluong_donvi')->where('thang','08')->where('nam','2018')->where('trangthai','DAGUI')
                         ->distinct()->get();
                 })->get();
 
@@ -1173,7 +1172,7 @@ class baocaothongtu67Controller extends Controller
                     ->where('tonghopluong_donvi.madvbc','like',$inputs['madv'].'%')
                     ->where('dmdonvibaocao.level','T')
                     ->wherein('tonghopluong_donvi_chitiet.mathdv',function($qr){
-                        $qr->select('mathdv')->from('tonghopluong_donvi')->where('thang','10')->where('nam','2018')->where('trangthai','DAGUI')
+                        $qr->select('mathdv')->from('tonghopluong_donvi')->where('thang','08')->where('nam','2018')->where('trangthai','DAGUI')
                             ->distinct()->get();
                     })->get();
             }
@@ -4318,7 +4317,7 @@ class baocaothongtu67Controller extends Controller
             $a_BI[3] = array('tt'=>'3','noidung'=>'Hoạt động phí tăng thêm đối với đại biểu hội đồng nhân dân các cấp','sotien'=>'0');
             $a_BI[4] = array('tt'=>'4','noidung'=>'Quỹ trợ cấp tăng thêm đối với cán bộ xã nghỉ việc hưởng trợ cấp hàng tháng theo NĐ 76/2017/NĐ-CP','sotien'=>'0');
             $a_BI[5] = array('tt'=>'5','noidung'=>'Kinh phí tăng thêm để thực hiện chế độ đối với cán bộ không chuyên trách cấp xã, thôn và tổ dân phố','sotien'=>'0');
-            $a_BI[6] = array('tt'=>'6','noidung'=>'Kinh phí tăng thêm để thực hiện phụ cấp trách nhiệm đối với cấp ủy viên các cấp theo QĐ số 169-QĐ/TW ngày 24/6/2010','sotien'=>'0');
+            $a_BI[6] = array('tt'=>'6','noidung'=>'Kinh phí tăng thêm để thực hiện phụ cấp trách nhiệm đối với cấp ủy viên các cấp theo QĐ số 169-QĐ/TW ngày 24/6/2008','sotien'=>'0');
             $a_BI[7] = array('tt'=>'7','noidung'=>'Kinh phí tăng thêm thực hiện chế độ bồi dưỡng phục vụ hoạt động cấp ủy thuộc cấp tỉnh theo Quy định 3115-QĐ/VVPTW','sotien'=>'0');
 
             $a_BII = array();
@@ -4445,7 +4444,7 @@ class baocaothongtu67Controller extends Controller
             }
             //dd($model_bienche);
 
-            $model_tonghop = tonghopluong_donvi::where('thang','10')->where('nam','2018')
+            $model_tonghop = tonghopluong_donvi::where('thang','08')->where('nam','2018')
                 ->where('madvbc',$madvbc)->get();
 
             $luongcb = 0.935;
@@ -4454,7 +4453,7 @@ class baocaothongtu67Controller extends Controller
             //nếu đơn vị đã tạo bảng lương tháng 07/2017 =>xuất kết quả
 
             $model_tonghop_ct = tonghopluong_donvi_chitiet::wherein('mathdv',function($qr){
-                $qr->select('mathdv')->from('tonghopluong_donvi')->where('thang','10')->where('nam','2018')->where('trangthai','DAGUI')
+                $qr->select('mathdv')->from('tonghopluong_donvi')->where('thang','08')->where('nam','2018')->where('trangthai','DAGUI')
                     ->where('macqcq',session('admin')->madv)->get();
             })->get();
 
@@ -4775,13 +4774,13 @@ class baocaothongtu67Controller extends Controller
             $madvbc = session('admin')->madvbc;
             $m_dv = dmdonvi::where('madv',session('admin')->madv)->first();
             $model_donvi = dmdonvi::where('madvbc',$madvbc)->get();
-            $model_tonghop = tonghopluong_donvi::where('thang','10')->where('nam','2018')
+            $model_tonghop = tonghopluong_donvi::where('thang','08')->where('nam','2018')
                 ->where('madvbc',$madvbc)->get();
             $luongcb = 1;
             //nếu đơn vị đã tạo bảng lương tháng 07/2017 =>xuất kết quả
 
             $model_tonghop_ct = tonghopluong_donvi_chitiet::wherein('mathdv',function($qr){
-                $qr->select('mathdv')->from('tonghopluong_donvi')->where('thang','10')->where('nam','2018')->where('trangthai','DAGUI')
+                $qr->select('mathdv')->from('tonghopluong_donvi')->where('thang','08')->where('nam','2018')->where('trangthai','DAGUI')
                     ->where('macqcq',session('admin')->madv)->get();
             })->get();
 

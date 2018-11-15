@@ -147,17 +147,17 @@
                         @endforeach
 
                         @foreach($a_phucap as $key=>$val)
-                            <td>{{dinhdangso($ct->$key * $thongtin['luongcb'])}}</td>
+                            <td>{{$ct->$key * $thongtin['luongcb']}}</td>
                         @endforeach
 
 
-                        <td>{{dinhdangso($ct->ttl - $ct->giaml + $ct->bhct)}}</td>
+                        <td>{{$ct->ttl - $ct->giaml + $ct->bhct}}</td>
 
-                        <td>{{dinhdangso($ct->stbhxh)}}</td>
-                        <td>{{dinhdangso($ct->stbhyt)}}</td>
-                        <td>{{dinhdangso($ct->stkpcd)}}</td>
-                        <td>{{dinhdangso($ct->ttbh)}}</td>
-                        <td>{{dinhdangso($ct->luongtn)}}</td>
+                        <td>{{$ct->stbhxh}}</td>
+                        <td>{{$ct->stbhyt}}</td>
+                        <td>{{$ct->stkpcd}}</td>
+                        <td>{{$ct->ttbh}}</td>
+                        <td>{{$ct->luongtn}}</td>
                         <td></td>
                     </tr>
                 @endforeach
@@ -169,15 +169,15 @@
                     @endforeach
 
                     @foreach($a_phucap as $key=>$val)
-                        <td>{{dinhdangso($model_luong->sum($key) *  $thongtin['luongcb'])}}</td>
+                        <td>{{$model_luong->sum($key) *  $thongtin['luongcb']}}</td>
                     @endforeach
-                    <td class="money">{{dinhdangso($model_luong->sum('ttl') - $model_luong->sum('giaml') + $model_luong->sum('bhct'))}}</td>
+                    <td class="money">{{$model_luong->sum('ttl') - $model_luong->sum('giaml') + $model_luong->sum('bhct')}}</td>
 
-                    <td class="money">{{dinhdangso($model_luong->sum('stbhxh'))}}</td>
-                    <td class="money">{{dinhdangso($model_luong->sum('stbhyt'))}}</td>
-                    <td class="money">{{dinhdangso($model_luong->sum('stkpcd'))}}</td>
-                    <td class="money">{{dinhdangso($model_luong->sum('ttbh'))}}</td>
-                    <td class="money">{{dinhdangso($model_luong->sum('luongtn'))}}</td>
+                    <td class="money">{{$model_luong->sum('stbhxh')}}</td>
+                    <td class="money">{{$model_luong->sum('stbhyt')}}</td>
+                    <td class="money">{{$model_luong->sum('stkpcd')}}</td>
+                    <td class="money">{{$model_luong->sum('ttbh')}}</td>
+                    <td class="money">{{$model_luong->sum('luongtn')}}</td>
 
                     <td></td>
                 </tr>
@@ -193,13 +193,13 @@
             @foreach($a_phucap as $key=>$val)
                 <td>{{dinhdangsothapphan($model->sum($key) ,5)}}</td>
             @endforeach
-            <td class="money">{{dinhdangso($model->sum('ttl') - $model->sum('giaml') + $model->sum('bhct'))}}</td>
+            <td class="money">{{$model->sum('ttl') - $model->sum('giaml') + $model->sum('bhct')}}</td>
 
-            <td class="money">{{dinhdangso($model->sum('stbhxh'))}}</td>
-            <td class="money">{{dinhdangso($model->sum('stbhyt'))}}</td>
-            <td class="money">{{dinhdangso($model->sum('stkpcd'))}}</td>
-            <td class="money">{{dinhdangso($model->sum('ttbh'))}}</td>
-            <td class="money">{{dinhdangso($model->sum('luongtn'))}}</td>
+            <td class="money">{{$model->sum('stbhxh')}}</td>
+            <td class="money">{{$model->sum('stbhyt')}}</td>
+            <td class="money">{{$model->sum('stkpcd')}}</td>
+            <td class="money">{{$model->sum('ttbh')}}</td>
+            <td class="money">{{$model->sum('luongtn')}}</td>
             <td></td>
         </tr>
     </table>
