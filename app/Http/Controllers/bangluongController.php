@@ -741,7 +741,7 @@ class bangluongController extends Controller
                 switch ($a_pc[$k]['phanloai']) {
                     case 0: {//hệ số
                         $tonghs += $m_cb[$key][$mapc];
-                        $a_pc[$k]['sotien'] = round($m_cb[$key][$mapc] * $inputs['luongcoban']);
+                        $a_pc[$k]['sotien'] = round($m_cb[$key][$mapc] * $inputs['luongcoban'],0);
                         break;
                     }
                     case 1: {//số tiền
@@ -758,7 +758,7 @@ class bangluongController extends Controller
                             $m_cb[$key][$mapc] = $heso * $m_cb[$key][$mapc] / 100;
                         }
                         $tonghs += $m_cb[$key][$mapc];
-                        $a_pc[$k]['sotien'] = round($m_cb[$key][$mapc] * $inputs['luongcoban']);
+                        $a_pc[$k]['sotien'] = round($m_cb[$key][$mapc] * $inputs['luongcoban'],0);
                         break;
                     }
                     default: {//trường hợp còn lại (ẩn,...)
