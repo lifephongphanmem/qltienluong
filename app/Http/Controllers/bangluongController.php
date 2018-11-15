@@ -338,7 +338,7 @@ class bangluongController extends Controller
                 switch ($pl) {
                     case 0: {//hệ số
                         $ths += $cb->$mapc;
-                        $sotien = $cb->$mapc * $ct->luongcoban;
+                        $sotien =round($cb->$mapc * $ct->luongcoban,0);
                         break;
                     }
                     case 1: {//số tiền
@@ -357,7 +357,7 @@ class bangluongController extends Controller
                             $cb->$mapc = $heso * $cb->$mapc / 100;
                         }
                         $ths += $cb->$mapc;
-                        $sotien = $cb->$mapc * $ct->luongcoban;
+                        $sotien = round($cb->$mapc * $ct->luongcoban,0);
                         break;
                     }
                     default: {//trường hợp còn lại (ẩn,...)
@@ -1219,7 +1219,7 @@ class bangluongController extends Controller
                                 break;
                             }
                         }
-                        $ct->sotien = $cb->$mapc * $cb->luongcoban;
+                        $ct->sotien = round($cb->$mapc * $cb->luongcoban,0);
                         //tính bảo hiểm
                         if ($ct->baohiem == 1 &&
                             ($cb->maphanloai != 'KHAC' || ($cb->maphanloai == 'KHAC' && !in_array($mapc,$a_goc)))) {
@@ -1242,7 +1242,7 @@ class bangluongController extends Controller
                         $tonghs = $tonghs - $cb->heso - $cb->vuotkhung - $cb->pccv;
                     }
                     $cb->tonghs = $tonghs;
-                    $thangtl = $cb->luongcoban * $tonghs + $tien;
+                    $thangtl = round($cb->luongcoban * $tonghs) + $tien;
                     $ngaytl = round($thangtl / $ngaycong, 0);
                     //1 tháng
                     $stbhxh = $model_phucap->sum('stbhxh');
@@ -1349,7 +1349,7 @@ class bangluongController extends Controller
                     //Gán tham số mặc định
                     $cb->mabl = $inputs['mabl'];
                     $cb->songay = $inputs['songay'];
-                    $cb->ttl =  $inputs['luongcoban'] * $cb->songay * $cb->heso;
+                    $cb->ttl =  round($inputs['luongcoban'] * $cb->songay * $cb->heso);
                     //lưu vào bảng phụ cấp theo lương (chỉ có hệ số)
                     $kq = $cb->toarray();
                     unset($kq['id']);
