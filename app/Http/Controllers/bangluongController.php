@@ -795,7 +795,7 @@ class bangluongController extends Controller
                     */
                     //$a_pc[$k]['heso'] = $m_cb[$key][$mapc];
                     $a_pc[$k]['sotien'] = $daingay ? round($a_pc[$k]['sotien'] * $ptdn, 0) : round($a_pc[$k]['sotien'], 0);
-                    $m_cb[$key]['st_'.$mapc] = $a_pc[$k]['sotien'];
+                    $m_cb[$key]['st_'.$mapc] = round($a_pc[$k]['sotien'], 0);
                     if ($m_cb[$key]['baohiem'] == 1 && $a_pc[$k]['baohiem'] == 1 && !$thaisan && !$daingay) {//nghỉ thai sản + dài ngày ko đóng bảo biểm
                         $a_pc[$k]['stbhxh'] = round($a_pc[$k]['sotien'] * $m_cb[$key]['bhxh'], 0);
                         $a_pc[$k]['stbhyt'] = round($a_pc[$k]['sotien'] * $m_cb[$key]['bhyt'], 0);
@@ -945,17 +945,21 @@ class bangluongController extends Controller
 
         //Mảng chứa các cột bỏ để chạy hàm insert
         $a_col_pc = array('id','baohiem','mapc','luongcoban','tenpc');
+        /*
         $a_data_phucap = unset_key($a_data_phucap,$a_col_pc);
-        //$a_chunk = array_chunk($a_data_phucap, 100);
+        $a_chunk = array_chunk($a_data_phucap, 100);
         foreach(array_chunk($a_data_phucap, 100)  as $data){
             //bangluong_phucap::insert($data);
         }
+        */
         $a_col_cb = array('id','bac','baohiem','macongtac','manguonkp','pthuong','theodoi');
         $a_data_canbo = unset_key($a_data_canbo,$a_col_cb);
+
+        //dd($a_data_canbo);
         foreach(array_chunk($a_data_canbo, 50)  as $data){
             bangluong_ct::insert($data);
         }
-        //dd($a_data_canbo);
+
 
         //Tính toán lương cho cán bộ kiêm nhiệm
         $a_kn_canbo = array();
@@ -2960,7 +2964,7 @@ class bangluongController extends Controller
             $inputs['mact'] = $inputs['mact_mau7'];
             //$inputs['cochu'] = $inputs['cochu_mau1'];
             $model = $this->getBangLuong($inputs)->wherein('phanloai', ['CVCHINH', 'KHONGCT']);
-            //dd($inputs);
+
             $mabl = $inputs['mabl'];
             $m_bl = bangluong::select('thang', 'nam', 'mabl', 'madv', 'ngaylap', 'luongcoban')->where('mabl', $mabl)->first();
             $m_dv = dmdonvi::where('madv', $m_bl->madv)->first();
