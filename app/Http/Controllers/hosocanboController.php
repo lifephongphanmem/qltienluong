@@ -376,6 +376,7 @@ class hosocanboController extends Controller
         $inputs['madv'] = session('admin')->madv;
         $inputs['hesopc'] = chkDbl($inputs['hesopc']);
         $inputs['pckn'] = chkDbl($inputs['pckn']);
+        $inputs['pcxaxe'] = chkDbl($inputs['pcxaxe']);
         $inputs['manguonkp'] = (implode(',',$inputs['manguonkp']));
 
         if ($inputs['id'] > 0) {
@@ -687,6 +688,7 @@ class hosocanboController extends Controller
 
         $inputs['madv'] = session('admin')->madv;
         $inputs['hesopc'] = chkDbl($inputs['hesopc']);
+        $inputs['pcxaxe'] = chkDbl($inputs['pcxaxe']);
         $inputs['pckn'] = chkDbl($inputs['pckn']);
         $inputs['manguonkp'] = (implode(',',$inputs['manguonkp']));
         if ($inputs['id'] > 0) {
