@@ -1012,6 +1012,7 @@ class hosocanboController extends Controller
                 $model->tencanbo = $data[$i][$inputs['tencanbo']];
                 $model->ngaysinh = getDateToDb($data[$i][$inputs['ngaysinh']]);
                 $model->gioitinh = $data[$i][$inputs['gioitinh']];
+                $model->lvtd = $data[$i][$inputs['lvtd']];
 
                 $model->ngaytu =  getDateToDb($data[$i][$inputs['ngaytu']]);
                 $model->ngayden =  getDateToDb($data[$i][$inputs['ngayden']]);

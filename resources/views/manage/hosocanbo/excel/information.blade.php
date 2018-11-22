@@ -161,6 +161,13 @@
 
                                                     <div class="col-md-2">
                                                         <div class="form-group">
+                                                            <label class="control-label">Nơi công tác <span class="require">*</span></label>
+                                                            {!!Form::text('lvtd', 'O', array('id' => 'lvtd','class' => 'form-control required'))!!}
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="col-md-2">
+                                                        <div class="form-group">
                                                             <label class="control-label">Nhận từ dòng<span class="require">*</span></label>
                                                             {!!Form::text('tudong', '5', array('id' => 'tudong','class' => 'form-control required','data-mask'=>'fdecimal'))!!}
                                                         </div>
