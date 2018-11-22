@@ -376,7 +376,7 @@ class hosocanboController extends Controller
         $inputs['madv'] = session('admin')->madv;
         $inputs['hesopc'] = chkDbl($inputs['hesopc']);
         $inputs['pckn'] = chkDbl($inputs['pckn']);
-        $inputs['pcxaxe'] = chkDbl($inputs['pcxaxe']);
+        $inputs['pcdith'] = chkDbl($inputs['pcdith']);
         $inputs['manguonkp'] = (implode(',',$inputs['manguonkp']));
 
         if ($inputs['id'] > 0) {
@@ -688,7 +688,7 @@ class hosocanboController extends Controller
 
         $inputs['madv'] = session('admin')->madv;
         $inputs['hesopc'] = chkDbl($inputs['hesopc']);
-        $inputs['pcxaxe'] = chkDbl($inputs['pcxaxe']);
+        $inputs['pcdith'] = chkDbl($inputs['pcdith']);
         $inputs['pckn'] = chkDbl($inputs['pckn']);
         $inputs['manguonkp'] = (implode(',',$inputs['manguonkp']));
         if ($inputs['id'] > 0) {
@@ -991,7 +991,7 @@ class hosocanboController extends Controller
             $path = public_path() . '/data/uploads/excels/' . $filename . '.xls';
 
             $data = [];
-            //dd ($ar_sheet);
+
             Excel::load($path, function($reader) use (&$data, $inputs) {
                 $obj = $reader->getExcel();
                 $sheet = $obj->getSheet(0);
@@ -999,7 +999,7 @@ class hosocanboController extends Controller
             });
 
             $j = getDbl((hosocanbo::where('madv', session('admin')->madv)->get()->max('stt'))) + 1;
-            //dd($data);
+            dd($data);
             for($i=$inputs['tudong'];$i < ($inputs['tudong'] + $inputs['sodong']); $i++){
                 //dd($data[$i]);
                 if (!isset($data[$i][$inputs['tencanbo']]) || $data[$i][$inputs['tencanbo']] == '') {
