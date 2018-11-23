@@ -17,7 +17,7 @@
     <link rel="stylesheet" href="{{ url('css/style-responsive.css') }}">
 </head>
 <body id="error-page" class="animated bounceInLeft">
-<div id="error-page-content"><h1>Bảo trì</h1><h2>Sở Tài chính Khánh Hòa tiến hành cắt điện chống bão</h2>
+<div id="error-page-content"><h1>Thông báo</h1><h2>Sở Tài chính Khánh Hòa tiến hành cắt điện chống bão</h2>
     <h4><b>Phần mềm sẽ hoạt động trở lại vào thứ 2 ngày 26/11/2018</b></h4>
 <script src="{{ url('js/jquery-1.9.1.js') }}"></script>
 <script src="{{ url('js/jquery-migrate-1.2.1.min.js') }}"></script>
