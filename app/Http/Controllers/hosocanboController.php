@@ -376,6 +376,7 @@ class hosocanboController extends Controller
         $inputs['madv'] = session('admin')->madv;
         $inputs['hesopc'] = chkDbl($inputs['hesopc']);
         $inputs['pckn'] = chkDbl($inputs['pckn']);
+        $inputs['pcdith'] = chkDbl($inputs['pcdith']);
         $inputs['manguonkp'] = (implode(',',$inputs['manguonkp']));
 
         if ($inputs['id'] > 0) {
@@ -687,6 +688,7 @@ class hosocanboController extends Controller
 
         $inputs['madv'] = session('admin')->madv;
         $inputs['hesopc'] = chkDbl($inputs['hesopc']);
+        $inputs['pcdith'] = chkDbl($inputs['pcdith']);
         $inputs['pckn'] = chkDbl($inputs['pckn']);
         $inputs['manguonkp'] = (implode(',',$inputs['manguonkp']));
         if ($inputs['id'] > 0) {
@@ -989,7 +991,7 @@ class hosocanboController extends Controller
             $path = public_path() . '/data/uploads/excels/' . $filename . '.xls';
 
             $data = [];
-            //dd ($ar_sheet);
+
             Excel::load($path, function($reader) use (&$data, $inputs) {
                 $obj = $reader->getExcel();
                 $sheet = $obj->getSheet(0);
@@ -1010,6 +1012,7 @@ class hosocanboController extends Controller
                 $model->tencanbo = $data[$i][$inputs['tencanbo']];
                 $model->ngaysinh = getDateToDb($data[$i][$inputs['ngaysinh']]);
                 $model->gioitinh = $data[$i][$inputs['gioitinh']];
+                $model->lvtd = $data[$i][$inputs['lvtd']];
 
                 $model->ngaytu =  getDateToDb($data[$i][$inputs['ngaytu']]);
                 $model->ngayden =  getDateToDb($data[$i][$inputs['ngayden']]);

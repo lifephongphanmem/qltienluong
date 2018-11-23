@@ -172,7 +172,7 @@
                         </div>
                     </div>
 
-                    <?php $a_kct = array('pckn'); ?>
+                    <?php $a_kct = array('pckn','pcdith'); ?>
                     @foreach($model_pc as $pc)
                         @if(!in_array($pc->mapc,$a_kct))
                             @continue
@@ -807,6 +807,7 @@
                      $('#id_dbhdnd').val(data.id);
                      $('#hesopc_dbhdnd').val(data.hesopc);
                      $('#pckn_dbhdnd').val(data.pckn);
+                     $('#pcdith_dbhdnd').val(data.pcdith);
                      $('#dbhdnd-modal').modal('show');
                 }
                 if(data.phanloai == 'QUANSU'){
@@ -917,6 +918,7 @@
                     macvcq : $('#macvcq_dbhdnd').val(),
                     id: $('#id_dbhdnd').val(),
                     hesopc: $('#hesopc_dbhdnd').val(),
+                    pcdith: $('#pcdith_dbhdnd').val(),
                     phanloai: $('#phanloai_dbhdnd').val(),
                     pckn: $('#pckn_dbhdnd').val()
                 },
