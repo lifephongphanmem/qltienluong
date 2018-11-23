@@ -742,6 +742,7 @@ class baocaobangluongController extends Controller
             //dd($m_pc);
             $a_phucap = array();
             $col = 0;
+            $a_bienche = array_column(chitieubienche::all()->toarray(),'madv','soluongduocgiao');
             $model_tonghop = tonghopluong_donvi::where('macqcq',$madv)
                 ->where('nam', $nam)
                 ->where('thang', $thang)
@@ -765,6 +766,7 @@ class baocaobangluongController extends Controller
             $model_ct = array_column(dmphanloaict::all()->toArray(), 'tenct', 'mact');
             foreach ($model as $chitiet) {
                 $chitiet->madv = $a_dv[$chitiet->mathdv];
+                $chitiet->biencheduocgiao = $this->bienchegiao($chitiet->madv,$nam);
                 $chitiet->maphanloai = $a_pl[$chitiet->madv];
                 //$chitiet->tennguonkp = isset($model_nguonkp[$chitiet->manguonkp]) ? $model_nguonkp[$chitiet->manguonkp] : '';
                 if($chitiet->mact == null){
@@ -782,7 +784,7 @@ class baocaobangluongController extends Controller
             //dd($model->toarray());
             $model_data = $model->map(function ($data) {
                 return collect($data->toArray())
-                    ->only(['mact', 'soluong', 'madv', 'maphanloai'])
+                    ->only(['mact', 'soluong', 'madv', 'maphanloai','biencheduocgiao'])
                     ->all();
             });
             /*
@@ -822,6 +824,34 @@ class baocaobangluongController extends Controller
             return view('errors.notlogin');
     }
 
+    function bienchegiao($madv,$nam)
+    {
+        $bienchegiao = 0;
+        $checkdv = dmdonvi::where('madv',$madv)->where('phanloaitaikhoan','TH')->get();
+        if(count($checkdv) > 0)
+        {
+
+            $a_bienche = chitieubienche::select('soluongduocgiao','nam')
+                ->where('nam',$nam)
+                ->wherein('madv',function($query) use($madv){
+                $query->select('madv')->from('dmdonvi')
+                    ->where('madvbc',$madv)
+                    ->get();
+            })->groupby('nam')
+                ->get();
+            $bienchegiao = $a_bienche->sum('soluongduocgiao');
+        }
+        else
+        {
+            $a_bienche = chitieubienche::select('soluongduocgiao','nam')
+                ->where('nam',$nam)
+                ->where('madv',$madv)
+                ->groupby('nam')
+                ->get();
+            $bienchegiao = $a_bienche->sum('soluongduocgiao');
+        }
+        return $bienchegiao;
+    }
     function baocaohesoluong(Request $request)
     {
         if (Session::has('admin')) {
@@ -837,6 +867,7 @@ class baocaobangluongController extends Controller
             //dd($model_phanloai);
             $a_phucap = array();
             $col = 0;
+            $a_bienche = array_column(chitieubienche::all()->toarray(),'madv','soluongduocgiao');
             $model_tonghop = tonghopluong_donvi::where('madvbc',$madvbc)
                 ->where('nam', $nam)
                 ->where('thang', $thang)
@@ -864,6 +895,7 @@ class baocaobangluongController extends Controller
             $model_ct = array_column(dmphanloaict::all()->toArray(), 'tenct', 'mact');
             foreach ($model as $chitiet) {
                 $chitiet->madv = $a_dv[$chitiet->mathdv];
+                $chitiet->biencheduocgiao = $this->bienchegiao($chitiet->madv,$nam);
                 $chitiet->maphanloai = $a_pl[$chitiet->madv];
                 //$chitiet->tennguonkp = isset($model_nguonkp[$chitiet->manguonkp]) ? $model_nguonkp[$chitiet->manguonkp] : '';
                 if($chitiet->mact == null){
@@ -880,10 +912,10 @@ class baocaobangluongController extends Controller
                 $chitiet->hesoluong = $chitiet->heso/$a_luongcb[$chitiet->mathdv];
 
             }
-            //dd($model->toarray());
+            // dd($model->toarray());
             $model_data = $model->map(function ($data) {
                 return collect($data->toArray())
-                    ->only(['mact', 'soluong', 'madv', 'maphanloai'])
+                    ->only(['mact', 'soluong', 'madv', 'maphanloai','biencheduocgiao'])
                     ->all();
             });
             /*
@@ -953,7 +985,7 @@ class baocaobangluongController extends Controller
                 ->where('macqcq', session('admin')->madv)->get();
 
 
-            dd($model_tonghop_donvi);
+            //dd($model_tonghop_donvi);
             $model_nguonkp = getNguonKP(false);
             $model_phanloaict = getNhomCongTac(false);
 

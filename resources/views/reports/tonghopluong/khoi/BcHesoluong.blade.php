@@ -111,7 +111,8 @@
     </tr>
     <?php $i=1; $Tbienche = 0;
     $Thopdong68 = 0;
-    $Tkhac = 0;?>
+    $Tkhac = 0;
+    $Tbienchegiao = 0;?>
     @foreach($model_phanloai as $pl)
         <!--tr style="font-weight: bold;">
             <td style="text-align: left;">{{convert2Roman($i++)}}</td>
@@ -122,9 +123,10 @@
             $a_pl = a_getelement($a_soluong,array('maphanloai'=>$pl->maphanloai));
             $phanloai = $model->where('maphanloai',$pl->maphanloai);
             $donvi = $model_donvi->where('maphanloai',$pl->maphanloai);
-            $bienche = 0;
-            $hopdong68 = 0;
-            $khac = 0;
+            $bienchepl = 0;
+            $hopdong68pl = 0;
+            $khacpl = 0;
+            $bienchegiaopl = 0;
         ?>
         @foreach($donvi as $dv)
             <tr style="font-weight: bold; font-style: italic">
@@ -139,12 +141,13 @@
                 $bienche = 0;
                 $hopdong68 = 0;
                 $khac = 0;
+                $bienchegiao = 0;
             ?>
             @foreach($chitiet as $ct)
                 <tr class="money">
                     <td style="text-align: right">-</td>
                     <td style="text-align: left">{{$ct->tencongtac}}</td>
-                    <td style="text-align: center">{{$ct->soluong}}</td>
+                    <td style="text-align: center">{{ $ct->tencongtac == "Biên chế"? $ct->biencheduocgiao:0}}</td>
                     <td style="text-align: center">{{$ct->soluong}}</td>
                     <td style="text-align: center">{{$ct->tencongtac == "Biên chế"? $ct->soluong:0}}</td>
                     <td style="text-align: center">{{$ct->tencongtac == "Hợp đồng Nghị định 68"? $ct->soluong:0}}</td>
@@ -155,13 +158,19 @@
                 if($ct->tencongtac == "Biên chế"){
                     $bienche += $ct->soluong;
                     $Tbienche += $ct->soluong;
+                    $bienchepl += $ct->soluong;
+                    $bienchegiao += $ct->biencheduocgiao;
+                    $Tbienchegiao += $ct->biencheduocgiao;
+                    $bienchegiaopl += $ct->biencheduocgiao;
                 }
                 if($ct->tencongtac == "Hợp đồng Nghị định 68"){
                     $hopdong68 += $ct->soluong;
+                    $hopdong68pl += $ct->soluong;
                     $Thopdong68 += $ct->soluong;
                 }
                 if($ct->tencongtac != "Hợp đồng Nghị định 68" && $ct->tencongtac != "Biên chế"){
                     $khac += $ct->soluong;
+                    $khacpl += $ct->soluong;
                     $Tkhac += $ct->soluong;
                 }
 
@@ -184,7 +193,7 @@
             @if(count($chitiet) > 0)
                 <tr class="money" style="font-weight: bold; font-style: italic">
                     <td colspan="2">Cộng</td>
-                    <td style="text-align: center">{{dinhdangso(array_sum( array_column($a_dv,'soluong')))}}</td>
+                    <td style="text-align: center">{{dinhdangso($bienchegiao)}}</td>
                     <td style="text-align: center">{{dinhdangso(array_sum( array_column($a_dv,'soluong')))}}</td>
                     <td style="text-align: center">{{$bienche}}</td>
                     <td style="text-align: center">{{$hopdong68}}</td>
@@ -206,11 +215,11 @@
         @if(count($phanloai) > 0)
             <tr class="money" style="font-weight: bold">
                 <td colspan="2"> Cộng {{$pl->tenphanloai}}</td>
+                <td style="text-align: center">{{dinhdangso($bienchegiaopl)}}</td>
                 <td style="text-align: center">{{dinhdangso(array_sum( array_column($a_pl,'soluong')))}}</td>
-                <td style="text-align: center">{{dinhdangso(array_sum( array_column($a_pl,'soluong')))}}</td>
-                <td style="text-align: center">{{dinhdangso($Tbienche)}}</td>
-                <td style="text-align: center">{{dinhdangso($Thopdong68)}}</td>
-                <td style="text-align: center">{{dinhdangso($Tkhac)}}</td>
+                <td style="text-align: center">{{dinhdangso($bienchepl)}}</td>
+                <td style="text-align: center">{{dinhdangso($hopdong68pl)}}</td>
+                <td style="text-align: center">{{dinhdangso($khacpl)}}</td>
 
                 <td style="text-align: right">{{dinhdangso($phanloai->sum('tonghs'),0,3)}}</td>
                 <td style="text-align: right">{{dinhdangso($phanloai->sum('heso'),0,3)}}</td>
@@ -226,8 +235,8 @@
     @endforeach
     <tr class="money" style="font-weight: bold">
         <td colspan="2"> Tổng cộng</td>
-        <td style="text-align: center">{{dinhdangso(array_sum( array_column($a_pl,'soluong')))}}</td>
-        <td style="text-align: center">{{dinhdangso(array_sum( array_column($a_pl,'soluong')))}}</td>
+        <td style="text-align: center">{{dinhdangso($Tbienchegiao)}}</td>
+        <td style="text-align: center">{{dinhdangso($model->sum('soluong'))}}</td>
         <td style="text-align: center">{{dinhdangso($Tbienche)}}</td>
         <td style="text-align: center">{{dinhdangso($Thopdong68)}}</td>
         <td style="text-align: center">{{dinhdangso($Tkhac)}}</td>
