@@ -100,6 +100,11 @@ class HomeController extends Controller
 
     }
 
+    public function baotri()
+    {
+        return view('errors.baotri');
+    }
+
     public function setting()
     {
         if (Session::has('admin')) {
