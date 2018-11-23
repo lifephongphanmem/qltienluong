@@ -79,6 +79,7 @@
 			<!-- END HEADER SEARCH BOX -->
 			<!-- BEGIN TOP NAVIGATION MENU -->
 			<div class="top-menu">
+                <MARQUEE > <font color="#FF0000" size="2"> Phần mềm tiến hành bảo trì lúc 15h45 ngày 23/11/2018</font> </MARQUEE>
 				<ul class="nav navbar-nav pull-right">
 					<li class="separator hide">
 					</li>
