@@ -87,7 +87,8 @@
                                     <td class="text-center bold">{{$a_trangthai[$value['trangthai']]}}</td>
                                     <td>
                                         @if ($value['mathdv'] != NULL)
-                                            <a href="{{url($furl.'tonghop?thang='.$value['thang'].'&nam='.$nam)}}" class="btn btn-default btn-xs" target="_blank">
+                                            <!--a href="{{url($furl.'tonghop?thang='.$value['thang'].'&nam='.$nam)}}" class="btn btn-default btn-xs" target="_blank"-->
+                                        <a href="{{url('/chuc_nang/tong_hop_luong/khoi/tonghop_khoi?thang='.$value['thang'].'&nam='.$nam.'&madv='.$value['madv'])}}" class="btn btn-default btn-sm" TARGET="_blank">
                                                 <i class="fa fa-print"></i>&nbsp; Số liệu tổng hợp</a>
                                             <!--a href="{{url($furl.'tonghop_diaban?thang='.$value['thang'].'&nam='.$nam)}}" class="btn btn-default btn-xs" target="_blank">
                                                 <i class="fa fa-print"></i>&nbsp; Số liệu địa bàn</a-->
@@ -96,7 +97,8 @@
 
                                         @else
                                             @if($value['trangthai'] != 'CHUADL')
-                                                <a href="{{url($furl.'tonghop?thang='.$value['thang'].'&nam='.$nam)}}" class="btn btn-default btn-xs" target="_blank">
+                                                <a href="{{url($furl.'tonghop_huyen?thang='.$value['thang'].'&nam='.$nam)}}" class="btn btn-default btn-xs" target="_blank">
+                                                    <!--a href="{{url('/chuc_nang/tong_hop_luong/khoi/tonghop_khoi?thang='.$value['thang'].'&nam='.$nam.'&madv='.session('admin')->madv)}}" class="btn btn-default btn-sm" TARGET="_blank"-->
                                                     <i class="fa fa-print"></i>&nbsp; Số liệu tổng hợp</a>
                                                 <!--a href="{{url($furl.'tonghop_diaban?thang='.$value['thang'].'&nam='.$nam)}}" class="btn btn-default btn-xs" target="_blank">
                                                     <i class="fa fa-print"></i>&nbsp; Số liệu địa bàn</a-->
