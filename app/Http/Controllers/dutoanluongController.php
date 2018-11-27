@@ -172,7 +172,7 @@ class dutoanluongController extends Controller
                 $cb->macongtac = $a_congtac[$cb->mact];
                 $cb->masodv = $masodv;
                 //trong bảng danh mục là % vượt khung => sang bảng lương chuyển thành hệ số
-                $cb->vuotkhung = $cb->heso * $cb->vuotkhung / 100;
+                //$cb->vuotkhung = $cb->heso * $cb->vuotkhung / 100;
                 $cb->bhxh_dv = floatval($cb->bhxh_dv) / 100;
                 $cb->bhyt_dv = floatval($cb->bhyt_dv) / 100;
                 $cb->kpcd_dv = floatval($cb->kpcd_dv) / 100;
@@ -204,7 +204,6 @@ class dutoanluongController extends Controller
                 } else {
                     $cb->nam_tnn = null;
                     $cb->thang_tnn = null;
-
                 }
             }
 
@@ -393,6 +392,7 @@ class dutoanluongController extends Controller
         $m_cb['tonghs'] = 0;
         $m_cb['luongtn'] = 0;
         $m_cb['luongcoban'] = $luongcb;
+        $m_cb['vuotkhung'] = ($m_cb['heso'] * $m_cb['vuotkhung']) / 100;
         for ($i = 0; $i < count($a_pc); $i++) {
             $mapc = $a_pc[$i]['mapc'];
             switch (getDbl($a_pc[$i]['phanloai'])) {
