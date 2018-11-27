@@ -322,7 +322,9 @@ Route::group(['prefix'=>'nghiep_vu'],function(){
     Route::group(['prefix'=>'dieu_dong'],function(){
         Route::get('danh_sach','hosodieudongController@index');
         Route::get('create','hosodieudongController@create');
+        Route::get('accept','hosodieudongController@accept');
         Route::post('store','hosodieudongController@store');
+        Route::post('store_accept','hosodieudongController@store_accept');
         Route::get('del/{id}','hosodieudongController@destroy');
 
         Route::get('/maso={macanbo}','hosoluanchuyenController@index_dd');

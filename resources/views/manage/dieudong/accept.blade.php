@@ -33,7 +33,7 @@
                 </div-->
                 <div class="portlet-body form">
                     <!-- BEGIN FORM-->
-                    {!! Form::model($model,['url'=>$furl.'store', 'id' => 'create_tttaikhoan', 'class'=>'horizontal-form']) !!}
+                    {!! Form::model($model,['url'=>$furl.'store_accept', 'id' => 'create_tttaikhoan', 'class'=>'horizontal-form']) !!}
                     <input type="hidden" id="macanbo" name="macanbo" value="{{$model->macanbo}}"/>
                     <input type="hidden" id="gioitinh" name="gioitinh" value="{{$model->gioitinh}}"/>
                     <input type="hidden" id="maso" name="maso" value="{{$model->maso}}"/>
@@ -55,14 +55,14 @@
                                             <div class="col-md-3">
                                                 <div class="form-group">
                                                     <label class="form-control-label">Phân loại<span class="require">*</span></label>
-                                                    {!!Form::select('maphanloai', $a_phanloai, null, array('id' => 'maphanloai','class' => 'form-control','required'))!!}
+                                                    {!!Form::select('maphanloai', $a_phanloai, null, array('id' => 'maphanloai','class' => 'form-control','readonly'))!!}
                                                 </div>
                                             </div>
 
                                             <div class="col-md-3">
                                                 <div class="form-group">
                                                     <label class="form-control-label">Ngày luân chuyển, điều động<span class="require">*</span></label>
-                                                    {!! Form::input('date','ngaylc',null,array('id' => 'ngaylc', 'class' => 'form-control','required'))!!}
+                                                    {!! Form::input('date','ngaylc',null,array('id' => 'ngaylc', 'class' => 'form-control','readonly'))!!}
                                                 </div>
                                             </div>
 
@@ -77,23 +77,6 @@
                                                 <div class="form-group">
                                                     <label class="form-control-label">Đến ngày</label>
                                                     {!! Form::input('date','ngaylcden',null,array('id' => 'ngaylcden', 'class' => 'form-control'))!!}
-                                                </div>
-                                            </div>
-
-                                            <div class="col-md-12">
-                                                <div class="form-group">
-                                                    <label class="form-control-label">Đơn vị chuyển đến</label>
-                                                    <select class="form-control select2me" name="madv_dd" id="madv_dd">
-                                                        <option value="DONVIKHAC">Đơn vị ngoài hệ thống</option>
-                                                        @foreach($model_diaban as $diaban)
-                                                            <optgroup label="{{$diaban->tendvbc}}">
-                                                                <?php $donvi = $model_donvi->where('madvbc',$diaban->madvbc); ?>
-                                                                @foreach($donvi as $ct)
-                                                                    <option value="{{$ct->madv}}">{{$ct->tendv}}</option>
-                                                                @endforeach
-                                                            </optgroup>
-                                                        @endforeach
-                                                    </select>
                                                 </div>
                                             </div>
 

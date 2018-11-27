@@ -12,6 +12,7 @@ use Illuminate\Foundation\Auth\User;
 use Illuminate\Http\Request;
 
 use App\Http\Requests;
+use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Session;
 
 class HomeController extends Controller
@@ -82,14 +83,14 @@ class HomeController extends Controller
                 $m_nghe = $model->where('nam_nghe', $date['year']);
 
                 //$m_sinhnhat=$model->where('thang',$date['mon']);
-                //$m_hettapsu= $model->where('tenct','Hết tập sự');//Chưa làm
+                $m_luanchuyen= \App\hosodieudong::where('madv_dd',session('admin')->madv)->where('trangthai','CHONHAN')->get();
                 //dd($m_nangluong->toarray());
 
                 return view('dashboard')
                     ->with('m_nangluong', $m_nangluong->sortby('ngayden'))
                     ->with('m_nghihuu', $m_nghihuu->sortby('ngaysinh'))
                     ->with('m_nghe',$m_nghe->sortby('tnndenngay'))
-                    //->with('m_hettapsu',$m_hettapsu)
+                    ->with('m_luanchuyen',$m_luanchuyen)
                     ->with('a_ketqua', $a_ketqua)
                     ->with('pageTitle', 'Tổng quan');
 

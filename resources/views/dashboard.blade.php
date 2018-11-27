@@ -185,18 +185,16 @@
                     <table id="sample_6" class="table table-hover table-striped table-bordered">
                         <thead>
                         <tr>
-                            <th class="text-center">STT</th>
+                            <th style="width: 10%" class="text-center">STT</th>
                             <th class="text-center">Họ và tên</th>
-                            <th class="text-center">Ngày chuyển</th>
                         </tr>
                         </thead>
                         <tbody>
-                        @if(isset($m_nhancb))
-                            @foreach($m_nhancb as $key=>$value)
+                        @if(isset($m_luanchuyen))
+                            @foreach($m_luanchuyen as $key=>$value)
                                 <tr>
                                     <td class="text-center">{{$i++}}</td>
                                     <td>{{$value->tencanbo}}</td>
-                                    <td>{{getDayVn($value->ngaynghi)}}</td>
                                 </tr>
                             @endforeach
 

@@ -47,7 +47,7 @@
                         <th class="text-center">Cán bộ</th>
                         <th class="text-center">Phân loại</th>
                         <th class="text-center">Ngày điều động,</br>luân chuyển</th>
-                        <th class="text-center">Đơn vị chuyển đến</th>
+                        <th class="text-center">Tên đơn vị</th>
                         <th class="text-center">Trạng thái</th>
                         <th class="text-center">Thao tác</th>
                         </tr>
@@ -60,14 +60,32 @@
                                         <td>{{$value->tencanbo}}</td>
                                         <td>{{$value->tenphanloai}}</td>
                                         <td class="text-center">{{getDayVn($value->ngaylc)}}</td>
-                                        <td>{{$value->tendv_dd}}</td>
+                                        <td>{{($value->donvi == 'DONVI' ?'Đơn vị nhận: ':'Từ đơn vị: ').$value->tendv_dd}}</td>
                                         <td>{{$value->tentrangthai}}</td>
                                         <td>
-                                            <!-- Kiểm tra trạng thái trc khi xóa -->
-                                            <a href="{{url($furl.'create?maso='.$value->maso)}}" class="btn btn-default btn-xs">
-                                                <i class="fa fa-edit"></i>&nbsp; Chỉnh sửa</a>
-                                            <button type="button" onclick="cfDel('{{$furl.'del/'.$value->id}}')" class="btn btn-default btn-xs" data-target="#delete-modal-confirm" data-toggle="modal">
-                                                <i class="fa fa-trash-o"></i>&nbsp; Xóa</button>
+                                            @if($value->donvi == 'DONVI')
+                                                <!-- Kiểm tra trạng thái trc khi xóa -->
+                                                @if($value->trangthai != 'DACHUYEN')
+                                                    <a href="{{url($furl.'create?maso='.$value->maso)}}" class="btn btn-default btn-xs">
+                                                        <i class="fa fa-edit"></i>&nbsp; Chỉnh sửa</a>
+                                                    <button type="button" onclick="cfDel('{{$furl.'del/'.$value->id}}')" class="btn btn-default btn-xs" data-target="#delete-modal-confirm" data-toggle="modal">
+                                                        <i class="fa fa-trash-o"></i>&nbsp; Xóa</button>
+                                                @else
+                                                    <a href="{{url($furl.'create?maso='.$value->maso)}}" class="btn btn-default btn-xs">
+                                                        <i class="fa fa-edit"></i>&nbsp; Chi tiết</a>
+                                                @endif
+                                            @else
+                                                @if($value->trangthai != 'DACHUYEN')
+                                                    <a href="{{url($furl.'accept?maso='.$value->maso)}}" class="btn btn-default btn-xs">
+                                                        <i class="fa fa-edit"></i>&nbsp; Nhận cán bộ</a>
+                                                    <button type="button" onclick="cfDel('{{$furl.'del/'.$value->id}}')" class="btn btn-default btn-xs" data-target="#delete-modal-confirm" data-toggle="modal">
+                                                        <i class="fa fa-trash-o"></i>&nbsp; Trả lại</button>
+                                                @else
+                                                    <a href="{{url($furl.'accept?maso='.$value->maso)}}" class="btn btn-default btn-xs">
+                                                        <i class="fa fa-edit"></i>&nbsp; Chi tiết</a>
+                                                @endif
+                                            @endif
+
                                         </td>
                                     </tr>
                                 @endforeach
