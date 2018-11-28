@@ -3122,10 +3122,13 @@ class bangluongController extends Controller
             $inputs['mapb'] = $inputs['mapb_mauds'];
             $inputs['macvcq'] = $inputs['macvcq_mauds'];
             $inputs['mact'] = $inputs['mact_mauds'];
+            $inputs['madv'] = session('admin')->madv;
 
             $mabl = $inputs['mabl'];
             $m_bl = bangluong::select('thang','nam','mabl','madv','ngaylap','phanloai')->where('mabl',$mabl)->first();
-            $model = bangluong_ct::where('mabl',$mabl)->get();
+            $model= $this->getBangLuong_moi($inputs);
+            //dd($model);
+            //$model = bangluong_ct::where('mabl',$mabl)->get();
             $model_hoso = hosocanbo::where('madv',$m_bl->madv)->get();
             foreach($model as $ct) {
                 $hoso = $model_hoso->where('macanbo', $ct->macanbo)->first();
@@ -3906,18 +3909,20 @@ class bangluongController extends Controller
     function getBangLuong_moi($inputs){
         $model = bangluong_ct::where('mabl', $inputs['mabl'])->get();
         $m_hoso = hosocanbo::where('madv', $inputs['madv'])->get();
-
-        $a_ht = array_column($m_hoso->toarray(),'tencanbo','macanbo');
+        //$a_ht = array_column($m_hoso->keyby('macanbo')->toarray(),'tencanbo','macanbo');
         $dmchucvucq = array_column(dmchucvucq::all('tenvt', 'macvcq')->toArray(), 'tenvt', 'macvcq');
-        $sunghiep = array_column($m_hoso->toarray(), 'sunghiep', 'macanbo');
+        //$sunghiep = array_column($m_hoso->toarray(), 'sunghiep', 'macanbo');
         $nhomct = array_column(dmphanloaict::all('macongtac', 'mact')->toArray(), 'macongtac', 'mact');
-
+        $a_ht = $m_hoso->keyby('macanbo')->toarray();
         foreach ($model as $hs) {
             $hs->tencv = isset($dmchucvucq[$hs->macvcq]) ? $dmchucvucq[$hs->macvcq] : '';
-            $hs->sunghiep = isset($sunghiep[$hs->macanbo]) ? $sunghiep[$hs->macanbo] : '';
+            $hs->sunghiep = isset($a_ht[$hs->macanbo]) ? $a_ht[$hs->macanbo]['sunghiep'] : '';
+            $hs->sotk = isset($a_ht[$hs->macanbo]) ? $a_ht[$hs->macanbo]['sotk'] : '';
+            //$hs->sunghiep = isset($a_ht[$hs->macanbo]) ? $sunghiep[$hs->macanbo] : '';
             $hs->macongtac = isset($nhomct[$hs->mact]) ? $nhomct[$hs->mact] : '';
             if($hs->tencanbo == ''){
-                $hs->tencanbo = isset($a_ht[$hs->macanbo]) ? $a_ht[$hs->macanbo] : ''; //kiêm nhiệm chưa có tên cán bộ
+                $hs->tencanbo = isset($a_ht[$hs->macanbo]) ? $a_ht[$hs->macanbo]['tencanbo'] : ''; //kiêm nhiệm chưa có tên cán bộ
+                //$hs->tencanbo = isset($a_ht[$hs->macanbo]) ? $a_ht[$hs->macanbo] : ''; //kiêm nhiệm chưa có tên cán bộ
             }
         }
 
