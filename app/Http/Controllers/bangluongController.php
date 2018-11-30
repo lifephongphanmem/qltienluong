@@ -1165,7 +1165,7 @@ class bangluongController extends Controller
 
                     //Gán tham số mặc định
                     $cb->mabl = $inputs['mabl'];
-                    $cb->vuotkhung = 0;//đơn vị tạo trước update
+                    //$cb->vuotkhung = 0;//đơn vị tạo trước update
                     $cb->sunghiep = null;
                     $cb->mact = $hoso['mact'];
                     $cb->macvcq = $hoso['macvcq'];
