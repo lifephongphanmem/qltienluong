@@ -1427,6 +1427,9 @@ class bangluongController extends Controller
     function destroy_ct($id){
         if (Session::has('admin')) {
             $model = bangluong_ct::find($id);
+            hosotruylinh::where('mabl', $model->mabl)
+                ->where('macanbo', $model->macanbo)
+                ->update(['mabl' => null]);
             $model->delete();
             return redirect('/chuc_nang/bang_luong/bang_luong?mabl='.$model->mabl.'&mapb='.$model->mapb);
             //return redirect('/chuc_nang/bang_luong/maso='.$model->mabl);
