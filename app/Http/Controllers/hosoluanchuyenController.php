@@ -13,7 +13,7 @@ use App\Http\Requests;
 use Illuminate\Support\Facades\Session;
 
 class hosoluanchuyenController extends Controller
-{
+{//bỏ
     //   <editor-fold desc="--Điều động, luân chuyển cán bộ--">
     function index_dd($macanbo){
         if (Session::has('admin')) {

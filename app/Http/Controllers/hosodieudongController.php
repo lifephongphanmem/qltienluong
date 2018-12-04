@@ -21,29 +21,29 @@ class hosodieudongController extends Controller
     function index()
     {
         if (Session::has('admin')) {
-            //lấy danh sách cán bộ luân chuyển trong đơn
-
-            //lấy cán bộ đơn vị # chuyển đến (trạng thái, phân loại)
-            $model = hosodieudong::where('madv', session('admin')->madv)->get();
-            $model_canbo = hosocanbo::where('madv', session('admin')->madv)->where('theodoi', '<', '9')->get();
             $a_pl = getPhanLoaiLuanChuyen();
             $a_tt = getStatus();
+            $a_dv = array_column(\App\dmdonvi::select('madv', 'tendv')->get()->toarray(), 'tendv', 'madv');
 
-            //tuywf theo phan laoi mà có chức năng tương ứng
-            // + được điều động, lc dến => nhận cán bộ
-            /*
-            //$m_pbm=dmphongban::all('mapb','tenpb')->toArray();
-            $m_cvm=dmchucvucq::all('tencv', 'macvcq')->toArray();
-            $m_dvm=dmdonvi::select('tendv', 'madv')->where('madvbc',session('admin')->madvbc)->get()->toArray();
-
-
-            */
-            foreach($model as $ct){
-                //$hs->tenpb=getInfoPhongBan($hs,$m_pbm);
-                $ct->tenphanloai = isset($a_pl[$ct->maphanloai])? $a_pl[$ct->maphanloai] : '';
-                $ct->tentrangthai = isset($a_tt[$ct->trangthai])? $a_tt[$ct->trangthai] : '';
-                $ct->tendv_dd=getTenDV($ct->madv_dd);
+            //lấy danh sách cán bộ luân chuyển trong đơn
+            $model_dv = hosodieudong::where('madv', session('admin')->madv)->get();
+            foreach ($model_dv as $ct) {
+                $ct->donvi = 'DONVI';//biến phân biệt đơn vị, luân chuyển, điều động
+                $ct->tenphanloai = isset($a_pl[$ct->maphanloai]) ? $a_pl[$ct->maphanloai] : '';
+                $ct->tentrangthai = isset($a_tt[$ct->trangthai]) ? $a_tt[$ct->trangthai] : '';
+                $ct->tendv_dd = isset($a_dv[$ct->madv_dd]) ? $a_dv[$ct->madv_dd] : '';
             }
+
+            //lấy cán bộ đơn vị # chuyển đến (trạng thái, phân loại)
+            $model_dd = hosodieudong::where('madv_dd', session('admin')->madv)->get();
+            foreach ($model_dd as $ct) {
+                $ct->donvi = $ct->maphanloai;//biến phân biệt đơn vị, luân chuyển, điều động
+                $ct->tenphanloai = isset($a_pl[$ct->maphanloai]) ? $a_pl[$ct->maphanloai] : '';
+                $ct->tentrangthai = isset($a_tt[$ct->trangthai]) ? $a_tt[$ct->trangthai] : '';
+                $ct->tendv_dd = isset($a_dv[$ct->madv_dd]) ? $a_dv[$ct->madv_dd] : '';
+            }
+            $model = $model_dv->merge($model_dd);
+            $model_canbo = hosocanbo::where('madv', session('admin')->madv)->where('theodoi', '<', '9')->get();
 
             return view('manage.dieudong.index')
                 ->with('furl', '/nghiep_vu/dieu_dong/')
@@ -91,6 +91,34 @@ class hosodieudongController extends Controller
             return view('errors.notlogin');
     }
 
+    function accept(Request $request)
+    {
+        if (Session::has('admin')) {
+            $inputs = $request->all();
+            $model = hosodieudong::where('maso',$inputs['maso'])->first();
+            $model_pc = dmphucap_donvi::where('madv', session('admin')->madv)->get();
+            $model_nhomct = dmphanloaicongtac::select('macongtac', 'tencongtac')->get();
+            $model_tenct = dmphanloaict::select('tenct', 'macongtac', 'mact')->get();
+            $model_diaban = dmdonvibaocao::where('level','H')->get();
+            $model_donvi = dmdonvi::where('phanloaitaikhoan','SD')->get();
+            $a_phanloai = getPhanLoaiLuanChuyen();
+            return view('manage.dieudong.accept')
+                ->with('furl', '/nghiep_vu/dieu_dong/')
+                ->with('inputs',$inputs)
+                ->with('model',$model)
+                ->with('model_nhomct', $model_nhomct)
+                ->with('model_tenct', $model_tenct)
+                ->with('model_diaban', $model_diaban)
+                ->with('model_donvi', $model_donvi)
+                ->with('a_heso', array('hesott'))
+                ->with('a_phanloai', $a_phanloai)
+                //->with('a_heso', array('heso', 'vuotkhung', 'hesopc', 'hesott'))
+                ->with('model_pc', $model_pc)
+                ->with('pageTitle', 'Nhận cán bộ luân chuyển, điều động');
+        } else
+            return view('errors.notlogin');
+    }
+
     function store(Request $request)
     {
         if (Session::has('admin')) {
@@ -134,6 +162,35 @@ class hosodieudongController extends Controller
                 //DONVI: trong hệ thống => trạng thái chuyển về chờ nhận
                 //dd($model);
                 hosodieudong::where('maso',$insert['maso'])->first()->update($insert);
+            }
+
+            return redirect('/nghiep_vu/dieu_dong/danh_sach');
+        } else
+            return view('errors.notlogin');
+    }
+
+    function store_accept(Request $request)
+    {
+        if (Session::has('admin')) {
+            $insert = $request->all();
+            $maso = $insert['maso'];
+            $macanbo = $insert['macanbo'];
+
+            //lưu hồ sơ
+            $insert['macanbo'] = session('admin')->madv . '_' . getdate()[0];
+            $insert['madv'] = session('admin')->madv;
+            hosocanbo::create($insert);
+            //cập nhật trag thái
+            hosodieudong::where('maso',$maso)->update(['trangthai'=>'DACHUYEN']);
+            //chuyển cán bộ cũ
+            if($insert['maphanloai'] == 'LUANCHUYEN'){
+                $model_hoso = hosocanbo::where('macanbo',$macanbo)->first();
+                $model_hoso->update(['theodoi'=>'9']);
+                $model_hoso->maso = getdate()[0];
+                $model_hoso->maphanloai = 'LUANCHUYEN';
+                $a_kq = $model_hoso->toarray();
+                unset($a_kq['id']);
+                hosothoicongtac::create($a_kq);
             }
 
             return redirect('/nghiep_vu/dieu_dong/danh_sach');

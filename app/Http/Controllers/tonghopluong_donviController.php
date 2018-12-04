@@ -52,15 +52,16 @@ class tonghopluong_donviController extends Controller
             */
             $a_trangthai = getStatus();
             $inputs = $requests->all();
-            $model = tonghopluong_donvi::where('madv', session('admin')->madv)->get();
-            $model_bangluong = bangluong::where('madv', session('admin')->madv)->get();
+            $model = tonghopluong_donvi::where('madv', session('admin')->madv)->where('nam', $inputs['nam'])->get();
+            $model_bangluong = bangluong::where('madv', session('admin')->madv)->where('nam', $inputs['nam'])->get();
             for ($i = 0; $i < count($a_data); $i++) {
                 $a_data[$i]['maphanloai'] = session('admin')->maphanloai;
                 $a_data[$i]['ngaygui'] = '';
                 $a_data[$i]['macqcq'] = '';
                 $a_data[$i]['tendvcq'] = '';
-                $tonghop = $model->where('thang', $a_data[$i]['thang'])->where('nam', $inputs['nam'])->first();
-                $bangluong = $model_bangluong->where('thang', $a_data[$i]['thang'])->where('nam', $inputs['nam']);
+                $a_data[$i]['noidung'] = 'Dữ liệu tổng hợp của ' . getTenDV(session('admin')->madv) . ' thời điểm ' . $a_data[$i]['thang'] . '/' . $inputs['nam'];
+                $tonghop = $model->where('thang', $a_data[$i]['thang'])->first();
+                $bangluong = $model_bangluong->where('thang', $a_data[$i]['thang']);
                 if (count($bangluong) > 0) {
                     $a_data[$i]['bangluong'] = 'ok';
                     if (count($tonghop) > 0) {
@@ -74,16 +75,29 @@ class tonghopluong_donviController extends Controller
                             $a_data[$i]['tendvcq'] = $a_data[$i]['macqcq']; //trường hợp đơn vị gửi nhưng ko pải đơn vị trong hệ thống => đưa mã để kiểm tra
                         }
                     } else {
-                        $a_data[$i]['noidung'] = 'Dữ liệu tổng hợp của ' . getTenDV(session('admin')->madv) . ' thời điểm ' . $a_data[$i]['thang'] . '/' . $inputs['nam'];
                         $a_data[$i]['trangthai'] = 'CHUATAO';
                     }
                 } else {
-                    $a_data[$i]['noidung'] = 'Dữ liệu tổng hợp của ' . getTenDV(session('admin')->madv) . ' thời điểm ' . $a_data[$i]['thang'] . '/' . $inputs['nam'];
-                    $a_data[$i]['bangluong'] = null;
-                    $a_data[$i]['trangthai'] = 'CHUALUONG';
+                    //do trc xóa bảng lương nhưng chưa xóa tổng hợp
+                    if (count($tonghop) > 0) {
+                        $a_data[$i]['bangluong'] = 'ok';
+                        $a_data[$i]['noidung'] = $tonghop->noidung;
+                        $a_data[$i]['mathdv'] = $tonghop->mathdv;
+                        $a_data[$i]['trangthai'] = $tonghop->trangthai;
+                        $a_data[$i]['ngaygui'] = $tonghop->ngaygui;
+                        $a_data[$i]['macqcq'] = $tonghop->macqcq;
+                        $a_data[$i]['tendvcq'] = getTenDV($a_data[$i]['macqcq']);
+                        if($a_data[$i]['tendvcq'] == ''){
+                            $a_data[$i]['tendvcq'] = $a_data[$i]['macqcq']; //trường hợp đơn vị gửi nhưng ko pải đơn vị trong hệ thống => đưa mã để kiểm tra
+                        }
+                    } else {
+                        $a_data[$i]['bangluong'] = null;
+                        $a_data[$i]['trangthai'] = 'CHUALUONG';
+                    }
                 }
 
             }
+            //dd($model);
             //dd($a_data);
             return view('functions.tonghopluong.donvi.index')
                 ->with('furl', '/chuc_nang/tong_hop_luong/don_vi/')

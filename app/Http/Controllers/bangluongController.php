@@ -1165,7 +1165,7 @@ class bangluongController extends Controller
 
                     //Gán tham số mặc định
                     $cb->mabl = $inputs['mabl'];
-                    $cb->vuotkhung = 0;//đơn vị tạo trước update
+                    //$cb->vuotkhung = 0;//đơn vị tạo trước update
                     $cb->sunghiep = null;
                     $cb->mact = $hoso['mact'];
                     $cb->macvcq = $hoso['macvcq'];
@@ -1212,9 +1212,8 @@ class bangluongController extends Controller
                                         if ($cthuc != '')
                                             $heso += $cb->$cthuc;
                                     }
+                                    $cb->$mapc = ($heso * $cb->$mapc) / 100;
                                 }
-
-                                $cb->$mapc = ($heso * $cb->$mapc) / 100;
                                 $tonghs += $cb->$mapc;
                                 break;
                             }
@@ -1428,6 +1427,9 @@ class bangluongController extends Controller
     function destroy_ct($id){
         if (Session::has('admin')) {
             $model = bangluong_ct::find($id);
+            hosotruylinh::where('mabl', $model->mabl)
+                ->where('macanbo', $model->macanbo)
+                ->update(['mabl' => null]);
             $model->delete();
             return redirect('/chuc_nang/bang_luong/bang_luong?mabl='.$model->mabl.'&mapb='.$model->mapb);
             //return redirect('/chuc_nang/bang_luong/maso='.$model->mabl);
@@ -3122,10 +3124,13 @@ class bangluongController extends Controller
             $inputs['mapb'] = $inputs['mapb_mauds'];
             $inputs['macvcq'] = $inputs['macvcq_mauds'];
             $inputs['mact'] = $inputs['mact_mauds'];
+            $inputs['madv'] = session('admin')->madv;
 
             $mabl = $inputs['mabl'];
             $m_bl = bangluong::select('thang','nam','mabl','madv','ngaylap','phanloai')->where('mabl',$mabl)->first();
-            $model = bangluong_ct::where('mabl',$mabl)->get();
+            $model= $this->getBangLuong_moi($inputs);
+            //dd($model);
+            //$model = bangluong_ct::where('mabl',$mabl)->get();
             $model_hoso = hosocanbo::where('madv',$m_bl->madv)->get();
             foreach($model as $ct) {
                 $hoso = $model_hoso->where('macanbo', $ct->macanbo)->first();
@@ -3906,18 +3911,20 @@ class bangluongController extends Controller
     function getBangLuong_moi($inputs){
         $model = bangluong_ct::where('mabl', $inputs['mabl'])->get();
         $m_hoso = hosocanbo::where('madv', $inputs['madv'])->get();
-
-        $a_ht = array_column($m_hoso->toarray(),'tencanbo','macanbo');
+        //$a_ht = array_column($m_hoso->keyby('macanbo')->toarray(),'tencanbo','macanbo');
         $dmchucvucq = array_column(dmchucvucq::all('tenvt', 'macvcq')->toArray(), 'tenvt', 'macvcq');
-        $sunghiep = array_column($m_hoso->toarray(), 'sunghiep', 'macanbo');
+        //$sunghiep = array_column($m_hoso->toarray(), 'sunghiep', 'macanbo');
         $nhomct = array_column(dmphanloaict::all('macongtac', 'mact')->toArray(), 'macongtac', 'mact');
-
+        $a_ht = $m_hoso->keyby('macanbo')->toarray();
         foreach ($model as $hs) {
             $hs->tencv = isset($dmchucvucq[$hs->macvcq]) ? $dmchucvucq[$hs->macvcq] : '';
-            $hs->sunghiep = isset($sunghiep[$hs->macanbo]) ? $sunghiep[$hs->macanbo] : '';
+            $hs->sunghiep = isset($a_ht[$hs->macanbo]) ? $a_ht[$hs->macanbo]['sunghiep'] : '';
+            $hs->sotk = isset($a_ht[$hs->macanbo]) ? $a_ht[$hs->macanbo]['sotk'] : '';
+            //$hs->sunghiep = isset($a_ht[$hs->macanbo]) ? $sunghiep[$hs->macanbo] : '';
             $hs->macongtac = isset($nhomct[$hs->mact]) ? $nhomct[$hs->mact] : '';
             if($hs->tencanbo == ''){
-                $hs->tencanbo = isset($a_ht[$hs->macanbo]) ? $a_ht[$hs->macanbo] : ''; //kiêm nhiệm chưa có tên cán bộ
+                $hs->tencanbo = isset($a_ht[$hs->macanbo]) ? $a_ht[$hs->macanbo]['tencanbo'] : ''; //kiêm nhiệm chưa có tên cán bộ
+                //$hs->tencanbo = isset($a_ht[$hs->macanbo]) ? $a_ht[$hs->macanbo] : ''; //kiêm nhiệm chưa có tên cán bộ
             }
         }
 

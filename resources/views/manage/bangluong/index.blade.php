@@ -280,8 +280,8 @@
                         <h4 id="modal-header-primary-label" class="modal-title">Đồng ý cập nhật lại bảng lương ?</h4>
                     </div>
                     <div class="modal-body">
-                        <div class="form-group">ph
-                            <label><b>Chi tiết bảng lương sẽ được cập nhật lại theo thông tin cán bộ mới nhấ. Bạn có chắc chắn muốn cập nhật ?</b></label>
+                        <div class="form-group">
+                            <label><b>Chi tiết bảng lương sẽ được cập nhật lại theo thông tin cán bộ mới nhất. Bạn có chắc chắn muốn cập nhật ?</b></label>
                         </div>
                     </div>
 

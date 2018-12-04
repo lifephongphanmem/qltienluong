@@ -90,7 +90,7 @@
         </th>
     </tr-->
 </table>
-<p style="text-align: center; font-weight: bold; font-size: 20px;">BẢNG THANH THANH TOÁN TIỀN PHỤ CẤP {{$thongtin['tencv']}}</p>
+<p style="text-align: center; font-weight: bold; font-size: 20px;">BẢNG THANH TOÁN TIỀN PHỤ CẤP {{$thongtin['tencv']}}</p>
 <p style="text-align: center; font-style: italic">Tháng {{$thongtin['thang']}} năm {{$thongtin['nam']}}</p>
 <p style="font-weight: bold">Chương: ...; Loại: ...; Khoản: ...;</p>
 
