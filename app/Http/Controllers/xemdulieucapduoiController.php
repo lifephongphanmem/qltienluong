@@ -28,6 +28,7 @@ class xemdulieucapduoiController extends Controller
             $inputs=$request->all();
             $madv = session('admin')->madv;
             $a_trangthai=array('ALL'=>'Tất cả dữ liệu','CHOGUI'=>'Chưa gửi dữ liệu','DAGUI'=>'Đã gửi dữ liệu');
+            $a_phanloai = array('ALL'=>'Tất cả các đơn vị','MAMNON'=>'Trường Mầm non','TIEUHOC'=>'Trường Tiểu học', 'THCS'=>'Trường Trung học cơ sở');
             //$list_donvi= dmdonvi::select('madv', 'tendv')->where('madvbc', session('admin')->madvbc)->get();
             $model_donvi = dmdonvi::select('madv', 'tendv','macqcq','maphanloai','phanloaitaikhoan')->where('macqcq', $madv)->where('madv','<>',$madv)->get();
             $model_tonghop = tonghopluong_donvi::where('macqcq', $madv)
@@ -123,7 +124,9 @@ class xemdulieucapduoiController extends Controller
             if($inputs['trangthai'] !='ALL'){
                 $model_donvi = $model_donvi->where('trangthai', $inputs['trangthai']);
             }
-            $a_phanloai = array('ALL'=>'Tất cả các đơn vị','MAMNON'=>'Trường Mầm non','TIEUHOC'=>'Trường Tiểu học', 'THCS'=>'Trường Trung học cơ sở');
+            if($inputs['phanloai'] !='ALL'){
+                $model_donvi = $model_donvi->where('maphanloai', $inputs['phanloai']);
+            }
             //dd($model_donvi->toarray());
             return view('functions.viewdata.index')
                 ->with('model', $model_donvi)

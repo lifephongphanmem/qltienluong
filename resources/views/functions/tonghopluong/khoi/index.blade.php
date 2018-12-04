@@ -94,7 +94,7 @@
                                                 <i class="fa fa-print"></i>&nbsp; Số liệu địa bàn</a>
                                                 -->
 
-                                            <a href="{{url('/chuc_nang/xem_du_lieu/index?thang='.$value['thang'].'&nam='.$nam.'&trangthai=ALL')}}" class="btn btn-default btn-xs">
+                                            <a href="{{url('/chuc_nang/xem_du_lieu/index?thang='.$value['thang'].'&nam='.$nam.'&trangthai=ALL'.'&phanloai=ALL')}}" class="btn btn-default btn-xs">
                                                 <i class="fa fa-list-alt"></i>&nbsp; Số liệu chi tiết</a>
 
                                             @if($value['trangthai'] == 'TRALAI')
@@ -114,18 +114,18 @@
                                                 -->
 
                                                 @if($value['trangthai'] != 'CHUADAYDU')
-                                                    <a href="{{url('/chuc_nang/xem_du_lieu/index?thang='.$value['thang'].'&nam='.$nam.'&trangthai=ALL')}}" class="btn btn-default btn-xs">
+                                                    <a href="{{url('/chuc_nang/xem_du_lieu/index?thang='.$value['thang'].'&nam='.$nam.'&trangthai=ALL'.'&phanloai=ALL')}}" class="btn btn-default btn-xs">
                                                         <i class="fa fa-list-alt"></i>&nbsp; Số liệu chi tiết</a>
                                                     <button type="button" class="btn btn-default btn-xs" onclick="confirmChuyen('{{$value['thang']}}','{{$nam}}')" data-target="#chuyen-modal" data-toggle="modal"><i class="fa fa-share-square-o"></i>&nbsp;
                                                         Gửi dữ liệu</button>
                                                 @else
-                                                    <a href="{{url('/chuc_nang/xem_du_lieu/index?thang='.$value['thang'].'&nam='.$nam.'&trangthai=CHOGUI')}}" class="btn btn-default btn-xs">
+                                                    <a href="{{url('/chuc_nang/xem_du_lieu/index?thang='.$value['thang'].'&nam='.$nam.'&trangthai=CHOGUI'.'&phanloai=ALL')}}" class="btn btn-default btn-xs">
                                                         <i class="fa fa-list-alt"></i>&nbsp; Đơn vị chưa gửi dữ liệu</a>
                                                 @endif
 
 
                                             @else
-                                                <a href="{{url('/chuc_nang/xem_du_lieu/index?thang='.$value['thang'].'&nam='.$nam.'&trangthai=ALL')}}" class="btn btn-default btn-xs">
+                                                <a href="{{url('/chuc_nang/xem_du_lieu/index?thang='.$value['thang'].'&nam='.$nam.'&trangthai=ALL'.'&phanloai=ALL')}}" class="btn btn-default btn-xs">
                                                             <i class="fa fa-stack-overflow"></i>&nbsp; Chưa có dữ liệu</a>
                                             @endif
                                         @endif

@@ -292,7 +292,7 @@
                                 </li>
 
                                 <li>
-                                    <a href="{{url('chuc_nang/xem_du_lieu/index?thang='.date('m').'&nam='.date('Y').'&trangthai=ALL')}}"><i class="fa fa-caret-right"></i>Xem số liệu tổng hợp từ đơn vị cấp dưới</a>
+                                    <a href="{{url('chuc_nang/xem_du_lieu/index?thang='.date('m').'&nam='.date('Y').'&trangthai=ALL'.'&phanloai=ALL')}}"><i class="fa fa-caret-right"></i>Xem số liệu tổng hợp từ đơn vị cấp dưới</a>
                                 </li>
                             @endif
 

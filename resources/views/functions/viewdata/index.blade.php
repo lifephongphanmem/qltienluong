@@ -229,7 +229,8 @@
             var thang = $('#thang').val();
             var nam = $('#nam').val();
             var trangthai = $('#trangthai').val();
-            return '/chuc_nang/xem_du_lieu/index?thang='+ thang +'&nam=' + nam + '&trangthai=' + trangthai;
+            var phanloai = $('#phanloai').val();
+            return '/chuc_nang/xem_du_lieu/index?thang='+ thang +'&nam=' + nam + '&trangthai=' + trangthai + '&phanloai=' + phanloai;
         }
 
         $(function(){
@@ -240,6 +241,9 @@
                 window.location.href = getLink();
             });
             $('#trangthai').change(function() {
+                window.location.href = getLink();
+            });
+            $('#phanloai').change(function() {
                 window.location.href = getLink();
             });
         })
