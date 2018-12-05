@@ -84,9 +84,9 @@
                                                     <a href="{{url('/chuc_nang/tong_hop_luong/huyen/chitiet_khoi?thang='.$value['thang'].'&nam='.$nam.'&madv='.$value['madv'])}}" class="btn btn-default btn-xs" target="_blank">
                                                     <i class="fa fa-print"></i>&nbsp; Số liệu chi tiết khối</a>
                                             @else
-                                                <a href="{{url('/chuc_nang/tong_hop_luong/huyen/printf_data/ma_so='.$value['mathdv'])}}" class="btn btn-default btn-sm" TARGET="_blank">
+                                                <a href="{{url('/chuc_nang/tong_hop_luong/huyen/printf_data_huyen?mathdv='.$value['mathdv'].'&madv='.$value['madv'])}}" class="btn btn-default btn-sm" TARGET="_blank">
                                                     <i class="fa fa-print"></i>&nbsp; Số liệu tổng hợp</a>
-                                                <a href="{{url('/chuc_nang/tong_hop_luong/huyen/printf_bl_huyen/ma_so='.$value['mathdv'])}}" class="btn btn-default btn-sm" TARGET="_blank">
+                                                <a href="{{url('/chuc_nang/tong_hop_luong/huyen/printf_bl_huyen?mathdv='.$value['mathdv'].'&madv='.$value['madv'])}}" class="btn btn-default btn-sm" TARGET="_blank">
                                                     <i class="fa fa-print"></i>&nbsp; Số liệu chi tiết</a>
                                             @endif
                                             <!--a href="{{url('/chuc_nang/tong_hop_luong/huyen/printf_data_diaban/ma_so='.$value['mathdv'])}}" class="btn btn-default btn-sm" TARGET="_blank">
