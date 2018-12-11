@@ -80,7 +80,7 @@
                                     <li><a href="#" data-target="#thoaidutoan-huyen-modal" data-toggle="modal" onclick="dutoanluong_huyen('{{$furl.'huyen/dutoanluong'}}')">Dự toán lương</a></li>
                                     <li><a href="#" data-target="#thoaichitra-khoi-moi-modal" data-toggle="modal" onclick="chitraluong_khoi_moi('{{$furl.'huyen/baocaohesoluong'}}')">Báo cáo hệ số lương của đơn vị có mặt</a></li>
 
-                                    <li><a href="{{url('/bao_cao/thong_tu_67/huyen/mau2a1')}}" target="_blank">Báo cáo nhu cầu kinh phí thực hiện nghị định 47/2017/NĐ-CP (Mẫu 2a/1)</a></li>
+                                    <!--li><a href="{{url('/bao_cao/thong_tu_67/huyen/mau2a1')}}" target="_blank">Báo cáo nhu cầu kinh phí thực hiện nghị định 47/2017/NĐ-CP (Mẫu 2a/1)</a></li>
                                     <li><a href="{{url('/bao_cao/thong_tu_67/huyen/mau2a2')}}" target="_blank">Báo cáo nhu cầu kinh phí thực hiện nghị định 47/2017/NĐ-CP (Mẫu 2a/2)</a></li>
                                     <li><a href="{{url('/bao_cao/thong_tu_67/huyen/mau2b')}}" target="_blank">Báo cáo tổng hợp quỹ trợ cấp tăng thêm của cán bộ xã, phường, thị trấn đã nghỉ việc (Mẫu 2b)</a></li>
                                     <li><a href="{{url('/bao_cao/thong_tu_67/huyen/mau2c')}}" target="_blank">Báo cáo nhu cầu chênh lệch (Mẫu 2c)</a></li>
@@ -91,14 +91,13 @@
                                     <li><a href="{{url('/bao_cao/thong_tu_67/don_vi/mau2h')}}" target="_blank">Tổng hợp phụ cấp thu hút tăng, giảm do điều chỉnh địa bàn vùng kinh tế xã hội đặc biệt khó khăn (Mẫu 2h)</a></li>
 
                                     <li><a href="{{url('/bao_cao/thong_tu_67/huyen/mau4a')}}" target="_blank">Báo cáo nguồn kinh phí (Mẫu 4a)</a></li>
-                                    <li><a href="{{url('/bao_cao/thong_tu_67/huyen/mau4b')}}" target="_blank">Tổng hợp nhu cầu, nguồn kinh phí (Mẫu 4b)</a></li>
+                                    <li><a href="{{url('/bao_cao/thong_tu_67/huyen/mau4b')}}" target="_blank">Tổng hợp nhu cầu, nguồn kinh phí (Mẫu 4b)</a></li-->
 
-
-                                    <!--li><a href="#" data-target="#chitiet-modal" data-toggle="modal" onclick="baocao('{{'/tong_hop_bao_cao/mau2a1_tt67'}}')">Báo cáo nhu cầu kinh phí thực hiện nghị định 47/2017/NĐ-CP (Mẫu 2a/1)</a></li>
-                                    <li><a href="#" data-target="#chitiet-modal" data-toggle="modal" onclick="baocao('{{'/tong_hop_bao_cao/mau2a2_tt67'}}')">Báo cáo nhu cầu kinh phí thực hiện nghị định 47/2017/NĐ-CP (Mẫu 2a/2)</a></li>
+                                    <li><a href="#" data-target="#chitiet-modal" data-toggle="modal" onclick="baocao('{{'/bao_cao/thong_tu_67/huyen/mau2a1'}}')">Báo cáo nhu cầu kinh phí thực hiện nghị định 47/2017/NĐ-CP (Mẫu 2a/1)</a></li>
+                                    <li><a href="#" data-target="#chitiet-modal" data-toggle="modal" onclick="baocao('{{'/bao_cao/thong_tu_67/huyen/mau2a2'}}')">Báo cáo nhu cầu kinh phí thực hiện nghị định 47/2017/NĐ-CP (Mẫu 2a/2)</a></li>
                                     <li><a href="#" data-target="#chitiet-modal" data-toggle="modal" onclick="baocao('{{'/tong_hop_bao_cao/mau2b_tt67'}}')">Báo cáo tổng hợp quỹ trợ cấp tăng thêm của cán bộ xã, phường, thị trấn đã nghỉ việc (Mẫu 2b)</a></li>
 
-                                    <li><a href="#" data-target="#chitiet-modal" data-toggle="modal" onclick="baocao('{{$furl.'mau2c_tt67'}}')">Báo cáo nhu cầu chênh lệch (Mẫu 2c)</a></li-->
+                                    <li><a href="#" data-target="#chitiet-modal" data-toggle="modal" onclick="baocao('{{$furl.'mau2c_tt67'}}')">Báo cáo nhu cầu chênh lệch (Mẫu 2c)</a></li>
                                     <!--li><a href="#" data-target="#chitiet-modal" data-toggle="modal" onclick="baocao('{{$furl.'maubckpbhtn'}}')">Báo cáo nhu cầu kinh phí thực hiện bảo hiểm thất nghiệp theo nghị định 28/2015/NĐ-CP</a></li-->
                                     <!--li><a href="#" data-target="#chitiet-modal" data-toggle="modal" onclick="baocao('{{$furl.'mau2d_tt67'}}')">Tổng hợp kinh phí tăng thêm để thực hiện chế độ phụ cấp đối với cán bộ không chuyên trách (Mẫu 2d)</a></li>
                                     <li><a href="#" data-target="#chitiet-modal" data-toggle="modal" onclick="baocao('{{$furl.'mau2e_tt67'}}')">Tổng hợp kinh phí tăng, giảm do điều chỉnh địa bàn vùng kinh tế xã hội đặc biệt khó khăn (Mẫu 2e)</a></li>
@@ -549,16 +548,7 @@
                                 <div class="form-group">
                                     <label class="col-md-4 control-label"> Năm<span class="require">*</span></label>
                                     <div class="col-md-8">
-                                        {!! Form::select(
-                                        'nam',
-                                        array(
-                                        '2015' => '2015',
-                                        '2016' => '2016',
-                                        '2017' => '2017',
-                                        '2018' => '2018'
-                                        ),null,
-                                        array('id' => 'nam', 'class' => 'form-control'))
-                                        !!}
+                                        {!! Form::select('nam',getNam(),date('Y'),array('id' => 'nam', 'class' => 'form-control'))!!}
                                     </div>
                                 </div>
                                 -->
@@ -566,7 +556,7 @@
                                 <div class="form-group">
                                     <label class="col-md-4 control-label"> Đơn vị<span class="require">*</span></label>
                                     <div class="col-md-8">
-                                        <select id="madv" name="madv" class="form-control">
+                                        <select class="form-control select2me" name="madv" id="madv" >
                                             <option value="">Tất cả các đơn vị</option>
                                             @if(isset($model_dv))
                                                 @foreach($model_dv as $dv)
@@ -582,7 +572,7 @@
                                 <div class="form-group">
                                     <label class="col-md-4 control-label"> Khu vực, địa bàn<span class="require">*</span></label>
                                     <div class="col-md-8">
-                                        <select id="madv" name="madv" class="form-control">
+                                        <select class="form-control select2me" id="madv" name="madv" class="form-control">
                                             <option value="">Tất cả các đơn vị</option>
 
                                             @if(session('admin')->username != 'khthso' && isset($model_dvbc))
@@ -609,9 +599,12 @@
                                 <label class="col-md-4 control-label"> </label>
                                 <input type="checkbox" name="inchitiet" />
                                 <label  > In chi tiết các đơn vị</label>
+                                <input type="checkbox" name="excel" id = "excel"/>
+                                Xuất dữ liệu ra file excel
 
                             </div>
                             <input type="hidden" name="_token" value="{{ csrf_token() }}">
+                            <input type="hidden" name="urlbc" id="urlbc" value="">
                         </div>
                     </div>
                     <input type="hidden" name="_token" value="{{ csrf_token() }}">
@@ -661,9 +654,23 @@
         }
 
     </script>
-    <script>
+
+    <script type="text/javascript">
         function baocao(url){
-            $('#thoaibc').attr('action',url);
+            $('#urlbc').val(url);
+        }
+        window.onsubmit = function() {
+            document.thoaibc.action = get_action();
+        }
+
+        function get_action() {
+            var url = $('#urlbc').val();
+            if ($("input[name='excel']:checked").length == 1) {
+                url = $('#urlbc').val() + 'excel';
+                $('#thoaibc').attr('action', url);
+            }
+            else
+                $('#thoaibc').attr('action',url);
         }
     </script>
 @stop

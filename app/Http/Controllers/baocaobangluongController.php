@@ -62,7 +62,7 @@ class baocaobangluongController extends Controller
                 $model_phanloai = dmphanloaidonvi::wherein('maphanloai',array_column($model_donvi->toarray(),'maphanloai'))->get();
                 $model_phanloaict = dmphanloaict::All();
             }
-            else
+            if(session('admin')->phamvitonghop == 'HUYEN')
             {
                 $model_donvi = dmdonvi::where('macqcq',session('admin')->madv)->get();
                 $model_phanloai = dmphanloaidonvi::wherein('maphanloai',array_column($model_donvi->toarray(),'maphanloai'))->get();

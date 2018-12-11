@@ -708,8 +708,10 @@ Route::group(['prefix'=>'bao_cao'],function(){
         });
 
         Route::group(['prefix'=>'huyen'],function(){
-            Route::get('mau2a1','baocaothongtu67Controller@mau2a1_huyen');
-            Route::get('mau2a2','baocaothongtu67Controller@mau2a2_huyen');
+            Route::post('mau2a1','baocaothongtu67Controller@mau2a1_huyen');
+            Route::post('mau2a1excel','baocaothongtu67Controller@mau2a1_huyen_excel');
+            Route::post('mau2a2','baocaothongtu67Controller@mau2a2_huyen');
+            Route::post('mau2a2excel','baocaothongtu67Controller@mau2a2_huyen_excel');
             Route::get('mau2b','baocaothongtu67Controller@mau2b_donvi');
             Route::get('mau2c','baocaothongtu67Controller@mau2c_huyen');
             Route::get('mau2d','baocaothongtu67Controller@mau2d_donvi');

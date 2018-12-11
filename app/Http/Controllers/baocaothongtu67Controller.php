@@ -14,11 +14,14 @@ use App\hosocanbo;
 use App\nguonkinhphi;
 use App\tonghopluong_donvi;
 use App\tonghopluong_donvi_chitiet;
+use App\tonghopluong_huyen;
 use Illuminate\Http\Request;
 
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Session;
+use Maatwebsite\Excel\Facades\Excel;
+use Illuminate\Support\Str;
 
 class baocaothongtu67Controller extends Controller
 {
@@ -34,6 +37,22 @@ class baocaothongtu67Controller extends Controller
             return view('reports.thongtu67.index')
                 ->with('model_dv', $model_dv)
                 ->with('model_dvbc', $model_dvbc)
+                ->with('model_dvbcT', $model_dvbcT)
+                ->with('furl','/tong_hop_bao_cao/')
+                ->with('pageTitle','Báo cáo tổng hợp lương');
+        } else
+            return view('errors.notlogin');
+    }
+    function index_huyen() {
+        if (Session::has('admin')) {
+            $macqcq=session('admin')->madv;
+            $model_dv=dmdonvi::where('macqcq',$macqcq)->orwhere('madv',$macqcq)->get();
+            $model_dvbcT=dmdonvi::join('dmdonvibaocao','dmdonvi.madvbc','dmdonvibaocao.madvbc')
+                ->where('dmdonvibaocao.level','T')
+                ->where('dmdonvi.phanloaitaikhoan','TH' )
+                ->get();
+            return view('reports.thongtu67.index')
+                ->with('model_dv', $model_dv)
                 ->with('model_dvbcT', $model_dvbcT)
                 ->with('furl','/tong_hop_bao_cao/')
                 ->with('pageTitle','Báo cáo tổng hợp lương');
@@ -374,8 +393,8 @@ class baocaothongtu67Controller extends Controller
                 $tonghop = $model_tonghop->where('mathdv',$ct->mathdv)->first();
                 //dd($model_tonghop_ct->toarray());
                 $a_th =  array_column($tonghop->toarray(),'mathdv','maphanloai');
-                //$ct->maphanloai = $model_donvi->where('madv',$tonghop->madv)->first()->maphanloai;
-                $ct->maphanloai =  $a_th[$ct->mathdv];
+                $ct->maphanloai = $model_donvi->where('madv',$tonghop->madv)->first()->maphanloai;
+                //$ct->maphanloai =  $a_th[$ct->mathdv];
                 $ct->heso = $ct->heso * $luongcb;
                 $ct->pckv = $ct->pckv * $luongcb;
                 $ct->pccv = $ct->pccv * $luongcb;
@@ -4429,7 +4448,1203 @@ class baocaothongtu67Controller extends Controller
             return view('errors.notlogin');
     }
 
-    function mau2a1_huyen() {
+    function mau2a1_huyen(Request $request) {
+        if (Session::has('admin')) {
+            $inputs=$request->all();
+            $madvbc = session('admin')->madvbc;
+            $m_dv = dmdonvi::where('madv',session('admin')->madv)->first();
+            if($inputs['madv'] != "")
+            {
+                $madv = $inputs['madv'];
+                $chekdv = dmdonvi::where('madv', $inputs['madv'])->where('phanloaitaikhoan','TH')->get();
+                if(count($chekdv) > 0)
+                {
+                    $model_donvi = dmdonvi::where('macqcq',$madv)->get();
+                    $model_bienche = chitieubienche::where('nam', '2018')->wherein('madv', function ($qr) use ($madv) {
+                        $qr->select('madv')->from('dmdonvi')->where('macqcq', $madv)->distinct()->get();
+                    })->get();
+                }
+
+                else
+                {
+                    $model_donvi = dmdonvi::where('madv',$madv)->get();
+                    $model_bienche = chitieubienche::where('nam', '2018')->where('madv', $madv)->get();
+                }
+            }
+            else {
+                $model_donvi = dmdonvi::where('madvbc', $madvbc)->get();
+                $model_bienche = chitieubienche::where('nam', '2018')->wherein('madv', function ($qr) use ($madvbc) {
+                    $qr->select('madv')->from('dmdonvi')->where('madvbc', $madvbc)->distinct()->get();
+                })->get();
+            }
+            //dd($model_donvi->toarray());
+            foreach($model_bienche as $bienche){
+                $bienche->maphanloai = $model_donvi->where('madv',$bienche->madv)->first()->maphanloai;
+            }
+            //dd($model_bienche);
+
+            if($inputs['madv'] !="")
+            {
+                if(count($chekdv) > 0) {
+                    $model_tonghop = tonghopluong_huyen::where('thang', '08')->where('nam', '2018')
+                        ->where('madv', $inputs['madv'])->get();
+                    $model_tonghop_ct = tonghopluong_donvi_chitiet::join('tonghopluong_donvi', 'tonghopluong_donvi_chitiet.mathdv', '=', 'tonghopluong_donvi.mathdv')
+                        ->where('tonghopluong_donvi.macqcq', $inputs['madv'])
+                        ->wherein('tonghopluong_donvi_chitiet.mathdv', function ($qr) {
+                            $qr->select('mathdv')->from('tonghopluong_donvi')->where('thang', '08')->where('nam', '2018')->where('trangthai', 'DAGUI')
+                                ->distinct()->get();
+                        })->get();
+                }
+                else {
+                    $model_tonghop = tonghopluong_donvi::where('thang', '08')->where('nam', '2018')
+                        ->where('madv', $inputs['madv'])->get();
+                    $model_tonghop_ct = tonghopluong_donvi_chitiet::join('tonghopluong_donvi', 'tonghopluong_donvi_chitiet.mathdv', '=', 'tonghopluong_donvi.mathdv')
+                        ->where('tonghopluong_donvi.madv', $inputs['madv'])
+                        ->wherein('tonghopluong_donvi_chitiet.mathdv', function ($qr) {
+                            $qr->select('mathdv')->from('tonghopluong_donvi')->where('thang', '08')->where('nam', '2018')->where('trangthai', 'DAGUI')
+                                ->distinct()->get();
+                        })->get();
+                    dd($model_tonghop_ct->toarray());
+                }
+            }
+            else
+            {
+                $model_tonghop = tonghopluong_donvi::where('thang','08')->where('nam','2018')
+                    ->where('madvbc',$madvbc)->get();
+                $model_tonghop_ct = tonghopluong_donvi_chitiet::join('tonghopluong_donvi', 'tonghopluong_donvi_chitiet.mathdv', '=', 'tonghopluong_donvi.mathdv')
+                    ->where('tonghopluong_donvi.madvbc',$madvbc)
+                    ->wherein('tonghopluong_donvi_chitiet.mathdv',function($qr){
+                        $qr->select('mathdv')->from('tonghopluong_donvi')->where('thang','08')->where('nam','2018')->where('trangthai','DAGUI')
+                            ->distinct()->get();
+                    })->get();
+            }
+
+            $luongcb = 0.935;
+            //$luongcb = 1390000;
+
+            //nếu đơn vị đã tạo bảng lương tháng 07/2017 =>xuất kết quả
+            //dd($model_tonghop_ct->toarray());
+
+            if(session('admin')->username == 'khthso')
+            {
+                $model_bienche = chitieubienche::join('dmdonvi','dmdonvi.madv','=','chitieubienche.madv')
+                    ->join('dmdonvibaocao','dmdonvibaocao.madvbc','=','dmdonvi.madvbc')
+                    ->where('chitieubienche.nam','2018')->where('dmdonvi.madvbc','like',$inputs['madv'].'%')
+                    ->where('dmdonvibaocao.level','T')->get();
+                //$luongcb = 1210000; tạm thời bỏ vì bang lương đã nhân lcb
+                $luongcb = 0.935;
+                //nếu đơn vị đã tạo bảng lương tháng 07/2017 =>xuất kết quả
+                $model_tonghop_ct = tonghopluong_donvi_chitiet::join('tonghopluong_donvi', 'tonghopluong_donvi_chitiet.mathdv', '=', 'tonghopluong_donvi.mathdv')
+                    ->join('dmdonvibaocao','dmdonvibaocao.madvbc','=','tonghopluong_donvi.madvbc')
+                    ->where('tonghopluong_donvi.madvbc','like',$inputs['madv'].'%')
+                    ->where('dmdonvibaocao.level','T')
+                    ->wherein('tonghopluong_donvi_chitiet.mathdv',function($qr){
+                        $qr->select('mathdv')->from('tonghopluong_donvi')->where('thang','08')->where('nam','2018')->where('trangthai','DAGUI')
+                            ->distinct()->get();
+                    })->get();
+            }
+            foreach($model_tonghop_ct as $ct){
+                if($inputs['madv'] !="" && count($chekdv) > 0){
+                    $tonghop = $model_tonghop->where('mathdv',$ct->mathh)->first();
+                    $ct->maphanloai = $tonghop->maphanloai;
+                }
+                else {
+                    $tonghop = $model_tonghop->where('mathdv', $ct->mathdv)->first();
+                    $ct->maphanloai = $model_donvi->where('madv', $tonghop->madv)->first()->maphanloai;
+                }
+                //$a_th =  array_column($tonghop->toarray(),'mathdv','maphanloai');
+                //$ct->maphanloai =  $a_th[$ct->mathdv];
+                $ct->heso = $ct->heso * $luongcb;
+                $ct->pckv = $ct->pckv * $luongcb;
+                $ct->pccv = $ct->pccv * $luongcb;
+                $ct->pctnvk = $ct->pctnvk * $luongcb;
+                $ct->pcudn = $ct->pcudn * $luongcb;
+                $ct->pcth = $ct->pcth * $luongcb;
+                $ct->pctn = $ct->pctn * $luongcb;
+                $ct->pccovu = $ct->pccovu * $luongcb;
+                $ct->pcdang = $ct->pcdang * $luongcb;
+                $ct->pcthni = $ct->pcthni * $luongcb;
+                $ct->pck = $ct->pck * $luongcb;
+                $ct->pcdbqh = $ct->pcdbqh * $luongcb;
+                $ct->pcvk = $ct->pcvk * $luongcb;
+                $ct->ttbh_dv = ($ct->stbhxh_dv + $ct->stbhyt_dv +$ct->stkpcd_dv + $ct->stbhtn_dv) * $luongcb;
+
+            }
+            $model_bangluong_ct = $model_tonghop_ct->where('macongtac','BIENCHE')->where('maphanloai','<>','KVXP');
+
+            //dd($model_bangluong_ct->toarray());
+            $ar_I = array();
+            $ar_Igr = array();
+            if(isset($inputs['inchitiet'])) {
+                $ar_Igr[0] = array('val' => 'GD;DT', 'tt' => '1', 'noidung' => 'Sự nghiệp giáo dục - đào tạo');
+                $ar_Igr[1] = array('val' => 'GD', 'tt' => '-', 'noidung' => 'Giáo dục');
+                $ar_Igr[2] = array('val' => 'DT', 'tt' => '-', 'noidung' => 'Đào tạo');
+                $ar_Igr[3] = array('val' => 'YTE', 'tt' => '2', 'noidung' => 'Sự nghiệp y tế');
+                $ar_Igr[4] = array('val' => 'KHCN', 'tt' => '3', 'noidung' => 'Sự nghiệp khoa học-công nghệ');
+                $ar_Igr[5] = array('val' => 'VHTT', 'tt' => '4', 'noidung' => 'Sự nghiệp văn hóa thông tin');
+                $ar_Igr[6] = array('val' => 'PTTH', 'tt' => '5', 'noidung' => 'Sự nghiệp phát thanh truyền hình');
+                $ar_Igr[7] = array('val' => 'TDTT', 'tt' => '6', 'noidung' => 'Sự nghiệp thể dục - thể thao');
+                $ar_Igr[8] = array('val' => 'DBXH', 'tt' => '7', 'noidung' => 'Sự nghiệp đảm bảo xã hội');
+                $ar_Igr[9] = array('val' => 'KT', 'tt' => '8', 'noidung' => 'Sự nghiệp kinh tế');
+                $ar_Igr[10] = array('val' => 'MT', 'tt' => '9', 'noidung' => 'Sự nghiệp môi trường');
+                $ar_Igr[11] = array('val' => 'QLNN;DDT', 'tt' => '10', 'noidung' => 'Quản lý nhà nước, đảng, đoàn thể');
+                $ar_Igr[12] = array('val' => 'QLNN', 'tt' => '-', 'noidung' => ' Quản lý NN');
+                $ar_Igr[13] = array('val' => 'DDT', 'tt' => '-', 'noidung' => 'Đảng, đoàn thể');
+            }
+            else {
+                $ar_I[0] = array('val' => 'GD;DT', 'tt' => '1', 'noidung' => 'Sự nghiệp giáo dục - đào tạo');
+                $ar_I[1] = array('val' => 'GD', 'tt' => '-', 'noidung' => 'Giáo dục');
+                $ar_I[2] = array('val' => 'DT', 'tt' => '-', 'noidung' => 'Đào tạo');
+                $ar_I[3] = array('val' => 'YTE', 'tt' => '2', 'noidung' => 'Sự nghiệp y tế');
+                $ar_I[4] = array('val' => 'KHCN', 'tt' => '3', 'noidung' => 'Sự nghiệp khoa học-công nghệ');
+                $ar_I[5] = array('val' => 'VHTT', 'tt' => '4', 'noidung' => 'Sự nghiệp văn hóa thông tin');
+                $ar_I[6] = array('val' => 'PTTH', 'tt' => '5', 'noidung' => 'Sự nghiệp phát thanh truyền hình');
+                $ar_I[7] = array('val' => 'TDTT', 'tt' => '6', 'noidung' => 'Sự nghiệp thể dục - thể thao');
+                $ar_I[8] = array('val' => 'DBXH', 'tt' => '7', 'noidung' => 'Sự nghiệp đảm bảo xã hội');
+                $ar_I[9] = array('val' => 'KT', 'tt' => '8', 'noidung' => 'Sự nghiệp kinh tế');
+                $ar_I[10] = array('val' => 'MT', 'tt' => '9', 'noidung' => 'Sự nghiệp môi trường');
+                $ar_I[11] = array('val' => 'QLNN;DDT', 'tt' => '10', 'noidung' => 'Quản lý nhà nước, đảng, đoàn thể');
+                $ar_I[12] = array('val' => 'QLNN', 'tt' => '-', 'noidung' => ' Quản lý NN');
+                $ar_I[13] = array('val' => 'DDT', 'tt' => '-', 'noidung' => 'Đảng, đoàn thể');
+            }
+            $a_It = array('luong' => 0,
+                'pckv' => 0,
+                'pccv' => 0,
+                'pctnvk' => 0,
+                'pcudn' => 0,
+                'pcth' => 0,
+                'pctn' => 0,
+                'pccovu' => 0,
+                'pcdang' => 0,
+                'pcthni' => 0,
+                'pck' => 0,
+                'tongpc' => 0,
+                'ttbh_dv' => 0,
+                'soluongduocgiao' => 0,
+                'soluongbienche'=> 0,
+            );
+            //thiếu chỉ tiêu biên chế
+            if(isset($inputs['inchitiet'])) {
+                $gddt = 0;
+                $daotao = 0;
+                $giaoduc = 0;
+                $qlnnddt = 0;
+                $qlnn = 0;
+                $ddt =0;
+                $i = 0;
+                for ($j = 0; $j < count($ar_Igr); $j++) {
+                    $i++;
+                    if ($ar_Igr[$j]['val'] == 'GD;DT')
+                        $gddt = $i;
+                    if ($ar_Igr[$j]['val'] == 'GD')
+                        $giaoduc = $i;
+                    if ($ar_Igr[$j]['val'] == 'DT')
+                        $daotao = $i;
+                    if ($ar_Igr[$j]['val'] == 'QLNN;DDT')
+                        $qlnnddt = $i;
+                    if ($ar_Igr[$j]['val'] == 'QLNN')
+                        $qlnn = $i;
+                    if ($ar_Igr[$j]['val'] == 'DDT')
+                        $ddt = $i;
+                    $ar_I[$i]['tt'] = $ar_Igr[$j]['tt'];
+                    $ar_I[$i]['noidung'] = $ar_Igr[$j]['noidung'];
+                    $ar_I[$i]['luong'] = 0;
+                    $ar_I[$i]['pckv'] = 0;
+                    $ar_I[$i]['pccv'] = 0;
+                    $ar_I[$i]['pctnvk'] = 0;
+                    $ar_I[$i]['pcudn'] = 0;
+                    $ar_I[$i]['pcth'] = 0;
+                    $ar_I[$i]['pctn'] = 0;
+                    $ar_I[$i]['pccovu'] = 0;
+                    $ar_I[$i]['pcdang'] = 0;
+                    $ar_I[$i]['pcthni'] = 0;
+                    $ar_I[$i]['pck'] = 0;
+                    $ar_I[$i]['tongpc'] = 0;
+                    $ar_I[$i]['ttbh_dv'] = 0;
+                    if (isset($model_bangluong_ct)) {
+                        $chitiet = $model_bangluong_ct->where('linhvuchoatdong', $ar_Igr[$j]['val']);
+                    }
+                    $ar_I[$i]['soluongduocgiao'] = 0;
+                    $ar_I[$i]['soluongbienche'] = 0;
+                    $d = 1;
+                    $luugr = $i;
+                    if (isset($chitiet) && count($chitiet) > 0) {
+                        $thongtin = $chitiet->toArray();
+                        //dd($thongtin);
+
+                        foreach ($thongtin as $thongtinchitiet) {
+                            $d++;
+                            $i += $d;
+                            $ar_I[$i]['tt'] = '+';
+                            $ar_I[$i]['noidung'] = $thongtinchitiet['nguoigui'];
+                            $ar_I[$i]['soluongduocgiao'] = 0;
+                            $ar_I[$i]['soluongbienche'] = 0;
+                            $ar_I[$i]['soluongduocgiao'] = isset($model_bienche->soluongduocgiao) ? $model_bienche->soluongduocgiao : 0;
+                            $a_It['soluongduocgiao'] += $ar_I[$i - $d]['soluongduocgiao'];
+
+                            $ar_I[$i]['soluongbienche'] = isset($model_bienche->soluongbienche) ? $model_bienche->soluongbienche : 0;
+                            $a_It['soluongbienche'] += $ar_I[$i - $d]['soluongbienche'];
+                            $tongpc = 0;
+                            $ar_I[$i]['luong'] = $thongtinchitiet['heso'];
+                            $a_It['luong'] += $ar_I[$i]['luong'];
+
+                            $ar_I[$i]['pckv'] = $thongtinchitiet['pckv'];
+                            $tongpc += $ar_I[$i]['pckv'];
+                            $a_It['pckv'] += $ar_I[$i]['pckv'];
+
+                            $ar_I[$i]['pccv'] = $thongtinchitiet['pccv'];
+                            $tongpc += $ar_I[$i]['pccv'];
+                            $a_It['pccv'] += $ar_I[$i]['pccv'];
+
+                            $ar_I[$i]['pctnvk'] = $thongtinchitiet['pctnvk'];
+                            $tongpc += $ar_I[$i]['pctnvk'];
+                            $a_It['pctnvk'] += $ar_I[$i]['pctnvk'];
+
+                            $ar_I[$i]['pcudn'] = $thongtinchitiet['pcudn'];
+                            $tongpc += $ar_I[$i]['pcudn'];
+                            $a_It['pcudn'] += $ar_I[$i]['pcudn'];
+
+                            $ar_I[$i]['pcth'] = $thongtinchitiet['pcth'];
+                            $tongpc += $ar_I[$i]['pcth'];
+                            $a_It['pcth'] += $ar_I[$i]['pcth'];
+
+                            $ar_I[$i]['pctn'] = $thongtinchitiet['pctn'];
+                            $tongpc += $ar_I[$i]['pctn'];
+                            $a_It['pctn'] += $ar_I[$i]['pctn'];
+
+                            $ar_I[$i]['pccovu'] = $thongtinchitiet['pccovu'];
+                            $tongpc += $ar_I[$i]['pccovu'];
+                            $a_It['pccovu'] += $ar_I[$i]['pccovu'];
+
+                            $ar_I[$i]['pcdang'] = $thongtinchitiet['pcdang'];
+                            $tongpc += $ar_I[$i]['pcdang'];
+                            $a_It['pcdang'] += $ar_I[$i]['pcdang'];
+
+                            $ar_I[$i]['pcthni'] = $thongtinchitiet['pcthni'];
+                            $tongpc += $ar_I[$i]['pcthni'];
+                            $a_It['pcthni'] += $ar_I[$i]['pcthni'];
+
+                            $ar_I[$i]['pck'] = $thongtinchitiet['pck'];
+                            $tongpc += $ar_I[$i]['pck'];
+                            $a_It['pck'] += $ar_I[$i]['pck'];
+
+                            $ar_I[$i]['tongpc'] = $tongpc;
+                            $a_It['tongpc'] += $ar_I[$i]['tongpc'];
+
+                            $ar_I[$i]['ttbh_dv'] = round(($ar_I[$i]['luong'] + $ar_I[$i]['pccv']) * 0.24);
+                            $a_It['ttbh_dv'] += $ar_I[$i]['ttbh_dv'];
+                            //$ar_II['ttbh_dv'] =round(($ar_II['luong'] + $ar_II['pccv'])*0.24);
+
+                            $ar_I[$luugr]['luong'] += $ar_I[$i]['luong'];
+                            $ar_I[$luugr]['pckv'] += $ar_I[$i]['pckv'];
+                            $ar_I[$luugr]['pccv'] += $ar_I[$i]['pccv'];
+                            $ar_I[$luugr]['pctnvk'] += $ar_I[$i]['pctnvk'];
+                            $ar_I[$luugr]['pcudn'] += $ar_I[$i]['pcudn'];
+                            $ar_I[$luugr]['pcth'] += $ar_I[$i]['pcth'];
+                            $ar_I[$luugr]['pctn'] += $ar_I[$i]['pctn'];
+                            $ar_I[$luugr]['pccovu'] += $ar_I[$i]['pccovu'];
+                            $ar_I[$luugr]['pcdang'] += $ar_I[$i]['pcdang'];
+                            $ar_I[$luugr]['pcthni'] += $ar_I[$i]['pcthni'];
+                            $ar_I[$luugr]['pck'] += $ar_I[$i]['pck'];
+                            $ar_I[$luugr]['tongpc'] += $ar_I[$i]['tongpc'];
+                            $ar_I[$luugr]['ttbh_dv'] += $ar_I[$i]['ttbh_dv'];
+
+
+                        }
+                    } else {
+                        $ar_I[$i]['soluongduocgiao'] = 0;
+                        $ar_I[$i]['soluongbienche'] = 0;
+                        $ar_I[$i]['luong'] = 0;
+                        $ar_I[$i]['pckv'] = 0;
+                        $ar_I[$i]['pccv'] = 0;
+                        $ar_I[$i]['pctnvk'] = 0;
+                        $ar_I[$i]['pcudn'] = 0;
+                        $ar_I[$i]['pcth'] = 0;
+                        $ar_I[$i]['pctn'] = 0;
+                        $ar_I[$i]['pccovu'] = 0;
+                        $ar_I[$i]['pcdang'] = 0;
+                        $ar_I[$i]['pcthni'] = 0;
+                        $ar_I[$i]['pck'] = 0;
+                        $ar_I[$i]['tongpc'] = 0;
+                        $ar_I[$i]['ttbh_dv'] = 0;
+                    }
+                }
+
+                $ar_I[$gddt]['luong'] = $ar_I[$giaoduc]['luong'] + $ar_I[$daotao]['luong'];
+                $ar_I[$gddt]['pckv'] = $ar_I[$giaoduc]['pckv'] + $ar_I[$daotao]['pckv'];
+                $ar_I[$gddt]['pccv'] = $ar_I[$giaoduc]['pccv'] + $ar_I[$daotao]['pccv'];
+                $ar_I[$gddt]['pctnvk'] = $ar_I[$giaoduc]['pctnvk'] + $ar_I[$daotao]['pctnvk'];
+                $ar_I[$gddt]['pcudn'] = $ar_I[$giaoduc]['pcudn'] + $ar_I[$daotao]['pcudn'];
+                $ar_I[$gddt]['pcth'] = $ar_I[$giaoduc]['pcth'] + $ar_I[$daotao]['pcth'];
+                $ar_I[$gddt]['pctn'] = $ar_I[$giaoduc]['pctn'] + $ar_I[$daotao]['pctn'];
+                $ar_I[$gddt]['pccovu'] = $ar_I[$giaoduc]['pccovu'] + $ar_I[$daotao]['pccovu'];
+                $ar_I[$gddt]['pcdang'] = $ar_I[$giaoduc]['pcdang'] + $ar_I[$daotao]['pcdang'];
+                $ar_I[$gddt]['pcthni'] = $ar_I[$giaoduc]['pcthni'] + $ar_I[$daotao]['pcthni'];
+                $ar_I[$gddt]['pck'] = $ar_I[$giaoduc]['pck'] + $ar_I[$daotao]['pck'];
+                $ar_I[$gddt]['tongpc'] = $ar_I[$giaoduc]['tongpc'] + $ar_I[$daotao]['tongpc'];
+                $ar_I[$gddt]['ttbh_dv'] = $ar_I[$giaoduc]['ttbh_dv'] + $ar_I[$daotao]['ttbh_dv'];
+
+                $ar_I[$qlnnddt]['luong'] = $ar_I[$qlnn]['luong'] + $ar_I[$ddt]['luong'];
+                $ar_I[$qlnnddt]['pckv'] = $ar_I[$qlnn]['pckv'] + $ar_I[$ddt]['pckv'];
+                $ar_I[$qlnnddt]['pccv'] = $ar_I[$qlnn]['pccv'] + $ar_I[$ddt]['pccv'];
+                $ar_I[$qlnnddt]['pctnvk'] = $ar_I[$qlnn]['pctnvk'] + $ar_I[$ddt]['pctnvk'];
+                $ar_I[$qlnnddt]['pcudn'] = $ar_I[$qlnn]['pcudn'] + $ar_I[$ddt]['pcudn'];
+                $ar_I[$qlnnddt]['pcth'] = $ar_I[$qlnn]['pcth'] + $ar_I[$ddt]['pcth'];
+                $ar_I[$qlnnddt]['pctn'] = $ar_I[$qlnn]['pctn'] + $ar_I[$ddt]['pctn'];
+                $ar_I[$qlnnddt]['pccovu'] = $ar_I[$qlnn]['pccovu'] + $ar_I[$ddt]['pccovu'];
+                $ar_I[$qlnnddt]['pcdang'] = $ar_I[$qlnn]['pcdang'] + $ar_I[$ddt]['pcdang'];
+                $ar_I[$qlnnddt]['pcthni'] = $ar_I[$qlnn]['pcthni'] + $ar_I[$ddt]['pcthni'];
+                $ar_I[$qlnnddt]['pck'] = $ar_I[$qlnn]['pck'] + $ar_I[$ddt]['pck'];
+                $ar_I[$qlnnddt]['tongpc'] = $ar_I[$qlnn]['tongpc'] + $ar_I[$ddt]['tongpc'];
+                $ar_I[$qlnnddt]['ttbh_dv'] = $ar_I[$qlnn]['ttbh_dv'] + $ar_I[$ddt]['ttbh_dv'];
+
+            }
+            else {
+                for ($i = 0; $i < count($ar_I); $i++) {
+                    if (isset($model_bangluong_ct)) {
+                        $chitiet = $model_bangluong_ct->where('linhvuchoatdong', $ar_I[$i]['val']);
+                    }
+
+                    $ar_I[$i]['soluongduocgiao'] = 0;
+                    $ar_I[$i]['soluongbienche'] = 0;
+                    if (isset($chitiet) && count($chitiet) > 0) {
+                        //$ar_I[$i]['soluongduocgiao'] = isset($model_bienche->soluongduocgiao) ? $model_bienche->soluongduocgiao : 0;
+                        $a_It['soluongduocgiao'] += $ar_I[$i]['soluongduocgiao'];
+
+                        //$ar_I[$i]['soluongbienche'] = isset($model_bienche->soluongbienche) ? $model_bienche->soluongbienche : 0;
+                        $a_It['soluongbienche'] += $ar_I[$i]['soluongbienche'];
+                        $tongpc = 0;
+                        $ar_I[$i]['luong'] = $chitiet->sum('heso');
+                        $a_It['luong'] += $ar_I[$i]['luong'];
+
+                        $ar_I[$i]['pckv'] = $chitiet->sum('pckv');
+                        $tongpc += $ar_I[$i]['pckv'];
+                        $a_It['pckv'] += $ar_I[$i]['pckv'];
+
+                        $ar_I[$i]['pccv'] = $chitiet->sum('pccv');
+                        $tongpc += $ar_I[$i]['pccv'];
+                        $a_It['pccv'] += $ar_I[$i]['pccv'];
+
+                        $ar_I[$i]['pctnvk'] = $chitiet->sum('pctnvk');
+                        $tongpc += $ar_I[$i]['pctnvk'];
+                        $a_It['pctnvk'] += $ar_I[$i]['pctnvk'];
+
+                        $ar_I[$i]['pcudn'] = $chitiet->sum('pcudn');
+                        $tongpc += $ar_I[$i]['pcudn'];
+                        $a_It['pcudn'] += $ar_I[$i]['pcudn'];
+
+                        $ar_I[$i]['pcth'] = $chitiet->sum('pcth');
+                        $tongpc += $ar_I[$i]['pcth'];
+                        $a_It['pcth'] += $ar_I[$i]['pcth'];
+
+                        $ar_I[$i]['pctn'] = $chitiet->sum('pctn');
+                        $tongpc += $ar_I[$i]['pctn'];
+                        $a_It['pctn'] += $ar_I[$i]['pctn'];
+
+                        $ar_I[$i]['pccovu'] = $chitiet->sum('pccovu');
+                        $tongpc += $ar_I[$i]['pccovu'];
+                        $a_It['pccovu'] += $ar_I[$i]['pccovu'];
+
+                        $ar_I[$i]['pcdang'] = $chitiet->sum('pcdang');
+                        $tongpc += $ar_I[$i]['pcdang'];
+                        $a_It['pcdang'] += $ar_I[$i]['pcdang'];
+
+                        $ar_I[$i]['pcthni'] = $chitiet->sum('pcthni');
+                        $tongpc += $ar_I[$i]['pcthni'];
+                        $a_It['pcthni'] += $ar_I[$i]['pcthni'];
+
+                        $ar_I[$i]['pck'] = $chitiet->sum('pck');
+                        $tongpc += $ar_I[$i]['pck'];
+                        $a_It['pck'] += $ar_I[$i]['pck'];
+
+                        $ar_I[$i]['tongpc'] = $tongpc;
+                        $a_It['tongpc'] += $ar_I[$i]['tongpc'];
+
+                        $ar_I[$i]['ttbh_dv'] = round(($ar_I[$i]['luong'] + $ar_I[$i]['pccv']) * 0.24);
+                        $a_It['ttbh_dv'] += $ar_I[$i]['ttbh_dv'];
+                        //$ar_II['ttbh_dv'] =round(($ar_II['luong'] + $ar_II['pccv'])*0.24);
+                    } else {
+                        $ar_I[$i]['luong'] = 0;
+                        $ar_I[$i]['pckv'] = 0;
+                        $ar_I[$i]['pccv'] = 0;
+                        $ar_I[$i]['pctnvk'] = 0;
+                        $ar_I[$i]['pcudn'] = 0;
+                        $ar_I[$i]['pcth'] = 0;
+                        $ar_I[$i]['pctn'] = 0;
+                        $ar_I[$i]['pccovu'] = 0;
+                        $ar_I[$i]['pcdang'] = 0;
+                        $ar_I[$i]['pcthni'] = 0;
+                        $ar_I[$i]['pck'] = 0;
+                        $ar_I[$i]['tongpc'] = 0;
+                        $ar_I[$i]['ttbh_dv'] = 0;
+                    }
+                }
+
+                $ar_I[11]['luong'] = $ar_I[12]['luong'] + $ar_I[13]['luong'];
+                $ar_I[11]['pckv'] = $ar_I[12]['pckv'] + $ar_I[13]['pckv'];
+                $ar_I[11]['pccv'] = $ar_I[12]['pccv'] + $ar_I[13]['pccv'];
+                $ar_I[11]['pctnvk'] = $ar_I[12]['pctnvk'] + $ar_I[13]['pctnvk'];
+                $ar_I[11]['pcudn'] = $ar_I[12]['pcudn'] + $ar_I[13]['pcudn'];
+                $ar_I[11]['pcth'] = $ar_I[12]['pcth'] + $ar_I[13]['pcth'];
+                $ar_I[11]['pctn'] = $ar_I[12]['pctn'] + $ar_I[13]['pctn'];
+                $ar_I[11]['pccovu'] = $ar_I[12]['pccovu'] + $ar_I[13]['pccovu'];
+                $ar_I[11]['pcdang'] = $ar_I[12]['pcdang'] + $ar_I[13]['pcdang'];
+                $ar_I[11]['pcthni'] = $ar_I[12]['pcthni'] + $ar_I[13]['pcthni'];
+                $ar_I[11]['pck'] = $ar_I[12]['pck'] + $ar_I[13]['pck'];
+                $ar_I[11]['tongpc'] = $ar_I[12]['tongpc'] + $ar_I[13]['tongpc'];
+                $ar_I[11]['ttbh_dv'] = $ar_I[12]['ttbh_dv'] + $ar_I[13]['ttbh_dv'];
+
+                $ar_I[0]['luong'] = $ar_I[1]['luong'] + $ar_I[2]['luong'];
+                $ar_I[0]['pckv'] = $ar_I[1]['pckv'] + $ar_I[2]['pckv'];
+                $ar_I[0]['pccv'] = $ar_I[1]['pccv'] + $ar_I[2]['pccv'];
+                $ar_I[0]['pctnvk'] = $ar_I[1]['pctnvk'] + $ar_I[2]['pctnvk'];
+                $ar_I[0]['pcudn'] = $ar_I[1]['pcudn'] + $ar_I[2]['pcudn'];
+                $ar_I[0]['pcth'] = $ar_I[1]['pcth'] + $ar_I[2]['pcth'];
+                $ar_I[0]['pctn'] = $ar_I[1]['pctn'] + $ar_I[2]['pctn'];
+                $ar_I[0]['pccovu'] = $ar_I[1]['pccovu'] + $ar_I[2]['pccovu'];
+                $ar_I[0]['pcdang'] = $ar_I[1]['pcdang'] + $ar_I[2]['pcdang'];
+                $ar_I[0]['pcthni'] = $ar_I[1]['pcthni'] + $ar_I[2]['pcthni'];
+                $ar_I[0]['pck'] = $ar_I[1]['pck'] + $ar_I[2]['pck'];
+                $ar_I[0]['tongpc'] = $ar_I[1]['tongpc'] + $ar_I[2]['tongpc'];
+                $ar_I[0]['ttbh_dv'] = $ar_I[1]['ttbh_dv'] + $ar_I[2]['ttbh_dv'];
+            }
+            //dd($ar_I);
+
+            $ar_II = array();
+            $ar_II['soluongduocgiao'] = isset($model_bienche->soluongduocgiao) ? $model_bienche->soluongduocgiao : 0;
+            $ar_II['soluongbienche'] = isset($model_bienche->soluongbienche) ? $model_bienche->soluongbienche : 0;
+
+            $model_bangluong_ct = $model_tonghop_ct->where('maphanloai','KVXP');
+            //dd($model_bangluong_ct);
+            //
+            if(count($model_bangluong_ct)>0){
+                //dd($model_tonghop_ct);
+                $tongpc = 0;
+                $ar_II['luong'] = $model_bangluong_ct->sum('heso');
+
+                $ar_II['pckv'] = $model_bangluong_ct->sum('pckv');
+                $tongpc += $ar_II['pckv'];
+
+                $ar_II['pccv'] = $model_bangluong_ct->sum('pccv');
+                $tongpc += $ar_II['pccv'];
+
+                $ar_II['pctnvk'] = $model_bangluong_ct->sum('pctnvk');
+                $tongpc += $ar_II['pctnvk'];
+
+                $ar_II['pcudn'] = $model_bangluong_ct->sum('pcudn');
+                $tongpc += $ar_II['pcudn'];
+
+                $ar_II['pcth'] = $model_bangluong_ct->sum('pcth');
+                $tongpc += $ar_II['pcth'];
+
+                $ar_II['pctn'] = $model_bangluong_ct->sum('pctn');
+                $tongpc += $ar_II['pctn'];
+
+                $ar_II['pccovu'] = $model_bangluong_ct->sum('pccovu');
+                $tongpc += $ar_II['pccovu'];
+
+                $ar_II['pcdang'] = $model_bangluong_ct->sum('pcdang');
+                $tongpc += $ar_II['pcdang'];
+
+                $ar_II['pcthni'] = $model_bangluong_ct->sum('pcthni');
+                $tongpc += $ar_II['pcthni'];
+
+                $ar_II['pck'] = $model_bangluong_ct->sum('pck');
+                $tongpc += $ar_II['pck'];
+
+                $ar_II['tongpc'] = $tongpc;
+
+                $ar_II['ttbh_dv'] =$model_bangluong_ct->sum('ttbh_dv') ;
+            }
+            else{
+                $ar_II['luong'] = 0;
+                $ar_II['pckv'] = 0;
+                $ar_II['pccv'] = 0;
+                $ar_II['pctnvk'] = 0;
+                $ar_II['pcudn'] = 0;
+                $ar_II['pcth'] = 0;
+                $ar_II['pctn'] = 0;
+                $ar_II['pccovu'] = 0;
+                $ar_II['pcdang'] = 0;
+                $ar_II['pcthni'] = 0;
+                $ar_II['pck'] = 0;
+                $ar_II['tongpc'] = 0;
+                $ar_II['ttbh_dv'] = 0;
+            }
+            //dd($ar_II);
+
+            //căn cứ vào cấp dự toán để xác định đơn vị cấp xã, huyện, tỉnh
+            //chỉ có cột tổng cộng
+            $ar_III = array();
+            $ar_III[]=array('val'=>'T','tt'=>'-','noidung'=>'Cấp tỉnh','tongso'=>'0');
+            $ar_III[]=array('val'=>'H','tt'=>'-','noidung'=>'Cấp huyện','tongso'=>'0');
+            $ar_III[]=array('val'=>'X','tt'=>'-','noidung'=>'Cấp xã','tongso'=>'0');
+
+            $ar_IV = array();
+            $ar_IV[]=array('val'=>'T','tt'=>'-','noidung'=>'Ủy viên cấp tỉnh','tongso'=>'0');
+            $ar_IV[]=array('val'=>'H','tt'=>'-','noidung'=>'Ủy viên cấp huyện','tongso'=>'0');
+            $ar_IV[]=array('val'=>'X','tt'=>'-','noidung'=>'Ủy viên cấp xã','tongso'=>'0');
+            //hỏi chi tiết xem đơn vi cấp xã có pai là dự toán cấp 3,4
+            //huyên cấp ??
+            //tỉnh cấp ??
+
+            $a_IIIt = array('tongso'=>0);
+            $a_IVt = array('tongso'=>0);
+            //dd(session('admin')->maphanloai);
+            if(session('admin')->level=='T'){
+                if($m_dv->capdonvi > 2){
+                    if(isset($model_bangluong_ct)){
+                        $ar_III[2]['tongso'] = $model_bangluong_ct->sum('pcdbqh');
+                        $ar_IV[2]['tongso'] = $model_bangluong_ct->sum('pcvk');
+                    }
+                    $a_IVt['tongso'] += $ar_IV[2]['tongso'];
+                    $a_IIIt['tongso'] += $ar_III[2]['tongso'];
+
+                }else{
+                    if(isset($model_bangluong_ct)){
+                        $ar_III[1]['tongso'] = $model_bangluong_ct->sum('pcdbqh');
+                        $ar_IV[1]['tongso'] = $model_bangluong_ct->sum('pcvk');
+                    }
+                    $a_IIIt['tongso'] += $ar_III[1]['tongso'];
+                    $a_IVt['tongso'] += $ar_IV[1]['tongso'];
+                }
+            }else{
+                if($m_dv->capdonvi >= 3){
+                    if(isset($model_bangluong_ct)){
+                        $ar_III[1]['tongso'] = $model_bangluong_ct->sum('pcdbqh');
+                        $ar_IV[1]['tongso'] = $model_bangluong_ct->sum('pcvk');
+                    }
+                    $a_IIIt['tongso'] += $ar_III[1]['tongso'];
+                    $a_IVt['tongso'] += $ar_IV[1]['tongso'];
+                }else{
+                    if(isset($model_bangluong_ct)){
+                        $ar_III[0]['tongso'] = $model_bangluong_ct->sum('pcdbqh');
+                        $ar_IV[0]['tongso'] = $model_bangluong_ct->sum('pcvk');
+                    }
+
+                    $a_IIIt['tongso'] += $ar_III[0]['tongso'];
+                    $a_IVt['tongso'] += $ar_IV[0]['tongso'];
+                }
+            }
+
+            return view('reports.thongtu67.mau2a1_tt67')
+                ->with('furl','/tong_hop_bao_cao/')
+                ->with('ar_I',$ar_I)
+                ->with('ar_II',$ar_II)
+                ->with('ar_III',$ar_III)
+                ->with('ar_IV',$ar_IV)
+                ->with('a_It',$a_It)
+                ->with('a_IIIt',$a_IIIt)
+                ->with('a_IVt',$a_IVt)
+                ->with('m_dv',$m_dv)
+                ->with('inputs',$inputs)
+                ->with('pageTitle','Báo cáo nhu cầu kinh phí thực hiện nghị định 47/2017/NĐ-CP');
+        } else
+            return view('errors.notlogin');
+    }
+
+    function mau2a1_huyen_excel(Request $request) {
+        if (Session::has('admin')) {
+            $inputs=$request->all();
+            $madvbc = session('admin')->madvbc;
+            $m_dv = dmdonvi::where('madv',session('admin')->madv)->first();
+            if($inputs['madv'] != "")
+            {
+                $madv = $inputs['madv'];
+                $chekdv = dmdonvi::where('madv', $inputs['madv'])->where('phanloaitaikhoan','TH')->get();
+                if(count($chekdv) > 0)
+                {
+                    $model_donvi = dmdonvi::where('macqcq',$madv)->get();
+                    $model_bienche = chitieubienche::where('nam', '2018')->wherein('madv', function ($qr) use ($madv) {
+                        $qr->select('madv')->from('dmdonvi')->where('macqcq', $madv)->distinct()->get();
+                    })->get();
+                }
+
+                else
+                {
+                    $model_donvi = dmdonvi::where('madv',$madv)->get();
+                    $model_bienche = chitieubienche::where('nam', '2018')->where('madv', $madv)->get();
+                }
+            }
+            else {
+                $model_donvi = dmdonvi::where('madvbc', $madvbc)->get();
+                $model_bienche = chitieubienche::where('nam', '2018')->wherein('madv', function ($qr) use ($madvbc) {
+                    $qr->select('madv')->from('dmdonvi')->where('madvbc', $madvbc)->distinct()->get();
+                })->get();
+            }
+            //dd($model_donvi->toarray());
+            foreach($model_bienche as $bienche){
+                $bienche->maphanloai = $model_donvi->where('madv',$bienche->madv)->first()->maphanloai;
+            }
+            //dd($model_bienche);
+
+            if($inputs['madv'] !="")
+            {
+                if(count($chekdv) > 0) {
+                    $model_tonghop = tonghopluong_huyen::where('thang', '08')->where('nam', '2018')
+                        ->where('madv', $inputs['madv'])->get();
+                    $model_tonghop_ct = tonghopluong_donvi_chitiet::join('tonghopluong_donvi', 'tonghopluong_donvi_chitiet.mathdv', '=', 'tonghopluong_donvi.mathdv')
+                        ->where('tonghopluong_donvi.macqcq', $inputs['madv'])
+                        ->wherein('tonghopluong_donvi_chitiet.mathdv', function ($qr) {
+                            $qr->select('mathdv')->from('tonghopluong_donvi')->where('thang', '08')->where('nam', '2018')->where('trangthai', 'DAGUI')
+                                ->distinct()->get();
+                        })->get();
+                }
+                else {
+                    $model_tonghop = tonghopluong_donvi::where('thang', '08')->where('nam', '2018')
+                        ->where('madv', $inputs['madv'])->get();
+                    $model_tonghop_ct = tonghopluong_donvi_chitiet::join('tonghopluong_donvi', 'tonghopluong_donvi_chitiet.mathdv', '=', 'tonghopluong_donvi.mathdv')
+                        ->where('tonghopluong_donvi.madv', $inputs['madv'])
+                        ->wherein('tonghopluong_donvi_chitiet.mathdv', function ($qr) {
+                            $qr->select('mathdv')->from('tonghopluong_donvi')->where('thang', '08')->where('nam', '2018')->where('trangthai', 'DAGUI')
+                                ->distinct()->get();
+                        })->get();
+                    dd($model_tonghop_ct->toarray());
+                }
+            }
+            else
+            {
+                $model_tonghop = tonghopluong_donvi::where('thang','08')->where('nam','2018')
+                    ->where('madvbc',$madvbc)->get();
+                $model_tonghop_ct = tonghopluong_donvi_chitiet::join('tonghopluong_donvi', 'tonghopluong_donvi_chitiet.mathdv', '=', 'tonghopluong_donvi.mathdv')
+                    ->where('tonghopluong_donvi.madvbc',$madvbc)
+                    ->wherein('tonghopluong_donvi_chitiet.mathdv',function($qr){
+                        $qr->select('mathdv')->from('tonghopluong_donvi')->where('thang','08')->where('nam','2018')->where('trangthai','DAGUI')
+                            ->distinct()->get();
+                    })->get();
+            }
+
+            $luongcb = 0.935;
+            //$luongcb = 1390000;
+
+            //nếu đơn vị đã tạo bảng lương tháng 07/2017 =>xuất kết quả
+            //dd($model_tonghop_ct->toarray());
+
+            if(session('admin')->username == 'khthso')
+            {
+                $model_bienche = chitieubienche::join('dmdonvi','dmdonvi.madv','=','chitieubienche.madv')
+                    ->join('dmdonvibaocao','dmdonvibaocao.madvbc','=','dmdonvi.madvbc')
+                    ->where('chitieubienche.nam','2018')->where('dmdonvi.madvbc','like',$inputs['madv'].'%')
+                    ->where('dmdonvibaocao.level','T')->get();
+                //$luongcb = 1210000; tạm thời bỏ vì bang lương đã nhân lcb
+                $luongcb = 0.935;
+                //nếu đơn vị đã tạo bảng lương tháng 07/2017 =>xuất kết quả
+                $model_tonghop_ct = tonghopluong_donvi_chitiet::join('tonghopluong_donvi', 'tonghopluong_donvi_chitiet.mathdv', '=', 'tonghopluong_donvi.mathdv')
+                    ->join('dmdonvibaocao','dmdonvibaocao.madvbc','=','tonghopluong_donvi.madvbc')
+                    ->where('tonghopluong_donvi.madvbc','like',$inputs['madv'].'%')
+                    ->where('dmdonvibaocao.level','T')
+                    ->wherein('tonghopluong_donvi_chitiet.mathdv',function($qr){
+                        $qr->select('mathdv')->from('tonghopluong_donvi')->where('thang','08')->where('nam','2018')->where('trangthai','DAGUI')
+                            ->distinct()->get();
+                    })->get();
+            }
+            foreach($model_tonghop_ct as $ct){
+                if($inputs['madv'] !="" && count($chekdv) > 0){
+                    $tonghop = $model_tonghop->where('mathdv',$ct->mathh)->first();
+                    $ct->maphanloai = $tonghop->maphanloai;
+                }
+                else {
+                    $tonghop = $model_tonghop->where('mathdv', $ct->mathdv)->first();
+                    $ct->maphanloai = $model_donvi->where('madv', $tonghop->madv)->first()->maphanloai;
+                }
+                //$a_th =  array_column($tonghop->toarray(),'mathdv','maphanloai');
+                //$ct->maphanloai =  $a_th[$ct->mathdv];
+                $ct->heso = $ct->heso * $luongcb;
+                $ct->pckv = $ct->pckv * $luongcb;
+                $ct->pccv = $ct->pccv * $luongcb;
+                $ct->pctnvk = $ct->pctnvk * $luongcb;
+                $ct->pcudn = $ct->pcudn * $luongcb;
+                $ct->pcth = $ct->pcth * $luongcb;
+                $ct->pctn = $ct->pctn * $luongcb;
+                $ct->pccovu = $ct->pccovu * $luongcb;
+                $ct->pcdang = $ct->pcdang * $luongcb;
+                $ct->pcthni = $ct->pcthni * $luongcb;
+                $ct->pck = $ct->pck * $luongcb;
+                $ct->pcdbqh = $ct->pcdbqh * $luongcb;
+                $ct->pcvk = $ct->pcvk * $luongcb;
+                $ct->ttbh_dv = ($ct->stbhxh_dv + $ct->stbhyt_dv +$ct->stkpcd_dv + $ct->stbhtn_dv) * $luongcb;
+
+            }
+            $model_bangluong_ct = $model_tonghop_ct->where('macongtac','BIENCHE')->where('maphanloai','<>','KVXP');
+
+            //dd($model_bangluong_ct->toarray());
+            $ar_I = array();
+            $ar_Igr = array();
+            if(isset($inputs['inchitiet'])) {
+                $ar_Igr[0] = array('val' => 'GD;DT', 'tt' => '1', 'noidung' => 'Sự nghiệp giáo dục - đào tạo');
+                $ar_Igr[1] = array('val' => 'GD', 'tt' => '-', 'noidung' => 'Giáo dục');
+                $ar_Igr[2] = array('val' => 'DT', 'tt' => '-', 'noidung' => 'Đào tạo');
+                $ar_Igr[3] = array('val' => 'YTE', 'tt' => '2', 'noidung' => 'Sự nghiệp y tế');
+                $ar_Igr[4] = array('val' => 'KHCN', 'tt' => '3', 'noidung' => 'Sự nghiệp khoa học-công nghệ');
+                $ar_Igr[5] = array('val' => 'VHTT', 'tt' => '4', 'noidung' => 'Sự nghiệp văn hóa thông tin');
+                $ar_Igr[6] = array('val' => 'PTTH', 'tt' => '5', 'noidung' => 'Sự nghiệp phát thanh truyền hình');
+                $ar_Igr[7] = array('val' => 'TDTT', 'tt' => '6', 'noidung' => 'Sự nghiệp thể dục - thể thao');
+                $ar_Igr[8] = array('val' => 'DBXH', 'tt' => '7', 'noidung' => 'Sự nghiệp đảm bảo xã hội');
+                $ar_Igr[9] = array('val' => 'KT', 'tt' => '8', 'noidung' => 'Sự nghiệp kinh tế');
+                $ar_Igr[10] = array('val' => 'MT', 'tt' => '9', 'noidung' => 'Sự nghiệp môi trường');
+                $ar_Igr[11] = array('val' => 'QLNN;DDT', 'tt' => '10', 'noidung' => 'Quản lý nhà nước, đảng, đoàn thể');
+                $ar_Igr[12] = array('val' => 'QLNN', 'tt' => '-', 'noidung' => ' Quản lý NN');
+                $ar_Igr[13] = array('val' => 'DDT', 'tt' => '-', 'noidung' => 'Đảng, đoàn thể');
+            }
+            else {
+                $ar_I[0] = array('val' => 'GD;DT', 'tt' => '1', 'noidung' => 'Sự nghiệp giáo dục - đào tạo');
+                $ar_I[1] = array('val' => 'GD', 'tt' => '-', 'noidung' => 'Giáo dục');
+                $ar_I[2] = array('val' => 'DT', 'tt' => '-', 'noidung' => 'Đào tạo');
+                $ar_I[3] = array('val' => 'YTE', 'tt' => '2', 'noidung' => 'Sự nghiệp y tế');
+                $ar_I[4] = array('val' => 'KHCN', 'tt' => '3', 'noidung' => 'Sự nghiệp khoa học-công nghệ');
+                $ar_I[5] = array('val' => 'VHTT', 'tt' => '4', 'noidung' => 'Sự nghiệp văn hóa thông tin');
+                $ar_I[6] = array('val' => 'PTTH', 'tt' => '5', 'noidung' => 'Sự nghiệp phát thanh truyền hình');
+                $ar_I[7] = array('val' => 'TDTT', 'tt' => '6', 'noidung' => 'Sự nghiệp thể dục - thể thao');
+                $ar_I[8] = array('val' => 'DBXH', 'tt' => '7', 'noidung' => 'Sự nghiệp đảm bảo xã hội');
+                $ar_I[9] = array('val' => 'KT', 'tt' => '8', 'noidung' => 'Sự nghiệp kinh tế');
+                $ar_I[10] = array('val' => 'MT', 'tt' => '9', 'noidung' => 'Sự nghiệp môi trường');
+                $ar_I[11] = array('val' => 'QLNN;DDT', 'tt' => '10', 'noidung' => 'Quản lý nhà nước, đảng, đoàn thể');
+                $ar_I[12] = array('val' => 'QLNN', 'tt' => '-', 'noidung' => ' Quản lý NN');
+                $ar_I[13] = array('val' => 'DDT', 'tt' => '-', 'noidung' => 'Đảng, đoàn thể');
+            }
+            $a_It = array('luong' => 0,
+                'pckv' => 0,
+                'pccv' => 0,
+                'pctnvk' => 0,
+                'pcudn' => 0,
+                'pcth' => 0,
+                'pctn' => 0,
+                'pccovu' => 0,
+                'pcdang' => 0,
+                'pcthni' => 0,
+                'pck' => 0,
+                'tongpc' => 0,
+                'ttbh_dv' => 0,
+                'soluongduocgiao' => 0,
+                'soluongbienche'=> 0,
+            );
+            //thiếu chỉ tiêu biên chế
+            if(isset($inputs['inchitiet'])) {
+                $gddt = 0;
+                $daotao = 0;
+                $giaoduc = 0;
+                $qlnnddt = 0;
+                $qlnn = 0;
+                $ddt =0;
+                $i = 0;
+                for ($j = 0; $j < count($ar_Igr); $j++) {
+                    $i++;
+                    if ($ar_Igr[$j]['val'] == 'GD;DT')
+                        $gddt = $i;
+                    if ($ar_Igr[$j]['val'] == 'GD')
+                        $giaoduc = $i;
+                    if ($ar_Igr[$j]['val'] == 'DT')
+                        $daotao = $i;
+                    if ($ar_Igr[$j]['val'] == 'QLNN;DDT')
+                        $qlnnddt = $i;
+                    if ($ar_Igr[$j]['val'] == 'QLNN')
+                        $qlnn = $i;
+                    if ($ar_Igr[$j]['val'] == 'DDT')
+                        $ddt = $i;
+                    $ar_I[$i]['tt'] = $ar_Igr[$j]['tt'];
+                    $ar_I[$i]['noidung'] = $ar_Igr[$j]['noidung'];
+                    $ar_I[$i]['luong'] = 0;
+                    $ar_I[$i]['pckv'] = 0;
+                    $ar_I[$i]['pccv'] = 0;
+                    $ar_I[$i]['pctnvk'] = 0;
+                    $ar_I[$i]['pcudn'] = 0;
+                    $ar_I[$i]['pcth'] = 0;
+                    $ar_I[$i]['pctn'] = 0;
+                    $ar_I[$i]['pccovu'] = 0;
+                    $ar_I[$i]['pcdang'] = 0;
+                    $ar_I[$i]['pcthni'] = 0;
+                    $ar_I[$i]['pck'] = 0;
+                    $ar_I[$i]['tongpc'] = 0;
+                    $ar_I[$i]['ttbh_dv'] = 0;
+                    if (isset($model_bangluong_ct)) {
+                        $chitiet = $model_bangluong_ct->where('linhvuchoatdong', $ar_Igr[$j]['val']);
+                    }
+                    $ar_I[$i]['soluongduocgiao'] = 0;
+                    $ar_I[$i]['soluongbienche'] = 0;
+                    $d = 1;
+                    $luugr = $i;
+                    if (isset($chitiet) && count($chitiet) > 0) {
+                        $thongtin = $chitiet->toArray();
+                        //dd($thongtin);
+
+                        foreach ($thongtin as $thongtinchitiet) {
+                            $d++;
+                            $i += $d;
+                            $ar_I[$i]['tt'] = '+';
+                            $ar_I[$i]['noidung'] = $thongtinchitiet['nguoigui'];
+                            $ar_I[$i]['soluongduocgiao'] = 0;
+                            $ar_I[$i]['soluongbienche'] = 0;
+                            $ar_I[$i]['soluongduocgiao'] = isset($model_bienche->soluongduocgiao) ? $model_bienche->soluongduocgiao : 0;
+                            $a_It['soluongduocgiao'] += $ar_I[$i - $d]['soluongduocgiao'];
+
+                            $ar_I[$i]['soluongbienche'] = isset($model_bienche->soluongbienche) ? $model_bienche->soluongbienche : 0;
+                            $a_It['soluongbienche'] += $ar_I[$i - $d]['soluongbienche'];
+                            $tongpc = 0;
+                            $ar_I[$i]['luong'] = $thongtinchitiet['heso'];
+                            $a_It['luong'] += $ar_I[$i]['luong'];
+
+                            $ar_I[$i]['pckv'] = $thongtinchitiet['pckv'];
+                            $tongpc += $ar_I[$i]['pckv'];
+                            $a_It['pckv'] += $ar_I[$i]['pckv'];
+
+                            $ar_I[$i]['pccv'] = $thongtinchitiet['pccv'];
+                            $tongpc += $ar_I[$i]['pccv'];
+                            $a_It['pccv'] += $ar_I[$i]['pccv'];
+
+                            $ar_I[$i]['pctnvk'] = $thongtinchitiet['pctnvk'];
+                            $tongpc += $ar_I[$i]['pctnvk'];
+                            $a_It['pctnvk'] += $ar_I[$i]['pctnvk'];
+
+                            $ar_I[$i]['pcudn'] = $thongtinchitiet['pcudn'];
+                            $tongpc += $ar_I[$i]['pcudn'];
+                            $a_It['pcudn'] += $ar_I[$i]['pcudn'];
+
+                            $ar_I[$i]['pcth'] = $thongtinchitiet['pcth'];
+                            $tongpc += $ar_I[$i]['pcth'];
+                            $a_It['pcth'] += $ar_I[$i]['pcth'];
+
+                            $ar_I[$i]['pctn'] = $thongtinchitiet['pctn'];
+                            $tongpc += $ar_I[$i]['pctn'];
+                            $a_It['pctn'] += $ar_I[$i]['pctn'];
+
+                            $ar_I[$i]['pccovu'] = $thongtinchitiet['pccovu'];
+                            $tongpc += $ar_I[$i]['pccovu'];
+                            $a_It['pccovu'] += $ar_I[$i]['pccovu'];
+
+                            $ar_I[$i]['pcdang'] = $thongtinchitiet['pcdang'];
+                            $tongpc += $ar_I[$i]['pcdang'];
+                            $a_It['pcdang'] += $ar_I[$i]['pcdang'];
+
+                            $ar_I[$i]['pcthni'] = $thongtinchitiet['pcthni'];
+                            $tongpc += $ar_I[$i]['pcthni'];
+                            $a_It['pcthni'] += $ar_I[$i]['pcthni'];
+
+                            $ar_I[$i]['pck'] = $thongtinchitiet['pck'];
+                            $tongpc += $ar_I[$i]['pck'];
+                            $a_It['pck'] += $ar_I[$i]['pck'];
+
+                            $ar_I[$i]['tongpc'] = $tongpc;
+                            $a_It['tongpc'] += $ar_I[$i]['tongpc'];
+
+                            $ar_I[$i]['ttbh_dv'] = round(($ar_I[$i]['luong'] + $ar_I[$i]['pccv']) * 0.24);
+                            $a_It['ttbh_dv'] += $ar_I[$i]['ttbh_dv'];
+                            //$ar_II['ttbh_dv'] =round(($ar_II['luong'] + $ar_II['pccv'])*0.24);
+
+                            $ar_I[$luugr]['luong'] += $ar_I[$i]['luong'];
+                            $ar_I[$luugr]['pckv'] += $ar_I[$i]['pckv'];
+                            $ar_I[$luugr]['pccv'] += $ar_I[$i]['pccv'];
+                            $ar_I[$luugr]['pctnvk'] += $ar_I[$i]['pctnvk'];
+                            $ar_I[$luugr]['pcudn'] += $ar_I[$i]['pcudn'];
+                            $ar_I[$luugr]['pcth'] += $ar_I[$i]['pcth'];
+                            $ar_I[$luugr]['pctn'] += $ar_I[$i]['pctn'];
+                            $ar_I[$luugr]['pccovu'] += $ar_I[$i]['pccovu'];
+                            $ar_I[$luugr]['pcdang'] += $ar_I[$i]['pcdang'];
+                            $ar_I[$luugr]['pcthni'] += $ar_I[$i]['pcthni'];
+                            $ar_I[$luugr]['pck'] += $ar_I[$i]['pck'];
+                            $ar_I[$luugr]['tongpc'] += $ar_I[$i]['tongpc'];
+                            $ar_I[$luugr]['ttbh_dv'] += $ar_I[$i]['ttbh_dv'];
+
+
+                        }
+                    } else {
+                        $ar_I[$i]['soluongduocgiao'] = 0;
+                        $ar_I[$i]['soluongbienche'] = 0;
+                        $ar_I[$i]['luong'] = 0;
+                        $ar_I[$i]['pckv'] = 0;
+                        $ar_I[$i]['pccv'] = 0;
+                        $ar_I[$i]['pctnvk'] = 0;
+                        $ar_I[$i]['pcudn'] = 0;
+                        $ar_I[$i]['pcth'] = 0;
+                        $ar_I[$i]['pctn'] = 0;
+                        $ar_I[$i]['pccovu'] = 0;
+                        $ar_I[$i]['pcdang'] = 0;
+                        $ar_I[$i]['pcthni'] = 0;
+                        $ar_I[$i]['pck'] = 0;
+                        $ar_I[$i]['tongpc'] = 0;
+                        $ar_I[$i]['ttbh_dv'] = 0;
+                    }
+                }
+
+                $ar_I[$gddt]['luong'] = $ar_I[$giaoduc]['luong'] + $ar_I[$daotao]['luong'];
+                $ar_I[$gddt]['pckv'] = $ar_I[$giaoduc]['pckv'] + $ar_I[$daotao]['pckv'];
+                $ar_I[$gddt]['pccv'] = $ar_I[$giaoduc]['pccv'] + $ar_I[$daotao]['pccv'];
+                $ar_I[$gddt]['pctnvk'] = $ar_I[$giaoduc]['pctnvk'] + $ar_I[$daotao]['pctnvk'];
+                $ar_I[$gddt]['pcudn'] = $ar_I[$giaoduc]['pcudn'] + $ar_I[$daotao]['pcudn'];
+                $ar_I[$gddt]['pcth'] = $ar_I[$giaoduc]['pcth'] + $ar_I[$daotao]['pcth'];
+                $ar_I[$gddt]['pctn'] = $ar_I[$giaoduc]['pctn'] + $ar_I[$daotao]['pctn'];
+                $ar_I[$gddt]['pccovu'] = $ar_I[$giaoduc]['pccovu'] + $ar_I[$daotao]['pccovu'];
+                $ar_I[$gddt]['pcdang'] = $ar_I[$giaoduc]['pcdang'] + $ar_I[$daotao]['pcdang'];
+                $ar_I[$gddt]['pcthni'] = $ar_I[$giaoduc]['pcthni'] + $ar_I[$daotao]['pcthni'];
+                $ar_I[$gddt]['pck'] = $ar_I[$giaoduc]['pck'] + $ar_I[$daotao]['pck'];
+                $ar_I[$gddt]['tongpc'] = $ar_I[$giaoduc]['tongpc'] + $ar_I[$daotao]['tongpc'];
+                $ar_I[$gddt]['ttbh_dv'] = $ar_I[$giaoduc]['ttbh_dv'] + $ar_I[$daotao]['ttbh_dv'];
+
+                $ar_I[$qlnnddt]['luong'] = $ar_I[$qlnn]['luong'] + $ar_I[$ddt]['luong'];
+                $ar_I[$qlnnddt]['pckv'] = $ar_I[$qlnn]['pckv'] + $ar_I[$ddt]['pckv'];
+                $ar_I[$qlnnddt]['pccv'] = $ar_I[$qlnn]['pccv'] + $ar_I[$ddt]['pccv'];
+                $ar_I[$qlnnddt]['pctnvk'] = $ar_I[$qlnn]['pctnvk'] + $ar_I[$ddt]['pctnvk'];
+                $ar_I[$qlnnddt]['pcudn'] = $ar_I[$qlnn]['pcudn'] + $ar_I[$ddt]['pcudn'];
+                $ar_I[$qlnnddt]['pcth'] = $ar_I[$qlnn]['pcth'] + $ar_I[$ddt]['pcth'];
+                $ar_I[$qlnnddt]['pctn'] = $ar_I[$qlnn]['pctn'] + $ar_I[$ddt]['pctn'];
+                $ar_I[$qlnnddt]['pccovu'] = $ar_I[$qlnn]['pccovu'] + $ar_I[$ddt]['pccovu'];
+                $ar_I[$qlnnddt]['pcdang'] = $ar_I[$qlnn]['pcdang'] + $ar_I[$ddt]['pcdang'];
+                $ar_I[$qlnnddt]['pcthni'] = $ar_I[$qlnn]['pcthni'] + $ar_I[$ddt]['pcthni'];
+                $ar_I[$qlnnddt]['pck'] = $ar_I[$qlnn]['pck'] + $ar_I[$ddt]['pck'];
+                $ar_I[$qlnnddt]['tongpc'] = $ar_I[$qlnn]['tongpc'] + $ar_I[$ddt]['tongpc'];
+                $ar_I[$qlnnddt]['ttbh_dv'] = $ar_I[$qlnn]['ttbh_dv'] + $ar_I[$ddt]['ttbh_dv'];
+
+            }
+            else {
+                for ($i = 0; $i < count($ar_I); $i++) {
+                    if (isset($model_bangluong_ct)) {
+                        $chitiet = $model_bangluong_ct->where('linhvuchoatdong', $ar_I[$i]['val']);
+                    }
+
+                    $ar_I[$i]['soluongduocgiao'] = 0;
+                    $ar_I[$i]['soluongbienche'] = 0;
+                    if (isset($chitiet) && count($chitiet) > 0) {
+                        //$ar_I[$i]['soluongduocgiao'] = isset($model_bienche->soluongduocgiao) ? $model_bienche->soluongduocgiao : 0;
+                        $a_It['soluongduocgiao'] += $ar_I[$i]['soluongduocgiao'];
+
+                        //$ar_I[$i]['soluongbienche'] = isset($model_bienche->soluongbienche) ? $model_bienche->soluongbienche : 0;
+                        $a_It['soluongbienche'] += $ar_I[$i]['soluongbienche'];
+                        $tongpc = 0;
+                        $ar_I[$i]['luong'] = $chitiet->sum('heso');
+                        $a_It['luong'] += $ar_I[$i]['luong'];
+
+                        $ar_I[$i]['pckv'] = $chitiet->sum('pckv');
+                        $tongpc += $ar_I[$i]['pckv'];
+                        $a_It['pckv'] += $ar_I[$i]['pckv'];
+
+                        $ar_I[$i]['pccv'] = $chitiet->sum('pccv');
+                        $tongpc += $ar_I[$i]['pccv'];
+                        $a_It['pccv'] += $ar_I[$i]['pccv'];
+
+                        $ar_I[$i]['pctnvk'] = $chitiet->sum('pctnvk');
+                        $tongpc += $ar_I[$i]['pctnvk'];
+                        $a_It['pctnvk'] += $ar_I[$i]['pctnvk'];
+
+                        $ar_I[$i]['pcudn'] = $chitiet->sum('pcudn');
+                        $tongpc += $ar_I[$i]['pcudn'];
+                        $a_It['pcudn'] += $ar_I[$i]['pcudn'];
+
+                        $ar_I[$i]['pcth'] = $chitiet->sum('pcth');
+                        $tongpc += $ar_I[$i]['pcth'];
+                        $a_It['pcth'] += $ar_I[$i]['pcth'];
+
+                        $ar_I[$i]['pctn'] = $chitiet->sum('pctn');
+                        $tongpc += $ar_I[$i]['pctn'];
+                        $a_It['pctn'] += $ar_I[$i]['pctn'];
+
+                        $ar_I[$i]['pccovu'] = $chitiet->sum('pccovu');
+                        $tongpc += $ar_I[$i]['pccovu'];
+                        $a_It['pccovu'] += $ar_I[$i]['pccovu'];
+
+                        $ar_I[$i]['pcdang'] = $chitiet->sum('pcdang');
+                        $tongpc += $ar_I[$i]['pcdang'];
+                        $a_It['pcdang'] += $ar_I[$i]['pcdang'];
+
+                        $ar_I[$i]['pcthni'] = $chitiet->sum('pcthni');
+                        $tongpc += $ar_I[$i]['pcthni'];
+                        $a_It['pcthni'] += $ar_I[$i]['pcthni'];
+
+                        $ar_I[$i]['pck'] = $chitiet->sum('pck');
+                        $tongpc += $ar_I[$i]['pck'];
+                        $a_It['pck'] += $ar_I[$i]['pck'];
+
+                        $ar_I[$i]['tongpc'] = $tongpc;
+                        $a_It['tongpc'] += $ar_I[$i]['tongpc'];
+
+                        $ar_I[$i]['ttbh_dv'] = round(($ar_I[$i]['luong'] + $ar_I[$i]['pccv']) * 0.24);
+                        $a_It['ttbh_dv'] += $ar_I[$i]['ttbh_dv'];
+                        //$ar_II['ttbh_dv'] =round(($ar_II['luong'] + $ar_II['pccv'])*0.24);
+                    } else {
+                        $ar_I[$i]['luong'] = 0;
+                        $ar_I[$i]['pckv'] = 0;
+                        $ar_I[$i]['pccv'] = 0;
+                        $ar_I[$i]['pctnvk'] = 0;
+                        $ar_I[$i]['pcudn'] = 0;
+                        $ar_I[$i]['pcth'] = 0;
+                        $ar_I[$i]['pctn'] = 0;
+                        $ar_I[$i]['pccovu'] = 0;
+                        $ar_I[$i]['pcdang'] = 0;
+                        $ar_I[$i]['pcthni'] = 0;
+                        $ar_I[$i]['pck'] = 0;
+                        $ar_I[$i]['tongpc'] = 0;
+                        $ar_I[$i]['ttbh_dv'] = 0;
+                    }
+                }
+
+                $ar_I[11]['luong'] = $ar_I[12]['luong'] + $ar_I[13]['luong'];
+                $ar_I[11]['pckv'] = $ar_I[12]['pckv'] + $ar_I[13]['pckv'];
+                $ar_I[11]['pccv'] = $ar_I[12]['pccv'] + $ar_I[13]['pccv'];
+                $ar_I[11]['pctnvk'] = $ar_I[12]['pctnvk'] + $ar_I[13]['pctnvk'];
+                $ar_I[11]['pcudn'] = $ar_I[12]['pcudn'] + $ar_I[13]['pcudn'];
+                $ar_I[11]['pcth'] = $ar_I[12]['pcth'] + $ar_I[13]['pcth'];
+                $ar_I[11]['pctn'] = $ar_I[12]['pctn'] + $ar_I[13]['pctn'];
+                $ar_I[11]['pccovu'] = $ar_I[12]['pccovu'] + $ar_I[13]['pccovu'];
+                $ar_I[11]['pcdang'] = $ar_I[12]['pcdang'] + $ar_I[13]['pcdang'];
+                $ar_I[11]['pcthni'] = $ar_I[12]['pcthni'] + $ar_I[13]['pcthni'];
+                $ar_I[11]['pck'] = $ar_I[12]['pck'] + $ar_I[13]['pck'];
+                $ar_I[11]['tongpc'] = $ar_I[12]['tongpc'] + $ar_I[13]['tongpc'];
+                $ar_I[11]['ttbh_dv'] = $ar_I[12]['ttbh_dv'] + $ar_I[13]['ttbh_dv'];
+
+                $ar_I[0]['luong'] = $ar_I[1]['luong'] + $ar_I[2]['luong'];
+                $ar_I[0]['pckv'] = $ar_I[1]['pckv'] + $ar_I[2]['pckv'];
+                $ar_I[0]['pccv'] = $ar_I[1]['pccv'] + $ar_I[2]['pccv'];
+                $ar_I[0]['pctnvk'] = $ar_I[1]['pctnvk'] + $ar_I[2]['pctnvk'];
+                $ar_I[0]['pcudn'] = $ar_I[1]['pcudn'] + $ar_I[2]['pcudn'];
+                $ar_I[0]['pcth'] = $ar_I[1]['pcth'] + $ar_I[2]['pcth'];
+                $ar_I[0]['pctn'] = $ar_I[1]['pctn'] + $ar_I[2]['pctn'];
+                $ar_I[0]['pccovu'] = $ar_I[1]['pccovu'] + $ar_I[2]['pccovu'];
+                $ar_I[0]['pcdang'] = $ar_I[1]['pcdang'] + $ar_I[2]['pcdang'];
+                $ar_I[0]['pcthni'] = $ar_I[1]['pcthni'] + $ar_I[2]['pcthni'];
+                $ar_I[0]['pck'] = $ar_I[1]['pck'] + $ar_I[2]['pck'];
+                $ar_I[0]['tongpc'] = $ar_I[1]['tongpc'] + $ar_I[2]['tongpc'];
+                $ar_I[0]['ttbh_dv'] = $ar_I[1]['ttbh_dv'] + $ar_I[2]['ttbh_dv'];
+            }
+            //dd($ar_I);
+
+            $ar_II = array();
+            $ar_II['soluongduocgiao'] = isset($model_bienche->soluongduocgiao) ? $model_bienche->soluongduocgiao : 0;
+            $ar_II['soluongbienche'] = isset($model_bienche->soluongbienche) ? $model_bienche->soluongbienche : 0;
+
+            $model_bangluong_ct = $model_tonghop_ct->where('maphanloai','KVXP');
+            //dd($model_bangluong_ct);
+            //
+            if(count($model_bangluong_ct)>0){
+                //dd($model_tonghop_ct);
+                $tongpc = 0;
+                $ar_II['luong'] = $model_bangluong_ct->sum('heso');
+
+                $ar_II['pckv'] = $model_bangluong_ct->sum('pckv');
+                $tongpc += $ar_II['pckv'];
+
+                $ar_II['pccv'] = $model_bangluong_ct->sum('pccv');
+                $tongpc += $ar_II['pccv'];
+
+                $ar_II['pctnvk'] = $model_bangluong_ct->sum('pctnvk');
+                $tongpc += $ar_II['pctnvk'];
+
+                $ar_II['pcudn'] = $model_bangluong_ct->sum('pcudn');
+                $tongpc += $ar_II['pcudn'];
+
+                $ar_II['pcth'] = $model_bangluong_ct->sum('pcth');
+                $tongpc += $ar_II['pcth'];
+
+                $ar_II['pctn'] = $model_bangluong_ct->sum('pctn');
+                $tongpc += $ar_II['pctn'];
+
+                $ar_II['pccovu'] = $model_bangluong_ct->sum('pccovu');
+                $tongpc += $ar_II['pccovu'];
+
+                $ar_II['pcdang'] = $model_bangluong_ct->sum('pcdang');
+                $tongpc += $ar_II['pcdang'];
+
+                $ar_II['pcthni'] = $model_bangluong_ct->sum('pcthni');
+                $tongpc += $ar_II['pcthni'];
+
+                $ar_II['pck'] = $model_bangluong_ct->sum('pck');
+                $tongpc += $ar_II['pck'];
+
+                $ar_II['tongpc'] = $tongpc;
+
+                $ar_II['ttbh_dv'] =$model_bangluong_ct->sum('ttbh_dv') ;
+            }
+            else{
+                $ar_II['luong'] = 0;
+                $ar_II['pckv'] = 0;
+                $ar_II['pccv'] = 0;
+                $ar_II['pctnvk'] = 0;
+                $ar_II['pcudn'] = 0;
+                $ar_II['pcth'] = 0;
+                $ar_II['pctn'] = 0;
+                $ar_II['pccovu'] = 0;
+                $ar_II['pcdang'] = 0;
+                $ar_II['pcthni'] = 0;
+                $ar_II['pck'] = 0;
+                $ar_II['tongpc'] = 0;
+                $ar_II['ttbh_dv'] = 0;
+            }
+            //dd($ar_II);
+
+            //căn cứ vào cấp dự toán để xác định đơn vị cấp xã, huyện, tỉnh
+            //chỉ có cột tổng cộng
+            $ar_III = array();
+            $ar_III[]=array('val'=>'T','tt'=>'-','noidung'=>'Cấp tỉnh','tongso'=>'0');
+            $ar_III[]=array('val'=>'H','tt'=>'-','noidung'=>'Cấp huyện','tongso'=>'0');
+            $ar_III[]=array('val'=>'X','tt'=>'-','noidung'=>'Cấp xã','tongso'=>'0');
+
+            $ar_IV = array();
+            $ar_IV[]=array('val'=>'T','tt'=>'-','noidung'=>'Ủy viên cấp tỉnh','tongso'=>'0');
+            $ar_IV[]=array('val'=>'H','tt'=>'-','noidung'=>'Ủy viên cấp huyện','tongso'=>'0');
+            $ar_IV[]=array('val'=>'X','tt'=>'-','noidung'=>'Ủy viên cấp xã','tongso'=>'0');
+            //hỏi chi tiết xem đơn vi cấp xã có pai là dự toán cấp 3,4
+            //huyên cấp ??
+            //tỉnh cấp ??
+
+            $a_IIIt = array('tongso'=>0);
+            $a_IVt = array('tongso'=>0);
+            //dd(session('admin')->maphanloai);
+            if(session('admin')->level=='T'){
+                if($m_dv->capdonvi > 2){
+                    if(isset($model_bangluong_ct)){
+                        $ar_III[2]['tongso'] = $model_bangluong_ct->sum('pcdbqh');
+                        $ar_IV[2]['tongso'] = $model_bangluong_ct->sum('pcvk');
+                    }
+                    $a_IVt['tongso'] += $ar_IV[2]['tongso'];
+                    $a_IIIt['tongso'] += $ar_III[2]['tongso'];
+
+                }else{
+                    if(isset($model_bangluong_ct)){
+                        $ar_III[1]['tongso'] = $model_bangluong_ct->sum('pcdbqh');
+                        $ar_IV[1]['tongso'] = $model_bangluong_ct->sum('pcvk');
+                    }
+                    $a_IIIt['tongso'] += $ar_III[1]['tongso'];
+                    $a_IVt['tongso'] += $ar_IV[1]['tongso'];
+                }
+            }else{
+                if($m_dv->capdonvi >= 3){
+                    if(isset($model_bangluong_ct)){
+                        $ar_III[1]['tongso'] = $model_bangluong_ct->sum('pcdbqh');
+                        $ar_IV[1]['tongso'] = $model_bangluong_ct->sum('pcvk');
+                    }
+                    $a_IIIt['tongso'] += $ar_III[1]['tongso'];
+                    $a_IVt['tongso'] += $ar_IV[1]['tongso'];
+                }else{
+                    if(isset($model_bangluong_ct)){
+                        $ar_III[0]['tongso'] = $model_bangluong_ct->sum('pcdbqh');
+                        $ar_IV[0]['tongso'] = $model_bangluong_ct->sum('pcvk');
+                    }
+
+                    $a_IIIt['tongso'] += $ar_III[0]['tongso'];
+                    $a_IVt['tongso'] += $ar_IV[0]['tongso'];
+                }
+            }
+            Excel::create('BANGLUONG_107',function($excel) use($ar_I,$ar_II,$ar_III,$ar_IV,$a_It,$a_IIIt,$a_IVt,$m_dv,$inputs){
+                $excel->sheet('New sheet', function($sheet) use($ar_I,$ar_II,$ar_III,$ar_IV,$a_It,$a_IIIt,$a_IVt,$m_dv,$inputs){
+                    $sheet->loadView('reports.thongtu67.mau2a1_tt67excel')
+                        ->with('ar_I',$ar_I)
+                        ->with('ar_II',$ar_II)
+                        ->with('ar_III',$ar_III)
+                        ->with('ar_IV',$ar_IV)
+                        ->with('a_It',$a_It)
+                        ->with('a_IIIt',$a_IIIt)
+                        ->with('a_IVt',$a_IVt)
+                        ->with('m_dv',$m_dv)
+                        ->with('inputs',$inputs)
+                        ->with('pageTitle','Mau2a1_TT67');
+                    $sheet->setAutoSize(false);
+                    $sheet->setFontFamily('Tahoma');
+                    $sheet->setFontBold(false);
+                });
+            })->download('xls');
+        } else
+            return view('errors.notlogin');
+    }
+
+    function mau2a1_huyencu(Request $request) {
+
         if (Session::has('admin')) {
             $madvbc = session('admin')->madvbc;
             $m_dv = dmdonvi::where('madv',session('admin')->madv)->first();
@@ -4768,8 +5983,1199 @@ class baocaothongtu67Controller extends Controller
         } else
             return view('errors.notlogin');
     }
+    function mau2a2_huyen(Request $request) {
+        if (Session::has('admin')) {
+            $inputs=$request->all();
+            $madvbc = session('admin')->madvbc;
+            $m_dv = dmdonvi::where('madv',session('admin')->madv)->first();
+            if($inputs['madv'] != "")
+            {
+                $madv = $inputs['madv'];
+                $chekdv = dmdonvi::where('madv', $inputs['madv'])->where('phanloaitaikhoan','TH')->get();
+                if(count($chekdv) > 0)
+                {
+                    $model_donvi = dmdonvi::where('macqcq',$madv)->get();
+                    $model_bienche = chitieubienche::where('nam', '2018')->wherein('madv', function ($qr) use ($madv) {
+                        $qr->select('madv')->from('dmdonvi')->where('macqcq', $madv)->distinct()->get();
+                    })->get();
+                }
 
-    function mau2a2_huyen() {
+                else
+                {
+                    $model_donvi = dmdonvi::where('madv',$madv)->get();
+                    $model_bienche = chitieubienche::where('nam', '2018')->where('madv', $madv)->get();
+                }
+            }
+            else {
+                $model_donvi = dmdonvi::where('madvbc', $madvbc)->get();
+                $model_bienche = chitieubienche::where('nam', '2018')->wherein('madv', function ($qr) use ($madvbc) {
+                    $qr->select('madv')->from('dmdonvi')->where('madvbc', $madvbc)->distinct()->get();
+                })->get();
+            }
+            //dd($model_donvi->toarray());
+            foreach($model_bienche as $bienche){
+                $bienche->maphanloai = $model_donvi->where('madv',$bienche->madv)->first()->maphanloai;
+            }
+            //dd($model_bienche);
+
+            if($inputs['madv'] !="")
+            {
+                if(count($chekdv) > 0) {
+                    $model_tonghop = tonghopluong_huyen::where('thang', '08')->where('nam', '2018')
+                        ->where('madv', $inputs['madv'])->get();
+                    $model_tonghop_ct = tonghopluong_donvi_chitiet::join('tonghopluong_donvi', 'tonghopluong_donvi_chitiet.mathdv', '=', 'tonghopluong_donvi.mathdv')
+                        ->where('tonghopluong_donvi.macqcq', $inputs['madv'])
+                        ->wherein('tonghopluong_donvi_chitiet.mathdv', function ($qr) {
+                            $qr->select('mathdv')->from('tonghopluong_donvi')->where('thang', '08')->where('nam', '2018')->where('trangthai', 'DAGUI')
+                                ->distinct()->get();
+                        })->get();
+                }
+                else {
+                    $model_tonghop = tonghopluong_donvi::where('thang', '08')->where('nam', '2018')
+                        ->where('madv', $inputs['madv'])->get();
+                    $model_tonghop_ct = tonghopluong_donvi_chitiet::join('tonghopluong_donvi', 'tonghopluong_donvi_chitiet.mathdv', '=', 'tonghopluong_donvi.mathdv')
+                        ->where('tonghopluong_donvi.madv', $inputs['madv'])
+                        ->wherein('tonghopluong_donvi_chitiet.mathdv', function ($qr) {
+                            $qr->select('mathdv')->from('tonghopluong_donvi')->where('thang', '08')->where('nam', '2018')->where('trangthai', 'DAGUI')
+                                ->distinct()->get();
+                        })->get();
+                    dd($model_tonghop_ct->toarray());
+                }
+            }
+            else
+            {
+                $model_tonghop = tonghopluong_donvi::where('thang','08')->where('nam','2018')
+                    ->where('madvbc',$madvbc)->get();
+                $model_tonghop_ct = tonghopluong_donvi_chitiet::join('tonghopluong_donvi', 'tonghopluong_donvi_chitiet.mathdv', '=', 'tonghopluong_donvi.mathdv')
+                    ->where('tonghopluong_donvi.madvbc',$madvbc)
+                    ->wherein('tonghopluong_donvi_chitiet.mathdv',function($qr){
+                        $qr->select('mathdv')->from('tonghopluong_donvi')->where('thang','08')->where('nam','2018')->where('trangthai','DAGUI')
+                            ->distinct()->get();
+                    })->get();
+            }
+
+            $luongcb = 1;
+            //$luongcb = 1390000;
+
+            //nếu đơn vị đã tạo bảng lương tháng 07/2017 =>xuất kết quả
+            //dd($model_tonghop_ct->toarray());
+
+            if(session('admin')->username == 'khthso')
+            {
+                $model_bienche = chitieubienche::join('dmdonvi','dmdonvi.madv','=','chitieubienche.madv')
+                    ->join('dmdonvibaocao','dmdonvibaocao.madvbc','=','dmdonvi.madvbc')
+                    ->where('chitieubienche.nam','2018')->where('dmdonvi.madvbc','like',$inputs['madv'].'%')
+                    ->where('dmdonvibaocao.level','T')->get();
+                //$luongcb = 1210000; tạm thời bỏ vì bang lương đã nhân lcb
+                $luongcb = 0.935;
+                //nếu đơn vị đã tạo bảng lương tháng 07/2017 =>xuất kết quả
+                $model_tonghop_ct = tonghopluong_donvi_chitiet::join('tonghopluong_donvi', 'tonghopluong_donvi_chitiet.mathdv', '=', 'tonghopluong_donvi.mathdv')
+                    ->join('dmdonvibaocao','dmdonvibaocao.madvbc','=','tonghopluong_donvi.madvbc')
+                    ->where('tonghopluong_donvi.madvbc','like',$inputs['madv'].'%')
+                    ->where('dmdonvibaocao.level','T')
+                    ->wherein('tonghopluong_donvi_chitiet.mathdv',function($qr){
+                        $qr->select('mathdv')->from('tonghopluong_donvi')->where('thang','08')->where('nam','2018')->where('trangthai','DAGUI')
+                            ->distinct()->get();
+                    })->get();
+            }
+            foreach($model_tonghop_ct as $ct){
+                if($inputs['madv'] !="" && count($chekdv) > 0){
+                    $tonghop = $model_tonghop->where('mathdv',$ct->mathh)->first();
+                    $ct->maphanloai = $tonghop->maphanloai;
+                }
+                else {
+                    $tonghop = $model_tonghop->where('mathdv', $ct->mathdv)->first();
+                    $ct->maphanloai = $model_donvi->where('madv', $tonghop->madv)->first()->maphanloai;
+                }
+                //$a_th =  array_column($tonghop->toarray(),'mathdv','maphanloai');
+                //$ct->maphanloai =  $a_th[$ct->mathdv];
+                $ct->heso = $ct->heso * $luongcb;
+                $ct->pckv = $ct->pckv * $luongcb;
+                $ct->pccv = $ct->pccv * $luongcb;
+                $ct->pctnvk = $ct->pctnvk * $luongcb;
+                $ct->pcudn = $ct->pcudn * $luongcb;
+                $ct->pcth = $ct->pcth * $luongcb;
+                $ct->pctn = $ct->pctn * $luongcb;
+                $ct->pccovu = $ct->pccovu * $luongcb;
+                $ct->pcdang = $ct->pcdang * $luongcb;
+                $ct->pcthni = $ct->pcthni * $luongcb;
+                $ct->pck = $ct->pck * $luongcb;
+                $ct->pcdbqh = $ct->pcdbqh * $luongcb;
+                $ct->pcvk = $ct->pcvk * $luongcb;
+                $ct->ttbh_dv = ($ct->stbhxh_dv + $ct->stbhyt_dv +$ct->stkpcd_dv + $ct->stbhtn_dv) * $luongcb;
+
+            }
+            $model_bangluong_ct = $model_tonghop_ct->where('macongtac','BIENCHE')->where('maphanloai','<>','KVXP');
+
+            //dd($model_bangluong_ct->toarray());
+            $ar_I = array();
+            $ar_Igr = array();
+            if(isset($inputs['inchitiet'])) {
+                $ar_Igr[]=array('val'=>'GD;DT','tt'=>'1','noidung'=>'Sự nghiệp giáo dục - đào tạo');
+                $ar_Igr[]=array('val'=>'GD','tt'=>'-','noidung'=>'Giáo dục');
+                $ar_Igr[]=array('val'=>'DT','tt'=>'-','noidung'=>'Đào tạo');
+                $ar_Igr[]=array('val'=>'YTE','tt'=>'2','noidung'=>'Sự nghiệp y tế');
+                $ar_Igr[]=array('val'=>'KHCN','tt'=>'3','noidung'=>'Sự nghiệp khoa học-công nghệ');
+                $ar_Igr[]=array('val'=>'VHTT','tt'=>'4','noidung'=>'Sự nghiệp văn hóa thông tin');
+                $ar_Igr[]=array('val'=>'PTTH','tt'=>'5','noidung'=>'Sự nghiệp phát thanh truyền hình');
+                $ar_Igr[]=array('val'=>'TDTT','tt'=>'6','noidung'=>'Sự nghiệp thể dục - thể thao');
+                $ar_Igr[]=array('val'=>'DBXH','tt'=>'7','noidung'=>'Sự nghiệp đảm bảo xã hội');
+                $ar_Igr[]=array('val'=>'KT','tt'=>'8','noidung'=>'Sự nghiệp kinh tế');
+                $ar_Igr[]=array('val'=>'MT','tt'=>'9','noidung'=>'Sự nghiệp môi trường');
+                $ar_Igr[]=array('val'=>'QLNN;DDT','tt'=>'10','noidung'=>'Quản lý nhà nước, đảng, đoàn thể');
+                $ar_Igr[]=array('val'=>'QLNN','tt'=>'-','noidung'=>' Quản lý NN');
+                $ar_Igr[]=array('val'=>'DDT','tt'=>'-','noidung'=>'Đảng, đoàn thể');
+            }
+            else {
+                $ar_I[]=array('val'=>'GD;DT','tt'=>'1','noidung'=>'Sự nghiệp giáo dục - đào tạo');
+                $ar_I[]=array('val'=>'GD','tt'=>'-','noidung'=>'Giáo dục');
+                $ar_I[]=array('val'=>'DT','tt'=>'-','noidung'=>'Đào tạo');
+                $ar_I[]=array('val'=>'YTE','tt'=>'2','noidung'=>'Sự nghiệp y tế');
+                $ar_I[]=array('val'=>'KHCN','tt'=>'3','noidung'=>'Sự nghiệp khoa học-công nghệ');
+                $ar_I[]=array('val'=>'VHTT','tt'=>'4','noidung'=>'Sự nghiệp văn hóa thông tin');
+                $ar_I[]=array('val'=>'PTTH','tt'=>'5','noidung'=>'Sự nghiệp phát thanh truyền hình');
+                $ar_I[]=array('val'=>'TDTT','tt'=>'6','noidung'=>'Sự nghiệp thể dục - thể thao');
+                $ar_I[]=array('val'=>'DBXH','tt'=>'7','noidung'=>'Sự nghiệp đảm bảo xã hội');
+                $ar_I[]=array('val'=>'KT','tt'=>'8','noidung'=>'Sự nghiệp kinh tế');
+                $ar_I[]=array('val'=>'MT','tt'=>'9','noidung'=>'Sự nghiệp môi trường');
+                $ar_I[]=array('val'=>'QLNN;DDT','tt'=>'10','noidung'=>'Quản lý nhà nước, đảng, đoàn thể');
+                $ar_I[]=array('val'=>'QLNN','tt'=>'-','noidung'=>' Quản lý NN');
+                $ar_I[]=array('val'=>'DDT','tt'=>'-','noidung'=>'Đảng, đoàn thể');
+            }
+            $a_It = array('luong' => 0,
+                'pckv' => 0,
+                'pccv' => 0,
+                'pctnvk' => 0,
+                'pcudn' => 0,
+                'pcth' => 0,
+                'pctn' => 0,
+                'pccovu' => 0,
+                'pcdang' => 0,
+                'pcthni' => 0,
+                'pck' => 0,
+                'tongpc' => 0,
+                'ttbh_dv' => 0,
+                'chenhlech' => 0
+            );
+            if(isset($inputs['inchitiet'])) {
+                $gddt = 0;
+                $daotao = 0;
+                $giaoduc = 0;
+                $qlnnddt = 0;
+                $qlnn = 0;
+                $ddt = 0;
+                $i = 0;
+                for ($j = 0; $j < count($ar_Igr); $j++) {
+                    $i++;
+                    if ($ar_Igr[$j]['val'] == 'GD;DT')
+                        $gddt = $i;
+                    if ($ar_Igr[$j]['val'] == 'GD')
+                        $giaoduc = $i;
+                    if ($ar_Igr[$j]['val'] == 'DT')
+                        $daotao = $i;
+                    if ($ar_Igr[$j]['val'] == 'QLNN;DDT')
+                        $qlnnddt = $i;
+                    if ($ar_Igr[$j]['val'] == 'QLNN')
+                        $qlnn = $i;
+                    if ($ar_Igr[$j]['val'] == 'DDT')
+                        $ddt = $i;
+                    $ar_I[$i]['tt'] = $ar_Igr[$j]['tt'];
+                    $ar_I[$i]['noidung'] = $ar_Igr[$j]['noidung'];
+                    $ar_I[$i]['luong'] = 0;
+                    $ar_I[$i]['pckv'] = 0;
+                    $ar_I[$i]['pccv'] = 0;
+                    $ar_I[$i]['pctnvk'] = 0;
+                    $ar_I[$i]['pcudn'] = 0;
+                    $ar_I[$i]['pcth'] = 0;
+                    $ar_I[$i]['pctn'] = 0;
+                    $ar_I[$i]['pccovu'] = 0;
+                    $ar_I[$i]['pcdang'] = 0;
+                    $ar_I[$i]['pcthni'] = 0;
+                    $ar_I[$i]['pck'] = 0;
+                    $ar_I[$i]['tongpc'] = 0;
+                    $ar_I[$i]['ttbh_dv'] = 0;
+                    $ar_I[$i]['chenhlech'] = 0;
+                    if (isset($model_bangluong_ct)) {
+                        $chitiet = $model_bangluong_ct->where('linhvuchoatdong', $ar_Igr[$j]['val']);
+                    }
+                    $d= 1;
+                    $luugr = $i;
+                    if (isset($chitiet) && count($chitiet) > 0) {
+                        $thongtin = $chitiet->toArray();
+                        foreach ($thongtin as $thongtinchitiet) {
+                            $d++;
+                            $i += $d;
+                            $ar_I[$i]['tt'] = '+';
+                            $ar_I[$i]['noidung'] = $thongtinchitiet['nguoigui'];
+                            $tongpc = 0;
+                            $ar_I[$i]['luong'] = $thongtinchitiet['heso'] * $luongcb;
+                            $a_It['luong'] += $ar_I[$i]['luong'];
+
+                            $ar_I[$i]['pckv'] = $thongtinchitiet['pckv'] * $luongcb;
+                            $tongpc += $ar_I[$i]['pckv'];
+                            $a_It['pckv'] += $ar_I[$i]['pckv'];
+
+                            $ar_I[$i]['pccv'] = $thongtinchitiet['pccv'] * $luongcb;
+                            $tongpc += $ar_I[$i]['pccv'];
+                            $a_It['pccv'] += $ar_I[$i]['pccv'];
+
+                            $ar_I[$i]['pctnvk'] = $thongtinchitiet['pctnvk'] * $luongcb;
+                            $tongpc += $ar_I[$i]['pctnvk'];
+                            $a_It['pctnvk'] += $ar_I[$i]['pctnvk'];
+
+                            $ar_I[$i]['pcudn'] = $thongtinchitiet['pcudn'] * $luongcb;
+                            $tongpc += $ar_I[$i]['pcudn'];
+                            $a_It['pcudn'] += $ar_I[$i]['pcudn'];
+
+                            $ar_I[$i]['pcth'] = $thongtinchitiet['pcth'] * $luongcb;
+                            $tongpc += $ar_I[$i]['pcth'];
+                            $a_It['pcth'] += $ar_I[$i]['pcth'];
+
+                            $ar_I[$i]['pctn'] = $thongtinchitiet['pctn'] * $luongcb;
+                            $tongpc += $ar_I[$i]['pctn'];
+                            $a_It['pctn'] += $ar_I[$i]['pctn'];
+
+                            $ar_I[$i]['pccovu'] = $thongtinchitiet['pccovu'] * $luongcb;
+                            $tongpc += $ar_I[$i]['pccovu'];
+                            $a_It['pccovu'] += $ar_I[$i]['pccovu'];
+
+                            $ar_I[$i]['pcdang'] = $thongtinchitiet['pcdang'] * $luongcb;
+                            $tongpc += $ar_I[$i]['pcdang'];
+                            $a_It['pcdang'] += $ar_I[$i]['pcdang'];
+
+                            $ar_I[$i]['pcthni'] = $thongtinchitiet['pcthni'] * $luongcb;
+                            $tongpc += $ar_I[$i]['pcthni'];
+                            $a_It['pcthni'] += $ar_I[$i]['pcthni'];
+
+                            $ar_I[$i]['pck'] = $thongtinchitiet['pck'] * $luongcb;
+                            $tongpc += $ar_I[$i]['pck'];
+                            $a_It['pck'] += $ar_I[$i]['pck'];
+
+                            $ar_I[$i]['ttbh_dv'] = round($thongtinchitiet['ttbh_dv'] * $luongcb);
+                            $a_It['ttbh_dv'] += $ar_I[$i]['ttbh_dv'];
+
+                            $ar_I[$i]['tongpc'] = $tongpc;
+                            $a_It['tongpc'] += $ar_I[$i]['tongpc'];
+                            $ar_I[$i]['chenhlech'] = round(($tongpc + $ar_I[$i]['ttbh_dv'] + $ar_I[$i]['luong']) * 90000 / 1390000);
+                            $a_It['chenhlech'] += $ar_I[$i]['chenhlech'];
+
+                            $ar_I[$luugr]['luong'] += $ar_I[$i]['luong'];
+                            $ar_I[$luugr]['pckv'] += $ar_I[$i]['pckv'];
+                            $ar_I[$luugr]['pccv'] += $ar_I[$i]['pccv'];
+                            $ar_I[$luugr]['pctnvk'] += $ar_I[$i]['pctnvk'];
+                            $ar_I[$luugr]['pcudn'] += $ar_I[$i]['pcudn'];
+                            $ar_I[$luugr]['pcth'] += $ar_I[$i]['pcth'];
+                            $ar_I[$luugr]['pctn'] += $ar_I[$i]['pctn'];
+                            $ar_I[$luugr]['pccovu'] += $ar_I[$i]['pccovu'];
+                            $ar_I[$luugr]['pcdang'] += $ar_I[$i]['pcdang'];
+                            $ar_I[$luugr]['pcthni'] += $ar_I[$i]['pcthni'];
+                            $ar_I[$luugr]['pck'] += $ar_I[$i]['pck'];
+                            $ar_I[$luugr]['tongpc'] += $ar_I[$i]['tongpc'];
+                            $ar_I[$luugr]['ttbh_dv'] += $ar_I[$i]['ttbh_dv'];
+                            $ar_I[$luugr]['chenhlech'] += $ar_I[$i]['chenhlech'];
+
+                        }
+                    }else {
+                        $ar_I[$i]['luong'] = 0;
+                        $ar_I[$i]['pckv'] = 0;
+                        $ar_I[$i]['pccv'] = 0;
+                        $ar_I[$i]['pctnvk'] = 0;
+                        $ar_I[$i]['pcudn'] = 0;
+                        $ar_I[$i]['pcth'] = 0;
+                        $ar_I[$i]['pctn'] = 0;
+                        $ar_I[$i]['pccovu'] = 0;
+                        $ar_I[$i]['pcdang'] = 0;
+                        $ar_I[$i]['pcthni'] = 0;
+                        $ar_I[$i]['pck'] = 0;
+                        $ar_I[$i]['tongpc'] = 0;
+                        $ar_I[$i]['ttbh_dv'] = 0;
+                        $ar_I[$i]['chenhlech'] = 0;
+                    }
+                }
+                $ar_I[$gddt]['luong'] = $ar_I[$giaoduc]['luong'] + $ar_I[$daotao]['luong'];
+                $ar_I[$gddt]['pckv'] = $ar_I[$giaoduc]['pckv'] + $ar_I[$daotao]['pckv'];
+                $ar_I[$gddt]['pccv'] = $ar_I[$giaoduc]['pccv'] + $ar_I[$daotao]['pccv'];
+                $ar_I[$gddt]['pctnvk'] = $ar_I[$giaoduc]['pctnvk'] + $ar_I[$daotao]['pctnvk'];
+                $ar_I[$gddt]['pcudn'] = $ar_I[$giaoduc]['pcudn'] + $ar_I[$daotao]['pcudn'];
+                $ar_I[$gddt]['pcth'] = $ar_I[$giaoduc]['pcth'] + $ar_I[$daotao]['pcth'];
+                $ar_I[$gddt]['pctn'] = $ar_I[$giaoduc]['pctn'] + $ar_I[$daotao]['pctn'];
+                $ar_I[$gddt]['pccovu'] = $ar_I[$giaoduc]['pccovu'] + $ar_I[$daotao]['pccovu'];
+                $ar_I[$gddt]['pcdang'] = $ar_I[$giaoduc]['pcdang'] + $ar_I[$daotao]['pcdang'];
+                $ar_I[$gddt]['pcthni'] = $ar_I[$giaoduc]['pcthni'] + $ar_I[$daotao]['pcthni'];
+                $ar_I[$gddt]['pck'] = $ar_I[$giaoduc]['pck'] + $ar_I[$daotao]['pck'];
+                $ar_I[$gddt]['tongpc'] = $ar_I[$giaoduc]['tongpc'] + $ar_I[$daotao]['tongpc'];
+                $ar_I[$gddt]['ttbh_dv'] = $ar_I[$giaoduc]['ttbh_dv'] + $ar_I[$daotao]['ttbh_dv'];
+                $ar_I[$gddt]['chenhlech'] = $ar_I[$giaoduc]['chenhlech'] + $ar_I[$daotao]['chenhlech'];
+
+                $ar_I[$qlnnddt]['luong'] = $ar_I[$qlnn]['luong'] + $ar_I[$ddt]['luong'];
+                $ar_I[$qlnnddt]['pckv'] = $ar_I[$qlnn]['pckv'] + $ar_I[$ddt]['pckv'];
+                $ar_I[$qlnnddt]['pccv'] = $ar_I[$qlnn]['pccv'] + $ar_I[$ddt]['pccv'];
+                $ar_I[$qlnnddt]['pctnvk'] = $ar_I[$qlnn]['pctnvk'] + $ar_I[$ddt]['pctnvk'];
+                $ar_I[$qlnnddt]['pcudn'] = $ar_I[$qlnn]['pcudn'] + $ar_I[$ddt]['pcudn'];
+                $ar_I[$qlnnddt]['pcth'] = $ar_I[$qlnn]['pcth'] + $ar_I[$ddt]['pcth'];
+                $ar_I[$qlnnddt]['pctn'] = $ar_I[$qlnn]['pctn'] + $ar_I[$ddt]['pctn'];
+                $ar_I[$qlnnddt]['pccovu'] = $ar_I[$qlnn]['pccovu'] + $ar_I[$ddt]['pccovu'];
+                $ar_I[$qlnnddt]['pcdang'] = $ar_I[$qlnn]['pcdang'] + $ar_I[$ddt]['pcdang'];
+                $ar_I[$qlnnddt]['pcthni'] = $ar_I[$qlnn]['pcthni'] + $ar_I[$ddt]['pcthni'];
+                $ar_I[$qlnnddt]['pck'] = $ar_I[$qlnn]['pck'] + $ar_I[$ddt]['pck'];
+                $ar_I[$qlnnddt]['tongpc'] = $ar_I[$qlnn]['tongpc'] + $ar_I[$ddt]['tongpc'];
+                $ar_I[$qlnnddt]['ttbh_dv'] = $ar_I[$qlnn]['ttbh_dv'] + $ar_I[$ddt]['ttbh_dv'];
+                $ar_I[$qlnnddt]['chenhlech'] = $ar_I[$qlnn]['chenhlech'] + $ar_I[$ddt]['chenhlech'];
+            }
+            else {
+                for ($i = 0; $i < count($ar_I); $i++) {
+                    if (isset($model_bangluong_ct)) {
+                        $chitiet = $model_bangluong_ct->where('linhvuchoatdong', $ar_I[$i]['val']);
+                    }
+                    if (isset($chitiet) > 0) {
+                        $tongpc = 0;
+                        $ar_I[$i]['luong'] = $chitiet->sum('heso') * $luongcb;
+                        $a_It['luong'] += $ar_I[$i]['luong'];
+
+
+                        $ar_I[$i]['pckv'] = $chitiet->sum('pckv') * $luongcb;
+                        $tongpc += $ar_I[$i]['pckv'];
+                        $a_It['pckv'] += $ar_I[$i]['pckv'];
+
+                        $ar_I[$i]['pccv'] = $chitiet->sum('pccv') * $luongcb;
+                        $tongpc += $ar_I[$i]['pccv'];
+                        $a_It['pccv'] += $ar_I[$i]['pccv'];
+
+                        $ar_I[$i]['pctnvk'] = $chitiet->sum('pctnvk') * $luongcb;
+                        $tongpc += $ar_I[$i]['pctnvk'];
+                        $a_It['pctnvk'] += $ar_I[$i]['pctnvk'];
+
+                        $ar_I[$i]['pcudn'] = $chitiet->sum('pcudn') * $luongcb;
+                        $tongpc += $ar_I[$i]['pcudn'];
+                        $a_It['pcudn'] += $ar_I[$i]['pcudn'];
+
+                        $ar_I[$i]['pcth'] = $chitiet->sum('pcth') * $luongcb;
+                        $tongpc += $ar_I[$i]['pcth'];
+                        $a_It['pcth'] += $ar_I[$i]['pcth'];
+
+                        $ar_I[$i]['pctn'] = $chitiet->sum('pctn') * $luongcb;
+                        $tongpc += $ar_I[$i]['pctn'];
+                        $a_It['pctn'] += $ar_I[$i]['pctn'];
+
+                        $ar_I[$i]['pccovu'] = $chitiet->sum('pccovu') * $luongcb;
+                        $tongpc += $ar_I[$i]['pccovu'];
+                        $a_It['pccovu'] += $ar_I[$i]['pccovu'];
+
+                        $ar_I[$i]['pcdang'] = $chitiet->sum('pcdang') * $luongcb;
+                        $tongpc += $ar_I[$i]['pcdang'];
+                        $a_It['pcdang'] += $ar_I[$i]['pcdang'];
+
+                        $ar_I[$i]['pcthni'] = $chitiet->sum('pcthni') * $luongcb;
+                        $tongpc += $ar_I[$i]['pcthni'];
+                        $a_It['pcthni'] += $ar_I[$i]['pcthni'];
+
+                        $ar_I[$i]['pck'] = $chitiet->sum('pck') * $luongcb;
+                        $tongpc += $ar_I[$i]['pck'];
+                        $a_It['pck'] += $ar_I[$i]['pck'];
+
+                        $ar_I[$i]['ttbh_dv'] = round($chitiet->sum('ttbh_dv') * $luongcb);
+                        $a_It['ttbh_dv'] += $ar_I[$i]['ttbh_dv'];
+
+                        $ar_I[$i]['tongpc'] = $tongpc;
+                        $a_It['tongpc'] += $ar_I[$i]['tongpc'];
+                        $ar_I[$i]['chenhlech'] = round(($tongpc + $ar_I[$i]['ttbh_dv'] + $ar_I[$i]['luong']) * 90000 / 1390000);
+                        $a_It['chenhlech'] += $ar_I[$i]['chenhlech'];
+
+                    } else {
+                        $ar_I[$i]['luong'] = 0;
+                        $ar_I[$i]['pckv'] = 0;
+                        $ar_I[$i]['pccv'] = 0;
+                        $ar_I[$i]['pctnvk'] = 0;
+                        $ar_I[$i]['pcudn'] = 0;
+                        $ar_I[$i]['pcth'] = 0;
+                        $ar_I[$i]['pctn'] = 0;
+                        $ar_I[$i]['pccovu'] = 0;
+                        $ar_I[$i]['pcdang'] = 0;
+                        $ar_I[$i]['pcthni'] = 0;
+                        $ar_I[$i]['pck'] = 0;
+                        $ar_I[$i]['tongpc'] = 0;
+                        $ar_I[$i]['ttbh_dv'] = 0;
+                        $ar_I[$i]['chenhlech'] = 0;
+                    }
+                }
+                $ar_I[11]['luong'] = $ar_I[12]['luong'] + $ar_I[13]['luong'];
+                $ar_I[11]['pckv'] = $ar_I[12]['pckv'] + $ar_I[13]['pckv'];
+                $ar_I[11]['pccv'] = $ar_I[12]['pccv'] + $ar_I[13]['pccv'];
+                $ar_I[11]['pctnvk'] = $ar_I[12]['pctnvk'] + $ar_I[13]['pctnvk'];
+                $ar_I[11]['pcudn'] = $ar_I[12]['pcudn'] + $ar_I[13]['pcudn'];
+                $ar_I[11]['pcth'] = $ar_I[12]['pcth'] + $ar_I[13]['pcth'];
+                $ar_I[11]['pctn'] = $ar_I[12]['pctn'] + $ar_I[13]['pctn'];
+                $ar_I[11]['pccovu'] = $ar_I[12]['pccovu'] + $ar_I[13]['pccovu'];
+                $ar_I[11]['pcdang'] = $ar_I[12]['pcdang'] + $ar_I[13]['pcdang'];
+                $ar_I[11]['pcthni'] = $ar_I[12]['pcthni'] + $ar_I[13]['pcthni'];
+                $ar_I[11]['pck'] = $ar_I[12]['pck'] + $ar_I[13]['pck'];
+                $ar_I[11]['tongpc'] = $ar_I[12]['tongpc'] + $ar_I[13]['tongpc'];
+                $ar_I[11]['ttbh_dv'] = $ar_I[12]['ttbh_dv'] + $ar_I[13]['ttbh_dv'];
+                $ar_I[11]['chenhlech'] = $ar_I[12]['chenhlech'] + $ar_I[13]['chenhlech'];
+
+                $ar_I[0]['luong'] = $ar_I[1]['luong'] + $ar_I[2]['luong'];
+                $ar_I[0]['pckv'] = $ar_I[1]['pckv'] + $ar_I[2]['pckv'];
+                $ar_I[0]['pccv'] = $ar_I[1]['pccv'] + $ar_I[2]['pccv'];
+                $ar_I[0]['pctnvk'] = $ar_I[1]['pctnvk'] + $ar_I[2]['pctnvk'];
+                $ar_I[0]['pcudn'] = $ar_I[1]['pcudn'] + $ar_I[2]['pcudn'];
+                $ar_I[0]['pcth'] = $ar_I[1]['pcth'] + $ar_I[2]['pcth'];
+                $ar_I[0]['pctn'] = $ar_I[1]['pctn'] + $ar_I[2]['pctn'];
+                $ar_I[0]['pccovu'] = $ar_I[1]['pccovu'] + $ar_I[2]['pccovu'];
+                $ar_I[0]['pcdang'] = $ar_I[1]['pcdang'] + $ar_I[2]['pcdang'];
+                $ar_I[0]['pcthni'] = $ar_I[1]['pcthni'] + $ar_I[2]['pcthni'];
+                $ar_I[0]['pck'] = $ar_I[1]['pck'] + $ar_I[2]['pck'];
+                $ar_I[0]['tongpc'] = $ar_I[1]['tongpc'] + $ar_I[2]['tongpc'];
+                $ar_I[0]['ttbh_dv'] = $ar_I[1]['ttbh_dv'] + $ar_I[2]['ttbh_dv'];
+                $ar_I[0]['chenhlech'] = $ar_I[1]['chenhlech'] + $ar_I[2]['chenhlech'];
+                //dd($ar_I);
+            }
+            $ar_II = array();
+            /*
+            if(isset($model_bangluong_ct)){
+                $chitiet = $model_bangluong_ct->where('maphanloai', 'KVXP');
+            }
+            */
+            $chitiet = $model_tonghop_ct->where('maphanloai', 'KVXP');
+            //dd($chitiet);
+            if(isset($chitiet)){
+                $tongpc = 0;
+                $ar_II['luong'] = $chitiet->sum('heso')* $luongcb;
+                $ar_II['ttbh_dv'] = round($chitiet->sum('ttbh_dv') * $luongcb);
+
+                $ar_II['pckv'] = $chitiet->sum('pckv')* $luongcb;
+                $tongpc += $ar_II['pckv'];
+                $ar_II['pccv'] = $chitiet->sum('pccv')* $luongcb;
+                $tongpc += $ar_II['pccv'];
+                $ar_II['pctnvk'] = $chitiet->sum('pctnvk')* $luongcb;
+                $tongpc += $ar_II['pctnvk'];
+                $ar_II['pcudn'] = $chitiet->sum('pcudn')* $luongcb;
+                $tongpc += $ar_II['pcudn'];
+                $ar_II['pcth'] = $chitiet->sum('pcth')* $luongcb;
+                $tongpc += $ar_II['pcth'];
+                $ar_II['pctn'] = $chitiet->sum('pctn')* $luongcb;
+                $tongpc += $ar_II['pctn'];
+                $ar_II['pccovu'] = $chitiet->sum('pccovu')* $luongcb;
+                $tongpc += $ar_II['pccovu'];
+                $ar_II['pcdang'] = $chitiet->sum('pcdang')* $luongcb;
+                $tongpc += $ar_II['pcdang'];
+                $ar_II['pcthni'] = $chitiet->sum('pcthni')* $luongcb;
+                $tongpc += $ar_II['pcthni'];
+                $ar_II['pck'] = $chitiet->sum('pck');
+                $tongpc += $ar_II['pck'];
+                $ar_II['tongpc'] = $tongpc;
+
+                $ar_II['chenhlech'] = round(($tongpc +$ar_II['ttbh_dv'] +$ar_II['luong'])*90000/1390000);
+
+            }else{
+                $ar_II['luong'] = 0;
+                $ar_II['pckv'] = 0;
+                $ar_II['pccv'] = 0;
+                $ar_II['pctnvk'] = 0;
+                $ar_II['pcudn'] = 0;
+                $ar_II['pcth'] = 0;
+                $ar_II['pctn'] = 0;
+                $ar_II['pccovu'] = 0;
+                $ar_II['pcdang'] = 0;
+                $ar_II['pcthni'] = 0;
+                $ar_II['pck'] = 0;
+                $ar_II['tongpc'] = 0;
+                $ar_II['ttbh_dv'] = 0;
+                $ar_II['chenhlech'] = 0;
+            }
+            //dd($ar_II);
+
+            //căn cứ vào cấp dự toán để xác định đơn vị cấp xã, huyện, tỉnh
+            //chỉ có cột tổng cộng
+            $ar_III = array();
+            $ar_III[]=array('val'=>'T','tt'=>'-','noidung'=>'Cấp tỉnh','tongso'=>'0','chenhlech'=>'0');
+            $ar_III[]=array('val'=>'H','tt'=>'-','noidung'=>'Cấp huyện','tongso'=>'0','chenhlech'=>'0');
+            $ar_III[]=array('val'=>'X','tt'=>'-','noidung'=>'Cấp xã','tongso'=>'0','chenhlech'=>'0');
+
+            $ar_IV = array();
+            $ar_IV[]=array('val'=>'T','tt'=>'-','noidung'=>'Ủy viên cấp tỉnh','tongso'=>'0','chenhlech'=>'0');
+            $ar_IV[]=array('val'=>'H','tt'=>'-','noidung'=>'Ủy viên cấp huyện','tongso'=>'0','chenhlech'=>'0');
+            $ar_IV[]=array('val'=>'X','tt'=>'-','noidung'=>'Ủy viên cấp xã','tongso'=>'0','chenhlech'=>'0');
+            //hỏi chi tiết xem đơn vi cấp xã có pai là dự toán cấp 3,4
+            //huyên cấp ??
+            //tỉnh cấp ??
+
+            $a_IIIt = array('tongso'=>0,'chenhlech'=>0);
+            $a_IVt = array('tongso'=>0,'chenhlech'=>0);
+            if(session('admin')->level=='T'){
+                if($m_dv->capdonvi >= 3){
+
+                    $ar_III[2]['tongso'] = $model_tonghop_ct->sum('pcdbqh') * $luongcb;
+                    $ar_III[2]['chenhlech'] = $model_tonghop_ct->sum('pcdbqh') * 90000 / 1390000;
+                    $ar_IV[2]['tongso'] = $model_tonghop_ct->sum('pcvk') * $luongcb;
+                    $ar_IV[2]['chenhlech'] = $model_tonghop_ct->sum('pcvk') * 90000;
+
+
+                    $a_IIIt['tongso'] += $ar_III[2]['tongso'];
+                    $a_IIIt['chenhlech'] += $ar_III[2]['chenhlech'];
+                    $a_IVt['tongso'] += $ar_IV[2]['tongso'];
+                    $a_IVt['chenhlech'] += $ar_IV[2]['chenhlech'];
+                }else{
+
+                    $ar_III[1]['tongso'] = $model_tonghop_ct->sum('pcdbqh') * $luongcb;
+                    $ar_III[1]['chenhlech'] = $model_tonghop_ct->sum('pcdbqh') * 90000/ 1390000;
+                    $ar_IV[1]['tongso'] = $model_tonghop_ct->sum('pcvk') * $luongcb;
+                    $ar_IV[1]['chenhlech'] = $model_tonghop_ct->sum('pcvk') * 90000/ 1390000;
+
+
+                    $a_IIIt['tongso'] += $ar_III[1]['tongso'];
+                    $a_IIIt['chenhlech'] += $ar_III[1]['chenhlech'];
+                    $a_IVt['tongso'] += $ar_IV[1]['tongso'];
+                    $a_IVt['chenhlech'] += $ar_IV[1]['chenhlech'];
+                }
+            }else{
+                if($m_dv->capdonvi >= 3){
+                    if(isset($model_bangluong_ct)){
+                        $ar_III[1]['tongso'] = $model_bangluong_ct->sum('pcdbqh') * $luongcb;
+                        $ar_III[1]['chenhlech'] = $model_bangluong_ct->sum('pcdbqh') * 90000/ 1390000;
+
+                        $ar_IV[1]['tongso'] = $model_bangluong_ct->sum('pcvk') * $luongcb;
+                        $ar_IV[1]['chenhlech'] = $model_bangluong_ct->sum('pcvk') * 90000/ 1390000;
+                    }
+
+                    $a_IIIt['tongso'] += $ar_III[1]['tongso'];
+                    $a_IIIt['chenhlech'] += $ar_III[1]['chenhlech'];
+
+                    $a_IVt['tongso'] += $ar_IV[1]['tongso'];
+                    $a_IVt['chenhlech'] += $ar_IV[1]['chenhlech'];
+                }else{
+                    if(isset($model_bangluong_ct)){
+                        $ar_III[0]['tongso'] = $model_bangluong_ct->sum('pcdbqh') * $luongcb;
+                        $ar_III[0]['chenhlech'] = $model_bangluong_ct->sum('pcdbqh') * 90000/ 1390000;
+
+                        $ar_IV[0]['tongso'] = $model_bangluong_ct->sum('pcvk') * $luongcb;
+                        $ar_IV[0]['chenhlech'] = $model_bangluong_ct->sum('pcvk') * 90000/ 1390000;
+                    }
+
+                    $a_IIIt['tongso'] += $ar_III[0]['tongso'];
+                    $a_IIIt['chenhlech'] += $ar_III[0]['chenhlech'];
+
+                    $a_IVt['tongso'] += $ar_IV[0]['tongso'];
+                    $a_IVt['chenhlech'] += $ar_IV[0]['chenhlech'];
+                }
+            }
+            //dd($ar_I);
+
+            return view('reports.thongtu67.mau2a2_tt67')
+                ->with('furl','/tong_hop_bao_cao/')
+                ->with('ar_I',$ar_I)
+                ->with('ar_II',$ar_II)
+                ->with('ar_III',$ar_III)
+                ->with('ar_IV',$ar_IV)
+                ->with('a_It',$a_It)
+                ->with('a_IIIt',$a_IIIt)
+                ->with('a_IVt',$a_IVt)
+                ->with('m_dv',$m_dv)
+                ->with('inputs',$inputs)
+                ->with('pageTitle','Báo cáo nhu cầu kinh phí thực hiện nghị định 47/2017/NĐ-CP');
+        } else
+            return view('errors.notlogin');
+
+    }
+
+    function mau2a2_huyen_excel(Request $request) {
+        if (Session::has('admin')) {
+            $inputs=$request->all();
+            $madvbc = session('admin')->madvbc;
+            $m_dv = dmdonvi::where('madv',session('admin')->madv)->first();
+            if($inputs['madv'] != "")
+            {
+                $madv = $inputs['madv'];
+                $chekdv = dmdonvi::where('madv', $inputs['madv'])->where('phanloaitaikhoan','TH')->get();
+                if(count($chekdv) > 0)
+                {
+                    $model_donvi = dmdonvi::where('macqcq',$madv)->get();
+                    $model_bienche = chitieubienche::where('nam', '2018')->wherein('madv', function ($qr) use ($madv) {
+                        $qr->select('madv')->from('dmdonvi')->where('macqcq', $madv)->distinct()->get();
+                    })->get();
+                }
+
+                else
+                {
+                    $model_donvi = dmdonvi::where('madv',$madv)->get();
+                    $model_bienche = chitieubienche::where('nam', '2018')->where('madv', $madv)->get();
+                }
+            }
+            else {
+                $model_donvi = dmdonvi::where('madvbc', $madvbc)->get();
+                $model_bienche = chitieubienche::where('nam', '2018')->wherein('madv', function ($qr) use ($madvbc) {
+                    $qr->select('madv')->from('dmdonvi')->where('madvbc', $madvbc)->distinct()->get();
+                })->get();
+            }
+            //dd($model_donvi->toarray());
+            foreach($model_bienche as $bienche){
+                $bienche->maphanloai = $model_donvi->where('madv',$bienche->madv)->first()->maphanloai;
+            }
+            //dd($model_bienche);
+
+            if($inputs['madv'] !="")
+            {
+                if(count($chekdv) > 0) {
+                    $model_tonghop = tonghopluong_huyen::where('thang', '08')->where('nam', '2018')
+                        ->where('madv', $inputs['madv'])->get();
+                    $model_tonghop_ct = tonghopluong_donvi_chitiet::join('tonghopluong_donvi', 'tonghopluong_donvi_chitiet.mathdv', '=', 'tonghopluong_donvi.mathdv')
+                        ->where('tonghopluong_donvi.macqcq', $inputs['madv'])
+                        ->wherein('tonghopluong_donvi_chitiet.mathdv', function ($qr) {
+                            $qr->select('mathdv')->from('tonghopluong_donvi')->where('thang', '08')->where('nam', '2018')->where('trangthai', 'DAGUI')
+                                ->distinct()->get();
+                        })->get();
+                }
+                else {
+                    $model_tonghop = tonghopluong_donvi::where('thang', '08')->where('nam', '2018')
+                        ->where('madv', $inputs['madv'])->get();
+                    $model_tonghop_ct = tonghopluong_donvi_chitiet::join('tonghopluong_donvi', 'tonghopluong_donvi_chitiet.mathdv', '=', 'tonghopluong_donvi.mathdv')
+                        ->where('tonghopluong_donvi.madv', $inputs['madv'])
+                        ->wherein('tonghopluong_donvi_chitiet.mathdv', function ($qr) {
+                            $qr->select('mathdv')->from('tonghopluong_donvi')->where('thang', '08')->where('nam', '2018')->where('trangthai', 'DAGUI')
+                                ->distinct()->get();
+                        })->get();
+                    dd($model_tonghop_ct->toarray());
+                }
+            }
+            else
+            {
+                $model_tonghop = tonghopluong_donvi::where('thang','08')->where('nam','2018')
+                    ->where('madvbc',$madvbc)->get();
+                $model_tonghop_ct = tonghopluong_donvi_chitiet::join('tonghopluong_donvi', 'tonghopluong_donvi_chitiet.mathdv', '=', 'tonghopluong_donvi.mathdv')
+                    ->where('tonghopluong_donvi.madvbc',$madvbc)
+                    ->wherein('tonghopluong_donvi_chitiet.mathdv',function($qr){
+                        $qr->select('mathdv')->from('tonghopluong_donvi')->where('thang','08')->where('nam','2018')->where('trangthai','DAGUI')
+                            ->distinct()->get();
+                    })->get();
+            }
+
+            $luongcb = 1;
+            //$luongcb = 1390000;
+
+            //nếu đơn vị đã tạo bảng lương tháng 07/2017 =>xuất kết quả
+            //dd($model_tonghop_ct->toarray());
+
+            if(session('admin')->username == 'khthso')
+            {
+                $model_bienche = chitieubienche::join('dmdonvi','dmdonvi.madv','=','chitieubienche.madv')
+                    ->join('dmdonvibaocao','dmdonvibaocao.madvbc','=','dmdonvi.madvbc')
+                    ->where('chitieubienche.nam','2018')->where('dmdonvi.madvbc','like',$inputs['madv'].'%')
+                    ->where('dmdonvibaocao.level','T')->get();
+                //$luongcb = 1210000; tạm thời bỏ vì bang lương đã nhân lcb
+                $luongcb = 0.935;
+                //nếu đơn vị đã tạo bảng lương tháng 07/2017 =>xuất kết quả
+                $model_tonghop_ct = tonghopluong_donvi_chitiet::join('tonghopluong_donvi', 'tonghopluong_donvi_chitiet.mathdv', '=', 'tonghopluong_donvi.mathdv')
+                    ->join('dmdonvibaocao','dmdonvibaocao.madvbc','=','tonghopluong_donvi.madvbc')
+                    ->where('tonghopluong_donvi.madvbc','like',$inputs['madv'].'%')
+                    ->where('dmdonvibaocao.level','T')
+                    ->wherein('tonghopluong_donvi_chitiet.mathdv',function($qr){
+                        $qr->select('mathdv')->from('tonghopluong_donvi')->where('thang','08')->where('nam','2018')->where('trangthai','DAGUI')
+                            ->distinct()->get();
+                    })->get();
+            }
+            foreach($model_tonghop_ct as $ct){
+                if($inputs['madv'] !="" && count($chekdv) > 0){
+                    $tonghop = $model_tonghop->where('mathdv',$ct->mathh)->first();
+                    $ct->maphanloai = $tonghop->maphanloai;
+                }
+                else {
+                    $tonghop = $model_tonghop->where('mathdv', $ct->mathdv)->first();
+                    $ct->maphanloai = $model_donvi->where('madv', $tonghop->madv)->first()->maphanloai;
+                }
+                //$a_th =  array_column($tonghop->toarray(),'mathdv','maphanloai');
+                //$ct->maphanloai =  $a_th[$ct->mathdv];
+                $ct->heso = $ct->heso * $luongcb;
+                $ct->pckv = $ct->pckv * $luongcb;
+                $ct->pccv = $ct->pccv * $luongcb;
+                $ct->pctnvk = $ct->pctnvk * $luongcb;
+                $ct->pcudn = $ct->pcudn * $luongcb;
+                $ct->pcth = $ct->pcth * $luongcb;
+                $ct->pctn = $ct->pctn * $luongcb;
+                $ct->pccovu = $ct->pccovu * $luongcb;
+                $ct->pcdang = $ct->pcdang * $luongcb;
+                $ct->pcthni = $ct->pcthni * $luongcb;
+                $ct->pck = $ct->pck * $luongcb;
+                $ct->pcdbqh = $ct->pcdbqh * $luongcb;
+                $ct->pcvk = $ct->pcvk * $luongcb;
+                $ct->ttbh_dv = ($ct->stbhxh_dv + $ct->stbhyt_dv +$ct->stkpcd_dv + $ct->stbhtn_dv) * $luongcb;
+
+            }
+            $model_bangluong_ct = $model_tonghop_ct->where('macongtac','BIENCHE')->where('maphanloai','<>','KVXP');
+
+            //dd($model_bangluong_ct->toarray());
+            $ar_I = array();
+            $ar_Igr = array();
+            if(isset($inputs['inchitiet'])) {
+                $ar_Igr[]=array('val'=>'GD;DT','tt'=>'1','noidung'=>'Sự nghiệp giáo dục - đào tạo');
+                $ar_Igr[]=array('val'=>'GD','tt'=>'-','noidung'=>'Giáo dục');
+                $ar_Igr[]=array('val'=>'DT','tt'=>'-','noidung'=>'Đào tạo');
+                $ar_Igr[]=array('val'=>'YTE','tt'=>'2','noidung'=>'Sự nghiệp y tế');
+                $ar_Igr[]=array('val'=>'KHCN','tt'=>'3','noidung'=>'Sự nghiệp khoa học-công nghệ');
+                $ar_Igr[]=array('val'=>'VHTT','tt'=>'4','noidung'=>'Sự nghiệp văn hóa thông tin');
+                $ar_Igr[]=array('val'=>'PTTH','tt'=>'5','noidung'=>'Sự nghiệp phát thanh truyền hình');
+                $ar_Igr[]=array('val'=>'TDTT','tt'=>'6','noidung'=>'Sự nghiệp thể dục - thể thao');
+                $ar_Igr[]=array('val'=>'DBXH','tt'=>'7','noidung'=>'Sự nghiệp đảm bảo xã hội');
+                $ar_Igr[]=array('val'=>'KT','tt'=>'8','noidung'=>'Sự nghiệp kinh tế');
+                $ar_Igr[]=array('val'=>'MT','tt'=>'9','noidung'=>'Sự nghiệp môi trường');
+                $ar_Igr[]=array('val'=>'QLNN;DDT','tt'=>'10','noidung'=>'Quản lý nhà nước, đảng, đoàn thể');
+                $ar_Igr[]=array('val'=>'QLNN','tt'=>'-','noidung'=>' Quản lý NN');
+                $ar_Igr[]=array('val'=>'DDT','tt'=>'-','noidung'=>'Đảng, đoàn thể');
+            }
+            else {
+                $ar_I[]=array('val'=>'GD;DT','tt'=>'1','noidung'=>'Sự nghiệp giáo dục - đào tạo');
+                $ar_I[]=array('val'=>'GD','tt'=>'-','noidung'=>'Giáo dục');
+                $ar_I[]=array('val'=>'DT','tt'=>'-','noidung'=>'Đào tạo');
+                $ar_I[]=array('val'=>'YTE','tt'=>'2','noidung'=>'Sự nghiệp y tế');
+                $ar_I[]=array('val'=>'KHCN','tt'=>'3','noidung'=>'Sự nghiệp khoa học-công nghệ');
+                $ar_I[]=array('val'=>'VHTT','tt'=>'4','noidung'=>'Sự nghiệp văn hóa thông tin');
+                $ar_I[]=array('val'=>'PTTH','tt'=>'5','noidung'=>'Sự nghiệp phát thanh truyền hình');
+                $ar_I[]=array('val'=>'TDTT','tt'=>'6','noidung'=>'Sự nghiệp thể dục - thể thao');
+                $ar_I[]=array('val'=>'DBXH','tt'=>'7','noidung'=>'Sự nghiệp đảm bảo xã hội');
+                $ar_I[]=array('val'=>'KT','tt'=>'8','noidung'=>'Sự nghiệp kinh tế');
+                $ar_I[]=array('val'=>'MT','tt'=>'9','noidung'=>'Sự nghiệp môi trường');
+                $ar_I[]=array('val'=>'QLNN;DDT','tt'=>'10','noidung'=>'Quản lý nhà nước, đảng, đoàn thể');
+                $ar_I[]=array('val'=>'QLNN','tt'=>'-','noidung'=>' Quản lý NN');
+                $ar_I[]=array('val'=>'DDT','tt'=>'-','noidung'=>'Đảng, đoàn thể');
+            }
+            $a_It = array('luong' => 0,
+                'pckv' => 0,
+                'pccv' => 0,
+                'pctnvk' => 0,
+                'pcudn' => 0,
+                'pcth' => 0,
+                'pctn' => 0,
+                'pccovu' => 0,
+                'pcdang' => 0,
+                'pcthni' => 0,
+                'pck' => 0,
+                'tongpc' => 0,
+                'ttbh_dv' => 0,
+                'chenhlech' => 0
+            );
+            if(isset($inputs['inchitiet'])) {
+                $gddt = 0;
+                $daotao = 0;
+                $giaoduc = 0;
+                $qlnnddt = 0;
+                $qlnn = 0;
+                $ddt = 0;
+                $i = 0;
+                for ($j = 0; $j < count($ar_Igr); $j++) {
+                    $i++;
+                    if ($ar_Igr[$j]['val'] == 'GD;DT')
+                        $gddt = $i;
+                    if ($ar_Igr[$j]['val'] == 'GD')
+                        $giaoduc = $i;
+                    if ($ar_Igr[$j]['val'] == 'DT')
+                        $daotao = $i;
+                    if ($ar_Igr[$j]['val'] == 'QLNN;DDT')
+                        $qlnnddt = $i;
+                    if ($ar_Igr[$j]['val'] == 'QLNN')
+                        $qlnn = $i;
+                    if ($ar_Igr[$j]['val'] == 'DDT')
+                        $ddt = $i;
+                    $ar_I[$i]['tt'] = $ar_Igr[$j]['tt'];
+                    $ar_I[$i]['noidung'] = $ar_Igr[$j]['noidung'];
+                    $ar_I[$i]['luong'] = 0;
+                    $ar_I[$i]['pckv'] = 0;
+                    $ar_I[$i]['pccv'] = 0;
+                    $ar_I[$i]['pctnvk'] = 0;
+                    $ar_I[$i]['pcudn'] = 0;
+                    $ar_I[$i]['pcth'] = 0;
+                    $ar_I[$i]['pctn'] = 0;
+                    $ar_I[$i]['pccovu'] = 0;
+                    $ar_I[$i]['pcdang'] = 0;
+                    $ar_I[$i]['pcthni'] = 0;
+                    $ar_I[$i]['pck'] = 0;
+                    $ar_I[$i]['tongpc'] = 0;
+                    $ar_I[$i]['ttbh_dv'] = 0;
+                    $ar_I[$i]['chenhlech'] = 0;
+                    if (isset($model_bangluong_ct)) {
+                        $chitiet = $model_bangluong_ct->where('linhvuchoatdong', $ar_Igr[$j]['val']);
+                    }
+                    $d= 1;
+                    $luugr = $i;
+                    if (isset($chitiet) && count($chitiet) > 0) {
+                        $thongtin = $chitiet->toArray();
+                        foreach ($thongtin as $thongtinchitiet) {
+                            $d++;
+                            $i += $d;
+                            $ar_I[$i]['tt'] = '+';
+                            $ar_I[$i]['noidung'] = $thongtinchitiet['nguoigui'];
+                            $tongpc = 0;
+                            $ar_I[$i]['luong'] = $thongtinchitiet['heso'] * $luongcb;
+                            $a_It['luong'] += $ar_I[$i]['luong'];
+
+                            $ar_I[$i]['pckv'] = $thongtinchitiet['pckv'] * $luongcb;
+                            $tongpc += $ar_I[$i]['pckv'];
+                            $a_It['pckv'] += $ar_I[$i]['pckv'];
+
+                            $ar_I[$i]['pccv'] = $thongtinchitiet['pccv'] * $luongcb;
+                            $tongpc += $ar_I[$i]['pccv'];
+                            $a_It['pccv'] += $ar_I[$i]['pccv'];
+
+                            $ar_I[$i]['pctnvk'] = $thongtinchitiet['pctnvk'] * $luongcb;
+                            $tongpc += $ar_I[$i]['pctnvk'];
+                            $a_It['pctnvk'] += $ar_I[$i]['pctnvk'];
+
+                            $ar_I[$i]['pcudn'] = $thongtinchitiet['pcudn'] * $luongcb;
+                            $tongpc += $ar_I[$i]['pcudn'];
+                            $a_It['pcudn'] += $ar_I[$i]['pcudn'];
+
+                            $ar_I[$i]['pcth'] = $thongtinchitiet['pcth'] * $luongcb;
+                            $tongpc += $ar_I[$i]['pcth'];
+                            $a_It['pcth'] += $ar_I[$i]['pcth'];
+
+                            $ar_I[$i]['pctn'] = $thongtinchitiet['pctn'] * $luongcb;
+                            $tongpc += $ar_I[$i]['pctn'];
+                            $a_It['pctn'] += $ar_I[$i]['pctn'];
+
+                            $ar_I[$i]['pccovu'] = $thongtinchitiet['pccovu'] * $luongcb;
+                            $tongpc += $ar_I[$i]['pccovu'];
+                            $a_It['pccovu'] += $ar_I[$i]['pccovu'];
+
+                            $ar_I[$i]['pcdang'] = $thongtinchitiet['pcdang'] * $luongcb;
+                            $tongpc += $ar_I[$i]['pcdang'];
+                            $a_It['pcdang'] += $ar_I[$i]['pcdang'];
+
+                            $ar_I[$i]['pcthni'] = $thongtinchitiet['pcthni'] * $luongcb;
+                            $tongpc += $ar_I[$i]['pcthni'];
+                            $a_It['pcthni'] += $ar_I[$i]['pcthni'];
+
+                            $ar_I[$i]['pck'] = $thongtinchitiet['pck'] * $luongcb;
+                            $tongpc += $ar_I[$i]['pck'];
+                            $a_It['pck'] += $ar_I[$i]['pck'];
+
+                            $ar_I[$i]['ttbh_dv'] = round($thongtinchitiet['ttbh_dv'] * $luongcb);
+                            $a_It['ttbh_dv'] += $ar_I[$i]['ttbh_dv'];
+
+                            $ar_I[$i]['tongpc'] = $tongpc;
+                            $a_It['tongpc'] += $ar_I[$i]['tongpc'];
+                            $ar_I[$i]['chenhlech'] = round(($tongpc + $ar_I[$i]['ttbh_dv'] + $ar_I[$i]['luong']) * 90000 / 1390000);
+                            $a_It['chenhlech'] += $ar_I[$i]['chenhlech'];
+
+                            $ar_I[$luugr]['luong'] += $ar_I[$i]['luong'];
+                            $ar_I[$luugr]['pckv'] += $ar_I[$i]['pckv'];
+                            $ar_I[$luugr]['pccv'] += $ar_I[$i]['pccv'];
+                            $ar_I[$luugr]['pctnvk'] += $ar_I[$i]['pctnvk'];
+                            $ar_I[$luugr]['pcudn'] += $ar_I[$i]['pcudn'];
+                            $ar_I[$luugr]['pcth'] += $ar_I[$i]['pcth'];
+                            $ar_I[$luugr]['pctn'] += $ar_I[$i]['pctn'];
+                            $ar_I[$luugr]['pccovu'] += $ar_I[$i]['pccovu'];
+                            $ar_I[$luugr]['pcdang'] += $ar_I[$i]['pcdang'];
+                            $ar_I[$luugr]['pcthni'] += $ar_I[$i]['pcthni'];
+                            $ar_I[$luugr]['pck'] += $ar_I[$i]['pck'];
+                            $ar_I[$luugr]['tongpc'] += $ar_I[$i]['tongpc'];
+                            $ar_I[$luugr]['ttbh_dv'] += $ar_I[$i]['ttbh_dv'];
+                            $ar_I[$luugr]['chenhlech'] += $ar_I[$i]['chenhlech'];
+
+                        }
+                    }else {
+                        $ar_I[$i]['luong'] = 0;
+                        $ar_I[$i]['pckv'] = 0;
+                        $ar_I[$i]['pccv'] = 0;
+                        $ar_I[$i]['pctnvk'] = 0;
+                        $ar_I[$i]['pcudn'] = 0;
+                        $ar_I[$i]['pcth'] = 0;
+                        $ar_I[$i]['pctn'] = 0;
+                        $ar_I[$i]['pccovu'] = 0;
+                        $ar_I[$i]['pcdang'] = 0;
+                        $ar_I[$i]['pcthni'] = 0;
+                        $ar_I[$i]['pck'] = 0;
+                        $ar_I[$i]['tongpc'] = 0;
+                        $ar_I[$i]['ttbh_dv'] = 0;
+                        $ar_I[$i]['chenhlech'] = 0;
+                    }
+                }
+                $ar_I[$gddt]['luong'] = $ar_I[$giaoduc]['luong'] + $ar_I[$daotao]['luong'];
+                $ar_I[$gddt]['pckv'] = $ar_I[$giaoduc]['pckv'] + $ar_I[$daotao]['pckv'];
+                $ar_I[$gddt]['pccv'] = $ar_I[$giaoduc]['pccv'] + $ar_I[$daotao]['pccv'];
+                $ar_I[$gddt]['pctnvk'] = $ar_I[$giaoduc]['pctnvk'] + $ar_I[$daotao]['pctnvk'];
+                $ar_I[$gddt]['pcudn'] = $ar_I[$giaoduc]['pcudn'] + $ar_I[$daotao]['pcudn'];
+                $ar_I[$gddt]['pcth'] = $ar_I[$giaoduc]['pcth'] + $ar_I[$daotao]['pcth'];
+                $ar_I[$gddt]['pctn'] = $ar_I[$giaoduc]['pctn'] + $ar_I[$daotao]['pctn'];
+                $ar_I[$gddt]['pccovu'] = $ar_I[$giaoduc]['pccovu'] + $ar_I[$daotao]['pccovu'];
+                $ar_I[$gddt]['pcdang'] = $ar_I[$giaoduc]['pcdang'] + $ar_I[$daotao]['pcdang'];
+                $ar_I[$gddt]['pcthni'] = $ar_I[$giaoduc]['pcthni'] + $ar_I[$daotao]['pcthni'];
+                $ar_I[$gddt]['pck'] = $ar_I[$giaoduc]['pck'] + $ar_I[$daotao]['pck'];
+                $ar_I[$gddt]['tongpc'] = $ar_I[$giaoduc]['tongpc'] + $ar_I[$daotao]['tongpc'];
+                $ar_I[$gddt]['ttbh_dv'] = $ar_I[$giaoduc]['ttbh_dv'] + $ar_I[$daotao]['ttbh_dv'];
+                $ar_I[$gddt]['chenhlech'] = $ar_I[$giaoduc]['chenhlech'] + $ar_I[$daotao]['chenhlech'];
+
+                $ar_I[$qlnnddt]['luong'] = $ar_I[$qlnn]['luong'] + $ar_I[$ddt]['luong'];
+                $ar_I[$qlnnddt]['pckv'] = $ar_I[$qlnn]['pckv'] + $ar_I[$ddt]['pckv'];
+                $ar_I[$qlnnddt]['pccv'] = $ar_I[$qlnn]['pccv'] + $ar_I[$ddt]['pccv'];
+                $ar_I[$qlnnddt]['pctnvk'] = $ar_I[$qlnn]['pctnvk'] + $ar_I[$ddt]['pctnvk'];
+                $ar_I[$qlnnddt]['pcudn'] = $ar_I[$qlnn]['pcudn'] + $ar_I[$ddt]['pcudn'];
+                $ar_I[$qlnnddt]['pcth'] = $ar_I[$qlnn]['pcth'] + $ar_I[$ddt]['pcth'];
+                $ar_I[$qlnnddt]['pctn'] = $ar_I[$qlnn]['pctn'] + $ar_I[$ddt]['pctn'];
+                $ar_I[$qlnnddt]['pccovu'] = $ar_I[$qlnn]['pccovu'] + $ar_I[$ddt]['pccovu'];
+                $ar_I[$qlnnddt]['pcdang'] = $ar_I[$qlnn]['pcdang'] + $ar_I[$ddt]['pcdang'];
+                $ar_I[$qlnnddt]['pcthni'] = $ar_I[$qlnn]['pcthni'] + $ar_I[$ddt]['pcthni'];
+                $ar_I[$qlnnddt]['pck'] = $ar_I[$qlnn]['pck'] + $ar_I[$ddt]['pck'];
+                $ar_I[$qlnnddt]['tongpc'] = $ar_I[$qlnn]['tongpc'] + $ar_I[$ddt]['tongpc'];
+                $ar_I[$qlnnddt]['ttbh_dv'] = $ar_I[$qlnn]['ttbh_dv'] + $ar_I[$ddt]['ttbh_dv'];
+                $ar_I[$qlnnddt]['chenhlech'] = $ar_I[$qlnn]['chenhlech'] + $ar_I[$ddt]['chenhlech'];
+            }
+            else {
+                for ($i = 0; $i < count($ar_I); $i++) {
+                    if (isset($model_bangluong_ct)) {
+                        $chitiet = $model_bangluong_ct->where('linhvuchoatdong', $ar_I[$i]['val']);
+                    }
+                    if (isset($chitiet) > 0) {
+                        $tongpc = 0;
+                        $ar_I[$i]['luong'] = $chitiet->sum('heso') * $luongcb;
+                        $a_It['luong'] += $ar_I[$i]['luong'];
+
+
+                        $ar_I[$i]['pckv'] = $chitiet->sum('pckv') * $luongcb;
+                        $tongpc += $ar_I[$i]['pckv'];
+                        $a_It['pckv'] += $ar_I[$i]['pckv'];
+
+                        $ar_I[$i]['pccv'] = $chitiet->sum('pccv') * $luongcb;
+                        $tongpc += $ar_I[$i]['pccv'];
+                        $a_It['pccv'] += $ar_I[$i]['pccv'];
+
+                        $ar_I[$i]['pctnvk'] = $chitiet->sum('pctnvk') * $luongcb;
+                        $tongpc += $ar_I[$i]['pctnvk'];
+                        $a_It['pctnvk'] += $ar_I[$i]['pctnvk'];
+
+                        $ar_I[$i]['pcudn'] = $chitiet->sum('pcudn') * $luongcb;
+                        $tongpc += $ar_I[$i]['pcudn'];
+                        $a_It['pcudn'] += $ar_I[$i]['pcudn'];
+
+                        $ar_I[$i]['pcth'] = $chitiet->sum('pcth') * $luongcb;
+                        $tongpc += $ar_I[$i]['pcth'];
+                        $a_It['pcth'] += $ar_I[$i]['pcth'];
+
+                        $ar_I[$i]['pctn'] = $chitiet->sum('pctn') * $luongcb;
+                        $tongpc += $ar_I[$i]['pctn'];
+                        $a_It['pctn'] += $ar_I[$i]['pctn'];
+
+                        $ar_I[$i]['pccovu'] = $chitiet->sum('pccovu') * $luongcb;
+                        $tongpc += $ar_I[$i]['pccovu'];
+                        $a_It['pccovu'] += $ar_I[$i]['pccovu'];
+
+                        $ar_I[$i]['pcdang'] = $chitiet->sum('pcdang') * $luongcb;
+                        $tongpc += $ar_I[$i]['pcdang'];
+                        $a_It['pcdang'] += $ar_I[$i]['pcdang'];
+
+                        $ar_I[$i]['pcthni'] = $chitiet->sum('pcthni') * $luongcb;
+                        $tongpc += $ar_I[$i]['pcthni'];
+                        $a_It['pcthni'] += $ar_I[$i]['pcthni'];
+
+                        $ar_I[$i]['pck'] = $chitiet->sum('pck') * $luongcb;
+                        $tongpc += $ar_I[$i]['pck'];
+                        $a_It['pck'] += $ar_I[$i]['pck'];
+
+                        $ar_I[$i]['ttbh_dv'] = round($chitiet->sum('ttbh_dv') * $luongcb);
+                        $a_It['ttbh_dv'] += $ar_I[$i]['ttbh_dv'];
+
+                        $ar_I[$i]['tongpc'] = $tongpc;
+                        $a_It['tongpc'] += $ar_I[$i]['tongpc'];
+                        $ar_I[$i]['chenhlech'] = round(($tongpc + $ar_I[$i]['ttbh_dv'] + $ar_I[$i]['luong']) * 90000 / 1390000);
+                        $a_It['chenhlech'] += $ar_I[$i]['chenhlech'];
+
+                    } else {
+                        $ar_I[$i]['luong'] = 0;
+                        $ar_I[$i]['pckv'] = 0;
+                        $ar_I[$i]['pccv'] = 0;
+                        $ar_I[$i]['pctnvk'] = 0;
+                        $ar_I[$i]['pcudn'] = 0;
+                        $ar_I[$i]['pcth'] = 0;
+                        $ar_I[$i]['pctn'] = 0;
+                        $ar_I[$i]['pccovu'] = 0;
+                        $ar_I[$i]['pcdang'] = 0;
+                        $ar_I[$i]['pcthni'] = 0;
+                        $ar_I[$i]['pck'] = 0;
+                        $ar_I[$i]['tongpc'] = 0;
+                        $ar_I[$i]['ttbh_dv'] = 0;
+                        $ar_I[$i]['chenhlech'] = 0;
+                    }
+                }
+                $ar_I[11]['luong'] = $ar_I[12]['luong'] + $ar_I[13]['luong'];
+                $ar_I[11]['pckv'] = $ar_I[12]['pckv'] + $ar_I[13]['pckv'];
+                $ar_I[11]['pccv'] = $ar_I[12]['pccv'] + $ar_I[13]['pccv'];
+                $ar_I[11]['pctnvk'] = $ar_I[12]['pctnvk'] + $ar_I[13]['pctnvk'];
+                $ar_I[11]['pcudn'] = $ar_I[12]['pcudn'] + $ar_I[13]['pcudn'];
+                $ar_I[11]['pcth'] = $ar_I[12]['pcth'] + $ar_I[13]['pcth'];
+                $ar_I[11]['pctn'] = $ar_I[12]['pctn'] + $ar_I[13]['pctn'];
+                $ar_I[11]['pccovu'] = $ar_I[12]['pccovu'] + $ar_I[13]['pccovu'];
+                $ar_I[11]['pcdang'] = $ar_I[12]['pcdang'] + $ar_I[13]['pcdang'];
+                $ar_I[11]['pcthni'] = $ar_I[12]['pcthni'] + $ar_I[13]['pcthni'];
+                $ar_I[11]['pck'] = $ar_I[12]['pck'] + $ar_I[13]['pck'];
+                $ar_I[11]['tongpc'] = $ar_I[12]['tongpc'] + $ar_I[13]['tongpc'];
+                $ar_I[11]['ttbh_dv'] = $ar_I[12]['ttbh_dv'] + $ar_I[13]['ttbh_dv'];
+                $ar_I[11]['chenhlech'] = $ar_I[12]['chenhlech'] + $ar_I[13]['chenhlech'];
+
+                $ar_I[0]['luong'] = $ar_I[1]['luong'] + $ar_I[2]['luong'];
+                $ar_I[0]['pckv'] = $ar_I[1]['pckv'] + $ar_I[2]['pckv'];
+                $ar_I[0]['pccv'] = $ar_I[1]['pccv'] + $ar_I[2]['pccv'];
+                $ar_I[0]['pctnvk'] = $ar_I[1]['pctnvk'] + $ar_I[2]['pctnvk'];
+                $ar_I[0]['pcudn'] = $ar_I[1]['pcudn'] + $ar_I[2]['pcudn'];
+                $ar_I[0]['pcth'] = $ar_I[1]['pcth'] + $ar_I[2]['pcth'];
+                $ar_I[0]['pctn'] = $ar_I[1]['pctn'] + $ar_I[2]['pctn'];
+                $ar_I[0]['pccovu'] = $ar_I[1]['pccovu'] + $ar_I[2]['pccovu'];
+                $ar_I[0]['pcdang'] = $ar_I[1]['pcdang'] + $ar_I[2]['pcdang'];
+                $ar_I[0]['pcthni'] = $ar_I[1]['pcthni'] + $ar_I[2]['pcthni'];
+                $ar_I[0]['pck'] = $ar_I[1]['pck'] + $ar_I[2]['pck'];
+                $ar_I[0]['tongpc'] = $ar_I[1]['tongpc'] + $ar_I[2]['tongpc'];
+                $ar_I[0]['ttbh_dv'] = $ar_I[1]['ttbh_dv'] + $ar_I[2]['ttbh_dv'];
+                $ar_I[0]['chenhlech'] = $ar_I[1]['chenhlech'] + $ar_I[2]['chenhlech'];
+                //dd($ar_I);
+            }
+            $ar_II = array();
+            /*
+            if(isset($model_bangluong_ct)){
+                $chitiet = $model_bangluong_ct->where('maphanloai', 'KVXP');
+            }
+            */
+            $chitiet = $model_tonghop_ct->where('maphanloai', 'KVXP');
+            //dd($chitiet);
+            if(isset($chitiet)){
+                $tongpc = 0;
+                $ar_II['luong'] = $chitiet->sum('heso')* $luongcb;
+                $ar_II['ttbh_dv'] = round($chitiet->sum('ttbh_dv') * $luongcb);
+
+                $ar_II['pckv'] = $chitiet->sum('pckv')* $luongcb;
+                $tongpc += $ar_II['pckv'];
+                $ar_II['pccv'] = $chitiet->sum('pccv')* $luongcb;
+                $tongpc += $ar_II['pccv'];
+                $ar_II['pctnvk'] = $chitiet->sum('pctnvk')* $luongcb;
+                $tongpc += $ar_II['pctnvk'];
+                $ar_II['pcudn'] = $chitiet->sum('pcudn')* $luongcb;
+                $tongpc += $ar_II['pcudn'];
+                $ar_II['pcth'] = $chitiet->sum('pcth')* $luongcb;
+                $tongpc += $ar_II['pcth'];
+                $ar_II['pctn'] = $chitiet->sum('pctn')* $luongcb;
+                $tongpc += $ar_II['pctn'];
+                $ar_II['pccovu'] = $chitiet->sum('pccovu')* $luongcb;
+                $tongpc += $ar_II['pccovu'];
+                $ar_II['pcdang'] = $chitiet->sum('pcdang')* $luongcb;
+                $tongpc += $ar_II['pcdang'];
+                $ar_II['pcthni'] = $chitiet->sum('pcthni')* $luongcb;
+                $tongpc += $ar_II['pcthni'];
+                $ar_II['pck'] = $chitiet->sum('pck');
+                $tongpc += $ar_II['pck'];
+                $ar_II['tongpc'] = $tongpc;
+
+                $ar_II['chenhlech'] = round(($tongpc +$ar_II['ttbh_dv'] +$ar_II['luong'])*90000/1390000);
+
+            }else{
+                $ar_II['luong'] = 0;
+                $ar_II['pckv'] = 0;
+                $ar_II['pccv'] = 0;
+                $ar_II['pctnvk'] = 0;
+                $ar_II['pcudn'] = 0;
+                $ar_II['pcth'] = 0;
+                $ar_II['pctn'] = 0;
+                $ar_II['pccovu'] = 0;
+                $ar_II['pcdang'] = 0;
+                $ar_II['pcthni'] = 0;
+                $ar_II['pck'] = 0;
+                $ar_II['tongpc'] = 0;
+                $ar_II['ttbh_dv'] = 0;
+                $ar_II['chenhlech'] = 0;
+            }
+            //dd($ar_II);
+
+            //căn cứ vào cấp dự toán để xác định đơn vị cấp xã, huyện, tỉnh
+            //chỉ có cột tổng cộng
+            $ar_III = array();
+            $ar_III[]=array('val'=>'T','tt'=>'-','noidung'=>'Cấp tỉnh','tongso'=>'0','chenhlech'=>'0');
+            $ar_III[]=array('val'=>'H','tt'=>'-','noidung'=>'Cấp huyện','tongso'=>'0','chenhlech'=>'0');
+            $ar_III[]=array('val'=>'X','tt'=>'-','noidung'=>'Cấp xã','tongso'=>'0','chenhlech'=>'0');
+
+            $ar_IV = array();
+            $ar_IV[]=array('val'=>'T','tt'=>'-','noidung'=>'Ủy viên cấp tỉnh','tongso'=>'0','chenhlech'=>'0');
+            $ar_IV[]=array('val'=>'H','tt'=>'-','noidung'=>'Ủy viên cấp huyện','tongso'=>'0','chenhlech'=>'0');
+            $ar_IV[]=array('val'=>'X','tt'=>'-','noidung'=>'Ủy viên cấp xã','tongso'=>'0','chenhlech'=>'0');
+            //hỏi chi tiết xem đơn vi cấp xã có pai là dự toán cấp 3,4
+            //huyên cấp ??
+            //tỉnh cấp ??
+
+            $a_IIIt = array('tongso'=>0,'chenhlech'=>0);
+            $a_IVt = array('tongso'=>0,'chenhlech'=>0);
+            if(session('admin')->level=='T'){
+                if($m_dv->capdonvi >= 3){
+
+                    $ar_III[2]['tongso'] = $model_tonghop_ct->sum('pcdbqh') * $luongcb;
+                    $ar_III[2]['chenhlech'] = $model_tonghop_ct->sum('pcdbqh') * 90000 / 1390000;
+                    $ar_IV[2]['tongso'] = $model_tonghop_ct->sum('pcvk') * $luongcb;
+                    $ar_IV[2]['chenhlech'] = $model_tonghop_ct->sum('pcvk') * 90000;
+
+
+                    $a_IIIt['tongso'] += $ar_III[2]['tongso'];
+                    $a_IIIt['chenhlech'] += $ar_III[2]['chenhlech'];
+                    $a_IVt['tongso'] += $ar_IV[2]['tongso'];
+                    $a_IVt['chenhlech'] += $ar_IV[2]['chenhlech'];
+                }else{
+
+                    $ar_III[1]['tongso'] = $model_tonghop_ct->sum('pcdbqh') * $luongcb;
+                    $ar_III[1]['chenhlech'] = $model_tonghop_ct->sum('pcdbqh') * 90000/ 1390000;
+                    $ar_IV[1]['tongso'] = $model_tonghop_ct->sum('pcvk') * $luongcb;
+                    $ar_IV[1]['chenhlech'] = $model_tonghop_ct->sum('pcvk') * 90000/ 1390000;
+
+
+                    $a_IIIt['tongso'] += $ar_III[1]['tongso'];
+                    $a_IIIt['chenhlech'] += $ar_III[1]['chenhlech'];
+                    $a_IVt['tongso'] += $ar_IV[1]['tongso'];
+                    $a_IVt['chenhlech'] += $ar_IV[1]['chenhlech'];
+                }
+            }else{
+                if($m_dv->capdonvi >= 3){
+                    if(isset($model_bangluong_ct)){
+                        $ar_III[1]['tongso'] = $model_bangluong_ct->sum('pcdbqh') * $luongcb;
+                        $ar_III[1]['chenhlech'] = $model_bangluong_ct->sum('pcdbqh') * 90000/ 1390000;
+
+                        $ar_IV[1]['tongso'] = $model_bangluong_ct->sum('pcvk') * $luongcb;
+                        $ar_IV[1]['chenhlech'] = $model_bangluong_ct->sum('pcvk') * 90000/ 1390000;
+                    }
+
+                    $a_IIIt['tongso'] += $ar_III[1]['tongso'];
+                    $a_IIIt['chenhlech'] += $ar_III[1]['chenhlech'];
+
+                    $a_IVt['tongso'] += $ar_IV[1]['tongso'];
+                    $a_IVt['chenhlech'] += $ar_IV[1]['chenhlech'];
+                }else{
+                    if(isset($model_bangluong_ct)){
+                        $ar_III[0]['tongso'] = $model_bangluong_ct->sum('pcdbqh') * $luongcb;
+                        $ar_III[0]['chenhlech'] = $model_bangluong_ct->sum('pcdbqh') * 90000/ 1390000;
+
+                        $ar_IV[0]['tongso'] = $model_bangluong_ct->sum('pcvk') * $luongcb;
+                        $ar_IV[0]['chenhlech'] = $model_bangluong_ct->sum('pcvk') * 90000/ 1390000;
+                    }
+
+                    $a_IIIt['tongso'] += $ar_III[0]['tongso'];
+                    $a_IIIt['chenhlech'] += $ar_III[0]['chenhlech'];
+
+                    $a_IVt['tongso'] += $ar_IV[0]['tongso'];
+                    $a_IVt['chenhlech'] += $ar_IV[0]['chenhlech'];
+                }
+            }
+            Excel::create('mau2a2',function($excel) use($ar_I,$ar_II,$ar_III,$ar_IV,$a_It,$a_IIIt,$a_IVt,$m_dv,$inputs){
+                $excel->sheet('New sheet', function($sheet) use($ar_I,$ar_II,$ar_III,$ar_IV,$a_It,$a_IIIt,$a_IVt,$m_dv,$inputs){
+                    $sheet->loadView('reports.thongtu67.mau2a2excel')
+                        ->with('ar_I',$ar_I)
+                        ->with('ar_II',$ar_II)
+                        ->with('ar_III',$ar_III)
+                        ->with('ar_IV',$ar_IV)
+                        ->with('a_It',$a_It)
+                        ->with('a_IIIt',$a_IIIt)
+                        ->with('a_IVt',$a_IVt)
+                        ->with('m_dv',$m_dv)
+                        ->with('inputs',$inputs)
+                        ->with('pageTitle','Mau2a2');
+                    $sheet->setAutoSize(false);
+                    $sheet->setFontFamily('Tahoma');
+                    $sheet->setFontBold(false);
+                });
+            })->download('xls');
+        } else
+            return view('errors.notlogin');
+
+    }
+
+    function mau2a2_huyencu() {
         if (Session::has('admin')) {
             $madvbc = session('admin')->madvbc;
             $m_dv = dmdonvi::where('madv',session('admin')->madv)->first();
