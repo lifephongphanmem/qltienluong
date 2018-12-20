@@ -636,14 +636,6 @@ Route::group(['prefix'=>'chuc_nang'],function(){
 
     });
 
-    Route::group(['prefix'=>'thuyen_chuyen'],function(){
-        Route::get('danh_sach','dshettapsuController@index');
-        Route::get('update/{id}','dshettapsuController@update');
-        Route::get('create','dshettapsuController@create');
-        Route::get('/maso={mahts}','dshettapsuController@show');
-        Route::get('del/{id}','dshettapsuController@destroy');
-    });
-
     Route::group(['prefix'=>'dang_ky_luong'],function(){
         Route::get('danh_sach','bangluongdangkyController@dangky');
         Route::post('store','bangluongdangkyController@store');
@@ -661,26 +653,6 @@ Route::group(['prefix'=>'chuc_nang'],function(){
 });
 
 Route::group(['prefix'=>'bao_cao'],function(){
-    Route::group(['prefix'=>'don_vi'],function(){
-        Route::get('','baocaoController@donvi');
-        Route::post('mausl1','baocaoController@BcSLCBm1');
-        Route::post('mausl2','baocaoController@BcSLCBm2');
-        Route::post('mausl3','baocaoController@BcSLCBm3');
-        Route::post('maudv','baocaoController@BcCLDangVien');
-    });
-
-    Route::group(['prefix'=>'mau_chuan'],function(){
-        Route::get('','baocaoController@mauchuan');
-        Route::post('BcDSTuyenDungTT08','baocaoController@BcDSTuyenDungTT08');
-        Route::post('BcDSTuyenDungTT10','baocaoController@BcDSTuyenDungTT10');
-        Route::post('BcDSCC','baocaoController@BcDSCC');
-        Route::post('BcDSVC','baocaoController@BcDSVC');
-        Route::post('BcSLCLCC','baocaoController@BcSLCLCC');
-        Route::post('BcSLCLVC','baocaoController@BcSLCLVC');
-        Route::post('BcDSCCCVCC','baocaoController@BcDSCCCVCC');
-        Route::post('BcDSVCCVCC','baocaoController@BcDSVCCVCC');
-        Route::post('BcSLCLCC_TT11','baocaoController@BcSLCLCC_TT11');
-    });
 
     Route::group(['prefix'=>'thong_tu_67'],function(){
         Route::group(['prefix'=>'don_vi'],function(){
@@ -712,11 +684,24 @@ Route::group(['prefix'=>'bao_cao'],function(){
             Route::post('mau2a1excel','baocaothongtu67Controller@mau2a1_huyen_excel');
             Route::post('mau2a2','baocaothongtu67Controller@mau2a2_huyen');
             Route::post('mau2a2excel','baocaothongtu67Controller@mau2a2_huyen_excel');
-            Route::get('mau2b','baocaothongtu67Controller@mau2b_donvi');
-            Route::get('mau2c','baocaothongtu67Controller@mau2c_huyen');
-            Route::get('mau2d','baocaothongtu67Controller@mau2d_donvi');
-            Route::get('mau4a','baocaothongtu67Controller@mau4a_huyen');
-            Route::get('mau4b','baocaothongtu67Controller@mau4b_huyen');
+            Route::post('mau2b','baocaothongtu67Controller@mau2b_huyen');
+            Route::post('mau2bexcel','baocaothongtu67Controller@mau2b_huyen_excel');
+            Route::post('mau2c','baocaothongtu67Controller@mau2c_huyen');
+            Route::post('mau2cexcel','baocaothongtu67Controller@mau2c_huyen_excel');
+            Route::post('mau2d','baocaothongtu67Controller@mau2d_huyen');
+            Route::post('mau2dexcel','baocaothongtu67Controller@mau2d_huyen_excel');
+            Route::post('mau2e','baocaothongtu67Controller@mau2e_huyen');
+            Route::post('mau2eexcel','baocaothongtu67Controller@mau2e_huyen_excel');
+            Route::post('mau2g','baocaothongtu67Controller@mau2g_huyen');
+            Route::post('mau2gexcel','baocaothongtu67Controller@mau2g_huyen_excel');
+            Route::post('mau2h','baocaothongtu67Controller@mau2h_huyen');
+            Route::post('mau2hexcel','baocaothongtu67Controller@mau2h_huyen_excel');
+            Route::post('mau4a','baocaothongtu67Controller@mau4a_huyen');
+            Route::post('mau4aexcel','baocaothongtu67Controller@mau4a_huyen_excel');
+            Route::post('mau4b','baocaothongtu67Controller@mau4b_huyen');
+            Route::post('mau4bexcel','baocaothongtu67Controller@mau4b_huyen_excel');
+            Route::post('mau4bbs','baocaothongtu67Controller@mau4bbs_huyen');
+            Route::post('mau4bbsexcel','baocaothongtu67Controller@mau4bbs_huyen_excel');
         });
     });
 
@@ -745,9 +730,12 @@ Route::group(['prefix'=>'bao_cao'],function(){
 
         Route::group(['prefix'=>'huyen'],function(){
             Route::post('chitraluong_ct','baocaobangluongController@chitraluong_ct_huyen');
+            Route::post('chitraluong_ctexcel','baocaobangluongController@chitraluong_ct_huyen_excel');
             Route::post('chitraluong_th','baocaobangluongController@chitraluong_th_huyen');
+            Route::post('chitraluong_thexcel','baocaobangluongController@chitraluong_th_huyen_excel');
             Route::post('dutoanluong','baocaobangluongController@dutoanluong_huyen');
             Route::post('baocaohesoluong','baocaobangluongController@baocaohesoluong');
+            Route::post('baocaohesoluongexcel','baocaobangluongController@baocaohesoluongexcel');
 
         });
 
@@ -763,17 +751,28 @@ Route::group(['prefix'=>'tong_hop_bao_cao'],function(){
     Route::get('danh_sach','baocaothongtu67Controller@index');
 
     Route::post('mau2a1_tt67','baocaothongtu67Controller@mau2a1_tt67');
+    Route::post('mau2a1_tt67excel','baocaothongtu67Controller@mau2a1_tt67excel');
     Route::post('mau2a2_tt67','baocaothongtu67Controller@mau2a2_tt67');
+    Route::post('mau2a2_tt67excel','baocaothongtu67Controller@mau2a2_tt67excel');
     Route::post('mau2b_tt67','baocaothongtu67Controller@mau2b_tt67');
+    Route::post('mau2b_tt67excel','baocaothongtu67Controller@mau2b_tt67excel');
 
     Route::post('mau2c_tt67','baocaothongtu67Controller@mau2c_tt67');
+    Route::post('mau2c_tt67excel','baocaothongtu67Controller@mau2c_tt67excel');
     Route::post('mau2d_tt67','baocaothongtu67Controller@mau2d_tt67');
+    Route::post('mau2d_tt67excel','baocaothongtu67Controller@mau2d_tt67excel');
     Route::post('mau2e_tt67','baocaothongtu67Controller@mau2e_tt67');
+    Route::post('mau2e_tt67excel','baocaothongtu67Controller@mau2e_tt67excel');
     Route::post('mau2g_tt67','baocaothongtu67Controller@mau2g_tt67');
+    Route::post('mau2g_tt67excel','baocaothongtu67Controller@mau2g_tt67excel');
     Route::post('mau2h_tt67','baocaothongtu67Controller@mau2h_tt67');
+    Route::post('mau2h_tt67excel','baocaothongtu67Controller@mau2h_tt67excel');
     Route::post('mau4a_tt67','baocaothongtu67Controller@mau4a_tt67');
+    Route::post('mau4a_tt67excel','baocaothongtu67Controller@mau4a_tt67excel');
     Route::post('mau4b_tt67','baocaothongtu67Controller@mau4b_tt67');
+    Route::post('mau4b_tt67excel','baocaothongtu67Controller@mau4b_tt67excel');
     Route::post('mau4b_tt67bs','baocaothongtu67Controller@mau4b_tt67bs');
+    Route::post('mau4b_tt67bsexcel','baocaothongtu67Controller@mau4b_tt67bsexcel');
 
 });
 

@@ -8,7 +8,8 @@
         ?>
 @extends('main')
 @section('custom-style')
-    <link href="{{url('assets/global/css/plugins.css')}}" rel="stylesheet" type="text/css"/>
+    <link href="{{url('assets/global/css/plugins.css')}}" rel="stylesheet" type="text/css"
+          xmlns="http://www.w3.org/1999/html"/>
     <link rel="stylesheet" type="text/css" href="{{url('assets/global/plugins/select2/select2.css')}}"/>
     <link rel="stylesheet" type="text/css" href="{{url('assets/global/plugins/datatables/plugins/bootstrap/dataTables.bootstrap.css')}}"/>
     <link rel="stylesheet" type="text/css" href="{{url('assets/global/plugins/select2/select2.css')}}"/>
@@ -75,10 +76,10 @@
                                 <ol>
                                     <!--li><a href="#" data-target="#thoaichitra-huyen-modal" data-toggle="modal" onclick="chitraluong_huyen('{{$furl.'huyen/chitraluong_th'}}')">Tổng hợp tình hình chi trả lương (Mẫu tổng hợp)</a></li>
                                     <li><a href="#" data-target="#thoaichitra-huyen-modal" data-toggle="modal" onclick="chitraluong_huyen('{{$furl.'huyen/chitraluong_ct'}}')">Tổng hợp tình hình chi trả lương (Mẫu chi tiết)</a></li-->
-                                    <li><a href="#" data-target="#thoaichitra-khoi-moi-modal" data-toggle="modal" onclick="chitraluong_khoi_moi('{{$furl.'huyen/chitraluong_th'}}')">Tổng hợp tình hình chi trả lương (Mẫu tổng hợp)</a></li>
+                                    <li><a href="#" data-target="#thoaichitra-khoi-moi-modal" data-toggle="modal" onclick="chitraluongth('{{$furl.'huyen/chitraluong_th'}}')">Tổng hợp tình hình chi trả lương (Mẫu tổng hợp)</a></li>
                                     <li><a href="#" data-target="#thoaichitra-khoi-moi-ct-modal" data-toggle="modal" onclick="chitraluong_khoi_ct_moi('{{$furl.'huyen/chitraluong_ct'}}')">Tổng hợp tình hình chi trả lương (Mẫu chi tiết)</a></li>
                                     <li><a href="#" data-target="#thoaidutoan-huyen-modal" data-toggle="modal" onclick="dutoanluong_huyen('{{$furl.'huyen/dutoanluong'}}')">Dự toán lương</a></li>
-                                    <li><a href="#" data-target="#thoaichitra-khoi-moi-modal" data-toggle="modal" onclick="chitraluong_khoi_moi('{{$furl.'huyen/baocaohesoluong'}}')">Báo cáo hệ số lương của đơn vị có mặt</a></li>
+                                    <li><a href="#" data-target="#thoaichitra-khoi-moi-modal" data-toggle="modal" onclick="chitraluongth('{{$furl.'huyen/baocaohesoluong'}}')">Báo cáo hệ số lương của đơn vị có mặt</a></li>
 
                                     <!--li><a href="{{url('/bao_cao/thong_tu_67/huyen/mau2a1')}}" target="_blank">Báo cáo nhu cầu kinh phí thực hiện nghị định 47/2017/NĐ-CP (Mẫu 2a/1)</a></li>
                                     <li><a href="{{url('/bao_cao/thong_tu_67/huyen/mau2a2')}}" target="_blank">Báo cáo nhu cầu kinh phí thực hiện nghị định 47/2017/NĐ-CP (Mẫu 2a/2)</a></li>
@@ -95,17 +96,16 @@
 
                                     <li><a href="#" data-target="#chitiet-modal" data-toggle="modal" onclick="baocao('{{'/bao_cao/thong_tu_67/huyen/mau2a1'}}')">Báo cáo nhu cầu kinh phí thực hiện nghị định 47/2017/NĐ-CP (Mẫu 2a/1)</a></li>
                                     <li><a href="#" data-target="#chitiet-modal" data-toggle="modal" onclick="baocao('{{'/bao_cao/thong_tu_67/huyen/mau2a2'}}')">Báo cáo nhu cầu kinh phí thực hiện nghị định 47/2017/NĐ-CP (Mẫu 2a/2)</a></li>
-                                    <li><a href="#" data-target="#chitiet-modal" data-toggle="modal" onclick="baocao('{{'/tong_hop_bao_cao/mau2b_tt67'}}')">Báo cáo tổng hợp quỹ trợ cấp tăng thêm của cán bộ xã, phường, thị trấn đã nghỉ việc (Mẫu 2b)</a></li>
-
-                                    <li><a href="#" data-target="#chitiet-modal" data-toggle="modal" onclick="baocao('{{$furl.'mau2c_tt67'}}')">Báo cáo nhu cầu chênh lệch (Mẫu 2c)</a></li>
+                                    <li><a href="#" data-target="#chitiet-modal" data-toggle="modal" onclick="baocao('{{'/bao_cao/thong_tu_67/huyen/mau2b'}}')">Báo cáo tổng hợp quỹ trợ cấp tăng thêm của cán bộ xã, phường, thị trấn đã nghỉ việc (Mẫu 2b)</a></li>
+                                    <li><a href="#" data-target="#chitiet-modal" data-toggle="modal" onclick="baocao('{{'/bao_cao/thong_tu_67/huyen/mau2c'}}')">Báo cáo nhu cầu chênh lệch (Mẫu 2c)</a></li>
                                     <!--li><a href="#" data-target="#chitiet-modal" data-toggle="modal" onclick="baocao('{{$furl.'maubckpbhtn'}}')">Báo cáo nhu cầu kinh phí thực hiện bảo hiểm thất nghiệp theo nghị định 28/2015/NĐ-CP</a></li-->
-                                    <!--li><a href="#" data-target="#chitiet-modal" data-toggle="modal" onclick="baocao('{{$furl.'mau2d_tt67'}}')">Tổng hợp kinh phí tăng thêm để thực hiện chế độ phụ cấp đối với cán bộ không chuyên trách (Mẫu 2d)</a></li>
-                                    <li><a href="#" data-target="#chitiet-modal" data-toggle="modal" onclick="baocao('{{$furl.'mau2e_tt67'}}')">Tổng hợp kinh phí tăng, giảm do điều chỉnh địa bàn vùng kinh tế xã hội đặc biệt khó khăn (Mẫu 2e)</a></li>
-                                    <li><a href="#" data-target="#chitiet-modal" data-toggle="modal" onclick="baocao('{{$furl.'mau2g_tt67'}}')">Tổng hợp phụ cấp ưu đãi tăng, giảm do điều chỉnh địa bàn vùng kinh tế xã hội đặc biệt khó khăn (Mẫu 2g)</a></li>
-                                    <li><a href="#" data-target="#chitiet-modal" data-toggle="modal" onclick="baocao('{{$furl.'mau2h_tt67'}}')">Tổng hợp phụ cấp thu hút tăng, giảm do điều chỉnh địa bàn vùng kinh tế xã hội đặc biệt khó khăn (Mẫu 2h)</a></li>
-                                    <li><a href="#" data-target="#chitiet-modal" data-toggle="modal" onclick="baocao('{{$furl.'mau4a_tt67'}}')">Báo cáo nguồn kinh phí để thực hiện cải cách tiền lương (Mẫu 4a)</a></li>
-                                    <li><a href="#" data-target="#chitiet-modal" data-toggle="modal" onclick="baocao('{{$furl.'mau4b_tt67'}}')">Tổng hợp nhu cầu, nguồn thực hiện nghị định 47/2017/NĐ-CP (Mẫu 4b)</a></li>
-                                    <li><a href="#" data-target="#chitiet-modal" data-toggle="modal" onclick="baocao('{{$furl.'mau4b_tt67bs'}}')">Tổng hợp nhu cầu, nguồn thực hiện nghị định 47/2017/NĐ-CP (Mẫu 4b bổ sung)</a></li-->
+                                    <li><a href="#" data-target="#chitiet-modal" data-toggle="modal" onclick="baocao('{{'/bao_cao/thong_tu_67/huyen/mau2d'}}')">Tổng hợp kinh phí tăng thêm để thực hiện chế độ phụ cấp đối với cán bộ không chuyên trách (Mẫu 2d)</a></li>
+                                    <li><a href="#" data-target="#chitiet-modal" data-toggle="modal" onclick="baocao('{{'/bao_cao/thong_tu_67/huyen/mau2e'}}')">Tổng hợp kinh phí tăng, giảm do điều chỉnh địa bàn vùng kinh tế xã hội đặc biệt khó khăn (Mẫu 2e)</a></li>
+                                    <li><a href="#" data-target="#chitiet-modal" data-toggle="modal" onclick="baocao('{{'/bao_cao/thong_tu_67/huyen/mau2g'}}')">Tổng hợp phụ cấp ưu đãi tăng, giảm do điều chỉnh địa bàn vùng kinh tế xã hội đặc biệt khó khăn (Mẫu 2g)</a></li>
+                                    <li><a href="#" data-target="#chitiet-modal" data-toggle="modal" onclick="baocao('{{'/bao_cao/thong_tu_67/huyen/mau2h'}}')">Tổng hợp phụ cấp thu hút tăng, giảm do điều chỉnh địa bàn vùng kinh tế xã hội đặc biệt khó khăn (Mẫu 2h)</a></li>
+                                    <li><a href="#" data-target="#chitiet-modal" data-toggle="modal" onclick="baocao('{{'/bao_cao/thong_tu_67/huyen/mau4a'}}')">Báo cáo nguồn kinh phí để thực hiện cải cách tiền lương (Mẫu 4a)</a></li>
+                                    <li><a href="#" data-target="#chitiet-modal" data-toggle="modal" onclick="baocao('{{'/bao_cao/thong_tu_67/huyen/mau4b'}}')">Tổng hợp nhu cầu, nguồn thực hiện nghị định 47/2017/NĐ-CP (Mẫu 4b)</a></li>
+                                    <li><a href="#" data-target="#chitiet-modal" data-toggle="modal" onclick="baocao('{{'/bao_cao/thong_tu_67/huyen/mau4bbs'}}')">Tổng hợp nhu cầu, nguồn thực hiện nghị định 47/2017/NĐ-CP (Mẫu 4b bổ sung)</a></li>
 
                                 </ol>
                             </div>
@@ -174,8 +174,11 @@
                             {!! Form::select('donvitinh',getDonViTinh(),'1',array('id' => 'donvitinh', 'class' => 'form-control'))!!}
                         </div>
                     </div>
-
+                    <label class="col-md-4 control-label"> </label>
+                    <input type="checkbox" name="excel" id = "excel"/>
+                    Xuất dữ liệu ra file excel
                     <input type="hidden" name="_token" value="{{ csrf_token() }}">
+                    <input type="hidden" id="urlbcluong" name="urlbcluong" >
                 </div>
             </div>
             <div class="modal-footer">
@@ -185,6 +188,7 @@
         </div>
         {!! Form::close() !!}
     </div>
+
     <div id="thoaichitra-khoi-moi-ct-modal" tabindex="-1" role="dialog" aria-hidden="true" class="modal fade">
         {!! Form::open(['url'=>'#','target'=>'_blank' ,'method'=>'post' ,'id' => 'thoaichitra_khoi_ct_moi', 'class'=>'form-horizontal form-validate']) !!}
         <div class="modal-dialog modal-content">
@@ -224,7 +228,10 @@
                             {!! Form::select('donvitinh',getDonViTinh(),'1',array('id' => 'donvitinh', 'class' => 'form-control'))!!}
                         </div>
                     </div>
-
+                    <label class="col-md-4 control-label"> </label>
+                    <input type="checkbox" name="excel" id = "excel"/>
+                    Xuất dữ liệu ra file excel
+                    <input type="hidden" id="urlbcluongct" name="urlbcluongct" >
                     <input type="hidden" name="_token" value="{{ csrf_token() }}">
                 </div>
             </div>
@@ -473,8 +480,6 @@
         {!! Form::close() !!}
     </div>
 
-
-
     <div id="thoaidutoan-huyen-modal" tabindex="-1" role="dialog" aria-hidden="true" class="modal fade">
         {!! Form::open(['url'=>'#','target'=>'_blank' ,'method'=>'post' ,'id' => 'thoaidutoan_huyen', 'class'=>'form-horizontal form-validate']) !!}
         <div class="modal-dialog modal-content">
@@ -598,10 +603,11 @@
                             <div class="form-group">
                                 <label class="col-md-4 control-label"> </label>
                                 <input type="checkbox" name="inchitiet" />
-                                <label  > In chi tiết các đơn vị</label>
+                                <label > In chi tiết các đơn vị</label>
+                                </br>
+                                <label class="col-md-4 control-label"> </label>
                                 <input type="checkbox" name="excel" id = "excel"/>
                                 Xuất dữ liệu ra file excel
-
                             </div>
                             <input type="hidden" name="_token" value="{{ csrf_token() }}">
                             <input type="hidden" name="urlbc" id="urlbc" value="">
@@ -647,6 +653,7 @@
             $('#thoaidutoan_huyen').attr('action',url);
         }
         function chitraluong_khoi_moi(url){
+            alert(url);
             $('#thoaichitra_khoi_moi').attr('action',url);
         }
         function chitraluong_khoi_ct_moi(url){
@@ -671,6 +678,27 @@
             }
             else
                 $('#thoaibc').attr('action',url);
+        }
+    </script>
+
+    <script type="text/javascript">
+        function chitraluongth(url){
+            $('#urlbcluong').val(url);
+        }
+        window.onsubmit = function() {
+            document.thoaichitra_khoi_moi.action = get_action();
+        }
+
+        function get_action() {
+            var url = $('#urlbcluong').val();
+            if ($("input[name='excel']:checked").length == 1) {
+                url = $('#urlbcluong').val() + 'excel';
+                $('#thoaichitra_khoi_moi').attr('action', url);
+            }
+            else {
+                $('#thoaichitra_khoi_moi').attr('action', url);
+            }
+
         }
     </script>
 @stop

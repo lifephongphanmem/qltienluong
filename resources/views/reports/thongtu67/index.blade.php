@@ -44,16 +44,16 @@
 
     <div id="chitiet-modal" tabindex="-1" role="dialog" aria-hidden="true" class="modal fade">
         {!! Form::open(['url'=>'#','target'=>'_blank' ,'method'=>'post' ,'id' => 'thoaibc', 'class'=>'form-horizontal form-validate']) !!}
-            <div class="modal-dialog modal-content">
-                <div class="modal-header modal-header-primary">
-                    <button type="button" data-dismiss="modal" aria-hidden="true" class="close">&times;</button>
-                    <h4 id="modal-header-primary-label" class="modal-title">Thông tin kết xuất báo cáo</h4>
-                </div>
-                <div class="modal-body">
-                    <div class="form-horizontal">
-                        <div class="modal-body">
-                            <div class="form-horizontal">
-                                <!--
+        <div class="modal-dialog modal-content">
+            <div class="modal-header modal-header-primary">
+                <button type="button" data-dismiss="modal" aria-hidden="true" class="close">&times;</button>
+                <h4 id="modal-header-primary-label" class="modal-title">Thông tin kết xuất báo cáo</h4>
+            </div>
+            <div class="modal-body">
+                <div class="form-horizontal">
+                    <div class="modal-body">
+                        <div class="form-horizontal">
+                            <!--
                                 <div class="form-group">
                                     <label class="col-md-4 control-label"> Tháng<span class="require">*</span></label>
                                     <div class="col-md-8">
@@ -81,85 +81,93 @@
                                 <div class="form-group">
                                     <label class="col-md-4 control-label"> Năm<span class="require">*</span></label>
                                     <div class="col-md-8">
-                                        {!! Form::select(
-                                        'nam',
-                                        array(
-                                        '2015' => '2015',
-                                        '2016' => '2016',
-                                        '2017' => '2017',
-                                        '2018' => '2018'
-                                        ),null,
-                                        array('id' => 'nam', 'class' => 'form-control'))
-                                        !!}
+                                        {!! Form::select('nam',getNam(),date('Y'),array('id' => 'nam', 'class' => 'form-control'))!!}
                                     </div>
                                 </div>
                                 -->
-                                @if(session('admin')->level=='H')
-                                    <div class="form-group">
-                                        <label class="col-md-4 control-label"> Đơn vị<span class="require">*</span></label>
-                                        <div class="col-md-8">
-                                            <select id="madv" name="madv" class="form-control">
-                                                <option value="">Tất cả các đơn vị</option>
-                                                @if(isset($model_dv))
-                                                    @foreach($model_dv as $dv)
-                                                        <option value="{{$dv->madv}}">{{$dv->tendv}}</option>
-                                                    @endforeach
-                                                @endif
-                                            </select>
-                                        </div>
-                                    </div>
-                                @endif
-
-                                @if(session('admin')->level=='T')
-                                    <div class="form-group">
-                                        <label class="col-md-4 control-label"> Khu vực, địa bàn<span class="require">*</span></label>
-                                        <div class="col-md-8">
-                                            <select id="madv" name="madv" class="form-control">
-                                                <option value="">Tất cả các đơn vị</option>
-
-                                                    @if(session('admin')->username != 'khthso' && isset($model_dvbc))
-                                                        @foreach($model_dvbc as $dv)
-                                                            <option value="{{$dv->madvbc}}">{{$dv->tendvbc}}</option>
-                                                        @endforeach
-                                                    @endif
-                                                    @if(session('admin')->username == 'khthso' && isset($model_dvbcT))
-                                                        @foreach($model_dvbcT as $dvT)
-                                                            <option value="{{$dvT->madv}}">{{$dvT->tendv}}</option>
-                                                        @endforeach
-                                                    @endif
-                                            </select>
-                                        </div>
-                                    </div>
-                                @endif
+                            @if(session('admin')->level=='H')
                                 <div class="form-group">
-                                    <label class="col-md-4 control-label"> Đơn vị tính</label>
+                                    <label class="col-md-4 control-label"> Đơn vị<span class="require">*</span></label>
                                     <div class="col-md-8">
-                                        {!! Form::select('donvitinh',getDonViTinh(),'1',array('id' => 'donvitinh', 'class' => 'form-control'))!!}
+                                        <select class="form-control select2me" name="madv" id="madv" >
+                                            <option value="">Tất cả các đơn vị</option>
+                                            @if(isset($model_dv))
+                                                @foreach($model_dv as $dv)
+                                                    <option value="{{$dv->madv}}">{{$dv->tendv}}</option>
+                                                @endforeach
+                                            @endif
+                                        </select>
                                     </div>
                                 </div>
-                                <div class="form-group">
-                                    <label class="col-md-4 control-label"> </label>
-                                    <input type="checkbox" name="inchitiet" />
-                                    <label  > In chi tiết các đơn vị</label>
+                            @endif
 
+                            @if(session('admin')->level=='T')
+                                <div class="form-group">
+                                    <label class="col-md-4 control-label"> Khu vực, địa bàn<span class="require">*</span></label>
+                                    <div class="col-md-8">
+                                        <select class="form-control select2me" id="madv" name="madv" class="form-control">
+                                            <option value="">Tất cả các đơn vị</option>
+
+                                            @if(session('admin')->username != 'khthso' && isset($model_dvbc))
+                                                @foreach($model_dvbc as $dv)
+                                                    <option value="{{$dv->madvbc}}">{{$dv->tendvbc}}</option>
+                                                @endforeach
+                                            @endif
+                                            @if(session('admin')->username == 'khthso' && isset($model_dvbcT))
+                                                @foreach($model_dvbcT as $dvT)
+                                                    <option value="{{$dvT->madv}}">{{$dvT->tendv}}</option>
+                                                @endforeach
+                                            @endif
+                                        </select>
+                                    </div>
                                 </div>
-                                <input type="hidden" name="_token" value="{{ csrf_token() }}">
+                            @endif
+                            <div class="form-group">
+                                <label class="col-md-4 control-label"> Đơn vị tính</label>
+                                <div class="col-md-8">
+                                    {!! Form::select('donvitinh',getDonViTinh(),'1',array('id' => 'donvitinh', 'class' => 'form-control'))!!}
+                                </div>
                             </div>
+                            <div class="form-group">
+                                <label class="col-md-4 control-label"> </label>
+                                <input type="checkbox" name="inchitiet" />
+                                <label > In chi tiết các đơn vị</label>
+                                </br>
+                                <label class="col-md-4 control-label"> </label>
+                                <input type="checkbox" name="excel" id = "excel"/>
+                                Xuất dữ liệu ra file excel
+                            </div>
+                            <input type="hidden" name="_token" value="{{ csrf_token() }}">
+                            <input type="hidden" name="urlbc" id="urlbc" value="">
                         </div>
-                        <input type="hidden" name="_token" value="{{ csrf_token() }}">
                     </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" data-dismiss="modal" class="btn btn-default">Hủy thao tác</button>
-                    <button type="submit" id="submit" name="submit" value="submit" class="btn btn-primary">Đồng ý</button>
+                    <input type="hidden" name="_token" value="{{ csrf_token() }}">
                 </div>
             </div>
+            <div class="modal-footer">
+                <button type="button" data-dismiss="modal" class="btn btn-default">Hủy thao tác</button>
+                <button type="submit" id="submit" name="submit" value="submit" class="btn btn-primary">Đồng ý</button>
+            </div>
+        </div>
         {!! Form::close() !!}
     </div>
 
-    <script>
+    <script type="text/javascript">
         function baocao(url){
-            $('#thoaibc').attr('action',url);
+            $('#urlbc').val(url);
+        }
+        window.onsubmit = function() {
+            document.thoaibc.action = get_action();
+        }
+
+        function get_action() {
+            var url = $('#urlbc').val();
+            if ($("input[name='excel']:checked").length == 1) {
+                url = $('#urlbc').val() + 'excel';
+                $('#thoaibc').attr('action', url);
+            }
+            else
+                $('#thoaibc').attr('action',url);
         }
     </script>
 @stop
