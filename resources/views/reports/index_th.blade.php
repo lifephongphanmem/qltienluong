@@ -174,11 +174,9 @@
                             {!! Form::select('donvitinh',getDonViTinh(),'1',array('id' => 'donvitinh', 'class' => 'form-control'))!!}
                         </div>
                     </div>
-                    @if(session('admin')->quanlykhuvuc)
                     <label class="col-md-4 control-label"> </label>
                     <input type="checkbox" name="excelth" id = "excelth"/>
                     Xuất dữ liệu ra file excel
-                    @endif
                     <input type="hidden" name="_token" value="{{ csrf_token() }}">
                     <input type="hidden" id="urlbcluong" name="urlbcluong" >
                 </div>
@@ -230,11 +228,9 @@
                             {!! Form::select('donvitinh',getDonViTinh(),'1',array('id' => 'donvitinh', 'class' => 'form-control'))!!}
                         </div>
                     </div>
-                    @if(session('admin')->quanlykhuvuc)
                     <label class="col-md-4 control-label"> </label>
                     <input type="checkbox" name="excelct" id = "excelct"/>
                     Xuất dữ liệu ra file excel
-                    @endif
                     <input type="hidden" id="urlbcluongct" name="urlbcluongct" >
                     <input type="hidden" name="_token" value="{{ csrf_token() }}">
                 </div>

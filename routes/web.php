@@ -721,11 +721,14 @@ Route::group(['prefix'=>'bao_cao'],function(){
 
         Route::group(['prefix'=>'khoi'],function(){
             Route::post('chitraluong_ct','baocaobangluongController@chitraluong_ct_khoim');
+            Route::post('chitraluong_ctexcel','baocaobangluongController@chitraluong_ct_khoim_excel');
             //Route::post('chitraluong_ct','baocaobangluongController@chitraluong_ct_khoi');
             //Route::post('chitraluong_th','baocaobangluongController@chitraluong_th_khoi');
             Route::post('chitraluong_th','baocaobangluongController@chitraluong_th_khoim');
+            Route::post('chitraluong_thexcel','baocaobangluongController@chitraluong_th_khoim_excel');
             Route::post('dutoanluong','baocaobangluongController@dutoanluong_khoi');
-            Route::post('baocaohesoluong','baocaobangluongController@baocaohesoluong_khoi');
+                Route::post('baocaohesoluong','baocaobangluongController@baocaohesoluong_khoi');
+            Route::post('baocaohesoluongexcel','baocaobangluongController@baocaohesoluong_khoi_excel');
         });
 
         Route::group(['prefix'=>'huyen'],function(){
