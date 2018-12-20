@@ -76,10 +76,10 @@
                                 <ol>
                                     <!--li><a href="#" data-target="#thoaichitra-huyen-modal" data-toggle="modal" onclick="chitraluong_huyen('{{$furl.'huyen/chitraluong_th'}}')">Tổng hợp tình hình chi trả lương (Mẫu tổng hợp)</a></li>
                                     <li><a href="#" data-target="#thoaichitra-huyen-modal" data-toggle="modal" onclick="chitraluong_huyen('{{$furl.'huyen/chitraluong_ct'}}')">Tổng hợp tình hình chi trả lương (Mẫu chi tiết)</a></li-->
-                                    <li><a href="#" data-target="#thoaichitra-khoi-moi-modal" data-toggle="modal" onclick="chitraluongth('{{$furl.'huyen/chitraluong_th'}}')">Tổng hợp tình hình chi trả lương (Mẫu tổng hợp)</a></li>
-                                    <li><a href="#" data-target="#thoaichitra-khoi-moi-ct-modal" data-toggle="modal" onclick="chitraluong_khoi_ct_moi('{{$furl.'huyen/chitraluong_ct'}}')">Tổng hợp tình hình chi trả lương (Mẫu chi tiết)</a></li>
+                                    <li><a href="#" data-target="#thoaichitra-khoi-moi-modal" data-toggle="modal" onclick="baocao('{{$furl.'huyen/chitraluong_th'}}')">Tổng hợp tình hình chi trả lương (Mẫu tổng hợp)</a></li>
+                                    <li><a href="#" data-target="#thoaichitra-khoi-moi-ct-modal" data-toggle="modal" onclick="baocao('{{$furl.'huyen/chitraluong_ct'}}')">Tổng hợp tình hình chi trả lương (Mẫu chi tiết)</a></li>
                                     <li><a href="#" data-target="#thoaidutoan-huyen-modal" data-toggle="modal" onclick="dutoanluong_huyen('{{$furl.'huyen/dutoanluong'}}')">Dự toán lương</a></li>
-                                    <li><a href="#" data-target="#thoaichitra-khoi-moi-modal" data-toggle="modal" onclick="chitraluongth('{{$furl.'huyen/baocaohesoluong'}}')">Báo cáo hệ số lương của đơn vị có mặt</a></li>
+                                    <li><a href="#" data-target="#thoaichitra-khoi-moi-modal" data-toggle="modal" onclick="baocao('{{$furl.'huyen/baocaohesoluong'}}')">Báo cáo hệ số lương của đơn vị có mặt</a></li>
 
                                     <!--li><a href="{{url('/bao_cao/thong_tu_67/huyen/mau2a1')}}" target="_blank">Báo cáo nhu cầu kinh phí thực hiện nghị định 47/2017/NĐ-CP (Mẫu 2a/1)</a></li>
                                     <li><a href="{{url('/bao_cao/thong_tu_67/huyen/mau2a2')}}" target="_blank">Báo cáo nhu cầu kinh phí thực hiện nghị định 47/2017/NĐ-CP (Mẫu 2a/2)</a></li>
@@ -175,7 +175,7 @@
                         </div>
                     </div>
                     <label class="col-md-4 control-label"> </label>
-                    <input type="checkbox" name="excel" id = "excel"/>
+                    <input type="checkbox" name="excelth" id = "excelth"/>
                     Xuất dữ liệu ra file excel
                     <input type="hidden" name="_token" value="{{ csrf_token() }}">
                     <input type="hidden" id="urlbcluong" name="urlbcluong" >
@@ -229,7 +229,7 @@
                         </div>
                     </div>
                     <label class="col-md-4 control-label"> </label>
-                    <input type="checkbox" name="excel" id = "excel"/>
+                    <input type="checkbox" name="excelct" id = "excelct"/>
                     Xuất dữ liệu ra file excel
                     <input type="hidden" id="urlbcluongct" name="urlbcluongct" >
                     <input type="hidden" name="_token" value="{{ csrf_token() }}">
@@ -515,7 +515,7 @@
     </div>
 
     <div id="chitiet-modal" tabindex="-1" role="dialog" aria-hidden="true" class="modal fade">
-        {!! Form::open(['url'=>'#','target'=>'_blank' ,'method'=>'post' ,'id' => 'thoaibc', 'class'=>'form-horizontal form-validate']) !!}
+        {!! Form::open(['url'=>'#','target'=>'_blank' ,'method'=>'post' ,'id' => 'thoaibc67', 'class'=>'form-horizontal form-validate']) !!}
         <div class="modal-dialog modal-content">
             <div class="modal-header modal-header-primary">
                 <button type="button" data-dismiss="modal" aria-hidden="true" class="close">&times;</button>
@@ -610,7 +610,7 @@
                                 Xuất dữ liệu ra file excel
                             </div>
                             <input type="hidden" name="_token" value="{{ csrf_token() }}">
-                            <input type="hidden" name="urlbc" id="urlbc" value="">
+                            <input type="hidden" name="urlbc67" id="urlbc67" value="">
                         </div>
                     </div>
                     <input type="hidden" name="_token" value="{{ csrf_token() }}">
@@ -664,41 +664,45 @@
 
     <script type="text/javascript">
         function baocao(url){
-            $('#urlbc').val(url);
-        }
-        window.onsubmit = function() {
-            document.thoaibc.action = get_action();
-        }
-
-        function get_action() {
-            var url = $('#urlbc').val();
-            if ($("input[name='excel']:checked").length == 1) {
-                url = $('#urlbc').val() + 'excel';
-                $('#thoaibc').attr('action', url);
-            }
-            else
-                $('#thoaibc').attr('action',url);
-        }
-    </script>
-
-    <script type="text/javascript">
-        function chitraluongth(url){
+            $('#urlbc67').val(url);
+            $('#urlbcluongct').val(url);
             $('#urlbcluong').val(url);
+
         }
         window.onsubmit = function() {
-            document.thoaichitra_khoi_moi.action = get_action();
+            document.thoaibc67.action = get_action67();
+            document.thoaichitra_khoi_moi.action = get_action67();
+            document.thoaichitra_khoi_ct_moi.action = get_action67();
         }
 
-        function get_action() {
-            var url = $('#urlbcluong').val();
+        function get_action67() {
+            var url = $('#urlbc67').val();
+            var url1 = $('#urlbcluong').val();
+            var url2 = $('#urlbcluongct').val();
             if ($("input[name='excel']:checked").length == 1) {
-                url = $('#urlbcluong').val() + 'excel';
-                $('#thoaichitra_khoi_moi').attr('action', url);
+                url = $('#urlbc67').val() + 'excel';
+                $('#thoaibc67').attr('action', url);
             }
             else {
-                $('#thoaichitra_khoi_moi').attr('action', url);
+                $('#thoaibc67').attr('action', url);
+            }
+            if ($("input[name='excelth']:checked").length == 1) {
+                url1 = $('#urlbcluong').val() + 'excel';
+                $('#thoaichitra_khoi_moi').attr('action', url1);
+            }
+            else {
+                $('#thoaichitra_khoi_moi').attr('action', url1);
+            }
+            if ($("input[name='excelct']:checked").length == 1) {
+                url2 = $('#urlbcluongct').val() + 'excel';
+                $('#thoaichitra_khoi_ct_moi').attr('action', url2);
+            }
+            else {
+                $('#thoaichitra_khoi_ct_moi').attr('action', url2);
             }
 
         }
     </script>
+
+
 @stop
