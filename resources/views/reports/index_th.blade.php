@@ -45,10 +45,10 @@
                                 <ol>
                                     <!--li><a href="#" data-target="#thoaichitra-khoi-modal" data-toggle="modal" onclick="chitraluong_khoi('{{$furl.'khoi/chitraluong_th'}}')">Tổng hợp tình hình chi trả lương (Mẫu tổng hợp)</a></li>
                                     <li><a href="#" data-target="#thoaichitra-khoi-modal" data-toggle="modal" onclick="chitraluong_khoi('{{$furl.'khoi/chitraluong_ct'}}')">Tổng hợp tình hình chi trả lương (Mẫu chi tiết)</a></li-->
-                                    <li><a href="#" data-target="#thoaichitra-khoi-moi-modal" data-toggle="modal" onclick="chitraluong_khoi_moi('{{$furl.'khoi/chitraluong_th'}}')">Tổng hợp tình hình chi trả lương (Mẫu tổng hợp)</a></li>
-                                    <li><a href="#" data-target="#thoaichitra-khoi-moi-ct-modal" data-toggle="modal" onclick="chitraluong_khoi_ct_moi('{{$furl.'khoi/chitraluong_ct'}}')">Tổng hợp tình hình chi trả lương (Mẫu chi tiết)</a></li>
+                                    <li><a href="#" data-target="#thoaichitra-khoi-moi-modal" data-toggle="modal" onclick="baocao('{{$furl.'khoi/chitraluong_th'}}')">Tổng hợp tình hình chi trả lương (Mẫu tổng hợp)</a></li>
+                                    <li><a href="#" data-target="#thoaichitra-khoi-moi-ct-modal" data-toggle="modal" onclick="baocao('{{$furl.'khoi/chitraluong_ct'}}')">Tổng hợp tình hình chi trả lương (Mẫu chi tiết)</a></li>
                                     <li><a href="#" data-target="#thoaidutoan-khoi-modal" data-toggle="modal" onclick="dutoanluong_khoi('{{$furl.'khoi/dutoanluong'}}')">Dự toán lương</a></li>
-                                    <li><a href="#" data-target="#thoaichitra-khoi-moi-modal" data-toggle="modal" onclick="chitraluong_khoi_moi('{{$furl.'khoi/baocaohesoluong'}}')">Báo cáo hệ số lương của đơn vị có mặt</a></li>
+                                    <li><a href="#" data-target="#thoaichitra-khoi-moi-modal" data-toggle="modal" onclick="baocao('{{$furl.'khoi/baocaohesoluong'}}')">Báo cáo hệ số lương của đơn vị có mặt</a></li>
 
                                     <li><a href="{{url('/bao_cao/thong_tu_67/khoi/mau2a1')}}" target="_blank">Báo cáo nhu cầu kinh phí thực hiện nghị định 47/2017/NĐ-CP (Mẫu 2a/1)</a></li>
                                     <li><a href="{{url('/bao_cao/thong_tu_67/khoi/mau2a2')}}" target="_blank">Báo cáo nhu cầu kinh phí thực hiện nghị định 47/2017/NĐ-CP (Mẫu 2a/2)</a></li>
@@ -174,9 +174,11 @@
                             {!! Form::select('donvitinh',getDonViTinh(),'1',array('id' => 'donvitinh', 'class' => 'form-control'))!!}
                         </div>
                     </div>
+                    @if(session('admin')->quanlykhuvuc)
                     <label class="col-md-4 control-label"> </label>
                     <input type="checkbox" name="excelth" id = "excelth"/>
                     Xuất dữ liệu ra file excel
+                    @endif
                     <input type="hidden" name="_token" value="{{ csrf_token() }}">
                     <input type="hidden" id="urlbcluong" name="urlbcluong" >
                 </div>
@@ -228,9 +230,11 @@
                             {!! Form::select('donvitinh',getDonViTinh(),'1',array('id' => 'donvitinh', 'class' => 'form-control'))!!}
                         </div>
                     </div>
+                    @if(session('admin')->quanlykhuvuc)
                     <label class="col-md-4 control-label"> </label>
                     <input type="checkbox" name="excelct" id = "excelct"/>
                     Xuất dữ liệu ra file excel
+                    @endif
                     <input type="hidden" id="urlbcluongct" name="urlbcluongct" >
                     <input type="hidden" name="_token" value="{{ csrf_token() }}">
                 </div>
@@ -653,7 +657,6 @@
             $('#thoaidutoan_huyen').attr('action',url);
         }
         function chitraluong_khoi_moi(url){
-            alert(url);
             $('#thoaichitra_khoi_moi').attr('action',url);
         }
         function chitraluong_khoi_ct_moi(url){

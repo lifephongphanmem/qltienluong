@@ -57,7 +57,7 @@ class baocaobangluongController extends Controller
             //$madvbc = session('admin')->madvbc;
             //$model_donvi = dmdonvi::where('madvbc',$madvbc)->get();
             //$model_donvi = dmdonvi::where('macqcq',session('admin')->madv)->get();
-            if(session('admin')->quanlykhuvuc)
+            if(session('admin')->phamvitonghop = 'KHOI')
             {
                 $model_donvi = dmdonvi::where('madvbc',session('admin')->madvbc)->get();
                 $model_phanloai = dmphanloaidonvi::wherein('maphanloai',array_column($model_donvi->toarray(),'maphanloai'))->get();
