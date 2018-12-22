@@ -81,13 +81,23 @@
                                                 </div>
                                             </div>
 
-                                            <div class="col-md-4">
+
+                                            <div class="col-md-2">
                                                 <div class="form-group">
                                                     <label class="control-label" style="font-weight: bold">Lương hệ số</label>
-                                                    {!!Form::text('ttl', null, array('id' => 'ttl','class' => 'form-control', 'data-mask'=>'fdecimal','readonly'=>'true','style'=>'font-weight:bold'))!!}
+                                                    {!!Form::text('ttl', null, array('id' => 'ttl','class' => 'form-control text-right', 'data-mask'=>'fdecimal','readonly'=>'true','style'=>'font-weight:bold'))!!}
                                                 </div>
                                             </div>
 
+                                            <div class="col-md-2">
+                                                <div class="form-group">
+                                                    <label class="control-label" style="font-weight: bold">Nộp theo lương</label>
+                                                    {!!Form::text('tbh', $model->ttbh, array('id' => 'tbh','class' => 'form-control text-right', 'data-mask'=>'fdecimal','readonly'=>'true','style'=>'font-weight:bold'))!!}
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="row">
                                             <div class="col-md-2">
                                                 <div class="form-group">
                                                     <label class="control-label">Giảm trừ lương </label>
@@ -111,12 +121,19 @@
 
                                             <div class="col-md-2">
                                                 <div class="form-group">
-                                                    <label class="control-label" style="font-weight: bold">Nộp theo lương</label>
-                                                    {!!Form::text('tbh', $model->ttbh, array('id' => 'tbh','class' => 'form-control text-right', 'data-mask'=>'fdecimal','readonly'=>'true','style'=>'font-weight:bold'))!!}
+                                                    <label class="control-label">Khen thưởng </label>
+                                                    {!!Form::text('tienthuong', null, array('id' => 'tienthuong','class' => 'form-control tienluong text-right', 'data-mask'=>'fdecimal'))!!}
                                                 </div>
                                             </div>
 
-                                            <div class="col-md-4">
+                                            <div class="col-md-2">
+                                                <div class="form-group">
+                                                    <label class="control-label">Đóng góp (trích nộp) </label>
+                                                    {!!Form::text('trichnop', null, array('id' => 'trichnop','class' => 'form-control tienluong text-right', 'data-mask'=>'fdecimal'))!!}
+                                                </div>
+                                            </div>
+
+                                            <div class="col-md-2">
                                                 <div class="form-group">
                                                     <label class="control-label"><b>Lương thực nhận </b></label>
                                                     {!!Form::text('luongtn', null, array('id' => 'luongtn','class' => 'form-control text-right', 'data-mask'=>'fdecimal','readonly'=>'true','style'=>'font-weight:bold'))!!}
@@ -350,7 +367,9 @@
             var giaml = getdl($('#giaml').val());
             var bhct = getdl($('#bhct').val());
             var thuetn = getdl($('#thuetn').val());
-            return bhct - giaml - thuetn;
+            var tienthuong = getdl($('#tienthuong').val());
+            var trichnop = getdl($('#trichnop').val());
+            return bhct + tienthuong - giaml - thuetn - trichnop;
 
         }
 

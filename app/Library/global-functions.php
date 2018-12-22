@@ -258,6 +258,18 @@ function convert2date($ngaythang){
     return date('Y-m-d', strtotime(str_replace('/', '-', $ngaythang)));
 }
 
+function convert2str($number){
+    if(!is_numeric($number)){
+        return '';
+    }else{
+        if($number<10){
+            return '0'.strval($number);
+        }else{
+            return strval($number);
+        }
+    }
+}
+
 function convert2Roman($num){
     $n = intval($num);
     $res = '';

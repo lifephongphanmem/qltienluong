@@ -115,6 +115,15 @@
                             {!!Form::text('luongcoban', getGeneralConfigs()['luongcb'], array('id' => 'luongcoban','class' => 'form-control', 'data-mask'=>'fdecimal'))!!}
                         </div>
                     </div>
+
+                    <div class="row">
+                        <div class="col-md-offset-3 col-md-9" style="padding-top: 10px">
+                            {!! Form::checkbox('nghihuu',null, array('id'=>'nghihuu')) !!}
+                            <label>Không tính dự toán cho cán bộ nghỉ hưu</label>
+                        </div>
+
+
+                    </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" data-dismiss="modal" class="btn btn-default">Hủy thao tác</button>

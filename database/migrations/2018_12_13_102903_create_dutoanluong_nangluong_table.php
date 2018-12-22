@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateDutoanluongBangluongTable extends Migration
+class CreateDutoanluongNangluongTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,7 +13,7 @@ class CreateDutoanluongBangluongTable extends Migration
      */
     public function up()
     {
-        Schema::create('dutoanluong_bangluong', function (Blueprint $table) {
+        Schema::create('dutoanluong_nangluong', function (Blueprint $table) {
             $table->increments('id');
             $table->string('masodv',50)->nullable();
             $table->string('masok',50)->nullable();
@@ -26,6 +26,7 @@ class CreateDutoanluongBangluongTable extends Migration
             $table->string('congtac',25)->default('CONGTAC');//công tác/ nghỉ hưu
             $table->string('macongtac')->nullable();
             $table->string('mact')->nullable();
+            $table->string('maphanloai')->nullable();
             $table->string('macvcq', 50)->nullable();
             $table->string('mapb', 50)->nullable();
             $table->string('msngbac', 50)->nullable();
@@ -91,6 +92,6 @@ class CreateDutoanluongBangluongTable extends Migration
      */
     public function down()
     {
-        Schema::drop('dutoanluong_bangluong');
+        Schema::drop('dutoanluong_nangluong');
     }
 }

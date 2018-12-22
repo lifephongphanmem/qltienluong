@@ -22,6 +22,7 @@ use App\hosocanbo_kiemnhiem;
 use App\hosotamngungtheodoi;
 use App\hosotruc;
 use App\hosotruylinh;
+use App\Jobs\Delbangluong_ct;
 use App\ngachluong;
 use App\nguonkinhphi_dinhmuc;
 use App\nguonkinhphi_dinhmuc_ct;
@@ -131,35 +132,91 @@ class bangluongController extends Controller
 
     function capnhat(Request $request)
     {
-        $inputs = $request->all();
-        $mabl_cu = $inputs['mabl_capnhat'];
-        $model = bangluong::where('mabl', $mabl_cu)->first();
-        $inputs['luongcoban'] = $model->luongcoban;
-        $mabl = session('admin')->madv . '_' . getdate()[0];
-        $inputs['mabl'] = $mabl;
-        $inputs['thang'] = $model->thang;
-        $inputs['nam'] = $model->nam;
-        $inputs['madv'] = $model->madv;
-        $inputs['luongcoban'] = $model->luongcoban;
-        $inputs['phanloai'] = $model->phanloai;
-        $inputs['manguonkp'] = $model->manguonkp;
-        $inputs['linhvuchoatdong'] = $model->linhvuchoatdong;
+        if (Session::has('admin')) {
+            $inputs = $request->all();
+            $mabl_cu = $inputs['mabl_capnhat'];
+            $model = bangluong::where('mabl', $mabl_cu)->first();
+            $inputs['luongcoban'] = $model->luongcoban;
+            $mabl = session('admin')->madv . '_' . getdate()[0];
+            $inputs['mabl'] = $mabl;
+            $inputs['thang'] = $model->thang;
+            $inputs['nam'] = $model->nam;
+            $inputs['madv'] = $model->madv;
+            $inputs['luongcoban'] = $model->luongcoban;
+            $inputs['phanloai'] = $model->phanloai;
+            $inputs['manguonkp'] = $model->manguonkp;
+            $inputs['linhvuchoatdong'] = $model->linhvuchoatdong;
 
-        $dinhmuc = nguonkinhphi_dinhmuc::join('nguonkinhphi_dinhmuc_ct', 'nguonkinhphi_dinhmuc.maso', '=', 'nguonkinhphi_dinhmuc_ct.maso')
-            ->select('nguonkinhphi_dinhmuc_ct.mapc')
-            ->where('nguonkinhphi_dinhmuc.manguonkp', $model->manguonkp)->where('nguonkinhphi_dinhmuc.madv', session('admin')->madv)
-            ->get()->count();
+            $dinhmuc = nguonkinhphi_dinhmuc::join('nguonkinhphi_dinhmuc_ct', 'nguonkinhphi_dinhmuc.maso', '=', 'nguonkinhphi_dinhmuc_ct.maso')
+                ->select('nguonkinhphi_dinhmuc_ct.mapc')
+                ->where('nguonkinhphi_dinhmuc.manguonkp', $model->manguonkp)->where('nguonkinhphi_dinhmuc.madv', session('admin')->madv)
+                ->get()->count();
+            $delchitiet = (new Delbangluong_ct($mabl_cu, $inputs['thang']))->delay(Carbon::now()->addSecond(10));
+            //$delchitiet->delay(Carbon::now()->addSecond(10));
+            dispatch($delchitiet);
+            if ($dinhmuc > 0) {
+                $this->tinhluong_dinhmuc($inputs);
+            } else {
+                $this->tinhluong_khongdinhmuc($inputs);
+            }
 
-        if ($dinhmuc > 0) {
-            $this->tinhluong_dinhmuc($inputs);
-        } else {
-            $this->tinhluong_khongdinhmuc($inputs);
-        }
+            //Tạo bảng lương
+            $model->mabl = $mabl;
+            $model->save();
+            return redirect('/chuc_nang/bang_luong/bang_luong?mabl=' . $inputs['mabl'] . '&mapb=');
+        } else
+            return view('errors.notlogin');
+    }
 
-        //Tạo bảng lương
-        $model->mabl = $mabl;
-        $model->save();
-        return redirect('/chuc_nang/bang_luong/bang_luong?mabl=' . $inputs['mabl'] . '&mapb=');
+    function tanggiam(Request $request){
+        if (Session::has('admin')) {
+            $inputs = $request->all();
+            $mabl = $inputs['mabl_tg'];
+            $inputs['sotien'] = chkDbl($inputs['sotien_tg']);
+            $model = bangluong_ct::where('mabl', $mabl)->get();
+            $model_bl = bangluong::where('mabl', $mabl)->first();
+            $ngaycong = dmdonvi::where('madv', $model_bl->madv)->first()->songaycong;
+
+            if (isset($inputs['mapb_tg']) && $inputs['mapb_tg'] != '') {
+                $model = $model->where('mapb', $inputs['mapb_tg']);
+            }
+            if (isset($inputs['macvcq_tg']) && $inputs['macvcq_tg'] != '') {
+                $model = $model->where('macvcq', $inputs['macvcq_tg']);
+            }
+            if (isset($inputs['mact_tg']) && $inputs['mact_tg'] != '') {
+                $model = $model->where('mact', $inputs['mact_tg']);
+            }
+            //dd($model);
+            foreach ($model as $ct) {
+                //if($inputs['phanloai_tg'] == 'KPCD'){ //tính riêng từ tháng - đến tháng: tổng tiền các khoản nộp bảo hiểm / 1%
+                if ($inputs['phanloai_tg'] == 'TANG') {
+                    if ($inputs['kieutanggiam_tg'] == 'SOTIEN') {
+                        $ct->tienthuong += $inputs['sotien'];
+                        $ct->luongtn += $inputs['sotien'];
+                    } else {
+                        //lấy thông tin đơn vị để tính ngày công trong hệ thống.
+                        $tienluong = $ct->st_heso + $ct->st_vuotkhung + $ct->st_pccv + $ct->st_hesobl + $ct->st_pctnn;
+                        $tiencong = round($tienluong / $ngaycong);
+                        $ct->tienthuong += $tiencong;
+                        $ct->luongtn += $tiencong;
+                    }
+                } else {
+                    if ($inputs['kieutanggiam_tg'] == 'SOTIEN') {
+                        $ct->trichnop += $inputs['sotien'];
+                        $ct->luongtn -= $inputs['sotien'];
+                    } else {
+                        //lấy thông tin đơn vị để tính ngày công trong hệ thống.
+                        $tienluong = $ct->st_heso + $ct->st_vuotkhung + $ct->st_pccv + $ct->st_hesobl + $ct->st_pctnn;
+                        $tiencong = round($tienluong / $ngaycong);
+                        $ct->trichnop += $tiencong;
+                        $ct->luongtn -= $tiencong;
+                    }
+                }
+                $ct->save();
+            }
+            return redirect('/chuc_nang/bang_luong/chi_tra?thang=' . $model_bl->thang . '&nam=' . $model_bl->nam);
+        } else
+            return view('errors.notlogin');
     }
 
     //Insert + update bảng lương
@@ -1585,6 +1642,8 @@ class bangluongController extends Controller
 
             $inputs['ttl'] = chkDbl($inputs['ttl']);
             $inputs['giaml'] = chkDbl($inputs['giaml']);
+            $inputs['tienthuong'] = chkDbl($inputs['tienthuong']);
+            $inputs['trichnop'] = chkDbl($inputs['trichnop']);
             $inputs['thuetn'] = chkDbl($inputs['thuetn']);
             $inputs['bhct'] = chkDbl($inputs['bhct']);
             $inputs['stbhxh'] = chkDbl($inputs['stbhxh']);
@@ -1687,7 +1746,7 @@ class bangluongController extends Controller
 
             $model->tonghs += $heso_cl;
             $model->ttl += $sotien_cl;
-            $model->luongtn = $model->ttl -  $model->ttbh - $model->giaml - $model->thuetn + $model->bhct;
+            $model->luongtn = $model->ttl -  $model->ttbh - $model->giaml - $model->thuetn - $model->trichnop + $model->bhct + $model->tienthuong;
             //dd($model);
             $model->save();
             return redirect('/chuc_nang/bang_luong/bang_luong?mabl='.$model->mabl.'&mapb='.$model->mapb);

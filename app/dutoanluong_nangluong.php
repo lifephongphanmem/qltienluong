@@ -4,9 +4,9 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class dutoanluong_bangluong extends Model
+class dutoanluong_nangluong extends Model
 {
-    protected $table = 'dutoanluong_bangluong';
+    protected $table = 'dutoanluong_nangluong';
     protected $fillable = [
         'id',
         'masodv',
@@ -19,6 +19,7 @@ class dutoanluong_bangluong extends Model
         'linhvuchoatdong',//Phân loại xã phường ko cần chọn lĩnh vực hoạt động
         'congtac',//đang công tác, nghỉ hưu
         'macongtac',
+        'maphanloai',
         'mact',
         'macvcq',
         'mapb',
@@ -56,7 +57,6 @@ class dutoanluong_bangluong extends Model
         'pcbdhdcu',
         'pcthni',
 
-
         //thêm vào chưa dùng => các loại phụ cấp ko tổng hợp
         'pclade', //làm đêm
         'pcud61', //ưu đãi theo tt61
@@ -75,6 +75,4 @@ class dutoanluong_bangluong extends Model
         'stbhtn_dv',
         'ttbh_dv'
     ];
-
-    //13.12.2018 ALTER TABLE `dutoanluong_bangluong` ADD `congtac` VARCHAR(25) NULL DEFAULT 'CONGTAC' AFTER `msngbac`;
 }
