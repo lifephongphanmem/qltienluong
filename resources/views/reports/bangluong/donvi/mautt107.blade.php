@@ -238,19 +238,19 @@
 
     <table class="header" width="96%" border="0" cellspacing="0" cellpadding="8" style="margin:20px auto; text-align: center;">
         <tr>
-            <td style="text-align: left;" width="35%"></td>
+            <td style="text-align: left;" width="25%"></td>
             <td style="text-align: left;" width="30%"></td>
-            <td style="text-align: center; font-style: italic" width="35%">{{$m_dv->diadanh .', '.Date2Str($thongtin['ngaylap'])}}</td>
+            <td style="text-align: center; font-style: italic" width="45%">{{$m_dv->diadanh .', '.Date2Str($thongtin['ngaylap'])}}</td>
         </tr>
         <tr style="font-weight: bold">
-            <td style="text-align: center;" width="35%">Người lập bảng</td>
-            <th style="text-align: center;" width="50%">{{$m_dv->cdketoan}}</th>
-            <td style="text-align: center;" width="35%">{{$m_dv['cdlanhdao']}}</td>
+            <td style="text-align: center;" width="25%">Người lập bảng</td>
+            <th style="text-align: center;" width="30%">{{$m_dv->cdketoan}}</th>
+            <td style="text-align: center;" width="45%">{{$m_dv['cdlanhdao']}}</td>
         </tr>
         <tr style="font-style: italic">
-            <td style="text-align: center;" width="35%">(Ghi rõ họ tên)</td>
+            <td style="text-align: center;" width="25%">(Ghi rõ họ tên)</td>
             <td style="text-align: center;" width="30%">(Ghi rõ họ tên)</td>
-            <td style="text-align: center;" width="35%">(Ký tên, đóng dấu)</td>
+            <td style="text-align: center;" width="45%">(Ký tên, đóng dấu)</td>
         </tr>
         <tr>
             <td>
@@ -259,9 +259,9 @@
         </tr>
 
         <tr>
-            <td style="text-align: center;" width="35%">{{$m_dv['nguoilapbieu']}}</td>
+            <td style="text-align: center;" width="25%">{{$m_dv['nguoilapbieu']}}</td>
             <td style="text-align: center;" width="30%">{{$m_dv['ketoan']}}</td>
-            <td style="text-align: center;" width="35%">{{$m_dv['lanhdao']}}</td>
+            <td style="text-align: center;" width="45%">{{$m_dv['lanhdao']}}</td>
         </tr>
     </table>
 
