@@ -125,7 +125,7 @@
                             <tbody>
                             @if(isset($model))
                                 @foreach($model as $key=>$value)
-                                    <tr>
+                                    <tr data-id="{{$value->madv}}">
                                         <td class="text-center">{{$key+1}}</td>
                                         <td>{{$value->name}}</td>
                                         <td>{{$value->username}}</td>

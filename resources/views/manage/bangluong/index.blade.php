@@ -89,6 +89,11 @@
                                                 <button onclick="capnhat('{{$value->mabl}}')" class="btn btn-default btn-xs mbs" data-target="#capnhat-modal-confirm" data-toggle="modal">
                                                     <i class="fa fa-th-list"></i>&nbsp; Cập nhật lương</button>
 
+                                                @if($value->phanloai == 'BANGLUONG')
+                                                    <button onclick="tanggiam('{{$value->mabl}}')" class="btn btn-default btn-xs mbs" data-target="#tanggiam-modal-confirm" data-toggle="modal">
+                                                        <i class="fa fa-th-list"></i>&nbsp; Tăng/Giảm lương</button>
+                                                @endif
+
                                                 <button type="button" onclick="cfDel('{{$inputs['furl'].'del/'.$value->id}}')" class="btn btn-danger btn-xs mbs" data-target="#delete-modal-confirm" data-toggle="modal">
                                                     <i class="fa fa-trash-o"></i>&nbsp; Xóa</button>
                                             @endif
@@ -295,11 +300,86 @@
         </form>
     </div>
     {!! Form::close() !!}
+
+    {!! Form::open(['url'=>'/chuc_nang/bang_luong/tang_giam','method'=>'get' , 'files'=>true, 'id' => 'create_bangluong_truylinh']) !!}
+    <div id="tanggiam-modal-confirm" tabindex="-1" role="dialog" aria-hidden="true" class="modal fade">
+        <form id="frmtanggiam" method="GET" action="#" accept-charset="UTF-8">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header modal-header-primary">
+                        <button type="button" data-dismiss="modal" aria-hidden="true" class="close">&times;</button>
+                        <h4 id="modal-header-primary-label" class="modal-title">Thông tin tăng / giảm lương cán bộ</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-horizontal">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <label class="control-label">Khối/Tổ công tác</label>
+                                    <select name="mapb_tg" id="mapb_tg" class="form-control select2me">
+                                        @foreach(getPhongBan(true) as $key=>$val)
+                                            <option value="{{$key}}">{{$val}}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+
+                                <div class="col-md-12">
+                                    <label class="control-label">Chức vụ</label>
+                                    {!!Form::select('macvcq_tg',getChucVuCQ(true), null, array('id' => 'macvcq_tg','class' => 'form-control select2me'))!!}
+                                </div>
+
+                                <div class="col-md-12">
+                                    <label class="control-label">Phân loại công tác</label>
+                                    <select class="form-control select2me" name="mact_tg" id="mact_tg">
+                                        <option value="">-- Tất cả các phân loại công tác --</option>
+                                        @foreach($model_nhomct as $kieuct)
+                                            <optgroup label="{{$kieuct->tencongtac}}">
+                                                <?php $mode_ct=$model_tenct->where('macongtac',$kieuct->macongtac); ?>
+                                                @foreach($mode_ct as $ct)
+                                                    <option value="{{$ct->mact}}">{{$ct->tenct}}</option>
+                                                @endforeach
+                                            </optgroup>
+                                        @endforeach
+                                    </select>
+                                </div>
+
+                                <div class="col-md-6">
+                                    <label class="control-label">Phân loại</label>
+                                    {!!Form::select('phanloai_tg', getTangGiamLuong(), 'TANG',array('id' => 'phanloai_tg','class' => 'form-control select2me'))!!}
+                                </div>
+
+                                <div class="col-md-6">
+                                    <label class="control-label">Tùy chọn</label>
+                                    {!!Form::select('kieutanggiam_tg', getKieuTangGiamLuong(), 'SOTIEN',array('id' => 'kieutanggiam_tg','class' => 'form-control select2me'))!!}
+                                </div>
+
+                                <div class="col-md-6">
+                                    <label class="control-label">Số tiền / Ngày công</label>
+                                    {!!Form::text('sotien_tg', 0, array('id' => 'sotien_tg','class' => 'form-control', 'data-mask'=>'fdecimal'))!!}
+                                </div>
+                            </div>
+                        </div>
+                        <input type="hidden" id="mabl_tg" name="mabl_tg"/>
+                    </div>
+
+
+                    <div class="modal-footer">
+                        <button type="button" data-dismiss="modal" class="btn btn-default">Hủy thao tác</button>
+                        <button type="submit" id="submit" name="submit" value="submit" class="btn btn-primary">Đồng ý</button>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+    {!! Form::close() !!}
+
     <script>
         function capnhat(mabl){
             $('#mabl_capnhat').val(mabl);
         }
 
+        function tanggiam(mabl){
+            $('#mabl_tg').val(mabl);
+        }
     </script>
     <!--Modal thông tin tùy chọn in bảng lương -->
     <div id="inbl-modal" tabindex="-1" role="dialog" aria-hidden="true" class="modal fade">

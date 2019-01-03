@@ -580,4 +580,19 @@ function getPhanLoaiTruyLinh(){
         'KHAC'=>'Truy lĩnh khác',
     );
 }
+
+function getTangGiamLuong(){
+    return array(
+        'TANG' => 'Tăng lương (khen thưởng)',
+        'GIAM' => 'Giảm lương (đóng góp, trích nộp)',
+        //'KPCD' => 'Trừ kinh phí công đoàn',
+    );
+}
+
+function getKieuTangGiamLuong(){
+    return array(
+        'SOTIEN' => 'Theo số tiền',
+        'NGAYLV' => 'Theo ngày công',
+    );
+}
 ?>

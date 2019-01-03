@@ -53,13 +53,8 @@
                         </div>
                         <div class="col-md-3">
                             <div class="form-group">
-                                <select name="nambc" id="nambc" class="form-control">
-                                    @if ($nam_start = intval(date('Y')) - 2 ) @endif
-                                    @if ($nam_stop = intval(date('Y'))) @endif
-                                    @for($i = $nam_start; $i <= $nam_stop; $i++)
-                                        <option value="{{$i}}" {{$i == $nam ? 'selected' : ''}}>{{$i}}</option>
-                                    @endfor
-                                </select>
+                                {!! Form::select('nambc',getNam(),$nam, array('id' => 'nambc', 'class' => 'form-control'))!!}
+
                             </div>
                         </div>
                     </div>

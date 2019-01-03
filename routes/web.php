@@ -370,6 +370,7 @@ Route::group(['prefix'=>'chuc_nang'],function(){
 
         Route::get('bang_luong','bangluongController@show');
         Route::get('cap_nhat','bangluongController@capnhat');
+        Route::get('tang_giam','bangluongController@tanggiam');
         //Route::get('/maso={mabl}','bangluongController@show');
         Route::get('in/maso={mabl}','bangluongController@inbangluong');
         Route::get('inbangluong/maso={mabl}','bangluongController@inbangluong_sotien');
@@ -653,7 +654,28 @@ Route::group(['prefix'=>'chuc_nang'],function(){
 });
 
 Route::group(['prefix'=>'bao_cao'],function(){
+    /*
+    Route::group(['prefix'=>'don_vi'],function(){
+        Route::get('','baocaoController@donvi');
+        Route::post('mausl1','baocaoController@BcSLCBm1');
+        Route::post('mausl2','baocaoController@BcSLCBm2');
+        Route::post('mausl3','baocaoController@BcSLCBm3');
+        Route::post('maudv','baocaoController@BcCLDangVien');
+    });
 
+    Route::group(['prefix'=>'mau_chuan'],function(){
+        Route::get('','baocaoController@mauchuan');
+        Route::post('BcDSTuyenDungTT08','baocaoController@BcDSTuyenDungTT08');
+        Route::post('BcDSTuyenDungTT10','baocaoController@BcDSTuyenDungTT10');
+        Route::post('BcDSCC','baocaoController@BcDSCC');
+        Route::post('BcDSVC','baocaoController@BcDSVC');
+        Route::post('BcSLCLCC','baocaoController@BcSLCLCC');
+        Route::post('BcSLCLVC','baocaoController@BcSLCLVC');
+        Route::post('BcDSCCCVCC','baocaoController@BcDSCCCVCC');
+        Route::post('BcDSVCCVCC','baocaoController@BcDSVCCVCC');
+        Route::post('BcSLCLCC_TT11','baocaoController@BcSLCLCC_TT11');
+    });
+    */
     Route::group(['prefix'=>'thong_tu_67'],function(){
         Route::group(['prefix'=>'don_vi'],function(){
             Route::get('mau2a1','baocaothongtu67Controller@mau2a1_donvi');
