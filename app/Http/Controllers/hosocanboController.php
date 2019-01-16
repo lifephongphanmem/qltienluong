@@ -20,7 +20,7 @@ use App\hosocanbo;
 use App\hosocanbo_kiemnhiem;
 use App\hosocanbo_kiemnhiem_temp;
 use App\hosochucvu;
-use App\hosothoicongtac;
+//use App\hosothoicongtac;
 use App\hosotinhtrangct;
 use App\ngachluong;
 use App\nhomngachluong;

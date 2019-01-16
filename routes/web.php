@@ -269,6 +269,8 @@ Route::group(['prefix'=>'nghiep_vu'],function(){
 
             Route::get('printf/ma_so={masodv}','dutoanluongController@printf_data');
             Route::get('printf_bl/ma_so={masodv}','dutoanluongController@printf_bl');
+            Route::get('mauqd19','dutoanluongController@printf_qd19');
+
         });
 
         Route::group(['prefix'=>'dia_ban_dbkk'],function(){
