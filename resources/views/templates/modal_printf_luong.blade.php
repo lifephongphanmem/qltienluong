@@ -386,6 +386,11 @@
                         <label class="control-label">Cỡ chữ</label>
                         {!!Form::select('cochu',getCoChu(), 10, array('id' => 'cochu','class' => 'form-control select2me'))!!}
                     </div>
+
+                    <div class="col-md-offset-2 col-md-8">
+                        <input type="checkbox" name="inbaohiem" />
+                        <label class="control-label">In tiểu mục bảo hiểm</label>
+                    </div>
                 </div>
             </div>
 
