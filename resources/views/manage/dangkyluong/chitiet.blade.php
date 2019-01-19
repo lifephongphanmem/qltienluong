@@ -161,18 +161,19 @@
                                         </div>
                                         <div class="portlet-body" style="display: block;">
                                             <div class="row">
-                                                @foreach($a_phucap as $key=>$val)
-                                                    @if($a_donvi[$key] == 3)
-                                                        {!!Form::hidden($key, null, array('id' =>$key, 'class' => 'form-control heso', 'data-mask'=>'fdecimal'))!!}
+                                                @foreach($model_pc as $pc)
+                                                    @if($pc->phanloai == 3)
+                                                        {!!Form::hidden($pc->mapc, null, array('id' =>$pc->mapc, 'class' => 'form-control heso', 'data-mask'=>'fdecimal'))!!}
                                                     @else
                                                         <div class="col-md-3">
                                                             <div class="form-group">
-                                                                <label class="control-label">{{$val}}</label>
-                                                                {!!Form::text($key, null, array('id' =>$key, 'class' => 'form-control heso', 'data-mask'=>'fdecimal'))!!}
+                                                                <label class="control-label">{{$pc->form}}</label>
+                                                                {!!Form::text($pc->mapc, null, array('id' =>$pc->mapc, 'class' => 'form-control heso', 'data-mask'=>'fdecimal'))!!}
                                                             </div>
                                                         </div>
                                                     @endif
                                                 @endforeach
+
 
                                             </div>
                                         </div>
@@ -280,7 +281,7 @@
 
                             <button type="submit" class="btn btn-default">Hoàn thành <i class="fa fa-save mlx"></i></button>
 
-                            <a href="{{url('/chuc_nang/bang_luong/maso='.$model->mabl)}}" class="btn btn-default"><i class="fa fa-reply mlx"></i> Quay lại</a>
+                            <a href="{{url('/chuc_nang/dang_ky_luong/maso='.$model->mabl)}}" class="btn btn-default"><i class="fa fa-reply mlx"></i> Quay lại</a>
                         </div>
                     {!! Form::close() !!}
                 </div>

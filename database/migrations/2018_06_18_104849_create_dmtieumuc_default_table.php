@@ -19,6 +19,7 @@ class CreateDmtieumucDefaultTable extends Migration
             $table->string('tieumuc', 50)->nullable();
             $table->string('noidung', 50)->nullable(); //lay theo muc luc ngan sach
             //các điều kiện để lấy dữ liệu (có thể bỏ trống)
+            $table->string('phanloai', 50)->default('CHILUONG');//chi lương / bảo hiểm
             $table->string('sunghiep', 50)->nullable();
             $table->string('macongtac', 50)->nullable();
             $table->string('mapc', 50)->nullable();

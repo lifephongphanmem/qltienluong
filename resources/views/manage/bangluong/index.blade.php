@@ -90,8 +90,8 @@
                                                     <i class="fa fa-th-list"></i>&nbsp; Cập nhật lương</button>
 
                                                 @if($value->phanloai == 'BANGLUONG')
-                                                    <button onclick="tanggiam('{{$value->mabl}}')" class="btn btn-default btn-xs mbs" data-target="#tanggiam-modal-confirm" data-toggle="modal">
-                                                        <i class="fa fa-th-list"></i>&nbsp; Tăng/Giảm lương</button>
+                                                    <!--button onclick="tanggiam('{{$value->mabl}}')" class="btn btn-default btn-xs mbs" data-target="#tanggiam-modal-confirm" data-toggle="modal">
+                                                        <i class="fa fa-th-list"></i>&nbsp; Tăng/Giảm lương</button-->
                                                 @endif
 
                                                 <button type="button" onclick="cfDel('{{$inputs['furl'].'del/'.$value->id}}')" class="btn btn-danger btn-xs mbs" data-target="#delete-modal-confirm" data-toggle="modal">

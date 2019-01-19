@@ -2704,9 +2704,13 @@ class bangluongController extends Controller
             $m_dv->tendvcq = getTenDB($m_dv->madvbc);
             $inputs['madv'] = $m_dv->madv;
             $model = $this->getBangLuong_moi($inputs);
-            //dd($model);
 
-            $model_tm = dmtieumuc_default::all();
+            if(isset($inputs['inbaohiem'])){
+                $model_tm = dmtieumuc_default::all();
+            }else{
+                $model_tm = dmtieumuc_default::where('phanloai','CHILUONG')->get();
+            }
+            //dd($model_tm);
             $model_congtac = dmphanloaict::join('bangluong_ct', 'bangluong_ct.mact', '=', 'dmphanloaict.mact')
                 ->select('dmphanloaict.mact', 'dmphanloaict.tenct')
                 ->where('bangluong_ct.mabl', $mabl)
@@ -2763,9 +2767,9 @@ class bangluongController extends Controller
                         continue;
                     }
 
-                    if ($mapc == 'heso') {
-                        $a_phca[$k]['heso'] = $ct->heso + $ct->vuotkhung;
-                        $a_phca[$k]['sotien'] = $ct->st_heso + $ct->st_vuotkhung;
+                    if ($mapc == 'pctnn') { //6115: pc vượt khung, thâm niên nghề
+                        $a_phca[$k]['heso'] = $ct->pctnn + $ct->vuotkhung;
+                        $a_phca[$k]['sotien'] = $ct->st_pctnn + $ct->st_vuotkhung;
                     } else {
                         $a_phca[$k]['heso'] = $ct->$mapc;
                         $a_phca[$k]['sotien'] = $ct->$mapc_st;
@@ -2789,16 +2793,6 @@ class bangluongController extends Controller
             //dd($a_pc_tm);
 
             foreach ($model_tm as $tm) {
-                $m_tinhtoan = $model;
-                //check sự nghiệp
-                if ($tm->sunghiep != 'ALL' && $tm->sunghiep != 'null') {
-                    $m_tinhtoan = $m_tinhtoan->where('sunghiep', $tm->sunghiep);
-                }
-
-                //check mã công tác
-                if ($tm->macongtac != 'ALL' && $tm->macongtac != 'null') {
-                    $m_tinhtoan = $m_tinhtoan->where('macongtac', $tm->macongtac);
-                }
                 $tm->heso = 0;
                 $tm->sotien = 0;
                 $tm->stbhxh = 0;
@@ -2811,6 +2805,25 @@ class bangluongController extends Controller
                 $tm->stkpcd_dv = 0;
                 $tm->stbhtn_dv = 0;
                 $tm->ttbh_dv = 0;
+
+                $m_tinhtoan = $model;
+                if($tm->muc == '6300'){
+                    foreach(explode(',',$tm->mapc) as $maso){
+                        if($maso != ''){
+                            $tm->sotien += $m_tinhtoan->sum($maso);
+                        }
+                    }
+                    continue;
+                }
+                //check sự nghiệp
+                if ($tm->sunghiep != 'ALL' && $tm->sunghiep != 'null') {
+                    $m_tinhtoan = $m_tinhtoan->where('sunghiep', $tm->sunghiep);
+                }
+
+                //check mã công tác
+                if ($tm->macongtac != 'ALL' && $tm->macongtac != 'null') {
+                    $m_tinhtoan = $m_tinhtoan->where('macongtac', $tm->macongtac);
+                }
 
                 $a_canbo = (array_column($m_tinhtoan->toarray(), 'macanbo'));
                 foreach ($a_canbo as $cb) {
@@ -2831,6 +2844,7 @@ class bangluongController extends Controller
                     }
                 }
             }
+            //dd($model_tm);
             $model_tm = $model_tm->where('sotien', '>', 0);
 
             $a_muc = $model_tm->map(function ($data) {
