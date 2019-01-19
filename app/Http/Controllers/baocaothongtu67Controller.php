@@ -5011,7 +5011,7 @@ class baocaothongtu67Controller extends Controller
                 }
             }
 
-            return view('reports.thongtu67.Mau2d_tt68')
+            return view('reports.thongtu67.Mau2d_tt68m')
                 ->with('m_dv', $m_dv)
                 ->with('ar_I', $ar_I)
                 ->with('a_It', $a_It)
@@ -10366,7 +10366,7 @@ class baocaothongtu67Controller extends Controller
             }
             //dd($ar_I);
 
-            return view('reports.thongtu67.Mau2d_tt68')
+            return view('reports.thongtu67.Mau2d_tt68m')
                 ->with('m_dv',$m_dv)
                 ->with('ar_I',$ar_I)
                 ->with('a_It',$a_It)
