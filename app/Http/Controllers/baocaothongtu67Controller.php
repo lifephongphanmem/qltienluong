@@ -61,27 +61,28 @@ class baocaothongtu67Controller extends Controller
     }
     //Tính bảng lương của toàn tỉnh
 
-    function mau2a1_tt67(Request $request) {
+    function mau2a1_tt67(Request $request)
+    {
         //Test trên huyện nên sau này sửa lại leve "T"
         //if ((Session::has('admin') && session('admin')->quanlykhuvuc == true) || (Session::has('admin') && session('admin')->username == 'khthso') ) {
         //if ((Session::has('admin') && session('admin')->username == 'khthstc') || (Session::has('admin') && session('admin')->username == 'khthso') ) {
         if (Session::has('admin')) {
-            $inputs=$request->all();
+            $inputs = $request->all();
             $madvbc = session('admin')->madvbc;
-            $m_dv = dmdonvi::where('madv',session('admin')->madv)->first();
-            $model_donvi = dmdonvi::where('madvbc','like',$inputs['madv'].'%')->get();
+            $m_dv = dmdonvi::where('madv', session('admin')->madv)->first();
+            $model_donvi = dmdonvi::where('madvbc', 'like', $inputs['madv'] . '%')->get();
 
-            $model_bienche = chitieubienche::where('nam','2018')->wherein('madv',function($qr)use($madvbc){
-                $qr->select('madv')->from('dmdonvi')->where('madvbc',$madvbc)->distinct()->get();
+            $model_bienche = chitieubienche::where('nam', '2018')->wherein('madv', function ($qr) use ($madvbc) {
+                $qr->select('madv')->from('dmdonvi')->where('madvbc', $madvbc)->distinct()->get();
             })->get();
 
-            foreach($model_bienche as $bienche){
-                $bienche->maphanloai = $model_donvi->where('madv',$bienche->madv)->first()->maphanloai;
+            foreach ($model_bienche as $bienche) {
+                $bienche->maphanloai = $model_donvi->where('madv', $bienche->madv)->first()->maphanloai;
             }
             //dd($model_bienche);
 
-            $model_tonghop = tonghopluong_donvi::where('thang','08')->where('nam','2018')
-                ->where('madvbc','like',$inputs['madv'].'%')->get();
+            $model_tonghop = tonghopluong_donvi::where('thang', '08')->where('nam', '2018')
+                ->where('madvbc', 'like', $inputs['madv'] . '%')->get();
 
             $luongcb = 0.935;
             //$luongcb = 1390000;
@@ -89,37 +90,36 @@ class baocaothongtu67Controller extends Controller
             //nếu đơn vị đã tạo bảng lương tháng 07/2017 =>xuất kết quả
 
             $model_tonghop_ct = tonghopluong_donvi_chitiet::join('tonghopluong_donvi', 'tonghopluong_donvi_chitiet.mathdv', '=', 'tonghopluong_donvi.mathdv')
-                ->where('tonghopluong_donvi.madvbc','like',$inputs['madv'].'%')
-                ->wherein('tonghopluong_donvi_chitiet.mathdv',function($qr){
-                    $qr->select('mathdv')->from('tonghopluong_donvi')->where('thang','08')->where('nam','2018')->where('trangthai','DAGUI')
+                ->where('tonghopluong_donvi.madvbc', 'like', $inputs['madv'] . '%')
+                ->wherein('tonghopluong_donvi_chitiet.mathdv', function ($qr) {
+                    $qr->select('mathdv')->from('tonghopluong_donvi')->where('thang', '08')->where('nam', '2018')->where('trangthai', 'DAGUI')
                         ->distinct()->get();
                 })->get();
 
-            if(session('admin')->username == 'khthso')
-            {
-                $model_bienche = chitieubienche::join('dmdonvi','dmdonvi.madv','=','chitieubienche.madv')
-                    ->join('dmdonvibaocao','dmdonvibaocao.madvbc','=','dmdonvi.madvbc')
-                    ->where('chitieubienche.nam','2018')->where('dmdonvi.madvbc','like',$inputs['madv'].'%')
-                    ->where('dmdonvibaocao.level','T')->get();
+            if (session('admin')->username == 'khthso') {
+                $model_bienche = chitieubienche::join('dmdonvi', 'dmdonvi.madv', '=', 'chitieubienche.madv')
+                    ->join('dmdonvibaocao', 'dmdonvibaocao.madvbc', '=', 'dmdonvi.madvbc')
+                    ->where('chitieubienche.nam', '2018')->where('dmdonvi.madvbc', 'like', $inputs['madv'] . '%')
+                    ->where('dmdonvibaocao.level', 'T')->get();
                 //$luongcb = 1210000; tạm thời bỏ vì bang lương đã nhân lcb
                 $luongcb = 0.935;
                 //nếu đơn vị đã tạo bảng lương tháng 07/2017 =>xuất kết quả
                 $model_tonghop_ct = tonghopluong_donvi_chitiet::join('tonghopluong_donvi', 'tonghopluong_donvi_chitiet.mathdv', '=', 'tonghopluong_donvi.mathdv')
-                    ->join('dmdonvibaocao','dmdonvibaocao.madvbc','=','tonghopluong_donvi.madvbc')
-                    ->where('tonghopluong_donvi.madvbc','like',$inputs['madv'].'%')
-                    ->where('dmdonvibaocao.level','T')
-                    ->wherein('tonghopluong_donvi_chitiet.mathdv',function($qr){
-                        $qr->select('mathdv')->from('tonghopluong_donvi')->where('thang','08')->where('nam','2018')->where('trangthai','DAGUI')
+                    ->join('dmdonvibaocao', 'dmdonvibaocao.madvbc', '=', 'tonghopluong_donvi.madvbc')
+                    ->where('tonghopluong_donvi.madvbc', 'like', $inputs['madv'] . '%')
+                    ->where('dmdonvibaocao.level', 'T')
+                    ->wherein('tonghopluong_donvi_chitiet.mathdv', function ($qr) {
+                        $qr->select('mathdv')->from('tonghopluong_donvi')->where('thang', '08')->where('nam', '2018')->where('trangthai', 'DAGUI')
                             ->distinct()->get();
                     })->get();
             }
 
 
-            foreach($model_tonghop_ct as $ct){
-                $tonghop = $model_tonghop->where('mathdv',$ct->mathdv)->first();
+            foreach ($model_tonghop_ct as $ct) {
+                $tonghop = $model_tonghop->where('mathdv', $ct->mathdv)->first();
                 //dd($model_tonghop_ct->toarray());
-                $a_th =  array_column($tonghop->toarray(),'mathdv','maphanloai');
-                $ct->maphanloai = $model_donvi->where('madv',$tonghop->madv)->first()->maphanloai;
+                $a_th = array_column($tonghop->toarray(), 'mathdv', 'maphanloai');
+                $ct->maphanloai = $model_donvi->where('madv', $tonghop->madv)->first()->maphanloai;
                 //$ct->maphanloai =  $a_th[$ct->mathdv];
                 $ct->heso = $ct->heso * $luongcb;
                 $ct->pckv = $ct->pckv * $luongcb;
@@ -134,16 +134,16 @@ class baocaothongtu67Controller extends Controller
                 $ct->pck = $ct->pck * $luongcb;
                 $ct->pcdbqh = $ct->pcdbqh * $luongcb;
                 $ct->pcvk = $ct->pcvk * $luongcb;
-                $ct->ttbh_dv = ($ct->stbhxh_dv + $ct->stbhyt_dv +$ct->stkpcd_dv + $ct->stbhtn_dv) * $luongcb;
+                $ct->ttbh_dv = ($ct->stbhxh_dv + $ct->stbhyt_dv + $ct->stkpcd_dv + $ct->stbhtn_dv) * $luongcb;
 
             }
 
-            $model_bangluong_ct = $model_tonghop_ct->where('macongtac','BIENCHE')->where('maphanloai','<>','KVXP');
+            $model_bangluong_ct = $model_tonghop_ct->where('macongtac', 'BIENCHE')->where('maphanloai', '<>', 'KVXP');
 
             //dd($model_bangluong_ct);
             $ar_I = array();
             $ar_Igr = array();
-            if(isset($inputs['inchitiet'])) {
+            if (isset($inputs['inchitiet'])) {
                 $ar_Igr[0] = array('val' => 'GD;DT', 'tt' => '1', 'noidung' => 'Sự nghiệp giáo dục - đào tạo');
                 $ar_Igr[1] = array('val' => 'GD', 'tt' => '-', 'noidung' => 'Giáo dục');
                 $ar_Igr[2] = array('val' => 'DT', 'tt' => '-', 'noidung' => 'Đào tạo');
@@ -158,8 +158,7 @@ class baocaothongtu67Controller extends Controller
                 $ar_Igr[11] = array('val' => 'QLNN;DDT', 'tt' => '10', 'noidung' => 'Quản lý nhà nước, đảng, đoàn thể');
                 $ar_Igr[12] = array('val' => 'QLNN', 'tt' => '-', 'noidung' => ' Quản lý NN');
                 $ar_Igr[13] = array('val' => 'DDT', 'tt' => '-', 'noidung' => 'Đảng, đoàn thể');
-            }
-            else {
+            } else {
                 $ar_I[0] = array('val' => 'GD;DT', 'tt' => '1', 'noidung' => 'Sự nghiệp giáo dục - đào tạo');
                 $ar_I[1] = array('val' => 'GD', 'tt' => '-', 'noidung' => 'Giáo dục');
                 $ar_I[2] = array('val' => 'DT', 'tt' => '-', 'noidung' => 'Đào tạo');
@@ -189,16 +188,16 @@ class baocaothongtu67Controller extends Controller
                 'tongpc' => 0,
                 'ttbh_dv' => 0,
                 'soluongduocgiao' => 0,
-                'soluongbienche'=> 0,
+                'soluongbienche' => 0,
             );
             //thiếu chỉ tiêu biên chế
-            if(isset($inputs['inchitiet'])) {
+            if (isset($inputs['inchitiet'])) {
                 $gddt = 0;
                 $daotao = 0;
                 $giaoduc = 0;
                 $qlnnddt = 0;
                 $qlnn = 0;
-                $ddt =0;
+                $ddt = 0;
                 $i = 0;
                 for ($j = 0; $j < count($ar_Igr); $j++) {
                     $i++;
@@ -366,8 +365,7 @@ class baocaothongtu67Controller extends Controller
                 $ar_I[$qlnnddt]['tongpc'] = $ar_I[$qlnn]['tongpc'] + $ar_I[$ddt]['tongpc'];
                 $ar_I[$qlnnddt]['ttbh_dv'] = $ar_I[$qlnn]['ttbh_dv'] + $ar_I[$ddt]['ttbh_dv'];
 
-            }
-            else {
+            } else {
                 for ($i = 0; $i < count($ar_I); $i++) {
                     if (isset($model_bangluong_ct)) {
                         $chitiet = $model_bangluong_ct->where('linhvuchoatdong', $ar_I[$i]['val']);
@@ -482,10 +480,10 @@ class baocaothongtu67Controller extends Controller
             $ar_II['soluongduocgiao'] = isset($model_bienche->soluongduocgiao) ? $model_bienche->soluongduocgiao : 0;
             $ar_II['soluongbienche'] = isset($model_bienche->soluongbienche) ? $model_bienche->soluongbienche : 0;
 
-            $model_bangluong_ct = $model_tonghop_ct->where('maphanloai','KVXP');
+            $model_bangluong_ct = $model_tonghop_ct->where('maphanloai', 'KVXP');
             //dd($model_bangluong_ct);
             //
-            if(count($model_bangluong_ct)>0){
+            if (count($model_bangluong_ct) > 0) {
                 //dd($model_tonghop_ct);
                 $tongpc = 0;
                 $ar_II['luong'] = $model_bangluong_ct->sum('heso');
@@ -522,9 +520,8 @@ class baocaothongtu67Controller extends Controller
 
                 $ar_II['tongpc'] = $tongpc;
 
-                $ar_II['ttbh_dv'] =$model_bangluong_ct->sum('ttbh_dv') ;
-            }
-            else{
+                $ar_II['ttbh_dv'] = $model_bangluong_ct->sum('ttbh_dv');
+            } else {
                 $ar_II['luong'] = 0;
                 $ar_II['pckv'] = 0;
                 $ar_II['pccv'] = 0;
@@ -544,48 +541,48 @@ class baocaothongtu67Controller extends Controller
             //căn cứ vào cấp dự toán để xác định đơn vị cấp xã, huyện, tỉnh
             //chỉ có cột tổng cộng
             $ar_III = array();
-            $ar_III[]=array('val'=>'T','tt'=>'-','noidung'=>'Cấp tỉnh','tongso'=>'0');
-            $ar_III[]=array('val'=>'H','tt'=>'-','noidung'=>'Cấp huyện','tongso'=>'0');
-            $ar_III[]=array('val'=>'X','tt'=>'-','noidung'=>'Cấp xã','tongso'=>'0');
+            $ar_III[] = array('val' => 'T', 'tt' => '-', 'noidung' => 'Cấp tỉnh', 'tongso' => '0');
+            $ar_III[] = array('val' => 'H', 'tt' => '-', 'noidung' => 'Cấp huyện', 'tongso' => '0');
+            $ar_III[] = array('val' => 'X', 'tt' => '-', 'noidung' => 'Cấp xã', 'tongso' => '0');
 
             $ar_IV = array();
-            $ar_IV[]=array('val'=>'T','tt'=>'-','noidung'=>'Ủy viên cấp tỉnh','tongso'=>'0');
-            $ar_IV[]=array('val'=>'H','tt'=>'-','noidung'=>'Ủy viên cấp huyện','tongso'=>'0');
-            $ar_IV[]=array('val'=>'X','tt'=>'-','noidung'=>'Ủy viên cấp xã','tongso'=>'0');
+            $ar_IV[] = array('val' => 'T', 'tt' => '-', 'noidung' => 'Ủy viên cấp tỉnh', 'tongso' => '0');
+            $ar_IV[] = array('val' => 'H', 'tt' => '-', 'noidung' => 'Ủy viên cấp huyện', 'tongso' => '0');
+            $ar_IV[] = array('val' => 'X', 'tt' => '-', 'noidung' => 'Ủy viên cấp xã', 'tongso' => '0');
             //hỏi chi tiết xem đơn vi cấp xã có pai là dự toán cấp 3,4
             //huyên cấp ??
             //tỉnh cấp ??
 
-            $a_IIIt = array('tongso'=>0);
-            $a_IVt = array('tongso'=>0);
+            $a_IIIt = array('tongso' => 0);
+            $a_IVt = array('tongso' => 0);
             //dd(session('admin')->maphanloai);
-            if(session('admin')->level=='T'){
-                if($m_dv->capdonvi > 2){
-                    if(isset($model_bangluong_ct)){
+            if (session('admin')->level == 'T') {
+                if ($m_dv->capdonvi > 2) {
+                    if (isset($model_bangluong_ct)) {
                         $ar_III[2]['tongso'] = $model_bangluong_ct->sum('pcdbqh');
                         $ar_IV[2]['tongso'] = $model_bangluong_ct->sum('pcvk');
                     }
                     $a_IVt['tongso'] += $ar_IV[2]['tongso'];
                     $a_IIIt['tongso'] += $ar_III[2]['tongso'];
 
-                }else{
-                    if(isset($model_bangluong_ct)){
+                } else {
+                    if (isset($model_bangluong_ct)) {
                         $ar_III[1]['tongso'] = $model_bangluong_ct->sum('pcdbqh');
                         $ar_IV[1]['tongso'] = $model_bangluong_ct->sum('pcvk');
                     }
                     $a_IIIt['tongso'] += $ar_III[1]['tongso'];
                     $a_IVt['tongso'] += $ar_IV[1]['tongso'];
                 }
-            }else{
-                if($m_dv->capdonvi >= 3){
-                    if(isset($model_bangluong_ct)){
+            } else {
+                if ($m_dv->capdonvi >= 3) {
+                    if (isset($model_bangluong_ct)) {
                         $ar_III[1]['tongso'] = $model_bangluong_ct->sum('pcdbqh');
                         $ar_IV[1]['tongso'] = $model_bangluong_ct->sum('pcvk');
                     }
                     $a_IIIt['tongso'] += $ar_III[1]['tongso'];
                     $a_IVt['tongso'] += $ar_IV[1]['tongso'];
-                }else{
-                    if(isset($model_bangluong_ct)){
+                } else {
+                    if (isset($model_bangluong_ct)) {
                         $ar_III[0]['tongso'] = $model_bangluong_ct->sum('pcdbqh');
                         $ar_IV[0]['tongso'] = $model_bangluong_ct->sum('pcvk');
                     }
@@ -594,19 +591,40 @@ class baocaothongtu67Controller extends Controller
                     $a_IVt['tongso'] += $ar_IV[0]['tongso'];
                 }
             }
+            if (isset($inputs['excel'])) {
+                Excel::create('Mau2a1_TT68', function ($excel) use ($ar_I, $ar_II, $ar_III, $ar_IV, $a_It, $a_IIIt, $a_IVt, $m_dv, $inputs) {
+                    $excel->sheet('New sheet', function ($sheet) use ($ar_I, $ar_II, $ar_III, $ar_IV, $a_It, $a_IIIt, $a_IVt, $m_dv, $inputs) {
+                        $sheet->loadView('reports.thongtu67.mau2a1_tt68')
+                            ->with('ar_I', $ar_I)
+                            ->with('ar_II', $ar_II)
+                            ->with('ar_III', $ar_III)
+                            ->with('ar_IV', $ar_IV)
+                            ->with('a_It', $a_It)
+                            ->with('a_IIIt', $a_IIIt)
+                            ->with('a_IVt', $a_IVt)
+                            ->with('m_dv', $m_dv)
+                            ->with('inputs', $inputs)
+                            ->with('pageTitle', 'Mau2a1_TT68');
+                        $sheet->setAutoSize(false);
+                        $sheet->setFontFamily('Tahoma');
+                        $sheet->setFontBold(false);
+                    });
+                })->download('xls');
+            } else {
+                return view('reports.thongtu67.mau2a1_tt68')
+                    ->with('furl', '/tong_hop_bao_cao/')
+                    ->with('ar_I', $ar_I)
+                    ->with('ar_II', $ar_II)
+                    ->with('ar_III', $ar_III)
+                    ->with('ar_IV', $ar_IV)
+                    ->with('a_It', $a_It)
+                    ->with('a_IIIt', $a_IIIt)
+                    ->with('a_IVt', $a_IVt)
+                    ->with('m_dv', $m_dv)
+                    ->with('inputs', $inputs)
+                    ->with('pageTitle', 'Báo cáo nhu cầu kinh phí thực hiện nghị định 47/2017/NĐ-CP');
+            }
 
-            return view('reports.thongtu67.mau2a1_tt67')
-                ->with('furl','/tong_hop_bao_cao/')
-                ->with('ar_I',$ar_I)
-                ->with('ar_II',$ar_II)
-                ->with('ar_III',$ar_III)
-                ->with('ar_IV',$ar_IV)
-                ->with('a_It',$a_It)
-                ->with('a_IIIt',$a_IIIt)
-                ->with('a_IVt',$a_IVt)
-                ->with('m_dv',$m_dv)
-                ->with('inputs',$inputs)
-                ->with('pageTitle','Báo cáo nhu cầu kinh phí thực hiện nghị định 47/2017/NĐ-CP');
         } else
             return view('errors.notlogin');
     }
@@ -1168,285 +1186,6 @@ class baocaothongtu67Controller extends Controller
 
     function mau2a2_tt67(Request $request) {
         //if (Session::has('admin') && session('admin')->quanlykhuvuc == true) {
-        /*
-        if (Session::has('admin')  ) {
-        //if ((Session::has('admin') && session('admin')->username == 'khthstc') || (Session::has('admin') && session('admin')->username == 'khthso') ) {
-            $inputs=$request->all();
-            $m_dv = dmdonvi::where('madv',session('admin')->madv)->first();
-            //$luongcb = 1300000;; tạm thời bỏ vì bang lương đã nhân lcb
-            $luongcb = 1;
-            //nếu đơn vị đã tạo bảng lương tháng 07/2017 =>xuất kết quả
-            $model_tonghop_ct = tonghopluong_donvi_chitiet::join('tonghopluong_donvi', 'tonghopluong_donvi_chitiet.mathdv', '=', 'tonghopluong_donvi.mathdv')
-                ->where('tonghopluong_donvi.madvbc','like',$inputs['madv'].'%')
-                ->wherein('tonghopluong_donvi_chitiet.mathdv',function($qr){
-                $qr->select('mathdv')->from('tonghopluong_donvi')->where('thang','08')->where('nam','2018')->where('trangthai','DAGUI')
-                    ->distinct()->get();
-            })->get();
-
-            if(session('admin')->username == 'khthso')
-            {
-                //nếu đơn vị đã tạo bảng lương tháng 07/2017 =>xuất kết quả
-                $model_tonghop_ct = tonghopluong_donvi_chitiet::join('tonghopluong_donvi', 'tonghopluong_donvi_chitiet.mathdv', '=', 'tonghopluong_donvi.mathdv')
-                    ->join('dmdonvibaocao','dmdonvibaocao.madvbc','=','tonghopluong_donvi.madvbc')
-                    ->where('tonghopluong_donvi.madvbc','like',$inputs['madv'].'%')
-                    ->where('dmdonvibaocao.level','T')
-                    ->wherein('tonghopluong_donvi_chitiet.mathdv',function($qr){
-                        $qr->select('mathdv')->from('tonghopluong_donvi')->where('thang','08')->where('nam','2018')->where('trangthai','DAGUI')
-                            ->distinct()->get();
-                    })->get();
-            }
-            $model_bangluong_ct = $model_tonghop_ct->where('macongtac','BIENCHE');
-
-            //dd($model_bangluong_ct->toarray());
-            $ar_I = array();
-            $ar_I[]=array('val'=>'GD;DT','tt'=>'1','noidung'=>'Sự nghiệp giáo dục - đào tạo');
-            $ar_I[]=array('val'=>'GD','tt'=>'-','noidung'=>'Giáo dục');
-            $ar_I[]=array('val'=>'DT','tt'=>'-','noidung'=>'Đào tạo');
-            $ar_I[]=array('val'=>'YTE','tt'=>'2','noidung'=>'Sự nghiệp y tế');
-            $ar_I[]=array('val'=>'KHCN','tt'=>'3','noidung'=>'Sự nghiệp khoa học-công nghệ');
-            $ar_I[]=array('val'=>'VHTT','tt'=>'4','noidung'=>'Sự nghiệp văn hóa thông tin');
-            $ar_I[]=array('val'=>'PTTH','tt'=>'5','noidung'=>'Sự nghiệp phát thanh truyền hình');
-            $ar_I[]=array('val'=>'TDTT','tt'=>'6','noidung'=>'Sự nghiệp thể dục - thể thao');
-            $ar_I[]=array('val'=>'DBXH','tt'=>'7','noidung'=>'Sự nghiệp đảm bảo xã hội');
-            $ar_I[]=array('val'=>'KT','tt'=>'8','noidung'=>'Sự nghiệp kinh tế');
-            $ar_I[]=array('val'=>'MT','tt'=>'9','noidung'=>'Sự nghiệp môi trường');
-            $ar_I[]=array('val'=>'QLNN;DDT','tt'=>'10','noidung'=>'Quản lý nhà nước, đảng, đoàn thể');
-            $ar_I[]=array('val'=>'QLNN','tt'=>'-','noidung'=>' Quản lý NN');
-            $ar_I[]=array('val'=>'DDT','tt'=>'-','noidung'=>'Đảng, đoàn thể');
-
-            $a_It = array('luong' => 0,
-                'pckv' => 0,
-                'pccv' => 0,
-                'pctnvk' => 0,
-                'pcudn' => 0,
-                'pcth' => 0,
-                'pctn' => 0,
-                'pccovu' => 0,
-                'pcdang' => 0,
-                'pcthni' => 0,
-                'pck' => 0,
-                'tongpc' => 0,
-                'ttbh_dv' => 0,
-                'chenhlech' => 0
-            );
-
-            for($i=0;$i<count($ar_I);$i++){
-                if(isset($model_bangluong_ct)){
-                    $chitiet = $model_bangluong_ct->where('linhvuchoatdong',$ar_I[$i]['val']);
-                }
-
-                if(isset($chitiet)>0){
-                    $tongpc = 0;
-                    $ar_I[$i]['luong'] = $chitiet->sum('heso') * $luongcb;
-                    $a_It['luong'] += $ar_I[$i]['luong'];
-
-                    $ar_I[$i]['ttbh_dv'] = ($chitiet->sum('stbhxh_dv') + $chitiet->sum('stbhyt_dv')
-                        + $chitiet->sum('stkpcd_dv') + $chitiet->sum('stbhtn_dv'))* $luongcb;
-                    $a_It['ttbh_dv'] += $ar_I[$i]['ttbh_dv'];
-
-                    $ar_I[$i]['pckv'] = $chitiet->sum('pckv') * $luongcb;
-                    $tongpc += $ar_I[$i]['pckv'];
-                    $a_It['pckv'] += $ar_I[$i]['pckv'];
-
-                    $ar_I[$i]['pccv'] = $chitiet->sum('pccv') * $luongcb;
-                    $tongpc += $ar_I[$i]['pccv'];
-                    $a_It['pccv'] += $ar_I[$i]['pccv'];
-
-                    $ar_I[$i]['pctnvk'] = $chitiet->sum('pctnvk') * $luongcb;
-                    $tongpc += $ar_I[$i]['pctnvk'];
-                    $a_It['pctnvk'] += $ar_I[$i]['pctnvk'];
-
-                    $ar_I[$i]['pcudn'] = $chitiet->sum('pcudn') * $luongcb;
-                    $tongpc += $ar_I[$i]['pcudn'];
-                    $a_It['pcudn'] += $ar_I[$i]['pcudn'];
-
-                    $ar_I[$i]['pcth'] = $chitiet->sum('pcth') * $luongcb;
-                    $tongpc += $ar_I[$i]['pcth'];
-                    $a_It['pcth'] += $ar_I[$i]['pcth'];
-
-                    $ar_I[$i]['pctn'] = $chitiet->sum('pctn') * $luongcb;
-                    $tongpc += $ar_I[$i]['pctn'];
-                    $a_It['pctn'] += $ar_I[$i]['pctn'];
-
-                    $ar_I[$i]['pccovu'] = $chitiet->sum('pccovu') * $luongcb;
-                    $tongpc += $ar_I[$i]['pccovu'];
-                    $a_It['pccovu'] += $ar_I[$i]['pccovu'];
-
-                    $ar_I[$i]['pcdang'] = $chitiet->sum('pcdang') * $luongcb;
-                    $tongpc += $ar_I[$i]['pcdang'];
-                    $a_It['pcdang'] += $ar_I[$i]['pcdang'];
-
-                    $ar_I[$i]['pcthni'] = $chitiet->sum('pcthni') * $luongcb;
-                    $tongpc += $ar_I[$i]['pcthni'];
-                    $a_It['pcthni'] += $ar_I[$i]['pcthni'];
-
-                    $ar_I[$i]['pck'] = $chitiet->sum('pck') * $luongcb;
-                    $tongpc += $ar_I[$i]['pck'];
-                    $a_It['pck'] += $ar_I[$i]['pck'];
-
-                    $ar_I[$i]['tongpc'] = $tongpc;
-                    $a_It['tongpc'] += $ar_I[$i]['tongpc'];
-                    $ar_I[$i]['chenhlech'] = round(($tongpc +$ar_I[$i]['ttbh_dv'] +$ar_I[$i]['luong'])*0.065);
-                    $a_It['chenhlech'] += $ar_I[$i]['chenhlech'];
-
-                }else{
-                    $ar_I[$i]['luong'] = 0;
-                    $ar_I[$i]['pckv'] = 0;
-                    $ar_I[$i]['pccv'] = 0;
-                    $ar_I[$i]['pctnvk'] = 0;
-                    $ar_I[$i]['pcudn'] = 0;
-                    $ar_I[$i]['pcth'] = 0;
-                    $ar_I[$i]['pctn'] = 0;
-                    $ar_I[$i]['pccovu'] = 0;
-                    $ar_I[$i]['pcdang'] = 0;
-                    $ar_I[$i]['pcthni'] = 0;
-                    $ar_I[$i]['pck'] = 0;
-                    $ar_I[$i]['tongpc'] = 0;
-                    $ar_I[$i]['ttbh_dv'] = 0;
-                    $ar_I[$i]['chenhlech'] = 0;
-                }
-            }
-            //dd($ar_I);
-
-            $ar_II = array();
-            if(session('admin')->maphanloai == 'KVXP' && isset($model_bangluong_ct)){
-                $tongpc = 0;
-                $ar_II['luong'] = $model_bangluong_ct->sum('heso') * $luongcb;
-                $ar_II['ttbh_dv'] = round(($model_bangluong_ct->sum('ttbh_dv')) * $luongcb);
-
-                $ar_II['pckv'] = $model_bangluong_ct->sum('pckv') * $luongcb;
-                $tongpc += $ar_II['pckv'];
-                $ar_II['pccv'] = $model_bangluong_ct->sum('pccv') * $luongcb;
-                $tongpc += $ar_II['pckv'];
-                $ar_II['pctnvk'] = $model_bangluong_ct->sum('pctnvk') * $luongcb;
-                $tongpc += $ar_II['pctnvk'];
-                $ar_II['pcudn'] = $model_bangluong_ct->sum('pcudn') * $luongcb;
-                $tongpc += $ar_II['pcudn'];
-                $ar_II['pcth'] = $model_bangluong_ct->sum('pcth') * $luongcb;
-                $tongpc += $ar_II['pcth'];
-                $ar_II['pctn'] = $model_bangluong_ct->sum('pctn') * $luongcb;
-                $tongpc += $ar_II['pctn'];
-                $ar_II['pccovu'] = $model_bangluong_ct->sum('pccovu') * $luongcb;
-                $tongpc += $ar_II['pccovu'];
-                $ar_II['pcdang'] = $model_bangluong_ct->sum('pcdang') * $luongcb;
-                $tongpc += $ar_II['pcdang'];
-                $ar_II['pcthni'] = $model_bangluong_ct->sum('pcthni') * $luongcb;
-                $tongpc += $ar_II['pcthni'];
-                $ar_II['pck'] = $model_bangluong_ct->sum('pck') * $luongcb;
-                $tongpc += $ar_II['pck'];
-                $ar_II['tongpc'] = $tongpc;
-
-                $ar_II['chenhlech'] = round(($tongpc +$ar_II['ttbh_dv'] +$ar_II['luong'])*0.065);
-
-            }else{
-                $ar_II['luong'] = 0;
-                $ar_II['pckv'] = 0;
-                $ar_II['pccv'] = 0;
-                $ar_II['pctnvk'] = 0;
-                $ar_II['pcudn'] = 0;
-                $ar_II['pcth'] = 0;
-                $ar_II['pctn'] = 0;
-                $ar_II['pccovu'] = 0;
-                $ar_II['pcdang'] = 0;
-                $ar_II['pcthni'] = 0;
-                $ar_II['pck'] = 0;
-                $ar_II['tongpc'] = 0;
-                $ar_II['ttbh_dv'] = 0;
-                $ar_II['chenhlech'] = 0;
-            }
-            //dd($ar_II);
-
-            //căn cứ vào cấp dự toán để xác định đơn vị cấp xã, huyện, tỉnh
-            //chỉ có cột tổng cộng
-            $ar_III = array();
-            $ar_III[]=array('val'=>'T','tt'=>'-','noidung'=>'Cấp tỉnh','tongso'=>'0','chenhlech'=>'0');
-            $ar_III[]=array('val'=>'H','tt'=>'-','noidung'=>'Cấp huyện','tongso'=>'0','chenhlech'=>'0');
-            $ar_III[]=array('val'=>'X','tt'=>'-','noidung'=>'Cấp xã','tongso'=>'0','chenhlech'=>'0');
-
-            $ar_IV = array();
-            $ar_IV[]=array('val'=>'T','tt'=>'-','noidung'=>'Ủy viên cấp tỉnh','tongso'=>'0','chenhlech'=>'0');
-            $ar_IV[]=array('val'=>'H','tt'=>'-','noidung'=>'Ủy viên cấp huyện','tongso'=>'0','chenhlech'=>'0');
-            $ar_IV[]=array('val'=>'X','tt'=>'-','noidung'=>'Ủy viên cấp xã','tongso'=>'0','chenhlech'=>'0');
-            //hỏi chi tiết xem đơn vi cấp xã có pai là dự toán cấp 3,4
-            //huyên cấp ??
-            //tỉnh cấp ??
-
-            $a_IIIt = array('tongso'=>0,'chenhlech'=>0);
-            $a_IVt = array('tongso'=>0,'chenhlech'=>0);
-            if(session('admin')->level=='T'){
-                if($m_dv->capdonvi >= 3){
-                    if(isset($model_bangluong_ct)){
-                        $ar_III[2]['tongso'] = $model_bangluong_ct->sum('pcdbqh') * $luongcb;
-                        $ar_III[2]['chenhlech'] = $model_bangluong_ct->sum('pcdbqh') * 0.065;
-                        $ar_IV[2]['tongso'] = $model_bangluong_ct->sum('pcvk') * $luongcb;
-                        $ar_IV[2]['chenhlech'] = $model_bangluong_ct->sum('pcvk') * 0.065;
-                    }
-
-                    $a_IIIt['tongso'] += $ar_III[2]['tongso'];
-                    $a_IIIt['chenhlech'] += $ar_III[2]['chenhlech'];
-                    $a_IVt['tongso'] += $ar_IV[2]['tongso'];
-                    $a_IVt['chenhlech'] += $ar_IV[2]['chenhlech'];
-                }else{
-                    if(isset($model_bangluong_ct)){
-                        $ar_III[1]['tongso'] = $model_bangluong_ct->sum('pcdbqh') * $luongcb;
-                        $ar_III[1]['chenhlech'] = $model_bangluong_ct->sum('pcdbqh') * 0.065;
-                        $ar_IV[1]['tongso'] = $model_bangluong_ct->sum('pcvk') * $luongcb;
-                        $ar_IV[1]['chenhlech'] = $model_bangluong_ct->sum('pcvk') * 0.065;
-                    }
-
-                    $a_IIIt['tongso'] += $ar_III[1]['tongso'];
-                    $a_IIIt['chenhlech'] += $ar_III[1]['chenhlech'];
-                    $a_IVt['tongso'] += $ar_IV[1]['tongso'];
-                    $a_IVt['chenhlech'] += $ar_IV[1]['chenhlech'];
-                }
-            }else{
-                if($m_dv->capdonvi >= 3){
-                    if(isset($model_bangluong_ct)){
-                        $ar_III[1]['tongso'] = $model_bangluong_ct->sum('pcdbqh') * $luongcb;
-                        $ar_III[1]['chenhlech'] = $model_bangluong_ct->sum('pcdbqh') * 0.065;
-
-                        $ar_IV[1]['tongso'] = $model_bangluong_ct->sum('pcvk') * $luongcb;
-                        $ar_IV[1]['chenhlech'] = $model_bangluong_ct->sum('pcvk') * 0.065;
-                    }
-
-                    $a_IIIt['tongso'] += $ar_III[1]['tongso'];
-                    $a_IIIt['chenhlech'] += $ar_III[1]['chenhlech'];
-
-                    $a_IVt['tongso'] += $ar_IV[1]['tongso'];
-                    $a_IVt['chenhlech'] += $ar_IV[1]['chenhlech'];
-                }else{
-                    if(isset($model_bangluong_ct)){
-                        $ar_III[0]['tongso'] = $model_bangluong_ct->sum('pcdbqh') * $luongcb;
-                        $ar_III[0]['chenhlech'] = $model_bangluong_ct->sum('pcdbqh') * 0.065;
-
-                        $ar_IV[0]['tongso'] = $model_bangluong_ct->sum('pcvk') * $luongcb;
-                        $ar_IV[0]['chenhlech'] = $model_bangluong_ct->sum('pcvk') * 0.065;
-                    }
-
-                    $a_IIIt['tongso'] += $ar_III[0]['tongso'];
-                    $a_IIIt['chenhlech'] += $ar_III[0]['chenhlech'];
-
-                    $a_IVt['tongso'] += $ar_IV[0]['tongso'];
-                    $a_IVt['chenhlech'] += $ar_IV[0]['chenhlech'];
-                }
-            }
-
-            return view('reports.thongtu67.mau2a2_tt67')
-                ->with('furl','/tong_hop_bao_cao/')
-                ->with('ar_I',$ar_I)
-                ->with('ar_II',$ar_II)
-                ->with('ar_III',$ar_III)
-                ->with('ar_IV',$ar_IV)
-                ->with('a_It',$a_It)
-                ->with('a_IIIt',$a_IIIt)
-                ->with('a_IVt',$a_IVt)
-                ->with('m_dv',$m_dv)
-                ->with('inputs',$inputs)
-                ->with('pageTitle','Báo cáo nhu cầu kinh phí thực hiện nghị định 47/2017/NĐ-CP');
-        } else
-            return view('errors.notlogin');
-        */
-
         if (Session::has('admin')) {
             $inputs=$request->all();
             $madvbc = session('admin')->madvbc;
@@ -1936,19 +1675,41 @@ class baocaothongtu67Controller extends Controller
                 }
             }
             //dd($ar_I);
+            if(isset($inputs['excel'])){
+                Excel::create('mau2a2',function($excel) use($ar_I,$ar_II,$ar_III,$ar_IV,$a_It,$a_IIIt,$a_IVt,$m_dv,$inputs){
+                    $excel->sheet('New sheet', function($sheet) use($ar_I,$ar_II,$ar_III,$ar_IV,$a_It,$a_IIIt,$a_IVt,$m_dv,$inputs){
+                        $sheet->loadView('reports.thongtu67.mau2a2_tt68')
+                            ->with('ar_I',$ar_I)
+                            ->with('ar_II',$ar_II)
+                            ->with('ar_III',$ar_III)
+                            ->with('ar_IV',$ar_IV)
+                            ->with('a_It',$a_It)
+                            ->with('a_IIIt',$a_IIIt)
+                            ->with('a_IVt',$a_IVt)
+                            ->with('m_dv',$m_dv)
+                            ->with('inputs',$inputs)
+                            ->with('pageTitle','Mau2a2');
+                        $sheet->setAutoSize(false);
+                        $sheet->setFontFamily('Tahoma');
+                        $sheet->setFontBold(false);
+                    });
+                })->download('xls');
+            }
+            else{
+                return view('reports.thongtu67.mau2a2_tt67')
+                    ->with('furl','/tong_hop_bao_cao/')
+                    ->with('ar_I',$ar_I)
+                    ->with('ar_II',$ar_II)
+                    ->with('ar_III',$ar_III)
+                    ->with('ar_IV',$ar_IV)
+                    ->with('a_It',$a_It)
+                    ->with('a_IIIt',$a_IIIt)
+                    ->with('a_IVt',$a_IVt)
+                    ->with('m_dv',$m_dv)
+                    ->with('inputs',$inputs)
+                    ->with('pageTitle','Báo cáo nhu cầu kinh phí thực hiện nghị định 72/2018/NĐ-CP');
+            }
 
-            return view('reports.thongtu67.mau2a2_tt67')
-                ->with('furl','/tong_hop_bao_cao/')
-                ->with('ar_I',$ar_I)
-                ->with('ar_II',$ar_II)
-                ->with('ar_III',$ar_III)
-                ->with('ar_IV',$ar_IV)
-                ->with('a_It',$a_It)
-                ->with('a_IIIt',$a_IIIt)
-                ->with('a_IVt',$a_IVt)
-                ->with('m_dv',$m_dv)
-                ->with('inputs',$inputs)
-                ->with('pageTitle','Báo cáo nhu cầu kinh phí thực hiện nghị định 47/2017/NĐ-CP');
         } else
             return view('errors.notlogin');
     }
@@ -2495,11 +2256,27 @@ class baocaothongtu67Controller extends Controller
                     $chitiet = $m_hscb->where('linhvuchoatdong',$ar_I[$i]['val']);
                 }
             }
-            return view('reports.thongtu67.mau2b')
-                ->with('furl','/tong_hop_bao_cao/')
-                ->with('ar_I',$ar_I)
-                ->with('m_dv',$m_dv)
-                ->with('pageTitle','Báo cáo nhu cầu kinh phí thực hiện nghị định 47/2017/NĐ-CP');
+            if(isset($inputs['excel'])){
+                Excel::create('mau2b_tt68',function($excel) use($ar_I,$a_It,$m_dv){
+                    $excel->sheet('New sheet', function($sheet) use($ar_I,$a_It,$m_dv){
+                        $sheet->loadView('reports.thongtu67.mau2b_tt68')
+                            ->with('ar_I',$ar_I)
+                            ->with('a_It',$a_It)
+                            ->with('m_dv',$m_dv)
+                            ->with('pageTitle','mau2b_tt68');
+                        $sheet->setAutoSize(false);
+                        $sheet->setFontFamily('Tahoma');
+                        $sheet->setFontBold(false);
+                    });
+                })->download('xls');
+            }else{
+                return view('reports.thongtu67.mau2b_tt68')
+                    ->with('furl','/tong_hop_bao_cao/')
+                    ->with('ar_I',$ar_I)
+                    ->with('m_dv',$m_dv)
+                    ->with('pageTitle','Báo cáo nhu cầu kinh phí thực hiện nghị định 72/2018/NĐ-CP');
+            }
+
         } else
             return view('errors.notlogin');
     }
@@ -2765,13 +2542,30 @@ class baocaothongtu67Controller extends Controller
                     }
                 }
             }
+            if(isset($inputs['excel'])){
+                Excel::create('Mau2c_tt68',function($excel) use($ar_I,$a_It,$ar_II,$m_dv,$inputs){
+                    $excel->sheet('New sheet', function($sheet) use($ar_I,$a_It,$ar_II,$m_dv,$inputs){
+                        $sheet->loadView('reports.thongtu67.Mau2c_tt68')
+                            ->with('ar_I',$ar_I)
+                            ->with('a_It',$a_It)
+                            ->with('ar_II',$ar_II)
+                            ->with('m_dv',$m_dv)
+                            ->with('inputs',$inputs)
+                            ->with('pageTitle','Mau2c_tt68');
+                        $sheet->setAutoSize(false);
+                        $sheet->setFontFamily('Tahoma');
+                        $sheet->setFontBold(false);
+                    });
+                })->download('xls');
+            }   else{
+                return view('reports.thongtu67.Mau2c_tt68')
+                    ->with('m_dv',$m_dv)
+                    ->with('ar_I',$ar_I)
+                    ->with('a_It',$a_It)
+                    ->with('inputs',$inputs)
+                    ->with('pageTitle','BÁO CÁO NHU CẦU KINH PHÍ THỰC HIỆN BHTN');
+            }
 
-            return view('reports.thongtu67.Mau2c_BcNCCL')
-                ->with('m_dv',$m_dv)
-                ->with('ar_I',$ar_I)
-                ->with('a_It',$a_It)
-                ->with('inputs',$inputs)
-                ->with('pageTitle','BÁO CÁO NHU CẦU CHÊNH LỆCH');
         } else
             return view('errors.notlogin');
     }
@@ -3144,13 +2938,29 @@ class baocaothongtu67Controller extends Controller
                 }
             }
             //dd($ar_I);
+            if(isset($inputs['excel'])) {
+                Excel::create('Mau2d_tt68', function ($excel) use ($ar_I, $a_It, $m_dv, $inputs) {
+                    $excel->sheet('New sheet', function ($sheet) use ($ar_I, $a_It, $m_dv, $inputs) {
+                        $sheet->loadView('reports.thongtu67.Mau2d_tt68')
+                            ->with('ar_I', $ar_I)
+                            ->with('a_It', $a_It)
+                            ->with('m_dv', $m_dv)
+                            ->with('inputs', $inputs)
+                            ->with('pageTitle', 'Mau2d_tt68');
+                        $sheet->setAutoSize(false);
+                        $sheet->setFontFamily('Tahoma');
+                        $sheet->setFontBold(false);
+                    });
+                })->download('xls');
+            }else{
+                return view('reports.thongtu67.Mau2d_tt68')
+                    ->with('m_dv',$m_dv)
+                    ->with('ar_I',$ar_I)
+                    ->with('a_It',$a_It)
+                    ->with('inputs',$inputs)
+                    ->with('pageTitle','TỔNG HỢP KINH PHÍ TĂNG THÊM ĐỂ THỰC HIỆN CHẾ ĐỘ PHỤ CẤP ĐỐI VỚI CÁN BỘ KHÔNG CHUYÊN TRÁCH');
+            }
 
-            return view('reports.thongtu67.Mau2d_ThKPTT')
-                ->with('m_dv',$m_dv)
-                ->with('ar_I',$ar_I)
-                ->with('a_It',$a_It)
-                ->with('inputs',$inputs)
-                ->with('pageTitle','TỔNG HỢP KINH PHÍ TĂNG THÊM ĐỂ THỰC HIỆN CHẾ ĐỘ PHỤ CẤP ĐỐI VỚI CÁN BỘ KHÔNG CHUYÊN TRÁCH');
         } else
             return view('errors.notlogin');
     }
@@ -3273,26 +3083,66 @@ class baocaothongtu67Controller extends Controller
             return view('errors.notlogin');
     }
 
-    function mau2e_tt67(Request $request) {
-        if (Session::has('admin')  ) {
-            $inputs=$request->all();
-            $madvbc = session('admin')->madvbc;
-            $m_dv = dmdonvi::where('madv',session('admin')->madv)->first();
-            $m_dsh = dmdonvibaocao::where('level','H')->distinct()->get();
-            $m_xa = dmdiabandbkk::join('dmdonvi','dmdonvi.madv', '=', 'dmdiabandbkk.madv')
-                ->join('dmdonvibaocao','dmdonvibaocao.madvbc','=','dmdonvi.madvbc')->get();
-            $ar_h = array();
-            $tt = 0;
-            foreach ($m_dsh as $h) {
-                for ($i = 0; $i < count($m_dsh); $i++) {
-                    $tt++;
-                    $ar_h[$i]['tt'] = $tt;
-                    $ar_h[$i]['noidung'] = $h['tendvbc'];
-                }
+    function mau2đ_tt67(Request $request) {
+        if (Session::has('admin')) {
+            $inputs = $request->all();
+            $ar_I = array();
+            $ar_I[]=array('val'=>'QLNN','tt'=>'I','noidung'=>'Quản lý nhà nước');
+            $ar_I[]=array('val'=>'SNCL','tt'=>'II','noidung'=>'Sự nghiệp công lập');
+            $ar_I[]=array('val'=>'CTXDT','tt'=>'1','noidung'=>'Đơn vị đảm bảo chi thường xuyên và chi đầu tư (2)');
+            $ar_I[]=array('val'=>'CTX','tt'=>'2','noidung'=>'Đơn vị đảm bảo chi thường xuyên (2)');
+            $ar_I[]=array('val'=>'MPCTX','tt'=>'3','noidung'=>'Đơn vị đảm bảo một phần chi thường xuyên');
+            $ar_I[]=array('val'=>'NNCTX','tt'=>'4','noidung'=>'Đơn vị được nhà nước đảm bảo chi thường xuyên');
+            if(isset($inputs['excel'])){
+                Excel::create('Mau2đ_tt68',function($excel) use($ar_I,$inputs){
+                    $excel->sheet('New sheet', function($sheet) use($ar_I,$inputs){
+                        $sheet->loadView('reports.thongtu67.Mau2đ_tt68')
+                            ->with('ar_I',$ar_I)
+                            ->with('inputs',$inputs)
+                            ->with('pageTitle','Mau2đ_tt68');
+                        $sheet->setAutoSize(false);
+                        $sheet->setFontFamily('Tahoma');
+                        $sheet->setFontBold(false);
+                    });
+                })->download('xls');
             }
-            //dd($ar_h);
-            return view('reports.thongtu67.Mau2e_ThKPTG')
-                ->with('pageTitle','TỔNG HỢP KINH PHÍ TĂNG, GIẢM DO ĐIỀU CHỈNH ĐỊA BÀN VÙNG KINH TẾ XÃ HỘI ĐẶC BIỆT KHÓ KHĂN');
+            else{
+                return view('reports.thongtu67.Mau2đ_tt68')
+                    ->with('inputs',$inputs)
+                    ->with('ar_I',$ar_I)
+                    ->with('pageTitle','TỔNG HỢP PHỤ CẤP ƯU ĐÃI TĂNG, GIẢM DO ĐIỀU CHỈNH ĐỊA BÀN VÙNG KINH TẾ XÃ HỘI ĐẶC BIỆT KHÓ KHĂN');
+            }
+        } else
+            return view('errors.notlogin');
+    }
+
+    function mau2e_tt67(Request $request) {
+        if (Session::has('admin')) {
+            $inputs = $request->all();
+            $ar_I = array();
+            $ar_I[]=array('val'=>'CTXDT','tt'=>'1','noidung'=>'Đơn vị đảm bảo chi thường xuyên và chi đầu tư');
+            $ar_I[]=array('val'=>'CTX','tt'=>'2','noidung'=>'Đơn vị đảm bảo chi thường xuyên');
+            $ar_I[]=array('val'=>'MPCTX','tt'=>'3','noidung'=>'Đơn vị đảm bảo một phần chi thường xuyên');
+            $ar_I[]=array('val'=>'NNCTX','tt'=>'4','noidung'=>'Đơn vị được nhà nước đảm bảo chi thường xuyên');
+            if(isset($inputs['excel'])){
+                Excel::create('Mau2e_tt68',function($excel) use($ar_I,$inputs){
+                    $excel->sheet('New sheet', function($sheet) use($ar_I,$inputs){
+                        $sheet->loadView('reports.thongtu67.Mau2e_tt68')
+                            ->with('ar_I',$ar_I)
+                            ->with('inputs',$inputs)
+                            ->with('pageTitle','Mau2e_tt68');
+                        $sheet->setAutoSize(false);
+                        $sheet->setFontFamily('Tahoma');
+                        $sheet->setFontBold(false);
+                    });
+                })->download('xls');
+            }
+            else {
+                return view('reports.thongtu67.Mau2e_tt68')
+                    ->with('inputs', $inputs)
+                    ->with('ar_I', $ar_I)
+                    ->with('pageTitle', 'Báo cáo nguồn thực hiện CCTL tiết kiệm từ việc thay đổi cơ chế tự chủ');
+            }
         } else
             return view('errors.notlogin');
     }
@@ -3328,10 +3178,40 @@ class baocaothongtu67Controller extends Controller
             return view('errors.notlogin');
     }
 
-    function mau2g_tt67() {
+    function mau2g_tt67(Request $request) {
         if (Session::has('admin')) {
-            return view('reports.thongtu67.Mau2g_ThPCUDTG')
-                ->with('pageTitle','TỔNG HỢP PHỤ CẤP ƯU ĐÃI TĂNG, GIẢM DO ĐIỀU CHỈNH ĐỊA BÀN VÙNG KINH TẾ XÃ HỘI ĐẶC BIỆT KHÓ KHĂN');
+            $inputs = $request->all();
+            $ar_I[0] = array('val' => 'GD;DT', 'tt' => '1', 'noidung' => 'Sự nghiệp giáo dục - đào tạo');
+            $ar_I[1] = array('val' => 'GD', 'tt' => '', 'noidung' => '- Giáo dục');
+            $ar_I[2] = array('val' => 'DT', 'tt' => '', 'noidung' => '- Đào tạo');
+            $ar_I[3] = array('val' => 'YTE', 'tt' => '2', 'noidung' => 'Sự nghiệp y tế');
+            $ar_I[4] = array('val' => 'KHCN', 'tt' => '3', 'noidung' => 'Sự nghiệp khoa học-công nghệ');
+            $ar_I[5] = array('val' => 'VHTT', 'tt' => '4', 'noidung' => 'Sự nghiệp văn hóa thông tin');
+            $ar_I[6] = array('val' => 'PTTH', 'tt' => '5', 'noidung' => 'Sự nghiệp phát thanh truyền hình');
+            $ar_I[7] = array('val' => 'TDTT', 'tt' => '6', 'noidung' => 'Sự nghiệp thể dục - thể thao');
+            $ar_I[8] = array('val' => 'DBXH', 'tt' => '7', 'noidung' => 'Sự nghiệp đảm bảo xã hội');
+            $ar_I[9] = array('val' => 'KT', 'tt' => '8', 'noidung' => 'Sự nghiệp kinh tế');
+            $ar_I[10] = array('val' => 'MT', 'tt' => '9', 'noidung' => 'Sự nghiệp môi trường');
+            $ar_I[11] = array('val' => 'QLNN;DDT', 'tt' => '10', 'noidung' => 'Quản lý nhà nước, đảng, đoàn thể');
+            if(isset($inputs['excel'])){
+                Excel::create('Mau2g_tt68',function($excel) use($ar_I,$inputs){
+                    $excel->sheet('New sheet', function($sheet) use($ar_I,$inputs){
+                        $sheet->loadView('reports.thongtu67.Mau2g_tt68')
+                            ->with('ar_I',$ar_I)
+                            ->with('inputs',$inputs)
+                            ->with('pageTitle','Mau2g_tt68');
+                        $sheet->setAutoSize(false);
+                        $sheet->setFontFamily('Tahoma');
+                        $sheet->setFontBold(false);
+                    });
+                })->download('xls');
+            }
+            else {
+                return view('reports.thongtu67.Mau2g_tt68')
+                    ->with('ar_I', $ar_I)
+                    ->with('inputs', $inputs)
+                    ->with('pageTitle', 'BÁO CÁO QUỸ TIỀN LƯƠNG, PHỤ CẤP ĐỐI VỚI LAO ĐỘNG THEO HỢP ĐỒNG KHU VỰC HÀNH CHÍNH VÀ ĐƠN VỊ SỰ NGHIỆP');
+            }
         } else
             return view('errors.notlogin');
     }
@@ -3413,35 +3293,40 @@ class baocaothongtu67Controller extends Controller
             $m_dv = dmdonvi::where('madv',session('admin')->madv)->first();
 
             $a_A = array();
-            $a_A[0] = array('tt'=>'1','noidung'=>'50% tăng thu NSĐP (không kể tăng thu tiền sử dụng đất) thực hiện 2016 so dự toán Thủ tướng Chính phủ giao năm 2016','sotien'=>'0');
-            $a_A[1] = array('tt'=>'2','noidung'=>'Số tiết kiệm 10% chi thường xuyên dự toán năm 2017','sotien'=>'0');
-            $a_A[2] = array('tt'=>'3','noidung'=>'Số thu được huy động từ nguồn để lại đơn vị năm 2017','sotien'=>'0');
-            $a_A[3] = array('tt'=>'a','noidung'=>'Nguồn huy động từ các đơn vị tự đảm bảo','sotien'=>'0');
-            $a_A[4] = array('tt'=>'+','noidung'=>'Học phí','sotien'=>'0');
-            $a_A[5] = array('tt'=>'+','noidung'=>'Viện phí','sotien'=>'0');
-            $a_A[6] = array('tt'=>'+','noidung'=>'Nguồn thu khác','sotien'=>'0');
-            $a_A[7] = array('tt'=>'b','noidung'=>'Nguồn huy động từ các đơn vị chưa tự đảm bảo','sotien'=>'0');
-            $a_A[8] = array('tt'=>'+','noidung'=>'Học phí','sotien'=>'0');
-            $a_A[9] = array('tt'=>'+','noidung'=>'Viện phí','sotien'=>'0');
-            $a_A[10] = array('tt'=>'+','noidung'=>'Nguồn thu khác','sotien'=>'0');
-            $a_A[11] = array('tt'=>'4','noidung'=>'Nguồn thực hiện cải cách tiền lương năm 2016 chưa sử dụng hết chuyển sang 2017','sotien'=>'0');
-
-            //
-            $a_BI = array();
-            $a_BI[0] = array('tt'=>'1','noidung'=>'Quỹ tiền lương, phụ cấp tăng thêm đối với cán bộ công chức khu vực hành chính, sự nghiệp ','sotien'=>'0');
-            $a_BI[1] = array('tt'=>'','noidung'=>'Trong đó: nhu cầu tăng thêm đối với các đơn vị sự nghiệp tự đảm bảo ','sotien'=>'0');
-            $a_BI[2] = array('tt'=>'2','noidung'=>'Quỹ lương, phụ cấp tăng thêm đối với cán bộ chuyên trách và công chức cấp xã','sotien'=>'0');
-            $a_BI[3] = array('tt'=>'3','noidung'=>'Hoạt động phí tăng thêm đối với đại biểu hội đồng nhân dân các cấp','sotien'=>'0');
-            $a_BI[4] = array('tt'=>'4','noidung'=>'Quỹ trợ cấp tăng thêm đối với cán bộ xã nghỉ việc hưởng trợ cấp hàng tháng theo NĐ 76/2017/NĐ-CP','sotien'=>'0');
-            $a_BI[5] = array('tt'=>'5','noidung'=>'Kinh phí tăng thêm để thực hiện chế độ đối với cán bộ không chuyên trách cấp xã, thôn và tổ dân phố','sotien'=>'0');
-            $a_BI[6] = array('tt'=>'6','noidung'=>'Kinh phí tăng thêm để thực hiện phụ cấp trách nhiệm đối với cấp ủy viên các cấp theo QĐ số 169-QĐ/TW ngày 24/6/2008','sotien'=>'0');
-            $a_BI[7] = array('tt'=>'7','noidung'=>'Kinh phí tăng thêm thực hiện chế độ bồi dưỡng phục vụ hoạt động cấp ủy thuộc cấp tỉnh theo Quy định 3115-QĐ/VVPTW','sotien'=>'0');
+            $a_A[0] = array('tt'=>'1','noidung'=>'50% tăng thu NSĐP (không kể tăng thu tiền sử dụng đất) thực hiện 2017 so dự toán Thủ tướng Chính phủ giao năm 2017','sotien'=>'0');
+            $a_A[1] = array('tt'=>'2','noidung'=>'50% tăng thu NSĐP (không kể tăng thu tiền sử dụng đất) thực hiện 2018 so dự toán 2017 Thủ tướng Chính phủ giao','sotien'=>'0');
+            $a_A[2] = array('tt'=>'3','noidung'=>'Số tiết kiệm 10% chi thường xuyên dự toán năm 2017','sotien'=>'0');
+            $a_A[3] = array('tt'=>'4','noidung'=>'Số tiết kiệm 10% chi thường xuyên dự toán tăng thêm năm 2018','sotien'=>'0');
+            $a_A[4] = array('tt'=>'5','noidung'=>'Số thu được huy động từ nguồn để lại đơn vị năm 2018:','sotien'=>'0');
+            $a_A[5] = array('tt'=>'a','noidung'=>'Nguồn huy động từ các đơn vị tự đảm bảo(1):','sotien'=>'0');
+            $a_A[6] = array('tt'=>'','noidung'=>'+ Học phí','sotien'=>'0');
+            $a_A[7] = array('tt'=>'','noidung'=>'+ Viện phí','sotien'=>'0');
+            $a_A[8] = array('tt'=>'','noidung'=>'+ Nguồn thu khác','sotien'=>'0');
+            $a_A[9] = array('tt'=>'b','noidung'=>'Nguồn huy động từ các đơn vị chưa tự đảm bảo chi thường xuyên:','sotien'=>'0');
+            $a_A[10] = array('tt'=>'','noidung'=>'+ Học phí','sotien'=>'0');
+            $a_A[11] = array('tt'=>'','noidung'=>'+ Viện phí','sotien'=>'0');
+            $a_A[12] = array('tt'=>'','noidung'=>'+ Nguồn thu khác','sotien'=>'0');
+            $a_A[13] = array('tt'=>'6','noidung'=>'Nguồn tiết kiệm chi gắn với thực hiện các giải pháp sắp xếp tổ chức bộ máy, tinh giản biên chế, đổi mới hoạt động đơn vị sự nghiệp công lập theo Nghị quyết số 18, 19 (nếu có)','sotien'=>'0');
+            $a_A[14] = array('tt'=>'','noidung'=>'+ Từ việc tinh giản biên chế tổ chức lại bộ máy (2)','sotien'=>'0');
+            $a_A[15] = array('tt'=>'','noidung'=>'+ Từ việc sát nhập các đầu mối, cơ quan, đơn vị (2)','sotien'=>'0');
+            $a_A[16] = array('tt'=>'','noidung'=>'+ Từ việc thay đổi cơ chế tự chủ của đơn vị sư nghiệp (3)','sotien'=>'0');
+            $a_A[17] = array('tt'=>'','noidung'=>'+ Từ việc sát nhập các xã không đủ điều kiện tiêu chuẩn','sotien'=>'0');
+            $a_A[18] = array('tt'=>'7','noidung'=>'Nguồn thực hiện cải cách tiền lương năm 2017 chưa sử dụng hết chuyển sang năm 2018','sotien'=>'0');
 
             $a_BII = array();
-            $a_BII[0] = array('tt'=>'1','noidung'=>'Kinh phí hỗ trợ chênh lệch tiền lương cho người có thu nhập thấp (NĐ17/2015/NĐ-CP) và mức lương 1,21 (6 tháng)','sotien'=>'0');
-            $a_BII[1] = array('tt'=>'2','noidung'=>'Kinh phí tăng, giảm do điều chỉnh địa bàn vùng KTXH ĐBKK năm 2017 theo Quyết định số 131/QĐ-TTg và Quyết định số 582/QĐ-TTg của Thủ tướng Chính phủ','sotien'=>'0');
-            $a_BII[2] = array('tt'=>'3','noidung'=>'Nhu cầu kinh phí thực hiện chính sách tinh giản biên chế năm 2017 theo NĐ số 108/2014/NĐ-CP ngày 20/11/2014 (Đối tượng đã được Bộ Nội vụ thẩm định)','sotien'=>'0');
-            $a_BII[3] = array('tt'=>'4','noidung'=>'Nhu cầu kinh phí thực hiện chính sách nghỉ hưu trước tuổi năm 2017 theo NĐ số 26/2014/NĐ-CP ngày 09/3/2015','sotien'=>'0');
+            $a_BII[0] = array('tt'=>'1','noidung'=>'Quỹ tiền lương, phụ cấp tăng thêm đối với cán bộ công chức khu vực hành chính, sự nghiệp ','sotien'=>'0');
+            $a_BII[1] = array('tt'=>'','noidung'=>'Trong đó: nhu cầu tăng thêm đối với các đơn vị sự nghiệp tự đảm bảo (5)','sotien'=>'0');
+            $a_BII[2] = array('tt'=>'2','noidung'=>'Quỹ lương, phụ cấp tăng thêm đối với cán bộ chuyên trách và công chức cấp xã','sotien'=>'0');
+            $a_BII[3] = array('tt'=>'3','noidung'=>'Hoạt động phí tăng thêm đối với đại biểu hội đồng nhân dân các cấp','sotien'=>'0');
+            $a_BII[4] = array('tt'=>'4','noidung'=>'Quỹ trợ cấp tăng thêm đối với cán bộ xã nghỉ việc hưởng trợ cấp hàng tháng theo NĐ 88/2018/NĐ-CP','sotien'=>'0');
+            $a_BII[5] = array('tt'=>'5','noidung'=>'Kinh phí tăng thêm để thực hiện chế độ đối với cán bộ không chuyên trách cấp xã, thôn và tổ dân phố','sotien'=>'0');
+            $a_BII[6] = array('tt'=>'6','noidung'=>'Kinh phí tăng thêm để thực hiện phụ cấp trách nhiệm đối với cấp ủy viên các cấp theo QĐ số 169-QĐ/TW ngày 24/6/2008','sotien'=>'0');
+            $a_BII[7] = array('tt'=>'7','noidung'=>'Kinh phí tăng thêm thực hiện chế độ bồi dưỡng phục vụ hoạt động cấp ủy thuộc cấp tỉnh theo Quy định 09-QĐ/VVPTW ngày 22/9/2017','sotien'=>'0');
+
+            $a_BIII = array();
+            $a_BIII[0] = array('tt'=>'1','noidung'=>'Kinh phí tăng, giảm do điều chỉnh địa bàn vùng KTXH ĐBKK năm 2017 theo Quyết định số 131/QĐ-TTg và Quyết định số 582/QĐ-TTg của Thủ tướng Chính phủ tính đủ 12 tháng (6)','sotien'=>'0');
+            $a_BIII[1] = array('tt'=>'2','noidung'=>'Nhu cầu kinh phí thực hiện chính sách tinh giản biên chế năm 2018 theo NĐ số 108/2014/NĐ-CP ngày 20/11/2014 (Đối tượng đã được Bộ Nội vụ thẩm định)','sotien'=>'0');
+            $a_BIII[2] = array('tt'=>'3','noidung'=>'Nhu cầu kinh phí thực hiện chính sách nghỉ hưu trước tuổi năm 2018 theo NĐ số 26/2014/NĐ-CP ngày 09/3/2015','sotien'=>'0');
 
             //Tính toán
             $a_A[1]['sotien'] = $model->sum('tietkiem');
@@ -3459,36 +3344,53 @@ class baocaothongtu67Controller extends Controller
 
             $model_xp = $model->where('maphanloai','KVXP');
 
-            $a_BI[1]['sotien'] = $model_tudb->sum('luongphucap');
-            $a_BI[2]['sotien'] = $model_xp->sum('luongphucap');
-            $a_BI[0]['sotien'] = $model->sum('luongphucap') - $model_xp->sum('luongphucap');
+            $a_BII[1]['sotien'] = $model_tudb->sum('luongphucap');
+            $a_BII[2]['sotien'] = $model_xp->sum('luongphucap');
+            $a_BII[0]['sotien'] = $model->sum('luongphucap') - $model_xp->sum('luongphucap');
 
-            $a_BI[3]['sotien'] = $model->sum('daibieuhdnd');
-            $a_BI[4]['sotien'] = $model->sum('nghihuu');
-            $a_BI[5]['sotien'] = $model->sum('canbokct');
-            $a_BI[6]['sotien'] = $model->sum('uyvien');
-            $a_BI[7]['sotien'] = $model->sum('boiduong');
+            $a_BII[3]['sotien'] = $model->sum('daibieuhdnd');
+            $a_BII[4]['sotien'] = $model->sum('nghihuu');
+            $a_BII[5]['sotien'] = $model->sum('canbokct');
+            $a_BII[6]['sotien'] = $model->sum('uyvien');
+            $a_BII[7]['sotien'] = $model->sum('boiduong');
 
-            $a_BII[0]['sotien'] = $model->sum('thunhapthap');
-            $a_BII[1]['sotien'] = $model->sum('diaban');
-            $a_BII[2]['sotien'] = $model->sum('tinhgiam');
-            $a_BII[3]['sotien'] = $model->sum('nghihuusom');
+            $a_BIII[0]['sotien'] = $model->sum('thunhapthap');
+            $a_BIII[1]['sotien'] = $model->sum('diaban');
+            $a_BIII[2]['sotien'] = $model->sum('tinhgiam');
 
             $a_TC = array(
                 'A'=>($a_A[0]['sotien'] + $a_A[1]['sotien'] +$a_A[2]['sotien'] + $a_A[11]['sotien']),
-                'BI'=>(array_sum(array_column($a_BI,'sotien')) - $a_BI[1]['sotien']),
-                'BII'=>(array_sum(array_column($a_BII,'sotien')))
+                'BII'=>(array_sum(array_column($a_BII,'sotien')) - $a_BII[1]['sotien']),
+                'BIII'=>(array_sum(array_column($a_BIII,'sotien')))
             );
-
-            return view('reports.thongtu67.mau4a')
+            if(isset($inputs['excel'])){
+                Excel::create('mau4a_tt68',function($excel) use($model,$a_A,$a_BII,$a_BIII,$a_TC,$m_dv,$inputs){
+                    $excel->sheet('New sheet', function($sheet) use($model,$a_A,$a_BII,$a_BIII,$a_TC,$m_dv,$inputs){
+                        $sheet->loadView('reports.thongtu67.mau4a_tt68')
+                            ->with('model',$model)
+                            ->with('a_A',$a_A)
+                            ->with('a_BII',$a_BII)
+                            ->with('a_BIII',$a_BIII)
+                            ->with('a_TC',$a_TC)
+                            ->with('m_dv',$m_dv)
+                            ->with('inputs',$inputs)
+                            ->with('pageTitle','mau4a_tt68');
+                        $sheet->setAutoSize(false);
+                        $sheet->setFontFamily('Tahoma');
+                        $sheet->setFontBold(false);
+                    });
+                })->download('xls');
+            }else{
+            return view('reports.thongtu67.mau4a_tt68')
                 ->with('model',$model)
                 ->with('a_A',$a_A)
-                ->with('a_BI',$a_BI)
                 ->with('a_BII',$a_BII)
+                ->with('a_BIII',$a_BIII)
                 ->with('a_TC',$a_TC)
                 ->with('m_dv',$m_dv)
                 ->with('inputs',$inputs)
                 ->with('pageTitle','Danh sách nguồn kinh phí của đơn vị');
+            }
         } else
             return view('errors.notlogin');
     }
@@ -3674,6 +3576,7 @@ class baocaothongtu67Controller extends Controller
                     $data[$i]['tietkiem'] = 0;
                     $data[$i]['hocphi'] = 0;
                     $data[$i]['vienphi'] = 0;
+                    $data[$i]['khac'] = 0;
                     $data[$i]['nguonthu'] = 0;
                     $dulieu = $model->where('linhvuchoatdong', $group[$j]['val']);
                     if (isset($dulieu) && count($dulieu) > 0) {
@@ -3693,6 +3596,7 @@ class baocaothongtu67Controller extends Controller
                                 $data[$i]['tietkiem'] = $solieu->sum('tietkiem');
                                 $data[$i]['hocphi'] = $solieu->sum('hocphi');
                                 $data[$i]['vienphi'] = $solieu->sum('vienphi');
+                                $data[$i]['khac'] = 0;
                                 $data[$i]['nguonthu'] = $solieu->sum('nguonthu');
 
                                 $data[$luugr]['nhucau'] += $solieu->sum('nhucau');
@@ -3700,6 +3604,7 @@ class baocaothongtu67Controller extends Controller
                                 $data[$luugr]['tietkiem'] += $solieu->sum('tietkiem');
                                 $data[$luugr]['hocphi'] += $solieu->sum('hocphi');
                                 $data[$luugr]['vienphi'] += $solieu->sum('vienphi');
+                                $data[$luugr]['khac'] += 0;
                                 $data[$luugr]['nguonthu'] += $solieu->sum('nguonthu');
                             }
                         }
@@ -3711,6 +3616,7 @@ class baocaothongtu67Controller extends Controller
                 $data[$gddt]['tietkiem'] = $data[$giaoduc]['tietkiem'] + $data[$daotao]['tietkiem'];
                 $data[$gddt]['hocphi'] = $data[$giaoduc]['hocphi'] + $data[$daotao]['hocphi'];
                 $data[$gddt]['vienphi'] = $data[$giaoduc]['vienphi'] + $data[$daotao]['vienphi'];
+                $data[$gddt]['khac'] = 0;
                 $data[$gddt]['nguonthu'] = $data[$giaoduc]['nguonthu'] + $data[$daotao]['nguonthu'];
 
                 /*
@@ -3737,6 +3643,7 @@ class baocaothongtu67Controller extends Controller
                     $data[$i]['tietkiem'] = $solieu->sum('tietkiem');
                     $data[$i]['hocphi'] = $solieu->sum('hocphi');
                     $data[$i]['vienphi'] = $solieu->sum('vienphi');
+                    $data[$i]['khac'] =0;
                     $data[$i]['nguonthu'] = $solieu->sum('nguonthu');
                 }
                 $data[0]['nhucau'] = $data[1]['nhucau'] + $data[2]['nhucau'];
@@ -3744,6 +3651,7 @@ class baocaothongtu67Controller extends Controller
                 $data[0]['tietkiem'] = $data[1]['tietkiem'] + $data[2]['tietkiem'];
                 $data[0]['hocphi'] = $data[1]['hocphi'] + $data[2]['hocphi'];
                 $data[0]['vienphi'] = $data[1]['vienphi'] + $data[2]['vienphi'];
+                $data[0]['khac'] = 0;
                 $data[0]['nguonthu'] = $data[1]['nguonthu'] + $data[2]['nguonthu'];
 
                 $data[4]['nhucau'] = $model->sum('nhucau') - $data[0]['nhucau'] - $data[5]['nhucau'] - $data[3]['nhucau'];
@@ -3751,15 +3659,31 @@ class baocaothongtu67Controller extends Controller
                 $data[4]['tietkiem'] = $model->sum('tietkiem') - $data[0]['tietkiem'] - $data[5]['tietkiem'] - $data[3]['tietkiem'];
                 $data[4]['hocphi'] = $model->sum('hocphi') - $data[0]['hocphi'] - $data[5]['hocphi'] - $data[3]['hocphi'];
                 $data[4]['vienphi'] = $model->sum('vienphi') - $data[0]['vienphi'] - $data[5]['vienphi'] - $data[3]['vienphi'];
+                $data[4]['khac'] = 0;
                 $data[4]['nguonthu'] = $model->sum('nguonthu') - $data[0]['nguonthu'] - $data[5]['nguonthu'] - $data[3]['nguonthu'];
             }
-
-            return view('reports.thongtu67.mau4b')
+            if(isset($inputs['excel'])){
+                Excel::create('mau4b_tt68',function($excel) use($model,$data,$m_dv,$inputs){
+                    $excel->sheet('New sheet', function($sheet) use($model,$data,$m_dv,$inputs){
+                        $sheet->loadView('reports.thongtu67.mau4b_tt68')
+                            ->with('model',$model)
+                            ->with('data',$data)
+                            ->with('m_dv',$m_dv)
+                            ->with('inputs',$inputs)
+                            ->with('pageTitle','mau4b_tt68');
+                        $sheet->setAutoSize(false);
+                        $sheet->setFontFamily('Tahoma');
+                        $sheet->setFontBold(false);
+                    });
+                })->download('xls');
+            }else{
+            return view('reports.thongtu67.mau4b_tt68')
                 ->with('model',$model)
                 ->with('data',$data)
                 ->with('m_dv',$m_dv)
                 ->with('inputs',$inputs)
                 ->with('pageTitle','Danh sách nguồn kinh phí của đơn vị');
+            }
         } else
             return view('errors.notlogin');
     }
@@ -3996,6 +3920,7 @@ class baocaothongtu67Controller extends Controller
                     $data[$i]['tietkiem'] = 0;
                     $data[$i]['hocphi'] = 0;
                     $data[$i]['vienphi'] = 0;
+                    $data[$i]['khac'] = 0;
                     $data[$i]['nguonthu'] = 0;
                     $data[$i]['bosung'] = 0;
                     $dulieu = $model->where('linhvuchoatdong', $group[$j]['val']);
@@ -4016,6 +3941,7 @@ class baocaothongtu67Controller extends Controller
                                 $data[$i]['tietkiem'] = $solieu->sum('tietkiem');
                                 $data[$i]['hocphi'] = $solieu->sum('hocphi');
                                 $data[$i]['vienphi'] = $solieu->sum('vienphi');
+                                $data[$i]['khac'] = 0;
                                 $data[$i]['nguonthu'] = $solieu->sum('nguonthu');
                                 $data[$i]['bosung'] = $solieu->sum('nhucau') - $solieu->sum('nguonkp');
 
@@ -4024,6 +3950,7 @@ class baocaothongtu67Controller extends Controller
                                 $data[$luugr]['tietkiem'] += $solieu->sum('tietkiem');
                                 $data[$luugr]['hocphi'] += $solieu->sum('hocphi');
                                 $data[$luugr]['vienphi'] += $solieu->sum('vienphi');
+                                $data[$luugr]['khac'] += 0;
                                 $data[$luugr]['nguonthu'] += $solieu->sum('nguonthu');
                                 $data[$luugr]['bosung'] += $solieu->sum('nhucau') - $solieu->sum('nguonkp');
                             }
@@ -4036,6 +3963,7 @@ class baocaothongtu67Controller extends Controller
                 $data[$gddt]['tietkiem'] = $data[$giaoduc]['tietkiem'] + $data[$daotao]['tietkiem'];
                 $data[$gddt]['hocphi'] = $data[$giaoduc]['hocphi'] + $data[$daotao]['hocphi'];
                 $data[$gddt]['vienphi'] = $data[$giaoduc]['vienphi'] + $data[$daotao]['vienphi'];
+                $data[$gddt]['khac'] = 0;
                 $data[$gddt]['nguonthu'] = $data[$giaoduc]['nguonthu'] + $data[$daotao]['nguonthu'];
                 $data[$gddt]['bosung'] = $data[$giaoduc]['nhucau'] + $data[$daotao]['nhucau'] - $data[$giaoduc]['nguonthu'] - $data[$daotao]['nguonthu'];
 
@@ -4063,6 +3991,7 @@ class baocaothongtu67Controller extends Controller
                     $data[$i]['tietkiem'] = $solieu->sum('tietkiem');
                     $data[$i]['hocphi'] = $solieu->sum('hocphi');
                     $data[$i]['vienphi'] = $solieu->sum('vienphi');
+                    $data[$i]['khac'] = 0;
                     $data[$i]['nguonthu'] = $solieu->sum('nguonthu');
                     $data[$i]['bosung'] = $solieu->sum('nhucau') - $solieu->sum('nguonkp');
                 }
@@ -4071,6 +4000,7 @@ class baocaothongtu67Controller extends Controller
                 $data[0]['tietkiem'] = $data[1]['tietkiem'] + $data[2]['tietkiem'];
                 $data[0]['hocphi'] = $data[1]['hocphi'] + $data[2]['hocphi'];
                 $data[0]['vienphi'] = $data[1]['vienphi'] + $data[2]['vienphi'];
+                $data[0]['khac'] = 0;
                 $data[0]['nguonthu'] = $data[1]['nguonthu'] + $data[2]['nguonthu'];
                 $data[0]['bosung'] = $data[1]['nhucau'] + $data[2]['nhucau'] - $data[1]['nguonkp'] - $data[2]['nguonkp'];
 
@@ -4079,16 +4009,32 @@ class baocaothongtu67Controller extends Controller
                 $data[4]['tietkiem'] = $model->sum('tietkiem') - $data[0]['tietkiem'] - $data[5]['tietkiem'] - $data[3]['tietkiem'];
                 $data[4]['hocphi'] = $model->sum('hocphi') - $data[0]['hocphi'] - $data[5]['hocphi'] - $data[3]['hocphi'];
                 $data[4]['vienphi'] = $model->sum('vienphi') - $data[0]['vienphi'] - $data[5]['vienphi'] - $data[3]['vienphi'];
+                $data[4]['khac'] = 0;
                 $data[4]['nguonthu'] = $model->sum('nguonthu') - $data[0]['nguonthu'] - $data[5]['nguonthu'] - $data[3]['nguonthu'];
                 $data[4]['bosung'] = $model->sum('nhucau') - $data[0]['nhucau'] - $data[5]['nhucau'] - $data[3]['nhucau'] - ($model->sum('nguonkp') - $data[0]['nguonkp'] - $data[5]['nguonkp'] - $data[3]['nguonkp']);
             }
-
-            return view('reports.thongtu67.mau4b_bosung')
-                ->with('model',$model)
-                ->with('data',$data)
-                ->with('m_dv',$m_dv)
-                ->with('inputs',$inputs)
-                ->with('pageTitle','Danh sách nguồn kinh phí của đơn vị');
+            if(isset($inpust['excel'])){
+                Excel::create('mau4b_tt68bosung',function($excel) use($model,$data,$m_dv,$inputs){
+                    $excel->sheet('New sheet', function($sheet) use($model,$data,$m_dv,$inputs){
+                        $sheet->loadView('reports.thongtu67.mau4b_tt68bosung')
+                            ->with('model',$model)
+                            ->with('data',$data)
+                            ->with('m_dv',$m_dv)
+                            ->with('inputs',$inputs)
+                            ->with('pageTitle','mau4b_tt68bosung');
+                        $sheet->setAutoSize(false);
+                        $sheet->setFontFamily('Tahoma');
+                        $sheet->setFontBold(false);
+                    });
+                })->download('xls');
+            }else {
+                return view('reports.thongtu67.mau4b_tt68bosung')
+                    ->with('model', $model)
+                    ->with('data', $data)
+                    ->with('m_dv', $m_dv)
+                    ->with('inputs', $inputs)
+                    ->with('pageTitle', 'Danh sách nguồn kinh phí của đơn vị');
+            }
         } else
             return view('errors.notlogin');
     }
@@ -4851,7 +4797,7 @@ class baocaothongtu67Controller extends Controller
             $ar_I[]=array('tt'=>'2','noidung'=>'Nguyên Phó bí thư, phó chủ tịch, Thường trực Đảng ủy, Ủy viên, Thư ký UBND Thư ký HĐND, xã đội trưởng');
             $ar_I[]=array('tt'=>'3','noidung'=>'Các chức danh còn lại');
 
-            return view('reports.thongtu67.mau2b')
+            return view('reports.thongtu67.mau2b_tt68')
                 ->with('furl','/tong_hop_bao_cao/')
                 ->with('ar_I',$ar_I)
                 ->with('m_dv',$m_dv)
@@ -5065,7 +5011,7 @@ class baocaothongtu67Controller extends Controller
                 }
             }
 
-            return view('reports.thongtu67.Mau2d_ThKPTT')
+            return view('reports.thongtu67.Mau2d_tt68')
                 ->with('m_dv', $m_dv)
                 ->with('ar_I', $ar_I)
                 ->with('a_It', $a_It)
@@ -5563,7 +5509,7 @@ class baocaothongtu67Controller extends Controller
                 }
             }
 
-            return view('reports.thongtu67.khoi.mau2a1')
+            return view('reports.thongtu67.khoi.mau2a1_tt68')
                 ->with('furl','/tong_hop_bao_cao/')
                 ->with('ar_I',$ar_I)
                 ->with('ar_II',$ar_II)
@@ -5650,7 +5596,8 @@ class baocaothongtu67Controller extends Controller
                 if(isset($model_bangluong_ct)){
                     $chitiet = $model_bangluong_ct->where('linhvuchoatdong',$ar_I[$i]['val']);
                 }
-                if(isset($chitiet)>0){
+
+                if(count($chitiet->toarray())>0){
                     $tongpc = 0;
                     $ar_I[$i]['luong'] = $chitiet->sum('heso' * $luongcb);
                     $a_It['luong'] += $ar_I[$i]['luong'];
@@ -5877,7 +5824,7 @@ class baocaothongtu67Controller extends Controller
             }
             //dd($ar_I);
 
-            return view('reports.thongtu67.khoi.mau2a2')
+            return view('reports.thongtu67.khoi.mau2a2_tt68')
                 ->with('furl','/tong_hop_bao_cao/')
                 ->with('ar_I',$ar_I)
                 ->with('ar_II',$ar_II)
@@ -6026,7 +5973,7 @@ class baocaothongtu67Controller extends Controller
             }
             //dd($ar_II);
 
-            return view('reports.thongtu67.khoi.mau2c')
+            return view('reports.thongtu67.khoi.mau2c_tt68')
                 ->with('furl','/tong_hop_bao_cao/')
                 ->with('ar_I',$ar_I)
                 ->with('ar_II',$ar_II)
@@ -6055,35 +6002,41 @@ class baocaothongtu67Controller extends Controller
             $m_dv = dmdonvi::where('madv',session('admin')->madv)->first();
 
             $a_A = array();
-            $a_A[0] = array('tt'=>'1','noidung'=>'50% tăng thu NSĐP (không kể tăng thu tiền sử dụng đất) thực hiện 2016 so dự toán Thủ tướng Chính phủ giao năm 2016','sotien'=>'0');
-            $a_A[1] = array('tt'=>'2','noidung'=>'Số tiết kiệm 10% chi thường xuyên dự toán năm 2017','sotien'=>'0');
-            $a_A[2] = array('tt'=>'3','noidung'=>'Số thu được huy động từ nguồn để lại đơn vị năm 2017','sotien'=>'0');
-            $a_A[3] = array('tt'=>'a','noidung'=>'Nguồn huy động từ các đơn vị tự đảm bảo','sotien'=>'0');
-            $a_A[4] = array('tt'=>'+','noidung'=>'Học phí','sotien'=>'0');
-            $a_A[5] = array('tt'=>'+','noidung'=>'Viện phí','sotien'=>'0');
-            $a_A[6] = array('tt'=>'+','noidung'=>'Nguồn thu khác','sotien'=>'0');
-            $a_A[7] = array('tt'=>'b','noidung'=>'Nguồn huy động từ các đơn vị chưa tự đảm bảo','sotien'=>'0');
-            $a_A[8] = array('tt'=>'+','noidung'=>'Học phí','sotien'=>'0');
-            $a_A[9] = array('tt'=>'+','noidung'=>'Viện phí','sotien'=>'0');
-            $a_A[10] = array('tt'=>'+','noidung'=>'Nguồn thu khác','sotien'=>'0');
-            $a_A[11] = array('tt'=>'4','noidung'=>'Nguồn thực hiện cải cách tiền lương năm 2016 chưa sử dụng hết chuyển sang 2017','sotien'=>'0');
+            $a_A[0] = array('tt'=>'1','noidung'=>'50% tăng thu NSĐP (không kể tăng thu tiền sử dụng đất) thực hiện 2017 so dự toán Thủ tướng Chính phủ giao năm 2017','sotien'=>'0');
+            $a_A[1] = array('tt'=>'2','noidung'=>'50% tăng thu NSĐP (không kể tăng thu tiền sử dụng đất) thực hiện 2018 so dự toán 2017 Thủ tướng Chính phủ giao','sotien'=>'0');
+            $a_A[2] = array('tt'=>'3','noidung'=>'Số tiết kiệm 10% chi thường xuyên dự toán năm 2017','sotien'=>'0');
+            $a_A[3] = array('tt'=>'4','noidung'=>'Số tiết kiệm 10% chi thường xuyên dự toán tăng thêm năm 2018','sotien'=>'0');
+            $a_A[4] = array('tt'=>'5','noidung'=>'Số thu được huy động từ nguồn để lại đơn vị năm 2018:','sotien'=>'0');
+            $a_A[5] = array('tt'=>'a','noidung'=>'Nguồn huy động từ các đơn vị tự đảm bảo(1):','sotien'=>'0');
+            $a_A[6] = array('tt'=>'','noidung'=>'+ Học phí','sotien'=>'0');
+            $a_A[7] = array('tt'=>'','noidung'=>'+ Viện phí','sotien'=>'0');
+            $a_A[8] = array('tt'=>'','noidung'=>'+ Nguồn thu khác','sotien'=>'0');
+            $a_A[9] = array('tt'=>'b','noidung'=>'Nguồn huy động từ các đơn vị chưa tự đảm bảo chi thường xuyên:','sotien'=>'0');
+            $a_A[10] = array('tt'=>'','noidung'=>'+ Học phí','sotien'=>'0');
+            $a_A[11] = array('tt'=>'','noidung'=>'+ Viện phí','sotien'=>'0');
+            $a_A[12] = array('tt'=>'','noidung'=>'+ Nguồn thu khác','sotien'=>'0');
+            $a_A[13] = array('tt'=>'6','noidung'=>'Nguồn tiết kiệm chi gắn với thực hiện các giải pháp sắp xếp tổ chức bộ máy, tinh giản biên chế, đổi mới hoạt động đơn vị sự nghiệp công lập theo Nghị quyết số 18, 19 (nếu có)','sotien'=>'0');
+            $a_A[14] = array('tt'=>'','noidung'=>'+ Từ việc tinh giản biên chế tổ chức lại bộ máy (2)','sotien'=>'0');
+            $a_A[15] = array('tt'=>'','noidung'=>'+ Từ việc sát nhập các đầu mối, cơ quan, đơn vị (2)','sotien'=>'0');
+            $a_A[16] = array('tt'=>'','noidung'=>'+ Từ việc thay đổi cơ chế tự chủ của đơn vị sư nghiệp (3)','sotien'=>'0');
+            $a_A[17] = array('tt'=>'','noidung'=>'+ Từ việc sát nhập các xã không đủ điều kiện tiêu chuẩn','sotien'=>'0');
+            $a_A[18] = array('tt'=>'7','noidung'=>'Nguồn thực hiện cải cách tiền lương năm 2017 chưa sử dụng hết chuyển sang năm 2018','sotien'=>'0');
 
             //
-            $a_BI = array();
-            $a_BI[0] = array('tt'=>'1','noidung'=>'Quỹ tiền lương, phụ cấp tăng thêm đối với cán bộ công chức khu vực hành chính, sự nghiệp ','sotien'=>'0');
-            $a_BI[1] = array('tt'=>'','noidung'=>'Trong đó: nhu cầu tăng thêm đối với các đơn vị sự nghiệp tự đảm bảo ','sotien'=>'0');
-            $a_BI[2] = array('tt'=>'2','noidung'=>'Quỹ lương, phụ cấp tăng thêm đối với cán bộ chuyên trách và công chức cấp xã','sotien'=>'0');
-            $a_BI[3] = array('tt'=>'3','noidung'=>'Hoạt động phí tăng thêm đối với đại biểu hội đồng nhân dân các cấp','sotien'=>'0');
-            $a_BI[4] = array('tt'=>'4','noidung'=>'Quỹ trợ cấp tăng thêm đối với cán bộ xã nghỉ việc hưởng trợ cấp hàng tháng theo NĐ 76/2017/NĐ-CP','sotien'=>'0');
-            $a_BI[5] = array('tt'=>'5','noidung'=>'Kinh phí tăng thêm để thực hiện chế độ đối với cán bộ không chuyên trách cấp xã, thôn và tổ dân phố','sotien'=>'0');
-            $a_BI[6] = array('tt'=>'6','noidung'=>'Kinh phí tăng thêm để thực hiện phụ cấp trách nhiệm đối với cấp ủy viên các cấp theo QĐ số 169-QĐ/TW ngày 24/6/2008','sotien'=>'0');
-            $a_BI[7] = array('tt'=>'7','noidung'=>'Kinh phí tăng thêm thực hiện chế độ bồi dưỡng phục vụ hoạt động cấp ủy thuộc cấp tỉnh theo Quy định 3115-QĐ/VVPTW','sotien'=>'0');
-
             $a_BII = array();
-            $a_BII[0] = array('tt'=>'1','noidung'=>'Kinh phí hỗ trợ chênh lệch tiền lương cho người có thu nhập thấp (NĐ17/2015/NĐ-CP) và mức lương 1,21 (6 tháng)','sotien'=>'0');
-            $a_BII[1] = array('tt'=>'2','noidung'=>'Kinh phí tăng, giảm do điều chỉnh địa bàn vùng KTXH ĐBKK năm 2017 theo Quyết định số 131/QĐ-TTg và Quyết định số 582/QĐ-TTg của Thủ tướng Chính phủ','sotien'=>'0');
-            $a_BII[2] = array('tt'=>'3','noidung'=>'Nhu cầu kinh phí thực hiện chính sách tinh giản biên chế năm 2017 theo NĐ số 108/2014/NĐ-CP ngày 20/11/2014 (Đối tượng đã được Bộ Nội vụ thẩm định)','sotien'=>'0');
-            $a_BII[3] = array('tt'=>'4','noidung'=>'Nhu cầu kinh phí thực hiện chính sách nghỉ hưu trước tuổi năm 2017 theo NĐ số 26/2014/NĐ-CP ngày 09/3/2015','sotien'=>'0');
+            $a_BII[0] = array('tt'=>'1','noidung'=>'Quỹ tiền lương, phụ cấp tăng thêm đối với cán bộ công chức khu vực hành chính, sự nghiệp ','sotien'=>'0');
+            $a_BII[1] = array('tt'=>'','noidung'=>'Trong đó: nhu cầu tăng thêm đối với các đơn vị sự nghiệp tự đảm bảo (5)','sotien'=>'0');
+            $a_BII[2] = array('tt'=>'2','noidung'=>'Quỹ lương, phụ cấp tăng thêm đối với cán bộ chuyên trách và công chức cấp xã','sotien'=>'0');
+            $a_BII[3] = array('tt'=>'3','noidung'=>'Hoạt động phí tăng thêm đối với đại biểu hội đồng nhân dân các cấp','sotien'=>'0');
+            $a_BII[4] = array('tt'=>'4','noidung'=>'Quỹ trợ cấp tăng thêm đối với cán bộ xã nghỉ việc hưởng trợ cấp hàng tháng theo NĐ 88/2018/NĐ-CP','sotien'=>'0');
+            $a_BII[5] = array('tt'=>'5','noidung'=>'Kinh phí tăng thêm để thực hiện chế độ đối với cán bộ không chuyên trách cấp xã, thôn và tổ dân phố','sotien'=>'0');
+            $a_BII[6] = array('tt'=>'6','noidung'=>'Kinh phí tăng thêm để thực hiện phụ cấp trách nhiệm đối với cấp ủy viên các cấp theo QĐ số 169-QĐ/TW ngày 24/6/2008','sotien'=>'0');
+            $a_BII[7] = array('tt'=>'7','noidung'=>'Kinh phí tăng thêm thực hiện chế độ bồi dưỡng phục vụ hoạt động cấp ủy thuộc cấp tỉnh theo Quy định 09-QĐ/VVPTW ngày 22/9/2017','sotien'=>'0');
+
+            $a_BIII = array();
+            $a_BIII[0] = array('tt'=>'1','noidung'=>'Kinh phí tăng, giảm do điều chỉnh địa bàn vùng KTXH ĐBKK năm 2017 theo Quyết định số 131/QĐ-TTg và Quyết định số 582/QĐ-TTg của Thủ tướng Chính phủ tính đủ 12 tháng (6)','sotien'=>'0');
+            $a_BIII[1] = array('tt'=>'2','noidung'=>'Nhu cầu kinh phí thực hiện chính sách tinh giản biên chế năm 2018 theo NĐ số 108/2014/NĐ-CP ngày 20/11/2014 (Đối tượng đã được Bộ Nội vụ thẩm định)','sotien'=>'0');
+            $a_BIII[2] = array('tt'=>'3','noidung'=>'Nhu cầu kinh phí thực hiện chính sách nghỉ hưu trước tuổi năm 2018 theo NĐ số 26/2014/NĐ-CP ngày 09/3/2015','sotien'=>'0');
 
             //Tính toán
             $a_A[1]['sotien'] = $model->sum('tietkiem');
@@ -6092,7 +6045,7 @@ class baocaothongtu67Controller extends Controller
             $a_A[5]['sotien'] =$model_tudb->sum('vienphi');
             $a_A[6]['sotien'] =$model_tudb->sum('nguonthu');
             $a_A[3]['sotien'] =  $a_A[4]['sotien'] +  $a_A[5]['sotien']+  $a_A[6]['sotien'];
-            //$a_BI[1]['sotien'] = $model->luongphucap;
+            //$a_BII[1]['sotien'] = $model->luongphucap;
             $a_A[8]['sotien'] = $model->sum('hocphi') - $model_tudb->sum('hocphi');
             $a_A[9]['sotien'] = $model->sum('vienphi')- $model_tudb->sum('vienphi');
             $a_A[10]['sotien'] = $model->sum('nguonthu')- $model_tudb->sum('nguonthu');
@@ -6101,32 +6054,30 @@ class baocaothongtu67Controller extends Controller
 
             $model_xp = $model->where('maphanloai','KVXP');
 
-            $a_BI[1]['sotien'] = $model_tudb->sum('luongphucap');
-            $a_BI[2]['sotien'] = $model_xp->sum('luongphucap');
-            $a_BI[0]['sotien'] = $model->sum('luongphucap') - $model_xp->sum('luongphucap');
+            $a_BII[1]['sotien'] = $model_tudb->sum('luongphucap');
+            $a_BII[2]['sotien'] = $model_xp->sum('luongphucap');
+            $a_BII[0]['sotien'] = $model->sum('luongphucap') - $model_xp->sum('luongphucap');
 
-            $a_BI[3]['sotien'] = $model->sum('daibieuhdnd');
-            $a_BI[4]['sotien'] = $model->sum('nghihuu');
-            $a_BI[5]['sotien'] = $model->sum('canbokct');
-            $a_BI[6]['sotien'] = $model->sum('uyvien');
-            $a_BI[7]['sotien'] = $model->sum('boiduong');
+            $a_BII[3]['sotien'] = $model->sum('daibieuhdnd');
+            $a_BII[4]['sotien'] = $model->sum('nghihuu');
+            $a_BII[5]['sotien'] = $model->sum('canbokct');
+            $a_BII[6]['sotien'] = $model->sum('uyvien');
+            $a_BII[7]['sotien'] = $model->sum('boiduong');
 
-            $a_BII[0]['sotien'] = $model->sum('thunhapthap');
-            $a_BII[1]['sotien'] = $model->sum('diaban');
-            $a_BII[2]['sotien'] = $model->sum('tinhgiam');
-            $a_BII[3]['sotien'] = $model->sum('nghihuusom');
+            $a_BIII[0]['sotien'] = $model->sum('thunhapthap');
+            $a_BIII[1]['sotien'] = $model->sum('diaban');
+            $a_BIII[2]['sotien'] = $model->sum('tinhgiam');
 
             $a_TC = array(
                 'A'=>($a_A[0]['sotien'] + $a_A[1]['sotien'] +$a_A[2]['sotien'] + $a_A[11]['sotien']),
-                'BI'=>(array_sum(array_column($a_BI,'sotien')) - $a_BI[1]['sotien']),
-                'BII'=>(array_sum(array_column($a_BII,'sotien')))
+                'BII'=>(array_sum(array_column($a_BII,'sotien')) - $a_BII[1]['sotien']),
+                'BIII'=>(array_sum(array_column($a_BIII,'sotien')))
             );
-
-            return view('reports.thongtu67.donvi.mau4a')
+            return view('reports.thongtu67.khoi.mau4a_tt68')
                 ->with('model',$model)
                 ->with('a_A',$a_A)
-                ->with('a_BI',$a_BI)
                 ->with('a_BII',$a_BII)
+                ->with('a_BIII',$a_BIII)
                 ->with('a_TC',$a_TC)
                 ->with('m_dv',$m_dv)
                 ->with('pageTitle','Danh sách nguồn kinh phí của đơn vị');
@@ -6147,13 +6098,13 @@ class baocaothongtu67Controller extends Controller
 
             $m_dv = dmdonvi::where('madv',session('admin')->madv)->first();
             $data = array();
-            $data[0]=array('val'=>'GDDT','tt'=>'a','noidung'=>'Sự nghiệp giáo dục - đào tạo','nhucau'=>0,'nguonkp'=>0,'tietkiem'=>0,'hocphi'=>0,'vienphi'=>0,'nguonthu'=>0);
-            $data[1]=array('val'=>'GD','tt'=>'-','noidung'=>'Giáo dục','nhucau'=>0,'nguonkp'=>0,'tietkiem'=>0,'hocphi'=>0,'vienphi'=>0,'nguonthu'=>0);
-            $data[2]=array('val'=>'DT','tt'=>'-','noidung'=>'Đào tạo','nhucau'=>0,'nguonkp'=>0,'tietkiem'=>0,'hocphi'=>0,'vienphi'=>0,'nguonthu'=>0);
-            $data[3]=array('val'=>'YTE','tt'=>'b','noidung'=>'Sự nghiệp y tế','nhucau'=>0,'nguonkp'=>0,'tietkiem'=>0,'hocphi'=>0,'vienphi'=>0,'nguonthu'=>0);
-            $data[4]=array('val'=>'KHAC','tt'=>'c','noidung'=>'Sự nghiệp khác','nhucau'=>0,'nguonkp'=>0,'tietkiem'=>0,'hocphi'=>0,'vienphi'=>0,'nguonthu'=>0);
-            $data[5]=array('val'=>'QLNN','tt'=>'d','noidung'=>' Quản lý nhà nước, Đảng, đoàn thể','nhucau'=>0,'nguonkp'=>0,'tietkiem'=>0,'hocphi'=>0,'vienphi'=>0,'nguonthu'=>0);
-            $data[6]=array('val'=>'QLNN','tt'=>'-','noidung'=>'Trong đó: Cán bộ, công chức cấp xã','nhucau'=>0,'nguonkp'=>0,'tietkiem'=>0,'hocphi'=>0,'vienphi'=>0,'nguonthu'=>0);
+            $data[0]=array('val'=>'GDDT','tt'=>'a','noidung'=>'Sự nghiệp giáo dục - đào tạo','nhucau'=>0,'nguonkp'=>0,'tietkiem'=>0,'hocphi'=>0,'vienphi'=>0,'khac'=>0,'nguonthu'=>0);
+            $data[1]=array('val'=>'GD','tt'=>'-','noidung'=>'Giáo dục','nhucau'=>0,'nguonkp'=>0,'tietkiem'=>0,'hocphi'=>0,'vienphi'=>0,'khac'=>0,'nguonthu'=>0);
+            $data[2]=array('val'=>'DT','tt'=>'-','noidung'=>'Đào tạo','nhucau'=>0,'nguonkp'=>0,'tietkiem'=>0,'hocphi'=>0,'vienphi'=>0,'khac'=>0,'nguonthu'=>0);
+            $data[3]=array('val'=>'YTE','tt'=>'b','noidung'=>'Sự nghiệp y tế','nhucau'=>0,'nguonkp'=>0,'tietkiem'=>0,'hocphi'=>0,'vienphi'=>0,'khac'=>0,'nguonthu'=>0);
+            $data[4]=array('val'=>'KHAC','tt'=>'c','noidung'=>'Sự nghiệp khác','nhucau'=>0,'nguonkp'=>0,'tietkiem'=>0,'hocphi'=>0,'vienphi'=>0,'khac'=>0,'nguonthu'=>0);
+            $data[5]=array('val'=>'QLNN','tt'=>'d','noidung'=>' Quản lý nhà nước, Đảng, đoàn thể','nhucau'=>0,'nguonkp'=>0,'tietkiem'=>0,'hocphi'=>0,'vienphi'=>0,'khac'=>0,'nguonthu'=>0);
+            $data[6]=array('val'=>'QLNN','tt'=>'-','noidung'=>'Trong đó: Cán bộ, công chức cấp xã','nhucau'=>0,'nguonkp'=>0,'tietkiem'=>0,'hocphi'=>0,'vienphi'=>0,'khac'=>0,'nguonthu'=>0);
             //Thiếu trường hợp 'Sự nghiệp khác' và GDDT
 
             for($i=0;$i<count($data);$i++){
@@ -6163,6 +6114,7 @@ class baocaothongtu67Controller extends Controller
                 $data[$i]['tietkiem'] = $solieu->sum('tietkiem');
                 $data[$i]['hocphi'] = $solieu->sum('hocphi');
                 $data[$i]['vienphi'] = $solieu->sum('vienphi');
+                $data[$i]['khac'] = 0;
                 $data[$i]['nguonthu'] = $solieu->sum('nguonthu');
             }
             $data[0]['nhucau'] = $data[1]['nhucau']+$data[2]['nhucau'];
@@ -6170,6 +6122,7 @@ class baocaothongtu67Controller extends Controller
             $data[0]['tietkiem'] = $data[1]['tietkiem']  + $data[2]['tietkiem'] ;
             $data[0]['hocphi'] = $data[1]['hocphi'] + $data[2]['hocphi'];
             $data[0]['vienphi'] = $data[1]['vienphi'] +$data[2]['vienphi'];
+            $data[0]['khac'] = 0;
             $data[0]['nguonthu'] = $data[1]['nguonthu']  + $data[2]['nguonthu'] ;
 
             $data[4]['nhucau'] = $model->sum('nhucau') - $data[0]['nhucau'] - $data[5]['nhucau'] - $data[3]['nhucau'];
@@ -6177,9 +6130,10 @@ class baocaothongtu67Controller extends Controller
             $data[4]['tietkiem'] = $model->sum('tietkiem') - $data[0]['tietkiem']- $data[5]['tietkiem']- $data[3]['tietkiem'];
             $data[4]['hocphi'] = $model->sum('hocphi') - $data[0]['hocphi']- $data[5]['hocphi']- $data[3]['hocphi'];
             $data[4]['vienphi'] = $model->sum('vienphi') - $data[0]['vienphi']- $data[5]['vienphi']- $data[3]['vienphi'];
+            $data[4]['khac'] = 0;
             $data[4]['nguonthu'] = $model->sum('nguonthu')- $data[0]['nguonthu'] - $data[5]['nguonthu'] - $data[3]['nguonthu'];
 
-            return view('reports.thongtu67.khoi.mau4b')
+            return view('reports.thongtu67.khoi.mau4b_tt68')
                 ->with('model',$model)
                 ->with('data',$data)
                 ->with('m_dv',$m_dv)
@@ -6767,7 +6721,7 @@ class baocaothongtu67Controller extends Controller
                 }
             }
 
-            return view('reports.thongtu67.mau2a1_tt67')
+            return view('reports.thongtu67.mau2a1_tt68')
                 ->with('furl','/tong_hop_bao_cao/')
                 ->with('ar_I',$ar_I)
                 ->with('ar_II',$ar_II)
@@ -8301,7 +8255,7 @@ class baocaothongtu67Controller extends Controller
             }
             //dd($ar_I);
 
-            return view('reports.thongtu67.mau2a2_tt67')
+            return view('reports.thongtu67.mau2a2_tt68')
                 ->with('furl','/tong_hop_bao_cao/')
                 ->with('ar_I',$ar_I)
                 ->with('ar_II',$ar_II)
@@ -9301,7 +9255,7 @@ class baocaothongtu67Controller extends Controller
             }
 
 
-            return view('reports.thongtu67.mau2b')
+            return view('reports.thongtu67.mau2b_tt68')
                 ->with('furl','/tong_hop_bao_cao/')
                 ->with('ar_I',$ar_I)
                 ->with('$a_It',$a_It)
@@ -9980,13 +9934,13 @@ class baocaothongtu67Controller extends Controller
                 $ar_II['cl'] = 0;
                 $ar_II['nc'] = 0;
             }
-            return view('reports.thongtu67.Mau2c_BcNCCL')
+            return view('reports.thongtu67.Mau2c_tt68')
                 ->with('m_dv',$m_dv)
                 ->with('ar_I',$ar_I)
                 ->with('ar_II',$ar_II)
                 ->with('a_It',$a_It)
                 ->with('inputs',$inputs)
-                ->with('pageTitle','BÁO CÁO NHU CẦU CHÊNH LỆCH');
+                ->with('pageTitle','BÁO CÁO NHU CẦU KINH PHÍ THỰC HIỆN BHTN');
         } else
             return view('errors.notlogin');
     }
@@ -10412,7 +10366,7 @@ class baocaothongtu67Controller extends Controller
             }
             //dd($ar_I);
 
-            return view('reports.thongtu67.Mau2d_ThKPTT')
+            return view('reports.thongtu67.Mau2d_tt68')
                 ->with('m_dv',$m_dv)
                 ->with('ar_I',$ar_I)
                 ->with('a_It',$a_It)
@@ -10559,26 +10513,36 @@ class baocaothongtu67Controller extends Controller
             return view('errors.notlogin');
     }
 
+    function mau2đ_huyen(Request $request) {
+        if (Session::has('admin')) {
+            $inputs = $request->all();
+            $ar_I = array();
+            $ar_I[]=array('val'=>'QLNN','tt'=>'I','noidung'=>'Quản lý nhà nước');
+            $ar_I[]=array('val'=>'SNCL','tt'=>'II','noidung'=>'Sự nghiệp công lập');
+            $ar_I[]=array('val'=>'CTXDT','tt'=>'1','noidung'=>'Đơn vị đảm bảo chi thường xuyên và chi đầu tư (2)');
+            $ar_I[]=array('val'=>'CTX','tt'=>'2','noidung'=>'Đơn vị đảm bảo chi thường xuyên (2)');
+            $ar_I[]=array('val'=>'MPCTX','tt'=>'3','noidung'=>'Đơn vị đảm bảo một phần chi thường xuyên');
+            $ar_I[]=array('val'=>'NNCTX','tt'=>'4','noidung'=>'Đơn vị được nhà nước đảm bảo chi thường xuyên');
+            return view('reports.thongtu67.Mau2đ_tt68')
+                ->with('inputs',$inputs)
+                ->with('ar_I',$ar_I)
+                ->with('pageTitle','TỔNG HỢP PHỤ CẤP ƯU ĐÃI TĂNG, GIẢM DO ĐIỀU CHỈNH ĐỊA BÀN VÙNG KINH TẾ XÃ HỘI ĐẶC BIỆT KHÓ KHĂN');
+        } else
+            return view('errors.notlogin');
+    }
+
     function mau2e_huyen(Request $request) {
-        if (Session::has('admin')  ) {
-            $inputs=$request->all();
-            $madvbc = session('admin')->madvbc;
-            $m_dv = dmdonvi::where('madv',session('admin')->madv)->first();
-            $m_dsh = dmdonvibaocao::where('level','H')->distinct()->get();
-            $m_xa = dmdiabandbkk::join('dmdonvi','dmdonvi.madv', '=', 'dmdiabandbkk.madv')
-                ->join('dmdonvibaocao','dmdonvibaocao.madvbc','=','dmdonvi.madvbc')->get();
-            $ar_h = array();
-            $tt = 0;
-            foreach ($m_dsh as $h) {
-                for ($i = 0; $i < count($m_dsh); $i++) {
-                    $tt++;
-                    $ar_h[$i]['tt'] = $tt;
-                    $ar_h[$i]['noidung'] = $h['tendvbc'];
-                }
-            }
-            //dd($ar_h);
-            return view('reports.thongtu67.Mau2e_ThKPTG')
-                ->with('pageTitle','TỔNG HỢP KINH PHÍ TĂNG, GIẢM DO ĐIỀU CHỈNH ĐỊA BÀN VÙNG KINH TẾ XÃ HỘI ĐẶC BIỆT KHÓ KHĂN');
+        if (Session::has('admin')) {
+            $inputs = $request->all();
+            $ar_I = array();
+            $ar_I[]=array('val'=>'CTXDT','tt'=>'1','noidung'=>'Đơn vị đảm bảo chi thường xuyên và chi đầu tư');
+            $ar_I[]=array('val'=>'CTX','tt'=>'2','noidung'=>'Đơn vị đảm bảo chi thường xuyên');
+            $ar_I[]=array('val'=>'MPCTX','tt'=>'3','noidung'=>'Đơn vị đảm bảo một phần chi thường xuyên');
+            $ar_I[]=array('val'=>'NNCTX','tt'=>'4','noidung'=>'Đơn vị được nhà nước đảm bảo chi thường xuyên');
+            return view('reports.thongtu67.Mau2e_tt68')
+                ->with('inputs',$inputs)
+                ->with('ar_I',$ar_I)
+                ->with('pageTitle','TỔNG HỢP PHỤ CẤP ƯU ĐÃI TĂNG, GIẢM DO ĐIỀU CHỈNH ĐỊA BÀN VÙNG KINH TẾ XÃ HỘI ĐẶC BIỆT KHÓ KHĂN');
         } else
             return view('errors.notlogin');
     }
@@ -10614,10 +10578,25 @@ class baocaothongtu67Controller extends Controller
             return view('errors.notlogin');
     }
 
-    function mau2g_huyen() {
+    function mau2g_huyen(Request $request) {
         if (Session::has('admin')) {
-            return view('reports.thongtu67.Mau2g_ThPCUDTG')
-                ->with('pageTitle','TỔNG HỢP PHỤ CẤP ƯU ĐÃI TĂNG, GIẢM DO ĐIỀU CHỈNH ĐỊA BÀN VÙNG KINH TẾ XÃ HỘI ĐẶC BIỆT KHÓ KHĂN');
+            $inputs = $request->all();
+            $ar_I[0] = array('val' => 'GD;DT', 'tt' => '1', 'noidung' => 'Sự nghiệp giáo dục - đào tạo');
+            $ar_I[1] = array('val' => 'GD', 'tt' => '', 'noidung' => '- Giáo dục');
+            $ar_I[2] = array('val' => 'DT', 'tt' => '', 'noidung' => '- Đào tạo');
+            $ar_I[3] = array('val' => 'YTE', 'tt' => '2', 'noidung' => 'Sự nghiệp y tế');
+            $ar_I[4] = array('val' => 'KHCN', 'tt' => '3', 'noidung' => 'Sự nghiệp khoa học-công nghệ');
+            $ar_I[5] = array('val' => 'VHTT', 'tt' => '4', 'noidung' => 'Sự nghiệp văn hóa thông tin');
+            $ar_I[6] = array('val' => 'PTTH', 'tt' => '5', 'noidung' => 'Sự nghiệp phát thanh truyền hình');
+            $ar_I[7] = array('val' => 'TDTT', 'tt' => '6', 'noidung' => 'Sự nghiệp thể dục - thể thao');
+            $ar_I[8] = array('val' => 'DBXH', 'tt' => '7', 'noidung' => 'Sự nghiệp đảm bảo xã hội');
+            $ar_I[9] = array('val' => 'KT', 'tt' => '8', 'noidung' => 'Sự nghiệp kinh tế');
+            $ar_I[10] = array('val' => 'MT', 'tt' => '9', 'noidung' => 'Sự nghiệp môi trường');
+            $ar_I[11] = array('val' => 'QLNN;DDT', 'tt' => '10', 'noidung' => 'Quản lý nhà nước, đảng, đoàn thể');
+            return view('reports.thongtu67.Mau2g_tt68')
+                ->with('ar_I',$ar_I)
+                ->with('inputs',$inputs)
+                ->with('pageTitle','BÁO CÁO QUỸ TIỀN LƯƠNG, PHỤ CẤP ĐỐI VỚI LAO ĐỘNG THEO HỢP ĐỒNG KHU VỰC HÀNH CHÍNH VÀ ĐƠN VỊ SỰ NGHIỆP');
         } else
             return view('errors.notlogin');
     }
@@ -10691,35 +10670,42 @@ class baocaothongtu67Controller extends Controller
             $m_dv = dmdonvi::where('madv',session('admin')->madv)->first();
 
             $a_A = array();
-            $a_A[0] = array('tt'=>'1','noidung'=>'50% tăng thu NSĐP (không kể tăng thu tiền sử dụng đất) thực hiện 2016 so dự toán Thủ tướng Chính phủ giao năm 2016','sotien'=>'0');
-            $a_A[1] = array('tt'=>'2','noidung'=>'Số tiết kiệm 10% chi thường xuyên dự toán năm 2017','sotien'=>'0');
-            $a_A[2] = array('tt'=>'3','noidung'=>'Số thu được huy động từ nguồn để lại đơn vị năm 2017','sotien'=>'0');
-            $a_A[3] = array('tt'=>'a','noidung'=>'Nguồn huy động từ các đơn vị tự đảm bảo','sotien'=>'0');
-            $a_A[4] = array('tt'=>'+','noidung'=>'Học phí','sotien'=>'0');
-            $a_A[5] = array('tt'=>'+','noidung'=>'Viện phí','sotien'=>'0');
-            $a_A[6] = array('tt'=>'+','noidung'=>'Nguồn thu khác','sotien'=>'0');
-            $a_A[7] = array('tt'=>'b','noidung'=>'Nguồn huy động từ các đơn vị chưa tự đảm bảo','sotien'=>'0');
-            $a_A[8] = array('tt'=>'+','noidung'=>'Học phí','sotien'=>'0');
-            $a_A[9] = array('tt'=>'+','noidung'=>'Viện phí','sotien'=>'0');
-            $a_A[10] = array('tt'=>'+','noidung'=>'Nguồn thu khác','sotien'=>'0');
-            $a_A[11] = array('tt'=>'4','noidung'=>'Nguồn thực hiện cải cách tiền lương năm 2016 chưa sử dụng hết chuyển sang 2017','sotien'=>'0');
+            $a_A[0] = array('tt'=>'1','noidung'=>'50% tăng thu NSĐP (không kể tăng thu tiền sử dụng đất) thực hiện 2017 so dự toán Thủ tướng Chính phủ giao năm 2017','sotien'=>'0');
+            $a_A[1] = array('tt'=>'2','noidung'=>'50% tăng thu NSĐP (không kể tăng thu tiền sử dụng đất) thực hiện 2018 so dự toán 2017 Thủ tướng Chính phủ giao','sotien'=>'0');
+            $a_A[2] = array('tt'=>'3','noidung'=>'Số tiết kiệm 10% chi thường xuyên dự toán năm 2017','sotien'=>'0');
+            $a_A[3] = array('tt'=>'4','noidung'=>'Số tiết kiệm 10% chi thường xuyên dự toán tăng thêm năm 2018','sotien'=>'0');
+            $a_A[4] = array('tt'=>'5','noidung'=>'Số thu được huy động từ nguồn để lại đơn vị năm 2018:','sotien'=>'0');
+            $a_A[5] = array('tt'=>'a','noidung'=>'Nguồn huy động từ các đơn vị tự đảm bảo(1):','sotien'=>'0');
+            $a_A[6] = array('tt'=>'','noidung'=>'+ Học phí','sotien'=>'0');
+            $a_A[7] = array('tt'=>'','noidung'=>'+ Viện phí','sotien'=>'0');
+            $a_A[8] = array('tt'=>'','noidung'=>'+ Nguồn thu khác','sotien'=>'0');
+            $a_A[9] = array('tt'=>'b','noidung'=>'Nguồn huy động từ các đơn vị chưa tự đảm bảo chi thường xuyên:','sotien'=>'0');
+            $a_A[10] = array('tt'=>'','noidung'=>'+ Học phí','sotien'=>'0');
+            $a_A[11] = array('tt'=>'','noidung'=>'+ Viện phí','sotien'=>'0');
+            $a_A[12] = array('tt'=>'','noidung'=>'+ Nguồn thu khác','sotien'=>'0');
+            $a_A[13] = array('tt'=>'6','noidung'=>'Nguồn tiết kiệm chi gắn với thực hiện các giải pháp sắp xếp tổ chức bộ máy, tinh giản biên chế, đổi mới hoạt động đơn vị sự nghiệp công lập theo Nghị quyết số 18, 19 (nếu có)','sotien'=>'0');
+            $a_A[14] = array('tt'=>'','noidung'=>'+ Từ việc tinh giản biên chế tổ chức lại bộ máy (2)','sotien'=>'0');
+            $a_A[15] = array('tt'=>'','noidung'=>'+ Từ việc sát nhập các đầu mối, cơ quan, đơn vị (2)','sotien'=>'0');
+            $a_A[16] = array('tt'=>'','noidung'=>'+ Từ việc thay đổi cơ chế tự chủ của đơn vị sư nghiệp (3)','sotien'=>'0');
+            $a_A[17] = array('tt'=>'','noidung'=>'+ Từ việc sát nhập các xã không đủ điều kiện tiêu chuẩn','sotien'=>'0');
+            $a_A[18] = array('tt'=>'7','noidung'=>'Nguồn thực hiện cải cách tiền lương năm 2017 chưa sử dụng hết chuyển sang năm 2018','sotien'=>'0');
 
             //
-            $a_BI = array();
-            $a_BI[0] = array('tt'=>'1','noidung'=>'Quỹ tiền lương, phụ cấp tăng thêm đối với cán bộ công chức khu vực hành chính, sự nghiệp ','sotien'=>'0');
-            $a_BI[1] = array('tt'=>'','noidung'=>'Trong đó: nhu cầu tăng thêm đối với các đơn vị sự nghiệp tự đảm bảo ','sotien'=>'0');
-            $a_BI[2] = array('tt'=>'2','noidung'=>'Quỹ lương, phụ cấp tăng thêm đối với cán bộ chuyên trách và công chức cấp xã','sotien'=>'0');
-            $a_BI[3] = array('tt'=>'3','noidung'=>'Hoạt động phí tăng thêm đối với đại biểu hội đồng nhân dân các cấp','sotien'=>'0');
-            $a_BI[4] = array('tt'=>'4','noidung'=>'Quỹ trợ cấp tăng thêm đối với cán bộ xã nghỉ việc hưởng trợ cấp hàng tháng theo NĐ 76/2017/NĐ-CP','sotien'=>'0');
-            $a_BI[5] = array('tt'=>'5','noidung'=>'Kinh phí tăng thêm để thực hiện chế độ đối với cán bộ không chuyên trách cấp xã, thôn và tổ dân phố','sotien'=>'0');
-            $a_BI[6] = array('tt'=>'6','noidung'=>'Kinh phí tăng thêm để thực hiện phụ cấp trách nhiệm đối với cấp ủy viên các cấp theo QĐ số 169-QĐ/TW ngày 24/6/2008','sotien'=>'0');
-            $a_BI[7] = array('tt'=>'7','noidung'=>'Kinh phí tăng thêm thực hiện chế độ bồi dưỡng phục vụ hoạt động cấp ủy thuộc cấp tỉnh theo Quy định 3115-QĐ/VVPTW','sotien'=>'0');
-
             $a_BII = array();
-            $a_BII[0] = array('tt'=>'1','noidung'=>'Kinh phí hỗ trợ chênh lệch tiền lương cho người có thu nhập thấp (NĐ17/2015/NĐ-CP) và mức lương 1,21 (6 tháng)','sotien'=>'0');
-            $a_BII[1] = array('tt'=>'2','noidung'=>'Kinh phí tăng, giảm do điều chỉnh địa bàn vùng KTXH ĐBKK năm 2017 theo Quyết định số 131/QĐ-TTg và Quyết định số 582/QĐ-TTg của Thủ tướng Chính phủ','sotien'=>'0');
-            $a_BII[2] = array('tt'=>'3','noidung'=>'Nhu cầu kinh phí thực hiện chính sách tinh giản biên chế năm 2017 theo NĐ số 108/2014/NĐ-CP ngày 20/11/2014 (Đối tượng đã được Bộ Nội vụ thẩm định)','sotien'=>'0');
-            $a_BII[3] = array('tt'=>'4','noidung'=>'Nhu cầu kinh phí thực hiện chính sách nghỉ hưu trước tuổi năm 2017 theo NĐ số 26/2014/NĐ-CP ngày 09/3/2015','sotien'=>'0');
+            $a_BII[0] = array('tt'=>'1','noidung'=>'Quỹ tiền lương, phụ cấp tăng thêm đối với cán bộ công chức khu vực hành chính, sự nghiệp ','sotien'=>'0');
+            $a_BII[1] = array('tt'=>'','noidung'=>'Trong đó: nhu cầu tăng thêm đối với các đơn vị sự nghiệp tự đảm bảo (5)','sotien'=>'0');
+            $a_BII[2] = array('tt'=>'2','noidung'=>'Quỹ lương, phụ cấp tăng thêm đối với cán bộ chuyên trách và công chức cấp xã','sotien'=>'0');
+            $a_BII[3] = array('tt'=>'3','noidung'=>'Hoạt động phí tăng thêm đối với đại biểu hội đồng nhân dân các cấp','sotien'=>'0');
+            $a_BII[4] = array('tt'=>'4','noidung'=>'Quỹ trợ cấp tăng thêm đối với cán bộ xã nghỉ việc hưởng trợ cấp hàng tháng theo NĐ 88/2018/NĐ-CP','sotien'=>'0');
+            $a_BII[5] = array('tt'=>'5','noidung'=>'Kinh phí tăng thêm để thực hiện chế độ đối với cán bộ không chuyên trách cấp xã, thôn và tổ dân phố','sotien'=>'0');
+            $a_BII[6] = array('tt'=>'6','noidung'=>'Kinh phí tăng thêm để thực hiện phụ cấp trách nhiệm đối với cấp ủy viên các cấp theo QĐ số 169-QĐ/TW ngày 24/6/2008','sotien'=>'0');
+            $a_BII[7] = array('tt'=>'7','noidung'=>'Kinh phí tăng thêm thực hiện chế độ bồi dưỡng phục vụ hoạt động cấp ủy thuộc cấp tỉnh theo Quy định 09-QĐ/VVPTW ngày 22/9/2017','sotien'=>'0');
+
+            $a_BIII = array();
+            $a_BIII[0] = array('tt'=>'1','noidung'=>'Kinh phí tăng, giảm do điều chỉnh địa bàn vùng KTXH ĐBKK năm 2017 theo Quyết định số 131/QĐ-TTg và Quyết định số 582/QĐ-TTg của Thủ tướng Chính phủ tính đủ 12 tháng (6)','sotien'=>'0');
+            $a_BIII[1] = array('tt'=>'2','noidung'=>'Nhu cầu kinh phí thực hiện chính sách tinh giản biên chế năm 2018 theo NĐ số 108/2014/NĐ-CP ngày 20/11/2014 (Đối tượng đã được Bộ Nội vụ thẩm định)','sotien'=>'0');
+            $a_BIII[2] = array('tt'=>'3','noidung'=>'Nhu cầu kinh phí thực hiện chính sách nghỉ hưu trước tuổi năm 2018 theo NĐ số 26/2014/NĐ-CP ngày 09/3/2015','sotien'=>'0');
+
 
             //Tính toán
             $a_A[1]['sotien'] = $model->sum('tietkiem');
@@ -10737,32 +10723,31 @@ class baocaothongtu67Controller extends Controller
 
             $model_xp = $model->where('maphanloai','KVXP');
 
-            $a_BI[1]['sotien'] = $model_tudb->sum('luongphucap');
-            $a_BI[2]['sotien'] = $model_xp->sum('luongphucap');
-            $a_BI[0]['sotien'] = $model->sum('luongphucap') - $model_xp->sum('luongphucap');
+            $a_BII[1]['sotien'] = $model_tudb->sum('luongphucap');
+            $a_BII[2]['sotien'] = $model_xp->sum('luongphucap');
+            $a_BII[0]['sotien'] = $model->sum('luongphucap') - $model_xp->sum('luongphucap');
 
-            $a_BI[3]['sotien'] = $model->sum('daibieuhdnd');
-            $a_BI[4]['sotien'] = $model->sum('nghihuu');
-            $a_BI[5]['sotien'] = $model->sum('canbokct');
-            $a_BI[6]['sotien'] = $model->sum('uyvien');
-            $a_BI[7]['sotien'] = $model->sum('boiduong');
+            $a_BII[3]['sotien'] = $model->sum('daibieuhdnd');
+            $a_BII[4]['sotien'] = $model->sum('nghihuu');
+            $a_BII[5]['sotien'] = $model->sum('canbokct');
+            $a_BII[6]['sotien'] = $model->sum('uyvien');
+            $a_BII[7]['sotien'] = $model->sum('boiduong');
 
-            $a_BII[0]['sotien'] = $model->sum('thunhapthap');
-            $a_BII[1]['sotien'] = $model->sum('diaban');
-            $a_BII[2]['sotien'] = $model->sum('tinhgiam');
-            $a_BII[3]['sotien'] = $model->sum('nghihuusom');
+            $a_BIII[0]['sotien'] = $model->sum('thunhapthap');
+            $a_BIII[1]['sotien'] = $model->sum('diaban');
+            $a_BIII[2]['sotien'] = $model->sum('tinhgiam');
 
             $a_TC = array(
                 'A'=>($a_A[0]['sotien'] + $a_A[1]['sotien'] +$a_A[2]['sotien'] + $a_A[11]['sotien']),
-                'BI'=>(array_sum(array_column($a_BI,'sotien')) - $a_BI[1]['sotien']),
-                'BII'=>(array_sum(array_column($a_BII,'sotien')))
+                'BII'=>(array_sum(array_column($a_BII,'sotien')) - $a_BII[1]['sotien']),
+                'BIII'=>(array_sum(array_column($a_BIII,'sotien')))
             );
 
-            return view('reports.thongtu67.mau4a')
+            return view('reports.thongtu67.mau4a_tt68')
                 ->with('model',$model)
                 ->with('a_A',$a_A)
-                ->with('a_BI',$a_BI)
                 ->with('a_BII',$a_BII)
+                ->with('a_BIII',$a_BIII)
                 ->with('a_TC',$a_TC)
                 ->with('m_dv',$m_dv)
                 ->with('inputs',$inputs)
@@ -10942,22 +10927,22 @@ class baocaothongtu67Controller extends Controller
             $data = array();
             $group = array();
             if(isset($inputs['inchitiet'])) {
-                $group[0] = array('val' => 'GDDT', 'tt' => 'a', 'noidung' => 'Sự nghiệp giáo dục - đào tạo', 'nhucau' => 0, 'nguonkp' => 0, 'tietkiem' => 0, 'hocphi' => 0, 'vienphi' => 0, 'nguonthu' => 0);
-                $group[1] = array('val' => 'GD', 'tt' => '-', 'noidung' => 'Giáo dục', 'nhucau' => 0, 'nguonkp' => 0, 'tietkiem' => 0, 'hocphi' => 0, 'vienphi' => 0, 'nguonthu' => 0);
-                $group[2] = array('val' => 'DT', 'tt' => '-', 'noidung' => 'Đào tạo', 'nhucau' => 0, 'nguonkp' => 0, 'tietkiem' => 0, 'hocphi' => 0, 'vienphi' => 0, 'nguonthu' => 0);
-                $group[3] = array('val' => 'YTE', 'tt' => 'b', 'noidung' => 'Sự nghiệp y tế', 'nhucau' => 0, 'nguonkp' => 0, 'tietkiem' => 0, 'hocphi' => 0, 'vienphi' => 0, 'nguonthu' => 0);
-                $group[4] = array('val' => 'KHAC', 'tt' => 'c', 'noidung' => 'Sự nghiệp khác', 'nhucau' => 0, 'nguonkp' => 0, 'tietkiem' => 0, 'hocphi' => 0, 'vienphi' => 0, 'nguonthu' => 0);
-                $group[5] = array('val' => 'QLNN', 'tt' => 'd', 'noidung' => ' Quản lý nhà nước, Đảng, đoàn thể', 'nhucau' => 0, 'nguonkp' => 0, 'tietkiem' => 0, 'hocphi' => 0, 'vienphi' => 0, 'nguonthu' => 0);
-                $group[6] = array('val' => 'QLNN', 'tt' => '-', 'noidung' => 'Trong đó: Cán bộ, công chức cấp xã', 'nhucau' => 0, 'nguonkp' => 0, 'tietkiem' => 0, 'hocphi' => 0, 'vienphi' => 0, 'nguonthu' => 0);
+                $group[0] = array('val' => 'GDDT', 'tt' => 'a', 'noidung' => 'Sự nghiệp giáo dục - đào tạo', 'nhucau' => 0, 'nguonkp' => 0, 'tietkiem' => 0, 'hocphi' => 0, 'vienphi' => 0,'khac' => 0, 'nguonthu' => 0);
+                $group[1] = array('val' => 'GD', 'tt' => '-', 'noidung' => 'Giáo dục', 'nhucau' => 0, 'nguonkp' => 0, 'tietkiem' => 0, 'hocphi' => 0, 'vienphi' => 0,'khac' => 0, 'nguonthu' => 0);
+                $group[2] = array('val' => 'DT', 'tt' => '-', 'noidung' => 'Đào tạo', 'nhucau' => 0, 'nguonkp' => 0, 'tietkiem' => 0, 'hocphi' => 0, 'vienphi' => 0,'khac' => 0, 'nguonthu' => 0);
+                $group[3] = array('val' => 'YTE', 'tt' => 'b', 'noidung' => 'Sự nghiệp y tế', 'nhucau' => 0, 'nguonkp' => 0, 'tietkiem' => 0, 'hocphi' => 0, 'vienphi' => 0,'khac' => 0, 'nguonthu' => 0);
+                $group[4] = array('val' => 'KHAC', 'tt' => 'c', 'noidung' => 'Sự nghiệp khác', 'nhucau' => 0, 'nguonkp' => 0, 'tietkiem' => 0, 'hocphi' => 0, 'vienphi' => 0,'khac' => 0, 'nguonthu' => 0);
+                $group[5] = array('val' => 'QLNN', 'tt' => 'd', 'noidung' => ' Quản lý nhà nước, Đảng, đoàn thể', 'nhucau' => 0, 'nguonkp' => 0, 'tietkiem' => 0, 'hocphi' => 0, 'vienphi' => 0,'khac' => 0, 'nguonthu' => 0);
+                $group[6] = array('val' => 'QLNN', 'tt' => '-', 'noidung' => 'Trong đó: Cán bộ, công chức cấp xã', 'nhucau' => 0, 'nguonkp' => 0, 'tietkiem' => 0, 'hocphi' => 0, 'vienphi' => 0,'khac' => 0, 'nguonthu' => 0);
             }
             else {
-                $data[0] = array('val' => 'GDDT', 'tt' => 'a', 'noidung' => 'Sự nghiệp giáo dục - đào tạo', 'nhucau' => 0, 'nguonkp' => 0, 'tietkiem' => 0, 'hocphi' => 0, 'vienphi' => 0, 'nguonthu' => 0);
-                $data[1] = array('val' => 'GD', 'tt' => '-', 'noidung' => 'Giáo dục', 'nhucau' => 0, 'nguonkp' => 0, 'tietkiem' => 0, 'hocphi' => 0, 'vienphi' => 0, 'nguonthu' => 0);
-                $data[2] = array('val' => 'DT', 'tt' => '-', 'noidung' => 'Đào tạo', 'nhucau' => 0, 'nguonkp' => 0, 'tietkiem' => 0, 'hocphi' => 0, 'vienphi' => 0, 'nguonthu' => 0);
-                $data[3] = array('val' => 'YTE', 'tt' => 'b', 'noidung' => 'Sự nghiệp y tế', 'nhucau' => 0, 'nguonkp' => 0, 'tietkiem' => 0, 'hocphi' => 0, 'vienphi' => 0, 'nguonthu' => 0);
-                $data[4] = array('val' => 'KHAC', 'tt' => 'c', 'noidung' => 'Sự nghiệp khác', 'nhucau' => 0, 'nguonkp' => 0, 'tietkiem' => 0, 'hocphi' => 0, 'vienphi' => 0, 'nguonthu' => 0);
-                $data[5] = array('val' => 'QLNN', 'tt' => 'd', 'noidung' => ' Quản lý nhà nước, Đảng, đoàn thể', 'nhucau' => 0, 'nguonkp' => 0, 'tietkiem' => 0, 'hocphi' => 0, 'vienphi' => 0, 'nguonthu' => 0);
-                $data[6] = array('val' => 'QLNN', 'tt' => '-', 'noidung' => 'Trong đó: Cán bộ, công chức cấp xã', 'nhucau' => 0, 'nguonkp' => 0, 'tietkiem' => 0, 'hocphi' => 0, 'vienphi' => 0, 'nguonthu' => 0);
+                $data[0] = array('val' => 'GDDT', 'tt' => 'a', 'noidung' => 'Sự nghiệp giáo dục - đào tạo', 'nhucau' => 0, 'nguonkp' => 0, 'tietkiem' => 0, 'hocphi' => 0, 'vienphi' => 0,'khac' => 0, 'nguonthu' => 0);
+                $data[1] = array('val' => 'GD', 'tt' => '-', 'noidung' => 'Giáo dục', 'nhucau' => 0, 'nguonkp' => 0, 'tietkiem' => 0, 'hocphi' => 0, 'vienphi' => 0,'khac' => 0, 'nguonthu' => 0);
+                $data[2] = array('val' => 'DT', 'tt' => '-', 'noidung' => 'Đào tạo', 'nhucau' => 0, 'nguonkp' => 0, 'tietkiem' => 0, 'hocphi' => 0, 'vienphi' => 0,'khac' => 0, 'nguonthu' => 0);
+                $data[3] = array('val' => 'YTE', 'tt' => 'b', 'noidung' => 'Sự nghiệp y tế', 'nhucau' => 0, 'nguonkp' => 0, 'tietkiem' => 0, 'hocphi' => 0, 'vienphi' => 0,'khac' => 0, 'nguonthu' => 0);
+                $data[4] = array('val' => 'KHAC', 'tt' => 'c', 'noidung' => 'Sự nghiệp khác', 'nhucau' => 0, 'nguonkp' => 0, 'tietkiem' => 0, 'hocphi' => 0, 'vienphi' => 0,'khac' => 0, 'nguonthu' => 0);
+                $data[5] = array('val' => 'QLNN', 'tt' => 'd', 'noidung' => ' Quản lý nhà nước, Đảng, đoàn thể', 'nhucau' => 0, 'nguonkp' => 0, 'tietkiem' => 0, 'hocphi' => 0, 'vienphi' => 0,'khac' => 0, 'nguonthu' => 0);
+                $data[6] = array('val' => 'QLNN', 'tt' => '-', 'noidung' => 'Trong đó: Cán bộ, công chức cấp xã', 'nhucau' => 0, 'nguonkp' => 0, 'tietkiem' => 0, 'hocphi' => 0, 'vienphi' => 0,'khac' => 0, 'nguonthu' => 0);
             }
             //Thiếu trường hợp 'Sự nghiệp khác' và GDDT
 
@@ -10981,6 +10966,7 @@ class baocaothongtu67Controller extends Controller
                     $data[$i]['tietkiem'] = 0;
                     $data[$i]['hocphi'] = 0;
                     $data[$i]['vienphi'] = 0;
+                    $data[$i]['khac'] = 0;
                     $data[$i]['nguonthu'] = 0;
                     $dulieu = $model->where('linhvuchoatdong', $group[$j]['val']);
                     if (isset($dulieu) && count($dulieu) > 0) {
@@ -11000,6 +10986,7 @@ class baocaothongtu67Controller extends Controller
                                 $data[$i]['tietkiem'] = $solieu->sum('tietkiem');
                                 $data[$i]['hocphi'] = $solieu->sum('hocphi');
                                 $data[$i]['vienphi'] = $solieu->sum('vienphi');
+                                $data[$i]['khac'] = 0;
                                 $data[$i]['nguonthu'] = $solieu->sum('nguonthu');
 
                                 $data[$luugr]['nhucau'] += $solieu->sum('nhucau');
@@ -11007,6 +10994,7 @@ class baocaothongtu67Controller extends Controller
                                 $data[$luugr]['tietkiem'] += $solieu->sum('tietkiem');
                                 $data[$luugr]['hocphi'] += $solieu->sum('hocphi');
                                 $data[$luugr]['vienphi'] += $solieu->sum('vienphi');
+                                $data[$luugr]['khac'] += 0;
                                 $data[$luugr]['nguonthu'] += $solieu->sum('nguonthu');
                             }
                         }
@@ -11018,6 +11006,7 @@ class baocaothongtu67Controller extends Controller
                 $data[$gddt]['tietkiem'] = $data[$giaoduc]['tietkiem'] + $data[$daotao]['tietkiem'];
                 $data[$gddt]['hocphi'] = $data[$giaoduc]['hocphi'] + $data[$daotao]['hocphi'];
                 $data[$gddt]['vienphi'] = $data[$giaoduc]['vienphi'] + $data[$daotao]['vienphi'];
+                $data[$gddt]['khac'] = 0;
                 $data[$gddt]['nguonthu'] = $data[$giaoduc]['nguonthu'] + $data[$daotao]['nguonthu'];
 
                 /*
@@ -11044,6 +11033,7 @@ class baocaothongtu67Controller extends Controller
                     $data[$i]['tietkiem'] = $solieu->sum('tietkiem');
                     $data[$i]['hocphi'] = $solieu->sum('hocphi');
                     $data[$i]['vienphi'] = $solieu->sum('vienphi');
+                    $data[$i]['khac'] = 0;
                     $data[$i]['nguonthu'] = $solieu->sum('nguonthu');
                 }
                 $data[0]['nhucau'] = $data[1]['nhucau'] + $data[2]['nhucau'];
@@ -11051,6 +11041,7 @@ class baocaothongtu67Controller extends Controller
                 $data[0]['tietkiem'] = $data[1]['tietkiem'] + $data[2]['tietkiem'];
                 $data[0]['hocphi'] = $data[1]['hocphi'] + $data[2]['hocphi'];
                 $data[0]['vienphi'] = $data[1]['vienphi'] + $data[2]['vienphi'];
+                $data[0]['khac'] = 0;
                 $data[0]['nguonthu'] = $data[1]['nguonthu'] + $data[2]['nguonthu'];
 
                 $data[4]['nhucau'] = $model->sum('nhucau') - $data[0]['nhucau'] - $data[5]['nhucau'] - $data[3]['nhucau'];
@@ -11058,10 +11049,11 @@ class baocaothongtu67Controller extends Controller
                 $data[4]['tietkiem'] = $model->sum('tietkiem') - $data[0]['tietkiem'] - $data[5]['tietkiem'] - $data[3]['tietkiem'];
                 $data[4]['hocphi'] = $model->sum('hocphi') - $data[0]['hocphi'] - $data[5]['hocphi'] - $data[3]['hocphi'];
                 $data[4]['vienphi'] = $model->sum('vienphi') - $data[0]['vienphi'] - $data[5]['vienphi'] - $data[3]['vienphi'];
+                $data[4]['khác'] = 0;
                 $data[4]['nguonthu'] = $model->sum('nguonthu') - $data[0]['nguonthu'] - $data[5]['nguonthu'] - $data[3]['nguonthu'];
             }
 
-            return view('reports.thongtu67.mau4b')
+            return view('reports.thongtu67.mau4b_tt68')
                 ->with('model',$model)
                 ->with('data',$data)
                 ->with('m_dv',$m_dv)
@@ -11285,6 +11277,10 @@ class baocaothongtu67Controller extends Controller
                     ->where('sohieu','TT67_2017')->get();
             }
             $ardv = $m_dv->toArray();
+            /*
+            $model = nguonkinhphi::where('madvbc','like',$inputs['madv'].'%')
+                ->where('sohieu','TT67_2017')->get();
+            */
             if(session('admin')->username == 'khthso')
             {
                 $model = nguonkinhphi::join('dmdonvibaocao','dmdonvibaocao.madvbc','=','nguonkinhphi.madvbc')
@@ -11301,22 +11297,22 @@ class baocaothongtu67Controller extends Controller
             $data = array();
             $group = array();
             if(isset($inputs['inchitiet'])) {
-                $group[0] = array('val' => 'GDDT', 'tt' => 'a', 'noidung' => 'Sự nghiệp giáo dục - đào tạo', 'nhucau' => 0, 'nguonkp' => 0, 'tietkiem' => 0, 'hocphi' => 0, 'vienphi' => 0, 'nguonthu' => 0);
-                $group[1] = array('val' => 'GD', 'tt' => '-', 'noidung' => 'Giáo dục', 'nhucau' => 0, 'nguonkp' => 0, 'tietkiem' => 0, 'hocphi' => 0, 'vienphi' => 0, 'nguonthu' => 0);
-                $group[2] = array('val' => 'DT', 'tt' => '-', 'noidung' => 'Đào tạo', 'nhucau' => 0, 'nguonkp' => 0, 'tietkiem' => 0, 'hocphi' => 0, 'vienphi' => 0, 'nguonthu' => 0);
-                $group[3] = array('val' => 'YTE', 'tt' => 'b', 'noidung' => 'Sự nghiệp y tế', 'nhucau' => 0, 'nguonkp' => 0, 'tietkiem' => 0, 'hocphi' => 0, 'vienphi' => 0, 'nguonthu' => 0);
-                $group[4] = array('val' => 'KHAC', 'tt' => 'c', 'noidung' => 'Sự nghiệp khác', 'nhucau' => 0, 'nguonkp' => 0, 'tietkiem' => 0, 'hocphi' => 0, 'vienphi' => 0, 'nguonthu' => 0);
-                $group[5] = array('val' => 'QLNN', 'tt' => 'd', 'noidung' => ' Quản lý nhà nước, Đảng, đoàn thể', 'nhucau' => 0, 'nguonkp' => 0, 'tietkiem' => 0, 'hocphi' => 0, 'vienphi' => 0, 'nguonthu' => 0);
-                $group[6] = array('val' => 'QLNN', 'tt' => '-', 'noidung' => 'Trong đó: Cán bộ, công chức cấp xã', 'nhucau' => 0, 'nguonkp' => 0, 'tietkiem' => 0, 'hocphi' => 0, 'vienphi' => 0, 'nguonthu' => 0);
+                $group[0] = array('val' => 'GDDT', 'tt' => 'a', 'noidung' => 'Sự nghiệp giáo dục - đào tạo', 'nhucau' => 0, 'nguonkp' => 0, 'tietkiem' => 0, 'hocphi' => 0, 'vienphi' => 0,'khac' => 0, 'nguonthu' => 0);
+                $group[1] = array('val' => 'GD', 'tt' => '-', 'noidung' => 'Giáo dục', 'nhucau' => 0, 'nguonkp' => 0, 'tietkiem' => 0, 'hocphi' => 0, 'vienphi' => 0,'khac' => 0, 'nguonthu' => 0);
+                $group[2] = array('val' => 'DT', 'tt' => '-', 'noidung' => 'Đào tạo', 'nhucau' => 0, 'nguonkp' => 0, 'tietkiem' => 0, 'hocphi' => 0, 'vienphi' => 0,'khac' => 0, 'nguonthu' => 0);
+                $group[3] = array('val' => 'YTE', 'tt' => 'b', 'noidung' => 'Sự nghiệp y tế', 'nhucau' => 0, 'nguonkp' => 0, 'tietkiem' => 0, 'hocphi' => 0, 'vienphi' => 0,'khac' => 0, 'nguonthu' => 0);
+                $group[4] = array('val' => 'KHAC', 'tt' => 'c', 'noidung' => 'Sự nghiệp khác', 'nhucau' => 0, 'nguonkp' => 0, 'tietkiem' => 0, 'hocphi' => 0, 'vienphi' => 0,'khac' => 0, 'nguonthu' => 0);
+                $group[5] = array('val' => 'QLNN', 'tt' => 'd', 'noidung' => ' Quản lý nhà nước, Đảng, đoàn thể', 'nhucau' => 0, 'nguonkp' => 0, 'tietkiem' => 0, 'hocphi' => 0, 'vienphi' => 0,'khac' => 0, 'nguonthu' => 0);
+                $group[6] = array('val' => 'QLNN', 'tt' => '-', 'noidung' => 'Trong đó: Cán bộ, công chức cấp xã', 'nhucau' => 0, 'nguonkp' => 0, 'tietkiem' => 0, 'hocphi' => 0, 'vienphi' => 0,'khac' => 0, 'nguonthu' => 0);
             }
             else {
-                $data[0] = array('val' => 'GDDT', 'tt' => 'a', 'noidung' => 'Sự nghiệp giáo dục - đào tạo', 'nhucau' => 0, 'nguonkp' => 0, 'tietkiem' => 0, 'hocphi' => 0, 'vienphi' => 0, 'nguonthu' => 0);
-                $data[1] = array('val' => 'GD', 'tt' => '-', 'noidung' => 'Giáo dục', 'nhucau' => 0, 'nguonkp' => 0, 'tietkiem' => 0, 'hocphi' => 0, 'vienphi' => 0, 'nguonthu' => 0);
-                $data[2] = array('val' => 'DT', 'tt' => '-', 'noidung' => 'Đào tạo', 'nhucau' => 0, 'nguonkp' => 0, 'tietkiem' => 0, 'hocphi' => 0, 'vienphi' => 0, 'nguonthu' => 0);
-                $data[3] = array('val' => 'YTE', 'tt' => 'b', 'noidung' => 'Sự nghiệp y tế', 'nhucau' => 0, 'nguonkp' => 0, 'tietkiem' => 0, 'hocphi' => 0, 'vienphi' => 0, 'nguonthu' => 0);
-                $data[4] = array('val' => 'KHAC', 'tt' => 'c', 'noidung' => 'Sự nghiệp khác', 'nhucau' => 0, 'nguonkp' => 0, 'tietkiem' => 0, 'hocphi' => 0, 'vienphi' => 0, 'nguonthu' => 0);
-                $data[5] = array('val' => 'QLNN', 'tt' => 'd', 'noidung' => ' Quản lý nhà nước, Đảng, đoàn thể', 'nhucau' => 0, 'nguonkp' => 0, 'tietkiem' => 0, 'hocphi' => 0, 'vienphi' => 0, 'nguonthu' => 0);
-                $data[6] = array('val' => 'QLNN', 'tt' => '-', 'noidung' => 'Trong đó: Cán bộ, công chức cấp xã', 'nhucau' => 0, 'nguonkp' => 0, 'tietkiem' => 0, 'hocphi' => 0, 'vienphi' => 0, 'nguonthu' => 0);
+                $data[0] = array('val' => 'GDDT', 'tt' => 'a', 'noidung' => 'Sự nghiệp giáo dục - đào tạo', 'nhucau' => 0, 'nguonkp' => 0, 'tietkiem' => 0, 'hocphi' => 0, 'vienphi' => 0,'khac' => 0, 'nguonthu' => 0);
+                $data[1] = array('val' => 'GD', 'tt' => '-', 'noidung' => 'Giáo dục', 'nhucau' => 0, 'nguonkp' => 0, 'tietkiem' => 0, 'hocphi' => 0, 'vienphi' => 0,'khac' => 0, 'nguonthu' => 0);
+                $data[2] = array('val' => 'DT', 'tt' => '-', 'noidung' => 'Đào tạo', 'nhucau' => 0, 'nguonkp' => 0, 'tietkiem' => 0, 'hocphi' => 0, 'vienphi' => 0,'khac' => 0, 'nguonthu' => 0);
+                $data[3] = array('val' => 'YTE', 'tt' => 'b', 'noidung' => 'Sự nghiệp y tế', 'nhucau' => 0, 'nguonkp' => 0, 'tietkiem' => 0, 'hocphi' => 0, 'vienphi' => 0,'khac' => 0, 'nguonthu' => 0);
+                $data[4] = array('val' => 'KHAC', 'tt' => 'c', 'noidung' => 'Sự nghiệp khác', 'nhucau' => 0, 'nguonkp' => 0, 'tietkiem' => 0, 'hocphi' => 0, 'vienphi' => 0,'khac' => 0, 'nguonthu' => 0);
+                $data[5] = array('val' => 'QLNN', 'tt' => 'd', 'noidung' => ' Quản lý nhà nước, Đảng, đoàn thể', 'nhucau' => 0, 'nguonkp' => 0, 'tietkiem' => 0, 'hocphi' => 0, 'vienphi' => 0,'khac' => 0, 'nguonthu' => 0);
+                $data[6] = array('val' => 'QLNN', 'tt' => '-', 'noidung' => 'Trong đó: Cán bộ, công chức cấp xã', 'nhucau' => 0, 'nguonkp' => 0, 'tietkiem' => 0, 'hocphi' => 0, 'vienphi' => 0,'khac' => 0, 'nguonthu' => 0);
             }
             //Thiếu trường hợp 'Sự nghiệp khác' và GDDT
 
@@ -11340,6 +11336,7 @@ class baocaothongtu67Controller extends Controller
                     $data[$i]['tietkiem'] = 0;
                     $data[$i]['hocphi'] = 0;
                     $data[$i]['vienphi'] = 0;
+                    $data[$i]['khac'] = 0;
                     $data[$i]['nguonthu'] = 0;
                     $data[$i]['bosung'] = 0;
                     $dulieu = $model->where('linhvuchoatdong', $group[$j]['val']);
@@ -11360,6 +11357,7 @@ class baocaothongtu67Controller extends Controller
                                 $data[$i]['tietkiem'] = $solieu->sum('tietkiem');
                                 $data[$i]['hocphi'] = $solieu->sum('hocphi');
                                 $data[$i]['vienphi'] = $solieu->sum('vienphi');
+                                $data[$i]['khac'] = 0;
                                 $data[$i]['nguonthu'] = $solieu->sum('nguonthu');
                                 $data[$i]['bosung'] = $solieu->sum('nhucau') - $solieu->sum('nguonkp');
 
@@ -11368,8 +11366,10 @@ class baocaothongtu67Controller extends Controller
                                 $data[$luugr]['tietkiem'] += $solieu->sum('tietkiem');
                                 $data[$luugr]['hocphi'] += $solieu->sum('hocphi');
                                 $data[$luugr]['vienphi'] += $solieu->sum('vienphi');
+                                $data[$luugr]['khac'] += 0;
                                 $data[$luugr]['nguonthu'] += $solieu->sum('nguonthu');
                                 $data[$luugr]['bosung'] += $solieu->sum('nhucau') - $solieu->sum('nguonkp');
+
                             }
                         }
                     }
@@ -11380,8 +11380,25 @@ class baocaothongtu67Controller extends Controller
                 $data[$gddt]['tietkiem'] = $data[$giaoduc]['tietkiem'] + $data[$daotao]['tietkiem'];
                 $data[$gddt]['hocphi'] = $data[$giaoduc]['hocphi'] + $data[$daotao]['hocphi'];
                 $data[$gddt]['vienphi'] = $data[$giaoduc]['vienphi'] + $data[$daotao]['vienphi'];
+                $data[$gddt]['khac'] = 0;
                 $data[$gddt]['nguonthu'] = $data[$giaoduc]['nguonthu'] + $data[$daotao]['nguonthu'];
-                $data[$gddt]['bosung'] = $data[$giaoduc]['nhucau'] + $data[$daotao]['nhucau'] - $data[$giaoduc]['nguonthu'] - $data[$daotao]['nguonthu'];
+                $data[$gddt]['bosung'] = $data[$giaoduc]['nhucau'] + $data[$daotao]['nhucau']-$data[$giaoduc]['nguonkp'] - $data[$daotao]['nguonkp'];
+
+                /*
+                $data[0]['nhucau'] = $data[1]['nhucau'] + $data[2]['nhucau'];
+                $data[0]['nguonkp'] = $data[1]['nguonkp'] + $data[2]['nguonkp'];
+                $data[0]['tietkiem'] = $data[1]['tietkiem'] + $data[2]['tietkiem'];
+                $data[0]['hocphi'] = $data[1]['hocphi'] + $data[2]['hocphi'];
+                $data[0]['vienphi'] = $data[1]['vienphi'] + $data[2]['vienphi'];
+                $data[0]['nguonthu'] = $data[1]['nguonthu'] + $data[2]['nguonthu'];
+
+                $data[4]['nhucau'] = $model->sum('nhucau') - $data[0]['nhucau'] - $data[5]['nhucau'] - $data[3]['nhucau'];
+                $data[4]['nguonkp'] = $model->sum('nguonkp') - $data[0]['nguonkp'] - $data[5]['nguonkp'] - $data[3]['nguonkp'];
+                $data[4]['tietkiem'] = $model->sum('tietkiem') - $data[0]['tietkiem'] - $data[5]['tietkiem'] - $data[3]['tietkiem'];
+                $data[4]['hocphi'] = $model->sum('hocphi') - $data[0]['hocphi'] - $data[5]['hocphi'] - $data[3]['hocphi'];
+                $data[4]['vienphi'] = $model->sum('vienphi') - $data[0]['vienphi'] - $data[5]['vienphi'] - $data[3]['vienphi'];
+                $data[4]['nguonthu'] = $model->sum('nguonthu') - $data[0]['nguonthu'] - $data[5]['nguonthu'] - $data[3]['nguonthu'];
+                */
             }
             else {
                 for ($i = 0; $i < count($data); $i++) {
@@ -11391,27 +11408,30 @@ class baocaothongtu67Controller extends Controller
                     $data[$i]['tietkiem'] = $solieu->sum('tietkiem');
                     $data[$i]['hocphi'] = $solieu->sum('hocphi');
                     $data[$i]['vienphi'] = $solieu->sum('vienphi');
+                    $data[$i]['khac'] = 0;
                     $data[$i]['nguonthu'] = $solieu->sum('nguonthu');
-                    $data[$i]['bosung'] = $solieu->sum('nhucau') - $solieu->sum('nguonkp');
+                    $data[$i]['bosung'] = $solieu->sum('nhucau')-$solieu->sum('nguonkp');
                 }
                 $data[0]['nhucau'] = $data[1]['nhucau'] + $data[2]['nhucau'];
                 $data[0]['nguonkp'] = $data[1]['nguonkp'] + $data[2]['nguonkp'];
                 $data[0]['tietkiem'] = $data[1]['tietkiem'] + $data[2]['tietkiem'];
                 $data[0]['hocphi'] = $data[1]['hocphi'] + $data[2]['hocphi'];
                 $data[0]['vienphi'] = $data[1]['vienphi'] + $data[2]['vienphi'];
+                $data[0]['khac'] = 0;
                 $data[0]['nguonthu'] = $data[1]['nguonthu'] + $data[2]['nguonthu'];
-                $data[0]['bosung'] = $data[1]['nhucau'] + $data[2]['nhucau'] - $data[1]['nguonkp'] - $data[2]['nguonkp'];
+                $data[0]['bosung'] = $data[1]['nhucau'] + $data[2]['nhucau']-$data[1]['nguonkp'] - $data[2]['nguonkp'];
 
                 $data[4]['nhucau'] = $model->sum('nhucau') - $data[0]['nhucau'] - $data[5]['nhucau'] - $data[3]['nhucau'];
                 $data[4]['nguonkp'] = $model->sum('nguonkp') - $data[0]['nguonkp'] - $data[5]['nguonkp'] - $data[3]['nguonkp'];
                 $data[4]['tietkiem'] = $model->sum('tietkiem') - $data[0]['tietkiem'] - $data[5]['tietkiem'] - $data[3]['tietkiem'];
                 $data[4]['hocphi'] = $model->sum('hocphi') - $data[0]['hocphi'] - $data[5]['hocphi'] - $data[3]['hocphi'];
                 $data[4]['vienphi'] = $model->sum('vienphi') - $data[0]['vienphi'] - $data[5]['vienphi'] - $data[3]['vienphi'];
+                $data[4]['khác'] = 0;
                 $data[4]['nguonthu'] = $model->sum('nguonthu') - $data[0]['nguonthu'] - $data[5]['nguonthu'] - $data[3]['nguonthu'];
-                $data[4]['bosung'] = $model->sum('nhucau') - $data[0]['nhucau'] - $data[5]['nhucau'] - $data[3]['nhucau'] - ($model->sum('nguonkp') - $data[0]['nguonkp'] - $data[5]['nguonkp'] - $data[3]['nguonkp']);
+                $data[4]['bosung'] = $model->sum('nhucau') - $data[0]['nhucau'] - $data[5]['nhucau'] - $data[3]['nhucau']-($model->sum('nguonkp') - $data[0]['nguonkp'] - $data[5]['nguonkp'] - $data[3]['nguonkp']);
             }
 
-            return view('reports.thongtu67.mau4b_bosung')
+            return view('reports.thongtu67.mau4b_tt68bosung')
                 ->with('model',$model)
                 ->with('data',$data)
                 ->with('m_dv',$m_dv)

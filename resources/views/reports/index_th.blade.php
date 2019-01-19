@@ -53,7 +53,7 @@
                                     <li><a href="{{url('/bao_cao/thong_tu_67/khoi/mau2a1')}}" target="_blank">Báo cáo nhu cầu kinh phí thực hiện nghị định 47/2017/NĐ-CP (Mẫu 2a/1)</a></li>
                                     <li><a href="{{url('/bao_cao/thong_tu_67/khoi/mau2a2')}}" target="_blank">Báo cáo nhu cầu kinh phí thực hiện nghị định 47/2017/NĐ-CP (Mẫu 2a/2)</a></li>
                                     <li><a href="{{url('/bao_cao/thong_tu_67/khoi/mau2b')}}" target="_blank">Báo cáo tổng hợp quỹ trợ cấp tăng thêm của cán bộ xã, phường, thị trấn đã nghỉ việc (Mẫu 2b)</a></li>
-                                    <li><a href="{{url('/bao_cao/thong_tu_67/khoi/mau2c')}}" target="_blank">Báo cáo nhu cầu chênh lệch (Mẫu 2c)</a></li>
+                                    <li><a href="{{url('/bao_cao/thong_tu_67/khoi/mau2c')}}" target="_blank">Báo cáo nhu cầu kinh phí thực hiện BHTN theo nghị định 28/2015 (Mẫu 2c)</a></li>
                                     <li><a href="{{url('/bao_cao/thong_tu_67/khoi/mau2d')}}" target="_blank">Tổng hợp kinh phí tăng thêm để thực hiện chế độ phụ cấp đối với cán bộ không chuyên trách (Mẫu 2d)</a></li>
                                     <li><a href="{{url('/bao_cao/thong_tu_67/khoi/mau4a')}}" target="_blank">Báo cáo nguồn kinh phí (Mẫu 4a)</a></li>
                                     <li><a href="{{url('/bao_cao/thong_tu_67/khoi/mau4b')}}" target="_blank">Tổng hợp nhu cầu, nguồn kinh phí (Mẫu 4b)</a></li>
@@ -94,18 +94,19 @@
                                     <li><a href="{{url('/bao_cao/thong_tu_67/huyen/mau4a')}}" target="_blank">Báo cáo nguồn kinh phí (Mẫu 4a)</a></li>
                                     <li><a href="{{url('/bao_cao/thong_tu_67/huyen/mau4b')}}" target="_blank">Tổng hợp nhu cầu, nguồn kinh phí (Mẫu 4b)</a></li-->
 
-                                    <li><a href="#" data-target="#chitiet-modal" data-toggle="modal" onclick="baocao('{{'/bao_cao/thong_tu_67/huyen/mau2a1'}}')">Báo cáo nhu cầu kinh phí thực hiện nghị định 47/2017/NĐ-CP (Mẫu 2a/1)</a></li>
-                                    <li><a href="#" data-target="#chitiet-modal" data-toggle="modal" onclick="baocao('{{'/bao_cao/thong_tu_67/huyen/mau2a2'}}')">Báo cáo nhu cầu kinh phí thực hiện nghị định 47/2017/NĐ-CP (Mẫu 2a/2)</a></li>
+                                    <li><a href="#" data-target="#chitiet-modal" data-toggle="modal" onclick="baocao('{{'/bao_cao/thong_tu_67/huyen/mau2a1'}}')">Báo cáo nhu cầu kinh phí thực hiện nghị định 72/2018/NĐ-CP (Mẫu 2a/1)</a></li>
+                                    <li><a href="#" data-target="#chitiet-modal" data-toggle="modal" onclick="baocao('{{'/bao_cao/thong_tu_67/huyen/mau2a2'}}')">Báo cáo nhu cầu kinh phí thực hiện nghị định 72/2018/NĐ-CP (Mẫu 2a/2)</a></li>
                                     <li><a href="#" data-target="#chitiet-modal" data-toggle="modal" onclick="baocao('{{'/bao_cao/thong_tu_67/huyen/mau2b'}}')">Báo cáo tổng hợp quỹ trợ cấp tăng thêm của cán bộ xã, phường, thị trấn đã nghỉ việc (Mẫu 2b)</a></li>
-                                    <li><a href="#" data-target="#chitiet-modal" data-toggle="modal" onclick="baocao('{{'/bao_cao/thong_tu_67/huyen/mau2c'}}')">Báo cáo nhu cầu chênh lệch (Mẫu 2c)</a></li>
+                                    <li><a href="#" data-target="#chitiet-modal" data-toggle="modal" onclick="baocao('{{'/bao_cao/thong_tu_67/huyen/mau2c'}}')">Báo cáo nhu cầu kinh phí thực hiện BHTN theo nghị định 28/2015 (Mẫu 2c)</a></li>
                                     <!--li><a href="#" data-target="#chitiet-modal" data-toggle="modal" onclick="baocao('{{$furl.'maubckpbhtn'}}')">Báo cáo nhu cầu kinh phí thực hiện bảo hiểm thất nghiệp theo nghị định 28/2015/NĐ-CP</a></li-->
                                     <li><a href="#" data-target="#chitiet-modal" data-toggle="modal" onclick="baocao('{{'/bao_cao/thong_tu_67/huyen/mau2d'}}')">Tổng hợp kinh phí tăng thêm để thực hiện chế độ phụ cấp đối với cán bộ không chuyên trách (Mẫu 2d)</a></li>
-                                    <li><a href="#" data-target="#chitiet-modal" data-toggle="modal" onclick="baocao('{{'/bao_cao/thong_tu_67/huyen/mau2e'}}')">Tổng hợp kinh phí tăng, giảm do điều chỉnh địa bàn vùng kinh tế xã hội đặc biệt khó khăn (Mẫu 2e)</a></li>
-                                    <li><a href="#" data-target="#chitiet-modal" data-toggle="modal" onclick="baocao('{{'/bao_cao/thong_tu_67/huyen/mau2g'}}')">Tổng hợp phụ cấp ưu đãi tăng, giảm do điều chỉnh địa bàn vùng kinh tế xã hội đặc biệt khó khăn (Mẫu 2g)</a></li>
-                                    <li><a href="#" data-target="#chitiet-modal" data-toggle="modal" onclick="baocao('{{'/bao_cao/thong_tu_67/huyen/mau2h'}}')">Tổng hợp phụ cấp thu hút tăng, giảm do điều chỉnh địa bàn vùng kinh tế xã hội đặc biệt khó khăn (Mẫu 2h)</a></li>
+                                    <li><a href="#" data-target="#chitiet-modal" data-toggle="modal" onclick="baocao('{{'/bao_cao/thong_tu_67/huyen/mau2đ'}}')">Báo cáo nguồn thực hiện CCTL tiết kiệm từ việc thực hiện tinh giảm biên chế (Mẫu 2đ)</a></li>
+                                    <li><a href="#" data-target="#chitiet-modal" data-toggle="modal" onclick="baocao('{{'/bao_cao/thong_tu_67/huyen/mau2e'}}')">Báo cáo nguồn thực hiện CCTL tiết kiệm từ việc thay đổi cơ chế tự chủ (Mẫu 2e)</a></li>
+                                    <li><a href="#" data-target="#chitiet-modal" data-toggle="modal" onclick="baocao('{{'/bao_cao/thong_tu_67/huyen/mau2g'}}')">Báo cáo quỹ tiền lương, phụ cấp đối với lao động theo hợp đồng khu vực hành chính và đơn vị sự nghiệp (Mẫu 2g)</a></li>
+                                    <!--li><a href="#" data-target="#chitiet-modal" data-toggle="modal" onclick="baocao('{{'/bao_cao/thong_tu_67/huyen/mau2h'}}')">Tổng hợp phụ cấp thu hút tăng, giảm do điều chỉnh địa bàn vùng kinh tế xã hội đặc biệt khó khăn (Mẫu 2h)</a></li-->
                                     <li><a href="#" data-target="#chitiet-modal" data-toggle="modal" onclick="baocao('{{'/bao_cao/thong_tu_67/huyen/mau4a'}}')">Báo cáo nguồn kinh phí để thực hiện cải cách tiền lương (Mẫu 4a)</a></li>
-                                    <li><a href="#" data-target="#chitiet-modal" data-toggle="modal" onclick="baocao('{{'/bao_cao/thong_tu_67/huyen/mau4b'}}')">Tổng hợp nhu cầu, nguồn thực hiện nghị định 47/2017/NĐ-CP (Mẫu 4b)</a></li>
-                                    <li><a href="#" data-target="#chitiet-modal" data-toggle="modal" onclick="baocao('{{'/bao_cao/thong_tu_67/huyen/mau4bbs'}}')">Tổng hợp nhu cầu, nguồn thực hiện nghị định 47/2017/NĐ-CP (Mẫu 4b bổ sung)</a></li>
+                                    <li><a href="#" data-target="#chitiet-modal" data-toggle="modal" onclick="baocao('{{'/bao_cao/thong_tu_67/huyen/mau4b'}}')">Tổng hợp nhu cầu, nguồn thực hiện nghị định 72/2018/NĐ-CP (Mẫu 4b)</a></li>
+                                    <li><a href="#" data-target="#chitiet-modal" data-toggle="modal" onclick="baocao('{{'/bao_cao/thong_tu_67/huyen/mau4bbs'}}')">Tổng hợp nhu cầu, nguồn thực hiện nghị định 72/2018/NĐ-CP (Mẫu 4b bổ sung)</a></li>
 
                                 </ol>
                             </div>
