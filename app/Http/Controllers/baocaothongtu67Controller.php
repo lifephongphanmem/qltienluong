@@ -3094,12 +3094,12 @@ class baocaothongtu67Controller extends Controller
             $ar_I[]=array('val'=>'MPCTX','tt'=>'3','noidung'=>'Đơn vị đảm bảo một phần chi thường xuyên');
             $ar_I[]=array('val'=>'NNCTX','tt'=>'4','noidung'=>'Đơn vị được nhà nước đảm bảo chi thường xuyên');
             if(isset($inputs['excel'])){
-                Excel::create('Mau2đ_tt68',function($excel) use($ar_I,$inputs){
+                Excel::create('Mau2dd_tt68',function($excel) use($ar_I,$inputs){
                     $excel->sheet('New sheet', function($sheet) use($ar_I,$inputs){
-                        $sheet->loadView('reports.thongtu67.Mau2đ_tt68')
+                        $sheet->loadView('reports.thongtu67.Mau2dd_tt68')
                             ->with('ar_I',$ar_I)
                             ->with('inputs',$inputs)
-                            ->with('pageTitle','Mau2đ_tt68');
+                            ->with('pageTitle','Mau2dd_tt68');
                         $sheet->setAutoSize(false);
                         $sheet->setFontFamily('Tahoma');
                         $sheet->setFontBold(false);
@@ -3107,7 +3107,7 @@ class baocaothongtu67Controller extends Controller
                 })->download('xls');
             }
             else{
-                return view('reports.thongtu67.Mau2đ_tt68')
+                return view('reports.thongtu67.Mau2dd_tt68')
                     ->with('inputs',$inputs)
                     ->with('ar_I',$ar_I)
                     ->with('pageTitle','TỔNG HỢP PHỤ CẤP ƯU ĐÃI TĂNG, GIẢM DO ĐIỀU CHỈNH ĐỊA BÀN VÙNG KINH TẾ XÃ HỘI ĐẶC BIỆT KHÓ KHĂN');
@@ -10523,7 +10523,7 @@ class baocaothongtu67Controller extends Controller
             $ar_I[]=array('val'=>'CTX','tt'=>'2','noidung'=>'Đơn vị đảm bảo chi thường xuyên (2)');
             $ar_I[]=array('val'=>'MPCTX','tt'=>'3','noidung'=>'Đơn vị đảm bảo một phần chi thường xuyên');
             $ar_I[]=array('val'=>'NNCTX','tt'=>'4','noidung'=>'Đơn vị được nhà nước đảm bảo chi thường xuyên');
-            return view('reports.thongtu67.Mau2đ_tt68')
+            return view('reports.thongtu67.Mau2dd_tt68')
                 ->with('inputs',$inputs)
                 ->with('ar_I',$ar_I)
                 ->with('pageTitle','TỔNG HỢP PHỤ CẤP ƯU ĐÃI TĂNG, GIẢM DO ĐIỀU CHỈNH ĐỊA BÀN VÙNG KINH TẾ XÃ HỘI ĐẶC BIỆT KHÓ KHĂN');
