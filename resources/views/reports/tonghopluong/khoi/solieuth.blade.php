@@ -134,7 +134,7 @@
             @if(count($chitiet) > 0 )
                 <tr class="money">
                     <td style="text-align: right">-</td>
-                    <td style="text-align: left">{{$plct->tennguonkp}}</td>
+                    <td style="text-align: left"></td>
                     <td style="text-align: left">{{$plct->tenct}}</td>
                     <td style="text-align: center">{{dinhdangso(array_sum( array_column($a_plct,'soluong')))}}</td>
 

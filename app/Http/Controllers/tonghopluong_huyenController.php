@@ -928,7 +928,8 @@ class tonghopluong_huyenController extends Controller
             $a_pl = array_column($model_donvi->toarray(),'maphanloai','madv');
             $model = tonghopluong_donvi_chitiet::join('tonghopluong_donvi','tonghopluong_donvi_chitiet.mathdv','tonghopluong_donvi.mathdv')
                 ->join('dmdonvi','dmdonvi.madv','tonghopluong_donvi.madv')
-                ->select('dmdonvi.madv','maphanloai','mact','manguonkp','luongcoban','soluong','heso','hesobl','hesopc','hesott','vuotkhung','tonghopluong_donvi_chitiet.pcct'
+                ->join('dmphanloaict','dmphanloaict.mact','tonghopluong_donvi_chitiet.mact')
+                ->select('dmdonvi.madv','maphanloai','tonghopluong_donvi_chitiet.mact','tenct','manguonkp','luongcoban','soluong','heso','hesobl','hesopc','hesott','vuotkhung','tonghopluong_donvi_chitiet.pcct'
                     , 'tonghopluong_donvi_chitiet.pckct', 'tonghopluong_donvi_chitiet.pck', 'tonghopluong_donvi_chitiet.pccv', 'tonghopluong_donvi_chitiet.pckv',
                     'tonghopluong_donvi_chitiet.pcth', 'tonghopluong_donvi_chitiet.pcdd', 'tonghopluong_donvi_chitiet.pcdh', 'tonghopluong_donvi_chitiet.pcld',
                     'tonghopluong_donvi_chitiet.pcdbqh', 'tonghopluong_donvi_chitiet.pcudn', 'tonghopluong_donvi_chitiet.pctn',
@@ -944,7 +945,7 @@ class tonghopluong_huyenController extends Controller
             $m_pl = tonghopluong_donvi_chitiet::join('tonghopluong_donvi','tonghopluong_donvi_chitiet.mathdv','tonghopluong_donvi.mathdv')
                 ->join('dmdonvi','dmdonvi.madv','tonghopluong_donvi.madv')
                 ->join('dmphanloaict','dmphanloaict.mact','tonghopluong_donvi_chitiet.mact')
-                ->select('maphanloai','tenct','dmphanloaict.mact','manguonkp')
+                ->select('maphanloai','tenct','dmphanloaict.mact')
                 ->wherein('tonghopluong_donvi_chitiet.mathdv', array_column($model_tonghop->toarray(),'mathdv'))
                 ->orderby('maphanloai')
                 ->distinct()
@@ -953,9 +954,11 @@ class tonghopluong_huyenController extends Controller
             $model_nguonkp = array_column(dmnguonkinhphi::all()->toArray(), 'tennguonkp', 'manguonkp');
             $model_phanloaict = array_column(dmphanloaicongtac::all()->toArray(), 'tencongtac', 'macongtac');
             $model_ct = array_column(dmphanloaict::all()->toArray(), 'tenct', 'mact');
+            /*
             foreach ($m_pl as $chitiet) {
                 $chitiet->tennguonkp = isset($model_nguonkp[$chitiet->manguonkp]) ? $model_nguonkp[$chitiet->manguonkp] : '';
             }
+            */
             foreach ($model as $chitiet) {
                 //$chitiet->madv = $a_dv[$chitiet->mathdv];
                 //$chitiet->maphanloai = $a_pl[$chitiet->madv];
@@ -968,7 +971,7 @@ class tonghopluong_huyenController extends Controller
                 $chitiet->tongtl = $chitiet->tonghs - $chitiet->giaml;
                 $chitiet->tongbh = $chitiet->stbhxh_dv + $chitiet->stbhyt_dv + $chitiet->stkpcd_dv + $chitiet->stbhtn_dv;
                 foreach (getColTongHop() as $ct) {
-                    $ma = 'hs'.$ct;
+                    $ma = $ct;
                     $chitiet->$ma = $chitiet->$ct / $chitiet->luongcoban;
                 }
             }
