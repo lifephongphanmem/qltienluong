@@ -53,7 +53,7 @@ License: You must have a valid license purchased only from themeforest(the above
 <div class="logo">
 	<a href="">
         <!--img src="{{url('images/h2softduoi.png')}}" width="150"-->
-		<img src="{{ url('images/LIFESOFT.png')}}"  width="250" alt="Công ty TNHH phát triển phần mềm Cuộc Sống"/>
+		<img src="{{ url('images/LIFESOFT.png')}}"  width="150" alt="Công ty TNHH phát triển phần mềm Cuộc Sống"/>
 	</a>
 </div>
 <!-- END LOGO -->
@@ -65,7 +65,7 @@ License: You must have a valid license purchased only from themeforest(the above
 <div class="content">
 	<!-- BEGIN LOGIN FORM -->
 		{!! Form::open(['url'=>'/signin','id' => 'form-login', 'class'=>'form-horizontal form-validate']) !!}
-		<h3 class="form-title">Login</h3>
+		<h3 class="form-title">ĐĂNG NHẬP</h3>
 		<div class="alert alert-danger display-hide">
 			<button class="close" data-close="alert"></button>
 			<span>
@@ -73,27 +73,33 @@ License: You must have a valid license purchased only from themeforest(the above
 		</div>
 		<div class="form-group">
 			<!--ie8, ie9 does not support html5 placeholder, so we just show field title for that-->
-			<label class="control-label visible-ie8 visible-ie9">Username</label>
+			<label class="control-label visible-ie8 visible-ie9">Tài khoản</label>
 			<div class="input-icon">
 				<i class="fa fa-user"></i>
-				<input class="form-control required" type="text" autocomplete="off" placeholder="Username" name="username" id="username" value="{{$username}}" autofocus >
+				<input class="form-control required" type="text" autocomplete="off" placeholder="Tài khoản" name="username" id="username" value="{{$username}}" autofocus >
 			</div>
 		</div>
 		<div class="form-group">
-			<label class="control-label visible-ie8 visible-ie9">Password</label>
+			<label class="control-label visible-ie8 visible-ie9">Mật khẩu</label>
 			<div class="input-icon">
 				<i class="fa fa-lock"></i>
-				<input class="form-control required" type="password" autocomplete="off" placeholder="Password" name="password" id="password"/>
+				<input class="form-control required" type="password" autocomplete="off" placeholder="Mật khẩu" name="password" id="password"/>
 			</div>
 		</div>
+        <hr>
 		<div class="form-actions">
-           <button type="submit" class="btn blue pull-right" id="login_button" onclick="validatePassword();">
-				Login <i class="m-icon-swapright m-icon-white"></i>
-           </button>
+            <div class="form-group">
+                <button type="submit" class="btn blue pull-right" id="login_button" onclick="validatePassword();">
+                    Đăng nhập <i class="m-icon-swapright m-icon-white"></i>
+                </button>
+            </div>
 
-            <a class="btn blue"  href="{{url('/danh_sach_tai_khoan?madiaban=ALL')}}">
-                Danh sách tài khoản
-            </a>
+            <div class="form-group">
+                <a class="btn blue pull-right"  href="{{url('/danh_sach_tai_khoan?madiaban=ALL')}}">
+                    Danh sách tài khoản
+                </a>
+            </div>
+
 		</div>
 		{!! Form::close() !!}
 

@@ -31,7 +31,7 @@
 
 <br><br>
 <div class="row">
-    <img src="{{url('images/LIFESOFT.png')}}" width="250" alt="Công ty TNHH phát triển phần mềm Cuộc Sống">
+    <img src="{{url('images/LIFESOFT.png')}}" width="150" alt="Công ty TNHH phát triển phần mềm Cuộc Sống">
     <!--img src="{{url('images/h2softduoi.png')}}" width="150"-->
 </div>
 <div class="row">
