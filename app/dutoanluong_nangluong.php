@@ -26,6 +26,7 @@ class dutoanluong_nangluong extends Model
         'msngbac',
         'macanbo',
         'tencanbo',
+        'stt',
         'luongcoban',
         'heso',
         'hesobl',

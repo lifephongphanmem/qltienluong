@@ -67,9 +67,13 @@
                                             <a href="{{url($furl.'?maso='.$value->masodv)}}" class="btn btn-default btn-xs mbs">
                                                 <i class="fa fa-th-list"></i>&nbsp; Chi tiết</a>
                                             <!--a href="{{url($furl.'printf/ma_so='.$value->masodv)}}" class="btn btn-default btn-xs mbs" TARGET="_blank">
-                                                <i class="fa fa-print"></i>&nbsp; In dự toán</a-->
+                                                <i class="fa fa-print"></i>&nbsp; In dự toán</a>
                                             <a href="{{url($furl.'printf_bl/ma_so='.$value->masodv)}}" class="btn btn-default btn-xs mbs" TARGET="_blank">
-                                                <i class="fa fa-print"></i>&nbsp; In bảng lương</a>
+                                                <i class="fa fa-print"></i>&nbsp; In bảng lương</a-->
+
+                                            <button type="button" onclick="indutoan('{{$value->namns}}','{{$value->masodv}}')" class="btn btn-default btn-xs mbs" data-target="#indt-modal" data-toggle="modal">
+                                                <i class="fa fa-print"></i>&nbsp; In dự toán</button>
+
                                             @if($value->trangthai == 'CHUAGUI' || $value->trangthai == 'TRALAI')
                                                 <button type="button" class="btn btn-default btn-xs" onclick="confirmChuyen('{{$value->masodv}}')" data-target="#chuyen-modal" data-toggle="modal"><i class="fa fa-share-square-o"></i>&nbsp;
                                                     Gửi dữ liệu</button>
@@ -89,12 +93,72 @@
                         </tbody>
                     </table>
                 </div>
-                </div>
             </div>
+        </div>
+    </div>
+
+    <!--Modal thông tin tùy chọn in bảng lương -->
+    <div id="indt-modal" tabindex="-1" role="dialog" aria-hidden="true" class="modal fade">
+        <div class="modal-lg modal-dialog modal-content">
+            <div class="modal-header modal-header-primary">
+                <button type="button" data-dismiss="modal" aria-hidden="true" class="close">&times;</button>
+                <h4 id="hd-inbl" class="modal-title">In dự toán lương</h4>
+            </div>
+
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <button type="button" onclick="intonghopdt()" style="border-width: 0px" class="btn btn-default btn-xs mbs">
+                                <i class="fa fa-print"></i>&nbsp; In dự toán tổng hợp</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <button type="button" style="border-width: 0px" class="btn btn-default btn-xs mbs" data-target="#mautt107-modal" data-toggle="modal"
+                                    title="Bảng lương của cán bộ theo mẫu C02-HD">
+                                <i class="fa fa-print"></i>&nbsp; Bảng lương mẫu C02-HD (TT107/2017/TT-BTC)</button>
+                        </div>
+                    </div>
+
+                    <!--div class="col-md-6">
+                        <div class="form-group">
+                            <button type="button" style="border-width: 0px" class="btn btn-default btn-xs mbs" data-target="#mautt107-modal" data-toggle="modal"
+                                    title="Bảng lương của cán bộ theo mẫu C02-HD">
+                                <i class="fa fa-print"></i>&nbsp; Bảng lương mẫu C02-HD (TT185/2010/TT-BTC)</button>
+                        </div>
+                    </div-->
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <button type="button" style="border-width: 0px" onclick="innangluong()" class="btn btn-default btn-xs mbs">
+                                <i class="fa fa-print"></i>&nbsp; Danh sách cán bộ nâng lương</button>
+                        </div>
+                    </div>
+
+                    <!--div class="col-md-6">
+                        <div class="form-group">
+                            <button type="button" style="border-width: 0px" onclick="innghihuu()" class="btn btn-default btn-xs mbs">
+                                <i class="fa fa-print"></i>&nbsp; Danh sách cán bộ nghỉ hưu</button>
+                        </div>
+                    </div-->
+                </div>
+                <input type="hidden" id="nam_dt" name="nam_dt"/>
+                <input type="hidden" id="masodv_dt" name="masodv_dt"/>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" data-dismiss="modal" class="btn btn-default">Hủy thao tác</button>
+            </div>
+        </div>
     </div>
 
     <!--Modal thêm mới -->
-
     {!! Form::open(['url'=>$furl.'create', 'id' => 'create_dutoan', 'class'=>'horizontal-form']) !!}
     <div id="create-modal" tabindex="-1" role="dialog" aria-hidden="true" class="modal fade">
         <div class="modal-dialog">
@@ -189,12 +253,28 @@
 
 
     <script>
+        function indutoan(namdt, masodv){
+            $('#nam_dt').val(namdt);
+            $('#masodv_dt').val(masodv);
+        }
+
         function add(){
             $('#create-modal').modal('show');
         }
 
         function confirmChuyen(masodv) {
-            document.getElementById("masodv").value = masodv;
+            //document.getElementById("masodv").value = masodv;
+            $('#frm_chuyen').find("[id^='masodv']").val(masodv);
+        }
+
+        function innangluong() {
+            var masodv = $('#masodv_dt').val();
+            window.open('{{$furl}}'+'nangluong?maso='+ masodv,'_blank');
+        }
+
+        function intonghopdt() {
+            var masodv = $('#masodv_dt').val();
+            window.open('{{$furl}}'+'printf?maso='+ masodv,'_blank');
         }
 
         function getLyDo(masodv){
@@ -233,4 +313,5 @@
     </script>
 
     @include('includes.modal.delete')
+    @include('manage.dutoanluong.modal_printf')
 @stop

@@ -93,11 +93,14 @@ class HomeController extends Controller
                     ->with('m_luanchuyen',$m_luanchuyen)
                     ->with('a_ketqua', $a_ketqua)
                     ->with('pageTitle', 'Tổng quan');
-
             }
 
-        } else
-            return view('welcome');
+        } else{
+            //dd(getGeneralConfigs());
+            return view('welcome')
+                ->with('a_gen', getGeneralConfigs());
+        }
+
 
     }
 

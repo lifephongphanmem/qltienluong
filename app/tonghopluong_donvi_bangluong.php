@@ -22,6 +22,7 @@ class tonghopluong_donvi_bangluong extends Model
         'msngbac',
         'macanbo',
         'tencanbo',
+        'stt',
         'luongcoban',
         'soluong',
         'heso',

@@ -267,10 +267,10 @@ Route::group(['prefix'=>'nghiep_vu'],function(){
             Route::post('detail/update','dutoanluongController@update_detail');
             Route::get('detail/get','dutoanluongController@get_detail');
 
-            Route::get('printf/ma_so={masodv}','dutoanluongController@printf_data');
+            Route::get('printf','dutoanluongController@printf_data');
             Route::get('printf_bl/ma_so={masodv}','dutoanluongController@printf_bl');
-            Route::get('mauqd19','dutoanluongController@printf_qd19');
-
+            Route::post('mautt107','dutoanluongController@printf_tt107');
+            Route::get('nangluong','dutoanluongController@printf_nangluong');
         });
 
         Route::group(['prefix'=>'dia_ban_dbkk'],function(){

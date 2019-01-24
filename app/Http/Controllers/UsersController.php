@@ -177,6 +177,7 @@ class UsersController extends Controller
 
                 $ttuser->phanloaitaikhoan = $model_donvi->phanloaitaikhoan;
                 $ttuser->phamvitonghop = $model_donvi->phamvitonghop;
+                $ttuser->lamtron = $model_donvi->lamtron;
 
                 //kt 2 biến 'phanloaitaikhoan' == TH && 'phamvitonghop' để xem tk có là tk tổng hợp ko.
                 //Giữ 2 biến cũ cho đỡ lỗi, tìm và thay thế

@@ -47,6 +47,8 @@
 
     <br>
     <br>
+
+    <h4>{!!$a_gen['thongbao']!!}</h4>
 </div>
 <div class="row mtxl mbxl"></div>
 <div class="row mtxl mbxl"></div>
@@ -57,7 +59,7 @@
 
     <p style="text"><b>Phát triển bởi Công ty TNHH Phát Triển Phần Mềm Cuộc Sống</b></p>
 
-    <p><b>Địa chỉ</b>: T14 – Cụm 591 – Liên Ninh – Thanh trì – Hà Nội</p>
+    <p><b>Địa chỉ</b>: Ngũ Hiệp – Thanh trì – Hà Nội</p>
 
     <p><b>Tel</b>: 04.36343951 - <b>Email</b>: phanmemcuocsong@gmail.com</p>
 </div>

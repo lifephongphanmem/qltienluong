@@ -24,6 +24,7 @@ class nguonkinhphi_bangluong extends Model
         'msngbac',
         'macanbo',
         'tencanbo',
+        'stt',
         'luongcoban',
         'heso',
         'hesobl',

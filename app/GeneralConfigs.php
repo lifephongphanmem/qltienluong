@@ -12,15 +12,11 @@ class GeneralConfigs extends Model
         'tuoinu',
         'tuoinam',
         'luongcb',
-        'bhxh',
-        'bhyt',
-        'bhtn',
-        'kpcd',
-        'bhxh_dv',
-        'bhyt_dv',
-        'bhtn_dv',
-        'kpcd_dv',
+        'tinh',
+        'huyen',
+        'thongbao',
         'tg_hetts',
         'tg_xetnl'
     ];
+    //ALTER TABLE `general_configs` ADD `thongbao` TEXT NULL AFTER `huyen`;
 }

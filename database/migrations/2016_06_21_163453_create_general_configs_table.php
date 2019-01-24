@@ -19,22 +19,7 @@ class CreateGeneralConfigsTable extends Migration
             $table->string('tinh', 30)->nullable();
             $table->string('huyen', 30)->nullable();
             $table->double('luongcb')->default(0);
-            $table->double('bhxh')->default(0);
-            $table->double('bhyt')->default(0);
-            $table->double('bhtn')->default(0);
-            $table->double('kpcd')->default(0);
-            $table->double('stbhxh')->default(0);
-            $table->double('stbhyt')->default(0);
-            $table->double('stbhtn')->default(0);
-            $table->double('stkpcd')->default(0);
-            $table->double('bhxh_dv')->default(0);
-            $table->double('bhyt_dv')->default(0);
-            $table->double('bhtn_dv')->default(0);
-            $table->double('kpcd_dv')->default(0);
-            $table->double('stbhxh_dv')->default(0);
-            $table->double('stbhyt_dv')->default(0);
-            $table->double('stbhtn_dv')->default(0);
-            $table->double('stkpcd_dv')->default(0);
+            $table->text('thongbao')->nullable();
             $table->double('tg_hetts')->default(0);//Thời gian xet hết tập sự
             $table->double('tg_xetnl')->default(0);//Thời gian xet nâng lương
             $table->timestamps();
