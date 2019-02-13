@@ -655,7 +655,7 @@ class bangluongController extends Controller
     function tinhluong_khongdinhmuc($inputs){
         $ngaylap = Carbon::create($inputs['nam'], $inputs['thang'], '01');
 
-        $a_thaisan =array_column(hosotamngungtheodoi::where('madv', $inputs['madv'])->where('maphanloai', 'THAISAN')
+        $a_thaisan = array_column(hosotamngungtheodoi::where('madv', $inputs['madv'])->where('maphanloai', 'THAISAN')
             ->where('ngaytu', '<=', $ngaylap)->where('ngayden', '>=', $ngaylap)->get()->toarray(),'macanbo');
 
         $a_duongsuc = hosotamngungtheodoi::select('songaycong','songaynghi','macanbo')->where('madv', $inputs['madv'])->where('maphanloai','DUONGSUC')
@@ -973,6 +973,30 @@ class bangluongController extends Controller
                 $cb_nghi = $a_nghiphep[$m_cb[$key]['macanbo']];
                 $ngaycong = $cb_nghi['songaycong'] > 0 ? $cb_nghi['songaycong'] : $ngaycong;
                 $m_cb[$key]['congtac'] = 'NGHIPHEP';
+                $sotiencong = $inputs['luongcoban'] *
+                    ($m_cb[$key]['heso'] + $m_cb[$key]['vuotkhung'] + $m_cb[$key]['pccv']
+                        + $m_cb[$key]['hesobl'] + $m_cb[$key]['pctnn']);
+                $tiencong = round($sotiencong / $ngaycong, 0);
+
+                if($cb_nghi['songaynghi'] >= 15) {//nghỉ quá 15 ngày thì ko đóng bảo hiểm
+                    $m_cb[$key]['stbhxh'] = 0;
+                    $m_cb[$key]['stbhyt'] = 0;
+                    $m_cb[$key]['stkpcd'] = 0;
+                    $m_cb[$key]['stbhtn'] = 0;
+                    $m_cb[$key]['ttbh'] = 0;
+                    $m_cb[$key]['stbhxh_dv'] = 0;
+                    $m_cb[$key]['stbhyt_dv'] = 0;
+                    $m_cb[$key]['stkpcd_dv'] = 0;
+                    $m_cb[$key]['stbhtn_dv'] = 0;
+                    $m_cb[$key]['ttbh_dv'] = 0;
+                }
+                $m_cb[$key]['giaml'] = $cb_nghi['songaynghi'] >= $ngaycong ? $sotiencong : ($tiencong * $cb_nghi['songaynghi']);
+            }
+
+            if($duongsuc) {
+                $cb_nghi = $a_nghiphep[$m_cb[$key]['macanbo']];
+                $ngaycong = $cb_nghi['songaycong'] > 0 ? $cb_nghi['songaycong'] : $ngaycong;
+                $m_cb[$key]['congtac'] = 'DUONGSUC';
                 $sotiencong = $inputs['luongcoban'] *
                     ($m_cb[$key]['heso'] + $m_cb[$key]['vuotkhung'] + $m_cb[$key]['pccv']
                         + $m_cb[$key]['hesobl'] + $m_cb[$key]['pctnn']);

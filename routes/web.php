@@ -481,7 +481,8 @@ Route::group(['prefix'=>'chuc_nang'],function(){
             Route::post('tralai','tonghopluong_donviController@tralai'); //trả lại dữ liệu
             Route::get('getlydo','tonghopluong_donviController@getlydo');//lý do trả lại dữ liệu
 
-            Route::get('del/maso={mathdv}','tonghopluong_donviController@destroy');//lý do trả lại dữ liệu
+            //Route::get('del/maso={mathdv}','tonghopluong_donviController@destroy');
+            Route::post('destroy','tonghopluong_donviController@destroy');
             Route::get('del_detail/{id}','tonghopluong_donviController@destroy_detail');//lý do trả lại dữ liệu
 
             Route::get('printf_data/ma_so={mathdv}','tonghopluong_donviController@printf_data');

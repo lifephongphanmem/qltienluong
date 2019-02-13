@@ -97,7 +97,7 @@
                                                         <button type="button" class="btn btn-default btn-sm" onclick="getLyDo('{{$value['mathdv']}}')" data-target="#tralai-modal" data-toggle="modal"><i class="fa fa-share-square-o"></i>&nbsp;
                                                             Lý do trả lại</button>
                                                     @endif
-                                                    <button type="button" onclick="cfDel('{{$furl.'del/maso='.$value['mathdv']}}')" class="btn btn-default btn-sm mbs" data-target="#delete-modal-confirm" data-toggle="modal">
+                                                    <button type="button" onclick="cfDel('{{$furl.'destroy?&thang='.$value['thang'].'&nam='.$nam.'&madv='.session('admin')->madv}}')" class="btn btn-default btn-sm mbs" data-target="#delete-modal-confirm" data-toggle="modal">
                                                         <i class="fa fa-times"></i>&nbsp; Xóa</button>
                                                 @endif
                                                 <a href="{{url($furl.'printf_data/ma_so='.$value['mathdv'])}}" class="btn btn-default btn-sm" TARGET="_blank">
@@ -109,8 +109,8 @@
                                                         <i class="fa fa-print"></i>&nbsp; Số liệu địa bàn</a-->
                                                 @endif
                                             @else
-                                                <a href="{{url($furl.'tonghop?thang='.$value['thang'].'&nam='.$nam)}}" class="btn btn-default btn-sm">
-                                                    <i class="fa fa-stack-overflow"></i>&nbsp; Tổng hợp dữ liệu</a>
+                                                <button type="button" id="btntonghop" onclick="tonghop('{{($furl.'tonghop?thang='.$value['thang'].'&nam='.$nam)}}')" class="btn btn-default btn-sm">
+                                                    <i class="fa fa-stack-overflow"></i>&nbsp; Tổng hợp dữ liệu</button>
                                             @endif
                                         @else
 
@@ -180,6 +180,11 @@
     </div>
 
     <script>
+        function tonghop(url) {
+            $('#btntonghop').attr('disabled', true);
+            window.location.href = url;
+        }
+
         function confirmChuyen(mathdv) {
             document.getElementById("mathdv").value = mathdv;
         }
@@ -334,7 +339,8 @@
     </script>
 
     <div id="delete-modal-confirm" tabindex="-1" role="dialog" aria-hidden="true" class="modal fade">
-        <form id="frmDelete" method="GET" action="#" accept-charset="UTF-8">
+        {!! Form::open(['url'=>'','method'=>'post' , 'id' => 'frmDelete']) !!}
+        <!--form id="frmDelete" method="POST" action="#" accept-charset="UTF-8"-->
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header modal-header-primary">

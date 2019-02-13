@@ -463,8 +463,18 @@ class tonghopluong_donviController extends Controller
             $inputs = $requests->all();
             $thang = $inputs['thang'];
             $nam = $inputs['nam'];
-            $mathdv = getdate()[0];
             $madv = session('admin')->madv;
+            $chk_data = tonghopluong_donvi::where('thang', $inputs['thang'])
+                ->where('nam', $inputs['nam'])
+                ->where('madv', $madv)
+                ->get()->count();
+            if($chk_data > 0){
+                return view('errors.trungdulieu')
+                    ->with('url','/chuc_nang/tong_hop_luong/don_vi/index?nam='.date('Y'));
+            }
+
+            $mathdv = getdate()[0];
+
             $a_congtac = array_column(dmphanloaict::all()->toArray(), 'macongtac', 'mact');
             //$a_hs = array_column(hosocanbo::where('madv',session('admin')->madv)->where('theodoi','<','9')->get()->toArray(), 'tencanbo', 'macanbo');
 
@@ -576,7 +586,7 @@ class tonghopluong_donviController extends Controller
             $model_data = unset_key($model_data,array('congtac','mabl','macanbo', 'macvcq', 'mapb'));
             tonghopluong_donvi_chitiet::insert($model_data);
             tonghopluong_donvi::create($inputs);
-            return redirect('/chuc_nang/tong_hop_luong/don_vi/detail/ma_so=' . $mathdv);
+            return redirect('/chuc_nang/tong_hop_luong/don_vi/detail/ma_so='. $mathdv);
         } else
             return view('errors.notlogin');
     }
@@ -1012,6 +1022,7 @@ class tonghopluong_donviController extends Controller
         } else
             return view('errors.notlogin');
     }
+
     function printf_bl_khoi($mathdv)
     {
         if (Session::has('admin')) {
@@ -1155,15 +1166,20 @@ class tonghopluong_donviController extends Controller
         die($model);
     }
 
-    function destroy($mathdv)
-    {
+    function destroy(Request $request)
+    {//từ mathdv -> lấy các bảng tổng hợp theo tháng, năm -> xóa hết
         if (Session::has('admin')) {
-            tonghopluong_donvi_chitiet::where('mathdv', $mathdv)->delete();
-            tonghopluong_donvi_bangluong::where('mathdv', $mathdv)->delete();
-            $model = tonghopluong_donvi::where('mathdv', $mathdv)->first();
-            $model->delete();
-            //tonghopluong_donvi::where('mathdv',$mathdv)->delete();
-            return redirect('/chuc_nang/tong_hop_luong/don_vi/index?nam=' . $model->nam);
+            $inputs = $request->all();
+            $a_maso = tonghopluong_donvi::select('mathdv')->where('thang', $inputs['thang'])
+                ->where('nam', $inputs['nam'])
+                ->where('madv', $inputs['madv'])
+                ->get()->toarray();
+
+            tonghopluong_donvi::wherein('mathdv', $a_maso)->delete();
+            tonghopluong_donvi_chitiet::wherein('mathdv', $a_maso)->delete();
+            tonghopluong_donvi_bangluong::wherein('mathdv', $a_maso)->delete();
+
+            return redirect('/chuc_nang/tong_hop_luong/don_vi/index?nam='. date('Y'));
         } else
             return view('errors.notlogin');
     }
