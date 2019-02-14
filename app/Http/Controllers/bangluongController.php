@@ -3329,6 +3329,7 @@ class bangluongController extends Controller
             //dd($request->all());
 
             $m_dv=dmdonvi::where('madv',$m_bl->madv)->first();
+            $tendvcq = dmdonvi::where('madv',$m_dv->macqcq)->first()->tendv;
 
             $dmchucvucq=dmchucvucq::all('tencv', 'macvcq')->toArray();
             foreach($model as $hs){
@@ -3343,6 +3344,7 @@ class bangluongController extends Controller
                 ->with('model',$model->sortBy('stt'))
                 ->with('model_pb',getPhongBan())
                 ->with('m_dv',$m_dv)
+                ->with('tendvcq',$tendvcq)
                 ->with('thongtin',$thongtin)
                 ->with('model_congtac',$model_congtac)
                 ->with('pageTitle','Bảng trích nộp bảo hiểm chi tiết');

@@ -49,7 +49,7 @@
 <table class="header" width="96%" border="0" cellspacing="0" cellpadding="8" style="margin:0 auto 25px; text-align: center;">
     <tr>
         <td  style="text-align: left;width: 60%">
-            <b>Đơn vị chủ quản: {{$m_dv->tenct}}</b>
+            <b>Đơn vị chủ quản: {{$tendvcq}}</b>
         </td>
         <td  style="text-align: center;">
             <!--b>Mẫu số C02-X</b-->
@@ -164,7 +164,7 @@
     </tr>
 
     <tr>
-        <td style="text-align: center;" width="50%">{{''}}</td>
+        <td style="text-align: center;" width="50%">{{$m_dv->nguoilapbieu}}</td>
         <td style="text-align: center;" width="50%">{{$m_dv->lanhdao}}</td>
     </tr>
 </table>
