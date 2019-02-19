@@ -86,10 +86,10 @@
                                                 <a href="{{url($inputs['furl'].'bang_luong?mabl='.$value->mabl.'&mapb=')}}" class="btn btn-default btn-xs mbs">
                                                     <i class="fa fa-th-list"></i>&nbsp; Chi tiết</a>
 
-                                                <button onclick="capnhat('{{$value->mabl}}')" class="btn btn-default btn-xs mbs" data-target="#capnhat-modal-confirm" data-toggle="modal">
-                                                    <i class="fa fa-th-list"></i>&nbsp; Cập nhật lương</button>
-
                                                 @if($value->phanloai == 'BANGLUONG')
+                                                    <button onclick="capnhat('{{$value->mabl}}')" class="btn btn-default btn-xs mbs" data-target="#capnhat-modal-confirm" data-toggle="modal">
+                                                        <i class="fa fa-th-list"></i>&nbsp; Cập nhật lương</button>
+
                                                     <!--button onclick="tanggiam('{{$value->mabl}}')" class="btn btn-default btn-xs mbs" data-target="#tanggiam-modal-confirm" data-toggle="modal">
                                                         <i class="fa fa-th-list"></i>&nbsp; Tăng/Giảm lương</button-->
                                                 @endif
