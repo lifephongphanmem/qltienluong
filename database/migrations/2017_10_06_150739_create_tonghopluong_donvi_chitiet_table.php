@@ -19,6 +19,9 @@ class CreateTonghopluongDonviChitietTable extends Migration
             $table->string('mathk',50)->nullable();
             $table->string('mathh',50)->nullable();
             $table->string('matht',50)->nullable();
+
+            $table->string('tonghop',50)->nullable()->default('BANGLUONG');//tổng hợp từ BANGLUONG, BANGLUONG + TRUYLINH
+
             $table->string('manguonkp',50)->nullable();
             $table->string('linhvuchoatdong')->nullable();//Phân loại xã phường ko cần chọn lĩnh vực hoạt động
             $table->string('macongtac')->nullable();

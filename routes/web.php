@@ -224,6 +224,7 @@ Route::group(['prefix'=>'nghiep_vu'],function(){
         */
         Route::get('thoi_cong_tac','hosocanboController@index_thoicongtac');
 
+        Route::get('store_chvu','hosocanboController@store_chvu');
         Route::get('store_kct','hosocanboController@store_kct');
         Route::get('store_dbhdnd','hosocanboController@store_dbhdnd');
         Route::get('store_qs','hosocanboController@store_qs');
@@ -234,6 +235,7 @@ Route::group(['prefix'=>'nghiep_vu'],function(){
         Route::get('getinfor_kn','hosocanboController@getinfor_kn');
         Route::get('delete_kn','hosocanboController@delete_kn');
 
+        Route::get('temp/store_chvu','hosocanboController@store_chvu_temp');
         Route::get('temp/store_kct','hosocanboController@store_kct_temp');
         Route::get('temp/store_dbhdnd','hosocanboController@store_dbhdnd_temp');
         Route::get('temp/store_qs','hosocanboController@store_qs_temp');

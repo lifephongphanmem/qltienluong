@@ -627,7 +627,6 @@
     <!-- /.modal-dialog -->
 </div>
 
-
 <!-- Kiêm nhiệm đội tình nguyện -->
 <div class="modal fade bs-modal-lg" id="tn-modal" tabindex="-1" aria-labelledby="myModalLabel" role="dialog" aria-hidden="true">
     <div class="modal-dialog modal-lg">
@@ -699,7 +698,106 @@
     <!-- /.modal-dialog -->
 </div>
 
+<!-- Kiêm nhiệm chức vụ công tác -->
+<div class="modal fade bs-modal-lg" id="chvu-modal" tabindex="-1" aria-labelledby="myModalLabel" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+                <h4 class="modal-title">Thông tin chức vụ kiêm nhiệm của cán bộ</h4>
+            </div>
+
+            <div class="modal-body">
+                <div class="row">
+                    {!!Form::hidden('phanloai_chvu', 'CHUCVU', array('id' => 'phanloai_chvu','class' => 'form-control'))!!}
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label class="control-label">Phân loại công tác</label>
+                            <select class="form-control" name="mact_chvu" id="mact_chvu" required="required">
+                                @foreach($model_nhomct as $kieuct)
+                                    <optgroup label="{{$kieuct->tencongtac}}">
+                                        <?php
+                                        $mode_ct=$model_tenct->where('macongtac',$kieuct->macongtac);
+                                        ?>
+                                        @foreach($mode_ct as $ct)
+                                            <option value="{{$ct->mact}}">{{$ct->tenct}}</option>
+                                        @endforeach
+                                    </optgroup>
+                                @endforeach
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label class="control-label">Chức vụ kiêm nhiệm</label>
+                            {!!Form::select('macvcq_chvu',getChucVuCQ(false), null, array('id' => 'macvcq_chvu','class' => 'form-control select2me'))!!}
+                        </div>
+                    </div>
+
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label class="control-label">Khối/Tổ công tác</label>
+                            {!!Form::select('mapb_chvu',getPhongBan(), null, array('id' => 'mapb_chvu','class' => 'form-control select2me'))!!}
+                        </div>
+                    </div>
+
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label class="control-label">Nguồn KP hưởng lương</label>
+                            {!!Form::select('manguonkp_chvu',getNguonKP(true), null, array('id' => 'manguonkp_chvu','class' => 'form-control select2me', 'multiple'=>'multiple'))!!}
+                        </div>
+                    </div>
+
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label class="control-label">Hệ số lương</label>
+                            {!!Form::text('heso_chvu', null, array('id' => 'heso_chvu','class' => 'form-control', 'data-mask'=>'fdecimal'))!!}
+                        </div>
+                    </div>
+
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label class="control-label">Phụ cấp vượt khung</label>
+                            <div class="input-group bootstrap-touchspin">
+                                {!!Form::text('vuotkhung_chvu', null, array('id' =>'vuotkhung_chvu', 'class' => 'form-control', 'data-mask'=>'fdecimal'))!!}
+                                <span class="input-group-addon bootstrap-touchspin-postfix">%</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label class="control-label">Tỷ lệ hưởng lương</label>
+                            <div class="input-group bootstrap-touchspin">
+                                {!!Form::text('pthuong_chvu', 10, array('id' => 'pthuong_chvu','class' => 'form-control', 'data-mask'=>'fdecimal'))!!}
+                                <span class="input-group-addon bootstrap-touchspin-postfix">%</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <input type="hidden" name="id_chvu" id="id_chvu" />
+            <div class="modal-footer">
+                <button type="button" data-dismiss="modal" class="btn btn-default">Thoát</button>
+                <button type="button" id="capnhat_chvu" name="capnhat_chvu" class="btn btn-primary">Hoàn thành</button>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+
+
 <script>
+    function add_chvu(){
+        $('#mact_chvu').val('1506672780').trigger('change');
+        $('#manguonkp_chvu').val('').trigger('change');
+        $('#id_chvu').val(0);
+        $('#chvu-modal').modal('show');
+    }
+
     function add_kct(){
         $('#mact_kct').val('1506673695').trigger('change');
         $('#baohiem_kct').val('0').trigger('change');
@@ -785,19 +883,30 @@
             },
             dataType: 'JSON',
             success: function (data) {
+                if(data.phanloai == 'CHUCVU'){
+                     $('#mact_chvu').val(data.mact).trigger('change');
+                     $('#manguonkp_chvu').val(data.manguonkp.split(',')).trigger('change');
+                     $('#mapb_chvu').val(data.mapb).trigger('change');
+                     $('#macvcq_chvu').val(data.macvcq).trigger('change');
+                     $('#id_chvu').val(data.id);
+                     $('#heso_chvu').val(data.heso);
+                     $('#vuotkhung_chvu').val(data.vuotkhung);
+                     $('#pthuong_chvu').val(data.pthuong);
+                     $('#chvu-modal').modal('show');
+                }
                 if(data.phanloai == 'KHONGCT'){
-                     $('#mact_kct').val(data.mact).trigger('change');
-                     $('#baohiem_kct').val(data.baohiem).trigger('change');
-                     $('#manguonkp_kct').val(data.manguonkp.split(',')).trigger('change');
-                     $('#mapb_kct').val(data.mapb).trigger('change');
-                     $('#macvcq_kct').val(data.macvcq).trigger('change');
-                     $('#id_kct').val(data.id);
-                     $('#hesopc_kct').val(data.hesopc);
-                     $('#pckn_kct').val(data.pckn);
-                     $('#pclt_kct').val(data.pclt);
-                     $('#pckct_kct').val(data.pckct);
-                     $('#pcthni_kct').val(data.pcthni);
-                     $('#kct-modal').modal('show');
+                    $('#mact_kct').val(data.mact).trigger('change');
+                    $('#baohiem_kct').val(data.baohiem).trigger('change');
+                    $('#manguonkp_kct').val(data.manguonkp.split(',')).trigger('change');
+                    $('#mapb_kct').val(data.mapb).trigger('change');
+                    $('#macvcq_kct').val(data.macvcq).trigger('change');
+                    $('#id_kct').val(data.id);
+                    $('#hesopc_kct').val(data.hesopc);
+                    $('#pckn_kct').val(data.pckn);
+                    $('#pclt_kct').val(data.pclt);
+                    $('#pckct_kct').val(data.pckct);
+                    $('#pcthni_kct').val(data.pcthni);
+                    $('#kct-modal').modal('show');
                 }
                 if(data.phanloai == 'DBHDND'){
                      $('#mact_dbhdnd').val(data.mact).trigger('change');
@@ -1097,6 +1206,38 @@
             })
         });
 
+        $('button[name="capnhat_chvu"]').click(function(){
+            var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
+
+            $.ajax({
+                url: '{{$furl_kn}}'+'store_chvu',
+                type: 'GET',
+                data: {
+                    _token: CSRF_TOKEN,
+                    macanbo : $('#macanbo').val(),
+                    mact : $('#mact_chvu').val(),
+                    manguonkp : $('#manguonkp_chvu').val(),
+                    mapb : $('#mapb_chvu').val(),
+                    macvcq : $('#macvcq_chvu').val(),
+                    id: $('#id_chvu').val(),
+                    heso: $('#heso_chvu').val(),
+                    phanloai: $('#phanloai_chvu').val(),
+                    vuotkhung: $('#vuotkhung_chvu').val(),
+                    pthuong: $('#pthuong_chvu').val()
+                },
+                dataType: 'JSON',
+                success: function (data) {
+                    if(data.status == 'success') {
+                        toastr.success("Cập nhật thông tin thành công", "Thành công!");
+                        $('#dskn').replaceWith(data.message);
+                        $('#chvu-modal').modal('hide');
+                    }
+                    else {
+                        toastr.error("Bạn cần kiểm tra lại thông tin vừa nhập!", "Lỗi!");
+                    }
+                }
+            })
+        });
     }(jQuery));
 </script>
 <!--end form5  -->

@@ -70,7 +70,7 @@ class CreateHosocanboTable extends Migration
             $table->string('sotk', 50)->nullable();
             $table->string('tennganhang', 150)->nullable();
             $table->string('tthn', 100)->nullable();
-            $table->boolean('bhtn')->default(1);
+            //$table->boolean('bhtn')->default(1);
             $table->string('madv',50)->nullable();
             //Thông tin lương hiện tại
             $table->string('msngbac', 50)->nullable();

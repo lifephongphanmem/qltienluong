@@ -10,6 +10,7 @@ class bangluong_ct extends Model
     protected $fillable = [
         'id',
         'mabl',
+        'manguonkp',//lưu mã nguồn bảng lương truy lĩnh
         'macvcq',
         'mapb',
         'mact',
@@ -210,4 +211,7 @@ class bangluong_ct extends Model
         ALTER TABLE `bangluong_ct` CHANGE  `st_pcdith` `st_pcdith` DOUBLE NOT NULL DEFAULT '0';
         ALTER TABLE `bangluong_ct` CHANGE  `st_luonghd` `st_luonghd` DOUBLE NOT NULL DEFAULT '0';
         ALTER TABLE `bangluong_ct` CHANGE  `st_pcphth` `st_pcphth` DOUBLE NOT NULL DEFAULT '0';
+
+    19/02/19
+    ALTER TABLE `bangluong_ct` ADD `manguonkp` VARCHAR(50) NULL AFTER `mabl`;
 */

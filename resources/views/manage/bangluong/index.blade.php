@@ -193,6 +193,15 @@
                         </div>
                     </div>
 
+                    <!-- Phân loại đơn vị xa phường ko cần lĩnh vực hoạt động -->
+                    @if(session('admin')->maphanloai != 'KVXP')
+                        <label class="control-label">Lĩnh vực công tác </label>
+                        <select id="linhvuchoatdong_truylinh" name="linhvuchoatdong_truylinh" class="form-control">
+                            @foreach($m_linhvuc as $key => $val)
+                                <option value="{{$key}}">{{$val}}</option>
+                            @endforeach
+                        </select>
+                    @endif
 
                     <div class="row">
                         <div class="col-md-6">

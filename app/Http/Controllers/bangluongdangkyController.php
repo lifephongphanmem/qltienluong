@@ -108,6 +108,14 @@ class bangluongdangkyController extends Controller
                     $ths += $cb->$mapc;
                 }
 
+                if($cb->phanloai == 'CHUCVU'){
+                    $cb->heso = round($cb->heso * $cb->pthuong /100, session('admin')->lamtron);
+                    $cb->st_heso = round($cb->st_heso * $cb->pthuong /100, 0);
+                    $cb->vuotkhung = round($cb->vuotkhung * $cb->pthuong /100, session('admin')->lamtron);
+                    $cb->st_vuotkhung = round($cb->st_vuotkhung * $cb->pthuong /100,0);
+                    $ths = round($ths * $cb->pthuong /100, session('admin')->lamtron);
+                }
+
                 $cb->tonghs = $ths;
                 $cb->ttl = round($inputs['luongcoban'] * $ths);
 
@@ -298,7 +306,7 @@ class bangluongdangkyController extends Controller
             array_column($model_phucap->toarray(),'mapc'));
 
         //$m_cb_kn = hosocanbo_kiemnhiem::select(array_merge($a_th,array('phanloai')))->where('madv',$inputs['madv'])->wherein('manguonkp',[$inputs['manguonkp'],'',null])->get()->toArray();;
-        $m_cb_kn = hosocanbo_kiemnhiem::select(array_merge($a_th,array('phanloai')))->where('madv',$inputs['madv'])->get()->toArray();;
+        $m_cb_kn = hosocanbo_kiemnhiem::select(array_merge($a_th,array('phanloai', 'pthuong')))->where('madv',$inputs['madv'])->get()->toArray();;
 
         //công tác
         $a_th = array_merge(array('stt','tencanbo', 'msngbac', 'bac', 'pthuong','theodoi',
@@ -636,6 +644,7 @@ class bangluongdangkyController extends Controller
         //Tính toán lương cho cán bộ kiêm nhiệm
         $a_kn_canbo = array();
         $a_kn_phucap = array();
+
         for($i=0; $i<count($m_cb_kn); $i++){
             if(!array_key_exists($m_cb_kn[$i]['macanbo'],$m_cb)){
                 continue;
@@ -745,6 +754,16 @@ class bangluongdangkyController extends Controller
                 //$a_pc[$k]['sotien'] = round($inputs['luongcoban'] * $tonghs + $tien, 0);
 
                 $a_kn_phucap[] = $a_pc[$k];
+            }
+
+            //ko tính % trong công thức duyệt phụ cấp vì khi tính % sẽ sai
+            if($m_cb_kn[$i]['phanloai'] == 'CHUCVU'){
+                $m_cb_kn[$i]['heso'] = round($m_cb_kn[$i]['heso'] * $m_cb_kn[$i]['pthuong'] /100, session('admin')->lamtron);
+                $m_cb_kn[$i]['st_heso'] = round($m_cb_kn[$i]['st_heso'] * $m_cb_kn[$i]['pthuong'] /100, 0);
+                $m_cb_kn[$i]['vuotkhung'] = round($m_cb_kn[$i]['vuotkhung'] * $m_cb_kn[$i]['pthuong'] /100, session('admin')->lamtron);
+                $m_cb_kn[$i]['st_vuotkhung'] = round($m_cb_kn[$i]['st_vuotkhung'] * $m_cb_kn[$i]['pthuong'] /100, 0);
+                $tonghs = round($tonghs * $m_cb_kn[$i]['pthuong'] /100, session('admin')->lamtron);
+                $tien = round($tien * $m_cb_kn[$i]['pthuong'] /100, 0);
             }
 
             $m_cb_kn[$i]['tonghs'] = $tonghs;
