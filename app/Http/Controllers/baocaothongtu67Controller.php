@@ -95,6 +95,21 @@ class baocaothongtu67Controller extends Controller
                     $qr->select('mathdv')->from('tonghopluong_donvi')->where('thang', '08')->where('nam', '2018')->where('trangthai', 'DAGUI')
                         ->distinct()->get();
                 })->get();
+            if (isset($inputs['inchitiet'])) {
+                $model_tonghop_ct = tonghopluong_donvi_chitiet::join('tonghopluong_donvi', 'tonghopluong_donvi_chitiet.mathdv', '=', 'tonghopluong_donvi.mathdv')
+                    ->select('tonghopluong_donvi_chitiet.linhvuchoatdong','tonghopluong_donvi_chitiet.heso','tonghopluong_donvi_chitiet.pckv','tonghopluong_donvi_chitiet.pccv',
+                        'tonghopluong_donvi_chitiet.pctnvk','tonghopluong_donvi_chitiet.pcudn','pcth','pctn','pccovu','pcdang',
+                        'pcthni','pck','nguoigui','madv','tonghopluong_donvi.mathh','tonghopluong_donvi.mathdv')
+                    ->where('tonghopluong_donvi.madvbc', 'like', $inputs['madv'] . '%')
+                    ->where('tonghopluong_donvi_chitiet.macongtac', 'BIENCHE')
+                    ->wherein('tonghopluong_donvi_chitiet.mathdv', function ($qr) {
+                        $qr->select('mathdv')->from('tonghopluong_donvi')->where('thang', '08')->where('nam', '2018')->where('trangthai', 'DAGUI')
+                            ->distinct()->get();
+                    })
+                    ->groupby('linhvuchoatdong','nguoigui','madv','mathh','mathdv')
+                    ->get();
+                dd($model_tonghop_ct->toarray());
+            }
 
             if (session('admin')->username == 'khthso') {
                 $model_bienche = chitieubienche::join('dmdonvi', 'dmdonvi.madv', '=', 'chitieubienche.madv')
@@ -138,7 +153,7 @@ class baocaothongtu67Controller extends Controller
 
             }
 
-            $model_bangluong_ct = $model_tonghop_ct->where('macongtac', 'BIENCHE')->where('maphanloai', '<>', 'KVXP');
+            $model_bangluong_ct = $model_tonghop_ct->where('maphanloai', '<>', 'KVXP');
 
             //dd($model_bangluong_ct);
             $ar_I = array();
@@ -6198,7 +6213,6 @@ class baocaothongtu67Controller extends Controller
                             $qr->select('mathdv')->from('tonghopluong_donvi')->where('thang', '08')->where('nam', '2018')->where('trangthai', 'DAGUI')
                                 ->distinct()->get();
                         })->get();
-                    dd($model_tonghop_ct->toarray());
                 }
             }
             else
@@ -6206,13 +6220,17 @@ class baocaothongtu67Controller extends Controller
                 $model_tonghop = tonghopluong_donvi::where('thang','08')->where('nam','2018')
                     ->where('madvbc',$madvbc)->get();
                 $model_tonghop_ct = tonghopluong_donvi_chitiet::join('tonghopluong_donvi', 'tonghopluong_donvi_chitiet.mathdv', '=', 'tonghopluong_donvi.mathdv')
+                    ->select('tonghopluong_donvi_chitiet.linhvuchoatdong','tonghopluong_donvi_chitiet.heso','tonghopluong_donvi_chitiet.pckv','tonghopluong_donvi_chitiet.pccv',
+                        'tonghopluong_donvi_chitiet.pctnvk','tonghopluong_donvi_chitiet.pcudn','pcth','pctn','pccovu','pcdang',
+                        'pcthni','pck','nguoigui','madv','tonghopluong_donvi.mathh','tonghopluong_donvi.mathdv','macongtac')
                     ->where('tonghopluong_donvi.madvbc',$madvbc)
                     ->wherein('tonghopluong_donvi_chitiet.mathdv',function($qr){
                         $qr->select('mathdv')->from('tonghopluong_donvi')->where('thang','08')->where('nam','2018')->where('trangthai','DAGUI')
                             ->distinct()->get();
-                    })->get();
+                    })
+                    ->groupby('linhvuchoatdong','nguoigui','madv','mathh','mathdv','macongtac')
+                    ->get();
             }
-
             $luongcb = 0.935;
             //$luongcb = 1390000;
 
@@ -6358,14 +6376,13 @@ class baocaothongtu67Controller extends Controller
                     if (isset($model_bangluong_ct)) {
                         $chitiet = $model_bangluong_ct->where('linhvuchoatdong', $ar_Igr[$j]['val']);
                     }
+
                     $ar_I[$i]['soluongduocgiao'] = 0;
                     $ar_I[$i]['soluongbienche'] = 0;
                     $d = 1;
                     $luugr = $i;
                     if (isset($chitiet) && count($chitiet) > 0) {
                         $thongtin = $chitiet->toArray();
-                        //dd($thongtin);
-
                         foreach ($thongtin as $thongtinchitiet) {
                             $d++;
                             $i += $d;
@@ -7719,11 +7736,13 @@ class baocaothongtu67Controller extends Controller
                     $model_tonghop = tonghopluong_huyen::where('thang', '08')->where('nam', '2018')
                         ->where('madv', $inputs['madv'])->get();
                     $model_tonghop_ct = tonghopluong_donvi_chitiet::join('tonghopluong_donvi', 'tonghopluong_donvi_chitiet.mathdv', '=', 'tonghopluong_donvi.mathdv')
+
                         ->where('tonghopluong_donvi.macqcq', $inputs['madv'])
                         ->wherein('tonghopluong_donvi_chitiet.mathdv', function ($qr) {
                             $qr->select('mathdv')->from('tonghopluong_donvi')->where('thang', '08')->where('nam', '2018')->where('trangthai', 'DAGUI')
                                 ->distinct()->get();
-                        })->get();
+                        })
+                        ->get();
                 }
                 else {
                     $model_tonghop = tonghopluong_donvi::where('thang', '08')->where('nam', '2018')
@@ -7734,7 +7753,6 @@ class baocaothongtu67Controller extends Controller
                             $qr->select('mathdv')->from('tonghopluong_donvi')->where('thang', '08')->where('nam', '2018')->where('trangthai', 'DAGUI')
                                 ->distinct()->get();
                         })->get();
-                    dd($model_tonghop_ct->toarray());
                 }
             }
             else
@@ -7742,11 +7760,16 @@ class baocaothongtu67Controller extends Controller
                 $model_tonghop = tonghopluong_donvi::where('thang','08')->where('nam','2018')
                     ->where('madvbc',$madvbc)->get();
                 $model_tonghop_ct = tonghopluong_donvi_chitiet::join('tonghopluong_donvi', 'tonghopluong_donvi_chitiet.mathdv', '=', 'tonghopluong_donvi.mathdv')
+                    ->select('tonghopluong_donvi_chitiet.linhvuchoatdong','tonghopluong_donvi_chitiet.heso','tonghopluong_donvi_chitiet.pckv','tonghopluong_donvi_chitiet.pccv',
+                        'tonghopluong_donvi_chitiet.pctnvk','tonghopluong_donvi_chitiet.pcudn','pcth','pctn','pccovu','pcdang',
+                        'pcthni','pck','nguoigui','madv','tonghopluong_donvi.mathh','tonghopluong_donvi.mathdv','macongtac')
                     ->where('tonghopluong_donvi.madvbc',$madvbc)
                     ->wherein('tonghopluong_donvi_chitiet.mathdv',function($qr){
                         $qr->select('mathdv')->from('tonghopluong_donvi')->where('thang','08')->where('nam','2018')->where('trangthai','DAGUI')
                             ->distinct()->get();
-                    })->get();
+                    })
+                    ->groupby('linhvuchoatdong','nguoigui','madv','mathh','mathdv','macongtac')
+                    ->get();
             }
 
             $luongcb = 1;
