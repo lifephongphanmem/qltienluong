@@ -15,6 +15,7 @@ class CreateBangluongctTable extends Migration
         Schema::create('bangluong_ct', function (Blueprint $table) {
             $table->increments('id');
             $table->string('mabl', 50)->nullable();
+            $table->string('manguonkp',50)->nullable();//lưu manguonkp để lấy khi tổng hợp. Do bang lương truy lĩnh ko có mã nguồn
             $table->string('macvcq', 50)->nullable();
             $table->string('mapb', 50)->nullable();
             $table->string('msngbac', 50)->nullable();

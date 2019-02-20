@@ -14,6 +14,7 @@ class tonghopluong_donvi_chitiet extends Model
         'mathh',
         'matht',
         'manguonkp',
+        'tonghop',
         'linhvuchoatdong',//Phân loại xã phường ko cần chọn lĩnh vực hoạt động
         'macongtac',
         'mact',
@@ -63,4 +64,6 @@ class tonghopluong_donvi_chitiet extends Model
         'stbhtn_dv',
         'ttbh_dv'
     ];
+    //19/02/2018
+    //ALTER TABLE `tonghopluong_donvi_chitiet` ADD `tonghop` VARCHAR(50) NULL DEFAULT 'BANGLUONG' AFTER `linhvuchoatdong`;
 }

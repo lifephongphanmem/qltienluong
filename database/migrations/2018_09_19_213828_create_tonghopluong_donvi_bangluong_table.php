@@ -21,6 +21,9 @@ class CreateTonghopluongDonviBangluongTable extends Migration
             $table->string('matht',50)->nullable();
             $table->string('manguonkp',50)->nullable();
             $table->string('linhvuchoatdong')->nullable();//Phân loại xã phường ko cần chọn lĩnh vực hoạt động
+
+            $table->string('phanloai',50)->nullable()->default('BANGLUONG');//bảng lương cán bộ /  bảng truy lĩnh lương
+
             $table->string('macongtac')->nullable();
             $table->string('mact')->nullable();
             $table->string('macvcq', 50)->nullable();
@@ -29,6 +32,10 @@ class CreateTonghopluongDonviBangluongTable extends Migration
             $table->string('macanbo', 50)->nullable();
             $table->string('tencanbo', 50)->nullable();
             $table->string('stt', 10)->nullable();
+
+            $table->double('thangtl')->default(0);//số tháng được truy lĩnh lương
+            $table->double('ngaytl')->default(0);//số tháng được truy lĩnh lương
+
             $table->double('luongcoban')->default(0);
             $table->double('heso')->default(0);
             $table->double('hesobl')->default(0);

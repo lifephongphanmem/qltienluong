@@ -25,3 +25,10 @@ class bangluong extends Model
     ];
 }
 //DELETE FROM `bangluong_ct` WHERE mabl not in (SELECT mabl FROM bangluong);
+
+/*
+    UPDATE bangluong_ct
+    INNER JOIN bangluong ON bangluong_ct.mabl = bangluong.mabl
+    SET bangluong_ct.manguonkp = bangluong.manguonkp
+    WHERE bangluong.phanloai ='BANGLUONG';
+ */

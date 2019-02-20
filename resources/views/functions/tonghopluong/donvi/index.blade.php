@@ -109,7 +109,8 @@
                                                         <i class="fa fa-print"></i>&nbsp; Số liệu địa bàn</a-->
                                                 @endif
                                             @else
-                                                <button type="button" id="btntonghop" onclick="tonghop('{{($furl.'tonghop?thang='.$value['thang'].'&nam='.$nam)}}')" class="btn btn-default btn-sm">
+                                                <button type="button" id="btntonghop" onclick="tonghop('{{$value['thang']}}','{{$nam}}')" class="btn btn-default btn-sm"
+                                                        data-target="#tonghop-modal" data-toggle="modal">
                                                     <i class="fa fa-stack-overflow"></i>&nbsp; Tổng hợp dữ liệu</button>
                                             @endif
                                         @else
@@ -125,6 +126,51 @@
             </div>
         </div>
     </div>
+
+    <!--Model tổng hợp-->
+    <div class="modal fade" id="tonghop-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                {!! Form::open(['url'=>$furl.'tonghop','id' => 'frm_tonghop','method'=>'GET'])!!}
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+                    <h4 class="modal-title">Đồng ý tổng hợp số liệu?</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="form-horizontal">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <label>Phân loại dữ liệu</label>
+                                <select name="tonghop" id="tonghop" class="form-control">
+                                    <option value="BANGLUONG">Bảng thanh toán tiền lương</option>
+                                    <option value="TONGHOP">Bảng thanh toán tiền lương và bảng truy lĩnh lương</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <hr>
+
+                        <div class="row">
+                            <div class="col-md-12">
+                                <label><b>Sau khi tổng hợp số liệu thì bảng thanh toán lương sẽ không thể chỉnh sửa. Bạn hãy kiểm tra bảng lương trước khi tổng hợp.</b></label>
+                            </div>
+                        </div>
+                        <input type="hidden" name="thang" id="thang">
+                        <input type="hidden" name="nam" id="nam">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn default" data-dismiss="modal">Hủy</button>
+                    <button type="submit" class="btn blue">Đồng ý</button>
+
+                </div>
+                {!! Form::close() !!}
+            </div>
+                <!-- /.modal-content -->
+            <!-- /.modal-dialog -->
+        </div>
+    </div>
+
 
     <!--Model chuyển-->
     <div class="modal fade" id="chuyen-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
@@ -180,9 +226,12 @@
     </div>
 
     <script>
-        function tonghop(url) {
-            $('#btntonghop').attr('disabled', true);
-            window.location.href = url;
+        function tonghop(thang, nam) {
+            $('#frm_tonghop').find("[id^='thang']").val(thang);
+            $('#frm_tonghop').find("[id^='nam']").val(nam);
+            //$('#frm_tonghop').attr('action', url);
+            //$('#btntonghop').attr('disabled', true);
+            //window.location.href = url;
         }
 
         function confirmChuyen(mathdv) {

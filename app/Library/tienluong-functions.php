@@ -524,6 +524,7 @@ function getCoChu(){
 
 function getPhanLoaiKiemNhiem(){
     return array(
+        'CHUCVU' => 'Kiêm nhiệm chức vụ',
         'KHONGCT' => 'Không chuyên trách',
         'QUANSU' => 'Kiêm nhiệm quân sự',
         'DBHDND' => 'Kiêm nhiệm đại biểu HĐND',
@@ -559,6 +560,7 @@ function getPhanLoaiCanBo_CongTac()
     return array('1' => 'Cán bộ đang công tác',
         '3' => 'Cán bộ đang điều động',
         '4' => 'Cán bộ được điều động đến',
+        '5' => 'Cán bộ công tác tại vùng cao, biên giới, hải đảo',
     );
 }
 

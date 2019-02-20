@@ -17,8 +17,11 @@ class tonghopluong_donvi_bangluong extends Model
         'linhvuchoatdong',//Phân loại xã phường ko cần chọn lĩnh vực hoạt động
         'macongtac',
         'mact',
+        'phanloai',
         'macvcq',
         'mapb',
+        'thangtl',
+        'ngaytl',
         'msngbac',
         'macanbo',
         'tencanbo',
@@ -71,4 +74,8 @@ class tonghopluong_donvi_bangluong extends Model
         'stbhtn_dv',
         'ttbh_dv'
     ];
+    /*
+     19/02/19
+    ALTER TABLE `tonghopluong_donvi_bangluong` ADD `phanloai` VARCHAR(50) NULL DEFAULT 'BANGLUONG' AFTER `mapb`, ADD `thangtl` DOUBLE NOT NULL DEFAULT '0' AFTER `phanloai`, ADD `ngaytl` DOUBLE NOT NULL DEFAULT '0' AFTER `thangtl`;
+     * */
 }

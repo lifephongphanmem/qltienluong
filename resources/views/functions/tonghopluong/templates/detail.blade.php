@@ -44,6 +44,7 @@
                         <thead>
                             <tr>
                                 <th class="text-center" style="width: 3%">STT</th>
+                                <th class="text-center">Phân loại</th>
                                 <th class="text-center">Nguồn kinh phí</th>
                                 <th class="text-center">Phân loại</br>công tác</th>
                                 <th class="text-center">Lương ngạch</br>bậc</th>
@@ -60,6 +61,7 @@
                                 @foreach($model as $key=>$value)
                                     <tr>
                                         <td class="text-center">{{$key+1}}</td>
+                                        <td>{{$value->tonghop == 'BANGLUONG' ? 'Bảng chi trả lương' : 'Bảng truy lĩnh lương'}}</td>
                                         <td>{{$value->tennguonkp}}</td>
                                         <td>{{$value->tencongtac}}</td>
                                         <td class="text-right">{{dinhdangso($value->heso)}}</td>

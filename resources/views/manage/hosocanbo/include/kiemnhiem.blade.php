@@ -10,6 +10,9 @@
                 </button>
                 <ul class="dropdown-menu">
                     <li>
+                        <button style="border-width: 0px" type="button" class="btn btn-default" onclick="add_chvu()"><i class="fa fa-plus"></i>&nbsp;Chức danh/Chức vụ</button>
+                    </li>
+                    <li>
                         <button style="border-width: 0px" type="button" class="btn btn-default" onclick="add_kct()"><i class="fa fa-plus"></i>&nbsp;Cán bộ không CT</button>
                     </li>
                     <li>

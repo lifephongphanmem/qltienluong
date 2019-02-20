@@ -16,6 +16,7 @@ class hosocanbo_kiemnhiem_temp extends Model
         'baohiem',
         'macvcq',
         'macanbo',
+        'pthuong',
         'heso',
         'hesopc',
         'pcct',//dùng để thay thế phụ cấp ghép lớp
