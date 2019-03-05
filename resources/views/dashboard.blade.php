@@ -89,12 +89,6 @@
                         </tr>
                         <tr>
                             <td style="text-align: center">3</td>
-                            <td style="font-weight: bold">Triệu Hồng Đạt</td>
-                            <td>Nhân viên</td>
-                            <td>0936.368.122</td>
-                        </tr>
-                        <tr>
-                            <td style="text-align: center">4</td>
                             <td style="font-weight: bold">Nguyễn Văn Hiển</td>
                             <td>Nhân viên</td>
                             <td>0975.500.274</td>
