@@ -5,6 +5,46 @@ use App\Http\Requests;
 
 class dataController extends Controller
 {
+    //chay code nang cap db
+    function update(){
+        $a_pc = [
+            'pck',
+            'pccv',
+            'pckv',
+            'pcth',
+            'pcdd',
+            'pcdh',
+            'pcld',
+            'pcdbqh',
+            'pcudn',
+            'pctn',
+            'pctnn',
+            'pcdbn',
+            'pcvk',//dùng để thay thế phụ cấp Đảng uy viên
+            'pckn',
+            'pcdang',
+            'pccovu',
+            'pclt', //lưu thay phụ cấp phân loại xã
+            'pcd',
+            'pctr',
+            'pctdt',
+            'pctnvk',
+            'pcbdhdcu',
+            'pcthni',
+
+            'pclade',
+            'pcud61',
+            'pcxaxe',
+            'pcdith',
+            'luonghd',
+            'pcphth',
+
+        ];
+
+        return view('errors.nangcapdb')
+            ->with('a_pc',$a_pc);
+    }
+
     function getBangluong_ct($thang,$nam,$madv, $mabl){//thừa đk
         //sau này chia bảng
     }

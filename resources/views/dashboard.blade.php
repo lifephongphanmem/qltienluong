@@ -22,6 +22,139 @@
     <!-- END PAGE HEADER-->
     <!-- BEGIN DASHBOARD STATS -->
     <!--div class="row margin-top-10"-->
+    <!-- END PAGE HEADER-->
+    <!-- BEGIN DASHBOARD STATS -->
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="portlet light ">
+                <div class="portlet-title">
+                    <div class="caption caption-md">
+                        <i class="icon-bar-chart theme-font-color hide"></i>
+                        <span class="caption-subject theme-font-color bold uppercase">Thông tin hỗ trợ</span>
+                    </div>
+                    <div class="actions">
+
+                    </div>
+                </div>
+                <div class="portlet-body">
+
+                    <p>Công ty LifeSoft chân thành cảm ơn quý khách hàng đã tin tưởng sử dụng phần mềm của công ty.
+                        Thay mặt toàn bộ cán bộ nhân viên trong công ty gửi đến khách hàng lời chúc sức khỏe- thành công</p>
+                    <p>Nhằm chăm sóc, hỗ trợ khách hàng nhanh chóng và tiện dụng nhất công ty xin cung cấp thông tin các cán bộ hỗ trợ khách hàng trong quá trình sử dụng.
+                        Mọi vấn đề khúc mắc khách hàng có thể gọi điện thoại trực tiếp cho cán bộ để được hỗ trợ nhanh nhất có thể!</p>
+                    <p>Số điện thoại công ty: <b>0243.6343.951</b></p>
+                    <p>Phụ trách khối kỹ thuật:<b> Phó giám đốc:  Trần Ngọc Hiếu </b>- tel: <b>0968.206.844</b></p>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-sm-6">
+            <!-- BEGIN PORTLET-->
+            <div class="portlet light ">
+                <div class="portlet-title">
+                    <div class="caption caption-md">
+                        <i class="icon-bar-chart theme-font-color hide"></i>
+                        <span class="caption-subject theme-font-color bold uppercase">Phòng TKBT I - quản lý địa bàn các tỉnh phía Nam</span>
+                    </div>
+                    <div class="actions">
+
+                    </div>
+                </div>
+
+                <div class="portlet-body">
+                    <table id="sample_7" class="table table-hover table-striped table-bordered">
+                        <thead>
+                        <tr>
+                            <th width="2%">STT</th>
+                            <th width="40%">Họ và tên</th>
+                            <th>Chức vụ</th>
+                            <th width="25%">Điện thoại</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td style="text-align: center">1</td>
+                            <td style="font-weight: bold;">Nguyễn Xuân Trường</td>
+                            <td>Trưởng phòng</td>
+                            <td>0917.737.456</td>
+                        </tr>
+                        <tr>
+                            <td style="text-align: center">2</td>
+                            <td style="font-weight: bold">Hoàng Ngọc Long</td>
+                            <td>Phó phòng</td>
+                            <td>0985.365.683</td>
+                        </tr>
+                        <tr>
+                            <td style="text-align: center">3</td>
+                            <td style="font-weight: bold">Triệu Hồng Đạt</td>
+                            <td>Nhân viên</td>
+                            <td>0936.368.122</td>
+                        </tr>
+                        <tr>
+                            <td style="text-align: center">4</td>
+                            <td style="font-weight: bold">Nguyễn Văn Hiển</td>
+                            <td>Nhân viên</td>
+                            <td>0975.500.274</td>
+                        </tr>
+                        <tbody>
+                    </table>
+                </div>
+            </div>
+            <!-- END PORTLET-->
+        </div>
+        <div class="col-sm-6">
+            <!-- BEGIN PORTLET-->
+            <div class="portlet light ">
+                <div class="portlet-title">
+                    <div class="caption caption-md">
+                        <i class="icon-bar-chart theme-font-color hide"></i>
+                        <span class="caption-subject theme-font-color bold uppercase">Phòng TKBT II - quản lý địa bàn các tỉnh phía Bắc</span>
+                    </div>
+                    <div class="actions">
+
+                    </div>
+                </div>
+
+                <div class="portlet-body">
+                    <table id="sample_8" class="table table-hover table-striped table-bordered">
+                        <thead>
+                        <tr>
+                            <th width="2%">STT</th>
+                            <th width="40%">Họ và tên</th>
+                            <th>Chức vụ</th>
+                            <th width="25%">Điện thoại</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td style="text-align: center">1</td>
+                            <td style="font-weight: bold">Hoàng Văn Sáng</td>
+                            <td>Phó phòng</td>
+                            <td>0974.090.556</td>
+                        </tr>
+                        <tr>
+                            <td style="text-align: center">2</td>
+                            <td style="font-weight: bold">Nguyễn Văn Dũng</td>
+                            <td>Nhân viên</td>
+                            <td>0986.012.094</td>
+                        </tr>
+                        <tr>
+                            <td style="text-align: center">3</td>
+                            <td style="font-weight: bold">Nguyễn Văn Đạt</td>
+                            <td>Nhân viên</td>
+                            <td>0966.305.359</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <!-- END PORTLET-->
+        </div>
+    </div>
+
     <div class="row">
         <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
             <div class="dashboard-stat2">

@@ -1,7 +1,7 @@
 <?php
 Route::get('', 'HomeController@index');
 //Route::get('', 'HomeController@baotri');
-Route::get('test', 'bangluong_inController@test');
+Route::get('test', 'dataController@update');
 Route::get('ajaxtest','ajaxController@test');
 
 
