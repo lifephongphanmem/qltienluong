@@ -50,6 +50,11 @@
                                 </li>
                             </ul>
                         </div>
+
+                        <button type="button" class="btn btn-lg btn-default" data-target="#danhsach-modal" data-toggle="modal">
+                            <i class="fa fa-print"></i> In danh sách
+                        </button>
+
                         <a href="{{url($url.'create')}}" class="btn btn-default btn-xs"> Thêm mới hồ sơ</a>
                     </div>
 
@@ -123,6 +128,59 @@
                 </div>
             </div>
         </div>
+        {!! Form::close() !!}
+    </div>
+
+    <div id="danhsach-modal" tabindex="-1" role="dialog" aria-hidden="true" class="modal fade">
+        {!! Form::open(['url'=>'/nghiep_vu/ho_so/indanhsach','method'=>'post' , 'files'=>true, 'id' => 'indanhsach','target'=>'_blank']) !!}
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header modal-header-primary">
+                        <button type="button" data-dismiss="modal" aria-hidden="true" class="close">&times;</button>
+                        <h4 id="modal-header-primary-label" class="modal-title">Thông tin danh sách cán bộ</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-horizontal">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <label class="control-label">Khối/Tổ công tác</label>
+                                    <select name="mapb" id="mapb" class="form-control select2me">
+                                        @foreach(getPhongBan(true) as $key=>$val)
+                                            <option value="{{$key}}">{{$val}}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+
+                                <div class="col-md-12">
+                                    <label class="control-label">Chức vụ</label>
+                                    {!!Form::select('macvcq',getChucVuCQ(true), null, array('id' => 'macvcq','class' => 'form-control select2me'))!!}
+                                </div>
+
+                                <div class="col-md-12">
+                                    <label class="control-label">Phân loại công tác</label>
+                                    <select class="form-control select2me" name="mact" id="mact">
+                                        <option value="">-- Tất cả các phân loại công tác --</option>
+                                        @foreach($model_nhomct as $kieuct)
+                                            <optgroup label="{{$kieuct->tencongtac}}">
+                                                <?php $mode_ct=$model_tenct->where('macongtac',$kieuct->macongtac); ?>
+                                                @foreach($mode_ct as $ct)
+                                                    <option value="{{$ct->mact}}">{{$ct->tenct}}</option>
+                                                @endforeach
+                                            </optgroup>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="modal-footer">
+                        <button type="button" data-dismiss="modal" class="btn btn-default">Hủy thao tác</button>
+                        <button type="submit" id="submit" name="submit" value="submit" class="btn btn-primary">Đồng ý</button>
+                    </div>
+                </div>
+            </div>
         {!! Form::close() !!}
     </div>
 

@@ -224,6 +224,11 @@ Route::group(['prefix'=>'nghiep_vu'],function(){
         */
         Route::get('thoi_cong_tac','hosocanboController@index_thoicongtac');
 
+        //
+        Route::post('indanhsach','hosocanboController@indanhsach');
+        Route::post('indanhsach_excel','hosocanboController@indanhsach_excel');
+        Route::post('inhoso','hosocanboController@inhoso');
+
         Route::get('store_chvu','hosocanboController@store_chvu');
         Route::get('store_kct','hosocanboController@store_kct');
         Route::get('store_dbhdnd','hosocanboController@store_dbhdnd');
