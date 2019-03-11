@@ -76,35 +76,35 @@
 
                                                     <div class="col-md-2">
                                                         <div class="form-group">
-                                                            <label class="control-label">Ngày sinh<span class="require">*</span></label>
+                                                            <label class="control-label">Ngày sinh</label>
                                                             {!!Form::text('ngaysinh', 'C', array('id' => 'ngaysinh','class' => 'form-control required'))!!}
                                                         </div>
                                                     </div>
 
                                                     <div class="col-md-2">
                                                         <div class="form-group">
-                                                            <label class="control-label">Giới tính<span class="require">*</span></label>
+                                                            <label class="control-label">Giới tính</label>
                                                             {!!Form::text('gioitinh', 'D', array('id' => 'gioitinh','class' => 'form-control required'))!!}
                                                         </div>
                                                     </div>
 
                                                     <div class="col-md-2">
                                                         <div class="form-group">
-                                                            <label class="control-label">Sự nghiệp<span class="require">*</span></label>
+                                                            <label class="control-label">Sự nghiệp</label>
                                                             {!!Form::text('sunghiep', 'E', array('id' => 'sunghiep','class' => 'form-control required'))!!}
                                                         </div>
                                                     </div>
 
                                                     <div class="col-md-2">
                                                         <div class="form-group">
-                                                            <label class="control-label">Phân loại c.tác<span class="require">*</span></label>
+                                                            <label class="control-label">Phân loại c.tác</label>
                                                             {!!Form::text('mact', 'F', array('id' => 'mact','class' => 'form-control required'))!!}
                                                         </div>
                                                     </div>
 
                                                     <div class="col-md-2">
                                                         <div class="form-group">
-                                                            <label class="control-label">Khối(tổ) công tác<span class="require">*</span></label>
+                                                            <label class="control-label">Khối(tổ) công tác</label>
                                                             {!!Form::text('mapb', 'G', array('id' => 'mapb','class' => 'form-control required'))!!}
                                                         </div>
                                                     </div>
@@ -112,56 +112,56 @@
 
                                                     <div class="col-md-2">
                                                         <div class="form-group">
-                                                            <label class="control-label">Chức vụ<span class="require">*</span></label>
+                                                            <label class="control-label">Chức vụ</label>
                                                             {!!Form::text('macvcq', 'H', array('id' => 'macvcq','class' => 'form-control required'))!!}
                                                         </div>
                                                     </div>
 
                                                     <div class="col-md-2">
                                                         <div class="form-group">
-                                                            <label class="control-label">Mã ngạch bậc<span class="require">*</span></label>
+                                                            <label class="control-label">Mã ngạch bậc</label>
                                                             {!!Form::text('msngbac', 'I', array('id' => 'msngbac','class' => 'form-control required'))!!}
                                                         </div>
                                                     </div>
 
                                                     <div class="col-md-2">
                                                         <div class="form-group">
-                                                            <label class="control-label">Ngạch bậc - Từ <span class="require">*</span></label>
+                                                            <label class="control-label">Ngạch bậc - Từ</label>
                                                             {!!Form::text('ngaytu', 'J', array('id' => 'ngaytu','class' => 'form-control required'))!!}
                                                         </div>
                                                     </div>
 
                                                     <div class="col-md-2">
                                                         <div class="form-group">
-                                                            <label class="control-label">Ngạch bậc - Đến <span class="require">*</span></label>
+                                                            <label class="control-label">Ngạch bậc - Đến</label>
                                                             {!!Form::text('ngayden', 'K', array('id' => 'ngayden','class' => 'form-control required'))!!}
                                                         </div>
                                                     </div>
                                                     <!--/span-->
                                                     <div class="col-md-2">
                                                         <div class="form-group">
-                                                            <label class="control-label">TN Nghề - Từ <span class="require">*</span></label>
+                                                            <label class="control-label">TN Nghề - Từ</label>
                                                             {!!Form::text('tnntungay', 'L', array('id' => 'tnntungay','class' => 'form-control required'))!!}
                                                         </div>
                                                     </div>
 
                                                     <div class="col-md-2">
                                                         <div class="form-group">
-                                                            <label class="control-label">TN Nghề - Đến <span class="require">*</span></label>
+                                                            <label class="control-label">TN Nghề - Đến</label>
                                                             {!!Form::text('tnndenngay', 'M', array('id' => 'tnndenngay','class' => 'form-control required'))!!}
                                                         </div>
                                                     </div>
 
                                                     <div class="col-md-2">
                                                         <div class="form-group">
-                                                            <label class="control-label">Số tài khoản <span class="require">*</span></label>
+                                                            <label class="control-label">Số tài khoản</label>
                                                             {!!Form::text('sotk', 'N', array('id' => 'sotk','class' => 'form-control required'))!!}
                                                         </div>
                                                     </div>
 
                                                     <div class="col-md-2">
                                                         <div class="form-group">
-                                                            <label class="control-label">Nơi công tác <span class="require">*</span></label>
+                                                            <label class="control-label">Nơi công tác</label>
                                                             {!!Form::text('lvtd', 'O', array('id' => 'lvtd','class' => 'form-control required'))!!}
                                                         </div>
                                                     </div>
@@ -257,7 +257,7 @@
                 $('#tencanbo').parent().addClass('has-error');
                 ok = false;
             }
-
+            /*
             if (!$('#msngbac').val()) {
                 str += '  - Mã ngạch lương \n';
                 $('#msngbac').parent().addClass('has-error');
@@ -276,23 +276,6 @@
                 ok = false;
             }
 
-            if (!$('#tudong').val()) {
-                str += '  - Dòng bắt đầu nhận dữ liệu \n';
-                $('#tudong').parent().addClass('has-error');
-                ok = false;
-            }
-
-            if (!$('#sodong').val()) {
-                str += '  - Số dòng dữ liệu \n';
-                $('#sodong').parent().addClass('has-error');
-                ok = false;
-            }
-
-            if (!$('#fexcel').val()) {
-                str += '  - File Excel \n';
-                $('#fexcel').parent().addClass('has-error');
-                ok = false;
-            }
 
             if (!$('#ngaysinh').val()) {
                 str += '  - Ngày sinh \n';
@@ -327,6 +310,19 @@
             if (!$('#macvcq').val()) {
                 str += '  - Chức vụ (chức danh) \n';
                 $('#macvcq').parent().addClass('has-error');
+                ok = false;
+            }
+             */
+
+            if (!$('#fexcel').val()) {
+                str += '  - File Excel \n';
+                $('#fexcel').parent().addClass('has-error');
+                ok = false;
+            }
+
+            if (!$('#tudong').val()) {
+                str += '  - Dòng bắt đầu nhận dữ liệu \n';
+                $('#tudong').parent().addClass('has-error');
                 ok = false;
             }
 

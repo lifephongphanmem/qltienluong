@@ -346,7 +346,12 @@ function getChucVuCQ($val_null = true){
     //$model = array_column(App\dmchucvucq::where('maphanloai',session('admin')->maphanloai)->get()->toArray(),'tencv','macvcq');
     if($val_null){
         $a_kq = array(''=>'-- Chọn chức vụ --');
-        return array_merge($a_kq,$model);
+        //dd($model);
+        foreach($model as $key=>$val){
+            $a_kq[$key] = $val;
+        }
+        //return array_merge($a_kq,$model);
+        return $a_kq;
     }
     return $model;
 
