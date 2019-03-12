@@ -227,7 +227,7 @@ Route::group(['prefix'=>'nghiep_vu'],function(){
         //
         Route::post('indanhsach','hosocanboController@indanhsach');
         Route::post('indanhsach_excel','hosocanboController@indanhsach_excel');
-        Route::post('inhoso','hosocanboController@inhoso');
+        Route::get('inhoso','hosocanboController@inhoso');
 
         Route::get('store_chvu','hosocanboController@store_chvu');
         Route::get('store_kct','hosocanboController@store_kct');

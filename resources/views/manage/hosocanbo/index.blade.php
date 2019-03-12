@@ -95,6 +95,7 @@
                                     <td class="text-center">{{$hs->tenct}}</td>
                                 <td>
                                     <a href="{{url($url.'maso='.$hs->id.'')}}" class="btn btn-default btn-xs mbs"><i class="fa fa-edit"></i>&nbsp; Chỉnh sửa</a>
+                                    <a href="{{url($url.'inhoso?maso='.$hs->macanbo.'')}}" class="btn btn-default btn-xs mbs" target="_blank"><i class="fa fa-print"></i>&nbsp; In hồ sơ</a>
                                     <button type="button" onclick="cfDel('{{$url.'del/maso='.$hs->id}}')" class="btn btn-default btn-xs mbs" data-target="#delete-modal-confirm" data-toggle="modal">
                                         <i class="fa fa-times"></i>&nbsp; Xóa</button>
                                 </td>

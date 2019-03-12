@@ -1246,100 +1246,7 @@ class hosocanboController extends Controller
     }
 
 
-    function create_excel_051018(Request $request){
-        if(Session::has('admin')){
-            $madv=session('admin')->madv;
-            $inputs=$request->all();
 
-            $filename = $madv . date('YmdHis');
-            $request->file('fexcel')->move(public_path() . '/data/uploads/excels/', $filename . '.xls');
-            $path = public_path() . '/data/uploads/excels/' . $filename . '.xls';
-
-            $data = [];
-            //dd ($ar_sheet);
-            Excel::load($path, function($reader) use (&$data, $inputs) {
-                $obj = $reader->getExcel();
-                $sheet = $obj->getSheet(0);
-                $data = $sheet->toArray(null,true,true,true);// giữ lại tiêu đề A=>'val';
-                /*
-                $Row = $sheet->getHighestRow();
-                $Row = $inputs['sodong']+$inputs['tudong'] > $Row ? $Row : ($inputs['sodong']+$inputs['tudong']);
-                $Col = $sheet->getHighestColumn();
-                for ($r = $inputs['tudong']; $r <= $Row; $r++)
-                {
-                    $rowData = $sheet->rangeToArray('A' . $r . ':' . $Col . $r, NULL, TRUE, FALSE);//'0'=>'val'
-                    $data[] = $rowData[0];
-                }
-                */
-            });
-            dd($data);
-            //chuyển từ A=>0; B=>1,...
-            foreach($inputs as $key=>$val) {
-                $ma=ord($val);
-                if($ma>=65 && $ma<=90){
-                    $inputs[$key]=$ma-65;
-                }
-                if($ma>=97 && $ma<=122){
-                    $inputs[$key]=$ma-97;
-                }
-            }
-
-            //nhận dữ liệu vào bảng hồ sơ cán bộ
-            $model_donvi = dmdonvi::where('madv',$madv)->first();
-            $model_msngbac = ngachluong::all();
-            $model_nhomngbac = nhomngachluong::all();
-            $model_chucvu = dmchucvucq::all();
-
-            $a_col = array(
-                '0'=>'heso','1'=>'vuotkhung'
-            );
-            foreach(getColPhuCap() as $key=>$val){
-                if($model_donvi->$key < 3){
-                    $a_col[] = $key;
-                }
-            }
-            //dd($a_col);
-            $i=0; //lấy 1 số thêm vào ngày giờ vì for chạy xong trong 1s
-            foreach ($data as $row) {
-                if ($row[$inputs['tencanbo']] == '') {
-                    //Tên cán bộ rỗng => thoát
-                    continue;
-                }
-                $model = new hosocanbo();
-                $model->madv = $madv;
-                $model->macanbo = $madv. '_' . (getdate()[0] + $i++);
-                $model->macongchuc = $row[$inputs['macongchuc']];
-                $model->tencanbo = $row[$inputs['tencanbo']];
-                $model->macvcq = $row[$inputs['macvcq']];
-                $model->msngbac = $row[$inputs['msngbac']];
-                $model->bac = 1;
-                //Tính bậc lương (mặc định 1), lấy mã chức vụ cho cán bộ (mặc định chức vụ không xác định)
-                foreach ($a_col as $key => $val) {
-                    $model->$val = isset($row[$inputs[$val]]) ? chkDbl($row[$inputs[$val]]) : 0;
-                }
-                // Từ hệ số lương tính ra bậc lương của cán bộ
-                $msngbac = $model_msngbac->where('msngbac',$model->msngbac)->first();
-                if(isset($msngbac)){
-                    $nhomngbac = $model_nhomngbac->where('manhom',$msngbac->manhom)->first();
-                    if(isset($nhomngbac)){
-                        $model->bac =(int)(($model->heso - $nhomngbac->heso)/$nhomngbac->hesochenhlech) + 1;
-                    }
-                }else{
-                    $model->msngbac = null;
-                }
-                //Lấy mã chức vụ nếu có
-                $chucvu = $model_chucvu->where('macvcq',$model->macvcq)->first();
-                if(isset($chucvu)) {
-                    $model->macvcq = isset($chucvu) ? $chucvu->macvcq : null;
-                }
-                $model->save();
-            }
-
-            File::Delete($path);
-            return redirect('nghiep_vu/ho_so/danh_sach');
-        }else
-            return view('errors.notlogin');
-    }
     /**
      * @param $result
      * @param $model
@@ -1430,6 +1337,7 @@ class hosocanboController extends Controller
             $a_ct = array_column(dmphanloaict::all()->toArray(), 'tenct', 'mact');
             $a_pb = getPhongBan(false);
             $a_cv = getChucVuCQ(false);
+            $a_plpc = getPhanLoaiPhuCap();
 
             foreach($model as $hs){
                 $hs->tenpb = isset($a_pb[$hs->mapb])?$a_pb[$hs->mapb] : '';
@@ -1454,7 +1362,7 @@ class hosocanboController extends Controller
 
             foreach($model_pc as $ct) {
                 if ($model->sum($ct->mapc) > 0) {
-                    $a_phucap[$ct->mapc] = $ct->report;
+                    $a_phucap[$ct->mapc] = $ct->report.'</br>('.$a_plpc[$ct->phanloai].')';
                     $col++;
                 }
             }
@@ -1514,6 +1422,39 @@ class hosocanboController extends Controller
                 ->with('model_congtac',$model_congtac)
                 ->with('a_phucap',$a_phucap)
                 ->with('pageTitle','Bảng lương chi tiết');
+        } else
+            return view('errors.notlogin');
+    }
+
+    public function inhoso(Request $request){
+        if (Session::has('admin')) {
+            $inputs = $request->all();
+            $a_ct = array_column(dmphanloaict::all()->toArray(), 'tenct', 'mact');
+            $a_pb = getPhongBan(false);
+            $a_cv = getChucVuCQ(false);
+            $a_plpc = getPhanLoaiPhuCap();
+            //dd($inputs);
+            $model=hosocanbo::where('macanbo',$inputs['maso'])->first();
+            $model->tenpb = isset($a_pb[$model->mapb])?$a_pb[$model->mapb] : '';
+            $model->tencv = isset($a_cv[$model->macvcq])?$a_cv[$model->macvcq] : '';
+            $model->tenct = isset($a_ct[$model->mact])?$a_ct[$model->mact] : '';
+
+            $model_pc = dmphucap_donvi::where('madv',session('admin')->madv)->where('phanloai','<','3')->get();
+
+            foreach($model_pc as $ct) {
+                $mapc = $ct->mapc;
+                $ct->phanloai = $a_plpc[$ct->phanloai];
+                $ct->heso = $model->$mapc > 0 ? $model->$mapc : 0;
+            }
+
+            $model_pc = $model_pc->where('heso','>',0);
+            //dd($model_pc);
+            $m_dv = dmdonvi::where('madv',session('admin')->madv)->first();
+            return view('reports.hoso.thongtincanbo')
+                ->with('model',$model)
+                ->with('m_dv',$m_dv)
+                ->with('model_pc',$model_pc)
+                ->with('pageTitle','Thông tin cán bộ');
         } else
             return view('errors.notlogin');
     }
