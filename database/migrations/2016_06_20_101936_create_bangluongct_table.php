@@ -134,6 +134,12 @@ class CreateBangluongctTable extends Migration
             $table->double('bhyt_dv')->default(0);
             $table->double('bhtn_dv')->default(0);
             $table->double('kpcd_dv')->default(0);
+            //lưu hệ số gốc 1 số loại pc tính %
+            $table->double('hs_vuotkhung')->default(0);
+            $table->double('hs_pctnn')->default(0);
+            $table->double('hs_pccovu')->default(0);
+            $table->double('hs_pcud61')->default(0);
+            $table->double('hs_pcudn')->default(0);
             $table->timestamps();
         });
     }

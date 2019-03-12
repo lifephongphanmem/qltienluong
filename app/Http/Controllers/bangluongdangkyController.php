@@ -141,7 +141,12 @@ class bangluongdangkyController extends Controller
                 $cb->bhyt_dv = floatval($cb->bhyt_dv) / 100;
                 $cb->kpcd_dv = floatval($cb->kpcd_dv) / 100;
                 $cb->bhtn_dv = floatval($cb->bhtn_dv) / 100;
-
+                //lưu lại hệ số gốc 1 số loại pc
+                $cb->hs_vuotkhung = $cb->vuotkhung;
+                $cb->hs_pctnn = $cb->pctnn;
+                $cb->hs_pccovu = $cb->pccovu;
+                $cb->hs_pcud61 = $cb->pcud61;
+                $cb->hs_pcudn = $cb->pcudn;
                 //trong bảng danh mục là % vượt khung => sang bảng lương chuyển thành hệ số
                 $cb->vuotkhung = $cb->heso * $cb->vuotkhung / 100;
 

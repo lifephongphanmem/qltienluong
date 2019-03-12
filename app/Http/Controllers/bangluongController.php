@@ -328,6 +328,12 @@ class bangluongController extends Controller
             $cb->kpcd_dv = floatval($cb->kpcd_dv) / 100;
             $cb->bhtn_dv = floatval($cb->bhtn_dv) / 100;
             $cb->macongtac = isset($a_ct[$cb->mact])? $a_ct[$cb->mact] : '' ;
+            //lưu lại hệ số gốc 1 số loại pc
+            $cb->hs_vuotkhung = $cb->vuotkhung;
+            $cb->hs_pctnn = $cb->pctnn;
+            $cb->hs_pccovu = $cb->pccovu;
+            $cb->hs_pcud61 = $cb->pcud61;
+            $cb->hs_pcudn = $cb->pcudn;
 
             //trong bảng danh mục là % vượt khung => sang bảng lương chuyển thành hệ số
             //$heso_goc = $cb->heso * $cb->pthuong / 100;
@@ -743,6 +749,14 @@ class bangluongController extends Controller
             $m_cb[$key]['manguonkp'] = $inputs['manguonkp'];
             $m_cb[$key]['congtac'] = 'CONGTAC';
             $m_cb[$key]['macongtac'] = isset($a_nhomct[$m_cb[$key]['mact']]) ? $a_nhomct[$m_cb[$key]['mact']] : '';
+            //lưu hệ số gốc
+
+            $m_cb[$key]['hs_vuotkhung'] = $val['vuotkhung'];
+            $m_cb[$key]['hs_pctnn'] = $val['pctnn'];
+            $m_cb[$key]['hs_pccovu'] = $val['pccovu'];
+            $m_cb[$key]['hs_pcud61'] = $val['pcud61'];
+            $m_cb[$key]['hs_pcudn'] = $val['pcudn'];
+
             $m_cb[$key]['heso'] = $val['heso'] * $val['pthuong'] / 100;
             $m_cb[$key]['vuotkhung'] = $val['heso'] * $val['vuotkhung'] / 100;//trong bảng danh mục là % vượt khung => sang bảng lương chuyển thành hệ số
             $m_cb[$key]['bhxh'] = floatval($val['bhxh']) / 100;

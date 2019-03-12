@@ -131,7 +131,13 @@ class bangluong_ct extends Model
         'bhxh_dv',
         'bhyt_dv',
         'bhtn_dv',
-        'kpcd_dv'
+        'kpcd_dv',
+        //lưu hệ số gốc 1 số loại pc tính %
+        'hs_vuotkhung',
+        'hs_pctnn',
+        'hs_pccovu',
+        'hs_pcud61',
+        'hs_pcudn',
     ];
 }
 /*
@@ -213,5 +219,13 @@ class bangluong_ct extends Model
         ALTER TABLE `bangluong_ct` CHANGE  `st_pcphth` `st_pcphth` DOUBLE NOT NULL DEFAULT '0';
 
     19/02/19
-    ALTER TABLE `bangluong_ct` ADD `manguonkp` VARCHAR(50) NULL AFTER `mabl`;
+        ALTER TABLE `bangluong_ct` ADD `manguonkp` VARCHAR(50) NULL AFTER `mabl`;
+    12/03/19
+        ALTER TABLE `bangluong_ct` ADD `hs_vuotkhung` FLOAT NOT NULL DEFAULT '0' AFTER `kpcd_dv`;
+        ALTER TABLE `bangluong_ct` ADD `hs_pctnn` FLOAT NOT NULL DEFAULT '0' AFTER `kpcd_dv`;
+        ALTER TABLE `bangluong_ct` ADD `hs_pccovu` FLOAT NOT NULL DEFAULT '0' AFTER `kpcd_dv`;
+        ALTER TABLE `bangluong_ct` ADD `hs_pcud61` FLOAT NOT NULL DEFAULT '0' AFTER `kpcd_dv`;
+        ALTER TABLE `bangluong_ct` ADD `hs_pcudn` FLOAT NOT NULL DEFAULT '0' AFTER `kpcd_dv`;
+
+        UPDATE bangluong_ct SET hs_vuotkhung = vuotkhung * 100 / heso WHERE vuotkhung > 0 and hs_vuotkhung = 0
 */
