@@ -136,7 +136,7 @@
                                             <div class="col-md-2">
                                                 <div class="form-group">
                                                     <label class="control-label"><b>Lương thực nhận </b></label>
-                                                    {!!Form::text('luongtn', null, array('id' => 'luongtn','class' => 'form-control text-right', 'data-mask'=>'fdecimal','readonly'=>'true','style'=>'font-weight:bold'))!!}
+                                                    {!!Form::text('luongtn', null, array('id' => 'luongtn','class' => 'form-control text-right', 'data-mask'=>'fdecimal', 'style'=>'font-weight:bold'))!!}
                                                 </div>
                                             </div>
                                         </div>

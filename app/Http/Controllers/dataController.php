@@ -49,17 +49,30 @@ class dataController extends Controller
         //sau này chia bảng
     }
 
-    function getBangluong_ct_th($thang,$nam,$madv){
+    function getBangluong_ct_th($thang,$nam,$madv, $manguonkp){
         //sau này chia bảng
         //for từng bảng rồi cộng vào trả lại mảng array
-        $model = \App\bangluong::join('bangluong_ct','bangluong.mabl','=','bangluong_ct.mabl')
-            ->where('bangluong.thang',$thang)
-            ->where('bangluong.nam', $nam)
-            ->where('bangluong.madv',$madv)
-            ->where('bangluong.phanloai', 'BANGLUONG')
-            ->select('bangluong_ct.*')
-            //->orderby('bangluong_ct.stt')
-            ->get()->sortby('stt')->toarray();
+        if($manguonkp == null){
+            $model = \App\bangluong::join('bangluong_ct','bangluong.mabl','=','bangluong_ct.mabl')
+                ->where('bangluong.thang',$thang)
+                ->where('bangluong.nam', $nam)
+                ->where('bangluong.madv',$madv)
+                ->where('bangluong.phanloai', 'BANGLUONG')
+                ->select('bangluong_ct.*')
+                //->orderby('bangluong_ct.stt')
+                ->get()->sortby('stt')->toarray();
+        }else{
+            $model = \App\bangluong::join('bangluong_ct','bangluong.mabl','=','bangluong_ct.mabl')
+                ->where('bangluong.thang',$thang)
+                ->where('bangluong.nam', $nam)
+                ->where('bangluong.madv',$madv)
+                ->wherein('bangluong.manguonkp',$manguonkp)
+                ->where('bangluong.phanloai', 'BANGLUONG')
+                ->select('bangluong_ct.*')
+                //->orderby('bangluong_ct.stt')
+                ->get()->sortby('stt')->toarray();
+        }
+        //dd($model);
         /*
         $model = bangluong_ct::where('mabl', $inputs['mabl'])->get();
         $m_hoso = hosocanbo::where('madv', $inputs['madv'])->get();

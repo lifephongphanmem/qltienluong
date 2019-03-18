@@ -229,6 +229,7 @@ class dmphucapController extends Controller
                 return view('errors.notlogin');
             }
             $inputs = $request->all();
+            //dd($request);
             $inputs['congthuc'] = getDbl($inputs['phanloai']) == 2 ? $inputs['congthuc'] : '';
             dmphucap_donvi::where('mapc', $inputs['mapc'])->where('madv', session('admin')->madv)->first()->update($inputs);
             return redirect('/danh_muc/phu_cap/don_vi');

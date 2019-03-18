@@ -39,7 +39,7 @@ use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Support\Facades\Response;
 
 class bangluongController extends Controller
-{
+{   //bo
     function index(Request $request)
     {
         if (Session::has('admin')) {
@@ -116,6 +116,16 @@ class bangluongController extends Controller
             //$model = $model->sortby('nam')->sortby('thang');
             //dd($model);
             //dd($inputs);
+
+            //lấy danh mục nguồn kinh đã tạo bảng lương trong tháng
+            $a_nguon = $model->map(function($data){
+                return collect($data->toarray())
+                    ->only(['manguonkp'])
+                    ->all();
+
+            })->toarray();
+            $m_nguonkp_bl = dmnguonkinhphi::select('manguonkp','tennguonkp')->wherein('manguonkp', $a_nguon)->get();
+
             return view('manage.bangluong.index')
                 //->with('furl', '/chuc_nang/bang_luong/')
                 //->with('furl_ajax', '/ajax/bang_luong/')
@@ -125,6 +135,7 @@ class bangluongController extends Controller
                 ->with('model_nhomct', $model_nhomct)
                 ->with('model_tenct', $model_tenct)
                 ->with('m_nguonkp', $m_nguonkp)
+                ->with('a_nguonkp_bl', array_column($m_nguonkp_bl->toArray(), 'tennguonkp', 'manguonkp'))
                 ->with('pageTitle', 'Danh sách bảng lương');
         } else
             return view('errors.notlogin');
@@ -2068,11 +2079,13 @@ class bangluongController extends Controller
     public function printf_mau01(Request $request){
         if (Session::has('admin')) {
             $inputs = $request->all();
+            /*
             $inputs['mabl'] = $inputs['mabl_mau1'];
             $inputs['mapb'] = $inputs['mapb_mau1'];
             $inputs['macvcq'] = $inputs['macvcq_mau1'];
             $inputs['mact'] = $inputs['mact_mau1'];
-            //$inputs['cochu'] = $inputs['cochu_mau1'];
+            $inputs['cochu'] = $inputs['cochu_mau1'];
+            */
             $model = $this->getBangLuong($inputs)->wherein('phanloai', ['CVCHINH','KHONGCT']);
             //dd($inputs);
             $mabl = $inputs['mabl'];
@@ -2188,7 +2201,7 @@ class bangluongController extends Controller
     public function printf_mautt107(Request $request){
         if (Session::has('admin')) {
             $inputs = $request->all();
-            $inputs['mabl'] = $inputs['mabl_mautt107'];
+            //$inputs['mabl'] = $inputs['mabl'];
             //$model = $this->getBangLuong($inputs);
             $model = $this->getBangLuong($inputs)->wherein('phanloai', ['CVCHINH','KHONGCT']);
             //dd($inputs);
@@ -2289,11 +2302,57 @@ class bangluongController extends Controller
             return view('errors.notlogin');
     }
 
+    public function printf_mautt107_m2(Request $request){
+        if (Session::has('admin')) {
+            $inputs = $request->all();
+            //$inputs['mabl'] = $inputs['mabl'];
+            //$model = $this->getBangLuong($inputs);
+            $model = $this->getBangLuong($inputs)->wherein('phanloai', ['CVCHINH','KHONGCT']);
+            //dd($inputs);
+            $mabl = $inputs['mabl'];
+            $m_bl = bangluong::select('thang','nam','mabl','madv','ngaylap','phanloai')->where('mabl',$mabl)->first();
+            $m_dv = dmdonvi::where('madv',$m_bl->madv)->first();
+
+            $model_congtac = dmphanloaict::select('mact','tenct')
+                ->wherein('mact', function($query) use($mabl){
+                    $query->select('mact')->from('bangluong_ct')->where('mabl',$mabl);
+                })->get();
+
+            $thongtin=array('nguoilap'=>$m_bl->nguoilap,
+                'thang'=>$m_bl->thang,
+                'nam'=>$m_bl->nam,
+                'ngaylap'=>$m_bl->ngaylap,'phanloai'=>$m_bl->phanloai,
+                'cochu'=>$inputs['cochu']);
+            //xử lý ẩn hiện cột phụ cấp => biết tổng số cột hiện => colspan trên báo cáo
+            $a_goc = array('hesott');
+            $model_pc = dmphucap_donvi::where('madv',$m_bl->madv)->where('phanloai','<','3')->wherenotin('mapc',$a_goc)->get();
+            $a_phucap = array();
+            $col = 0;
+
+            foreach($model_pc as $ct) {
+                if ($model->sum($ct->mapc) > 0) {
+                    $a_phucap[$ct->mapc] = $ct->report;
+                    $col++;
+                }
+            }
+            return view('reports.bangluong.donvi.mautt107_m2')
+                ->with('model',$model->sortBy('stt'))
+                ->with('model_pb',getPhongBan())
+                ->with('m_dv',$m_dv)
+                ->with('thongtin',$thongtin)
+                ->with('col',$col)
+                ->with('model_congtac',$model_congtac)
+                ->with('a_phucap',$a_phucap)
+                ->with('pageTitle','Bảng lương chi tiết');
+        } else
+            return view('errors.notlogin');
+    }
+
     public function printf_mautt107_pb(Request $request)
     {
         if (Session::has('admin')) {
             $inputs = $request->all();
-            $inputs['mabl'] = $inputs['mabl_mautt107_pb'];
+            //$inputs['mabl'] = $inputs['mabl'];
             /*
             //lưu mã pb lại vì chưa lọc theo phòng ban
             $mapb = $inputs['mapb'];
@@ -2401,10 +2460,6 @@ class bangluongController extends Controller
     public function printf_mau03(Request $request){
         if (Session::has('admin')) {
             $inputs = $request->all();
-            $inputs['mabl'] = $inputs['mabl_mau3'];
-            $inputs['mapb'] = $inputs['mapb_mau3'];
-            $inputs['macvcq'] = $inputs['macvcq_mau3'];
-            $inputs['mact'] = $inputs['mact_mau3'];
             $model = $this->getBangLuong($inputs)->wherein('phanloai', ['CVCHINH','KHONGCT']);
             //dd($inputs);
             $mabl = $inputs['mabl'];
@@ -2455,10 +2510,6 @@ class bangluongController extends Controller
     public function printf_mau03_excel(Request $request){
         if (Session::has('admin')) {
             $inputs = $request->all();
-            $inputs['mabl'] = $inputs['mabl_mau3'];
-            $inputs['mapb'] = $inputs['mapb_mau3'];
-            $inputs['macvcq'] = $inputs['macvcq_mau3'];
-            $inputs['mact'] = $inputs['mact_mau3'];
             $model = $this->getBangLuong($inputs)->wherein('phanloai', ['CVCHINH','KHONGCT']);
             //dd($inputs);
             $mabl = $inputs['mabl'];
@@ -2519,10 +2570,6 @@ class bangluongController extends Controller
     public function printf_mau04(Request $request){
         if (Session::has('admin')) {
             $inputs = $request->all();
-            $inputs['mabl'] = $inputs['mabl_mau4'];
-            $inputs['mapb'] = $inputs['mapb_mau4'];
-            $inputs['macvcq'] = $inputs['macvcq_mau4'];
-            $inputs['mact'] = $inputs['mact_mau4'];
             $model = $this->getBangLuong($inputs)->wherein('phanloai', ['CVCHINH','KHONGCT']);
             //dd($inputs);
             $mabl = $inputs['mabl'];
@@ -2572,10 +2619,6 @@ class bangluongController extends Controller
     public function printf_mau04_excel(Request $request){
         if (Session::has('admin')) {
             $inputs = $request->all();
-            $inputs['mabl'] = $inputs['mabl_mau4'];
-            $inputs['mapb'] = $inputs['mapb_mau4'];
-            $inputs['macvcq'] = $inputs['macvcq_mau4'];
-            $inputs['mact'] = $inputs['mact_mau4'];
             $model = $this->getBangLuong($inputs)->wherein('phanloai', ['CVCHINH','KHONGCT']);
             //dd($inputs);
             $mabl = $inputs['mabl'];
@@ -2635,10 +2678,6 @@ class bangluongController extends Controller
     public function printf_mau05(Request $request){
         if (Session::has('admin')) {
             $inputs = $request->all();
-            $inputs['mabl'] = $inputs['mabl_mau5'];
-            $inputs['mapb'] = $inputs['mapb_mau5'];
-            $inputs['macvcq'] = $inputs['macvcq_mau5'];
-            $inputs['mact'] = $inputs['mact_mau5'];
             $model = $this->getBangLuong($inputs)->wherein('phanloai', ['CVCHINH','KHONGCT']);
             //dd($inputs);
             $mabl = $inputs['mabl'];
@@ -3056,10 +3095,7 @@ class bangluongController extends Controller
     {
         if (Session::has('admin')) {
             $inputs = $request->all();
-            $inputs['mabl'] = $inputs['mabl_mau7'];
-            $inputs['mapb'] = $inputs['mapb_mau7'];
-            $inputs['macvcq'] = $inputs['macvcq_mau7'];
-            $inputs['mact'] = $inputs['mact_mau7'];
+
             //$inputs['cochu'] = $inputs['cochu_mau1'];
             $model = $this->getBangLuong($inputs)->wherein('phanloai', ['CVCHINH','KHONGCT']);
             //$data_phucap = bangluong_phucap::where('mabl', $inputs['mabl'])->get()->toarray();
@@ -3116,10 +3152,7 @@ class bangluongController extends Controller
     {
         if (Session::has('admin')) {
             $inputs = $request->all();
-            $inputs['mabl'] = $inputs['mabl_mau7'];
-            $inputs['mapb'] = $inputs['mapb_mau7'];
-            $inputs['macvcq'] = $inputs['macvcq_mau7'];
-            $inputs['mact'] = $inputs['mact_mau7'];
+
             //$inputs['cochu'] = $inputs['cochu_mau1'];
             $model = $this->getBangLuong($inputs)->wherein('phanloai', ['CVCHINH', 'KHONGCT']);
 
@@ -3189,10 +3222,7 @@ class bangluongController extends Controller
     {
         if (Session::has('admin')) {
             $inputs = $request->all();
-            $inputs['mabl'] = $inputs['mabl_mau8'];
-            $inputs['mapb'] = $inputs['mapb_mau8'];
-            $inputs['macvcq'] = $inputs['macvcq_mau8'];
-            $inputs['mact'] = $inputs['mact_mau8'];
+
             //$inputs['cochu'] = $inputs['cochu_mau1'];
             $model = $this->getBangLuong($inputs)->wherein('phanloai', ['CVCHINH','KHONGCT']);
             $model_st = $this->getBangLuong($inputs,1)->wherein('phanloai', ['CVCHINH','KHONGCT']);
@@ -3276,10 +3306,6 @@ class bangluongController extends Controller
     public function printf_mauds(Request $request){
         if (Session::has('admin')) {
             $inputs = $request->all();
-            $inputs['mabl'] = $inputs['mabl_mauds'];
-            $inputs['mapb'] = $inputs['mapb_mauds'];
-            $inputs['macvcq'] = $inputs['macvcq_mauds'];
-            $inputs['mact'] = $inputs['mact_mauds'];
             $inputs['madv'] = session('admin')->madv;
 
             $mabl = $inputs['mabl'];
@@ -3318,10 +3344,6 @@ class bangluongController extends Controller
     public function printf_mauds_excel(Request $request){
         if (Session::has('admin')) {
             $inputs = $request->all();
-            $inputs['mabl'] = $inputs['mabl_mauds'];
-            $inputs['mapb'] = $inputs['mapb_mauds'];
-            $inputs['macvcq'] = $inputs['macvcq_mauds'];
-            $inputs['mact'] = $inputs['mact_mauds'];
 
             $mabl = $inputs['mabl'];
             $m_bl = bangluong::select('thang','nam','mabl','madv','ngaylap','phanloai')->where('mabl',$mabl)->first();
@@ -3368,13 +3390,7 @@ class bangluongController extends Controller
 
     function printf_maubh(Request $request){
         if (Session::has('admin')) {
-
             $inputs = $request->all();
-            $inputs['mabl'] = $inputs['mabl_maubh'];
-            $inputs['mapb'] = $inputs['mapb_maubh'];
-            $inputs['macvcq'] = $inputs['macvcq_maubh'];
-            $inputs['mact'] = $inputs['mact_maubh'];
-
             $mabl = $inputs['mabl'];
             $m_bl = bangluong::select('thang','nam','mabl','madv','ngaylap','phanloai')->where('mabl',$mabl)->first();
             $model = $this->getBangLuong($inputs);
@@ -3383,7 +3399,6 @@ class bangluongController extends Controller
                 ->wherein('mact', function($query) use($mabl){
                     $query->select('mact')->from('bangluong_ct')->where('mabl',$mabl);
                 })->get();
-
 
             //dd($request->all());
 
@@ -3414,12 +3429,7 @@ class bangluongController extends Controller
     //chưa làm xuất bh ra excel
     function printf_maubh_excel(Request $request){
         if (Session::has('admin')) {
-
             $inputs = $request->all();
-            $inputs['mabl'] = $inputs['mabl_maubh'];
-            $inputs['mapb'] = $inputs['mapb_maubh'];
-            $inputs['macvcq'] = $inputs['macvcq_maubh'];
-            $inputs['mact'] = $inputs['mact_maubh'];
 
             $mabl = $inputs['mabl'];
             $m_bl = bangluong::select('thang','nam','mabl','madv','ngaylap','phanloai')->where('mabl',$mabl)->first();
@@ -3456,10 +3466,6 @@ class bangluongController extends Controller
     public function printf_maudbhdnd(Request $request){
         if (Session::has('admin')) {
             $inputs = $request->all();
-            $inputs['mabl'] = $inputs['mabl_maudbhdnd'];
-            //$inputs['mapb'] = $inputs['mapb_maudbhdnd'];
-            //$inputs['macvcq'] = $inputs['macvcq_maudbhdnd'];
-            //$inputs['mact'] = $inputs['mact_maudbhdnd'];
 
             $mabl = $inputs['mabl'];
             $m_bl = bangluong::select('thang','nam','mabl','madv','ngaylap','luongcoban')->where('mabl',$mabl)->first();
@@ -3500,10 +3506,6 @@ class bangluongController extends Controller
     public function printf_maudbhdnd_excel(Request $request){
         if (Session::has('admin')) {
             $inputs = $request->all();
-            $inputs['mabl'] = $inputs['mabl_maudbhdnd'];
-            //$inputs['mapb'] = $inputs['mapb_maudbhdnd'];
-            //$inputs['macvcq'] = $inputs['macvcq_maudbhdnd'];
-            //$inputs['mact'] = $inputs['mact_maudbhdnd'];
 
             $mabl = $inputs['mabl'];
             $m_bl = bangluong::select('thang','nam','mabl','madv','ngaylap','luongcoban')->where('mabl',$mabl)->first();
@@ -3553,10 +3555,6 @@ class bangluongController extends Controller
     {
         if (Session::has('admin')) {
             $inputs = $request->all();
-            $inputs['mabl'] = $inputs['mabl_maublpc'];
-            $inputs['mapb'] = $inputs['mapb_maublpc'];
-            $inputs['macvcq'] = $inputs['macvcq_maublpc'];
-            $inputs['mact'] = $inputs['mact_maublpc'];
             $model = $this->getBangLuong($inputs);
 
             $mabl = $inputs['mabl'];
@@ -3604,10 +3602,6 @@ class bangluongController extends Controller
     {
         if (Session::has('admin')) {
             $inputs = $request->all();
-            $inputs['mabl'] = $inputs['mabl_maublpc'];
-            $inputs['mapb'] = $inputs['mapb_maublpc'];
-            $inputs['macvcq'] = $inputs['macvcq_maublpc'];
-            $inputs['mact'] = $inputs['mact_maublpc'];
             $model = $this->getBangLuong($inputs);
 
             $mabl = $inputs['mabl'];
@@ -3661,10 +3655,6 @@ class bangluongController extends Controller
     public function printf_maubchd(Request $request){
         if (Session::has('admin')) {
             $inputs = $request->all();
-            $inputs['mabl'] = $inputs['mabl_maubchd'];
-            //$inputs['mapb'] = $inputs['mapb_maudbhdnd'];
-            //$inputs['macvcq'] = $inputs['macvcq_maudbhdnd'];
-            //$inputs['mact'] = $inputs['mact_maudbhdnd'];
 
             $mabl = $inputs['mabl'];
             $m_bl = bangluong::select('thang','nam','mabl','madv','ngaylap','luongcoban')->where('mabl',$mabl)->first();
@@ -3719,10 +3709,6 @@ class bangluongController extends Controller
     public function printf_maubchd_excel(Request $request){
         if (Session::has('admin')) {
             $inputs = $request->all();
-            $inputs['mabl'] = $inputs['mabl_maubchd'];
-            //$inputs['mapb'] = $inputs['mapb_maudbhdnd'];
-            //$inputs['macvcq'] = $inputs['macvcq_maudbhdnd'];
-            //$inputs['mact'] = $inputs['mact_maudbhdnd'];
 
             $mabl = $inputs['mabl'];
             $m_bl = bangluong::select('thang','nam','mabl','madv','ngaylap','luongcoban')->where('mabl',$mabl)->first();
@@ -3783,9 +3769,6 @@ class bangluongController extends Controller
     public function printf_mauqs(Request $request){
         if (Session::has('admin')) {
             $inputs = $request->all();
-            $inputs['mabl'] = $inputs['mabl_mauqs'];
-            $inputs['mapb']= $inputs['mapb_mauqs'];
-
             $mabl = $inputs['mabl'];
             $m_bl = bangluong::select('thang','nam','mabl','madv','ngaylap','luongcoban')->where('mabl',$mabl)->first();
             $model = bangluong_ct::where('mabl',$mabl)->where('mact','1536402878')->get();
@@ -3831,9 +3814,6 @@ class bangluongController extends Controller
     public function printf_mauqs_excel(Request $request){
         if (Session::has('admin')) {
             $inputs = $request->all();
-            $inputs['mabl'] = $inputs['mabl_mauqs'];
-            $inputs['mapb']= $inputs['mapb_mauqs'];
-
             $mabl = $inputs['mabl'];
             $m_bl = bangluong::select('thang','nam','mabl','madv','ngaylap','luongcoban')->where('mabl',$mabl)->first();
             $model = bangluong_ct::where('mabl',$mabl)->get();

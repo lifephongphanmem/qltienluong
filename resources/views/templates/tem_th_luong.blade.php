@@ -31,6 +31,15 @@
         </div>
 
         <div class="col-md-12">
+            <label class="control-label">Nguồn kinh phí</label>
+            <select class="form-control" id="manguonkp" name="manguonkp[]" multiple="multiple">
+                @foreach($a_nguonkp_bl as $key=>$value)
+                    <option value="{{$key}}" selected>{{$value}}</option>
+                @endforeach
+            </select>
+        </div>
+
+        <div class="col-md-12">
             <label class="control-label">Cỡ chữ</label>
             {!!Form::select('cochu',getCoChu(), 10, array('id' => 'cochu','class' => 'form-control select2me'))!!}
         </div>

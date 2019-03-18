@@ -400,6 +400,7 @@ Route::group(['prefix'=>'chuc_nang'],function(){
         //Tạo in bảng lương theo cách mới
         Route::post('mau01','bangluongController@printf_mau01');
         Route::post('mautt107','bangluongController@printf_mautt107');
+        Route::post('mautt107_m2','bangluongController@printf_mautt107_m2');
         Route::post('mautt107_pb','bangluongController@printf_mautt107_pb');
         Route::post('mau03','bangluongController@printf_mau03');
         Route::post('mau04','bangluongController@printf_mau04');
@@ -420,6 +421,7 @@ Route::group(['prefix'=>'chuc_nang'],function(){
         //tổng hợp
         Route::post('mau185_th','bangluong_inController@printf_mau185_th');
         Route::post('mautt107_th','bangluong_inController@printf_mautt107_th');
+        Route::post('mautt107_th_m2','bangluong_inController@printf_mautt107_th_m2');
         Route::post('mautt107_pb_th','bangluong_inController@printf_mautt107_pb_th');
         Route::post('mau07_th','bangluong_inController@printf_mau07_th');
         Route::post('mauds_th','bangluong_inController@printf_mauds_th');

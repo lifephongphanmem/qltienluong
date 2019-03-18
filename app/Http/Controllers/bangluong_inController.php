@@ -20,10 +20,12 @@ class bangluong_inController extends Controller
     public function printf_mautt107_th(Request $request){
         if (Session::has('admin')) {
             $inputs = $request->all();
+            //dd($inputs);
             $inputs['madv'] = session('admin')->madv;
             list($a_canbo, $a_pc) = $this->getData($inputs);
-
+            //dd($a_canbo);
             $m_dv = dmdonvi::where('madv',$inputs['madv'])->first();
+
             $m_bl = bangluong::select('thang', 'nam', 'mabl', 'madv', 'ngaylap')
                 ->where('thang',$inputs['thang_th'])
                 ->where('nam',$inputs['nam_th'])
@@ -114,6 +116,49 @@ class bangluong_inController extends Controller
                 });
             })->download('xls');
 
+        } else
+            return view('errors.notlogin');
+    }
+
+    public function printf_mautt107_th_m2(Request $request){
+        if (Session::has('admin')) {
+            $inputs = $request->all();
+            $inputs['madv'] = session('admin')->madv;
+            list($a_canbo, $a_pc) = $this->getData($inputs);
+
+            $m_dv = dmdonvi::where('madv',$inputs['madv'])->first();
+            $m_bl = bangluong::select('thang', 'nam', 'mabl', 'madv', 'ngaylap')
+                ->where('thang',$inputs['thang_th'])
+                ->where('nam',$inputs['nam_th'])
+                ->where('madv',$inputs['madv'])
+                ->where('phanloai', 'BANGLUONG')->first();
+
+            $thongtin = array('nguoilap'=>$m_bl->nguoilap,
+                'thang'=>$m_bl->thang,
+                'nam'=>$m_bl->nam,
+                'ngaylap'=>$m_bl->ngaylap,
+                'cochu'=>$inputs['cochu']);
+            //xử lý ẩn hiện cột phụ cấp => biết tổng số cột hiện => colspan trên báo cáo
+            $a_phucap = array();
+            $col = 0;
+
+            foreach($a_pc as $k=>$v){
+                $st = array_sum(array_column($a_canbo,$k));;
+                if ($st > 0) {
+                    $a_phucap[$k] = $v['report'];
+                    $col++;
+                }
+            }
+
+            return view('reports.bangluong.tonghopbangluong.mautt107_m2')
+                ->with('a_canbo',$a_canbo)
+                ->with('m_dv',$m_dv)
+                ->with('thongtin',$thongtin)
+                ->with('col',$col)
+                ->with('a_ct',getPhanLoaiCT(false))
+                ->with('a_congtac',a_unique(a_split($a_canbo,array('mact'))))
+                ->with('a_phucap',$a_phucap)
+                ->with('pageTitle','Bảng lương chi tiết');
         } else
             return view('errors.notlogin');
     }
@@ -254,7 +299,7 @@ class bangluong_inController extends Controller
     public function getData($inputs)
     {
         $getData = new data();
-        $model = $getData->getBangluong_ct_th($inputs['thang_th'], $inputs['nam_th'], $inputs['madv']);
+        $model = $getData->getBangluong_ct_th($inputs['thang_th'], $inputs['nam_th'], $inputs['madv'], isset($inputs['manguonkp'])? $inputs['manguonkp']: null);
         if (isset($inputs['mapb']) && $inputs['mapb'] != '') {
             $model = a_getelement_equal($model, array('mapb' => $inputs['mapb']));
         }
