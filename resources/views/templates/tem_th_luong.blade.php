@@ -43,6 +43,11 @@
             <label class="control-label">Cỡ chữ</label>
             {!!Form::select('cochu',getCoChu(), 10, array('id' => 'cochu','class' => 'form-control select2me'))!!}
         </div>
+
+        <div class="col-md-offset-2 col-md-8">
+            <input type="checkbox" name="in_truylinh" />
+            <label class="control-label">Bao gồm cả bảng truy lĩnh lương</label>
+        </div>
     </div>
     <input type="hidden" id="thang_th" name="thang_th" value="{{$inputs['thang']}}"/>
     <input type="hidden" id="nam_th" name="nam_th" value="{{$inputs['nam']}}"/>

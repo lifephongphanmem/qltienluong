@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 
 use App\bangluong;
+use App\dmchucvucq;
 use App\dmdonvi;
 use App\dmphucap_donvi;
 use Carbon\Carbon;
@@ -149,6 +150,7 @@ class bangluong_inController extends Controller
                     $col++;
                 }
             }
+            $a_chucvu = array_column(dmchucvucq::all('tenvt', 'macvcq')->toArray(), 'tenvt', 'macvcq');
 
             return view('reports.bangluong.tonghopbangluong.mautt107_m2')
                 ->with('a_canbo',$a_canbo)
@@ -158,6 +160,7 @@ class bangluong_inController extends Controller
                 ->with('a_ct',getPhanLoaiCT(false))
                 ->with('a_congtac',a_unique(a_split($a_canbo,array('mact'))))
                 ->with('a_phucap',$a_phucap)
+                ->with('a_chucvu',$a_chucvu)
                 ->with('pageTitle','Bảng lương chi tiết');
         } else
             return view('errors.notlogin');
@@ -310,7 +313,34 @@ class bangluong_inController extends Controller
             $model = a_getelement_equal($model, array('mact' => $inputs['mact']));
             return array($inputs, $model);
         }
-
+        //kiểm tra xem có lấy bảng lương truy lĩnh ko
+        $model_tl = array();
+        if(isset($inputs['in_truylinh'])){
+            //lấy bảng truy lĩnh lương
+            //tạo thành mảng rồi cộng vào ds cán bộ
+            if(isset($inputs['manguonkp'])){
+                $model_tl = \App\bangluong::join('bangluong_ct','bangluong.mabl','=','bangluong_ct.mabl')
+                    ->where('bangluong.thang',$inputs['thang_th'])
+                    ->where('bangluong.nam', $inputs['nam_th'])
+                    ->where('bangluong.madv',$inputs['madv'])
+                    ->where('bangluong.phanloai', 'TRUYLINH')
+                    ->select('bangluong_ct.*')
+                    //->orderby('bangluong_ct.stt')
+                    ->get()->sortby('stt')->toarray();
+            }else{
+                $model_tl = \App\bangluong::join('bangluong_ct','bangluong.mabl','=','bangluong_ct.mabl')
+                    ->where('bangluong.thang',$inputs['thang_th'])
+                    ->where('bangluong.nam', $inputs['nam_th'])
+                    ->where('bangluong.madv',$inputs['madv'])
+                    ->wherein('bangluong_ct.manguonkp',$inputs['manguonkp'])
+                    ->where('bangluong.phanloai', 'TRUYLINH')
+                    ->select('bangluong_ct.*')
+                    //->orderby('bangluong_ct.stt')
+                    ->get()->sortby('stt')->toarray();
+            }
+        }
+        //dd($model_tl);
+        //
         //lấy danh sách cán bộ
         $a_canbo = a_split($model, array('macanbo', 'macvcq', 'mapb', 'mact', 'msngbac'));
         $a_canbo = a_unique($a_canbo);
@@ -344,7 +374,28 @@ class bangluong_inController extends Controller
                 $a_canbo[$i][$k] = $first[$k];
                 $a_canbo[$i]['st_' . $k] = $first['st_' . $k];
             }
+            $a_canbo[$i]['hs_vuotkhung'] = $first['hs_vuotkhung'];
             $a_canbo[$i]['tonghs'] = $first['tonghs'];
+
+            $a_canbo[$i]['ttl_tl'] = 0;//lưu tiền lương truy lĩnh để sau cộng cùng bảng lương
+            if(count($model_tl)>0){
+                //nếu chỉ lấy mã can bo => chưa tính trường hợp kiêm nhiệm
+                $data_tl = a_getelement_equal($model_tl, array('macanbo'=>$a_canbo[$i]['macanbo']));
+                //dd($data_tl);
+                $a_canbo[$i]['ttl_tl'] = array_sum(array_column($data_tl, 'ttl'));
+
+                $a_canbo[$i]['luongtn'] += array_sum(array_column($data_tl, 'luongtn'));
+                $a_canbo[$i]['stbhxh'] += array_sum(array_column($data_tl, 'stbhxh'));
+                $a_canbo[$i]['stbhyt'] += array_sum(array_column($data_tl, 'stbhyt'));
+                $a_canbo[$i]['stkpcd'] += array_sum(array_column($data_tl, 'stkpcd'));
+                $a_canbo[$i]['stbhtn'] += array_sum(array_column($data_tl, 'stbhtn'));
+                $a_canbo[$i]['ttbh'] += array_sum(array_column($data_tl, 'ttbh'));
+                $a_canbo[$i]['stbhxh_dv'] += array_sum(array_column($data_tl, 'stbhxh_dv'));
+                $a_canbo[$i]['stbhyt_dv'] += array_sum(array_column($data_tl, 'stbhyt_dv'));
+                $a_canbo[$i]['stkpcd_dv'] += array_sum(array_column($data_tl, 'stkpcd_dv'));
+                $a_canbo[$i]['stbhtn_dv'] += array_sum(array_column($data_tl, 'stbhtn_dv'));
+                $a_canbo[$i]['ttbh_dv'] += array_sum(array_column($data_tl, 'ttbh_dv'));
+            }
         }
 
         return array($a_canbo, $a_pc);

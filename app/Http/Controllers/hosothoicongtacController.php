@@ -37,6 +37,7 @@ class hosothoicongtacController extends Controller
     function store(Request $request){
         if (Session::has('admin')) {
             $insert = $request->all();
+            //dd($insert);
             $model_chk = hosothoicongtac::where('macanbo',$insert['macanbo'])->first();
             if(count($model_chk)>0){
                 return view('errors.thoicongtac');
@@ -45,6 +46,7 @@ class hosothoicongtacController extends Controller
             $insert['ngayqd'] = getDateTime($insert['ngayqd']);
             if($insert['maso'] == 'ADD'){
                 $model_hoso = hosocanbo::where('macanbo',$insert['macanbo'])->first();
+                //dd($model_hoso);
                 $model_hoso->update(['theodoi'=>'9']);
                 $model_hoso->maso = getdate()[0];
                 $model_hoso->maphanloai = $insert['maphanloai'];
@@ -57,11 +59,17 @@ class hosothoicongtacController extends Controller
                 unset($a_kq['id']);
                 hosothoicongtac::create($a_kq);
                 //update theodoi = 9;
-
+                //chạy lại số thứ tự
+                $m_canbo = hosocanbo::select('macanbo','stt')->where('madv',$model_hoso->madv)->where('stt','>',$model_hoso->stt)->get();
+                //dd($m_canbo);
+                foreach($m_canbo as $cb){
+                    $tt = $cb->stt - 1;
+                    //dd($tt);
+                    hosocanbo::where('macanbo',$cb->macanbo)->update(['stt'=>$tt]);
+                }
             }else{
                hosothoicongtac::where('maso', $insert['maso'])->first()->update($insert);
             }
-
 
             return redirect('nghiep_vu/da_nghi/danh_sach');
         }else
@@ -85,7 +93,18 @@ class hosothoicongtacController extends Controller
     function destroy($id){
         if (Session::has('admin')) {
             $model = hosothoicongtac::find($id);
-            hosocanbo::where('macanbo',$model->macanbo)->update(['theodoi'=>'0']);
+
+            $model_hoso = hosocanbo::where('macanbo',$model->macanbo)->first();
+            $stt = $model_hoso->stt;
+
+            $m_canbo = hosocanbo::select('macanbo','stt')->where('madv',$model_hoso->madv)->where('stt','>=',$stt)->get();
+            foreach($m_canbo as $cb){
+                $tt = $cb->stt + 1;
+                //dd($tt);
+                hosocanbo::where('macanbo',$cb->macanbo)->update(['stt'=>$tt]);
+            }
+            //dd($stt);
+            hosocanbo::where('macanbo',$model->macanbo)->update(['theodoi'=>'0','stt'=>$stt]);
             //$macanbo = $model->macanbo;
             $model->delete();
             return redirect('/nghiep_vu/da_nghi/danh_sach');

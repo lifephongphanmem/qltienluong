@@ -65,20 +65,29 @@
                                                     {!! Form::input('date','ngaylc',null,array('id' => 'ngaylc', 'class' => 'form-control','readonly'))!!}
                                                 </div>
                                             </div>
-
-                                            <div class="col-md-3">
-                                                <div class="form-group">
-                                                    <label class="form-control-label">Từ ngày</label>
-                                                    {!! Form::input('date','ngaylctu',null,array('id' => 'ngaylctu', 'class' => 'form-control'))!!}
+                                            @if($model->maphanloai == 'DIEUDONG')
+                                                <div class="col-md-3">
+                                                    <div class="form-group">
+                                                        <label class="form-control-label">Từ ngày</label>
+                                                        {!! Form::input('date','ngaylctu',null,array('id' => 'ngaylctu', 'class' => 'form-control'))!!}
+                                                    </div>
                                                 </div>
-                                            </div>
 
-                                            <div class="col-md-3">
-                                                <div class="form-group">
-                                                    <label class="form-control-label">Đến ngày</label>
-                                                    {!! Form::input('date','ngaylcden',null,array('id' => 'ngaylcden', 'class' => 'form-control'))!!}
+                                                <div class="col-md-3">
+                                                    <div class="form-group">
+                                                        <label class="form-control-label">Đến ngày</label>
+                                                        {!! Form::input('date','ngaylcden',null,array('id' => 'ngaylcden', 'class' => 'form-control'))!!}
+                                                    </div>
                                                 </div>
-                                            </div>
+                                            @else
+                                                <div class="col-md-3">
+                                                    <div class="form-group">
+                                                        <label class="form-control-label">Luân chuyển từ ngày</label>
+                                                        {!! Form::input('date','ngaylctu',null,array('id' => 'ngaylctu', 'class' => 'form-control'))!!}
+                                                    </div>
+                                                </div>
+                                                <input type="hidden"  name="ngaylcden" id="ngaylcden"/>
+                                            @endif
 
                                             <div class="col-md-12">
                                                 <div class="form-group">

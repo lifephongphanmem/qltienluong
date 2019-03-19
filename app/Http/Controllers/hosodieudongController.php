@@ -102,6 +102,7 @@ class hosodieudongController extends Controller
             $model_diaban = dmdonvibaocao::where('level','H')->get();
             $model_donvi = dmdonvi::where('phanloaitaikhoan','SD')->get();
             $a_phanloai = getPhanLoaiLuanChuyen();
+            //dd($model);
             return view('manage.dieudong.accept')
                 ->with('furl', '/nghiep_vu/dieu_dong/')
                 ->with('inputs',$inputs)
@@ -175,10 +176,12 @@ class hosodieudongController extends Controller
             $insert = $request->all();
             $maso = $insert['maso'];
             $macanbo = $insert['macanbo'];
-
+            //dd($insert);
             //lưu hồ sơ
+            $insert['ngaybc'] = $insert['ngaylctu'];
             $insert['macanbo'] = session('admin')->madv . '_' . getdate()[0];
             $insert['madv'] = session('admin')->madv;
+            $insert['stt'] = getDbl((hosocanbo::where('madv', session('admin')->madv)->get()->max('stt'))) + 1;;
             hosocanbo::create($insert);
             //cập nhật trag thái
             hosodieudong::where('maso',$maso)->update(['trangthai'=>'DACHUYEN']);
@@ -191,6 +194,14 @@ class hosodieudongController extends Controller
                 $a_kq = $model_hoso->toarray();
                 unset($a_kq['id']);
                 hosothoicongtac::create($a_kq);
+                //chạy lại số thứ tự
+                $m_canbo = hosocanbo::select('macanbo','stt')->where('madv',$model_hoso->madv)->where('stt','>',$model_hoso->stt)->get();
+                //dd($m_canbo);
+                foreach($m_canbo as $cb){
+                    $tt = $cb->stt - 1;
+                    //dd($tt);
+                    hosocanbo::where('macanbo',$cb->macanbo)->update(['stt'=>$tt]);
+                }
             }
 
             return redirect('/nghiep_vu/dieu_dong/danh_sach');

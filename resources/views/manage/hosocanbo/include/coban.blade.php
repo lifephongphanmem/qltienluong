@@ -4,7 +4,7 @@
         <div class="row">
             <div class="col-md-3">
                 <div class="form-group">
-                    <label class="control-label">Mã công chức/viên chức </label>
+                    <label class="control-label">Mã CCVC </label>
                     {!!Form::text('macongchuc', null, array('id' => 'macongchuc','class' => 'form-control'))!!}
                 </div>
             </div>
@@ -29,7 +29,7 @@
 
             <div class="col-md-3">
                 <div class="form-group">
-                    <label class="control-label">Chức vụ (chức danh)</label>
+                    <label class="control-label">Chức vụ(chức danh)</label>
                     {!!Form::select('macvcq',getChucVuCQ(false), null, array('id' => 'macvcq','class' => 'form-control select2me'))!!}
                 </div>
             </div>
@@ -40,6 +40,16 @@
         <div class="row">
             <div class="col-md-3">
                 <div class="form-group">
+                    <label class="control-label">Giới tính</label>
+                    {!! Form::select(
+                    'gioitinh',array('Nam' => 'Nam','Nữ' => 'Nữ'),null,
+                    array('id' => 'gioitinh', 'class' => 'form-control'))
+                    !!}
+                </div>
+            </div>
+
+            <div class="col-md-3">
+                <div class="form-group">
                     <label class="control-label">Ngày sinh</label>
                     <input type="date" name="ngaysinh" id="ngaysinh" class="form-control" value="{{!isset($model)?'':$model->ngaysinh}}"/>
                 </div>
@@ -47,14 +57,10 @@
 
             <div class="col-md-3">
                 <div class="form-group">
-                    <label class="control-label">Giới tính</label>
-                    {!! Form::select(
-                        'gioitinh',array('Nam' => 'Nam','Nữ' => 'Nữ'),null,
-                        array('id' => 'gioitinh', 'class' => 'form-control'))
-                    !!}
+                    <label class="control-label">Ngày vào công tác</label>
+                    <input type="date" name="ngaybc" id="ngaybc" class="form-control" value="{{!isset($model)?'':$model->ngaybc}}"/>
                 </div>
             </div>
-
 
             <div class="col-md-3">
                 <div class="form-group">
@@ -63,26 +69,30 @@
                 </div>
             </div>
 
+
+        </div>
+
+        <div class="row">
             <div class="col-md-3">
                 <div class="form-group">
                     <label class="control-label">Số thứ tự (sắp xếp)</label>
                     {!!Form::text('stt', null, array('id' => 'stt','class' => 'form-control', 'data-mask'=>'fdecimal'))!!}
                 </div>
             </div>
-        </div>
 
-        <div class="row">
-            <div class="col-md-3">
-                <div class="form-group">
-                    <label class="control-label">Số tài khoản ngân hàng</label>
-                    {!!Form::text('sotk', null, array('id' => 'sotk','class' => 'form-control'))!!}
-                </div>
-            </div>
 
             <div class="col-md-3">
                 <div class="form-group">
                     <label class="control-label">Nơi công tác</label>
                     {!!Form::text('lvtd', null, array('id' => 'lvtd','class' => 'form-control'))!!}
+                </div>
+            </div>
+
+
+            <div class="col-md-3">
+                <div class="form-group">
+                    <label class="control-label">Số tài khoản ngân hàng</label>
+                    {!!Form::text('sotk', null, array('id' => 'sotk','class' => 'form-control'))!!}
                 </div>
             </div>
 
@@ -102,8 +112,10 @@
                     </select>
                 </div>
             </div>
+        </div>
 
-            <div class="col-md-3">
+        <div class="row">
+            <div class="col-md-6">
                 <div class="form-group">
                     <label class="control-label">Nguồn kinh phí hưởng lương </label>
                     <select class="form-control" id="nguonkp" name="nguonkp" multiple="multiple">
@@ -120,9 +132,7 @@
 
                 </div>
             </div>
-        </div>
 
-        <div class="row">
 
             <div class="col-md-6">
                 <div class="form-group">

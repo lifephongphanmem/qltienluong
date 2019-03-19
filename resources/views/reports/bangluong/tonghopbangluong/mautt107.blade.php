@@ -154,7 +154,7 @@
 
                         <td>{{dinhdangsothapphan($luong['tonghs'],5)}}</td>
                         <td>{{dinhdangso($luong['ttl'])}}</td>
-                        <td>{{dinhdangso($luong['ttl'] - $luong['giaml'] + $luong['bhct'])}}</td>
+                        <td>{{dinhdangso($luong['ttl'] + $luong['ttl_tl'] - $luong['giaml'] + $luong['bhct'])}}</td>
 
                         <td>{{dinhdangso($luong['stbhxh_dv'])}}</td>
                         <td>{{dinhdangso($luong['stbhxh'])}}</td>
@@ -183,7 +183,8 @@
 
 
                         <td class="money">{{dinhdangso(array_sum(array_column($a_luong,'ttl')))}}</td>
-                        <td class="money">{{dinhdangso(array_sum(array_column($a_luong,'ttl'))- array_sum(array_column($a_luong,'giaml')) + array_sum(array_column($a_luong,'bhct')))}}</td>
+                        <td class="money">{{dinhdangso(array_sum(array_column($a_luong,'ttl')) + array_sum(array_column($a_luong,'ttl_tl'))
+                            - array_sum(array_column($a_luong,'giaml')) + array_sum(array_column($a_luong,'bhct')))}}</td>
 
                         <td class="money">{{dinhdangso(array_sum(array_column($a_luong,'stbhxh_dv')))}}</td>
                         <td class="money">{{dinhdangso(array_sum(array_column($a_luong,'stbhxh')))}}</td>
@@ -209,7 +210,7 @@
             @endforeach
             <td>{{dinhdangsothapphan(array_sum(array_column($a_canbo,'tonghs')) ,5)}}</td>
             <td class="money">{{dinhdangso(array_sum(array_column($a_canbo,'ttl')))}}</td>
-            <td class="money">{{dinhdangso(array_sum(array_column($a_canbo,'ttl')) - array_sum(array_column($a_canbo,'giaml')) + array_sum(array_column($a_canbo,'bhct')))}}</td>
+            <td class="money">{{dinhdangso(array_sum(array_column($a_canbo,'ttl')) + array_sum(array_column($a_canbo,'ttl_tl')) - array_sum(array_column($a_canbo,'giaml')) + array_sum(array_column($a_canbo,'bhct')))}}</td>
 
             <td class="money">{{dinhdangso(array_sum(array_column($a_canbo,'stbhxh_dv')))}}</td>
             <td class="money">{{dinhdangso(array_sum(array_column($a_canbo,'stbhxh')))}}</td>
