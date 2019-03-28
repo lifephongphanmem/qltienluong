@@ -716,7 +716,7 @@ class baocaobangluongController extends Controller
                     ->only(['mact', 'soluong', 'madv', 'maphanloai'])
                     ->all();
             });
-            dd($model->toarray());
+            //dd($model->toarray());
             $a_soluong = a_unique($model_data);
             //dd($a_soluong);
             //cho trương hợp đơn vị cấp trên in dữ liệu dv câp dưới mà ko sai tên đơn vị

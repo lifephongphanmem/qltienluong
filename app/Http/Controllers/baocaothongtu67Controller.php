@@ -19,6 +19,7 @@ use Illuminate\Http\Request;
 
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
 use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Support\Str;
@@ -6157,7 +6158,7 @@ class baocaothongtu67Controller extends Controller
             return view('errors.notlogin');
     }
 
-    function mau2a1_huyen(Request $request) {
+        function mau2a1_huyen(Request $request) {
         if (Session::has('admin')) {
             $inputs=$request->all();
             $madvbc = session('admin')->madvbc;
@@ -6230,6 +6231,19 @@ class baocaothongtu67Controller extends Controller
                     })
                     ->groupby('linhvuchoatdong','nguoigui','madv','mathh','mathdv','macongtac')
                     ->get();
+                if(isset($inputs['inheso'])) {
+                    $model_tonghop_ct = tonghopluong_donvi_chitiet::join('tonghopluong_donvi', 'tonghopluong_donvi_chitiet.mathdv', '=', 'tonghopluong_donvi.mathdv')
+                        ->select('tonghopluong_donvi_chitiet.linhvuchoatdong',DB::raw('heso/luongcoban as heso'),DB::raw('pckv/luongcoban as pckv'),DB::raw('pccv/luongcoban as pccv'),
+                            DB::raw('pctnvk/luongcoban as pctnvk'),DB::raw('pcudn/luongcoban as pcudn'),DB::raw('pcth/luongcoban as pcth'),DB::raw('pctn/luongcoban as pctn'),DB::raw('pccovu/luongcoban as pccovu'),DB::raw('pcdang/luongcoban as pcdang'),
+                            DB::raw('pcthni/luongcoban as pcthni'),DB::raw('pck/luongcoban as pck'),'nguoigui','madv','tonghopluong_donvi.mathh','tonghopluong_donvi.mathdv','macongtac')
+                        ->where('tonghopluong_donvi.madvbc',$madvbc)
+                        ->wherein('tonghopluong_donvi_chitiet.mathdv',function($qr){
+                            $qr->select('mathdv')->from('tonghopluong_donvi')->where('thang','08')->where('nam','2018')->where('trangthai','DAGUI')
+                                ->distinct()->get();
+                        })
+                        ->groupby('linhvuchoatdong','nguoigui','madv','mathh','mathdv','macongtac')
+                        ->get();
+                }
             }
             $luongcb = 0.935;
             //$luongcb = 1390000;
