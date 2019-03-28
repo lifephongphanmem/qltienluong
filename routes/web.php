@@ -401,6 +401,7 @@ Route::group(['prefix'=>'chuc_nang'],function(){
         Route::post('mau01','bangluongController@printf_mau01');
         Route::post('mautt107','bangluongController@printf_mautt107');
         Route::post('mautt107_m2','bangluongController@printf_mautt107_m2');
+        Route::post('mautt107_m3','bangluongController@printf_mautt107_m3');
         Route::post('mautt107_pb','bangluongController@printf_mautt107_pb');
         Route::post('mau03','bangluongController@printf_mau03');
         Route::post('mau04','bangluongController@printf_mau04');
@@ -418,6 +419,9 @@ Route::group(['prefix'=>'chuc_nang'],function(){
         Route::get('maumc','bangluongController@printf_maumc');
         Route::get('mautruc','bangluongController@printf_mautruc');
         Route::get('mautinhnguyen','bangluongController@printf_mautinhnguyen');
+
+        Route::get('mauthpl','bangluong_inController@printf_mauthpl');
+        Route::get('mauthpc','bangluong_inController@printf_mauthpc');
         //tổng hợp
         Route::post('mau185_th','bangluong_inController@printf_mau185_th');
         Route::post('mautt107_th','bangluong_inController@printf_mautt107_th');

@@ -2361,6 +2361,83 @@ class bangluongController extends Controller
             return view('errors.notlogin');
     }
 
+    public function printf_mautt107_m3(Request $request){
+        if (Session::has('admin')) {
+            $inputs = $request->all();
+            //$inputs['mabl'] = $inputs['mabl'];
+            //$model = $this->getBangLuong($inputs);
+            $a_chucvu = getChucVuCQ(false);
+            //dd($a_chucvu);
+            $model_canbo = $this->getBangLuong($inputs);
+            //dd($model_canbo->toarray());
+            $model = $model_canbo->where('congtac','<>' ,'CHUCVU');
+            $model_kn = $model_canbo->where('congtac','CHUCVU');
+            //dd($inputs);
+            //dd($model_kn);
+            $mabl = $inputs['mabl'];
+            $m_bl = bangluong::select('thang','nam','mabl','madv','ngaylap','phanloai','luongcoban')->where('mabl',$mabl)->first();
+            $m_dv = dmdonvi::where('madv',$m_bl->madv)->first();
+
+            $model_congtac = dmphanloaict::select('mact','tenct')
+                ->wherein('mact', function($query) use($mabl){
+                    $query->select('mact')->from('bangluong_ct')->where('mabl',$mabl);
+                })->get();
+
+            $thongtin=array('nguoilap'=>$m_bl->nguoilap,
+                'thang'=>$m_bl->thang,
+                'nam'=>$m_bl->nam,
+                'ngaylap'=>$m_bl->ngaylap,'phanloai'=>$m_bl->phanloai,
+                'cochu'=>$inputs['cochu']);
+            //xử lý ẩn hiện cột phụ cấp => biết tổng số cột hiện => colspan trên báo cáo
+            $a_goc = array('hesott');
+            $model_pc = dmphucap_donvi::where('madv',$m_bl->madv)->where('phanloai','<','3')->wherenotin('mapc',$a_goc)->get();
+            $a_phucap = array();
+            $col = 0;
+
+            foreach($model_pc as $ct) {
+                if ($model->sum($ct->mapc) > 0) {
+                    $a_phucap[$ct->mapc] = $ct->report;
+                    $col++;
+                }
+            }
+
+            foreach($model as $cb){
+                $canbo = $model_kn->where('macanbo',$cb->macanbo)->first();
+                if(count($canbo)>0){
+                    $cb->ttl_kn = $canbo->ttl;
+                    $cb->luongtn_kn = $canbo->luongtn;
+                    $cb->macvcq_kn = $canbo->macvcq;
+                }
+            }
+            //dd($a_phucap);
+            //chạy lại để tính lại phụ cấp
+            /*
+            $luongcb = $m_bl->luongcoban;
+            foreach($model as $cb){
+                $cb->ttl_tn = $cb->ttl;
+                if($cb->congtac == 'DAINGAY' || $cb->congtac == 'THAISAN' || $cb->congtac == 'KHONGLUONG'){
+                    $cb->tonghs = 0;
+                    foreach($a_phucap as $k=>$v) {
+                        $cb->tonghs += $cb->$k;
+                    }
+                    $cb->ttl_tn =round($cb->tonghs * $luongcb, 0);
+                }
+            }
+            */
+            return view('reports.bangluong.donvi.mautt107_m3')
+                ->with('model',$model->sortBy('stt'))
+                ->with('model_pb',getPhongBan())
+                ->with('m_dv',$m_dv)
+                ->with('thongtin',$thongtin)
+                ->with('col',$col)
+                ->with('model_congtac',$model_congtac)
+                ->with('a_phucap',$a_phucap)
+                ->with('a_chucvu',$a_chucvu)
+                ->with('pageTitle','Bảng lương chi tiết');
+        } else
+            return view('errors.notlogin');
+    }
+
     public function printf_mautt107_pb(Request $request)
     {
         if (Session::has('admin')) {
@@ -3576,7 +3653,7 @@ class bangluongController extends Controller
             //$model = bangluong_ct::where('mabl', $mabl)->get();
             $model_hoso = hosocanbo::where('madv', $m_bl->madv)->get();
             $a_chucvu = getChucVuCQ();
-
+            //dd($a_chucvu);
             $tencv = isset($a_chucvu[$inputs['macvcq']]) ? $a_chucvu[$inputs['macvcq']]:'';
             $tencv = strlen($inputs['macvcq'])==0? 'Tất cả các chức vụ':$tencv;
 
@@ -4249,6 +4326,7 @@ class bangluongController extends Controller
             }
         }
     }
+
     //<editor-fold desc="Tra cứu">
     function search()
     {

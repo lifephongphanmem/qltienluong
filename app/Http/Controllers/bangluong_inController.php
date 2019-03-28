@@ -4,9 +4,12 @@ namespace App\Http\Controllers;
 
 
 use App\bangluong;
+use App\bangluong_ct;
 use App\dmchucvucq;
 use App\dmdonvi;
+use App\dmphanloaict;
 use App\dmphucap_donvi;
+use App\hosocanbo;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\Http\Controllers\dataController as data;
@@ -18,6 +21,7 @@ use Maatwebsite\Excel\Facades\Excel;
 
 class bangluong_inController extends Controller
 {
+    //<editor-fold desc="In tổng hợp lương">
     public function printf_mautt107_th(Request $request){
         if (Session::has('admin')) {
             $inputs = $request->all();
@@ -295,6 +299,140 @@ class bangluong_inController extends Controller
         } else
             return view('errors.notlogin');
     }
+    //</editor-fold>
+
+    //<editor-fold desc="In bảng lương">
+    public function printf_mauthpl(Request $request){
+        if (Session::has('admin')) {
+            $inputs = $request->all();
+            $mabl = $inputs['mabl'];
+            //dd($inputs);
+            $m_bl = bangluong::select('thang','nam','mabl','madv','ngaylap','luongcoban')->where('mabl',$mabl)->first();
+            $model = bangluong_ct::where('mabl',$mabl)->get();
+            //$model_hoso = hosocanbo::where('madv',$m_bl->madv)->get();
+            //$a_cv = getChucVuCQ(false);
+            $model_congtac = dmphanloaict::select('mact','tenct')
+                ->wherein('mact', function($query) use($mabl){
+                    $query->select('mact')->from('bangluong_ct')->where('mabl',$mabl);
+                })->get();
+            //dd($model_congtac);
+            $a_goc = array('hesott');
+            $model_pc = dmphucap_donvi::where('madv',$m_bl->madv)->where('phanloai','<','3')->wherenotin('mapc',$a_goc)->get();
+            $a_phucap = array();
+            $a_phucap_st = array();
+            $col = 0;
+
+            foreach($model_pc as $ct) {
+                if ($model->sum($ct->mapc) > 0) {
+                    $a_phucap[$ct->mapc] = $ct->report;
+                    $a_phucap_st['st_'.$ct->mapc] = $ct->report;
+                    $col++;
+                }
+            }
+
+            foreach($model_congtac as $ct){
+                $canbo = $model->where('mact', $ct->mact)->where('congtac','<>','CHUCVU');
+                $canbo_kn = $model->where('mact', $ct->mact)->where('congtac','CHUCVU');
+                $ct->soluong = count($canbo) + count($canbo_kn);
+                //
+                //dd($canbo);
+                foreach($a_phucap as $k=>$v){
+                    $st = 'st_'.$k;
+                    $ct->$k = $canbo->sum($k) + $canbo_kn->sum($k);
+                    $ct->$st = $canbo->sum($st) + $canbo_kn->sum($st);
+                }
+                $ct->ttl = $canbo->sum('ttl');
+                $ct->ttl_kn = $canbo_kn->sum('ttl');
+                $ct->ttbh = $canbo->sum('ttbh') + $canbo_kn->sum('ttbh');
+                $ct->luongtn = $canbo->sum('luongtn') + $canbo_kn->sum('luongtn');
+            }
+            //dd($model_congtac);
+            $m_dv = dmdonvi::where('madv',$m_bl->madv)->first();
+            $m_dv->tendvcq = getTenDB($m_dv->madvbc);
+
+            $thongtin=array('nguoilap'=>$m_bl->nguoilap,
+                'thang'=>$m_bl->thang,
+                'nam'=>$m_bl->nam,
+                'ngaylap'=>$m_bl->ngaylap,
+                'luongcb' => $m_bl->luongcoban,
+                'col'=>$col);
+
+            return view('reports.bangluong.donvi.mauthpl')
+                ->with('model',$model_congtac)
+                ->with('m_dv',$m_dv)
+                ->with('a_phucap',$a_phucap_st)
+                ->with('thongtin',$thongtin)
+                ->with('pageTitle','Bảng lương chi tiết');
+        } else
+            return view('errors.notlogin');
+    }
+
+    public function printf_mauthpc(Request $request){
+        if (Session::has('admin')) {
+            $inputs = $request->all();
+            $mabl = $inputs['mabl'];
+            //dd($inputs);
+            $m_bl = bangluong::select('thang','nam','mabl','madv','ngaylap','luongcoban')->where('mabl',$mabl)->first();
+            $model = bangluong_ct::where('mabl',$mabl)->get();
+            //$model_hoso = hosocanbo::where('madv',$m_bl->madv)->get();
+            //$a_cv = getChucVuCQ(false);
+            $model_congtac = dmphanloaict::select('mact','tenct')
+                ->wherein('mact', function($query) use($mabl){
+                    $query->select('mact')->from('bangluong_ct')->where('mabl',$mabl);
+                })->get();
+            //dd($model_congtac);
+            $a_goc = array('hesott');
+            $model_pc = dmphucap_donvi::where('madv',$m_bl->madv)->where('phanloai','<','3')->wherenotin('mapc',$a_goc)->get();
+            $a_phucap = array();
+            $a_phucap_st = array();
+            $col = 0;
+
+            foreach($model_pc as $ct) {
+                if ($model->sum($ct->mapc) > 0) {
+                    $a_phucap[$ct->mapc] = $ct->report;
+                    $a_phucap_st['st_'.$ct->mapc] = $ct->report;
+                    $col++;
+                }
+            }
+
+            foreach($model_congtac as $ct){
+                $canbo = $model->where('mact', $ct->mact)->where('congtac','<>','CHUCVU');
+                $canbo_kn = $model->where('mact', $ct->mact)->where('congtac','CHUCVU');
+                $ct->soluong = count($canbo) + count($canbo_kn);
+                //
+                //dd($canbo);
+                foreach($a_phucap as $k=>$v){
+                    $st = 'st_'.$k;
+                    $ct->$k = $canbo->sum($k) + $canbo_kn->sum($k);
+                    $ct->$st = $canbo->sum($st) + $canbo_kn->sum($st);
+                }
+                $ct->ttl = $canbo->sum('ttl');
+                $ct->ttl_kn = $canbo_kn->sum('ttl');
+                $ct->ttbh = $canbo->sum('ttbh') + $canbo_kn->sum('ttbh');
+                $ct->luongtn = $canbo->sum('luongtn') + $canbo_kn->sum('luongtn');
+            }
+            //dd($model_congtac);
+            $m_dv = dmdonvi::where('madv',$m_bl->madv)->first();
+            $m_dv->tendvcq = getTenDB($m_dv->madvbc);
+
+            $thongtin=array('nguoilap'=>$m_bl->nguoilap,
+                'thang'=>$m_bl->thang,
+                'nam'=>$m_bl->nam,
+                'ngaylap'=>$m_bl->ngaylap,
+                'luongcb' => $m_bl->luongcoban,
+                'col'=>$col);
+
+            return view('reports.bangluong.donvi.mauthpl')
+                ->with('model',$model_congtac)
+                ->with('m_dv',$m_dv)
+                ->with('a_phucap',$a_phucap_st)
+                ->with('thongtin',$thongtin)
+                ->with('pageTitle','Bảng lương chi tiết');
+        } else
+            return view('errors.notlogin');
+    }
+    //</editor-fold>
+
     /**
      * @param $inputs
      * @return array
