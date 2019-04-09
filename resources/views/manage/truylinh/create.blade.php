@@ -1,6 +1,7 @@
 @extends('main')
 
 @section('custom-style')
+    <link rel="stylesheet" type="text/css" href="{{url('assets/global/plugins/datatables/plugins/bootstrap/dataTables.bootstrap.css')}}"/>
     <link rel="stylesheet" type="text/css" href="{{url('assets/global/plugins/select2/select2.css')}}"/>
 @stop
 
@@ -8,9 +9,15 @@
 @section('custom-script')
     <script type="text/javascript" src="{{url('assets/global/plugins/jquery-validation/js/jquery.validate.min.js')}}"></script>
     <script type="text/javascript" src="{{url('assets/global/plugins/select2/select2.min.js')}}"></script>
+
     @include('includes.script.scripts')
+    <script type="text/javascript" src="{{url('assets/global/plugins/datatables/media/js/jquery.dataTables.min.js')}}"></script>
+    <script type="text/javascript" src="{{url('assets/global/plugins/datatables/plugins/bootstrap/dataTables.bootstrap.js')}}"></script>
+
+    <script src="{{url('assets/admin/pages/scripts/table-managed.js')}}"></script>
     <script>
         jQuery(document).ready(function() {
+            //TableManaged.init();
             tinhtoan_load();
         });
         $(function() {
@@ -41,10 +48,7 @@
                 <div class="portlet-body form">
                     <!-- BEGIN FORM-->
                     {!! Form::model($model,['url'=>$furl.'store', 'id' => 'create_tttaikhoan', 'class'=>'horizontal-form']) !!}
-                    <input type="hidden" id="macanbo" name="macanbo" value="{{$model->macanbo}}"/>
-                    <input type="hidden" id="tencanbo" name="tencanbo" value="{{$model->tencanbo}}"/>
-                    <input type="hidden" id="maso" name="maso" value="{{$model->maso}}"/>
-                    <input type="hidden" id="maphanloai" name="maphanloai" value="{{$model->maphanloai}}"/>
+                    @include('manage.truylinh.temp_value_hiden')
                     <div class="form-body">
                         <div class="row">
                             <div class="col-md-12">
@@ -69,24 +73,12 @@
 
                                             <div class="col-md-3">
                                                 <div class="form-group">
-                                                    <label class="control-label">Nguồn KP hưởng lương</label>
-                                                    {!!Form::select('manguonkp',getNguonKP(), null, array('id' => 'manguonkp','class' => 'form-control select2me'))!!}
-                                                </div>
-                                            </div>
-
-                                            <div class="col-md-3">
-                                                <div class="form-group">
-                                                    <label class="control-label">Mức lương truy lĩnh </label>
-                                                    {!!Form::text('luongcoban', null, array('id' => 'luongcoban','class' => 'form-control', 'data-mask'=>'fdecimal'))!!}
-                                                </div>
-                                            </div>
-
-                                            <div class="col-md-3">
-                                                <div class="form-group">
                                                     <label class="control-label">Hệ số truy lĩnh </label>
                                                     {!!Form::text('heso', null, array('id' => 'heso','class' => 'form-control', 'data-mask'=>'fdecimal'))!!}
                                                 </div>
                                             </div>
+                                        </div>
+                                        <div class="row">
 
                                             <div class="col-md-3">
                                                 <div class="form-group">
@@ -115,10 +107,11 @@
                                                     {!!Form::text('ngaytl', null, array('id' => 'ngaytl','class' => 'form-control', 'data-mask'=>'fdecimal'))!!}
                                                 </div>
                                             </div>
+
                                             <div class="col-md-12">
                                                 <div class="form-group">
                                                     <label class="control-label">Nội dung truy lĩnh </label>
-                                                    {!!Form::textarea('noidung', null, array('id' => 'noidung','class' => 'form-control','rows'=>'3'))!!}
+                                                    {!!Form::textarea('noidung', null, array('id' => 'noidung','class' => 'form-control','rows'=>'2'))!!}
                                                 </div>
                                             </div>
 
@@ -187,19 +180,15 @@
                                 <!-- END PORTLET-->
                             </div>
                         </div>
+
+                        @include('manage.truylinh.temp_nguonkp')
                     </div>
+                    @include('manage.truylinh.temp_btnSubmit')
+                    {!! Form::close() !!}
+                    <!-- END FORM-->
+                <!-- END VALIDATION STATES-->
                 </div>
             </div>
-                <div style="text-align: center">
-                    <button type="submit" class="btn green" onclick="validateForm()"><i class="fa fa-check"></i> Hoàn thành</button>
-                    <a href="{{url($furl.'danh_sach')}}" class="btn btn-danger"><i class="fa fa-reply"></i>&nbsp;Quay lại</a>
-                </div>
-                {!! Form::close() !!}
-                <!-- END FORM-->
-
-            <!-- END VALIDATION STATES-->
-        </div>
-    </div>
     <script type="text/javascript">
         $('.ngaythang').change(function(){
             tinhtoan();
@@ -328,4 +317,5 @@
         }
     </script>
 
+    @include('manage.truylinh.temp_nguonkp_js')
 @stop

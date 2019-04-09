@@ -117,6 +117,7 @@ Route::group(['prefix'=>'danh_muc'],function(){
         Route::get('get','dmdonvibaocaoController@getinfo');
         Route::get('add','dmdonvibaocaoController@store');
         Route::get('update','dmdonvibaocaoController@update');
+
         Route::get('del/{maso}','dmdonvibaocaoController@destroy');
 
         Route::get('chi_tiet','dmdonvibaocaoController@list_donvi');
@@ -128,6 +129,8 @@ Route::group(['prefix'=>'danh_muc'],function(){
         Route::get('del_donvi/{madv}','dmdonvibaocaoController@destroy_donvi');
         Route::get('get_list_unit','dmdonvibaocaoController@get_list_unit');
         Route::get('set_management','dmdonvibaocaoController@set_management');
+
+        Route::get('update_plct','dmdonvibaocaoController@update_plct');
 
         Route::get('getPhanLoai','ajaxController@getPhanLoai');
     });
@@ -312,6 +315,9 @@ Route::group(['prefix'=>'nghiep_vu'],function(){
         Route::post('update','hosotruylinhController@update');
         Route::get('get','hosotruylinhController@getinfo');
         Route::get('get_thongtin_canbo','hosotruylinhController@get_thongtin_canbo');
+        Route::get('get_nkp','hosotruylinhController@getinfor_nkp');
+        Route::get('store_nkp','hosotruylinhController@store_nkp');
+        Route::get('del_nkp','hosotruylinhController@destroy_nkp');
     });
 
     Route::group(['prefix'=>'da_nghi'],function(){

@@ -862,9 +862,6 @@
             success: function (data) {
                 toastr.success("Bạn đã xóa thông tin thành công!", "Thành công!");
                 $('#dskn').replaceWith(data.message);
-                jQuery(document).ready(function() {
-                    //TableManaged.init().initTable4();
-                });
                 $('#kiemnhiem-modal').modal('hide');
             }
         })

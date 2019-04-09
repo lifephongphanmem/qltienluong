@@ -337,7 +337,7 @@ function getPhanLoaiCT($val_null = true){
 
 function getChucVuCQ($val_null = true){
     if(session('admin')->level=='SA' || session('admin')->level=='SSA'){
-        $model = App\dmchucvucq::where('maphanloai',session('admin')->maphanloai)->get()->toArray();
+        $model = App\dmchucvucq::where('maphanloai',session('admin')->maphanloai)->get();
     }else{
         $model = App\dmchucvucq::where('maphanloai',session('admin')->maphanloai)
             ->wherein('madv',['SA',session('admin')->madv])->get();

@@ -19,8 +19,8 @@ class hosotruylinh extends Model
         'nguoiky',//chưa dùng
         'coquanqd',//chưa dùng
         'mabl',
-        'manguonkp',
-        'luongcoban',
+        //'manguonkp',
+        //'luongcoban',
         'thangtl',
         'ngaytl',
         'ngaytu',

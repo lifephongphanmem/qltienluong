@@ -6,11 +6,14 @@ use App\bangluong;
 use App\dmdonvi;
 use App\dmdonvibaocao;
 use App\dmkhoipb;
+use App\dmphanloaicongtac;
+use App\dmphanloaict;
 use App\dmphanloaidonvi;
 use App\Users;
 use Illuminate\Http\Request;
 
 use App\Http\Requests;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
 
 class dmdonvibaocaoController extends Controller
@@ -121,9 +124,13 @@ class dmdonvibaocaoController extends Controller
                 $donvi->capdutoan = isset($model_capdv[$donvi->capdonvi]) ? $model_capdv[$donvi->capdonvi] : '';
                 $donvi->phamvi = isset($a_phamvi[$donvi->phamvitonghop])?$a_phamvi[$donvi->phamvitonghop]:'';
             }
+            $model_nhomct = dmphanloaicongtac::select('macongtac', 'tencongtac')->get();
+            $model_tenct = dmphanloaict::select('tenct', 'macongtac', 'mact')->get();
 
             return view('system.danhmuc.donvibaocao.index_donvi')
                 ->with('model', $model)
+                ->with('model_nhomct', $model_nhomct)
+                ->with('model_tenct', $model_tenct)
                 ->with('a_donvi', $a_donvi)
                 ->with('inputs', $inputs)
                 ->with('url', '/danh_muc/khu_vuc/')
@@ -338,6 +345,16 @@ class dmdonvibaocaoController extends Controller
                 ->with('pageTitle','Danh sách đơn vị tổng hợp lương');
 
         } else
+            return view('errors.notlogin');
+    }
+
+    function update_plct(Request $request){
+        if (Session::has('admin')) {
+            $inputs = $request->all();
+            $model = dmdonvi::where('madv',$inputs['madv'])->first();
+            DB::statement("Update hosocanbo set mact = '".$inputs['mact_moi']."' where mact='".$inputs['mact_cu']."' and madv ='".$inputs['madv']."'");
+            return redirect('/danh_muc/khu_vuc/chi_tiet?ma_so='.$model->madvbc.'&phan_loai='.$model->phanloaitaikhoan);
+        }else
             return view('errors.notlogin');
     }
 }

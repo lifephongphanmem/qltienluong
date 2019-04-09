@@ -40,15 +40,27 @@
                     </div>
                 </div>
                 <div class="portlet-body form-horizontal">
+                    <div class="row">
+                        <div class="form-group">
+                            <label class="control-label col-md-offset-2 col-md-1" style="text-align: right">Tháng </label>
+                            <div class="col-md-2">
+                                {!! Form::select('thangct',getThang(),$inputs['thang'],array('id' => 'thangct', 'class' => 'form-control'))!!}
+                            </div>
+                            <label class="control-label col-md-1" style="text-align: right">Năm </label>
+                            <div class="col-md-2">
+                                {!! Form::select('namct',getNam(),$inputs['nam'], array('id' => 'namct', 'class' => 'form-control'))!!}
+                            </div>
+                        </div>
+                    </div>
+
                     <table id="sample_3" class="table table-hover table-striped table-bordered" style="min-height: 230px">
                         <thead>
                             <tr>
                                 <th class="text-center" style="width: 5%">STT</th>
                                 <th class="text-center">Phân loại</th>
                                 <th class="text-center">Họ và tên</th>
-                                <th class="text-center">Từ ngày</th>
-                                <th class="text-center">Đến ngày</th>
                                 <th class="text-center">Hệ số</br>truy lĩnh</th>
+                                <th class="text-center">Trạng thái</th>
                                 <th class="text-center">Thao tác</th>
                             </tr>
                         </thead>
@@ -59,16 +71,20 @@
                                         <td class="text-center">{{$key+1}}</td>
                                         <td>{{isset($a_pl[$value->maphanloai])? $a_pl[$value->maphanloai]:'' }}</td>
                                         <td>{{$value->tencanbo}}</td>
-                                        <td class="text-center">{{getDayVn($value->ngaytu)}}</td>
-                                        <td class="text-center">{{getDayVn($value->ngayden)}}</td>
                                         <td class="text-center">{{$value->heso}}</td>
+                                        <td class="text-center">{{$value->mabl == null?"Chưa chi trả":'Đã chi trả'}}</td>
+
                                         <td>
 
-                                            <a href="{{url($furl.'create?maso='.$value->maso)}}" class="btn btn-default btn-xs">
-                                                <i class="fa fa-edit"></i>&nbsp; Chỉnh sửa</a>
-                                            <button type="button" onclick="cfDel('{{$furl.'del/'.$value->id}}')" class="btn btn-default btn-xs" data-target="#delete-modal-confirm" data-toggle="modal">
-                                                <i class="fa fa-trash-o"></i>&nbsp; Xóa</button>
-
+                                            @if($value->mabl == null)
+                                                <a href="{{url($furl.'create?maso='.$value->maso)}}" class="btn btn-default btn-xs">
+                                                    <i class="fa fa-edit"></i>&nbsp; Sửa</a>
+                                                <button type="button" onclick="cfDel('{{$furl.'del/'.$value->id}}')" class="btn btn-default btn-xs" data-target="#delete-modal-confirm" data-toggle="modal">
+                                                    <i class="fa fa-trash-o"></i>&nbsp; Xóa</button>
+                                            @else
+                                                <a href="{{url($furl.'create?maso='.$value->maso)}}" class="btn btn-default btn-xs">
+                                                <i class="fa fa-edit"></i>&nbsp; Chi tiết</a>
+                                            @endif
                                         </td>
                                     </tr>
                                 @endforeach
@@ -117,6 +133,23 @@
             $('#maso').val('ADD');
             $('#create-modal').modal('show');
         }
+
+        function getLink(){
+            var thang = $("#thangct").val();
+            var nam = $("#namct").val();
+            return '{{$furl}}'+'danh_sach?thang='+thang +'&nam='+nam;
+        }
+        $(function(){
+
+            $('#thangct').change(function(){
+                window.location.href = getLink();
+            });
+
+            $('#namct').change(function(){
+                window.location.href = getLink();
+            });
+
+        })
     </script>
 
     @include('includes.modal.delete')

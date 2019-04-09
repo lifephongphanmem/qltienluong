@@ -373,45 +373,46 @@ class bangluong_inController extends Controller
             $mabl = $inputs['mabl'];
             //dd($inputs);
             $m_bl = bangluong::select('thang','nam','mabl','madv','ngaylap','luongcoban')->where('mabl',$mabl)->first();
-            $model = bangluong_ct::where('mabl',$mabl)->get();
+            $model_bl = bangluong_ct::where('mabl',$mabl)->get();
             //$model_hoso = hosocanbo::where('madv',$m_bl->madv)->get();
             //$a_cv = getChucVuCQ(false);
-            $model_congtac = dmphanloaict::select('mact','tenct')
-                ->wherein('mact', function($query) use($mabl){
-                    $query->select('mact')->from('bangluong_ct')->where('mabl',$mabl);
-                })->get();
-            //dd($model_congtac);
-            $a_goc = array('hesott');
-            $model_pc = dmphucap_donvi::where('madv',$m_bl->madv)->where('phanloai','<','3')->wherenotin('mapc',$a_goc)->get();
-            $a_phucap = array();
-            $a_phucap_st = array();
-            $col = 0;
-
-            foreach($model_pc as $ct) {
-                if ($model->sum($ct->mapc) > 0) {
-                    $a_phucap[$ct->mapc] = $ct->report;
-                    $a_phucap_st['st_'.$ct->mapc] = $ct->report;
-                    $col++;
+            //dd($model_bl);
+            $model = array(
+                array('mact'=>'1536459380','mapc'=>'all','congtac'=>'all','tenct'=>'Cấp ủy viên','soluong'=>0,'ttl'=>0,'ttl_kn'=>0),
+                array('mact'=>'1536459380','mapc'=>'pckn','congtac'=>'','tenct'=>'Ủy viên ủy ban kiểm tra đảng ủy','soluong'=>0,'ttl'=>0,'ttl_kn'=>0),
+                array('mact'=>'1536459382','mapc'=>'all','congtac'=>'all','tenct'=>'Chi ủy viên','soluong'=>0,'ttl'=>0,'ttl_kn'=>0),
+                array('mact'=>'1536402868','mapc'=>'all','congtac'=>'all','tenct'=>'Phụ cấp đại biểu HĐND','soluong'=>0,'ttl'=>0,'ttl_kn'=>0),
+                array('mact'=>'1536402868','mapc'=>'pcdith','congtac'=>'all','tenct'=>'Hỗ trợ thông tin liên lạc đại biểu HĐND','soluong'=>0,'ttl'=>0,'ttl_kn'=>0),
+                array('mact'=>'1536402870','mapc'=>'all','congtac'=>'all','tenct'=>'Phụ cấp đại biểu HĐND chuyên trách','soluong'=>0,'ttl'=>0,'ttl_kn'=>0),
+                array('mact'=>'1536402868','mapc'=>'pckn','congtac'=>'all','tenct'=>'Phụ cấp kiêm nhiệm các chức danh của HĐND','soluong'=>0,'ttl'=>0,'ttl_kn'=>0),
+                array('mact'=>'1536459160','mapc'=>'pcd','congtac'=>'all','tenct'=>'Phụ cấp cán bộ làm công tác tiếp nhận và trả kết quả','soluong'=>0,'ttl'=>0,'ttl_kn'=>0),
+                array('mact'=>'1536402895','mapc'=>'all','congtac'=>'all','tenct'=>'Phụ cấp cán bộ trung tâm học tập cộng đồng','soluong'=>0,'ttl'=>0,'ttl_kn'=>0),
+                array('mact'=>'1536402878','mapc'=>'pctn','congtac'=>'all','tenct'=>'Phụ cấp trách nhiệm cán bộ quản lý quân sự','soluong'=>0,'ttl'=>0,'ttl_kn'=>0),
+                array('mact'=>'1536402878','mapc'=>'pcdbn','congtac'=>'all','tenct'=>'Phụ cấp đặc thù phó CHT quân sự','soluong'=>0,'ttl'=>0,'ttl_kn'=>0),
+                array('mact'=>'1537427170','mapc'=>'all','congtac'=>'all','tenct'=>'Phụ cấp đội hoạt động xã hội tình nguyện','soluong'=>0,'ttl'=>0,'ttl_kn'=>0),
+                array('mact'=>'1536459160','mapc'=>'pcdh','congtac'=>'all','tenct'=>'Phụ cấp công chức chuyên trách về ứng dụng công nghệ thông tin','soluong'=>0,'ttl'=>0,'ttl_kn'=>0),
+            );
+            for($i=0;$i<count($model);$i++){
+                $m_kq = $model_bl->where('mact',$model[$i]['mact']);
+                if(count($m_kq)>0){
+                    if($model[$i]['mapc'] == 'all'){
+                        $model[$i]['soluong'] = count($m_kq);
+                        $model[$i]['ttl'] = $m_kq->sum('ttl');
+                        //$model[$i]['luongtn'] = $m_kq->sum('luongtn');
+                    }else{
+                        $mapc = $model[$i]['mapc'];
+                        $mapc_st = 'st_'.$model[$i]['mapc'];
+                        foreach($m_kq as $pc){
+                            if($pc->$mapc > 0){
+                                $model[$i]['soluong'] ++;
+                                $model[$i]['ttl'] += $pc->$mapc_st;
+                                //$model[$i]['luongtn'] += $pc->$mapc;
+                            }
+                        }
+                    }
                 }
             }
 
-            foreach($model_congtac as $ct){
-                $canbo = $model->where('mact', $ct->mact)->where('congtac','<>','CHUCVU');
-                $canbo_kn = $model->where('mact', $ct->mact)->where('congtac','CHUCVU');
-                $ct->soluong = count($canbo) + count($canbo_kn);
-                //
-                //dd($canbo);
-                foreach($a_phucap as $k=>$v){
-                    $st = 'st_'.$k;
-                    $ct->$k = $canbo->sum($k) + $canbo_kn->sum($k);
-                    $ct->$st = $canbo->sum($st) + $canbo_kn->sum($st);
-                }
-                $ct->ttl = $canbo->sum('ttl');
-                $ct->ttl_kn = $canbo_kn->sum('ttl');
-                $ct->ttbh = $canbo->sum('ttbh') + $canbo_kn->sum('ttbh');
-                $ct->luongtn = $canbo->sum('luongtn') + $canbo_kn->sum('luongtn');
-            }
-            //dd($model_congtac);
             $m_dv = dmdonvi::where('madv',$m_bl->madv)->first();
             $m_dv->tendvcq = getTenDB($m_dv->madvbc);
 
@@ -419,13 +420,11 @@ class bangluong_inController extends Controller
                 'thang'=>$m_bl->thang,
                 'nam'=>$m_bl->nam,
                 'ngaylap'=>$m_bl->ngaylap,
-                'luongcb' => $m_bl->luongcoban,
-                'col'=>$col);
+                'luongcb' => $m_bl->luongcoban);
 
-            return view('reports.bangluong.donvi.mauthpl')
-                ->with('model',$model_congtac)
+            return view('reports.bangluong.donvi.mauthpc')
+                ->with('model',$model)
                 ->with('m_dv',$m_dv)
-                ->with('a_phucap',$a_phucap_st)
                 ->with('thongtin',$thongtin)
                 ->with('pageTitle','Bảng lương chi tiết');
         } else

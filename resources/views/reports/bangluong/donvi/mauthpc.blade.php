@@ -87,62 +87,42 @@
 
     <table class="money" cellspacing="0" cellpadding="0" border="1" style="margin: 20px auto; border-collapse: collapse;font:normal 11px Times, serif;">
         <tr style="padding-left: 2px;padding-right: 2px">
-            <th style="width: 2%;" rowspan="2">S</br>T</br>T</th>
-            <th style="width: 12%;" rowspan="2">Phân loại cán bộ</th>
-            <th style="width: 3%;" rowspan="2">Số người</th>
-            <th style="width: 8%;" rowspan="2">Tổng tiền lương hoặc phụ cấp</th>
-            <th colspan="{{$thongtin['col']}}">Các loại phụ cấp</th>
-            <th style="width: 8%;" rowspan="2">Trợ cấp, phụ cấp kiêm nhiệm</th>
-            <th style="width: 8%;" rowspan="2">Tổng tiền lương, phụ cấp và trợ cấp kiêm nhiệm</th>
-            <th style="width: 8%;" rowspan="2">Các khoản khấu trừ</th>
-            <th style="width: 8%;" rowspan="2">Tiền lương, phụ cấp còn lại</th>
-            <th style="width: 5%;" rowspan="2">Ghi chú</th>
-        </tr>
-
-        <tr style="padding-left: 2px;padding-right: 2px">
-            @foreach($a_phucap as $key=>$val)
-                <th>{!!$val!!}</th>
-            @endforeach
+            <th style="width: 2%;" >S</br>T</br>T</th>
+            <th style="width: 12%;">Phân loại cán bộ, công chức</th>
+            <th style="width: 3%;">Số người</th>
+            <th style="width: 8%;">Tổng tiền lương hoặc phụ cấp</th>
+            <th style="width: 8%;">Trợ cấp, phụ cấp kiêm nhiệm</th>
+            <th style="width: 8%;">Tổng tiền lương, phụ cấp và trợ cấp kiêm nhiệm</th>
+            <th style="width: 5%;">Ghi chú</th>
         </tr>
 
         <tr>
-            @for($i=1;$i<=9 + $thongtin['col'];$i++)
+            @for($i=1;$i<=7;$i++)
                 <th>{{$i}}</th>
             @endfor
         </tr>
 
         <?php $i=1; ?>
 
-        @foreach($model as $ct)
+        @foreach($model as $key=>$val)
             <tr>
                 <td>{{$i++}}</td>
-                <td style="text-align: left">{{$ct->tenct}}</td>
-                <td style="text-align: center">{{$ct->soluong}}</td>
-                <td>{{dinhdangso($ct->ttl)}}</td>
-
-                @foreach($a_phucap as $key=>$val)
-                    <td>{{dinhdangso($ct->$key)}}</td>
-                @endforeach
-                <td>{{dinhdangso($ct->ttl_kn)}}</td>
-                <td>{{dinhdangso($ct->ttl_kn + $ct->ttl)}}</td>
-                <td>{{dinhdangso($ct->ttbh)}}</td>
-                <td>{{dinhdangso($ct->luongtn)}}</td>
+                <td style="text-align: left">{{$val['tenct']}}</td>
+                <td style="text-align: center">{{dinhdangso($val['soluong'])}}</td>
+                <td>{{dinhdangso($val['ttl'])}}</td>
+                <td>{{dinhdangso($val['ttl_kn'])}}</td>
+                <td>{{dinhdangso($val['ttl_kn'] + $val['ttl'])}}</td>
                 <td></td>
             </tr>
         @endforeach
 
         <tr style="font-weight: bold; text-align: center;">
             <td colspan="2">Tổng cộng</td>
-            <td style="text-align: center">{{dinhdangso($model->sum('soluong'))}}</td>
-            <td class="money">{{dinhdangso($model->sum('ttl'))}}</td>
-            @foreach($a_phucap as $key=>$val)
-                <td>{{dinhdangsothapphan($model->sum($key) ,5)}}</td>
-            @endforeach
+            <td style="text-align: center">{{dinhdangso(array_column($model,'soluong'))}}</td>
+            <td class="money">{{dinhdangso(array_column($model,'ttl'))}}</td>
+            <td class="money">{{dinhdangso(array_column($model,'ttl_kn'))}}</td>
+            <td class="money">{{dinhdangso(array_column($model,'ttl_kn') + array_column($model,'ttl'))}}</td>
 
-            <td class="money">{{dinhdangso($model->sum('ttl_kn'))}}</td>
-            <td class="money">{{dinhdangso($model->sum('ttl_kn') + $model->sum('ttl'))}}</td>
-            <td class="money">{{dinhdangso($model->sum('ttbh'))}}</td>
-            <td class="money">{{dinhdangso($model->sum('luongtn'))}}</td>
             <td></td>
         </tr>
     </table>

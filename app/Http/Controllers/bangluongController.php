@@ -767,6 +767,7 @@ class bangluongController extends Controller
             $m_cb[$key]['hs_pccovu'] = $val['pccovu'];
             $m_cb[$key]['hs_pcud61'] = $val['pcud61'];
             $m_cb[$key]['hs_pcudn'] = $val['pcudn'];
+            $m_cb[$key]['songaytruc'] = 0;
 
             $m_cb[$key]['heso'] =round($val['heso'] * $val['pthuong'] / 100,session('admin')->lamtron);
             $m_cb[$key]['vuotkhung'] =round($val['heso'] * $val['vuotkhung'] / 100,session('admin')->lamtron);//trong bảng danh mục là % vượt khung => sang bảng lương chuyển thành hệ số
@@ -1014,6 +1015,7 @@ class bangluongController extends Controller
             if($nghi) {
                 $cb_nghi = $a_nghiphep[$m_cb[$key]['macanbo']];
                 $ngaycong = $cb_nghi['songaycong'] > 0 ? $cb_nghi['songaycong'] : $ngaycong;
+                $m_cb[$key]['songaytruc'] = $ngaycong;
                 $m_cb[$key]['congtac'] = 'NGHIPHEP';
                 $sotiencong = $inputs['luongcoban'] *
                     ($m_cb[$key]['heso'] + $m_cb[$key]['vuotkhung'] + $m_cb[$key]['pccv']
@@ -1277,10 +1279,12 @@ class bangluongController extends Controller
                 $ngaylap = Carbon::create($inputs['nam'], $inputs['thang'], '01')->addMonth(1)->addDay(-1);
                 //$ngaylap = $inputs['nam'] . '-' . $inputs['thang'] . '-01';
 
-                $model_canbo = hosotruylinh::where('madv', $madv)
-                    //->select('stt', 'macanbo', 'tencanbo', 'msngbac', 'hesott', 'ngaytu', 'ngayden', 'maso')
-                    ->where('ngayden', '<=', $ngaylap)->wherenull('mabl')->get();
+                $model_canbo = hosotruylinh::join('hosotruylinh_nguon','hosotruylinh.maso','=','hosotruylinh_nguon.maso')
+                    ->select('hosotruylinh.*', 'hosotruylinh_nguon.manguonkp', 'hosotruylinh_nguon.luongcoban')
+                    ->where('hosotruylinh.madv', $madv)
+                    ->where('hosotruylinh.ngayden', '<=', $ngaylap)->wherenull('hosotruylinh.mabl')->get();
                 //dd($model_canbo);
+
                 $a_hoso = hosocanbo::select('mapb', 'mact', 'macanbo', 'macvcq', 'bhxh', 'bhyt', 'bhtn', 'kpcd', 'bhxh_dv', 'bhyt_dv', 'bhtn_dv', 'kpcd_dv')
                     ->where('madv', session('admin')->madv)->get()->keyby('macanbo')->toarray();
 
@@ -1582,7 +1586,8 @@ class bangluongController extends Controller
                 ->where('macanbo', $model->macanbo)
                 ->update(['mabl' => null]);
             $model->delete();
-            return redirect('/chuc_nang/bang_luong/bang_luong?mabl='.$model->mabl.'&mapb='.$model->mapb);
+            return redirect('/chuc_nang/bang_luong/bang_luong?mabl='.$model->mabl.'&mapb=');
+            //return redirect('/chuc_nang/bang_luong/bang_luong?mabl='.$model->mabl.'&mapb='.$model->mapb);
             //return redirect('/chuc_nang/bang_luong/maso='.$model->mabl);
         } else
             return view('errors.notlogin');

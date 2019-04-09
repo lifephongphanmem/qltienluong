@@ -5,25 +5,40 @@ namespace App\Http\Controllers;
 use App\dmphucap_donvi;
 use App\hosocanbo;
 use App\hosotruylinh;
+use App\hosotruylinh_nguon;
+use App\hosotruylinh_nguon_temp;
 use App\ngachluong;
 use App\nhomngachluong;
 use Illuminate\Http\Request;
 
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
 
 class hosotruylinhController extends Controller
 {
-    function index()
+    function index(Request $request)
     {
         if (Session::has('admin')) {
+            $inputs = $request->all();
+            if(!isset($inputs['thang'])){
+                $inputs['thang'] = date('m');
+            }
+            if(!isset($inputs['nam'])){
+                $inputs['nam'] = date('Y');
+            }
 
             $model_canbo = hosocanbo::where('madv', session('admin')->madv)->where('theodoi', '<', '9')->get();
-            $model = hosotruylinh::where('madv', session('admin')->madv)->get();
+            $model = hosotruylinh::where('madv', session('admin')->madv)
+                ->wheremonth('ngayden',$inputs['thang'])
+                ->whereyear('ngayden',$inputs['nam'])->get();
+            //dd($inputs);
+            //$model = hosotruylinh::where('madv', session('admin')->madv)->get();
             //$a = getPhanLoaiTruyLinh();
             return view('manage.truylinh.index')
                 ->with('model', $model->sortby('ngaytu'))
+                ->with('inputs', $inputs)
                 ->with('a_canbo', array_column($model_canbo->toarray(), 'tencanbo', 'macanbo'))
                 ->with('a_pl', getPhanLoaiTruyLinh(false))
                 ->with('furl', '/nghiep_vu/truy_linh/')
@@ -37,13 +52,15 @@ class hosotruylinhController extends Controller
     {
         if (Session::has('admin')) {
             $insert = $request->all();
-            $insert['luongcoban'] = getDbl($insert['luongcoban']);
+            //$insert['luongcoban'] = getDbl($insert['luongcoban']);
             $insert['thangtl'] = getDbl($insert['thangtl']);
             $insert['ngaytl'] = getDbl($insert['ngaytl']);
-            if($insert['maso'] == 'ADD'){
+            if($insert['trangthai'] == 'ADD'){
                 $insert['madv'] = session('admin')->madv;
-                $insert['maso'] = session('admin')->madv . '_' . getdate()[0];
+                //$insert['maso'] = session('admin')->madv . '_' . getdate()[0];
                 hosotruylinh::create($insert);
+                DB::statement("Insert into hosotruylinh_nguon(manguonkp,luongcoban,maso) SELECT manguonkp, luongcoban, maso FROM hosotruylinh_nguon_temp WHERE maso='".$insert['maso']."'");
+                DB::statement("Delete FROM hosotruylinh_nguon_temp WHERE maso='".$insert['maso']."'");
             }else{
                 //$model = hosotruylinh::where('maso',$insert['maso'])->first();
                 hosotruylinh::where('maso',$insert['maso'])->first()->update($insert);
@@ -54,6 +71,7 @@ class hosotruylinhController extends Controller
             return view('errors.notlogin');
     }
 
+    //bỏ
     function update(Request $request)
     {
         if (Session::has('admin')) {
@@ -62,7 +80,7 @@ class hosotruylinhController extends Controller
             $insert['ngaytu'] = $insert['ngaytu_edit'];
             $insert['msngbac'] = $insert['msngbac_edit'];
             $insert['hesott'] = $insert['hesott_edit'];
-            $insert['luongcoban'] = getDbl($insert['luongcoban']);
+            //$insert['luongcoban'] = getDbl($insert['luongcoban']);
             $insert['thangtl'] = getDbl($insert['thangtl']);
             $insert['ngaytl'] = getDbl($insert['ngaytl']);
 
@@ -137,6 +155,7 @@ class hosotruylinhController extends Controller
     function destroy($id){
         if (Session::has('admin')) {
             $model = hosotruylinh::find($id);
+            DB::statement("Delete FROM hosotruylinh_nguon_temp WHERE maso='".$model->maso."'");
             //$macanbo = $model->macanbo;
             $model->delete();
             return redirect('/nghiep_vu/truy_linh/danh_sach');
@@ -149,13 +168,17 @@ class hosotruylinhController extends Controller
         if (Session::has('admin')) {
             $inputs = $request->all();
             $a_pl = getPhanLoaiTruyLinh();
+            $a_nkp = getNguonKP(false);
+
             //msngbac: kiểm tra xem mã ngạch bậc: xem lấy mã số xem truy lĩnh hệ số hay vượt khung
             //tnn: tính 1% thâm niên nghề. Các hệ số ko có
             $model_pc = dmphucap_donvi::where('madv', session('admin')->madv)->get();
             if(isset($inputs['maso'])){
+                $inputs['trangthai'] = 'EDIT';
                 $model = hosotruylinh::where('maso',$inputs['maso'])->first();
+                $model_nkp = hosotruylinh_nguon::where('maso',$inputs['maso'])->get();
                 $model->tentruylinh = isset($a_pl[$model->maphanloai]) ? $a_pl[$model->maphanloai] : '';
-
+                //dd($model_nkp);
                 switch($model->maphanloai){
                     case 'MSNGBAC':{
                         $model_pc = $model_pc->where('phanloai',2);
@@ -163,6 +186,8 @@ class hosotruylinhController extends Controller
                             ->with('furl', '/nghiep_vu/truy_linh/')
                             ->with('inputs',$inputs)
                             ->with('model',$model)
+                            ->with('model_nkp',$model_nkp)
+                            ->with('a_nkp',$a_nkp)
                             ->with('a_heso', array('heso','vuotkhung'))
                             ->with('model_pc', $model_pc)
                             ->with('pageTitle', 'Thêm mới cán bộ truy lĩnh lương');
@@ -174,6 +199,8 @@ class hosotruylinhController extends Controller
                             ->with('furl', '/nghiep_vu/truy_linh/')
                             ->with('inputs',$inputs)
                             ->with('model',$model)
+                            ->with('model_nkp',$model_nkp)
+                            ->with('a_nkp',$a_nkp)
                             ->with('a_heso', array('heso','vuotkhung'))
                             ->with('model_pc', $model_pc)
                             ->with('pageTitle', 'Thêm mới cán bộ truy lĩnh lương');
@@ -184,6 +211,8 @@ class hosotruylinhController extends Controller
                             ->with('furl', '/nghiep_vu/truy_linh/')
                             ->with('inputs',$inputs)
                             ->with('model',$model)
+                            ->with('model_nkp',$model_nkp)
+                            ->with('a_nkp',$a_nkp)
                             ->with('pageTitle', 'Thêm mới cán bộ truy lĩnh lương');
                         break;
                     }
@@ -193,6 +222,8 @@ class hosotruylinhController extends Controller
                             ->with('furl', '/nghiep_vu/truy_linh/')
                             ->with('inputs',$inputs)
                             ->with('model',$model)
+                            ->with('model_nkp',$model_nkp)
+                            ->with('a_nkp',$a_nkp)
                             ->with('a_heso', array('hesott'))
                             ->with('model_pc', $model_pc)
                             ->with('pageTitle', 'Thêm mới cán bộ truy lĩnh lương');
@@ -203,6 +234,8 @@ class hosotruylinhController extends Controller
                             ->with('furl', '/nghiep_vu/truy_linh/')
                             ->with('inputs',$inputs)
                             ->with('model',$model)
+                            ->with('model_nkp',$model_nkp)
+                            ->with('a_nkp',$a_nkp)
                             ->with('a_heso', array('hesott'))
                             ->with('model_pc', $model_pc)
                             ->with('pageTitle', 'Thêm mới cán bộ truy lĩnh lương');
@@ -214,6 +247,8 @@ class hosotruylinhController extends Controller
                             ->with('furl', '/nghiep_vu/truy_linh/')
                             ->with('inputs',$inputs)
                             ->with('model',$model)
+                            ->with('model_nkp',$model_nkp)
+                            ->with('a_nkp',$a_nkp)
                             ->with('a_heso', array('heso','vuotkhung'))
                             ->with('model_pc', $model_pc)
                             ->with('pageTitle', 'Thêm mới cán bộ truy lĩnh lương');
@@ -222,10 +257,11 @@ class hosotruylinhController extends Controller
                 }
             }else{
             //thêm mới
+                $inputs['trangthai'] = 'ADD';
                 $model = hosocanbo::where('macanbo',$inputs['macanbo'])->first();
                 $model->ngaytu = null;
                 $model->ngayden = null;
-                $model->maso = 'ADD';
+                $model->maso = session('admin')->madv . '_' . getdate()[0];
                 $model->maphanloai = $inputs['maphanloai'];
                 $model->tentruylinh = isset($a_pl[$model->maphanloai]) ? $a_pl[$model->maphanloai] : '';
                 switch($inputs['maphanloai']){
@@ -259,6 +295,7 @@ class hosotruylinhController extends Controller
                             ->with('furl', '/nghiep_vu/truy_linh/')
                             ->with('inputs',$inputs)
                             ->with('model',$model)
+                            ->with('a_nkp',$a_nkp)
                             ->with('a_heso', array('heso','vuotkhung'))
                             ->with('model_pc', $model_pc)
                             ->with('pageTitle', 'Thêm mới cán bộ truy lĩnh lương');
@@ -279,6 +316,7 @@ class hosotruylinhController extends Controller
                             ->with('furl', '/nghiep_vu/truy_linh/')
                             ->with('inputs',$inputs)
                             ->with('model',$model)
+                            ->with('a_nkp',$a_nkp)
                             ->with('a_heso', array('heso','vuotkhung'))
                             ->with('model_pc', $model_pc)
                             ->with('pageTitle', 'Thêm mới cán bộ truy lĩnh lương');
@@ -298,6 +336,7 @@ class hosotruylinhController extends Controller
                             ->with('furl', '/nghiep_vu/truy_linh/')
                             ->with('inputs',$inputs)
                             ->with('model',$model)
+                            ->with('a_nkp',$a_nkp)
                             ->with('pageTitle', 'Thêm mới cán bộ truy lĩnh lương');
                         break;
                     }
@@ -307,6 +346,7 @@ class hosotruylinhController extends Controller
                             ->with('furl', '/nghiep_vu/truy_linh/')
                             ->with('inputs',$inputs)
                             ->with('model',$model)
+                            ->with('a_nkp',$a_nkp)
                             ->with('a_heso', array('hesott'))
                             ->with('model_pc', $model_pc)
                             ->with('pageTitle', 'Thêm mới cán bộ truy lĩnh lương');
@@ -320,6 +360,7 @@ class hosotruylinhController extends Controller
                             ->with('model',$model)
                             ->with('a_heso', array('hesott'))
                             ->with('model_pc', $model_pc)
+                            ->with('a_nkp',$a_nkp)
                             ->with('pageTitle', 'Thêm mới cán bộ truy lĩnh lương');
                         break;
                     }
@@ -329,15 +370,147 @@ class hosotruylinhController extends Controller
                             ->with('furl', '/nghiep_vu/truy_linh/')
                             ->with('inputs',$inputs)
                             ->with('model',$model)
+                            ->with('a_nkp',$a_nkp)
                             ->with('a_heso', array('heso','vuotkhung'))
                             ->with('model_pc', $model_pc)
                             ->with('pageTitle', 'Thêm mới cán bộ truy lĩnh lương');
                         break;
                     }
                 }
-
             }
         } else
             return view('errors.notlogin');
+    }
+
+    function getinfor_nkp(Request $request){
+        if(!Session::has('admin')) {
+            $result = array(
+                'status' => 'fail',
+                'message' => 'permission denied',
+            );
+            die(json_encode($result));
+        }
+
+        $inputs = $request->all();
+        //dd(hosotruylinh_nguon::find($inputs['id']));
+        die(hosotruylinh_nguon::find($inputs['id']));
+    }
+
+    function store_nkp(Request $request)
+    {
+        $result = array(
+            'status' => 'fail',
+            'message' => 'error',
+        );
+        if (!Session::has('admin')) {
+            $result = array(
+                'status' => 'fail',
+                'message' => 'permission denied',
+            );
+            die(json_encode($result));
+        }
+        $insert = $request->all();
+        $insert['luongcoban'] = getDbl($insert['luongcoban']);
+        if($insert['trangthai'] == 'ADD'){//thao tác vào bảng tạm
+            $model_chk = hosotruylinh_nguon_temp::where('maso', $insert['maso'])->where('manguonkp', $insert['manguonkp'])->first();
+            if(count($model_chk) > 0){
+                $model_chk->luongcoban = $insert['luongcoban'];
+                $model_chk->manguonkp = $insert['manguonkp'];
+                $model_chk->save();
+            }else{
+                $model = new hosotruylinh_nguon_temp();
+                $model->maso = $insert['maso'];
+                $model->manguonkp = $insert['manguonkp'];
+                $model->luongcoban = $insert['luongcoban'];
+                $model->save();
+            }
+            $model = hosotruylinh_nguon_temp::where('maso', $insert['maso'])->get();
+        }else{//thao tác vào bảng gốc
+            $model_chk = hosotruylinh_nguon::where('maso', $insert['maso'])->where('manguonkp', $insert['manguonkp'])->first();
+            if(count($model_chk) > 0){
+                $model_chk->luongcoban = $insert['luongcoban'];
+                $model_chk->manguonkp = $insert['manguonkp'];
+                $model_chk->save();
+            }else{
+                $model = new hosotruylinh_nguon();
+                $model->maso = $insert['maso'];
+                $model->manguonkp = $insert['manguonkp'];
+                $model->luongcoban = $insert['luongcoban'];
+                $model->save();
+            }
+            $model = hosotruylinh_nguon::where('maso', $insert['maso'])->get();
+        }
+
+        $result = $this->retun_html_kn($result, $model);
+
+        die(json_encode($result));
+    }
+
+    public function destroy_nkp(Request $request)
+    {
+        $result = array(
+            'status' => 'fail',
+            'message' => 'error',
+        );
+        if (!Session::has('admin')) {
+            $result = array(
+                'status' => 'fail',
+                'message' => 'permission denied',
+            );
+            die(json_encode($result));
+        }
+
+        $inputs = $request->all();
+        if($inputs['trangthai'] == 'ADD'){//thao tác vào bảng tạm
+            $model = hosotruylinh_nguon_temp::find($inputs['id']);
+            $model->delete();
+            $model = hosotruylinh_nguon_temp::where('maso', $model->maso)->get();
+        }else{
+            $model = hosotruylinh_nguon::find($inputs['id']);
+            $model->delete();
+            $model = hosotruylinh_nguon::where('maso', $model->maso)->get();
+        }
+        //$a_pl = getPhanLoaiKiemNhiem();
+        $result = $this->retun_html_kn($result, $model);
+        die(json_encode($result));
+    }
+
+    public function retun_html_kn($result, $model)
+    {
+        $a_nkp = getNguonKP(false);
+        $result['message'] = '<div class="row" id="dsnkp">';
+        $result['message'] .= '<div class="col-md-12">';
+        $result['message'] .= '<table class="table table-striped table-bordered table-hover" id="sample_4">';
+        $result['message'] .= '<thead>';
+        $result['message'] .= '<tr>';
+        $result['message'] .= '<th class="text-center" style="width: 5%">STT</th>';
+        $result['message'] .= '<th class="text-center">Nguồn kinh phí</th>';
+        $result['message'] .= '<th class="text-center" style="width: 15%">Số tiền</th>';
+        $result['message'] .= '<th class="text-center" style="width: 15%">Thao tác</th>';
+
+        $result['message'] .= '</tr>';
+        $result['message'] .= '</thead>';
+        $result['message'] .= '<tbody>';
+        if (count($model) > 0) {
+            foreach ($model as $key => $value) {
+                $result['message'] .= '<tr>';
+                $result['message'] .= '<td style="text-align: center">' . ($key + 1) . '</td>';
+                $result['message'] .= '<td>' . (isset($a_nkp[$value->manguonkp]) ? $a_nkp[$value->manguonkp] : '') . '</td>';
+                $result['message'] .= '<td>' . dinhdangso($value->luongcoban) . '</td>';
+                $result['message'] .= '<td>' .
+                    '<button type="button" data-target="#nguonkp-modal" data-toggle="modal" class="btn btn-default btn-xs mbs" onclick="edit_nkp(&#39;' . $value->id . '&#39;);"><i class="fa fa-edit"></i>&nbsp;Sửa</button>' .
+                    '<button type="button" class="btn btn-default btn-xs mbs" data-target="#delete-modal-confirm" data-toggle="modal" onclick="cfDel(&#39;'.$value->id. '&#39;)" ><i class="fa fa-trash-o"></i>&nbsp;Xóa</button>'
+
+                    . '</td>';
+                $result['message'] .= '</tr>';
+            }
+            $result['message'] .= '</tbody>';
+            $result['message'] .= '</table>';
+            $result['message'] .= '</div>';
+            $result['message'] .= '</div>';
+            $result['status'] = 'success';
+            return $result;
+        }
+        return $result;
     }
 }

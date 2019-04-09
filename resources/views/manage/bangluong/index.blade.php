@@ -494,15 +494,16 @@
                                                 <i class="fa fa-print"></i>&nbsp; Bảng tổng hợp lương theo phân loại công tác</a>
                                         </div>
                                     </div>
-                                    <!--div class="col-md-6">
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-md-6">
                                         <div class="form-group">
                                             <a id="in_thpc" href="" onclick="inthpc()" style="border-width: 0px;margin-left: 5px" target="_blank">
                                                 <i class="fa fa-print"></i>&nbsp; Bảng tổng hợp phụ cấp, trợ cấp</a>
                                         </div>
-                                    </div-->
-                                </div>
+                                    </div>
 
-                                <div class="row">
                                     <div class="col-md-6">
                                         <div class="form-group">
                                             <button type="button" style="border-width: 0px" onclick="inblpc('/chuc_nang/bang_luong/maublpc')" class="btn btn-default btn-xs mbs"
@@ -510,7 +511,9 @@
                                                 <i class="fa fa-print"></i>&nbsp; Bảng thanh toán tiền lương, phụ cấp</button>
                                         </div>
                                     </div>
+                                </div>
 
+                                <div class="row">
                                     <div class="col-md-6">
                                         <div class="form-group">
                                             <button type="button" style="border-width: 0px" onclick="indbhdnd('/chuc_nang/bang_luong/maudbhdnd')" class="btn btn-default btn-xs mbs"
@@ -518,9 +521,7 @@
                                                 <i class="fa fa-print"></i>&nbsp; Bảng thanh toán phụ cấp ĐBHDND</button>
                                         </div>
                                     </div>
-                                </div>
 
-                                <div class="row">
                                     <div class="col-md-6">
                                         <div class="form-group">
                                             <button type="button" style="border-width: 0px" onclick="indbhdnd('/chuc_nang/bang_luong/maubchd')" class="btn btn-default btn-xs mbs"
@@ -528,7 +529,9 @@
                                                 <i class="fa fa-print"></i>&nbsp; Bảng thanh toán phụ cấp BCH Đảng Ủy</button>
                                         </div>
                                     </div>
+                                </div>
 
+                                <div class="row">
                                     <div class="col-md-6">
                                         <div class="form-group">
                                             <button type="button" style="border-width: 0px" onclick="inqs('/chuc_nang/bang_luong/mauqs')" class="btn btn-default btn-xs mbs"
@@ -536,32 +539,32 @@
                                                 <i class="fa fa-print"></i>&nbsp; Bảng thanh toán phụ cấp quân sự</button>
                                         </div>
                                     </div>
-                                </div>
 
-                                <div class="row">
                                     <div class="col-md-6">
                                         <div class="form-group">
                                             <a id="in_cd" href="" onclick="incd()" style="border-width: 0px;margin-left: 5px" target="_blank">
                                                 <i class="fa fa-print"></i>&nbsp; Bảng thanh toán phụ trung tâm học tập cấp cộng đồng</a>
                                         </div>
                                     </div>
+                                </div>
 
+                                <div class="row">
                                     <div class="col-md-6">
                                         <div class="form-group">
                                             <a id="in_mc" href="" onclick="inmc()" style="border-width: 0px;margin-left: 5px" target="_blank">
                                                 <i class="fa fa-print"></i>&nbsp; Bảng thanh toán phụ cấp trách nhiệm</a>
                                         </div>
                                     </div>
-                                </div>
 
-                                <div class="row">
                                     <div class="col-md-6">
                                         <div class="form-group">
                                             <a id="in_truc" href="" onclick="intruc()" style="border-width: 0px;margin-left: 5px" target="_blank">
                                                 <i class="fa fa-print"></i>&nbsp; Bảng thanh toán phụ cấp trực</a>
                                         </div>
                                     </div>
+                                </div>
 
+                                <div class="row">
                                     <div class="col-md-6">
                                         <div class="form-group">
                                             <a id="in_tn" href="" onclick="intn()" style="border-width: 0px;margin-left: 5px" target="_blank">

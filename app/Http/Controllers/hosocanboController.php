@@ -1245,8 +1245,6 @@ class hosocanboController extends Controller
             return view('errors.notlogin');
     }
 
-
-
     /**
      * @param $result
      * @param $model
