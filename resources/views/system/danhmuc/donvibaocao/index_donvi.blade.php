@@ -249,6 +249,7 @@
     <script>
         function giatri(madv){
             $('#frm_plct').find("[id^='madv']").val(madv);
+            $('#frm_sunghiep').find("[id^='madv']").val(madv);
         }
 
         $(function(){
