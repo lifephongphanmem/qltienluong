@@ -131,6 +131,7 @@ Route::group(['prefix'=>'danh_muc'],function(){
         Route::get('set_management','dmdonvibaocaoController@set_management');
 
         Route::get('update_plct','dmdonvibaocaoController@update_plct');
+        Route::get('update_sunghiep','dmdonvibaocaoController@update_sunghiep');
 
         Route::get('getPhanLoai','ajaxController@getPhanLoai');
     });

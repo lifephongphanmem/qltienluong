@@ -357,4 +357,14 @@ class dmdonvibaocaoController extends Controller
         }else
             return view('errors.notlogin');
     }
+
+    function update_sunghiep(Request $request){
+        if (Session::has('admin')) {
+            $inputs = $request->all();
+            $model = dmdonvi::where('madv',$inputs['madv'])->first();
+            DB::statement("Update hosocanbo set sunghiep = '".$inputs['sunghiep_moi']."' where sunghiep='".$inputs['sunghiep_cu']."' and madv ='".$inputs['madv']."'");
+            return redirect('/danh_muc/khu_vuc/chi_tiet?ma_so='.$model->madvbc.'&phan_loai='.$model->phanloaitaikhoan);
+        }else
+            return view('errors.notlogin');
+    }
 }

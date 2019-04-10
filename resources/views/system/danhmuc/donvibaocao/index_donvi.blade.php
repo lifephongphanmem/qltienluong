@@ -123,6 +123,10 @@
                                     <a href="#tab_0" data-toggle="tab" aria-expanded="true">
                                         Phân loại công tác </a>
                                 </li>
+                                <li>
+                                    <a href="#tab_1" data-toggle="tab" aria-expanded="true">
+                                        Sự nghiệp </a>
+                                </li>
                             </ul>
                             <div class="tab-content">
                                 <!-- phân loại công tác -->
@@ -184,7 +188,49 @@
 
                                 <!-- Mẫu bảng lương khánh hòa -->
                                 <div class="tab-pane" id="tab_1">
+                                    <div class="portlet box blue">
+                                        <div class="portlet-title">
+                                            <div class="caption"></div>
+                                            <div class="tools"></div>
+                                        </div>
+                                        <div class="portlet-body form">
+                                            <!-- BEGIN FORM-->
+                                            <form action="/danh_muc/khu_vuc/update_sunghiep" class="form-horizontal" id="frm_sunghiep">
+                                                <div class="form-body">
+                                                    <div class="form-horizontal">
+                                                        <div class="row">
+                                                            <div class="col-md-6">
+                                                                <label class="control-label">Sự nghiệp cán bộ cũ</label>
+                                                                <select class="form-control select2me" name="sunghiep_cu" id="sunghiep_cu">
+                                                                    <option value="Công chức">Công chức</option>
+                                                                    <option value="Viên chức">Viên chức</option>
+                                                                    <option value="Khác">Khác</option>
+                                                                </select>
+                                                            </div>
 
+                                                            <div class="col-md-6">
+                                                                <label class="control-label">Sự nghiệp cán bộ mới</label>
+                                                                <select class="form-control select2me" name="sunghiep_moi" id="sunghiep_moi">
+                                                                    <option value="Công chức">Công chức</option>
+                                                                    <option value="Viên chức">Viên chức</option>
+                                                                    <option value="Khác">Khác</option>
+                                                                </select>
+                                                            </div>
+                                                        </div>
+                                                        <input type="hidden" id="madv" name="madv"/>
+                                                    </div>
+                                                </div>
+                                                <div class="form-actions">
+                                                    <div class="row text-center">
+                                                        <div class="col-md-12">
+                                                            <button type="submit" class="btn default">Hoàn thành</button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </form>
+                                            <!-- END FORM-->
+                                        </div>
+                                    </div>
                                 </div>
 
                                 <!-- Mẫu bảng lương lạng sơn + cao bằng -->
