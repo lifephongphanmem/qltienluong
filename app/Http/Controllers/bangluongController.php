@@ -1802,6 +1802,7 @@ class bangluongController extends Controller
             $inputs['ttbh_dv'] = chkDbl($inputs['ttbh_dv']);
             $inputs['luongtn'] = chkDbl($inputs['luongtn']);
 
+            unset($inputs['id']);
             //dd($inputs);
             $model->update($inputs);
             return redirect('/chuc_nang/bang_luong/bang_luong?mabl='.$model->mabl.'&mapb='.$model->mapb);
