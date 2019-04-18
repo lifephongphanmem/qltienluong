@@ -632,7 +632,7 @@ class tonghopluong_donviController extends Controller
             for($i=0; $i<count($col); $i++){
                 $col_st[] ='st_'. $col[$i];
             }
-            $a_th = array_merge(array('macanbo','tencanbo','msngbac', 'mact', 'macvcq', 'mapb', 'mabl', 'manguonkp', 'luongcoban'
+            $a_th = array_merge(array('macanbo','tencanbo','msngbac', 'mact', 'macvcq', 'mapb', 'mabl', 'manguonkp', 'luongcoban','thangtl','ngaytl'
                 ,'congtac','stbhxh_dv','stbhyt_dv','stkpcd_dv','stbhtn_dv','tonghs','ttl', 'giaml','ttbh_dv'),$col);
             $a_th = array_merge($a_th,$col_st);
             $a_ct = bangluong_ct::select($a_th)->wherein('mabl', array_column($a_bangluong,'mabl'))->get()->toarray();
@@ -684,6 +684,10 @@ class tonghopluong_donviController extends Controller
                 if($a_ct[$i]['congtac'] != 'TRUYLINH'){//bảng lương truy lĩnh có luowngcb trong chi tiết
                     $a_ct[$i]['luongcoban'] = $bangluong['luongcoban'];
                     $a_ct[$i]['congtac'] = 'BANGLUONG';//do trong trường congtac = CHUCVU, BIENCHE,...
+                }else{
+                    foreach (getColTongHop() as $ct) {
+                        $a_ct[$i]['st_'.$ct] = $a_ct[$i]['st_'.$ct] * $a_ct[$i]['thangtl'];
+                    }
                 }
 
                 if(in_array($a_ct[$i]['macongtac'],$a_plcongtac) || in_array($a_ct[$i]['mact'],$a_plct)){
@@ -1021,12 +1025,18 @@ class tonghopluong_donviController extends Controller
             $thongtin = array('nguoilap' => session('admin')->name,
                 'thang' => $model_thongtin->thang,
                 'nam' => $model_thongtin->nam);
-            //dd($model);
+            $a_tonghop = $model->map(function($data){
+                return collect($data->toArray())
+                    ->only(['tonghop'])
+                    ->all();
+            });
+            //dd($a_tonghop);
             return view('reports.tonghopluong.donvi.solieutonghop')
                 ->with('thongtin', $thongtin)
                 ->with('model', $model)
                 ->with('m_dv', $m_dv)
                 ->with('col', $col)
+                ->with('a_tonghop',a_unique($a_tonghop))
                 ->with('a_phucap', $a_phucap)
                 ->with('a_phucap_hs', $a_phucap_hs)
                 ->with('pageTitle', 'Chi tiết tổng hợp lương tại đơn vị theo địa bàn quản lý');
