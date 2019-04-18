@@ -426,6 +426,9 @@ Route::group(['prefix'=>'chuc_nang'],function(){
         Route::get('maumc','bangluongController@printf_maumc');
         Route::get('mautruc','bangluongController@printf_mautruc');
         Route::get('mautinhnguyen','bangluongController@printf_mautinhnguyen');
+        Route::post('maumtm','bangluongController@printf_maumtm');
+        //truy lĩnh
+        Route::post('mautruylinh','bangluongController@printf_mautruylinh');
 
         Route::get('mauthpl','bangluong_inController@printf_mauthpl');
         Route::get('mauthpc','bangluong_inController@printf_mauthpc');
@@ -763,6 +766,7 @@ Route::group(['prefix'=>'bao_cao'],function(){
             Route::post('maubaohiem','baocaobangluongController@maubaohiem');
             Route::post('chitraluong','baocaobangluongController@chitraluong');
             Route::post('dutoanluong','baocaobangluongController@dutoanluong');
+            Route::post('nangluong','baocaobangluongController@nangluong');
         });
 
         Route::group(['prefix'=>'khoi'],function(){

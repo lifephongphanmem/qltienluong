@@ -231,7 +231,7 @@
 					<ul class="sub-menu">
                         <!--li><a href="{{url('bao_cao/don_vi')}}">Báo cáo nhân sự</a></li  chưa fix -->
                         <!--li><a href="{{url('bao_cao/mau_chuan')}}">Báo cáo theo thông tư, quyết định</a></li-->
-                        <li><a href="{{url('bao_cao/bang_luong')}}"><i class="fa fa-caret-right"></i>Báo cáo chi trả lương</a></li>
+                        <li><a href="{{url('bao_cao/bang_luong')}}"><i class="fa fa-caret-right"></i>Báo cáo chi tiết</a></li>
 					</ul>
 				</li>
 
