@@ -141,7 +141,7 @@
                         <td>{{convert2Roman($i++)}}</td>
                         <td style="text-align: left;" colspan="{{12+ $col}}">{{$congtac['tenct']}}</td>
                     </tr>
-                    @foreach($model_luong as $ct)
+                    @foreach($model_luong as $ct )
                         <tr>
                             <td>{{$stt++}}</td>
                             <td style="text-align: left">{{$ct->tencanbo}}</td>
