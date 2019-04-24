@@ -28,6 +28,8 @@
                                 <li><a href="#" data-target="#thoaibangluong-modal" data-toggle="modal" onclick="baocaobangluong('{{$furl.'don_vi/maubaohiem'}}')">Mẫu bảo hiểm phải nộp theo lương</a></li-->
                                 <li><a href="#" data-target="#thoaichitra-modal" data-toggle="modal" onclick="chitraluong('{{$furl.'don_vi/chitraluong'}}')">Tổng hợp tình hình chi trả lương</a></li>
                                 <li><a href="#" data-target="#thoaidutoan-modal" data-toggle="modal" onclick="dutoanluong('{{$furl.'don_vi/dutoanluong'}}')">Dự toán lương</a></li>
+                                <li><a href="#" data-target="#thoainangluong-modal" data-toggle="modal" onclick="nangluong('{{$furl.'don_vi/nangluong'}}','NGACHBAC')">Danh sách nâng lương ngạch bậc</a></li>
+                                <li><a href="#" data-target="#thoainangluong-modal" data-toggle="modal" onclick="nangluong('{{$furl.'don_vi/nangluong'}}','TNN')">Danh sách nâng thâm niên nghề</a></li>
 
                                 <!-- Tạm thời bỏ để triển khai lạng sơn -->
                                 <!--
@@ -144,6 +146,40 @@
                             {!! Form::select('namns',getNam(),date('Y'),array('id' => 'namns', 'class' => 'form-control'))!!}
                         </div>
                     </div>
+                    <input type="hidden" name="_token" value="{{ csrf_token() }}">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" data-dismiss="modal" class="btn btn-default">Hủy thao tác</button>
+                <button type="submit" id="submit" name="submit" value="submit" class="btn btn-primary">Đồng ý</button>
+            </div>
+        </div>
+        {!! Form::close() !!}
+    </div>
+
+    <div id="thoainangluong-modal" tabindex="-1" role="dialog" aria-hidden="true" class="modal fade">
+        {!! Form::open(['url'=>'#','target'=>'_blank' ,'method'=>'post' ,'id' => 'frm_thoainangluong', 'class'=>'form-horizontal form-validate']) !!}
+        <div class="modal-dialog modal-content">
+            <div class="modal-header modal-header-primary">
+                <button type="button" data-dismiss="modal" aria-hidden="true" class="close">&times;</button>
+                <h4 id="modal-header-primary-label" class="modal-title">Thông tin kết xuất bảng lương</h4>
+            </div>
+            <div class="modal-body">
+                <div class="form-horizontal">
+                    <div class="form-group">
+                        <label class="col-md-4 control-label"> Từ ngày<span class="require">*</span></label>
+                        <div class="col-md-8">
+                            {!!Form::input('date','ngaytu',date('Y').'-01-01', array('id' => 'ngaytu','class' => 'form-control'))!!}
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-md-4 control-label"> Đến ngày<span class="require">*</span></label>
+                        <div class="col-md-8">
+                            {!!Form::input('date','ngayden', date('Y').'-12-31', array('id' => 'ngayden','class' => 'form-control'))!!}
+                        </div>
+                    </div>
+                    <input type="hidden" name="phanloai" id="phanloai">
                     <input type="hidden" name="_token" value="{{ csrf_token() }}">
                 </div>
             </div>
@@ -335,6 +371,12 @@
 
         function dutoanluong(url){
             $('#thoaidutoan').attr('action',url);
+        }
+
+        function nangluong(url,phanloai){
+            $('#frm_thoainangluong').attr('action',url);
+            $('#frm_thoainangluong').find("[id='phanloai']").val(phanloai);
+
         }
 
         function chitraluong_khoi(url){

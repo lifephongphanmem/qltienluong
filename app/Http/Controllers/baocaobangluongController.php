@@ -16,6 +16,8 @@ use App\dmphanloaidonvi;
 use App\dmphucap;
 use App\dmphucap_donvi;
 use App\dutoanluong;
+use App\hosocanbo;
+use App\ngachluong;
 use App\tonghop_huyen;
 use App\tonghop_huyen_chitiet;
 use App\tonghopluong_donvi;
@@ -1716,7 +1718,7 @@ class baocaobangluongController extends Controller
                 });
                 $a_nguon = a_unique($model_nguon);
 
-                return view('reports.tonghopluong.donvi.bangluong')
+                return view('reports.tonghopluong.khoi.bangluong')
                     ->with('thongtin', $thongtin)
                     ->with('model', $model)
                     ->with('m_dv', $m_dv)
@@ -1921,6 +1923,70 @@ class baocaobangluongController extends Controller
                 ->with('thongtin',$thongtin)
                 ->with('m_dv',$m_dv)
                 ->with('pageTitle','Báo cáo tổng hợp dự toán lương');
+        } else
+            return view('errors.notlogin');
+    }
+
+    function nangluong(Request $request) {
+        if (Session::has('admin')) {
+            $inputs = $request->all();
+            $m_dv = dmdonvi::where('madv',session('admin')->madv)->first();
+            $a_cv = getChucVuCQ(false);
+
+            //dd($inputs);
+            if($inputs['phanloai'] == 'TNN'){
+                $model = hosocanbo::select('stt','macanbo', 'tencanbo','macvcq', 'msngbac', 'sunghiep', 'gioitinh', 'tnntungay','tnndenngay', 'ngaytu', 'ngayden', 'heso','pctnn','vuotkhung','bac')
+                    ->wherebetween('tnndenngay',[$inputs['ngaytu'],$inputs['ngayden']])
+                    ->where('madv', session('admin')->madv)
+                    ->where('theodoi','<' ,'9')
+                    ->get();
+
+                foreach($model as $ct){
+                    $ct->tencv = isset($a_cv[$ct->macvcq])? $a_cv[$ct->macvcq]:'';
+                    $ct->pctnn_m = $ct->pctnn == 0? 5: $ct->pctnn + 1;
+                }
+
+                return view('reports.donvi.nangluong_tnn')
+                    ->with('model',$model->sortby('stt'))
+                    ->with('m_dv',$m_dv)
+                    ->with('inputs',$inputs)
+                    ->with('pageTitle','Danh sách cán bộ');
+
+            }else{
+                $model = hosocanbo::select('stt','macanbo', 'tencanbo','macvcq', 'msngbac', 'sunghiep', 'gioitinh', 'tnndenngay', 'ngaytu', 'ngayden', 'heso','pctnn','vuotkhung','bac')
+                    ->wherebetween('ngayden',[$inputs['ngaytu'],$inputs['ngayden']])
+                    ->wherenotnull('msngbac')
+                    ->where('madv', session('admin')->madv)
+                    ->where('theodoi','<' ,'9')
+                    ->get();
+
+                $a_nb = ngachluong::all()->keyby('msngbac')->toarray();
+                //dd($a_nb);
+                foreach($model as $ct){
+                    $ct->tencv = isset($a_cv[$ct->macvcq])? $a_cv[$ct->macvcq]:'';
+                    $ct->bac_m = $ct->bac;
+                    $ct->heso_m = $ct->heso;
+                    $ct->vuotkhung_m = $ct->vuotkhung;
+                    if(isset($a_nb[$ct->msngbac])){
+                        $ngachluong = $a_nb[$ct->msngbac];
+                        if($ct->heso < $ngachluong['hesolonnhat']){//nâng lương ngạch bậc
+                            $ct->heso_m = $ct->heso + $ngachluong['hesochenhlech'];
+                            $ct->bac_m = $ct->bac < $ngachluong['baclonnhat'] - 1 ? $ct->bac + 1 : $ngachluong['baclonnhat'];
+                        }else{//vượt khung
+                            if($ct->vuotkhung == 0){//lần đầu
+                                $ct->vuotkhung_m = $ngachluong['vuotkhung'];
+                            }else{
+                                $ct->vuotkhung_m = $ct->vuotkhung + 1;
+                            }
+                        }
+                    }
+                }
+                return view('reports.donvi.nangluong_ngachbac')
+                    ->with('model',$model->sortby('stt'))
+                    ->with('m_dv',$m_dv)
+                    ->with('inputs',$inputs)
+                    ->with('pageTitle','Danh sách cán bộ');
+            }
         } else
             return view('errors.notlogin');
     }

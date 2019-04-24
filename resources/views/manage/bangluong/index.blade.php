@@ -87,20 +87,31 @@
 
                                                 <a href="{{url($inputs['furl'].'bang_luong?mabl='.$value->mabl.'&mapb=')}}" class="btn btn-default btn-xs mbs">
                                                     <i class="fa fa-th-list"></i>&nbsp; Chi tiết</a>
-
                                                 @if($value->phanloai == 'BANGLUONG')
                                                     <button onclick="capnhat('{{$value->mabl}}')" class="btn btn-default btn-xs mbs" data-target="#capnhat-modal-confirm" data-toggle="modal">
                                                         <i class="fa fa-th-list"></i>&nbsp; Cập nhật lương</button>
 
+                                                    <button type="button" onclick="inbl('{{$value->mabl}}','{{$value->thang}}','{{$value->nam}}')" class="btn btn-default btn-xs mbs">
+                                                        <i class="fa fa-print"></i>&nbsp; In bảng lương</button>
+                                                @else
+                                                    <button type="button" onclick="inbl_tl('{{$value->mabl}}','{{$value->thang}}','{{$value->nam}}')" class="btn btn-default btn-xs mbs">
+                                                        <i class="fa fa-print"></i>&nbsp; In bảng lương</button>
                                                     <!--button onclick="tanggiam('{{$value->mabl}}')" class="btn btn-default btn-xs mbs" data-target="#tanggiam-modal-confirm" data-toggle="modal">
                                                         <i class="fa fa-th-list"></i>&nbsp; Tăng/Giảm lương</button-->
                                                 @endif
 
                                                 <button type="button" onclick="cfDel('{{$inputs['furl'].'del/'.$value->id}}')" class="btn btn-danger btn-xs mbs" data-target="#delete-modal-confirm" data-toggle="modal">
                                                     <i class="fa fa-trash-o"></i>&nbsp; Xóa</button>
+                                            @else
+                                                @if($value->phanloai == 'BANGLUONG')
+                                                    <button type="button" onclick="inbl('{{$value->mabl}}','{{$value->thang}}','{{$value->nam}}')" class="btn btn-default btn-xs mbs">
+                                                        <i class="fa fa-print"></i>&nbsp; In bảng lương</button>
+                                                @else
+                                                    <button type="button" onclick="inbl_tl('{{$value->mabl}}','{{$value->thang}}','{{$value->nam}}')" class="btn btn-default btn-xs mbs">
+                                                        <i class="fa fa-print"></i>&nbsp; In bảng lương</button>
+                                                @endif
                                             @endif
-                                            <button type="button" onclick="inbl('{{$value->mabl}}','{{$value->thang}}','{{$value->nam}}')" class="btn btn-default btn-xs mbs">
-                                                <i class="fa fa-print"></i>&nbsp; In bảng lương</button>
+
                                         </td>
                                     </tr>
                                 @endforeach
@@ -490,8 +501,9 @@
 
                                     <div class="col-md-6">
                                         <div class="form-group">
-                                            <a id="in_thpl" href="" onclick="inthpl()" style="border-width: 0px;margin-left: 5px" target="_blank">
-                                                <i class="fa fa-print"></i>&nbsp; Bảng tổng hợp lương theo phân loại công tác</a>
+                                            <button type="button" style="border-width: 0px" onclick="inblmtt107('/chuc_nang/bang_luong/maumtm')" class="btn btn-default btn-xs mbs"
+                                                    title="Bảng lương thêm cột giảm trừ lương, phần trăm vượt khung" data-target="#mautt107-modal" data-toggle="modal">
+                                                <i class="fa fa-print"></i>&nbsp; Bảng thanh toán tiền lương theo mục, tiểu mục</button>
                                         </div>
                                     </div>
                                 </div>
@@ -499,11 +511,20 @@
                                 <div class="row">
                                     <div class="col-md-6">
                                         <div class="form-group">
+                                            <a id="in_thpl" href="" onclick="inthpl()" style="border-width: 0px;margin-left: 5px" target="_blank">
+                                                <i class="fa fa-print"></i>&nbsp; Bảng tổng hợp lương theo phân loại công tác</a>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        <div class="form-group">
                                             <a id="in_thpc" href="" onclick="inthpc()" style="border-width: 0px;margin-left: 5px" target="_blank">
                                                 <i class="fa fa-print"></i>&nbsp; Bảng tổng hợp phụ cấp, trợ cấp</a>
                                         </div>
                                     </div>
+                                </div>
 
+                                <div class="row">
                                     <div class="col-md-6">
                                         <div class="form-group">
                                             <button type="button" style="border-width: 0px" onclick="inblpc('/chuc_nang/bang_luong/maublpc')" class="btn btn-default btn-xs mbs"
@@ -511,9 +532,7 @@
                                                 <i class="fa fa-print"></i>&nbsp; Bảng thanh toán tiền lương, phụ cấp</button>
                                         </div>
                                     </div>
-                                </div>
 
-                                <div class="row">
                                     <div class="col-md-6">
                                         <div class="form-group">
                                             <button type="button" style="border-width: 0px" onclick="indbhdnd('/chuc_nang/bang_luong/maudbhdnd')" class="btn btn-default btn-xs mbs"
@@ -521,7 +540,9 @@
                                                 <i class="fa fa-print"></i>&nbsp; Bảng thanh toán phụ cấp ĐBHDND</button>
                                         </div>
                                     </div>
+                                </div>
 
+                                <div class="row">
                                     <div class="col-md-6">
                                         <div class="form-group">
                                             <button type="button" style="border-width: 0px" onclick="indbhdnd('/chuc_nang/bang_luong/maubchd')" class="btn btn-default btn-xs mbs"
@@ -529,9 +550,7 @@
                                                 <i class="fa fa-print"></i>&nbsp; Bảng thanh toán phụ cấp BCH Đảng Ủy</button>
                                         </div>
                                     </div>
-                                </div>
 
-                                <div class="row">
                                     <div class="col-md-6">
                                         <div class="form-group">
                                             <button type="button" style="border-width: 0px" onclick="inqs('/chuc_nang/bang_luong/mauqs')" class="btn btn-default btn-xs mbs"
@@ -539,32 +558,32 @@
                                                 <i class="fa fa-print"></i>&nbsp; Bảng thanh toán phụ cấp quân sự</button>
                                         </div>
                                     </div>
+                                </div>
 
+                                <div class="row">
                                     <div class="col-md-6">
                                         <div class="form-group">
                                             <a id="in_cd" href="" onclick="incd()" style="border-width: 0px;margin-left: 5px" target="_blank">
                                                 <i class="fa fa-print"></i>&nbsp; Bảng thanh toán phụ trung tâm học tập cấp cộng đồng</a>
                                         </div>
                                     </div>
-                                </div>
 
-                                <div class="row">
                                     <div class="col-md-6">
                                         <div class="form-group">
                                             <a id="in_mc" href="" onclick="inmc()" style="border-width: 0px;margin-left: 5px" target="_blank">
                                                 <i class="fa fa-print"></i>&nbsp; Bảng thanh toán phụ cấp trách nhiệm</a>
                                         </div>
                                     </div>
+                                </div>
 
+                                <div class="row">
                                     <div class="col-md-6">
                                         <div class="form-group">
                                             <a id="in_truc" href="" onclick="intruc()" style="border-width: 0px;margin-left: 5px" target="_blank">
                                                 <i class="fa fa-print"></i>&nbsp; Bảng thanh toán phụ cấp trực</a>
                                         </div>
                                     </div>
-                                </div>
 
-                                <div class="row">
                                     <div class="col-md-6">
                                         <div class="form-group">
                                             <a id="in_tn" href="" onclick="intn()" style="border-width: 0px;margin-left: 5px" target="_blank">
@@ -634,8 +653,6 @@
                     </div>
                 </div>
                 </div>
-
-
 
                 <input type="hidden" id="nam_in" name="nam_in"/>
                 <input type="hidden" id="thang_in" name="thang_in"/>
@@ -726,6 +743,45 @@
                         </div>
                     </div>
                 </div-->
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" data-dismiss="modal" class="btn btn-default">Hủy thao tác</button>
+            </div>
+        </div>
+    </div>
+
+    <!--Modal thông tin tùy chọn in truy lĩnh lương -->
+    <div id="inbl_tl-modal" tabindex="-1" role="dialog" aria-hidden="true" class="modal fade">
+        <div class="modal-lg modal-dialog modal-content">
+            <div class="modal-header modal-header-primary">
+                <button type="button" data-dismiss="modal" aria-hidden="true" class="close">&times;</button>
+                <h4 id="hd-inbl_tl" class="modal-title">In bảng lương truy lĩnh</h4>
+            </div>
+
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <button type="button" style="border-width: 0px" class="btn btn-default btn-xs mbs"
+                                onclick="inblmtt107('/chuc_nang/bang_luong/mautt107')"
+                                data-toggle="modal" data-target="#mautt107-modal"
+                                title="Bảng lương của cán bộ theo mẫu C02-HD">
+                                <i class="fa fa-print"></i>&nbsp; Bảng lương mẫu C02-HD (TT107/2017/TT-BTC) - Mẫu 01</button>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <button type="button" style="border-width: 0px" class="btn btn-default btn-xs mbs"
+                                data-toggle="modal" data-target="#mautt107-modal"
+                                title="Bảng lương thêm cột giảm trừ lương, phần trăm vượt khung"
+                                onclick="inblmtt107('/chuc_nang/bang_luong/mautruylinh')">
+                                <i class="fa fa-print"></i>&nbsp; Bảng lương mẫu C02-HD (TT107) - Mẫu 02</button>
+                        </div>
+                    </div>
+                </div>
+
             </div>
 
             <div class="modal-footer">
@@ -867,6 +923,16 @@
             $("#thang_in").val(thang);
             $("#nam_in").val(nam);
             $('#inbl-modal').modal('show');
+            //$('#inbl-modal').modal('hide');
+        }
+
+        function inbl_tl(mabl,thang,nam){
+            document.getElementById("hd-inbl_tl").innerHTML="In bảng truy lĩnh lương tháng " + thang + ' năm ' + nam;
+            //gán giá trị vào modal in để lấy giá trị
+            $("#mabl_in").val(mabl);
+            $("#thang_in").val(thang);
+            $("#nam_in").val(nam);
+            $('#inbl_tl-modal').modal('show');
             //$('#inbl-modal').modal('hide');
         }
 
