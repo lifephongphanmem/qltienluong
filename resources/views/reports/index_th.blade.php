@@ -670,7 +670,7 @@
 
         }
         window.onsubmit = function() {
-            document.thoaibc67.action = get_action67();
+            document.thoaibc67.action   = get_action67();
             document.thoaichitra_khoi_moi.action = get_action67();
             document.thoaichitra_khoi_ct_moi.action = get_action67();
         }
