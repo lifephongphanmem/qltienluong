@@ -1323,7 +1323,7 @@ class tonghopluong_donviController extends Controller
                     //->update(['trangthai' => 'TRALAI', 'lydo' => $inputs['lydo']]);
                     ->update(['trangthai' => 'TRALAI', 'lydo' => $inputs['lydo'], 'mathh' => null, 'matht' => null, 'mathk' => null]);
             }
-            return redirect('/chuc_nang/xem_du_lieu/index?thang=' . $model->thang . '&nam=' . $model->nam . '&trangthai=ALL');
+            return redirect('/chuc_nang/xem_du_lieu/index?thang=' . $model->thang . '&nam=' . $model->nam . '&trangthai=ALL&phanloai=ALL');
         } else
             return view('errors.notlogin');
     }
