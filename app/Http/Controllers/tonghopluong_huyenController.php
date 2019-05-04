@@ -580,7 +580,7 @@ class tonghopluong_huyenController extends Controller
             //Lấy dữ liệu để lập
             $model_congtac = $model->map(function ($data) {
                 return collect($data->toArray())
-                    ->only(['mact','manguonkp','tennguonkp','tenct'])
+                    ->only(['mact','manguonkp','tennguonkp','tenct', 'tonghop'])
                     ->all();
             });
             //group mact đã bao gồm macongtac; manguonkp bao gồm luongcoban
@@ -588,11 +588,19 @@ class tonghopluong_huyenController extends Controller
 
             $model_nguon = $model->map(function ($data) {
                 return collect($data->toArray())
-                    ->only(['manguonkp','tennguonkp'])
+                    ->only(['manguonkp', 'tennguonkp', 'tonghop'])
                     ->all();
             });
             $a_nguon = a_unique($model_nguon);
 
+            //mới thêm
+            $a_tonghop = $model->map(function ($data) {
+                return collect($data->toArray())
+                    ->only(['tonghop'])
+                    ->all();
+            });
+            //dd($a_tonghop);
+            //
             return view('reports.tonghopluong.donvi.bangluong')
                 ->with('thongtin', $thongtin)
                 ->with('model', $model)
@@ -601,6 +609,7 @@ class tonghopluong_huyenController extends Controller
                 ->with('a_phucap', $a_phucap)
                 ->with('a_nguon', $a_nguon)
                 ->with('a_congtac', $a_congtac)
+                ->with('a_tonghop',a_unique($a_tonghop))
                 ->with('pageTitle', 'Chi tiết tổng hợp lương tại đơn vị');
         } else
             return view('errors.notlogin');

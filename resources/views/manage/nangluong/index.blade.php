@@ -49,19 +49,25 @@
                         </thead>
                         <tbody>
                         @if(isset($model))
+                            <?php $i=1;?>
                             @foreach($model as $key=>$value)
                                 <tr>
-                                    <td class="text-center">{{$key+1}}</td>
-                                    <td>{{getDayVn($value->ngayxet)}}</td>
+                                    <td class="text-center">{{$i++}}</td>
+                                    <td class="text-center">{{getDayVn($value->ngayxet)}}</td>
                                     <td>{{$value->kemtheo}}</td>
                                     <td>{{$value->trangthai}}</td>
-                                    <td>
-                                        <button type="button" onclick="edit({{$value->id}})" class="btn btn-info btn-xs mbs">
-                                            <i class="fa fa-edit"></i>&nbsp; Chỉnh sửa</button>
-                                        <a href="{{url($furl.'maso='.$value->manl)}}" class="btn btn-success btn-xs mbs">
-                                            <i class="fa fa-th-list"></i>&nbsp; Chi tiết</a>
-                                        <button type="button" onclick="cfDel('{{$furl.'del/'.$value->id}}')" class="btn btn-danger btn-xs mbs" data-target="#delete-modal-confirm" data-toggle="modal">
-                                            <i class="fa fa-trash-o"></i>&nbsp; Xóa</button>
+                                    <td style="width: 25%">
+                                        @if($value->trangthai != 'Đã nâng lương')
+                                            <button type="button" onclick="edit({{$value->id}})" class="btn btn-default btn-xs mbs">
+                                                <i class="fa fa-edit"></i>&nbsp; Sửa</button>
+
+                                            <button type="button" onclick="cfDel('{{$furl.'del/'.$value->id}}')" class="btn btn-danger btn-xs mbs" data-target="#delete-modal-confirm" data-toggle="modal">
+                                                <i class="fa fa-trash-o"></i>&nbsp; Xóa</button>
+
+                                        @endif
+
+                                            <a href="{{url($furl.'maso='.$value->manl)}}" class="btn btn-default btn-xs mbs">
+                                                <i class="fa fa-th-list"></i>&nbsp; Chi tiết</a>
                                     </td>
                                 </tr>
                             @endforeach

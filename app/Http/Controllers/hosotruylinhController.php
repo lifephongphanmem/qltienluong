@@ -446,7 +446,7 @@ class hosotruylinhController extends Controller
         die(json_encode($result));
     }
 
-    public function destroy_nkp(Request $request)
+    function destroy_nkp(Request $request)
     {
         $result = array(
             'status' => 'fail',
@@ -475,7 +475,7 @@ class hosotruylinhController extends Controller
         die(json_encode($result));
     }
 
-    public function retun_html_kn($result, $model)
+    function retun_html_kn($result, $model)
     {
         $a_nkp = getNguonKP(false);
         $result['message'] = '<div class="row" id="dsnkp">';

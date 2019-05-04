@@ -15,6 +15,7 @@ class CreateDsnangluongTable extends Migration
         Schema::create('dsnangluong', function (Blueprint $table) {
             $table->increments('id');
             $table->string('manl', 50)->unique();
+            $table->string('maphanloai', 50)->nullable()->default('NANGLUONG');//nâng lương, tnn
             $table->string('loaids', 50)->nullable();
             $table->string('soqd', 50)->nullable();
             $table->string('ngayqd')->nullable();

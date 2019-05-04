@@ -10,6 +10,7 @@ class dsnangluong extends Model
     protected $fillable = [
         'id',
         'manl',
+        'maphanloai',
         'loaids',
         'soqd',
         'ngayqd',

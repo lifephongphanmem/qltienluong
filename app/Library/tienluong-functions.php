@@ -617,4 +617,24 @@ function getKieuTangGiamLuong(){
         'NGAYLV' => 'Theo ngày công',
     );
 }
+
+//Nguồn truy lĩnh sau lấy trong db
+function getNguonTruyLinh(){
+    return array(
+        '13' => '1390000',
+    );
+}
+
+function getNguonTruyLinh_df(){
+    return array(
+        '13' => '1390000',
+    );
+}
+
+function getPhanLoaiChiTietNangLuong(){
+    return array(
+        'DUNGHAN' => 'Nâng lương đúng thời hạn',
+        'TRUOCHAN' => 'Nâng lương trước thời hạn',
+    );
+}
 ?>
