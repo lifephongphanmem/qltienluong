@@ -135,23 +135,6 @@
                 <?php
                     $model_congtac = a_getelement($a_congtac,array_merge($a_nguon[$j],$th));
                 ?>
-<<<<<<< HEAD
-                @if(count($model_luong)> 0)
-                    <?php $stt=1; ?>
-                    <tr style="font-weight: bold; font-style:italic ">
-                        <td>{{convert2Roman($i++)}}</td>
-                        <td style="text-align: left;" colspan="{{12+ $col}}">{{$congtac['tenct']}}</td>
-                    </tr>
-                    @foreach($model_luong as $ct )
-                        <tr>
-                            <td>{{$stt++}}</td>
-                            <td style="text-align: left">{{$ct->tencanbo}}</td>
-                            <td style="text-align: left">{{$ct->msngbac}}</td>
-=======
-                <tr style="font-weight: bold;">
-                    <td>{{$i_nkp++}}</td>
-                    <td style="text-align: left;" colspan="{{12 + $col}}">{{$a_nguon[$j]['tennguonkp']}}</td>
-                </tr>
                 @foreach($model_congtac as $congtac)
                     <?php
                         $model_luong = $model->where('mact',$congtac['mact'])
@@ -188,7 +171,6 @@
                                 <td></td>
                             </tr>
                         @endforeach
->>>>>>> 0d9d71f7b256142711c51f41ad42ea6100fe4ba4
 
                         <tr style="font-weight: bold; text-align: center; font-style: italic">
                             <td colspan="3">Cộng</td>
@@ -210,6 +192,7 @@
                         </tr>
                     @endif
                 @endforeach
+
             @endfor
         @endforeach
         <tr style="font-weight: bold; text-align: center;">

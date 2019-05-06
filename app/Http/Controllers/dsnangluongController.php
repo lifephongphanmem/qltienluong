@@ -62,6 +62,7 @@ class dsnangluongController extends Controller
             foreach ($a_canbo as $key=>$val) {
                 $ngayden = $a_canbo[$key]['ngayden'];
                 $a_canbo[$key]['manl'] = $manl;
+                $a_canbo[$key]['phanloai'] = 'DUNGHAN';
                 //Lấy thông tin ngạch lương
                 $b_vuotkhung = false; //biến xác định cán bộ có thuộc diện vượt khung
                 if(!isset($a_ngachluong[$val['msngbac']])){
