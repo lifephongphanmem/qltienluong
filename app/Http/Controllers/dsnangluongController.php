@@ -359,9 +359,11 @@ class dsnangluongController extends Controller
     function show($manl){
         if (Session::has('admin')) {
             $model = dsnangluong_chitiet::where('manl', $manl)->get();
+            $model_nangluong = dsnangluong::where('manl', $manl)->first();
             $a_cv = getChucVuCQ(false);
             $a_cb = hosocanbo::select('macanbo', 'macvcq', 'tencanbo')
                 ->where('madv', session('admin')->madv)->get()->keyby('macanbo')->toarray();
+            //dd($model_nangluong);
 
             foreach ($model as $hs) {
                 if (isset($a_cb[$hs->macanbo])) {
@@ -370,10 +372,16 @@ class dsnangluongController extends Controller
                     $hs->tencv = isset($a_cv[$canbo['macvcq']]) ? $a_cv[$canbo['macvcq']] : '';
                 }
             }
+            //lấy danh sách cán bộ không có trong danh sách
 
-            $model_canbo = hosocanbo::where('madv', session('admin')->madv)->where('theodoi', '<', '9')->get();
+            $model_canbo = hosocanbo::where('madv', session('admin')->madv)
+                ->wherenotnull('msngbac')
+                ->where('theodoi', '<', '9')
+                ->wherenotin('macanbo',array_column($model->toarray(),'macanbo'))
+                ->get();
 
-            $model_nangluong = dsnangluong::where('manl', $manl)->first();
+            //dd($model_canbo);
+
             return view('manage.nangluong.nangluong')
                 ->with('furl', '/chuc_nang/nang_luong/')
                 ->with('model', $model)
@@ -409,6 +417,46 @@ class dsnangluongController extends Controller
                 ->with('a_nkp', $a_nkp)
                 ->with('model_nangluong', $model_nangluong)
                 ->with('pageTitle', 'Chi tiết danh sách nâng lương');
+        } else
+            return view('errors.notlogin');
+    }
+
+    function add_canbo(Request $request){
+        if (Session::has('admin')) {
+            $inputs = $request->all();
+            $model_nangluong = dsnangluong::where('manl', $inputs['manl'])->first();
+            $model_canbo = hosocanbo::select('macanbo','msngbac','bac','ngaytu','ngayden','msngbac','heso','vuotkhung')
+                ->where('macanbo', $inputs['macanbo'])->first();
+            $a_nb = ngachluong::where('msngbac',$model_canbo->msngbac)->first();
+            if(count($a_nb) == 0){
+                //trả lại danh sách
+                return redirect('chuc_nang/nang_luong/maso='.$inputs['manl']);
+            }
+            $a_data_nguon = array();
+            $a_nguon_df = getNguonTruyLinh_df();
+
+            $ngayxet = new Carbon($model_nangluong->ngayxet);
+            $model_canbo->manl = $inputs['manl'];
+            $model_canbo->phanloai = 'TRUOCHAN';
+            $model_canbo->ngaytu = $ngayxet->toDateString('Y-m-d');
+            $model_canbo->ngayden = $ngayxet->addYear($a_nb['namnb'])->toDateString('Y-m-d');
+
+            if($model_canbo->heso < $a_nb->hesolonnhat){//nâng lương ngạch bậc
+                $model_canbo['heso'] += $a_nb['hesochenhlech'];
+                $model_canbo['bac'] = $model_canbo['bac'] < $a_nb['baclonnhat'] - 1 ? $model_canbo['bac'] + 1 : $a_nb['baclonnhat'];
+            }else{//vượt khung
+                $model_canbo['vuotkhung'] = $model_canbo['vuotkhung'] + ($model_canbo['vuotkhung'] == 0?$a_nb['vuotkhung'] : 1);
+                $model_canbo['bac'] = $a_nb['baclonnhat'];
+            }
+            /* Nâng trc hạn ko có truy lĩnh
+            foreach($a_nguon_df as $k=>$v) {
+                $a_data_nguon[] = array('macanbo' => $inputs['macanbo'], 'manguonkp' => $k, 'luongcoban' => $v, 'manl' => $inputs['manl']);
+            }
+            dsnangluong_nguon::insert($a_data_nguon);
+            */
+            dsnangluong_chitiet::create($model_canbo->toarray());
+
+            return redirect('chuc_nang/nang_luong/chi_tiet?maso='.$inputs['manl'].'&canbo='.$inputs['macanbo']);
         } else
             return view('errors.notlogin');
     }
@@ -506,6 +554,7 @@ class dsnangluongController extends Controller
         if (Session::has('admin')) {
             $model = dsnangluong::find($id);
             dsnangluong_chitiet::where('manl',$model->manl)->delete();
+            dsnangluong_nguon::where('manl',$model->manl)->delete();
             $model->delete();
             return redirect('/chuc_nang/nang_luong/danh_sach');
         } else
@@ -515,6 +564,7 @@ class dsnangluongController extends Controller
     function destroydt($id){
         if (Session::has('admin')) {
             $model = dsnangluong_chitiet::find($id);
+            dsnangluong_nguon::where('macanbo',$model->macanbo)->where('manl',$model->manl)->delete();
             $manl= $model->manl;
             $model->delete();
             return redirect('/chuc_nang/nang_luong/maso='.$manl);

@@ -470,6 +470,8 @@ Route::group(['prefix'=>'chuc_nang'],function(){
         Route::get('del/{id}','dsnangluongController@destroy');
         Route::get('nang_luong/maso={manl}','dsnangluongController@nang_luong');
         Route::get('deldt/{id}','dsnangluongController@destroydt');
+        Route::post('add_canbo','dsnangluongController@add_canbo');
+
 
         Route::get('get_nkp','dsnangluongController@getinfor_nkp');
         Route::get('store_nkp','dsnangluongController@store_nkp');

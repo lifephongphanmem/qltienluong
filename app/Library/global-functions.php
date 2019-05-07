@@ -433,4 +433,5 @@ function dinhdangsothapphan ($number , $decimals = 0) {
 
         return ucfirst($textnumber." đồng chẵn");
     }
+
 ?>

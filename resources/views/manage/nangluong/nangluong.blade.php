@@ -45,11 +45,13 @@
                                 <th class="text-center">STT</th>
                                 <th class="text-center">Họ tên</th>
                                 <th class="text-center">Chức vụ</th>
+                                <th class="text-center">Phân loại</br>nâng lương</th>
+
                                 <th class="text-center">Thời gian</br>hưởng lương</th>
                                 <th class="text-center">Mã ngạch</th>
                                 <th class="text-center">Bậc</th>
                                 <th class="text-center">Hệ số</th>
-                                <th class="text-center">Phần</br>trăm</br>vượt</br>khung</th>
+                                <th class="text-center">Vượt</br>khung</th>
                                 <th class="text-center">Hệ số</br>truy lĩnh</th>
                                 <th class="text-center">Thời gian</br>truy lĩnh</th>
                                 <th class="text-center">Thao tác</th>
@@ -63,6 +65,7 @@
                                         <td class="text-center">{{$key+1}}</td>
                                         <td>{{$value->tencanbo}}</td>
                                         <td>{{$value->tencv}}</td>
+                                        <td>{{$value->phanloai == 'TRUOCHAN'? 'Trước hạn' : 'Đúng hạn'}}</td>
                                         <td class="text-center">{{'Từ '.getDayVn($value->ngaytu).' đến '.getDayVn($value->ngayden)}}</td>
                                         <td class="text-center">{{$value->msngbac}}</td>
                                         <td class="text-center">{{$value->bac}}</td>
@@ -73,7 +76,7 @@
                                         <td>
 
                                             <a type="button" href="{{url($furl.'chi_tiet?maso='.$value->manl.'&canbo='.$value->macanbo)}}" class="btn btn-info btn-xs mbs">
-                                                <i class="fa fa-edit"></i>&nbsp;Chi tiết</a>
+                                                <i class="fa fa-edit"></i>&nbsp;Sửa</a>
                                             @if($model_nangluong->trangthai != 'Đã nâng lương')
                                                 <button type="button" onclick="cfDel('{{$furl.'deldt/'.$value->id}}')" class="btn btn-danger btn-xs mbs" data-target="#delete-modal-confirm" data-toggle="modal">
                                                     <i class="fa fa-trash-o"></i>&nbsp; Xóa</button>
@@ -100,7 +103,7 @@
     </div>
 
     <div id="addCanBo-modal" tabindex="-1" role="dialog" aria-hidden="true" class="modal fade">
-        {!! Form::open(['url'=>$furl.'store', 'class'=>'horizontal-form']) !!}
+        {!! Form::open(['url'=>$furl.'add_canbo', 'class'=>'horizontal-form']) !!}
         <div class="modal-dialog modal-content">
             <div class="modal-header modal-header-primary">
                 <button type="button" data-dismiss="modal" aria-hidden="true" class="close">&times;</button>
