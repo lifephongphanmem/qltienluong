@@ -4,8 +4,10 @@ namespace App\Http\Controllers;
 
 use App\dsnangthamnien;
 use App\dsnangthamnien_ct;
+use App\dsnangthamnien_nguon;
 use App\hosocanbo;
 use App\hosotruylinh;
+use App\hosotruylinh_nguon;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 
@@ -38,44 +40,103 @@ class dsnangthamnienController extends Controller
             $model->update($inputs);
             return redirect('/chuc_nang/tham_nien/danh_sach');
         } else {
-
             $madv = session('admin')->madv;
             $manl = $madv . '_' . getdate()[0];
             $inputs['madv'] = $madv;
             $inputs['manl'] = $manl;
 
-
-            $m_canbo = hosocanbo::select('macanbo','msngbac','heso','vuotkhung','pccv','tnntungay','tnndenngay','pctnn','macvcq')
+            $m_canbo = hosocanbo::select('macanbo','msngbac','heso','vuotkhung','pccv','tnntungay','tnndenngay','pctnn')
                 ->where('tnndenngay', '<=', $inputs['ngayxet'])
                 ->where('theodoi','<','9')
                 ->where('madv', $madv)->get();
 
+            $a_data = array();
+            $a_data_nguon = array();
+            $a_nguon_df = getNguonTruyLinh_df();
+
             $inputs['trangthai'] = 'Tạo danh sách';
-            dsnangthamnien::create($inputs);
+
             foreach ($m_canbo as $cb) {
                 $cb->manl = $manl;
                 $cb->vuotkhung = $cb->heso * $cb->vuotkhung / 100;
                 $cb->pctnn = $cb->pctnn == 0 ? 5 : $cb->pctnn + 1;
-                $cb->ngaytu = new Carbon($cb->tnndenngay);
+
                 $date = new Carbon($cb->tnndenngay);
-                $cb->ngayden = $date->addYear('1');
+                $cb->ngaytu = $date->toDateString();
+                $cb->ngayden = $date->addYear('1')->toDateString();
+
                 $cb->heso = ($cb->vuotkhung + $cb->heso + $cb->pccv) / 100;
                 //kiểm tra truy lĩnh nếu ngày xét = ngày nâng lương = > ko truy lĩnh
                 if ($inputs['ngayxet'] > $cb->tnndenngay) {
-                    $cb->truylinhtungay = new Carbon($cb->tnndenngay);
-                    $cb->truylinhdenngay = new Carbon($inputs['ngayxet']);
+                    $cb->truylinhtungay = (new Carbon($cb->tnndenngay))->toDateString();
+                    $cb->truylinhdenngay = (new Carbon($inputs['ngayxet']))->toDateString();
+
+                    list($cb['thangtl'], $cb['ngaytl']) = $this->getThoiGianTL($cb['truylinhtungay'], $cb['truylinhdenngay']);
                 } else {
+                    $cb['ngaytl'] = 0;
+                    $cb['thangtl'] = 0;
                     $cb->truylinhtungay = null;
                     $cb->truylinhdenngay = null;
                 }
-                dsnangthamnien_ct::create($cb->toarray());
+                foreach($a_nguon_df as $k=>$v) {
+                    $a_data_nguon[] = array('macanbo' => $cb->macanbo, 'manguonkp' => $k, 'luongcoban' => $v, 'manl' => $manl);
+                }
+                $a_data[] = $cb->toarray();
             }
-            //dd($m_canbo->toarray());
+            $a_data = unset_key($a_data,array('tnndenngay','tnntungay'));
 
-
+            dsnangthamnien_ct::insert($a_data);
+            dsnangthamnien_nguon::insert($a_data_nguon);
+            dsnangthamnien::create($inputs);
             //dsnangthamnien_ct::insert($m_canbo->toarray());
             return redirect('/chuc_nang/tham_nien/maso='.$manl);
         }
+    }
+
+    function getThoiGianTL($tungay,$denngay){
+        $ngaytl = 0;
+        $ngaycong = 22;
+        $tungay = new Carbon($tungay);
+        $denngay = new Carbon($denngay);
+
+        $nam_tu = $tungay->year;
+        $ngay_tu = $tungay->day;
+        $thang_tu = $tungay->month;
+
+        $nam_den = $denngay->year;
+        $ngay_den = $denngay->day;
+        $thang_den = $denngay->month;
+
+        $thangtl = $thang_den + 12*($nam_den - $nam_tu) - $thang_tu + 1;//cộng 1 là do 7->8 = 2 tháng (như đếm số tự nhiên)
+
+        if($ngay_tu >1){//không pải từ đầu tháng => xét số ngày tl
+            $thangtl = $thangtl - 1;
+            //từ ngày xét đến cuối tháng
+            //lấy ngày cuối cùng của tháng từ
+            $ngay_tucuoi = Carbon::create($nam_tu, $thang_tu + 1, 0)->day;
+            if($ngay_tucuoi - $ngay_tu >= $ngaycong){
+                $thangtl = $thangtl + 1;
+            }else{
+                $ngaytl = $ngay_tucuoi - $ngay_tu;
+            }
+        }
+
+        $ngay_dencuoi = Carbon::create($nam_den, $thang_den + 1, 0)->day;
+        if($ngay_den < $ngay_dencuoi){
+            $thangtl = $thangtl - 1;
+            if( $ngay_den >= $ngaycong){
+                $thangtl = $thangtl + 1;
+            }else{
+                $ngaytl += $ngay_den;
+            }
+        }
+
+        if($ngaytl > $ngaycong){
+            $ngaytl = $ngaytl - $ngaycong;
+            $thangtl = $thangtl + 1;
+        }
+
+        return array($thangtl, $ngaytl);
     }
 
     function show($manl){
@@ -121,6 +182,7 @@ class dsnangthamnienController extends Controller
         if (Session::has('admin')) {
             $inputs = $request->all();
             $model = dsnangthamnien_ct::where('manl', $inputs['maso'])->where('macanbo', $inputs['canbo'])->first();
+            $model_nguon = dsnangthamnien_nguon::where('manl', $inputs['maso'])->where('macanbo', $inputs['canbo'])->get();
             //dd($model);
             $model_canbo = hosocanbo::select('macanbo', 'macvcq', 'tencanbo')->where('macanbo', $model->macanbo)->first();
             if (count($model_canbo) > 0) {
@@ -131,6 +193,8 @@ class dsnangthamnienController extends Controller
                 ->with('furl', '/chuc_nang/tham_nien/')
                 ->with('model', $model)
                 ->with('model_nangluong', $model_nangluong)
+                ->with('model_nkp', $model_nguon)
+                ->with('a_nkp', getNguonKP(false))
                 ->with('pageTitle', 'Chi tiết danh sách nâng thâm niên nghề');
         } else
             return view('errors.notlogin');
@@ -152,6 +216,7 @@ class dsnangthamnienController extends Controller
     function nang_luong($manl){
         if (Session::has('admin')) {
             $model = dsnangthamnien_ct::where('manl',$manl)->get();
+            $model_nguon = dsnangthamnien_nguon::where('manl', $manl)->get();
             $ma = getdate()[0];
             foreach($model as $canbo) {
                 $ma = $ma + 1;
@@ -173,6 +238,25 @@ class dsnangthamnienController extends Controller
                     $truylinh->heso = $canbo->heso;
                     $truylinh->maphanloai = 'TNN';
                     $truylinh->save();
+
+                    $nguon = $model_nguon->where('macanbo', $canbo->macanbo);
+                    if(count($nguon)> 0){
+                        foreach ($nguon as $nkp) {
+                            $nguon_tl = new hosotruylinh_nguon();
+                            $nguon_tl->maso = $truylinh->maso;
+                            $nguon_tl->manguonkp = $nkp->manguonkp;
+                            $nguon_tl->luongcoban = $nkp->luongcoban;
+                            $nguon_tl->save();
+                        }
+                    }else{//lấy nguồn mặc định
+                        foreach (getNguonTruyLinh_df() as $k=>$v) {
+                            $nguon_tl = new hosotruylinh_nguon();
+                            $nguon_tl->maso = $truylinh->maso;
+                            $nguon_tl->manguonkp = $k;
+                            $nguon_tl->luongcoban = $v;
+                            $nguon_tl->save();
+                        }
+                    }
                 }
                 //Lưu thông tin vào hồ sơ cán bộ
 
@@ -182,7 +266,6 @@ class dsnangthamnienController extends Controller
         } else
             return view('errors.notlogin');
     }
-
 
     function destroy($id){
         if (Session::has('admin')) {
@@ -215,5 +298,122 @@ class dsnangthamnienController extends Controller
         $inputs = $request->all();
         $model = dsnangthamnien::find($inputs['id']);
         die($model);
+    }
+
+    function getinfor_nkp(Request $request){
+        if(!Session::has('admin')) {
+            $result = array(
+                'status' => 'fail',
+                'message' => 'permission denied',
+            );
+            die(json_encode($result));
+        }
+
+        $inputs = $request->all();
+        //dd(hosotruylinh_nguon::find($inputs['id']));
+        die(dsnangthamnien_nguon::find($inputs['id']));
+    }
+
+    function store_nkp(Request $request)
+    {
+        $result = array(
+            'status' => 'fail',
+            'message' => 'error',
+        );
+        if (!Session::has('admin')) {
+            $result = array(
+                'status' => 'fail',
+                'message' => 'permission denied',
+            );
+            die(json_encode($result));
+        }
+        $insert = $request->all();
+        $insert['luongcoban'] = getDbl($insert['luongcoban']);
+
+        $model_chk = dsnangthamnien_nguon::where('manl', $insert['manl'])
+            ->where('macanbo', $insert['macanbo'])
+            ->where('manguonkp', $insert['manguonkp'])->first();
+        if(count($model_chk) > 0){
+            $model_chk->macanbo = $insert['macanbo'];
+            $model_chk->luongcoban = $insert['luongcoban'];
+            $model_chk->manguonkp = $insert['manguonkp'];
+            $model_chk->save();
+        }else{
+            $model = new dsnangthamnien_nguon();
+            $model->manl = $insert['manl'];
+            $model->macanbo = $insert['macanbo'];
+            $model->manguonkp = $insert['manguonkp'];
+            $model->luongcoban = $insert['luongcoban'];
+            $model->save();
+        }
+        $model = dsnangthamnien_nguon::where('manl', $insert['manl'])
+            ->where('macanbo', $insert['macanbo'])->get();
+
+
+        $result = $this->retun_html_kn($result, $model);
+
+        die(json_encode($result));
+    }
+
+    function destroy_nkp(Request $request)
+    {
+        $result = array(
+            'status' => 'fail',
+            'message' => 'error',
+        );
+        if (!Session::has('admin')) {
+            $result = array(
+                'status' => 'fail',
+                'message' => 'permission denied',
+            );
+            die(json_encode($result));
+        }
+
+        $inputs = $request->all();
+        $model = dsnangthamnien_nguon::find($inputs['id']);
+        $model->delete();
+        $model = dsnangthamnien_nguon::where('manl', $model->manl)->where('macanbo', $model->macanbo)->get();
+        //$a_pl = getPhanLoaiKiemNhiem();
+        $result = $this->retun_html_kn($result, $model);
+        die(json_encode($result));
+    }
+
+    function retun_html_kn($result, $model)
+    {
+        $a_nkp = getNguonKP(false);
+        $result['message'] = '<div class="row" id="dsnkp">';
+        $result['message'] .= '<div class="col-md-12">';
+        $result['message'] .= '<table class="table table-striped table-bordered table-hover" id="sample_4">';
+        $result['message'] .= '<thead>';
+        $result['message'] .= '<tr>';
+        $result['message'] .= '<th class="text-center" style="width: 5%">STT</th>';
+        $result['message'] .= '<th class="text-center">Nguồn kinh phí</th>';
+        $result['message'] .= '<th class="text-center" style="width: 15%">Số tiền</th>';
+        $result['message'] .= '<th class="text-center" style="width: 15%">Thao tác</th>';
+
+        $result['message'] .= '</tr>';
+        $result['message'] .= '</thead>';
+        $result['message'] .= '<tbody>';
+        if (count($model) > 0) {
+            foreach ($model as $key => $value) {
+                $result['message'] .= '<tr>';
+                $result['message'] .= '<td style="text-align: center">' . ($key + 1) . '</td>';
+                $result['message'] .= '<td>' . (isset($a_nkp[$value->manguonkp]) ? $a_nkp[$value->manguonkp] : '') . '</td>';
+                $result['message'] .= '<td>' . dinhdangso($value->luongcoban) . '</td>';
+                $result['message'] .= '<td>' .
+                    '<button type="button" data-target="#nguonkp-modal" data-toggle="modal" class="btn btn-default btn-xs mbs" onclick="edit_nkp(&#39;' . $value->id . '&#39;);"><i class="fa fa-edit"></i>&nbsp;Sửa</button>' .
+                    '<button type="button" class="btn btn-default btn-xs mbs" data-target="#delete-modal-confirm" data-toggle="modal" onclick="cfDel(&#39;'.$value->id. '&#39;)" ><i class="fa fa-trash-o"></i>&nbsp;Xóa</button>'
+
+                    . '</td>';
+                $result['message'] .= '</tr>';
+            }
+            $result['message'] .= '</tbody>';
+            $result['message'] .= '</table>';
+            $result['message'] .= '</div>';
+            $result['message'] .= '</div>';
+            $result['status'] = 'success';
+            return $result;
+        }
+        return $result;
     }
 }

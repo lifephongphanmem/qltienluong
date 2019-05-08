@@ -472,7 +472,6 @@ Route::group(['prefix'=>'chuc_nang'],function(){
         Route::get('deldt/{id}','dsnangluongController@destroydt');
         Route::post('add_canbo','dsnangluongController@add_canbo');
 
-
         Route::get('get_nkp','dsnangluongController@getinfor_nkp');
         Route::get('store_nkp','dsnangluongController@store_nkp');
         Route::get('del_nkp','dsnangluongController@destroy_nkp');
@@ -491,6 +490,10 @@ Route::group(['prefix'=>'chuc_nang'],function(){
         Route::get('del/{id}','dsnangthamnienController@destroy');
         Route::get('nang_luong/maso={manl}','dsnangthamnienController@nang_luong');
         Route::get('deldt/{id}','dsnangthamnienController@destroydt');
+
+        Route::get('get_nkp','dsnangthamnienController@getinfor_nkp');
+        Route::get('store_nkp','dsnangthamnienController@store_nkp');
+        Route::get('del_nkp','dsnangthamnienController@destroy_nkp');
     });
 
     Route::group(['prefix'=>'tong_hop_luong'],function(){
