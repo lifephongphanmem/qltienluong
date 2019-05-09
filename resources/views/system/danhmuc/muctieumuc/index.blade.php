@@ -22,6 +22,7 @@
     <script>
         jQuery(document).ready(function() {
             TableManaged.init();
+            $("#mapc").select2();
         });
     </script>
 @stop
@@ -45,7 +46,6 @@
                                 <th class="text-center" style="width: 10%">STT</th>
                                 <th class="text-center">Tiểu mục</th>
                                 <th class="text-center">Nội dung</th>
-                                <th class="text-center">Sự nghiệp</br>cán bộ</th>
                                 <th class="text-center">Phân loại</br>công tác</th>
                                 <th class="text-center">Phụ cấp</th>
                                 <th class="text-center">Thao tác</th>
@@ -58,12 +58,11 @@
                                         <td class="text-center">{{$key+1}}</td>
                                         <td>{{$value->tieumuc}}</td>
                                         <td>{{$value->noidung}}</td>
-                                        <td>{{$value->tensunghiep}}</td>
                                         <td>{{$value->tennhomct}}</td>
                                         <td>{{$value->tenpc}}</td>
                                         <td>
                                             <button type="button" onclick="editCV('{{$value->tieumuc}}')" class="btn btn-default btn-xs">
-                                                <i class="fa fa-edit"></i>&nbsp; Chỉnh sửa</button>
+                                                <i class="fa fa-edit"></i>&nbsp; Sửa</button>
                                             <button type="button" onclick="cfDel('{{$furl.'del/'.$value->id}}')" class="btn btn-default btn-xs" data-target="#delete-modal-confirm" data-toggle="modal">
                                                 <i class="fa fa-trash-o"></i>&nbsp; Xóa</button>
                                         </td>
@@ -79,6 +78,7 @@
 
     <!--Modal thông tin chức vụ -->
     <div id="create-modal" tabindex="-1" role="dialog" aria-hidden="true" class="modal fade">
+        {!! Form::open(['id'=>'frm_add', 'method'=>'POST','url'=>$furl.'store']) !!}
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header modal-header-primary">
@@ -111,14 +111,7 @@
                     </div>
 
                     <div class="row">
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label class="control-label">Sự nghiệp</label>
-                                {!! Form::select('sunghiep',$model_sunghiep,null,array('id'=>'sunghiep','class'=>'form-control select2me'))!!}
-                            </div>
-                        </div>
-
-                        <div class="col-md-6">
+                        <div class="col-md-12">
                             <div class="form-group">
                                 <label class="control-label">Phân loại công tác</label>
                                 {!! Form::select('macongtac',$model_nhomct,null,array('id'=>'macongtac','class'=>'form-control select2me'))!!}
@@ -128,10 +121,10 @@
                     </div>
 
                     <div class="row">
-                        <div class="col-md-6">
+                        <div class="col-md-12">
                             <div class="form-group">
                                 <label class="control-label">Phụ cấp</label>
-                                {!! Form::select('mapc',$model_phucap,null,array('id' => 'mapc','class' => 'form-control select2me')) !!}
+                                {!! Form::select('mapc[]',$model_phucap,null,array('id' => 'mapc','class' => 'form-control select2me','multiple'=>'multiple','required'=>'required')) !!}
                             </div>
                         </div>
                     </div>
@@ -139,10 +132,11 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" data-dismiss="modal" class="btn btn-default">Hủy thao tác</button>
-                    <button type="submit" id="submit" name="submit" value="submit" class="btn btn-primary" onclick="cfPB()">Đồng ý</button>
+                    <button type="submit" id="submit" name="submit" value="submit" class="btn btn-primary">Đồng ý</button>
                 </div>
             </div>
         </div>
+        {!! Form::close() !!}
     </div>
 
     <script>
@@ -165,13 +159,12 @@
                 },
                 dataType: 'JSON',
                 success: function (data) {
+                    var a_pc = data.mapc.split(',');
                     $('#muc').val(data.muc);
                     $('#tieumuc').val(data.tieumuc);
                     $('#noidung').val(data.noidung);
-                    $('#sunghiep').val(data.sunghiep).trigger('change');
                     $('#macongtac').val(data.macongtac).trigger('change');
-                    $('#mapc').val(data.mapc).trigger('change');
-                    //$('#id').val(data.muc);
+                    $('#mapc').select2("val",a_pc);
                 },
                 error: function(message){
                     toastr.error(message,'Lỗi!');
@@ -181,48 +174,7 @@
 
         }
 
-        function cfPB() {
-            var valid = true;
-            var message = '';
 
-            var muc = $('#muc').val();
-            var tieumuc = $('#tieumuc').val();
-
-            if (muc == '' || tieumuc == '') {
-                valid = false;
-                message += 'Mục - Tiểu mục không được bỏ trống \n';
-            }
-
-            if (valid) {
-                $.ajax({
-                    url: '{{$furl}}' + 'store',
-                    type: 'GET',
-                    data: {
-                        _token: $('meta[name="csrf-token"]').attr('content'),
-                        muc: muc,
-                        tieumuc: tieumuc,
-                        noidung: $('#noidung').val(),
-                        sunghiep: $('#sunghiep').val(),
-                        macongtac: $('#macongtac').val(),
-                        mapc: $('#mapc').val()
-                    },
-                    dataType: 'JSON',
-                    success: function (data) {
-                        if (data.status == 'success') {
-                            location.reload();
-                        }
-                    },
-                    error: function (message) {
-                        toastr.error(message);
-                    }
-                });
-
-                $('#create-modal').modal('hide');
-            } else {
-                toastr.error(message, 'Lỗi!.');
-            }
-            return valid;
-        }
     </script>
 
     @include('includes.modal.delete')

@@ -20,7 +20,7 @@
 
             <div class="col-md-3">
                 <div class="form-group">
-                    <label class="control-label">Sự nghiệp cán bộ</label>
+                    <label class="control-label">Phân loại cán bộ</label>
                     <select class="form-control select2me" name="sunghiep" id="sunghiep" required="required">
                         <option value="Công chức">Công chức</option>
                         <option value="Viên chức">Viên chức</option>

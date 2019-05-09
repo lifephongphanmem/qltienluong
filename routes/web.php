@@ -181,7 +181,7 @@ Route::group(['prefix'=>'danh_muc'],function(){
 
     Route::group(['prefix'=>'tieu_muc'],function(){
         Route::get('index','dmtieumuc_defaultController@index');
-        Route::get('store','dmtieumuc_defaultController@store');
+        Route::post('store','dmtieumuc_defaultController@store');
 
         Route::get('del/{id}','dmtieumuc_defaultController@destroy');
         Route::get('get','dmtieumuc_defaultController@getinfo');

@@ -60,9 +60,7 @@
                                         @if($value->trangthai != 'Đã nâng lương')
                                             <button type="button" onclick="edit({{$value->id}})" class="btn btn-default btn-xs mbs">
                                                 <i class="fa fa-edit"></i>&nbsp; Sửa</button>
-
                                         @endif
-
                                             <a href="{{url($furl.'maso='.$value->manl)}}" class="btn btn-default btn-xs mbs">
                                                 <i class="fa fa-th-list"></i>&nbsp; Chi tiết</a>
 
