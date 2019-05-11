@@ -56,12 +56,15 @@
                                     <td>{{$value->kemtheo}}</td>
                                     <td>{{$value->trangthai}}</td>
                                     <td>
-                                        <button type="button" onclick="edit({{$value->id}})" class="btn btn-info btn-xs mbs">
-                                            <i class="fa fa-edit"></i>&nbsp; Chỉnh sửa</button>
+                                        @if($value->trangthai != 'Đã nâng lương')
+                                            <button type="button" onclick="edit({{$value->id}})" class="btn btn-info btn-xs mbs">
+                                                <i class="fa fa-edit"></i>&nbsp; Sửa</button>
+                                        @endif
                                         <a href="{{url($furl.'maso='.$value->manl)}}" class="btn btn-success btn-xs mbs">
                                             <i class="fa fa-th-list"></i>&nbsp; Chi tiết</a>
-                                        <button type="button" onclick="cfDel('{{$furl.'del/'.$value->id}}')" class="btn btn-danger btn-xs mbs" data-target="#delete-modal-confirm" data-toggle="modal">
-                                            <i class="fa fa-trash-o"></i>&nbsp; Xóa</button>
+
+                                            <button type="button" onclick="cfDel('{{$furl.'del/'.$value->id}}')" class="btn btn-danger btn-xs mbs" data-target="#delete-modal-confirm" data-toggle="modal">
+                                                <i class="fa fa-trash-o"></i>&nbsp; Xóa</button>
                                     </td>
                                 </tr>
                             @endforeach

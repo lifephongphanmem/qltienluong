@@ -181,7 +181,7 @@ Route::group(['prefix'=>'danh_muc'],function(){
 
     Route::group(['prefix'=>'tieu_muc'],function(){
         Route::get('index','dmtieumuc_defaultController@index');
-        Route::get('store','dmtieumuc_defaultController@store');
+        Route::post('store','dmtieumuc_defaultController@store');
 
         Route::get('del/{id}','dmtieumuc_defaultController@destroy');
         Route::get('get','dmtieumuc_defaultController@getinfo');
@@ -470,6 +470,7 @@ Route::group(['prefix'=>'chuc_nang'],function(){
         Route::get('del/{id}','dsnangluongController@destroy');
         Route::get('nang_luong/maso={manl}','dsnangluongController@nang_luong');
         Route::get('deldt/{id}','dsnangluongController@destroydt');
+        Route::post('add_canbo','dsnangluongController@add_canbo');
 
         Route::get('get_nkp','dsnangluongController@getinfor_nkp');
         Route::get('store_nkp','dsnangluongController@store_nkp');
@@ -489,6 +490,10 @@ Route::group(['prefix'=>'chuc_nang'],function(){
         Route::get('del/{id}','dsnangthamnienController@destroy');
         Route::get('nang_luong/maso={manl}','dsnangthamnienController@nang_luong');
         Route::get('deldt/{id}','dsnangthamnienController@destroydt');
+
+        Route::get('get_nkp','dsnangthamnienController@getinfor_nkp');
+        Route::get('store_nkp','dsnangthamnienController@store_nkp');
+        Route::get('del_nkp','dsnangthamnienController@destroy_nkp');
     });
 
     Route::group(['prefix'=>'tong_hop_luong'],function(){

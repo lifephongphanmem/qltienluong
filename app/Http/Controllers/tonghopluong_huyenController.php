@@ -302,6 +302,11 @@ class tonghopluong_huyenController extends Controller
             $thongtin = array('nguoilap' => session('admin')->name,
                 'thang' => $model_thongtin->thang,
                 'nam' => $model_thongtin->nam);
+            $a_tonghop = $model->map(function($data){
+                return collect($data->toArray())
+                    ->only(['tonghop'])
+                    ->all();
+            });
             //dd($model->toarray());
             return view('reports.tonghopluong.donvi.solieutonghop')
                 ->with('thongtin', $thongtin)
@@ -310,6 +315,7 @@ class tonghopluong_huyenController extends Controller
                 ->with('col', $col)
                 ->with('a_phucap', $a_phucap)
                 ->with('a_phucap_hs', $a_phucap_hs)
+                ->with('a_tonghop',a_unique($a_tonghop))
                 ->with('pageTitle', 'Chi tiết tổng hợp lương tại đơn vị theo địa bàn quản lý');
         } else
             return view('errors.notlogin');
@@ -600,7 +606,7 @@ class tonghopluong_huyenController extends Controller
                     ->all();
             });
             //dd($a_tonghop);
-            //
+            //dd($model);
             return view('reports.tonghopluong.donvi.bangluong')
                 ->with('thongtin', $thongtin)
                 ->with('model', $model)
