@@ -1519,7 +1519,7 @@ class baocaobangluongController extends Controller
                 });
                 $a_nguon = a_unique($model_nguon);
 
-                return view('reports.tonghopluong.donvi.bangluong')
+                return view('reports.tonghopluong.huyen.bangluong')
                     ->with('thongtin', $thongtin)
                     ->with('model', $model)
                     ->with('m_dv', $m_dv)

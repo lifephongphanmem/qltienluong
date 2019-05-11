@@ -142,7 +142,7 @@
                         <td>{{dinhdangsothapphan($chitiet->sum($key) ,5)}}</td>
                     @endforeach
 
-                    <td>{{dinhdangso($chitiet->sum('tonghs'))}}</td>
+                    <td>{{dinhdangso($chitiet->sum('luongtn'))}}</td>
                     <td>{{dinhdangso($chitiet->sum('giaml'))}}</td>
                     <td>{{dinhdangso($chitiet->sum('tongtl'))}}</td>
 
@@ -164,7 +164,7 @@
                     <td>{{dinhdangsothapphan($phanloai->sum($key) ,5)}}</td>
                 @endforeach
 
-                <td>{{dinhdangso($phanloai->sum('tonghs'))}}</td>
+                <td>{{dinhdangso($phanloai->sum('luongtn'))}}</td>
                 <td>{{dinhdangso($phanloai->sum('giaml'))}}</td>
                 <td>{{dinhdangso($phanloai->sum('tongtl'))}}</td>
 
@@ -184,7 +184,7 @@
             <td>{{dinhdangsothapphan($model->sum($key) ,5)}}</td>
         @endforeach
 
-        <td>{{dinhdangso($model->sum('tonghs'))}}</td>
+        <td>{{dinhdangso($model->sum('luongtn'))}}</td>
         <td>{{dinhdangso($model->sum('giaml'))}}</td>
         <td>{{dinhdangso($model->sum('tongtl'))}}</td>
 

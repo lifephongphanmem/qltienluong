@@ -1262,7 +1262,7 @@ class tonghopluong_donviController extends Controller
             });
             $a_nguon = a_unique($model_nguon);
 
-            return view('reports.tonghopluong.donvi.bangluong')
+            return view('reports.tonghopluong.khoi.bangluong')
                 ->with('thongtin', $thongtin)
                 ->with('model', $model)
                 ->with('m_dv', $m_dv)
