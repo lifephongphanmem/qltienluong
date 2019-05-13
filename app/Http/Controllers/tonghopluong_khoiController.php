@@ -138,7 +138,9 @@ class tonghopluong_khoiController extends Controller
             $m_pc = array_column(dmphucap::all()->toarray(),'report','mapc');
             $a_phucap = array();
             $col = 0;
+
             $model_tonghop = tonghopluong_donvi::where('macqcq',$madv)
+                ->orWhereIn('macqcq', array_column($model_donvi->toarray(),'madv'))
                 ->where('nam', $nam)
                 ->where('thang', $thang)
                 ->where('trangthai', 'DAGUI')->get();
