@@ -127,6 +127,7 @@
             $stt=1;
             $a_dv = a_getelement($a_soluong,array('maphanloai'=>$pl->maphanloai,'madv'=>$dv->madv));
             $chitiet = $model->where('madv',$dv->madv);
+
             ?>
             @foreach($chitiet as $ct)
                 <tr class="money">

@@ -261,6 +261,7 @@ class tonghopluong_khoiController extends Controller
 
             if(count($checkdv) > 0) {
                 $model_tonghop = tonghopluong_donvi::where('macqcq', $madv)
+                    ->orWhereIn('macqcq', array_column($model_donvi->toarray(),'madv'))
                     ->where('nam', $nam)
                     ->where('thang', $thang)
                     ->where('trangthai', 'DAGUI')->get();

@@ -682,6 +682,13 @@ class baocaobangluongController extends Controller
             $m_pc = array_column(dmphucap::all()->toarray(),'report','mapc');
             $a_phucap = array();
             $col = 0;
+            /*
+            $model_tonghop = tonghopluong_donvi::where('macqcq',$madv)
+                ->orWhereIn('macqcq', array_column($model_donvi->toarray(),'madv'))
+                ->where('nam', $nam)
+                ->where('thang', $thang)
+                ->where('trangthai', 'DAGUI')->get();
+*/
             $model_tonghop = tonghopluong_donvi::where('macqcq',$madv)
                 ->orWhereIn('macqcq', array_column($model_donvi->toarray(),'madv'))
                 ->where('nam', $nam)
@@ -692,6 +699,7 @@ class baocaobangluongController extends Controller
                         ->where('maphanloai','like', $maphanloai.'%')
                         ->get();
                 })->get();
+
             $model_dmdv = dmdonvi::where('macqcq',$madv)
                 ->orWhereIn('macqcq', array_column($model_donvi->toarray(),'madv'))->get();
             $a_dv = array_column($model_tonghop->toarray(),'madv','mathdv');
