@@ -246,15 +246,31 @@ class tonghopluong_khoiController extends Controller
             $thang = $inputs['thang'];
             $nam = $inputs['nam'];
             $madv = $inputs['madv'];
-            $model_donvi = dmdonvi::where('macqcq',$madv)->get();
+            $checkdv = dmdonvi::where('madv',$madv)->where('phanloaitaikhoan','TH')->get();
+            if(count($checkdv) > 0) {
+                $model_donvi = dmdonvi::where('macqcq',$madv)->get();
+            }
+            else{
+                $model_donvi = dmdonvi::where('madv',$madv)->get();
+            }
+
             $model_phanloai = dmphanloaidonvi::wherein('maphanloai',array_column($model_donvi->toarray(),'maphanloai'))->get();
             $m_pc = array_column(dmphucap::all()->toarray(),'report','mapc');
             $a_phucap = array();
             $col = 0;
-            $model_tonghop = tonghopluong_donvi::where('macqcq',$madv)
-                ->where('nam', $nam)
-                ->where('thang', $thang)
-                ->where('trangthai', 'DAGUI')->get();
+
+            if(count($checkdv) > 0) {
+                $model_tonghop = tonghopluong_donvi::where('macqcq', $madv)
+                    ->where('nam', $nam)
+                    ->where('thang', $thang)
+                    ->where('trangthai', 'DAGUI')->get();
+            }
+            else{
+                $model_tonghop = tonghopluong_donvi::where('madv', $madv)
+                    ->where('nam', $nam)
+                    ->where('thang', $thang)
+                    ->where('trangthai', 'DAGUI')->get();
+            }
             $model_plth = dmdonvi::join('tonghopluong_donvi','dmdonvi.madv','tonghopluong_donvi.madv')
                 ->select('maphanloai','mathdv')
                 ->where('nam', $nam)
