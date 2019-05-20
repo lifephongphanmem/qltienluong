@@ -4306,9 +4306,9 @@ class bangluongController extends Controller
     function getBangLuong($inputs, $phanloai=0)
     {
         $mabl = $inputs['mabl'];
-        $m_bl = bangluong::select('madv')->where('mabl', $mabl)->first();
+        $m_bl = bangluong::select('madv','thang','mabl')->where('mabl', $mabl)->first();
         $model = (new data())->getBangluong_ct($m_bl->thang,$m_bl->mabl);
-        //dd($inputs);
+        //dd($m_bl);
         $m_hoso = hosocanbo::where('madv', $m_bl->madv)->get();
         $a_ht = array_column($m_hoso->toarray(),'tencanbo','macanbo');
         $dmchucvucq = array_column(dmchucvucq::all('tenvt', 'macvcq')->toArray(), 'tenvt', 'macvcq');
@@ -4334,12 +4334,13 @@ class bangluongController extends Controller
         if (isset($inputs['mact']) && $inputs['mact'] != '') {
             $model = $model->where('mact', $inputs['mact']);
         }
+        //dd($model);
         return $model;
     }
 
     function getBangLuong_moi($inputs){
         //$model = bangluong_ct::where('mabl', $inputs['mabl'])->get();
-        $m_bl = bangluong::select('madv')->where('mabl', $inputs['mabl'])->first();
+        $m_bl = bangluong::select('madv','thang','mabl')->where('mabl', $inputs['mabl'])->first();
         $model = (new data())->getBangluong_ct($m_bl->thang,$m_bl->mabl);
 
         $m_hoso = hosocanbo::where('madv', $inputs['madv'])->get();
