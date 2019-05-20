@@ -126,13 +126,13 @@
                         <tr>
                             <td style="text-align: center">1</td>
                             <td style="font-weight: bold">Hoàng Văn Sáng</td>
-                            <td>Phó phòng</td>
+                            <td>Trưởng phòng</td>
                             <td>0974.090.556</td>
                         </tr>
                         <tr>
                             <td style="text-align: center">2</td>
                             <td style="font-weight: bold">Nguyễn Văn Dũng</td>
-                            <td>Nhân viên</td>
+                            <td>Phó phòng</td>
                             <td>0986.012.094</td>
                         </tr>
                         <tr>
@@ -140,6 +140,12 @@
                             <td style="font-weight: bold">Nguyễn Văn Đạt</td>
                             <td>Nhân viên</td>
                             <td>0966.305.359</td>
+                        </tr>
+                        <tr>
+                            <td style="text-align: center">4</td>
+                            <td style="font-weight: bold">Ngô Thế Dương</td>
+                            <td>Nhân viên</td>
+                            <td>0916.678.911</td>
                         </tr>
                         </tbody>
                     </table>

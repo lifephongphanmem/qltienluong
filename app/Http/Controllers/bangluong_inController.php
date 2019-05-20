@@ -308,7 +308,10 @@ class bangluong_inController extends Controller
             $mabl = $inputs['mabl'];
             //dd($inputs);
             $m_bl = bangluong::select('thang','nam','mabl','madv','ngaylap','luongcoban')->where('mabl',$mabl)->first();
-            $model = bangluong_ct::where('mabl',$mabl)->get();
+
+            //$model = bangluong_ct::where('mabl',$mabl)->get(); //dùng hàm lấy dữ liệu chung
+            $model = (new data())->getBangluong_ct($m_bl->thang,$m_bl->mabl);
+
             //$model_hoso = hosocanbo::where('madv',$m_bl->madv)->get();
             //$a_cv = getChucVuCQ(false);
             $model_congtac = dmphanloaict::select('mact','tenct')
@@ -373,7 +376,8 @@ class bangluong_inController extends Controller
             $mabl = $inputs['mabl'];
             //dd($inputs);
             $m_bl = bangluong::select('thang','nam','mabl','madv','ngaylap','luongcoban')->where('mabl',$mabl)->first();
-            $model_bl = bangluong_ct::where('mabl',$mabl)->get();
+            $model_bl = (new data())->getBangluong_ct($m_bl->thang,$m_bl->mabl);
+            //$model_bl = bangluong_ct::where('mabl',$mabl)->get();
             //$model_hoso = hosocanbo::where('madv',$m_bl->madv)->get();
             //$a_cv = getChucVuCQ(false);
             //dd($model_bl);

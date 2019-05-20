@@ -71,9 +71,9 @@
                                     <td>{{$value->msngbac}}</td>
                                     <td class="text-right">{{number_format($value->luongtn)}}</td>
                                     <td>
-                                        <a href="{{url($furl.'?maso='.$value->id)}}" class="btn btn-info btn-xs mbs">
-                                            <i class="fa fa-edit"></i>&nbsp; Chi tiết</a>
-                                        <button type="button" onclick="cfDel('{{$furl.'del_ct/'.$value->id}}')" class="btn btn-danger btn-xs mbs" data-target="#delete-modal-confirm" data-toggle="modal">
+                                        <a href="{{url($furl.'can_bo?mabl='.$m_bl->mabl.'&maso='.$value->id)}}" class="btn btn-info btn-xs mbs">
+                                            <i class="fa fa-edit"></i>&nbsp; Sửa</a>
+                                        <button type="button" onclick="cfDel('{{$m_bl->mabl}}','{{$value->id}}')" class="btn btn-danger btn-xs mbs" data-target="#delete-modal-confirm" data-toggle="modal">
                                             <i class="fa fa-trash-o"></i>&nbsp; Xóa</button>
                                     </td>
                                 </tr>
@@ -91,6 +91,29 @@
             </div>
         </div>
     </div>
+
+    <!--Modal Delete-->
+    <div id="delete-modal-confirm" tabindex="-1" role="dialog" aria-hidden="true" class="modal fade">
+        {!!Form::open(['id'=>'frmDelete', 'method'=>'POST', 'url'=>$furl.'del_ct']) !!}
+            <input type="hidden" id="id" name="id" value="" />
+            <input type="hidden" id="mabl" name="mabl" value="" />
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header modal-header-primary">
+                        <button type="button" data-dismiss="modal" aria-hidden="true"
+                                class="close">&times;</button>
+                        <h4 id="modal-header-primary-label" class="modal-title">Đồng ý xoá?</h4>
+
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" data-dismiss="modal" class="btn btn-default">Hủy thao tác</button>
+                        <button type="submit" class="btn btn-primary">Đồng ý</button>
+                    </div>
+                </div>
+            </div>
+        {!!Form::close()!!}
+    </div>
+
     <script>
         function getLink(){
             var mapb = $('#mapb').val();
@@ -105,8 +128,13 @@
 
         })
 
+        function cfDel(mabl, id){
+            $('#frmDelete').find("[id^='mabl']").val(mabl);
+            $('#frmDelete').find("[id^='id']").val(id);
+        }
 
+        function subDel(){
+            $('#frmDelete').submit();
+        }
     </script>
-
-    @include('includes.modal.delete')
 @stop

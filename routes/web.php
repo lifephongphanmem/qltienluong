@@ -393,11 +393,11 @@ Route::group(['prefix'=>'chuc_nang'],function(){
         Route::get('inmau3/maso={mabl}','bangluongController@inbangluongmau3'); //mẫu làm theo y.c lạng sơn
         Route::get('inmau4/maso={mabl}','bangluongController@inbangluongmau4'); //mẫu làm theo y.c lạng sơn
         Route::get('in_bh/maso={mabl}','bangluongController@inbaohiem');
-        Route::get('','bangluongController@detail');
-        Route::post('updatect/{id}','bangluongController@updatect');
+        Route::get('can_bo','bangluongController@detail');
+        Route::post('updatect','bangluongController@updatect');
         Route::post('updatect_truylinh','bangluongController@updatect_truylinh');
         Route::get('del/{id}','bangluongController@destroy');
-        Route::get('del_ct/{id}','bangluongController@destroy_ct');
+        Route::post('del_ct','bangluongController@destroy_ct');
 
         Route::get('get_chitiet','bangluongController@get_chitiet');
         Route::post('update_chitiet','bangluongController@update_chitiet');

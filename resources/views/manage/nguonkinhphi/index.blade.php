@@ -73,8 +73,8 @@
                                             @if($value->trangthai != 'DAGUI')
                                                 <a href="{{url($furl.'ma_so='.$value->masodv)}}" class="btn btn-default btn-xs mbs">
                                                     <i class="fa fa-edit"></i>&nbsp; Chi tiết</a>
-                                                <a href="{{url($furl.'printf_bl/ma_so='.$value->masodv)}}" class="btn btn-default btn-xs mbs" TARGET="_blank">
-                                                    <i class="fa fa-print"></i>&nbsp; In bảng lương</a>
+                                                <!--a href="{{url($furl.'printf_bl/ma_so='.$value->masodv)}}" class="btn btn-default btn-xs mbs" TARGET="_blank">
+                                                    <i class="fa fa-print"></i>&nbsp; In bảng lương</a-->
                                                 <button type="button" class="btn btn-default btn-xs mbs" onclick="confirmChuyen('{{$value['masodv']}}')" data-target="#chuyen-modal" data-toggle="modal"><i class="fa fa-share-square-o"></i>&nbsp;
                                                     Gửi dữ liệu</button>
                                                 <button type="button" onclick="cfDel('{{$furl.'del/'.$value->id}}')" class="btn btn-default btn-xs mbs" data-target="#delete-modal-confirm" data-toggle="modal">

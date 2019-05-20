@@ -23,7 +23,7 @@
         <div class="col-md-12">
             <div class="portlet light bordered">
                 <div class="portlet-title">
-                    <div class="caption">
+                    <div class="caption text-uppercase">
                         THÔNG TIN CHI TIẾT LƯƠNG CỦA CÁN BỘ: {{$model->tencanbo}}
                     </div>
                     <div class="actions">
@@ -41,7 +41,7 @@
                     <input type="hidden" id="kpcd_dv" name="kpcd_dv" value="{{$model->kpcd_dv}}" />
                     <input type="hidden" id="luongcoban" name="luongcoban" value="{{$model->luongcoban}}" />
 
-                    {!! Form::model($model, ['url'=>'/chuc_nang/bang_luong/updatect/'.$model->id, 'method' => 'POST', 'files'=>true, 'id' => 'create-hscb', 'class'=>'horizontal-form form-validate']) !!}
+                    {!! Form::model($model, ['url'=>'/chuc_nang/bang_luong/updatect', 'method' => 'POST', 'files'=>true, 'id' => 'create-hscb', 'class'=>'horizontal-form form-validate']) !!}
                     <input type="hidden" id="macanbo" name="macanbo" value="{{$model->macanbo}}" />
                     <input type="hidden" id="mabl" name="mabl" value="{{$model->mabl}}" />
                     <input type="hidden" id="id" name="id" value="{{$model->id}}" />
@@ -322,6 +322,7 @@
                     </div>
                     <input type="hidden" id="mapc" name="mapc"/>
                     <input type="hidden" id="id_hs" name="id_hs" />
+                    <input type="hidden" id="mabl_hs" name="mabl_hs" />
                 </div>
             </div>
 
@@ -343,6 +344,7 @@
                 data: {
                     _token: CSRF_TOKEN,
                     mapc: mapc,
+                    mabl: $('#mabl').val(),
                     id: id
                 },
                 dataType: 'JSON',
@@ -350,8 +352,6 @@
                     $('#tenpc').val(data.tenpc);
                     $('#heso').val(data.heso);
                     $('#sotien').val(data.sotien);
-
-
                 },
                 error: function(message){
                     toastr.error(message,'Lỗi!');
@@ -360,6 +360,7 @@
             $('#mapc').val(mapc);
             $('#id_hs').val(id);
             $('#luongcb').val($('#luongcoban').val());
+            $('#mabl_hs').val($('#mabl').val());
             $('#chitiet-modal').modal('show');
         }
 

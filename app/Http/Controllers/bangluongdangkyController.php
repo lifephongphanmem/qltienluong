@@ -15,6 +15,7 @@ use App\hosocanbo;
 use App\hosocanbo_kiemnhiem;
 use App\ngachluong;
 use Illuminate\Http\Request;
+use App\Http\Controllers\dataController as data;
 
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
@@ -642,7 +643,8 @@ class bangluongdangkyController extends Controller
 
         //dd($a_data_canbo);
         foreach(array_chunk($a_data_canbo, 50)  as $data){
-            bangluong_ct::insert($data);
+            (new data())->storeBangLuong($inputs['thang'],$data);
+            //bangluong_ct::insert($data);
         }
 
 
@@ -804,7 +806,8 @@ class bangluongdangkyController extends Controller
         $a_kn_canbo = unset_key($a_kn_canbo,$a_col_cbkn);
 
         foreach(array_chunk($a_kn_canbo, 50)  as $data){
-            bangluong_ct::insert($data);
+            //bangluong_ct::insert($data);
+            (new data())->storeBangLuong($inputs['thang'],$data);
         }
         //dd($a_data_canbo);
         //dd($a_kn_canbo);

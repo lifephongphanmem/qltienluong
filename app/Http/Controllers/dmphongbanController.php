@@ -22,12 +22,13 @@ class dmphongbanController extends Controller
             $ct->mapb = str_replace(".", "_", $ct->mapb);
             $ct->save();
         }
-
+        /*
         $model_bl = bangluong_ct::wherenotnull('mapb')->get();
         foreach ($model_bl as $ct){
             $ct->mapb = str_replace(".", "_", $ct->mapb);
             $ct->save();
         }
+        */
          dd('OK');
     }
 

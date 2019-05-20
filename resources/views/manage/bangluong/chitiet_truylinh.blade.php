@@ -8,7 +8,7 @@
         <div class="col-md-12">
             <div class="portlet light bordered">
                 <div class="portlet-title">
-                    <div class="caption">
+                    <div class="caption text-uppercase">
                         THÔNG TIN CHI TIẾT TRUY LĨNH LƯƠNG CỦA CÁN BỘ {{$model->tencanbo}}
                     </div>
                     <div class="actions">
