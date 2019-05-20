@@ -202,11 +202,14 @@ class tonghopluong_donviController extends Controller
                 if($a_ct[$i]['congtac'] != 'TRUYLINH'){//bảng lương truy lĩnh có luowngcb trong chi tiết
                     $a_ct[$i]['luongcoban'] = $bangluong['luongcoban'];
                     $a_ct[$i]['congtac'] = 'BANGLUONG';//do trong trường congtac = CHUCVU, BIENCHE,...
-                }else{
+                }
+                /*
+                else{
                     foreach (getColTongHop() as $ct) {
                         $a_ct[$i]['st_'.$ct] = $a_ct[$i]['st_'.$ct] * ($a_ct[$i]['thangtl']<= 1 ? 1 : $a_ct[$i]['thangtl']);
                     }
                 }
+                */
 
                 $a_ct[$i]['tonghop'] = $a_ct[$i]['congtac'];
                 if(in_array($a_ct[$i]['macongtac'],$a_plcongtac) || in_array($a_ct[$i]['mact'],$a_plct)){

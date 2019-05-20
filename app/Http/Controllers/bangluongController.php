@@ -1329,11 +1329,12 @@ class bangluongController extends Controller
                         $cb->ngayden = $ngaylap;
                     }
                     $cb->vuotkhung = ($cb->heso * $cb->vuotkhung) / 100;
-                    $tonghs = $tien = 0;
 
+                    $tonghs = $tongtien = 0;
                     foreach ($model_phucap as $ct) {
                         $mapc = $ct->mapc;
                         $mapc_st = 'st_'.$ct->mapc;
+                        $tien = 0;
                         $ct->stbhxh = 0;
                         $ct->stbhyt = 0;
                         $ct->stkpcd = 0;
@@ -1348,7 +1349,8 @@ class bangluongController extends Controller
                                 break;
                             }
                             case 1: {//số tiền
-                                $tien += chkDbl($cb->$mapc);
+                                $tongtien += chkDbl($cb->$mapc);
+                                $tien = chkDbl($cb->$mapc);
                                 break;
                             }
                             case 2: {//phần trăm
@@ -1368,8 +1370,11 @@ class bangluongController extends Controller
                                 break;
                             }
                         }
-                        $ct->sotien = round($cb->$mapc * $cb->luongcoban,0);
-                        $cb->$mapc_st = $ct->sotien;
+                        $tiencong = round($cb->$mapc * $cb->luongcoban,0) + $tien;
+                        $ct->sotien = $tiencong;
+
+                        //Tính lại số tiền để gán vào cột phụ cấp (theo ngày + tháng)
+                        $cb->$mapc_st = round(($tiencong / $ngaycong)* $cb->ngaytl,0) + $tiencong * $cb->thangtl;
                         //tính bảo hiểm
                         if ($ct->baohiem == 1 &&
                             ($cb->maphanloai != 'KHAC' || ($cb->maphanloai == 'KHAC' && !in_array($mapc,$a_goc)))) {
@@ -1383,7 +1388,6 @@ class bangluongController extends Controller
                             $ct->stkpcd_dv = round($ct->sotien * $cb->kpcd_dv, 0);
                             $ct->stbhtn_dv = round($ct->sotien * $cb->bhtn_dv, 0);
                             $ct->ttbh_dv = $ct->stbhxh_dv + $ct->stbhyt_dv + $ct->stkpcd_dv + $ct->stbhtn_dv;
-
                         }
                     }
 
@@ -1392,8 +1396,10 @@ class bangluongController extends Controller
                         $tonghs = $tonghs - $cb->heso - $cb->vuotkhung - $cb->pccv;
                     }
                     $cb->tonghs = $tonghs;
-                    $thangtl = round($cb->luongcoban * $tonghs) + $tien;
-                    $ngaytl = round($thangtl / $ngaycong, 0);
+
+
+                    //Tính lại số tiền để gán vào cột phụ cấp
+
                     //1 tháng
                     $stbhxh = $model_phucap->sum('stbhxh');
                     $stbhyt = $model_phucap->sum('stbhyt');
@@ -1426,9 +1432,12 @@ class bangluongController extends Controller
                         $cb->stbhtn_dv = round($stbhtn_dv * $cb->thangtl, 0);
                     }
 
+                    $thangtl = round($cb->luongcoban * $tonghs) + $tongtien;
+                    //$ngaytl = round($thangtl / $ngaycong, 0);
+
                     $cb->ttbh = $cb->stbhxh + $cb->stbhyt + $cb->stkpcd + $cb->stbhtn;
                     $cb->ttbh_dv = $cb->stbhxh_dv + $cb->stbhyt_dv + $cb->stkpcd_dv + $cb->stbhtn_dv;
-                    $cb->ttl = round($thangtl * $cb->thangtl + $cb->ngaytl * $ngaytl, 0);
+                    $cb->ttl = round($thangtl * $cb->thangtl + ($cb->ngaytl * $thangtl) / $ngaycong, 0);
                     $cb->luongtn = $cb->ttl - $cb->ttbh;
                     //lưu vào bảng phụ cấp theo lương (chỉ có hệ số)
                     //ưng mỗi phân loại set về hệ số: chucvu => pccv=heso; tnn: pctnn=heso
