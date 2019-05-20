@@ -691,7 +691,7 @@ class tonghopluong_donviController extends Controller
             });
             //group mact đã bao gồm macongtac; manguonkp bao gồm luongcoban
             $a_congtac = a_unique($model_congtac);
-
+            //dd($a_congtac);
             $model_nguon = $model->map(function ($data) {
                 return collect($data->toArray())
                     ->only(['manguonkp', 'tennguonkp', 'tonghop'])
