@@ -626,9 +626,16 @@ function getNguonTruyLinh(){
 }
 
 function getNguonTruyLinh_df(){
-    return array(
-        '13' => '1390000',
-    );
+    $model = App\dmnguonkinhphi::where('manguonkp', '13')->get();
+    if (count($model) == 0) {
+        return array(
+            'NGANSACH' => '1390000',
+        );
+    } else {
+        return array(
+            '13' => '1390000',
+        );
+    }
 }
 
 function getPhanLoaiChiTietNangLuong(){

@@ -844,6 +844,12 @@ Route::group(['prefix'=>'tra_cuu'],function(){
         Route::get('','hosocanboController@search');
         Route::post('ket_qua','hosocanboController@result');
     });
+
+    Route::group(['prefix'=>'truy_linh'],function(){
+        Route::get('','tracuuController@search_truylinh');
+        Route::post('ket_qua','hosocanboController@result');
+    });
+
     /*
     Route::group(['prefix'=>'cong_tac'],function(){
         Route::get('','hosocongtacController@search');

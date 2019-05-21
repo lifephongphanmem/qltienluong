@@ -137,7 +137,7 @@
                     <ul class="sub-menu">
                         <li><a href="{{url('nghiep_vu/ho_so/danh_sach')}}"><i class="fa fa-caret-right"></i>Danh sách cán bộ đang công tác</a></li>
                         <li><a href="{{url('nghiep_vu/tam_ngung/danh_sach')}}"><i class="fa fa-caret-right"></i>Danh sách cán bộ tạm ngừng theo dõi</a></li>
-                        <li><a href="{{url('nghiep_vu/truy_linh/danh_sach')}}"><i class="fa fa-caret-right"></i>Danh sách cán bộ được truy lĩnh lương</a></li>
+                        <li><a href="{{url('nghiep_vu/truy_linh/danh_sach?thang='.date('m').'&nam='.date('Y'))}}"><i class="fa fa-caret-right"></i>Danh sách cán bộ được truy lĩnh lương</a></li>
                         <li>
                             <a href="{{url('nghiep_vu/truc/danh_sach')}}"><i class="fa fa-caret-right"></i>Danh sách cán bộ trực công tác</a>
                         </li>

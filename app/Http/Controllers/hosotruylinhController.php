@@ -22,17 +22,26 @@ class hosotruylinhController extends Controller
     {
         if (Session::has('admin')) {
             $inputs = $request->all();
-            if(!isset($inputs['thang'])){
-                $inputs['thang'] = date('m');
-            }
+            $model_canbo = hosocanbo::where('madv', session('admin')->madv)->where('theodoi', '<', '9')->get();
+            /*
+
             if(!isset($inputs['nam'])){
                 $inputs['nam'] = date('Y');
             }
 
-            $model_canbo = hosocanbo::where('madv', session('admin')->madv)->where('theodoi', '<', '9')->get();
-            $model = hosotruylinh::where('madv', session('admin')->madv)
-                ->wheremonth('ngayden',$inputs['thang'])
-                ->whereyear('ngayden',$inputs['nam'])->get();
+            if(!isset($inputs['thang'])){
+                $inputs['thang'] = date('m');
+            }
+            */
+
+            if($inputs['thang'] == 'ALL'){
+                $model = hosotruylinh::where('madv', session('admin')->madv)
+                    ->whereyear('ngayden',$inputs['nam'])->get();
+            }else{
+                $model = hosotruylinh::where('madv', session('admin')->madv)
+                    ->wheremonth('ngayden',$inputs['thang'])
+                    ->whereyear('ngayden',$inputs['nam'])->get();
+            }
             //dd($inputs);
             //$model = hosotruylinh::where('madv', session('admin')->madv)->get();
             //$a = getPhanLoaiTruyLinh();
@@ -66,7 +75,7 @@ class hosotruylinhController extends Controller
                 hosotruylinh::where('maso',$insert['maso'])->first()->update($insert);
             }
 
-            return redirect('nghiep_vu/truy_linh/danh_sach');
+            return redirect('nghiep_vu/truy_linh/danh_sach?thang='.date('m').'&nam='.date('Y'));
         } else
             return view('errors.notlogin');
     }
@@ -85,7 +94,7 @@ class hosotruylinhController extends Controller
             $insert['ngaytl'] = getDbl($insert['ngaytl']);
 
             $model->update($insert);
-            return redirect('nghiep_vu/truy_linh/danh_sach');
+            return redirect('nghiep_vu/truy_linh/danh_sach?thang='.date('m').'&nam='.date('Y'));
         } else
             return view('errors.notlogin');
     }
@@ -158,7 +167,7 @@ class hosotruylinhController extends Controller
             DB::statement("Delete FROM hosotruylinh_nguon_temp WHERE maso='".$model->maso."'");
             //$macanbo = $model->macanbo;
             $model->delete();
-            return redirect('/nghiep_vu/truy_linh/danh_sach');
+            return redirect('nghiep_vu/truy_linh/danh_sach?thang='.date('m').'&nam='.date('Y'));
         } else
             return view('errors.notlogin');
     }
@@ -262,8 +271,22 @@ class hosotruylinhController extends Controller
                 $model->ngaytu = null;
                 $model->ngayden = null;
                 $model->maso = session('admin')->madv . '_' . getdate()[0];
+
                 $model->maphanloai = $inputs['maphanloai'];
                 $model->tentruylinh = isset($a_pl[$model->maphanloai]) ? $a_pl[$model->maphanloai] : '';
+
+                foreach(getNguonTruyLinh_df() as $nkp=>$luongcb){
+                    $m_nguon = new hosotruylinh_nguon_temp();
+                    $m_nguon->macanbo = $model->macanbo;
+                    $m_nguon->maso = $model->maso;
+                    $m_nguon->manguonkp = $nkp;
+                    $m_nguon->luongcoban = $luongcb;
+                    $m_nguon->madv = session('admin')->madv;
+                    $m_nguon->save();
+                }
+                $model_nkp = hosotruylinh_nguon_temp::where('maso',$model->maso)->get();
+                //dd($model_nkp);
+                //dd($a_nkp);
                 switch($inputs['maphanloai']){
                     case 'MSNGBAC':{
                         $heso = 0;
@@ -291,10 +314,12 @@ class hosotruylinhController extends Controller
                         $model->heso = $heso;
                         $model->luongcoban = getGeneralConfigs()['luongcb'];
                         $model_pc = $model_pc->where('phanloai',2);
+
                         return view('manage.truylinh.create')
                             ->with('furl', '/nghiep_vu/truy_linh/')
                             ->with('inputs',$inputs)
                             ->with('model',$model)
+                            ->with('model_nkp',$model_nkp)
                             ->with('a_nkp',$a_nkp)
                             ->with('a_heso', array('heso','vuotkhung'))
                             ->with('model_pc', $model_pc)
@@ -316,6 +341,7 @@ class hosotruylinhController extends Controller
                             ->with('furl', '/nghiep_vu/truy_linh/')
                             ->with('inputs',$inputs)
                             ->with('model',$model)
+                            ->with('model_nkp',$model_nkp)
                             ->with('a_nkp',$a_nkp)
                             ->with('a_heso', array('heso','vuotkhung'))
                             ->with('model_pc', $model_pc)
@@ -336,6 +362,7 @@ class hosotruylinhController extends Controller
                             ->with('furl', '/nghiep_vu/truy_linh/')
                             ->with('inputs',$inputs)
                             ->with('model',$model)
+                            ->with('model_nkp',$model_nkp)
                             ->with('a_nkp',$a_nkp)
                             ->with('pageTitle', 'Thêm mới cán bộ truy lĩnh lương');
                         break;
@@ -346,6 +373,7 @@ class hosotruylinhController extends Controller
                             ->with('furl', '/nghiep_vu/truy_linh/')
                             ->with('inputs',$inputs)
                             ->with('model',$model)
+                            ->with('model_nkp',$model_nkp)
                             ->with('a_nkp',$a_nkp)
                             ->with('a_heso', array('hesott'))
                             ->with('model_pc', $model_pc)
@@ -358,6 +386,7 @@ class hosotruylinhController extends Controller
                             ->with('furl', '/nghiep_vu/truy_linh/')
                             ->with('inputs',$inputs)
                             ->with('model',$model)
+                            ->with('model_nkp',$model_nkp)
                             ->with('a_heso', array('hesott'))
                             ->with('model_pc', $model_pc)
                             ->with('a_nkp',$a_nkp)
@@ -370,6 +399,7 @@ class hosotruylinhController extends Controller
                             ->with('furl', '/nghiep_vu/truy_linh/')
                             ->with('inputs',$inputs)
                             ->with('model',$model)
+                            ->with('model_nkp',$model_nkp)
                             ->with('a_nkp',$a_nkp)
                             ->with('a_heso', array('heso','vuotkhung'))
                             ->with('model_pc', $model_pc)
