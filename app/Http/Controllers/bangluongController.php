@@ -773,7 +773,7 @@ class bangluongController extends Controller
             $m_cb[$key]['hs_pcudn'] = $val['pcudn'];
             $m_cb[$key]['songaytruc'] = 0;
 
-            $m_cb[$key]['heso'] =round($val['heso'] * $val['pthuong'] / 100,session('admin')->lamtron);
+            $m_cb[$key]['heso'] = round($val['heso'] * $val['pthuong'] / 100,session('admin')->lamtron);
             $m_cb[$key]['vuotkhung'] =round($val['heso'] * $val['vuotkhung'] / 100,session('admin')->lamtron);//trong bảng danh mục là % vượt khung => sang bảng lương chuyển thành hệ số
             $m_cb[$key]['bhxh'] = floatval($val['bhxh']) / 100;
             $m_cb[$key]['bhyt'] = floatval($val['bhyt']) / 100;
@@ -785,8 +785,8 @@ class bangluongController extends Controller
             $m_cb[$key]['bhtn_dv'] = floatval($val['bhtn_dv']) / 100;
             $m_cb[$key]['giaml'] = 0;
             //tính trc 1 số phụ cấp để làm hệ số cơ sơ
-            foreach($a_pc_coth as $pc){
-                if(isset($a_pc[$pc])){
+            foreach($a_pc_coth as $pc) {
+                if (isset($a_pc[$pc])) {
                     switch ($a_pc[$pc]['phanloai']) {
                         case 0:
                         case 1: {//số tiền
@@ -799,7 +799,7 @@ class bangluongController extends Controller
                                 if ($ct != '' && $ct != $pc)
                                     $heso += $m_cb[$key][$ct];
                             }
-                            $m_cb[$key][$pc] =round($heso * $m_cb[$key][$pc] / 100,session('admin')->lamtron);
+                            $m_cb[$key][$pc] = round($heso * $m_cb[$key][$pc] / 100, session('admin')->lamtron);
                             break;
                         }
                         default: {//trường hợp còn lại (ẩn,...)
@@ -845,7 +845,7 @@ class bangluongController extends Controller
                 switch ($a_pc[$k]['phanloai']) {
                     case 0: {//hệ số
                         $tonghs += $m_cb[$key][$mapc];
-                        $a_pc[$k]['sotien'] = round($m_cb[$key][$mapc] * $inputs['luongcoban'],0);
+                        $a_pc[$k]['sotien'] = round($m_cb[$key][$mapc] * $inputs['luongcoban']);
                         break;
                     }
                     case 1: {//số tiền
@@ -862,7 +862,7 @@ class bangluongController extends Controller
                             $m_cb[$key][$mapc] =round($heso * $m_cb[$key][$mapc] / 100,session('admin')->lamtron);
                         }
                         $tonghs += $m_cb[$key][$mapc];
-                        $a_pc[$k]['sotien'] = round($m_cb[$key][$mapc] * $inputs['luongcoban'],0);
+                        $a_pc[$k]['sotien'] = round($m_cb[$key][$mapc] * $inputs['luongcoban']);
                         break;
                     }
                     default: {//trường hợp còn lại (ẩn,...)
