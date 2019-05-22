@@ -93,7 +93,7 @@
         <th rowspan="4">Mã số</br>CBCC,</br>viên</br>chức</th>
         <th style="width: 15%;" rowspan="4">Họ và tên</th>
         <th rowspan="4">Mã</br>ngạch</br>lương</th>
-        <th colspan="12">Lương hệ số</th>
+        <th colspan="13">Lương hệ số</th>
         <th rowspan="4">Tiền lương</br>tháng</th>
         <th colspan="4">Các khoản trừ vào lương</th>
         <th rowspan="4">Tổng số tiền</br>thực lĩnh</th>
@@ -103,7 +103,7 @@
     <tr style="padding-left: 2px;padding-right: 2px">
         <th rowspan="3">Hệ số</br>lương</th>
         <th rowspan="3">Phụ cấp</br>chức vụ</th>
-        <th colspan="9">Hệ số phụ cấp khác</th>
+        <th colspan="10">Hệ số phụ cấp khác</th>
         <th rowspan="3">Cộng</br>hệ số</th>
         <th rowspan="3">BHXH</th>
         <th rowspan="3">BHYT</th>
@@ -119,7 +119,7 @@
         <th colspan="2">PCTNVK</th>
         <th colspan="2">PCTNNG</th>
         <th rowspan="2">Phụ cấp</br>lâu năm</th>
-        <!--th rowspan="2">Phụ cấp</br>độc hại</th-->
+        <th rowspan="2">Phụ cấp</br>độc hại</th>
     </tr>
 
     <tr style="padding-left: 2px;padding-right: 2px">
@@ -134,7 +134,7 @@
         <th>B</th>
         <th>C</th>
         <th>D</th>
-        @for($i=1;$i<=19;$i++)
+        @for($i=1;$i<=20;$i++)
             <th>{{$i}}</th>
         @endfor
 
@@ -147,7 +147,7 @@
             <?php $stt=1; ?>
                 <tr style="font-weight: bold;">
                     <td>{{convert2Roman($i++)}}</td>
-                    <td style="text-align: left;" colspan="22">{{$congtac->tenct}}</td>
+                    <td style="text-align: left;" colspan="23">{{$congtac->tenct}}</td>
                 </tr>
             @foreach($model_luong as $ct)
                 <tr>
@@ -163,13 +163,13 @@
                     <td>{{dinhdangsothapphan($ct->pcudn,5)}}</td>
 
                     <td>{{dinhdangsothapphan($ct->pctn,5)}}</td>
-                    <td>{{dinhdangsothapphan($ct->vk,5)}}</td>
+                    <td>{{dinhdangsothapphan($ct->hs_vuotkhung,5)}}</td>
                     <td>{{dinhdangsothapphan($ct->vuotkhung,5)}}</td>
 
-                    <td>{{dinhdangsothapphan($ct->tnn,5)}}</td>
+                    <td>{{dinhdangsothapphan($ct->hs_pctnn,5)}}</td>
                     <td>{{dinhdangsothapphan($ct->pctnn,5)}}</td>
                     <td>{{dinhdangsothapphan($ct->pcthni,5)}}</td>
-                    <!--td>{{dinhdangsothapphan($ct->pcdh,5)}}</td-->
+                    <td>{{dinhdangsothapphan($ct->pcdh,5)}}</td>
                     <td>{{dinhdangsothapphan($ct->tonghs,5)}}</td>
                     <td>{{dinhdangso($ct->ttl)}}</td>
 
@@ -196,7 +196,7 @@
                 <td></td>
                 <td>{{dinhdangsothapphan($model_luong->sum('pctnn'),5)}}</td>
                 <td>{{dinhdangsothapphan($model_luong->sum('pcthni'),5)}}</td>
-                <!--td>{{dinhdangsothapphan($model_luong->sum('pcdh'),5)}}</td-->
+                <td>{{dinhdangsothapphan($model_luong->sum('pcdh'),5)}}</td>
 
                 <td>{{dinhdangsothapphan($model_luong->sum('tonghs'),5)}}</td>
                 <td class="money">{{dinhdangso($model_luong->sum('ttl'))}}</td>
@@ -223,7 +223,7 @@
         <td></td>
         <td>{{dinhdangsothapphan($model->sum('pctnn'),5)}}</td>
         <td>{{dinhdangsothapphan($model->sum('pcthni'),5)}}</td>
-        <!--td>{{dinhdangsothapphan($model->sum('pcdh'),5)}}</td-->
+        <td>{{dinhdangsothapphan($model->sum('pcdh'),5)}}</td>
         <td>{{dinhdangsothapphan($model->sum('tonghs'),5)}}</td>
 
         <td class="money">{{dinhdangso($model->sum('ttl'))}}</td>

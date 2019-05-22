@@ -2782,6 +2782,7 @@ class bangluongController extends Controller
             $a_phucap = array();
             $col = 0;
             $model_hoso = hosocanbo::where('madv', $m_bl->madv)->get();
+            /*
             foreach ($model as $ct) {
                 $hoso = $model_hoso->where('macanbo', $ct->macanbo)->first();
                 if(count($hoso)>0 &&  $ct->heso>0){
@@ -2795,6 +2796,7 @@ class bangluongController extends Controller
                     $ct->tencanbo = count($hoso) > 0 ? $hoso->tencanbo : null;
                 }
             }
+            */
             foreach($model_pc as $ct){
                 $a_phucap[$ct->mapc] = $ct->report;
                 $col++;
