@@ -620,22 +620,17 @@ function getKieuTangGiamLuong(){
 
 //Nguồn truy lĩnh sau lấy trong db
 function getNguonTruyLinh(){
+    $model = App\dmnguonkinhphi::all()->first();
     return array(
-        '13' => '1390000',
+        $model->manguonkp => '1390000',
     );
 }
 
 function getNguonTruyLinh_df(){
-    $model = App\dmnguonkinhphi::where('manguonkp', '13')->get();
-    if (count($model) == 0) {
-        return array(
-            'NGANSACH' => '1390000',
-        );
-    } else {
-        return array(
-            '13' => '1390000',
-        );
-    }
+    $model = App\dmnguonkinhphi::all()->first();
+    return array(
+        $model->manguonkp => '1390000',
+    );
 }
 
 function getPhanLoaiChiTietNangLuong(){
