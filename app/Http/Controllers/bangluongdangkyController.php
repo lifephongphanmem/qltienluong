@@ -94,15 +94,17 @@ class bangluongdangkyController extends Controller
             */
             //Lấy danh sách cán bộ kiêm nhiệm
             $model_canbo_kn = hosocanbo_kiemnhiem::where('madv', $madv)->get();
-
+            //dd($model_canbo_kn);
             //Tạo bảng lương
             bangluongdangky::create($inputs);
 
             //Tính toán lương cho cán bộ kiêm nhiệm
             $m_donvi = dmdonvi::where('madv', session('admin')->madv)->first();
 
+            $a_cb = array_column($m_cb->toarray(),'tencanbo','macanbo');
             foreach ($model_canbo_kn as $cb) {
                 $cb->mabl = $inputs['mabl'];
+                $cb->tencanbo = isset($a_cb[$cb->macanbo])? $a_cb[$cb->macanbo]:'';
                 $ths = 0;
                 foreach ($model_phucap as $ct) {
                     $mapc = $ct->mapc;
@@ -123,6 +125,7 @@ class bangluongdangkyController extends Controller
                 $cb->luongtn = $cb->ttl;
                 $a_k = $cb->toarray();
                 unset($a_k['id']);
+                //dd($a_k);
                 bangluongdangky_ct::create($a_k);
             }
             //Tính toán lương cho cán bộ
@@ -278,6 +281,7 @@ class bangluongdangkyController extends Controller
         return redirect('/chuc_nang/dang_ky_luong/maso=' . $inputs['mabl']);
     }
 
+    //Không dùng
     function tinhluong_khongdinhmuc($inputs){
         $ngaylap = Carbon::create($inputs['nam'], $inputs['thang'], '01');
 
@@ -960,7 +964,8 @@ class bangluongdangkyController extends Controller
             $inputs['macvcq'] = $inputs['macvcq_mau1'];
             $inputs['mact'] = $inputs['mact_mau1'];
             //$inputs['cochu'] = $inputs['cochu_mau1'];
-            $model = $this->getBangLuong($inputs)->wherein('phanloai', ['CVCHINH','KHONGCT']);
+            $model = $this->getBangLuong($inputs);
+            //$model = $this->getBangLuong($inputs)->wherein('phanloai', ['CVCHINH','KHONGCT']);
             //dd($inputs);
             $mabl = $inputs['mabl'];
             $m_bl = bangluongdangky::select('thang','nam','mabl','madv','ngaylap','phanloai')->where('mabl',$mabl)->first();
@@ -971,6 +976,7 @@ class bangluongdangkyController extends Controller
                     $query->select('mact')->from('bangluongdangky_ct')->where('mabl',$mabl);
                 })->get();
 
+            /*
             $model_hoso = hosocanbo::where('madv', $m_bl->madv)->get();
             foreach ($model as $ct) {
                 if ($ct->phanloai == 'KHONGCT') {
@@ -978,7 +984,7 @@ class bangluongdangkyController extends Controller
                     $ct->tencanbo = count($hoso) > 0 ? $hoso->tencanbo : null;
                 }
             }
-
+            */
             $thongtin=array('nguoilap'=>$m_bl->nguoilap,
                 'thang'=>$m_bl->thang,
                 'nam'=>$m_bl->nam,
@@ -1013,7 +1019,8 @@ class bangluongdangkyController extends Controller
         if (Session::has('admin')) {
             $inputs = $request->all();
             $inputs['mabl'] = $inputs['mabl_mautt107'];
-            $model = $this->getBangLuong($inputs)->wherein('phanloai', ['CVCHINH','KHONGCT']);
+            $model = $this->getBangLuong($inputs);
+            //$model = $this->getBangLuong($inputs)->wherein('phanloai', ['CVCHINH','KHONGCT']);
             //dd($inputs);
             $mabl = $inputs['mabl'];
             $m_bl = bangluongdangky::select('thang','nam','mabl','madv','ngaylap','phanloai')->where('mabl',$mabl)->first();
@@ -1023,7 +1030,7 @@ class bangluongdangkyController extends Controller
                 ->wherein('mact', function($query) use($mabl){
                     $query->select('mact')->from('bangluongdangky_ct')->where('mabl',$mabl);
                 })->get();
-
+            /*
             $model_hoso = hosocanbo::where('madv', $m_bl->madv)->get();
             foreach ($model as $ct) {
                 if ($ct->phanloai == 'KHONGCT') {
@@ -1031,7 +1038,7 @@ class bangluongdangkyController extends Controller
                     $ct->tencanbo = count($hoso) > 0 ? $hoso->tencanbo : null;
                 }
             }
-
+            */
             $thongtin=array('nguoilap'=>$m_bl->nguoilap,
                 'thang'=>$m_bl->thang,
                 'nam'=>$m_bl->nam,
@@ -1069,7 +1076,10 @@ class bangluongdangkyController extends Controller
         $m_bl = bangluongdangky::select('thang', 'nam', 'mabl', 'madv', 'ngaylap', 'luongcoban')->where('mabl', $mabl)->first();
         //$m_dv = dmdonvi::where('madv', $m_bl->madv)->first();
         $dmchucvucq = getChucVuCQ(false);
-        $sunghiep = array_column(hosocanbo::select('sunghiep', 'macanbo')->where('madv', $m_bl->madv)->get()->toArray(), 'sunghiep', 'macanbo');
+
+        $m_cb = hosocanbo::select('tencanbo','sunghiep', 'macanbo')->where('madv', $m_bl->madv)->get();
+        $a_sn = array_column($m_cb->toArray(), 'sunghiep', 'macanbo');
+        $a_cb = array_column($m_cb->toArray(), 'tencanbo', 'macanbo');
         $nhomct = array_column(dmphanloaict::all('macongtac', 'mact')->toArray(), 'macongtac', 'mact');
 
         //xử lý ẩn hiện cột phụ cấp => biết tổng số cột hiện => colspan trên báo cáo
@@ -1088,8 +1098,12 @@ class bangluongdangkyController extends Controller
 
         foreach ($model as $hs) {
             $hs->tencv = isset($dmchucvucq[$hs->macvcq]) ? $dmchucvucq[$hs->macvcq] : '';
-            $hs->sunghiep = isset($sunghiep[$hs->macanbo]) ? $sunghiep[$hs->macanbo] : '';
+            $hs->sunghiep = isset($a_sn[$hs->macanbo]) ? $a_sn[$hs->macanbo] : '';
+            if($hs->tencanbo == ''){
+                $hs->tencanbo = isset($a_cb[$hs->macanbo]) ? $a_cb[$hs->macanbo] : '';
+            }
             $hs->macongtac = isset($nhomct[$hs->mact]) ? $nhomct[$hs->mact] : '';
+            /*
             if ($phanloai == 1) {
                 $ths = 0;
                 foreach ($model_pc as $col) {
@@ -1111,6 +1125,7 @@ class bangluongdangkyController extends Controller
                     $hs->tonghs = $ths;
                 }
             }
+            */
         }
 
         if (isset($inputs['mapb']) && $inputs['mapb'] != '') {

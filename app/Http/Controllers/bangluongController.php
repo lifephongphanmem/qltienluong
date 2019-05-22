@@ -1247,7 +1247,7 @@ class bangluongController extends Controller
 
         $a_col_cbkn = array('id','bac','baohiem','macongtac','pthuong','theodoi','phanloai');//'manguonkp',
         $a_kn_canbo = unset_key($a_kn_canbo,$a_col_cbkn);
-
+        //dd($a_kn_canbo);
         foreach(array_chunk($a_kn_canbo, 50)  as $data){
             //bangluong_ct::insert($data);
             (new data())->storeBangLuong($inputs['thang'],$data);
