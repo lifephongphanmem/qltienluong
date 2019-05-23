@@ -16,6 +16,7 @@ use App\tonghopluong_donvi;
 use App\tonghopluong_donvi_chitiet;
 use App\tonghopluong_huyen;
 use Illuminate\Http\Request;
+use App\Http\Controllers\dataController as data;
 
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
@@ -4241,7 +4242,8 @@ class baocaothongtu67Controller extends Controller
             if(isset($model_bangluong)){
                 $luongcb = $model_bangluong->luongcoban;
                 $model_congtac = dmphanloaict::all();
-                $model_bangluong_ct = bangluong_ct::where('mabl',$model_bangluong->mabl)->get();
+                //$model_bangluong_ct = bangluong_ct::where('mabl',$model_bangluong->mabl)->get();
+                $model_bangluong_ct = (new data())->getBangluong_ct($model_bangluong->thang,$model_bangluong->mabl);
                 foreach($model_bangluong_ct as $ct){
                     //$ct->luongcb = $model_bangluong->luongcoban;
                     $ct->linhvuchoatdong=$model_bangluong->linhvuchoatdong;//chỉ dùng cho khối HCSN
@@ -4521,7 +4523,8 @@ class baocaothongtu67Controller extends Controller
             //nếu đơn vị đã tạo bảng lương tháng 07/2017 =>xuất kết quả
             if(isset($model_bangluong)){
                 $model_congtac = dmphanloaict::all();
-                $model_bangluong_ct = bangluong_ct::where('mabl',$model_bangluong->mabl)->get();
+                //$model_bangluong_ct = bangluong_ct::where('mabl',$model_bangluong->mabl)->get();
+                $model_bangluong_ct = (new data())->getBangluong_ct($model_bangluong->thang,$model_bangluong->mabl);
                 foreach($model_bangluong_ct as $ct){
                     //$ct->luongcb = $model_bangluong->luongcoban;
                     $ct->linhvuchoatdong=$model_bangluong->linhvuchoatdong;//chỉ dùng cho khối HCSN
@@ -4836,7 +4839,8 @@ class baocaothongtu67Controller extends Controller
             if(isset($model_bangluong)){
                 //$luongcb = $model_bangluong->luongcoban;
                 $model_congtac = dmphanloaict::all();
-                $model_bangluong_ct = bangluong_ct::where('mabl',$model_bangluong->mabl)->get();
+                //$model_bangluong_ct = bangluong_ct::where('mabl',$model_bangluong->mabl)->get();
+                $model_bangluong_ct = (new data())->getBangluong_ct($model_bangluong->thang,$model_bangluong->mabl);
                 foreach($model_bangluong_ct as $ct){
                     //$ct->luongcb = $model_bangluong->luongcoban;
                     $ct->linhvuchoatdong=$model_bangluong->linhvuchoatdong;//chỉ dùng cho khối HCSN
@@ -5872,14 +5876,17 @@ class baocaothongtu67Controller extends Controller
                 })->get();
             $luongcb = 1150000;
             //nếu đơn vị đã tạo bảng lương tháng 07/2017 =>xuất kết quả
-//dd($model_tonghop);
+            //dd($model_tonghop);
+            $model_tonghop_ct = (new data())->getBangluong_ct_ar('07',a_unique(array_column($model_tonghop->toarray(),'mabl')));
+
+            /*
             $model_tonghop_ct = bangluong_ct::wherein('mabl',function($qr) use($macqcq){
                 $qr->select('mabl')->from('bangluong')->where('thang','07')->where('nam','2017')
                     ->wherein('madv',function($q) use($macqcq){
                         $q->select('madv')->from('dmdonvi')->where('macqcq',$macqcq)->get();
                     })->get();
             })->get();
-
+            */
             foreach($model_tonghop_ct as $ct){
                 //$ct->luongcb = $model_bangluong->luongcoban;
 
@@ -9563,14 +9570,17 @@ class baocaothongtu67Controller extends Controller
                 })->get();
             $luongcb = 1150000;
             //nếu đơn vị đã tạo bảng lương tháng 07/2017 =>xuất kết quả
-//dd($model_tonghop);
+            //dd($model_tonghop);
+
+            /*
             $model_tonghop_ct = bangluong_ct::wherein('mabl',function($qr) use($madvbc){
                 $qr->select('mabl')->from('bangluong')->where('thang','07')->where('nam','2017')
                     ->wherein('madv',function($q) use($madvbc){
                         $q->select('madv')->from('dmdonvi')->where('madvbc',$madvbc)->get();
                     })->get();
             })->get();
-
+            */
+            $model_tonghop_ct = (new data())->getBangluong_ct_ar('07',a_unique(array_column($model_tonghop->toarray(),'mabl')));
             foreach($model_tonghop_ct as $ct){
                 //$ct->luongcb = $model_bangluong->luongcoban;
 

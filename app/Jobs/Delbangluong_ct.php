@@ -6,6 +6,7 @@ use Illuminate\Bus\Queueable;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
+use App\Http\Controllers\dataController as data;
 
 class Delbangluong_ct implements ShouldQueue
 {
@@ -32,6 +33,7 @@ class Delbangluong_ct implements ShouldQueue
      */
     public function handle()
     {
-        \App\bangluong_ct::where('mabl',$this->mabl)->delete();
+        (new data())->destroyBangluong_ct($this->thang,$this->mabl);
+        //\App\bangluong_ct::where('mabl',$this->mabl)->delete();
     }
 }

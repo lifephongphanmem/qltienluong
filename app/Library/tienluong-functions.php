@@ -620,14 +620,16 @@ function getKieuTangGiamLuong(){
 
 //Nguồn truy lĩnh sau lấy trong db
 function getNguonTruyLinh(){
+    $model = App\dmnguonkinhphi::all()->first();
     return array(
-        '13' => '1390000',
+        $model->manguonkp => '1390000',
     );
 }
 
 function getNguonTruyLinh_df(){
+    $model = App\dmnguonkinhphi::all()->first();
     return array(
-        '13' => '1390000',
+        $model->manguonkp => '1390000',
     );
 }
 

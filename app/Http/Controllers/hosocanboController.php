@@ -217,7 +217,8 @@ class hosocanboController extends Controller
             hosocanbo_kiemnhiem::where('macanbo',$model->macanbo)->delete();
             $model->delete();
             return redirect('nghiep_vu/ho_so/danh_sach');
-            //
+
+            /*
             $chk_bl = bangluong_ct::where('macanbo',$model->macanbo)->get()->count();
             if($chk_bl > 0){
                 return view('errors.del_canbo')
@@ -227,7 +228,7 @@ class hosocanboController extends Controller
                 $model->delete();
                 return redirect('nghiep_vu/ho_so/danh_sach');
             }
-
+            */
 
             //bangluong_ct::where('macanbo',$model->macanbo)->delete();
             //bangluong_phucap::where('macanbo',$model->macanbo)->delete();

@@ -3,7 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\bangluong;
-use App\bangluong_ct;
+//use App\bangluong_ct;
+use App\Http\Controllers\dataController as data;
 use App\bangluong_phucap;
 use App\bangluong_truc;
 use App\dmchucvucq;
@@ -184,8 +185,9 @@ class bangluongController extends Controller
             $inputs = $request->all();
             $mabl = $inputs['mabl_tg'];
             $inputs['sotien'] = chkDbl($inputs['sotien_tg']);
-            $model = bangluong_ct::where('mabl', $mabl)->get();
             $model_bl = bangluong::where('mabl', $mabl)->first();
+            //$model = bangluong_ct::where('mabl', $mabl)->get();
+            $model = (new data())->getBangluong_ct($model_bl->thang,$model_bl->mabl);
             $ngaycong = dmdonvi::where('madv', $model_bl->madv)->first()->songaycong;
 
             if (isset($inputs['mapb_tg']) && $inputs['mapb_tg'] != '') {
@@ -549,7 +551,8 @@ class bangluongController extends Controller
 
             $kq = $cb->toarray();
             unset($kq['id']);
-            bangluong_ct::create($kq);
+            //bangluong_ct::create($kq);
+            (new data())->createBangLuong($inputs['thang'],$kq);
         }
 
         //Tính toán lương cho cán bộ kiêm nhiệm
@@ -680,7 +683,8 @@ class bangluongController extends Controller
             $cb->luongtn = $cb->ttl - $cb->ttbh;
             $a_k = $cb->toarray();
             unset($a_k['id']);
-            bangluong_ct::create($a_k);
+            //bangluong_ct::create($a_k);
+            (new data())->createBangLuong($inputs['thang'],$a_k);
         }
     }
 
@@ -769,7 +773,7 @@ class bangluongController extends Controller
             $m_cb[$key]['hs_pcudn'] = $val['pcudn'];
             $m_cb[$key]['songaytruc'] = 0;
 
-            $m_cb[$key]['heso'] =round($val['heso'] * $val['pthuong'] / 100,session('admin')->lamtron);
+            $m_cb[$key]['heso'] = round($val['heso'] * $val['pthuong'] / 100,session('admin')->lamtron);
             $m_cb[$key]['vuotkhung'] =round($val['heso'] * $val['vuotkhung'] / 100,session('admin')->lamtron);//trong bảng danh mục là % vượt khung => sang bảng lương chuyển thành hệ số
             $m_cb[$key]['bhxh'] = floatval($val['bhxh']) / 100;
             $m_cb[$key]['bhyt'] = floatval($val['bhyt']) / 100;
@@ -781,8 +785,8 @@ class bangluongController extends Controller
             $m_cb[$key]['bhtn_dv'] = floatval($val['bhtn_dv']) / 100;
             $m_cb[$key]['giaml'] = 0;
             //tính trc 1 số phụ cấp để làm hệ số cơ sơ
-            foreach($a_pc_coth as $pc){
-                if(isset($a_pc[$pc])){
+            foreach($a_pc_coth as $pc) {
+                if (isset($a_pc[$pc])) {
                     switch ($a_pc[$pc]['phanloai']) {
                         case 0:
                         case 1: {//số tiền
@@ -795,7 +799,7 @@ class bangluongController extends Controller
                                 if ($ct != '' && $ct != $pc)
                                     $heso += $m_cb[$key][$ct];
                             }
-                            $m_cb[$key][$pc] =round($heso * $m_cb[$key][$pc] / 100,session('admin')->lamtron);
+                            $m_cb[$key][$pc] = round($heso * $m_cb[$key][$pc] / 100, session('admin')->lamtron);
                             break;
                         }
                         default: {//trường hợp còn lại (ẩn,...)
@@ -841,7 +845,7 @@ class bangluongController extends Controller
                 switch ($a_pc[$k]['phanloai']) {
                     case 0: {//hệ số
                         $tonghs += $m_cb[$key][$mapc];
-                        $a_pc[$k]['sotien'] = round($m_cb[$key][$mapc] * $inputs['luongcoban'],0);
+                        $a_pc[$k]['sotien'] = round($m_cb[$key][$mapc] * $inputs['luongcoban']);
                         break;
                     }
                     case 1: {//số tiền
@@ -858,7 +862,7 @@ class bangluongController extends Controller
                             $m_cb[$key][$mapc] =round($heso * $m_cb[$key][$mapc] / 100,session('admin')->lamtron);
                         }
                         $tonghs += $m_cb[$key][$mapc];
-                        $a_pc[$k]['sotien'] = round($m_cb[$key][$mapc] * $inputs['luongcoban'],0);
+                        $a_pc[$k]['sotien'] = round($m_cb[$key][$mapc] * $inputs['luongcoban']);
                         break;
                     }
                     default: {//trường hợp còn lại (ẩn,...)
@@ -1083,7 +1087,8 @@ class bangluongController extends Controller
 
         //dd($a_data_canbo);
         foreach(array_chunk($a_data_canbo, 50)  as $data){
-            bangluong_ct::insert($data);
+            //bangluong_ct::insert($data);
+            (new data())->storeBangLuong($inputs['thang'],$data);
         }
 
         //Tính toán lương cho cán bộ kiêm nhiệm
@@ -1242,9 +1247,10 @@ class bangluongController extends Controller
 
         $a_col_cbkn = array('id','bac','baohiem','macongtac','pthuong','theodoi','phanloai');//'manguonkp',
         $a_kn_canbo = unset_key($a_kn_canbo,$a_col_cbkn);
-
+        //dd($a_kn_canbo);
         foreach(array_chunk($a_kn_canbo, 50)  as $data){
-            bangluong_ct::insert($data);
+            //bangluong_ct::insert($data);
+            (new data())->storeBangLuong($inputs['thang'],$data);
         }
         //dd($a_data_canbo);
         //dd($a_kn_canbo);
@@ -1323,11 +1329,12 @@ class bangluongController extends Controller
                         $cb->ngayden = $ngaylap;
                     }
                     $cb->vuotkhung = ($cb->heso * $cb->vuotkhung) / 100;
-                    $tonghs = $tien = 0;
 
+                    $tonghs = $tongtien = 0;
                     foreach ($model_phucap as $ct) {
                         $mapc = $ct->mapc;
                         $mapc_st = 'st_'.$ct->mapc;
+                        $tien = 0;
                         $ct->stbhxh = 0;
                         $ct->stbhyt = 0;
                         $ct->stkpcd = 0;
@@ -1342,7 +1349,8 @@ class bangluongController extends Controller
                                 break;
                             }
                             case 1: {//số tiền
-                                $tien += chkDbl($cb->$mapc);
+                                $tongtien += chkDbl($cb->$mapc);
+                                $tien = chkDbl($cb->$mapc);
                                 break;
                             }
                             case 2: {//phần trăm
@@ -1362,8 +1370,11 @@ class bangluongController extends Controller
                                 break;
                             }
                         }
-                        $ct->sotien = round($cb->$mapc * $cb->luongcoban,0);
-                        $cb->$mapc_st = $ct->sotien;
+                        $tiencong = round($cb->$mapc * $cb->luongcoban,0) + $tien;
+                        $ct->sotien = $tiencong;
+
+                        //Tính lại số tiền để gán vào cột phụ cấp (theo ngày + tháng)
+                        $cb->$mapc_st = round(($tiencong / $ngaycong)* $cb->ngaytl,0) + $tiencong * $cb->thangtl;
                         //tính bảo hiểm
                         if ($ct->baohiem == 1 &&
                             ($cb->maphanloai != 'KHAC' || ($cb->maphanloai == 'KHAC' && !in_array($mapc,$a_goc)))) {
@@ -1377,7 +1388,6 @@ class bangluongController extends Controller
                             $ct->stkpcd_dv = round($ct->sotien * $cb->kpcd_dv, 0);
                             $ct->stbhtn_dv = round($ct->sotien * $cb->bhtn_dv, 0);
                             $ct->ttbh_dv = $ct->stbhxh_dv + $ct->stbhyt_dv + $ct->stkpcd_dv + $ct->stbhtn_dv;
-
                         }
                     }
 
@@ -1386,8 +1396,10 @@ class bangluongController extends Controller
                         $tonghs = $tonghs - $cb->heso - $cb->vuotkhung - $cb->pccv;
                     }
                     $cb->tonghs = $tonghs;
-                    $thangtl = round($cb->luongcoban * $tonghs) + $tien;
-                    $ngaytl = round($thangtl / $ngaycong, 0);
+
+
+                    //Tính lại số tiền để gán vào cột phụ cấp
+
                     //1 tháng
                     $stbhxh = $model_phucap->sum('stbhxh');
                     $stbhyt = $model_phucap->sum('stbhyt');
@@ -1420,9 +1432,12 @@ class bangluongController extends Controller
                         $cb->stbhtn_dv = round($stbhtn_dv * $cb->thangtl, 0);
                     }
 
+                    $thangtl = round($cb->luongcoban * $tonghs) + $tongtien;
+                    //$ngaytl = round($thangtl / $ngaycong, 0);
+
                     $cb->ttbh = $cb->stbhxh + $cb->stbhyt + $cb->stkpcd + $cb->stbhtn;
                     $cb->ttbh_dv = $cb->stbhxh_dv + $cb->stbhyt_dv + $cb->stkpcd_dv + $cb->stbhtn_dv;
-                    $cb->ttl = round($thangtl * $cb->thangtl + $cb->ngaytl * $ngaytl, 0);
+                    $cb->ttl = round($thangtl * $cb->thangtl + ($cb->ngaytl * $thangtl) / $ngaycong, 0);
                     $cb->luongtn = $cb->ttl - $cb->ttbh;
                     //lưu vào bảng phụ cấp theo lương (chỉ có hệ số)
                     //ưng mỗi phân loại set về hệ số: chucvu => pccv=heso; tnn: pctnn=heso
@@ -1455,7 +1470,8 @@ class bangluongController extends Controller
                     //lưu vào db
                     //$this->createBangLuong($inputs['thang'],$kq);
                     //dd($kq);
-                    bangluong_ct::create($kq);
+                    //bangluong_ct::create($kq);
+                    (new data())->createBangLuong($inputs['thang'],$kq);
                 }
 
                 $model_canbo = $model_canbo->map(function ($data) {
@@ -1525,8 +1541,8 @@ class bangluongController extends Controller
     function show(Request $request){
         if (Session::has('admin')) {
             $inputs = $request->all();
-
             $m_bl = bangluong::select('thang', 'nam', 'mabl','phanloai')->where('mabl', $inputs['mabl'])->first();
+            //dd($m_bl);
             if($m_bl->phanloai == 'TRUC'){
                 $model = bangluong_truc::where('mabl', $inputs['mabl'])->get();
                 return view('manage.bangluong.bangluong_truc')
@@ -1536,7 +1552,8 @@ class bangluongController extends Controller
                     ->with('pageTitle', 'Bảng lương chi tiết');
             }else{
                 //$model = $this->getBL($m_bl->thang, $m_bl->mabl);
-                $model = bangluong_ct::where('mabl',$inputs['mabl'])->get();
+                //$model = bangluong_ct::where('mabl',$inputs['mabl'])->get();
+                $model = (new data())->getBangluong_ct($m_bl->thang, $m_bl->mabl);
             }
             if($inputs['mapb'] != ''){
                 $model = $model->where('mapb',$inputs['mapb']);
@@ -1571,7 +1588,8 @@ class bangluongController extends Controller
                 hosotruylinh::where('mabl', $model->mabl)
                     ->update(['mabl' => null]);
             }
-            bangluong_ct::where('mabl', $model->mabl)->delete();
+            //bangluong_ct::where('mabl', $model->mabl)->delete();
+            (new data())->destroyBangluong_ct($model->thang,$model->mabl);
             //bangluong_phucap::where('mabl', $model->mabl)->delete();
             //bangluong_truc::where('mabl', $model->mabl)->delete();
             $model->delete();
@@ -1580,14 +1598,17 @@ class bangluongController extends Controller
             return view('errors.notlogin');
     }
 
-    function destroy_ct($id){
+    function destroy_ct(Request $request){
         if (Session::has('admin')) {
-            $model = bangluong_ct::find($id);
+            $inputs = $request->all();
+            $m_bl = bangluong::where('mabl',$inputs['mabl'])->first();
+            $model = (new data())->getBangluong_ct_cb($m_bl->thang,$inputs['id']);
+            //dd($model);
             hosotruylinh::where('mabl', $model->mabl)
                 ->where('macanbo', $model->macanbo)
                 ->update(['mabl' => null]);
             $model->delete();
-            return redirect('/chuc_nang/bang_luong/bang_luong?mabl='.$model->mabl.'&mapb=');
+            return redirect('/chuc_nang/bang_luong/bang_luong?mabl='.$m_bl->mabl.'&mapb=');
             //return redirect('/chuc_nang/bang_luong/bang_luong?mabl='.$model->mabl.'&mapb='.$model->mapb);
             //return redirect('/chuc_nang/bang_luong/maso='.$model->mabl);
         } else
@@ -1651,7 +1672,8 @@ class bangluongController extends Controller
         $inputs = $request->all();
 
         $inputs['st'] = 'st_'.$inputs['mapc'];
-        $model_luong = bangluong_ct::find($inputs['id']);
+        $m_bl = bangluong::where('mabl',$inputs['mabl'])->first();
+        $model_luong = (new data())->getBangluong_ct_cb($m_bl->thang,$inputs['id']);
         $model = dmphucap::where('mapc',$inputs['mapc'])->first();
         $model->heso = $model_luong->$inputs['mapc'];
         $model->sotien = $model_luong->$inputs['st'];
@@ -1662,29 +1684,15 @@ class bangluongController extends Controller
     function detail(Request $request){
         if (Session::has('admin')) {
             $inputs = $request->all();
-            $model = bangluong_ct::findorfail($inputs['maso']);
-            $model_bangluong = bangluong::where('mabl',$model->mabl)->first();
+            //dd($inputs);
+            $model_bangluong = bangluong::where('mabl',$inputs['mabl'])->first();
+            $model = (new data())->getBangluong_ct_cb($model_bangluong->thang,$inputs['maso']);
 
             $m_nb = ngachluong::where('msngbac',$model->msngbac)->first();
-            //$model_bl = bangluong::where('mabl',$model->mabl)->first();
             $model->tennb = isset($m_nb)? $m_nb->tenngachluong:'';
-            $model->tencanbo = Str::upper($model->tencanbo);
-            /*
-            $model_canbo = hosocanbo::where('macanbo',$model->macanbo)->first();
-            $model->bhxh = $model_canbo->bhxh;
-            $model->bhyt = $model_canbo->bhyt;
-            $model->bhtn = $model_canbo->bhtn;
-            $model->kpcd = $model_canbo->kpcd;
-            $model->bhxh_dv = $model_canbo->bhxh_dv;
-            $model->bhyt_dv = $model_canbo->bhyt_dv;
-            $model->bhtn_dv = $model_canbo->bhtn_dv;
-            $model->kpcd_dv = $model_canbo->kpcd_dv;
-            */
-            //$a_donvi = dmdonvi::where('madv',session('admin')->madv)->first()->toarray();
 
             //$a_goc = array('heso','vuotkhung','hesott','hesopc');
-            $model_pc = dmphucap_donvi::where('madv', $model_bangluong->madv)->where('phanloai', '<', '3')
-                ->get();
+            $model_pc = dmphucap_donvi::where('madv', $model_bangluong->madv)->where('phanloai', '<', '3')->get();
             //dd($model_pc);
 
             if($model_bangluong->phanloai == 'TRUYLINH'){
@@ -1732,15 +1740,18 @@ class bangluongController extends Controller
     function updatect(Request $request){
         if (Session::has('admin')) {
             $inputs=$request->all();
-            $model=bangluong_ct::findorfail($inputs['id']);
+            //dd($inputs);
+            $m_bl = bangluong::where('mabl',$inputs['mabl'])->first();
+            $model = (new data())->getBangluong_ct_cb($m_bl->thang,$inputs['id']);
+            /* bổ qua vì đã chạy chi tiết phụ cấp
             $model_pc = dmphucap_donvi::where('madv', session('admin')->madv)->get();
             foreach($model_pc as $pc){
                 if(isset($inputs[$pc->mapc])){
                     $inputs[$pc->mapc] = chkDbl($inputs[$pc->mapc]);
                 }
             }
-
-            $inputs['ttl'] = chkDbl($inputs['ttl']);
+            */
+            $inputs['ttl'] = round(chkDbl($inputs['ttl']));
             $inputs['giaml'] = chkDbl($inputs['giaml']);
             $inputs['tienthuong'] = chkDbl($inputs['tienthuong']);
             $inputs['trichnop'] = chkDbl($inputs['trichnop']);
@@ -1756,7 +1767,7 @@ class bangluongController extends Controller
             $inputs['stkpcd_dv'] = chkDbl($inputs['stkpcd_dv']);
             $inputs['stbhtn_dv'] = chkDbl($inputs['stbhtn_dv']);
             $inputs['ttbh_dv'] = chkDbl($inputs['ttbh_dv']);
-            $inputs['luongtn'] = chkDbl($inputs['luongtn']);
+            $inputs['luongtn'] = round(chkDbl($inputs['luongtn']));
 
             //dd($inputs);
             $model->update($inputs);
@@ -1770,6 +1781,7 @@ class bangluongController extends Controller
     function updatect_truylinh(Request $request){
         if (Session::has('admin')) {
             $inputs=$request->all();
+            //dd($inputs);
             /*
             //Lưu bảng truy linh
             $model_truylinh = hosotruylinh::where('macanbo',$inputs['macanbo'])->where('mabl',$inputs['mabl'])->first();
@@ -1781,7 +1793,10 @@ class bangluongController extends Controller
             }
             //lưu bảng lương chi tiết
             */
-            $model=bangluong_ct::where('macanbo',$inputs['macanbo'])->where('mabl',$inputs['mabl'])->first();
+            //$model=bangluong_ct::where('macanbo',$inputs['macanbo'])->where('mabl',$inputs['mabl'])->first();
+            $m_bl = bangluong::where('mabl',$inputs['mabl'])->first();
+            $model = (new data())->getBangluong_ct_cb($m_bl->thang,$inputs['id']);
+
             $model_pc = dmphucap_donvi::where('madv', session('admin')->madv)->get();
             foreach($model_pc as $pc){
                 if(isset($inputs[$pc->mapc])){
@@ -1806,7 +1821,7 @@ class bangluongController extends Controller
             unset($inputs['id']);
             //dd($inputs);
             $model->update($inputs);
-            return redirect('/chuc_nang/bang_luong/bang_luong?mabl='.$model->mabl.'&mapb='.$model->mapb);
+            return redirect('/chuc_nang/bang_luong/bang_luong?mabl='.$model->mabl.'&mapb=');
 
 
         } else
@@ -1816,8 +1831,9 @@ class bangluongController extends Controller
     function update_chitiet(Request $request){
         if (Session::has('admin')) {
             $inputs=$request->all();
-
-            $model = bangluong_ct::findorfail($inputs['id_hs']);
+            $m_bl = bangluong::where('mabl',$inputs['mabl_hs'])->first();
+            $model = (new data())->getBangluong_ct_cb($m_bl->thang,$inputs['id_hs']);
+            //dd($model);
             $mapc = $inputs['mapc'];
             $mapc_st ='st_'. $inputs['mapc'];
 
@@ -1859,19 +1875,18 @@ class bangluongController extends Controller
 
     public function inbangluong($mabl){
         if (Session::has('admin')) {
-            $model = bangluong_ct::where('mabl',$mabl)->get();
             $m_bl = bangluong::select('thang','nam','mabl','madv','nguoilap','ngaylap','phanloai')->where('mabl',$mabl)->first();
-            $mabl = $m_bl->mabl;
-            $m_dv = dmdonvi::where('madv',$m_bl->madv)->first();
+            $model = (new data())->getBangluong_ct($m_bl->thang,$m_bl->mabl);
 
+            //$mabl = $m_bl->mabl;
+            $m_dv = dmdonvi::where('madv',$m_bl->madv)->first();
+            //$a_pl = a_unique(array_column($model->toarray(),'mact'));
             $model_congtac = dmphanloaict::select('mact','tenct')
-                ->wherein('mact', function($query) use($mabl){
-                    $query->select('mact')->from('bangluong_ct')->where('mabl',$mabl);
-                })->get();
+                ->wherein('mact', a_unique(array_column($model->toarray(),'mact')))->get();
 
             //dd($model_congtac);
             //$model_congtac = dmphanloaict::select('mact','tenct')->get();
-            $dmchucvucq=array_column(dmchucvucq::all('tenvt', 'macvcq')->toArray(),'tenvt', 'macvcq');
+            $dmchucvucq = array_column(dmchucvucq::all('tenvt', 'macvcq')->toArray(),'tenvt', 'macvcq');
             //dd($dmchucvucq);
             //dd($model);
             foreach($model as $hs){
@@ -1908,17 +1923,21 @@ class bangluongController extends Controller
 
     public function inbangluong_sotien($mabl){
         if (Session::has('admin')) {
-            $model = bangluong_ct::where('mabl',$mabl)->get();
             $m_bl = bangluong::select('thang','nam','mabl','madv','luongcoban','phanloai')->where('mabl',$mabl)->first();
-            $mabl = $m_bl->mabl;
+            $model = (new data())->getBangluong_ct($m_bl->thang,$m_bl->mabl);
+
+            //$mabl = $m_bl->mabl;
             $luongcb = $m_bl->luongcoban;
             $m_dv = dmdonvi::where('madv',$m_bl->madv)->first();
 
             $model_congtac = dmphanloaict::select('mact','tenct')
+                ->wherein('mact', a_unique(array_column($model->toarray(),'mact')))->get();
+            /*
+            $model_congtac = dmphanloaict::select('mact','tenct')
                 ->wherein('mact', function($query) use($mabl){
                     $query->select('mact')->from('bangluong_ct')->where('mabl',$mabl);
                 })->get();
-
+            */
             //dd($model_congtac);
             //$model_congtac = dmphanloaict::select('mact','tenct')->get();
             $dmchucvucq=array_column(dmchucvucq::all('tenvt', 'macvcq')->toArray(),'tenvt', 'macvcq');
@@ -1963,15 +1982,13 @@ class bangluongController extends Controller
 
     public function inbangluongmau3($mabl){
         if (Session::has('admin')) {
-            $model = bangluong_ct::where('mabl',$mabl)->get();
             $m_bl = bangluong::select('thang','nam','mabl','madv')->where('mabl',$mabl)->first();
-            $mabl = $m_bl->mabl;
+            $model = (new data())->getBangluong_ct($m_bl->thang,$m_bl->mabl);
+            //$mabl = $m_bl->mabl;
             $m_dv = dmdonvi::where('madv',$m_bl->madv)->first();
 
             $model_congtac = dmphanloaict::select('mact','tenct')
-                ->wherein('mact', function($query) use($mabl){
-                    $query->select('mact')->from('bangluong_ct')->where('mabl',$mabl);
-                })->get();
+                ->wherein('mact', a_unique(array_column($model->toarray(),'mact')))->get();
 
             //dd($model_congtac);
             //$model_congtac = dmphanloaict::select('mact','tenct')->get();
@@ -2007,16 +2024,13 @@ class bangluongController extends Controller
     //Mẫu group theo khối/tổ công tác
     public function inbangluongmau4($mabl){
         if (Session::has('admin')) {
-            $model = bangluong_ct::where('mabl',$mabl)->get();
             $m_bl = bangluong::select('thang','nam','mabl','madv')->where('mabl',$mabl)->first();
-            $mabl = $m_bl->mabl;
+            $model = (new data())->getBangluong_ct($m_bl->thang,$m_bl->mabl);
+            //$mabl = $m_bl->mabl;
             $m_dv = dmdonvi::where('madv',$m_bl->madv)->first();
 
             $model_congtac = dmphanloaict::select('mact','tenct')
-                ->wherein('mact', function($query) use($mabl){
-                    $query->select('mact')->from('bangluong_ct')->where('mabl',$mabl);
-                })->get();
-
+                ->wherein('mact', a_unique(array_column($model->toarray(),'mact')))->get();
             //dd($model_congtac);
             //$model_congtac = dmphanloaict::select('mact','tenct')->get();
             $dmchucvucq=array_column(dmchucvucq::all('tenvt', 'macvcq')->toArray(),'tenvt', 'macvcq');
@@ -2054,31 +2068,28 @@ class bangluongController extends Controller
 
     function inbaohiem($mabl){
         if (Session::has('admin')) {
-            $m_dv=dmdonvi::where('madv',session('admin')->maxa)->first();
+            $m_dv = dmdonvi::where('madv', session('admin')->maxa)->first();
+            $m_bl = bangluong::select('thang', 'nam')->where('mabl', $mabl)->first();
+            $model = (new data())->getBangluong_ct($m_bl->thang, $m_bl->mabl);
+            $dmchucvucq = dmchucvucq::all('tencv', 'macvcq')->toArray();
 
-            $model=bangluong_ct::where('mabl',$mabl)->get();
+            $model_congtac = dmphanloaict::select('mact', 'tenct')
+                ->wherein('mact', a_unique(array_column($model->toarray(), 'mact')))->get();
 
-            $m_bl=bangluong::select('thang','nam')->where('mabl',$mabl)->first();
-            $dmchucvucq=dmchucvucq::all('tencv', 'macvcq')->toArray();
-            $model_congtac = dmphanloaict::select('mact','tenct')
-                ->wherein('mact', function($query) use($mabl){
-                    $query->select('mact')->from('bangluong_ct')->where('mabl',$mabl);
-                })->get();
-
-            foreach($model as $hs){
-                $hs->tencv=getInfoChucVuCQ($hs,$dmchucvucq);
+            foreach ($model as $hs) {
+                $hs->tencv = getInfoChucVuCQ($hs, $dmchucvucq);
             }
 
-            $thongtin=array('nguoilap'=>session('admin')->name,
-                'thang'=>$m_bl->thang,
-                'nam'=>$m_bl->nam,
-                'cochu'=>12);
+            $thongtin = array('nguoilap' => session('admin')->name,
+                'thang' => $m_bl->thang,
+                'nam' => $m_bl->nam,
+                'cochu' => 12);
             return view('reports.bangluong.maubaohiem')
-                ->with('model',$model)
-                ->with('m_dv',$m_dv)
-                ->with('thongtin',$thongtin)
-                ->with('model_congtac',$model_congtac)
-                ->with('pageTitle','Bảng trích nộp bảo hiểm chi tiết');
+                ->with('model', $model)
+                ->with('m_dv', $m_dv)
+                ->with('thongtin', $thongtin)
+                ->with('model_congtac', $model_congtac)
+                ->with('pageTitle', 'Bảng trích nộp bảo hiểm chi tiết');
         } else
             return view('errors.notlogin');
     }
@@ -2100,15 +2111,12 @@ class bangluongController extends Controller
             $m_dv = dmdonvi::where('madv',$m_bl->madv)->first();
 
             $model_congtac = dmphanloaict::select('mact','tenct')
-                ->wherein('mact', function($query) use($mabl){
-                    $query->select('mact')->from('bangluong_ct')->where('mabl',$mabl);
-                })->get();
+                ->wherein('mact', a_unique(array_column($model->toarray(),'mact')))->get();
 
-            $model_hoso = hosocanbo::where('madv', $m_bl->madv)->get();
+            $a_hoso = array_column(hosocanbo::where('madv', $m_bl->madv)->get()->toarray(),'tencanbo','macanbo');
             foreach ($model as $ct) {
                 if ($ct->phanloai == 'KHONGCT') {
-                    $hoso = $model_hoso->where('macanbo', $ct->macanbo)->first();
-                    $ct->tencanbo = count($hoso) > 0 ? $hoso->tencanbo : null;
+                    $ct->tencanbo = isset($a_hoso[$ct->macanbo]) ? $a_hoso[$ct->macanbo] : '';
                 }
             }
 
@@ -2156,17 +2164,15 @@ class bangluongController extends Controller
             $m_dv = dmdonvi::where('madv',$m_bl->madv)->first();
 
             $model_congtac = dmphanloaict::select('mact','tenct')
-                ->wherein('mact', function($query) use($mabl){
-                    $query->select('mact')->from('bangluong_ct')->where('mabl',$mabl);
-                })->get();
+                ->wherein('mact', a_unique(array_column($model->toarray(),'mact')))->get();
 
-            $model_hoso = hosocanbo::where('madv', $m_bl->madv)->get();
+            $a_hoso = array_column(hosocanbo::where('madv', $m_bl->madv)->get()->toarray(),'tencanbo','macanbo');
             foreach ($model as $ct) {
                 if ($ct->phanloai == 'KHONGCT') {
-                    $hoso = $model_hoso->where('macanbo', $ct->macanbo)->first();
-                    $ct->tencanbo = count($hoso) > 0 ? $hoso->tencanbo : null;
+                    $ct->tencanbo = isset($a_hoso[$ct->macanbo]) ? $a_hoso[$ct->macanbo] : '';
                 }
             }
+
             $thongtin=array('nguoilap'=>$m_bl->nguoilap,
                 'thang'=>$m_bl->thang,
                 'nam'=>$m_bl->nam,
@@ -2217,9 +2223,7 @@ class bangluongController extends Controller
             $m_dv = dmdonvi::where('madv',$m_bl->madv)->first();
 
             $model_congtac = dmphanloaict::select('mact','tenct')
-                ->wherein('mact', function($query) use($mabl){
-                    $query->select('mact')->from('bangluong_ct')->where('mabl',$mabl);
-                })->get();
+                ->wherein('mact', a_unique(array_column($model->toarray(),'mact')))->get();
 
             $thongtin=array('nguoilap'=>$m_bl->nguoilap,
                 'thang'=>$m_bl->thang,
@@ -2263,9 +2267,7 @@ class bangluongController extends Controller
             $m_dv = dmdonvi::where('madv',$m_bl->madv)->first();
 
             $model_congtac = dmphanloaict::select('mact','tenct')
-                ->wherein('mact', function($query) use($mabl){
-                    $query->select('mact')->from('bangluong_ct')->where('mabl',$mabl);
-                })->get();
+                ->wherein('mact', a_unique(array_column($model->toarray(),'mact')))->get();
 
             $thongtin=array('nguoilap'=>$m_bl->nguoilap,
                 'thang'=>$m_bl->thang,
@@ -2321,9 +2323,7 @@ class bangluongController extends Controller
             $m_dv = dmdonvi::where('madv',$m_bl->madv)->first();
 
             $model_congtac = dmphanloaict::select('mact','tenct')
-                ->wherein('mact', function($query) use($mabl){
-                    $query->select('mact')->from('bangluong_ct')->where('mabl',$mabl);
-                })->get();
+                ->wherein('mact', a_unique(array_column($model->toarray(),'mact')))->get();
 
             $thongtin=array('nguoilap'=>$m_bl->nguoilap,
                 'thang'=>$m_bl->thang,
@@ -2386,9 +2386,7 @@ class bangluongController extends Controller
             $m_dv = dmdonvi::where('madv',$m_bl->madv)->first();
 
             $model_congtac = dmphanloaict::select('mact','tenct')
-                ->wherein('mact', function($query) use($mabl){
-                    $query->select('mact')->from('bangluong_ct')->where('mabl',$mabl);
-                })->get();
+                ->wherein('mact', a_unique(array_column($model->toarray(),'mact')))->get();
 
             $thongtin=array('nguoilap'=>$m_bl->nguoilap,
                 'thang'=>$m_bl->thang,
@@ -2462,9 +2460,7 @@ class bangluongController extends Controller
             $model = $this->getBangLuong_moi($inputs);
 
             $model_pb = dmphongban::select('mapb', 'tenpb')
-                ->wherein('mapb', function ($query) use ($mabl) {
-                    $query->select('mapb')->from('bangluong_ct')->where('mabl', $mabl);
-                })->get();
+                ->wherein('mapb', a_unique(array_column($model->toarray(),'mapb')))->get();
 
             $thongtin = array('nguoilap' => $m_bl->nguoilap,
                 'thang' => $m_bl->thang,
@@ -2508,9 +2504,7 @@ class bangluongController extends Controller
             $m_dv = dmdonvi::where('madv',$m_bl->madv)->first();
 
             $model_congtac = dmphanloaict::select('mact','tenct')
-                ->wherein('mact', function($query) use($mabl){
-                    $query->select('mact')->from('bangluong_ct')->where('mabl',$mabl);
-                })->get();
+                ->wherein('mact', a_unique(array_column($model->toarray(),'mact')))->get();
 
             $thongtin=array('nguoilap'=>$m_bl->nguoilap,
                 'thang'=>$m_bl->thang,
@@ -2564,9 +2558,7 @@ class bangluongController extends Controller
             $m_dv = dmdonvi::where('madv',$m_bl->madv)->first();
 
             $model_congtac = dmphanloaict::select('mact','tenct')
-                ->wherein('mact', function($query) use($mabl){
-                    $query->select('mact')->from('bangluong_ct')->where('mabl',$mabl);
-                })->get();
+                ->wherein('mact', a_unique(array_column($model->toarray(),'mact')))->get();
 
             $thongtin=array('nguoilap'=>$m_bl->nguoilap,
                 'thang'=>$m_bl->thang,
@@ -2614,9 +2606,7 @@ class bangluongController extends Controller
             $m_dv = dmdonvi::where('madv',$m_bl->madv)->first();
 
             $model_congtac = dmphanloaict::select('mact','tenct')
-                ->wherein('mact', function($query) use($mabl){
-                    $query->select('mact')->from('bangluong_ct')->where('mabl',$mabl);
-                })->get();
+                ->wherein('mact', a_unique(array_column($model->toarray(),'mact')))->get();
 
             $thongtin=array('nguoilap'=>$m_bl->nguoilap,
                 'thang'=>$m_bl->thang,
@@ -2674,9 +2664,7 @@ class bangluongController extends Controller
             $m_dv = dmdonvi::where('madv',$m_bl->madv)->first();
 
             $model_congtac = dmphanloaict::select('mact','tenct')
-                ->wherein('mact', function($query) use($mabl){
-                    $query->select('mact')->from('bangluong_ct')->where('mabl',$mabl);
-                })->get();
+                ->wherein('mact', a_unique(array_column($model->toarray(),'mact')))->get();
 
             $thongtin=array('nguoilap'=>$m_bl->nguoilap,
                 'thang'=>$m_bl->thang,
@@ -2723,9 +2711,7 @@ class bangluongController extends Controller
             $m_dv = dmdonvi::where('madv',$m_bl->madv)->first();
 
             $model_congtac = dmphanloaict::select('mact','tenct')
-                ->wherein('mact', function($query) use($mabl){
-                    $query->select('mact')->from('bangluong_ct')->where('mabl',$mabl);
-                })->get();
+                ->wherein('mact', a_unique(array_column($model->toarray(),'mact')))->get();
 
             $thongtin=array('nguoilap'=>$m_bl->nguoilap,
                 'thang'=>$m_bl->thang,
@@ -2783,9 +2769,7 @@ class bangluongController extends Controller
             $m_dv->tendvcq = getTenDB($m_dv->madvbc);
 
             $model_congtac = dmphanloaict::select('mact','tenct')
-                ->wherein('mact', function($query) use($mabl){
-                    $query->select('mact')->from('bangluong_ct')->where('mabl',$mabl);
-                })->get();
+                ->wherein('mact', a_unique(array_column($model->toarray(),'mact')))->get();
 
             $thongtin=array('nguoilap'=>$m_bl->nguoilap,
                 'thang'=>$m_bl->thang,
@@ -2798,6 +2782,7 @@ class bangluongController extends Controller
             $a_phucap = array();
             $col = 0;
             $model_hoso = hosocanbo::where('madv', $m_bl->madv)->get();
+            /*
             foreach ($model as $ct) {
                 $hoso = $model_hoso->where('macanbo', $ct->macanbo)->first();
                 if(count($hoso)>0 &&  $ct->heso>0){
@@ -2811,6 +2796,7 @@ class bangluongController extends Controller
                     $ct->tencanbo = count($hoso) > 0 ? $hoso->tencanbo : null;
                 }
             }
+            */
             foreach($model_pc as $ct){
                 $a_phucap[$ct->mapc] = $ct->report;
                 $col++;
@@ -2844,16 +2830,15 @@ class bangluongController extends Controller
             $m_dv->tendvcq = getTenDB($m_dv->madvbc);
 
             $model_congtac = dmphanloaict::select('mact','tenct')
-                ->wherein('mact', function($query) use($mabl){
-                    $query->select('mact')->from('bangluong_ct')->where('mabl',$mabl);
-                })->get();
-            $model_hoso = hosocanbo::where('madv', $m_bl->madv)->get();
+                ->wherein('mact', a_unique(array_column($model->toarray(),'mact')))->get();
+
+            $a_hoso = array_column(hosocanbo::where('madv', $m_bl->madv)->get()->toarray(),'tencanbo','macanbo');
             foreach ($model as $ct) {
                 if ($ct->phanloai == 'KHONGCT') {
-                    $hoso = $model_hoso->where('macanbo', $ct->macanbo)->first();
-                    $ct->tencanbo = count($hoso) > 0 ? $hoso->tencanbo : null;
+                    $ct->tencanbo = isset($a_hoso[$ct->macanbo]) ? $a_hoso[$ct->macanbo] : '';
                 }
             }
+
             $thongtin=array('nguoilap'=>$m_bl->nguoilap,
                 'thang'=>$m_bl->thang,
                 'nam'=>$m_bl->nam,
@@ -2930,11 +2915,15 @@ class bangluongController extends Controller
                 $model_tm = dmtieumuc_default::where('phanloai','CHILUONG')->get();
             }
             //dd($model_tm);
+            $model_congtac = dmphanloaict::select('mact','tenct')
+                ->wherein('mact', a_unique(array_column($model->toarray(),'mact')))->get();
+
+            /*
             $model_congtac = dmphanloaict::join('bangluong_ct', 'bangluong_ct.mact', '=', 'dmphanloaict.mact')
                 ->select('dmphanloaict.mact', 'dmphanloaict.tenct')
                 ->where('bangluong_ct.mabl', $mabl)
                 ->distinct()->get();
-
+            */
             $a_pb = getPhongBan();
             $thongtin = array('nguoilap' => $m_bl->nguoilap,
                 'thang' => $m_bl->thang,
@@ -3104,9 +3093,7 @@ class bangluongController extends Controller
             $model_tm = dmtieumuc_default::all();
 
             $model_congtac = dmphanloaict::select('mact','tenct')
-                ->wherein('mact', function($query) use($mabl){
-                    $query->select('mact')->from('bangluong_ct')->where('mabl',$mabl);
-                })->get();
+                ->wherein('mact', a_unique(array_column($model->toarray(),'mact')))->get();
 
             $thongtin=array('nguoilap'=>$m_bl->nguoilap,
                 'thang'=>$m_bl->thang,
@@ -3201,11 +3188,8 @@ class bangluongController extends Controller
             $m_bl = bangluong::select('thang', 'nam', 'mabl', 'madv', 'ngaylap','luongcoban')->where('mabl', $mabl)->first();
             $m_dv = dmdonvi::where('madv', $m_bl->madv)->first();
 
-            $model_congtac = dmphanloaict::select('mact', 'tenct')
-                ->wherein('mact', function ($query) use ($mabl) {
-                    $query->select('mact')->from('bangluong_ct')->where('mabl', $mabl);
-                })->get();
-            //$model_hoso = hosocanbo::where('madv', $m_bl->madv)->get();
+            $model_congtac = dmphanloaict::select('mact','tenct')
+                ->wherein('mact', a_unique(array_column($model->toarray(),'mact')))->get();
 
             $thongtin = array('nguoilap' => $m_bl->nguoilap,
                 'thang' => $m_bl->thang,
@@ -3256,15 +3240,13 @@ class bangluongController extends Controller
             $m_bl = bangluong::select('thang', 'nam', 'mabl', 'madv', 'ngaylap', 'luongcoban')->where('mabl', $mabl)->first();
             $m_dv = dmdonvi::where('madv', $m_bl->madv)->first();
 
-            $model_congtac = dmphanloaict::select('mact', 'tenct')
-                ->wherein('mact', function ($query) use ($mabl) {
-                    $query->select('mact')->from('bangluong_ct')->where('mabl', $mabl);
-                })->get();
-            $model_hoso = hosocanbo::where('madv', $m_bl->madv)->get();
+            $model_congtac = dmphanloaict::select('mact','tenct')
+                ->wherein('mact', a_unique(array_column($model->toarray(),'mact')))->get();
+
+            $a_hoso = array_column(hosocanbo::where('madv', $m_bl->madv)->get()->toarray(),'tencanbo','macanbo');
             foreach ($model as $ct) {
                 if ($ct->phanloai == 'KHONGCT') {
-                    $hoso = $model_hoso->where('macanbo', $ct->macanbo)->first();
-                    $ct->tencanbo = count($hoso) > 0 ? $hoso->tencanbo : null;
+                    $ct->tencanbo = isset($a_hoso[$ct->macanbo]) ? $a_hoso[$ct->macanbo] : '';
                 }
             }
 
@@ -3282,7 +3264,6 @@ class bangluongController extends Controller
             $col = 0;
 
             foreach ($model_pc as $ct) {
-
                 if ($model->sum($ct->mapc) > 0) {
                     $a_phucap[$ct->mapc] = $ct->report;
                     $col++;
@@ -3327,11 +3308,11 @@ class bangluongController extends Controller
             $m_bl = bangluong::select('thang', 'nam', 'mabl', 'madv', 'ngaylap','luongcoban')->where('mabl', $mabl)->first();
             $m_dv = dmdonvi::where('madv', $m_bl->madv)->first();
 
-            $model_congtac = dmphanloaict::select('mact', 'tenct')
-                ->wherein('mact', function ($query) use ($mabl) {
-                    $query->select('mact')->from('bangluong_ct')->where('mabl', $mabl);
-                })->get();
-            $model_hoso = hosocanbo::where('madv', $m_bl->madv)->get();
+            $model_congtac = dmphanloaict::select('mact','tenct')
+                ->wherein('mact', a_unique(array_column($model->toarray(),'mact')))->get();
+
+            $a_hoso = array_column(hosocanbo::where('madv', $m_bl->madv)->get()->toarray(),'tencanbo','macanbo');
+
             $model_ts =array_column( dmphucap_thaisan::select('mapc')->where('madv', $m_bl->madv)->get()->toarray(),'mapc');
             $a_goc = array('hesott');
             $model_pc = dmphucap_donvi::where('madv', $m_bl->madv)->where('phanloai', '<', '3')->wherenotin('mapc', $a_goc)->get();
@@ -3345,8 +3326,7 @@ class bangluongController extends Controller
             }
             foreach ($model as $ct) {
                 if ($ct->phanloai == 'KHONGCT') {
-                    $hoso = $model_hoso->where('macanbo', $ct->macanbo)->first();
-                    $ct->tencanbo = count($hoso) > 0 ? $hoso->tencanbo : null;
+                    $ct->tencanbo = isset($a_hoso[$ct->macanbo]) ? $a_hoso[$ct->macanbo] : '';
                 }
 
                 if ($ct->congtac == 'THAISAN') {
@@ -3409,17 +3389,14 @@ class bangluongController extends Controller
             $model= $this->getBangLuong_moi($inputs);
             //dd($model);
             //$model = bangluong_ct::where('mabl',$mabl)->get();
-            $model_hoso = hosocanbo::where('madv',$m_bl->madv)->get();
+
+            $a_hoso = array_column(hosocanbo::where('madv', $m_bl->madv)->get()->toarray(),'sotk','macanbo');
             foreach($model as $ct) {
-                $hoso = $model_hoso->where('macanbo', $ct->macanbo)->first();
-                $ct->sotk = count($hoso) > 0 ? $hoso->sotk : null;
+                $ct->sotk = isset($a_hoso[$ct->macanbo]) ? $a_hoso[$ct->macanbo] : '';
             }
             $m_dv = dmdonvi::where('madv',$m_bl->madv)->first();
-
             $model_congtac = dmphanloaict::select('mact','tenct')
-                ->wherein('mact', function($query) use($mabl){
-                    $query->select('mact')->from('bangluong_ct')->where('mabl',$mabl);
-                })->get();
+                ->wherein('mact', a_unique(array_column($model->toarray(),'mact')))->get();
 
             $thongtin=array('nguoilap'=>$m_bl->nguoilap,
                 'thang'=>$m_bl->thang,
@@ -3440,21 +3417,20 @@ class bangluongController extends Controller
     public function printf_mauds_excel(Request $request){
         if (Session::has('admin')) {
             $inputs = $request->all();
-
             $mabl = $inputs['mabl'];
             $m_bl = bangluong::select('thang','nam','mabl','madv','ngaylap','phanloai')->where('mabl',$mabl)->first();
-            $model = bangluong_ct::where('mabl',$mabl)->get();
-            $model_hoso = hosocanbo::where('madv',$m_bl->madv)->get();
-            foreach($model as $ct) {
-                $hoso = $model_hoso->where('macanbo', $ct->macanbo)->first();
-                $ct->sotk = count($hoso) > 0 ? $hoso->sotk : null;
-            }
+            $model = (new data())->getBangluong_ct($m_bl->thang,$m_bl->mabl);
+            //$model = bangluong_ct::where('mabl',$mabl)->get();
+
             $m_dv = dmdonvi::where('madv',$m_bl->madv)->first();
 
+            $a_hoso = array_column(hosocanbo::where('madv', $m_bl->madv)->get()->toarray(),'sotk','macanbo');
+            foreach($model as $ct) {
+                $ct->sotk = isset($a_hoso[$ct->macanbo]) ? $a_hoso[$ct->macanbo] : '';
+            }
+
             $model_congtac = dmphanloaict::select('mact','tenct')
-                ->wherein('mact', function($query) use($mabl){
-                    $query->select('mact')->from('bangluong_ct')->where('mabl',$mabl);
-                })->get();
+                ->wherein('mact', a_unique(array_column($model->toarray(),'mact')))->get();
 
             $thongtin=array('nguoilap'=>$m_bl->nguoilap,
                 'thang'=>$m_bl->thang,
@@ -3491,10 +3467,9 @@ class bangluongController extends Controller
             $m_bl = bangluong::select('thang','nam','mabl','madv','ngaylap','phanloai')->where('mabl',$mabl)->first();
             $model = $this->getBangLuong($inputs);
             //$model_hoso = hosocanbo::where('madv',$m_bl->madv)->get();
+
             $model_congtac = dmphanloaict::select('mact','tenct')
-                ->wherein('mact', function($query) use($mabl){
-                    $query->select('mact')->from('bangluong_ct')->where('mabl',$mabl);
-                })->get();
+                ->wherein('mact', a_unique(array_column($model->toarray(),'mact')))->get();
 
             //dd($request->all());
 
@@ -3526,35 +3501,29 @@ class bangluongController extends Controller
     function printf_maubh_excel(Request $request){
         if (Session::has('admin')) {
             $inputs = $request->all();
-
             $mabl = $inputs['mabl'];
-            $m_bl = bangluong::select('thang','nam','mabl','madv','ngaylap','phanloai')->where('mabl',$mabl)->first();
+            $m_bl = bangluong::select('thang', 'nam', 'mabl', 'madv', 'ngaylap', 'phanloai')->where('mabl', $mabl)->first();
             $model = $this->getBangLuong($inputs);
             //$model_hoso = hosocanbo::where('madv',$m_bl->madv)->get();
-            $model_congtac = dmphanloaict::select('mact','tenct')
-                ->wherein('mact', function($query) use($mabl){
-                    $query->select('mact')->from('bangluong_ct')->where('mabl',$mabl);
-                })->get();
 
+            $model_congtac = dmphanloaict::select('mact', 'tenct')
+                ->wherein('mact', a_unique(array_column($model->toarray(), 'mact')))->get();
+            $m_dv = dmdonvi::where('madv', $m_bl->madv)->first();
 
-            //dd($request->all());
-
-            $m_dv=dmdonvi::where('madv',$m_bl->madv)->first();
-
-            $dmchucvucq=dmchucvucq::all('tencv', 'macvcq')->toArray();
-            foreach($model as $hs){
-                $hs->tencv=getInfoChucVuCQ($hs,$dmchucvucq);
+            $dmchucvucq = dmchucvucq::all('tencv', 'macvcq')->toArray();
+            foreach ($model as $hs) {
+                $hs->tencv = getInfoChucVuCQ($hs, $dmchucvucq);
             }
-            $thongtin=array('nguoilap'=>session('admin')->name,
-                'thang'=>$m_bl->thang,
-                'nam'=>$m_bl->nam);
+            $thongtin = array('nguoilap' => session('admin')->name,
+                'thang' => $m_bl->thang,
+                'nam' => $m_bl->nam);
             return view('reports.bangluong.maubaohiem')
-                ->with('model',$model->sortBy('stt'))
-                ->with('model_pb',getPhongBan())
-                ->with('m_dv',$m_dv)
-                ->with('thongtin',$thongtin)
-                ->with('model_congtac',$model_congtac)
-                ->with('pageTitle','Bảng trích nộp bảo hiểm chi tiết');
+                ->with('model', $model->sortBy('stt'))
+                ->with('model_pb', getPhongBan())
+                ->with('m_dv', $m_dv)
+                ->with('thongtin', $thongtin)
+                ->with('model_congtac', $model_congtac)
+                ->with('pageTitle', 'Bảng trích nộp bảo hiểm chi tiết');
         } else
             return view('errors.notlogin');
     }
@@ -3562,10 +3531,10 @@ class bangluongController extends Controller
     public function printf_maudbhdnd(Request $request){
         if (Session::has('admin')) {
             $inputs = $request->all();
-
             $mabl = $inputs['mabl'];
             $m_bl = bangluong::select('thang','nam','mabl','madv','ngaylap','luongcoban')->where('mabl',$mabl)->first();
-            $model = bangluong_ct::where('mabl',$mabl)->where('mact','1536402868')->get();
+            $model = (new data())->getBangluong_ct($m_bl->thang,$m_bl->mabl)->where('mact','1536402868')->get();
+            //$model = bangluong_ct::where('mabl',$mabl)->where('mact','1536402868')->get();
             $model_hoso = hosocanbo::where('madv',$m_bl->madv)->get();
             $a_cv = getChucVuCQ(false);
             foreach($model as $ct) {
@@ -3602,10 +3571,9 @@ class bangluongController extends Controller
     public function printf_maudbhdnd_excel(Request $request){
         if (Session::has('admin')) {
             $inputs = $request->all();
-
             $mabl = $inputs['mabl'];
             $m_bl = bangluong::select('thang','nam','mabl','madv','ngaylap','luongcoban')->where('mabl',$mabl)->first();
-            $model = bangluong_ct::where('mabl',$mabl)->get();
+            $model = (new data())->getBangluong_ct($m_bl->thang,$m_bl->mabl);
             $model_hoso = hosocanbo::where('madv',$m_bl->madv)->get();
 
             foreach($model as $ct) {
@@ -3652,7 +3620,6 @@ class bangluongController extends Controller
         if (Session::has('admin')) {
             $inputs = $request->all();
             $model = $this->getBangLuong($inputs);
-
             $mabl = $inputs['mabl'];
             $m_bl = bangluong::select('thang', 'nam', 'mabl', 'madv', 'ngaylap', 'luongcoban')->where('mabl', $mabl)->first();
 
@@ -3754,7 +3721,7 @@ class bangluongController extends Controller
 
             $mabl = $inputs['mabl'];
             $m_bl = bangluong::select('thang','nam','mabl','madv','ngaylap','luongcoban')->where('mabl',$mabl)->first();
-            $model = bangluong_ct::where('mabl',$mabl)->where('mact','1536459380')->get();
+            $model = (new data())->getBangluong_ct($m_bl->thang,$m_bl->mabl)->where('mact','1536459380')->get();
             $model_hoso = hosocanbo::where('madv',$m_bl->madv)->get();
             $a_cv = getChucVuCQ(false);
 
@@ -3808,7 +3775,7 @@ class bangluongController extends Controller
 
             $mabl = $inputs['mabl'];
             $m_bl = bangluong::select('thang','nam','mabl','madv','ngaylap','luongcoban')->where('mabl',$mabl)->first();
-            $model = bangluong_ct::where('mabl',$mabl)->get();
+            $model = (new data())->getBangluong_ct($m_bl->thang,$m_bl->mabl);
             $model_hoso = hosocanbo::where('madv',$m_bl->madv)->get();
             $a_cv = getChucVuCQ(false);
 
@@ -3867,14 +3834,13 @@ class bangluongController extends Controller
             $inputs = $request->all();
             $mabl = $inputs['mabl'];
             $m_bl = bangluong::select('thang','nam','mabl','madv','ngaylap','luongcoban')->where('mabl',$mabl)->first();
-            $model = bangluong_ct::where('mabl',$mabl)->where('mact','1536402878')->get();
+            $model = (new data())->getBangluong_ct($m_bl->thang,$m_bl->mabl)->where('mact','1536402878')->get();
             if (isset($inputs['mapb']) && $inputs['mapb'] != '') {
                 $model = $model->where('mapb', $inputs['mapb']);
             }
 
             $model_hoso = hosocanbo::where('madv',$m_bl->madv)->get();
             $a_cv = getChucVuCQ(false);
-
 
             foreach($model as $ct) {
                 $ct->luongcb = $m_bl->luongcoban;
@@ -3912,7 +3878,7 @@ class bangluongController extends Controller
             $inputs = $request->all();
             $mabl = $inputs['mabl'];
             $m_bl = bangluong::select('thang','nam','mabl','madv','ngaylap','luongcoban')->where('mabl',$mabl)->first();
-            $model = bangluong_ct::where('mabl',$mabl)->get();
+            $model = (new data())->getBangluong_ct($m_bl->thang,$m_bl->mabl);
             if (isset($inputs['mapb']) && $inputs['mapb'] != '') {
                 $model = $model->where('mapb', $inputs['mapb']);
             }
@@ -3969,7 +3935,7 @@ class bangluongController extends Controller
             $inputs = $request->all();
             $mabl = $inputs['mabl'];
             $m_bl = bangluong::select('thang','nam','mabl','madv','ngaylap','luongcoban')->where('mabl',$mabl)->first();
-            $model = bangluong_ct::where('mabl',$mabl)->where('mact','1536402895')->get();
+            $model = (new data())->getBangluong_ct($m_bl->thang,$m_bl->mabl)->where('mact','1536402895')->get();
             $model_hoso = hosocanbo::where('madv',$m_bl->madv)->get();
             $a_cv = getChucVuCQ(false);
 
@@ -4009,7 +3975,7 @@ class bangluongController extends Controller
             $inputs = $request->all();
             $mabl = $inputs['mabl'];
             $m_bl = bangluong::select('thang','nam','mabl','madv','ngaylap','luongcoban')->where('mabl',$mabl)->first();
-            $model = bangluong_ct::where('mabl',$mabl)->where('mact','1536459160')->get();
+            $model = (new data())->getBangluong_ct($m_bl->thang,$m_bl->mabl)->where('mact','1536459160')->get();
             $model_hoso = hosocanbo::where('madv',$m_bl->madv)->get();
             $a_cv = getChucVuCQ(false);
 
@@ -4076,7 +4042,7 @@ class bangluongController extends Controller
             $inputs = $request->all();
             $mabl = $inputs['mabl'];
             $m_bl = bangluong::select('thang','nam','mabl','madv','ngaylap','luongcoban')->where('mabl',$mabl)->first();
-            $model = bangluong_ct::where('mabl',$mabl)->where('mact','1537427170')->get();
+            $model = (new data())->getBangluong_ct($m_bl->thang,$m_bl->mabl)->where('mact','1537427170')->get();
             $model_hoso = hosocanbo::where('madv',$m_bl->madv)->get();
             $a_cv = getChucVuCQ(false);
 
@@ -4136,10 +4102,6 @@ class bangluongController extends Controller
              * */
             $model_tm = dmtieumuc_default::all();
             //dd($model_tm);
-            $model_congtac = dmphanloaict::join('bangluong_ct', 'bangluong_ct.mact', '=', 'dmphanloaict.mact')
-                ->select('dmphanloaict.mact', 'dmphanloaict.tenct')
-                ->where('bangluong_ct.mabl', $mabl)
-                ->distinct()->get();
 
             $a_pb = getPhongBan();
             $thongtin = array('nguoilap' => $m_bl->nguoilap,
@@ -4355,9 +4317,9 @@ class bangluongController extends Controller
     function getBangLuong($inputs, $phanloai=0)
     {
         $mabl = $inputs['mabl'];
-        $model = bangluong_ct::where('mabl', $mabl)->get();
-        $m_bl = bangluong::select('madv')->where('mabl', $mabl)->first();
-        //dd($inputs);
+        $m_bl = bangluong::select('madv','thang','mabl')->where('mabl', $mabl)->first();
+        $model = (new data())->getBangluong_ct($m_bl->thang,$m_bl->mabl);
+        //dd($m_bl);
         $m_hoso = hosocanbo::where('madv', $m_bl->madv)->get();
         $a_ht = array_column($m_hoso->toarray(),'tencanbo','macanbo');
         $dmchucvucq = array_column(dmchucvucq::all('tenvt', 'macvcq')->toArray(), 'tenvt', 'macvcq');
@@ -4383,11 +4345,15 @@ class bangluongController extends Controller
         if (isset($inputs['mact']) && $inputs['mact'] != '') {
             $model = $model->where('mact', $inputs['mact']);
         }
+        //dd($model);
         return $model;
     }
 
     function getBangLuong_moi($inputs){
-        $model = bangluong_ct::where('mabl', $inputs['mabl'])->get();
+        //$model = bangluong_ct::where('mabl', $inputs['mabl'])->get();
+        $m_bl = bangluong::select('madv','thang','mabl')->where('mabl', $inputs['mabl'])->first();
+        $model = (new data())->getBangluong_ct($m_bl->thang,$m_bl->mabl);
+
         $m_hoso = hosocanbo::where('madv', $inputs['madv'])->get();
         //$a_ht = array_column($m_hoso->keyby('macanbo')->toarray(),'tencanbo','macanbo');
         $dmchucvucq = array_column(dmchucvucq::all('tenvt', 'macvcq')->toArray(), 'tenvt', 'macvcq');
@@ -4416,165 +4382,6 @@ class bangluongController extends Controller
             $model = $model->where('mact', $inputs['mact']);
         }
         return $model;
-    }
-
-    function storeBangLuong($thang, $data){
-        switch($thang){
-            case '01':{
-                \App\bangluong_ct_01::insert($data);
-                break;
-            }
-            case '02':{
-                \App\bangluong_ct_02::insert($data);
-                break;
-            }
-            case '03':{
-                \App\bangluong_ct_03::insert($data);
-                break;
-            }
-            case '04':{
-                \App\bangluong_ct_04::insert($data);
-                break;
-            }
-            case '05':{
-                \App\bangluong_ct_05::insert($data);
-                break;
-            }
-            case '06':{
-                \App\bangluong_ct_06::insert($data);
-                break;
-            }
-            case '07':{
-                \App\bangluong_ct_07::insert($data);
-                break;
-            }
-            case '08':{
-                \App\bangluong_ct_08::insert($data);
-                break;
-            }
-            case '09':{
-                \App\bangluong_ct_09::insert($data);
-                break;
-            }
-            case '10':{
-                \App\bangluong_ct_10::insert($data);
-                break;
-            }
-            case '11':{
-                \App\bangluong_ct_11::insert($data);
-                break;
-            }
-            case '12':{
-                \App\bangluong_ct_12::insert($data);
-                break;
-            }
-        }
-    }
-
-    function createBangLuong($thang, $data){
-        switch($thang){
-            case '01':{
-                \App\bangluong_ct_01::create($data);
-                break;
-            }
-            case '02':{
-                \App\bangluong_ct_02::create($data);
-                break;
-            }
-            case '03':{
-                \App\bangluong_ct_03::create($data);
-                break;
-            }
-            case '04':{
-                \App\bangluong_ct_04::create($data);
-                break;
-            }
-            case '05':{
-                \App\bangluong_ct_05::create($data);
-                break;
-            }
-            case '06':{
-                \App\bangluong_ct_06::create($data);
-                break;
-            }
-            case '07':{
-                \App\bangluong_ct_07::create($data);
-                break;
-            }
-            case '08':{
-                \App\bangluong_ct_08::create($data);
-                break;
-            }
-            case '09':{
-                \App\bangluong_ct_09::create($data);
-                break;
-            }
-            case '10':{
-                \App\bangluong_ct_10::create($data);
-                break;
-            }
-            case '11':{
-                \App\bangluong_ct_11::create($data);
-                break;
-            }
-            case '12':{
-                \App\bangluong_ct_12::create($data);
-                break;
-            }
-        }
-    }
-
-    function getBL($thang, $mabl){
-        switch($thang){
-            case '01':{
-                return  \App\bangluong_ct_01::where('mabl',$mabl)->get();
-                break;
-            }
-            case '02':{
-                return \App\bangluong_ct_02::where('mabl',$mabl)->get();
-                break;
-            }
-            case '03':{
-                return \App\bangluong_ct_03::where('mabl',$mabl)->get();
-                break;
-            }
-            case '04':{
-                return \App\bangluong_ct_04::where('mabl',$mabl)->get();
-                break;
-            }
-            case '05':{
-                return \App\bangluong_ct_05::where('mabl',$mabl)->get();
-                break;
-            }
-            case '06':{
-                return \App\bangluong_ct_06::where('mabl',$mabl)->get();
-                break;
-            }
-            case '07':{
-                return \App\bangluong_ct_07::where('mabl',$mabl)->get();
-                break;
-            }
-            case '08':{
-                return \App\bangluong_ct_08::where('mabl',$mabl)->get();
-                break;
-            }
-            case '09':{
-                return \App\bangluong_ct_09::where('mabl',$mabl)->get();
-                break;
-            }
-            case '10':{
-                return \App\bangluong_ct_10::where('mabl',$mabl)->get();
-                break;
-            }
-            case '11':{
-                return \App\bangluong_ct_11::where('mabl',$mabl)->get();
-                break;
-            }
-            case '12':{
-                return \App\bangluong_ct_12::where('mabl',$mabl)->get();
-                break;
-            }
-        }
     }
 
     //<editor-fold desc="Tra cứu">

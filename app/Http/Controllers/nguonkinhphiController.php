@@ -430,7 +430,7 @@ class nguonkinhphiController extends Controller
                     + $model->tinhgiam + $model->nghihuusom;
             }
             return view('manage.nguonkinhphi.edit')
-                ->with('furl', '/du_toan/nguon_kinh_phi/')
+                ->with('furl', '/nguon_kinh_phi/')
                 ->with('model', $model)
                 ->with('pageTitle', 'Danh sách nguồn kinh phí của đơn vị');
         } else
@@ -464,7 +464,7 @@ class nguonkinhphiController extends Controller
             //dd($inputs);
             $model->update($inputs);
 
-            return redirect('/du_toan/nguon_kinh_phi/danh_sach');
+            return redirect('/nguon_kinh_phi/danh_sach');
         }else
             return view('errors.notlogin');
     }
@@ -595,7 +595,7 @@ class nguonkinhphiController extends Controller
         if (Session::has('admin')) {
             $model = nguonkinhphi::find($id);
             $model->delete();
-            return redirect('/du_toan/nguon_kinh_phi/danh_sach');
+            return redirect('/nguon_kinh_phi/danh_sach');
         } else
             return view('errors.notlogin');
     }

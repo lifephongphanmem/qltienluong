@@ -44,7 +44,7 @@
                         <div class="form-group">
                             <label class="control-label col-md-offset-2 col-md-1" style="text-align: right">Tháng </label>
                             <div class="col-md-2">
-                                {!! Form::select('thangct',getThang(),$inputs['thang'],array('id' => 'thangct', 'class' => 'form-control'))!!}
+                                {!! Form::select('thangct',getThangBC(),$inputs['thang'],array('id' => 'thangct', 'class' => 'form-control'))!!}
                             </div>
                             <label class="control-label col-md-1" style="text-align: right">Năm </label>
                             <div class="col-md-2">
@@ -60,6 +60,7 @@
                                 <th class="text-center">Phân loại</th>
                                 <th class="text-center">Họ và tên</th>
                                 <th class="text-center">Hệ số</br>truy lĩnh</th>
+                                <th class="text-center">Thời gian</br>truy lĩnh</th>
                                 <th class="text-center">Trạng thái</th>
                                 <th class="text-center">Thao tác</th>
                             </tr>
@@ -72,8 +73,8 @@
                                         <td>{{isset($a_pl[$value->maphanloai])? $a_pl[$value->maphanloai]:'' }}</td>
                                         <td>{{$value->tencanbo}}</td>
                                         <td class="text-center">{{$value->heso}}</td>
+                                        <td>{{getDayVn($value->ngaytu) .' - '. getDayVn($value->ngayden)}}</td>
                                         <td class="text-center">{{$value->mabl == null?"Chưa chi trả":'Đã chi trả'}}</td>
-
                                         <td>
 
                                             @if($value->mabl == null)

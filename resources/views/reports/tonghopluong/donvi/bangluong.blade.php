@@ -124,17 +124,16 @@
         @foreach($a_tonghop as $th)
             <?php
                 $stt=1; $i_nkp = 1;
-                //$tonghop = $model->where('tonghop',$th['tonghop']);
-            ?>
-                <tr style="font-weight: bold;">
-                    <td style="text-align: left">{{convert2Roman($i++)}}</td>
-                    <td style="text-align: left;" colspan="22">{{$th['tonghop']=='BANGLUONG'?'Số liệu chi trả lương':'Số liệu truy lĩnh lương'}}</td>
-                </tr>
+                $a_nguon_kp = a_getelement($a_nguon,$th);
+                //print_r($a_nguon_kp);
+                //$tonghop = $model->where('tonghop',$th['tonghop']); ?>
+            <tr style="font-weight: bold;">
+                <td style="text-align: left">{{convert2Roman($i++)}}</td>
+                <td style="text-align: left;" colspan="22">{{$th['tonghop']=='BANGLUONG'?'Số liệu chi trả lương':'Số liệu truy lĩnh lương'}}</td>
+            </tr>
 
-                @for($j=0;$j<count($a_nguon);$j++)
-                <?php
-                    $model_congtac = a_getelement($a_congtac,array_merge($a_nguon[$j],$th));
-                ?>
+            @foreach($a_nguon_kp as $nkp)
+                <?php $model_congtac = a_getelement($a_congtac,$nkp); ?>
                 @foreach($model_congtac as $congtac)
                     <?php
                         $model_luong = $model->where('mact',$congtac['mact'])
@@ -192,8 +191,7 @@
                         </tr>
                     @endif
                 @endforeach
-
-            @endfor
+            @endforeach
         @endforeach
         <tr style="font-weight: bold; text-align: center;">
             <td colspan="3">Tổng cộng</td>

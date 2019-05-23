@@ -61,7 +61,6 @@
                         {!! Form::open(['url'=>'/nghiep_vu/ho_so/store','method'=>'post' , 'files'=>true, 'id' => 'create_hscb','enctype'=>'multipart/form-data']) !!}
                             <div class="form-body">
                                 <ul class="nav nav-pills nav-justified steps">
-
                                     <li><a href="#tab1" data-toggle="tab" class="step">
                                             <p class="description"><i class="glyphicon glyphicon-user"></i> Thông tin cơ bản</p></a>
                                     </li>
