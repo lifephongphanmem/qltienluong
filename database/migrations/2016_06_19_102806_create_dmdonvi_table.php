@@ -39,6 +39,8 @@ class CreateDmdonviTable extends Migration
             $table->double('songaycong')->default(24);
             $table->double('ptdaingay')->default(100);
             $table->double('lamtron')->default(3);
+            $table->date('ngaydung')->nullable();
+            $table->string('trangthai')->nullable();
             $table->timestamps();
         });
     }

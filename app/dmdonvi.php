@@ -33,6 +33,8 @@ class dmdonvi extends Model
         'linhvuchoatdong',
         'songaycong',
         'ptdaingay',
-        'lamtron'
+        'lamtron',
+        'ngaydung',
+        'trangthai'
     ];
 }

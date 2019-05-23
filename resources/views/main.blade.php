@@ -417,6 +417,7 @@
                                 </a>
                                 <ul class="sub-menu" style="margin-left: 15px;">
                                     <li><a href="{{url('/he_thong/don_vi/don_vi')}}"><i class="fa fa-caret-right"></i>Thông tin đơn vị</a></li>
+                                    <li><a href="{{url('/he_thong/don_vi/stopdv')}}"><i class="fa fa-caret-right"></i>Dừng hoạt động đơn vị</a></li>
                                 </ul>
                             </li>
                         </ul>

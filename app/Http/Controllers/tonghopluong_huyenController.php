@@ -127,6 +127,24 @@ class tonghopluong_huyenController extends Controller
             return view('errors.notlogin');
     }
 
+    public  function  soluongdv($thang,$nam)
+    {
+        $madv = session('admin')->madv;
+        $model_donvi = dmdonvi::select('madv', 'tendv')
+                    ->where('macqcq', $madv)
+                    ->where('madv', '<>', $madv)
+                    ->wherenotin('madv', function ($query) use ($madv,$thang,$nam) {
+                        $query->select('madv')->from('dmdonvi')
+                            ->whereMonth('ngaydung', '<=', $thang)
+                            ->whereYear('ngaydung', '<=', $nam)
+                            ->where('trangthai', 'TD')
+                            ->get();
+                    })->get();
+
+
+        $kq = $model_donvi->count();
+        return $kq;
+    }
     function index(Request $requests)
     {
         if (Session::has('admin')) {
@@ -145,18 +163,18 @@ class tonghopluong_huyenController extends Controller
             //dd($model_donvi->toarray());
             $sldv = $model_donvi->count();
 
-            $a_data = array(array('thang' => '01', 'mathdv' => null, 'noidung' => null, 'sldv' => $sldv, 'dvgui' => 0),
-                array('thang' => '02', 'mathdv' => null, 'noidung' => null, 'sldv' => $sldv, 'dvgui' => 0),
-                array('thang' => '03', 'mathdv' => null, 'noidung' => null, 'sldv' => $sldv, 'dvgui' => 0),
-                array('thang' => '04', 'mathdv' => null, 'noidung' => null, 'sldv' => $sldv, 'dvgui' => 0),
-                array('thang' => '05', 'mathdv' => null, 'noidung' => null, 'sldv' => $sldv, 'dvgui' => 0),
-                array('thang' => '06', 'mathdv' => null, 'noidung' => null, 'sldv' => $sldv, 'dvgui' => 0),
-                array('thang' => '07', 'mathdv' => null, 'noidung' => null, 'sldv' => $sldv, 'dvgui' => 0),
-                array('thang' => '08', 'mathdv' => null, 'noidung' => null, 'sldv' => $sldv, 'dvgui' => 0),
-                array('thang' => '09', 'mathdv' => null, 'noidung' => null, 'sldv' => $sldv, 'dvgui' => 0),
-                array('thang' => '10', 'mathdv' => null, 'noidung' => null, 'sldv' => $sldv, 'dvgui' => 0),
-                array('thang' => '11', 'mathdv' => null, 'noidung' => null, 'sldv' => $sldv, 'dvgui' => 0),
-                array('thang' => '12', 'mathdv' => null, 'noidung' => null, 'sldv' => $sldv, 'dvgui' => 0)
+            $a_data = array(array('thang' => '01', 'mathdv' => null, 'noidung' => null, 'sldv' =>$this->soluongdv('1',$inputs['nam']), 'dvgui' => 0),
+                array('thang' => '02', 'mathdv' => null, 'noidung' => null, 'sldv' => $this->soluongdv('2',$inputs['nam']), 'dvgui' => 0),
+                array('thang' => '03', 'mathdv' => null, 'noidung' => null, 'sldv' => $this->soluongdv('3',$inputs['nam']), 'dvgui' => 0),
+                array('thang' => '04', 'mathdv' => null, 'noidung' => null, 'sldv' => $this->soluongdv('4',$inputs['nam']), 'dvgui' => 0),
+                array('thang' => '05', 'mathdv' => null, 'noidung' => null, 'sldv' => $this->soluongdv('5',$inputs['nam']), 'dvgui' => 0),
+                array('thang' => '06', 'mathdv' => null, 'noidung' => null, 'sldv' => $this->soluongdv('6',$inputs['nam']), 'dvgui' => 0),
+                array('thang' => '07', 'mathdv' => null, 'noidung' => null, 'sldv' => $this->soluongdv('7',$inputs['nam']), 'dvgui' => 0),
+                array('thang' => '08', 'mathdv' => null, 'noidung' => null, 'sldv' => $this->soluongdv('8',$inputs['nam']), 'dvgui' => 0),
+                array('thang' => '09', 'mathdv' => null, 'noidung' => null, 'sldv' => $this->soluongdv('9',$inputs['nam']), 'dvgui' => 0),
+                array('thang' => '10', 'mathdv' => null, 'noidung' => null, 'sldv' => $this->soluongdv('10',$inputs['nam']), 'dvgui' => 0),
+                array('thang' => '11', 'mathdv' => null, 'noidung' => null, 'sldv' => $this->soluongdv('11',$inputs['nam']), 'dvgui' => 0),
+                array('thang' => '12', 'mathdv' => null, 'noidung' => null, 'sldv' => $this->soluongdv('12',$inputs['nam']), 'dvgui' => 0)
             );
             if(session('admin')->phamvitonghop == 'HUYEN')
                 $model_nguon = tonghopluong_huyen::wherein('madv', function($query) use($madv){
