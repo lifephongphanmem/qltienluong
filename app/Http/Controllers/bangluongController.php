@@ -3533,7 +3533,7 @@ class bangluongController extends Controller
             $inputs = $request->all();
             $mabl = $inputs['mabl'];
             $m_bl = bangluong::select('thang','nam','mabl','madv','ngaylap','luongcoban')->where('mabl',$mabl)->first();
-            $model = (new data())->getBangluong_ct($m_bl->thang,$m_bl->mabl)->where('mact','1536402868')->get();
+            $model = (new data())->getBangluong_ct($m_bl->thang,$m_bl->mabl)->where('mact','1536402868');
             //$model = bangluong_ct::where('mabl',$mabl)->where('mact','1536402868')->get();
             $model_hoso = hosocanbo::where('madv',$m_bl->madv)->get();
             $a_cv = getChucVuCQ(false);
@@ -3721,7 +3721,7 @@ class bangluongController extends Controller
 
             $mabl = $inputs['mabl'];
             $m_bl = bangluong::select('thang','nam','mabl','madv','ngaylap','luongcoban')->where('mabl',$mabl)->first();
-            $model = (new data())->getBangluong_ct($m_bl->thang,$m_bl->mabl)->where('mact','1536459380')->get();
+            $model = (new data())->getBangluong_ct($m_bl->thang,$m_bl->mabl)->where('mact','1536459380');
             $model_hoso = hosocanbo::where('madv',$m_bl->madv)->get();
             $a_cv = getChucVuCQ(false);
 
@@ -3834,7 +3834,7 @@ class bangluongController extends Controller
             $inputs = $request->all();
             $mabl = $inputs['mabl'];
             $m_bl = bangluong::select('thang','nam','mabl','madv','ngaylap','luongcoban')->where('mabl',$mabl)->first();
-            $model = (new data())->getBangluong_ct($m_bl->thang,$m_bl->mabl)->where('mact','1536402878')->get();
+            $model = (new data())->getBangluong_ct($m_bl->thang,$m_bl->mabl)->where('mact','1536402878');
             if (isset($inputs['mapb']) && $inputs['mapb'] != '') {
                 $model = $model->where('mapb', $inputs['mapb']);
             }
@@ -3935,7 +3935,7 @@ class bangluongController extends Controller
             $inputs = $request->all();
             $mabl = $inputs['mabl'];
             $m_bl = bangluong::select('thang','nam','mabl','madv','ngaylap','luongcoban')->where('mabl',$mabl)->first();
-            $model = (new data())->getBangluong_ct($m_bl->thang,$m_bl->mabl)->where('mact','1536402895')->get();
+            $model = (new data())->getBangluong_ct($m_bl->thang,$m_bl->mabl)->where('mact','1536402895');
             $model_hoso = hosocanbo::where('madv',$m_bl->madv)->get();
             $a_cv = getChucVuCQ(false);
 
@@ -3975,7 +3975,7 @@ class bangluongController extends Controller
             $inputs = $request->all();
             $mabl = $inputs['mabl'];
             $m_bl = bangluong::select('thang','nam','mabl','madv','ngaylap','luongcoban')->where('mabl',$mabl)->first();
-            $model = (new data())->getBangluong_ct($m_bl->thang,$m_bl->mabl)->where('mact','1536459160')->get();
+            $model = (new data())->getBangluong_ct($m_bl->thang,$m_bl->mabl)->where('mact','1536459160');
             $model_hoso = hosocanbo::where('madv',$m_bl->madv)->get();
             $a_cv = getChucVuCQ(false);
 
@@ -4042,7 +4042,7 @@ class bangluongController extends Controller
             $inputs = $request->all();
             $mabl = $inputs['mabl'];
             $m_bl = bangluong::select('thang','nam','mabl','madv','ngaylap','luongcoban')->where('mabl',$mabl)->first();
-            $model = (new data())->getBangluong_ct($m_bl->thang,$m_bl->mabl)->where('mact','1537427170')->get();
+            $model = (new data())->getBangluong_ct($m_bl->thang,$m_bl->mabl)->where('mact','1537427170');
             $model_hoso = hosocanbo::where('madv',$m_bl->madv)->get();
             $a_cv = getChucVuCQ(false);
 
@@ -4407,11 +4407,11 @@ class bangluongController extends Controller
     function result(Request $request){
         if (Session::has('admin')) {
             $inputs = $request->all();
-            $model=bangluong::where('thang',$inputs['thang'])->where('nam',$inputs['nam'])->where('madv',$inputs['madv'])->get();
+            $model = bangluong::where('thang', $inputs['thang'])->where('nam', $inputs['nam'])->where('madv', $inputs['madv'])->get();
 
             return view('search.chiluong.result')
-                ->with('model',$model)
-                ->with('pageTitle','Kết quả tra cứu chi trả lương của cán bộ');
+                ->with('model', $model)
+                ->with('pageTitle', 'Kết quả tra cứu chi trả lương của cán bộ');
         } else
             return view('errors.notlogin');
     }
