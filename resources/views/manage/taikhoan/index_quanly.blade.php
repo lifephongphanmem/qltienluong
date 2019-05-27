@@ -97,7 +97,7 @@
                         <input type="date" name="ngaydung" id="ngaydung" class="form-control" />
                     </div>
                 </div>
-                <input type="" name="madvstop" id="madvstop">
+                <input type="hidden" name="madvstop" id="madvstop">
                 <div class="modal-footer">
                     <button type="button" class="btn default" data-dismiss="modal">Hủy</button>
                     <button type="submit" class="btn blue" >Đồng ý</button>

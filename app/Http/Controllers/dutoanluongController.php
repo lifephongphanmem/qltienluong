@@ -389,8 +389,9 @@ class dutoanluongController extends Controller
                 $m_data[$i]['luongbh_dt'] = array_sum(array_column($dutoan,'ttbh_dv'));
                 $luongbh += $m_data[$i]['luongbh_dt'];
             }
-            dutoanluong_chitiet::insert($m_data);
 
+            dutoanluong_chitiet::insert($m_data);
+            //dd($m_data);
             $inputs['masodv'] = $masodv;
             $inputs['macqcq'] = session('admin')->macqcq;
             $inputs['madvbc'] = session('admin')->madvbc;

@@ -515,7 +515,7 @@ class nguonkinhphiController extends Controller
             $model->trangthai = 'DAGUI';
             $model->save();
 
-            return redirect('du_toan/nguon_kinh_phi/danh_sach');
+            return redirect('/nguon_kinh_phi/danh_sach');
         } else
             return view('errors.notlogin');
     }

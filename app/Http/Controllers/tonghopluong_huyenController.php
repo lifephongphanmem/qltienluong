@@ -127,7 +127,7 @@ class tonghopluong_huyenController extends Controller
             return view('errors.notlogin');
     }
 
-    public  function  soluongdv($thang,$nam)
+    public function soluongdv($thang,$nam)
     {
         $madv = session('admin')->madv;
         $model_donvi = dmdonvi::select('madv', 'tendv')
@@ -154,13 +154,14 @@ class tonghopluong_huyenController extends Controller
             $tendb = getTenDb($madvbc);
 
             //Danh sách đơn vi = macqcq&(SD;TH&KHOI); bỏ đi TH&HUYEN
+            /* Bỏ do số lượng đơn vị gửi dữ liệu thay đổi theo tháng
             $model_donvi = dmdonvi::select('madv', 'tendv')
                 ->wherein('madv', function ($query) use ($madv) {
                     $query->select('madv')->from('dmdonvi')->where('macqcq', $madv)->where('madv', '<>', $madv)->get();
                 })->get();
             //dd($model_donvi->toarray());
             $sldv = $model_donvi->count();
-
+            */
             $a_data = array(array('thang' => '01', 'mathdv' => null, 'noidung' => null, 'sldv' =>$this->soluongdv('1',$inputs['nam']), 'dvgui' => 0),
                 array('thang' => '02', 'mathdv' => null, 'noidung' => null, 'sldv' => $this->soluongdv('2',$inputs['nam']), 'dvgui' => 0),
                 array('thang' => '03', 'mathdv' => null, 'noidung' => null, 'sldv' => $this->soluongdv('3',$inputs['nam']), 'dvgui' => 0),
@@ -178,7 +179,7 @@ class tonghopluong_huyenController extends Controller
                 $model_nguon = tonghopluong_huyen::wherein('madv', function($query) use($madv){
                     $query->select('madv')->from('dmdonvi')->where('macqcq',$madv)->where('madv','<>',$madv)->get();
                 })->where('trangthai', 'DAGUI')
-                    ->get();
+                ->get();
             if(session('admin')->phamvitonghop == 'KHOI')
             {
                 $model_nguon = tonghopluong_donvi::wherein('madv', function($query) use($madv){
@@ -228,10 +229,11 @@ class tonghopluong_huyenController extends Controller
                     if (count($dulieu) == 0) {//chưa gửi
                         $a_data[$i]['trangthai'] = 'CHUADL';
 
-                    } elseif (count($dulieu) == $sldv) {
+                    //} elseif (count($dulieu) == $sldv) {
+                    } elseif (count($dulieu) == $a_data[$i]['sldv']) {
                         //kiểm tra xem có bao nhiêu đơn vị gửi / tổng số các đơn vị
                         $a_data[$i]['trangthai'] = 'CHUAGUI';
-                        $a_data[$i]['dvgui'] = $sldv;
+                        $a_data[$i]['dvgui'] = $a_data[$i]['sldv'];
                     } else {
                         $a_data[$i]['trangthai'] = 'CHUADAYDU';
                         $a_data[$i]['dvgui'] = count($dulieu);
