@@ -269,7 +269,8 @@ class dutoanluongController extends Controller
             foreach($m_nb as $key =>$val){
                 if(isset($a_nhomnb[$val['msngbac']])){
                     $nhomnb = $a_nhomnb[$val['msngbac']];
-                    $hesomax = $nhomnb['heso'] +  ($nhomnb['heso'] * $nhomnb['hesochenhlech']);
+                    //$hesomax = $nhomnb['heso'] +  ($nhomnb['heso'] * $nhomnb['hesochenhlech']);
+                    $hesomax = $nhomnb['hesolonnhat'];
                     if($val['heso'] >= $hesomax){
                         $m_nb[$key]['vuotkhung'] = $m_nb[$key]['vuotkhung'] == 0 ? $nhomnb['vuotkhung'] : $m_nb[$key]['vuotkhung'] + 1;
                     }else{
