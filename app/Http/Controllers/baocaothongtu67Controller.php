@@ -603,7 +603,6 @@ class baocaothongtu67Controller extends Controller
                         $ar_III[0]['tongso'] = $model_bangluong_ct->sum('pcdbqh');
                         $ar_IV[0]['tongso'] = $model_bangluong_ct->sum('pcvk');
                     }
-
                     $a_IIIt['tongso'] += $ar_III[0]['tongso'];
                     $a_IVt['tongso'] += $ar_IV[0]['tongso'];
                 }
@@ -1713,7 +1712,7 @@ class baocaothongtu67Controller extends Controller
                 })->download('xls');
             }
             else{
-                return view('reports.thongtu67.mau2a2_tt67')
+                return view('reports.thongtu67.mau2a2_tt68')
                     ->with('furl','/tong_hop_bao_cao/')
                     ->with('ar_I',$ar_I)
                     ->with('ar_II',$ar_II)

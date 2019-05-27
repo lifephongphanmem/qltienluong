@@ -48,7 +48,7 @@
     </tr>
     <tr>
         <td style="text-align: left;width: 60%">
-            <b>{{'ỦY BAN NHÂN DÂN TỈNH, THÀNH PHỐ:'}}</b>
+            <b>{{'ỦY BAN NHÂN DÂN TỈNH, THÀNH PHỐ: '.$m_dv->diadanh}}</b>
         </td>
         <td style="text-align: center; font-style: italic">
 
@@ -78,7 +78,7 @@
         <td>3</td>
         <td>(4)=(3)-(2)</td>
         <td>(5)=(1)x0,09x4,5%</td>
-        <td>(7)=((4)+(5))x6T</td>
+        <td>(6)=((4)+(5))x6T</td>
     </tr>
 
     <tr style="font-weight: bold;">

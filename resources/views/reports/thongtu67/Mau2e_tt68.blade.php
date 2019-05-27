@@ -34,7 +34,7 @@
 <table width="96%" border="0" cellspacing="0" cellpadding="4" style="margin:0 auto 20px;text-align: center">
     <tr>
         <td style="text-align: left">
-            <b>UỶ BAN NHÂN DÂN TỈNH, THÀNH PHỐ</b><br>
+            <b>UỶ BAN NHÂN DÂN TỈNH, THÀNH PHỐ {{$m_dv->diadanh}}</b><br>
         </td>
         <td style="text-align: right">
             <b>Biểu số 2e</b><br>

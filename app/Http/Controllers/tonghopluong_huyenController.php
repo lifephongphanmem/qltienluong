@@ -140,8 +140,6 @@ class tonghopluong_huyenController extends Controller
                             ->where('trangthai', 'TD')
                             ->get();
                     })->get();
-
-
         $kq = $model_donvi->count();
         return $kq;
     }

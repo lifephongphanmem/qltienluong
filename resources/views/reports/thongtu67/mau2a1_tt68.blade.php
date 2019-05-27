@@ -72,7 +72,7 @@
         <th style="width: 6%;padding-left: 2px;padding-right: 2px" rowspan="2">LƯƠNG THEO NGẠCH, BẬC CHỨC VỤ</th>
         <th style="width: 6%;" rowspan="2">TỔNG CÁC KHOẢN PHỤ CẤP</th>
         <th style="width: 6%;padding-left: 2px;padding-right: 2px" colspan="10">TRONG ĐÓ</th>
-        <th rowspan="2">CÁC KHOẢN</br>ĐÓNG GÓP</br>BHXH,BHYT,</br>KPCĐ,KHTN</th>
+        <th rowspan="2">CÁC KHOẢN</br>ĐÓNG GÓP</br>BHXH,BHYT,</br>BHTN, KPCĐ</th>
     </tr>
     <tr style="padding-left: 2px;padding-right: 2px">
         <th>PHỤ CẤP KHU VỰC</th>
@@ -110,7 +110,7 @@
 
     <tr style="font-weight: bold; text-align: right">
         <th></th>
-        <th style="text-align: center">TỔNG CỘNG (I+II+III+IV+V+VI)</th>
+        <th style="text-align: center">TỔNG CỘNG (I+II+III+IV)</th>
 
         <th style="text-align: center"></th>
         <th style="text-align: center"></th>

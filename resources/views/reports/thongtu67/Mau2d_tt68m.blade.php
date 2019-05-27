@@ -34,7 +34,7 @@
 <table width="96%" border="0" cellspacing="0" cellpadding="4" style="margin:0 auto 20px;text-align: center">
     <tr>
         <td style="text-align: left">
-            <b>UỶ BAN NHÂN DÂN TỈNH, THÀNH PHỐ</b><br>
+            <b>UỶ BAN NHÂN DÂN TỈNH, THÀNH PHỐ {{$m_dv->diadanh}}</b> <br>
         </td>
         <td style="text-align: right">
             <b>Biểu số 2d</b><br>
@@ -64,20 +64,23 @@
         <th style="width: 50%">CHỈ TIÊU</th>
         <th>TỔNG ĐƠN VỊ HÀNH CHÍNH CẤP XÃ, THÔN </th>
         <th>MỨC KHOÁN QUỸ PHỤ CẤP<sup>(1)</sup></th>
+        <th>SỐ LƯỢNG NGƯỜI CÓ MẶT</th>
         <th>KINH PHÍ KHOÁN TĂNG DO ĐIỀU CHỈNH LƯƠNG CƠ SỞ</th>
         <th>BHXH (14%) CHO BÁN BỘ KHÔNG CHUYÊN TRÁCH CẤP XÃ</th>
     </tr>
     <tr>
         <td>A</td>
         <td>B</td>
-        <td>(1)</td>
-        <td>(2)</td>
-        <td>(3) = (1) x (2) x 0,09 x 6t</td>
-        <td>(3) = số đối tượng có mặt x 14% x 0,09 x6t</td>
+        <td>1</td>
+        <td>2</td>
+        <td>3</td>
+        <td>4 = 1 x 2 x 0,09 x 6T</td>
+        <td>5 = 3 x 14% x 0,09 x 6T</td>
     </tr>
     <tr style="font-weight: bold">
         <td></td>
         <td>TỔNG SỐ</td>
+        <td></td>
         <td></td>
         <td></td>
         <td></td>
@@ -89,6 +92,7 @@
             <td style=" text-align: left">{{$dulieu['noidung']}}</td>
             <td>{{dinhdangso($dulieu['tdv'])}}</td>
             <td>{{$dulieu['mk']}}</td>
+            <td></td>
             <td>{{dinhdangso($dulieu['kp'],0,$inputs['donvitinh'])}}</td>
             <td>{{dinhdangso($dulieu['bhxh'],0,$inputs['donvitinh'])}}</td>
         </tr>
