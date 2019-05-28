@@ -148,7 +148,7 @@ class tonghopluong_khoiController extends Controller
                 ->select('maphanloai','mathdv')
                 ->where('nam', $nam)
                 ->where('thang', $thang)
-                ->where('trangthai', 'DAGUI')->get();
+                ->where('tonghopluong_donvi.trangthai', 'DAGUI')->get();
             $a_plth = array_column($model_plth->toarray(),'maphanloai','mathdv');
             $a_dv = array_column($model_tonghop->toarray(),'madv','mathdv');
             $a_pl = array_column($model_donvi->toarray(),'maphanloai','madv');
