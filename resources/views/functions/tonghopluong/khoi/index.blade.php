@@ -100,8 +100,10 @@
                                             @if($value['trangthai'] == 'TRALAI')
                                                 <button type="button" class="btn btn-default btn-sm" onclick="getLyDo('{{$value['mathdv']}}')" data-target="#tralai-modal" data-toggle="modal"><i class="fa fa-share-square-o"></i>&nbsp;
                                                     Lý do trả lại</button>
-                                                <button type="button" class="btn btn-default btn-xs" onclick="confirmChuyen('{{$value['thang']}}','{{$nam}}')" data-target="#chuyen-modal" data-toggle="modal"><i class="fa fa-share-square-o"></i>&nbsp;
-                                                    Gửi dữ liệu</button>
+                                                @if($value['sldv'] == $value['dvgui'])
+                                                    <button type="button" class="btn btn-default btn-xs" onclick="confirmChuyen('{{$value['thang']}}','{{$nam}}')" data-target="#chuyen-modal" data-toggle="modal"><i class="fa fa-share-square-o"></i>&nbsp;
+                                                        Gửi dữ liệu</button>
+                                                @endif
                                             @endif
 
                                         @else
