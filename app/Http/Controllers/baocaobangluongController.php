@@ -693,7 +693,6 @@ class baocaobangluongController extends Controller
                 ->where('trangthai', 'DAGUI')->get();
 */
             $model_tonghop = tonghopluong_donvi::where('macqcq',$madv)
-                ->orWhereIn('macqcq', array_column($model_donvi->toarray(),'madv'))
                 ->where('nam', $nam)
                 ->where('thang', $thang)
                 ->where('trangthai', 'DAGUI')
@@ -701,8 +700,9 @@ class baocaobangluongController extends Controller
                     $query->select('madv')->from('dmdonvi')
                         ->where('maphanloai','like', $maphanloai.'%')
                         ->get();
-                })->get();
-
+                })
+                ->orWhereIn('macqcq', array_column($model_donvi->toarray(),'madv'))->get();
+            //dd($model_tonghop->toarray());
             $model_dmdv = dmdonvi::where('macqcq',$madv)
                 ->orWhereIn('macqcq', array_column($model_donvi->toarray(),'madv'))->get();
             $a_dv = array_column($model_tonghop->toarray(),'madv','mathdv');
@@ -732,7 +732,7 @@ class baocaobangluongController extends Controller
                     ->only(['mact', 'soluong', 'madv', 'maphanloai'])
                     ->all();
             });
-            //dd($model->toarray());
+            //  dd($model->toarray());
             $a_soluong = a_unique($model_data);
             //dd($a_soluong);
             //cho trương hợp đơn vị cấp trên in dữ liệu dv câp dưới mà ko sai tên đơn vị
