@@ -295,6 +295,10 @@ class dutoanluongController extends Controller
             //bắt đầu tính lương
             //cán bộ đã nghỉ hưu thì các thông tin # bỏ qua
             //nghỉ hưu vào tháng 08, trong thông tin cán bộ  tháng 12 tăng lương => bỏ qua thông tin tăng lương
+            $a_luu = array();
+            foreach($m_cb as $key =>$val){
+                $a_luu[$key] = $m_cb[$key];
+            }
             $a_data = array();
             $a_data_nl = array();
             $a_danghihuu = array();
@@ -315,7 +319,7 @@ class dutoanluongController extends Controller
                     foreach($a_nb as $key=>$val){
                         if(!in_array($key,$a_danghihuu)){
                             if($a_thang[$i]['thang'] != '01'){//nâng lương vào tháng 01 => ko tính chênh lệch nâng lương
-                                $a_data_nl[] = $this->getHeSoPc_Sub($a_pc,$a_nb[$key],$m_cb[$key],'NGACHBAC',$a_thang[$i]['thang'],$a_thang[$i]['nam']);
+                                $a_data_nl[] = $this->getHeSoPc_Sub($a_pc,$a_nb[$key],$a_luu[$key],'NGACHBAC',$a_thang[$i]['thang'],$a_thang[$i]['nam']);
                             }
                             $m_cb[$key] = $a_nb[$key];
                         }
