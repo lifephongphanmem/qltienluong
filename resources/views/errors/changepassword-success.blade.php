@@ -19,7 +19,7 @@
 <body id="error-page" class="animated bounceInLeft">
 <div id="error-page-content"><h1>Thành công</h1><h2>Thay đổi mật khẩu thành công</h2>
     <p>Bạn cần đăng nhập lại để vào chương trình</p>
-    <p><a href='{{ url('/login') }}'>Bấm vào đây</a> để đăng nhập chương trình.</p></div>
+    <p><a href='{{ url(isset($url)? $url : '/login') }}'>Bấm vào đây</a> để đăng nhập chương trình.</p></div>
 <script src="{{ url('js/jquery-1.9.1.js') }}"></script>
 <script src="{{ url('js/jquery-migrate-1.2.1.min.js') }}"></script>
 <script src="{{ url('js/jquery-ui.js') }}"></script>

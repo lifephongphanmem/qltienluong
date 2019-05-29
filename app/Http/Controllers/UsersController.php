@@ -326,7 +326,8 @@ class UsersController extends Controller
         $ttuser->ip = $ip;
         if ($ttuser->save()) {
             Session::flush();
-            return view('errors.changepassword-success');
+            return view('errors.changepassword-success')
+                ->with('url','/login?user='.$update['username']);
         }
     }
 
