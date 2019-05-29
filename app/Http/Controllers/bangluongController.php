@@ -1019,8 +1019,9 @@ class bangluongController extends Controller
 
             if($nghi) {
                 $cb_nghi = $a_nghiphep[$m_cb[$key]['macanbo']];
-                $ngaycong = $cb_nghi['songaycong'] > 0 ? $cb_nghi['songaycong'] : $ngaycong;
-                $m_cb[$key]['songaytruc'] = $ngaycong;
+                //$ngaycong = $cb_nghi['songaycong'] > 0 ? $cb_nghi['songaycong'] : $ngaycong;
+                $ngaynghi = $cb_nghi['songaynghi'] > 0 ? $cb_nghi['songaynghi'] : 0;
+                $m_cb[$key]['songaytruc'] = $ngaynghi;
                 $m_cb[$key]['congtac'] = 'NGHIPHEP';
                 $sotiencong = $inputs['luongcoban'] *
                     ($m_cb[$key]['heso'] + $m_cb[$key]['vuotkhung'] + $m_cb[$key]['pccv']
