@@ -1186,6 +1186,11 @@ class bangluongController extends Controller
                             $m_cb_kn[$i]['st_'.$mapc] = round($m_cb_kn[$i][$mapc] * $inputs['luongcoban']);
                             $tien += $m_cb_kn[$i]['st_'.$mapc];
                         }
+                        else {
+                            $m_cb_kn[$i]['st_pcthni'] = $m_cb_kn[$i]['pcthni'] * $inputs['luongcoban'];
+                            $tonghs += $m_cb_kn[$i]['pcthni'];
+                            $tien += $m_cb_kn[$i]['st_pcthni'];
+                        }
                         break;
                     }
                     default: {//trường hợp còn lại (ẩn,...)
@@ -1203,8 +1208,8 @@ class bangluongController extends Controller
                 $a_pc[$k]['heso'] = $m_cb[$key][$mapc];
                 //$m_cb_kn[$i]['st_'.$mapc] = $a_pc[$k]['sotien']; round($inputs['luongcoban'] * $tonghs
                 //$a_pc[$k]['sotien'] = round($inputs['luongcoban'] * $tonghs + $tien, 0);
-
                 $a_kn_phucap[] = $a_pc[$k];
+
             }
 
             //ko tính % trong công thức duyệt phụ cấp vì khi tính % sẽ sai
@@ -1924,7 +1929,7 @@ class bangluongController extends Controller
 
     public function inbangluong_sotien($mabl){
         if (Session::has('admin')) {
-            $m_bl = bangluong::select('thang','nam','mabl','madv','luongcoban','phanloai')->where('mabl',$mabl)->first();
+            $m_bl = bangluong::select('thang','nam','mabl','madv','luongcoban','phanloai','ngaylap')->where('mabl',$mabl)->first();
             $model = (new data())->getBangluong_ct($m_bl->thang,$m_bl->mabl);
 
             //$mabl = $m_bl->mabl;
@@ -1956,7 +1961,7 @@ class bangluongController extends Controller
             }
             //dd($m_bl);
             $thongtin=array('nguoilap'=>$m_bl->nguoilap,
-                'thang'=>$m_bl->thang,'phanloai'=>$m_bl->phanloai,
+                'thang'=>$m_bl->thang,'phanloai'=>$m_bl->phanloai,'cochu'=>10,'ngaylap'=>$m_bl->ngaylap,
                 'nam'=>$m_bl->nam);
             //xử lý ẩn hiện cột phụ cấp => biết tổng số cột hiện => colspan trên báo cáo
             $a_phucapbc = getColPhuCap_BaoCao();
@@ -2071,8 +2076,9 @@ class bangluongController extends Controller
         if (Session::has('admin')) {
             $m_dv = dmdonvi::where('madv', session('admin')->maxa)->first();
             $m_bl = bangluong::select('thang', 'nam')->where('mabl', $mabl)->first();
-            $model = (new data())->getBangluong_ct($m_bl->thang, $m_bl->mabl);
+            $model = (new data())->getBangluong_ct($m_bl->thang, $mabl);
             $dmchucvucq = dmchucvucq::all('tencv', 'macvcq')->toArray();
+            $tendvcq = dmdonvi::where('madv',$m_dv->macqcq)->first()->tendv;
 
             $model_congtac = dmphanloaict::select('mact', 'tenct')
                 ->wherein('mact', a_unique(array_column($model->toarray(), 'mact')))->get();
@@ -2089,6 +2095,7 @@ class bangluongController extends Controller
                 ->with('model', $model)
                 ->with('m_dv', $m_dv)
                 ->with('thongtin', $thongtin)
+                ->with('tendvcq', $tendvcq)
                 ->with('model_congtac', $model_congtac)
                 ->with('pageTitle', 'Bảng trích nộp bảo hiểm chi tiết');
         } else
