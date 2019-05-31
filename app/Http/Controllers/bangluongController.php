@@ -2350,6 +2350,7 @@ class bangluongController extends Controller
                     $col++;
                 }
             }
+
             //dd($a_phucap);
             //chạy lại để tính lại phụ cấp
             $luongcb = $m_bl->luongcoban;
@@ -2358,6 +2359,7 @@ class bangluongController extends Controller
                 if($cb->congtac == 'DAINGAY' || $cb->congtac == 'THAISAN' || $cb->congtac == 'KHONGLUONG'){
                     $cb->tonghs = 0;
                     foreach($a_phucap as $k=>$v) {
+                        if($cb->$k < 100)
                         $cb->tonghs += $cb->$k;
                     }
                     $cb->ttl_tn =round($cb->tonghs * $luongcb, 0);
