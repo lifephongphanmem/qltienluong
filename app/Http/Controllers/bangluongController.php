@@ -2415,11 +2415,13 @@ class bangluongController extends Controller
             }
 
             foreach($model as $cb){
-                $canbo = $model_kn->where('macanbo',$cb->macanbo)->first();
+                $canbo = $model_kn->where('macanbo',$cb->macanbo);
                 if(count($canbo)>0){
-                    $cb->ttl_kn = $canbo->ttl;
-                    $cb->luongtn_kn = $canbo->luongtn;
-                    $cb->macvcq_kn = $canbo->macvcq;
+                    foreach($canbo as $cbkn) {
+                        $cb->ttl_kn += $cbkn->ttl;
+                        $cb->luongtn_kn += $cbkn->luongtn;
+                        $cb->macvcq_kn .= $a_chucvu[$cbkn->macvcq] . '; ';
+                    }
                 }
             }
             //dd($a_phucap);

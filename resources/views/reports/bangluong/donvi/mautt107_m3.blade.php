@@ -149,7 +149,8 @@
 
                         <td>{{dinhdangsothapphan($ct->tonghs,5)}}</td>
                         <td>{{dinhdangso($ct->ttl)}}</td>
-                        <td style="text-align: left">{{isset($a_chucvu[$ct->macvcq_kn]) ? $a_chucvu[$ct->macvcq_kn]:'' }}</td>
+                        <!--td style="text-align: left">{{isset($a_chucvu[$ct->macvcq_kn]) ? $a_chucvu[$ct->macvcq_kn]:'' }}</td-->
+                        <td style="text-align: left">{{$ct->macvcq_kn}}</td>
                         <td>{{dinhdangso($ct->ttl_kn)}}</td>
                         <td>{{dinhdangso($ct->ttl + $ct->ttl_kn)}}</td>
 
