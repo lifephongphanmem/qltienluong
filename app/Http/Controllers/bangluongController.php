@@ -2341,6 +2341,8 @@ class bangluongController extends Controller
             //xử lý ẩn hiện cột phụ cấp => biết tổng số cột hiện => colspan trên báo cáo
             $a_goc = array('hesott');
             $model_pc = dmphucap_donvi::where('madv',$m_bl->madv)->where('phanloai','<','3')->wherenotin('mapc',$a_goc)->get();
+            $a_pl = array_column($model_pc->toarray(),'phanloai','mapc');
+            //dd($a_pl);
             $a_phucap = array();
             $col = 0;
 
@@ -2350,7 +2352,6 @@ class bangluongController extends Controller
                     $col++;
                 }
             }
-
             //dd($a_phucap);
             //chạy lại để tính lại phụ cấp
             $luongcb = $m_bl->luongcoban;
@@ -2359,7 +2360,6 @@ class bangluongController extends Controller
                 if($cb->congtac == 'DAINGAY' || $cb->congtac == 'THAISAN' || $cb->congtac == 'KHONGLUONG'){
                     $cb->tonghs = 0;
                     foreach($a_phucap as $k=>$v) {
-                        if($cb->$k < 100)
                         $cb->tonghs += $cb->$k;
                     }
                     $cb->ttl_tn =round($cb->tonghs * $luongcb, 0);

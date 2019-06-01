@@ -479,7 +479,7 @@
                         </div>
                     </div>
 
-                    <?php $a_cd = array('pckn'); ?>
+                    <?php $a_cd = array('hesopc','pckn'); ?>
                     @foreach($model_pc as $pc)
                         @if(!in_array($pc->mapc,$a_cd))
                             @continue
@@ -947,6 +947,7 @@
                     $('#manguonkp_cd').val(data.manguonkp.split(',')).trigger('change');
                     $('#id_cd').val(data.id);
                     $('#pckn_cd').val(data.pckn);
+                    $('#hesopc_cd').val(data.hesopc);
                     $('#cd-modal').modal('show');
                 }
                 if(data.phanloai == 'MOTCUA'){
@@ -1124,7 +1125,8 @@
                     macvcq : $('#macvcq_cd').val(),
                     id: $('#id_cd').val(),
                     phanloai: $('#phanloai_cd').val(),
-                    pckn: $('#pckn_cd').val()
+                    pckn: $('#pckn_cd').val(),
+                    hesopc: $('#hesopc_cd').val()
                 },
                 dataType: 'JSON',
                 success: function (data) {
