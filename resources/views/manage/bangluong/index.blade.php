@@ -37,9 +37,24 @@
                     <div class="caption">DANH SÁCH CHI TRẢ LƯƠNG CỦA ĐƠN VỊ</div>
                     <div class="actions">
                         @if($inputs['thaotac'])
-                            <button type="button" class="btn btn-default btn-xs" onclick="add()"><i class="fa fa-plus"></i>&nbsp;Thêm mới bảng lương</button>
-                            <button type="button" class="btn btn-default btn-xs" onclick="add_truylinh()"><i class="fa fa-plus"></i>&nbsp;Thêm mới bảng truy lĩnh</button>
-                            <button type="button" class="btn btn-default btn-xs" onclick="add_truc()"><i class="fa fa-plus"></i>&nbsp;Thêm mới bảng trực</button>
+                            <button type="button" class="btn btn-default btn-xs" onclick="add()"><i class="fa fa-plus"></i>&nbsp;Thêm chi lương</button>
+                            <button type="button" class="btn btn-default btn-xs" onclick="add_truylinh()"><i class="fa fa-plus"></i>&nbsp;Thêm truy lĩnh</button>
+
+                            <div class="btn-group btn-group-solid">
+                                <button type="button" class="btn btn-lg btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="true">
+                                    Chi trả khác <i class="fa fa-angle-down"></i>
+                                </button>
+
+                                <ul class="dropdown-menu">
+                                    <li>
+                                        <button type="button" class="btn btn-default" style="padding-bottom: 5px; border: none;" onclick="add_truc()">&nbsp;Trực công tác</button>
+                                    </li>
+                                    <li>
+                                        <button type="button" class="btn btn-default" style="padding-bottom: 5px; border: none;" onclick="add_ctp()"
+                                                data-target="#chikhac-modal" data-toggle="modal">&nbsp;Công tác phí</button>
+                                    </li>
+                                </ul>
+                            </div>
                         @endif
                     </div>
                 </div>
@@ -54,9 +69,9 @@
                             <div class="col-md-2">
                                 {!! Form::select('namct',getNam(),$inputs['nam'], array('id' => 'namct', 'class' => 'form-control'))!!}
                             </div>
-                            <div class="col-md-offset-1 col-md-2">
+                            <div class="col-md-3 text-right">
                             <button type="button" onclick="inbl_th('{{$inputs['thang']}}','{{$inputs['nam']}}')" class="btn btn-default mbs">
-                                <i class="fa fa-print"></i>&nbsp; In bảng lương tổng hợp</button>
+                                <i class="fa fa-print"></i>&nbsp; In tổng hợp</button>
                             </div>
                         </div>
                     </div>
@@ -93,11 +108,14 @@
 
                                                     <button type="button" onclick="inbl('{{$value->mabl}}','{{$value->thang}}','{{$value->nam}}')" class="btn btn-default btn-xs mbs">
                                                         <i class="fa fa-print"></i>&nbsp; In bảng lương</button>
-                                                @else
+                                                @elseif($value->phanloai == 'TRUYLINH')
                                                     <button type="button" onclick="inbl_tl('{{$value->mabl}}','{{$value->thang}}','{{$value->nam}}')" class="btn btn-default btn-xs mbs">
                                                         <i class="fa fa-print"></i>&nbsp; In bảng lương</button>
                                                     <!--button onclick="tanggiam('{{$value->mabl}}')" class="btn btn-default btn-xs mbs" data-target="#tanggiam-modal-confirm" data-toggle="modal">
                                                         <i class="fa fa-th-list"></i>&nbsp; Tăng/Giảm lương</button-->
+                                                @else
+                                                    <a href="{{url($inputs['furl'].'mauctphi?mabl='.$value->mabl)}}" class="btn btn-default btn-xs mbs" target="_blank">
+                                                        <i class="fa fa-print"></i>&nbsp; In chi tiết</a>
                                                 @endif
 
                                                 <button type="button" onclick="cfDel('{{$inputs['furl'].'del/'.$value->id}}')" class="btn btn-danger btn-xs mbs" data-target="#delete-modal-confirm" data-toggle="modal">
@@ -106,9 +124,12 @@
                                                 @if($value->phanloai == 'BANGLUONG')
                                                     <button type="button" onclick="inbl('{{$value->mabl}}','{{$value->thang}}','{{$value->nam}}')" class="btn btn-default btn-xs mbs">
                                                         <i class="fa fa-print"></i>&nbsp; In bảng lương</button>
-                                                @else
+                                                @elseif($value->phanloai == 'TRUYLINH')
                                                     <button type="button" onclick="inbl_tl('{{$value->mabl}}','{{$value->thang}}','{{$value->nam}}')" class="btn btn-default btn-xs mbs">
                                                         <i class="fa fa-print"></i>&nbsp; In bảng lương</button>
+                                                @else
+                                                    <a href="{{url($inputs['furl'].'mauctphi?mabl='.$value->mabl)}}" class="btn btn-default btn-xs mbs" target="_blank">
+                                                        <i class="fa fa-print"></i>&nbsp; In chi tiết</a>
                                                 @endif
                                             @endif
 
@@ -297,6 +318,60 @@
     </div>
     {!! Form::close() !!}
 
+    {!! Form::open(['url'=>'/chuc_nang/bang_luong/store_chikhac','method'=>'post' , 'files'=>true, 'id' => 'create_chikhac']) !!}
+    <div id="chikhac-modal" tabindex="-1" role="dialog" aria-hidden="true" class="modal fade">
+        <div class="modal-dialog modal-content">
+            <div class="modal-header modal-header-primary">
+                <button type="button" data-dismiss="modal" aria-hidden="true" class="close">&times;</button>
+                <h4 id="modal-header-primary-label" class="modal-title">Thông tin chi trả khác của cán bộ</h4>
+            </div>
+            <div class="modal-body">
+                <div class="form-horizontal">
+
+                    <div class="row">
+                        <div class="col-md-12">
+                            <label class="control-label"> Nội dung</label>
+                            {!! Form::textarea('noidung',null,array('id' => 'noidung', 'class' => 'form-control','rows'=>'3'))!!}
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <label class="control-label">Phân loại</label>
+                            {!!Form::select('congtac',getPhanLoaiChiTietChiLuong(), 'CTP', array('id' => 'congtac','class' => 'form-control'))!!}
+                        </div>
+                        <div class="col-md-6">
+                            <label class="control-label">Mức chi trả</label>
+                            {!!Form::text('luongcoban', $inputs['luongcb'], array('id' => 'luongcoban','class' => 'form-control', 'data-mask'=>'fdecimal'))!!}
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <label class="control-label">Ngày lập</label>
+                            <input type="date" name="ngaylap" id="ngaylap" class="form-control" value="{{date('Y-m-d')}}"/>
+
+                        </div>
+                        <div class="col-md-6">
+                            <label class="control-label">Người lập</label>
+                            {!!Form::text('nguoilap', session('admin')->nguoilapbieu, array('id' => 'nguoilap','class' => 'form-control'))!!}
+                        </div>
+                    </div>
+                    <input type="hidden" id="thang" name="thang" value="{{$inputs['thang']}}"/>
+                    <input type="hidden" id="nam" name="nam" value="{{$inputs['nam']}}"/>
+                    <input type="hidden" id="mabl" name="mabl"/>
+                    <input type="hidden" id="phanloai" name="phanloai"/>
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" data-dismiss="modal" class="btn btn-default">Hủy thao tác</button>
+                <button type="submit" id="submit" name="submit" value="submit" class="btn btn-primary">Đồng ý</button>
+            </div>
+        </div>
+    </div>
+    {!! Form::close() !!}
+
     {!! Form::open(['url'=>'/chuc_nang/bang_luong/cap_nhat','method'=>'get' , 'files'=>true, 'id' => 'create_bangluong_truylinh']) !!}
     <div id="capnhat-modal-confirm" tabindex="-1" role="dialog" aria-hidden="true" class="modal fade">
         <form id="frmcapnhat" method="GET" action="#" accept-charset="UTF-8">
@@ -394,15 +469,6 @@
     </div>
     {!! Form::close() !!}
 
-    <script>
-        function capnhat(mabl){
-            $('#mabl_capnhat').val(mabl);
-        }
-
-        function tanggiam(mabl){
-            $('#mabl_tg').val(mabl);
-        }
-    </script>
     <!--Modal thông tin tùy chọn in bảng lương -->
     <div id="inbl-modal" tabindex="-1" role="dialog" aria-hidden="true" class="modal fade">
         <div class="modal-lg modal-dialog modal-content">
@@ -793,13 +859,20 @@
     @include('templates.modal_printf_luong')
     @include('templates.modal_printf_th_luong')
     <script>
+        function capnhat(mabl){
+            $('#mabl_capnhat').val(mabl);
+        }
+
+        function tanggiam(mabl){
+            $('#mabl_tg').val(mabl);
+        }
+
         function getLink(){
             var thang = $("#thangct").val();
             var nam = $("#namct").val();
             return '{{$inputs['furl']}}'+'chi_tra?thang='+thang +'&nam='+nam;
         }
         $(function(){
-
             $('#thangct').change(function(){
                 window.location.href = getLink();
             });
@@ -857,6 +930,14 @@
             $('#noidung_truc').val('');
             $('#mabl_truc').val('');
             $('#truc-modal').modal('show');
+        }
+
+        function add_ctp(){
+            //$('#phanloai_truc').val('CTP');
+            //$('#noidung_truc').val('');
+            $('#create_chikhac').find("[id='phanloai']").val('CTPHI');
+            $('#create_chikhac').find("[id='mabl']").val('');
+            //$('#chikhac-modal').modal('show');
         }
 
         function edit(mabl,phanloai){

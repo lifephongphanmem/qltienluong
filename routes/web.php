@@ -383,6 +383,7 @@ Route::group(['prefix'=>'chuc_nang'],function(){
         Route::post('store','bangluongController@store');
         Route::post('store_truylinh','bangluongController@store_truylinh');
         Route::post('store_truc','bangluongController@store_truc');
+        Route::post('store_chikhac','bangluongController@store_chikhac');
 
         Route::get('bang_luong','bangluongController@show');
         Route::get('cap_nhat','bangluongController@capnhat');
@@ -394,10 +395,13 @@ Route::group(['prefix'=>'chuc_nang'],function(){
         Route::get('inmau4/maso={mabl}','bangluongController@inbangluongmau4'); //mẫu làm theo y.c lạng sơn
         Route::get('in_bh/maso={mabl}','bangluongController@inbaohiem');
         Route::get('can_bo','bangluongController@detail');
+        Route::get('chi_khac/can_bo','bangluongController@detail_chikhac');
         Route::post('updatect','bangluongController@updatect');
         Route::post('updatect_truylinh','bangluongController@updatect_truylinh');
+        Route::post('updatect_chikhac','bangluongController@updatect_chikhac');
         Route::get('del/{id}','bangluongController@destroy');
         Route::post('del_ct','bangluongController@destroy_ct');
+        Route::get('del_ct_chikhac/{id}','bangluongController@destroy_truc');
 
         Route::get('get_chitiet','bangluongController@get_chitiet');
         Route::post('update_chitiet','bangluongController@update_chitiet');
@@ -432,6 +436,9 @@ Route::group(['prefix'=>'chuc_nang'],function(){
 
         Route::get('mauthpl','bangluong_inController@printf_mauthpl');
         Route::get('mauthpc','bangluong_inController@printf_mauthpc');
+        //chi khác (trực, công tác phí)
+        Route::get('mauctphi','bangluong_inController@printf_mauctphi');
+
         //tổng hợp
         Route::post('mau185_th','bangluong_inController@printf_mau185_th');
         Route::post('mautt107_th','bangluong_inController@printf_mautt107_th');

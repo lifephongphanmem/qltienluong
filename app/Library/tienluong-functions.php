@@ -514,9 +514,13 @@ function getTronSo(){
 }
 
 function getPhanLoaiBangLuong(){
-    return array('BANGLUONG' => 'Bảng lương cán bộ',
-        'TRUYLINH' => 'Bảng truy lĩnh lương',
-        'TRUC'=>'Bảng phụ cấp trực');
+    return array(
+        'BANGLUONG' => 'Bảng chi trả lương',
+        'TRUYLINH' => 'Bảng chi trả truy lĩnh',
+        'TRUC' => 'Bảng chi trả trực công tác',
+        'CTPHI' => 'Bảng chi trả công tác phí',
+        'KHAC' => 'Bảng chi trả khác',
+    );
 }
 
 function getPhuCapNopBH(){
@@ -637,6 +641,16 @@ function getPhanLoaiChiTietNangLuong(){
     return array(
         'DUNGHAN' => 'Nâng lương đúng thời hạn',
         'TRUOCHAN' => 'Nâng lương trước thời hạn',
+    );
+}
+
+function getPhanLoaiChiTietChiLuong(){
+    return array(
+        'TRUC' => 'Trực công tác',
+        'CTPHI' => 'Công tác phí',
+        'XAXE' => 'Xăng xe, điện thoại',
+        'THUONG' => 'Chi thưởng',
+        'KHAC' => 'Chi khác',
     );
 }
 ?>

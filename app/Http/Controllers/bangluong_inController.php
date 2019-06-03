@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 
 use App\bangluong;
 use App\bangluong_ct;
+use App\bangluong_truc;
 use App\dmchucvucq;
 use App\dmdonvi;
 use App\dmphanloaict;
@@ -436,6 +437,45 @@ class bangluong_inController extends Controller
     }
     //</editor-fold>
 
+    //<editor-fold desc="Chi khác">
+    public function printf_mauctphi(Request $request){
+        if (Session::has('admin')) {
+            $inputs = $request->all();
+            $mabl = $inputs['mabl'];
+            //dd($inputs);
+            $m_bl = bangluong::select('thang','nam','mabl','madv','ngaylap','luongcoban','phanloai')->where('mabl',$mabl)->first();
+            $a_pl = getPhanLoaiBangLuong();
+            $m_bl->tenphanloai = isset($a_pl[$m_bl->phanloai]) ? $a_pl[$m_bl->phanloai] : 'Bảng thanh toán chi khác';
+            //$model = bangluong_ct::where('mabl',$mabl)->get(); //dùng hàm lấy dữ liệu chung
+            $model = bangluong_truc::where('mabl',$m_bl->mabl)->get();
+
+            $model_congtac = dmphanloaict::select('mact','tenct')
+                ->wherein('mact',a_unique(array_column($model->toarray(),'mact')))->get();
+            //dd($model_congtac);
+
+            $m_dv = dmdonvi::where('madv',$m_bl->madv)->first();
+            $m_dv->tendvcq = getTenDB($m_dv->madvbc);
+
+            $thongtin=array('nguoilap'=>$m_bl->nguoilap,
+                'thang'=>$m_bl->thang,
+                'nam'=>$m_bl->nam,
+                'ngaylap'=>$m_bl->ngaylap,
+                'luongcb' => $m_bl->luongcoban,
+                ''
+                );
+            //dd($model_congtac);
+            return view('reports.bangluong.donvi.mauctphi')
+                ->with('model',$model)
+                ->with('model_congtac',$model_congtac)
+                ->with('m_dv',$m_dv)
+                ->with('m_bl',$m_bl)
+                ->with('a_cv',getChucVuCQ(false))
+                ->with('thongtin',$thongtin)
+                ->with('pageTitle','Bảng lương chi tiết');
+        } else
+            return view('errors.notlogin');
+    }
+    //</editor-fold>
     /**
      * @param $inputs
      * @return array

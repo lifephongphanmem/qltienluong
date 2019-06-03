@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\bangluong;
 //use App\bangluong_ct;
+use App\hosothoicongtac;
 use App\Http\Controllers\dataController as data;
 use App\bangluong_phucap;
 use App\bangluong_truc;
@@ -273,6 +274,7 @@ class bangluongController extends Controller
         return redirect('/chuc_nang/bang_luong/bang_luong?mabl=' . $inputs['mabl'].'&mapb=');
     }
 
+    //làm hàm lấy ds cán bộ đang công tác: notin thôi công tac and notin ngaycongtac < ngày cuối tháng lương
     function tinhluong_dinhmuc($inputs){
         $ngaylap = Carbon::create($inputs['nam'], $inputs['thang'], '01');
         $m_tamngung = hosotamngungtheodoi::where('madv', $inputs['madv'])->where('maphanloai', 'THAISAN')->where('ngaytu', '<=', $ngaylap)->where('ngayden', '>=', $ngaylap)->get();
@@ -1544,13 +1546,65 @@ class bangluongController extends Controller
             return view('errors.notlogin');
     }
 
+    function store_chikhac(Request $request)
+    {
+        if (Session::has('admin')) {
+            $inputs = $request->all();
+            $inputs['luongcoban'] = getDbl($inputs['luongcoban']);
+            $inputs['phantramhuong'] = 100;
+            $model = bangluong::where('mabl', $inputs['mabl'])->first();
+            if (count($model) > 0) {
+                $inputs['luongcoban'] = getDbl($inputs['luongcoban']);
+                $model->update($inputs);
+                return redirect('/chuc_nang/bang_luong/danh_sach');
+            } else {
+                //insert
+                $madv = session('admin')->madv;
+                //lấy ngày cuối tháng
+                $ngaycuoithang = Carbon::create($inputs['nam'], $inputs['thang'] + 1, 0)->toDateString();
+                //ds cán bộ thôi công tác
+                $a_cbn = hosothoicongtac::select('macanbo')->where('madv', $madv)->where('ngaynghi','<=',$ngaycuoithang)->get()->toarray();
+                //ds cán bộ
+                $m_cb = hosocanbo::select('macvcq','mapb','mact','macanbo','tencanbo','ngaybc')->where('madv', $madv)->wherenotin('macanbo',$a_cbn)->get();
+
+                $a_data = array();
+                $inputs['mabl'] = $madv . '_' . getdate()[0];
+                $inputs['madv'] = $madv;
+                //$ngaylap = Carbon::create($inputs['nam'],$inputs['thang'],'01');
+                foreach ($m_cb as $cb) {
+                    if(getDayVn($cb->ngaybc) != '' && $cb->ngaybc > $ngaycuoithang){
+                        continue;
+                    }
+                    $cb->mabl = $inputs['mabl'];
+                    $cb->congtac = $inputs['congtac'];
+                    $cb->ttl =  $inputs['luongcoban'];
+                    //lưu vào bảng phụ cấp theo lương (chỉ có hệ số)
+                    $kq = $cb->toarray();
+                    unset($kq['ngaybc']);
+                    $a_data[] = $kq;
+                    //lưu vào db
+                    //bangluong_truc::create($kq);
+                }
+                foreach(array_chunk($a_data, 100)  as $data){
+                    bangluong_truc::insert($data);
+                }
+                bangluong::create($inputs);
+            }
+
+            return redirect('/chuc_nang/bang_luong/bang_luong?mabl=' . $inputs['mabl'].'&mapb=');
+        } else
+            return view('errors.notlogin');
+    }
+
     function show(Request $request){
         if (Session::has('admin')) {
             $inputs = $request->all();
             $m_bl = bangluong::select('thang', 'nam', 'mabl','phanloai')->where('mabl', $inputs['mabl'])->first();
             //dd($m_bl);
-            if($m_bl->phanloai == 'TRUC'){
+            if($m_bl->phanloai != 'BANGLUONG' && $m_bl->phanloai != 'TRUYLINH'){
                 $model = bangluong_truc::where('mabl', $inputs['mabl'])->get();
+                $a_pl = getPhanLoaiBangLuong();
+                $m_bl->tenphanloai = isset($a_pl[$m_bl->phanloai]) ? $a_pl[$m_bl->phanloai]: '';
                 return view('manage.bangluong.bangluong_truc')
                     ->with('furl', '/chuc_nang/bang_luong/')
                     ->with('model', $model)
@@ -1625,7 +1679,7 @@ class bangluongController extends Controller
         if (Session::has('admin')) {
             $model = bangluong_truc::find($id);
             $model->delete();
-            return redirect('/chuc_nang/bang_luong/maso='.$model->mabl);
+            return redirect('/chuc_nang/bang_luong/bang_luong?mabl='.$model->mabl.'&mapb=');
         } else
             return view('errors.notlogin');
     }
@@ -1692,6 +1746,7 @@ class bangluongController extends Controller
             $inputs = $request->all();
             //dd($inputs);
             $model_bangluong = bangluong::where('mabl',$inputs['mabl'])->first();
+
             $model = (new data())->getBangluong_ct_cb($model_bangluong->thang,$inputs['maso']);
 
             $m_nb = ngachluong::where('msngbac',$model->msngbac)->first();
@@ -1879,6 +1934,30 @@ class bangluongController extends Controller
             return view('errors.notlogin');
     }
 
+    function detail_chikhac(Request $request){
+        if (Session::has('admin')) {
+            $inputs = $request->all();
+            //dd($inputs);
+            $model = bangluong_truc::find($inputs['maso']);
+            return view('manage.bangluong.chitiet_truc')
+                ->with('furl','/chuc_nang/bang_luong/')
+                ->with('model',$model)
+                ->with('pageTitle','Chi tiết bảng lương');
+        } else
+            return view('errors.notlogin');
+    }
+
+    function updatect_chikhac(Request $request){
+        if (Session::has('admin')) {
+            $inputs=$request->all();
+            $model = bangluong_truc::find($inputs['id']);
+            $model->heso = chkDbl($inputs['heso']);
+            $model->ttl = chkDbl($inputs['ttl']);
+            $model->save();
+            return redirect('/chuc_nang/bang_luong/bang_luong?mabl='.$model->mabl.'&mapb=');
+        } else
+            return view('errors.notlogin');
+    }
     public function inbangluong($mabl){
         if (Session::has('admin')) {
             $m_bl = bangluong::select('thang','nam','mabl','madv','nguoilap','ngaylap','phanloai')->where('mabl',$mabl)->first();
