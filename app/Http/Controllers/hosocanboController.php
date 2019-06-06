@@ -129,6 +129,7 @@ class hosocanboController extends Controller
 
             $insert['anh'] = ($filename == '' ? '' : '/data/uploads/anh/' . $filename);
             $insert['madv'] = $madv;
+            $insert['ngaybc']=getDateTime($insert['ngaybc']);
             $insert['ngaysinh'] = getDateTime($insert['ngaysinh']);
             $insert['ngaytu'] = getDateTime($insert['ngaytu']);
             $insert['ngayden'] = getDateTime($insert['ngayden']);
@@ -255,7 +256,8 @@ class hosocanboController extends Controller
                 $img->move(public_path() . '/data/uploads/anh/', $filename);
                 $insert['anh']='/data/uploads/anh/'. $filename;
             }
-
+            //dd($insert);
+            $insert['ngaybc']=getDateTime($insert['ngaybc']);
             $insert['ngaysinh']=getDateTime($insert['ngaysinh']);
             $insert['ngaytu']=getDateTime($insert['ngaytu']);
             $insert['ngayden']=getDateTime($insert['ngayden']);

@@ -758,6 +758,13 @@
 
                     <div class="col-md-4">
                         <div class="form-group">
+                            <label class="control-label">Phụ cấp chức vụ</label>
+                            {!!Form::text('pccv_chvu', null, array('id' => 'pccv_chvu','class' => 'form-control', 'data-mask'=>'fdecimal'))!!}
+                        </div>
+                    </div>
+
+                    <div class="col-md-4">
+                        <div class="form-group">
                             <label class="control-label">Phụ cấp vượt khung</label>
                             <div class="input-group bootstrap-touchspin">
                                 {!!Form::text('vuotkhung_chvu', null, array('id' =>'vuotkhung_chvu', 'class' => 'form-control', 'data-mask'=>'fdecimal'))!!}
@@ -887,6 +894,7 @@
                      $('#macvcq_chvu').val(data.macvcq).trigger('change');
                      $('#id_chvu').val(data.id);
                      $('#heso_chvu').val(data.heso);
+                     $('#pccv_chvu').val(data.pccv);
                      $('#vuotkhung_chvu').val(data.vuotkhung);
                      $('#pthuong_chvu').val(data.pthuong);
                      $('#chvu-modal').modal('show');
@@ -1220,6 +1228,7 @@
                     macvcq : $('#macvcq_chvu').val(),
                     id: $('#id_chvu').val(),
                     heso: $('#heso_chvu').val(),
+                    pccv: $('#pccv_chvu').val(),
                     phanloai: $('#phanloai_chvu').val(),
                     vuotkhung: $('#vuotkhung_chvu').val(),
                     pthuong: $('#pthuong_chvu').val()

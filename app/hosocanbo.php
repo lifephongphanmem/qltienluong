@@ -80,7 +80,7 @@ class hosocanbo extends Model
         'pcdith',
         'luonghd',
         'pcphth',
-
+        'pcctp',
         'theodoi',
         'mact',
         'baohiem',

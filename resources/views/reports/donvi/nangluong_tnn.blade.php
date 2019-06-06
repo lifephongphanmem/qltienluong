@@ -101,18 +101,23 @@
             @endfor
         </tr>
 
-        <?php $i=1; ?>
-
-        @foreach($model as $ct)
-            <tr>
-                <td>{{$i++}}</td>
-                <td style="text-align: left">{{$ct->tencanbo}}</td>
-                <td style="text-align: left">{{$ct->tencv}}</td>
-                <td style="text-align: center">{{$ct->msngbac}}</td>
-                <td style="text-align: center">{{getDayVn($ct->tnndenngay)}}</td>
-                <td style="text-align: center">{{dinhdangsothapphan($ct->pctnn)}}</td>
-                <td style="text-align: center">{{dinhdangsothapphan($ct->pctnn_m)}}</td>
+        @foreach($a_pl as $pl)
+            <?php $i=1; $model_ct = $model->where('trangthai',$pl['trangthai']); ?>
+            <tr style="font-weight: bold; font-style:italic ">
+                <td></td>
+                <td style="text-align: left;" colspan="10">{{$pl['trangthai'] == 'DANANGLUONG'?'Danh sách cán bộ đã nâng lương':'Danh sách cán bộ chưa nâng lương'}}</td>
             </tr>
+            @foreach($model_ct as $ct)
+                <tr>
+                    <td>{{$i++}}</td>
+                    <td style="text-align: left">{{$ct->tencanbo}}</td>
+                    <td style="text-align: left">{{$ct->tencv}}</td>
+                    <td style="text-align: center">{{$ct->msngbac}}</td>
+                    <td style="text-align: center">{{getDayVn($ct->tnndenngay)}}</td>
+                    <td style="text-align: center">{{dinhdangsothapphan($ct->pctnn)}}</td>
+                    <td style="text-align: center">{{dinhdangsothapphan($ct->pctnn_m)}}</td>
+                </tr>
+            @endforeach
         @endforeach
     </table>
 

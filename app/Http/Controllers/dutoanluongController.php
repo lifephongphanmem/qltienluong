@@ -743,7 +743,6 @@ class dutoanluongController extends Controller
             });
             $model_congtac = a_unique($model_congtac);
 
-
             return view('reports.dutoanluong.donvi.bangluong')
                 ->with('thongtin', $thongtin)
                 ->with('model', $model)

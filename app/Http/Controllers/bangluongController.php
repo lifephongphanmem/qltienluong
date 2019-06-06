@@ -279,8 +279,14 @@ class bangluongController extends Controller
         $ngaylap = Carbon::create($inputs['nam'], $inputs['thang'], '01');
         $m_tamngung = hosotamngungtheodoi::where('madv', $inputs['madv'])->where('maphanloai', 'THAISAN')->where('ngaytu', '<=', $ngaylap)->where('ngayden', '>=', $ngaylap)->get();
         $m_nghiphep = hosotamngungtheodoi::where('madv', $inputs['madv'])->wherein('maphanloai',['NGHIPHEP','NGHIOM'])->whereYear('ngaytu', $inputs['nam'])->whereMonth('ngaytu', $inputs['thang'])->get();
-        $m_cb = hosocanbo::where('madv', $inputs['madv'])->where('theodoi','<', '9')->get();
+        //$m_cb = hosocanbo::where('madv', $inputs['madv'])->where('theodoi','<', '9')->get();
         $m_cbkn = hosocanbo::where('madv', $inputs['madv'])->where('theodoi','<', '9')->get();
+
+        $ngaycuoithang = Carbon::create($inputs['nam'], $inputs['thang'] + 1, 0)->toDateString();
+        //ds cán bộ thôi công tác
+        $a_cbn = hosothoicongtac::select('macanbo')->where('madv', $inputs['madv'])->where('ngaynghi','<=',$ngaycuoithang)->get()->toarray();
+        //ds cán bộ
+        $m_cb = hosocanbo::where('madv', $inputs['madv'])->wherenotin('macanbo',$a_cbn)->get();
 
         //Lấy danh sách cán bộ kiêm nhiệm
         //$model_canbo_kn = hosocanbo_kiemnhiem::where('madv',session('admin')->madv)->wherein('manguonkp',[$inputs['manguonkp'],''])->get();
@@ -332,6 +338,11 @@ class bangluongController extends Controller
         $a_pc_coth = array('pcudn','pctnn');
         $ngaycong = dmdonvi::where('madv',$inputs['madv'])->first()->songaycong;
         foreach ($m_cb as $cb) {
+            //ngày công tác không thỏa mãn
+            if(getDayVn($cb->ngaybc) != '' && $cb->ngaybc > $ngaycuoithang){
+                continue;
+            }
+
             $cb->mabl = $inputs['mabl'];
             $cb->congtac = 'CONGTAC';
             $cb->bhxh = floatval($cb->bhxh) / 100;
@@ -725,12 +736,18 @@ class bangluongController extends Controller
         //dd($m_cb_kn);
         //công tác
         $a_th = array_merge(array('stt','tencanbo', 'msngbac', 'bac', 'theodoi','pthuong',
-            'bhxh', 'bhyt', 'bhtn', 'kpcd','bhxh_dv', 'bhyt_dv', 'bhtn_dv', 'kpcd_dv'),
+            'bhxh', 'bhyt', 'bhtn', 'kpcd','bhxh_dv', 'bhyt_dv', 'bhtn_dv', 'kpcd_dv', 'ngaybc'),
             $a_th);
-        $m_cb = hosocanbo::select($a_th)->where('madv', $inputs['madv'])->where('theodoi','<', '9')->get()->keyBy('macanbo')->toArray();
+        //$m_cb = hosocanbo::select($a_th)->where('madv', $inputs['madv'])->where('theodoi','<', '9')->get()->keyBy('macanbo')->toArray();
         $m_dv = dmdonvi::where('madv',$inputs['madv'])->first();
         //dd($m_cb);
         //dd($m_cb_kn);
+
+        $ngaycuoithang = Carbon::create($inputs['nam'], $inputs['thang'] + 1, 0)->toDateString();
+        //ds cán bộ thôi công tác
+        $a_cbn = hosothoicongtac::select('macanbo')->where('madv', $inputs['madv'])->where('ngaynghi','<=',$ngaycuoithang)->get()->toarray();
+        //ds cán bộ
+        $m_cb = hosocanbo::select($a_th)->where('madv', $inputs['madv'])->wherenotin('macanbo',$a_cbn)->get()->keyBy('macanbo')->toArray();
 
         $a_phanloai = dmphanloaicongtac_baohiem::where('madv', session('admin')->madv)->get()->keyBy('mact')->toArray();
         $a_nhomct = array_column(dmphanloaict::all()->toarray(), 'macongtac','mact');
@@ -760,6 +777,10 @@ class bangluongController extends Controller
             //nếu cán bộ ko set nguồn (null, '') hoặc trong nguồn thì sét luôn =  ma nguồn để tạo bang lương
             if ($val['manguonkp'] != '' && $val['manguonkp'] != null && !in_array($inputs['manguonkp'], $a_nguon)) {
                 continue; //cán bộ ko thuộc nguồn quản lý => ko tính lương
+            }
+            //ngày công tác không thỏa mãn
+            if(getDayVn($m_cb[$key]['ngaybc']) != '' && $m_cb[$key]['ngaybc'] > $ngaycuoithang){
+                continue;
             }
 
             $m_cb[$key]['mabl'] = $inputs['mabl'];
@@ -1085,7 +1106,7 @@ class bangluongController extends Controller
             //bangluong_phucap::insert($data);
         }
         */
-        $a_col_cb = array('id','bac','baohiem','macongtac','pthuong','theodoi');//'manguonkp',
+        $a_col_cb = array('id','bac','baohiem','macongtac','pthuong','theodoi', 'ngaybc');//'manguonkp',
         $a_data_canbo = unset_key($a_data_canbo,$a_col_cb);
 
         //dd($a_data_canbo);
@@ -1218,6 +1239,8 @@ class bangluongController extends Controller
             if($m_cb_kn[$i]['phanloai'] == 'CHUCVU'){
                 $m_cb_kn[$i]['heso'] = round($m_cb_kn[$i]['heso'] * $m_cb_kn[$i]['pthuong'] /100, session('admin')->lamtron);
                 $m_cb_kn[$i]['st_heso'] = round($m_cb_kn[$i]['st_heso'] * $m_cb_kn[$i]['pthuong'] /100, 0);
+                $m_cb_kn[$i]['pccv'] = round($m_cb_kn[$i]['pccv'] * $m_cb_kn[$i]['pthuong'] /100, session('admin')->lamtron);
+                $m_cb_kn[$i]['st_pccv'] = round($m_cb_kn[$i]['st_pccv'] * $m_cb_kn[$i]['pthuong'] /100, 0);
                 $m_cb_kn[$i]['vuotkhung'] = round($m_cb_kn[$i]['vuotkhung'] * $m_cb_kn[$i]['pthuong'] /100, session('admin')->lamtron);
                 $m_cb_kn[$i]['st_vuotkhung'] = round($m_cb_kn[$i]['st_vuotkhung'] * $m_cb_kn[$i]['pthuong'] /100, 0);
                 $tonghs = round($tonghs * $m_cb_kn[$i]['pthuong'] /100, session('admin')->lamtron);

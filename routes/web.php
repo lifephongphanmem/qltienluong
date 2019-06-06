@@ -132,6 +132,7 @@ Route::group(['prefix'=>'danh_muc'],function(){
 
         Route::get('update_plct','dmdonvibaocaoController@update_plct');
         Route::get('update_sunghiep','dmdonvibaocaoController@update_sunghiep');
+        Route::get('update_nguonkp','dmdonvibaocaoController@update_nguonkp');
 
         Route::get('getPhanLoai','ajaxController@getPhanLoai');
     });
@@ -691,6 +692,7 @@ Route::group(['prefix'=>'chuc_nang'],function(){
         //Tạo in bảng lương theo cách mới
         Route::post('mau01','bangluongdangkyController@printf_mau01');
         Route::post('mautt107','bangluongdangkyController@printf_mautt107');
+        Route::post('mautt107_m2','bangluongdangkyController@printf_mautt107_m2');
 
     });
 });
@@ -783,6 +785,7 @@ Route::group(['prefix'=>'bao_cao'],function(){
             Route::post('chitraluong','baocaobangluongController@chitraluong');
             Route::post('dutoanluong','baocaobangluongController@dutoanluong');
             Route::post('nangluong','baocaobangluongController@nangluong');
+            Route::post('dangkyluong','baocaobangluongController@dangkyluong');
         });
 
         Route::group(['prefix'=>'khoi'],function(){

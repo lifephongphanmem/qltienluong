@@ -101,28 +101,15 @@
         <td style="width: 10%; text-align: center;font-weight: bold">Thành tiền</td>
         <td style="text-align: center;font-weight: bold">Ký nhận</td>
     </tr>
-
-
-    @foreach($model_congtac as $congtac)
-        <?php $model_ct= $model->where('mact',$congtac->mact); $i=1; ?>
-        <tr style="font-weight: bold;">
+    <?php $i=1; ?>
+    @foreach($model as $ct)
+        <tr>
+            <td>{{$i++}}</td>
+            <td style="text-align: left">{{$ct->tencanbo}}</td>
+            <td style="text-align: left">{{isset($a_cv[$ct->macvcq])? $a_cv[$ct->macvcq] : ''}}</td>
+            <td style="text-align: right">{{dinhdangso($ct->ttl)}}</td>
             <td></td>
-            <td style="text-align: left" colspan="4">{{$congtac->tenct}}</td>
         </tr>
-        @foreach($model_ct as $ct)
-            <tr>
-                <td>{{$i++}}</td>
-                <td style="text-align: left">{{$ct->tencanbo}}</td>
-                <td style="text-align: left">{{isset($a_cv[$ct->macvcq])? $a_cv[$ct->macvcq] : ''}}</td>
-                <td style="text-align: right">{{dinhdangso($ct->ttl)}}</td>
-                <td></td>
-            </tr>
-        @endforeach
-            <tr style="font-weight: bold; text-align: center;">
-                <td colspan="3">Cộng</td>
-                <td class="money">{{dinhdangso($model_ct->sum('ttl'))}}</td>
-                <td></td>
-            </tr>
     @endforeach
     <tr style="font-weight: bold; text-align: center;">
         <td colspan="3">Tổng cộng</td>

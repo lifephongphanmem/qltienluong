@@ -1069,6 +1069,52 @@ class bangluongdangkyController extends Controller
             return view('errors.notlogin');
     }
 
+    public function printf_mautt107_m2(Request $request){
+        if (Session::has('admin')) {
+            $inputs = $request->all();
+            $inputs['mabl'] = $inputs['mabl_mautt107'];
+            $model = $this->getBangLuong($inputs);
+            //$model = $this->getBangLuong($inputs)->wherein('phanloai', ['CVCHINH','KHONGCT']);
+            //dd($inputs);
+            $mabl = $inputs['mabl'];
+            $m_bl = bangluongdangky::select('thang','nam','mabl','madv','ngaylap','phanloai')->where('mabl',$mabl)->first();
+            $m_dv = dmdonvi::where('madv',$m_bl->madv)->first();
+
+            $model_congtac = dmphanloaict::select('mact','tenct')
+                ->wherein('mact', function($query) use($mabl){
+                    $query->select('mact')->from('bangluongdangky_ct')->where('mabl',$mabl);
+                })->get();
+
+            $thongtin=array('nguoilap'=>$m_bl->nguoilap,
+                'thang'=>$m_bl->thang,
+                'nam'=>$m_bl->nam,
+                'ngaylap'=>$m_bl->ngaylap,'phanloai'=>$m_bl->phanloai,
+                'cochu'=>$inputs['cochu']);
+            //xử lý ẩn hiện cột phụ cấp => biết tổng số cột hiện => colspan trên báo cáo
+            $a_goc = array('hesott');
+            $model_pc = dmphucap_donvi::where('madv',$m_bl->madv)->where('phanloai','<','3')->wherenotin('mapc',$a_goc)->get();
+            $a_phucap = array();
+            $col = 0;
+
+            foreach($model_pc as $ct) {
+                if ($model->sum($ct->mapc) > 0) {
+                    $a_phucap[$ct->mapc] = $ct->report;
+                    $col++;
+                }
+            }
+            return view('reports.bangluong.donvi.mautt107_dk_m2')
+                ->with('model',$model->sortBy('stt'))
+                ->with('model_pb',getPhongBan())
+                ->with('m_dv',$m_dv)
+                ->with('thongtin',$thongtin)
+                ->with('col',$col)
+                ->with('model_congtac',$model_congtac)
+                ->with('a_phucap',$a_phucap)
+                ->with('pageTitle','Bảng lương chi tiết');
+        } else
+            return view('errors.notlogin');
+    }
+
     function getBangLuong($inputs, $phanloai=0)
     {
         $mabl = $inputs['mabl'];

@@ -140,6 +140,9 @@ class CreateBangluongctTable extends Migration
             $table->double('hs_pccovu')->default(0);
             $table->double('hs_pcud61')->default(0);
             $table->double('hs_pcudn')->default(0);
+
+            $table->double('pcctp')->default(0);//phụ cấp công tác phí
+            $table->double('st_pcctp')->default(0);//phụ cấp công tác phí
             $table->timestamps();
         });
     }

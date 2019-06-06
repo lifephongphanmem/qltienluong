@@ -123,6 +123,8 @@ class bangluong_ct extends Model
         'st_pcdith',
         'st_luonghd',
         'st_pcphth',
+        'st_pcctp',
+        'pcctp',
         //lưu tỷ lệ bảo hiểm (đã quy về hệ số)
         'bhxh',
         'bhyt',

@@ -466,7 +466,7 @@ class bangluong_inController extends Controller
             //dd($model_congtac);
             return view('reports.bangluong.donvi.mauctphi')
                 ->with('model',$model)
-                ->with('model_congtac',$model_congtac)
+                //->with('model_congtac',$model_congtac)
                 ->with('m_dv',$m_dv)
                 ->with('m_bl',$m_bl)
                 ->with('a_cv',getChucVuCQ(false))

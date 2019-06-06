@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\bangluong;
 use App\bangluong_ct;
+use App\bangluongdangky;
+use App\bangluongdangky_ct;
 use App\chitieubienche;
 use App\dmchucvucq;
 use App\dmdonvi;
@@ -15,6 +17,8 @@ use App\dmphanloaict;
 use App\dmphanloaidonvi;
 use App\dmphucap;
 use App\dmphucap_donvi;
+use App\dsnangluong;
+use App\dsnangthamnien;
 use App\dutoanluong;
 use App\hosocanbo;
 use App\ngachluong;
@@ -247,6 +251,51 @@ class baocaobangluongController extends Controller
                 ->with('model_dv', $model_dv)
                 ->with('m_dv', $m_dv)
                 ->with('pageTitle', 'Báo cáo bảng lương');
+        } else
+            return view('errors.notlogin');
+    }
+
+    function dangkyluong(Request $request){
+        if (Session::has('admin')) {
+            $inputs = $request->all();
+            $tuthang = $inputs['tuthang'];
+            $tunam = $inputs['tunam'];
+            $denthang = $inputs['denthang'];
+            //$dennam = $inputs['dennam'];
+
+            $model_tonghop = bangluongdangky::whereBetween('thang', array($tuthang, $denthang))
+                ->where('nam', $tunam)->where('madv', session('admin')->madv)->orderby('thang')->get();
+
+            $model = bangluongdangky_ct::wherein('mabl', a_unique(array_column($model_tonghop->toarray(), 'mabl')))->get();
+            $a_ct = array_column(dmphanloaict::wherein('mact',a_unique(array_column($model->toarray(), 'mact')))->get()->toArray(), 'tenct', 'mact');
+            $a_phucap = array();
+            $col = 0;
+            $m_pc = dmphucap_donvi::where('madv', session('admin')->madv)->orderby('stt')->get()->toarray();
+
+            foreach ($m_pc as $ct) {
+                if ($model->sum($ct['mapc']) > 0) {
+                    $a_phucap[$ct['mapc']] = $ct['report'];
+                    $col++;
+                }
+            }
+
+            $model_thang = $model_tonghop->map(function ($data) {
+                return collect($data->toArray())
+                    ->only(['thang','mabl'])
+                    ->all();
+            });
+            //dd($model_thang);
+            $model_thang = a_unique($model_thang);
+            $m_dv = dmdonvi::where('madv', session('admin')->madv)->first();
+
+            return view('reports.mauchung.donvi.dangkyluong')
+                ->with('model', $model)
+                ->with('m_dv', $m_dv)
+                ->with('col', $col)
+                ->with('a_phucap', $a_phucap)
+                ->with('a_ct', $a_ct)
+                ->with('model_thang', $model_thang)
+                ->with('pageTitle', 'Tổng hợp đăng ký lương');
         } else
             return view('errors.notlogin');
     }
@@ -1946,28 +1995,56 @@ class baocaobangluongController extends Controller
             $inputs = $request->all();
             $m_dv = dmdonvi::where('madv',session('admin')->madv)->first();
             $a_cv = getChucVuCQ(false);
-
+            $a_cb = hosocanbo::select('macanbo','tencanbo','macvcq')->where('madv', $m_dv->madv)->get()->keyBy('macanbo')->toArray();
+            //dd($m_cb);
             //dd($inputs);
-            if($inputs['phanloai'] == 'TNN'){
-                $model = hosocanbo::select('stt','macanbo', 'tencanbo','macvcq', 'msngbac', 'sunghiep', 'gioitinh', 'tnntungay','tnndenngay', 'ngaytu', 'ngayden', 'heso','pctnn','vuotkhung','bac')
-                    ->wherebetween('tnndenngay',[$inputs['ngaytu'],$inputs['ngayden']])
+            if($inputs['phanloai'] == 'TNN') {
+                $model = hosocanbo::select(DB::raw("'CHUANANGLUONG'" . ' as trangthai'), 'stt', 'macanbo', 'tencanbo', 'macvcq', 'msngbac', 'sunghiep', 'gioitinh', 'tnntungay', 'tnndenngay', 'ngaytu', 'ngayden', 'heso', 'pctnn', 'vuotkhung', 'bac')
+                    ->wherebetween('tnndenngay', [$inputs['ngaytu'], $inputs['ngayden']])
                     ->where('madv', session('admin')->madv)
-                    ->where('theodoi','<' ,'9')
+                    ->where('theodoi', '<', '9')
                     ->get();
 
-                foreach($model as $ct){
-                    $ct->tencv = isset($a_cv[$ct->macvcq])? $a_cv[$ct->macvcq]:'';
-                    $ct->pctnn_m = $ct->pctnn == 0? 5: $ct->pctnn + 1;
+                foreach ($model as $ct) {
+                    $ct->tencv = isset($a_cv[$ct->macvcq]) ? $a_cv[$ct->macvcq] : '';
+                    $ct->pctnn_m = $ct->pctnn == 0 ? 5 : $ct->pctnn + 1;
                 }
 
+                if (isset($inputs['indanangluong'])) {
+                    $model_nangluong = dsnangthamnien::join('dsnangthamnien_chitiet', 'dsnangthamnien.manl', '=', 'dsnangthamnien.manl')
+                        ->where('madv', session('admin')->madv)
+                        ->where('trangthai', 'Đã nâng lương')
+                        ->wherebetween('ngayxet', [$inputs['ngaytu'], $inputs['ngayden']])->get();
+
+                    foreach ($model_nangluong as $ct) {
+                        if (isset($a_cb[$ct->macanbo])) {
+                            $ct->tencanbo = $a_cb[$ct->macanbo]['tencanbo'];
+                            $ct->macvcq = $a_cb[$ct->macanbo]['macvcq'];
+                            $ct->tencv = isset($a_cv[$ct->macvcq]) ? $a_cv[$ct->macvcq] : '';
+                            $ct->pctnn_m = $ct->pctnn - 1;
+                            $ct->pctnn = $ct->pctnn_m - 1 == 5 ? 0 : $ct->pctnn_m - 1;
+                            $ct->tnndenngay = $ct->ngaytu;
+                            $ct->trangthai = "DANANGLUONG";
+                            $model->add($ct);
+                        }
+                    }
+                }
+
+                $a_pl = $model->map(function($data){
+                    return collect($data->toArray())
+                        ->only(['trangthai'])
+                        ->all();
+                });
+                //dd($a_pl);
                 return view('reports.donvi.nangluong_tnn')
-                    ->with('model',$model->sortby('stt'))
-                    ->with('m_dv',$m_dv)
-                    ->with('inputs',$inputs)
-                    ->with('pageTitle','Danh sách cán bộ');
+                    ->with('model', $model->sortby('tnndenngay'))
+                    ->with('m_dv', $m_dv)
+                    ->with('a_pl',a_unique($a_pl))
+                    ->with('inputs', $inputs)
+                    ->with('pageTitle', 'Danh sách cán bộ');
 
             }else{
-                $model = hosocanbo::select('stt','macanbo', 'tencanbo','macvcq', 'msngbac', 'sunghiep', 'gioitinh', 'tnndenngay', 'ngaytu', 'ngayden', 'heso','pctnn','vuotkhung','bac')
+                $model = hosocanbo::select(DB::raw("'CHUANANGLUONG'".' as trangthai'),'stt','macanbo', 'tencanbo','macvcq', 'msngbac', 'sunghiep', 'gioitinh', 'tnndenngay', 'ngaytu', 'ngayden', 'heso','pctnn','vuotkhung','bac')
                     ->wherebetween('ngayden',[$inputs['ngaytu'],$inputs['ngayden']])
                     ->wherenotnull('msngbac')
                     ->where('madv', session('admin')->madv)
@@ -1995,9 +2072,49 @@ class baocaobangluongController extends Controller
                         }
                     }
                 }
+
+                if (isset($inputs['indanangluong'])) {
+                    $model_nangluong = dsnangluong::join('dsnangluong_chitiet', 'dsnangluong.manl', '=', 'dsnangluong.manl')
+                        ->where('madv', session('admin')->madv)
+                        ->where('trangthai', 'Đã nâng lương')
+                        ->wherebetween('ngayxet', [$inputs['ngaytu'], $inputs['ngayden']])->get();
+
+                    foreach ($model_nangluong as $ct) {
+                        if (isset($a_cb[$ct->macanbo])) {
+                            $ct->tencanbo = $a_cb[$ct->macanbo]['tencanbo'];
+                            $ct->macvcq = $a_cb[$ct->macanbo]['macvcq'];
+                            $ct->tencv = isset($a_cv[$ct->macvcq]) ? $a_cv[$ct->macvcq] : '';
+                            $ct->trangthai = "DANANGLUONG";
+
+                            if(isset($a_nb[$ct->msngbac])){
+                                $ngachluong = $a_nb[$ct->msngbac];
+                                if($ct->heso < $ngachluong['hesolonnhat']){//nâng lương ngạch bậc
+                                    $ct->heso_m = $ct->heso + $ngachluong['hesochenhlech'];
+                                    $ct->bac_m = $ct->bac < $ngachluong['baclonnhat'] - 1 ? $ct->bac + 1 : $ngachluong['baclonnhat'];
+                                }else{//vượt khung
+                                    if($ct->vuotkhung == 0){//lần đầu
+                                        $ct->vuotkhung_m = $ngachluong['vuotkhung'];
+                                    }else{
+                                        $ct->vuotkhung_m = $ct->vuotkhung + 1;
+                                    }
+                                }
+                            }
+
+                            $model->add($ct);
+                        }
+                    }
+                }
+
+                $a_pl = $model->map(function($data){
+                    return collect($data->toArray())
+                        ->only(['trangthai'])
+                        ->all();
+                });
                 return view('reports.donvi.nangluong_ngachbac')
-                    ->with('model',$model->sortby('stt'))
+                    //->with('model',$model->sortby('ngayden')->sortby('stt'))
+                    ->with('model',$model->sortby('ngayden'))
                     ->with('m_dv',$m_dv)
+                    ->with('a_pl',a_unique($a_pl))
                     ->with('inputs',$inputs)
                     ->with('pageTitle','Danh sách cán bộ');
             }
