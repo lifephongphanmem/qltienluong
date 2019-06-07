@@ -251,8 +251,8 @@ class tonghopluong_donviController extends Controller
             $a_data = unset_key($a_data,$a_col_pc);
             $a_data = unset_key($a_data,$col_st);
             $a_data = unset_key($a_data,array('st_pctdt', 'pctdt','st_pcxaxe',
-                'pcxaxe','st_pcdith','pcdith','st_pcphth','pcphth','pclade', 'st_pclade'));//tạm
-            dd($a_data);
+                'pcxaxe','st_pcdith','pcdith','st_pcphth','pcphth','pclade', 'st_pclade', 'pcctp', 'st_pcctp'));//tạm
+            //dd($a_data);
             foreach(array_chunk($a_data, 50)  as $data){
                 tonghopluong_donvi_bangluong::insert($data);
             }
