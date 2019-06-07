@@ -247,25 +247,30 @@
                                         </div>
                                         <div class="portlet-body form">
                                             <!-- BEGIN FORM-->
-                                            <form action="/danh_muc/khu_vuc/update_nguonkp" class="form-horizontal" id="frm_sunghiep">
+                                            <form action="/danh_muc/khu_vuc/update_nguonkp" class="form-horizontal" id="frm_nguonkp">
                                                 <div class="form-body">
                                                     <div class="form-horizontal">
                                                         <div class="row">
                                                             <div class="col-md-6">
-                                                                <label class="control-label">Sự nghiệp cán bộ cũ</label>
-                                                                <select class="form-control select2me" name="sunghiep_cu" id="sunghiep_cu">
-                                                                    <option value="Công chức">Công chức</option>
-                                                                    <option value="Viên chức">Viên chức</option>
-                                                                    <option value="Khác">Khác</option>
+                                                                <label class="control-label">Phân loại công tác cần gán giá trị</label>
+                                                                <select class="form-control select2me" name="mact" id="mact">
+                                                                    @foreach($model_nhomct as $kieuct)
+                                                                        <optgroup label="{{$kieuct->tencongtac}}">
+                                                                            <?php $mode_ct=$model_tenct->where('macongtac',$kieuct->macongtac); ?>
+                                                                            @foreach($mode_ct as $ct)
+                                                                                <option value="{{$ct->mact}}">{{$ct->tenct}}</option>
+                                                                            @endforeach
+                                                                        </optgroup>
+                                                                    @endforeach
                                                                 </select>
                                                             </div>
 
                                                             <div class="col-md-6">
-                                                                <label class="control-label">Sự nghiệp cán bộ mới</label>
-                                                                <select class="form-control select2me" name="sunghiep_moi" id="sunghiep_moi">
-                                                                    <option value="Công chức">Công chức</option>
-                                                                    <option value="Viên chức">Viên chức</option>
-                                                                    <option value="Khác">Khác</option>
+                                                                <label class="control-label">Nguồn kinh phí</label>
+                                                                <select class="form-control" id="manguonkp" name="manguonkp[]" multiple="multiple">
+                                                                    @foreach(getNguonKP(false) as $key=>$value)
+                                                                        <option value="{{$key}}">{{$value}}</option>
+                                                                    @endforeach
                                                                 </select>
                                                             </div>
                                                         </div>
@@ -294,9 +299,16 @@
     </div>
 
     <script>
+        $(function(){
+            //Multi select box
+            $("#manguonkp").select2();
+
+        });
+
         function giatri(madv){
             $('#frm_plct').find("[id^='madv']").val(madv);
             $('#frm_sunghiep').find("[id^='madv']").val(madv);
+            $('#frm_nguonkp').find("[id^='madv']").val(madv);
         }
 
         $(function(){
