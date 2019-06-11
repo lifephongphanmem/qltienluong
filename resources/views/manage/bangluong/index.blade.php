@@ -159,18 +159,18 @@
                             <div class="tabbable tabbable-custom tabbable-noborder tabbable-reversed">
                                 <ul class="nav nav-tabs">
                                     <li class="active">
-                                        <a href="#tab_0" data-toggle="tab" aria-expanded="true">
+                                        <a href="#tab_0_cre" data-toggle="tab" aria-expanded="true">
                                             Thông tin chung </a>
                                     </li>
                                     <li class="">
-                                        <a href="#tab_1" data-toggle="tab" aria-expanded="false">
+                                        <a href="#tab_1_cre" data-toggle="tab" aria-expanded="false">
                                             Tạo bảng lương theo mẫu </a>
                                     </li>
 
                                 </ul>
                                 <div class="tab-content">
                                     <!-- Thông tin chung -->
-                                    <div class="tab-pane active" id="tab_0">
+                                    <div class="tab-pane active" id="tab_0_cre">
                                         {!! Form::open(['url'=>'/chuc_nang/bang_luong/store','method'=>'post' , 'files'=>true, 'id' => 'create_bangluong']) !!}
                                         <div class="row">
                                             <div class="col-md-12">
@@ -221,7 +221,7 @@
                                     </div>
 
                                     <!-- Tùy chọn nâng cao -->
-                                    <div class="tab-pane" id="tab_1">
+                                    <div class="tab-pane" id="tab_1_cre">
                                         <table id="sample_4" class="table table-hover table-striped table-bordered">
                                             <thead>
                                                 <tr>
