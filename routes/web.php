@@ -270,6 +270,7 @@ Route::group(['prefix'=>'nghiep_vu'],function(){
             Route::get('danh_sach','dutoanluongController@index');
             Route::get('del/{id}','dutoanluongController@destroy');
             Route::post('create','dutoanluongController@create');
+            Route::get('create_mau','dutoanluongController@create_mau');
             //Route::get('checkNamDuToan','dutoanluongController@checkNamDT');
             //Route::get('checkBangLuong','dutoanluongController@checkBangLuong');
             Route::post('senddata','dutoanluongController@senddata'); //gửi dữ liệu
@@ -280,8 +281,10 @@ Route::group(['prefix'=>'nghiep_vu'],function(){
             Route::get('detail/get','dutoanluongController@get_detail');
 
             Route::get('printf','dutoanluongController@printf_data');
+            Route::get('printf_m2','dutoanluongController@printf_data_m2');
             Route::get('printf_bl/ma_so={masodv}','dutoanluongController@printf_bl');
             Route::post('mautt107','dutoanluongController@printf_tt107');
+            Route::get('mautt107_m2','dutoanluongController@printf_tt107_m2');
             Route::get('nangluong','dutoanluongController@printf_nangluong');
         });
 
@@ -385,6 +388,8 @@ Route::group(['prefix'=>'chuc_nang'],function(){
         Route::post('store_truylinh','bangluongController@store_truylinh');
         Route::post('store_truc','bangluongController@store_truc');
         Route::post('store_chikhac','bangluongController@store_chikhac');
+
+        Route::get('store_mau','bangluongController@store_mau');
 
         Route::get('bang_luong','bangluongController@show');
         Route::get('cap_nhat','bangluongController@capnhat');
