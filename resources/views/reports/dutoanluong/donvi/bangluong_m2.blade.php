@@ -96,7 +96,7 @@
             <th rowspan="2">Cộng hệ số</th>
             <th rowspan="2">Tiền lương tháng</th>
             <th colspan="5">Các khoản trích nộp theo lương</th>
-
+            <th rowspan="2">Tổng tiền lương và bảo hiểm</th>
             <th style="width: 5%" rowspan="2">Ghi chú</th>
         </tr>
 
@@ -109,7 +109,7 @@
         </tr>
 
         <tr>
-            @for($i=1;$i<=11 + $col;$i++)
+            @for($i=1;$i<=12 + $col;$i++)
                 <th>{{$i}}</th>
             @endfor
         </tr>
@@ -142,6 +142,7 @@
                         <td>{{dinhdangso($ct->stkpcd_dv)}}</td>
                         <td>{{dinhdangso($ct->stbhtn_dv)}}</td>
                         <td>{{dinhdangso($ct->ttbh_dv)}}</td>
+                        <td>{{dinhdangso($ct->ttbh_dv + $ct->ttl)}}</td>
                         <td></td>
                     </tr>
                 @endforeach
@@ -159,6 +160,7 @@
                     <td class="money">{{dinhdangso($model_luong->sum('stkpcd_dv'))}}</td>
                     <td class="money">{{dinhdangso($model_luong->sum('stbhtn_dv'))}}</td>
                     <td class="money">{{dinhdangso($model_luong->sum('ttbh_dv'))}}</td>
+                    <td class="money">{{dinhdangso($model_luong->sum('ttbh_dv') + $model_luong->sum('ttl'))}}</td>
                     <td></td>
                 </tr>
             @endif
@@ -170,13 +172,14 @@
                 <td>{{dinhdangsothapphan($model->sum($key) ,5)}}</td>
             @endforeach
             <td>{{dinhdangsothapphan($model->sum('tonghs') ,5)}}</td>
-            <td class="money">{{dinhdangso($model->sum('luongtn'))}}</td>
+            <td class="money">{{dinhdangso($model->sum('ttl'))}}</td>
 
             <td class="money">{{dinhdangso($model->sum('stbhxh_dv'))}}</td>
             <td class="money">{{dinhdangso($model->sum('stbhyt_dv'))}}</td>
             <td class="money">{{dinhdangso($model->sum('stkpcd_dv'))}}</td>
             <td class="money">{{dinhdangso($model->sum('stbhtn_dv'))}}</td>
             <td class="money">{{dinhdangso($model->sum('ttbh_dv'))}}</td>
+            <td class="money">{{dinhdangso($model->sum('ttbh_dv') + $model->sum('ttl'))}}</td>
             <td></td>
         </tr>
     </table>
