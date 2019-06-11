@@ -114,7 +114,7 @@
             @endfor
         </tr>
 
-
+        <?php $i=1; ?>
         @foreach($a_congtac as $key=>$val)
             <?php
                 $model_luong = $model->where('mact',$key);
@@ -122,7 +122,7 @@
             @if(count($model_luong)> 0)
                 <?php $stt=1; ?>
                 <tr style="font-weight: bold; font-style:italic ">
-                    <td>{{convert2Roman($stt++)}}</td>
+                    <td>{{convert2Roman($i++)}}</td>
                     <td style="text-align: left;" colspan="{{10 + $col}}">{{$val}}</td>
                 </tr>
                 @foreach($model_luong as $ct)
@@ -136,7 +136,7 @@
                         @endforeach
 
                         <td>{{dinhdangsothapphan($ct->tonghs,5)}}</td>
-                        <td>{{dinhdangso($ct->luongtn)}}</td>
+                        <td>{{dinhdangso($ct->ttl)}}</td>
                         <td>{{dinhdangso($ct->stbhxh_dv)}}</td>
                         <td>{{dinhdangso($ct->stbhyt_dv)}}</td>
                         <td>{{dinhdangso($ct->stkpcd_dv)}}</td>
@@ -152,7 +152,7 @@
                         <td>{{dinhdangsothapphan($model_luong->sum($key) ,5)}}</td>
                     @endforeach
                     <td>{{dinhdangsothapphan($model_luong->sum('tonghs') ,5)}}</td>
-                    <td class="money">{{dinhdangso($model_luong->sum('luongtn'))}}</td>
+                    <td class="money">{{dinhdangso($model_luong->sum('ttl'))}}</td>
 
                     <td class="money">{{dinhdangso($model_luong->sum('stbhxh_dv'))}}</td>
                     <td class="money">{{dinhdangso($model_luong->sum('stbhyt_dv'))}}</td>

@@ -2902,11 +2902,11 @@ class bangluongController extends Controller
 
             foreach($model as $cb){
                 $canbo = $model_kn->where('macanbo',$cb->macanbo);
-                if(count($canbo)>0){
+                if(count($canbo)>0 && $cb->macongtac == 'BIENCHE'){
                     foreach($canbo as $cbkn) {
                         $cb->ttl_kn += $cbkn->ttl;
                         $cb->luongtn_kn += $cbkn->luongtn;
-                        $cb->macvcq_kn .= $a_chucvu[$cbkn->macvcq] . '; ';
+                        $cb->macvcq_kn .=(isset($a_chucvu[$cbkn->macvcq])? $a_chucvu[$cbkn->macvcq] : '')  . '; ';
                     }
                 }
             }

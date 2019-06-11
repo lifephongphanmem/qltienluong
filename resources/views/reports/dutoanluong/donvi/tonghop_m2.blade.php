@@ -80,8 +80,6 @@
         <th colspan="{{$col}}">Hệ số</th>
         <th colspan="{{$col}}">Số tiền</th>
         <th style="width: 6%;padding-left: 2px;padding-right: 2px" rowspan="2">Tổng tiền lương</th>
-        <th style="width: 6%;padding-left: 2px;padding-right: 2px" rowspan="2">Các khoản</br>giảm trừ</br>lương</th>
-        <th style="width: 6%;padding-left: 2px;padding-right: 2px" rowspan="2">Tiền lương</br>thực lĩnh</th>
 
         <th colspan="5">Các khoản phải đóng góp BHXH, BHYT, KPCĐ, BHTN </th>
         <th style="width: 6%;padding-left: 2px;padding-right: 2px" rowspan="2">Tổng cộng</th>
@@ -105,7 +103,7 @@
     </tr>
 
     <tr>
-        @for($i=1;$i<=12 + $col*2;$i++)
+        @for($i=1;$i<=10 + $col*2;$i++)
         <th>{{$i}}</th>
         @endfor
     </tr>
@@ -127,8 +125,6 @@
                 <td>{{dinhdangso($ct->$ma)}}</td>
             @endforeach
 
-            <td>{{dinhdangso($ct->tongtl)}}</td>
-            <td>{{dinhdangso($ct->giaml)}}</td>
             <td>{{dinhdangso($ct->tongtl)}}</td>
 
 
@@ -154,8 +150,6 @@
             <td>{{dinhdangso($model->sum($ma))}}</td>
         @endforeach
 
-        <td>{{dinhdangso($model->sum('tongtl'))}}</td>
-        <td>{{dinhdangso($model->sum('giaml'))}}</td>
         <td>{{dinhdangso($model->sum('tongtl'))}}</td>
 
         <td>{{dinhdangso($model->sum('stbhxh_dv'))}}</td>
