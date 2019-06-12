@@ -2011,7 +2011,7 @@ class baocaobangluongController extends Controller
                 }
 
                 if (isset($inputs['indanangluong'])) {
-                    $model_nangluong = dsnangthamnien::join('dsnangthamnien_chitiet', 'dsnangthamnien.manl', '=', 'dsnangthamnien.manl')
+                    $model_nangluong = dsnangthamnien::join('dsnangthamnien_chitiet', 'dsnangthamnien_ct.manl', '=', 'dsnangthamnien.manl')
                         ->where('madv', session('admin')->madv)
                         ->where('trangthai', 'Đã nâng lương')
                         ->wherebetween('ngayxet', [$inputs['ngaytu'], $inputs['ngayden']])->get();
@@ -2074,11 +2074,11 @@ class baocaobangluongController extends Controller
                 }
 
                 if (isset($inputs['indanangluong'])) {
-                    $model_nangluong = dsnangluong::join('dsnangluong_chitiet', 'dsnangluong.manl', '=', 'dsnangluong.manl')
+                    $model_nangluong = dsnangluong::join('dsnangluong_chitiet', 'dsnangluong_chitiet.manl', '=', 'dsnangluong.manl')
                         ->where('madv', session('admin')->madv)
                         ->where('trangthai', 'Đã nâng lương')
                         ->wherebetween('ngayxet', [$inputs['ngaytu'], $inputs['ngayden']])->get();
-
+                    //dd($model_nangluong);
                     foreach ($model_nangluong as $ct) {
                         if (isset($a_cb[$ct->macanbo])) {
                             $ct->tencanbo = $a_cb[$ct->macanbo]['tencanbo'];
@@ -2091,12 +2091,15 @@ class baocaobangluongController extends Controller
                                 if($ct->heso < $ngachluong['hesolonnhat']){//nâng lương ngạch bậc
                                     $ct->heso_m = $ct->heso + $ngachluong['hesochenhlech'];
                                     $ct->bac_m = $ct->bac < $ngachluong['baclonnhat'] - 1 ? $ct->bac + 1 : $ngachluong['baclonnhat'];
+                                    $ct->vuotkhung_m = 0;
                                 }else{//vượt khung
                                     if($ct->vuotkhung == 0){//lần đầu
                                         $ct->vuotkhung_m = $ngachluong['vuotkhung'];
                                     }else{
                                         $ct->vuotkhung_m = $ct->vuotkhung + 1;
                                     }
+                                    $ct->heso_m = $ct->heso;
+                                    $ct->bac_m = $ct->bac;
                                 }
                             }
 
@@ -2104,12 +2107,13 @@ class baocaobangluongController extends Controller
                         }
                     }
                 }
-
+                //dd($model);
                 $a_pl = $model->map(function($data){
                     return collect($data->toArray())
                         ->only(['trangthai'])
                         ->all();
                 });
+
                 return view('reports.donvi.nangluong_ngachbac')
                     //->with('model',$model->sortby('ngayden')->sortby('stt'))
                     ->with('model',$model->sortby('ngayden'))

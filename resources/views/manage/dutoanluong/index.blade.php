@@ -374,7 +374,7 @@
             //create_bangluong
             //var form = $('#create_bangluong');
             $.ajax({
-                url: '{{$furl}}' + 'create_mau',
+                url: '{{$furl}}' + 'create_mau1',
                 type: 'GET',
                 data: {
                     _token: CSRF_TOKEN,

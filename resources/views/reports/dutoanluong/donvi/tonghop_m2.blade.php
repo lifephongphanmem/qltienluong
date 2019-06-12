@@ -125,7 +125,7 @@
                 <td>{{dinhdangso($ct->$ma)}}</td>
             @endforeach
 
-            <td>{{dinhdangso($ct->tongtl)}}</td>
+            <td>{{dinhdangso($ct->ttl)}}</td>
 
 
             <td>{{dinhdangso($ct->stbhxh_dv)}}</td>
@@ -133,7 +133,7 @@
             <td>{{dinhdangso($ct->stkpcd_dv)}}</td>
             <td>{{dinhdangso($ct->stbhtn_dv)}}</td>
             <td>{{dinhdangso($ct->tongbh)}}</td>
-            <td>{{dinhdangso($ct->tongbh + $ct->tongtl)}}</td>
+            <td>{{dinhdangso($ct->tongbh + $ct->ttl)}}</td>
 
         </tr>
     @endforeach
@@ -150,14 +150,14 @@
             <td>{{dinhdangso($model->sum($ma))}}</td>
         @endforeach
 
-        <td>{{dinhdangso($model->sum('tongtl'))}}</td>
+        <td>{{dinhdangso($model->sum('ttl'))}}</td>
 
         <td>{{dinhdangso($model->sum('stbhxh_dv'))}}</td>
         <td>{{dinhdangso($model->sum('stbhyt_dv'))}}</td>
         <td>{{dinhdangso($model->sum('stkpcd_dv'))}}</td>
         <td>{{dinhdangso($model->sum('stbhtn_dv'))}}</td>
         <td>{{dinhdangso($model->sum('tongbh'))}}</td>
-        <td>{{dinhdangso($model->sum('tongbh') + $model->sum('tongtl'))}}</td>
+        <td>{{dinhdangso($model->sum('tongbh') + $model->sum('ttl'))}}</td>
     </tr>
 </table>
 

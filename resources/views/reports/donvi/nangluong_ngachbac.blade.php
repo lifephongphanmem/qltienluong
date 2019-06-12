@@ -116,7 +116,7 @@
                 <td></td>
                 <td style="text-align: left;" colspan="10">{{$pl['trangthai'] == 'DANANGLUONG'?'Danh sách cán bộ đã nâng lương':'Danh sách cán bộ chưa nâng lương'}}</td>
             </tr>
-            @foreach($model as $ct)
+            @foreach($model_ct as $ct)
                 <tr>
                     <td>{{$i++}}</td>
                     <td style="text-align: left">{{$ct->tencanbo}}</td>
