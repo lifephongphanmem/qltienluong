@@ -110,22 +110,27 @@
             @endfor
         </tr>
 
-        <?php $i=1; ?>
-
-        @foreach($model as $ct)
-            <tr>
-                <td>{{$i++}}</td>
-                <td style="text-align: left">{{$ct->tencanbo}}</td>
-                <td style="text-align: left">{{$ct->tencv}}</td>
-                <td style="text-align: center">{{getDayVn($ct->ngayden)}}</td>
-                <td style="text-align: center">{{$ct->msngbac}}</td>
-                <td style="text-align: center">{{dinhdangsothapphan($ct->bac)}}</td>
-                <td style="text-align: center">{{dinhdangsothapphan($ct->heso,3)}}</td>
-                <td style="text-align: center">{{dinhdangsothapphan($ct->vuotkhung)}}</td>
-                <td style="text-align: center">{{dinhdangsothapphan($ct->bac_m)}}</td>
-                <td style="text-align: center">{{dinhdangsothapphan($ct->heso_m,3)}}</td>
-                <td style="text-align: center">{{dinhdangsothapphan($ct->vuotkhung_m)}}</td>
+        @foreach($a_pl as $pl)
+            <?php $i=1; $model_ct = $model->where('trangthai',$pl['trangthai'])->sortby('ngayden'); ?>
+            <tr style="font-weight: bold; font-style:italic ">
+                <td></td>
+                <td style="text-align: left;" colspan="10">{{$pl['trangthai'] == 'DANANGLUONG'?'Danh sách cán bộ đã nâng lương':'Danh sách cán bộ chưa nâng lương'}}</td>
             </tr>
+            @foreach($model_ct as $ct)
+                <tr>
+                    <td>{{$i++}}</td>
+                    <td style="text-align: left">{{$ct->tencanbo}}</td>
+                    <td style="text-align: left">{{$ct->tencv}}</td>
+                    <td style="text-align: center">{{getDayVn($ct->ngayden)}}</td>
+                    <td style="text-align: center">{{$ct->msngbac}}</td>
+                    <td style="text-align: center">{{dinhdangsothapphan($ct->bac)}}</td>
+                    <td style="text-align: center">{{dinhdangsothapphan($ct->heso,3)}}</td>
+                    <td style="text-align: center">{{dinhdangsothapphan($ct->vuotkhung)}}</td>
+                    <td style="text-align: center">{{dinhdangsothapphan($ct->bac_m)}}</td>
+                    <td style="text-align: center">{{dinhdangsothapphan($ct->heso_m,3)}}</td>
+                    <td style="text-align: center">{{dinhdangsothapphan($ct->vuotkhung_m)}}</td>
+                </tr>
+            @endforeach
         @endforeach
     </table>
 

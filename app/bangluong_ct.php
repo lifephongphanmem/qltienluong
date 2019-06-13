@@ -123,6 +123,8 @@ class bangluong_ct extends Model
         'st_pcdith',
         'st_luonghd',
         'st_pcphth',
+        'st_pcctp',
+        'pcctp',
         //lưu tỷ lệ bảo hiểm (đã quy về hệ số)
         'bhxh',
         'bhyt',
@@ -177,6 +179,8 @@ class bangluong_ct extends Model
         ALTER TABLE `bangluong_ct` ADD `st_pcdith` FLOAT NOT NULL DEFAULT '0' AFTER `kpcd_dv`;
         ALTER TABLE `bangluong_ct` ADD `st_luonghd` FLOAT NOT NULL DEFAULT '0' AFTER `kpcd_dv`;
         ALTER TABLE `bangluong_ct` ADD `st_pcphth` FLOAT NOT NULL DEFAULT '0' AFTER `kpcd_dv`;
+        ALTER TABLE `bangluong_ct` ADD `st_pcctp` FLOAT NOT NULL DEFAULT '0' AFTER `kpcd_dv`;
+        ALTER TABLE `bangluong_ct` ADD `pcctp` FLOAT NOT NULL DEFAULT '0' AFTER `kpcd_dv`;
 
     ALTER TABLE `bangluong_ct` CHANGE  `st_heso` `st_heso` DOUBLE NOT NULL DEFAULT '0';
         ALTER TABLE `bangluong_ct` CHANGE  `st_hesobl` `st_hesobl` DOUBLE NOT NULL DEFAULT '0';

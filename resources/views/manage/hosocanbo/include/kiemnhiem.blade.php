@@ -45,11 +45,15 @@
                         <th class="text-center" style="width: 5%">STT</th>
                         <th class="text-center">Phân loại</th>
                         <th class="text-center">Chức vụ</br>kiêm nhiệm</th>
-                        <th class="text-center">Hệ số</br>phụ cấp</th>
-                        <th class="text-center">Phụ cấp</br>trách nhiệm</th>
-                        <th class="text-center">Phụ cấp</br>kiêm nhiệm</th>
-                        <th class="text-center">Phụ cấp</br>đặc thù</th>
-                        <th class="text-center">Phụ cấp</br>khác</th>
+                        <th class="text-center">Hệ</br>số</br>lương</th>
+                        <th class="text-center">Hệ</br>số</br>phụ</br>cấp</th>
+                        <th class="text-center">Phụ</br>cấp</br>chức</br>vụ</th>
+                        <th class="text-center">Phụ</br>cấp</br>trách</br>nhiệm</th>
+                        <th class="text-center">Phụ</br>cấp</br>kiêm</br>nhiệm</th>
+                        <th class="text-center">Phụ</br>cấp</br>đặc</br>thù</th>
+                        <th class="text-center">Phụ</br>cấp</br>một</br>cửa</th>
+                        <th class="text-center">Phụ</br>cấp</br>điện</br>thoại</th>
+                        <th class="text-center">Phụ</br>cấp</br>khác</th>
                         <th class="text-center">Thao tác</th>
                     </tr>
                 </thead>
@@ -61,13 +65,17 @@
                             <td class="text-center">{{$key+1}}</td>
                             <td class="text-center">{{$value->tenphanloai}}</td>
                             <td class="text-center">{{$value->tenchucvu}}</td>
+                            <td class="text-right">{{$value->heso}}</td>
                             <td class="text-right">{{$value->hesopc}}</td>
+                            <td class="text-right">{{$value->pccv}}</td>
                             <td class="text-right">{{$value->pctn}}</td>
                             <td class="text-right">{{$value->pckn}}</td>
                             <td class="text-right">{{$value->pcdbn}}</td>
+                            <td class="text-right">{{$value->pcd}}</td>
+                            <td class="text-right">{{$value->pcdith}}</td>
                             <td class="text-right">{{$value->pck}}</td>
                             <td>
-                                <button type="button" class="btn btn-default btn-xs mbs" onclick="edit_kn({{$value->id}});"><i class="fa fa-edit"></i>&nbsp;Chỉnh sửa</button>
+                                <button type="button" class="btn btn-default btn-xs mbs" onclick="edit_kn({{$value->id}});"><i class="fa fa-edit"></i>&nbsp;Sửa</button>
                                 <button type="button" class="btn btn-default btn-xs mbs" onclick="deleteRow({{$value->id}})" ><i class="fa fa-trash-o"></i>&nbsp;Xóa</button>
                             </td>
                         </tr>

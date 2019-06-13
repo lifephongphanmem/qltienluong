@@ -127,6 +127,11 @@
                                     <a href="#tab_1" data-toggle="tab" aria-expanded="true">
                                         Sự nghiệp </a>
                                 </li>
+
+                                <li>
+                                    <a href="#tab_2" data-toggle="tab" aria-expanded="true">
+                                        Nguồn kinh phí </a>
+                                </li>
                             </ul>
                             <div class="tab-content">
                                 <!-- phân loại công tác -->
@@ -186,7 +191,7 @@
                                     </div>
                                 </div>
 
-                                <!-- Mẫu bảng lương khánh hòa -->
+                                <!-- sự nghiệp công tác -->
                                 <div class="tab-pane" id="tab_1">
                                     <div class="portlet box blue">
                                         <div class="portlet-title">
@@ -233,9 +238,56 @@
                                     </div>
                                 </div>
 
-                                <!-- Mẫu bảng lương lạng sơn + cao bằng -->
+                                <!-- Nguồn kinh phí -->
                                 <div class="tab-pane" id="tab_2">
+                                    <div class="portlet box blue">
+                                        <div class="portlet-title">
+                                            <div class="caption"></div>
+                                            <div class="tools"></div>
+                                        </div>
+                                        <div class="portlet-body form">
+                                            <!-- BEGIN FORM-->
+                                            <form action="/danh_muc/khu_vuc/update_nguonkp" class="form-horizontal" id="frm_nguonkp">
+                                                <div class="form-body">
+                                                    <div class="form-horizontal">
+                                                        <div class="row">
+                                                            <div class="col-md-6">
+                                                                <label class="control-label">Phân loại công tác cần gán giá trị</label>
+                                                                <select class="form-control select2me" name="mact" id="mact">
+                                                                    @foreach($model_nhomct as $kieuct)
+                                                                        <optgroup label="{{$kieuct->tencongtac}}">
+                                                                            <?php $mode_ct=$model_tenct->where('macongtac',$kieuct->macongtac); ?>
+                                                                            @foreach($mode_ct as $ct)
+                                                                                <option value="{{$ct->mact}}">{{$ct->tenct}}</option>
+                                                                            @endforeach
+                                                                        </optgroup>
+                                                                    @endforeach
+                                                                </select>
+                                                            </div>
 
+                                                            <div class="col-md-6">
+                                                                <label class="control-label">Nguồn kinh phí</label>
+                                                                <select class="form-control" id="manguonkp" name="manguonkp[]" multiple="multiple">
+                                                                    @foreach(getNguonKP(false) as $key=>$value)
+                                                                        <option value="{{$key}}">{{$value}}</option>
+                                                                    @endforeach
+                                                                </select>
+                                                            </div>
+                                                        </div>
+                                                        <input type="hidden" id="madv" name="madv"/>
+                                                    </div>
+                                                </div>
+                                                <div class="form-actions">
+                                                    <div class="row text-center">
+                                                        <div class="col-md-12">
+                                                            <button type="submit" class="btn default">Hoàn thành</button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </form>
+                                            <!-- END FORM-->
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -247,9 +299,16 @@
     </div>
 
     <script>
+        $(function(){
+            //Multi select box
+            $("#manguonkp").select2();
+
+        });
+
         function giatri(madv){
             $('#frm_plct').find("[id^='madv']").val(madv);
             $('#frm_sunghiep').find("[id^='madv']").val(madv);
+            $('#frm_nguonkp').find("[id^='madv']").val(madv);
         }
 
         $(function(){

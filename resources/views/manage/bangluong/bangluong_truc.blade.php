@@ -31,8 +31,8 @@
         <div class="col-md-12">
             <div class="portlet light bordered">
                 <div class="portlet-title">
-                    <div class="caption">
-                        CHI TIẾT BẢNG PHỤ CẤP TRỰC THÁNG {{$m_bl->thang}} NĂM {{$m_bl->nam}}
+                    <div class="caption text-uppercase">
+                        {{$m_bl->tenphanloai}} THÁNG {{$m_bl->thang}} NĂM {{$m_bl->nam}}
                     </div>
                     <div class="actions"></div>
                 </div>
@@ -42,8 +42,10 @@
                             <tr>
                                 <th class="text-center" style="width: 5%">STT</th>
                                 <th class="text-center">Họ tên</th>
-                                <th class="text-center">Hệ số</th>
-                                <th class="text-center">Số ngày</th>
+                                @if($m_bl->phanloai == 'TRUC')
+                                    <th class="text-center">Hệ số</th>
+                                    <th class="text-center">Số ngày</th>
+                                @endif
                                 <th class="text-center">Thực lĩnh</th>
                                 <th class="text-center">Thao tác</th>
                             </tr>
@@ -55,13 +57,15 @@
                                 <tr>
                                     <td class="text-center">{{$key+1}}</td>
                                     <td>{{$value->tencanbo}}</td>
-                                    <td>{{$value->heso}}</td>
-                                    <td>{{$value->songay}}</td>
+                                    @if($m_bl->phanloai == 'TRUC')
+                                        <td>{{$value->heso}}</td>
+                                        <td>{{$value->songay}}</td>
+                                    @endif
                                     <td class="text-right">{{number_format($value->ttl)}}</td>
                                     <td>
-                                        <a href="{{url($furl.'?maso='.$value->id)}}" class="btn btn-info btn-xs mbs">
+                                        <a href="{{url($furl.'chi_khac/can_bo?maso='.$value->id)}}" class="btn btn-info btn-xs mbs">
                                             <i class="fa fa-edit"></i>&nbsp; Chi tiết</a>
-                                        <button type="button" onclick="cfDel('{{$furl.'del_ct/'.$value->id}}')" class="btn btn-danger btn-xs mbs" data-target="#delete-modal-confirm" data-toggle="modal">
+                                        <button type="button" onclick="cfDel('{{$furl.'del_ct_chikhac/'.$value->id}}')" class="btn btn-danger btn-xs mbs" data-target="#delete-modal-confirm" data-toggle="modal">
                                             <i class="fa fa-trash-o"></i>&nbsp; Xóa</button>
                                     </td>
                                 </tr>

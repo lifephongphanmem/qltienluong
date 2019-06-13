@@ -235,11 +235,13 @@ class tonghopluong_donviController extends Controller
                     $tonghs += chkDbl($model_data[$i][$ct]);
 
                 }
+                $a_slcb = a_unique(a_split($luongct, array('macanbo','mact')));//lọc cán bộ kiêm nhiệm
+
                 $model_data[$i]['stbhxh_dv'] = array_sum(array_column($luongct,'stbhxh_dv'));
                 $model_data[$i]['stbhyt_dv'] = array_sum(array_column($luongct,'stbhyt_dv'));
                 $model_data[$i]['stkpcd_dv'] = array_sum(array_column($luongct,'stkpcd_dv'));
                 $model_data[$i]['stbhtn_dv'] = array_sum(array_column($luongct,'stbhtn_dv'));
-                $model_data[$i]['soluong'] = count($luongct);
+                $model_data[$i]['soluong'] = count($a_slcb);
                 $model_data[$i]['giaml'] = array_sum(array_column($luongct,'giaml'));
                 $model_data[$i]['tonghs'] = $tonghs;
                 $model_data[$i]['luongtn'] = $model_data[$i]['tonghs'] - $model_data[$i]['giaml'];
@@ -251,8 +253,8 @@ class tonghopluong_donviController extends Controller
             $a_data = unset_key($a_data,$a_col_pc);
             $a_data = unset_key($a_data,$col_st);
             $a_data = unset_key($a_data,array('st_pctdt', 'pctdt','st_pcxaxe',
-                'pcxaxe','st_pcdith','pcdith','st_pcphth','pcphth','pclade', 'st_pclade'));//tạm
-
+                'pcxaxe','st_pcdith','pcdith','st_pcphth','pcphth','pclade', 'st_pclade', 'pcctp', 'st_pcctp'));//tạm
+            //dd($a_data);
             foreach(array_chunk($a_data, 50)  as $data){
                 tonghopluong_donvi_bangluong::insert($data);
             }
@@ -507,8 +509,7 @@ class tonghopluong_donviController extends Controller
                 $m_dv = dmdonvi::where('madv', $model_thongtin->madv)->first();
                 $m_pc = array_column(dmphucap_donvi::where('madv', $model_thongtin->madv)->get()->toarray(),'report','mapc');
             }
-            $dsdonvi = dmdonvi:: join('tonghopluong_khoi','dmdonvi.madv','tonghopluong_khoi.madv')
-                ->where('mathdv',$mathdv)->get();
+            //$dsdonvi = dmdonvi:: join('tonghopluong_khoi','dmdonvi.madv','tonghopluong_khoi.madv')->where('mathdv',$mathdv)->get();
             $model_nguonkp = array_column(dmnguonkinhphi::all()->toArray(), 'tennguonkp', 'manguonkp');
             //$model_phanloaict = array_column(dmphanloaicongtac::all()->toArray(), 'tencongtac', 'macongtac');
             $model_ct = array_column(dmphanloaict::all()->toArray(), 'tenct', 'mact');
@@ -556,7 +557,7 @@ class tonghopluong_donviController extends Controller
                     ->only(['tonghop'])
                     ->all();
             });
-            //dd($a_tonghop);
+            //dd($model);
             return view('reports.tonghopluong.donvi.solieutonghop')
                 ->with('thongtin', $thongtin)
                 ->with('model', $model)

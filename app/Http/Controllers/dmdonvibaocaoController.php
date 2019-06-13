@@ -367,4 +367,21 @@ class dmdonvibaocaoController extends Controller
         }else
             return view('errors.notlogin');
     }
+
+    function update_nguonkp(Request $request){
+        if (Session::has('admin')) {
+            $inputs = $request->all();
+            if(isset($inputs['manguonkp'])){
+                $inputs['manguonkp'] = implode(',',$inputs['manguonkp']);
+            }else{
+                $inputs['manguonkp'] = '';
+            }
+
+            $model = dmdonvi::where('madv',$inputs['madv'])->first();
+            DB::statement("Update hosocanbo set manguonkp = '".$inputs['manguonkp']."' where mact='".$inputs['mact']."' and madv ='".$inputs['madv']."'");
+            DB::statement("Update hosocanbo_kiemnhiem set manguonkp = '".$inputs['manguonkp']."' where mact='".$inputs['mact']."' and madv ='".$inputs['madv']."'");
+            return redirect('/danh_muc/khu_vuc/chi_tiet?ma_so='.$model->madvbc.'&phan_loai='.$model->phanloaitaikhoan);
+        }else
+            return view('errors.notlogin');
+    }
 }

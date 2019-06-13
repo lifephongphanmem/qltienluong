@@ -109,8 +109,15 @@
                 <div class="row">
                     <div class="col-md-6">
                         <div class="form-group">
-                            <button type="button" onclick="intonghopdt()" style="border-width: 0px" class="btn btn-default btn-xs mbs">
-                                <i class="fa fa-print"></i>&nbsp; In dự toán tổng hợp</button>
+                            <button type="button" onclick="intonghopdt('{{$furl.'printf?maso='}}')" style="border-width: 0px" class="btn btn-default btn-xs mbs">
+                                <i class="fa fa-print"></i>&nbsp; In dự toán tổng hợp - mẫu 01</button>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <button type="button" onclick="intonghopdt('{{$furl.'printf_m2?maso='}}')" style="border-width: 0px" class="btn btn-default btn-xs mbs">
+                                <i class="fa fa-print"></i>&nbsp; In dự toán tổng hợp - mẫu 02</button>
                         </div>
                     </div>
                 </div>
@@ -124,6 +131,12 @@
                         </div>
                     </div>
 
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <button type="button" onclick="intonghopdt('{{$furl.'mautt107_m2?maso='}}')" style="border-width: 0px" class="btn btn-default btn-xs mbs">
+                                <i class="fa fa-print"></i>&nbsp; Bảng lương mẫu C02-HD (TT107/2017/TT-BTC) - tổng hợp</button>
+                        </div>
+                    </div>
                     <!--div class="col-md-6">
                         <div class="form-group">
                             <button type="button" style="border-width: 0px" class="btn btn-default btn-xs mbs" data-target="#mautt107-modal" data-toggle="modal"
@@ -161,7 +174,7 @@
     <!--Modal thêm mới -->
     {!! Form::open(['url'=>$furl.'create', 'id' => 'create_dutoan', 'class'=>'horizontal-form']) !!}
     <div id="create-modal" tabindex="-1" role="dialog" aria-hidden="true" class="modal fade">
-        <div class="modal-dialog">
+        <div class="modal-dialog modal-lg modal-content">
             <div class="modal-content">
                 <div class="modal-header modal-header-primary">
                     <button type="button" data-dismiss="modal" aria-hidden="true" class="close">&times;</button>
@@ -169,25 +182,79 @@
                 </div>
                 <div class="modal-body">
                     <div class="row">
-                        <div class="col-md-6">
-                            <label class="control-label">Năm được giao dự toán</label>
-                            {!!Form::text('namdt', date('Y') + 1, array('id' => 'namdt','class' => 'form-control'))!!}
+                        <div class="col-md-12">
+                            <div class="tabbable tabbable-custom tabbable-noborder tabbable-reversed">
+                                <ul class="nav nav-tabs">
+                                    <li class="active">
+                                        <a href="#tab_0" data-toggle="tab" aria-expanded="true">
+                                            Thông tin chung </a>
+                                    </li>
+                                    <li class="">
+                                        <a href="#tab_1" data-toggle="tab" aria-expanded="false">
+                                            Tạo dự toán theo bảng lương </a>
+                                    </li>
+                                </ul>
+                                <div class="tab-content">
+                                    <div class="tab-pane active" id="tab_0">
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <label class="control-label">Năm được giao dự toán</label>
+                                                {!!Form::text('namdt', date('Y') + 1, array('id' => 'namdt','class' => 'form-control'))!!}
+                                            </div>
+
+                                            <div class="col-md-6">
+                                                <label class="control-label">Mức lương cơ bản</label>
+                                                {!!Form::text('luongcoban', getGeneralConfigs()['luongcb'], array('id' => 'luongcoban','class' => 'form-control', 'data-mask'=>'fdecimal'))!!}
+                                            </div>
+
+                                            <div class="row">
+                                                <div class="col-md-offset-3 col-md-9" style="padding-top: 15px">
+                                                    <input type="checkbox" checked id="nghihuu" name="nghihuu" />
+                                                    <label>Không tính dự toán cho cán bộ nghỉ hưu</label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="tab-pane" id="tab_1">
+                                        <table id="sample_4" class="table table-hover table-striped table-bordered">
+                                            <thead>
+                                            <tr>
+                                                <th class="text-center" style="width: 5%">STT</th>
+                                                <th class="text-center">Tháng</br>Năm</th>
+                                                <th class="text-center">Nguồn kinh phí</th>
+                                                <th class="text-center">Nội dung</th>
+                                                <th class="text-center">Thao tác</th>
+                                            </tr>
+                                            </thead>
+                                            <?php $i=1;?>
+                                            <tbody>
+                                            @foreach($model_bl as $key=>$value)
+                                                <tr>
+                                                    <td class="text-center">{{$i++}}</td>
+                                                    <td class="text-center">{{$value->thang.'/'.$value->nam}}</td>
+                                                    <td>{{isset($a_nkp[$value->manguonkp]) ? $a_nkp[$value->manguonkp] : ''}}</td>
+                                                    <td>{{$value->noidung}}</td>
+                                                    <td>
+                                                        <button type="button" onclick="taobl('{{$value->mabl}}')" class="btn btn-default btn-xs mbs">
+                                                            <i class="fa fa-edit"></i>&nbsp; Chọn</button>
+
+                                                        <a href="{{url($furl.'bang_luong?mabl='.$value->mabl.'&mapb=')}}" class="btn btn-default btn-xs mbs" target="_blank">
+                                                            <i class="fa fa-th-list"></i>&nbsp; Danh sách</a>
+
+                                                    </td>
+                                                </tr>
+                                            @endforeach
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
 
-                        <div class="col-md-6">
-                            <label class="control-label">Mức lương cơ bản</label>
-                            {!!Form::text('luongcoban', getGeneralConfigs()['luongcb'], array('id' => 'luongcoban','class' => 'form-control', 'data-mask'=>'fdecimal'))!!}
-                        </div>
                     </div>
 
-                    <div class="row">
-                        <div class="col-md-offset-3 col-md-9" style="padding-top: 10px">
-                            {!! Form::checkbox('nghihuu',null, array('id'=>'nghihuu')) !!}
-                            <label>Không tính dự toán cho cán bộ nghỉ hưu</label>
-                        </div>
 
-
-                    </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" data-dismiss="modal" class="btn btn-default">Hủy thao tác</button>
@@ -272,9 +339,9 @@
             window.open('{{$furl}}'+'nangluong?maso='+ masodv,'_blank');
         }
 
-        function intonghopdt() {
+        function intonghopdt(url) {
             var masodv = $('#masodv_dt').val();
-            window.open('{{$furl}}'+'printf?maso='+ masodv,'_blank');
+            window.open(url + masodv,'_blank');
         }
 
         function getLyDo(masodv){
@@ -297,6 +364,38 @@
 
             //$('#madvbc').val(madvbc);
             //$('#phongban-modal').modal('show');
+        }
+
+        function taobl(mabl){
+            //var tr = $(e).closest('tr');
+            $('#create-modal').modal('hide');
+            var nghihuu = document.getElementById("nghihuu").checked;
+            var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
+            //create_bangluong
+            //var form = $('#create_bangluong');
+            $.ajax({
+                url: '{{$furl}}' + 'create_mau',
+                type: 'GET',
+                data: {
+                    _token: CSRF_TOKEN,
+                    namdt: $('#namdt').val(),
+                    luongcoban: $('#luongcoban').val(),
+                    mabl: mabl,
+                    nghihuu: nghihuu
+                },
+                dataType: 'JSON',
+                success: function (data) {
+                    if (data.status == 'success') {
+                        location.reload();
+                    }else{
+                        toastr.error(data.message);
+                    }
+                },
+                error: function(message){
+                    toastr.error(message);
+                }
+            });
+
         }
 
         function confirm_create() {

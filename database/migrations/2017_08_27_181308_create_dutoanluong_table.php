@@ -23,6 +23,10 @@ class CreateDutoanluongTable extends Migration
             $table->double('luongnb_dt')->default(0);
             $table->double('luonghs_dt')->default(0);
             $table->double('luongbh_dt')->default(0);
+            $table->double('luongcoban')->default(0);
+            $table->double('luongnb_nl')->default(0);
+            $table->double('luonghs_nl')->default(0);
+            $table->double('luongbh_nl')->default(0);
             $table->string('ghichu')->nullable();
             $table->string('madv')->nullable();
             $table->string('madvbc',50)->nullable();

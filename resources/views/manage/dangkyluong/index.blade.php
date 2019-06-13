@@ -158,7 +158,8 @@
                 <div class="row">
                     <div class="col-md-6">
                         <div class="form-group">
-                            <button type="button" style="border-width: 0px" onclick="inblmtt107()" class="btn btn-default btn-xs mbs"
+                            <button type="button" style="border-width: 0px" onclick="inblmtt107('{{$furl.'mautt107'}}')" class="btn btn-default btn-xs mbs"
+                                    data-target="#mautt107-modal" data-toggle="modal"
                                     title="Bảng lương của cán bộ theo mẫu C02-HD hệ số phụ cấp hiển thị số tiền">
                                 <i class="fa fa-print"></i>&nbsp; Bảng lương mẫu C02-HD (TT107/2017/TT-BTC)</button>
                         </div>
@@ -169,6 +170,17 @@
                             <button type="button" style="border-width: 0px" onclick="inblm1()" class="btn btn-default btn-xs mbs"
                                     title="Bảng lương của cán bộ theo mẫu C02-HD">
                                 <i class="fa fa-print"></i>&nbsp; Bảng lương mẫu C02-HD (TT185/2010/TT-BTC)</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <button type="button" style="border-width: 0px" onclick="inblmtt107('{{$furl.'mautt107_m2'}}')" class="btn btn-default btn-xs mbs"
+                                    data-target="#mautt107-modal" data-toggle="modal"
+                                    title="Bảng lương của cán bộ theo mẫu C02-HD hệ số phụ cấp hiển thị số tiền">
+                                <i class="fa fa-print"></i>&nbsp; Bảng lương mẫu C02-HD (TT107) - mẫu 2</button>
                         </div>
                     </div>
                 </div>
@@ -244,7 +256,7 @@
     {!! Form::close() !!}
 
     <!--Mẫu TT107 -->
-    {!! Form::open(['url'=>(isset($furl)?$furl : '').'mautt107','method'=>'post' ,'target'=>'_blank', 'files'=>true, 'id' => 'printf_mautt107']) !!}
+    {!! Form::open(['url'=>'','method'=>'post' ,'target'=>'_blank', 'files'=>true, 'id' => 'printf_mautt107']) !!}
     <div id="mautt107-modal" tabindex="-1" role="dialog" aria-hidden="true" class="modal fade">
         <div class="modal-dialog modal-content">
             <div class="modal-header modal-header-primary">
@@ -315,13 +327,7 @@
             return '{{$furl}}'+'danh_sach?thang='+thang +'&nam='+nam;
         }
         $(function(){
-
-            $('#thangct').change(function() {
-                window.location.href = getLink();
-            });
-
             $('#thangct').change(function(){
-
                 window.location.href = getLink();
             });
 
@@ -370,9 +376,10 @@
             $('#mabl_mau1').val($('#mabl_in').val());
             $('#mau1-modal').modal('show');
         }
-        function inblmtt107(){
+        function inblmtt107(url){
+            $('#printf_mautt107').attr('action', url);
             $('#mabl_mautt107').val($('#mabl_in').val());
-            $('#mautt107-modal').modal('show');
+            //$('#mautt107-modal').modal('show');
         }
 
         $(function(){
@@ -392,8 +399,6 @@
         }
 
         function ClickBCtt107() {
-            var url = '{{(isset($furl)?$furl : '').'mautt107'}}'
-            $('#printf_mautt107').attr('action', url);
             $('#printf_mautt107').submit();
 
         }

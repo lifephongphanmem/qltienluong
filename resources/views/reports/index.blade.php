@@ -27,6 +27,7 @@
                                 <li><a href="#" data-target="#thoaibangluong-modal" data-toggle="modal" onclick="baocaobangluong('{{$furl.'don_vi/mauc02x'}}')">Mẫu 2 (Mẫu C02 - X)</a></li>
                                 <li><a href="#" data-target="#thoaibangluong-modal" data-toggle="modal" onclick="baocaobangluong('{{$furl.'don_vi/maubaohiem'}}')">Mẫu bảo hiểm phải nộp theo lương</a></li-->
                                 <li><a href="#" data-target="#thoaichitra-modal" data-toggle="modal" onclick="chitraluong('{{$furl.'don_vi/chitraluong'}}')">Tổng hợp tình hình chi trả lương</a></li>
+                                <li><a href="#" data-target="#thoaichitra-modal" data-toggle="modal" onclick="chitraluong('{{$furl.'don_vi/dangkyluong'}}')">Tổng hợp đăng ký lương</a></li>
                                 <li><a href="#" data-target="#thoaidutoan-modal" data-toggle="modal" onclick="dutoanluong('{{$furl.'don_vi/dutoanluong'}}')">Dự toán lương</a></li>
                                 <li><a href="#" data-target="#thoainangluong-modal" data-toggle="modal" onclick="nangluong('{{$furl.'don_vi/nangluong'}}','NGACHBAC')">Danh sách nâng lương ngạch bậc</a></li>
                                 <li><a href="#" data-target="#thoainangluong-modal" data-toggle="modal" onclick="nangluong('{{$furl.'don_vi/nangluong'}}','TNN')">Danh sách nâng thâm niên nghề</a></li>
@@ -93,7 +94,7 @@
         <div class="modal-dialog modal-content">
             <div class="modal-header modal-header-primary">
                 <button type="button" data-dismiss="modal" aria-hidden="true" class="close">&times;</button>
-                <h4 id="modal-header-primary-label" class="modal-title">Thông tin kết xuất tổng hợp chi trả bảng lương</h4>
+                <h4 id="modal-header-primary-label" class="modal-title">Thông tin kết xuất</h4>
             </div>
             <div class="modal-body">
                 <div class="form-horizontal">
@@ -119,7 +120,6 @@
                             {!! Form::select('tunam',getNam(),date('Y'),array('id' => 'tunam', 'class' => 'form-control'))!!}
                         </div>
                     </div>
-                    <input type="hidden" name="_token" value="{{ csrf_token() }}">
                 </div>
             </div>
             <div class="modal-footer">
@@ -162,7 +162,7 @@
         <div class="modal-dialog modal-content">
             <div class="modal-header modal-header-primary">
                 <button type="button" data-dismiss="modal" aria-hidden="true" class="close">&times;</button>
-                <h4 id="modal-header-primary-label" class="modal-title">Thông tin kết xuất bảng lương</h4>
+                <h4 id="modal-header-primary-label" class="modal-title">Thông tin kết xuất</h4>
             </div>
             <div class="modal-body">
                 <div class="form-horizontal">
@@ -179,6 +179,13 @@
                             {!!Form::input('date','ngayden', date('Y').'-12-31', array('id' => 'ngayden','class' => 'form-control'))!!}
                         </div>
                     </div>
+                    <div class="form-group">
+                        <div class="col-md-offset-4 col-md-8">
+                            <input type="checkbox" name="indanangluong" />
+                            <label class="control-label">Bao gồm các cán bộ đã nâng lương</label>
+                        </div>
+                    </div>
+
                     <input type="hidden" name="phanloai" id="phanloai">
                     <input type="hidden" name="_token" value="{{ csrf_token() }}">
                 </div>
@@ -281,7 +288,7 @@
         <div class="modal-dialog modal-content">
             <div class="modal-header modal-header-primary">
                 <button type="button" data-dismiss="modal" aria-hidden="true" class="close">&times;</button>
-                <h4 id="modal-header-primary-label" class="modal-title">Thông tin kết xuất tổng hợp chi trả bảng lương</h4>
+                <h4 id="modal-header-primary-label" class="modal-title">Thông tin kết xuất</h4>
             </div>
             <div class="modal-body">
                 <div class="form-horizontal">

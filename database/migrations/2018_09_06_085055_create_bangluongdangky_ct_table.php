@@ -64,6 +64,8 @@ class CreateBangluongdangkyCtTable extends Migration
             $table->double('pcdith')->default(0); //điện thoại
             $table->double('luonghd')->default(0); //lương hợp đồng, lương khoán (số tiền)
             $table->double('pcphth')->default(0); //phẫu thuật, thủ thuật
+            $table->double('pcctp')->default(0);//phụ cấp công tác phí
+            $table->double('st_pcctp')->default(0);//phụ cấp công tác phí
 
             $table->double('tonghs')->default(0);
             $table->double('ttl')->default(0);

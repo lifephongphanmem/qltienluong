@@ -129,6 +129,7 @@ class hosocanboController extends Controller
 
             $insert['anh'] = ($filename == '' ? '' : '/data/uploads/anh/' . $filename);
             $insert['madv'] = $madv;
+            $insert['ngaybc']=getDateTime($insert['ngaybc']);
             $insert['ngaysinh'] = getDateTime($insert['ngaysinh']);
             $insert['ngaytu'] = getDateTime($insert['ngaytu']);
             $insert['ngayden'] = getDateTime($insert['ngayden']);
@@ -255,7 +256,8 @@ class hosocanboController extends Controller
                 $img->move(public_path() . '/data/uploads/anh/', $filename);
                 $insert['anh']='/data/uploads/anh/'. $filename;
             }
-
+            //dd($insert);
+            $insert['ngaybc']=getDateTime($insert['ngaybc']);
             $insert['ngaysinh']=getDateTime($insert['ngaysinh']);
             $insert['ngaytu']=getDateTime($insert['ngaytu']);
             $insert['ngayden']=getDateTime($insert['ngayden']);
@@ -540,6 +542,7 @@ class hosocanboController extends Controller
         $inputs = $request->all();
         $inputs['baohiem'] = isset($inputs['baohiem'])?$inputs['baohiem'] : 0;
         $inputs['madv'] = session('admin')->madv;
+        $inputs['hesopc'] = chkDbl($inputs['hesopc']);
         $inputs['pckn'] = chkDbl($inputs['pckn']);
         $inputs['manguonkp'] = (implode(',',$inputs['manguonkp']));
 
@@ -1261,11 +1264,15 @@ class hosocanboController extends Controller
         $result['message'] .= '<th class="text-center" style="width: 5%">STT</th>';
         $result['message'] .= '<th class="text-center">Phân loại</th>';
         $result['message'] .= '<th class="text-center">Chức vụ</br>kiêm nhiệm</th>';
-        $result['message'] .= '<th class="text-center">Hệ số</br>phụ cấp</th>';
-        $result['message'] .= '<th class="text-center">Phụ cấp</br>trách nhiệm</th>';
-        $result['message'] .= '<th class="text-center">Phụ cấp</br>kiêm nhiệm</th>';
-        $result['message'] .= '<th class="text-center">Phụ cấp</br>đặc thù</th>';
-        $result['message'] .= '<th class="text-center">Phụ cấp</br>khác</th>';
+        $result['message'] .= '<th class="text-center">Hệ</br>số</br>lương</th>';
+        $result['message'] .= '<th class="text-center">Hệ</br>số</br>phụ</br>cấp</th>';
+        $result['message'] .= '<th class="text-center">Phụ</br>cấp</br>chức</br>vụ</th>';
+        $result['message'] .= '<th class="text-center">Phụ</br>cấp</br>trách</br>nhiệm</th>';
+        $result['message'] .= '<th class="text-center">Phụ</br>cấp</br>kiêm</br>nhiệm</th>';
+        $result['message'] .= '<th class="text-center">Phụ</br>cấp</br>đặc</br>thù</th>';
+        $result['message'] .= '<th class="text-center">Phụ</br>cấp</br>một</br>cửa</th>';
+        $result['message'] .= '<th class="text-center">Phụ</br>cấp</br>điện</br>thoại</th>';
+        $result['message'] .= '<th class="text-center">Phụ</br>cấp</br>khác</th>';
         $result['message'] .= '<th class="text-center">Thao tác</th>';
 
 
@@ -1278,13 +1285,17 @@ class hosocanboController extends Controller
                 $result['message'] .= '<td style="text-align: center">' . ($key + 1) . '</td>';
                 $result['message'] .= '<td>' . $value->tenphanloai . '</td>';
                 $result['message'] .= '<td>' . $value->tenchucvu . '</td>';
+                $result['message'] .= '<td>' . $value->heso . '</td>';
                 $result['message'] .= '<td>' . $value->hesopc . '</td>';
+                $result['message'] .= '<td>' . $value->pccv . '</td>';
                 $result['message'] .= '<td>' . $value->pctn . '</td>';
                 $result['message'] .= '<td>' . $value->pckn . '</td>';
                 $result['message'] .= '<td>' . $value->pcdbn . '</td>';
+                $result['message'] .= '<td>' . $value->pcd . '</td>';
+                $result['message'] .= '<td>' . $value->pcdith . '</td>';
                 $result['message'] .= '<td>' . $value->pck . '</td>';
                 $result['message'] .= '<td>' .
-                    '<button type="button" data-target="#kiemnhiem-modal" data-toggle="modal" class="btn btn-default btn-xs mbs" onclick="edit_kn(' . $value->id . ');"><i class="fa fa-edit"></i>&nbsp;Chỉnh sửa</button>' .
+                    '<button type="button" data-target="#kiemnhiem-modal" data-toggle="modal" class="btn btn-default btn-xs mbs" onclick="edit_kn(' . $value->id . ');"><i class="fa fa-edit"></i>&nbsp;Sửa</button>' .
                     '<button type="button" class="btn btn-default btn-xs mbs" onclick="deleteRow(' . $value->id . ')" ><i class="fa fa-trash-o"></i>&nbsp;Xóa</button>'
 
                     . '</td>';

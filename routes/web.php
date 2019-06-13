@@ -132,6 +132,7 @@ Route::group(['prefix'=>'danh_muc'],function(){
 
         Route::get('update_plct','dmdonvibaocaoController@update_plct');
         Route::get('update_sunghiep','dmdonvibaocaoController@update_sunghiep');
+        Route::get('update_nguonkp','dmdonvibaocaoController@update_nguonkp');
 
         Route::get('getPhanLoai','ajaxController@getPhanLoai');
     });
@@ -275,6 +276,7 @@ Route::group(['prefix'=>'nghiep_vu'],function(){
             Route::get('danh_sach','dutoanluongController@index');
             Route::get('del/{id}','dutoanluongController@destroy');
             Route::post('create','dutoanluongController@create');
+            Route::get('create_mau','dutoanluongController@create_mau');
             //Route::get('checkNamDuToan','dutoanluongController@checkNamDT');
             //Route::get('checkBangLuong','dutoanluongController@checkBangLuong');
             Route::post('senddata','dutoanluongController@senddata'); //gửi dữ liệu
@@ -285,8 +287,10 @@ Route::group(['prefix'=>'nghiep_vu'],function(){
             Route::get('detail/get','dutoanluongController@get_detail');
 
             Route::get('printf','dutoanluongController@printf_data');
+            Route::get('printf_m2','dutoanluongController@printf_data_m2');
             Route::get('printf_bl/ma_so={masodv}','dutoanluongController@printf_bl');
             Route::post('mautt107','dutoanluongController@printf_tt107');
+            Route::get('mautt107_m2','dutoanluongController@printf_tt107_m2');
             Route::get('nangluong','dutoanluongController@printf_nangluong');
         });
 
@@ -389,6 +393,9 @@ Route::group(['prefix'=>'chuc_nang'],function(){
         Route::post('store','bangluongController@store');
         Route::post('store_truylinh','bangluongController@store_truylinh');
         Route::post('store_truc','bangluongController@store_truc');
+        Route::post('store_chikhac','bangluongController@store_chikhac');
+
+        Route::get('store_mau','bangluongController@store_mau');
 
         Route::get('bang_luong','bangluongController@show');
         Route::get('cap_nhat','bangluongController@capnhat');
@@ -400,10 +407,13 @@ Route::group(['prefix'=>'chuc_nang'],function(){
         Route::get('inmau4/maso={mabl}','bangluongController@inbangluongmau4'); //mẫu làm theo y.c lạng sơn
         Route::get('in_bh/maso={mabl}','bangluongController@inbaohiem');
         Route::get('can_bo','bangluongController@detail');
+        Route::get('chi_khac/can_bo','bangluongController@detail_chikhac');
         Route::post('updatect','bangluongController@updatect');
         Route::post('updatect_truylinh','bangluongController@updatect_truylinh');
+        Route::post('updatect_chikhac','bangluongController@updatect_chikhac');
         Route::get('del/{id}','bangluongController@destroy');
         Route::post('del_ct','bangluongController@destroy_ct');
+        Route::get('del_ct_chikhac/{id}','bangluongController@destroy_truc');
 
         Route::get('get_chitiet','bangluongController@get_chitiet');
         Route::post('update_chitiet','bangluongController@update_chitiet');
@@ -438,6 +448,9 @@ Route::group(['prefix'=>'chuc_nang'],function(){
 
         Route::get('mauthpl','bangluong_inController@printf_mauthpl');
         Route::get('mauthpc','bangluong_inController@printf_mauthpc');
+        //chi khác (trực, công tác phí)
+        Route::get('mauctphi','bangluong_inController@printf_mauctphi');
+
         //tổng hợp
         Route::post('mau185_th','bangluong_inController@printf_mau185_th');
         Route::post('mautt107_th','bangluong_inController@printf_mautt107_th');
@@ -691,6 +704,7 @@ Route::group(['prefix'=>'chuc_nang'],function(){
         //Tạo in bảng lương theo cách mới
         Route::post('mau01','bangluongdangkyController@printf_mau01');
         Route::post('mautt107','bangluongdangkyController@printf_mautt107');
+        Route::post('mautt107_m2','bangluongdangkyController@printf_mautt107_m2');
 
     });
 });
@@ -783,6 +797,7 @@ Route::group(['prefix'=>'bao_cao'],function(){
             Route::post('chitraluong','baocaobangluongController@chitraluong');
             Route::post('dutoanluong','baocaobangluongController@dutoanluong');
             Route::post('nangluong','baocaobangluongController@nangluong');
+            Route::post('dangkyluong','baocaobangluongController@dangkyluong');
         });
 
         Route::group(['prefix'=>'khoi'],function(){

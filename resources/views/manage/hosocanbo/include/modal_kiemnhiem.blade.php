@@ -479,7 +479,7 @@
                         </div>
                     </div>
 
-                    <?php $a_cd = array('pckn'); ?>
+                    <?php $a_cd = array('hesopc','pckn'); ?>
                     @foreach($model_pc as $pc)
                         @if(!in_array($pc->mapc,$a_cd))
                             @continue
@@ -758,6 +758,13 @@
 
                     <div class="col-md-4">
                         <div class="form-group">
+                            <label class="control-label">Phụ cấp chức vụ</label>
+                            {!!Form::text('pccv_chvu', null, array('id' => 'pccv_chvu','class' => 'form-control', 'data-mask'=>'fdecimal'))!!}
+                        </div>
+                    </div>
+
+                    <div class="col-md-4">
+                        <div class="form-group">
                             <label class="control-label">Phụ cấp vượt khung</label>
                             <div class="input-group bootstrap-touchspin">
                                 {!!Form::text('vuotkhung_chvu', null, array('id' =>'vuotkhung_chvu', 'class' => 'form-control', 'data-mask'=>'fdecimal'))!!}
@@ -887,6 +894,7 @@
                      $('#macvcq_chvu').val(data.macvcq).trigger('change');
                      $('#id_chvu').val(data.id);
                      $('#heso_chvu').val(data.heso);
+                     $('#pccv_chvu').val(data.pccv);
                      $('#vuotkhung_chvu').val(data.vuotkhung);
                      $('#pthuong_chvu').val(data.pthuong);
                      $('#chvu-modal').modal('show');
@@ -947,6 +955,7 @@
                     $('#manguonkp_cd').val(data.manguonkp.split(',')).trigger('change');
                     $('#id_cd').val(data.id);
                     $('#pckn_cd').val(data.pckn);
+                    $('#hesopc_cd').val(data.hesopc);
                     $('#cd-modal').modal('show');
                 }
                 if(data.phanloai == 'MOTCUA'){
@@ -1124,7 +1133,8 @@
                     macvcq : $('#macvcq_cd').val(),
                     id: $('#id_cd').val(),
                     phanloai: $('#phanloai_cd').val(),
-                    pckn: $('#pckn_cd').val()
+                    pckn: $('#pckn_cd').val(),
+                    hesopc: $('#hesopc_cd').val()
                 },
                 dataType: 'JSON',
                 success: function (data) {
@@ -1218,6 +1228,7 @@
                     macvcq : $('#macvcq_chvu').val(),
                     id: $('#id_chvu').val(),
                     heso: $('#heso_chvu').val(),
+                    pccv: $('#pccv_chvu').val(),
                     phanloai: $('#phanloai_chvu').val(),
                     vuotkhung: $('#vuotkhung_chvu').val(),
                     pthuong: $('#pthuong_chvu').val()
