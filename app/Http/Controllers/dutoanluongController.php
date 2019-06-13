@@ -446,7 +446,7 @@ class dutoanluongController extends Controller
         //$a_congtac = array_column(dmphanloaict::all()->toArray(), 'macongtac', 'mact');
         //$gen = getGeneralConfigs();
         $masodv = $inputs['madv'] . '_' . getdate()[0];
-        $a_th = array_merge(array('macanbo', 'mact', 'macvcq','msngbac', 'mapb', 'bhxh_dv', 'bhyt_dv', 'bhtn_dv', 'kpcd_dv'), getColTongHop());
+        $a_th = array_merge(array('stt','macanbo', 'mact', 'macvcq','msngbac', 'mapb', 'bhxh_dv', 'bhyt_dv', 'bhtn_dv', 'kpcd_dv'), getColTongHop());
 
         $m_bl = bangluong::where('mabl', $inputs['mabl'])->first();
         $model = (new dataController())->getBangluong_ct_ar($m_bl->thang, array($inputs['mabl']), $a_th);
@@ -627,88 +627,135 @@ class dutoanluongController extends Controller
         foreach($model_nb_danl as $ct){
             $model_nb->add($ct);
         }
-        $a_data_nangluong = array();
+        $a_nangluong_nb = array();
+        $a_nangluong_tnn = array();
         //tính danh sách cán bộ nâng lương
         $a_nb = $model_nb->keyby('macanbo')->toarray();
         $a_tnn = $model_tnn->keyby('macanbo')->toarray();
+        //dd($model->toarray());
         foreach ($model as $cb){
             $nb = isset($a_nb[$cb->macanbo]) ? $a_nb[$cb->macanbo] : null;
             $tnn = isset($a_tnn[$cb->macanbo]) ? $a_tnn[$cb->macanbo] : null;
-            $ngaynang_nb = $nb != null ? $nb['ngaynang'] : null;
-            $ngaynang_tnn = $tnn != null ? $tnn['ngaynang'] : null;
-            $tonghs = 0;
+            $thang_nb = $thang_tnn = $tonghs = $vkhung_cl = $heso_cl = $tnn_cl = 0;//lưu $tnn_cl theo %
 
-            //cán bộ chỉ nâng lương nb
-            if($ngaynang_nb != null && $ngaynang_tnn == null){
-                $thang_nb = (12 - (new Carbon($ngaynang_nb))->month) + 1;
-                $vkhung_cl = round(($nb['vuotkhung'] - $cb->hs_vuotkhung)/($cb->heso*100),session('admin')->lamtronso);
-                $heso_cl = $nb['heso'] -  $cb->heso;
-                $cb->heso = $heso_cl < 0 ? 0 : $heso_cl;
-                $cb->vuotkhung = $vkhung_cl < 0 ? 0 : $vkhung_cl;
-                $chenhlech = $cb->heso + $cb->vuotkhung;
+            //tính nâng lương tnn trc
+            if($tnn != null){
+                $thang_tnn = (new Carbon($tnn['ngaynang']))->month;
+                $cb->pctnn = $tnn['pctnn'] -  $cb->hs_pctnn;
+                //$cb->hs_pctnn = $cb->pctnn;
+                $cb->maphanloai = 'THAMNIENNGHE';
+                $cb->thang = $thang_tnn;
+                $a_nangluong_tnn[] = $cb->toarray();
+            }
 
-                dd($cb);// làm đến đây
-                //tính vượt khung + hệ số
-                foreach ($a_pc as $k => $v) {
-                    $mapc = $v['mapc'];
-                    $mapc_st = 'st_' . $mapc;
-                    $mapc_hs = 'hs_' . $mapc;
-                    $cb->$mapc_st = 0;
-
-                    $a_pc[$k]['stbhxh_dv'] = 0;
-                    $a_pc[$k]['stbhyt_dv'] = 0;
-                    $a_pc[$k]['stkpcd_dv'] = 0;
-                    $a_pc[$k]['stbhtn_dv'] = 0;
-                    $a_pc[$k]['ttbh_dv'] = 0;
-                    $a_pc[$k]['sotien'] = 0;
-
-                    switch ($a_pc[$k]['phanloai']) {
-                        case 2: {//hệ số
-                            $cb->$mapc = round(($chenhlech * $cb->$mapc_hs)/100 ,session('admin')->lamtronso);
-                            $tonghs += $cb->$mapc;
-                            $a_pc[$k]['sotien'] = round($cb->$mapc * $inputs['luongcoban']);
-                            break;
-                        }
-                        default: {//trường hợp còn lại (ẩn,...)
-                            $cb->$mapc = 0;
-                            break;
-                        }
-                    }
-                    $tien += $a_pc[$k]['sotien'];
-                    $a_pc[$k]['sotien'] = round($a_pc[$k]['sotien'], 0);
-                    $cb->$mapc_st = round($a_pc[$k]['sotien'], 0);
-                    if ($cb->baohiem == 1 && $a_pc[$k]['baohiem'] == 1) {
-                        $a_pc[$k]['stbhxh_dv'] = round($a_pc[$k]['sotien'] * $cb->bhxh_dv, 0);
-                        $a_pc[$k]['stbhyt_dv'] = round($a_pc[$k]['sotien'] * $cb->bhyt_dv, 0);
-                        $a_pc[$k]['stkpcd_dv'] = round($a_pc[$k]['sotien'] * $cb->kpcd_dv, 0);
-                        $a_pc[$k]['stbhtn_dv'] = round($a_pc[$k]['sotien'] * $cb->bhtn_dv, 0);
-                        $a_pc[$k]['ttbh_dv'] = $a_pc[$k]['stbhxh_dv'] + $a_pc[$k]['stbhyt_dv'] + $a_pc[$k]['stkpcd_dv'] + $a_pc[$k]['stbhtn_dv'];
+            //tính nâng lương ngạch bậc trc
+            if($nb != null){
+                $thang_nb = (new Carbon($nb['ngaynang']))->month;
+                $cb->vuotkhung = round(($nb['vuotkhung'] - $cb->hs_vuotkhung)/($cb->heso*100),session('admin')->lamtron);
+                $cb->heso = $nb['heso'] -  $cb->heso;
+                $cb->thang = $thang_nb;
+                $cb->maphanloai = 'NGACHBAC';
+                $a_nangluong_nb[] = $cb->toarray();
+            }
+        }
+        $a_data_nb = array();
+        for($i=0;$i<count($a_nangluong_nb);$i++){
+            //gán lại giá trị
+            $stbhxh_dv = 0;
+            $stbhyt_dv = 0;
+            $stkpcd_dv = 0;
+            $stbhtn_dv = 0;
+            $tonghs = $tongtien =0;
+            $a_nangluong_nb[$i]['tonghs'] = 0;
+            $a_nangluong_nb[$i]['luongtn'] = 0;
+            $a_nangluong_nb[$i]['ttl'] = 0;
+            $a_nangluong_nb[$i]['heso'] *= (13 - $a_nangluong_nb[$i]['thang']);
+            $a_nangluong_nb[$i]['vuotkhung'] *= (13 - $a_nangluong_nb[$i]['thang']);
+            $chenhlech = $a_nangluong_nb[$i]['heso'] + $a_nangluong_nb[$i]['vuotkhung'];
+            //tính lại hs, vk
+            $a_nangluong_nb[$i]['st_heso'] = round($a_nangluong_nb[$i]['heso'] * $inputs['luongcoban']);
+            $a_nangluong_nb[$i]['st_vuotkhung'] = round($a_nangluong_nb[$i]['vuotkhung'] * $inputs['luongcoban']);
+            //tính lại hs hương theo % (chỉ có hs + vk)
+            foreach ($a_pc as $k => $v) {
+                $mapc = $v['mapc'];
+                $mapc_st = 'st_' . $mapc;
+                if($k == 'heso' || $k == 'vuotkhung'){
+                    $tonghs += $a_nangluong_nb[$i][$mapc];
+                    $tongtien += $a_nangluong_nb[$i][$mapc_st];
+                    $stbhxh_dv += round($a_nangluong_nb[$i][$mapc_st] * $a_nangluong_nb[$i]['bhxh_dv'], 0);
+                    $stbhyt_dv += round($a_nangluong_nb[$i][$mapc_st] * $a_nangluong_nb[$i]['bhyt_dv'], 0);
+                    $stkpcd_dv += round($a_nangluong_nb[$i][$mapc_st] * $a_nangluong_nb[$i]['kpcd_dv'], 0);
+                    $stbhtn_dv += round($a_nangluong_nb[$i][$mapc_st] * $a_nangluong_nb[$i]['bhtn_dv'], 0);
+                    continue;
+                }
+                $mapc_hs = 'hs_' . $mapc;
+                $a_nangluong_nb[$i][$mapc_st] = 0;
+                $a_nangluong_nb[$i][$mapc] = 0;
+                if($v['phanloai'] == 2){//tính lại %
+                    $a_nangluong_nb[$i][$mapc] = round(($chenhlech * $a_nangluong_nb[$i][$mapc_hs])/100,session('admin')->lamtron);
+                    if ($a_nangluong_nb[$i]['baohiem'] == 1 && $v['baohiem'] == 1) {
+                        $stbhxh_dv += round($a_nangluong_nb[$i][$mapc_st] * $a_nangluong_nb[$i]['bhxh_dv'], 0);
+                        $stbhyt_dv += round($a_nangluong_nb[$i][$mapc_st] * $a_nangluong_nb[$i]['bhyt_dv'], 0);
+                        $stkpcd_dv += round($a_nangluong_nb[$i][$mapc_st] * $a_nangluong_nb[$i]['kpcd_dv'], 0);
+                        $stbhtn_dv += round($a_nangluong_nb[$i][$mapc_st] * $a_nangluong_nb[$i]['bhtn_dv'], 0);
                     }
                 }
-
-                $cb->stbhxh_dv = array_sum(array_column($a_pc, 'stbhxh_dv'));
-                $cb->stbhyt_dv = array_sum(array_column($a_pc, 'stbhyt_dv'));
-                $cb->stkpcd_dv = array_sum(array_column($a_pc, 'stkpcd_dv'));
-                $cb->stbhtn_dv = array_sum(array_column($a_pc, 'stbhtn_dv'));
-                $cb->ttbh_dv = $cb->stbhxh_dv + $cb->stbhyt_dv + $cb->stkpcd_dv + $cb->stbhtn_dv;
-                dd($thang_nb);
+                $tonghs += $a_nangluong_nb[$i][$mapc];
+                $tongtien += $a_nangluong_nb[$i][$mapc_st];
             }
+            $a_nangluong_nb[$i]['tonghs'] = $tonghs;
+            $a_nangluong_nb[$i]['ttl'] = $tongtien;
+            $a_nangluong_nb[$i]['luongtn'] = $tongtien;
 
-            //cán bộ chỉ nâng lương tnn
-            if($ngaynang_nb == null && $ngaynang_tnn != null){
-                $thang_tnn = (new Carbon($ngaynang_tnn))->month;
-                dd($ngaynang_tnn .'-tn-'.$thang_tnn);
-            }
+            $a_nangluong_nb[$i]['stbhxh_dv'] = $stbhxh_dv;
+            $a_nangluong_nb[$i]['stbhyt_dv'] = $stbhyt_dv;
+            $a_nangluong_nb[$i]['stkpcd_dv'] = $stkpcd_dv;
+            $a_nangluong_nb[$i]['stbhtn_dv'] = $stbhtn_dv;
+            $a_nangluong_nb[$i]['ttbh_dv'] = $stbhxh_dv + $stbhyt_dv + $stkpcd_dv + $stbhtn_dv;
 
-            //cán bộ có cả nâng lương nb và tnn
-            if($ngaynang_nb != null && $ngaynang_tnn != null){
-                $thang_nb = (new Carbon($ngaynang_nb))->month;
-                $thang_tnn = (new Carbon($ngaynang_tnn))->month;
-            }
-
-            //không có nâng lương => thoát
+            $a_data_nb[] = $a_nangluong_nb[$i];
+            //dutoanluong_nangluong::create($a_nangluong_nb[$i]);
         }
-        dd($model_nb->keyby('macanbo')->toarray());
+        //dd($a_data_nb);
+        $a_data_tnn = array();
+        //dd($a_nangluong_tnn);
+        for($i=0;$i<count($a_nangluong_tnn);$i++){
+            $pctnn = $a_pc['pctnn'];
+            $heso = 0;
+            foreach (explode(',', $pctnn['congthuc']) as $ct) {
+                if ($ct != ''){$heso += $a_nangluong_tnn[$i][$ct];}
+            }
+
+            $a_nangluong_tnn[$i]['pctnn'] = round(($a_nangluong_tnn[$i]['pctnn'] / $heso) / 100, session('admin')->lamtron)
+                                            * (13 - $a_nangluong_tnn[$i]['thang']);
+            $a_nangluong_tnn[$i]['st_pctnn'] = round($a_nangluong_tnn[$i]['pctnn'] * $inputs['luongcoban']);
+            $a_nangluong_tnn[$i]['tonghs'] = $a_nangluong_tnn[$i]['pctnn'];
+            $a_nangluong_tnn[$i]['luongtn'] = $a_nangluong_tnn[$i]['st_pctnn'];
+            $a_nangluong_tnn[$i]['ttl'] = $a_nangluong_tnn[$i]['st_pctnn'];
+
+            if ($a_nangluong_tnn[$i]['baohiem'] == 1 && $pctnn['baohiem'] == 1) {
+                $a_nangluong_tnn[$i]['stbhxh_dv'] = round($a_nangluong_tnn[$i]['st_pctnn'] * $a_nangluong_tnn[$i]['bhxh_dv'], 0);
+                $a_nangluong_tnn[$i]['stbhyt_dv'] = round($a_nangluong_tnn[$i]['st_pctnn'] * $a_nangluong_tnn[$i]['bhyt_dv'], 0);
+                $a_nangluong_tnn[$i]['stkpcd_dv'] = round($a_nangluong_tnn[$i]['st_pctnn'] * $a_nangluong_tnn[$i]['kpcd_dv'], 0);
+                $a_nangluong_tnn[$i]['stbhtn_dv'] = round($a_nangluong_tnn[$i]['st_pctnn'] * $a_nangluong_tnn[$i]['bhtn_dv'], 0);
+                $a_nangluong_tnn[$i]['ttbh_dv'] = $a_nangluong_tnn[$i]['stbhxh_dv'] + $a_nangluong_tnn[$i]['stbhyt_dv']
+                    + $a_nangluong_tnn[$i]['stkpcd_dv'] + $a_nangluong_tnn[$i]['stbhtn_dv'];
+            }
+
+            foreach ($a_pc as $k => $v) {
+                if($k == 'pctnn'){
+                    continue;
+                }
+                $mapc = $v['mapc'];
+                $mapc_st = 'st_' . $mapc;
+                $mapc_hs = 'hs_' . $mapc;
+                $a_nangluong_tnn[$i][$mapc_st] = 0;
+                $a_nangluong_tnn[$i][$mapc_hs] = 0;
+                $a_nangluong_tnn[$i][$mapc] = 0;
+            }
+            $a_data_tnn[] = $a_nangluong_tnn[$i];
+            //dutoanluong_nangluong::create($a_nangluong_tnn[$i]);
+        }
 
         $a_thang = array(array('thang' => '01', 'nam' => $inputs['namdt']),
             array('thang' => '02', 'nam' => $inputs['namdt']),
@@ -730,8 +777,25 @@ class dutoanluongController extends Controller
                 $a_data[] = array_merge($cb, array('thang' => $a_thang[$i]['thang'], 'nam' => $a_thang[$i]['nam']));
             }
         }
-        $a_col = array('bac', 'bhxh_dv', 'bhtn_dv', 'kpcd_dv', 'bhyt_dv', 'gioitinh', 'nam_nb', 'nam_ns', 'nam_tnn',
-            'thang_nb', 'thang_ns', 'thang_tnn', 'ngayden', 'ngaysinh', 'tnndenngay', 'pcctp', 'st_pcctp', 'baohiem','theodoi');
+        $a_col = array();
+        foreach ($a_pc as $k => $v) {
+            //$a_col[] = 'st_'.$k;
+            $a_col[] = 'hs_'.$k;
+        }
+
+        $a_col = array_merge($a_col, array('bac', 'bhxh_dv', 'bhtn_dv', 'kpcd_dv', 'bhyt_dv', 'gioitinh', 'nam_nb', 'nam_ns', 'nam_tnn',
+            'thang_nb', 'thang_ns', 'thang_tnn', 'ngayden', 'ngaysinh', 'tnndenngay', 'pcctp', 'st_pcctp', 'baohiem','theodoi'));
+
+        $a_data_nb = unset_key($a_data_nb, $a_col);
+
+        foreach (array_chunk($a_data_nb, 50) as $data) {
+            dutoanluong_nangluong::insert($data);
+        }
+
+        $a_data_tnn = unset_key($a_data_tnn, $a_col);
+        foreach (array_chunk($a_data_tnn, 50) as $data) {
+            dutoanluong_nangluong::insert($data);
+        }
 
         $a_data = unset_key($a_data, $a_col);
         foreach (array_chunk($a_data, 50) as $data) {
@@ -753,6 +817,8 @@ class dutoanluongController extends Controller
         for ($i = 0; $i < count($m_data); $i++) {
             $canbo = a_getelement($m_cb, array('mact' => $m_data[$i]['mact']));
             $dutoan = a_getelement($a_data, array('mact' => $m_data[$i]['mact']));
+            $ngachbac = a_getelement($a_data_nb, array('mact' => $m_data[$i]['mact']));
+            $thamnn = a_getelement($a_data_tnn, array('mact' => $m_data[$i]['mact']));
             $m_data[$i]['masodv'] = $masodv;
             $soluong = count($canbo);
             $m_data[$i]['canbo_congtac'] = $soluong;
@@ -766,12 +832,18 @@ class dutoanluongController extends Controller
                     $m_data[$i]['luongnb'] = $m_data[$i]['canbo_dutoan'] * $inputs['luongcoban'] * $heso;
                 }
             }
-            $m_data[$i]['luongnb_dt'] = (array_sum(array_column($dutoan, 'heso')) + array_sum(array_column($dutoan, 'vuotkhung'))) * $inputs['luongcoban'];
+            $m_data[$i]['luongnb_dt'] = (array_sum(array_column($dutoan, 'heso')) + array_sum(array_column($dutoan, 'vuotkhung'))) * $inputs['luongcoban']
+                + array_sum(array_column($ngachbac,'st_heso'))+ array_sum(array_column($ngachbac,'st_vuotkhung'));
             $luongnb += $m_data[$i]['luongnb_dt'];
             //dùng luongtn vì các phụ cấp tính theo số tiền đã cộng vào luongtn (ko tính vào hệ số)
-            $m_data[$i]['luonghs_dt'] = array_sum(array_column($dutoan, 'luongtn')) - $m_data[$i]['luongnb_dt'];
+            $m_data[$i]['luonghs_dt'] = array_sum(array_column($dutoan, 'luongtn'))
+                + array_sum(array_column($ngachbac, 'luongtn'))
+                + array_sum(array_column($thamnn, 'luongtn'))
+                - $m_data[$i]['luongnb_dt'];
             $luonghs += $m_data[$i]['luonghs_dt'];
-            $m_data[$i]['luongbh_dt'] = array_sum(array_column($dutoan, 'ttbh_dv'));
+            $m_data[$i]['luongbh_dt'] = array_sum(array_column($dutoan, 'ttbh_dv'))
+                + array_sum(array_column($ngachbac, 'ttbh_dv'))
+                + array_sum(array_column($thamnn, 'ttbh_dv'));
             $luongbh += $m_data[$i]['luongbh_dt'];
         }
 

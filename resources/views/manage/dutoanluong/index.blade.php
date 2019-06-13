@@ -368,13 +368,13 @@
 
         function taobl(mabl){
             //var tr = $(e).closest('tr');
-            $('#chitiet-modal').modal('hide');
+            $('#create-modal').modal('hide');
             var nghihuu = document.getElementById("nghihuu").checked;
             var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
             //create_bangluong
             //var form = $('#create_bangluong');
             $.ajax({
-                url: '{{$furl}}' + 'create_mau1',
+                url: '{{$furl}}' + 'create_mau',
                 type: 'GET',
                 data: {
                     _token: CSRF_TOKEN,
