@@ -43,24 +43,7 @@
                                         <label class="col-sm-4 control-label">Tháng</label>
 
                                         <div class="col-sm-8 controls">
-                                            {!! Form::select(
-                                            'thang',
-                                            array(
-                                            '01' => '01',
-                                            '02' => '02',
-                                            '03' => '03',
-                                            '04' => '04',
-                                            '05' => '05',
-                                            '06' => '06',
-                                            '07' => '07',
-                                            '08' => '08',
-                                            '09' => '09',
-                                            '10' => '10',
-                                            '11' => '11',
-                                            '12' => '12',
-                                            ),null,
-                                            array('id' => 'thang', 'class' => 'form-control'))
-                                            !!}
+                                            {!! Form::select('thang',getThang(),null,array('id' => 'thang', 'class' => 'form-control'))!!}
                                         </div>
                                     </div>
                                 </div>
@@ -70,16 +53,7 @@
                                         <label class="col-sm-4 control-label">Năm</label>
 
                                         <div class="col-sm-8 controls">
-                                            {!! Form::select(
-                                            'nam',
-                                            array(
-                                            '2015' => '2015',
-                                            '2016' => '2016',
-                                            '2017' => '2017',
-                                            '2018' => '2018'
-                                            ),null,
-                                            array('id' => 'nam', 'class' => 'form-control'))
-                                            !!}
+                                            {!! Form::select('nam',getNam(),null, array('id' => 'nam', 'class' => 'form-control'))!!}
                                         </div>
                                     </div>
                                 </div>

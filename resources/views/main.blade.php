@@ -282,6 +282,27 @@
                     <li>
                         <a href="javascript:;">
                             <i class="fa icon-book-open"></i>
+                            <span class="title">Quản lý hồ sơ</span>
+                            <span class="arrow "></span>
+                        </a>
+                        <ul class="sub-menu">
+                            @if(session('admin')->level == 'H')
+                                <li>
+                                    <a href="{{url('nghiep_vu/ho_so/danh_sach_th?sunghiep=ALL')}}"><i class="fa fa-caret-right"></i>Danh sách cán bộ</a>
+                                </li>
+
+                                <li>
+                                    <a href="{{url('nghiep_vu/ho_so/nang_luong_th?madv=ALL&nangluong=NB')}}"><i class="fa fa-caret-right"></i>Danh sách nâng lương</a>
+                                </li>
+                                <li>
+                                    <a href="{{url('nghiep_vu/ho_so/nghi_huu_th?madv=ALL')}}"><i class="fa fa-caret-right"></i>Danh sách nghỉ hưu</a>
+                                </li>
+                            @endif
+                        </ul>
+                    </li>
+                    <li>
+                        <a href="javascript:;">
+                            <i class="fa icon-book-open"></i>
                             <span class="title">Chi trả lương</span>
                             <span class="arrow "></span>
                         </a>

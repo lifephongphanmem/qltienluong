@@ -57,7 +57,6 @@
                                     <li><a href="{{url('/bao_cao/thong_tu_67/khoi/mau2d')}}" target="_blank">Tổng hợp kinh phí tăng thêm để thực hiện chế độ phụ cấp đối với cán bộ không chuyên trách (Mẫu 2d)</a></li>
                                     <li><a href="{{url('/bao_cao/thong_tu_67/khoi/mau4a')}}" target="_blank">Báo cáo nguồn kinh phí (Mẫu 4a)</a></li>
                                     <li><a href="{{url('/bao_cao/thong_tu_67/khoi/mau4b')}}" target="_blank">Tổng hợp nhu cầu, nguồn kinh phí (Mẫu 4b)</a></li>
-
                                 </ol>
                             </div>
                         </div>
@@ -79,7 +78,7 @@
                                     <li><a href="#" data-target="#thoaichitra-khoi-moi-modal" data-toggle="modal" onclick="baocao('{{$furl.'huyen/chitraluong_th'}}')">Tổng hợp tình hình chi trả lương (Mẫu tổng hợp)</a></li>
                                     <li><a href="#" data-target="#thoaichitra-khoi-moi-ct-modal" data-toggle="modal" onclick="baocao('{{$furl.'huyen/chitraluong_ct'}}')">Tổng hợp tình hình chi trả lương (Mẫu chi tiết)</a></li>
                                     <li><a href="#" data-target="#thoaidutoan-huyen-modal" data-toggle="modal" onclick="dutoanluong_huyen('{{$furl.'huyen/dutoanluong'}}')">Dự toán lương</a></li>
-                                    <li><a href="#" data-target="#thoaichitra-khoi-moi-modal" data-toggle="modal" onclick="baocao('{{$furl.'huyen/baocaohesoluong'}}')">Báo cáo hệ số lương của đơn vị có mặt</a></li>
+                                    <li><a href="#" data-target="#thoaibaocaohesoluong-khoi-modal" data-toggle="modal" onclick="baocao('{{$furl.'huyen/baocaohesoluong'}}')">Báo cáo hệ số lương của đơn vị có mặt</a></li>
 
                                     <!--li><a href="{{url('/bao_cao/thong_tu_67/huyen/mau2a1')}}" target="_blank">Báo cáo nhu cầu kinh phí thực hiện nghị định 47/2017/NĐ-CP (Mẫu 2a/1)</a></li>
                                     <li><a href="{{url('/bao_cao/thong_tu_67/huyen/mau2a2')}}" target="_blank">Báo cáo nhu cầu kinh phí thực hiện nghị định 47/2017/NĐ-CP (Mẫu 2a/2)</a></li>
@@ -117,8 +116,8 @@
         </div>
     </div>
 
-    <div id="thoaichitra-khoi-moi-modal" tabindex="-1" role="dialog" aria-hidden="true" class="modal fade">
-        {!! Form::open(['url'=>'#','target'=>'_blank' ,'method'=>'post' ,'id' => 'thoaichitra_khoi_moi', 'class'=>'form-horizontal form-validate']) !!}
+    <div id="thoaibaocaohesoluong-khoi-modal" tabindex="-1" role="dialog" aria-hidden="true" class="modal fade">
+        {!! Form::open(['url'=>'#','target'=>'_blank' ,'method'=>'post' ,'id' => 'thoai_baocaohesoluong', 'class'=>'form-horizontal form-validate']) !!}
         <div class="modal-dialog modal-content">
             <div class="modal-header modal-header-primary">
                 <button type="button" data-dismiss="modal" aria-hidden="true" class="close">&times;</button>
@@ -130,15 +129,69 @@
                     <div class="form-group">
                         <label class="col-md-4 control-label"> Tháng<span class="require">*</span></label>
                         <div class="col-md-8">
-                            {!! Form::select('tuthang',getThang(),'01',array('id' => 'tuthang', 'class' => 'form-control'))!!}
+                            {!! Form::select('tuthang',getThang(),'ALL',array('id' => 'tuthang', 'class' => 'form-control'))!!}
                         </div>
                     </div>
-                    <!--div class="form-group">
-                        <label class="col-md-4 control-label"> Đến tháng<span class="require">*</span></label>
+                    <div class="form-group">
+                        <label class="col-md-4 control-label"> Năm<span class="require">*</span></label>
                         <div class="col-md-8">
-                            {!! Form::select('denthang',getThang(),'12',array('id' => 'denthang', 'class' => 'form-control'))!!}
+                            {!! Form::select('tunam',getNam(),date('Y'),array('id' => 'tunam', 'class' => 'form-control'))!!}
                         </div>
-                    </div-->
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-4 control-label">Phân loại<span class="require">*</span></label>
+                        <div class="col-md-8">
+                            {!! Form::select('phanloai',$a_phanloai,date('Y'),array('id' => 'phanloai', 'class' => 'form-control select2me'))!!}
+                        </div>
+                    </div>
+                    @if(!session('admin')->quanlykhuvuc)
+                        <div class="form-group">
+                            <label class="col-md-4 control-label">Phân loại công tác<span class="require">*</span></label>
+                            <div class="col-md-8">
+                                <select class="form-control select2me" id="phanloaict" name="phanloaict">
+                                    <option value="">--Chọn tất cả--</option>
+                                    @foreach($model_phanloaict as $phanloaict)
+                                        <option value="{{$phanloaict['mact']}}">{{$phanloaict['tenct']}}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
+                    @endif
+                    <div class="form-group">
+                        <label class="col-md-4 control-label"> Đơn vị tính</label>
+                        <div class="col-md-8">
+                            {!! Form::select('donvitinh',getDonViTinh(),'1',array('id' => 'donvitinh', 'class' => 'form-control'))!!}
+                        </div>
+                    </div>
+                    <label class="col-md-4 control-label"> </label>
+                    <input type="checkbox" name="excelthsl" id = "excelthsl"/>
+                    Xuất dữ liệu ra file excel
+                    <input type="hidden" name="_token" value="{{ csrf_token() }}">
+                    <input type="hidden" id="urlbcsoluong" name="urlbcsoluong" >
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" data-dismiss="modal" class="btn btn-default">Hủy thao tác</button>
+                <button type="submit" id="submit" name="submit" value="submit" class="btn btn-primary">Đồng ý</button>
+            </div>
+        </div>
+        {!! Form::close() !!}
+    </div>
+    <div id="thoaichitra-khoi-moi-modal" tabindex="-1" role="dialog" aria-hidden="true" class="modal fade">
+        {!! Form::open(['url'=>'#','target'=>'_blank' ,'method'=>'post' ,'id' => 'thoaichitra_khoi_moi', 'class'=>'form-horizontal form-validate']) !!}
+        <div class="modal-dialog modal-content">
+            <div class="modal-header modal-header-primary">
+                <button type="button" data-dismiss="modal" aria-hidden="true" class="close">&times;</button>
+                <h4 id="modal-header-primary-label" class="modal-title">Thông tin kết xuất tổng hợp chi trả bảng lương</h4>
+            </div>
+            <div class="modal-body">
+                <div class="form-horizontal">
+                    <div class="form-group">
+                        <label class="col-md-4 control-label"> Tháng<span class="require">*</span></label>
+                        <div class="col-md-8">
+                            {!! Form::select('tuthang',$a_thang,'ALL',array('id' => 'tuthang', 'class' => 'form-control'))!!}
+                        </div>
+                    </div>
                     <div class="form-group">
                         <label class="col-md-4 control-label"> Năm<span class="require">*</span></label>
                         <div class="col-md-8">
@@ -148,12 +201,7 @@
                     <div class="form-group">
                             <label class="col-md-4 control-label">Phân loại<span class="require">*</span></label>
                             <div class="col-md-8">
-                                <select class="form-control select2me" name="phanloai" id="phanloai" >
-                                    <option value="">--Chọn tất cả--</option>
-                                    @foreach($model_phanloai as $phanloaict)
-                                        <option value="{{$phanloaict['maphanloai']}}">{{$phanloaict['tenphanloai']}}</option>
-                                    @endforeach
-                                </select>
+                                {!! Form::select('phanloai',$a_phanloai,date('Y'),array('id' => 'phanloai', 'class' => 'form-control select2me'))!!}
                             </div>
                         </div>
                     @if(!session('admin')->quanlykhuvuc)
@@ -162,6 +210,7 @@
                         <div class="col-md-8">
                             <select class="form-control select2me" id="phanloaict" name="phanloaict">
                                 <option value="">--Chọn tất cả--</option>
+
                                 @foreach($model_phanloaict as $phanloaict)
                                     <option value="{{$phanloaict['mact']}}">{{$phanloaict['tenct']}}</option>
                                 @endforeach
@@ -189,7 +238,6 @@
         </div>
         {!! Form::close() !!}
     </div>
-
     <div id="thoaichitra-khoi-moi-ct-modal" tabindex="-1" role="dialog" aria-hidden="true" class="modal fade">
         {!! Form::open(['url'=>'#','target'=>'_blank' ,'method'=>'post' ,'id' => 'thoaichitra_khoi_ct_moi', 'class'=>'form-horizontal form-validate']) !!}
         <div class="modal-dialog modal-content">
@@ -203,7 +251,7 @@
                     <div class="form-group">
                         <label class="col-md-4 control-label"> Tháng<span class="require">*</span></label>
                         <div class="col-md-8">
-                            {!! Form::select('thang',getThang(),'01',array('id' => 'thang', 'class' => 'form-control'))!!}
+                            {!! Form::select('tuthang',$a_thang,'ALL',array('id' => 'tuthang', 'class' => 'form-control'))!!}
                         </div>
                     </div>
                     <div class="form-group">
@@ -212,7 +260,6 @@
                             {!! Form::select('nam',getNam(),date('Y'),array('id' => 'nam', 'class' => 'form-control'))!!}
                         </div>
                     </div>
-
                     <div class="form-group">
                         <label class="col-md-4 control-label">Đơn vị<span class="require">*</span></label>
                         <div class="col-md-8">
@@ -243,7 +290,6 @@
         </div>
         {!! Form::close() !!}
     </div>
-
     <div id="thoaibangluong-modal" tabindex="-1" role="dialog" aria-hidden="true" class="modal fade">
         {!! Form::open(['url'=>'#','target'=>'_blank' ,'method'=>'post' ,'id' => 'thoaibangluong', 'class'=>'form-horizontal form-validate']) !!}
         <div class="modal-dialog modal-content">
@@ -259,7 +305,6 @@
                             {!! Form::select('thang',getThang(),null,array('id' => 'thang', 'class' => 'form-control'))!!}
                         </div>
                     </div>
-
                     <div class="form-group">
                         <label class="col-md-4 control-label"> Năm<span class="require">*</span></label>
                         <div class="col-md-8">
@@ -276,7 +321,6 @@
         </div>
         {!! Form::close() !!}
     </div>
-
     <div id="thoaichitra-modal" tabindex="-1" role="dialog" aria-hidden="true" class="modal fade">
         {!! Form::open(['url'=>'#','target'=>'_blank' ,'method'=>'post' ,'id' => 'thoaichitra', 'class'=>'form-horizontal form-validate']) !!}
         <div class="modal-dialog modal-content">
@@ -293,15 +337,12 @@
                             {!! Form::select('tuthang',getThang(),'01',array('id' => 'tuthang', 'class' => 'form-control'))!!}
                         </div>
                     </div>
-
-
                     <div class="form-group">
                         <label class="col-md-4 control-label"> Đến tháng<span class="require">*</span></label>
                         <div class="col-md-8">
                             {!! Form::select('denthang',getThang(),'12',array('id' => 'denthang', 'class' => 'form-control'))!!}
                         </div>
                     </div>
-
                     <div class="form-group">
                         <label class="col-md-4 control-label"> Năm<span class="require">*</span></label>
                         <div class="col-md-8">
@@ -659,6 +700,9 @@
         function chitraluong_khoi_ct_moi(url){
             $('#thoaichitra_khoi_ct_moi').attr('action',url);
         }
+        function baocaohesoluong(url){
+            $('#thoai_baocaohesoluong').attr('action',url);
+        }
 
     </script>
 
@@ -667,18 +711,21 @@
             $('#urlbc67').val(url);
             $('#urlbcluongct').val(url);
             $('#urlbcluong').val(url);
+            $('#urlbcsoluong').val(url);
 
         }
         window.onsubmit = function() {
             document.thoaibc67.action   = get_action67();
             document.thoaichitra_khoi_moi.action = get_action67();
             document.thoaichitra_khoi_ct_moi.action = get_action67();
+            document.thoai_baocaosoluong.action   = get_action67();
         }
 
         function get_action67() {
             var url = $('#urlbc67').val();
             var url1 = $('#urlbcluong').val();
             var url2 = $('#urlbcluongct').val();
+            var url3 = $('#urlbcsoluong').val();
             if ($("input[name='excel']:checked").length == 1) {
                 url = $('#urlbc67').val() + 'excel';
                 $('#thoaibc67').attr('action', url);
@@ -700,7 +747,13 @@
             else {
                 $('#thoaichitra_khoi_ct_moi').attr('action', url2);
             }
-
+            if ($("input[name='excelthsl']:checked").length == 1) {
+                url3 = $('#urlbcsoluong').val() + 'excel';
+                $('#thoai_baocaohesoluong').attr('action', url3);
+            }
+            else {
+                $('#thoai_baocaohesoluong').attr('action', url3);
+            }
         }
     </script>
 

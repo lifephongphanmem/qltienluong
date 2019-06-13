@@ -5,7 +5,9 @@ namespace App\Http\Controllers;
 use App\dmdonvi;
 use App\dmphanloaicongtac;
 use App\dmphanloaict;
+use App\dmphucap_donvi;
 use App\dutoanluong;
+use App\dutoanluong_bangluong;
 use App\dutoanluong_chitiet;
 use App\dutoanluong_huyen;
 use App\dutoanluong_khoi;
@@ -171,9 +173,12 @@ class dutoanluong_khoiController extends Controller
             $model = dutoanluong_chitiet::wherein('masodv', function($query) use ($inputs){
                 $query->select('masodv')->from('dutoanluong')->wherein('madv', function($q) use ($inputs){
                     $q->select('madv')->from('dmdonvi')->where('macqcq',$inputs['madv'])->get();
-                })->where('namns',$inputs['namns'])->get();
-            })->get();
+                })->where('trangthai','DAGUI')->where('namns',$inputs['namns'])->get();
+            })
 
+                ->get();
+
+            $model_ct = array_column(dmphanloaict::all()->toArray(), 'tenct', 'mact');
             $model_donvi = dmdonvi::select('madv', 'tendv')
                 ->wherein('madv', function($query) use ($inputs){
                     $query->select('madv')->from('dmdonvi')->where('macqcq',$inputs['madv'])->where('madv','<>',$inputs['madv'])->get();
@@ -184,11 +189,16 @@ class dutoanluong_khoiController extends Controller
             })->get();
 
             $a_nhomct = getNhomCongTac(false);
-
+            //dd($model->toarray());
             foreach($model as $ct) {
                 $dutoan = $model_dutoan->where('masodv', $ct->masodv)->first();
                 $ct->madv = count($dutoan) > 0 ? $dutoan->madv : null;
-                $ct->tencongtac = isset($a_nhomct[$ct->macongtac]) ? $a_nhomct[$ct->macongtac] : '';
+                if($ct->mact == null){
+                    $ct->tencongtac = isset($model_phanloaict[$ct->macongtac]) ? $model_phanloaict[$ct->macongtac] : '';
+                }else{
+                    $ct->tencongtac = isset($model_ct[$ct->mact]) ? $model_ct[$ct->mact] : '';
+                }
+                //$ct->tencongtac = isset($a_nhomct[$ct->mact]) ? $a_nhomct[$ct->macongtac] : '';
                 $ct->tongcong = $ct->luongnb_dt + $ct->luonghs_dt + $ct->luongbh_dt;
             }
 
@@ -205,4 +215,61 @@ class dutoanluong_khoiController extends Controller
         } else
             return view('errors.notlogin');
     }
+    function printfbl(Request $request)
+    {
+        if (Session::has('admin')) {
+            $inputs = $request->all();
+            //dd($inputs);
+            $model = dutoanluong_bangluong::where('masodv', $inputs['maso'])->orderby('stt')->get();
+            //$model = dutoanluong_bangluong::where('masodv', $inputs['masodv'])->orderby('thang')->get();
+            $model_thongtin = dutoanluong::where('masodv', $inputs['maso'])->first();
+            $a_ct = array_column(dmphanloaict::all()->toArray(), 'tenct', 'mact');
+
+            //cho trương hợp đơn vị cấp trên in dữ liệu dv câp dưới mà ko sai tên đơn vị
+            $m_dv = dmdonvi::where('madv', $model_thongtin->madv)->first();
+            $a_phucap = array();
+            $col = 0;
+            $m_pc = dmphucap_donvi::where('madv', $model_thongtin->madv)->orderby('stt')->get()->toarray();
+
+            foreach ($m_pc as $ct) {
+                if ($model->sum($ct['mapc']) > 0) {
+                    $a_phucap[$ct['mapc']] = $ct['report'];
+                    $col++;
+                }
+            }
+
+            $thongtin = array('nguoilap' => session('admin')->name,
+                'thang' => $model_thongtin->thang,
+                'nam' => $model_thongtin->nam);
+
+            //Lấy dữ liệu để lập
+            $model_thang = $model->sortby('thang')->map(function ($data) {
+                return collect($data->toArray())
+                    ->only(['thang'])
+                    ->all();
+            });
+            //group mact đã bao gồm macongtac; manguonkp bao gồm luongcoban
+            $model_thang = a_unique($model_thang);
+
+            $model_congtac = $model->map(function ($data) {
+                return collect($data->toArray())
+                    ->only(['thang','mact'])
+                    ->all();
+            });
+            $model_congtac = a_unique($model_congtac);
+
+            return view('reports.viewdata.dutoan.bangluong')
+                ->with('thongtin', $thongtin)
+                ->with('model', $model)
+                ->with('m_dv', $m_dv)
+                ->with('col', $col)
+                ->with('a_phucap', $a_phucap)
+                ->with('a_ct', $a_ct)
+                ->with('model_thang', $model_thang)
+                ->with('model_congtac', $model_congtac)
+                ->with('pageTitle', 'Chi tiết tổng hợp lương tại đơn vị');
+        } else
+            return view('errors.notlogin');
+    }
 }
+

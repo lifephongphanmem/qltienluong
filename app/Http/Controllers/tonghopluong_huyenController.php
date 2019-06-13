@@ -625,7 +625,7 @@ class tonghopluong_huyenController extends Controller
             });
             //dd($a_tonghop);
             //dd($model);
-            return view('reports.tonghopluong.donvi.bangluong')
+            return view('reports.tonghopluong.huyen.bangluongct')
                 ->with('thongtin', $thongtin)
                 ->with('model', $model)
                 ->with('m_dv', $m_dv)

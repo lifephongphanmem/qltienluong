@@ -254,6 +254,12 @@ Route::group(['prefix'=>'nghiep_vu'],function(){
         Route::get('temp/store_tn','hosocanboController@store_tn_temp');
         Route::get('temp/getinfor_kn','hosocanboController@getinfor_kn_temp');
         Route::get('temp/delete_kn','hosocanboController@delete_kn_temp_temp');
+        // Quản lý hồ sơ khối huyện
+        Route::get('danh_sach_th','quanlyhosoController@index');
+        Route::get('nang_luong_th','quanlyhosoController@index_nangluong');
+        Route::get('nghi_huu_th','quanlyhosoController@index_nghihuu');
+        Route::post('danh_sach_nang_luong','quanlyhosoController@innangluong_th');
+        Route::post('danh_sach_nghi_huu','quanlyhosoController@innghihuu_th');
     });
 
     Route::group(['prefix'=>'quan_ly'],function(){
@@ -656,7 +662,7 @@ Route::group(['prefix'=>'chuc_nang'],function(){
             Route::post('tralai','dutoanluong_huyenController@tralai');
             Route::post('senddata','dutoanluong_huyenController@senddata'); //gửi dữ liệu lên tỉnh
 
-            Route::get('tonghop','dutoanluong_huyenController@tonghop');
+            Route::get('tonghop','dutoanluong_huyenController@tonghopCR');
             Route::get('printf','dutoanluong_huyenController@printf');//in một khối trong khối
             Route::get('chitietbl','dutoanluong_huyenController@chitietbl');//in chi tiết bảng lương đơn vị
         });
@@ -667,7 +673,8 @@ Route::group(['prefix'=>'chuc_nang'],function(){
             Route::post('senddata','dutoanluong_khoiController@senddata'); //gửi dữ liệu lên huyện
 
             Route::get('tonghop','dutoanluong_khoiController@tonghop');
-            Route::get('printf','dutoanluong_khoiController@printf');//in một đơn vị trong khối
+            Route::get('printf','dutoanluong_khoiController@printf');//in TH một đơn vị trong khối
+            Route::get('chitietbl','dutoanluong_khoiController@printfbl');//in một đơn vị trong khối
         });
 
     });

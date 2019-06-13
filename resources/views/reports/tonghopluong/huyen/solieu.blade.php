@@ -128,29 +128,38 @@
                 $a_dv = a_getelement($a_soluong,array('maphanloai'=>$pl->maphanloai,'madv'=>$dv->madv));
                 $chitiet = $model->where('madv',$dv->madv);
             ?>
-            @foreach($chitiet as $ct)
-                <tr class="money">
-                    <td style="text-align: right">-</td>
-                    <td style="text-align: left">{{$ct->tennguonkp}}</td>
-                    <td style="text-align: left">{{$ct->tencongtac}}</td>
-                    <td style="text-align: center">{{$ct->soluong}}</td>
-
-                    @foreach($a_phucap as $key=>$val)
-                        <td>{{dinhdangsothapphan($ct->$key/$ct->luongcoban,5)}}</td>
-                    @endforeach
-
-                    <td>{{dinhdangso($ct->tonghs)}}</td>
-                    <td>{{dinhdangso($ct->giaml)}}</td>
-                    <td>{{dinhdangso($ct->tongtl)}}</td>
-
-                    <td>{{dinhdangso($ct->stbhxh_dv)}}</td>
-                    <td>{{dinhdangso($ct->stbhyt_dv)}}</td>
-                    <td>{{dinhdangso($ct->stkpcd_dv)}}</td>
-                    <td>{{dinhdangso($ct->stbhtn_dv)}}</td>
-                    <td>{{dinhdangso($ct->tongbh)}}</td>
-                    <td>{{dinhdangso($ct->tongbh + $ct->tongtl)}}</td>
-
+            @foreach($a_thang as $key=>$val)
+                <tr style="font-weight: bold; font-style:italic ">
+                    <td></td>
+                    <td style="text-align: left;" colspan="{{12+ $col}}">Tháng: {{$key}}</td>
                 </tr>
+                <?php
+                $chitietct = $chitiet->where('thang',$key);
+                ?>
+                @foreach($chitietct as $ct)
+                    <tr class="money">
+                        <td style="text-align: right">-</td>
+                        <td style="text-align: left">{{$ct->tennguonkp}}</td>
+                        <td style="text-align: left">{{$ct->tencongtac}}</td>
+                        <td style="text-align: center">{{$ct->soluong}}</td>
+
+                        @foreach($a_phucap as $key=>$val)
+                            <td>{{dinhdangsothapphan($ct->$key/$ct->luongcoban,5)}}</td>
+                        @endforeach
+
+                        <td>{{dinhdangso($ct->tonghs)}}</td>
+                        <td>{{dinhdangso($ct->giaml)}}</td>
+                        <td>{{dinhdangso($ct->tongtl)}}</td>
+
+                        <td>{{dinhdangso($ct->stbhxh_dv)}}</td>
+                        <td>{{dinhdangso($ct->stbhyt_dv)}}</td>
+                        <td>{{dinhdangso($ct->stkpcd_dv)}}</td>
+                        <td>{{dinhdangso($ct->stbhtn_dv)}}</td>
+                        <td>{{dinhdangso($ct->tongbh)}}</td>
+                        <td>{{dinhdangso($ct->tongbh + $ct->tongtl)}}</td>
+
+                    </tr>
+                @endforeach
             @endforeach
             @if(count($chitiet) > 0)
                 <tr class="money" style="font-weight: bold; font-style: italic">

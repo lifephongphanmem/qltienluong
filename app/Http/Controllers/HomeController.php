@@ -41,7 +41,7 @@ class HomeController extends Controller
                 $a_ketqua['congchuc'] = $model->where('sunghiep', 'Công chức')->count();
                 $a_ketqua['vienchuc'] = $model->where('sunghiep', 'Viên chức')->count();
                 $a_ketqua['khac'] = $model->where('sunghiep', 'Khác')->count();
-                $a_ketqua['tapsu'] = $model->where('tenct', 'Tập sự')->count();
+                $a_ketqua['tapsu'] = $model->where('tenct ', 'Tập sự')->count();
                 $a_ketqua['chinhthuc'] = $model->count() - $a_ketqua['tapsu'];
 
                 $a_ketqua['gt_nam'] = $model->where('gioitinh', 'Nam')->count();

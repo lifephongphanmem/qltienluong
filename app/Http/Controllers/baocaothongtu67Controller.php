@@ -3101,6 +3101,7 @@ class baocaothongtu67Controller extends Controller
 
     function mau2đ_tt67(Request $request) {
         if (Session::has('admin')) {
+            $m_dv = dmdonvi::where('madv',session('admin')->madv)->first();
             $inputs = $request->all();
             $ar_I = array();
             $ar_I[]=array('val'=>'QLNN','tt'=>'I','noidung'=>'Quản lý nhà nước');
@@ -3110,10 +3111,11 @@ class baocaothongtu67Controller extends Controller
             $ar_I[]=array('val'=>'MPCTX','tt'=>'3','noidung'=>'Đơn vị đảm bảo một phần chi thường xuyên');
             $ar_I[]=array('val'=>'NNCTX','tt'=>'4','noidung'=>'Đơn vị được nhà nước đảm bảo chi thường xuyên');
             if(isset($inputs['excel'])){
-                Excel::create('Mau2dd_tt68',function($excel) use($ar_I,$inputs){
-                    $excel->sheet('New sheet', function($sheet) use($ar_I,$inputs){
+                Excel::create('Mau2dd_tt68',function($excel) use($ar_I,$inputs,$m_dv){
+                    $excel->sheet('New sheet', function($sheet) use($ar_I,$inputs,$m_dv){
                         $sheet->loadView('reports.thongtu67.Mau2dd_tt68')
                             ->with('ar_I',$ar_I)
+                            ->with('m_dv',$m_dv)
                             ->with('inputs',$inputs)
                             ->with('pageTitle','Mau2dd_tt68');
                         $sheet->setAutoSize(false);
@@ -3125,6 +3127,7 @@ class baocaothongtu67Controller extends Controller
             else{
                 return view('reports.thongtu67.Mau2dd_tt68')
                     ->with('inputs',$inputs)
+                    ->with('m_dv',$m_dv)
                     ->with('ar_I',$ar_I)
                     ->with('pageTitle','TỔNG HỢP PHỤ CẤP ƯU ĐÃI TĂNG, GIẢM DO ĐIỀU CHỈNH ĐỊA BÀN VÙNG KINH TẾ XÃ HỘI ĐẶC BIỆT KHÓ KHĂN');
             }
@@ -3135,16 +3138,18 @@ class baocaothongtu67Controller extends Controller
     function mau2e_tt67(Request $request) {
         if (Session::has('admin')) {
             $inputs = $request->all();
+            $m_dv = dmdonvi::where('madv',session('admin')->madv)->first();
             $ar_I = array();
             $ar_I[]=array('val'=>'CTXDT','tt'=>'1','noidung'=>'Đơn vị đảm bảo chi thường xuyên và chi đầu tư');
             $ar_I[]=array('val'=>'CTX','tt'=>'2','noidung'=>'Đơn vị đảm bảo chi thường xuyên');
             $ar_I[]=array('val'=>'MPCTX','tt'=>'3','noidung'=>'Đơn vị đảm bảo một phần chi thường xuyên');
             $ar_I[]=array('val'=>'NNCTX','tt'=>'4','noidung'=>'Đơn vị được nhà nước đảm bảo chi thường xuyên');
             if(isset($inputs['excel'])){
-                Excel::create('Mau2e_tt68',function($excel) use($ar_I,$inputs){
-                    $excel->sheet('New sheet', function($sheet) use($ar_I,$inputs){
+                Excel::create('Mau2e_tt68',function($excel) use($ar_I,$inputs,$m_dv){
+                    $excel->sheet('New sheet', function($sheet) use($ar_I,$inputs,$m_dv){
                         $sheet->loadView('reports.thongtu67.Mau2e_tt68')
                             ->with('ar_I',$ar_I)
+                            ->with('m_dv',$m_dv)
                             ->with('inputs',$inputs)
                             ->with('pageTitle','Mau2e_tt68');
                         $sheet->setAutoSize(false);
@@ -3156,6 +3161,7 @@ class baocaothongtu67Controller extends Controller
             else {
                 return view('reports.thongtu67.Mau2e_tt68')
                     ->with('inputs', $inputs)
+                    ->with('m_dv',$m_dv)
                     ->with('ar_I', $ar_I)
                     ->with('pageTitle', 'Báo cáo nguồn thực hiện CCTL tiết kiệm từ việc thay đổi cơ chế tự chủ');
             }
@@ -3180,10 +3186,11 @@ class baocaothongtu67Controller extends Controller
                     $ar_h[$i]['noidung'] = $h['tendvbc'];
                 }
             }
-            Excel::create('Mau2e_ThKPTG',function($excel) use($ar_h){
-                $excel->sheet('New sheet', function($sheet) use($ar_h){
+            Excel::create('Mau2e_ThKPTG',function($excel) use($ar_h,$m_dv){
+                $excel->sheet('New sheet', function($sheet) use($ar_h,$m_dv){
                     $sheet->loadView('reports.thongtu67.Mau2e_ThKPTGexcel')
                         ->with('ar_h',$ar_h)
+                        ->with('m_dv',$m_dv)
                         ->with('pageTitle','Mau2e_ThKPTG');
                     $sheet->setAutoSize(false);
                     $sheet->setFontFamily('Tahoma');
@@ -3197,6 +3204,7 @@ class baocaothongtu67Controller extends Controller
     function mau2g_tt67(Request $request) {
         if (Session::has('admin')) {
             $inputs = $request->all();
+            $m_dv = dmdonvi::where('madv',session('admin')->madv)->first();
             $ar_I[0] = array('val' => 'GD;DT', 'tt' => '1', 'noidung' => 'Sự nghiệp giáo dục - đào tạo');
             $ar_I[1] = array('val' => 'GD', 'tt' => '', 'noidung' => '- Giáo dục');
             $ar_I[2] = array('val' => 'DT', 'tt' => '', 'noidung' => '- Đào tạo');
@@ -3210,10 +3218,11 @@ class baocaothongtu67Controller extends Controller
             $ar_I[10] = array('val' => 'MT', 'tt' => '9', 'noidung' => 'Sự nghiệp môi trường');
             $ar_I[11] = array('val' => 'QLNN;DDT', 'tt' => '10', 'noidung' => 'Quản lý nhà nước, đảng, đoàn thể');
             if(isset($inputs['excel'])){
-                Excel::create('Mau2g_tt68',function($excel) use($ar_I,$inputs){
-                    $excel->sheet('New sheet', function($sheet) use($ar_I,$inputs){
+                Excel::create('Mau2g_tt68',function($excel) use($ar_I,$inputs,$m_dv){
+                    $excel->sheet('New sheet', function($sheet) use($ar_I,$inputs,$m_dv){
                         $sheet->loadView('reports.thongtu67.Mau2g_tt68')
                             ->with('ar_I',$ar_I)
+                            ->with('m_dv',$m_dv)
                             ->with('inputs',$inputs)
                             ->with('pageTitle','Mau2g_tt68');
                         $sheet->setAutoSize(false);
@@ -3225,6 +3234,7 @@ class baocaothongtu67Controller extends Controller
             else {
                 return view('reports.thongtu67.Mau2g_tt68')
                     ->with('ar_I', $ar_I)
+                    ->with('m_dv',$m_dv)
                     ->with('inputs', $inputs)
                     ->with('pageTitle', 'BÁO CÁO QUỸ TIỀN LƯƠNG, PHỤ CẤP ĐỐI VỚI LAO ĐỘNG THEO HỢP ĐỒNG KHU VỰC HÀNH CHÍNH VÀ ĐƠN VỊ SỰ NGHIỆP');
             }
@@ -10562,6 +10572,7 @@ class baocaothongtu67Controller extends Controller
     function mau2đ_huyen(Request $request) {
         if (Session::has('admin')) {
             $inputs = $request->all();
+            $m_dv = dmdonvi::where('madv',session('admin')->madv)->first();
             $ar_I = array();
             $ar_I[]=array('val'=>'QLNN','tt'=>'I','noidung'=>'Quản lý nhà nước');
             $ar_I[]=array('val'=>'SNCL','tt'=>'II','noidung'=>'Sự nghiệp công lập');
@@ -10571,6 +10582,7 @@ class baocaothongtu67Controller extends Controller
             $ar_I[]=array('val'=>'NNCTX','tt'=>'4','noidung'=>'Đơn vị được nhà nước đảm bảo chi thường xuyên');
             return view('reports.thongtu67.Mau2dd_tt68')
                 ->with('inputs',$inputs)
+                ->with('m_dv',$m_dv)
                 ->with('ar_I',$ar_I)
                 ->with('pageTitle','TỔNG HỢP PHỤ CẤP ƯU ĐÃI TĂNG, GIẢM DO ĐIỀU CHỈNH ĐỊA BÀN VÙNG KINH TẾ XÃ HỘI ĐẶC BIỆT KHÓ KHĂN');
         } else
@@ -10580,6 +10592,7 @@ class baocaothongtu67Controller extends Controller
     function mau2e_huyen(Request $request) {
         if (Session::has('admin')) {
             $inputs = $request->all();
+            $m_dv = dmdonvi::where('madv',session('admin')->madv)->first();
             $ar_I = array();
             $ar_I[]=array('val'=>'CTXDT','tt'=>'1','noidung'=>'Đơn vị đảm bảo chi thường xuyên và chi đầu tư');
             $ar_I[]=array('val'=>'CTX','tt'=>'2','noidung'=>'Đơn vị đảm bảo chi thường xuyên');
@@ -10588,6 +10601,7 @@ class baocaothongtu67Controller extends Controller
             return view('reports.thongtu67.Mau2e_tt68')
                 ->with('inputs',$inputs)
                 ->with('ar_I',$ar_I)
+                ->with('m_dv',$m_dv)
                 ->with('pageTitle','TỔNG HỢP PHỤ CẤP ƯU ĐÃI TĂNG, GIẢM DO ĐIỀU CHỈNH ĐỊA BÀN VÙNG KINH TẾ XÃ HỘI ĐẶC BIỆT KHÓ KHĂN');
         } else
             return view('errors.notlogin');
@@ -10627,6 +10641,7 @@ class baocaothongtu67Controller extends Controller
     function mau2g_huyen(Request $request) {
         if (Session::has('admin')) {
             $inputs = $request->all();
+            $m_dv = dmdonvi::where('madv',session('admin')->madv)->first();
             $ar_I[0] = array('val' => 'GD;DT', 'tt' => '1', 'noidung' => 'Sự nghiệp giáo dục - đào tạo');
             $ar_I[1] = array('val' => 'GD', 'tt' => '', 'noidung' => '- Giáo dục');
             $ar_I[2] = array('val' => 'DT', 'tt' => '', 'noidung' => '- Đào tạo');
@@ -10641,6 +10656,7 @@ class baocaothongtu67Controller extends Controller
             $ar_I[11] = array('val' => 'QLNN;DDT', 'tt' => '10', 'noidung' => 'Quản lý nhà nước, đảng, đoàn thể');
             return view('reports.thongtu67.Mau2g_tt68')
                 ->with('ar_I',$ar_I)
+                ->with('m_dv',$m_dv)
                 ->with('inputs',$inputs)
                 ->with('pageTitle','BÁO CÁO QUỸ TIỀN LƯƠNG, PHỤ CẤP ĐỐI VỚI LAO ĐỘNG THEO HỢP ĐỒNG KHU VỰC HÀNH CHÍNH VÀ ĐƠN VỊ SỰ NGHIỆP');
         } else
@@ -10666,7 +10682,9 @@ class baocaothongtu67Controller extends Controller
 
     function mau2h_huyen() {
         if (Session::has('admin')) {
+            $m_dv = dmdonvi::where('madv',session('admin')->madv)->first();
             return view('reports.thongtu67.Mau2h_ThPCTHTG')
+                ->with('m_dv',$m_dv)
                 ->with('pageTitle','TỔNG HỢP PHỤ CẤP THU HÚT TĂNG, GIẢM DO ĐIỀU CHỈNH ĐỊA BÀN VÙNG KINH TẾ XÃ HỘI ĐẶC BIỆT KHÓ KHĂN');
         } else
             return view('errors.notlogin');
@@ -11666,6 +11684,5 @@ class baocaothongtu67Controller extends Controller
         } else
             return view('errors.notlogin');
     }
-
 }
 

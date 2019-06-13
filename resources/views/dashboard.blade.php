@@ -166,14 +166,25 @@
                         <i class="icon-pie-chart"></i>
                     </div>
                 </div>
+                @if(session('admin')->level == 'H')
                 <div class="">
-                    <li class="list-group-item">Công chức<span class="badge badge-info pull-right">
+                    <li class="list-group-item"> <a href="{{url('nghiep_vu/ho_so/danh_sach_th?sunghiep=Công chức')}}">Công chức</a><span class="badge badge-info pull-right">
                             {{number_format($a_ketqua['congchuc'])}}</span></li>
-                    <li class="list-group-item">Viên chức<span class="badge badge-info pull-right">
+                    <li class="list-group-item"><a href="{{url('nghiep_vu/ho_so/danh_sach_th?sunghiep=Viên chức')}}">Viên chức</a><span class="badge badge-info pull-right">
                             {{number_format($a_ketqua['vienchuc'])}}</span></li>
-                    <li class="list-group-item">Khác<span class="badge badge-info pull-right">
+                    <li class="list-group-item"><a href="{{url('nghiep_vu/ho_so/danh_sach_th?sunghiep=Khác')}}">Khác</a><span class="badge badge-info pull-right">
                             {{number_format($a_ketqua['khac'])}}</span></li>
                 </div>
+                    @else
+                    <div class="">
+                        <li class="list-group-item">Công chức<span class="badge badge-info pull-right">
+                            {{number_format($a_ketqua['congchuc'])}}</span></li>
+                        <li class="list-group-item">Viên chức<span class="badge badge-info pull-right">
+                            {{number_format($a_ketqua['vienchuc'])}}</span></li>
+                        <li class="list-group-item">Khác<span class="badge badge-info pull-right">
+                            {{number_format($a_ketqua['khac'])}}</span></li>
+                    </div>
+                @endif
             </div>
         </div>
 

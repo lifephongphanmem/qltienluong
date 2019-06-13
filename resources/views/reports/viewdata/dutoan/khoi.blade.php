@@ -93,14 +93,16 @@
         <th style="width: 12%;">Các khoản</br>đóng góp</th>
     </tr>
 
-    <?php $i=1; ?>
+
 
     @foreach($model_donvi as $dv)
         <tr style="font-weight: bold;">
             <td style="text-align: left" colspan="8">{{$dv->tendv}}</td>
         </tr>
         <?php $model_ct =  $model->where('madv',$dv->madv); ?>
+        <?php $i=1; ?>
         @foreach($model_ct as $ct)
+
             <tr>
                 <td>{{$i++}}</td>
                 <td style="text-align: left">{{$ct->tencongtac}}</td>

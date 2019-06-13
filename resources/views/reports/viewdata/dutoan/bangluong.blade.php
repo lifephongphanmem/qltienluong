@@ -79,30 +79,22 @@
         </tr>
         <tr>
             <td colspan="2" style="text-align: center; font-weight: bold; font-size: 20px;">
-                BẢNG TỔNG HỢP LƯƠNG VÀ CÁC KHOẢN PHỤ CẤP THEO LƯƠNG CỦA ĐƠN VỊ
+                BẢNG DỰ TOÁN LƯƠNG VÀ CÁC KHOẢN PHỤ CẤP THEO LƯƠNG CỦA ĐƠN VỊ
             </td>
         </tr>
 
-        <tr>
-            <td colspan="2" style="text-align: center; font-style: italic">
-                Tháng {{$thongtin['thang']}} năm {{$thongtin['nam']}}
-            </td>
-        </tr>
     </table>
 
     <table class="money" cellspacing="0" cellpadding="0" border="1" style="margin: 20px auto; border-collapse: collapse;font:normal 12px Times, serif;">
         <tr style="padding-left: 2px;padding-right: 2px">
             <th style="width: 2%;" rowspan="2">S</br>T</br>T</th>
             <th style="width: 12%;" rowspan="2">Họ và tên</th>
-            <th rowspan="2">Chức vụ</th>
             <th style="width: 3%;" rowspan="2">Mã ngạch</th>
             @foreach($a_phucap as $key=>$val)
                 <th rowspan="2">{!!$val!!}</th>
             @endforeach
             <th rowspan="2">Cộng hệ số</th>
             <th rowspan="2">Tiền lương tháng</th>
-            <th rowspan="2">Giảm trừ<br>lương</th>
-            <th rowspan="2">Tiền lương thực tế</th>
             <th colspan="5">Các khoản trích nộp theo lương</th>
 
             <th style="width: 5%" rowspan="2">Ghi chú</th>
@@ -117,74 +109,59 @@
         </tr>
 
         <tr>
-            @for($i=1;$i<=14 + $col;$i++)
+            @for($i=1;$i<=11 + $col;$i++)
                 <th>{{$i}}</th>
             @endfor
         </tr>
-        @for($j=0;$j<count($a_nguon);$j++)
-            <?php $i=1;
-                $model_congtac = a_getelement($a_congtac,$a_nguon[$j]);
+
+        @for($j=0;$j<count($model_thang);$j++)
+            <?php
+                $i=1;
+                $a_congtac = a_getelement($model_congtac,$model_thang[$j]);
+                $a_thang = $model->where('thang',$model_thang[$j]['thang']);
             ?>
             <tr style="font-weight: bold;">
                 <td></td>
-                <td style="text-align: left;" colspan="{{13 + $col}}">{{$a_nguon[$j]['tennguonkp']}}</td>
+                <td style="text-align: left;" colspan="{{10 + $col}}">Tháng {{$model_thang[$j]['thang']}}</td>
             </tr>
-            @foreach($model_congtac as $congtac)
+            @foreach($a_congtac as $congtac)
                 <?php
-                    $model_luong = $model->where('mact',$congtac['mact'])->where('manguonkp',$congtac['manguonkp']);
+                    $model_luong = $a_thang->where('mact',$congtac['mact']);
                 ?>
                 @if(count($model_luong)> 0)
                     <?php $stt=1; ?>
                     <tr style="font-weight: bold; font-style:italic ">
                         <td>{{convert2Roman($i++)}}</td>
-                        <td style="text-align: left;" colspan="{{13+ $col}}">{{$congtac['tenct']}}</td>
+                        <td style="text-align: left;" colspan="{{10 + $col}}">{{$a_ct[$congtac['mact']]}}</td>
                     </tr>
-                    @foreach($a_thang as $key=>$val)
-                        <tr style="font-weight: bold; font-style:italic ">
+                    @foreach($model_luong as $ct)
+                        <tr>
+                            <td>{{$stt++}}</td>
+                            <td style="text-align: left">{{$ct->tencanbo}}</td>
+                            <td style="text-align: left">{{$ct->msngbac}}</td>
+
+                            @foreach($a_phucap as $key=>$val)
+                                <td>{{dinhdangsothapphan($ct->$key,5)}}</td>
+                            @endforeach
+
+                            <td>{{dinhdangsothapphan($ct->tonghs,5)}}</td>
+                            <td>{{dinhdangso($ct->luongtn)}}</td>
+                            <td>{{dinhdangso($ct->stbhxh_dv)}}</td>
+                            <td>{{dinhdangso($ct->stbhyt_dv)}}</td>
+                            <td>{{dinhdangso($ct->stkpcd_dv)}}</td>
+                            <td>{{dinhdangso($ct->stbhtn_dv)}}</td>
+                            <td>{{dinhdangso($ct->ttbh_dv)}}</td>
                             <td></td>
-                            <td style="text-align: left;" colspan="{{13+ $col}}">Tháng: {{$key}}</td>
                         </tr>
-                        <?php
-                        $model_luongct = $model_luong->where('thang',$key);
-                        ?>
-                        @foreach($model_luongct as $ct)
-
-                            <tr>
-                                <td>{{$stt++}}</td>
-                                <td style="text-align: left">{{$ct->tencanbo}}</td>
-                                <td style="text-align: left">{{$ct->tencv}}</td>
-                                <td style="text-align: left">{{$ct->msngbac}}</td>
-
-                                @foreach($a_phucap as $key=>$val)
-                                    <td>{{dinhdangsothapphan($ct->$key,5)}}</td>
-                                @endforeach
-
-                                <td>{{dinhdangsothapphan($ct->tonghs,5)}}</td>
-                                <td>{{dinhdangso($ct->tongtl)}}</td>
-                                <td>{{dinhdangso($ct->giaml)}}</td>
-                                <td>{{dinhdangso($ct->tongtl - $ct->giaml)}}</td>
-
-                                <td>{{dinhdangso($ct->stbhxh_dv)}}</td>
-                                <td>{{dinhdangso($ct->stbhyt_dv)}}</td>
-                                <td>{{dinhdangso($ct->stkpcd_dv)}}</td>
-                                <td>{{dinhdangso($ct->stbhtn_dv)}}</td>
-
-                                <td>{{dinhdangso($ct->ttbh_dv)}}</td>
-                                <td></td>
-                            </tr>
-                        @endforeach
                     @endforeach
 
                     <tr style="font-weight: bold; text-align: center; font-style: italic">
-                        <td colspan="4">Cộng</td>
+                        <td colspan="3">Cộng</td>
                         @foreach($a_phucap as $key=>$val)
                             <td>{{dinhdangsothapphan($model_luong->sum($key) ,5)}}</td>
                         @endforeach
                         <td>{{dinhdangsothapphan($model_luong->sum('tonghs') ,5)}}</td>
-
-                        <td class="money">{{dinhdangso($model_luong->sum('tongtl'))}}</td>
-                        <td class="money">{{dinhdangso($model_luong->sum('giaml'))}}</td>
-                        <td class="money">{{dinhdangso($model_luong->sum('tongtl') - $model_luong->sum('giaml'))}}</td>
+                        <td class="money">{{dinhdangso($model_luong->sum('luongtn'))}}</td>
 
                         <td class="money">{{dinhdangso($model_luong->sum('stbhxh_dv'))}}</td>
                         <td class="money">{{dinhdangso($model_luong->sum('stbhyt_dv'))}}</td>
@@ -195,16 +172,29 @@
                     </tr>
                 @endif
             @endforeach
+            <tr style="font-weight: bold; text-align: center">
+                <td colspan="3">Cộng tháng {{$model_thang[$j]['thang']}}</td>
+                @foreach($a_phucap as $key=>$val)
+                    <td>{{dinhdangsothapphan($a_thang->sum($key) ,5)}}</td>
+                @endforeach
+                <td>{{dinhdangsothapphan($a_thang->sum('tonghs') ,5)}}</td>
+                <td class="money">{{dinhdangso($a_thang->sum('luongtn'))}}</td>
+
+                <td class="money">{{dinhdangso($a_thang->sum('stbhxh_dv'))}}</td>
+                <td class="money">{{dinhdangso($a_thang->sum('stbhyt_dv'))}}</td>
+                <td class="money">{{dinhdangso($a_thang->sum('stkpcd_dv'))}}</td>
+                <td class="money">{{dinhdangso($a_thang->sum('stbhtn_dv'))}}</td>
+                <td class="money">{{dinhdangso($a_thang->sum('ttbh_dv'))}}</td>
+                <td></td>
+            </tr>
         @endfor
         <tr style="font-weight: bold; text-align: center;">
-            <td colspan="4">Tổng cộng</td>
+            <td colspan="3">Tổng cộng</td>
             @foreach($a_phucap as $key=>$val)
                 <td>{{dinhdangsothapphan($model->sum($key) ,5)}}</td>
             @endforeach
             <td>{{dinhdangsothapphan($model->sum('tonghs') ,5)}}</td>
-            <td class="money">{{dinhdangso($model->sum('tongtl'))}}</td>
-            <td class="money">{{dinhdangso($model->sum('giaml'))}}</td>
-            <td class="money">{{dinhdangso($model->sum('tongtl') - $model->sum('giaml'))}}</td>
+            <td class="money">{{dinhdangso($model->sum('luongtn'))}}</td>
 
             <td class="money">{{dinhdangso($model->sum('stbhxh_dv'))}}</td>
             <td class="money">{{dinhdangso($model->sum('stbhyt_dv'))}}</td>
