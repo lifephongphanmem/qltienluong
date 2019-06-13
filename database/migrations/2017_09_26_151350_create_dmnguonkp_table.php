@@ -18,6 +18,7 @@ class CreateDmnguonkpTable extends Migration
             $table->string('manguonkp')->nullable();
             $table->string('tennguonkp')->nullable();
             $table->string('phanloai')->nullable();
+            $table->double('macdinh')->default(0);
             $table->string('ghichu')->nullable();
             $table->timestamps();
         });

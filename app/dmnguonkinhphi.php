@@ -12,6 +12,7 @@ class dmnguonkinhphi extends Model
         'manguonkp',
         'tennguonkp',
         'phanloai',
+        'macdinh',
         'ghichu'
     ];
 }

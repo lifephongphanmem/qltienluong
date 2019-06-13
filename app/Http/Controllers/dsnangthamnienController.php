@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\dmdonvi;
 use App\dsnangthamnien;
 use App\dsnangthamnien_ct;
 use App\dsnangthamnien_nguon;
@@ -168,10 +169,18 @@ class dsnangthamnienController extends Controller
                 }
             }
             $model_nangluong = dsnangthamnien::where('manl',$manl)->first();
+            $model_canbo = hosocanbo::where('madv', session('admin')->madv)
+                ->wherenotnull('msngbac')
+                ->where('theodoi', '<', '9')
+                ->wherenotin('macanbo',array_column($model->toarray(),'macanbo'))
+                ->get();
+
+
             return view('manage.thamnien.nangluong')
                 ->with('furl','/chuc_nang/tham_nien/')
                 ->with('model',$model->sortBy('stt'))
                 ->with('model_nangluong',$model_nangluong)
+                ->with('a_canbo', array_column($model_canbo->toarray(), 'tencanbo', 'macanbo'))
                 ->with('pageTitle','Chi tiết danh sách nâng thâm niên nghề');
         } else
             return view('errors.notlogin');
@@ -212,6 +221,51 @@ class dsnangthamnienController extends Controller
         } else
             return view('errors.notlogin');
     }
+
+    function add_canbo(Request $request){
+        if (Session::has('admin')) {
+            $inputs = $request->all();
+            $model_nangluong = dsnangthamnien::where('manl', $inputs['manl'])->first();
+            $model_canbo = hosocanbo::select('macanbo','msngbac','heso','vuotkhung','pccv','tnntungay','tnndenngay','pctnn')
+                ->where('macanbo', $inputs['macanbo'])->first();
+
+            $a_data_nguon = array();
+            $a_nguon_df = getNguonTruyLinh_df();
+
+            $model_canbo->manl = $model_nangluong->manl;
+            $model_canbo->vuotkhung = $model_canbo->heso * $model_canbo->vuotkhung / 100;
+            $model_canbo->pctnn = $model_canbo->pctnn == 0 ? 5 : $model_canbo->pctnn + 1;
+
+            $date = new Carbon($model_canbo->tnndenngay);
+            $model_canbo->ngaytu = $date->toDateString();
+            $model_canbo->ngayden = $date->addYear('1')->toDateString();
+
+            //kiểm tra truy lĩnh nếu ngày xét = ngày nâng lương = > ko truy lĩnh
+            if ($model_nangluong->ngayxet > $model_canbo->tnndenngay) {
+                $model_canbo->truylinhtungay = (new Carbon($model_canbo->tnndenngay))->toDateString();
+                $model_canbo->truylinhdenngay = (new Carbon($model_nangluong->ngayxet))->toDateString();
+                //lưu hệ số truy lĩnh
+                $model_canbo->heso = ($model_canbo->vuotkhung + $model_canbo->heso + $model_canbo->pccv) * $model_canbo->pctnn/ 100;
+                list($model_canbo['thangtl'], $model_canbo['ngaytl']) = $this->getThoiGianTL($model_canbo['truylinhtungay'], $model_canbo['truylinhdenngay']);
+                foreach($a_nguon_df as $k=>$v) {
+                    $a_data_nguon[] = array('macanbo' => $model_canbo->macanbo, 'manguonkp' => $k, 'luongcoban' => $v, 'manl' => $model_nangluong->manl);
+                }
+
+                dsnangthamnien_nguon::insert($a_data_nguon);
+            } else {
+                $model_canbo['ngaytl'] = 0;
+                $model_canbo['thangtl'] = 0;
+                $model_canbo->truylinhtungay = null;
+                $model_canbo->truylinhdenngay = null;
+            }
+
+            dsnangthamnien_ct::create($model_canbo->toarray());
+
+            return redirect('/chuc_nang/tham_nien/chi_tiet?maso='.$inputs['manl'].'&canbo='.$inputs['macanbo']);
+        } else
+            return view('errors.notlogin');
+    }
+
 
     function nang_luong($manl){
         if (Session::has('admin')) {
@@ -281,6 +335,7 @@ class dsnangthamnienController extends Controller
         if (Session::has('admin')) {
             $model = dsnangthamnien_ct::find($id);
             $manl= $model->manl;
+            dsnangthamnien_nguon::where('macanbo',$model->macanbo)->where('manl',$model->manl)->delete();
             $model->delete();
             return redirect('/chuc_nang/tham_nien/maso='.$manl);
         } else
@@ -415,5 +470,42 @@ class dsnangthamnienController extends Controller
             return $result;
         }
         return $result;
+    }
+
+    function printf_data(Request $request) {
+        if (Session::has('admin')) {
+            $inputs = $request->all();
+
+            $model_nangluong = dsnangthamnien::where('manl', $inputs['maso'])->first();
+            $model = dsnangthamnien_ct::where('manl', $inputs['maso'])->get();
+
+            $m_dv = dmdonvi::where('madv',session('admin')->madv)->first();
+            $a_cv = getChucVuCQ(false);
+            $a_cb = hosocanbo::select('macanbo','tencanbo','macvcq')->where('madv', session('admin')->madv)->get()->keyBy('macanbo')->toArray();
+            foreach ($model as $ct) {
+                if (isset($a_cb[$ct->macanbo])) {
+                    $ct->tencanbo = $a_cb[$ct->macanbo]['tencanbo'];
+                    $ct->macvcq = $a_cb[$ct->macanbo]['macvcq'];
+                }
+                $ct->tencv = isset($a_cv[$ct->macvcq]) ? $a_cv[$ct->macvcq] : '';
+                $ct->tnndenngay = $ct->ngaytu;
+                $ct->trangthai = $model_nangluong->trangthai == 'Đã nâng lương' ? 'DANANGLUONG' : 'CHUANANGLUONG';
+                $ct->pctnn_m = $ct->pctnn == 0 ? 5 : $ct->pctnn + 1;
+            }
+
+            $a_pl = $model->map(function($data){
+                return collect($data->toArray())
+                    ->only(['trangthai'])
+                    ->all();
+            });
+            //dd($model);
+            return view('reports.donvi.nangluong_tnn')
+                ->with('model', $model->sortby('tnndenngay'))
+                ->with('inputs', $inputs)
+                ->with('a_pl',a_unique($a_pl))
+                ->with('m_dv',$m_dv)
+                ->with('pageTitle', 'Danh sách cán bộ');
+        } else
+            return view('errors.notlogin');
     }
 }
