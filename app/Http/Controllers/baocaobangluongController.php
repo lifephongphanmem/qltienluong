@@ -643,7 +643,10 @@ class baocaobangluongController extends Controller
                 $chitiet->tongbh = $chitiet->stbhxh_dv + $chitiet->stbhyt_dv + $chitiet->stkpcd_dv + $chitiet->stbhtn_dv;
                 foreach (getColTongHop() as $ct) {
                     $ma = 'hs'.$ct;
-                    $chitiet->$ma = $chitiet->$ct / $chitiet->luongcoban;
+                    if($chitiet->luongcoban > 0)
+                        $chitiet->$ma = $chitiet->$ct / $chitiet->luongcoban;
+                    else
+                        $chitiet->$ma = 0;
                 }
             }
             $model_data = $model->map(function ($data) {
