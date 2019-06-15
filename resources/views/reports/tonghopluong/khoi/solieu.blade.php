@@ -135,11 +135,15 @@
                     <td style="text-align: left">{{$ct->tennguonkp}}</td>
                     <td style="text-align: left">{{$ct->tencongtac}}</td>
                     <td style="text-align: center">{{$ct->soluong}}</td>
-
-                    @foreach($a_phucap as $key=>$val)
-                        <td>{{dinhdangsothapphan($ct->$key/$ct->luongcoban,5)}}</td>
-                    @endforeach
-
+                    @if($ct->luongcoban > 0)
+                        @foreach($a_phucap as $key=>$val)
+                            <td>{{dinhdangsothapphan($ct->$key/$ct->luongcoban,5)}}</td>
+                        @endforeach
+                    @else
+                        @foreach($a_phucap as $key=>$val)
+                            <td>0</td>
+                        @endforeach
+                    @endif
                     <td>{{dinhdangso($ct->tonghs)}}</td>
                     <td>{{dinhdangso($ct->giaml)}}</td>
                     <td>{{dinhdangso($ct->tongtl)}}</td>
