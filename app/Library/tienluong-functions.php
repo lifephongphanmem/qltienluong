@@ -624,16 +624,24 @@ function getKieuTangGiamLuong(){
 
 //Nguồn truy lĩnh sau lấy trong db
 function getNguonTruyLinh(){
-    $model = App\dmnguonkinhphi::all()->first();
+    $model = App\dmnguonkinhphi::all();
+    $nkp_df = $model->where('macdinh',1)->first();
+    if(count($nkp_df) == 0){
+        $nkp_df = $model->first();
+    }
     return array(
-        $model->manguonkp => '1390000',
+        $nkp_df->manguonkp => '1390000',
     );
 }
 
 function getNguonTruyLinh_df(){
     $model = App\dmnguonkinhphi::all()->first();
+    $nkp_df = $model->where('macdinh',1)->first();
+    if(count($nkp_df) == 0){
+        $nkp_df = $model->first();
+    }
     return array(
-        $model->manguonkp => '1390000',
+        $nkp_df->manguonkp => '1390000',
     );
 }
 

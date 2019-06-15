@@ -45,8 +45,8 @@
                                 <th class="text-center" style="width: 5%">STT</th>
                                 <th class="text-center">Mã nguồn kinh phí</th>
                                 <th class="text-center">Tên nguồn kinh phí</th>
-                                <th class="text-center" >Phân loại</th>
-                                <th class="text-center" >Ghi chú</th>
+                                <th class="text-center">Phân loại</th>
+                                <th class="text-center">Ghi chú</th>
                                 <th class="text-center">Thao tác</th>
                             </tr>
                         </thead>
@@ -58,7 +58,7 @@
                                         <td>{{$value->manguonkp}}</td>
                                         <td>{{$value->tennguonkp}}</td>
                                         <td>{{$value->phanloai}}</td>
-                                        <td>{{$value->ghichu}}</td>
+                                        <td>{{$value->macdinh == 1 ? 'Nguồn kinh phí mặc định': ''}}</td>
                                         <td>
 
                                             <button type="button" onclick="editPB('{{$value->manguonkp}}')" class="btn btn-info btn-xs mbs">
@@ -99,6 +99,11 @@
                     <label class="form-control-label">Ghi chú</label>
                     {!!Form::textarea('ghichu', null, array('id' => 'ghichu','class' => 'form-control','rows'=>'3'))!!}
 
+
+                    <label class="control-label col-md-offset-3" style="padding-top: 15px">
+                        <input name="macdinh" id="macdinh" type="checkbox" />Nguồn kinh phí mặc định
+                    </label>
+
                     <input type="hidden" id="id" name="id"/>
                 </div>
                 <div class="modal-footer">
@@ -132,10 +137,13 @@
                 },
                 dataType: 'JSON',
                 success: function (data) {
+                    //alert(data.macdinh);
                     $('#manguonkp').val(data.manguonkp);
                     $('#phanloai').val(data.phanloai);
                     $('#tennguonkp').val(data.tennguonkp);
                     $('#ghichu').val(data.ghichu);
+                    $('#macdinh').prop('checked', data.macdinh == 0? false : true);
+                    $.uniform.update();
                 },
                 error: function(message){
                     toastr.error(message,'Lỗi!');
@@ -154,6 +162,7 @@
             var tennguonkp = $('#tennguonkp').val();
             var phanloai = $('#phanloai').val();
             var ghichu=$('#ghichu').val();
+            var macdinh= $('#macdinh').is(':checked');
 
             if(tennguonkp==''){
                 valid=false;
@@ -171,6 +180,7 @@
                             manguonkp: manguonkp,
                             tennguonkp: tennguonkp,
                             phanloai: phanloai,
+                            macdinh: macdinh == true ? 1 : 0,
                             ghichu: ghichu
                         },
                         dataType: 'JSON',
@@ -192,6 +202,7 @@
                             manguonkp: manguonkp,
                             tennguonkp: tennguonkp,
                             phanloai: phanloai,
+                            macdinh: macdinh == true ? 1 : 0,
                             ghichu: ghichu
                         },
                         dataType: 'JSON',

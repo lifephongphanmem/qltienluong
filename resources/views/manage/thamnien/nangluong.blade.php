@@ -32,7 +32,15 @@
             <div class="portlet light bordered">
                 <div class="portlet-title">
                     <div class="caption">DANH SÁCH CHI TIẾT CÁC CÁN BỘ ĐƯỢC NÂNG LƯƠNG </div>
-                    <div class="actions"></div>
+                    <div class="actions">
+                        <a class="btn btn-default" href="{{url($furl.'printf?maso='.$model_nangluong->manl)}}" target="_blank">
+                            <i class="fa fa-print"></i> In danh sách
+                        </a>
+
+                        <button type="button" class="btn btn-default" data-target="#addCanBo-modal" data-toggle="modal">
+                            <i class="fa fa-plus"></i> Thêm cán bộ
+                        </button>
+                    </div>
                 </div>
                 <div class="portlet-body form-horizontal">
                     <table id="sample_3" class="table table-hover table-striped table-bordered" style="min-height: 230px">
@@ -88,6 +96,33 @@
 
         </div>
     </div>
+
+    <div id="addCanBo-modal" tabindex="-1" role="dialog" aria-hidden="true" class="modal fade">
+        {!! Form::open(['url'=>$furl.'add_canbo', 'class'=>'horizontal-form']) !!}
+        <div class="modal-dialog modal-content">
+            <div class="modal-header modal-header-primary">
+                <button type="button" data-dismiss="modal" aria-hidden="true" class="close">&times;</button>
+                <h4 id="modal-header-primary-label" class="modal-title">Thêm cán bộ nâng lương thâm niên nghề</h4>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <label class="control-label">Chọn cán bộ nâng lương</label>
+                        {!!Form::select('macanbo',$a_canbo, null, array('id' => 'macanbo','class' => 'form-control select2me'))!!}
+                    </div>
+                </div>
+
+                <input type="hidden" id="manl" name="manl" value="{{$model_nangluong->manl}}"/>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" data-dismiss="modal" class="btn btn-default">Hủy thao tác</button>
+                <button type="submit" id="submit" name="submit" value="submit" class="btn btn-primary" onclick="store_nkp()">Đồng ý</button>
+            </div>
+        </div>
+        {!! Form::close() !!}
+    </div>
+
 
     <!--Modal thông tin chi tiết -->
     @include('includes.modal.delete')

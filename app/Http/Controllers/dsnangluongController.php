@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\dmchucvucq;
+use App\dmdonvi;
 use App\dmphucap_donvi;
 use App\dsnangluong;
 use App\dsnangluong_chitiet;
@@ -485,6 +486,7 @@ class dsnangluongController extends Controller
             $model = dsnangluong_chitiet::where('manl', $manl)->get();
             $model_nguon = dsnangluong_nguon::where('manl', $manl)->get();
             $ma = getdate()[0];
+            $model_pc = dmphucap_donvi::where('madv', session('admin')->madv)->where('phanloai',2)->get();
             foreach ($model as $canbo) {
                 $ma = $ma + 1;
                 $hoso = hosocanbo::where('macanbo', $canbo->macanbo)->first();
@@ -493,17 +495,34 @@ class dsnangluongController extends Controller
                 $hoso->vuotkhung = $canbo->vuotkhung;
                 $hoso->ngaytu = $canbo->ngaytu;
                 $hoso->ngayden = $canbo->ngayden;
-                $hoso->save();
+
+                /*
                 $data = $canbo->toarray();
                 unset($data['id']);
                 unset($data['phanloai']);
-                //hosoluong::create($data);
+                hosoluong::create($data);
+                */
                 if (isset($canbo->truylinhtungay) && $canbo->hesott > 0) {
+                    /*
                     $truylinh = hosotruylinh::where('macanbo', $canbo->macanbo)->first();
                     if (count($truylinh) == 0) {
                         $truylinh = new hosotruylinh();
                         $truylinh->maso = session('admin')->madv . '_' . $ma;
                     }
+
+                    }
+                    */
+
+                    $truylinh = new hosotruylinh();
+                    foreach ($model_pc as $pc) {
+                        if ($pc->mapc == 'vuotkhung') {
+                            continue;
+                        }
+                        $mapc = $pc->mapc;
+                        $truylinh->$mapc = $hoso->$mapc;
+
+                    }
+                    $truylinh->maso = session('admin')->madv . '_' . $ma;
                     $truylinh->macanbo = $canbo->macanbo;
                     $truylinh->tencanbo = $hoso->tencanbo;
                     $truylinh->ngaytu = $canbo->truylinhtungay;
@@ -515,6 +534,7 @@ class dsnangluongController extends Controller
                     $truylinh->msngbac = $canbo->msngbac;
                     $truylinh->heso = $canbo->hesott; //hệ số truy lĩnh đều đưa vào hệ số
                     $truylinh->maphanloai = 'MSNGBAC'; //hệ số truy lĩnh đều đưa vào hệ số
+
                     $truylinh->save();
                     $nguon = $model_nguon->where('macanbo', $canbo->macanbo);
                     if(count($nguon)> 0){
@@ -535,6 +555,8 @@ class dsnangluongController extends Controller
                         }
                     }
                 }
+
+                $hoso->save();
                 /*
                 //Lưu thông tin vào hồ sơ cán bộ
                 unset($data['manl']);
@@ -700,5 +722,68 @@ class dsnangluongController extends Controller
             return $result;
         }
         return $result;
+    }
+
+    function printf_data(Request $request) {
+        if (Session::has('admin')) {
+            $inputs = $request->all();
+            $model_nangluong = dsnangluong::where('manl', $inputs['maso'])->first();
+            $model = dsnangluong_chitiet::where('manl', $inputs['maso'])->get();
+
+            $m_dv = dmdonvi::where('madv',session('admin')->madv)->first();
+            $a_cv = getChucVuCQ(false);
+            $a_cb = hosocanbo::select('macanbo','tencanbo','macvcq')->where('madv', session('admin')->madv)->get()->keyBy('macanbo')->toArray();
+            $a_nb = ngachluong::all()->keyby('msngbac')->toarray();
+
+            foreach ($model as $ct) {
+                if (isset($a_cb[$ct->macanbo])) {
+                    $ct->tencanbo = $a_cb[$ct->macanbo]['tencanbo'];
+                    $ct->macvcq = $a_cb[$ct->macanbo]['macvcq'];
+                    $ct->tencv = isset($a_cv[$ct->macvcq]) ? $a_cv[$ct->macvcq] : '';
+                    $ct->trangthai = $model_nangluong->trangthai == 'Đã nâng lương' ? 'DANANGLUONG' : 'CHUANANGLUONG';
+                    //lưu hệ số cũ (thiết kế lại để dùng chung report)
+                    $ct->heso_m = $ct->heso;
+                    $ct->bac_m = $ct->bac;
+                    $ct->vuotkhung_m = $ct->vuotkhung;
+
+                    if(isset($a_nb[$ct->msngbac])){
+                        $ngachluong = $a_nb[$ct->msngbac];
+
+                        if($ct->heso < $ngachluong['hesolonnhat']){//nâng lương ngạch bậc
+                            $ct->heso = $ct->heso - $ngachluong['hesochenhlech'];
+                            $ct->bac = $ct->bac < $ngachluong['baclonnhat'] - 1 ? $ct->bac - 1 : $ngachluong['baclonnhat'];
+                            $ct->vuotkhung = 0;
+                        }else{//vượt khung
+                            if($ct->vuotkhung == 0){//lần đầu
+                                $ct->heso = $ct->heso - $ngachluong['hesochenhlech'];
+                                $ct->bac = $ct->bac - 1;
+                                $ct->vuotkhung = 0;
+                            }else{
+                                $ct->vuotkhung = $ct->vuotkhung - 1;
+                                $ct->heso;
+                                $ct->bac;
+                            }
+                        }
+                    }
+                }
+            }
+
+            $a_pl = $model->map(function($data){
+                return collect($data->toArray())
+                    ->only(['trangthai'])
+                    ->all();
+            });
+            //dd($model);
+            return view('reports.donvi.nangluong_ngachbac')
+                //->with('model',$model->sortby('ngayden')->sortby('stt'))
+                ->with('model',$model->sortby('ngayden'))
+                ->with('m_dv',$m_dv)
+                ->with('a_pl',a_unique($a_pl))
+                ->with('inputs',$inputs)
+                ->with('pageTitle','Danh sách cán bộ');
+
+
+        } else
+            return view('errors.notlogin');
     }
 }

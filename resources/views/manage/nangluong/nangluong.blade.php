@@ -33,6 +33,10 @@
                 <div class="portlet-title">
                     <div class="caption">DANH SÁCH CHI TIẾT CÁC CÁN BỘ ĐƯỢC NÂNG LƯƠNG </div>
                     <div class="actions">
+                        <a class="btn btn-default" href="{{url($furl.'printf?maso='.$model_nangluong->manl)}}" target="_blank">
+                            <i class="fa fa-print"></i> In danh sách
+                        </a>
+
                         <button type="button" class="btn btn-default" data-target="#addCanBo-modal" data-toggle="modal">
                             <i class="fa fa-plus"></i> Thêm cán bộ
                         </button>

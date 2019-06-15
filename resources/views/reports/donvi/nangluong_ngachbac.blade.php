@@ -76,12 +76,13 @@
                 DANH SÁCH CÁN BỘ NÂNG LƯƠNG NGẠCH BẬC
             </td>
         </tr>
-
-        <tr>
-            <td colspan="2" style="text-align: center; font-style: italic">
-                Từ ngày: {{getDayVn($inputs['ngaytu'])}} đến ngày: {{getDayVn($inputs['ngayden'])}}
-            </td>
-        </tr>
+        @if(isset($inputs['ngaytu']))
+            <tr>
+                <td colspan="2" style="text-align: center; font-style: italic">
+                    Từ ngày: {{getDayVn($inputs['ngaytu'])}} đến ngày: {{getDayVn($inputs['ngayden'])}}
+                </td>
+            </tr>
+        @endif
     </table>
 
     <table class="money" cellspacing="0" cellpadding="0" border="1" style="margin: 20px auto; border-collapse: collapse;font:normal 11px Times, serif;">
