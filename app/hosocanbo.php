@@ -81,6 +81,7 @@ class hosocanbo extends Model
         'luonghd',
         'pcphth',
         'pcctp',
+        'pctaicu',
         'theodoi',
         'mact',
         'baohiem',
