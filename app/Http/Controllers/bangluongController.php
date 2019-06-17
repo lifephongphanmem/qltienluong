@@ -741,12 +741,18 @@ class bangluongController extends Controller
         //dd($m_cb);
         //dd($m_cb_kn);
 
+        $ngaycuoithang = Carbon::create($inputs['nam'], $inputs['thang'], 0)->toDateString();
         $ngaycuoithang = Carbon::create($inputs['nam'], $inputs['thang'] + 1, 0)->toDateString();
         //ds cán bộ thôi công tác
-        $a_cbn = hosothoicongtac::select('macanbo')->where('madv', $inputs['madv'])->where('ngaynghi','<=',$ngaycuoithang)->get()->toarray();
+        //$a_cbn = hosothoicongtac::select('macanbo')->where('madv', $inputs['madv'])->get()->toarray();dd($a_cbn);
+        $a_cbn = hosothoicongtac::select('macanbo')->where('madv', $inputs['madv'])
+            ->where(function($qr)use($ngaycuoithang){
+                $qr->where('ngaynghi','<=',$ngaycuoithang)->orWhereNull('ngaynghi');
+            //})->toSql();dd($a_cbn);
+            })->get()->toarray();
         //ds cán bộ
         $m_cb = hosocanbo::select($a_th)->where('madv', $inputs['madv'])->wherenotin('macanbo',$a_cbn)->get()->keyBy('macanbo')->toArray();
-
+        //dd($ngaycuoithang);
         $a_phanloai = dmphanloaicongtac_baohiem::where('madv', session('admin')->madv)->get()->keyBy('mact')->toArray();
         $a_nhomct = array_column(dmphanloaict::all()->toarray(), 'macongtac','mact');
         //dd($a_nhomct);
