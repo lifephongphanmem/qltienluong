@@ -227,7 +227,18 @@ class dutoanluongController extends Controller
             $m_tnn = $model->where('nam_tnn', '<>', '')->where('nam_tnn', '<=', $inputs['namdt'])->keyBy('macanbo')->toarray();
             //dd($m_nb);
             foreach ($m_cb_kn as $key => $val) {
-                $m_cb_kn[$key]['tencanbo'] = isset($a_hoten[$m_cb_kn[$key]['macanbo']]) ? $a_hoten[$m_cb_kn[$key]['macanbo']] : '';
+                $m_cb_kn[$key]['congtac'] = 'CONGTAC';
+                if(isset($m_cb[$m_cb_kn[$key]['macanbo']])){
+                    $canbo = $m_cb[$m_cb_kn[$key]['macanbo']];
+                    $m_cb_kn[$key]['tencanbo'] = $canbo['tencanbo'];
+                    $m_cb_kn[$key]['stt'] = $canbo['stt'];
+                    $m_cb_kn[$key]['msngbac'] = $canbo['msngbac'];
+                }else{
+                    $m_cb_kn[$key]['tencanbo'] = '';
+                    $m_cb_kn[$key]['stt'] = '';
+                    $m_cb_kn[$key]['msngbac'] = '';
+                }
+
                 $m_cb_kn[$key]['ngaysinh'] = null;
                 $m_cb_kn[$key]['tnndenngay'] = null;
                 $m_cb_kn[$key]['macongtac'] = null;
@@ -362,7 +373,7 @@ class dutoanluongController extends Controller
             foreach (array_chunk($a_data_nl, 100) as $data) {
                 dutoanluong_nangluong::insert($data);
             }
-            //dd($a_data);
+            //dd($a_data[100]);
             //chia nhỏ thành các mảng nhỏ 100 phần tử để insert
             //$a_chunk = array_chunk($a_data, 100);
             foreach (array_chunk($a_data, 100) as $data) {
