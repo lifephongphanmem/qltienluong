@@ -777,16 +777,11 @@ class bangluongController extends Controller
             }
             */
 
-            $a_nguon = explode(',', $val['manguonkp']);
-            //nếu cán bộ ko set nguồn (null, '') hoặc trong nguồn thì sét luôn =  ma nguồn để tạo bang lương
-            if ($val['manguonkp'] != '' && $val['manguonkp'] != null && !in_array($inputs['manguonkp'], $a_nguon)) {
-                continue; //cán bộ ko thuộc nguồn quản lý => ko tính lương
-            }
-            //ngày công tác không thỏa mãn
-            if(getDayVn($m_cb[$key]['ngaybc']) != '' && $m_cb[$key]['ngaybc'] > $ngaycuoithang){
-                continue;
-            }
-
+            //chạy tính hệ số + vượt khung trc để tính cho kiêm nhiệm (trường hợp tạo bảng lương không hưởng ở nguồn
+            // kinh phí này)
+            $m_cb[$key]['heso'] = round($val['heso'] * $val['pthuong'] / 100,session('admin')->lamtron);
+            //dd($m_cb[$key]['heso']);
+            $m_cb[$key]['vuotkhung'] =round($val['heso'] * $val['vuotkhung'] / 100,session('admin')->lamtron);//trong bảng danh mục là % vượt khung => sang bảng lương chuyển thành hệ số
             $m_cb[$key]['mabl'] = $inputs['mabl'];
             $m_cb[$key]['manguonkp'] = $inputs['manguonkp'];
             $m_cb[$key]['congtac'] = 'CONGTAC';
@@ -800,9 +795,6 @@ class bangluongController extends Controller
             $m_cb[$key]['hs_pcudn'] = $val['pcudn'];
             $m_cb[$key]['songaytruc'] = 0;
 
-            $m_cb[$key]['heso'] = round($val['heso'] * $val['pthuong'] / 100,session('admin')->lamtron);
-            //dd($m_cb[$key]['heso']);
-            $m_cb[$key]['vuotkhung'] =round($val['heso'] * $val['vuotkhung'] / 100,session('admin')->lamtron);//trong bảng danh mục là % vượt khung => sang bảng lương chuyển thành hệ số
             $m_cb[$key]['bhxh'] = floatval($val['bhxh']) / 100;
             $m_cb[$key]['bhyt'] = floatval($val['bhyt']) / 100;
             $m_cb[$key]['kpcd'] = floatval($val['kpcd']) / 100;
@@ -836,6 +828,18 @@ class bangluongController extends Controller
                         }
                     }
                 }
+            }
+
+            //kết thúc chạy để tính môt số hệ số gốc
+
+            $a_nguon = explode(',', $val['manguonkp']);
+            //nếu cán bộ ko set nguồn (null, '') hoặc trong nguồn thì sét luôn =  ma nguồn để tạo bang lương
+            if ($val['manguonkp'] != '' && $val['manguonkp'] != null && !in_array($inputs['manguonkp'], $a_nguon)) {
+                continue; //cán bộ ko thuộc nguồn quản lý => ko tính lương
+            }
+            //ngày công tác không thỏa mãn
+            if(getDayVn($m_cb[$key]['ngaybc']) != '' && $m_cb[$key]['ngaybc'] > $ngaycuoithang){
+                continue;
             }
 
             $tien = $tonghs = 0;
@@ -1149,9 +1153,9 @@ class bangluongController extends Controller
             $m_cb_kn[$i]['stbhtn_dv'] = 0;
             $m_cb_kn[$i]['ttbh_dv'] = 0;
 
-
             if(isset($a_pc['pcthni'])){
                 $pctn = $a_pc['pcthni'];
+                //dd($pctn);
                 switch ($pctn['phanloai']) {
                     case 0:
                     case 1: {//số tiền
@@ -1166,11 +1170,10 @@ class bangluongController extends Controller
                         }
                         //công thức hệ số (lấy thêm hệ số phụ cấp do cán bộ không chuyên trách nhập hệ số vào hesopc)
                         $heso += $canbo['hesopc'];
-                        $m_cb_kn[$i]['pcthni'] =round($heso * $m_cb_kn[$i]['pcthni'] / 100,session('admin')->lamtron);
+                        $m_cb_kn[$i]['pcthni'] = round($heso * $m_cb_kn[$i]['pcthni'] / 100,session('admin')->lamtron);
                         break;
                     }
                     default: {//trường hợp còn lại (ẩn,...)
-                        $m_cb_kn[$i]['pcthni'] = 0;
                         break;
                     }
                 }
