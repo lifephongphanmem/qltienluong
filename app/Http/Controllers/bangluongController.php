@@ -92,7 +92,8 @@ class bangluongController extends Controller
             $inputs['furl_ajax']= '/ajax/bang_luong/';
             $inputs['dinhmuc']= 0;
 
-            $dinhmuc = nguonkinhphi_dinhmuc::where('manguonkp',$inputs['manguonkp'])->where('madv',session('admin')->madv)->first();
+            $dinhmuc = nguonkinhphi_dinhmuc::where('manguonkp',$inputs['manguonkp'])
+                ->where('madv',session('admin')->madv)->first();
             $maso = count($dinhmuc)> 0 ? $dinhmuc->maso : '';
             $dinhmuc_ct = nguonkinhphi_dinhmuc_ct::where('maso',$maso)->get();
 
@@ -106,6 +107,7 @@ class bangluongController extends Controller
             $model_nhomct = dmphanloaicongtac::select('macongtac', 'tencongtac')->get();
             $model_tenct = dmphanloaict::select('tenct', 'macongtac', 'mact')->get();
             $model = bangluong::where('madv', session('admin')->madv)->where('thang', $inputs['thang'])->where('nam', $inputs['nam'])->get();
+            //bảng lương mẫu
             $model_bl = bangluong::where('madv', session('admin')->madv)->where('phanloai','BANGLUONG')->orderby('nam')->orderby('thang')->get();
             $model_tonghop = tonghopluong_donvi::where('madv', session('admin')->madv)
                 ->where('thang', $inputs['thang'])->where('nam', $inputs['nam'])->first();
@@ -754,12 +756,12 @@ class bangluongController extends Controller
         $ptdn = $m_dv->ptdaingay / 100;//cán bộ nghỉ dài ngày hưởng 50% lương
         $a_goc = array('heso','vuotkhung','pccv'); //mảng phụ cấp làm công thức tính
         $a_pc = $model_phucap->keyby('mapc')->toarray();
-
+        //dd($a_pc);
         $ngaycong = $m_dv->songaycong;
         $a_data_canbo = array();
         $a_data_phucap = array();
         $a_pc_coth = array('pcudn','pctnn');
-
+        //dd($m_cb);
         foreach ($m_cb as $key=>$val) {
             //Dùng tìm kiếm các bộ nào phù hợp. Do lvhd là mảng nên pải lọc
             /*
@@ -793,6 +795,7 @@ class bangluongController extends Controller
             $m_cb[$key]['songaytruc'] = 0;
 
             $m_cb[$key]['heso'] = round($val['heso'] * $val['pthuong'] / 100,session('admin')->lamtron);
+            //dd($m_cb[$key]['heso']);
             $m_cb[$key]['vuotkhung'] =round($val['heso'] * $val['vuotkhung'] / 100,session('admin')->lamtron);//trong bảng danh mục là % vượt khung => sang bảng lương chuyển thành hệ số
             $m_cb[$key]['bhxh'] = floatval($val['bhxh']) / 100;
             $m_cb[$key]['bhyt'] = floatval($val['bhyt']) / 100;

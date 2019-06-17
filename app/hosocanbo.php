@@ -100,3 +100,12 @@ class hosocanbo extends Model
         'lvhd'
     ];
 }
+//bangluongct; bangluongdangky_ct; dutoanluong_bangluong; dutoanluong_nangluong
+
+
+//dsnangluong_chitiet; dsnangthamnien_chitiet; hosocanbo_kiemnhiem; hosocanbo_kiemnhiem_temp; hosodieudong;
+//hosothoicongtac; nguonkinhphi_bangluong; tonghopluong_donvi_bangluong
+
+//thêm pcctp
+//nguonkinhphi_bangluong; dsnangthamnien_chitiet; hosodieudong; hosothoicongtac; tonghopluong_donvi_bangluong
+

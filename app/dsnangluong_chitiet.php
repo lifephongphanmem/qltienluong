@@ -58,6 +58,7 @@ class dsnangluong_chitiet extends Model
         'luonghd',
         'pcphth',
         'pcctp',
+        'pctaicu',
         'ghichu'
     ];
 }

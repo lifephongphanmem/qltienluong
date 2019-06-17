@@ -64,7 +64,8 @@ class nguonkinhphi_bangluong extends Model
         'pcdith', //điện thoại
         'pcphth', //phẫu thuật, thủ thuật
         'luonghd', //đã thêm vào tổng hợp=> ko dự toán =>thừa
-
+        'pcctp',
+        'pctaicu',
         'tonghs',
         'ttl',
         'giaml',

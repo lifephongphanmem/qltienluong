@@ -52,6 +52,7 @@ class hosocanbo_kiemnhiem extends Model
         'pcphth',
         'hesobl',
         'pcctp',
+        'pctaicu',
         'madv'
     ];
 }

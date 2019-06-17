@@ -85,6 +85,8 @@ class hosodieudong extends Model
         'pcxaxe', //điện thoại
         'pcdith', //điện thoại
         'luonghd', //lương hợp đồng (số tiền)
+        'pcctp',
+        'pctaicu',
         'tnntungay',
         'ttnndenngay',
         'mact',

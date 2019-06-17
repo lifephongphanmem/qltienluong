@@ -156,13 +156,13 @@
                 <div class="form-horizontal">
                     <div class="row">
                         <div class="col-md-12">
-                            <div class="tabbable tabbable-custom tabbable-noborder tabbable-reversed">
+                            <div class="tabbable tabbable-custom tabbable-noborder tabbable-reversed" id="tab_cre">
                                 <ul class="nav nav-tabs">
                                     <li class="active">
                                         <a href="#tab_0_cre" data-toggle="tab" aria-expanded="true">
                                             Thông tin chung </a>
                                     </li>
-                                    <li class="">
+                                    <li class="" id="li_tab_1_cre">
                                         <a href="#tab_1_cre" data-toggle="tab" aria-expanded="false">
                                             Tạo bảng lương theo mẫu </a>
                                     </li>
@@ -939,6 +939,11 @@
                 window.location.href = getLink();
             });
 
+            $(".disabled").click(function (e) {
+                e.preventDefault();
+                return false;
+            });
+
             $('#manguonkp').change(function(){
                 var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
                 $.ajax({
@@ -964,6 +969,8 @@
 
         function add(){
             $('#luongcoban').prop('readonly',false);//mặc định
+            $('#manguonkp').prop('disabled',false);
+
             var dm = '{{$inputs['dinhmuc']}}';
             $('#noidung').val('');
             //$('#phantramhuong').val(100);
@@ -975,6 +982,7 @@
             }
 
             $('#chitiet-modal').modal('show');
+            $("#tab_cre").tabs("enable", 1);
         }
 
         function add_truylinh(){
@@ -1055,6 +1063,9 @@
                 $('#chitiet-modal').modal('show');
             }
             $('#luongcoban').prop('readonly',true);
+            $('#manguonkp').prop('disabled', true);
+            $("#tab_cre" ).tabs( { disabled: [1] } );
+            //$('#tab_cre').tabs();
         }
 
         function taobl(mabl){

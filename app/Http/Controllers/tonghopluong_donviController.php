@@ -674,7 +674,7 @@ class tonghopluong_donviController extends Controller
                     $chitiet->tongtl = $chitiet->ttl;
                 }
             }
-            dd($model->toarray());
+            //dd($model->toarray());
 
             foreach (getColTongHop() as $ct) {
                 if ($model->sum($ct) > 0) {

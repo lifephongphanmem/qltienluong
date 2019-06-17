@@ -57,6 +57,8 @@ class dsnangthamnien_ct extends Model
         'pcdith',
         'luonghd',
         'pcphth',
+        'pctaicu',
+        'pcctp',
         'ghichu'
     ];
 }

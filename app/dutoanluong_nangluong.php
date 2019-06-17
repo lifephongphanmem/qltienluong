@@ -103,7 +103,8 @@ class dutoanluong_nangluong extends Model
         'st_pcphth',
         'pcctp',
         'st_pcctp',
-        
+        'pctaicu',
+        'st_pctaicu',
         'tonghs',
         'ttl',
         'giaml',
