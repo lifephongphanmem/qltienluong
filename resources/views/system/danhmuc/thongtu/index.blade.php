@@ -17,7 +17,7 @@
     <script type="text/javascript" src="{{url('assets/global/plugins/select2/select2.min.js')}}"></script>
     <script type="text/javascript" src="{{url('assets/global/plugins/datatables/media/js/jquery.dataTables.min.js')}}"></script>
     <script type="text/javascript" src="{{url('assets/global/plugins/datatables/plugins/bootstrap/dataTables.bootstrap.js')}}"></script>
-
+    @include('includes.script.scripts')
     <script src="{{url('assets/admin/pages/scripts/table-managed.js')}}"></script>
     <script>
         jQuery(document).ready(function() {
@@ -46,6 +46,7 @@
                                 <th class="text-center" style="width: 10%">STT</th>
                                 <th class="text-center">Số hiệu</th>
                                 <th class="text-center">Tên thông tư,</br>quyết định</th>
+                                <th class="text-center">Căn cứ</br>nghị định</th>
                                 <th class="text-center">Mức lương</br>định mức</th>
                                 <th class="text-center">Mức lương</br>áp dụng</th>
                                 <th class="text-center">Chênh lệch</th>
@@ -53,25 +54,24 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @if(isset($model))
-                                @foreach($model as $key=>$value)
-                                    <tr>
-                                        <td class="text-center">{{$key+1}}</td>
-                                        <td>{{$value->sohieu}}</td>
-                                        <td>{{$value->tenttqd}}</td>
-                                        <td class="text-right">{{dinhdangso($value->muccu)}}</td>
-                                        <td class="text-right">{{dinhdangso($value->mucapdung)}}</td>
-                                        <td class="text-right">{{dinhdangso($value->chenhlech)}}</td>
-                                        <td>
-                                            <button type="button" onclick="editCV('{{$value->id}}')" class="btn btn-info btn-xs mbs">
-                                                <i class="fa fa-edit"></i>&nbsp; Chỉnh sửa</button>
+                            @foreach($model as $key=>$value)
+                                <tr>
+                                    <td class="text-center">{{$key+1}}</td>
+                                    <td>{{$value->sohieu}}</td>
+                                    <td>{{$value->tenttqd}}</td>
+                                    <td>{{$value->cancu}}</td>
+                                    <td class="text-right">{{dinhdangso($value->muccu)}}</td>
+                                    <td class="text-right">{{dinhdangso($value->mucapdung)}}</td>
+                                    <td class="text-right">{{dinhdangso($value->chenhlech)}}</td>
+                                    <td>
+                                        <button type="button" onclick="editCV('{{$value->id}}')" class="btn btn-info btn-xs mbs">
+                                            <i class="fa fa-edit"></i>&nbsp; Chỉnh sửa</button>
 
-                                            <button type="button" onclick="cfDel('{{$furl.'del/'.$value->id}}')" class="btn btn-danger btn-xs mbs" data-target="#delete-modal-confirm" data-toggle="modal">
-                                                <i class="fa fa-trash-o"></i>&nbsp; Xóa</button>
-                                        </td>
-                                    </tr>
-                                @endforeach
-                            @endif
+                                        <button type="button" onclick="cfDel('{{$furl.'del/'.$value->id}}')" class="btn btn-danger btn-xs mbs" data-target="#delete-modal-confirm" data-toggle="modal">
+                                            <i class="fa fa-trash-o"></i>&nbsp; Xóa</button>
+                                    </td>
+                                </tr>
+                            @endforeach
                         </tbody>
                     </table>
                 </div>
@@ -99,6 +99,16 @@
                             <div class="col-md-12">
                                 <label class="form-control-label">Tên thông tư, quyết định</label>
                                 {!!Form::text('tenttqd', null, array('id' => 'tenttqd','class' => 'form-control'))!!}
+                            </div>
+
+                            <div class="col-md-12">
+                                <label class="form-control-label">Căn cứ theo nghị định</label>
+                                {!!Form::text('cancu', null, array('id' => 'cancu','class' => 'form-control'))!!}
+                            </div>
+
+                            <div class="col-md-12">
+                                <label class="form-control-label">Năm thực hiện</label>
+                                {!!Form::text('namdt', null, array('id' => 'namdt','class' => 'form-control'))!!}
                             </div>
 
                             <div class="col-md-12">
@@ -131,10 +141,13 @@
     <script>
         function addCV(){
             $('#id_tt').val('ADD');
+            $('#sohieu').val('');
+            $('#sohieu').prop('readonly',false);
             $('#chucvu-modal').modal('show');
         }
 
         function editCV(id){
+            $('#sohieu').prop('readonly',true);
             var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
             $.ajax({
                 url: '{{$furl}}' + 'get',
@@ -147,6 +160,8 @@
                 success: function (data) {
                     $('#sohieu').val(data.sohieu);
                     $('#tenttqd').val(data.tenttqd);
+                    $('#cancu').val(data.cancu);
+                    $('#namdt').val(data.namdt);
                     $('#muccu').val(data.muccu);
                     $('#mucapdung').val(data.mucapdung);
                     $('#chenhlech').val(data.chenhlech);
@@ -180,6 +195,8 @@
                         _token: CSRF_TOKEN,
                         sohieu: sohieu,
                         tenttqd: $('#tenttqd').val(),
+                        cancu: $('#cancu').val(),
+                        namdt: $('#namdt').val(),
                         muccu: $('#muccu').val(),
                         mucapdung: $('#mucapdung').val(),
                         chenhlech: $('#chenhlech').val(),

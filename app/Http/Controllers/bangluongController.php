@@ -307,7 +307,7 @@ class bangluongController extends Controller
         //$m_cb = $m_cb->where('lvhd', $inputs['linhvuc']);
         $m_cb = $m_cb->where('manguonkp', $inputs['manguonkp']);
         $a_ct = array_column(dmphanloaict::all()->toArray(),'macongtac','mact');
-        $model_phanloai = dmphanloaicongtac_baohiem::where('madv', session('admin')->madv)->get();
+        //$model_phanloai = dmphanloaicongtac_baohiem::where('madv', session('admin')->madv)->get();
 
         //Không tính truy lĩnh
         $a_goc = array('heso','vuotkhung','pccv'); //mảng phụ cấp làm công thức tính
@@ -333,7 +333,7 @@ class bangluongController extends Controller
 
         $a_data_canbo = array();
         $a_data_phucap = array();
-        $a_pc_coth = array('pcudn','pctnn');
+        $a_pc_coth = array('pcudn','pctnn', 'pctaicu');
         $ngaycong = dmdonvi::where('madv',$inputs['madv'])->first()->songaycong;
         foreach ($m_cb as $cb) {
             //ngày công tác không thỏa mãn
@@ -589,29 +589,33 @@ class bangluongController extends Controller
 
             //tính thâm niên
             $pctn = $model_phucap->where('mapc', 'pcthni')->first();
-            $pl = getDbl($pctn->phanloai);
-            switch ($pl) {
-                case 0:
-                case 1: {//số tiền
-                    //giữ nguyên ko cần tính
-                    break;
-                }
-                case 2: {//phần trăm
-                    $heso = 0;
-                    foreach (explode(',', $pctn->congthuc) as $ct) {
-                        if ($ct != '' && $ct != 'pcthni')
-                            $heso += $canbo->$ct;
+            //trường đơn vị ko mở phụ cấp thâm niên
+            if(count($pctn) > 0){
+                $pl = getDbl($pctn->phanloai);
+                switch ($pl) {
+                    case 0:
+                    case 1: {//số tiền
+                        //giữ nguyên ko cần tính
+                        break;
                     }
-                    //công thức hệ số (lấy thêm hệ số phụ cấp do cán bộ không chuyên trách nhập hệ số vào hesopc)
-                    $heso += $canbo->hesopc;
-                    $cb->pcthni =round($heso * $cb->pcthni / 100,session('admin')->lamtron);
-                    break;
-                }
-                default: {//trường hợp còn lại (ẩn,...)
-                    $cb->pcthni = 0;
-                    break;
+                    case 2: {//phần trăm
+                        $heso = 0;
+                        foreach (explode(',', $pctn->congthuc) as $ct) {
+                            if ($ct != '' && $ct != 'pcthni')
+                                $heso += $canbo->$ct;
+                        }
+                        //công thức hệ số (lấy thêm hệ số phụ cấp do cán bộ không chuyên trách nhập hệ số vào hesopc)
+                        $heso += $canbo->hesopc;
+                        $cb->pcthni =round($heso * $cb->pcthni / 100,session('admin')->lamtron);
+                        break;
+                    }
+                    default: {//trường hợp còn lại (ẩn,...)
+                        $cb->pcthni = 0;
+                        break;
+                    }
                 }
             }
+
 
             //
             $canbo->pcthni = $cb->pcthni; //set vao hồ sơ cán bộ để tính công thức lương
@@ -676,21 +680,20 @@ class bangluongController extends Controller
 
             $cb->tonghs = $ths;
             $cb->ttl = $tt;
+
             if ($cb->baohiem) {
-                $phanloai = $model_phanloai->where('mact', $cb->mact)->first();
-                if (count($phanloai) > 0) {//do trc nhập chưa lưu mact
-                    $cb->stbhxh = round($inputs['luongcoban'] * floatval($phanloai->bhxh) / 100, 0);
-                    $cb->stbhyt = round($inputs['luongcoban'] * floatval($phanloai->bhyt) / 100, 0);
-                    $cb->stkpcd = round($inputs['luongcoban'] * floatval($phanloai->kpcd) / 100, 0);
-                    $cb->stbhtn = round($inputs['luongcoban'] * floatval($phanloai->bhtn) / 100, 0);
-                    $cb->ttbh = $cb->stbhxh + $cb->stbhyt + $cb->stkpcd + $cb->stbhtn;
-                    $cb->stbhxh_dv = round($inputs['luongcoban'] * floatval($phanloai->bhxh_dv) / 100, 0);
-                    $cb->stbhyt_dv = round($inputs['luongcoban'] * floatval($phanloai->bhyt_dv) / 100, 0);
-                    $cb->stkpcd_dv = round($inputs['luongcoban'] * floatval($phanloai->kpcd_dv), 0);
-                    $cb->stbhtn_dv = round($inputs['luongcoban'] * floatval($phanloai->bhtn_dv), 0);
-                    $cb->ttbh_dv = $cb->stbhxh_dv + $cb->stbhyt_dv + $cb->stkpcd_dv + $cb->stbhtn_dv;
-                }
+                $cb->stbhxh = round($inputs['luongcoban'] * $cb->bhxh, 0);
+                $cb->stbhyt = round($inputs['luongcoban'] * $cb->bhyt, 0);
+                $cb->stkpcd = round($inputs['luongcoban'] * $cb->kpcd, 0);
+                $cb->stbhtn = round($inputs['luongcoban'] * $cb->bhtn, 0);
+                $cb->ttbh = $cb->stbhxh + $cb->stbhyt + $cb->stkpcd + $cb->stbhtn;
+                $cb->stbhxh_dv = round($inputs['luongcoban'] * $cb->bhxh_dv, 0);
+                $cb->stbhyt_dv = round($inputs['luongcoban'] * $cb->bhyt_dv, 0);
+                $cb->stkpcd_dv = round($inputs['luongcoban'] * $cb->kpcd_dv, 0);
+                $cb->stbhtn_dv = round($inputs['luongcoban'] * $cb->bhtn_dv, 0);
+                $cb->ttbh_dv = $cb->stbhxh_dv + $cb->stbhyt_dv + $cb->stkpcd_dv + $cb->stbhtn_dv;
             }
+
             $cb->luongtn = $cb->ttl - $cb->ttbh;
             $a_k = $cb->toarray();
             unset($a_k['id']);
@@ -766,7 +769,7 @@ class bangluongController extends Controller
         $ngaycong = $m_dv->songaycong;
         $a_data_canbo = array();
         $a_data_phucap = array();
-        $a_pc_coth = array('pcudn','pctnn');
+        $a_pc_coth = array('pcudn','pctnn','pctaicu');
         //dd($m_cb);
         foreach ($m_cb as $key=>$val) {
             //Dùng tìm kiếm các bộ nào phù hợp. Do lvhd là mảng nên pải lọc
@@ -1178,6 +1181,7 @@ class bangluongController extends Controller
                     }
                 }
             }
+
             $tonghs = $tien = 0;
             $canbo['pcthni'] = $m_cb_kn[$i]['pcthni']; //set vao hồ sơ cán bộ để tính công thức lương
             $canbo['pctn'] = $m_cb_kn[$i]['pctn'];

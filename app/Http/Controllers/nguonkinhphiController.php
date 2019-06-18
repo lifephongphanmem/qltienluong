@@ -26,11 +26,12 @@ class nguonkinhphiController extends Controller
 {
     function index(){
         if (Session::has('admin')) {
-            $model = nguonkinhphi::where('madv',session('admin')->madv)->get();
+            $model = nguonkinhphi::where('madv',session('admin')->madv)->orderby('namns')->get();
             $lvhd = getLinhVucHoatDong(false);
             foreach($model as $ct){
                 $ct->linhvuc = isset($lvhd[$ct->linhvuchoatdong])? $lvhd[$ct->linhvuchoatdong]:'' ;
             }
+            //dd($model);
             return view('manage.nguonkinhphi.index')
                 ->with('furl','/nguon_kinh_phi/')
                 ->with('a_trangthai',getStatus())
@@ -164,7 +165,8 @@ class nguonkinhphiController extends Controller
     {
         if (Session::has('admin')) {
             $inputs = $request->all();
-            $inputs['namdt'] = $inputs['sohieu'] == 'TT67_2017'? 2017 : 2018; //lấy năm từ ngày áp dung
+            $model_thongtu = dmthongtuquyetdinh::where('sohieu',$inputs['sohieu'])->first();
+            $inputs['namdt'] = chkDbl($model_thongtu->namdt) == 0 ? date('Y'): $model_thongtu->namdt;
             /*
             $model_ttqd = dmthongtuquyetdinh::where('sohieu', $inputs['sohieu'])->first();
             $ngayapdung = new Carbon($model_ttqd->ngayapdung);
@@ -199,7 +201,7 @@ class nguonkinhphiController extends Controller
                 ->where('madv', session('admin')->madv)
                 ->wherein('mact',['1536402868','1536459380','1535613221', '1506673695'])
                 ->get()->keyBy('macanbo')->toarray();
-            $a_th = array_merge(array('ngaysinh','tencanbo', 'tnndenngay', 'gioitinh', 'msngbac', 'bac', 'bhxh_dv', 'bhyt_dv', 'bhtn_dv', 'kpcd_dv'),$a_th);
+            $a_th = array_merge(array('stt','ngaysinh','tencanbo', 'tnndenngay', 'gioitinh', 'msngbac', 'bac', 'bhxh_dv', 'bhyt_dv', 'bhtn_dv', 'kpcd_dv'),$a_th);
             $model = hosocanbo::select($a_th)->where('madv', session('admin')->madv)
                 ->where('theodoi','<', '9')
                 ->get();
@@ -244,14 +246,27 @@ class nguonkinhphiController extends Controller
 
                 }
             }
+            $model = $model->wherein('macongtac',['BIENCHE','KHONGCT','HOPDONG']);
 
-            $m_cb = $model->wherein('macongtac',['BIENCHE','KHONGCT','HOPDONG'])->keyBy('macanbo')->toarray();
+            $m_cb = $model->keyBy('macanbo')->toarray();
+            //làm tùy chọn tính nghỉ hưu
             $m_nh = $model->where('nam_ns','<=',$inputs['namdt'])->keyBy('macanbo')->toarray();
             $m_nb = $model->where('nam_nb','<=',$inputs['namdt'])->keyBy('macanbo')->toarray();
             $m_tnn = $model->where('nam_tnn','<=',$inputs['namdt'])->keyBy('macanbo')->toarray();
 
             foreach($m_cb_kn as $key =>$val){
-                $m_cb_kn[$key]['tencanbo'] =isset($a_hoten[$m_cb_kn[$key]['macanbo']])? $a_hoten[$m_cb_kn[$key]['macanbo']] : '';
+                if(isset($m_cb[$m_cb_kn[$key]['macanbo']])){
+                    $canbo = $m_cb[$m_cb_kn[$key]['macanbo']];
+                    $m_cb_kn[$key]['tencanbo'] = $canbo['tencanbo'];
+                    $m_cb_kn[$key]['stt'] = $canbo['stt'];
+                    $m_cb_kn[$key]['msngbac'] = $canbo['msngbac'];
+                }else{
+                    $m_cb_kn[$key]['tencanbo'] = '';
+                    $m_cb_kn[$key]['stt'] = '';
+                    $m_cb_kn[$key]['msngbac'] = '';
+                }
+                //$m_cb_kn[$key]['tencanbo'] = isset($a_hoten[$m_cb_kn[$key]['macanbo']])? $a_hoten[$m_cb_kn[$key]['macanbo']] : '';
+
                 $m_cb_kn[$key]['ngaysinh'] = null;
                 $m_cb_kn[$key]['tnndenngay'] = null;
                 $m_cb_kn[$key]['macongtac'] = null;
@@ -288,7 +303,7 @@ class nguonkinhphiController extends Controller
             foreach($m_nb as $key =>$val){
                 if(isset($a_nhomnb[$val['msngbac']])){
                     $nhomnb = $a_nhomnb[$val['msngbac']];
-                    $hesomax = $nhomnb['heso'] +  ($nhomnb['heso'] * $nhomnb['hesochenhlech']);
+                    $hesomax = $nhomnb['hesolonnhat'];
                     if($val['heso'] >= $hesomax){
                         $m_nb[$key]['vuotkhung'] = $m_nb[$key]['vuotkhung'] == 0 ? $nhomnb['vuotkhung'] : $m_nb[$key]['vuotkhung'] + 1;
                     }else{
@@ -528,7 +543,9 @@ class nguonkinhphiController extends Controller
             if(count($model) == 0){
                 $model = nguonkinhphi::where('masoh',$masodv)->first();
             }
-
+            //lấy thông tư tổng hợp nguồn
+            $model_thongtu = dmthongtuquyetdinh::where('sohieu',$model->sohieu)->first();
+            //dd($model_thongtu);
             $m_dv = dmdonvi::where('madv',$model->madv)->first();
             $data = array();
             $data[]=array('val'=>'GDDT','tt'=>'a','noidung'=>'Sự nghiệp giáo dục - đào tạo','nhucau'=>0,'nguonkp'=>0,'tietkiem'=>0,'hocphi'=>0,'vienphi'=>0,'nguonthu'=>0);
@@ -570,6 +587,7 @@ class nguonkinhphiController extends Controller
 
             return view('reports.thongtu67.donvi.mau4b')
                 ->with('model',$model)
+                ->with('model_thongtu',$model_thongtu)
                 ->with('data',$data)
                 ->with('m_dv',$m_dv)
                 ->with('pageTitle','Danh sách nguồn kinh phí của đơn vị');

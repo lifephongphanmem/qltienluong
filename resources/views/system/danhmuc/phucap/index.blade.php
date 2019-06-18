@@ -48,7 +48,8 @@
                                 <th class="text-center">Mã số</th>
                                 <th class="text-center">Phụ cấp</th>
                                 <th class="text-center">Phân loại</th>
-                                <th class="text-center">Bao gồm các loại hệ số</th>
+                                <th class="text-center">Bao gồm các</br>loại hệ số</th>
+                                <th class="text-center">Tổng hợp số liệu</th>
                                 <th class="text-center">Thao tác</th>
                             </tr>
                         </thead>
@@ -62,6 +63,7 @@
                                     <td>{{$value->tenpc}}</td>
                                     <td>{{$value->tenphanloai}}</td>
                                     <td>{{$value->tencongthuc}}</td>
+                                    <td class="text-center">{{$value->tonghop}}</td>
                                     <td>
                                         <a href="{{$furl.'edit?maso='.$value->mapc}}" class="btn btn-default btn-xs">
                                             <i class="fa fa-edit"></i>&nbsp; Sửa</a>

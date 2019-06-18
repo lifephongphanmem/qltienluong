@@ -11,6 +11,8 @@ class dmthongtuquyetdinh extends Model
         'id',
         'sohieu',
         'tenttqd',
+        'cancu',
+        'namdt',
         'donvibanhanh',
         'ngayapdung',
         'muccu',

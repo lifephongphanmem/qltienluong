@@ -20,3 +20,4 @@ class dmphucap extends Model
         'ghichu'
     ];
 }
+/*các modul tính toán phụ cấp*/

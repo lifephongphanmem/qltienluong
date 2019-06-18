@@ -406,6 +406,7 @@ function getCongThucTinhPC(){
         'pcthni' => 'Phụ cấp thâm niên',
         'pctn' => 'Phụ cấp trách nhiệm',
         'pcudn' => 'Phụ cấp ưu đãi ngành',
+        'pctaicu' => 'Phụ cấp tái ứng củ',
     );
 }
 
