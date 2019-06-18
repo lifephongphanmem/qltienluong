@@ -79,16 +79,9 @@
         </tr>
 
         <tr>
-            @if($thongtin['phanloai'] == 'TRUYLINH')
-                <td colspan="2" style="text-align: center; font-weight: bold; font-size: 20px;">
-                    BẢNG THANH TOÁN TRUY LĨNH LƯƠNG VÀ CÁC KHOẢN PHỤ CẤP THEO LƯƠNG,</br>CÁC KHOẢN TRÍCH NỘP THEO LƯƠNG
-                </td>
-            @else
-                <td colspan="2" style="text-align: center; font-weight: bold; font-size: 20px;">
-                    BẢNG THANH TOÁN TIỀN LƯƠNG VÀ CÁC KHOẢN PHỤ CẤP THEO LƯƠNG,</br>CÁC KHOẢN TRÍCH NỘP THEO LƯƠNG
-                </td>
-            @endif
-
+            <td colspan="2" style="text-align: center; font-weight: bold; font-size: 20px;">
+                BẢNG THANH TOÁN TIỀN LƯƠNG VÀ CÁC KHOẢN PHỤ CẤP THEO LƯƠNG,</br>CÁC KHOẢN TRÍCH NỘP THEO LƯƠNG
+            </td>
         </tr>
 
         <tr>
@@ -191,7 +184,7 @@
             <td class="money">{{dinhdangso($model->sum('ttl_kn'))}}</td>
             <td class="money">{{dinhdangso($model->sum('ttl') + $model->sum('ttl_kn'))}}</td>
             <td class="money">{{dinhdangso($model->sum('ttbh'))}}</td>
-            <td class="money">{{dinhdangso($model->sum('luongtn'))}}</td>
+            <td class="money">{{dinhdangso($model->sum('luongtn') + $model->sum('luongtn_kn'))}}</td>
             <td></td>
         </tr>
     </table>

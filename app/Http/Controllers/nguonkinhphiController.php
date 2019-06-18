@@ -712,4 +712,29 @@ class nguonkinhphiController extends Controller
         return $m_cb;
     }
 
+    public function getHeSoPc_Sub($a_pc, $m_cb, $m_cb_cu, $phanloai, $thang, $nam)
+    {
+        $m_cb['maphanloai'] = $phanloai;
+        $m_cb['thang'] = $thang;
+        $m_cb['nam'] = $nam;
+        $thang = 12 - $thang + 1;
+
+        for ($i = 0; $i < count($a_pc); $i++) {
+            $mapc = $a_pc[$i]['mapc'];
+            $mapc_st = 'st_'.$mapc;
+            $m_cb[$mapc] = ($m_cb[$mapc] - $m_cb_cu[$mapc]) * $thang;
+            $m_cb[$mapc_st] = ($m_cb[$mapc_st] - $m_cb_cu[$mapc_st]) * $thang;
+        }
+
+        $m_cb['tonghs'] = ($m_cb['tonghs'] - $m_cb_cu['tonghs']) * $thang;
+        $m_cb['luongtn'] = ($m_cb['luongtn'] - $m_cb_cu['luongtn']) * $thang;
+
+        $m_cb['stbhxh_dv'] = ($m_cb['stbhxh_dv'] - $m_cb_cu['stbhxh_dv']) * $thang;
+        $m_cb['stbhyt_dv'] = ($m_cb['stbhyt_dv'] - $m_cb_cu['stbhyt_dv']) * $thang;
+        $m_cb['stkpcd_dv'] = ($m_cb['stkpcd_dv'] - $m_cb_cu['stkpcd_dv']) * $thang;
+        $m_cb['stbhtn_dv'] = ($m_cb['stbhtn_dv'] - $m_cb_cu['stbhtn_dv']) * $thang;
+        $m_cb['ttbh_dv'] = ($m_cb['ttbh_dv'] - $m_cb_cu['ttbh_dv']) * $thang;
+        return $m_cb;
+    }
+
 }
