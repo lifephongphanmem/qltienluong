@@ -315,7 +315,7 @@ class bangluong_inController extends Controller
             //$model_hoso = hosocanbo::where('madv',$m_bl->madv)->get();
             //$a_cv = getChucVuCQ(false);
             $model_congtac = dmphanloaict::select('mact','tenct')
-                ->wherein(a_unique(array_column($model->toarray(),'mact')))->get();
+                ->wherein('mact',a_unique(array_column($model->toarray(),'mact')))->get();
             //dd($model_congtac);
             $a_goc = array('hesott');
             $model_pc = dmphucap_donvi::where('madv',$m_bl->madv)->where('phanloai','<','3')->wherenotin('mapc',$a_goc)->get();
