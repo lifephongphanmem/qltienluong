@@ -22,7 +22,7 @@ class CreateBangluongctTable extends Migration
             $table->string('mact', 50)->nullable();
             $table->string('stt', 10)->nullable();
             $table->string('phanloai',50)->default('CVCHINH');//phân loại kiêm nhiệm / chính thức
-            $table->string('congtac',50)->default('CONGTAC');//phân loại kiêm nhiệm / chính thức
+            $table->string('congtac',50)->default('CONGTAC');
             $table->string('macanbo', 50)->nullable();
             $table->string('tencanbo', 50)->nullable();
             $table->string('macongchuc', 50)->nullable();

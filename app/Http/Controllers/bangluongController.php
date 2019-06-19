@@ -2915,11 +2915,11 @@ class bangluongController extends Controller
                     $col++;
                 }
             }
-
+            //dd($model_kn->toarray());
             foreach($model as $cb){
                 $canbo = $model_kn->where('macanbo',$cb->macanbo);
                 //làm lại chức danh kiêm nhiệm chỉ vào chức danh chính (...)
-                if(count($canbo)>0 && $cb->congtac == 'CVCHINH'){
+                if(count($canbo)>0 && $cb->phanloai == 'CVCHINH'){
                 //if(count($canbo)>0){
                     foreach($canbo as $cbkn) {
                         $cb->ttl_kn += $cbkn->ttl;
