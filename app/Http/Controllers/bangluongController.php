@@ -2919,7 +2919,7 @@ class bangluongController extends Controller
             foreach($model as $cb){
                 $canbo = $model_kn->where('macanbo',$cb->macanbo);
                 //làm lại chức danh kiêm nhiệm chỉ vào chức danh chính (...)
-                if(count($canbo)>0 && $cb->phanloai == 'CVCHINH'){
+                if(count($canbo)>0 && $cb->congtac == 'CONGTAC'){
                 //if(count($canbo)>0){
                     foreach($canbo as $cbkn) {
                         $cb->ttl_kn += $cbkn->ttl;
