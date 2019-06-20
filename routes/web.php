@@ -366,6 +366,11 @@ Route::group(['prefix'=>'nguon_kinh_phi'],function(){
     Route::post('senddata','nguonkinhphiController@senddata'); //gửi dữ liệu
     Route::get('ma_so={masodv}/in','nguonkinhphiController@printf');
 
+    Route::get('printf','nguonkinhphiController@printf_data');//in theo thoại
+    Route::post('mautt107','nguonkinhphiController@printf_tt107');
+    Route::get('mautt107_m2','nguonkinhphiController@printf_tt107_m2');
+    Route::get('nangluong','nguonkinhphiController@printf_nangluong');
+
     Route::get('del/{id}','nguonkinhphiController@destroy');
 
     Route::get('get_thongtu','nguonkinhphiController@getinfor_thongtu');
@@ -376,14 +381,6 @@ Route::group(['prefix'=>'nguon_kinh_phi'],function(){
         Route::post('tralai','tonghopluong_khoiController@tralai'); //trả lại dữ liệu
         Route::get('getlydo','tonghopluong_khoiController@getlydo');//lý do trả lại dữ liệu
     });
-});
-
-Route::group(['prefix'=>'du_toan'],function(){
-    Route::group(['prefix'=>'luong'],function(){
-
-    });
-
-
 });
 
 Route::group(['prefix'=>'chuc_nang'],function(){

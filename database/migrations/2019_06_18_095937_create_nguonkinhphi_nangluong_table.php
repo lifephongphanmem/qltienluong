@@ -110,11 +110,18 @@ class CreateNguonkinhphiNangluongTable extends Migration
             $table->double('st_pcphth')->default(0);
             $table->double('pcctp')->default(0);
             $table->double('st_pcctp')->default(0);
+            $table->double('pctaicu')->default(0);//phụ cấp tái ứng cử
+            $table->double('st_pctaicu')->default(0);
 
             $table->double('tonghs')->default(0);
             $table->double('ttl')->default(0);
             $table->double('giaml')->default(0);
             $table->double('luongtn')->default(0);
+            $table->double('stbhxh')->default(0);
+            $table->double('stbhyt')->default(0);
+            $table->double('stkpcd')->default(0);
+            $table->double('stbhtn')->default(0);
+            $table->double('ttbh')->default(0);
             $table->double('stbhxh_dv')->default(0);
             $table->double('stbhyt_dv')->default(0);
             $table->double('stkpcd_dv')->default(0);

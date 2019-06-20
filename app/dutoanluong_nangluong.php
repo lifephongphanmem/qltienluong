@@ -109,6 +109,11 @@ class dutoanluong_nangluong extends Model
         'ttl',
         'giaml',
         'luongtn',
+        'stbhxh',
+        'stbhyt',
+        'stkpcd',
+        'stbhtn',
+        'ttbh',
         'stbhxh_dv',
         'stbhyt_dv',
         'stluonghd',
@@ -155,4 +160,10 @@ class dutoanluong_nangluong extends Model
         ALTER TABLE `dutoanluong_nangluong` ADD `st_pcphth` FLOAT NOT NULL DEFAULT '0' AFTER `luonghd`;
         ALTER TABLE `dutoanluong_nangluong` ADD `st_pcctp` FLOAT NOT NULL DEFAULT '0' AFTER `luonghd`;
         ALTER TABLE `dutoanluong_nangluong` ADD `pcctp` FLOAT NOT NULL DEFAULT '0' AFTER `luonghd`;
+
+ALTER TABLE `dutoanluong_nangluong` ADD `stbhyt` FLOAT NOT NULL DEFAULT '0' AFTER `luongtn`;
+ALTER TABLE `dutoanluong_nangluong` ADD `stbhtn` FLOAT NOT NULL DEFAULT '0' AFTER `luongtn`;
+ALTER TABLE `dutoanluong_nangluong` ADD `stbhxh` FLOAT NOT NULL DEFAULT '0' AFTER `luongtn`;
+ALTER TABLE `dutoanluong_nangluong` ADD `stkpcd` FLOAT NOT NULL DEFAULT '0' AFTER `luongtn`;
+ALTER TABLE `dutoanluong_nangluong` ADD `ttbh` FLOAT NOT NULL DEFAULT '0' AFTER `luongtn`;
     */

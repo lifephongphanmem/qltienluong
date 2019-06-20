@@ -265,6 +265,13 @@ function getThangBC(){
     );
 }
 
+function getThangBC_nhucau(){
+    return array('ALL'=>'Tất cả các tháng',
+        '07' => '07','08' => '08','09' => '09',
+        '10' => '10','11' => '11','12' => '12'
+    );
+}
+
 function getNam(){
     return array('2017' => '2017','2018' => '2018','2019' => '2019','2020' => '2020');
 }

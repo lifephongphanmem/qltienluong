@@ -71,10 +71,55 @@ class CreateNguonkinhphiBangluongTable extends Migration
             $table->double('luonghd')->default(0); //lương hợp đồng, lương khoán (số tiền)
             $table->double('pcphth')->default(0); //phẫu thuật, thủ thuật
 
+            //lưu số tiền
+            $table->double('st_heso')->default(0);
+            $table->double('st_hesobl')->default(0);
+            $table->double('st_hesopc')->default(0);
+            $table->double('st_vuotkhung')->default(0);
+            $table->double('st_pcct')->default(0);
+            $table->double('st_pckct')->default(0);
+            $table->double('st_pck')->default(0);
+            $table->double('st_pccv')->default(0);
+            $table->double('st_pckv')->default(0);
+            $table->double('st_pcth')->default(0);
+            $table->double('st_pcdd')->default(0);
+            $table->double('st_pcdh')->default(0);
+            $table->double('st_pcld')->default(0);
+            $table->double('st_pcdbqh')->default(0);
+            $table->double('st_pcudn')->default(0);
+            $table->double('st_pctn')->default(0);
+            $table->double('st_pctnn')->default(0);
+            $table->double('st_pcdbn')->default(0);
+            $table->double('st_pcvk')->default(0);
+            $table->double('st_pckn')->default(0);
+            $table->double('st_pcdang')->default(0);
+            $table->double('st_pccovu')->default(0);
+            $table->double('st_pclt')->default(0);
+            $table->double('st_pcd')->default(0);
+            $table->double('st_pctr')->default(0);
+            $table->double('st_pctdt')->default(0);
+            $table->double('st_pctnvk')->default(0);
+            $table->double('st_pcbdhdcu')->default(0);
+            $table->double('st_pcthni')->default(0);
+            $table->double('st_pclade')->default(0);
+            $table->double('st_pcud61')->default(0);
+            $table->double('st_pcxaxe')->default(0);
+            $table->double('st_pcdith')->default(0);
+            $table->double('st_luonghd')->default(0);
+            $table->double('st_pcphth')->default(0);
+            $table->double('st_pcctp')->default(0);
+            $table->double('pctaicu')->default(0);//phụ cấp tái ứng cử
+            $table->double('st_pctaicu')->default(0);
+
             $table->double('tonghs')->default(0);
             $table->double('ttl')->default(0);
             $table->double('giaml')->default(0);
             $table->double('luongtn')->default(0);
+            $table->double('stbhxh')->default(0);
+            $table->double('stbhyt')->default(0);
+            $table->double('stkpcd')->default(0);
+            $table->double('stbhtn')->default(0);
+            $table->double('ttbh')->default(0);
             $table->double('stbhxh_dv')->default(0);
             $table->double('stbhyt_dv')->default(0);
             $table->double('stkpcd_dv')->default(0);

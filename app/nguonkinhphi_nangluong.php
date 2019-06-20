@@ -109,6 +109,11 @@ class nguonkinhphi_nangluong extends Model
         'ttl',
         'giaml',
         'luongtn',
+        'stbhxh',
+        'stbhyt',
+        'stkpcd',
+        'stbhtn',
+        'ttbh',
         'stbhxh_dv',
         'stbhyt_dv',
         'stluonghd',
@@ -116,3 +121,10 @@ class nguonkinhphi_nangluong extends Model
         'ttbh_dv'
     ];
 }
+/*
+ ALTER TABLE `nguonkinhphi_nangluong` ADD `stbhyt` FLOAT NOT NULL DEFAULT '0' AFTER `luongtn`;
+ALTER TABLE `nguonkinhphi_nangluong` ADD `stbhtn` FLOAT NOT NULL DEFAULT '0' AFTER `luongtn`;
+ALTER TABLE `nguonkinhphi_nangluong` ADD `stbhxh` FLOAT NOT NULL DEFAULT '0' AFTER `luongtn`;
+ALTER TABLE `nguonkinhphi_nangluong` ADD `stkpcd` FLOAT NOT NULL DEFAULT '0' AFTER `luongtn`;
+ALTER TABLE `nguonkinhphi_nangluong` ADD `ttbh` FLOAT NOT NULL DEFAULT '0' AFTER `luongtn`;
+ */

@@ -744,7 +744,7 @@ class bangluongController extends Controller
         //dd($m_cb);
         //dd($m_cb_kn);
 
-        $ngaycuoithang = Carbon::create($inputs['nam'], $inputs['thang'], 0)->toDateString();
+        //$ngaycuoithang = Carbon::create($inputs['nam'], $inputs['thang'], 0)->toDateString();
         $ngaycuoithang = Carbon::create($inputs['nam'], $inputs['thang'] + 1, 0)->toDateString();
         //ds cán bộ thôi công tác
         //$a_cbn = hosothoicongtac::select('macanbo')->where('madv', $inputs['madv'])->get()->toarray();dd($a_cbn);
@@ -916,6 +916,7 @@ class bangluongController extends Controller
                 if (!$khongluong || !$thaisan
                     || ($thaisan && in_array($mapc, $a_ts))
                     || ($daingay && in_array($mapc, $a_ts))
+                    || ($m_cb[$key]['theodoi'] == 4 && in_array($mapc, $a_dd))
                 ) {//lưu vào bảng lương phụ cấp
 
                     /* tạm thời bỏ vì ko lưu bangluong_phucap
