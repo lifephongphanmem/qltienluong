@@ -1858,7 +1858,7 @@ class baocaobangluongController extends Controller
             //$model = tonghopluong_donvi_chitiet::where('mathdv', $mathdv)->get();
             $inputs = $request->all();
             $madv = $inputs['donvi'];
-            $thang = $inputs['thang'];
+            $thang = $inputs['tuthang'];
             $nam = $inputs['nam'];
             $check = dmdonvi::where('madv',$madv)->where('phanloaitaikhoan','TH')->first();
             if(count($check)>0)
