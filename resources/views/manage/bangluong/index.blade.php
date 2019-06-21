@@ -150,7 +150,6 @@
         <div class="modal-dialog modal-lg modal-content">
             <div class="modal-header modal-header-primary">
                 <button type="button" data-dismiss="modal" aria-hidden="true" class="close">&times;</button>
-                <h4 id="modal-header-primary-label" class="modal-title">Thông tin bảng lương</h4>
             </div>
             <div class="modal-body">
                 <div class="form-horizontal">
@@ -175,7 +174,7 @@
                                         <div class="row">
                                             <div class="col-md-12">
                                                 <label class="control-label"> Nội dung</label>
-                                                {!! Form::textarea('noidung',null,array('id' => 'noidung', 'class' => 'form-control','rows'=>'3'))!!}
+                                                {!! Form::textarea('noidung',null,array('id' => 'noidung', 'class' => 'form-control','rows'=>'1'))!!}
                                             </div>
                                         </div>
                                         <!-- Phân loại đơn vị xa phường ko cần lĩnh vực hoạt động -->
@@ -209,6 +208,13 @@
                                             <div class="col-md-6">
                                                 <label class="control-label">Người lập bảng lương</label>
                                                 {!!Form::text('nguoilap', session('admin')->nguoilapbieu, array('id' => 'nguoilap','class' => 'form-control'))!!}
+                                            </div>
+                                        </div>
+
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <label class="control-label">Không bao gồm các phụ cấp</label>
+                                                {!! Form::select('phucaploaitru[]',$a_phucap,null,array('id' => 'phucaploaitru','class' => 'form-control select2me','multiple'=>'multiple')) !!}
                                             </div>
                                         </div>
 
@@ -970,6 +976,7 @@
         function add(){
             $('#luongcoban').prop('readonly',false);//mặc định
             $('#manguonkp').prop('disabled',false);
+            $('#phucaploaitru').prop('disabled',false);
 
             var dm = '{{$inputs['dinhmuc']}}';
             $('#noidung').val('');
@@ -1045,6 +1052,8 @@
                     },
                     dataType: 'JSON',
                     success: function (data) {
+                        var a_pc = data.phucaploaitru.split(',');
+                        $('#phucaploaitru').select2("val",a_pc);
                         $('#thang').val(data.thang);
                         $('#nam').val(data.nam);
                         $('#noidung').val(data.noidung);
@@ -1064,6 +1073,7 @@
             }
             $('#luongcoban').prop('readonly',true);
             $('#manguonkp').prop('disabled', true);
+            $('#phucaploaitru').prop('disabled', true);
             $("#tab_cre" ).tabs( { disabled: [1] } );
             //$('#tab_cre').tabs();
         }

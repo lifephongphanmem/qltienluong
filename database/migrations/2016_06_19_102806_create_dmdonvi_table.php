@@ -34,6 +34,7 @@ class CreateDmdonviTable extends Migration
             $table->string('phanloaixa',50)->nullable();//đơn vị cấp X, H, T
             $table->string('phanloainguon')->nullable();
             $table->string('linhvuchoatdong')->nullable();//lĩnh vực hoạt động
+            $table->string('phucaploaitru')->nullable();//lưu(cập nhật) khi tạo bảng lương
             $table->string('phanloaitaikhoan',50)->default('SD');//đơn vị nhập liệu; đơn vị tổng hợp
             $table->string('phamvitonghop',50)->default('KHOI');//Khối, sở ban ngành; Cả huyện, tất cả các sở ban ngành(chỉ có 1 tài khoản 1 huyện)
             $table->double('songaycong')->default(24);
