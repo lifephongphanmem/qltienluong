@@ -17,11 +17,13 @@ class CreateBangluongTrucTable extends Migration
             $table->increments('id');
             $table->string('macvcq', 50)->nullable();
             $table->string('mapb', 50)->nullable();
-            $table->string('congtac', 50)->nullable();//phân loại chi trả
+            $table->string('congtac', 50)->nullable();//phân loại chi trả (ctp, trực, độc hại,...)
             $table->string('mact', 50)->nullable();
             $table->string('mabl', 50)->nullable();
             $table->string('macanbo', 50)->nullable();
             $table->string('tencanbo', 50)->nullable();
+            $table->double('luongcoban')->default(0);
+            $table->double('ngaycong')->default(0);
             $table->double('heso')->default(0);
             $table->double('songay')->default(0);
             $table->double('ttl')->default(0);

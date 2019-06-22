@@ -104,7 +104,7 @@
                                                     <i class="fa fa-th-list"></i>&nbsp; Chi tiết</a>
                                                 @if($value->phanloai == 'BANGLUONG')
                                                     <button onclick="capnhat('{{$value->mabl}}')" class="btn btn-default btn-xs mbs" data-target="#capnhat-modal-confirm" data-toggle="modal">
-                                                        <i class="fa fa-th-list"></i>&nbsp; Cập nhật lương</button>
+                                                        <i class="fa fa-refresh"></i>&nbsp; Cập nhật lương</button>
 
                                                     <button type="button" onclick="inbl('{{$value->mabl}}','{{$value->thang}}','{{$value->nam}}')" class="btn btn-default btn-xs mbs">
                                                         <i class="fa fa-print"></i>&nbsp; In bảng lương</button>
@@ -381,7 +381,7 @@
     </div>
     {!! Form::close() !!}
 
-    {!! Form::open(['url'=>'/chuc_nang/bang_luong/store_chikhac','method'=>'post' , 'files'=>true, 'id' => 'create_chikhac']) !!}
+    {!! Form::open(['url'=>'/chuc_nang/bang_luong/store_ctp','method'=>'post' , 'files'=>true, 'id' => 'create_ctp']) !!}
     <div id="chikhac-modal" tabindex="-1" role="dialog" aria-hidden="true" class="modal fade">
         <div class="modal-dialog modal-content">
             <div class="modal-header modal-header-primary">
@@ -390,22 +390,10 @@
             </div>
             <div class="modal-body">
                 <div class="form-horizontal">
-
                     <div class="row">
                         <div class="col-md-12">
                             <label class="control-label"> Nội dung</label>
                             {!! Form::textarea('noidung',null,array('id' => 'noidung', 'class' => 'form-control','rows'=>'3'))!!}
-                        </div>
-                    </div>
-
-                    <div class="row">
-                        <div class="col-md-6">
-                            <label class="control-label">Phân loại</label>
-                            {!!Form::select('congtac',getPhanLoaiChiTietChiLuong(), 'CTP', array('id' => 'congtac','class' => 'form-control'))!!}
-                        </div>
-                        <div class="col-md-6">
-                            <label class="control-label">Mức chi trả</label>
-                            {!!Form::text('luongcoban', $inputs['luongcb'], array('id' => 'luongcoban','class' => 'form-control', 'data-mask'=>'fdecimal'))!!}
                         </div>
                     </div>
 
@@ -1009,8 +997,8 @@
         function add_ctp(){
             //$('#phanloai_truc').val('CTP');
             //$('#noidung_truc').val('');
-            $('#create_chikhac').find("[id='phanloai']").val('CTPHI');
-            $('#create_chikhac').find("[id='mabl']").val('');
+            $('#create_ctp').find("[id='phanloai']").val('CTPHI');
+            $('#create_ctp').find("[id='mabl']").val('');
             //$('#chikhac-modal').modal('show');
         }
 

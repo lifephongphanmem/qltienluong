@@ -297,7 +297,10 @@ class bangluongController extends Controller
         $ngaycuoithang = Carbon::create($inputs['nam'], $inputs['thang'] + 1, 0)->toDateString();
         //ds cán bộ thôi công tác
         $a_cbn = hosothoicongtac::select('macanbo')->where('madv', $inputs['madv'])
-            ->where('ngaynghi','<=',$ngaycuoithang)->get()->toarray();
+            ->where(function($qr)use($ngaycuoithang){
+                $qr->where('ngaynghi','<=',$ngaycuoithang)->orWhereNull('ngaynghi');
+                //})->toSql();dd($a_cbn);
+            })->get()->toarray();
         //ds cán bộ
         $m_cb = hosocanbo::where('madv', $inputs['madv'])->wherenotin('macanbo',$a_cbn)->get();
 
@@ -1419,7 +1422,11 @@ class bangluongController extends Controller
 
         $ngaycuoithang = Carbon::create($inputs['nam'], $inputs['thang'] + 1, 0)->toDateString();
         //ds cán bộ thôi công tác
-        $a_cbn = hosothoicongtac::select('macanbo')->where('madv', $inputs['madv'])->where('ngaynghi','<=',$ngaycuoithang)->get()->toarray();
+        $a_cbn = hosothoicongtac::select('macanbo')->where('madv', $inputs['madv'])
+            ->where(function($qr)use($ngaycuoithang){
+                $qr->where('ngaynghi','<=',$ngaycuoithang)->orWhereNull('ngaynghi');
+                //})->toSql();dd($a_cbn);
+            })->get()->toarray();
         //dd($a_th);
         $m_bl = bangluong::where('mabl', $inputs['mabl_mau'])->first();
         $model = (new data())->getBangluong_ct_ar($m_bl->thang,array($inputs['mabl_mau']),$a_th);
@@ -2003,8 +2010,62 @@ class bangluongController extends Controller
             return view('errors.notlogin');
     }
 
-    function store_chikhac(Request $request)
-    {
+    function store_ctp(Request $request){
+        if (Session::has('admin')) {
+            $inputs = $request->all();
+            $model = bangluong::where('mabl', $inputs['mabl'])->first();
+            if (count($model) > 0) {
+                dd($inputs);
+                $model->update($inputs);
+                return redirect('/chuc_nang/bang_luong/danh_sach');
+            } else {
+                //insert
+                $madv = session('admin')->madv;
+                //lấy ngày cuối tháng
+                $ngaycuoithang = Carbon::create($inputs['nam'], $inputs['thang'] + 1, 0)->toDateString();
+                //ds cán bộ thôi công tác
+                $a_cbn = hosothoicongtac::select('macanbo')->where('madv', $madv)
+                    ->where(function($qr)use($ngaycuoithang){
+                        $qr->where('ngaynghi','<=',$ngaycuoithang)->orWhereNull('ngaynghi');
+                        //})->toSql();dd($a_cbn);
+                    })->get()->toarray();
+                //ds cán bộ
+
+                $m_cb = hosocanbo::select('macvcq','mapb','mact','macanbo','tencanbo','ngaybc','pcctp')
+                    ->where('madv', $madv)->where('pcctp','>',0)->wherenotin('macanbo',$a_cbn)->get();
+                //dd($m_cb);
+                $a_data = array();
+                $inputs['mabl'] = $madv . '_' . getdate()[0];
+                $inputs['madv'] = $madv;
+                //$ngaylap = Carbon::create($inputs['nam'],$inputs['thang'],'01');
+                foreach ($m_cb as $cb) {
+                    if(getDayVn($cb->ngaybc) != '' && $cb->ngaybc > $ngaycuoithang){
+                        continue;
+                    }
+                    $cb->mabl = $inputs['mabl'];
+                    $cb->congtac = $inputs['phanloai'];
+                    $cb->ttl =  $cb->pcctp;
+                    $cb->heso =  $cb->pcctp;
+                    //lưu vào bảng phụ cấp theo lương (chỉ có hệ số)
+                    $kq = $cb->toarray();
+                    unset($kq['ngaybc']);
+                    unset($kq['pcctp']);
+                    $a_data[] = $kq;
+                    //lưu vào db
+                    //bangluong_truc::create($kq);
+                }
+                foreach(array_chunk($a_data, 100)  as $data){
+                    bangluong_truc::insert($data);
+                }
+                bangluong::create($inputs);
+            }
+
+            return redirect('/chuc_nang/bang_luong/bang_luong?mabl=' . $inputs['mabl'].'&mapb=');
+        } else
+            return view('errors.notlogin');
+    }
+
+    function store_chikhac(Request $request){
         if (Session::has('admin')) {
             $inputs = $request->all();
             $inputs['luongcoban'] = getDbl($inputs['luongcoban']);
@@ -2020,10 +2081,13 @@ class bangluongController extends Controller
                 //lấy ngày cuối tháng
                 $ngaycuoithang = Carbon::create($inputs['nam'], $inputs['thang'] + 1, 0)->toDateString();
                 //ds cán bộ thôi công tác
-                $a_cbn = hosothoicongtac::select('macanbo')->where('madv', $madv)->where('ngaynghi','<=',$ngaycuoithang)->get()->toarray();
+                $a_cbn = hosothoicongtac::select('macanbo')->where('madv', $madv)->where(function($qr)use($ngaycuoithang){
+                    $qr->where('ngaynghi','<=',$ngaycuoithang)->orWhereNull('ngaynghi');
+                    //})->toSql();dd($a_cbn);
+                    })->get()->toarray();
                 //ds cán bộ
                 $m_cb = hosocanbo::select('macvcq','mapb','mact','macanbo','tencanbo','ngaybc')->where('madv', $madv)->wherenotin('macanbo',$a_cbn)->get();
-
+                dd($inputs);
                 $a_data = array();
                 $inputs['mabl'] = $madv . '_' . getdate()[0];
                 $inputs['madv'] = $madv;

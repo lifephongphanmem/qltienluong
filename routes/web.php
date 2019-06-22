@@ -390,7 +390,7 @@ Route::group(['prefix'=>'chuc_nang'],function(){
         Route::post('store','bangluongController@store');
         Route::post('store_truylinh','bangluongController@store_truylinh');
         Route::post('store_truc','bangluongController@store_truc');
-        Route::post('store_chikhac','bangluongController@store_chikhac');
+        Route::post('store_ctp','bangluongController@store_ctp');
 
         Route::get('store_mau','bangluongController@store_mau');
 
