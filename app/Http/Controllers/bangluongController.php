@@ -1749,7 +1749,7 @@ class bangluongController extends Controller
             if (count($model) > 0) {
                 //$inputs['luongcoban'] = getDbl($inputs['luongcoban']);
                 $model->update($inputs);
-                return redirect('/chuc_nang/bang_luong/danh_sach');
+                return redirect('/chuc_nang/bang_luong/chi_tra?thang=' . $inputs['thang'] . '&nam=' . $inputs['nam']);
             } else {
                 //insert
                 $madv = session('admin')->madv;
@@ -1979,7 +1979,7 @@ class bangluongController extends Controller
             if (count($model) > 0) {
                 $inputs['luongcoban'] = getDbl($inputs['luongcoban']);
                 $model->update($inputs);
-                return redirect('/chuc_nang/bang_luong/danh_sach');
+                return redirect('/chuc_nang/bang_luong/chi_tra?thang=' . $inputs['thang'] . '&nam=' . $inputs['nam']);
             } else {
                 //insert
                 $madv = session('admin')->madv;
@@ -2015,9 +2015,9 @@ class bangluongController extends Controller
             $inputs = $request->all();
             $model = bangluong::where('mabl', $inputs['mabl'])->first();
             if (count($model) > 0) {
-                dd($inputs);
+                //dd($inputs);
                 $model->update($inputs);
-                return redirect('/chuc_nang/bang_luong/danh_sach');
+                return redirect('/chuc_nang/bang_luong/chi_tra?thang=' . $inputs['thang'] . '&nam=' . $inputs['nam']);
             } else {
                 //insert
                 $madv = session('admin')->madv;
