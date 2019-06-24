@@ -108,7 +108,7 @@ class xemdulieu_dutoanController extends Controller
                 $model_donvi = $model_donvi->where('trangthai',$inputs['trangthai']);
             }
 
-            return view('functions.viewdata.dutoanluong.index')
+            return view('functions.viewdata.dutoanluong.huyen.index')
                 ->with('model', $model_donvi)
                 ->with('inputs', $inputs)
                 ->with('a_trangthai', $a_trangthai)

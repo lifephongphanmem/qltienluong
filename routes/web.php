@@ -817,10 +817,12 @@ Route::group(['prefix'=>'bao_cao'],function(){
 
         Route::group(['prefix'=>'huyen'],function(){
             Route::post('chitraluong_ct','baocaobangluongController@chitraluong_ct_huyen');
+            Route::post('chitraluong_ct_CR','baocaobangluongController@chitraluong_ct_huyenCR');
             Route::post('chitraluong_ctexcel','baocaobangluongController@chitraluong_ct_huyen_excel');
             Route::post('chitraluong_th','baocaobangluongController@chitraluong_th_huyen');
             Route::post('chitraluong_thexcel','baocaobangluongController@chitraluong_th_huyen_excel');
             Route::post('dutoanluong','baocaobangluongController@dutoanluong_huyen');
+            Route::post('dutoanluongCR','baocaobangluongController@dutoanluong_huyen_CR');
             Route::post('baocaohesoluong','baocaobangluongController@baocaohesoluong');
             Route::post('baocaohesoluongexcel','baocaobangluongController@baocaohesoluongexcel');
 

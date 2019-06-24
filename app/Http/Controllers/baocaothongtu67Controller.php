@@ -11325,41 +11325,38 @@ class baocaothongtu67Controller extends Controller
             //if ((Session::has('admin') && session('admin')->username == 'khthstc') || (Session::has('admin') && session('admin')->username == 'khthso') ) {
             $inputs = $request->all();
             $madvbc = session('admin')->madvbc;
-            if($inputs['madv'] != "")
-            {
+            if($inputs['madv'] != "") {
                 $madv = $inputs['madv'];
-                $chekdv = dmdonvi::where('madv', $inputs['madv'])->where('phanloaitaikhoan','TH')->get();
-                if(count($chekdv) > 0) {
+                $chekdv = dmdonvi::where('madv', $inputs['madv'])->where('phanloaitaikhoan', 'TH')->get();
+                if (count($chekdv) > 0) {
                     $m_dv = dmdonvi::select('tendv', 'madv')
                         ->where('macqcq', $madv)
                         ->distinct()
                         ->get();
-                    $model = nguonkinhphi::where('macqcq',$madv)
-                        ->where('sohieu','TT67_2017')
-                        ->where('macqcq',session('admin')->madv)
-                        ->where('trangthai','DAGUI')
+                    $model = nguonkinhphi::where('macqcq', $madv)
+                        ->where('sohieu', 'TT67_2017')
+                        ->where('macqcq', session('admin')->madv)
+                        ->where('trangthai', 'DAGUI')
                         ->get();
-                }
-                else
-                {
+                } else {
                     $m_dv = dmdonvi::select('tendv', 'madv')
                         ->where('madv', $madv)
                         ->distinct()
                         ->get();
-                    $model = nguonkinhphi::where('madv',$madv)
-                        ->where('sohieu','TT67_2017') ->where('macqcq',session('admin')->madv)
-                        ->where('trangthai','DAGUI')
+                    $model = nguonkinhphi::where('madv', $madv)
+                        ->where('sohieu', 'TT67_2017')->where('macqcq', session('admin')->madv)
+                        ->where('trangthai', 'DAGUI')
                         ->get();
                 }
             }
             else {
-                $m_dv = dmdonvi::select('tendv','madv')
-                    ->where('madvbc',$madvbc)
+                $m_dv = dmdonvi::select('tendv', 'madv')
+                    ->where('madvbc', $madvbc)
                     ->distinct()
                     ->get();
-                $model = nguonkinhphi::where('madvbc',$madvbc)
-                    ->where('sohieu','TT67_2017') ->where('macqcq',session('admin')->madv)
-                    ->where('trangthai','DAGUI')
+                $model = nguonkinhphi::where('madvbc', $madvbc)
+                    ->where('sohieu', 'TT67_2017')->where('macqcq', session('admin')->madv)
+                    ->where('trangthai', 'DAGUI')
                     ->get();
             }
             $ardv = $m_dv->toArray();
@@ -11367,14 +11364,13 @@ class baocaothongtu67Controller extends Controller
             $model = nguonkinhphi::where('madvbc','like',$inputs['madv'].'%')
                 ->where('sohieu','TT67_2017')->get();
             */
-            if(session('admin')->username == 'khthso')
-            {
-                $model = nguonkinhphi::join('dmdonvibaocao','dmdonvibaocao.madvbc','=','nguonkinhphi.madvbc')
-                    ->where('nguonkinhphi.madvbc','like',$inputs['madv'].'%')
-                    ->where('dmdonvibaocao.level','T')
+            if(session('admin')->username == 'khthso') {
+                $model = nguonkinhphi::join('dmdonvibaocao', 'dmdonvibaocao.madvbc', '=', 'nguonkinhphi.madvbc')
+                    ->where('nguonkinhphi.madvbc', 'like', $inputs['madv'] . '%')
+                    ->where('dmdonvibaocao.level', 'T')
                     //->where('macqcq',session('admin')->madv)
-                    ->where('trangthai','DAGUI')
-                    ->where('nguonkinhphi.sohieu','TT67_2017')->get();
+                    ->where('trangthai', 'DAGUI')
+                    ->where('nguonkinhphi.sohieu', 'TT67_2017')->get();
             }
             //dd($model);
             if(count($model) == 0){
@@ -11461,7 +11457,6 @@ class baocaothongtu67Controller extends Controller
                             }
                         }
                     }
-
                 }
                 $data[$gddt]['nhucau'] = $data[$giaoduc]['nhucau'] + $data[$daotao]['nhucau'];
                 $data[$gddt]['nguonkp'] = $data[$giaoduc]['nguonkp'] + $data[$daotao]['nguonkp'];
@@ -11536,26 +11531,23 @@ class baocaothongtu67Controller extends Controller
             //if ((Session::has('admin') && session('admin')->username == 'khthstc') || (Session::has('admin') && session('admin')->username == 'khthso') ) {
             $inputs = $request->all();
             $madvbc = session('admin')->madvbc;
-            if($inputs['madv'] != "")
-            {
+            if($inputs['madv'] != "") {
                 $madv = $inputs['madv'];
-                $chekdv = dmdonvi::where('madv', $inputs['madv'])->where('phanloaitaikhoan','TH')->get();
-                if(count($chekdv) > 0) {
+                $chekdv = dmdonvi::where('madv', $inputs['madv'])->where('phanloaitaikhoan', 'TH')->get();
+                if (count($chekdv) > 0) {
                     $m_dv = dmdonvi::select('tendv', 'madv')
                         ->where('macqcq', $madv)
                         ->distinct()
                         ->get();
-                    $model = nguonkinhphi::where('macqcq',$madv)
-                        ->where('sohieu','TT67_2017')->get();
-                }
-                else
-                {
+                    $model = nguonkinhphi::where('macqcq', $madv)
+                        ->where('sohieu', 'TT67_2017')->get();
+                } else {
                     $m_dv = dmdonvi::select('tendv', 'madv')
                         ->where('madv', $madv)
                         ->distinct()
                         ->get();
-                    $model = nguonkinhphi::where('madv',$madv)
-                        ->where('sohieu','TT67_2017')->get();
+                    $model = nguonkinhphi::where('madv', $madv)
+                        ->where('sohieu', 'TT67_2017')->get();
                 }
             }
             else {
@@ -11567,12 +11559,11 @@ class baocaothongtu67Controller extends Controller
                     ->where('sohieu','TT67_2017')->get();
             }
             $ardv = $m_dv->toArray();
-            if(session('admin')->username == 'khthso')
-            {
-                $model = nguonkinhphi::join('dmdonvibaocao','dmdonvibaocao.madvbc','=','nguonkinhphi.madvbc')
-                    ->where('nguonkinhphi.madvbc','like',$inputs['madv'].'%')
-                    ->where('dmdonvibaocao.level','T')
-                    ->where('nguonkinhphi.sohieu','TT67_2017')->get();
+            if(session('admin')->username == 'khthso') {
+                $model = nguonkinhphi::join('dmdonvibaocao', 'dmdonvibaocao.madvbc', '=', 'nguonkinhphi.madvbc')
+                    ->where('nguonkinhphi.madvbc', 'like', $inputs['madv'] . '%')
+                    ->where('dmdonvibaocao.level', 'T')
+                    ->where('nguonkinhphi.sohieu', 'TT67_2017')->get();
             }
             //dd($model);
             if(count($model) == 0){
