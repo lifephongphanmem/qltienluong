@@ -59,8 +59,7 @@ class CreateDsnangluongChitietTable extends Migration
             $table->double('luonghd')->default(0); //lương hợp đồng, lương khoán (số tiền)
             $table->double('pcphth')->default(0); //phẫu thuật, thủ thuật
             $table->double('pcctp')->default(0);//phụ cấp công tác phí
-
-            $table->text('ghichu')->nullable();
+            $table->double('pctaicu')->default(0);//phụ cấp tái ứng cử
 
             $table->date('truylinhtungay')->nullable();
             $table->date('truylinhdenngay')->nullable();
@@ -68,6 +67,7 @@ class CreateDsnangluongChitietTable extends Migration
             $table->double('ngaytl')->default(0);//số tháng được truy lĩnh lương
             $table->double('luongcoban')->default(0);//mức lương co bản được truy lĩnh lương
             $table->string('manguonkp',50)->nullable();
+            $table->text('ghichu')->nullable();
             $table->timestamps();
         });
     }

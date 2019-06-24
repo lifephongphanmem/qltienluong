@@ -366,6 +366,11 @@ Route::group(['prefix'=>'nguon_kinh_phi'],function(){
     Route::post('senddata','nguonkinhphiController@senddata'); //gửi dữ liệu
     Route::get('ma_so={masodv}/in','nguonkinhphiController@printf');
 
+    Route::get('printf','nguonkinhphiController@printf_data');//in theo thoại
+    Route::post('mautt107','nguonkinhphiController@printf_tt107');
+    Route::get('mautt107_m2','nguonkinhphiController@printf_tt107_m2');
+    Route::get('nangluong','nguonkinhphiController@printf_nangluong');
+
     Route::get('del/{id}','nguonkinhphiController@destroy');
 
     Route::get('get_thongtu','nguonkinhphiController@getinfor_thongtu');
@@ -378,14 +383,6 @@ Route::group(['prefix'=>'nguon_kinh_phi'],function(){
     });
 });
 
-Route::group(['prefix'=>'du_toan'],function(){
-    Route::group(['prefix'=>'luong'],function(){
-
-    });
-
-
-});
-
 Route::group(['prefix'=>'chuc_nang'],function(){
     Route::group(['prefix'=>'bang_luong'],function(){
         Route::get('danh_sach','bangluongController@index');
@@ -393,7 +390,7 @@ Route::group(['prefix'=>'chuc_nang'],function(){
         Route::post('store','bangluongController@store');
         Route::post('store_truylinh','bangluongController@store_truylinh');
         Route::post('store_truc','bangluongController@store_truc');
-        Route::post('store_chikhac','bangluongController@store_chikhac');
+        Route::post('store_ctp','bangluongController@store_ctp');
 
         Route::get('store_mau','bangluongController@store_mau');
 

@@ -581,6 +581,7 @@ class hosocanboController extends Controller
         $inputs['baohiem'] = isset($inputs['baohiem'])?$inputs['baohiem'] : 0;
         $inputs['madv'] = session('admin')->madv;
         $inputs['pcdh'] = chkDbl($inputs['pcdh']);
+        $inputs['hesopc'] = chkDbl($inputs['hesopc']);
         $inputs['pcd'] = chkDbl($inputs['pcd']);
         $inputs['manguonkp'] = (implode(',',$inputs['manguonkp']));
         if ($inputs['id'] > 0) {
@@ -933,6 +934,7 @@ class hosocanboController extends Controller
         $inputs['madv'] = session('admin')->madv;
         $inputs['pcdh'] = chkDbl($inputs['pcdh']);
         $inputs['pcd'] = chkDbl($inputs['pcd']);
+        $inputs['hesopc'] = chkDbl($inputs['hesopc']);
         $inputs['manguonkp'] = (implode(',',$inputs['manguonkp']));
         if ($inputs['id'] > 0) {
             hosocanbo_kiemnhiem_temp::find($inputs['id'])->update($inputs);

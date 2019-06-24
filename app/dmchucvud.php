@@ -15,8 +15,4 @@ class dmchucvud extends Model
         'sapxep',
         'madv'
     ];
-
-    public function hosochucvud(){
-        return $this->hasMany('App\hosochucvud','macvd');
-    }
 }

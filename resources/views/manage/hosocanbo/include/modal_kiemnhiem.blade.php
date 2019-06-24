@@ -579,7 +579,7 @@
                         </div>
                     </div>
 
-                    <?php $a_mc = array('pcdh','pcd'); ?>
+                    <?php $a_mc = array('hesopc','pcdh','pcd'); ?>
                     @foreach($model_pc as $pc)
                         @if(!in_array($pc->mapc,$a_mc))
                             @continue
@@ -964,6 +964,7 @@
                     $('#macvcq_mc').val(data.macvcq).trigger('change');
                     $('#manguonkp_mc').val(data.manguonkp.split(',')).trigger('change');
                     $('#id_mc').val(data.id);
+                    $('#hesopc_mc').val(data.hesopc);
                     $('#pckn_mc').val(data.pckn);
                     $('#pcdh_mc').val(data.pcdh);
                     $('#mc-modal').modal('show');
@@ -1165,6 +1166,7 @@
                     manguonkp : $('#manguonkp_mc').val(),
                     id: $('#id_mc').val(),
                     phanloai: $('#phanloai_mc').val(),
+                    hesopc: $('#hesopc_mc').val(),
                     pcd: $('#pcd_mc').val(),
                     pcdh: $('#pcdh_mc').val()
                 },

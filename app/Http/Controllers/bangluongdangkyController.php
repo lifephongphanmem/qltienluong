@@ -133,7 +133,7 @@ class bangluongdangkyController extends Controller
             //$a_baohiem = getPhuCapNopBH();
 
 
-            $a_pc_coth = array('pcudn', 'pctnn');
+            $a_pc_coth = array('pcudn', 'pctnn' ,'pctaicu');
             foreach ($m_cb as $cb) {
                 $cb->mabl = $inputs['mabl'];
                 $cb->macongtac = null;

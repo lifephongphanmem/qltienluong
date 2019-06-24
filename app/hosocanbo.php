@@ -81,6 +81,7 @@ class hosocanbo extends Model
         'luonghd',
         'pcphth',
         'pcctp',
+        'pctaicu',
         'theodoi',
         'mact',
         'baohiem',
@@ -100,3 +101,37 @@ class hosocanbo extends Model
         'lvhd'
     ];
 }
+//bangluongct; bangluongdangky_ct; dutoanluong_bangluong; dutoanluong_nangluong; nguonkinhphi_nangluong
+
+
+//dsnangluong_chitiet; dsnangthamnien_chitiet; hosocanbo_kiemnhiem; hosocanbo_kiemnhiem_temp; hosodieudong;
+//hosothoicongtac; nguonkinhphi_bangluong; tonghopluong_donvi_bangluong
+
+//thêm pcctp
+//nguonkinhphi_bangluong; dsnangthamnien_chitiet; hosodieudong; hosothoicongtac; tonghopluong_donvi_bangluong
+
+/*
+ ALTER TABLE `bangluong_ct` ADD `pctaicu` FLOAT NOT NULL DEFAULT '0' AFTER `luonghd`;
+ALTER TABLE `bangluong_ct` ADD `st_pctaicu` FLOAT NOT NULL DEFAULT '0' AFTER `luonghd`;
+ALTER TABLE `bangluongdangky_ct` ADD `pctaicu` FLOAT NOT NULL DEFAULT '0' AFTER `luonghd`;
+ALTER TABLE `bangluongdangky_ct` ADD `st_pctaicu` FLOAT NOT NULL DEFAULT '0' AFTER `luonghd`;
+ALTER TABLE `dutoanluong_bangluong` ADD `pctaicu` FLOAT NOT NULL DEFAULT '0' AFTER `luonghd`;
+ALTER TABLE `dutoanluong_bangluong` ADD `st_pctaicu` FLOAT NOT NULL DEFAULT '0' AFTER `luonghd`;
+
+ALTER TABLE `dutoanluong_nangluong` ADD `pctaicu` FLOAT NOT NULL DEFAULT '0' AFTER `luonghd`;
+ALTER TABLE `dutoanluong_nangluong` ADD `st_pctaicu` FLOAT NOT NULL DEFAULT '0' AFTER `luonghd`;
+ALTER TABLE `dsnangluong_chitiet` ADD `pctaicu` FLOAT NOT NULL DEFAULT '0' AFTER `luonghd`;
+ALTER TABLE `dsnangthamnien_chitiet` ADD `pctaicu` FLOAT NOT NULL DEFAULT '0' AFTER `luonghd`;
+ALTER TABLE `hosocanbo_kiemnhiem` ADD `pctaicu` FLOAT NOT NULL DEFAULT '0' AFTER `luonghd`;
+ALTER TABLE `hosocanbo_kiemnhiem_temp` ADD `pctaicu` FLOAT NOT NULL DEFAULT '0' AFTER `luonghd`;
+ALTER TABLE `hosodieudong` ADD `pctaicu` FLOAT NOT NULL DEFAULT '0' AFTER `luonghd`;
+ALTER TABLE `hosothoicongtac` ADD `pctaicu` FLOAT NOT NULL DEFAULT '0' AFTER `luonghd`;
+
+ALTER TABLE `nguonkinhphi_bangluong` ADD `pctaicu` FLOAT NOT NULL DEFAULT '0' AFTER `luonghd`;
+ALTER TABLE `tonghopluong_donvi_bangluong` ADD `pctaicu` FLOAT NOT NULL DEFAULT '0' AFTER `luonghd`;
+ALTER TABLE `nguonkinhphi_bangluong` ADD `pcctp` FLOAT NOT NULL DEFAULT '0' AFTER `luonghd`;
+ALTER TABLE `dsnangthamnien_chitiet` ADD `pcctp` FLOAT NOT NULL DEFAULT '0' AFTER `luonghd`;
+ALTER TABLE `hosodieudong` ADD `pcctp` FLOAT NOT NULL DEFAULT '0' AFTER `luonghd`;
+ALTER TABLE `hosothoicongtac` ADD `pcctp` FLOAT NOT NULL DEFAULT '0' AFTER `luonghd`;
+ALTER TABLE `tonghopluong_donvi_bangluong` ADD `pcctp` FLOAT NOT NULL DEFAULT '0' AFTER `luonghd`;
+ * */

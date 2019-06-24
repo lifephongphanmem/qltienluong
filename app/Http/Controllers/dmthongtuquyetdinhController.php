@@ -37,10 +37,14 @@ class dmthongtuquyetdinhController extends Controller
             die(json_encode($result));
         }
         $inputs = $request->all();
+
         $inputs['muccu'] = chkDbl($inputs['muccu']);
         $inputs['mucapdung'] = chkDbl($inputs['mucapdung']);
         $inputs['chenhlech'] = chkDbl($inputs['chenhlech']);
         if ($inputs['id'] == 'ADD') {
+            $inputs['sohieu'] = str_replace("-", "_", chuanhoatruong($inputs['sohieu']));
+            $inputs['sohieu'] = str_replace("*", "", $inputs['sohieu']);
+            $inputs['sohieu'] = str_replace("%", "", $inputs['sohieu']);
             dmthongtuquyetdinh::create($inputs);
         } else {
             dmthongtuquyetdinh::find($inputs['id'])->update($inputs);

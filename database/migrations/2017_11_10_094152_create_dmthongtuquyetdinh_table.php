@@ -17,6 +17,8 @@ class CreateDmthongtuquyetdinhTable extends Migration
             $table->increments('id');
             $table->string('sohieu')->nullable();
             $table->string('tenttqd')->nullable();
+            $table->string('cancu')->nullable();
+            $table->string('namdt')->nullable();
             $table->string('donvibanhanh')->nullable();
             $table->date('ngayapdung')->nullable();
             $table->double('mucu')->default(0);//lưu mức cũ vì khi tạo đơn vi đa phần đã update mức mới vào bảng gen

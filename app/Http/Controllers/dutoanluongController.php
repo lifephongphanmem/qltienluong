@@ -121,6 +121,7 @@ class dutoanluongController extends Controller
             $model = dutoanluong::find($id);
             dutoanluong_chitiet::where('masodv',$model->masodv)->delete();
             dutoanluong_bangluong::where('masodv',$model->masodv)->delete();
+            dutoanluong_nangluong::where('masodv',$model->masodv)->delete();
             $model->delete();
             return redirect('/nghiep_vu/quan_ly/du_toan/danh_sach');
         } else
@@ -227,7 +228,18 @@ class dutoanluongController extends Controller
             $m_tnn = $model->where('nam_tnn', '<>', '')->where('nam_tnn', '<=', $inputs['namdt'])->keyBy('macanbo')->toarray();
             //dd($m_nb);
             foreach ($m_cb_kn as $key => $val) {
-                $m_cb_kn[$key]['tencanbo'] = isset($a_hoten[$m_cb_kn[$key]['macanbo']]) ? $a_hoten[$m_cb_kn[$key]['macanbo']] : '';
+                $m_cb_kn[$key]['congtac'] = 'CONGTAC';
+                if(isset($m_cb[$m_cb_kn[$key]['macanbo']])){
+                    $canbo = $m_cb[$m_cb_kn[$key]['macanbo']];
+                    $m_cb_kn[$key]['tencanbo'] = $canbo['tencanbo'];
+                    $m_cb_kn[$key]['stt'] = $canbo['stt'];
+                    $m_cb_kn[$key]['msngbac'] = $canbo['msngbac'];
+                }else{
+                    $m_cb_kn[$key]['tencanbo'] = '';
+                    $m_cb_kn[$key]['stt'] = '';
+                    $m_cb_kn[$key]['msngbac'] = '';
+                }
+
                 $m_cb_kn[$key]['ngaysinh'] = null;
                 $m_cb_kn[$key]['tnndenngay'] = null;
                 $m_cb_kn[$key]['macongtac'] = null;
@@ -303,10 +315,11 @@ class dutoanluongController extends Controller
             //bắt đầu tính lương
             //cán bộ đã nghỉ hưu thì các thông tin # bỏ qua
             //nghỉ hưu vào tháng 08, trong thông tin cán bộ  tháng 12 tăng lương => bỏ qua thông tin tăng lương
-            $a_luu = array();
-            foreach ($m_cb as $key => $val) {
-                $a_luu[$key] = $m_cb[$key];
-            }
+
+            //lưu lại mảng thông tin cũ do đã tách riêng: nâng lương ngạch bậc và nâng lương thâm niên
+            //nâng tnn: 02; nâng nb: 06 => mảng chênh lệch 'NGACHBAC' lấy thông tin cũ để tính
+            $a_luu = $m_cb;
+
 
             $a_data = array();
             $a_data_nl = array();
@@ -362,7 +375,7 @@ class dutoanluongController extends Controller
             foreach (array_chunk($a_data_nl, 100) as $data) {
                 dutoanluong_nangluong::insert($data);
             }
-            //dd($a_data);
+            //dd($a_data[100]);
             //chia nhỏ thành các mảng nhỏ 100 phần tử để insert
             //$a_chunk = array_chunk($a_data, 100);
             foreach (array_chunk($a_data, 100) as $data) {
@@ -882,7 +895,7 @@ class dutoanluongController extends Controller
         $m_cb['luongtn'] = 0;
         $m_cb['luongcoban'] = $luongcb;
         if($vk){
-            $m_cb['vuotkhung'] = ($m_cb['heso'] * $m_cb['vuotkhung']) / 100;
+            $m_cb['vuotkhung'] = round(($m_cb['heso'] * $m_cb['vuotkhung']) / 100, session('admin')->lamtron);
         }
         for ($i = 0; $i < count($a_pc); $i++) {
             $mapc = $a_pc[$i]['mapc'];
@@ -1281,15 +1294,14 @@ class dutoanluongController extends Controller
             return view('errors.notlogin');
     }
 
-    function printf_tt107(Request $request)
-    {
+    function printf_tt107(Request $request){
         if (Session::has('admin')) {
             $inputs = $request->all();
             //dd($inputs);
             if($inputs['thang'] == 'ALL'){
-                $model = dutoanluong_bangluong::where('masodv', $inputs['masodv'])->orderby('stt')->get();
+                $model = dutoanluong_bangluong::where('masodv', $inputs['masodv'])->orderby('thang')->orderby('stt')->get();
             }else{
-                $model = dutoanluong_bangluong::where('masodv', $inputs['masodv'])->where('thang', $inputs['thang'])->orderby('stt')->get();
+                $model = dutoanluong_bangluong::where('masodv', $inputs['masodv'])->where('thang', $inputs['thang'])->orderby('thang')->orderby('stt')->get();
             }
 
             //$model = dutoanluong_bangluong::where('masodv', $inputs['masodv'])->orderby('thang')->get();

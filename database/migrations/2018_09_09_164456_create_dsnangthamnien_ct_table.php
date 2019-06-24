@@ -58,6 +58,8 @@ class CreateDsnangthamnienCtTable extends Migration
             $table->double('pcdith')->default(0); //điện thoại
             $table->double('luonghd')->default(0); //lương hợp đồng, lương khoán (số tiền)
             $table->double('pcphth')->default(0); //phẫu thuật, thủ thuật
+            $table->double('pctaicu')->default(0);//phụ cấp tái ứng cử
+            $table->double('pcctp')->default(0);
 
             $table->text('ghichu')->nullable();
             $table->date('truylinhtungay')->nullable();

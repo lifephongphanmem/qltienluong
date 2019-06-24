@@ -85,6 +85,8 @@ class bangluongdangky_ct extends Model
         'hs_pcudn',
         'st_pcctp',
         'pcctp',
+        'pctaicu',
+        'st_pctaicu',
     ];
 
     /*

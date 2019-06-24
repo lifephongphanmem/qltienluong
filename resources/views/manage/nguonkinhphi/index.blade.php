@@ -73,15 +73,15 @@
                                             @if($value->trangthai != 'DAGUI')
                                                 <a href="{{url($furl.'ma_so='.$value->masodv)}}" class="btn btn-default btn-xs mbs">
                                                     <i class="fa fa-edit"></i>&nbsp; Chi tiết</a>
-                                                <!--a href="{{url($furl.'printf_bl/ma_so='.$value->masodv)}}" class="btn btn-default btn-xs mbs" TARGET="_blank">
-                                                    <i class="fa fa-print"></i>&nbsp; In bảng lương</a-->
+
                                                 <button type="button" class="btn btn-default btn-xs mbs" onclick="confirmChuyen('{{$value['masodv']}}')" data-target="#chuyen-modal" data-toggle="modal"><i class="fa fa-share-square-o"></i>&nbsp;
                                                     Gửi dữ liệu</button>
+
                                                 <button type="button" onclick="cfDel('{{$furl.'del/'.$value->id}}')" class="btn btn-default btn-xs mbs" data-target="#delete-modal-confirm" data-toggle="modal">
                                                     <i class="fa fa-trash-o"></i>&nbsp; Xóa</button>
                                             @endif
-                                            <a href="{{url($furl.'ma_so='.$value->masodv.'/in')}}" target="_blank" class="btn btn-default btn-xs mbs">
-                                                <i class="fa fa-print"></i>&nbsp; In số liệu</a>
+                                            <button type="button" onclick="indutoan('{{$value->namns}}','{{$value->masodv}}')" class="btn btn-default btn-xs mbs" data-target="#indt-modal" data-toggle="modal">
+                                                <i class="fa fa-print"></i>&nbsp; In số liệu</button>
                                         </td>
                                     </tr>
                                 @endforeach
@@ -92,6 +92,81 @@
                 </div>
             </div>
     </div>
+
+    <!--Modal thông tin tùy chọn in bảng lương -->
+    <div id="indt-modal" tabindex="-1" role="dialog" aria-hidden="true" class="modal fade">
+        <div class="modal-lg modal-dialog modal-content">
+            <div class="modal-header modal-header-primary">
+                <button type="button" data-dismiss="modal" aria-hidden="true" class="close">&times;</button>
+                <h4 id="hd-inbl" class="modal-title">In nhu cầu kinh phí</h4>
+            </div>
+
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <button type="button" onclick="intonghopdt('{{$furl.'printf?maso='}}')" style="border-width: 0px" class="btn btn-default btn-xs mbs">
+                                <i class="fa fa-print"></i>&nbsp; Tổng hợp nhu cầu và nguồn thực hiện (Mẫu 4b)</button>
+                        </div>
+                    </div>
+
+                    <!--div class="col-md-6">
+                        <div class="form-group">
+                            <button type="button" onclick="intonghopdt('{{$furl.'printf_m2?maso='}}')" style="border-width: 0px" class="btn btn-default btn-xs mbs">
+                                <i class="fa fa-print"></i>&nbsp; In dự toán tổng hợp - mẫu 02</button>
+                        </div>
+                    </div-->
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <button type="button" style="border-width: 0px" class="btn btn-default btn-xs mbs" data-target="#mautt107-modal" data-toggle="modal"
+                                    title="Bảng lương của cán bộ theo mẫu C02-HD">
+                                <i class="fa fa-print"></i>&nbsp; Bảng lương mẫu C02-HD (TT107/2017/TT-BTC)</button>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <button type="button" onclick="intonghopdt('{{$furl.'mautt107_m2?maso='}}')" style="border-width: 0px" class="btn btn-default btn-xs mbs">
+                                <i class="fa fa-print"></i>&nbsp; Bảng lương mẫu C02-HD (TT107/2017/TT-BTC) - tổng hợp</button>
+                        </div>
+                    </div>
+                    <!--div class="col-md-6">
+                        <div class="form-group">
+                            <button type="button" style="border-width: 0px" class="btn btn-default btn-xs mbs" data-target="#mautt107-modal" data-toggle="modal"
+                                    title="Bảng lương của cán bộ theo mẫu C02-HD">
+                                <i class="fa fa-print"></i>&nbsp; Bảng lương mẫu C02-HD (TT185/2010/TT-BTC)</button>
+                        </div>
+                    </div-->
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <button type="button" style="border-width: 0px" onclick="innangluong()" class="btn btn-default btn-xs mbs">
+                                <i class="fa fa-print"></i>&nbsp; Danh sách cán bộ nâng lương</button>
+                        </div>
+                    </div>
+
+                    <!--div class="col-md-6">
+                        <div class="form-group">
+                            <button type="button" style="border-width: 0px" onclick="innghihuu()" class="btn btn-default btn-xs mbs">
+                                <i class="fa fa-print"></i>&nbsp; Danh sách cán bộ nghỉ hưu</button>
+                        </div>
+                    </div-->
+                </div>
+                <input type="hidden" id="nam_dt" name="nam_dt"/>
+                <input type="hidden" id="masodv_dt" name="masodv_dt"/>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" data-dismiss="modal" class="btn btn-default">Hủy thao tác</button>
+            </div>
+        </div>
+    </div>
+
 
     <!--Modal thêm mới -->
     {!! Form::open(['url'=>$furl.'create','method'=>'POST', 'id' => 'create_dutoan', 'class'=>'horizontal-form']) !!}
@@ -172,6 +247,21 @@
     </div>
 
     <script>
+        function indutoan(namdt, masodv){
+            $('#nam_dt').val(namdt);
+            $('#masodv_dt').val(masodv);
+        }
+
+        function intonghopdt(url) {
+            var masodv = $('#masodv_dt').val();
+            window.open(url + masodv,'_blank');
+        }
+
+        function innangluong() {
+            var masodv = $('#masodv_dt').val();
+            window.open('{{$furl}}'+'nangluong?maso='+ masodv,'_blank');
+        }
+
         $(function(){
             $("#sohieu").change(function(){
                 var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
@@ -225,4 +315,5 @@
     </script>
 
     @include('includes.modal.delete')
+    @include('manage.nguonkinhphi.modal_printf')
 @stop

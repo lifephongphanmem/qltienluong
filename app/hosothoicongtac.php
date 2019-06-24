@@ -63,6 +63,8 @@ class hosothoicongtac extends Model
         'pcdith',
         'luonghd',
         'pcphth',
+        'pcctp',
+        'pctaicu',
         'mact',
 
         'ghichu',

@@ -20,6 +20,7 @@ class bangluong extends Model
         'manguonkp',
         'phanloai',
         'phantramhuong',
+        'phucaploaitru',
         'madv',
         'luongcoban'
     ];

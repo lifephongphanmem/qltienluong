@@ -59,8 +59,8 @@
         </td>
     </tr>
 </table>
-<p style="text-align: center; font-weight: bold; font-size: 20px;">TỔNG HỢP NHU CẦU, NGUỒN THỰC HIỆN NGHỊ ĐỊNH 47/2017/NĐ-CP NĂM 2017</p>
-<p style="text-align: center; font-style: italic">(Ban hành kèm theo Thông tư số 67/2017/TT-BTC)</p>
+<p style="text-align: center; font-weight: bold; font-size: 20px;text-transform: uppercase">TỔNG HỢP NHU CẦU, NGUỒN THỰC HIỆN {{$model_thongtu->cancu}}</p>
+<p style="text-align: center; font-style: italic">(Ban hành kèm theo {{$model_thongtu->tenttqd}})</p>
 <p style="text-align: right; font-style: italic">Đơn vị: đồng</p>
 <table cellspacing="0" cellpadding="0" border="1" style="margin: 10px auto; border-collapse: collapse;">
     <tr style="padding-left: 2px;padding-right: 2px">

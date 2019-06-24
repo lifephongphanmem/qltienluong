@@ -87,7 +87,8 @@ class bangluong_ct extends Model
         'thangtl',
         'ngaytl',
         'songaytruc',
-//lưu theo số tiền
+
+        //lưu theo số tiền
         'st_heso',
         'st_hesobl',
         'st_hesopc',
@@ -125,6 +126,8 @@ class bangluong_ct extends Model
         'st_pcphth',
         'st_pcctp',
         'pcctp',
+        'st_pctaicu',
+        'pctaicu',
         //lưu tỷ lệ bảo hiểm (đã quy về hệ số)
         'bhxh',
         'bhyt',

@@ -75,10 +75,12 @@ class dmphucapController extends Controller
             $model = dmphucap::all();//default
             $a_pl = getPhanLoaiPhuCap();
             $a_ct = getCongThucTinhPC();
+            $a_th = getColTongHop();
             foreach ($model as $ct) {
                 $ct->tenphanloai = isset($a_pl[$ct->phanloai]) ? $a_pl[$ct->phanloai] : '';
                 $congthuc = explode(',', $ct->congthuc);
                 $ct->tencongthuc = '';
+                $ct->tonghop = in_array($ct->mapc,$a_th) ? 'Tổng hợp và dự toán':'';
                 foreach ($congthuc as $bg) {
                     $ct->tencongthuc .= isset($a_ct[$bg]) ? ($a_ct[$bg] . '; ') : '';
                 }
@@ -174,10 +176,12 @@ class dmphucapController extends Controller
 
             $a_pl = getPhanLoaiPhuCap();
             $a_ct = getCongThucTinhPC();
+            $a_th = getColTongHop();
             foreach ($model as $ct) {
                 $ct->tenphanloai = isset($a_pl[$ct->phanloai]) ? $a_pl[$ct->phanloai] : '';
                 $congthuc = explode(',', $ct->congthuc);
                 $ct->tencongthuc = '';
+                $ct->tonghop = in_array($ct->mapc,$a_th) ? 'Tổng hợp và dự toán':'';
                 foreach ($congthuc as $bg) {
                     $ct->tencongthuc .= isset($a_ct[$bg]) ? ($a_ct[$bg] . '; ') : '';
                 }
@@ -204,6 +208,7 @@ class dmphucapController extends Controller
 
             $inputs = $request->all();
             $a_pl = getPhanLoaiPhuCap();
+            $a_ct = getCongThucTinhPC();
             $model = dmphucap_donvi::where('mapc', $inputs['maso'])->where('madv', session('admin')->madv)->first();
             if(in_array($inputs['maso'],$a_lock)){
                 $a_pl =  array('0' => 'Hệ số','3' => 'Ẩn');
@@ -211,10 +216,12 @@ class dmphucapController extends Controller
 
             if($inputs['maso']=='vuotkhung'){
                 $a_pl =  array('2' => 'Phần trăm','3' => 'Ẩn');
+                $a_ct = array('heso' => 'Lương ngạch bậc');
             }
             return view('system.danhmuc.phucap.edit_donvi')
                 ->with('model', $model)
                 ->with('a_pl', $a_pl)
+                ->with('a_ct', $a_ct)
                 ->with('furl', '/danh_muc/phu_cap/don_vi/')
                 ->with('pageTitle', 'Sửa thông tin phụ cấp');
         } else

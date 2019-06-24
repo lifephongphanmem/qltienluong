@@ -17,7 +17,9 @@ class bangluong_truc extends Model
         'macanbo',
         'tencanbo',
         'songay',
+        'ngaycong',
         'heso',
+        'luongcoban',
         'ttl'
     ];
 }

@@ -71,7 +71,7 @@
                             <div class="col-md-12">
                                 <div class="form-group">
                                     <label class="form-control-label">Gồm các loại hệ số, phụ cấp</label>
-                                    {!!Form::select('ctpc', getCongThucTinhPC(), null, array('id' => 'ctpc','class' => 'form-control select2me','multiple'=>'multiple'))!!}
+                                    {!!Form::select('ctpc', $a_ct, null, array('id' => 'ctpc','class' => 'form-control select2me','multiple'=>'multiple'))!!}
 
                                 </div>
                             </div>

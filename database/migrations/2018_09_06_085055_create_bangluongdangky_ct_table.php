@@ -67,6 +67,9 @@ class CreateBangluongdangkyCtTable extends Migration
             $table->double('pcctp')->default(0);//phụ cấp công tác phí
             $table->double('st_pcctp')->default(0);//phụ cấp công tác phí
 
+            $table->double('pctaicu')->default(0);//phụ cấp tái ứng cử
+            $table->double('st_pctaicu')->default(0);
+
             $table->double('tonghs')->default(0);
             $table->double('ttl')->default(0);
             $table->double('giaml')->default(0);

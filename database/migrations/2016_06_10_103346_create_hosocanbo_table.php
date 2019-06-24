@@ -114,6 +114,7 @@ class CreateHosocanboTable extends Migration
             $table->double('pcdith')->default(0); //điện thoại
             $table->double('luonghd')->default(0); //lương hợp đồng (số tiền)
             $table->double('pcctp')->default(0);//phụ cấp công tác phí
+            $table->double('pctaicu')->default(0);//phụ cấp tái ứng cử
 
             //thông tin truy lĩnh lương, sau khi tính lại bảng lương xét lại về ban đầu
             $table->date('truylinhtungay')->nullable();

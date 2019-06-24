@@ -102,11 +102,17 @@ class dutoanluong_bangluong extends Model
         'st_pcphth',
         'pcctp',
         'st_pcctp',
-
+        'pctaicu',
+        'st_taicu',
         'tonghs',
         'ttl',
         'giaml',
         'luongtn',
+        'stbhxh',
+        'stbhyt',
+        'stkpcd',
+        'stbhtn',
+        'ttbh',
         'stbhxh_dv',
         'stbhyt_dv',
         'stkpcd_dv',
@@ -153,5 +159,12 @@ class dutoanluong_bangluong extends Model
         ALTER TABLE `dutoanluong_bangluong` ADD `st_pcphth` FLOAT NOT NULL DEFAULT '0' AFTER `luonghd`;
         ALTER TABLE `dutoanluong_bangluong` ADD `st_pcctp` FLOAT NOT NULL DEFAULT '0' AFTER `luonghd`;
         ALTER TABLE `dutoanluong_bangluong` ADD `pcctp` FLOAT NOT NULL DEFAULT '0' AFTER `luonghd`;
+
+ALTER TABLE `dutoanluong_bangluong` ADD `stbhyt` FLOAT NOT NULL DEFAULT '0' AFTER `luongtn`;
+ALTER TABLE `dutoanluong_bangluong` ADD `stbhtn` FLOAT NOT NULL DEFAULT '0' AFTER `luongtn`;
+ALTER TABLE `dutoanluong_bangluong` ADD `stbhxh` FLOAT NOT NULL DEFAULT '0' AFTER `luongtn`;
+ALTER TABLE `dutoanluong_bangluong` ADD `stkpcd` FLOAT NOT NULL DEFAULT '0' AFTER `luongtn`;
+ALTER TABLE `dutoanluong_bangluong` ADD `ttbh` FLOAT NOT NULL DEFAULT '0' AFTER `luongtn`;
+
     */
 }
