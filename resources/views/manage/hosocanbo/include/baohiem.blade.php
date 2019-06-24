@@ -102,8 +102,15 @@
                     {!!Form::text('bhtn_dv', null, array('id' => 'bhtn_dv','class' => 'form-control baohiem_dv text-right', 'data-mask'=>'fdecimal'))!!}
                 </div>
             </div>
+        </div>
 
-
+        <div class="row">
+            <div class="col-md-12">
+                <div class="form-group">
+                    <label class="control-label">Các phụ cấp không nộp bảo hiểm</label>
+                    {!! Form::select('khongnopbaohiem[]',$a_pc_bh,null,array('id' => 'khongnopbaohiem','class' => 'form-control select2me','multiple'=>'multiple')) !!}
+                </div>
+            </div>
         </div>
     </div>
 </div>

@@ -141,6 +141,7 @@ class CreateHosocanboTable extends Migration
             $table->double('bhtnld_dv')->default(0);
             $table->double('nguoiphuthuoc')->default(0);
 
+            $table->string('khongnopbaohiem')->nullable();// các loại phụ cấp không nộp bảo hiểm
             $table->timestamps();
         });
     }

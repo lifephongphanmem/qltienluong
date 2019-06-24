@@ -91,7 +91,8 @@ class hosocanboController extends Controller
 
             $max_stt = getDbl((hosocanbo::where('madv', session('admin')->madv)->get()->max('stt'))) + 1;
             $model_pc = dmphucap_donvi::where('madv', session('admin')->madv)->get();
-
+            $model_pc_bh = array_column( $model_pc->where('baohiem',1)->toarray(),'tenpc','mapc');
+            //dd($model_pc_bh);
             return view('manage.hosocanbo.create')
                 ->with('type', 'create')
                 ->with('macanbo', $macanbo)
@@ -105,6 +106,7 @@ class hosocanboController extends Controller
                 ->with('m_pln', $m_pln)
                 ->with('furl_kn', '/nghiep_vu/ho_so/temp/')
                 ->with('a_heso', array('heso', 'vuotkhung', 'luonghd', 'hesott'))
+                ->with('a_pc_bh', $model_pc_bh)
                 ->with('model_pc', $model_pc)
                 ->with('pageTitle', 'Tạo hồ sơ cán bộ');
         } else
@@ -118,6 +120,11 @@ class hosocanboController extends Controller
             $madv = session('admin')->madv;
             $macanbo = $insert['macanbo'];
 
+            //có 1 số trường hợp cán bộ nhấn tạo 2 lần => trùng mã
+            if(count(hosocanbo::where('macanbo',$macanbo)->first()) > 0){
+                return redirect('nghiep_vu/ho_so/danh_sach');
+            }
+
             //Xử lý file ảnh
             //dd($request->file('anh'));
             $img = $request->file('anh');
@@ -127,6 +134,12 @@ class hosocanboController extends Controller
                 $img->move(public_path() . '/data/uploads/anh/', $filename);
             }
 
+            if(isset($inputs['khongnopbaohiem'])){
+                $inputs['khongnopbaohiem'] = implode(',', $inputs['khongnopbaohiem']);
+            }else{
+                $inputs['khongnopbaohiem'] = '';
+            }
+            //dd($inputs);
             $insert['anh'] = ($filename == '' ? '' : '/data/uploads/anh/' . $filename);
             $insert['madv'] = $madv;
             $insert['ngaybc']=getDateTime($insert['ngaybc']);
@@ -190,7 +203,7 @@ class hosocanboController extends Controller
                 $ct->tenphanloai = isset($a_pl[$ct->phanloai]) ? $a_pl[$ct->phanloai] : '';
                 $ct->tenchucvu = isset($a_cv[$ct->macvcq]) ? $a_cv[$ct->macvcq] : '';
             }
-
+            $model_pc_bh = array_column( $model_pc->where('baohiem',1)->toarray(),'tenpc','mapc');
             return view('manage.hosocanbo.edit')
                 ->with('model',$model)
                 ->with('type','edit')
@@ -205,6 +218,7 @@ class hosocanboController extends Controller
                 ->with('m_pln',$m_pln)
                 ->with('furl_kn', '/nghiep_vu/ho_so/')
                 ->with('a_heso', array('heso', 'vuotkhung', 'luonghd', 'hesott'))
+                ->with('a_pc_bh', $model_pc_bh)
                 ->with('model_pc',$model_pc->sortby('stt'))
                 ->with('pageTitle','Sửa thông tin hồ sơ cán bộ');
         } else
@@ -244,43 +258,58 @@ class hosocanboController extends Controller
     {
         if (Session::has('admin')) {
             $insert = $request->all();
+            //dd($insert);
             $model = hosocanbo::find($id);
             //Xử lý file ảnh
-            $img=$request->file('anh');
-            if(isset($img)) {
-                //Xóa ảnh cũ
-                if(File::exists($model->anh))
-                File::Delete($model->anh);
-
-                $filename = $model->macanbo . '.' . $img->getClientOriginalExtension();
-                $img->move(public_path() . '/data/uploads/anh/', $filename);
-                $insert['anh']='/data/uploads/anh/'. $filename;
+            $img = $request->file('anh');
+            if ($insert['bl_xoaanh'] == 'true') {//dùng chức năng xóa ảnh đại diện
+                if (File::exists($model->anh)) {
+                    File::Delete($model->anh);
+                }
+                $insert['anh'] = '';
+            } else {
+                if (isset($img)) {
+                    //Xóa ảnh cũ
+                    if (File::exists($model->anh)) {
+                        File::Delete($model->anh);
+                    }
+                    $filename = $model->macanbo . '.' . $img->getClientOriginalExtension();
+                    $img->move(public_path() . '/data/uploads/anh/', $filename);
+                    $insert['anh'] = '/data/uploads/anh/' . $filename;
+                }
             }
+
+            if(isset($insert['khongnopbaohiem'])){
+                $insert['khongnopbaohiem'] = implode(',', $insert['khongnopbaohiem']);
+            }else{
+                $insert['khongnopbaohiem'] = '';
+            }
+
             //dd($insert);
-            $insert['ngaybc']=getDateTime($insert['ngaybc']);
-            $insert['ngaysinh']=getDateTime($insert['ngaysinh']);
-            $insert['ngaytu']=getDateTime($insert['ngaytu']);
-            $insert['ngayden']=getDateTime($insert['ngayden']);
-            $insert['pthuong']=chkDbl($insert['pthuong']) == 0 ? 100 :chkDbl($insert['pthuong']) ;
+            $insert['ngaybc'] = getDateTime($insert['ngaybc']);
+            $insert['ngaysinh'] = getDateTime($insert['ngaysinh']);
+            $insert['ngaytu'] = getDateTime($insert['ngaytu']);
+            $insert['ngayden'] = getDateTime($insert['ngayden']);
+            $insert['pthuong'] = chkDbl($insert['pthuong']) == 0 ? 100 : chkDbl($insert['pthuong']);
             $insert['tnntungay'] = getDateTime($insert['tnntungay']);
             $insert['tnndenngay'] = getDateTime($insert['tnndenngay']);
             $model_pc = dmphucap_donvi::select('mapc')->where('madv', session('admin')->madv)->get()->toarray();
-            foreach($model_pc as $pc){
-                if(isset($insert[$pc['mapc']])){
+            foreach ($model_pc as $pc) {
+                if (isset($insert[$pc['mapc']])) {
                     $insert[$pc['mapc']] = chkDbl($insert[$pc['mapc']]);
                 }
             }
 
-            $a_bh = array('nguoiphuthuoc','bhxh','bhyt','bhtn','kpcd','bhxh_dv','bhyt_dv','bhtn_dv','kpcd_dv',);
-            foreach($a_bh as $bh){
-                if(isset($insert[$bh])){
+            $a_bh = array('nguoiphuthuoc', 'bhxh', 'bhyt', 'bhtn', 'kpcd', 'bhxh_dv', 'bhyt_dv', 'bhtn_dv', 'kpcd_dv',);
+            foreach ($a_bh as $bh) {
+                if (isset($insert[$bh])) {
                     $insert[$bh] = chkDbl($insert[$bh]);
                 }
             }
 
             $model->update($insert);
             return redirect('nghiep_vu/ho_so/danh_sach');
-        }else
+        } else
             return view('errors.notlogin');
     }
 

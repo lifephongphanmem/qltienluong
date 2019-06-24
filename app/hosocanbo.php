@@ -98,7 +98,8 @@ class hosocanbo extends Model
         'nguoiphuthuoc',
         'ngaybc',
         'ngayvao',
-        'lvhd'
+        'lvhd',
+        'khongnopbaohiem'
     ];
 }
 //bangluongct; bangluongdangky_ct; dutoanluong_bangluong; dutoanluong_nangluong; nguonkinhphi_nangluong
