@@ -86,7 +86,7 @@
                 </div>
                 <div class="modal-body">
                     <label class="form-control-label">Họ và tên cán bộ</label>
-                    {!!Form::select('macanbo',$a_canbo, null, array('id' => 'macanbo','class' => 'form-control'))!!}
+                    {!!Form::select('macanbo',$a_canbo, null, array('id' => 'macanbo','class' => 'form-control select2me'))!!}
 
                     <label class="form-control-label">Phân loại</label>
                     {!!Form::select('maphanloai',getPhanLoaiThoiCongTac(), null, array('id' => 'maphanloai','class' => 'form-control'))!!}

@@ -12,7 +12,7 @@ class dmphucap_donvi extends Model
         'stt',
         'mapc',
         'tenpc',
-        'baohiem',//chưa dùng
+        'baohiem',
         'form', //tiêu đề trên Form
         'report', //tiêu đề trên Report
         'phanloai',

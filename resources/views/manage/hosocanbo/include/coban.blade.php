@@ -88,7 +88,6 @@
                 </div>
             </div>
 
-
             <div class="col-md-3">
                 <div class="form-group">
                     <label class="control-label">Số tài khoản ngân hàng</label>
@@ -97,6 +96,15 @@
             </div>
 
             <div class="col-md-3">
+                <div class="form-group">
+                    <label class="control-label">Tên ngân hàng</label>
+                    {!!Form::text('tennganhang', null, array('id' => 'tennganhang','class' => 'form-control'))!!}
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-6">
                 <div class="form-group">
                     <label class="control-label">Lĩnh vực công tác </label>
                     <select class="form-control" id="linhvuc" name="linhvuc" multiple="multiple">
@@ -112,9 +120,7 @@
                     </select>
                 </div>
             </div>
-        </div>
 
-        <div class="row">
             <div class="col-md-6">
                 <div class="form-group">
                     <label class="control-label">Nguồn kinh phí hưởng lương </label>
@@ -132,19 +138,22 @@
 
                 </div>
             </div>
+        </div>
 
-
-            <div class="col-md-6">
+        <div class="row">
+            <div class="col-md-12">
                 <div class="form-group">
                     <label class="control-label">Ảnh đại diện </label>
                     @if(isset($model))
-                        <p><img src="{{$model->anh!=''?url($model->anh):url('images/avatar/no-image.png')}}" width="90"></p>
+                        <p><img id="str_anh" src="{{$model->anh!=''?url($model->anh):url('images/avatar/no-image.png')}}" width="90"></p>
                     @endif
                     {!!Form::file('anh', array('id' => 'anh'))!!}
+                    <button style="margin-top: 5px" type="button" class="btn btn-danger btn-xs" onclick="xoaanh()"><i class="fa fa-times"></i>&nbsp;Xóa ảnh</button>
                 </div>
             </div>
         </div>
     </div>
+    <input type="hidden" id="bl_xoaanh" name="bl_xoaanh" value="false"/>
     <input type="hidden" id="lvhd" name="lvhd" value="{{isset($model)?$model->lvhd:''}}"/>
     <input type="hidden" id="manguonkp" name="manguonkp" value="{{isset($model)?$model->manguonkp:''}}"/>
     <input type="hidden" id="macanbo" name="macanbo" value="{{isset($model) ? $model->macanbo : ''}}"/>
@@ -152,6 +161,11 @@
 </div>
 
 <script>
+    function xoaanh(){
+        $("#str_anh").prop('src',"{{url('images/avatar/no-image.png')}}");
+        $("#bl_xoaanh").val('true');
+    }
+
     $(function(){
         //Multi select box
         $("#linhvuc").select2();
@@ -163,6 +177,7 @@
         $("#nguonkp").change(function(){
             $("#manguonkp").val( $("#nguonkp").val());
         });
+
         $('#create_hscb :submit').click(function(){
             var str = '';
             var ok = true;

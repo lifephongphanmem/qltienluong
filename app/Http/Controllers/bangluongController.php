@@ -360,6 +360,7 @@ class bangluongController extends Controller
         $ngaycong = dmdonvi::where('madv',$inputs['madv'])->first()->songaycong;
         foreach ($m_cb as $cb) {
             $a_nguon = explode(',', $cb->manguonkp);
+            $a_pc_kobh = explode(',', $cb->khongnopbaohiem);
             //nếu cán bộ ko set nguồn (null, '') hoặc trong nguồn thì sét luôn =  ma nguồn để tạo bang lương
             if ($cb->manguonkp != '' && $cb->manguonkp != null && !in_array($inputs['manguonkp'], $a_nguon)) {
                 continue; //cán bộ ko thuộc nguồn quản lý => ko tính lương
@@ -494,7 +495,7 @@ class bangluongController extends Controller
                     //$ct->heso = $cb->$mapc;
                     $ct->sotien = round($sotien, 0);
                     $cb->$mapc_st = $ct->sotien;
-                    if ($ct->baohiem == 1) {
+                    if ($ct->baohiem == 1 && !in_array($mapc, $a_pc_kobh)) {
                         $ct->stbhxh = round($ct->sotien * $cb->bhxh, 0);
                         $ct->stbhyt = round($ct->sotien * $cb->bhyt, 0);
                         $ct->stkpcd = round($ct->sotien * $cb->kpcd, 0);
@@ -767,7 +768,7 @@ class bangluongController extends Controller
         $m_cb_kn = hosocanbo_kiemnhiem::select(array_merge($a_th,array('phanloai','pthuong')))->where('madv',$inputs['madv'])->get()->toArray();;
         //dd($m_cb_kn);
         //công tác
-        $a_th = array_merge(array('stt','tencanbo', 'msngbac', 'bac', 'theodoi','pthuong',
+        $a_th = array_merge(array('stt','tencanbo', 'msngbac', 'bac', 'theodoi','pthuong','khongnopbaohiem',
             'bhxh', 'bhyt', 'bhtn', 'kpcd','bhxh_dv', 'bhyt_dv', 'bhtn_dv', 'kpcd_dv', 'ngaybc'),
             $a_th);
         //$m_cb = hosocanbo::select($a_th)->where('madv', $inputs['madv'])->where('theodoi','<', '9')->get()->keyBy('macanbo')->toArray();
@@ -867,6 +868,8 @@ class bangluongController extends Controller
             //kết thúc chạy để tính môt số hệ số gốc
 
             $a_nguon = explode(',', $val['manguonkp']);
+            $a_pc_kobh = explode(',', $val['khongnopbaohiem']);
+
             //nếu cán bộ ko set nguồn (null, '') hoặc trong nguồn thì sét luôn =  ma nguồn để tạo bang lương
             if ($val['manguonkp'] != '' && $val['manguonkp'] != null && !in_array($inputs['manguonkp'], $a_nguon)) {
                 continue; //cán bộ ko thuộc nguồn quản lý => ko tính lương
@@ -968,7 +971,8 @@ class bangluongController extends Controller
                     //$a_pc[$k]['heso'] = $m_cb[$key][$mapc];
                     $a_pc[$k]['sotien'] = $daingay ? round($a_pc[$k]['sotien'] * $ptdn, 0) : round($a_pc[$k]['sotien'], 0);
                     $m_cb[$key]['st_'.$mapc] = round($a_pc[$k]['sotien'], 0);
-                    if ($m_cb[$key]['baohiem'] == 1 && $a_pc[$k]['baohiem'] == 1 && !$thaisan && !$daingay) {//nghỉ thai sản + dài ngày ko đóng bảo biểm
+                    if ($m_cb[$key]['baohiem'] == 1 && $a_pc[$k]['baohiem'] == 1
+                        && !$thaisan && !$daingay  && !in_array($mapc, $a_pc_kobh)) {//nghỉ thai sản + dài ngày ko đóng bảo biểm
                         $a_pc[$k]['stbhxh'] = round($a_pc[$k]['sotien'] * $m_cb[$key]['bhxh'], 0);
                         $a_pc[$k]['stbhyt'] = round($a_pc[$k]['sotien'] * $m_cb[$key]['bhyt'], 0);
                         $a_pc[$k]['stkpcd'] = round($a_pc[$k]['sotien'] * $m_cb[$key]['kpcd'], 0);
@@ -1150,7 +1154,7 @@ class bangluongController extends Controller
             //bangluong_phucap::insert($data);
         }
         */
-        $a_col_cb = array('id','bac','baohiem','macongtac','pthuong','theodoi', 'ngaybc');//'manguonkp',
+        $a_col_cb = array('id','bac','baohiem','macongtac','pthuong','theodoi', 'ngaybc','khongnopbaohiem');//'manguonkp',
         $a_data_canbo = unset_key($a_data_canbo,$a_col_cb);
 
         //dd($a_data_canbo);
@@ -1320,7 +1324,7 @@ class bangluongController extends Controller
             //bangluong_phucap::insert($data);
         }
 
-        $a_col_cbkn = array('id','bac','baohiem','macongtac','pthuong','theodoi','phanloai');//'manguonkp',
+        $a_col_cbkn = array('id','bac','baohiem','macongtac','pthuong','theodoi','phanloai','khongnopbaohiem');//'manguonkp',
         $a_kn_canbo = unset_key($a_kn_canbo,$a_col_cbkn);
         //dd($a_kn_canbo);
         foreach(array_chunk($a_kn_canbo, 50)  as $data){
@@ -1412,12 +1416,13 @@ class bangluongController extends Controller
         $model_phucap = dmphucap_donvi::select('mapc','phanloai','congthuc','baohiem','tenpc')->where('madv', session('admin')->madv)
             ->wherenotin('mapc',array_merge(['hesott'],explode(',',$inputs['phucaploaitru'])))->get();
         //kiêm nhiệm
-        $a_th = array_merge(array('macanbo', 'macvcq', 'mapb', 'manguonkp','mact','stt','tencanbo', 'msngbac',
+        $a_th = array_merge(array('macanbo', 'macvcq', 'mapb', 'manguonkp','mact','stt','tencanbo', 'msngbac','khongnopbaohiem',
             'congtac','phanloai', 'bhxh', 'bhyt', 'bhtn', 'kpcd','bhxh_dv', 'bhyt_dv', 'bhtn_dv', 'kpcd_dv'),
             array_column($model_phucap->toarray(),'mapc'));
 
-        $m_cb = hosocanbo::select('macanbo','tencanbo','macvcq','mapb', 'mact','stt', 'bhxh', 'bhyt', 'bhtn', 'kpcd', 'bhxh_dv', 'bhyt_dv', 'bhtn_dv', 'kpcd_dv',
-            'ngaybc','baohiem','theodoi')->where('madv', $inputs['madv'])->get()->keyBy('macanbo')->toarray();
+        $m_cb = hosocanbo::select('macanbo','tencanbo','macvcq','mapb', 'mact','stt', 'bhxh', 'bhyt', 'bhtn', 'kpcd',
+            'bhxh_dv', 'bhyt_dv', 'bhtn_dv', 'kpcd_dv','khongnopbaohiem','ngaybc','baohiem','theodoi')
+            ->where('madv', $inputs['madv'])->get()->keyBy('macanbo')->toarray();
         //dd($m_cb);
 
         $ngaycuoithang = Carbon::create($inputs['nam'], $inputs['thang'] + 1, 0)->toDateString();
@@ -1468,6 +1473,7 @@ class bangluongController extends Controller
                 $cb->theodoi = $canbo['theodoi'];
                 $cb->baohiem = $canbo['baohiem'];
                 $cb->tencanbo = $canbo['tencanbo'];
+                $cb->khongnopbaohiem = $canbo['khongnopbaohiem'];
                 $cb->bhxh = floatval($canbo['bhxh']) / 100;
                 $cb->bhyt = floatval($canbo['bhyt']) / 100;
                 $cb->kpcd = floatval($canbo['kpcd']) / 100;
@@ -1478,7 +1484,7 @@ class bangluongController extends Controller
                 $cb->bhtn_dv = floatval($canbo['bhtn_dv']) / 100;
             }
             $cb->macongtac = isset($a_nhomct[$cb->mact]) ? $a_nhomct[$cb->mact] : '';
-
+            $a_pc_kobh = explode(',',$cb->khongnopbaohiem);
             $tien = $tonghs = 0;
             //nếu cán bộ nghỉ thai sản
             $thaisan = in_array($cb->macanbo,$a_thaisan) ? true : false;
@@ -1546,7 +1552,8 @@ class bangluongController extends Controller
                 ) {
                     $a_pc[$k]['sotien'] = $daingay ? round($a_pc[$k]['sotien'] * $ptdn, 0) : round($a_pc[$k]['sotien'], 0);
                     $cb->$mapc_st = round($a_pc[$k]['sotien'], 0);
-                    if ($cb->baohiem == 1 && $a_pc[$k]['baohiem'] == 1 && !$thaisan && !$daingay) {//nghỉ thai sản + dài ngày ko đóng bảo biểm
+                    if ($cb->baohiem == 1 && $a_pc[$k]['baohiem'] == 1 &&
+                        !$thaisan && !$daingay && !in_array($a_pc, $a_pc_kobh)) {//nghỉ thai sản + dài ngày ko đóng bảo biểm
                         $a_pc[$k]['stbhxh'] = round($a_pc[$k]['sotien'] * $cb->bhxh, 0);
                         $a_pc[$k]['stbhyt'] = round($a_pc[$k]['sotien'] * $cb->bhyt, 0);
                         $a_pc[$k]['stkpcd'] = round($a_pc[$k]['sotien'] * $cb->kpcd, 0);
