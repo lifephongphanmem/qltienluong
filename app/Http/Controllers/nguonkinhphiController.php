@@ -127,6 +127,7 @@ class nguonkinhphiController extends Controller
 
                 }
             }
+
             $model = $model->wherein('macongtac',['BIENCHE','KHONGCT','HOPDONG']);
 
             $m_cb = $model->keyBy('macanbo')->toarray();
@@ -222,6 +223,7 @@ class nguonkinhphiController extends Controller
             //dd($a_luu);
 
             $a_data = array();
+            $a_data_nl = array();
             $a_danghihuu = array();
             //dd($m_cb);
             for($i=0;$i<count($a_thang);$i++) {
@@ -319,14 +321,11 @@ class nguonkinhphiController extends Controller
             $a_col = array('bac', 'bhxh_dv', 'bhtn_dv', 'kpcd_dv', 'bhyt_dv', 'gioitinh', 'nam_nb', 'nam_ns', 'nam_tnn',
                 'thang_nb', 'thang_ns', 'thang_tnn', 'ngayden', 'ngaysinh', 'tnndenngay', 'pcctp', 'st_pcctp');
 
-            if(count($a_data_nl) > 0){
-                $a_data_nl = unset_key($a_data_nl, $a_col);
-                //dd($a_data_nl);
-                foreach (array_chunk($a_data_nl, 100) as $data) {
-                    nguonkinhphi_nangluong::insert($data);
-                }
+            $a_data_nl = unset_key($a_data_nl, $a_col);
+            //dd($a_data_nl);
+            foreach (array_chunk($a_data_nl, 100) as $data) {
+                nguonkinhphi_nangluong::insert($data);
             }
-
             //dd($a_data);
             //chia nhỏ thành các mảng nhỏ 100 phần tử để insert
             $a_data = unset_key($a_data, $a_col);
