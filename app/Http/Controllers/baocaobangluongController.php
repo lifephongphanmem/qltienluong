@@ -2226,6 +2226,7 @@ class baocaobangluongController extends Controller
 
             $model_donvi = dmdonvi::where('madvbc',$madvbc)->get();
             $model_dutoan=dutoanluong::where('namns',$inputs['namns'])
+                ->where('trangthai','DAGUI')
                 ->wherein('madv',function($qr)use($madvbc){
                     $qr->select('madv')->from('dmdonvi')->where('madvbc',$madvbc);
                 })->get();
