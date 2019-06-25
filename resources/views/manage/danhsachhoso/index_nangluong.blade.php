@@ -68,6 +68,7 @@
                             <th class="text-center">STT</th>
                             <th class="text-center">Họ và tên</th>
                             <th class="text-center">Mã ngạch</th>
+                            <th class="text-center">Hệ số lương</th>
                             <th class="text-center">Ngày nâng lương</th>
                             <th class="text-center">Đơn vị</th>
                         </tr>
@@ -80,6 +81,7 @@
                                     <td class="text-center">{{$i++}}</td>
                                     <td>{{$value->tencanbo}}</td>
                                     <td>{{$value->msngbac}}</td>
+                                    <td>{{$value->heso}}</td>
                                     @if($nangluong == 'TNN')
                                         <td>{{getDayVn($value->tnndenngay)}}</td>
                                     @else

@@ -86,8 +86,11 @@
                                             @else
                                                 <a href="{{url('/chuc_nang/tong_hop_luong/huyen/printf_data_huyen?mathdv='.$value['mathdv'].'&madv='.$value['madv'])}}" class="btn btn-default btn-sm" TARGET="_blank">
                                                     <i class="fa fa-print"></i>&nbsp; Số liệu tổng hợp</a>
-                                                <a href="{{url('/chuc_nang/tong_hop_luong/huyen/printf_bl_huyen?mathdv='.$value['mathdv'].'&madv='.$value['madv'])}}" class="btn btn-default btn-sm" TARGET="_blank">
-                                                    <i class="fa fa-print"></i>&nbsp; Số liệu chi tiết</a>
+                                                <!--a href="{{url('/chuc_nang/tong_hop_luong/huyen/printf_bl_huyen?mathdv='.$value['mathdv'].'&madv='.$value['madv'])}}" class="btn btn-default btn-sm" TARGET="_blank">
+                                                    <i class="fa fa-print"></i>&nbsp; Số liệu chi tiết</a-->
+
+                                                <button type="button" onclick="inbl('{{$value['mathdv']}}','{{$value['madv']}}')" class="btn btn-default btn-xs mbs">
+                                                    <i class="fa fa-print"></i>&nbsp; Số liệu chi tiết</button>
                                             @endif
                                             <!--a href="{{url('/chuc_nang/tong_hop_luong/huyen/printf_data_diaban/ma_so='.$value['mathdv'])}}" class="btn btn-default btn-sm" TARGET="_blank">
                                                 <i class="fa fa-print"></i>&nbsp; Số liệu địa bàn</a-->
@@ -143,8 +146,50 @@
             <!-- /.modal-dialog -->
         </div>
     </div>
+    <div id="inbl-modal" tabindex="-1" role="dialog" aria-hidden="true" class="modal fade">
+        <div class="modal-lg modal-dialog modal-content">
+            <div class="modal-header modal-header-primary">
+                <button type="button" data-dismiss="modal" aria-hidden="true" class="close">&times;</button>
+                <h4 id="hd-inbl" class="modal-title">In số liệu chi tiết</h4>
+            </div>
 
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <a id="in_bl" href="" onclick="insolieu('/chuc_nang/tong_hop_luong/huyen/printf_bl_huyen')" style="border-width: 0px;margin-left: 5px" target="_blank">
+                                <i class="fa fa-print"></i>&nbsp; In số liệu chi tiết</a>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <a id="in_blCR" href="" onclick="insolieuCR('/chuc_nang/tong_hop_luong/huyen/printf_bl_huyenCR')" style="border-width: 0px;margin-left: 5px" target="_blank">
+                                <i class="fa fa-print"></i>&nbsp; In số liệu chi tiết (CR)</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <input type="hidden" id="mathdv_in" name="mathdv_in"/>
+            <input type="hidden" id="madv_in" name="madv_in"/>
+            <div class="modal-footer">
+                <button type="button" data-dismiss="modal" class="btn btn-default">Hủy thao tác</button>
+            </div>
+        </div>
+    </div>
     <script>
+        function inbl(mathdv,madv){
+            $("#mathdv_in").val(mathdv);
+            $("#madv_in").val(madv);
+            $('#inbl-modal').modal('show');
+            //$('#inbl-modal').modal('hide');
+        }
+        function insolieu($url){
+            $("#in_bl").attr("href", $url +'?mathdv='+$('#mathdv_in').val()+'&madv='+ $('#madv_in').val());
+        }
+        function insolieuCR($url){
+            $("#in_blCR").attr("href", $url +'?mathdv='+$('#mathdv_in').val()+'&madv='+ $('#madv_in').val());
+        }
         function confirmChuyen(math) {
             document.getElementById("mathdv").value = math;
             document.getElementById("mathh").value = math;

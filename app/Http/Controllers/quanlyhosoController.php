@@ -76,7 +76,7 @@ class quanlyhosoController extends Controller
 
             $donvi = $inputs['madv'];
             $model = hosocanbo::join('dmdonvi','hosocanbo.madv','dmdonvi.madv')
-                ->select('macanbo', 'tencanbo', 'msngbac', 'sunghiep', 'gioitinh', 'tnndenngay', 'ngaytu', 'ngayden','ngaysinh','mact','tendv')
+                ->select('macanbo', 'tencanbo', 'msngbac', 'sunghiep', 'gioitinh', 'tnndenngay', 'ngaytu', 'ngayden','ngaysinh','mact','tendv','heso')
                 ->where('theodoi','<' ,'9')
                 ->where('hosocanbo.madv',$inputs['madv'])
                 ->where('dmdonvi.macqcq', session('admin')->madv)
@@ -84,7 +84,7 @@ class quanlyhosoController extends Controller
                 ->get();
             if($inputs['madv'] == 'ALL')
                 $model = hosocanbo::join('dmdonvi','hosocanbo.madv','dmdonvi.madv')
-                    ->select('macanbo', 'tencanbo', 'msngbac', 'sunghiep', 'gioitinh', 'tnndenngay', 'ngaytu', 'ngayden','ngaysinh','mact','tendv')
+                    ->select('macanbo', 'tencanbo', 'msngbac', 'sunghiep', 'gioitinh', 'tnndenngay', 'ngaytu', 'ngayden','ngaysinh','mact','tendv','heso')
                     ->where('theodoi','<' ,'9')
                     ->where('dmdonvi.macqcq', session('admin')->madv)
                     ->orderby('tendv')
@@ -114,6 +114,7 @@ class quanlyhosoController extends Controller
                 $m_hs = $model->where('nam_luong', $date['year']);
             if($nangluong == 'TNN')
                 $m_hs = $model->where('nam_nghe', $date['year']);
+
             return view('manage.danhsachhoso.index_nangluong')
                 ->with('m_hs',$m_hs)
                 ->with('url','/nghiep_vu/ho_so/')
