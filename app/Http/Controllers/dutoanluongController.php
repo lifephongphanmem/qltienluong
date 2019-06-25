@@ -825,7 +825,8 @@ class dutoanluongController extends Controller
         //lấy chỉ tiêu biên chế trong năm để tính
         $a_chitieu = chitieubienche::where('madv', session('admin')->madv)->where('nam', $inputs['namdt'])->get()->keyBy('mact')->toarray();
         $maphanloai = dmdonvi::where('madv', session('admin')->madv)->first()->maphanloai;
-        $heso = $maphanloai == 'MAMNON' ? 2.1 : 2.34;
+        //$heso = $maphanloai == 'MAMNON' ? 2.1 : 2.34;
+        $heso = 2.34;
         //dd($m_data);
         for ($i = 0; $i < count($m_data); $i++) {
             $canbo = a_getelement($m_cb, array('mact' => $m_data[$i]['mact']));

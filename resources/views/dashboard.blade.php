@@ -166,7 +166,7 @@
                         <i class="icon-pie-chart"></i>
                     </div>
                 </div>
-                @if(session('admin')->level == 'H')
+                @if(session('admin')->phanloaitaikhoan == 'TH')
                 <div class="">
                     <li class="list-group-item"> <a href="{{url('nghiep_vu/ho_so/danh_sach_th?sunghiep=Công chức')}}">Công chức</a><span class="badge badge-info pull-right">
                             {{number_format($a_ketqua['congchuc'])}}</span></li>
@@ -175,7 +175,7 @@
                     <li class="list-group-item"><a href="{{url('nghiep_vu/ho_so/danh_sach_th?sunghiep=Khác')}}">Khác</a><span class="badge badge-info pull-right">
                             {{number_format($a_ketqua['khac'])}}</span></li>
                 </div>
-                    @else
+                @else
                     <div class="">
                         <li class="list-group-item">Công chức<span class="badge badge-info pull-right">
                             {{number_format($a_ketqua['congchuc'])}}</span></li>

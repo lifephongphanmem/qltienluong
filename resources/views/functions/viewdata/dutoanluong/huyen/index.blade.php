@@ -74,8 +74,8 @@
                                         @if ($value->masodv != NULL)
                                             <a href="{{url($furl_th.'printf?maso='.$value['masodv'])}}" class="btn btn-default btn-sm" TARGET="_blank">
                                                 <i class="fa fa-print"></i>&nbsp; Số liệu tổng hợp</a>
-                                            <a href="{{url($furl_th.'chitietbl?maso='.$value['masodv'])}}" class="btn btn-default btn-sm" TARGET="_blank">
-                                                <i class="fa fa-print"></i>&nbsp; Số liệu chi tiết</a>
+                                            <button type="button" onclick="inbl('{{$value['masodv']}}')" class="btn btn-default btn-xs mbs">
+                                                <i class="fa fa-print"></i>&nbsp; In số liệu chi tiết</button>
 
                                             @if($value->tralai)
                                                 <button type="button" class="btn btn-default btn-sm" onclick="confirmChuyen('{{$value['masodv']}}')" data-target="#chuyen-modal" data-toggle="modal"><i class="fa icon-share-alt"></i>&nbsp;
@@ -120,8 +120,48 @@
             <!-- /.modal-dialog -->
         </div>
     </div>
+    <div id="inbl-modal" tabindex="-1" role="dialog" aria-hidden="true" class="modal fade">
+        <div class="modal-lg modal-dialog modal-content">
+            <div class="modal-header modal-header-primary">
+                <button type="button" data-dismiss="modal" aria-hidden="true" class="close">&times;</button>
+                <h4 id="hd-inbl" class="modal-title">In số liệu chi tiết</h4>
+            </div>
 
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <a id="in_bl" href="" onclick="insolieu('/chuc_nang/du_toan_luong/huyen/chitietbl')" style="border-width: 0px;margin-left: 5px" target="_blank">
+                                <i class="fa fa-print"></i>&nbsp; In số liệu chi tiết từng tháng</a>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <a id="in_blCR" href="" onclick="insolieuCR('/chuc_nang/du_toan_luong/huyen/chitietblCR')" style="border-width: 0px;margin-left: 5px" target="_blank">
+                                <i class="fa fa-print"></i>&nbsp; In số liệu tổng hợp các tháng (CR)</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <input type="hidden" id="mabl_in" name="mabl_in"/>
+            <div class="modal-footer">
+                <button type="button" data-dismiss="modal" class="btn btn-default">Hủy thao tác</button>
+            </div>
+        </div>
+    </div>
     <script>
+        function inbl(mabl){
+            $("#mabl_in").val(mabl);
+            $('#inbl-modal').modal('show');
+            //$('#inbl-modal').modal('hide');
+        }
+        function insolieu($url){
+            $("#in_bl").attr("href", $url +'?maso='+ $('#mabl_in').val());
+        }
+        function insolieuCR($url){
+            $("#in_blCR").attr("href", $url +'?maso='+ $('#mabl_in').val());
+        }
         function confirmChuyen(masodv) {
             document.getElementById("masodv").value = masodv;
         }

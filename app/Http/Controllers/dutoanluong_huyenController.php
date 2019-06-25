@@ -13,6 +13,7 @@ use App\dutoanluong_chitiet;
 use App\dutoanluong_huyen;
 use App\dutoanluong_khoi;
 use App\dutoanluong_tinh;
+use App\hosocanbo;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 
@@ -278,6 +279,90 @@ class dutoanluong_huyenController extends Controller
 
 
             return view('reports.viewdata.dutoan.bangluong')
+                ->with('thongtin', $thongtin)
+                ->with('model', $model)
+                ->with('m_dv', $m_dv)
+                ->with('col', $col)
+                ->with('a_phucap', $a_phucap)
+                ->with('a_ct', $a_ct)
+                ->with('model_thang', $model_thang)
+                ->with('model_congtac', $model_congtac)
+                ->with('pageTitle', 'Chi tiết tổng hợp lương tại đơn vị');
+        } else
+            return view('errors.notlogin');
+    }
+    function chitietblCR(Request $requests)
+    {
+        if (Session::has('admin')) {
+            //dd($masodv);
+            $inputs = $requests->all();
+            $masodv = $inputs['maso'];
+            /*
+            $model = dutoanluong_bangluong::wherein('masodv',function($query) use($masodv){
+                $query->select('masodv')->from('dutoanluong')->where('masoh',$masodv)->get();
+            })->orderby('thang')->get();
+            */
+            $model = dutoanluong_bangluong::join('dutoanluong','dutoanluong.masodv','dutoanluong_bangluong.masodv')
+                ->Select('msngbac','mact','macanbo',DB::raw('sum(heso) as heso'),DB::raw('sum(tonghs-heso) as tongpc'),DB::raw('sum(tonghs) as tonghs'),DB::raw('sum(hesobl) as hesobl')
+                    ,DB::raw('sum(hesott) as hesott'),DB::raw('sum(hesopc) as hesopc'),DB::raw('sum(vuotkhung) as vuotkhung'),DB::raw('sum(pcct) as pcct'),DB::raw('sum(pckct) as pckct'),
+                    DB::raw('sum(pck) as pck'),DB::raw('sum(pccv) as pccv'),DB::raw('sum(pckv) as pckv'),DB::raw('sum(pcth) as pcth'),DB::raw('sum(pcdd) as pcdd'),
+                    DB::raw('sum(pcdh) as pcdh'),DB::raw('sum(pcld) as pcld'),DB::raw('sum(pcdbqh) as pcdbqh'),DB::raw('sum(pcudn) as pcudn'),DB::raw('sum(pctn) as pctn')
+                    ,DB::raw('sum(pctnn) as pctnn'),DB::raw('sum(pcdbn) as pcdbn'),DB::raw('sum(pcvk) as pcvk'),DB::raw('sum(pckn) as pckn'),DB::raw('sum(pcdang) as pcdang'),
+                    DB::raw('sum(pccovu) as pccovu'),DB::raw('sum(pclt) as pclt'),DB::raw('sum(pcd) as pcd'),DB::raw('sum(pctr) as pctr'),DB::raw('sum(pctdt) as pctdt')
+                    ,DB::raw('sum(pctnvk) as pctnvk'),DB::raw('sum(pcbdhdcu) as pcbdhdcu'),DB::raw('sum(pcthni) as pcthni'),DB::raw('sum(pclade) as pclade'),
+                    DB::raw('sum(pcud61) as pcud61'),DB::raw('sum(pcxaxe) as pcxaxe'),DB::raw('sum(pcdith) as pcdith'),DB::raw('sum(pcphth) as pcphth'),DB::raw('sum(luongtn) as luongtn'),
+                    DB::raw('sum(stbhxh_dv) as stbhxh_dv'),DB::raw('sum(stbhyt_dv) as stbhyt_dv'),DB::raw('sum(stbhtn_dv) as stbhtn_dv'),DB::raw('sum(stkpcd_dv) as stkpcd_dv')
+                    ,DB::raw('sum(ttbh_dv) as ttbh_dv'))
+                ->where('dutoanluong.masoh',$masodv)
+                ->where('trangthai','DAGUI')
+                ->groupby('msngbac','mact','macanbo')
+                ->get();
+            $model_canbo = hosocanbo::wherein('madv',function($query) use($masodv){
+                $query->select('madv')->from('dutoanluong')->where('masoh',$masodv)->get();
+            })->get();
+            $model_thongtin = dutoanluong::where('masoh', $masodv)->first();
+            //$model = dutoanluong_bangluong::wherein('masodv', array_column($model_thongtin->toarray(),'masodv'))->get();
+            //$model_thongtin = dutoanluong::where('masoh', $masodv)->first();
+            $a_ct = array_column(dmphanloaict::all()->toArray(), 'tenct', 'mact');
+
+            //cho trương hợp đơn vị cấp trên in dữ liệu dv câp dưới mà ko sai tên đơn vị
+            $m_dv = dmdonvi::where('madv', $model_thongtin->madv)->first();
+            $a_phucap = array();
+            $col = 0;
+            $m_pc = dmphucap_donvi::where('madv', $model_thongtin->madv)->orderby('stt')->get()->toarray();
+            foreach($model as $ct)
+            {
+                $ct->tencanbo = $model_canbo->where('macanbo',$ct->macanbo)->first()->tencanbo;
+            }
+            foreach ($m_pc as $ct) {
+                if ($model->sum($ct['mapc']) > 0) {
+                    $a_phucap[$ct['mapc']] = $ct['report'];
+                    $col++;
+                }
+            }
+
+            $thongtin = array('nguoilap' => session('admin')->name,
+                'thang' => $model_thongtin->thang,
+                'nam' => $model_thongtin->nam);
+
+            //Lấy dữ liệu để lập
+            $model_thang = $model->map(function ($data) {
+                return collect($data->toArray())
+                    ->only(['thang'])
+                    ->all();
+            });
+            //group mact đã bao gồm macongtac; manguonkp bao gồm luongcoban
+            $model_thang = a_unique($model_thang);
+
+            $model_congtac = $model->map(function ($data) {
+                return collect($data->toArray())
+                    ->only(['mact'])
+                    ->all();
+            });
+            $model_congtac = a_unique($model_congtac);
+
+
+            return view('reports.viewdata.dutoan.bangluongCR')
                 ->with('thongtin', $thongtin)
                 ->with('model', $model)
                 ->with('m_dv', $m_dv)

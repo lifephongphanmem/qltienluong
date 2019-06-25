@@ -678,6 +678,7 @@ Route::group(['prefix'=>'chuc_nang'],function(){
             Route::get('tonghop','dutoanluong_huyenController@tonghopCR');
             Route::get('printf','dutoanluong_huyenController@printf');//in một khối trong khối
             Route::get('chitietbl','dutoanluong_huyenController@chitietbl');//in chi tiết bảng lương đơn vị
+            Route::get('chitietblCR','dutoanluong_huyenController@chitietblCR');//in chi tiết bảng lương đơn vị
         });
 
         Route::group(['prefix'=>'khoi'],function(){
