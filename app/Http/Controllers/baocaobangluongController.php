@@ -2376,7 +2376,7 @@ class baocaobangluongController extends Controller
 
             $model_hdnd = dutoanluong_bangluong::join('dutoanluong','dutoanluong.masodv','dutoanluong_bangluong.masodv')
                 ->Select('mact',DB::raw('sum(heso) as heso'),DB::raw('sum(tonghs-heso-pckn) as tongpc'),DB::raw('sum(tonghs-pckn) as tonghs')
-                    ,DB::raw('sum(hesopc) as pccv'),DB::raw('sum(pckn) as pckn'),DB::raw('sum(luongcoban*hesopc) as luongtn'),
+                    ,DB::raw('sum(hesopc) as pccv'),DB::raw('sum(pckn) as pckn'),DB::raw('sum(dutoanluong_bangluong.luongcoban*hesopc) as luongtn'),
                     DB::raw('sum(stbhxh_dv) as stbhxh_dv'),DB::raw('sum(stbhyt_dv) as stbhyt_dv'),DB::raw('sum(stbhtn_dv) as stbhtn_dv'),DB::raw('sum(stkpcd_dv) as stkpcd_dv')
                     ,DB::raw('sum(ttbh_dv) as ttbh_dv'))
                 ->where('madvbc',$madvbc)
