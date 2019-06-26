@@ -666,6 +666,8 @@ class tonghopluong_huyenController extends Controller
             //$m_pc = array_column(dmphucap_donvi::where('madv', $model_thongtin->madv)->get()->toarray(),'report','mapc');
 
             foreach ($model as $chitiet) {
+                if(!isset($model_nguonkp[$chitiet->manguonkp]))
+                    $chitiet->manguonkp = 12;
                 $chitiet->tennguonkp = isset($model_nguonkp[$chitiet->manguonkp]) ? $model_nguonkp[$chitiet->manguonkp] : '';
                 $chitiet->tenct = isset($model_ct[$chitiet->mact]) ? $model_ct[$chitiet->mact] : '';
                 $thanhtien = 0;
