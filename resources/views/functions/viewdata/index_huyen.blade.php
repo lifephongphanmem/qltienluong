@@ -47,12 +47,26 @@
                             <div class="col-md-2">
                                 {!! Form::select('nam',getNam(),$nam,array('id' => 'nam', 'class' => 'form-control'))!!}
                             </div>
-                            <div class="col-md-5">
+
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="form-group">
+                            <div class="col-md-6">
                                 <label class="control-label col-md-3" style="text-align: right">Trạng thái </label>
                                 <div class="col-md-7">
                                     {!! Form::select(
                                     'trangthai',$a_trangthai,$trangthai,
                                     array('id' => 'trangthai', 'class' => 'form-control'))
+                                    !!}
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="control-label col-md-3" style="text-align: right">Phân loại </label>
+                                <div class="col-md-8">
+                                    {!! Form::select(
+                                    'phanloai',$a_phanloai,$phanloai,
+                                    array('id' => 'phanloai', 'class' => 'form-control'))
                                     !!}
                                 </div>
                             </div>
@@ -199,7 +213,8 @@
             var thang = $('#thang').val();
             var nam = $('#nam').val();
             var trangthai = $('#trangthai').val();
-            return '/chuc_nang/xem_du_lieu/huyen?thang='+ thang +'&nam=' + nam + '&trangthai=' + trangthai;
+            var phanloai = $('#phanloai').val();
+            return '/chuc_nang/xem_du_lieu/huyen?thang='+ thang +'&nam=' + nam + '&trangthai=' + trangthai+ '&phanloai=' + phanloai;
         }
 
         $(function(){
@@ -210,6 +225,9 @@
                 window.location.href = getLink();
             });
             $('#trangthai').change(function() {
+                window.location.href = getLink();
+            });
+            $('#phanloai').change(function() {
                 window.location.href = getLink();
             });
         })

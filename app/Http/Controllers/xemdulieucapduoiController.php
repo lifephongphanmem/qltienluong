@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\dmdonvi;
 use App\dmdonvibaocao;
+use App\dmphanloaidonvi;
 use App\tonghop_huyen;
 use App\tonghopluong_donvi;
 use App\tonghopluong_donvi_chitiet;
@@ -232,6 +233,13 @@ class xemdulieucapduoiController extends Controller
             $madvbc = session('admin')->madvbc;
 
             $a_trangthai = array('ALL' => '--Chọn trạng thái dữ liệu--', 'CHOGUI' => 'Chưa gửi dữ liệu', 'DAGUI' => 'Đã gửi dữ liệu');
+            $model_donvi = dmdonvi::where('macqcq',session('admin')->madv)->get();
+            $model_phanloai = dmphanloaidonvi::wherein('maphanloai',array_column($model_donvi->toarray(),'maphanloai'))->get();
+            $model_phanloai = array_column($model_phanloai->toarray(),'tenphanloai','maphanloai');
+            foreach($model_phanloai as $key=>$key)
+                $a_phanloai[$key]= $model_phanloai[$key];
+            //$a_phanloai['GD'] = 'Khối Giáo Dục';
+            $a_phanloai['ALL'] = '--Chọn tất cả--';
             //$a_phanloai = array('DONVI' => 'Dữ liệu tổng hợp của đơn vị', 'CAPDUOI' => 'Dữ liệu tổng hợp của các đơn vị cấp dưới');
             /*$model_donvi = dmdonvi::select('madv', 'tendv')
                     ->wherein('madv', function($query) use($madv){
@@ -246,7 +254,7 @@ class xemdulieucapduoiController extends Controller
                         $query->select('madv')->from('dmdonvi')->where('macqcq',$madv)->where('madv','<>',$madv)->get();
                     })->distinct()->get();
                 */
-                $model_donvi = dmdonvi::select('dmdonvi.madv', 'dmdonvi.tendv','phanloaitaikhoan')
+                $model_donvi = dmdonvi::select('dmdonvi.madv', 'dmdonvi.tendv','phanloaitaikhoan','maphanloai')
                     ->where('macqcq',$madv)->where('madv','<>',$madv)
                     ->distinct()->get();
                 $model_nguon = tonghopluong_donvi::wherein('madv', function($query) use($madv){
@@ -271,7 +279,7 @@ class xemdulieucapduoiController extends Controller
                         $query->select('madv')->from('dmdonvi')->where('macqcq',$madv)->where('madv','<>',$madv)->get();
                     })->distinct()->get();
                 */
-                $model_donvi = dmdonvi::select('dmdonvi.madv', 'dmdonvi.tendv','phanloaitaikhoan')
+                $model_donvi = dmdonvi::select('dmdonvi.madv', 'dmdonvi.tendv','phanloaitaikhoan','maphanloai')
                     ->where('macqcq',$madv)->where('madv','<>',$madv)->distinct()->get();
                 $model_nguon = tonghopluong_huyen::wherein('madv', function($query) use($madv){
                     $query->select('madv')->from('dmdonvi')->where('macqcq',$madv)->where('madv','<>',$madv)->get();
@@ -319,13 +327,18 @@ class xemdulieucapduoiController extends Controller
             if (!isset($inputs['trangthai']) || $inputs['trangthai'] != 'ALL') {
                 $model_donvi = $model_donvi->where('trangthai',$inputs['trangthai']);
             }
+            if (!isset($inputs['phanloai']) || $inputs['phanloai'] != 'ALL') {
+                $model_donvi = $model_donvi->where('maphanloai',$inputs['phanloai']);
+            }
 
             return view('functions.viewdata.index_huyen')
                 ->with('model', $model_donvi)
                 ->with('thang', $inputs['thang'])
                 ->with('nam', $inputs['nam'])
                 ->with('trangthai', $inputs['trangthai'])
+                ->with('phanloai', $inputs['phanloai'])
                 ->with('a_trangthai', $a_trangthai)
+                ->with('a_phanloai', $a_phanloai)
                 ->with('furl', '/chuc_nang/tong_hop_luong/')
                 ->with('pageTitle', 'Danh sách đơn vị tổng hợp lương');
 

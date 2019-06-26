@@ -295,7 +295,10 @@ class tonghopluong_huyenController extends Controller
                 $phucap = a_getelement_equal($a_bangluong, array('mact'=>$chitiet->mact,'manguonkp'=>$chitiet->manguonkp));
                 foreach (getColTongHop() as $ct) {
                     $ma = 'hs'.$ct;
+                    if($chitiet->luongcoban != 0)
                     $chitiet->$ma = $chitiet->$ct / $chitiet->luongcoban;
+                    else
+                        $chitiet->$ma = 0;
                 }
                 /*
                 foreach (getColTongHop() as $ct) {
@@ -575,6 +578,8 @@ class tonghopluong_huyenController extends Controller
             $m_pc = array_column(dmphucap_donvi::where('madv', $model_thongtin->madv)->get()->toarray(),'report','mapc');
 
             foreach ($model as $chitiet) {
+                if(!isset($model_nguonkp[$chitiet->manguonkp]))
+                    $chitiet->manguonkp = 12;
                 $chitiet->tennguonkp = isset($model_nguonkp[$chitiet->manguonkp]) ? $model_nguonkp[$chitiet->manguonkp] : '';
                 $chitiet->tenct = isset($model_ct[$chitiet->mact]) ? $model_ct[$chitiet->mact] : '';
                 $thanhtien = 0;
@@ -666,20 +671,29 @@ class tonghopluong_huyenController extends Controller
                 $thanhtien = 0;
                 foreach (getColTongHop() as $ct) {
                     if ($chitiet->$ct > 50000) {
-                        $thanhtien +=  $chitiet->$ct;
+                        $thanhtien += $chitiet->$ct;
                     }
                 }
-                if($chitiet->ttl == 0){//trường hop dinh mức ko nhân dc với hệ số
+                if ($chitiet->ttl == 0) {//trường hop dinh mức ko nhân dc với hệ số
                     $chitiet->tongtl = $chitiet->tonghs * $chitiet->luongcoban + $thanhtien;
-                }else{
+                } else {
                     $chitiet->tongtl = $chitiet->ttl;
                 }
                 $chitiet->stbh_dv = $chitiet->ttbh_dv;
-                $chitiet->stbhxh_dv = $chitiet->stbhxh_dv/$chitiet->luongcoban;
-                $chitiet->stbhyt_dv = $chitiet->stbhyt_dv/$chitiet->luongcoban;
-                $chitiet->stkpcd_dv = $chitiet->stkpcd_dv/$chitiet->luongcoban;
-                $chitiet->stbhtn_dv = $chitiet->stbhtn_dv/$chitiet->luongcoban;
-                $chitiet->ttbh_dv = $chitiet->ttbh_dv/$chitiet->luongcoban;
+                if ($chitiet->luongcoban == 0) {
+                    $chitiet->stbhxh_dv = 0;
+                    $chitiet->stbhyt_dv = 0;
+                    $chitiet->stkpcd_dv = 0;
+                    $chitiet->stbhtn_dv = 0;
+                    $chitiet->ttbh_dv = 0;
+                } else {
+                    $chitiet->stbhxh_dv = $chitiet->stbhxh_dv / $chitiet->luongcoban;
+                    $chitiet->stbhyt_dv = $chitiet->stbhyt_dv / $chitiet->luongcoban;
+                    $chitiet->stkpcd_dv = $chitiet->stkpcd_dv / $chitiet->luongcoban;
+                    $chitiet->stbhtn_dv = $chitiet->stbhtn_dv / $chitiet->luongcoban;
+                    $chitiet->ttbh_dv = $chitiet->ttbh_dv / $chitiet->luongcoban;
+                }
+
             }
             //dd($model->toarray());
 

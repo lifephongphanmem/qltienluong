@@ -323,7 +323,7 @@
                                 </li>
 
                                 <li>
-                                    <a href="{{url('chuc_nang/xem_du_lieu/huyen?thang='.date('m').'&nam='.date('Y').'&trangthai=ALL')}}"><i class="fa fa-caret-right"></i>Xem số liệu tổng hợp toàn địa bàn</a>
+                                    <a href="{{url('chuc_nang/xem_du_lieu/huyen?thang='.date('m').'&nam='.date('Y').'&trangthai=ALL&phanloai=ALL')}}"><i class="fa fa-caret-right"></i>Xem số liệu tổng hợp toàn địa bàn</a>
                                 </li>
                             @endif
 
