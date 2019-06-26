@@ -440,11 +440,14 @@ Route::group(['prefix'=>'chuc_nang'],function(){
         Route::get('mautruc','bangluongController@printf_mautruc');
         Route::get('mautinhnguyen','bangluongController@printf_mautinhnguyen');
         Route::post('maumtm','bangluongController@printf_maumtm');
+
+
         //truy lĩnh
         Route::post('mautruylinh','bangluongController@printf_mautruylinh');
 
         Route::get('mauthpl','bangluong_inController@printf_mauthpl');
         Route::get('mauthpc','bangluong_inController@printf_mauthpc');
+        Route::post('mautt107_m4','bangluong_inController@printf_mautt107_m4');//mẫu cam ranh - Khánh Hòa
         //chi khác (trực, công tác phí)
         Route::get('mauctphi','bangluong_inController@printf_mauctphi');
 
@@ -1045,13 +1048,7 @@ Route::group(['prefix'=>'ajax'],function(){
         Route::get('get','dutoanluongController@get_detail');
     });
 });
-/*
-Route::group(['prefix'=>'luu_du_lieu'],function(){
-    Route::get('can_bo','dshuutriController@store');
-    Route::get('bang_luong','dshuutriController@update');
-    Route::get('het_tap_su','dshuutriController@getinfo');
-});
-*/
+
 Route::group(['prefix'=>'he_thong'],function(){
     Route::group(['prefix'=>'don_vi'],function(){
         Route::get('don_vi','dmdonviController@information_local');

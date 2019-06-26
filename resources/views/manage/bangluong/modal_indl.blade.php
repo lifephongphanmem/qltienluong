@@ -87,11 +87,30 @@
 
                                     <div class="col-md-6">
                                         <div class="form-group">
+                                            <button type="button" style="border-width: 0px" onclick="inblmtt107('/chuc_nang/bang_luong/mautt107_m4')" class="btn btn-default btn-xs mbs"
+                                                    title="" data-target="#mautt107-modal" data-toggle="modal">
+                                                <i class="fa fa-print"></i>&nbsp; Bảng lương mẫu C02-HD (TT107/2017/TT-BTC) - mẫu CR</button>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-group">
                                             <button type="button" style="border-width: 0px" onclick="inblmtt107_pb('/chuc_nang/bang_luong/mautt107_pb')" class="btn btn-default btn-xs mbs"
                                                     title="Bảng lương của cán bộ theo mẫu C02-HD" data-target="#mautt107-modal" data-toggle="modal">
                                                 <i class="fa fa-print"></i>&nbsp; Bảng lương mẫu C02-HD (TT107) - theo khối, tổ công tác</button>
                                         </div>
                                     </div>
+
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <button type="button" style="border-width: 0px" onclick="inblmtt107('/chuc_nang/bang_luong/maumtm')" class="btn btn-default btn-xs mbs"
+                                                    title="Bảng lương theo mục, tiểu mục" data-target="#mautt107-modal" data-toggle="modal">
+                                                <i class="fa fa-print"></i>&nbsp; Bảng thanh toán tiền lương theo mục, tiểu mục</button>
+                                        </div>
+                                    </div>
+
                                 </div>
 
                                 <div class="row">
@@ -105,21 +124,13 @@
 
                                     <div class="col-md-6">
                                         <div class="form-group">
-                                            <button type="button" style="border-width: 0px" onclick="inblmtt107('/chuc_nang/bang_luong/maumtm')" class="btn btn-default btn-xs mbs"
-                                                    title="Bảng lương thêm cột giảm trừ lương, phần trăm vượt khung" data-target="#mautt107-modal" data-toggle="modal">
-                                                <i class="fa fa-print"></i>&nbsp; Bảng thanh toán tiền lương theo mục, tiểu mục</button>
+                                            <a id="in_thpl" href="" onclick="inthpl()" style="border-width: 0px;margin-left: 5px" target="_blank">
+                                                <i class="fa fa-print"></i>&nbsp; Bảng tổng hợp lương theo phân loại công tác</a>
                                         </div>
                                     </div>
                                 </div>
 
                                 <div class="row">
-                                    <div class="col-md-6">
-                                        <div class="form-group">
-                                            <a id="in_thpl" href="" onclick="inthpl()" style="border-width: 0px;margin-left: 5px" target="_blank">
-                                                <i class="fa fa-print"></i>&nbsp; Bảng tổng hợp lương theo phân loại công tác</a>
-                                        </div>
-                                    </div>
-
                                     <div class="col-md-6">
                                         <div class="form-group">
                                             <a id="in_thpc" href="" onclick="inthpc()" style="border-width: 0px;margin-left: 5px" target="_blank">

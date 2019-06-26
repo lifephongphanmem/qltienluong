@@ -32,7 +32,7 @@ class CreateNguonkinhphiNangluongTable extends Migration
             $table->string('msngbac', 50)->nullable();
             $table->string('macanbo', 50)->nullable();
             $table->string('tencanbo', 50)->nullable();
-            $table->string('stt', 10)->nullable();
+            $table->double('stt')->default(1);
             $table->double('luongcoban')->default(0);
             $table->double('heso')->default(0);
             $table->double('hesobl')->default(0);

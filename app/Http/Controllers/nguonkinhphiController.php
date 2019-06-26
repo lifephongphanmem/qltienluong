@@ -262,7 +262,6 @@ class nguonkinhphiController extends Controller
                     $m_cb[$key]['nam'] = $a_thang[$i]['nam'];
                     $a_data[] = $m_cb[$key];
                 }
-                //tính toán xong lưu dữ liệu
             }
 
             $m_data = a_split($a_data,array('mact','macongtac'));

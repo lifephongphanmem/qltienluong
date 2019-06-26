@@ -2948,7 +2948,7 @@ class bangluongController extends Controller
             //xử lý ẩn hiện cột phụ cấp => biết tổng số cột hiện => colspan trên báo cáo
             $a_goc = array('hesott');
             $model_pc = dmphucap_donvi::where('madv',$m_bl->madv)->where('phanloai','<','3')->wherenotin('mapc',$a_goc)->get();
-            $a_pl = array_column($model_pc->toarray(),'phanloai','mapc');
+            //$a_pl = array_column($model_pc->toarray(),'phanloai','mapc');
             //dd($a_pl);
             $a_phucap = array();
             $col = 0;
@@ -2969,7 +2969,7 @@ class bangluongController extends Controller
                     foreach($a_phucap as $k=>$v) {
                         $cb->tonghs += $cb->$k;
                     }
-                    $cb->ttl_tn =round($cb->tonghs * $luongcb, 0);
+                    $cb->ttl_tn = round($cb->tonghs * $luongcb, 0);
                 }
             }
             return view('reports.bangluong.donvi.mautt107_m2')

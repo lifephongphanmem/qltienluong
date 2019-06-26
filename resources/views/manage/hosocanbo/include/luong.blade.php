@@ -15,6 +15,7 @@
                 </div>
                 <div class="portlet-body" style="display: block;">
                     <div class="row">
+                        <input type="hidden" name="namnangluong" id="namnangluong" value="0">
                         <div class="col-md-2">
                             <div class="form-group">
                                 <label class="control-label">Mã ngạch <span class="require">*</span></label>
@@ -46,7 +47,7 @@
                                 </div>
                             </div>
 
-                            <div class="col-md-2">
+                            <div id="div_bac" class="col-md-2">
                                 <div class="form-group">
                                     <label class="control-label">Bậc lương</label>
                                     <select class="form-control select2me" name="bac" id="bac" onchange="getHS()">
@@ -114,14 +115,14 @@
                         <div class="col-md-3">
                             <div class="form-group">
                                 <label class="control-label">Ngạch bậc - Từ ngày</label>
-                                {!! Form::input('date','ngaytu',null,array('id' => 'ngaytu', 'class' => 'form-control'))!!}
+                                {!! Form::input('date','ngaytu',null,array('id' => 'ngaytu', 'class' => 'form-control ngachbac'))!!}
                             </div>
                         </div>
 
                         <div class="col-md-3">
                             <div class="form-group">
                                 <label class="control-label">Ngạch bậc - Đến ngày</label>
-                                {!! Form::input('date','ngayden',null,array('id' => 'ngayden', 'class' => 'form-control'))!!}
+                                {!! Form::input('date','ngayden',null,array('id' => 'ngayden', 'class' => 'form-control ngachbac'))!!}
                             </div>
                         </div>
 
@@ -233,14 +234,14 @@
                                     <div class="col-md-3">
                                         <div class="form-group">
                                             <label class="control-label">TN nghề - Từ ngày</label>
-                                            {!! Form::input('date','tnntungay',null,array('id' => 'tnntungay', 'class' => 'form-control'))!!}
+                                            {!! Form::input('date','tnntungay',null,array('id' => 'tnntungay', 'class' => 'form-control thamnien'))!!}
                                         </div>
                                     </div>
 
                                     <div class="col-md-3">
                                         <div class="form-group">
                                             <label class="control-label">TN nghề - Đến ngày</label>
-                                            {!! Form::input('date','tnndenngay',null,array('id' => 'tnndenngay', 'class' => 'form-control'))!!}
+                                            {!! Form::input('date','tnndenngay',null,array('id' => 'tnndenngay', 'class' => 'form-control thamnien'))!!}
                                         </div>
                                     </div>
                                 @elseif($pc->mapc == 'pctnn' && $pc->phanloai == 3)

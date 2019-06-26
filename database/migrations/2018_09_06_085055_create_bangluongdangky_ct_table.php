@@ -20,7 +20,7 @@ class CreateBangluongdangkyCtTable extends Migration
             $table->string('mapb', 50)->nullable();
             $table->string('msngbac', 50)->nullable();
             $table->string('mact', 50)->nullable();
-            $table->string('stt', 10)->nullable();
+            $table->double('stt')->default(1);
             $table->string('phanloai',50)->default('CVCHINH');//phân loại kiêm nhiệm / chính thức
             $table->string('macanbo', 50)->nullable();
             $table->string('tencanbo', 50)->nullable();

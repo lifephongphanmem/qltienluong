@@ -48,6 +48,8 @@
     </style>
 </head>
 
+
+
 <body style="font:normal 11px Times, serif;">
     <table class="header" width="96%" border="0" cellspacing="0" cellpadding="8" style="margin:0 auto 25px; text-align: center;">
         <tr>
@@ -89,7 +91,7 @@
         </tr>
 
     </table>
-    <?php $vuotkhung = false; ?>
+    <?php $a_hs = array(); ?>
     <table class="money" cellspacing="0" cellpadding="0" border="1" style="margin: 20px auto; border-collapse: collapse;font:normal {{$thongtin['cochu']}}px Times, serif;">
         <thead>
             <tr style="padding-left: 2px;padding-right: 2px">
@@ -98,9 +100,9 @@
                 <th rowspan="2">Chức vụ</th>
                 <th style="width: 3%;" rowspan="2">Mã ngạch</th>
                 @foreach($a_phucap as $key=>$val)
-                    @if($key == 'vuotkhung')
-                        <th colspan="2">Phụ cấp</br>V.Khung</th>
-                        <?php $vuotkhung = true; ?>
+                    @if($key == 'vuotkhung' || $key == 'pctnn')
+                        <th colspan="2">{!!$val!!}</th>
+                        <?php $a_hs[] = $key; ?>
                     @else
                         <th rowspan="2">{!!$val!!}</th>
                     @endif
@@ -121,10 +123,10 @@
             </tr>
 
             <tr style="padding-left: 2px;padding-right: 2px">
-                @if($vuotkhung)
+                @for($a=0;$a<count($a_hs);$a++)
                     <th>Tỷ lệ (%)</th>
                     <th>Hệ số</th>
-                @endif
+                @endfor
 
                 <th>Trừ vào CP</th>
                 <th>Trừ vào lương</th>
@@ -140,18 +142,19 @@
             </tr>
 
             <tr>
-                @for($j=1;$j<=21 + ($vuotkhung ? $col : $col-1);$j++)
+                @for($j=1;$j<=20 + count($a_hs) + $col;$j++)
                     <th>{{$j}}</th>
                 @endfor
             </tr>
         </thead>
+
         <?php $i=1;$stt=1; ?>
         @foreach($model_congtac as $congtac)
             <?php $model_luong = $model->where('mact',$congtac->mact)?>
             @if(count($model_luong)> 0)
                 <tr style="font-weight: bold;">
                     <td>{{convert2Roman($i++)}}</td>
-                    <td style="text-align: left;" colspan="{{20 + ($vuotkhung ? $col : $col-1)}}">{{$congtac->tenct}}</td>
+                    <td style="text-align: left;" colspan="{{19 + count($a_hs) + $col}}">{{$congtac->tenct}}</td>
                 </tr>
                 @foreach($model_luong as $ct)
                     <tr>
@@ -161,8 +164,9 @@
                         <td style="text-align: left">{{$ct->msngbac}}</td>
 
                         @foreach($a_phucap as $key=>$val)
-                            @if($key == 'vuotkhung')
-                                <td style="text-align: center">{{dinhdangsothapphan($ct->hs_vuotkhung,5)}}</td>
+                            @if($key == 'vuotkhung' || $key == 'pctnn')
+                                <?php $ma = 'hs_'.$key; ?>
+                                <td style="text-align: center">{{dinhdangsothapphan($ct->$ma,5)}}</td>
                                 <td>{{dinhdangsothapphan($ct->$key,5)}}</td>
                             @else
                                 <td>{{dinhdangsothapphan($ct->$key,5)}}</td>
@@ -193,7 +197,7 @@
                 <tr style="font-weight: bold; text-align: center; font-style: italic">
                     <td colspan="4">Cộng</td>
                     @foreach($a_phucap as $key=>$val)
-                        @if($key == 'vuotkhung')
+                            @if($key == 'vuotkhung' || $key == 'pctnn')
                             <td></td>
                             <td>{{dinhdangsothapphan($model_luong->sum($key) ,5)}}</td>
                         @else
@@ -225,7 +229,7 @@
         <tr style="font-weight: bold; text-align: center;">
             <td colspan="4">Tổng cộng</td>
             @foreach($a_phucap as $key=>$val)
-                @if($key == 'vuotkhung')
+                @if($key == 'vuotkhung' || $key == 'pctnn')
                     <td></td>
                     <td>{{dinhdangsothapphan($model->sum($key) ,5)}}</td>
                 @else
