@@ -175,7 +175,7 @@ class dutoanluongController extends Controller
             $model = hosocanbo::select($a_th)->where('madv', session('admin')->madv)
                 ->where('theodoi', '<', '9')
                 ->get();
-            $a_hoten = array_column($model->toarray(), 'tencanbo', 'macanbo');
+            //$a_hoten = array_column($model->toarray(), 'tencanbo', 'macanbo');
             foreach ($model as $cb) {
                 $cb->congtac = 'CONGTAC';
                 $cb->macongtac = $a_congtac[$cb->mact];

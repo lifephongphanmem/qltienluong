@@ -63,7 +63,7 @@
                                     <td>{{$value->tenpc}}</td>
                                     <td>{{$value->tenphanloai}}</td>
                                     <td>{{$value->tencongthuc}}</td>
-                                    <td class="text-center">{{$value->tonghop}}</td>
+                                    <td class="text-center">{{$value->tonghop == 1 ? 'Tổng hợp và dự toán':''}}</td>
                                     <td>
                                         <a href="{{$furl.'edit?maso='.$value->mapc}}" class="btn btn-default btn-xs">
                                             <i class="fa fa-edit"></i>&nbsp; Sửa</a>

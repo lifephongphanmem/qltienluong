@@ -16,7 +16,7 @@ class dmphanloaidonviController extends Controller
 {
     public function index(){
         if (Session::has('admin')) {
-            $model=dmphanloaidonvi::all();
+            $model= dmphanloaidonvi::all();
             return view('system.danhmuc.phanloaidonvi.index')
                 ->with('model',$model)
                 ->with('furl','/danh_muc/pl_don_vi/')
