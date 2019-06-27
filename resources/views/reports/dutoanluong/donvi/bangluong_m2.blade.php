@@ -123,7 +123,7 @@
                 <?php $stt=1; ?>
                 <tr style="font-weight: bold; font-style:italic ">
                     <td>{{convert2Roman($i++)}}</td>
-                    <td style="text-align: left;" colspan="{{10 + $col}}">{{$val}}</td>
+                    <td style="text-align: left;" colspan="{{11 + $col}}">{{$val}}</td>
                 </tr>
                 @foreach($model_luong as $ct)
                     <tr>
