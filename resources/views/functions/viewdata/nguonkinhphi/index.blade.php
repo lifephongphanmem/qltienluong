@@ -77,8 +77,9 @@
                                                 <a href="{{url('/nguon_kinh_phi/khoi/mautt107_m2?maso='.$value['masodv'])}}" class="btn btn-default btn-sm" TARGET="_blank">
                                                 <i class="fa fa-print"></i>&nbsp; Số liệu tổng hợp</a>
                                             @else
-                                            <a href="{{url('/nguon_kinh_phi/huyen/mautt107_m2?maso='.$value['masodv'])}}" class="btn btn-default btn-sm" TARGET="_blank">
-                                                <i class="fa fa-print"></i>&nbsp; Số liệu tổng hợp</a>
+                                                <a href="{{url('/nguon_kinh_phi/huyen/mautt107_m2?maso='.$value['masodv'])}}" class="btn btn-default btn-sm" TARGET="_blank">
+                                                    <i class="fa fa-print"></i>&nbsp; Số liệu tổng hợp</a>
+                                            @endif
                                             @if($value->tralai)
                                                 <button type="button" class="btn btn-default btn-sm" onclick="confirmChuyen('{{$value['masodv']}}')" data-target="#chuyen-modal" data-toggle="modal"><i class="fa icon-share-alt"></i>&nbsp;
                                                     Trả lại dữ liệu</button>
