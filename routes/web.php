@@ -381,6 +381,9 @@ Route::group(['prefix'=>'nguon_kinh_phi'],function(){
         Route::post('tralai','tonghopluong_khoiController@tralai'); //trả lại dữ liệu
         Route::get('getlydo','tonghopluong_khoiController@getlydo');//lý do trả lại dữ liệu
     });
+    Route::group(['prefix'=>'huyen'],function(){
+        Route::get('mautt107_m2','tonghopnguon_huyenController@printf_tt107_m2');
+    });
 });
 
 Route::group(['prefix'=>'chuc_nang'],function(){
@@ -591,6 +594,7 @@ Route::group(['prefix'=>'chuc_nang'],function(){
             Route::get('edit_detail_diaban','tonghopluong_huyenController@edit_detail_diaban');//chỉnh sửa dữ liêu
             Route::post('store_detail','tonghopluong_huyenController@store_detail');//chỉnh sửa dữ liêu
             Route::post('store_detail_diaban','tonghopluong_huyenController@store_detail_diaban');//chỉnh sửa dữ liêu
+            Route::get('thanh_toan_CR','tonghopluong_huyenController@thanhtoanluongCR');
         });
 
         Route::group(['prefix'=>'tinh'],function(){
@@ -653,7 +657,8 @@ Route::group(['prefix'=>'chuc_nang'],function(){
             Route::get('index','tonghopnguon_huyenController@index');
             Route::post('tralai','tonghopnguon_huyenController@tralai');
             Route::get('ma_so={sohieu}/in','tonghopnguon_huyenController@printf');
-            Route::get('tonghop','tonghopnguon_khoiController@tonghop');//tạm
+            //Route::get('tonghop','tonghopnguon_khoiController@tonghop');//tạm
+            Route::get('tonghop','tonghopnguon_huyenController@tonghop');//tạm
             Route::post('senddata','tonghopnguon_huyenController@senddata'); //gửi dữ liệu lên tỉnh
         });
 

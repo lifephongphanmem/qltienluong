@@ -57,8 +57,10 @@
                                         <a href="{{url($furl_th.'tonghop?sohieu='.$value->sohieu)}}" class="btn btn-default btn-xs" target="_blank">
                                             <i class="fa fa-print"></i>&nbsp; Số liệu tổng hợp</a>
                                         @if ($value['masodv'] == NULL)
+                                            @if($value['trangthai'] == 'CHUAGUI')
                                             <button type="button" class="btn btn-default btn-xs" onclick="confirmChuyen('{{$value->sohieu}}')" data-target="#chuyen-modal" data-toggle="modal"><i class="fa fa-share-square-o"></i>&nbsp;
                                                 Gửi dữ liệu</button>
+                                            @endif
                                         @endif
 
                                         @if($value['trangthai'] == 'TRALAI')

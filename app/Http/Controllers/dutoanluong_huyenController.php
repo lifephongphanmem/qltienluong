@@ -56,12 +56,14 @@ class dutoanluong_huyenController extends Controller
                         $dv->trangthai = 'CHUADL';
                     }elseif($sl < $soluong){
                         $dv->trangthai = 'CHUADAYDU';
-                    }else{
+                    }elseif($sl == $soluong){
+                        $dv->trangthai = 'CHUAGUI';
+                    }
+                    else{
                         $dv->trangthai = 'CHUATAO';
                     }
                 }
             }
-
             return view('functions.dutoanluong.index')
                 ->with('model', $model)
                 ->with('a_trangthai', $a_trangthai)
@@ -406,7 +408,7 @@ class dutoanluong_huyenController extends Controller
                     $ct->tencongtac = isset($model_ct[$ct->mact]) ? $model_ct[$ct->mact] : '';
                 }
             }
-            $m_pc = dmphucap_donvi::where('madv', session('admin')->madv)->orderby('stt')->get()->toarray();
+            $m_pc = dmphucap_donvi::where('madv', $madv)->orderby('stt')->get()->toarray();
 
             foreach ($m_pc as $ct) {
                 if ($model->sum($ct['mapc']) > 0) {
@@ -417,7 +419,7 @@ class dutoanluong_huyenController extends Controller
             $m_donvi = dmdonvi::select('madv')->where('macqcq', $madv)->get();
             //dd($model_phanloaict);
             //dd($model->where('mact','1506672780')->groupby('mact')->toarray());
-            $thongtin = dmdonvi::where('madv',session('admin')->madv)->first();
+            $thongtin = dmdonvi::where('madv',$madv)->first();
 
             $model_congtac = $model->map(function ($data) {
                 return collect($data->toArray())

@@ -183,6 +183,14 @@
                         </div>
                     </div>
                 </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <a id="in_ttCR" href="" onclick="thanhtoanCR('/chuc_nang/tong_hop_luong/huyen/thanh_toan_CR')" style="border-width: 0px;margin-left: 5px" target="_blank">
+                                <i class="fa fa-print"></i>&nbsp; In bảng thanh toán lương (CR)</a>
+                        </div>
+                    </div>
+                </div>
             </div>
             <input type="hidden" id="mathdv_in" name="mathdv_in"/>
             <input type="hidden" id="madv_in" name="madv_in"/>
@@ -203,6 +211,9 @@
         }
         function insolieuCR($url){
             $("#in_blCR").attr("href", $url +'?mathdv='+$('#mathdv_in').val()+'&madv='+ $('#madv_in').val());
+        }
+        function thanhtoanCR($url){
+            $("#in_ttCR").attr("href", $url +'?mathdv='+$('#mathdv_in').val()+'&madv='+ $('#madv_in').val());
         }
         function confirmChuyen(math) {
             document.getElementById("mathdv").value = math;

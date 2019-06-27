@@ -155,46 +155,37 @@
                         <td>{{convert2Roman($i++)}}</td>
                         <td style="text-align: left;" colspan="{{20+ $col}}">{{$congtac['tenct']}}</td>
                     </tr>
-                    @foreach($a_thang as $key=>$val)
-                        <tr style="font-weight: bold; font-style:italic ">
+                    @foreach($model_luong as $ct)
+
+                        <tr>
+                            <td>{{$stt++}}</td>
+                            <td style="text-align: left">{{$ct->tencanbo}}</td>
+                            <td style="text-align: left">{{$ct->tencv}}</td>
+                            <td style="text-align: left">{{$ct->msngbac}}</td>
+                            <td style="text-align: right">{{$ct->heso}}</td>
+
+                            @foreach($a_phucap as $key=>$val)
+                                <td>{{dinhdangsothapphan($ct->$key,5)}}</td>
+                            @endforeach
+
+                            <td>{{dinhdangsothapphan($ct->tonghs,5)}}</td>
+                            <td>{{dinhdangso($ct->tongtl)}}</td>
+                            <td>{{dinhdangso(0)}}</td>
+                            <td>{{dinhdangso(0)}}</td>
+                            <td>{{dinhdangso(0)}}</td>
+                            <td>{{dinhdangso($ct->giaml)}}</td>
+                            <td>{{dinhdangso(0)}}</td>
+                            <td>{{dinhdangso($ct->tongtl - $ct->giaml)}}</td>
+
+                            <td>{{dinhdangso($ct->stbhxh_dv*8/17.5)}}</td>
+                            <td>{{dinhdangso($ct->stbhyt_dv*1.5/3)}}</td>
+                            <td>{{dinhdangso($ct->stbhtn_dv)}}</td>
+                            <td>{{dinhdangso($ct->stbhxh_dv*8/17.5+$ct->stbhyt_dv*1.5/3+$ct->stbhtn_dv)}}</td>
+                            <td>{{dinhdangso(0)}}</td>
+                            <td>{{dinhdangso(0)}}</td>
+                            <td>{{dinhdangso($ct->tongtl - $ct->giaml-$ct->stbhxh_dv*8/17.5-$ct->stbhyt_dv*1.5/3-$ct->stbhtn_dv)}}</td>
                             <td></td>
-                            <td style="text-align: left;" colspan="{{20+ $col}}">Tháng: {{$key}}</td>
                         </tr>
-                        <?php
-                        $model_luongct = $model_luong->where('thang',$key);
-                        ?>
-                        @foreach($model_luongct as $ct)
-
-                            <tr>
-                                <td>{{$stt++}}</td>
-                                <td style="text-align: left">{{$ct->tencanbo}}</td>
-                                <td style="text-align: left">{{$ct->tencv}}</td>
-                                <td style="text-align: left">{{$ct->msngbac}}</td>
-                                <td style="text-align: right">{{$ct->heso}}</td>
-
-                                @foreach($a_phucap as $key=>$val)
-                                    <td>{{dinhdangsothapphan($ct->$key,5)}}</td>
-                                @endforeach
-
-                                <td>{{dinhdangsothapphan($ct->tonghs,5)}}</td>
-                                <td>{{dinhdangso($ct->tongtl)}}</td>
-                                <td>{{dinhdangso(0)}}</td>
-                                <td>{{dinhdangso(0)}}</td>
-                                <td>{{dinhdangso(0)}}</td>
-                                <td>{{dinhdangso($ct->giaml)}}</td>
-                                <td>{{dinhdangso(0)}}</td>
-                                <td>{{dinhdangso($ct->tongtl - $ct->giaml)}}</td>
-
-                                <td>{{dinhdangso($ct->stbhxh_dv*8/17.5)}}</td>
-                                <td>{{dinhdangso($ct->stbhyt_dv*1.5/3)}}</td>
-                                <td>{{dinhdangso($ct->stbhtn_dv)}}</td>
-                                <td>{{dinhdangso($ct->stbhxh_dv*8/17.5+$ct->stbhyt_dv*1.5/3+$ct->stbhtn_dv)}}</td>
-                                <td>{{dinhdangso(0)}}</td>
-                                <td>{{dinhdangso(0)}}</td>
-                                <td>{{dinhdangso($ct->tongtl - $ct->giaml-$ct->stbhxh_dv*8/17.5-$ct->stbhyt_dv*1.5/3-$ct->stbhtn_dv)}}</td>
-                                <td></td>
-                            </tr>
-                        @endforeach
                     @endforeach
 
                     <tr style="font-weight: bold; text-align: center; font-style: italic">
