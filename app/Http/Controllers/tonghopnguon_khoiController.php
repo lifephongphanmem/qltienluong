@@ -63,7 +63,7 @@ class tonghopnguon_khoiController extends Controller
     public function index(){
         if (Session::has('admin')) {
             $madv = session('admin')->madv;
-            $model_nguon = nguonkinhphi::where('trangthai','DAGUI')->where('macqcq', $madv)->get();
+            $model_nguon = nguonkinhphi::where('trangthai ','DAGUI')->where('macqcq', $madv)->get();
             $model_nguon_khoi = nguonkinhphi_khoi::where('madv', $madv)->get();
             $model = dmthongtuquyetdinh::all();
             $a_trangthai = getStatus();
@@ -91,7 +91,10 @@ class tonghopnguon_khoiController extends Controller
                         $dv->trangthai = 'CHUADL';
                     }elseif($sl < $soluong){
                         $dv->trangthai = 'CHUADAYDU';
-                    }else{
+                    }elseif($sl == $soluong){
+                        $dv->trangthai = 'CHUAGUI';
+                    }
+                    else{
                         $dv->trangthai = 'CHUATAO';
                     }
                 }
@@ -223,8 +226,9 @@ class tonghopnguon_khoiController extends Controller
     function tonghop(Request $requests){
         //Kiểm tra cấp đơn vị xem đơn vị để update trường masoh hoặc masot
         if (Session::has('admin')) {
+            $inputs = $requests->all();
             $model = nguonkinhphi::where('macqcq',session('admin')->madv)
-                ->where('sohieu','TT67_2017')->get();
+                ->where('sohieu',$inputs['sohieu'])->get();
             $model_donvi = dmdonvi::where('madvbc',session('admin')->madvbc)->get();
             if(count($model) == 0){
                 return view('errors.nodata');
