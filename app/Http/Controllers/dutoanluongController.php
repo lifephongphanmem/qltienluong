@@ -1244,7 +1244,7 @@ class dutoanluongController extends Controller
     {
         if (Session::has('admin')) {
             //dd($mathdv);
-            $model = dutoanluong_bangluong::where('masodv', $masodv)->orderby('thang')->get();
+            $model = dutoanluong_bangluong::where('masodv', $masodv)->orderby('thang')->orderby('stt')->get();
             $model_thongtin = dutoanluong::where('masodv', $masodv)->first();
             $a_ct = array_column(dmphanloaict::all()->toArray(), 'tenct', 'mact');
 
@@ -1398,7 +1398,7 @@ class dutoanluongController extends Controller
                 $ct->ttbh_dv = $ct->ttbh_dv * 12;
             }
 
-            //dd($model);
+            //dd($model->toarray());
             $thongtin = array('nguoilap' => session('admin')->name,
                 'namns' => $model_thongtin->namns);
 

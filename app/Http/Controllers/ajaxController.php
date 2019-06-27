@@ -121,25 +121,19 @@ class ajaxController extends Controller
         }
 
         $inputs = $request->all();
+        $model = ngachluong::where('msngbac', $inputs['msngbac'])->first();
+        $bac = $inputs['bac'] > $model->baclonnhat ? $model->baclonnhat : $inputs['bac'];
+        $result['message'] = '<div id="div_bac" class="col-md-2">
+                                <div class="form-group">
+                                    <label class="control-label">Bậc lương</label>';
 
-        if (isset($inputs['plnb']) && isset($inputs['tennb'])) {
-            $m_nbs = ngachbac::select('bac', 'msngbac')
-                ->where('plnb', '=', $inputs['plnb'])
-                ->where('tennb', '=', $inputs['tennb'])
-                ->distinct()->get();
-            $msngbac = '';
-            $result['message'] = '<select name="bac" id="bac" class="form-control" onchange="getHS()"><option value="all">--Chọn bậc lương--</option>';
-            if (count($m_nbs) > 0) {
-                foreach ($m_nbs as $m_nb) {
-                    $msngbac = $m_nb->msngbac;
-                    $result['message'] .= '<option value="' . $m_nb->bac . '">' . $m_nb->bac . '</option>';
-                }
-                $result['message'] .= '</select>';
-                //gán giá trị msngbac để tách mảng
-                $result['message'] .= ';' . $msngbac;
-                $result['status'] = 'success';
-            }
+        $result['message'] .= '<select name="bac" id="bac" class="form-control" onchange="getHS()">';
+        for ($i = 1; $i <= $model->baclonnhat; $i++) {
+            $result['message'] .= '<option value="' . $i . '" '.($bac == $i ? 'selected':'').'>' . $i . '</option>';
         }
+        $result['message'] .= '</select></div></div>';
+
+        $result['status'] = 'success';
         die(json_encode($result));
     }
 
@@ -165,8 +159,28 @@ class ajaxController extends Controller
             die(json_encode($result));
         }
 
+        $bac = $inputs['bac'];
+        $model = ngachluong::where('msngbac',$inputs['msngbac'])->first();
+        $heso = $vuotkhung = 0;
+        $namnl = $model->namnb;
 
-        $manhom = ngachluong::where('msngbac',$inputs['msngbac'])->first()->manhom;
+        //mặc định nếu ko có vượt khung bacvuotkhung=0, nhưng do form nhap de giá trị bacvuotkhung=0
+        if($model->bacvuotkhung==0 || $model->bacvuotkhung==1){
+            $heso = $model->heso + ($bac - 1) * $model->hesochenhlech;
+            $vuotkhung = $model->vuotkhung;
+        }elseif($bac >= $model->bacvuotkhung){//bao gồm cả trường hợp mã ngạch ko có vượt khung
+            //do bắt đầu từ bậc 1 và bắt đàu vượt khung thì heso = hệ số bậc lương trc
+            $heso = $model->heso + ($model->bacvuotkhung - 2) * $model->hesochenhlech;
+
+            $vuotkhung = $model->vuotkhung + ($bac - $model->bacvuotkhung) * $model->namnb;
+        }else{
+            $heso= $model->heso + ($bac - 1) * $model->hesochenhlech;
+            $vuotkhung = 0;
+        }
+
+        $result['message'] = $heso.';'.$vuotkhung.';'.$namnl.';';
+
+        /*
         $model_nhomngachluong = nhomngachluong::where('manhom',$manhom)->first();
         //dd($inputs);
         if($model_nhomngachluong->manhom !='CBCT'){
@@ -174,7 +188,7 @@ class ajaxController extends Controller
         }else{
             $result['message'] = getLuongNgachBac_CBCT($inputs['msngbac'],$inputs['bac']);
         }
-
+        */
         $result['status'] = 'success';
 
         die(json_encode($result));
@@ -278,7 +292,6 @@ class ajaxController extends Controller
             foreach($model_linhvuc as $linhvuc){
                 $result['message'] .='<option value="'.$linhvuc->makhoipb.'">'.$linhvuc->tenkhoipb.'</option>';
             }
-
 
             $result['message'] .='</seclect>';
             $result['message'] .='</div>';

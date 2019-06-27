@@ -163,7 +163,7 @@ function getLuongNgachBac_CBCT($msngbac,$bac=1){
                 $vuotkhung = $model->vuotkhung;
             }elseif($bac >= $model->bacvuotkhung){//bao gồm cả trường hợp mã ngạch ko có vượt khung
                 //do bắt đầu từ bậc 1 và bắt đàu vượt khung thì heso = hệ số bậc lương trc
-                $heso=$model->heso + ($model->bacvuotkhung - 2) * $model->hesochenhlech;
+                $heso = $model->heso + ($model->bacvuotkhung - 2) * $model->hesochenhlech;
 
                 $vuotkhung = $model->vuotkhung + ($bac - $model->bacvuotkhung) * $model->namnb;
             }else{
