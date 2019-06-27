@@ -3,8 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\dmdonvi;
+use App\dmphanloaict;
+use App\dmphucap_donvi;
 use App\dmthongtuquyetdinh;
 use App\nguonkinhphi;
+use App\nguonkinhphi_bangluong;
 use App\nguonkinhphi_huyen;
 use App\nguonkinhphi_khoi;
 use Carbon\Carbon;
@@ -156,6 +159,63 @@ class tonghopnguon_khoiController extends Controller
                 nguonkinhphi_huyen::create($inputs);
             }
             return redirect('/chuc_nang/tong_hop_nguon/khoi/index');
+        } else
+            return view('errors.notlogin');
+    }
+
+    function printf_tt107_m2(Request $request)
+    {
+        if (Session::has('admin')) {
+            $inputs = $request->all();
+            //dd($inputs);
+            $model = nguonkinhphi_bangluong::where('masodv', $inputs['maso'])->where('thang', '07')->orderby('stt')->get();
+            //dd($model);
+
+            //$model = dutoanluong_bangluong::where('masodv', $inputs['masodv'])->orderby('thang')->get();
+            $model_thongtin = nguonkinhphi::where('masodv', $inputs['maso'])->first();
+            $a_congtac = array_column(dmphanloaict::wherein('mact',a_unique(array_column($model->toarray(),'mact')))->get()->toArray(), 'tenct', 'mact');
+            //dd($a_ct);
+            //cho trương hợp đơn vị cấp trên in dữ liệu dv câp dưới mà ko sai tên đơn vị
+            $m_dv = dmdonvi::where('madv', $model_thongtin->madv)->first();
+            $a_phucap = array();
+            $col = 0;
+            $m_pc = dmphucap_donvi::where('madv', $model_thongtin->madv)->orderby('stt')->get()->toarray();
+
+            foreach ($m_pc as $ct) {
+                if ($model->sum($ct['mapc']) > 0) {
+                    $a_phucap[$ct['mapc']] = $ct['report'];
+                    $col++;
+                }
+            }
+
+            foreach ($model as $ct) {
+                foreach ($m_pc as $pc) {
+                    $ma = $pc['mapc'];
+                    $ma_st = 'st_'.$pc['mapc'];
+                    $ct->$ma = $ct->$ma * 6;
+                    $ct->$ma_st = $ct->$ma_st * 6;
+                }
+                $ct->tonghs = $ct->tonghs * 6;
+                $ct->ttl = $ct->luongtn * 6;
+                $ct->stbhxh_dv = $ct->stbhxh_dv * 6;
+                $ct->stbhyt_dv = $ct->stbhyt_dv * 6;
+                $ct->stkpcd_dv = $ct->stkpcd_dv * 6;
+                $ct->stbhtn_dv = $ct->stbhtn_dv * 6;
+                $ct->ttbh_dv = $ct->ttbh_dv * 6;
+            }
+
+            //dd($model);
+            $thongtin = array('nguoilap' => session('admin')->name,
+                'namns' => $model_thongtin->namns);
+
+            return view('reports.nguonkinhphi.khoi.bangluong_m2')
+                ->with('thongtin', $thongtin)
+                ->with('model', $model)
+                ->with('m_dv', $m_dv)
+                ->with('col', $col)
+                ->with('a_phucap', $a_phucap)
+                ->with('a_congtac', $a_congtac)
+                ->with('pageTitle', 'Tổng hợp dự toán lương tại đơn vị');
         } else
             return view('errors.notlogin');
     }

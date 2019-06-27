@@ -380,6 +380,7 @@ Route::group(['prefix'=>'nguon_kinh_phi'],function(){
         Route::post('senddata','tonghopluong_khoiController@senddata'); //gửi dữ liệu
         Route::post('tralai','tonghopluong_khoiController@tralai'); //trả lại dữ liệu
         Route::get('getlydo','tonghopluong_khoiController@getlydo');//lý do trả lại dữ liệu
+        Route::get('mautt107_m2','tonghopnguon_khoiController@printf_tt107_m2');
     });
     Route::group(['prefix'=>'huyen'],function(){
         Route::get('mautt107_m2','tonghopnguon_huyenController@printf_tt107_m2');
