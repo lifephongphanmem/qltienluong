@@ -163,8 +163,12 @@ class tonghopluong_donviController extends Controller
             $a_bh = array_column(dmphucap_thaisan::select('mapc')->where('madv', session('admin')->madv)->get()->toarray(), 'mapc');
 
             $a_data = array();
+            $a_plct = getPLCTTongHop();
+            /*
+            dd($a_plct);
             $a_plct = array('1536402868','1536459380','1535613221', '1506673695');
             $a_plcongtac = array('BIENCHE','KHONGCT','HOPDONG');
+            */
             for($i=0; $i< count($a_ct); $i++){
                 $a_ct[$i]['macongtac'] = isset($a_congtac[$a_ct[$i]['mact']]) ? $a_congtac[$a_ct[$i]['mact']] : null;
                 $bangluong = $a_bangluong[$a_ct[$i]['mabl']];
@@ -212,7 +216,8 @@ class tonghopluong_donviController extends Controller
                 */
 
                 $a_ct[$i]['tonghop'] = $a_ct[$i]['congtac'];
-                if(in_array($a_ct[$i]['macongtac'],$a_plcongtac) || in_array($a_ct[$i]['mact'],$a_plct)){
+                //if(in_array($a_ct[$i]['macongtac'],$a_plcongtac) || in_array($a_ct[$i]['mact'],$a_plct)){
+                if(in_array($a_ct[$i]['mact'],$a_plct)){
                     $a_data[] = $a_ct[$i];
                 }
             }

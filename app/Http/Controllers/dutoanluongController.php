@@ -169,9 +169,11 @@ class dutoanluongController extends Controller
             //dd($inputs);
             //1536402868: Đại biểu hội đồng nhân dân; 1536459380: Cán bộ cấp ủy viên; 1506673695: KCT cấp xã; 1535613221: kct cấp thôn
             $a_th = array_merge(array('macanbo', 'mact', 'macvcq', 'mapb', 'ngayden'), getColTongHop());
+            $a_plct = getPLCTTongHop();
+
             $m_cb_kn = hosocanbo_kiemnhiem::select($a_th)
                 ->where('madv', session('admin')->madv)
-                ->wherein('mact', ['1536402868', '1536459380', '1535613221', '1506673695'])
+                ->wherein('mact', $a_plct)
                 ->get()->keyBy('macanbo')->toarray();
             $a_th = array_merge(array('ngaysinh', 'tencanbo', 'stt', 'tnndenngay', 'gioitinh', 'msngbac', 'bac', 'bhxh_dv', 'bhyt_dv', 'bhtn_dv', 'kpcd_dv'), $a_th);
             $model = hosocanbo::select($a_th)->where('madv', session('admin')->madv)
@@ -222,7 +224,8 @@ class dutoanluongController extends Controller
                 }
             }
             //lọc danh sach cán bộ
-            $model = $model->wherein('macongtac', ['BIENCHE', 'KHONGCT']);
+            //$model = $model->wherein('macongtac', ['BIENCHE', 'KHONGCT']);
+            $model = $model->wherein('mact', $a_plct);
 
             $m_cb = $model->keyBy('macanbo')->toarray();
             $m_nh = $model->where('nam_ns', '<>', '')->where('nam_ns', '<=', $inputs['namdt'])->keyBy('macanbo')->toarray();

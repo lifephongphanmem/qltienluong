@@ -68,6 +68,7 @@ class nguonkinhphiController extends Controller
                     ->with('furl','/nguon_kinh_phi/danh_sach');
             }
 
+            $a_plct = getPLCTTongHop();
             $a_congtac = array_column(dmphanloaict::all()->toArray(), 'macongtac', 'mact');
             $gen = getGeneralConfigs();
             $a_pc = dmphucap_donvi::select('mapc','phanloai','congthuc','baohiem')
@@ -76,11 +77,18 @@ class nguonkinhphiController extends Controller
             $masodv = session('admin')->madv . '_' . getdate()[0];
 
             $inputs['chenhlech'] = chkDbl($inputs['chenhlech']);
-            //1536402868: Đại biểu hội đồng nhân dân; 1536459380: Cán bộ cấp ủy viên; 1506673695: KCT cấp xã; 1535613221: kct cấp thôn
+
             $a_th = array_merge(array('macanbo', 'mact', 'macvcq', 'mapb', 'ngayden'),getColTongHop());
-            $m_cb_kn = hosocanbo_kiemnhiem::select($a_th)
+            /* lưu chưa tách theo nhóm tổng hợp
+             //1536402868: Đại biểu hội đồng nhân dân; 1536459380: Cán bộ cấp ủy viên; 1506673695: KCT cấp xã; 1535613221: kct cấp thôn
+             $m_cb_kn = hosocanbo_kiemnhiem::select($a_th)
                 ->where('madv', session('admin')->madv)
                 ->wherein('mact',['1536402868','1536459380','1535613221', '1506673695'])
+                ->get()->keyBy('macanbo')->toarray();
+             * */
+            $m_cb_kn = hosocanbo_kiemnhiem::select($a_th)
+                ->where('madv', session('admin')->madv)
+                ->wherein('mact',$a_plct)
                 ->get()->keyBy('macanbo')->toarray();
             $a_th = array_merge(array('stt','ngaysinh','tencanbo', 'tnndenngay', 'gioitinh', 'msngbac', 'bac', 'bhxh_dv', 'bhyt_dv', 'bhtn_dv', 'kpcd_dv'),$a_th);
             $model = hosocanbo::select($a_th)->where('madv', session('admin')->madv)
@@ -141,11 +149,13 @@ class nguonkinhphiController extends Controller
                 } else {
                     $cb->nam_tnn = null;
                     $cb->thang_tnn = null;
-
                 }
             }
 
-            $model = $model->wherein('macongtac',['BIENCHE','KHONGCT','HOPDONG']);
+            $model = $model->wherein('mact',$a_plct);
+            //lấy danh sách cán bộ chưa nâng lương từ tháng 01-06 => tự nâng lương
+
+            //$model = $model->wherein('macongtac',['BIENCHE','KHONGCT','HOPDONG']);
 
             $m_cb = $model->keyBy('macanbo')->toarray();
             //làm tùy chọn tính nghỉ hưu
@@ -186,11 +196,6 @@ class nguonkinhphiController extends Controller
                 $m_cb[$key.'_kn'] = $m_cb_kn[$key];
             }
 
-            //chạy tính hệ số lương, phụ cấp trc. Sau này mỗi tháng chỉ chạy cán bộ thay đổi
-            foreach($m_cb as $key =>$val){
-                $m_cb[$key] = $this->getHeSoPc($a_pc, $m_cb[$key],$inputs['chenhlech']);
-            }
-
             foreach($m_nh as $key =>$val){
                 $m_nh[$key] = $this->getHeSoPc_nh($a_pc, $m_nh[$key]);
             }
@@ -215,6 +220,12 @@ class nguonkinhphiController extends Controller
                     }
                 }
                 $m_nb[$key] = $this->getHeSoPc($a_pc, $m_nb[$key],$inputs['chenhlech']);
+
+                //kiểm tra xem thời gian nâng lương của cán bộ từ tháng 01-06 => tự nâng
+                if(date_create($val['ngayden']) <= date_create($inputs['namdt'].'-06-30')){
+                    $m_cb[$key]['heso'] = $m_nb[$key]['heso'];
+                    $m_cb[$key]['vuotkhung'] = $m_nb[$key]['vuotkhung'];
+                }
             }
 
             foreach ($m_tnn as $key => $val) {
@@ -235,6 +246,19 @@ class nguonkinhphiController extends Controller
                 } else {
                     $m_tnn[$key] = $this->getHeSoPc($a_pc, $m_tnn[$key], $inputs['chenhlech']);
                 }
+
+                //kiểm tra xem thời gian nâng lương của cán bộ từ tháng 01-06 => tự nâng
+                if(date_create($val['ngayden']) <= date_create($inputs['namdt'].'-06-30')){
+                    if(isset($m_cb[$key]['pctnn'])){
+                        $m_cb[$key]['pctnn'] = $m_tnn[$key]['pctnn'];
+                    }
+                }
+            }
+
+            //chạy tính hệ số lương, phụ cấp trc. Sau này mỗi tháng chỉ chạy cán bộ thay đổi
+            //chạy sau các nâng lương để tính cán bộ chưa nâng lương trc tháng 06
+            foreach($m_cb as $key =>$val){
+                $m_cb[$key] = $this->getHeSoPc($a_pc, $m_cb[$key],$inputs['chenhlech']);
             }
 
             $a_thang = array(
