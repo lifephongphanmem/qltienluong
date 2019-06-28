@@ -36,6 +36,7 @@ class CreateNguonkinhphiTable extends Migration
             $table->double('diaban')->default(0);
             $table->double('tinhgiam')->default(0);
             $table->double('nghihuusom')->default(0);
+            $table->double('baohiem')->default(0);
             //nguonkp = cộng các nguồn lại
             $table->double('nguonkp')->default(0);
             $table->double('tietkiem')->default(0);

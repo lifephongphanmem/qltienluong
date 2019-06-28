@@ -120,7 +120,14 @@
                                             </div>
                                         </div>
 
-                                        <div class="col-md-6">
+                                        <div class="col-md-3">
+                                            <div class="form-group">
+                                                <label class=" control-label">Các khoản nộp theo lương</label>
+                                                {!!Form::text('baohiem', null, array('id' => 'baohiem','class' => 'form-control nhucaukp text-right', 'data-mask'=>'fdecimal'))!!}
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-3">
                                             <div class="form-group">
                                                 <label class="control-label">Tổng số</label>
                                                 {!!Form::text('nhucaukp', null, array('id' => 'nhucaukp','class' => 'form-control text-right', 'data-mask'=>'fdecimal','readonly'=>'true'))!!}

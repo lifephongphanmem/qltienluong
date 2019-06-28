@@ -29,6 +29,7 @@ class nguonkinhphi extends Model
         'diaban',
         'tinhgiam',
         'nghihuusom',
+        'baohiem',
         'nguonkp',
         'tietkiem',
         'hocphi',

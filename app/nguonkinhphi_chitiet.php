@@ -31,6 +31,7 @@ class nguonkinhphi_chitiet extends Model
         'diaban',
         'tinhgiam',
         'nghihuusom',
+        'baohiem',
         'nguonkp',
         'tietkiem',
         'hocphi',

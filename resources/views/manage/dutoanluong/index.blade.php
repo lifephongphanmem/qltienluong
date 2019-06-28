@@ -133,10 +133,12 @@
 
                     <div class="col-md-6">
                         <div class="form-group">
-                            <button type="button" onclick="intonghopdt('{{$furl.'mautt107_m2?maso='}}')" style="border-width: 0px" class="btn btn-default btn-xs mbs">
-                                <i class="fa fa-print"></i>&nbsp; Bảng lương mẫu C02-HD (TT107/2017/TT-BTC) - tổng hợp</button>
+                            <button type="button" onclick="intonghopdt('{{$furl.'mautt107_m3?maso='}}')" style="border-width: 0px" class="btn btn-default btn-xs mbs">
+                                <i class="fa fa-print"></i>&nbsp; Bảng lương mẫu C02-HD (Tổng hợp chi lương và nâng lương)</button>
                         </div>
                     </div>
+
+
                     <!--div class="col-md-6">
                         <div class="form-group">
                             <button type="button" style="border-width: 0px" class="btn btn-default btn-xs mbs" data-target="#mautt107-modal" data-toggle="modal"
@@ -147,6 +149,13 @@
                 </div>
 
                 <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <button type="button" onclick="intonghopdt('{{$furl.'mautt107_m2?maso='}}')" style="border-width: 0px" class="btn btn-default btn-xs mbs">
+                                <i class="fa fa-print"></i>&nbsp; Bảng lương mẫu C02-HD (Tổng hợp chi lương các tháng)</button>
+                        </div>
+                    </div>
+
                     <div class="col-md-6">
                         <div class="form-group">
                             <button type="button" style="border-width: 0px" onclick="innangluong()" class="btn btn-default btn-xs mbs">
