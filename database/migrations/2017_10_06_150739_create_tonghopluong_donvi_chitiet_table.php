@@ -70,6 +70,11 @@ class CreateTonghopluongDonviChitietTable extends Migration
             $table->double('tonghs')->default(0);
             $table->double('giaml')->default(0);
             $table->double('luongtn')->default(0);
+            $table->double('stbhxh')->default(0);
+            $table->double('stbhyt')->default(0);
+            $table->double('stkpcd')->default(0);
+            $table->double('stbhtn')->default(0);
+            $table->double('ttbh')->default(0);
             $table->double('stbhxh_dv')->default(0);
             $table->double('stbhyt_dv')->default(0);
             $table->double('stkpcd_dv')->default(0);
