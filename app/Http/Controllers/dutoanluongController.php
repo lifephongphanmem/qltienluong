@@ -1359,6 +1359,7 @@ class dutoanluongController extends Controller
             return view('errors.notlogin');
     }
 
+    //bỏ vì thừa
     function printf_tt107_m3(Request $request)
     {
         if (Session::has('admin')) {

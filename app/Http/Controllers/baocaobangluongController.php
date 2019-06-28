@@ -325,11 +325,16 @@ class baocaobangluongController extends Controller
                 ->where('nam',$tunam)
                 ->where('madv',session('admin')->madv)->get();
 
-            $model_tonghop_chitiet = tonghopluong_donvi_chitiet::wherein('mathdv',function($qr)use($tuthang,$denthang,$tunam){
-                $qr->select('mathdv')->from('tonghopluong_donvi')->whereBetween('thang', array($tuthang,$denthang))
-                    ->where('nam',$tunam)
-                    ->where('madv',session('admin')->madv);
-            }) ->get();
+            $model_tonghop_chitiet = tonghopluong_donvi_chitiet::wherein('mathdv',a_unique(array_column($model_tonghop->toarray(),'mathdv'))) ->get();
+            dd($model_tonghop_chitiet);
+            $a_phucap = array();
+            $col = 0;
+            foreach (getColTongHop() as $ct) {
+                if ($model_tonghop_chitiet->sum($ct) > 0) {
+                    $a_phucap[$ct] = isset($m_pc[$ct]) ? $m_pc[$ct] : '';
+                    $col++;
+                }
+            }
 
             $model_nguonkp = getNguonKP();
             $model_phanloaict = getNhomCongTac();
