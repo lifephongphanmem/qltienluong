@@ -117,7 +117,7 @@ class nguonkinhphiController extends Controller
                 $cb->macongtac = $a_congtac[$cb->mact];
                 $cb->masodv = $masodv;
                 //trong bảng danh mục là % vượt khung => sang bảng lương chuyển thành hệ số
-                $cb->vuotkhung = $cb->heso * $cb->vuotkhung / 100;
+                //$cb->vuotkhung = $cb->heso * $cb->vuotkhung / 100;
                 $cb->bhxh_dv = floatval($cb->bhxh_dv) / 100;
                 $cb->bhyt_dv = floatval($cb->bhyt_dv) / 100;
                 $cb->kpcd_dv = floatval($cb->kpcd_dv) / 100;
@@ -219,13 +219,15 @@ class nguonkinhphiController extends Controller
                         $m_nb[$key]['heso'] += $nhomnb['hesochenhlech'];
                     }
                 }
-                $m_nb[$key] = $this->getHeSoPc($a_pc, $m_nb[$key],$inputs['chenhlech']);
 
                 //kiểm tra xem thời gian nâng lương của cán bộ từ tháng 01-06 => tự nâng
+                //tính lại do vượt khung đã tính từ trc sang hệ số => tính lại hệ số vk thì sai
                 if(date_create($val['ngayden']) <= date_create($inputs['namdt'].'-06-30')){
                     $m_cb[$key]['heso'] = $m_nb[$key]['heso'];
                     $m_cb[$key]['vuotkhung'] = $m_nb[$key]['vuotkhung'];
                 }
+
+                $m_nb[$key] = $this->getHeSoPc($a_pc, $m_nb[$key],$inputs['chenhlech']);
             }
 
             foreach ($m_tnn as $key => $val) {
@@ -242,7 +244,7 @@ class nguonkinhphiController extends Controller
                 if (isset($m_nb[$key]) && $m_tnn[$key]['thang_tnn'] >= $m_nb[$key]['thang_nb']) {
                     $m_tnn[$key]['heso'] = $m_nb[$key]['heso'];
                     $m_tnn[$key]['vuotkhung'] = $m_nb[$key]['vuotkhung'];
-                    $m_tnn[$key] = $this->getHeSoPc($a_pc, $m_tnn[$key], $inputs['chenhlech'], false);
+                    $m_tnn[$key] = $this->getHeSoPc($a_pc, $m_tnn[$key], $inputs['chenhlech']);
                 } else {
                     $m_tnn[$key] = $this->getHeSoPc($a_pc, $m_tnn[$key], $inputs['chenhlech']);
                 }
@@ -937,8 +939,9 @@ class nguonkinhphiController extends Controller
         $m_cb['luongtn'] = 0;
         $m_cb['luongcoban'] = $luongcb;
         if($vk){
-            $m_cb['vuotkhung'] =round(($m_cb['heso'] * $m_cb['vuotkhung']) / 100, session('admin')->lamtron);
+            $m_cb['vuotkhung'] = round(($m_cb['heso'] * $m_cb['vuotkhung']) / 100, session('admin')->lamtron);
         }
+        //$m_cb['vuotkhung'] = round(($m_cb['heso'] * $m_cb['vuotkhung']) / 100, session('admin')->lamtron);
 
         for ($i = 0; $i < count($a_pc); $i++) {
             $mapc = $a_pc[$i]['mapc'];
@@ -1059,6 +1062,71 @@ class nguonkinhphiController extends Controller
         $m_cb['tonghs'] = $tonghs;
         $m_cb['luongtn'] = round($m_cb['tonghs'] * $m_cb['luongcoban'], 0);
         return $m_cb;
+    }
+
+    function getHeSoPc_290618($a_pc, $m_cb, $luongcb = 0, $vk = true)
+    {
+        $stbhxh_dv = 0;
+        $stbhyt_dv = 0;
+        $stkpcd_dv = 0;
+        $stbhtn_dv = 0;
+        $m_cb['tonghs'] = 0;
+        $m_cb['luongtn'] = 0;
+        $m_cb['luongcoban'] = $luongcb;
+        if($vk){
+            $m_cb['vuotkhung'] = round(($m_cb['heso'] * $m_cb['vuotkhung']) / 100, session('admin')->lamtron);
+        }
+        //tính lại vk
+        for ($i = 0; $i < count($a_pc); $i++) {
+            $mapc = $a_pc[$i]['mapc'];
+            $mapc_st = 'st_'.$mapc;
+            switch (getDbl($a_pc[$i]['phanloai'])) {
+                case 0:{
+                    $m_cb['tonghs'] += $m_cb[$mapc];
+                    $m_cb[$mapc_st] = round($m_cb[$mapc] * $luongcb);
+                    break;
+                }
+                case 1: {//số tiền (không tính chênh lệch)
+                    //$m_cb['luongtn'] += $m_cb[$mapc];
+                    $m_cb[$mapc_st] = $m_cb[$mapc] = 0;
+                    break;
+                }
+                case 2: {//phần trăm
+                    if ($mapc != 'vuotkhung') {//vượt khung đã tính ở trên
+                        $heso = 0;
+                        foreach (explode(',', $a_pc[$i]['congthuc']) as $cthuc) {
+                            if ($cthuc != '') {
+                                $heso += $m_cb[$cthuc];
+                            }
+                        }
+                        $m_cb[$mapc] = round($heso * $m_cb[$mapc] / 100, session('admin')->lamtron);
+                    }
+                    $m_cb['tonghs'] += $m_cb[$mapc];
+                    $m_cb[$mapc_st] = round($m_cb[$mapc] * $luongcb);
+                    break;
+                }
+                default: {//trường hợp còn lại (ẩn,...)
+                    $m_cb[$mapc] = 0;
+                    $m_cb[$mapc_st] = 0;
+                    break;
+                }
+            }
+            if ($a_pc[$i]['baohiem'] == 1) {
+                $stbhxh_dv += round($m_cb['bhxh_dv'] * $m_cb[$mapc] * $luongcb, 0);
+                $stbhyt_dv += round($m_cb['bhyt_dv'] * $m_cb[$mapc] * $luongcb, 0);
+                $stkpcd_dv += round($m_cb['kpcd_dv'] * $m_cb[$mapc] * $luongcb, 0);
+                $stbhtn_dv += round($m_cb['bhtn_dv'] * $m_cb[$mapc] * $luongcb, 0);
+            }
+        }
+
+        $m_cb['stbhxh_dv'] = $stbhxh_dv;
+        $m_cb['stbhyt_dv'] = $stbhyt_dv;
+        $m_cb['stkpcd_dv'] = $stkpcd_dv;
+        $m_cb['stbhtn_dv'] = $stbhtn_dv;
+        $m_cb['luongtn'] += round($m_cb['tonghs'] * $luongcb, 0);
+        $m_cb['ttbh_dv'] = $stbhxh_dv + $stbhyt_dv + $stkpcd_dv + $stbhtn_dv;
+        return $m_cb;
+
     }
 
 }

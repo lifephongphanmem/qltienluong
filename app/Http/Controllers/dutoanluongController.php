@@ -501,6 +501,7 @@ class dutoanluongController extends Controller
         $a_dd = array('pclt');
         $a_goc = array('heso', 'vuotkhung', 'pccv');
         //dd($a_pc);
+
         foreach ($model as $cb) {
             $cb->masodv = $masodv;
             $cb->baohiem = 0;
@@ -693,7 +694,7 @@ class dutoanluongController extends Controller
             //tính nâng lương ngạch bậc trc
             if($nb != null){
                 $thang_nb = (new Carbon($nb['ngaynang']))->month;
-                $cb->vuotkhung = round(($nb['vuotkhung'] - $cb->hs_vuotkhung)/($cb->heso*100),session('admin')->lamtron);
+                $cb->vuotkhung = round((($nb['vuotkhung'] - $cb->hs_vuotkhung) * $cb->heso) / 100,session('admin')->lamtron);
                 $cb->heso = $nb['heso'] -  $cb->heso;
                 $cb->thang = $thang_nb;
                 $cb->maphanloai = 'NGACHBAC';
@@ -1011,6 +1012,7 @@ class dutoanluongController extends Controller
 
     public function getHeSoPc_Sub($a_pc, $m_cb, $m_cb_cu, $phanloai, $thang, $nam)
     {
+        //dd($m_cb);
         $m_cb['maphanloai'] = $phanloai;
         $m_cb['thang'] = $thang;
         $m_cb['nam'] = $nam;
