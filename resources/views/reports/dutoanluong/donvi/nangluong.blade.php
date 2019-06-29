@@ -186,7 +186,7 @@
             <td class="money">{{dinhdangso($model->sum('stkpcd_dv'))}}</td>
             <td class="money">{{dinhdangso($model->sum('stbhtn_dv'))}}</td>
             <td class="money">{{dinhdangso($model->sum('ttbh_dv'))}}</td>
-            <td class="money">{{dinhdangso($model->sum('ttbh_dv') + $model->sum('ttbh_dv'))}}</td>
+            <td class="money">{{dinhdangso($model->sum('ttbh_dv') + $model->sum('luongtn'))}}</td>
             <td></td>
         </tr>
     </table>

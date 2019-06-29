@@ -99,12 +99,12 @@
             <td style="text-align: center">{{dinhdangso($ct->canbo_dutoan)}}</td>
 
 
-            <td>{{dinhdangso($ct->luongnb_dt + $ct->luongnb)}}</td>
+            <td>{{dinhdangso($ct->luongnb_dt)}}</td>
             <td>{{dinhdangso($ct->luonghs_dt)}}</td>
             <td>{{dinhdangso($ct->luongbh_dt)}}</td>
 
             <td>{{dinhdangso($ct->luongnb_dt + $ct->luonghs_dt
-                            + $ct->luongbh_dt + $ct->luongnb)}}</td>
+                            + $ct->luongbh_dt)}}</td>
 
         </tr>
     @endforeach
@@ -113,12 +113,12 @@
         <td style="text-align: center">{{dinhdangso($model->sum('canbo_congtac'))}}</td>
         <td style="text-align: center">{{dinhdangso($model->sum('canbo_dutoan'))}}</td>
 
-        <td>{{dinhdangso($model->sum('luongnb_dt') + $model->sum('luongnb'))}}</td>
+        <td>{{dinhdangso($model->sum('luongnb_dt'))}}</td>
         <td>{{dinhdangso($model->sum('luonghs_dt'))}}</td>
         <td>{{dinhdangso($model->sum('luongbh_dt'))}}</td>
 
         <td>{{dinhdangso($model->sum('luongnb_dt') + $model->sum('luonghs_dt')
-                        + $model->sum('luongbh_dt') + $model->sum('luongnb'))}}</td>
+                        + $model->sum('luongbh_dt'))}}</td>
     </tr>
 </table>
 
