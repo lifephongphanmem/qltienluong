@@ -862,7 +862,7 @@ class dutoanluongController extends Controller
         $luongbh = 0;
         //lấy chỉ tiêu biên chế trong năm để tính
         $a_chitieu = chitieubienche::where('madv', session('admin')->madv)->where('nam', $inputs['namdt'])->get()->keyBy('mact')->toarray();
-        $maphanloai = dmdonvi::where('madv', session('admin')->madv)->first()->maphanloai;
+        //$maphanloai = dmdonvi::where('madv', session('admin')->madv)->first()->maphanloai;
         //$heso = $maphanloai == 'MAMNON' ? 2.1 : 2.34;
         $heso = 2.34;
         //dd($m_data);
