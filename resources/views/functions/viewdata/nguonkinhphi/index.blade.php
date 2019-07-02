@@ -39,21 +39,38 @@
                 <div class="portlet-body form-horizontal">
                     <div class="row">
                         <div class="form-group">
-                            <div class="col-md-7">
-                                <label class="control-label col-md-5" style="text-align: right">Căn cứ thông tư, quyết định </label>
+                            <div class="col-md-12">
+                                <label class="control-label col-md-3" style="text-align: right">Căn cứ thông tư, quyết định </label>
                                 <div class="col-md-7">
                                     {!! Form::select('sohieu',getThongTuQD(false),$inputs['sohieu'],array('id' => 'sohieu', 'class' => 'form-control'))!!}
                                 </div>
                             </div>
 
+
+                        </div>
+
+                    </div>
+                    <div class="row">
+                        <div class="form-group">
                             <div class="col-md-5">
                                 <label class="control-label col-md-3" style="text-align: right">Trạng thái </label>
                                 <div class="col-md-7">
                                     {!! Form::select('trangthai',$a_trangthai,$inputs['trangthai'],array('id' => 'trangthai', 'class' => 'form-control'))!!}
                                 </div>
                             </div>
+                            <div class="col-md-6">
+                                <label class="control-label col-md-3" style="text-align: right">Phân loại </label>
+                                <div class="col-md-8">
+                                    {!! Form::select(
+                                    'phanloai',$a_phanloai,$inputs['phanloai'],
+                                    array('id' => 'phanloai', 'class' => 'form-control'))
+                                    !!}
+                                </div>
+                            </div>
                         </div>
+
                     </div>
+
                     <table id="sample_3" class="table table-hover table-striped table-bordered" style="min-height: 230px">
                         <thead>
                         <tr>
@@ -157,7 +174,8 @@
         function getLink(){
             var sohieu = $('#sohieu').val();
             var trangthai = $('#trangthai').val();
-            return '{{$furl_xem}}' + '?sohieu='+ sohieu + '&trangthai=' + trangthai;
+            var phanloai = $('#phanloai').val();
+            return '{{$furl_xem}}' + '?sohieu='+ sohieu + '&trangthai=' + trangthai+ '&phanloai=' + phanloai;
         }
 
         $(function(){
@@ -166,6 +184,9 @@
             });
 
             $('#trangthai').change(function() {
+                window.location.href = getLink();
+            });
+            $('#phanloai').change(function() {
                 window.location.href = getLink();
             });
         })

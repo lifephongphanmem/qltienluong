@@ -177,7 +177,6 @@ class dutoanluong_huyenController extends Controller
             if(!isset($inputs['madvbc'])){
                 $inputs['madvbc'] = session('admin')->madvbc;
             }
-
             //chú ý trùng dữ liẹuu
             $model = dutoanluong_chitiet::wherein('masodv', function($query) use ($inputs){
                 $query->select('masodv')->from('dutoanluong')->where('madvbc', $inputs['madvbc'])
@@ -188,11 +187,11 @@ class dutoanluong_huyenController extends Controller
                 $query->select('masodv')->from('dutoanluong')->wherein('masok', function($q) use ($inputs){
                     $q->select('masodv')->from('dutoanluong_khoi')->where('madvbc', $inputs['madvbc'])->where('namns',$inputs['namns'])->get();
                 })->where('trangthai','DAGUI')->get();})->get();
-
+            /*
             foreach ($model_th as $donvi) {
                 //$model->add($donvi);
             }
-
+            */
             $model_donvi = dmdonvi::select('madv', 'tendv')
                 ->wherein('madv', function($query) use ($inputs){
                     $query->select('madv')->from('dmdonvi')->where('macqcq',$inputs['madv'])->where('madv','<>',$inputs['madv'])->get();
@@ -380,6 +379,7 @@ class dutoanluong_huyenController extends Controller
     function tonghopCR(Request $requests)
     {
         if (Session::has('admin')) {
+            ini_set('memory_limit', '-1');
             $inputs = $requests->all();
             $namns = $inputs['namns'];
             $madv = session('admin')->madv;
@@ -393,13 +393,14 @@ class dutoanluong_huyenController extends Controller
             $model_dutoan = dutoanluong::wherein('madv', function($query) use ($madv){
                 $query->select('madv')->from('dmdonvi')->where('macqcq', $madv)->get();
             })->get();
+
             $m_phanloai = dmphanloaidonvi::all();
             $m_dv = dmdonvi::where('macqcq', $madv)->get();
             $a_phucap = array();
             $col = 0;
+
             foreach($model as $ct) {
                 $dutoan = $model_dutoan->where('masodv', $ct->masodv)->first();
-
                 $ct->madv = count($dutoan) > 0 ? $dutoan->madv : null;
                 $ct->phanloai = $m_dv->where('madv',$ct->madv)->first()->maphanloai;
                 if($ct->mact == null){
@@ -408,6 +409,7 @@ class dutoanluong_huyenController extends Controller
                     $ct->tencongtac = isset($model_ct[$ct->mact]) ? $model_ct[$ct->mact] : '';
                 }
             }
+
             $m_pc = dmphucap_donvi::where('madv', $madv)->orderby('stt')->get()->toarray();
 
             foreach ($m_pc as $ct) {
