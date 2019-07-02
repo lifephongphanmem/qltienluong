@@ -14,6 +14,10 @@
             padding-bottom: 10px;
         }
 
+        .money td{
+            text-align: right;
+        }
+
         table, p {
             width: 98%;
             margin: auto;
@@ -70,31 +74,22 @@
 
 <p style="text-align: right; font-style: italic">Đơn vị tính: đồng</p>
 <table cellspacing="0" cellpadding="0" border="1" style="margin: 20px auto; border-collapse: collapse;">
+    <thead>
     <tr style="padding-left: 2px;padding-right: 2px">
         <th style="width: 2%;padding-left: 2px;padding-right: 2px" rowspan="2">STT</th>
-        <th style="width: 7%;padding-left: 2px;padding-right: 2px" rowspan="2">Nguồn kinh phí</th>
-        <th style="width: 7%;padding-left: 2px;padding-right: 2px" rowspan="2">Phân loại</br>công tác</th>
-        <th style="width: 6%;padding-left: 2px;padding-right: 2px" rowspan="2">Lương</br>hệ số</th>
-        <th style="width: 6%;padding-left: 2px;padding-right: 2px" rowspan="2">Phụ cấp</br>lương</th>
-        <th style="width: 6%;padding-left: 2px;padding-right: 2px" rowspan="2">Tổng các</br>khoản phụ</br>cấp</th>
-        <th colspan="11">Các khoản phụ cấp khác</th>
+        <th style="width: 15%;padding-left: 2px;padding-right: 2px" rowspan="2">Nguồn kinh phí</th>
+        <th style="width: 15%;padding-left: 2px;padding-right: 2px" rowspan="2">Phân loại</br>công tác</th>
+        <th style="width: 7%;padding-left: 2px;padding-right: 2px" rowspan="2">Số lượng</br>cán bộ</th>
+        <th colspan="{{$col}}">Các khoản phụ cấp khác</th>
         <th style="width: 6%;padding-left: 2px;padding-right: 2px" rowspan="2">Tổng tiền lương</th>
         <th colspan="5">Các khoản phải đóng góp BHXH, BHYT, KPCĐ, BHTN </th>
         <th style="width: 6%;padding-left: 2px;padding-right: 2px" rowspan="2">Tổng cộng</th>
     </tr>
 
     <tr style="padding-left: 2px;padding-right: 2px">
-        <th>Phụ cấp</br>vượt khung</th>
-        <th>Phụ cấp</br>khu vực</th>
-        <th>Phụ cấp</br>chức vụ</th>
-        <th>Phụ cấp</br>ưu đãi ngành</th>
-        <th>Phụ cấp</br>thu hút</th>
-        <th>Phụ cấp</br>công tác lâu năm</th>
-        <th>Phụ cấp</br>công vụ</th>
-        <th>Phụ cấp</br>công tác Đảng</th>
-        <th>Phụ cấp</br>thâm niên nghề</th>
-        <th>Phụ cấp</br>trách nhiệm</th>
-        <th>Phụ cấp</br>khác</th>
+        @foreach($a_phucap as $key=>$val)
+            <th>{!!$val!!}</th>
+        @endforeach
 
         <th>BHXH</th>
         <th>BHYT</th>
@@ -104,10 +99,11 @@
     </tr>
 
     <tr>
-        @for($i=1;$i<=24;$i++)
+        @for($i=1;$i<=11+$col;$i++)
         <th>{{$i}}</th>
         @endfor
     </tr>
+    </thead>
 
     <?php $stt=1; ?>
     @foreach($model_tonghop as $tonghop)
@@ -119,25 +115,14 @@
         </tr>
             <?php $i=1; ?>
         @foreach($chitiet as $ct)
-            <tr>
-                <td>{{$i++}}</td>
-                <td>{{$ct->tennguonkp}}</td>
-                <td>{{$ct->tencongtac}}</td>
-                <td>{{dinhdangso($ct->heso)}}</td>
-                <td>{{dinhdangso($ct->hesopc)}}</td>
-                <td>{{dinhdangso($ct->tonghs - $ct->heso - $ct->hesopc)}}</td>
-
-                <td>{{dinhdangso($ct->vuotkhung)}}</td>
-                <td>{{dinhdangso($ct->pckv)}}</td>
-                <td>{{dinhdangso($ct->pccv)}}</td>
-                <td>{{dinhdangso($ct->pcudn)}}</td>
-                <td>{{dinhdangso($ct->pcth)}}</td>
-                <td>{{dinhdangso($ct->pcthni)}}</td>
-                <td>{{dinhdangso($ct->pccovu)}}</td>
-                <td>{{dinhdangso($ct->pcdang)}}</td>
-                <td>{{dinhdangso($ct->pctnn)}}</td>
-                <td>{{dinhdangso($ct->pctn)}}</td>
-                <td>{{dinhdangso($ct->pck)}}</td>
+            <tr class="money">
+                <td style="text-align: center">{{$i++}}</td>
+                <td style="text-align: left">{{$ct->tennguonkp}}</td>
+                <td style="text-align: left">{{$ct->tencongtac}}</td>
+                <td style="text-align: center">{{$ct->soluong}}</td>
+                @foreach($a_phucap as $key=>$val)
+                    <td>{{dinhdangsothapphan($ct->$key,5)}}</td>
+                @endforeach
 
                 <td>{{dinhdangso($ct->tongtl)}}</td>
                 <td>{{dinhdangso($ct->stbhxh_dv)}}</td>
@@ -150,23 +135,14 @@
         </tr>
         @endforeach
         <!--Cộng theo nhóm-->
-        <tr style="font-weight: bold; text-align: center">
+        <tr style="font-weight: bold; text-align: center" class="money">
             <td colspan="3">Cộng</td>
-            <td>{{dinhdangso($chitiet->sum('heso'))}}</td>
-            <td>{{dinhdangso($chitiet->sum('hesopc'))}}</td>
-            <td>{{dinhdangso($chitiet->sum('tonghs') - $chitiet->sum('heso') - $chitiet->sum('hesopc'))}}</td>
+            <td style="text-align: center">{{dinhdangso($chitiet->sum('soluong'))}}</td>
 
-            <td>{{dinhdangso($chitiet->sum('vuotkhung'))}}</td>
-            <td>{{dinhdangso($chitiet->sum('pckv'))}}</td>
-            <td>{{dinhdangso($chitiet->sum('pccv'))}}</td>
-            <td>{{dinhdangso($chitiet->sum('pcudn'))}}</td>
-            <td>{{dinhdangso($chitiet->sum('pcth'))}}</td>
-            <td>{{dinhdangso($chitiet->sum('pcthni'))}}</td>
-            <td>{{dinhdangso($chitiet->sum('pccovu'))}}</td>
-            <td>{{dinhdangso($chitiet->sum('pcdang'))}}</td>
-            <td>{{dinhdangso($chitiet->sum('pctnn'))}}</td>
-            <td>{{dinhdangso($chitiet->sum('pctn'))}}</td>
-            <td>{{dinhdangso($chitiet->sum('pck'))}}</td>
+            @foreach($a_phucap as $key=>$val)
+                <td>{{dinhdangso($chitiet->sum($key))}}</td>
+            @endforeach
+
             <td>{{dinhdangso($chitiet->sum('tongtl'))}}</td>
             <td>{{dinhdangso($chitiet->sum('stbhxh_dv'))}}</td>
             <td>{{dinhdangso($chitiet->sum('stbhyt_dv'))}}</td>
@@ -176,22 +152,12 @@
             <td>{{dinhdangso($chitiet->sum('tongbh') + $chitiet->sum('tongtl'))}}</td>
         </tr>
     @endforeach
-    <tr style="font-weight: bold; text-align: center">
+    <tr style="font-weight: bold; text-align: center" class="money">
         <td colspan="3">Tổng cộng</td>
-        <td>{{dinhdangso($model_tonghop_chitiet->sum('heso'))}}</td>
-        <td>{{dinhdangso($model_tonghop_chitiet->sum('hesopc'))}}</td>
-        <td>{{dinhdangso($model_tonghop_chitiet->sum('tonghs') - $model_tonghop_chitiet->sum('heso') - $model_tonghop_chitiet->sum('hesopc'))}}</td>
-        <td>{{dinhdangso($model_tonghop_chitiet->sum('vuotkhung'))}}</td>
-        <td>{{dinhdangso($model_tonghop_chitiet->sum('pckv'))}}</td>
-        <td>{{dinhdangso($model_tonghop_chitiet->sum('pccv'))}}</td>
-        <td>{{dinhdangso($model_tonghop_chitiet->sum('pcudn'))}}</td>
-        <td>{{dinhdangso($model_tonghop_chitiet->sum('pcth'))}}</td>
-        <td>{{dinhdangso($model_tonghop_chitiet->sum('pcthni'))}}</td>
-        <td>{{dinhdangso($model_tonghop_chitiet->sum('pccovu'))}}</td>
-        <td>{{dinhdangso($model_tonghop_chitiet->sum('pcdang'))}}</td>
-        <td>{{dinhdangso($model_tonghop_chitiet->sum('pctnn'))}}</td>
-        <td>{{dinhdangso($model_tonghop_chitiet->sum('pctn'))}}</td>
-        <td>{{dinhdangso($model_tonghop_chitiet->sum('pck'))}}</td>
+        <td>{{dinhdangso($model_tonghop_chitiet->sum('soluong'))}}</td>
+        @foreach($a_phucap as $key=>$val)
+            <td>{{dinhdangso($model_tonghop_chitiet->sum($key))}}</td>
+        @endforeach
         <td>{{dinhdangso($model_tonghop_chitiet->sum('tongtl'))}}</td>
         <td>{{dinhdangso($model_tonghop_chitiet->sum('stbhxh_dv'))}}</td>
         <td>{{dinhdangso($model_tonghop_chitiet->sum('stbhyt_dv'))}}</td>

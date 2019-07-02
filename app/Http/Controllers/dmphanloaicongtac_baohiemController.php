@@ -21,8 +21,10 @@ class dmphanloaicongtac_baohiemController extends Controller
             $model = dmphanloaicongtac_baohiem::where('madv', session('admin')->madv)->get();
             $model_phanloai = dmphanloaict::all();
             $a_pl = array_column($model_phanloai->toArray(),'tenct','mact');
-
+            $a_tonghop = getPLCTTongHop();
+            //dd($a_tonghop);
             foreach($model as $ct) {
+                $ct->tonghop = in_array($ct->mact,$a_tonghop)? 1:0;
                 $ct->tencongtac = isset($a_pl[$ct->mact]) ? $a_pl[$ct->mact] : '';
             }
             return view('system.danhmuc.mucbaohiem.index')

@@ -59,6 +59,7 @@ class dutoanluongController extends Controller
         die($model);
     }
 
+    //kiểm tra xem còn dùng ko
     function store(Request $request){
         $result = array(
             'status' => 'fail',
@@ -140,6 +141,7 @@ class dutoanluongController extends Controller
         }
     }
 
+    //kiểm tra xem còn dùng ko
     function checkBangLuong(Request $request){
         $inputs = $request->all();
         $model = tonghopluong_donvi::where('thang',$inputs['thang'])
@@ -167,15 +169,17 @@ class dutoanluongController extends Controller
             //dd($inputs);
             //1536402868: Đại biểu hội đồng nhân dân; 1536459380: Cán bộ cấp ủy viên; 1506673695: KCT cấp xã; 1535613221: kct cấp thôn
             $a_th = array_merge(array('macanbo', 'mact', 'macvcq', 'mapb', 'ngayden'), getColTongHop());
+            $a_plct = getPLCTTongHop();
+
             $m_cb_kn = hosocanbo_kiemnhiem::select($a_th)
                 ->where('madv', session('admin')->madv)
-                ->wherein('mact', ['1536402868', '1536459380', '1535613221', '1506673695'])
+                ->wherein('mact', $a_plct)
                 ->get()->keyBy('macanbo')->toarray();
             $a_th = array_merge(array('ngaysinh', 'tencanbo', 'stt', 'tnndenngay', 'gioitinh', 'msngbac', 'bac', 'bhxh_dv', 'bhyt_dv', 'bhtn_dv', 'kpcd_dv'), $a_th);
             $model = hosocanbo::select($a_th)->where('madv', session('admin')->madv)
                 ->where('theodoi', '<', '9')
                 ->get();
-            $a_hoten = array_column($model->toarray(), 'tencanbo', 'macanbo');
+            //$a_hoten = array_column($model->toarray(), 'tencanbo', 'macanbo');
             foreach ($model as $cb) {
                 $cb->congtac = 'CONGTAC';
                 $cb->macongtac = $a_congtac[$cb->mact];
@@ -220,7 +224,8 @@ class dutoanluongController extends Controller
                 }
             }
             //lọc danh sach cán bộ
-            $model = $model->wherein('macongtac', ['BIENCHE', 'KHONGCT']);
+            //$model = $model->wherein('macongtac', ['BIENCHE', 'KHONGCT']);
+            $model = $model->wherein('mact', $a_plct);
 
             $m_cb = $model->keyBy('macanbo')->toarray();
             $m_nh = $model->where('nam_ns', '<>', '')->where('nam_ns', '<=', $inputs['namdt'])->keyBy('macanbo')->toarray();
@@ -287,6 +292,7 @@ class dutoanluongController extends Controller
             }
 
             foreach ($m_nb as $key => $val) {
+                //kiểm tra xem tháng đó có nâng lương có nghỉ ts ko nếu có tháng nâng lương thành tháng ngay sau ngày nghỉ
                 if (isset($a_nhomnb[$val['msngbac']])) {
                     $nhomnb = $a_nhomnb[$val['msngbac']];
                     //$hesomax = $nhomnb['heso'] +  ($nhomnb['heso'] * $nhomnb['hesochenhlech']);
@@ -320,7 +326,6 @@ class dutoanluongController extends Controller
             //nâng tnn: 02; nâng nb: 06 => mảng chênh lệch 'NGACHBAC' lấy thông tin cũ để tính
             $a_luu = $m_cb;
 
-
             $a_data = array();
             $a_data_nl = array();
             $a_danghihuu = array();
@@ -330,8 +335,10 @@ class dutoanluongController extends Controller
                     foreach ($a_nh as $key => $val) {
                         if (isset($inputs['nghihuu'])) {
                             $m_cb[$key] = $a_nh[$key];
+                        }else{
+                            $m_cb[$key]['tencanbo'] .= ' (nghỉ hưu)';
                         }
-                        $m_cb[$key]['tencanbo'] .= ' (nghỉ hưu)';
+
                         $m_cb[$key]['congtac'] = 'NGHIHUU';
                         $a_danghihuu[] = $key;
                     }
@@ -389,9 +396,10 @@ class dutoanluongController extends Controller
             $luongbh = 0;
             //lấy chỉ tiêu biên chế trong năm để tính
             $a_chitieu = chitieubienche::where('madv', session('admin')->madv)->where('nam', $inputs['namdt'])->get()->keyBy('mact')->toarray();
-            $maphanloai = dmdonvi::where('madv', session('admin')->madv)->first()->maphanloai;
-            $heso = $maphanloai == 'MAMNON' ? 2.1 : 2.34;
-
+            //$maphanloai = dmdonvi::where('madv', session('admin')->madv)->first()->maphanloai;
+            //$heso = $maphanloai == 'MAMNON' ? 2.1 : 2.34;
+            $heso = 2.34;
+            $a_tuyenthem = array();
             for ($i = 0; $i < count($m_data); $i++) {
                 $canbo = a_getelement($m_cb, array('mact' => $m_data[$i]['mact']));
                 $dutoan = a_getelement($a_data, array('mact' => $m_data[$i]['mact']));
@@ -405,18 +413,39 @@ class dutoanluongController extends Controller
                     $soluongduocgiao = chkDbl($chitieu['soluongduocgiao']);
                     if ($soluongduocgiao > $soluong) {
                         $m_data[$i]['canbo_dutoan'] = $soluongduocgiao - $soluong;
-                        $m_data[$i]['luongnb'] = $m_data[$i]['canbo_dutoan'] * $inputs['luongcoban'] * $heso;
+                        $luongtt = $m_data[$i]['canbo_dutoan'] * $inputs['luongcoban'] * $heso;
+
+                        $a_tuyenthem[] = array('mact'=>'1561606077','heso'=>$heso * $m_data[$i]['canbo_dutoan'],
+                            'st_heso'=>$luongtt,'tonghs'=>$heso * $m_data[$i]['canbo_dutoan'],
+                            'macanbo'=>$masodv,'tencanbo'=>'Cán bộ chưa tuyển','masodv'=>$masodv,
+                            'ttl'=>$luongtt,'luongtn'=>$luongtt,
+                            'luongcoban'=>$inputs['luongcoban'],'congtac'=>'CONGTAC');
+
+                        $m_data[$i]['luongnb'] = $luongtt * 12;
                     }
                 }
                 $m_data[$i]['luongnb_dt'] = (array_sum(array_column($dutoan, 'heso')) + array_sum(array_column($dutoan, 'vuotkhung'))) * $inputs['luongcoban'];
-                $luongnb += $m_data[$i]['luongnb_dt'];
+                $luongnb += ($m_data[$i]['luongnb_dt']+$m_data[$i]['luongnb']);
                 //dùng luongtn vì các phụ cấp tính theo số tiền đã cộng vào luongtn (ko tính vào hệ số)
                 $m_data[$i]['luonghs_dt'] = array_sum(array_column($dutoan, 'luongtn')) - $m_data[$i]['luongnb_dt'];
                 $luonghs += $m_data[$i]['luonghs_dt'];
                 $m_data[$i]['luongbh_dt'] = array_sum(array_column($dutoan, 'ttbh_dv'));
                 $luongbh += $m_data[$i]['luongbh_dt'];
             }
-
+            if(count($a_tuyenthem)>0){//đưa cán bộ tuyển thêm vào danh sách bảng lương
+                $a_data_tt = array();
+                for ($i = 0; $i < count($a_thang); $i++){
+                    for ($j = 0; $j < count($a_tuyenthem); $j++){
+                        $a_tuyenthem[$j]['thang'] = $a_thang[$i]['thang'];
+                        $a_tuyenthem[$j]['nam'] = $a_thang[$i]['nam'];
+                        $a_data_tt[] = $a_tuyenthem[$j];
+                    }
+                }
+                //dd($a_data_tt);
+                foreach (array_chunk($a_data_tt, 100) as $data) {
+                    dutoanluong_bangluong::insert($data);
+                }
+            }
             dutoanluong_chitiet::insert($m_data);
             //dd($m_data);
             $inputs['masodv'] = $masodv;
@@ -472,6 +501,7 @@ class dutoanluongController extends Controller
         $a_dd = array('pclt');
         $a_goc = array('heso', 'vuotkhung', 'pccv');
         //dd($a_pc);
+
         foreach ($model as $cb) {
             $cb->masodv = $masodv;
             $cb->baohiem = 0;
@@ -664,7 +694,7 @@ class dutoanluongController extends Controller
             //tính nâng lương ngạch bậc trc
             if($nb != null){
                 $thang_nb = (new Carbon($nb['ngaynang']))->month;
-                $cb->vuotkhung = round(($nb['vuotkhung'] - $cb->hs_vuotkhung)/($cb->heso*100),session('admin')->lamtron);
+                $cb->vuotkhung = round((($nb['vuotkhung'] - $cb->hs_vuotkhung) * $cb->heso) / 100,session('admin')->lamtron);
                 $cb->heso = $nb['heso'] -  $cb->heso;
                 $cb->thang = $thang_nb;
                 $cb->maphanloai = 'NGACHBAC';
@@ -679,6 +709,7 @@ class dutoanluongController extends Controller
             $stkpcd_dv = 0;
             $stbhtn_dv = 0;
             $tonghs = $tongtien =0;
+            $a_nangluong_nb[$i]['luongcoban'] = $inputs['luongcoban'];
             $a_nangluong_nb[$i]['tonghs'] = 0;
             $a_nangluong_nb[$i]['luongtn'] = 0;
             $a_nangluong_nb[$i]['ttl'] = 0;
@@ -704,6 +735,7 @@ class dutoanluongController extends Controller
                 $mapc_hs = 'hs_' . $mapc;
                 $a_nangluong_nb[$i][$mapc_st] = 0;
                 $a_nangluong_nb[$i][$mapc] = 0;
+
                 if($v['phanloai'] == 2){//tính lại %
                     $a_nangluong_nb[$i][$mapc] = round(($chenhlech * $a_nangluong_nb[$i][$mapc_hs])/100,session('admin')->lamtron);
                     if ($a_nangluong_nb[$i]['baohiem'] == 1 && $v['baohiem'] == 1) {
@@ -712,6 +744,11 @@ class dutoanluongController extends Controller
                         $stkpcd_dv += round($a_nangluong_nb[$i][$mapc_st] * $a_nangluong_nb[$i]['kpcd_dv'], 0);
                         $stbhtn_dv += round($a_nangluong_nb[$i][$mapc_st] * $a_nangluong_nb[$i]['bhtn_dv'], 0);
                     }
+                    $a_nangluong_nb[$i][$mapc_st] = round($a_nangluong_nb[$i][$mapc] * $inputs['luongcoban']);
+                }elseif($v['phanloai'] == 1){
+                    $a_nangluong_nb[$i][$mapc_st] = $a_nangluong_nb[$i][$mapc];
+                }else{
+                    $a_nangluong_nb[$i][$mapc_st] = round($a_nangluong_nb[$i][$mapc] * $inputs['luongcoban']);
                 }
                 $tonghs += $a_nangluong_nb[$i][$mapc];
                 $tongtien += $a_nangluong_nb[$i][$mapc_st];
@@ -733,6 +770,7 @@ class dutoanluongController extends Controller
         $a_data_tnn = array();
         //dd($a_nangluong_tnn);
         for($i=0;$i<count($a_nangluong_tnn);$i++){
+            $a_nangluong_tnn[$i]['luongcoban'] = $inputs['luongcoban'];
             $pctnn = $a_pc['pctnn'];
             $heso = 0;
             foreach (explode(',', $pctnn['congthuc']) as $ct) {
@@ -798,9 +836,9 @@ class dutoanluongController extends Controller
 
         $a_col = array_merge($a_col, array('bac', 'bhxh_dv', 'bhtn_dv', 'kpcd_dv', 'bhyt_dv', 'gioitinh', 'nam_nb', 'nam_ns', 'nam_tnn',
             'thang_nb', 'thang_ns', 'thang_tnn', 'ngayden', 'ngaysinh', 'tnndenngay', 'pcctp', 'st_pcctp', 'baohiem','theodoi'));
-
+        //dd($a_data_nb);
         $a_data_nb = unset_key($a_data_nb, $a_col);
-
+        //dd($a_data_nb);
         foreach (array_chunk($a_data_nb, 50) as $data) {
             dutoanluong_nangluong::insert($data);
         }
@@ -824,10 +862,11 @@ class dutoanluongController extends Controller
         $luongbh = 0;
         //lấy chỉ tiêu biên chế trong năm để tính
         $a_chitieu = chitieubienche::where('madv', session('admin')->madv)->where('nam', $inputs['namdt'])->get()->keyBy('mact')->toarray();
-        $maphanloai = dmdonvi::where('madv', session('admin')->madv)->first()->maphanloai;
+        //$maphanloai = dmdonvi::where('madv', session('admin')->madv)->first()->maphanloai;
         //$heso = $maphanloai == 'MAMNON' ? 2.1 : 2.34;
         $heso = 2.34;
         //dd($m_data);
+        $a_tuyenthem = array();
         for ($i = 0; $i < count($m_data); $i++) {
             $canbo = a_getelement($m_cb, array('mact' => $m_data[$i]['mact']));
             $dutoan = a_getelement($a_data, array('mact' => $m_data[$i]['mact']));
@@ -843,12 +882,19 @@ class dutoanluongController extends Controller
                 $soluongduocgiao = chkDbl($chitieu['soluongduocgiao']);
                 if ($soluongduocgiao > $soluong) {
                     $m_data[$i]['canbo_dutoan'] = $soluongduocgiao - $soluong;
-                    $m_data[$i]['luongnb'] = $m_data[$i]['canbo_dutoan'] * $inputs['luongcoban'] * $heso;
+                    $luongtt = $m_data[$i]['canbo_dutoan'] * $inputs['luongcoban'] * $heso;
+                    $a_tuyenthem[] = array('mact'=>'1561606077','heso'=>$heso * $m_data[$i]['canbo_dutoan'],
+                        'st_heso'=>$luongtt,'tonghs'=>$heso * $m_data[$i]['canbo_dutoan'],
+                        'macanbo'=>$masodv,'tencanbo'=>'Cán bộ chưa tuyển','masodv'=>$masodv,
+                        'ttl'=>$luongtt,'luongtn'=>$luongtt,
+                        'luongcoban'=>$inputs['luongcoban'],'congtac'=>'CONGTAC');
+
+                    $m_data[$i]['luongnb'] = $luongtt * 12;
                 }
             }
             $m_data[$i]['luongnb_dt'] = (array_sum(array_column($dutoan, 'heso')) + array_sum(array_column($dutoan, 'vuotkhung'))) * $inputs['luongcoban']
                 + array_sum(array_column($ngachbac,'st_heso'))+ array_sum(array_column($ngachbac,'st_vuotkhung'));
-            $luongnb += $m_data[$i]['luongnb_dt'];
+            $luongnb += ($m_data[$i]['luongnb_dt'] + $m_data[$i]['luongnb']);
             //dùng luongtn vì các phụ cấp tính theo số tiền đã cộng vào luongtn (ko tính vào hệ số)
             $m_data[$i]['luonghs_dt'] = array_sum(array_column($dutoan, 'luongtn'))
                 + array_sum(array_column($ngachbac, 'luongtn'))
@@ -859,6 +905,20 @@ class dutoanluongController extends Controller
                 + array_sum(array_column($ngachbac, 'ttbh_dv'))
                 + array_sum(array_column($thamnn, 'ttbh_dv'));
             $luongbh += $m_data[$i]['luongbh_dt'];
+        }
+        if(count($a_tuyenthem)>0){//đưa cán bộ tuyển thêm vào danh sách bảng lương
+            $a_data_tt = array();
+            for ($i = 0; $i < count($a_thang); $i++){
+                for ($j = 0; $j < count($a_tuyenthem); $j++){
+                    $a_tuyenthem[$j]['thang'] = $a_thang[$i]['thang'];
+                    $a_tuyenthem[$j]['nam'] = $a_thang[$i]['nam'];
+                    $a_data_tt[] = $a_tuyenthem[$j];
+                }
+            }
+            //dd($a_data_tt);
+            foreach (array_chunk($a_data_tt, 100) as $data) {
+                dutoanluong_bangluong::insert($data);
+            }
         }
 
         dutoanluong_chitiet::insert($m_data);
@@ -952,6 +1012,7 @@ class dutoanluongController extends Controller
 
     public function getHeSoPc_Sub($a_pc, $m_cb, $m_cb_cu, $phanloai, $thang, $nam)
     {
+        //dd($m_cb);
         $m_cb['maphanloai'] = $phanloai;
         $m_cb['thang'] = $thang;
         $m_cb['nam'] = $nam;
@@ -1240,6 +1301,135 @@ class dutoanluongController extends Controller
             return view('errors.notlogin');
     }
 
+    function printf_tt107_m2(Request $request)
+    {
+        if (Session::has('admin')) {
+            $inputs = $request->all();
+            //dd($inputs);
+            $model_ct = dutoanluong_bangluong::where('masodv', $inputs['maso'])->orderby('stt')->get();
+            $model = $model_ct->unique('macanbo');
+            //dd($model);
+
+            //$model = dutoanluong_bangluong::where('masodv', $inputs['masodv'])->orderby('thang')->get();
+            $model_thongtin = dutoanluong::where('masodv', $inputs['maso'])->first();
+            $a_congtac = array_column(dmphanloaict::wherein('mact',a_unique(array_column($model->toarray(),'mact')))->get()->toArray(), 'tenct', 'mact');
+            //dd($a_ct);
+            //cho trương hợp đơn vị cấp trên in dữ liệu dv câp dưới mà ko sai tên đơn vị
+            $m_dv = dmdonvi::where('madv', $model_thongtin->madv)->first();
+            $a_phucap = array();
+            $col = 0;
+            $m_pc = dmphucap_donvi::where('madv', $model_thongtin->madv)->orderby('stt')->get()->toarray();
+
+            foreach ($m_pc as $ct) {
+                if ($model->sum($ct['mapc']) > 0) {
+                    $a_phucap[$ct['mapc']] = $ct['report'];
+                    $col++;
+                }
+            }
+
+            foreach ($model as $ct) {
+                $bl = $model_ct->where('macanbo',$ct->macanbo);
+                foreach ($m_pc as $pc) {
+                    $ma = $pc['mapc'];
+                    $ma_st = 'st_'.$pc['mapc'];
+                    $ct->$ma = $bl->sum($ma);
+                    $ct->$ma_st = $bl->sum($ma_st);
+                }
+                $ct->tonghs = $bl->sum('tonghs');
+                $ct->luongtn = $bl->sum('luongtn');
+                $ct->stbhxh_dv = $bl->sum('stbhxh_dv');
+                $ct->stbhyt_dv = $bl->sum('stbhyt_dv');
+                $ct->stkpcd_dv = $bl->sum('stkpcd_dv');
+                $ct->stbhtn_dv = $bl->sum('stbhtn_dv');
+                $ct->ttbh_dv = $bl->sum('ttbh_dv');
+
+                $ct->tencanbo = str_replace('(nghỉ thai sản)','',$ct->tencanbo);
+                $ct->tencanbo = str_replace('(nghỉ hưu)','',$ct->tencanbo);
+                $ct->tencanbo = trim($ct->tencanbo);
+            }
+
+            //dd($model);
+            $thongtin = array('nguoilap' => session('admin')->name,
+                'namns' => $model_thongtin->namns);
+
+            return view('reports.dutoanluong.donvi.bangluong_m2')
+                ->with('thongtin', $thongtin)
+                ->with('model', $model->sortby('stt'))
+                ->with('m_dv', $m_dv)
+                ->with('col', $col)
+                ->with('a_phucap', $a_phucap)
+                ->with('a_congtac', $a_congtac)
+                ->with('pageTitle', 'Tổng hợp dự toán lương tại đơn vị');
+        } else
+            return view('errors.notlogin');
+    }
+
+    //bỏ vì thừa
+    function printf_tt107_m3(Request $request)
+    {
+        if (Session::has('admin')) {
+            $inputs = $request->all();
+            //dd($inputs);
+            $model_ct = dutoanluong_bangluong::where('masodv', $inputs['maso'])->get();
+            $model_nl = dutoanluong_nangluong::where('masodv', $inputs['maso'])->get();
+            $model = $model_ct->unique('macanbo');//lấy ra các bản ghi đầu tiên với macanbo
+            //dd($model_nl);
+            //$model = dutoanluong_bangluong::where('masodv', $inputs['masodv'])->orderby('thang')->get();
+            $model_thongtin = dutoanluong::where('masodv', $inputs['maso'])->first();
+            $a_congtac = array_column(dmphanloaict::wherein('mact',a_unique(array_column($model_ct->toarray(),'mact')))->get()->toArray(), 'tenct', 'mact');
+            //dd($a_congtac);
+            //cho trương hợp đơn vị cấp trên in dữ liệu dv câp dưới mà ko sai tên đơn vị
+            $m_dv = dmdonvi::where('madv', $model_thongtin->madv)->first();
+            $a_phucap = array();
+            $col = 0;
+            $m_pc = dmphucap_donvi::where('madv', $model_thongtin->madv)->orderby('stt')->get()->toarray();
+
+            foreach ($m_pc as $ct) {
+                if ($model_ct->sum($ct['mapc']) > 0) {
+                    $a_phucap[$ct['mapc']] = $ct['report'];
+                    $col++;
+                }
+            }
+
+            foreach ($model as $ct) {
+                $bl = $model_ct->where('macanbo',$ct->macanbo);
+                $nl = $model_nl->where('macanbo',$ct->macanbo);
+                foreach ($m_pc as $pc) {
+                    $ma = $pc['mapc'];
+                    $ma_st = 'st_'.$pc['mapc'];
+                    $ct->$ma = $bl->sum($ma) + $nl->sum($ma);
+                    $ct->$ma_st = $bl->sum($ma_st) + $nl->sum($ma_st);
+                }
+                $ct->tonghs = $bl->sum('tonghs') + $nl->sum('tonghs');
+                //$ct->ttl = $bl->sum('ttl') + $nl->sum('ttl');
+                $ct->luongtn = $bl->sum('luongtn') + $nl->sum('luongtn');
+                $ct->stbhxh_dv = $bl->sum('stbhxh_dv') + $nl->sum('stbhxh_dv');
+                $ct->stbhyt_dv = $bl->sum('stbhyt_dv') + $nl->sum('stbhyt_dv');
+                $ct->stkpcd_dv = $bl->sum('stkpcd_dv') + $nl->sum('stkpcd_dv');
+                $ct->stbhtn_dv = $bl->sum('stbhtn_dv') + $nl->sum('stbhtn_dv');
+                $ct->ttbh_dv = $bl->sum('ttbh_dv') + $nl->sum('ttbh_dv');
+
+                $ct->tencanbo = str_replace('(nghỉ thai sản)','',$ct->tencanbo);
+                $ct->tencanbo = str_replace('(nghỉ hưu)','',$ct->tencanbo);
+                $ct->tencanbo = trim($ct->tencanbo);
+            }
+
+            //dd($model);
+            $thongtin = array('nguoilap' => session('admin')->name,
+                'namns' => $model_thongtin->namns);
+
+            return view('reports.dutoanluong.donvi.bangluong_m2')
+                ->with('thongtin', $thongtin)
+                ->with('model', $model)
+                ->with('m_dv', $m_dv)
+                ->with('col', $col)
+                ->with('a_phucap', $a_phucap)
+                ->with('a_congtac', $a_congtac)
+                ->with('pageTitle', 'Tổng hợp dự toán lương tại đơn vị');
+        } else
+            return view('errors.notlogin');
+    }
+
     function printf_bl($masodv)
     {
         if (Session::has('admin')) {
@@ -1353,63 +1543,6 @@ class dutoanluongController extends Controller
                 ->with('model_thang', $model_thang)
                 ->with('model_congtac', $model_congtac)
                 ->with('pageTitle', 'Chi tiết tổng hợp lương tại đơn vị');
-        } else
-            return view('errors.notlogin');
-    }
-
-    function printf_tt107_m2(Request $request)
-    {
-        if (Session::has('admin')) {
-            $inputs = $request->all();
-            //dd($inputs);
-            $model = dutoanluong_bangluong::where('masodv', $inputs['maso'])->where('thang', '01')->orderby('stt')->get();
-            //dd($model);
-
-            //$model = dutoanluong_bangluong::where('masodv', $inputs['masodv'])->orderby('thang')->get();
-            $model_thongtin = dutoanluong::where('masodv', $inputs['maso'])->first();
-            $a_congtac = array_column(dmphanloaict::wherein('mact',a_unique(array_column($model->toarray(),'mact')))->get()->toArray(), 'tenct', 'mact');
-            //dd($a_ct);
-            //cho trương hợp đơn vị cấp trên in dữ liệu dv câp dưới mà ko sai tên đơn vị
-            $m_dv = dmdonvi::where('madv', $model_thongtin->madv)->first();
-            $a_phucap = array();
-            $col = 0;
-            $m_pc = dmphucap_donvi::where('madv', $model_thongtin->madv)->orderby('stt')->get()->toarray();
-
-            foreach ($m_pc as $ct) {
-                if ($model->sum($ct['mapc']) > 0) {
-                    $a_phucap[$ct['mapc']] = $ct['report'];
-                    $col++;
-                }
-            }
-
-            foreach ($model as $ct) {
-                foreach ($m_pc as $pc) {
-                    $ma = $pc['mapc'];
-                    $ma_st = 'st_'.$pc['mapc'];
-                    $ct->$ma = $ct->$ma * 12;
-                    $ct->$ma_st = $ct->$ma_st * 12;
-                }
-                $ct->tonghs = $ct->tonghs * 12;
-                $ct->ttl = $ct->luongtn * 12;
-                $ct->stbhxh_dv = $ct->stbhxh_dv * 12;
-                $ct->stbhyt_dv = $ct->stbhyt_dv * 12;
-                $ct->stkpcd_dv = $ct->stkpcd_dv * 12;
-                $ct->stbhtn_dv = $ct->stbhtn_dv * 12;
-                $ct->ttbh_dv = $ct->ttbh_dv * 12;
-            }
-
-            //dd($model->toarray());
-            $thongtin = array('nguoilap' => session('admin')->name,
-                'namns' => $model_thongtin->namns);
-
-            return view('reports.dutoanluong.donvi.bangluong_m2')
-                ->with('thongtin', $thongtin)
-                ->with('model', $model)
-                ->with('m_dv', $m_dv)
-                ->with('col', $col)
-                ->with('a_phucap', $a_phucap)
-                ->with('a_congtac', $a_congtac)
-                ->with('pageTitle', 'Tổng hợp dự toán lương tại đơn vị');
         } else
             return view('errors.notlogin');
     }

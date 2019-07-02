@@ -98,7 +98,17 @@
                                 </div>
                             </div>
                         </div>
+
+                        <div class="row">
+
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label class="form-control-label">Tổng hợp và dự toán</label>
+                                    {!!Form::select('tonghop',array('0'=>'Không','1'=>'Có'), null, array('id' => 'tonghop','class' => 'form-control'))!!}
+                                </div>
+                            </div>
                         </div>
+                    </div>
                 </div>
             </div>
                 <div style="text-align: center">

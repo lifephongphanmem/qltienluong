@@ -36,7 +36,7 @@
                     </div>
                     <div class="actions">
                         @if(session('admin')->level == 'SA')
-                            <button type="button" id="_btnaddPB" class="btn btn-success btn-xs" onclick="add()"><i class="fa fa-plus"></i>&nbsp;Thêm mới phân loại</button>
+                            <button type="button" id="_btnaddPB" class="btn btn-success btn-xs" onclick="add()"><i class="fa fa-plus"></i>&nbsp;Thêm mới</button>
                         @endif
                     </div>
                 </div>
@@ -62,7 +62,7 @@
                                                 <i class="fa fa-edit"></i>&nbsp; Chi tiết</a>
                                             @if(session('admin')->level == 'SA' || session('admin')->level == 'SSA')
                                                 <button type="button" onclick="editCV('{{$value->macongtac}}')" class="btn btn-default btn-xs">
-                                                    <i class="fa fa-edit"></i>&nbsp; Chỉnh sửa</button>
+                                                    <i class="fa fa-edit"></i>&nbsp; Sửa</button>
                                                 <button type="button" onclick="cfDel('/danh_muc/cong_tac/del/{{$value->id}}')" class="btn btn-default btn-xs" data-target="#delete-modal-confirm" data-toggle="modal">
                                                     <i class="fa fa-trash-o"></i>&nbsp; Xóa</button>
                                             @endif

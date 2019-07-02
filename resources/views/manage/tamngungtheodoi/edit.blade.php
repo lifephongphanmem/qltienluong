@@ -43,7 +43,7 @@
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label class="form-control-label">Họ tên cán bộ<span class="require">*</span></label>
-                                    {!!Form::select('macanbo',$a_canbo, null, array('id' => 'macanbo','class' => 'form-control','required','autofocus'=>'true'))!!}
+                                    {!!Form::select('macanbo',$a_canbo, null, array('id' => 'macanbo','class' => 'form-control select2me','required','autofocus'=>'true'))!!}
                                 </div>
                             </div>
 

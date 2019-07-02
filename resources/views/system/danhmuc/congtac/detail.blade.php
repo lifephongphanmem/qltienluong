@@ -32,10 +32,10 @@
             <div class="portlet light bordered">
                 <div class="portlet-title">
                     <div class="caption">
-                        <b>DANH MỤC PHÂN LOẠI CÔNG TÁC</b>
+                        <b>DANH MỤC PHÂN LOẠI CÔNG TÁC CHI TIẾT</b>
                     </div>
                     <div class="actions">
-                        <button type="button" id="_btnaddPB" class="btn btn-success btn-xs" onclick="add()"><i class="fa fa-plus"></i>&nbsp;Thêm mới phân loại</button>
+                        <button type="button" id="_btnaddPB" class="btn btn-success btn-xs" onclick="add()"><i class="fa fa-plus"></i>&nbsp;Thêm mới</button>
                     </div>
                 </div>
                 <div class="portlet-body form-horizontal">
@@ -44,6 +44,7 @@
                             <tr>
                                 <th class="text-center" style="width: 10%">STT</th>
                                 <th class="text-center">Phân loại công tác</th>
+                                <th class="text-center">Tổng hợp số liệu</th>
                                 <th class="text-center">Thao tác</th>
                             </tr>
                         </thead>
@@ -53,10 +54,11 @@
                                     <tr>
                                         <td class="text-center">{{$key+1}}</td>
                                         <td>{{$value->tenct}}</td>
+                                        <td class="text-center">{{$value->tonghop == 1 ? 'Tổng hợp và dự toán':''}}</td>
                                         <td>
                                             @if(session('admin')->level == 'SA' || session('admin')->level == 'SSA')
                                                 <button type="button" onclick="editCV('{{$value->mact}}')" class="btn btn-default btn-xs">
-                                                    <i class="fa fa-edit"></i>&nbsp; Chỉnh sửa</button>
+                                                    <i class="fa fa-edit"></i>&nbsp; Sửa</button>
 
                                                 <button type="button" onclick="cfDel('/danh_muc/cong_tac/del_detail/{{$value->id}}')" class="btn btn-default btn-xs" data-target="#delete-modal-confirm" data-toggle="modal">
                                                     <i class="fa fa-trash-o"></i>&nbsp; Xóa</button>
@@ -67,6 +69,13 @@
                             @endif
                         </tbody>
                     </table>
+
+                    <div class="row">
+                        <div class="col-md-offset-5 col-md-8">
+                            <a href="{{url('/danh_muc/cong_tac/index')}}" class="btn btn-default"><i class="fa fa-reply"></i>&nbsp;Quay lại</a>
+
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -86,7 +95,16 @@
                             <label class="form-control-label">Phân loại công tác<span class="require">*</span></label>
                             {!!Form::text('tenct', null, array('id' => 'tenct','class' => 'form-control','required'=>'required','autofocus'=>'true'))!!}
                         </div>
+                    </div>
 
+                    <div class="row">
+                        <div class="col-md-12" style="margin-bottom: 5px;">
+                            <label class="form-control-label">Tổng hợp và dự toán</label>
+                            {!!Form::select('tonghop',array('0'=>'Không','1'=>'Có'), null, array('id' => 'tonghop','class' => 'form-control'))!!}
+                        </div>
+                    </div>
+
+                    <div class="row">
                         <div class="col-md-12">
                             <!-- BEGIN PORTLET-->
                             <div class="portlet box blue" style="margin-bottom: 5px;">
@@ -213,6 +231,7 @@
                 success: function (data) {
                     $('#mact').val(data.mact);
                     $('#tenct').val(data.tenct);
+                    $('#tonghop').val(data.tonghop).trigger("change");
                     $('#id').val(data.id);
                     $('#bhxh').val(data.bhxh);
                     $('#bhyt').val(data.bhyt);
@@ -254,6 +273,7 @@
                             _token: CSRF_TOKEN,
                             mact: mact,
                             macongtac: macongtac,
+                            tonghop: $('#tonghop').val(),
                             tenct: tenct,
                             bhxh:$('#bhxh').val(),
                             bhyt:$('#bhyt').val(),
@@ -282,6 +302,7 @@
                             _token: CSRF_TOKEN,
                             mact: mact,
                             tenct: tenct,
+                            tonghop: $('#tonghop').val(),
                             bhxh:$('#bhxh').val(),
                             bhyt:$('#bhyt').val(),
                             kpcd:$('#kpcd').val(),

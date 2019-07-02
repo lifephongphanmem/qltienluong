@@ -75,12 +75,13 @@ class dmphucapController extends Controller
             $model = dmphucap::all();//default
             $a_pl = getPhanLoaiPhuCap();
             $a_ct = getCongThucTinhPC();
-            $a_th = getColTongHop();
+            //$a_th = getColTongHop();
+            //dd($a_th);
             foreach ($model as $ct) {
                 $ct->tenphanloai = isset($a_pl[$ct->phanloai]) ? $a_pl[$ct->phanloai] : '';
                 $congthuc = explode(',', $ct->congthuc);
                 $ct->tencongthuc = '';
-                $ct->tonghop = in_array($ct->mapc,$a_th) ? 'Tổng hợp và dự toán':'';
+                //$ct->tonghop = in_array($ct->mapc,$a_th) ? 'Tổng hợp và dự toán':'';
                 foreach ($congthuc as $bg) {
                     $ct->tencongthuc .= isset($a_ct[$bg]) ? ($a_ct[$bg] . '; ') : '';
                 }

@@ -142,9 +142,14 @@ class tonghopnguon_huyenController extends Controller
         if (Session::has('admin')) {
             $inputs = $request->all();
             //dd($inputs);
-            $model = nguonkinhphi_bangluong::where('masoh', $inputs['maso'])->where('thang', '07')->orderby('stt')->get();
-            //dd($model);
+            //$model = nguonkinhphi_bangluong::where('masoh', $inputs['maso'])->where('thang', '07')->orderby('stt')->get();
 
+            //từ bảng nguonkinhphi_huyen lấy ra masodv để lấy dữ liệu từ bảng nguonkinhphi_bangluong
+            $maso_huyen = $inputs['maso'];
+            $model_ct = nguonkinhphi_bangluong::where('masodv',function($qr) use($maso_huyen){
+                $qr->select('masodv')->from('nguonkinhphi')->where('masoh',$maso_huyen)->get();
+            })->get();
+            $model = $model_ct->unique('macanbo');
             //$model = dutoanluong_bangluong::where('masodv', $inputs['masodv'])->orderby('thang')->get();
             $model_thongtin = nguonkinhphi::where('masoh', $inputs['maso'])->first();
             $a_congtac = array_column(dmphanloaict::wherein('mact',a_unique(array_column($model->toarray(),'mact')))->get()->toArray(), 'tenct', 'mact');
@@ -162,6 +167,30 @@ class tonghopnguon_huyenController extends Controller
                 }
             }
 
+            //dữ liệu đã bao gồm cả nâng lương
+            //nếu lấy dữ 06 tháng chưa nâng lương thì lấy tháng 07 * 6
+            foreach ($model as $ct) {
+                $bl = $model_ct->where('macanbo',$ct->macanbo);
+                foreach ($m_pc as $pc) {
+                    $ma = $pc['mapc'];
+                    $ma_st = 'st_'.$pc['mapc'];
+                    $ct->$ma = $bl->sum($ma);
+                    $ct->$ma_st = $bl->sum($ma_st);
+                }
+                $ct->tonghs = $bl->sum('tonghs');
+                $ct->ttl = $bl->sum('luongtn');
+                $ct->stbhxh_dv = $bl->sum('stbhxh_dv');
+                $ct->stbhyt_dv = $bl->sum('stbhyt_dv');
+                $ct->stkpcd_dv = $bl->sum('stkpcd_dv');
+                $ct->stbhtn_dv = $bl->sum('stbhtn_dv');
+                $ct->ttbh_dv = $bl->sum('ttbh_dv');
+
+                $ct->tencanbo = str_replace('(nghỉ thai sản)','',$ct->tencanbo);
+                $ct->tencanbo = str_replace('(nghỉ hưu)','',$ct->tencanbo);
+                $ct->tencanbo = trim($ct->tencanbo);
+            }
+
+            /* dữ liệu chưa nâng lương
             foreach ($model as $ct) {
                 foreach ($m_pc as $pc) {
                     $ma = $pc['mapc'];
@@ -177,7 +206,7 @@ class tonghopnguon_huyenController extends Controller
                 $ct->stbhtn_dv = $ct->stbhtn_dv * 6;
                 $ct->ttbh_dv = $ct->ttbh_dv * 6;
             }
-
+            */
             //dd($model);
             $thongtin = array('nguoilap' => session('admin')->name,
                 'namns' => $model_thongtin->namns);

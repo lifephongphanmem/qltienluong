@@ -146,8 +146,9 @@ class tonghopluong_donviController extends Controller
             for($i=0; $i<count($col); $i++){
                 $col_st[] ='st_'. $col[$i];
             }
-            $a_th = array_merge(array('macanbo','tencanbo','msngbac', 'mact', 'macvcq', 'mapb', 'mabl', 'manguonkp', 'luongcoban','thangtl','ngaytl'
-                ,'congtac','stbhxh_dv','stbhyt_dv','stkpcd_dv','stbhtn_dv','tonghs','ttl', 'giaml','ttbh_dv'),$col);
+            $a_th = array_merge(array('macanbo','tencanbo','msngbac', 'mact', 'macvcq', 'mapb', 'mabl', 'manguonkp',
+                'luongcoban','thangtl','ngaytl' ,'congtac','stbhxh_dv','stbhyt_dv','stkpcd_dv','stbhtn_dv','tonghs',
+                'stbhxh','stbhyt','stkpcd','stbhtn','ttbh','ttbh_dv','ttl', 'giaml','ttbh_dv'),$col);
             $a_th = array_merge($a_th,$col_st);
 
             //$a_ct = bangluong_ct::select($a_th)->wherein('mabl', array_column($a_bangluong,'mabl'))->get()->toarray();
@@ -163,8 +164,12 @@ class tonghopluong_donviController extends Controller
             $a_bh = array_column(dmphucap_thaisan::select('mapc')->where('madv', session('admin')->madv)->get()->toarray(), 'mapc');
 
             $a_data = array();
+            $a_plct = getPLCTTongHop();
+            /*
+            dd($a_plct);
             $a_plct = array('1536402868','1536459380','1535613221', '1506673695');
             $a_plcongtac = array('BIENCHE','KHONGCT','HOPDONG');
+            */
             for($i=0; $i< count($a_ct); $i++){
                 $a_ct[$i]['macongtac'] = isset($a_congtac[$a_ct[$i]['mact']]) ? $a_congtac[$a_ct[$i]['mact']] : null;
                 $bangluong = $a_bangluong[$a_ct[$i]['mabl']];
@@ -212,7 +217,8 @@ class tonghopluong_donviController extends Controller
                 */
 
                 $a_ct[$i]['tonghop'] = $a_ct[$i]['congtac'];
-                if(in_array($a_ct[$i]['macongtac'],$a_plcongtac) || in_array($a_ct[$i]['mact'],$a_plct)){
+                //if(in_array($a_ct[$i]['macongtac'],$a_plcongtac) || in_array($a_ct[$i]['mact'],$a_plct)){
+                if(in_array($a_ct[$i]['mact'],$a_plct)){
                     $a_data[] = $a_ct[$i];
                 }
             }
@@ -237,10 +243,17 @@ class tonghopluong_donviController extends Controller
                 }
                 $a_slcb = a_unique(a_split($luongct, array('macanbo','mact')));//lọc cán bộ kiêm nhiệm
 
+                $model_data[$i]['stbhxh'] = array_sum(array_column($luongct,'stbhxh'));
+                $model_data[$i]['stbhyt'] = array_sum(array_column($luongct,'stbhyt'));
+                $model_data[$i]['stkpcd'] = array_sum(array_column($luongct,'stkpcd'));
+                $model_data[$i]['stbhtn'] = array_sum(array_column($luongct,'stbhtn'));
+                $model_data[$i]['ttbh'] = array_sum(array_column($luongct,'ttbh'));
+
                 $model_data[$i]['stbhxh_dv'] = array_sum(array_column($luongct,'stbhxh_dv'));
                 $model_data[$i]['stbhyt_dv'] = array_sum(array_column($luongct,'stbhyt_dv'));
                 $model_data[$i]['stkpcd_dv'] = array_sum(array_column($luongct,'stkpcd_dv'));
                 $model_data[$i]['stbhtn_dv'] = array_sum(array_column($luongct,'stbhtn_dv'));
+                $model_data[$i]['ttbh_dv'] = array_sum(array_column($luongct,'ttbh_dv'));
                 $model_data[$i]['soluong'] = count($a_slcb);
                 $model_data[$i]['giaml'] = array_sum(array_column($luongct,'giaml'));
                 $model_data[$i]['tonghs'] = $tonghs;

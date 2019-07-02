@@ -17,6 +17,7 @@ class dmphucap extends Model
         'report', //tiêu đề trên Report
         'phanloai',
         'congthuc',
+        'tonghop',
         'ghichu'
     ];
 }

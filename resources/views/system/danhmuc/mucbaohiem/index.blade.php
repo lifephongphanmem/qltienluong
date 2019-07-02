@@ -44,6 +44,7 @@
                             <tr>
                                 <th class="text-center" style="width: 5%">STT</th>
                                 <th class="text-center">Phân loại</br>công tác</th>
+                                <th class="text-center">Tổng hợp</br> và dự toán</th>
                                 <th class="text-center">BHXH</br>cá nhân</br>đóng</th>
                                 <th class="text-center">BHYT</br>cá nhân</br>đóng</th>
                                 <th class="text-center">KPCĐ</br>cá nhân</br>đóng</th>
@@ -62,6 +63,7 @@
                                     <tr>
                                         <td class="text-center">{{$key+1}}</td>
                                         <td>{{$value->tencongtac}}</td>
+                                        <td class="text-center">{{$value->tonghop == 1 ? 'Tổng hợp và dự toán':''}}</td>
                                         <td class="text-center">{{$value->bhxh}}</td>
                                         <td class="text-center">{{$value->bhyt}}</td>
                                         <td class="text-center">{{$value->kpcd}}</td>

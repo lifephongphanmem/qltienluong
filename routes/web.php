@@ -291,6 +291,7 @@ Route::group(['prefix'=>'nghiep_vu'],function(){
             Route::get('printf_bl/ma_so={masodv}','dutoanluongController@printf_bl');
             Route::post('mautt107','dutoanluongController@printf_tt107');
             Route::get('mautt107_m2','dutoanluongController@printf_tt107_m2');
+            Route::get('mautt107_m3','dutoanluongController@printf_tt107_m3');
             Route::get('nangluong','dutoanluongController@printf_nangluong');
         });
 
@@ -369,6 +370,7 @@ Route::group(['prefix'=>'nguon_kinh_phi'],function(){
     Route::get('printf','nguonkinhphiController@printf_data');//in theo thoại
     Route::post('mautt107','nguonkinhphiController@printf_tt107');
     Route::get('mautt107_m2','nguonkinhphiController@printf_tt107_m2');
+    Route::get('mautt107_m3','nguonkinhphiController@printf_tt107_m3');
     Route::get('nangluong','nguonkinhphiController@printf_nangluong');
 
     Route::get('del/{id}','nguonkinhphiController@destroy');

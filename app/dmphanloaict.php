@@ -10,6 +10,7 @@ class dmphanloaict extends Model
     protected $fillable = [
         'id',
         'macongtac',
+        'tonghop',
         'mact',
         'tenct',
         'bhxh',

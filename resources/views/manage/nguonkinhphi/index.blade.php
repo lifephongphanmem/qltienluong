@@ -130,19 +130,19 @@
                     <div class="col-md-6">
                         <div class="form-group">
                             <button type="button" onclick="intonghopdt('{{$furl.'mautt107_m2?maso='}}')" style="border-width: 0px" class="btn btn-default btn-xs mbs">
-                                <i class="fa fa-print"></i>&nbsp; Bảng lương mẫu C02-HD (TT107/2017/TT-BTC) - tổng hợp</button>
+                                <i class="fa fa-print"></i>&nbsp; Bảng lương mẫu C02-HD (Tổng hợp chi lương và nâng lương)</button>
                         </div>
                     </div>
-                    <!--div class="col-md-6">
-                        <div class="form-group">
-                            <button type="button" style="border-width: 0px" class="btn btn-default btn-xs mbs" data-target="#mautt107-modal" data-toggle="modal"
-                                    title="Bảng lương của cán bộ theo mẫu C02-HD">
-                                <i class="fa fa-print"></i>&nbsp; Bảng lương mẫu C02-HD (TT185/2010/TT-BTC)</button>
-                        </div>
-                    </div-->
                 </div>
 
                 <div class="row">
+                    <!--div class="col-md-6">
+                        <div class="form-group">
+                            <button type="button" onclick="intonghopdt('{{$furl.'mautt107_m2?maso='}}')" style="border-width: 0px" class="btn btn-default btn-xs mbs">
+                                <i class="fa fa-print"></i>&nbsp; Bảng lương mẫu C02-HD (Tổng hợp chi lương các tháng)</button>
+                        </div>
+                    </div-->
+
                     <div class="col-md-6">
                         <div class="form-group">
                             <button type="button" style="border-width: 0px" onclick="innangluong()" class="btn btn-default btn-xs mbs">
@@ -207,6 +207,13 @@
                         <div class="col-md-12">
                             <label class="control-label">Nội dung</label>
                             {!!Form::textarea('noidung', null, array('id' => 'noidung','class' => 'form-control','rows'=>'3'))!!}
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-offset-3 col-md-9" style="padding-top: 15px">
+                            <input type="checkbox" checked id="nghihuu" name="nghihuu" />
+                            <label>Không tính dự toán cho cán bộ nghỉ hưu</label>
                         </div>
                     </div>
                 </div>

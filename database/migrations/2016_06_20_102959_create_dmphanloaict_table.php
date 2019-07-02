@@ -16,6 +16,7 @@ class CreateDmphanloaictTable extends Migration
         Schema::create('dmphanloaict', function (Blueprint $table) {
             $table->increments('id');
             $table->string('macongtac', 50)->nullable();
+            $table->double('tonghop')->default(0);
             $table->string('mact', 50)->nullable();
             $table->string('tenct', 50)->nullable();
             $table->double('bhxh')->default(0);
