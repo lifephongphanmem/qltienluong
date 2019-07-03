@@ -206,14 +206,19 @@
                                 <div class="tab-content">
                                     <div class="tab-pane active" id="tab_0">
                                         <div class="row">
-                                            <div class="col-md-6">
+                                            <div class="col-md-4">
                                                 <label class="control-label">Năm được giao dự toán</label>
                                                 {!!Form::text('namdt', date('Y') + 1, array('id' => 'namdt','class' => 'form-control'))!!}
                                             </div>
 
-                                            <div class="col-md-6">
+                                            <div class="col-md-4">
                                                 <label class="control-label">Mức lương cơ bản</label>
                                                 {!!Form::text('luongcoban', getGeneralConfigs()['luongcb'], array('id' => 'luongcoban','class' => 'form-control', 'data-mask'=>'fdecimal'))!!}
+                                            </div>
+
+                                            <div class="col-md-4">
+                                                <label class="control-label">Dự toán từ tháng</label>
+                                                {!! Form::select('thang',getThang(),01,array('id' => 'thang', 'class' => 'form-control'))!!}
                                             </div>
 
                                             <div class="row">
