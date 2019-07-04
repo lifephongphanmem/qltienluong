@@ -304,7 +304,10 @@ class bangluongController extends Controller
             })->get()->toarray();
         //ds cán bộ
         $m_cb = hosocanbo::where('madv', $inputs['madv'])->wherenotin('macanbo',$a_cbn)->get();
-        $m_cb = (new data())->getCanBo($m_cb,$ngaydauthang);
+        if($inputs['capnhatnangluong']){
+            $m_cb = (new data())->getCanBo($m_cb,$ngaydauthang);
+        }
+
         //Lấy danh sách cán bộ kiêm nhiệm
         //$model_canbo_kn = hosocanbo_kiemnhiem::where('madv',session('admin')->madv)->wherein('manguonkp',[$inputs['manguonkp'],''])->get();
         $model_canbo_kn = hosocanbo_kiemnhiem::where('madv',session('admin')->madv)->get();
@@ -784,8 +787,12 @@ class bangluongController extends Controller
         //$m_cb = hosocanbo::select($a_th)->where('madv', $inputs['madv'])->wherenotin('macanbo',$a_cbn)->get()->keyBy('macanbo')->toArray();
         $m_cb = hosocanbo::select($a_th)->where('madv', $inputs['madv'])->wherenotin('macanbo',$a_cbn)->get();
         //chay hàm lấy lại hàm sửa dữ liệu
-        $m_cb = (new data())->getCanBo($m_cb,$ngaydauthang)->keyBy('macanbo')->toArray();
 
+        if($inputs['capnhatnangluong']){
+            $m_cb = (new data())->getCanBo($m_cb,$ngaydauthang);
+        }
+
+        $m_cb = $m_cb->keyBy('macanbo')->toArray();
         $a_phanloai = dmphanloaicongtac_baohiem::where('madv', session('admin')->madv)->get()->keyBy('mact')->toArray();
         $a_nhomct = array_column(dmphanloaict::all()->toarray(), 'macongtac','mact');
         //dd($a_nhomct);

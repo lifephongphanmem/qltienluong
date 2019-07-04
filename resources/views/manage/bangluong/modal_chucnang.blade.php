@@ -79,6 +79,13 @@
                                         </div>
                                     </div>
 
+                                    <div class="row">
+                                        <div class="col-md-offset-3 col-md-9" style="margin-top: 15px">
+                                            <input name="capnhatnangluong" id="capnhatnangluong" type="checkbox" checked>Cập nhật quá trình nâng lương của cán bộ</label>
+                                        </div>
+                                    </div>
+
+
                                     <input type="hidden" id="dinhmuc" name="dinhmuc" value="{{$inputs['dinhmuc']}}"/>
                                     <input type="hidden" id="thang" name="thang" value="{{$inputs['thang']}}"/>
                                     <input type="hidden" id="nam" name="nam" value="{{$inputs['nam']}}"/>
