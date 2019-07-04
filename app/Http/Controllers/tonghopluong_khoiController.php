@@ -140,10 +140,11 @@ class tonghopluong_khoiController extends Controller
             $col = 0;
 
             $model_tonghop = tonghopluong_donvi::where('macqcq',$madv)
-                ->orWhereIn('macqcq', array_column($model_donvi->toarray(),'madv'))
                 ->where('nam', $nam)
                 ->where('thang', $thang)
-                ->where('trangthai', 'DAGUI')->get();
+                ->where('trangthai', 'DAGUI')
+                ->orWhereIn('macqcq', array_column($model_donvi->toarray(),'madv'))
+                ->get();
             $model_plth = dmdonvi::join('tonghopluong_donvi','dmdonvi.madv','tonghopluong_donvi.madv')
                 ->select('maphanloai','mathdv')
                 ->where('nam', $nam)
