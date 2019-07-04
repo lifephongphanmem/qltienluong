@@ -304,7 +304,7 @@ class bangluongController extends Controller
             })->get()->toarray();
         //ds cán bộ
         $m_cb = hosocanbo::where('madv', $inputs['madv'])->wherenotin('macanbo',$a_cbn)->get();
-        if($inputs['capnhatnangluong']){
+        if(isset($inputs['capnhatnangluong'])){
             $m_cb = (new data())->getCanBo($m_cb,$ngaydauthang);
         }
 
@@ -788,7 +788,7 @@ class bangluongController extends Controller
         $m_cb = hosocanbo::select($a_th)->where('madv', $inputs['madv'])->wherenotin('macanbo',$a_cbn)->get();
         //chay hàm lấy lại hàm sửa dữ liệu
 
-        if($inputs['capnhatnangluong']){
+        if(isset($inputs['capnhatnangluong'])){
             $m_cb = (new data())->getCanBo($m_cb,$ngaydauthang);
         }
 
@@ -4975,6 +4975,10 @@ class bangluongController extends Controller
         if (isset($inputs['mact']) && $inputs['mact'] != '') {
             $model = $model->where('mact', $inputs['mact']);
         }
+        if (isset($inputs['manguonkp']) && $inputs['manguonkp'] != '') {
+            $model = $model->where('manguonkp', $inputs['manguonkp']);
+        }
+
         //dd($model);
         return $model;
     }
