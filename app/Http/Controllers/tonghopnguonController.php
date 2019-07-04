@@ -48,8 +48,8 @@ class tonghopnguonController extends Controller
 
     public function tralai(Request $request){
         if (Session::has('admin')) {
-            $inputs=$request->all();
-            $model = nguonkinhphi::where('masodv',$inputs['masodv'])->first();
+            $inputs = $request->all();
+            $model = nguonkinhphi::where('masodv', $inputs['masodv'])->first();
             $model->trangthai = 'TRALAI';
             $model->lydo = $inputs['lydo'];
             $model->save();

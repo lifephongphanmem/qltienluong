@@ -95,6 +95,7 @@
 
 
 <table class="money" cellspacing="0" cellpadding="0" border="1" style="margin: 20px auto; border-collapse: collapse;">
+    <thead>
     <tr style="padding-left: 2px;padding-right: 2px; text-align: center">
         <th rowspan="2" span="2" style="width: 3%;font-weight: bold" >STT</th>
         <th rowspan="2" style="width: 12%;text-align: center;font-weight: bold">Họ và tên</th>
@@ -109,18 +110,17 @@
     </tr>
 
     <tr style="padding-left: 2px;padding-right: 2px; text-align: center">
-
         <th style="width: 6%;text-align: center;font-weight: bold">Phụ cấp đặc thù</th>
         <th style="width: 6%;text-align: center;font-weight: bold">Phụ cấp trách nhiệm</th>
         <th style="width: 6%;text-align: center;font-weight: bold">Phụ cấp thâm niên</th>
         <th style="width: 6%;text-align: center;font-weight: bold">Hệ số khác (PC TĐ Trưởng)</th>
-
 
         <th style="width: 6%;text-align: center;font-weight: bold">Phụ cấp đặc thù</th>
         <th style="width: 6%;text-align: center;font-weight: bold">Phụ cấp trách nhiệm</th>
         <th style="width: 6%;text-align: center;font-weight: bold">Phụ cấp thâm niên</th>
         <th style="width: 6%;text-align: center;font-weight: bold">Hệ số khác (PC TĐ Trưởng)</th>
     </tr>
+    </thead>
 
     <?php $i=1; ?>
     @foreach($model as $ct)

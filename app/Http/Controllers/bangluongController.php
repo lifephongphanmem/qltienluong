@@ -295,6 +295,7 @@ class bangluongController extends Controller
         $m_cbkn = hosocanbo::where('madv', $inputs['madv'])->where('theodoi','<', '9')->get();
 
         $ngaycuoithang = Carbon::create($inputs['nam'], $inputs['thang'] + 1, 0)->toDateString();
+        $ngaydauthang = Carbon::create($inputs['nam'], $inputs['thang'], '01')->toDateString();
         //ds cán bộ thôi công tác
         $a_cbn = hosothoicongtac::select('macanbo')->where('madv', $inputs['madv'])
             ->where(function($qr)use($ngaycuoithang){
@@ -303,15 +304,16 @@ class bangluongController extends Controller
             })->get()->toarray();
         //ds cán bộ
         $m_cb = hosocanbo::where('madv', $inputs['madv'])->wherenotin('macanbo',$a_cbn)->get();
+        if($inputs['capnhatnangluong']){
+            $m_cb = (new data())->getCanBo($m_cb,$ngaydauthang);
+        }
 
         //Lấy danh sách cán bộ kiêm nhiệm
         //$model_canbo_kn = hosocanbo_kiemnhiem::where('madv',session('admin')->madv)->wherein('manguonkp',[$inputs['manguonkp'],''])->get();
         $model_canbo_kn = hosocanbo_kiemnhiem::where('madv',session('admin')->madv)->get();
 
-        /*
         foreach ($m_cb as $canbo) {
             //Dùng tìm kiếm các bộ nào phù hợp. Do lvhd là mảng nên pải lọc
-
             $a_lv = explode(',', $canbo->lvhd);
             if (in_array($inputs['linhvuchoatdong'], $a_lv) || $canbo->lvhd == null) {
                 $canbo->lvhd = $inputs['linhvuchoatdong'];
@@ -324,8 +326,6 @@ class bangluongController extends Controller
             }
         }
         //$m_cb = $m_cb->where('lvhd', $inputs['linhvuc']);
-        */
-
         $m_cb = $m_cb->where('manguonkp', $inputs['manguonkp']);
         $a_ct = array_column(dmphanloaict::all()->toArray(),'macongtac','mact');
         //$model_phanloai = dmphanloaicongtac_baohiem::where('madv', session('admin')->madv)->get();
@@ -768,26 +768,31 @@ class bangluongController extends Controller
         $m_cb_kn = hosocanbo_kiemnhiem::select(array_merge($a_th,array('phanloai','pthuong')))->where('madv',$inputs['madv'])->get()->toArray();;
         //dd($m_cb_kn);
         //công tác
-        $a_th = array_merge(array('stt','tencanbo', 'msngbac', 'bac', 'theodoi','pthuong','khongnopbaohiem',
+        $a_th = array_merge(array('stt','tencanbo', 'msngbac', 'bac', 'theodoi','pthuong','khongnopbaohiem','ngaytu','tnntungay',
             'bhxh', 'bhyt', 'bhtn', 'kpcd','bhxh_dv', 'bhyt_dv', 'bhtn_dv', 'kpcd_dv', 'ngaybc'),
             $a_th);
         //$m_cb = hosocanbo::select($a_th)->where('madv', $inputs['madv'])->where('theodoi','<', '9')->get()->keyBy('macanbo')->toArray();
         $m_dv = dmdonvi::where('madv',$inputs['madv'])->first();
-        //dd($m_cb);
         //dd($m_cb_kn);
 
-        //$ngaycuoithang = Carbon::create($inputs['nam'], $inputs['thang'], 0)->toDateString();
         $ngaycuoithang = Carbon::create($inputs['nam'], $inputs['thang'] + 1, 0)->toDateString();
+        $ngaydauthang = Carbon::create($inputs['nam'], $inputs['thang'], '01')->toDateString();
         //ds cán bộ thôi công tác
-        //$a_cbn = hosothoicongtac::select('macanbo')->where('madv', $inputs['madv'])->get()->toarray();dd($a_cbn);
         $a_cbn = hosothoicongtac::select('macanbo')->where('madv', $inputs['madv'])
             ->where(function($qr)use($ngaycuoithang){
                 $qr->where('ngaynghi','<=',$ngaycuoithang)->orWhereNull('ngaynghi');
             //})->toSql();dd($a_cbn);
             })->get()->toarray();
         //ds cán bộ
-        $m_cb = hosocanbo::select($a_th)->where('madv', $inputs['madv'])->wherenotin('macanbo',$a_cbn)->get()->keyBy('macanbo')->toArray();
-        //dd($ngaycuoithang);
+        //$m_cb = hosocanbo::select($a_th)->where('madv', $inputs['madv'])->wherenotin('macanbo',$a_cbn)->get()->keyBy('macanbo')->toArray();
+        $m_cb = hosocanbo::select($a_th)->where('madv', $inputs['madv'])->wherenotin('macanbo',$a_cbn)->get();
+        //chay hàm lấy lại hàm sửa dữ liệu
+
+        if($inputs['capnhatnangluong']){
+            $m_cb = (new data())->getCanBo($m_cb,$ngaydauthang);
+        }
+
+        $m_cb = $m_cb->keyBy('macanbo')->toArray();
         $a_phanloai = dmphanloaicongtac_baohiem::where('madv', session('admin')->madv)->get()->keyBy('mact')->toArray();
         $a_nhomct = array_column(dmphanloaict::all()->toarray(), 'macongtac','mact');
         //dd($a_nhomct);
@@ -1149,7 +1154,7 @@ class bangluongController extends Controller
         }
 
         //Mảng chứa các cột bỏ để chạy hàm insert
-        $a_col_pc = array('id','baohiem','mapc','luongcoban','tenpc');
+        //$a_col_pc = array('id','baohiem','mapc','luongcoban','tenpc');
         /*
         $a_data_phucap = unset_key($a_data_phucap,$a_col_pc);
         $a_chunk = array_chunk($a_data_phucap, 100);
@@ -1157,7 +1162,8 @@ class bangluongController extends Controller
             //bangluong_phucap::insert($data);
         }
         */
-        $a_col_cb = array('id','bac','baohiem','macongtac','pthuong','theodoi', 'ngaybc','khongnopbaohiem');//'manguonkp',
+        $a_col_cb = array('id','bac','baohiem','macongtac','pthuong','theodoi', 'ngaybc',
+            'khongnopbaohiem','ngaytu','tnntungay');//'manguonkp',
         $a_data_canbo = unset_key($a_data_canbo,$a_col_cb);
 
         //dd($a_data_canbo);

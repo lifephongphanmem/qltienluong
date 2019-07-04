@@ -18,6 +18,7 @@ use App\nguonkinhphi;
 use App\nguonkinhphi_bangluong;
 use App\nguonkinhphi_chitiet;
 use App\nguonkinhphi_huyen;
+use App\nguonkinhphi_khoi;
 use App\nguonkinhphi_nangluong;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -596,6 +597,8 @@ class nguonkinhphiController extends Controller
             nguonkinhphi_chitiet::where('masodv',$model->masodv)->delete();
             nguonkinhphi_bangluong::where('masodv',$model->masodv)->delete();
             nguonkinhphi_nangluong::where('masodv',$model->masodv)->delete();
+            nguonkinhphi_khoi::where('masodv',$model->masok)->delete();
+            nguonkinhphi_huyen::where('masodv',$model->masoh)->delete();
             $model->delete();
             return redirect('/nguon_kinh_phi/danh_sach');
         } else

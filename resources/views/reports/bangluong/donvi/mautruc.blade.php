@@ -10,7 +10,6 @@
             font: normal 12px/14px time, serif;
         }
 
-
         .title {
             text-align: right;
         }
@@ -94,6 +93,7 @@
 <p style="text-align: center; font-style: italic">Tháng {{$thongtin['thang']}} năm {{$thongtin['nam']}}</p>
 
 <table class="money" cellspacing="0" cellpadding="0" border="1" style="margin: 20px auto; border-collapse: collapse;">
+    <thead>
     <tr style="padding-left: 2px;padding-right: 2px; text-align: center">
         <td rowspan="2" style="width: 5%;font-weight: bold" >STT</td>
         <td rowspan="2" style="width: 15%;text-align: center;font-weight: bold">Họ và tên</td>
@@ -112,6 +112,8 @@
         <td style="text-align: center;font-weight: bold">Phụ cấp tiểu đội DQTT</td>
         <td style="text-align: center;font-weight: bold">Phụ cấp</td>
     </tr>
+    </thead>
+
     <?php $i=1; ?>
     @foreach($model as $ct)
         <tr>

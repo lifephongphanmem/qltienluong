@@ -15,6 +15,7 @@ use App\dutoanluong;
 use App\dutoanluong_bangluong;
 use App\dutoanluong_chitiet;
 use App\dutoanluong_huyen;
+use App\dutoanluong_khoi;
 use App\dutoanluong_nangluong;
 use App\hosocanbo;
 use App\hosocanbo_kiemnhiem;
@@ -123,6 +124,9 @@ class dutoanluongController extends Controller
             dutoanluong_chitiet::where('masodv',$model->masodv)->delete();
             dutoanluong_bangluong::where('masodv',$model->masodv)->delete();
             dutoanluong_nangluong::where('masodv',$model->masodv)->delete();
+
+            dutoanluong_khoi::where('masodv',$model->masok)->delete();
+            dutoanluong_huyen::where('masodv',$model->masoh)->delete();
             $model->delete();
             return redirect('/nghiep_vu/quan_ly/du_toan/danh_sach');
         } else
@@ -269,19 +273,10 @@ class dutoanluongController extends Controller
                 ->where('madv', session('admin')->madv)->wherein('mapc', getColTongHop())->get()->toarray();
             $a_nhomnb = ngachluong::all()->keyBy('msngbac')->toarray();
 
-            $a_thang = array(array('thang' => '01', 'nam' => $inputs['namdt']),
-                array('thang' => '02', 'nam' => $inputs['namdt']),
-                array('thang' => '03', 'nam' => $inputs['namdt']),
-                array('thang' => '04', 'nam' => $inputs['namdt']),
-                array('thang' => '05', 'nam' => $inputs['namdt']),
-                array('thang' => '06', 'nam' => $inputs['namdt']),
-                array('thang' => '07', 'nam' => $inputs['namdt']),
-                array('thang' => '08', 'nam' => $inputs['namdt']),
-                array('thang' => '09', 'nam' => $inputs['namdt']),
-                array('thang' => '10', 'nam' => $inputs['namdt']),
-                array('thang' => '11', 'nam' => $inputs['namdt']),
-                array('thang' => '12', 'nam' => $inputs['namdt'])
-            );
+            $a_thang=array();
+            for($i = $inputs['thang'];$i < 13; $i++){
+                $a_thang[] = array('thang'=> str_pad($i, 2, '0', STR_PAD_LEFT),'nam' => $inputs['namdt']);
+            }
 
             //chạy tính hệ số lương, phụ cấp trc. Sau này mỗi tháng chỉ chạy cán bộ thay đổi
             foreach ($m_cb as $key => $val) {
@@ -808,19 +803,10 @@ class dutoanluongController extends Controller
             //dutoanluong_nangluong::create($a_nangluong_tnn[$i]);
         }
 
-        $a_thang = array(array('thang' => '01', 'nam' => $inputs['namdt']),
-            array('thang' => '02', 'nam' => $inputs['namdt']),
-            array('thang' => '03', 'nam' => $inputs['namdt']),
-            array('thang' => '04', 'nam' => $inputs['namdt']),
-            array('thang' => '05', 'nam' => $inputs['namdt']),
-            array('thang' => '06', 'nam' => $inputs['namdt']),
-            array('thang' => '07', 'nam' => $inputs['namdt']),
-            array('thang' => '08', 'nam' => $inputs['namdt']),
-            array('thang' => '09', 'nam' => $inputs['namdt']),
-            array('thang' => '10', 'nam' => $inputs['namdt']),
-            array('thang' => '11', 'nam' => $inputs['namdt']),
-            array('thang' => '12', 'nam' => $inputs['namdt'])
-        );
+        $a_thang=array();
+        for($i = $inputs['thang'];$i < 13; $i++){
+            $a_thang[] = array('thang'=> str_pad($i, 2, '0', STR_PAD_LEFT),'nam' => $inputs['namdt']);
+        }
 
         $a_data = array();
         for ($i = 0; $i < count($a_thang); $i++) {

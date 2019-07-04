@@ -201,7 +201,6 @@ class tonghopluong_donviController extends Controller
                         $a_ct[$i][$mapc_st] = 0;
 
                     }
-
                 }
 
                 if($a_ct[$i]['congtac'] != 'TRUYLINH'){//bảng lương truy lĩnh có luowngcb trong chi tiết
@@ -237,6 +236,8 @@ class tonghopluong_donviController extends Controller
                 $model_data[$i]['mathdv'] = $mathdv;
                 $model_data[$i]['tonghop'] = $model_data[$i]['congtac'];
                 foreach (getColTongHop() as $ct) {
+                    $model_data[$i]['st_'.$ct] = array_sum(array_column($luongct,'st_'.$ct));
+                    //$model_data[$i][$ct] = array_sum(array_column($luongct,$ct));
                     $model_data[$i][$ct] = array_sum(array_column($luongct,'st_'.$ct));
                     $tonghs += chkDbl($model_data[$i][$ct]);
 
@@ -254,6 +255,7 @@ class tonghopluong_donviController extends Controller
                 $model_data[$i]['stkpcd_dv'] = array_sum(array_column($luongct,'stkpcd_dv'));
                 $model_data[$i]['stbhtn_dv'] = array_sum(array_column($luongct,'stbhtn_dv'));
                 $model_data[$i]['ttbh_dv'] = array_sum(array_column($luongct,'ttbh_dv'));
+
                 $model_data[$i]['soluong'] = count($a_slcb);
                 $model_data[$i]['giaml'] = array_sum(array_column($luongct,'giaml'));
                 $model_data[$i]['tonghs'] = $tonghs;
