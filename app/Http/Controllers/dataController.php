@@ -499,7 +499,7 @@ class dataController extends Controller
         $a_nglg = \App\ngachluong::all()->keyby('msngbac')->toarray();
         foreach($m_canbo as $canbo){
             //xet lương ngạch bậc
-            if(getDayVn($canbo->ngaytu) != '' && $canbo->ngaytu < $ngayxet){
+            if(getDayVn($canbo->ngaytu) != '' && $canbo->ngaytu > $ngayxet){
                 if(!isset($a_nglg[$canbo->msngbac])){
                     continue;
                 }
@@ -512,7 +512,7 @@ class dataController extends Controller
                 }
             }
             //xét thâm niên nghề
-            if(getDayVn($canbo->tnntungay) != '' && $canbo->tnntungay < $ngayxet){
+            if(getDayVn($canbo->tnntungay) != '' && $canbo->tnntungay > $ngayxet){
                 $canbo->pctnn = $canbo->pctnn == 5 ? 0 : $canbo->pctnn - 1;
             }
         }
