@@ -87,6 +87,7 @@
 <p style="text-align: center; font-style: italic">Tháng {{$thongtin['thang']}} năm {{$thongtin['nam']}}</p>
 
 <table class="money" width="90%"  cellspacing="0" cellpadding="0" border="1" style="margin: 20px auto; border-collapse: collapse;">
+    <thead>
     <tr style="padding-left: 2px;padding-right: 2px">
         <th style="width: 5%;" >Mục</th>
         <th style="width: 5%;" >Tiểu mục</th>
@@ -99,6 +100,7 @@
         <th>Tổng cộng</th>
         <th>Còn lại</th>
     </tr>
+    </thead>
 
     @foreach($a_muc as $muc)
         <?php $tieumuc = $model_tm->where('muc',$muc['muc']); ?>

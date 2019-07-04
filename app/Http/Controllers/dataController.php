@@ -44,6 +44,7 @@ class dataController extends Controller
         return view('errors.nangcapdb')
             ->with('a_pc',$a_pc);
     }
+
     //<editor-fold desc="Bảng chi tiết lương">
     function getBangluong_ct_th($thang,$nam,$madv, $manguonkp){
         //sau này chia bảng
@@ -489,6 +490,33 @@ class dataController extends Controller
             }
         }
         */
+    }
+    //</editor-fold>
+
+    //<editor-fold desc="Danh sách cán bộ">
+    //Hàm kiểm tra nâng lương so với ngày xét
+    function getCanBo($m_canbo, $ngayxet){
+        $a_nglg = \App\ngachluong::all()->keyby('msngbac')->toarray();
+        foreach($m_canbo as $canbo){
+            //xet lương ngạch bậc
+            if(getDayVn($canbo->ngaytu) != '' && $canbo->ngaytu < $ngayxet){
+                if(!isset($a_nglg[$canbo->msngbac])){
+                    continue;
+                }
+                $nglg = $a_nglg[$canbo->msngbac];
+
+                if($canbo->heso < $nglg['hesolonnhat']){//nâng lương ngạch bậc
+                    $canbo->heso -= $nglg['hesochenhlech'];
+                }else{//vượt khung
+                    $canbo->vuotkhung = $canbo->vuotkhung == 5 ? 0 : $canbo->vuotkhung - 1;
+                }
+            }
+            //xét thâm niên nghề
+            if(getDayVn($canbo->tnntungay) != '' && $canbo->tnntungay < $ngayxet){
+                $canbo->pctnn = $canbo->pctnn == 5 ? 0 : $canbo->pctnn - 1;
+            }
+        }
+        return $m_canbo;
     }
     //</editor-fold>
 }

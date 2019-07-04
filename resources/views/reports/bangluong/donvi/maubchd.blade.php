@@ -93,8 +93,8 @@
 <p style="text-align: center; font-weight: bold; font-size: 20px;">DANH SÁCH CÁN BỘ NHẬN TIỀN PHỤ CẤP UV BAN CHẤP HÀNH ĐẢNG VÀ CẤP ỦY VIÊN</p>
 <p style="text-align: center; font-style: italic">Tháng {{$thongtin['thang']}} năm {{$thongtin['nam']}}</p>
 
-
 <table class="money" cellspacing="0" cellpadding="0" border="1" style="margin: 20px auto; border-collapse: collapse;">
+    <thead>
     <tr style="padding-left: 2px;padding-right: 2px; text-align: center">
         <td style="width: 5%;font-weight: bold" >STT</td>
         <td style="width: 20%;text-align: center;font-weight: bold">Họ và tên</td>
@@ -106,6 +106,7 @@
         <td style="width: 10%; text-align: center;font-weight: bold">Thành tiền</td>
         <td style="text-align: center;font-weight: bold">Ký nhận</td>
     </tr>
+    </thead>
 
     <?php $i=1; ?>
     @foreach($model as $ct)

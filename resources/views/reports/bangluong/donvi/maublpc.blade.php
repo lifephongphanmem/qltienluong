@@ -96,6 +96,7 @@
 
 
 <table class="money" cellspacing="0" cellpadding="0" border="1" style="margin: 20px auto; border-collapse: collapse;">
+    <thead>
     <tr style="padding-left: 2px;padding-right: 2px; text-align: center">
         <td style="width: 5%;font-weight: bold" >STT</td>
         <td style="width: 30%;text-align: center;font-weight: bold">Họ và tên</td>
@@ -105,6 +106,7 @@
         <td style="width: 10%; text-align: center;font-weight: bold">Thành tiền</td>
         <td style="width: 15%; text-align: center;font-weight: bold">Ký nhận</td>
     </tr>
+    </thead>
 
     <?php $i=1; ?>
     @foreach($model as $ct)

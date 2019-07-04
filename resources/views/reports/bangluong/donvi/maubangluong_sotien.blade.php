@@ -85,6 +85,7 @@
 <p style="text-align: center; font-style: italic">Tháng {{$thongtin['thang']}} năm {{$thongtin['nam']}}</p>
 
 <table class="money" cellspacing="0" cellpadding="0" border="1" style="margin: 20px auto; border-collapse: collapse;font:normal {{$thongtin['cochu']}}px Times, serif;">
+    <thead>
     <tr style="padding-left: 2px;padding-right: 2px">
         <th style="width: 2%;" rowspan="2">S</br>T</br>T</th>
         <th style="width: 3%;" rowspan="2">Mã</br>số</br>công</br>chức</th>
@@ -122,6 +123,7 @@
             <th>{{$i}}</th>
         @endfor
     </tr>
+    </thead>
 
     <?php $i=1; ?>
     @foreach($model_congtac as $congtac)

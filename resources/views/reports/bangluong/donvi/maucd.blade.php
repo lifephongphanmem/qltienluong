@@ -93,8 +93,8 @@
 <p style="text-align: center; font-weight: bold; font-size: 20px;">DANH SÁCH CÁN BỘ NHẬN TIỀN PHỤ CẤP TRUNG TÂM HỌC TẬP CỘNG ĐỒNG</p>
 <p style="text-align: center; font-style: italic">Tháng {{$thongtin['thang']}} năm {{$thongtin['nam']}}</p>
 
-
 <table class="money" cellspacing="0" cellpadding="0" border="1" style="margin: 20px auto; border-collapse: collapse;">
+    <thead>
     <tr style="padding-left: 2px;padding-right: 2px; text-align: center">
         <td rowspan="2" style="width: 5%;font-weight: bold" >STT</td>
         <td rowspan="2" style="width: 15%;text-align: center;font-weight: bold">Họ và tên</td>
@@ -106,6 +106,8 @@
         <td rowspan="2" style="width: 10%; text-align: center;font-weight: bold">Thành tiền</td>
         <td rowspan="2" style="text-align: center;font-weight: bold">Ký nhận</td>
     </tr>
+    </thead>
+
     <tr style="padding-left: 2px;padding-right: 2px; text-align: center">
 
         <td style="text-align: center;font-weight: bold">Hệ số kiêm nhiệm</td>

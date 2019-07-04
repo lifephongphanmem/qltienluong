@@ -48,8 +48,6 @@
     </style>
 </head>
 
-
-
 <body style="font:normal 11px Times, serif;">
     <table class="header" width="96%" border="0" cellspacing="0" cellpadding="8" style="margin:0 auto 25px; text-align: center;">
 
@@ -86,6 +84,7 @@
     </table>
 
     <table class="money" cellspacing="0" cellpadding="0" border="1" style="margin: 20px auto; border-collapse: collapse;font:normal 11px Times, serif;">
+        <thead>
         <tr style="padding-left: 2px;padding-right: 2px">
             <th style="width: 2%;" >S</br>T</br>T</th>
             <th style="width: 12%;">Phân loại cán bộ, công chức</th>
@@ -101,6 +100,7 @@
                 <th>{{$i}}</th>
             @endfor
         </tr>
+        </thead>
 
         <?php $i=1; ?>
 

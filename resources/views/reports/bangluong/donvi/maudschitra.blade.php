@@ -83,6 +83,7 @@
 <p style="text-align: center; font-style: italic">Lương ngạch bậc và phụ cấp tháng {{$thongtin['thang']}} năm {{$thongtin['nam']}}</p>
 
 <table class="money" cellspacing="0" cellpadding="0" border="1" style="margin: 20px auto; border-collapse: collapse;">
+    <thead>
     <tr style="padding-left: 2px;padding-right: 2px">
         <th style="width: 5%;" >STT</th>
         <th>Họ và tên</th>
@@ -90,6 +91,7 @@
         <th style="width: 15%;">Số tiền</th>
         <th style="width: 20%;">Ghi chú</th>
     </tr>
+    </thead>
 
     <?php $i=1; ?>
     @foreach($model_congtac as $congtac)
