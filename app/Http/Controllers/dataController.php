@@ -504,7 +504,7 @@ class dataController extends Controller
                     continue;
                 }
                 $nglg = $a_nglg[$canbo->msngbac];
-
+                $canbo->ngayden = $canbo->ngaytu;//xét lại ngày nâng lương
                 if($canbo->heso < $nglg['hesolonnhat']){//nâng lương ngạch bậc
                     $canbo->heso -= $nglg['hesochenhlech'];
                 }else{//vượt khung
@@ -514,6 +514,7 @@ class dataController extends Controller
             //xét thâm niên nghề
             if(getDayVn($canbo->tnntungay) != '' && $canbo->tnntungay > $ngayxet){
                 $canbo->pctnn = $canbo->pctnn == 5 ? 0 : $canbo->pctnn - 1;
+                $canbo->tnndenngay = $canbo->tnntungay;//xét lại ngày nâng lương
             }
         }
         return $m_canbo;

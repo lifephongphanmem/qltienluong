@@ -1163,7 +1163,7 @@ class bangluongController extends Controller
         }
         */
         $a_col_cb = array('id','bac','baohiem','macongtac','pthuong','theodoi', 'ngaybc',
-            'khongnopbaohiem','ngaytu','tnntungay');//'manguonkp',
+            'khongnopbaohiem','ngaytu','tnntungay','ngayden','tnndenngay');//'manguonkp',
         $a_data_canbo = unset_key($a_data_canbo,$a_col_cb);
 
         //dd($a_data_canbo);
@@ -1789,6 +1789,7 @@ class bangluongController extends Controller
 
                 $ngaycong = session('admin')->songaycong;
                 //$ngaycong = dmdonvi::where('madv', $madv)->first()->songaycong;
+                //dd($model_canbo->toarray());
 
                 foreach ($model_canbo as $cb) {
                     if (!isset($a_hoso[$cb->macanbo])) {
@@ -1955,13 +1956,9 @@ class bangluongController extends Controller
 
                     $kq = $cb->toarray();
                     unset($kq['id']);
-                    //lưu vào db
-                    //$this->createBangLuong($inputs['thang'],$kq);
-                    //dd($kq);
-                    //bangluong_ct::create($kq);
                     (new data())->createBangLuong($inputs['thang'],$kq);
                 }
-
+                //dd($model_canbo->toarray());
                 $model_canbo = $model_canbo->map(function ($data) {
                     return collect($data->toArray())
                         ->only(['maso'])

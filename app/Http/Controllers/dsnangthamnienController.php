@@ -266,7 +266,6 @@ class dsnangthamnienController extends Controller
             return view('errors.notlogin');
     }
 
-
     function nang_luong($manl){
         if (Session::has('admin')) {
             $model = dsnangthamnien_ct::where('manl',$manl)->get();
@@ -290,6 +289,8 @@ class dsnangthamnienController extends Controller
                     $truylinh->noidung = 'Truy lĩnh nâng thâm niên nghề';
                     //$truylinh->msngbac = $canbo->msngbac;
                     $truylinh->heso = $canbo->heso;
+                    $truylinh->thangtl = $canbo->thangtl;
+                    $truylinh->ngaytl = $canbo->ngaytl;
                     $truylinh->maphanloai = 'TNN';
                     $truylinh->save();
 

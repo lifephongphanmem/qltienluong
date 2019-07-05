@@ -11,7 +11,7 @@
     @include('includes.script.scripts')
     <script>
         jQuery(document).ready(function() {
-            tinhtoan_load();
+            //tinhtoan_load(); bỏ tính trc đi vì đơn vị nhìn thấy tưởng tính rồi nên ko lưu
         });
         $(function() {
             //Multi select box

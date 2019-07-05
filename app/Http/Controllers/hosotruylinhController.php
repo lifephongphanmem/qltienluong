@@ -75,7 +75,7 @@ class hosotruylinhController extends Controller
                 hosotruylinh::where('maso',$insert['maso'])->first()->update($insert);
             }
 
-            return redirect('nghiep_vu/truy_linh/danh_sach?thang='.date('m').'&nam='.date('Y'));
+            return redirect('nghiep_vu/truy_linh/danh_sach?thang=ALL&nam='.date('Y'));
         } else
             return view('errors.notlogin');
     }
@@ -216,6 +216,7 @@ class hosotruylinhController extends Controller
                         break;
                     }
                     case 'TNN':{
+                        //dd($model);
                         return view('manage.truylinh.create_tnn')
                             ->with('furl', '/nghiep_vu/truy_linh/')
                             ->with('inputs',$inputs)

@@ -102,8 +102,24 @@
                                             <a href="{{url($inputs['furl'].'bang_luong?mabl='.$value->mabl.'&mapb=')}}" class="btn btn-default btn-xs mbs">
                                                 <i class="fa fa-th-list"></i>&nbsp; Chi tiết</a>
                                             @if($value->phanloai == 'BANGLUONG')
-                                                <button onclick="capnhat('{{$value->mabl}}')" class="btn btn-default btn-xs mbs" data-target="#capnhat-modal-confirm" data-toggle="modal">
-                                                    <i class="fa fa-refresh"></i>&nbsp; Cập nhật lương</button>
+                                                <div class="btn-group btn-group-solid">
+                                                    <button type="button" class="btn btn-default dropdown-toggle btn-xs" data-toggle="dropdown" aria-expanded="true">
+                                                        <i class="fa fa-cog"></i> Chức năng <i class="fa fa-angle-down"></i>
+                                                    </button>
+
+                                                    <ul class="dropdown-menu">
+                                                        <li>
+                                                            <button onclick="capnhat('{{$value->mabl}}')" style="border: none;" class="btn btn-default" data-target="#capnhat-modal-confirm" data-toggle="modal">
+                                                                <i class="fa fa-refresh"></i>&nbsp; Cập nhật lương</button>
+                                                        </li>
+                                                        <li>
+                                                            <button onclick="trichnop('{{$value->mabl}}')" style="border: none;" class="btn btn-default" data-target="#trichnop-modal-confirm" data-toggle="modal">
+                                                                <i class="fa fa-list-alt"></i>&nbsp; Trích nộp lương</button>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+
+
 
                                                 <button type="button" onclick="inbl('{{$value->mabl}}','{{$value->thang}}','{{$value->nam}}')" class="btn btn-default btn-xs mbs">
                                                     <i class="fa fa-print"></i>&nbsp; In bảng lương</button>
