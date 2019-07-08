@@ -56,8 +56,11 @@
                                     <td>
                                         <a href="{{url($furl_th.'tonghop?namns='.$value->namns)}}" class="btn btn-default btn-xs" target="_blank">
                                             <i class="fa fa-print"></i>&nbsp; Số liệu tổng hợp</a>
-                                        @if ($value['masodv'] == NULL && $value['trangthai'] == 'CHUAGUI')
+                                        @if ($value['trangthai'] == 'CHUAGUI')
                                             <button type="button" class="btn btn-default btn-xs" onclick="confirmChuyen('{{$value->namns}}')" data-target="#chuyen-modal" data-toggle="modal"><i class="fa fa-share-square-o"></i>&nbsp;
+                                                Gửi dữ liệu</button>
+                                        @else
+                                            <button disabled type="button" class="btn btn-default btn-xs" ><i class="fa fa-share-square-o"></i>&nbsp;
                                                 Gửi dữ liệu</button>
                                         @endif
 
@@ -66,7 +69,7 @@
                                                 Lý do trả lại</button>
                                         @endif
 
-                                        <a href="{{url($furl_xem.'?namns='.$value->namns.'&trangthai=ALL')}}" class="btn btn-default btn-xs">
+                                        <a href="{{url($furl_xem.'?namns='.$value->namns.'&trangthai=ALL&phanloai=ALL')}}" class="btn btn-default btn-xs">
                                             <i class="fa fa-list-alt"></i>&nbsp; Số liệu chi tiết</a>
                                     </td>
 

@@ -132,15 +132,15 @@ class tonghopluong_huyenController extends Controller
     {
         $madv = session('admin')->madv;
         $model_donvi = dmdonvi::select('madv', 'tendv')
-                    ->where('macqcq', $madv)
-                    ->where('madv', '<>', $madv)
-                    ->wherenotin('madv', function ($query) use ($madv,$thang,$nam) {
-                        $query->select('madv')->from('dmdonvi')
-                            ->whereMonth('ngaydung', '<=', $thang)
-                            ->whereYear('ngaydung', '<=', $nam)
-                            ->where('trangthai', 'TD')
-                            ->get();
-                    })->get();
+        ->where('macqcq', $madv)
+        ->where('madv', '<>', $madv)
+        ->wherenotin('madv', function ($query) use ($madv,$thang,$nam) {
+            $query->select('madv')->from('dmdonvi')
+                ->whereMonth('ngaydung', '<=', $thang)
+                ->whereYear('ngaydung', '<=', $nam)
+                ->where('trangthai', 'TD')
+                ->get();
+        })->get();
         $kq = $model_donvi->count();
         return $kq;
     }

@@ -314,7 +314,9 @@ class dutoanluong_huyenController extends Controller
                     DB::raw('sum(pcud61) as pcud61'),DB::raw('sum(pcxaxe) as pcxaxe'),DB::raw('sum(pcdith) as pcdith'),DB::raw('sum(pcphth) as pcphth'),DB::raw('sum(luongtn) as luongtn'),
                     DB::raw('sum(stbhxh_dv) as stbhxh_dv'),DB::raw('sum(stbhyt_dv) as stbhyt_dv'),DB::raw('sum(stbhtn_dv) as stbhtn_dv'),DB::raw('sum(stkpcd_dv) as stkpcd_dv')
                     ,DB::raw('sum(ttbh_dv) as ttbh_dv'))
-                ->where('dutoanluong.masoh',$masodv)
+                //->where('dutoanluong.masoh',$masodv)
+                ->where('dutoanluong.namns',$inputs['namns'])
+                ->where('dutoanluong.madv',$inputs['madv'])
                 ->where('trangthai','DAGUI')
                 ->groupby('msngbac','mact','macanbo')
                 ->get();
@@ -383,12 +385,15 @@ class dutoanluong_huyenController extends Controller
             $inputs = $requests->all();
             $namns = $inputs['namns'];
             $madv = session('admin')->madv;
-            $model = dutoanluong_bangluong::wherein('masodv',function($query) use($madv,$namns){
-                $query->select('masodv')->from('dutoanluong')->where('macqcq',$madv)->where('namns',$namns)->where('trangthai','DAGUI')->get();
-            } )->orderby('thang')->get();
+            $model = dutoanluong_bangluong::join('dutoanluong','dutoanluong.masodv','dutoanluong_bangluong.masodv')
+                ->select('dutoanluong_bangluong.*','dutoanluong.madv')
+                ->where('dutoanluong.macqcq',$madv)
+                ->where('dutoanluong.namns',$namns)
+                ->where('dutoanluong.trangthai','DAGUI')
+                ->orderby('dutoanluong_bangluong.thang')->get();
             $a_ct = array_column(dmphanloaict::all()->toArray(), 'tenct', 'mact');
             $model_phanloaict = array_column(dmphanloaicongtac::all()->toArray(), 'tencongtac', 'macongtac');
-            $model_ct = array_column(dmphanloaict::all()->toArray(), 'tenct', 'mact');
+            //$model_ct = array_column(dmphanloaict::all()->toArray(), 'tenct', 'mact');
             //cho trương hợp đơn vị cấp trên in dữ liệu dv câp dưới mà ko sai tên đơn vị
             $model_dutoan = dutoanluong::wherein('madv', function($query) use ($madv){
                 $query->select('madv')->from('dmdonvi')->where('macqcq', $madv)->get();
@@ -400,16 +405,16 @@ class dutoanluong_huyenController extends Controller
             $col = 0;
 
             foreach($model as $ct) {
-                $dutoan = $model_dutoan->where('masodv', $ct->masodv)->first();
-                $ct->madv = count($dutoan) > 0 ? $dutoan->madv : null;
+                //$dutoan = $model_dutoan->where('masodv', $ct->masodv)->first();
+                //$ct->madv = count($dutoan) > 0 ? $dutoan->madv : null;
                 $ct->phanloai = $m_dv->where('madv',$ct->madv)->first()->maphanloai;
                 if($ct->mact == null){
                     $ct->tencongtac = isset($model_phanloaict[$ct->macongtac]) ? $model_phanloaict[$ct->macongtac] : '';
                 }else{
-                    $ct->tencongtac = isset($model_ct[$ct->mact]) ? $model_ct[$ct->mact] : '';
+                    $ct->tencongtac = isset($a_ct[$ct->mact]) ? $a_ct[$ct->mact] : '';
                 }
             }
-
+            //dd($model->toarray());
             $m_pc = dmphucap_donvi::where('madv', $madv)->orderby('stt')->get()->toarray();
 
             foreach ($m_pc as $ct) {
@@ -443,6 +448,44 @@ class dutoanluong_huyenController extends Controller
                 ->with('model_congtac', $model_congtac)
                 ->with('m_phanloai', $m_phanloai)
                 ->with('pageTitle', 'Chi tiết tổng hợp lương tại đơn vị');
+        } else
+            return view('errors.notlogin');
+    }
+    function tonghopct(Request $requests)
+    {
+        if (Session::has('admin')) {
+            $inputs = $requests->all();
+            //$model_thongtin = dutoanluong::where('masodv', $inputs['maso'])->first();
+            $model = dutoanluong_chitiet::join('dutoanluong','dutoanluong.masodv','dutoanluong_chitiet.masodv')
+                ->select('dutoanluong_chitiet.*')
+                ->where('dutoanluong.madv', $inputs['madv'])
+                ->where('dutoanluong.namns', $inputs['namns'])->get();
+
+            $model_phanloaict = array_column(dmphanloaicongtac::all()->toArray(), 'tencongtac', 'macongtac');
+            $model_ct = array_column(dmphanloaict::all()->toArray(), 'tenct', 'mact');
+
+            $a_nhomct = getNhomCongTac(false);
+            foreach($model as $ct){
+                //$ct->tencongtac = isset($a_nhomct[$ct->macongtac])? $a_nhomct[$ct->macongtac]:'';
+                $ct->tongcong = $ct->luongnb_dt + $ct->luonghs_dt + $ct->luongbh_dt;
+
+                if($ct->mact == null){
+                    $ct->tencongtac = isset($model_phanloaict[$ct->macongtac]) ? $model_phanloaict[$ct->macongtac] : '';
+                }else{
+                    $ct->tencongtac = isset($model_ct[$ct->mact]) ? $model_ct[$ct->mact] : '';
+                }
+            }
+            //dd($model->toarray());
+            //cho trương hợp đơn vị cấp trên in dữ liệu dv câp dưới mà ko sai tên đơn vị
+            $m_dv = dmdonvi::where('madv', $inputs['madv'])->first();
+            //$thongtin = array('nam' => $model_thongtin->namns);
+
+
+            return view('reports.viewdata.dutoan.tonghopct')
+                ->with('inputs', $inputs)
+                ->with('model', $model)
+                ->with('m_dv', $m_dv)
+                ->with('pageTitle', 'Chi tiết dự toán lương tại đơn vị.');
         } else
             return view('errors.notlogin');
     }

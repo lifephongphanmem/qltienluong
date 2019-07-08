@@ -39,20 +39,34 @@
                 <div class="portlet-body form-horizontal">
                     <div class="row">
                         <div class="form-group">
-                            <div class="col-md-4 col-md-offset-1">
-                                <label class="control-label col-md-5" style="text-align: right">Năm ngân sách</label>
+                            <div class="col-md-10 col-md-offset-1">
+                                <label class="control-label col-md-3" style="text-align: right">Năm ngân sách</label>
                                 <div class="col-md-7">
                                     {!! Form::select('namns',getNam(),$inputs['namns'],array('id' => 'namns', 'class' => 'form-control'))!!}
                                 </div>
                             </div>
+                        </div>
 
-                            <div class="col-md-7">
+                    </div>
+                    <div class="row">
+                        <div class="form-group">
+                            <div class="col-md-6">
                                 <label class="control-label col-md-3" style="text-align: right">Trạng thái </label>
                                 <div class="col-md-7">
                                     {!! Form::select('trangthai',$a_trangthai,$inputs['trangthai'],array('id' => 'trangthai', 'class' => 'form-control'))!!}
                                 </div>
                             </div>
+                            <div class="col-md-6">
+                                <label class="control-label col-md-3" style="text-align: right">Phân loại </label>
+                                <div class="col-md-8">
+                                    {!! Form::select(
+                                    'phanloai',$a_phanloai,$inputs['phanloai'],
+                                    array('id' => 'phanloai', 'class' => 'form-control'))
+                                    !!}
+                                </div>
+                            </div>
                         </div>
+
                     </div>
                     <table id="sample_3" class="table table-hover table-striped table-bordered" style="min-height: 230px">
                         <thead>
@@ -72,9 +86,11 @@
                                     <td>{{$value->tendvcq}}</td>
                                     <td>
                                         @if ($value->masodv != NULL)
-                                            <a href="{{url($furl_th.'printf?maso='.$value['masodv'])}}" class="btn btn-default btn-sm" TARGET="_blank">
+                                            <!--a href="{{url($furl_th.'printf?maso='.$value['masodv'])}}" class="btn btn-default btn-sm" TARGET="_blank"-->
+                                            <a href="{{url($furl_th.'tonghopct?namns='.$inputs['namns'].'&madv='.$value['madv'])}}" class="btn btn-default btn-sm" TARGET="_blank">
                                                 <i class="fa fa-print"></i>&nbsp; Số liệu tổng hợp</a>
-                                            <button type="button" onclick="inbl('{{$value['masodv']}}')" class="btn btn-default btn-xs mbs">
+                                            <!--button type="button" onclick="inbl('{{$value['masodv']}}')" class="btn btn-default btn-xs mbs"-->
+                                            <button type="button" onclick="inbl('{{$value['madv']}}','{{$inputs['namns']}}','{{$value['masodv']}}')" class="btn btn-default btn-xs mbs">
                                                 <i class="fa fa-print"></i>&nbsp; In số liệu chi tiết</button>
 
                                             @if($value->tralai)
@@ -145,14 +161,18 @@
                 </div>
             </div>
             <input type="hidden" id="mabl_in" name="mabl_in"/>
+            <input type="hidden" id="madv_in" name="madv_in"/>
+            <input type="hidden" id="namns_in" name="namns_in"/>
             <div class="modal-footer">
                 <button type="button" data-dismiss="modal" class="btn btn-default">Hủy thao tác</button>
             </div>
         </div>
     </div>
     <script>
-        function inbl(mabl){
+        function inbl(madv,namns,mabl){
             $("#mabl_in").val(mabl);
+            $("#madv_in").val(madv);
+            $("#namns_in").val(namns);
             $('#inbl-modal').modal('show');
             //$('#inbl-modal').modal('hide');
         }
@@ -160,7 +180,7 @@
             $("#in_bl").attr("href", $url +'?maso='+ $('#mabl_in').val());
         }
         function insolieuCR($url){
-            $("#in_blCR").attr("href", $url +'?maso='+ $('#mabl_in').val());
+            $("#in_blCR").attr("href", $url +'?maso='+ $('#mabl_in').val()+'&madv='+ $('#madv_in').val()+'&namns='+ $('#namns_in').val());
         }
         function confirmChuyen(masodv) {
             document.getElementById("masodv").value = masodv;
@@ -194,7 +214,8 @@
         function getLink(){
             var namns = $('#namns').val();
             var trangthai = $('#trangthai').val();
-            return '{{$furl_xem}}' + '?namns='+ namns + '&trangthai=' + trangthai;
+            var phanloai = $('#phanloai').val();
+            return '{{$furl_xem}}' + '?namns='+ namns + '&trangthai=' + trangthai+ '&phanloai=' + phanloai;
         }
 
         $(function(){
@@ -203,6 +224,9 @@
             });
 
             $('#trangthai').change(function() {
+                window.location.href = getLink();
+            });
+            $('#phanloai').change(function() {
                 window.location.href = getLink();
             });
         })

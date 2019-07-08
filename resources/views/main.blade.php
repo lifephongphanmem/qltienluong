@@ -360,7 +360,7 @@
                                         <a href="{{url('chuc_nang/du_toan_luong/huyen/index')}}"><i class="fa fa-caret-right"></i>Tổng số liệu dự toán</a>
                                     </li>
                                     <li>
-                                        <a href="{{url('chuc_nang/xem_du_lieu/du_toan/huyen?namns='.date('Y').'&trangthai=ALL')}}"><i class="fa fa-caret-right"></i>Xem số liệu tổng hợp từ đơn vị cấp dưới</a>
+                                        <a href="{{url('chuc_nang/xem_du_lieu/du_toan/huyen?namns='.date('Y').'&trangthai=ALL&phanloai=ALL')}}"><i class="fa fa-caret-right"></i>Xem số liệu tổng hợp từ đơn vị cấp dưới</a>
                                     </li>
                             @endif
 

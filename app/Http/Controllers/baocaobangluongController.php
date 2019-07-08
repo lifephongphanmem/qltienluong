@@ -846,7 +846,7 @@ class baocaobangluongController extends Controller
                     ->orWhereIn('macqcq', array_column($model_donvi->toarray(),'madv'))->get();
             //dd($model_tonghop->toarray());
             $model_dmdv = dmdonvi::where('macqcq',$madv)
-                ->orWhereIn('macqcq', array_column($model_donvi->toarray(),'madv'))->wherein('madv',array_column($model_tonghop->toarray(),'madv'))->get();
+                ->wherein('madv',array_column($model_tonghop->toarray(),'madv'))->orWhereIn('macqcq', array_column($model_donvi->toarray(),'madv'))->get();
             $a_dv = array_column($model_tonghop->toarray(),'madv','mathdv');
             $a_pl = array_column($model_dmdv->toarray(),'maphanloai','madv');
             $model = tonghopluong_donvi_chitiet::wherein('mathdv', array_column($model_tonghop->toarray(),'mathdv'))->get();

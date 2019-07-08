@@ -688,6 +688,7 @@ Route::group(['prefix'=>'chuc_nang'],function(){
             Route::post('senddata','dutoanluong_huyenController@senddata'); //gửi dữ liệu lên tỉnh
 
             Route::get('tonghop','dutoanluong_huyenController@tonghopCR');
+            Route::get('tonghopct','dutoanluong_huyenController@tonghopct');
             Route::get('printf','dutoanluong_huyenController@printf');//in một khối trong khối
             Route::get('chitietbl','dutoanluong_huyenController@chitietbl');//in chi tiết bảng lương đơn vị
             Route::get('chitietblCR','dutoanluong_huyenController@chitietblCR');//in chi tiết bảng lương đơn vị

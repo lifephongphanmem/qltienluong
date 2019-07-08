@@ -60,7 +60,6 @@ class tonghopnguon_huyenController extends Controller
                     }
                 }
             }
-
             return view('functions.tonghopnguon.index')
                 ->with('model', $model)
                 ->with('a_trangthai', $a_trangthai)
@@ -233,8 +232,7 @@ class tonghopnguon_huyenController extends Controller
                 ->where('madvbc',$madvbc)
                 ->distinct()
                 ->get();
-            $model = nguonkinhphi::where('madvbc',$madvbc)
-                ->where('sohieu',$inputs['sohieu'])
+            $model = nguonkinhphi::where('sohieu',$inputs['sohieu'])
                 ->where('macqcq',session('admin')->madv)
                 ->where('trangthai','DAGUI')
                 ->get();

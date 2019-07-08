@@ -109,6 +109,8 @@
                                                     <button type="button" class="btn btn-default btn-xs" onclick="confirmChuyen('{{$value['thang']}}','{{$nam}}')" data-target="#chuyen-modal" data-toggle="modal"><i class="fa fa-share-square-o"></i>&nbsp;
                                                         Gửi dữ liệu</button>
                                                 @else
+                                                    <button disabled type="button" class="btn btn-default btn-xs" onclick="confirmChuyen('{{$value['thang']}}','{{$nam}}')" data-target="#chuyen-modal" data-toggle="modal"><i class="fa fa-share-square-o"></i>&nbsp;
+                                                        Gửi dữ liệu</button>
                                                     <a href="{{url('/chuc_nang/xem_du_lieu/huyen?thang='.$value['thang'].'&nam='.$nam.'&trangthai=CHOGUI&phanloai=ALL')}}" class="btn btn-default btn-xs">
                                                         <i class="fa fa-list-alt"></i>&nbsp; Đơn vị chưa gửi dữ liệu</a>
                                                 @endif

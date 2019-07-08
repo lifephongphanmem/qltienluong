@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\dmdonvi;
+use App\dmphanloaidonvi;
 use App\dutoanluong;
 use App\dutoanluong_huyen;
 use App\dutoanluong_khoi;
@@ -74,11 +75,16 @@ class xemdulieu_dutoanController extends Controller
             $inputs = $request->all();
             $madv = session('admin')->madv;
             $a_trangthai = array('ALL' => '--Chọn trạng thái dữ liệu--', 'CHOGUI' => 'Chưa gửi dữ liệu', 'DAGUI' => 'Đã gửi dữ liệu');
-
-            $model_donvi = dmdonvi::select('madv', 'tendv')
+            $model_donvi = dmdonvi::select('madv', 'tendv','maphanloai')
                 ->wherein('madv', function($query) use($madv){
                     $query->select('madv')->from('dmdonvi')->where('macqcq',$madv)->where('madv','<>',$madv)->get();
                 })->get();
+            $model_phanloai = dmphanloaidonvi::wherein('maphanloai',array_column($model_donvi->toarray(),'maphanloai'))->get();
+            $model_phanloai = array_column($model_phanloai->toarray(),'tenphanloai','maphanloai');
+            foreach($model_phanloai as $key=>$key)
+                $a_phanloai[$key]= $model_phanloai[$key];
+            $a_phanloai['ALL'] = '--Chọn tất cả--';
+
             $model_nguon = dutoanluong_huyen::wherein('madv', function($query) use($madv){
                 $query->select('madv')->from('dmdonvi')->where('macqcq',$madv)->where('madv','<>',$madv)->get();
             })->get();
@@ -107,11 +113,15 @@ class xemdulieu_dutoanController extends Controller
             if (!isset($inputs['trangthai']) || $inputs['trangthai'] != 'ALL') {
                 $model_donvi = $model_donvi->where('trangthai',$inputs['trangthai']);
             }
+            if (!isset($inputs['phanloai']) || $inputs['phanloai'] != 'ALL') {
+                $model_donvi = $model_donvi->where('maphanloai',$inputs['phanloai']);
+            }
 
             return view('functions.viewdata.dutoanluong.huyen.index')
                 ->with('model', $model_donvi)
                 ->with('inputs', $inputs)
                 ->with('a_trangthai', $a_trangthai)
+                ->with('a_phanloai', $a_phanloai)
                 ->with('furl_th', 'chuc_nang/du_toan_luong/huyen/')
                 ->with('furl_xem', '/chuc_nang/xem_du_lieu/du_toan/huyen')
                 ->with('pageTitle', 'Danh sách đơn vị tổng hợp dự toán lương');
