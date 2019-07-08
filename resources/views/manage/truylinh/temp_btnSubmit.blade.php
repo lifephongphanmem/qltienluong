@@ -10,5 +10,5 @@
     @if(!isset($model->mabl) ||(isset($model->mabl) && $model->mabl == null))
         <button type="submit" class="btn green" onclick="validateForm()"><i class="fa fa-check"></i> Hoàn thành</button>
     @endif
-    <a href="{{url('nghiep_vu/truy_linh/danh_sach?thang='.date('m').'&nam='.date('Y'))}}" class="btn btn-danger"><i class="fa fa-reply"></i>&nbsp;Quay lại</a>
+    <a href="{{url('nghiep_vu/truy_linh/danh_sach?thang=ALL&nam='.date('Y'))}}" class="btn btn-danger"><i class="fa fa-reply"></i>&nbsp;Quay lại</a>
 </div>

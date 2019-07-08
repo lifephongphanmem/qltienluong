@@ -81,7 +81,7 @@
 
                                     <div class="row">
                                         <div class="col-md-offset-3 col-md-9" style="margin-top: 15px">
-                                            <input name="capnhatnangluong" id="capnhatnangluong" type="checkbox" checked>Cập nhật quá trình nâng lương của cán bộ</label>
+                                            <input name="capnhatnangluong" id="capnhatnangluong" type="checkbox">Cập nhật quá trình nâng lương của cán bộ</label>
                                         </div>
                                     </div>
 

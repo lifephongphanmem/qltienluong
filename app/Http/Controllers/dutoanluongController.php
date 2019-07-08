@@ -179,11 +179,13 @@ class dutoanluongController extends Controller
                 ->where('madv', session('admin')->madv)
                 ->wherein('mact', $a_plct)
                 ->get()->keyBy('macanbo')->toarray();
-            $a_th = array_merge(array('ngaysinh', 'tencanbo', 'stt', 'tnndenngay', 'gioitinh', 'msngbac', 'bac', 'bhxh_dv', 'bhyt_dv', 'bhtn_dv', 'kpcd_dv'), $a_th);
+            $a_th = array_merge(array('ngaysinh', 'tencanbo', 'stt', 'tnndenngay', 'gioitinh', 'msngbac', 'bac',
+                'bhxh_dv', 'bhyt_dv', 'bhtn_dv', 'kpcd_dv','ngaytu','tnntungay','tnndenngay'), $a_th);
             $model = hosocanbo::select($a_th)->where('madv', session('admin')->madv)
                 ->where('theodoi', '<', '9')
                 ->get();
             //$a_hoten = array_column($model->toarray(), 'tencanbo', 'macanbo');
+            $model = (new dataController())->getCanBo($model,$inputs['namdt'].'-'.$inputs['thang'].'-01');
             foreach ($model as $cb) {
                 $cb->congtac = 'CONGTAC';
                 $cb->macongtac = $a_congtac[$cb->mact];
@@ -369,8 +371,9 @@ class dutoanluongController extends Controller
                 //tính toán xong lưu dữ liệu
             }
 
-            $a_col = array('bac', 'bhxh_dv', 'bhtn_dv', 'kpcd_dv', 'bhyt_dv', 'gioitinh', 'nam_nb', 'nam_ns', 'nam_tnn',
-                'thang_nb', 'thang_ns', 'thang_tnn', 'ngayden', 'ngaysinh', 'tnndenngay', 'pcctp', 'st_pcctp');
+            $a_col = array('bac', 'bhxh_dv', 'bhtn_dv', 'kpcd_dv', 'bhyt_dv', 'gioitinh', 'nam_nb', 'nam_ns',
+                'thang_nb', 'thang_ns', 'thang_tnn', 'ngayden', 'ngaysinh', 'tnndenngay', 'pcctp', 'st_pcctp',
+                'ngaytu','tnntungay','nam_tnn');
             $a_data_nl = unset_key($a_data_nl, $a_col);
             $a_data = unset_key($a_data, $a_col);
             //dd($a_data_nl);
