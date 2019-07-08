@@ -397,6 +397,7 @@ Route::group(['prefix'=>'chuc_nang'],function(){
         Route::post('store_truylinh','bangluongController@store_truylinh');
         Route::post('store_truc','bangluongController@store_truc');
         Route::post('store_ctp','bangluongController@store_ctp');
+        Route::post('store_trichnop','bangluongController@store_trichnop');
 
         Route::get('store_mau','bangluongController@store_mau');
 
@@ -434,7 +435,7 @@ Route::group(['prefix'=>'chuc_nang'],function(){
         Route::post('mau05','bangluongController@printf_mau05');
         Route::post('mau06','bangluongController@printf_mau06');
         Route::post('mau07','bangluongController@printf_mau07');
-        Route::post('mau08','bangluongController@printf_mau08');
+        Route::post('mauquy','bangluongController@printf_mauquy');
         Route::post('mauds','bangluongController@printf_mauds');
         Route::post('maubh','bangluongController@printf_maubh');
         Route::post('maudbhdnd','bangluongController@printf_maudbhdnd');
@@ -446,7 +447,6 @@ Route::group(['prefix'=>'chuc_nang'],function(){
         Route::get('mautruc','bangluongController@printf_mautruc');
         Route::get('mautinhnguyen','bangluongController@printf_mautinhnguyen');
         Route::post('maumtm','bangluongController@printf_maumtm');
-
 
         //truy lĩnh
         Route::post('mautruylinh','bangluongController@printf_mautruylinh');

@@ -154,6 +154,45 @@ class tonghopluong_donvi_chitiet extends Model
         ALTER TABLE `tonghopluong_donvi_chitiet` ADD `st_pcctp` FLOAT NOT NULL DEFAULT '0' AFTER `pctaicu`;
         ALTER TABLE `tonghopluong_donvi_chitiet` ADD `st_pctaicu` FLOAT NOT NULL DEFAULT '0' AFTER `pctaicu`;
 
+
+        ALTER TABLE `bangluong_ct` CHANGE `st_heso` `st_heso` DOUBLE NOT NULL DEFAULT '0';
+        ALTER TABLE `bangluong_ct` CHANGE `st_hesobl` `st_hesobl` DOUBLE NOT NULL DEFAULT '0';
+        ALTER TABLE `bangluong_ct` CHANGE `st_hesopc` `st_hesopc` DOUBLE NOT NULL DEFAULT '0';
+        ALTER TABLE `bangluong_ct` CHANGE `st_vuotkhung` `st_vuotkhung` DOUBLE NOT NULL DEFAULT '0';
+        ALTER TABLE `bangluong_ct` CHANGE `st_pcct` `st_pcct` DOUBLE NOT NULL DEFAULT '0';
+        ALTER TABLE `bangluong_ct` CHANGE `st_pckct` `st_pckct` DOUBLE NOT NULL DEFAULT '0';
+        ALTER TABLE `bangluong_ct` CHANGE `st_pck` `st_pck` DOUBLE NOT NULL DEFAULT '0';
+        ALTER TABLE `bangluong_ct` CHANGE `st_pccv` `st_pccv` DOUBLE NOT NULL DEFAULT '0';
+        ALTER TABLE `bangluong_ct` CHANGE `st_pckv` `st_pckv` DOUBLE NOT NULL DEFAULT '0';
+        ALTER TABLE `bangluong_ct` CHANGE `st_pcth` `st_pcth` DOUBLE NOT NULL DEFAULT '0';
+        ALTER TABLE `bangluong_ct` CHANGE `st_pcdd` `st_pcdd` DOUBLE NOT NULL DEFAULT '0';
+        ALTER TABLE `bangluong_ct` CHANGE `st_pcdh` `st_pcdh` DOUBLE NOT NULL DEFAULT '0';
+        ALTER TABLE `bangluong_ct` CHANGE `st_pcld` `st_pcld` DOUBLE NOT NULL DEFAULT '0';
+        ALTER TABLE `bangluong_ct` CHANGE `st_pcdbqh` `st_pcdbqh` DOUBLE NOT NULL DEFAULT '0';
+        ALTER TABLE `bangluong_ct` CHANGE `st_pcudn` `st_pcudn` DOUBLE NOT NULL DEFAULT '0';
+        ALTER TABLE `bangluong_ct` CHANGE `st_pctn` `st_pctn` DOUBLE NOT NULL DEFAULT '0';
+        ALTER TABLE `bangluong_ct` CHANGE `st_pctnn` `st_pctnn` DOUBLE NOT NULL DEFAULT '0';
+        ALTER TABLE `bangluong_ct` CHANGE `st_pcdbn` `st_pcdbn` DOUBLE NOT NULL DEFAULT '0';
+        ALTER TABLE `bangluong_ct` CHANGE `st_pcvk` `st_pcvk` DOUBLE NOT NULL DEFAULT '0';
+        ALTER TABLE `bangluong_ct` CHANGE `st_pckn` `st_pckn` DOUBLE NOT NULL DEFAULT '0';
+        ALTER TABLE `bangluong_ct` CHANGE `st_pcdang` `st_pcdang` DOUBLE NOT NULL DEFAULT '0';
+        ALTER TABLE `bangluong_ct` CHANGE `st_pccovu` `st_pccovu` DOUBLE NOT NULL DEFAULT '0';
+        ALTER TABLE `bangluong_ct` CHANGE `st_pclt` `st_pclt` DOUBLE NOT NULL DEFAULT '0';
+        ALTER TABLE `bangluong_ct` CHANGE `st_pcd` `st_pcd` DOUBLE NOT NULL DEFAULT '0';
+        ALTER TABLE `bangluong_ct` CHANGE `st_pctr` `st_pctr` DOUBLE NOT NULL DEFAULT '0';
+        ALTER TABLE `bangluong_ct` CHANGE `st_pctdt` `st_pctdt` DOUBLE NOT NULL DEFAULT '0';
+        ALTER TABLE `bangluong_ct` CHANGE `st_pctnvk` `st_pctnvk` DOUBLE NOT NULL DEFAULT '0';
+        ALTER TABLE `bangluong_ct` CHANGE `st_pcbdhdcu` `st_pcbdhdcu` DOUBLE NOT NULL DEFAULT '0';
+        ALTER TABLE `bangluong_ct` CHANGE `st_pcthni` `st_pcthni` DOUBLE NOT NULL DEFAULT '0';
+        ALTER TABLE `bangluong_ct` CHANGE `st_pclade` `st_pclade` DOUBLE NOT NULL DEFAULT '0';
+        ALTER TABLE `bangluong_ct` CHANGE `st_pcud61` `st_pcud61` DOUBLE NOT NULL DEFAULT '0';
+        ALTER TABLE `bangluong_ct` CHANGE `st_pcxaxe` `st_pcxaxe` DOUBLE NOT NULL DEFAULT '0';
+        ALTER TABLE `bangluong_ct` CHANGE `st_pcdith` `st_pcdith` DOUBLE NOT NULL DEFAULT '0';
+        ALTER TABLE `bangluong_ct` CHANGE `st_luonghd` `st_luonghd` DOUBLE NOT NULL DEFAULT '0';
+        ALTER TABLE `bangluong_ct` CHANGE `st_pcphth` `st_pcphth` DOUBLE NOT NULL DEFAULT '0';
+        ALTER TABLE `bangluong_ct` CHANGE `st_pcctp` `st_pcctp` DOUBLE NOT NULL DEFAULT '0';
+        ALTER TABLE `bangluong_ct` CHANGE `st_pctaicu` `st_pctaicu` DOUBLE NOT NULL DEFAULT '0';
+
      *
      * */
 

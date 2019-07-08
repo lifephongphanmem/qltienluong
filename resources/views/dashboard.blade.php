@@ -68,31 +68,28 @@
                     <table id="sample_7" class="table table-hover table-striped table-bordered">
                         <thead>
                         <tr>
-                            <th width="2%">STT</th>
-                            <th width="40%">Họ và tên</th>
-                            <th>Chức vụ</th>
-                            <th width="25%">Điện thoại</th>
+                            <th width="5%">STT</th>
+                            <th width="60%">Họ và tên</th>
+                            <th width="35%">Điện thoại</th>
                         </tr>
                         </thead>
                         <tbody>
                         <tr>
                             <td style="text-align: center">1</td>
                             <td style="font-weight: bold;">Nguyễn Xuân Trường</td>
-                            <td>Trưởng phòng</td>
                             <td>0917.737.456</td>
                         </tr>
                         <tr>
                             <td style="text-align: center">2</td>
                             <td style="font-weight: bold">Hoàng Ngọc Long</td>
-                            <td>Phó phòng</td>
                             <td>0985.365.683</td>
                         </tr>
-                        <tr>
-                            <td style="text-align: center">3</td>
-                            <td style="font-weight: bold">Nguyễn Văn Hiển</td>
-                            <td>Nhân viên</td>
-                            <td>0975.500.274</td>
-                        </tr>
+                        {{--<tr>--}}
+                            {{--<td style="text-align: center">3</td>--}}
+                            {{--<td style="font-weight: bold">Nguyễn Văn Hiển</td>--}}
+                            {{--<td>Nhân viên</td>--}}
+                            {{--<td>0975.500.274</td>--}}
+                        {{--</tr>--}}
                         <tbody>
                     </table>
                 </div>
@@ -116,35 +113,34 @@
                     <table id="sample_8" class="table table-hover table-striped table-bordered">
                         <thead>
                         <tr>
-                            <th width="2%">STT</th>
-                            <th width="40%">Họ và tên</th>
-                            <th>Chức vụ</th>
-                            <th width="25%">Điện thoại</th>
+                            <th width="5%">STT</th>
+                            <th width="60%">Họ và tên</th>
+                            <th width="35%">Điện thoại</th>
                         </tr>
                         </thead>
                         <tbody>
                         <tr>
                             <td style="text-align: center">1</td>
                             <td style="font-weight: bold">Hoàng Văn Sáng</td>
-                            <td>Trưởng phòng</td>
+
                             <td>0974.090.556</td>
                         </tr>
                         <tr>
                             <td style="text-align: center">2</td>
                             <td style="font-weight: bold">Nguyễn Văn Dũng</td>
-                            <td>Phó phòng</td>
+
                             <td>0986.012.084</td>
                         </tr>
                         <tr>
                             <td style="text-align: center">3</td>
                             <td style="font-weight: bold">Nguyễn Văn Đạt</td>
-                            <td>Nhân viên</td>
+
                             <td>0966.305.359</td>
                         </tr>
                         <tr>
                             <td style="text-align: center">4</td>
                             <td style="font-weight: bold">Ngô Thế Dương</td>
-                            <td>Nhân viên</td>
+
                             <td>0916.678.911</td>
                         </tr>
                         </tbody>

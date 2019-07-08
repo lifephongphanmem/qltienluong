@@ -9,6 +9,7 @@ class bangluong_truc extends Model
     protected $table = 'bangluong_truc';
     protected $fillable = [
         'id',
+        'stt',
         'macvcq',
         'mapb',
         'mact',
