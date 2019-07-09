@@ -454,6 +454,7 @@ Route::group(['prefix'=>'chuc_nang'],function(){
         Route::get('mauthpl','bangluong_inController@printf_mauthpl');
         Route::get('mauthpc','bangluong_inController@printf_mauthpc');
         Route::post('mautt107_m4','bangluong_inController@printf_mautt107_m4');//mẫu cam ranh - Khánh Hòa
+        Route::post('dangkyluong','bangluong_inController@printf_dangkyluong');
         //chi khác (trực, công tác phí)
         Route::get('mauctphi','bangluong_inController@printf_mauctphi');
 

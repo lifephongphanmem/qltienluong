@@ -85,7 +85,7 @@
 
         <tr>
             <td colspan="2" style="text-align: center; font-style: italic">
-                Tháng {{$thongtin['thang']}} năm {{$thongtin['nam']}} -m2
+                Tháng {{$thongtin['thang']}} năm {{$thongtin['nam']}}
             </td>
         </tr>
 

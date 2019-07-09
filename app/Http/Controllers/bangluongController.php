@@ -348,8 +348,6 @@ class bangluongController extends Controller
         $a_ts = array_column(dmphucap_thaisan::where('madv', session('admin')->madv)
             ->wherenotin('mapc',explode(',',$inputs['phucaploaitru']))->get()->toarray(), 'mapc');
 
-        $a_data_canbo = array();
-        $a_data_phucap = array();
         $a_pc_coth = array('pcudn','pctnn', 'pctaicu');
         $ngaycong = dmdonvi::where('madv',$inputs['madv'])->first()->songaycong;
         foreach ($m_cb as $cb) {
@@ -585,6 +583,16 @@ class bangluongController extends Controller
             }
 
             $cb->luongtn = $cb->ttl - $cb->ttbh - $cb->giaml;
+            if ($cb->baohiem == 0){
+                $cb->bhxh = 0;
+                $cb->bhyt = 0;
+                $cb->kpcd = 0;
+                $cb->bhtn = 0;
+                $cb->bhxh_dv = 0;
+                $cb->bhyt_dv = 0;
+                $cb->kpcd_dv = 0;
+                $cb->bhtn_dv = 0;
+            }
 
             $kq = $cb->toarray();
             unset($kq['id']);
@@ -718,6 +726,15 @@ class bangluongController extends Controller
                 $cb->stkpcd_dv = round($inputs['luongcoban'] * $cb->kpcd_dv, 0);
                 $cb->stbhtn_dv = round($inputs['luongcoban'] * $cb->bhtn_dv, 0);
                 $cb->ttbh_dv = $cb->stbhxh_dv + $cb->stbhyt_dv + $cb->stkpcd_dv + $cb->stbhtn_dv;
+            }else{
+                $cb->bhxh = 0;
+                $cb->bhyt = 0;
+                $cb->kpcd = 0;
+                $cb->bhtn = 0;
+                $cb->bhxh_dv = 0;
+                $cb->bhyt_dv = 0;
+                $cb->kpcd_dv = 0;
+                $cb->bhtn_dv = 0;
             }
 
             $cb->luongtn = $cb->ttl - $cb->ttbh;
@@ -1149,6 +1166,17 @@ class bangluongController extends Controller
             }
 
             tinhluong:
+            //cán bộ không đóng bảo hiểm => set tỷ lệ = 0 sau ko pải kiểm tra trên danh sách
+            if($m_cb[$key]['baohiem'] == 0){
+                $m_cb[$key]['bhxh'] = 0;
+                $m_cb[$key]['bhyt'] = 0;
+                $m_cb[$key]['kpcd'] = 0;
+                $m_cb[$key]['bhtn'] = 0;
+                $m_cb[$key]['bhxh_dv'] = 0;
+                $m_cb[$key]['bhyt_dv'] = 0;
+                $m_cb[$key]['kpcd_dv'] = 0;
+                $m_cb[$key]['bhtn_dv'] = 0;
+            }
             $m_cb[$key]['tonghs'] = $tonghs;
             $m_cb[$key]['ttl'] = $tien;
             $m_cb[$key]['luongtn'] = $m_cb[$key]['ttl'] - $m_cb[$key]['ttbh'] - $m_cb[$key]['giaml'];
@@ -1170,20 +1198,19 @@ class bangluongController extends Controller
 
         //dd($a_data_canbo);
         foreach(array_chunk($a_data_canbo, 50)  as $data){
-            //bangluong_ct::insert($data);
             (new data())->storeBangLuong($inputs['thang'],$data);
         }
 
         //Tính toán lương cho cán bộ kiêm nhiệm
         $a_kn_canbo = array();
         $a_kn_phucap = array();
-        for($i=0; $i<count($m_cb_kn); $i++){
-            if(!array_key_exists($m_cb_kn[$i]['macanbo'],$m_cb)){
+        for($i=0; $i<count($m_cb_kn); $i++) {
+            if (!array_key_exists($m_cb_kn[$i]['macanbo'], $m_cb)) {
                 continue;
             }
             $a_nguon = explode(',', $m_cb_kn[$i]['manguonkp']);
             //nếu cán bộ ko set nguồn (null, '') hoặc trong nguồn thì sét luôn =  ma nguồn để tạo bang lương
-            if ($m_cb_kn[$i]['manguonkp'] != '' && !in_array($inputs['manguonkp'], $a_nguon) && $m_cb_kn[$i]['manguonkp'] != null ) {
+            if ($m_cb_kn[$i]['manguonkp'] != '' && !in_array($inputs['manguonkp'], $a_nguon) && $m_cb_kn[$i]['manguonkp'] != null) {
                 continue;
             }
             $canbo = $m_cb[$m_cb_kn[$i]['macanbo']];
@@ -1203,8 +1230,29 @@ class bangluongController extends Controller
             $m_cb_kn[$i]['stkpcd_dv'] = 0;
             $m_cb_kn[$i]['stbhtn_dv'] = 0;
             $m_cb_kn[$i]['ttbh_dv'] = 0;
+            if (isset($a_phanloai[$m_cb_kn[$i]['mact']])) {
+                $phanloai = $a_phanloai[$m_cb_kn[$i]['mact']];
+                $m_cb_kn[$i]['bhxh'] = floatval($phanloai['bhxh']) / 100;
+                $m_cb_kn[$i]['bhyt'] = floatval($phanloai['bhyt']) / 100;
+                $m_cb_kn[$i]['kpcd'] = floatval($phanloai['kpcd']) / 100;
+                $m_cb_kn[$i]['bhtn'] = floatval($phanloai['bhtn']) / 100;
+                $m_cb_kn[$i]['bhxh_dv'] = floatval($phanloai['bhxh_dv']) / 100;
+                $m_cb_kn[$i]['bhyt_dv'] = floatval($phanloai['bhyt_dv']) / 100;
+                $m_cb_kn[$i]['kpcd_dv'] = floatval($phanloai['kpcd_dv']) / 100;
+                $m_cb_kn[$i]['bhtn_dv'] = floatval($phanloai['bhtn_dv']) / 100;
+            } else {
+                $m_cb_kn[$i]['bhxh'] = 0;
+                $m_cb_kn[$i]['bhyt'] = 0;
+                $m_cb_kn[$i]['kpcd'] = 0;
+                $m_cb_kn[$i]['bhtn'] = 0;
+                $m_cb_kn[$i]['bhxh_dv'] = 0;
+                $m_cb_kn[$i]['bhyt_dv'] = 0;
+                $m_cb_kn[$i]['kpcd_dv'] = 0;
+                $m_cb_kn[$i]['bhtn_dv'] = 0;
+            }
 
-            if(isset($a_pc['pcthni'])){
+
+            if (isset($a_pc['pcthni'])) {
                 $pctn = $a_pc['pcthni'];
                 //dd($pctn);
                 switch ($pctn['phanloai']) {
@@ -1221,7 +1269,7 @@ class bangluongController extends Controller
                         }
                         //công thức hệ số (lấy thêm hệ số phụ cấp do cán bộ không chuyên trách nhập hệ số vào hesopc)
                         $heso += $canbo['hesopc'];
-                        $m_cb_kn[$i]['pcthni'] = round($heso * $m_cb_kn[$i]['pcthni'] / 100,session('admin')->lamtron);
+                        $m_cb_kn[$i]['pcthni'] = round($heso * $m_cb_kn[$i]['pcthni'] / 100, session('admin')->lamtron);
                         break;
                     }
                     default: {//trường hợp còn lại (ẩn,...)
@@ -1234,10 +1282,10 @@ class bangluongController extends Controller
             $canbo['pcthni'] = $m_cb_kn[$i]['pcthni']; //set vao hồ sơ cán bộ để tính công thức lương
             $canbo['pctn'] = $m_cb_kn[$i]['pctn'];
 
-            foreach ($a_pc as $k=>$v) {
+            foreach ($a_pc as $k => $v) {
                 $mapc = $v['mapc'];
-                $m_cb_kn[$i]['st_'.$mapc] = 0;
-                if($m_cb_kn[$i][$mapc] <= 0){
+                $m_cb_kn[$i]['st_' . $mapc] = 0;
+                if ($m_cb_kn[$i][$mapc] <= 0) {
                     continue;
                 }
                 //$a_pc[$k]['heso_goc'] =$m_cb_kn[$i][$mapc];//lưu lại hệ số gốc
@@ -1245,17 +1293,17 @@ class bangluongController extends Controller
                 switch ($v['phanloai']) {
                     case 0: {//hệ số
                         $tonghs += $m_cb_kn[$i][$mapc];
-                        $m_cb_kn[$i]['st_'.$mapc] = round($m_cb_kn[$i][$mapc] * $inputs['luongcoban']);
-                        $tien += $m_cb_kn[$i]['st_'.$mapc];
+                        $m_cb_kn[$i]['st_' . $mapc] = round($m_cb_kn[$i][$mapc] * $inputs['luongcoban']);
+                        $tien += $m_cb_kn[$i]['st_' . $mapc];
                         break;
                     }
                     case 1: {//số tiền
                         $tien += chkDbl($m_cb_kn[$i][$mapc]);
-                        $m_cb_kn[$i]['st_'.$mapc] = chkDbl($m_cb_kn[$i][$mapc]);
+                        $m_cb_kn[$i]['st_' . $mapc] = chkDbl($m_cb_kn[$i][$mapc]);
                         break;
                     }
                     case 2: {//phần trăm
-                        if($mapc != 'pcthni'){
+                        if ($mapc != 'pcthni') {
                             $heso = 0;
                             foreach (explode(',', $v['congthuc']) as $cthuc) {
                                 if ($cthuc != '')
@@ -1264,12 +1312,11 @@ class bangluongController extends Controller
 
                             //công thức hệ số (lấy thêm hệ số phụ cấp do cán bộ không chuyên trách nhập hệ số vào hesopc)
                             $heso += $canbo['hesopc'];
-                            $m_cb_kn[$i][$mapc] =round($heso * $m_cb_kn[$i][$mapc] / 100,session('admin')->lamtron);
+                            $m_cb_kn[$i][$mapc] = round($heso * $m_cb_kn[$i][$mapc] / 100, session('admin')->lamtron);
                             $tonghs += $m_cb_kn[$i][$mapc];
-                            $m_cb_kn[$i]['st_'.$mapc] = round($m_cb_kn[$i][$mapc] * $inputs['luongcoban']);
-                            $tien += $m_cb_kn[$i]['st_'.$mapc];
-                        }
-                        else {
+                            $m_cb_kn[$i]['st_' . $mapc] = round($m_cb_kn[$i][$mapc] * $inputs['luongcoban']);
+                            $tien += $m_cb_kn[$i]['st_' . $mapc];
+                        } else {
                             $m_cb_kn[$i]['st_pcthni'] = $m_cb_kn[$i]['pcthni'] * $inputs['luongcoban'];
                             $tonghs += $m_cb_kn[$i]['pcthni'];
                             $tien += $m_cb_kn[$i]['st_pcthni'];
@@ -1296,37 +1343,44 @@ class bangluongController extends Controller
             }
 
             //ko tính % trong công thức duyệt phụ cấp vì khi tính % sẽ sai
-            if($m_cb_kn[$i]['phanloai'] == 'CHUCVU'){
-                $m_cb_kn[$i]['heso'] = round($m_cb_kn[$i]['heso'] * $m_cb_kn[$i]['pthuong'] /100, session('admin')->lamtron);
-                $m_cb_kn[$i]['st_heso'] = round($m_cb_kn[$i]['st_heso'] * $m_cb_kn[$i]['pthuong'] /100, 0);
-                $m_cb_kn[$i]['pccv'] = round($m_cb_kn[$i]['pccv'] * $m_cb_kn[$i]['pthuong'] /100, session('admin')->lamtron);
-                $m_cb_kn[$i]['st_pccv'] = round($m_cb_kn[$i]['st_pccv'] * $m_cb_kn[$i]['pthuong'] /100, 0);
-                $m_cb_kn[$i]['vuotkhung'] = round($m_cb_kn[$i]['vuotkhung'] * $m_cb_kn[$i]['pthuong'] /100, session('admin')->lamtron);
-                $m_cb_kn[$i]['st_vuotkhung'] = round($m_cb_kn[$i]['st_vuotkhung'] * $m_cb_kn[$i]['pthuong'] /100, 0);
-                $tonghs = round($tonghs * $m_cb_kn[$i]['pthuong'] /100, session('admin')->lamtron);
-                $tien = round($tien * $m_cb_kn[$i]['pthuong'] /100, 0);
+            if ($m_cb_kn[$i]['phanloai'] == 'CHUCVU') {
+                $m_cb_kn[$i]['heso'] = round($m_cb_kn[$i]['heso'] * $m_cb_kn[$i]['pthuong'] / 100, session('admin')->lamtron);
+                $m_cb_kn[$i]['st_heso'] = round($m_cb_kn[$i]['st_heso'] * $m_cb_kn[$i]['pthuong'] / 100, 0);
+                $m_cb_kn[$i]['pccv'] = round($m_cb_kn[$i]['pccv'] * $m_cb_kn[$i]['pthuong'] / 100, session('admin')->lamtron);
+                $m_cb_kn[$i]['st_pccv'] = round($m_cb_kn[$i]['st_pccv'] * $m_cb_kn[$i]['pthuong'] / 100, 0);
+                $m_cb_kn[$i]['vuotkhung'] = round($m_cb_kn[$i]['vuotkhung'] * $m_cb_kn[$i]['pthuong'] / 100, session('admin')->lamtron);
+                $m_cb_kn[$i]['st_vuotkhung'] = round($m_cb_kn[$i]['st_vuotkhung'] * $m_cb_kn[$i]['pthuong'] / 100, 0);
+                $tonghs = round($tonghs * $m_cb_kn[$i]['pthuong'] / 100, session('admin')->lamtron);
+                $tien = round($tien * $m_cb_kn[$i]['pthuong'] / 100, 0);
             }
 
             $m_cb_kn[$i]['tonghs'] = $tonghs;
             $m_cb_kn[$i]['ttl'] = $tien;
 
             if ($m_cb_kn[$i]['baohiem'] == 1) {
-                if (isset($a_phanloai[$m_cb_kn[$i]['mact']])) {//do trc nhập chưa lưu mact
-                    $phanloai = $a_phanloai[$m_cb_kn[$i]['mact']];
-                    $m_cb_kn[$i]['stbhxh'] = round($inputs['luongcoban'] * floatval($phanloai['bhxh']) / 100, 0);
-                    $m_cb_kn[$i]['stbhyt'] = round($inputs['luongcoban'] * floatval($phanloai['bhyt']) / 100, 0);
-                    $m_cb_kn[$i]['stkpcd'] = round($inputs['luongcoban'] * floatval($phanloai['kpcd']) / 100, 0);
-                    $m_cb_kn[$i]['stbhtn'] = round($inputs['luongcoban'] * floatval($phanloai['bhtn']) / 100, 0);
-                    $m_cb_kn[$i]['stbhxh_dv'] = round($inputs['luongcoban'] * floatval($phanloai['bhxh_dv']) / 100, 0);
-                    $m_cb_kn[$i]['stbhyt_dv'] = round($inputs['luongcoban'] * floatval($phanloai['bhyt_dv']) / 100, 0);
-                    $m_cb_kn[$i]['stkpcd_dv'] = round($inputs['luongcoban'] * floatval($phanloai['kpcd_dv']), 0);
-                    $m_cb_kn[$i]['stbhtn_dv'] = round($inputs['luongcoban'] * floatval($phanloai['bhtn_dv']), 0);
+                $m_cb_kn[$i]['stbhxh'] = round($inputs['luongcoban'] * $m_cb_kn[$i]['bhxh'], 0);
+                $m_cb_kn[$i]['stbhyt'] = round($inputs['luongcoban'] * $m_cb_kn[$i]['bhyt'], 0);
+                $m_cb_kn[$i]['stkpcd'] = round($inputs['luongcoban'] * $m_cb_kn[$i]['kpcd'], 0);
+                $m_cb_kn[$i]['stbhtn'] = round($inputs['luongcoban'] * $m_cb_kn[$i]['bhtn'], 0);
+                $m_cb_kn[$i]['stbhxh_dv'] = round($inputs['luongcoban'] * $m_cb_kn[$i]['bhxh_dv'], 0);
+                $m_cb_kn[$i]['stbhyt_dv'] = round($inputs['luongcoban'] * $m_cb_kn[$i]['bhyt_dv'], 0);
+                $m_cb_kn[$i]['stkpcd_dv'] = round($inputs['luongcoban'] * $m_cb_kn[$i]['kpcd_dv'], 0);
+                $m_cb_kn[$i]['stbhtn_dv'] = round($inputs['luongcoban'] * $m_cb_kn[$i]['bhtn_dv'], 0);
 
-                    $m_cb_kn[$i]['ttbh'] = $m_cb_kn[$i]['stbhxh'] + $m_cb_kn[$i]['stbhyt'] + $m_cb_kn[$i]['stkpcd'] + $m_cb_kn[$i]['stbhtn'];
-                    $m_cb_kn[$i]['ttbh_dv'] = $m_cb_kn[$i]['stbhxh_dv'] + $m_cb_kn[$i]['stbhyt_dv'] + $m_cb_kn[$i]['stkpcd_dv'] + $m_cb_kn[$i]['stbhtn_dv'];
-                }
+                $m_cb_kn[$i]['ttbh'] = $m_cb_kn[$i]['stbhxh'] + $m_cb_kn[$i]['stbhyt'] + $m_cb_kn[$i]['stkpcd'] + $m_cb_kn[$i]['stbhtn'];
+                $m_cb_kn[$i]['ttbh_dv'] = $m_cb_kn[$i]['stbhxh_dv'] + $m_cb_kn[$i]['stbhyt_dv'] + $m_cb_kn[$i]['stkpcd_dv'] + $m_cb_kn[$i]['stbhtn_dv'];
+
+            } else {//cán bộ ko đóng bảo hiểm =>set tỷ lệ bảo hiểm = 0
+                $m_cb_kn[$i]['bhxh'] = 0;
+                $m_cb_kn[$i]['bhyt'] = 0;
+                $m_cb_kn[$i]['kpcd'] = 0;
+                $m_cb_kn[$i]['bhtn'] = 0;
+                $m_cb_kn[$i]['bhxh_dv'] = 0;
+                $m_cb_kn[$i]['bhyt_dv'] = 0;
+                $m_cb_kn[$i]['kpcd_dv'] = 0;
+                $m_cb_kn[$i]['bhtn_dv'] = 0;
             }
-            $m_cb_kn[$i]['luongtn'] =  $m_cb_kn[$i]['ttl'] -  $m_cb_kn[$i]['ttbh'];
+            $m_cb_kn[$i]['luongtn'] = $m_cb_kn[$i]['ttl'] - $m_cb_kn[$i]['ttbh'];
             $a_kn_canbo[] = $m_cb_kn[$i];
         }
         /*

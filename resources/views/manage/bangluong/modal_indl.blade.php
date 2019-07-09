@@ -58,6 +58,16 @@
                                 <div class="row">
                                     <div class="col-md-6">
                                         <div class="form-group">
+                                            <button type="button" style="border-width: 0px" onclick="inblmtt107('/chuc_nang/bang_luong/dangkyluong')" class="btn btn-default btn-xs mbs"
+                                                    title="Bảng đăng ký lương của cán bộ theo mẫu C02-HD" data-target="#mautt107-modal" data-toggle="modal">
+                                                <i class="fa fa-print"></i>&nbsp; Bảng đăng ký lương mẫu C02-HD</button>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-group">
                                             <button type="button" style="border-width: 0px" onclick="inds('/chuc_nang/bang_luong/mauds')" class="btn btn-default btn-xs mbs"
                                                     title="Danh sách chi trả cá nhân" data-target="#mauds-modal" data-toggle="modal">
                                                 <i class="fa fa-print"></i>&nbsp; Danh sách chi trả cá nhân</button>
