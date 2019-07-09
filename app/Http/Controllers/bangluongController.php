@@ -383,6 +383,7 @@ class bangluongController extends Controller
             $cb->hs_pccovu = $cb->pccovu;
             $cb->hs_pcud61 = $cb->pcud61;
             $cb->hs_pcudn = $cb->pcudn;
+            $cb->luongcoban = $inputs['luongcoban'];
 
             //trong bảng danh mục là % vượt khung => sang bảng lương chuyển thành hệ số
             //$heso_goc = $cb->heso * $cb->pthuong / 100;
@@ -611,6 +612,7 @@ class bangluongController extends Controller
 
             $cb->mabl = $inputs['mabl'];
             $cb->manguonkp = $inputs['manguonkp'];
+            $cb->luongcoban = $inputs['luongcoban'];
 
             //tính thâm niên
             $pctn = $model_phucap->where('mapc', 'pcthni')->first();
@@ -640,7 +642,6 @@ class bangluongController extends Controller
                     }
                 }
             }
-
 
             //
             $canbo->pcthni = $cb->pcthni; //set vao hồ sơ cán bộ để tính công thức lương
@@ -823,6 +824,7 @@ class bangluongController extends Controller
             //lưu hệ số gốc
 
             $m_cb[$key]['hs_vuotkhung'] = $val['vuotkhung'];
+            $m_cb[$key]['luongcoban'] = $inputs['luongcoban'];
             $m_cb[$key]['hs_pctnn'] = $val['pctnn'];
             $m_cb[$key]['hs_pccovu'] = $val['pccovu'];
             $m_cb[$key]['hs_pcud61'] = $val['pcud61'];
@@ -1187,6 +1189,7 @@ class bangluongController extends Controller
             $canbo = $m_cb[$m_cb_kn[$i]['macanbo']];
             $m_cb_kn[$i]['tencanbo'] = $canbo['tencanbo'];
             $m_cb_kn[$i]['manguonkp'] = $inputs['manguonkp'];
+            $m_cb_kn[$i]['luongcoban'] = $inputs['luongcoban'];
             $m_cb_kn[$i]['stt'] = $canbo['stt'];
             $m_cb_kn[$i]['mabl'] = $inputs['mabl'];
             $m_cb_kn[$i]['congtac'] = $m_cb_kn[$i]['phanloai'];
@@ -1326,13 +1329,14 @@ class bangluongController extends Controller
             $m_cb_kn[$i]['luongtn'] =  $m_cb_kn[$i]['ttl'] -  $m_cb_kn[$i]['ttbh'];
             $a_kn_canbo[] = $m_cb_kn[$i];
         }
+        /*
         //Mảng chứa các cột bỏ để chạy hàm insert
         $a_col_pc = array('id','baohiem','mapc','luongcoban','tenpc');
         $a_kn_phucap = unset_key($a_kn_phucap,$a_col_pc);
         foreach(array_chunk($a_kn_phucap, 100)  as $data){
             //bangluong_phucap::insert($data);
         }
-
+        */
         $a_col_cbkn = array('id','bac','baohiem','macongtac','pthuong','theodoi','phanloai','khongnopbaohiem');//'manguonkp',
         $a_kn_canbo = unset_key($a_kn_canbo,$a_col_cbkn);
         //dd($a_kn_canbo);

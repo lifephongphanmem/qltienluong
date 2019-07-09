@@ -97,7 +97,11 @@ class dsnangluongController extends Controller
                     $a_canbo[$key]['thangtl'] = 0;
 
                     $a_canbo[$key]['truylinhtungay'] = new Carbon($ngayden);
-                    $a_canbo[$key]['truylinhdenngay'] = new Carbon($inputs['ngayxet']);
+                    $ngayxet = new Carbon($inputs['ngayxet']);
+                    if($ngayxet->day == 1){
+                        $ngayxet->addDay(-1);
+                    }
+                    $a_canbo[$key]['truylinhdenngay'] = $ngayxet;
                     list($a_canbo[$key]['thangtl'], $a_canbo[$key]['ngaytl']) = $this->getThoiGianTL($a_canbo[$key]['truylinhtungay'], $a_canbo[$key]['truylinhdenngay']);
                 }else{
                     $a_canbo[$key]['ngaytl'] = 0;
@@ -433,8 +437,6 @@ class dsnangluongController extends Controller
                 //trả lại danh sách
                 return redirect('chuc_nang/nang_luong/maso='.$inputs['manl']);
             }
-            $a_data_nguon = array();
-            $a_nguon_df = getNguonTruyLinh_df();
 
             $ngayxet = new Carbon($model_nangluong->ngayxet);
             $model_canbo->manl = $inputs['manl'];
