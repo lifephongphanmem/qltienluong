@@ -110,7 +110,7 @@
                     <td style="text-align: center">{{$ct->sotk}}</td>
                     <td>{{dinhdangso($ct->luongtn)}}</td>
                     <td style="text-align: left">{{$ct->tennganhang}}</td>
-                    <td></td>
+                    <td style="text-align: left">Lương tháng {{$thongtin['thang']}} năm {{$thongtin['nam']}}</td>
                 </tr>
             @endforeach
             <tr style="font-weight: bold; text-align: center; font-style: italic">
@@ -131,26 +131,32 @@
 
 <table class="header" width="96%" border="0" cellspacing="0" cellpadding="8" style="margin:20px auto; text-align: center;">
     <tr>
-        <th style="text-align: left;" width="35%"></th>
-        <th style="text-align: left;" width="30%"></th>
-        <th style="text-align: center; font-style: italic" width="35%">{{$m_dv->diadanh .', '.Date2Str($thongtin['ngaylap'])}}</th>
+        <th style="text-align: left;" width="15%"></th>
+        <th style="text-align: left;" width="15%"></th>
+        <th style="text-align: left;" width="25%"></th>
+        <th style="text-align: left;" width="20%"></th>
+        <th style="text-align: center; font-style: italic" width="25%">{{$m_dv->diadanh .', '.Date2Str($thongtin['ngaylap'])}}</th>
     </tr>
     <tr style="font-weight: bold">
-        <th style="text-align: center;" width="35%">Người lập bảng</th>
-        <th style="text-align: center;" width="35%">{{$m_dv->cdketoan}}</th>
-        <th style="text-align: center;" width="35%">{{$m_dv->cdlanhdao}}</th>
+        <th style="text-align: center;" colspan="3">XÁC NHẬN CỦA KHO BẠC NHÀ NƯỚC</th>
+        <th style="text-align: center;" width="20%">{{$m_dv->cdketoan}}</th>
+        <th style="text-align: center;" width="25%">{{$m_dv->cdlanhdao}}</th>
     </tr>
     <tr style="font-style: italic">
-        <th style="text-align: center;" width="35%">(Ghi rõ họ tên)</th>
-        <th style="text-align: center;" width="30%">(Ghi rõ họ tên)</th>
-        <th style="text-align: center;" width="35%">(Ký tên, đóng dấu)</th>
+        <th style="text-align: left;" width="15%">KIỂM SOÁT</th>
+        <th style="text-align: left;" width="15%">KẾ TOÁN TRƯỞNG</th>
+        <th style="text-align: left;" width="25%">GIÁM ĐỐC</th>
+        <th style="text-align: center;" width="20%">(Ghi rõ họ tên)</th>
+        <th style="text-align: center;" width="25%">(Ký tên, đóng dấu)</th>
     </tr>
     <tr>
-        <th><br><br><br></th>
+        <th><br><br><br><br><br><br></th>
     </tr>
 
     <tr>
-        <th style="text-align: center;" width="35%">{{$m_dv->nguoilapbieu}}</th>
+        <th style="text-align: left;" width="15%"></th>
+        <th style="text-align: left;" width="15%"></th>
+        <th style="text-align: left;" width="25%"></th>
         <th style="text-align: center;" width="30%">{{$m_dv->ketoan}}</th>
         <th style="text-align: center;" width="35%">{{$m_dv->lanhdao}}</th>
     </tr>
