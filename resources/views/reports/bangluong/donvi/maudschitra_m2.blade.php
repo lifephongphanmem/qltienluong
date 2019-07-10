@@ -157,8 +157,8 @@
         <th style="text-align: left;" width="15%"></th>
         <th style="text-align: left;" width="15%"></th>
         <th style="text-align: left;" width="25%"></th>
-        <th style="text-align: center;" width="30%">{{$m_dv->ketoan}}</th>
-        <th style="text-align: center;" width="35%">{{$m_dv->lanhdao}}</th>
+        <th style="text-align: center;" width="20%">{{$m_dv->ketoan}}</th>
+        <th style="text-align: center;" width="25%">{{$m_dv->lanhdao}}</th>
     </tr>
 </table>
 
