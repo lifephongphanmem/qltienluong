@@ -2201,7 +2201,7 @@ class bangluongController extends Controller
                                 $sotien += $cb->$pc_st;
                             }
                         }
-                        $trichnop = round(($sotien / 100) * $inputs['phantram']);
+                        $trichnop = round(($sotien / 100) * $inputs['phantram'],$inputs['lamtron']);
                         $a_data[] = array('mabl' => $inputs['mabl'], 'congtac' => $inputs['phanloai'], 'ttl' => $trichnop,
                             'macvcq' => $cb->macvcq, 'mapb' => $cb->mapb, 'mact' => $cb->mact, 'macanbo' => $cb->macanbo,
                             'tencanbo' => $cb->tencanbo,'stt'=>$cb->stt);
