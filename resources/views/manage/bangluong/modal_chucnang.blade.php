@@ -405,83 +405,86 @@
                 </div>
 
                 <div class="row">
-                    <div class="col-md-12">
+                    <div class="col-md-4">
                         <label class="control-label"> Tên quỹ trích nộp <span class="require">*</span></label>
                         {!! Form::text('tenquy',null,array('id' => 'tenquy', 'class' => 'form-control'))!!}
                     </div>
-                </div>
 
+                    <div class="col-md-4">
+                        <label class="control-label">Ngày lập</label>
+                        <input type="date" name="ngaylap" id="ngaylap" class="form-control" value="{{date('Y-m-d')}}"/>
+                    </div>
+
+                    <div class="col-md-4">
+                        <label class="control-label">Người lập</label>
+                        {!!Form::text('nguoilap', session('admin')->nguoilapbieu, array('id' => 'nguoilap','class' => 'form-control'))!!}
+                    </div>
+                </div>
+                <hr>
                 <div class="row">
-                    <div class="col-md-12" style="padding-top: 6px;">
+                    <div class="col-md-2" style="padding-top: 6px;">
                         <div class="md-radio">
                             <input type="radio" id="pp_sotien" name="pptinh" class="md-radiobtn" checked value="sotien">
                             <label for="pp_sotien"><span class="inc"></span><span class="check"></span><span class="box"></span>
                                 Số tiền</label>
                         </div>
                     </div>
-                </div>
 
-                <div class="row">
-                    <div class="col-md-offset-1 col-md-11">
+                    <div class="col-md-4">
                         {!! Form::text('sotien',null,array('id' => 'sotien', 'class' => 'form-control','placeholder'=>'Số tiền trích nộp',
                             'data-mask'=>'fdecimal','title'=>'Số tiền trích nộp'))!!}
                     </div>
-                </div>
 
-                <div class="row">
-                    <div class="col-md-12">
-                        <div class="md-radio">
-                            <input type="radio" id="pp_ngaycong" name="pptinh" class="md-radiobtn form-control" value="ngaycong">
-                            <label for="pp_ngaycong"><span class="inc"></span><span class="check"></span><span class="box"></span>
-                                Ngày công</label>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="row">
-                    <div class="col-md-offset-1 col-md-2">
-                        {!! Form::text('tongngaycong','',array('id' => 'tongngaycong', 'class' => 'form-control',
-                            'placeholder'=>'Tổng số ngày công', 'data-mask'=>'fdecimal','readonly'=>'true','title'=>'Tổng số ngày công trong tháng'))!!}
-                    </div>
-                    <div class="col-md-2">
-                        {!! Form::text('ngaycong','',array('id' => 'ngaycong', 'class' => 'form-control','placeholder'=>'Ngày công',
-                            'data-mask'=>'fdecimal','readonly'=>'true','title'=>'Số ngày công trích nộp'))!!}
-                    </div>
-                    <div class="col-md-7">
-                        {!! Form::select('phucap_nc[]',$a_phucap_trichnop,'ALL',array('id' => 'phucap_nc','class' => 'form-control select2me',
-                            'multiple'=>'multiple','placeholder'=>'Tất cả các loại phụ cấp','disabled'=>'true','title'=>'Phụ cấp tính phần trăm')) !!}
-                    </div>
-                </div>
-
-                <div class="row">
-                    <div class="col-md-12">
+                    <div class="col-md-2" style="padding-top: 6px;">
                         <div class="md-radio">
                             <input type="radio" id="pp_phantram" name="pptinh" class="md-radiobtn form-control" value="phantram">
                             <label for="pp_phantram"><span class="inc"></span><span class="check"></span><span class="box"></span>
                                 Phần trăm</label>
                         </div>
                     </div>
-                </div>
-                <div class="row">
-                    <div class="col-md-offset-1 col-md-3">
+
+                    <div class="col-md-4">
                         {!! Form::text('phantram',null,array('id' => 'phantram', 'class' => 'form-control','placeholder'=>'Số % hưởng',
-                            'data-mask'=>'fdecimal', 'readonly'=>'true','title'=>'Số phần trăm trích nộp'))!!}
-                    </div>
-                    <div class="col-md-8">
-                        {!! Form::select('phucap_pt[]',$a_phucap_trichnop,'ALL',array('id' => 'phucap_pt','class' => 'form-control select2me',
-                            'multiple'=>'multiple','placeholder'=>'Tất cả các loại phụ cấp','disabled'=>'true','title'=>'Phụ cấp tính phần trăm')) !!}
+                        'data-mask'=>'fdecimal', 'readonly'=>'true','title'=>'Số phần trăm trích nộp'))!!}
                     </div>
                 </div>
 
-                <div class="row">
-                    <div class="col-md-6">
-                        <label class="control-label">Ngày lập</label>
-                        <input type="date" name="ngaylap" id="ngaylap" class="form-control" value="{{date('Y-m-d')}}"/>
+                <div class="row" style="padding-top: 15px;">
+                    <div class="col-md-2" style="padding-top: 6px;">
+                        <div class="md-radio">
+                            <input type="radio" id="pp_ngaycong" name="pptinh" class="md-radiobtn form-control" value="ngaycong">
+                            <label for="pp_ngaycong"><span class="inc"></span><span class="check"></span><span class="box"></span>
+                                Ngày công</label>
+                        </div>
                     </div>
 
-                    <div class="col-md-6">
-                        <label class="control-label">Người lập</label>
-                        {!!Form::text('nguoilap', session('admin')->nguoilapbieu, array('id' => 'nguoilap','class' => 'form-control'))!!}
+                    <div class="col-md-3">
+                        {!! Form::text('tongngaycong','',array('id' => 'tongngaycong', 'class' => 'form-control',
+                            'placeholder'=>'Tổng số ngày công', 'data-mask'=>'fdecimal','readonly'=>'true','title'=>'Tổng số ngày công trong tháng'))!!}
+                    </div>
+
+                    <div class="col-md-3">
+                        {!! Form::text('ngaycong','',array('id' => 'ngaycong', 'class' => 'form-control','placeholder'=>'Ngày công',
+                            'data-mask'=>'fdecimal','readonly'=>'true','title'=>'Số ngày công trích nộp'))!!}
+                    </div>
+
+                    <div class="col-md-4">
+                        {!! Form::text('phantramtinh','',array('id' => 'phantramtinh', 'class' => 'form-control','placeholder'=>'Phần trăm tính trích nộp',
+                        'data-mask'=>'fdecimal','readonly'=>'true','title'=>'Phần trăm tính'))!!}
+                    </div>
+                </div>
+
+                <hr style="margin-bottom: 5px;">
+
+                <div class="row">
+                    <div class="col-md-9">
+                        <label class="control-label">Phụ cấp trích nộp</label>
+                        {!! Form::select('phucap[]',$a_phucap_trichnop,'ALL',array('id' => 'phucap','class' => 'form-control select2me',
+                        'multiple'=>'multiple','title'=>'Phụ cấp tính phần trăm')) !!}
+                    </div>
+                    <div class="col-md-3">
+                        <label class="control-label">Làm tròn số tiền</label>
+                        {!! Form::select('lamtron',getTronSo(),'0',array('id' => 'lamtron','class' => 'form-control select2me')) !!}
                     </div>
                 </div>
 
@@ -489,6 +492,7 @@
                 <input type="hidden" id="nam" name="nam" value="{{$inputs['nam']}}"/>
                 <input type="hidden" id="mabl_trichnop" name="mabl_trichnop"/>
                 <input type="hidden" id="phanloai" name="phanloai"/>
+                <input type="hidden" id="phanloai_pptinh" name="phanloai_pptinh" value="sotien"/>
             </div>
         </div>
 

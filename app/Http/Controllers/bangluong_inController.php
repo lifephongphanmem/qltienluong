@@ -592,6 +592,41 @@ class bangluong_inController extends Controller
         } else
             return view('errors.notlogin');
     }
+
+    public function printf_mauds_m2(Request $request){
+        if (Session::has('admin')) {
+            $inputs = $request->all();
+            $inputs['madv'] = session('admin')->madv;
+
+            $mabl = $inputs['mabl'];
+            $m_bl = bangluong::select('thang','nam','mabl','madv','ngaylap','phanloai')->where('mabl',$mabl)->first();
+            $model= $this->getBangLuong($inputs);
+            //dd($model);
+            //$model = bangluong_ct::where('mabl',$mabl)->get();
+
+            $a_hoso = array_column(hosocanbo::where('madv', $m_bl->madv)->get()->toarray(),'sotk','macanbo');
+            foreach($model as $ct) {
+                $ct->sotk = isset($a_hoso[$ct->macanbo]) ? $a_hoso[$ct->macanbo] : '';
+            }
+            $m_dv = dmdonvi::where('madv',$m_bl->madv)->first();
+            $model_congtac = dmphanloaict::select('mact','tenct')
+                ->wherein('mact', a_unique(array_column($model->toarray(),'mact')))->get();
+
+            $thongtin=array('nguoilap'=>$m_bl->nguoilap,
+                'thang'=>$m_bl->thang,
+                'nam'=>$m_bl->nam,
+                'ngaylap'=>$m_bl->ngaylap);
+
+            return view('reports.bangluong.donvi.maudschitra_m2')
+                ->with('model',$model->sortBy('stt'))
+                ->with('model_pb',getPhongBan())
+                ->with('m_dv',$m_dv)
+                ->with('thongtin',$thongtin)
+                ->with('model_congtac',$model_congtac)
+                ->with('pageTitle','Bảng lương chi tiết');
+        } else
+            return view('errors.notlogin');
+    }
     //</editor-fold>
 
     //<editor-fold desc="Chi khác">
@@ -745,19 +780,23 @@ class bangluong_inController extends Controller
         $m_bl = bangluong::select('madv','thang','mabl')->where('mabl', $mabl)->first();
         $model = (new data())->getBangluong_ct($m_bl->thang,$m_bl->mabl);
         //dd($m_bl);
-        $m_hoso = hosocanbo::where('madv', $m_bl->madv)->get();
-        $a_ht = array_column($m_hoso->toarray(),'tencanbo','macanbo');
+        $a_hoso = hosocanbo::select('macanbo','sunghiep','sotk','tennganhang')
+            ->where('madv', $m_bl->madv)->get()->keyby('macanbo')->toarray();
         $dmchucvucq = array_column(dmchucvucq::all('tenvt', 'macvcq')->toArray(), 'tenvt', 'macvcq');
-        $sunghiep = array_column($m_hoso->toarray(), 'sunghiep', 'macanbo');
         $nhomct = array_column(dmphanloaict::all('macongtac', 'mact')->toArray(), 'macongtac', 'mact');
 
         foreach ($model as $hs) {
-            $hs->tencv = isset($dmchucvucq[$hs->macvcq]) ? $dmchucvucq[$hs->macvcq] : '';
-            $hs->sunghiep = isset($sunghiep[$hs->macanbo]) ? $sunghiep[$hs->macanbo] : '';
-            $hs->macongtac = isset($nhomct[$hs->mact]) ? $nhomct[$hs->mact] : '';
-            if($hs->tencanbo == ''){
-                $hs->tencanbo = isset($a_ht[$hs->macanbo]) ? $a_ht[$hs->macanbo] : ''; //kiêm nhiệm chưa có tên cán bộ
+            if(isset($a_hoso[$hs->macanbo])){
+                $hoso = $a_hoso[$hs->macanbo];
+                $hs->sunghiep = $hoso['sunghiep'];
+                $hs->sotk = $hoso['sotk'];
+                $hs->tennganhang = $hoso['tennganhang'];
+                if($hs->tencanbo == ''){
+                    $hs->tencanbo = $hoso['tencanbo']; //kiêm nhiệm chưa có tên cán bộ
+                }
             }
+            $hs->tencv = isset($dmchucvucq[$hs->macvcq]) ? $dmchucvucq[$hs->macvcq] : '';
+            $hs->macongtac = isset($nhomct[$hs->mact]) ? $nhomct[$hs->mact] : '';
             // $hs->tencanbo = isset($a_ht[$hs->macanbo]) ? $a_ht[$hs->macanbo] : ''; //kiêm nhiệm chưa có tên cán bộ
         }
 

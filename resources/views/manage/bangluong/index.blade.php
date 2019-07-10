@@ -235,7 +235,7 @@
                 ok = false;
             }
 
-            switch ($("input[type=radio][name=pptinh]").val()){
+            switch ($('#phanloai_pptinh').val()){
                 case 'sotien':{
                     if($('#create_trichnop').find("[id='sotien']").val() == ''){
                         str += '  - Số tiền trích nộp \n';
@@ -253,7 +253,6 @@
                         str += '  - Tổng số ngày công \n';
                         ok = false;
                     }
-
                     break;
                 }
                 case 'phantram':{
@@ -473,19 +472,17 @@
                     $('#create_trichnop').find("[id='ngaycong']").prop('readonly',true);
                     $('#create_trichnop').find("[id='tongngaycong']").prop('readonly',true);
                     $('#create_trichnop').find("[id='phantram']").prop('readonly',true);
-                    $('#create_trichnop').find("[id='phucap_nc']").prop('disabled',true);
-                    $('#create_trichnop').find("[id='phucap_pt']").prop('disabled',true);
-                    $("input[type=radio][name=pptinh]").val('sotien');
+                    $('#create_trichnop').find("[id='phantramtinh']").prop('readonly',true);
+                    $('#phanloai_pptinh').val('sotien');
                     break;
                 }
                 case 'ngaycong':{
                     $('#create_trichnop').find("[id='ngaycong']").prop('readonly',false);
                     $('#create_trichnop').find("[id='tongngaycong']").prop('readonly',false);
+                    $('#create_trichnop').find("[id='phantramtinh']").prop('readonly',false);
                     $('#create_trichnop').find("[id='sotien']").prop('readonly',true);
                     $('#create_trichnop').find("[id='phantram']").prop('readonly',true);
-                    $('#create_trichnop').find("[id='phucap_nc']").prop('disabled',false);
-                    $('#create_trichnop').find("[id='phucap_pt']").prop('disabled',true);
-                    $("input[type=radio][name=pptinh]").val('ngaycong');
+                    $('#phanloai_pptinh').val('ngaycong');
                     break;
                 }
                 case 'phantram':{
@@ -493,9 +490,8 @@
                     $('#create_trichnop').find("[id='sotien']").prop('readonly',true);
                     $('#create_trichnop').find("[id='ngaycong']").prop('readonly',true);
                     $('#create_trichnop').find("[id='tongngaycong']").prop('readonly',true);
-                    $('#create_trichnop').find("[id='phucap_nc']").prop('disabled',true);
-                    $('#create_trichnop').find("[id='phucap_pt']").prop('disabled',false);
-                    $("input[type=radio][name=pptinh]").val('phantram');
+                    $('#create_trichnop').find("[id='phantramtinh']").prop('readonly',true);
+                    $('#phanloai_pptinh').val('phantram');
                     break;
                 }
             }

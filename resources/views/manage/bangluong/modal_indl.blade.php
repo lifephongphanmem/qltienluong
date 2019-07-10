@@ -70,10 +70,20 @@
                                         <div class="form-group">
                                             <button type="button" style="border-width: 0px" onclick="inds('/chuc_nang/bang_luong/mauds')" class="btn btn-default btn-xs mbs"
                                                     title="Danh sách chi trả cá nhân" data-target="#mauds-modal" data-toggle="modal">
-                                                <i class="fa fa-print"></i>&nbsp; Danh sách chi trả cá nhân</button>
+                                                <i class="fa fa-print"></i>&nbsp; Danh sách chi trả cá nhân - mẫu 01</button>
                                         </div>
                                     </div>
 
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <button type="button" style="border-width: 0px" onclick="inds('/chuc_nang/bang_luong/mauds_m2')" class="btn btn-default btn-xs mbs"
+                                                    title="Danh sách chi trả cá nhân" data-target="#mauds-modal" data-toggle="modal">
+                                                <i class="fa fa-print"></i>&nbsp; Danh sách chi trả cá nhân - mẫu 02</button>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row">
                                     <div class="col-md-6">
                                         <div class="form-group">
                                             <button type="button" style="border-width: 0px" onclick="inblmtt107('/chuc_nang/bang_luong/maubh')" class="btn btn-default btn-xs mbs"

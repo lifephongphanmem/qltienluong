@@ -2147,56 +2147,68 @@ class bangluongController extends Controller
             $a_phucap = array_column(dmphucap_donvi::where('madv', session('admin')->madv)
                 ->where('phanloai','<','3')->get()->toarray(),'mapc');
             $a_data = array();
-            foreach ($model_canbo as $cb) {
-                $trichnop = 0;
-                switch ($inputs['pptinh']) {
-                    case 'sotien': {
-                        $trichnop = chkDbl($inputs['sotien']);
-                        break;
+
+            switch ($inputs['pptinh']) {
+                case 'sotien': {
+                    foreach ($model_canbo as $cb) {
+                        $trichnop = round(chkDbl($inputs['sotien']),$inputs['lamtron']);
+                        $a_data[] = array('mabl' => $inputs['mabl'], 'congtac' => $inputs['phanloai'], 'ttl' => $trichnop,
+                            'macvcq' => $cb->macvcq, 'mapb' => $cb->mapb, 'mact' => $cb->mact, 'macanbo' => $cb->macanbo,
+                            'tencanbo' => $cb->tencanbo,'stt'=>$cb->stt);
                     }
-                    case 'ngaycong': {
-                        $inputs['tongngaycong'] = chkDbl($inputs['tongngaycong']);
-                        $inputs['tongngaycong'] = $inputs['tongngaycong'] < 1 ? 1 : $inputs['tongngaycong'];
-                        $inputs['ngaycong'] = chkDbl($inputs['ngaycong']);
+                    break;
+                }
+                case 'ngaycong': {
+                    $inputs['tongngaycong'] = chkDbl($inputs['tongngaycong']) < 1 ? 1 : chkDbl($inputs['tongngaycong']);
+                    $inputs['phantramtinh'] = chkDbl($inputs['tongngaycong']) <= 0 || chkDbl($inputs['tongngaycong'])>100
+                            ? 100 : chkDbl($inputs['tongngaycong']);
+                    $inputs['ngaycong'] = chkDbl($inputs['ngaycong']);
+
+                    $heso = ($inputs['ngaycong'] * $inputs['phantramtinh']) / ($inputs['tongngaycong'] * 100);
+                    foreach ($model_canbo as $cb) {
                         $sotien = 0;
-                        if(in_array('ALL',$inputs['phucap_nc'])){
+                        if(!isset($inputs['phucap']) || in_array('ALL',$inputs['phucap'])){
                             foreach($a_phucap as $pc){
                                 $pc_st = 'st_'.$pc;
                                 $sotien += $cb->$pc_st;
                             }
                         }else{
-                            foreach($inputs['phucap_nc'] as $pc){
+                            foreach($inputs['phucap'] as $pc){
                                 $pc_st = 'st_'.$pc;
                                 $sotien += $cb->$pc_st;
                             }
                         }
-                        $trichnop = round(($sotien / $inputs['tongngaycong']) * $inputs['ngaycong']);
-                        break;
+                        $trichnop = round($sotien * $heso,$inputs['lamtron']);
+
+                        $a_data[] = array('mabl' => $inputs['mabl'], 'congtac' => $inputs['phanloai'], 'ttl' => $trichnop,
+                            'macvcq' => $cb->macvcq, 'mapb' => $cb->mapb, 'mact' => $cb->mact, 'macanbo' => $cb->macanbo,
+                            'tencanbo' => $cb->tencanbo,'stt'=>$cb->stt);
                     }
-                    case 'phantram': {
-                        $inputs['phantram'] = chkDbl($inputs['phantram']);
+                    break;
+                }
+                case 'phantram': {
+                    $inputs['phantram'] = chkDbl($inputs['phantram']);
+                    foreach ($model_canbo as $cb) {
                         $sotien = 0;
-                        if(in_array('ALL',$inputs['phucap_nc'])){
+                        if(!isset($inputs['phucap']) || in_array('ALL',$inputs['phucap'])){
                             foreach($a_phucap as $pc){
                                 $pc_st = 'st_'.$pc;
                                 $sotien += $cb->$pc_st;
                             }
                         }else{
-                            foreach($inputs['phucap_nc'] as $pc){
+                            foreach($inputs['phucap'] as $pc){
                                 $pc_st = 'st_'.$pc;
                                 $sotien += $cb->$pc_st;
                             }
                         }
                         $trichnop = round(($sotien / 100) * $inputs['phantram']);
-                        break;
+                        $a_data[] = array('mabl' => $inputs['mabl'], 'congtac' => $inputs['phanloai'], 'ttl' => $trichnop,
+                            'macvcq' => $cb->macvcq, 'mapb' => $cb->mapb, 'mact' => $cb->mact, 'macanbo' => $cb->macanbo,
+                            'tencanbo' => $cb->tencanbo,'stt'=>$cb->stt);
                     }
-                }
 
-                $a_data[] = array('mabl' => $inputs['mabl'], 'congtac' => $inputs['phanloai'], 'ttl' => $trichnop,
-                    'macvcq' => $cb->macvcq, 'mapb' => $cb->mapb, 'mact' => $cb->mact, 'macanbo' => $cb->macanbo,
-                    'tencanbo' => $cb->tencanbo,'stt'=>$cb->stt);
-                //lưu vào db
-                //bangluong_truc::create($kq);
+                    break;
+                }
             }
 
             foreach(array_chunk($a_data, 100)  as $data){
