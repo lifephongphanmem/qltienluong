@@ -235,20 +235,22 @@ class bangluongController extends Controller
     //Insert + update bảng lương
     function store(Request $request){
         $inputs = $request->all();
-        if(isset($inputs['phucaploaitru'])){
-            $inputs['phucaploaitru'] = implode(',', $inputs['phucaploaitru']);
-        }else{
-            $inputs['phucaploaitru'] = '';
-        }
         //dd($inputs);
         $inputs['luongcoban'] = getDbl($inputs['luongcoban']);
         $model = bangluong::where('mabl', $inputs['mabl'])->first();
-        //dd($inputs);
+        //dd($model);
         if (count($model) > 0) {
             //update
+            $inputs['phucaploaitru'] = $model->phucaploaitru;
             $model->update($inputs);
             return redirect('/chuc_nang/bang_luong/chi_tra?thang=' . $inputs['thang'] . '&nam=' . $inputs['nam']);
         } else {
+            if(isset($inputs['phucaploaitru'])){
+                $inputs['phucaploaitru'] = implode(',', $inputs['phucaploaitru']);
+            }else{
+                $inputs['phucaploaitru'] = '';
+            }
+
             //kiểm tra bảng lương cùng nguồn, lĩnh vực hoạt động, lương cơ bản =>ko cho tạo
             $model_chk = bangluong::where('thang', $inputs['thang'])->where('nam', $inputs['nam'])
                 ->where('phanloai', 'BANGLUONG')
