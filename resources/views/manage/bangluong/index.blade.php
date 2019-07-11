@@ -318,8 +318,10 @@
                         },
                         dataType: 'JSON',
                         success: function (data) {
-                            var a_pc = data.phucaploaitru.split(',');
-                            $('#phucaploaitru').select2("val",a_pc);
+                            if( data.phucaploaitru != null){
+                                var a_pc = data.phucaploaitru.split(',');
+                                $('#phucaploaitru').select2("val",a_pc);
+                            }
                             $('#thang').val(data.thang);
                             $('#nam').val(data.nam);
                             $('#noidung').val(data.noidung);
