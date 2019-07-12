@@ -780,7 +780,7 @@ class bangluong_inController extends Controller
         $m_bl = bangluong::select('madv','thang','mabl')->where('mabl', $mabl)->first();
         $model = (new data())->getBangluong_ct($m_bl->thang,$m_bl->mabl);
         //dd($m_bl);
-        $a_hoso = hosocanbo::select('macanbo','sunghiep','sotk','tennganhang')
+        $a_hoso = hosocanbo::select('macanbo','sunghiep','sotk','tennganhang','ngaytu','tnntungay')
             ->where('madv', $m_bl->madv)->get()->keyby('macanbo')->toarray();
         $dmchucvucq = array_column(dmchucvucq::all('tenvt', 'macvcq')->toArray(), 'tenvt', 'macvcq');
         $nhomct = array_column(dmphanloaict::all('macongtac', 'mact')->toArray(), 'macongtac', 'mact');
@@ -789,6 +789,8 @@ class bangluong_inController extends Controller
             if(isset($a_hoso[$hs->macanbo])){
                 $hoso = $a_hoso[$hs->macanbo];
                 $hs->sunghiep = $hoso['sunghiep'];
+                $hs->ngaytu = $hoso['ngaytu'];
+                $hs->tnntungay = $hoso['tnntungay'];
                 $hs->sotk = $hoso['sotk'];
                 $hs->tennganhang = $hoso['tennganhang'];
                 if($hs->tencanbo == ''){

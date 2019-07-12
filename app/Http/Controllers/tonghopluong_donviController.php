@@ -204,16 +204,9 @@ class tonghopluong_donviController extends Controller
                 }
 
                 if($a_ct[$i]['congtac'] != 'TRUYLINH'){//bảng lương truy lĩnh có luowngcb trong chi tiết
-                    $a_ct[$i]['luongcoban'] = $bangluong['luongcoban'];
+                    //$a_ct[$i]['luongcoban'] = $bangluong['luongcoban'];
                     $a_ct[$i]['congtac'] = 'BANGLUONG';//do trong trường congtac = CHUCVU, BIENCHE,...
                 }
-                /*
-                else{
-                    foreach (getColTongHop() as $ct) {
-                        $a_ct[$i]['st_'.$ct] = $a_ct[$i]['st_'.$ct] * ($a_ct[$i]['thangtl']<= 1 ? 1 : $a_ct[$i]['thangtl']);
-                    }
-                }
-                */
 
                 $a_ct[$i]['tonghop'] = $a_ct[$i]['congtac'];
                 //if(in_array($a_ct[$i]['macongtac'],$a_plcongtac) || in_array($a_ct[$i]['mact'],$a_plct)){
@@ -266,9 +259,11 @@ class tonghopluong_donviController extends Controller
             //Mảng chứa các cột bỏ để chạy hàm insert
             $a_col_pc = array('id','baohiem','bhxh','baohiem','bhtn', 'kpcd', 'bhyt', 'bhct','congtac', 'mabl');
             $a_data = unset_key($a_data,$a_col_pc);
+            /*
             $a_data = unset_key($a_data,$col_st);
             $a_data = unset_key($a_data,array('st_pctdt', 'pctdt','st_pcxaxe','pctaicu','st_pctaicu',
                 'pcxaxe','st_pcdith','pcdith','st_pcphth','pcphth','pclade', 'st_pclade', 'pcctp', 'st_pcctp'));//tạm
+            */
             //dd($a_data);
             foreach(array_chunk($a_data, 50)  as $data){
                 tonghopluong_donvi_bangluong::insert($data);

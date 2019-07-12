@@ -170,9 +170,9 @@
                         {!!Form::select('cochu',getCoChu(), 10, array('id' => 'cochu','class' => 'form-control select2me'))!!}
                     </div>
 
-                    <div class="col-md-offset-2 col-md-8">
-                        <input type="checkbox" name="inbaohiem" />
-                        <label class="control-label">In tiểu mục bảo hiểm</label>
+                    <div class="col-md-offset-3 col-md-9">
+                        <input type="checkbox" name="inbaohiem" id="inbaohiem"/>
+                        <label class="control-label" for="inbaohiem">In tiểu mục bảo hiểm</label>
                     </div>
                 </div>
             </div>
@@ -182,7 +182,7 @@
         <div class="modal-footer">
             <button type="button" data-dismiss="modal" class="btn btn-default">Hủy thao tác</button>
             <button type="submit" data-dismiss="modal" class="btn btn-success" onclick="ClickBC6()">Đồng ý</button>
-            <button type="submit" data-dismiss="modal" class="btn btn-primary" onclick="ClickBC6_excel()">Xuất Excel</button>
+            {{--<button type="submit" data-dismiss="modal" class="btn btn-primary" onclick="ClickBC6_excel()">Xuất Excel</button>--}}
         </div>
     </div>
 </div>
