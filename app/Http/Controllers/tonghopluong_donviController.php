@@ -160,7 +160,8 @@ class tonghopluong_donviController extends Controller
             $a_nguondm = nguonkinhphi_dinhmuc_ct::join('nguonkinhphi_dinhmuc','nguonkinhphi_dinhmuc_ct.maso','nguonkinhphi_dinhmuc.maso')
                 ->where('nguonkinhphi_dinhmuc.madv',$madv)->get()->toarray();
             //dd($a_nguondm);
-            $a_pc = dmphucap_donvi::where('madv', $madv)->wherenotin('mapc',['hesott'])->get()->keyby('mapc')->toarray();
+            //$a_pc = dmphucap_donvi::where('madv', $madv)->wherein('mapc',getColTongHop())->get()->keyby('mapc')->toarray();
+            $a_pc = getColTongHop();
             $a_bh = array_column(dmphucap_thaisan::select('mapc')->where('madv', session('admin')->madv)->get()->toarray(), 'mapc');
 
             $a_data = array();
@@ -179,8 +180,7 @@ class tonghopluong_donviController extends Controller
                 //chỉ dùng cho khối HCSN
                 $a_ct[$i]['mathdv'] = $mathdv;
                 $a_nguon = array_column(a_getelement_equal($a_nguondm, array('manguonkp' => $a_ct[$i]['manguonkp'])), 'mapc');
-                foreach ($a_pc as $k=>$v) {
-                    $mapc = $v['mapc'];
+                foreach ($a_pc as $mapc) {
                     $mapc_st = 'st_' . $mapc;
                     //$phucap = a_getelement_equal($a_bangluong_phucap, array('macanbo' => $a_ct[$i]['macanbo'], 'mabl' => $a_ct[$i]['mabl'], 'maso' => $mapc), true);
                     //$a_ct[$i][$mapc_st] = count($phucap) > 0 ? $phucap['sotien'] : 0;
@@ -230,8 +230,8 @@ class tonghopluong_donviController extends Controller
                 $model_data[$i]['tonghop'] = $model_data[$i]['congtac'];
                 foreach (getColTongHop() as $ct) {
                     $model_data[$i]['st_'.$ct] = array_sum(array_column($luongct,'st_'.$ct));
-                    //$model_data[$i][$ct] = array_sum(array_column($luongct,$ct));
-                    $model_data[$i][$ct] = array_sum(array_column($luongct,'st_'.$ct));
+                    $model_data[$i][$ct] = array_sum(array_column($luongct,$ct));
+                    //$model_data[$i][$ct] = array_sum(array_column($luongct,'st_'.$ct));
                     $tonghs += chkDbl($model_data[$i][$ct]);
 
                 }
