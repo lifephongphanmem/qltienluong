@@ -15,6 +15,7 @@ class CreateBangluongTable extends Migration
         Schema::create('bangluong', function (Blueprint $table) {
             $table->increments('id');
             $table->string('mabl',50)->unique();
+            $table->string('mabl_trichnop',50)->nullable();
             $table->string('thang',10)->nullable();
             $table->string('nam',10)->nullable();
             $table->string('noidung')->nullable();
@@ -30,6 +31,8 @@ class CreateBangluongTable extends Migration
             $table->date('ngaygui')->nullable();
             $table->string('nguoigui')->nullable();
             $table->string('trangthai')->nullable();
+            $table->string('maquy',30)->nullable();
+            $table->string('tenquy')->nullable();
             $table->string('madv',50);
             $table->timestamps();
         });

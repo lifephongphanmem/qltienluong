@@ -15,6 +15,7 @@ class CreateBangluongTrucTable extends Migration
     {
         Schema::create('bangluong_truc', function (Blueprint $table) {
             $table->increments('id');
+            $table->double('stt')->default(1);
             $table->string('macvcq', 50)->nullable();
             $table->string('mapb', 50)->nullable();
             $table->string('congtac', 50)->nullable();//phân loại chi trả (ctp, trực, độc hại,...)

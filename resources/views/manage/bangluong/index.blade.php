@@ -96,30 +96,23 @@
                                     <td>{{$value->noidung}}</td>
                                     <td>
                                         @if($inputs['thaotac'])
-                                            <button type="button" onclick="edit('{{$value->mabl}}','{{$value->phanloai}}')" class="btn btn-default btn-xs mbs">
-                                                <i class="fa fa-edit"></i>&nbsp; Sửa</button>
-
-                                            <a href="{{url($inputs['furl'].'bang_luong?mabl='.$value->mabl.'&mapb=')}}" class="btn btn-default btn-xs mbs">
-                                                <i class="fa fa-th-list"></i>&nbsp; Chi tiết</a>
                                             @if($value->phanloai == 'BANGLUONG')
                                                 <div class="btn-group btn-group-solid">
                                                     <button type="button" class="btn btn-default dropdown-toggle btn-xs" data-toggle="dropdown" aria-expanded="true">
                                                         <i class="fa fa-cog"></i> Chức năng <i class="fa fa-angle-down"></i>
                                                     </button>
 
-                                                    <ul class="dropdown-menu">
+                                                    <ul class="dropdown-menu" style="margin-top: 0px;position: static">
                                                         <li>
-                                                            <button onclick="capnhat('{{$value->mabl}}')" style="border: none;" class="btn btn-default" data-target="#capnhat-modal-confirm" data-toggle="modal">
+                                                            <button onclick="capnhat('{{$value->mabl}}')" style="border: none;padding-top: 0px;padding-bottom: 0px;" class="btn btn-default" data-target="#capnhat-modal-confirm" data-toggle="modal">
                                                                 <i class="fa fa-refresh"></i>&nbsp; Cập nhật lương</button>
                                                         </li>
                                                         <li>
-                                                            <button onclick="trichnop('{{$value->mabl}}')" style="border: none;" class="btn btn-default" data-target="#trichnop-modal-confirm" data-toggle="modal">
+                                                            <button onclick="trichnop('{{$value->mabl}}')" style="border: none;padding-top: 0px;padding-bottom: 0px;" class="btn btn-default" data-target="#trichnop-modal-confirm" data-toggle="modal">
                                                                 <i class="fa fa-list-alt"></i>&nbsp; Trích nộp lương</button>
                                                         </li>
                                                     </ul>
                                                 </div>
-
-
 
                                                 <button type="button" onclick="inbl('{{$value->mabl}}','{{$value->thang}}','{{$value->nam}}')" class="btn btn-default btn-xs mbs">
                                                     <i class="fa fa-print"></i>&nbsp; In bảng lương</button>
@@ -133,6 +126,11 @@
                                                     <i class="fa fa-print"></i>&nbsp; In chi tiết</a>
                                             @endif
 
+                                            <button type="button" onclick="edit('{{$value->mabl}}','{{$value->phanloai}}')" class="btn btn-default btn-xs mbs">
+                                                <i class="fa fa-edit"></i>&nbsp; Sửa</button>
+
+                                            <a href="{{url($inputs['furl'].'bang_luong?mabl='.$value->mabl.'&mapb=')}}" class="btn btn-default btn-xs mbs">
+                                                <i class="fa fa-th-list"></i>&nbsp; Chi tiết</a>
                                             <button type="button" onclick="cfDel('{{$inputs['furl'].'del/'.$value->id}}')" class="btn btn-danger btn-xs mbs" data-target="#delete-modal-confirm" data-toggle="modal">
                                                 <i class="fa fa-trash-o"></i>&nbsp; Xóa</button>
                                         @else
@@ -167,6 +165,13 @@
     @include('templates.modal_printf_th_luong')
     <script>
         function capnhat(mabl){
+            $('#mabl_capnhat').val(mabl);
+        }
+
+        function trichnop(mabl){
+            $('#create_trichnop').find("[id='phanloai']").val('TRICHNOP');
+            $('#create_trichnop').find("[id='mabl_trichnop']").val(mabl);
+
             $('#mabl_capnhat').val(mabl);
         }
 
@@ -221,6 +226,55 @@
             //$('#chikhac-modal').modal('show');
         }
 
+        function confirm_trichnop(){
+            var str = '';
+            var ok = true;
+
+            if($('#create_trichnop').find("[id='tenquy']").val() == ''){
+                str += '  - Tên quỹ \n';
+                ok = false;
+            }
+
+            switch ($('#phanloai_pptinh').val()){
+                case 'sotien':{
+                    if($('#create_trichnop').find("[id='sotien']").val() == ''){
+                        str += '  - Số tiền trích nộp \n';
+                        ok = false;
+                    }
+                    break;
+                }
+                case 'ngaycong':{
+                    if($('#create_trichnop').find("[id='ngaycong']").val() == ''){
+                        str += '  - Số ngày công trích nộp \n';
+                        ok = false;
+                    }
+
+                    if($('#create_trichnop').find("[id='tongngaycong']").val() == ''){
+                        str += '  - Tổng số ngày công \n';
+                        ok = false;
+                    }
+                    break;
+                }
+                case 'phantram':{
+                    if($('#create_trichnop').find("[id='phantram']").val() == ''){
+                        str += '  - Phần trăm trích nộp \n';
+                        ok = false;
+                    }
+                    break;
+                }
+            }
+
+            if(!ok){
+                alert('Các trường: \n' + str + 'Không được để trống');
+                $('#create_trichnop').submit(function (e) {
+                    e.preventDefault();
+                });
+            }else{
+                $('#create_trichnop').unbind('submit').submit();
+                $('#trichnop-modal-confirm').modal('hide');
+            }
+        }
+
         function edit(mabl,phanloai){
             //var tr = $(e).closest('tr');
             var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
@@ -264,8 +318,10 @@
                         },
                         dataType: 'JSON',
                         success: function (data) {
-                            var a_pc = data.phucaploaitru.split(',');
-                            $('#phucaploaitru').select2("val",a_pc);
+                            if( data.phucaploaitru != null){
+                                var a_pc = data.phucaploaitru.split(',');
+                                $('#phucaploaitru').select2("val",a_pc);
+                            }
                             $('#thang').val(data.thang);
                             $('#nam').val(data.nam);
                             $('#noidung').val(data.noidung);
@@ -410,6 +466,40 @@
         }
 
         $(function(){
+            $("input[type=radio][name=pptinh]").change(function() {
+            //alert($(this).val());
+            switch ($(this).val()){
+                case 'sotien':{
+                    $('#create_trichnop').find("[id='sotien']").prop('readonly',false);
+                    $('#create_trichnop').find("[id='ngaycong']").prop('readonly',true);
+                    $('#create_trichnop').find("[id='tongngaycong']").prop('readonly',true);
+                    $('#create_trichnop').find("[id='phantram']").prop('readonly',true);
+                    $('#create_trichnop').find("[id='phantramtinh']").prop('readonly',true);
+                    $('#phanloai_pptinh').val('sotien');
+                    break;
+                }
+                case 'ngaycong':{
+                    $('#create_trichnop').find("[id='ngaycong']").prop('readonly',false);
+                    $('#create_trichnop').find("[id='tongngaycong']").prop('readonly',false);
+                    $('#create_trichnop').find("[id='phantramtinh']").prop('readonly',false);
+                    $('#create_trichnop').find("[id='sotien']").prop('readonly',true);
+                    $('#create_trichnop').find("[id='phantram']").prop('readonly',true);
+                    $('#phanloai_pptinh').val('ngaycong');
+                    break;
+                }
+                case 'phantram':{
+                    $('#create_trichnop').find("[id='phantram']").prop('readonly',false);
+                    $('#create_trichnop').find("[id='sotien']").prop('readonly',true);
+                    $('#create_trichnop').find("[id='ngaycong']").prop('readonly',true);
+                    $('#create_trichnop').find("[id='tongngaycong']").prop('readonly',true);
+                    $('#create_trichnop').find("[id='phantramtinh']").prop('readonly',true);
+                    $('#phanloai_pptinh').val('phantram');
+                    break;
+                }
+            }
+
+            });
+
             $('#thangct').change(function(){
                 window.location.href = getLink();
             });

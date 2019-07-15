@@ -397,6 +397,7 @@ Route::group(['prefix'=>'chuc_nang'],function(){
         Route::post('store_truylinh','bangluongController@store_truylinh');
         Route::post('store_truc','bangluongController@store_truc');
         Route::post('store_ctp','bangluongController@store_ctp');
+        Route::post('store_trichnop','bangluongController@store_trichnop');
 
         Route::get('store_mau','bangluongController@store_mau');
 
@@ -434,8 +435,9 @@ Route::group(['prefix'=>'chuc_nang'],function(){
         Route::post('mau05','bangluongController@printf_mau05');
         Route::post('mau06','bangluongController@printf_mau06');
         Route::post('mau07','bangluongController@printf_mau07');
-        Route::post('mau08','bangluongController@printf_mau08');
+        Route::post('mauquy','bangluongController@printf_mauquy');
         Route::post('mauds','bangluongController@printf_mauds');
+        Route::post('mauds_m2','bangluong_inController@printf_mauds_m2');
         Route::post('maubh','bangluongController@printf_maubh');
         Route::post('maudbhdnd','bangluongController@printf_maudbhdnd');
         Route::post('maublpc','bangluongController@printf_maublpc');
@@ -447,13 +449,13 @@ Route::group(['prefix'=>'chuc_nang'],function(){
         Route::get('mautinhnguyen','bangluongController@printf_mautinhnguyen');
         Route::post('maumtm','bangluongController@printf_maumtm');
 
-
         //truy lĩnh
         Route::post('mautruylinh','bangluongController@printf_mautruylinh');
 
         Route::get('mauthpl','bangluong_inController@printf_mauthpl');
         Route::get('mauthpc','bangluong_inController@printf_mauthpc');
         Route::post('mautt107_m4','bangluong_inController@printf_mautt107_m4');//mẫu cam ranh - Khánh Hòa
+        Route::post('dangkyluong','bangluong_inController@printf_dangkyluong');
         //chi khác (trực, công tác phí)
         Route::get('mauctphi','bangluong_inController@printf_mauctphi');
 

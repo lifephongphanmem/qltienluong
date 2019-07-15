@@ -70,7 +70,11 @@ class dsnangthamnienController extends Controller
                 //kiểm tra truy lĩnh nếu ngày xét = ngày nâng lương = > ko truy lĩnh
                 if ($inputs['ngayxet'] > $cb->tnndenngay) {
                     $cb->truylinhtungay = (new Carbon($cb->tnndenngay))->toDateString();
-                    $cb->truylinhdenngay = (new Carbon($inputs['ngayxet']))->toDateString();
+                    $ngayxet = new Carbon($inputs['ngayxet']);
+                    if($ngayxet->day == 1){
+                        $ngayxet->addDay(-1);
+                    }
+                    $cb->truylinhdenngay = $ngayxet->toDateString();
 
                     list($cb['thangtl'], $cb['ngaytl']) = $this->getThoiGianTL($cb['truylinhtungay'], $cb['truylinhdenngay']);
                 } else {

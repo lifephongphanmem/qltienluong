@@ -143,47 +143,13 @@ class bangluong_ct extends Model
         'hs_pccovu',
         'hs_pcud61',
         'hs_pcudn',
+        'luuheso',
+        'ghichu',
     ];
 }
 /*
  *
-        ALTER TABLE `bangluong_ct` ADD `st_heso` FLOAT NOT NULL DEFAULT '0' AFTER `kpcd_dv`;
-        ALTER TABLE `bangluong_ct` ADD `st_hesobl` FLOAT NOT NULL DEFAULT '0' AFTER `kpcd_dv`;
-        ALTER TABLE `bangluong_ct` ADD `st_hesopc` FLOAT NOT NULL DEFAULT '0' AFTER `kpcd_dv`;
-        ALTER TABLE `bangluong_ct` ADD `st_vuotkhung` FLOAT NOT NULL DEFAULT '0' AFTER `kpcd_dv`;
-        ALTER TABLE `bangluong_ct` ADD `st_pcct` FLOAT NOT NULL DEFAULT '0' AFTER `kpcd_dv`;
-        ALTER TABLE `bangluong_ct` ADD `st_pckct` FLOAT NOT NULL DEFAULT '0' AFTER `kpcd_dv`;
-        ALTER TABLE `bangluong_ct` ADD `st_pck` FLOAT NOT NULL DEFAULT '0' AFTER `kpcd_dv`;
-        ALTER TABLE `bangluong_ct` ADD `st_pccv` FLOAT NOT NULL DEFAULT '0' AFTER `kpcd_dv`;
-        ALTER TABLE `bangluong_ct` ADD `st_pckv` FLOAT NOT NULL DEFAULT '0' AFTER `kpcd_dv`;
-        ALTER TABLE `bangluong_ct` ADD `st_pcth` FLOAT NOT NULL DEFAULT '0' AFTER `kpcd_dv`;
-        ALTER TABLE `bangluong_ct` ADD `st_pcdd` FLOAT NOT NULL DEFAULT '0' AFTER `kpcd_dv`;
-        ALTER TABLE `bangluong_ct` ADD `st_pcdh` FLOAT NOT NULL DEFAULT '0' AFTER `kpcd_dv`;
-        ALTER TABLE `bangluong_ct` ADD `st_pcld` FLOAT NOT NULL DEFAULT '0' AFTER `kpcd_dv`;
-        ALTER TABLE `bangluong_ct` ADD `st_pcdbqh` FLOAT NOT NULL DEFAULT '0' AFTER `kpcd_dv`;
-        ALTER TABLE `bangluong_ct` ADD `st_pcudn` FLOAT NOT NULL DEFAULT '0' AFTER `kpcd_dv`;
-        ALTER TABLE `bangluong_ct` ADD `st_pctn` FLOAT NOT NULL DEFAULT '0' AFTER `kpcd_dv`;
-        ALTER TABLE `bangluong_ct` ADD `st_pctnn` FLOAT NOT NULL DEFAULT '0' AFTER `kpcd_dv`;
-        ALTER TABLE `bangluong_ct` ADD `st_pcdbn` FLOAT NOT NULL DEFAULT '0' AFTER `kpcd_dv`;
-        ALTER TABLE `bangluong_ct` ADD `st_pcvk` FLOAT NOT NULL DEFAULT '0' AFTER `kpcd_dv`;
-        ALTER TABLE `bangluong_ct` ADD `st_pckn` FLOAT NOT NULL DEFAULT '0' AFTER `kpcd_dv`;
-        ALTER TABLE `bangluong_ct` ADD `st_pcdang` FLOAT NOT NULL DEFAULT '0' AFTER `kpcd_dv`;
-        ALTER TABLE `bangluong_ct` ADD `st_pccovu` FLOAT NOT NULL DEFAULT '0' AFTER `kpcd_dv`;
-        ALTER TABLE `bangluong_ct` ADD `st_pclt` FLOAT NOT NULL DEFAULT '0' AFTER `kpcd_dv`;
-        ALTER TABLE `bangluong_ct` ADD `st_pcd` FLOAT NOT NULL DEFAULT '0' AFTER `kpcd_dv`;
-        ALTER TABLE `bangluong_ct` ADD `st_pctr` FLOAT NOT NULL DEFAULT '0' AFTER `kpcd_dv`;
-        ALTER TABLE `bangluong_ct` ADD `st_pctdt` FLOAT NOT NULL DEFAULT '0' AFTER `kpcd_dv`;
-        ALTER TABLE `bangluong_ct` ADD `st_pctnvk` FLOAT NOT NULL DEFAULT '0' AFTER `kpcd_dv`;
-        ALTER TABLE `bangluong_ct` ADD `st_pcbdhdcu` FLOAT NOT NULL DEFAULT '0' AFTER `kpcd_dv`;
-        ALTER TABLE `bangluong_ct` ADD `st_pcthni` FLOAT NOT NULL DEFAULT '0' AFTER `kpcd_dv`;
-        ALTER TABLE `bangluong_ct` ADD `st_pclade` FLOAT NOT NULL DEFAULT '0' AFTER `kpcd_dv`;
-        ALTER TABLE `bangluong_ct` ADD `st_pcud61` FLOAT NOT NULL DEFAULT '0' AFTER `kpcd_dv`;
-        ALTER TABLE `bangluong_ct` ADD `st_pcxaxe` FLOAT NOT NULL DEFAULT '0' AFTER `kpcd_dv`;
-        ALTER TABLE `bangluong_ct` ADD `st_pcdith` FLOAT NOT NULL DEFAULT '0' AFTER `kpcd_dv`;
-        ALTER TABLE `bangluong_ct` ADD `st_luonghd` FLOAT NOT NULL DEFAULT '0' AFTER `kpcd_dv`;
-        ALTER TABLE `bangluong_ct` ADD `st_pcphth` FLOAT NOT NULL DEFAULT '0' AFTER `kpcd_dv`;
-        ALTER TABLE `bangluong_ct` ADD `st_pcctp` FLOAT NOT NULL DEFAULT '0' AFTER `kpcd_dv`;
-        ALTER TABLE `bangluong_ct` ADD `pcctp` FLOAT NOT NULL DEFAULT '0' AFTER `kpcd_dv`;
+
 
     ALTER TABLE `bangluong_ct` CHANGE  `st_heso` `st_heso` DOUBLE NOT NULL DEFAULT '0';
         ALTER TABLE `bangluong_ct` CHANGE  `st_hesobl` `st_hesobl` DOUBLE NOT NULL DEFAULT '0';

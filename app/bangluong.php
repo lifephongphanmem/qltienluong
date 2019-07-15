@@ -10,6 +10,7 @@ class bangluong extends Model
     protected $fillable = [
         'id',
         'mabl',
+        'mabl_trichnop',
         'thang',
         'nam',
         'noidung',
@@ -22,7 +23,9 @@ class bangluong extends Model
         'phantramhuong',
         'phucaploaitru',
         'madv',
-        'luongcoban'
+        'luongcoban',
+        'maquy',
+        'tenquy'
     ];
 }
 //DELETE FROM `bangluong_ct` WHERE mabl not in (SELECT mabl FROM bangluong);

@@ -160,7 +160,8 @@ class tonghopluong_donviController extends Controller
             $a_nguondm = nguonkinhphi_dinhmuc_ct::join('nguonkinhphi_dinhmuc','nguonkinhphi_dinhmuc_ct.maso','nguonkinhphi_dinhmuc.maso')
                 ->where('nguonkinhphi_dinhmuc.madv',$madv)->get()->toarray();
             //dd($a_nguondm);
-            $a_pc = dmphucap_donvi::where('madv', $madv)->wherenotin('mapc',['hesott'])->get()->keyby('mapc')->toarray();
+            //$a_pc = dmphucap_donvi::where('madv', $madv)->wherein('mapc',getColTongHop())->get()->keyby('mapc')->toarray();
+            $a_pc = getColTongHop();
             $a_bh = array_column(dmphucap_thaisan::select('mapc')->where('madv', session('admin')->madv)->get()->toarray(), 'mapc');
 
             $a_data = array();
@@ -179,8 +180,7 @@ class tonghopluong_donviController extends Controller
                 //chỉ dùng cho khối HCSN
                 $a_ct[$i]['mathdv'] = $mathdv;
                 $a_nguon = array_column(a_getelement_equal($a_nguondm, array('manguonkp' => $a_ct[$i]['manguonkp'])), 'mapc');
-                foreach ($a_pc as $k=>$v) {
-                    $mapc = $v['mapc'];
+                foreach ($a_pc as $mapc) {
                     $mapc_st = 'st_' . $mapc;
                     //$phucap = a_getelement_equal($a_bangluong_phucap, array('macanbo' => $a_ct[$i]['macanbo'], 'mabl' => $a_ct[$i]['mabl'], 'maso' => $mapc), true);
                     //$a_ct[$i][$mapc_st] = count($phucap) > 0 ? $phucap['sotien'] : 0;
@@ -204,16 +204,9 @@ class tonghopluong_donviController extends Controller
                 }
 
                 if($a_ct[$i]['congtac'] != 'TRUYLINH'){//bảng lương truy lĩnh có luowngcb trong chi tiết
-                    $a_ct[$i]['luongcoban'] = $bangluong['luongcoban'];
+                    //$a_ct[$i]['luongcoban'] = $bangluong['luongcoban'];
                     $a_ct[$i]['congtac'] = 'BANGLUONG';//do trong trường congtac = CHUCVU, BIENCHE,...
                 }
-                /*
-                else{
-                    foreach (getColTongHop() as $ct) {
-                        $a_ct[$i]['st_'.$ct] = $a_ct[$i]['st_'.$ct] * ($a_ct[$i]['thangtl']<= 1 ? 1 : $a_ct[$i]['thangtl']);
-                    }
-                }
-                */
 
                 $a_ct[$i]['tonghop'] = $a_ct[$i]['congtac'];
                 //if(in_array($a_ct[$i]['macongtac'],$a_plcongtac) || in_array($a_ct[$i]['mact'],$a_plct)){
@@ -225,7 +218,7 @@ class tonghopluong_donviController extends Controller
             //Lấy dữ liệu để lập
             $model_data = a_split($a_data,array('congtac', 'mact', 'linhvuchoatdong', 'manguonkp', 'macongtac', 'luongcoban'));
             $model_data = a_unique($model_data);
-            //dd($model_data);
+            //dd($a_data);
             for ($i = 0; $i < count($model_data); $i++) {
                 $luongct = a_getelement_equal($a_data, array('manguonkp'=> $model_data[$i]['manguonkp'],
                     'mact'=>$model_data[$i]['mact'],
@@ -237,8 +230,8 @@ class tonghopluong_donviController extends Controller
                 $model_data[$i]['tonghop'] = $model_data[$i]['congtac'];
                 foreach (getColTongHop() as $ct) {
                     $model_data[$i]['st_'.$ct] = array_sum(array_column($luongct,'st_'.$ct));
-                    //$model_data[$i][$ct] = array_sum(array_column($luongct,$ct));
-                    $model_data[$i][$ct] = array_sum(array_column($luongct,'st_'.$ct));
+                    $model_data[$i][$ct] = array_sum(array_column($luongct,$ct));
+                    //$model_data[$i][$ct] = array_sum(array_column($luongct,'st_'.$ct));
                     $tonghs += chkDbl($model_data[$i][$ct]);
 
                 }
@@ -259,16 +252,18 @@ class tonghopluong_donviController extends Controller
                 $model_data[$i]['soluong'] = count($a_slcb);
                 $model_data[$i]['giaml'] = array_sum(array_column($luongct,'giaml'));
                 $model_data[$i]['tonghs'] = $tonghs;
-                $model_data[$i]['luongtn'] = $model_data[$i]['tonghs'] - $model_data[$i]['giaml'];
+                $model_data[$i]['luongtn'] = array_sum(array_column($luongct,'ttl')) - $model_data[$i]['giaml'];
             }
             //dd($a_data);
             //dd($model_data);
             //Mảng chứa các cột bỏ để chạy hàm insert
             $a_col_pc = array('id','baohiem','bhxh','baohiem','bhtn', 'kpcd', 'bhyt', 'bhct','congtac', 'mabl');
             $a_data = unset_key($a_data,$a_col_pc);
+            /*
             $a_data = unset_key($a_data,$col_st);
             $a_data = unset_key($a_data,array('st_pctdt', 'pctdt','st_pcxaxe','pctaicu','st_pctaicu',
                 'pcxaxe','st_pcdith','pcdith','st_pcphth','pcphth','pclade', 'st_pclade', 'pcctp', 'st_pcctp'));//tạm
+            */
             //dd($a_data);
             foreach(array_chunk($a_data, 50)  as $data){
                 tonghopluong_donvi_bangluong::insert($data);
@@ -524,6 +519,7 @@ class tonghopluong_donviController extends Controller
                 $m_dv = dmdonvi::where('madv', $model_thongtin->madv)->first();
                 $m_pc = array_column(dmphucap_donvi::where('madv', $model_thongtin->madv)->get()->toarray(),'report','mapc');
             }
+            //dd($model);
             //$dsdonvi = dmdonvi:: join('tonghopluong_khoi','dmdonvi.madv','tonghopluong_khoi.madv')->where('mathdv',$mathdv)->get();
             $model_nguonkp = array_column(dmnguonkinhphi::all()->toArray(), 'tennguonkp', 'manguonkp');
             //$model_phanloaict = array_column(dmphanloaicongtac::all()->toArray(), 'tencongtac', 'macongtac');
@@ -540,8 +536,9 @@ class tonghopluong_donviController extends Controller
                     $chitiet->tencongtac = isset($model_ct[$chitiet->mact]) ? $model_ct[$chitiet->mact] : '';
                 }
                 */
-                $chitiet->tongtl = $chitiet->tonghs - $chitiet->giaml;
+                $chitiet->tongtl = $chitiet->luongtn;
                 $chitiet->tongbh = $chitiet->stbhxh_dv + $chitiet->stbhyt_dv + $chitiet->stkpcd_dv + $chitiet->stbhtn_dv;
+                /*
                 $phucap = a_getelement_equal($a_bangluong, array('mact'=>$chitiet->mact,'manguonkp'=>$chitiet->manguonkp,'tonghop'=>$chitiet->tonghop));
                 //$m_pc = array_column(dmphucap_donvi::where('madv', $model_thongtin->madv)->get()->toarray(),'report','mapc');
                 if($chitiet->tonghop != 'TRUYLINH'){
@@ -550,16 +547,16 @@ class tonghopluong_donviController extends Controller
                         $chitiet->$ma = array_sum(array_column($phucap,$ct));
                     }
                 }
-
+                */
             }
 
             $a_phucap = array();
-            $a_phucap_hs = array();
+            //$a_phucap_hs = array();
             $col = 0;
             foreach (getColTongHop() as $ct) {
                 if ($model->sum($ct) > 0) {
                     $a_phucap[$ct] = isset($m_pc[$ct]) ? $m_pc[$ct] : '';
-                    $a_phucap_hs['hs'.$ct] = isset($m_pc[$ct]) ? $m_pc[$ct] : '';
+                    //$a_phucap_hs['hs'.$ct] = isset($m_pc[$ct]) ? $m_pc[$ct] : '';
                     $col++;
                 }
             }
@@ -567,6 +564,7 @@ class tonghopluong_donviController extends Controller
             $thongtin = array('nguoilap' => session('admin')->name,
                 'thang' => $model_thongtin->thang,
                 'nam' => $model_thongtin->nam);
+
             $a_tonghop = $model->map(function($data){
                 return collect($data->toArray())
                     ->only(['tonghop'])
@@ -580,7 +578,7 @@ class tonghopluong_donviController extends Controller
                 ->with('col', $col)
                 ->with('a_tonghop',a_unique($a_tonghop))
                 ->with('a_phucap', $a_phucap)
-                ->with('a_phucap_hs', $a_phucap_hs)
+                //->with('a_phucap_hs', $a_phucap_hs)
                 ->with('pageTitle', 'Chi tiết tổng hợp lương tại đơn vị theo địa bàn quản lý');
         } else
             return view('errors.notlogin');

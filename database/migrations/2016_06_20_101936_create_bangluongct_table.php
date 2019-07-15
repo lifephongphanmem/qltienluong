@@ -145,6 +145,8 @@ class CreateBangluongctTable extends Migration
             $table->double('st_pcctp')->default(0);
             $table->double('pctaicu')->default(0);//phụ cấp tái ứng cử
             $table->double('st_pctaicu')->default(0);
+            $table->text('luuheso')->nullable();
+            $table->string('ghichu')->nullable();
             $table->timestamps();
         });
     }

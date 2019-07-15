@@ -85,15 +85,12 @@
 </table>
 <p style="text-align: center; font-weight: bold; font-size: 20px;">BẢNG THANH TOÁN TIỀN LƯƠNG VÀ PHỤ CẤP</p>
 <p style="text-align: center; font-style: italic">Tháng {{$thongtin['thang']}} năm {{$thongtin['nam']}}</p>
-@if($thongtin['mapb'] != '')
-    <p style="text-align: center; font-style: italic">Khối/Tổ công tác: {{$thongtin['tenpb']}}</p>
-@endif
 
 <table width="97%" class="money" cellspacing="0" cellpadding="0" border="1" style="margin: 20px auto; border-collapse: collapse;font:normal {{$thongtin['cochu']}}px Times, serif;">
     <thead>
     <tr style="padding-left: 2px;padding-right: 2px">
         <th style="width: 2%;" rowspan="2">S</br>T</br>T</th>
-        <th style="width: 15%;" rowspan="2">Họ và tên</th>
+        <th style="width: 12%;" rowspan="2">Họ và tên</th>
         <th style="width: 4%;" rowspan="2">Cấp bậc</br>chức vụ</th>
         <th style="width: 4%;" rowspan="2">Mã số</br>ngạch</br>bậc</th>
         <th colspan="{{$col + 2}}">Hệ số lương, phụ cấp </th>
@@ -101,15 +98,15 @@
         <th colspan="5">Các khoản phải khấu trừ</th>
         <th style="width: 4%;" rowspan="2">Bảo hiểm</br>(đơn vị đóng)</th>
         <th style="width: 6%;" rowspan="2">Số tiền</br>thực lĩnh</th>
-        <th style="width: 4%;" rowspan="2">Ký nhận</th>
+        <th style="width: 8%;" rowspan="2">Ghi chú</th>
     </tr>
 
     <tr style="padding-left: 2px;padding-right: 2px">
         @foreach($a_phucap as $key=>$val)
-            <th>{!!$val!!}</th>
+            <th style="width: 2%;">{!!$val!!}</th>
         @endforeach
 
-        <th>Cộng</br>hệ số</th>
+        <th style="width: 3%">Cộng</br>hệ số</th>
         <th>Thành tiền</th>
 
         <th>BHXH</th>
@@ -156,7 +153,7 @@
                     <td>{{dinhdangso($ct->ttbh)}}</td>
                     <td>{{dinhdangso($ct->ttbh_dv)}}</td>
                     <td>{{dinhdangso($ct->luongtn)}}</td>
-                    <td></td>
+                    <td style="text-align: left">{{$ct->ghichu}}</td>
                 </tr>
             @endforeach
 
@@ -204,6 +201,7 @@
 </table>
 
 <table class="money" width="90%"  cellspacing="0" cellpadding="0" border="1" style="margin: 20px auto; border-collapse: collapse;">
+    <thead>
     <tr style="padding-left: 2px;padding-right: 2px">
         <th style="width: 5%;" >Mục</th>
         <th style="width: 5%;" >Tiểu mục</th>
@@ -216,7 +214,7 @@
         <th>Tổng cộng</th>
         <th>Còn lại</th>
     </tr>
-
+    </thead>
     @foreach($a_muc as $muc)
         <?php $tieumuc = $model_tm->where('muc',$muc['muc']); ?>
         <tr style="font-weight: bold;">
@@ -244,6 +242,19 @@
                 <td>{{dinhdangso($ct->sotien - $ct->ttbh)}}</td>
             </tr>
         @endforeach
+        @if($muc['muc'] == '6100' && $thongtin['inbaohiem'])
+            <?php $mucluong = $model_tm->where('muc','<>','6300'); ?>
+            <tr style="font-weight: bold; text-align: center;font-style: italic;">
+                <td colspan="2">Cộng chi lương</td>
+                <td class="money">{{dinhdangso($mucluong->sum('sotien'))}}</td>
+                <td class="money">{{dinhdangso($mucluong->sum('stbhxh'))}}</td>
+                <td class="money">{{dinhdangso($mucluong->sum('stbhyt'))}}</td>
+                <td class="money">{{dinhdangso($mucluong->sum('stkpcd'))}}</td>
+                <td class="money">{{dinhdangso($mucluong->sum('stbhtn'))}}</td>
+                <td class="money">{{dinhdangso($mucluong->sum('ttbh'))}}</td>
+                <td class="money">{{dinhdangso($mucluong->sum('sotien') - $mucluong->sum('ttbh'))}}</td>
+            </tr>
+        @endif
     @endforeach
     <tr style="font-weight: bold; text-align: center;">
         <td colspan="2">Tổng cộng</td>
