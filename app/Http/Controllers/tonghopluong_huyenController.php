@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\dmchucvucq;
 use App\dmdiabandbkk;
 use App\dmdonvi;
+use App\dmkhoipb;
 use App\dmnguonkinhphi;
 use App\dmphanloaicongtac;
 use App\dmphanloaict;
@@ -1103,11 +1104,13 @@ class tonghopluong_huyenController extends Controller
             $m_pl = tonghopluong_donvi_chitiet::join('tonghopluong_donvi','tonghopluong_donvi_chitiet.mathdv','tonghopluong_donvi.mathdv')
                 ->join('dmdonvi','dmdonvi.madv','tonghopluong_donvi.madv')
                 ->join('dmphanloaict','dmphanloaict.mact','tonghopluong_donvi_chitiet.mact')
-                ->select('maphanloai','tenct','dmphanloaict.mact')
+                ->select('maphanloai','tenct','dmphanloaict.mact','tonghopluong_donvi.madv','tonghopluong_donvi_chitiet.linhvuchoatdong')
                 ->wherein('tonghopluong_donvi_chitiet.mathdv', array_column($model_tonghop->toarray(),'mathdv'))
                 ->orderby('maphanloai')
                 ->distinct()
                 ->get();
+            //dd($m_pl->toarray());
+            $m_linhvuc = dmkhoipb::all();
             //$model = tonghopluong_donvi_chitiet::wherein('mathdv', array_column($model_tonghop->toarray(),'mathdv'))->get();
             $model_nguonkp = array_column(dmnguonkinhphi::all()->toArray(), 'tennguonkp', 'manguonkp');
             $model_phanloaict = array_column(dmphanloaicongtac::all()->toArray(), 'tencongtac', 'macongtac');
@@ -1118,8 +1121,9 @@ class tonghopluong_huyenController extends Controller
             }
             */
             foreach ($model as $chitiet) {
-                //$chitiet->madv = $a_dv[$chitiet->mathdv];
+                $chitiet->tendv = $model_donvi->where('madv',$chitiet->madv)->first()->tendv;
                 //$chitiet->maphanloai = $a_pl[$chitiet->madv];
+                $chitiet->tenlinhvuc = $m_linhvuc->where('makhoipb',$chitiet->linhvuchoatdong)->first()->tenkhoipb;
                 $chitiet->tennguonkp = isset($model_nguonkp[$chitiet->manguonkp]) ? $model_nguonkp[$chitiet->manguonkp] : '';
                 if($chitiet->mact == null){
                     $chitiet->tencongtac = isset($model_phanloaict[$chitiet->macongtac]) ? $model_phanloaict[$chitiet->macongtac] : '';
@@ -1138,6 +1142,17 @@ class tonghopluong_huyenController extends Controller
                     ->only(['mact', 'soluong', 'madv', 'maphanloai'])
                     ->all();
             });
+            $model_khoipb = $model->map(function ($data) {
+                return collect($data->toArray())
+                    ->only(['linhvuchoatdong', 'tenlinhvuc','maphanloai'])
+                    ->all();
+            });
+            $m_donvi = $model->map(function ($data) {
+                return collect($data->toArray())
+                    ->only(['madv','tendv','linhvuchoatdong','maphanloai'])
+                    ->all();
+            });
+            //$a_khoipb = a_unique($model_khoipb);
 
             $a_soluong = a_unique($model_data);
             //dd($a_soluong);
@@ -1153,6 +1168,7 @@ class tonghopluong_huyenController extends Controller
                     $col++;
                 }
             }
+
             //dd($model->toarray());
             return view('reports.tonghopluong.huyen.solieuth')
                 ->with('thongtin', $thongtin)
@@ -1160,7 +1176,9 @@ class tonghopluong_huyenController extends Controller
                 ->with('model_tonghop', $model_tonghop)
                 ->with('model_phanloai', $model_phanloai)
                 ->with('model_donvi', $model_donvi)
+                ->with('m_donvi', $m_donvi)
                 ->with('a_soluong', $a_soluong)
+                ->with('model_khoipb', $model_khoipb)
                 ->with('m_dv', $m_dv)
                 ->with('m_pl', $m_pl)
                 ->with('col', $col)
