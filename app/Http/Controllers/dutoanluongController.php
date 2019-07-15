@@ -314,7 +314,7 @@ class dutoanluongController extends Controller
                     $m_tnn[$key] = $this->getHeSoPc($a_pc, $m_tnn[$key], $inputs['luongcoban']);
                 }
             }
-            //dd($m_nb);
+            //dd($m_tnn);
             //bắt đầu tính lương
             //cán bộ đã nghỉ hưu thì các thông tin # bỏ qua
             //nghỉ hưu vào tháng 08, trong thông tin cán bộ  tháng 12 tăng lương => bỏ qua thông tin tăng lương

@@ -46,13 +46,13 @@
                                 <th class="text-center" style="width: 3%">STT</th>
                                 <th class="text-center">Phân loại</th>
                                 <th class="text-center">Nguồn kinh phí</th>
+                                <th class="text-center">Lĩnh vực</br>hoạt động</th>
                                 <th class="text-center">Phân loại</br>công tác</th>
-                                <th class="text-center">Lương ngạch</br>bậc</th>
-                                <th class="text-center">Phụ cấp</br>lương</th>
-                                <th class="text-center">Các khoản</br>phụ cấp</th>
-                                <th class="text-center">Tổng tiền</br>lương và phụ</br> cấp</th>
-                                <th class="text-center">Các khoản</br>giảm trừ</br>lương</th>
-                                <th class="text-center">Tổng khoản</br>nộp theo</br>lương</th>
+                                <th class="text-center">Lương</br>ngạch</br>bậc</th>
+                                <th class="text-center">Các</br>khoản</br>phụ cấp</th>
+                                <th class="text-center">Tổng</br>tiền</br>lương và</br>phụ cấp</th>
+                                <th class="text-center">Các</br>khoản</br>giảm trừ</br>lương</th>
+                                <th class="text-center">Tổng</br>khoản</br>nộp theo</br>lương</th>
                                 <th class="text-center">Thao tác</th>
                             </tr>
                         </thead>
@@ -63,11 +63,11 @@
                                         <td class="text-center">{{$key+1}}</td>
                                         <td>{{$value->tonghop == 'BANGLUONG' ? 'Bảng chi trả lương' : 'Bảng truy lĩnh lương'}}</td>
                                         <td>{{$value->tennguonkp}}</td>
+                                        <td>{{$value->linhvuchoatdong}}</td>
                                         <td>{{$value->tencongtac}}</td>
-                                        <td class="text-right">{{dinhdangso($value->heso)}}</td>
-                                        <td class="text-right">{{dinhdangso($value->hesopc)}}</td>
-                                        <td class="text-right">{{dinhdangso($value->tonghs - $value->heso - $value->hesopc)}}</td>
-                                        <td class="text-right">{{dinhdangso($value->tonghs)}}</td>
+                                        <td class="text-right">{{dinhdangso($value->st_heso + $value->st_vuotkhung)}}</td>
+                                        <td class="text-right">{{dinhdangso($value->luongtn - $value->st_heso- $value->st_vuotkhung)}}</td>
+                                        <td class="text-right">{{dinhdangso($value->luongtn)}}</td>
                                         <td class="text-right">{{dinhdangso($value->giaml)}}</td>
                                         <td class="text-right">{{dinhdangso($value->tongbh)}}</td>
                                         <td>
