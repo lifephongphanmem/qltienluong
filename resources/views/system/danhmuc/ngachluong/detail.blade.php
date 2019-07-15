@@ -61,7 +61,7 @@
                                         <td>
                                             @if(session('admin')->level == 'SA' || session('admin')->level == 'SSA')
                                                 <button type="button" onclick="edit('{{$value->msngbac}}')" class="btn btn-default btn-xs">
-                                                    <i class="fa fa-edit"></i>&nbsp; Chỉnh sửa</button>
+                                                    <i class="fa fa-edit"></i>&nbsp; Sửa</button>
 
                                                 <button type="button" onclick="cfDel('/danh_muc/ngach_bac/del_detail/{{$value->id}}')" class="btn btn-default btn-xs" data-target="#delete-modal-confirm" data-toggle="modal">
                                                     <i class="fa fa-trash-o"></i>&nbsp; Xóa</button>
@@ -97,7 +97,9 @@
                             <label class="form-control-label">Tên ngạch bậc</label>
                             {!!Form::text('tenngachluong', null, array('id' => 'tenngachluong','class' => 'form-control'))!!}
                         </div>
+                    </div>
 
+                    <div class="row">
                         <div class="col-md-6">
                             <label class="form-control-label">Hệ số lương</label>
                             {!!Form::text('heso', $model_nhom->heso, array('id' => 'heso','class' => 'form-control','data-mask'=>'fdecimal'))!!}
@@ -107,17 +109,29 @@
                             <label class="form-control-label">Hệ số lương lớn nhất</label>
                             {!!Form::text('hesolonnhat', $model_nhom->hesolonnhat, array('id' => 'hesolonnhat','class' => 'form-control','data-mask'=>'fdecimal'))!!}
                         </div>
+                    </div>
 
-                        <div class="col-md-6">
-                            <label class="form-control-label">Phần trăm vượt khung</label>
-                            {!!Form::text('vuotkhung', $model_nhom->vuotkhung, array('id' => 'vuotkhung','class' => 'form-control','data-mask'=>'fdecimal'))!!}
-                        </div>
+                    <div class="row">
 
                         <div class="col-md-6">
                             <label class="form-control-label">Bậc lương cao nhất</label>
                             {!!Form::text('baclonnhat', $model_nhom->baclonnhat, array('id' => 'baclonnhat','class' => 'form-control','data-mask'=>'fdecimal'))!!}
                         </div>
+                    </div>
 
+                    <div class="row">
+                        <div class="col-md-6">
+                            <label class="form-control-label">Bậc lương vượt khung</label>
+                            {!!Form::text('bacvuotkhung', $model_nhom->bacvuotkhung, array('id' => 'bacvuotkhung','class' => 'form-control','data-mask'=>'fdecimal'))!!}
+                        </div>
+
+                        <div class="col-md-6">
+                            <label class="form-control-label">Phần trăm vượt khung</label>
+                            {!!Form::text('vuotkhung', $model_nhom->vuotkhung, array('id' => 'vuotkhung','class' => 'form-control','data-mask'=>'fdecimal'))!!}
+                        </div>
+                    </div>
+
+                    <div class="row">
                         <div class="col-md-6">
                             <label class="form-control-label">Hệ số chênh lệnh</label>
                             {!!Form::text('hesochenhlech', $model_nhom->hesochenhlech, array('id' => 'hesochenhlech','class' => 'form-control','data-mask'=>'fdecimal'))!!}
@@ -126,7 +140,6 @@
                             <label class="form-control-label">Năm nâng lương</label>
                             {!!Form::text('namnb', $model_nhom->namnb, array('id' => 'namnb','class' => 'form-control','data-mask'=>'fdecimal'))!!}
                         </div>
-
                     </div>
                     <input type="hidden" id="id_del" name="id_del"/>
                     <input type="hidden" id="manhom" name="manhom" value="{{$manhom}}"/>
@@ -164,6 +177,7 @@
                     $('#tenngachluong').val(data.tenngachluong);
                     $('#heso').val(data.heso);
                     $('#vuotkhung').val(data.vuotkhung);
+                    $('#bacvuotkhung').val(data.bacvuotkhung);
                     $('#baclonnhat').val(data.baclonnhat);
                     $('#hesolonnhat').val(data.hesolonnhat);
                     $('#hesochenhlech').val(data.hesochenhlech);

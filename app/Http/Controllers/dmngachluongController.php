@@ -84,7 +84,6 @@ class dmngachluongController extends Controller
     {
         $inputs = $request->all();
         //$model_nhom = nhomngachluong::where('manhom',$inputs['manhom'])->first();
-
         $model = ngachluong::where('msngbac',$inputs['msngbac'])->first();
         if(count($model)>0){
             //update

@@ -68,7 +68,7 @@
                                                 <i class="fa fa-edit"></i>&nbsp; Chi tiết</a>
                                             @if(session('admin')->level == 'SA' || session('admin')->level == 'SSA')
                                                 <button type="button" onclick="editCV('{{$value->manhom}}')" class="btn btn-default btn-xs">
-                                                    <i class="fa fa-edit"></i>&nbsp; Chỉnh sửa</button>
+                                                    <i class="fa fa-edit"></i>&nbsp; Sửa</button>
 
                                                 <button type="button" onclick="cfDel('/danh_muc/ngach_luong/del/{{$value->id}}')" class="btn btn-default btn-xs" data-target="#delete-modal-confirm" data-toggle="modal">
                                                     <i class="fa fa-trash-o"></i>&nbsp; Xóa</button>
@@ -103,7 +103,9 @@
                             <label class="form-control-label">Tên nhóm ngạch bậc</label>
                             {!!Form::text('tennhom', null, array('id' => 'tennhom','class' => 'form-control'))!!}
                         </div>
+                    </div>
 
+                    <div class="row">
                         <div class="col-md-6">
                             <label class="form-control-label">Hệ số lương</label>
                             {!!Form::text('heso', 0, array('id' => 'heso','class' => 'form-control','data-mask'=>'fdecimal'))!!}
@@ -113,17 +115,28 @@
                             <label class="form-control-label">Hệ số lương lớn nhất</label>
                             {!!Form::text('hesolonnhat', 0, array('id' => 'hesolonnhat','class' => 'form-control','data-mask'=>'fdecimal'))!!}
                         </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <label class="form-control-label">Bậc lương cao nhất</label>
+                            {!!Form::text('baclonnhat', 1, array('id' => 'baclonnhat','class' => 'form-control','data-mask'=>'fdecimal'))!!}
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <label class="form-control-label">Bậc lương vượt khung</label>
+                            {!!Form::text('bacvuotkhung', 1, array('id' => 'bacvuotkhung','class' => 'form-control','data-mask'=>'fdecimal'))!!}
+                        </div>
 
                         <div class="col-md-6">
                             <label class="form-control-label">Phần trăm vượt khung</label>
                             {!!Form::text('vuotkhung', 0, array('id' => 'vuotkhung','class' => 'form-control','data-mask'=>'fdecimal'))!!}
                         </div>
+                    </div>
 
-                        <div class="col-md-6">
-                            <label class="form-control-label">Bậc lương cao nhất</label>
-                            {!!Form::text('baclonnhat', 1, array('id' => 'baclonnhat','class' => 'form-control','data-mask'=>'fdecimal'))!!}
-                        </div>
-
+                    <div class="row">
                         <div class="col-md-6">
                             <label class="form-control-label">Hệ số chênh lệnh</label>
                             {!!Form::text('hesochenhlech', 0, array('id' => 'hesochenhlech','class' => 'form-control','data-mask'=>'fdecimal'))!!}
@@ -132,10 +145,16 @@
                             <label class="form-control-label">Năm nâng lương</label>
                             {!!Form::text('namnb', 0, array('id' => 'namnb','class' => 'form-control','data-mask'=>'fdecimal'))!!}
                         </div>
+                    </div>
+
+                    <div class="row">
                         <div class="col-md-12">
                             <label class="form-control-label">Phân loại nhóm ngạch lương</label>
                             {!!Form::select('phanloai',$a_phanloai, null, array('id' => 'phanloai','class' => 'form-control'))!!}
                         </div>
+                    </div>
+
+                    <div class="row">
                         <div class="col-md-12">
                             <label class="form-control-label">Ghi chú</label>
                             {!!Form::textarea('ghichu', null, array('id' => 'ghichu','class' => 'form-control','rows'=>'3'))!!}
@@ -179,6 +198,7 @@
                     $('#ghichu').val(data.ghichu);
                     $('#heso').val(data.heso);
                     $('#vuotkhung').val(data.vuotkhung);
+                    $('#bacvuotkhung').val(data.bacvuotkhung);
                     $('#baclonnhat').val(data.baclonnhat);
                     $('#hesolonnhat').val(data.hesolonnhat);
                     $('#hesochenhlech').val(data.hesochenhlech);
