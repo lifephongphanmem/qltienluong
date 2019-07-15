@@ -291,18 +291,14 @@ class tonghopluong_donviController extends Controller
         if (Session::has('admin')) {
             $model = tonghopluong_donvi_chitiet::where('mathdv', $mathdv)->get();
             $model_thongtin = tonghopluong_donvi::where('mathdv', $mathdv)->first();
-            $model_nguonkp = array_column(dmnguonkinhphi::all()->toArray(), 'tennguonkp', 'manguonkp');
-            $model_phanloaict = array_column(dmphanloaicongtac::all()->toArray(), 'tencongtac', 'macongtac');
-            $model_ct = array_column(dmphanloaict::all()->toArray(), 'tenct', 'mact');
+            $a_nguonkp = getNguonKP(false);
+            $a_ct = getPhanLoaiCT(false);
+            $a_lv = getLinhVucHoatDong(false);
 
             foreach ($model as $chitiet) {
-                $chitiet->tennguonkp = isset($model_nguonkp[$chitiet->manguonkp]) ? $model_nguonkp[$chitiet->manguonkp] : '';
-                if($chitiet->mact == null){
-                    $chitiet->tencongtac = isset($model_phanloaict[$chitiet->macongtac]) ? $model_phanloaict[$chitiet->macongtac] : '';
-                }else{
-                    $chitiet->tencongtac = isset($model_ct[$chitiet->mact]) ? $model_ct[$chitiet->mact] : '';
-                }
-
+                $chitiet->tennguonkp = isset($a_nguonkp[$chitiet->manguonkp]) ? $a_nguonkp[$chitiet->manguonkp] : '';
+                $chitiet->tencongtac = isset($a_ct[$chitiet->mact]) ? $a_ct[$chitiet->mact] : '';
+                $chitiet->linhvuchoatdong = isset($a_lv[$chitiet->linhvuchoatdong]) ? $a_lv[$chitiet->linhvuchoatdong] : '';
                 $chitiet->tongtl = $chitiet->tonghs;
                 $chitiet->tongbh = $chitiet->stbhxh_dv + $chitiet->stbhyt_dv + $chitiet->stkpcd_dv + $chitiet->stbhtn_dv;
             }
