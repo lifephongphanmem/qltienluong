@@ -2192,8 +2192,8 @@ class bangluongController extends Controller
                 }
                 case 'ngaycong': {
                     $inputs['tongngaycong'] = chkDbl($inputs['tongngaycong']) < 1 ? 1 : chkDbl($inputs['tongngaycong']);
-                    $inputs['phantramtinh'] = chkDbl($inputs['tongngaycong']) <= 0 || chkDbl($inputs['tongngaycong'])>100
-                            ? 100 : chkDbl($inputs['tongngaycong']);
+                    $inputs['phantramtinh'] = chkDbl($inputs['phantramtinh']) <= 0 || chkDbl($inputs['phantramtinh'])>100
+                            ? 100 : chkDbl($inputs['phantramtinh']);
                     $inputs['ngaycong'] = chkDbl($inputs['ngaycong']);
 
                     $heso = ($inputs['ngaycong'] * $inputs['phantramtinh']) / ($inputs['tongngaycong'] * 100);
@@ -2210,6 +2210,7 @@ class bangluongController extends Controller
                                 $sotien += $cb->$pc_st;
                             }
                         }
+                        //dd($inputs);
                         $trichnop = round($sotien * $heso,$inputs['lamtron']);
 
                         $a_data[] = array('mabl' => $inputs['mabl'], 'congtac' => $inputs['phanloai'], 'ttl' => $trichnop,
