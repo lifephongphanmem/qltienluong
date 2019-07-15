@@ -20,9 +20,11 @@
                     <tr>
                         <th width="2%" style="text-align: center">STT</th>
                         <th style="text-align: center">Mã ngạch</th>
-                        <th style="text-align: center">Tên mã ngạch lương</th>
-                        <th style="text-align: center">Hệ số</br>bắt đầu</th>
+                        <th style="text-align: center">Tên ngạch lương</th>
                         <th style="text-align: center">Số năm</br>nâng lương</th>
+                        <th style="text-align: center">Hệ số</br>bắt đầu</th>
+                        <th style="text-align: center">Hệ số</br>lớn nhất</th>
+                        <th style="text-align: center">Bậc lương</br>vượt khung</th>
                         <th style="text-align: center">Thao tác</th>
                     </tr>
                     </thead>
@@ -33,8 +35,10 @@
                             <td style="text-align: center">{{$i++}}</td>
                             <td class="text-center" name="msngbac">{{$tt->msngbac}}</td>
                             <td name="tenngachluong">{{$tt->tenngachluong}}</td>
-                            <td class="text-center" name="heso">{{$tt->heso}}</td>
                             <td class="text-center" name="namnb">{{$tt->namnb}}</td>
+                            <td class="text-center" name="heso">{{$tt->heso}}</td>
+                            <td class="text-center" name="heso">{{$tt->hesolonnhat}}</td>
+                            <td class="text-center" name="heso">{{$tt->bacvuotkhung}}</td>
                             <td>
                                 <button type="button" onclick="set_vitri(this)" class="btn btn-default btn-xs mbs"><i class="fa fa-trash-o"></i>&nbsp;
                                     Chọn</button>

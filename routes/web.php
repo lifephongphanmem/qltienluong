@@ -178,6 +178,8 @@ Route::group(['prefix'=>'danh_muc'],function(){
         Route::get('del_detail/{id}','dmngachluongController@destroy_detail');
         Route::post('store_detail','dmngachluongController@store_detail');//insert + update
         Route::get('get_detail','dmngachluongController@getinfo_detail');
+
+        Route::get('danhsach','dmngachluongController@danhsach');
     });
 
     Route::group(['prefix'=>'tieu_muc'],function(){
