@@ -36,7 +36,8 @@ class dmphanloaictController extends Controller
             die(json_encode($result));
         }
         $inputs = $request->all();
-        $inputs['macongtac']=getdate()[0];
+
+        $inputs['macongtac']= getdate()[0];
         dmphanloaicongtac::create($inputs);
         //Trả lại kết quả
         $result['message'] = 'Thao tác thành công.';
@@ -129,8 +130,22 @@ class dmphanloaictController extends Controller
             );
             die(json_encode($result));
         }
+
         $inputs = $request->all();
-        $inputs['mact']=getdate()[0];
+        $model_chk = dmphanloaict::all();
+        foreach($model_chk as $ct){
+            if(chuanhoatruong(trim($ct->tenct)) == chuanhoatruong(trim($inputs['tenct']))){
+                $result = array(
+                    'status' => 'fail',
+                    'message' => 'Phân loại công tác này đã có trong phần mềm.',
+                );
+                die(json_encode($result));
+            }
+        }
+
+
+
+        $inputs['mact'] = getdate()[0];
         dmphanloaict::create($inputs);
         //Trả lại kết quả
         $result['message'] = 'Thao tác thành công.';

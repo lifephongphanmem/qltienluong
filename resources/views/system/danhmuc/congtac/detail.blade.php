@@ -288,6 +288,8 @@
                         success: function (data) {
                             if (data.status == 'success') {
                                 location.reload();
+                            }else{
+                                toastr.error(data.message);
                             }
                         },
                         error: function(message){
