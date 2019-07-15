@@ -24,7 +24,7 @@ class tonghopnguon_huyenController extends Controller
     public function index(){
         if (Session::has('admin')) {
             $madv = session('admin')->madv;
-            $model_nguon = nguonkinhphi_huyen::where('macqcq', $madv)->where('trangthai','DAGUI')->get();
+            $model_nguon = nguonkinhphi::where('macqcq', $madv)->where('trangthai','DAGUI')->get();
             $model_nguon_tinh = nguonkinhphi_tinh::where('madv', $madv)->get();
             //$model_nguon_khoi = nguonkinhphi_khoi::where('madv', $madv)->get();
             $model = dmthongtuquyetdinh::all();

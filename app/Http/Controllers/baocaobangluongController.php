@@ -652,7 +652,7 @@ class baocaobangluongController extends Controller
                 foreach (getColTongHop() as $ct) {
                     $ma = 'hs'.$ct;
                     if($chitiet->luongcoban > 0)
-                        $chitiet->$ma = $chitiet->$ct / $chitiet->luongcoban;
+                        $chitiet->$ma = $chitiet->$ct ;
                     else
                         $chitiet->$ma = 0;
                 }
@@ -756,7 +756,7 @@ class baocaobangluongController extends Controller
                 $chitiet->tongbh = $chitiet->stbhxh_dv + $chitiet->stbhyt_dv + $chitiet->stkpcd_dv + $chitiet->stbhtn_dv;
                 foreach (getColTongHop() as $ct) {
                     $ma = 'hs'.$ct;
-                    $chitiet->$ma = $chitiet->$ct / $chitiet->luongcoban;
+                    $chitiet->$ma = $chitiet->$ct ;
                 }
             }
             $model_data = $model->map(function ($data) {
@@ -866,7 +866,7 @@ class baocaobangluongController extends Controller
                 $chitiet->tongbh = $chitiet->stbhxh_dv + $chitiet->stbhyt_dv + $chitiet->stkpcd_dv + $chitiet->stbhtn_dv;
                 foreach (getColTongHop() as $ct) {
                     $ma = 'hs'.$ct;
-                    $chitiet->$ma = $chitiet->$ct / $chitiet->luongcoban;
+                    $chitiet->$ma = $chitiet->$ct ;
                 }
             }
             $model_data = $model->map(function ($data) {
@@ -945,7 +945,7 @@ class baocaobangluongController extends Controller
                 $chitiet->tongbh = $chitiet->stbhxh_dv + $chitiet->stbhyt_dv + $chitiet->stkpcd_dv + $chitiet->stbhtn_dv;
                 foreach (getColTongHop() as $ct) {
                     $ma = 'hs'.$ct;
-                    $chitiet->$ma = $chitiet->$ct / $chitiet->luongcoban;
+                    $chitiet->$ma = $chitiet->$ct;
                 }
             }
             $model_data = $model->map(function ($data) {

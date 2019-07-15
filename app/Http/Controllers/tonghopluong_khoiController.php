@@ -157,15 +157,15 @@ class tonghopluong_khoiController extends Controller
             //$model = tonghopluong_donvi_chitiet::wherein('mathdv', array_column($model_tonghop->toarray(),'mathdv'))->get();
             $model = tonghopluong_donvi_chitiet::join('tonghopluong_donvi','tonghopluong_donvi_chitiet.mathdv','tonghopluong_donvi.mathdv')
             ->join('dmdonvi','dmdonvi.madv','tonghopluong_donvi.madv')
-            ->select('maphanloai','mact',DB::raw('SUM(soluong) as soluong'),DB::raw('SUM(heso/luongcoban) as heso'),DB::raw('SUM(hesobl/luongcoban) as hesobl'),
-                DB::raw('SUM(hesopc/luongcoban) as hesopc'),DB::raw('SUM(hesott/luongcoban) as hesott'),DB::raw('SUM(vuotkhung/luongcoban) as vuotkhung'),DB::raw('SUM(tonghopluong_donvi_chitiet.pcct/luongcoban) as pcct'),
-                DB::raw('SUM(tonghopluong_donvi_chitiet.pckct/luongcoban) as pckct'),DB::raw('SUM(tonghopluong_donvi_chitiet.pck/luongcoban) as pck'),DB::raw('SUM(tonghopluong_donvi_chitiet.pccv/luongcoban) as pccv'),DB::raw('SUM(tonghopluong_donvi_chitiet.pckv/luongcoban) as pckv'),
-                DB::raw('SUM(tonghopluong_donvi_chitiet.pcth/luongcoban) as pcth'), DB::raw('SUM(tonghopluong_donvi_chitiet.pcdd/luongcoban) as pcdd'), DB::raw('SUM(tonghopluong_donvi_chitiet.pcdh/luongcoban) as pcdh'),DB::raw('SUM(tonghopluong_donvi_chitiet.pcld/luongcoban) as pcld'),
-                DB::raw('SUM(tonghopluong_donvi_chitiet.pcdbqh/luongcoban) as pcdbqh'), DB::raw('SUM(tonghopluong_donvi_chitiet.pcudn/luongcoban) as pcudn'), DB::raw('SUM(tonghopluong_donvi_chitiet.pctn/luongcoban) as pctn'),
-                DB::raw('SUM(tonghopluong_donvi_chitiet.pctnn/luongcoban) as pctnn'), DB::raw('SUM(tonghopluong_donvi_chitiet.pcdbn/luongcoban) as pcdbn'), DB::raw('SUM(tonghopluong_donvi_chitiet.pcvk/luongcoban) as pcvk'), DB::raw('SUM(tonghopluong_donvi_chitiet.pckn/luongcoban) as pckn'),
-                DB::raw('SUM(tonghopluong_donvi_chitiet.pcdang/luongcoban) as pcdang'), DB::raw('SUM(tonghopluong_donvi_chitiet.pccovu/luongcoban) as pccovu'), DB::raw('SUM(tonghopluong_donvi_chitiet.pclt/luongcoban) as pclt'),DB::raw('SUM(tonghopluong_donvi_chitiet.pcd/luongcoban) as pcd'),
-                DB::raw('SUM(tonghopluong_donvi_chitiet.pctr/luongcoban) as pctr'), DB::raw('SUM(tonghopluong_donvi_chitiet.pctdt/luongcoban) as pctdt'), DB::raw('SUM(tonghopluong_donvi_chitiet.pctnvk/luongcoban) as pctnvk'),
-                DB::raw('SUM(tonghopluong_donvi_chitiet.pcbdhdcu/luongcoban) as pcbdhdcu'),DB::raw('SUM(tonghopluong_donvi_chitiet.pcthni/luongcoban) as pcthni') ,'tonghopluong_donvi_chitiet.tonghs', 'tonghopluong_donvi_chitiet.giaml',
+            ->select('maphanloai','mact',DB::raw('SUM(soluong) as soluong'),DB::raw('SUM(heso) as heso'),DB::raw('SUM(hesobl) as hesobl'),
+                DB::raw('SUM(hesopc) as hesopc'),DB::raw('SUM(hesott) as hesott'),DB::raw('SUM(vuotkhung) as vuotkhung'),DB::raw('SUM(tonghopluong_donvi_chitiet.pcct) as pcct'),
+                DB::raw('SUM(tonghopluong_donvi_chitiet.pckct) as pckct'),DB::raw('SUM(tonghopluong_donvi_chitiet.pck) as pck'),DB::raw('SUM(tonghopluong_donvi_chitiet.pccv) as pccv'),DB::raw('SUM(tonghopluong_donvi_chitiet.pckv) as pckv'),
+                DB::raw('SUM(tonghopluong_donvi_chitiet.pcth) as pcth'), DB::raw('SUM(tonghopluong_donvi_chitiet.pcdd) as pcdd'), DB::raw('SUM(tonghopluong_donvi_chitiet.pcdh) as pcdh'),DB::raw('SUM(tonghopluong_donvi_chitiet.pcld) as pcld'),
+                DB::raw('SUM(tonghopluong_donvi_chitiet.pcdbqh) as pcdbqh'), DB::raw('SUM(tonghopluong_donvi_chitiet.pcudn) as pcudn'), DB::raw('SUM(tonghopluong_donvi_chitiet.pctn) as pctn'),
+                DB::raw('SUM(tonghopluong_donvi_chitiet.pctnn) as pctnn'), DB::raw('SUM(tonghopluong_donvi_chitiet.pcdbn) as pcdbn'), DB::raw('SUM(tonghopluong_donvi_chitiet.pcvk) as pcvk'), DB::raw('SUM(tonghopluong_donvi_chitiet.pckn) as pckn'),
+                DB::raw('SUM(tonghopluong_donvi_chitiet.pcdang) as pcdang'), DB::raw('SUM(tonghopluong_donvi_chitiet.pccovu) as pccovu'), DB::raw('SUM(tonghopluong_donvi_chitiet.pclt) as pclt'),DB::raw('SUM(tonghopluong_donvi_chitiet.pcd) as pcd'),
+                DB::raw('SUM(tonghopluong_donvi_chitiet.pctr) as pctr'), DB::raw('SUM(tonghopluong_donvi_chitiet.pctdt) as pctdt'), DB::raw('SUM(tonghopluong_donvi_chitiet.pctnvk) as pctnvk'),
+                DB::raw('SUM(tonghopluong_donvi_chitiet.pcbdhdcu) as pcbdhdcu'),DB::raw('SUM(tonghopluong_donvi_chitiet.pcthni) as pcthni') ,'tonghopluong_donvi_chitiet.tonghs', 'tonghopluong_donvi_chitiet.giaml',
                 DB::raw('SUM(tonghopluong_donvi_chitiet.luongtn) as luongtn'), DB::raw('SUM(tonghopluong_donvi_chitiet.stbhxh_dv) as stbhxh_dv'), DB::raw('SUM(tonghopluong_donvi_chitiet.stbhyt_dv) as stbhyt_dv'),DB::raw('SUM(tonghopluong_donvi_chitiet.stkpcd_dv) as stkpcd_dv'),
                 DB::raw('SUM(tonghopluong_donvi_chitiet.stbhtn_dv) as stbhtn_dv'), DB::raw('SUM(tonghopluong_donvi_chitiet.ttbh_dv) as ttbh_dv'))
             ->wherein('tonghopluong_donvi_chitiet.mathdv', array_column($model_tonghop->toarray(),'mathdv'))
@@ -285,15 +285,15 @@ class tonghopluong_khoiController extends Controller
             //$model = tonghopluong_donvi_chitiet::wherein('mathdv', array_column($model_tonghop->toarray(),'mathdv'))->get();
             $model = tonghopluong_donvi_chitiet::join('tonghopluong_donvi','tonghopluong_donvi_chitiet.mathdv','tonghopluong_donvi.mathdv')
                 ->join('dmdonvi','dmdonvi.madv','tonghopluong_donvi.madv')
-                ->select('maphanloai','mact',DB::raw('SUM(soluong) as soluong'),DB::raw('SUM(heso/luongcoban) as heso'),DB::raw('SUM(hesobl/luongcoban) as hesobl'),
-                    DB::raw('SUM(hesopc/luongcoban) as hesopc'),DB::raw('SUM(hesott/luongcoban) as hesott'),DB::raw('SUM(vuotkhung/luongcoban) as vuotkhung'),DB::raw('SUM(tonghopluong_donvi_chitiet.pcct/luongcoban) as pcct'),
-                    DB::raw('SUM(tonghopluong_donvi_chitiet.pckct/luongcoban) as pckct'),DB::raw('SUM(tonghopluong_donvi_chitiet.pck/luongcoban) as pck'),DB::raw('SUM(tonghopluong_donvi_chitiet.pccv/luongcoban) as pccv'),DB::raw('SUM(tonghopluong_donvi_chitiet.pckv/luongcoban) as pckv'),
-                    DB::raw('SUM(tonghopluong_donvi_chitiet.pcth/luongcoban) as pcth'), DB::raw('SUM(tonghopluong_donvi_chitiet.pcdd/luongcoban) as pcdd'), DB::raw('SUM(tonghopluong_donvi_chitiet.pcdh/luongcoban) as pcdh'),DB::raw('SUM(tonghopluong_donvi_chitiet.pcld/luongcoban) as pcld'),
-                    DB::raw('SUM(tonghopluong_donvi_chitiet.pcdbqh/luongcoban) as pcdbqh'), DB::raw('SUM(tonghopluong_donvi_chitiet.pcudn/luongcoban) as pcudn'), DB::raw('SUM(tonghopluong_donvi_chitiet.pctn/luongcoban) as pctn'),
-                    DB::raw('SUM(tonghopluong_donvi_chitiet.pctnn/luongcoban) as pctnn'), DB::raw('SUM(tonghopluong_donvi_chitiet.pcdbn/luongcoban) as pcdbn'), DB::raw('SUM(tonghopluong_donvi_chitiet.pcvk/luongcoban) as pcvk'), DB::raw('SUM(tonghopluong_donvi_chitiet.pckn/luongcoban) as pckn'),
-                    DB::raw('SUM(tonghopluong_donvi_chitiet.pcdang/luongcoban) as pcdang'), DB::raw('SUM(tonghopluong_donvi_chitiet.pccovu/luongcoban) as pccovu'), DB::raw('SUM(tonghopluong_donvi_chitiet.pclt/luongcoban) as pclt'),DB::raw('SUM(tonghopluong_donvi_chitiet.pcd/luongcoban) as pcd'),
-                    DB::raw('SUM(tonghopluong_donvi_chitiet.pctr/luongcoban) as pctr'), DB::raw('SUM(tonghopluong_donvi_chitiet.pctdt/luongcoban) as pctdt'), DB::raw('SUM(tonghopluong_donvi_chitiet.pctnvk/luongcoban) as pctnvk'),
-                    DB::raw('SUM(tonghopluong_donvi_chitiet.pcbdhdcu/luongcoban) as pcbdhdcu'),DB::raw('SUM(tonghopluong_donvi_chitiet.pcthni/luongcoban) as pcthni') ,'tonghopluong_donvi_chitiet.tonghs', 'tonghopluong_donvi_chitiet.giaml',
+                ->select('maphanloai','mact',DB::raw('SUM(soluong) as soluong'),DB::raw('SUM(heso) as heso'),DB::raw('SUM(hesobl) as hesobl'),
+                    DB::raw('SUM(hesopc) as hesopc'),DB::raw('SUM(hesott) as hesott'),DB::raw('SUM(vuotkhung) as vuotkhung'),DB::raw('SUM(tonghopluong_donvi_chitiet.pcct) as pcct'),
+                    DB::raw('SUM(tonghopluong_donvi_chitiet.pckct) as pckct'),DB::raw('SUM(tonghopluong_donvi_chitiet.pck) as pck'),DB::raw('SUM(tonghopluong_donvi_chitiet.pccv) as pccv'),DB::raw('SUM(tonghopluong_donvi_chitiet.pckv) as pckv'),
+                    DB::raw('SUM(tonghopluong_donvi_chitiet.pcth) as pcth'), DB::raw('SUM(tonghopluong_donvi_chitiet.pcdd) as pcdd'), DB::raw('SUM(tonghopluong_donvi_chitiet.pcdh) as pcdh'),DB::raw('SUM(tonghopluong_donvi_chitiet.pcld) as pcld'),
+                    DB::raw('SUM(tonghopluong_donvi_chitiet.pcdbqh) as pcdbqh'), DB::raw('SUM(tonghopluong_donvi_chitiet.pcudn) as pcudn'), DB::raw('SUM(tonghopluong_donvi_chitiet.pctn) as pctn'),
+                    DB::raw('SUM(tonghopluong_donvi_chitiet.pctnn) as pctnn'), DB::raw('SUM(tonghopluong_donvi_chitiet.pcdbn) as pcdbn'), DB::raw('SUM(tonghopluong_donvi_chitiet.pcvk) as pcvk'), DB::raw('SUM(tonghopluong_donvi_chitiet.pckn) as pckn'),
+                    DB::raw('SUM(tonghopluong_donvi_chitiet.pcdang) as pcdang'), DB::raw('SUM(tonghopluong_donvi_chitiet.pccovu) as pccovu'), DB::raw('SUM(tonghopluong_donvi_chitiet.pclt) as pclt'),DB::raw('SUM(tonghopluong_donvi_chitiet.pcd) as pcd'),
+                    DB::raw('SUM(tonghopluong_donvi_chitiet.pctr) as pctr'), DB::raw('SUM(tonghopluong_donvi_chitiet.pctdt) as pctdt'), DB::raw('SUM(tonghopluong_donvi_chitiet.pctnvk) as pctnvk'),
+                    DB::raw('SUM(tonghopluong_donvi_chitiet.pcbdhdcu) as pcbdhdcu'),DB::raw('SUM(tonghopluong_donvi_chitiet.pcthni) as pcthni') ,'tonghopluong_donvi_chitiet.tonghs', 'tonghopluong_donvi_chitiet.giaml',
                     DB::raw('SUM(tonghopluong_donvi_chitiet.luongtn) as luongtn'), DB::raw('SUM(tonghopluong_donvi_chitiet.stbhxh_dv) as stbhxh_dv'), DB::raw('SUM(tonghopluong_donvi_chitiet.stbhyt_dv) as stbhyt_dv'),DB::raw('SUM(tonghopluong_donvi_chitiet.stkpcd_dv) as stkpcd_dv'),
                     DB::raw('SUM(tonghopluong_donvi_chitiet.stbhtn_dv) as stbhtn_dv'), DB::raw('SUM(tonghopluong_donvi_chitiet.ttbh_dv) as ttbh_dv'))
                 ->wherein('tonghopluong_donvi_chitiet.mathdv', array_column($model_tonghop->toarray(),'mathdv'))
@@ -434,7 +434,7 @@ class tonghopluong_khoiController extends Controller
                 $chitiet->tongbh = $chitiet->stbhxh_dv + $chitiet->stbhyt_dv + $chitiet->stkpcd_dv + $chitiet->stbhtn_dv;
                 foreach (getColTongHop() as $ct) {
                     $ma = 'hs'.$ct;
-                    $chitiet->$ma = $chitiet->$ct / $chitiet->luongcoban;
+                    $chitiet->$ma = $chitiet->$ct ;
                 }
             }
             $model_data = $model->map(function ($data) {

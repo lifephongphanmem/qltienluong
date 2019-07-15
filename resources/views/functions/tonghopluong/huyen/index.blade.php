@@ -79,49 +79,63 @@
                         <?php $i=1;?>
                         @if(isset($model))
                             @foreach($model as $value)
-                                <tr class="{{getTextStatus($value['trangthai'])}}">
-                                    <td class="text-center">{{$i++}}</td>
-                                    <td class="text-center">{{$value['thang'].'/'.$nam}}</td>
-                                    <td>{{$value['noidung']}}</td>
-                                    <td class="text-center bold"> {{$value['dvgui'].'/'.$value['sldv']}}</td>
-                                    <td class="text-center bold">{{$a_trangthai[$value['trangthai']]}}</td>
-                                    <td>
-                                        @if ($value['mathdv'] != NULL)
-                                            <!--a href="{{url($furl.'tonghop?thang='.$value['thang'].'&nam='.$nam)}}" class="btn btn-default btn-xs" target="_blank"-->
-                                        <a href="{{url('/chuc_nang/tong_hop_luong/khoi/tonghop_khoi?thang='.$value['thang'].'&nam='.$nam.'&madv='.session('admin')->madv)}}" class="btn btn-default btn-sm" TARGET="_blank">
+                                @if($value['thang'] != '')
+                                    <tr class="{{getTextStatus($value['trangthai'])}}">
+                                        <td class="text-center">{{$i++}}</td>
+                                        <td class="text-center">{{$value['thang'].'/'.$nam}}</td>
+                                        <td>{{$value['noidung']}}</td>
+                                        <td class="text-center bold"> {{$value['dvgui'].'/'.$value['sldv']}}</td>
+                                        <td class="text-center bold">{{$a_trangthai[$value['trangthai']]}}</td>
+                                        <td>
+                                            @if ($value['mathdv'] != NULL)
+                                                    <!--a href="{{url($furl.'tonghop?thang='.$value['thang'].'&nam='.$nam)}}" class="btn btn-default btn-xs" target="_blank"-->
+                                            <a href="{{url('/chuc_nang/tong_hop_luong/khoi/tonghop_khoi?thang='.$value['thang'].'&nam='.$nam.'&madv='.session('admin')->madv)}}" class="btn btn-default btn-sm" TARGET="_blank">
                                                 <i class="fa fa-print"></i>&nbsp; Số liệu tổng hợp</a>
                                             <!--a href="{{url($furl.'tonghop_diaban?thang='.$value['thang'].'&nam='.$nam)}}" class="btn btn-default btn-xs" target="_blank">
-                                                <i class="fa fa-print"></i>&nbsp; Số liệu địa bàn</a-->
+                                                    <i class="fa fa-print"></i>&nbsp; Số liệu địa bàn</a-->
                                             <a href="{{url('/chuc_nang/xem_du_lieu/huyen?thang='.$value['thang'].'&nam='.$nam.'&trangthai=ALL&phanloai=ALL')}}" class="btn btn-default btn-xs">
                                                 <i class="fa fa-list-alt"></i>&nbsp; Số liệu chi tiết</a>
 
-                                        @else
-                                            @if($value['trangthai'] != 'CHUADL')
-                                                <a href="{{url($furl.'tonghop_huyen?thang='.$value['thang'].'&nam='.$nam)}}" class="btn btn-default btn-xs" target="_blank">
-                                                    <!--a href="{{url('/chuc_nang/tong_hop_luong/khoi/tonghop_khoi?thang='.$value['thang'].'&nam='.$nam.'&madv='.session('admin')->madv)}}" class="btn btn-default btn-sm" TARGET="_blank"-->
-                                                    <i class="fa fa-print"></i>&nbsp; Số liệu tổng hợp</a>
-                                                <!--a href="{{url($furl.'tonghop_diaban?thang='.$value['thang'].'&nam='.$nam)}}" class="btn btn-default btn-xs" target="_blank">
-                                                    <i class="fa fa-print"></i>&nbsp; Số liệu địa bàn</a-->
-
-                                                @if($value['trangthai'] != 'CHUADAYDU')
-                                                    <a href="{{url('/chuc_nang/xem_du_lieu/huyen?thang='.$value['thang'].'&nam='.$nam.'&trangthai=ALL&phanloai=ALL')}}" class="btn btn-default btn-xs">
-                                                        <i class="fa fa-list-alt"></i>&nbsp; Số liệu chi tiết</a>
-                                                    <button type="button" class="btn btn-default btn-xs" onclick="confirmChuyen('{{$value['thang']}}','{{$nam}}')" data-target="#chuyen-modal" data-toggle="modal"><i class="fa fa-share-square-o"></i>&nbsp;
-                                                        Gửi dữ liệu</button>
-                                                @else
-                                                    <button disabled type="button" class="btn btn-default btn-xs" onclick="confirmChuyen('{{$value['thang']}}','{{$nam}}')" data-target="#chuyen-modal" data-toggle="modal"><i class="fa fa-share-square-o"></i>&nbsp;
-                                                        Gửi dữ liệu</button>
-                                                    <a href="{{url('/chuc_nang/xem_du_lieu/huyen?thang='.$value['thang'].'&nam='.$nam.'&trangthai=CHOGUI&phanloai=ALL')}}" class="btn btn-default btn-xs">
-                                                        <i class="fa fa-list-alt"></i>&nbsp; Đơn vị chưa gửi dữ liệu</a>
-                                                @endif
-
                                             @else
-                                                <a href="{{url('/chuc_nang/xem_du_lieu/huyen?thang='.$value['thang'].'&nam='.$nam.'&trangthai=ALL&phanloai=ALL')}}" class="btn btn-default btn-xs">
-                                                    <i class="fa fa-stack-overflow"></i>&nbsp; Chưa có dữ liệu</a>
+                                                @if($value['trangthai'] != 'CHUADL')
+                                                    <a href="{{url($furl.'tonghop_huyen?thang='.$value['thang'].'&nam='.$nam)}}" class="btn btn-default btn-xs" target="_blank">
+                                                        <!--a href="{{url('/chuc_nang/tong_hop_luong/khoi/tonghop_khoi?thang='.$value['thang'].'&nam='.$nam.'&madv='.session('admin')->madv)}}" class="btn btn-default btn-sm" TARGET="_blank"-->
+                                                        <i class="fa fa-print"></i>&nbsp; Số liệu tổng hợp</a>
+                                                    <!--a href="{{url($furl.'tonghop_diaban?thang='.$value['thang'].'&nam='.$nam)}}" class="btn btn-default btn-xs" target="_blank">
+                                                        <i class="fa fa-print"></i>&nbsp; Số liệu địa bàn</a-->
+
+                                                    @if($value['trangthai'] != 'CHUADAYDU')
+                                                        <a href="{{url('/chuc_nang/xem_du_lieu/huyen?thang='.$value['thang'].'&nam='.$nam.'&trangthai=ALL&phanloai=ALL')}}" class="btn btn-default btn-xs">
+                                                            <i class="fa fa-list-alt"></i>&nbsp; Số liệu chi tiết</a>
+                                                        <button type="button" class="btn btn-default btn-xs" onclick="confirmChuyen('{{$value['thang']}}','{{$nam}}')" data-target="#chuyen-modal" data-toggle="modal"><i class="fa fa-share-square-o"></i>&nbsp;
+                                                            Gửi dữ liệu</button>
+                                                    @else
+                                                        <button disabled type="button" class="btn btn-default btn-xs" onclick="confirmChuyen('{{$value['thang']}}','{{$nam}}')" data-target="#chuyen-modal" data-toggle="modal"><i class="fa fa-share-square-o"></i>&nbsp;
+                                                            Gửi dữ liệu</button>
+                                                        <a href="{{url('/chuc_nang/xem_du_lieu/huyen?thang='.$value['thang'].'&nam='.$nam.'&trangthai=CHOGUI&phanloai=ALL')}}" class="btn btn-default btn-xs">
+                                                            <i class="fa fa-list-alt"></i>&nbsp; Đơn vị chưa gửi dữ liệu</a>
+                                                    @endif
+
+                                                @else
+                                                    <a href="{{url('/chuc_nang/xem_du_lieu/huyen?thang='.$value['thang'].'&nam='.$nam.'&trangthai=ALL&phanloai=ALL')}}" class="btn btn-default btn-xs">
+                                                        <i class="fa fa-stack-overflow"></i>&nbsp; Chưa có dữ liệu</a>
+                                                @endif
                                             @endif
-                                        @endif
-                                    </td>
-                                </tr>
+                                        </td>
+                                    </tr>
+                                @else
+                                    <tr class="{{getTextStatus($value['trangthai'])}}">
+                                        <td class="text-center">{{$i++}}</td>
+                                        <td class="text-center">{{$nam}}</td>
+                                        <td>{{$value['noidung']}}</td>
+                                        <td class="text-center bold"></td>
+                                        <td class="text-center bold"></td>
+                                        <td>
+                                            <a href="{{url($furl.'tonghopnam?nam='.$nam)}}" class="btn btn-default btn-xs" target="_blank">
+                                                <i class="fa fa-print"></i>&nbsp; Số liệu tổng hợp</a>
+                                        </td>
+                                    </tr>
+                                    @endif
                             @endforeach
                         @endif
                         </tbody>

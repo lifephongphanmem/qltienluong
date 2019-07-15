@@ -5570,7 +5570,7 @@ class baocaothongtu67Controller extends Controller
             foreach($model_tonghop_ct as $ct){
                 $tonghop = $model_tonghop->where('madvth',$ct->madvth)->first();
                 $ct->maphanloai = $model_donvi->where('madv',$tonghop->madv)->first()->maphanloai;
-
+                /*
                 $ct->heso = $ct->heso / $ct->luongcoban;
                 $ct->pckv = $ct->pckv / $ct->luongcoban;
                 $ct->pccv = $ct->pccv / $ct->luongcoban;
@@ -5585,7 +5585,10 @@ class baocaothongtu67Controller extends Controller
                 $ct->pcdbqh = $ct->pcdbqh / $ct->luongcoban;
                 $ct->pcvk = $ct->pcvk / $ct->luongcoban;
 
+
                 $ct->ttbh_dv = ($ct->stbhxh_dv+$ct->stbhyt_dv+$ct->stkpcd_dv+$ct->stbhtn_dv)/ $ct->luongcoban;
+                */
+                $ct->ttbh_dv = $ct->stbhxh_dv+$ct->stbhyt_dv+$ct->stkpcd_dv+$ct->stbhtn_dv;
             }
             $model_bangluong_ct = $model_tonghop_ct->where('macongtac','BIENCHE');
             //dd($model_bangluong_ct->toarray());
@@ -6249,9 +6252,9 @@ class baocaothongtu67Controller extends Controller
                     ->get();
                 if(isset($inputs['inheso'])) {
                     $model_tonghop_ct = tonghopluong_donvi_chitiet::join('tonghopluong_donvi', 'tonghopluong_donvi_chitiet.mathdv', '=', 'tonghopluong_donvi.mathdv')
-                        ->select('tonghopluong_donvi_chitiet.linhvuchoatdong',DB::raw('heso/luongcoban as heso'),DB::raw('pckv/luongcoban as pckv'),DB::raw('pccv/luongcoban as pccv'),
-                            DB::raw('pctnvk/luongcoban as pctnvk'),DB::raw('pcudn/luongcoban as pcudn'),DB::raw('pcth/luongcoban as pcth'),DB::raw('pctn/luongcoban as pctn'),DB::raw('pccovu/luongcoban as pccovu'),DB::raw('pcdang/luongcoban as pcdang'),
-                            DB::raw('pcthni/luongcoban as pcthni'),DB::raw('pck/luongcoban as pck'),'nguoigui','madv','tonghopluong_donvi.mathh','tonghopluong_donvi.mathdv','macongtac')
+                        ->select('tonghopluong_donvi_chitiet.linhvuchoatdong',DB::raw('heso as heso'),DB::raw('pckv as pckv'),DB::raw('pccv as pccv'),
+                            DB::raw('pctnvk as pctnvk'),DB::raw('pcudn as pcudn'),DB::raw('pcth as pcth'),DB::raw('pctn as pctn'),DB::raw('pccovu as pccovu'),DB::raw('pcdang as pcdang'),
+                            DB::raw('pcthni as pcthni'),DB::raw('pck as pck'),'nguoigui','madv','tonghopluong_donvi.mathh','tonghopluong_donvi.mathdv','macongtac')
                         ->where('tonghopluong_donvi.madvbc',$madvbc)
                         ->wherein('tonghopluong_donvi_chitiet.mathdv',function($qr){
                             $qr->select('mathdv')->from('tonghopluong_donvi')->where('thang','08')->where('nam','2018')->where('trangthai','DAGUI')

@@ -107,7 +107,7 @@
             <th rowspan="3">Ký nhận</th>
         </tr>
         <tr style="padding-left: 2px;padding-right: 2px">
-            <th style="width: 12%;" rowspan="2">Hệ số lương</th>
+            <th rowspan="2">Hệ số lương</th>
             <th colspan="{{$col}}">Hệ số phụ cấp</th>
             <th style="width: 3%;" rowspan="2">Cộng hệ số</th>
             <th style="width: 3%;" rowspan="2">Thành tiền</th>

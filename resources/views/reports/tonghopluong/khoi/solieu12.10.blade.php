@@ -136,7 +136,7 @@
                     <td style="text-align: center">{{$ct->soluong}}</td>
 
                     @foreach($a_phucap as $key=>$val)
-                        <td>{{dinhdangsothapphan($ct->$key/$ct->luongcoban,5)}}</td>
+                        <td>{{dinhdangsothapphan($ct->$key,5)}}</td>
                     @endforeach
 
                     <td>{{dinhdangso($ct->tonghs)}}</td>

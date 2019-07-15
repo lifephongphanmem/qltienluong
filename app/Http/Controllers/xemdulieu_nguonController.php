@@ -86,7 +86,9 @@ class xemdulieu_nguonController extends Controller
             $a_phanloai['ALL'] = '--Chọn tất cả--';
 
 
-            $model_nguon = nguonkinhphi_huyen::wherein('madv', function($query) use($madv){
+            $model_nguon = nguonkinhphi::where('trangthai','DAGUI')
+                ->where('macqcq',$madv)
+            ->wherein('madv', function($query) use($madv){
                 $query->select('madv')->from('dmdonvi')->where('macqcq',$madv)->where('madv','<>',$madv)->get();
             })->get();
 
@@ -117,7 +119,6 @@ class xemdulieu_nguonController extends Controller
             if (!isset($inputs['phanloai']) || $inputs['phanloai'] != 'ALL') {
                 $model_donvi = $model_donvi->where('maphanloai',$inputs['phanloai']);
             }
-
             return view('functions.viewdata.nguonkinhphi.index')
                 ->with('model', $model_donvi)
                 ->with('inputs', $inputs)

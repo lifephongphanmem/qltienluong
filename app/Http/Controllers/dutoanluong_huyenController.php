@@ -398,7 +398,13 @@ class dutoanluong_huyenController extends Controller
             $model_dutoan = dutoanluong::wherein('madv', function($query) use ($madv){
                 $query->select('madv')->from('dmdonvi')->where('macqcq', $madv)->get();
             })->get();
-
+            $model_soluong = dutoanluong_chitiet::join('dutoanluong','dutoanluong.masodv','dutoanluong_chitiet.masodv')
+                ->select('canbo_congtac','canbo_dutoan','madv','mact')
+                ->where('dutoanluong.macqcq',$madv)
+                ->where('dutoanluong.namns',$namns)
+                ->where('dutoanluong.trangthai','DAGUI')
+                ->get();
+            //dd($model_soluong->toarray());
             $m_phanloai = dmphanloaidonvi::all();
             $m_dv = dmdonvi::where('macqcq', $madv)->get();
             $a_phucap = array();
@@ -446,6 +452,7 @@ class dutoanluong_huyenController extends Controller
                 ->with('a_phucap', $a_phucap)
                 ->with('a_ct', $a_ct)
                 ->with('model_congtac', $model_congtac)
+                ->with('model_soluong', $model_soluong)
                 ->with('m_phanloai', $m_phanloai)
                 ->with('pageTitle', 'Chi tiết tổng hợp lương tại đơn vị');
         } else

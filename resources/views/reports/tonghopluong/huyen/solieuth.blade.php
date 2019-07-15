@@ -117,59 +117,28 @@
             $a_pl = a_getelement($a_soluong,array('maphanloai'=>$pl->maphanloai));
             $phanloai = $model->where('maphanloai',$pl->maphanloai);
             $donvi = $model_donvi->where('maphanloai',$pl->maphanloai);
+            $stt=1;
+            $a_dv = a_getelement($a_soluong,array('maphanloai'=>$pl->maphanloai));
+            //print_r($a_dv);
+
+            $phanloaict = $m_pl->where('maphanloai',$pl->maphanloai);
+            foreach($phanloaict as $plct){
+                $chitiet = $model->where('maphanloai',$plct->maphanloai)->where('mact',$plct->mact);
+                $a_plct = a_getelement($a_pl,array('mact'=>$plct->mact,'maphanloai'=>$plct->maphanloai));
         ?>
-        @foreach($donvi as $dv)
-            <tr style="font-weight: bold; font-style: italic">
-                <td style="text-align: center;">{{$j++}}</td>
-                <td style="text-align: left;" colspan="{{12 + $col}}">{{$dv->tendv}}</td>
-            </tr>
-            <?php
-                $stt=1;
-                $a_dv = a_getelement($a_soluong,array('maphanloai'=>$pl->maphanloai,'madv'=>$dv->madv));
-                $chitiet = $model->where('madv',$dv->madv);
-            ?>
-            @foreach($a_thang as $key=>$val)
-                <tr style="font-weight: bold; font-style:italic ">
-                    <td></td>
-                    <td style="text-align: left;" colspan="{{12+ $col}}">Tháng: {{$key}}</td>
-                </tr>
-                <?php
-                $chitietct = $chitiet->where('thang',$key);
-                ?>
-                @foreach($chitietct as $ct)
-                    <tr class="money">
-                        <td style="text-align: right">-</td>
-                        <td style="text-align: left">{{$ct->tennguonkp}}</td>
-                        <td style="text-align: left">{{$ct->tencongtac}}</td>
-                        <td style="text-align: center">{{$ct->soluong}}</td>
 
-                        @foreach($a_phucap as $key=>$val)
-                            <td>{{dinhdangsothapphan($ct->$key,5)}}</td>
-                        @endforeach
+            @if(count($chitiet) > 0 )
+                <tr class="money">
+                    <td style="text-align: right">-</td>
+                    <td style="text-align: left"></td>
+                    <td style="text-align: left">{{$plct->tenct}}</td>
+                    <td style="text-align: center">{{dinhdangso(array_sum( array_column($a_plct,'soluong')))}}</td>
 
-                        <td>{{dinhdangso($ct->tonghs)}}</td>
-                        <td>{{dinhdangso($ct->giaml)}}</td>
-                        <td>{{dinhdangso($ct->tongtl)}}</td>
-
-                        <td>{{dinhdangso($ct->stbhxh_dv)}}</td>
-                        <td>{{dinhdangso($ct->stbhyt_dv)}}</td>
-                        <td>{{dinhdangso($ct->stkpcd_dv)}}</td>
-                        <td>{{dinhdangso($ct->stbhtn_dv)}}</td>
-                        <td>{{dinhdangso($ct->tongbh)}}</td>
-                        <td>{{dinhdangso($ct->tongbh + $ct->tongtl)}}</td>
-
-                    </tr>
-                @endforeach
-            @endforeach
-            @if(count($chitiet) > 0)
-                <tr class="money" style="font-weight: bold; font-style: italic">
-                    <td colspan="3">Cộng</td>
-                    <td style="text-align: center">{{dinhdangso(array_sum( array_column($a_dv,'soluong')))}}</td>
                     @foreach($a_phucap as $key=>$val)
-                        <td>{{dinhdangsothapphan($chitiet->sum('hs'.$key) ,5)}}</td>
+                        <td>{{dinhdangsothapphan($chitiet->sum($key) ,5)}}</td>
                     @endforeach
 
-                    <td>{{dinhdangso($chitiet->sum('tonghs'))}}</td>
+                    <td>{{dinhdangso($chitiet->sum('luongtn'))}}</td>
                     <td>{{dinhdangso($chitiet->sum('giaml'))}}</td>
                     <td>{{dinhdangso($chitiet->sum('tongtl'))}}</td>
 
@@ -179,18 +148,19 @@
                     <td>{{dinhdangso($chitiet->sum('stbhtn_dv'))}}</td>
                     <td>{{dinhdangso($chitiet->sum('tongbh'))}}</td>
                     <td>{{dinhdangso($chitiet->sum('tongbh') + $chitiet->sum('tongtl'))}}</td>
+
                 </tr>
             @endif
-        @endforeach
+            <?php }?>
         @if(count($phanloai) > 0)
             <tr class="money" style="font-weight: bold">
                 <td colspan="3"> Tổng</td>
                 <td style="text-align: center">{{dinhdangso(array_sum( array_column($a_pl,'soluong')))}}</td>
                 @foreach($a_phucap as $key=>$val)
-                    <td>{{dinhdangsothapphan($phanloai->sum('hs'.$key) ,5)}}</td>
+                    <td>{{dinhdangsothapphan($phanloai->sum($key) ,5)}}</td>
                 @endforeach
 
-                <td>{{dinhdangso($phanloai->sum('tonghs'))}}</td>
+                <td>{{dinhdangso($phanloai->sum('luongtn'))}}</td>
                 <td>{{dinhdangso($phanloai->sum('giaml'))}}</td>
                 <td>{{dinhdangso($phanloai->sum('tongtl'))}}</td>
 
@@ -207,10 +177,10 @@
         <td colspan="3">Tổng cộng</td>
         <td style="text-align: center">{{dinhdangso(array_sum( array_column($a_soluong,'soluong')))}}</td>
         @foreach($a_phucap as $key=>$val)
-            <td>{{dinhdangsothapphan($model->sum('hs'.$key) ,5)}}</td>
+            <td>{{dinhdangsothapphan($model->sum($key) ,5)}}</td>
         @endforeach
 
-        <td>{{dinhdangso($model->sum('tonghs'))}}</td>
+        <td>{{dinhdangso($model->sum('luongtn'))}}</td>
         <td>{{dinhdangso($model->sum('giaml'))}}</td>
         <td>{{dinhdangso($model->sum('tongtl'))}}</td>
 

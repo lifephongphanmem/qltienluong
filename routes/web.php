@@ -580,6 +580,7 @@ Route::group(['prefix'=>'chuc_nang'],function(){
             Route::get('index','tonghopluong_huyenController@index');
             Route::get('tonghop','tonghopluong_huyenController@tonghop');
             Route::get('tonghop_huyen','tonghopluong_huyenController@tonghop_huyen');
+            Route::get('tonghopnam','tonghopluong_huyenController@tonghopnam');
             Route::get('chitiet_khoi','tonghopluong_huyenController@chitiet_khoi');
             Route::get('tonghop_diaban','tonghopluong_huyenController@tonghop_diaban');
             Route::post('tonghop_chuadaydu','tonghopluong_huyenController@tonghop_chuadaydu');

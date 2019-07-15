@@ -89,7 +89,7 @@
         <tr style="padding-left: 2px;padding-right: 2px">
             <th style="width: 2%;" rowspan="2">S</br>T</br>T</th>
             <th style="width: 12%;" rowspan="2">Phân loại công tác</th>
-            <th style="width: 3%;" rowspan="2">Số lượng cán bộ</th>
+            <th style="width: 3%;" colspan="2">Số lượng cán bộ</th>
             @foreach($a_phucap as $key=>$val)
                 <th rowspan="2">{!!$val!!}</th>
             @endforeach
@@ -101,6 +101,8 @@
         </tr>
 
         <tr style="padding-left: 2px;padding-right: 2px">
+            <th>Có mặt</th>
+            <th>Được giao</th>
             <th>BHXH</th>
             <th>BHYT</th>
             <th>KPCĐ</th>
@@ -109,7 +111,7 @@
         </tr>
 
         <tr>
-            @for($i=1;$i<=12 + $col;$i++)
+            @for($i=1;$i<=13 + $col;$i++)
                 <th>{{$i}}</th>
             @endfor
         </tr>
@@ -122,14 +124,15 @@
             ?>
             <tr style="font-weight: bold;">
                 <td>{{convert2Roman($j)}}</td>
-                <td style="text-align: left;" colspan="{{11 + $col}}">{{$phanloai->tenphanloai}}</td>
+                <td style="text-align: left;" colspan="{{12 + $col}}">{{$phanloai->tenphanloai}}</td>
             </tr>
             @foreach($donvi as $dv)
                 <tr style="font-weight: bold;">
                     <td></td>
-                    <td style="text-align: left" colspan="{{11 + $col}}">{{$dv->tendv}}</td>
+                    <td style="text-align: left" colspan="{{12 + $col}}">{{$dv->tendv}}</td>
                 </tr>
                 <?php $model_ct =  $model_phanloai->where('madv',$dv->madv);
+                    $model_sldv = $model_soluong->where('madv',$dv->madv);
                 $i=1;
                 $ar_dv = $m_donvi->where('madv',$dv->madv)->first()->toarray() ;
                 $a_congtac = a_getelement($model_congtac,$ar_dv);
@@ -138,11 +141,13 @@
             @foreach($a_congtac as $congtac)
                 <?php
                     $model_luong = $model_ct->where('mact',$congtac['mact']);
+                    $model_sl = $model_sldv->where('mact',$congtac['mact']);
                 ?>
                     <tr>
                         <td>{{$stt++}}</td>
                         <td style="text-align: left">{{$a_ct[$congtac['mact']]}}</td>
-                        <td style="text-align: right">{{$model_luong->count('id')/12}}</td>
+                        <td style="text-align: right">{{$model_sl->avg('canbo_congtac')}}</td>
+                        <td style="text-align: right">{{$model_sl->sum('canbo_dutoan')}}</td>
                         @foreach($a_phucap as $key=>$val)
                             <td>{{dinhdangsothapphan($model_luong->sum($key),5)}}</td>
                         @endforeach
@@ -159,7 +164,7 @@
                     </tr>
             @endforeach
                 <tr style="font-weight: bold; text-align: center; font-style: italic">
-                    <td colspan="3">Cộng</td>
+                    <td colspan="4">Cộng</td>
                     @foreach($a_phucap as $key=>$val)
                         <td>{{dinhdangsothapphan($model_ct->sum($key) ,5)}}</td>
                     @endforeach
@@ -177,7 +182,7 @@
          @endforeach
     @endforeach
         <tr style="font-weight: bold; text-align: center;">
-            <td colspan="3">Tổng cộng</td>
+            <td colspan="4">Tổng cộng</td>
             @foreach($a_phucap as $key=>$val)
                 <td>{{dinhdangsothapphan($model->sum($key) ,5)}}</td>
             @endforeach
