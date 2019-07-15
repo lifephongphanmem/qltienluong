@@ -76,7 +76,6 @@
 <table cellspacing="0" cellpadding="0" border="1" style="margin: 20px auto; border-collapse: collapse;">
     <tr style="padding-left: 2px;padding-right: 2px">
         <th style="width: 2%;padding-left: 2px;padding-right: 2px" rowspan="2">STT</th>
-        <th style="width: 7%;padding-left: 2px;padding-right: 2px" rowspan="2">Nguồn kinh phí</th>
         <th style="width: 7%;padding-left: 2px;padding-right: 2px" rowspan="2">Phân loại</br>công tác</th>
         <th style="width: 7%;padding-left: 2px;padding-right: 2px" rowspan="2">Số lượng</br>cán bộ</th>
         <th colspan="{{$col}}">Hệ số</th>
@@ -102,7 +101,7 @@
     </tr>
 
     <tr>
-        @for($i=1;$i<=13 + $col;$i++)
+        @for($i=1;$i<=12 + $col;$i++)
             <th>{{$i}}</th>
         @endfor
     </tr>
@@ -110,7 +109,7 @@
     @foreach($model_phanloai as $pl)
         <tr style="font-weight: bold;">
             <td style="text-align: left;">{{convert2Roman($i++)}}</td>
-            <td style="text-align: left;" colspan="{{12 + $col}}">{{$pl->tenphanloai}}</td>
+            <td style="text-align: left;" colspan="{{11 + $col}}">{{$pl->tenphanloai}}</td>
         </tr>
         <?php
             $j=1;
@@ -119,23 +118,39 @@
             $donvi = $model_donvi->where('maphanloai',$pl->maphanloai);
             $stt=1;
             $a_dv = a_getelement($a_soluong,array('maphanloai'=>$pl->maphanloai));
-            //print_r($a_dv);
+            $a_khoipb = array_column($model_khoipb->where('maphanloai',$pl->maphanloai)->toarray(),'linhvuchoatdong','tenlinhvuc');
+            foreach($a_khoipb as $key=>$val){
+                    $a_donvi = array_column($m_donvi->where('maphanloai',$pl->maphanloai)->where('linhvuchoatdong',$a_khoipb[$key])->toarray(),'madv','tendv');
+                ?>
+                    <tr style="font-weight: bold;">
+                    <td style="text-align: left;"></td>
+                    <td style="text-align: left;" colspan="{{11 + $col}}">Lĩnh vực: {{$key}}</td>
+                    </tr>
+        <?php
+                $sttdv = 0;
+                foreach($a_donvi as $keydv=>$val) {
+                    $sttdv ++;
+                    $phanloaict = $m_pl->where('maphanloai',$pl->maphanloai)->where('linhvuchoatdong',$a_khoipb[$key])->where('madv',$a_donvi[$keydv]);
 
-            $phanloaict = $m_pl->where('maphanloai',$pl->maphanloai);
+        ?>
+                        <tr style="font-weight: bold;font-style: italic">
+                            <td style="text-align: left;">{{$sttdv}}</td>
+                            <td style="text-align: left;" colspan="{{11 + $col}}">{{$keydv}}</td>
+                        </tr>
+        <?php
             foreach($phanloaict as $plct){
-                $chitiet = $model->where('maphanloai',$plct->maphanloai)->where('mact',$plct->mact);
-                $a_plct = a_getelement($a_pl,array('mact'=>$plct->mact,'maphanloai'=>$plct->maphanloai));
+                $chitiet = $model->where('maphanloai',$plct->maphanloai)->where('mact',$plct->mact)->where('linhvuchoatdong',$a_khoipb[$key])->where('madv',$a_donvi[$keydv]);
+                $a_plct = a_getelement($a_pl,array('mact'=>$plct->mact,'maphanloai'=>$plct->maphanloai,'madv'=> $a_donvi[$keydv]));
         ?>
 
             @if(count($chitiet) > 0 )
                 <tr class="money">
                     <td style="text-align: right">-</td>
-                    <td style="text-align: left"></td>
                     <td style="text-align: left">{{$plct->tenct}}</td>
                     <td style="text-align: center">{{dinhdangso(array_sum( array_column($a_plct,'soluong')))}}</td>
 
-                    @foreach($a_phucap as $key=>$val)
-                        <td>{{dinhdangsothapphan($chitiet->sum($key) ,5)}}</td>
+                    @foreach($a_phucap as $keypc=>$val)
+                        <td>{{dinhdangsothapphan($chitiet->sum($keypc) ,5)}}</td>
                     @endforeach
 
                     <td>{{dinhdangso($chitiet->sum('luongtn'))}}</td>
@@ -151,10 +166,10 @@
 
                 </tr>
             @endif
-            <?php }?>
+            <?php }}}?>
         @if(count($phanloai) > 0)
             <tr class="money" style="font-weight: bold">
-                <td colspan="3"> Tổng</td>
+                <td colspan="2"> Tổng</td>
                 <td style="text-align: center">{{dinhdangso(array_sum( array_column($a_pl,'soluong')))}}</td>
                 @foreach($a_phucap as $key=>$val)
                     <td>{{dinhdangsothapphan($phanloai->sum($key) ,5)}}</td>
@@ -174,7 +189,7 @@
         @endif
     @endforeach
     <tr class="money" style="font-weight: bold">
-        <td colspan="3">Tổng cộng</td>
+        <td colspan="2">Tổng cộng</td>
         <td style="text-align: center">{{dinhdangso(array_sum( array_column($a_soluong,'soluong')))}}</td>
         @foreach($a_phucap as $key=>$val)
             <td>{{dinhdangsothapphan($model->sum($key) ,5)}}</td>
