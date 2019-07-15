@@ -160,10 +160,32 @@ class ajaxController extends Controller
         }
 
         $bac = $inputs['bac'];
+        $inputs['heso'] = chkDbl($inputs['heso']);
         $model = ngachluong::where('msngbac',$inputs['msngbac'])->first();
+        //dd($model);
         $heso = $vuotkhung = 0;
         $namnl = $model->namnb;
+        if($model->bacvuotkhung==0 || $model->bacvuotkhung==1){
+            $heso = $model->heso + ($bac - 1) * $model->hesochenhlech;
+            $heso = $heso > $model->hesolonnhat? $model->hesolonnhat : $heso;
+            $vuotkhung = 0;
+        }else{
+            if($inputs['bac'] < $model->bacvuotkhung){
+                $vuotkhung = 0;
+                $heso = $model->heso + ($bac - 1) * $model->hesochenhlech;
+            }elseif($inputs['bac'] == $model->bacvuotkhung){
+                $vuotkhung = $model->vuotkhung;
+                $heso = $model->hesolonnhat;
+            }else{
+                $vuotkhung = $model->vuotkhung + $model->vuotkhungchenhlech * ( $inputs['bac'] - $model->bacvuotkhung);
+                $heso = $model->hesolonnhat;
+            }
+        }
 
+        $result['message'] = $heso.';'.$vuotkhung.';'.$namnl.';';
+
+        /*
+         * dd($inputs);
         //mặc định nếu ko có vượt khung bacvuotkhung=0, nhưng do form nhap de giá trị bacvuotkhung=0
         if($model->bacvuotkhung==0 || $model->bacvuotkhung==1){
             $heso = $model->heso + ($bac - 1) * $model->hesochenhlech;
@@ -177,10 +199,6 @@ class ajaxController extends Controller
             $heso= $model->heso + ($bac - 1) * $model->hesochenhlech;
             $vuotkhung = 0;
         }
-
-        $result['message'] = $heso.';'.$vuotkhung.';'.$namnl.';';
-
-        /*
         $model_nhomngachluong = nhomngachluong::where('manhom',$manhom)->first();
         //dd($inputs);
         if($model_nhomngachluong->manhom !='CBCT'){

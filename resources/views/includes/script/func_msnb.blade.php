@@ -60,6 +60,8 @@
                 data: {
                     _token: CSRF_TOKEN,
                     msngbac: $('#tennb').val(),
+                    heso: $('#heso').val(),
+                    vuotkhung: $('#vuotkhung').val(),
                     bac: $('#bac').val()
                 },
                 dataType: 'JSON',
@@ -80,7 +82,7 @@
     function setMSNGBAC(){
         $('#msngbac').val($('#tennb').val());
         getHS();
-        getBac();
+        //getBac();
     }
 
 </script>
