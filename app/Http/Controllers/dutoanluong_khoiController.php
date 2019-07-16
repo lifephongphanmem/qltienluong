@@ -78,7 +78,7 @@ class dutoanluong_khoiController extends Controller
             $model->lydo = $inputs['lydo'];
             $model->save();
 
-            return redirect('/chuc_nang/xem_du_lieu/du_toan/khoi?namns=' . $model->namns . '&trangthai=ALL');
+            return redirect('/chuc_nang/xem_du_lieu/du_toan/khoi?namns=' . $model->namns . '&trangthai=ALL&phanloai=ALL');
         } else
             return view('errors.notlogin');
     }

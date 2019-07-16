@@ -94,7 +94,7 @@ class tonghopnguon_huyenController extends Controller
                     ->update(['trangthai' => 'TRALAI', 'lydo'=>$inputs['lydo']]);
             }
 
-            return redirect('/chuc_nang/xem_du_lieu/nguon/huyen?sohieu=' . $model->sohieu . '&trangthai=ALL');
+            return redirect('/chuc_nang/xem_du_lieu/nguon/huyen?sohieu=' . $model->sohieu . '&trangthai=ALL&phanloai=ALL');
         } else
             return view('errors.notlogin');
     }

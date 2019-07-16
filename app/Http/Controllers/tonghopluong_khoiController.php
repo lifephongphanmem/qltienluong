@@ -753,7 +753,7 @@ class tonghopluong_khoiController extends Controller
             $model->matht = null;
             $model->lydo = $inputs['lydo'];
             $model->save();
-            return redirect('/chuc_nang/xem_du_lieu/khoi?thang='.$model->thang.'&nam=' . $model->nam . '&trangthai=ALL');
+            return redirect('/chuc_nang/xem_du_lieu/khoi?thang='.$model->thang.'&nam=' . $model->nam . '&trangthai=ALL&phanloai=ALL');
         } else
             return view('errors.notlogin');
     }

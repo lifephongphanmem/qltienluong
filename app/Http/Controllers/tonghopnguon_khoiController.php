@@ -121,7 +121,7 @@ class tonghopnguon_khoiController extends Controller
             $model->lydo = $inputs['lydo'];
             $model->save();
 
-            return redirect('/chuc_nang/xem_du_lieu/nguon/khoi?sohieu=' . $model->sohieu . '&trangthai=ALL');
+            return redirect('/chuc_nang/xem_du_lieu/nguon/khoi?sohieu=' . $model->sohieu . '&trangthai=ALL&phanloai=ALL');
         } else
             return view('errors.notlogin');
     }

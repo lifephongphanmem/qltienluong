@@ -97,7 +97,7 @@ class dutoanluong_huyenController extends Controller
                     ->update(['trangthai' => 'TRALAI', 'lydo'=>$inputs['lydo']]);
             }
 
-            return redirect('/chuc_nang/xem_du_lieu/du_toan/huyen?namns=' . $model->namns . '&trangthai=ALL');
+            return redirect('/chuc_nang/xem_du_lieu/du_toan/huyen?namns=' . $model->namns . '&trangthai=ALL&phanloai=ALL');
         } else
             return view('errors.notlogin');
     }
