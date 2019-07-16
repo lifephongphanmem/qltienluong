@@ -838,10 +838,10 @@ class bangluongController extends Controller
         $a_pc_coth = array('pcudn','pctnn','pctaicu');
         //dd($m_cb);
         foreach ($m_cb as $key=>$val) {
-            $a_lv = explode(',', $m_cb[$key]['lvhd']);
-            if (in_array($inputs['linhvuchoatdong'], $a_lv) || $m_cb[$key]['lvhd'] == null) {
-                $m_cb[$key]['lvhd'] = $inputs['linhvuchoatdong'];
-            }
+//            $a_lv = explode(',', $m_cb[$key]['lvhd']);
+//            if (in_array($inputs['linhvuchoatdong'], $a_lv) || $m_cb[$key]['lvhd'] == null) {
+//                $m_cb[$key]['lvhd'] = $inputs['linhvuchoatdong'];
+//            }
 
             //chạy tính hệ số + vượt khung trc để tính cho kiêm nhiệm (trường hợp tạo bảng lương không hưởng ở nguồn
             // kinh phí này)
