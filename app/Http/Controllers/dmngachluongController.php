@@ -84,7 +84,6 @@ class dmngachluongController extends Controller
     {
         $inputs = $request->all();
         //$model_nhom = nhomngachluong::where('manhom',$inputs['manhom'])->first();
-
         $model = ngachluong::where('msngbac',$inputs['msngbac'])->first();
         if(count($model)>0){
             //update
@@ -117,5 +116,16 @@ class dmngachluongController extends Controller
         $inputs = $request->all();
         $model = ngachluong::where('msngbac',$inputs['msngbac'])->first();
         die($model);
+    }
+
+    function danhsach(){
+        if (Session::has('admin')) {
+            $model = ngachluong::all();
+            return view('system.danhmuc.ngachluong.danhsach')
+                ->with('model', $model)
+                ->with('furl', '/danh_muc/ngach_bac/')
+                ->with('pageTitle', 'Danh mục ngạch bậc lương');
+        } else
+            return view('errors.notlogin');
     }
 }

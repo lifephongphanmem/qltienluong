@@ -19,7 +19,7 @@
 
 
     <h3 class="page-title">
-        Cấu hình hệ thống<small> chỉnh sửa</small>
+        Thông tin đơn vị<small> chỉnh sửa</small>
     </h3>
     <!-- END PAGE HEADER-->
 
@@ -53,14 +53,14 @@
                             <div class="row">
                                 <div class="col-md-3">
                                     <div class="form-group">
-                                        <label class="control-label">Chức danh thủ trưởng</label>
+                                        <label class="control-label">Chức danh lãnh đạo</label>
                                         {!!Form::text('cdlanhdao', null, array('id' => 'cdlanhdao','class' => 'form-control'))!!}
                                     </div>
                                 </div>
 
                                 <div class="col-md-3">
                                     <div class="form-group">
-                                        <label class="control-label">Thủ trưởng đơn vị</label>
+                                        <label class="control-label">Họ và tên lãnh đạo</label>
                                         {!!Form::text('lanhdao', null, array('id' => 'lanhdao','class' => 'form-control'))!!}
                                     </div>
                                 </div>
@@ -74,7 +74,7 @@
 
                                 <div class="col-md-3">
                                     <div class="form-group">
-                                        <label class="control-label">Kế toán đơn vị</label>
+                                        <label class="control-label">Họ và tên kế toán</label>
                                         {!!Form::text('ketoan', null, array('id' => 'ketoan','class' => 'form-control'))!!}
                                     </div>
                                 </div>
@@ -125,6 +125,29 @@
                                     </div>
                                 </div>
 
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label class="control-label">Số ngày công trong tháng</label>
+                                        {!!Form::text('songaycong', null, array('id' =>'songaycong', 'class' => 'form-control', 'data-mask'=>'fdecimal'))!!}
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label class="control-label">Cấp đơn vị hành chính</label>
+                                        {!!Form::select('caphanhchinh', array('XA'=>'Đơn vị cấp Xã','HUYEN'=>'Đơn vị cấp Huyện','TINH'=>'Đơn vị cấp Tỉnh'), null, array('id' => 'caphanhchinh','class' => 'form-control','required'=>'required'))!!}
+                                    </div>
+                                </div>
+
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label class="control-label">Cấp dự toán</label>
+                                        {!!Form::select('capdonvi', getCapDonVi(), null, array('id' => 'capdonvi','class' => 'form-control'))!!}
+                                    </div>
+                                </div>
+
                                 <div class="col-md-6">
                                     <div class="form-group">
                                         <label class="control-label">Phân loại mức độ tự chủ tài chính</label>
@@ -137,15 +160,14 @@
                                 <div class="col-md-3">
                                     <div class="form-group">
                                         <label class="control-label">Phân loại đơn vị</label>
-                                        {!!Form::select('maphanloai', $a_phanloai, null, array('id' => 'maphanloai','class' => 'form-control'))!!}
+                                        {!!Form::select('maphanloai', getPhanLoaiDonVi(), null, array('id' => 'maphanloai','class' => 'form-control'))!!}
                                     </div>
                                 </div>
 
-
                                 <div class="col-md-3">
                                     <div class="form-group">
-                                        <label class="control-label">Cấp dự toán</label>
-                                        {!!Form::select('capdonvi', $model_capdv, null, array('id' => 'capdonvi','class' => 'form-control'))!!}
+                                        <label class="control-label">Loại xã (khối xã, phường)</label>
+                                        {!!Form::select('phanloaixa', getPhanLoaiXa(), null, array('id' => 'phanloaixa','class' => 'form-control','required'=>'required'))!!}
                                     </div>
                                 </div>
 
@@ -158,40 +180,12 @@
                             </div>
 
                             <div class="row">
-                                <div class="col-md-3">
+                                <div class="col-md-12">
                                     <div class="form-group">
-                                        <label class="control-label">Số ngày công trong tháng</label>
-                                        {!!Form::text('songaycong', null, array('id' =>'songaycong', 'class' => 'form-control', 'data-mask'=>'fdecimal'))!!}
+                                        <label class="control-label">Lĩnh vực hoạt động <span class="require">*</span></label>
+                                        {!!Form::select('linhvuchoatdong[]', getLinhVucHoatDong(false), null, array('id' => 'linhvuchoatdong','class' => 'form-control required','multiple'=>'multiple'))!!}
                                     </div>
                                 </div>
-
-                                @if($model->maphanloai == 'KVXP')
-                                    <div id="plxa" class="col-md-9">
-                                        <div class="form-group">
-                                            <label class="control-label">Phân loại xã phường</label>
-                                            {!!Form::select('phanloaixa', $model_plxa, null, array('id' => 'phanloaixa','class' => 'form-control','required'=>'required'))!!}
-                                        </div>
-                                    </div>
-                                @else
-                                    <div id="plxa" class="col-md-9">
-                                        <div class="form-group">
-                                            <label class="control-label">Lĩnh vực hoạt động</label>
-                                            <select class="form-control" id="linhvuc" name="linhvuc" multiple="multiple">
-                                                @if(isset($a_linhvuc))
-                                                    @foreach($model_linhvuc as $key=>$value)
-                                                        <option value="{{$key}}" {{in_array($key,$a_linhvuc)?'selected':''}}>{{$value}}</option>
-                                                    @endforeach
-                                                @else
-                                                    @foreach($model_linhvuc as $key=>$value)
-                                                        <option value="{{$key}}">{{$value}}</option>
-                                                    @endforeach
-                                                @endif
-                                            </select>
-
-                                        </div>
-                                    </div>
-                                    <input type="hidden" id="linhvuchoatdong" name="linhvuchoatdong" value="{{isset($model)?$model->linhvuchoatdong:''}}"/>
-                                @endif
                             </div>
                         </div>
 
@@ -210,31 +204,8 @@
     </div>
     <script type="text/javascript">
         $(function(){
-            $('#maphanloai').change (function(){
-                var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
-                $.ajax({
-                    url: '/danh_muc/khu_vuc/getPhanLoai',
-                    type: 'GET',
-                    data: {
-                        _token: CSRF_TOKEN,
-                        maphanloai: this.value
-                    },
-                    dataType: 'JSON',
-                    success: function (data) {
-                        $('#plxa').replaceWith(data.message);
-                        $("#linhvuchoatdong").select2();
-                    },
-                    error: function(message){
-                        toastr.error(message,'Lỗi!');
-                    }
-                });
-
-            });
-
-            $("#linhvuc").select2();
-            $("#linhvuc").change(function(){
-                $("#linhvuchoatdong").val( $("#linhvuc").val());
-            });
+            $("#linhvuchoatdong").select2();
+            $('#linhvuchoatdong').val('{{$model->linhvuchoatdong}}').trigger('change');
         });
 
         function validateForm(){

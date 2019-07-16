@@ -78,8 +78,7 @@ class hosocanboController extends Controller
             $m_linhvuc = array_column(dmkhoipb::all()->toArray(), 'tenkhoipb', 'makhoipb');
             //$m_cvd= dmchucvud::all();
             $m_plnb = nhomngachluong::select('manhom', 'tennhom', 'heso', 'namnb')->distinct()->get();
-            $m_pln = ngachluong::select('tenngachluong', 'manhom', 'msngbac', 'heso', 'namnb')
-                ->distinct()->get();
+            $m_pln = ngachluong::select('tenngachluong','manhom','msngbac','heso','namnb','hesolonnhat','bacvuotkhung')->get();
             foreach ($m_pln as $mangach) {
                 $nhomnb = $m_plnb->where('manhom', $mangach->manhom)->first();
                 if (count($nhomnb) > 0 && $mangach->manhom != 'CBCT') {
@@ -189,7 +188,7 @@ class hosocanboController extends Controller
             //khối phòng ban giờ là lĩnh vực hoạt động
             $m_linhvuc = array_column(dmkhoipb::all()->toArray(),'tenkhoipb','makhoipb');
             $m_plnb = nhomngachluong::select('manhom','tennhom')->distinct()->get();
-            $m_pln = ngachluong::select('tenngachluong','manhom','msngbac')->distinct()->get();
+            $m_pln = ngachluong::select('tenngachluong','manhom','msngbac','heso','namnb','hesolonnhat','bacvuotkhung')->get();
             $a_linhvuc = explode(',',$model->lvhd);
             $a_nguonkp = explode(',',$model->manguonkp);
             //lấy phụ cấp ở danh mục phụ cấp đơn vị mapc => tenform
