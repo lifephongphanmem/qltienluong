@@ -351,7 +351,7 @@ class bangluongController extends Controller
             ->wherenotin('mapc',explode(',',$inputs['phucaploaitru']))->get()->toarray(), 'mapc');
 
         $a_pc_coth = array('pcudn','pctnn', 'pctaicu');
-        $ngaycong = dmdonvi::where('madv',$inputs['madv'])->first()->songaycong;
+        //$ngaycong = dmdonvi::where('madv',$inputs['madv'])->first()->songaycong;
         foreach ($m_cb as $cb) {
             $a_nguon = explode(',', $cb->manguonkp);
             $a_pc_kobh = explode(',', $cb->khongnopbaohiem);
@@ -583,7 +583,7 @@ class bangluongController extends Controller
                 $cb->congtac = 'NGHIPHEP';
                 $sotiencong = $model_phucap->wherein('maso',['heso','vuotkhung','pccv','hesobl','pctnn'])->sum('sotien');
                 //$sotiencong = $inputs['luongcoban'] * ($cb->heso + $cb->vuotkhung + $cb->pccv + $cb->hesobl + $cb->pctnn);
-                $tiencong = round($sotiencong / $ngaycong, 0);
+                $tiencong = $sotiencong / $nghi->songaycong;
                 if($nghi->songaynghi >= 15){//nghỉ quá 15 ngày thì ko đóng bảo hiểm
                     $cb->stbhxh = 0;
                     $cb->stbhyt = 0;
@@ -596,7 +596,7 @@ class bangluongController extends Controller
                     $cb->stbhtn_dv = 0;
                     $cb->ttbh_dv = 0;
                 }
-                $cb->giaml = $nghi->songaynghi >= $ngaycong ? $sotiencong : ($tiencong * $nghi->songaynghi);
+                $cb->giaml = $nghi->songaynghi >= $nghi->songaycong ? $sotiencong : round($tiencong * $nghi->songaynghi, 0);
             }
 
             $cb->luongtn = $cb->ttl - $cb->ttbh - $cb->giaml;
@@ -838,13 +838,10 @@ class bangluongController extends Controller
         $a_pc_coth = array('pcudn','pctnn','pctaicu');
         //dd($m_cb);
         foreach ($m_cb as $key=>$val) {
-            //Dùng tìm kiếm các bộ nào phù hợp. Do lvhd là mảng nên pải lọc
-            /*
-            $a_lv = explode(',', $canbo->lvhd);
-            if (in_array($inputs['linhvuchoatdong'], $a_lv) || $canbo->lvhd == null) {
-                $canbo->lvhd = $inputs['linhvuchoatdong'];
+            $a_lv = explode(',', $m_cb[$key]['lvhd']);
+            if (in_array($inputs['linhvuchoatdong'], $a_lv) || $m_cb[$key]['lvhd'] == null) {
+                $m_cb[$key]['lvhd'] = $inputs['linhvuchoatdong'];
             }
-            */
 
             //chạy tính hệ số + vượt khung trc để tính cho kiêm nhiệm (trường hợp tạo bảng lương không hưởng ở nguồn
             // kinh phí này)
@@ -1155,7 +1152,7 @@ class bangluongController extends Controller
                 $sotiencong = $inputs['luongcoban'] *
                     ($m_cb[$key]['heso'] + $m_cb[$key]['vuotkhung'] + $m_cb[$key]['pccv']
                         + $m_cb[$key]['hesobl'] + $m_cb[$key]['pctnn']);
-                $tiencong = round($sotiencong / $ngaycong, 0);
+                $tiencong = $sotiencong / $ngaycong;
 
                 if($cb_nghi['songaynghi'] >= 15) {//nghỉ quá 15 ngày thì ko đóng bảo hiểm
                     $m_cb[$key]['stbhxh'] = 0;
@@ -1170,7 +1167,7 @@ class bangluongController extends Controller
                     $m_cb[$key]['ttbh_dv'] = 0;
                 }
                 //dd($tiencong);
-                $m_cb[$key]['giaml'] = $cb_nghi['songaynghi'] >= $ngaycong ? $sotiencong : ($tiencong * $cb_nghi['songaynghi']);
+                $m_cb[$key]['giaml'] = $cb_nghi['songaynghi'] >= $ngaycong ? $sotiencong : round($tiencong * $cb_nghi['songaynghi'], 0);
             }
 
             if($duongsuc) {

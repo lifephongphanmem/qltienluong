@@ -185,9 +185,11 @@ function getPhanLoaiXa($val_null = true){
         'XL2'=>'Xã loại 2',
         'XL3'=>'Xã loại 3'
     );
+    /*
     if($val_null){
         return array_merge( array(''=>'--Chọn phân loại xã--'),$model);
     }
+    */
     return $model;
 }
 
@@ -297,7 +299,12 @@ function getGeneralConfigs() {
 function getLinhVucHoatDong($val_null = true){
     $model = array_column(App\dmkhoipb::all()->toArray(),'tenkhoipb','makhoipb');
     if($val_null){
-        return array_merge( array(''=>'--Chọn lĩnh vực hoạt động--'),$model);
+        $a_kq = array(''=>'--Chọn lĩnh vực hoạt động--');
+        foreach($model as $key=>$val){
+            $a_kq[$key]=$val;
+        }
+        return $a_kq;
+        //return array_merge( array(''=>'--Chọn lĩnh vực hoạt động--'),$model);
     }
     return $model;
 }

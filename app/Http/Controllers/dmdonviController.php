@@ -70,7 +70,8 @@ class dmdonviController extends Controller
             $inputs = $request->all();
             if (session('admin')->level == 'SA' || session('admin')->madv == $inputs['maso']) {
                 $model = dmdonvi::where('madv', $inputs['maso'])->first();
-                $model_donvi = array_column(dmdonvi::select('madv', 'tendv')->where('madvbc', $model->madvbc)->where('phanloaitaikhoan', 'TH')->get()->toarray(), 'tendv', 'madv');
+                $model_donvi = array_column(dmdonvi::select('madv', 'tendv')->where('madvbc', $model->madvbc)
+                    ->where('phanloaitaikhoan', 'TH')->get()->toarray(), 'tendv', 'madv');
                 /*
                     $model_donvi = array_column(dmdonvi::select('madv','tendv')->where('madvbc',$model->madvbc)->get()->toarray(),'tendv','madv');
                     $a_kq = array(''=>'--Chọn đơn vị gửi dữ liệu--');
@@ -85,15 +86,16 @@ class dmdonviController extends Controller
                     $model_linhvuc = array_column(dmkhoipb::all()->toarray(),'tenkhoipb','makhoipb');
                     $a_linhvuc = explode(',',$model->linhvuchoatdong);
                 */
+                //dd($model);
                 return view('system.general.local.edit')
                     ->with('model', $model)
                     ->with('model_donvi', $model_donvi)
                     //->with('a_phanloai',$a_phanloai)
-                    ->with('a_phanloai', getPhanLoaiDonVi())
-                    ->with('model_plxa', getPhanLoaiXa())
-                    ->with('model_capdv', getCapDonVi())
-                    ->with('model_linhvuc', array_column(dmkhoipb::all()->toarray(), 'tenkhoipb', 'makhoipb'))
-                    ->with('a_linhvuc', explode(',', $model->linhvuchoatdong))
+                    //->with('a_phanloai', getPhanLoaiDonVi())
+                    //->with('model_plxa', getPhanLoaiXa())
+                    //->with('model_capdv', getCapDonVi())
+                    //->with('model_linhvuc', getLinhVucHoatDong(false))
+                    //->with('a_linhvuc', explode(',', $model->linhvuchoatdong))
                     ->with('url', '/he_thong/don_vi/')
                     ->with('pageTitle', 'Chỉnh sửa thông tin đơn vị');
             } else {
@@ -111,6 +113,8 @@ class dmdonviController extends Controller
             if (session('admin')->level == 'SA' || session('admin')->madv == $madv) {
                 $inputs = $request->all();
                 $model = dmdonvi::where('madv', $madv)->first();
+                $inputs['linhvuchoatdong'] = implode(',',$inputs['linhvuchoatdong']);
+                //dd($inputs);
                 $model->update($inputs);
 
                 session('admin')->maphanloai = $inputs['maphanloai'];
