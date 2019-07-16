@@ -797,8 +797,9 @@ class bangluongController extends Controller
         $m_cb_kn = hosocanbo_kiemnhiem::select(array_merge($a_th,array('phanloai','pthuong')))->where('madv',$inputs['madv'])->get()->toArray();;
         //dd($m_cb_kn);
         //công tác
-        $a_th = array_merge(array('stt','tencanbo', 'msngbac', 'bac', 'theodoi','pthuong','khongnopbaohiem','ngaytu','tnntungay',
-            'bhxh', 'bhyt', 'bhtn', 'kpcd','bhxh_dv', 'bhyt_dv', 'bhtn_dv', 'kpcd_dv', 'ngaybc'),
+        $a_th = array_merge(array('stt','tencanbo', 'msngbac', 'bac', 'theodoi','pthuong',
+            'khongnopbaohiem','ngaytu','tnntungay','bhxh', 'bhyt', 'bhtn', 'kpcd','bhxh_dv',
+            'bhyt_dv', 'bhtn_dv', 'kpcd_dv', 'ngaybc', 'lvhd'),
             $a_th);
         //$m_cb = hosocanbo::select($a_th)->where('madv', $inputs['madv'])->where('theodoi','<', '9')->get()->keyBy('macanbo')->toArray();
         $m_dv = dmdonvi::where('madv',$inputs['madv'])->first();
@@ -838,10 +839,10 @@ class bangluongController extends Controller
         $a_pc_coth = array('pcudn','pctnn','pctaicu');
         //dd($m_cb);
         foreach ($m_cb as $key=>$val) {
-//            $a_lv = explode(',', $m_cb[$key]['lvhd']);
-//            if (in_array($inputs['linhvuchoatdong'], $a_lv) || $m_cb[$key]['lvhd'] == null) {
-//                $m_cb[$key]['lvhd'] = $inputs['linhvuchoatdong'];
-//            }
+            $a_lv = explode(',', $m_cb[$key]['lvhd']);
+            if (in_array($inputs['linhvuchoatdong'], $a_lv) || $m_cb[$key]['lvhd'] == null) {
+                $m_cb[$key]['lvhd'] = $inputs['linhvuchoatdong'];
+            }
 
             //chạy tính hệ số + vượt khung trc để tính cho kiêm nhiệm (trường hợp tạo bảng lương không hưởng ở nguồn
             // kinh phí này)
@@ -1222,7 +1223,7 @@ class bangluongController extends Controller
         }
         */
         $a_col_cb = array('id','bac','baohiem','macongtac','pthuong','theodoi', 'ngaybc',
-            'khongnopbaohiem','ngaytu','tnntungay','ngayden','tnndenngay');//'manguonkp',
+            'khongnopbaohiem','ngaytu','tnntungay','ngayden','tnndenngay','lvhd');//'manguonkp',
         $a_data_canbo = unset_key($a_data_canbo,$a_col_cb);
 
         //dd($a_data_canbo);
