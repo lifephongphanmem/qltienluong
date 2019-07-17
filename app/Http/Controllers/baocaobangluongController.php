@@ -1644,7 +1644,7 @@ class baocaobangluongController extends Controller
             $nam = $inputs['nam'];
             $check = dmdonvi::where('madv', $madv)->where('phanloaitaikhoan','TH')->get();
             if(count($check)>0) {
-                if ($inputs['thang'] == 'ALL')
+                if ($inputs['tuthang'] == 'ALL')
                     $m_mathdv = tonghopluong_khoi::where('madv', $madv)->where('nam', $nam)->where('trangthai', 'DAGUI')->first();
                 else
                     $m_mathdv = tonghopluong_khoi::where('madv', $madv)->where('thang', $thang)->where('nam', $nam)->where('trangthai', 'DAGUI')->first();

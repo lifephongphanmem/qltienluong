@@ -1014,6 +1014,7 @@ class tonghopluong_huyenController extends Controller
             $model_phanloaict = array_column(dmphanloaicongtac::all()->toArray(), 'tencongtac', 'macongtac');
             $model_ct = array_column(dmphanloaict::all()->toArray(), 'tenct', 'mact');
             foreach ($model as $chitiet) {
+                $chitiet->thang = $thang;
                 $chitiet->madv = $a_dv[$chitiet->mathdv];
                 $chitiet->maphanloai = $a_pl[$chitiet->madv];
                 $chitiet->tennguonkp = isset($model_nguonkp[$chitiet->manguonkp]) ? $model_nguonkp[$chitiet->manguonkp] : '';
@@ -1049,6 +1050,8 @@ class tonghopluong_huyenController extends Controller
                     $col++;
                 }
             }
+            $a_thang = array($thang=>$thang);
+            //dd($model->toarray());
             return view('reports.tonghopluong.huyen.solieu')
                 ->with('thongtin', $thongtin)
                 ->with('model', $model)
@@ -1056,6 +1059,7 @@ class tonghopluong_huyenController extends Controller
                 ->with('model_phanloai', $model_phanloai)
                 ->with('model_donvi', $model_donvi)
                 ->with('a_soluong', $a_soluong)
+                ->with('a_thang', $a_thang)
                 ->with('m_dv', $m_dv)
                 ->with('col', $col)
                 ->with('a_phucap', $a_phucap)
