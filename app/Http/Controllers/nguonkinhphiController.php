@@ -475,7 +475,11 @@ class nguonkinhphiController extends Controller
                 return view('errors.chuacqcq');
             }
             $model = nguonkinhphi::where('masodv', $inputs['masodv'])->first();
-
+            //Kiểm tra xem đã có macqcq trong bàng nguồn chưa
+            if($model->macqcq == ''){
+                $model->macqcq = session('admin')->macqcq;
+                $model->save();
+            }
             //kiểm tra xem gửi lên khối hay lên huyện
             //lên khối=> chuyển trạng thái do nguonkinhphi(SD) = nguonkinhphi_khoi(TH)
             //lên huyện => phát sinh bản ghi mới tại bảng nguonkinhphi_huyen
