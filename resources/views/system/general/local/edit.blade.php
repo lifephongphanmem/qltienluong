@@ -188,16 +188,18 @@
                                 </div>
                             </div>
                         </div>
-
                     <!-- END FORM-->
+                    <div class="form-actions">
+                        <div class="row" style="text-align: center">
+                            <div class="col-md-12">
+                                <button type="submit" class="btn green" onclick="validateForm()"><i class="fa fa-check"></i> Cập nhật</button>
+                                <a href="{{url('/he_thong/don_vi/don_vi')}}" class="btn btn-default">&nbsp;Quay lại&nbsp;<i class="fa fa-reply"></i></a>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
-            <div class="row" style="text-align: center">
-                <div class="col-md-12">
-                    <button type="submit" class="btn green" onclick="validateForm()"><i class="fa fa-check"></i> Cập nhật</button>
-                    <button type="reset" class="btn default">Hủy</button>
-                </div>
-            </div>
+
             {!! Form::close() !!}
             <!-- END VALIDATION STATES-->
         </div>
@@ -205,7 +207,8 @@
     <script type="text/javascript">
         $(function(){
             $("#linhvuchoatdong").select2();
-            $('#linhvuchoatdong').val('{{$model->linhvuchoatdong}}').trigger('change');
+            var selectedValuesTest = '{{$model->linhvuchoatdong}}'.split(',');
+            $('#linhvuchoatdong').val(selectedValuesTest).trigger('change');
         });
 
         function validateForm(){

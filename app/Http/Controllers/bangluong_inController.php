@@ -780,7 +780,7 @@ class bangluong_inController extends Controller
         $m_bl = bangluong::select('madv','thang','mabl')->where('mabl', $mabl)->first();
         $model = (new data())->getBangluong_ct($m_bl->thang,$m_bl->mabl);
         //dd($m_bl);
-        $a_hoso = hosocanbo::select('macanbo','sunghiep','sotk','tennganhang','ngaytu','tnntungay')
+        $a_hoso = hosocanbo::select('macanbo','sunghiep','sotk','tennganhang','ngaytu','tnntungay','socmnd')
             ->where('madv', $m_bl->madv)->get()->keyby('macanbo')->toarray();
         $dmchucvucq = array_column(dmchucvucq::all('tenvt', 'macvcq')->toArray(), 'tenvt', 'macvcq');
         $nhomct = array_column(dmphanloaict::all('macongtac', 'mact')->toArray(), 'macongtac', 'mact');
@@ -792,6 +792,7 @@ class bangluong_inController extends Controller
                 $hs->ngaytu = $hoso['ngaytu'];
                 $hs->tnntungay = $hoso['tnntungay'];
                 $hs->sotk = $hoso['sotk'];
+                $hs->socmnd = $hoso['socmnd'];
                 $hs->tennganhang = $hoso['tennganhang'];
                 if($hs->tencanbo == ''){
                     $hs->tencanbo = $hoso['tencanbo']; //kiêm nhiệm chưa có tên cán bộ

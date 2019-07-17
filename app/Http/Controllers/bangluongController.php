@@ -527,8 +527,10 @@ class bangluongController extends Controller
             $cb->tonghs = $ths;
             //nếu cán bộ nghỉ thai sản
             if($thaisan){
+                $ts = $m_tamngung->where('macanbo',$cb->macanbo)->first();
                 $cb->tencanbo = $cb->tencanbo . '(nghỉ thai sản)';
                 $cb->congtac = 'THAISAN';
+                $cb->ghichu .= 'Nghỉ thai sản từ '.getDayVn($ts->ngaytu).' đến '.getDayVn($ts->ngayden).';';
             }
 
             $cb->ttl = $model_phucap->sum('sotien'); //do mức lương cơ bản đi theo phụ cấp =>ko thể lấy tổng hệ số * lương cơ bản
@@ -765,8 +767,8 @@ class bangluongController extends Controller
     function tinhluong_khongdinhmuc($inputs){
         $ngaylap = Carbon::create($inputs['nam'], $inputs['thang'], '01');
 
-        $a_thaisan = array_column(hosotamngungtheodoi::where('madv', $inputs['madv'])->where('maphanloai', 'THAISAN')
-            ->where('ngaytu', '<=', $ngaylap)->where('ngayden', '>=', $ngaylap)->get()->toarray(),'macanbo');
+        $a_thaisan = hosotamngungtheodoi::where('madv', $inputs['madv'])->where('maphanloai', 'THAISAN')
+            ->where('ngaytu', '<=', $ngaylap)->where('ngayden', '>=', $ngaylap)->get()->keyBy('macanbo')->toarray();
 
         $a_duongsuc = hosotamngungtheodoi::select('songaycong','songaynghi','macanbo')->where('madv', $inputs['madv'])->where('maphanloai','DUONGSUC')
             ->whereYear('ngaytu', $inputs['nam'])->whereMonth('ngaytu', $inputs['thang'])->get()->keyBy('macanbo')->toarray();
@@ -929,10 +931,11 @@ class bangluongController extends Controller
 
             $tien = $tonghs = 0;
             //nếu cán bộ nghỉ thai sản
-            $thaisan = in_array($m_cb[$key]['macanbo'],$a_thaisan) ? true : false;
+            //$thaisan = in_array($m_cb[$key]['macanbo'],$a_thaisan) ? true : false;
             $khongluong = in_array($m_cb[$key]['macanbo'],$a_khongluong) ? true : false;
             $daingay = in_array($m_cb[$key]['macanbo'],$a_daingay) ? true : false;
             $nghi = isset($a_nghiphep[$m_cb[$key]['macanbo']]) ? true : false;
+            $thaisan = isset($a_thaisan[$m_cb[$key]['macanbo']]) ? true : false;
             $duongsuc = isset($a_duongsuc[$m_cb[$key]['macanbo']]) ? true : false;
 
             //Tính phụ cấp
@@ -1110,6 +1113,7 @@ class bangluongController extends Controller
 
             if($thaisan) {
                 $m_cb[$key]['tencanbo'] .= ' (nghỉ thai sản)';
+                $m_cb[$key]['ghichu'] .= 'Nghỉ thai sản từ '.getDayVn($a_thaisan[$key]['ngaytu']).' đến '.getDayVn($a_thaisan[$key]['ngayden']).';';
                 $m_cb[$key]['congtac'] = 'THAISAN';
                 //kiểm tra phân loại công tác
                 $tien = $tonghs = 0;
@@ -4168,10 +4172,10 @@ class bangluongController extends Controller
             //dd($model);
             //$model = bangluong_ct::where('mabl',$mabl)->get();
 
-            $a_hoso = array_column(hosocanbo::where('madv', $m_bl->madv)->get()->toarray(),'sotk','macanbo');
-            foreach($model as $ct) {
-                $ct->sotk = isset($a_hoso[$ct->macanbo]) ? $a_hoso[$ct->macanbo] : '';
-            }
+//            $a_hoso = array_column(hosocanbo::where('madv', $m_bl->madv)->get()->toarray(),'sotk','macanbo');
+//            foreach($model as $ct) {
+//                $ct->sotk = isset($a_hoso[$ct->macanbo]) ? $a_hoso[$ct->macanbo] : '';
+//            }
             $m_dv = dmdonvi::where('madv',$m_bl->madv)->first();
             $model_congtac = dmphanloaict::select('mact','tenct')
                 ->wherein('mact', a_unique(array_column($model->toarray(),'mact')))->get();
@@ -5137,7 +5141,7 @@ class bangluongController extends Controller
         $model = (new data())->getBangluong_ct($m_bl->thang,$m_bl->mabl);
 
         //$m_hoso = hosocanbo::where('madv', $inputs['madv'])->get();
-        $a_hoso = hosocanbo::select('macanbo','sunghiep','sotk','tennganhang','ngaytu','tnntungay')
+        $a_hoso = hosocanbo::select('macanbo','sunghiep','sotk','tennganhang','ngaytu','tnntungay', 'socmnd')
             ->where('madv', $m_bl->madv)->get()->keyby('macanbo')->toarray();
 
         //$a_ht = array_column($m_hoso->keyby('macanbo')->toarray(),'tencanbo','macanbo');
@@ -5152,6 +5156,7 @@ class bangluongController extends Controller
                 $hs->ngaytu = $hoso['ngaytu'];
                 $hs->tnntungay = $hoso['tnntungay'];
                 $hs->sotk = $hoso['sotk'];
+                $hs->socmnd = $hoso['socmnd'];
                 $hs->tennganhang = $hoso['tennganhang'];
                 if($hs->tencanbo == ''){
                     $hs->tencanbo = $hoso['tencanbo']; //kiêm nhiệm chưa có tên cán bộ
