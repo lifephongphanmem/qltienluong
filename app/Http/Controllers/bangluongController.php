@@ -527,8 +527,10 @@ class bangluongController extends Controller
             $cb->tonghs = $ths;
             //nếu cán bộ nghỉ thai sản
             if($thaisan){
+                $ts = $m_tamngung->where('macanbo',$cb->macanbo)->first();
                 $cb->tencanbo = $cb->tencanbo . '(nghỉ thai sản)';
                 $cb->congtac = 'THAISAN';
+                $cb->ghichu .= 'Nghỉ thai sản từ '.getDayVn($ts->ngaytu).' đến '.getDayVn($ts->ngaytu).';';
             }
 
             $cb->ttl = $model_phucap->sum('sotien'); //do mức lương cơ bản đi theo phụ cấp =>ko thể lấy tổng hệ số * lương cơ bản
