@@ -51,6 +51,8 @@ class dutoanluong_khoiController extends Controller
                         $dv->trangthai = 'CHUADL';
                     }elseif($sl < $soluong){
                         $dv->trangthai = 'CHUADAYDU';
+                    }elseif($sl == $soluong){
+                        $dv->trangthai = 'CHUAGUI';
                     }else{
                         $dv->trangthai = 'CHUATAO';
                     }

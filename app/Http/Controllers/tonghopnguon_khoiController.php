@@ -93,8 +93,7 @@ class tonghopnguon_khoiController extends Controller
                         $dv->trangthai = 'CHUADAYDU';
                     }elseif($sl == $soluong){
                         $dv->trangthai = 'CHUAGUI';
-                    }
-                    else{
+                    }else{
                         $dv->trangthai = 'CHUATAO';
                     }
                 }

@@ -27,6 +27,12 @@ class xemdulieu_nguonController extends Controller
                 ->wherein('madv', function($query) use($madv){
                     $query->select('madv')->from('dmdonvi')->where('macqcq',$madv)->where('madv','<>',$madv)->get();
                 })->get();
+            $model_phanloai = dmphanloaidonvi::wherein('maphanloai',array_column($model_donvi->toarray(),'maphanloai'))->get();
+            $model_phanloai = array_column($model_phanloai->toarray(),'tenphanloai','maphanloai');
+            foreach($model_phanloai as $key=>$key)
+                $a_phanloai[$key]= $model_phanloai[$key];
+            //$a_phanloai['GD'] = 'Khối Giáo Dục';
+            $a_phanloai['ALL'] = '--Chọn tất cả--';
             $model_nguon = nguonkinhphi::wherein('madv', function($query) use($madv){
                 $query->select('madv')->from('dmdonvi')->where('macqcq',$madv)->where('madv','<>',$madv)->get();
             })->get();
@@ -60,6 +66,7 @@ class xemdulieu_nguonController extends Controller
                 ->with('model', $model_donvi)
                 ->with('inputs', $inputs)
                 ->with('a_trangthai', $a_trangthai)
+                ->with('a_phanloai', $a_phanloai)
                 ->with('furl_th', 'chuc_nang/tong_hop_nguon/khoi/')
                 ->with('furl_xem', '/chuc_nang/xem_du_lieu/nguon/khoi')
                 ->with('pageTitle', 'Danh sách đơn vị tổng hợp nguồn');

@@ -377,7 +377,7 @@ class nguonkinhphiController extends Controller
             $inputs['maphanloai'] = session('admin')->maphanloai;
             $inputs['masodv'] = $masodv;
             $inputs['madv'] = session('admin')->madv;
-            //$inputs['macqcq'] = session('admin')->macqcq;
+            $inputs['macqcq'] = session('admin')->macqcq;
             $inputs['madvbc'] = session('admin')->madvbc;
             $inputs['namns'] = $inputs['namdt'];
             $inputs['nhucau'] = array_sum(array_column($m_data, 'nhucau'));
