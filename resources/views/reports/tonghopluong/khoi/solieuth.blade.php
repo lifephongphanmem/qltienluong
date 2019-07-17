@@ -129,6 +129,7 @@
             foreach($phanloaict as $plct){
                 $chitiet = $model->where('maphanloai',$plct->maphanloai)->where('mact',$plct->mact);
                 $a_plct = a_getelement($a_pl,array('mact'=>$plct->mact,'maphanloai'=>$plct->maphanloai));
+            //dd($chitiet->toarray());
         ?>
 
             @if(count($chitiet) > 0 )
@@ -136,7 +137,7 @@
                     <td style="text-align: right">-</td>
                     <td style="text-align: left"></td>
                     <td style="text-align: left">{{$plct->tenct}}</td>
-                    <td style="text-align: center">{{dinhdangso(array_sum( array_column($a_plct,'soluong')))}}</td>
+                    <td style="text-align: center">{{dinhdangso(array_sum(array_column($a_plct,'soluong')))}}</td>
 
                     @foreach($a_phucap as $key=>$val)
                         <td>{{dinhdangsothapphan($chitiet->sum($key) ,5)}}</td>

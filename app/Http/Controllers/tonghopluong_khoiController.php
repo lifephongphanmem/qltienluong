@@ -282,7 +282,15 @@ class tonghopluong_khoiController extends Controller
             $a_dv = array_column($model_tonghop->toarray(),'madv','mathdv');
             $a_pl = array_column($model_donvi->toarray(),'maphanloai','madv');
 
-            //$model = tonghopluong_donvi_chitiet::wherein('mathdv', array_column($model_tonghop->toarray(),'mathdv'))->get();
+            $model = tonghopluong_donvi_chitiet::join('tonghopluong_donvi','tonghopluong_donvi_chitiet.mathdv','tonghopluong_donvi.mathdv')
+                ->join('dmdonvi','dmdonvi.madv','tonghopluong_donvi.madv')
+                ->select('tonghopluong_donvi_chitiet.*','maphanloai')
+                ->where('tonghopluong_donvi.trangthai','DAGUI')
+                ->where('nam', $nam)
+                ->where('thang', $thang)
+                ->wherein('tonghopluong_donvi_chitiet.mathdv', array_column($model_tonghop->toarray(),'mathdv'))
+                ->get();
+            /*
             $model = tonghopluong_donvi_chitiet::join('tonghopluong_donvi','tonghopluong_donvi_chitiet.mathdv','tonghopluong_donvi.mathdv')
                 ->join('dmdonvi','dmdonvi.madv','tonghopluong_donvi.madv')
                 ->select('maphanloai','mact',DB::raw('SUM(soluong) as soluong'),DB::raw('SUM(heso) as heso'),DB::raw('SUM(hesobl) as hesobl'),
@@ -300,6 +308,25 @@ class tonghopluong_khoiController extends Controller
                 ->groupby('mact','maphanloai')
                 ->orderby('maphanloai')
                 ->get();
+
+            $model = tonghopluong_donvi_chitiet::join('tonghopluong_donvi','tonghopluong_donvi_chitiet.mathdv','tonghopluong_donvi.mathdv')
+                ->join('dmdonvi','dmdonvi.madv','tonghopluong_donvi.madv')
+                ->select('maphanloai','mact','soluong','heso','hesobl',
+                    'hesopc','hesott','vuotkhung',DB::raw('SUM(tonghopluong_donvi_chitiet.pcct) as pcct'),
+                    DB::raw('SUM(tonghopluong_donvi_chitiet.pckct) as pckct'),DB::raw('SUM(tonghopluong_donvi_chitiet.pck) as pck'),DB::raw('SUM(tonghopluong_donvi_chitiet.pccv) as pccv'),DB::raw('SUM(tonghopluong_donvi_chitiet.pckv) as pckv'),
+                    DB::raw('SUM(tonghopluong_donvi_chitiet.pcth) as pcth'), DB::raw('SUM(tonghopluong_donvi_chitiet.pcdd) as pcdd'), DB::raw('SUM(tonghopluong_donvi_chitiet.pcdh) as pcdh'),DB::raw('SUM(tonghopluong_donvi_chitiet.pcld) as pcld'),
+                    DB::raw('SUM(tonghopluong_donvi_chitiet.pcdbqh) as pcdbqh'), DB::raw('SUM(tonghopluong_donvi_chitiet.pcudn) as pcudn'), DB::raw('SUM(tonghopluong_donvi_chitiet.pctn) as pctn'),
+                    DB::raw('SUM(tonghopluong_donvi_chitiet.pctnn) as pctnn'), DB::raw('SUM(tonghopluong_donvi_chitiet.pcdbn) as pcdbn'), DB::raw('SUM(tonghopluong_donvi_chitiet.pcvk) as pcvk'), DB::raw('SUM(tonghopluong_donvi_chitiet.pckn) as pckn'),
+                    DB::raw('SUM(tonghopluong_donvi_chitiet.pcdang) as pcdang'), DB::raw('SUM(tonghopluong_donvi_chitiet.pccovu) as pccovu'), DB::raw('SUM(tonghopluong_donvi_chitiet.pclt) as pclt'),DB::raw('SUM(tonghopluong_donvi_chitiet.pcd) as pcd'),
+                    DB::raw('SUM(tonghopluong_donvi_chitiet.pctr) as pctr'), DB::raw('SUM(tonghopluong_donvi_chitiet.pctdt) as pctdt'), DB::raw('SUM(tonghopluong_donvi_chitiet.pctnvk) as pctnvk'),
+                    DB::raw('SUM(tonghopluong_donvi_chitiet.pcbdhdcu) as pcbdhdcu'),DB::raw('SUM(tonghopluong_donvi_chitiet.pcthni) as pcthni') ,'tonghopluong_donvi_chitiet.tonghs', 'tonghopluong_donvi_chitiet.giaml',
+                    DB::raw('SUM(tonghopluong_donvi_chitiet.luongtn) as luongtn'), DB::raw('SUM(tonghopluong_donvi_chitiet.stbhxh_dv) as stbhxh_dv'), DB::raw('SUM(tonghopluong_donvi_chitiet.stbhyt_dv) as stbhyt_dv'),DB::raw('SUM(tonghopluong_donvi_chitiet.stkpcd_dv) as stkpcd_dv'),
+                    DB::raw('SUM(tonghopluong_donvi_chitiet.stbhtn_dv) as stbhtn_dv'), DB::raw('SUM(tonghopluong_donvi_chitiet.ttbh_dv) as ttbh_dv'))
+                ->wherein('tonghopluong_donvi_chitiet.mathdv', array_column($model_tonghop->toarray(),'mathdv'))
+                ->groupby('mact','maphanloai')
+                ->orderby('maphanloai')
+                ->get();
+            */
             $m_pl = tonghopluong_donvi_chitiet::join('tonghopluong_donvi','tonghopluong_donvi_chitiet.mathdv','tonghopluong_donvi.mathdv')
                 ->join('dmdonvi','dmdonvi.madv','tonghopluong_donvi.madv')
                 ->join('dmphanloaict','dmphanloaict.mact','tonghopluong_donvi_chitiet.mact')
