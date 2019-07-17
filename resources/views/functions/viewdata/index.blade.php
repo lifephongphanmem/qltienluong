@@ -72,7 +72,7 @@
                                     <label class="control-label " style="text-align: right">Phân loại đơn vị</label>
                                 </div>
                                 <div class="col-md-7">
-                                    {!! Form::select('phanloai',$a_phanloai,null, array('id' => 'phanloai', 'class' => 'form-control'))!!}
+                                    {!! Form::select('phanloai',$a_phanloai,$phanloai, array('id' => 'phanloai', 'class' => 'form-control'))!!}
                                 </div>
                             </div>
                         </div>
