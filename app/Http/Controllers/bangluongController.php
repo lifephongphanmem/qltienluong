@@ -767,8 +767,8 @@ class bangluongController extends Controller
     function tinhluong_khongdinhmuc($inputs){
         $ngaylap = Carbon::create($inputs['nam'], $inputs['thang'], '01');
 
-        $a_thaisan = array_column(hosotamngungtheodoi::where('madv', $inputs['madv'])->where('maphanloai', 'THAISAN')
-            ->where('ngaytu', '<=', $ngaylap)->where('ngayden', '>=', $ngaylap)->get()->toarray(),'macanbo');
+        $a_thaisan = hosotamngungtheodoi::where('madv', $inputs['madv'])->where('maphanloai', 'THAISAN')
+            ->where('ngaytu', '<=', $ngaylap)->where('ngayden', '>=', $ngaylap)->get()->keyBy('macanbo')->toarray();
 
         $a_duongsuc = hosotamngungtheodoi::select('songaycong','songaynghi','macanbo')->where('madv', $inputs['madv'])->where('maphanloai','DUONGSUC')
             ->whereYear('ngaytu', $inputs['nam'])->whereMonth('ngaytu', $inputs['thang'])->get()->keyBy('macanbo')->toarray();
@@ -931,10 +931,11 @@ class bangluongController extends Controller
 
             $tien = $tonghs = 0;
             //nếu cán bộ nghỉ thai sản
-            $thaisan = in_array($m_cb[$key]['macanbo'],$a_thaisan) ? true : false;
+            //$thaisan = in_array($m_cb[$key]['macanbo'],$a_thaisan) ? true : false;
             $khongluong = in_array($m_cb[$key]['macanbo'],$a_khongluong) ? true : false;
             $daingay = in_array($m_cb[$key]['macanbo'],$a_daingay) ? true : false;
             $nghi = isset($a_nghiphep[$m_cb[$key]['macanbo']]) ? true : false;
+            $thaisan = isset($a_thaisan[$m_cb[$key]['macanbo']]) ? true : false;
             $duongsuc = isset($a_duongsuc[$m_cb[$key]['macanbo']]) ? true : false;
 
             //Tính phụ cấp
