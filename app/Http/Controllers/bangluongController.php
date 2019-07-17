@@ -530,7 +530,7 @@ class bangluongController extends Controller
                 $ts = $m_tamngung->where('macanbo',$cb->macanbo)->first();
                 $cb->tencanbo = $cb->tencanbo . '(nghỉ thai sản)';
                 $cb->congtac = 'THAISAN';
-                $cb->ghichu .= 'Nghỉ thai sản từ '.getDayVn($ts->ngaytu).' đến '.getDayVn($ts->ngaytu).';';
+                $cb->ghichu .= 'Nghỉ thai sản từ '.getDayVn($ts->ngaytu).' đến '.getDayVn($ts->ngayden).';';
             }
 
             $cb->ttl = $model_phucap->sum('sotien'); //do mức lương cơ bản đi theo phụ cấp =>ko thể lấy tổng hệ số * lương cơ bản
@@ -1113,7 +1113,7 @@ class bangluongController extends Controller
 
             if($thaisan) {
                 $m_cb[$key]['tencanbo'] .= ' (nghỉ thai sản)';
-                $m_cb[$key]['ghichu'] .= 'Nghỉ thai sản từ '.getDayVn($a_thaisan[$key]['ngaytu']).' đến '.getDayVn($a_thaisan[$key]['ngaytu']).';';
+                $m_cb[$key]['ghichu'] .= 'Nghỉ thai sản từ '.getDayVn($a_thaisan[$key]['ngaytu']).' đến '.getDayVn($a_thaisan[$key]['ngayden']).';';
                 $m_cb[$key]['congtac'] = 'THAISAN';
                 //kiểm tra phân loại công tác
                 $tien = $tonghs = 0;
