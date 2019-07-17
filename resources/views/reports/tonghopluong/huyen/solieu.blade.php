@@ -156,7 +156,7 @@
                         <td>{{dinhdangso($ct->stkpcd_dv)}}</td>
                         <td>{{dinhdangso($ct->stbhtn_dv)}}</td>
                         <td>{{dinhdangso($ct->tongbh)}}</td>
-                        <td>{{dinhdangso($ct->tongbh + $ct->tongtl)}}</td>
+                        <td>{{dinhdangso($ct->tongbh + $ct->tongtl-$ct->giaml)}}</td>
 
                     </tr>
                 @endforeach
@@ -178,7 +178,7 @@
                     <td>{{dinhdangso($chitiet->sum('stkpcd_dv'))}}</td>
                     <td>{{dinhdangso($chitiet->sum('stbhtn_dv'))}}</td>
                     <td>{{dinhdangso($chitiet->sum('tongbh'))}}</td>
-                    <td>{{dinhdangso($chitiet->sum('tongbh') + $chitiet->sum('tongtl'))}}</td>
+                    <td>{{dinhdangso($chitiet->sum('tongbh') + $chitiet->sum('tongtl') - $chitiet->sum('giaml'))}}</td>
                 </tr>
             @endif
         @endforeach
@@ -199,7 +199,7 @@
                 <td>{{dinhdangso($phanloai->sum('stkpcd_dv'))}}</td>
                 <td>{{dinhdangso($phanloai->sum('stbhtn_dv'))}}</td>
                 <td>{{dinhdangso($phanloai->sum('tongbh'))}}</td>
-                <td>{{dinhdangso($phanloai->sum('tongbh') + $phanloai->sum('tongtl'))}}</td>
+                <td>{{dinhdangso($phanloai->sum('tongbh') + $phanloai->sum('tongtl') - $phanloai->sum('giaml'))}}</td>
             </tr>
         @endif
     @endforeach
@@ -219,7 +219,7 @@
         <td>{{dinhdangso($model->sum('stkpcd_dv'))}}</td>
         <td>{{dinhdangso($model->sum('stbhtn_dv'))}}</td>
         <td>{{dinhdangso($model->sum('tongbh'))}}</td>
-        <td>{{dinhdangso($model->sum('tongbh') + $model->sum('tongtl'))}}</td>
+        <td>{{dinhdangso($model->sum('tongbh') + $model->sum('tongtl') - $model->sum('giaml'))}}</td>
     </tr>
 </table>
 
