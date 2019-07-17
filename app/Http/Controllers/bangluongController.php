@@ -1112,6 +1112,7 @@ class bangluongController extends Controller
 
             if($thaisan) {
                 $m_cb[$key]['tencanbo'] .= ' (nghỉ thai sản)';
+                $m_cb[$key]['ghichu'] .= 'Nghỉ thai sản từ '.getDayVn($a_thaisan[$key]['ngaytu']).' đến '.getDayVn($a_thaisan[$key]['ngaytu']).';';
                 $m_cb[$key]['congtac'] = 'THAISAN';
                 //kiểm tra phân loại công tác
                 $tien = $tonghs = 0;
