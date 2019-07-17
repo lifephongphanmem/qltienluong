@@ -234,6 +234,7 @@ class dutoanluongController extends Controller
             $model = $model->wherein('mact', $a_plct);
 
             $m_cb = $model->keyBy('macanbo')->toarray();
+            //dd($m_cb);
             $m_nh = $model->where('nam_ns', '<>', '')->where('nam_ns', '<=', $inputs['namdt'])->keyBy('macanbo')->toarray();
             $m_nb = $model->where('nam_nb', '<>', '')->where('nam_nb', '<=', $inputs['namdt'])->keyBy('macanbo')->toarray();
             $m_tnn = $model->where('nam_tnn', '<>', '')->where('nam_tnn', '<=', $inputs['namdt'])->keyBy('macanbo')->toarray();
@@ -279,6 +280,8 @@ class dutoanluongController extends Controller
             for($i = $inputs['thang'];$i < 13; $i++){
                 $a_thang[] = array('thang'=> str_pad($i, 2, '0', STR_PAD_LEFT),'nam' => $inputs['namdt']);
             }
+            //thời điểm xét duyệt
+            $thoidiem = Carbon::create($inputs['namdt'], $inputs['thang'] + 1, '01')->addDay(-1)->toDateString();
 
             //chạy tính hệ số lương, phụ cấp trc. Sau này mỗi tháng chỉ chạy cán bộ thay đổi
             foreach ($m_cb as $key => $val) {
@@ -300,6 +303,11 @@ class dutoanluongController extends Controller
                         $m_nb[$key]['heso'] += $nhomnb['hesochenhlech'];
                     }
                 }
+                //kiểm tra xem cán bộ đc nâng lương trc thời điêm xét ko
+                // nếu có => xet thời điểm nâng lương là thời điểm xét.
+                if($val['ngaytu'] <= $thoidiem){
+                    $m_nb[$key]['thang_nb'] = $inputs['thang'];
+                }
                 $m_nb[$key] = $this->getHeSoPc($a_pc, $m_nb[$key], $inputs['luongcoban']);
             }
 
@@ -312,6 +320,11 @@ class dutoanluongController extends Controller
                     $m_tnn[$key] = $this->getHeSoPc($a_pc, $m_tnn[$key], $inputs['luongcoban'], false);
                 } else {
                     $m_tnn[$key] = $this->getHeSoPc($a_pc, $m_tnn[$key], $inputs['luongcoban']);
+                }
+                //kiểm tra xem cán bộ đc nâng lương trc thời điêm xét ko
+                // nếu có => xet thời điểm nâng lương là thời điểm xét.
+                if($val['tnndenngay'] <= $thoidiem){
+                    $m_tnn[$key]['thang_tnn'] = $inputs['thang'];
                 }
             }
             //dd($m_tnn);
