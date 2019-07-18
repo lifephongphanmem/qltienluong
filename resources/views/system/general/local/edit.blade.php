@@ -151,7 +151,7 @@
                                 <div class="col-md-6">
                                     <div class="form-group">
                                         <label class="control-label">Phân loại mức độ tự chủ tài chính</label>
-                                        {!!Form::select('phanloainguon', getPhanLoaiNguon(), 'NULL', array('id' => 'phanloainguon','class' => 'form-control'))!!}
+                                        {!!Form::select('phanloainguon', getPhanLoaiNguon(), null, array('id' => 'phanloainguon','class' => 'form-control'))!!}
                                     </div>
                                 </div>
                             </div>
