@@ -28,6 +28,22 @@ use Illuminate\Support\Facades\Session;
 
 class tonghopluong_khoiController extends Controller
 {
+    public function soluongdv($thang,$nam)
+    {
+        $madv = session('admin')->madv;
+        $model_donvi = dmdonvi::select('madv', 'tendv')
+            ->where('macqcq', $madv)
+            ->where('madv', '<>', $madv)
+            ->wherenotin('madv', function ($query) use ($madv,$thang,$nam) {
+                $query->select('madv')->from('dmdonvi')
+                    ->whereMonth('ngaydung', '<=', $thang)
+                    ->whereYear('ngaydung', '<=', $nam)
+                    ->where('trangthai', 'TD')
+                    ->get();
+            })->get();
+        $kq = $model_donvi->count();
+        return $kq;
+    }
     function index(Request $requests)
     {
         if (Session::has('admin')) {
@@ -38,20 +54,19 @@ class tonghopluong_khoiController extends Controller
             $inputs = $requests->all();
             $madv = session('admin')->madv;
             $tendv = getTenDV($madv);
-            $sldvcapduoi = dmdonvi::where('macqcq', $madv)->count();
-
-            $a_data = array(array('thang' => '01', 'mathdv' => null, 'noidung' => null, 'trangthai' => 'CHUADL', 'sldv' => $sldvcapduoi, 'dvgui' => 0),
-                array('thang' => '02', 'mathdv' => null, 'noidung' => null, 'trangthai' => 'CHUADL', 'sldv' => $sldvcapduoi, 'dvgui' => 0),
-                array('thang' => '03', 'mathdv' => null, 'noidung' => null, 'trangthai' => 'CHUADL', 'sldv' => $sldvcapduoi, 'dvgui' => 0),
-                array('thang' => '04', 'mathdv' => null, 'noidung' => null, 'trangthai' => 'CHUADL', 'sldv' => $sldvcapduoi, 'dvgui' => 0),
-                array('thang' => '05', 'mathdv' => null, 'noidung' => null, 'trangthai' => 'CHUADL', 'sldv' => $sldvcapduoi, 'dvgui' => 0),
-                array('thang' => '06', 'mathdv' => null, 'noidung' => null, 'trangthai' => 'CHUADL', 'sldv' => $sldvcapduoi, 'dvgui' => 0),
-                array('thang' => '07', 'mathdv' => null, 'noidung' => null, 'trangthai' => 'CHUADL', 'sldv' => $sldvcapduoi, 'dvgui' => 0),
-                array('thang' => '08', 'mathdv' => null, 'noidung' => null, 'trangthai' => 'CHUADL', 'sldv' => $sldvcapduoi, 'dvgui' => 0),
-                array('thang' => '09', 'mathdv' => null, 'noidung' => null, 'trangthai' => 'CHUADL', 'sldv' => $sldvcapduoi, 'dvgui' => 0),
-                array('thang' => '10', 'mathdv' => null, 'noidung' => null, 'trangthai' => 'CHUADL', 'sldv' => $sldvcapduoi, 'dvgui' => 0),
-                array('thang' => '11', 'mathdv' => null, 'noidung' => null, 'trangthai' => 'CHUADL', 'sldv' => $sldvcapduoi, 'dvgui' => 0),
-                array('thang' => '12', 'mathdv' => null, 'noidung' => null, 'trangthai' => 'CHUADL', 'sldv' => $sldvcapduoi, 'dvgui' => 0)
+            //$sldvcapduoi = dmdonvi::where('macqcq', $madv)->count();
+            $a_data = array(array('thang' => '01', 'mathdv' => null, 'noidung' => null, 'trangthai' => 'CHUADL', 'sldv' => $this->soluongdv('1',$inputs['nam']), 'dvgui' => 0),
+                array('thang' => '02', 'mathdv' => null, 'noidung' => null, 'trangthai' => 'CHUADL', 'sldv' => $this->soluongdv('2',$inputs['nam']), 'dvgui' => 0),
+                array('thang' => '03', 'mathdv' => null, 'noidung' => null, 'trangthai' => 'CHUADL', 'sldv' => $this->soluongdv('3',$inputs['nam']), 'dvgui' => 0),
+                array('thang' => '04', 'mathdv' => null, 'noidung' => null, 'trangthai' => 'CHUADL', 'sldv' => $this->soluongdv('4',$inputs['nam']), 'dvgui' => 0),
+                array('thang' => '05', 'mathdv' => null, 'noidung' => null, 'trangthai' => 'CHUADL', 'sldv' => $this->soluongdv('5',$inputs['nam']), 'dvgui' => 0),
+                array('thang' => '06', 'mathdv' => null, 'noidung' => null, 'trangthai' => 'CHUADL', 'sldv' => $this->soluongdv('6',$inputs['nam']), 'dvgui' => 0),
+                array('thang' => '07', 'mathdv' => null, 'noidung' => null, 'trangthai' => 'CHUADL', 'sldv' => $this->soluongdv('7',$inputs['nam']), 'dvgui' => 0),
+                array('thang' => '08', 'mathdv' => null, 'noidung' => null, 'trangthai' => 'CHUADL', 'sldv' => $this->soluongdv('8',$inputs['nam']), 'dvgui' => 0),
+                array('thang' => '09', 'mathdv' => null, 'noidung' => null, 'trangthai' => 'CHUADL', 'sldv' => $this->soluongdv('9',$inputs['nam']), 'dvgui' => 0),
+                array('thang' => '10', 'mathdv' => null, 'noidung' => null, 'trangthai' => 'CHUADL', 'sldv' => $this->soluongdv('10',$inputs['nam']), 'dvgui' => 0),
+                array('thang' => '11', 'mathdv' => null, 'noidung' => null, 'trangthai' => 'CHUADL', 'sldv' => $this->soluongdv('11',$inputs['nam']), 'dvgui' => 0),
+                array('thang' => '12', 'mathdv' => null, 'noidung' => null, 'trangthai' => 'CHUADL', 'sldv' => $this->soluongdv('12',$inputs['nam']), 'dvgui' => 0)
             );
             /*
             $a_trangthai=array('CHUAGUI'=>'Chưa gửi tổng hợp dữ liệu','CHUADAYDU'=>'Chưa đầy đủ tổng hợp dữ liệu','CHUATAO'=>'Chưa tổng hợp dữ liệu'
@@ -106,9 +121,9 @@ class tonghopluong_khoiController extends Controller
                     //Kiểm tra xem đơn vị cấp dưới đã gửi dữ liệu khối chưa
                     if (count($dulieu)+ count($dulieukhoi)== 0) {//chưa gửi
                         $a_data[$i]['trangthai'] = 'CHUADL';
-                    } elseif (count($dulieu)+ count($dulieukhoi) == $sldvcapduoi) { //kiểm tra xem có bao nhiêu đơn vị gửi / tổng số các đơn vị
+                    } elseif (count($dulieu)+ count($dulieukhoi) == $a_data[$i]['sldv']) { //kiểm tra xem có bao nhiêu đơn vị gửi / tổng số các đơn vị
                         $a_data[$i]['trangthai'] = 'CHUAGUI';
-                        $a_data[$i]['dvgui'] = $sldvcapduoi;
+                        $a_data[$i]['dvgui'] = $a_data[$i]['sldv'];
                     } else {
                         $a_data[$i]['dvgui'] = count($dulieu);
                         $a_data[$i]['trangthai'] = 'CHUADAYDU';
