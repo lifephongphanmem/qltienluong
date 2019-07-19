@@ -125,7 +125,7 @@ class tonghopluong_khoiController extends Controller
                         $a_data[$i]['trangthai'] = 'CHUAGUI';
                         $a_data[$i]['dvgui'] = $a_data[$i]['sldv'];
                     } else {
-                        $a_data[$i]['dvgui'] = count($dulieu);
+                        $a_data[$i]['dvgui'] = count($dulieu)+ count($dulieukhoi);
                         $a_data[$i]['trangthai'] = 'CHUADAYDU';
                     }
                 }
