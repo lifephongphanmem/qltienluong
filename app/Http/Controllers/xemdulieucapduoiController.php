@@ -610,4 +610,93 @@ class xemdulieucapduoiController extends Controller
         } else
             return view('errors.notlogin');
     }
+    function danhsach(Request $request){
+
+        if (Session::has('admin')) {
+            //$donvi=dmdonvi::where('madv',session('admin')->madv)->get();
+            $inputs = $request->all();
+            $madv = session('admin')->madv;
+            $model_donvi = dmdonvi::where('macqcq',session('admin')->madv)->get();
+            $a_trangthai=array('CHOGUI'=>'Chưa gửi dữ liệu','DAGUI'=>'Đã gửi dữ liệu');
+            if(session('admin')->phamvitonghop == 'KHOI')
+            {
+                $model_donvi = dmdonvi::select('dmdonvi.madv', 'dmdonvi.tendv','phanloaitaikhoan','maphanloai')
+                    ->where('macqcq',$madv)->where('madv','<>',$madv)
+                    ->distinct()->get();
+                $model_nguon = tonghopluong_donvi::wherein('madv', function($query) use($madv){
+                    $query->select('madv')->from('dmdonvi')->where('macqcq',$madv)->where('madv','<>',$madv)->get();
+                })->where('thang', $inputs['thang'])
+                    ->where('nam', $inputs['nam'])
+                    ->where('trangthai', 'DAGUI')
+                    ->get();
+                $model_nguonkhoi = tonghopluong_khoi::wherein('madv', function($query) use($madv){
+                    $query->select('madv')->from('dmdonvi')->where('macqcq',$madv)->where('madv','<>',$madv)->get();
+                })->where('thang', $inputs['thang'])
+                    ->where('nam', $inputs['nam'])
+                    ->where('trangthai', 'DAGUI')
+                    ->get();
+            }
+            if(session('admin')->phamvitonghop == 'HUYEN')
+            {
+                $model_donvi = dmdonvi::select('dmdonvi.madv', 'dmdonvi.tendv','phanloaitaikhoan','maphanloai')
+                    ->where('macqcq',$madv)->where('madv','<>',$madv)->distinct()->get();
+                $model_nguon = tonghopluong_huyen::wherein('madv', function($query) use($madv){
+                    $query->select('madv')->from('dmdonvi')->where('macqcq',$madv)->where('madv','<>',$madv)->get();
+                })->where('thang', $inputs['thang'])
+                    ->where('nam', $inputs['nam'])
+                    ->where('trangthai', 'DAGUI')
+                    ->get();
+            }
+            //dd($model_nguon->toarray());
+            $model_nguon_tinh = tonghopluong_tinh::where('madv', $madv)->where('thang', $inputs['thang'])
+                ->where('nam', $inputs['nam'])->first();
+            //kiểm tra xem đã tổng hợp thành dữ liệu huyện gửi lên tỉnh chưa?
+            if(count($model_nguon_tinh)>0 && $model_nguon_tinh->trangthai == 'DAGUI'){
+                $tralai = false;
+            }else{
+                $tralai = true;
+            }
+            foreach ($model_donvi as $dv) {
+                $dv->tralai = $tralai;
+                $nguon = $model_nguon->where('madv',$dv->madv)->first();
+                if(session('admin')->phamvitonghop == 'KHOI')
+                    $nguonkhoi = $model_nguonkhoi->where('madv',$dv->madv)->first();
+                if(count($nguon)> 0 && $nguon->trangthai == 'DAGUI' && session('admin')->phamvitonghop == 'HUYEN' ) {
+                    $dv->mathdv = $nguon->mathdv;
+                    $dv->mathh = $nguon->mathdv;
+                    $dv->trangthai = 'DAGUI';
+                    $dv->thang = $nguon->thang;
+                    $dv->nam = $nguon->nam;
+                }elseif(session('admin')->phamvitonghop == 'KHOI') {
+                    if ((count($nguon) > 0 && $nguon->trangthai == 'DAGUI') || (count($nguonkhoi) > 0 && $nguonkhoi->trangthai == 'DAGUI')) {
+                        $dv->mathdv = $nguon->mathdv;
+                        $dv->trangthai = 'DAGUI';
+                        $dv->thang = $nguonkhoi->thang;
+                        $dv->nam = $nguonkhoi->nam;
+
+                    }
+                }
+                else{
+                    $dv->trangthai = 'CHOGUI';
+                    $dv->mathdv = null;
+                }
+            }
+               // dd($model_donvi->toarray());
+            if (!isset($inputs['trangthai']) || $inputs['trangthai'] != 'ALL') {
+                $model_donvi = $model_donvi->where('trangthai',$inputs['trangthai']);
+            }
+            //  dd($model_donvi->toarray());
+            $m_dv = dmdonvi::where('madv',$madv)->first();
+            return view('reports.tonghopluong.huyen.danhsach')
+                ->with('model', $model_donvi)
+                ->with('thang', $inputs['thang'])
+                ->with('nam', $inputs['nam'])
+                ->with('a_trangthai', $a_trangthai)
+                ->with('m_dv', $m_dv)
+                ->with('furl', '/chuc_nang/tong_hop_luong/')
+                ->with('pageTitle', 'Danh sách đơn vị tổng hợp lương');
+
+        } else
+            return view('errors.notlogin');
+    }
 }

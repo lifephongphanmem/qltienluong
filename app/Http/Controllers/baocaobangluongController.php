@@ -63,26 +63,24 @@ class baocaobangluongController extends Controller
             //dd(session('admin')->toarray());
             $a_thang = getThang();
             $a_phanloai = array();
-            if(session('admin')->phamvitonghop == 'KHOI')
-            {
-                $model_donvi = dmdonvi::where('madvbc',session('admin')->madvbc)->get();
-                $model_phanloai = dmphanloaidonvi::wherein('maphanloai',array_column($model_donvi->toarray(),'maphanloai'))->get();
+            if(session('admin')->phamvitonghop == 'KHOI') {
+                $model_donvi = dmdonvi::where('madvbc', session('admin')->madvbc)->get();
+                $model_phanloai = dmphanloaidonvi::wherein('maphanloai', array_column($model_donvi->toarray(), 'maphanloai'))->get();
                 $model_phanloaict = dmphanloaict::All();
-                $model_phanloai = array_column($model_phanloai->toarray(),'tenphanloai','maphanloai');
-                foreach($model_phanloai as $key=>$key)
-                    $a_phanloai[$key]= $model_phanloai[$key];
+                $model_phanloai = array_column($model_phanloai->toarray(), 'tenphanloai', 'maphanloai');
+                foreach ($model_phanloai as $key => $key)
+                    $a_phanloai[$key] = $model_phanloai[$key];
                 $a_phanloai[''] = '--Chọn tất cả--';
             }
-            if(session('admin')->phamvitonghop == 'HUYEN')
-            {
-                $model_donvi = dmdonvi::where('macqcq',session('admin')->madv)->get();
-                $model_phanloai = dmphanloaidonvi::wherein('maphanloai',array_column($model_donvi->toarray(),'maphanloai'))->get();
+            if(session('admin')->phamvitonghop == 'HUYEN') {
+                $model_donvi = dmdonvi::where('macqcq', session('admin')->madv)->get();
+                $model_phanloai = dmphanloaidonvi::wherein('maphanloai', array_column($model_donvi->toarray(), 'maphanloai'))->get();
                 $model_phanloaict = dmphanloaict::All();
-                if(session('admin')->level = 'H')
-                    $model_phanloai = dmphanloaidonvi::wherein('maphanloai',array_column($model_donvi->toarray(),'maphanloai'))->get();
-                $model_phanloai = array_column($model_phanloai->toarray(),'tenphanloai','maphanloai');
-                foreach($model_phanloai as $key=>$key)
-                    $a_phanloai[$key]= $model_phanloai[$key];
+                if (session('admin')->level = 'H')
+                    $model_phanloai = dmphanloaidonvi::wherein('maphanloai', array_column($model_donvi->toarray(), 'maphanloai'))->get();
+                $model_phanloai = array_column($model_phanloai->toarray(), 'tenphanloai', 'maphanloai');
+                foreach ($model_phanloai as $key => $key)
+                    $a_phanloai[$key] = $model_phanloai[$key];
                 $a_phanloai['GD'] = 'Khối Giáo Dục';
                 $a_phanloai[''] = '--Chọn tất cả--';
                 $a_thang['ALL'] = "--Chọn tất cả--";
