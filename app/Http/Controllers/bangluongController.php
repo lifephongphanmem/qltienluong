@@ -1517,7 +1517,7 @@ class bangluongController extends Controller
         $model_phucap = dmphucap_donvi::select('mapc','phanloai','congthuc','baohiem','tenpc')->where('madv', session('admin')->madv)
             ->wherenotin('mapc',array_merge(['hesott'],explode(',',$inputs['phucaploaitru'])))->get();
         //kiêm nhiệm
-        $a_th = array_merge(array('macanbo', 'macvcq', 'mapb', 'manguonkp','mact','stt','tencanbo', 'msngbac','khongnopbaohiem',
+        $a_th = array_merge(array('macanbo', 'macvcq', 'mapb', 'manguonkp','mact','stt','tencanbo', 'msngbac',
             'congtac','phanloai', 'bhxh', 'bhyt', 'bhtn', 'kpcd','bhxh_dv', 'bhyt_dv', 'bhtn_dv', 'kpcd_dv'),
             array_column($model_phucap->toarray(),'mapc'));
 
@@ -1827,7 +1827,7 @@ class bangluongController extends Controller
             $a_data_canbo[]= $cb->toarray();
         }
 
-        $a_col_cb = array('id','bac','baohiem', 'macongtac','pthuong','theodoi', 'ngaybc');//'manguonkp',
+        $a_col_cb = array('id','bac','baohiem', 'macongtac','pthuong','theodoi', 'ngaybc', 'khongnopbaohiem');//'manguonkp',
         $a_data_canbo = unset_key($a_data_canbo,$a_col_cb);
         //dd($a_data_canbo);
         foreach(array_chunk($a_data_canbo, 50)  as $data){
