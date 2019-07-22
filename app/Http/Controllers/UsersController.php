@@ -174,7 +174,10 @@ class UsersController extends Controller
 
             if ($ttuser->level != 'SA' && $ttuser->level != 'SSA') {
                 $model_donvi = dmdonvi::where('madv', $ttuser->madv)->first();
-
+                $gen = getGeneralConfigs();
+                //dd($gen);
+                $ttuser->tinh = $gen['tinh'];
+                $ttuser->huyen = $gen['huyen'];
                 $ttuser->phanloaitaikhoan = $model_donvi->phanloaitaikhoan;
                 $ttuser->phamvitonghop = $model_donvi->phamvitonghop;
                 $ttuser->lamtron = $model_donvi->lamtron;
@@ -257,10 +260,7 @@ class UsersController extends Controller
                         }
                         nguonkinhphi_dinhmuc::insert($nguon->toarray());
                     }
-
                 }
-
-
             }
             //kiểm tra xem user thuộc đơn vị nào, nếu ko thuộc đơn vị nào (trừ tài khoản quản trị) => đăng nhập ko thành công
         }

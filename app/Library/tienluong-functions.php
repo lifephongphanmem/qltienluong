@@ -352,6 +352,10 @@ function getPhongBan($val_null = true){
 
 }
 
+function getNgachLuong(){
+    return array_column(App\ngachluong::all()->toArray(),'tenngachluong','msngbac');
+}
+
 function getPhanLoaiCT($val_null = true){
     $model = array_column(App\dmphanloaict::all()->toArray(),'tenct','mact');
     if($val_null){

@@ -45,7 +45,7 @@
                     <img src="{{ url($model->anh)}}" height="150">
                 @endif
             </td>
-            <td>1) Họ và tên khai sinh (viết chữ in hoa):{{$model->tenviethoa}}</td>
+            <td>1) Họ và tên khai sinh (viết chữ in hoa): {{$model->tenviethoa}}</td>
         </tr>
         <tr>
             <td>2) Tên gọi khác: {{$model->tenkhac}}</td>

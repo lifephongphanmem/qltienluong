@@ -265,8 +265,24 @@ Route::group(['prefix'=>'nghiep_vu'],function(){
         Route::post('danh_sach_nghi_huu','quanlyhosoController@innghihuu_th');
     });
 
-    Route::group(['prefix'=>'quan_ly'],function(){
+    Route::group(['prefix'=>'nhan_su'],function(){
+        Route::get('danh_sach','hosonhansuController@index');
+        Route::patch('update/{id}','hosonhansuController@update');
+        Route::get('create','hosonhansuController@create');
+        Route::get('maso={id}','hosonhansuController@show');
+        Route::get('del/maso={id}','hosonhansuController@destroy');
+        Route::post('store','hosonhansuController@store');
 
+        Route::get('phucap','hosonhansuController@phucap');
+        Route::get('get_phucap','hosonhansuController@get_phucap');
+        Route::get('del_phucap','hosonhansuController@detroys_phucap');
+
+        Route::get('syll/{id}','hosonhansuController@syll');
+        Route::get('ttts/{id}','hosonhansuController@tomtatts');
+        Route::post('bsll/{id}','hosonhansuController@bsll');
+    });
+
+    Route::group(['prefix'=>'quan_ly'],function(){
         Route::group(['prefix'=>'chi_tieu'],function(){
             Route::get('danh_sach','chitieubiencheController@index');
             Route::get('del/{id}','chitieubiencheController@destroy');
@@ -296,7 +312,7 @@ Route::group(['prefix'=>'nghiep_vu'],function(){
             Route::get('mautt107_m3','dutoanluongController@printf_tt107_m3');
             Route::get('nangluong','dutoanluongController@printf_nangluong');
         });
-
+        /*
         Route::group(['prefix'=>'dia_ban_dbkk'],function(){
             Route::get('index','dmdiabandbkkController@index');
             Route::get('del/{id}','dmdiabandbkkController@destroy');
@@ -306,6 +322,36 @@ Route::group(['prefix'=>'nghiep_vu'],function(){
             Route::get('ma_so={madiaban}','dmdiabandbkkController@detail');
             Route::get('del_detail/{id}','dmdiabandbkkController@destroy_detail');
             Route::get('add_canbo','dmdiabandbkkController@store_detail');
+        });
+        */
+        //làm cho lai châu
+        Route::group(['prefix'=>'tai_lieu'],function(){
+            Route::get('/maso={macanbo}','hosotailieuController@index');
+            Route::get('del/{id}','hosotailieuController@destroy');
+        });
+        Route::group(['prefix'=>'quan_he_bt'],function(){
+            Route::get('/maso={macanbo}','hosoquanhegdController@index_bt');
+            Route::get('del/{id}','hosoquanhegdController@destroy_bt');
+        });
+        Route::group(['prefix'=>'quan_he_vc'],function(){
+            Route::get('/maso={macanbo}','hosoquanhegdController@index_vc');
+            Route::get('del/{id}','hosoquanhegdController@destroy_vc');
+        });
+        Route::group(['prefix'=>'dieu_dong'],function(){
+            Route::get('/maso={macanbo}','hosoluanchuyenController@index_dd');
+            Route::get('del/{id}','hosoluanchuyenController@destroy_dd');
+        });
+        Route::group(['prefix'=>'chuc_vu'],function(){
+            Route::get('/maso={macanbo}','hosochucvuController@index');
+            Route::get('del/{id}','hosochucvuController@destroy');
+        });
+        Route::group(['prefix'=>'bhyt'],function(){
+            Route::get('/maso={macanbo}','hosobaohiemyteController@index');
+            Route::get('del/{id}','hosobaohiemyteController@destroy');
+        });
+        Route::group(['prefix'=>'llvt'],function(){
+            Route::get('/maso={macanbo}','hosollvtController@index');
+            Route::get('del/{id}','hosollvtController@destroy');
         });
     });
 
@@ -357,6 +403,52 @@ Route::group(['prefix'=>'nghiep_vu'],function(){
         Route::get('del/{id}','hosodieudongController@destroy');
 
         Route::get('/maso={macanbo}','hosoluanchuyenController@index_dd');
+    });
+
+    Route::group(['prefix'=>'qua_trinh'],function(){
+        Route::group(['prefix'=>'dao_tao'],function(){
+            Route::get('/maso={macanbo}','hosodaotaoController@index');
+            Route::get('del/{id}','hosodaotaoController@destroy');
+        });
+        Route::group(['prefix'=>'cong_tac'],function(){
+            Route::get('/maso={macanbo}','hosocongtacController@index');
+            Route::get('del/{id}','hosocongtacController@destroy');
+        });
+        Route::group(['prefix'=>'cong_tac_nn'],function(){
+            Route::get('/maso={macanbo}','hosocongtacnnController@index');
+            Route::get('del/{id}','hosocongtacnnController@destroy');
+        });
+        Route::group(['prefix'=>'luong'],function(){
+            Route::get('/maso={macanbo}','hosoluongController@index');
+            Route::get('del/{id}','hosoluongController@destroy');
+        });
+        Route::group(['prefix'=>'phu_cap'],function(){
+            Route::get('/maso={macanbo}','hosophucapController@index');
+            Route::get('del/{id}','hosophucapController@destroy');
+        });
+    });
+
+    Route::group(['prefix'=>'danh_gia'],function(){
+        Route::group(['prefix'=>'binh_bau'],function(){
+            Route::get('/maso={macanbo}','hosobinhbauController@index');
+            Route::get('del/{id}','hosobinhbauController@destroy');
+        });
+        Route::group(['prefix'=>'khen_thuong'],function(){
+            Route::get('/maso={macanbo}','hosokhenthuongController@index');
+            Route::get('del/{id}','hosokhenthuongController@destroy');
+        });
+        Route::group(['prefix'=>'ky_luat'],function(){
+            Route::get('/maso={macanbo}','hosokyluatController@index');
+            Route::get('del/{id}','hosokyluatController@destroy');
+        });
+        Route::group(['prefix'=>'thanh_tra'],function(){
+            Route::get('/maso={macanbo}','hosothanhtraController@index');
+            Route::get('del/{id}','hosothanhtraController@destroy');
+        });
+        Route::group(['prefix'=>'nhan_xet'],function(){
+            Route::get('/maso={macanbo}','hosonhanxetdgController@index');
+            Route::get('del/{id}','hosonhanxetdgController@destroy');
+        });
     });
 });
 
@@ -933,7 +1025,7 @@ Route::group(['prefix'=>'ajax'],function(){
     //Route::get('msnb','ajaxController@getMSNB');
     Route::get('checkmadv','ajaxController@checkmadv');
     //Route::get('phucap','ajaxController@getPhuCap');
-    /*
+
     Route::group(['prefix'=>'tai_lieu'],function(){
         Route::get('add','hosotailieuController@store');
         Route::get('update','hosotailieuController@update');
@@ -1019,7 +1111,6 @@ Route::group(['prefix'=>'ajax'],function(){
         Route::get('get','hosonhanxetdgController@getinfo');
     });
 
-
     Route::group(['prefix'=>'het_tap_su'],function(){
         Route::get('add','dshettapsuController@store');
         Route::get('update','dshettapsuController@update');
@@ -1030,7 +1121,7 @@ Route::group(['prefix'=>'ajax'],function(){
         Route::get('update','dshuutriController@update');
         Route::get('get','dshuutriController@getinfo');
     });
-    */
+
     Route::group(['prefix'=>'nang_luong'],function(){
         Route::get('add','dsnangluongController@store');
         Route::get('update','dsnangluongController@update');
