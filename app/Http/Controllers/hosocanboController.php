@@ -1081,9 +1081,9 @@ class hosocanboController extends Controller
             $maso = getdate()[0]; //lưu mã số
             $inputs = $request->all();
             //dd($inputs);
-            $a_nb = array_column(ngachluong::all()->toArray(), 'manhom','msngbac');
+            $a_nb = ngachluong::all()->keyBy('msngbac')->toArray();
             $a_pc = array_column(dmphucap_donvi::where('madv', session('admin')->madv)->where('phanloai','<','3')->get()->toArray(),'mapc');
-            $a_nhomnb = nhomngachluong::all()->keyBy('manhom')->toArray();
+            //$a_nhomnb = nhomngachluong::all()->keyBy('manhom')->toArray();
 
             $a_chucvu = getChucVuCQ(false);
             foreach($a_chucvu as $key=>$val){
@@ -1247,10 +1247,9 @@ class hosocanboController extends Controller
                 if($inputs['msngbac'] != '') {
                     $msngbac =(string) $data[$i][$inputs['msngbac']];
                     //dd($msngbac);
-                    if(array_key_exists($msngbac, $a_nb)){
+                    if(isset($a_nb[$msngbac])){
                         $model->msngbac = $msngbac;
-                        $nhom = $a_nhomnb[$a_nb[$model->msngbac]];
-                        $bac = ($model->heso - $nhom['heso'])/$nhom['hesochenhlech'];
+                        $bac = ($model->heso - $a_nb[$msngbac]['heso'])/$a_nb[$msngbac]['hesochenhlech'];
                         $model->bac = chkDbl($bac) + 1;//do bắt đầu từ 1
                     }
                 }else{
