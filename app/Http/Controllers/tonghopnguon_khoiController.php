@@ -74,8 +74,8 @@ class tonghopnguon_khoiController extends Controller
                     $query->select('madv')->from('dmdonvi')->where('macqcq',$madv)->where('madv','<>',$madv)->get();
                 })->get();
             $soluong = $model_donvi->count();
-            $dulieukhoi = tonghopluong_khoi::wherein('madv', function($query) use($madv){
-                $query->select('madv')->from('tonghopluong_khoi')->where('macqcq',$madv)->where('madv','<>',$madv)
+            $dulieukhoi = nguonkinhphi_khoi::wherein('madv', function($query) use($madv){
+                $query->select('madv')->from('nguonkinhphi_khoi')->where('macqcq',$madv)->where('madv','<>',$madv)
                     ->where('trangthai','DAGUI')->get();
             })->where('trangthai', 'DAGUI')
                 ->get();
