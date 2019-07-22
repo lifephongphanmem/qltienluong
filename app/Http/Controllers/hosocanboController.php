@@ -1077,12 +1077,13 @@ class hosocanboController extends Controller
         if(Session::has('admin')){
             //Nguyên tắc: chuyển chức vụ, mact về tiếng việt ko dấu để tìm kiếm, lấy đầu tiên tìm đc ko gán = mặc định
             //chức vụ ko tìm dc trong mảng chính => tìm trong bảng viết tắt
-            $madv=session('admin')->madv;
-            $inputs=$request->all();
+            $madv = session('admin')->madv;
+            $maso = getdate()[0]; //lưu mã số
+            $inputs = $request->all();
             //dd($inputs);
-            $a_nb = array_column(ngachluong::all()->toArray(), 'manhom','msngbac');
+            $a_nb = ngachluong::all()->keyBy('msngbac')->toArray();
             $a_pc = array_column(dmphucap_donvi::where('madv', session('admin')->madv)->where('phanloai','<','3')->get()->toArray(),'mapc');
-            $a_nhomnb = nhomngachluong::all()->keyBy('manhom')->toArray();
+            //$a_nhomnb = nhomngachluong::all()->keyBy('manhom')->toArray();
 
             $a_chucvu = getChucVuCQ(false);
             foreach($a_chucvu as $key=>$val){
@@ -1120,7 +1121,13 @@ class hosocanboController extends Controller
             });
 
             $j = getDbl((hosocanbo::where('madv', session('admin')->madv)->get()->max('stt'))) + 1;
-            //dd($data);
+            if($inputs['macvcq'] != '') {
+                $a_pb_ex = a_split($data,array($inputs['macvcq']));
+            }
+            $a_cv_m = array();
+            $a_pb_m = array();
+            //dd( '-' . chuanhoachuoi(trim($a_pb_ex[5]['H'])) . '-');
+
             for($i=$inputs['tudong'];$i < ($inputs['tudong'] + $inputs['sodong']); $i++){
                 //dd($data[$i]);
                 if (!isset($data[$i][$inputs['tencanbo']]) || $data[$i][$inputs['tencanbo']] == '') {
@@ -1129,7 +1136,7 @@ class hosocanboController extends Controller
                 $model = new hosocanbo();
                 $model->stt = $j++;
                 $model->madv = $madv;
-                $model->macanbo = $madv. '_' . (getdate()[0] + $i);
+                $model->macanbo = $madv. '_' . $maso++;
                 $model->tencanbo = $data[$i][$inputs['tencanbo']];
 
                 if($inputs['ngaysinh'] != ''){
@@ -1202,8 +1209,20 @@ class hosocanboController extends Controller
                             $model->mapb = $key;
                         }
                     }
-                }else{
-                    $model->mapb = '';
+
+                    if ($model->mapb == null || $model->mapb == '') {
+                        if (!isset($a_pb_m[$mapb])) {
+                            //tự thêm vào danh mục
+                            $mapb_m = $madv . '_' . ($maso++);
+                            $model->mapb = $mapb_m;
+                            //xóa ký tự đăc biệt, xuống dòng
+                            $tenpb = preg_replace('/([^\pL\.\ ]+)/u', ' ', strip_tags($data[$i][$inputs['mapb']]));
+                            $a_pb_m[$mapb] = array('mapb' => $mapb_m, 'tenpb' => $tenpb, 'madv' => $madv);
+
+                        } else {
+                            $model->mapb = $a_pb_m[$mapb]['mapb'];
+                        }
+                    }
                 }
 
                 if($inputs['mact'] != '') {
@@ -1228,18 +1247,20 @@ class hosocanboController extends Controller
                 if($inputs['msngbac'] != '') {
                     $msngbac =(string) $data[$i][$inputs['msngbac']];
                     //dd($msngbac);
-                    if(array_key_exists($msngbac, $a_nb)){
+                    if(isset($a_nb[$msngbac])){
                         $model->msngbac = $msngbac;
-                        $nhom = $a_nhomnb[$a_nb[$model->msngbac]];
-                        $bac = ($model->heso - $nhom['heso'])/$nhom['hesochenhlech'];
+                        $bac = ($model->heso - $a_nb[$msngbac]['heso'])/$a_nb[$msngbac]['hesochenhlech'];
                         $model->bac = chkDbl($bac) + 1;//do bắt đầu từ 1
                     }
                 }else{
                     $model->msngbac = '';
                 }
 
-                if($inputs['mact'] != '') {
+                if($inputs['macvcq'] != '') {
+                    //xóa ký tự đăc biệt, xuống dòng
+                    //$macv = preg_replace('/([^\pL\.\ ]+)/u', ' ', strip_tags($data[$i][$inputs['macvcq']]));
                     $macv = '-' . chuanhoachuoi(trim($data[$i][$inputs['macvcq']])) . '-';
+
                     foreach ($a_chucvu as $key => $val) {
                         if ($val == $macv) {
                             $model->macvcq = $key;
@@ -1250,29 +1271,36 @@ class hosocanboController extends Controller
                         }
                     }
 
-                    if ($model->macvcq == null || $model->macvcq == '') {//tìm trong mảng chức vụ viết tắt ko dc => set mặc định
-                        $mavt = '-' . chuanhoachuoi(trim($data[$i][$inputs['macvcq']])) . '-';
+                    if ($model->macvcq == null || $model->macvcq == '') {
+                        //tìm trong mảng chức vụ viết tắt ko dc => set mặc định
                         foreach ($a_chucvu_vt as $key => $val) {
-                            if ($val == $mavt) {
+                            if ($val == $macv) {
                                 $model->macvcq = $key;
                                 break;
                             }
-                            if (strpos($val, $mavt) !== false) {
-                                $model->macvcq = $key;
-                            }
                         }
-
                     }
-                }else{
-                    $model->macvcq = '';
-                }
 
-                if($model->macvcq == null || $model->macvcq == ''){//tìm trong mảng chức vụ ko dc => set mặc định
-                    $model->macvcq = $macv_df;
+                    if ($model->macvcq == null || $model->macvcq == '') {
+                        if (!isset($a_cv_m[$macv])) {
+                            //tự thêm vào danh mục
+                            $macv_m = $madv . '_' . ($maso++);
+                            $model->macvcq = $macv_m;
+                            //xóa ký tự đăc biệt, xuống dòng
+                            $tencv = preg_replace('/([^\pL\.\ ]+)/u', ' ', strip_tags($data[$i][$inputs['macvcq']]));
+                            $a_cv_m[$macv] = array('macvcq' => $macv_m, 'tencv' => $tencv, 'madv' => $madv, 'maphanloai' => session('admin')->maphanloai);
+
+                        } else {
+                            $model->macvcq = $a_cv_m[$macv]['macvcq'];
+                        }
+                    }
                 }
                 //dd($model);
                 $model->save();
             }
+            dmchucvucq::insert($a_cv_m);
+            dmphongban::insert($a_pb_m);
+            //dd($a_cv_m);
             File::Delete($path);
             return redirect('nghiep_vu/ho_so/danh_sach');
         }else

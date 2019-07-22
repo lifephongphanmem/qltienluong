@@ -308,6 +308,10 @@ class dutoanluongController extends Controller
                 if($val['ngaytu'] <= $thoidiem){
                     $m_nb[$key]['thang_nb'] = $inputs['thang'];
                 }
+
+                if (isset($m_tnn[$key]) && $m_tnn[$key]['thang_tnn'] < $m_nb[$key]['thang_nb']) {
+                    $m_nb[$key]['pctnn'] = $m_nb[$key]['pctnn'] == 0 ? 5: $m_nb[$key]['pctnn'] + 1;
+                }
                 $m_nb[$key] = $this->getHeSoPc($a_pc, $m_nb[$key], $inputs['luongcoban']);
             }
 
