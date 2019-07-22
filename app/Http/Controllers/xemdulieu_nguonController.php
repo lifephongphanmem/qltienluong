@@ -23,7 +23,7 @@ class xemdulieu_nguonController extends Controller
             $madv = session('admin')->madv;
             $a_trangthai = array('ALL' => '--Chọn trạng thái dữ liệu--', 'CHOGUI' => 'Chưa gửi dữ liệu', 'DAGUI' => 'Đã gửi dữ liệu');
 
-            $model_donvi = dmdonvi::select('madv', 'tendv')
+            $model_donvi = dmdonvi::select('madv', 'tendv','macqcq','maphanloai','phanloaitaikhoan')
                 ->wherein('madv', function($query) use($madv){
                     $query->select('madv')->from('dmdonvi')->where('macqcq',$madv)->where('madv','<>',$madv)->get();
                 })->get();
@@ -38,6 +38,8 @@ class xemdulieu_nguonController extends Controller
             })->get();
 
             $model_nguon_khoi = nguonkinhphi_huyen::where('madv', $madv)->get();
+            $model_tonghopkhoi = nguonkinhphi_khoi::where('macqcq', $madv)
+                ->where('trangthai', 'DAGUI')->get();
 
             foreach($model_donvi as $dv){
                 //kiểm tra xem đã tổng hợp thành dữ liệu khối  gửi lên huyện chưa?
@@ -49,10 +51,15 @@ class xemdulieu_nguonController extends Controller
                 }
 
                 $nguon = $model_nguon->where('sohieu',$inputs['sohieu'])->where('madv',$dv->madv)->first();
+                $khoi = $model_tonghopkhoi->where('sohieu',$inputs['sohieu'])->where('madv',$dv->madv)->first();
                 if(count($nguon)> 0 && $nguon->trangthai == 'DAGUI'){
                     $dv->masodv = $nguon->masodv;
                     $dv->trangthai = 'DAGUI';
-                }else{
+                }elseif(count($khoi)> 0 && $khoi->trangthai == 'DAGUI'){
+                    $dv->masodv = $khoi->masodv;
+                    $dv->trangthai = 'DAGUI';
+                }
+                else{
                     $dv->trangthai = 'CHOGUI';
                     $dv->masodv = null;
                 }

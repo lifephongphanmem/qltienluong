@@ -23,7 +23,7 @@ class xemdulieu_dutoanController extends Controller
             $madv = session('admin')->madv;
             $a_trangthai = array('ALL' => '--Chọn trạng thái dữ liệu--', 'CHOGUI' => 'Chưa gửi dữ liệu', 'DAGUI' => 'Đã gửi dữ liệu');
 
-            $model_donvi = dmdonvi::select('madv', 'tendv')
+            $model_donvi = dmdonvi::select('madv', 'tendv','macqcq','maphanloai','phanloaitaikhoan')
                 ->wherein('madv', function($query) use($madv){
                     $query->select('madv')->from('dmdonvi')->where('macqcq',$madv)->where('madv','<>',$madv)->get();
                 })->get();
@@ -32,10 +32,13 @@ class xemdulieu_dutoanController extends Controller
             })->get();
 
             $model_nguon_khoi = dutoanluong_khoi::where('madv', $madv)->get();
+            $model_tonghopkhoi = dutoanluong_khoi::where('macqcq', $madv)
+                ->where('trangthai', 'DAGUI')->get();
 
             foreach($model_donvi as $dv){
                 //kiểm tra xem đã tổng hợp thành dữ liệu khối  gửi lên huyện chưa?
                 $nguon_khoi = $model_nguon_khoi->where('namns',$inputs['namns'])->first();
+
 
                 if(count($nguon_khoi)>0 && $nguon_khoi->trangthai == 'DAGUI'){
                     $dv->tralai = false;
@@ -44,10 +47,15 @@ class xemdulieu_dutoanController extends Controller
                 }
 
                 $nguon = $model_nguon->where('namns',$inputs['namns'])->where('madv',$dv->madv)->first();
+                $khoi = $model_tonghopkhoi->where('namns',$inputs['namns'])->first();
                 if(count($nguon)> 0 && $nguon->trangthai == 'DAGUI'){
                     $dv->masodv = $nguon->masodv;
                     $dv->trangthai = 'DAGUI';
-                }else{
+                }elseif(count($khoi)> 0 && $khoi->trangthai == 'DAGUI'){
+                    $dv->masodv = $nguon->masodv;
+                    $dv->trangthai = 'DAGUI';
+                }
+                else{
                     $dv->trangthai = 'CHOGUI';
                     $dv->masodv = null;
                 }

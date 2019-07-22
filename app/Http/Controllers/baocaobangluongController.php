@@ -74,6 +74,8 @@ class baocaobangluongController extends Controller
             }
             if(session('admin')->phamvitonghop == 'HUYEN') {
                 $model_donvi = dmdonvi::where('macqcq', session('admin')->madv)->get();
+                if(session('admin')->caphanhchinh == 'T' && session('admin')->phanloaitaikhoan == 'TH')
+                    $model_donvi = dmdonvi::where('tendv','<>','Phần mềm Cuộc Sống')->orderby('tendv')->get();
                 $model_phanloai = dmphanloaidonvi::wherein('maphanloai', array_column($model_donvi->toarray(), 'maphanloai'))->get();
                 $model_phanloaict = dmphanloaict::All();
                 if (session('admin')->level = 'H')

@@ -199,6 +199,7 @@ class UsersController extends Controller
                 $ttuser->madvbc = $model_donvi->madvbc;
                 $ttuser->maphanloai = $model_donvi->maphanloai;
                 $ttuser->capdonvi = $model_donvi->capdonvi;
+                $ttuser->caphanhchinh = $model_donvi->caphanhchinh;
 
                 //kiểm tra lại hệ thống danh mục nếu danh mục nào chưa có thì tự động lấy vào
                 //trường hợp đơn vị tổng hợp thì bỏ qua

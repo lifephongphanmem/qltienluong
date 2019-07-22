@@ -253,8 +253,8 @@ class xemdulieucapduoiController extends Controller
                 $a_phanloai[$key]= $model_phanloai[$key];
             //$a_phanloai['GD'] = 'Khối Giáo Dục';
             $a_phanloai['ALL'] = '--Chọn tất cả--';
-            //$a_phanloai = array('DONVI' => 'Dữ liệu tổng hợp của đơn vị', 'CAPDUOI' => 'Dữ liệu tổng hợp của các đơn vị cấp dưới');
-            /*$model_donvi = dmdonvi::select('madv', 'tendv')
+            /*//$a_phanloai = array('DONVI' => 'Dữ liệu tổng hợp của đơn vị', 'CAPDUOI' => 'Dữ liệu tổng hợp của các đơn vị cấp dưới');
+            $model_donvi = dmdonvi::select('madv', 'tendv')
                     ->wherein('madv', function($query) use($madv){
                         $query->select('madv')->from('dmdonvi')->where('macqcq',$madv)->where('madv','<>',$madv)->get();
                     })->get();*/
