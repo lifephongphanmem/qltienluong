@@ -10,6 +10,7 @@ use App\nguonkinhphi;
 use App\nguonkinhphi_bangluong;
 use App\nguonkinhphi_huyen;
 use App\nguonkinhphi_khoi;
+use App\tonghopluong_khoi;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 
@@ -73,9 +74,14 @@ class tonghopnguon_khoiController extends Controller
                     $query->select('madv')->from('dmdonvi')->where('macqcq',$madv)->where('madv','<>',$madv)->get();
                 })->get();
             $soluong = $model_donvi->count();
-
+            $dulieukhoi = tonghopluong_khoi::wherein('madv', function($query) use($madv){
+                $query->select('madv')->from('tonghopluong_khoi')->where('macqcq',$madv)->where('madv','<>',$madv)
+                    ->where('trangthai','DAGUI')->get();
+            })->where('trangthai', 'DAGUI')
+                ->get();
             foreach($model as $dv){
                 $nguon_khoi = $model_nguon_khoi->where('sohieu', $dv->sohieu)->first();
+
                 if(count($nguon_khoi)>0){
                     //Đã tổng hợp dữ liệu
                     $dv->sldv = $soluong . '/' . $soluong;
@@ -85,13 +91,14 @@ class tonghopnguon_khoiController extends Controller
                 }else{
                     //Chưa tổng hợp dữ liệu
                     $sl = $model_nguon->where('sohieu', $dv->sohieu)->count();
-                    $dv->sldv = $sl . '/' . $soluong;
+                    $khoi = $dulieukhoi->where('sohieu', $dv->sohieu)->count();
+                    $dv->sldv = $sl+$khoi . '/' . $soluong;
                     $dv->masodv = null;
-                    if($sl==0){
+                    if(($sl+$khoi)==0){
                         $dv->trangthai = 'CHUADL';
-                    }elseif($sl < $soluong){
+                    }elseif(($sl+$khoi) < $soluong){
                         $dv->trangthai = 'CHUADAYDU';
-                    }elseif($sl == $soluong){
+                    }elseif(($sl+$khoi) == $soluong){
                         $dv->trangthai = 'CHUAGUI';
                     }else{
                         $dv->trangthai = 'CHUATAO';
