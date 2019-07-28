@@ -15,6 +15,7 @@ use App\nguonkinhphi;
 use App\tonghopluong_donvi;
 use App\tonghopluong_donvi_chitiet;
 use App\tonghopluong_huyen;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\Http\Controllers\dataController as data;
 
@@ -27,24 +28,27 @@ use Illuminate\Support\Str;
 
 class baocaothongtu67Controller extends Controller
 {
-    function index() {
+    function index()
+    {
         if (Session::has('admin')) {
-            $macqcq=session('admin')->madv;
-            $model_dv=dmdonvi::where('macqcq',$macqcq)->orwhere('madv',$macqcq)->get();
-            $model_dvbc=dmdonvibaocao::where('level','H')->orwhere('level','T')->get();
-            $model_dvbcT=dmdonvi::join('dmdonvibaocao','dmdonvi.madvbc','dmdonvibaocao.madvbc')
-                ->where('dmdonvibaocao.level','T')
-                ->where('dmdonvi.phanloaitaikhoan','TH' )
+            $macqcq = session('admin')->madv;
+            $model_dv = dmdonvi::where('macqcq', $macqcq)->orwhere('madv', $macqcq)->get();
+            $model_dvbc = dmdonvibaocao::where('level', 'H')->orwhere('level', 'T')->get();
+            $model_dvbcT = dmdonvi::join('dmdonvibaocao', 'dmdonvi.madvbc', 'dmdonvibaocao.madvbc')
+                ->where('dmdonvibaocao.level', 'T')
+                ->where('dmdonvi.phanloaitaikhoan', 'TH')
                 ->get();
+            $model_thongtu = dmthongtuquyetdinh::where('sohieu',$inputs['sohieu'])->first();
             return view('reports.thongtu67.index')
                 ->with('model_dv', $model_dv)
                 ->with('model_dvbc', $model_dvbc)
                 ->with('model_dvbcT', $model_dvbcT)
-                ->with('furl','/tong_hop_bao_cao/')
-                ->with('pageTitle','Báo cáo tổng hợp lương');
+                ->with('furl', '/tong_hop_bao_cao/')
+                ->with('pageTitle', 'Báo cáo tổng hợp lương');
         } else
             return view('errors.notlogin');
     }
+
     function index_huyen() {
         if (Session::has('admin')) {
             $macqcq=session('admin')->madv;
@@ -4239,15 +4243,24 @@ class baocaothongtu67Controller extends Controller
     //Cần tính toán lại 2 biểu này do
     //bảng lương bao gồm cả cán bộ ko chuyên trách, cán bộ hợp đồng =>sai lòi
     //chưa tính trương họp 1 tháng đơn vị có nhiều bảng lương
-    function mau2a1_donvi() {
+    function mau2a1_donvi(Request $request) {
         if (Session::has('admin')) {
+            $inputs = $request->all();
+            $model_thongtu = \App\dmthongtuquyetdinh::where('sohieu',$inputs['sohieu'])->first();
+            $thoidiem = Carbon::createFromFormat('Y-m-d',$model_thongtu->ngayapdung);
+            $thang = str_pad($thoidiem->month, 2, '0', STR_PAD_LEFT);
+            $nam = str_pad($thoidiem->year, 4, '0', STR_PAD_LEFT);
             $m_dv = dmdonvi::where('madv',session('admin')->madv)->first();
-            $model_bangluong = bangluong::where('thang','07')->where('nam','2017')
-                ->where('madv',session('admin')->madv)->first();
-            $model_bienche = chitieubienche::where('nam','2017')->where('madv',session('admin')->madv)->first();
+
+            $model_chitiet = tonghopluong_donvi_chitiet::wherein('mathdv',function($qr) use ($thang, $nam){
+                $qr->select('mathdv')->from('tonghopluong_donvi')->where('thang',$thang)
+                    ->where('nam',$nam)->where('madv',session('admin')->madv)->get();
+            })->get();
+            dd($model_chitiet);
+            $model_bienche = chitieubienche::where('nam',$nam)->where('madv',session('admin')->madv)->first();
             $luongcb = 0;
             //nếu đơn vị đã tạo bảng lương tháng 07/2017 =>xuất kết quả
-
+            dd();
             if(isset($model_bangluong)){
                 $luongcb = $model_bangluong->luongcoban;
                 $model_congtac = dmphanloaict::all();
@@ -4408,6 +4421,7 @@ class baocaothongtu67Controller extends Controller
             $ar_II = array();
             $ar_II['soluongduocgiao'] = 0;
             $ar_II['soluongbienche'] = 0;
+
             if(session('admin')->maphanloai == 'KVXP' && isset($model_bangluong_ct)){
                 $ar_II['soluongduocgiao'] = isset($model_bienche->soluongduocgiao) ? $model_bienche->soluongduocgiao : 0;
                 $ar_II['soluongbienche'] = isset($model_bienche->soluongbienche) ? $model_bienche->soluongbienche : 0;

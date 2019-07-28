@@ -845,7 +845,7 @@ Route::group(['prefix'=>'bao_cao'],function(){
     */
     Route::group(['prefix'=>'thong_tu_67'],function(){
         Route::group(['prefix'=>'don_vi'],function(){
-            Route::get('mau2a1','baocaothongtu67Controller@mau2a1_donvi');
+            Route::post('mau2a1','baocaothongtu67Controller@mau2a1_donvi');
             Route::get('mau2a2','baocaothongtu67Controller@mau2a2_donvi');
             Route::get('mau2b','baocaothongtu67Controller@mau2b_donvi');
             Route::get('mau2c','baocaothongtu67Controller@mau2c_donvi');

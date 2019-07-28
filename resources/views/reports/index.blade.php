@@ -15,22 +15,26 @@
             <!-- BEGIN EXAMPLE TABLE PORTLET-->
             <div class="portlet box">
                 <div class="portlet-header">
-                    MẪU BÁO CÁO TẠI CÁC ĐƠN VỊ
                 </div>
                 <div class="portlet-body">
                     <div class="row">
                         <div class="col-lg-12">
                             <ol>
-                                <!--li><a href="#" data-target="#thoaibangluong-modal" data-toggle="modal" onclick="baocaobangluong('{{$furl.'don_vi/mauc02ahd'}}')">Bảng lương mẫu 1 (C02a - HD)</a></li>
-                                <li><a href="#" data-target="#thoaibangluong-modal" data-toggle="modal" onclick="baocaobangluong('{{$furl.'don_vi/mauc02ahd_mau2'}}')">Bảng lương mẫu 2 (C02a - HD)</a></li>
-                                <li><a href="#" data-target="#thoaibangluong-modal" data-toggle="modal" onclick="baocaobangluong('{{$furl.'don_vi/mauc02ahd_mau3'}}')">Bảng lương mẫu Lạng Sơn (C02a - HD)</a></li>
-                                <li><a href="#" data-target="#thoaibangluong-modal" data-toggle="modal" onclick="baocaobangluong('{{$furl.'don_vi/mauc02x'}}')">Mẫu 2 (Mẫu C02 - X)</a></li>
-                                <li><a href="#" data-target="#thoaibangluong-modal" data-toggle="modal" onclick="baocaobangluong('{{$furl.'don_vi/maubaohiem'}}')">Mẫu bảo hiểm phải nộp theo lương</a></li-->
-                                <li><a href="#" data-target="#thoaichitra-modal" data-toggle="modal" onclick="chitraluong('{{$furl.'don_vi/chitraluong'}}')">Tổng hợp tình hình chi trả lương</a></li>
-                                <li><a href="#" data-target="#thoaichitra-modal" data-toggle="modal" onclick="chitraluong('{{$furl.'don_vi/dangkyluong'}}')">Tổng hợp đăng ký lương</a></li>
                                 <li><a href="#" data-target="#thoaidutoan-modal" data-toggle="modal" onclick="dutoanluong('{{$furl.'don_vi/dutoanluong'}}')">Dự toán lương</a></li>
+                                <hr>
+                                <li><a href="#" data-target="#thoaichitra-modal" data-toggle="modal" onclick="chitraluong('{{$furl.'don_vi/chitraluong'}}')">Tổng hợp tình hình chi trả lương</a></li>
+                                <hr>
+                                <li><a href="#" onclick="nhucauluong('{{'/bao_cao/thong_tu_67/don_vi/mau2a1'}}')" data-toggle="modal" data-target="#thoainhucauluong-modal">Báo cáo nhu cầu kinh phí (Mẫu 2a/1)</a></li>
+                                <li><a href="{{url('/bao_cao/thong_tu_67/don_vi/mau2a2')}}" onclick="nhucauluong()" target="_blank">Báo cáo nhu cầu kinh phí (Mẫu 2a/2)</a></li>
+                                <hr>
+                                <li><a href="{{url('/bao_cao/thong_tu_67/don_vi/mau4a')}}" onclick="nhucauluong()" target="_blank">Báo cáo nguồn kinh phí (Mẫu 4a)</a></li>
+                                <li><a href="{{url('/bao_cao/thong_tu_67/don_vi/mau4b')}}" onclick="nhucauluong()" target="_blank">Tổng hợp nhu cầu, nguồn kinh phí (Mẫu 4b)</a></li>
+
+                                {{--<li><a href="#" data-target="#thoaichitra-modal" data-toggle="modal" onclick="chitraluong('{{$furl.'don_vi/dangkyluong'}}')">Tổng hợp đăng ký lương</a></li>--}}
+                                <hr>
                                 <li><a href="#" data-target="#thoainangluong-modal" data-toggle="modal" onclick="nangluong('{{$furl.'don_vi/nangluong'}}','NGACHBAC')">Danh sách nâng lương ngạch bậc</a></li>
                                 <li><a href="#" data-target="#thoainangluong-modal" data-toggle="modal" onclick="nangluong('{{$furl.'don_vi/nangluong'}}','TNN')">Danh sách nâng thâm niên nghề</a></li>
+
 
                                 <!-- Tạm thời bỏ để triển khai lạng sơn -->
                                 <!--
@@ -367,6 +371,32 @@
         {!! Form::close() !!}
     </div>
 
+    <div id="thoainhucauluong-modal" tabindex="-1" role="dialog" aria-hidden="true" class="modal fade">
+        {!! Form::open(['url'=>'#','target'=>'_blank' ,'method'=>'post' ,'id' => 'thoainhucau', 'class'=>'form-horizontal']) !!}
+        <div class="modal-dialog modal-content">
+            <div class="modal-header modal-header-primary">
+                <button type="button" data-dismiss="modal" aria-hidden="true" class="close">&times;</button>
+                <h4 id="modal-header-primary-label" class="modal-title">Thông tin kết xuất nhu cầu kinh phí</h4>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <label class="control-label">Căn cứ thông tư, quyết định</label>
+                        {!!Form::select('sohieu',getThongTuQD(false), null, array('id' => 'sohieu','class' => 'form-control'))!!}
+                    </div>
+                </div>
+
+                <input type="hidden" name="_token" value="{{ csrf_token() }}">
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" data-dismiss="modal" class="btn btn-default">Hủy thao tác</button>
+                <button type="submit" id="submit" name="submit" value="submit" class="btn btn-primary">Đồng ý</button>
+            </div>
+        </div>
+        {!! Form::close() !!}
+    </div>
+
     <script>
         function baocaobangluong(url){
             $('#thoaibangluong').attr('action',url);
@@ -383,7 +413,6 @@
         function nangluong(url,phanloai){
             $('#frm_thoainangluong').attr('action',url);
             $('#frm_thoainangluong').find("[id='phanloai']").val(phanloai);
-
         }
 
         function chitraluong_khoi(url){
@@ -402,5 +431,8 @@
             $('#thoaidutoan_huyen').attr('action',url);
         }
 
+        function nhucauluong(url){
+            $('#thoainhucau').attr('action',url);
+        }
     </script>
 @stop

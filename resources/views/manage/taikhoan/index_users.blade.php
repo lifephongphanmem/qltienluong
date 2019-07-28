@@ -96,7 +96,7 @@
             <div class="col-md-12">
                 <div class="portlet light bordered">
                     <div class="portlet-title">
-                        <div class="caption">DANH SÁCH TÀI KHOẢN</div>
+                        <div class="caption">DANH SÁCH TÀI KHOẢN SỬ DỤNG PHẦN MỀM</div>
                         <div class="actions">
                             <div class="actions">
 
@@ -117,7 +117,9 @@
                             <tr>
                                 <th class="text-center" style="width: 4%">STT</th>
                                 <th class="text-center">Tên đơn vị</th>
-                                <th class="text-center">Tài khoản</th>
+                                <th class="text-center">Tên tài khoản</th>
+                                <th class="text-center">Tên đăng nhập</th>
+                                <th class="text-center">Phân loại</th>
                                 <th class="text-center">Trạng thái</th>
                                 <th class="text-center">Thao tác</th>
                             </tr>
@@ -128,8 +130,10 @@
                                     <tr data-id="{{$value->madv}}">
                                         <td class="text-center">{{$key+1}}</td>
                                         <td>{{$value->name}}</td>
+                                        <td>{{$value->tendv}}</td>
                                         <td>{{$value->username}}</td>
-                                        <td>{{$value->status}}</td>
+                                        <td>{{$value->phanloaitaikhoan}}</td>
+                                        <td class="text-center">{{$value->status}}</td>
                                         <td>
                                             <a href="{{url('/login?user='.$value->username)}}" class="btn btn-info btn-xs mbs">
                                                 <i class="fa fa-edit"></i>&nbsp; Đăng nhập</a>

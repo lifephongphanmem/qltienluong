@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 
+use App\dmdonvi;
 use App\dmdonvibaocao;
 use App\GeneralConfigs;
 use App\hosocanbo;
@@ -27,14 +28,14 @@ class HomeController extends Controller
 
                 //thêm phân loại công tác
                 //chia ra màn hình đơn vị; màn hình đơn vị tổng hợp
-                $model = hosocanbo::select('macanbo', 'tencanbo', 'msngbac', 'sunghiep', 'gioitinh', 'tnndenngay', 'ngaytu', 'ngayden','ngaysinh','mact')
-                    ->where('theodoi','<' ,'9')
+                $model = hosocanbo::select('macanbo', 'tencanbo', 'msngbac', 'sunghiep', 'gioitinh', 'tnndenngay', 'ngaytu', 'ngayden', 'ngaysinh', 'mact')
+                    ->where('theodoi', '<', '9')
                     ->where('madv', session('admin')->madv)
                     ->get();
-                if(session('admin')->phanloaitaikhoan =='TH')
-                    $model = hosocanbo::join('dmdonvi','hosocanbo.madv','dmdonvi.madv')
-                ->select('macanbo', 'tencanbo', 'msngbac', 'sunghiep', 'gioitinh', 'tnndenngay', 'ngaytu', 'ngayden','ngaysinh','mact')
-                        ->where('theodoi','<' ,'9')
+                if (session('admin')->phanloaitaikhoan == 'TH')
+                    $model = hosocanbo::join('dmdonvi', 'hosocanbo.madv', 'dmdonvi.madv')
+                        ->select('macanbo', 'tencanbo', 'msngbac', 'sunghiep', 'gioitinh', 'tnndenngay', 'ngaytu', 'ngayden', 'ngaysinh', 'mact')
+                        ->where('theodoi', '<', '9')
                         ->where('dmdonvi.macqcq', session('admin')->madv)
                         ->get();
                 $a_ketqua = array();
@@ -73,29 +74,29 @@ class HomeController extends Controller
                         //$ct->ngaynangluong = null;
                     }
 
-                    if(isset($ct->ngaysinh)){
-                        $ct->ngaynghi = $dt->modify(' +'.($ct->gioitinh == 'Nam' ?$gen['tuoinam']: $gen['tuoinu'] ).' year')->format('Y-m-d');;
+                    if (isset($ct->ngaysinh)) {
+                        $ct->ngaynghi = $dt->modify(' +' . ($ct->gioitinh == 'Nam' ? $gen['tuoinam'] : $gen['tuoinu']) . ' year')->format('Y-m-d');;
                     }
                 }
 
-                $m_nghihuu = $model->where('nam','<=' ,$date['year']);
+                $m_nghihuu = $model->where('nam', '<=', $date['year']);
                 $m_nangluong = $model->where('nam_luong', $date['year']);
                 $m_nghe = $model->where('nam_nghe', $date['year']);
 
                 //$m_sinhnhat=$model->where('thang',$date['mon']);
-                $m_luanchuyen= \App\hosodieudong::where('madv_dd',session('admin')->madv)->where('trangthai','CHONHAN')->get();
+                $m_luanchuyen = \App\hosodieudong::where('madv_dd', session('admin')->madv)->where('trangthai', 'CHONHAN')->get();
                 //dd($m_nangluong->toarray());
 
                 return view('dashboard')
                     ->with('m_nangluong', $m_nangluong->sortby('ngayden'))
                     ->with('m_nghihuu', $m_nghihuu->sortby('ngaysinh'))
-                    ->with('m_nghe',$m_nghe->sortby('tnndenngay'))
-                    ->with('m_luanchuyen',$m_luanchuyen)
+                    ->with('m_nghe', $m_nghe->sortby('tnndenngay'))
+                    ->with('m_luanchuyen', $m_luanchuyen)
                     ->with('a_ketqua', $a_ketqua)
                     ->with('pageTitle', 'Tổng quan');
             }
 
-        } else{
+        } else {
             //dd(getGeneralConfigs());
             return view('welcome')
                 ->with('a_gen', getGeneralConfigs());
@@ -112,17 +113,16 @@ class HomeController extends Controller
     public function setting()
     {
         if (Session::has('admin')) {
-            if(session('admin')->sadmin == 'ssa')
-            {
+            if (session('admin')->sadmin == 'ssa') {
                 $model = GeneralConfigs::first();
                 $setting = $model->setting;
 
                 return view('system.general.setting')
-                    ->with('setting',json_decode($setting))
-                    ->with('pageTitle','Cấu hình chức năng chương trình');
+                    ->with('setting', json_decode($setting))
+                    ->with('pageTitle', 'Cấu hình chức năng chương trình');
             }
 
-        }else
+        } else
             return view('welcome');
     }
 
@@ -138,32 +138,37 @@ class HomeController extends Controller
             $model->save();
 
             return redirect('cau_hinh_he_thong');
-        }else
+        } else
             return view('welcome');
     }
 
     public function listusers(Request $request)
     {
         $inputs = $request->all();
-        $model_diaban = array_column(dmdonvibaocao::select('tendvbc','madvbc')->get()->toArray(),'tendvbc','madvbc');
-        $a_diaban = array('ALL'=>'--Chọn địa bàn, khu vực--');
-        foreach($model_diaban as $key=>$val){
+        $model_diaban = array_column(dmdonvibaocao::select('tendvbc', 'madvbc')->get()->toArray(), 'tendvbc', 'madvbc');
+        $a_diaban = array('ALL' => '--Chọn địa bàn, khu vực--');
+        foreach ($model_diaban as $key => $val) {
             $a_diaban[$key] = $val;
         }
 
         $madvbc = $inputs['madiaban'];
-        $model = Users::wherein('madv',function($qr)use($madvbc){
-            $qr->select('madv')->from('dmdonvi')->where('madvbc',$madvbc)->get();
-        })->get();
-
-
+        $model_dv = dmdonvi::where('madvbc', $inputs['madiaban'])->get();
+        $model = Users::wherein('madv', array_column($model_dv->toarray(), 'madv'))->get();
+        $a_donvi = $model_dv->keyby('madv')->toarray();
+        $a_pl = getPhanLoaiTaiKhoan();
+        foreach($model as $us){
+            $donvi = $a_donvi[$us->madv];
+            $us->tendv = $donvi['tendv'];
+            $us->phanloaitaikhoan = $a_pl[$donvi['phanloaitaikhoan']];
+            $us->status = $us->status == 'active'? 'Kích hoạt' : 'Vô hiệu hóa';
+        }
+        //dd($model_dv);
         return view('manage.taikhoan.index_users')
-            ->with('a_diaban',$a_diaban)
-            ->with('model',$model)
-            ->with('madvbc',$madvbc)
-            ->with('pageTitle','Danh sách đơn vị');
-
-
+            ->with('a_diaban', $a_diaban)
+            //->with('a_donvi', array_column($model_dv->toarray(), 'tendv', 'madv'))
+            ->with('model', $model)
+            ->with('madvbc', $madvbc)
+            ->with('pageTitle', 'Danh sách đơn vị');
     }
 
 }
