@@ -638,13 +638,13 @@ class nguonkinhphiController extends Controller
             //dd($model_thongtu);
             $m_dv = dmdonvi::where('madv',$model->madv)->first();
             $data = array();
-            $data[]=array('val'=>'GDDT','tt'=>'a','noidung'=>'Sự nghiệp giáo dục - đào tạo','nhucau'=>0,'nguonkp'=>0,'tietkiem'=>0,'hocphi'=>0,'vienphi'=>0,'nguonthu'=>0);
-            $data[]=array('val'=>'GD','tt'=>'-','noidung'=>'Giáo dục','nhucau'=>0,'nguonkp'=>0,'tietkiem'=>0,'hocphi'=>0,'vienphi'=>0,'nguonthu'=>0);
-            $data[]=array('val'=>'DT','tt'=>'-','noidung'=>'Đào tạo','nhucau'=>0,'nguonkp'=>0,'tietkiem'=>0,'hocphi'=>0,'vienphi'=>0,'nguonthu'=>0);
-            $data[]=array('val'=>'YTE','tt'=>'b','noidung'=>'Sự nghiệp y tế','nhucau'=>0,'nguonkp'=>0,'tietkiem'=>0,'hocphi'=>0,'vienphi'=>0,'nguonthu'=>0);
-            $data[]=array('val'=>'KHAC','tt'=>'c','noidung'=>'Sự nghiệp khác','nhucau'=>0,'nguonkp'=>0,'tietkiem'=>0,'hocphi'=>0,'vienphi'=>0,'nguonthu'=>0);
-            $data[]=array('val'=>'QLNN','tt'=>'d','noidung'=>' Quản lý nhà nước, Đảng, đoàn thể','nhucau'=>0,'nguonkp'=>0,'tietkiem'=>0,'hocphi'=>0,'vienphi'=>0,'nguonthu'=>0);
-            $data[]=array('val'=>'QLNN','tt'=>'-','noidung'=>'Trong đó: Cán bộ, công chức cấp xã','nhucau'=>0,'nguonkp'=>0,'tietkiem'=>0,'hocphi'=>0,'vienphi'=>0,'nguonthu'=>0);
+            $data[]=array('val'=>'GDDT','tt'=>'a','noidung'=>'Sự nghiệp giáo dục - đào tạo','nhucau'=>0,'nguonkp'=>0,'tietkiem'=>0,'hocphi'=>0,'vienphi'=>0,'khac'=>0,'nguonthu'=>0);
+            $data[]=array('val'=>'GD','tt'=>'-','noidung'=>'Giáo dục','nhucau'=>0,'nguonkp'=>0,'tietkiem'=>0,'hocphi'=>0,'vienphi'=>0,'khac'=>0,'nguonthu'=>0);
+            $data[]=array('val'=>'DT','tt'=>'-','noidung'=>'Đào tạo','nhucau'=>0,'nguonkp'=>0,'tietkiem'=>0,'hocphi'=>0,'vienphi'=>0,'khac'=>0,'nguonthu'=>0);
+            $data[]=array('val'=>'YTE','tt'=>'b','noidung'=>'Sự nghiệp y tế','nhucau'=>0,'nguonkp'=>0,'tietkiem'=>0,'hocphi'=>0,'vienphi'=>0,'khac'=>0,'nguonthu'=>0);
+            $data[]=array('val'=>'KHAC','tt'=>'c','noidung'=>'Sự nghiệp khác','nhucau'=>0,'nguonkp'=>0,'tietkiem'=>0,'hocphi'=>0,'vienphi'=>0,'khac'=>0,'nguonthu'=>0);
+            $data[]=array('val'=>'QLNN','tt'=>'d','noidung'=>' Quản lý nhà nước, Đảng, đoàn thể','nhucau'=>0,'nguonkp'=>0,'tietkiem'=>0,'hocphi'=>0,'vienphi'=>0,'khac'=>0,'nguonthu'=>0);
+            $data[]=array('val'=>'QLNN','tt'=>'-','noidung'=>'Trong đó: Cán bộ, công chức cấp xã','nhucau'=>0,'nguonkp'=>0,'tietkiem'=>0,'hocphi'=>0,'vienphi'=>0,'khac'=>0,'nguonthu'=>0);
             //Thiếu trường hợp 'Sự nghiệp khác' và GDDT
             $khac = false;
             for($i=0;$i<count($data);$i++){
@@ -654,6 +654,7 @@ class nguonkinhphiController extends Controller
                     $data[$i]['tietkiem'] = $model->tietkiem;
                     $data[$i]['hocphi'] = $model->hocphi;
                     $data[$i]['vienphi'] = $model->vienphi;
+                    $data[$i]['khac'] = 0;
                     $data[$i]['nguonthu'] = $model->nguonthu;
 
                     $khac = true;
@@ -664,6 +665,7 @@ class nguonkinhphiController extends Controller
             $data[0]['tietkiem'] = $data[1]['tietkiem']  + $data[2]['tietkiem'] ;
             $data[0]['hocphi'] = $data[1]['hocphi'] + $data[2]['hocphi'];
             $data[0]['vienphi'] = $data[1]['vienphi'] +$data[2]['vienphi'];
+            $data[0]['khac'] = 0;
             $data[0]['nguonthu'] = $data[1]['nguonthu']  + $data[2]['nguonthu'] ;
 
             if(!$khac){
@@ -672,14 +674,16 @@ class nguonkinhphiController extends Controller
                 $data[4]['tietkiem'] = $model->tietkiem;
                 $data[4]['hocphi'] = $model->hocphi;
                 $data[4]['vienphi'] = $model->vienphi;
+                $data[4]['khac'] = 0;
                 $data[4]['nguonthu'] = $model->nguonthu;
             }
-
-            return view('reports.thongtu67.donvi.mau4b')
+            $inputs['donvitinh'] = 1;
+            return view('reports.thongtu67.donvi.mau4b_tt46')
                 ->with('model',$model)
                 ->with('model_thongtu',$model_thongtu)
                 ->with('data',$data)
                 ->with('m_dv',$m_dv)
+                ->with('inputs',$inputs)
                 ->with('pageTitle','Danh sách nguồn kinh phí của đơn vị');
         } else
             return view('errors.notlogin');
