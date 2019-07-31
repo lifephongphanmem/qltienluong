@@ -4546,7 +4546,6 @@ class baocaothongtu67Controller extends Controller
             $nam = str_pad($thoidiem->year, 4, '0', STR_PAD_LEFT);
             $m_dv = dmdonvi::where('madv', session('admin')->madv)->first();
             $model_donvi = dmdonvi::where('madv', session('admin')->madv)->get();
-
             $model_bienche = chitieubienche::where('nam', $thang)->wherein('madv', function ($qr) use ($madvbc) {
                 $qr->select('madv')->from('dmdonvi')->where('madv', session('admin')->madv)->distinct()->get();
             })->get();
@@ -4855,19 +4854,35 @@ class baocaothongtu67Controller extends Controller
                 }
             }
             $inputs['donvitinh'] = 1;
-            return view('reports.thongtu67.mau2a1_tt68')
-                ->with('furl', '/tong_hop_bao_cao/')
-                ->with('ar_I', $ar_I)
-                ->with('ar_II', $ar_II)
-                ->with('ar_III', $ar_III)
-                ->with('ar_IV', $ar_IV)
-                ->with('a_It', $a_It)
-                ->with('a_IIIt', $a_IIIt)
-                ->with('a_IVt', $a_IVt)
-                ->with('m_dv', $m_dv)
-                ->with('inputs', $inputs)
-                ->with('pageTitle', 'Báo cáo nhu cầu kinh phí thực hiện nghị định 47/2017/NĐ-CP');
-
+            if($inputs['sohieu'] == 'tt682018')
+            {
+                return view('reports.thongtu67.mau2a1_tt68')
+                    ->with('furl', '/tong_hop_bao_cao/')
+                    ->with('ar_I', $ar_I)
+                    ->with('ar_II', $ar_II)
+                    ->with('ar_III', $ar_III)
+                    ->with('ar_IV', $ar_IV)
+                    ->with('a_It', $a_It)
+                    ->with('a_IIIt', $a_IIIt)
+                    ->with('a_IVt', $a_IVt)
+                    ->with('m_dv', $m_dv)
+                    ->with('inputs', $inputs)
+                    ->with('pageTitle', 'Báo cáo nhu cầu kinh phí thực hiện nghị định 47/2017/NĐ-CP');
+            }
+            else{
+                return view('reports.thongtu67.mau2a1_tt46')
+                    ->with('furl', '/tong_hop_bao_cao/')
+                    ->with('ar_I', $ar_I)
+                    ->with('ar_II', $ar_II)
+                    ->with('ar_III', $ar_III)
+                    ->with('ar_IV', $ar_IV)
+                    ->with('a_It', $a_It)
+                    ->with('a_IIIt', $a_IIIt)
+                    ->with('a_IVt', $a_IVt)
+                    ->with('m_dv', $m_dv)
+                    ->with('inputs', $inputs)
+                    ->with('pageTitle', 'Báo cáo nhu cầu kinh phí thực hiện nghị định 47/2017/NĐ-CP');
+            }
         } else
             return view('errors.notlogin');
     }
@@ -5160,7 +5175,7 @@ class baocaothongtu67Controller extends Controller
             }
             $inputs = array();
             $inputs['donvitinh'] = 1;
-            return view('reports.thongtu67.mau2a2_tt68')
+            return view('reports.thongtu67.mau2a2_tt46')
                 ->with('furl','/tong_hop_bao_cao/')
                 ->with('ar_I',$ar_I)
                 ->with('ar_II',$ar_II)
@@ -5644,7 +5659,7 @@ class baocaothongtu67Controller extends Controller
             );
             $inputs =array();
             $inputs['donvitinh'] = 1;
-            return view('reports.thongtu67.mau4a_tt68')
+            return view('reports.thongtu67.mau4a_tt46')
                 ->with('model',$model)
                 ->with('a_A',$a_A)
                 ->with('a_BII',$a_BII)
@@ -5840,7 +5855,7 @@ class baocaothongtu67Controller extends Controller
             }
             $inputs = array();
             $inputs['donvitinh'] =1;
-            return view('reports.thongtu67.mau4b_tt68')
+            return view('reports.thongtu67.mau4b_tt46')
                 ->with('model',$model)
                 ->with('data',$data)
                 ->with('m_dv',$m_dv)
