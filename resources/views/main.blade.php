@@ -144,6 +144,9 @@
                                         <li><a href="{{url('/nghiep_vu/nhan_su/danh_sach')}}">Cán bộ đang công tác</a></li>
                                         <li><a href="{{url('/nghiep_vu/tam_ngung/danh_sach')}}">Cán bộ tạm ngừng theo dõi</a></li>
                                         <li><a href="{{url('/nghiep_vu/da_nghi/danh_sach')}}">Cán bộ đã thôi công tác</a></li>
+                                        <li>
+                                            <a href="{{url('nghiep_vu/truy_linh/danh_sach?thang=ALL'.'&nam='.date('Y'))}}"></i>Cán bộ được truy lĩnh lương</a>
+                                        </li>
                                     </ul>
                                 </li>
                                 <li>
