@@ -102,7 +102,7 @@
             <?php $stt=1; ?>
                 <tr style="font-weight: bold;">
                     <td>{{convert2Roman($i++)}}</td>
-                    <td style="text-align: left;" colspan="5">{{$congtac->tenct}}</td>
+                    <td style="text-align: left;" colspan="6">{{$congtac->tenct}}</td>
                 </tr>
             @foreach($model_luong as $ct)
                 <tr>
@@ -116,7 +116,7 @@
                 </tr>
             @endforeach
             <tr style="font-weight: bold; text-align: center; font-style: italic">
-                <td colspan="3">Cộng</td>
+                <td colspan="4">Cộng</td>
                 <td class="money">{{dinhdangso($model_luong->sum('luongtn'))}}</td>
                 <td></td>
                 <td></td>
@@ -124,7 +124,7 @@
         @endif
     @endforeach
     <tr style="font-weight: bold; text-align: center;">
-        <td colspan="3">Tổng cộng</td>
+        <td colspan="4">Tổng cộng</td>
         <td class="money">{{dinhdangso($model->sum('luongtn'))}}</td>
         <td></td>
         <td></td>
