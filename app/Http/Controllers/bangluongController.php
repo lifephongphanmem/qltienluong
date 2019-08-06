@@ -2047,6 +2047,7 @@ class bangluongController extends Controller
 
                     $kq = $cb->toarray();
                     unset($kq['id']);
+                    //dd($kq);
                     (new data())->createBangLuong($inputs['thang'],$kq);
                 }
                 //dd($model_canbo->toarray());

@@ -539,7 +539,7 @@ function getPhanLoaiTamNgungTheoDoi(){
 
 function getTronSo(){
     $a_kq = array();
-    for($i = -3; $i < 6; $i++){
+    for($i = -3; $i < 8; $i++){
         $a_kq[$i] = $i;
     }
     return $a_kq;

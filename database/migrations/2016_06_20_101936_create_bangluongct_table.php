@@ -16,6 +16,7 @@ class CreateBangluongctTable extends Migration
             $table->increments('id');
             $table->string('mabl', 50)->nullable();
             $table->string('manguonkp',50)->nullable();//lưu manguonkp để lấy khi tổng hợp. Do bang lương truy lĩnh ko có mã nguồn
+            $table->string('maso',50)->nullable();//lưu maso truy lĩnh
             $table->string('macvcq', 50)->nullable();
             $table->string('mapb', 50)->nullable();
             $table->string('msngbac', 50)->nullable();
