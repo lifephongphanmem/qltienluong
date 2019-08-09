@@ -661,7 +661,8 @@ class bangluong_inController extends Controller
 
             $model = new Collection();
             foreach($model_bl as $ct) {//trường hợp giảm lương
-                $canbo = $model_trc->where('macanbo', $ct->macanbo)->where('mact', $ct->mact)->first();
+                $canbo = $model_trc->where('macanbo', $ct->macanbo)->where('mact', $ct->mact)
+                    ->where('mapb', $ct->mapb)->first();
                 if (count($canbo) > 0) {
                     foreach ($model_pc as $pc) {
                         $mapc = $pc->mapc;
@@ -759,7 +760,8 @@ class bangluong_inController extends Controller
 
             $model = new Collection();
             foreach($model_bl as $ct) {//trường hợp giảm lương
-                $canbo = $model_trc->where('macanbo', $ct->macanbo)->where('mact', $ct->mact)->first();
+                $canbo = $model_trc->where('macanbo', $ct->macanbo)->where('mact', $ct->mact)
+                        ->where('mapb', $ct->mapb)->first();
                 if (count($canbo) > 0) {
                     foreach ($model_pc as $pc) {
                         $mapc = $pc->mapc;
