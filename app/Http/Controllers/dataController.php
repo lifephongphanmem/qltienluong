@@ -46,49 +46,99 @@ class dataController extends Controller
     }
 
     //<editor-fold desc="Bảng chi tiết lương">
-    function getBangluong_ct_th($thang,$nam,$madv, $manguonkp){
+    function getBangluong_ct_th($thang, $nam, $madv, $manguonkp, $phanloai){
         //sau này chia bảng
         //for từng bảng rồi cộng vào trả lại mảng array
-        if($manguonkp == null){
-            $model = \App\bangluong::join('bangluong_ct','bangluong.mabl','=','bangluong_ct.mabl')
-                ->where('bangluong.thang',$thang)
+        /*Cũ 08.08.2019
+        if ($manguonkp == null) {
+            $model = \App\bangluong::join('bangluong_ct', 'bangluong.mabl', '=', 'bangluong_ct.mabl')
+                ->where('bangluong.thang', $thang)
                 ->where('bangluong.nam', $nam)
-                ->where('bangluong.madv',$madv)
+                ->where('bangluong.madv', $madv)
                 ->where('bangluong.phanloai', 'BANGLUONG')
                 ->select('bangluong_ct.*')
                 //->orderby('bangluong_ct.stt')
                 ->get()->sortby('stt')->toarray();
-        }else{
-            $model = \App\bangluong::join('bangluong_ct','bangluong.mabl','=','bangluong_ct.mabl')
-                ->where('bangluong.thang',$thang)
+        } else {
+            $model = \App\bangluong::join('bangluong_ct', 'bangluong.mabl', '=', 'bangluong_ct.mabl')
+                ->where('bangluong.thang', $thang)
                 ->where('bangluong.nam', $nam)
-                ->where('bangluong.madv',$madv)
-                ->wherein('bangluong.manguonkp',$manguonkp)
+                ->where('bangluong.madv', $madv)
+                ->wherein('bangluong.manguonkp', $manguonkp)
                 ->where('bangluong.phanloai', 'BANGLUONG')
                 ->select('bangluong_ct.*')
                 //->orderby('bangluong_ct.stt')
                 ->get()->sortby('stt')->toarray();
         }
-        //dd($model);
+        */
+        if ($manguonkp == null) {
+            $a_bl = \App\bangluong::select('mabl')
+                ->where('thang', $thang)
+                ->where('nam', $nam)
+                ->where('madv', $madv)
+                ->where('phanloai', 'BANGLUONG')->get();
+        } else {
+            $a_bl = \App\bangluong::select('mabl')
+                ->where('thang', $thang)
+                ->where('nam', $nam)
+                ->where('madv', $madv)
+                ->wherein('manguonkp', $manguonkp)
+                ->where('phanloai', 'BANGLUONG')->get()->toarray();
+        }
+
+        return  \App\bangluong_ct::wherein('mabl',$a_bl)->orderby('stt')->get();
         /*
-        $model = bangluong_ct::where('mabl', $inputs['mabl'])->get();
-        $m_hoso = hosocanbo::where('madv', $inputs['madv'])->get();
-
-        $a_ht = array_column($m_hoso->toarray(),'tencanbo','macanbo');
-        $dmchucvucq = array_column(dmchucvucq::all('tenvt', 'macvcq')->toArray(), 'tenvt', 'macvcq');
-        $sunghiep = array_column($m_hoso->toarray(), 'sunghiep', 'macanbo');
-        $nhomct = array_column(dmphanloaict::all('macongtac', 'mact')->toArray(), 'macongtac', 'mact');
-
-        foreach ($model as $hs) {
-            $hs->tencv = isset($dmchucvucq[$hs->macvcq]) ? $dmchucvucq[$hs->macvcq] : '';
-            $hs->sunghiep = isset($sunghiep[$hs->macanbo]) ? $sunghiep[$hs->macanbo] : '';
-            $hs->macongtac = isset($nhomct[$hs->mact]) ? $nhomct[$hs->mact] : '';
-            if($hs->tencanbo == ''){
-                $hs->tencanbo = isset($a_ht[$hs->macanbo]) ? $a_ht[$hs->macanbo] : ''; //kiêm nhiệm chưa có tên cán bộ
+        switch($thang){
+            case '01':{
+                return  \App\bangluong_ct_01::where('mabl',$mabl)->get();
+                break;
+            }
+            case '02':{
+                return \App\bangluong_ct_02::where('mabl',$mabl)->get();
+                break;
+            }
+            case '03':{
+                return \App\bangluong_ct_03::where('mabl',$mabl)->get();
+                break;
+            }
+            case '04':{
+                return \App\bangluong_ct_04::where('mabl',$mabl)->get();
+                break;
+            }
+            case '05':{
+                return \App\bangluong_ct_05::where('mabl',$mabl)->get();
+                break;
+            }
+            case '06':{
+                return \App\bangluong_ct_06::where('mabl',$mabl)->get();
+                break;
+            }
+            case '07':{
+                return \App\bangluong_ct_07::where('mabl',$mabl)->get();
+                break;
+            }
+            case '08':{
+                return \App\bangluong_ct_08::where('mabl',$mabl)->get();
+                break;
+            }
+            case '09':{
+                return \App\bangluong_ct_09::where('mabl',$mabl)->get();
+                break;
+            }
+            case '10':{
+                return \App\bangluong_ct_10::where('mabl',$mabl)->get();
+                break;
+            }
+            case '11':{
+                return \App\bangluong_ct_11::where('mabl',$mabl)->get();
+                break;
+            }
+            case '12':{
+                return \App\bangluong_ct_12::where('mabl',$mabl)->get();
+                break;
             }
         }
         */
-        return $model;
     }
 
     function storeBangLuong($thang, $data){

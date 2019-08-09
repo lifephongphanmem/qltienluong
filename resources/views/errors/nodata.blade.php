@@ -17,7 +17,16 @@
     <link rel="stylesheet" href="{{ url('css/style-responsive.css') }}">
 </head>
 <body id="error-page" class="animated bounceInLeft">
-<div id="error-page-content"><h1>Thông báo!</h1><h4>Không tìm thấy dữ liệu bạn yêu cầu. Kiểm tra lại dữ liệu nhập!</h4></div>
+<div id="error-page-content">
+    <h1>Thông báo!</h1>
+    @if(isset($message))
+        <h3>{{$message}}</h3>
+    @else
+        <h3>Không tìm thấy dữ liệu bạn yêu cầu. Kiểm tra lại dữ liệu nhập!</h3>
+    @endif
+
+
+</div>
 <script src="{{ url('js/jquery-1.9.1.js') }}"></script>
 <script src="{{ url('js/jquery-migrate-1.2.1.min.js') }}"></script>
 <script src="{{ url('js/jquery-ui.js') }}"></script>

@@ -12,6 +12,7 @@ use App\dmphanloaict;
 use App\dmphucap_donvi;
 use App\hosocanbo;
 use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Request;
 use App\Http\Controllers\dataController as data;
 
@@ -627,6 +628,204 @@ class bangluong_inController extends Controller
         } else
             return view('errors.notlogin');
     }
+
+    public function printf_dstangluong(Request $request){
+        if (Session::has('admin')) {
+            $inputs = $request->all();
+            //$inputs['mabl'] = $inputs['mabl'];
+            //$model = $this->getBangLuong($inputs);
+            $m_bl = bangluong::select('madv','thang','mabl','manguonkp', 'nam')->where('mabl', $inputs['mabl'])->first();
+
+            if($m_bl->thang == '01'){
+                $thang = '12';
+                $nam = str_pad($m_bl->nam - 1, 4, '0', STR_PAD_LEFT) ;
+            }else{
+                $thang = str_pad($m_bl->thang - 1, 2, '0', STR_PAD_LEFT) ;
+                $nam = $m_bl->nam;
+            }
+
+            $m_bl_trc = bangluong::select('madv','thang','mabl','manguonkp', 'nam')
+                ->where('thang',$thang)->where('nam',$nam)->where('manguonkp',$m_bl->manguonkp)
+                ->where('madv',$m_bl->madv)
+                ->first();
+
+            if(count($m_bl_trc) == 0){
+                return view('errors.nodata')
+                    ->with('message','Không tìm thấy bảng lương tháng '.$thang.' năm '.$nam.' (cùng nguồn kinh phí) để so sánh.');
+            }
+
+            $model_bl = (new data())->getBangluong_ct($m_bl->thang,$m_bl->mabl);
+            $model_trc = (new data())->getBangluong_ct($m_bl_trc->thang,$m_bl_trc->mabl);
+
+            $model_pc = dmphucap_donvi::where('madv',$m_bl->madv)->where('phanloai','<','3')->get();
+
+            $model = new Collection();
+            foreach($model_bl as $ct) {//trường hợp giảm lương
+                $canbo = $model_trc->where('macanbo', $ct->macanbo)->where('mact', $ct->mact)->first();
+                if (count($canbo) > 0) {
+                    foreach ($model_pc as $pc) {
+                        $mapc = $pc->mapc;
+                        $mapc_st = 'st_' . $pc->mapc;
+                        $ct->$mapc -= $canbo->$mapc;
+                        $ct->$mapc_st -= $canbo->$mapc_st;
+                    }
+                    //tính lại lương thực nhận do đã giảm trừ
+                    $ct->luongtn = $ct->ttl - $ct->ttbh - $canbo->ttl + $canbo->ttbh;
+                    $ct->tonghs -= $canbo->tonghs;
+                    $ct->ttl -= $canbo->ttl;
+                    $ct->stbhxh -= $canbo->stbhxh;
+                    $ct->stbhyt -= $canbo->stbhyt;
+                    $ct->stkpcd -= $canbo->stkpcd;
+                    $ct->stbhtn -= $canbo->stbhtn;
+                    $ct->ttbh -= $canbo->ttbh;
+                    $ct->stbhxh_dv -= $canbo->stbhxh_dv;
+                    $ct->stbhyt_dv -= $canbo->stbhyt_dv;
+                    $ct->stkpcd_dv -= $canbo->stkpcd_dv;
+                    $ct->stbhtn_dv -= $canbo->stbhtn_dv;
+                    $ct->ttbh_dv -= $canbo->ttbh_dv;
+
+                }
+                //nếu ttl > 0 =>add
+                if ($ct->ttl > 0) {
+                    $model->add($ct);
+                }
+
+            }
+            //dd($model);
+
+            $model_congtac = dmphanloaict::select('mact','tenct')
+                ->wherein('mact', a_unique(array_column($model->toarray(),'mact')))->get();
+
+            $thongtin = array('nguoilap'=>$m_bl->nguoilap,
+                'thang'=>$m_bl->thang,
+                'nam'=>$m_bl->nam,
+                'ngaylap'=>$m_bl->ngaylap,'phanloai'=>$m_bl->phanloai,
+                'cochu'=>$inputs['cochu']);
+            //xử lý ẩn hiện cột phụ cấp => biết tổng số cột hiện => colspan trên báo cáo
+
+            $a_phucap = array();
+            $col = 0;
+
+            foreach($model_pc as $ct) {
+                if ($model->sum($ct->mapc) > 0) {
+                    $a_phucap[$ct->mapc] = $ct->report;
+                    $col++;
+                }
+            }
+            $m_dv = dmdonvi::where('madv',$m_bl->madv)->first();
+            $m_dv->tendvcq = getTenDB($m_dv->madvbc);
+
+            return view('reports.bangluong.donvi.dstangluong')
+                ->with('model',$model->sortBy('stt'))
+                ->with('m_dv',$m_dv)
+                ->with('thongtin',$thongtin)
+                ->with('col',$col)
+                ->with('model_congtac',$model_congtac)
+                ->with('a_phucap',$a_phucap)
+                ->with('pageTitle','Danh sách cán bộ tăng lương');
+        } else
+            return view('errors.notlogin');
+    }
+
+    public function printf_dsgiamluong(Request $request){
+        if (Session::has('admin')) {
+            $inputs = $request->all();
+            //$inputs['mabl'] = $inputs['mabl'];
+            //$model = $this->getBangLuong($inputs);
+            $m_bl = bangluong::select('madv','thang','mabl','manguonkp', 'nam')->where('mabl', $inputs['mabl'])->first();
+
+            if($m_bl->thang == '01'){
+                $thang = '12';
+                $nam = str_pad($m_bl->nam - 1, 4, '0', STR_PAD_LEFT) ;
+            }else{
+                $thang = str_pad($m_bl->thang - 1, 2, '0', STR_PAD_LEFT) ;
+                $nam = $m_bl->nam;
+            }
+
+            $m_bl_trc = bangluong::select('madv','thang','mabl','manguonkp', 'nam')
+                ->where('thang',$thang)->where('nam',$nam)->where('manguonkp',$m_bl->manguonkp)
+                ->where('madv',$m_bl->madv)
+                ->first();
+
+            if(count($m_bl_trc) == 0){
+                return view('errors.nodata')
+                    ->with('message','Không tìm thấy bảng lương tháng '.$thang.' năm '.$nam.' (cùng nguồn kinh phí) để so sánh.');
+            }
+
+            $model_bl = (new data())->getBangluong_ct($m_bl->thang,$m_bl->mabl);
+            $model_trc = (new data())->getBangluong_ct($m_bl_trc->thang,$m_bl_trc->mabl);
+
+            $model_pc = dmphucap_donvi::where('madv',$m_bl->madv)->where('phanloai','<','3')->get();
+
+            $model = new Collection();
+            foreach($model_bl as $ct) {//trường hợp giảm lương
+                $canbo = $model_trc->where('macanbo', $ct->macanbo)->where('mact', $ct->mact)->first();
+                if (count($canbo) > 0) {
+                    foreach ($model_pc as $pc) {
+                        $mapc = $pc->mapc;
+                        $mapc_st = 'st_' . $pc->mapc;
+                        $ct->$mapc = $canbo->$mapc - $ct->$mapc;
+                        $ct->$mapc_st = $canbo->$mapc_st - $ct->$mapc_st;
+                        $ct->$mapc = $ct->$mapc < 0 ? 0 : $ct->$mapc;
+                        $ct->$mapc_st = $ct->$mapc_st < 0 ? 0 : $ct->$mapc_st;
+                    }
+                    //tính lại lương thực nhận do đã giảm trừ
+                    $ct->luongtn = $canbo->ttl - $canbo->ttbh -  $ct->ttl + $ct->ttbh;
+
+                    $ct->tonghs = $canbo->tonghs - $ct->tonghs;
+                    $ct->ttl = $canbo->ttl - $ct->ttl;
+                    $ct->stbhxh = $canbo->stbhxh - $ct->stbhxh;
+                    $ct->stbhyt = $canbo->stbhyt - $ct->stbhyt;
+                    $ct->stkpcd = $canbo->stkpcd - $ct->stkpcd;
+                    $ct->stbhtn = $canbo->stbhtn - $ct->stbhtn;
+                    $ct->ttbh = $canbo->ttbh - $ct->ttbh;
+                    $ct->stbhxh_dv = $canbo->stbhxh_dv - $ct->stbhxh_dv;
+                    $ct->stbhyt_dv = $canbo->stbhyt_dv - $ct->stbhyt_dv;
+                    $ct->stkpcd_dv = $canbo->stkpcd_dv - $ct->stkpcd_dv;
+                    $ct->stbhtn_dv = $canbo->stbhtn_dv - $ct->stbhtn_dv;
+                    $ct->ttbh_dv = $canbo->ttbh_dv - $ct->ttbh_dv;
+                }
+                //nếu ttl > 0 =>add
+                if ($ct->ttl > 0) {
+                    $model->add($ct);
+                }
+
+            }
+            //dd($model);
+
+            $model_congtac = dmphanloaict::select('mact','tenct')
+                ->wherein('mact', a_unique(array_column($model->toarray(),'mact')))->get();
+
+            $thongtin = array('nguoilap'=>$m_bl->nguoilap,
+                'thang'=>$m_bl->thang,
+                'nam'=>$m_bl->nam,
+                'ngaylap'=>$m_bl->ngaylap,'phanloai'=>$m_bl->phanloai,
+                'cochu'=>$inputs['cochu']);
+            //xử lý ẩn hiện cột phụ cấp => biết tổng số cột hiện => colspan trên báo cáo
+
+            $a_phucap = array();
+            $col = 0;
+
+            foreach($model_pc as $ct) {
+                if ($model->sum($ct->mapc) > 0) {
+                    $a_phucap[$ct->mapc] = $ct->report;
+                    $col++;
+                }
+            }
+            $m_dv = dmdonvi::where('madv',$m_bl->madv)->first();
+            $m_dv->tendvcq = getTenDB($m_dv->madvbc);
+
+            return view('reports.bangluong.donvi.dsgiamluong')
+                ->with('model',$model->sortBy('stt'))
+                ->with('m_dv',$m_dv)
+                ->with('thongtin',$thongtin)
+                ->with('col',$col)
+                ->with('model_congtac',$model_congtac)
+                ->with('a_phucap',$a_phucap)
+                ->with('pageTitle','Danh sách cán bộ tăng lương');
+        } else
+            return view('errors.notlogin');
+    }
     //</editor-fold>
 
     //<editor-fold desc="Chi khác">
@@ -675,103 +874,82 @@ class bangluong_inController extends Controller
     public function getData($inputs)
     {
         $getData = new data();
-        $model = $getData->getBangluong_ct_th($inputs['thang_th'], $inputs['nam_th'], $inputs['madv'], isset($inputs['manguonkp'])? $inputs['manguonkp']: null);
-        if (isset($inputs['mapb']) && $inputs['mapb'] != '') {
-            $model = a_getelement_equal($model, array('mapb' => $inputs['mapb']));
-        }
-        if (isset($inputs['macvcq']) && $inputs['macvcq'] != '') {
-            $model = a_getelement_equal($model, array('macvcq' => $inputs['macvcq']));
-        }
-        if (isset($inputs['mact']) && $inputs['mact'] != '') {
-            $model = a_getelement_equal($model, array('mact' => $inputs['mact']));
-            return array($inputs, $model);
-        }
-        //kiểm tra xem có lấy bảng lương truy lĩnh ko
+        $model = $getData->getBangluong_ct_th($inputs['thang_th'], $inputs['nam_th'], $inputs['madv'],
+                    isset($inputs['manguonkp'])? $inputs['manguonkp']: null, 'BANGLUONG');
         $model_tl = array();
         if(isset($inputs['in_truylinh'])){
-            //lấy bảng truy lĩnh lương
-            //tạo thành mảng rồi cộng vào ds cán bộ
-            if(isset($inputs['manguonkp'])){
-                $model_tl = \App\bangluong::join('bangluong_ct','bangluong.mabl','=','bangluong_ct.mabl')
-                    ->where('bangluong.thang',$inputs['thang_th'])
-                    ->where('bangluong.nam', $inputs['nam_th'])
-                    ->where('bangluong.madv',$inputs['madv'])
-                    ->where('bangluong.phanloai', 'TRUYLINH')
-                    ->select('bangluong_ct.*')
-                    //->orderby('bangluong_ct.stt')
-                    ->get()->sortby('stt')->toarray();
-            }else{
-                $model_tl = \App\bangluong::join('bangluong_ct','bangluong.mabl','=','bangluong_ct.mabl')
-                    ->where('bangluong.thang',$inputs['thang_th'])
-                    ->where('bangluong.nam', $inputs['nam_th'])
-                    ->where('bangluong.madv',$inputs['madv'])
-                    ->wherein('bangluong_ct.manguonkp',$inputs['manguonkp'])
-                    ->where('bangluong.phanloai', 'TRUYLINH')
-                    ->select('bangluong_ct.*')
-                    //->orderby('bangluong_ct.stt')
-                    ->get()->sortby('stt')->toarray();
-            }
+            $model_tl = $getData->getBangluong_ct_th($inputs['thang_th'], $inputs['nam_th'], $inputs['madv'],
+                isset($inputs['manguonkp'])? $inputs['manguonkp']: null, 'TRUYLINH');
         }
-        //dd($model_tl);
-        //
-        //lấy danh sách cán bộ
-        $a_canbo = a_split($model, array('macanbo', 'macvcq', 'mapb', 'mact', 'msngbac'));
-        $a_canbo = a_unique($a_canbo);
+        if (isset($inputs['mapb']) && $inputs['mapb'] != '') {
+            $model = $model->where('mapb' ,$inputs['mapb']);
+            $model_tl = $model_tl->where('mapb' ,$inputs['mapb']);
+        }
+        if (isset($inputs['macvcq']) && $inputs['macvcq'] != '') {
+            $model = $model->where('macvcq' ,$inputs['macvcq']);
+            $model_tl = $model_tl->where('macvcq' ,$inputs['macvcq']);
+        }
+        if (isset($inputs['mact']) && $inputs['mact'] != '') {
+            $model = $model->where('mact' ,$inputs['mact']);
+            $model_tl = $model_tl->where('mact' ,$inputs['mact']);
+        }
+
+        $model_canbo = $model->unique('macanbo');
+        //dd($model_canbo);
 
         $a_pc = dmphucap_donvi::where('madv', $inputs['madv'])->where('phanloai', '<', '3')
             ->wherenotin('mapc', array('hesott'))->get()->keyby('mapc')->toarray();
         //dd($a_canbo);
-        for ($i = 0; $i < count($a_canbo); $i++) {
-            $data = a_getelement_equal($model, $a_canbo[$i]);
-            $a_canbo[$i]['ttl'] = array_sum(array_column($data, 'ttl'));
-            $a_canbo[$i]['giaml'] = array_sum(array_column($data, 'giaml'));
-            $a_canbo[$i]['bhct'] = array_sum(array_column($data, 'bhct'));
-            $a_canbo[$i]['thuetn'] = array_sum(array_column($data, 'thuetn'));
-            $a_canbo[$i]['luongtn'] = array_sum(array_column($data, 'luongtn'));
+        foreach($model_canbo as $cb){
+            $m_canbo = $model->where('macanbo',$cb->macanbo);
+            $cb->ttl = $m_canbo->sum('ttl');
+            $cb->giaml = $m_canbo->sum('giaml');
+            $cb->bhct = $m_canbo->sum('bhct');
+            $cb->thuetn = $m_canbo->sum('thuetn');
+            $cb->luongtn = $m_canbo->sum('luongtn');
 
-            $a_canbo[$i]['stbhxh'] = array_sum(array_column($data, 'stbhxh'));
-            $a_canbo[$i]['stbhyt'] = array_sum(array_column($data, 'stbhyt'));
-            $a_canbo[$i]['stkpcd'] = array_sum(array_column($data, 'stkpcd'));
-            $a_canbo[$i]['stbhtn'] = array_sum(array_column($data, 'stbhtn'));
-            $a_canbo[$i]['ttbh'] = array_sum(array_column($data, 'ttbh'));
-            $a_canbo[$i]['stbhxh_dv'] = array_sum(array_column($data, 'stbhxh_dv'));
-            $a_canbo[$i]['stbhyt_dv'] = array_sum(array_column($data, 'stbhyt_dv'));
-            $a_canbo[$i]['stkpcd_dv'] = array_sum(array_column($data, 'stkpcd_dv'));
-            $a_canbo[$i]['stbhtn_dv'] = array_sum(array_column($data, 'stbhtn_dv'));
-            $a_canbo[$i]['ttbh_dv'] = array_sum(array_column($data, 'ttbh_dv'));
+            $cb->stbhxh = $m_canbo->sum('stbhxh');
+            $cb->stbhyt = $m_canbo->sum('stbhyt');
+            $cb->stkpcd = $m_canbo->sum('stkpcd');
+            $cb->stbhtn = $m_canbo->sum('stbhtn');
+            $cb->ttbh = $m_canbo->sum('ttbh');
+            $cb->stbhxh_dv = $m_canbo->sum('stbhxh_dv');
+            $cb->stbhyt_dv = $m_canbo->sum('stbhyt_dv');
+            $cb->stkpcd_dv = $m_canbo->sum('stkpcd_dv');
+            $cb->stbhtn_dv = $m_canbo->sum('stbhtn_dv');
+            $cb->ttbh_dv = $m_canbo->sum('ttbh_dv');
 
-            $first = array_shift($data);
-            $a_canbo[$i]['tencanbo'] = $first['tencanbo'];
-            $a_canbo[$i]['stt'] = $first['stt'];
             foreach ($a_pc as $k => $v) {
-                $a_canbo[$i][$k] = $first[$k];
-                $a_canbo[$i]['st_' . $k] = $first['st_' . $k];
+                $mapc_st = 'st_' . $k;
+                $cb->$mapc_st = $m_canbo->sum($mapc_st);
+                // lấy hệ số phụ cấp của bảng lương có hệ số
+                if($cb->$k == 0){
+                    foreach($m_canbo as $cb_pc){
+                        if($cb->$k > 0){break;}
+                        $cb->$k = $cb_pc->$k;
+                    }
+                }
             }
-            $a_canbo[$i]['hs_vuotkhung'] = $first['hs_vuotkhung'];
-            $a_canbo[$i]['tonghs'] = $first['tonghs'];
 
-            $a_canbo[$i]['ttl_tl'] = 0;//lưu tiền lương truy lĩnh để sau cộng cùng bảng lương
+            $cb->ttl_tl = 0;//lưu tiền lương truy lĩnh để sau cộng cùng bảng lương
             if(count($model_tl)>0){
                 //nếu chỉ lấy mã can bo => chưa tính trường hợp kiêm nhiệm
-                $data_tl = a_getelement_equal($model_tl, array('macanbo'=>$a_canbo[$i]['macanbo']));
-                //dd($data_tl);
-                $a_canbo[$i]['ttl_tl'] = array_sum(array_column($data_tl, 'ttl'));
-
-                $a_canbo[$i]['luongtn'] += array_sum(array_column($data_tl, 'luongtn'));
-                $a_canbo[$i]['stbhxh'] += array_sum(array_column($data_tl, 'stbhxh'));
-                $a_canbo[$i]['stbhyt'] += array_sum(array_column($data_tl, 'stbhyt'));
-                $a_canbo[$i]['stkpcd'] += array_sum(array_column($data_tl, 'stkpcd'));
-                $a_canbo[$i]['stbhtn'] += array_sum(array_column($data_tl, 'stbhtn'));
-                $a_canbo[$i]['ttbh'] += array_sum(array_column($data_tl, 'ttbh'));
-                $a_canbo[$i]['stbhxh_dv'] += array_sum(array_column($data_tl, 'stbhxh_dv'));
-                $a_canbo[$i]['stbhyt_dv'] += array_sum(array_column($data_tl, 'stbhyt_dv'));
-                $a_canbo[$i]['stkpcd_dv'] += array_sum(array_column($data_tl, 'stkpcd_dv'));
-                $a_canbo[$i]['stbhtn_dv'] += array_sum(array_column($data_tl, 'stbhtn_dv'));
-                $a_canbo[$i]['ttbh_dv'] += array_sum(array_column($data_tl, 'ttbh_dv'));
+                $m_canbo_tl = $model_tl->where('macanbo',$cb->macanbo);
+                $cb->ttl_tl = $m_canbo_tl->sum('ttl');
+                $cb->luongtn += $m_canbo_tl->sum('luongtn');
+                $cb->stbhxh += $m_canbo_tl->sum('stbhxh');
+                $cb->stbhyt += $m_canbo_tl->sum('stbhyt');
+                $cb->stkpcd += $m_canbo_tl->sum('stkpcd');
+                $cb->stbhtn += $m_canbo_tl->sum('stbhtn');
+                $cb->ttbh += $m_canbo_tl->sum('ttbh');
+                $cb->stbhxh_dv += $m_canbo_tl->sum('stbhxh_dv');
+                $cb->stbhyt_dv += $m_canbo_tl->sum('stbhyt_dv');
+                $cb->stkpcd_dv += $m_canbo_tl->sum('stkpcd_dv');
+                $cb->stbhtn_dv += $m_canbo_tl->sum('stbhtn_dv');
+                $cb->ttbh_dv += $m_canbo_tl->sum('ttbh_dv');
             }
         }
-
-        return array($a_canbo, $a_pc);
+        return array($model_canbo->toarray(), $a_pc);
     }
 
     function getBangLuong($inputs)
