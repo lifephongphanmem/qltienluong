@@ -120,6 +120,7 @@ class bangluongController extends Controller
             $m_nguonkp_bl = $m_nguonkp->wherein('manguonkp', a_unique(array_column($model->toarray(),'manguonkp')));
             $a_phucap_trichnop = dmphucap_donvi::where('madv', session('admin')->madv)->where('phanloai','<','3')->get();
             $a_phucap = dmphucap_donvi::where('madv', session('admin')->madv)->where('phanloai','<','3')->wherenotin('mapc',$a_pc)->get();
+            $m_linhvuc = getLinhVucHoatDong(false);
 
             return view('manage.bangluong.index')
                 //->with('furl', '/chuc_nang/bang_luong/')
@@ -127,7 +128,7 @@ class bangluongController extends Controller
                 ->with('model', $model)
                 ->with('model_bl', $model_bl)
                 ->with('inputs', $inputs)
-                ->with('m_linhvuc', getLinhVucHoatDong(false))
+                ->with('m_linhvuc', $m_linhvuc)
                 ->with('model_nhomct', $model_nhomct)
                 ->with('model_tenct', $model_tenct)
                 ->with('m_nguonkp', array_column($m_nguonkp->toArray(), 'tennguonkp', 'manguonkp'))
@@ -1845,7 +1846,7 @@ class bangluongController extends Controller
             $inputs['thang'] = $inputs['thang_truylinh'];
             $inputs['nam'] = $inputs['nam_truylinh'];
             $inputs['noidung'] = $inputs['noidung_truylinh'];
-            $inputs['linhvuchoatdong'] = !isset($inputs['linhvuchoatdong_truylinh']) ? 'QLNN' : $inputs['linhvuchoatdong_truylinh'];
+            $inputs['linhvuchoatdong'] = $inputs['linhvuchoatdong_truylinh'];
             //$inputs['manguonkp'] = $inputs['manguonkp_truylinh'];
             //$inputs['luongcoban'] = $inputs['luongcoban_truylinh'];
             $inputs['phanloai'] = $inputs['phanloai_truylinh'];

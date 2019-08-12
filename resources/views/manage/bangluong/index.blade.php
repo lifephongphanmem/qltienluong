@@ -295,6 +295,7 @@
                             $('#noidung_truylinh').val(data.noidung);
                             //$('#manguonkp_truylinh').val(data.manguonkp);
                             //$('#luongcoban_truylinh').val(data.luongcoban);
+                            $('#linhvuchoatdong_truylinh').val(data.linhvuchoatdong_truylinh).trigger('change');
                             $('#mabl_truylinh').val(data.mabl);
                             $('#phanloai_truylinh').val(data.phanloai);
                             $('#ngaylap_truylinh').val(data.ngaylap);
@@ -326,6 +327,7 @@
                             $('#nam').val(data.nam);
                             $('#noidung').val(data.noidung);
                             $('#manguonkp').val(data.manguonkp);
+                            $('#linhvuchoatdong').val(data.linhvuchoatdong).trigger('change');
                             $('#phantramhuong').val(data.phantramhuong);
                             $('#luongcoban').val(data.luongcoban);
                             $('#mabl').val(data.mabl);
