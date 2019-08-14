@@ -58,7 +58,7 @@
                                         <td class="text-center">{{$key+1}}</td>
                                         <td>{{$value->tieumuc}}</td>
                                         <td>{{$value->noidung}}</td>
-                                        <td>{{$value->tennhomct}}</td>
+                                        <td>{{$value->tenct}}</td>
                                         <td>{{$value->tenpc}}</td>
                                         <td>
                                             <button type="button" onclick="editCV('{{$value->tieumuc}}')" class="btn btn-default btn-xs">
@@ -114,7 +114,18 @@
                         <div class="col-md-12">
                             <div class="form-group">
                                 <label class="control-label">Phân loại công tác</label>
-                                {!! Form::select('macongtac',$model_nhomct,null,array('id'=>'macongtac','class'=>'form-control select2me'))!!}
+                                <select class="form-control select2me" name="mact[]" id="mact" multiple required="required">
+                                    <option value="null">Không chọn</option>
+                                    <option value="ALL">Tất cả</option>
+                                    @foreach($model_nhomct as $kieuct)
+                                        <optgroup label="{{$kieuct->tencongtac}}">
+                                            <?php $mode_ct=$model_tenct->where('macongtac',$kieuct->macongtac); ?>
+                                            @foreach($mode_ct as $ct)
+                                                <option value="{{$ct->mact}}">{{$ct->tenct}}</option>
+                                            @endforeach
+                                        </optgroup>
+                                    @endforeach
+                                </select>
 
                             </div>
                         </div>
@@ -124,7 +135,7 @@
                         <div class="col-md-12">
                             <div class="form-group">
                                 <label class="control-label">Phụ cấp</label>
-                                {!! Form::select('mapc[]',$model_phucap,null,array('id' => 'mapc','class' => 'form-control select2me','multiple'=>'multiple','required'=>'required')) !!}
+                                {!! Form::select('mapc[]',$a_pc,null,array('id' => 'mapc','class' => 'form-control select2me','multiple'=>'multiple','required'=>'required')) !!}
                             </div>
                         </div>
                     </div>
@@ -160,11 +171,13 @@
                 dataType: 'JSON',
                 success: function (data) {
                     var a_pc = data.mapc.split(',');
+                    var a_ct = data.mact.split(',');
                     $('#muc').val(data.muc);
                     $('#tieumuc').val(data.tieumuc);
                     $('#noidung').val(data.noidung);
-                    $('#macongtac').val(data.macongtac).trigger('change');
+                    $('#mact').select2("val",a_ct);
                     $('#mapc').select2("val",a_pc);
+                    //$('#macongtac').val(data.macongtac).trigger('change');
                 },
                 error: function(message){
                     toastr.error(message,'Lỗi!');

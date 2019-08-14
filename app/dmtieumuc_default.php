@@ -15,7 +15,7 @@ class dmtieumuc_default extends Model
         //các điều kiện để lấy dữ liệu (có thể bỏ trống)
         'phanloai',
         'sunghiep',
-        'macongtac',
+        'mact',
         'mapc',
         'ghichu'
     ];

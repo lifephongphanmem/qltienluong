@@ -360,7 +360,10 @@ function getPhanLoaiCT($val_null = true){
     $model = array_column(App\dmphanloaict::all()->toArray(),'tenct','mact');
     if($val_null){
         $a_kq = array(''=>'-- Chọn phân loại công tác --');
-        return array_merge($a_kq,$model);
+        foreach($model as $key=>$val){
+            $a_kq[$key]=$val;
+        }
+        return $a_kq;
     }
     return $model;
 
