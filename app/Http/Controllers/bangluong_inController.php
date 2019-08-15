@@ -690,7 +690,6 @@ class bangluong_inController extends Controller
                 if ($ct->ttl > 0) {
                     $model->add($ct);
                 }
-
             }
             //dd($model);
 
@@ -759,33 +758,32 @@ class bangluong_inController extends Controller
             $model_pc = dmphucap_donvi::where('madv',$m_bl->madv)->where('phanloai','<','3')->get();
 
             $model = new Collection();
-            foreach($model_bl as $ct) {//trường hợp giảm lương
-                $canbo = $model_trc->where('macanbo', $ct->macanbo)->where('mact', $ct->mact)
-                        ->where('mapb', $ct->mapb)->first();
+
+            foreach($model_trc as $ct) {//trường hợp giảm lương
+                $canbo = $model_bl->where('macanbo', $ct->macanbo)->where('mact', $ct->mact)
+                    ->where('mapb', $ct->mapb)->first();
                 if (count($canbo) > 0) {
                     foreach ($model_pc as $pc) {
                         $mapc = $pc->mapc;
                         $mapc_st = 'st_' . $pc->mapc;
-                        $ct->$mapc = $canbo->$mapc - $ct->$mapc;
-                        $ct->$mapc_st = $canbo->$mapc_st - $ct->$mapc_st;
-                        $ct->$mapc = $ct->$mapc < 0 ? 0 : $ct->$mapc;
-                        $ct->$mapc_st = $ct->$mapc_st < 0 ? 0 : $ct->$mapc_st;
+                        $ct->$mapc -= $canbo->$mapc;
+                        $ct->$mapc_st -= $canbo->$mapc_st;
                     }
                     //tính lại lương thực nhận do đã giảm trừ
-                    $ct->luongtn = $canbo->ttl - $canbo->ttbh -  $ct->ttl + $ct->ttbh;
+                    $ct->luongtn = $ct->ttl - $ct->ttbh - $canbo->ttl + $canbo->ttbh;
+                    $ct->tonghs -= $canbo->tonghs;
+                    $ct->ttl -= $canbo->ttl;
+                    $ct->stbhxh -= $canbo->stbhxh;
+                    $ct->stbhyt -= $canbo->stbhyt;
+                    $ct->stkpcd -= $canbo->stkpcd;
+                    $ct->stbhtn -= $canbo->stbhtn;
+                    $ct->ttbh -= $canbo->ttbh;
+                    $ct->stbhxh_dv -= $canbo->stbhxh_dv;
+                    $ct->stbhyt_dv -= $canbo->stbhyt_dv;
+                    $ct->stkpcd_dv -= $canbo->stkpcd_dv;
+                    $ct->stbhtn_dv -= $canbo->stbhtn_dv;
+                    $ct->ttbh_dv -= $canbo->ttbh_dv;
 
-                    $ct->tonghs = $canbo->tonghs - $ct->tonghs;
-                    $ct->ttl = $canbo->ttl - $ct->ttl;
-                    $ct->stbhxh = $canbo->stbhxh - $ct->stbhxh;
-                    $ct->stbhyt = $canbo->stbhyt - $ct->stbhyt;
-                    $ct->stkpcd = $canbo->stkpcd - $ct->stkpcd;
-                    $ct->stbhtn = $canbo->stbhtn - $ct->stbhtn;
-                    $ct->ttbh = $canbo->ttbh - $ct->ttbh;
-                    $ct->stbhxh_dv = $canbo->stbhxh_dv - $ct->stbhxh_dv;
-                    $ct->stbhyt_dv = $canbo->stbhyt_dv - $ct->stbhyt_dv;
-                    $ct->stkpcd_dv = $canbo->stkpcd_dv - $ct->stkpcd_dv;
-                    $ct->stbhtn_dv = $canbo->stbhtn_dv - $ct->stbhtn_dv;
-                    $ct->ttbh_dv = $canbo->ttbh_dv - $ct->ttbh_dv;
                 }
                 //nếu ttl > 0 =>add
                 if ($ct->ttl > 0) {

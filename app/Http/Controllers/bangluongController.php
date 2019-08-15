@@ -911,6 +911,11 @@ class bangluongController extends Controller
             if ($val['manguonkp'] != '' && $val['manguonkp'] != null && !in_array($inputs['manguonkp'], $a_nguon)) {
                 continue; //cán bộ ko thuộc nguồn quản lý => ko tính lương
             }
+
+            if ($m_cb[$key]['lvhd'] != $inputs['linhvuchoatdong']) {
+                continue; //cán bộ ko thuộc lvhd => ko tính lương
+            }
+
             //ngày công tác không thỏa mãn
             if(getDayVn($m_cb[$key]['ngaybc']) != '' && $m_cb[$key]['ngaybc'] > $ngaycuoithang){
                 continue;
