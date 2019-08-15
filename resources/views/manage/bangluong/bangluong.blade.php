@@ -51,9 +51,9 @@
                         <thead>
                             <tr>
                                 <th class="text-center" style="width: 5%">STT</th>
-                                <th class="text-center">Mã công chức</th>
                                 <th class="text-center">Họ tên</th>
                                 <th class="text-center">Chức vụ</th>
+                                <th class="text-center">Phân loại</br>công tác</th>
                                 <th class="text-center">Mã ngạch</th>
                                 <th class="text-center">Thực lĩnh</th>
                                 <th class="text-center">Thao tác</th>
@@ -65,14 +65,20 @@
                             @foreach($model as $key=>$value)
                                 <tr>
                                     <td class="text-center">{{$key+1}}</td>
-                                    <td>{{$value->macongchuc}}</td>
                                     <td>{{$value->tencanbo}}</td>
                                     <td>{{isset($a_cv[$value->macvcq])? $a_cv[$value->macvcq]: ''}}</td>
+                                    <td>{{isset($a_ct[$value->mact])? $a_ct[$value->mact]: ''}}</td>
                                     <td>{{$value->msngbac}}</td>
                                     <td class="text-right">{{number_format($value->luongtn)}}</td>
                                     <td>
-                                        <a href="{{url($furl.'can_bo?mabl='.$m_bl->mabl.'&maso='.$value->id)}}" class="btn btn-info btn-xs mbs">
+                                        <a href="{{url($furl.'can_bo?mabl='.$m_bl->mabl.'&maso='.$value->id)}}" class="btn btn-default btn-xs mbs">
                                             <i class="fa fa-edit"></i>&nbsp; Sửa</a>
+                                        @if($m_bl->phanloai == 'BANGLUONG')
+                                            <button type="button" class="btn btn-xs btn-default" data-target="#giatri-modal" data-toggle="modal"
+                                                    onclick="giatri('{{$m_bl->mabl}}','{{$value->id}}','{{$value->tencanbo}}','{{$value->mact}}')">
+                                                <i class="fa fa-list-alt"></i> Cập nhật
+                                            </button>
+                                        @endif
                                         <button type="button" onclick="cfDel('{{$m_bl->mabl}}','{{$value->id}}')" class="btn btn-danger btn-xs mbs" data-target="#delete-modal-confirm" data-toggle="modal">
                                             <i class="fa fa-trash-o"></i>&nbsp; Xóa</button>
                                     </td>
@@ -114,11 +120,107 @@
         {!!Form::close()!!}
     </div>
 
+    <!--Modal thông tin tùy chọn in bảng lương -->
+    <div id="giatri-modal" tabindex="-1" role="dialog" aria-hidden="true" class="modal fade">
+        <div class="modal-lg modal-dialog modal-content">
+            <div class="modal-header modal-header-primary">
+                <button type="button" data-dismiss="modal" aria-hidden="true" class="close">&times;</button>
+                <h4 id="hd-inbl" class="modal-title">Thông tin chung</h4>
+            </div>
+
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="tabbable tabbable-custom tabbable-noborder tabbable-reversed">
+                            <ul class="nav nav-tabs">
+                                <li class="active">
+                                    <a href="#tab_0" data-toggle="tab" aria-expanded="true">
+                                        Phân loại công tác </a>
+                                </li>
+                                <!--li>
+                                    <a href="#tab_1" data-toggle="tab" aria-expanded="true">
+                                        Sự nghiệp </a>
+                                </li>
+
+                                <li>
+                                    <a href="#tab_2" data-toggle="tab" aria-expanded="true">
+                                        Nguồn kinh phí </a>
+                                </li-->
+                            </ul>
+                            <div class="tab-content">
+                                <!-- phân loại công tác -->
+                                <div class="tab-pane active" id="tab_0">
+                                    <div class="portlet box blue">
+                                        <div class="portlet-title">
+                                            <div class="caption"></div>
+                                            <div class="tools"></div>
+                                        </div>
+                                        <div class="portlet-body form">
+                                            <!-- BEGIN FORM-->
+                                            {!! Form::open(['url'=>'/chuc_nang/bang_luong/updatect_plct', 'method' => 'POST', 'id' => 'frm_plct', 'class'=>'horizontal-form']) !!}
+                                                <div class="form-body">
+                                                    <div class="form-horizontal">
+                                                        <div class="row">
+                                                            <div class="col-md-12">
+                                                                <label class="control-label">Phân loại công tác mới</label>
+                                                                <select class="form-control select2me" name="mact" id="mact">
+                                                                    @foreach($model_nhomct as $kieuct)
+                                                                        <optgroup label="{{$kieuct->tencongtac}}">
+                                                                            <?php $mode_ct=$model_tenct->where('macongtac',$kieuct->macongtac); ?>
+                                                                            @foreach($mode_ct as $ct)
+                                                                                <option value="{{$ct->mact}}">{{$ct->tenct}}</option>
+                                                                            @endforeach
+                                                                        </optgroup>
+                                                                    @endforeach
+                                                                </select>
+                                                            </div>
+                                                        </div>
+                                                        <div class="row">
+                                                            <div class="col-md-offset-4 col-md-8">
+                                                                <input type="checkbox" name="up_hoso" id="up_hoso" checked />
+                                                                <label class="control-label" for="up_hoso">Cập nhật hồ sơ cán bộ</label>
+                                                            </div>
+                                                        </div>
+
+                                                        <input type="hidden" id="id" name="id"/>
+                                                        <input type="hidden" id="mabl" name="mabl"/>
+                                                    </div>
+                                                </div>
+                                                <div class="form-actions">
+                                                    <div class="row text-center">
+                                                        <div class="col-md-12">
+                                                            <button type="submit" class="btn default">Hoàn thành</button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </form>
+                                            <!-- END FORM-->
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer"></div>
+        </div>
+    </div>
+
     <script>
         function getLink(){
             var mapb = $('#mapb').val();
             var mabl = '{{$m_bl->mabl}}';
             return '/chuc_nang/bang_luong/bang_luong?mabl='+ mabl +'&mapb=' + mapb;
+        }
+
+        function giatri(mabl, id, canbo, mact){
+            document.getElementById("hd-inbl").innerHTML="Cập nhật thông tin cán bộ: " + canbo;
+            $('#frm_plct').find("[id^='id']").val(id);
+            $('#frm_plct').find("[id^='mabl']").val(mabl);
+            $('#frm_plct').find("[id^='mact']").val(mact).trigger('change');
+
         }
 
         $(function(){

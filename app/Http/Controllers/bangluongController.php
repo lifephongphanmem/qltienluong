@@ -2315,6 +2315,8 @@ class bangluongController extends Controller
         if (Session::has('admin')) {
             $inputs = $request->all();
             $m_bl = bangluong::select('thang', 'nam', 'mabl','phanloai')->where('mabl', $inputs['mabl'])->first();
+            $model_nhomct = dmphanloaicongtac::select('macongtac','tencongtac')->get();
+            $model_tenct = dmphanloaict::select('tenct','macongtac','mact')->get();
             //dd($m_bl);
             if($m_bl->phanloai != 'BANGLUONG' && $m_bl->phanloai != 'TRUYLINH'){
                 $model = bangluong_truc::where('mabl', $inputs['mabl'])->get();
@@ -2333,23 +2335,15 @@ class bangluongController extends Controller
             if($inputs['mapb'] != ''){
                 $model = $model->where('mapb',$inputs['mapb']);
             }
-            //getPhongBan()
 
-            /*
-             * $dmchucvucq = dmchucvucq::all('tencv', 'macvcq')->toArray();
-            $model_cb = hosocanbo::where('madv', session('admin')->madv)->get();
-            foreach ($model as $hs) {
-                $cb = $model_cb->where('macanbo', $hs->macanbo)->first();
-                $hs->tencanbo = count($cb) > 0 ? $cb->tencanbo : '';
-                $hs->tencv = getInfoChucVuCQ($hs, $dmchucvucq);
-            }
-            */
-            //dd(getChucVuCQ(false));
             return view('manage.bangluong.bangluong')
                 ->with('furl', '/chuc_nang/bang_luong/')
                 ->with('model', $model)
                 ->with('m_bl', $m_bl)
+                ->with('model_nhomct',$model_nhomct)
+                ->with('model_tenct',$model_tenct)
                 ->with('a_cv', getChucVuCQ(false))
+                ->with('a_ct', getPhanLoaiCT(false))
                 ->with('inputs', $inputs)
                 ->with('pageTitle', 'Bảng lương chi tiết');
         } else
@@ -2670,6 +2664,37 @@ class bangluongController extends Controller
             $model->ttl = chkDbl($inputs['ttl']);
             $model->save();
             return redirect('/chuc_nang/bang_luong/bang_luong?mabl='.$model->mabl.'&mapb=');
+        } else
+            return view('errors.notlogin');
+    }
+
+    function updatect_plct(Request $request)
+    {
+        if (Session::has('admin')) {
+            $inputs = $request->all();
+            $m_bl = bangluong::where('mabl', $inputs['mabl'])->first();
+            $model = (new data())->getBangluong_ct_cb($m_bl->thang, $inputs['id']);
+            $model->update(['mact' => $inputs['mact']]);
+            if (isset($inputs['up_hoso'])) {
+                $pl = dmphanloaicongtac_baohiem::where('mact',$inputs['mact'])->where('madv',session('admin')->madv)->first();
+                $canbo = hosocanbo::where('macanbo', $model->macanbo)->first();
+                if($canbo->baohiem == 0){
+                    $canbo->update(['mact' => $inputs['mact']]);
+                }else{
+                    $canbo->update(['mact' => $inputs['mact'],
+                                    "bhxh" => $pl->bhxh,
+                                    "bhyt" => $pl->bhyt,
+                                    "bhtn" => $pl->bhtn,
+                                    "kpcd" => $pl->kpcd,
+                                    "bhxh_dv" => $pl->bhxh_dv,
+                                    "bhyt_dv" => $pl->bhyt_dv,
+                                    "bhtn_dv" => $pl->bhtn_dv,
+                                    "kpcd_dv" => $pl->kpcd_dv,]);
+                }
+            }
+
+            return redirect('/chuc_nang/bang_luong/bang_luong?mabl=' . $model->mabl . '&mapb=' . $model->mapb);
+
         } else
             return view('errors.notlogin');
     }
