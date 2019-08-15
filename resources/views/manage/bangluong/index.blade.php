@@ -82,7 +82,8 @@
                                 <th class="text-center" style="width: 5%">STT</th>
                                 <th class="text-center">Phân loại</th>
                                 <th class="text-center">Nguồn kinh phí</th>
-                                <th class="text-center">Nội dung bảng lương</th>
+                                <th class="text-center">Lĩnh vực</br>hoạt động</th>
+                                <th class="text-center">Nội dung</br>bảng lương</th>
                                 <th class="text-center">Thao tác</th>
                             </tr>
                         </thead>
@@ -93,6 +94,7 @@
                                     <td class="text-center">{{$i++}}</td>
                                     <td>{{isset($a_phanloai[$value->phanloai]) ? $a_phanloai[$value->phanloai] : 'Bảng lương cán bộ'}}</td>
                                     <td>{{isset($a_nguonkp_bl[$value->manguonkp]) ? $a_nguonkp_bl[$value->manguonkp] : ''}}</td>
+                                    <td>{{isset($m_linhvuc[$value->linhvuchoatdong]) ? $m_linhvuc[$value->linhvuchoatdong] : ''}}</td>
                                     <td>{{$value->noidung}}</td>
                                     <td>
                                         @if($inputs['thaotac'])
