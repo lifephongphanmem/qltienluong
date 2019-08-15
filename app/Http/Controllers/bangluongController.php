@@ -3841,7 +3841,6 @@ class bangluongController extends Controller
                             $a_phca[$k]['stbhtn_dv'] = round($a_phca[$k]['sotien'] * $ct->bhtn_dv, 0);
                             $a_phca[$k]['ttbh_dv'] = $a_phca[$k]['stbhxh_dv'] + $a_phca[$k]['stbhyt_dv'] + $a_phca[$k]['stkpcd_dv'] + $a_phca[$k]['stbhtn_dv'];
                         }
-
                     }
                     $a_pc_tm->add($a_phca[$k]);
                     //$a_pc_tm[] = $a_phca[$k];
@@ -4956,6 +4955,9 @@ class bangluongController extends Controller
 
             $a_ts = array_column(dmphucap_thaisan::where('madv', session('admin')->madv)->get()->toarray(), 'mapc');
 
+            $model_congtac = dmphanloaict::select('mact','tenct','macongtac')
+                ->wherein('mact', a_unique(array_column($model->toarray(),'mact')))->get();
+
             $a_phucap = array();
             $col = 0;
 
@@ -4967,10 +4969,12 @@ class bangluongController extends Controller
             }
             $a_phca = $a_pc;
             $a_bh = a_getelement_equal($a_pc, array('baohiem' => 1));
+            $a_nhomct = array_column($model_congtac->toarray(),'macongtac','mact');
             //dd($a_bh);
             $a_pc_tm = new Collection();
             //dd($a_pc);
             foreach ($model as $ct) {
+                $ct->macongtac = isset($a_nhomct[$ct->mact])? $a_nhomct[$ct->mact] : '';
                 //chưa tính trường hợp nghỉ ts
                 //foreach ($a_bh as $k => $v) {
                 foreach ($a_phca as $k => $v) {
@@ -4997,16 +5001,32 @@ class bangluongController extends Controller
 
                     //kiểm tra xem có bảo hiểm ko tính lại bảo hiểm
                     if(isset($a_bh[$k])){
-                        $a_phca[$k]['stbhxh'] = round($a_phca[$k]['sotien'] * $ct->bhxh, 0);
-                        $a_phca[$k]['stbhyt'] = round($a_phca[$k]['sotien'] * $ct->bhyt, 0);
-                        $a_phca[$k]['stkpcd'] = round($a_phca[$k]['sotien'] * $ct->kpcd, 0);
-                        $a_phca[$k]['stbhtn'] = round($a_phca[$k]['sotien'] * $ct->bhtn, 0);
-                        $a_phca[$k]['ttbh'] = $a_phca[$k]['stbhxh'] + $a_phca[$k]['stbhyt'] + $a_phca[$k]['stkpcd'] + $a_phca[$k]['stbhtn'];
-                        $a_phca[$k]['stbhxh_dv'] = round($a_phca[$k]['sotien'] * $ct->bhxh_dv, 0);
-                        $a_phca[$k]['stbhyt_dv'] = round($a_phca[$k]['sotien'] * $ct->bhyt_dv, 0);
-                        $a_phca[$k]['stkpcd_dv'] = round($a_phca[$k]['sotien'] * $ct->kpcd_dv, 0);
-                        $a_phca[$k]['stbhtn_dv'] = round($a_phca[$k]['sotien'] * $ct->bhtn_dv, 0);
-                        $a_phca[$k]['ttbh_dv'] = $a_phca[$k]['stbhxh_dv'] + $a_phca[$k]['stbhyt_dv'] + $a_phca[$k]['stkpcd_dv'] + $a_phca[$k]['stbhtn_dv'];
+                        //cán bộ KHONGCT, KHAC đóng bảo hiểm hệ số 1.0 (ko theo hệ số)=> tính bảo hiểm chỉ gán vào 'heso' hoặc 'hesopc'
+                        if($ct->macongtac == 'KHONGCT' || $ct->macongtac == 'KHAC'){
+                            if(in_array($k,['heso','hesopc']) && $ct->$k > 0 ){
+                                $a_phca[$k]['stbhxh'] = round($ct->luongcoban * $ct->bhxh, 0);
+                                $a_phca[$k]['stbhyt'] = round($ct->luongcoban * $ct->bhyt, 0);
+                                $a_phca[$k]['stkpcd'] = round($ct->luongcoban * $ct->kpcd, 0);
+                                $a_phca[$k]['stbhtn'] = round($ct->luongcoban * $ct->bhtn, 0);
+                                $a_phca[$k]['ttbh'] = $a_phca[$k]['stbhxh'] + $a_phca[$k]['stbhyt'] + $a_phca[$k]['stkpcd'] + $a_phca[$k]['stbhtn'];
+                                $a_phca[$k]['stbhxh_dv'] = round($ct->luongcoban * $ct->bhxh_dv, 0);
+                                $a_phca[$k]['stbhyt_dv'] = round($ct->luongcoban * $ct->bhyt_dv, 0);
+                                $a_phca[$k]['stkpcd_dv'] = round($ct->luongcoban * $ct->kpcd_dv, 0);
+                                $a_phca[$k]['stbhtn_dv'] = round($ct->luongcoban * $ct->bhtn_dv, 0);
+                                $a_phca[$k]['ttbh_dv'] = $a_phca[$k]['stbhxh_dv'] + $a_phca[$k]['stbhyt_dv'] + $a_phca[$k]['stkpcd_dv'] + $a_phca[$k]['stbhtn_dv'];
+                            }
+                        }else{
+                            $a_phca[$k]['stbhxh'] = round($a_phca[$k]['sotien'] * $ct->bhxh, 0);
+                            $a_phca[$k]['stbhyt'] = round($a_phca[$k]['sotien'] * $ct->bhyt, 0);
+                            $a_phca[$k]['stkpcd'] = round($a_phca[$k]['sotien'] * $ct->kpcd, 0);
+                            $a_phca[$k]['stbhtn'] = round($a_phca[$k]['sotien'] * $ct->bhtn, 0);
+                            $a_phca[$k]['ttbh'] = $a_phca[$k]['stbhxh'] + $a_phca[$k]['stbhyt'] + $a_phca[$k]['stkpcd'] + $a_phca[$k]['stbhtn'];
+                            $a_phca[$k]['stbhxh_dv'] = round($a_phca[$k]['sotien'] * $ct->bhxh_dv, 0);
+                            $a_phca[$k]['stbhyt_dv'] = round($a_phca[$k]['sotien'] * $ct->bhyt_dv, 0);
+                            $a_phca[$k]['stkpcd_dv'] = round($a_phca[$k]['sotien'] * $ct->kpcd_dv, 0);
+                            $a_phca[$k]['stbhtn_dv'] = round($a_phca[$k]['sotien'] * $ct->bhtn_dv, 0);
+                            $a_phca[$k]['ttbh_dv'] = $a_phca[$k]['stbhxh_dv'] + $a_phca[$k]['stbhyt_dv'] + $a_phca[$k]['stkpcd_dv'] + $a_phca[$k]['stbhtn_dv'];
+                        }
                     }
                     $a_pc_tm->add($a_phca[$k]);
                     //$a_pc_tm[] = $a_phca[$k];
