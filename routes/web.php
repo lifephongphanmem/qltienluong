@@ -650,7 +650,7 @@ Route::group(['prefix'=>'chuc_nang'],function(){
         Route::group(['prefix'=>'khoi'],function(){
             Route::get('index','tonghopluong_khoiController@index');
             Route::get('tonghop','tonghopluong_khoiController@tonghop');
-            Route::get('tonghop_khoi','tonghopluong_khoiController@tonghop_khoi');
+            Route::post('tonghop_khoi','tonghopluong_khoiController@tonghop_khoi');
             //Route::get('tonghop','tonghopluong_khoiController@tonghop');
             Route::get('tonghop_diaban','tonghopluong_khoiController@tonghop_diaban');
 
@@ -677,7 +677,7 @@ Route::group(['prefix'=>'chuc_nang'],function(){
             Route::get('tonghop','tonghopluong_huyenController@tonghop');
             Route::get('tonghop_huyen','tonghopluong_huyenController@tonghop_huyen');
             Route::get('tonghopnam','tonghopluong_huyenController@tonghopnam');
-            Route::get('chitiet_khoi','tonghopluong_huyenController@chitiet_khoi');
+            Route::post('chitiet_khoi','tonghopluong_huyenController@chitiet_khoi');
             Route::get('tonghop_diaban','tonghopluong_huyenController@tonghop_diaban');
             Route::post('tonghop_chuadaydu','tonghopluong_huyenController@tonghop_chuadaydu');
             //chưa làm
@@ -686,7 +686,7 @@ Route::group(['prefix'=>'chuc_nang'],function(){
             Route::get('getlydo','tonghopluong_huyenController@getlydo');//lý do trả lại dữ liệu
 
             Route::get('printf_data/ma_so={mathdv}','tonghopluong_huyenController@printf_data_huyen');
-            Route::get('printf_data_huyen','tonghopluong_huyenController@printf_data_huyen');
+            Route::post('printf_data_huyen','tonghopluong_huyenController@printf_data_huyen');
             //Route::get('printf_bl_huyen/ma_so={mathdv}','tonghopluong_huyenController@printf_bl_huyen');
             Route::get('printf_bl_huyen','tonghopluong_huyenController@printf_bl_huyen');
             Route::get('printf_bl_huyenCR','tonghopluong_huyenController@printf_bl_huyenCR');
