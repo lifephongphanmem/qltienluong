@@ -360,7 +360,10 @@ function getPhanLoaiCT($val_null = true){
     $model = array_column(App\dmphanloaict::all()->toArray(),'tenct','mact');
     if($val_null){
         $a_kq = array(''=>'-- Chọn phân loại công tác --');
-        return array_merge($a_kq,$model);
+        foreach($model as $key=>$val){
+            $a_kq[$key]=$val;
+        }
+        return $a_kq;
     }
     return $model;
 
@@ -539,7 +542,7 @@ function getPhanLoaiTamNgungTheoDoi(){
 
 function getTronSo(){
     $a_kq = array();
-    for($i = -3; $i < 6; $i++){
+    for($i = -3; $i < 8; $i++){
         $a_kq[$i] = $i;
     }
     return $a_kq;

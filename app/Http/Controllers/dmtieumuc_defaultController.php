@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\dmphanloaicongtac;
+use App\dmphanloaict;
 use App\dmphucap;
 use App\dmtieumuc_default;
 use Illuminate\Http\Request;
@@ -17,22 +18,30 @@ class dmtieumuc_defaultController extends Controller
     {
         if (Session::has('admin')) {
             $model = dmtieumuc_default::all();
-            $model_nhomct = dmphanloaicongtac::select('macongtac', 'tencongtac')->get();
-            $model_pc = array_column(dmphucap::select('mapc', 'tenpc')->get()->toarray(), 'tenpc', 'mapc');
-            //$a_phucap = array_merge(array('null' => 'Không chọn', 'heso' => 'Lương hệ số'), getColPhuCap());//Lương hệ số bao gồm cả vượt khung);
-            $a_phucap = array_merge(array('null' => 'Không chọn'), $model_pc);//Lương hệ số bao gồm cả vượt khung);
-            $a_nhomct = array_merge(array('null' => 'Không chọn', 'ALL' => 'Tất cả'), array_column($model_nhomct->toarray(), 'tencongtac', 'macongtac'));
+            $a_pc = array_merge(['null' => 'Không chọn'], array_column(dmphucap::select('mapc', 'tenpc')->get()->toarray(), 'tenpc', 'mapc'));
+
+            $a_ct = array('null' => 'Không chọn', 'ALL' => 'Tất cả');
+            foreach(getPhanLoaiCT(false) as $k=>$v){
+                $a_ct[$k] = $v;
+            }
             //$a_sunghiep = array('null'=> 'Không chọn','ALL' => 'Tất cả', 'Công chức' => 'Công chức', 'Viên chức' => 'Viên chức', 'Khác' => 'Khác');
             foreach ($model as $ct) {
-                $ct->tennhomct = isset($a_nhomct[$ct->macongtac]) ? $a_nhomct[$ct->macongtac] : '';
+                foreach(explode(',',$ct->mact) as $val){
+                    $ct->tenct .= isset($a_ct[$val]) ? ($a_ct[$val].'; ') : '';
+                }
                 foreach(explode(',',$ct->mapc) as $val){
-                    $ct->tenpc .= isset($a_phucap[$val]) ? ($a_phucap[$val].'; ') : '';
+                    $ct->tenpc .= isset($a_pc[$val]) ? ($a_pc[$val].'; ') : '';
                 }
             }
+
+            $model_nhomct = dmphanloaicongtac::select('macongtac','tencongtac')->get();
+            $model_tenct = dmphanloaict::select('tenct','macongtac','mact')->get();
+
             return view('system.danhmuc.muctieumuc.index')
                 ->with('model', $model->sortBy('tieumuc'))
-                ->with('model_nhomct', $a_nhomct)
-                ->with('model_phucap', $a_phucap)
+                ->with('model_nhomct',$model_nhomct)
+                ->with('model_tenct',$model_tenct)
+                ->with('a_pc', $a_pc)
                 //->with('model_sunghiep', $a_sunghiep)
                 ->with('furl', '/danh_muc/tieu_muc/')
                 ->with('pageTitle', 'Danh mục mục - tiểu mục');
@@ -44,11 +53,24 @@ class dmtieumuc_defaultController extends Controller
     {
         if (Session::has('admin')) {
             $inputs = $request->all();
+
+            if(in_array('null',$inputs['mact'])){
+                $inputs['mact'] = 'null';
+            }elseif(in_array('ALL',$inputs['mact'])){
+                $inputs['mact'] = 'ALL';
+            }else{
+                $inputs['mact'] = implode(',',$inputs['mact']);
+            }
+
+            if(in_array('null',$inputs['mapc'])){
+                $inputs['mapc'] = 'null';
+            }else{
+                $inputs['mapc'] = implode(',',$inputs['mapc']);
+            }
             //kiểm tra trong mang nếu có giá trị "Không chọn" => loại bỏ nếu có 2 giá trị
 
-            $inputs['mapc'] = implode(',',$inputs['mapc']);
-            $inputs['mapc'] = strpos($inputs['mapc'],'null') !== false ? 'null' : $inputs['mapc'];
             $model = dmtieumuc_default::where('tieumuc',$inputs['tieumuc'])->first();
+
             if(count($model) > 0){//update
                 $model->update($inputs);
             }else{//add

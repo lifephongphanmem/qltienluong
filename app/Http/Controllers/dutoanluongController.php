@@ -162,8 +162,7 @@ class dutoanluongController extends Controller
         }
     }
 
-    function create(Request $request)
-    {
+    function create(Request $request){
         if (Session::has('admin')) {
             $inputs = $request->all();
             $inputs['luongcoban'] = getDbl($inputs['luongcoban']);
@@ -290,7 +289,7 @@ class dutoanluongController extends Controller
             foreach ($m_nh as $key => $val) {
                 $m_nh[$key] = $this->getHeSoPc_nh($a_pc, $m_nh[$key]);
             }
-
+            //dd($thoidiem);
             foreach ($m_nb as $key => $val) {
                 //kiểm tra xem tháng đó có nâng lương có nghỉ ts ko nếu có tháng nâng lương thành tháng ngay sau ngày nghỉ
                 if (isset($a_nhomnb[$val['msngbac']])) {
@@ -305,7 +304,7 @@ class dutoanluongController extends Controller
                 }
                 //kiểm tra xem cán bộ đc nâng lương trc thời điêm xét ko
                 // nếu có => xet thời điểm nâng lương là thời điểm xét.
-                if($val['ngaytu'] <= $thoidiem){
+                if($val['ngayden'] <= $thoidiem){
                     $m_nb[$key]['thang_nb'] = $inputs['thang'];
                 }
 
@@ -314,7 +313,7 @@ class dutoanluongController extends Controller
                 }
                 $m_nb[$key] = $this->getHeSoPc($a_pc, $m_nb[$key], $inputs['luongcoban']);
             }
-
+            //dd($m_nb);
             foreach ($m_tnn as $key => $val) {
                 $m_tnn[$key]['pctnn'] = $m_tnn[$key]['pctnn'] + 1;
                 //nếu tăng tnn bằng hoặc sau nb => set lai heso, vuotkhung

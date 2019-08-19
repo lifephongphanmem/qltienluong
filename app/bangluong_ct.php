@@ -11,6 +11,7 @@ class bangluong_ct extends Model
         'id',
         'mabl',
         'manguonkp',//lưu mã nguồn bảng lương truy lĩnh
+        'maso',//mã số truy lĩnh
         'macvcq',
         'mapb',
         'mact',
@@ -149,7 +150,7 @@ class bangluong_ct extends Model
 }
 /*
  *
-
+ALTER TABLE `bangluong_ct` ADD `maso` VARCHAR(50) NULL AFTER `mabl`
 
     ALTER TABLE `bangluong_ct` CHANGE  `st_heso` `st_heso` DOUBLE NOT NULL DEFAULT '0';
         ALTER TABLE `bangluong_ct` CHANGE  `st_hesobl` `st_hesobl` DOUBLE NOT NULL DEFAULT '0';

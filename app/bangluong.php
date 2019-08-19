@@ -35,4 +35,6 @@ class bangluong extends Model
     INNER JOIN bangluong ON bangluong_ct.mabl = bangluong.mabl
     SET bangluong_ct.manguonkp = bangluong.manguonkp
     WHERE bangluong.phanloai ='BANGLUONG';
+
+
  */
