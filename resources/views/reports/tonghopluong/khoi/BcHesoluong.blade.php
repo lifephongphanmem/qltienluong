@@ -181,12 +181,12 @@
                 <td>{{dinhdangsothapphan(($tongpc),5)}}</td>
                     <!--td>{{dinhdangsothapphan($tongpc,5)}}</td-->
                     @foreach($a_phucap as $key=>$val)
-                        <td>{{dinhdangsothapphan($ct->$key,5)}}</td>
+                        <td style="text-align: right">{{dinhdangsothapphan($ct->$key,5)}}</td>
                     @endforeach
 
-                    <td>{{dinhdangso($ct->tongbh)}}</td>
-                    <td>{{$ct->hesoluong}}</td>
-                    <td>{{dinhdangso($ct->tonghs *12*1.3)}}</td>
+                    <td style="text-align: right">{{dinhdangso($ct->tongbh)}}</td>
+                    <td style="text-align: right">{{$ct->hesoluong}}</td>
+                    <td style="text-align: right">{{dinhdangso($ct->tonghs *12*1.3)}}</td>
 
                 </tr>
             @endforeach
