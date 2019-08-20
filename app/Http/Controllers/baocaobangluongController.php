@@ -1395,7 +1395,8 @@ class baocaobangluongController extends Controller
                     $ma = 'hs'.$ct;
                     $chitiet->$ma = $chitiet->$ct;
                 }
-                $chitiet->hesoluong = $chitiet->heso/$a_luongcb[$chitiet->mathdv];
+                //$chitiet->hesoluong = $chitiet->heso/$a_luongcb[$chitiet->mathdv];
+                $chitiet->hesoluong = $chitiet->heso;
 
             }
             // dd($model->toarray());
@@ -1497,7 +1498,8 @@ class baocaobangluongController extends Controller
                     $ma = 'hs'.$ct;
                     $chitiet->$ma = $chitiet->$ct;
                 }
-                $chitiet->hesoluong = $chitiet->heso/$a_luongcb[$chitiet->mathdv];
+                //$chitiet->hesoluong = $chitiet->heso/$a_luongcb[$chitiet->mathdv];
+                $chitiet->hesoluong = $chitiet->heso;
 
             }
             // dd($model->toarray());
