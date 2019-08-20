@@ -152,8 +152,8 @@
                     <td style="text-align: center">{{$ct->tencongtac == "Biên chế"? $ct->soluong:0}}</td>
                     <td style="text-align: center">{{$ct->tencongtac == "Hợp đồng Nghị định 68"? $ct->soluong:0}}</td>
                     <td style="text-align: center">@if($ct->tencongtac != "Hợp đồng Nghị định 68" && $ct->tencongtac != "Biên chế") {{$ct->soluong}} @endif</td>
-                    <td style="text-align: left">{{dinhdangso($ct->tonghs,0,3)}}</td>
-                    <td>{{dinhdangso($ct->heso,0,3)}}</td>
+                    <td style="text-align: left">{{dinhdangsothapphan($ct->tonghs,5)}}</td>
+                    <td>{{dinhdangsothapphan($ct->heso,5)}}</td>
                 <?php
                 if($ct->tencongtac == "Biên chế"){
                     $bienche += $ct->soluong;
@@ -178,15 +178,15 @@
                 foreach($a_phucap as $key=>$val)
                     $tongpc += $ct->$key
                 ?>
-                <td>{{dinhdangso($ct->tonghs - $ct->heso,0,3)}}</td>
-                    <!--td>{{dinhdangso($tongpc,0,3)}}</td-->
+                <td>{{dinhdangsothapphan(($tongpc),5)}}</td>
+                    <!--td>{{dinhdangsothapphan($tongpc,5)}}</td-->
                     @foreach($a_phucap as $key=>$val)
-                        <td>{{dinhdangso($ct->$key,0,3)}}</td>
+                        <td>{{dinhdangsothapphan($ct->$key,5)}}</td>
                     @endforeach
 
-                    <td>{{dinhdangso($ct->tongbh,0,3)}}</td>
+                    <td>{{dinhdangso($ct->tongbh)}}</td>
                     <td>{{$ct->hesoluong}}</td>
-                    <td>{{dinhdangso($ct->tonghs *12*1.3,0,3)}}</td>
+                    <td>{{dinhdangso($ct->tonghs *12*1.3)}}</td>
 
                 </tr>
             @endforeach
@@ -198,17 +198,22 @@
                     <td style="text-align: center">{{$bienche}}</td>
                     <td style="text-align: center">{{$hopdong68}}</td>
                     <td style="text-align: center">{{$khac}}</td>
-                    <td style="text-align: right">{{dinhdangso($chitiet->sum('tonghs'),0,3)}}</td>
-                    <td style="text-align: right">{{dinhdangso($chitiet->sum('heso'),0,3)}}</td>
-                    <td>{{dinhdangso($chitiet->sum('tonghs') - $chitiet->sum('heso'),0,3)}}</td>
+                    <td style="text-align: right">{{dinhdangsothapphan($chitiet->sum('tonghs'),5)}}</td>
+                    <td style="text-align: right">{{dinhdangsothapphan($chitiet->sum('heso'),5)}}</td>
+                    <?php
+                        $tongcong = 0;
+                        foreach($a_phucap as $key=>$val)
+                                $tongcong += $chitiet->sum($key)
+                    ?>
+                    <td style="text-align: right">{{dinhdangsothapphan($tongcong,5)}}</td>
 
                     @foreach($a_phucap as $key=>$val)
-                        <td>{{dinhdangso($chitiet->sum($key),0,3)}}</td>
+                        <td style="text-align: right">{{dinhdangsothapphan($chitiet->sum($key),5)}}</td>
                     @endforeach
 
-                    <td>{{dinhdangso($chitiet->sum('tongbh'),0,3)}}</td>
-                    <td>{{$chitiet->sum('hesoluong')}}</td>
-                    <td>{{dinhdangso($chitiet->sum('tonghs')*12*1.3,0,3)}}</td>
+                    <td style="text-align: right">{{dinhdangso($chitiet->sum('tongbh'))}}</td>
+                    <td style="text-align: right">{{$chitiet->sum('hesoluong')}}</td>
+                    <td style="text-align: right">{{dinhdangso($chitiet->sum('tonghs')*12*1.3)}}</td>
                 </tr>
             @endif
         @endforeach
@@ -221,15 +226,20 @@
                 <td style="text-align: center">{{dinhdangso($hopdong68pl)}}</td>
                 <td style="text-align: center">{{dinhdangso($khacpl)}}</td>
 
-                <td style="text-align: right">{{dinhdangso($phanloai->sum('tonghs'),0,3)}}</td>
-                <td style="text-align: right">{{dinhdangso($phanloai->sum('heso'),0,3)}}</td>
-                <td>{{dinhdangso($phanloai->sum('tonghs') - $phanloai->sum('heso'),0,3)}}</td>
+                <td style="text-align: right">{{dinhdangsothapphan($phanloai->sum('tonghs'),5)}}</td>
+                <td style="text-align: right">{{dinhdangsothapphan($phanloai->sum('heso'),5)}}</td>
+                <?php
+                $tongcong = 0;
+                foreach($a_phucap as $key=>$val)
+                        $tongcong += $phanloai->sum($key)
+                ?>
+                <td style="text-align: right">{{dinhdangsothapphan($tongcong,5)}}</td>
                 @foreach($a_phucap as $key=>$val)
-                    <td>{{dinhdangso($phanloai->sum($key),0,3)}}</td>
+                    <td>{{dinhdangsothapphan($phanloai->sum($key),5)}}</td>
                 @endforeach
-                <td>{{dinhdangso($phanloai->sum('tongbh'),0,3)}}</td>
+                <td>{{dinhdangso($phanloai->sum('tongbh'))}}</td>
                 <td>{{$phanloai->sum('hesoluong')}}</td>
-                <td>{{dinhdangso($phanloai->sum('tonghs')*12*1.3,0,3)}}</td>
+                <td>{{dinhdangso($phanloai->sum('tonghs')*12*1.3)}}</td>
             </tr>
         @endif
     @endforeach
@@ -241,15 +251,20 @@
         <td style="text-align: center">{{dinhdangso($Thopdong68)}}</td>
         <td style="text-align: center">{{dinhdangso($Tkhac)}}</td>
 
-        <td style="text-align: right">{{dinhdangso($model->sum('tonghs'),0,3)}}</td>
-        <td style="text-align: right">{{dinhdangso($model->sum('heso'),0,3)}}</td>
-        <td>{{dinhdangso($model->sum('tonghs') - $model->sum('heso'),0,3)}}</td>
+        <td style="text-align: right">{{dinhdangsothapphan($model->sum('tonghs'),5)}}</td>
+        <td style="text-align: right">{{dinhdangsothapphan($model->sum('heso'),5)}}</td>
+        <?php
+        $tongcong = 0;
+        foreach($a_phucap as $key=>$val)
+                $tongcong += $model->sum($key)
+        ?>
+        <td style="text-align: right">{{dinhdangsothapphan($tongcong,5)}}</td>
         @foreach($a_phucap as $key=>$val)
-            <td>{{dinhdangso($model->sum($key),0,3)}}</td>
+            <td>{{dinhdangsothapphan($model->sum($key),5)}}</td>
         @endforeach
-        <td>{{dinhdangso($model->sum('tongbh'),0,3)}}</td>
+        <td>{{dinhdangso($model->sum('tongbh'))}}</td>
         <td>{{$model->sum('hesoluong')}}</td>
-        <td>{{dinhdangso($model->sum('tonghs')*12*1.3,0,3)}}</td>
+        <td>{{dinhdangso($model->sum('tonghs')*12*1.3)}}</td>
     </tr>
 </table>
 
