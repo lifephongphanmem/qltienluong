@@ -314,7 +314,7 @@
                 ->where('linhvuchoatdong','<>','QLNN')
                 ->where('linhvuchoatdong','<>','DDT');
         $model_hcsnT = $model_hcsn->groupby('tencongtac');
-        $a_plcongtac = array_column($model_gd->toarray(),'mact' , 'tencongtac');
+        $a_plcongtac = array_column($model_hcsn->toarray(),'mact' , 'tencongtac');
         ?>
         <tr style="font-weight: bold;">
             <td>II</td>
