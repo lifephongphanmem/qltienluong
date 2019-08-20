@@ -43,12 +43,9 @@
                         <thead>
                             <tr>
                                 <th class="text-center" style="width: 5%">STT</th>
-                                <th class="text-center">Năm</br>được</br>giao</th>
-                                <th class="text-center">Phân loại</br>công tác</th>
-                                <th class="text-center">Số lượng</br>biên chế</br>được giao</th>
-                                <th class="text-center">Số lượng</br>cán bộ không</br>chuyên trách</br>(nếu có)</th>
-                                <th class="text-center">Số lượng</br>đại biểu</br>HĐND</th>
-                                <th class="text-center">Số lượng</br>ủy viên</th>
+                                <th class="text-center">Năm được giao</th>
+                                <th class="text-center">Phân loại công tác</th>
+                                <th class="text-center">Số lượng biên chế</br>được giao</th>
                                 <th class="text-center">Thao tác</th>
                             </tr>
                         </thead>
@@ -56,16 +53,13 @@
                         <tbody>
                             @if(isset($model))
                                 @foreach($model as $key=>$value)
-                                    <tr class="text-center">
-                                        <td>{{$key+1}}</td>
-                                        <td>{{$value->nam}}</td>
-                                        <td class="text-left">{{$value->tenct}}</td>
-                                        <td>{{$value->soluongduocgiao}}</td>
-                                        <td>{{$value->soluongkhongchuyentrach}}</td>
-                                        <td>{{$value->soluonguyvien}}</td>
-                                        <td>{{$value->soluongdaibieuhdnd}}</td>
+                                    <tr>
+                                        <td class="text-center">{{$key+1}}</td>
+                                        <td class="text-center">{{$value->nam}}</td>
+                                        <td>{{$value->tenct}}</td>
+                                        <td class="text-center">{{$value->soluongduocgiao}}</td>
                                         <td>
-                                            <button type="button" onclick="edit({{$value->id}})" class="btn btn-info btn-xs mbs">
+                                            <button type="button" onclick="edit({{$value->id}})" class="btn btn-default btn-xs mbs">
                                                 <i class="fa fa-edit"></i>&nbsp;Sửa</button>
                                             <button type="button" onclick="cfDel('{{$furl.'del/'.$value->id}}')" class="btn btn-danger btn-xs mbs" data-target="#delete-modal-confirm" data-toggle="modal">
                                                 <i class="fa fa-trash-o"></i>&nbsp;Xóa</button>
@@ -117,23 +111,23 @@
                                 {!!Form::text('soluongduocgiao', null, array('id' => 'soluongduocgiao','class' => 'form-control text-right', 'data-mask'=>'fdecimal'))!!}
                             </div>
 
-                            <div class="col-md-6">
-                                <label class="control-label">Cán bộ không chuyên trách</label>
-                                {!!Form::text('soluongkhongchuyentrach', null, array('id' => 'soluongkhongchuyentrach','class' => 'form-control text-right', 'data-mask'=>'fdecimal'))!!}
-                            </div>
+                            {{--<div class="col-md-6">--}}
+                                {{--<label class="control-label">Cán bộ không chuyên trách</label>--}}
+                                {{--{!!Form::text('soluongkhongchuyentrach', null, array('id' => 'soluongkhongchuyentrach','class' => 'form-control text-right', 'data-mask'=>'fdecimal'))!!}--}}
+                            {{--</div>--}}
                         </div>
 
-                        <div class="row">
-                            <div class="col-md-6">
-                                <label class="control-label">Cán bộ cấp ủy viên</label>
-                                {!!Form::text('soluonguyvien', null, array('id' => 'soluonguyvien','class' => 'form-control text-right', 'data-mask'=>'fdecimal'))!!}
-                            </div>
+                        {{--<div class="row">--}}
+                            {{--<div class="col-md-6">--}}
+                                {{--<label class="control-label">Cán bộ cấp ủy viên</label>--}}
+                                {{--{!!Form::text('soluonguyvien', null, array('id' => 'soluonguyvien','class' => 'form-control text-right', 'data-mask'=>'fdecimal'))!!}--}}
+                            {{--</div>--}}
 
-                            <div class="col-md-6">
-                                <label class="control-label">Cán bộ đại biểu HĐND</label>
-                                {!!Form::text('soluongdaibieuhdnd', null, array('id' => 'soluongdaibieuhdnd','class' => 'form-control text-right', 'data-mask'=>'fdecimal'))!!}
-                            </div>
-                        </div>
+                            {{--<div class="col-md-6">--}}
+                                {{--<label class="control-label">Cán bộ đại biểu HĐND</label>--}}
+                                {{--{!!Form::text('soluongdaibieuhdnd', null, array('id' => 'soluongdaibieuhdnd','class' => 'form-control text-right', 'data-mask'=>'fdecimal'))!!}--}}
+                            {{--</div>--}}
+                        {{--</div>--}}
                         <input type="hidden" id="id_ct" name="id_ct"/>
                     </div>
                 </div>

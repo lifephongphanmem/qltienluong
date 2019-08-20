@@ -112,7 +112,9 @@ class nguonkinhphiController extends Controller
             $m_ts = hosotamngungtheodoi::where('madv', session('admin')->madv)->where('maphanloai', 'THAISAN')
                 ->whereBetween('ngayden', [Carbon::create($inputs['namdt'])->startOfYear(),Carbon::create($inputs['namdt']+1)->endOfYear()])
                 ->get();
-            $a_pc_ts = array_column(dmphucap_thaisan::where('madv', session('admin')->madv)->get()->toarray(), 'mapc');
+            //$a_pc_ts = array_column(dmphucap_thaisan::where('madv', session('admin')->madv)->get()->toarray(), 'mapc');
+            $a_pc_ts = array_column(dmphucap_donvi::where('madv', session('admin')->madv)
+                ->where('phanloai','<','3')->where('thaisan','1')->get()->toarray(), 'mapc');
             //dd($a_pc_ts);
             foreach($model as $cb){
                 $cb->macongtac = $a_congtac[$cb->mact];
@@ -234,14 +236,14 @@ class nguonkinhphiController extends Controller
                 }
                 $m_nb[$key] = $this->getHeSoPc($a_pc, $m_nb[$key],$inputs['chenhlech']);
             }
-            //dd($m_nb);
+            //dd($m_tnn);
             foreach ($m_tnn as $key => $val) {
                 //kiểm tra xem tháng đó có nâng lương có nghỉ ts ko nếu có tháng nâng lương thành tháng ngay sau ngày nghỉ
                 $ngaylap = Carbon::create($val['nam_tnn'], $val['thang_tnn'], '01');
                 $a_ts = $m_ts->where('macanbo',$key)->where('ngaytu', '<=', $ngaylap)->where('ngayden', '>=', $ngaylap);
                 if(count($a_ts) > 0){
                     $dt_luong = date_create($a_ts->first()->ngayden);
-                    $m_nb[$key]['thang_tnn'] = date_format($dt_luong, 'm');
+                    $m_tnn[$key]['thang_tnn'] = date_format($dt_luong, 'm');
                 }
 
                 $m_tnn[$key]['pctnn'] = $m_tnn[$key]['pctnn'] == 0 ? 5: $m_tnn[$key]['pctnn'] + 1;
@@ -249,8 +251,8 @@ class nguonkinhphiController extends Controller
                 if (isset($m_nb[$key]) && $m_tnn[$key]['thang_tnn'] >= $m_nb[$key]['thang_nb']) {
                     $m_tnn[$key]['heso'] = $m_nb[$key]['heso'];
                     $m_tnn[$key]['vuotkhung'] = $m_nb[$key]['vuotkhung'];
-                    $m_tnn[$key] = $this->getHeSoPc($a_pc, $m_tnn[$key], $inputs['chenhlech']);
-                } else {
+                    $m_tnn[$key] = $this->getHeSoPc($a_pc, $m_tnn[$key], $inputs['chenhlech'], false);
+                }else {
                     $m_tnn[$key] = $this->getHeSoPc($a_pc, $m_tnn[$key], $inputs['chenhlech']);
                 }
 

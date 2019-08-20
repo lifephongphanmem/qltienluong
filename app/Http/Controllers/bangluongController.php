@@ -349,10 +349,13 @@ class bangluongController extends Controller
         foreach($model_phucap as $pc){
             $pc->luongcoban = isset($a_mucluong[$pc->mapc])? $a_mucluong[$pc->mapc] : 0;
         }
+        $a_ts = array_column($model_phucap->where('thaisan',1)->toarray(), 'mapc');
+        $a_no = array_column($model_phucap->where('nghiom',1)->toarray(), 'mapc');
 
+        /*
         $a_ts = array_column(dmphucap_thaisan::where('madv', session('admin')->madv)
             ->wherenotin('mapc',explode(',',$inputs['phucaploaitru']))->get()->toarray(), 'mapc');
-
+        */
         $a_pc_coth = array('pcudn','pctnn', 'pctaicu');
         //$ngaycong = dmdonvi::where('madv',$inputs['madv'])->first()->songaycong;
         foreach ($m_cb as $cb) {
@@ -586,7 +589,8 @@ class bangluongController extends Controller
             $nghi = $m_nghiphep->where('macanbo', $cb->macanbo)->first();
             if (count($nghi) > 0) {
                 $cb->congtac = 'NGHIPHEP';
-                $sotiencong = $model_phucap->wherein('maso',['heso','vuotkhung','pccv','hesobl','pctnn'])->sum('sotien');
+                //$sotiencong = $model_phucap->wherein('maso',['heso','vuotkhung','pccv','hesobl','pctnn'])->sum('sotien');
+                $sotiencong = $model_phucap->wherein('maso',$a_no)->sum('sotien');
                 //$sotiencong = $inputs['luongcoban'] * ($cb->heso + $cb->vuotkhung + $cb->pccv + $cb->hesobl + $cb->pctnn);
                 $tiencong = $sotiencong / $nghi->songaycong;
                 if($nghi->songaynghi >= 15){//nghỉ quá 15 ngày thì ko đóng bảo hiểm
@@ -831,10 +835,14 @@ class bangluongController extends Controller
         $a_phanloai = dmphanloaicongtac_baohiem::where('madv', session('admin')->madv)->get()->keyBy('mact')->toArray();
         $a_nhomct = array_column(dmphanloaict::all()->toarray(), 'macongtac','mact');
         //dd($a_nhomct);
-        $a_ts = array_column(dmphucap_thaisan::where('madv', session('admin')->madv)->wherenotin('mapc',explode(',',$inputs['phucaploaitru']))->get()->toarray(), 'mapc');
+        //$a_ts = array_column(dmphucap_thaisan::where('madv', session('admin')->madv)->wherenotin('mapc',explode(',',$inputs['phucaploaitru']))->get()->toarray(), 'mapc');
         $a_dd = array('pclt','pckv');//các loại phụ cấp cán bộ được điều động động đến được hưởng (chưa làm cho định mức)
         //$a_dn = array('pckv','pcudn');//các loại phụ cấp cán bộ nghỉ dài ngày đến được hưởng (chưa làm cho định mức)
         $ptdn = $m_dv->ptdaingay / 100;//cán bộ nghỉ dài ngày hưởng 50% lương
+
+        $a_ts = array_column($model_phucap->where('phanloai','<','3')->where('thaisan',1)->toarray(), 'mapc');
+        $a_no = array_column($model_phucap->where('phanloai','<','3')->where('nghiom',1)->toarray(), 'mapc');
+
         $a_goc = array('heso','vuotkhung','pccv'); //mảng phụ cấp làm công thức tính
         $a_pc = $model_phucap->keyby('mapc')->toarray();
         //dd($a_pc);
@@ -1162,9 +1170,11 @@ class bangluongController extends Controller
                 $ngaycong = $cb_nghi['songaycong'] > 0 ? $cb_nghi['songaycong'] : 1;
                 $m_cb[$key]['songaytruc'] = $ngaynghi;
                 $m_cb[$key]['congtac'] = 'NGHIPHEP';
-                $sotiencong = $inputs['luongcoban'] *
-                    ($m_cb[$key]['heso'] + $m_cb[$key]['vuotkhung'] + $m_cb[$key]['pccv']
-                        + $m_cb[$key]['hesobl'] + $m_cb[$key]['pctnn']);
+                $heso_no = 0;
+                foreach($a_no as $no){
+                    $heso_no += $m_cb[$key][$no];
+                }
+                $sotiencong = $inputs['luongcoban'] * $heso_no;
                 $tiencong = $sotiencong / $ngaycong;
 
                 if($cb_nghi['songaynghi'] >= 15) {//nghỉ quá 15 ngày thì ko đóng bảo hiểm
@@ -1187,9 +1197,11 @@ class bangluongController extends Controller
                 $cb_nghi = $a_duongsuc[$m_cb[$key]['macanbo']];
                 $ngaycong = $cb_nghi['songaycong'] > 0 ? $cb_nghi['songaycong'] : $ngaycong;
                 $m_cb[$key]['congtac'] = 'DUONGSUC';
-                $sotiencong = $inputs['luongcoban'] *
-                    ($m_cb[$key]['heso'] + $m_cb[$key]['vuotkhung'] + $m_cb[$key]['pccv']
-                        + $m_cb[$key]['hesobl'] + $m_cb[$key]['pctnn']);
+                $heso_no = 0;
+                foreach($a_no as $no){
+                    $heso_no += $m_cb[$key][$no];
+                }
+                $sotiencong = $inputs['luongcoban'] * $heso_no;
                 $tiencong = round($sotiencong / $ngaycong, 0);
 
                 if($cb_nghi['songaynghi'] >= 15) {//nghỉ quá 15 ngày thì ko đóng bảo hiểm
@@ -1522,7 +1534,7 @@ class bangluongController extends Controller
             ->where('ngaytu', '<=', $ngaylap)->where('ngayden', '>=', $ngaylap)
             ->where('maphanloai', 'DAINGAY')->get()->toarray(),'macanbo');
 
-        $model_phucap = dmphucap_donvi::select('mapc','phanloai','congthuc','baohiem','tenpc')->where('madv', session('admin')->madv)
+        $model_phucap = dmphucap_donvi::select('mapc','phanloai','congthuc','baohiem','tenpc','thaisan','nghiom')->where('madv', session('admin')->madv)
             ->wherenotin('mapc',array_merge(['hesott'],explode(',',$inputs['phucaploaitru'])))->get();
         //kiêm nhiệm
         $a_th = array_merge(array('macanbo', 'macvcq', 'mapb', 'manguonkp','mact','stt','tencanbo', 'msngbac',
@@ -1547,8 +1559,12 @@ class bangluongController extends Controller
         //dd($model);
         $a_nhomct = array_column(dmphanloaict::all()->toarray(), 'macongtac','mact');
         //dd($a_nhomct);
+        /*
         $a_ts = array_column(dmphucap_thaisan::where('madv', session('admin')->madv)
             ->wherenotin('mapc',explode(',',$inputs['phucaploaitru']))->get()->toarray(), 'mapc');
+        */
+        $a_ts = array_column($model_phucap->where('thaisan',1)->where('phanloai','<','3')->toarray(), 'mapc');
+        $a_no = array_column($model_phucap->where('nghiom',1)->where('phanloai','<','3')->toarray(), 'mapc');
         $a_dd = array('pclt','pckv');//các loại phụ cấp cán bộ được điều động động đến được hưởng (chưa làm cho định mức)
         //$a_dn = array('pckv','pcudn');//các loại phụ cấp cán bộ nghỉ dài ngày đến được hưởng (chưa làm cho định mức)
 
@@ -1783,9 +1799,11 @@ class bangluongController extends Controller
                 $ngaynghi = $cb_nghi['songaynghi'] > 0 ? $cb_nghi['songaynghi'] : 0;
                 $cb->songaytruc = $ngaynghi;
                 $cb->congtac = 'NGHIPHEP';
-                $sotiencong = $inputs['luongcoban'] *
-                    ($cb->heso + $cb->vuotkhung + $cb->pccv
-                        + $cb->hesobl + $cb->pctnn);
+                $heso_no = 0;
+                foreach($a_no as $no){
+                    $heso_no += $cb->$no;
+                }
+                $sotiencong = $inputs['luongcoban'] * $heso_no;
                 $tiencong = round($sotiencong / $ngaycong, 0);
 
                 if($cb_nghi['songaynghi'] >= 15) {//nghỉ quá 15 ngày thì ko đóng bảo hiểm
@@ -1807,9 +1825,11 @@ class bangluongController extends Controller
                 $cb_nghi = $a_duongsuc[$cb->macanbo];
                 $ngaycong = $cb_nghi['songaycong'] > 0 ? $cb_nghi['songaycong'] : $ngaycong;
                 $cb->congtac = 'DUONGSUC';
-                $sotiencong = $inputs['luongcoban'] *
-                    ($cb->heso + $cb->vuotkhung + $cb->pccv
-                        + $cb->hesobl + $cb->pctnn);
+                $heso_no = 0;
+                foreach($a_no as $no){
+                    $heso_no += $cb->$no;
+                }
+                $sotiencong = $inputs['luongcoban'] * $heso_no;
                 $tiencong = round($sotiencong / $ngaycong, 0);
 
                 if($cb_nghi['songaynghi'] >= 15) {//nghỉ quá 15 ngày thì ko đóng bảo hiểm
@@ -3769,7 +3789,8 @@ class bangluongController extends Controller
             $a_pc = dmphucap_donvi::where('madv', $m_bl->madv)->where('phanloai', '<', '3')->orderby('stt')
                 ->get()->keyby('mapc')->toarray();
 
-            $a_ts = array_column(dmphucap_thaisan::where('madv', session('admin')->madv)->get()->toarray(), 'mapc');
+            $a_ts = array_column(dmphucap_donvi::where('madv', session('admin')->madv)
+                ->where('phanloai','<','3')->where('thaisan','1')->get()->toarray(), 'mapc');
 
             $a_phucap = array();
             $col = 0;

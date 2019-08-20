@@ -52,7 +52,6 @@
 
 <body style="font:normal 11px Times, serif;">
     <table class="header" width="96%" border="0" cellspacing="0" cellpadding="8" style="margin:0 auto 25px; text-align: center;">
-
         <tr>
             <td style="text-align: left;width: 60%">
                 <b>Đơn vị: {{$m_dv['tendv']}}</b>
@@ -86,22 +85,23 @@
     </table>
 
     <table class="money" cellspacing="0" cellpadding="0" border="1" style="margin: 20px auto; border-collapse: collapse;font:normal 11px Times, serif;">
-        <tr style="padding-left: 2px;padding-right: 2px">
-            <th style="width: 3%;" >S</br>T</br>T</th>
-            <th>Họ và tên</th>
-            <th style="width: 15%;">Chức vụ</th>
-            <th style="width: 10%;">Mã ngạch lương</th>
-            <th style="width: 10%;">Ngày nâng lương</th>
-            <th style="width: 8%;">Hệ số hiện tại</th>
-            <th style="width: 8%;">Hệ số mới</th>
-        </tr>
+        <thead>
+            <tr style="padding-left: 2px;padding-right: 2px">
+                <th style="width: 3%;" >S</br>T</br>T</th>
+                <th>Họ và tên</th>
+                <th style="width: 20%;">Chức vụ</th>
+                <th style="width: 10%;">Mã ngạch lương</th>
+                <th style="width: 10%;">Ngày nâng lương</th>
+                <th style="width: 8%;">Hệ số hiện tại</th>
+                <th style="width: 8%;">Hệ số mới</th>
+            </tr>
 
-        <tr>
-            @for($i=1;$i<=7;$i++)
-                <th>{{$i}}</th>
-            @endfor
-        </tr>
-
+            <tr>
+                @for($i=1;$i<=7;$i++)
+                    <th>{{$i}}</th>
+                @endfor
+            </tr>
+        </thead>
         @foreach($a_pl as $pl)
             <?php $i=1; $model_ct = $model->where('trangthai',$pl['trangthai']); ?>
             <tr style="font-weight: bold; font-style:italic ">

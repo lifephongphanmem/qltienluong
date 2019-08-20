@@ -213,6 +213,10 @@
                                     <a href="{{url('nghiep_vu/da_nghi/danh_sach')}}"><i class="fa fa-caret-right"></i>Danh sách cán bộ đã thôi công tác</a>
                                 </li>
 
+                                <li>
+                                    <a href="{{url('nghiep_vu/chi_tieu/danh_sach')}}"><i class="fa fa-caret-right"></i>Chỉ tiêu biên chế</a>
+                                </li>
+
                                 @if(session('admin')->maphanloai == 'KVXP')
                                     <!-- Tạm thời bỏ để triển khai lạng sơn -->
                                     <!--li><a href="{{url('nghiep_vu/quan_ly/dia_ban_dbkk/index')}}"><i class="fa fa-caret-right"></i>Danh sách thôn, tổ dân phố</a></li-->
@@ -247,10 +251,6 @@
 
                             <li>
                                 <a href="{{url('nghiep_vu/dieu_dong/danh_sach')}}"><i class="fa fa-caret-right"></i>Luân chuyển cán bộ</a>
-                            </li>
-
-                            <li>
-                                <a href="{{url('nghiep_vu/quan_ly/chi_tieu/danh_sach')}}"><i class="fa fa-caret-right"></i>Chỉ tiêu biên chế</a>
                             </li>
                         </ul>
                     </li>
@@ -324,7 +324,7 @@
                             </li>
                             <li>
                                 <a href="javascript:;">
-                                    <i class="icon-user"></i> Người dùng <span class="arrow"></span>
+                                    <i class="icon-user"></i>Người dùng <span class="arrow"></span>
                                 </a>
 
                                 <ul class="sub-menu" style="margin-left: 15px;">
@@ -340,7 +340,7 @@
                                     <li><a href="{{url('/he_thong/don_vi/don_vi')}}"><i class="fa fa-caret-right"></i>Thông tin đơn vị</a></li>
                                     <li><a href="{{url('/he_thong/don_vi/bao_hiem')}}"><i class="fa fa-caret-right"></i>Thông tin nộp bảo hiểm</a></li>
                                     <li><a href="{{url('/danh_muc/phu_cap/don_vi')}}"><i class="fa fa-caret-right"></i>Thông tin phụ cấp</a></li>
-                                    <li><a href="{{url('/danh_muc/thai_san/danh_sach')}}"><i class="fa fa-caret-right"></i>Thông tin phụ cấp thai sản</a></li>
+                                    {{--<li><a href="{{url('/danh_muc/thai_san/danh_sach')}}"><i class="fa fa-caret-right"></i>Thông tin phụ cấp thai sản</a></li>--}}
                                     <li><a href="{{url('/he_thong/dinh_muc/danh_sach')}}"><i class="fa fa-caret-right"></i>Thông tin định mức nguồn kinh phí</a></li>
                                 </ul>
                             </li>

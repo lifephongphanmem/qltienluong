@@ -2576,7 +2576,7 @@ class baocaobangluongController extends Controller
                 }
 
                 if (isset($inputs['indanangluong'])) {
-                    $model_nangluong = dsnangthamnien::join('dsnangthamnien_chitiet', 'dsnangthamnien_ct.manl', '=', 'dsnangthamnien.manl')
+                    $model_nangluong = dsnangthamnien::join('dsnangthamnien_chitiet', 'dsnangthamnien_chitiet.manl', '=', 'dsnangthamnien.manl')
                         ->where('madv', session('admin')->madv)
                         ->where('trangthai', 'Đã nâng lương')
                         ->wherebetween('ngayxet', [$inputs['ngaytu'], $inputs['ngayden']])->get();

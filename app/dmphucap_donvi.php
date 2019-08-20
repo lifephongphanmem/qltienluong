@@ -13,6 +13,8 @@ class dmphucap_donvi extends Model
         'mapc',
         'tenpc',
         'baohiem',
+        'thaisan',
+        'nghiom',
         'form', //tiêu đề trên Form
         'report', //tiêu đề trên Report
         'phanloai',

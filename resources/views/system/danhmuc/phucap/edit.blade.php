@@ -90,21 +90,33 @@
                                     {!!Form::text('report', null, array('id' => 'report','class' => 'form-control','required'=>'required'))!!}
                                 </div>
                             </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label class="form-control-label">Tổng hợp và dự toán</label>
+                                    {!!Form::select('tonghop',array('0'=>'Không','1'=>'Có'), null, array('id' => 'tonghop','class' => 'form-control'))!!}
+                                </div>
+                            </div>
+                        </div>
 
+                        <div class="row">
                             <div class="col-md-4">
                                 <div class="form-group">
                                     <label class="form-control-label">Nộp bảo hiểm</label>
                                     {!!Form::select('baohiem',array('0'=>'Không nộp hiểm','1'=>'Có nộp hiểm'), null, array('id' => 'baohiem','class' => 'form-control'))!!}
                                 </div>
                             </div>
-                        </div>
-
-                        <div class="row">
 
                             <div class="col-md-4">
                                 <div class="form-group">
-                                    <label class="form-control-label">Tổng hợp và dự toán</label>
-                                    {!!Form::select('tonghop',array('0'=>'Không','1'=>'Có'), null, array('id' => 'tonghop','class' => 'form-control'))!!}
+                                    <label class="form-control-label">Trừ nghỉ phép, nghỉ ốm</label>
+                                    {!!Form::select('nghiom',array('0'=>'Không trừ nghỉ phép, nghỉ ốm','1'=>'Có trừ nghỉ phép, nghỉ ốm'), null, array('id' => 'nghiom','class' => 'form-control'))!!}
+                                </div>
+                            </div>
+
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label class="form-control-label">Tính thai sản</label>
+                                    {!!Form::select('thaisan',array('0'=>'Không tính thai sản','1'=>'Có tính thai sản'), null, array('id' => 'thaisan','class' => 'form-control'))!!}
                                 </div>
                             </div>
                         </div>

@@ -162,7 +162,9 @@ class tonghopluong_donviController extends Controller
             //dd($a_nguondm);
             //$a_pc = dmphucap_donvi::where('madv', $madv)->wherein('mapc',getColTongHop())->get()->keyby('mapc')->toarray();
             $a_pc = getColTongHop();
-            $a_bh = array_column(dmphucap_thaisan::select('mapc')->where('madv', session('admin')->madv)->get()->toarray(), 'mapc');
+            //$a_bh = array_column(dmphucap_thaisan::select('mapc')->where('madv', session('admin')->madv)->get()->toarray(), 'mapc');
+            $a_ts = array_column(dmphucap_donvi::where('madv', session('admin')->madv)
+                ->where('phanloai','<','3')->where('thaisan','1')->get()->toarray(), 'mapc');
 
             $a_data = array();
             $a_plct = getPLCTTongHop();
@@ -186,7 +188,7 @@ class tonghopluong_donviController extends Controller
                     //$a_ct[$i][$mapc_st] = count($phucap) > 0 ? $phucap['sotien'] : 0;
                     //$a_ct[$i][$mapc] = count($phucap) > 0 ? $phucap['heso'] : 0;
 
-                    if ($a_ct[$i]['congtac'] == 'THAISAN' && !in_array($mapc, $a_bh) ) {
+                    if ($a_ct[$i]['congtac'] == 'THAISAN' && !in_array($mapc, $a_ts) ) {
                         $a_ct[$i][$mapc] = 0;
                         $a_ct[$i][$mapc_st] = 0;
                     }
