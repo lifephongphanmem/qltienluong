@@ -283,12 +283,7 @@ Route::group(['prefix'=>'nghiep_vu'],function(){
     });
 
     Route::group(['prefix'=>'quan_ly'],function(){
-        Route::group(['prefix'=>'chi_tieu'],function(){
-            Route::get('danh_sach','chitieubiencheController@index');
-            Route::get('del/{id}','chitieubiencheController@destroy');
-            Route::get('store','chitieubiencheController@store');
-            Route::get('get','chitieubiencheController@get_detail');
-        });
+
         Route::group(['prefix'=>'du_toan'],function(){
             Route::get('','dutoanluongController@show');
             Route::get('danh_sach','dutoanluongController@index');
@@ -449,6 +444,13 @@ Route::group(['prefix'=>'nghiep_vu'],function(){
             Route::get('/maso={macanbo}','hosonhanxetdgController@index');
             Route::get('del/{id}','hosonhanxetdgController@destroy');
         });
+    });
+
+    Route::group(['prefix'=>'chi_tieu'],function(){
+        Route::get('danh_sach','chitieubiencheController@index');
+        Route::get('del/{id}','chitieubiencheController@destroy');
+        Route::get('store','chitieubiencheController@store');
+        Route::get('get','chitieubiencheController@get_detail');
     });
 });
 

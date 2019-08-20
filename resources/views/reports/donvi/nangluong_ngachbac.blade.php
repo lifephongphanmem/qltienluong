@@ -86,31 +86,32 @@
     </table>
 
     <table class="money" cellspacing="0" cellpadding="0" border="1" style="margin: 20px auto; border-collapse: collapse;font:normal 11px Times, serif;">
-        <tr style="padding-left: 2px;padding-right: 2px">
-            <th rowspan="2" style="width: 3%;" >S</br>T</br>T</th>
-            <th rowspan="2">Họ và tên</th>
-            <th rowspan="2" style="width: 15%;">Chức vụ</th>
-            <th rowspan="2" style="width: 10%;">Ngày nâng lương</th>
-            <th rowspan="2" style="width: 10%;">Mã ngạch lương</th>
-            <th colspan="3">Lương hiện tại</th>
-            <th colspan="3">Lương mới</th>
-        </tr>
+        <thead>
+            <tr style="padding-left: 2px;padding-right: 2px">
+                <th rowspan="2" style="width: 3%;" >S</br>T</br>T</th>
+                <th rowspan="2">Họ và tên</th>
+                <th rowspan="2" style="width: 20%;">Chức vụ</th>
+                <th rowspan="2" style="width: 10%;">Ngày nâng lương</th>
+                <th rowspan="2" style="width: 10%;">Mã ngạch lương</th>
+                <th colspan="3">Lương hiện tại</th>
+                <th colspan="3">Lương mới</th>
+            </tr>
 
-        <tr>
-            <th style="width: 5%;">Bậc</th>
-            <th style="width: 5%;">Hệ số</th>
-            <th style="width: 5%;">Vượt khung</th>
+            <tr>
+                <th style="width: 5%;">Bậc</th>
+                <th style="width: 5%;">Hệ số</th>
+                <th style="width: 5%;">Vượt khung</th>
 
-            <th style="width: 5%;">Bậc</th>
-            <th style="width: 5%;">Hệ số</th>
-            <th style="width: 5%;">Vượt khung</th>
-        </tr>
-        <tr>
-            @for($i=1;$i<=11;$i++)
-                <th>{{$i}}</th>
-            @endfor
-        </tr>
-
+                <th style="width: 5%;">Bậc</th>
+                <th style="width: 5%;">Hệ số</th>
+                <th style="width: 5%;">Vượt khung</th>
+            </tr>
+            <tr>
+                @for($i=1;$i<=11;$i++)
+                    <th>{{$i}}</th>
+                @endfor
+            </tr>
+        </thead>
         @foreach($a_pl as $pl)
             <?php $i=1; $model_ct = $model->where('trangthai',$pl['trangthai'])->sortby('ngayden'); ?>
             <tr style="font-weight: bold; font-style:italic ">
