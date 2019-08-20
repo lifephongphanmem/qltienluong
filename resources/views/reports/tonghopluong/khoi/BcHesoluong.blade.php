@@ -152,8 +152,8 @@
                     <td style="text-align: center">{{$ct->tencongtac == "Biên chế"? $ct->soluong:0}}</td>
                     <td style="text-align: center">{{$ct->tencongtac == "Hợp đồng Nghị định 68"? $ct->soluong:0}}</td>
                     <td style="text-align: center">@if($ct->tencongtac != "Hợp đồng Nghị định 68" && $ct->tencongtac != "Biên chế") {{$ct->soluong}} @endif</td>
-                    <td style="text-align: left">{{dinhdangsothapphan($ct->tonghs,5)}}</td>
-                    <td>{{dinhdangsothapphan($ct->heso,5)}}</td>
+                    <td style="text-align: right">{{dinhdangsothapphan($ct->tonghs,5)}}</td>
+                    <td style="text-align: right">{{dinhdangsothapphan($ct->heso,5)}}</td>
                 <?php
                 if($ct->tencongtac == "Biên chế"){
                     $bienche += $ct->soluong;
@@ -178,7 +178,7 @@
                 foreach($a_phucap as $key=>$val)
                     $tongpc += $ct->$key
                 ?>
-                <td>{{dinhdangsothapphan(($tongpc),5)}}</td>
+                <td style="text-align: right">{{dinhdangsothapphan(($tongpc),5)}}</td>
                     <!--td>{{dinhdangsothapphan($tongpc,5)}}</td-->
                     @foreach($a_phucap as $key=>$val)
                         <td style="text-align: right">{{dinhdangsothapphan($ct->$key,5)}}</td>
@@ -262,9 +262,9 @@
         @foreach($a_phucap as $key=>$val)
             <td>{{dinhdangsothapphan($model->sum($key),5)}}</td>
         @endforeach
-        <td>{{dinhdangso($model->sum('tongbh'))}}</td>
-        <td>{{$model->sum('hesoluong')}}</td>
-        <td>{{dinhdangso($model->sum('tonghs')*12*1.3)}}</td>
+        <td style="text-align: right">{{dinhdangso($model->sum('tongbh'))}}</td>
+        <td style="text-align: right">{{$model->sum('hesoluong')}}</td>
+        <td style="text-align: right">{{dinhdangso($model->sum('tonghs')*12*1.3)}}</td>
     </tr>
 </table>
 
