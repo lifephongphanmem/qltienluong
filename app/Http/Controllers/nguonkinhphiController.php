@@ -112,7 +112,9 @@ class nguonkinhphiController extends Controller
             $m_ts = hosotamngungtheodoi::where('madv', session('admin')->madv)->where('maphanloai', 'THAISAN')
                 ->whereBetween('ngayden', [Carbon::create($inputs['namdt'])->startOfYear(),Carbon::create($inputs['namdt']+1)->endOfYear()])
                 ->get();
-            $a_pc_ts = array_column(dmphucap_thaisan::where('madv', session('admin')->madv)->get()->toarray(), 'mapc');
+            //$a_pc_ts = array_column(dmphucap_thaisan::where('madv', session('admin')->madv)->get()->toarray(), 'mapc');
+            $a_pc_ts = array_column(dmphucap_donvi::where('madv', session('admin')->madv)
+                ->where('phanloai','<','3')->where('thaisan','1')->get()->toarray(), 'mapc');
             //dd($a_pc_ts);
             foreach($model as $cb){
                 $cb->macongtac = $a_congtac[$cb->mact];

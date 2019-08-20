@@ -12,7 +12,9 @@ class dmphucap extends Model
         'stt',
         'mapc',
         'tenpc',
-        'baohiem',//chưa dùng
+        'baohiem',
+        'thaisan',
+        'nghiom',
         'form', //tiêu đề trên Form
         'report', //tiêu đề trên Report
         'phanloai',

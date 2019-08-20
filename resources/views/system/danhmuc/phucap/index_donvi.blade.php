@@ -49,8 +49,10 @@
                                 <th class="text-center">Phụ cấp</th>
                                 <th class="text-center">Phân loại</th>
                                 <th class="text-center">Bao gồm các</br>loại hệ số</th>
-                                <th class="text-center">Nộp bảo hiểm</th>
-                                <th class="text-center">Tổng hợp số liệu</th>
+                                <th class="text-center">Tổng hợp</br>số liệu</th>
+                                <th class="text-center">Nộp</br>bảo hiểm</th>
+                                <th class="text-center">Trừ</br>nghỉ phép</th>
+                                <th class="text-center">Tính</br>thai sản</th>
                                 <th class="text-center">Thao tác</th>
                             </tr>
                         </thead>
@@ -64,8 +66,10 @@
                                     <td>{{$value->tenpc}}</td>
                                     <td>{{$value->tenphanloai}}</td>
                                     <td>{{$value->tencongthuc}}</td>
-                                    <td class="text-center">{{$value->baohiem == 0 ? '': 'Có nộp bảo hiểm'}}</td>
-                                    <td class="text-center">{{$value->tonghop}}</td>
+                                    <td class="text-center">{{$value->tonghop == 1 ? 'Tổng hợp và dự toán':''}}</td>
+                                    <td class="text-center">{{$value->baohiem == 1 ? 'Nộp bảo hiểm':''}}</td>
+                                    <td class="text-center">{{$value->nghiom == 1 ? 'Trừ nghỉ phép':''}}</td>
+                                    <td class="text-center">{{$value->thaisan == 1 ? 'Tính thai sản':''}}</td>
                                     <td>
                                         <a href="{{$furl.'edit?maso='.$value->mapc}}" class="btn btn-default btn-xs">
                                             <i class="fa fa-edit"></i>&nbsp; Sửa</a>

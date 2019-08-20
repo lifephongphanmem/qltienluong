@@ -227,7 +227,7 @@ class UsersController extends Controller
                     dmphucap_donvi::insert($model_dmpc->toarray());
                 }
 
-                //phụ cấp thai sản
+                /*phụ cấp thai sản
                 $model_ts = dmphucap_thaisan::where('madv', $ttuser->madv)->get();
                 if (count($model_ts) == 0) {
                     $model_dmpc = dmphucap::select('mapc', 'tenpc', DB::raw($ttuser->madv . ' as madv'))
@@ -235,6 +235,7 @@ class UsersController extends Controller
                         ->get();
                     dmphucap_thaisan::insert($model_dmpc->toarray());
                 }
+                */
 
                 //định mức nguồn kinh phí
                 $model_dmn = nguonkinhphi_dinhmuc::where('madv', $ttuser->madv)->get();

@@ -182,7 +182,7 @@ class dmphucapController extends Controller
                 $ct->tenphanloai = isset($a_pl[$ct->phanloai]) ? $a_pl[$ct->phanloai] : '';
                 $congthuc = explode(',', $ct->congthuc);
                 $ct->tencongthuc = '';
-                $ct->tonghop = in_array($ct->mapc,$a_th) ? 'Tổng hợp và dự toán':'';
+                $ct->tonghop = in_array($ct->mapc,$a_th) ? '1':'0';
                 foreach ($congthuc as $bg) {
                     $ct->tencongthuc .= isset($a_ct[$bg]) ? ($a_ct[$bg] . '; ') : '';
                 }
@@ -198,8 +198,6 @@ class dmphucapController extends Controller
     function edit_donvi(Request $request)
     {
         if (Session::has('admin')) {
-
-            //kiểm tra lại quyền của User (đi tập huấn một số đơn vị ko hiểu sao lại cập nhật luôn vào danh mục
             if(session('admin')->level =='SA' || session('admin')->level == 'SSA'){
                 Session::flush();
                 return view('errors.notlogin');
