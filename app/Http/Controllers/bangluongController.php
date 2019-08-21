@@ -795,7 +795,7 @@ class bangluongController extends Controller
             ->where('ngaytu', '<=', $ngaylap)->where('ngayden', '>=', $ngaylap)
             ->where('maphanloai', 'DAINGAY')->get()->toarray(),'macanbo');
         //dd($inputs['phucaploaitru']);
-        $model_phucap = dmphucap_donvi::select('mapc','phanloai','congthuc','baohiem','tenpc')->where('madv', session('admin')->madv)
+        $model_phucap = dmphucap_donvi::select('mapc','phanloai','congthuc','baohiem','tenpc', 'thaisan', 'nghiom')->where('madv', session('admin')->madv)
             ->wherenotin('mapc',array_merge(['hesott'],explode(',',$inputs['phucaploaitru'])))->get();
         //dd($model_phucap);
         //kiêm nhiệm
@@ -842,7 +842,7 @@ class bangluongController extends Controller
 
         $a_ts = array_column($model_phucap->where('phanloai','<','3')->where('thaisan',1)->toarray(), 'mapc');
         $a_no = array_column($model_phucap->where('phanloai','<','3')->where('nghiom',1)->toarray(), 'mapc');
-
+        //dd($a_ts);
         $a_goc = array('heso','vuotkhung','pccv'); //mảng phụ cấp làm công thức tính
         $a_pc = $model_phucap->keyby('mapc')->toarray();
         //dd($a_pc);

@@ -64,8 +64,8 @@
                                     <td class="text-right">{{dinhdangso($value->mucapdung)}}</td>
                                     <td class="text-right">{{dinhdangso($value->chenhlech)}}</td>
                                     <td>
-                                        <button type="button" onclick="editCV('{{$value->id}}')" class="btn btn-info btn-xs mbs">
-                                            <i class="fa fa-edit"></i>&nbsp; Chỉnh sửa</button>
+                                        <button type="button" onclick="editCV('{{$value->id}}')" class="btn btn-default btn-xs mbs">
+                                            <i class="fa fa-edit"></i>&nbsp; Sửa</button>
 
                                         <button type="button" onclick="cfDel('{{$furl.'del/'.$value->id}}')" class="btn btn-danger btn-xs mbs" data-target="#delete-modal-confirm" data-toggle="modal">
                                             <i class="fa fa-trash-o"></i>&nbsp; Xóa</button>
@@ -93,7 +93,7 @@
                         <div class="row">
                             <div class="col-md-12">
                                 <label class="form-control-label">Số hiệu<span class="require">*</span></label>
-                                {!!Form::text('sohieu', null, array('id' => 'sohieu','class' => 'form-control','required'=>'required'))!!}
+                                {!!Form::text('sohieu', null, array('id' => 'sohieu','class' => 'form-control required'))!!}
                             </div>
 
                             <div class="col-md-12">
@@ -107,8 +107,9 @@
                             </div>
 
                             <div class="col-md-12">
-                                <label class="form-control-label">Năm thực hiện</label>
-                                {!!Form::text('namdt', null, array('id' => 'namdt','class' => 'form-control'))!!}
+                                <label class="form-control-label">Thời gian áp dụng</label>
+                                <input type="date" name="ngayapdung" id="ngayapdung" class="form-control" />
+
                             </div>
 
                             <div class="col-md-12">
@@ -161,7 +162,7 @@
                     $('#sohieu').val(data.sohieu);
                     $('#tenttqd').val(data.tenttqd);
                     $('#cancu').val(data.cancu);
-                    $('#namdt').val(data.namdt);
+                    $('#ngayapdung').val(data.ngayapdung);
                     $('#muccu').val(data.muccu);
                     $('#mucapdung').val(data.mucapdung);
                     $('#chenhlech').val(data.chenhlech);
@@ -184,7 +185,11 @@
 
             if(sohieu==''){
                 valid=false;
-                message +='Số hiệu không được bỏ trống \n';
+                message += 'Số hiệu không được bỏ trống. \n';
+            }
+            if($('#ngayapdung').val()==''){
+                valid=false;
+                message += ' Thời gian áp dụng không được bỏ trống. \n';
             }
             if(valid){
                 var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
@@ -196,7 +201,7 @@
                         sohieu: sohieu,
                         tenttqd: $('#tenttqd').val(),
                         cancu: $('#cancu').val(),
-                        namdt: $('#namdt').val(),
+                        ngayapdung: $('#ngayapdung').val(),
                         muccu: $('#muccu').val(),
                         mucapdung: $('#mucapdung').val(),
                         chenhlech: $('#chenhlech').val(),

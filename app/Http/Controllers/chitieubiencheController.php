@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\chitieubienche;
 use App\dmphanloaicongtac;
 use App\dmphanloaict;
+use App\dutoanluong;
 use App\hosocanbo;
 use Illuminate\Http\Request;
 
@@ -14,9 +15,12 @@ use Illuminate\Support\Facades\Session;
 
 class chitieubiencheController extends Controller
 {
-    function index(){
+    function index(Request $request){
         if (Session::has('admin')) {
-            $model = chitieubienche::where('madv',session('admin')->madv)->get();
+            $inputs = $request->all();
+            $m_dutoan = dutoanluong::where('madv',session('admin')->madv)->where('namns',$inputs['namct'])->first();
+            $inputs['trangthai'] = count($m_dutoan) > 0 ? false : true;
+            $model = chitieubienche::where('madv',session('admin')->madv)->where('nam',$inputs['namct'])->get();
             $model_nhomct = dmphanloaicongtac::select('macongtac', 'tencongtac')->get();
             $model_tenct = dmphanloaict::select('tenct', 'macongtac', 'mact')->get();
             $a_ct = array_column($model_tenct->toarray(),'tenct','mact');
@@ -28,6 +32,8 @@ class chitieubiencheController extends Controller
                 ->with('model',$model)
                 ->with('model_nhomct', $model_nhomct)
                 ->with('model_tenct', $model_tenct)
+                ->with('inputs', $inputs)
+
                 ->with('pageTitle','Danh sách chỉ tiêu biên chế của đơn vị');
         } else
             return view('errors.notlogin');
@@ -64,9 +70,9 @@ class chitieubiencheController extends Controller
         $inputs = $request->all();
         $inputs['soluongduocgiao'] = chkDbl($inputs['soluongduocgiao']);
         //$inputs['soluongbienche'] = chkDbl($inputs['soluongbienche']);
-        $inputs['soluongkhongchuyentrach'] = chkDbl($inputs['soluongkhongchuyentrach']);
-        $inputs['soluonguyvien'] = chkDbl($inputs['soluonguyvien']);
-        $inputs['soluongdaibieuhdnd'] = chkDbl($inputs['soluongdaibieuhdnd']);
+        //$inputs['soluongkhongchuyentrach'] = chkDbl($inputs['soluongkhongchuyentrach']);
+        //$inputs['soluonguyvien'] = chkDbl($inputs['soluonguyvien']);
+        //$inputs['soluongdaibieuhdnd'] = chkDbl($inputs['soluongdaibieuhdnd']);
         if ($inputs['id'] == 'ADD') {
             $inputs['madv'] = session('admin')->madv;
             //chưa bắt trùng nam + mact + madv

@@ -50,10 +50,10 @@ class nguonkinhphiController extends Controller
         if (Session::has('admin')) {
             $inputs = $request->all();
             $model_thongtu = dmthongtuquyetdinh::where('sohieu',$inputs['sohieu'])->first();
-            $inputs['namdt'] = chkDbl($model_thongtu->namdt) == 0 ? date('Y'): $model_thongtu->namdt;
+            $ngayapdung = new Carbon($model_thongtu->ngayapdung);
+            $inputs['namdt'] = chkDbl($model_thongtu->namdt) == 0 ? date('Y'): date_format($ngayapdung, 'Y');
             /*
             $model_ttqd = dmthongtuquyetdinh::where('sohieu', $inputs['sohieu'])->first();
-            $ngayapdung = new Carbon($model_ttqd->ngayapdung);
             $nam = date_format($ngayapdung, 'Y');
             $thang = date_format($ngayapdung, 'm');
              * */

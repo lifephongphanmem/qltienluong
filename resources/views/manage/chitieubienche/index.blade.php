@@ -35,10 +35,22 @@
                         <i class="fa fa-list-alt"></i>DANH SÁCH CHỈ TIÊU BIÊN CHẾ CỦA ĐƠN VỊ
                     </div>
                     <div class="actions">
-                        <button type="button" id="_btnadd" class="btn btn-default btn-xs" onclick="add()"><i class="fa fa-plus"></i>&nbsp;Thêm mới</button>
+                        @if($inputs['trangthai'])
+                            <button type="button" id="_btnadd" class="btn btn-default btn-xs" onclick="add()"><i class="fa fa-plus"></i>&nbsp;Thêm mới</button>
+                        @endif
                     </div>
                 </div>
                 <div class="portlet-body form-horizontal">
+                    <div class="row">
+                        <div class="form-group">
+                            <label class="control-label text-right col-md-offset-2 col-md-2"> Năm chỉ tiêu</label>
+                            <div class="col-md-3">
+                                {!! Form::select('namct', getNam(), $inputs['namct'], array('id' => 'namct', 'class' => 'form-control'))!!}
+                            </div>
+
+                        </div>
+                    </div>
+
                     <table id="sample_3" class="table table-hover table-striped table-bordered" style="min-height: 230px">
                         <thead>
                             <tr>
@@ -59,10 +71,12 @@
                                         <td>{{$value->tenct}}</td>
                                         <td class="text-center">{{$value->soluongduocgiao}}</td>
                                         <td>
-                                            <button type="button" onclick="edit({{$value->id}})" class="btn btn-default btn-xs mbs">
-                                                <i class="fa fa-edit"></i>&nbsp;Sửa</button>
-                                            <button type="button" onclick="cfDel('{{$furl.'del/'.$value->id}}')" class="btn btn-danger btn-xs mbs" data-target="#delete-modal-confirm" data-toggle="modal">
-                                                <i class="fa fa-trash-o"></i>&nbsp;Xóa</button>
+                                            @if($inputs['trangthai'])
+                                                <button type="button" onclick="edit({{$value->id}})" class="btn btn-default btn-xs mbs">
+                                                    <i class="fa fa-edit"></i>&nbsp;Sửa</button>
+                                                <button type="button" onclick="cfDel('{{$furl.'del/'.$value->id}}')" class="btn btn-danger btn-xs mbs" data-target="#delete-modal-confirm" data-toggle="modal">
+                                                    <i class="fa fa-trash-o"></i>&nbsp;Xóa</button>
+                                            @endif
                                         </td>
                                     </tr>
                                 @endforeach
@@ -85,12 +99,12 @@
                 <div class="modal-body">
                     <div class="form-horizontal">
                         <div class="row">
-                            <div class="col-md-4">
+                            <div class="col-md-5">
                                 <label class="control-label">Năm được giao</label>
                                 {!!Form::select('nam', getNam(), date('Y') + 1, array('id' => 'nam','class' => 'form-control text-right'))!!}
                             </div>
 
-                            <div class="col-md-8">
+                            <div class="col-md-7">
                                 <label class="control-label">Phân loại công tác</label>
                                 <select class="form-control select2me" name="mact" id="mact" required="required">
                                     @foreach($model_nhomct as $kieuct)
@@ -106,7 +120,7 @@
                         </div>
 
                         <div class="row">
-                            <div class="col-md-6">
+                            <div class="col-md-5">
                                 <label class="control-label">Biên chế được giao</label>
                                 {!!Form::text('soluongduocgiao', null, array('id' => 'soluongduocgiao','class' => 'form-control text-right', 'data-mask'=>'fdecimal'))!!}
                             </div>
@@ -144,9 +158,9 @@
             $('#nam').prop('readonly',false);
             //$('#nam').val(0);
             $('#soluongduocgiao').val(0);
-            $('#soluongkhongchuyentrach').val(0);
-            $('#soluonguyvien').val(0);
-            $('#soluongdaibieuhdnd').val(0);
+//            $('#soluongkhongchuyentrach').val(0);
+//            $('#soluonguyvien').val(0);
+//            $('#soluongdaibieuhdnd').val(0);
             $('#id_ct').val('ADD');
             $('#chitiet-modal').modal('show');
         }
@@ -166,9 +180,9 @@
                     $('#nam').val(data.nam);
                     $('#soluongduocgiao').val(data.soluongduocgiao);
                     $('#mact').val(data.mact).trigger('change');
-                    $('#soluongkhongchuyentrach').val(data.soluongkhongchuyentrach);
-                    $('#soluonguyvien').val(data.soluonguyvien);
-                    $('#soluongdaibieuhdnd').val(data.soluongdaibieuhdnd);
+//                    $('#soluongkhongchuyentrach').val(data.soluongkhongchuyentrach);
+//                    $('#soluonguyvien').val(data.soluonguyvien);
+//                    $('#soluongdaibieuhdnd').val(data.soluongdaibieuhdnd);
                 },
                 error: function (message) {
                     toastr.error(message, 'Lỗi!');
@@ -191,10 +205,10 @@
                     id: $('#id_ct').val(),
                     mact: $('#mact').val(),
                     nam:$('#nam').val(),
-                    soluongduocgiao:$('#soluongduocgiao').val(),
-                    soluongkhongchuyentrach:$('#soluongkhongchuyentrach').val(),
-                    soluonguyvien:$('#soluonguyvien').val(),
-                    soluongdaibieuhdnd:$('#soluongdaibieuhdnd').val()
+                    soluongduocgiao:$('#soluongduocgiao').val()
+//                    soluongkhongchuyentrach:$('#soluongkhongchuyentrach').val(),
+//                    soluonguyvien:$('#soluonguyvien').val(),
+//                    soluongdaibieuhdnd:$('#soluongdaibieuhdnd').val()
                 },
                 dataType: 'JSON',
                 success: function (data) {
@@ -213,6 +227,11 @@
 
             return valid;
         }
+        $(function(){
+            $('#namct').change(function(){
+                window.location.href = '/nghiep_vu/chi_tieu/danh_sach?namct='+$('#namct').val() ;
+            });
+        });
     </script>
 
     @include('includes.modal.delete')
