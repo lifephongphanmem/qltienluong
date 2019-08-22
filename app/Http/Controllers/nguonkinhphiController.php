@@ -116,6 +116,9 @@ class nguonkinhphiController extends Controller
             $a_pc_ts = array_column(dmphucap_donvi::where('madv', session('admin')->madv)
                 ->where('phanloai','<','3')->where('thaisan','1')->get()->toarray(), 'mapc');
             //dd($a_pc_ts);
+
+            $model = (new dataController())->getCanBo($model,$model_thongtu->ngayapdung);
+
             foreach($model as $cb){
                 $cb->macongtac = $a_congtac[$cb->mact];
                 $cb->masodv = $masodv;

@@ -113,6 +113,13 @@
                                     {!!Form::select('thaisan',array('0'=>'Không tính thai sản','1'=>'Có tính thai sản'), null, array('id' => 'thaisan','class' => 'form-control'))!!}
                                 </div>
                             </div>
+
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label class="form-control-label">Số thứ tự (sắp xếp)</label>
+                                    {!!Form::text('stt', null, array('id' => 'stt','class' => 'form-control', 'data-mask'=>'fdecimal'))!!}
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>

@@ -61,7 +61,7 @@
                         @if(isset($model))
                             @foreach($model as $key=>$value)
                                 <tr>
-                                    <td class="text-center">{{$key+1}}</td>
+                                    <td class="text-center">{{$value->stt}}</td>
                                     <td>{{$value->mapc}}</td>
                                     <td>{{$value->tenpc}}</td>
                                     <td>{{$value->tenphanloai}}</td>
