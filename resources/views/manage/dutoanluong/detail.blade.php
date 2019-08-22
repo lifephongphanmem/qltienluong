@@ -63,7 +63,7 @@
                                         <td class="text-right">{{number_format($value->tongcong)}}</td>
                                         <td class="text-right">{{number_format($value->luongnb_dt + $value->luongnb)}}</td>
                                         <td class="text-right">{{number_format($value->luonghs_dt)}}</td>
-                                        <td class="text-right">{{number_format($value->luongbh_dt)}}</td>
+                                        <td class="text-right">{{number_format($value->luongbh_dt + $value->luongbh)}}</td>
                                         <td>
                                             @if($model_dutoan->trangthai == 'CHUAGUI')
                                                 <button type="button" onclick="getDuToan('{{$value->masodv}}','{{$value->mact}}')" class="btn btn-default btn-xs mbs">
@@ -152,6 +152,11 @@
                                             <label class="control-label">Lương theo ngạch bậc</label>
                                             {!!Form::text('luongnb', null, array('id' => 'luongnb','class' => 'form-control text-right congthuc', 'data-mask'=>'fdecimal'))!!}
                                         </div>
+
+                                        <div class="col-md-3">
+                                            <label class="control-label">Các khoản đóng góp</label>
+                                            {!!Form::text('luongbh', null, array('id' => 'luongbh','class' => 'form-control text-right', 'data-mask'=>'fdecimal'))!!}
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -227,7 +232,7 @@
 
                     $('#luongnb').val(data.luongnb);
                     //$('#luonghs').val(data.luonghs);
-                    //$('#luongbh').val(data.luongbh);
+                    $('#luongbh').val(data.luongbh);
 
                     $('#luongnb_dt').val(data.luongnb_dt);
                     $('#luonghs_dt').val(data.luonghs_dt);

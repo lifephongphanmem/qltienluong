@@ -101,10 +101,10 @@
 
             <td>{{dinhdangso($ct->luongnb_dt + $ct->luongnb)}}</td>
             <td>{{dinhdangso($ct->luonghs_dt)}}</td>
-            <td>{{dinhdangso($ct->luongbh_dt)}}</td>
+            <td>{{dinhdangso($ct->luongbh_dt + $ct->luongbh)}}</td>
 
             <td>{{dinhdangso($ct->luongnb_dt + $ct->luonghs_dt
-                            + $ct->luongbh_dt + $ct->luongnb)}}</td>
+                            + $ct->luongbh_dt + $ct->luongnb + $ct->luongbh)}}</td>
 
         </tr>
     @endforeach
@@ -115,10 +115,10 @@
 
         <td>{{dinhdangso($model->sum('luongnb_dt') + $model->sum('luongnb'))}}</td>
         <td>{{dinhdangso($model->sum('luonghs_dt'))}}</td>
-        <td>{{dinhdangso($model->sum('luongbh_dt'))}}</td>
+        <td>{{dinhdangso($model->sum('luongbh_dt') + $model->sum('luongbh'))}}</td>
 
         <td>{{dinhdangso($model->sum('luongnb_dt') + $model->sum('luonghs_dt')
-                        + $model->sum('luongbh_dt') + $model->sum('luongnb'))}}</td>
+                        + $model->sum('luongbh_dt') + $model->sum('luongnb') + $model->sum('luongbh'))}}</td>
     </tr>
 </table>
 

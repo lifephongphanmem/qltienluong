@@ -198,10 +198,10 @@
                                         <a href="#tab_0" data-toggle="tab" aria-expanded="true">
                                             Thông tin chung </a>
                                     </li>
-                                    <li class="">
-                                        <a href="#tab_1" data-toggle="tab" aria-expanded="false">
-                                            Tạo dự toán theo bảng lương </a>
-                                    </li>
+                                    {{--<li class="">--}}
+                                        {{--<a href="#tab_1" data-toggle="tab" aria-expanded="false">--}}
+                                            {{--Tạo dự toán theo bảng lương </a>--}}
+                                    {{--</li>--}}
                                 </ul>
                                 <div class="tab-content">
                                     <div class="tab-pane active" id="tab_0">
@@ -222,15 +222,20 @@
                                             </div>
 
                                             <div class="row">
-                                                <div class="col-md-offset-3 col-md-9" style="padding-top: 15px">
+                                                <div class="col-md-offset-4 col-md-8" style="padding-top: 15px">
                                                     <input type="checkbox" checked id="nghihuu" name="nghihuu" />
-                                                    <label>Không tính dự toán cho cán bộ nghỉ hưu</label>
+                                                    <label for="nghihuu">Không tính dự toán cho cán bộ nghỉ hưu</label>
+                                                </div>
+
+                                                <div class="col-md-offset-4 col-md-8" style="padding-top: 15px">
+                                                    <input type="checkbox" id="baohiem" name="baohiem" />
+                                                    <label for="baohiem">Tính bảo hiểm cho cán bộ chưa tuyển</label>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
 
-                                    <div class="tab-pane" id="tab_1">
+                                    <!--div class="tab-pane" id="tab_1">
                                         <table id="sample_4" class="table table-hover table-striped table-bordered">
                                             <thead>
                                             <tr>
@@ -261,7 +266,7 @@
                                             @endforeach
                                             </tbody>
                                         </table>
-                                    </div>
+                                    </div-->
                                 </div>
                             </div>
                         </div>

@@ -7,6 +7,7 @@ use App\bangluong;
 use App\chitieubienche;
 use App\dmdonvi;
 use App\dmphanloaicongtac;
+use App\dmphanloaicongtac_baohiem;
 use App\dmphanloaict;
 use App\dmphucap_donvi;
 use App\dsnangluong;
@@ -165,8 +166,12 @@ class dutoanluongController extends Controller
     function create(Request $request){
         if (Session::has('admin')) {
             $inputs = $request->all();
+            //dd($inputs);
             $inputs['luongcoban'] = getDbl($inputs['luongcoban']);
             $a_congtac = array_column(dmphanloaict::all()->toArray(), 'macongtac', 'mact');
+            $a_baohiem = dmphanloaicongtac_baohiem::where('mact','1561606077')
+                ->where('madv', session('admin')->madv)->first();
+            //dd($a_baohiem);
             $gen = getGeneralConfigs();
             $masodv = session('admin')->madv . '_' . getdate()[0];
             //dd($inputs);
@@ -420,31 +425,44 @@ class dutoanluongController extends Controller
                 $soluong = count($canbo);
                 $m_data[$i]['canbo_congtac'] = $soluong;
                 $m_data[$i]['canbo_dutoan'] = 0;
-                $m_data[$i]['luongnb'] = 0;
+                $m_data[$i]['luongbh'] = $m_data[$i]['luongnb'] = 0;
                 if (isset($a_chitieu[$m_data[$i]['mact']])) {
                     $chitieu = $a_chitieu[$m_data[$i]['mact']];
                     $soluongduocgiao = chkDbl($chitieu['soluongduocgiao']);
                     if ($soluongduocgiao > $soluong) {
                         $m_data[$i]['canbo_dutoan'] = $soluongduocgiao - $soluong;
                         $luongtt = $m_data[$i]['canbo_dutoan'] * $inputs['luongcoban'] * $heso;
+                        if(isset($inputs['baohiem'])){
+                            $bhxh_dv = round($a_baohiem['bhxh_dv'] * $luongtt / 100, 0);
+                            $bhtn_dv = round($a_baohiem['bhtn_dv'] * $luongtt / 100, 0);
+                            $kpcd_dv = round($a_baohiem['kpcd_dv'] * $luongtt / 100, 0);
+                            $bhyt_dv = round($a_baohiem['bhyt_dv'] * $luongtt / 100, 0);
+                            $ttbh_dv = $bhxh_dv + $bhtn_dv + $kpcd_dv + $bhyt_dv;
+                        }else{
+                            $ttbh_dv = $bhxh_dv = $bhtn_dv = $kpcd_dv = $bhyt_dv = 0;
+                        }
 
                         $a_tuyenthem[] = array('mact'=>'1561606077','heso'=>$heso * $m_data[$i]['canbo_dutoan'],
                             'st_heso'=>$luongtt,'tonghs'=>$heso * $m_data[$i]['canbo_dutoan'],
                             'macanbo'=>$masodv,'tencanbo'=>'Cán bộ chưa tuyển','masodv'=>$masodv,
-                            'ttl'=>$luongtt,'luongtn'=>$luongtt,
+                            'ttl'=>$luongtt,'luongtn'=>$luongtt,'stbhxh_dv'=>$bhxh_dv,
+                            'stbhtn_dv'=>$bhtn_dv,'stkpcd_dv'=>$kpcd_dv,'stbhyt_dv'=>$bhyt_dv,'ttbh_dv'=>$ttbh_dv,
                             'luongcoban'=>$inputs['luongcoban'],'congtac'=>'CONGTAC');
 
                         $m_data[$i]['luongnb'] = $luongtt * 12;
+                        $m_data[$i]['luongbh'] = $ttbh_dv * 12;
                     }
                 }
                 $m_data[$i]['luongnb_dt'] = (array_sum(array_column($dutoan, 'heso')) + array_sum(array_column($dutoan, 'vuotkhung'))) * $inputs['luongcoban'];
                 $luongnb += ($m_data[$i]['luongnb_dt']+$m_data[$i]['luongnb']);
                 //dùng luongtn vì các phụ cấp tính theo số tiền đã cộng vào luongtn (ko tính vào hệ số)
-                $m_data[$i]['luonghs_dt'] = array_sum(array_column($dutoan, 'luongtn')) - $m_data[$i]['luongnb_dt'];
+                $m_data[$i]['luonghs_dt'] = chkDbl(array_sum(array_column($dutoan, 'luongtn'))) - chkDbl($m_data[$i]['luongnb_dt']);
                 $luonghs += $m_data[$i]['luonghs_dt'];
                 $m_data[$i]['luongbh_dt'] = array_sum(array_column($dutoan, 'ttbh_dv'));
                 $luongbh += $m_data[$i]['luongbh_dt'];
+
             }
+            //dd($m_data);
             if(count($a_tuyenthem)>0){//đưa cán bộ tuyển thêm vào danh sách bảng lương
                 $a_data_tt = array();
                 for ($i = 0; $i < count($a_thang); $i++){
@@ -1214,22 +1232,21 @@ class dutoanluongController extends Controller
             $model_thongtin = dutoanluong::where('masodv', $inputs['maso'])->first();
             $model_ct = array_column(dmphanloaict::all()->toArray(), 'tenct', 'mact');
             //$gnr = getGeneralConfigs();
-
             //cho trương hợp đơn vị cấp trên in dữ liệu dv câp dưới mà ko sai tên đơn vị
             $m_dv = dmdonvi::where('madv', $model_thongtin->madv)->first();
-
             foreach ($model as $chitiet) {
                 $chitiet->tennguonkp = isset($model_nguonkp[$chitiet->manguonkp]) ? $model_nguonkp[$chitiet->manguonkp] : '';
-                if($chitiet->mact == null){
-                    $chitiet->tencongtac = isset($model_phanloaict[$chitiet->macongtac]) ? $model_phanloaict[$chitiet->macongtac] : '';
-                }else{
-                    $chitiet->tencongtac = isset($model_ct[$chitiet->mact]) ? $model_ct[$chitiet->mact] : '';
-                }
-                $chitiet->tongtl = $chitiet->tonghs - $chitiet->giaml;
-                $chitiet->tongbh = $chitiet->stbhxh_dv + $chitiet->stbhyt_dv + $chitiet->stkpcd_dv + $chitiet->stbhtn_dv;
+                $chitiet->tencongtac = isset($model_ct[$chitiet->mact]) ? $model_ct[$chitiet->mact] : '';
+//                if($chitiet->mact == null){
+//                    $chitiet->tencongtac = isset($model_phanloaict[$chitiet->macongtac]) ? $model_phanloaict[$chitiet->macongtac] : '';
+//                }else{
+//                    $chitiet->tencongtac = isset($model_ct[$chitiet->mact]) ? $model_ct[$chitiet->mact] : '';
+//                }
+//                $chitiet->tongtl = $chitiet->tonghs - $chitiet->giaml;
+//                $chitiet->tongbh = $chitiet->stbhxh_dv + $chitiet->stbhyt_dv + $chitiet->stkpcd_dv + $chitiet->stbhtn_dv;
 
             }
-
+            //dd($model);
             $thongtin = array('nguoilap' => session('admin')->name,
                 'namns' => $model_thongtin->namns);
             //dd($model);
@@ -1252,7 +1269,20 @@ class dutoanluongController extends Controller
             $a_ct = getPhanLoaiCT(false);
             $model_bl = dutoanluong_bangluong::where('masodv', $inputs['maso'])->orderby('thang')->get();
             //dd($model_bl);
-            //$gnr = getGeneralConfigs();
+
+            if($model->sum('canbo_dutoan')>0) {
+                $ct = clone $model->first();
+                $ct->canbo_congtac = $model->sum('canbo_dutoan');
+                $ct->canbo_dutoan = 0;
+                $ct->mact = "1561606077";
+                $ct->luongnb = 0;
+                $ct->luonghs = 0;
+                $ct->luongbh = 0;
+                $ct->luongnb_dt = 0;
+                $ct->luonghs_dt = 0;
+                $ct->luongbh_dt = 0;
+                $model->add($ct);
+            }
 
             //cho trương hợp đơn vị cấp trên in dữ liệu dv câp dưới mà ko sai tên đơn vị
             $m_dv = dmdonvi::where('madv', $model_thongtin->madv)->first();
