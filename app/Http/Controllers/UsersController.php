@@ -121,7 +121,7 @@ class UsersController extends Controller
             $model->phone = $input['phone'];
             $model->email = $input['email'];
             $model->status = $input['status'];
-            $model->username = $input['username'];
+            //$model->username = $input['username'];
             if ($input['newpass'] != '')
                 $model->password = md5($input['newpass']);
             $model->save();
@@ -141,11 +141,11 @@ class UsersController extends Controller
             $input['level'] = isset($donvi->level)?'':isset($donvi->level);
             $input['password'] = md5($input['password']);
             $input['permission'] = getPermissionDefault($donvi->level);
+            $input['username'] = chuanhoachuoi($input['username']);
             $input['sadmin'] = isset($input['sadmin'])?$input['sadmin'] : 'NULL';
+            //dd($input);
             Users::create($input);
-
             return redirect('/danh_muc/tai_khoan/list_user?&madv=' . $input['madv']);
-
         } else {
             return redirect('');
         }

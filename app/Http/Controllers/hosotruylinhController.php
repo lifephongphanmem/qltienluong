@@ -71,6 +71,12 @@ class hosotruylinhController extends Controller
                 DB::statement("Insert into hosotruylinh_nguon(manguonkp,luongcoban,maso) SELECT manguonkp, luongcoban, maso FROM hosotruylinh_nguon_temp WHERE maso='".$insert['maso']."'");
                 DB::statement("Delete FROM hosotruylinh_nguon_temp WHERE maso='".$insert['maso']."'");
             }else{
+                $model_pc = dmphucap_donvi::where('madv', session('admin')->madv)->get();
+                foreach($model_pc as $pc){
+                    if(isset($insert[$pc->mapc])){
+                        $insert[$pc->mapc] = chkDbl($insert[$pc->mapc]);
+                    }
+                }
                 //$model = hosotruylinh::where('maso',$insert['maso'])->first();
                 hosotruylinh::where('maso',$insert['maso'])->first()->update($insert);
             }
