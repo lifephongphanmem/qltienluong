@@ -35,7 +35,9 @@
                         DANH MỤC KHU VỰC, ĐỊA BÀN QUẢN LÝ
                     </div>
                     <div class="actions">
-                        <button type="button" id="_btnaddPB" class="btn btn-default" onclick="addPB()"><i class="fa fa-plus"></i>&nbsp;Thêm mới</button>
+                        @if(can('qldonvi','create'))
+                            <button type="button" id="_btnaddPB" class="btn btn-default" onclick="addPB()"><i class="fa fa-plus"></i>&nbsp;Thêm mới</button>
+                        @endif
                     </div>
                 </div>
                 <div class="portlet-body form-horizontal">
@@ -66,14 +68,14 @@
                                         <td>
                                             <a href="{{url('/danh_muc/khu_vuc/chi_tiet?ma_so='.$value->madvbc.'&phan_loai=SD')}}" class="btn btn-default btn-xs mbs">
                                                 <i class="fa fa-list-alt"></i>&nbsp; Danh sách đơn vị</a>
-                                            @if($value->level != 'T')
+                                            @if(can('qldonvi','edit'))
                                                 <button type="button" onclick="edit('{{$value->madvbc}}')" class="btn btn-default btn-xs mbs">
                                                     <i class="fa fa-edit"></i>&nbsp; Chỉnh sửa</button>
                                                 <button type="button" onclick="unit_manage('{{$value->madvbc}}')" class="btn btn-default btn-xs mbs">
                                                     <i class="fa fa-sitemap"></i>&nbsp; Đơn vị tổng hợp số liệu</button>
                                             @endif
 
-                                            @if(session('admin')->level == 'SA')
+                                            @if(can('qldonvi','delete'))
                                                 <button type="button" onclick="cfDel('{{$furl.'del/'.$value->madvbc}}')" class="btn btn-default btn-xs mbs" data-target="#delete-modal-confirm" data-toggle="modal">
                                                     <i class="fa fa-trash-o"></i>&nbsp; Xóa</button>
                                             @endif

@@ -34,9 +34,11 @@
                     <div class="caption">
                         <b>DANH MỤC CHỨC VỤ</b>
                     </div>
-                    <div class="actions">
-                        <button type="button" id="_btnaddPB" class="btn btn-success btn-xs" onclick="addCV()"><i class="fa fa-plus"></i>&nbsp;Thêm mới chức vụ</button>
-                    </div>
+                    @if(can('dmchucvu','create'))
+                        <div class="actions">
+                            <button type="button" id="_btnaddPB" class="btn btn-default btn-xs" onclick="addCV()"><i class="fa fa-plus"></i>&nbsp;Thêm mới</button>
+                        </div>
+                    @endif
                 </div>
                 <div class="portlet-body form-horizontal">
                     <div class="row">
@@ -67,11 +69,14 @@
                                         <td>{{$value->tenvt}}</td>
                                         <td>{{$value->phanloai}}</td>
                                         <td>
-                                            <button type="button" onclick="editCV('{{$value->macvcq}}')" class="btn btn-info btn-xs mbs">
-                                                <i class="fa fa-edit"></i>&nbsp; Chỉnh sửa</button>
-
-                                            <button type="button" onclick="cfDel('{{$furl.'del/'.$value->id}}')" class="btn btn-danger btn-xs mbs" data-target="#delete-modal-confirm" data-toggle="modal">
-                                                <i class="fa fa-trash-o"></i>&nbsp; Xóa</button>
+                                            @if(can('dmchucvu','edit'))
+                                                <button type="button" onclick="editCV('{{$value->macvcq}}')" class="btn btn-default btn-xs mbs">
+                                                    <i class="fa fa-edit"></i>&nbsp; Sửa</button>
+                                            @endif
+                                            @if(can('dmchucvu','delete'))
+                                                <button type="button" onclick="cfDel('{{$furl.'del/'.$value->id}}')" class="btn btn-danger btn-xs mbs" data-target="#delete-modal-confirm" data-toggle="modal">
+                                                    <i class="fa fa-trash-o"></i>&nbsp; Xóa</button>
+                                            @endif
                                         </td>
                                     </tr>
                                 @endforeach

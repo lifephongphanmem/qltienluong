@@ -34,9 +34,11 @@
                     <div class="caption">DANH SÁCH CÁC ĐƠN VỊ</div>
                     <div class="actions">
                         <div class="actions">
-                            <a class="btn btn-default" href="{{url($url.'ma_so='.$madv.'/create')}}">
-                                <i class="fa fa-plus"></i> Thêm mới
-                            </a>
+                            @if(can('qltaikhoan','create'))
+                                <a class="btn btn-default" href="{{url($url.'ma_so='.$madv.'/create')}}">
+                                    <i class="fa fa-plus"></i> Thêm mới
+                                </a>
+                            @endif
                         </div>
                     </div>
                 </div>
@@ -68,16 +70,18 @@
                                             <td>{{$value->username}}</td>
                                             <td>{{$value->status}}</td>
                                             <td>
-                                                <a class="btn btn-default btn-xs mbs" href="{{url($url.'list_user?&username='.$value->username)}}">
-                                                    <i class="fa fa-edit"></i> Chỉnh sửa
-                                                </a>
-
+                                                @if(can('qltaikhoan','edit'))
+                                                    <a class="btn btn-default btn-xs mbs" href="{{url($url.'list_user?&username='.$value->username)}}">
+                                                        <i class="fa fa-edit"></i> Chỉnh sửa
+                                                    </a>
+                                                @endif
                                                 <!--a class="btn btn-default btn-xs mbs" href="{{url($url.'ma_so='.$value->username.'/permission')}}">
                                                     <i class="fa fa-list-ul"></i> Phân quyền
                                                 </a-->
-
-                                                <button type="button" onclick="cfDel('{{$url.'del_taikhoan/'.$value->username}}')" class="btn btn-default btn-xs mbs" data-target="#delete-modal-confirm" data-toggle="modal">
-                                                    <i class="fa fa-trash-o"></i>&nbsp; Xóa</button>
+                                                @if(can('qltaikhoan','delete'))
+                                                    <button type="button" onclick="cfDel('{{$url.'del_taikhoan/'.$value->username}}')" class="btn btn-default btn-xs mbs" data-target="#delete-modal-confirm" data-toggle="modal">
+                                                        <i class="fa fa-trash-o"></i>&nbsp; Xóa</button>
+                                                @endif
                                             </td>
                                         </tr>
                                     @endforeach

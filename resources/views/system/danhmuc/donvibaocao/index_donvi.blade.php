@@ -34,9 +34,11 @@
                     <div class="caption">DANH SÁCH CÁC ĐƠN VỊ</div>
                     <div class="actions">
                         <div class="actions">
-                            <a class="btn btn-default" href="{{url($url.'create?ma_so='.$inputs['ma_so'].'&phan_loai='.$inputs['phan_loai'])}}">
-                                <i class="fa fa-plus"></i> Thêm mới
-                            </a>
+                            @if(can('qldonvi','create'))
+                                <a class="btn btn-default" href="{{url($url.'create?ma_so='.$inputs['ma_so'].'&phan_loai='.$inputs['phan_loai'])}}">
+                                    <i class="fa fa-plus"></i> Thêm mới
+                                </a>
+                            @endif
                         </div>
                     </div>
                 </div>
@@ -79,17 +81,31 @@
                                                 <td>{{$value->phanloai}}</td>
                                             @endif
                                             <td>
-                                                <a class="btn btn-default btn-xs mbs" href="{{url($url.'ma_so='.$value->madvbc.'&don_vi='.$value->madv.'/edit')}}">
-                                                    <i class="fa fa-edit"></i> Chỉnh sửa
-                                                </a>
-
                                                 <button type="button" class="btn btn-xs btn-default" data-target="#giatri-modal" data-toggle="modal"
                                                         onclick="giatri('{{$value->madv}}')">
                                                     <i class="fa fa-list-alt"></i> Gán thông tin
                                                 </button>
 
-                                                <button type="button" onclick="cfDel('{{$url.'del_donvi/'.$value->madv}}')" class="btn btn-default btn-xs mbs" data-target="#delete-modal-confirm" data-toggle="modal">
-                                                    <i class="fa fa-trash-o"></i>&nbsp; Xóa</button>
+                                                @if(can('qldonvi','edit'))
+                                                    @if(can('qldonvi','delete'))
+                                                        <button type="button" onclick="cfDel_All('{{$url.'del_donvi/'.$value->madv}}')" class="btn btn-default btn-xs mbs" data-target="#delete-modal-confirm" data-toggle="modal">
+                                                            <i class="fa fa-trash-o"></i>&nbsp; Xóa</button>
+                                                    @endif
+
+                                                    <a class="btn btn-default btn-xs mbs" href="{{url($url.'ma_so='.$value->madvbc.'&don_vi='.$value->madv.'/edit')}}">
+                                                        <i class="fa fa-edit"></i> Chỉnh sửa
+                                                    </a>
+                                                @endif
+
+                                                @if(can('qldonvi','data'))
+                                                    <button type="button" onclick="cfDel_All('{{$value->madv}}')" class="btn btn-default btn-xs mbs" data-target="#delete-all-modal-confirm" data-toggle="modal">
+                                                        <i class="fa fa-trash-o"></i>&nbsp; Xóa tất cả cán bộ</button>
+                                                @endif
+
+                                                @if(can('qldonvi','delete'))
+                                                    <button type="button" onclick="cfDel('{{$url.'del_donvi/'.$value->madv}}')" class="btn btn-default btn-xs mbs" data-target="#delete-modal-confirm" data-toggle="modal">
+                                                        <i class="fa fa-trash-o"></i>&nbsp; Xóa</button>
+                                                @endif
                                             </td>
                                         </tr>
                                     @endforeach
@@ -318,4 +334,35 @@
         })
     </script>
     @include('includes.modal.delete')
+
+    <script>
+        function cfDel_All(madv){
+            $('#frmDelete_all').attr('action', '{{$url.'del_dscanbo/'}}'+madv);
+
+        }
+
+        function subDel_All(){
+            $('#frmDelete_all').submit();
+        }
+    </script>
+
+    <div id="delete-all-modal-confirm" tabindex="-1" role="dialog" aria-hidden="true" class="modal fade">
+
+        <form id="frmDelete_all" method="GET" action="{{$url.'del_dscanbo'}}" accept-charset="UTF-8">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header modal-header-primary">
+                        <button type="button" data-dismiss="modal" aria-hidden="true"
+                                class="close">&times;</button>
+                        <h4 id="modal-header-primary-label" class="modal-title">Đồng ý xoá?</h4>
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="button" data-dismiss="modal" class="btn btn-default">Hủy thao tác</button>
+                        <button type="submit" onclick="subDel_All()" data-dismiss="modal" class="btn btn-primary">Đồng ý</button>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
 @stop

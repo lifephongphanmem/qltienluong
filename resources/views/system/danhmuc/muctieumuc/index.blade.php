@@ -35,9 +35,11 @@
                     <div class="caption">
                         <b>DANH MỤC MỤC - TIỂU MỤC</b>
                     </div>
-                    <div class="actions">
-                        <button type="button" id="_btnaddPB" class="btn btn-success btn-xs" onclick="add()"><i class="fa fa-plus"></i>&nbsp;Thêm mới</button>
-                    </div>
+                    @if(can('congthucmtm','create'))
+                        <div class="actions">
+                            <button type="button" id="_btnaddPB" class="btn btn-success btn-xs" onclick="add()"><i class="fa fa-plus"></i>&nbsp;Thêm mới</button>
+                        </div>
+                    @endif
                 </div>
                 <div class="portlet-body form-horizontal">
                     <table id="sample_3" class="table table-hover table-striped table-bordered" style="min-height: 230px">
@@ -61,10 +63,15 @@
                                         <td>{{$value->tenct}}</td>
                                         <td>{{$value->tenpc}}</td>
                                         <td>
-                                            <button type="button" onclick="editCV('{{$value->tieumuc}}')" class="btn btn-default btn-xs">
-                                                <i class="fa fa-edit"></i>&nbsp; Sửa</button>
-                                            <button type="button" onclick="cfDel('{{$furl.'del/'.$value->id}}')" class="btn btn-default btn-xs" data-target="#delete-modal-confirm" data-toggle="modal">
-                                                <i class="fa fa-trash-o"></i>&nbsp; Xóa</button>
+                                            @if(can('congthucmtm','edit'))
+                                                <button type="button" onclick="editCV('{{$value->tieumuc}}')" class="btn btn-default btn-xs">
+                                                    <i class="fa fa-edit"></i>&nbsp; Sửa</button>
+                                            @endif
+
+                                            @if(can('congthucmtm','delete'))
+                                                <button type="button" onclick="cfDel('{{$furl.'del/'.$value->id}}')" class="btn btn-default btn-xs" data-target="#delete-modal-confirm" data-toggle="modal">
+                                                    <i class="fa fa-trash-o"></i>&nbsp; Xóa</button>
+                                            @endif
                                         </td>
                                     </tr>
                                 @endforeach

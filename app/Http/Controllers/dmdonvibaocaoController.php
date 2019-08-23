@@ -384,4 +384,15 @@ class dmdonvibaocaoController extends Controller
         }else
             return view('errors.notlogin');
     }
+
+    function del_dscanbo($madv){
+        if (Session::has('admin')) {
+            $model = dmdonvi::where('madv',$madv)->first();
+            if(session('admin')->sadmin == 'SSA'){
+                DB::statement('Delete From hosocanbo where madv ='.$madv);
+            }
+            return redirect('/danh_muc/khu_vuc/chi_tiet?ma_so='.$model->madvbc.'&phan_loai='.$model->phanloaitaikhoan);
+        }else
+            return view('errors.notlogin');
+    }
 }

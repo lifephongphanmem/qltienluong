@@ -35,8 +35,8 @@
                         DANH MỤC PHÂN LOẠI ĐƠN VỊ QUẢN LÝ
                     </div>
                     <div class="actions">
-                        @if(session('admin')->username == 'huongvu' || session('admin')->level == 'SSA')
-                            <button type="button" id="_btnaddPB" class="btn btn-success btn-xs" onclick="addPB()"><i class="fa fa-plus"></i>&nbsp;Thêm mới</button>
+                        @if(can('dmphanloaidv','create'))
+                            <button type="button" id="_btnaddPB" class="btn btn-default btn-xs" onclick="addPB()"><i class="fa fa-plus"></i>&nbsp;Thêm mới</button>
                         @endif
                     </div>
                 </div>
@@ -62,9 +62,11 @@
                                         <td>
                                             <a href="{{url($furl.'?maso='.$value->maphanloai)}}" class="btn btn-default btn-xs">
                                                 <i class="fa fa-edit"></i>&nbsp; Phụ cấp</a>
-                                            @if(session('admin')->username == 'huongvu' || session('admin')->level == 'SSA')
+                                            @if(can('dmphanloaidv','edit'))
                                                 <button type="button" onclick="editPB('{{$value->maphanloai}}')" class="btn btn-default btn-xs mbs">
                                                     <i class="fa fa-edit"></i>&nbsp; Sửa</button>
+                                            @endif
+                                            @if(can('dmphanloaidv','delete'))
                                                 <button type="button" onclick="cfDel('/danh_muc/nguon_kinh_phi/del/{{$value->id}}')" class="btn btn-danger btn-xs mbs" data-target="#delete-modal-confirm" data-toggle="modal">
                                                     <i class="fa fa-trash-o"></i>&nbsp; Xóa</button>
                                             @endif
@@ -110,6 +112,7 @@
 
     <script>
         function addPB(){
+            $('#maphanloai').prop('readonly',false);
             $('#maphanloai').val('');
             $('#tenphanloai').val('');
             $('#id').val(0);
@@ -117,6 +120,7 @@
         }
 
         function editPB(maphanloai){
+            $('#maphanloai').prop('readonly',true);
             var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
             $.ajax({
                 url: '{{$furl}}' + 'get',

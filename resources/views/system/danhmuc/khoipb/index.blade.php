@@ -35,8 +35,8 @@
                         DANH MỤC LĨNH VỰC HOẠT ĐỘNG
                     </div>
                     <div class="actions">
-                        @if(session('admin')->level == 'SA' || session('admin')->level == 'SSA')
-                            <button type="button" id="_btnaddPB" class="btn btn-success btn-xs" onclick="addPB()"><i class="fa fa-plus"></i>&nbsp;Thêm mới</button>
+                        @if(can('dmlinhvuchd','create'))
+                            <button type="button" id="_btnaddPB" class="btn btn-default btn-xs" onclick="addPB()"><i class="fa fa-plus"></i>&nbsp;Thêm mới</button>
                         @endif
                     </div>
                 </div>
@@ -59,11 +59,17 @@
                                         <td>{{$value->makhoipb}}</td>
                                         <td>{{$value->tenkhoipb}}</td>
                                         <td>{{$value->ghichu}}</td>
-                                        @if(session('admin')->level == 'SA' || session('admin')->level == 'SSA')
-                                            @include('includes.crumbs.bt_editdel')
-                                        @else
-                                            <td></td>
-                                        @endif
+                                        <td>
+                                            @if(can('dmlinhvuchd','edit'))
+                                                <button type="button" onclick="edit('{{$value->id}}')" class="btn btn-default btn-xs mbs">
+                                                    <i class="fa fa-edit"></i>&nbsp; Sửa</button>
+                                            @endif
+
+                                            @if(can('dmlinhvuchd','delete'))
+                                                <button type="button" onclick="cfDel('{{$furl.'del/'.$value->id}}')" class="btn btn-danger btn-xs mbs" data-target="#delete-modal-confirm" data-toggle="modal">
+                                                    <i class="fa fa-trash-o"></i>&nbsp; Xóa</button>
+                                            @endif
+                                        </td>
                                     </tr>
                                 @endforeach
                             @endif
