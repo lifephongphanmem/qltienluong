@@ -188,7 +188,10 @@ class dutoanluongController extends Controller
                 ->where('theodoi', '<', '9')
                 ->get();
             //$a_hoten = array_column($model->toarray(), 'tencanbo', 'macanbo');
-            $model = (new dataController())->getCanBo($model,$inputs['namdt'].'-'.$inputs['thang'].'-01');
+            //thời điểm xét duyệt
+            $thoidiem = Carbon::create($inputs['namdt'], $inputs['thang'] + 1, '01')->addDay(-1)->toDateString();
+
+            $model = (new dataController())->getCanBo($model,$inputs['namdt'].'-'.$inputs['thang'].'-01',true,$thoidiem);
             foreach ($model as $cb) {
                 $cb->congtac = 'CONGTAC';
                 $cb->macongtac = $a_congtac[$cb->mact];
@@ -239,8 +242,8 @@ class dutoanluongController extends Controller
             $m_cb = $model->keyBy('macanbo')->toarray();
             //dd($m_cb);
             $m_nh = $model->where('nam_ns', '<>', '')->where('nam_ns', '<=', $inputs['namdt'])->keyBy('macanbo')->toarray();
-            $m_nb = $model->where('nam_nb', '<>', '')->where('nam_nb', '<=', $inputs['namdt'])->keyBy('macanbo')->toarray();
-            $m_tnn = $model->where('nam_tnn', '<>', '')->where('nam_tnn', '<=', $inputs['namdt'])->keyBy('macanbo')->toarray();
+            $m_nb = $model->where('nam_nb', '<>', '')->where('nam_nb', '=', $inputs['namdt'])->keyBy('macanbo')->toarray();
+            $m_tnn = $model->where('nam_tnn', '<>', '')->where('nam_tnn', '=', $inputs['namdt'])->keyBy('macanbo')->toarray();
             //dd($m_nb);
             foreach ($m_cb_kn as $key => $val) {
                 $m_cb_kn[$key]['congtac'] = 'CONGTAC';
@@ -283,8 +286,6 @@ class dutoanluongController extends Controller
             for($i = $inputs['thang'];$i < 13; $i++){
                 $a_thang[] = array('thang'=> str_pad($i, 2, '0', STR_PAD_LEFT),'nam' => $inputs['namdt']);
             }
-            //thời điểm xét duyệt
-            $thoidiem = Carbon::create($inputs['namdt'], $inputs['thang'] + 1, '01')->addDay(-1)->toDateString();
 
             //chạy tính hệ số lương, phụ cấp trc. Sau này mỗi tháng chỉ chạy cán bộ thay đổi
             foreach ($m_cb as $key => $val) {
@@ -308,9 +309,9 @@ class dutoanluongController extends Controller
                 }
                 //kiểm tra xem cán bộ đc nâng lương trc thời điêm xét ko
                 // nếu có => xet thời điểm nâng lương là thời điểm xét.
-                if($val['ngayden'] <= $thoidiem){
-                    $m_nb[$key]['thang_nb'] = $inputs['thang'];
-                }
+//                if($val['ngayden'] <= $thoidiem){
+//                    $m_nb[$key]['thang_nb'] = $inputs['thang'];
+//                }
 
                 if (isset($m_tnn[$key]) && $m_tnn[$key]['thang_tnn'] < $m_nb[$key]['thang_nb']) {
                     $m_nb[$key]['pctnn'] = $m_nb[$key]['pctnn'] == 0 ? 5: $m_nb[$key]['pctnn'] + 1;
@@ -330,9 +331,9 @@ class dutoanluongController extends Controller
                 }
                 //kiểm tra xem cán bộ đc nâng lương trc thời điêm xét ko
                 // nếu có => xet thời điểm nâng lương là thời điểm xét.
-                if($val['tnndenngay'] <= $thoidiem){
-                    $m_tnn[$key]['thang_tnn'] = $inputs['thang'];
-                }
+//                if($val['tnndenngay'] <= $thoidiem){
+//                    $m_tnn[$key]['thang_tnn'] = $inputs['thang'];
+//                }
             }
             //dd($m_tnn);
             //bắt đầu tính lương

@@ -117,7 +117,7 @@ class nguonkinhphiController extends Controller
                 ->where('phanloai','<','3')->where('thaisan','1')->get()->toarray(), 'mapc');
             //dd($a_pc_ts);
 
-            $model = (new dataController())->getCanBo($model,$model_thongtu->ngayapdung);
+            $model = (new dataController())->getCanBo($model,$model_thongtu->ngayapdung,true,$model_thongtu->ngayapdung);
 
             foreach($model as $cb){
                 $cb->macongtac = $a_congtac[$cb->mact];
@@ -166,8 +166,8 @@ class nguonkinhphiController extends Controller
             $m_cb = $model->keyBy('macanbo')->toarray();
             //làm tùy chọn tính nghỉ hưu
             $m_nh = $model->where('nam_ns', '<>', '')->where('nam_ns','<=',$inputs['namdt'])->keyBy('macanbo')->toarray();
-            $m_nb = $model->where('nam_nb', '<>', '')->where('nam_nb','<=',$inputs['namdt'])->keyBy('macanbo')->toarray();
-            $m_tnn = $model->where('nam_tnn', '<>', '')->where('nam_tnn','<=',$inputs['namdt'])->keyBy('macanbo')->toarray();
+            $m_nb = $model->where('nam_nb', '<>', '')->where('nam_nb','=',$inputs['namdt'])->keyBy('macanbo')->toarray();
+            $m_tnn = $model->where('nam_tnn', '<>', '')->where('nam_tnn','=',$inputs['namdt'])->keyBy('macanbo')->toarray();
             //dd($m_nb);
             foreach($m_cb_kn as $key =>$val){
                 if(isset($m_cb[$m_cb_kn[$key]['macanbo']])){
@@ -220,7 +220,8 @@ class nguonkinhphiController extends Controller
                     $nhomnb = $a_nhomnb[$val['msngbac']];
                     $hesomax = $nhomnb['hesolonnhat'];
                     if($val['heso'] >= $hesomax){
-                        $m_nb[$key]['vuotkhung'] = $m_nb[$key]['vuotkhung'] == 0 ? $nhomnb['vuotkhung'] : $m_nb[$key]['vuotkhung'] + 1;
+                        //$m_nb[$key]['vuotkhung'] = $m_nb[$key]['vuotkhung'] == 0 ? $nhomnb['vuotkhung'] : $m_nb[$key]['vuotkhung'] + 1;
+                        $m_nb[$key]['vuotkhung'] = $m_nb[$key]['vuotkhung'] == 0 ? 5 : $m_nb[$key]['vuotkhung'] + 1;
                     }else{
                         $m_nb[$key]['heso'] += $nhomnb['hesochenhlech'];
                     }
@@ -228,10 +229,10 @@ class nguonkinhphiController extends Controller
 
                 //kiểm tra xem thời gian nâng lương của cán bộ từ tháng 01-06 => tự nâng
                 //tính lại do vượt khung đã tính từ trc sang hệ số => tính lại hệ số vk thì sai
-                if(date_create($val['ngayden']) <= date_create($inputs['namdt'].'-06-30')){
-                    $m_cb[$key]['heso'] = $m_nb[$key]['heso'];
-                    $m_cb[$key]['vuotkhung'] = $m_nb[$key]['vuotkhung'];
-                }
+//                if(date_create($val['ngayden']) <= date_create($inputs['namdt'].'-06-30')){
+//                    $m_cb[$key]['heso'] = $m_nb[$key]['heso'];
+//                    $m_cb[$key]['vuotkhung'] = $m_nb[$key]['vuotkhung'];
+//                }
 
                 if (isset($m_tnn[$key]) && $m_tnn[$key]['thang_tnn'] < $m_nb[$key]['thang_nb']) {
                     $m_nb[$key]['pctnn'] = $m_nb[$key]['pctnn'] == 0 ? 5: $m_nb[$key]['pctnn'] + 1;
@@ -260,11 +261,11 @@ class nguonkinhphiController extends Controller
                 }
 
                 //kiểm tra xem thời gian nâng lương của cán bộ từ tháng 01-06 => tự nâng
-                if(date_create($val['ngayden']) <= date_create($inputs['namdt'].'-06-30')){
-                    if(isset($m_cb[$key]['pctnn'])){
-                        $m_cb[$key]['pctnn'] = $m_tnn[$key]['pctnn'];
-                    }
-                }
+//                if(date_create($val['ngayden']) <= date_create($inputs['namdt'].'-06-30')){
+//                    if(isset($m_cb[$key]['pctnn'])){
+//                        $m_cb[$key]['pctnn'] = $m_tnn[$key]['pctnn'];
+//                    }
+//                }
             }
 
             //chạy tính hệ số lương, phụ cấp trc. Sau này mỗi tháng chỉ chạy cán bộ thay đổi
