@@ -66,6 +66,7 @@
                 },
                 dataType: 'JSON',
                 success: function (data) {
+                    //alert(data.message);
                     var heso = data.message.split(';');
                     $('#heso').val(heso[0]);
                     $('#vuotkhung').val(heso[1]);

@@ -26,6 +26,12 @@ class dsnangluong_chitiet extends Model
         'luongcoban',
         'thangtl',
         'ngaytl',
+        'ghichu',
+        'msngbac_cu',
+        'bac_cu',
+        'heso_cu',
+        'vuotkhung_cu',
+        /*
         'pcct',
         'pckct',
         'pck',
@@ -59,6 +65,10 @@ class dsnangluong_chitiet extends Model
         'pcphth',
         'pcctp',
         'pctaicu',
-        'ghichu'
+        */
     ];
 }
+
+/*
+ * ALTER TABLE `dsnangluong_chitiet` ADD `msngbac_cu` VARCHAR(50) NULL AFTER `ngaytl`, ADD `bac_cu` INT NOT NULL DEFAULT '1' AFTER `msngbac_cu`, ADD `heso_cu` DOUBLE NOT NULL DEFAULT '0' AFTER `bac_cu`, ADD `vuotkhung_cu` DOUBLE NOT NULL DEFAULT '0' AFTER `heso_cu`
+ * */

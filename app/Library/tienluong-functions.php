@@ -370,13 +370,18 @@ function getPhanLoaiCT($val_null = true){
 }
 
 function getChucVuCQ($val_null = true){
+    /*bỏ phân loại do phát sinh nhiều maphanloai mới
     if(session('admin')->level=='SA' || session('admin')->level=='SSA'){
         $model = App\dmchucvucq::where('maphanloai',session('admin')->maphanloai)->get();
     }else{
         $model = App\dmchucvucq::where('maphanloai',session('admin')->maphanloai)
-            ->wherein('madv',['SA',session('admin')->madv])->get();
+        ->wherein('madv',['SA',session('admin')->madv])->get();
     }
     $model = array_column($model->toArray(),'tencv','macvcq');
+    */
+    $model = array_column(App\dmchucvucq::wherein('madv',['SA',session('admin')->madv])
+        ->get()->toArray(),'tencv','macvcq');
+
     //$model = array_column(App\dmchucvucq::where('maphanloai',session('admin')->maphanloai)->get()->toArray(),'tencv','macvcq');
     if($val_null){
         $a_kq = array(''=>'-- Chọn chức vụ --');

@@ -53,7 +53,7 @@ class dsnangluongController extends Controller
             $inputs['madv'] = $madv;
             $inputs['manl'] = $manl;
             $a_ngachluong = ngachluong::all()->keyby('msngbac')->toarray();
-            $a_canbo = hosocanbo::select('macanbo','msngbac','bac','ngaytu','ngayden','msngbac','heso','hesott','vuotkhung')
+            $a_canbo = hosocanbo::select('macanbo','msngbac','bac','ngaytu','ngayden','msngbac','heso','vuotkhung')
                 ->where('ngayden', '<=', $inputs['ngayxet'])->where('theodoi','<','9')
                 ->where('madv', $madv)->get()->keyby('macanbo')->toarray();
             $a_data = array();
@@ -64,6 +64,16 @@ class dsnangluongController extends Controller
                 $ngayden = $a_canbo[$key]['ngayden'];
                 $a_canbo[$key]['manl'] = $manl;
                 $a_canbo[$key]['phanloai'] = 'DUNGHAN';
+                $a_canbo[$key]['ngaytl'] = 0;
+                $a_canbo[$key]['thangtl'] = 0;
+                $a_canbo[$key]['truylinhtungay'] = null;
+                $a_canbo[$key]['truylinhdenngay'] = null;
+                $a_canbo[$key]['hesott'] = 0;
+                $a_canbo[$key]['msngbac_cu']= $val['msngbac'];
+                $a_canbo[$key]['bac_cu']= $val['bac'];
+                $a_canbo[$key]['heso_cu']= $val['heso'];
+                $a_canbo[$key]['vuotkhung_cu']= $val['vuotkhung'];
+
                 //Lấy thông tin ngạch lương
                 $b_vuotkhung = false; //biến xác định cán bộ có thuộc diện vượt khung
                 if(!isset($a_ngachluong[$val['msngbac']])){
@@ -93,9 +103,6 @@ class dsnangluongController extends Controller
                 }
 
                 if($inputs['ngayxet']>$ngayden) {
-                    $a_canbo[$key]['ngaytl'] = 0;
-                    $a_canbo[$key]['thangtl'] = 0;
-
                     $a_canbo[$key]['truylinhtungay'] = new Carbon($ngayden);
                     $ngayxet = new Carbon($inputs['ngayxet']);
                     if($ngayxet->day == 1){
@@ -103,198 +110,11 @@ class dsnangluongController extends Controller
                     }
                     $a_canbo[$key]['truylinhdenngay'] = $ngayxet;
                     list($a_canbo[$key]['thangtl'], $a_canbo[$key]['ngaytl']) = $this->getThoiGianTL($a_canbo[$key]['truylinhtungay'], $a_canbo[$key]['truylinhdenngay']);
-                }else{
-                    $a_canbo[$key]['ngaytl'] = 0;
-                    $a_canbo[$key]['thangtl'] = 0;
-                    $a_canbo[$key]['truylinhtungay'] = null;
-                    $a_canbo[$key]['truylinhdenngay'] = null;
-                    $a_canbo[$key]['hesott'] = 0;
                 }
                 $a_data[] = $a_canbo[$key];
                 foreach($a_nguon_df as $k=>$v) {
                     $a_data_nguon[] = array('macanbo' => $key, 'manguonkp' => $k, 'luongcoban' => $v, 'manl' => $manl);
                 }
-
-                /*
-                dd($ngachluong);
-                //Lấy thông tin nhóm ngạch lương
-                if($ngachluong->manhom == 'CBCT'){
-                    //nhóm ngạch lương cán bộ chuyên trách xử lý riêng do danh mục
-                    $nhomngluong = $ngachluong;
-
-                    if($cb->bac + 1 > $nhomngluong->baclonnhat){
-                        $cb->bac = $nhomngluong->baclonnhat;
-                    }else{
-                        $cb->bac = $cb->bac + 1;
-                    }
-
-                    $hsl = getLuongNgachBac_CBCT($cb->msngbac, $cb->bac);
-                }else{
-                    $nhomngluong = $model_nhomngluong->where('manhom',$ngachluong->manhom)->first();
-
-                    //nếu bậc lương  = bậc vượt khung thì mỗi năm tăng 1% và ko tăng bậc lương nữa
-                    //xét biến vượt khung
-                    if($cb->bac >= $nhomngluong->bacvuotkhung){
-                        $b_vuotkhung = true;
-                    }else{
-                        if($cb->bac + 1 > $nhomngluong->baclonnhat){
-                            $cb->bac = $nhomngluong->baclonnhat;
-                        }else{
-                            $cb->bac = $cb->bac + 1;
-                        }
-                        $hsl = getLuongNgachBac($ngachluong->manhom, $cb->bac);
-                    }
-                }
-                if(count($nhomngluong) == 0){continue;}
-
-                if($b_vuotkhung){
-                    if($cb->vuotkhung < $nhomngluong->vuotkhung){
-                        $cb->vuotkhung = $nhomngluong->vuotkhung;
-                        $cb->hesott = ($nhomngluong->vuotkhung * $cb->heso) / 100;
-                    }else{
-                        $cb->vuotkhung = $cb->vuotkhung + 1;
-                        $cb->hesott = $cb->heso / 100;
-                    }
-
-                    $cb->ngaytu = new Carbon($cb->ngayden);
-                    //$cb->ngaytu = $date->addDay('1');
-                    //$date1 = new Carbon($cb->ngayden);
-                    //$cb->ngayden = $date1->addYear('1');
-                    $date = new Carbon($cb->ngayden);
-                    $cb->ngayden = $date->addYear('1');
-                    //kiểm tra truy lĩnh nếu ngày xét = ngày nâng lương = > ko truy lĩnh
-                    if($inputs['ngayxet']>$cb->ngayden) {
-                        $cb->truylinhtungay = new Carbon($cb->ngayden);
-                        $cb->truylinhdenngay = new Carbon($inputs['ngayxet']);
-                    }else{
-                        $cb->truylinhtungay = null;
-                        $cb->truylinhdenngay = null;
-                    }
-
-                    //$cb->truylinhdenngay = $inputs['ngayxet'];
-                }else{
-                    //Tính lại hệ số lương + phụ cấp + hệ số truy lĩnh
-                    $a_hsl = explode(';',$hsl);
-                    $cb->heso = $a_hsl[0];
-                    $cb->vuotkhung = $a_hsl[1];
-
-                    //$cb->ngaytu = $date->addDay('1');
-                    $cb->ngaytu = new Carbon($cb->ngayden);
-                    //$date1 = new Carbon($cb->ngayden);
-                    //$cb->ngayden = $date1->addYear($nhomngluong->namnb)->addDay('1');
-                    //kiểm tra truy lĩnh nếu ngày xét = ngày nâng lương = > ko truy lĩnh
-                    if($inputs['ngayxet']>$cb->ngayden) {
-                        $cb->truylinhtungay = new Carbon($cb->ngayden);
-                        $cb->truylinhdenngay = new Carbon($inputs['ngayxet']);
-                        $cb->hesott = $nhomngluong->hesochenhlech;
-                    }else{
-                        $cb->truylinhtungay = null;
-                        $cb->truylinhdenngay = null;
-                    }
-                    $date = new Carbon($cb->ngayden);
-                    $cb->ngayden = $date->addYear($nhomngluong->namnb);
-                }
-            }
-
-            dd($a_canbo);
-
-            //bắt đầu làm lại
-            $model_ngachluong = ngachluong::wherein('msngbac', function ($query) use ($madv) {
-                $query->select('msngbac')->from('hosocanbo')->where('madv', $madv)->distinct();
-            })->get();
-            $model_nhomngluong = nhomngachluong::all();
-
-            $m_canbo = hosocanbo::select('macanbo','msngbac','bac','ngaytu','ngayden','msngbac','heso','hesott','vuotkhung',DB::raw("'".$inputs['manl']. "' as manl"),
-                    'pck','pccv','pckv','pcth','pcdh','pcld','pcudn','pctn','pctnn','pcdbn','pcvk','pckn','pccovu','pcdbqh','pctnvk','pcbdhdcu','pcdang','pcthni')
-                ->where('ngayden', '<=', $inputs['ngayxet'])
-                ->where('theodoi','<','9')
-                ->where('madv', $madv)->get();
-
-            //dd($model_nhomngluong->toarray());
-            foreach ($m_canbo as $cb) {
-                //Lấy thông tin ngạch lương
-                $ngachluong = $model_ngachluong->where('msngbac',$cb->msngbac)->first();
-                $b_vuotkhung = false; //biến xác định cán bộ có thuộc diện vượt khung
-                if(count($ngachluong)==0){continue;}
-
-                //Lấy thông tin nhóm ngạch lương
-                if($ngachluong->manhom == 'CBCT'){
-                    //nhóm ngạch lương cán bộ chuyên trách xử lý riêng do danh mục
-                    $nhomngluong = $ngachluong;
-
-                    if($cb->bac + 1 > $nhomngluong->baclonnhat){
-                        $cb->bac = $nhomngluong->baclonnhat;
-                    }else{
-                        $cb->bac = $cb->bac + 1;
-                    }
-
-                    $hsl = getLuongNgachBac_CBCT($cb->msngbac, $cb->bac);
-                }else{
-                    $nhomngluong = $model_nhomngluong->where('manhom',$ngachluong->manhom)->first();
-
-                    //nếu bậc lương  = bậc vượt khung thì mỗi năm tăng 1% và ko tăng bậc lương nữa
-                    //xét biến vượt khung
-                    if($cb->bac >= $nhomngluong->bacvuotkhung){
-                        $b_vuotkhung = true;
-                    }else{
-                        if($cb->bac + 1 > $nhomngluong->baclonnhat){
-                            $cb->bac = $nhomngluong->baclonnhat;
-                        }else{
-                            $cb->bac = $cb->bac + 1;
-                        }
-                        $hsl = getLuongNgachBac($ngachluong->manhom, $cb->bac);
-                    }
-                }
-                if(count($nhomngluong) == 0){continue;}
-
-                if($b_vuotkhung){
-                    if($cb->vuotkhung < $nhomngluong->vuotkhung){
-                        $cb->vuotkhung = $nhomngluong->vuotkhung;
-                        $cb->hesott = ($nhomngluong->vuotkhung * $cb->heso) / 100;
-                    }else{
-                        $cb->vuotkhung = $cb->vuotkhung + 1;
-                        $cb->hesott = $cb->heso / 100;
-                    }
-
-                    $cb->ngaytu = new Carbon($cb->ngayden);
-                    //$cb->ngaytu = $date->addDay('1');
-                    //$date1 = new Carbon($cb->ngayden);
-                    //$cb->ngayden = $date1->addYear('1');
-                    $date = new Carbon($cb->ngayden);
-                    $cb->ngayden = $date->addYear('1');
-                    //kiểm tra truy lĩnh nếu ngày xét = ngày nâng lương = > ko truy lĩnh
-                    if($inputs['ngayxet']>$cb->ngayden) {
-                        $cb->truylinhtungay = new Carbon($cb->ngayden);
-                        $cb->truylinhdenngay = new Carbon($inputs['ngayxet']);
-                    }else{
-                        $cb->truylinhtungay = null;
-                        $cb->truylinhdenngay = null;
-                    }
-
-                    //$cb->truylinhdenngay = $inputs['ngayxet'];
-                }else{
-                    //Tính lại hệ số lương + phụ cấp + hệ số truy lĩnh
-                    $a_hsl = explode(';',$hsl);
-                    $cb->heso = $a_hsl[0];
-                    $cb->vuotkhung = $a_hsl[1];
-
-                    //$cb->ngaytu = $date->addDay('1');
-                    $cb->ngaytu = new Carbon($cb->ngayden);
-                    //$date1 = new Carbon($cb->ngayden);
-                    //$cb->ngayden = $date1->addYear($nhomngluong->namnb)->addDay('1');
-                    //kiểm tra truy lĩnh nếu ngày xét = ngày nâng lương = > ko truy lĩnh
-                    if($inputs['ngayxet']>$cb->ngayden) {
-                        $cb->truylinhtungay = new Carbon($cb->ngayden);
-                        $cb->truylinhdenngay = new Carbon($inputs['ngayxet']);
-                        $cb->hesott = $nhomngluong->hesochenhlech;
-                    }else{
-                        $cb->truylinhtungay = null;
-                        $cb->truylinhdenngay = null;
-                    }
-                    $date = new Carbon($cb->ngayden);
-                    $cb->ngayden = $date->addYear($nhomngluong->namnb);
-                }
-                */
             }
             //dd($m_canbo->toarray());
             //dd($a_data_nguon);
@@ -443,6 +263,10 @@ class dsnangluongController extends Controller
             $model_canbo->phanloai = 'TRUOCHAN';
             $model_canbo->ngaytu = $ngayxet->toDateString('Y-m-d');
             $model_canbo->ngayden = $ngayxet->addYear($a_nb['namnb'])->toDateString('Y-m-d');
+            $model_canbo->msngbac_cu= $model_canbo->msngbac;
+            $model_canbo->bac_cu= $model_canbo->bac;
+            $model_canbo->heso_cu= $model_canbo->heso;
+            $model_canbo->vuotkhung_cu= $model_canbo->vuotkhung;
 
             if($model_canbo->heso < $a_nb->hesolonnhat){//nâng lương ngạch bậc
                 $model_canbo['heso'] += $a_nb['hesochenhlech'];

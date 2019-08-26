@@ -401,7 +401,7 @@ class nguonkinhphiController extends Controller
 
             //lưu dữ liệu
             $a_col = array('bac', 'bhxh_dv', 'bhtn_dv', 'kpcd_dv', 'bhyt_dv', 'gioitinh', 'nam_nb', 'nam_ns', 'nam_tnn',
-                'thang_nb', 'thang_ns', 'thang_tnn', 'ngayden', 'ngaysinh', 'tnndenngay', 'pcctp', 'st_pcctp');
+                'thang_nb', 'thang_ns', 'thang_tnn', 'ngayden','ngaytu', 'ngaysinh', 'tnndenngay','tnntungay', 'pcctp', 'st_pcctp');
 
             $a_data_nl = unset_key($a_data_nl, $a_col);
             //dd($a_data_nl);

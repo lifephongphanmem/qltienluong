@@ -129,6 +129,7 @@ Route::group(['prefix'=>'danh_muc'],function(){
         Route::get('del_donvi/{madv}','dmdonvibaocaoController@destroy_donvi');
         Route::get('get_list_unit','dmdonvibaocaoController@get_list_unit');
         Route::get('set_management','dmdonvibaocaoController@set_management');
+        Route::post('get_canbo','dmdonvibaocaoController@get_canbo');
 
         Route::get('update_plct','dmdonvibaocaoController@update_plct');
         Route::get('update_sunghiep','dmdonvibaocaoController@update_sunghiep');
@@ -136,6 +137,7 @@ Route::group(['prefix'=>'danh_muc'],function(){
         Route::get('del_dscanbo/{maso}','dmdonvibaocaoController@del_dscanbo');
 
         Route::get('getPhanLoai','ajaxController@getPhanLoai');
+
     });
 
     Route::group(['prefix'=>'tai_khoan'],function(){

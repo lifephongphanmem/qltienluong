@@ -87,11 +87,6 @@
                                                 </button>
 
                                                 @if(can('qldonvi','edit'))
-                                                    @if(can('qldonvi','delete'))
-                                                        <button type="button" onclick="cfDel_All('{{$url.'del_donvi/'.$value->madv}}')" class="btn btn-default btn-xs mbs" data-target="#delete-modal-confirm" data-toggle="modal">
-                                                            <i class="fa fa-trash-o"></i>&nbsp; Xóa</button>
-                                                    @endif
-
                                                     <a class="btn btn-default btn-xs mbs" href="{{url($url.'ma_so='.$value->madvbc.'&don_vi='.$value->madv.'/edit')}}">
                                                         <i class="fa fa-edit"></i> Chỉnh sửa
                                                     </a>
@@ -99,7 +94,10 @@
 
                                                 @if(can('qldonvi','data'))
                                                     <button type="button" onclick="cfDel_All('{{$value->madv}}')" class="btn btn-default btn-xs mbs" data-target="#delete-all-modal-confirm" data-toggle="modal">
-                                                        <i class="fa fa-trash-o"></i>&nbsp; Xóa tất cả cán bộ</button>
+                                                        <i class="fa fa-trash-o"></i>&nbsp; Xóa cán bộ</button>
+
+                                                    <button type="button" onclick="getcanbo('{{$value->madv}}')" class="btn btn-default btn-xs mbs" data-target="#getcanbo-modal-confirm" data-toggle="modal">
+                                                        <i class="fa fa-stack-overflow"></i>&nbsp; Lấy thông tin cán bộ</button>
                                                 @endif
 
                                                 @if(can('qldonvi','delete'))
@@ -338,7 +336,10 @@
     <script>
         function cfDel_All(madv){
             $('#frmDelete_all').attr('action', '{{$url.'del_dscanbo/'}}'+madv);
+        }
 
+        function getcanbo(madv){
+            $('#frm_getcanbo').find("[id^='madv']").val(madv);
         }
 
         function subDel_All(){
@@ -347,7 +348,6 @@
     </script>
 
     <div id="delete-all-modal-confirm" tabindex="-1" role="dialog" aria-hidden="true" class="modal fade">
-
         <form id="frmDelete_all" method="GET" action="{{$url.'del_dscanbo'}}" accept-charset="UTF-8">
             <div class="modal-dialog">
                 <div class="modal-content">
@@ -365,4 +365,40 @@
             </div>
         </form>
     </div>
+
+    <div id="getcanbo-modal-confirm" tabindex="-1" role="dialog" aria-hidden="true" class="modal fade">
+        {{Form::open(['id'=>'frm_getcanbo','method'=>'POST','url'=>$url.'get_canbo','class'=>'form'])}}
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header modal-header-primary">
+                        <button type="button" data-dismiss="modal" aria-hidden="true"
+                                class="close">&times;</button>
+                        <h4 id="modal-header-primary-label" class="modal-title">Nhận danh sách cán bộ</h4>
+                    </div>
+                    <div class="form-body">
+                        <div class="form-horizontal">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <label class="control-label">Đơn vị lấy thông tin cán bộ</label>
+                                    <select class="form-control select2me" name="madv_lay" id="madv_lay">
+                                        <option value="">-- Chọn đơn vị --</option>
+                                        @foreach($a_donvi as $k=>$v)
+                                            <option value="{{$k}}">{{$v}}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
+                            <input type="hidden" id="madv" name="madv"/>
+                        </div>
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="button" data-dismiss="modal" class="btn btn-default">Hủy thao tác</button>
+                        <button type="submit" class="btn btn-primary">Đồng ý</button>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+
 @stop
