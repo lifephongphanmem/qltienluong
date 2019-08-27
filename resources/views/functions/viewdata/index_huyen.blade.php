@@ -94,13 +94,16 @@
                                     <td>
                                         @if ($value->mathdv != NULL)
                                             @if($value->phanloaitaikhoan == 'TH')
-                                                <a href="{{url('/chuc_nang/tong_hop_luong/khoi/tonghop_khoi?thang='.$value['thang'].'&nam='.$nam.'&madv='.$value['madv'])}}" class="btn btn-default btn-sm" TARGET="_blank">
+                                                <!--a href="{{url('/chuc_nang/tong_hop_luong/khoi/tonghop_khoi?thang='.$value['thang'].'&nam='.$nam.'&madv='.$value['madv'])}}" class="btn btn-default btn-sm" TARGET="_blank"-->
+                                                <a href="#" data-target="#thkhoi-modal" data-toggle="modal" onclick="baocao('{{'/chuc_nang/tong_hop_luong/khoi/tonghop_khoi'}}','{{$value['thang']}}','{{$nam}}','{{$value['tendv']}}','{{$value['madv']}}','') " class="btn btn-default btn-sm" TARGET="_blank">
                                                     <i class="fa fa-print"></i>&nbsp; Số liệu tổng hợp khối</a>
                                                 <!--a href="{{url('/chuc_nang/tong_hop_luong/don_vi/printf_bl_khoi/ma_so='.$value['mathdv'])}}" class="btn btn-default btn-sm" TARGET="_blank"-->
-                                                    <a href="{{url('/chuc_nang/tong_hop_luong/huyen/chitiet_khoi?thang='.$value['thang'].'&nam='.$nam.'&madv='.$value['madv'])}}" class="btn btn-default btn-xs" target="_blank">
+                                                    <!--a href="{{url('/chuc_nang/tong_hop_luong/huyen/chitiet_khoi?thang='.$value['thang'].'&nam='.$nam.'&madv='.$value['madv'])}}" class="btn btn-default btn-xs" target="_blank"-->
+                                                    <a href="#" data-target="#thkhoi-modal" data-toggle="modal" onclick="baocao('{{'/chuc_nang/tong_hop_luong/huyen/chitiet_khoi'}}','{{$value['thang']}}','{{$nam}}','{{$value['tendv']}}','{{$value['madv']}}','') " class="btn btn-default btn-sm" TARGET="_blank">
                                                     <i class="fa fa-print"></i>&nbsp; Số liệu chi tiết khối</a>
                                             @else
-                                                <a href="{{url('/chuc_nang/tong_hop_luong/huyen/printf_data_huyen?mathdv='.$value['mathdv'].'&madv='.$value['madv'])}}" class="btn btn-default btn-sm" TARGET="_blank">
+                                                <!--a href="{{url('/chuc_nang/tong_hop_luong/huyen/printf_data_huyen?mathdv='.$value['mathdv'].'&madv='.$value['madv'])}}" class="btn btn-default btn-sm" TARGET="_blank"-->
+                                                    <a href="#" data-target="#thkhoi-modal" data-toggle="modal" onclick="baocao('{{'/chuc_nang/tong_hop_luong/huyen/printf_data_huyen'}}','{{$value['thang']}}','{{$nam}}','{{$value['tendv']}}','{{$value['madv']}}','{{$value['mathdv']}}') " class="btn btn-default btn-sm" TARGET="_blank">
                                                     <i class="fa fa-print"></i>&nbsp; Số liệu tổng hợp</a>
                                                 <!--a href="{{url('/chuc_nang/tong_hop_luong/huyen/printf_bl_huyen?mathdv='.$value['mathdv'].'&madv='.$value['madv'])}}" class="btn btn-default btn-sm" TARGET="_blank">
                                                     <i class="fa fa-print"></i>&nbsp; Số liệu chi tiết</a-->
@@ -219,13 +222,13 @@
                                             <div class="col-md-12">
                                                 <label class="col-md-3" style="text-align: right">Tháng </label>
                                                 <div class="col-md-9">
-                                                    {!! Form::select('thang',getThang(),$thang,array('id' => 'thang', 'class' => 'form-control'))!!}
+                                                    {!! Form::select('thangds',getThang(),$thang,array('id' => 'thangds', 'class' => 'form-control'))!!}
                                                 </div>
                                             </div>
                                             <div class="col-md-12">
                                                 <label class="col-md-3" style="text-align: right">Năm </label>
                                                 <div class="col-md-9">
-                                                    {!! Form::select('nam',getNam(),$nam,array('id' => 'nam', 'class' => 'form-control'))!!}
+                                                    {!! Form::select('namds',getNam(),$nam,array('id' => 'namds', 'class' => 'form-control'))!!}
                                                 </div>
                                             </div>
                                             <div class="col-md-12">
@@ -236,6 +239,11 @@
                                                     array('id' => 'trangthai', 'class' => 'form-control'))
                                                     !!}
                                                 </div>
+                                            </div>
+                                            <div class="col-md-12">
+                                                <label class="control-label col-md-3" style="text-align: right"></label>
+                                                <input type="checkbox" name="excel" id = "excel"/>
+                                                Xuất dữ liệu ra file excel
                                             </div>
                                         <input type="hidden" id="phantramhuong" name="phantramhuong" value="100"/>
                                         <input type="hidden" id="id_ct" name="id_ct"/>
@@ -254,7 +262,78 @@
             </div>
         </div>
     </div>
+    </div>
+    {!! Form::close() !!}
+    <div id="thkhoi-modal" tabindex="-1" role="dialog" aria-hidden="true" class="modal fade">
+        {!! Form::open(['url'=>'#','target'=>'_blank' ,'method'=>'post' ,'id' => 'thoaibc', 'class'=>'form-horizontal form-validate']) !!}
+        <div class="modal-dialog modal-content">
+            <div class="modal-header modal-header-primary">
+                <button type="button" data-dismiss="modal" aria-hidden="true" class="close">&times;</button>
+                <h4 id="modal-header-primary-label" class="modal-title">Thông tin kết xuất báo cáo</h4>
+            </div>
+            <div class="modal-body">
+                <div class="form-horizontal">
+                    <div class="modal-body">
+                        <div class="form-horizontal">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <label class="col-md-3" style="text-align: right">Tháng: </label>
+                                    <div class="col-md-9">
+                                        <input class="form-control" id="thangbc" name="thangbc" readonly/>
+                                    </div>
+                                </div>
+                                <div class="col-md-12">
+                                    <label class="col-md-3" style="text-align: right">Năm: </label>
+                                    <div class="col-md-9">
+                                        <input class="form-control"  id="nambc" name="nambc" readonly/>
+                                    </div>
+                                </div>
+                                <div class="col-md-12">
+                                    <label class="col-md-3" style="text-align: right">Tên đơn vị: </label>
+                                    <div class="col-md-9">
+                                        <input class="form-control" id="tendvbc" name="tendvbc" readonly/>
+                                    </div>
+                                </div>
+                                <div class="col-md-12">
+                                    <label class="control-label col-md-3" style="text-align: right"></label>
+                                    <input type="checkbox" name="excelbc" id = "excelbc"/>
+                                    Xuất dữ liệu ra file excel
+                                </div>
+                                <input type="hidden" id="madv" name="madv"/>
+                                <input type="hidden" id="mathdvbc" name="mathdvbc"/>
+                                <input type="hidden" name="urlbc" id="urlbc" value="">
+                            </div>
+                            <input type="hidden" name="_token" value="{{ csrf_token() }}">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" data-dismiss="modal" class="btn btn-default">Hủy thao tác</button>
+                <button type="submit" id="submit" name="submit" value="submit"  class="btn btn-primary">Đồng ý</button>
+            </div>
+        </div>
+        {!! Form::close() !!}
+    </div>
     <script>
+        function baocao(url,thang,nam,tendv,madv,mathdv){
+            $('#urlbc').val(url);
+            $('#thangbc').val(thang);
+            $('#nambc').val(nam);
+            $('#madv').val(madv);
+            $('#mathdvbc').val(mathdv);
+            $('#tendvbc').val(tendv);
+        }
+        window.onsubmit = function() {
+            document.thoaibc.action = get_action();
+        }
+
+        function get_action() {
+            var url = $('#urlbc').val();
+                $('#thoaibc').attr('action', url);
+        }
+        </script>
+        <script>
         function inbl(mathdv,madv){
             $("#mathdv_in").val(mathdv);
             $("#madv_in").val(madv);

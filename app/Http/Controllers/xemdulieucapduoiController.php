@@ -20,6 +20,7 @@ use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
+use Maatwebsite\Excel\Facades\Excel;
 
 class xemdulieucapduoiController extends Controller
 {
@@ -33,7 +34,7 @@ class xemdulieucapduoiController extends Controller
             $a_trangthai=array('ALL'=>'Tất cả dữ liệu','CHOGUI'=>'Chưa gửi dữ liệu','DAGUI'=>'Đã gửi dữ liệu');
             $a_phanloai = getPhanLoaiDonVi();
             $a_phanloai['ALL']='Tất cả các đơn vị';
-                //array('ALL'=>'Tất cả các đơn vị','MAMNON'=>'Trường Mầm non','TIEUHOC'=>'Trường Tiểu học', 'THCS'=>'Trường Trung học cơ sở');
+            //array('ALL'=>'Tất cả các đơn vị','MAMNON'=>'Trường Mầm non','TIEUHOC'=>'Trường Tiểu học', 'THCS'=>'Trường Trung học cơ sở');
             //$list_donvi= dmdonvi::select('madv', 'tendv')->where('madvbc', session('admin')->madvbc)->get();
             $model_donvi = dmdonvi::select('madv', 'tendv','macqcq','maphanloai','phanloaitaikhoan')->where('macqcq', $madv)->where('madv','<>',$madv)
                 ->wherenotin('madv', function ($query) use ($madv,$thang,$nam) {
@@ -133,7 +134,6 @@ class xemdulieucapduoiController extends Controller
                     $dv->nam = $tonghopkhoi->nam;
                 }
             }
-            //dd($model_donvi->toarray());
             if($inputs['trangthai'] !='ALL'){
                 $model_donvi = $model_donvi->where('trangthai', $inputs['trangthai']);
             }
@@ -635,14 +635,14 @@ class xemdulieucapduoiController extends Controller
                     ->distinct()->get();
                 $model_nguon = tonghopluong_donvi::wherein('madv', function($query) use($madv){
                     $query->select('madv')->from('dmdonvi')->where('macqcq',$madv)->where('madv','<>',$madv)->get();
-                })->where('thang', $inputs['thang'])
-                    ->where('nam', $inputs['nam'])
+                })->where('thang', $inputs['thangds'])
+                    ->where('nam', $inputs['namds'])
                     ->where('trangthai', 'DAGUI')
                     ->get();
                 $model_nguonkhoi = tonghopluong_khoi::wherein('madv', function($query) use($madv){
                     $query->select('madv')->from('dmdonvi')->where('macqcq',$madv)->where('madv','<>',$madv)->get();
-                })->where('thang', $inputs['thang'])
-                    ->where('nam', $inputs['nam'])
+                })->where('thang', $inputs['thangds'])
+                    ->where('nam', $inputs['namds'])
                     ->where('trangthai', 'DAGUI')
                     ->get();
             }
@@ -652,14 +652,14 @@ class xemdulieucapduoiController extends Controller
                     ->where('macqcq',$madv)->where('madv','<>',$madv)->distinct()->get();
                 $model_nguon = tonghopluong_huyen::wherein('madv', function($query) use($madv){
                     $query->select('madv')->from('dmdonvi')->where('macqcq',$madv)->where('madv','<>',$madv)->get();
-                })->where('thang', $inputs['thang'])
-                    ->where('nam', $inputs['nam'])
+                })->where('thang', $inputs['thangds'])
+                    ->where('nam', $inputs['namds'])
                     ->where('trangthai', 'DAGUI')
                     ->get();
             }
             //dd($model_nguon->toarray());
-            $model_nguon_tinh = tonghopluong_tinh::where('madv', $madv)->where('thang', $inputs['thang'])
-                ->where('nam', $inputs['nam'])->first();
+            $model_nguon_tinh = tonghopluong_tinh::where('madv', $madv)->where('thang', $inputs['thangds'])
+                ->where('nam', $inputs['namds'])->first();
             //kiểm tra xem đã tổng hợp thành dữ liệu huyện gửi lên tỉnh chưa?
             if(count($model_nguon_tinh)>0 && $model_nguon_tinh->trangthai == 'DAGUI'){
                 $tralai = false;
@@ -697,14 +697,33 @@ class xemdulieucapduoiController extends Controller
             }
             //  dd($model_donvi->toarray());
             $m_dv = dmdonvi::where('madv',$madv)->first();
-            return view('reports.tonghopluong.huyen.danhsach')
-                ->with('model', $model_donvi)
-                ->with('thang', $inputs['thang'])
-                ->with('nam', $inputs['nam'])
-                ->with('a_trangthai', $a_trangthai)
-                ->with('m_dv', $m_dv)
-                ->with('furl', '/chuc_nang/tong_hop_luong/')
-                ->with('pageTitle', 'Danh sách đơn vị tổng hợp lương');
+            if(isset($inputs['excel'])){
+                Excel::create('THluong', function ($excel) use ($model_donvi, $a_trangthai, $m_dv, $inputs) {
+                    $excel->sheet('New sheet', function ($sheet) use ($model_donvi, $a_trangthai, $m_dv, $inputs) {
+                        $sheet->loadView('reports.tonghopluong.huyen.danhsach')
+                            ->with('model', $model_donvi)
+                            ->with('thang', $inputs['thangds'])
+                            ->with('nam', $inputs['namds'])
+                            ->with('a_trangthai', $a_trangthai)
+                            ->with('m_dv', $m_dv)
+                            ->with('furl', '/chuc_nang/tong_hop_luong/')
+                            ->with('pageTitle', 'THluong');
+                        $sheet->setAutoSize(false);
+                        $sheet->setFontFamily('Tahoma');
+                        $sheet->setFontBold(false);
+                    });
+                })->download('xls');
+            }else{
+                return view('reports.tonghopluong.huyen.danhsach')
+                    ->with('model', $model_donvi)
+                    ->with('thang', $inputs['thangds'])
+                    ->with('nam', $inputs['namds'])
+                    ->with('a_trangthai', $a_trangthai)
+                    ->with('m_dv', $m_dv)
+                    ->with('furl', '/chuc_nang/tong_hop_luong/')
+                    ->with('pageTitle', 'Danh sách đơn vị tổng hợp lương');
+            }
+
 
         } else
             return view('errors.notlogin');

@@ -185,8 +185,8 @@
                     @endforeach
 
                     <td style="text-align: right">{{dinhdangso($ct->tongbh)}}</td>
-                    <td style="text-align: right">{{$ct->hesoluong}}</td>
-                    <td style="text-align: right">{{dinhdangso($ct->tonghs *12*1.3)}}</td>
+                    <td style="text-align: right">{{$ct->heso + $tongpc}}</td>
+                    <td style="text-align: right">{{dinhdangso($ct->tonghs *12*1.07)}}</td>
 
                 </tr>
             @endforeach
@@ -212,8 +212,8 @@
                     @endforeach
 
                     <td style="text-align: right">{{dinhdangso($chitiet->sum('tongbh'))}}</td>
-                    <td style="text-align: right">{{$chitiet->sum('hesoluong')}}</td>
-                    <td style="text-align: right">{{dinhdangso($chitiet->sum('tonghs')*12*1.3)}}</td>
+                    <td style="text-align: right">{{$chitiet->sum('heso')+$tongcong}}</td>
+                    <td style="text-align: right">{{dinhdangso($chitiet->sum('tonghs')*12*1.07)}}</td>
                 </tr>
             @endif
         @endforeach
@@ -238,8 +238,8 @@
                     <td>{{dinhdangsothapphan($phanloai->sum($key),5)}}</td>
                 @endforeach
                 <td>{{dinhdangso($phanloai->sum('tongbh'))}}</td>
-                <td>{{$phanloai->sum('hesoluong')}}</td>
-                <td>{{dinhdangso($phanloai->sum('tonghs')*12*1.3)}}</td>
+                <td>{{$phanloai->sum('heso')+$tongcong}}</td>
+                <td>{{dinhdangso($phanloai->sum('tonghs')*12*1.07)}}</td>
             </tr>
         @endif
     @endforeach
@@ -263,8 +263,8 @@
             <td>{{dinhdangsothapphan($model->sum($key),5)}}</td>
         @endforeach
         <td style="text-align: right">{{dinhdangso($model->sum('tongbh'))}}</td>
-        <td style="text-align: right">{{$model->sum('hesoluong')}}</td>
-        <td style="text-align: right">{{dinhdangso($model->sum('tonghs')*12*1.3)}}</td>
+        <td style="text-align: right">{{$model->sum('heso')+$tongcong}}</td>
+        <td style="text-align: right">{{dinhdangso($model->sum('tonghs')*12*1.07)}}</td>
     </tr>
 </table>
 

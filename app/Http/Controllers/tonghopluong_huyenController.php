@@ -31,6 +31,7 @@ use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
+use Maatwebsite\Excel\Facades\Excel;
 
 class tonghopluong_huyenController extends Controller
 {
@@ -268,7 +269,7 @@ class tonghopluong_huyenController extends Controller
     function printf_data_huyen(Request $requests){
         if (Session::has('admin')) {
             $input = $requests->all();
-            $mathh = $input['mathdv'];
+            $mathh = $input['mathdvbc'];
             $madv = $input['madv'];
             //$model = tonghopluong_donvi_chitiet::where('mathdv', $mathdv)->get();
             //$a_bangluong = tonghopluong_donvi_bangluong::where('mathdv', $mathdv)->get()->toarray();
@@ -344,16 +345,37 @@ class tonghopluong_huyenController extends Controller
                     ->all();
             });
             //dd($model->toarray());
-            return view('reports.tonghopluong.huyen.solieutonghopm')
-                ->with('thongtin', $thongtin)
-                ->with('model', $model)
-                ->with('model_dulieu', $model_dulieu)
-                ->with('m_dv', $m_dv)
-                ->with('col', $col)
-                ->with('a_phucap', $a_phucap)
-                ->with('a_phucap_hs', $a_phucap_hs)
-                ->with('a_tonghop',a_unique($a_tonghop))
-                ->with('pageTitle', 'Chi tiết tổng hợp lương tại đơn vị theo địa bàn quản lý');
+            if(isset($input['excelbc'])){
+                Excel::create('solieuth',function($excel) use($model,$thongtin,$m_dv,$model_dulieu,$a_phucap_hs,$a_tonghop,$col,$a_phucap){
+                    $excel->sheet('New sheet', function($sheet) use($model,$thongtin,$m_dv,$model_dulieu,$a_phucap_hs,$a_tonghop,$col,$a_phucap){
+                        $sheet->loadView('reports.tonghopluong.huyen.solieutonghopm')
+                            ->with('thongtin', $thongtin)
+                            ->with('model', $model)
+                            ->with('model_dulieu', $model_dulieu)
+                            ->with('m_dv', $m_dv)
+                            ->with('col', $col)
+                            ->with('a_phucap', $a_phucap)
+                            ->with('a_phucap_hs', $a_phucap_hs)
+                            ->with('a_tonghop',a_unique($a_tonghop))
+                            ->with('pageTitle','solieutonghopm');
+                        $sheet->setAutoSize(false);
+                        $sheet->setFontFamily('Tahoma');
+                        $sheet->setFontBold(false);
+                    });
+                })->download('xls');
+            }else{
+                return view('reports.tonghopluong.huyen.solieutonghopm')
+                    ->with('thongtin', $thongtin)
+                    ->with('model', $model)
+                    ->with('model_dulieu', $model_dulieu)
+                    ->with('m_dv', $m_dv)
+                    ->with('col', $col)
+                    ->with('a_phucap', $a_phucap)
+                    ->with('a_phucap_hs', $a_phucap_hs)
+                    ->with('a_tonghop',a_unique($a_tonghop))
+                    ->with('pageTitle', 'Chi tiết tổng hợp lương tại đơn vị theo địa bàn quản lý');
+            }
+
         } else
             return view('errors.notlogin');
     }
@@ -646,16 +668,38 @@ class tonghopluong_huyenController extends Controller
             });
             //dd($a_tonghop);
             //dd($model);
-            return view('reports.tonghopluong.huyen.bangluongct')
-                ->with('thongtin', $thongtin)
-                ->with('model', $model)
-                ->with('m_dv', $m_dv)
-                ->with('col', $col)
-                ->with('a_phucap', $a_phucap)
-                ->with('a_nguon', $a_nguon)
-                ->with('a_congtac', $a_congtac)
-                ->with('a_tonghop',a_unique($a_tonghop))
-                ->with('pageTitle', 'Chi tiết tổng hợp lương tại đơn vị');
+            if(isset($input['excelbc'])){
+                Excel::create('bangluongct',function($excel) use($model,$thongtin,$m_dv,$a_nguon,$a_congtac,$a_tonghop,$col,$a_phucap){
+                    $excel->sheet('New sheet', function($sheet) use($model,$thongtin,$m_dv,$a_nguon,$a_congtac,$a_tonghop,$col,$a_phucap){
+                        $sheet->loadView('reports.tonghopluong.huyen.bangluongct')
+                            ->with('thongtin', $thongtin)
+                            ->with('model', $model)
+                            ->with('m_dv', $m_dv)
+                            ->with('col', $col)
+                            ->with('a_phucap', $a_phucap)
+                            ->with('a_nguon', $a_nguon)
+                            ->with('a_congtac', $a_congtac)
+                            ->with('a_tonghop',a_unique($a_tonghop))
+                            ->with('pageTitle','solieuth');
+                        $sheet->setAutoSize(false);
+                        $sheet->setFontFamily('Tahoma');
+                        $sheet->setFontBold(false);
+                    });
+                })->download('xls');
+            }else{
+                return view('reports.tonghopluong.huyen.bangluongct')
+                    ->with('thongtin', $thongtin)
+                    ->with('model', $model)
+                    ->with('m_dv', $m_dv)
+                    ->with('col', $col)
+                    ->with('a_phucap', $a_phucap)
+                    ->with('a_nguon', $a_nguon)
+                    ->with('a_congtac', $a_congtac)
+                    ->with('a_tonghop',a_unique($a_tonghop))
+                    ->with('pageTitle', 'Chi tiết tổng hợp lương tại đơn vị');
+            }
+
+
         } else
             return view('errors.notlogin');
     }
@@ -993,8 +1037,8 @@ class tonghopluong_huyenController extends Controller
         */
         if (Session::has('admin')) {
             $inputs = $requests->all();
-            $thang = $inputs['thang'];
-            $nam = $inputs['nam'];
+            $thang = $inputs['thangbc'];
+            $nam = $inputs['nambc'];
             $madv = $inputs['madv'];
             $madvbc = session('admin')->madvbc;
             $model_donvi = dmdonvi::where('macqcq',$madv)->get();
@@ -1052,19 +1096,40 @@ class tonghopluong_huyenController extends Controller
             }
             $a_thang = array($thang=>$thang);
             //dd($model->toarray());
-            return view('reports.tonghopluong.huyen.solieu')
-                ->with('thongtin', $thongtin)
-                ->with('model', $model)
-                ->with('model_tonghop', $model_tonghop)
-                ->with('model_phanloai', $model_phanloai)
-                ->with('model_donvi', $model_donvi)
-                ->with('a_soluong', $a_soluong)
-                ->with('a_thang', $a_thang)
-                ->with('m_dv', $m_dv)
-                ->with('col', $col)
-                ->with('a_phucap', $a_phucap)
-                ->with('pageTitle', 'Chi tiết tổng hợp lương tại đơn vị cấp dưới');
-
+            if(isset($inputs['excelbc'])){
+                Excel::create('solieuth',function($excel) use($model,$thongtin,$m_dv,$inputs,$model_tonghop,$model_phanloai,$model_donvi,$a_soluong,$col,$a_phucap,$a_thang){
+                    $excel->sheet('New sheet', function($sheet) use($model,$thongtin,$m_dv,$inputs,$model_tonghop,$model_phanloai,$model_donvi,$a_soluong,$col,$a_phucap,$a_thang){
+                        $sheet->loadView('reports.tonghopluong.huyen.solieu')
+                            ->with('thongtin', $thongtin)
+                            ->with('model', $model)
+                            ->with('model_tonghop', $model_tonghop)
+                            ->with('model_phanloai', $model_phanloai)
+                            ->with('model_donvi', $model_donvi)
+                            ->with('a_soluong', $a_soluong)
+                            ->with('a_thang', $a_thang)
+                            ->with('m_dv', $m_dv)
+                            ->with('col', $col)
+                            ->with('a_phucap', $a_phucap)
+                            ->with('pageTitle','solieu');
+                        $sheet->setAutoSize(false);
+                        $sheet->setFontFamily('Tahoma');
+                        $sheet->setFontBold(false);
+                    });
+                })->download('xls');
+            }else{
+                return view('reports.tonghopluong.huyen.solieu')
+                    ->with('thongtin', $thongtin)
+                    ->with('model', $model)
+                    ->with('model_tonghop', $model_tonghop)
+                    ->with('model_phanloai', $model_phanloai)
+                    ->with('model_donvi', $model_donvi)
+                    ->with('a_soluong', $a_soluong)
+                    ->with('a_thang', $a_thang)
+                    ->with('m_dv', $m_dv)
+                    ->with('col', $col)
+                    ->with('a_phucap', $a_phucap)
+                    ->with('pageTitle', 'Chi tiết tổng hợp lương tại đơn vị cấp dưới');
+            }
         } else
             return view('errors.notlogin');
     }
