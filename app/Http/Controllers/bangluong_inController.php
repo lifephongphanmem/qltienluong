@@ -900,6 +900,8 @@ class bangluong_inController extends Controller
         $a_pc = dmphucap_donvi::where('madv', $inputs['madv'])->where('phanloai', '<', '3')
             ->wherenotin('mapc', array('hesott'))->get()->keyby('mapc')->toarray();
         //dd($a_canbo);
+        //duyệt từng cán bộm từng phụ cấp để tính lại tổng hệ số
+        //-> kiểm tra số tiền > 0 => cộng vào tổng hệ số.
         foreach($model_canbo as $cb){
             $m_canbo = $model->where('macanbo',$cb->macanbo);
             $cb->ttl = $m_canbo->sum('ttl');
@@ -919,15 +921,18 @@ class bangluong_inController extends Controller
             $cb->stbhtn_dv = $m_canbo->sum('stbhtn_dv');
             $cb->ttbh_dv = $m_canbo->sum('ttbh_dv');
 
+            $cb->tonghs = 0;
             foreach ($a_pc as $k => $v) {
                 $mapc_st = 'st_' . $k;
                 $cb->$mapc_st = $m_canbo->sum($mapc_st);
                 // lấy hệ số phụ cấp của bảng lương có hệ số
-                if($cb->$k == 0){
-                    foreach($m_canbo as $cb_pc){
-                        if($cb->$k > 0){break;}
-                        $cb->$k = $cb_pc->$k;
-                    }
+                //c1: where($k,>,0), sum()/count()
+                //c2: foreach()
+                $canbo = $m_canbo->where($k,'>',0);
+                $cb->$k = $canbo->sum($k)/(count($canbo) == 0 ? 1 : count($canbo));
+                //hệ số và tính lương
+                if($cb->$k< 1000 && $cb->$mapc_st > 0){
+                    $cb->tonghs += $cb->$k;
                 }
             }
 

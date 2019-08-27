@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 use App\Http\Requests;
+use Carbon\Carbon;
 
 class dataController extends Controller
 {
@@ -545,7 +546,8 @@ class dataController extends Controller
 
     //<editor-fold desc="Danh sách cán bộ">
     //Hàm kiểm tra nâng lương so với ngày xét
-    function getCanBo($m_canbo, $ngayxet){
+    //biến $nangluong để tự nâng lương cán bộ - dành cho dư toán, nhu cầu kp
+    function getCanBo($m_canbo, $ngayxet, $nangluong = false, $ngaynangluong = null){
         $a_nglg = \App\ngachluong::all()->keyby('msngbac')->toarray();
         foreach($m_canbo as $canbo){
             //xet lương ngạch bậc
@@ -566,6 +568,33 @@ class dataController extends Controller
                 $canbo->pctnn = $canbo->pctnn == 5 ? 0 : $canbo->pctnn - 1;
                 $canbo->tnndenngay = $canbo->tnntungay;//xét lại ngày nâng lương
             }
+            //tự động nâng lương cho cán bộ chưa nâng lương (trước thời điểm xét) - dành cho dư toán, nhu cầu kp
+            if($nangluong){
+                if(getDayVn($canbo->ngayden) != '' && $canbo->ngayden <= $ngaynangluong){
+                    if(!isset($a_nglg[$canbo->msngbac])){
+                        continue;
+                    }
+                    $canbo->ngaytu = $canbo->ngayden;
+                    $date = new Carbon($canbo->ngayden);
+                    $nglg = $a_nglg[$canbo->msngbac];
+                    if($canbo->heso < $nglg['hesolonnhat']){//nâng lương ngạch bậc
+                        $canbo->heso += $nglg['hesochenhlech'];
+                        $canbo->ngayden = $date->addYear($nglg['namnb'])->toDateString();
+                    }else{//vượt khung
+                        $canbo->vuotkhung = $canbo->vuotkhung == 0 ? 5 : $canbo->vuotkhung + 1;
+                        $canbo->ngayden = $date->addYear(1)->toDateString();
+                    }
+                }
+
+                //xét thâm niên nghề
+                if(getDayVn($canbo->tnndenngay) != '' && $canbo->tnndenngay <= $ngaynangluong){
+                    $canbo->pctnn = $canbo->pctnn == 0 ? 5 : $canbo->pctnn + 1;
+                    $canbo->tnntungay = $canbo->tnndenngay;
+                    $datetn = new Carbon($canbo->tnndenngay);
+                    $canbo->tnndenngay = $datetn->addYear(1)->toDateString();
+                }
+            }
+
         }
         return $m_canbo;
     }

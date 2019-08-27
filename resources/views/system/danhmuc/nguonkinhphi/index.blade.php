@@ -34,9 +34,11 @@
                     <div class="caption">
                         DANH MỤC NGUỒN KINH PHÍ
                     </div>
-                    <div class="actions">
-                        <button type="button" id="_btnaddPB" class="btn btn-success btn-xs" onclick="addPB()"><i class="fa fa-plus"></i>&nbsp;Thêm mới</button>
-                    </div>
+                    @if(can('dmnguonkp','create'))
+                        <div class="actions">
+                            <button type="button" id="_btnaddPB" class="btn btn-default btn-xs" onclick="addPB()"><i class="fa fa-plus"></i>&nbsp;Thêm mới</button>
+                        </div>
+                    @endif
                 </div>
                 <div class="portlet-body form-horizontal">
                     <table id="sample_3" class="table table-hover table-striped table-bordered" style="min-height: 230px">
@@ -60,13 +62,14 @@
                                         <td>{{$value->phanloai}}</td>
                                         <td>{{$value->macdinh == 1 ? 'Nguồn kinh phí mặc định': ''}}</td>
                                         <td>
-
-                                            <button type="button" onclick="editPB('{{$value->manguonkp}}')" class="btn btn-info btn-xs mbs">
-                                                <i class="fa fa-edit"></i>&nbsp; Chỉnh sửa</button>
-                                            <!--
-                                            <button type="button" onclick="cfDel('/danh_muc/nguon_kinh_phi/del/{{$value->id}}')" class="btn btn-danger btn-xs mbs" data-target="#delete-modal-confirm" data-toggle="modal">
-                                                <i class="fa fa-trash-o"></i>&nbsp; Xóa</button>
-                                                -->
+                                            @if(can('dmnguonkp','edit'))
+                                                <button type="button" onclick="editPB('{{$value->manguonkp}}')" class="btn btn-default btn-xs mbs">
+                                                    <i class="fa fa-edit"></i>&nbsp; Sửa</button>
+                                            @endif
+                                            @if(can('dmnguonkp','delete'))
+                                                <button type="button" onclick="cfDel('/danh_muc/nguon_kinh_phi/del/{{$value->id}}')" class="btn btn-danger btn-xs mbs" data-target="#delete-modal-confirm" data-toggle="modal">
+                                                    <i class="fa fa-trash-o"></i>&nbsp; Xóa</button>
+                                            @endif
                                         </td>
                                     </tr>
                                 @endforeach

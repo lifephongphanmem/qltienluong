@@ -34,9 +34,11 @@
                     <div class="caption">
                         <b>DANH MỤC PHÂN LOẠI CÔNG TÁC CHI TIẾT</b>
                     </div>
-                    <div class="actions">
-                        <button type="button" id="_btnaddPB" class="btn btn-success btn-xs" onclick="add()"><i class="fa fa-plus"></i>&nbsp;Thêm mới</button>
-                    </div>
+                    @if(can('dmphanloaict','create'))
+                        <div class="actions">
+                            <button type="button" id="_btnaddPB" class="btn btn-success btn-xs" onclick="add()"><i class="fa fa-plus"></i>&nbsp;Thêm mới</button>
+                        </div>
+                    @endif
                 </div>
                 <div class="portlet-body form-horizontal">
                     <table id="sample_3" class="table table-hover table-striped table-bordered" style="min-height: 230px">
@@ -56,10 +58,12 @@
                                         <td>{{$value->tenct}}</td>
                                         <td class="text-center">{{$value->tonghop == 1 ? 'Tổng hợp và dự toán':''}}</td>
                                         <td>
-                                            @if(session('admin')->level == 'SA' || session('admin')->level == 'SSA')
+                                            @if(can('dmphanloaict','edit'))
                                                 <button type="button" onclick="editCV('{{$value->mact}}')" class="btn btn-default btn-xs">
                                                     <i class="fa fa-edit"></i>&nbsp; Sửa</button>
+                                            @endif
 
+                                            @if(can('dmphanloaict','delete'))
                                                 <button type="button" onclick="cfDel('/danh_muc/cong_tac/del_detail/{{$value->id}}')" class="btn btn-default btn-xs" data-target="#delete-modal-confirm" data-toggle="modal">
                                                     <i class="fa fa-trash-o"></i>&nbsp; Xóa</button>
                                             @endif

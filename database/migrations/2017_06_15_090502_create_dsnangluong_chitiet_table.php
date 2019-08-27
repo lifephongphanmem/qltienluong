@@ -68,6 +68,12 @@ class CreateDsnangluongChitietTable extends Migration
             $table->double('luongcoban')->default(0);//mức lương co bản được truy lĩnh lương
             $table->string('manguonkp',50)->nullable();
             $table->text('ghichu')->nullable();
+
+            $table->string('msngbac_cu', 50)->nullable();
+            $table->integer('bac_cu')->default(1);
+            $table->double('heso_cu')->default(0);
+            $table->double('vuotkhung_cu')->default(0);
+
             $table->timestamps();
         });
     }

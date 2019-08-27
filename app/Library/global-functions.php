@@ -1,29 +1,162 @@
 <?php
 function getPermissionDefault($level) {
     $roles = array();
-    $roles[] = array(
-        'data' => array(
-            'units' => 0,
+    $roles['SA'] = array(
+        'dmchucvu' => array(
+            'view' => 1,
+            'create' => 1,
+            'edit' => 1,
+            'delete' => 1
+        ),
+        'dmphucap' => array(
+            'view' => 1,
+            'create' => 0,
+            'edit' => 1,
+            'delete' => 0
+        ),
+        'dmnguonkp' => array(
+            'view' => 1,
+            'create' => 0,
+            'edit' => 1,
+            'delete' => 0
+        ),
+        'dmlinhvuchd' => array(
+            'view' => 1,
+            'create' => 0,
+            'edit' => 1,
+            'delete' => 0
+        ),
+        'dmngachluong' => array(
+            'view' => 1,
+            'create' => 1,
+            'edit' => 1,
+            'delete' => 0
+        ),
+        'dmphanloaidv' => array(
+            'view' => 1,
+            'create' => 0,
+            'edit' => 1,
+            'delete' => 0
+        ),
+        'dmphanloaict' => array(
+            'view' => 1,
+            'create' => 1,
+            'edit' => 1,
+            'delete' => 0
+        ),
+        'dmttqd' => array(
+            'view' => 1,
+            'create' => 1,
+            'edit' => 1,
+            'delete' => 0
+        ),
+        'congthucmtm' => array(
+            'view' => 1,
+            'create' => 1,
+            'edit' => 1,
+            'delete' => 0
+        ),
+        'qltaikhoan' => array(
+            'view' => 1,
+            'create' => 1,
+            'edit' => 1,
+            'delete' => 1
+        ),
+        'qldonvi' => array(
+            'view' => 1,
+            'create' => 0,
+            'edit' => 1,
+            'delete' => 0,
+            'data'=> 0
+        ),
+    );
+
+    $roles['SSA'] = array(
+        'dmchucvu' => array(
+            'view' => 1,
+            'create' => 1,
+            'edit' => 1,
+            'delete' => 1
+        ),
+        'dmphucap' => array(
+            'view' => 1,
+            'create' => 1,
+            'edit' => 1,
+            'delete' => 1
+        ),
+        'dmnguonkp' => array(
+            'view' => 1,
+            'create' => 1,
+            'edit' => 1,
+            'delete' => 1
+        ),
+        'dmlinhvuchd' => array(
+            'view' => 1,
+            'create' => 1,
+            'edit' => 1,
+            'delete' => 1
+        ),
+        'dmngachluong' => array(
+            'view' => 1,
+            'create' => 1,
+            'edit' => 1,
+            'delete' => 1
+        ),
+        'dmphanloaidv' => array(
+            'view' => 1,
+            'create' => 1,
+            'edit' => 1,
+            'delete' => 1
+        ),
+        'dmphanloaict' => array(
+            'view' => 1,
+            'create' => 1,
+            'edit' => 1,
+            'delete' => 1
+        ),
+        'dmttqd' => array(
+            'view' => 1,
+            'create' => 1,
+            'edit' => 1,
+            'delete' => 1
+        ),
+        'congthucmtm' => array(
+            'view' => 1,
+            'create' => 1,
+            'edit' => 1,
+            'delete' => 1
+        ),
+        'qltaikhoan' => array(
+            'view' => 1,
+            'create' => 1,
+            'edit' => 1,
+            'delete' => 1
+        ),
+        'qldonvi' => array(
+            'view' => 1,
             'create' => 1,
             'edit' => 1,
             'delete' => 1,
-            'reports'=> 0
+            'data'=> 1
         ),
-        'system' => array(
-            'information' => 1,
-            'create' => 0,
-            'edit' => 0,
-            'delete' => 0
-        ),
-        'report' =>array(
-            'view' => 1,
-            'create' => 0,
-            'edit' => 0,
-            'delete' => 0
-        )
     );
-    return json_encode($roles[0]);
+
+    return json_encode($roles[$level]);
 }
+
+function can($module = null, $action = null)
+{
+    //$permission = !empty(session('admin')->permission) ? session('admin')->permission : getPermissionDefault(session('admin')->level);
+    $per = getPermissionDefault(session('admin')->sadmin);
+    $per = json_decode($per, true);
+    //dd($per);
+    if(isset($per[$module][$action]) && $per[$module][$action] == 1) {
+        return true;
+    }else{
+        return false;
+    }
+}
+
 
 function getDayVn($date) {
     if ($date == NULL || $date == null || $date == '' || $date == '0000-00-00') {
@@ -77,17 +210,6 @@ function chkDbl($obj) {
     }
 }
 
-function can($module = null, $action = null)
-{
-    $permission = !empty(session('admin')->permission) ? session('admin')->permission : getPermissionDefault(session('admin')->level);
-    $permission = json_decode($permission, true);
-    //check permission
-    if(isset($permission[$module][$action]) && $permission[$module][$action] == 1) {
-        return true;
-    }else{
-        return false;
-    }
-}
 
 function canGeneral($module = null, $action =null)
 {

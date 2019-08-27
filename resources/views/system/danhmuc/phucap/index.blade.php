@@ -34,7 +34,7 @@
                     <div class="caption">
                         DANH SÁCH CÁC LOẠI PHỤ CẤP
                     </div>
-                    @if(session('admin')->level == 'SSA' || session('admin')->username == 'huongvu')
+                    @if(can('dmphucap','create'))
                         <div class="actions">
                             <a href="{{url($furl.'create')}}" class="btn btn-default btn-xs"><i class="fa fa-plus"></i>&nbsp;Thêm mới</a>
                         </div>
@@ -71,10 +71,15 @@
                                     <td class="text-center">{{$value->nghiom == 1 ? 'Trừ nghỉ phép':''}}</td>
                                     <td class="text-center">{{$value->thaisan == 1 ? 'Tính thai sản':''}}</td>
                                     <td>
-                                        <a href="{{$furl.'edit?maso='.$value->mapc}}" class="btn btn-default btn-xs">
-                                            <i class="fa fa-edit"></i>&nbsp; Sửa</a>
-                                        <!--button type="button" onclick="cfDel('{{$furl.'del/'.$value->id}}')" class="btn btn-default btn-xs" data-target="#delete-modal-confirm" data-toggle="modal">
-                                            <i class="fa fa-trash-o"></i>&nbsp; Xóa</button-->
+                                        @if(can('dmphucap','edit'))
+                                            <a href="{{$furl.'edit?maso='.$value->mapc}}" class="btn btn-default btn-xs">
+                                                <i class="fa fa-edit"></i>&nbsp; Sửa</a>
+                                        @endif
+
+                                        @if(can('dmphucap','delete'))
+                                            <button type="button" onclick="cfDel('{{$furl.'del/'.$value->id}}')" class="btn btn-default btn-xs" data-target="#delete-modal-confirm" data-toggle="modal">
+                                                <i class="fa fa-trash-o"></i>&nbsp; Xóa</button>
+                                        @endif
                                     </td>
                                 </tr>
                             @endforeach

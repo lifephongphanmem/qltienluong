@@ -20,12 +20,15 @@ class dsnangthamnien_ct extends Model
         'vuotkhung',
         'pthuong',
         'hesott',
+        'pctnn',
         'truylinhtungay',
         'truylinhdenngay',
         'manguonkp',
         'luongcoban',
         'thangtl',
         'ngaytl',
+        'ghichu',
+        /*
         'pcct',
         'pckct',
         'pck',
@@ -59,6 +62,6 @@ class dsnangthamnien_ct extends Model
         'pcphth',
         'pctaicu',
         'pcctp',
-        'ghichu'
+        */
     ];
 }

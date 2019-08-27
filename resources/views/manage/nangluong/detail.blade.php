@@ -48,17 +48,24 @@
 
                                                 <div class="col-md-6">
                                                     <div class="form-group">
-                                                        <label class="control-label">Ngạch bậc </label>
-                                                        <select class="form-control select2me" name="tennb" id="tennb" onchange="setMSNGBAC()">
-                                                            @foreach($m_plnb as $plnb)
-                                                                <optgroup label="{{$plnb->tennhom}}">
-                                                                    <?php $mode_ct=$m_pln->where('manhom',$plnb->manhom); ?>
-                                                                    @foreach($mode_ct as $ct)
-                                                                        <option value="{{$ct->msngbac}}" {{$model->msngbac == $ct->msngbac?'selected':''}}>{{$ct->tenngachluong}}</option>
-                                                                    @endforeach
-                                                                </optgroup>
-                                                            @endforeach
-                                                        </select>
+                                                        <div class="col-md-11">
+                                                            <label class="control-label">Ngạch bậc </label>
+                                                            <select class="form-control select2me" name="tennb" id="tennb" onchange="setMSNGBAC()">
+                                                                @foreach($m_plnb as $plnb)
+                                                                    <optgroup label="{{$plnb->tennhom}}">
+                                                                        <?php $mode_ct=$m_pln->where('manhom',$plnb->manhom); ?>
+                                                                        @foreach($mode_ct as $ct)
+                                                                            <option value="{{$ct->msngbac}}" {{$model->msngbac == $ct->msngbac?'selected':''}}>{{$ct->tenngachluong}}</option>
+                                                                        @endforeach
+                                                                    </optgroup>
+                                                                @endforeach
+                                                            </select>
+                                                        </div>
+
+                                                        <div class="col-md-1" style="padding-left: 0px;">
+                                                            <label class="control-label">&nbsp;&nbsp;&nbsp;</label>
+                                                            <button type="button" class="btn btn-default" data-target="#modal-vitri" data-toggle="modal"><i class="fa glyphicon glyphicon-list-alt"></i></button>
+                                                        </div>
                                                     </div>
                                                 </div>
 
@@ -245,4 +252,6 @@
     </script>
 
     @include('manage.nangluong.temp_nguonkp_js')
+    @include('includes.script.func_msnb')
+    @include('includes.modal.mangach')
 @stop

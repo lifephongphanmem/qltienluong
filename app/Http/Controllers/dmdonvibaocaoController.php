@@ -3,12 +3,15 @@
 namespace App\Http\Controllers;
 
 use App\bangluong;
+use App\dmchucvucq;
 use App\dmdonvi;
 use App\dmdonvibaocao;
 use App\dmkhoipb;
 use App\dmphanloaicongtac;
 use App\dmphanloaict;
 use App\dmphanloaidonvi;
+use App\dmphongban;
+use App\hosocanbo;
 use App\Users;
 use Illuminate\Http\Request;
 
@@ -113,13 +116,14 @@ class dmdonvibaocaoController extends Controller
         if (Session::has('admin')) {
             $inputs = $request->all();
             $model = dmdonvi::where('madvbc', $inputs['ma_so'])->where('phanloaitaikhoan', $inputs['phan_loai'])->get();
-            $a_donvi = array_column(dmdonvi::where('madvbc', $inputs['ma_so'])->where('phanloaitaikhoan', 'TH')->get()->toarray(), 'tendv', 'madv');
+            $model_donvi = dmdonvi::where('madvbc', $inputs['ma_so'])->get();
+            $a_dv = array_column($model_donvi->where('phanloaitaikhoan', 'TH')->toarray(), 'tendv', 'madv');
             //$a_donvi = array_column($model->toarray(), 'tendv', 'madv');
             $a_phanloai = getPhanLoaiDonVi();
             $a_phamvi = getPhamViTongHop();
             $model_capdv = getCapDonVi();
             foreach ($model as $donvi) {
-                $donvi->tencqcq = isset($a_donvi[$donvi->macqcq]) ? $a_donvi[$donvi->macqcq] : '';
+                $donvi->tencqcq = isset($a_dv[$donvi->macqcq]) ? $a_dv[$donvi->macqcq] : '';
                 $donvi->phanloai = isset($a_phanloai[$donvi->maphanloai])?$a_phanloai[$donvi->maphanloai]:'';
                 $donvi->capdutoan = isset($model_capdv[$donvi->capdonvi]) ? $model_capdv[$donvi->capdonvi] : '';
                 $donvi->phamvi = isset($a_phamvi[$donvi->phamvitonghop])?$a_phamvi[$donvi->phamvitonghop]:'';
@@ -131,7 +135,7 @@ class dmdonvibaocaoController extends Controller
                 ->with('model', $model)
                 ->with('model_nhomct', $model_nhomct)
                 ->with('model_tenct', $model_tenct)
-                ->with('a_donvi', $a_donvi)
+                ->with('a_donvi', array_column($model_donvi->where('phanloaitaikhoan','<>','TH')->toarray(),'tendv', 'madv'))
                 ->with('inputs', $inputs)
                 ->with('url', '/danh_muc/khu_vuc/')
                 ->with('pageTitle', 'Danh mục đơn vị');
@@ -380,6 +384,109 @@ class dmdonvibaocaoController extends Controller
             $model = dmdonvi::where('madv',$inputs['madv'])->first();
             DB::statement("Update hosocanbo set manguonkp = '".$inputs['manguonkp']."' where mact='".$inputs['mact']."' and madv ='".$inputs['madv']."'");
             DB::statement("Update hosocanbo_kiemnhiem set manguonkp = '".$inputs['manguonkp']."' where mact='".$inputs['mact']."' and madv ='".$inputs['madv']."'");
+            return redirect('/danh_muc/khu_vuc/chi_tiet?ma_so='.$model->madvbc.'&phan_loai='.$model->phanloaitaikhoan);
+        }else
+            return view('errors.notlogin');
+    }
+
+    function del_dscanbo($madv){
+        if (Session::has('admin')) {
+            $model = dmdonvi::where('madv',$madv)->first();
+            if(session('admin')->sadmin == 'SSA'){
+                DB::statement('Delete From hosocanbo where madv ='.$madv);
+            }
+            return redirect('/danh_muc/khu_vuc/chi_tiet?ma_so='.$model->madvbc.'&phan_loai='.$model->phanloaitaikhoan);
+        }else
+            return view('errors.notlogin');
+    }
+
+    function get_canbo(Request $request){
+        if (Session::has('admin')) {
+            $inputs = $request->all();
+            //dd($inputs);
+            $a_cv_m = array();
+            $a_pb_m = array();
+            $a_cv = array();
+            $a_pb = array();
+
+            $model_canbo = hosocanbo::where('madv', $inputs['madv_lay'])->get();
+            $maso = getdate()[0]; //lưu mã số
+
+            $model_chucvu_moi = dmchucvucq::where('madv', $inputs['madv'])->get();
+            $a_chucvu = array();
+            foreach($model_chucvu_moi as $chucvu){
+                $ma = '-' . chuanhoachuoi(trim($chucvu->tencv)) . '-';
+                $a_chucvu[$ma] = $chucvu->macvcq;
+            }
+
+            $model_chucvu_cu = dmchucvucq::where('madv', $inputs['madv_lay'])
+                ->wherein('macvcq',a_unique( array_column($model_canbo->toarray(),'macvcq')))->get();
+            //$a_chucvu_cu = array();
+            foreach($model_chucvu_cu as $chucvu){
+                $ma = '-' . chuanhoachuoi(trim($chucvu->tencv)) . '-';
+                if(isset($a_chucvu[$ma])){
+                    $a_cv[$chucvu->macvcq] = $a_chucvu[$ma];
+                }else{
+                    $maso_m = $inputs['madv'] . '_' . ($maso++);
+                    $a_cv_m[] = ['macvcq'=>$maso_m, 'tencv' => $chucvu->tencv, 'madv' => $inputs['madv']];
+                    $a_cv[$chucvu->macvcq] = $maso_m;
+                }
+            }
+
+            $model_phongban_moi = dmphongban::where('madv',$inputs['madv'])->get();
+            $a_phongban = array();
+            foreach($model_phongban_moi as $phongban) {
+                $ma = '-' . chuanhoachuoi(trim($phongban->tenpb)) . '-';
+                $a_phongban[$ma] = $phongban->mapb;
+            }
+
+            $model_phongban_cu = dmphongban::where('madv',$inputs['madv_lay'])
+                ->wherein('mapb',a_unique( array_column($model_canbo->toarray(),'mapb')))->get();
+            foreach($model_phongban_cu as $phongban) {
+                $ma = '-' . chuanhoachuoi(trim($phongban->tenpb)) . '-';
+                if(isset($a_phongban[$ma])){
+                    $a_pb[$phongban->mapb] = $a_phongban[$ma];
+                }else{
+                    $maso_m = $inputs['madv'] . '_' . ($maso++);
+                    $a_pb_m[] = ['mapb'=>$maso_m, 'tenpb' => $phongban->tenpb, 'madv' => $inputs['madv']];
+                    $a_pb[$phongban->mapb] = $maso_m;
+                }
+            }
+
+            $j = getDbl((hosocanbo::where('madv', $inputs['madv'])->get()->max('stt'))) + 1;
+
+            $a_cb = array();
+            $model_canbo = hosocanbo::where('madv', $inputs['madv_lay'])->get();
+            //lấy danh sách chức vụ, phòng ban của đơn vị cũ
+            foreach($model_canbo as $canbo){
+                $canbo->stt = $j++;
+                $canbo->madv = $inputs['madv'];
+                $canbo->macanbo = $inputs['madv']. '_' . $maso++;
+                if(isset($a_cv[$canbo->macvcq])){
+                    //set lại mã chức vụ nếu chưa có
+                    $canbo->macvcq = $a_cv[$canbo->macvcq];
+                }
+
+                if(isset($a_pb[$canbo->mapb])){
+                    //set lại mã chức vụ nếu chưa có
+                    $canbo->mapb = $a_pb[$canbo->mapb];
+                }
+                $kq = $canbo->toarray();
+                unset($kq['id']);
+                $a_cb[] = $kq;
+            }
+            //dd($a_cb);
+            if(count($a_cv_m)){
+                dmchucvucq::insert($a_cv_m);
+            }
+            if(count($a_pb_m)){
+                dmphongban::insert($a_pb_m);
+            }
+            if(count($a_cb)){
+                hosocanbo::insert($a_cb);
+            }
+
+            $model = dmdonvi::where('madv',$inputs['madv'])->first();
             return redirect('/danh_muc/khu_vuc/chi_tiet?ma_so='.$model->madvbc.'&phan_loai='.$model->phanloaitaikhoan);
         }else
             return view('errors.notlogin');

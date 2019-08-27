@@ -35,7 +35,7 @@
                         <b>DANH MỤC NHÓM NGẠCH BẬC</b>
                     </div>
                     <div class="actions">
-                        @if(session('admin')->level == 'SA' || session('admin')->level == 'SSA')
+                        @if(session('admin')->level == 'SSA')
                             <button type="button" id="_btnaddPB" class="btn btn-success btn-xs" onclick="add()"><i class="fa fa-plus"></i>&nbsp;Thêm mới</button>
                         @endif
                     </div>
@@ -66,10 +66,12 @@
                                         <td>
                                             <a href="{{url($furl.'ma_so='.$value->manhom)}}" class="btn btn-default btn-xs">
                                                 <i class="fa fa-edit"></i>&nbsp; Chi tiết</a>
-                                            @if(session('admin')->level == 'SA' || session('admin')->level == 'SSA')
+                                            @if(can('dmngachluong','edit'))
                                                 <button type="button" onclick="editCV('{{$value->manhom}}')" class="btn btn-default btn-xs">
                                                     <i class="fa fa-edit"></i>&nbsp; Sửa</button>
+                                            @endif
 
+                                            @if(can('dmngachluong','delete'))
                                                 <button type="button" onclick="cfDel('/danh_muc/ngach_luong/del/{{$value->id}}')" class="btn btn-default btn-xs" data-target="#delete-modal-confirm" data-toggle="modal">
                                                     <i class="fa fa-trash-o"></i>&nbsp; Xóa</button>
                                             @endif
