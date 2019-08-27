@@ -859,9 +859,13 @@ class bangluongController extends Controller
 
             //chạy tính hệ số + vượt khung trc để tính cho kiêm nhiệm (trường hợp tạo bảng lương không hưởng ở nguồn
             // kinh phí này)
-            $m_cb[$key]['heso'] = round($val['heso'] * $val['pthuong'] / 100,session('admin')->lamtron);
-            //dd($m_cb[$key]['heso']);
-            $m_cb[$key]['vuotkhung'] =round($val['heso'] * $val['vuotkhung'] / 100,session('admin')->lamtron);//trong bảng danh mục là % vượt khung => sang bảng lương chuyển thành hệ số
+
+            //trường hợp cán bộ đang đi công tác, đi học => giữ nguyên 100% để tính bảo hiểm sau mới tính lại lương thực nhận
+            if($m_cb[$key]['theodoi'] != 2){
+                $m_cb[$key]['heso'] = round($val['heso'] * $val['pthuong'] / 100,session('admin')->lamtron);
+            }
+
+            $m_cb[$key]['vuotkhung'] = round($val['heso'] * $val['vuotkhung'] / 100,session('admin')->lamtron);
             $m_cb[$key]['mabl'] = $inputs['mabl'];
             $m_cb[$key]['manguonkp'] = $inputs['manguonkp'];
             $m_cb[$key]['congtac'] = 'CONGTAC';
@@ -995,7 +999,7 @@ class bangluongController extends Controller
                                 if ($ct != '')
                                     $heso += $m_cb[$key][$ct];
                             }
-                            $m_cb[$key][$mapc] =round($heso * $m_cb[$key][$mapc] / 100,session('admin')->lamtron);
+                            $m_cb[$key][$mapc] = round($heso * $m_cb[$key][$mapc] / 100,session('admin')->lamtron);
                         }
                         $tonghs += $m_cb[$key][$mapc];
                         $a_pc[$k]['sotien'] = round($m_cb[$key][$mapc] * $inputs['luongcoban']);
@@ -1111,6 +1115,24 @@ class bangluongController extends Controller
                     }
                     $tien -= $m_cb[$key]['st_'.$val];
                 }
+            }
+
+            //Cán bộ đang đi công tác, đi học (bỏ qua các loại tạm ngưng theo dõi)
+            if($m_cb[$key]['theodoi'] == 2){
+                $tien = $tonghs = 0;
+                foreach ($a_pc as $k=>$v) {
+                    $m_cb[$key][$k] = round($m_cb[$key][$k] * $m_cb[$key]['pthuong'] / 100,session('admin')->lamtron);
+                    $m_cb[$key]['st_'.$k] = round($m_cb[$key]['st_'.$k] * $m_cb[$key]['pthuong'] / 100);
+
+                    //phụ cấp ko tính theo số tiền và đc hưởng
+                    if ($m_cb[$key][$k] < 10000 && $m_cb[$key]['st_'.$k] > 0) {
+                        $tonghs += $m_cb[$key][$k];
+                    }
+
+                    $tien += $m_cb[$key]['st_'.$k];
+
+                }
+                goto tinhluong;
             }
 
             if($daingay){
