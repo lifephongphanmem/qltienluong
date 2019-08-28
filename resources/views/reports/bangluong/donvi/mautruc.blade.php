@@ -121,7 +121,7 @@
                     <td>{{$i++}}</td>
                     <td style="text-align: left">{{$ct->tencanbo}}</td>
                     <td style="text-align: left">{{isset($a_cv[$ct->macvcq])? $a_cv[$ct->macvcq] : ''}}</td>
-                    <td>{{$ct->songaytruc}}</td>
+                    <td style="text-align: center">{{$ct->songaytruc}}</td>
                     @foreach($a_phucap as $key=>$val)
                         <td>{{dinhdangsothapphan($ct->$key,5)}}</td>
                     @endforeach

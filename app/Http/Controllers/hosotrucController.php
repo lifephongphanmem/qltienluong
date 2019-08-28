@@ -32,6 +32,7 @@ class hosotrucController extends Controller
             $m_bl = bangluong::where('phanloai','TRUC')
                 ->where('thang', $inputs['thang'])
                 ->where('nam', $inputs['nam'])
+                ->where('madv', session('admin')->madv)
                 ->get();
 
             $inputs['trangthai'] = count($m_bl)> 0 ? false : true;
