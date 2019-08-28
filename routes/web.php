@@ -386,6 +386,8 @@ Route::group(['prefix'=>'nghiep_vu'],function(){
     });
 
     Route::group(['prefix'=>'truc'],function(){
+        Route::get('create','hosotrucController@create');
+        Route::get('edit','hosotrucController@edit');
         Route::get('danh_sach','hosotrucController@index');
         Route::get('del/{id}','hosotrucController@destroy');
         Route::post('store','hosotrucController@store');

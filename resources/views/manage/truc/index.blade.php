@@ -34,9 +34,11 @@
                     <div class="caption">
                         DANH SÁCH CÁN BỘ TRỰC CÔNG TÁC
                     </div>
-                    <div class="actions">
-                        <button type="button" class="btn btn-default btn-xs" onclick="add()"><i class="fa fa-plus"></i>&nbsp;Thêm mới</button>
-                    </div>
+                    @if($inputs['trangthai'])
+                        <div class="actions">
+                            <button type="button" class="btn btn-default btn-xs" onclick="add()"><i class="fa fa-plus"></i>&nbsp;Thêm mới</button>
+                        </div>
+                    @endif
                 </div>
 
                 <div class="portlet-body form-horizontal">
@@ -71,16 +73,18 @@
                             <tr>
                                 <td class="text-center">{{$key+1}}</td>
                                 <td>{{$value->tencanbo}}</td>
-                                <td>{{$value->songaytruc}}</td>
-                                <td>{{$value->pcudn}}</td>
-                                <td>{{$value->pcud61}}</td>
-                                <td>{{$value->pcdh}}</td>
-                                <td>{{$value->pctn}}</td>
+                                <td class="text-center">{{$value->songaytruc}}</td>
+                                <td class="text-center">{{dinhdangsothapphan($value->pcudn)}}</td>
+                                <td class="text-center">{{dinhdangsothapphan($value->pcud61)}}</td>
+                                <td class="text-center">{{dinhdangsothapphan($value->pcdh)}}</td>
+                                <td class="text-center">{{dinhdangsothapphan($value->pctn)}}</td>
                                 <td>
-                                    <button type="button" onclick="edit({{$value->id}})" class="btn btn-info btn-xs mbs">
-                                        <i class="fa fa-edit"></i>&nbsp;Chỉnh sửa</button>
-                                    <button type="button" onclick="cfDel('{{$inputs['furl'].'del/'.$value->id}}')" class="btn btn-danger btn-xs mbs" data-target="#delete-modal-confirm" data-toggle="modal">
-                                        <i class="fa fa-trash-o"></i>&nbsp;Xóa</button>
+                                    @if($inputs['trangthai'])
+                                        <a href="{{$inputs['furl'].'edit?macanbo='.$value->macanbo.'&thang='.$value->thang.'&nam='.$value->nam}}" class="btn btn-default btn-xs mbs">
+                                            <i class="fa fa-edit"></i>&nbsp;Sửa</a>
+                                        <button type="button" onclick="cfDel('{{$inputs['furl'].'del/'.$value->id}}')" class="btn btn-danger btn-xs mbs" data-target="#delete-modal-confirm" data-toggle="modal">
+                                            <i class="fa fa-trash-o"></i>&nbsp;Xóa</button>
+                                    @endif
                                 </td>
                             </tr>
                         @endforeach
@@ -102,26 +106,34 @@
             </div>
             <div class="modal-body">
                 <div class="form-horizontal">
-                    <div class="row">
-                        <div class="col-md-6">
-                            <label class="control-label">Tên cán bộ</label>
-                            {!!Form::text('tencanbo', null, array('id' => 'tencanbo','class' => 'form-control'))!!}
-                        </div>
-
-                        <div class="col-md-6">
-                            <label class="control-label">Hệ số trực</label>
-                            {!!Form::text('heso', null, array('id' => 'heso','class' => 'form-control', 'data-mask'=>'fdecimal'))!!}
-                        </div>
-                    </div>
-
-                    <input type="hidden" id="id" name="id"/>
+                    <table id="sample_4" class="table table-hover table-striped table-bordered">
+                        <thead>
+                        <tr>
+                            <th class="text-center" style="width: 5%">STT</th>
+                            <th class="text-center">Họ tên cán bộ</th>
+                            <th class="text-center">Chức vụ</th>
+                            <th class="text-center">Thao tác</th>
+                        </tr>
+                        </thead>
+                        <?php $i=1;?>
+                        <tbody>
+                        @foreach($m_cb as $key=>$value)
+                            <tr>
+                                <td class="text-center">{{$i++}}</td>
+                                <td>{{$value->tencanbo}}</td>
+                                <td>{{isset($a_cv[$value->macvcq])? $a_cv[$value->macvcq] : ''}}</td>
+                                <td>
+                                    <a href="{{url($inputs['furl'].'create?macanbo='.$value->macanbo.'&thang='.$inputs['thang'].'&nam='.$inputs['nam'])}}" class="btn btn-default btn-xs mbs">
+                                        <i class="fa fa-edit"></i>&nbsp;Chọn</a>
+                                </td>
+                            </tr>
+                        @endforeach
+                        </tbody>
+                    </table>
                 </div>
             </div>
 
-            <div class="modal-footer">
-                <button type="button" data-dismiss="modal" class="btn btn-default">Hủy thao tác</button>
-                <button type="submit" id="submit" name="submit" value="submit" class="btn btn-primary">Đồng ý</button>
-            </div>
+            <div class="modal-footer"></div>
         </div>
     </div>
     {!! Form::close() !!}

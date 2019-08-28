@@ -290,6 +290,7 @@ class bangluongController extends Controller
             ->where('ngaytu', '<=', $ngaylap)->where('ngayden', '>=', $ngaylap)->get();
         $m_nghiphep = hosotamngungtheodoi::where('madv', $inputs['madv'])->wherein('maphanloai',['NGHIPHEP','NGHIOM'])
             ->whereYear('ngaytu', $inputs['nam'])->whereMonth('ngaytu', $inputs['thang'])->get();
+        //dd($m_nghiphep);
         $m_khongluong = hosotamngungtheodoi::where('madv', $inputs['madv'])
             ->where('ngaytu', '<=', $ngaylap)->where('ngayden', '>=', $ngaylap)
             ->where('maphanloai', 'KHONGLUONG')->get();
@@ -592,9 +593,9 @@ class bangluongController extends Controller
             //ngày công = lương co + chuc vu + ....
             $nghi = $m_nghiphep->where('macanbo', $cb->macanbo)->first();
             if (count($nghi) > 0) {
-                $cb->congtac = 'NGHIPHEP';
+                //$cb->congtac = 'NGHIPHEP';
                 //$sotiencong = $model_phucap->wherein('maso',['heso','vuotkhung','pccv','hesobl','pctnn'])->sum('sotien');
-                $sotiencong = $model_phucap->wherein('maso',$a_no)->sum('sotien');
+                $sotiencong = $model_phucap->wherein('mapc',$a_no)->sum('sotien');
                 //$sotiencong = $inputs['luongcoban'] * ($cb->heso + $cb->vuotkhung + $cb->pccv + $cb->hesobl + $cb->pctnn);
                 $tiencong = $sotiencong / $nghi->songaycong;
                 if($nghi->songaynghi >= 15){//nghỉ quá 15 ngày thì ko đóng bảo hiểm
@@ -1195,7 +1196,7 @@ class bangluongController extends Controller
                 $ngaynghi = $cb_nghi['songaynghi'] > 0 ? $cb_nghi['songaynghi'] : 0;
                 $ngaycong = $cb_nghi['songaycong'] > 0 ? $cb_nghi['songaycong'] : 1;
                 $m_cb[$key]['songaytruc'] = $ngaynghi;
-                $m_cb[$key]['congtac'] = 'NGHIPHEP';
+                //$m_cb[$key]['congtac'] = 'NGHIPHEP';
                 $heso_no = 0;
                 foreach($a_no as $no){
                     $heso_no += $m_cb[$key][$no];
@@ -1222,7 +1223,7 @@ class bangluongController extends Controller
             if($duongsuc) {
                 $cb_nghi = $a_duongsuc[$m_cb[$key]['macanbo']];
                 $ngaycong = $cb_nghi['songaycong'] > 0 ? $cb_nghi['songaycong'] : $ngaycong;
-                $m_cb[$key]['congtac'] = 'DUONGSUC';
+                //$m_cb[$key]['congtac'] = 'DUONGSUC';
                 $heso_no = 0;
                 foreach($a_no as $no){
                     $heso_no += $m_cb[$key][$no];
