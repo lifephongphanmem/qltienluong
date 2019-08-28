@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\bangluong;
 //use App\bangluong_ct;
+use App\bangluong_ct;
 use App\hosothoicongtac;
 use App\Http\Controllers\dataController as data;
 use App\bangluong_phucap;
@@ -2128,13 +2129,15 @@ class bangluongController extends Controller
             $inputs['thang'] = $inputs['thang_truc'];
             $inputs['nam'] = $inputs['nam_truc'];
             $inputs['noidung'] = $inputs['noidung_truc'];
-            $inputs['luongcoban'] = $inputs['luongcoban_truc'];
+            $inputs['luongcoban'] = chkDbl($inputs['luongcoban_truc']);
             $inputs['phanloai'] = $inputs['phanloai_truc'];
             $inputs['nguoilap'] = $inputs['nguoilap_truc'];
             $inputs['ngaylap'] = $inputs['ngaylap_truc'];
-            $inputs['songay'] = getDbl($inputs['songay_truc']);
+            $inputs['manguonkp'] = $inputs['manguonkp_truc'];
+            $inputs['linhvuchoatdong'] = $inputs['linhvuchoatdong_truc'];
+            //$inputs['songay'] = getDbl($inputs['songay_truc']);
             $inputs['phantramhuong'] = 100;
-
+            //dd($inputs);
             $model = bangluong::where('mabl', $inputs['mabl'])->first();
             if (count($model) > 0) {
                 $inputs['luongcoban'] = getDbl($inputs['luongcoban']);
@@ -2146,23 +2149,88 @@ class bangluongController extends Controller
                 $inputs['mabl'] = $madv . '_' . getdate()[0];
                 $inputs['madv'] = $madv;
 
-                $inputs['luongcoban'] = getDbl($inputs['luongcoban']);
+                $model = hosotruc::select('macanbo','tencanbo','songaytruc','songaycong',
+                    'heso','vuotkhung','pccv','pcdh','pctn','pcudn','pcud61')
+                    ->where('madv', $madv)->where('thang',$inputs['thang'])->where('nam',$inputs['nam'])->get();
+                $model_pc = dmphucap_donvi::where('madv', session('admin')->madv)
+                    ->wherein('mapc',['pcdh','pctn','pcudn','pcud61'])
+                    ->get();
+                $m_hoso = hosocanbo::select('macanbo','stt','macvcq','mapb','mact')->where('madv',session('admin')->madv)
+                    ->get()->keyby('macanbo')->toarray();
 
-                //$ngaylap = Carbon::create($inputs['nam'],$inputs['thang'],'01');
-
-                $model_canbo = hosotruc::where('madv', $madv)->get();
-                bangluong::create($inputs);
-                foreach ($model_canbo as $cb) {
+                $a_data = array();
+                foreach ($model as $cb) {
                     //Gán tham số mặc định
                     $cb->mabl = $inputs['mabl'];
-                    $cb->songay = $inputs['songay'];
-                    $cb->ttl =  round($inputs['luongcoban'] * $cb->songay * $cb->heso);
+                    $cb->stt = 99;
+                    $cb->macvcq = $cb->mapb = $cb->mact = '';
+                    $cb->luongcoban = $inputs['luongcoban'];
+                    $cb->manguonkp = $inputs['manguonkp'];
+                    if(isset($m_hoso[$cb->macanbo])){
+                        $hoso = $m_hoso[$cb->macanbo];
+                        $cb->stt = $hoso['stt'];
+                        $cb->macvcq = $hoso['macvcq'];
+                        $cb->mapb = $hoso['mapb'];
+                        $cb->mact = $hoso['mact'];
+                    }
+
+                    $cb->vuotkhung = round($cb->heso * $cb->vuotkhung / 100, session('admin')->lamtron);
+                    $hesotinh = $cb->songaytruc / $cb->songaycong;
+                    $tonghs = $tongtt = 0;
+
+                    foreach ($model_pc as $pc) {
+                        $mapc = $pc->mapc;
+                        $mapc_st = 'st_'.$pc->mapc;
+                        switch (getDbl($pc->phanloai)) {
+                            case 0: {//hệ số
+                                //$cb->$mapc = $cb->$mapc * $hesotinh;
+                                $cb->$mapc = round($cb->$mapc * $hesotinh, session('admin')->lamtron);
+                                $cb->$mapc_st = round($cb->$mapc * $cb->luongcoban);
+                                $tonghs += $cb->$mapc;
+                                $tongtt += $cb->$mapc_st;
+                                break;
+                            }
+                            case 1: {//số tiền
+                                $cb->$mapc = round($cb->$mapc * $hesotinh);
+                                $cb->$mapc_st = $cb->$mapc;
+                                $tongtt += $cb->$mapc_st;
+                                break;
+                            }
+                            case 2: {//phần trăm
+                                $heso = 0;
+                                //ko có vượt khung
+                                foreach (explode(',', $pc->congthuc) as $cthuc) {
+                                    if ($cthuc != '')
+                                        $heso += $cb->$cthuc;
+                                }
+                                $cb->$mapc = round($heso * $cb->$mapc * $hesotinh /100, session('admin')->lamtron);
+                                $cb->$mapc_st = round($cb->$mapc * $cb->luongcoban);
+                                $tonghs += $cb->$mapc;
+                                $tongtt += $cb->$mapc_st;
+                                break;
+                            }
+                            default: {//trường hợp còn lại (ẩn,...)
+                                //$cb->$mapc = 0;
+                                break;
+                            }
+                        }
+
+                    }
+                    $cb->tonghs = $tonghs;
+                    $cb->ttl = $tongtt;
+                    $cb->luongtn = $tongtt;
+                    $cb->heso = 0;
+                    $cb->vuotkhung = 0;
+                    $cb->pccv = 0;
                     //lưu vào bảng phụ cấp theo lương (chỉ có hệ số)
-                    $kq = $cb->toarray();
-                    unset($kq['id']);
-                    //lưu vào db
-                    bangluong_truc::create($kq);
+                    $a_data[] = $cb->toarray();
                 }
+                //dd($a_data);
+                foreach(array_chunk($a_data, 50)  as $data){
+                    //bangluong_ct::insert($data);
+                    (new data())->storeBangLuong($inputs['thang'],$data);
+                }
+                bangluong::create($inputs);
             }
 
             return redirect('/chuc_nang/bang_luong/bang_luong?mabl=' . $inputs['mabl'].'&mapb=');
@@ -2370,21 +2438,8 @@ class bangluongController extends Controller
             $m_bl = bangluong::select('thang', 'nam', 'mabl','phanloai')->where('mabl', $inputs['mabl'])->first();
             $model_nhomct = dmphanloaicongtac::select('macongtac','tencongtac')->get();
             $model_tenct = dmphanloaict::select('tenct','macongtac','mact')->get();
-            //dd($m_bl);
-            if($m_bl->phanloai != 'BANGLUONG' && $m_bl->phanloai != 'TRUYLINH'){
-                $model = bangluong_truc::where('mabl', $inputs['mabl'])->get();
-                $a_pl = getPhanLoaiBangLuong();
-                $m_bl->tenphanloai = isset($a_pl[$m_bl->phanloai]) ? $a_pl[$m_bl->phanloai]: '';
-                return view('manage.bangluong.bangluong_truc')
-                    ->with('furl', '/chuc_nang/bang_luong/')
-                    ->with('model', $model)
-                    ->with('m_bl', $m_bl)
-                    ->with('pageTitle', 'Bảng lương chi tiết');
-            }else{
-                //$model = $this->getBL($m_bl->thang, $m_bl->mabl);
-                //$model = bangluong_ct::where('mabl',$inputs['mabl'])->get();
-                $model = (new data())->getBangluong_ct($m_bl->thang, $m_bl->mabl);
-            }
+            $model = (new data())->getBangluong_ct($m_bl->thang, $m_bl->mabl);
+
             if($inputs['mapb'] != ''){
                 $model = $model->where('mapb',$inputs['mapb']);
             }

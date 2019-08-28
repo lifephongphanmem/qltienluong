@@ -73,15 +73,15 @@
 
                                             <div class="col-md-3">
                                                 <div class="form-group">
-                                                    <label class="control-label">Số ngày công</label>
-                                                    {!!Form::text('songaycong', null, array('id' => 'songaycong','class' => 'form-control', 'data-mask'=>'fdecimal'))!!}
+                                                    <label class="control-label">Số ngày công <span class="require">*</span></label>
+                                                    {!!Form::text('songaycong', null, array('id' => 'songaycong','class' => 'form-control required', 'data-mask'=>'fdecimal'))!!}
                                                 </div>
                                             </div>
 
                                             <div class="col-md-3">
                                                 <div class="form-group">
-                                                    <label class="control-label">Số ngày trực</label>
-                                                    {!!Form::text('songaytruc', null, array('id' => 'songaytruc','class' => 'form-control', 'data-mask'=>'fdecimal'))!!}
+                                                    <label class="control-label">Số ngày trực <span class="require">*</span></label>
+                                                    {!!Form::text('songaytruc', null, array('id' => 'songaytruc','class' => 'form-control required', 'data-mask'=>'fdecimal'))!!}
                                                 </div>
                                             </div>
                                         </div>

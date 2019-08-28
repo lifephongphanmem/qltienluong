@@ -35,6 +35,7 @@ class CreateBangluongctTable extends Migration
             $table->double('ngaytl')->default(0);//số tháng được truy lĩnh lương
             $table->double('luongcoban')->default(0);//mức lương co bản được truy lĩnh lương
             $table->double('songaytruc')->default(0);
+            $table->double('songaycong')->default(0);
             $table->double('vuotkhung')->default(0);
 
             $table->double('pcct')->default(0);//dùng để thay thế phụ cấp ghép lớp

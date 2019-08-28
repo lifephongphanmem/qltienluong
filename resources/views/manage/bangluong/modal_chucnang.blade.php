@@ -199,7 +199,6 @@
         </div>
         <div class="modal-body">
             <div class="form-horizontal">
-
                 <div class="row">
                     <div class="col-md-12">
                         <label class="control-label"> Nội dung</label>
@@ -209,9 +208,18 @@
 
                 <div class="row">
                     <div class="col-md-6">
-                        <label class="control-label">Số ngày công</label>
-                        {!!Form::text('songay_truc', date('t'), array('id' => 'songay_truc','class' => 'form-control'))!!}
+                        <label class="control-label">Nguồn kinh phí</label>
+                        {!!Form::select('manguonkp_truc',$m_nguonkp, $inputs['manguonkp'], array('id' => 'manguonkp_truc','class' => 'form-control'))!!}
                     </div>
+
+                    <div class="col-md-6">
+                        <label class="control-label">Lĩnh vực công tác </label>
+                        {!! Form::select('linhvuchoatdong_truc',$m_linhvuc,session('admin')->maphanloai == 'KVXP' ?'QLNN':null ,array('id' => 'linhvuchoatdong_truc','class' => 'form-control select2me')) !!}
+                    </div>
+                </div>
+
+                <div class="row">
+
                     <div class="col-md-6">
                         <label class="control-label">Mức lương cơ bản</label>
                         {!!Form::text('luongcoban_truc', $inputs['luongcb'], array('id' => 'luongcoban_truc','class' => 'form-control', 'data-mask'=>'fdecimal'))!!}

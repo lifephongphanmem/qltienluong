@@ -123,6 +123,9 @@
                                                     <i class="fa fa-print"></i>&nbsp; In bảng lương</button>
                                                 <!--button onclick="tanggiam('{{$value->mabl}}')" class="btn btn-default btn-xs mbs" data-target="#tanggiam-modal-confirm" data-toggle="modal">
                                                     <i class="fa fa-th-list"></i>&nbsp; Tăng/Giảm lương</button-->
+                                            @elseif($value->phanloai == 'TRUC')
+                                                <a href="{{url($inputs['furl'].'mautruc?mabl='.$value->mabl)}}" class="btn btn-default btn-xs mbs" target="_blank">
+                                                    <i class="fa fa-print"></i>&nbsp; In chi tiết</a>
                                             @else
                                                 <a href="{{url($inputs['furl'].'mauctphi?mabl='.$value->mabl)}}" class="btn btn-default btn-xs mbs" target="_blank">
                                                     <i class="fa fa-print"></i>&nbsp; In chi tiết</a>
@@ -142,6 +145,9 @@
                                             @elseif($value->phanloai == 'TRUYLINH')
                                                 <button type="button" onclick="inbl_tl('{{$value->mabl}}','{{$value->thang}}','{{$value->nam}}')" class="btn btn-default btn-xs mbs">
                                                     <i class="fa fa-print"></i>&nbsp; In bảng lương</button>
+                                            @elseif($value->phanloai == 'TRUC')
+                                                <a href="{{url($inputs['furl'].'mautruc?mabl='.$value->mabl)}}" class="btn btn-default btn-xs mbs" target="_blank">
+                                                    <i class="fa fa-print"></i>&nbsp; In chi tiết</a>
                                             @else
                                                 <a href="{{url($inputs['furl'].'mauctphi?mabl='.$value->mabl)}}" class="btn btn-default btn-xs mbs" target="_blank">
                                                     <i class="fa fa-print"></i>&nbsp; In chi tiết</a>

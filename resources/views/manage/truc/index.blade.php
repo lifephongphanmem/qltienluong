@@ -74,10 +74,10 @@
                                 <td class="text-center">{{$key+1}}</td>
                                 <td>{{$value->tencanbo}}</td>
                                 <td class="text-center">{{$value->songaytruc}}</td>
-                                <td class="text-center">{{dinhdangsothapphan($value->pcudn)}}</td>
-                                <td class="text-center">{{dinhdangsothapphan($value->pcud61)}}</td>
-                                <td class="text-center">{{dinhdangsothapphan($value->pcdh)}}</td>
-                                <td class="text-center">{{dinhdangsothapphan($value->pctn)}}</td>
+                                <td class="text-center">{{dinhdangsothapphan($value->pcudn,5)}}</td>
+                                <td class="text-center">{{dinhdangsothapphan($value->pcud61,5)}}</td>
+                                <td class="text-center">{{dinhdangsothapphan($value->pcdh,5)}}</td>
+                                <td class="text-center">{{dinhdangsothapphan($value->pctn,5)}}</td>
                                 <td>
                                     @if($inputs['trangthai'])
                                         <a href="{{$inputs['furl'].'edit?macanbo='.$value->macanbo.'&thang='.$value->thang.'&nam='.$value->nam}}" class="btn btn-default btn-xs mbs">

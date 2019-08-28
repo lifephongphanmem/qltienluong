@@ -564,6 +564,7 @@ Route::group(['prefix'=>'chuc_nang'],function(){
         Route::post('dsgiamluong','bangluong_inController@printf_dsgiamluong');
         //chi khác (trực, công tác phí)
         Route::get('mauctphi','bangluong_inController@printf_mauctphi');
+        Route::get('mautruc','bangluong_inController@printf_mautruc');
 
         //tổng hợp
         Route::post('mau185_th','bangluong_inController@printf_mau185_th');

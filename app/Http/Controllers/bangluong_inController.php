@@ -866,6 +866,56 @@ class bangluong_inController extends Controller
         } else
             return view('errors.notlogin');
     }
+
+    public function printf_mautruc(Request $request){
+        if (Session::has('admin')) {
+            $inputs = $request->all();
+            $mabl = $inputs['mabl'];
+            //dd($inputs);
+            $m_bl = bangluong::select('thang','nam','mabl','madv','ngaylap','luongcoban','phanloai')->where('mabl',$mabl)->first();
+            $a_pl = getPhanLoaiBangLuong();
+            $m_bl->tenphanloai = isset($a_pl[$m_bl->phanloai]) ? $a_pl[$m_bl->phanloai] : 'Bảng thanh toán chi khác';
+            $model = (new data())->getBangluong_ct($m_bl->thang,$m_bl->mabl);
+
+            $model_congtac = dmphanloaict::select('mact','tenct')
+                ->wherein('mact',a_unique(array_column($model->toarray(),'mact')))->get();
+            //dd($model_congtac);
+            $a_phucap = array();
+            $col = 0;
+            $model_pc = dmphucap_donvi::where('madv',$m_bl->madv)->where('phanloai','<','3')->get();
+
+            foreach($model_pc as $ct) {
+                if ($model->sum($ct->mapc) > 0) {
+                    $a_phucap[$ct->mapc] = $ct->report;
+                    $col++;
+                }
+            }
+
+            $m_dv = dmdonvi::where('madv',$m_bl->madv)->first();
+            $m_dv->tendvcq = getTenDB($m_dv->madvbc);
+
+            $thongtin=array('nguoilap'=>$m_bl->nguoilap,
+                'thang'=>$m_bl->thang,
+                'nam'=>$m_bl->nam,
+                'ngaylap'=>$m_bl->ngaylap,
+                'luongcb' => $m_bl->luongcoban,
+                ''
+            );
+
+            return view('reports.bangluong.donvi.mautruc')
+                ->with('model',$model)
+                //->with('model_congtac',$model_congtac)
+                ->with('m_dv',$m_dv)
+                ->with('m_bl',$m_bl)
+                ->with('a_cv',getChucVuCQ(false))
+                ->with('thongtin',$thongtin)
+                ->with('col',$col)
+                //->with('model_congtac',$model_congtac)
+                ->with('a_phucap',$a_phucap)
+                ->with('pageTitle','Bảng lương chi tiết');
+        } else
+            return view('errors.notlogin');
+    }
     //</editor-fold>
     /**
      * @param $inputs

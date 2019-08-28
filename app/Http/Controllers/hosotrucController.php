@@ -27,7 +27,7 @@ class hosotrucController extends Controller
 
             $m_cb = hosocanbo::select('macanbo', 'macvcq', 'tencanbo')
                 ->wherenotin('macanbo',array_column($model->toarray(),'macanbo'))
-                ->where('madv', session('admin')->madv)->get();
+                ->where('madv', session('admin')->madv)->orderby('stt')->get();
             //dd($a_cb);
             $m_bl = bangluong::where('phanloai','TRUC')
                 ->where('thang', $inputs['thang'])
@@ -64,7 +64,7 @@ class hosotrucController extends Controller
                 ->with('model',$model)
                 ->with('model_pc',$model_pc)
                 ->with('a_heso', array('heso','vuotkhung','pccv'))
-                ->with('pageTitle', 'Thêm mới cán bộ truy lĩnh lương');
+                ->with('pageTitle', 'Thêm mới cán bộ trực');
 
         } else
             return view('errors.notlogin');
@@ -75,12 +75,11 @@ class hosotrucController extends Controller
             $inputs = $request->all();
             $inputs['trangthai'] = 'EDIT';
             $inputs['furl'] = '/nghiep_vu/truc/';
-            dd($inputs);
-            $model = hosocanbo::where('macanbo',$inputs['macanbo'])->first();
-            $model->songaycong = session('admin')->songaycong;
-            $model->songaytruc = session('admin')->songaycong;
-            $model->thang = $inputs['thang'];
-            $model->nam = $inputs['nam'];
+
+            $model = hosotruc::where('macanbo',$inputs['macanbo'])->where('thang',$inputs['thang'])
+                ->where('nam',$inputs['nam'])
+                ->first();
+
             $model_pc = dmphucap_donvi::where('madv', session('admin')->madv)
                 ->wherein('mapc',['heso','vuotkhung','pccv','pcdh','pctn','pcudn','pcud61'])
                 ->get();
@@ -90,7 +89,7 @@ class hosotrucController extends Controller
                 ->with('model',$model)
                 ->with('model_pc',$model_pc)
                 ->with('a_heso', array('heso','vuotkhung','pccv'))
-                ->with('pageTitle', 'Thêm mới cán bộ truy lĩnh lương');
+                ->with('pageTitle', 'Thông tin cán bộ trực');
 
         } else
             return view('errors.notlogin');
@@ -100,6 +99,8 @@ class hosotrucController extends Controller
     {
         if (Session::has('admin')) {
             $inputs = $request->all();
+            $inputs['songaycong'] = chkDbl($inputs['songaycong']) < 1 ? 1 : chkDbl($inputs['songaycong']);
+            $inputs['songaytruc'] = chkDbl($inputs['songaytruc']);
             //dd($inputs);
             if ($inputs['trangthai'] == 'ADD') {
                 hosotruc::create($inputs);
