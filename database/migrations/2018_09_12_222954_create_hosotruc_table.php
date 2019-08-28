@@ -24,6 +24,17 @@ class CreateHosotrucTable extends Migration
             $table->string('tongiao', 20)->nullable();
             $table->double('heso')->default(0);
             $table->string('madv',50)->nullable();
+
+            $table->double('vuotkhung')->default(0);
+            $table->double('pccv')->default(0);
+            $table->double('pcdh')->default(0);
+            $table->double('pctn')->default(0);
+            $table->double('pcudn')->default(100);
+            $table->double('pcud61')->default(100);
+            $table->double('songaycong')->default(100);
+            $table->double('songaytruc')->default(100);
+            $table->string('thang',10)->nullable();
+            $table->string('nam',10)->nullable();
             $table->timestamps();
         });
     }

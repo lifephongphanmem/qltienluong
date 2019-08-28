@@ -210,7 +210,7 @@
                                     <a href="{{url('nghiep_vu/truy_linh/danh_sach?thang=ALL'.'&nam='.date('Y'))}}"><i class="fa fa-caret-right"></i>Danh sách cán bộ được truy lĩnh lương</a>
                                 </li>
                                 <li>
-                                    <a href="{{url('nghiep_vu/truc/danh_sach')}}"><i class="fa fa-caret-right"></i>Danh sách cán bộ trực công tác</a>
+                                    <a href="{{url('nghiep_vu/truc/danh_sach?thang='.date('m').'&nam='.date('Y'))}}"><i class="fa fa-caret-right"></i>Danh sách cán bộ trực công tác</a>
                                 </li>
                                 <li>
                                     <a href="{{url('nghiep_vu/da_nghi/danh_sach')}}"><i class="fa fa-caret-right"></i>Danh sách cán bộ đã thôi công tác</a>

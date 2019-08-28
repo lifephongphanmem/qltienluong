@@ -40,32 +40,50 @@
                 </div>
 
                 <div class="portlet-body form-horizontal">
+                    <div class="row">
+                        <div class="form-group">
+                            <label class="control-label col-md-offset-2 col-md-1" style="text-align: right">Tháng </label>
+                            <div class="col-md-2">
+                                {!! Form::select('thangct',getThang(),$inputs['thang'],array('id' => 'thangct', 'class' => 'form-control'))!!}
+                            </div>
+                            <label class="control-label col-md-1" style="text-align: right">Năm </label>
+                            <div class="col-md-2">
+                                {!! Form::select('namct',getNam(),$inputs['nam'], array('id' => 'namct', 'class' => 'form-control'))!!}
+                            </div>
+                        </div>
+                    </div>
 
                     <table id="sample_3" class="table table-hover table-striped table-bordered" style="min-height: 230px">
                         <thead>
                             <tr>
                                 <th class="text-center" style="width: 5%">STT</th>
                                 <th class="text-center">Họ tên cán bộ</th>
-                                <th class="text-center">Hệ số</th>
+                                <th class="text-center">Số</br>ngày</br>trực</th>
+                                <th class="text-center">Phụ cấp</br>ưu đãi</th>
+                                <th class="text-center">Phụ cấp</br>ưu đãi</br>chênh lệch</th>
+                                <th class="text-center">Phụ cấp</br>độc hại</th>
+                                <th class="text-center">Phụ cấp</br>trách nhiệm</th>
                                 <th class="text-center">Thao tác</th>
                             </tr>
                         </thead>
                         <tbody>
-                        @if(isset($model))
-                            @foreach($model as $key=>$value)
-                                <tr>
-                                    <td class="text-center">{{$key+1}}</td>
-                                    <td>{{$value->tencanbo}}</td>
-                                    <td>{{$value->heso}}</td>
-                                    <td>
-                                        <button type="button" onclick="edit({{$value->id}})" class="btn btn-info btn-xs mbs">
-                                            <i class="fa fa-edit"></i>&nbsp;Chỉnh sửa</button>
-                                        <button type="button" onclick="cfDel('{{$furl.'del/'.$value->id}}')" class="btn btn-danger btn-xs mbs" data-target="#delete-modal-confirm" data-toggle="modal">
-                                            <i class="fa fa-trash-o"></i>&nbsp;Xóa</button>
-                                    </td>
-                                </tr>
-                            @endforeach
-                        @endif
+                        @foreach($model as $key=>$value)
+                            <tr>
+                                <td class="text-center">{{$key+1}}</td>
+                                <td>{{$value->tencanbo}}</td>
+                                <td>{{$value->songaytruc}}</td>
+                                <td>{{$value->pcudn}}</td>
+                                <td>{{$value->pcud61}}</td>
+                                <td>{{$value->pcdh}}</td>
+                                <td>{{$value->pctn}}</td>
+                                <td>
+                                    <button type="button" onclick="edit({{$value->id}})" class="btn btn-info btn-xs mbs">
+                                        <i class="fa fa-edit"></i>&nbsp;Chỉnh sửa</button>
+                                    <button type="button" onclick="cfDel('{{$inputs['furl'].'del/'.$value->id}}')" class="btn btn-danger btn-xs mbs" data-target="#delete-modal-confirm" data-toggle="modal">
+                                        <i class="fa fa-trash-o"></i>&nbsp;Xóa</button>
+                                </td>
+                            </tr>
+                        @endforeach
                         </tbody>
                     </table>
                 </div>
@@ -75,7 +93,7 @@
 
     @include('includes.modal.delete')
 
-    {!! Form::open(['url'=>$furl.'store','method'=>'post' , 'files'=>true, 'id' => 'create_bangluong']) !!}
+    {!! Form::open(['url'=>$inputs['furl'].'store','method'=>'post' , 'files'=>true, 'id' => 'create_bangluong']) !!}
     <div id="chitiet-modal" tabindex="-1" role="dialog" aria-hidden="true" class="modal fade">
         <div class="modal-dialog modal-content">
             <div class="modal-header modal-header-primary">
@@ -114,14 +132,24 @@
             $('#chitiet-modal').modal('show');
         }
 
-        function getInfo(){
-            window.location.href = '{{$furl}}'+'maso='+$('#cbmacb').val();
+        function getLink(){
+            var thang = $("#thangct").val();
+            var nam = $("#namct").val();
+            return '{{$inputs['furl']}}'+'danh_sach?thang='+thang +'&nam='+nam;
         }
+
+        $('#thangct').change(function(){
+            window.location.href = getLink();
+        });
+
+        $('#namct').change(function(){
+            window.location.href = getLink();
+        });
 
         function edit(id) {
             var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
             var kq = $.ajax({
-                url: '{{$furl}}' + 'get',
+                url: '{{$inputs['furl']}}' + 'get',
                 type: 'GET',
                 data: {
                     _token: CSRF_TOKEN,
@@ -169,7 +197,7 @@
                 var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
                 if(id==0){//Thêm mới
                     $.ajax({
-                        url: '{{$furl_ajax}}' + 'add',
+                        url: '{{$inputs['furl_ajax']}}' + 'add',
                         type: 'GET',
                         data: {
                             _token: CSRF_TOKEN,
@@ -194,7 +222,7 @@
                     });
                 }else{//Cập nhật
                     $.ajax({
-                        url: '{{$furl_ajax}}' + 'update',
+                        url: '{{$inputs['furl_ajax']}}' + 'update',
                         type: 'GET',
                         data: {
                             _token: CSRF_TOKEN,

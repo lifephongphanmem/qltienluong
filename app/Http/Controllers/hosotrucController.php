@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\hosocanbo;
 use App\hosotruc;
 use Illuminate\Http\Request;
 
@@ -11,15 +12,22 @@ use Illuminate\Support\Facades\Session;
 
 class hosotrucController extends Controller
 {
-    function index()
+    function index(Request $request)
     {
         if (Session::has('admin')) {
-            $model = hosotruc::where('madv', session('admin')->madv)->get();
+            $inputs = $request->all();
+            $inputs['furl'] = '/nghiep_vu/truc/';
+            $inputs['furl_ajax'] = '/ajax/truc/';
+            $model = hosotruc::where('madv', session('admin')->madv)
+                ->where('thang', $inputs['thang'])->where('nam', $inputs['nam'])
+                ->get();
 
+            $a_cb = hosocanbo::select('macanbo', 'macvcq', 'tencanbo')
+                ->where('madv', session('admin')->madv)->get()->keyby('macanbo')->toarray();
+            //dd($a_cb);
             return view('manage.truc.index')
-                ->with('furl', '/nghiep_vu/truc/')
-                ->with('furl_ajax', '/ajax/truc/')
-                //->with('macanbo', $macanbo)
+                ->with('inputs', $inputs)
+                ->with('a_cb', $a_cb)
                 ->with('model', $model)
                 ->with('pageTitle', 'Danh sách cán bộ trực công tác');
         } else

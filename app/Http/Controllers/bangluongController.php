@@ -290,6 +290,10 @@ class bangluongController extends Controller
             ->where('ngaytu', '<=', $ngaylap)->where('ngayden', '>=', $ngaylap)->get();
         $m_nghiphep = hosotamngungtheodoi::where('madv', $inputs['madv'])->wherein('maphanloai',['NGHIPHEP','NGHIOM'])
             ->whereYear('ngaytu', $inputs['nam'])->whereMonth('ngaytu', $inputs['thang'])->get();
+        $m_khongluong = hosotamngungtheodoi::where('madv', $inputs['madv'])
+            ->where('ngaytu', '<=', $ngaylap)->where('ngayden', '>=', $ngaylap)
+            ->where('maphanloai', 'KHONGLUONG')->get();
+
         //$m_cb = hosocanbo::where('madv', $inputs['madv'])->where('theodoi','<', '9')->get();
         $m_cbkn = hosocanbo::where('madv', $inputs['madv'])->where('theodoi','<', '9')->get();
 
@@ -440,6 +444,7 @@ class bangluongController extends Controller
             $tt = $ths = 0;
             //nếu cán bộ nghỉ thai sản
             $thaisan = count($m_tamngung->where('macanbo',$cb->macanbo))>0? true : false;
+            $khongluong = count($m_khongluong->where('macanbo',$cb->macanbo))>0? true : false;
 
             foreach ($model_phucap as $ct) {
                 $mapc = $ct->mapc;
@@ -502,41 +507,40 @@ class bangluongController extends Controller
                     }
                 }
 
-                if (!$thaisan ||($thaisan && in_array($mapc,$a_ts)) ) {//lưu vào bảng lương phụ cấp (chi luu số tiền >0)
-                    $ct->mabl = $inputs['mabl'];
-                    //$ct->macanbo = $cb->macanbo;
-                    //$ct->tencanbo = $cb->tencanbo;
-                    //$ct->maso = $mapc;
-                    //$ct->ten = $ct->tenpc;
-                    //$ct->heso = $cb->$mapc;
-                    $ct->sotien = round($sotien, 0);
-                    $cb->$mapc_st = $ct->sotien;
-                    if ($ct->baohiem == 1 && !in_array($mapc, $a_pc_kobh)) {
-                        $ct->stbhxh = round($ct->sotien * $cb->bhxh, 0);
-                        $ct->stbhyt = round($ct->sotien * $cb->bhyt, 0);
-                        $ct->stkpcd = round($ct->sotien * $cb->kpcd, 0);
-                        $ct->stbhtn = round($ct->sotien * $cb->bhtn, 0);
-                        $ct->ttbh = $ct->stbhxh + $ct->stbhyt + $ct->stkpcd + $ct->stbhtn;
-                        $ct->stbhxh_dv = round($ct->sotien * $cb->bhxh_dv, 0);
-                        $ct->stbhyt_dv = round($ct->sotien * $cb->bhyt_dv, 0);
-                        $ct->stkpcd_dv = round($ct->sotien * $cb->kpcd_dv, 0);
-                        $ct->stbhtn_dv = round($ct->sotien * $cb->bhtn_dv, 0);
-                        $ct->ttbh_dv = $ct->stbhxh_dv + $ct->stbhyt_dv + $ct->stkpcd_dv + $ct->stbhtn_dv;
-                    }
+                if ($khongluong){goto ketthuc_phucap;}
+                if ($thaisan && !in_array($mapc, $a_ts)){goto ketthuc_phucap;}
 
-                    //$a_kq = $ct->toarray();
-                    //unset($a_kq['id']);
-                    //bangluong_phucap::create($a_kq);
+                $ct->mabl = $inputs['mabl'];
+                $ct->sotien = round($sotien, 0);
+                $cb->$mapc_st = $ct->sotien;
+                if ($ct->baohiem == 1 && !in_array($mapc, $a_pc_kobh)) {
+                    $ct->stbhxh = round($ct->sotien * $cb->bhxh, 0);
+                    $ct->stbhyt = round($ct->sotien * $cb->bhyt, 0);
+                    $ct->stkpcd = round($ct->sotien * $cb->kpcd, 0);
+                    $ct->stbhtn = round($ct->sotien * $cb->bhtn, 0);
+                    $ct->ttbh = $ct->stbhxh + $ct->stbhyt + $ct->stkpcd + $ct->stbhtn;
+                    $ct->stbhxh_dv = round($ct->sotien * $cb->bhxh_dv, 0);
+                    $ct->stbhyt_dv = round($ct->sotien * $cb->bhyt_dv, 0);
+                    $ct->stkpcd_dv = round($ct->sotien * $cb->kpcd_dv, 0);
+                    $ct->stbhtn_dv = round($ct->sotien * $cb->bhtn_dv, 0);
+                    $ct->ttbh_dv = $ct->stbhxh_dv + $ct->stbhyt_dv + $ct->stkpcd_dv + $ct->stbhtn_dv;
                 }
+
+                ketthuc_phucap:
             }
             //$ths = $ths + $heso_goc - $cb->heso;//do chỉ lương nb hưởng 85%, các hệ số hưởng %, bảo hiểm thì lấy 100% để tính
             $cb->tonghs = $ths;
+
             //nếu cán bộ nghỉ thai sản
             if($thaisan){
                 $ts = $m_tamngung->where('macanbo',$cb->macanbo)->first();
                 $cb->tencanbo = $cb->tencanbo . '(nghỉ thai sản)';
                 $cb->congtac = 'THAISAN';
                 $cb->ghichu .= 'Nghỉ thai sản từ '.getDayVn($ts->ngaytu).' đến '.getDayVn($ts->ngayden).';';
+            }
+
+            if($khongluong){
+                $cb->tencanbo = $cb->tencanbo . '(nghỉ không lương)';
             }
 
             $cb->ttl = $model_phucap->sum('sotien'); //do mức lương cơ bản đi theo phụ cấp =>ko thể lấy tổng hệ số * lương cơ bản
