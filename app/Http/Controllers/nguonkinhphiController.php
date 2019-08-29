@@ -346,6 +346,11 @@ class nguonkinhphiController extends Controller
                     if(isset($m_hh[$key]) && $m_hh[$key]['thang_hh'] < $a_thang[$i]['thang']){
                         continue;
                     }
+                    //nếu cán bộ chưa đến hạn công tác =>bỏ qua
+                    if($m_cb[$key]['ngaybc'] > $ngaylap){
+                        continue;
+                    }
+
                     $m_cb[$key]['thang'] = $a_thang[$i]['thang'];
                     $m_cb[$key]['nam'] = $a_thang[$i]['nam'];
                     //kiểm tra nghỉ thai san không
