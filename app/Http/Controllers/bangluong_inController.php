@@ -872,7 +872,7 @@ class bangluong_inController extends Controller
             $inputs = $request->all();
             $mabl = $inputs['mabl'];
             //dd($inputs);
-            $m_bl = bangluong::select('thang','nam','mabl','madv','ngaylap','luongcoban','phanloai')->where('mabl',$mabl)->first();
+            $m_bl = bangluong::select('thang','nam','mabl','madv','ngaylap','luongcoban','phanloai','noidung')->where('mabl',$mabl)->first();
             $a_pl = getPhanLoaiBangLuong();
             $m_bl->tenphanloai = isset($a_pl[$m_bl->phanloai]) ? $a_pl[$m_bl->phanloai] : 'Bảng thanh toán chi khác';
             $model = (new data())->getBangluong_ct($m_bl->thang,$m_bl->mabl);

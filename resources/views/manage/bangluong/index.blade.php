@@ -47,7 +47,7 @@
 
                                 <ul class="dropdown-menu">
                                     <li>
-                                        <button type="button" class="btn btn-default" style="padding-bottom: 5px; border: none;" onclick="add_truc()">&nbsp;Trực công tác</button>
+                                        <button type="button" class="btn btn-default" style="padding-bottom: 5px; border: none;" onclick="add_truc()">&nbsp;Phụ cấp độc hại</button>
                                     </li>
                                     <li>
                                         <button type="button" class="btn btn-default" style="padding-bottom: 5px; border: none;" onclick="add_ctp()"
@@ -179,7 +179,7 @@
         function trichnop(mabl){
             $('#create_trichnop').find("[id='phanloai']").val('TRICHNOP');
             $('#create_trichnop').find("[id='mabl_trichnop']").val(mabl);
-
+            $('#create_trichnop').find("[id='mabl']").val('NULL');//them moi
             $('#mabl_capnhat').val(mabl);
         }
 
@@ -317,6 +317,32 @@
                     break;
                 }
 
+                case 'TRICHNOP' :{
+                    var form_ctp = $('#create_trichnop');
+                    $.ajax({
+                        url: '{{$inputs['furl_ajax']}}' + 'get',
+                        type: 'GET',
+                        data: {
+                            _token: CSRF_TOKEN,
+                            mabl: mabl
+                        },
+                        dataType: 'JSON',
+                        success: function (data) {
+                            form_ctp.find("[id^='noidung']").val(data.noidung);
+                            form_ctp.find("[id^='mabl']").val(data.mabl);
+                            form_ctp.find("[id^='phanloai']").val(data.phanloai);
+                            form_ctp.find("[id^='ngaylap']").val(data.ngaylap);
+                            form_ctp.find("[id^='nguoilap']").val(data.nguoilap);
+                            form_ctp.find("[id^='tenquy']").val(data.tenquy);
+                        },
+                        error: function(message){
+                            toastr.error(message,'Lỗi!');
+                        }
+                    });
+                    $('#trichnop-modal-confirm').modal('show');
+                    break;
+                }
+
                 case 'BANGLUONG' : {
                     $.ajax({
                         url: '{{$inputs['furl_ajax']}}' + 'get',
@@ -378,6 +404,33 @@
                         }
                     });
                     $('#ctphi-modal').modal('show');
+                    break;
+                }
+
+                case 'TRUC' : {
+                    $.ajax({
+                        url: '{{$inputs['furl_ajax']}}' + 'get',
+                        type: 'GET',
+                        data: {
+                            _token: CSRF_TOKEN,
+                            mabl: mabl
+                        },
+                        dataType: 'JSON',
+                        success: function (data) {
+                            $('#noidung_truc').val(data.noidung);
+                            $('#manguonkp_truc').val(data.manguonkp);
+                            $('#linhvuchoatdong_truc').val(data.linhvuchoatdong).trigger('change');
+                            $('#luongcoban_truc').val(data.luongcoban);
+                            $('#mabl_truc').val(data.mabl);
+                            $('#ngaylap_truc').val(data.ngaylap);
+                            $('#nguoilap_truc').val(data.nguoilap);
+                            $('#phanloai_truc').val(data.phanloai);
+                        },
+                        error: function(message){
+                            toastr.error(message,'Lỗi!');
+                        }
+                    });
+                    $('#truc-modal').modal('show');
                     break;
                 }
 

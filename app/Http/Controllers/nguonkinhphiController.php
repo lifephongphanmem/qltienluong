@@ -80,21 +80,16 @@ class nguonkinhphiController extends Controller
             $inputs['chenhlech'] = chkDbl($inputs['chenhlech']);
 
             $a_th = array_merge(array('macanbo', 'mact', 'macvcq', 'mapb', 'ngayden'),getColTongHop());
-            /* lưu chưa tách theo nhóm tổng hợp
-             //1536402868: Đại biểu hội đồng nhân dân; 1536459380: Cán bộ cấp ủy viên; 1506673695: KCT cấp xã; 1535613221: kct cấp thôn
-             $m_cb_kn = hosocanbo_kiemnhiem::select($a_th)
-                ->where('madv', session('admin')->madv)
-                ->wherein('mact',['1536402868','1536459380','1535613221', '1506673695'])
-                ->get()->keyBy('macanbo')->toarray();
-             * */
+
             $m_cb_kn = hosocanbo_kiemnhiem::select($a_th)
                 ->where('madv', session('admin')->madv)
                 ->wherein('mact',$a_plct)
                 ->get()->keyBy('macanbo')->toarray();
-            $a_th = array_merge(array('stt','ngaysinh','tencanbo', 'tnndenngay', 'gioitinh', 'msngbac', 'bac', 'bhxh_dv', 'bhyt_dv', 'bhtn_dv', 'kpcd_dv'),$a_th);
+            $a_th = array_merge(array('stt','ngaysinh','tencanbo', 'tnndenngay', 'gioitinh', 'msngbac', 'bac', 'bhxh_dv', 'bhyt_dv', 'bhtn_dv', 'kpcd_dv', 'ngaybc', 'ngayvao'),$a_th);
             $model = hosocanbo::select($a_th)->where('madv', session('admin')->madv)
                 ->where('theodoi','<', '9')
                 ->get();
+
             //$a_hoten = array_column($model->toarray(),'tencanbo','macanbo');
             /*
             $m_tamngung = hosotamngungtheodoi::where('madv', $inputs['madv'])->where('maphanloai', 'THAISAN')
@@ -120,6 +115,11 @@ class nguonkinhphiController extends Controller
             $model = (new dataController())->getCanBo($model,$model_thongtu->ngayapdung,true,$model_thongtu->ngayapdung);
 
             foreach($model as $cb){
+                /*
+                if(getDayVn($cb->ngaybc) != '' && $cb->ngaybc > $model_thongtu->ngayapdung){
+                    continue;
+                }
+                */
                 $cb->macongtac = $a_congtac[$cb->mact];
                 $cb->masodv = $masodv;
                 //trong bảng danh mục là % vượt khung => sang bảng lương chuyển thành hệ số
@@ -156,6 +156,16 @@ class nguonkinhphiController extends Controller
                     $cb->nam_tnn = null;
                     $cb->thang_tnn = null;
                 }
+
+                if (getDayVn($cb->ngayvao) != '') {
+                    $dt_hh = date_create($cb->ngayvao);
+                    $cb->nam_hh = date_format($dt_hh, 'Y');
+                    $cb->thang_hh = date_format($dt_hh, 'm');
+
+                } else {
+                    $cb->nam_hh = null;
+                    $cb->thang_hh = null;
+                }
             }
 
             $model = $model->wherein('mact',$a_plct);
@@ -165,6 +175,7 @@ class nguonkinhphiController extends Controller
 
             $m_cb = $model->keyBy('macanbo')->toarray();
             //làm tùy chọn tính nghỉ hưu
+            $m_hh = $model->where('ngayvao','>=' ,$model_thongtu->ngayapdung)->where('ngayvao','<=' ,$inputs['namdt'].'-12-31')->keyBy('macanbo')->toarray();
             $m_nh = $model->where('nam_ns', '<>', '')->where('nam_ns','<=',$inputs['namdt'])->keyBy('macanbo')->toarray();
             $m_nb = $model->where('nam_nb', '<>', '')->where('nam_nb','=',$inputs['namdt'])->keyBy('macanbo')->toarray();
             $m_tnn = $model->where('nam_tnn', '<>', '')->where('nam_tnn','=',$inputs['namdt'])->keyBy('macanbo')->toarray();
@@ -331,6 +342,10 @@ class nguonkinhphiController extends Controller
                 $ngaylap = Carbon::create($a_thang[$i]['nam'], $a_thang[$i]['thang'], '01');
                 //lưu vào 1 mảng
                 foreach($m_cb as $key =>$val){
+                    //kiem tra can bo het han lao dong => bo wa
+                    if(isset($m_hh[$key]) && $m_hh[$key]['thang_hh'] < $a_thang[$i]['thang']){
+                        continue;
+                    }
                     $m_cb[$key]['thang'] = $a_thang[$i]['thang'];
                     $m_cb[$key]['nam'] = $a_thang[$i]['nam'];
                     //kiểm tra nghỉ thai san không
@@ -401,7 +416,8 @@ class nguonkinhphiController extends Controller
 
             //lưu dữ liệu
             $a_col = array('bac', 'bhxh_dv', 'bhtn_dv', 'kpcd_dv', 'bhyt_dv', 'gioitinh', 'nam_nb', 'nam_ns', 'nam_tnn',
-                'thang_nb', 'thang_ns', 'thang_tnn', 'ngayden','ngaytu', 'ngaysinh', 'tnndenngay','tnntungay', 'pcctp', 'st_pcctp');
+                'thang_nb', 'thang_ns', 'thang_tnn', 'ngayden','ngaytu', 'ngaysinh', 'tnndenngay','tnntungay', 'pcctp',
+                'st_pcctp', 'nam_hh', 'thang_hh','ngaybc', 'ngayvao');
 
             $a_data_nl = unset_key($a_data_nl, $a_col);
             //dd($a_data_nl);

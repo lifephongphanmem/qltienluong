@@ -190,7 +190,7 @@
 </div>
 {!! Form::close() !!}
 
-{!! Form::open(['url'=>'/chuc_nang/bang_luong/store_truc','method'=>'post' , 'files'=>true, 'id' => 'create_bangluong_truylinh']) !!}
+{!! Form::open(['url'=>'/chuc_nang/bang_luong/store_truc','method'=>'post' , 'files'=>true, 'id' => 'create_bangluong_truc']) !!}
 <div id="truc-modal" tabindex="-1" role="dialog" aria-hidden="true" class="modal fade">
     <div class="modal-dialog modal-content">
         <div class="modal-header modal-header-primary">
@@ -202,7 +202,7 @@
                 <div class="row">
                     <div class="col-md-12">
                         <label class="control-label"> Nội dung</label>
-                        {!! Form::textarea('noidung_truc',null,array('id' => 'noidung_truylinh', 'class' => 'form-control','rows'=>'3'))!!}
+                        {!! Form::textarea('noidung_truc',null,array('id' => 'noidung_truc', 'class' => 'form-control','rows'=>'3'))!!}
                     </div>
                 </div>
 
@@ -217,7 +217,6 @@
                         {!! Form::select('linhvuchoatdong_truc',$m_linhvuc,session('admin')->maphanloai == 'KVXP' ?'QLNN':null ,array('id' => 'linhvuchoatdong_truc','class' => 'form-control select2me')) !!}
                     </div>
                 </div>
-
                 <div class="row">
 
                     <div class="col-md-6">
@@ -462,17 +461,17 @@
                     </div>
 
                     <div class="col-md-3">
-                        {!! Form::text('tongngaycong','',array('id' => 'tongngaycong', 'class' => 'form-control',
+                        {!! Form::text('tongngaycong',session('admin')->songaycong,array('id' => 'tongngaycong', 'class' => 'form-control',
                             'placeholder'=>'Tổng số ngày công', 'data-mask'=>'fdecimal','readonly'=>'true','title'=>'Tổng số ngày công trong tháng'))!!}
                     </div>
 
                     <div class="col-md-3">
-                        {!! Form::text('ngaycong','',array('id' => 'ngaycong', 'class' => 'form-control','placeholder'=>'Ngày công',
+                        {!! Form::text('ngaycong',1,array('id' => 'ngaycong', 'class' => 'form-control','placeholder'=>'Ngày công',
                             'data-mask'=>'fdecimal','readonly'=>'true','title'=>'Số ngày công trích nộp'))!!}
                     </div>
 
                     <div class="col-md-4">
-                        {!! Form::text('phantramtinh','',array('id' => 'phantramtinh', 'class' => 'form-control','placeholder'=>'Phần trăm tính trích nộp',
+                        {!! Form::text('phantramtinh','100',array('id' => 'phantramtinh', 'class' => 'form-control','placeholder'=>'Phần trăm tính trích nộp',
                         'data-mask'=>'fdecimal','readonly'=>'true','title'=>'Phần trăm tính'))!!}
                     </div>
                 </div>
@@ -494,6 +493,7 @@
                 <input type="hidden" id="thang" name="thang" value="{{$inputs['thang']}}"/>
                 <input type="hidden" id="nam" name="nam" value="{{$inputs['nam']}}"/>
                 <input type="hidden" id="mabl_trichnop" name="mabl_trichnop"/>
+                <input type="hidden" id="mabl" name="mabl"/>
                 <input type="hidden" id="phanloai" name="phanloai"/>
                 <input type="hidden" id="phanloai_pptinh" name="phanloai_pptinh" value="sotien"/>
             </div>

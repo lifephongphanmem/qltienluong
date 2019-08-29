@@ -2243,7 +2243,6 @@ class bangluongController extends Controller
             $inputs = $request->all();
             $model = bangluong::where('mabl', $inputs['mabl'])->first();
             if (count($model) > 0) {
-                //dd($inputs);
                 $model->update($inputs);
                 return redirect('/chuc_nang/bang_luong/chi_tra?thang=' . $inputs['thang'] . '&nam=' . $inputs['nam']);
             } else {
@@ -2296,86 +2295,92 @@ class bangluongController extends Controller
     function store_trichnop(Request $request){
         if (Session::has('admin')) {
             $inputs = $request->all();
-            $madv = session('admin')->madv;
-            $inputs['mabl'] = $madv . '_' . getdate()[0];
-            $inputs['maquy'] = $inputs['mabl'];
-            $inputs['madv'] = $madv;
-            //dd($inputs);
-            $model_canbo = (new data())->getBangluong_ct($inputs['thang'],$inputs['mabl_trichnop']);
-            $a_phucap = array_column(dmphucap_donvi::where('madv', session('admin')->madv)
-                ->where('phanloai','<','3')->get()->toarray(),'mapc');
-            $a_data = array();
+            $model = bangluong::where('mabl', $inputs['mabl'])->first();
+            if (count($model) > 0) {
+                $model->update($inputs);
+                return redirect('/chuc_nang/bang_luong/chi_tra?thang=' . $inputs['thang'] . '&nam=' . $inputs['nam']);
+            } else {
+                $madv = session('admin')->madv;
+                $inputs['mabl'] = $madv . '_' . getdate()[0];
+                $inputs['maquy'] = $inputs['mabl'];
+                $inputs['madv'] = $madv;
+                //dd($inputs);
+                $model_canbo = (new data())->getBangluong_ct($inputs['thang'], $inputs['mabl_trichnop']);
+                $a_phucap = array_column(dmphucap_donvi::where('madv', session('admin')->madv)
+                    ->where('phanloai', '<', '3')->get()->toarray(), 'mapc');
+                $a_data = array();
 
-            switch ($inputs['pptinh']) {
-                case 'sotien': {
-                    foreach ($model_canbo as $cb) {
-                        $trichnop = round(chkDbl($inputs['sotien']),$inputs['lamtron']);
-                        $a_data[] = array('mabl' => $inputs['mabl'], 'congtac' => $inputs['phanloai'], 'ttl' => $trichnop,
-                            'macvcq' => $cb->macvcq, 'mapb' => $cb->mapb, 'mact' => $cb->mact, 'macanbo' => $cb->macanbo,
-                            'tencanbo' => $cb->tencanbo,'stt'=>$cb->stt);
+                switch ($inputs['pptinh']) {
+                    case 'sotien': {
+                        foreach ($model_canbo as $cb) {
+                            $trichnop = round(chkDbl($inputs['sotien']), $inputs['lamtron']);
+                            $a_data[] = array('mabl' => $inputs['mabl'], 'congtac' => $inputs['phanloai'], 'ttl' => $trichnop,
+                                'macvcq' => $cb->macvcq, 'mapb' => $cb->mapb, 'mact' => $cb->mact, 'macanbo' => $cb->macanbo,
+                                'tencanbo' => $cb->tencanbo, 'stt' => $cb->stt);
+                        }
+                        break;
                     }
-                    break;
-                }
-                case 'ngaycong': {
-                    $inputs['tongngaycong'] = chkDbl($inputs['tongngaycong']) < 1 ? 1 : chkDbl($inputs['tongngaycong']);
-                    $inputs['phantramtinh'] = chkDbl($inputs['phantramtinh']) <= 0 || chkDbl($inputs['phantramtinh'])>100
+                    case 'ngaycong': {
+                        $inputs['tongngaycong'] = chkDbl($inputs['tongngaycong']) < 1 ? 1 : chkDbl($inputs['tongngaycong']);
+                        $inputs['phantramtinh'] = chkDbl($inputs['phantramtinh']) <= 0 || chkDbl($inputs['phantramtinh']) > 100
                             ? 100 : chkDbl($inputs['phantramtinh']);
-                    $inputs['ngaycong'] = chkDbl($inputs['ngaycong']);
+                        $inputs['ngaycong'] = chkDbl($inputs['ngaycong']);
 
-                    $heso = ($inputs['ngaycong'] * $inputs['phantramtinh']) / ($inputs['tongngaycong'] * 100);
-                    foreach ($model_canbo as $cb) {
-                        $sotien = 0;
-                        if(!isset($inputs['phucap']) || in_array('ALL',$inputs['phucap'])){
-                            foreach($a_phucap as $pc){
-                                $pc_st = 'st_'.$pc;
-                                $sotien += $cb->$pc_st;
+                        $heso = ($inputs['ngaycong'] * $inputs['phantramtinh']) / ($inputs['tongngaycong'] * 100);
+                        foreach ($model_canbo as $cb) {
+                            $sotien = 0;
+                            if (!isset($inputs['phucap']) || in_array('ALL', $inputs['phucap'])) {
+                                foreach ($a_phucap as $pc) {
+                                    $pc_st = 'st_' . $pc;
+                                    $sotien += $cb->$pc_st;
+                                }
+                            } else {
+                                foreach ($inputs['phucap'] as $pc) {
+                                    $pc_st = 'st_' . $pc;
+                                    $sotien += $cb->$pc_st;
+                                }
                             }
-                        }else{
-                            foreach($inputs['phucap'] as $pc){
-                                $pc_st = 'st_'.$pc;
-                                $sotien += $cb->$pc_st;
-                            }
+                            //dd($inputs);
+                            $trichnop = round($sotien * $heso, $inputs['lamtron']);
+
+                            $a_data[] = array('mabl' => $inputs['mabl'], 'congtac' => $inputs['phanloai'], 'ttl' => $trichnop,
+                                'macvcq' => $cb->macvcq, 'mapb' => $cb->mapb, 'mact' => $cb->mact, 'macanbo' => $cb->macanbo,
+                                'tencanbo' => $cb->tencanbo, 'stt' => $cb->stt);
                         }
-                        //dd($inputs);
-                        $trichnop = round($sotien * $heso,$inputs['lamtron']);
-
-                        $a_data[] = array('mabl' => $inputs['mabl'], 'congtac' => $inputs['phanloai'], 'ttl' => $trichnop,
-                            'macvcq' => $cb->macvcq, 'mapb' => $cb->mapb, 'mact' => $cb->mact, 'macanbo' => $cb->macanbo,
-                            'tencanbo' => $cb->tencanbo,'stt'=>$cb->stt);
+                        break;
                     }
-                    break;
-                }
-                case 'phantram': {
-                    $inputs['phantram'] = chkDbl($inputs['phantram']);
-                    foreach ($model_canbo as $cb) {
-                        $sotien = 0;
-                        if(!isset($inputs['phucap']) || in_array('ALL',$inputs['phucap'])){
-                            foreach($a_phucap as $pc){
-                                $pc_st = 'st_'.$pc;
-                                $sotien += $cb->$pc_st;
+                    case 'phantram': {
+                        $inputs['phantram'] = chkDbl($inputs['phantram']);
+                        foreach ($model_canbo as $cb) {
+                            $sotien = 0;
+                            if (!isset($inputs['phucap']) || in_array('ALL', $inputs['phucap'])) {
+                                foreach ($a_phucap as $pc) {
+                                    $pc_st = 'st_' . $pc;
+                                    $sotien += $cb->$pc_st;
+                                }
+                            } else {
+                                foreach ($inputs['phucap'] as $pc) {
+                                    $pc_st = 'st_' . $pc;
+                                    $sotien += $cb->$pc_st;
+                                }
                             }
-                        }else{
-                            foreach($inputs['phucap'] as $pc){
-                                $pc_st = 'st_'.$pc;
-                                $sotien += $cb->$pc_st;
-                            }
+                            $trichnop = round(($sotien / 100) * $inputs['phantram'], $inputs['lamtron']);
+                            $a_data[] = array('mabl' => $inputs['mabl'], 'congtac' => $inputs['phanloai'], 'ttl' => $trichnop,
+                                'macvcq' => $cb->macvcq, 'mapb' => $cb->mapb, 'mact' => $cb->mact, 'macanbo' => $cb->macanbo,
+                                'tencanbo' => $cb->tencanbo, 'stt' => $cb->stt);
                         }
-                        $trichnop = round(($sotien / 100) * $inputs['phantram'],$inputs['lamtron']);
-                        $a_data[] = array('mabl' => $inputs['mabl'], 'congtac' => $inputs['phanloai'], 'ttl' => $trichnop,
-                            'macvcq' => $cb->macvcq, 'mapb' => $cb->mapb, 'mact' => $cb->mact, 'macanbo' => $cb->macanbo,
-                            'tencanbo' => $cb->tencanbo,'stt'=>$cb->stt);
+
+                        break;
                     }
-
-                    break;
                 }
-            }
 
-            foreach(array_chunk($a_data, 100)  as $data){
-                bangluong_truc::insert($data);
-            }
-            bangluong::create($inputs);
+                foreach (array_chunk($a_data, 100) as $data) {
+                    bangluong_truc::insert($data);
+                }
+                bangluong::create($inputs);
 
-            return redirect('/chuc_nang/bang_luong/bang_luong?mabl=' . $inputs['mabl'].'&mapb=');
+                return redirect('/chuc_nang/bang_luong/bang_luong?mabl=' . $inputs['mabl'] . '&mapb=');
+            }
         } else
             return view('errors.notlogin');
     }
@@ -2438,8 +2443,18 @@ class bangluongController extends Controller
             $m_bl = bangluong::select('thang', 'nam', 'mabl','phanloai')->where('mabl', $inputs['mabl'])->first();
             $model_nhomct = dmphanloaicongtac::select('macongtac','tencongtac')->get();
             $model_tenct = dmphanloaict::select('tenct','macongtac','mact')->get();
-            $model = (new data())->getBangluong_ct($m_bl->thang, $m_bl->mabl);
 
+            if($m_bl->phanloai == 'TRICHNOP'){
+                $model = bangluong_truc::where('mabl', $inputs['mabl'])->get();
+                $a_pl = getPhanLoaiBangLuong();
+                $m_bl->tenphanloai = isset($a_pl[$m_bl->phanloai]) ? $a_pl[$m_bl->phanloai]: '';
+                return view('manage.bangluong.bangluong_truc')
+                    ->with('furl', '/chuc_nang/bang_luong/')
+                    ->with('model', $model)
+                    ->with('m_bl', $m_bl)
+                    ->with('pageTitle', 'Bảng lương chi tiết');
+            }
+            $model = (new data())->getBangluong_ct($m_bl->thang, $m_bl->mabl);
             if($inputs['mapb'] != ''){
                 $model = $model->where('mapb',$inputs['mapb']);
             }
