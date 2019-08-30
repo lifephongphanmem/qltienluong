@@ -161,19 +161,20 @@
             @foreach($a_phucap as $key=>$val)
                 <td>{{dinhdangsothapphan($chitiet->sum('hs'.$key) ,5)}}</td>
             @endforeach
+
             <?php $tongluong = 0;?>
             @foreach($a_phucap as $key=>$val)
                 <?php
 
                 $ma = 'st_'.$key;
-                $tongluong += $chitiet->$ma;
+                $tongluong += $chitiet->sum('st_'.$key);
                 ?>
                 <td>{{dinhdangso($chitiet->sum('st_'.$key))}}</td>
             @endforeach
 
             <td>{{dinhdangso($tongluong)}}</td>
             <td>{{dinhdangso($chitiet->sum('giaml'))}}</td>
-            <td>{{dinhdangso($chitiet->sum($tongluong - $chitiet->sum('giaml')))}}</td>
+            <td>{{dinhdangso($tongluong - $chitiet->sum('giaml'))}}</td>
 
             <td>{{dinhdangso($chitiet->sum('stbhxh_dv'))}}</td>
             <td>{{dinhdangso($chitiet->sum('stbhyt_dv'))}}</td>
@@ -195,9 +196,9 @@
             <?php
 
             $ma = 'st_'.$key;
-            $tongluong += $model->$ma;
+            $tongluong += $chitiet->sum('st_'.$key);
             ?>
-            <td>{{dinhdangso($model->sum('st_'.$key))}}</td>
+            <td>{{dinhdangso($chitiet->sum('st_'.$key))}}</td>
         @endforeach
 
         <td>{{dinhdangso($tongluong)}}</td>
@@ -224,7 +225,7 @@
     </tr>
     <tr style="font-style: italic">
         <td style="text-align: center;" width="50%">(Ghi rõ họ tên)</td>
-        <td style="text-align: center;" width="50%">(Ký tên, đóng dấu) </td>
+        <td style="text-align: center;" width="50%">(Ký tên, đóng dấu)</td>
     </tr>
     <tr>
         <td><br><br><br></td>
