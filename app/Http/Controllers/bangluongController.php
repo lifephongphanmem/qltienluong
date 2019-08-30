@@ -117,7 +117,7 @@ class bangluongController extends Controller
             $inputs['thaotac'] = $thaotac;
 
             $a_pc = array('heso','vuotkhung','pctnn','pccovu','pcud61','pcudn','hesott',
-                'pccv','pctaicu','hesopc','pcthni','pctn'); //do các loại phụ cấp lưu lại
+                'pccv','pctaicu','hesopc','pcthni'); //do các loại phụ cấp lưu lại
 
             $m_nguonkp_bl = $m_nguonkp->wherein('manguonkp', a_unique(array_column($model->toarray(),'manguonkp')));
             $a_phucap_trichnop = dmphucap_donvi::where('madv', session('admin')->madv)->where('phanloai','<','3')->get();

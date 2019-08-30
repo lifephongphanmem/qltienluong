@@ -56,6 +56,7 @@
                             <tr>
                                 <th class="text-center" style="width: 5%">STT</th>
                                 <th class="text-center">Năm được giao</th>
+                                <th class="text-center">Lĩnh vực công tác</th>
                                 <th class="text-center">Phân loại công tác</th>
                                 <th class="text-center">Số lượng biên chế</br>được giao</th>
                                 <th class="text-center">Thao tác</th>
@@ -63,24 +64,23 @@
                         </thead>
 
                         <tbody>
-                            @if(isset($model))
-                                @foreach($model as $key=>$value)
-                                    <tr>
-                                        <td class="text-center">{{$key+1}}</td>
-                                        <td class="text-center">{{$value->nam}}</td>
-                                        <td>{{$value->tenct}}</td>
-                                        <td class="text-center">{{$value->soluongduocgiao}}</td>
-                                        <td>
-                                            @if($inputs['trangthai'])
-                                                <button type="button" onclick="edit({{$value->id}})" class="btn btn-default btn-xs mbs">
-                                                    <i class="fa fa-edit"></i>&nbsp;Sửa</button>
-                                                <button type="button" onclick="cfDel('{{$furl.'del/'.$value->id}}')" class="btn btn-danger btn-xs mbs" data-target="#delete-modal-confirm" data-toggle="modal">
-                                                    <i class="fa fa-trash-o"></i>&nbsp;Xóa</button>
-                                            @endif
-                                        </td>
-                                    </tr>
-                                @endforeach
-                            @endif
+                            @foreach($model as $key=>$value)
+                                <tr>
+                                    <td class="text-center">{{$key+1}}</td>
+                                    <td class="text-center">{{$value->nam}}</td>
+                                    <td>{{isset($m_lv[$value->linhvuchoatdong])? $m_lv[$value->linhvuchoatdong] : ''}}</td>
+                                    <td>{{$value->tenct}}</td>
+                                    <td class="text-center">{{$value->soluongduocgiao}}</td>
+                                    <td>
+                                        @if($inputs['trangthai'])
+                                            <button type="button" onclick="edit({{$value->id}})" class="btn btn-default btn-xs mbs">
+                                                <i class="fa fa-edit"></i>&nbsp;Sửa</button>
+                                            <button type="button" onclick="cfDel('{{$furl.'del/'.$value->id}}')" class="btn btn-danger btn-xs mbs" data-target="#delete-modal-confirm" data-toggle="modal">
+                                                <i class="fa fa-trash-o"></i>&nbsp;Xóa</button>
+                                        @endif
+                                    </td>
+                                </tr>
+                            @endforeach
                         </tbody>
                     </table>
                 </div>
@@ -99,12 +99,21 @@
                 <div class="modal-body">
                     <div class="form-horizontal">
                         <div class="row">
-                            <div class="col-md-5">
+                            <div class="col-md-12">
                                 <label class="control-label">Năm được giao</label>
                                 {!!Form::select('nam', getNam(), date('Y') + 1, array('id' => 'nam','class' => 'form-control text-right'))!!}
                             </div>
+                        </div>
 
-                            <div class="col-md-7">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <label class="control-label">Lĩnh vực công tác </label>
+                                {!! Form::select('linhvuchoatdong',$m_lv,session('admin')->maphanloai == 'KVXP' ?'QLNN':null ,array('id' => 'linhvuchoatdong','class' => 'form-control select2me')) !!}
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-12">
                                 <label class="control-label">Phân loại công tác</label>
                                 <select class="form-control select2me" name="mact" id="mact" required="required">
                                     @foreach($model_nhomct as $kieuct)
@@ -120,18 +129,17 @@
                         </div>
 
                         <div class="row">
-                            <div class="col-md-5">
+                            <div class="col-md-12">
                                 <label class="control-label">Biên chế được giao</label>
                                 {!!Form::text('soluongduocgiao', null, array('id' => 'soluongduocgiao','class' => 'form-control text-right', 'data-mask'=>'fdecimal'))!!}
                             </div>
-
-                            {{--<div class="col-md-6">--}}
-                                {{--<label class="control-label">Cán bộ không chuyên trách</label>--}}
-                                {{--{!!Form::text('soluongkhongchuyentrach', null, array('id' => 'soluongkhongchuyentrach','class' => 'form-control text-right', 'data-mask'=>'fdecimal'))!!}--}}
-                            {{--</div>--}}
                         </div>
 
                         {{--<div class="row">--}}
+                            {{--<div class="col-md-6">--}}
+                            {{--<label class="control-label">Cán bộ không chuyên trách</label>--}}
+                            {{--{!!Form::text('soluongkhongchuyentrach', null, array('id' => 'soluongkhongchuyentrach','class' => 'form-control text-right', 'data-mask'=>'fdecimal'))!!}--}}
+                            {{--</div>--}}
                             {{--<div class="col-md-6">--}}
                                 {{--<label class="control-label">Cán bộ cấp ủy viên</label>--}}
                                 {{--{!!Form::text('soluonguyvien', null, array('id' => 'soluonguyvien','class' => 'form-control text-right', 'data-mask'=>'fdecimal'))!!}--}}
@@ -180,6 +188,7 @@
                     $('#nam').val(data.nam);
                     $('#soluongduocgiao').val(data.soluongduocgiao);
                     $('#mact').val(data.mact).trigger('change');
+                    $('#linhvuchoatdong').val(data.linhvuchoatdong).trigger('change');
 //                    $('#soluongkhongchuyentrach').val(data.soluongkhongchuyentrach);
 //                    $('#soluonguyvien').val(data.soluonguyvien);
 //                    $('#soluongdaibieuhdnd').val(data.soluongdaibieuhdnd);
@@ -204,6 +213,7 @@
                     _token: CSRF_TOKEN,
                     id: $('#id_ct').val(),
                     mact: $('#mact').val(),
+                    linhvuchoatdong: $('#linhvuchoatdong').val(),
                     nam:$('#nam').val(),
                     soluongduocgiao:$('#soluongduocgiao').val()
 //                    soluongkhongchuyentrach:$('#soluongkhongchuyentrach').val(),

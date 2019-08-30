@@ -224,13 +224,18 @@
                                             <div class="row">
                                                 <div class="col-md-offset-4 col-md-8" style="padding-top: 15px">
                                                     <input type="checkbox" checked id="nghihuu" name="nghihuu" />
-                                                    <label for="nghihuu">Không tính dự toán cho cán bộ nghỉ hưu</label>
+                                                    <label for="nghihuu">Tính dự toán cho cán bộ nghỉ hưu</label>
                                                 </div>
 
                                                 <div class="col-md-offset-4 col-md-8" style="padding-top: 15px">
                                                     <input type="checkbox" id="baohiem" name="baohiem" />
                                                     <label for="baohiem">Tính bảo hiểm cho cán bộ chưa tuyển</label>
                                                 </div>
+
+                                                {{--<div class="col-md-offset-4 col-md-8" style="padding-top: 15px">--}}
+                                                    {{--<input type="checkbox" id="thaisan" name="thaisan" />--}}
+                                                    {{--<label for="thaisan">Tính thời gian nghỉ thai sản của cán bộ</label>--}}
+                                                {{--</div>--}}
                                             </div>
                                         </div>
                                     </div>

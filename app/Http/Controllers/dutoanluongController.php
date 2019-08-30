@@ -182,7 +182,7 @@ class dutoanluongController extends Controller
                 ->where('madv', session('admin')->madv)
                 ->wherein('mact', $a_plct)
                 ->get()->keyBy('macanbo')->toarray();
-            $a_th = array_merge(array('ngaysinh', 'tencanbo', 'stt', 'gioitinh', 'msngbac', 'bac',
+            $a_th = array_merge(array('ngaysinh', 'tencanbo', 'stt', 'gioitinh', 'msngbac', 'bac','ngayvao','ngaybc',
                 'bhxh_dv', 'bhyt_dv', 'bhtn_dv', 'kpcd_dv','ngaytu','ngayden','tnntungay','tnndenngay'), $a_th);
             $model = hosocanbo::select($a_th)->where('madv', session('admin')->madv)
                 ->where('theodoi', '<', '9')
@@ -234,6 +234,16 @@ class dutoanluongController extends Controller
                     $cb->nam_tnn = null;
                     $cb->thang_tnn = null;
                 }
+
+                if (getDayVn($cb->ngayvao) != '') {
+                    $dt_hh = date_create($cb->ngayvao);
+                    $cb->nam_hh = date_format($dt_hh, 'Y');
+                    $cb->thang_hh = date_format($dt_hh, 'm');
+
+                } else {
+                    $cb->nam_hh = null;
+                    $cb->thang_hh = null;
+                }
             }
             //lọc danh sach cán bộ
             //$model = $model->wherein('macongtac', ['BIENCHE', 'KHONGCT']);
@@ -241,6 +251,7 @@ class dutoanluongController extends Controller
 
             $m_cb = $model->keyBy('macanbo')->toarray();
             //dd($m_cb);
+            $m_hh = $model->where('ngayvao','>=' ,$inputs['namdt'].'-01-01')->where('ngayvao','<=' ,$inputs['namdt'].'-12-31')->keyBy('macanbo')->toarray();
             $m_nh = $model->where('nam_ns', '<>', '')->where('nam_ns', '<=', $inputs['namdt'])->keyBy('macanbo')->toarray();
             $m_nb = $model->where('nam_nb', '<>', '')->where('nam_nb', '=', $inputs['namdt'])->keyBy('macanbo')->toarray();
             $m_tnn = $model->where('nam_tnn', '<>', '')->where('nam_tnn', '=', $inputs['namdt'])->keyBy('macanbo')->toarray();
@@ -385,6 +396,15 @@ class dutoanluongController extends Controller
                 }
                 //lưu vào 1 mảng
                 foreach ($m_cb as $key => $val) {
+                    //kiem tra can bo het han lao dong => bo wa
+                    if (isset($m_hh[$key]) && $m_hh[$key]['thang_hh'] < $a_thang[$i]['thang']) {
+                        continue;
+                    }
+                    //nếu cán bộ chưa đến hạn công tác =>bỏ qua
+                    if ($m_cb[$key]['ngaybc'] > $a_thang[$i]['nam'].'-'.$a_thang[$i]['nam'].'-01') {
+                        continue;
+                    }
+
                     $m_cb[$key]['thang'] = $a_thang[$i]['thang'];
                     $m_cb[$key]['nam'] = $a_thang[$i]['nam'];
                     $a_data[] = $m_cb[$key];
@@ -394,7 +414,7 @@ class dutoanluongController extends Controller
 
             $a_col = array('bac', 'bhxh_dv', 'bhtn_dv', 'kpcd_dv', 'bhyt_dv', 'gioitinh', 'nam_nb', 'nam_ns',
                 'thang_nb', 'thang_ns', 'thang_tnn', 'ngayden', 'ngaysinh', 'tnndenngay', 'pcctp', 'st_pcctp',
-                'ngaytu','tnntungay','nam_tnn');
+                'ngaytu','tnntungay','nam_tnn', 'nam_hh', 'thang_hh','ngaybc', 'ngayvao');
             $a_data_nl = unset_key($a_data_nl, $a_col);
             $a_data = unset_key($a_data, $a_col);
             //dd($a_data_nl);
@@ -490,7 +510,6 @@ class dutoanluongController extends Controller
             $inputs['namns'] = $inputs['namdt'];
 
             dutoanluong::create($inputs);
-
             return redirect('/nghiep_vu/quan_ly/du_toan/danh_sach');
         } else
             return view('errors.notlogin');
@@ -498,6 +517,7 @@ class dutoanluongController extends Controller
 
     //mới tính lấy tháng lương cán bộ (bỏ các loại nghỉ) * 12 tháng
     //chưa tính nâng lương.
+    //tạm thời bỏ
     function create_mau(Request $request)
     {
         $result = array(

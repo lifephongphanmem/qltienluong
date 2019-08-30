@@ -21,6 +21,7 @@ use App\nguonkinhphi_huyen;
 use App\nguonkinhphi_khoi;
 use App\nguonkinhphi_nangluong;
 use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Request;
 
 use App\Http\Controllers\Controller;
@@ -52,11 +53,6 @@ class nguonkinhphiController extends Controller
             $model_thongtu = dmthongtuquyetdinh::where('sohieu',$inputs['sohieu'])->first();
             $ngayapdung = new Carbon($model_thongtu->ngayapdung);
             $inputs['namdt'] = chkDbl($model_thongtu->namdt) == 0 ? date('Y'): date_format($ngayapdung, 'Y');
-            /*
-            $model_ttqd = dmthongtuquyetdinh::where('sohieu', $inputs['sohieu'])->first();
-            $nam = date_format($ngayapdung, 'Y');
-            $thang = date_format($ngayapdung, 'm');
-             * */
 
             //Kiểm tra nếu có rồi thì ko tạo
             $chk = nguonkinhphi::where('sohieu',$inputs['sohieu'])
@@ -76,16 +72,15 @@ class nguonkinhphiController extends Controller
                 ->where('madv', session('admin')->madv)->wherein('mapc',getColTongHop())->get()->toarray();
             $a_nhomnb = ngachluong::all()->keyBy('msngbac')->toarray();
             $masodv = session('admin')->madv . '_' . getdate()[0];
-
             $inputs['chenhlech'] = chkDbl($inputs['chenhlech']);
 
             $a_th = array_merge(array('macanbo', 'mact', 'macvcq', 'mapb', 'ngayden'),getColTongHop());
-
             $m_cb_kn = hosocanbo_kiemnhiem::select($a_th)
                 ->where('madv', session('admin')->madv)
                 ->wherein('mact',$a_plct)
                 ->get()->keyBy('macanbo')->toarray();
-            $a_th = array_merge(array('stt','ngaysinh','tencanbo', 'tnndenngay', 'gioitinh', 'msngbac', 'bac', 'bhxh_dv', 'bhyt_dv', 'bhtn_dv', 'kpcd_dv', 'ngaybc', 'ngayvao'),$a_th);
+            $a_th = array_merge(array('stt','ngaysinh','tencanbo', 'tnndenngay', 'gioitinh', 'msngbac', 'bac',
+                'bhxh_dv', 'bhyt_dv', 'bhtn_dv', 'kpcd_dv', 'ngaybc', 'ngayvao'),$a_th);
             $model = hosocanbo::select($a_th)->where('madv', session('admin')->madv)
                 ->where('theodoi','<', '9')
                 ->get();
@@ -104,9 +99,13 @@ class nguonkinhphiController extends Controller
                 ->where('maphanloai', 'DAINGAY')->get()->toarray(),'macanbo');
             */
             //$inputs['namdt']
-            $m_ts = hosotamngungtheodoi::where('madv', session('admin')->madv)->where('maphanloai', 'THAISAN')
-                ->whereBetween('ngayden', [Carbon::create($inputs['namdt'])->startOfYear(),Carbon::create($inputs['namdt']+1)->endOfYear()])
-                ->get();
+            if(isset($inputs['thaisan'])){
+                $m_ts = hosotamngungtheodoi::where('madv', session('admin')->madv)->where('maphanloai', 'THAISAN')
+                    ->whereBetween('ngayden', [Carbon::create($inputs['namdt'])->startOfYear(),Carbon::create($inputs['namdt']+1)->endOfYear()])
+                    ->get();
+            }else{
+                $m_ts = new Collection();
+            }
             //$a_pc_ts = array_column(dmphucap_thaisan::where('madv', session('admin')->madv)->get()->toarray(), 'mapc');
             $a_pc_ts = array_column(dmphucap_donvi::where('madv', session('admin')->madv)
                 ->where('phanloai','<','3')->where('thaisan','1')->get()->toarray(), 'mapc');
@@ -115,11 +114,6 @@ class nguonkinhphiController extends Controller
             $model = (new dataController())->getCanBo($model,$model_thongtu->ngayapdung,true,$model_thongtu->ngayapdung);
 
             foreach($model as $cb){
-                /*
-                if(getDayVn($cb->ngaybc) != '' && $cb->ngaybc > $model_thongtu->ngayapdung){
-                    continue;
-                }
-                */
                 $cb->macongtac = $a_congtac[$cb->mact];
                 $cb->masodv = $masodv;
                 //trong bảng danh mục là % vượt khung => sang bảng lương chuyển thành hệ số
@@ -171,8 +165,6 @@ class nguonkinhphiController extends Controller
             $model = $model->wherein('mact',$a_plct);
             //lấy danh sách cán bộ chưa nâng lương từ tháng 01-06 => tự nâng lương
 
-            //$model = $model->wherein('macongtac',['BIENCHE','KHONGCT','HOPDONG']);
-
             $m_cb = $model->keyBy('macanbo')->toarray();
             //làm tùy chọn tính nghỉ hưu
             $m_hh = $model->where('ngayvao','>=' ,$model_thongtu->ngayapdung)->where('ngayvao','<=' ,$inputs['namdt'].'-12-31')->keyBy('macanbo')->toarray();
@@ -218,13 +210,15 @@ class nguonkinhphiController extends Controller
             }
 
             foreach($m_nb as $key =>$val){
-                //kiểm tra xem tháng đó có nâng lương có nghỉ ts ko nếu có tháng nâng lương thành tháng ngay sau ngày nghỉ
-                $ngaylap = Carbon::create($val['nam_nb'], $val['thang_nb'], '01');
-                $a_ts = $m_ts->where('macanbo',$key)->where('ngaytu', '<=', $ngaylap)->where('ngayden', '>=', $ngaylap);
-                if(count($a_ts) > 0){
-                    $dt_luong = date_create($a_ts->first()->ngayden);
-                    $m_nb[$key]['thang_nb'] = date_format($dt_luong, 'm')+1;
-                    //dd($m_nb[$key]);
+                if(isset($inputs['thaisan'])){
+                    //kiểm tra xem tháng đó có nâng lương có nghỉ ts ko nếu có tháng nâng lương thành tháng ngay sau ngày nghỉ
+                    $ngaylap = Carbon::create($val['nam_nb'], $val['thang_nb'], '01');
+                    $a_ts = $m_ts->where('macanbo',$key)->where('ngaytu', '<=', $ngaylap)->where('ngayden', '>=', $ngaylap);
+                    if(count($a_ts) > 0){
+                        $dt_luong = date_create($a_ts->first()->ngayden);
+                        $m_nb[$key]['thang_nb'] = date_format($dt_luong, 'm')+1;
+                        //dd($m_nb[$key]);
+                    }
                 }
 
                 if(isset($a_nhomnb[$val['msngbac']])){
@@ -253,12 +247,14 @@ class nguonkinhphiController extends Controller
             }
             //dd($m_tnn);
             foreach ($m_tnn as $key => $val) {
-                //kiểm tra xem tháng đó có nâng lương có nghỉ ts ko nếu có tháng nâng lương thành tháng ngay sau ngày nghỉ
-                $ngaylap = Carbon::create($val['nam_tnn'], $val['thang_tnn'], '01');
-                $a_ts = $m_ts->where('macanbo',$key)->where('ngaytu', '<=', $ngaylap)->where('ngayden', '>=', $ngaylap);
-                if(count($a_ts) > 0){
-                    $dt_luong = date_create($a_ts->first()->ngayden);
-                    $m_tnn[$key]['thang_tnn'] = date_format($dt_luong, 'm');
+                if(isset($inputs['thaisan'])) {
+                    //kiểm tra xem tháng đó có nâng lương có nghỉ ts ko nếu có tháng nâng lương thành tháng ngay sau ngày nghỉ
+                    $ngaylap = Carbon::create($val['nam_tnn'], $val['thang_tnn'], '01');
+                    $a_ts = $m_ts->where('macanbo', $key)->where('ngaytu', '<=', $ngaylap)->where('ngayden', '>=', $ngaylap);
+                    if (count($a_ts) > 0) {
+                        $dt_luong = date_create($a_ts->first()->ngayden);
+                        $m_tnn[$key]['thang_tnn'] = date_format($dt_luong, 'm');
+                    }
                 }
 
                 $m_tnn[$key]['pctnn'] = $m_tnn[$key]['pctnn'] == 0 ? 5: $m_tnn[$key]['pctnn'] + 1;
@@ -305,11 +301,11 @@ class nguonkinhphiController extends Controller
             //dd($m_cb);
             for($i=0;$i<count($a_thang);$i++) {
                 $a_nh = a_getelement($m_nh, array('thang_ns' => $a_thang[$i]['thang']));
-                if(count($a_nh) > 0){
+                if (count($a_nh) > 0) {
                     foreach ($a_nh as $key => $val) {
                         if (isset($inputs['nghihuu'])) {
                             $m_cb[$key] = $a_nh[$key];
-                        }else{
+                        } else {
                             $m_cb[$key]['tencanbo'] .= ' (nghỉ hưu)';
                         }
                         $a_danghihuu[] = $key;
@@ -317,9 +313,9 @@ class nguonkinhphiController extends Controller
                 }
 
                 $a_nb = a_getelement($m_nb, array('thang_nb' => $a_thang[$i]['thang']));
-                if(count($a_nb) > 0){
-                    foreach($a_nb as $key=>$val){
-                        if(!in_array($key,$a_danghihuu)){
+                if (count($a_nb) > 0) {
+                    foreach ($a_nb as $key => $val) {
+                        if (!in_array($key, $a_danghihuu)) {
                             if ($a_thang[$i]['thang'] != '07') {//nâng lương vào tháng 07 => ko tính chênh lệch nâng lương
                                 $a_data_nl[] = $this->getHeSoPc_Sub($a_pc, $a_nb[$key], $a_luu[$key], 'NGACHBAC', $a_thang[$i]['thang'], $a_thang[$i]['nam']);
                             }
@@ -328,9 +324,9 @@ class nguonkinhphiController extends Controller
                     }
                 }
                 $a_tnn = a_getelement($m_tnn, array('thang_tnn' => $a_thang[$i]['thang']));
-                if(count($a_tnn) > 0){
-                    foreach($a_tnn as $key=>$val){
-                        if(!in_array($key,$a_danghihuu)){
+                if (count($a_tnn) > 0) {
+                    foreach ($a_tnn as $key => $val) {
+                        if (!in_array($key, $a_danghihuu)) {
                             if ($a_thang[$i]['thang'] != '07') {//nâng lương vào tháng 01 => ko tính chênh lệch nâng lương
                                 $a_data_nl[] = $this->getHeSoPc_Sub($a_pc, $a_tnn[$key], $m_cb[$key], 'THAMNIENNGHE', $a_thang[$i]['thang'], $a_thang[$i]['nam']);
                             }
@@ -341,27 +337,29 @@ class nguonkinhphiController extends Controller
 
                 $ngaylap = Carbon::create($a_thang[$i]['nam'], $a_thang[$i]['thang'], '01');
                 //lưu vào 1 mảng
-                foreach($m_cb as $key =>$val){
+                foreach ($m_cb as $key => $val) {
                     //kiem tra can bo het han lao dong => bo wa
-                    if(isset($m_hh[$key]) && $m_hh[$key]['thang_hh'] < $a_thang[$i]['thang']){
+                    if (isset($m_hh[$key]) && $m_hh[$key]['thang_hh'] < $a_thang[$i]['thang']) {
                         continue;
                     }
                     //nếu cán bộ chưa đến hạn công tác =>bỏ qua
-                    if($m_cb[$key]['ngaybc'] > $ngaylap){
+                    if ($m_cb[$key]['ngaybc'] > $ngaylap) {
                         continue;
                     }
 
                     $m_cb[$key]['thang'] = $a_thang[$i]['thang'];
                     $m_cb[$key]['nam'] = $a_thang[$i]['nam'];
-                    //kiểm tra nghỉ thai san không
-                    $a_ts = $m_ts->where('macanbo',$key)->where('ngaytu', '<=', $ngaylap)->where('ngayden', '>=', $ngaylap);
-                    if(count($a_ts)>0){//cán bộ nghỉ ts
-                        $a_cb = $m_cb[$key];
-                        //dd($this->getHeSoPc_ts($a_cb,$a_pc,$a_pc_ts));
-                        $a_data[] = $this->getHeSoPc_ts($a_cb,$a_pc,$a_pc_ts);
-                    }else{
-                        $a_data[] = $m_cb[$key];
+                    if (isset($inputs['thaisan'])) {
+                        //kiểm tra nghỉ thai san không
+                        $a_ts = $m_ts->where('macanbo', $key)->where('ngaytu', '<=', $ngaylap)->where('ngayden', '>=', $ngaylap);
+                        if (count($a_ts) > 0) {//cán bộ nghỉ ts
+                            $a_cb = $m_cb[$key];
+                            //dd($this->getHeSoPc_ts($a_cb,$a_pc,$a_pc_ts));
+                            $a_data[] = $this->getHeSoPc_ts($a_cb, $a_pc, $a_pc_ts);
+                            continue;
+                        }
                     }
+                    $a_data[] = $m_cb[$key];
                 }
             }
 
@@ -370,6 +368,7 @@ class nguonkinhphiController extends Controller
 
             for ($i = 0; $i < count($m_data); $i++) {
                 $dutoan = a_getelement($a_data, array('mact' => $m_data[$i]['mact']));
+                $m_data[$i]['linhvuchoatdong'] = $inputs['linhvuchoatdong'];
                 $m_data[$i]['masodv'] = $masodv;
                 $m_data[$i]['nhucau'] = 0;
                 $m_data[$i]['daibieuhdnd'] = 0;
@@ -450,15 +449,18 @@ class nguonkinhphiController extends Controller
     {
         if (Session::has('admin')) {
             $model = nguonkinhphi::where('masodv', $masodv)->first();
+            $m_thongtu = dmthongtuquyetdinh::where('sohieu',$model->sohieu)->first();
             if (count($model) > 0) {
                 $model->nhucaukp = $model->luongphucap + $model->daibieuhdnd + $model->canbokct
                     + $model->uyvien + $model->boiduong + $model->nghihuu + $model->baohiem;
                 $model->nhucaupc = $model->thunhapthap + $model->diaban
-                    + $model->tinhgiam + $model->nghihuusom;
+                    + $model->tinhgiam + $model->nghihuusom
+                    + $model->kpuudai + $model->kpthuhut;
             }
             return view('manage.nguonkinhphi.edit')
                 ->with('furl', '/nguon_kinh_phi/')
                 ->with('model', $model)
+                ->with('nam',date_format(date_create($m_thongtu->ngayapdung),'Y'))
                 ->with('pageTitle', 'Danh sách nguồn kinh phí của đơn vị');
         } else
             return view('errors.notlogin');
@@ -488,7 +490,18 @@ class nguonkinhphiController extends Controller
             $inputs['tinhgiam'] = chkDbl($inputs['tinhgiam']);
             $inputs['nghihuusom'] = chkDbl($inputs['nghihuusom']);
 
+            $inputs['tietkiem1'] = chkDbl($inputs['tietkiem1']);
+            $inputs['tietkiem2'] = chkDbl($inputs['tietkiem2']);
+            $inputs['thuchien1'] = chkDbl($inputs['thuchien1']);
+            $inputs['dutoan'] = chkDbl($inputs['dutoan']);
+            $inputs['dutoan1'] = chkDbl($inputs['dutoan1']);
+            $inputs['bosung'] = chkDbl($inputs['bosung']);
+            $inputs['caicach'] = chkDbl($inputs['caicach']);
+            $inputs['kpthuhut'] = chkDbl($inputs['kpthuhut']);
+            $inputs['kpuudai'] = chkDbl($inputs['kpuudai']);
+
             $inputs['nhucau'] = chkDbl($inputs['nhucaukp']) + chkDbl($inputs['nhucaupc']);
+
             //dd($inputs);
             $model->update($inputs);
 
