@@ -10,6 +10,7 @@ use App\dmdiabandbkk_chitiet;
 use App\dmdonvi;
 use App\dmdonvibaocao;
 use App\dmphanloaict;
+use App\dmthongtuquyetdinh;
 use App\hosocanbo;
 use App\nguonkinhphi;
 use App\tonghopluong_donvi;
@@ -39,11 +40,12 @@ class baocaothongtu67Controller extends Controller
                 ->where('dmdonvibaocao.level', 'T')
                 ->where('dmdonvi.phanloaitaikhoan', 'TH')
                 ->get();
-            $model_thongtu = dmthongtuquyetdinh::where('sohieu',$inputs['sohieu'])->first();
+            $model_thongtu = dmthongtuquyetdinh::all();
             return view('reports.thongtu67.index')
                 ->with('model_dv', $model_dv)
                 ->with('model_dvbc', $model_dvbc)
                 ->with('model_dvbcT', $model_dvbcT)
+                ->with('model_thongtu', $model_thongtu)
                 ->with('furl', '/tong_hop_bao_cao/')
                 ->with('pageTitle', 'Báo cáo tổng hợp lương');
         } else
@@ -58,9 +60,11 @@ class baocaothongtu67Controller extends Controller
                 ->where('dmdonvibaocao.level','T')
                 ->where('dmdonvi.phanloaitaikhoan','TH' )
                 ->get();
+            $model_thongtu = dmthongtuquyetdinh::all();
             return view('reports.thongtu67.index')
                 ->with('model_dv', $model_dv)
                 ->with('model_dvbcT', $model_dvbcT)
+                ->with('model_thongtu', $model_thongtu)
                 ->with('furl','/tong_hop_bao_cao/')
                 ->with('pageTitle','Báo cáo tổng hợp lương');
         } else
@@ -3304,13 +3308,13 @@ class baocaothongtu67Controller extends Controller
         ///if ((Session::has('admin') && session('admin')->username == 'khthstc') || (Session::has('admin') && session('admin')->username == 'khthso') ) {
             $inputs = $request->all();
             $model = nguonkinhphi::where('madvbc','like',$inputs['madv'].'%')
-                ->where('sohieu','TT67_2017')->get();
+                ->where('sohieu','ND38_2019')->get();
             if(session('admin')->username == 'khthso')
             {
                 $model = nguonkinhphi::join('dmdonvibaocao','dmdonvibaocao.madvbc','=','nguonkinhphi.madvbc')
                     ->where('nguonkinhphi.madvbc','like',$inputs['madv'].'%')
                     ->where('dmdonvibaocao.level','T')
-                    ->where('nguonkinhphi.sohieu','TT67_2017')->get();
+                    ->where('nguonkinhphi.sohieu','ND38_2019')->get();
             }
             $model_donvi = dmdonvi::where('madvbc',session('admin')->madvbc)->get();
             if(count($model) == 0){
@@ -3433,13 +3437,13 @@ class baocaothongtu67Controller extends Controller
         ///if ((Session::has('admin') && session('admin')->username == 'khthstc') || (Session::has('admin') && session('admin')->username == 'khthso') ) {
             $inputs = $request->all();
             $model = nguonkinhphi::where('madvbc','like',$inputs['madv'].'%')
-                ->where('sohieu','TT67_2017')->get();
+                ->where('sohieu','ND38_2019')->get();
             if(session('admin')->username == 'khthso')
             {
                 $model = nguonkinhphi::join('dmdonvibaocao','dmdonvibaocao.madvbc','=','nguonkinhphi.madvbc')
                     ->where('nguonkinhphi.madvbc','like',$inputs['madv'].'%')
                     ->where('dmdonvibaocao.level','T')
-                    ->where('nguonkinhphi.sohieu','TT67_2017')->get();
+                    ->where('nguonkinhphi.sohieu','ND38_2019')->get();
             }
             $model_donvi = dmdonvi::where('madvbc',session('admin')->madvbc)->get();
             if(count($model) == 0){
@@ -3551,13 +3555,13 @@ class baocaothongtu67Controller extends Controller
                 ->get();
             $ardv = $m_dv->toArray();
             $model = nguonkinhphi::where('madvbc','like',$inputs['madv'].'%')
-                ->where('sohieu','TT67_2017')->get();
+                ->where('sohieu','ND38_2019')->get();
             if(session('admin')->username == 'khthso')
             {
                 $model = nguonkinhphi::join('dmdonvibaocao','dmdonvibaocao.madvbc','=','nguonkinhphi.madvbc')
                     ->where('nguonkinhphi.madvbc','like',$inputs['madv'].'%')
                     ->where('dmdonvibaocao.level','T')
-                    ->where('nguonkinhphi.sohieu','TT67_2017')->get();
+                    ->where('nguonkinhphi.sohieu','ND38_2019')->get();
             }
             //dd($model);
             if(count($model) == 0){
@@ -3731,13 +3735,13 @@ class baocaothongtu67Controller extends Controller
                 ->get();
             $ardv = $m_dv->toArray();
             $model = nguonkinhphi::where('madvbc','like',$inputs['madv'].'%')
-                ->where('sohieu','TT67_2017')->get();
+                ->where('sohieu','ND38_2019')->get();
             if(session('admin')->username == 'khthso')
             {
                 $model = nguonkinhphi::join('dmdonvibaocao','dmdonvibaocao.madvbc','=','nguonkinhphi.madvbc')
                     ->where('nguonkinhphi.madvbc','like',$inputs['madv'].'%')
                     ->where('dmdonvibaocao.level','T')
-                    ->where('nguonkinhphi.sohieu','TT67_2017')->get();
+                    ->where('nguonkinhphi.sohieu','ND38_2019')->get();
             }
             //dd($model);
             if(count($model) == 0){
@@ -3895,13 +3899,13 @@ class baocaothongtu67Controller extends Controller
                 ->get();
             $ardv = $m_dv->toArray();
             $model = nguonkinhphi::where('madvbc','like',$inputs['madv'].'%')
-                ->where('sohieu','TT67_2017')->get();
+                ->where('sohieu','ND38_2019')->get();
             if(session('admin')->username == 'khthso')
             {
                 $model = nguonkinhphi::join('dmdonvibaocao','dmdonvibaocao.madvbc','=','nguonkinhphi.madvbc')
                     ->where('nguonkinhphi.madvbc','like',$inputs['madv'].'%')
                     ->where('dmdonvibaocao.level','T')
-                    ->where('nguonkinhphi.sohieu','TT67_2017')->get();
+                    ->where('nguonkinhphi.sohieu','ND38_2019')->get();
             }
             //dd($model);
             if(count($model) == 0){
@@ -4082,13 +4086,13 @@ class baocaothongtu67Controller extends Controller
                 ->get();
             $ardv = $m_dv->toArray();
             $model = nguonkinhphi::where('madvbc','like',$inputs['madv'].'%')
-                ->where('sohieu','TT67_2017')->get();
+                ->where('sohieu','ND38_2019')->get();
             if(session('admin')->username == 'khthso')
             {
                 $model = nguonkinhphi::join('dmdonvibaocao','dmdonvibaocao.madvbc','=','nguonkinhphi.madvbc')
                     ->where('nguonkinhphi.madvbc','like',$inputs['madv'].'%')
                     ->where('dmdonvibaocao.level','T')
-                    ->where('nguonkinhphi.sohieu','TT67_2017')->get();
+                    ->where('nguonkinhphi.sohieu','ND38_2019')->get();
             }
             //dd($model);
             if(count($model) == 0){
@@ -5485,7 +5489,7 @@ class baocaothongtu67Controller extends Controller
         //Kiểm tra cấp đơn vị xem đơn vị để update trường masoh hoặc masot
         if (Session::has('admin')) {
             $model = nguonkinhphi::where('madv',session('admin')->madv)
-                ->where('sohieu','TT67_2017')->first();
+                ->where('sohieu','ND38_2019')->first();
 
             if(count($model) == 0){
                 return view('errors.nodata');
@@ -5685,7 +5689,7 @@ class baocaothongtu67Controller extends Controller
         //Kiểm tra cấp đơn vị xem đơn vị để update trường masoh hoặc masot
         if (Session::has('admin')) {
             $model = nguonkinhphi::where('madv',session('admin')->madv)
-                ->where('sohieu','TT67_2017')->first();
+                ->where('sohieu','ND38_2019')->first();
 
             if(count($model) == 0){
                 return view('errors.nodata');
@@ -6639,7 +6643,7 @@ class baocaothongtu67Controller extends Controller
         //Kiểm tra cấp đơn vị xem đơn vị để update trường masoh hoặc masot
         if (Session::has('admin')) {
             $model = nguonkinhphi::where('macqcq',session('admin')->madv)
-                ->where('sohieu','TT67_2017')->get();
+                ->where('sohieu','ND38_2019')->get();
             $model_donvi = dmdonvi::where('madvbc',session('admin')->madvbc)->get();
             if(count($model) == 0){
                 return view('errors.nodata');
@@ -6740,7 +6744,7 @@ class baocaothongtu67Controller extends Controller
         //Kiểm tra cấp đơn vị xem đơn vị để update trường masoh hoặc masot
         if (Session::has('admin')) {
             $model = nguonkinhphi::where('macqcq',session('admin')->madv)
-                ->where('sohieu','TT67_2017')->get();
+                ->where('sohieu','ND38_2019')->get();
             //dd($model);
             if(count($model) == 0){
                 return view('errors.nodata');
@@ -10144,7 +10148,7 @@ class baocaothongtu67Controller extends Controller
         //Kiểm tra cấp đơn vị xem đơn vị để update trường masoh hoặc masot
         if (Session::has('admin')) {
             $model = nguonkinhphi::where('madvbc',session('admin')->madvbc)
-                ->where('sohieu','TT67_2017')->get();
+                ->where('sohieu','ND38_2019')->get();
             $model_donvi = dmdonvi::where('madvbc',session('admin')->madvbc)->get();
             if(count($model) == 0){
                 return view('errors.nodata');
@@ -10241,7 +10245,7 @@ class baocaothongtu67Controller extends Controller
         //Kiểm tra cấp đơn vị xem đơn vị để update trường masoh hoặc masot
         if (Session::has('admin')) {
             $model = nguonkinhphi::where('madvbc',session('admin')->madvbc)
-                ->where('sohieu','TT67_2017')->get();
+                ->where('sohieu','ND38_2019')->get();
             //dd($model);
             if(count($model) == 0){
                 return view('errors.nodata');
@@ -11449,7 +11453,7 @@ class baocaothongtu67Controller extends Controller
             ///if ((Session::has('admin') && session('admin')->username == 'khthstc') || (Session::has('admin') && session('admin')->username == 'khthso') ) {
             $inputs = $request->all();
             $model = nguonkinhphi::where('madvbc','like',$inputs['madv'].'%')
-                ->where('sohieu','TT67_2017')
+                ->where('sohieu ','ND38_2019')
                 ->where('macqcq',session('admin')->madv)
                 ->where('trangthai','DAGUI')
                 ->get();
@@ -11458,7 +11462,7 @@ class baocaothongtu67Controller extends Controller
                 $model = nguonkinhphi::join('dmdonvibaocao','dmdonvibaocao.madvbc','=','nguonkinhphi.madvbc')
                     ->where('nguonkinhphi.madvbc','like',$inputs['madv'].'%')
                     ->where('dmdonvibaocao.level','T')
-                    ->where('nguonkinhphi.sohieu','TT67_2017')->get();
+                    ->where('nguonkinhphi.sohieu','ND38_2019')->get();
             }
             $model_donvi = dmdonvi::where('madvbc',session('admin')->madvbc)->get();
             if(count($model) == 0){
@@ -11565,13 +11569,13 @@ class baocaothongtu67Controller extends Controller
             ///if ((Session::has('admin') && session('admin')->username == 'khthstc') || (Session::has('admin') && session('admin')->username == 'khthso') ) {
             $inputs = $request->all();
             $model = nguonkinhphi::where('madvbc','like',$inputs['madv'].'%')
-                ->where('sohieu','TT67_2017')->get();
+                ->where('sohieu','ND38_2019')->get();
             if(session('admin')->username == 'khthso')
             {
                 $model = nguonkinhphi::join('dmdonvibaocao','dmdonvibaocao.madvbc','=','nguonkinhphi.madvbc')
                     ->where('nguonkinhphi.madvbc','like',$inputs['madv'].'%')
                     ->where('dmdonvibaocao.level','T')
-                    ->where('nguonkinhphi.sohieu','TT67_2017')->get();
+                    ->where('nguonkinhphi.sohieu','ND38_2019')->get();
             }
             $model_donvi = dmdonvi::where('madvbc',session('admin')->madvbc)->get();
             if(count($model) == 0){
@@ -11688,7 +11692,7 @@ class baocaothongtu67Controller extends Controller
                         ->distinct()
                         ->get();
                     $model = nguonkinhphi::where('macqcq',$madv)
-                        ->where('sohieu','TT67_2017')
+                        ->where('sohieu','ND38_2019')
                         ->where('macqcq',session('admin')->madv)
                         ->where('trangthai','DAGUI')
                         ->get();
@@ -11700,7 +11704,7 @@ class baocaothongtu67Controller extends Controller
                         ->distinct()
                         ->get();
                     $model = nguonkinhphi::where('madv',$madv)
-                        ->where('sohieu','TT67_2017')
+                        ->where('sohieu','ND38_2019')
                         ->where('macqcq',session('admin')->madv)
                         ->where('trangthai','DAGUI')
                         ->get();
@@ -11712,7 +11716,7 @@ class baocaothongtu67Controller extends Controller
                     ->distinct()
                     ->get();
                 $model = nguonkinhphi::where('madvbc',$madvbc)
-                    ->where('sohieu','TT67_2017')
+                    ->where('sohieu','ND38_2019')
                     ->where('macqcq',session('admin')->madv)
                     ->where('trangthai','DAGUI')
                     ->get();
@@ -11720,14 +11724,14 @@ class baocaothongtu67Controller extends Controller
             $ardv = $m_dv->toArray();
             /*
             $model = nguonkinhphi::where('madvbc','like',$inputs['madv'].'%')
-                ->where('sohieu','TT67_2017')->get();
+                ->where('sohieu','ND38_2019')->get();
             */
             if(session('admin')->username == 'khthso')
             {
                 $model = nguonkinhphi::join('dmdonvibaocao','dmdonvibaocao.madvbc','=','nguonkinhphi.madvbc')
                     ->where('nguonkinhphi.madvbc','like',$inputs['madv'].'%')
                     ->where('dmdonvibaocao.level','T')
-                    ->where('nguonkinhphi.sohieu','TT67_2017')
+                    ->where('nguonkinhphi.sohieu','ND38_2019')
                     //->where('macqcq',session('admin')->madv)
                     ->where('trangthai','DAGUI')
                     ->get();
@@ -11894,7 +11898,7 @@ class baocaothongtu67Controller extends Controller
                         ->distinct()
                         ->get();
                     $model = nguonkinhphi::where('macqcq',$madv)
-                        ->where('sohieu','TT67_2017')->get();
+                        ->where('sohieu','ND38_2019')->get();
                 }
                 else
                 {
@@ -11903,7 +11907,7 @@ class baocaothongtu67Controller extends Controller
                         ->distinct()
                         ->get();
                     $model = nguonkinhphi::where('madv',$madv)
-                        ->where('sohieu','TT67_2017')->get();
+                        ->where('sohieu','ND38_2019')->get();
                 }
             }
             else {
@@ -11912,19 +11916,19 @@ class baocaothongtu67Controller extends Controller
                     ->distinct()
                     ->get();
                 $model = nguonkinhphi::where('madvbc',$madvbc)
-                    ->where('sohieu','TT67_2017')->get();
+                    ->where('sohieu','ND38_2019')->get();
             }
             $ardv = $m_dv->toArray();
             /*
             $model = nguonkinhphi::where('madvbc','like',$inputs['madv'].'%')
-                ->where('sohieu','TT67_2017')->get();
+                ->where('sohieu','ND38_2019')->get();
             */
             if(session('admin')->username == 'khthso')
             {
                 $model = nguonkinhphi::join('dmdonvibaocao','dmdonvibaocao.madvbc','=','nguonkinhphi.madvbc')
                     ->where('nguonkinhphi.madvbc','like',$inputs['madv'].'%')
                     ->where('dmdonvibaocao.level','T')
-                    ->where('nguonkinhphi.sohieu','TT67_2017')->get();
+                    ->where('nguonkinhphi.sohieu','ND38_2019')->get();
             }
             //dd($model);
             if(count($model) == 0){
@@ -12069,7 +12073,7 @@ class baocaothongtu67Controller extends Controller
                         ->distinct()
                         ->get();
                     $model = nguonkinhphi::where('macqcq', $madv)
-                        ->where('sohieu', 'TT67_2017')
+                        ->where('sohieu', 'ND38_2019')
                         ->where('macqcq', session('admin')->madv)
                         ->where('trangthai', 'DAGUI')
                         ->get();
@@ -12079,7 +12083,7 @@ class baocaothongtu67Controller extends Controller
                         ->distinct()
                         ->get();
                     $model = nguonkinhphi::where('madv', $madv)
-                        ->where('sohieu', 'TT67_2017')->where('macqcq', session('admin')->madv)
+                        ->where('sohieu', 'ND38_2019')->where('macqcq', session('admin')->madv)
                         ->where('trangthai', 'DAGUI')
                         ->get();
                 }
@@ -12090,14 +12094,14 @@ class baocaothongtu67Controller extends Controller
                     ->distinct()
                     ->get();
                 $model = nguonkinhphi::where('madvbc', $madvbc)
-                    ->where('sohieu', 'TT67_2017')->where('macqcq', session('admin')->madv)
+                    ->where('sohieu', 'ND38_2019')->where('macqcq', session('admin')->madv)
                     ->where('trangthai', 'DAGUI')
                     ->get();
             }
             $ardv = $m_dv->toArray();
             /*
             $model = nguonkinhphi::where('madvbc','like',$inputs['madv'].'%')
-                ->where('sohieu','TT67_2017')->get();
+                ->where('sohieu','ND38_2019')->get();
             */
             if(session('admin')->username == 'khthso') {
                 $model = nguonkinhphi::join('dmdonvibaocao', 'dmdonvibaocao.madvbc', '=', 'nguonkinhphi.madvbc')
@@ -12105,7 +12109,7 @@ class baocaothongtu67Controller extends Controller
                     ->where('dmdonvibaocao.level', 'T')
                     //->where('macqcq',session('admin')->madv)
                     ->where('trangthai', 'DAGUI')
-                    ->where('nguonkinhphi.sohieu', 'TT67_2017')->get();
+                    ->where('nguonkinhphi.sohieu', 'ND38_2019')->get();
             }
             //dd($model);
             if(count($model) == 0){
@@ -12275,14 +12279,14 @@ class baocaothongtu67Controller extends Controller
                         ->distinct()
                         ->get();
                     $model = nguonkinhphi::where('macqcq', $madv)
-                        ->where('sohieu', 'TT67_2017')->get();
+                        ->where('sohieu', 'ND38_2019')->get();
                 } else {
                     $m_dv = dmdonvi::select('tendv', 'madv')
                         ->where('madv', $madv)
                         ->distinct()
                         ->get();
                     $model = nguonkinhphi::where('madv', $madv)
-                        ->where('sohieu', 'TT67_2017')->get();
+                        ->where('sohieu', 'ND38_2019')->get();
                 }
             }
             else {
@@ -12291,14 +12295,14 @@ class baocaothongtu67Controller extends Controller
                     ->distinct()
                     ->get();
                 $model = nguonkinhphi::where('madvbc',$madvbc)
-                    ->where('sohieu','TT67_2017')->get();
+                    ->where('sohieu','ND38_2019')->get();
             }
             $ardv = $m_dv->toArray();
             if(session('admin')->username == 'khthso') {
                 $model = nguonkinhphi::join('dmdonvibaocao', 'dmdonvibaocao.madvbc', '=', 'nguonkinhphi.madvbc')
                     ->where('nguonkinhphi.madvbc', 'like', $inputs['madv'] . '%')
                     ->where('dmdonvibaocao.level', 'T')
-                    ->where('nguonkinhphi.sohieu', 'TT67_2017')->get();
+                    ->where('nguonkinhphi.sohieu', 'ND38_2019')->get();
             }
             //dd($model);
             if(count($model) == 0){
