@@ -646,6 +646,16 @@
                                 </div>
                             @endif
                             <div class="form-group">
+                                <label class="col-md-4 control-label"> Thông tư:<span class="require">*</span></label>
+                                <div class="col-md-8">
+                                    <select class="form-control select2me" id="sohieu" name="sohieu" class="form-control">
+                                            @foreach($model_thongtu as $tt)
+                                                <option value="{{$tt->sohieu}}">{{$tt->tenttqd}}</option>
+                                            @endforeach
+                                        </select>
+                                </div>
+                            </div>
+                            <div class="form-group">
                                 <label class="col-md-4 control-label"> Đơn vị tính</label>
                                 <div class="col-md-8">
                                     {!! Form::select('donvitinh',getDonViTinh(),'1',array('id' => 'donvitinh', 'class' => 'form-control'))!!}

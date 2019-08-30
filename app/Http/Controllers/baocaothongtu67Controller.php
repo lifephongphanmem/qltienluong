@@ -6932,7 +6932,8 @@ class baocaothongtu67Controller extends Controller
                     }
                 }
             }
-            $luongcb = 1390000/1490000;
+            $model_thongtu = dmthongtuquyetdinh::where('sohieu',$inputs['sohieu'])->first();
+            $luongcb = $model_thongtu->muccu/$model_thongtu->mucapdung;
             //$luongcb = 1390000;
 
             //nếu đơn vị đã tạo bảng lương tháng 07/2017 =>xuất kết quả
@@ -6945,7 +6946,7 @@ class baocaothongtu67Controller extends Controller
                     ->where('chitieubienche.nam','2019')->where('dmdonvi.madvbc','like',$inputs['madv'].'%')
                     ->where('dmdonvibaocao.level','T')->get();
                 //$luongcb = 1210000; tạm thời bỏ vì bang lương đã nhân lcb
-                $luongcb = 0.935;
+                $luongcb = 1390000/1490000;
                 //nếu đơn vị đã tạo bảng lương tháng 07/2017 =>xuất kết quả
                 $model_tonghop_ct = tonghopluong_donvi_chitiet::join('tonghopluong_donvi', 'tonghopluong_donvi_chitiet.mathdv', '=', 'tonghopluong_donvi.mathdv')
                     ->join('dmdonvibaocao','dmdonvibaocao.madvbc','=','tonghopluong_donvi.madvbc')
@@ -8566,9 +8567,8 @@ class baocaothongtu67Controller extends Controller
                     }
                 }
             }
-
-            $luongcb = 1;
-            //$luongcb = 1390000;
+            $model_thongtu = dmthongtuquyetdinh::where('sohieu',$inputs['sohieu'])->first();
+            $luongcb = $model_thongtu->mucapdung/$model_thongtu->mucapdung;
 
             //nếu đơn vị đã tạo bảng lương tháng 07/2017 =>xuất kết quả
             //dd($model_tonghop_ct->toarray());
@@ -8934,7 +8934,7 @@ class baocaothongtu67Controller extends Controller
                 $ar_I[11]['pccovu'] = $ar_I[12]['pccovu'] + $ar_I[13]['pccovu'];
                 $ar_I[11]['pcdang'] = $ar_I[12]['pcdang'] + $ar_I[13]['pcdang'];
                 $ar_I[11]['pcthni'] = $ar_I[12]['pcthni'] + $ar_I[13]['pcthni'];
-                $ar_I[11]['Tpck'] = $ar_I[12]['pck'] + $ar_I[13]['Tpck'];
+                $ar_I[11]['Tpck'] = $ar_I[12]['Tpck'] + $ar_I[13]['Tpck'];
                 $ar_I[11]['tongpc'] = $ar_I[12]['tongpc'] + $ar_I[13]['tongpc'];
                 $ar_I[11]['ttbh_dv'] = $ar_I[12]['ttbh_dv'] + $ar_I[13]['ttbh_dv'];
                 $ar_I[11]['chenhlech'] = $ar_I[12]['chenhlech'] + $ar_I[13]['chenhlech'];
@@ -8949,7 +8949,7 @@ class baocaothongtu67Controller extends Controller
                 $ar_I[0]['pccovu'] = $ar_I[1]['pccovu'] + $ar_I[2]['pccovu'];
                 $ar_I[0]['pcdang'] = $ar_I[1]['pcdang'] + $ar_I[2]['pcdang'];
                 $ar_I[0]['pcthni'] = $ar_I[1]['pcthni'] + $ar_I[2]['pcthni'];
-                $ar_I[0]['Tpck'] = $ar_I[1]['pck'] + $ar_I[2]['Tpck'];
+                $ar_I[0]['Tpck'] = $ar_I[1]['Tpck'] + $ar_I[2]['Tpck'];
                 $ar_I[0]['tongpc'] = $ar_I[1]['tongpc'] + $ar_I[2]['tongpc'];
                 $ar_I[0]['ttbh_dv'] = $ar_I[1]['ttbh_dv'] + $ar_I[2]['ttbh_dv'];
                 $ar_I[0]['chenhlech'] = $ar_I[1]['chenhlech'] + $ar_I[2]['chenhlech'];
