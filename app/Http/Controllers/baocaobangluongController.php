@@ -17,6 +17,7 @@ use App\dmphanloaict;
 use App\dmphanloaidonvi;
 use App\dmphucap;
 use App\dmphucap_donvi;
+use App\dmthongtuquyetdinh;
 use App\dsnangluong;
 use App\dsnangthamnien;
 use App\dutoanluong;
@@ -86,6 +87,7 @@ class baocaobangluongController extends Controller
                 $a_phanloai[''] = '--Chọn tất cả--';
                 $a_thang['ALL'] = "--Chọn tất cả--";
             }
+            $model_thongtu = dmthongtuquyetdinh::all();
             return view('reports.index_th')
                 ->with('furl','/bao_cao/bang_luong/')
                 ->with('model_phanloai',$model_phanloai)
@@ -93,6 +95,7 @@ class baocaobangluongController extends Controller
                 ->with('a_phanloai',$a_phanloai)
                 ->with('model_dv',$model_donvi)
                 ->with('model_phanloaict',$model_phanloaict)
+                ->with('model_thongtu',$model_thongtu)
                 //->with('model_dvbc', $model_dvbc)
                 ->with('pageTitle','Báo cáo chi trả lương');
         } else
