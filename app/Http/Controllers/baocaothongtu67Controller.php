@@ -10,6 +10,7 @@ use App\dmdiabandbkk_chitiet;
 use App\dmdonvi;
 use App\dmdonvibaocao;
 use App\dmphanloaict;
+use App\dmphucap_donvi;
 use App\dmthongtuquyetdinh;
 use App\hosocanbo;
 use App\nguonkinhphi;
@@ -6796,7 +6797,7 @@ class baocaothongtu67Controller extends Controller
             return view('errors.notlogin');
     }
 
-        function mau2a1_huyen(Request $request) {
+    function mau2a1_huyen(Request $request) {
         if (Session::has('admin')) {
             $inputs=$request->all();
             $madvbc = session('admin')->madvbc;
@@ -6861,7 +6862,14 @@ class baocaothongtu67Controller extends Controller
                     $model_tonghop_ct = tonghopluong_donvi_chitiet::join('tonghopluong_donvi', 'tonghopluong_donvi_chitiet.mathdv', '=', 'tonghopluong_donvi.mathdv')
                         ->select('tonghopluong_donvi_chitiet.linhvuchoatdong', DB::raw('st_heso as heso'), DB::raw('st_pckv as pckv'), DB::raw('st_pccv as pccv'),
                             DB::raw('st_pctnvk as pctnvk'), DB::raw('st_pcudn as pcudn'), DB::raw('st_pcth as pcth'), DB::raw('st_pctn as pctn'), DB::raw('st_pccovu as pccovu'), DB::raw('st_pcdang as pcdang'),
-                            DB::raw('st_pcthni as pcthni'), DB::raw('st_pck as pck'), 'nguoigui', 'madv', 'tonghopluong_donvi.mathh', 'tonghopluong_donvi.mathdv', 'macongtac')
+                            DB::raw('st_pcthni as pcthni'), DB::raw('st_pck as pck'),DB::raw('st_pcct as pcct'),DB::raw('st_pckct as pckct'),DB::raw('st_pcdd as pcdd'),
+                            DB::raw('st_pcdh as pcdh'),DB::raw('st_pcld as pcld'),DB::raw('st_pcdbqh as pcdbqh'),DB::raw('st_pctnn as pctnn'),DB::raw('st_pcdbn as pcdbn'),
+                            DB::raw('st_pcvk as pcvk'),DB::raw('st_pckn as pckn'),DB::raw('st_pcdang as pcdang'),DB::raw('st_pclt as pclt'),DB::raw('st_pcd as pcd'),
+                            DB::raw('st_pctr as pctr'),DB::raw('st_pctdt as pctdt'),DB::raw('st_pclade as pclade'),DB::raw('st_pcud61 as pcud61'),DB::raw('st_pcxaxe as pcxaxe'),
+                            DB::raw('st_pcdith as pcdith'),DB::raw('st_pcphth as pcphth'),DB::raw('st_pcphth as pctnvk'),DB::raw('st_pcbdhdcu as pcbdhdcu'),DB::raw('st_pcctp as pcctp'),
+                            DB::raw('st_pctaicu as pctaicu'),
+                            'stbhxh_dv','stbhyt_dv','stkpcd_dv','stbhtn_dv','ttbh_dv',
+                            'nguoigui', 'madv', 'tonghopluong_donvi.mathh', 'tonghopluong_donvi.mathdv', 'macongtac')
                         ->where('tonghopluong_donvi.macqcq', session('admin')->madv)
                         ->wherein('tonghopluong_donvi_chitiet.mathdv', function ($qr) {
                             $qr->select('mathdv')->from('tonghopluong_donvi')->where('thang', '07')->where('nam', '2019')->where('trangthai', 'DAGUI')
@@ -6873,7 +6881,10 @@ class baocaothongtu67Controller extends Controller
                         $model_tonghop_ct = tonghopluong_donvi_chitiet::join('tonghopluong_donvi', 'tonghopluong_donvi_chitiet.mathdv', '=', 'tonghopluong_donvi.mathdv')
                             ->select('tonghopluong_donvi_chitiet.linhvuchoatdong', 'tonghopluong_donvi_chitiet.heso', 'tonghopluong_donvi_chitiet.pckv', 'tonghopluong_donvi_chitiet.pccv',
                                 'tonghopluong_donvi_chitiet.pctnvk', 'tonghopluong_donvi_chitiet.pcudn', 'pcth', 'pctn', 'pccovu', 'pcdang',
-                                'pcthni', 'pck', 'nguoigui', 'madv', 'tonghopluong_donvi.mathh', 'tonghopluong_donvi.mathdv', 'macongtac')
+                                'pcthni', 'pck','pcct','pckct','pcdd','pcdh','pcld','pcdbqh','pctnn','pcdbn','pcvk','pckn','pcdang','pclt','pcd','pctr',
+                                'pctdt','pclade','pcud61','pcxaxe','pcdith','pcphth','pctnvk','pcbdhdcu','pcctp','pctaicu',
+                                'stbhxh_dv','stbhyt_dv','stkpcd_dv','stbhtn_dv','ttbh_dv',
+                                'nguoigui', 'madv', 'tonghopluong_donvi.mathh', 'tonghopluong_donvi.mathdv', 'macongtac')
                             ->where('tonghopluong_donvi.macqcq', session('admin')->madv)
                             ->wherein('tonghopluong_donvi_chitiet.mathdv', function ($qr) {
                                 $qr->select('mathdv')->from('tonghopluong_donvi')->where('thang', '07')->where('nam', '2019')->where('trangthai', 'DAGUI')
@@ -6888,7 +6899,14 @@ class baocaothongtu67Controller extends Controller
                     $model_tonghop_ct = tonghopluong_donvi_chitiet::join('tonghopluong_donvi', 'tonghopluong_donvi_chitiet.mathdv', '=', 'tonghopluong_donvi.mathdv')
                         ->select('tonghopluong_donvi_chitiet.linhvuchoatdong', DB::raw('st_heso as heso'), DB::raw('st_pckv as pckv'), DB::raw('st_pccv as pccv'),
                             DB::raw('st_pctnvk as pctnvk'), DB::raw('st_pcudn as pcudn'), DB::raw('st_pcth as pcth'), DB::raw('st_pctn as pctn'), DB::raw('st_pccovu as pccovu'), DB::raw('st_pcdang as pcdang'),
-                            DB::raw('st_pcthni as pcthni'), DB::raw('st_pck as pck'), 'nguoigui', 'madv', 'tonghopluong_donvi.mathh', 'tonghopluong_donvi.mathdv', 'macongtac')
+                            DB::raw('st_pcthni as pcthni'), DB::raw('st_pck as pck') ,DB::raw('st_pcct as pcct'),DB::raw('st_pckct as pckct'),DB::raw('st_pcdd as pcdd'),
+                            DB::raw('st_pcdh as pcdh'),DB::raw('st_pcld as pcld'),DB::raw('st_pcdbqh as pcdbqh'),DB::raw('st_pctnn as pctnn'),DB::raw('st_pcdbn as pcdbn'),
+                            DB::raw('st_pcvk as pcvk'),DB::raw('st_pckn as pckn'),DB::raw('st_pcdang as pcdang'),DB::raw('st_pclt as pclt'),DB::raw('st_pcd as pcd'),
+                            DB::raw('st_pctr as pctr'),DB::raw('st_pctdt as pctdt'),DB::raw('st_pclade as pclade'),DB::raw('st_pcud61 as pcud61'),DB::raw('st_pcxaxe as pcxaxe'),
+                            DB::raw('st_pcdith as pcdith'),DB::raw('st_pcphth as pcphth'),DB::raw('st_pcphth as pctnvk'),DB::raw('st_pcbdhdcu as pcbdhdcu'),DB::raw('st_pcctp as pcctp'),
+                            DB::raw('st_pctaicu as pctaicu'),
+                            'stbhxh_dv','stbhyt_dv','stkpcd_dv','stbhtn_dv','ttbh_dv',
+                            'nguoigui', 'madv', 'tonghopluong_donvi.mathh', 'tonghopluong_donvi.mathdv', 'macongtac')
                         ->where('tonghopluong_donvi.madvbc', $madvbc)
                         ->wherein('tonghopluong_donvi_chitiet.mathdv', function ($qr) {
                             $qr->select('mathdv')->from('tonghopluong_donvi')->where('thang', '07')->where('nam', '2019')->where('trangthai', 'DAGUI')
@@ -6900,7 +6918,10 @@ class baocaothongtu67Controller extends Controller
                         $model_tonghop_ct = tonghopluong_donvi_chitiet::join('tonghopluong_donvi', 'tonghopluong_donvi_chitiet.mathdv', '=', 'tonghopluong_donvi.mathdv')
                             ->select('tonghopluong_donvi_chitiet.linhvuchoatdong', 'tonghopluong_donvi_chitiet.heso', 'tonghopluong_donvi_chitiet.pckv', 'tonghopluong_donvi_chitiet.pccv',
                                 'tonghopluong_donvi_chitiet.pctnvk', 'tonghopluong_donvi_chitiet.pcudn', 'pcth', 'pctn', 'pccovu', 'pcdang',
-                                'pcthni', 'pck', 'nguoigui', 'madv', 'tonghopluong_donvi.mathh', 'tonghopluong_donvi.mathdv', 'macongtac')
+                                'pcthni', 'pck','pcct','pckct','pcdd','pcdh','pcld','pcdbqh','pctnn','pcdbn','pcvk','pckn','pcdang','pclt','pcd','pctr',
+                                'pctdt','pclade','pcud61','pcxaxe','pcdith','pcphth','pctnvk','pcbdhdcu','pcctp','pctaicu',
+                                'stbhxh_dv','stbhyt_dv','stkpcd_dv','stbhtn_dv','ttbh_dv',
+                                'nguoigui', 'madv', 'tonghopluong_donvi.mathh', 'tonghopluong_donvi.mathdv', 'macongtac')
                             ->where('tonghopluong_donvi.madvbc', $madvbc)
                             ->wherein('tonghopluong_donvi_chitiet.mathdv', function ($qr) {
                                 $qr->select('mathdv')->from('tonghopluong_donvi')->where('thang', '07')->where('nam', '2019')->where('trangthai', 'DAGUI')
@@ -6911,7 +6932,7 @@ class baocaothongtu67Controller extends Controller
                     }
                 }
             }
-            $luongcb = 0.935;
+            $luongcb = 1390000/1490000;
             //$luongcb = 1390000;
 
             //nếu đơn vị đã tạo bảng lương tháng 07/2017 =>xuất kết quả
@@ -6939,11 +6960,15 @@ class baocaothongtu67Controller extends Controller
                 if($inputs['madv'] !="" && count($chekdv) > 0){
                     $tonghop = $model_tonghop->where('mathdv',$ct->mathh)->first();
                     $ct->maphanloai = $tonghop->maphanloai;
+                    $a_phucap = dmphucap_donvi::where('madv', $inputs['madv'])->where('phanloai','<','3')->get();
                 }
                 else {
                     $tonghop = $model_tonghop->where('mathdv', $ct->mathdv)->first();
                     $ct->maphanloai = $model_donvi->where('madv', $tonghop->madv)->first()->maphanloai;
+                    $a_phucap = dmphucap_donvi::where('madv', $tonghop->madv)->where('phanloai','<','3')->get();
                 }
+                $a_phucap =array_column($a_phucap->toarray(), 'mapc');
+                $a_pc = array('heso','pckv','pccv','pctnvk','pcudn','pcth','pctn','pccovu','pcdang','pcthni','pcdbqh','pcvk');
                 //$a_th =  array_column($tonghop->toarray(),'mathdv','maphanloai');
                 //$ct->maphanloai =  $a_th[$ct->mathdv];
                 $ct->heso = $ct->heso * $luongcb;
@@ -6959,6 +6984,11 @@ class baocaothongtu67Controller extends Controller
                 $ct->pck = $ct->pck * $luongcb;
                 $ct->pcdbqh = $ct->pcdbqh * $luongcb;
                 $ct->pcvk = $ct->pcvk * $luongcb;
+                foreach($a_phucap as $phca){
+                    if(!in_array($phca, $a_pc)){
+                        $ct->Tpck += $ct->$phca*$luongcb;
+                    }
+                }
                 $ct->ttbh_dv = ($ct->stbhxh_dv + $ct->stbhyt_dv +$ct->stkpcd_dv + $ct->stbhtn_dv) * $luongcb;
 
             }
@@ -7009,7 +7039,7 @@ class baocaothongtu67Controller extends Controller
                 'pccovu' => 0,
                 'pcdang' => 0,
                 'pcthni' => 0,
-                'pck' => 0,
+                'Tpck' => 0,
                 'tongpc' => 0,
                 'ttbh_dv' => 0,
                 'soluongduocgiao' => 0,
@@ -7050,7 +7080,7 @@ class baocaothongtu67Controller extends Controller
                     $ar_I[$i]['pccovu'] = 0;
                     $ar_I[$i]['pcdang'] = 0;
                     $ar_I[$i]['pcthni'] = 0;
-                    $ar_I[$i]['pck'] = 0;
+                    $ar_I[$i]['Tpck'] = 0;
                     $ar_I[$i]['tongpc'] = 0;
                     $ar_I[$i]['ttbh_dv'] = 0;
                     if (isset($model_bangluong_ct)) {
@@ -7115,14 +7145,15 @@ class baocaothongtu67Controller extends Controller
                             $tongpc += $ar_I[$i]['pcthni'];
                             $a_It['pcthni'] += $ar_I[$i]['pcthni'];
 
-                            $ar_I[$i]['pck'] = $thongtinchitiet['pck'];
-                            $tongpc += $ar_I[$i]['pck'];
-                            $a_It['pck'] += $ar_I[$i]['pck'];
+                            $ar_I[$i]['Tpck'] = $thongtinchitiet['Tpck'];
+                            $tongpc += $ar_I[$i]['Tpck'];
+                            $a_It['Tpck'] += $ar_I[$i]['Tpck'];
 
                             $ar_I[$i]['tongpc'] = $tongpc;
                             $a_It['tongpc'] += $ar_I[$i]['tongpc'];
 
-                            $ar_I[$i]['ttbh_dv'] = round(($ar_I[$i]['luong'] + $ar_I[$i]['pccv']) * 0.24);
+                            $ar_I[$i]['ttbh_dv'] = ($thongtinchitiet['stbhxh_dv'] + $thongtinchitiet['stbhyt_dv'] + $thongtinchitiet['stkpcd_dv'] + $thongtinchitiet['stbhtn_dv']);
+                            //round(($ar_I[$i]['luong'] + $ar_I[$i]['pccv']) * 0.24);
                             $a_It['ttbh_dv'] += $ar_I[$i]['ttbh_dv'];
                             //$ar_II['ttbh_dv'] =round(($ar_II['luong'] + $ar_II['pccv'])*0.24);
 
@@ -7136,7 +7167,7 @@ class baocaothongtu67Controller extends Controller
                             $ar_I[$luugr]['pccovu'] += $ar_I[$i]['pccovu'];
                             $ar_I[$luugr]['pcdang'] += $ar_I[$i]['pcdang'];
                             $ar_I[$luugr]['pcthni'] += $ar_I[$i]['pcthni'];
-                            $ar_I[$luugr]['pck'] += $ar_I[$i]['pck'];
+                            $ar_I[$luugr]['Tpck'] += $ar_I[$i]['Tpck'];
                             $ar_I[$luugr]['tongpc'] += $ar_I[$i]['tongpc'];
                             $ar_I[$luugr]['ttbh_dv'] += $ar_I[$i]['ttbh_dv'];
 
@@ -7155,7 +7186,7 @@ class baocaothongtu67Controller extends Controller
                         $ar_I[$i]['pccovu'] = 0;
                         $ar_I[$i]['pcdang'] = 0;
                         $ar_I[$i]['pcthni'] = 0;
-                        $ar_I[$i]['pck'] = 0;
+                        $ar_I[$i]['Tpck'] = 0;
                         $ar_I[$i]['tongpc'] = 0;
                         $ar_I[$i]['ttbh_dv'] = 0;
                     }
@@ -7171,7 +7202,7 @@ class baocaothongtu67Controller extends Controller
                 $ar_I[$gddt]['pccovu'] = $ar_I[$giaoduc]['pccovu'] + $ar_I[$daotao]['pccovu'];
                 $ar_I[$gddt]['pcdang'] = $ar_I[$giaoduc]['pcdang'] + $ar_I[$daotao]['pcdang'];
                 $ar_I[$gddt]['pcthni'] = $ar_I[$giaoduc]['pcthni'] + $ar_I[$daotao]['pcthni'];
-                $ar_I[$gddt]['pck'] = $ar_I[$giaoduc]['pck'] + $ar_I[$daotao]['pck'];
+                $ar_I[$gddt]['Tpck'] = $ar_I[$giaoduc]['Tpck'] + $ar_I[$daotao]['Tpck'];
                 $ar_I[$gddt]['tongpc'] = $ar_I[$giaoduc]['tongpc'] + $ar_I[$daotao]['tongpc'];
                 $ar_I[$gddt]['ttbh_dv'] = $ar_I[$giaoduc]['ttbh_dv'] + $ar_I[$daotao]['ttbh_dv'];
 
@@ -7185,7 +7216,7 @@ class baocaothongtu67Controller extends Controller
                 $ar_I[$qlnnddt]['pccovu'] = $ar_I[$qlnn]['pccovu'] + $ar_I[$ddt]['pccovu'];
                 $ar_I[$qlnnddt]['pcdang'] = $ar_I[$qlnn]['pcdang'] + $ar_I[$ddt]['pcdang'];
                 $ar_I[$qlnnddt]['pcthni'] = $ar_I[$qlnn]['pcthni'] + $ar_I[$ddt]['pcthni'];
-                $ar_I[$qlnnddt]['pck'] = $ar_I[$qlnn]['pck'] + $ar_I[$ddt]['pck'];
+                $ar_I[$qlnnddt]['Tpck'] = $ar_I[$qlnn]['Tpck'] + $ar_I[$ddt]['Tpck'];
                 $ar_I[$qlnnddt]['tongpc'] = $ar_I[$qlnn]['tongpc'] + $ar_I[$ddt]['tongpc'];
                 $ar_I[$qlnnddt]['ttbh_dv'] = $ar_I[$qlnn]['ttbh_dv'] + $ar_I[$ddt]['ttbh_dv'];
 
@@ -7244,14 +7275,15 @@ class baocaothongtu67Controller extends Controller
                         $tongpc += $ar_I[$i]['pcthni'];
                         $a_It['pcthni'] += $ar_I[$i]['pcthni'];
 
-                        $ar_I[$i]['pck'] = $chitiet->sum('pck');
-                        $tongpc += $ar_I[$i]['pck'];
-                        $a_It['pck'] += $ar_I[$i]['pck'];
+                        $ar_I[$i]['Tpck'] = $chitiet->sum('Tpck');
+                        $tongpc += $ar_I[$i]['Tpck'];
+                        $a_It['Tpck'] += $ar_I[$i]['Tpck'];
 
                         $ar_I[$i]['tongpc'] = $tongpc;
                         $a_It['tongpc'] += $ar_I[$i]['tongpc'];
 
-                        $ar_I[$i]['ttbh_dv'] = round(($ar_I[$i]['luong'] + $ar_I[$i]['pccv']) * 0.24);
+                        $ar_I[$i]['ttbh_dv'] = $chitiet->sum('stbhxh_dv') + $chitiet->sum('stbhyt_dv') +$chitiet->sum('stkpcd_dv') + $chitiet->sum('stbhtn_dv');
+                        //$ar_I[$i]['ttbh_dv'] = round(($ar_I[$i]['luong'] + $ar_I[$i]['pccv']) * 0.24);
                         $a_It['ttbh_dv'] += $ar_I[$i]['ttbh_dv'];
                         //$ar_II['ttbh_dv'] =round(($ar_II['luong'] + $ar_II['pccv'])*0.24);
                     } else {
@@ -7265,7 +7297,7 @@ class baocaothongtu67Controller extends Controller
                         $ar_I[$i]['pccovu'] = 0;
                         $ar_I[$i]['pcdang'] = 0;
                         $ar_I[$i]['pcthni'] = 0;
-                        $ar_I[$i]['pck'] = 0;
+                        $ar_I[$i]['Tpck'] = 0;
                         $ar_I[$i]['tongpc'] = 0;
                         $ar_I[$i]['ttbh_dv'] = 0;
                     }
@@ -7281,7 +7313,7 @@ class baocaothongtu67Controller extends Controller
                 $ar_I[11]['pccovu'] = $ar_I[12]['pccovu'] + $ar_I[13]['pccovu'];
                 $ar_I[11]['pcdang'] = $ar_I[12]['pcdang'] + $ar_I[13]['pcdang'];
                 $ar_I[11]['pcthni'] = $ar_I[12]['pcthni'] + $ar_I[13]['pcthni'];
-                $ar_I[11]['pck'] = $ar_I[12]['pck'] + $ar_I[13]['pck'];
+                $ar_I[11]['Tpck'] = $ar_I[12]['Tpck'] + $ar_I[13]['Tpck'];
                 $ar_I[11]['tongpc'] = $ar_I[12]['tongpc'] + $ar_I[13]['tongpc'];
                 $ar_I[11]['ttbh_dv'] = $ar_I[12]['ttbh_dv'] + $ar_I[13]['ttbh_dv'];
 
@@ -7295,7 +7327,7 @@ class baocaothongtu67Controller extends Controller
                 $ar_I[0]['pccovu'] = $ar_I[1]['pccovu'] + $ar_I[2]['pccovu'];
                 $ar_I[0]['pcdang'] = $ar_I[1]['pcdang'] + $ar_I[2]['pcdang'];
                 $ar_I[0]['pcthni'] = $ar_I[1]['pcthni'] + $ar_I[2]['pcthni'];
-                $ar_I[0]['pck'] = $ar_I[1]['pck'] + $ar_I[2]['pck'];
+                $ar_I[0]['Tpck'] = $ar_I[1]['Tpck'] + $ar_I[2]['Tpck'];
                 $ar_I[0]['tongpc'] = $ar_I[1]['tongpc'] + $ar_I[2]['tongpc'];
                 $ar_I[0]['ttbh_dv'] = $ar_I[1]['ttbh_dv'] + $ar_I[2]['ttbh_dv'];
             }
@@ -7340,8 +7372,8 @@ class baocaothongtu67Controller extends Controller
                 $ar_II['pcthni'] = $model_bangluong_ct->sum('pcthni');
                 $tongpc += $ar_II['pcthni'];
 
-                $ar_II['pck'] = $model_bangluong_ct->sum('pck');
-                $tongpc += $ar_II['pck'];
+                $ar_II['Tpck'] = $model_bangluong_ct->sum('Tpck');
+                $tongpc += $ar_II['Tpck'];
 
                 $ar_II['tongpc'] = $tongpc;
 
@@ -7358,7 +7390,7 @@ class baocaothongtu67Controller extends Controller
                 $ar_II['pccovu'] = 0;
                 $ar_II['pcdang'] = 0;
                 $ar_II['pcthni'] = 0;
-                $ar_II['pck'] = 0;
+                $ar_II['Tpck'] = 0;
                 $ar_II['tongpc'] = 0;
                 $ar_II['ttbh_dv'] = 0;
             }
@@ -7417,6 +7449,7 @@ class baocaothongtu67Controller extends Controller
                     $a_IVt['tongso'] += $ar_IV[0]['tongso'];
                 }
             }
+            //dd($ar_I);
             if(isset($inputs['excel'])){
                 Excel::create('Mau2a1_TT46',function($excel) use($ar_I,$ar_II,$ar_III,$ar_IV,$a_It,$a_IIIt,$a_IVt,$m_dv,$inputs){
                     $excel->sheet('New sheet', function($sheet) use($ar_I,$ar_II,$ar_III,$ar_IV,$a_It,$a_IIIt,$a_IVt,$m_dv,$inputs){
@@ -8101,21 +8134,6 @@ class baocaothongtu67Controller extends Controller
                 $ct->pcdbqh = $ct->pcdbqh * $luongcb;
                 $ct->pcvk = $ct->pcvk * $luongcb;
                 $ct->ttbh_dv = ($ct->stbhxh_dv + $ct->stbhyt_dv +$ct->stkpcd_dv + $ct->stbhtn_dv) * $luongcb;
-                /*
-                $ct->heso = ($ct->heso / $ct->luongcoban)* $luongcb;
-                $ct->pckv = ($ct->pckv / $ct->luongcoban)* $luongcb;
-                $ct->pccv = ($ct->pccv / $ct->luongcoban)* $luongcb;
-                $ct->pctnvk = ($ct->pctnvk / $ct->luongcoban)* $luongcb;
-                $ct->pcudn = ($ct->pcudn / $ct->luongcoban)* $luongcb;
-                $ct->pcth = ($ct->pcth / $ct->luongcoban)* $luongcb;
-                $ct->pctn = ($ct->pctn / $ct->luongcoban)* $luongcb;
-                $ct->pccovu = ($ct->pccovu / $ct->luongcoban)* $luongcb;
-                $ct->pcdang = ($ct->pcdang / $ct->luongcoban)* $luongcb;
-                $ct->pcthni = ($ct->pcthni / $ct->luongcoban)* $luongcb;
-                $ct->pck = ($ct->pck / $ct->luongcoban)* $luongcb;
-                $ct->pcdbqh = ($ct->pcdbqh / $ct->luongcoban)* $luongcb;
-                $ct->pcvk = ($ct->pcvk / $ct->luongcoban)* $luongcb;
-                */
             }
 
             $model_bangluong_ct = $model_tonghop_ct->where('macongtac','BIENCHE')->where('maphanloai','<>','KVXP');
@@ -8464,7 +8482,14 @@ class baocaothongtu67Controller extends Controller
                     $model_tonghop_ct = tonghopluong_donvi_chitiet::join('tonghopluong_donvi', 'tonghopluong_donvi_chitiet.mathdv', '=', 'tonghopluong_donvi.mathdv')
                         ->select('tonghopluong_donvi_chitiet.linhvuchoatdong', DB::raw('st_heso as heso'), DB::raw('st_pckv as pckv'), DB::raw('st_pccv as pccv'),
                             DB::raw('st_pctnvk as pctnvk'), DB::raw('st_pcudn as pcudn'), DB::raw('st_pcth as pcth'), DB::raw('st_pctn as pctn'), DB::raw('st_pccovu as pccovu'), DB::raw('st_pcdang as pcdang'),
-                            DB::raw('st_pcthni as pcthni'), DB::raw('st_pck as pck'), 'nguoigui', 'madv', 'tonghopluong_donvi.mathh', 'tonghopluong_donvi.mathdv', 'macongtac')
+                            DB::raw('st_pcthni as pcthni'), DB::raw('st_pck as pck'),DB::raw('st_pcct as pcct'),DB::raw('st_pckct as pckct'),DB::raw('st_pcdd as pcdd'),
+                            DB::raw('st_pcdh as pcdh'),DB::raw('st_pcld as pcld'),DB::raw('st_pcdbqh as pcdbqh'),DB::raw('st_pctnn as pctnn'),DB::raw('st_pcdbn as pcdbn'),
+                            DB::raw('st_pcvk as pcvk'),DB::raw('st_pckn as pckn'),DB::raw('st_pcdang as pcdang'),DB::raw('st_pclt as pclt'),DB::raw('st_pcd as pcd'),
+                            DB::raw('st_pctr as pctr'),DB::raw('st_pctdt as pctdt'),DB::raw('st_pclade as pclade'),DB::raw('st_pcud61 as pcud61'),DB::raw('st_pcxaxe as pcxaxe'),
+                            DB::raw('st_pcdith as pcdith'),DB::raw('st_pcphth as pcphth'),DB::raw('st_pcphth as pctnvk'),DB::raw('st_pcbdhdcu as pcbdhdcu'),DB::raw('st_pcctp as pcctp'),
+                            DB::raw('st_pctaicu as pctaicu'),
+                            'stbhxh_dv','stbhyt_dv','stkpcd_dv','stbhtn_dv','ttbh_dv',
+                            'nguoigui', 'madv', 'tonghopluong_donvi.mathh', 'tonghopluong_donvi.mathdv', 'macongtac')
                         ->where('tonghopluong_donvi.macqcq', session('admin')->madv)
                         ->wherein('tonghopluong_donvi_chitiet.mathdv', function ($qr) {
                             $qr->select('mathdv')->from('tonghopluong_donvi')->where('thang', '07')->where('nam', '2019')->where('trangthai', 'DAGUI')
@@ -8476,7 +8501,10 @@ class baocaothongtu67Controller extends Controller
                         $model_tonghop_ct = tonghopluong_donvi_chitiet::join('tonghopluong_donvi', 'tonghopluong_donvi_chitiet.mathdv', '=', 'tonghopluong_donvi.mathdv')
                             ->select('tonghopluong_donvi_chitiet.linhvuchoatdong', 'tonghopluong_donvi_chitiet.heso', 'tonghopluong_donvi_chitiet.pckv', 'tonghopluong_donvi_chitiet.pccv',
                                 'tonghopluong_donvi_chitiet.pctnvk', 'tonghopluong_donvi_chitiet.pcudn', 'pcth', 'pctn', 'pccovu', 'pcdang',
-                                'pcthni', 'pck', 'nguoigui', 'madv', 'tonghopluong_donvi.mathh', 'tonghopluong_donvi.mathdv', 'macongtac')
+                                'pcthni', 'pck','pcct','pckct','pcdd','pcdh','pcld','pcdbqh','pctnn','pcdbn','pcvk','pckn','pcdang','pclt','pcd','pctr',
+                                'pctdt','pclade','pcud61','pcxaxe','pcdith','pcphth','pctnvk','pcbdhdcu','pcctp','pctaicu',
+                                'stbhxh_dv','stbhyt_dv','stkpcd_dv','stbhtn_dv','ttbh_dv',
+                                'nguoigui', 'madv', 'tonghopluong_donvi.mathh', 'tonghopluong_donvi.mathdv', 'macongtac')
                             ->where('tonghopluong_donvi.macqcq', session('admin')->madv)
                             ->wherein('tonghopluong_donvi_chitiet.mathdv', function ($qr) {
                                 $qr->select('mathdv')->from('tonghopluong_donvi')->where('thang', '07')->where('nam', '2019')->where('trangthai', 'DAGUI')
@@ -8491,7 +8519,14 @@ class baocaothongtu67Controller extends Controller
                     $model_tonghop_ct = tonghopluong_donvi_chitiet::join('tonghopluong_donvi', 'tonghopluong_donvi_chitiet.mathdv', '=', 'tonghopluong_donvi.mathdv')
                         ->select('tonghopluong_donvi_chitiet.linhvuchoatdong', DB::raw('st_heso as heso'), DB::raw('st_pckv as pckv'), DB::raw('st_pccv as pccv'),
                             DB::raw('st_pctnvk as pctnvk'), DB::raw('st_pcudn as pcudn'), DB::raw('st_pcth as pcth'), DB::raw('st_pctn as pctn'), DB::raw('st_pccovu as pccovu'), DB::raw('st_pcdang as pcdang'),
-                            DB::raw('st_pcthni as pcthni'), DB::raw('st_pck as pck'), 'nguoigui', 'madv', 'tonghopluong_donvi.mathh', 'tonghopluong_donvi.mathdv', 'macongtac')
+                            DB::raw('st_pcthni as pcthni'), DB::raw('st_pck as pck'),DB::raw('st_pcct as pcct'),DB::raw('st_pckct as pckct'),DB::raw('st_pcdd as pcdd'),
+                            DB::raw('st_pcdh as pcdh'),DB::raw('st_pcld as pcld'),DB::raw('st_pcdbqh as pcdbqh'),DB::raw('st_pctnn as pctnn'),DB::raw('st_pcdbn as pcdbn'),
+                            DB::raw('st_pcvk as pcvk'),DB::raw('st_pckn as pckn'),DB::raw('st_pcdang as pcdang'),DB::raw('st_pclt as pclt'),DB::raw('st_pcd as pcd'),
+                            DB::raw('st_pctr as pctr'),DB::raw('st_pctdt as pctdt'),DB::raw('st_pclade as pclade'),DB::raw('st_pcud61 as pcud61'),DB::raw('st_pcxaxe as pcxaxe'),
+                            DB::raw('st_pcdith as pcdith'),DB::raw('st_pcphth as pcphth'),DB::raw('st_pcphth as pctnvk'),DB::raw('st_pcbdhdcu as pcbdhdcu'),DB::raw('st_pcctp as pcctp'),
+                            DB::raw('st_pctaicu as pctaicu'),
+                            'stbhxh_dv','stbhyt_dv','stkpcd_dv','stbhtn_dv','ttbh_dv',
+                            'nguoigui', 'madv', 'tonghopluong_donvi.mathh', 'tonghopluong_donvi.mathdv', 'macongtac')
                         ->where('tonghopluong_donvi.madvbc', $madvbc)
                         ->wherein('tonghopluong_donvi_chitiet.mathdv', function ($qr) {
                             $qr->select('mathdv')->from('tonghopluong_donvi')->where('thang', '07')->where('nam', '2019')->where('trangthai', 'DAGUI')
@@ -8500,10 +8535,27 @@ class baocaothongtu67Controller extends Controller
                         ->groupby('linhvuchoatdong', 'nguoigui', 'madv', 'mathh', 'mathdv', 'macongtac')
                         ->get();
                     if (isset($inputs['inheso'])) {
+                        /*
                         $model_tonghop_ct = tonghopluong_donvi_chitiet::join('tonghopluong_donvi', 'tonghopluong_donvi_chitiet.mathdv', '=', 'tonghopluong_donvi.mathdv')
                             ->select('tonghopluong_donvi_chitiet.linhvuchoatdong', 'tonghopluong_donvi_chitiet.heso', 'tonghopluong_donvi_chitiet.pckv', 'tonghopluong_donvi_chitiet.pccv',
                                 'tonghopluong_donvi_chitiet.pctnvk', 'tonghopluong_donvi_chitiet.pcudn', 'pcth', 'pctn', 'pccovu', 'pcdang',
-                                'pcthni', 'pck', 'nguoigui', 'madv', 'tonghopluong_donvi.mathh', 'tonghopluong_donvi.mathdv', 'macongtac')
+                                'pcthni', 'pck','stbhxh_dv','stbhyt_dv','stkpcd_dv','stbhtn_dv','ttbh_dv',
+                                'nguoigui', 'madv', 'tonghopluong_donvi.mathh', 'tonghopluong_donvi.mathdv', 'macongtac')
+                            ->where('tonghopluong_donvi.madvbc', $madvbc)
+                            ->wherein('tonghopluong_donvi_chitiet.mathdv', function ($qr) {
+                                $qr->select('mathdv')->from('tonghopluong_donvi')->where('thang', '07')->where('nam', '2019')->where('trangthai', 'DAGUI')
+                                    ->distinct()->get();
+                            })
+                            ->groupby('linhvuchoatdong', 'nguoigui', 'madv', 'mathh', 'mathdv', 'macongtac')
+                            ->get();
+                        */
+                        $model_tonghop_ct = tonghopluong_donvi_chitiet::join('tonghopluong_donvi', 'tonghopluong_donvi_chitiet.mathdv', '=', 'tonghopluong_donvi.mathdv')
+                            ->select('tonghopluong_donvi_chitiet.linhvuchoatdong', 'tonghopluong_donvi_chitiet.heso', 'tonghopluong_donvi_chitiet.pckv', 'tonghopluong_donvi_chitiet.pccv',
+                                'tonghopluong_donvi_chitiet.pctnvk', 'tonghopluong_donvi_chitiet.pcudn', 'pcth', 'pctn', 'pccovu', 'pcdang',
+                                'pcthni', 'pck','pcct','pckct','pcdd','pcdh','pcld','pcdbqh','pctnn','pcdbn','pcvk','pckn','pcdang','pclt','pcd','pctr',
+                                'pctdt','pclade','pcud61','pcxaxe','pcdith','pcphth','pctnvk','pcbdhdcu','pcctp','pctaicu',
+                                'stbhxh_dv','stbhyt_dv','stkpcd_dv','stbhtn_dv','ttbh_dv',
+                                'nguoigui', 'madv', 'tonghopluong_donvi.mathh', 'tonghopluong_donvi.mathdv', 'macongtac')
                             ->where('tonghopluong_donvi.madvbc', $madvbc)
                             ->wherein('tonghopluong_donvi_chitiet.mathdv', function ($qr) {
                                 $qr->select('mathdv')->from('tonghopluong_donvi')->where('thang', '07')->where('nam', '2019')->where('trangthai', 'DAGUI')
@@ -8528,7 +8580,7 @@ class baocaothongtu67Controller extends Controller
                     ->where('chitieubienche.nam','2019')->where('dmdonvi.madvbc','like',$inputs['madv'].'%')
                     ->where('dmdonvibaocao.level','T')->get();
                 //$luongcb = 1210000; tạm thời bỏ vì bang lương đã nhân lcb
-                $luongcb = 0.935;
+                $luongcb = 1;
                 //nếu đơn vị đã tạo bảng lương tháng 07/2017 =>xuất kết quả
                 $model_tonghop_ct = tonghopluong_donvi_chitiet::join('tonghopluong_donvi', 'tonghopluong_donvi_chitiet.mathdv', '=', 'tonghopluong_donvi.mathdv')
                     ->join('dmdonvibaocao','dmdonvibaocao.madvbc','=','tonghopluong_donvi.madvbc')
@@ -8539,15 +8591,21 @@ class baocaothongtu67Controller extends Controller
                             ->distinct()->get();
                     })->get();
             }
+            //dd($model_tonghop_ct);
+            $a_phucap = dmphucap_donvi::where('madv', session('admin')->madv)->where('phanloai','<','3')->get();
             foreach($model_tonghop_ct as $ct){
                 if($inputs['madv'] !="" && count($chekdv) > 0){
                     $tonghop = $model_tonghop->where('mathdv',$ct->mathh)->first();
                     $ct->maphanloai = $tonghop->maphanloai;
+                    $a_phucap = dmphucap_donvi::where('madv', $inputs['madv'])->where('phanloai','<','3')->get();
                 }
                 else {
                     $tonghop = $model_tonghop->where('mathdv', $ct->mathdv)->first();
                     $ct->maphanloai = $model_donvi->where('madv', $tonghop->madv)->first()->maphanloai;
+                    $a_phucap = dmphucap_donvi::where('madv', $tonghop->madv)->where('phanloai','<','3')->get();
                 }
+                $a_phucap =array_column($a_phucap->toarray(), 'mapc');
+                $a_pc = array('heso','pckv','pccv','pctnvk','pcudn','pcth','pctn','pccovu','pcdang','pcthni','pcdbqh','pcvk');
                 //$a_th =  array_column($tonghop->toarray(),'mathdv','maphanloai');
                 //$ct->maphanloai =  $a_th[$ct->mathdv];
                 $ct->heso = $ct->heso * $luongcb;
@@ -8562,6 +8620,11 @@ class baocaothongtu67Controller extends Controller
                 $ct->pcthni = $ct->pcthni * $luongcb;
                 $ct->pck = $ct->pck * $luongcb;
                 $ct->pcdbqh = $ct->pcdbqh * $luongcb;
+                foreach($a_phucap as $phca){
+                    if(!in_array($phca, $a_pc)){
+                        $ct->Tpck += $ct->$phca*$luongcb;
+                    }
+                }
                 $ct->pcvk = $ct->pcvk * $luongcb;
                 $ct->ttbh_dv = ($ct->stbhxh_dv + $ct->stbhyt_dv +$ct->stkpcd_dv + $ct->stbhtn_dv) * $luongcb;
 
@@ -8613,7 +8676,7 @@ class baocaothongtu67Controller extends Controller
                 'pccovu' => 0,
                 'pcdang' => 0,
                 'pcthni' => 0,
-                'pck' => 0,
+                'Tpck' => 0,
                 'tongpc' => 0,
                 'ttbh_dv' => 0,
                 'chenhlech' => 0
@@ -8652,7 +8715,7 @@ class baocaothongtu67Controller extends Controller
                     $ar_I[$i]['pccovu'] = 0;
                     $ar_I[$i]['pcdang'] = 0;
                     $ar_I[$i]['pcthni'] = 0;
-                    $ar_I[$i]['pck'] = 0;
+                    $ar_I[$i]['Tpck'] = 0;
                     $ar_I[$i]['tongpc'] = 0;
                     $ar_I[$i]['ttbh_dv'] = 0;
                     $ar_I[$i]['chenhlech'] = 0;
@@ -8708,16 +8771,17 @@ class baocaothongtu67Controller extends Controller
                             $tongpc += $ar_I[$i]['pcthni'];
                             $a_It['pcthni'] += $ar_I[$i]['pcthni'];
 
-                            $ar_I[$i]['pck'] = $thongtinchitiet['pck'] * $luongcb;
-                            $tongpc += $ar_I[$i]['pck'];
-                            $a_It['pck'] += $ar_I[$i]['pck'];
+                            $ar_I[$i]['Tpck'] = $thongtinchitiet['Tpck'] * $luongcb;
+                            $tongpc += $ar_I[$i]['Tpck'];
+                            $a_It['Tpck'] += $ar_I[$i]['Tpck'];
 
-                            $ar_I[$i]['ttbh_dv'] = round($thongtinchitiet['ttbh_dv'] * $luongcb);
+                            $ar_I[$i]['ttbh_dv'] = $thongtinchitiet['stbhxh_dv'] + $thongtinchitiet['stbhyt_dv'] + $thongtinchitiet['stkpcd_dv'] + $thongtinchitiet['stbhtn_dv'];
+                            //$ar_I[$i]['ttbh_dv'] = round($thongtinchitiet['ttbh_dv'] * $luongcb);
                             $a_It['ttbh_dv'] += $ar_I[$i]['ttbh_dv'];
 
                             $ar_I[$i]['tongpc'] = $tongpc;
                             $a_It['tongpc'] += $ar_I[$i]['tongpc'];
-                            $ar_I[$i]['chenhlech'] = round(($tongpc + $ar_I[$i]['ttbh_dv'] + $ar_I[$i]['luong']) * 90000 / 1390000);
+                            $ar_I[$i]['chenhlech'] = round(($tongpc + $ar_I[$i]['ttbh_dv'] + $ar_I[$i]['luong']) * (1-0.933));
                             $a_It['chenhlech'] += $ar_I[$i]['chenhlech'];
 
                             $ar_I[$luugr]['luong'] += $ar_I[$i]['luong'];
@@ -8730,7 +8794,7 @@ class baocaothongtu67Controller extends Controller
                             $ar_I[$luugr]['pccovu'] += $ar_I[$i]['pccovu'];
                             $ar_I[$luugr]['pcdang'] += $ar_I[$i]['pcdang'];
                             $ar_I[$luugr]['pcthni'] += $ar_I[$i]['pcthni'];
-                            $ar_I[$luugr]['pck'] += $ar_I[$i]['pck'];
+                            $ar_I[$luugr]['Tpck'] += $ar_I[$i]['Tpck'];
                             $ar_I[$luugr]['tongpc'] += $ar_I[$i]['tongpc'];
                             $ar_I[$luugr]['ttbh_dv'] += $ar_I[$i]['ttbh_dv'];
                             $ar_I[$luugr]['chenhlech'] += $ar_I[$i]['chenhlech'];
@@ -8747,7 +8811,7 @@ class baocaothongtu67Controller extends Controller
                         $ar_I[$i]['pccovu'] = 0;
                         $ar_I[$i]['pcdang'] = 0;
                         $ar_I[$i]['pcthni'] = 0;
-                        $ar_I[$i]['pck'] = 0;
+                        $ar_I[$i]['Tpck'] = 0;
                         $ar_I[$i]['tongpc'] = 0;
                         $ar_I[$i]['ttbh_dv'] = 0;
                         $ar_I[$i]['chenhlech'] = 0;
@@ -8763,7 +8827,7 @@ class baocaothongtu67Controller extends Controller
                 $ar_I[$gddt]['pccovu'] = $ar_I[$giaoduc]['pccovu'] + $ar_I[$daotao]['pccovu'];
                 $ar_I[$gddt]['pcdang'] = $ar_I[$giaoduc]['pcdang'] + $ar_I[$daotao]['pcdang'];
                 $ar_I[$gddt]['pcthni'] = $ar_I[$giaoduc]['pcthni'] + $ar_I[$daotao]['pcthni'];
-                $ar_I[$gddt]['pck'] = $ar_I[$giaoduc]['pck'] + $ar_I[$daotao]['pck'];
+                $ar_I[$gddt]['Tpck'] = $ar_I[$giaoduc]['Tpck'] + $ar_I[$daotao]['Tpck'];
                 $ar_I[$gddt]['tongpc'] = $ar_I[$giaoduc]['tongpc'] + $ar_I[$daotao]['tongpc'];
                 $ar_I[$gddt]['ttbh_dv'] = $ar_I[$giaoduc]['ttbh_dv'] + $ar_I[$daotao]['ttbh_dv'];
                 $ar_I[$gddt]['chenhlech'] = $ar_I[$giaoduc]['chenhlech'] + $ar_I[$daotao]['chenhlech'];
@@ -8778,7 +8842,7 @@ class baocaothongtu67Controller extends Controller
                 $ar_I[$qlnnddt]['pccovu'] = $ar_I[$qlnn]['pccovu'] + $ar_I[$ddt]['pccovu'];
                 $ar_I[$qlnnddt]['pcdang'] = $ar_I[$qlnn]['pcdang'] + $ar_I[$ddt]['pcdang'];
                 $ar_I[$qlnnddt]['pcthni'] = $ar_I[$qlnn]['pcthni'] + $ar_I[$ddt]['pcthni'];
-                $ar_I[$qlnnddt]['pck'] = $ar_I[$qlnn]['pck'] + $ar_I[$ddt]['pck'];
+                $ar_I[$qlnnddt]['Tpck'] = $ar_I[$qlnn]['Tpck'] + $ar_I[$ddt]['Tpck'];
                 $ar_I[$qlnnddt]['tongpc'] = $ar_I[$qlnn]['tongpc'] + $ar_I[$ddt]['tongpc'];
                 $ar_I[$qlnnddt]['ttbh_dv'] = $ar_I[$qlnn]['ttbh_dv'] + $ar_I[$ddt]['ttbh_dv'];
                 $ar_I[$qlnnddt]['chenhlech'] = $ar_I[$qlnn]['chenhlech'] + $ar_I[$ddt]['chenhlech'];
@@ -8830,11 +8894,12 @@ class baocaothongtu67Controller extends Controller
                         $tongpc += $ar_I[$i]['pcthni'];
                         $a_It['pcthni'] += $ar_I[$i]['pcthni'];
 
-                        $ar_I[$i]['pck'] = $chitiet->sum('pck') * $luongcb;
-                        $tongpc += $ar_I[$i]['pck'];
-                        $a_It['pck'] += $ar_I[$i]['pck'];
+                        $ar_I[$i]['Tpck'] = $chitiet->sum('Tpck') * $luongcb;
+                        $tongpc += $ar_I[$i]['Tpck'];
+                        $a_It['Tpck'] += $ar_I[$i]['Tpck'];
 
-                        $ar_I[$i]['ttbh_dv'] = round($chitiet->sum('ttbh_dv') * $luongcb);
+                        $ar_I[$i]['ttbh_dv'] = $chitiet->sum('stbhxh_dv') + $chitiet->sum('stbhyt_dv') +$chitiet->sum('stkpcd_dv') + $chitiet->sum('stbhtn_dv');
+                        //$ar_I[$i]['ttbh_dv'] = round($chitiet->sum('ttbh_dv') * $luongcb);
                         $a_It['ttbh_dv'] += $ar_I[$i]['ttbh_dv'];
 
                         $ar_I[$i]['tongpc'] = $tongpc;
@@ -8853,7 +8918,7 @@ class baocaothongtu67Controller extends Controller
                         $ar_I[$i]['pccovu'] = 0;
                         $ar_I[$i]['pcdang'] = 0;
                         $ar_I[$i]['pcthni'] = 0;
-                        $ar_I[$i]['pck'] = 0;
+                        $ar_I[$i]['Tpck'] = 0;
                         $ar_I[$i]['tongpc'] = 0;
                         $ar_I[$i]['ttbh_dv'] = 0;
                         $ar_I[$i]['chenhlech'] = 0;
@@ -8869,7 +8934,7 @@ class baocaothongtu67Controller extends Controller
                 $ar_I[11]['pccovu'] = $ar_I[12]['pccovu'] + $ar_I[13]['pccovu'];
                 $ar_I[11]['pcdang'] = $ar_I[12]['pcdang'] + $ar_I[13]['pcdang'];
                 $ar_I[11]['pcthni'] = $ar_I[12]['pcthni'] + $ar_I[13]['pcthni'];
-                $ar_I[11]['pck'] = $ar_I[12]['pck'] + $ar_I[13]['pck'];
+                $ar_I[11]['Tpck'] = $ar_I[12]['pck'] + $ar_I[13]['Tpck'];
                 $ar_I[11]['tongpc'] = $ar_I[12]['tongpc'] + $ar_I[13]['tongpc'];
                 $ar_I[11]['ttbh_dv'] = $ar_I[12]['ttbh_dv'] + $ar_I[13]['ttbh_dv'];
                 $ar_I[11]['chenhlech'] = $ar_I[12]['chenhlech'] + $ar_I[13]['chenhlech'];
@@ -8884,7 +8949,7 @@ class baocaothongtu67Controller extends Controller
                 $ar_I[0]['pccovu'] = $ar_I[1]['pccovu'] + $ar_I[2]['pccovu'];
                 $ar_I[0]['pcdang'] = $ar_I[1]['pcdang'] + $ar_I[2]['pcdang'];
                 $ar_I[0]['pcthni'] = $ar_I[1]['pcthni'] + $ar_I[2]['pcthni'];
-                $ar_I[0]['pck'] = $ar_I[1]['pck'] + $ar_I[2]['pck'];
+                $ar_I[0]['Tpck'] = $ar_I[1]['pck'] + $ar_I[2]['Tpck'];
                 $ar_I[0]['tongpc'] = $ar_I[1]['tongpc'] + $ar_I[2]['tongpc'];
                 $ar_I[0]['ttbh_dv'] = $ar_I[1]['ttbh_dv'] + $ar_I[2]['ttbh_dv'];
                 $ar_I[0]['chenhlech'] = $ar_I[1]['chenhlech'] + $ar_I[2]['chenhlech'];
@@ -8921,8 +8986,8 @@ class baocaothongtu67Controller extends Controller
                 $tongpc += $ar_II['pcdang'];
                 $ar_II['pcthni'] = $chitiet->sum('pcthni')* $luongcb;
                 $tongpc += $ar_II['pcthni'];
-                $ar_II['pck'] = $chitiet->sum('pck');
-                $tongpc += $ar_II['pck'];
+                $ar_II['Tpck'] = $chitiet->sum('Tpck');
+                $tongpc += $ar_II['Tpck'];
                 $ar_II['tongpc'] = $tongpc;
 
                 $ar_II['chenhlech'] = round(($tongpc +$ar_II['ttbh_dv'] +$ar_II['luong'])*90000/1390000);
@@ -8938,7 +9003,7 @@ class baocaothongtu67Controller extends Controller
                 $ar_II['pccovu'] = 0;
                 $ar_II['pcdang'] = 0;
                 $ar_II['pcthni'] = 0;
-                $ar_II['pck'] = 0;
+                $ar_II['Tpck'] = 0;
                 $ar_II['tongpc'] = 0;
                 $ar_II['ttbh_dv'] = 0;
                 $ar_II['chenhlech'] = 0;

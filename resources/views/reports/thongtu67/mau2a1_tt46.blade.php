@@ -126,7 +126,7 @@
         <td>{{dinhdangso($a_It['pccovu'] + $ar_II['pccovu'],0,$inputs['donvitinh'])}}</td>
         <td>{{dinhdangso($a_It['pcdang'] + $ar_II['pcdang'],0,$inputs['donvitinh'])}}</td>
         <td>{{dinhdangso($a_It['pcthni'] + $ar_II['pcthni'],0,$inputs['donvitinh'])}}</td>
-        <td>{{dinhdangso($a_It['pck'] + $ar_II['pck'],0,$inputs['donvitinh'])}}</td>
+        <td>{{dinhdangso($a_It['Tpck'] + $ar_II['Tpck'],0,$inputs['donvitinh'])}}</td>
         <td>{{dinhdangso($a_It['ttbh_dv'] + $ar_II['ttbh_dv'],0,$inputs['donvitinh'])}}</td>
     </tr>
     <tr style="font-weight: bold; text-align: right">
@@ -146,7 +146,7 @@
         <td>{{dinhdangso($a_It['pccovu'],0,$inputs['donvitinh'])}}</td>
         <td>{{dinhdangso($a_It['pcdang'],0,$inputs['donvitinh'])}}</td>
         <td>{{dinhdangso($a_It['pcthni'],0,$inputs['donvitinh'])}}</td>
-        <td>{{dinhdangso($a_It['pck'],0,$inputs['donvitinh'])}}</td>
+        <td>{{dinhdangso($a_It['Tpck'],0,$inputs['donvitinh'])}}</td>
         <td>{{dinhdangso($a_It['ttbh_dv'],0,$inputs['donvitinh'])}}</td>
     </tr>
 
@@ -188,7 +188,7 @@
             <td>{{dinhdangso($dulieu['pccovu'],0,$inputs['donvitinh'])}}</td>
             <td>{{dinhdangso($dulieu['pcdang'],0,$inputs['donvitinh'])}}</td>
             <td>{{dinhdangso($dulieu['pcthni'],0,$inputs['donvitinh'])}}</td>
-            <td>{{dinhdangso($dulieu['pck'],0,$inputs['donvitinh'])}}</td>
+            <td>{{dinhdangso($dulieu['Tpck'],0,$inputs['donvitinh'])}}</td>
             <td>{{dinhdangso($dulieu['ttbh_dv'],0,$inputs['donvitinh'])}}</td>
         </tr>
     @endforeach
@@ -210,7 +210,7 @@
         <td>{{dinhdangso($ar_II['pccovu'],0,$inputs['donvitinh'])}}</td>
         <td>{{dinhdangso($ar_II['pcdang'],0,$inputs['donvitinh'])}}</td>
         <td>{{dinhdangso($ar_II['pcthni'],0,$inputs['donvitinh'])}}</td>
-        <td>{{dinhdangso($ar_II['pck'],0,$inputs['donvitinh'])}}</td>
+        <td>{{dinhdangso($ar_II['Tpck'],0,$inputs['donvitinh'])}}</td>
         <td>{{dinhdangso($ar_II['ttbh_dv'],0,$inputs['donvitinh'])}}</td>
     </tr>
     <tr style="font-weight: bold;">
