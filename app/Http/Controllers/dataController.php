@@ -77,14 +77,14 @@ class dataController extends Controller
                 ->where('thang', $thang)
                 ->where('nam', $nam)
                 ->where('madv', $madv)
-                ->where('phanloai', 'BANGLUONG')->get();
+                ->where('phanloai', $phanloai)->get();
         } else {
             $a_bl = \App\bangluong::select('mabl')
                 ->where('thang', $thang)
                 ->where('nam', $nam)
                 ->where('madv', $madv)
                 ->wherein('manguonkp', $manguonkp)
-                ->where('phanloai', 'BANGLUONG')->get()->toarray();
+                ->where('phanloai', $phanloai)->get()->toarray();
         }
 
         return  \App\bangluong_ct::wherein('mabl',$a_bl)->orderby('stt')->get();
