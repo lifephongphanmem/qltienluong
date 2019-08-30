@@ -161,21 +161,26 @@
             @foreach($a_phucap as $key=>$val)
                 <td>{{dinhdangsothapphan($chitiet->sum('hs'.$key) ,5)}}</td>
             @endforeach
-
+            <?php $tongluong = 0;?>
             @foreach($a_phucap as $key=>$val)
+                <?php
+
+                $ma = 'st_'.$key;
+                $tongluong += $ct->$ma;
+                ?>
                 <td>{{dinhdangso($chitiet->sum('st_'.$key))}}</td>
             @endforeach
 
-            <td>{{dinhdangso($chitiet->sum('tonghs'))}}</td>
+            <td>{{dinhdangso($chitiet->sum($tongluong))}}</td>
             <td>{{dinhdangso($chitiet->sum('giaml'))}}</td>
-            <td>{{dinhdangso($chitiet->sum('tongtl'))}}</td>
+            <td>{{dinhdangso($chitiet->sum($tongluong - $chitiet->sum('giaml')))}}</td>
 
             <td>{{dinhdangso($chitiet->sum('stbhxh_dv'))}}</td>
             <td>{{dinhdangso($chitiet->sum('stbhyt_dv'))}}</td>
             <td>{{dinhdangso($chitiet->sum('stkpcd_dv'))}}</td>
             <td>{{dinhdangso($chitiet->sum('stbhtn_dv'))}}</td>
             <td>{{dinhdangso($chitiet->sum('tongbh'))}}</td>
-            <td>{{dinhdangso($chitiet->sum('tongbh') + $chitiet->sum('tongtl'))}}</td>
+            <td>{{dinhdangso($chitiet->sum('tongbh') + $tongluong - $chitiet->sum('giaml'))}}</td>
         </tr>
     @endforeach
 
@@ -185,21 +190,26 @@
         @foreach($a_phucap as $key=>$val)
             <td>{{dinhdangsothapphan($model->sum('hs'.$key) ,5)}}</td>
         @endforeach
-
+        <?php $tongluong = 0;?>
         @foreach($a_phucap as $key=>$val)
+            <?php
+
+            $ma = 'st_'.$key;
+            $tongluong += $ct->$ma;
+            ?>
             <td>{{dinhdangso($model->sum('st_'.$key))}}</td>
         @endforeach
 
-        <td>{{dinhdangso($model->sum('tonghs'))}}</td>
+        <td>{{dinhdangso($model->sum($tongluong))}}</td>
         <td>{{dinhdangso($model->sum('giaml'))}}</td>
-        <td>{{dinhdangso($model->sum('tongtl'))}}</td>
+        <td>{{dinhdangso($tongluong - $model->sum('giaml'))}}</td>
 
         <td>{{dinhdangso($model->sum('stbhxh_dv'))}}</td>
         <td>{{dinhdangso($model->sum('stbhyt_dv'))}}</td>
         <td>{{dinhdangso($model->sum('stkpcd_dv'))}}</td>
         <td>{{dinhdangso($model->sum('stbhtn_dv'))}}</td>
         <td>{{dinhdangso($model->sum('tongbh'))}}</td>
-        <td>{{dinhdangso($model->sum('tongbh') + $model->sum('tongtl'))}}</td>
+        <td>{{dinhdangso($model->sum('tongbh') + $tongluong - $model->sum('giaml'))}}</td>
     </tr>
 </table>
 
