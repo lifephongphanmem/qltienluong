@@ -130,15 +130,19 @@
                 @foreach($a_phucap_hs as $key=>$val)
                     <td>{{dinhdangsothapphan($ct->$key,5)}}</td>
                 @endforeach
-
+                <?php $tongluong = 0;?>
                 @foreach($a_phucap as $key=>$val)
-                    <?php $ma = 'st_'.$key;?>
+                    <?php
+
+                    $ma = 'st_'.$key;
+                    $tongluong += $ct->$ma;
+                    ?>
                     <td>{{dinhdangso($ct->$ma)}}</td>
                 @endforeach
 
-                <td>{{dinhdangso($ct->tonghs)}}</td>
+                <td>{{dinhdangso($tongluong)}}</td>
                 <td>{{dinhdangso($ct->giaml)}}</td>
-                <td>{{dinhdangso($ct->tongtl)}}</td>
+                <td>{{dinhdangso($tongluong - $ct->giaml)}}</td>
 
 
                 <td>{{dinhdangso($ct->stbhxh_dv)}}</td>
@@ -146,7 +150,7 @@
                 <td>{{dinhdangso($ct->stkpcd_dv)}}</td>
                 <td>{{dinhdangso($ct->stbhtn_dv)}}</td>
                 <td>{{dinhdangso($ct->tongbh)}}</td>
-                <td>{{dinhdangso($ct->tongbh + $ct->tongtl)}}</td>
+                <td>{{dinhdangso($ct->tongbh +$tongluong - $ct->giaml)}}</td>
 
             </tr>
         @endforeach
