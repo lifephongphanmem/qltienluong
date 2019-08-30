@@ -11453,7 +11453,7 @@ class baocaothongtu67Controller extends Controller
             ///if ((Session::has('admin') && session('admin')->username == 'khthstc') || (Session::has('admin') && session('admin')->username == 'khthso') ) {
             $inputs = $request->all();
             $model = nguonkinhphi::where('madvbc','like',$inputs['madv'].'%')
-                ->where('sohieu ','ND38_2019')
+                ->where('sohieu','ND38_2019')
                 ->where('macqcq',session('admin')->madv)
                 ->where('trangthai','DAGUI')
                 ->get();
