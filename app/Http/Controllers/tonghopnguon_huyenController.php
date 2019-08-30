@@ -255,7 +255,7 @@ class tonghopnguon_huyenController extends Controller
                 $data[4]['khác'] = 0;
                 $data[4]['nguonthu'] = $model->sum('nguonthu') - $data[0]['nguonthu'] - $data[5]['nguonthu'] - $data[3]['nguonthu'];
 
-            return view('reports.thongtu67.mau4b_tt68')
+            return view('reports.thongtu67.mau4b_tt46')
                 ->with('model',$model)
                 ->with('data',$data)
                 ->with('m_dv',$m_dv)
