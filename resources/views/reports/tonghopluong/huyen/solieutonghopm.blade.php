@@ -166,12 +166,12 @@
                 <?php
 
                 $ma = 'st_'.$key;
-                $tongluong += $ct->$ma;
+                $tongluong += $chitiet->$ma;
                 ?>
                 <td>{{dinhdangso($chitiet->sum('st_'.$key))}}</td>
             @endforeach
 
-            <td>{{dinhdangso($chitiet->sum($tongluong))}}</td>
+            <td>{{dinhdangso($tongluong)}}</td>
             <td>{{dinhdangso($chitiet->sum('giaml'))}}</td>
             <td>{{dinhdangso($chitiet->sum($tongluong - $chitiet->sum('giaml')))}}</td>
 
@@ -195,12 +195,12 @@
             <?php
 
             $ma = 'st_'.$key;
-            $tongluong += $ct->$ma;
+            $tongluong += $model->$ma;
             ?>
             <td>{{dinhdangso($model->sum('st_'.$key))}}</td>
         @endforeach
 
-        <td>{{dinhdangso($model->sum($tongluong))}}</td>
+        <td>{{dinhdangso($tongluong)}}</td>
         <td>{{dinhdangso($model->sum('giaml'))}}</td>
         <td>{{dinhdangso($tongluong - $model->sum('giaml'))}}</td>
 
