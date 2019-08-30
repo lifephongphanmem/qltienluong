@@ -11549,7 +11549,7 @@ class baocaothongtu67Controller extends Controller
                 'BIII'=>(array_sum(array_column($a_BIII,'sotien')))
             );
 
-            return view('reports.thongtu67.mau4a_tt68')
+            return view('reports.thongtu67.mau4a_tt46')
                 ->with('model',$model)
                 ->with('a_A',$a_A)
                 ->with('a_BII',$a_BII)
@@ -11871,7 +11871,7 @@ class baocaothongtu67Controller extends Controller
                 $data[4]['nguonthu'] = $model->sum('nguonthu') - $data[0]['nguonthu'] - $data[5]['nguonthu'] - $data[3]['nguonthu'];
             }
 
-            return view('reports.thongtu67.mau4b_tt68')
+            return view('reports.thongtu67.mau4b_tt46')
                 ->with('model',$model)
                 ->with('data',$data)
                 ->with('m_dv',$m_dv)
@@ -12253,7 +12253,7 @@ class baocaothongtu67Controller extends Controller
                 $data[4]['bosung'] = $model->sum('nhucau') - $data[0]['nhucau'] - $data[5]['nhucau'] - $data[3]['nhucau']-($model->sum('nguonkp') - $data[0]['nguonkp'] - $data[5]['nguonkp'] - $data[3]['nguonkp']);
             }
 
-            return view('reports.thongtu67.mau4b_tt68bosung')
+            return view('reports.thongtu67.mau4b_tt46bosung')
                 ->with('model',$model)
                 ->with('data',$data)
                 ->with('m_dv',$m_dv)
