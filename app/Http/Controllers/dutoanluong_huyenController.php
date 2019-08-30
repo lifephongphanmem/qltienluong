@@ -12,6 +12,7 @@ use App\dutoanluong_bangluong;
 use App\dutoanluong_chitiet;
 use App\dutoanluong_huyen;
 use App\dutoanluong_khoi;
+use App\dutoanluong_nangluong;
 use App\dutoanluong_tinh;
 use App\hosocanbo;
 use Carbon\Carbon;
@@ -493,6 +494,59 @@ class dutoanluong_huyenController extends Controller
                 ->with('model', $model)
                 ->with('m_dv', $m_dv)
                 ->with('pageTitle', 'Chi tiết dự toán lương tại đơn vị.');
+        } else
+            return view('errors.notlogin');
+    }
+    function nangluongth(Request $request)
+    {
+        if (Session::has('admin')) {
+            $inputs = $request->all();
+            $masodv = $inputs['maso'];
+            $model = dutoanluong_nangluong::wherein('masodv',function($query) use($masodv){
+                $query->select('masodv')->from('dutoanluong')->where('masoh',$masodv)->get();
+            })->orderby('stt')->get();
+            $model_thongtin = dutoanluong::where('masoh', $inputs['maso'])->first();
+            $a_pl = getPhanLoaiNangLuong();
+            $m_dv = dmdonvi::where('madv', $model_thongtin->madv)->first();
+            $a_phucap = array();
+            $col = 0;
+            $m_pc = dmphucap_donvi::where('madv', $model_thongtin->madv)->orderby('stt')->get()->toarray();
+            foreach ($m_pc as $ct) {
+                if ($model->sum($ct['mapc']) > 0) {
+                    $a_phucap[$ct['mapc']] = $ct['report'];
+                    $col++;
+                }
+            }
+
+            $thongtin = array('nguoilap' => session('admin')->name,
+                'thang' => $model_thongtin->thang,
+                'nam' => $model_thongtin->nam);
+
+            //Lấy dữ liệu để lập
+            $model_thang = $model->map(function ($data) {
+                return collect($data->toArray())
+                    ->only(['thang'])
+                    ->all();
+            });
+            $model_thang = a_unique($model_thang);
+
+            $model_phanloai = $model->map(function ($data) {
+                return collect($data->toArray())
+                    ->only(['maphanloai'])
+                    ->all();
+            });
+            $model_phanloai = a_unique($model_phanloai);
+
+            return view('reports.dutoanluong.donvi.nangluong')
+                ->with('thongtin', $thongtin)
+                ->with('model', $model)
+                ->with('m_dv', $m_dv)
+                ->with('col', $col)
+                ->with('a_phucap', $a_phucap)
+                ->with('a_pl', $a_pl)
+                ->with('model_thang', $model_thang)
+                ->with('model_phanloai', $model_phanloai)
+                ->with('pageTitle', 'Chi tiết tổng hợp lương tại đơn vị');
         } else
             return view('errors.notlogin');
     }

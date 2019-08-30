@@ -195,6 +195,12 @@
                                 <i class="fa fa-print"></i>&nbsp; In bảng thanh toán lương (CR)</a>
                         </div>
                     </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <a id="in_blkhoito" href="" onclick="inkhoito('/chuc_nang/tong_hop_luong/huyen/inkhoito')" style="border-width: 0px;margin-left: 5px" target="_blank">
+                                <i class="fa fa-print"></i>&nbsp; In số liệu chi tiết (khối tổ)</a>
+                        </div>
+                    </div>
                 </div>
             </div>
             <input type="hidden" id="mathdv_in" name="mathdv_in"/>
@@ -348,6 +354,9 @@
         }
         function thanhtoanCR($url){
             $("#in_ttCR").attr("href", $url +'?mathdv='+$('#mathdv_in').val()+'&madv='+ $('#madv_in').val());
+        }
+        function inkhoito($url){
+            $("#in_blkhoito").attr("href", $url +'?mathdv='+$('#mathdv_in').val()+'&madv='+ $('#madv_in').val());
         }
         function confirmChuyen(math) {
             document.getElementById("mathdv").value = math;

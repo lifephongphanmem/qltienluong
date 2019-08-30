@@ -102,8 +102,10 @@
                                                     <a href="{{url('/nguon_kinh_phi/khoi/mautt107_m2?maso='.$value['masodv'])}}" class="btn btn-default btn-sm" TARGET="_blank">
                                                         <i class="fa fa-print"></i>&nbsp; Số liệu tổng hợp</a>
                                                 @else
-                                                    <a href="{{url('/nguon_kinh_phi/huyen/mautt107_m2?maso='.$value['masodv'])}}" class="btn btn-default btn-sm" TARGET="_blank">
-                                                        <i class="fa fa-print"></i>&nbsp; Số liệu tổng hợp</a>
+                                                    <!--a href="{{url('/nguon_kinh_phi/huyen/mautt107_m2?maso='.$value['masodv'])}}" class="btn btn-default btn-sm" TARGET="_blank">
+                                                        <i class="fa fa-print"></i>&nbsp; Số liệu tổng hợp</a-->
+                                                    <button type="button" onclick="indutoan('{{$value->namns}}','{{$value->masodv}}')" class="btn btn-default btn-xs mbs" data-target="#indt-modal" data-toggle="modal">
+                                                        <i class="fa fa-print"></i>&nbsp; In số liệu</button>
                                                     @endif
                                             @endif
                                             <!--a href="{{url('/du_toan/nguon_kinh_phi/ma_so='.$value['masodv'].'/in')}}" class="btn btn-default btn-sm" TARGET="_blank"-->
@@ -152,6 +154,58 @@
         </div>
     </div>
 
+    <div id="indt-modal" tabindex="-1" role="dialog" aria-hidden="true" class="modal fade">
+        <div class="modal-lg modal-dialog modal-content">
+            <div class="modal-header modal-header-primary">
+                <button type="button" data-dismiss="modal" aria-hidden="true" class="close">&times;</button>
+                <h4 id="hd-inbl" class="modal-title">In nhu cầu kinh phí</h4>
+            </div>
+
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <button type="button" onclick="intonghopdt('{{'/nguon_kinh_phi/printf?maso='}}')" style="border-width: 0px" class="btn btn-default btn-xs mbs">
+                                <i class="fa fa-print"></i>&nbsp; Tổng hợp nhu cầu và nguồn thực hiện (Mẫu 4b)</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <button type="button" style="border-width: 0px" class="btn btn-default btn-xs mbs" data-target="#mautt107-modal" data-toggle="modal"
+                                    title="Bảng lương của cán bộ theo mẫu C02-HD">
+                                <i class="fa fa-print"></i>&nbsp; Bảng lương mẫu C02-HD (TT107/2017/TT-BTC)</button>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <button type="button" onclick="intonghopdt('{{'/nguon_kinh_phi/huyen/mautt107_m2?maso='}}')" style="border-width: 0px" class="btn btn-default btn-xs mbs">
+                                <i class="fa fa-print"></i>&nbsp; Bảng lương mẫu C02-HD (Tổng hợp chi lương và nâng lương)</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <button type="button" style="border-width: 0px" onclick="innangluong()" class="btn btn-default btn-xs mbs">
+                                <i class="fa fa-print"></i>&nbsp; Danh sách cán bộ nâng lương</button>
+                        </div>
+                    </div>
+                </div>
+                <input type="hidden" id="nam_dt" name="nam_dt"/>
+                <input type="hidden" id="masodv_dt" name="masodv_dt"/>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" data-dismiss="modal" class="btn btn-default">Hủy thao tác</button>
+            </div>
+        </div>
+    </div>
+
     <script>
         function confirmChuyen(masodv) {
             document.getElementById("masodv").value = masodv;
@@ -179,7 +233,22 @@
 
 
     </script>
+    <script>
+        function indutoan(namdt, masodv){
+            $('#nam_dt').val(namdt);
+            $('#masodv_dt').val(masodv);
+        }
 
+        function intonghopdt(url) {
+            var masodv = $('#masodv_dt').val();
+            window.open(url + masodv,'_blank');
+        }
+
+        function innangluong() {
+            var masodv = $('#masodv_dt').val();
+            window.open('/nguon_kinh_phi/nangluong?maso='+ masodv,'_blank');
+        }
+    </script>
     <script>
 
         function getLink(){
@@ -202,5 +271,5 @@
             });
         })
     </script>
-
+    @include('functions.viewdata.nguonkinhphi.modal_printf')
 @stop

@@ -88,7 +88,7 @@ class baocaothongtu67Controller extends Controller
             }
             //dd($model_bienche);
 
-            $model_tonghop = tonghopluong_donvi::where('thang', '08')->where('nam', '2018')
+            $model_tonghop = tonghopluong_donvi::where('thang', '07')->where('nam', '2018')
                 ->where('madvbc', 'like', $inputs['madv'] . '%')->get();
 
             $luongcb = 0.935;
@@ -99,7 +99,7 @@ class baocaothongtu67Controller extends Controller
             $model_tonghop_ct = tonghopluong_donvi_chitiet::join('tonghopluong_donvi', 'tonghopluong_donvi_chitiet.mathdv', '=', 'tonghopluong_donvi.mathdv')
                 ->where('tonghopluong_donvi.madvbc', 'like', $inputs['madv'] . '%')
                 ->wherein('tonghopluong_donvi_chitiet.mathdv', function ($qr) {
-                    $qr->select('mathdv')->from('tonghopluong_donvi')->where('thang', '08')->where('nam', '2018')->where('trangthai', 'DAGUI')
+                    $qr->select('mathdv')->from('tonghopluong_donvi')->where('thang', '07')->where('nam', '2018')->where('trangthai', 'DAGUI')
                         ->distinct()->get();
                 })->get();
             if (isset($inputs['inchitiet'])) {
@@ -110,7 +110,7 @@ class baocaothongtu67Controller extends Controller
                     ->where('tonghopluong_donvi.madvbc', 'like', $inputs['madv'] . '%')
                     ->where('tonghopluong_donvi_chitiet.macongtac', 'BIENCHE')
                     ->wherein('tonghopluong_donvi_chitiet.mathdv', function ($qr) {
-                        $qr->select('mathdv')->from('tonghopluong_donvi')->where('thang', '08')->where('nam', '2018')->where('trangthai', 'DAGUI')
+                        $qr->select('mathdv')->from('tonghopluong_donvi')->where('thang', '07')->where('nam', '2018')->where('trangthai', 'DAGUI')
                             ->distinct()->get();
                     })
                     ->groupby('linhvuchoatdong','nguoigui','madv','mathh','mathdv')
@@ -131,7 +131,7 @@ class baocaothongtu67Controller extends Controller
                     ->where('tonghopluong_donvi.madvbc', 'like', $inputs['madv'] . '%')
                     ->where('dmdonvibaocao.level', 'T')
                     ->wherein('tonghopluong_donvi_chitiet.mathdv', function ($qr) {
-                        $qr->select('mathdv')->from('tonghopluong_donvi')->where('thang', '08')->where('nam', '2018')->where('trangthai', 'DAGUI')
+                        $qr->select('mathdv')->from('tonghopluong_donvi')->where('thang', '07')->where('nam', '2018')->where('trangthai', 'DAGUI')
                             ->distinct()->get();
                     })->get();
             }
@@ -669,7 +669,7 @@ class baocaothongtu67Controller extends Controller
             }
             //dd($model_bienche);
 
-            $model_tonghop = tonghopluong_donvi::where('thang','08')->where('nam','2018')
+            $model_tonghop = tonghopluong_donvi::where('thang','07')->where('nam','2018')
                 ->where('madvbc','like',$inputs['madv'].'%')->get();
 
             $luongcb = 0.935;
@@ -680,7 +680,7 @@ class baocaothongtu67Controller extends Controller
             $model_tonghop_ct = tonghopluong_donvi_chitiet::join('tonghopluong_donvi', 'tonghopluong_donvi_chitiet.mathdv', '=', 'tonghopluong_donvi.mathdv')
                 ->where('tonghopluong_donvi.madvbc','like',$inputs['madv'].'%')
                 ->wherein('tonghopluong_donvi_chitiet.mathdv',function($qr){
-                    $qr->select('mathdv')->from('tonghopluong_donvi')->where('thang','08')->where('nam','2018')->where('trangthai','DAGUI')
+                    $qr->select('mathdv')->from('tonghopluong_donvi')->where('thang','07')->where('nam','2018')->where('trangthai','DAGUI')
                         ->distinct()->get();
                 })->get();
 
@@ -698,7 +698,7 @@ class baocaothongtu67Controller extends Controller
                     ->where('tonghopluong_donvi.madvbc','like',$inputs['madv'].'%')
                     ->where('dmdonvibaocao.level','T')
                     ->wherein('tonghopluong_donvi_chitiet.mathdv',function($qr){
-                        $qr->select('mathdv')->from('tonghopluong_donvi')->where('thang','08')->where('nam','2018')->where('trangthai','DAGUI')
+                        $qr->select('mathdv')->from('tonghopluong_donvi')->where('thang','07')->where('nam','2018')->where('trangthai','DAGUI')
                             ->distinct()->get();
                     })->get();
             }
@@ -1212,7 +1212,7 @@ class baocaothongtu67Controller extends Controller
             $madvbc = session('admin')->madvbc;
             $m_dv = dmdonvi::where('madv',session('admin')->madv)->first();
             $model_donvi = dmdonvi::where('madvbc','like',$inputs['madv'].'%')->get();
-            $model_tonghop = tonghopluong_donvi::where('thang','08')->where('nam','2018')
+            $model_tonghop = tonghopluong_donvi::where('thang','07')->where('nam','2018')
                 ->where('madvbc','like',$inputs['madv'].'%')->get();
             $luongcb = 1;
             //nếu đơn vị đã tạo bảng lương tháng 07/2017 =>xuất kết quả
@@ -1220,7 +1220,7 @@ class baocaothongtu67Controller extends Controller
             $model_tonghop_ct = tonghopluong_donvi_chitiet::join('tonghopluong_donvi', 'tonghopluong_donvi_chitiet.mathdv', '=', 'tonghopluong_donvi.mathdv')
                 ->where('tonghopluong_donvi.madvbc','like',$inputs['madv'].'%')
                 ->wherein('tonghopluong_donvi_chitiet.mathdv',function($qr){
-                    $qr->select('mathdv')->from('tonghopluong_donvi')->where('thang','08')->where('nam','2018')->where('trangthai','DAGUI')
+                    $qr->select('mathdv')->from('tonghopluong_donvi')->where('thang','07')->where('nam','2018')->where('trangthai','DAGUI')
                         ->distinct()->get();
                 })->get();
 
@@ -1232,7 +1232,7 @@ class baocaothongtu67Controller extends Controller
                     ->where('tonghopluong_donvi.madvbc','like',$inputs['madv'].'%')
                     ->where('dmdonvibaocao.level','T')
                     ->wherein('tonghopluong_donvi_chitiet.mathdv',function($qr){
-                        $qr->select('mathdv')->from('tonghopluong_donvi')->where('thang','08')->where('nam','2018')->where('trangthai','DAGUI')
+                        $qr->select('mathdv')->from('tonghopluong_donvi')->where('thang','07')->where('nam','2018')->where('trangthai','DAGUI')
                             ->distinct()->get();
                     })->get();
             }
@@ -1743,7 +1743,7 @@ class baocaothongtu67Controller extends Controller
             $madvbc = session('admin')->madvbc;
             $m_dv = dmdonvi::where('madv',session('admin')->madv)->first();
             $model_donvi = dmdonvi::where('madvbc','like',$inputs['madv'].'%')->get();
-            $model_tonghop = tonghopluong_donvi::where('thang','08')->where('nam','2018')
+            $model_tonghop = tonghopluong_donvi::where('thang','07')->where('nam','2018')
                 ->where('madvbc','like',$inputs['madv'].'%')->get();
             $luongcb = 1;
             //nếu đơn vị đã tạo bảng lương tháng 07/2017 =>xuất kết quả
@@ -1751,7 +1751,7 @@ class baocaothongtu67Controller extends Controller
             $model_tonghop_ct = tonghopluong_donvi_chitiet::join('tonghopluong_donvi', 'tonghopluong_donvi_chitiet.mathdv', '=', 'tonghopluong_donvi.mathdv')
                 ->where('tonghopluong_donvi.madvbc','like',$inputs['madv'].'%')
                 ->wherein('tonghopluong_donvi_chitiet.mathdv',function($qr){
-                    $qr->select('mathdv')->from('tonghopluong_donvi')->where('thang','08')->where('nam','2018')->where('trangthai','DAGUI')
+                    $qr->select('mathdv')->from('tonghopluong_donvi')->where('thang','07')->where('nam','2018')->where('trangthai','DAGUI')
                         ->distinct()->get();
                 })->get();
 
@@ -1763,7 +1763,7 @@ class baocaothongtu67Controller extends Controller
                     ->where('tonghopluong_donvi.madvbc','like',$inputs['madv'].'%')
                     ->where('dmdonvibaocao.level','T')
                     ->wherein('tonghopluong_donvi_chitiet.mathdv',function($qr){
-                        $qr->select('mathdv')->from('tonghopluong_donvi')->where('thang','08')->where('nam','2018')->where('trangthai','DAGUI')
+                        $qr->select('mathdv')->from('tonghopluong_donvi')->where('thang','07')->where('nam','2018')->where('trangthai','DAGUI')
                             ->distinct()->get();
                     })->get();
             }
@@ -6804,7 +6804,7 @@ class baocaothongtu67Controller extends Controller
                 if(count($chekdv) > 0)
                 {
                     $model_donvi = dmdonvi::where('macqcq',$madv)->get();
-                    $model_bienche = chitieubienche::where('nam', '2018')->wherein('madv', function ($qr) use ($madv) {
+                    $model_bienche = chitieubienche::where('nam', '2019')->wherein('madv', function ($qr) use ($madv) {
                         $qr->select('madv')->from('dmdonvi')->where('macqcq', $madv)->distinct()->get();
                     })->get();
                 }
@@ -6812,12 +6812,12 @@ class baocaothongtu67Controller extends Controller
                 else
                 {
                     $model_donvi = dmdonvi::where('madv',$madv)->get();
-                    $model_bienche = chitieubienche::where('nam', '2018')->where('madv', $madv)->get();
+                    $model_bienche = chitieubienche::where('nam', '2019')->where('madv', $madv)->get();
                 }
             }
             else {
                 $model_donvi = dmdonvi::where('madvbc', $madvbc)->get();
-                $model_bienche = chitieubienche::where('nam', '2018')->wherein('madv', function ($qr) use ($madvbc) {
+                $model_bienche = chitieubienche::where('nam', '2019')->wherein('madv', function ($qr) use ($madvbc) {
                     $qr->select('madv')->from('dmdonvi')->where('madvbc', $madvbc)->distinct()->get();
                 })->get();
             }
@@ -6830,53 +6830,81 @@ class baocaothongtu67Controller extends Controller
             if($inputs['madv'] !="")
             {
                 if(count($chekdv) > 0) {
-                    $model_tonghop = tonghopluong_huyen::where('thang', '08')->where('nam', '2018')
+                    $model_tonghop = tonghopluong_huyen::where('thang', '07')->where('nam', '2019')
                         ->where('madv', $inputs['madv'])->get();
                     $model_tonghop_ct = tonghopluong_donvi_chitiet::join('tonghopluong_donvi', 'tonghopluong_donvi_chitiet.mathdv', '=', 'tonghopluong_donvi.mathdv')
                         ->where('tonghopluong_donvi.macqcq', $inputs['madv'])
                         ->wherein('tonghopluong_donvi_chitiet.mathdv', function ($qr) {
-                            $qr->select('mathdv')->from('tonghopluong_donvi')->where('thang', '08')->where('nam', '2018')->where('trangthai', 'DAGUI')
+                            $qr->select('mathdv')->from('tonghopluong_donvi')->where('thang', '07')->where('nam', '2019')->where('trangthai', 'DAGUI')
                                 ->distinct()->get();
                         })->get();
                 }
                 else {
-                    $model_tonghop = tonghopluong_donvi::where('thang', '08')->where('nam', '2018')
+                    $model_tonghop = tonghopluong_donvi::where('thang', '07')->where('nam', '2019')
                         ->where('madv', $inputs['madv'])->get();
                     $model_tonghop_ct = tonghopluong_donvi_chitiet::join('tonghopluong_donvi', 'tonghopluong_donvi_chitiet.mathdv', '=', 'tonghopluong_donvi.mathdv')
                         ->where('tonghopluong_donvi.madv', $inputs['madv'])
                         ->wherein('tonghopluong_donvi_chitiet.mathdv', function ($qr) {
-                            $qr->select('mathdv')->from('tonghopluong_donvi')->where('thang', '08')->where('nam', '2018')->where('trangthai', 'DAGUI')
+                            $qr->select('mathdv')->from('tonghopluong_donvi')->where('thang', '07')->where('nam', '2019')->where('trangthai', 'DAGUI')
                                 ->distinct()->get();
                         })->get();
                 }
             }
-            else
-            {
-                $model_tonghop = tonghopluong_donvi::where('thang','08')->where('nam','2018')
-                    ->where('madvbc',$madvbc)->get();
-                $model_tonghop_ct = tonghopluong_donvi_chitiet::join('tonghopluong_donvi', 'tonghopluong_donvi_chitiet.mathdv', '=', 'tonghopluong_donvi.mathdv')
-                    ->select('tonghopluong_donvi_chitiet.linhvuchoatdong','tonghopluong_donvi_chitiet.heso','tonghopluong_donvi_chitiet.pckv','tonghopluong_donvi_chitiet.pccv',
-                        'tonghopluong_donvi_chitiet.pctnvk','tonghopluong_donvi_chitiet.pcudn','pcth','pctn','pccovu','pcdang',
-                        'pcthni','pck','nguoigui','madv','tonghopluong_donvi.mathh','tonghopluong_donvi.mathdv','macongtac')
-                    ->where('tonghopluong_donvi.madvbc',$madvbc)
-                    ->wherein('tonghopluong_donvi_chitiet.mathdv',function($qr){
-                        $qr->select('mathdv')->from('tonghopluong_donvi')->where('thang','08')->where('nam','2018')->where('trangthai','DAGUI')
-                            ->distinct()->get();
-                    })
-                    ->groupby('linhvuchoatdong','nguoigui','madv','mathh','mathdv','macongtac')
-                    ->get();
-                if(isset($inputs['inheso'])) {
+            else {
+                if (session('admin')->phamvitonghop == "KHOI") {
+                    $model_tonghop = tonghopluong_donvi::where('thang', '07')->where('nam', '2019')
+                        ->where('macqcq', session('admin')->madv)->get();
                     $model_tonghop_ct = tonghopluong_donvi_chitiet::join('tonghopluong_donvi', 'tonghopluong_donvi_chitiet.mathdv', '=', 'tonghopluong_donvi.mathdv')
-                        ->select('tonghopluong_donvi_chitiet.linhvuchoatdong',DB::raw('heso as heso'),DB::raw('pckv as pckv'),DB::raw('pccv as pccv'),
-                            DB::raw('pctnvk as pctnvk'),DB::raw('pcudn as pcudn'),DB::raw('pcth as pcth'),DB::raw('pctn as pctn'),DB::raw('pccovu as pccovu'),DB::raw('pcdang as pcdang'),
-                            DB::raw('pcthni as pcthni'),DB::raw('pck as pck'),'nguoigui','madv','tonghopluong_donvi.mathh','tonghopluong_donvi.mathdv','macongtac')
-                        ->where('tonghopluong_donvi.madvbc',$madvbc)
-                        ->wherein('tonghopluong_donvi_chitiet.mathdv',function($qr){
-                            $qr->select('mathdv')->from('tonghopluong_donvi')->where('thang','08')->where('nam','2018')->where('trangthai','DAGUI')
+                        ->select('tonghopluong_donvi_chitiet.linhvuchoatdong', DB::raw('st_heso as heso'), DB::raw('st_pckv as pckv'), DB::raw('st_pccv as pccv'),
+                            DB::raw('st_pctnvk as pctnvk'), DB::raw('st_pcudn as pcudn'), DB::raw('st_pcth as pcth'), DB::raw('st_pctn as pctn'), DB::raw('st_pccovu as pccovu'), DB::raw('st_pcdang as pcdang'),
+                            DB::raw('st_pcthni as pcthni'), DB::raw('st_pck as pck'), 'nguoigui', 'madv', 'tonghopluong_donvi.mathh', 'tonghopluong_donvi.mathdv', 'macongtac')
+                        ->where('tonghopluong_donvi.macqcq', session('admin')->madv)
+                        ->wherein('tonghopluong_donvi_chitiet.mathdv', function ($qr) {
+                            $qr->select('mathdv')->from('tonghopluong_donvi')->where('thang', '07')->where('nam', '2019')->where('trangthai', 'DAGUI')
                                 ->distinct()->get();
                         })
-                        ->groupby('linhvuchoatdong','nguoigui','madv','mathh','mathdv','macongtac')
+                        ->groupby('linhvuchoatdong', 'nguoigui', 'madv', 'mathh', 'mathdv', 'macongtac')
                         ->get();
+                    if (isset($inputs['inheso'])) {
+                        $model_tonghop_ct = tonghopluong_donvi_chitiet::join('tonghopluong_donvi', 'tonghopluong_donvi_chitiet.mathdv', '=', 'tonghopluong_donvi.mathdv')
+                            ->select('tonghopluong_donvi_chitiet.linhvuchoatdong', 'tonghopluong_donvi_chitiet.heso', 'tonghopluong_donvi_chitiet.pckv', 'tonghopluong_donvi_chitiet.pccv',
+                                'tonghopluong_donvi_chitiet.pctnvk', 'tonghopluong_donvi_chitiet.pcudn', 'pcth', 'pctn', 'pccovu', 'pcdang',
+                                'pcthni', 'pck', 'nguoigui', 'madv', 'tonghopluong_donvi.mathh', 'tonghopluong_donvi.mathdv', 'macongtac')
+                            ->where('tonghopluong_donvi.macqcq', session('admin')->madv)
+                            ->wherein('tonghopluong_donvi_chitiet.mathdv', function ($qr) {
+                                $qr->select('mathdv')->from('tonghopluong_donvi')->where('thang', '07')->where('nam', '2019')->where('trangthai', 'DAGUI')
+                                    ->distinct()->get();
+                            })
+                            ->groupby('linhvuchoatdong', 'nguoigui', 'madv', 'mathh', 'mathdv', 'macongtac')
+                            ->get();
+                    }
+                } else {
+                    $model_tonghop = tonghopluong_donvi::where('thang', '07')->where('nam', '2019')
+                        ->where('madvbc', $madvbc)->get();
+                    $model_tonghop_ct = tonghopluong_donvi_chitiet::join('tonghopluong_donvi', 'tonghopluong_donvi_chitiet.mathdv', '=', 'tonghopluong_donvi.mathdv')
+                        ->select('tonghopluong_donvi_chitiet.linhvuchoatdong', DB::raw('st_heso as heso'), DB::raw('st_pckv as pckv'), DB::raw('st_pccv as pccv'),
+                            DB::raw('st_pctnvk as pctnvk'), DB::raw('st_pcudn as pcudn'), DB::raw('st_pcth as pcth'), DB::raw('st_pctn as pctn'), DB::raw('st_pccovu as pccovu'), DB::raw('st_pcdang as pcdang'),
+                            DB::raw('st_pcthni as pcthni'), DB::raw('st_pck as pck'), 'nguoigui', 'madv', 'tonghopluong_donvi.mathh', 'tonghopluong_donvi.mathdv', 'macongtac')
+                        ->where('tonghopluong_donvi.madvbc', $madvbc)
+                        ->wherein('tonghopluong_donvi_chitiet.mathdv', function ($qr) {
+                            $qr->select('mathdv')->from('tonghopluong_donvi')->where('thang', '07')->where('nam', '2019')->where('trangthai', 'DAGUI')
+                                ->distinct()->get();
+                        })
+                        ->groupby('linhvuchoatdong', 'nguoigui', 'madv', 'mathh', 'mathdv', 'macongtac')
+                        ->get();
+                    if (isset($inputs['inheso'])) {
+                        $model_tonghop_ct = tonghopluong_donvi_chitiet::join('tonghopluong_donvi', 'tonghopluong_donvi_chitiet.mathdv', '=', 'tonghopluong_donvi.mathdv')
+                            ->select('tonghopluong_donvi_chitiet.linhvuchoatdong', 'tonghopluong_donvi_chitiet.heso', 'tonghopluong_donvi_chitiet.pckv', 'tonghopluong_donvi_chitiet.pccv',
+                                'tonghopluong_donvi_chitiet.pctnvk', 'tonghopluong_donvi_chitiet.pcudn', 'pcth', 'pctn', 'pccovu', 'pcdang',
+                                'pcthni', 'pck', 'nguoigui', 'madv', 'tonghopluong_donvi.mathh', 'tonghopluong_donvi.mathdv', 'macongtac')
+                            ->where('tonghopluong_donvi.madvbc', $madvbc)
+                            ->wherein('tonghopluong_donvi_chitiet.mathdv', function ($qr) {
+                                $qr->select('mathdv')->from('tonghopluong_donvi')->where('thang', '07')->where('nam', '2019')->where('trangthai', 'DAGUI')
+                                    ->distinct()->get();
+                            })
+                            ->groupby('linhvuchoatdong', 'nguoigui', 'madv', 'mathh', 'mathdv', 'macongtac')
+                            ->get();
+                    }
                 }
             }
             $luongcb = 0.935;
@@ -6889,7 +6917,7 @@ class baocaothongtu67Controller extends Controller
             {
                 $model_bienche = chitieubienche::join('dmdonvi','dmdonvi.madv','=','chitieubienche.madv')
                     ->join('dmdonvibaocao','dmdonvibaocao.madvbc','=','dmdonvi.madvbc')
-                    ->where('chitieubienche.nam','2018')->where('dmdonvi.madvbc','like',$inputs['madv'].'%')
+                    ->where('chitieubienche.nam','2019')->where('dmdonvi.madvbc','like',$inputs['madv'].'%')
                     ->where('dmdonvibaocao.level','T')->get();
                 //$luongcb = 1210000; tạm thời bỏ vì bang lương đã nhân lcb
                 $luongcb = 0.935;
@@ -6899,7 +6927,7 @@ class baocaothongtu67Controller extends Controller
                     ->where('tonghopluong_donvi.madvbc','like',$inputs['madv'].'%')
                     ->where('dmdonvibaocao.level','T')
                     ->wherein('tonghopluong_donvi_chitiet.mathdv',function($qr){
-                        $qr->select('mathdv')->from('tonghopluong_donvi')->where('thang','08')->where('nam','2018')->where('trangthai','DAGUI')
+                        $qr->select('mathdv')->from('tonghopluong_donvi')->where('thang','07')->where('nam','2019')->where('trangthai','DAGUI')
                             ->distinct()->get();
                     })->get();
             }
@@ -7385,19 +7413,40 @@ class baocaothongtu67Controller extends Controller
                     $a_IVt['tongso'] += $ar_IV[0]['tongso'];
                 }
             }
+            if(isset($inputs['excel'])){
+                Excel::create('Mau2a1_TT46',function($excel) use($ar_I,$ar_II,$ar_III,$ar_IV,$a_It,$a_IIIt,$a_IVt,$m_dv,$inputs){
+                    $excel->sheet('New sheet', function($sheet) use($ar_I,$ar_II,$ar_III,$ar_IV,$a_It,$a_IIIt,$a_IVt,$m_dv,$inputs){
+                        $sheet->loadView('reports.thongtu67.mau2a1_tt46')
+                            ->with('ar_I',$ar_I)
+                            ->with('ar_II',$ar_II)
+                            ->with('ar_III',$ar_III)
+                            ->with('ar_IV',$ar_IV)
+                            ->with('a_It',$a_It)
+                            ->with('a_IIIt',$a_IIIt)
+                            ->with('a_IVt',$a_IVt)
+                            ->with('m_dv',$m_dv)
+                            ->with('inputs',$inputs)
+                            ->with('pageTitle','Mau2a1_TT46');
+                        $sheet->setAutoSize(false);
+                        $sheet->setFontFamily('Tahoma');
+                        $sheet->setFontBold(false);
+                    });
+                })->download('xls');
+            }else{
+                return view('reports.thongtu67.mau2a1_tt46')
+                    ->with('furl','/tong_hop_bao_cao/')
+                    ->with('ar_I',$ar_I)
+                    ->with('ar_II',$ar_II)
+                    ->with('ar_III',$ar_III)
+                    ->with('ar_IV',$ar_IV)
+                    ->with('a_It',$a_It)
+                    ->with('a_IIIt',$a_IIIt)
+                    ->with('a_IVt',$a_IVt)
+                    ->with('m_dv',$m_dv)
+                    ->with('inputs',$inputs)
+                    ->with('pageTitle','Báo cáo nhu cầu kinh phí thực hiện nghị định 47/2017/NĐ-CP');
+            }
 
-            return view('reports.thongtu67.mau2a1_tt68')
-                ->with('furl','/tong_hop_bao_cao/')
-                ->with('ar_I',$ar_I)
-                ->with('ar_II',$ar_II)
-                ->with('ar_III',$ar_III)
-                ->with('ar_IV',$ar_IV)
-                ->with('a_It',$a_It)
-                ->with('a_IIIt',$a_IIIt)
-                ->with('a_IVt',$a_IVt)
-                ->with('m_dv',$m_dv)
-                ->with('inputs',$inputs)
-                ->with('pageTitle','Báo cáo nhu cầu kinh phí thực hiện nghị định 47/2017/NĐ-CP');
         } else
             return view('errors.notlogin');
     }
@@ -7414,7 +7463,7 @@ class baocaothongtu67Controller extends Controller
                 if(count($chekdv) > 0)
                 {
                     $model_donvi = dmdonvi::where('macqcq',$madv)->get();
-                    $model_bienche = chitieubienche::where('nam', '2018')->wherein('madv', function ($qr) use ($madv) {
+                    $model_bienche = chitieubienche::where('nam', '2019')->wherein('madv', function ($qr) use ($madv) {
                         $qr->select('madv')->from('dmdonvi')->where('macqcq', $madv)->distinct()->get();
                     })->get();
                 }
@@ -7422,12 +7471,12 @@ class baocaothongtu67Controller extends Controller
                 else
                 {
                     $model_donvi = dmdonvi::where('madv',$madv)->get();
-                    $model_bienche = chitieubienche::where('nam', '2018')->where('madv', $madv)->get();
+                    $model_bienche = chitieubienche::where('nam', '2019')->where('madv', $madv)->get();
                 }
             }
             else {
                 $model_donvi = dmdonvi::where('madvbc', $madvbc)->get();
-                $model_bienche = chitieubienche::where('nam', '2018')->wherein('madv', function ($qr) use ($madvbc) {
+                $model_bienche = chitieubienche::where('nam', '2019')->wherein('madv', function ($qr) use ($madvbc) {
                     $qr->select('madv')->from('dmdonvi')->where('madvbc', $madvbc)->distinct()->get();
                 })->get();
             }
@@ -7440,22 +7489,22 @@ class baocaothongtu67Controller extends Controller
             if($inputs['madv'] !="")
             {
                 if(count($chekdv) > 0) {
-                    $model_tonghop = tonghopluong_huyen::where('thang', '08')->where('nam', '2018')
+                    $model_tonghop = tonghopluong_huyen::where('thang', '07')->where('nam', '2019')
                         ->where('madv', $inputs['madv'])->get();
                     $model_tonghop_ct = tonghopluong_donvi_chitiet::join('tonghopluong_donvi', 'tonghopluong_donvi_chitiet.mathdv', '=', 'tonghopluong_donvi.mathdv')
                         ->where('tonghopluong_donvi.macqcq', $inputs['madv'])
                         ->wherein('tonghopluong_donvi_chitiet.mathdv', function ($qr) {
-                            $qr->select('mathdv')->from('tonghopluong_donvi')->where('thang', '08')->where('nam', '2018')->where('trangthai', 'DAGUI')
+                            $qr->select('mathdv')->from('tonghopluong_donvi')->where('thang', '07')->where('nam', '2019')->where('trangthai', 'DAGUI')
                                 ->distinct()->get();
                         })->get();
                 }
                 else {
-                    $model_tonghop = tonghopluong_donvi::where('thang', '08')->where('nam', '2018')
+                    $model_tonghop = tonghopluong_donvi::where('thang', '07')->where('nam', '2019')
                         ->where('madv', $inputs['madv'])->get();
                     $model_tonghop_ct = tonghopluong_donvi_chitiet::join('tonghopluong_donvi', 'tonghopluong_donvi_chitiet.mathdv', '=', 'tonghopluong_donvi.mathdv')
                         ->where('tonghopluong_donvi.madv', $inputs['madv'])
                         ->wherein('tonghopluong_donvi_chitiet.mathdv', function ($qr) {
-                            $qr->select('mathdv')->from('tonghopluong_donvi')->where('thang', '08')->where('nam', '2018')->where('trangthai', 'DAGUI')
+                            $qr->select('mathdv')->from('tonghopluong_donvi')->where('thang', '07')->where('nam', '2019')->where('trangthai', 'DAGUI')
                                 ->distinct()->get();
                         })->get();
                     dd($model_tonghop_ct->toarray());
@@ -7463,12 +7512,12 @@ class baocaothongtu67Controller extends Controller
             }
             else
             {
-                $model_tonghop = tonghopluong_donvi::where('thang','08')->where('nam','2018')
+                $model_tonghop = tonghopluong_donvi::where('thang','07')->where('nam','2019')
                     ->where('madvbc',$madvbc)->get();
                 $model_tonghop_ct = tonghopluong_donvi_chitiet::join('tonghopluong_donvi', 'tonghopluong_donvi_chitiet.mathdv', '=', 'tonghopluong_donvi.mathdv')
                     ->where('tonghopluong_donvi.madvbc',$madvbc)
                     ->wherein('tonghopluong_donvi_chitiet.mathdv',function($qr){
-                        $qr->select('mathdv')->from('tonghopluong_donvi')->where('thang','08')->where('nam','2018')->where('trangthai','DAGUI')
+                        $qr->select('mathdv')->from('tonghopluong_donvi')->where('thang','07')->where('nam','2019')->where('trangthai','DAGUI')
                             ->distinct()->get();
                     })->get();
             }
@@ -7483,7 +7532,7 @@ class baocaothongtu67Controller extends Controller
             {
                 $model_bienche = chitieubienche::join('dmdonvi','dmdonvi.madv','=','chitieubienche.madv')
                     ->join('dmdonvibaocao','dmdonvibaocao.madvbc','=','dmdonvi.madvbc')
-                    ->where('chitieubienche.nam','2018')->where('dmdonvi.madvbc','like',$inputs['madv'].'%')
+                    ->where('chitieubienche.nam','2019')->where('dmdonvi.madvbc','like',$inputs['madv'].'%')
                     ->where('dmdonvibaocao.level','T')->get();
                 //$luongcb = 1210000; tạm thời bỏ vì bang lương đã nhân lcb
                 $luongcb = 0.935;
@@ -7493,7 +7542,7 @@ class baocaothongtu67Controller extends Controller
                     ->where('tonghopluong_donvi.madvbc','like',$inputs['madv'].'%')
                     ->where('dmdonvibaocao.level','T')
                     ->wherein('tonghopluong_donvi_chitiet.mathdv',function($qr){
-                        $qr->select('mathdv')->from('tonghopluong_donvi')->where('thang','08')->where('nam','2018')->where('trangthai','DAGUI')
+                        $qr->select('mathdv')->from('tonghopluong_donvi')->where('thang','07')->where('nam','2019')->where('trangthai','DAGUI')
                             ->distinct()->get();
                     })->get();
             }
@@ -8009,7 +8058,7 @@ class baocaothongtu67Controller extends Controller
             $m_dv = dmdonvi::where('madv',session('admin')->madv)->first();
             $model_donvi = dmdonvi::where('madvbc',$madvbc)->get();
 
-            $model_bienche = chitieubienche::where('nam','2018')->wherein('madv',function($qr)use($madvbc){
+            $model_bienche = chitieubienche::where('nam','2019')->wherein('madv',function($qr)use($madvbc){
                 $qr->select('madv')->from('dmdonvi')->where('madvbc',$madvbc)->distinct()->get();
             })->get();
 
@@ -8018,7 +8067,7 @@ class baocaothongtu67Controller extends Controller
             }
             //dd($model_bienche);
 
-            $model_tonghop = tonghopluong_donvi::where('thang','08')->where('nam','2018')
+            $model_tonghop = tonghopluong_donvi::where('thang','07')->where('nam','2019')
                 ->where('madvbc',$madvbc)->get();
 
             $luongcb = 0.935;
@@ -8027,7 +8076,7 @@ class baocaothongtu67Controller extends Controller
             //nếu đơn vị đã tạo bảng lương tháng 07/2017 =>xuất kết quả
 
             $model_tonghop_ct = tonghopluong_donvi_chitiet::wherein('mathdv',function($qr){
-                $qr->select('mathdv')->from('tonghopluong_donvi')->where('thang','08')->where('nam','2018')->where('trangthai','DAGUI')
+                $qr->select('mathdv')->from('tonghopluong_donvi')->where('thang','07')->where('nam','2019')->where('trangthai','DAGUI')
                     ->where('macqcq',session('admin')->madv)->get();
             })->get();
 
@@ -8355,7 +8404,7 @@ class baocaothongtu67Controller extends Controller
                 if(count($chekdv) > 0)
                 {
                     $model_donvi = dmdonvi::where('macqcq',$madv)->get();
-                    $model_bienche = chitieubienche::where('nam', '2018')->wherein('madv', function ($qr) use ($madv) {
+                    $model_bienche = chitieubienche::where('nam', '2019')->wherein('madv', function ($qr) use ($madv) {
                         $qr->select('madv')->from('dmdonvi')->where('macqcq', $madv)->distinct()->get();
                     })->get();
                 }
@@ -8363,12 +8412,12 @@ class baocaothongtu67Controller extends Controller
                 else
                 {
                     $model_donvi = dmdonvi::where('madv',$madv)->get();
-                    $model_bienche = chitieubienche::where('nam', '2018')->where('madv', $madv)->get();
+                    $model_bienche = chitieubienche::where('nam', '2019')->where('madv', $madv)->get();
                 }
             }
             else {
                 $model_donvi = dmdonvi::where('madvbc', $madvbc)->get();
-                $model_bienche = chitieubienche::where('nam', '2018')->wherein('madv', function ($qr) use ($madvbc) {
+                $model_bienche = chitieubienche::where('nam', '2019')->wherein('madv', function ($qr) use ($madvbc) {
                     $qr->select('madv')->from('dmdonvi')->where('madvbc', $madvbc)->distinct()->get();
                 })->get();
             }
@@ -8381,43 +8430,85 @@ class baocaothongtu67Controller extends Controller
             if($inputs['madv'] !="")
             {
                 if(count($chekdv) > 0) {
-                    $model_tonghop = tonghopluong_huyen::where('thang', '08')->where('nam', '2018')
+                    $model_tonghop = tonghopluong_huyen::where('thang', '07')->where('nam', '2019')
                         ->where('madv', $inputs['madv'])->get();
                     $model_tonghop_ct = tonghopluong_donvi_chitiet::join('tonghopluong_donvi', 'tonghopluong_donvi_chitiet.mathdv', '=', 'tonghopluong_donvi.mathdv')
 
                         ->where('tonghopluong_donvi.macqcq', $inputs['madv'])
                         ->wherein('tonghopluong_donvi_chitiet.mathdv', function ($qr) {
-                            $qr->select('mathdv')->from('tonghopluong_donvi')->where('thang', '08')->where('nam', '2018')->where('trangthai', 'DAGUI')
+                            $qr->select('mathdv')->from('tonghopluong_donvi')->where('thang', '07')->where('nam', '2019')->where('trangthai', 'DAGUI')
                                 ->distinct()->get();
                         })
                         ->get();
                 }
                 else {
-                    $model_tonghop = tonghopluong_donvi::where('thang', '08')->where('nam', '2018')
+                    $model_tonghop = tonghopluong_donvi::where('thang', '07')->where('nam', '2019')
                         ->where('madv', $inputs['madv'])->get();
                     $model_tonghop_ct = tonghopluong_donvi_chitiet::join('tonghopluong_donvi', 'tonghopluong_donvi_chitiet.mathdv', '=', 'tonghopluong_donvi.mathdv')
                         ->where('tonghopluong_donvi.madv', $inputs['madv'])
                         ->wherein('tonghopluong_donvi_chitiet.mathdv', function ($qr) {
-                            $qr->select('mathdv')->from('tonghopluong_donvi')->where('thang', '08')->where('nam', '2018')->where('trangthai', 'DAGUI')
+                            $qr->select('mathdv')->from('tonghopluong_donvi')->where('thang', '07')->where('nam', '2019')->where('trangthai', 'DAGUI')
                                 ->distinct()->get();
                         })->get();
                 }
             }
             else
             {
-                $model_tonghop = tonghopluong_donvi::where('thang','08')->where('nam','2018')
-                    ->where('madvbc',$madvbc)->get();
-                $model_tonghop_ct = tonghopluong_donvi_chitiet::join('tonghopluong_donvi', 'tonghopluong_donvi_chitiet.mathdv', '=', 'tonghopluong_donvi.mathdv')
-                    ->select('tonghopluong_donvi_chitiet.linhvuchoatdong','tonghopluong_donvi_chitiet.heso','tonghopluong_donvi_chitiet.pckv','tonghopluong_donvi_chitiet.pccv',
-                        'tonghopluong_donvi_chitiet.pctnvk','tonghopluong_donvi_chitiet.pcudn','pcth','pctn','pccovu','pcdang',
-                        'pcthni','pck','nguoigui','madv','tonghopluong_donvi.mathh','tonghopluong_donvi.mathdv','macongtac')
-                    ->where('tonghopluong_donvi.madvbc',$madvbc)
-                    ->wherein('tonghopluong_donvi_chitiet.mathdv',function($qr){
-                        $qr->select('mathdv')->from('tonghopluong_donvi')->where('thang','08')->where('nam','2018')->where('trangthai','DAGUI')
-                            ->distinct()->get();
-                    })
-                    ->groupby('linhvuchoatdong','nguoigui','madv','mathh','mathdv','macongtac')
-                    ->get();
+                if (session('admin')->phamvitonghop == "KHOI") {
+                    $model_tonghop = tonghopluong_donvi::where('thang', '07')->where('nam', '2019')
+                        ->where('macqcq', session('admin')->madv)->get();
+                    $model_tonghop_ct = tonghopluong_donvi_chitiet::join('tonghopluong_donvi', 'tonghopluong_donvi_chitiet.mathdv', '=', 'tonghopluong_donvi.mathdv')
+                        ->select('tonghopluong_donvi_chitiet.linhvuchoatdong', DB::raw('st_heso as heso'), DB::raw('st_pckv as pckv'), DB::raw('st_pccv as pccv'),
+                            DB::raw('st_pctnvk as pctnvk'), DB::raw('st_pcudn as pcudn'), DB::raw('st_pcth as pcth'), DB::raw('st_pctn as pctn'), DB::raw('st_pccovu as pccovu'), DB::raw('st_pcdang as pcdang'),
+                            DB::raw('st_pcthni as pcthni'), DB::raw('st_pck as pck'), 'nguoigui', 'madv', 'tonghopluong_donvi.mathh', 'tonghopluong_donvi.mathdv', 'macongtac')
+                        ->where('tonghopluong_donvi.macqcq', session('admin')->madv)
+                        ->wherein('tonghopluong_donvi_chitiet.mathdv', function ($qr) {
+                            $qr->select('mathdv')->from('tonghopluong_donvi')->where('thang', '07')->where('nam', '2019')->where('trangthai', 'DAGUI')
+                                ->distinct()->get();
+                        })
+                        ->groupby('linhvuchoatdong', 'nguoigui', 'madv', 'mathh', 'mathdv', 'macongtac')
+                        ->get();
+                    if (isset($inputs['inheso'])) {
+                        $model_tonghop_ct = tonghopluong_donvi_chitiet::join('tonghopluong_donvi', 'tonghopluong_donvi_chitiet.mathdv', '=', 'tonghopluong_donvi.mathdv')
+                            ->select('tonghopluong_donvi_chitiet.linhvuchoatdong', 'tonghopluong_donvi_chitiet.heso', 'tonghopluong_donvi_chitiet.pckv', 'tonghopluong_donvi_chitiet.pccv',
+                                'tonghopluong_donvi_chitiet.pctnvk', 'tonghopluong_donvi_chitiet.pcudn', 'pcth', 'pctn', 'pccovu', 'pcdang',
+                                'pcthni', 'pck', 'nguoigui', 'madv', 'tonghopluong_donvi.mathh', 'tonghopluong_donvi.mathdv', 'macongtac')
+                            ->where('tonghopluong_donvi.macqcq', session('admin')->madv)
+                            ->wherein('tonghopluong_donvi_chitiet.mathdv', function ($qr) {
+                                $qr->select('mathdv')->from('tonghopluong_donvi')->where('thang', '07')->where('nam', '2019')->where('trangthai', 'DAGUI')
+                                    ->distinct()->get();
+                            })
+                            ->groupby('linhvuchoatdong', 'nguoigui', 'madv', 'mathh', 'mathdv', 'macongtac')
+                            ->get();
+                    }
+                } else {
+                    $model_tonghop = tonghopluong_donvi::where('thang', '07')->where('nam', '2019')
+                        ->where('madvbc', $madvbc)->get();
+                    $model_tonghop_ct = tonghopluong_donvi_chitiet::join('tonghopluong_donvi', 'tonghopluong_donvi_chitiet.mathdv', '=', 'tonghopluong_donvi.mathdv')
+                        ->select('tonghopluong_donvi_chitiet.linhvuchoatdong', DB::raw('st_heso as heso'), DB::raw('st_pckv as pckv'), DB::raw('st_pccv as pccv'),
+                            DB::raw('st_pctnvk as pctnvk'), DB::raw('st_pcudn as pcudn'), DB::raw('st_pcth as pcth'), DB::raw('st_pctn as pctn'), DB::raw('st_pccovu as pccovu'), DB::raw('st_pcdang as pcdang'),
+                            DB::raw('st_pcthni as pcthni'), DB::raw('st_pck as pck'), 'nguoigui', 'madv', 'tonghopluong_donvi.mathh', 'tonghopluong_donvi.mathdv', 'macongtac')
+                        ->where('tonghopluong_donvi.madvbc', $madvbc)
+                        ->wherein('tonghopluong_donvi_chitiet.mathdv', function ($qr) {
+                            $qr->select('mathdv')->from('tonghopluong_donvi')->where('thang', '07')->where('nam', '2019')->where('trangthai', 'DAGUI')
+                                ->distinct()->get();
+                        })
+                        ->groupby('linhvuchoatdong', 'nguoigui', 'madv', 'mathh', 'mathdv', 'macongtac')
+                        ->get();
+                    if (isset($inputs['inheso'])) {
+                        $model_tonghop_ct = tonghopluong_donvi_chitiet::join('tonghopluong_donvi', 'tonghopluong_donvi_chitiet.mathdv', '=', 'tonghopluong_donvi.mathdv')
+                            ->select('tonghopluong_donvi_chitiet.linhvuchoatdong', 'tonghopluong_donvi_chitiet.heso', 'tonghopluong_donvi_chitiet.pckv', 'tonghopluong_donvi_chitiet.pccv',
+                                'tonghopluong_donvi_chitiet.pctnvk', 'tonghopluong_donvi_chitiet.pcudn', 'pcth', 'pctn', 'pccovu', 'pcdang',
+                                'pcthni', 'pck', 'nguoigui', 'madv', 'tonghopluong_donvi.mathh', 'tonghopluong_donvi.mathdv', 'macongtac')
+                            ->where('tonghopluong_donvi.madvbc', $madvbc)
+                            ->wherein('tonghopluong_donvi_chitiet.mathdv', function ($qr) {
+                                $qr->select('mathdv')->from('tonghopluong_donvi')->where('thang', '07')->where('nam', '2019')->where('trangthai', 'DAGUI')
+                                    ->distinct()->get();
+                            })
+                            ->groupby('linhvuchoatdong', 'nguoigui', 'madv', 'mathh', 'mathdv', 'macongtac')
+                            ->get();
+                    }
+                }
             }
 
             $luongcb = 1;
@@ -8430,7 +8521,7 @@ class baocaothongtu67Controller extends Controller
             {
                 $model_bienche = chitieubienche::join('dmdonvi','dmdonvi.madv','=','chitieubienche.madv')
                     ->join('dmdonvibaocao','dmdonvibaocao.madvbc','=','dmdonvi.madvbc')
-                    ->where('chitieubienche.nam','2018')->where('dmdonvi.madvbc','like',$inputs['madv'].'%')
+                    ->where('chitieubienche.nam','2019')->where('dmdonvi.madvbc','like',$inputs['madv'].'%')
                     ->where('dmdonvibaocao.level','T')->get();
                 //$luongcb = 1210000; tạm thời bỏ vì bang lương đã nhân lcb
                 $luongcb = 0.935;
@@ -8440,7 +8531,7 @@ class baocaothongtu67Controller extends Controller
                     ->where('tonghopluong_donvi.madvbc','like',$inputs['madv'].'%')
                     ->where('dmdonvibaocao.level','T')
                     ->wherein('tonghopluong_donvi_chitiet.mathdv',function($qr){
-                        $qr->select('mathdv')->from('tonghopluong_donvi')->where('thang','08')->where('nam','2018')->where('trangthai','DAGUI')
+                        $qr->select('mathdv')->from('tonghopluong_donvi')->where('thang','07')->where('nam','2019')->where('trangthai','DAGUI')
                             ->distinct()->get();
                     })->get();
             }
@@ -8925,8 +9016,27 @@ class baocaothongtu67Controller extends Controller
                 }
             }
             //dd($ar_I);
-
-            return view('reports.thongtu67.mau2a2_tt68')
+            if(isset($inputs['excel']))
+                Excel::create('mau2a2_tt46',function($excel) use($ar_I,$ar_II,$ar_III,$ar_IV,$a_It,$a_IIIt,$a_IVt,$m_dv,$inputs){
+                    $excel->sheet('New sheet', function($sheet) use($ar_I,$ar_II,$ar_III,$ar_IV,$a_It,$a_IIIt,$a_IVt,$m_dv,$inputs){
+                        $sheet->loadView('reports.thongtu67.mau2a2_tt46')
+                            ->with('ar_I',$ar_I)
+                            ->with('ar_II',$ar_II)
+                            ->with('ar_III',$ar_III)
+                            ->with('ar_IV',$ar_IV)
+                            ->with('a_It',$a_It)
+                            ->with('a_IIIt',$a_IIIt)
+                            ->with('a_IVt',$a_IVt)
+                            ->with('m_dv',$m_dv)
+                            ->with('inputs',$inputs)
+                            ->with('pageTitle','mau2a2_tt46');
+                        $sheet->setAutoSize(false);
+                        $sheet->setFontFamily('Tahoma');
+                        $sheet->setFontBold(false);
+                    });
+                })->download('xls');
+            else
+            return view('reports.thongtu67.mau2a2_tt46')
                 ->with('furl','/tong_hop_bao_cao/')
                 ->with('ar_I',$ar_I)
                 ->with('ar_II',$ar_II)
@@ -8937,7 +9047,7 @@ class baocaothongtu67Controller extends Controller
                 ->with('a_IVt',$a_IVt)
                 ->with('m_dv',$m_dv)
                 ->with('inputs',$inputs)
-                ->with('pageTitle','Báo cáo nhu cầu kinh phí thực hiện nghị định 47/2017/NĐ-CP');
+                ->with('pageTitle','Báo cáo nhu cầu kinh phí thực hiện nghị định 38/2019/NĐ-CP');
         } else
             return view('errors.notlogin');
 
@@ -8955,7 +9065,7 @@ class baocaothongtu67Controller extends Controller
                 if(count($chekdv) > 0)
                 {
                     $model_donvi = dmdonvi::where('macqcq',$madv)->get();
-                    $model_bienche = chitieubienche::where('nam', '2018')->wherein('madv', function ($qr) use ($madv) {
+                    $model_bienche = chitieubienche::where('nam', '2019')->wherein('madv', function ($qr) use ($madv) {
                         $qr->select('madv')->from('dmdonvi')->where('macqcq', $madv)->distinct()->get();
                     })->get();
                 }
@@ -8963,12 +9073,12 @@ class baocaothongtu67Controller extends Controller
                 else
                 {
                     $model_donvi = dmdonvi::where('madv',$madv)->get();
-                    $model_bienche = chitieubienche::where('nam', '2018')->where('madv', $madv)->get();
+                    $model_bienche = chitieubienche::where('nam', '2019')->where('madv', $madv)->get();
                 }
             }
             else {
                 $model_donvi = dmdonvi::where('madvbc', $madvbc)->get();
-                $model_bienche = chitieubienche::where('nam', '2018')->wherein('madv', function ($qr) use ($madvbc) {
+                $model_bienche = chitieubienche::where('nam', '2019')->wherein('madv', function ($qr) use ($madvbc) {
                     $qr->select('madv')->from('dmdonvi')->where('madvbc', $madvbc)->distinct()->get();
                 })->get();
             }
@@ -8981,22 +9091,22 @@ class baocaothongtu67Controller extends Controller
             if($inputs['madv'] !="")
             {
                 if(count($chekdv) > 0) {
-                    $model_tonghop = tonghopluong_huyen::where('thang', '08')->where('nam', '2018')
+                    $model_tonghop = tonghopluong_huyen::where('thang', '07')->where('nam', '2019')
                         ->where('madv', $inputs['madv'])->get();
                     $model_tonghop_ct = tonghopluong_donvi_chitiet::join('tonghopluong_donvi', 'tonghopluong_donvi_chitiet.mathdv', '=', 'tonghopluong_donvi.mathdv')
                         ->where('tonghopluong_donvi.macqcq', $inputs['madv'])
                         ->wherein('tonghopluong_donvi_chitiet.mathdv', function ($qr) {
-                            $qr->select('mathdv')->from('tonghopluong_donvi')->where('thang', '08')->where('nam', '2018')->where('trangthai', 'DAGUI')
+                            $qr->select('mathdv')->from('tonghopluong_donvi')->where('thang', '07')->where('nam', '2019')->where('trangthai', 'DAGUI')
                                 ->distinct()->get();
                         })->get();
                 }
                 else {
-                    $model_tonghop = tonghopluong_donvi::where('thang', '08')->where('nam', '2018')
+                    $model_tonghop = tonghopluong_donvi::where('thang', '07')->where('nam', '2019')
                         ->where('madv', $inputs['madv'])->get();
                     $model_tonghop_ct = tonghopluong_donvi_chitiet::join('tonghopluong_donvi', 'tonghopluong_donvi_chitiet.mathdv', '=', 'tonghopluong_donvi.mathdv')
                         ->where('tonghopluong_donvi.madv', $inputs['madv'])
                         ->wherein('tonghopluong_donvi_chitiet.mathdv', function ($qr) {
-                            $qr->select('mathdv')->from('tonghopluong_donvi')->where('thang', '08')->where('nam', '2018')->where('trangthai', 'DAGUI')
+                            $qr->select('mathdv')->from('tonghopluong_donvi')->where('thang', '07')->where('nam', '2019')->where('trangthai', 'DAGUI')
                                 ->distinct()->get();
                         })->get();
                     dd($model_tonghop_ct->toarray());
@@ -9004,12 +9114,12 @@ class baocaothongtu67Controller extends Controller
             }
             else
             {
-                $model_tonghop = tonghopluong_donvi::where('thang','08')->where('nam','2018')
+                $model_tonghop = tonghopluong_donvi::where('thang','07')->where('nam','2019')
                     ->where('madvbc',$madvbc)->get();
                 $model_tonghop_ct = tonghopluong_donvi_chitiet::join('tonghopluong_donvi', 'tonghopluong_donvi_chitiet.mathdv', '=', 'tonghopluong_donvi.mathdv')
                     ->where('tonghopluong_donvi.madvbc',$madvbc)
                     ->wherein('tonghopluong_donvi_chitiet.mathdv',function($qr){
-                        $qr->select('mathdv')->from('tonghopluong_donvi')->where('thang','08')->where('nam','2018')->where('trangthai','DAGUI')
+                        $qr->select('mathdv')->from('tonghopluong_donvi')->where('thang','07')->where('nam','2019')->where('trangthai','DAGUI')
                             ->distinct()->get();
                     })->get();
             }
@@ -9024,7 +9134,7 @@ class baocaothongtu67Controller extends Controller
             {
                 $model_bienche = chitieubienche::join('dmdonvi','dmdonvi.madv','=','chitieubienche.madv')
                     ->join('dmdonvibaocao','dmdonvibaocao.madvbc','=','dmdonvi.madvbc')
-                    ->where('chitieubienche.nam','2018')->where('dmdonvi.madvbc','like',$inputs['madv'].'%')
+                    ->where('chitieubienche.nam','2019')->where('dmdonvi.madvbc','like',$inputs['madv'].'%')
                     ->where('dmdonvibaocao.level','T')->get();
                 //$luongcb = 1210000; tạm thời bỏ vì bang lương đã nhân lcb
                 $luongcb = 0.935;
@@ -9034,7 +9144,7 @@ class baocaothongtu67Controller extends Controller
                     ->where('tonghopluong_donvi.madvbc','like',$inputs['madv'].'%')
                     ->where('dmdonvibaocao.level','T')
                     ->wherein('tonghopluong_donvi_chitiet.mathdv',function($qr){
-                        $qr->select('mathdv')->from('tonghopluong_donvi')->where('thang','08')->where('nam','2018')->where('trangthai','DAGUI')
+                        $qr->select('mathdv')->from('tonghopluong_donvi')->where('thang','07')->where('nam','2019')->where('trangthai','DAGUI')
                             ->distinct()->get();
                     })->get();
             }
@@ -9546,13 +9656,13 @@ class baocaothongtu67Controller extends Controller
             $madvbc = session('admin')->madvbc;
             $m_dv = dmdonvi::where('madv',session('admin')->madv)->first();
             $model_donvi = dmdonvi::where('madvbc',$madvbc)->get();
-            $model_tonghop = tonghopluong_donvi::where('thang','08')->where('nam','2018')
+            $model_tonghop = tonghopluong_donvi::where('thang','07')->where('nam','2019')
                 ->where('madvbc',$madvbc)->get();
             $luongcb = 1;
             //nếu đơn vị đã tạo bảng lương tháng 07/2017 =>xuất kết quả
 
             $model_tonghop_ct = tonghopluong_donvi_chitiet::wherein('mathdv',function($qr){
-                $qr->select('mathdv')->from('tonghopluong_donvi')->where('thang','08')->where('nam','2018')->where('trangthai','DAGUI')
+                $qr->select('mathdv')->from('tonghopluong_donvi')->where('thang','07')->where('nam','2019')->where('trangthai','DAGUI')
                     ->where('macqcq',session('admin')->madv)->get();
             })->get();
 
@@ -10972,19 +11082,16 @@ class baocaothongtu67Controller extends Controller
             $ar_I[]=array('val'=>'XL3','tt'=>'3','noidung'=>'Xã loại III');
             $ar_I[]=array('val'=>'DBKK;BGHD;DBTD','tt'=>'II','noidung'=>'Thôn, tỏ dân phố');
             $ar_I[]=array('val'=>'BGHD','tt'=>'1','noidung'=>'Số xã biên giới, hải đảo');
-            $ar_I[]=array('val'=>'BGHD','tt'=>'','noidung'=>'- Thôn thuộc xã biên giới, hải đảo');
-            $ar_I[]=array('val'=>'DBKK','tt'=>'2','noidung'=>'Số xã khó khăn theo Quyết định 1049/QĐ-TTg ngày 26/6/2014');
-            $ar_I[]=array('val'=>'DBKK','tt'=>'','noidung'=>'- Thôn thuộc xã khó khăn theo Quyết định 1049/QĐ-TTg');
-            $ar_I[]=array('val'=>'XL12K','tt'=>'3','noidung'=>'Số xã loại I, loại II (không bao gồm số xã thuộc khoản 1, 2 phần II)');
-            $ar_I[]=array('val'=>'TXL12K','tt'=>'','noidung'=>'- Thôn thuộc xã loại I, loại II');
-            $ar_I[]=array('val'=>'DBTD','tt'=>'4','noidung'=>'Số xã trọng điểm, phức tạp về an ninh trật tự');
-            $ar_I[]=array('val'=>'DBTD','tt'=>'','noidung'=>'- Số thôn thuộc xã trọng điểm, phức tạp về an ninh');
-            $ar_I[]=array('val'=>'TK,TDP','tt'=>'5','noidung'=>'Số xã, phường, thị trấn còn lại');
+            $ar_I[]=array('val'=>'TBGHD','tt'=>'','noidung'=>'- Thôn thuộc xã biên giới, hải đảo');
+            $ar_I[]=array('val'=>'DBKK','tt'=>'2','noidung'=>'Số xã có thôn có 350 hộ gia đình trở lên,  xã trọng điểm, phức tạp về an ninh trật tự theo Quyết định của cơ quan có thẩm quyền');
+            $ar_I[]=array('val'=>'TDBKK','tt'=>'','noidung'=>'- Số thôn có 350 hộ gia đình trở lên, thôn thuộc xã trọng điểm, phức tạp về an ninh trật tự theo Quyết định của cơ quan có thẩm quyền');
+            $ar_I[]=array('val'=>'TK,TDP','tt'=>'3','noidung'=>'Số xã, phường, thị trấn còn lại');
             $ar_I[]=array('val'=>'TK','tt'=>'','noidung'=>'- Thôn còn lại');
             $ar_I[]=array('val'=>'TDP','tt'=>'','noidung'=>'- Tổ dân phố');
 
             $a_It = array('tdv' => 0,
                 'mk' => 0,
+                'mk2' => 0,
                 'kp' => 0,
                 'bhxh' => 0
             );
@@ -10996,36 +11103,50 @@ class baocaothongtu67Controller extends Controller
 
                 if(isset($chitiet)>0){
                     $kpk = 0;
+                    $kpk2 = 0;
                     $ar_I[$i]['tdv'] = $chitiet->count('id');
                     $a_It['tdv'] += $ar_I[$i]['tdv'];
                     if($ar_I[$i]['val'] == "XL1")
                     {
                         $ar_I[$i]['mk'] = "20,3";
+                        $ar_I[$i]['mk2'] = "16";
                         $kpk = 20.3;
+                        $kpk2 = 16;
                     }
                     elseif($ar_I[$i]['val'] == "XL2")
                     {
                         $ar_I[$i]['mk'] = "18,6";
                         $kpk = 18.6;
+                        $ar_I[$i]['mk2'] = "13,7";
+                        $kpk2 = 13.7;
                     }
                     elseif($ar_I[$i]['val'] == "XL3")
                     {
                         $ar_I[$i]['mk'] = "17,6";
                         $kpk = 17.6;
+                        $ar_I[$i]['mk2'] = "11,4";
+                        $kpk2 = 11.4;
                     }
 
                     elseif($ar_I[$i]['val'] == "TBGHD" || $ar_I[$i]['val'] == "TDBKK" || $ar_I[$i]['val'] == "TXL12K" )
                     {
                         $ar_I[$i]['mk'] = "5,0";
                         $kpk = 5;
+                        $ar_I[$i]['mk2'] = "5,0";
+                        $kpk2 = 5;
                     }
                     elseif($ar_I[$i]['val'] == "TK" || $ar_I[$i]['val'] == "TDP")
                     {
                         $ar_I[$i]['mk'] = "3,0";
                         $kpk = 3;
+                        $ar_I[$i]['mk2'] = "3,0";
+                        $kpk2 = 3;
                     }
-                    else
+                    else{
                         $ar_I[$i]['mk'] = "";
+                        $ar_I[$i]['mk2'] = "";
+                    }
+
                     $ar_I[$i]['kp'] = $a_It['tdv']* $kpk * 6 * 900000;
                     $a_It['kp'] += $ar_I[$i]['kp'];
                     $ar_I[$i]['bhxh'] = 0;
@@ -11034,13 +11155,14 @@ class baocaothongtu67Controller extends Controller
                 }else{
                     $ar_I[$i]['tdv'] = 0;
                     $ar_I[$i]['mk'] = 0;
+                    $ar_I[$i]['mk2'] = 0;
                     $ar_I[$i]['kp'] = 0;
                     $ar_I[$i]['bh'] = 0;
                 }
             }
             //dd($ar_I);
 
-            return view('reports.thongtu67.Mau2d_tt68m')
+            return view('reports.thongtu67.Mau2d_tt46')
                 ->with('m_dv',$m_dv)
                 ->with('ar_I',$ar_I)
                 ->with('a_It',$a_It)
@@ -11055,25 +11177,20 @@ class baocaothongtu67Controller extends Controller
             $inputs=$request->all();
             $madvbc = session('admin')->madvbc;
             $m_dv = dmdonvi::where('madv',session('admin')->madv)->first();
-            if($inputs['madv'] != "")
-            {
+            if($inputs['madv'] != "") {
                 $madv = $inputs['madv'];
-                $chekdv = dmdonvi::where('madv', $inputs['madv'])->where('phanloaitaikhoan','TH')->get();
-                if(count($chekdv) > 0)
-                {
-                    $m_thon =dmdiabandbkk::join('dmdonvi', 'dmdiabandbkk.madv', '=', 'dmdonvi.madv')
-                        ->select('dmdiabandbkk.id','phanloai')
-                        ->where('dmdonvi.macqcq',$madv)
-                        ->where('maphanloai','KVXP')
+                $chekdv = dmdonvi::where('madv', $inputs['madv'])->where('phanloaitaikhoan', 'TH')->get();
+                if (count($chekdv) > 0) {
+                    $m_thon = dmdiabandbkk::join('dmdonvi', 'dmdiabandbkk.madv', '=', 'dmdonvi.madv')
+                        ->select('dmdiabandbkk.id', 'phanloai')
+                        ->where('dmdonvi.macqcq', $madv)
+                        ->where('maphanloai', 'KVXP')
                         ->get();
-                }
-
-                else
-                {
-                    $m_thon =dmdiabandbkk::join('dmdonvi', 'dmdiabandbkk.madv', '=', 'dmdonvi.madv')
-                        ->select('dmdiabandbkk.id','phanloai')
-                        ->where('dmdonvi.madv',$madv)
-                        ->where('maphanloai','KVXP')
+                } else {
+                    $m_thon = dmdiabandbkk::join('dmdonvi', 'dmdiabandbkk.madv', '=', 'dmdonvi.madv')
+                        ->select('dmdiabandbkk.id', 'phanloai')
+                        ->where('dmdonvi.madv', $madv)
+                        ->where('maphanloai', 'KVXP')
                         ->get();
                 }
             }
@@ -11194,15 +11311,15 @@ class baocaothongtu67Controller extends Controller
             $ar_I = array();
             $ar_I[]=array('val'=>'QLNN','tt'=>'I','noidung'=>'Quản lý nhà nước');
             $ar_I[]=array('val'=>'SNCL','tt'=>'II','noidung'=>'Sự nghiệp công lập');
-            $ar_I[]=array('val'=>'CTXDT','tt'=>'1','noidung'=>'Đơn vị đảm bảo chi thường xuyên và chi đầu tư (2)');
-            $ar_I[]=array('val'=>'CTX','tt'=>'2','noidung'=>'Đơn vị đảm bảo chi thường xuyên (2)');
+            $ar_I[]=array('val'=>'CTXDT','tt'=>'1','noidung'=>'Đơn vị đảm bảo chi thường xuyên và chi đầu tư (1)');
+            $ar_I[]=array('val'=>'CTX','tt'=>'2','noidung'=>'Đơn vị đảm bảo chi thường xuyên (1)');
             $ar_I[]=array('val'=>'MPCTX','tt'=>'3','noidung'=>'Đơn vị đảm bảo một phần chi thường xuyên');
             $ar_I[]=array('val'=>'NNCTX','tt'=>'4','noidung'=>'Đơn vị được nhà nước đảm bảo chi thường xuyên');
-            return view('reports.thongtu67.Mau2dd_tt68')
+            return view('reports.thongtu67.Mau2dd_tt46')
                 ->with('inputs',$inputs)
                 ->with('m_dv',$m_dv)
                 ->with('ar_I',$ar_I)
-                ->with('pageTitle','TỔNG HỢP PHỤ CẤP ƯU ĐÃI TĂNG, GIẢM DO ĐIỀU CHỈNH ĐỊA BÀN VÙNG KINH TẾ XÃ HỘI ĐẶC BIỆT KHÓ KHĂN');
+                ->with('pageTitle','BÁO CÁO NGUỒN THỰC HIỆN CCTL TIẾT KIỆM TỪ VIỆC THỰC HIỆN TINH GIẢN BIÊN CHẾ');
         } else
             return view('errors.notlogin');
     }
@@ -11216,11 +11333,11 @@ class baocaothongtu67Controller extends Controller
             $ar_I[]=array('val'=>'CTX','tt'=>'2','noidung'=>'Đơn vị đảm bảo chi thường xuyên');
             $ar_I[]=array('val'=>'MPCTX','tt'=>'3','noidung'=>'Đơn vị đảm bảo một phần chi thường xuyên');
             $ar_I[]=array('val'=>'NNCTX','tt'=>'4','noidung'=>'Đơn vị được nhà nước đảm bảo chi thường xuyên');
-            return view('reports.thongtu67.Mau2e_tt68')
+            return view('reports.thongtu67.Mau2e_tt46')
                 ->with('inputs',$inputs)
                 ->with('ar_I',$ar_I)
                 ->with('m_dv',$m_dv)
-                ->with('pageTitle','TỔNG HỢP PHỤ CẤP ƯU ĐÃI TĂNG, GIẢM DO ĐIỀU CHỈNH ĐỊA BÀN VÙNG KINH TẾ XÃ HỘI ĐẶC BIỆT KHÓ KHĂN');
+                ->with('pageTitle','BÁO CÁO NGUỒN THỰC HIỆN CCTL TIẾT KIỆM TỪ VIỆC THAY ĐỔI CƠ CHÉ TỰ CHỦ TRONG NĂM 2019');
         } else
             return view('errors.notlogin');
     }
@@ -11272,7 +11389,7 @@ class baocaothongtu67Controller extends Controller
             $ar_I[9] = array('val' => 'KT', 'tt' => '8', 'noidung' => 'Sự nghiệp kinh tế');
             $ar_I[10] = array('val' => 'MT', 'tt' => '9', 'noidung' => 'Sự nghiệp môi trường');
             $ar_I[11] = array('val' => 'QLNN;DDT', 'tt' => '10', 'noidung' => 'Quản lý nhà nước, đảng, đoàn thể');
-            return view('reports.thongtu67.Mau2g_tt68')
+            return view('reports.thongtu67.Mau2g_tt46')
                 ->with('ar_I',$ar_I)
                 ->with('m_dv',$m_dv)
                 ->with('inputs',$inputs)

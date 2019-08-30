@@ -158,6 +158,12 @@
                                 <i class="fa fa-print"></i>&nbsp; In số liệu tổng hợp các tháng (CR)</a>
                         </div>
                     </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <a id="in_blnl" href="" onclick="innangluongth('/chuc_nang/du_toan_luong/huyen/nangluongth')" style="border-width: 0px;margin-left: 5px" target="_blank">
+                                <i class="fa fa-print"></i>&nbsp; In số danh sách cán bộ nâng lương</a>
+                        </div>
+                    </div>
                 </div>
             </div>
             <input type="hidden" id="mabl_in" name="mabl_in"/>
@@ -181,6 +187,9 @@
         }
         function insolieuCR($url){
             $("#in_blCR").attr("href", $url +'?maso='+ $('#mabl_in').val()+'&madv='+ $('#madv_in').val()+'&namns='+ $('#namns_in').val());
+        }
+        function innangluongth($url){
+            $("#in_blnl").attr("href", $url +'?maso='+ $('#mabl_in').val()+'&madv='+ $('#madv_in').val()+'&namns='+ $('#namns_in').val());
         }
         function confirmChuyen(masodv) {
             document.getElementById("masodv").value = masodv;

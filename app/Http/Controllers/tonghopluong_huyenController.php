@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\bangluong;
 use App\dmchucvucq;
 use App\dmdiabandbkk;
 use App\dmdonvi;
@@ -10,6 +11,7 @@ use App\dmnguonkinhphi;
 use App\dmphanloaicongtac;
 use App\dmphanloaict;
 use App\dmphanloaidonvi;
+use App\dmphongban;
 use App\dmphucap;
 use App\dmphucap_donvi;
 use App\tonghop_huyen;
@@ -1771,6 +1773,51 @@ class tonghopluong_huyenController extends Controller
             else {
                 return view('errors.nodata');
             }
+        } else
+            return view('errors.notlogin');
+    }
+    public function inkhoito(Request $request)
+    {
+        if (Session::has('admin')) {
+            $inputs = $request->all();
+            $madv = $inputs['madv'];
+            $mathdv = $inputs['mathdv'];
+            $model = tonghopluong_donvi_bangluong::join('tonghopluong_donvi','tonghopluong_donvi_bangluong.mathdv','tonghopluong_donvi.mathdv')
+                ->select('tonghopluong_donvi_bangluong.*','thang')
+                ->where('tonghopluong_donvi.mathh', $mathdv)->where('madv',$madv)->get();
+            $model_thongtin = tonghopluong_donvi::where('mathh', $mathdv)->where('madv',$madv)->first();
+            $m_bl = tonghopluong_donvi::select('thang', 'nam', 'madv', 'ngaylap', 'phanloai')->where('mathh', $mathdv)->first();
+            $m_dv = dmdonvi::where('madv', $madv)->first();
+            $model_pb = dmphongban::select('mapb', 'tenpb')
+                ->where('madv',$inputs['madv'])
+                ->wherein('mapb', a_unique(array_column($model->toarray(),'mapb')))->get();
+
+            $thongtin = array('nguoilap' => $m_bl->nguoilap,
+                'thang' => $m_bl->thang,
+                'nam' => $m_bl->nam,
+                'ngaylap' => $m_bl->ngaylap, 'phanloai' => $m_bl->phanloai,
+                'cochu' =>10
+            );
+            //xử lý ẩn hiện cột phụ cấp => biết tổng số cột hiện => colspan trên báo cáo
+            $a_goc = array('hesott');
+            $model_pc = dmphucap_donvi::where('madv', $madv)->where('phanloai', '<', '3')->wherenotin('mapc', $a_goc)->get();
+            $a_phucap = array();
+            $col = 0;
+
+            foreach ($model_pc as $ct) {
+                if ($model->sum($ct->mapc) > 0) {
+                    $a_phucap[$ct->mapc] = $ct->report;
+                    $col++;
+                }
+            }
+            return view('reports.tonghopluong.huyen.mautt107_pb')
+                ->with('model', $model->sortBy('stt'))
+                ->with('m_dv', $m_dv)
+                ->with('thongtin', $thongtin)
+                ->with('col', $col)
+                ->with('model_pb', $model_pb)
+                ->with('a_phucap', $a_phucap)
+                ->with('pageTitle', 'Bảng lương chi tiết');
         } else
             return view('errors.notlogin');
     }

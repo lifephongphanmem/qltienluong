@@ -708,6 +708,7 @@ Route::group(['prefix'=>'chuc_nang'],function(){
             Route::post('store_detail','tonghopluong_huyenController@store_detail');//chỉnh sửa dữ liêu
             Route::post('store_detail_diaban','tonghopluong_huyenController@store_detail_diaban');//chỉnh sửa dữ liêu
             Route::get('thanh_toan_CR','tonghopluong_huyenController@thanhtoanluongCR');
+            Route::get('inkhoito','tonghopluong_huyenController@inkhoito');
         });
 
         Route::group(['prefix'=>'tinh'],function(){
@@ -799,6 +800,7 @@ Route::group(['prefix'=>'chuc_nang'],function(){
             Route::get('printf','dutoanluong_huyenController@printf');//in một khối trong khối
             Route::get('chitietbl','dutoanluong_huyenController@chitietbl');//in chi tiết bảng lương đơn vị
             Route::get('chitietblCR','dutoanluong_huyenController@chitietblCR');//in chi tiết bảng lương đơn vị
+            Route::get('nangluongth','dutoanluong_huyenController@nangluongth');//in chi tiết bảng lương đơn vị
         });
 
         Route::group(['prefix'=>'khoi'],function(){
