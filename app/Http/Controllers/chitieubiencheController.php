@@ -30,6 +30,7 @@ class chitieubiencheController extends Controller
             return view('manage.chitieubienche.index')
                 ->with('furl','/nghiep_vu/chi_tieu/')
                 ->with('model',$model)
+                ->with('m_lv', getLinhVucHoatDong(false))
                 ->with('model_nhomct', $model_nhomct)
                 ->with('model_tenct', $model_tenct)
                 ->with('inputs', $inputs)
@@ -102,7 +103,7 @@ class chitieubiencheController extends Controller
         if (Session::has('admin')) {
             $model = chitieubienche::find($id);
             $model->delete();
-            return redirect('/nghiep_vu/chi_tieu/danh_sach');
+            return redirect('/nghiep_vu/chi_tieu/danh_sach?namct='.$model->nam);
         } else
             return view('errors.notlogin');
     }

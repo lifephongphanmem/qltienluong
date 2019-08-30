@@ -71,23 +71,51 @@ class dataController extends Controller
                 //->orderby('bangluong_ct.stt')
                 ->get()->sortby('stt')->toarray();
         }
-        */
+
         if ($manguonkp == null) {
+                $a_bl = \App\bangluong::select('mabl')
+                    ->where('thang', $thang)
+                    ->where('nam', $nam)
+                    ->where('madv', $madv)
+                    ->where('phanloai', $phanloai)->get();
+            } else {
+                $a_bl = \App\bangluong::select('mabl')
+                    ->where('thang', $thang)
+                    ->where('nam', $nam)
+                    ->where('madv', $madv)
+                    ->wherein('manguonkp', $manguonkp)
+                    ->where('phanloai', $phanloai)->get()->toarray();
+            }
+
+            return  \App\bangluong_ct::wherein('mabl',$a_bl)->orderby('stt')->get();
+        */
+        if($phanloai == 'BANGLUONG'){
+            if ($manguonkp == null) {
+                $a_bl = \App\bangluong::select('mabl')
+                    ->where('thang', $thang)
+                    ->where('nam', $nam)
+                    ->where('madv', $madv)
+                    ->where('phanloai', $phanloai)->get();
+            } else {
+                $a_bl = \App\bangluong::select('mabl')
+                    ->where('thang', $thang)
+                    ->where('nam', $nam)
+                    ->where('madv', $madv)
+                    ->wherein('manguonkp', $manguonkp)
+                    ->where('phanloai', $phanloai)->get()->toarray();
+            }
+
+            return  \App\bangluong_ct::wherein('mabl',$a_bl)->orderby('stt')->get();
+        }else{
+            //truy lĩnh (nguồn kinh trong chi tiết bảng lương
             $a_bl = \App\bangluong::select('mabl')
                 ->where('thang', $thang)
                 ->where('nam', $nam)
                 ->where('madv', $madv)
-                ->where('phanloai', 'BANGLUONG')->get();
-        } else {
-            $a_bl = \App\bangluong::select('mabl')
-                ->where('thang', $thang)
-                ->where('nam', $nam)
-                ->where('madv', $madv)
-                ->wherein('manguonkp', $manguonkp)
-                ->where('phanloai', 'BANGLUONG')->get()->toarray();
+                ->where('phanloai', $phanloai)->get();
+            return  \App\bangluong_ct::wherein('mabl',$a_bl)->wherein('manguonkp', $manguonkp)->orderby('stt')->get();
         }
 
-        return  \App\bangluong_ct::wherein('mabl',$a_bl)->orderby('stt')->get();
         /*
         switch($thang){
             case '01':{

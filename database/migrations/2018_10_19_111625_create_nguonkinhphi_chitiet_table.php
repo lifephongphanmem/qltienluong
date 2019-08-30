@@ -60,6 +60,16 @@ class CreateNguonkinhphiChitietTable extends Migration
             $table->date('ngayguih')->nullable();
             $table->string('nguoiguih')->nullable();
             $table->text('lydo')->nullable();
+            //thêm mới theo thông tư 46/2019
+            $table->double('tietkiem1')->default(0); //trước 1 năm
+            $table->double('tietkiem2')->default(0); //trước 2 năm
+            $table->double('thuchien1')->default(0); //trước 1 năm
+            $table->double('dutoan')->default(0);
+            $table->double('dutoan1')->default(0); //trước 1 năm
+            $table->double('bosung')->default(0);
+            $table->double('caicach')->default(0);
+            $table->double('kpthuhut')->default(0);
+            $table->double('kpuudai')->default(0);
             $table->timestamps();
         });
     }

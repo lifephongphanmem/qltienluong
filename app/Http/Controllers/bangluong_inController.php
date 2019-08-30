@@ -926,6 +926,7 @@ class bangluong_inController extends Controller
         $getData = new data();
         $model = $getData->getBangluong_ct_th($inputs['thang_th'], $inputs['nam_th'], $inputs['madv'],
                     isset($inputs['manguonkp'])? $inputs['manguonkp']: null, 'BANGLUONG');
+
         $model_tl = array();
         if(isset($inputs['in_truylinh'])){
             $model_tl = $getData->getBangluong_ct_th($inputs['thang_th'], $inputs['nam_th'], $inputs['madv'],
@@ -952,6 +953,8 @@ class bangluong_inController extends Controller
         //dd($a_canbo);
         //duyệt từng cán bộm từng phụ cấp để tính lại tổng hệ số
         //-> kiểm tra số tiền > 0 => cộng vào tổng hệ số.
+
+        //dd($model_tl);
         foreach($model_canbo as $cb){
             $m_canbo = $model->where('macanbo',$cb->macanbo);
             $cb->ttl = $m_canbo->sum('ttl');

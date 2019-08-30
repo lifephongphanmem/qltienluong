@@ -15,12 +15,12 @@ class CreateNguonkinhphiTable extends Migration
     {
         Schema::create('nguonkinhphi', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('masodv',50)->nullable();
-            $table->string('masok',50)->nullable();
-            $table->string('masoh',50)->nullable();
-            $table->string('masot',50)->nullable();
+            $table->string('masodv', 50)->nullable();
+            $table->string('masok', 50)->nullable();
+            $table->string('masoh', 50)->nullable();
+            $table->string('masot', 50)->nullable();
             $table->string('sohieu')->nullable();
-            $table->string('manguonkp',50)->nullable();
+            $table->string('manguonkp', 50)->nullable();
             $table->text('noidung')->nullable();
             $table->string('namns')->nullable();
             $table->string('linhvuchoatdong')->nullable();
@@ -43,9 +43,9 @@ class CreateNguonkinhphiTable extends Migration
             $table->double('hocphi')->default(0);
             $table->double('vienphi')->default(0);
             $table->double('nguonthu')->default(0);
-            $table->string('madv',50)->nullable();
-            $table->string('madvbc',50)->nullable();
-            $table->string('macqcq',50)->nullable();
+            $table->string('madv', 50)->nullable();
+            $table->string('madvbc', 50)->nullable();
+            $table->string('macqcq', 50)->nullable();
             $table->string('maphanloai')->nullable();//lấy trong bảng danh sách đơn vị add vào
             $table->string('trangthai')->nullable();
             //Thông tin người gửi cấp đơn vị
@@ -58,6 +58,16 @@ class CreateNguonkinhphiTable extends Migration
             $table->date('ngayguih')->nullable();
             $table->string('nguoiguih')->nullable();
             $table->text('lydo')->nullable();
+            //thêm mới theo thông tư 46/2019
+            $table->double('tietkiem1')->default(0); //trước 1 năm
+            $table->double('tietkiem2')->default(0); //trước 2 năm
+            $table->double('thuchien1')->default(0); //trước 1 năm
+            $table->double('dutoan')->default(0);
+            $table->double('dutoan1')->default(0); //trước 1 năm
+            $table->double('bosung')->default(0);
+            $table->double('caicach')->default(0);
+            $table->double('kpthuhut')->default(0);
+            $table->double('kpuudai')->default(0);
             $table->timestamps();
         });
     }

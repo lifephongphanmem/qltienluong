@@ -319,6 +319,7 @@
 </div>
 {!! Form::close() !!}
 
+<!--
 {!! Form::open(['url'=>'/chuc_nang/bang_luong/tang_giam','method'=>'get' , 'files'=>true, 'id' => 'create_bangluong_truylinh']) !!}
 <div id="tanggiam-modal-confirm" tabindex="-1" role="dialog" aria-hidden="true" class="modal fade">
     <form id="frmtanggiam" method="GET" action="#" accept-charset="UTF-8">
@@ -389,6 +390,7 @@
     </form>
 </div>
 {!! Form::close() !!}
+-->
 
 {!! Form::open(['url'=>'/chuc_nang/bang_luong/store_trichnop','method'=>'post' , 'files'=>true, 'id' => 'create_trichnop']) !!}
 <div id="trichnop-modal-confirm" tabindex="-1" role="dialog" aria-hidden="true" class="modal fade">

@@ -46,6 +46,16 @@ class nguonkinhphi_chitiet extends Model
         'nguoiguidv',
         'ngayguih',
         'nguoiguih',
-        'lydo'
+        'lydo',
+        //thêm mới theo thông tư 46/2019
+        'tietkiem1', //trước 1 năm
+        'tietkiem2', //trước 2 năm
+        'thuchien1', //trước 1 năm
+        'dutoan',
+        'dutoan1', //trước 1 năm
+        'bosung',
+        'caicach',
+        'kpthuhut',
+        'kpuudai',
     ];
 }
