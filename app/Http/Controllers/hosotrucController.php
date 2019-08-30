@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\bangluong;
+use App\dmphucap_donvi;
+use App\hosocanbo;
 use App\hosotruc;
 use Illuminate\Http\Request;
 
@@ -11,17 +14,84 @@ use Illuminate\Support\Facades\Session;
 
 class hosotrucController extends Controller
 {
-    function index()
+    function index(Request $request)
     {
         if (Session::has('admin')) {
-            $model = hosotruc::where('madv', session('admin')->madv)->get();
+            $inputs = $request->all();
+            $inputs['furl'] = '/nghiep_vu/truc/';
+            $inputs['furl_ajax'] = '/ajax/truc/';
+            $model = hosotruc::where('madv', session('admin')->madv)
+                ->where('thang', $inputs['thang'])
+                ->where('nam', $inputs['nam'])
+                ->get();
 
+            $m_cb = hosocanbo::select('macanbo', 'macvcq', 'tencanbo')
+                ->wherenotin('macanbo',array_column($model->toarray(),'macanbo'))
+                ->where('madv', session('admin')->madv)->orderby('stt')->get();
+            //dd($a_cb);
+            $m_bl = bangluong::where('phanloai','TRUC')
+                ->where('thang', $inputs['thang'])
+                ->where('nam', $inputs['nam'])
+                ->where('madv', session('admin')->madv)
+                ->get();
+
+            $inputs['trangthai'] = count($m_bl)> 0 ? false : true;
             return view('manage.truc.index')
-                ->with('furl', '/nghiep_vu/truc/')
-                ->with('furl_ajax', '/ajax/truc/')
-                //->with('macanbo', $macanbo)
+                ->with('inputs', $inputs)
+                ->with('m_cb', $m_cb)
+                ->with('a_cv', getChucVuCQ(false))
                 ->with('model', $model)
                 ->with('pageTitle', 'Danh sách cán bộ trực công tác');
+        } else
+            return view('errors.notlogin');
+    }
+
+    function create(Request $request){
+        if (Session::has('admin')) {
+            $inputs = $request->all();
+            $inputs['trangthai'] = 'ADD';
+            $inputs['furl'] = '/nghiep_vu/truc/';
+            $model = hosocanbo::where('macanbo',$inputs['macanbo'])->first();
+            $model->songaycong = session('admin')->songaycong;
+            $model->songaytruc = session('admin')->songaycong;
+            $model->thang = $inputs['thang'];
+            $model->nam = $inputs['nam'];
+            $model_pc = dmphucap_donvi::where('madv', session('admin')->madv)
+                ->wherein('mapc',['heso','vuotkhung','pccv','pcdh','pctn','pcudn','pcud61'])
+                ->get();
+
+            return view('manage.truc.create')
+                ->with('inputs',$inputs)
+                ->with('model',$model)
+                ->with('model_pc',$model_pc)
+                ->with('a_heso', array('heso','vuotkhung','pccv'))
+                ->with('pageTitle', 'Thêm mới cán bộ trực');
+
+        } else
+            return view('errors.notlogin');
+    }
+
+    function edit(Request $request){
+        if (Session::has('admin')) {
+            $inputs = $request->all();
+            $inputs['trangthai'] = 'EDIT';
+            $inputs['furl'] = '/nghiep_vu/truc/';
+
+            $model = hosotruc::where('macanbo',$inputs['macanbo'])->where('thang',$inputs['thang'])
+                ->where('nam',$inputs['nam'])
+                ->first();
+
+            $model_pc = dmphucap_donvi::where('madv', session('admin')->madv)
+                ->wherein('mapc',['heso','vuotkhung','pccv','pcdh','pctn','pcudn','pcud61'])
+                ->get();
+
+            return view('manage.truc.create')
+                ->with('inputs',$inputs)
+                ->with('model',$model)
+                ->with('model_pc',$model_pc)
+                ->with('a_heso', array('heso','vuotkhung','pccv'))
+                ->with('pageTitle', 'Thông tin cán bộ trực');
+
         } else
             return view('errors.notlogin');
     }
@@ -30,17 +100,18 @@ class hosotrucController extends Controller
     {
         if (Session::has('admin')) {
             $inputs = $request->all();
-            if ($inputs['id'] == 'ADD') {
-                $inputs['madv'] = session('admin')->madv;
-                $inputs['macanbo'] =session('admin')->madv . '_' . getdate()[0];
-                $inputs['heso'] = chkDbl($inputs['heso']);
-                unset($inputs['id']);
+            $inputs['songaycong'] = chkDbl($inputs['songaycong']) < 1 ? 1 : chkDbl($inputs['songaycong']);
+            $inputs['songaytruc'] = chkDbl($inputs['songaytruc']);
+            //dd($inputs);
+            if ($inputs['trangthai'] == 'ADD') {
                 hosotruc::create($inputs);
             } else {
-                //unset($inputs['id']);
-                hosotruc::find($inputs['id'])->update($inputs);
+                hosotruc::where('macanbo',$inputs['macanbo'])
+                    ->where('thang',$inputs['thang'])
+                    ->where('nam',$inputs['nam'])
+                    ->first()->update($inputs);
             }
-            return redirect('/nghiep_vu/truc/danh_sach');
+            return redirect('/nghiep_vu/truc/danh_sach?thang='.$inputs['thang'].'&nam='.$inputs['nam']);
         } else
             return view('errors.notlogin');
     }
@@ -63,10 +134,11 @@ class hosotrucController extends Controller
     function destroy($id){
         if (Session::has('admin')) {
             $model = hosotruc::find($id);
-
             $model->delete();
-            return redirect('/nghiep_vu/truc/danh_sach');
+            return redirect('/nghiep_vu/truc/danh_sach?thang='.$model->thang.'&nam='.$model->nam);
         } else
             return view('errors.notlogin');
     }
+
+
 }

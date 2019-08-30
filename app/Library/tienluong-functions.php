@@ -557,7 +557,7 @@ function getPhanLoaiBangLuong(){
     return array(
         'BANGLUONG' => 'Bảng chi trả lương',
         'TRUYLINH' => 'Bảng chi trả truy lĩnh',
-        'TRUC' => 'Bảng chi trả trực công tác',
+        'TRUC' => 'Bảng chi trả phụ cấp độc hại',
         'CTPHI' => 'Bảng chi trả công tác phí',
         'TRICHNOP' => 'Bảng trích nộp lương',
         'KHAC' => 'Bảng chi trả khác',
@@ -608,6 +608,7 @@ function getPhanLoaiCanBo()
 function getPhanLoaiCanBo_CongTac()
 {
     return array('1' => 'Cán bộ đang công tác',
+        '2' => 'Cán bộ đang đi công tác, đi học',
         '3' => 'Cán bộ đang điều động',
         '4' => 'Cán bộ được điều động đến',
         '5' => 'Cán bộ công tác tại vùng cao, biên giới, hải đảo',

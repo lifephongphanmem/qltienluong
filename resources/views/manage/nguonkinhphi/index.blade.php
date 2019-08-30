@@ -179,22 +179,22 @@
                 </div>
                 <div class="modal-body">
                     <div class="row">
-                        <div class="col-md-12" {{session('admin')->maphanloai != 'KVXP'?'':'style=display:none'}}>
+                        <div class="col-md-6" {{session('admin')->maphanloai != 'KVXP'?'':'style=display:none'}}>
                             <label class="control-label">Lĩnh vực hoạt động</label>
                             {!!Form::select('linhvuchoatdong',getLinhVucHoatDong(false), null, array('id' => 'linhvuchoatdong','class' => 'form-control'))!!}
                         </div>
 
-                        <div class="col-md-12">
+                        <div class="col-md-6">
                             <label class="control-label">Căn cứ thông tư, quyết định</label>
                             {!!Form::select('sohieu',getThongTuQD(), null, array('id' => 'sohieu','class' => 'form-control'))!!}
                         </div>
 
-                        <div class="col-md-12">
+                        <div class="col-md-6">
                             <label class="control-label">Mức lương định mức</label>
                             {!!Form::text('muccu', null, array('id' => 'muccu','class' => 'form-control', 'data-mask'=>'fdecimal', 'readonly'))!!}
                         </div>
 
-                        <div class="col-md-12">
+                        <div class="col-md-6">
                             <label class="control-label">Mức lương áp dụng</label>
                             {!!Form::text('mucapdung', null, array('id' => 'mucapdung','class' => 'form-control', 'data-mask'=>'fdecimal', 'readonly'))!!}
                         </div>
@@ -213,7 +213,14 @@
                     <div class="row">
                         <div class="col-md-offset-3 col-md-9" style="padding-top: 15px">
                             <input type="checkbox" checked id="nghihuu" name="nghihuu" />
-                            <label>Không tính dự toán cho cán bộ nghỉ hưu</label>
+                            <label for="nghihuu">Tính dự toán cho cán bộ nghỉ hưu</label>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-offset-3 col-md-9" style="padding-top: 15px">
+                            <input type="checkbox" id="thaisan" name="thaisan" />
+                            <label for="thaisan">Tính thời gian nghỉ thai sản của cán bộ</label>
                         </div>
                     </div>
                 </div>

@@ -386,6 +386,8 @@ Route::group(['prefix'=>'nghiep_vu'],function(){
     });
 
     Route::group(['prefix'=>'truc'],function(){
+        Route::get('create','hosotrucController@create');
+        Route::get('edit','hosotrucController@edit');
         Route::get('danh_sach','hosotrucController@index');
         Route::get('del/{id}','hosotrucController@destroy');
         Route::post('store','hosotrucController@store');
@@ -562,6 +564,7 @@ Route::group(['prefix'=>'chuc_nang'],function(){
         Route::post('dsgiamluong','bangluong_inController@printf_dsgiamluong');
         //chi khác (trực, công tác phí)
         Route::get('mauctphi','bangluong_inController@printf_mauctphi');
+        Route::get('mautruc','bangluong_inController@printf_mautruc');
 
         //tổng hợp
         Route::post('mau185_th','bangluong_inController@printf_mau185_th');

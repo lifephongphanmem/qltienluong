@@ -88,7 +88,7 @@ class bangluong_ct extends Model
         'thangtl',
         'ngaytl',
         'songaytruc',
-
+        'songaycong',
         //lưu theo số tiền
         'st_heso',
         'st_hesobl',

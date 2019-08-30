@@ -44,9 +44,13 @@
             {!!Form::select('cochu',getCoChu(), 10, array('id' => 'cochu','class' => 'form-control select2me'))!!}
         </div>
 
-        <div class="col-md-offset-2 col-md-8">
-            <input type="checkbox" name="in_truylinh" />
-            <label class="control-label">Bao gồm cả bảng truy lĩnh lương</label>
+        <div class="col-md-offset-3 col-md-8">
+            <input type="checkbox" name="in_truylinh" id="in_truylinh" />
+            <label for="in_truylinh" class="control-label">Bao gồm cả bảng truy lĩnh lương</label>
+        </div>
+        <div class="col-md-offset-3 col-md-8">
+            <input type="checkbox" name="in_bltruc" id="in_bltruc" />
+            <label for="in_bltruc" class="control-label">Bao gồm cả bảng phụ cấp độc hại</label>
         </div>
     </div>
     <input type="hidden" id="thang_th" name="thang_th" value="{{$inputs['thang']}}"/>
