@@ -648,7 +648,7 @@
                             <div class="form-group">
                                 <label class="col-md-4 control-label"> Thông tư:<span class="require">*</span></label>
                                 <div class="col-md-8">
-                                    <select class="form-control select2me" id="sohieu" name="sohieu" class="form-control">
+                                    <select class="form-control select2me" id="sohieu"  name="sohieu" class="form-control">
                                             @foreach($model_thongtu as $tt)
                                                 <option value="{{$tt->sohieu}}">{{$tt->tenttqd}}</option>
                                             @endforeach
