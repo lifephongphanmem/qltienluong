@@ -119,10 +119,10 @@
         <td>{{dinhdangso($a_It['pctnvk'] + $ar_II['pctnvk'],0,$inputs['donvitinh'])}}</td>
         <td>{{dinhdangso($a_It['pcudn'] + $ar_II['pcudn'],0,$inputs['donvitinh'])}}</td>
         <td>{{dinhdangso($a_It['pcth'] + $ar_II['pcth'],0,$inputs['donvitinh'])}}</td>
-        <td>{{dinhdangso($a_It['pctn'] + $ar_II['pctn'],0,$inputs['donvitinh'])}}</td>
+        <td>{{dinhdangso($a_It['pcthni'] + $ar_II['pcthni'],0,$inputs['donvitinh'])}}</td>
         <td>{{dinhdangso($a_It['pccovu'] + $ar_II['pccovu'],0,$inputs['donvitinh'])}}</td>
         <td>{{dinhdangso($a_It['pcdang'] + $ar_II['pcdang'],0,$inputs['donvitinh'])}}</td>
-        <td>{{dinhdangso($a_It['pcthni'] + $ar_II['pcthni'],0,$inputs['donvitinh'])}}</td>
+        <td>{{dinhdangso($a_It['pctnn'] + $ar_II['pctnn'],0,$inputs['donvitinh'])}}</td>
         <td>{{dinhdangso($a_It['Tpck'] + $ar_II['Tpck'],0,$inputs['donvitinh'])}}</td>
         <td>{{dinhdangso($a_It['ttbh_dv'] + $ar_II['ttbh_dv'],0,$inputs['donvitinh'])}}</td>
         <td>{{dinhdangso($a_It['chenhlech'] + $ar_II['chenhlech'] + $a_IIIt['chenhlech'] + $a_IVt['chenhlech'],0,$inputs['donvitinh'])}}</td>
@@ -139,10 +139,10 @@
         <td>{{dinhdangso($a_It['pctnvk'],0,$inputs['donvitinh'])}}</td>
         <td>{{dinhdangso($a_It['pcudn'],0,$inputs['donvitinh'])}}</td>
         <td>{{dinhdangso($a_It['pcth'],0,$inputs['donvitinh'])}}</td>
-        <td>{{dinhdangso($a_It['pctn'],0,$inputs['donvitinh'])}}</td>
+        <td>{{dinhdangso($a_It['pcthni'],0,$inputs['donvitinh'])}}</td>
         <td>{{dinhdangso($a_It['pccovu'],0,$inputs['donvitinh'])}}</td>
         <td>{{dinhdangso($a_It['pcdang'],0,$inputs['donvitinh'])}}</td>
-        <td>{{dinhdangso($a_It['pcthni'],0,$inputs['donvitinh'])}}</td>
+        <td>{{dinhdangso($a_It['pctnn'],0,$inputs['donvitinh'])}}</td>
         <td>{{dinhdangso($a_It['Tpck'],0,$inputs['donvitinh'])}}</td>
         <td>{{dinhdangso($a_It['ttbh_dv'],0,$inputs['donvitinh'])}}</td>
         <td>{{dinhdangso($a_It['chenhlech'],0,$inputs['donvitinh'])}}</td>
@@ -181,10 +181,10 @@
             <td>{{dinhdangso($dulieu['pctnvk'],0,$inputs['donvitinh'])}}</td>
             <td>{{dinhdangso($dulieu['pcudn'],0,$inputs['donvitinh'])}}</td>
             <td>{{dinhdangso($dulieu['pcth'],0,$inputs['donvitinh'])}}</td>
-            <td>{{dinhdangso($dulieu['pctn'],0,$inputs['donvitinh'])}}</td>
+            <td>{{dinhdangso($dulieu['pcthni'],0,$inputs['donvitinh'])}}</td>
             <td>{{dinhdangso($dulieu['pccovu'],0,$inputs['donvitinh'])}}</td>
             <td>{{dinhdangso($dulieu['pcdang'],0,$inputs['donvitinh'])}}</td>
-            <td>{{dinhdangso($dulieu['pcthni'],0,$inputs['donvitinh'])}}</td>
+            <td>{{dinhdangso($dulieu['pctnn'],0,$inputs['donvitinh'])}}</td>
             <td>{{dinhdangso($dulieu['Tpck'],0,$inputs['donvitinh'])}}</td>
             <td>{{dinhdangso($dulieu['ttbh_dv'],0,$inputs['donvitinh'])}}</td>
             <td>{{dinhdangso($dulieu['chenhlech'],0,$inputs['donvitinh'])}}</td>
@@ -203,10 +203,10 @@
         <td>{{dinhdangso($ar_II['pctnvk'],0,$inputs['donvitinh'])}}</td>
         <td>{{dinhdangso($ar_II['pcudn'],0,$inputs['donvitinh'])}}</td>
         <td>{{dinhdangso($ar_II['pcth'],0,$inputs['donvitinh'])}}</td>
-        <td>{{dinhdangso($ar_II['pctn'],0,$inputs['donvitinh'])}}</td>
+        <td>{{dinhdangso($ar_II['pcthni'],0,$inputs['donvitinh'])}}</td>
         <td>{{dinhdangso($ar_II['pccovu'],0,$inputs['donvitinh'])}}</td>
         <td>{{dinhdangso($ar_II['pcdang'],0,$inputs['donvitinh'])}}</td>
-        <td>{{dinhdangso($ar_II['pcthni'],0,$inputs['donvitinh'])}}</td>
+        <td>{{dinhdangso($ar_II['pctnn'],0,$inputs['donvitinh'])}}</td>
         <td>{{dinhdangso($ar_II['Tpck'],0,$inputs['donvitinh'])}}</td>
         <td>{{dinhdangso($ar_II['ttbh_dv'],0,$inputs['donvitinh'])}}</td>
         <td>{{dinhdangso($ar_II['chenhlech'],0,$inputs['donvitinh'])}}</td>

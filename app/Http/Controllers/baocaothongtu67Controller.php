@@ -6969,7 +6969,7 @@ class baocaothongtu67Controller extends Controller
                     $a_phucap = dmphucap_donvi::where('madv', $tonghop->madv)->where('phanloai','<','3')->get();
                 }
                 $a_phucap =array_column($a_phucap->toarray(), 'mapc');
-                $a_pc = array('heso','pckv','pccv','pctnvk','pcudn','pcth','pctn','pccovu','pcdang','pcthni','pcdbqh','pcvk');
+                $a_pc = array('heso','pckv','pccv','pctnvk','pcudn','pcth','pctnn','pccovu','pcdang','pcthni','pcdbqh','pcvk');
                 //$a_th =  array_column($tonghop->toarray(),'mathdv','maphanloai');
                 //$ct->maphanloai =  $a_th[$ct->mathdv];
                 $ct->heso = $ct->heso * $luongcb;
@@ -7036,7 +7036,7 @@ class baocaothongtu67Controller extends Controller
                 'pctnvk' => 0,
                 'pcudn' => 0,
                 'pcth' => 0,
-                'pctn' => 0,
+                'pctnn' => 0,
                 'pccovu' => 0,
                 'pcdang' => 0,
                 'pcthni' => 0,
@@ -7077,7 +7077,7 @@ class baocaothongtu67Controller extends Controller
                     $ar_I[$i]['pctnvk'] = 0;
                     $ar_I[$i]['pcudn'] = 0;
                     $ar_I[$i]['pcth'] = 0;
-                    $ar_I[$i]['pctn'] = 0;
+                    $ar_I[$i]['pctnn'] = 0;
                     $ar_I[$i]['pccovu'] = 0;
                     $ar_I[$i]['pcdang'] = 0;
                     $ar_I[$i]['pcthni'] = 0;
@@ -7130,9 +7130,9 @@ class baocaothongtu67Controller extends Controller
                             $tongpc += $ar_I[$i]['pcth'];
                             $a_It['pcth'] += $ar_I[$i]['pcth'];
 
-                            $ar_I[$i]['pctn'] = $thongtinchitiet['pctn'];
-                            $tongpc += $ar_I[$i]['pctn'];
-                            $a_It['pctn'] += $ar_I[$i]['pctn'];
+                            $ar_I[$i]['pctnn'] = $thongtinchitiet['pctnn'];
+                            $tongpc += $ar_I[$i]['pctnn'];
+                            $a_It['pctnn'] += $ar_I[$i]['pctnn'];
 
                             $ar_I[$i]['pccovu'] = $thongtinchitiet['pccovu'];
                             $tongpc += $ar_I[$i]['pccovu'];
@@ -7164,7 +7164,7 @@ class baocaothongtu67Controller extends Controller
                             $ar_I[$luugr]['pctnvk'] += $ar_I[$i]['pctnvk'];
                             $ar_I[$luugr]['pcudn'] += $ar_I[$i]['pcudn'];
                             $ar_I[$luugr]['pcth'] += $ar_I[$i]['pcth'];
-                            $ar_I[$luugr]['pctn'] += $ar_I[$i]['pctn'];
+                            $ar_I[$luugr]['pctnn'] += $ar_I[$i]['pctnn'];
                             $ar_I[$luugr]['pccovu'] += $ar_I[$i]['pccovu'];
                             $ar_I[$luugr]['pcdang'] += $ar_I[$i]['pcdang'];
                             $ar_I[$luugr]['pcthni'] += $ar_I[$i]['pcthni'];
@@ -7183,7 +7183,7 @@ class baocaothongtu67Controller extends Controller
                         $ar_I[$i]['pctnvk'] = 0;
                         $ar_I[$i]['pcudn'] = 0;
                         $ar_I[$i]['pcth'] = 0;
-                        $ar_I[$i]['pctn'] = 0;
+                        $ar_I[$i]['pctnn'] = 0;
                         $ar_I[$i]['pccovu'] = 0;
                         $ar_I[$i]['pcdang'] = 0;
                         $ar_I[$i]['pcthni'] = 0;
@@ -7199,7 +7199,7 @@ class baocaothongtu67Controller extends Controller
                 $ar_I[$gddt]['pctnvk'] = $ar_I[$giaoduc]['pctnvk'] + $ar_I[$daotao]['pctnvk'];
                 $ar_I[$gddt]['pcudn'] = $ar_I[$giaoduc]['pcudn'] + $ar_I[$daotao]['pcudn'];
                 $ar_I[$gddt]['pcth'] = $ar_I[$giaoduc]['pcth'] + $ar_I[$daotao]['pcth'];
-                $ar_I[$gddt]['pctn'] = $ar_I[$giaoduc]['pctn'] + $ar_I[$daotao]['pctn'];
+                $ar_I[$gddt]['pctnn'] = $ar_I[$giaoduc]['pctnn'] + $ar_I[$daotao]['pctnn'];
                 $ar_I[$gddt]['pccovu'] = $ar_I[$giaoduc]['pccovu'] + $ar_I[$daotao]['pccovu'];
                 $ar_I[$gddt]['pcdang'] = $ar_I[$giaoduc]['pcdang'] + $ar_I[$daotao]['pcdang'];
                 $ar_I[$gddt]['pcthni'] = $ar_I[$giaoduc]['pcthni'] + $ar_I[$daotao]['pcthni'];
@@ -7213,7 +7213,7 @@ class baocaothongtu67Controller extends Controller
                 $ar_I[$qlnnddt]['pctnvk'] = $ar_I[$qlnn]['pctnvk'] + $ar_I[$ddt]['pctnvk'];
                 $ar_I[$qlnnddt]['pcudn'] = $ar_I[$qlnn]['pcudn'] + $ar_I[$ddt]['pcudn'];
                 $ar_I[$qlnnddt]['pcth'] = $ar_I[$qlnn]['pcth'] + $ar_I[$ddt]['pcth'];
-                $ar_I[$qlnnddt]['pctn'] = $ar_I[$qlnn]['pctn'] + $ar_I[$ddt]['pctn'];
+                $ar_I[$qlnnddt]['pctnn'] = $ar_I[$qlnn]['pctnn'] + $ar_I[$ddt]['pctnn'];
                 $ar_I[$qlnnddt]['pccovu'] = $ar_I[$qlnn]['pccovu'] + $ar_I[$ddt]['pccovu'];
                 $ar_I[$qlnnddt]['pcdang'] = $ar_I[$qlnn]['pcdang'] + $ar_I[$ddt]['pcdang'];
                 $ar_I[$qlnnddt]['pcthni'] = $ar_I[$qlnn]['pcthni'] + $ar_I[$ddt]['pcthni'];
@@ -7260,9 +7260,9 @@ class baocaothongtu67Controller extends Controller
                         $tongpc += $ar_I[$i]['pcth'];
                         $a_It['pcth'] += $ar_I[$i]['pcth'];
 
-                        $ar_I[$i]['pctn'] = $chitiet->sum('pctn');
-                        $tongpc += $ar_I[$i]['pctn'];
-                        $a_It['pctn'] += $ar_I[$i]['pctn'];
+                        $ar_I[$i]['pctnn'] = $chitiet->sum('pctnn');
+                        $tongpc += $ar_I[$i]['pctnn'];
+                        $a_It['pctnn'] += $ar_I[$i]['pctnn'];
 
                         $ar_I[$i]['pccovu'] = $chitiet->sum('pccovu');
                         $tongpc += $ar_I[$i]['pccovu'];
@@ -7294,7 +7294,7 @@ class baocaothongtu67Controller extends Controller
                         $ar_I[$i]['pctnvk'] = 0;
                         $ar_I[$i]['pcudn'] = 0;
                         $ar_I[$i]['pcth'] = 0;
-                        $ar_I[$i]['pctn'] = 0;
+                        $ar_I[$i]['pctnn'] = 0;
                         $ar_I[$i]['pccovu'] = 0;
                         $ar_I[$i]['pcdang'] = 0;
                         $ar_I[$i]['pcthni'] = 0;
@@ -7310,7 +7310,7 @@ class baocaothongtu67Controller extends Controller
                 $ar_I[11]['pctnvk'] = $ar_I[12]['pctnvk'] + $ar_I[13]['pctnvk'];
                 $ar_I[11]['pcudn'] = $ar_I[12]['pcudn'] + $ar_I[13]['pcudn'];
                 $ar_I[11]['pcth'] = $ar_I[12]['pcth'] + $ar_I[13]['pcth'];
-                $ar_I[11]['pctn'] = $ar_I[12]['pctn'] + $ar_I[13]['pctn'];
+                $ar_I[11]['pctnn'] = $ar_I[12]['pctnn'] + $ar_I[13]['pctnn'];
                 $ar_I[11]['pccovu'] = $ar_I[12]['pccovu'] + $ar_I[13]['pccovu'];
                 $ar_I[11]['pcdang'] = $ar_I[12]['pcdang'] + $ar_I[13]['pcdang'];
                 $ar_I[11]['pcthni'] = $ar_I[12]['pcthni'] + $ar_I[13]['pcthni'];
@@ -7324,7 +7324,7 @@ class baocaothongtu67Controller extends Controller
                 $ar_I[0]['pctnvk'] = $ar_I[1]['pctnvk'] + $ar_I[2]['pctnvk'];
                 $ar_I[0]['pcudn'] = $ar_I[1]['pcudn'] + $ar_I[2]['pcudn'];
                 $ar_I[0]['pcth'] = $ar_I[1]['pcth'] + $ar_I[2]['pcth'];
-                $ar_I[0]['pctn'] = $ar_I[1]['pctn'] + $ar_I[2]['pctn'];
+                $ar_I[0]['pctnn'] = $ar_I[1]['pctnn'] + $ar_I[2]['pctnn'];
                 $ar_I[0]['pccovu'] = $ar_I[1]['pccovu'] + $ar_I[2]['pccovu'];
                 $ar_I[0]['pcdang'] = $ar_I[1]['pcdang'] + $ar_I[2]['pcdang'];
                 $ar_I[0]['pcthni'] = $ar_I[1]['pcthni'] + $ar_I[2]['pcthni'];
@@ -7361,8 +7361,8 @@ class baocaothongtu67Controller extends Controller
                 $ar_II['pcth'] = $model_bangluong_ct->sum('pcth');
                 $tongpc += $ar_II['pcth'];
 
-                $ar_II['pctn'] = $model_bangluong_ct->sum('pctn');
-                $tongpc += $ar_II['pctn'];
+                $ar_II['pctnn'] = $model_bangluong_ct->sum('pctnn');
+                $tongpc += $ar_II['pctnn'];
 
                 $ar_II['pccovu'] = $model_bangluong_ct->sum('pccovu');
                 $tongpc += $ar_II['pccovu'];
@@ -7387,7 +7387,7 @@ class baocaothongtu67Controller extends Controller
                 $ar_II['pctnvk'] = 0;
                 $ar_II['pcudn'] = 0;
                 $ar_II['pcth'] = 0;
-                $ar_II['pctn'] = 0;
+                $ar_II['pctnn'] = 0;
                 $ar_II['pccovu'] = 0;
                 $ar_II['pcdang'] = 0;
                 $ar_II['pcthni'] = 0;
@@ -7654,7 +7654,7 @@ class baocaothongtu67Controller extends Controller
                 'pctnvk' => 0,
                 'pcudn' => 0,
                 'pcth' => 0,
-                'pctn' => 0,
+                'pctnn' => 0,
                 'pccovu' => 0,
                 'pcdang' => 0,
                 'pcthni' => 0,
@@ -7695,7 +7695,7 @@ class baocaothongtu67Controller extends Controller
                     $ar_I[$i]['pctnvk'] = 0;
                     $ar_I[$i]['pcudn'] = 0;
                     $ar_I[$i]['pcth'] = 0;
-                    $ar_I[$i]['pctn'] = 0;
+                    $ar_I[$i]['pctnn'] = 0;
                     $ar_I[$i]['pccovu'] = 0;
                     $ar_I[$i]['pcdang'] = 0;
                     $ar_I[$i]['pcthni'] = 0;
@@ -7749,9 +7749,9 @@ class baocaothongtu67Controller extends Controller
                             $tongpc += $ar_I[$i]['pcth'];
                             $a_It['pcth'] += $ar_I[$i]['pcth'];
 
-                            $ar_I[$i]['pctn'] = $thongtinchitiet['pctn'];
-                            $tongpc += $ar_I[$i]['pctn'];
-                            $a_It['pctn'] += $ar_I[$i]['pctn'];
+                            $ar_I[$i]['pctnn'] = $thongtinchitiet['pctnn'];
+                            $tongpc += $ar_I[$i]['pctnn'];
+                            $a_It['pctnn'] += $ar_I[$i]['pctnn'];
 
                             $ar_I[$i]['pccovu'] = $thongtinchitiet['pccovu'];
                             $tongpc += $ar_I[$i]['pccovu'];
@@ -7782,7 +7782,7 @@ class baocaothongtu67Controller extends Controller
                             $ar_I[$luugr]['pctnvk'] += $ar_I[$i]['pctnvk'];
                             $ar_I[$luugr]['pcudn'] += $ar_I[$i]['pcudn'];
                             $ar_I[$luugr]['pcth'] += $ar_I[$i]['pcth'];
-                            $ar_I[$luugr]['pctn'] += $ar_I[$i]['pctn'];
+                            $ar_I[$luugr]['pctnn'] += $ar_I[$i]['pctnn'];
                             $ar_I[$luugr]['pccovu'] += $ar_I[$i]['pccovu'];
                             $ar_I[$luugr]['pcdang'] += $ar_I[$i]['pcdang'];
                             $ar_I[$luugr]['pcthni'] += $ar_I[$i]['pcthni'];
@@ -7801,7 +7801,7 @@ class baocaothongtu67Controller extends Controller
                         $ar_I[$i]['pctnvk'] = 0;
                         $ar_I[$i]['pcudn'] = 0;
                         $ar_I[$i]['pcth'] = 0;
-                        $ar_I[$i]['pctn'] = 0;
+                        $ar_I[$i]['pctnn'] = 0;
                         $ar_I[$i]['pccovu'] = 0;
                         $ar_I[$i]['pcdang'] = 0;
                         $ar_I[$i]['pcthni'] = 0;
@@ -7817,7 +7817,7 @@ class baocaothongtu67Controller extends Controller
                 $ar_I[$gddt]['pctnvk'] = $ar_I[$giaoduc]['pctnvk'] + $ar_I[$daotao]['pctnvk'];
                 $ar_I[$gddt]['pcudn'] = $ar_I[$giaoduc]['pcudn'] + $ar_I[$daotao]['pcudn'];
                 $ar_I[$gddt]['pcth'] = $ar_I[$giaoduc]['pcth'] + $ar_I[$daotao]['pcth'];
-                $ar_I[$gddt]['pctn'] = $ar_I[$giaoduc]['pctn'] + $ar_I[$daotao]['pctn'];
+                $ar_I[$gddt]['pctnn'] = $ar_I[$giaoduc]['pctnn'] + $ar_I[$daotao]['pctnn'];
                 $ar_I[$gddt]['pccovu'] = $ar_I[$giaoduc]['pccovu'] + $ar_I[$daotao]['pccovu'];
                 $ar_I[$gddt]['pcdang'] = $ar_I[$giaoduc]['pcdang'] + $ar_I[$daotao]['pcdang'];
                 $ar_I[$gddt]['pcthni'] = $ar_I[$giaoduc]['pcthni'] + $ar_I[$daotao]['pcthni'];
@@ -7831,7 +7831,7 @@ class baocaothongtu67Controller extends Controller
                 $ar_I[$qlnnddt]['pctnvk'] = $ar_I[$qlnn]['pctnvk'] + $ar_I[$ddt]['pctnvk'];
                 $ar_I[$qlnnddt]['pcudn'] = $ar_I[$qlnn]['pcudn'] + $ar_I[$ddt]['pcudn'];
                 $ar_I[$qlnnddt]['pcth'] = $ar_I[$qlnn]['pcth'] + $ar_I[$ddt]['pcth'];
-                $ar_I[$qlnnddt]['pctn'] = $ar_I[$qlnn]['pctn'] + $ar_I[$ddt]['pctn'];
+                $ar_I[$qlnnddt]['pctnn'] = $ar_I[$qlnn]['pctnn'] + $ar_I[$ddt]['pctnn'];
                 $ar_I[$qlnnddt]['pccovu'] = $ar_I[$qlnn]['pccovu'] + $ar_I[$ddt]['pccovu'];
                 $ar_I[$qlnnddt]['pcdang'] = $ar_I[$qlnn]['pcdang'] + $ar_I[$ddt]['pcdang'];
                 $ar_I[$qlnnddt]['pcthni'] = $ar_I[$qlnn]['pcthni'] + $ar_I[$ddt]['pcthni'];
@@ -7878,9 +7878,9 @@ class baocaothongtu67Controller extends Controller
                         $tongpc += $ar_I[$i]['pcth'];
                         $a_It['pcth'] += $ar_I[$i]['pcth'];
 
-                        $ar_I[$i]['pctn'] = $chitiet->sum('pctn');
-                        $tongpc += $ar_I[$i]['pctn'];
-                        $a_It['pctn'] += $ar_I[$i]['pctn'];
+                        $ar_I[$i]['pctnn'] = $chitiet->sum('pctnn');
+                        $tongpc += $ar_I[$i]['pctnn'];
+                        $a_It['pctnn'] += $ar_I[$i]['pctnn'];
 
                         $ar_I[$i]['pccovu'] = $chitiet->sum('pccovu');
                         $tongpc += $ar_I[$i]['pccovu'];
@@ -7911,7 +7911,7 @@ class baocaothongtu67Controller extends Controller
                         $ar_I[$i]['pctnvk'] = 0;
                         $ar_I[$i]['pcudn'] = 0;
                         $ar_I[$i]['pcth'] = 0;
-                        $ar_I[$i]['pctn'] = 0;
+                        $ar_I[$i]['pctnn'] = 0;
                         $ar_I[$i]['pccovu'] = 0;
                         $ar_I[$i]['pcdang'] = 0;
                         $ar_I[$i]['pcthni'] = 0;
@@ -7927,7 +7927,7 @@ class baocaothongtu67Controller extends Controller
                 $ar_I[11]['pctnvk'] = $ar_I[12]['pctnvk'] + $ar_I[13]['pctnvk'];
                 $ar_I[11]['pcudn'] = $ar_I[12]['pcudn'] + $ar_I[13]['pcudn'];
                 $ar_I[11]['pcth'] = $ar_I[12]['pcth'] + $ar_I[13]['pcth'];
-                $ar_I[11]['pctn'] = $ar_I[12]['pctn'] + $ar_I[13]['pctn'];
+                $ar_I[11]['pctnn'] = $ar_I[12]['pctnn'] + $ar_I[13]['pctnn'];
                 $ar_I[11]['pccovu'] = $ar_I[12]['pccovu'] + $ar_I[13]['pccovu'];
                 $ar_I[11]['pcdang'] = $ar_I[12]['pcdang'] + $ar_I[13]['pcdang'];
                 $ar_I[11]['pcthni'] = $ar_I[12]['pcthni'] + $ar_I[13]['pcthni'];
@@ -7941,7 +7941,7 @@ class baocaothongtu67Controller extends Controller
                 $ar_I[0]['pctnvk'] = $ar_I[1]['pctnvk'] + $ar_I[2]['pctnvk'];
                 $ar_I[0]['pcudn'] = $ar_I[1]['pcudn'] + $ar_I[2]['pcudn'];
                 $ar_I[0]['pcth'] = $ar_I[1]['pcth'] + $ar_I[2]['pcth'];
-                $ar_I[0]['pctn'] = $ar_I[1]['pctn'] + $ar_I[2]['pctn'];
+                $ar_I[0]['pctnn'] = $ar_I[1]['pctnn'] + $ar_I[2]['pctnn'];
                 $ar_I[0]['pccovu'] = $ar_I[1]['pccovu'] + $ar_I[2]['pccovu'];
                 $ar_I[0]['pcdang'] = $ar_I[1]['pcdang'] + $ar_I[2]['pcdang'];
                 $ar_I[0]['pcthni'] = $ar_I[1]['pcthni'] + $ar_I[2]['pcthni'];
@@ -7978,8 +7978,8 @@ class baocaothongtu67Controller extends Controller
                 $ar_II['pcth'] = $model_bangluong_ct->sum('pcth');
                 $tongpc += $ar_II['pcth'];
 
-                $ar_II['pctn'] = $model_bangluong_ct->sum('pctn');
-                $tongpc += $ar_II['pctn'];
+                $ar_II['pctnn'] = $model_bangluong_ct->sum('pctnn');
+                $tongpc += $ar_II['pctnn'];
 
                 $ar_II['pccovu'] = $model_bangluong_ct->sum('pccovu');
                 $tongpc += $ar_II['pccovu'];
@@ -8004,7 +8004,7 @@ class baocaothongtu67Controller extends Controller
                 $ar_II['pctnvk'] = 0;
                 $ar_II['pcudn'] = 0;
                 $ar_II['pcth'] = 0;
-                $ar_II['pctn'] = 0;
+                $ar_II['pctnn'] = 0;
                 $ar_II['pccovu'] = 0;
                 $ar_II['pcdang'] = 0;
                 $ar_II['pcthni'] = 0;
@@ -8162,7 +8162,7 @@ class baocaothongtu67Controller extends Controller
                 'pctnvk' => 0,
                 'pcudn' => 0,
                 'pcth' => 0,
-                'pctn' => 0,
+                'pctnn' => 0,
                 'pccovu' => 0,
                 'pcdang' => 0,
                 'pcthni' => 0,
@@ -8210,9 +8210,9 @@ class baocaothongtu67Controller extends Controller
                     $tongpc += $ar_I[$i]['pcth'];
                     $a_It['pcth'] += $ar_I[$i]['pcth'];
 
-                    $ar_I[$i]['pctn'] = $chitiet->sum('pctn');
-                    $tongpc += $ar_I[$i]['pctn'];
-                    $a_It['pctn'] += $ar_I[$i]['pctn'];
+                    $ar_I[$i]['pctnn'] = $chitiet->sum('pctnn');
+                    $tongpc += $ar_I[$i]['pctnn'];
+                    $a_It['pctnn'] += $ar_I[$i]['pctnn'];
 
                     $ar_I[$i]['pccovu'] = $chitiet->sum('pccovu');
                     $tongpc += $ar_I[$i]['pccovu'];
@@ -8243,7 +8243,7 @@ class baocaothongtu67Controller extends Controller
                     $ar_I[$i]['pctnvk'] = 0;
                     $ar_I[$i]['pcudn'] = 0;
                     $ar_I[$i]['pcth'] = 0;
-                    $ar_I[$i]['pctn'] = 0;
+                    $ar_I[$i]['pctnn'] = 0;
                     $ar_I[$i]['pccovu'] = 0;
                     $ar_I[$i]['pcdang'] = 0;
                     $ar_I[$i]['pcthni'] = 0;
@@ -8259,7 +8259,7 @@ class baocaothongtu67Controller extends Controller
             $ar_I[11]['pctnvk'] = $ar_I[12]['pctnvk'] +$ar_I[13]['pctnvk'];
             $ar_I[11]['pcudn'] = $ar_I[12]['pcudn'] +$ar_I[13]['pcudn'];
             $ar_I[11]['pcth'] = $ar_I[12]['pcth'] +$ar_I[13]['pcth'];
-            $ar_I[11]['pctn'] = $ar_I[12]['pctn'] +$ar_I[13]['pctn'];
+            $ar_I[11]['pctnn'] = $ar_I[12]['pctnn'] +$ar_I[13]['pctnn'];
             $ar_I[11]['pccovu'] = $ar_I[12]['pccovu'] +$ar_I[13]['pccovu'];
             $ar_I[11]['pcdang'] = $ar_I[12]['pcdang'] +$ar_I[13]['pcdang'];
             $ar_I[11]['pcthni'] = $ar_I[12]['pcthni'] +$ar_I[13]['pcthni'];
@@ -8273,7 +8273,7 @@ class baocaothongtu67Controller extends Controller
             $ar_I[0]['pctnvk'] = $ar_I[1]['pctnvk'] +$ar_I[2]['pctnvk'];
             $ar_I[0]['pcudn'] = $ar_I[1]['pcudn'] +$ar_I[2]['pcudn'];
             $ar_I[0]['pcth'] = $ar_I[1]['pcth'] +$ar_I[2]['pcth'];
-            $ar_I[0]['pctn'] = $ar_I[1]['pctn'] +$ar_I[2]['pctn'];
+            $ar_I[0]['pctnn'] = $ar_I[1]['pctnn'] +$ar_I[2]['pctnn'];
             $ar_I[0]['pccovu'] = $ar_I[1]['pccovu'] +$ar_I[2]['pccovu'];
             $ar_I[0]['pcdang'] = $ar_I[1]['pcdang'] +$ar_I[2]['pcdang'];
             $ar_I[0]['pcthni'] = $ar_I[1]['pcthni'] +$ar_I[2]['pcthni'];
@@ -8310,8 +8310,8 @@ class baocaothongtu67Controller extends Controller
                 $ar_II['pcth'] = $model_bangluong_ct->sum('pcth');
                 $tongpc += $ar_II['pcth'];
 
-                $ar_II['pctn'] = $model_bangluong_ct->sum('pctn');
-                $tongpc += $ar_II['pctn'];
+                $ar_II['pctnn'] = $model_bangluong_ct->sum('pctnn');
+                $tongpc += $ar_II['pctnn'];
 
                 $ar_II['pccovu'] = $model_bangluong_ct->sum('pccovu');
                 $tongpc += $ar_II['pccovu'];
@@ -8336,7 +8336,7 @@ class baocaothongtu67Controller extends Controller
                 $ar_II['pctnvk'] = 0;
                 $ar_II['pcudn'] = 0;
                 $ar_II['pcth'] = 0;
-                $ar_II['pctn'] = 0;
+                $ar_II['pctnn'] = 0;
                 $ar_II['pccovu'] = 0;
                 $ar_II['pcdang'] = 0;
                 $ar_II['pcthni'] = 0;
@@ -8605,7 +8605,7 @@ class baocaothongtu67Controller extends Controller
                     $a_phucap = dmphucap_donvi::where('madv', $tonghop->madv)->where('phanloai','<','3')->get();
                 }
                 $a_phucap =array_column($a_phucap->toarray(), 'mapc');
-                $a_pc = array('heso','pckv','pccv','pctnvk','pcudn','pcth','pctn','pccovu','pcdang','pcthni','pcdbqh','pcvk');
+                $a_pc = array('heso','pckv','pccv','pctnvk','pcudn','pcth','pctnn','pccovu','pcdang','pcthni','pcdbqh','pcvk');
                 //$a_th =  array_column($tonghop->toarray(),'mathdv','maphanloai');
                 //$ct->maphanloai =  $a_th[$ct->mathdv];
                 $ct->heso = $ct->heso * $luongcb;
@@ -8672,7 +8672,7 @@ class baocaothongtu67Controller extends Controller
                 'pctnvk' => 0,
                 'pcudn' => 0,
                 'pcth' => 0,
-                'pctn' => 0,
+                'pctnn' => 0,
                 'pccovu' => 0,
                 'pcdang' => 0,
                 'pcthni' => 0,
@@ -8711,7 +8711,7 @@ class baocaothongtu67Controller extends Controller
                     $ar_I[$i]['pctnvk'] = 0;
                     $ar_I[$i]['pcudn'] = 0;
                     $ar_I[$i]['pcth'] = 0;
-                    $ar_I[$i]['pctn'] = 0;
+                    $ar_I[$i]['pctnn'] = 0;
                     $ar_I[$i]['pccovu'] = 0;
                     $ar_I[$i]['pcdang'] = 0;
                     $ar_I[$i]['pcthni'] = 0;
@@ -8755,9 +8755,9 @@ class baocaothongtu67Controller extends Controller
                             $tongpc += $ar_I[$i]['pcth'];
                             $a_It['pcth'] += $ar_I[$i]['pcth'];
 
-                            $ar_I[$i]['pctn'] = $thongtinchitiet['pctn'] * $luongcb;
-                            $tongpc += $ar_I[$i]['pctn'];
-                            $a_It['pctn'] += $ar_I[$i]['pctn'];
+                            $ar_I[$i]['pctnn'] = $thongtinchitiet['pctnn'] * $luongcb;
+                            $tongpc += $ar_I[$i]['pctnn'];
+                            $a_It['pctnn'] += $ar_I[$i]['pctnn'];
 
                             $ar_I[$i]['pccovu'] = $thongtinchitiet['pccovu'] * $luongcb;
                             $tongpc += $ar_I[$i]['pccovu'];
@@ -8790,7 +8790,7 @@ class baocaothongtu67Controller extends Controller
                             $ar_I[$luugr]['pctnvk'] += $ar_I[$i]['pctnvk'];
                             $ar_I[$luugr]['pcudn'] += $ar_I[$i]['pcudn'];
                             $ar_I[$luugr]['pcth'] += $ar_I[$i]['pcth'];
-                            $ar_I[$luugr]['pctn'] += $ar_I[$i]['pctn'];
+                            $ar_I[$luugr]['pctnn'] += $ar_I[$i]['pctnn'];
                             $ar_I[$luugr]['pccovu'] += $ar_I[$i]['pccovu'];
                             $ar_I[$luugr]['pcdang'] += $ar_I[$i]['pcdang'];
                             $ar_I[$luugr]['pcthni'] += $ar_I[$i]['pcthni'];
@@ -8807,7 +8807,7 @@ class baocaothongtu67Controller extends Controller
                         $ar_I[$i]['pctnvk'] = 0;
                         $ar_I[$i]['pcudn'] = 0;
                         $ar_I[$i]['pcth'] = 0;
-                        $ar_I[$i]['pctn'] = 0;
+                        $ar_I[$i]['pctnn'] = 0;
                         $ar_I[$i]['pccovu'] = 0;
                         $ar_I[$i]['pcdang'] = 0;
                         $ar_I[$i]['pcthni'] = 0;
@@ -8823,7 +8823,7 @@ class baocaothongtu67Controller extends Controller
                 $ar_I[$gddt]['pctnvk'] = $ar_I[$giaoduc]['pctnvk'] + $ar_I[$daotao]['pctnvk'];
                 $ar_I[$gddt]['pcudn'] = $ar_I[$giaoduc]['pcudn'] + $ar_I[$daotao]['pcudn'];
                 $ar_I[$gddt]['pcth'] = $ar_I[$giaoduc]['pcth'] + $ar_I[$daotao]['pcth'];
-                $ar_I[$gddt]['pctn'] = $ar_I[$giaoduc]['pctn'] + $ar_I[$daotao]['pctn'];
+                $ar_I[$gddt]['pctnn'] = $ar_I[$giaoduc]['pctnn'] + $ar_I[$daotao]['pctnn'];
                 $ar_I[$gddt]['pccovu'] = $ar_I[$giaoduc]['pccovu'] + $ar_I[$daotao]['pccovu'];
                 $ar_I[$gddt]['pcdang'] = $ar_I[$giaoduc]['pcdang'] + $ar_I[$daotao]['pcdang'];
                 $ar_I[$gddt]['pcthni'] = $ar_I[$giaoduc]['pcthni'] + $ar_I[$daotao]['pcthni'];
@@ -8838,7 +8838,7 @@ class baocaothongtu67Controller extends Controller
                 $ar_I[$qlnnddt]['pctnvk'] = $ar_I[$qlnn]['pctnvk'] + $ar_I[$ddt]['pctnvk'];
                 $ar_I[$qlnnddt]['pcudn'] = $ar_I[$qlnn]['pcudn'] + $ar_I[$ddt]['pcudn'];
                 $ar_I[$qlnnddt]['pcth'] = $ar_I[$qlnn]['pcth'] + $ar_I[$ddt]['pcth'];
-                $ar_I[$qlnnddt]['pctn'] = $ar_I[$qlnn]['pctn'] + $ar_I[$ddt]['pctn'];
+                $ar_I[$qlnnddt]['pctnn'] = $ar_I[$qlnn]['pctnn'] + $ar_I[$ddt]['pctnn'];
                 $ar_I[$qlnnddt]['pccovu'] = $ar_I[$qlnn]['pccovu'] + $ar_I[$ddt]['pccovu'];
                 $ar_I[$qlnnddt]['pcdang'] = $ar_I[$qlnn]['pcdang'] + $ar_I[$ddt]['pcdang'];
                 $ar_I[$qlnnddt]['pcthni'] = $ar_I[$qlnn]['pcthni'] + $ar_I[$ddt]['pcthni'];
@@ -8878,9 +8878,9 @@ class baocaothongtu67Controller extends Controller
                         $tongpc += $ar_I[$i]['pcth'];
                         $a_It['pcth'] += $ar_I[$i]['pcth'];
 
-                        $ar_I[$i]['pctn'] = $chitiet->sum('pctn') * $luongcb;
-                        $tongpc += $ar_I[$i]['pctn'];
-                        $a_It['pctn'] += $ar_I[$i]['pctn'];
+                        $ar_I[$i]['pctnn'] = $chitiet->sum('pctnn') * $luongcb;
+                        $tongpc += $ar_I[$i]['pctnn'];
+                        $a_It['pctnn'] += $ar_I[$i]['pctnn'];
 
                         $ar_I[$i]['pccovu'] = $chitiet->sum('pccovu') * $luongcb;
                         $tongpc += $ar_I[$i]['pccovu'];
@@ -8914,7 +8914,7 @@ class baocaothongtu67Controller extends Controller
                         $ar_I[$i]['pctnvk'] = 0;
                         $ar_I[$i]['pcudn'] = 0;
                         $ar_I[$i]['pcth'] = 0;
-                        $ar_I[$i]['pctn'] = 0;
+                        $ar_I[$i]['pctnn'] = 0;
                         $ar_I[$i]['pccovu'] = 0;
                         $ar_I[$i]['pcdang'] = 0;
                         $ar_I[$i]['pcthni'] = 0;
@@ -8930,7 +8930,7 @@ class baocaothongtu67Controller extends Controller
                 $ar_I[11]['pctnvk'] = $ar_I[12]['pctnvk'] + $ar_I[13]['pctnvk'];
                 $ar_I[11]['pcudn'] = $ar_I[12]['pcudn'] + $ar_I[13]['pcudn'];
                 $ar_I[11]['pcth'] = $ar_I[12]['pcth'] + $ar_I[13]['pcth'];
-                $ar_I[11]['pctn'] = $ar_I[12]['pctn'] + $ar_I[13]['pctn'];
+                $ar_I[11]['pctnn'] = $ar_I[12]['pctnn'] + $ar_I[13]['pctnn'];
                 $ar_I[11]['pccovu'] = $ar_I[12]['pccovu'] + $ar_I[13]['pccovu'];
                 $ar_I[11]['pcdang'] = $ar_I[12]['pcdang'] + $ar_I[13]['pcdang'];
                 $ar_I[11]['pcthni'] = $ar_I[12]['pcthni'] + $ar_I[13]['pcthni'];
@@ -8945,7 +8945,7 @@ class baocaothongtu67Controller extends Controller
                 $ar_I[0]['pctnvk'] = $ar_I[1]['pctnvk'] + $ar_I[2]['pctnvk'];
                 $ar_I[0]['pcudn'] = $ar_I[1]['pcudn'] + $ar_I[2]['pcudn'];
                 $ar_I[0]['pcth'] = $ar_I[1]['pcth'] + $ar_I[2]['pcth'];
-                $ar_I[0]['pctn'] = $ar_I[1]['pctn'] + $ar_I[2]['pctn'];
+                $ar_I[0]['pctnn'] = $ar_I[1]['pctnn'] + $ar_I[2]['pctnn'];
                 $ar_I[0]['pccovu'] = $ar_I[1]['pccovu'] + $ar_I[2]['pccovu'];
                 $ar_I[0]['pcdang'] = $ar_I[1]['pcdang'] + $ar_I[2]['pcdang'];
                 $ar_I[0]['pcthni'] = $ar_I[1]['pcthni'] + $ar_I[2]['pcthni'];
@@ -8978,8 +8978,8 @@ class baocaothongtu67Controller extends Controller
                 $tongpc += $ar_II['pcudn'];
                 $ar_II['pcth'] = $chitiet->sum('pcth')* $luongcb;
                 $tongpc += $ar_II['pcth'];
-                $ar_II['pctn'] = $chitiet->sum('pctn')* $luongcb;
-                $tongpc += $ar_II['pctn'];
+                $ar_II['pctnn'] = $chitiet->sum('pctnn')* $luongcb;
+                $tongpc += $ar_II['pctnn'];
                 $ar_II['pccovu'] = $chitiet->sum('pccovu')* $luongcb;
                 $tongpc += $ar_II['pccovu'];
                 $ar_II['pcdang'] = $chitiet->sum('pcdang')* $luongcb;
@@ -8999,7 +8999,7 @@ class baocaothongtu67Controller extends Controller
                 $ar_II['pctnvk'] = 0;
                 $ar_II['pcudn'] = 0;
                 $ar_II['pcth'] = 0;
-                $ar_II['pctn'] = 0;
+                $ar_II['pctnn'] = 0;
                 $ar_II['pccovu'] = 0;
                 $ar_II['pcdang'] = 0;
                 $ar_II['pcthni'] = 0;
@@ -9287,7 +9287,7 @@ class baocaothongtu67Controller extends Controller
                 'pctnvk' => 0,
                 'pcudn' => 0,
                 'pcth' => 0,
-                'pctn' => 0,
+                'pctnn' => 0,
                 'pccovu' => 0,
                 'pcdang' => 0,
                 'pcthni' => 0,
@@ -9326,7 +9326,7 @@ class baocaothongtu67Controller extends Controller
                     $ar_I[$i]['pctnvk'] = 0;
                     $ar_I[$i]['pcudn'] = 0;
                     $ar_I[$i]['pcth'] = 0;
-                    $ar_I[$i]['pctn'] = 0;
+                    $ar_I[$i]['pctnn'] = 0;
                     $ar_I[$i]['pccovu'] = 0;
                     $ar_I[$i]['pcdang'] = 0;
                     $ar_I[$i]['pcthni'] = 0;
@@ -9370,9 +9370,9 @@ class baocaothongtu67Controller extends Controller
                             $tongpc += $ar_I[$i]['pcth'];
                             $a_It['pcth'] += $ar_I[$i]['pcth'];
 
-                            $ar_I[$i]['pctn'] = $thongtinchitiet['pctn'] * $luongcb;
-                            $tongpc += $ar_I[$i]['pctn'];
-                            $a_It['pctn'] += $ar_I[$i]['pctn'];
+                            $ar_I[$i]['pctnn'] = $thongtinchitiet['pctnn'] * $luongcb;
+                            $tongpc += $ar_I[$i]['pctnn'];
+                            $a_It['pctnn'] += $ar_I[$i]['pctnn'];
 
                             $ar_I[$i]['pccovu'] = $thongtinchitiet['pccovu'] * $luongcb;
                             $tongpc += $ar_I[$i]['pccovu'];
@@ -9404,7 +9404,7 @@ class baocaothongtu67Controller extends Controller
                             $ar_I[$luugr]['pctnvk'] += $ar_I[$i]['pctnvk'];
                             $ar_I[$luugr]['pcudn'] += $ar_I[$i]['pcudn'];
                             $ar_I[$luugr]['pcth'] += $ar_I[$i]['pcth'];
-                            $ar_I[$luugr]['pctn'] += $ar_I[$i]['pctn'];
+                            $ar_I[$luugr]['pctnn'] += $ar_I[$i]['pctnn'];
                             $ar_I[$luugr]['pccovu'] += $ar_I[$i]['pccovu'];
                             $ar_I[$luugr]['pcdang'] += $ar_I[$i]['pcdang'];
                             $ar_I[$luugr]['pcthni'] += $ar_I[$i]['pcthni'];
@@ -9421,7 +9421,7 @@ class baocaothongtu67Controller extends Controller
                         $ar_I[$i]['pctnvk'] = 0;
                         $ar_I[$i]['pcudn'] = 0;
                         $ar_I[$i]['pcth'] = 0;
-                        $ar_I[$i]['pctn'] = 0;
+                        $ar_I[$i]['pctnn'] = 0;
                         $ar_I[$i]['pccovu'] = 0;
                         $ar_I[$i]['pcdang'] = 0;
                         $ar_I[$i]['pcthni'] = 0;
@@ -9437,7 +9437,7 @@ class baocaothongtu67Controller extends Controller
                 $ar_I[$gddt]['pctnvk'] = $ar_I[$giaoduc]['pctnvk'] + $ar_I[$daotao]['pctnvk'];
                 $ar_I[$gddt]['pcudn'] = $ar_I[$giaoduc]['pcudn'] + $ar_I[$daotao]['pcudn'];
                 $ar_I[$gddt]['pcth'] = $ar_I[$giaoduc]['pcth'] + $ar_I[$daotao]['pcth'];
-                $ar_I[$gddt]['pctn'] = $ar_I[$giaoduc]['pctn'] + $ar_I[$daotao]['pctn'];
+                $ar_I[$gddt]['pctnn'] = $ar_I[$giaoduc]['pctnn'] + $ar_I[$daotao]['pctnn'];
                 $ar_I[$gddt]['pccovu'] = $ar_I[$giaoduc]['pccovu'] + $ar_I[$daotao]['pccovu'];
                 $ar_I[$gddt]['pcdang'] = $ar_I[$giaoduc]['pcdang'] + $ar_I[$daotao]['pcdang'];
                 $ar_I[$gddt]['pcthni'] = $ar_I[$giaoduc]['pcthni'] + $ar_I[$daotao]['pcthni'];
@@ -9452,7 +9452,7 @@ class baocaothongtu67Controller extends Controller
                 $ar_I[$qlnnddt]['pctnvk'] = $ar_I[$qlnn]['pctnvk'] + $ar_I[$ddt]['pctnvk'];
                 $ar_I[$qlnnddt]['pcudn'] = $ar_I[$qlnn]['pcudn'] + $ar_I[$ddt]['pcudn'];
                 $ar_I[$qlnnddt]['pcth'] = $ar_I[$qlnn]['pcth'] + $ar_I[$ddt]['pcth'];
-                $ar_I[$qlnnddt]['pctn'] = $ar_I[$qlnn]['pctn'] + $ar_I[$ddt]['pctn'];
+                $ar_I[$qlnnddt]['pctnn'] = $ar_I[$qlnn]['pctnn'] + $ar_I[$ddt]['pctnn'];
                 $ar_I[$qlnnddt]['pccovu'] = $ar_I[$qlnn]['pccovu'] + $ar_I[$ddt]['pccovu'];
                 $ar_I[$qlnnddt]['pcdang'] = $ar_I[$qlnn]['pcdang'] + $ar_I[$ddt]['pcdang'];
                 $ar_I[$qlnnddt]['pcthni'] = $ar_I[$qlnn]['pcthni'] + $ar_I[$ddt]['pcthni'];
@@ -9492,9 +9492,9 @@ class baocaothongtu67Controller extends Controller
                         $tongpc += $ar_I[$i]['pcth'];
                         $a_It['pcth'] += $ar_I[$i]['pcth'];
 
-                        $ar_I[$i]['pctn'] = $chitiet->sum('pctn') * $luongcb;
-                        $tongpc += $ar_I[$i]['pctn'];
-                        $a_It['pctn'] += $ar_I[$i]['pctn'];
+                        $ar_I[$i]['pctnn'] = $chitiet->sum('pctnn') * $luongcb;
+                        $tongpc += $ar_I[$i]['pctnn'];
+                        $a_It['pctnn'] += $ar_I[$i]['pctnn'];
 
                         $ar_I[$i]['pccovu'] = $chitiet->sum('pccovu') * $luongcb;
                         $tongpc += $ar_I[$i]['pccovu'];
@@ -9527,7 +9527,7 @@ class baocaothongtu67Controller extends Controller
                         $ar_I[$i]['pctnvk'] = 0;
                         $ar_I[$i]['pcudn'] = 0;
                         $ar_I[$i]['pcth'] = 0;
-                        $ar_I[$i]['pctn'] = 0;
+                        $ar_I[$i]['pctnn'] = 0;
                         $ar_I[$i]['pccovu'] = 0;
                         $ar_I[$i]['pcdang'] = 0;
                         $ar_I[$i]['pcthni'] = 0;
@@ -9543,7 +9543,7 @@ class baocaothongtu67Controller extends Controller
                 $ar_I[11]['pctnvk'] = $ar_I[12]['pctnvk'] + $ar_I[13]['pctnvk'];
                 $ar_I[11]['pcudn'] = $ar_I[12]['pcudn'] + $ar_I[13]['pcudn'];
                 $ar_I[11]['pcth'] = $ar_I[12]['pcth'] + $ar_I[13]['pcth'];
-                $ar_I[11]['pctn'] = $ar_I[12]['pctn'] + $ar_I[13]['pctn'];
+                $ar_I[11]['pctnn'] = $ar_I[12]['pctnn'] + $ar_I[13]['pctnn'];
                 $ar_I[11]['pccovu'] = $ar_I[12]['pccovu'] + $ar_I[13]['pccovu'];
                 $ar_I[11]['pcdang'] = $ar_I[12]['pcdang'] + $ar_I[13]['pcdang'];
                 $ar_I[11]['pcthni'] = $ar_I[12]['pcthni'] + $ar_I[13]['pcthni'];
@@ -9558,7 +9558,7 @@ class baocaothongtu67Controller extends Controller
                 $ar_I[0]['pctnvk'] = $ar_I[1]['pctnvk'] + $ar_I[2]['pctnvk'];
                 $ar_I[0]['pcudn'] = $ar_I[1]['pcudn'] + $ar_I[2]['pcudn'];
                 $ar_I[0]['pcth'] = $ar_I[1]['pcth'] + $ar_I[2]['pcth'];
-                $ar_I[0]['pctn'] = $ar_I[1]['pctn'] + $ar_I[2]['pctn'];
+                $ar_I[0]['pctnn'] = $ar_I[1]['pctnn'] + $ar_I[2]['pctnn'];
                 $ar_I[0]['pccovu'] = $ar_I[1]['pccovu'] + $ar_I[2]['pccovu'];
                 $ar_I[0]['pcdang'] = $ar_I[1]['pcdang'] + $ar_I[2]['pcdang'];
                 $ar_I[0]['pcthni'] = $ar_I[1]['pcthni'] + $ar_I[2]['pcthni'];
@@ -9591,8 +9591,8 @@ class baocaothongtu67Controller extends Controller
                 $tongpc += $ar_II['pcudn'];
                 $ar_II['pcth'] = $chitiet->sum('pcth')* $luongcb;
                 $tongpc += $ar_II['pcth'];
-                $ar_II['pctn'] = $chitiet->sum('pctn')* $luongcb;
-                $tongpc += $ar_II['pctn'];
+                $ar_II['pctnn'] = $chitiet->sum('pctnn')* $luongcb;
+                $tongpc += $ar_II['pctnn'];
                 $ar_II['pccovu'] = $chitiet->sum('pccovu')* $luongcb;
                 $tongpc += $ar_II['pccovu'];
                 $ar_II['pcdang'] = $chitiet->sum('pcdang')* $luongcb;
@@ -9612,7 +9612,7 @@ class baocaothongtu67Controller extends Controller
                 $ar_II['pctnvk'] = 0;
                 $ar_II['pcudn'] = 0;
                 $ar_II['pcth'] = 0;
-                $ar_II['pctn'] = 0;
+                $ar_II['pctnn'] = 0;
                 $ar_II['pccovu'] = 0;
                 $ar_II['pcdang'] = 0;
                 $ar_II['pcthni'] = 0;
