@@ -569,7 +569,7 @@ class dataController extends Controller
                 }
                 $nglg = $a_nglg[$canbo->msngbac];
                 $canbo->ngayden = $canbo->ngaytu;//xét lại ngày nâng lương
-                if ($canbo->vuotkhung == 0 && $canbo->heso < $nglg['hesolonnhat']) {//cán bộ đang hưởng bâc lương cuối (kỳ sau vk)
+                if ($canbo->vuotkhung == 0 && $canbo->heso <= $nglg['hesolonnhat']) {//cán bộ đang hưởng bâc lương cuối (kỳ sau vk)
                     $canbo->heso -= $nglg['hesochenhlech'];
                 } else {
                     $canbo->vuotkhung = $canbo->vuotkhung <= 5 ? 0 : $canbo->vuotkhung - 1;
