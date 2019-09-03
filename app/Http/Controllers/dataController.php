@@ -89,30 +89,14 @@ class dataController extends Controller
 
             return  \App\bangluong_ct::wherein('mabl',$a_bl)->orderby('stt')->get();
         */
-        if($phanloai == 'BANGLUONG'){
-            if ($manguonkp == null) {
-                $a_bl = \App\bangluong::select('mabl')
-                    ->where('thang', $thang)
-                    ->where('nam', $nam)
-                    ->where('madv', $madv)
-                    ->where('phanloai', $phanloai)->get();
-            } else {
-                $a_bl = \App\bangluong::select('mabl')
-                    ->where('thang', $thang)
-                    ->where('nam', $nam)
-                    ->where('madv', $madv)
-                    ->wherein('manguonkp', $manguonkp)
-                    ->where('phanloai', $phanloai)->get()->toarray();
-            }
-
+        $a_bl = \App\bangluong::select('mabl')
+            ->where('thang', $thang)
+            ->where('nam', $nam)
+            ->where('madv', $madv)
+            ->where('phanloai', $phanloai)->get()->toarray();
+        if ($manguonkp == null) {
             return  \App\bangluong_ct::wherein('mabl',$a_bl)->orderby('stt')->get();
-        }else{
-            //truy lĩnh (nguồn kinh trong chi tiết bảng lương
-            $a_bl = \App\bangluong::select('mabl')
-                ->where('thang', $thang)
-                ->where('nam', $nam)
-                ->where('madv', $madv)
-                ->where('phanloai', $phanloai)->get();
+        } else {
             return  \App\bangluong_ct::wherein('mabl',$a_bl)->wherein('manguonkp', $manguonkp)->orderby('stt')->get();
         }
 
@@ -579,21 +563,21 @@ class dataController extends Controller
         $a_nglg = \App\ngachluong::all()->keyby('msngbac')->toarray();
         foreach($m_canbo as $canbo){
             //xet lương ngạch bậc
-            if(getDayVn($canbo->ngaytu) != '' && $canbo->ngaytu > $ngayxet){
-                if(!isset($a_nglg[$canbo->msngbac])){
+            if(getDayVn($canbo->ngaytu) != '' && $canbo->ngaytu > $ngayxet) {
+                if (!isset($a_nglg[$canbo->msngbac])) {
                     continue;
                 }
                 $nglg = $a_nglg[$canbo->msngbac];
                 $canbo->ngayden = $canbo->ngaytu;//xét lại ngày nâng lương
-                if($canbo->heso < $nglg['hesolonnhat']){//nâng lương ngạch bậc
+                if ($canbo->vuotkhung == 0 && $canbo->heso <= $nglg['hesolonnhat']) {//cán bộ đang hưởng bâc lương cuối (kỳ sau vk)
                     $canbo->heso -= $nglg['hesochenhlech'];
-                }else{//vượt khung
-                    $canbo->vuotkhung = $canbo->vuotkhung == 5 ? 0 : $canbo->vuotkhung - 1;
+                } else {
+                    $canbo->vuotkhung = $canbo->vuotkhung <= 5 ? 0 : $canbo->vuotkhung - 1;
                 }
             }
             //xét thâm niên nghề
             if(getDayVn($canbo->tnntungay) != '' && $canbo->tnntungay > $ngayxet){
-                $canbo->pctnn = $canbo->pctnn == 5 ? 0 : $canbo->pctnn - 1;
+                $canbo->pctnn = $canbo->pctnn <= 5 ? 0 : $canbo->pctnn - 1;
                 $canbo->tnndenngay = $canbo->tnntungay;//xét lại ngày nâng lương
             }
             //tự động nâng lương cho cán bộ chưa nâng lương (trước thời điểm xét) - dành cho dư toán, nhu cầu kp
@@ -622,7 +606,9 @@ class dataController extends Controller
                     $canbo->tnndenngay = $datetn->addYear(1)->toDateString();
                 }
             }
-
+//            if($canbo->macanbo == '1511748452_1535339860'){
+//                dd($canbo);
+//            }
         }
         return $m_canbo;
     }
