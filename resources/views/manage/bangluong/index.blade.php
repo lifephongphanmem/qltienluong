@@ -209,7 +209,7 @@
             }
 
             $('#chitiet-modal').modal('show');
-            $("#tab_cre").tabs("enable", 1);
+            //$("#tab_cre").tabs("enable", 1);
         }
 
         function add_truylinh(){
@@ -378,7 +378,7 @@
                     $('#luongcoban').prop('readonly',true);
                     $('#manguonkp').prop('disabled', true);
                     $('#phucaploaitru').prop('disabled', true);
-                    $("#tab_cre" ).tabs( { disabled: [1] } );
+                    //$("#tab_cre" ).tabs( { disabled: [1] } );
                     break;
                 }
 

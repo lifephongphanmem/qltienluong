@@ -22,10 +22,10 @@
                                     <a href="#tab_0_cre" data-toggle="tab" aria-expanded="true">
                                         Thông tin chung </a>
                                 </li>
-                                <li class="" id="li_tab_1_cre">
+                                <!--li class="" id="li_tab_1_cre">
                                     <a href="#tab_1_cre" data-toggle="tab" aria-expanded="false">
                                         Tạo bảng lương theo mẫu </a>
-                                </li>
+                                </li-->
 
                             </ul>
                             <div class="tab-content">
@@ -79,7 +79,8 @@
 
                                     <div class="row">
                                         <div class="col-md-offset-3 col-md-9" style="margin-top: 15px">
-                                            <input name="capnhatnangluong" id="capnhatnangluong" type="checkbox">Cập nhật quá trình nâng lương của cán bộ</label>
+                                            <input name="capnhatnangluong" id="capnhatnangluong" type="checkbox">
+                                            <label for="capnhatnangluong">Cập nhật quá trình nâng lương của cán bộ</label>
                                         </div>
                                     </div>
 
@@ -93,7 +94,7 @@
                                 </div>
 
                                 <!-- Tùy chọn nâng cao -->
-                                <div class="tab-pane" id="tab_1_cre">
+                                <!--div class="tab-pane" id="tab_1_cre">
                                     <table id="sample_4" class="table table-hover table-striped table-bordered">
                                         <thead>
                                         <tr>
@@ -124,7 +125,7 @@
                                         @endforeach
                                         </tbody>
                                     </table>
-                                </div>
+                                </div-->
                             </div>
                         </div>
                     </div>
