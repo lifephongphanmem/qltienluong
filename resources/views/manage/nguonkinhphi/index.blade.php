@@ -179,9 +179,9 @@
                 </div>
                 <div class="modal-body">
                     <div class="row">
-                        <div class="col-md-6" {{session('admin')->maphanloai != 'KVXP'?'':'style=display:none'}}>
+                        <div class="col-md-6">
                             <label class="control-label">Lĩnh vực hoạt động</label>
-                            {!!Form::select('linhvuchoatdong',getLinhVucHoatDong(false), null, array('id' => 'linhvuchoatdong','class' => 'form-control'))!!}
+                            {!!Form::select('linhvuchoatdong',getLinhVucHoatDong(false), session('admin')->maphanloai == 'KVXP'?'QLNN':null, array('id' => 'linhvuchoatdong','class' => 'form-control'))!!}
                         </div>
 
                         <div class="col-md-6">

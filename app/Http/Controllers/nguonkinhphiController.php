@@ -173,18 +173,16 @@ class nguonkinhphiController extends Controller
             $m_tnn = $model->where('nam_tnn', '<>', '')->where('nam_tnn','=',$inputs['namdt'])->keyBy('macanbo')->toarray();
             //dd($m_nb);
             foreach($m_cb_kn as $key =>$val){
-                if(isset($m_cb[$m_cb_kn[$key]['macanbo']])){
-                    $canbo = $m_cb[$m_cb_kn[$key]['macanbo']];
-                    $m_cb_kn[$key]['tencanbo'] = $canbo['tencanbo'];
-                    $m_cb_kn[$key]['stt'] = $canbo['stt'];
-                    $m_cb_kn[$key]['msngbac'] = $canbo['msngbac'];
-                }else{
-                    $m_cb_kn[$key]['tencanbo'] = '';
-                    $m_cb_kn[$key]['stt'] = '';
-                    $m_cb_kn[$key]['msngbac'] = '';
+                if(!isset($m_cb[$m_cb_kn[$key]['macanbo']])){
+                    continue;
                 }
-                //$m_cb_kn[$key]['tencanbo'] = isset($a_hoten[$m_cb_kn[$key]['macanbo']])? $a_hoten[$m_cb_kn[$key]['macanbo']] : '';
 
+                $canbo = $m_cb[$m_cb_kn[$key]['macanbo']];
+                $m_cb_kn[$key]['tencanbo'] = $canbo['tencanbo'];
+                $m_cb_kn[$key]['stt'] = $canbo['stt'];
+                $m_cb_kn[$key]['msngbac'] = $canbo['msngbac'];
+                $m_cb_kn[$key]['ngaybc'] = $canbo['ngaybc'];
+                $m_cb_kn[$key]['ngayvao'] = $canbo['ngayvao'];
                 $m_cb_kn[$key]['ngaysinh'] = null;
                 $m_cb_kn[$key]['tnndenngay'] = null;
                 $m_cb_kn[$key]['macongtac'] = null;
