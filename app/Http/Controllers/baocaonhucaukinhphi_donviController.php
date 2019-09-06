@@ -6,6 +6,7 @@ use App\chitieubienche;
 use App\dmdonvi;
 use App\dmthongtuquyetdinh;
 use App\nguonkinhphi;
+use App\nguonkinhphi_bangluong;
 use App\tonghopluong_donvi;
 use App\tonghopluong_donvi_bangluong;
 use App\tonghopluong_donvi_chitiet;
@@ -28,16 +29,20 @@ class baocaonhucaukinhphi_donviController extends Controller
             $inputs['nam'] = date_format($ngayapdung, 'Y');
             $inputs['thang'] = date_format($ngayapdung, 'm');
             $m_bienche = chitieubienche::where('nam', $inputs['nam'])->where('madv',session('admin')->madv)->get();
-            $_tonghop = tonghopluong_donvi::where('thang', $inputs['thang'])->where('nam', $inputs['nam'])
+            $_tonghop = nguonkinhphi::where('sohieu',$inputs['sohieu'])
                 ->where('madv', session('admin')->madv)->get();
-            $m_tonghop_ct = tonghopluong_donvi_chitiet::wherein('mathdv', array_column($_tonghop->toarray(),'mathdv'))->get();
-            //$m_tonghop_bl = tonghopluong_donvi_bangluong::wherein('mathdv', array_column($_tonghop->toarray(),'mathdv'))->get();
+            $a_linhvuc = array_column($_tonghop->toarray(),'linhvuchoatdong','masodv');
 
+            $m_tonghop_ct = nguonkinhphi_bangluong::wherein('masodv', array_column($_tonghop->toarray(),'masodv'))
+                ->where('nam', $inputs['nam'])->where('thang', $inputs['thang'])->get();
+            //$m_tonghop_bl = tonghopluong_donvi_bangluong::wherein('mathdv', array_column($_tonghop->toarray(),'mathdv'))->get();
+            //dd($m_tonghop_ct);
             $a_pc_goc = array('heso','vuotkhung','pckv','pccv','pcudn','pcth','pctnn','pccovu','pcdang','pcthni','pcdbqh','pcvk','pck');
             $a_pc_th = getColTongHop();
             $a_pc = array_diff($a_pc_th,$a_pc_goc);
 
             foreach($m_tonghop_ct as $ct) {
+                $ct->linhvuchoatdong = $a_linhvuc[$ct->masodv];
                 foreach ($a_pc as $pc) {
                     $pc_st = 'st_' . $pc;
                     if ($ct->$pc < $ct->$pc_st) { //hệ số < số tiền => theo dõi khác số tiền
@@ -86,7 +91,7 @@ class baocaonhucaukinhphi_donviController extends Controller
                 $chitiet = $m_tonghop_ct->where('linhvuchoatdong', $ar_I[$i]['val']);
 
                 $ar_I[$i]['soluongduocgiao'] = $m_bienche->where('linhvuchoatdong', $ar_I[$i]['val'])->sum('soluongduocgiao');
-                $ar_I[$i]['soluongbienche'] = $chitiet->sum('soluong');
+                $ar_I[$i]['soluongbienche'] =count($chitiet);
 
                 //$ar_I[$i]['soluongduocgiao'] = isset($model_bienche->soluongduocgiao) ? $model_bienche->soluongduocgiao : 0;
                 $a_It['soluongduocgiao'] += $ar_I[$i]['soluongduocgiao'];
@@ -190,17 +195,21 @@ class baocaonhucaukinhphi_donviController extends Controller
             $ngayapdung = new Carbon($m_thongtu->ngayapdung);
             $inputs['nam'] = date_format($ngayapdung, 'Y');
             $inputs['thang'] = date_format($ngayapdung, 'm');
+
             $m_bienche = chitieubienche::where('nam', $inputs['nam'])->where('madv',session('admin')->madv)->get();
-            $_tonghop = tonghopluong_donvi::where('thang', $inputs['thang'])->where('nam', $inputs['nam'])
+            $_tonghop = nguonkinhphi::where('sohieu',$inputs['sohieu'])
                 ->where('madv', session('admin')->madv)->get();
-            $m_tonghop_ct = tonghopluong_donvi_chitiet::wherein('mathdv', array_column($_tonghop->toarray(),'mathdv'))->get();
-            //$m_tonghop_bl = tonghopluong_donvi_bangluong::wherein('mathdv', array_column($_tonghop->toarray(),'mathdv'))->get();
+            $a_linhvuc = array_column($_tonghop->toarray(),'linhvuchoatdong','masodv');
+
+            $m_tonghop_ct = nguonkinhphi_bangluong::wherein('masodv', array_column($_tonghop->toarray(),'masodv'))
+                ->where('nam', $inputs['nam'])->where('thang', $inputs['thang'])->get();
 
             $a_pc_goc = array('heso','vuotkhung','pckv','pccv','pcudn','pcth','pctnn','pccovu','pcdang','pcthni','pcdbqh','pcvk','pck');
             $a_pc_th = getColTongHop();
             $a_pc = array_diff($a_pc_th,$a_pc_goc);
 
             foreach($m_tonghop_ct as $ct) {
+                $ct->linhvuchoatdong = $a_linhvuc[$ct->masodv];
                 foreach ($a_pc as $pc) {
                     $pc_st = 'st_' . $pc;
                     if ($ct->$pc < $ct->$pc_st) { //hệ số < số tiền => theo dõi khác số tiền
@@ -250,7 +259,7 @@ class baocaonhucaukinhphi_donviController extends Controller
                 $chitiet = $m_tonghop_ct->where('linhvuchoatdong', $ar_I[$i]['val']);
 
                 $ar_I[$i]['soluongduocgiao'] = $m_bienche->where('linhvuchoatdong', $ar_I[$i]['val'])->sum('soluongduocgiao');
-                $ar_I[$i]['soluongbienche'] = $chitiet->sum('soluong');
+                $ar_I[$i]['soluongbienche'] =count($chitiet);
 
                 //$ar_I[$i]['soluongduocgiao'] = isset($model_bienche->soluongduocgiao) ? $model_bienche->soluongduocgiao : 0;
                 $a_It['soluongduocgiao'] += $ar_I[$i]['soluongduocgiao'];
@@ -422,7 +431,8 @@ class baocaonhucaukinhphi_donviController extends Controller
             $a_A[6]['sotien'] =  $a_A[7]['sotien'] +  $a_A[11]['sotien'];
             $a_A[20]['sotien'] = $model->sum('bosung');
             $a_A[21]['sotien'] = $model->sum('caicach');
-            $model_xp = $model->where('maphanloai','KVXP');
+
+
 
             //phần II
             $a_BII = array();
@@ -434,10 +444,16 @@ class baocaonhucaukinhphi_donviController extends Controller
             $a_BII[5] = array('tt'=>'5','noidung'=>'Kinh phí tăng thêm để thực hiện chế độ đối với cán bộ không chuyên trách cấp xã, thôn và tổ dân phố','sotien'=>'0');
             $a_BII[6] = array('tt'=>'6','noidung'=>'Kinh phí tăng thêm để thực hiện phụ cấp trách nhiệm đối với cấp ủy viên các cấp theo QĐ số 169-QĐ/TW ngày 24/6/2008','sotien'=>'0');
             $a_BII[7] = array('tt'=>'7','noidung'=>'Kinh phí tăng thêm thực hiện chế độ bồi dưỡng phục vụ hoạt động cấp ủy thuộc cấp tỉnh theo Quy định 09-QĐ/VVPTW ngày 22/9/2017','sotien'=>'0');
+            if(session('admin')->maphanloai == 'KVXP'){
+                $a_BII[0]['sotien'] = 0;
+                $a_BII[2]['sotien'] = $model->sum('luongphucap');
+            }else{
+                $a_BII[0]['sotien'] = $model->sum('luongphucap');
+                $a_BII[2]['sotien'] = 0;
+            }
 
-            $a_BII[0]['sotien'] = $model->sum('luongphucap');
             $a_BII[1]['sotien'] = $model_tudb->sum('luongphucap');
-            $a_BII[2]['sotien'] = $model_xp->sum('luongchuyentrach');
+
             $a_BII[3]['sotien'] = $model->sum('daibieuhdnd');
             $a_BII[4]['sotien'] = $model->sum('nghihuu');
             $a_BII[5]['sotien'] = $model->sum('canbokct');
