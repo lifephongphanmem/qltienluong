@@ -17,7 +17,7 @@
     <link rel="stylesheet" href="{{ url('css/style-responsive.css') }}">
 </head>
 <body id="error-page" class="animated bounceInLeft">
-<div id="error-page-content"><h1>Error!</h1><h2>Bạn chưa chọn cơ quan để gửi dữ liệu tổng hợp.</h2>
+<div id="error-page-content"><h1>Lỗi!</h1><h2>Bạn chưa chọn cơ quan để gửi dữ liệu tổng hợp.</h2>
     <h3> <p><a href='{{url('/he_thong/don_vi/don_vi') }}'>Bấm vào đây</a> để chọn cơ quan tổng hợp dữ liệu.</p></div></h3>
 <script src="{{ url('js/jquery-1.9.1.js') }}"></script>
 <script src="{{ url('js/jquery-migrate-1.2.1.min.js') }}"></script>

@@ -25,10 +25,10 @@
                                 <li><a href="#" data-target="#thoaichitra-modal" data-toggle="modal" onclick="chitraluong('{{$furl.'don_vi/chitraluong'}}')">Tổng hợp tình hình chi trả lương</a></li>
                                 <hr>
                                 <li><a href="#" onclick="nhucauluong('{{'/bao_cao/thong_tu_67/don_vi/mau2a1'}}')" data-toggle="modal" data-target="#thoainhucauluong-modal">Báo cáo nhu cầu kinh phí (Mẫu 2a/1)</a></li>
-                                <li><a href="{{url('/bao_cao/thong_tu_67/don_vi/mau2a2')}}" onclick="nhucauluong()" target="_blank">Báo cáo nhu cầu kinh phí (Mẫu 2a/2)</a></li>
+                                <li><a href="#" onclick="nhucauluong('{{'/bao_cao/thong_tu_67/don_vi/mau2a2'}}')" data-toggle="modal" data-target="#thoainhucauluong-modal">Báo cáo nhu cầu kinh phí (Mẫu 2a/2)</a></li>
                                 <hr>
-                                <li><a href="{{url('/bao_cao/thong_tu_67/don_vi/mau4a')}}" onclick="nhucauluong()" target="_blank">Báo cáo nguồn kinh phí (Mẫu 4a)</a></li>
-                                <li><a href="{{url('/bao_cao/thong_tu_67/don_vi/mau4b')}}" onclick="nhucauluong()" target="_blank">Tổng hợp nhu cầu, nguồn kinh phí (Mẫu 4b)</a></li>
+                                <li><a href="#" onclick="nhucauluong('{{'/bao_cao/thong_tu_67/don_vi/mau4a'}}')" data-toggle="modal" data-target="#thoainhucauluong-modal">Báo cáo nguồn kinh phí (Mẫu 4a)</a></li>
+                                <li><a href="#" onclick="nhucauluong('{{'/bao_cao/thong_tu_67/don_vi/mau4b'}}')" data-toggle="modal" data-target="#thoainhucauluong-modal">Tổng hợp nhu cầu, nguồn kinh phí (Mẫu 4b)</a></li>
 
                                 {{--<li><a href="#" data-target="#thoaichitra-modal" data-toggle="modal" onclick="chitraluong('{{$furl.'don_vi/dangkyluong'}}')">Tổng hợp đăng ký lương</a></li>--}}
                                 <hr>

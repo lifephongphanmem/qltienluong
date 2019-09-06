@@ -57,5 +57,7 @@ class nguonkinhphi_chitiet extends Model
         'caicach',
         'kpthuhut',
         'kpuudai',
+        'luongchuyentrach',
+        'luongkhongchuyentrach',//thừa
     ];
 }

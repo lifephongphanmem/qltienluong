@@ -70,6 +70,9 @@ class CreateNguonkinhphiChitietTable extends Migration
             $table->double('caicach')->default(0);
             $table->double('kpthuhut')->default(0);
             $table->double('kpuudai')->default(0);
+
+            $table->double('luongchuyentrach')->default(0);
+            $table->double('luongkhongchuyentrach')->default(0);//thừa
             $table->timestamps();
         });
     }
