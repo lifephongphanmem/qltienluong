@@ -99,14 +99,14 @@
         <tr style=" text-align: right">
             <td style=" text-align: center">{{$dulieu['tt']}}</td>
             <td style=" text-align: left">{{$dulieu['noidung']}}</td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
+            <td>{{dinhdangso($dulieu['dt15'])}}</td>
+            <td>{{dinhdangso($dulieu['dt17'])}}</td>
+            <td>{{dinhdangso($dulieu['luong17'])}}</td>
+            <td>{{dinhdangso($dulieu['dt19'])}}</td>
+            <td>{{dinhdangso($dulieu['luong19'])}}</td>
+            <td>{{dinhdangso($dulieu['pcthang'])}}</td>
+            <td>{{dinhdangso($dulieu['tkthang'])}}</td>
+            <td>{{dinhdangso($dulieu['luong'])}}</td>
         </tr>
     @endforeach
 </table>

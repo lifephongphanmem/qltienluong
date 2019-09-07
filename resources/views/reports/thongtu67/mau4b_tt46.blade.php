@@ -83,6 +83,17 @@
         <th>VIỆN PHÍ</th>
         <th>KHÁC</th>
     </tr>
+    <tr style="font-weight: bold;">
+        <td></td>
+        <td>TỔNG SỐ</td>
+        <td class="money">{{dinhdangso(array_sum(array_column($data, 'nhucau')),0,$inputs['donvitinh'])}}</td>
+        <td class="money">{{dinhdangso(array_sum(array_column($data, 'nguonkp')),0,$inputs['donvitinh'])}}</td>
+        <td class="money">{{dinhdangso(array_sum(array_column($data, 'tietkiem')),0,$inputs['donvitinh'])}}</td>
+        <td class="money">{{dinhdangso(array_sum(array_column($data, 'hocphi')),0,$inputs['donvitinh'])}}</td>
+        <td class="money">{{dinhdangso(array_sum(array_column($data, 'vienphi')),0,$inputs['donvitinh'])}}</td>
+        <td class="money">{{dinhdangso(array_sum(array_column($data, 'nguonthu')),0,$inputs['donvitinh'])}}</td>
+        <td class="money">{{dinhdangso(array_sum(array_column($data, 'khac')),0,$inputs['donvitinh'])}}</td>
+    </tr>
     @foreach($data as $dulieu)
         <tr>
             <td>{{$dulieu['tt']}}</td>
@@ -92,8 +103,8 @@
             <td class="money">{{dinhdangso($dulieu['tietkiem'],0,$inputs['donvitinh'])}}</td>
             <td class="money">{{dinhdangso($dulieu['hocphi'],0,$inputs['donvitinh'])}}</td>
             <td class="money">{{dinhdangso($dulieu['vienphi'],0,$inputs['donvitinh'])}}</td>
-            <td class="money">{{dinhdangso($dulieu['khac'],0,$inputs['donvitinh'])}}</td>
             <td class="money">{{dinhdangso($dulieu['nguonthu'],0,$inputs['donvitinh'])}}</td>
+            <td class="money">{{dinhdangso($dulieu['khac'],0,$inputs['donvitinh'])}}</td>
         </tr>
     @endforeach
 </table>
@@ -105,7 +116,7 @@
     </tr>
     <tr style="font-weight: bold">
         <td style="text-align: center;" width="50%"></td>
-        <td style="text-align: center;" width="50%">{{strtoupper($m_dv->cdlanhdao)}}</td>
+        <td style="text-align: center;" width="50%">{{$m_dv->cdlanhdao}}</td>
     </tr>
     <tr style="font-style: italic">
         <td style="text-align: center;" width="50%"></td>

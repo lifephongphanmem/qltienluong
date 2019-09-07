@@ -102,7 +102,7 @@
                                     <li><a href="#" data-target="#chitiet-modal" data-toggle="modal" onclick="baocao('{{'/bao_cao/thong_tu_67/huyen/mau2c'}}')">Báo cáo nhu cầu kinh phí thực hiện BHTN theo nghị định 28/2015 (Mẫu 2c)</a></li>
                                     <!--li><a href="#" data-target="#chitiet-modal" data-toggle="modal" onclick="baocao('{{$furl.'maubckpbhtn'}}')">Báo cáo nhu cầu kinh phí thực hiện bảo hiểm thất nghiệp theo nghị định 28/2015/NĐ-CP</a></li-->
                                     <li><a href="#" data-target="#chitiet-modal" data-toggle="modal" onclick="baocao('{{'/bao_cao/thong_tu_67/huyen/mau2d'}}')">Tổng hợp kinh phí tăng thêm để thực hiện chế độ phụ cấp đối với cán bộ không chuyên trách (Mẫu 2d)</a></li>
-                                    <li><a href="#" data-target="#chitiet-modal" data-toggle="modal" onclick="baocao('{{'/bao_cao/thong_tu_67/huyen/mau2đ'}}')">Báo cáo nguồn thực hiện CCTL tiết kiệm từ việc thực hiện tinh giảm biên chế (Mẫu 2đ)</a></li>
+                                    <li><a href="#" data-target="#chitiet-modal" data-toggle="modal" onclick="baocao('{{'/bao_cao/thong_tu_67/huyen/mau2dd'}}')">Báo cáo nguồn thực hiện CCTL tiết kiệm từ việc thực hiện tinh giảm biên chế (Mẫu 2đ)</a></li>
                                     <li><a href="#" data-target="#chitiet-modal" data-toggle="modal" onclick="baocao('{{'/bao_cao/thong_tu_67/huyen/mau2e'}}')">Báo cáo nguồn thực hiện CCTL tiết kiệm từ việc thay đổi cơ chế tự chủ (Mẫu 2e)</a></li>
                                     <li><a href="#" data-target="#chitiet-modal" data-toggle="modal" onclick="baocao('{{'/bao_cao/thong_tu_67/huyen/mau2g'}}')">Báo cáo quỹ tiền lương, phụ cấp đối với lao động theo hợp đồng khu vực hành chính và đơn vị sự nghiệp (Mẫu 2g)</a></li>
                                     <!--li><a href="#" data-target="#chitiet-modal" data-toggle="modal" onclick="baocao('{{'/bao_cao/thong_tu_67/huyen/mau2h'}}')">Tổng hợp phụ cấp thu hút tăng, giảm do điều chỉnh địa bàn vùng kinh tế xã hội đặc biệt khó khăn (Mẫu 2h)</a></li-->
@@ -645,7 +645,7 @@
                                     </div>
                                 </div>
                             @endif
-                            <div class="form-group">
+                            <!--div class="form-group">
                                 <label class="col-md-4 control-label"> Thông tư:<span class="require">*</span></label>
                                 <div class="col-md-8">
                                     <select class="form-control select2me" id="sohieu"  name="sohieu" class="form-control">
@@ -654,7 +654,7 @@
                                             @endforeach
                                         </select>
                                 </div>
-                            </div>
+                            </div-->
                             <div class="form-group">
                                 <label class="col-md-4 control-label"> Đơn vị tính</label>
                                 <div class="col-md-8">

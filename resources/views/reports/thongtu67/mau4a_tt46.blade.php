@@ -98,12 +98,12 @@
         <td>I</td>
         <td>Tổng nhu cầu kinh phí tăng thêm để thực hiện cải cách tiền lương theo Nghị định số
             47/2017/NĐ-CP và Nghị định số 76/2017/NĐ-CP tính đủ 12 tháng (4)</td>
-        <td class="money">{{dinhdangso($a_TC['BII'],0,$inputs['donvitinh'])}}</td>
+        <td class="money">{{dinhdangso($a_TC['BI'],0,$inputs['donvitinh'])}}</td>
     </tr>
     <tr style="font-weight: bold;">
         <td>II</td>
         <td>Tổng nhu cầu kinh phí tăng thêm để thực hiện cải cách tiền lương theo nghị định số 72/2018/NĐ-CP và Nghị định số 88/2018/NĐ-CP</td>
-        <td class="money">{{dinhdangso($a_TC['BII'],0,$inputs['donvitinh'])}}</td>
+        <td class="money">{{dinhdangso($a_TC['BI1'],0,$inputs['donvitinh'])}}</td>
     </tr>
     <tr style="font-weight: bold;">
         <td>III</td>
