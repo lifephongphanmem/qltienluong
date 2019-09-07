@@ -45,10 +45,7 @@
                             <tr>
                                 <th class="text-center" style="width: 5%">STT</th>
                                 <th class="text-center">Năm ngân</br>sách</th>
-                                @if(session('admin')->maphanloai != 'KVXP')
-                                    <th class="text-center">Lĩnh vực hoạt động</th>
-                                @endif
-                                <th class="text-center">Nội dung</th>
+                                <th class="text-center">Lĩnh vực hoạt động</th>
                                 <th class="text-center">Nhu cầu</br>kinh phí</th>
                                 <th class="text-center">Kinh phí</br>thực hiện</th>
                                 <th class="text-center">Trạng thái</th>
@@ -62,10 +59,7 @@
                                     <tr class="{{getTextStatus($value->trangthai)}}">
                                         <td class="text-center">{{$key+1}}</td>
                                         <td class="text-center">{{$value->namns}}</td>
-                                        @if(session('admin')->maphanloai != 'KVXP')
-                                            <td>{{$value->linhvuc}}</td>
-                                        @endif
-                                        <td>{{$value->noidung}}</td>
+                                        <td>{{$value->linhvuc}}</td>
                                         <td class="text-right">{{number_format($value->nhucau)}}</td>
                                         <td class="text-right">{{number_format($value->nguonkp)}}</td>
                                         <td>{{$a_trangthai[$value->trangthai]}}</td>
@@ -179,9 +173,9 @@
                 </div>
                 <div class="modal-body">
                     <div class="row">
-                        <div class="col-md-6" {{session('admin')->maphanloai != 'KVXP'?'':'style=display:none'}}>
+                        <div class="col-md-6">
                             <label class="control-label">Lĩnh vực hoạt động</label>
-                            {!!Form::select('linhvuchoatdong',getLinhVucHoatDong(false), null, array('id' => 'linhvuchoatdong','class' => 'form-control'))!!}
+                            {!!Form::select('linhvuchoatdong',getLinhVucHoatDong(false), session('admin')->maphanloai == 'KVXP'?'QLNN':null, array('id' => 'linhvuchoatdong','class' => 'form-control'))!!}
                         </div>
 
                         <div class="col-md-6">

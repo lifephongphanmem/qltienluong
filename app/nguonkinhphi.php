@@ -55,5 +55,7 @@ class nguonkinhphi extends Model
         'caicach',
         'kpthuhut',
         'kpuudai',
+        'luongchuyentrach',
+        'luongkhongchuyentrach',//thừa
     ];
 }

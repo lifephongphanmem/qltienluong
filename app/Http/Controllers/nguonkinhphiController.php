@@ -57,6 +57,7 @@ class nguonkinhphiController extends Controller
             //Kiểm tra nếu có rồi thì ko tạo
             $chk = nguonkinhphi::where('sohieu',$inputs['sohieu'])
                 ->where('namns',$inputs['namdt'])
+                ->where('linhvuchoatdong',$inputs['linhvuchoatdong'])
                 ->where('madv',session('admin')->madv)
                 ->count();
 
@@ -173,18 +174,16 @@ class nguonkinhphiController extends Controller
             $m_tnn = $model->where('nam_tnn', '<>', '')->where('nam_tnn','=',$inputs['namdt'])->keyBy('macanbo')->toarray();
             //dd($m_nb);
             foreach($m_cb_kn as $key =>$val){
-                if(isset($m_cb[$m_cb_kn[$key]['macanbo']])){
-                    $canbo = $m_cb[$m_cb_kn[$key]['macanbo']];
-                    $m_cb_kn[$key]['tencanbo'] = $canbo['tencanbo'];
-                    $m_cb_kn[$key]['stt'] = $canbo['stt'];
-                    $m_cb_kn[$key]['msngbac'] = $canbo['msngbac'];
-                }else{
-                    $m_cb_kn[$key]['tencanbo'] = '';
-                    $m_cb_kn[$key]['stt'] = '';
-                    $m_cb_kn[$key]['msngbac'] = '';
+                if(!isset($m_cb[$m_cb_kn[$key]['macanbo']])){
+                    continue;
                 }
-                //$m_cb_kn[$key]['tencanbo'] = isset($a_hoten[$m_cb_kn[$key]['macanbo']])? $a_hoten[$m_cb_kn[$key]['macanbo']] : '';
 
+                $canbo = $m_cb[$m_cb_kn[$key]['macanbo']];
+                $m_cb_kn[$key]['tencanbo'] = $canbo['tencanbo'];
+                $m_cb_kn[$key]['stt'] = $canbo['stt'];
+                $m_cb_kn[$key]['msngbac'] = $canbo['msngbac'];
+                $m_cb_kn[$key]['ngaybc'] = $canbo['ngaybc'];
+                $m_cb_kn[$key]['ngayvao'] = $canbo['ngayvao'];
                 $m_cb_kn[$key]['ngaysinh'] = null;
                 $m_cb_kn[$key]['tnndenngay'] = null;
                 $m_cb_kn[$key]['macongtac'] = null;
@@ -510,26 +509,30 @@ class nguonkinhphiController extends Controller
             return view('errors.notlogin');
     }
 
-    function senddata(Request $requests)
-    {
-        //Kiểm tra cấp đơn vị xem đơn vị để update trường masoh hoặc masot
+    function senddata(Request $requests){
         if (Session::has('admin')) {
             $inputs = $requests->all();
             if (session('admin')->macqcq == '') {
                 return view('errors.chuacqcq');
             }
-            $model = nguonkinhphi::where('masodv', $inputs['masodv'])->first();
-            //Kiểm tra xem đã có macqcq trong bàng nguồn chưa
-            if($model->macqcq == ''){
-                $model->macqcq = session('admin')->macqcq;
-                $model->save();
+            $m_nkp = nguonkinhphi::where('masodv', $inputs['masodv'])->first();
+            $model = nguonkinhphi::where('sohieu', $m_nkp->sohieu)->where('madv', session('admin')->madv)->get();
+            foreach($model as $nguon) {
+                $nguon->trangthai = 'DAGUI';
+                $nguon->macqcq = session('admin')->macqcq;
+                $nguon->nguoiguidv = session('admin')->name;
+                $nguon->ngayguidv = Carbon::now()->toDateTimeString();
+                $nguon->save();
             }
+
+
             //kiểm tra xem gửi lên khối hay lên huyện
             //lên khối=> chuyển trạng thái do nguonkinhphi(SD) = nguonkinhphi_khoi(TH)
             //lên huyện => phát sinh bản ghi mới tại bảng nguonkinhphi_huyen
 
             //check đơn vị chủ quản là gửi lên huyện => chuyển trạng thái; import bản ghi vào bảng huyện
                 //khối => chuyển trạng thái
+            /* bỏ do tuyến huyện làm riêng
             if(session('admin')->macqcq == session('admin')->madvqlkv){//đơn vị chủ quản là huyện
                 //kiểm tra xem đã có bản ghi chưa (trường hợp trả lại)
                 $model_huyen = nguonkinhphi_huyen::where('masodv', $model->masoh)->first();
@@ -554,11 +557,12 @@ class nguonkinhphiController extends Controller
                     $model_huyen->save();
                 }
             }
-
-            $model->nguoiguidv = session('admin')->name;
-            $model->ngayguidv = Carbon::now()->toDateTimeString();
-            $model->trangthai = 'DAGUI';
-            $model->save();
+            */
+            //$model->macqcq = session('admin')->macqcq;
+            //$model->nguoiguidv = session('admin')->name;
+            //$model->ngayguidv = Carbon::now()->toDateTimeString();
+            //$model->trangthai = 'DAGUI';
+            //$model->save();
 
             return redirect('/nguon_kinh_phi/danh_sach');
         } else

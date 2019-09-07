@@ -36,7 +36,7 @@ class dmchucvucqController extends Controller
     {
         if (Session::has('admin')) {
             $model_pl = dmphanloaidonvi::where('maphanloai', session('admin')->maphanloai)->get();
-            $model = dmchucvucq::where('maphanloai', session('admin')->maphanloai)->wherein('madv', ['SA', session('admin')->madv])->get();
+            $model = dmchucvucq::wherein('madv', ['SA', session('admin')->madv])->get();
             //$model = dmchucvucq::where('maphanloai', session('admin')->maphanloai)->where('madv', session('admin')->madv)->get();
             $a_pl = getPhanLoaiNhanVien();
             foreach($model as $ct){

@@ -17,7 +17,7 @@
     <link rel="stylesheet" href="{{ url('css/style-responsive.css') }}">
 </head>
 <body id="error-page" class="animated bounceInLeft">
-<div id="error-page-content"><h1>Error!</h1><h4>Bạn không đủ quyền truy cập chức năng này</h4>
+<div id="error-page-content"><h1>Lỗi!</h1><h4>Bạn không đủ quyền truy cập chức năng này</h4>
     <p><a href='{{ url('/') }}'>Bấm vào đây</a> để quay lại trang chủ.</p></div>
 <script src="{{ url('js/jquery-1.9.1.js') }}"></script>
 <script src="{{ url('js/jquery-migrate-1.2.1.min.js') }}"></script>
