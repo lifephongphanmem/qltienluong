@@ -645,7 +645,7 @@
                                     </div>
                                 </div>
                             @endif
-                            <!--div class="form-group">
+                            <div class="form-group">
                                 <label class="col-md-4 control-label"> Thông tư:<span class="require">*</span></label>
                                 <div class="col-md-8">
                                     <select class="form-control select2me" id="sohieu"  name="sohieu" class="form-control">
@@ -654,7 +654,7 @@
                                             @endforeach
                                         </select>
                                 </div>
-                            </div-->
+                            </div>
                             <div class="form-group">
                                 <label class="col-md-4 control-label"> Đơn vị tính</label>
                                 <div class="col-md-8">
