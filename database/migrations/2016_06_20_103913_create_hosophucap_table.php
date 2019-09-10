@@ -14,7 +14,8 @@ class CreateHosophucapTable extends Migration
     {
         Schema::create('hosophucap', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('stt')->default(99);//theo danh mục
+            $table->string('maso', 50)->nullable();
+            $table->string('manl', 50)->nullable();
             $table->string('mapc', 50)->nullable();
             $table->string('macanbo', 50);
             $table->string('macvcq', 50);
@@ -27,21 +28,7 @@ class CreateHosophucapTable extends Migration
             $table->string('msngbac', 50)->nullable();
             $table->integer('bac')->default(1);
             $table->double('heso')->default(0);
-
-            $table->double('baohiem')->default(1);
-            $table->double('bhxh')->default(0);
-            $table->double('bhyt')->default(0);
-            $table->double('kpcd')->default(0);
-            $table->double('bhtn')->default(0);
-            $table->double('bhtnld')->default(0);
-            $table->double('bhxh_dv')->default(0);
-            $table->double('bhyt_dv')->default(0);
-            $table->double('kpcd_dv')->default(0);
-            $table->double('bhtn_dv')->default(0);
-            $table->double('bhtnld_dv')->default(0);
-
             $table->string('ghichu')->nullable();
-            $table->string('madv', 50)->nullable();//dùng update thông tin
             $table->timestamps();
         });
     }

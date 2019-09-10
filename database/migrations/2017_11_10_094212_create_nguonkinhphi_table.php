@@ -69,8 +69,11 @@ class CreateNguonkinhphiTable extends Migration
             $table->double('kpthuhut')->default(0);
             $table->double('kpuudai')->default(0);
 
-            $table->double('luongchuyentrach')->default(0);
+            $table->double('luongchuyentrach')->default(0);//thừa
             $table->double('luongkhongchuyentrach')->default(0);//thừa
+
+            $table->double('tongnhucau1')->default(0);
+            $table->double('tongnhucau2')->default(0);
             $table->timestamps();
         });
     }

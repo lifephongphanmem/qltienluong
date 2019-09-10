@@ -38,7 +38,7 @@ class hosocanboController extends Controller
     function index(){
         if (Session::has('admin')) {
             //$m_hs=hosocanbo::where('madv',session('admin')->maxa)->get();
-            $m_hs=hosocanbo::where('madv',session('admin')->madv)->where('theodoi','<','9')->get();
+            $m_hs = hosocanbo::where('madv',session('admin')->madv)->where('theodoi','<','9')->get();
             $a_ct = array_column(dmphanloaict::all()->toArray(), 'tenct', 'mact');
             $a_pb = getPhongBan(false);
             $a_cv = getChucVuCQ(false);

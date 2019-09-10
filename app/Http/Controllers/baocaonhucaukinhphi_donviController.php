@@ -432,8 +432,6 @@ class baocaonhucaukinhphi_donviController extends Controller
             $a_A[20]['sotien'] = $model->sum('bosung');
             $a_A[21]['sotien'] = $model->sum('caicach');
 
-
-
             //phần II
             $a_BII = array();
             $a_BII[0] = array('tt'=>'1','noidung'=>'Quỹ tiền lương, phụ cấp tăng thêm đối với cán bộ công chức khu vực hành chính, sự nghiệp ','sotien'=>'0');
@@ -481,6 +479,8 @@ class baocaonhucaukinhphi_donviController extends Controller
                     + $a_A[4]['sotien'] + $a_A[5]['sotien'] + $a_A[6]['sotien'] + $a_A[20]['sotien']
                     + $a_A[21]['sotien']),
                 'BII'=>(array_sum(array_column($a_BII,'sotien')) - $a_BII[1]['sotien']),
+                'BII1'=>$model->sum('tongnhucau1'),
+                'BII2'=>$model->sum('tongnhucau2'),
                 'BIII'=>(array_sum(array_column($a_BIII,'sotien')))
             );
 

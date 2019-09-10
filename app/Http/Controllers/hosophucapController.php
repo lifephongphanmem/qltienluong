@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\dmchucvucq;
 use App\dmphongban;
 use App\dmphucap;
+use App\dmphucap_donvi;
 use App\hosocanbo;
 use App\Http\Requests;
 use App\hosophucap;
@@ -13,28 +14,71 @@ use Illuminate\Http\Request;
 
 class hosophucapController extends Controller
 {
-    function index($macanbo){
+    function index(Request $request){
         if (Session::has('admin')) {
-            $model = hosophucap::where('macanbo',$macanbo)->get();
-            $m_pc=dmphucap::all('mapc','tenpc')->toArray();
-            $m_pb=getPhongBanX();
-            $m_cb=getCanBoX();
+            $inputs = $request->all();
+            $m_cb = hosocanbo::where('madv',session('admin')->madv)->where('theodoi','<','9')->orderby('stt')->get();
+            //$a_ct = array_column(dmphanloaict::all()->toArray(), 'tenct', 'mact');
+            $a_pb = getPhongBan(false);
+            $a_cv = getChucVuCQ(false);
+            if(!isset($inputs['canbo'])) {
+                if (count($m_cb) > 0) {
+                    $inputs['canbo'] = $m_cb->first()->macanbo;
+                } else {
+                    $inputs['canbo'] = '';
+                }
+            }
+
+            $model = hosophucap::where('macanbo', $inputs['canbo'])->get();
+            //$m_pc = dmphucap_donvi::all('mapc', 'tenpc')->toArray();
+            $a_pc = array_column(dmphucap_donvi::where('madv', session('admin')->madv)->where('phanloai','<','3')
+                ->get()->toarray(),'tenpc', 'mapc');
+
+
             //dd($m_pc);
+            $inputs['furl'] = '/nghiep_vu/qua_trinh/phu_cap/';
+            //$inputs['furl_ajax'] = '/ajax/phu_cap/';
+            //dd($inputs);
             return view('manage.phucap.index')
-                ->with('furl','/nghiep_vu/qua_trinh/phu_cap/')
-                ->with('furl_ajax','/ajax/phu_cap/')
-                ->with('macanbo',$macanbo)
-                ->with('m_pb',$m_pb)
-                ->with('m_cb',$m_cb)
+                ->with('inputs', $inputs)
+                //->with('a_pb', $a_pb)
+                ->with('a_cv', $a_cv)
+                ->with('a_cb',array_column($m_cb->toarray(),'tencanbo','macanbo'))
+                ->with('m_cb', $m_cb)
+                ->with('model', $model)
+                ->with('a_pc', $a_pc)
+                ->with('pageTitle', 'Danh sách quá trình hưởng lương, phụ cấp');
+        } else
+            return view('errors.notlogin');
+    }
+
+    function create(Request $request){
+        if (Session::has('admin')) {
+            $inputs = $request->all();
+            $inputs['furl'] = '/nghiep_vu/qua_trinh/phu_cap/';
+            $model = hosocanbo::select('macanbo','macvcq','tencanbo')->where('macanbo',$inputs['macanbo'])->first();
+            $model->maphanloai = 'CONGTAC';
+            $a_pc = array_column(dmphucap_donvi::where('madv', session('admin')->madv)->where('phanloai','<','3')
+                ->get()->toarray(),'tenpc', 'mapc');
+
+            return view('manage.phucap.create')
+                ->with('inputs',$inputs)
                 ->with('model',$model)
-                ->with('m_pc',$m_pc)
-                ->with('a_pc',array_column($m_pc,'tenpc','mapc'))
-                ->with('pageTitle','Danh sách quá trình hưởng phụ cấp');
+                ->with('a_pc',$a_pc)
+                ->with('pageTitle', 'Thêm mới quá trình hưởng lương, phụ cấp');
+
         } else
             return view('errors.notlogin');
     }
 
     function store(Request $request){
+        if (Session::has('admin')) {
+            $inputs = $request->all();
+
+            return redirect('/nghiep_vu/qua_trinh/phu_cap/maso='.$inputs['macanbo']);
+        } else
+            return view('errors.notlogin');
+        dd($request);
         $result = array(
             'status' => 'fail',
             'message' => 'error',

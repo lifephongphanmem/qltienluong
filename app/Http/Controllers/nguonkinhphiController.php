@@ -81,7 +81,7 @@ class nguonkinhphiController extends Controller
                 ->wherein('mact',$a_plct)
                 ->get()->keyBy('macanbo')->toarray();
             $a_th = array_merge(array('stt','ngaysinh','tencanbo', 'tnndenngay', 'gioitinh', 'msngbac', 'bac',
-                'bhxh_dv', 'bhyt_dv', 'bhtn_dv', 'kpcd_dv', 'ngaybc', 'ngayvao'),$a_th);
+                'bhxh_dv', 'bhyt_dv', 'bhtn_dv', 'kpcd_dv', 'ngaybc', 'ngayvao', 'lvhd'),$a_th);
             $model = hosocanbo::select($a_th)->where('madv', session('admin')->madv)
                 ->where('theodoi','<', '9')
                 ->get();
@@ -124,6 +124,11 @@ class nguonkinhphiController extends Controller
                 $cb->kpcd_dv = floatval($cb->kpcd_dv) / 100;
                 $cb->bhtn_dv = floatval($cb->bhtn_dv) / 100;
 
+                $a_lv = explode(',', $cb->lvhd);
+                if (in_array($inputs['linhvuchoatdong'], $a_lv) || $cb->lvhd == null) {
+                    $cb->lvhd = $inputs['linhvuchoatdong'];
+                }
+
                 if (isset($cb->ngaysinh)) {
                     $dt_ns = date_create($cb->ngaysinh);
                     $cb->nam_ns =(string) date_format($dt_ns, 'Y') + ($cb->gioitinh == 'Nam'? $gen['tuoinam']:$gen['tuoinu']);
@@ -163,7 +168,7 @@ class nguonkinhphiController extends Controller
                 }
             }
 
-            $model = $model->wherein('mact',$a_plct);
+            $model = $model->wherein('mact',$a_plct)->where('lvhd', $inputs['linhvuchoatdong']);
             //lấy danh sách cán bộ chưa nâng lương từ tháng 01-06 => tự nâng lương
 
             $m_cb = $model->keyBy('macanbo')->toarray();
@@ -201,6 +206,7 @@ class nguonkinhphiController extends Controller
                 $m_cb_kn[$key]['bhtn_dv'] = 0;
                 $m_cb_kn[$key]['kpcd_dv'] = 0;
                 $m_cb_kn[$key]['masodv'] = $masodv;
+                $m_cb_kn[$key]['lvhd'] = $canbo['lvhd'];
                 $m_cb[$key.'_kn'] = $m_cb_kn[$key];
             }
 
@@ -420,7 +426,7 @@ class nguonkinhphiController extends Controller
             //lưu dữ liệu
             $a_col = array('bac', 'bhxh_dv', 'bhtn_dv', 'kpcd_dv', 'bhyt_dv', 'gioitinh', 'nam_nb', 'nam_ns', 'nam_tnn',
                 'thang_nb', 'thang_ns', 'thang_tnn', 'ngayden','ngaytu', 'ngaysinh', 'tnndenngay','tnntungay', 'pcctp',
-                'st_pcctp', 'nam_hh', 'thang_hh','ngaybc', 'ngayvao');
+                'st_pcctp', 'nam_hh', 'thang_hh','ngaybc', 'ngayvao', 'lvhd');
 
             $a_data_nl = unset_key($a_data_nl, $a_col);
             //dd($a_data_nl);
@@ -500,6 +506,8 @@ class nguonkinhphiController extends Controller
             $inputs['kpuudai'] = chkDbl($inputs['kpuudai']);
 
             $inputs['nhucau'] = chkDbl($inputs['nhucaukp']) + chkDbl($inputs['nhucaupc']);
+            $inputs['tongnhucau1'] = chkDbl($inputs['tongnhucau1']);
+            $inputs['tongnhucau2'] = chkDbl($inputs['tongnhucau2']);
 
             //dd($inputs);
             $model->update($inputs);

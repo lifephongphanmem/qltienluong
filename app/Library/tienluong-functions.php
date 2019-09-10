@@ -572,17 +572,31 @@ function getCoChu(){
     return array('8'=>'8','9'=>'9','10'=>'10','11'=>'11','12'=>'12');
 }
 
-function getPhanLoaiKiemNhiem(){
-    return array(
-        'CHUCVU' => 'Kiêm nhiệm chức vụ',
-        'KHONGCT' => 'Không chuyên trách',
-        'QUANSU' => 'Kiêm nhiệm quân sự',
-        'DBHDND' => 'Kiêm nhiệm đại biểu HĐND',
-        'CAPUY' => 'Kiêm nhiệm cấp ủy viên',
-        'CONGDONG'=> 'Kiêm nhiệm cộng đồng',
-        'MOTCUA'=> 'Kiêm nhiệm một cửa',
-        'TINHNGUYEN'=> 'Đội thanh niên tình nguyện',
-    );
+function getPhanLoaiKiemNhiem($danhmuc = false){
+    if($danhmuc){
+        return array(
+            'CONGTAC' =>'Chức vụ chính',
+            'CHUCVU' => 'Kiêm nhiệm chức vụ',
+            'KHONGCT' => 'Không chuyên trách',
+            'QUANSU' => 'Kiêm nhiệm quân sự',
+            'DBHDND' => 'Kiêm nhiệm đại biểu HĐND',
+            'CAPUY' => 'Kiêm nhiệm cấp ủy viên',
+            'CONGDONG'=> 'Kiêm nhiệm cộng đồng',
+            'MOTCUA'=> 'Kiêm nhiệm một cửa',
+            'TINHNGUYEN'=> 'Đội thanh niên tình nguyện',
+        );
+    }else{
+        return array(
+            'CHUCVU' => 'Kiêm nhiệm chức vụ',
+            'KHONGCT' => 'Không chuyên trách',
+            'QUANSU' => 'Kiêm nhiệm quân sự',
+            'DBHDND' => 'Kiêm nhiệm đại biểu HĐND',
+            'CAPUY' => 'Kiêm nhiệm cấp ủy viên',
+            'CONGDONG'=> 'Kiêm nhiệm cộng đồng',
+            'MOTCUA'=> 'Kiêm nhiệm một cửa',
+            'TINHNGUYEN'=> 'Đội thanh niên tình nguyện',
+        );
+    }
 }
 
 function getPhanLoaiNhanVien(){

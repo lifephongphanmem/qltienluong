@@ -286,7 +286,6 @@ Route::group(['prefix'=>'nghiep_vu'],function(){
     });
 
     Route::group(['prefix'=>'quan_ly'],function(){
-
         Route::group(['prefix'=>'du_toan'],function(){
             Route::get('','dutoanluongController@show');
             Route::get('danh_sach','dutoanluongController@index');
@@ -423,7 +422,12 @@ Route::group(['prefix'=>'nghiep_vu'],function(){
             Route::get('del/{id}','hosoluongController@destroy');
         });
         Route::group(['prefix'=>'phu_cap'],function(){
-            Route::get('/maso={macanbo}','hosophucapController@index');
+            Route::get('danh_sach','hosophucapController@index');
+            Route::get('create','hosophucapController@create');
+            Route::post('store','hosophucapController@store');
+
+            Route::get('edit','hosophucapController@create');
+            Route::post('update','hosophucapController@update');
             Route::get('del/{id}','hosophucapController@destroy');
         });
     });
@@ -1094,11 +1098,13 @@ Route::group(['prefix'=>'ajax'],function(){
         Route::get('update','hosoluongController@update');
         Route::get('get','hosoluongController@getinfo');
     });
+    /*
     Route::group(['prefix'=>'phu_cap'],function(){
         Route::get('add','hosophucapController@store');
         Route::get('update','hosophucapController@update');
         Route::get('get','hosophucapController@getinfo');
     });
+    */
     Route::group(['prefix'=>'binh_bau'],function(){
         Route::get('add','hosobinhbauController@store');
         Route::get('update','hosobinhbauController@update');
