@@ -91,19 +91,19 @@
     <tr style="font-weight: bold;">
         <td>B</td>
         <td>TỔNG NHU CẦU NĂM 2019</td>
-        <td class="money">{{dinhdangso($a_TC['BII'] + $a_TC['BIII'])}}</td>
+        <td class="money">{{dinhdangso($a_TC['BII'] + $a_TC['BIII'] + $a_TC['BII1']+ $a_TC['BII2'])}}</td>
     </tr>
 
     <tr style="font-weight: bold;">
         <td>I</td>
         <td>Tổng nhu cầu kinh phí tăng thêm để thực hiện cải cách tiền lương theo Nghị định số
             47/2017/NĐ-CP và Nghị định số 76/2017/NĐ-CP tính đủ 12 tháng (4)</td>
-        <td class="money"></td>
+        <td class="money">{{dinhdangso($a_TC['BII2'])}}</td>
     </tr>
     <tr style="font-weight: bold;">
         <td>II</td>
         <td>Tổng nhu cầu kinh phí tăng thêm để thực hiện cải cách tiền lương theo nghị định số 72/2018/NĐ-CP và Nghị định số 88/2018/NĐ-CP</td>
-        <td class="money"></td>
+        <td class="money">{{dinhdangso($a_TC['BII1'])}}</td>
     </tr>
     <tr style="font-weight: bold;">
         <td>III</td>
@@ -132,7 +132,7 @@
     <tr style="font-weight: bold;">
         <td>C</td>
         <td>CHÊNH LỆCH NHU CẦU VÀ NGUỒN NĂM 2019</td>
-        <td class="money">{{dinhdangso($a_TC['A'] -$a_TC['BII'] - $a_TC['BIII'])}}</td>
+        <td class="money">{{dinhdangso($a_TC['A'] - $a_TC['BII']- $a_TC['BII1']- $a_TC['BII2'] - $a_TC['BIII'])}}</td>
     </tr>
     <tr>
         <td>1</td>

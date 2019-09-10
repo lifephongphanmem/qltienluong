@@ -34,10 +34,20 @@
                     <div class="caption">
                         DANH SÁCH QUÁ TRÌNH HƯỞNG PHỤ CẤP CỦA CÁN BỘ
                     </div>
-                    @include('includes.crumbs.bt_add')
+                    <div class="actions">
+                        <button type="button" class="btn btn-default btn-xs" onclick="add()"><i class="fa fa-plus"></i>&nbsp;Thêm mới</button>
+                    </div>
                 </div>
                 <div class="portlet-body form-horizontal">
-                    @include('includes.crumbs.cb_canbo')
+                    <div class="row">
+                        <div class="form-group">
+                            <label class="control-label col-md-3">Họ tên cán bộ </label>
+                            <div class="col-md-5">
+                                {!!Form::select('cbmacb',$a_cb,$inputs['canbo'],array('id'=>'cbmacb','class'=>'form-control select2me'))!!}
+                            </div>
+                        </div>
+                    </div>
+
                     <table id="sample_3" class="table table-hover table-striped table-bordered" style="min-height: 230px">
                         <thead>
                             <tr>
@@ -51,18 +61,21 @@
                         </thead>
 
                         <tbody>
-                        @if(isset($model))
                             @foreach($model as $key=>$value)
                                 <tr>
                                     <td class="text-center">{{$key+1}}</td>
                                     <td>{{getDayVn($value->ngaytu)}}</td>
                                     <td>{{getDayVn($value->ngayden)}}</td>
                                     <td>{{isset($a_pc[$value->mapc])?$a_pc[$value->mapc]:'' }}</td>
-                                    <td>{{$value->hesopc}}</td>
-                                    @include('includes.crumbs.bt_editdel')
+                                    <td>{{$value->heso}}</td>
+                                    <td>
+                                        <button type="button" onclick="edit('{{$value->id}}')" class="btn btn-info btn-xs mbs">
+                                            <i class="fa fa-edit"></i>&nbsp; Chỉnh sửa</button>
+                                        <button type="button" onclick="cfDel('{{$furl.'del/'.$value->id}}')" class="btn btn-danger btn-xs mbs" data-target="#delete-modal-confirm" data-toggle="modal">
+                                            <i class="fa fa-trash-o"></i>&nbsp; Xóa</button>
+                                    </td>
                                 </tr>
                             @endforeach
-                        @endif
                         </tbody>
                     </table>
                 </div>
@@ -71,7 +84,7 @@
     </div>
 
     <!--Modal thông tin chi tiết -->
-    <div id="chitiet-modal" tabindex="-1" role="dialog" aria-hidden="true" class="modal fade">
+    <!--div id="chitiet-modal" tabindex="-1" role="dialog" aria-hidden="true" class="modal fade">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header modal-header-primary">
@@ -80,26 +93,31 @@
                 </div>
                 <div class="modal-body">
                     <div class="form-horizontal">
-                        @include('includes.crumbs.tudenngay')
+                        <div class="form-group">
+                            <label class="col-md-4 control-label"> Từ ngày<span class="require">*</span></label>
+                            <div class="col-md-8">
+                                <input type="date" name="ngaytu" id="ngaytu" class="form-control" />
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="col-md-4 control-label"> Đến ngày</label>
+                            <div class="col-md-8">
+                                <input type="date" name="ngayden" id="ngayden" class="form-control" />
+                            </div>
+                        </div>
 
                         <div class="form-group">
                             <label class="col-md-4 control-label"> Phụ cấp</label>
                             <div class="col-md-8">
-                                <select name="mapc" id="mapc" class="form-control">
-                                    <option value="">--Chọn phụ cấp--</option>
-                                    @if(isset($m_pc))
-                                        @foreach($m_pc as $pc)
-                                            <option value="{{$pc['mapc']}}">{{$pc['tenpc']}}</option>
-                                        @endforeach
-                                    @endif
-                                </select>
+                                {!!Form::select('mapc',$a_pc,null,['id'=>'mapc','class'=>'form-control select2me'])!!}
                             </div>
                         </div>
 
                         <div class="form-group">
                             <label class="col-md-4 control-label"> Hệ số phụ cấp</label>
                             <div class="col-md-8">
-                                {!!Form::text('hesopc', null, array('id' => 'hesopc','class' => 'form-control','data-mask'=>'fdecimal'))!!}
+                                {!!Form::text('heso1', null, array('id' => 'heso1','class' => 'form-control','data-mask'=>'fdecimal'))!!}
                             </div>
                         </div>
 
@@ -112,32 +130,65 @@
                 </div>
             </div>
         </div>
+    </div-->
+
+    {!! Form::open(['url'=>$inputs['furl'].'store','method'=>'post' , 'files'=>true, 'id' => 'create_bangluong']) !!}
+    <div id="chitiet-modal" tabindex="-1" role="dialog" aria-hidden="true" class="modal fade">
+        <div class="modal-dialog modal-content">
+            <div class="modal-header modal-header-primary">
+                <button type="button" data-dismiss="modal" aria-hidden="true" class="close">&times;</button>
+                <h4 id="modal-header-primary-label" class="modal-title">Thông tin quá trình hưởng lương, phụ cấp của cán bộ</h4>
+            </div>
+            <div class="modal-body">
+                <div class="form-horizontal">
+                    <table id="sample_4" class="table table-hover table-striped table-bordered">
+                        <thead>
+                        <tr>
+                            <th class="text-center" style="width: 5%">STT</th>
+                            <th class="text-center">Họ tên cán bộ</th>
+                            <th class="text-center">Chức vụ</th>
+                            <th class="text-center">Thao tác</th>
+                        </tr>
+                        </thead>
+                        <?php $i=1;?>
+                        <tbody>
+                            @foreach($m_cb as $key=>$value)
+                                <tr>
+                                    <td class="text-center">{{$i++}}</td>
+                                    <td>{{$value->tencanbo}}</td>
+                                    <td>{{isset($a_cv[$value->macvcq])? $a_cv[$value->macvcq] : ''}}</td>
+                                    <td class="text-center">
+                                        <a href="{{url($inputs['furl'].'create?macanbo='.$value->macanbo)}}" class="btn btn-default btn-xs mbs">
+                                            <i class="fa fa-edit"></i>&nbsp;Chọn</a>
+                                    </td>
+                                </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="modal-footer"></div>
+        </div>
     </div>
+    {!! Form::close() !!}
 
     <script>
-        function add(){            
-            var macb=$('#cbmacb').val();
-            if(macb=='all'){
-                alert('Bạn cần chọn cán bộ để nhập thông tin.');
-                $('#cbmacb').focus();
-            }else{
-                $('#ngaytu').val('');
-                $('#ngayden').val('');
-                $('#mapc').val('');
-                $('#hesopc').val('');
-                $('#id_ct').val(0);
-                $('#chitiet-modal').modal('show');
-            }
+        function add(){
+            $('#id').val('ADD');
+            $('#chitiet-modal').modal('show');
         }
 
-        function getInfo() {
-            window.location.href = '{{$furl}}' + 'maso=' + $('#cbmacb').val();
-        }
+        $(function(){
+            $("#cbmacb").change(function(){
+                window.location.href = '{{$inputs['furl']}}' + 'danh_sach?canbo=' + $('#cbmacb').val();
+            });
+        });
 
         function edit(id){
             var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
             $.ajax({
-                url: '{{$furl_ajax}}' + 'get',
+                url: '{{$inputs['furl_ajax']}}' + 'get',
                 type: 'GET',
                 data: {
                     _token: CSRF_TOKEN,
@@ -189,7 +240,7 @@
                 var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
                 if(id==0){//Thêm mới
                     $.ajax({
-                        url: '{{$furl_ajax}}' + 'add',
+                        url: '{{$inputs['furl_ajax']}}' + 'add',
                         type: 'GET',
                         data: {
                             _token: CSRF_TOKEN,
@@ -211,7 +262,7 @@
                     });
                 }else{//Cập nhật
                     $.ajax({
-                        url: '{{$furl_ajax}}' + 'update',
+                        url: '{{$inputs['furl_ajax']}}' + 'update',
                         type: 'GET',
                         data: {
                             _token: CSRF_TOKEN,

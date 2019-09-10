@@ -78,6 +78,22 @@
                             <div class="portlet-body" style="display: block;">
                                 <div class="form-body">
                                     <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label class="control-label">Tổng nhu cầu kinh phí năm {{$nam-2}}</label>
+                                                {!!Form::text('tongnhucau2', null, array('id' => 'tongnhucau2','class' => 'form-control nhucaukp text-right', 'data-mask'=>'fdecimal'))!!}
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label class="control-label">Tổng nhu cầu kinh phí năm {{$nam-1}}</label>
+                                                {!!Form::text('tongnhucau1', null, array('id' => 'tongnhucau1','class' => 'form-control nhucaukp text-right', 'data-mask'=>'fdecimal'))!!}
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
                                         <div class="col-md-3">
                                             <div class="form-group">
                                                 <label class="control-label">Lương, phụ cấp</label>
