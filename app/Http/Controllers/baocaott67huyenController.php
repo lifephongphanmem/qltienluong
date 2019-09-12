@@ -3581,10 +3581,14 @@ class baocaott67huyenController extends Controller
             $a_sunghiep = dmkhoipb::all();
             $a_sn = array('GD','DT','YTE','QLNN');
             $a_sunghiep = array_column($a_sunghiep->toarray(), 'makhoipb');
+
             if(isset($inputs['inchitiet'])) {
                 $gddt = 0;
                 $daotao = 0;
                 $giaoduc = 0;
+                $qlnn = 0;
+                $yte = 0;
+                $snkhac = 0;
                 $i = 0;
                 for ($j = 0; $j < count($group); $j++) {
                     $i++;
@@ -3596,6 +3600,10 @@ class baocaott67huyenController extends Controller
                         $daotao = $i;
                     if ($group[$j]['val'] == 'QLNN')
                         $qlnn = $i;
+                    if ($group[$j]['val'] == 'YTE')
+                        $yte = $i;
+                    if ($group[$j]['val'] == 'KHAC')
+                        $snkhac = $i;
                     $data[$i]['tt'] = $group[$j]['tt'];
                     $data[$i]['noidung'] = $group[$j]['noidung'];
                     $data[$i]['nhucau'] = 0;
@@ -3711,13 +3719,13 @@ class baocaott67huyenController extends Controller
             //dd($data);
             if(isset($inputs['inchitiet'])) {
                 $a_TC = array(
-                    'nhucau' => ($data[1]['nhucau'] + $data[4]['nhucau'] + $data[5]['nhucau'] + $data[6]['nhucau']),
-                    'nguonkp' => ($data[1]['nguonkp'] + $data[4]['nguonkp'] + $data[5]['nguonkp'] + $data[6]['nguonkp']),
-                    'tietkiem' => ($data[1]['tietkiem'] + $data[4]['tietkiem'] + $data[5]['tietkiem'] + $data[6]['tietkiem']),
-                    'hocphi' => ($data[1]['hocphi'] + $data[4]['hocphi'] + $data[5]['hocphi'] + $data[6]['hocphi']),
-                    'vienphi' => ($data[1]['vienphi'] + $data[4]['vienphi'] + $data[5]['vienphi'] + $data[6]['vienphi']),
-                    'khac' => ($data[1]['khac'] + $data[4]['khac'] + $data[5]['khac'] + $data[6]['khac']),
-                    'nguonthu' => ($data[1]['nguonthu'] + $data[4]['nguonthu'] + $data[5]['nguonthu'] + $data[6]['nguonthu'])
+                    'nhucau' => ($data[$gddt]['nhucau'] + $data[$yte]['nhucau'] + $data[$snkhac]['nhucau'] + $data[$qlnn]['nhucau']),
+                    'nguonkp' => ($data[$gddt]['nguonkp'] + $data[$yte]['nguonkp'] + $data[$snkhac]['nguonkp'] + $data[$qlnn]['nguonkp']),
+                    'tietkiem' => ($data[$gddt]['tietkiem'] + $data[$yte]['tietkiem'] + $data[$snkhac]['tietkiem'] + $data[$qlnn]['tietkiem']),
+                    'hocphi' => ($data[$gddt]['hocphi'] + $data[$yte]['hocphi'] + $data[$snkhac]['hocphi'] + $data[$qlnn]['hocphi']),
+                    'vienphi' => ($data[$gddt]['vienphi'] + $data[$yte]['vienphi'] + $data[$snkhac]['vienphi'] + $data[$qlnn]['vienphi']),
+                    'khac' => 0,
+                    'nguonthu' => ($data[$gddt]['nguonthu'] + $data[$yte]['nguonthu'] + $data[$snkhac]['nguonthu'] + $data[$qlnn]['nguonthu'])
                 );
             }else{
                 $a_TC = array(
