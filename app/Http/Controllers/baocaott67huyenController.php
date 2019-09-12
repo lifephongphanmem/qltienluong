@@ -3708,7 +3708,7 @@ class baocaott67huyenController extends Controller
                 $data[4]['khac'] = 0;
                 $data[4]['nguonthu'] = $model->sum('nguonthu') - $data[0]['nguonthu'] - $data[5]['nguonthu'] - $data[3]['nguonthu'];
             }
-            dd($data);
+            //dd($data);
             if(isset($inputs['inchitiet'])) {
                 $a_TC = array(
                     'nhucau' => ($data[1]['nhucau'] + $data[4]['nhucau'] + $data[5]['nhucau'] + $data[6]['nhucau']),
