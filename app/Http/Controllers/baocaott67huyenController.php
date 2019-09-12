@@ -3708,15 +3708,28 @@ class baocaott67huyenController extends Controller
                 $data[4]['khac'] = 0;
                 $data[4]['nguonthu'] = $model->sum('nguonthu') - $data[0]['nguonthu'] - $data[5]['nguonthu'] - $data[3]['nguonthu'];
             }
-            $a_TC = array(
-                'nhucau'=>($data[0]['nhucau'] + $data[3]['nhucau'] +$data[4]['nhucau'] + $data[5]['nhucau']),
-                'nguonkp'=>($data[0]['nguonkp'] + $data[3]['nguonkp'] +$data[4]['nguonkp'] + $data[5]['nguonkp']),
-                'tietkiem'=>($data[0]['tietkiem'] + $data[3]['tietkiem'] +$data[4]['tietkiem'] + $data[5]['tietkiem']),
-                'hocphi'=>($data[0]['hocphi'] + $data[3]['hocphi'] +$data[4]['hocphi'] + $data[5]['hocphi']),
-                'vienphi'=>($data[0]['vienphi'] + $data[3]['vienphi'] +$data[4]['vienphi'] + $data[5]['vienphi']),
-                'khac'=>($data[0]['khac'] + $data[3]['khac'] +$data[4]['khac'] + $data[5]['khac']),
-                'nguonthu'=>($data[0]['nguonthu'] + $data[3]['nguonthu'] +$data[4]['nguonthu'] + $data[5]['nguonthu'])
-            );
+            dd($data);
+            if(isset($inputs['inchitiet'])) {
+                $a_TC = array(
+                    'nhucau' => ($data[1]['nhucau'] + $data[4]['nhucau'] + $data[5]['nhucau'] + $data[6]['nhucau']),
+                    'nguonkp' => ($data[1]['nguonkp'] + $data[4]['nguonkp'] + $data[5]['nguonkp'] + $data[6]['nguonkp']),
+                    'tietkiem' => ($data[1]['tietkiem'] + $data[4]['tietkiem'] + $data[5]['tietkiem'] + $data[6]['tietkiem']),
+                    'hocphi' => ($data[1]['hocphi'] + $data[4]['hocphi'] + $data[5]['hocphi'] + $data[6]['hocphi']),
+                    'vienphi' => ($data[1]['vienphi'] + $data[4]['vienphi'] + $data[5]['vienphi'] + $data[6]['vienphi']),
+                    'khac' => ($data[1]['khac'] + $data[4]['khac'] + $data[5]['khac'] + $data[6]['khac']),
+                    'nguonthu' => ($data[1]['nguonthu'] + $data[4]['nguonthu'] + $data[5]['nguonthu'] + $data[6]['nguonthu'])
+                );
+            }else{
+                $a_TC = array(
+                    'nhucau' => ($data[0]['nhucau'] + $data[3]['nhucau'] + $data[4]['nhucau'] + $data[5]['nhucau']),
+                    'nguonkp' => ($data[0]['nguonkp'] + $data[3]['nguonkp'] + $data[4]['nguonkp'] + $data[5]['nguonkp']),
+                    'tietkiem' => ($data[0]['tietkiem'] + $data[3]['tietkiem'] + $data[4]['tietkiem'] + $data[5]['tietkiem']),
+                    'hocphi' => ($data[0]['hocphi'] + $data[3]['hocphi'] + $data[4]['hocphi'] + $data[5]['hocphi']),
+                    'vienphi' => ($data[0]['vienphi'] + $data[3]['vienphi'] + $data[4]['vienphi'] + $data[5]['vienphi']),
+                    'khac' => ($data[0]['khac'] + $data[3]['khac'] + $data[4]['khac'] + $data[5]['khac']),
+                    'nguonthu' => ($data[0]['nguonthu'] + $data[3]['nguonthu'] + $data[4]['nguonthu'] + $data[5]['nguonthu'])
+                );
+            }
             if (isset($inputs['excel'])) {
                 Excel::create('mau4b_tt46', function ($excel) use ($model, $data, $m_dv, $inputs,$a_TC) {
                     $excel->sheet('New sheet', function ($sheet) use ($model, $data, $m_dv, $inputs,$a_TC) {
