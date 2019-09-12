@@ -1197,7 +1197,7 @@ class baocaott67huyenController extends Controller
                                 $ar_I[$i][$pc] = $thongtin->sum($pc_st);
                                 $a_It[$pc] += $ar_I[$i][$pc];
                                 $tongpc += $thongtin->sum($pc_st);
-                                $tonghs = $thongtin->sum($pc);;
+                                $tonghs += $thongtin->sum($pc);;
                             }
 
                             $ar_I[$i]['tongpc'] = $tongpc - $ar_I[$i]['heso'];
@@ -3356,8 +3356,8 @@ class baocaott67huyenController extends Controller
 
             $a_TC = array(
                 'A' => ($a_A[1]['sotien'] + $a_A[5]['sotien'] + $a_A[6]['sotien'] + $a_A[15]['sotien']+ $a_A[20]['sotien']+ $a_A[21]['sotien']),
-                'BI' => $model_nc2017->sum('nhucau'),
-                'BI1' => $model_nc2018->sum('nhucau'),
+                'BI' => $model->sum('tongnhucau1'),
+                'BI1' => $model->sum('tongnhucau2'),
                 'BII' => (array_sum(array_column($a_BII, 'sotien')) - $a_BII[1]['sotien']),
                 'BIII' => (array_sum(array_column($a_BIII, 'sotien')))
             );
