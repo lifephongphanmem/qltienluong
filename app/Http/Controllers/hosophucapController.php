@@ -74,65 +74,62 @@ class hosophucapController extends Controller
     function store(Request $request){
         if (Session::has('admin')) {
             $inputs = $request->all();
+            if($inputs['ngaytu']>=$inputs['ngayden']){
+                return view('errors.data_error')
+                    ->with('message','Ngày tháng không hợp lệ.')
+                    ->with('furl','/nghiep_vu/qua_trinh/phu_cap/danh_sach?canbo='.$inputs['macanbo']);
+            }
+            //kiêm tra xem phụ cấp đang được hưởng ko
+            $m_chk = hosocanbo::where('macanbo',$inputs['macanbo'])->where('mapc',$inputs['mapc'])->get();
+            if(count($m_chk) > 0){
 
-            return redirect('/nghiep_vu/qua_trinh/phu_cap/maso='.$inputs['macanbo']);
+            }
+            $model = new hosophucap();
+            $model->maso = session('admin')->madv . '_' . getdate()[0];;
+            $model->maphanloai = 'CONGTAC';
+            $model->macanbo = $inputs['macanbo'];
+            $model->macvcq = $inputs['macvcq'];
+            $model->ngaytu = getDateTime($inputs['ngaytu']);
+            $model->ngayden = getDateTime($inputs['ngayden']);
+            $model->mapc = $inputs['mapc'];
+            $model->heso = chkDbl($inputs['heso']);
+            $model->save();
+
+            return redirect('/nghiep_vu/qua_trinh/phu_cap/danh_sach?canbo='.$inputs['macanbo']);
         } else
             return view('errors.notlogin');
-        dd($request);
-        $result = array(
-            'status' => 'fail',
-            'message' => 'error',
-        );
-        if(!Session::has('admin')) {
-            $result = array(
-                'status' => 'fail',
-                'message' => 'permission denied',
-            );
-            die(json_encode($result));
-        }
+    }
 
-        $inputs = $request->all();
-        $model = new hosophucap();
+    function edit(Request $request){
+        if (Session::has('admin')) {
+            $inputs = $request->all();
+            $model = hosophucap::where('maso',$inputs['maso'])->first();
+            $a_pc = array_column(dmphucap_donvi::where('madv', session('admin')->madv)->where('phanloai','<','3')
+                ->get()->toarray(),'tenpc', 'mapc');
+            $inputs['furl'] = '/nghiep_vu/qua_trinh/phu_cap/';
+            //dd($model);
+            return view('manage.phucap.edit')
+                ->with('inputs',$inputs)
+                ->with('model',$model)
+                ->with('a_pc',$a_pc)
+                ->with('pageTitle', 'Thông tin quá trình hưởng lương, phụ cấp');
 
-        $model->macanbo = $inputs['macanbo'];
-        $model->ngaytu = getDateTime($inputs['ngaytu']);
-        $model->ngayden = getDateTime($inputs['ngayden']);
-        $model->mapc = $inputs['mapc'];
-        $model->hesopc = $inputs['hesopc'];
-
-        $model->save();
-
-        $result['message'] = "Thêm mới thành công.";
-        $result['status'] = 'success';
-        die(json_encode($result));
+        } else
+            return view('errors.notlogin');
     }
 
     function update(Request $request){
-        $result = array(
-            'status' => 'fail',
-            'message' => 'error',
-        );
-        if(!Session::has('admin')) {
-            $result = array(
-                'status' => 'fail',
-                'message' => 'permission denied',
-            );
-            die(json_encode($result));
-        }
-
-        $inputs = $request->all();
-        $model = hosophucap::find($inputs['id']);
-
-        $model->ngaytu  = getDateTime($inputs['ngaytu']);
-        $model->ngayden  = getDateTime($inputs['ngayden']);
-        $model->mapc  = $inputs['mapc'];
-        $model->hesopc  = $inputs['hesopc'];
-
-        $model->save();
-
-        $result['message'] = "Cập nhật thành công.";
-        $result['status'] = 'success';
-        die(json_encode($result));
+        if (Session::has('admin')) {
+            $inputs = $request->all();
+            $model = hosophucap::where('maso',$inputs['maso'])->first();
+            $model->ngaytu = getDateTime($inputs['ngaytu']);
+            $model->ngayden = getDateTime($inputs['ngayden']);
+            $model->mapc = $inputs['mapc'];
+            $model->heso = chkDbl($inputs['heso']);
+            $model->save();
+            return redirect('/nghiep_vu/qua_trinh/phu_cap/danh_sach?canbo='.$inputs['macanbo']);
+        } else
+            return view('errors.notlogin');
     }
 
     function destroy($id){

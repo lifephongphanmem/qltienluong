@@ -56,7 +56,7 @@
                                 <th class="text-center">Đến ngày</th>
                                 <th class="text-center">Phụ cấp</th>
                                 <th class="text-center">Hệ số</th>
-                                <th class="text-center">Thao tác</th>
+                                <th class="text-center" style="width: 15%">Thao tác</th>
                             </tr>
                         </thead>
 
@@ -64,14 +64,14 @@
                             @foreach($model as $key=>$value)
                                 <tr>
                                     <td class="text-center">{{$key+1}}</td>
-                                    <td>{{getDayVn($value->ngaytu)}}</td>
-                                    <td>{{getDayVn($value->ngayden)}}</td>
+                                    <td class="text-center">{{getDayVn($value->ngaytu)}}</td>
+                                    <td class="text-center">{{getDayVn($value->ngayden)}}</td>
                                     <td>{{isset($a_pc[$value->mapc])?$a_pc[$value->mapc]:'' }}</td>
-                                    <td>{{$value->heso}}</td>
+                                    <td class="text-center">{{$value->heso}}</td>
                                     <td>
-                                        <button type="button" onclick="edit('{{$value->id}}')" class="btn btn-info btn-xs mbs">
-                                            <i class="fa fa-edit"></i>&nbsp; Chỉnh sửa</button>
-                                        <button type="button" onclick="cfDel('{{$furl.'del/'.$value->id}}')" class="btn btn-danger btn-xs mbs" data-target="#delete-modal-confirm" data-toggle="modal">
+                                        <a href="{{url($inputs['furl'].'edit?maso='.$value->maso)}}" class="btn btn-default btn-xs mbs">
+                                            <i class="fa fa-edit"></i>&nbsp;Sửa</a>
+                                        <button type="button" onclick="cfDel('{{$inputs['furl'].'del/'.$value->id}}')" class="btn btn-danger btn-xs mbs" data-target="#delete-modal-confirm" data-toggle="modal">
                                             <i class="fa fa-trash-o"></i>&nbsp; Xóa</button>
                                     </td>
                                 </tr>
@@ -173,6 +173,24 @@
     </div>
     {!! Form::close() !!}
 
+    <div id="delete-modal-confirm" tabindex="-1" role="dialog" aria-hidden="true" class="modal fade">
+        {!! Form::open(['url'=>'','method'=>'post' , 'files'=>true, 'id' => 'frmDelete']) !!}
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header modal-header-primary">
+                        <button type="button" data-dismiss="modal" aria-hidden="true"
+                                class="close">&times;</button>
+                        <h4 id="modal-header-primary-label" class="modal-title">Đồng ý xoá?</h4>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" data-dismiss="modal" class="btn btn-default">Hủy thao tác</button>
+                        <button type="submit" class="btn btn-primary">Đồng ý</button>
+                    </div>
+                </div>
+            </div>
+        {!! Form::close() !!}
+    </div>
+
     <script>
         function add(){
             $('#id').val('ADD');
@@ -185,111 +203,10 @@
             });
         });
 
-        function edit(id){
-            var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
-            $.ajax({
-                url: '{{$inputs['furl_ajax']}}' + 'get',
-                type: 'GET',
-                data: {
-                    _token: CSRF_TOKEN,
-                    id: id
-                },
-                dataType: 'JSON',
-                success: function (data) {
-                    $('#ngaytu').val(data.ngaytu);
-                    $('#ngayden').val(data.ngayden);
-                    $('#mapc').val(data.mapc);
-                    $('#hesopc').val(data.hesopc);
-                },
-                error: function(message){
-                    alert(message);
-                }
-            });
-
-            $('#id_ct').val(id);
-            $('#chitiet-modal').modal('show');
-        }
-
-        function getHS() {
-            var kq = $('#mapc option:selected').attr('data-number');
-            $('#hesopc').val(kq);
-        }
-
-        function confirm(){
-            var valid=true;
-            var message='';
-
-            var macanbo = $('#cbmacb').val();
-
-            var ngaytu=$('#ngaytu').val();
-            var ngayden=$('#ngayden').val();
-            var mapc=$('#mapc').val();
-            var hesopc=$('#hesopc').val();
-
-            var id=$('#id_ct').val();
-
-            if(ngaytu==''){
-                valid=false;
-                message +='Ngày thay đổi không được bỏ trống \n';
-            }
-            if(mapc==''){
-                valid=false;
-                message +='Tên phụ cấp không được bỏ trống \n';
-            }
-            if(valid){
-                var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
-                if(id==0){//Thêm mới
-                    $.ajax({
-                        url: '{{$inputs['furl_ajax']}}' + 'add',
-                        type: 'GET',
-                        data: {
-                            _token: CSRF_TOKEN,
-                            macanbo: macanbo,
-                            ngaytu: ngaytu,
-                            ngayden: ngayden,
-                            mapc: mapc,
-                            hesopc: hesopc
-                        },
-                        dataType: 'JSON',
-                        success: function (data) {
-                            if (data.status == 'success') {
-                                location.reload();
-                            }
-                        },
-                        error: function(message){
-                            alert(message);
-                        }
-                    });
-                }else{//Cập nhật
-                    $.ajax({
-                        url: '{{$inputs['furl_ajax']}}' + 'update',
-                        type: 'GET',
-                        data: {
-                            _token: CSRF_TOKEN,
-                            ngaytu: ngaytu,
-                            ngayden: ngayden,
-                            mapc: mapc,
-                            hesopc: hesopc,
-                            id: id
-                        },
-                        dataType: 'JSON',
-                        success: function (data) {
-                            if (data.status == 'success') {
-                                location.reload();
-                            }
-                        },
-                        error: function(message){
-                            alert(message);
-                        }
-                    });
-                }
-                $('#chitiet-modal').modal('hide');
-            }else{
-                alert(message);
-            }
-            return valid;
+        function cfDel(url){
+            $('#frmDelete').attr('action', url);
         }
     </script>
 
-    @include('includes.modal.delete')
+
 @stop

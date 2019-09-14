@@ -65,7 +65,7 @@
                 </div>
 
                 <div class="portlet-body">
-                    <table id="sample_7" class="table table-hover table-striped table-bordered">
+                    <table class="table table-hover table-striped table-bordered">
                         <thead>
                         <tr>
                             <th width="5%">STT</th>
@@ -110,7 +110,7 @@
                 </div>
 
                 <div class="portlet-body">
-                    <table id="sample_8" class="table table-hover table-striped table-bordered">
+                    <table class="table table-hover table-striped table-bordered">
                         <thead>
                         <tr>
                             <th width="5%">STT</th>
@@ -223,6 +223,7 @@
             </div>
         </div>
     </div>
+
     <div class="row">
         <div class="col-sm-6">
             <!-- BEGIN PORTLET-->
@@ -248,7 +249,6 @@
                         </tr>
                         </thead>
                         <tbody>
-                        @if(isset($m_nghe))
                             @foreach($m_nghe as $key=>$value)
                                 <tr>
                                     <td class="text-center">{{$i++}}</td>
@@ -257,7 +257,6 @@
                                     <td>{{getDayVn($value->tnndenngay)}}</td>
                                 </tr>
                             @endforeach
-                        @endif
                         </tbody>
                     </table>
                 </div>
@@ -289,7 +288,6 @@
                         </tr>
                         </thead>
                         <tbody>
-                        @if(isset($m_nangluong))
                             @foreach($m_nangluong as $key=>$value)
                                 <tr>
                                     <td class="text-center">{{$i++}}</td>
@@ -298,7 +296,6 @@
                                     <td>{{getDayVn($value->ngayden)}}</td>
                                 </tr>
                             @endforeach
-                        @endif
                         </tbody>
                     </table>
                 </div>
@@ -330,15 +327,12 @@
                         </tr>
                         </thead>
                         <tbody>
-                        @if(isset($m_luanchuyen))
                             @foreach($m_luanchuyen as $key=>$value)
                                 <tr>
                                     <td class="text-center">{{$i++}}</td>
                                     <td>{{$value->tencanbo}}</td>
                                 </tr>
                             @endforeach
-
-                        @endif
                         </tbody>
                     </table>
                 </div>
@@ -369,7 +363,6 @@
                         </tr>
                         </thead>
                         <tbody>
-                        @if(isset($m_nghihuu))
                             @foreach($m_nghihuu as $key=>$value)
                                 <tr>
                                     <td class="text-center">{{$i++}}</td>
@@ -377,8 +370,6 @@
                                     <td>{{getDayVn($value->ngaynghi)}}</td>
                                 </tr>
                             @endforeach
-
-                        @endif
                         </tbody>
                     </table>
                 </div>
@@ -387,3 +378,4 @@
         </div>
     </div>
 @stop
+
