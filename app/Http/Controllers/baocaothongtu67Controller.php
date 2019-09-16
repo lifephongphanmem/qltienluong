@@ -3281,6 +3281,7 @@ class baocaothongtu67Controller extends Controller
         if (Session::has('admin')) {
             //if ((Session::has('admin') && session('admin')->username == 'khthstc') || (Session::has('admin') && session('admin')->username == 'khthso') ) {
             $inputs = $request->all();
+            $model_dvbc = dmdonvibaocao::all();
             $model_thongtu = dmthongtuquyetdinh::select('sohieu','namdt')->distinct()->get();
             $model_dv = dmdonvi::select('tendv', 'madv')
                 ->where('madvbc', 'like', $inputs['madv'] . '%')
@@ -3300,10 +3301,17 @@ class baocaothongtu67Controller extends Controller
             if (count($model) == 0) {
                 return view('errors.nodata');
             }
-
             $m_dv = dmdonvi::where('madv', session('admin')->madv)->first();
             $data = array();
             $group = array();
+            $tongcong = array();
+            $tongcong[0] = array('val' => 'GDDT', 'tt' => 'a', 'noidung' => 'Sự nghiệp giáo dục - đào tạo', 'nhucau' => 0, 'nguonkp' => 0, 'tietkiem' => 0, 'hocphi' => 0, 'vienphi' => 0,'khac' => 0, 'nguonthu' => 0);
+            $tongcong[1] = array('val' => 'GD', 'tt' => '-', 'noidung' => 'Giáo dục', 'nhucau' => 0, 'nguonkp' => 0, 'tietkiem' => 0, 'hocphi' => 0, 'vienphi' => 0,'khac' => 0, 'nguonthu' => 0);
+            $tongcong[2] = array('val' => 'DT', 'tt' => '-', 'noidung' => 'Đào tạo', 'nhucau' => 0, 'nguonkp' => 0, 'tietkiem' => 0, 'hocphi' => 0, 'vienphi' => 0,'khac' => 0, 'nguonthu' => 0);
+            $tongcong[3] = array('val' => 'YTE', 'tt' => 'b', 'noidung' => 'Sự nghiệp y tế', 'nhucau' => 0, 'nguonkp' => 0, 'tietkiem' => 0, 'hocphi' => 0, 'vienphi' => 0,'khac' => 0, 'nguonthu' => 0);
+            $tongcong[4] = array('val' => 'KHAC', 'tt' => 'c', 'noidung' => 'Sự nghiệp khác', 'nhucau' => 0, 'nguonkp' => 0, 'tietkiem' => 0, 'hocphi' => 0, 'vienphi' => 0,'khac' => 0, 'nguonthu' => 0);
+            $tongcong[5] = array('val' => 'QLNN', 'tt' => 'd', 'noidung' => ' Quản lý nhà nước, Đảng, đoàn thể', 'nhucau' => 0, 'nguonkp' => 0, 'tietkiem' => 0, 'hocphi' => 0, 'vienphi' => 0,'khac' => 0, 'nguonthu' => 0);
+            $tongcong[6] = array('val' => 'KVXP', 'tt' => '-', 'noidung' => 'Trong đó: Cán bộ, công chức cấp xã', 'nhucau' => 0, 'nguonkp' => 0, 'tietkiem' => 0, 'hocphi' => 0, 'vienphi' => 0,'khac' => 0, 'nguonthu' => 0);
             if (isset($inputs['inchitiet'])) {
                 $group[0] = array('val' => 'GDDT', 'tt' => 'a', 'noidung' => 'Sự nghiệp giáo dục - đào tạo', 'nhucau' => 0, 'nguonkp' => 0, 'tietkiem' => 0, 'hocphi' => 0, 'vienphi' => 0, 'nguonthu' => 0);
                 $group[1] = array('val' => 'GD', 'tt' => '-', 'noidung' => 'Giáo dục', 'nhucau' => 0, 'nguonkp' => 0, 'tietkiem' => 0, 'hocphi' => 0, 'vienphi' => 0, 'nguonthu' => 0);
@@ -3321,48 +3329,120 @@ class baocaothongtu67Controller extends Controller
                 $data[5] = array('val' => 'QLNN', 'tt' => 'd', 'noidung' => ' Quản lý nhà nước, Đảng, đoàn thể', 'nhucau' => 0, 'nguonkp' => 0, 'tietkiem' => 0, 'hocphi' => 0, 'vienphi' => 0, 'nguonthu' => 0);
                 $data[6] = array('val' => 'KVXP', 'tt' => '-', 'noidung' => 'Trong đó: Cán bộ, công chức cấp xã', 'nhucau' => 0, 'nguonkp' => 0, 'tietkiem' => 0, 'hocphi' => 0, 'vienphi' => 0, 'nguonthu' => 0);
             }
-            //Thiếu trường hợp 'Sự nghiệp khác' và GDDT
             $a_sunghiep = dmkhoipb::all();
             $a_sn = array('GD','DT','YTE','QLNN');
             $a_sunghiep = array_column($a_sunghiep->toarray(), 'makhoipb');
             $a_sn_cl = array_diff($a_sunghiep,$a_sn);
-            if (isset($inputs['inchitiet'])) {
-                $gddt = 0;
-                $daotao = 0;
-                $giaoduc = 0;
-                $i = 0;
-                for ($j = 0; $j < count($group); $j++) {
-                    $i++;
-                    if ($group[$j]['val'] == 'GDDT')
-                        $gddt = $i;
-                    if ($group[$j]['val'] == 'GD')
-                        $giaoduc = $i;
-                    if ($group[$j]['val'] == 'DT')
-                        $daotao = $i;
-                    $data[$i]['tt'] = $group[$j]['tt'];
-                    $data[$i]['noidung'] = $group[$j]['noidung'];
-                    $data[$i]['nhucau'] = 0;
-                    $data[$i]['nguonkp'] = 0;
-                    $data[$i]['tietkiem'] = 0;
-                    $data[$i]['hocphi'] = 0;
-                    $data[$i]['vienphi'] = 0;
-                    $data[$i]['khac'] = 0;
-                    $data[$i]['nguonthu'] = 0;
-                    $luugr = $i;
-                    if($group[$j]['val'] == 'KHAC'){
-                        foreach($a_sn_cl as $sn){
-                            $dulieu = $model->where('linhvuchoatdong', $sn);
-                            if (isset($dulieu) && count($dulieu) > 0) {
+            //Tổng cộng
+            for ($i = 0; $i < count($tongcong); $i++) {
+                $solieu = $model->where('linhvuchoatdong', $tongcong[$i]['val']);
+                $tongcong[$i]['nhucau'] = $solieu->sum('nhucau');
+                $tongcong[$i]['nguonkp'] = $solieu->sum('nguonkp');
+                $tongcong[$i]['tietkiem'] = $solieu->sum('tietkiem') ;
+                $tongcong[$i]['hocphi'] = $solieu->sum('hocphi');
+                $tongcong[$i]['vienphi'] = $solieu->sum('vienphi');
+                $tongcong[$i]['nguonthu'] = $solieu->sum('nguonthu');
+                $tongcong[$i]['khac'] = 0;
+            }
 
-                                $a_dv = a_unique(array_column($dulieu->toarray(),'madv'));
+            $tongcong[0]['nhucau'] = $tongcong[1]['nhucau'] + $tongcong[2]['nhucau'];
+            $tongcong[0]['nguonkp'] = $tongcong[1]['nguonkp'] + $tongcong[2]['nguonkp'];
+            $tongcong[0]['tietkiem'] = $tongcong[1]['tietkiem'] + $tongcong[2]['tietkiem'];
+            $tongcong[0]['hocphi'] = $tongcong[1]['hocphi'] + $tongcong[2]['hocphi'];
+            $tongcong[0]['vienphi'] = $tongcong[1]['vienphi'] + $tongcong[2]['vienphi'];
+            $tongcong[0]['nguonthu'] = $tongcong[1]['nguonthu'] + $tongcong[2]['nguonthu'];
+            $tongcong[0]['khac'] = 0;
+
+            $tongcong[4]['nhucau'] = $model->sum('nhucau') - $tongcong[0]['nhucau'] - $tongcong[5]['nhucau'] - $tongcong[3]['nhucau'];
+            $tongcong[4]['nguonkp'] = $model->sum('nguonkp') - $tongcong[0]['nguonkp'] - $tongcong[5]['nguonkp'] - $tongcong[3]['nguonkp'];
+            $tongcong[4]['tietkiem'] = $model->sum('tietkiem') - $tongcong[0]['tietkiem'];
+            $tongcong[4]['hocphi'] = $model->sum('hocphi') - $tongcong[0]['hocphi'] - $tongcong[5]['hocphi'] - $tongcong[3]['hocphi'];
+            $tongcong[4]['vienphi'] = $model->sum('vienphi') - $tongcong[0]['vienphi'] - $tongcong[5]['vienphi'] - $tongcong[3]['vienphi'];
+            $tongcong[4]['nguonthu'] = $model->sum('nguonthu') - $tongcong[0]['nguonthu'] - $tongcong[5]['nguonthu'] - $tongcong[3]['nguonthu'];
+            $tongcong[4]['khac'] = 0;
+            $model_dsdv = dmdonvi::all();
+            foreach ($model as $ct) {
+                $ct->caphanhchinh = $model_dsdv->where('madv',$ct->madv)->first()->caphanhchinh;
+                if($ct->caphanhchinh != 'T' )
+                    $ct->tenhuyen = $model_dvbc->where('madvbc',$ct->madvbc)->first()->tendvbc;
+            }
+            $a_h = array_column($model->toarray(),'tenhuyen','madvbc');
+            $a_TH = array('T','H');
+            foreach($a_TH as $val) {
+                $model_ct = $model->where('caphanhchinh',$val);
+                if (isset($inputs['inchitiet'])) {
+                    $gddt = 0;
+                    $daotao = 0;
+                    $giaoduc = 0;
+                    $i = 0;
+                    for ($j = 0; $j < count($group); $j++) {
+                        $i++;
+                        if ($group[$j]['val'] == 'GDDT')
+                            $gddt = $i;
+                        if ($group[$j]['val'] == 'GD')
+                            $giaoduc = $i;
+                        if ($group[$j]['val'] == 'DT')
+                            $daotao = $i;
+                        $data[$i]['val'] = $group[$j]['val'];
+                        $data[$i]['tt'] = $group[$j]['tt'];
+                        $data[$i]['noidung'] = $group[$j]['noidung'];
+                        $data[$i]['nhucau'] = 0;
+                        $data[$i]['nguonkp'] = 0;
+                        $data[$i]['tietkiem'] = 0;
+                        $data[$i]['hocphi'] = 0;
+                        $data[$i]['vienphi'] = 0;
+                        $data[$i]['khac'] = 0;
+                        $data[$i]['nguonthu'] = 0;
+                        $luugr = $i;
+                        if ($group[$j]['val'] == 'KHAC') {
+                            foreach ($a_sn_cl as $sn) {
+                                $dulieu = $model_ct->where('linhvuchoatdong', $sn);
+                                if (isset($dulieu) && count($dulieu) > 0) {
+                                    $a_dv = a_unique(array_column($dulieu->toarray(), 'madv'));
+                                    foreach ($a_dv as $chitietdv) {
+                                        $solieu = $dulieu->where('madv', $chitietdv);
+                                        $d = 1;
+                                        if (isset($solieu) && count($solieu) > 0) {
+                                            $d++;
+                                            $i += $d;
+                                            $data[$i]['val'] = $group[$j]['val'];
+                                            $data[$i]['tt'] = '+';
+                                            $data[$i]['noidung'] = $model_dv->where('madv', $chitietdv)->first()->tendv;
+                                            $data[$i]['nhucau'] = $solieu->sum('nhucau');
+                                            $data[$i]['nguonkp'] = $solieu->sum('nguonkp');
+                                            $data[$i]['tietkiem'] = $solieu->sum('tietkiem');
+                                            $data[$i]['hocphi'] = $solieu->sum('hocphi');
+                                            $data[$i]['vienphi'] = $solieu->sum('vienphi');
+                                            $data[$i]['khac'] = 0;
+                                            $data[$i]['nguonthu'] = $solieu->sum('nguonthu');
+
+                                            $data[$luugr]['nhucau'] += $solieu->sum('nhucau');
+                                            $data[$luugr]['nguonkp'] += $solieu->sum('nguonkp');
+                                            $data[$luugr]['tietkiem'] += $solieu->sum('tietkiem');
+                                            $data[$luugr]['hocphi'] += $solieu->sum('hocphi');
+                                            $data[$luugr]['vienphi'] += $solieu->sum('vienphi');
+                                            $data[$luugr]['khac'] += 0;
+                                            $data[$luugr]['nguonthu'] += $solieu->sum('nguonthu');
+                                        }
+                                    }
+                                }
+                            }
+                        } else {
+                            $dulieu = $model_ct->where('linhvuchoatdong', $group[$j]['val']);
+                            if (isset($dulieu) && count($dulieu) > 0) {
+                                //$luugr = 0;
+                                $a_dv = a_unique(array_column($dulieu->toarray(), 'madv'));
+                                $luugr = $i;
                                 foreach ($a_dv as $chitietdv) {
-                                    $solieu = $dulieu->where('madv', $chitietdv);
-                                    $d =1;
+                                    $solieu = $model_ct->where('madv', $chitietdv);
+                                    $d = 1;
                                     if (isset($solieu) && count($solieu) > 0) {
+                                        //dd($solieu);
                                         $d++;
                                         $i += $d;
+                                        $data[$i]['val'] = $group[$j]['val'];
                                         $data[$i]['tt'] = '+';
-                                        $data[$i]['noidung'] = $model_dv->where('madv',$chitietdv)->first()->tendv;
+                                        $data[$i]['noidung'] = $model_dv->where('madv', $chitietdv)->first()->tendv;
                                         $data[$i]['nhucau'] = $solieu->sum('nhucau');
                                         $data[$i]['nguonkp'] = $solieu->sum('nguonkp');
                                         $data[$i]['tietkiem'] = $solieu->sum('tietkiem');
@@ -3383,84 +3463,62 @@ class baocaothongtu67Controller extends Controller
                             }
                         }
                     }
-                    else {
-                        $dulieu = $model->where('linhvuchoatdong', $group[$j]['val']);
-                        if (isset($dulieu) && count($dulieu) > 0) {
-                            //$luugr = 0;
-                            $a_dv = a_unique(array_column($dulieu->toarray(), 'madv'));
-                            $luugr = $i;
-                            foreach ($a_dv as $chitietdv) {
-                                $solieu = $model->where('madv', $chitietdv);
-                                $d = 1;
-                                if (isset($solieu) && count($solieu) > 0) {
-                                    //dd($solieu);
-                                    $d++;
-                                    $i += $d;
-                                    $data[$i]['tt'] = '+';
-                                    $data[$i]['noidung'] = $model_dv->where('madv', $chitietdv)->first()->tendv;
-                                    $data[$i]['nhucau'] = $solieu->sum('nhucau');
-                                    $data[$i]['nguonkp'] = $solieu->sum('nguonkp');
-                                    $data[$i]['tietkiem'] = $solieu->sum('tietkiem');
-                                    $data[$i]['hocphi'] = $solieu->sum('hocphi');
-                                    $data[$i]['vienphi'] = $solieu->sum('vienphi');
-                                    $data[$i]['khac'] = 0;
-                                    $data[$i]['nguonthu'] = $solieu->sum('nguonthu');
-
-                                    $data[$luugr]['nhucau'] += $solieu->sum('nhucau');
-                                    $data[$luugr]['nguonkp'] += $solieu->sum('nguonkp');
-                                    $data[$luugr]['tietkiem'] += $solieu->sum('tietkiem');
-                                    $data[$luugr]['hocphi'] += $solieu->sum('hocphi');
-                                    $data[$luugr]['vienphi'] += $solieu->sum('vienphi');
-                                    $data[$luugr]['khac'] += 0;
-                                    $data[$luugr]['nguonthu'] += $solieu->sum('nguonthu');
-                                }
-                            }
-                        }
+                    $data[$gddt]['nhucau'] = $data[$giaoduc]['nhucau'] + $data[$daotao]['nhucau'];
+                    $data[$gddt]['nguonkp'] = $data[$giaoduc]['nguonkp'] + $data[$daotao]['nguonkp'];
+                    $data[$gddt]['tietkiem'] = $data[$giaoduc]['tietkiem'] + $data[$daotao]['tietkiem'];
+                    $data[$gddt]['hocphi'] = $data[$giaoduc]['hocphi'] + $data[$daotao]['hocphi'];
+                    $data[$gddt]['vienphi'] = $data[$giaoduc]['vienphi'] + $data[$daotao]['vienphi'];
+                    $data[$gddt]['khac'] = 0;
+                    $data[$gddt]['nguonthu'] = $data[$giaoduc]['nguonthu'] + $data[$daotao]['nguonthu'];
+                } else {
+                    for ($i = 0; $i < count($data); $i++) {
+                        $solieu = $model_ct->where('linhvuchoatdong', $data[$i]['val']);
+                        $data[$i]['nhucau'] = $solieu->sum('nhucau');
+                        $data[$i]['nguonkp'] = $solieu->sum('nguonkp');
+                        $data[$i]['tietkiem'] = $solieu->sum('tietkiem');
+                        $data[$i]['hocphi'] = $solieu->sum('hocphi');
+                        $data[$i]['vienphi'] = $solieu->sum('vienphi');
+                        $data[$i]['khac'] = 0;
+                        $data[$i]['nguonthu'] = $solieu->sum('nguonthu');
                     }
+                    $data[0]['nhucau'] = $data[1]['nhucau'] + $data[2]['nhucau'];
+                    $data[0]['nguonkp'] = $data[1]['nguonkp'] + $data[2]['nguonkp'];
+                    $data[0]['tietkiem'] = $data[1]['tietkiem'] + $data[2]['tietkiem'];
+                    $data[0]['hocphi'] = $data[1]['hocphi'] + $data[2]['hocphi'];
+                    $data[0]['vienphi'] = $data[1]['vienphi'] + $data[2]['vienphi'];
+                    $data[0]['khac'] = 0;
+                    $data[0]['nguonthu'] = $data[1]['nguonthu'] + $data[2]['nguonthu'];
 
+                    $data[4]['nhucau'] = $model_ct->sum('nhucau') - $data[0]['nhucau'] - $data[5]['nhucau'] - $data[3]['nhucau'];
+                    $data[4]['nguonkp'] = $model_ct->sum('nguonkp') - $data[0]['nguonkp'] - $data[5]['nguonkp'] - $data[3]['nguonkp'];
+                    $data[4]['tietkiem'] = $model_ct->sum('tietkiem') - $data[0]['tietkiem'] - $data[5]['tietkiem'] - $data[3]['tietkiem'];
+                    $data[4]['hocphi'] = $model_ct->sum('hocphi') - $data[0]['hocphi'] - $data[5]['hocphi'] - $data[3]['hocphi'];
+                    $data[4]['vienphi'] = $model_ct->sum('vienphi') - $data[0]['vienphi'] - $data[5]['vienphi'] - $data[3]['vienphi'];
+                    $data[4]['khac'] = 0;
+                    $data[4]['nguonthu'] = $model_ct->sum('nguonthu') - $data[0]['nguonthu'] - $data[5]['nguonthu'] - $data[3]['nguonthu'];
                 }
-                $data[$gddt]['nhucau'] = $data[$giaoduc]['nhucau'] + $data[$daotao]['nhucau'];
-                $data[$gddt]['nguonkp'] = $data[$giaoduc]['nguonkp'] + $data[$daotao]['nguonkp'];
-                $data[$gddt]['tietkiem'] = $data[$giaoduc]['tietkiem'] + $data[$daotao]['tietkiem'];
-                $data[$gddt]['hocphi'] = $data[$giaoduc]['hocphi'] + $data[$daotao]['hocphi'];
-                $data[$gddt]['vienphi'] = $data[$giaoduc]['vienphi'] + $data[$daotao]['vienphi'];
-                $data[$gddt]['khac'] = 0;
-                $data[$gddt]['nguonthu'] = $data[$giaoduc]['nguonthu'] + $data[$daotao]['nguonthu'];
-            } else {
-                for ($i = 0; $i < count($data); $i++) {
-                    $solieu = $model->where('linhvuchoatdong', $data[$i]['val']);
-                    $data[$i]['nhucau'] = $solieu->sum('nhucau');
-                    $data[$i]['nguonkp'] = $solieu->sum('nguonkp');
-                    $data[$i]['tietkiem'] = $solieu->sum('tietkiem');
-                    $data[$i]['hocphi'] = $solieu->sum('hocphi');
-                    $data[$i]['vienphi'] = $solieu->sum('vienphi');
-                    $data[$i]['khac'] = 0;
-                    $data[$i]['nguonthu'] = $solieu->sum('nguonthu');
-                }
-                $data[0]['nhucau'] = $data[1]['nhucau'] + $data[2]['nhucau'];
-                $data[0]['nguonkp'] = $data[1]['nguonkp'] + $data[2]['nguonkp'];
-                $data[0]['tietkiem'] = $data[1]['tietkiem'] + $data[2]['tietkiem'];
-                $data[0]['hocphi'] = $data[1]['hocphi'] + $data[2]['hocphi'];
-                $data[0]['vienphi'] = $data[1]['vienphi'] + $data[2]['vienphi'];
-                $data[0]['khac'] = 0;
-                $data[0]['nguonthu'] = $data[1]['nguonthu'] + $data[2]['nguonthu'];
-
-                $data[4]['nhucau'] = $model->sum('nhucau') - $data[0]['nhucau'] - $data[5]['nhucau'] - $data[3]['nhucau'];
-                $data[4]['nguonkp'] = $model->sum('nguonkp') - $data[0]['nguonkp'] - $data[5]['nguonkp'] - $data[3]['nguonkp'];
-                $data[4]['tietkiem'] = $model->sum('tietkiem') - $data[0]['tietkiem'] - $data[5]['tietkiem'] - $data[3]['tietkiem'];
-                $data[4]['hocphi'] = $model->sum('hocphi') - $data[0]['hocphi'] - $data[5]['hocphi'] - $data[3]['hocphi'];
-                $data[4]['vienphi'] = $model->sum('vienphi') - $data[0]['vienphi'] - $data[5]['vienphi'] - $data[3]['vienphi'];
-                $data[4]['khac'] = 0;
-                $data[4]['nguonthu'] = $model->sum('nguonthu') - $data[0]['nguonthu'] - $data[5]['nguonthu'] - $data[3]['nguonthu'];
             }
+            $a_TC = array(
+                'nhucau' => ($tongcong[0]['nhucau'] + $tongcong[3]['nhucau'] + $tongcong[4]['nhucau'] + $tongcong[5]['nhucau']),
+                'nguonkp' => ($tongcong[0]['nguonkp'] + $tongcong[3]['nguonkp'] + $tongcong[4]['nguonkp'] + $tongcong[5]['nguonkp']),
+                'tietkiem' => ($tongcong[0]['tietkiem'] + $tongcong[3]['tietkiem'] + $tongcong[4]['tietkiem'] + $tongcong[5]['tietkiem']),
+                'hocphi' => ($tongcong[0]['hocphi'] + $tongcong[3]['hocphi'] + $tongcong[4]['hocphi'] + $tongcong[5]['hocphi']),
+                'vienphi' => ($tongcong[0]['vienphi'] + $tongcong[3]['vienphi'] + $tongcong[4]['vienphi'] + $tongcong[5]['vienphi']),
+                'khac' => ($tongcong[0]['khac'] + $tongcong[3]['khac'] + $tongcong[4]['khac'] + $tongcong[5]['khac']),
+                'nguonthu' => ($tongcong[0]['nguonthu'] + $tongcong[3]['nguonthu'] + $tongcong[4]['nguonthu'] + $tongcong[5]['nguonthu'])
+            );
             if (isset($inputs['excel'])) {
-                Excel::create('mau4b_tt46', function ($excel) use ($model, $data, $m_dv, $inputs) {
-                    $excel->sheet('New sheet', function ($sheet) use ($model, $data, $m_dv, $inputs) {
-                        $sheet->loadView('reports.thongtu67.mau4b_tt68')
+                Excel::create('mau4b_tt46', function ($excel) use ($model, $data, $m_dv, $inputs,$tongcong,$a_TC,$a_h,$a_sn_cl) {
+                    $excel->sheet('New sheet', function ($sheet) use ($model, $data, $m_dv, $inputs,$tongcong,$a_TC,$a_h,$a_sn_cl) {
+                        $sheet->loadView('reports.thongtu67.mau4b_tt46')
                             ->with('model', $model)
                             ->with('data', $data)
                             ->with('m_dv', $m_dv)
                             ->with('inputs', $inputs)
+                            ->with('a_sn_cl', $a_sn_cl)
+                            ->with('tongcong', $tongcong)
+                            ->with('a_TC', $a_TC)
+                            ->with('a_h', $a_h)
                             ->with('pageTitle', 'mau4b_tt46');
                         $sheet->setAutoSize(false);
                         $sheet->setFontFamily('Tahoma');
@@ -3468,11 +3526,16 @@ class baocaothongtu67Controller extends Controller
                     });
                 })->download('xls');
             } else {
-                return view('reports.thongtu67.mau4b_tt46')
+                return view('reports.thongtu46.tinh.mau4b_tt46')
                     ->with('model', $model)
                     ->with('data', $data)
                     ->with('m_dv', $m_dv)
+                    ->with('model_dv', $model_dv)
+                    ->with('a_sn_cl', $a_sn_cl)
                     ->with('inputs', $inputs)
+                    ->with('tongcong', $tongcong)
+                    ->with('a_TC', $a_TC)
+                    ->with('a_h', $a_h)
                     ->with('pageTitle', 'Danh sách nguồn kinh phí của đơn vị');
             }
         } else

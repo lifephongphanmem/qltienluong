@@ -268,13 +268,13 @@
         $data[0]['khac'] = 0;
         $data[0]['nguonthu'] = $data[1]['nguonthu'] + $data[2]['nguonthu'];
 
-        $data[4]['nhucau'] = $model->sum('nhucau') - $data[0]['nhucau'] - $data[5]['nhucau'] - $data[3]['nhucau'];
-        $data[4]['nguonkp'] = $model->sum('nguonkp') - $data[0]['nguonkp'] - $data[5]['nguonkp'] - $data[3]['nguonkp'];
-        $data[4]['tietkiem'] = $model->sum('tietkiem') - $data[0]['tietkiem'] - $data[5]['tietkiem'] - $data[3]['tietkiem'];
-        $data[4]['hocphi'] = $model->sum('hocphi') - $data[0]['hocphi'] - $data[5]['hocphi'] - $data[3]['hocphi'];
-        $data[4]['vienphi'] = $model->sum('vienphi') - $data[0]['vienphi'] - $data[5]['vienphi'] - $data[3]['vienphi'];
+        $data[4]['nhucau'] = $model_ct->sum('nhucau') - $data[0]['nhucau'] - $data[5]['nhucau'] - $data[3]['nhucau'];
+        $data[4]['nguonkp'] = $model_ct->sum('nguonkp') - $data[0]['nguonkp'] - $data[5]['nguonkp'] - $data[3]['nguonkp'];
+        $data[4]['tietkiem'] = $model_ct->sum('tietkiem') - $data[0]['tietkiem'] - $data[5]['tietkiem'] - $data[3]['tietkiem'];
+        $data[4]['hocphi'] = $model_ct->sum('hocphi') - $data[0]['hocphi'] - $data[5]['hocphi'] - $data[3]['hocphi'];
+        $data[4]['vienphi'] = $model_ct->sum('vienphi') - $data[0]['vienphi'] - $data[5]['vienphi'] - $data[3]['vienphi'];
         $data[4]['khac'] = 0;
-        $data[4]['nguonthu'] = $model->sum('nguonthu') - $data[0]['nguonthu'] - $data[5]['nguonthu'] - $data[3]['nguonthu'];
+        $data[4]['nguonthu'] = $model_ct->sum('nguonthu') - $data[0]['nguonthu'] - $data[5]['nguonthu'] - $data[3]['nguonthu'];
     }
     ?>
     @foreach($data as $dulieu)
@@ -302,7 +302,24 @@
         <td> </td>
     </tr>
     <?php
-    $model_ct = $model->where('caphanhchinh','<>','T');
+
+        $stt = 0;
+        foreach($a_h as $huyen=>$key){
+            $model_ct = $model->where('caphanhchinh','<>','T')->where('madvbc',$huyen);
+            $stt++;
+        ?>
+    <tr style="font-weight: bold;">
+        <td>{{$stt}}</td>
+        <td>{{$a_h[$huyen]}}</td>
+        <td> </td>
+        <td> </td>
+        <td> </td>
+        <td> </td>
+        <td> </td>
+        <td> </td>
+        <td> </td>
+    </tr>
+    <?php
     if (isset($inputs['inchitiet'])) {
         $gddt = 0;
         $daotao = 0;
@@ -423,13 +440,13 @@
         $data[0]['khac'] = 0;
         $data[0]['nguonthu'] = $data[1]['nguonthu'] + $data[2]['nguonthu'];
 
-        $data[4]['nhucau'] = $model->sum('nhucau') - $data[0]['nhucau'] - $data[5]['nhucau'] - $data[3]['nhucau'];
-        $data[4]['nguonkp'] = $model->sum('nguonkp') - $data[0]['nguonkp'] - $data[5]['nguonkp'] - $data[3]['nguonkp'];
-        $data[4]['tietkiem'] = $model->sum('tietkiem') - $data[0]['tietkiem'] - $data[5]['tietkiem'] - $data[3]['tietkiem'];
-        $data[4]['hocphi'] = $model->sum('hocphi') - $data[0]['hocphi'] - $data[5]['hocphi'] - $data[3]['hocphi'];
-        $data[4]['vienphi'] = $model->sum('vienphi') - $data[0]['vienphi'] - $data[5]['vienphi'] - $data[3]['vienphi'];
+        $data[4]['nhucau'] = $model_ct->sum('nhucau') - $data[0]['nhucau'] - $data[5]['nhucau'] - $data[3]['nhucau'];
+        $data[4]['nguonkp'] = $model_ct->sum('nguonkp') - $data[0]['nguonkp'] - $data[5]['nguonkp'] - $data[3]['nguonkp'];
+        $data[4]['tietkiem'] = $model_ct->sum('tietkiem') - $data[0]['tietkiem'] - $data[5]['tietkiem'] - $data[3]['tietkiem'];
+        $data[4]['hocphi'] = $model_ct->sum('hocphi') - $data[0]['hocphi'] - $data[5]['hocphi'] - $data[3]['hocphi'];
+        $data[4]['vienphi'] = $model_ct->sum('vienphi') - $data[0]['vienphi'] - $data[5]['vienphi'] - $data[3]['vienphi'];
         $data[4]['khac'] = 0;
-        $data[4]['nguonthu'] = $model->sum('nguonthu') - $data[0]['nguonthu'] - $data[5]['nguonthu'] - $data[3]['nguonthu'];
+        $data[4]['nguonthu'] = $model_ct->sum('nguonthu') - $data[0]['nguonthu'] - $data[5]['nguonthu'] - $data[3]['nguonthu'];
     }
     ?>
     @foreach($data as $dulieu)
@@ -445,6 +462,7 @@
             <td class="money">{{dinhdangso($dulieu['khac'],0,$inputs['donvitinh'])}}</td>
         </tr>
     @endforeach
+    <?php }?>
 </table>
 
 <table class="header" width="96%" border="0" cellspacing="0" cellpadding="8" style="margin:20px auto; text-align: center;">
