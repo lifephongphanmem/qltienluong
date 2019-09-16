@@ -7,6 +7,7 @@ use App\dsnangthamnien;
 use App\dsnangthamnien_ct;
 use App\dsnangthamnien_nguon;
 use App\hosocanbo;
+use App\hosophucap;
 use App\hosotruylinh;
 use App\hosotruylinh_nguon;
 use Carbon\Carbon;
@@ -190,8 +191,7 @@ class dsnangthamnienController extends Controller
             return view('errors.notlogin');
     }
 
-    function detail(Request $request)
-    {
+    function detail(Request $request){
         if (Session::has('admin')) {
             $inputs = $request->all();
             $model = dsnangthamnien_ct::where('manl', $inputs['maso'])->where('macanbo', $inputs['canbo'])->first();
@@ -275,6 +275,11 @@ class dsnangthamnienController extends Controller
             $model = dsnangthamnien_ct::where('manl',$manl)->get();
             $model_nguon = dsnangthamnien_nguon::where('manl', $manl)->get();
             $ma = getdate()[0];
+            $m_nkp_df = getNguonTruyLinh();
+            $a_truylinh = array();
+            $a_nkp = array();
+            $a_phucap = array();
+
             foreach($model as $canbo) {
                 $ma = $ma + 1;
                 $hoso = hosocanbo::where('macanbo', $canbo->macanbo)->first();
@@ -283,43 +288,49 @@ class dsnangthamnienController extends Controller
                 $hoso->tnndenngay = $canbo->ngayden;
                 $hoso->save();
                 if (isset($canbo->truylinhtungay) && $canbo->heso > 0) {
-                    $truylinh = new hosotruylinh();
-                    $truylinh->maso = session('admin')->madv . '_' . $ma;
-                    $truylinh->macanbo = $canbo->macanbo;
-                    $truylinh->tencanbo = $hoso->tencanbo;
-                    $truylinh->ngaytu = $canbo->truylinhtungay;
-                    $truylinh->ngayden = $canbo->truylinhdenngay;
-                    $truylinh->madv = session('admin')->madv;
-                    $truylinh->noidung = 'Truy lĩnh nâng thâm niên nghề';
-                    //$truylinh->msngbac = $canbo->msngbac;
-                    $truylinh->heso = $canbo->heso;
-                    $truylinh->thangtl = $canbo->thangtl;
-                    $truylinh->ngaytl = $canbo->ngaytl;
-                    $truylinh->maphanloai = 'TNN';
-                    $truylinh->save();
+                    //$truylinh = new hosotruylinh();
+                    $a_tl = array();
+                    $a_tl['maso'] = session('admin')->madv . '_' . $ma;
+                    $a_tl['macanbo'] = $canbo->macanbo;
+                    $a_tl['tencanbo'] = $hoso->tencanbo;
+                    $a_tl['ngaytu'] = $canbo->truylinhtungay;
+                    $a_tl['ngayden'] = $canbo->truylinhdenngay;
+                    $a_tl['madv'] = session('admin')->madv;
+                    $a_tl['noidung'] = 'Truy lĩnh nâng thâm niên nghề';
+                    $a_tl['heso'] = $canbo->heso;
+                    $a_tl['thangtl'] = $canbo->thangtl;
+                    $a_tl['ngaytl'] = $canbo->ngaytl;
+                    $a_tl['maphanloai'] = 'TNN';
+                    $a_truylinh[] = $a_tl;
+                    //$truylinh->save();
 
                     $nguon = $model_nguon->where('macanbo', $canbo->macanbo);
                     if(count($nguon)> 0){
                         foreach ($nguon as $nkp) {
-                            $nguon_tl = new hosotruylinh_nguon();
-                            $nguon_tl->maso = $truylinh->maso;
-                            $nguon_tl->manguonkp = $nkp->manguonkp;
-                            $nguon_tl->luongcoban = $nkp->luongcoban;
-                            $nguon_tl->save();
+                            $a_nkp[] = array(
+                                'maso' => $a_tl['maso'], 'manguonkp' => $nkp->manguonkp, 'luongcoban' => $nkp->luongcoban
+                            );
                         }
                     }else{//lấy nguồn mặc định
-                        foreach (getNguonTruyLinh_df() as $k=>$v) {
-                            $nguon_tl = new hosotruylinh_nguon();
-                            $nguon_tl->maso = $truylinh->maso;
-                            $nguon_tl->manguonkp = $k;
-                            $nguon_tl->luongcoban = $v;
-                            $nguon_tl->save();
+                        foreach ($m_nkp_df as $k=>$v) {
+                            $a_nkp[] = array(
+                                'maso' => $a_tl['maso'], 'manguonkp' => $k, 'luongcoban' => $v
+                            );
                         }
                     }
                 }
-                //Lưu thông tin vào hồ sơ cán bộ
 
+                //lưu hosophucap (vẫn lấy má số do theo cán bộ
+                $a_phucap[] = array(
+                    'maso' => $a_tl['maso'], 'maphanloai' => 'CONGTAC', 'macanbo' => $canbo->macanbo,
+                    'ngaytu' => $canbo->ngaytu, 'ngayden' => $canbo->ngayden, 'macvcq' => $hoso->macvcq,
+                    'mapc' => 'pctnn', 'heso' => $canbo->pctnn
+                );
             }
+
+            hosophucap::insert($a_phucap);
+            hosotruylinh_nguon::insert($a_nkp);
+            hosotruylinh::insert($a_truylinh);
             dsnangthamnien::where('manl',$manl)->update(['trangthai'=>'Đã nâng lương']);
             return redirect('/chuc_nang/tham_nien/danh_sach');
         } else

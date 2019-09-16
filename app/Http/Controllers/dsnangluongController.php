@@ -10,6 +10,7 @@ use App\dsnangluong_chitiet;
 use App\dsnangluong_nguon;
 use App\hosocanbo;
 use App\hosoluong;
+use App\hosophucap;
 use App\hosotruylinh;
 use App\hosotruylinh_nguon;
 use App\ngachbac;
@@ -312,76 +313,68 @@ class dsnangluongController extends Controller
             $model = dsnangluong_chitiet::where('manl', $manl)->get();
             $model_nguon = dsnangluong_nguon::where('manl', $manl)->get();
             $ma = getdate()[0];
-            $model_pc = dmphucap_donvi::where('madv', session('admin')->madv)->where('phanloai',2)->get();
+            $model_pc = dmphucap_donvi::where('madv', session('admin')->madv)
+                ->where('mapc','<>','vuotkhung')
+                ->where('phanloai',2)->get();
+            $m_nkp_df = getNguonTruyLinh();
+            $a_truylinh = array();
+            $a_nkp = array();
+            $a_phucap = array();
             foreach ($model as $canbo) {
                 $ma = $ma + 1;
                 $hoso = hosocanbo::where('macanbo', $canbo->macanbo)->first();
+                $pl_phucap = $hoso->heso == $canbo->heso ? 'vuotkhung':'heso';
+
                 $hoso->heso = $canbo->heso;
                 $hoso->bac = $canbo->bac;
                 $hoso->vuotkhung = $canbo->vuotkhung;
                 $hoso->ngaytu = $canbo->ngaytu;
                 $hoso->ngayden = $canbo->ngayden;
 
-                /*
-                $data = $canbo->toarray();
-                unset($data['id']);
-                unset($data['phanloai']);
-                hosoluong::create($data);
-                */
+                //lưu truy lĩnh
                 if (isset($canbo->truylinhtungay) && $canbo->hesott > 0) {
-                    /*
-                    $truylinh = hosotruylinh::where('macanbo', $canbo->macanbo)->first();
-                    if (count($truylinh) == 0) {
-                        $truylinh = new hosotruylinh();
-                        $truylinh->maso = session('admin')->madv . '_' . $ma;
-                    }
-
-                    }
-                    */
-
-                    $truylinh = new hosotruylinh();
+                    $a_tl = array();
+                    //$truylinh = new hosotruylinh();
                     foreach ($model_pc as $pc) {
-                        if ($pc->mapc == 'vuotkhung') {
-                            continue;
-                        }
                         $mapc = $pc->mapc;
-                        $truylinh->$mapc = $hoso->$mapc;
+                        $a_tl[$mapc] = $hoso->$mapc;
 
                     }
-                    $truylinh->maso = session('admin')->madv . '_' . $ma;
-                    $truylinh->macanbo = $canbo->macanbo;
-                    $truylinh->tencanbo = $hoso->tencanbo;
-                    $truylinh->ngaytu = $canbo->truylinhtungay;
-                    $truylinh->ngayden = $canbo->truylinhdenngay;
-                    $truylinh->thangtl = $canbo->thangtl;
-                    $truylinh->ngaytl = $canbo->ngaytl;
-                    $truylinh->madv = session('admin')->madv;
-                    $truylinh->noidung = 'Truy lĩnh nâng lương ngạch bậc';
-                    $truylinh->msngbac = $canbo->msngbac;
-                    $truylinh->heso = $canbo->hesott; //hệ số truy lĩnh đều đưa vào hệ số
-                    $truylinh->maphanloai = 'MSNGBAC'; //hệ số truy lĩnh đều đưa vào hệ số
+                    $a_tl['maso'] = session('admin')->madv . '_' . $ma;
+                    $a_tl['macanbo'] = $canbo->macanbo;
+                    $a_tl['tencanbo'] = $hoso->tencanbo;
+                    $a_tl['ngaytu'] = $canbo->truylinhtungay;
+                    $a_tl['ngayden'] = $canbo->truylinhdenngay;
+                    $a_tl['thangtl'] = $canbo->thangtl;
+                    $a_tl['ngaytl'] = $canbo->ngaytl;
+                    $a_tl['madv'] = session('admin')->madv;
+                    $a_tl['noidung'] = 'Truy lĩnh nâng lương ngạch bậc';
+                    $a_tl['msngbac'] = $canbo->msngbac;
+                    $a_tl['heso'] = $canbo->hesott; //hệ số truy lĩnh đều đưa vào hệ số
+                    $a_tl['maphanloai'] = 'MSNGBAC'; //hệ số truy lĩnh đều đưa vào hệ số
+                    $a_truylinh[] = $a_tl;
 
-                    $truylinh->save();
                     $nguon = $model_nguon->where('macanbo', $canbo->macanbo);
-                    if(count($nguon)> 0){
+                    if (count($nguon) > 0) {
                         foreach ($nguon as $nkp) {
-                            $nguon_tl = new hosotruylinh_nguon();
-                            $nguon_tl->maso = $truylinh->maso;
-                            $nguon_tl->manguonkp = $nkp->manguonkp;
-                            $nguon_tl->luongcoban = $nkp->luongcoban;
-                            $nguon_tl->save();
+                            $a_nkp[] = array(
+                                'maso' => $a_tl['maso'], 'manguonkp' => $nkp->manguonkp, 'luongcoban' => $nkp->luongcoban
+                            );
                         }
-                    }else{//lấy nguồn mặc định
-                        foreach (getNguonTruyLinh_df() as $k=>$v) {
-                            $nguon_tl = new hosotruylinh_nguon();
-                            $nguon_tl->maso = $truylinh->maso;
-                            $nguon_tl->manguonkp = $k;
-                            $nguon_tl->luongcoban = $v;
-                            $nguon_tl->save();
+                    } else {//lấy nguồn mặc định
+                        foreach ($m_nkp_df as $k => $v) {
+                            $a_nkp[] = array(
+                                'maso' => $a_tl['maso'], 'manguonkp' => $k, 'luongcoban' => $v
+                            );
                         }
                     }
                 }
-
+                //lưu hosophucap (vẫn lấy má số do theo cán bộ
+                $a_phucap[] = array(
+                    'maso' => $a_tl['maso'], 'maphanloai' => 'CONGTAC', 'macanbo' => $canbo->macanbo,
+                    'ngaytu' => $canbo->ngaytu, 'ngayden' => $canbo->ngayden, 'macvcq' => $hoso->macvcq,
+                    'mapc' => $pl_phucap, 'heso' => $pl_phucap=='heso'?$canbo->heso:$canbo->vuotkhung
+                );
                 $hoso->save();
                 /*
                 //Lưu thông tin vào hồ sơ cán bộ
@@ -392,6 +385,9 @@ class dsnangluongController extends Controller
                 */
             }
 
+            hosophucap::insert($a_phucap);
+            hosotruylinh_nguon::insert($a_nkp);
+            hosotruylinh::insert($a_truylinh);
             dsnangluong::where('manl', $manl)->update(['trangthai' => 'Đã nâng lương']);
             return redirect('/chuc_nang/nang_luong/danh_sach');
         } else

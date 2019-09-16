@@ -79,11 +79,26 @@ class hosophucapController extends Controller
                     ->with('message','Ngày tháng không hợp lệ.')
                     ->with('furl','/nghiep_vu/qua_trinh/phu_cap/danh_sach?canbo='.$inputs['macanbo']);
             }
+            $ngaytu = $inputs['ngaytu'];
+            $ngayden = $inputs['ngayden'];
             //kiêm tra xem phụ cấp đang được hưởng ko
-            $m_chk = hosocanbo::where('macanbo',$inputs['macanbo'])->where('mapc',$inputs['mapc'])->get();
-            if(count($m_chk) > 0){
+            $m_chk = hosophucap::where('macanbo',$inputs['macanbo'])->where('mapc',$inputs['mapc'])
+                ->where(function($qr)use($ngaytu,$ngayden){
+                    $qr->WhereBetween('ngaytu',[$ngaytu,$ngayden])
+                    ->orWhereBetween('ngayden',[$ngaytu,$ngayden]);
+                })//->toSql();
+                ->get();
 
+            if(count($m_chk) > 0){
+                $a_pc = array_column(dmphucap_donvi::where('madv', session('admin')->madv)
+                    ->where('phanloai','<','3')
+                    ->get()->toarray(),'tenpc', 'mapc');
+
+                return view('errors.data_error')
+                    ->with('message',''.$a_pc[$inputs['mapc']] .' vẫn đang được hưởng (thời gian hưởng không hợp lệ).')
+                    ->with('furl','/nghiep_vu/qua_trinh/phu_cap/danh_sach?canbo='.$inputs['macanbo']);
             }
+
             $model = new hosophucap();
             $model->maso = session('admin')->madv . '_' . getdate()[0];;
             $model->maphanloai = 'CONGTAC';
@@ -121,6 +136,27 @@ class hosophucapController extends Controller
     function update(Request $request){
         if (Session::has('admin')) {
             $inputs = $request->all();
+            $ngaytu = $inputs['ngaytu'];
+            $ngayden = $inputs['ngayden'];
+
+            $m_chk = hosophucap::where('macanbo',$inputs['macanbo'])
+                ->where('mapc',$inputs['mapc'])
+                ->where('maso','<>',$inputs['maso'])
+                ->where(function($qr)use($ngaytu,$ngayden){
+                    $qr->WhereBetween('ngaytu',[$ngaytu,$ngayden])
+                        ->orWhereBetween('ngayden',[$ngaytu,$ngayden]);
+                })//->toSql();
+                ->get();
+
+            if(count($m_chk) > 0){
+                $a_pc = array_column(dmphucap_donvi::where('madv', session('admin')->madv)
+                    ->where('phanloai','<','3')
+                    ->get()->toarray(),'tenpc', 'mapc');
+
+                return view('errors.data_error')
+                    ->with('message',''.$a_pc[$inputs['mapc']] .' vẫn đang được hưởng (thời gian hưởng không hợp lệ).')
+                    ->with('furl','/nghiep_vu/qua_trinh/phu_cap/danh_sach?canbo='.$inputs['macanbo']);
+            }
             $model = hosophucap::where('maso',$inputs['maso'])->first();
             $model->ngaytu = getDateTime($inputs['ngaytu']);
             $model->ngayden = getDateTime($inputs['ngayden']);
@@ -132,12 +168,12 @@ class hosophucapController extends Controller
             return view('errors.notlogin');
     }
 
-    function destroy($id){
+    function destroy(Request $request){
         if (Session::has('admin')) {
-            $model = hosophucap::find($id);
-            $macanbo = $model->macanbo;
+            $inputs = $request->all();
+            $model = hosophucap::where('maso',$inputs['maso'])->first();
             $model->delete();
-            return redirect('/nghiep_vu/qua_trinh/phu_cap/maso='.$macanbo);
+            return redirect('/nghiep_vu/qua_trinh/phu_cap/danh_sach?canbo='.$model->macanbo);
         } else
             return view('errors.notlogin');
     }

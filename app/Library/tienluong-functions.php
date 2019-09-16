@@ -686,7 +686,7 @@ function getNguonTruyLinh(){
         $nkp_df = $model->first();
     }
     return array(
-        $nkp_df->manguonkp => '1390000',
+        $nkp_df->manguonkp => '1490000',
     );
 }
 
@@ -697,7 +697,7 @@ function getNguonTruyLinh_df(){
         $nkp_df = $model->first();
     }
     return array(
-        $nkp_df->manguonkp => '1390000',
+        $nkp_df->manguonkp => '1490000',
     );
 }
 
