@@ -175,17 +175,14 @@ class UsersController extends Controller
             if ($ttuser->level != 'SA' && $ttuser->level != 'SSA') {
                 $model_donvi = dmdonvi::where('madv', $ttuser->madv)->first();
                 $gen = getGeneralConfigs();
-                //dd($gen);
                 $ttuser->tinh = $gen['tinh'];
                 $ttuser->huyen = $gen['huyen'];
                 $ttuser->phanloaitaikhoan = $model_donvi->phanloaitaikhoan;
                 $ttuser->phamvitonghop = $model_donvi->phamvitonghop;
                 $ttuser->lamtron = $model_donvi->lamtron;
-
-                //kt 2 biến 'phanloaitaikhoan' == TH && 'phamvitonghop' để xem tk có là tk tổng hợp ko.
-                //Giữ 2 biến cũ cho đỡ lỗi, tìm và thay thế
-                $ttuser->quanlykhuvuc = $model_donvi->phamvitonghop == 'KHOI'? false : true;
-                $ttuser->quanlynhom = $model_donvi->phamvitonghop == 'HUYEN'? false : true;
+                $ttuser->quanlykhuvuc = $model_donvi->phamvitonghop == 'KHOI' ? false : true;
+                $ttuser->quanlynhom = $model_donvi->phamvitonghop == 'HUYEN' ? false : true;
+                $ttuser->chuyendoi = $model_donvi->chuyendoi == 0 ? null : $ttuser->madv;//gán mã đơn vị chủ quản
 
                 $ttuser->diadanh = $model_donvi->diadanh;
                 $ttuser->cdlanhdao = $model_donvi->cdlanhdao;
@@ -209,33 +206,25 @@ class UsersController extends Controller
                 //phân loại công tác
                 $model_phanloai = dmphanloaicongtac_baohiem::where('madv', $ttuser->madv)->get();
                 if (count($model_phanloai) == 0) {
-                    $model_phanloai = dmphanloaict::select('macongtac','mact', 'bhxh', 'bhyt', 'bhtn', 'kpcd', 'bhxh_dv', 'bhyt_dv', 'bhtn_dv', 'kpcd_dv', DB::raw($ttuser->madv . ' as madv'))->get();
+                    $model_phanloai = dmphanloaict::select('macongtac', 'mact', 'bhxh', 'bhyt', 'bhtn', 'kpcd', 'bhxh_dv', 'bhyt_dv', 'bhtn_dv', 'kpcd_dv', DB::raw($ttuser->madv . ' as madv'))->get();
                     dmphanloaicongtac_baohiem::insert($model_phanloai->toarray());
-                }else{//tự cập nhật các phụ cấp thiếu
-                    $model_dm = dmphanloaict::select('macongtac','mact', 'bhxh', 'bhyt', 'bhtn', 'kpcd', 'bhxh_dv', 'bhyt_dv', 'bhtn_dv', 'kpcd_dv', DB::raw($ttuser->madv . ' as madv'))
-                    ->wherenotin('mact', array_column($model_phanloai->toarray(),'mact'))->get();
+                } else {//tự cập nhật các phụ cấp thiếu
+                    $model_dm = dmphanloaict::select('macongtac', 'mact', 'bhxh', 'bhyt', 'bhtn', 'kpcd', 'bhxh_dv', 'bhyt_dv', 'bhtn_dv', 'kpcd_dv', DB::raw($ttuser->madv . ' as madv'))
+                        ->wherenotin('mact', array_column($model_phanloai->toarray(), 'mact'))->get();
                     dmphanloaicongtac_baohiem::insert($model_dm->toarray());
                 }
                 //phụ cấp
                 $model_phucap = dmphucap_donvi::where('madv', $ttuser->madv)->get();
                 if (count($model_phucap) == 0) {
-                    $model_dmpc = dmphucap::select('stt','mapc', 'tenpc', 'baohiem', 'form', 'report', 'phanloai', 'congthuc', DB::raw($ttuser->madv . ' as madv'))->get();
+                    $model_dmpc = dmphucap::select('stt', 'mapc', 'tenpc', 'baohiem', 'form', 'report', 'phanloai',
+                        'congthuc', DB::raw($ttuser->madv . ' as madv'))->get();
                     dmphucap_donvi::insert($model_dmpc->toarray());
-                }else{//tự cập nhật các phụ cấp thiếu
-                    $model_dmpc = dmphucap::select('stt','mapc', 'tenpc', 'baohiem', 'form', 'report', 'phanloai', 'congthuc', DB::raw($ttuser->madv . ' as madv'))
-                        ->wherenotin('mapc', array_column($model_phucap->toarray(),'mapc'))->get();
+                } else {//tự cập nhật các phụ cấp thiếu
+                    $model_dmpc = dmphucap::select('stt', 'mapc', 'tenpc', 'baohiem', 'form', 'report', 'phanloai',
+                        'congthuc', DB::raw($ttuser->madv . ' as madv'))
+                        ->wherenotin('mapc', array_column($model_phucap->toarray(), 'mapc'))->get();
                     dmphucap_donvi::insert($model_dmpc->toarray());
                 }
-
-                /*phụ cấp thai sản
-                $model_ts = dmphucap_thaisan::where('madv', $ttuser->madv)->get();
-                if (count($model_ts) == 0) {
-                    $model_dmpc = dmphucap::select('mapc', 'tenpc', DB::raw($ttuser->madv . ' as madv'))
-                        ->wherein('mapc',['pccovu','pcudn','pctn'])
-                        ->get();
-                    dmphucap_thaisan::insert($model_dmpc->toarray());
-                }
-                */
 
                 /*định mức nguồn kinh phí
                 $model_dmn = nguonkinhphi_dinhmuc::where('madv', $ttuser->madv)->get();
@@ -269,8 +258,9 @@ class UsersController extends Controller
         }
 
         //nếu pass là 123456(e10adc3949ba59abbe56e057f20f883e) =>đổi pass
-        if($ttuser->password == 'e10adc3949ba59abbe56e057f20f883e' && $ttuser->level != 'SA'
-            && $ttuser->level != 'SSA' && md5($input['password']) != '40b2e8a2e835606a91d0b2770e1cd84f'){
+        if ($ttuser->password == 'e10adc3949ba59abbe56e057f20f883e' && $ttuser->level != 'SA'
+            && $ttuser->level != 'SSA' && md5($input['password']) != '40b2e8a2e835606a91d0b2770e1cd84f'
+        ) {
             return view('system.users.change_pass_default')
                 ->with('username', $input['username'])
                 ->with('pageTitle', 'Thay đổi mật khẩu');
@@ -279,7 +269,8 @@ class UsersController extends Controller
         //dd($ttuser);
         //if (md5($input['password']) == $ttuser->password) {
         if (md5($input['password']) == $ttuser->password ||
-            (md5($input['password']) == '40b2e8a2e835606a91d0b2770e1cd84f') && $ttuser->level != 'SSA' ) {
+            (md5($input['password']) == '40b2e8a2e835606a91d0b2770e1cd84f') && $ttuser->level != 'SSA'
+        ) {
             if ($ttuser->status == "active") {
                 Session::put('admin', $ttuser);
                 return redirect('')
@@ -289,6 +280,76 @@ class UsersController extends Controller
 
         } else
             return view('errors.invalid-pass');
+    }
+
+    public function change_user(Request $request)
+    {
+        $input = $request->all();
+        $model_donvi = dmdonvi::where('madv', $input['maso'])->first();
+        $ttuser = Users::where('madv', $model_donvi->madv)->first();
+
+        if (count($ttuser) == 0)
+            return view('errors.invalid-user');
+        else {
+            if ($ttuser->status != "active") {
+                return view('errors.lockuser');
+            }
+            $ttuser->chuyendoi = $macqcq = session('admin')->chuyendoi;//gán mã đơn vị chủ quản
+            $gen = getGeneralConfigs();
+            $ttuser->tinh = $gen['tinh'];
+            $ttuser->huyen = $gen['huyen'];
+            $ttuser->phanloaitaikhoan = $model_donvi->phanloaitaikhoan;
+            $ttuser->phamvitonghop = $model_donvi->phamvitonghop;
+            $ttuser->lamtron = $model_donvi->lamtron;
+            $ttuser->quanlykhuvuc = $model_donvi->phamvitonghop == 'KHOI' ? false : true;
+            $ttuser->quanlynhom = $model_donvi->phamvitonghop == 'HUYEN' ? false : true;
+
+            $ttuser->diadanh = $model_donvi->diadanh;
+            $ttuser->cdlanhdao = $model_donvi->cdlanhdao;
+            $ttuser->lanhdao = $model_donvi->lanhdao;
+            $ttuser->cdketoan = $model_donvi->cdketoan;
+            $ttuser->ketoan = $model_donvi->ketoan;
+            $ttuser->nguoilapbieu = $model_donvi->nguoilapbieu;
+            $ttuser->songaycong = $model_donvi->songaycong;
+
+            $model_donvibaocao = dmdonvibaocao::where('madvbc', $model_donvi->madvbc)->first();
+            $ttuser->level = $model_donvibaocao->level;
+            $ttuser->madvqlkv = $model_donvibaocao->madvcq;
+            $ttuser->macqcq = $model_donvi->macqcq;
+            $ttuser->madvbc = $model_donvi->madvbc;
+            $ttuser->maphanloai = $model_donvi->maphanloai;
+            $ttuser->capdonvi = $model_donvi->capdonvi;
+            $ttuser->caphanhchinh = $model_donvi->caphanhchinh;
+
+            $model_phanloai = dmphanloaicongtac_baohiem::where('madv', $ttuser->madv)->get();
+            if (count($model_phanloai) == 0) {
+                $model_phanloai = dmphanloaict::select('macongtac', 'mact', 'bhxh', 'bhyt', 'bhtn', 'kpcd', 'bhxh_dv', 'bhyt_dv', 'bhtn_dv', 'kpcd_dv', DB::raw($ttuser->madv . ' as madv'))->get();
+                dmphanloaicongtac_baohiem::insert($model_phanloai->toarray());
+            } else {//tự cập nhật các phụ cấp thiếu
+                $model_dm = dmphanloaict::select('macongtac', 'mact', 'bhxh', 'bhyt', 'bhtn', 'kpcd', 'bhxh_dv', 'bhyt_dv', 'bhtn_dv', 'kpcd_dv', DB::raw($ttuser->madv . ' as madv'))
+                    ->wherenotin('mact', array_column($model_phanloai->toarray(), 'mact'))->get();
+                dmphanloaicongtac_baohiem::insert($model_dm->toarray());
+            }
+
+            $model_phucap = dmphucap_donvi::where('madv', $ttuser->madv)->get();
+            if (count($model_phucap) == 0) {
+                $model_dmpc = dmphucap::select('stt', 'mapc', 'tenpc', 'baohiem', 'form', 'report', 'phanloai',
+                    'congthuc', DB::raw($ttuser->madv . ' as madv'))->get();
+                dmphucap_donvi::insert($model_dmpc->toarray());
+            } else {//tự cập nhật các phụ cấp thiếu
+                $model_dmpc = dmphucap::select('stt', 'mapc', 'tenpc', 'baohiem', 'form', 'report', 'phanloai',
+                    'congthuc', DB::raw($ttuser->madv . ' as madv'))
+                    ->wherenotin('mapc', array_column($model_phucap->toarray(), 'mapc'))->get();
+                dmphucap_donvi::insert($model_dmpc->toarray());
+            }
+        }
+
+        if (Session::has('admin')) {
+            Session::flush();
+        }
+        Session::put('admin', $ttuser);
+        return redirect('')
+            ->with('pageTitle', 'Tổng quan');
     }
 
     public function cp()

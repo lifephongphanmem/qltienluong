@@ -92,6 +92,13 @@
                             <i class="fa fa-angle-down"></i>
                         </a>
                         <ul class="dropdown-menu dropdown-menu-default">
+                            @if(session('admin')->chuyendoi != null)
+                                <li>
+                                    <a href="{{url('/don_vi_cd')}}">
+                                        <i class="icon-users"></i> Chuyển đơn vị sử dụng</a>
+                                    </li>
+                            @endif
+
                             <li>
                                 <a href="{{url('change-password')}}">
                                     <i class="icon-lock"></i> Đổi mật khẩu</a>
@@ -100,6 +107,7 @@
                                 <a href="{{url('logout')}}">
                                     <i class="icon-key"></i> Đăng xuất </a>
                             </li>
+
                         </ul>
                     </li>
                     <!-- END USER LOGIN DROPDOWN -->
@@ -220,9 +228,9 @@
                                     <a href="{{url('nghiep_vu/chi_tieu/danh_sach?namct='.date('Y'))}}"><i class="fa fa-caret-right"></i>Chỉ tiêu biên chế</a>
                                 </li>
 
-                                <!--li>
+                                <li>
                                     <a href="{{url('nghiep_vu/qua_trinh/phu_cap/danh_sach')}}"><i class="fa fa-caret-right"></i>Quá trình hưởng lương, phụ cấp</a>
-                                </li-->
+                                </li>
                                 @if(session('admin')->maphanloai == 'KVXP')
                                     <!-- Tạm thời bỏ để triển khai lạng sơn -->
                                     <!--li><a href="{{url('nghiep_vu/quan_ly/dia_ban_dbkk/index')}}"><i class="fa fa-caret-right"></i>Danh sách thôn, tổ dân phố</a></li-->
@@ -566,30 +574,30 @@
 <!-- END SIDEBAR -->
 
 <!-- BEGIN CONTENT -->
-<div class="page-content-wrapper">
-<div class="page-content"  style="padding-top: 0px;">
-<!-- BEGIN PAGE BREADCRUMB -->
-<!--div class="page-bar">
-<ul class="page-breadcrumb breadcrumb">
-<li>
-<i class="fa fa-home"></i>
-    <a href="{{url('')}}">Trang chủ</a>
-<i class="fa fa-angle-right"></i>
-</li>
-<li>
-{{$pageTitle}}
-</li>
-</ul>
+    <div class="page-content-wrapper">
+    <div class="page-content"  style="padding-top: 0px;">
+    <!-- BEGIN PAGE BREADCRUMB -->
+    <!--div class="page-bar">
+    <ul class="page-breadcrumb breadcrumb">
+    <li>
+    <i class="fa fa-home"></i>
+        <a href="{{url('')}}">Trang chủ</a>
+    <i class="fa fa-angle-right"></i>
+    </li>
+    <li>
+    {{$pageTitle}}
+    </li>
+    </ul>
 
-<div class="page-toolbar">
-<div class="page-toolbar">
-<b><div id="clock"></div></b>
-</div>
-</div>
-</div-->
-<!-- END PAGE BREADCRUMB -->
-@yield('content')
-</div>
+    <div class="page-toolbar">
+    <div class="page-toolbar">
+    <b><div id="clock"></div></b>
+    </div>
+    </div>
+    </div-->
+    <!-- END PAGE BREADCRUMB -->
+        @yield('content')
+    </div>
 </div>
 <!-- END CONTENT -->
 </div>
@@ -643,9 +651,9 @@
 <!-- END PAGE LEVEL SCRIPTS -->
 <script>
 jQuery(document).ready(function() {
-Metronic.init(); // init metronic core componets
-Layout.init(); // init layout
-Demo.init(); // init demo features
+    Metronic.init(); // init metronic core componets
+    Layout.init(); // init layout
+    Demo.init(); // init demo features
 });
 </script>
 <!-- END JAVASCRIPTS -->

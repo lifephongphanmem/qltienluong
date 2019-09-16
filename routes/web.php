@@ -8,6 +8,7 @@ Route::get('ajaxtest','ajaxController@test');
 Route::get('/setting','HomeController@setting');
 Route::post('/setting','HomeController@upsetting');
 Route::get('danh_sach_tai_khoan','HomeController@listusers');
+Route::get('don_vi_cd','HomeController@list_donvi_cd');
 Route::get('fix_pc','dmphucapController@fix_mapc');
 //Route::get('fix_ct','dmphucapController@fix_ct');
 //Route::get('fix_dv','hosocanboController@upd_dm');
@@ -51,6 +52,7 @@ Route::get('users/unlock/{id}/{pl}','UsersController@unlockuser');
 Route::group(['prefix'=>'user'],function(){
     Route::post('signin','usersController@signin');
     Route::get('logout','usersController@logout');
+    Route::get('change_user','usersController@change_user');
 });
 
 Route::group(['prefix'=>'danh_muc'],function(){
@@ -426,7 +428,7 @@ Route::group(['prefix'=>'nghiep_vu'],function(){
             Route::get('create','hosophucapController@create');
             Route::post('store','hosophucapController@store');
 
-            Route::get('edit','hosophucapController@create');
+            Route::get('edit','hosophucapController@edit');
             Route::post('update','hosophucapController@update');
             Route::get('del/{id}','hosophucapController@destroy');
         });

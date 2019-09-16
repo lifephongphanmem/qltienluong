@@ -18,14 +18,12 @@ use Illuminate\Support\Facades\Session;
 
 class HomeController extends Controller
 {
-
     public function index()
     {
         if (Session::has('admin')) {
             if (session('admin')->username == 'sa')
                 return redirect('cau_hinh_he_thong');
             else {
-
                 //thêm phân loại công tác
                 //chia ra màn hình đơn vị; màn hình đơn vị tổng hợp
                 $model = hosocanbo::select('macanbo', 'tencanbo', 'msngbac', 'sunghiep', 'gioitinh', 'tnndenngay', 'ngaytu', 'ngayden', 'ngaysinh', 'mact')
@@ -38,6 +36,7 @@ class HomeController extends Controller
                         ->where('theodoi', '<', '9')
                         ->where('dmdonvi.macqcq', session('admin')->madv)
                         ->get();
+
                 $a_ketqua = array();
                 $a_ketqua['congchuc'] = $model->where('sunghiep', 'Công chức')->count();
                 $a_ketqua['vienchuc'] = $model->where('sunghiep', 'Viên chức')->count();
@@ -82,16 +81,19 @@ class HomeController extends Controller
                 $m_nghihuu = $model->where('nam', '<=', $date['year']);
                 $m_nangluong = $model->where('nam_luong', $date['year']);
                 $m_nghe = $model->where('nam_nghe', $date['year']);
-
                 //$m_sinhnhat=$model->where('thang',$date['mon']);
                 $m_luanchuyen = \App\hosodieudong::where('madv_dd', session('admin')->madv)->where('trangthai', 'CHONHAN')->get();
                 //dd($m_nangluong->toarray());
+
+                //chuyển đổi tài khoản
+                //$m_donvi_cd = dmdonvi::where('macqcq', session('admin')->chuyendoi)->get();
 
                 return view('dashboard')
                     ->with('m_nangluong', $m_nangluong->sortby('ngayden'))
                     ->with('m_nghihuu', $m_nghihuu->sortby('ngaysinh'))
                     ->with('m_nghe', $m_nghe->sortby('tnndenngay'))
                     ->with('m_luanchuyen', $m_luanchuyen)
+                    //->with('m_donvi_cd', $m_donvi_cd)
                     ->with('a_ketqua', $a_ketqua)
                     ->with('pageTitle', 'Tổng quan');
             }
@@ -101,8 +103,6 @@ class HomeController extends Controller
             return view('welcome')
                 ->with('a_gen', getGeneralConfigs());
         }
-
-
     }
 
     public function baotri()
@@ -171,4 +171,17 @@ class HomeController extends Controller
             ->with('pageTitle', 'Danh sách đơn vị');
     }
 
+    public function list_donvi_cd()
+    {
+        if (Session::has('admin')) {
+            $m_donvi_cd = dmdonvi::where('macqcq', session('admin')->chuyendoi)->get();
+
+            return view('system.manage.list_donvi')
+                ->with('m_donvi_cd', $m_donvi_cd)
+                ->with('pageTitle', 'Chuyển đơn vị');
+
+        } else
+            return view('errors.notlogin');
+
+    }
 }

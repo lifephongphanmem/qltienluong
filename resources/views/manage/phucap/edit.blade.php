@@ -37,7 +37,8 @@
                 </div-->
                 <div class="portlet-body form">
                     <!-- BEGIN FORM-->
-                    {!! Form::model($model,['url'=>$inputs['furl'].'store', 'id' => 'create_tttaikhoan', 'class'=>'horizontal-form']) !!}
+                    {!! Form::model($model,['url'=>$inputs['furl'].'update', 'id' => 'create_tttaikhoan', 'class'=>'horizontal-form']) !!}
+                    <input type="hidden" id="maso" name="maso" value="{{$model->maso}}"/>
                     <input type="hidden" id="macanbo" name="macanbo" value="{{$model->macanbo}}"/>
                     <input type="hidden" id="macvcq" name="macvcq" value="{{$model->macvcq}}"/>
                     <input type="hidden" id="madv" name="madv" value="{{session('admin')->madv}}"/>
