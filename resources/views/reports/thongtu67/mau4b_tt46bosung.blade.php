@@ -66,7 +66,7 @@
     <tr style="padding-left: 2px;padding-right: 2px">
         <th style="width: 5%;padding-left: 2px;padding-right: 2px" rowspan="3">TT</th>
         <th style="padding-left: 2px;padding-right: 2px" rowspan="3">CHỈ TIÊU</th>
-        <th style="width: 10%;padding-left: 2px;padding-right: 2px" rowspan="3">NHU CẦU KINH PHÍ THỰC HIỆN CCTL NĂM 2018</th>
+        <th style="width: 10%;padding-left: 2px;padding-right: 2px" rowspan="3">NHU CẦU KINH PHÍ THỰC HIỆN CCTL NĂM 2019</th>
         <th style="width: 40%;padding-left: 2px;padding-right: 2px" colspan="6">NGUỒN TỪ TIẾT KIỆM 10% CHI THƯỜNG XUYÊN VÀ NGUỒN THU ĐỂ LẠI ĐƠN VỊ VÀ NGUỒN TIẾT KIỆM THEO NGHỊ QUYẾT 18, 19</th>
         <th style="padding-left: 2px;padding-right: 2px" rowspan="3">NHU CẦU BỔ SUNG</th>
 
