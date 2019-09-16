@@ -113,6 +113,8 @@
                                             @if($value->tralai)
                                                 <button type="button" class="btn btn-default btn-sm" onclick="confirmChuyen('{{$value['masodv']}}')" data-target="#chuyen-modal" data-toggle="modal"><i class="fa icon-share-alt"></i>&nbsp;
                                                     Trả lại dữ liệu</button>
+                                                <!--a href="{{url('nguon_kinh_phi/ma_so='.$value->masodv)}}" class="btn btn-default btn-xs mbs">
+                                                    <i class="fa fa-edit"></i>&nbsp; Chi tiết</a-->
                                             @endif
                                         @else
                                             <button class="btn btn-danger btn-xs mbs">
