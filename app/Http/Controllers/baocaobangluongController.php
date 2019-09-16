@@ -881,7 +881,7 @@ class baocaobangluongController extends Controller
                 ->wherein('madv',array_column($model_tonghop->toarray(),'madv'))->orWhereIn('macqcq', array_column($model_donvi->toarray(),'madv'))->get();
             $a_dv = array_column($model_tonghop->toarray(),'madv','mathdv');
             $a_pl = array_column($model_dmdv->toarray(),'maphanloai','madv');
-            $model = tonghopluong_donvi_chitiet::wherein('mathdv', array_column($model_tonghop->toarray(),'mathdv'))->get();
+            $model = tonghopluong_donvi_bangluong::wherein('mathdv', array_column($model_tonghop->toarray(),'mathdv'))->get();
             $model_nguonkp = array_column(dmnguonkinhphi::all()->toArray(), 'tennguonkp', 'manguonkp');
             $model_phanloaict = array_column(dmphanloaicongtac::all()->toArray(), 'tencongtac', 'macongtac');
             $model_ct = array_column(dmphanloaict::all()->toArray(), 'tenct', 'mact');
@@ -907,7 +907,7 @@ class baocaobangluongController extends Controller
                     ->all();
             });
             $a_soluong = a_unique($model_data);
-            //dd($a_soluong);
+            //dd($model->toarray());
             //cho trương hợp đơn vị cấp trên in dữ liệu dv câp dưới mà ko sai tên đơn vị
             $m_dv = dmdonvi::where('madv', $madv)->first();
 

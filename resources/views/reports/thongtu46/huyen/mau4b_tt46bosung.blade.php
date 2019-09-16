@@ -87,14 +87,14 @@
     <tr style="font-weight: bold;">
         <td></td>
         <td>TỔNG SỐ</td>
-        <td class="money">{{dinhdangso(array_sum(array_column($data, 'nhucau')),0,$inputs['donvitinh'])}}</td>
-        <td class="money">{{dinhdangso(array_sum(array_column($data, 'nguonkp')),0,$inputs['donvitinh'])}}</td>
-        <td class="money">{{dinhdangso(array_sum(array_column($data, 'tietkiem')),0,$inputs['donvitinh'])}}</td>
-        <td class="money">{{dinhdangso(array_sum(array_column($data, 'hocphi')),0,$inputs['donvitinh'])}}</td>
-        <td class="money">{{dinhdangso(array_sum(array_column($data, 'vienphi')),0,$inputs['donvitinh'])}}</td>
-        <td class="money">{{dinhdangso(array_sum(array_column($data, 'nguonthu')),0,$inputs['donvitinh'])}}</td>
-        <td class="money">{{dinhdangso(array_sum(array_column($data, 'khac')),0,$inputs['donvitinh'])}}</td>
-        <td class="money">{{dinhdangso(array_sum(array_column($data, 'bosung')),0,$inputs['donvitinh'])}}</td>
+        <td class="money">{{dinhdangso($a_TC['nhucau'],0,$inputs['donvitinh'])}}</td>
+        <td class="money">{{dinhdangso($a_TC['nguonkp'],0,$inputs['donvitinh'])}}</td>
+        <td class="money">{{dinhdangso($a_TC['tietkiem'],0,$inputs['donvitinh'])}}</td>
+        <td class="money">{{dinhdangso($a_TC['hocphi'],0,$inputs['donvitinh'])}}</td>
+        <td class="money">{{dinhdangso($a_TC['vienphi'],0,$inputs['donvitinh'])}}</td>
+        <td class="money">{{dinhdangso($a_TC['nguonthu'],0,$inputs['donvitinh'])}}</td>
+        <td class="money">{{dinhdangso($a_TC['khac'],0,$inputs['donvitinh'])}}</td>
+        <td class="money">{{dinhdangso($a_TC['bosung'],0,$inputs['donvitinh'])}}</td>
     </tr>
     @foreach($data as $dulieu)
         <tr>
