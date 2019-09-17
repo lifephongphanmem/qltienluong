@@ -39,5 +39,6 @@ class dmdonvi extends Model
         'trangthai',
         'caphanhchinh',
         'chuyendoi',//biến lưu chuyển đổi tài khoản
+        'dinhmucnguon',
     ];
 }

@@ -43,7 +43,7 @@ use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Support\Facades\Response;
 
 class bangluongController extends Controller
-{   //bo
+{   /*
     function index(Request $request)
     {
         if (Session::has('admin')) {
@@ -83,25 +83,25 @@ class bangluongController extends Controller
         } else
             return view('errors.notlogin');
     }
-
+    bo*/
     function chitra(Request $request)
     {
         if (Session::has('admin')) {
             $inputs = $request->all();
-            $inputs['manguonkp']= '13';
-            $inputs['luongcb']= getGeneralConfigs()['luongcb'];
-            $inputs['furl']= '/chuc_nang/bang_luong/';
-            $inputs['furl_ajax']= '/ajax/bang_luong/';
-            $inputs['dinhmuc']= 0;
+            $inputs['manguonkp'] = '13';
+            $inputs['luongcb'] = getGeneralConfigs()['luongcb'];
+            $inputs['furl'] = '/chuc_nang/bang_luong/';
+            $inputs['furl_ajax'] = '/ajax/bang_luong/';
+            $inputs['dinhmuc'] = 0;
 
-            $dinhmuc = nguonkinhphi_dinhmuc::where('manguonkp',$inputs['manguonkp'])
-                ->where('madv',session('admin')->madv)->first();
-            $maso = count($dinhmuc)> 0 ? $dinhmuc->maso : '';
-            $dinhmuc_ct = nguonkinhphi_dinhmuc_ct::where('maso',$maso)->get();
+            $dinhmuc = nguonkinhphi_dinhmuc::where('manguonkp', $inputs['manguonkp'])
+                ->where('madv', session('admin')->madv)->first();
+            $maso = count($dinhmuc) > 0 ? $dinhmuc->maso : '';
+            $dinhmuc_ct = nguonkinhphi_dinhmuc_ct::where('maso', $maso)->get();
 
-            if(count($dinhmuc_ct)>0){
-                $inputs['dinhmuc']= 1;
-                $inputs['luongcb']= $dinhmuc->luongcoban;
+            if (count($dinhmuc_ct) > 0) {
+                $inputs['dinhmuc'] = 1;
+                $inputs['luongcb'] = $dinhmuc->luongcoban;
             }
 
             //$m_nguonkp = array_column(dmnguonkinhphi::all()->toArray(), 'tennguonkp', 'manguonkp');
@@ -110,18 +110,18 @@ class bangluongController extends Controller
             $model_tenct = dmphanloaict::select('tenct', 'macongtac', 'mact')->get();
             $model = bangluong::where('madv', session('admin')->madv)->where('thang', $inputs['thang'])->where('nam', $inputs['nam'])->get();
             //bảng lương mẫu
-            $model_bl = bangluong::where('madv', session('admin')->madv)->where('phanloai','BANGLUONG')->orderby('nam')->orderby('thang')->get();
+            $model_bl = bangluong::where('madv', session('admin')->madv)->where('phanloai', 'BANGLUONG')->orderby('nam')->orderby('thang')->get();
             $model_tonghop = tonghopluong_donvi::where('madv', session('admin')->madv)
                 ->where('thang', $inputs['thang'])->where('nam', $inputs['nam'])->first();
-            $thaotac = count($model_tonghop)> 0 ? false :true;
+            $thaotac = count($model_tonghop) > 0 ? false : true;
             $inputs['thaotac'] = $thaotac;
 
-            $a_pc = array('heso','vuotkhung','pctnn','pccovu','pcud61','pcudn','hesott',
-                'pccv','pctaicu','hesopc','pcthni'); //do các loại phụ cấp lưu lại
+            $a_pc = array('heso', 'vuotkhung', 'pctnn', 'pccovu', 'pcud61', 'pcudn', 'hesott',
+                'pccv', 'pctaicu', 'hesopc', 'pcthni'); //do các loại phụ cấp lưu lại
 
-            $m_nguonkp_bl = $m_nguonkp->wherein('manguonkp', a_unique(array_column($model->toarray(),'manguonkp')));
-            $a_phucap_trichnop = dmphucap_donvi::where('madv', session('admin')->madv)->where('phanloai','<','3')->get();
-            $a_phucap = dmphucap_donvi::where('madv', session('admin')->madv)->where('phanloai','<','3')->wherenotin('mapc',$a_pc)->get();
+            $m_nguonkp_bl = $m_nguonkp->wherein('manguonkp', a_unique(array_column($model->toarray(), 'manguonkp')));
+            $a_phucap_trichnop = dmphucap_donvi::where('madv', session('admin')->madv)->where('phanloai', '<', '3')->get();
+            $a_phucap = dmphucap_donvi::where('madv', session('admin')->madv)->where('phanloai', '<', '3')->wherenotin('mapc', $a_pc)->get();
             $m_linhvuc = getLinhVucHoatDong(false);
 
             return view('manage.bangluong.index')
@@ -136,7 +136,7 @@ class bangluongController extends Controller
                 ->with('m_nguonkp', array_column($m_nguonkp->toArray(), 'tennguonkp', 'manguonkp'))
                 ->with('a_nguonkp_bl', array_column($m_nguonkp_bl->toArray(), 'tennguonkp', 'manguonkp'))
                 ->with('a_phucap', array_column($a_phucap->toArray(), 'tenpc', 'mapc'))
-                ->with('a_phucap_trichnop',array_merge(array('ALL'=>'Tất cả các loại phụ cấp'), array_column($a_phucap_trichnop->toArray(), 'tenpc', 'mapc')))
+                ->with('a_phucap_trichnop', array_merge(array('ALL' => 'Tất cả các loại phụ cấp'), array_column($a_phucap_trichnop->toArray(), 'tenpc', 'mapc')))
                 ->with('a_phanloai', getPhanLoaiBangLuong())
                 ->with('pageTitle', 'Danh sách bảng lương');
         } else
@@ -182,7 +182,7 @@ class bangluongController extends Controller
         } else
             return view('errors.notlogin');
     }
-
+    /*
     function tanggiam(Request $request){
         if (Session::has('admin')) {
             $inputs = $request->all();
@@ -234,6 +234,7 @@ class bangluongController extends Controller
         } else
             return view('errors.notlogin');
     }
+    */
 
     //Insert + update bảng lương
     function store(Request $request){
@@ -285,6 +286,14 @@ class bangluongController extends Controller
     }
 
     //làm hàm lấy ds cán bộ đang công tác: notin thôi công tac and notin ngaycongtac < ngày cuối tháng lương
+    //xác định mức lương cơ bản cán bộ (phân loại công tác - nguồn kinh phí - phụ cấp)
+    //lấy theo mức lương mặc định theo nguồn kinh phí
+
+    //lấy theo nguồn => tạo theo phân loại công tác - mức phụ cấp (mặc định theo nguồn)
+    /*foreach(phanloaicongtac){
+        foreach(phucap){}
+    }
+    */
     function tinhluong_dinhmuc($inputs){
         $ngaylap = Carbon::create($inputs['nam'], $inputs['thang'], '01');
         $m_tamngung = hosotamngungtheodoi::where('madv', $inputs['madv'])->where('maphanloai', 'THAISAN')

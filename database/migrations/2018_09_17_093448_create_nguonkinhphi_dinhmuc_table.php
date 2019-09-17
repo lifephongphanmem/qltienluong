@@ -19,6 +19,7 @@ class CreateNguonkinhphiDinhmucTable extends Migration
         Schema::create('nguonkinhphi_dinhmuc', function (Blueprint $table) {
             $table->increments('id');
             $table->string('maso',50)->unique();
+            $table->string('mact')->default('ALL');
             $table->text('noidung')->nullable();
             $table->string('manguonkp', 50)->nullable();
             $table->date('tungay')->nullable();//chưa dùng

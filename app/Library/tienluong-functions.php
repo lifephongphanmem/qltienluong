@@ -208,6 +208,14 @@ function getPhanLoaiTaiKhoan(){
     return $model;
 }
 
+function getPhanLoaiDinhMuc(){
+    $model = array(
+        'HANHCHINH'=>'Khối hành chính sự nghiệp',
+        'YTE'=>'Khối y tế',
+    );
+    return $model;
+}
+
 function getPhamViTongHop(){
     $model = array(
         'KHOI'=>'Khối; Sở, ban ngành',

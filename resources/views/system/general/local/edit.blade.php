@@ -44,8 +44,8 @@
 
                                 <div class="col-md-9">
                                     <div class="form-group">
-                                        <label class="control-label">Tên đơn vị<span class="require">*</span></label>
-                                        {!!Form::text('tendv', null, array('id' => 'tendv','class' => 'form-control'))!!}
+                                        <label class="control-label">Tên đơn vị</label>
+                                        {!!Form::text('tendv', null, array('id' => 'tendv','class' => 'form-control', 'readonly'))!!}
                                     </div>
                                 </div>
                             </div>
@@ -104,7 +104,7 @@
 
                                 <div class="col-md-3">
                                     <div class="form-group">
-                                        <label class="control-label">Số điện thoại<span class="require">*</span></label>
+                                        <label class="control-label">Số điện thoại <span class="require">*</span></label>
                                         {!!Form::text('sodt', null, array('id' => 'sodt','class' => 'form-control required'))!!}
                                     </div>
                                 </div>
@@ -113,7 +113,7 @@
                             <div class="row">
                                 <div class="col-md-3">
                                     <div class="form-group">
-                                        <label class="control-label">Phần trăm dài ngày<span class="require">*</span></label>
+                                        <label class="control-label">Phần trăm dài ngày <span class="require">*</span></label>
                                         {!!Form::text('ptdaingay', null, array('id' => 'ptdaingay','class' => 'form-control required', 'data-mask'=>'fdecimal'))!!}
                                     </div>
                                 </div>
@@ -171,16 +171,23 @@
                                     </div>
                                 </div>
 
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label class="control-label">Phân loại định mức nguồn</label>
+                                        {!!Form::select('dinhmucnguon',getPhanLoaiDinhMuc(), null, array('id' => 'dinhmucnguon','class' => 'form-control required'))!!}
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
                                 <div class="col-md-6">
                                     <div class="form-group">
                                         <label class="control-label">Đơn vị tổng hợp dữ liệu<span class="require">*</span></label>
                                         {!!Form::select('macqcq', $model_donvi, null, array('id' => 'macqcq','class' => 'form-control'))!!}
                                     </div>
                                 </div>
-                            </div>
 
-                            <div class="row">
-                                <div class="col-md-12">
+                                <div class="col-md-6">
                                     <div class="form-group">
                                         <label class="control-label">Lĩnh vực hoạt động <span class="require">*</span></label>
                                         {!!Form::select('linhvuchoatdong[]', getLinhVucHoatDong(false), null, array('id' => 'linhvuchoatdong','class' => 'form-control required','multiple'=>'multiple'))!!}

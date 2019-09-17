@@ -44,6 +44,7 @@ class CreateDmdonviTable extends Migration
             $table->date('ngaydung')->nullable();
             $table->double('chuyendoi')->default(0);
             $table->string('trangthai')->nullable();
+            $table->string('dinhmucnguon',15)->default('HANHCHINH');
             $table->timestamps();
         });
     }

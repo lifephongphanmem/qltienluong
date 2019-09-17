@@ -10,6 +10,7 @@ class nguonkinhphi_dinhmuc extends Model
     protected $fillable = [
         'id',
         'maso',
+        'mact',
         'noidung',
         'manguonkp',
         'tungay',
@@ -19,3 +20,5 @@ class nguonkinhphi_dinhmuc extends Model
         'madv'
     ];
 }
+
+//DELETE FROM `nguonkinhphi_dinhmuc` WHERE maso not in (SELECT DISTINCT maso FROM nguonkinhphi_dinhmuc_ct);

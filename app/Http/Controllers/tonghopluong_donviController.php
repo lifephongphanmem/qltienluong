@@ -151,10 +151,9 @@ class tonghopluong_donviController extends Controller
                 'stbhxh','stbhyt','stkpcd','stbhtn','ttbh','ttbh_dv','ttl', 'giaml','ttbh_dv'),$col);
             $a_th = array_merge($a_th,$col_st);
 
-            //$a_ct = bangluong_ct::select($a_th)->wherein('mabl', array_column($a_bangluong,'mabl'))->get()->toarray();
-            $a_ct = (new data())->getBangluong_ct_ar($thang,array_column($a_bangluong,'mabl'),$a_th)->toarray();
+            $m_ct = (new data())->getBangluong_ct_ar($thang,array_column($a_bangluong,'mabl'),$a_th);
+
             //dd($a_ct);
-            //$a_bangluong_phucap = bangluong_phucap::wherein('mabl', array_column($a_bangluong,'mabl'))->get()->toarray();
 
             //$model_nguondm = nguonkinhphi_dinhmuc::where('madv',$madv)->get();
             $a_nguondm = nguonkinhphi_dinhmuc_ct::join('nguonkinhphi_dinhmuc','nguonkinhphi_dinhmuc_ct.maso','nguonkinhphi_dinhmuc.maso')
@@ -168,6 +167,8 @@ class tonghopluong_donviController extends Controller
 
             $a_data = array();
             $a_plct = getPLCTTongHop();
+            $a_ct = $m_ct->wherein('mact',$a_plct)->toarray();
+
             /*
             dd($a_plct);
             $a_plct = array('1536402868','1536459380','1535613221', '1506673695');
@@ -181,13 +182,20 @@ class tonghopluong_donviController extends Controller
                 $a_ct[$i]['linhvuchoatdong'] = $bangluong['linhvuchoatdong'];
                 //chỉ dùng cho khối HCSN
                 $a_ct[$i]['mathdv'] = $mathdv;
-                $a_nguon = array_column(a_getelement_equal($a_nguondm, array('manguonkp' => $a_ct[$i]['manguonkp'])), 'mapc');
+                //$a_nguon = array_column(a_getelement_equal($a_nguondm, array('manguonkp' => $a_ct[$i]['manguonkp'])), 'mapc');
+                $tonghs = $tongst = 0;
                 foreach ($a_pc as $mapc) {
                     $mapc_st = 'st_' . $mapc;
-                    //$phucap = a_getelement_equal($a_bangluong_phucap, array('macanbo' => $a_ct[$i]['macanbo'], 'mabl' => $a_ct[$i]['mabl'], 'maso' => $mapc), true);
-                    //$a_ct[$i][$mapc_st] = count($phucap) > 0 ? $phucap['sotien'] : 0;
-                    //$a_ct[$i][$mapc] = count($phucap) > 0 ? $phucap['heso'] : 0;
-
+                    //kiểm tra nếu số tiền == 0 => hệ số = 0;
+                    if($a_ct[$i][$mapc_st] > 0){
+                        $tongst += $a_ct[$i][$mapc_st];
+                        if($a_ct[$i][$mapc_st] > $a_ct[$i][$mapc]){//phụ cấp hưởng theo số tiền
+                            $tonghs += $a_ct[$i][$mapc];
+                        }
+                    }else{
+                        $a_ct[$i][$mapc] = 0;
+                    }
+                    /* cũ 17.09.2019
                     if ($a_ct[$i]['congtac'] == 'THAISAN' && !in_array($mapc, $a_ts) ) {
                         $a_ct[$i][$mapc] = 0;
                         $a_ct[$i][$mapc_st] = 0;
@@ -201,20 +209,20 @@ class tonghopluong_donviController extends Controller
                     if (count($a_nguon)> 0 && !in_array($mapc, $a_nguon)) {
                         $a_ct[$i][$mapc] = 0;
                         $a_ct[$i][$mapc_st] = 0;
-
                     }
+                    */
                 }
-
+                $a_ct[$i]['tonghs'] = $tonghs;
+                $a_ct[$i]['ttl'] = $tongst;
                 if($a_ct[$i]['congtac'] != 'TRUYLINH'){//bảng lương truy lĩnh có luowngcb trong chi tiết
                     //$a_ct[$i]['luongcoban'] = $bangluong['luongcoban'];
                     $a_ct[$i]['congtac'] = 'BANGLUONG';//do trong trường congtac = CHUCVU, BIENCHE,...
                 }
 
                 $a_ct[$i]['tonghop'] = $a_ct[$i]['congtac'];
-                //if(in_array($a_ct[$i]['macongtac'],$a_plcongtac) || in_array($a_ct[$i]['mact'],$a_plct)){
-                if(in_array($a_ct[$i]['mact'],$a_plct)){
-                    $a_data[] = $a_ct[$i];
-                }
+
+                $a_data[] = $a_ct[$i];
+
             }
             //dd($a_data);
             //Lấy dữ liệu để lập

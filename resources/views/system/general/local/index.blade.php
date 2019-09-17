@@ -26,8 +26,11 @@
                     <div class="caption">
                     </div>
                     <div class="actions">
-                        <a @if(session('admin')->phanloaitaikhoan == 'TH') style='display: none' @endif href="{{url($url.'thong_tin?maso='.$model->madv)}}" class="btn btn-default btn-sm">
-                            <i  class="fa fa-edit"></i> Chỉnh sửa </a>
+                        @if(session('admin')->phanloaitaikhoan != 'TH')
+                            <a href="{{url($url.'thong_tin?maso='.$model->madv)}}" class="btn btn-default btn-sm">
+                                <i  class="fa fa-edit"></i> Chỉnh sửa </a>
+                        @endif
+
                         <!--a href="" class="btn btn-default btn-sm">
                             <i class="fa fa-print"></i> Print </a-->
                         @if(session('admin')->sadmin == 'ssa')
@@ -67,10 +70,19 @@
 
                         <tr>
                             <td style="width:15%">
-                                <b>Cấp dự toán</b>
+                                <b>Phân loại đơn vị</b>
                             </td>
                             <td style="width:35%">
-                                <span class="text-muted">{{$model->capdutoan}}</span>
+                                <span class="text-muted">{{$model->maphanloai}}</span>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td style="width:15%">
+                                <b>Mức độ tự chủ tài chính</b>
+                            </td>
+                            <td style="width:35%">
+                                <span class="text-muted">{{$model->phanloainguon}}</span>
                             </td>
                         </tr>
 

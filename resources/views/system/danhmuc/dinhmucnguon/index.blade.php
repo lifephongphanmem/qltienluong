@@ -33,7 +33,7 @@
             <div class="portlet light bordered">
                 <div class="portlet-title">
                     <div class="caption">
-                        <b>THÔNG TIN ĐỊNH MỨC NGUỒN KINH PHÍ TẠI ĐƠN VỊ</b>
+                        <b>ĐỊNH MỨC NGUỒN KINH PHÍ TẠI ĐƠN VỊ</b>
                     </div>
                     <div class="actions">
 
@@ -44,32 +44,30 @@
                     <table id="sample_3" class="table table-hover table-striped table-bordered" style="min-height: 230px">
                         <thead>
                             <tr>
-                                <th class="text-center" style="width: 10%">STT</th>
-                                <th class="text-center">Mã nguồn</th>
-                                <th class="text-center">Tên nguồn kinh phí</th>
-                                <th class="text-center">Mức lương cơ bản</th>
-                                <th class="text-center">Nộp bảo hiểm</th>
+                                <th class="text-center" style="width: 5%">STT</th>
+                                <th class="text-center">Mã</br>nguồn</th>
+                                <th class="text-center">Nguồn kinh phí</th>
+                                <th class="text-center">Mức lương</br>cơ bản</th>
+                                <th class="text-center">Nộp</br>bảo hiểm</th>
                                 <th class="text-center">Thao tác</th>
                             </tr>
                         </thead>
                         <tbody>
-                            @if(isset($model))
-                                @foreach($model as $key=>$value)
-                                    <tr>
-                                        <td class="text-center">{{$key+1}}</td>
-                                        <td>{{$value->manguonkp}}</td>
-                                        <td>{{$value->tennguonkp}}</td>
-                                        <td class="text-right">{{dinhdangso($value->luongcoban)}}</td>
-                                        <td>{{$value->baohiem == 0 ? 'Không nộp bảo hiểm': 'Có nộp bảo hiểm'}}</td>
-                                        <td>
-                                            <button type="button" onclick="editCV('{{$value->maso}}')" class="btn btn-default btn-xs">
-                                                <i class="fa fa-edit"></i>&nbsp; Cập nhật mức lương</button>
-                                            <a href="{{url($furl.'phu_cap?maso='.$value->maso)}}" class="btn btn-default btn-xs">
-                                                <i class="fa fa-edit"></i>&nbsp; Phụ cấp</a>
-                                        </td>
-                                    </tr>
-                                @endforeach
-                            @endif
+                            @foreach($model as $key=>$value)
+                                <tr>
+                                    <td class="text-center">{{$key+1}}</td>
+                                    <td class="text-center">{{$value->manguonkp}}</td>
+                                    <td>{{$value->tennguonkp}}</td>
+                                    <td class="text-right">{{dinhdangso($value->luongcoban)}}</td>
+                                    <td class="text-center">{{$value->baohiem == 1 ? 'Nộp bảo hiểm': ''}}</td>
+                                    <td>
+                                        <button type="button" onclick="editCV('{{$value->maso}}')" class="btn btn-default btn-xs">
+                                            <i class="fa fa-edit"></i>&nbsp;Sửa</button>
+                                        <a href="{{url($furl.'phu_cap?maso='.$value->maso)}}" class="btn btn-default btn-xs">
+                                            <i class="fa fa-edit"></i>&nbsp;Phụ cấp</a>
+                                    </td>
+                                </tr>
+                            @endforeach
                         </tbody>
                     </table>
                 </div>
@@ -89,24 +87,35 @@
                 <div class="modal-body">
                     <div class="form-horizontal">
                         <div class="row">
-
-                            <div class="col-md-12">
-                                <label class="form-control-label">Mã số</label>
+                            <div class="col-md-4">
+                                <label class="form-control-label">Mã nguồn</label>
                                 {!!Form::text('manguonkp', null, array('id' => 'manguonkp','class' => 'form-control','readonly'))!!}
                             </div>
 
-                            <div class="col-md-12">
+                            <div class="col-md-8">
                                 <label class="form-control-label">Tên nguồn kinh phí</label>
                                 {!!Form::text('tennguonkp', null, array('id' => 'tennguonkp','class' => 'form-control','readonly'))!!}
                             </div>
-
+                        </div>
+                        <div class="row">
                             <div class="col-md-12">
+                                <label class="control-label">Phân loại công tác</label>
+                                {!!Form::select('baohiem', array('0'=>'Không nộp bảo hiểm','1'=>'Có nộp bảo hiểm'), null, array('id' => 'baohiem','class' => 'form-control'))!!}
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
                                 <label class="control-label">Mức lương cơ bản</label>
                                 {!!Form::text('luongcoban', null, array('id' => 'luongcoban','class' => 'form-control', 'data-mask'=>'fdecimal'))!!}
                             </div>
 
-                            <input type="hidden" id="maso" name="maso"/>
+                            <div class="col-md-6">
+                                <label class="control-label">Nộp bảo hiểm</label>
+                                {!!Form::select('baohiem', array('0'=>'Không nộp bảo hiểm','1'=>'Có nộp bảo hiểm'), null, array('id' => 'baohiem','class' => 'form-control'))!!}
+                            </div>
                         </div>
+                        <input type="hidden" id="maso" name="maso"/>
+
                     </div>
                 </div>
 

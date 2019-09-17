@@ -16,40 +16,41 @@ class dmdonviController extends Controller
 {
     function index($makhoipb){
         if (Session::has('admin')) {
-            if(session('admin')->level=='T'){
-                $model_kpb=dmkhoipb::all();
-                $m_pb=dmdonvi::all();
+            if (session('admin')->level == 'T') {
+                $model_kpb = dmkhoipb::all();
+                $m_pb = dmdonvi::all();
 
-            }else{//quyền này chỉ chạy cho H, T nen ko cần phần X
-                $makpb=getMaKhoiPB(session('admin')->madv);
-                $model_kpb=dmkhoipb::where('makhoipb',$makpb)->get();
-                $m_pb=dmdonvi::where('makhoipb',$makpb)->get();
+            } else {//quyền này chỉ chạy cho H, T nen ko cần phần X
+                $makpb = getMaKhoiPB(session('admin')->madv);
+                $model_kpb = dmkhoipb::where('makhoipb', $makpb)->get();
+                $m_pb = dmdonvi::where('makhoipb', $makpb)->get();
             }
 
-            if($makhoipb !='all'){
-                $m_pb= $m_pb->where('makhoipb',$makhoipb);
+            if ($makhoipb != 'all') {
+                $m_pb = $m_pb->where('makhoipb', $makhoipb);
             }
             return view('system.danhmuc.donvi.index')
-                ->with('makhoipb',$makhoipb)
-                ->with('model',$m_pb)
-                ->with('model_kpb',$model_kpb)
-                ->with('pageTitle','Danh mục đơn vị');
+                ->with('makhoipb', $makhoipb)
+                ->with('model', $m_pb)
+                ->with('model_kpb', $model_kpb)
+                ->with('pageTitle', 'Danh mục đơn vị');
         } else
             return view('errors.notlogin');
     }
 
-    function information_local()
-    {
+    function information_local(){
         if (Session::has('admin')) {
             $model = dmdonvi::where('madv', session('admin')->madv)->first();
             $model_capdv = getCapDonVi();
             $linhvuchoatdong = getLinhVucHoatDong(false);
             $phanloainguon = getPhanLoaiNguon(false);
             $phanloaixa = getPhanLoaiXa(false);
+            $a_pldv = getPhanLoaiDonVi();
             $model->capdutoan = isset($model_capdv[$model->capdonvi]) ? $model_capdv[$model->capdonvi] : '';
             $model->phanloainguon = isset($phanloainguon[$model->phanloainguon]) ? $phanloainguon[$model->phanloainguon] : '';
             $model->phanloaixa = isset($phanloaixa[$model->phanloaixa]) ? $phanloaixa[$model->phanloaixa] : '';
             $model->donviquanly = getTenDV($model->macqcq);
+            $model->maphanloai = isset($a_pldv[$model->maphanloai]) ?  $a_pldv[$model->maphanloai] : '';
             $a_lv = explode(',', $model->linhvuchoatdong);
             //dd($a_lv);
             foreach ($a_lv as $lv) {
