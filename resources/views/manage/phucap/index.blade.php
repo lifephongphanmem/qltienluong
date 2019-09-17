@@ -71,7 +71,7 @@
                                     <td>
                                         <a href="{{url($inputs['furl'].'edit?maso='.$value->maso)}}" class="btn btn-default btn-xs mbs">
                                             <i class="fa fa-edit"></i>&nbsp;Sửa</a>
-                                        <button type="button" onclick="cfDel('{{$inputs['furl'].'del/'.$value->id}}')" class="btn btn-danger btn-xs mbs" data-target="#delete-modal-confirm" data-toggle="modal">
+                                        <button type="button" onclick="cfDel('{{$value->maso}}')" class="btn btn-danger btn-xs mbs" data-target="#delete-modal-confirm" data-toggle="modal">
                                             <i class="fa fa-trash-o"></i>&nbsp; Xóa</button>
                                     </td>
                                 </tr>
@@ -174,7 +174,8 @@
     {!! Form::close() !!}
 
     <div id="delete-modal-confirm" tabindex="-1" role="dialog" aria-hidden="true" class="modal fade">
-        {!! Form::open(['url'=>'','method'=>'post' , 'files'=>true, 'id' => 'frmDelete']) !!}
+        {!! Form::open(['url'=>$inputs['furl'].'del','method'=>'post' , 'files'=>true, 'id' => 'frmDelete']) !!}
+            <input type="hidden" id="maso" name="maso"/>
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header modal-header-primary">
@@ -203,8 +204,8 @@
             });
         });
 
-        function cfDel(url){
-            $('#frmDelete').attr('action', url);
+        function cfDel(maso){
+            $('#frmDelete').find('[id="maso"]').attr('value',maso);
         }
     </script>
 

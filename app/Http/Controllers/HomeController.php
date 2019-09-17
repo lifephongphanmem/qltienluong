@@ -142,8 +142,7 @@ class HomeController extends Controller
             return view('welcome');
     }
 
-    public function listusers(Request $request)
-    {
+    public function listusers(Request $request){
         $inputs = $request->all();
         $model_diaban = array_column(dmdonvibaocao::select('tendvbc', 'madvbc')->get()->toArray(), 'tendvbc', 'madvbc');
         $a_diaban = array('ALL' => '--Chọn địa bàn, khu vực--');
@@ -156,11 +155,11 @@ class HomeController extends Controller
         $model = Users::wherein('madv', array_column($model_dv->toarray(), 'madv'))->get();
         $a_donvi = $model_dv->keyby('madv')->toarray();
         $a_pl = getPhanLoaiTaiKhoan();
-        foreach($model as $us){
+        foreach ($model as $us) {
             $donvi = $a_donvi[$us->madv];
             $us->tendv = $donvi['tendv'];
             $us->phanloaitaikhoan = $a_pl[$donvi['phanloaitaikhoan']];
-            $us->status = $us->status == 'active'? 'Kích hoạt' : 'Vô hiệu hóa';
+            $us->status = $us->status == 'active' ? 'Kích hoạt' : 'Vô hiệu hóa';
         }
         //dd($model_dv);
         return view('manage.taikhoan.index_users')
@@ -171,17 +170,15 @@ class HomeController extends Controller
             ->with('pageTitle', 'Danh sách đơn vị');
     }
 
-    public function list_donvi_cd()
-    {
+    public function list_donvi_cd(){
         if (Session::has('admin')) {
-            $m_donvi_cd = dmdonvi::where('macqcq', session('admin')->chuyendoi)->get();
+            $m_donvi_cd = dmdonvi::where('macqcq', session('admin')->chuyendoi)
+                ->orwhere('madv', session('admin')->chuyendoi)->get();
 
             return view('system.manage.list_donvi')
                 ->with('m_donvi_cd', $m_donvi_cd)
                 ->with('pageTitle', 'Chuyển đơn vị');
-
         } else
             return view('errors.notlogin');
-
     }
 }

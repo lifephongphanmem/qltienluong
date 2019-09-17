@@ -430,7 +430,7 @@ Route::group(['prefix'=>'nghiep_vu'],function(){
 
             Route::get('edit','hosophucapController@edit');
             Route::post('update','hosophucapController@update');
-            Route::get('del/{id}','hosophucapController@destroy');
+            Route::post('del','hosophucapController@destroy');
         });
     });
 
