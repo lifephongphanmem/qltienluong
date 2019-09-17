@@ -331,16 +331,16 @@ class dsnangluongController extends Controller
                 $hoso->ngaytu = $canbo->ngaytu;
                 $hoso->ngayden = $canbo->ngayden;
 
+                $a_tl = array();
+                $a_tl['maso'] = session('admin')->madv . '_' . $ma;
                 //lưu truy lĩnh
                 if (isset($canbo->truylinhtungay) && $canbo->hesott > 0) {
-                    $a_tl = array();
                     //$truylinh = new hosotruylinh();
                     foreach ($model_pc as $pc) {
                         $mapc = $pc->mapc;
                         $a_tl[$mapc] = $hoso->$mapc;
-
                     }
-                    $a_tl['maso'] = session('admin')->madv . '_' . $ma;
+
                     $a_tl['macanbo'] = $canbo->macanbo;
                     $a_tl['tencanbo'] = $hoso->tencanbo;
                     $a_tl['ngaytu'] = $canbo->truylinhtungay;
