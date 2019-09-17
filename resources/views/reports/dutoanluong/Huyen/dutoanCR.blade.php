@@ -286,22 +286,22 @@
                             <tr class="money">
                                 <td style="text-align: center"></td>
                                 <td style="text-align: left">{{$key}}</td>
-                                <td style="text-align: right">{{dinhdangso($model_gdplCT[$key]->sum('soluonggiao'))}}</td>
-                                <td style="text-align: right">{{dinhdangso($model_gdplCT[$key]->sum('soluongcomat'))}}</td>
-                                <td style="text-align: right">{{dinhdangso($model_gdplCT[$key]->sum('tonghs'))}}</td>
-                                <td style="text-align: right">{{dinhdangso($model_gdplCT[$key]->sum('heso'))}}</td>
-                                <td style="text-align: right">{{dinhdangso($model_gdplCT[$key]->sum('tongpc'))}}</td>
+                                <td style="text-align: right">{{dinhdangso($model_gddvCT[$key]->sum('soluonggiao'))}}</td>
+                                <td style="text-align: right">{{dinhdangso($model_gddvCT[$key]->sum('soluongcomat'))}}</td>
+                                <td style="text-align: right">{{dinhdangso($model_gddvCT[$key]->sum('tonghs'))}}</td>
+                                <td style="text-align: right">{{dinhdangso($model_gddvCT[$key]->sum('heso'))}}</td>
+                                <td style="text-align: right">{{dinhdangso($model_gddvCT[$key]->sum('tongpc'))}}</td>
 
                                 @foreach($a_phucap as $key1=>$val)
-                                    <td>{{dinhdangso($model_gdplCT[$key]->sum($key1))}}</td>
+                                    <td>{{dinhdangso($model_gddvCT[$key]->sum($key1))}}</td>
                                 @endforeach
 
-                                <td>{{dinhdangso($model_gdplCT[$key]->sum('ttbh_dv'))}}</td>
-                                <td>{{dinhdangso($model_gdplCT[$key]->sum('stbhxh_dv'))}}</td>
-                                <td>{{dinhdangso($model_gdplCT[$key]->sum('stbhyt_dv'))}}</td>
-                                <td>{{dinhdangso($model_gdplCT[$key]->sum('stkpcd_dv'))}}</td>
-                                <td>{{dinhdangso($model_gdplCT[$key]->sum('stbhtn_dv'))}}</td>
-                                <td>{{dinhdangso($model_gdplCT[$key]->sum('ttbh_dv') + $model_gdplCT[$key]->sum('luongtn'))}}</td>
+                                <td>{{dinhdangso($model_gddvCT[$key]->sum('ttbh_dv'))}}</td>
+                                <td>{{dinhdangso($model_gddvCT[$key]->sum('stbhxh_dv'))}}</td>
+                                <td>{{dinhdangso($model_gddvCT[$key]->sum('stbhyt_dv'))}}</td>
+                                <td>{{dinhdangso($model_gddvCT[$key]->sum('stkpcd_dv'))}}</td>
+                                <td>{{dinhdangso($model_gddvCT[$key]->sum('stbhtn_dv'))}}</td>
+                                <td>{{dinhdangso($model_gddvCT[$key]->sum('ttbh_dv') + $model_gddvCT[$key]->sum('luongtn'))}}</td>
                             </tr>
                         @endforeach
                 @endforeach
