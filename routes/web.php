@@ -393,6 +393,8 @@ Route::group(['prefix'=>'nghiep_vu'],function(){
         Route::get('del/{id}','hosotrucController@destroy');
         Route::post('store','hosotrucController@store');
         Route::get('get','hosotrucController@getinfo');
+
+        Route::post('copy','hosotrucController@copy');
     });
 
     Route::group(['prefix'=>'dieu_dong'],function(){

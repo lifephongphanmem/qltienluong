@@ -150,7 +150,6 @@ class tonghopluong_donviController extends Controller
                 'luongcoban','thangtl','ngaytl' ,'congtac','stbhxh_dv','stbhyt_dv','stkpcd_dv','stbhtn_dv','tonghs',
                 'stbhxh','stbhyt','stkpcd','stbhtn','ttbh','ttbh_dv','ttl', 'giaml','ttbh_dv'),$col);
             $a_th = array_merge($a_th,$col_st);
-
             $m_ct = (new data())->getBangluong_ct_ar($thang,array_column($a_bangluong,'mabl'),$a_th);
 
             //dd($a_ct);
@@ -220,9 +219,7 @@ class tonghopluong_donviController extends Controller
                 }
 
                 $a_ct[$i]['tonghop'] = $a_ct[$i]['congtac'];
-
                 $a_data[] = $a_ct[$i];
-
             }
             //dd($a_data);
             //Lấy dữ liệu để lập
@@ -243,7 +240,6 @@ class tonghopluong_donviController extends Controller
                     $model_data[$i][$ct] = array_sum(array_column($luongct,$ct));
                     //$model_data[$i][$ct] = array_sum(array_column($luongct,'st_'.$ct));
                     $tonghs += chkDbl($model_data[$i][$ct]);
-
                 }
                 $a_slcb = a_unique(a_split($luongct, array('macanbo','mact')));//lọc cán bộ kiêm nhiệm
 

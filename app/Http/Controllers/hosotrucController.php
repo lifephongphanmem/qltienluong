@@ -71,6 +71,49 @@ class hosotrucController extends Controller
             return view('errors.notlogin');
     }
 
+    function copy(Request $request){
+        if (Session::has('admin')) {
+            $inputs = $request->all();
+
+            $model = hosotruc::where('madv', session('admin')->madv)
+                ->where('thang', $inputs['thang_sao'])
+                ->where('nam', $inputs['nam_sao'])
+                ->get();
+            $a_data = array();
+
+            $model_chk = hosotruc::where('madv', session('admin')->madv)
+                ->where('thang', $inputs['thang'])
+                ->where('nam', $inputs['nam'])
+                ->get()->keyby('macanbo')->toarray();
+
+            foreach($model as $ct){
+                if(isset($model_chk[$ct->macanbo])){
+                    continue;
+                }
+                $a_data[] = array(
+                    'macanbo'=>$ct->macanbo,
+                    'tencanbo'=>$ct->tencanbo,
+                    'heso'=>$ct->heso,
+                    'madv'=>$ct->madv,
+                    'vuotkhung'=>$ct->vuotkhung,
+                    'pccv'=>$ct->pccv,
+                    'pcdh'=>$ct->pcdh,
+                    'pctn'=>$ct->pctn,
+                    'pcudn'=>$ct->pcudn,
+                    'pcud61'=>$ct->pcud61,
+                    'songaycong'=>$inputs['ngaycong_sao'],
+                    'songaytruc'=>$inputs['ngaycong_sao'],
+                    'thang'=>$inputs['thang'],
+                    'nam'=>$inputs['nam'],
+                );
+            }
+            hosotruc::insert($a_data);
+            return redirect('/nghiep_vu/truc/danh_sach?thang='.$inputs['thang'].'&nam='.$inputs['nam']);
+
+        } else
+            return view('errors.notlogin');
+    }
+
     function edit(Request $request){
         if (Session::has('admin')) {
             $inputs = $request->all();

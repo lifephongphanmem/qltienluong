@@ -36,6 +36,7 @@
                     </div>
                     @if($inputs['trangthai'])
                         <div class="actions">
+                            <button type="button" class="btn btn-default btn-xs" onclick="saochep()"><i class="fa fa-plus"></i>&nbsp;Sao chép</button>
                             <button type="button" class="btn btn-default btn-xs" onclick="add()"><i class="fa fa-plus"></i>&nbsp;Thêm mới</button>
                         </div>
                     @endif
@@ -138,10 +139,50 @@
     </div>
     {!! Form::close() !!}
 
+    {!! Form::open(['url'=>$inputs['furl'].'copy','method'=>'post' , 'files'=>true, 'id' => 'create_bangluong']) !!}
+    <div id="saochep-modal" tabindex="-1" role="dialog" aria-hidden="true" class="modal fade">
+        <div class="modal-dialog modal-content">
+            <div class="modal-header modal-header-primary">
+                <button type="button" data-dismiss="modal" aria-hidden="true" class="close">&times;</button>
+                <h4 id="modal-header-primary-label" class="modal-title">Sao chép bảng trực cán bộ</h4>
+            </div>
+            <div class="modal-body">
+                <div class="form-horizontal">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <label class="control-label">Tháng</label>
+                            {!!Form::select('thang_sao', getThang(),null, array('id' => 'thang_sao','class' => 'form-control'))!!}
+                        </div>
+
+                        <div class="col-md-6">
+                            <label class="control-label">Năm</label>
+                            {!!Form::select('nam_sao', getNam(),null, array('id' => 'nam_sao','class' => 'form-control'))!!}
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <label class="control-label">Tổng số ngày công</label>
+                            {!!Form::text('ngaycong_sao', session('admin')->songaycong, array('id' => 'ngaycong_sao','class' => 'form-control', 'data-mask'=>'fdecimal'))!!}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <input type="hidden" name="thang" id="thang" value="{{$inputs['thang']}}" >
+            <input type="hidden" name="nam" id="nam" value="{{$inputs['nam']}}" >
+            <div class="modal-footer">
+                <button type="submit" id="submit" name="submit" value="submit" class="btn btn-primary">Đồng ý</button>
+            </div>
+        </div>
+    </div>
+    {!! Form::close() !!}
     <script>
         function add(){
             $('#id').val('ADD');
             $('#chitiet-modal').modal('show');
+        }
+
+        function saochep(){
+            $('#saochep-modal').modal('show');
         }
 
         function getLink(){
