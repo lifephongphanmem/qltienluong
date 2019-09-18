@@ -62,6 +62,9 @@ class dsnangluongController extends Controller
             $a_nguon_df = getNguonTruyLinh_df();
             //dd($a_nguon_df);
             foreach ($a_canbo as $key=>$val) {
+                if(getDayVn($a_canbo[$key]['ngaytu']) == '' || getDayVn($a_canbo[$key]['ngayden']) == ''){
+                    continue;
+                }
                 $ngayden = $a_canbo[$key]['ngayden'];
                 $a_canbo[$key]['manl'] = $manl;
                 $a_canbo[$key]['phanloai'] = 'DUNGHAN';
