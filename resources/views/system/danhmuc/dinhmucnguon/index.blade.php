@@ -36,7 +36,7 @@
                         <b>ĐỊNH MỨC NGUỒN KINH PHÍ TẠI ĐƠN VỊ</b>
                     </div>
                     <div class="actions">
-
+                        <button type="button" class="btn btn-success btn-xs" onclick="add()"><i class="fa fa-plus"></i>&nbsp;Thêm mới</button>
                     </div>
                 </div>
                 <div class="portlet-body form-horizontal">
@@ -47,6 +47,7 @@
                                 <th class="text-center" style="width: 5%">STT</th>
                                 <th class="text-center">Mã</br>nguồn</th>
                                 <th class="text-center">Nguồn kinh phí</th>
+                                <th class="text-center">Phân loại công tác</th>
                                 <th class="text-center">Mức lương</br>cơ bản</th>
                                 <th class="text-center">Nộp</br>bảo hiểm</th>
                                 <th class="text-center">Thao tác</th>
@@ -58,13 +59,16 @@
                                     <td class="text-center">{{$key+1}}</td>
                                     <td class="text-center">{{$value->manguonkp}}</td>
                                     <td>{{$value->tennguonkp}}</td>
+                                    <td>{{$value->tenct}}</td>
                                     <td class="text-right">{{dinhdangso($value->luongcoban)}}</td>
                                     <td class="text-center">{{$value->baohiem == 1 ? 'Nộp bảo hiểm': ''}}</td>
                                     <td>
                                         <button type="button" onclick="editCV('{{$value->maso}}')" class="btn btn-default btn-xs">
                                             <i class="fa fa-edit"></i>&nbsp;Sửa</button>
                                         <a href="{{url($furl.'phu_cap?maso='.$value->maso)}}" class="btn btn-default btn-xs">
-                                            <i class="fa fa-edit"></i>&nbsp;Phụ cấp</a>
+                                            <i class="fa fa-list"></i>&nbsp;Phụ cấp</a>
+                                        <button type="button" onclick="cfDel('{{$value->maso}}')" class="btn btn-danger btn-xs mbs" data-target="#delete-modal-confirm" data-toggle="modal">
+                                            <i class="fa fa-trash-o"></i>&nbsp; Xóa</button>
                                     </td>
                                 </tr>
                             @endforeach
@@ -75,8 +79,9 @@
         </div>
     </div>
 
-    <!--Modal thông tin chức vụ -->
-    <div id="chucvu-modal" tabindex="-1" role="dialog" aria-hidden="true" class="modal fade">
+    <!--Modal thông tin -->
+    <div id="edit-modal" tabindex="-1" role="dialog" aria-hidden="true" class="modal fade">
+        {!! Form::open(['id'=>'frm_edit', 'method'=>'POST','url'=>$furl.'store']) !!}
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header modal-header-primary">
@@ -87,22 +92,29 @@
                 <div class="modal-body">
                     <div class="form-horizontal">
                         <div class="row">
-                            <div class="col-md-4">
-                                <label class="form-control-label">Mã nguồn</label>
-                                {!!Form::text('manguonkp', null, array('id' => 'manguonkp','class' => 'form-control','readonly'))!!}
-                            </div>
-
-                            <div class="col-md-8">
-                                <label class="form-control-label">Tên nguồn kinh phí</label>
-                                {!!Form::text('tennguonkp', null, array('id' => 'tennguonkp','class' => 'form-control','readonly'))!!}
+                            <div class="col-md-12">
+                                <label class="form-control-label">Nguồn kinh phí</label>
+                                {!!Form::select('manguonkp', getNguonKP(false), null, array('id' => 'manguonkp','class' => 'form-control'))!!}
                             </div>
                         </div>
+
                         <div class="row">
                             <div class="col-md-12">
                                 <label class="control-label">Phân loại công tác</label>
-                                {!!Form::select('baohiem', array('0'=>'Không nộp bảo hiểm','1'=>'Có nộp bảo hiểm'), null, array('id' => 'baohiem','class' => 'form-control'))!!}
+                                <select class="form-control select2me" name="mact[]" id="mact" multiple required="required">
+                                    <option value="ALL">Tất cả phân loại công tác</option>
+                                    @foreach($model_nhomct as $kieuct)
+                                        <optgroup label="{{$kieuct->tencongtac}}">
+                                            <?php $mode_ct=$model_tenct->where('macongtac',$kieuct->macongtac); ?>
+                                            @foreach($mode_ct as $ct)
+                                                <option value="{{$ct->mact}}">{{$ct->tenct}}</option>
+                                            @endforeach
+                                        </optgroup>
+                                    @endforeach
+                                </select>
                             </div>
                         </div>
+
                         <div class="row">
                             <div class="col-md-6">
                                 <label class="control-label">Mức lương cơ bản</label>
@@ -115,7 +127,6 @@
                             </div>
                         </div>
                         <input type="hidden" id="maso" name="maso"/>
-
                     </div>
                 </div>
 
@@ -125,9 +136,35 @@
                 </div>
             </div>
         </div>
+        {!! Form::close() !!}
     </div>
 
+    <div id="delete-modal-confirm" tabindex="-1" role="dialog" aria-hidden="true" class="modal fade">
+        {!! Form::open(['url'=>$furl.'destroy','method'=>'post' , 'files'=>true, 'id' => 'frmDelete']) !!}
+        <input type="hidden" id="maso_del" name="maso_del"/>
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header modal-header-primary">
+                    <button type="button" data-dismiss="modal" aria-hidden="true"
+                            class="close">&times;</button>
+                    <h4 id="modal-header-primary-label" class="modal-title">Đồng ý xoá?</h4>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" data-dismiss="modal" class="btn btn-default">Hủy thao tác</button>
+                    <button type="submit" class="btn btn-primary">Đồng ý</button>
+                </div>
+            </div>
+        </div>
+        {!! Form::close() !!}
+    </div>
     <script>
+        function add(){
+            $('#maso').val('ADD');
+            $('#luongcoban').val('{{session('admin')->luongcoban}}');
+            $('#mact').select2("val",[]);
+            $('#edit-modal').modal('show');
+        }
+
         function editCV(maso){
             var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
             $.ajax({
@@ -141,6 +178,7 @@
                 success: function (data) {
                     $('#manguonkp').val(data.manguonkp);
                     $('#tennguonkp').val(data.tennguonkp);
+                    $('#baohiem').val(data.baohiem);
                     $('#luongcoban').val(data.luongcoban);
                     $('#maso').val(maso);
                 },
@@ -149,32 +187,35 @@
                 }
             });
 
-            $('#chucvu-modal').modal('show');
+            $('#edit-modal').modal('show');
         }
 
-        function cfCV(){
-            var maso=$('#maso').val();
-            var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
-            $.ajax({
-                url: '{{$furl}}' + 'update',
-                type: 'GET',
-                data: {
-                    _token: CSRF_TOKEN,
-                    maso: maso,
-                    luongcoban: $('#luongcoban').val()
-                },
-                dataType: 'JSON',
-                success: function (data) {
-                    if (data.status == 'success') {
-                        location.reload();
-                    }
-                },
-                error: function(message){
-                    toastr.error(message,'Lỗi!!');
-                }
-            });
+        function cfDel(maso){
+            $('#maso_del').val(maso);
         }
+
+        {{--function cfCV(){--}}
+            {{--var maso=$('#maso').val();--}}
+            {{--var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');--}}
+            {{--$.ajax({--}}
+                {{--url: '{{$furl}}' + 'update',--}}
+                {{--type: 'GET',--}}
+                {{--data: {--}}
+                    {{--_token: CSRF_TOKEN,--}}
+                    {{--maso: maso,--}}
+                    {{--baohiem: $('#baohiem').val(),--}}
+                    {{--luongcoban: $('#luongcoban').val()--}}
+                {{--},--}}
+                {{--dataType: 'JSON',--}}
+                {{--success: function (data) {--}}
+                    {{--if (data.status == 'success') {--}}
+                        {{--location.reload();--}}
+                    {{--}--}}
+                {{--},--}}
+                {{--error: function(message){--}}
+                    {{--toastr.error(message,'Lỗi!!');--}}
+                {{--}--}}
+            {{--});--}}
+        {{--}--}}
     </script>
-
-    @include('includes.modal.delete')
 @stop

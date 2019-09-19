@@ -456,7 +456,7 @@ class dmdonvibaocaoController extends Controller
             $j = getDbl((hosocanbo::where('madv', $inputs['madv'])->get()->max('stt'))) + 1;
 
             $a_cb = array();
-            $model_canbo = hosocanbo::where('madv', $inputs['madv_lay'])->get();
+            $model_canbo = hosocanbo::where('madv', $inputs['madv_lay'])->where('theodoi','<','9')->get();
             //lấy danh sách chức vụ, phòng ban của đơn vị cũ
             foreach($model_canbo as $canbo){
                 $canbo->stt = $j++;

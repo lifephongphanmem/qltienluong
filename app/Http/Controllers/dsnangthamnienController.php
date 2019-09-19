@@ -59,6 +59,9 @@ class dsnangthamnienController extends Controller
             $inputs['trangthai'] = 'Tạo danh sách';
 
             foreach ($m_canbo as $cb) {
+                if(getDayVn($cb->tnndenngay) == '' || getDayVn($cb->tnntungay) == ''){
+                    continue;
+                }
                 $cb->manl = $manl;
                 $cb->vuotkhung = $cb->heso * $cb->vuotkhung / 100;
                 $cb->pctnn = $cb->pctnn == 0 ? 5 : $cb->pctnn + 1;

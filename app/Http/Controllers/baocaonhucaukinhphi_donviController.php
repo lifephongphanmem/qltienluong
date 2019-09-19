@@ -444,13 +444,13 @@ class baocaonhucaukinhphi_donviController extends Controller
             $a_BII[7] = array('tt'=>'7','noidung'=>'Kinh phí tăng thêm thực hiện chế độ bồi dưỡng phục vụ hoạt động cấp ủy thuộc cấp tỉnh theo Quy định 09-QĐ/VVPTW ngày 22/9/2017','sotien'=>'0');
             if(session('admin')->maphanloai == 'KVXP'){
                 $a_BII[0]['sotien'] = 0;
-                $a_BII[2]['sotien'] = $model->sum('luongphucap');
+                $a_BII[2]['sotien'] = $model->sum('luongphucap') + $model->sum('baohiem');
             }else{
-                $a_BII[0]['sotien'] = $model->sum('luongphucap');
+                $a_BII[0]['sotien'] = $model->sum('luongphucap') + $model->sum('baohiem');
                 $a_BII[2]['sotien'] = 0;
             }
 
-            $a_BII[1]['sotien'] = $model_tudb->sum('luongphucap');
+            $a_BII[1]['sotien'] = $model_tudb->sum('luongphucap') + $model_tudb->sum('baohiem');
 
             $a_BII[3]['sotien'] = $model->sum('daibieuhdnd');
             $a_BII[4]['sotien'] = $model->sum('nghihuu');

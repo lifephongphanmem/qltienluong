@@ -177,6 +177,7 @@ class UsersController extends Controller
                 $gen = getGeneralConfigs();
                 $ttuser->tinh = $gen['tinh'];
                 $ttuser->huyen = $gen['huyen'];
+                $ttuser->luongcoban = $gen['luongcb'];
                 $ttuser->phanloaitaikhoan = $model_donvi->phanloaitaikhoan;
                 $ttuser->phamvitonghop = $model_donvi->phamvitonghop;
                 $ttuser->lamtron = $model_donvi->lamtron;

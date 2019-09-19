@@ -1236,7 +1236,8 @@ Route::group(['prefix'=>'he_thong'],function(){
     Route::group(['prefix'=>'dinh_muc'],function(){
         Route::get('danh_sach','nguonkinhphi_dinhmucController@index');
         Route::get('get','nguonkinhphi_dinhmucController@getinfo');
-        Route::get('update','nguonkinhphi_dinhmucController@update');
+        Route::post('store','nguonkinhphi_dinhmucController@store');
+        Route::post('destroy','nguonkinhphi_dinhmucController@destroy');
         Route::get('get_ct','nguonkinhphi_dinhmucController@getinfor_ct');
         Route::get('update_ct','nguonkinhphi_dinhmucController@update_ct');
 
