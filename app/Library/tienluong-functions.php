@@ -295,6 +295,14 @@ function getThangBC_nhucau(){
     );
 }
 
+function getNamTL(){
+    $a_tl = array();
+    for($i=2010; $i <= date('Y'); $i++){
+        $a_tl[$i]=$i;
+    }
+    return $a_tl;
+}
+
 function getNam(){
     return array('2017' => '2017','2018' => '2018','2019' => '2019','2020' => '2020');
 }
