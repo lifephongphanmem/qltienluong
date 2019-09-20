@@ -64,6 +64,7 @@ class nguonkinhphi_dinhmucController extends Controller
     {
         if (Session::has('admin')) {
             $inputs = $request->all();
+            //dd($inputs);
             if (in_array('ALL', $inputs['mact'])) {
                 $mact = 'ALL';
             } else {
@@ -127,10 +128,27 @@ class nguonkinhphi_dinhmucController extends Controller
                     }
                 }
             } else {//update
+                $a_ct = getPhanLoaiCT(false);
+                $a_nkp = getNguonKP(false);
+
                 //lấy danh mục phân loại công tác theo định mức (trừ đinh mức ra)
-                $m_chk = nguonkinhphi_dinhmuc::where('manguonkp', $inputs['manguonkp'])
+                $m_goc = nguonkinhphi_dinhmuc::where('maso', '<>', $inputs['maso'])->first();
+
+                $m_chk = nguonkinhphi_dinhmuc::where('manguonkp', $m_goc->manguonkp)
                     ->where('maso', '<>', $inputs['maso'])
                     ->where('madv', session('admin')->madv)->get();
+                if(count($m_chk)>0){
+                    if ($mact == 'ALL') {
+                        return view('errors.data_error')
+                            ->with('message', $a_nkp[$inputs['manguonkp']] . ' đã thiết lập định mức nguồn nên không thể thêm định mức nguồn cho tất cả các phân loại công tác.')
+                            ->with('furl', '/he_thong/dinh_muc/danh_sach');
+                    }
+                }else{
+                    $m_goc->mact = $mact;
+                    $m_goc->luongcoban = chkDbl($inputs['luongcoban']);
+                    $m_goc->baohiem = $inputs['baohiem'];
+                    $m_goc->save();
+                }
             }
 
             return redirect('/he_thong/dinh_muc/danh_sach');

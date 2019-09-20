@@ -160,6 +160,7 @@
     <script>
         function add(){
             $('#maso').val('ADD');
+            $('#manguonkp').prop('disabled',false);
             $('#luongcoban').val('{{session('admin')->luongcoban}}');
             $('#mact').select2("val",[]);
             $('#edit-modal').modal('show');
@@ -176,17 +177,19 @@
                 },
                 dataType: 'JSON',
                 success: function (data) {
+                    var a_ct = data.mact.split(',');
                     $('#manguonkp').val(data.manguonkp);
                     $('#tennguonkp').val(data.tennguonkp);
                     $('#baohiem').val(data.baohiem);
                     $('#luongcoban').val(data.luongcoban);
                     $('#maso').val(maso);
+                    $('#mact').select2("val",a_ct);
                 },
                 error: function(message){
                     toastr.error(message,'Lỗi!');
                 }
             });
-
+            $('#manguonkp').prop('disabled',true);
             $('#edit-modal').modal('show');
         }
 

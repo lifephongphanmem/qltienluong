@@ -261,7 +261,7 @@ class tonghopluong_donviController extends Controller
                 $model_data[$i]['soluong'] = count($a_slcb);
                 $model_data[$i]['giaml'] = array_sum(array_column($luongct,'giaml'));
                 $model_data[$i]['tonghs'] = $tonghs;
-                $model_data[$i]['luongtn'] = array_sum(array_column($luongct,'ttl')) - $model_data[$i]['giaml'];
+                $model_data[$i]['luongtn'] = array_sum(array_column($luongct,'ttl'));
             }
             //dd($a_data);
             //dd($model_data);
