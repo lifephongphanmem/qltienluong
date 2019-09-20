@@ -189,9 +189,10 @@ class tonghopluong_donviController extends Controller
                 foreach ($a_pc as $mapc) {
                     $mapc_st = 'st_' . $mapc;
                     //kiểm tra nếu số tiền == 0 => hệ số = 0;
-                    if($a_ct[$i][$mapc_st] > 0){
+                    //dung hàm abs() do truy thu => số tiền âm
+                    if(abs($a_ct[$i][$mapc_st]) > 0){
                         $tongst += $a_ct[$i][$mapc_st];
-                        if($a_ct[$i][$mapc_st] > $a_ct[$i][$mapc]){//phụ cấp hưởng theo số tiền
+                        if(abs($a_ct[$i][$mapc_st]) > abs($a_ct[$i][$mapc])){//phụ cấp hưởng theo số tiền
                             $tonghs += $a_ct[$i][$mapc];
                         }
                     }else{
