@@ -150,7 +150,7 @@ class tonghopluong_donviController extends Controller
                 'luongcoban','thangtl','ngaytl' ,'congtac','stbhxh_dv','stbhyt_dv','stkpcd_dv','stbhtn_dv','tonghs',
                 'stbhxh','stbhyt','stkpcd','stbhtn','ttbh','ttbh_dv','ttl', 'giaml','ttbh_dv'),$col);
             $a_th = array_merge($a_th,$col_st);
-            $m_ct = (new data())->getBangluong_ct_ar($thang,array_column($a_bangluong,'mabl'),$a_th);
+            $a_ct = (new data())->getBangluong_ct_ar($thang,array_column($a_bangluong,'mabl'),$a_th)->toarray();
 
             //dd($a_ct);
 
@@ -166,14 +166,17 @@ class tonghopluong_donviController extends Controller
 
             $a_data = array();
             $a_plct = getPLCTTongHop();
-            $a_ct = $m_ct->wherein('mact',$a_plct)->toarray();
+            //$a_ct = $m_ct->wherein('mact',$a_plct)->toarray();
 
             /*
             dd($a_plct);
             $a_plct = array('1536402868','1536459380','1535613221', '1506673695');
             $a_plcongtac = array('BIENCHE','KHONGCT','HOPDONG');
             */
-            for($i=0; $i< count($a_ct); $i++){
+            for($i=0; $i < count($a_ct); $i++){
+                if(!in_array($a_ct[$i]['mact'],$a_plct)){
+                    continue;
+                }
                 $a_ct[$i]['macongtac'] = isset($a_congtac[$a_ct[$i]['mact']]) ? $a_congtac[$a_ct[$i]['mact']] : null;
                 $bangluong = $a_bangluong[$a_ct[$i]['mabl']];
                 //$a_ct[$i]['manguonkp'] = $bangluong['manguonkp'];
