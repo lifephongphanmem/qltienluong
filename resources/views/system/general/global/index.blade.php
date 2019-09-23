@@ -26,10 +26,8 @@
                     <div class="caption">
                     </div>
                     <div class="actions">
-                        @if(session('admin')->sadmin == 'SA' || session('admin')->sadmin == 'SSA')
-                            <a href="{{url($url.'maso='.$model->id.'/edit_global')}}" class="btn btn-default btn-sm">
-                                <i class="fa fa-edit"></i> Chỉnh sửa </a>
-                        @endif
+                        <a href="{{url('/he_thong/quan_tri/he_thong/edit')}}" class="btn btn-default btn-sm">
+                            <i class="fa fa-edit"></i> Chỉnh sửa </a>
                     </div>
                 </div>
                 <div class="portlet-body">

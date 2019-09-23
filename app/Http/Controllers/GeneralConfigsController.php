@@ -14,46 +14,41 @@ class GeneralConfigsController extends Controller
     {
         if (Session::has('admin')) {
             $model = GeneralConfigs::first();
+            return view('system.general.global.index')
+                ->with('model', $model)
+                ->with('pageTitle', 'Cấu hình hệ thống');
 
-            return view('system.general.index')
-                ->with('model',$model)
-                ->with('pageTitle','Cấu hình hệ thống');
-
-        }else
+        } else
             return view('errors.notlogin');
     }
-    public function edit($id)
+
+    public function edit()
     {
         if (Session::has('admin')) {
-            $model = GeneralConfigs::findOrFail($id);
+            $model = GeneralConfigs::first();
+            return view('system.general.global.edit')
+                ->with('model', $model)
+                ->with('pageTitle', 'Chỉnh sửa cấu hình hệ thống');
 
-            return view('system.general.edit')
-                ->with('model',$model)
-                ->with('pageTitle','Chỉnh sửa cấu hình hệ thống');
-
-        }else
+        } else
             return view('errors.notlogin');
     }
-    public function update(Request $request,$id)
+
+    public function update(Request $request)
     {
         if (Session::has('admin')) {
-            $update = $request->all();
-            $model = GeneralConfigs::findOrFail($id);
-            $model->diachi = $update['diachi'];
-            $model->thutruong = $update['thutruong'];
-            $model->ketoan = $update['ketoan'];
-            $model->nguoilapbieu =$update['nguoilapbieu'];
-            $model->sodvlt = $update['sodvlt'];
-            $model->sodvvt = $update['sodvvt'];
-            $model->namhethong = $update['namhethong'];
-            $model->ttlh = $update['ttlh'];
+            $inputs = $request->all();
+            $model = GeneralConfigs::first();
+            $model->tuoinu = chkDbl($inputs['tuoinu']);
+            $model->tuoinam = chkDbl($inputs['tuoinam']);
+            $model->luongcb = chkDbl($inputs['luongcb']);
+            $model->tg_hetts = chkDbl($inputs['tg_hetts']);
+            $model->tg_xetnl = chkDbl($inputs['tg_xetnl']);
             $model->save();
 
-            return redirect('cau_hinh_he_thong');
+            return redirect('/he_thong/quan_tri/he_thong');
 
-        }else
+        } else
             return view('errors.notlogin');
     }
-
-
 }

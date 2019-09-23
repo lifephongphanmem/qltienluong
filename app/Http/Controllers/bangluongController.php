@@ -88,12 +88,13 @@ class bangluongController extends Controller
     {
         if (Session::has('admin')) {
             $inputs = $request->all();
-            $inputs['manguonkp'] = '13';
-            $inputs['luongcb'] = getGeneralConfigs()['luongcb'];
+            foreach(getNguonTruyLinh() as $k=>$v){
+                $inputs['manguonkp'] = $k;
+                $inputs['luongcb'] = $v;
+            }
             $inputs['furl'] = '/chuc_nang/bang_luong/';
             $inputs['furl_ajax'] = '/ajax/bang_luong/';
             $inputs['dinhmuc'] = 0;
-
             $dinhmuc = nguonkinhphi_dinhmuc::where('manguonkp', $inputs['manguonkp'])
                 ->where('madv', session('admin')->madv)->first();
             $maso = count($dinhmuc) > 0 ? $dinhmuc->maso : '';
