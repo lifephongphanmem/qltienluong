@@ -150,7 +150,7 @@ class tonghopluong_donviController extends Controller
                 'luongcoban','thangtl','ngaytl' ,'congtac','stbhxh_dv','stbhyt_dv','stkpcd_dv','stbhtn_dv','tonghs',
                 'stbhxh','stbhyt','stkpcd','stbhtn','ttbh','ttbh_dv','ttl', 'giaml','ttbh_dv'),$col);
             $a_th = array_merge($a_th,$col_st);
-            $m_ct = (new data())->getBangluong_ct_ar($thang,array_column($a_bangluong,'mabl'),$a_th);
+            $a_ct = (new data())->getBangluong_ct_ar($thang,array_column($a_bangluong,'mabl'),$a_th)->toarray();
 
             //dd($a_ct);
 
@@ -166,14 +166,17 @@ class tonghopluong_donviController extends Controller
 
             $a_data = array();
             $a_plct = getPLCTTongHop();
-            $a_ct = $m_ct->wherein('mact',$a_plct)->toarray();
+            //$a_ct = $m_ct->wherein('mact',$a_plct)->toarray();
 
             /*
             dd($a_plct);
             $a_plct = array('1536402868','1536459380','1535613221', '1506673695');
             $a_plcongtac = array('BIENCHE','KHONGCT','HOPDONG');
             */
-            for($i=0; $i< count($a_ct); $i++){
+            for($i=0; $i < count($a_ct); $i++){
+                if(!in_array($a_ct[$i]['mact'],$a_plct)){
+                    continue;
+                }
                 $a_ct[$i]['macongtac'] = isset($a_congtac[$a_ct[$i]['mact']]) ? $a_congtac[$a_ct[$i]['mact']] : null;
                 $bangluong = $a_bangluong[$a_ct[$i]['mabl']];
                 //$a_ct[$i]['manguonkp'] = $bangluong['manguonkp'];
@@ -186,9 +189,10 @@ class tonghopluong_donviController extends Controller
                 foreach ($a_pc as $mapc) {
                     $mapc_st = 'st_' . $mapc;
                     //kiểm tra nếu số tiền == 0 => hệ số = 0;
-                    if($a_ct[$i][$mapc_st] > 0){
+                    //dung hàm abs() do truy thu => số tiền âm
+                    if(abs($a_ct[$i][$mapc_st]) > 0){
                         $tongst += $a_ct[$i][$mapc_st];
-                        if($a_ct[$i][$mapc_st] > $a_ct[$i][$mapc]){//phụ cấp hưởng theo số tiền
+                        if(abs($a_ct[$i][$mapc_st]) > abs($a_ct[$i][$mapc])){//phụ cấp hưởng theo số tiền
                             $tonghs += $a_ct[$i][$mapc];
                         }
                     }else{
@@ -258,7 +262,7 @@ class tonghopluong_donviController extends Controller
                 $model_data[$i]['soluong'] = count($a_slcb);
                 $model_data[$i]['giaml'] = array_sum(array_column($luongct,'giaml'));
                 $model_data[$i]['tonghs'] = $tonghs;
-                $model_data[$i]['luongtn'] = array_sum(array_column($luongct,'ttl')) - $model_data[$i]['giaml'];
+                $model_data[$i]['luongtn'] = array_sum(array_column($luongct,'ttl'));
             }
             //dd($a_data);
             //dd($model_data);
