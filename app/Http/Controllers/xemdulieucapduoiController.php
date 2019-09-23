@@ -641,12 +641,19 @@ class xemdulieucapduoiController extends Controller
             //$donvi=dmdonvi::where('madv',session('admin')->madv)->get();
             $inputs = $request->all();
             $madv = session('admin')->madv;
+            $ngay = date("Y-m-t", strtotime($inputs['namds'].'-'.$inputs['thangds'].'-01'));
             $model_donvi = dmdonvi::where('macqcq',session('admin')->madv)->get();
             $a_trangthai=array('CHOGUI'=>'Chưa gửi dữ liệu','DAGUI'=>'Đã gửi dữ liệu');
             if(session('admin')->phamvitonghop == 'KHOI')
             {
                 $model_donvi = dmdonvi::select('dmdonvi.madv', 'dmdonvi.tendv','phanloaitaikhoan','maphanloai')
                     ->where('macqcq',$madv)->where('madv','<>',$madv)
+                    ->wherenotin('madv', function ($query) use ($madv,$ngay) {
+                        $query->select('madv')->from('dmdonvi')
+                            ->where('ngaydung', '<=', $ngay)
+                            ->where('trangthai', 'TD')
+                            ->get();
+                    })
                     ->distinct()->get();
                 $model_nguon = tonghopluong_donvi::wherein('madv', function($query) use($madv){
                     $query->select('madv')->from('dmdonvi')->where('macqcq',$madv)->where('madv','<>',$madv)->get();
@@ -664,7 +671,14 @@ class xemdulieucapduoiController extends Controller
             if(session('admin')->phamvitonghop == 'HUYEN')
             {
                 $model_donvi = dmdonvi::select('dmdonvi.madv', 'dmdonvi.tendv','phanloaitaikhoan','maphanloai')
-                    ->where('macqcq',$madv)->where('madv','<>',$madv)->distinct()->get();
+                    ->where('macqcq',$madv)->where('madv','<>',$madv)
+                    ->wherenotin('madv', function ($query) use ($madv,$ngay) {
+                        $query->select('madv')->from('dmdonvi')
+                            ->where('ngaydung', '<=', $ngay)
+                            ->where('trangthai', 'TD')
+                            ->get();
+                    })
+                    ->distinct()->get();
                 $model_nguon = tonghopluong_huyen::wherein('madv', function($query) use($madv){
                     $query->select('madv')->from('dmdonvi')->where('macqcq',$madv)->where('madv','<>',$madv)->get();
                 })->where('thang', $inputs['thangds'])
