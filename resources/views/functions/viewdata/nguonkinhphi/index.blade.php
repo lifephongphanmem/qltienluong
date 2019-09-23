@@ -99,8 +99,10 @@
                                                 @endif
                                             @else
                                                 @if(session('admin')->phamvitonghop == 'KHOI')
-                                                    <a href="{{url('/nguon_kinh_phi/khoi/mautt107_m2?maso='.$value['masodv'])}}" class="btn btn-default btn-sm" TARGET="_blank">
-                                                        <i class="fa fa-print"></i>&nbsp; Số liệu tổng hợp</a>
+                                                    <!--a href="{{url('/nguon_kinh_phi/khoi/mautt107_m2?maso='.$value['masodv'])}}" class="btn btn-default btn-sm" TARGET="_blank">
+                                                        <i class="fa fa-print"></i>&nbsp; Số liệu tổng hợp</a-->
+                                                    <button type="button" onclick="indutoan('{{$value->namns}}','{{$value->masodv}}')" class="btn btn-default btn-xs mbs" data-target="#indt-modal" data-toggle="modal">
+                                                        <i class="fa fa-print"></i>&nbsp; In số liệu</button>
                                                 @else
                                                     <!--a href="{{url('/nguon_kinh_phi/huyen/mautt107_m2?maso='.$value['masodv'])}}" class="btn btn-default btn-sm" TARGET="_blank">
                                                         <i class="fa fa-print"></i>&nbsp; Số liệu tổng hợp</a-->
