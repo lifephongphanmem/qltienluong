@@ -134,14 +134,14 @@ class tonghopluong_huyenController extends Controller
 
     public function soluongdv($thang,$nam)
     {
+        $ngay = date("Y-m-t", strtotime($nam.'-'.$thang.'-01'));
         $madv = session('admin')->madv;
         $model_donvi = dmdonvi::select('madv', 'tendv')
         ->where('macqcq', $madv)
         ->where('madv', '<>', $madv)
-        ->wherenotin('madv', function ($query) use ($madv,$thang,$nam) {
+        ->wherenotin('madv', function ($query) use ($madv,$thang,$nam,$ngay) {
             $query->select('madv')->from('dmdonvi')
-                ->whereMonth('ngaydung', '<=', $thang)
-                ->whereYear('ngaydung', '<=', $nam)
+                ->where('ngaydung', '<=', $ngay)
                 ->where('trangthai', 'TD')
                 ->get();
         })->get();

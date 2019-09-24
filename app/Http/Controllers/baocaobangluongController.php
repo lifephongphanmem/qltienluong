@@ -2334,6 +2334,7 @@ class baocaobangluongController extends Controller
                 ->where('madvbc',$madvbc)
                 ->where('trangthai','DAGUI')
                 ->where('namns',$inputs['namns'])
+                ->wherein('madv', array_column($model_phanloai->toarray(),'madv'))
                 ->groupby('mact')
                 ->get();
             //dd($model_soluong->toarray());
