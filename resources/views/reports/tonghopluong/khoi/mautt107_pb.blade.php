@@ -176,7 +176,7 @@
                         <td>{{dinhdangso($ct->stkpcd)}}</td>
                         <td>{{dinhdangso($ct->thuetn)}}</td>
                         <td></td>
-                        <td>{{dinhdangso($ct->luongtn)}}</td>
+                        <td>{{dinhdangso($ct->ttl - $ct->giaml - $ct->stbhxh - $ct->stbhyt - $ct->stbhtn - $ct->stkpcd - $ct->thuetn)}}</td>
                         <td></td>
                     </tr>
                 @endforeach
@@ -204,7 +204,7 @@
                     <td class="money">{{dinhdangso($model_luong->sum('stkpcd'))}}</td>
                     <td class="money">{{dinhdangso($model_luong->sum('thuetn'))}}</td>
                     <td></td>
-                    <td class="money">{{dinhdangso($model_luong->sum('luongtn'))}}</td>
+                    <td class="money">{{dinhdangso($model_luong->sum('ttl') - $model_luong->sum('giaml') - $model_luong->sum('stbhxh')  - $model_luong->sum('stbhyt') - $model_luong->sum('stbhtn') - $model_luong->sum('stkpcd')  - $model_luong->sum('thuetn')) }}</td>
                     <td></td>
                 </tr>
             @endif
@@ -231,7 +231,7 @@
             <td class="money">{{dinhdangso($model->sum('stkpcd'))}}</td>
             <td class="money">{{dinhdangso($model->sum('thuetn'))}}</td>
             <td></td>
-            <td class="money">{{dinhdangso($model->sum('luongtn'))}}</td>
+            <td class="money">{{dinhdangso($model->sum('ttl') - $model->sum('giaml') - $model->sum('stbhxh') - $model->sum('stbhyt') - $model->sum('stbhtn') - $model->sum('stkpcd') - $model->sum('thuetn'))}}</td>
             <td></td>
         </tr>
     </table>
