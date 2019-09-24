@@ -477,6 +477,7 @@ class bangluongController extends Controller
                 $ct->stkpcd_dv = 0;
                 $ct->stbhtn_dv = 0;
                 $ct->sotien = 0;
+                $ct->heso_goc = 0;
                 if ($cb->$mapc <= 0) {
                     continue;
                 }
@@ -638,11 +639,13 @@ class bangluongController extends Controller
                 $ds = $m_duongsuc->where('macanbo', $cb->macanbo)->first();
                 $ngaycong = $ds->songaycong > 0 ? $ds->songaycong : session('admin')->ngaycong;
                 //$m_cb[$key]['congtac'] = 'DUONGSUC';
-                $heso_no = 0;
+                /*$heso_no = 0;
                 foreach ($a_no as $no) {
                     $heso_no += $cb->$no;
                 }
                 $sotiencong = $inputs['luongcoban'] * $heso_no;
+                */
+                $sotiencong = $model_phucap->wherein('mapc', $a_no)->sum('sotien');
                 $tiencong = round($sotiencong / $ngaycong, 0);
 
                 if ($ds->songaynghi >= 15) {//nghỉ quá 15 ngày thì ko đóng bảo hiểm
