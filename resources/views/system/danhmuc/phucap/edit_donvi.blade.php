@@ -109,8 +109,8 @@
 
                             <div class="col-md-4">
                                 <div class="form-group">
-                                    <label class="form-control-label">Tính thai sản</label>
-                                    {!!Form::select('thaisan',array('0'=>'Không tính thai sản','1'=>'Có tính thai sản'), null, array('id' => 'thaisan','class' => 'form-control'))!!}
+                                    <label class="form-control-label">Hưởng thai sản</label>
+                                    {!!Form::select('thaisan',array('0'=>'Không hưởng chế độ thai sản','1'=>'Có hưởng chế độ thai sản'), null, array('id' => 'thaisan','class' => 'form-control'))!!}
                                 </div>
                             </div>
 
