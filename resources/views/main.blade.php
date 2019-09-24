@@ -557,6 +557,7 @@
                                     <i class="icon-grid"></i> Quản trị hệ thống <span class="arrow"></span>
                                 </a>
                                 <ul class="sub-menu" style="margin-left: 15px;">
+                                    <li><a href="{{url('/he_thong/quan_tri/he_thong')}}"><i class="fa fa-caret-right"></i>Tham số hệ thống</a></li>
                                     <li><a href="{{url('/danh_muc/tieu_muc/index')}}"><i class="fa fa-caret-right"></i>Công thức mục-tiểu mục</a></li>
                                 </ul>
                             </li>

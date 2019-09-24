@@ -1214,6 +1214,10 @@ Route::group(['prefix'=>'he_thong'],function(){
 
         Route::get('don_vi/maso={madv}/don_vi','dmdonviController@edit_information');
         Route::patch('don_vi/maso={madv}','dmdonviController@update_information');
+
+        Route::get('he_thong','GeneralConfigsController@index');
+        Route::get('he_thong/edit','GeneralConfigsController@edit');
+        Route::post('he_thong/update','GeneralConfigsController@update');
     });
 
     Route::group(['prefix'=>'phu_cap'],function(){

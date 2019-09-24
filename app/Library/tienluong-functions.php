@@ -702,7 +702,7 @@ function getNguonTruyLinh(){
         $nkp_df = $model->first();
     }
     return array(
-        $nkp_df->manguonkp => '1490000',
+        $nkp_df->manguonkp => session('admin')->luongcoban,
     );
 }
 
@@ -713,7 +713,7 @@ function getNguonTruyLinh_df(){
         $nkp_df = $model->first();
     }
     return array(
-        $nkp_df->manguonkp => '1490000',
+        $nkp_df->manguonkp => session('admin')->luongcoban,
     );
 }
 

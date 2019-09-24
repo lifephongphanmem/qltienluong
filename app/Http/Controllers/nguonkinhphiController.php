@@ -76,10 +76,11 @@ class nguonkinhphiController extends Controller
             $inputs['chenhlech'] = chkDbl($inputs['chenhlech']);
 
             $a_th = array_merge(array('macanbo', 'mact', 'macvcq', 'mapb', 'ngayden'),getColTongHop());
-            $m_cb_kn = hosocanbo_kiemnhiem::select($a_th)
+            $m_cb_kn = hosocanbo_kiemnhiem::select(array_merge($a_th,['phanloai']))
                 ->where('madv', session('admin')->madv)
                 ->wherein('mact',$a_plct)
-                ->get()->keyBy('macanbo')->toarray();
+                //->get()->keyBy('macanbo')->toarray();
+                ->get();
             $a_th = array_merge(array('stt','ngaysinh','tencanbo', 'tnndenngay', 'gioitinh', 'msngbac', 'bac',
                 'bhxh_dv', 'bhyt_dv', 'bhtn_dv', 'kpcd_dv', 'ngaybc', 'ngayvao', 'lvhd'),$a_th);
             $model = hosocanbo::select($a_th)->where('madv', session('admin')->madv)
@@ -178,36 +179,38 @@ class nguonkinhphiController extends Controller
             $m_nb = $model->where('nam_nb', '<>', '')->where('nam_nb','=',$inputs['namdt'])->keyBy('macanbo')->toarray();
             $m_tnn = $model->where('nam_tnn', '<>', '')->where('nam_tnn','=',$inputs['namdt'])->keyBy('macanbo')->toarray();
             //dd($m_nb);
-            foreach($m_cb_kn as $key =>$val){
-                if(!isset($m_cb[$m_cb_kn[$key]['macanbo']])){
+            foreach($m_cb_kn as $ct){
+                if(!isset($m_cb[$ct->macanbo])){
                     continue;
                 }
-
-                $canbo = $m_cb[$m_cb_kn[$key]['macanbo']];
-                $m_cb_kn[$key]['tencanbo'] = $canbo['tencanbo'];
-                $m_cb_kn[$key]['stt'] = $canbo['stt'];
-                $m_cb_kn[$key]['msngbac'] = $canbo['msngbac'];
-                $m_cb_kn[$key]['ngaybc'] = $canbo['ngaybc'];
-                $m_cb_kn[$key]['ngayvao'] = $canbo['ngayvao'];
-                $m_cb_kn[$key]['ngaysinh'] = null;
-                $m_cb_kn[$key]['tnndenngay'] = null;
-                $m_cb_kn[$key]['macongtac'] = null;
-                $m_cb_kn[$key]['gioitinh'] = null;
-                $m_cb_kn[$key]['nam_ns'] = null;
-                $m_cb_kn[$key]['thang_ns'] = null;
-                $m_cb_kn[$key]['nam_nb'] = null;
-                $m_cb_kn[$key]['thang_nb'] = null;
-                $m_cb_kn[$key]['nam_tnn'] = null;
-                $m_cb_kn[$key]['thang_tnn'] = null;
-                $m_cb_kn[$key]['msngbac'] = null;
-                $m_cb_kn[$key]['bac'] = null;
-                $m_cb_kn[$key]['bhxh_dv'] = 0;
-                $m_cb_kn[$key]['bhyt_dv'] = 0;
-                $m_cb_kn[$key]['bhtn_dv'] = 0;
-                $m_cb_kn[$key]['kpcd_dv'] = 0;
-                $m_cb_kn[$key]['masodv'] = $masodv;
-                $m_cb_kn[$key]['lvhd'] = $canbo['lvhd'];
-                $m_cb[$key.'_kn'] = $m_cb_kn[$key];
+                //dd($ct);
+                $canbo = $m_cb[$ct->macanbo];
+                $ct->tencanbo = $canbo['tencanbo'];
+                $ct->stt = $canbo['stt'];
+                $ct->msngbac = $canbo['msngbac'];
+                $ct->ngaybc = $canbo['ngaybc'];
+                $ct->ngayvao = $canbo['ngayvao'];
+                $ct->ngaysinh = null;
+                $ct->tnndenngay = null;
+                $ct->macongtac = null;
+                $ct->gioitinh = null;
+                $ct->nam_ns = null;
+                $ct->thang_ns = null;
+                $ct->nam_nb = null;
+                $ct->thang_nb = null;
+                $ct->nam_tnn = null;
+                $ct->thang_tnn = null;
+                $ct->msngbac = null;
+                $ct->bac = null;
+                $ct->bhxh_dv = 0;
+                $ct->bhyt_dv = 0;
+                $ct->bhtn_dv = 0;
+                $ct->kpcd_dv = 0;
+                $ct->masodv = $masodv;
+                $ct->lvhd = $canbo['lvhd'];
+                $a_kq = $ct->toarray();
+                unset($a_kq['phanloai']);
+                $m_cb[$ct->macanbo.'_'.$ct->phanloai] = $a_kq;
             }
 
             foreach($m_nh as $key =>$val){
