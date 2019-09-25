@@ -2,8 +2,8 @@
 @section('custom-script')
     @include('includes.script.scripts')
     <script>
-        $('#tennb').val('{{$model->msngbac}}').trigger('change');
-        $('#bac').val('{{$model->bac}}').trigger('change');
+        //$('#tennb').val('{{$model->msngbac}}').trigger('change');
+        //$('#bac').val('{{$model->bac}}').trigger('change');
     </script>
 @stop
 
@@ -121,7 +121,9 @@
                                                 {!!Form::text('canbokct', null, array('id' => 'canbokct','class' => 'form-control nhucaukp text-right', 'data-mask'=>'fdecimal'))!!}
                                             </div>
                                         </div>
+                                    </div>
 
+                                    <div class="row">
                                         <div class="col-md-3">
                                             <div class="form-group">
                                                 <label class="control-label">Phụ cấp trách nhiệm cấp ủy</label>
@@ -152,7 +154,42 @@
                                     </div>
                                 </div>
 
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            <table id="sample_3" class="table table-hover table-striped table-bordered" style="min-height: 230px">
+                                        <thead>
+                                        <tr>
+                                            <th class="text-center" style="width: 5%">STT</th>
+                                            <th class="text-center">Năm ngân</br>sách</th>
+                                            <th class="text-center">Lĩnh vực hoạt động</th>
+                                            <th class="text-center">Nhu cầu</br>kinh phí</th>
+                                            <th class="text-center">Kinh phí</br>thực hiện</th>
 
+                                            <th class="text-center">Thao tác</th>
+                                        </tr>
+                                        </thead>
+
+                                        <tbody>
+                                        @foreach($model_ct as $key=>$value)
+                                            <tr class="{{getTextStatus($value->trangthai)}}">
+                                                <td class="text-center">{{$key+1}}</td>
+                                                <td class="text-center">{{$value->namns}}</td>
+                                                <td>{{$value->linhvuc}}</td>
+                                                <td class="text-right">{{number_format($value->nhucau)}}</td>
+                                                <td class="text-right">{{number_format($value->nguonkp)}}</td>
+
+                                                <td>
+                                                    <button type="button" onclick="indutoan('{{$value->namns}}','{{$value->masodv}}')" class="btn btn-default btn-xs mbs" data-target="#indt-modal" data-toggle="modal">
+                                                        <i class="fa fa-print"></i>&nbsp; In số liệu</button>
+                                                </td>
+                                            </tr>
+                                        @endforeach
+                                        </tbody>
+                                    </table>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                         <!-- END PORTLET-->

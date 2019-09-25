@@ -133,7 +133,11 @@ class nguonkinhphiController extends Controller
                 if (isset($cb->ngaysinh)) {
                     $dt_ns = date_create($cb->ngaysinh);
                     $cb->nam_ns =(string) date_format($dt_ns, 'Y') + ($cb->gioitinh == 'Nam'? $gen['tuoinam']:$gen['tuoinu']);
-                    $cb->thang_ns = date_format($dt_ns, 'm');
+                    $cb->thang_ns = date_format($dt_ns, 'm') + 1;
+                    if ($cb->thang_ns > 12) {
+                        $cb->thang_ns = '01';
+                        $cb->nam_ns = strval($cb->nam_ns + 1);
+                    }
                 } else {
                     $cb->nam_ns = null;
                     $cb->thang_ns = null;
@@ -310,6 +314,27 @@ class nguonkinhphiController extends Controller
             //dd($m_cb);
             for($i=0;$i<count($a_thang);$i++) {
                 $a_nh = a_getelement($m_nh, array('thang_ns' => $a_thang[$i]['thang']));
+                if (count($a_nh) > 0) { //
+                    foreach ($a_nh as $key => $val) {
+                        if (!isset($inputs['nghihuu'])) {
+                            $m_cb[$key] = $a_nh[$key];
+                        } else {
+                            $m_cb[$key]['tencanbo'] .= ' (nghỉ hưu)';
+                        }
+                        $a_danghihuu[] = $key;
+                    }
+                }
+
+                /*
+                 *
+                 if(!isset($inputs['nghihuu']) && count($a_nh) > 0){
+                    foreach ($a_nh as $key => $val) {
+                        $m_cb[$key] = $a_nh[$key];
+                        //$m_cb[$key]['tencanbo'] .= ' (nghỉ hưu)';
+                        $m_cb[$key]['congtac'] = 'NGHIHUU';
+                        $a_danghihuu[] = $key;
+                    }
+                }
                 if (count($a_nh) > 0) {
                     foreach ($a_nh as $key => $val) {
                         if (isset($inputs['nghihuu'])) {
@@ -320,6 +345,8 @@ class nguonkinhphiController extends Controller
                         $a_danghihuu[] = $key;
                     }
                 }
+                 * */
+
 
                 $a_nb = a_getelement($m_nb, array('thang_nb' => $a_thang[$i]['thang']));
                 if (count($a_nb) > 0) {
