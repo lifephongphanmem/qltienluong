@@ -198,16 +198,18 @@ class nguonkinhphi_dinhmucController extends Controller
         if (Session::has('admin')) {
             $inputs = $request->all();
             $model_nguon = nguonkinhphi_dinhmuc::where('maso', $inputs['maso'])->first();
-
             $model = nguonkinhphi_dinhmuc_ct::where('maso', $inputs['maso'])->get();
-            $a_pc =  array_column($model->toarray(), 'mapc');
-
-            $model_phucap = dmphucap_donvi::where('madv', session('admin')->madv)->wherenotin('mapc', $a_pc)->get();
+            $a_pc = array_column($model->toarray(), 'mapc');
+            $m_phucap = dmphucap_donvi::where('madv', session('admin')->madv)->where('phanloai','<',2)->get();
+            $m_pc_dm = $m_phucap->wherein('mapc', $a_pc);
+            $m_pc = $m_phucap->diff($m_pc_dm);
+                //->wherenotin('mapc', $a_pc)->get();
             //$model_phucap = dmphucap_donvi::wherenotin('mapc', $a_pc)->get();
             return view('system.danhmuc.dinhmucnguon.details')
                 ->with('model', $model)
                 ->with('model_nguon', $model_nguon)
-                ->with('model_phucap', array_column($model_phucap->toarray(), 'tenpc', 'mapc'))
+                ->with('model_phucap', array_column($m_pc->toarray(), 'tenpc', 'mapc'))
+                ->with('model_phucap_dm', array_column($m_pc_dm->toarray(), 'tenpc', 'mapc'))
                 ->with('furl', '/he_thong/dinh_muc/')
                 ->with('pageTitle', 'Danh mục định mức nguồn');
         } else
@@ -222,6 +224,24 @@ class nguonkinhphi_dinhmucController extends Controller
             $inputs['madv'] = session('admin')->madv;
             $inputs['luongcoban'] = chkDbl($inputs['luongcoban']);
             nguonkinhphi_dinhmuc_ct::create($inputs);
+            return redirect('/he_thong/dinh_muc/phu_cap?maso='.$inputs['maso']);
+        } else
+            return view('errors.notlogin');
+    }
+
+    function update_luongcb(Request $request)
+    {
+        if (Session::has('admin')) {
+            $inputs = $request->all();
+            $inputs['luongcoban'] = chkDbl($inputs['luongcoban']);
+            $model = nguonkinhphi_dinhmuc_ct::where('maso', $inputs['maso'])
+                ->wherein('mapc', $inputs['mapc'])
+                ->get();
+            foreach($model as $ct){
+                $ct->luongcoban = $inputs['luongcoban'];
+                $ct->save();
+            }
+
             return redirect('/he_thong/dinh_muc/phu_cap?maso='.$inputs['maso']);
         } else
             return view('errors.notlogin');

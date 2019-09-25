@@ -469,6 +469,8 @@ Route::group(['prefix'=>'nghiep_vu'],function(){
 
 Route::group(['prefix'=>'nguon_kinh_phi'],function(){
     Route::get('danh_sach','nguonkinhphiController@index');
+    Route::get('chi_tiet','nguonkinhphiController@edit');
+
     Route::post('create','nguonkinhphiController@create');
     Route::get('get','nguonkinhphiController@getinfo');
     Route::get('ma_so={masodv}','nguonkinhphiController@edit');
@@ -1250,7 +1252,7 @@ Route::group(['prefix'=>'he_thong'],function(){
         Route::get('phu_cap','nguonkinhphi_dinhmucController@phucap');
         Route::post('store_pc','nguonkinhphi_dinhmucController@store_pc');
         Route::get('del/{id}','nguonkinhphi_dinhmucController@destroy_pc');
-
+        Route::post('update_luongcb','nguonkinhphi_dinhmucController@update_luongcb');
     });
 });
 

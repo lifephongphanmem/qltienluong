@@ -64,14 +64,21 @@ class hosotruylinhController extends Controller
             //$insert['luongcoban'] = getDbl($insert['luongcoban']);
             $insert['thangtl'] = getDbl($insert['thangtl']);
             $insert['ngaytl'] = getDbl($insert['ngaytl']);
+            $model_pc = dmphucap_donvi::where('madv', session('admin')->madv)->get();
+
             if($insert['trangthai'] == 'ADD'){
                 $insert['madv'] = session('admin')->madv;
+                foreach($model_pc as $pc){
+                    if(isset($insert[$pc->mapc])){
+                        $insert[$pc->mapc] = chkDbl($insert[$pc->mapc]);
+                    }
+                }
                 //$insert['maso'] = session('admin')->madv . '_' . getdate()[0];
                 hosotruylinh::create($insert);
                 DB::statement("Insert into hosotruylinh_nguon(manguonkp,luongcoban,maso) SELECT manguonkp, luongcoban, maso FROM hosotruylinh_nguon_temp WHERE maso='".$insert['maso']."'");
                 DB::statement("Delete FROM hosotruylinh_nguon_temp WHERE maso='".$insert['maso']."'");
             }else{
-                $model_pc = dmphucap_donvi::where('madv', session('admin')->madv)->get();
+
                 foreach($model_pc as $pc){
                     if(isset($insert[$pc->mapc])){
                         $insert[$pc->mapc] = chkDbl($insert[$pc->mapc]);

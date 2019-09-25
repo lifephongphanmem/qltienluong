@@ -183,6 +183,7 @@ class nguonkinhphiController extends Controller
                 if(!isset($m_cb[$ct->macanbo])){
                     continue;
                 }
+                $ct->macongtac = $a_congtac[$ct->mact];
                 //dd($ct);
                 $canbo = $m_cb[$ct->macanbo];
                 $ct->tencanbo = $canbo['tencanbo'];
@@ -192,7 +193,7 @@ class nguonkinhphiController extends Controller
                 $ct->ngayvao = $canbo['ngayvao'];
                 $ct->ngaysinh = null;
                 $ct->tnndenngay = null;
-                $ct->macongtac = null;
+                //$ct->macongtac = null;
                 $ct->gioitinh = null;
                 $ct->nam_ns = null;
                 $ct->thang_ns = null;
@@ -373,7 +374,8 @@ class nguonkinhphiController extends Controller
 
             $m_data = a_split($a_data,array('mact','macongtac'));
             $m_data = a_unique($m_data);
-
+            //dd($a_data);
+            //tính lại do lệnh với bảng lương
             for ($i = 0; $i < count($m_data); $i++) {
                 $dutoan = a_getelement($a_data, array('mact' => $m_data[$i]['mact']));
                 $m_data[$i]['linhvuchoatdong'] = $inputs['linhvuchoatdong'];
@@ -385,10 +387,13 @@ class nguonkinhphiController extends Controller
                 $m_data[$i]['luongphucap'] = 0;
                 $m_data[$i]['nghihuu'] = 0;
                 $m_data[$i]['canbokct'] = 0;
-                $m_data[$i]['boiduong'] = array_sum(array_column($dutoan, 'pcbdhdcu')) * $inputs['chenhlech'];
-                $m_data[$i]['daibieuhdnd'] = array_sum(array_column($dutoan, 'pcdbqh')) * $inputs['chenhlech'];
+                $m_data[$i]['boiduong'] = array_sum(array_column($dutoan, 'st_pcbdhdcu'));
+                //$m_data[$i]['boiduong'] = array_sum(array_column($dutoan, 'pcbdhdcu')) * $inputs['chenhlech'];
+                $m_data[$i]['daibieuhdnd'] = array_sum(array_column($dutoan, 'st_pcdbqh'));
+                //$m_data[$i]['daibieuhdnd'] = array_sum(array_column($dutoan, 'pcdbqh')) * $inputs['chenhlech'];
                 //Vượt khung dùng làm trường thay thế pc Đảng ủy viên
-                $m_data[$i]['uyvien'] = array_sum(array_column($dutoan, 'pcvk')) * $inputs['chenhlech'];
+                //$m_data[$i]['uyvien'] = array_sum(array_column($dutoan, 'pcvk')) * $inputs['chenhlech'];
+                $m_data[$i]['uyvien'] = array_sum(array_column($dutoan, 'st_pcvk'));
                 $m_data[$i]['baohiem'] = array_sum(array_column($dutoan, 'ttbh_dv'));
                 //dùng luongtn vì các phụ cấp tính theo số tiền đã cộng vào luongtn (ko tính vào hệ số)
                 $m_data[$i]['luonghs'] = array_sum(array_column($dutoan, 'luongtn'))  - $m_data[$i]['boiduong'] - $m_data[$i]['daibieuhdnd'] - $m_data[$i]['uyvien'];
@@ -409,6 +414,8 @@ class nguonkinhphiController extends Controller
                 $m_data[$i]['nhucau'] = $m_data[$i]['luonghs'] +$m_data[$i]['uyvien'] + $m_data[$i]['daibieuhdnd']
                                 +$m_data[$i]['boiduong']+$m_data[$i]['baohiem'];
             }
+
+            //dd($m_data);
 
             $inputs['trangthai'] = 'CHOGUI';
             $inputs['maphanloai'] = session('admin')->maphanloai;
@@ -453,11 +460,14 @@ class nguonkinhphiController extends Controller
             return view('errors.notlogin');
     }
 
-    function edit($masodv)
+    function edit(Request $request)
     {
         if (Session::has('admin')) {
-            $model = nguonkinhphi::where('masodv', $masodv)->first();
+            $inputs = $request->all();
+            $model = nguonkinhphi::where('masodv', $inputs['maso'])->first();
+            $model_ct = nguonkinhphi_chitiet::where('masodv', $inputs['maso'])->get();
             $m_thongtu = dmthongtuquyetdinh::where('sohieu',$model->sohieu)->first();
+
             if (count($model) > 0) {
                 $model->nhucaukp = $model->luongphucap + $model->daibieuhdnd + $model->canbokct
                     + $model->uyvien + $model->boiduong + $model->nghihuu + $model->baohiem;
@@ -465,9 +475,11 @@ class nguonkinhphiController extends Controller
                     + $model->tinhgiam + $model->nghihuusom
                     + $model->kpuudai + $model->kpthuhut;
             }
+
             return view('manage.nguonkinhphi.edit')
                 ->with('furl', '/nguon_kinh_phi/')
                 ->with('model', $model)
+                ->with('model_ct', $model_ct)
                 ->with('nam',date_format(date_create($m_thongtu->ngayapdung),'Y'))
                 ->with('pageTitle', 'Danh sách nguồn kinh phí của đơn vị');
         } else
@@ -1059,7 +1071,7 @@ class nguonkinhphiController extends Controller
         $m_cb['stbhyt_dv'] = $stbhyt_dv;
         $m_cb['stkpcd_dv'] = $stkpcd_dv;
         $m_cb['stbhtn_dv'] = $stbhtn_dv;
-        $m_cb['luongtn'] += round($m_cb['tonghs'] * $luongcb, 0);
+        $m_cb['luongtn'] = round($m_cb['tonghs'] * $luongcb, 0);
         $m_cb['ttbh_dv'] = $stbhxh_dv + $stbhyt_dv + $stkpcd_dv + $stbhtn_dv;
         return $m_cb;
 
