@@ -214,6 +214,13 @@
                             <label for="thaisan">Tính thời gian nghỉ thai sản của cán bộ</label>
                         </div>
                     </div>
+
+                    <div class="row">
+                        <div class="col-md-offset-3 col-md-9" style="padding-top: 15px">
+                            <input type="checkbox" checked id="nangluong" name="nangluong" />
+                            <label for="nghihuu">Tính nâng lương cán bộ</label>
+                        </div>
+                    </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" data-dismiss="modal" class="btn btn-default">Hủy thao tác</button>
