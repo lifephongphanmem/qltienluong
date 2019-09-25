@@ -81,8 +81,8 @@ class nguonkinhphiController extends Controller
                 ->wherein('mact',$a_plct)
                 //->get()->keyBy('macanbo')->toarray();
                 ->get();
-            $a_th = array_merge(array('stt','ngaysinh','tencanbo', 'tnndenngay', 'gioitinh', 'msngbac', 'bac',
-                'bhxh_dv', 'bhyt_dv', 'bhtn_dv', 'kpcd_dv', 'ngaybc', 'ngayvao', 'lvhd'),$a_th);
+            $a_th = array_merge(array('stt','ngaysinh','tencanbo', 'gioitinh', 'msngbac', 'bac',
+                'bhxh_dv', 'bhyt_dv', 'bhtn_dv', 'kpcd_dv', 'ngaybc', 'ngayvao', 'lvhd', 'ngaytu', 'tnntungay','tnndenngay'),$a_th);
             $model = hosocanbo::select($a_th)->where('madv', session('admin')->madv)
                 ->where('theodoi','<', '9')
                 ->get();
@@ -112,7 +112,7 @@ class nguonkinhphiController extends Controller
             $a_pc_ts = array_column(dmphucap_donvi::where('madv', session('admin')->madv)
                 ->where('phanloai','<','3')->where('thaisan','1')->get()->toarray(), 'mapc');
             //dd($a_pc_ts);
-
+            //dd($model_thongtu->ngayapdung);
             $model = (new dataController())->getCanBo($model,$model_thongtu->ngayapdung,true,$model_thongtu->ngayapdung);
 
             foreach($model as $cb){
