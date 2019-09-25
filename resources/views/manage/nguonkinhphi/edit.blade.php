@@ -106,28 +106,28 @@
                                         <div class="col-md-3">
                                             <div class="form-group">
                                                 <label class="control-label">Lương, phụ cấp</label>
-                                                {!!Form::text('luongphucap', null, array('id' => 'luongphucap','class' => 'form-control nhucaukp text-right', 'data-mask'=>'fdecimal'))!!}
+                                                {!!Form::text('luongphucap', null, array('id' => 'luongphucap','class' => 'form-control text-right', 'data-mask'=>'fdecimal','readonly'))!!}
                                             </div>
                                         </div>
 
                                         <div class="col-md-3">
                                             <div class="form-group">
                                                 <label class="control-label">Phí hoạt động ĐBHĐND</label>
-                                                {!!Form::text('daibieuhdnd', null, array('id' => 'daibieuhdnd','class' => 'form-control nhucaukp text-right', 'data-mask'=>'fdecimal'))!!}
+                                                {!!Form::text('daibieuhdnd', null, array('id' => 'daibieuhdnd','class' => 'form-control text-right', 'data-mask'=>'fdecimal','readonly'))!!}
                                             </div>
                                         </div>
 
                                         <div class="col-md-3">
                                             <div class="form-group">
                                                 <label class="control-label">Trợ cấp bộ đã nghỉ hưu</label>
-                                                {!!Form::text('nghihuu', null, array('id' => 'nghihuu','class' => 'form-control nhucaukp text-right', 'data-mask'=>'fdecimal'))!!}
+                                                {!!Form::text('nghihuu', null, array('id' => 'nghihuu','class' => 'form-control text-right', 'data-mask'=>'fdecimal','readonly'))!!}
                                             </div>
                                         </div>
 
                                         <div class="col-md-3">
                                             <div class="form-group">
                                                 <label class="control-label">Cán bộ không chuyên trách</label>
-                                                {!!Form::text('canbokct', null, array('id' => 'canbokct','class' => 'form-control nhucaukp text-right', 'data-mask'=>'fdecimal'))!!}
+                                                {!!Form::text('canbokct', null, array('id' => 'canbokct','class' => 'form-control text-right', 'data-mask'=>'fdecimal','readonly'))!!}
                                             </div>
                                         </div>
                                     </div>
@@ -136,21 +136,21 @@
                                         <div class="col-md-3">
                                             <div class="form-group">
                                                 <label class="control-label">Phụ cấp trách nhiệm cấp ủy</label>
-                                                {!!Form::text('uyvien', null, array('id' => 'uyvien','class' => 'form-control nhucaukp text-right', 'data-mask'=>'fdecimal'))!!}
+                                                {!!Form::text('uyvien', null, array('id' => 'uyvien','class' => 'form-control text-right', 'data-mask'=>'fdecimal','readonly'))!!}
                                             </div>
                                         </div>
 
                                         <div class="col-md-3">
                                             <div class="form-group">
                                                 <label class=" control-label">Bồi dưỡng hoạt động cấp ủy</label>
-                                                {!!Form::text('boiduong', null, array('id' => 'boiduong','class' => 'form-control nhucaukp text-right', 'data-mask'=>'fdecimal'))!!}
+                                                {!!Form::text('boiduong', null, array('id' => 'boiduong','class' => 'form-control text-right', 'data-mask'=>'fdecimal','readonly'))!!}
                                             </div>
                                         </div>
 
                                         <div class="col-md-3">
                                             <div class="form-group">
                                                 <label class=" control-label">Các khoản nộp theo lương</label>
-                                                {!!Form::text('baohiem', null, array('id' => 'baohiem','class' => 'form-control nhucaukp text-right', 'data-mask'=>'fdecimal'))!!}
+                                                {!!Form::text('baohiem', null, array('id' => 'baohiem','class' => 'form-control text-right', 'data-mask'=>'fdecimal','readonly'))!!}
                                             </div>
                                         </div>
 
@@ -168,7 +168,7 @@
                                                     <thead>
                                                     <tr>
                                                         <th class="text-center" style="width: 3%">S</br>T</br>T</th>
-                                                        <th class="text-center">Phân loại</br>công tác</th>
+                                                        <th class="text-center">Phân loại công tác</th>
                                                         <th class="text-center">Lương</br>phụ cấp</th>
                                                         <th class="text-center">Phí hoạt</br>động</br>ĐBHĐND</th>
                                                         <th class="text-center">Trợ cấp</br>bộ đã</br>nghỉ hưu</th>
