@@ -200,7 +200,7 @@ class nguonkinhphi_dinhmucController extends Controller
             $model_nguon = nguonkinhphi_dinhmuc::where('maso', $inputs['maso'])->first();
             $model = nguonkinhphi_dinhmuc_ct::where('maso', $inputs['maso'])->get();
             $a_pc = array_column($model->toarray(), 'mapc');
-            $m_phucap = dmphucap_donvi::where('madv', session('admin')->madv)->where('phanloai','<',2)->get();
+            $m_phucap = dmphucap_donvi::where('madv', session('admin')->madv)->where('phanloai','<',3)->get();
             $m_pc_dm = $m_phucap->wherein('mapc', $a_pc);
             $m_pc = $m_phucap->diff($m_pc_dm);
                 //->wherenotin('mapc', $a_pc)->get();
