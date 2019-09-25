@@ -398,6 +398,8 @@ class nguonkinhphiController extends Controller
                     $a_data[] = $m_cb[$key];
                 }
             }
+            $a_dbhdnd = ['1536402868', '1536402870',];
+            $a_cuv = ['1536459380', '1558600713', '1536459382', '1558945077',];
 
             $m_data = a_split($a_data,array('mact','macongtac'));
             $m_data = a_unique($m_data);
@@ -415,26 +417,31 @@ class nguonkinhphiController extends Controller
                 $m_data[$i]['nghihuu'] = 0;
                 $m_data[$i]['canbokct'] = 0;
                 $m_data[$i]['boiduong'] = array_sum(array_column($dutoan, 'st_pcbdhdcu'));
-                //$m_data[$i]['boiduong'] = array_sum(array_column($dutoan, 'pcbdhdcu')) * $inputs['chenhlech'];
+
                 $m_data[$i]['daibieuhdnd'] = array_sum(array_column($dutoan, 'st_pcdbqh'));
-                //$m_data[$i]['daibieuhdnd'] = array_sum(array_column($dutoan, 'pcdbqh')) * $inputs['chenhlech'];
-                //Vượt khung dùng làm trường thay thế pc Đảng ủy viên
-                //$m_data[$i]['uyvien'] = array_sum(array_column($dutoan, 'pcvk')) * $inputs['chenhlech'];
+                if(in_array($m_data[$i]['mact'],$a_dbhdnd)){
+                    $m_data[$i]['daibieuhdnd'] += array_sum(array_column($dutoan, 'st_hesopc'));
+                }
+
                 $m_data[$i]['uyvien'] = array_sum(array_column($dutoan, 'st_pcvk'));
+                if(in_array($m_data[$i]['mact'],$a_cuv)){
+                    $m_data[$i]['uyvien'] += array_sum(array_column($dutoan, 'st_hesopc'));
+                }
+
                 $m_data[$i]['baohiem'] = array_sum(array_column($dutoan, 'ttbh_dv'));
                 //dùng luongtn vì các phụ cấp tính theo số tiền đã cộng vào luongtn (ko tính vào hệ số)
                 $m_data[$i]['luonghs'] = array_sum(array_column($dutoan, 'luongtn'))  - $m_data[$i]['boiduong'] - $m_data[$i]['daibieuhdnd'] - $m_data[$i]['uyvien'];
                 switch($m_data[$i]['macongtac']){
-                    case 'BIENCHE':{
-                        $m_data[$i]['luongphucap'] = $m_data[$i]['luonghs'];
-                        break;
-                    }
                     case 'NGHIHUU':{
                         $m_data[$i]['nghihuu'] = $m_data[$i]['luonghs'];
                         break;
                     }
                     case 'KHONGCT':{
                         $m_data[$i]['canbokct'] = $m_data[$i]['luonghs'];
+                        break;
+                    }
+                    default:{//BIENCHE, KHAC
+                        $m_data[$i]['luongphucap'] = $m_data[$i]['luonghs'];
                         break;
                     }
                 }
@@ -507,6 +514,7 @@ class nguonkinhphiController extends Controller
                 ->with('furl', '/nguon_kinh_phi/')
                 ->with('model', $model)
                 ->with('model_ct', $model_ct)
+                ->with('a_ct', getPhanLoaiCT(false))
                 ->with('nam',date_format(date_create($m_thongtu->ngayapdung),'Y'))
                 ->with('pageTitle', 'Danh sách nguồn kinh phí của đơn vị');
         } else

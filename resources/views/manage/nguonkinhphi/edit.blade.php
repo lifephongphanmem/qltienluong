@@ -1,9 +1,18 @@
 @extends('main')
+@section('custom-style')
+    <link rel="stylesheet" type="text/css" href="{{url('assets/global/plugins/datatables/plugins/bootstrap/dataTables.bootstrap.css')}}"/>
+    <link rel="stylesheet" type="text/css" href="{{url('assets/global/plugins/select2/select2.css')}}"/>
+@stop
 @section('custom-script')
+    <script type="text/javascript" src="{{url('assets/global/plugins/select2/select2.min.js')}}"></script>
+    <script type="text/javascript" src="{{url('assets/global/plugins/datatables/media/js/jquery.dataTables.min.js')}}"></script>
+    <script type="text/javascript" src="{{url('assets/global/plugins/datatables/plugins/bootstrap/dataTables.bootstrap.js')}}"></script>
     @include('includes.script.scripts')
+    <script src="{{url('assets/admin/pages/scripts/table-managed.js')}}"></script>
     <script>
-        //$('#tennb').val('{{$model->msngbac}}').trigger('change');
-        //$('#bac').val('{{$model->bac}}').trigger('change');
+        jQuery(document).ready(function() {
+            TableManaged.init();
+        });
     </script>
 @stop
 
@@ -76,7 +85,7 @@
                                 </div>
                             </div>
                             <div class="portlet-body" style="display: block;">
-                                <div class="form-body">
+                                <div id="nhucaukp" class="form-body">
                                     <div class="row">
                                         <div class="col-md-6">
                                             <div class="form-group">
@@ -152,44 +161,50 @@
                                             </div>
                                         </div>
                                     </div>
-                                </div>
 
-                                <div class="row">
-                                    <div class="col-md-12">
-                                        <div class="form-group">
-                                            <table id="sample_3" class="table table-hover table-striped table-bordered" style="min-height: 230px">
-                                        <thead>
-                                        <tr>
-                                            <th class="text-center" style="width: 5%">STT</th>
-                                            <th class="text-center">Năm ngân</br>sách</th>
-                                            <th class="text-center">Lĩnh vực hoạt động</th>
-                                            <th class="text-center">Nhu cầu</br>kinh phí</th>
-                                            <th class="text-center">Kinh phí</br>thực hiện</th>
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <table id="sample_3" class="table table-hover table-striped table-bordered">
+                                                    <thead>
+                                                    <tr>
+                                                        <th class="text-center" style="width: 3%">S</br>T</br>T</th>
+                                                        <th class="text-center">Phân loại</br>công tác</th>
+                                                        <th class="text-center">Lương</br>phụ cấp</th>
+                                                        <th class="text-center">Phí hoạt</br>động</br>ĐBHĐND</th>
+                                                        <th class="text-center">Trợ cấp</br>bộ đã</br>nghỉ hưu</th>
+                                                        <th class="text-center">Cán bộ</br>không</br>chuyên</br>trách</th>
+                                                        <th class="text-center">Phụ cấp</br>trách</br>nhiệm</br>cấp ủy</th>
+                                                        <th class="text-center">Bồi dưỡng</br>hoạt động</br>cấp ủy</th>
+                                                        <th class="text-center">Các khoản</br>nộp theo</br>lương</th>
+                                                        {{--<th class="text-center">Thao tác</th>--}}
+                                                    </tr>
+                                                    </thead>
 
-                                            <th class="text-center">Thao tác</th>
-                                        </tr>
-                                        </thead>
-
-                                        <tbody>
-                                        @foreach($model_ct as $key=>$value)
-                                            <tr class="{{getTextStatus($value->trangthai)}}">
-                                                <td class="text-center">{{$key+1}}</td>
-                                                <td class="text-center">{{$value->namns}}</td>
-                                                <td>{{$value->linhvuc}}</td>
-                                                <td class="text-right">{{number_format($value->nhucau)}}</td>
-                                                <td class="text-right">{{number_format($value->nguonkp)}}</td>
-
-                                                <td>
-                                                    <button type="button" onclick="indutoan('{{$value->namns}}','{{$value->masodv}}')" class="btn btn-default btn-xs mbs" data-target="#indt-modal" data-toggle="modal">
-                                                        <i class="fa fa-print"></i>&nbsp; In số liệu</button>
-                                                </td>
-                                            </tr>
-                                        @endforeach
-                                        </tbody>
-                                    </table>
+                                                    <tbody>
+                                                    @foreach($model_ct as $key=>$value)
+                                                        <tr class="{{getTextStatus($value->trangthai)}}">
+                                                            <td class="text-center">{{$key+1}}</td>
+                                                            <td>{{$a_ct[$value->mact]}}</td>
+                                                            <td class="text-right">{{dinhdangso($value->luongphucap)}}</td>
+                                                            <td class="text-right">{{dinhdangso($value->daibieuhdnd)}}</td>
+                                                            <td class="text-right">{{dinhdangso($value->nghihuu)}}</td>
+                                                            <td class="text-right">{{dinhdangso($value->canbokct)}}</td>
+                                                            <td class="text-right">{{dinhdangso($value->uyvien)}}</td>
+                                                            <td class="text-right">{{dinhdangso($value->boiduong)}}</td>
+                                                            <td class="text-right">{{dinhdangso($value->baohiem)}}</td>
+                                                            {{--<td>--}}
+                                                                {{--<button type="button" onclick="indutoan('{{$value->mact}}','{{$value->masodv}}')" class="btn btn-default btn-xs mbs" data-target="#indt-modal" data-toggle="modal">--}}
+                                                                    {{--<i class="fa fa-edit"></i>&nbsp; Sửa</button>--}}
+                                                            {{--</td>--}}
+                                                        </tr>
+                                                    @endforeach
+                                                    </tbody>
+                                                </table>
                                         </div>
                                     </div>
                                 </div>
+
+
                             </div>
                         </div>
                         <!-- END PORTLET-->
