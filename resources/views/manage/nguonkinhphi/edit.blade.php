@@ -1,9 +1,18 @@
 @extends('main')
+@section('custom-style')
+    <link rel="stylesheet" type="text/css" href="{{url('assets/global/plugins/datatables/plugins/bootstrap/dataTables.bootstrap.css')}}"/>
+    <link rel="stylesheet" type="text/css" href="{{url('assets/global/plugins/select2/select2.css')}}"/>
+@stop
 @section('custom-script')
+    <script type="text/javascript" src="{{url('assets/global/plugins/select2/select2.min.js')}}"></script>
+    <script type="text/javascript" src="{{url('assets/global/plugins/datatables/media/js/jquery.dataTables.min.js')}}"></script>
+    <script type="text/javascript" src="{{url('assets/global/plugins/datatables/plugins/bootstrap/dataTables.bootstrap.js')}}"></script>
     @include('includes.script.scripts')
+    <script src="{{url('assets/admin/pages/scripts/table-managed.js')}}"></script>
     <script>
-        $('#tennb').val('{{$model->msngbac}}').trigger('change');
-        $('#bac').val('{{$model->bac}}').trigger('change');
+        jQuery(document).ready(function() {
+            TableManaged.init();
+        });
     </script>
 @stop
 
@@ -76,7 +85,7 @@
                                 </div>
                             </div>
                             <div class="portlet-body" style="display: block;">
-                                <div class="form-body">
+                                <div id="nhucaukp" class="form-body">
                                     <div class="row">
                                         <div class="col-md-6">
                                             <div class="form-group">
@@ -97,49 +106,51 @@
                                         <div class="col-md-3">
                                             <div class="form-group">
                                                 <label class="control-label">Lương, phụ cấp</label>
-                                                {!!Form::text('luongphucap', null, array('id' => 'luongphucap','class' => 'form-control nhucaukp text-right', 'data-mask'=>'fdecimal'))!!}
+                                                {!!Form::text('luongphucap', null, array('id' => 'luongphucap','class' => 'form-control text-right', 'data-mask'=>'fdecimal','readonly'))!!}
                                             </div>
                                         </div>
 
                                         <div class="col-md-3">
                                             <div class="form-group">
                                                 <label class="control-label">Phí hoạt động ĐBHĐND</label>
-                                                {!!Form::text('daibieuhdnd', null, array('id' => 'daibieuhdnd','class' => 'form-control nhucaukp text-right', 'data-mask'=>'fdecimal'))!!}
+                                                {!!Form::text('daibieuhdnd', null, array('id' => 'daibieuhdnd','class' => 'form-control text-right', 'data-mask'=>'fdecimal','readonly'))!!}
                                             </div>
                                         </div>
 
                                         <div class="col-md-3">
                                             <div class="form-group">
                                                 <label class="control-label">Trợ cấp bộ đã nghỉ hưu</label>
-                                                {!!Form::text('nghihuu', null, array('id' => 'nghihuu','class' => 'form-control nhucaukp text-right', 'data-mask'=>'fdecimal'))!!}
+                                                {!!Form::text('nghihuu', null, array('id' => 'nghihuu','class' => 'form-control text-right', 'data-mask'=>'fdecimal','readonly'))!!}
                                             </div>
                                         </div>
 
                                         <div class="col-md-3">
                                             <div class="form-group">
                                                 <label class="control-label">Cán bộ không chuyên trách</label>
-                                                {!!Form::text('canbokct', null, array('id' => 'canbokct','class' => 'form-control nhucaukp text-right', 'data-mask'=>'fdecimal'))!!}
+                                                {!!Form::text('canbokct', null, array('id' => 'canbokct','class' => 'form-control text-right', 'data-mask'=>'fdecimal','readonly'))!!}
                                             </div>
                                         </div>
+                                    </div>
 
+                                    <div class="row">
                                         <div class="col-md-3">
                                             <div class="form-group">
                                                 <label class="control-label">Phụ cấp trách nhiệm cấp ủy</label>
-                                                {!!Form::text('uyvien', null, array('id' => 'uyvien','class' => 'form-control nhucaukp text-right', 'data-mask'=>'fdecimal'))!!}
+                                                {!!Form::text('uyvien', null, array('id' => 'uyvien','class' => 'form-control text-right', 'data-mask'=>'fdecimal','readonly'))!!}
                                             </div>
                                         </div>
 
                                         <div class="col-md-3">
                                             <div class="form-group">
                                                 <label class=" control-label">Bồi dưỡng hoạt động cấp ủy</label>
-                                                {!!Form::text('boiduong', null, array('id' => 'boiduong','class' => 'form-control nhucaukp text-right', 'data-mask'=>'fdecimal'))!!}
+                                                {!!Form::text('boiduong', null, array('id' => 'boiduong','class' => 'form-control text-right', 'data-mask'=>'fdecimal','readonly'))!!}
                                             </div>
                                         </div>
 
                                         <div class="col-md-3">
                                             <div class="form-group">
                                                 <label class=" control-label">Các khoản nộp theo lương</label>
-                                                {!!Form::text('baohiem', null, array('id' => 'baohiem','class' => 'form-control nhucaukp text-right', 'data-mask'=>'fdecimal'))!!}
+                                                {!!Form::text('baohiem', null, array('id' => 'baohiem','class' => 'form-control text-right', 'data-mask'=>'fdecimal','readonly'))!!}
                                             </div>
                                         </div>
 
@@ -148,6 +159,47 @@
                                                 <label class="control-label">Tổng số</label>
                                                 {!!Form::text('nhucaukp', null, array('id' => 'nhucaukp','class' => 'form-control text-right', 'data-mask'=>'fdecimal','readonly'=>'true'))!!}
                                             </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <table id="sample_3" class="table table-hover table-striped table-bordered">
+                                                    <thead>
+                                                    <tr>
+                                                        <th class="text-center" style="width: 3%">S</br>T</br>T</th>
+                                                        <th class="text-center">Phân loại công tác</th>
+                                                        <th class="text-center">Lương</br>phụ cấp</th>
+                                                        <th class="text-center">Phí hoạt</br>động</br>ĐBHĐND</th>
+                                                        <th class="text-center">Trợ cấp</br>bộ đã</br>nghỉ hưu</th>
+                                                        <th class="text-center">Cán bộ</br>không</br>chuyên</br>trách</th>
+                                                        <th class="text-center">Phụ cấp</br>trách</br>nhiệm</br>cấp ủy</th>
+                                                        <th class="text-center">Bồi dưỡng</br>hoạt động</br>cấp ủy</th>
+                                                        <th class="text-center">Các khoản</br>nộp theo</br>lương</th>
+                                                        {{--<th class="text-center">Thao tác</th>--}}
+                                                    </tr>
+                                                    </thead>
+
+                                                    <tbody>
+                                                    @foreach($model_ct as $key=>$value)
+                                                        <tr class="{{getTextStatus($value->trangthai)}}">
+                                                            <td class="text-center">{{$key+1}}</td>
+                                                            <td>{{$a_ct[$value->mact]}}</td>
+                                                            <td class="text-right">{{dinhdangso($value->luongphucap)}}</td>
+                                                            <td class="text-right">{{dinhdangso($value->daibieuhdnd)}}</td>
+                                                            <td class="text-right">{{dinhdangso($value->nghihuu)}}</td>
+                                                            <td class="text-right">{{dinhdangso($value->canbokct)}}</td>
+                                                            <td class="text-right">{{dinhdangso($value->uyvien)}}</td>
+                                                            <td class="text-right">{{dinhdangso($value->boiduong)}}</td>
+                                                            <td class="text-right">{{dinhdangso($value->baohiem)}}</td>
+                                                            {{--<td>--}}
+                                                                {{--<button type="button" onclick="indutoan('{{$value->mact}}','{{$value->masodv}}')" class="btn btn-default btn-xs mbs" data-target="#indt-modal" data-toggle="modal">--}}
+                                                                    {{--<i class="fa fa-edit"></i>&nbsp; Sửa</button>--}}
+                                                            {{--</td>--}}
+                                                        </tr>
+                                                    @endforeach
+                                                    </tbody>
+                                                </table>
                                         </div>
                                     </div>
                                 </div>

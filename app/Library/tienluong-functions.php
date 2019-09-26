@@ -297,7 +297,7 @@ function getThangBC_nhucau(){
 
 function getNamTL(){
     $a_tl = array();
-    for($i=2010; $i <= date('Y'); $i++){
+    for($i=2010; $i <= date('Y') + 4; $i++){
         $a_tl[$i]=$i;
     }
     return $a_tl;

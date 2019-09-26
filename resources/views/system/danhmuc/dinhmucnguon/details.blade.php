@@ -34,11 +34,10 @@
                     <div class="caption">
                         DANH SÁCH CÁC LOẠI PHỤ CẤP ĐƯỢC HƯỞNG (MÃ NGUỒN: {{$model_nguon->manguonkp}})
                     </div>
-
                     <div class="actions">
-                        <button type="button" id="_btnaddPB" class="btn btn-default btn-xs" onclick="addCV()"><i class="fa fa-plus"></i>&nbsp;Thêm mới</button>
+                        <button type="button" class="btn btn-default btn-xs" onclick="upd_luongcb()" data-toggle="modal" data-target="#luongcb-modal"><i class="fa fa-edit"></i>&nbsp;Cập nhật lương cơ bản</button>
+                        <button type="button" class="btn btn-default btn-xs" onclick="addCV()"><i class="fa fa-plus"></i>&nbsp;Thêm mới</button>
                     </div>
-
                 </div>
                 <div class="portlet-body form-horizontal">
                     <table id="sample_3" class="table table-hover table-striped table-bordered" style="min-height: 230px">
@@ -53,7 +52,6 @@
                         </thead>
 
                         <tbody>
-                        @if(isset($model))
                             @foreach($model as $key=>$value)
                                 <tr>
                                     <td class="text-center">{{$key+1}}</td>
@@ -61,7 +59,7 @@
                                     <td>{{$value->tenpc}}</td>
                                     <td class="text-right">{{dinhdangso($value->luongcoban)}}</td>
                                        <td>
-                                           <button type="button" onclick="editCV('{{$value->id}}')" class="btn btn-default btn-xs">
+                                           <button type="button" data-toggle="modal" data-target="#luongcb-modal" onclick="editCV('{{$value->mapc}}','{{$value->luongcoban}}')" class="btn btn-default btn-xs">
                                                <i class="fa fa-edit"></i>&nbsp; Sửa mức lương</button>
 
                                            <button type="button" onclick="cfDel('{{$furl.'del/'.$value->id}}')" class="btn btn-default btn-xs" data-target="#delete-modal-confirm" data-toggle="modal">
@@ -69,7 +67,6 @@
                                        </td>
                                 </tr>
                             @endforeach
-                        @endif
                         </tbody>
                     </table>
                 </div>
@@ -82,7 +79,6 @@
         </div>
     </div>
 
-
     <!--Modal thông tin chức vụ -->
     {!! Form::open(['url'=>$furl.'store_pc', 'id' => 'create_tttaikhoan', 'class'=>'horizontal-form']) !!}
     <div id="chitiet-modal" tabindex="-1" role="dialog" aria-hidden="true" class="modal fade">
@@ -94,7 +90,7 @@
                 </div>
                 <div class="modal-body">
                     <label class="form-control-label">Chọn phụ cấp<span class="require">*</span></label>
-                    {!!Form::select('mapc',$model_phucap ,null, array('id' => 'mapc','class' => 'form-control','required'=>'required'))!!}
+                    {!!Form::select('mapc',$model_phucap ,null, array('id' => 'mapc','class' => 'form-control select2me','required'=>'required'))!!}
 
                     <label class="control-label">Mức lương cơ bản</label>
                     {!!Form::text('luongcoban', $model_nguon->luongcoban, array('id' => 'luongcoban','class' => 'form-control', 'data-mask'=>'fdecimal'))!!}
@@ -111,91 +107,62 @@
 
 
     <!--Modal thông tin chức vụ -->
-    <div id="chucvu-modal" tabindex="-1" role="dialog" aria-hidden="true" class="modal fade">
+    {!! Form::open(['url'=>$furl.'update_luongcb', 'id' => 'upd_luongcb', 'class'=>'horizontal-form', 'method'=>'POST']) !!}
+    <div id="luongcb-modal" tabindex="-1" role="dialog" aria-hidden="true" class="modal fade">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header modal-header-primary">
                     <button type="button" data-dismiss="modal" aria-hidden="true" class="close">&times;</button>
-                    <h4 id="modal-header-primary-label" class="modal-title">Thông tin định mức nguồn kinh phí</h4>
+                    <h4 id="modal-header-primary-label" class="modal-title">Cập nhật mức lương cơ bản</h4>
                 </div>
 
                 <div class="modal-body">
                     <div class="form-horizontal">
                         <div class="row">
-
                             <div class="col-md-12">
-                                <label class="form-control-label">Mã số</label>
-                                {!!Form::text('mapc_ct', null, array('id' => 'mapc_ct','class' => 'form-control','readonly'))!!}
+                                <label class="form-control-label">Phụ cấp</label>
+                                <select class="form-control select2me" name="mapc[]" id="mapc" multiple required="required">
+                                    @foreach($model_phucap_dm as $k=>$v)
+                                        <option value="{{$k}}">{{$v}}</option>
+                                    @endforeach
+                                </select>
                             </div>
+                        </div>
 
-                            <div class="col-md-12">
-                                <label class="form-control-label">Tên nguồn kinh phí</label>
-                                {!!Form::text('tenpc_ct', null, array('id' => 'tenpc_ct','class' => 'form-control','readonly'))!!}
-                            </div>
-
+                        <div class="row">
                             <div class="col-md-12">
                                 <label class="control-label">Mức lương cơ bản</label>
-                                {!!Form::text('luongcoban_ct', null, array('id' => 'luongcoban_ct','class' => 'form-control', 'data-mask'=>'fdecimal'))!!}
+                                {!!Form::text('luongcoban', session('admin')->luongcoban, array('id' => 'luongcoban','class' => 'form-control', 'data-mask'=>'fdecimal'))!!}
                             </div>
-
-                            <input type="hidden" id="id_ct" name="id_ct"/>
                         </div>
+                        <input type="hidden" id="maso" name="maso" value="{{$model_nguon->maso}}"/>
                     </div>
                 </div>
 
                 <div class="modal-footer">
                     <button type="button" data-dismiss="modal" class="btn btn-default">Hủy thao tác</button>
-                    <button type="submit" id="submit" name="submit" value="submit" class="btn btn-primary" onclick="cfCV_ct()">Đồng ý</button>
+                    <button type="submit" id="submit" name="submit" value="submit" class="btn btn-primary" >Đồng ý</button>
                 </div>
             </div>
         </div>
     </div>
+    {!! Form::close() !!}
 
     <script>
-        function editCV(id){
-            var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
-            $.ajax({
-                url: '{{$furl}}' + 'get_ct',
-                type: 'GET',
-                data: {
-                    _token: CSRF_TOKEN,
-                    id: id
-                },
-                dataType: 'JSON',
-                success: function (data) {
-                    $('#mapc_ct').val(data.mapc);
-                    $('#tenpc_ct').val(data.tenpc);
-                    $('#luongcoban_ct').val(data.luongcoban);
-                    $('#id_ct').val(id);
-                },
-                error: function(message){
-                    toastr.error(message,'Lỗi!');
-                }
+        function upd_luongcb(){
+            var selectedItems = [];
+            var mapc = $('#upd_luongcb').find("[id='mapc']");
+            mapc.find('option').each(function(){
+                selectedItems.push($(this).val());
             });
-
-            $('#chucvu-modal').modal('show');
+            mapc.select2("val",selectedItems);
         }
 
-        function cfCV_ct(){
-            var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
-            $.ajax({
-                url: '{{$furl}}' + 'update_ct',
-                type: 'GET',
-                data: {
-                    _token: CSRF_TOKEN,
-                    id: $('#id_ct').val(),
-                    luongcoban: $('#luongcoban_ct').val()
-                },
-                dataType: 'JSON',
-                success: function (data) {
-                    if (data.status == 'success') {
-                        location.reload();
-                    }
-                },
-                error: function(message){
-                    toastr.error(message,'Lỗi!!');
-                }
-            });
+        function editCV(mapc,luongcoban){
+            var form = $('#upd_luongcb');
+            var a_pc = mapc.split(',');
+            form.find("[id='mapc']").select2("val",a_pc);
+            form.find("[id='luongcoban']").val(luongcoban);
         }
 
         function addCV(){

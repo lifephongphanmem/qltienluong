@@ -360,18 +360,27 @@ class dutoanluongController extends Controller
             $a_danghihuu = array();
             for ($i = 0; $i < count($a_thang); $i++) {
                 $a_nh = a_getelement($m_nh, array('thang_ns' => $a_thang[$i]['thang']));
-                if (count($a_nh) > 0) {
+                if (count($a_nh) > 0) { //
                     foreach ($a_nh as $key => $val) {
-                        if (isset($inputs['nghihuu'])) {
+                        if (!isset($inputs['nghihuu'])) {
                             $m_cb[$key] = $a_nh[$key];
-                        }else{
+                        } else {
                             $m_cb[$key]['tencanbo'] .= ' (nghỉ hưu)';
                         }
-
+                        $a_danghihuu[] = $key;
+                    }
+                }
+                /*
+                if(isset($inputs['nghihuu']) && count($a_nh) > 0){
+                    foreach ($a_nh as $key => $val) {
+                        $m_cb[$key] = $a_nh[$key];
+                        //$m_cb[$key]['tencanbo'] .= ' (nghỉ hưu)';
                         $m_cb[$key]['congtac'] = 'NGHIHUU';
                         $a_danghihuu[] = $key;
                     }
                 }
+                */
+
                 $a_nb = a_getelement($m_nb, array('thang_nb' => $a_thang[$i]['thang']));
                 if (count($a_nb) > 0) {
                     foreach ($a_nb as $key => $val) {

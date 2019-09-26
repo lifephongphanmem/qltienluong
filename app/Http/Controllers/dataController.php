@@ -606,10 +606,11 @@ class dataController extends Controller
                     $canbo->tnndenngay = $datetn->addYear(1)->toDateString();
                 }
             }
-//            if($canbo->macanbo == '1511748452_1535339860'){
+//            if($canbo->macanbo == '1511710284_1536317288'){
 //                dd($canbo);
 //            }
         }
+
         return $m_canbo;
     }
     //</editor-fold>

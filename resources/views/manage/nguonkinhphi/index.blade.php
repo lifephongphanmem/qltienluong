@@ -35,11 +35,10 @@
                         <i class="fa fa-list-alt"></i>DANH SÁCH NGUỒN KINH PHÍ CỦA ĐƠN VỊ
                     </div>
                     <div class="actions">
-                        <button type="button" id="_btnadd" class="btn btn-default btn-xs" onclick="add()"><i class="fa fa-plus"></i>&nbsp;Thêm mới</button>
+                        <button type="button" class="btn btn-default btn-xs" onclick="add()"><i class="fa fa-plus"></i>&nbsp;Thêm mới</button>
                     </div>
                 </div>
                 <div class="portlet-body form-horizontal">
-
                     <table id="sample_3" class="table table-hover table-striped table-bordered" style="min-height: 230px">
                         <thead>
                             <tr>
@@ -54,37 +53,35 @@
                         </thead>
 
                         <tbody>
-                            @if(isset($model))
-                                @foreach($model as $key=>$value)
-                                    <tr class="{{getTextStatus($value->trangthai)}}">
-                                        <td class="text-center">{{$key+1}}</td>
-                                        <td class="text-center">{{$value->namns}}</td>
-                                        <td>{{$value->linhvuc}}</td>
-                                        <td class="text-right">{{number_format($value->nhucau)}}</td>
-                                        <td class="text-right">{{number_format($value->nguonkp)}}</td>
-                                        <td>{{$a_trangthai[$value->trangthai]}}</td>
-                                        <td>
-                                            @if($value->trangthai != 'DAGUI')
-                                                <a href="{{url($furl.'ma_so='.$value->masodv)}}" class="btn btn-default btn-xs mbs">
-                                                    <i class="fa fa-edit"></i>&nbsp; Chi tiết</a>
+                            @foreach($model as $key=>$value)
+                                <tr class="{{getTextStatus($value->trangthai)}}">
+                                    <td class="text-center">{{$key+1}}</td>
+                                    <td class="text-center">{{$value->namns}}</td>
+                                    <td>{{$value->linhvuc}}</td>
+                                    <td class="text-right">{{number_format($value->nhucau)}}</td>
+                                    <td class="text-right">{{number_format($value->nguonkp)}}</td>
+                                    <td>{{$a_trangthai[$value->trangthai]}}</td>
+                                    <td>
+                                        @if($value->trangthai != 'DAGUI')
+                                            <a href="{{url($furl.'chi_tiet?maso='.$value->masodv)}}" class="btn btn-default btn-xs mbs">
+                                                <i class="fa fa-edit"></i>&nbsp; Chi tiết</a>
 
-                                                <button type="button" class="btn btn-default btn-xs mbs" onclick="confirmChuyen('{{$value['masodv']}}')" data-target="#chuyen-modal" data-toggle="modal"><i class="fa fa-share-square-o"></i>&nbsp;
-                                                    Gửi dữ liệu</button>
+                                            <button type="button" class="btn btn-default btn-xs mbs" onclick="confirmChuyen('{{$value['masodv']}}')" data-target="#chuyen-modal" data-toggle="modal"><i class="fa fa-share-square-o"></i>&nbsp;
+                                                Gửi dữ liệu</button>
 
-                                                <button type="button" onclick="cfDel('{{$furl.'del/'.$value->id}}')" class="btn btn-default btn-xs mbs" data-target="#delete-modal-confirm" data-toggle="modal">
-                                                    <i class="fa fa-trash-o"></i>&nbsp; Xóa</button>
-                                            @endif
-                                            <button type="button" onclick="indutoan('{{$value->namns}}','{{$value->masodv}}')" class="btn btn-default btn-xs mbs" data-target="#indt-modal" data-toggle="modal">
-                                                <i class="fa fa-print"></i>&nbsp; In số liệu</button>
-                                        </td>
-                                    </tr>
-                                @endforeach
-                            @endif
+                                            <button type="button" onclick="cfDel('{{$furl.'del/'.$value->id}}')" class="btn btn-default btn-xs mbs" data-target="#delete-modal-confirm" data-toggle="modal">
+                                                <i class="fa fa-trash-o"></i>&nbsp; Xóa</button>
+                                        @endif
+                                        <button type="button" onclick="indutoan('{{$value->namns}}','{{$value->masodv}}')" class="btn btn-default btn-xs mbs" data-target="#indt-modal" data-toggle="modal">
+                                            <i class="fa fa-print"></i>&nbsp; In số liệu</button>
+                                    </td>
+                                </tr>
+                            @endforeach
                         </tbody>
                     </table>
                 </div>
-                </div>
             </div>
+        </div>
     </div>
 
     <!--Modal thông tin tùy chọn in bảng lương -->
@@ -215,6 +212,13 @@
                         <div class="col-md-offset-3 col-md-9" style="padding-top: 15px">
                             <input type="checkbox" id="thaisan" name="thaisan" />
                             <label for="thaisan">Tính thời gian nghỉ thai sản của cán bộ</label>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-offset-3 col-md-9" style="padding-top: 15px">
+                            <input type="checkbox" checked id="nangluong" name="nangluong" />
+                            <label for="nghihuu">Tính nâng lương cán bộ</label>
                         </div>
                     </div>
                 </div>
