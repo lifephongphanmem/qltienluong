@@ -13,6 +13,7 @@ use App\dmthongtuquyetdinh;
 use App\hosocanbo;
 use App\hosocanbo_kiemnhiem;
 use App\hosotamngungtheodoi;
+use App\hosothoicongtac;
 use App\ngachluong;
 use App\nguonkinhphi;
 use App\nguonkinhphi_bangluong;
@@ -83,12 +84,35 @@ class nguonkinhphiController extends Controller
                 ->get();
             $a_th = array_merge(array('stt','ngaysinh','tencanbo', 'gioitinh', 'msngbac', 'bac',
                 'bhxh_dv', 'bhyt_dv', 'bhtn_dv', 'kpcd_dv', 'ngaybc', 'ngayvao', 'lvhd', 'ngaytu', 'tnntungay','tnndenngay'),$a_th);
+
             $model = hosocanbo::select($a_th)->where('madv', session('admin')->madv)
                 ->where('theodoi','<', '9')
                 ->get();
 
-            //$a_hoten = array_column($model->toarray(),'tencanbo','macanbo');
+            $m_thoict = hosothoicongtac::where('madv', session('admin')->madv)
+                ->wherebetween('ngaynghi',[$model_thongtu->ngayapdung,$inputs['namdt'].'-12-31'])->get();
+            $model_nghihuu = hosocanbo::select($a_th)->wherein('macanbo',array_column($m_thoict->toarray(),'macanbo'))->get();
+
+            foreach($model_nghihuu as $ct){
+                $nghihuu = $m_thoict->where('macanbo',$ct->macanbo)->first();
+                $ct->ngayvao = $nghihuu->ngaynghi;
+                $model->add($ct);
+            }
+
             /*
+            dd($model);
+            $a_cbn = hosothoicongtac::select('macanbo')->where('madv', $inputs['madv'])
+                ->where(function ($qr) use ($ngaycuoithang) {
+                    $qr->where('ngaynghi', '<=', $ngaycuoithang)->orWhereNull('ngaynghi');
+                    //})->toSql();dd($a_cbn);
+                })->get()->toarray();
+
+            //$a_hoten = array_column($model->toarray(),'tencanbo','macanbo');
+
+             *
+             $model = hosocanbo::select($a_th)->where('madv', session('admin')->madv)
+                ->where('theodoi','<', '9')
+                ->get();
             $m_tamngung = hosotamngungtheodoi::where('madv', $inputs['madv'])->where('maphanloai', 'THAISAN')
                 ->where('ngaytu', '<=', $ngaylap)->where('ngayden', '>=', $ngaylap)->get();
 
@@ -179,11 +203,11 @@ class nguonkinhphiController extends Controller
             $m_cb = $model->keyBy('macanbo')->toarray();
             //làm tùy chọn tính nghỉ hưu
             $m_hh = $model->where('ngayvao','>=' ,$model_thongtu->ngayapdung)->where('ngayvao','<=' ,$inputs['namdt'].'-12-31')->keyBy('macanbo')->toarray();
+
             $m_nh = $model->where('nam_ns', '<>', '')->where('nam_ns','<=',$inputs['namdt'])->keyBy('macanbo')->toarray();
             if(isset($inputs['nangluong'])){
                 $m_nb = $model->where('nam_nb', '<>', '')->where('nam_nb','=',$inputs['namdt'])->keyBy('macanbo')->toarray();
                 $m_tnn = $model->where('nam_tnn', '<>', '')->where('nam_tnn','=',$inputs['namdt'])->keyBy('macanbo')->toarray();
-
             }else{
                 $m_nb = array();
                 $m_tnn = array();
@@ -540,24 +564,24 @@ class nguonkinhphiController extends Controller
             $inputs['nghihuu'] = chkDbl($inputs['nghihuu']);
             $inputs['baohiem'] = chkDbl($inputs['baohiem']);
 
-            $inputs['tietkiem'] = chkDbl($inputs['tietkiem']);
-            $inputs['hocphi'] = chkDbl($inputs['hocphi']);
-            $inputs['vienphi'] = chkDbl($inputs['vienphi']);
-            $inputs['nguonthu'] = chkDbl($inputs['nguonthu']);
-            $inputs['nguonkp'] = chkDbl($inputs['nguonkp']);
+            //$inputs['tietkiem'] = chkDbl($inputs['tietkiem']);
+            //$inputs['hocphi'] = chkDbl($inputs['hocphi']);
+            //$inputs['vienphi'] = chkDbl($inputs['vienphi']);
+            //$inputs['nguonthu'] = chkDbl($inputs['nguonthu']);
+            //$inputs['nguonkp'] = chkDbl($inputs['nguonkp']);
 
             $inputs['thunhapthap'] = chkDbl($inputs['thunhapthap']);
             $inputs['diaban'] = chkDbl($inputs['diaban']);
             $inputs['tinhgiam'] = chkDbl($inputs['tinhgiam']);
             $inputs['nghihuusom'] = chkDbl($inputs['nghihuusom']);
 
-            $inputs['tietkiem1'] = chkDbl($inputs['tietkiem1']);
-            $inputs['tietkiem2'] = chkDbl($inputs['tietkiem2']);
-            $inputs['thuchien1'] = chkDbl($inputs['thuchien1']);
-            $inputs['dutoan'] = chkDbl($inputs['dutoan']);
-            $inputs['dutoan1'] = chkDbl($inputs['dutoan1']);
-            $inputs['bosung'] = chkDbl($inputs['bosung']);
-            $inputs['caicach'] = chkDbl($inputs['caicach']);
+            //$inputs['tietkiem1'] = chkDbl($inputs['tietkiem1']);
+            //$inputs['tietkiem2'] = chkDbl($inputs['tietkiem2']);
+            //$inputs['thuchien1'] = chkDbl($inputs['thuchien1']);
+            //$inputs['dutoan'] = chkDbl($inputs['dutoan']);
+            //$inputs['dutoan1'] = chkDbl($inputs['dutoan1']);
+            //$inputs['bosung'] = chkDbl($inputs['bosung']);
+            //$inputs['caicach'] = chkDbl($inputs['caicach']);
             $inputs['kpthuhut'] = chkDbl($inputs['kpthuhut']);
             $inputs['kpuudai'] = chkDbl($inputs['kpuudai']);
 

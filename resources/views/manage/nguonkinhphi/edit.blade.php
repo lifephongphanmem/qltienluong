@@ -290,114 +290,114 @@
                     </div>
                 </div>
 
-                <div class="row">
-                    <div class="col-md-12">
-                        <!-- BEGIN PORTLET-->
-                        <div class="portlet box blue">
-                            <div class="portlet-title">
-                                <div class="caption">
-                                    Thông tin nguồn kinh phí
-                                </div>
-                                <div class="tools">
-                                    <a href="javascript:;" class="collapse" data-original-title="" title=""></a>
-                                </div>
-                            </div>
-                            <div class="portlet-body" style="display: block;">
-                                <div class="row">
-                                    <div class="col-md-4">
-                                        <div class="form-group">
-                                            <label class="control-label">50% ngân sách thực hiện năm {{$nam-1}}</label>
-                                            {!!Form::text('thuchien1', null, array('id' => 'thuchien1','class' => 'form-control text-right kinhphi', 'data-mask'=>'fdecimal'))!!}
-                                        </div>
-                                    </div>
+                {{--<div class="row">--}}
+                    {{--<div class="col-md-12">--}}
+                        {{--<!-- BEGIN PORTLET-->--}}
+                        {{--<div class="portlet box blue">--}}
+                            {{--<div class="portlet-title">--}}
+                                {{--<div class="caption">--}}
+                                    {{--Thông tin nguồn kinh phí--}}
+                                {{--</div>--}}
+                                {{--<div class="tools">--}}
+                                    {{--<a href="javascript:;" class="collapse" data-original-title="" title=""></a>--}}
+                                {{--</div>--}}
+                            {{--</div>--}}
+                            {{--<div class="portlet-body" style="display: block;">--}}
+                                {{--<div class="row">--}}
+                                    {{--<div class="col-md-4">--}}
+                                        {{--<div class="form-group">--}}
+                                            {{--<label class="control-label">50% ngân sách thực hiện năm {{$nam-1}}</label>--}}
+                                            {{--{!!Form::text('thuchien1', null, array('id' => 'thuchien1','class' => 'form-control text-right kinhphi', 'data-mask'=>'fdecimal'))!!}--}}
+                                        {{--</div>--}}
+                                    {{--</div>--}}
 
-                                    <div class="col-md-4">
-                                        <div class="form-group">
-                                            <label class="control-label">50% ngân sách dự toán năm {{$nam}}</label>
-                                            {!!Form::text('dutoan', null, array('id' => 'dutoan','class' => 'form-control text-right kinhphi', 'data-mask'=>'fdecimal'))!!}
-                                        </div>
-                                    </div>
+                                    {{--<div class="col-md-4">--}}
+                                        {{--<div class="form-group">--}}
+                                            {{--<label class="control-label">50% ngân sách dự toán năm {{$nam}}</label>--}}
+                                            {{--{!!Form::text('dutoan', null, array('id' => 'dutoan','class' => 'form-control text-right kinhphi', 'data-mask'=>'fdecimal'))!!}--}}
+                                        {{--</div>--}}
+                                    {{--</div>--}}
 
-                                    <div class="col-md-4">
-                                        <div class="form-group">
-                                            <label class="control-label">50% ngân sách thực hiện năm {{$nam-1}}</label>
-                                            {!!Form::text('dutoan1', null, array('id' => 'dutoan1','class' => 'form-control text-right kinhphi', 'data-mask'=>'fdecimal'))!!}
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-md-4">
-                                        <div class="form-group">
-                                            <label class="control-label">Tiết kiệm chi 10% (năm {{$nam}})</label>
-                                            {!!Form::text('tietkiem', null, array('id' => 'tietkiem','class' => 'form-control text-right kinhphi', 'data-mask'=>'fdecimal'))!!}
-                                        </div>
-                                    </div>
+                                    {{--<div class="col-md-4">--}}
+                                        {{--<div class="form-group">--}}
+                                            {{--<label class="control-label">50% ngân sách thực hiện năm {{$nam-1}}</label>--}}
+                                            {{--{!!Form::text('dutoan1', null, array('id' => 'dutoan1','class' => 'form-control text-right kinhphi', 'data-mask'=>'fdecimal'))!!}--}}
+                                        {{--</div>--}}
+                                    {{--</div>--}}
+                                {{--</div>--}}
+                                {{--<div class="row">--}}
+                                    {{--<div class="col-md-4">--}}
+                                        {{--<div class="form-group">--}}
+                                            {{--<label class="control-label">Tiết kiệm chi 10% (năm {{$nam}})</label>--}}
+                                            {{--{!!Form::text('tietkiem', null, array('id' => 'tietkiem','class' => 'form-control text-right kinhphi', 'data-mask'=>'fdecimal'))!!}--}}
+                                        {{--</div>--}}
+                                    {{--</div>--}}
 
-                                    <div class="col-md-4">
-                                        <div class="form-group">
-                                            <label class="control-label">Tiết kiệm chi 10% (năm {{$nam-1}})</label>
-                                            {!!Form::text('tietkiem1', null, array('id' => 'tietkiem1','class' => 'form-control text-right kinhphi', 'data-mask'=>'fdecimal'))!!}
-                                        </div>
-                                    </div>
+                                    {{--<div class="col-md-4">--}}
+                                        {{--<div class="form-group">--}}
+                                            {{--<label class="control-label">Tiết kiệm chi 10% (năm {{$nam-1}})</label>--}}
+                                            {{--{!!Form::text('tietkiem1', null, array('id' => 'tietkiem1','class' => 'form-control text-right kinhphi', 'data-mask'=>'fdecimal'))!!}--}}
+                                        {{--</div>--}}
+                                    {{--</div>--}}
 
-                                    <div class="col-md-4">
-                                        <div class="form-group">
-                                            <label class="control-label">Tiết kiệm chi 10% (năm {{$nam-2}})</label>
-                                            {!!Form::text('tietkiem2', null, array('id' => 'tietkiem2','class' => 'form-control text-right kinhphi', 'data-mask'=>'fdecimal'))!!}
-                                        </div>
-                                    </div>
-                                </div>
+                                    {{--<div class="col-md-4">--}}
+                                        {{--<div class="form-group">--}}
+                                            {{--<label class="control-label">Tiết kiệm chi 10% (năm {{$nam-2}})</label>--}}
+                                            {{--{!!Form::text('tietkiem2', null, array('id' => 'tietkiem2','class' => 'form-control text-right kinhphi', 'data-mask'=>'fdecimal'))!!}--}}
+                                        {{--</div>--}}
+                                    {{--</div>--}}
+                                {{--</div>--}}
 
-                                <div class="row">
-                                    <div class="col-md-4">
-                                        <div class="form-group">
-                                            <label class="control-label">Học phí</label>
-                                            {!!Form::text('hocphi', null, array('id' => 'hocphi','class' => 'form-control text-right kinhphi', 'data-mask'=>'fdecimal'))!!}
-                                        </div>
-                                    </div>
+                                {{--<div class="row">--}}
+                                    {{--<div class="col-md-4">--}}
+                                        {{--<div class="form-group">--}}
+                                            {{--<label class="control-label">Học phí</label>--}}
+                                            {{--{!!Form::text('hocphi', null, array('id' => 'hocphi','class' => 'form-control text-right kinhphi', 'data-mask'=>'fdecimal'))!!}--}}
+                                        {{--</div>--}}
+                                    {{--</div>--}}
 
-                                    <div class="col-md-4">
-                                        <div class="form-group">
-                                            <label class="control-label">Viện phí</label>
-                                            {!!Form::text('vienphi', null, array('id' => 'vienphi','class' => 'form-control text-right kinhphi', 'data-mask'=>'fdecimal'))!!}
-                                        </div>
-                                    </div>
+                                    {{--<div class="col-md-4">--}}
+                                        {{--<div class="form-group">--}}
+                                            {{--<label class="control-label">Viện phí</label>--}}
+                                            {{--{!!Form::text('vienphi', null, array('id' => 'vienphi','class' => 'form-control text-right kinhphi', 'data-mask'=>'fdecimal'))!!}--}}
+                                        {{--</div>--}}
+                                    {{--</div>--}}
 
-                                    <div class="col-md-4">
-                                        <div class="form-group">
-                                            <label class="control-label">Nguồn thu khác</label>
-                                            {!!Form::text('nguonthu', null, array('id' => 'nguonthu','class' => 'form-control text-right kinhphi', 'data-mask'=>'fdecimal'))!!}
-                                        </div>
-                                    </div>
-                                </div>
+                                    {{--<div class="col-md-4">--}}
+                                        {{--<div class="form-group">--}}
+                                            {{--<label class="control-label">Nguồn thu khác</label>--}}
+                                            {{--{!!Form::text('nguonthu', null, array('id' => 'nguonthu','class' => 'form-control text-right kinhphi', 'data-mask'=>'fdecimal'))!!}--}}
+                                        {{--</div>--}}
+                                    {{--</div>--}}
+                                {{--</div>--}}
 
-                                <div class="row">
-                                    <div class="col-md-4">
-                                        <div class="form-group">
-                                            <label class="control-label">Ngân sách bổ sung năm {{$nam}}</label>
-                                            {!!Form::text('bosung', null, array('id' => 'bosung','class' => 'form-control text-right kinhphi', 'data-mask'=>'fdecimal'))!!}
-                                        </div>
-                                    </div>
+                                {{--<div class="row">--}}
+                                    {{--<div class="col-md-4">--}}
+                                        {{--<div class="form-group">--}}
+                                            {{--<label class="control-label">Ngân sách bổ sung năm {{$nam}}</label>--}}
+                                            {{--{!!Form::text('bosung', null, array('id' => 'bosung','class' => 'form-control text-right kinhphi', 'data-mask'=>'fdecimal'))!!}--}}
+                                        {{--</div>--}}
+                                    {{--</div>--}}
 
-                                    <div class="col-md-4">
-                                        <div class="form-group">
-                                            <label class="control-label">Nguồn cải cách còn dư  {{$nam-1}}</label>
-                                            {!!Form::text('caicach', null, array('id' => 'caicach','class' => 'form-control text-right kinhphi', 'data-mask'=>'fdecimal'))!!}
-                                        </div>
-                                    </div>
+                                    {{--<div class="col-md-4">--}}
+                                        {{--<div class="form-group">--}}
+                                            {{--<label class="control-label">Nguồn cải cách còn dư  {{$nam-1}}</label>--}}
+                                            {{--{!!Form::text('caicach', null, array('id' => 'caicach','class' => 'form-control text-right kinhphi', 'data-mask'=>'fdecimal'))!!}--}}
+                                        {{--</div>--}}
+                                    {{--</div>--}}
 
-                                    <div class="col-md-4">
-                                        <div class="form-group">
-                                            <label class="control-label">Tổng số</label>
-                                            {!!Form::text('nguonkp', null, array('id' => 'nguonkp','class' => 'form-control text-right', 'data-mask'=>'fdecimal','readonly'=>'true'))!!}
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <!-- END PORTLET-->
-                    </div>
-                </div>
+                                    {{--<div class="col-md-4">--}}
+                                        {{--<div class="form-group">--}}
+                                            {{--<label class="control-label">Tổng số</label>--}}
+                                            {{--{!!Form::text('nguonkp', null, array('id' => 'nguonkp','class' => 'form-control text-right', 'data-mask'=>'fdecimal','readonly'=>'true'))!!}--}}
+                                        {{--</div>--}}
+                                    {{--</div>--}}
+                                {{--</div>--}}
+                            {{--</div>--}}
+                        {{--</div>--}}
+                        {{--<!-- END PORTLET-->--}}
+                    {{--</div>--}}
+                {{--</div>--}}
 
                 <div  class="form-actions" style="text-align: center; border-top: 1px solid #eee;">
                     <button type="submit" class="btn btn-default">Hoàn thành <i class="fa fa-save mlx"></i></button>
