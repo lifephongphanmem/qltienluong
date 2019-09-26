@@ -46,7 +46,7 @@
                                 <th class="text-center">Năm ngân</br>sách</th>
                                 <th class="text-center">Lĩnh vực hoạt động</th>
                                 <th class="text-center">Nhu cầu</br>kinh phí</th>
-                                <th class="text-center">Kinh phí</br>thực hiện</th>
+                                {{--<th class="text-center">Kinh phí</br>thực hiện</th>--}}
                                 <th class="text-center">Trạng thái</th>
                                 <th class="text-center">Thao tác</th>
                             </tr>
@@ -59,7 +59,7 @@
                                     <td class="text-center">{{$value->namns}}</td>
                                     <td>{{$value->linhvuc}}</td>
                                     <td class="text-right">{{number_format($value->nhucau)}}</td>
-                                    <td class="text-right">{{number_format($value->nguonkp)}}</td>
+                                    {{--<td class="text-right">{{number_format($value->nguonkp)}}</td>--}}
                                     <td>{{$a_trangthai[$value->trangthai]}}</td>
                                     <td>
                                         @if($value->trangthai != 'DAGUI')
