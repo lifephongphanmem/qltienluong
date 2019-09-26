@@ -92,8 +92,8 @@
         <td class="money">{{dinhdangso($a_TC['tietkiem'],0,$inputs['donvitinh'])}}</td>
         <td class="money">{{dinhdangso($a_TC['hocphi'],0,$inputs['donvitinh'])}}</td>
         <td class="money">{{dinhdangso($a_TC['vienphi'],0,$inputs['donvitinh'])}}</td>
-        <td class="money">{{dinhdangso($a_TC['nguonthu'],0,$inputs['donvitinh'])}}</td>
         <td class="money">{{dinhdangso($a_TC['khac'],0,$inputs['donvitinh'])}}</td>
+        <td class="money">{{dinhdangso($a_TC['nguonthu'],0,$inputs['donvitinh'])}}</td>
         <td class="money">{{dinhdangso($a_TC['bosung'],0,$inputs['donvitinh'])}}</td>
     </tr>
     @foreach($data as $dulieu)
@@ -105,8 +105,8 @@
             <td class="money">{{dinhdangso($dulieu['tietkiem'],0,$inputs['donvitinh'])}}</td>
             <td class="money">{{dinhdangso($dulieu['hocphi'],0,$inputs['donvitinh'])}}</td>
             <td class="money">{{dinhdangso($dulieu['vienphi'],0,$inputs['donvitinh'])}}</td>
-            <td class="money">{{dinhdangso($dulieu['nguonthu'],0,$inputs['donvitinh'])}}</td>
             <td class="money">{{dinhdangso($dulieu['khac'],0,$inputs['donvitinh'])}}</td>
+            <td class="money">{{dinhdangso($dulieu['nguonthu'],0,$inputs['donvitinh'])}}</td>
             <td class="money">{{dinhdangso($dulieu['bosung'],0,$inputs['donvitinh'])}}</td>
         </tr>
     @endforeach

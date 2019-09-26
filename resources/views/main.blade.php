@@ -472,8 +472,11 @@
                             @endif
 
                             @if(session('admin')->level == 'H' && session('admin')->phamvitonghop == 'HUYEN')
+                                    <li>
+                                        <a href="{{url('nguon_kinh_phi/huyen/danh_sach')}}"><i class="fa fa-caret-right"></i>Số liệu nguồn kinh phí</a>
+                                    </li>
                                 <li>
-                                    <a href="{{url('chuc_nang/tong_hop_nguon/huyen/index')}}"><i class="fa fa-caret-right"></i>Tổng số liệu nguồn kinh phí</a>
+                                    <a href="{{url('chuc_nang/tong_hop_nguon/huyen/index')}}"><i class="fa fa-caret-right"></i>Tổng số liệu nhu cầu kinh phí</a>
                                 </li>
                                     <li>
                                         <a href="{{url('chuc_nang/xem_du_lieu/nguon/huyen?sohieu=TT68_2017&trangthai=ALL&phanloai=ALL')}}"><i class="fa fa-caret-right"></i>Xem số liệu tổng hợp từ đơn vị cấp dưới</a>
