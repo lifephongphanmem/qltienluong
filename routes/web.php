@@ -494,6 +494,15 @@ Route::group(['prefix'=>'nguon_kinh_phi'],function(){
         Route::get('mautt107_m2','tonghopnguon_khoiController@printf_tt107_m2');
     });
     Route::group(['prefix'=>'huyen'],function(){
+        Route::get('danh_sach','nguonkinhphi_huyen_baocaoController@index');
+        Route::get('create','nguonkinhphi_huyen_baocaoController@create');
+        Route::post('store','nguonkinhphi_huyen_baocaoController@store');
+        Route::get('ma_so={masodv}','nguonkinhphi_huyen_baocaoController@edit');
+        Route::get('ma_so={masodv}/show','nguonkinhphi_huyen_baocaoController@show');
+        Route::post('update','nguonkinhphi_huyen_baocaoController@update');
+        Route::get('del/{id}','nguonkinhphi_huyen_baocaoController@destroy');
+        Route::post('senddata','nguonkinhphi_huyen_baocaoController@senddata'); //gửi dữ liệu
+        Route::get('get_thongtu','nguonkinhphi_huyen_baocaoController@getinfor_thongtu');
         Route::get('mautt107_m2','tonghopnguon_huyenController@printf_tt107_m2');
     });
 });

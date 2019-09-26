@@ -3027,12 +3027,14 @@ class baocaothongtu67Controller extends Controller
                     ->wherein('sohieu',array_column($model_thongtu->where('namdt','2019')->toarray(),'sohieu'))->get();
             }
             $model_donvi = dmdonvi::where('madvbc', session('admin')->madvbc)->get();
-            if (count($model) == 0) {
-                return view('errors.nodata');
-            }
 
             $m_dv = dmdonvi::where('madv', session('admin')->madv)->first();
-
+            $model_nguon = nguonkinhphi_huyen_baocao::where('madv', session('admin')->madv)
+                ->where('trangthai','DAGUI')
+                ->wherein('sohieu',array_column($model_thongtu->where('namdt','2019')->toarray(),'sohieu'))->get();
+            if (count($model) == 0 && count($model_nguon) == 0) {
+                return view('errors.nodata');
+            }
             $a_A = array();
             $a_A[0] = array('tt' => '1', 'noidung' => '50% tăng/giảm thu NSĐP (không kể tăng thu tiền sử dụng đất, xổ số kiến thiết) thực hiện 2018 so dự toán Thủ tướng Chính phủ giao năm 2018', 'sotien' => '0');
             $a_A[1] = array('tt' => '2', 'noidung' => '50% tăng thu NSĐP (không kể tăng thu tiền sử dụng đất, xổ số kiến thiết) dự toán 2019 so dự toán 2018 Thủ tướng Chính phủ giao', 'sotien' => '0');
@@ -3077,26 +3079,28 @@ class baocaothongtu67Controller extends Controller
             $a_BIII[6] = array('tt' => '5', 'noidung' => 'Kinh phí giảm do điều chỉnh số lượng cán bộ, công chức cấp xã; mức khoán phụ cấp đối với người hoạt động không chuyên trách ở cấp xã theo Nghị định số 34/2019/NĐ-CP của Chính phủ (7)', 'sotien' => '0');
 
             //Tính toán
-            $a_A[0]['sotien'] = $model->sum('thuchien1');
-            $a_A[1]['sotien'] = $model->sum('dutoan');
-            $a_A[2]['sotien'] = $model->sum('dutoan1');
-            $a_A[3]['sotien'] = $model->sum('tietkiem2');
-            $a_A[4]['sotien'] = $model->sum('tietkiem1');
-            $a_A[5]['sotien'] = $model->sum('tietkiem');
-            $model_tudb = $model->wherein('phanloainguon', array('CHITXDT', 'CTX'));
-            $a_A[8]['sotien'] = $model_tudb->sum('hocphi');
-            $a_A[9]['sotien'] = $model_tudb->sum('vienphi');
-            $a_A[10]['sotien'] = $model_tudb->sum('nguonthu');
+            $a_A[0]['sotien'] = $model_nguon->sum('thuchien');
+            $a_A[1]['sotien'] = $model_nguon->sum('dutoan19');
+            $a_A[2]['sotien'] = $model_nguon->sum('dutoan18');
+            $a_A[3]['sotien'] = $model_nguon->sum('tietkiem17');
+            $a_A[4]['sotien'] = $model_nguon->sum('tietkiem18');
+            $a_A[5]['sotien'] = $model_nguon->sum('tietkiem19');
+            //Tự đảm bảo
+            $a_A[8]['sotien'] = $model_nguon->sum('dbhocphi');
+            $a_A[9]['sotien'] = $model_nguon->sum('dbvienphi');
+            $a_A[10]['sotien'] = $model_nguon->sum('dbkhac');
             $a_A[7]['sotien'] = $a_A[8]['sotien'] + $a_A[9]['sotien'] + $a_A[10]['sotien'];
-            //$a_BI[1]['sotien'] = $model->luongphucap;
-            $a_A[12]['sotien'] = $model->sum('hocphi') - $model_tudb->sum('hocphi');
-            $a_A[13]['sotien'] = $model->sum('vienphi') - $model_tudb->sum('vienphi');
-            $a_A[14]['sotien'] = $model->sum('nguonthu') - $model_tudb->sum('nguonthu');
-            $a_A[10]['sotien'] = $a_A[12]['sotien'] + $a_A[13]['sotien'] + $a_A[14]['sotien'];
-            $a_A[6]['sotien'] = $a_A[7]['sotien'] + $a_A[10]['sotien'];
 
-            $a_A[20]['sotien'] = $model->sum('bosung');
-            $a_A[21]['sotien'] = $model->sum('caicach');
+            $a_A[12]['sotien'] = $model_nguon->sum('kdbhocphi');
+            $a_A[13]['sotien'] = $model_nguon->sum('kdbvienphi');
+            $a_A[14]['sotien'] = $model_nguon->sum('kdbkhac');
+            $a_A[11]['sotien'] = $a_A[12]['sotien'] + $a_A[13]['sotien'] + $a_A[14]['sotien'];
+            $a_A[6]['sotien'] = $a_A[7]['sotien'] + $a_A[11]['sotien'];
+
+            $a_A[15]['sotien'] = $model_nguon->sum('tietkiemchi');
+            $a_A[20]['sotien'] = $model_nguon->sum('bosung');
+            $a_A[21]['sotien'] = $model_nguon->sum('caicach');
+
             //Tổng nhu cầu năm 2017
             $model_nc2017 = nguonkinhphi::where('madvbc', 'like', $inputs['madv'] . '%')
                 ->where('trangthai','DAGUI')
@@ -3105,7 +3109,7 @@ class baocaothongtu67Controller extends Controller
             $model_nc2018 = nguonkinhphi::where('madvbc', 'like', $inputs['madv'] . '%')
                 ->where('trangthai','DAGUI')
                 ->wherein('sohieu',array_column($model_thongtu->where('namdt','2018')->toarray(),'sohieu'))->get();
-
+            $model_tudb = $model->wherein('phanloainguon', array('CHITXDT', 'CTX'));
             $model_xp = $model->where('maphanloai', 'KVXP');
             $a_BII[1]['sotien'] = $model_tudb->sum('luongphucap');
             $a_BII[2]['sotien'] = $model_xp->sum('luongphucap');
@@ -3125,7 +3129,8 @@ class baocaothongtu67Controller extends Controller
             $a_BIII[6]['sotien'] = 0;
 
             $a_TC = array(
-                'A' => ($a_A[1]['sotien'] + $a_A[5]['sotien'] + $a_A[6]['sotien'] + $a_A[15]['sotien']+ $a_A[20]['sotien']+ $a_A[21]['sotien']),
+                'A' => ($a_A[0]['sotien'] + $a_A[1]['sotien'] + $a_A[2]['sotien'] + $a_A[3]['sotien']
+                    + $a_A[4]['sotien']+ $a_A[5]['sotien'] + $a_A[6]['sotien'] + $a_A[15]['sotien'] + $a_A[20]['sotien']+ $a_A[21]['sotien']),
                 'BI' => $model_nc2017->sum('nhucau'),
                 'BI1' => $model_nc2018->sum('nhucau'),
                 'BII' => (array_sum(array_column($a_BII, 'sotien')) - $a_BII[1]['sotien']),
@@ -3298,7 +3303,12 @@ class baocaothongtu67Controller extends Controller
                     ->wherein('nguonkinhphi.sohieu',array_column($model_thongtu->where('namdt','2019')->toarray(),'sohieu'))->get();
             }
             //dd($model);
-            if (count($model) == 0) {
+            $a_th = array_column(nguonkinhphi_huyen_baocao::where('trangthai','DAGUI')
+                ->where('madv',session('admin')->madv)->get()->toarray(),'masodv');
+            $model_nguon = nguonkinhphi_huyen_baocao_chitiet::where('madv', session('admin')->madv)
+                ->wherein('masodv',$a_th)
+                ->wherein('sohieu',array_column($model_thongtu->where('namdt','2019')->toarray(),'sohieu'))->get();
+            if (count($model) == 0 && count($model_nguon) == 0) {
                 return view('errors.nodata');
             }
             $m_dv = dmdonvi::where('madv', session('admin')->madv)->first();
@@ -3336,13 +3346,14 @@ class baocaothongtu67Controller extends Controller
             //Tổng cộng
             for ($i = 0; $i < count($tongcong); $i++) {
                 $solieu = $model->where('linhvuchoatdong', $tongcong[$i]['val']);
+                $solieu_nguon = $model_nguon->where('linhvuchoatdong',$tongcong[$i]['val']);
                 $tongcong[$i]['nhucau'] = $solieu->sum('nhucau');
-                $tongcong[$i]['nguonkp'] = $solieu->sum('nguonkp');
-                $tongcong[$i]['tietkiem'] = $solieu->sum('tietkiem') ;
-                $tongcong[$i]['hocphi'] = $solieu->sum('hocphi');
-                $tongcong[$i]['vienphi'] = $solieu->sum('vienphi');
-                $tongcong[$i]['nguonthu'] = $solieu->sum('nguonthu');
-                $tongcong[$i]['khac'] = 0;
+                $tongcong[$i]['tietkiem'] = $solieu_nguon->sum('tietkiem');
+                $tongcong[$i]['hocphi'] = $solieu_nguon->sum('dbhocphi') + $solieu_nguon->sum('kdbhocphi');
+                $tongcong[$i]['vienphi'] = $solieu_nguon->sum('dbvienphi') + $solieu_nguon->sum('kdbvienphi');
+                $tongcong[$i]['khac'] = $solieu_nguon->sum('dbkhac') + $solieu_nguon->sum('kdbkhac');
+                $tongcong[$i]['nguonthu'] = $solieu_nguon->sum('tietkiemchi');
+                $tongcong[$i]['nguonkp'] = $tongcong[$i]['hocphi'] + $tongcong[$i]['vienphi'] + $tongcong[$i]['khac'] + $tongcong[$i]['nguonthu'];
             }
 
             $tongcong[0]['nhucau'] = $tongcong[1]['nhucau'] + $tongcong[2]['nhucau'];
@@ -3351,8 +3362,8 @@ class baocaothongtu67Controller extends Controller
             $tongcong[0]['hocphi'] = $tongcong[1]['hocphi'] + $tongcong[2]['hocphi'];
             $tongcong[0]['vienphi'] = $tongcong[1]['vienphi'] + $tongcong[2]['vienphi'];
             $tongcong[0]['nguonthu'] = $tongcong[1]['nguonthu'] + $tongcong[2]['nguonthu'];
-            $tongcong[0]['khac'] = 0;
-
+            $tongcong[0]['khac'] = $tongcong[1]['khac'] + $tongcong[2]['khac'];
+            /*
             $tongcong[4]['nhucau'] = $model->sum('nhucau') - $tongcong[0]['nhucau'] - $tongcong[5]['nhucau'] - $tongcong[3]['nhucau'];
             $tongcong[4]['nguonkp'] = $model->sum('nguonkp') - $tongcong[0]['nguonkp'] - $tongcong[5]['nguonkp'] - $tongcong[3]['nguonkp'];
             $tongcong[4]['tietkiem'] = $model->sum('tietkiem') - $tongcong[0]['tietkiem'];
@@ -3360,6 +3371,7 @@ class baocaothongtu67Controller extends Controller
             $tongcong[4]['vienphi'] = $model->sum('vienphi') - $tongcong[0]['vienphi'] - $tongcong[5]['vienphi'] - $tongcong[3]['vienphi'];
             $tongcong[4]['nguonthu'] = $model->sum('nguonthu') - $tongcong[0]['nguonthu'] - $tongcong[5]['nguonthu'] - $tongcong[3]['nguonthu'];
             $tongcong[4]['khac'] = 0;
+            */
             $model_dsdv = dmdonvi::all();
             foreach ($model as $ct) {
                 $ct->caphanhchinh = $model_dsdv->where('madv',$ct->madv)->first()->caphanhchinh;
