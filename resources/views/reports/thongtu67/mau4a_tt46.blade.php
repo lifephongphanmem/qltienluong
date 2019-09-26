@@ -91,7 +91,7 @@
     <tr style="font-weight: bold;">
         <td>B</td>
         <td>TỔNG NHU CẦU NĂM 2019</td>
-        <td class="money">{{dinhdangso($a_TC['BII'] + $a_TC['BIII'],0,$inputs['donvitinh'])}}</td>
+        <td class="money">{{dinhdangso($a_TC['BII'] + $a_TC['BIII'] + $a_TC['BI'] + $a_TC['BI1'],0,$inputs['donvitinh'])}}</td>
     </tr>
 
     <tr style="font-weight: bold;">
