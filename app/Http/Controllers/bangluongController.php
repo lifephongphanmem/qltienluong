@@ -3349,9 +3349,14 @@ class bangluongController extends Controller
                 if($cb->congtac == 'DAINGAY' || $cb->congtac == 'THAISAN' || $cb->congtac == 'KHONGLUONG'){
                     $cb->tonghs = 0;
                     foreach($a_phucap as $k=>$v) {
-                        $cb->tonghs += $cb->$k;
+                        if($cb->$k>1000){
+                            $cb->ttl_tn += chkDbl($cb->$k);
+
+                        }else{
+                            $cb->tonghs += $cb->$k;
+                            $cb->ttl_tn += round($cb->$k * $luongcb, 0);
+                        }
                     }
-                    $cb->ttl_tn = round($cb->tonghs * $luongcb, 0);
                 }
             }
             return view('reports.bangluong.donvi.mautt107_m2')
