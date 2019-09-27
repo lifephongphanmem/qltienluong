@@ -392,14 +392,16 @@ class bangluongController extends Controller
             ->select('nguonkinhphi_dinhmuc_ct.*')->get();
         */
         //dd($model_dimhmuc);
-        $a_nguonpc = array_column($model_dimhmuc->toarray(), 'mapc');
-        $a_mucluong = array_column($model_dimhmuc->toarray(), 'luongcoban', 'mapc');
+
         $model_phucap = dmphucap_donvi::where('madv', session('admin')->madv)->where('phanloai', '<', '3')
             ->wherenotin('mapc', explode(',', $inputs['phucaploaitru']))->get();
-
+        /*
+        $a_nguonpc = array_column($model_dimhmuc->toarray(), 'mapc');
+        $a_mucluong = array_column($model_dimhmuc->toarray(), 'luongcoban', 'mapc');
         foreach ($model_phucap as $pc) {
             $pc->luongcoban = isset($a_mucluong[$pc->mapc]) ? $a_mucluong[$pc->mapc] : 0;
         }
+        */
         $a_ts = array_column($model_phucap->where('thaisan', 1)->toarray(), 'mapc');
         $a_no = array_column($model_phucap->where('nghiom', 1)->toarray(), 'mapc');
 
@@ -515,13 +517,14 @@ class bangluongController extends Controller
                 }
                 //kiểm tra phụ cấp =>ko trong nhóm tính
                 //ko trong nhóm phụ cấp làm cơ sơ = >set = 0
-                if (!in_array($mapc, $a_nguonpc)) {
+                if (!isset($a_nkp_dm[$cb->mact][$mapc])) {
+                //if (!in_array($mapc, $a_nguonpc)) {
                     if (!in_array($mapc, $a_goc)) {
                         $cb->$mapc = 0;
                     }
                     continue;
                 }
-
+                $pc->luongcoban = $a_nkp_dm[$cb->mact][$mapc];
                 $pc->heso_goc = $cb->$mapc;
                 $pl = getDbl($pc->phanloai);
 
@@ -2838,7 +2841,8 @@ class bangluongController extends Controller
             $model->luongtn = $model->ttl -  $model->ttbh - $model->giaml - $model->thuetn - $model->trichnop + $model->bhct + $model->tienthuong;
             //dd($model);
             $model->save();
-            return redirect('/chuc_nang/bang_luong/bang_luong?mabl='.$model->mabl.'&mapb='.$model->mapb);
+
+            return redirect('/chuc_nang/bang_luong/can_bo?mabl='.$model->mabl.'&maso='.$model->id);
 
 
         } else
