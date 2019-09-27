@@ -703,6 +703,7 @@ Route::group(['prefix'=>'chuc_nang'],function(){
             Route::post('store_detail','tonghopluong_khoiController@store_detail');//chỉnh sửa dữ liêu
             Route::post('store_detail_diaban','tonghopluong_khoiController@store_detail_diaban');//chỉnh sửa dữ liêu
             Route::get('inkhoito','tonghopluong_khoiController@inkhoito');//in khối tổ
+            Route::get('inkhoito_th','tonghopluong_khoiController@tonghop_khoito');//in khối tổ
             Route::get('printf_bl_khoi','tonghopluong_khoiController@printf_bl_khoi');//in bảng lương
         });
 
