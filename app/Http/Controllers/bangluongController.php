@@ -18,7 +18,7 @@ use App\dmphanloaict;
 use App\dmphongban;
 use App\dmphucap;
 use App\dmphucap_donvi;
-use App\dmphucap_thaisan;
+//use App\dmphucap_thaisan;
 use App\dmtieumuc_default;
 use App\hosocanbo;
 use App\hosocanbo_kiemnhiem;
@@ -329,7 +329,9 @@ class bangluongController extends Controller
 
         //Lấy danh sách cán bộ kiêm nhiệm
         //$model_canbo_kn = hosocanbo_kiemnhiem::where('madv',session('admin')->madv)->wherein('manguonkp',[$inputs['manguonkp'],''])->get();
+
         $model_canbo_kn = hosocanbo_kiemnhiem::where('madv', session('admin')->madv)->get();
+        $a_mact_ht = a_unique(array_column($model_canbo_kn->toarray(),'mact'));
 
         foreach ($m_cb as $canbo) {
             //Dùng tìm kiếm các bộ nào phù hợp. Do lvhd là mảng nên pải lọc
@@ -343,6 +345,10 @@ class bangluongController extends Controller
             if (in_array($inputs['manguonkp'], $a_nguon) || $canbo->manguonkp == null || $canbo->manguonkp == '') {
                 $canbo->manguonkp = $inputs['manguonkp'];
             }
+
+            if(!in_array($canbo->mact, $a_mact_ht )){
+                $a_mact_ht[] = $canbo->mact;
+            }
         }
         //$m_cb = $m_cb->where('lvhd', $inputs['linhvuc']);
         $m_cb = $m_cb->where('manguonkp', $inputs['manguonkp']);
@@ -354,6 +360,31 @@ class bangluongController extends Controller
         //=> lấy phụ cấp theo nguồn chứ ko pải phụ cấp toàn hệ thống
         $m_dm = nguonkinhphi_dinhmuc::where('madv', session('admin')->madv)->where('manguonkp', $inputs['manguonkp'])->first();
         $model_dimhmuc = nguonkinhphi_dinhmuc_ct::where('maso', $m_dm->maso)->wherenotin('mapc', explode(',', $inputs['phucaploaitru']))->get();
+
+        $m_dmng = nguonkinhphi_dinhmuc::where('madv', session('admin')->madv)->where('manguonkp', $inputs['manguonkp'])->get();
+        $m_dmng_ct = nguonkinhphi_dinhmuc_ct::wherein('maso',array_column($m_dmng->toarray(),'maso'))
+            ->wherenotin('mapc', explode(',', $inputs['phucaploaitru']))->get();
+
+        //phân loại công tác nào ko có trong định mức => gán lương cơ bản = 0
+        $a_nkp_dm = array();
+        foreach($m_dmng as $ng){
+            $chitiet = array_column($m_dmng_ct->where('maso',$ng->maso)->toarray(),'luongcoban','mapc');
+            if($ng->mact == 'ALL'){
+                //gán mảng nguồn từ đầu
+                $a_nkp_dm = array();
+                foreach($a_mact_ht as $ct){
+                    $a_nkp_dm[$ct] = $chitiet;
+                }
+                goto dinhmucnguon;
+            }
+
+            foreach(explode(',', $ng->mact) as $ct){
+                $a_nkp_dm[$ct] = $chitiet;
+            }
+        }
+        dinhmucnguon:
+        //dd($a_nkp_dm);
+        //dd($m_dmng_ct);
         /*
         $model_dimhmuc = nguonkinhphi_dinhmuc_ct::join('nguonkinhphi_dinhmuc','nguonkinhphi_dinhmuc.maso','=','nguonkinhphi_dinhmuc_ct.maso')
             ->where('madv', session('admin')->madv)
@@ -430,6 +461,7 @@ class bangluongController extends Controller
             //$heso_goc = $cb->heso * $cb->pthuong / 100;
             $cb->heso = round($cb->heso * $cb->pthuong / 100, session('admin')->lamtron);
             $cb->vuotkhung = round($cb->heso * $cb->vuotkhung / 100, session('admin')->lamtron);
+
             foreach ($a_pc_coth as $phca) {//tính trc 1 số phụ cấp làm phụ cấp cơ sở
                 $pctnn = $model_phucap->where('mapc', $phca)->first();
                 if (count($pctnn) > 0) {//do 1 số nguồn ko lấy thâm niên nghề làm cơ sở
@@ -463,21 +495,21 @@ class bangluongController extends Controller
             $khongluong = count($m_khongluong->where('macanbo', $cb->macanbo)) > 0 ? true : false;
             $duongsuc = count($m_duongsuc->where('macanbo', $cb->macanbo)) > 0 ? true : false;
 
-            foreach ($model_phucap as $ct) {
-                $mapc = $ct->mapc;
+            foreach ($model_phucap as $pc) {
+                $mapc = $pc->mapc;
                 $mapc_st = 'st_' . $mapc;
                 $cb->$mapc_st = 0;
                 //gán số tiền bảo hiểm  = 0 khi tính để ko trùng với giá trị cán bộ trc
-                $ct->stbhxh = 0;
-                $ct->stbhyt = 0;
-                $ct->stkpcd = 0;
-                $ct->stbhtn = 0;
-                $ct->stbhxh_dv = 0;
-                $ct->stbhyt_dv = 0;
-                $ct->stkpcd_dv = 0;
-                $ct->stbhtn_dv = 0;
-                $ct->sotien = 0;
-                $ct->heso_goc = 0;
+                $pc->stbhxh = 0;
+                $pc->stbhyt = 0;
+                $pc->stkpcd = 0;
+                $pc->stbhtn = 0;
+                $pc->stbhxh_dv = 0;
+                $pc->stbhyt_dv = 0;
+                $pc->stkpcd_dv = 0;
+                $pc->stbhtn_dv = 0;
+                $pc->sotien = 0;
+                $pc->heso_goc = 0;
                 if ($cb->$mapc <= 0) {
                     continue;
                 }
@@ -490,13 +522,13 @@ class bangluongController extends Controller
                     continue;
                 }
 
-                $ct->heso_goc = $cb->$mapc;
-                $pl = getDbl($ct->phanloai);
+                $pc->heso_goc = $cb->$mapc;
+                $pl = getDbl($pc->phanloai);
 
                 switch ($pl) {
                     case 0: {//hệ số
                         $ths += $cb->$mapc;
-                        $sotien = round($cb->$mapc * $ct->luongcoban, 0);
+                        $sotien = round($cb->$mapc * $pc->luongcoban, 0);
                         break;
                     }
                     case 1: {//số tiền
@@ -506,7 +538,7 @@ class bangluongController extends Controller
                     }
                     case 2: {//phần trăm
                         $heso = 0;
-                        foreach (explode(',', $ct->congthuc) as $cthuc) {
+                        foreach (explode(',', $pc->congthuc) as $cthuc) {
                             if ($cthuc != '')
                                 $heso += $cb->$cthuc;
                         }
@@ -515,7 +547,7 @@ class bangluongController extends Controller
                             $cb->$mapc = round($heso * $cb->$mapc / 100, session('admin')->lamtron);
                         }
                         $ths += $cb->$mapc;
-                        $sotien = round($cb->$mapc * $ct->luongcoban, 0);
+                        $sotien = round($cb->$mapc * $pc->luongcoban, 0);
                         break;
                     }
                     default: {//trường hợp còn lại (ẩn,...)
@@ -532,20 +564,20 @@ class bangluongController extends Controller
                     goto ketthuc_phucap;
                 }
 
-                $ct->mabl = $inputs['mabl'];
-                $ct->sotien = round($sotien, 0);
-                $cb->$mapc_st = $ct->sotien;
-                if ($ct->baohiem == 1 && !in_array($mapc, $a_pc_kobh)) {
-                    $ct->stbhxh = round($ct->sotien * $cb->bhxh, 0);
-                    $ct->stbhyt = round($ct->sotien * $cb->bhyt, 0);
-                    $ct->stkpcd = round($ct->sotien * $cb->kpcd, 0);
-                    $ct->stbhtn = round($ct->sotien * $cb->bhtn, 0);
-                    $ct->ttbh = $ct->stbhxh + $ct->stbhyt + $ct->stkpcd + $ct->stbhtn;
-                    $ct->stbhxh_dv = round($ct->sotien * $cb->bhxh_dv, 0);
-                    $ct->stbhyt_dv = round($ct->sotien * $cb->bhyt_dv, 0);
-                    $ct->stkpcd_dv = round($ct->sotien * $cb->kpcd_dv, 0);
-                    $ct->stbhtn_dv = round($ct->sotien * $cb->bhtn_dv, 0);
-                    $ct->ttbh_dv = $ct->stbhxh_dv + $ct->stbhyt_dv + $ct->stkpcd_dv + $ct->stbhtn_dv;
+                $pc->mabl = $inputs['mabl'];
+                $pc->sotien = round($sotien, 0);
+                $cb->$mapc_st = $pc->sotien;
+                if ($pc->baohiem == 1 && !in_array($mapc, $a_pc_kobh)) {
+                    $pc->stbhxh = round($pc->sotien * $cb->bhxh, 0);
+                    $pc->stbhyt = round($pc->sotien * $cb->bhyt, 0);
+                    $pc->stkpcd = round($pc->sotien * $cb->kpcd, 0);
+                    $pc->stbhtn = round($pc->sotien * $cb->bhtn, 0);
+                    $pc->ttbh = $pc->stbhxh + $pc->stbhyt + $pc->stkpcd + $pc->stbhtn;
+                    $pc->stbhxh_dv = round($pc->sotien * $cb->bhxh_dv, 0);
+                    $pc->stbhyt_dv = round($pc->sotien * $cb->bhyt_dv, 0);
+                    $pc->stkpcd_dv = round($pc->sotien * $cb->kpcd_dv, 0);
+                    $pc->stbhtn_dv = round($pc->sotien * $cb->bhtn_dv, 0);
+                    $pc->ttbh_dv = $pc->stbhxh_dv + $pc->stbhyt_dv + $pc->stkpcd_dv + $pc->stbhtn_dv;
                 }
 
                 ketthuc_phucap:
@@ -702,7 +734,7 @@ class bangluongController extends Controller
             $cb->mabl = $inputs['mabl'];
             $cb->manguonkp = $inputs['manguonkp'];
             $cb->luongcoban = $inputs['luongcoban'];
-
+            $cb->congtac = $cb->phanloai;
             //tính thâm niên
             $pctn = $model_phucap->where('mapc', 'pcthni')->first();
             //trường đơn vị ko mở phụ cấp thâm niên
@@ -738,20 +770,20 @@ class bangluongController extends Controller
             $ths = 0;
             $tt = 0;
             //lương cơ bản gán theo loại phụ cấp => tính tiền luôn
-            foreach ($model_phucap as $ct) {
-                $mapc = $ct->mapc;
-                $mapc_st = 'st_' . $ct->mapc;
+            foreach ($model_phucap as $pc) {
+                $mapc = $pc->mapc;
+                $mapc_st = 'st_' . $pc->mapc;
                 if ($cb->$mapc <= 0) {
                     continue;
                 }
 
-                $pl = getDbl($ct->phanloai);
+                $pl = getDbl($pc->phanloai);
 
                 switch ($pl) {
                     case 0: {//hệ số
                         $ths += $cb->$mapc;
                         $cb->$mapc_st = round($cb->$mapc * $inputs['luongcoban'], 0);
-                        $tt += round($cb->$mapc * $ct->luongcoban, 0);
+                        $tt += round($cb->$mapc * $pc->luongcoban, 0);
                         break;
                     }
                     case 1: {//số tiền
@@ -763,7 +795,7 @@ class bangluongController extends Controller
                         if ($mapc != 'pcthni') {
                             $heso = 0;
                             if ($pl == 2) {
-                                foreach (explode(',', $ct->congthuc) as $cthuc) {
+                                foreach (explode(',', $pc->congthuc) as $cthuc) {
                                     if ($cthuc != '')
                                         $heso += $canbo->$cthuc;
                                 }
@@ -772,7 +804,7 @@ class bangluongController extends Controller
                             $heso += $canbo->hesopc;
                             $cb->$mapc = round($heso * $cb->$mapc / 100, session('admin')->lamtron);
                             $ths += $cb->$mapc;
-                            $tt += round($cb->$mapc * $ct->luongcoban, 0);
+                            $tt += round($cb->$mapc * $pc->luongcoban, 0);
                             $cb->$mapc_st = round($cb->$mapc * $inputs['luongcoban'], 0);
                         }
                         break;
@@ -3349,9 +3381,14 @@ class bangluongController extends Controller
                 if($cb->congtac == 'DAINGAY' || $cb->congtac == 'THAISAN' || $cb->congtac == 'KHONGLUONG'){
                     $cb->tonghs = 0;
                     foreach($a_phucap as $k=>$v) {
-                        $cb->tonghs += $cb->$k;
+                        if($cb->$k>1000){
+                            $cb->ttl_tn += chkDbl($cb->$k);
+
+                        }else{
+                            $cb->tonghs += $cb->$k;
+                            $cb->ttl_tn += round($cb->$k * $luongcb, 0);
+                        }
                     }
-                    $cb->ttl_tn = round($cb->tonghs * $luongcb, 0);
                 }
             }
             return view('reports.bangluong.donvi.mautt107_m2')
@@ -5115,11 +5152,11 @@ class bangluongController extends Controller
             );
             //xử lý ẩn hiện cột phụ cấp => biết tổng số cột hiện => colspan trên báo cáo
             //$a_goc = array('heso','vuotkhung','hesott');
-            $a_pc = dmphucap_donvi::where('madv', $m_bl->madv)->where('phanloai', '<', '3')->orderby('stt')
+
+            $a_pc  = dmphucap_donvi::where('madv', $m_bl->madv)->where('phanloai', '<', '3')->orderby('stt')
                 ->get()->keyby('mapc')->toarray();
 
-            $a_ts = array_column(dmphucap_thaisan::where('madv', session('admin')->madv)->get()->toarray(), 'mapc');
-
+            //$a_ts = array_column(dmphucap_thaisan::where('madv', session('admin')->madv)->get()->toarray(), 'mapc');
             $model_congtac = dmphanloaict::select('mact','tenct','macongtac')
                 ->wherein('mact', a_unique(array_column($model->toarray(),'mact')))->get();
 
@@ -5134,6 +5171,7 @@ class bangluongController extends Controller
             }
             $a_phca = $a_pc;
             $a_bh = a_getelement_equal($a_pc, array('baohiem' => 1));
+            $a_ts = array_column(a_getelement_equal($a_pc, array('thaisan' => 1)), 'mapc');
             $a_nhomct = array_column($model_congtac->toarray(),'macongtac','mact');
             //dd($a_bh);
             $a_pc_tm = new Collection();
