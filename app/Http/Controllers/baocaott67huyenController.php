@@ -133,6 +133,7 @@ class baocaott67huyenController extends Controller
                     }
                     $ct->ttbh_dv = round(($ct->st_heso + $ct->st_vuotkhung + $ct->st_pccv + $ct->st_pctnn + $ct->st_hesopc)* 23.5 / 100);
             }
+            $model_tonghop_ct = $model_tonghop_ct->wherein('mact',getMaCongTacNhuCau());
             $model_bangluong_ct = $model_tonghop_ct->where('macongtac', 'BIENCHE')->where('maphanloai', '<>', 'KVXP');
             $ar_I = array();
             $ar_Igr = array();
@@ -1099,6 +1100,7 @@ class baocaott67huyenController extends Controller
                 }
                 $ct->ttbh_dv = round(($ct->st_heso + $ct->st_vuotkhung + $ct->st_pccv + $ct->st_pctnn + $ct->st_hesopc)* 23.5 / 100);
             }
+            $model_tonghop_ct = $model_tonghop_ct->wherein('mact',getMaCongTacNhuCau());
             $model_bangluong_ct = $model_tonghop_ct->where('macongtac', 'BIENCHE')->where('maphanloai', '<>', 'KVXP');
             $ar_I = array();
             $ar_Igr = array();
