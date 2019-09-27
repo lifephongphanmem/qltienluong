@@ -104,7 +104,7 @@
                                                 <a href="{{url('/chuc_nang/tong_hop_luong/don_vi/printf_bl_khoi/ma_so='.$value['mathdv'])}}" class="btn btn-default btn-sm" TARGET="_blank">
                                                     <i class="fa fa-print"></i>&nbsp; Số liệu chi tiết khối</a>
                                             @else
-                                                <a href="{{url('/chuc_nang/tong_hop_luong/don_vi/printf_data/ma_so='.$value['mathdv'])}}" class="btn btn-default btn-sm" TARGET="_blank">
+                                                <a href="{{url('/chuc_nang/tong_hop_luong/khoi/printf_data/ma_so='.$value['mathdv'])}}" class="btn btn-default btn-sm" TARGET="_blank">
                                                     <i class="fa fa-print"></i>&nbsp; Số liệu tổng hợp</a>
                                                 <!--a href="{{url('/chuc_nang/tong_hop_luong/don_vi/printf_bl/ma_so='.$value['mathdv'])}}" class="btn btn-default btn-sm" TARGET="_blank">
                                                     <i class="fa fa-print"></i>&nbsp; Số liệu chi tiết</a-->
@@ -220,6 +220,12 @@
                                 <i class="fa fa-print"></i>&nbsp; In số liệu chi tiết (khối tổ)</a>
                         </div>
                     </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <a id="in_thkhoito" href="" onclick="inthkhoito('/chuc_nang/tong_hop_luong/khoi/inkhoito_th')" style="border-width: 0px;margin-left: 5px" target="_blank">
+                                <i class="fa fa-print"></i>&nbsp; In số liệu tổng hợp (khối tổ)</a>
+                        </div>
+                    </div>
                 </div>
                 <!--div class="row">
                     <!--div class="col-md-6">
@@ -287,6 +293,9 @@
     }
     function inkhoito($url){
         $("#in_blkhoito").attr("href", $url +'?mathdv='+$('#mathdv_in').val()+'&madv='+ $('#madv_in').val());
+    }
+    function inthkhoito($url){
+        $("#in_thkhoito").attr("href", $url +'?mathdv='+$('#mathdv_in').val()+'&madv='+ $('#madv_in').val());
     }
     </script>
     <script>

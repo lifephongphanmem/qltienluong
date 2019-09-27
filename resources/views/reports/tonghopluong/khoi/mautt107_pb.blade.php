@@ -142,69 +142,76 @@
 
         <?php $i=1; ?>
         @foreach($model_pb as $pb)
-            <?php $model_luong = $model->where('mapb',$pb->mapb)?>
-            @if(count($model_luong)> 0)
-                <?php $stt=1; ?>
+            <?php $model_luongpb = $model->where('mapb',$pb->mapb)?>
+            @if(count($model_luongpb)> 0)
+                <?php $stt=1; $j=1;?>
                 <tr style="font-weight: bold;">
                     <td>{{convert2Roman($i++)}}</td>
                     <td style="text-align: left;" colspan="{{19+ $col}}">{{$pb->tenpb}}</td>
                 </tr>
-                @foreach($model_luong as $ct)
-                    <tr>
-                        <td>{{$stt++}}</td>
-                        <td style="text-align: left">{{$ct->tencanbo}}</td>
-                        <td style="text-align: left">{{$ct->msngbac}}</td>
+                    @foreach($model_ct as $pl)
+                        <?php $model_luong = $model_luongpb->where('mact',$pl->mact)?>
+                            <tr style="font-weight: bold;">
+                                <td>-</td>
+                                <td style="text-align: left;" colspan="{{19+ $col}}">{{$pl->tenct}}</td>
+                            </tr>
+                        @foreach($model_luong as $ct)
+                            <tr>
+                                <td>{{$stt++}}</td>
+                                <td style="text-align: left">{{$ct->tencanbo}}</td>
+                                <td style="text-align: left">{{$ct->msngbac}}</td>
 
-                        @foreach($a_phucap as $key=>$val)
-                            <td>{{dinhdangsothapphan($ct->$key,5)}}</td>
+                                @foreach($a_phucap as $key=>$val)
+                                    <td>{{dinhdangsothapphan($ct->$key,5)}}</td>
+                                @endforeach
+
+                                <td>{{dinhdangsothapphan($ct->tonghs,5)}}</td>
+                                <td>{{dinhdangso($ct->ttl)}}</td>
+                                <td>{{dinhdangso($ct->ttl - $ct->giaml + $ct->bhct)}}</td>
+
+                                <td>{{dinhdangso($ct->stbhxh_dv)}}</td>
+                                <td>{{dinhdangso($ct->stbhxh)}}</td>
+                                <td>{{dinhdangso($ct->stbhyt_dv)}}</td>
+                                <td>{{dinhdangso($ct->stbhyt)}}</td>
+
+                                <td>{{dinhdangso($ct->stbhtn_dv)}}</td>
+                                <td>{{dinhdangso($ct->stbhtn)}}</td>
+                                <td>{{dinhdangso($ct->stkpcd_dv)}}</td>
+                                <td>{{dinhdangso($ct->stkpcd)}}</td>
+                                <td>{{dinhdangso($ct->stkpcd_dv)}}</td>
+                                <td>{{dinhdangso($ct->stkpcd)}}</td>
+                                <td>{{dinhdangso($ct->thuetn)}}</td>
+                                <td></td>
+                                <td>{{dinhdangso($ct->ttl - $ct->giaml - $ct->stbhxh - $ct->stbhyt - $ct->stbhtn - $ct->stkpcd - $ct->thuetn)}}</td>
+                                <td></td>
+                            </tr>
                         @endforeach
-
-                        <td>{{dinhdangsothapphan($ct->tonghs,5)}}</td>
-                        <td>{{dinhdangso($ct->ttl)}}</td>
-                        <td>{{dinhdangso($ct->ttl - $ct->giaml + $ct->bhct)}}</td>
-
-                        <td>{{dinhdangso($ct->stbhxh_dv)}}</td>
-                        <td>{{dinhdangso($ct->stbhxh)}}</td>
-                        <td>{{dinhdangso($ct->stbhyt_dv)}}</td>
-                        <td>{{dinhdangso($ct->stbhyt)}}</td>
-
-                        <td>{{dinhdangso($ct->stbhtn_dv)}}</td>
-                        <td>{{dinhdangso($ct->stbhtn)}}</td>
-                        <td>{{dinhdangso($ct->stkpcd_dv)}}</td>
-                        <td>{{dinhdangso($ct->stkpcd)}}</td>
-                        <td>{{dinhdangso($ct->stkpcd_dv)}}</td>
-                        <td>{{dinhdangso($ct->stkpcd)}}</td>
-                        <td>{{dinhdangso($ct->thuetn)}}</td>
-                        <td></td>
-                        <td>{{dinhdangso($ct->ttl - $ct->giaml - $ct->stbhxh - $ct->stbhyt - $ct->stbhtn - $ct->stkpcd - $ct->thuetn)}}</td>
-                        <td></td>
-                    </tr>
-                @endforeach
+                    @endforeach
 
                 <tr style="font-weight: bold; text-align: center; font-style: italic">
                     <td colspan="3">Cộng</td>
                     @foreach($a_phucap as $key=>$val)
-                        <td>{{dinhdangsothapphan($model_luong->sum($key) ,5)}}</td>
+                        <td>{{dinhdangsothapphan($model_luongpb->sum($key) ,5)}}</td>
                     @endforeach
-                    <td>{{dinhdangsothapphan($model_luong->sum('tonghs') ,5)}}</td>
+                    <td>{{dinhdangsothapphan($model_luongpb->sum('tonghs') ,5)}}</td>
 
 
-                    <td class="money">{{dinhdangso($model_luong->sum('ttl'))}}</td>
-                    <td class="money">{{dinhdangso($model_luong->sum('ttl') - $model_luong->sum('giaml') + $model_luong->sum('bhct'))}}</td>
+                    <td class="money">{{dinhdangso($model_luongpb->sum('ttl'))}}</td>
+                    <td class="money">{{dinhdangso($model_luongpb->sum('ttl') - $model_luongpb->sum('giaml') + $model_luongpb->sum('bhct'))}}</td>
 
-                    <td class="money">{{dinhdangso($model_luong->sum('stbhxh_dv'))}}</td>
-                    <td class="money">{{dinhdangso($model_luong->sum('stbhxh'))}}</td>
-                    <td class="money">{{dinhdangso($model_luong->sum('stbhyt_dv'))}}</td>
-                    <td class="money">{{dinhdangso($model_luong->sum('stbhyt'))}}</td>
-                    <td class="money">{{dinhdangso($model_luong->sum('stbhtn_dv'))}}</td>
-                    <td class="money">{{dinhdangso($model_luong->sum('stbhtn'))}}</td>
-                    <td class="money">{{dinhdangso($model_luong->sum('stkpcd_dv'))}}</td>
-                    <td class="money">{{dinhdangso($model_luong->sum('stkpcd'))}}</td>
-                    <td class="money">{{dinhdangso($model_luong->sum('stkpcd_dv'))}}</td>
-                    <td class="money">{{dinhdangso($model_luong->sum('stkpcd'))}}</td>
-                    <td class="money">{{dinhdangso($model_luong->sum('thuetn'))}}</td>
+                    <td class="money">{{dinhdangso($model_luongpb->sum('stbhxh_dv'))}}</td>
+                    <td class="money">{{dinhdangso($model_luongpb->sum('stbhxh'))}}</td>
+                    <td class="money">{{dinhdangso($model_luongpb->sum('stbhyt_dv'))}}</td>
+                    <td class="money">{{dinhdangso($model_luongpb->sum('stbhyt'))}}</td>
+                    <td class="money">{{dinhdangso($model_luongpb->sum('stbhtn_dv'))}}</td>
+                    <td class="money">{{dinhdangso($model_luongpb->sum('stbhtn'))}}</td>
+                    <td class="money">{{dinhdangso($model_luongpb->sum('stkpcd_dv'))}}</td>
+                    <td class="money">{{dinhdangso($model_luongpb->sum('stkpcd'))}}</td>
+                    <td class="money">{{dinhdangso($model_luongpb->sum('stkpcd_dv'))}}</td>
+                    <td class="money">{{dinhdangso($model_luongpb->sum('stkpcd'))}}</td>
+                    <td class="money">{{dinhdangso($model_luongpb->sum('thuetn'))}}</td>
                     <td></td>
-                    <td class="money">{{dinhdangso($model_luong->sum('ttl') - $model_luong->sum('giaml') - $model_luong->sum('stbhxh')  - $model_luong->sum('stbhyt') - $model_luong->sum('stbhtn') - $model_luong->sum('stkpcd')  - $model_luong->sum('thuetn')) }}</td>
+                    <td class="money">{{dinhdangso($model_luongpb->sum('ttl') - $model_luongpb->sum('giaml') - $model_luongpb->sum('stbhxh')  - $model_luongpb->sum('stbhyt') - $model_luongpb->sum('stbhtn') - $model_luongpb->sum('stkpcd')  - $model_luongpb->sum('thuetn')) }}</td>
                     <td></td>
                 </tr>
             @endif

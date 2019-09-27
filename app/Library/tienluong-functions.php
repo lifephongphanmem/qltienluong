@@ -733,4 +733,7 @@ function getPhanLoaiChiTietChiLuong(){
         'KHAC' => 'Chi khác',
     );
 }
+function getMaCongTacNhuCau(){
+    return array('1506672780','1506673604');
+}
 ?>
