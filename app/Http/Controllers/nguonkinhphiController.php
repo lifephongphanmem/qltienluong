@@ -181,18 +181,25 @@ class nguonkinhphiController extends Controller
                 }
 
                 if (isset($cb->ngayden)) {
-                    $dt_luong = date_create($cb->ngayden);
-                    $cb->nam_nb = date_format($dt_luong, 'Y');
-                    $cb->thang_nb = date_format($dt_luong, 'm');
+                    $dt_luong = new Carbon($cb->ngayden);
+                    if($dt_luong->day == 1){
+                        $dt_luong->addDay(-1);
+                    }
+                    $cb->nam_nb = str_pad($dt_luong->year, 4, '0', STR_PAD_LEFT);
+                    $cb->thang_nb = str_pad($dt_luong->month, 2, '0', STR_PAD_LEFT);
+
                 } else {
                     $cb->nam_nb = null;
                     $cb->thang_nb = null;
                 }
 
                 if (isset($cb->tnndenngay)) {
-                    $dt_nghe = date_create($cb->tnndenngay);
-                    $cb->nam_tnn = date_format($dt_nghe, 'Y');
-                    $cb->thang_tnn = date_format($dt_nghe, 'm');
+                    $dt_nghe = new Carbon($cb->tnndenngay);
+                    if($dt_nghe->day == 1){
+                        $dt_nghe->addDay(-1);
+                    }
+                    $cb->nam_tnn = str_pad($dt_nghe->year, 4, '0', STR_PAD_LEFT);
+                    $cb->thang_tnn = str_pad($dt_nghe->month, 2, '0', STR_PAD_LEFT);
 
                 } else {
                     $cb->nam_tnn = null;
@@ -200,10 +207,12 @@ class nguonkinhphiController extends Controller
                 }
 
                 if (getDayVn($cb->ngayvao) != '') {
-                    $dt_hh = date_create($cb->ngayvao);
-                    $cb->nam_hh = date_format($dt_hh, 'Y');
-                    $cb->thang_hh = date_format($dt_hh, 'm');
-
+                    $ngayxet = new Carbon($cb->ngayvao);
+                    if($ngayxet->day == 1){
+                        $ngayxet->addDay(-1);
+                    }
+                    $cb->nam_hh = str_pad($ngayxet->year, 4, '0', STR_PAD_LEFT);
+                    $cb->thang_hh = str_pad($ngayxet->month, 2, '0', STR_PAD_LEFT);
                 } else {
                     $cb->nam_hh = null;
                     $cb->thang_hh = null;
