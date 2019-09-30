@@ -3262,7 +3262,7 @@ class bangluongController extends Controller
                 'thang'=>$m_bl->thang,
                 'nam'=>$m_bl->nam,
                 'ngaylap'=>$m_bl->ngaylap,'phanloai'=>$m_bl->phanloai,
-                'cochu'=>$inputs['cochu']);
+                'cochu'=> isset($inputs['cochu'])? $inputs['cochu']: 11);
             //xử lý ẩn hiện cột phụ cấp => biết tổng số cột hiện => colspan trên báo cáo
             $a_goc = array('hesott');
             $model_pc = dmphucap_donvi::where('madv',$m_bl->madv)->where('phanloai','<','3')->wherenotin('mapc',$a_goc)->get();
