@@ -182,9 +182,9 @@ class nguonkinhphiController extends Controller
 
                 if (isset($cb->ngayden)) {
                     $dt_luong = new Carbon($cb->ngayden);
-                    if($dt_luong->day == 1){
-                        $dt_luong->addDay(-1);
-                    }
+//                    if($dt_luong->day == 1){
+//                        $dt_luong->addDay(-1);
+//                    }
                     $cb->nam_nb = str_pad($dt_luong->year, 4, '0', STR_PAD_LEFT);
                     $cb->thang_nb = str_pad($dt_luong->month, 2, '0', STR_PAD_LEFT);
 
@@ -195,9 +195,9 @@ class nguonkinhphiController extends Controller
 
                 if (isset($cb->tnndenngay)) {
                     $dt_nghe = new Carbon($cb->tnndenngay);
-                    if($dt_nghe->day == 1){
-                        $dt_nghe->addDay(-1);
-                    }
+//                    if($dt_nghe->day == 1){
+//                        $dt_nghe->addDay(-1);
+//                    }
                     $cb->nam_tnn = str_pad($dt_nghe->year, 4, '0', STR_PAD_LEFT);
                     $cb->thang_tnn = str_pad($dt_nghe->month, 2, '0', STR_PAD_LEFT);
 
