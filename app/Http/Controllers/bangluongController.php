@@ -885,7 +885,8 @@ class bangluongController extends Controller
             ->where('ngaytu', '<=', $ngaylap)->where('ngayden', '>=', $ngaylap)
             ->where('maphanloai', 'DAINGAY')->get()->toarray(),'macanbo');
         //dd($inputs['phucaploaitru']);
-        $model_phucap = dmphucap_donvi::select('mapc','phanloai','congthuc','baohiem','tenpc', 'thaisan', 'nghiom')->where('madv', session('admin')->madv)
+        $model_phucap = dmphucap_donvi::select('mapc','phanloai','congthuc','baohiem','tenpc', 'thaisan', 'nghiom')
+            ->where('madv', session('admin')->madv)
             ->wherenotin('mapc',array_merge(['hesott'],explode(',',$inputs['phucaploaitru'])))->get();
         //dd($model_phucap);
         //kiêm nhiệm
@@ -900,6 +901,7 @@ class bangluongController extends Controller
             'khongnopbaohiem','ngaytu','tnntungay','bhxh', 'bhyt', 'bhtn', 'kpcd','bhxh_dv',
             'bhyt_dv', 'bhtn_dv', 'kpcd_dv', 'ngaybc', 'lvhd'),
             $a_th);
+
         //$m_cb = hosocanbo::select($a_th)->where('madv', $inputs['madv'])->where('theodoi','<', '9')->get()->keyBy('macanbo')->toArray();
         $m_dv = dmdonvi::where('madv',$inputs['madv'])->first();
         //dd($m_cb_kn);
@@ -925,11 +927,8 @@ class bangluongController extends Controller
         $a_phanloai = dmphanloaicongtac_baohiem::where('madv', session('admin')->madv)->get()->keyBy('mact')->toArray();
         $a_nhomct = array_column(dmphanloaict::all()->toarray(), 'macongtac','mact');
         //dd($a_nhomct);
-        //$a_ts = array_column(dmphucap_thaisan::where('madv', session('admin')->madv)->wherenotin('mapc',explode(',',$inputs['phucaploaitru']))->get()->toarray(), 'mapc');
-        $a_dd = array('pclt','pckv');//các loại phụ cấp cán bộ được điều động động đến được hưởng (chưa làm cho định mức)
-        //$a_dn = array('pckv','pcudn');//các loại phụ cấp cán bộ nghỉ dài ngày đến được hưởng (chưa làm cho định mức)
         $ptdn = $m_dv->ptdaingay / 100;//cán bộ nghỉ dài ngày hưởng 50% lương
-
+        $a_dd = array_column($model_phucap->wherein('mapc',['pclt','pckv'])->toarray(), 'mapc');//các loại phụ cấp cán bộ được điều động động đến được hưởng (chưa làm cho định mức)
         $a_ts = array_column($model_phucap->where('phanloai','<','3')->where('thaisan',1)->toarray(), 'mapc');
         $a_no = array_column($model_phucap->where('phanloai','<','3')->where('nghiom',1)->toarray(), 'mapc');
         //dd($a_ts);
