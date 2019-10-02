@@ -758,13 +758,6 @@
 
                     <div class="col-md-4">
                         <div class="form-group">
-                            <label class="control-label">Phụ cấp chức vụ</label>
-                            {!!Form::text('pccv_chvu', null, array('id' => 'pccv_chvu','class' => 'form-control', 'data-mask'=>'fdecimal'))!!}
-                        </div>
-                    </div>
-
-                    <div class="col-md-4">
-                        <div class="form-group">
                             <label class="control-label">Phụ cấp vượt khung</label>
                             <div class="input-group bootstrap-touchspin">
                                 {!!Form::text('vuotkhung_chvu', null, array('id' =>'vuotkhung_chvu', 'class' => 'form-control', 'data-mask'=>'fdecimal'))!!}
@@ -772,6 +765,42 @@
                             </div>
                         </div>
                     </div>
+
+                    <?php $a_kct = array('pccv','pck'); ?>
+                    @foreach($model_pc as $pc)
+                        @if(!in_array($pc->mapc,$a_kct))
+                            @continue
+                        @endif
+
+                        @if($pc->phanloai == 2)
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label class="control-label">{{$pc->form}}</label>
+                                    <div class="input-group bootstrap-touchspin">
+                                        {!!Form::text($pc->mapc.'_chvu', null, array('id' =>$pc->mapc.'_chvu', 'class' => 'form-control', 'data-mask'=>'fdecimal'))!!}
+                                        <span class="input-group-addon bootstrap-touchspin-postfix">%</span>
+                                    </div>
+                                </div>
+                            </div>
+                        @elseif($pc->phanloai == 1)
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label class="control-label">{{$pc->form}}</label>
+                                    <div class="input-group bootstrap-touchspin">
+                                        {!!Form::text($pc->mapc.'_chvu', null, array('id' =>$pc->mapc.'_chvu', 'class' => 'form-control', 'data-mask'=>'fdecimal'))!!}
+                                        <span class="input-group-addon bootstrap-touchspin-postfix">VNĐ</span>
+                                    </div>
+                                </div>
+                            </div>
+                        @else
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label class="control-label">{{$pc->form}}</label>
+                                    {!!Form::text($pc->mapc.'_chvu', null, array('id' =>$pc->mapc.'_chvu', 'class' => 'form-control', 'data-mask'=>'fdecimal'))!!}
+                                </div>
+                            </div>
+                        @endif
+                    @endforeach
 
                     <div class="col-md-4">
                         <div class="form-group">
@@ -795,7 +824,6 @@
     </div>
     <!-- /.modal-dialog -->
 </div>
-
 
 <script>
     function add_chvu(){
@@ -895,6 +923,7 @@
                      $('#id_chvu').val(data.id);
                      $('#heso_chvu').val(data.heso);
                      $('#pccv_chvu').val(data.pccv);
+                     $('#pck_chvu').val(data.pck);
                      $('#vuotkhung_chvu').val(data.vuotkhung);
                      $('#pthuong_chvu').val(data.pthuong);
                      $('#chvu-modal').modal('show');
@@ -1231,6 +1260,7 @@
                     id: $('#id_chvu').val(),
                     heso: $('#heso_chvu').val(),
                     pccv: $('#pccv_chvu').val(),
+                    pck: $('#pck_chvu').val(),
                     phanloai: $('#phanloai_chvu').val(),
                     vuotkhung: $('#vuotkhung_chvu').val(),
                     pthuong: $('#pthuong_chvu').val()

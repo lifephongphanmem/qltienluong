@@ -377,6 +377,8 @@ class hosocanboController extends Controller
         $inputs['heso'] = chkDbl($inputs['heso']);
         $inputs['vuotkhung'] = chkDbl($inputs['vuotkhung']);
         $inputs['pthuong'] = chkDbl($inputs['pthuong']);
+        $inputs['pccv'] = chkDbl($inputs['pccv']);
+        $inputs['pck'] = chkDbl($inputs['pck']);
         $inputs['manguonkp'] = (implode(',',$inputs['manguonkp']));
         if ($inputs['id'] > 0) {
             hosocanbo_kiemnhiem::find($inputs['id'])->update($inputs);
