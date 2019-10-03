@@ -359,7 +359,7 @@ class bangluongController extends Controller
         $a_goc = array('heso', 'vuotkhung', 'pccv'); //mảng phụ cấp làm công thức tính
         //=> lấy phụ cấp theo nguồn chứ ko pải phụ cấp toàn hệ thống
         $m_dm = nguonkinhphi_dinhmuc::where('madv', session('admin')->madv)->where('manguonkp', $inputs['manguonkp'])->first();
-        $model_dimhmuc = nguonkinhphi_dinhmuc_ct::where('maso', $m_dm->maso)->wherenotin('mapc', explode(',', $inputs['phucaploaitru']))->get();
+        //$model_dimhmuc = nguonkinhphi_dinhmuc_ct::where('maso', $m_dm->maso)->wherenotin('mapc', explode(',', $inputs['phucaploaitru']))->get();
 
         $m_dmng = nguonkinhphi_dinhmuc::where('madv', session('admin')->madv)->where('manguonkp', $inputs['manguonkp'])->get();
         $m_dmng_ct = nguonkinhphi_dinhmuc_ct::wherein('maso',array_column($m_dmng->toarray(),'maso'))
@@ -2019,11 +2019,13 @@ class bangluongController extends Controller
                 $ngaycong = session('admin')->songaycong;
                 //$ngaycong = dmdonvi::where('madv', $madv)->first()->songaycong;
                 //dd($model_canbo->toarray());
+                $a_ct = array_column(dmphanloaict::all()->toArray(), 'macongtac', 'mact');
 
                 foreach ($model_canbo as $cb) {
                     if (!isset($a_hoso[$cb->macanbo])) {
                         continue;
                     }
+                    $cb->macongtac = isset($a_ct[$cb->mact]) ? $a_ct[$cb->mact] : '';
                     $hoso = $a_hoso[$cb->macanbo];
 
                     //Gán tham số mặc định
@@ -2118,35 +2120,47 @@ class bangluongController extends Controller
                     //Tính lại số tiền để gán vào cột phụ cấp
 
                     //1 tháng
-                    $stbhxh = $model_phucap->sum('stbhxh');
-                    $stbhyt = $model_phucap->sum('stbhyt');
-                    $stkpcd = $model_phucap->sum('stkpcd');
-                    $stbhtn = $model_phucap->sum('stbhtn');
-                    $stbhxh_dv = $model_phucap->sum('stbhxh_dv');
-                    $stbhyt_dv = $model_phucap->sum('stbhyt_dv');
-                    $stkpcd_dv = $model_phucap->sum('stkpcd_dv');
-                    $stbhtn_dv = $model_phucap->sum('stbhtn_dv');
+                    if($cb->macongtac == 'KHONGCT'){//cán bộ KOCT đóng bảo hiểm hệ số 1
+                        $stbhxh = round($cb->luongcoban * $cb->bhxh);
+                        $stbhyt = round($cb->luongcoban * $cb->bhyt);
+                        $stkpcd = round($cb->luongcoban * $cb->kpcd);
+                        $stbhtn = round($cb->luongcoban * $cb->bhtn);
+
+                        $stbhxh_dv = round($cb->luongcoban * $cb->bhxh_dv);
+                        $stbhyt_dv = round($cb->luongcoban * $cb->bhyt_dv);
+                        $stkpcd_dv = round($cb->luongcoban * $cb->kpcd_dv);
+                        $stbhtn_dv = round($cb->luongcoban * $cb->bhtn_dv);
+                    }else{
+                        $stbhxh = $model_phucap->sum('stbhxh');
+                        $stbhyt = $model_phucap->sum('stbhyt');
+                        $stkpcd = $model_phucap->sum('stkpcd');
+                        $stbhtn = $model_phucap->sum('stbhtn');
+                        $stbhxh_dv = $model_phucap->sum('stbhxh_dv');
+                        $stbhyt_dv = $model_phucap->sum('stbhyt_dv');
+                        $stkpcd_dv = $model_phucap->sum('stkpcd_dv');
+                        $stbhtn_dv = $model_phucap->sum('stbhtn_dv');
+                    }
 
                     if ($cb->ngaytl >= $ngaycong/2) {
-                        $cb->stbhxh = round(($stbhxh * $cb->ngaytl) / $ngaycong + $stbhxh * $cb->thangtl, 0);
-                        $cb->stbhyt = round(($stbhyt * $cb->ngaytl) / $ngaycong + $stbhyt * $cb->thangtl, 0);
-                        $cb->stkpcd = round(($stkpcd * $cb->ngaytl) / $ngaycong + $stkpcd * $cb->thangtl, 0);
-                        $cb->stbhtn = round(($stbhtn * $cb->ngaytl) / $ngaycong + $stbhtn * $cb->thangtl, 0);
+                        $cb->stbhxh = round(($stbhxh * $cb->ngaytl) / $ngaycong + $stbhxh * $cb->thangtl);
+                        $cb->stbhyt = round(($stbhyt * $cb->ngaytl) / $ngaycong + $stbhyt * $cb->thangtl);
+                        $cb->stkpcd = round(($stkpcd * $cb->ngaytl) / $ngaycong + $stkpcd * $cb->thangtl);
+                        $cb->stbhtn = round(($stbhtn * $cb->ngaytl) / $ngaycong + $stbhtn * $cb->thangtl);
 
-                        $cb->stbhxh_dv = round(($stbhxh_dv * $cb->ngaytl) / $ngaycong + $stbhxh_dv * $cb->thangtl, 0);
-                        $cb->stbhyt_dv = round(($stbhyt_dv * $cb->ngaytl) / $ngaycong + $stbhyt_dv * $cb->thangtl, 0);
-                        $cb->stkpcd_dv = round(($stkpcd_dv * $cb->ngaytl) / $ngaycong + $stkpcd_dv * $cb->thangtl, 0);
-                        $cb->stbhtn_dv = round(($stbhtn_dv * $cb->ngaytl) / $ngaycong + $stbhtn_dv * $cb->thangtl, 0);
+                        $cb->stbhxh_dv = round(($stbhxh_dv * $cb->ngaytl) / $ngaycong + $stbhxh_dv * $cb->thangtl);
+                        $cb->stbhyt_dv = round(($stbhyt_dv * $cb->ngaytl) / $ngaycong + $stbhyt_dv * $cb->thangtl);
+                        $cb->stkpcd_dv = round(($stkpcd_dv * $cb->ngaytl) / $ngaycong + $stkpcd_dv * $cb->thangtl);
+                        $cb->stbhtn_dv = round(($stbhtn_dv * $cb->ngaytl) / $ngaycong + $stbhtn_dv * $cb->thangtl);
                     } else{
-                        $cb->stbhxh = round($stbhxh * $cb->thangtl, 0);
-                        $cb->stbhyt = round($stbhyt * $cb->thangtl, 0);
-                        $cb->stkpcd = round($stkpcd * $cb->thangtl, 0);
-                        $cb->stbhtn = round($stbhtn * $cb->thangtl, 0);
+                        $cb->stbhxh = round($stbhxh * $cb->thangtl);
+                        $cb->stbhyt = round($stbhyt * $cb->thangtl);
+                        $cb->stkpcd = round($stkpcd * $cb->thangtl);
+                        $cb->stbhtn = round($stbhtn * $cb->thangtl);
 
-                        $cb->stbhxh_dv = round($stbhxh_dv * $cb->thangtl, 0);
-                        $cb->stbhyt_dv = round($stbhyt_dv * $cb->thangtl, 0);
-                        $cb->stkpcd_dv = round($stkpcd_dv * $cb->thangtl, 0);
-                        $cb->stbhtn_dv = round($stbhtn_dv * $cb->thangtl, 0);
+                        $cb->stbhxh_dv = round($stbhxh_dv * $cb->thangtl);
+                        $cb->stbhyt_dv = round($stbhyt_dv * $cb->thangtl);
+                        $cb->stkpcd_dv = round($stkpcd_dv * $cb->thangtl);
+                        $cb->stbhtn_dv = round($stbhtn_dv * $cb->thangtl);
                     }
 
                     $thangtl = round($cb->luongcoban * $tonghs) + $tongtien;
