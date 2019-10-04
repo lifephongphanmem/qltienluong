@@ -66,6 +66,16 @@
                                                     {!!Form::text('tentruylinh', null, array('id' => 'tentruylinh','class' => 'form-control', 'readonly'))!!}
                                                 </div>
                                             </div>
+
+                                            <div class="col-md-3">
+                                                <div class="form-group">
+                                                    <label class="control-label">Phần trăm hưởng</label>
+                                                    <div class="input-group bootstrap-touchspin">
+                                                        {!!Form::text('pthuong', null, array('id' =>'pthuong', 'class' => 'form-control', 'data-mask'=>'fdecimal'))!!}
+                                                        <span class="input-group-addon bootstrap-touchspin-postfix">%</span>
+                                                    </div>
+                                                </div>
+                                            </div>
                                         </div>
 
                                         <div class="row">

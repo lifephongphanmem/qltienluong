@@ -2048,6 +2048,7 @@ class bangluongController extends Controller
                     if (getDateTime($cb->ngayden) == null) {
                         $cb->ngayden = $ngaylap;
                     }
+                    $cb->heso = round($cb->heso * $cb->pthuong / 100, session('admin')->lamtron);
                     $cb->vuotkhung = ($cb->heso * $cb->vuotkhung) / 100;
 
                     $tonghs = $tongtien = 0;
@@ -3432,7 +3433,6 @@ class bangluongController extends Controller
             //dd($model_canbo->toarray());
             $model = $model_canbo->where('congtac','<>' ,'CHUCVU');
             $model_kn = $model_canbo->where('congtac','CHUCVU');
-            //dd($inputs);
             //dd($model_kn);
             $mabl = $inputs['mabl'];
             $m_bl = bangluong::select('thang','nam','mabl','madv','ngaylap','phanloai','luongcoban')->where('mabl',$mabl)->first();
@@ -3458,7 +3458,22 @@ class bangluongController extends Controller
                     $col++;
                 }
             }
+            $a_cb = a_unique(array_column($model->toarray(),'macanbo'));
+            $a_cb_kn = a_unique(array_column($model_kn->toarray(),'macanbo'));
             //dd($model_kn->toarray());
+            foreach(array_diff($a_cb_kn,$a_cb) as $ct){
+                $cb = clone $model_kn->where('macanbo',$ct)->first();
+                $cb->macvcq = '';
+                foreach($a_phucap as $k=>$v) {
+                    $cb->$k = 0;
+                }
+                $cb->tonghs = 0;
+                $cb->ttl = 0;
+                $cb->luongtn = 0;
+                $cb->congtac = 'CONGTAC';
+                $model->add($cb);
+            }
+            //dd($model);
             foreach($model as $cb){
                 $canbo = $model_kn->where('macanbo',$cb->macanbo);
                 //làm lại chức danh kiêm nhiệm chỉ vào chức danh chính (...)
