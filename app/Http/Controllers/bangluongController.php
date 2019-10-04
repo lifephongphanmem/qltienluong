@@ -3438,8 +3438,6 @@ class bangluongController extends Controller
             $m_bl = bangluong::select('thang','nam','mabl','madv','ngaylap','phanloai','luongcoban')->where('mabl',$mabl)->first();
             $m_dv = dmdonvi::where('madv',$m_bl->madv)->first();
 
-            $model_congtac = dmphanloaict::select('mact','tenct')
-                ->wherein('mact', a_unique(array_column($model->toarray(),'mact')))->get();
 
             $thongtin=array('nguoilap'=>$m_bl->nguoilap,
                 'thang'=>$m_bl->thang,
@@ -3501,6 +3499,10 @@ class bangluongController extends Controller
                 }
             }
             */
+
+            $model_congtac = dmphanloaict::select('mact','tenct')
+                ->wherein('mact', a_unique(array_column($model->toarray(),'mact')))->get();
+
             return view('reports.bangluong.donvi.mautt107_m3')
                 ->with('model',$model->sortBy('stt'))
                 ->with('model_pb',getPhongBan())
