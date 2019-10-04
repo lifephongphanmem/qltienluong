@@ -73,6 +73,8 @@ class hosotruylinhController extends Controller
                         $insert[$pc->mapc] = chkDbl($insert[$pc->mapc]);
                     }
                 }
+                $insert['pthuong'] = chkDbl($insert['pthuong']);
+                $insert['pthuong'] = $insert['pthuong']<0 || $insert['pthuong']>100? 100 : $insert['pthuong'];
                 //$insert['maso'] = session('admin')->madv . '_' . getdate()[0];
                 hosotruylinh::create($insert);
                 DB::statement("Insert into hosotruylinh_nguon(manguonkp,luongcoban,maso) SELECT manguonkp, luongcoban, maso FROM hosotruylinh_nguon_temp WHERE maso='".$insert['maso']."'");
@@ -85,6 +87,7 @@ class hosotruylinhController extends Controller
                     }
                 }
                 //$model = hosotruylinh::where('maso',$insert['maso'])->first();
+                $insert['pthuong'] = $insert['pthuong']<0 || $insert['pthuong']>100? 100 : $insert['pthuong'];
                 hosotruylinh::where('maso',$insert['maso'])->first()->update($insert);
             }
 

@@ -28,6 +28,7 @@ class hosotruylinh extends Model
         'noidung',
         'madv',
         'msngbac',
+        'pthuong',
         'hesott',
         //chưa dùng, cho trường hợp truy lĩnh cả phụ cấp
         'heso',

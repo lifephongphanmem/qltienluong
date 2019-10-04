@@ -472,6 +472,7 @@ Route::group(['prefix'=>'nguon_kinh_phi'],function(){
     Route::get('chi_tiet','nguonkinhphiController@edit');
 
     Route::post('create','nguonkinhphiController@create');
+    Route::post('create_mau','nguonkinhphiController@create_mau');
     Route::get('get','nguonkinhphiController@getinfo');
     Route::get('ma_so={masodv}','nguonkinhphiController@edit');
     Route::post('update','nguonkinhphiController@update');
@@ -526,9 +527,9 @@ Route::group(['prefix'=>'chuc_nang'],function(){
         Route::get('tang_giam','bangluongController@tanggiam');
         //Route::get('/maso={mabl}','bangluongController@show');
         Route::get('in/maso={mabl}','bangluongController@inbangluong');
-        Route::get('inbangluong/maso={mabl}','bangluongController@inbangluong_sotien');
-        Route::get('inmau3/maso={mabl}','bangluongController@inbangluongmau3'); //mẫu làm theo y.c lạng sơn
-        Route::get('inmau4/maso={mabl}','bangluongController@inbangluongmau4'); //mẫu làm theo y.c lạng sơn
+        //Route::get('inbangluong/maso={mabl}','bangluongController@inbangluong_sotien');
+        //Route::get('inmau3/maso={mabl}','bangluongController@inbangluongmau3'); //mẫu làm theo y.c lạng sơn
+        //Route::get('inmau4/maso={mabl}','bangluongController@inbangluongmau4'); //mẫu làm theo y.c lạng sơn
         Route::get('in_bh/maso={mabl}','bangluongController@inbaohiem');
         Route::get('can_bo','bangluongController@detail');
         Route::get('chi_khac/can_bo','bangluongController@detail_chikhac');
@@ -547,6 +548,8 @@ Route::group(['prefix'=>'chuc_nang'],function(){
         //Route::post('importexcel','bangluongController@importexcel');
 
         //Tạo in bảng lương theo cách mới
+        Route::get('inbangluong','bangluongController@printf_mautt107');//in bảng lương tại các mẫu
+
         Route::post('mau01','bangluongController@printf_mau01');
         Route::post('mautt107','bangluongController@printf_mautt107');
         Route::post('mautt107_m2','bangluongController@printf_mautt107_m2');

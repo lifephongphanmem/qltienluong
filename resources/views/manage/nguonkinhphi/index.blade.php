@@ -36,6 +36,8 @@
                     </div>
                     <div class="actions">
                         <button type="button" class="btn btn-default btn-xs" onclick="add()"><i class="fa fa-plus"></i>&nbsp;Thêm mới</button>
+                        <button type="button" class="btn btn-default btn-xs" data-toggle="modal" data-target="#create-modal-mau"><i class="fa fa-plus"></i>&nbsp;Thêm mới (mẫu bảng lương)</button>
+
                     </div>
                 </div>
                 <div class="portlet-body form-horizontal">
@@ -158,7 +160,6 @@
         </div>
     </div>
 
-
     <!--Modal thêm mới -->
     {!! Form::open(['url'=>$furl.'create','method'=>'POST', 'id' => 'create_dutoan', 'class'=>'horizontal-form']) !!}
     <div id="create-modal" tabindex="-1" role="dialog" aria-hidden="true" class="modal fade">
@@ -177,22 +178,22 @@
 
                         <div class="col-md-6">
                             <label class="control-label">Căn cứ thông tư, quyết định</label>
-                            {!!Form::select('sohieu',getThongTuQD(), null, array('id' => 'sohieu','class' => 'form-control'))!!}
+                            {!!Form::select('sohieu',getThongTuQD(false), $model_tt_df->sohieu, array('id' => 'sohieu','class' => 'form-control'))!!}
                         </div>
 
                         <div class="col-md-6">
                             <label class="control-label">Mức lương định mức</label>
-                            {!!Form::text('muccu', null, array('id' => 'muccu','class' => 'form-control', 'data-mask'=>'fdecimal', 'readonly'))!!}
+                            {!!Form::text('muccu', $model_tt_df->muccu, array('id' => 'muccu','class' => 'form-control', 'data-mask'=>'fdecimal', 'readonly'))!!}
                         </div>
 
                         <div class="col-md-6">
                             <label class="control-label">Mức lương áp dụng</label>
-                            {!!Form::text('mucapdung', null, array('id' => 'mucapdung','class' => 'form-control', 'data-mask'=>'fdecimal', 'readonly'))!!}
+                            {!!Form::text('mucapdung', $model_tt_df->mucapdung, array('id' => 'mucapdung','class' => 'form-control', 'data-mask'=>'fdecimal', 'readonly'))!!}
                         </div>
 
                         <div class="col-md-12">
                             <label class="control-label">Mức chênh lệch</label>
-                            {!!Form::text('chenhlech', null, array('id' => 'chenhlech','class' => 'form-control', 'data-mask'=>'fdecimal', 'readonly'))!!}
+                            {!!Form::text('chenhlech', $model_tt_df->chenhlech, array('id' => 'chenhlech','class' => 'form-control', 'data-mask'=>'fdecimal', 'readonly'))!!}
                         </div>
 
                         <div class="col-md-12">
@@ -231,6 +232,94 @@
     </div>
     {!!Form::close()!!}
 
+    <!--Modal thêm mới chọn bảng lương -->
+    {!! Form::open(['url'=>$furl.'create_mau','method'=>'POST', 'id' => 'create_dutoan_mau', 'class'=>'horizontal-form']) !!}
+    <div id="create-modal-mau" tabindex="-1" role="dialog" aria-hidden="true" class="modal fade">
+        <div class="modal-dialog modal-lg modal-content">
+            <div class="modal-content">
+                <div class="modal-header modal-header-primary">
+                    <button type="button" data-dismiss="modal" aria-hidden="true" class="close">&times;</button>
+                    <h4 id="modal-header-primary-label" class="modal-title">Thông tin nguồn kinh phí</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="modal-horizontal">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <label class="control-label">Lĩnh vực hoạt động</label>
+                                {!!Form::select('linhvuchoatdong_mau',getLinhVucHoatDong(false), session('admin')->maphanloai == 'KVXP'?'QLNN':null, array('id' => 'linhvuchoatdong_mau','class' => 'form-control'))!!}
+                            </div>
+
+                            <div class="col-md-6">
+                                <label class="control-label">Căn cứ thông tư, quyết định</label>
+                                {!!Form::select('sohieu_mau',getThongTuQD(false), $model_tt_df->sohieu, array('id' => 'sohieu_mau','class' => 'form-control requied'))!!}
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-4">
+                                <label class="control-label">Mức lương định mức</label>
+                                {!!Form::text('muccu_mau', $model_tt_df->muccu, array('id' => 'muccu_mau','class' => 'form-control', 'data-mask'=>'fdecimal', 'readonly'))!!}
+                            </div>
+
+                            <div class="col-md-4">
+                                <label class="control-label">Mức lương áp dụng</label>
+                                {!!Form::text('mucapdung_mau', $model_tt_df->mucapdung, array('id' => 'mucapdung_mau','class' => 'form-control', 'data-mask'=>'fdecimal', 'readonly'))!!}
+                            </div>
+
+                            <div class="col-md-4">
+                                <label class="control-label">Mức chênh lệch</label>
+                                {!!Form::text('chenhlech_mau', $model_tt_df->chenhlech, array('id' => 'chenhlech_mau','class' => 'form-control', 'data-mask'=>'fdecimal', 'readonly'))!!}
+                            </div>
+                        </div>
+                        <input type="hidden" id="mabl" name="mabl" />
+                        <input type="hidden" id="thang" name="thang" />
+
+                        <div class="row" style="margin-top: 15px;">
+                            <div class="col-md-12">
+                                <table id="sample_4" class="table table-hover table-striped table-bordered">
+                                    <thead>
+                                            <tr>
+                                                <th class="text-center" style="width: 5%">STT</th>
+                                                <th class="text-center">Tháng</br>Năm</th>
+                                                <th class="text-center">Nguồn kinh phí</th>
+                                                <th class="text-center">Lĩnh vực hoạt động</th>
+                                                <th class="text-center">Thao tác</th>
+                                            </tr>
+                                            </thead>
+                                    <?php $i=1;?>
+                                    <tbody>
+                                        @foreach($model_bl as $key=>$value)
+                                            <tr>
+                                                <td class="text-center">{{$i++}}</td>
+                                                <td class="text-center">{{$value->thang.'/'.$value->nam}}</td>
+                                                <td>{{isset($a_nkp[$value->manguonkp]) ? $a_nkp[$value->manguonkp] : ''}}</td>
+                                                <td>{{isset($a_lvhd[$value->linhvuchoatdong]) ? $a_lvhd[$value->linhvuchoatdong] : ''}}</td>
+
+                                                <td>
+                                                    <button type="button" onclick="taonhucau('{{$value->mabl}}','{{$value->thang}}')" class="btn btn-default btn-xs mbs">
+                                                        <i class="fa fa-edit"></i>&nbsp; Chọn</button>
+
+                                                    <a href="{{url('/chuc_nang/bang_luong/inbangluong?mabl='.$value->mabl)}}" class="btn btn-default btn-xs mbs" target="_blank">
+                                                        <i class="fa fa-th-list"></i>&nbsp; Bảng lương</a>
+
+                                                </td>
+                                            </tr>
+                                        @endforeach
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+
+                </div>
+            </div>
+        </div>
+    </div>
+    {!!Form::close()!!}
+
     <!--Model chuyển-->
     <div class="modal fade" id="chuyen-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
         <div class="modal-dialog">
@@ -259,6 +348,13 @@
     </div>
 
     <script>
+        function taonhucau(mabl, thang){
+            var form = $('#create_dutoan_mau');
+            form.find("[id='mabl']").val(mabl);
+            form.find("[id='thang']").val(thang);
+            form.submit();
+        }
+
         function indutoan(namdt, masodv){
             $('#nam_dt').val(namdt);
             $('#masodv_dt').val(masodv);
@@ -277,6 +373,7 @@
         $(function(){
             $("#sohieu").change(function(){
                 var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
+                var form = $('#create_dutoan');
                 $.ajax({
                     url: '/nguon_kinh_phi/get_thongtu',
                     type: 'GET',
@@ -286,9 +383,28 @@
                     },
                     dataType: 'JSON',
                     success: function (data) {
-                        $("#muccu").val(data.muccu);
-                        $("#mucapdung").val(data.mucapdung);
-                        $("#chenhlech").val(data.chenhlech);
+                        form.find("[id='muccu']").val(data.muccu);
+                        form.find("[id='mucapdung']").val(data.mucapdung);
+                        form.find("[id='chenhlech']").val(data.chenhlech);
+                    }
+                });
+            });
+
+            $('#sohieu_mau').change(function(){
+                var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
+                var form = $('#create_dutoan_mau');
+                $.ajax({
+                    url: '/nguon_kinh_phi/get_thongtu',
+                    type: 'GET',
+                    data: {
+                        _token: CSRF_TOKEN,
+                        sohieu: $("#sohieu_mau").val()
+                    },
+                    dataType: 'JSON',
+                    success: function (data) {
+                        form.find("[id='muccu_mau']").val(data.muccu);
+                        form.find("[id='mucapdung_mau']").val(data.mucapdung);
+                        form.find("[id='chenhlech_mau']").val(data.chenhlech);
                     }
                 });
             });
@@ -321,7 +437,6 @@
         }
 
         function add(){
-            $("#sohieu").val('').trigger('change');
             $('#create-modal').modal('show');
         }
     </script>
