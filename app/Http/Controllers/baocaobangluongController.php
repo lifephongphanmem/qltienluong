@@ -627,6 +627,7 @@ class baocaobangluongController extends Controller
             $a_pl = array_column($model_donvi->toarray(),'maphanloai','madv');
             $model = tonghopluong_donvi_chitiet::join('tonghopluong_donvi','tonghopluong_donvi_chitiet.mathdv','tonghopluong_donvi.mathdv')
                 ->select('tonghopluong_donvi_chitiet.*','thang')
+                ->where('tonghopluong_donvi_chitiet.mact','like',$inputs['phanloaict'].'%')
                 ->wherein('tonghopluong_donvi_chitiet.mathdv', array_column($model_tonghop->toarray(),'mathdv'))->get();
             /*
             $model = tonghopluong_donvi_chitiet::select('luongcoban','mathdv','macongtac','mact','soluong','heso','hesobl','hesopc','hesott','vuotkhung'
@@ -881,7 +882,8 @@ class baocaobangluongController extends Controller
                 ->wherein('madv',array_column($model_tonghop->toarray(),'madv'))->orWhereIn('macqcq', array_column($model_donvi->toarray(),'madv'))->get();
             $a_dv = array_column($model_tonghop->toarray(),'madv','mathdv');
             $a_pl = array_column($model_dmdv->toarray(),'maphanloai','madv');
-            $model = tonghopluong_donvi_bangluong::wherein('mathdv', array_column($model_tonghop->toarray(),'mathdv'))->get();
+            $model = tonghopluong_donvi_bangluong::where('mact','like',$inputs['phanloaict'].'%')
+            ->wherein('mathdv', array_column($model_tonghop->toarray(),'mathdv'))->get();
             $model_nguonkp = array_column(dmnguonkinhphi::all()->toArray(), 'tennguonkp', 'manguonkp');
             $model_phanloaict = array_column(dmphanloaicongtac::all()->toArray(), 'tencongtac', 'macongtac');
             $model_ct = array_column(dmphanloaict::all()->toArray(), 'tenct', 'mact');
@@ -946,9 +948,25 @@ class baocaobangluongController extends Controller
             $maphanloai = $inputs['phanloai'];
             $model_donvi = dmdonvi::where('macqcq',$madv)->get();
             $model_phanloai = dmphanloaidonvi::where('maphanloai','like',$maphanloai.'%')->get();
+            $a_plgd = array('MAMNON','TIEUHOC','THCS','THvaTHCS');
+            $a_plth = array('TIEUHOC','THvaTHCS');
+            $a_plthcs = array('THCS','THvaTHCS');
+            if($maphanloai == 'GD')
+                $model_phanloai = dmphanloaidonvi::wherein('maphanloai',$a_plgd)->get();
+            if($maphanloai == 'TIEUHOC')
+                $model_phanloai = dmphanloaidonvi::wherein('maphanloai',$a_plth)->get();
+            if($maphanloai == 'THCS')
+                $model_phanloai = dmphanloaidonvi::wherein('maphanloai',$a_plthcs)->get();
             $m_pc = array_column(dmphucap::all()->toarray(),'report','mapc');
             $a_phucap = array();
             $col = 0;
+            /*
+            $model_tonghop = tonghopluong_donvi::where('macqcq',$madv)
+                ->orWhereIn('macqcq', array_column($model_donvi->toarray(),'madv'))
+                ->where('nam', $nam)
+                ->where('thang', $thang)
+                ->where('trangthai', 'DAGUI')->get();
+*/
             $model_tonghop = tonghopluong_donvi::where('macqcq',$madv)
                 ->where('nam', $nam)
                 ->where('thang', $thang)
@@ -957,10 +975,48 @@ class baocaobangluongController extends Controller
                     $query->select('madv')->from('dmdonvi')
                         ->where('maphanloai','like', $maphanloai.'%')
                         ->get();
-                })->get();
+                })
+                ->orWhereIn('macqcq', array_column($model_donvi->toarray(),'madv'))->get();
+            if($maphanloai == 'GD')
+                $model_tonghop = tonghopluong_donvi::where('macqcq',$madv)
+                    ->where('nam', $nam)
+                    ->where('thang', $thang)
+                    ->where('trangthai', 'DAGUI')
+                    ->wherein('madv', function ($query) use ($a_plgd) {
+                        $query->select('madv')->from('dmdonvi')
+                            ->wherein('maphanloai',$a_plgd)
+                            ->get();
+                    })
+                    ->orWhereIn('macqcq', array_column($model_donvi->toarray(),'madv'))->get();
+            if($maphanloai == 'TIEUHOC')
+                $model_tonghop = tonghopluong_donvi::where('macqcq',$madv)
+                    ->where('nam', $nam)
+                    ->where('thang', $thang)
+                    ->where('trangthai', 'DAGUI')
+                    ->wherein('madv', function ($query) use ($a_plth) {
+                        $query->select('madv')->from('dmdonvi')
+                            ->wherein('maphanloai',$a_plth)
+                            ->get();
+                    })
+                    ->orWhereIn('macqcq', array_column($model_donvi->toarray(),'madv'))->get();
+            if($maphanloai == 'THCS')
+                $model_tonghop = tonghopluong_donvi::where('macqcq',$madv)
+                    ->where('nam', $nam)
+                    ->where('thang', $thang)
+                    ->where('trangthai', 'DAGUI')
+                    ->wherein('madv', function ($query) use ($a_plthcs) {
+                        $query->select('madv')->from('dmdonvi')
+                            ->wherein('maphanloai',$a_plthcs)
+                            ->get();
+                    })
+                    ->orWhereIn('macqcq', array_column($model_donvi->toarray(),'madv'))->get();
+
+            //dd($model_tonghop->toarray());
+            $model_dmdv = dmdonvi::where('macqcq',$madv)
+                ->wherein('madv',array_column($model_tonghop->toarray(),'madv'))->orWhereIn('macqcq', array_column($model_donvi->toarray(),'madv'))->get();
             $a_dv = array_column($model_tonghop->toarray(),'madv','mathdv');
-            $a_pl = array_column($model_donvi->toarray(),'maphanloai','madv');
-            $model = tonghopluong_donvi_chitiet::where('mact','like',$inputs['phanloaict'].'%')-> wherein('mathdv', array_column($model_tonghop->toarray(),'mathdv'))->get();
+            $a_pl = array_column($model_dmdv->toarray(),'maphanloai','madv');
+            $model = tonghopluong_donvi_bangluong::wherein('mathdv', array_column($model_tonghop->toarray(),'mathdv'))->get();
             $model_nguonkp = array_column(dmnguonkinhphi::all()->toArray(), 'tennguonkp', 'manguonkp');
             $model_phanloaict = array_column(dmphanloaicongtac::all()->toArray(), 'tencongtac', 'macongtac');
             $model_ct = array_column(dmphanloaict::all()->toArray(), 'tenct', 'mact');
@@ -977,7 +1033,7 @@ class baocaobangluongController extends Controller
                 $chitiet->tongbh = $chitiet->stbhxh_dv + $chitiet->stbhyt_dv + $chitiet->stkpcd_dv + $chitiet->stbhtn_dv;
                 foreach (getColTongHop() as $ct) {
                     $ma = 'hs'.$ct;
-                    $chitiet->$ma = $chitiet->$ct;
+                    $chitiet->$ma = $chitiet->$ct ;
                 }
             }
             $model_data = $model->map(function ($data) {
@@ -985,9 +1041,8 @@ class baocaobangluongController extends Controller
                     ->only(['mact', 'soluong', 'madv', 'maphanloai'])
                     ->all();
             });
-
             $a_soluong = a_unique($model_data);
-            //dd($a_soluong);
+            //dd($model->toarray());
             //cho trương hợp đơn vị cấp trên in dữ liệu dv câp dưới mà ko sai tên đơn vị
             $m_dv = dmdonvi::where('madv', $madv)->first();
 
@@ -2103,13 +2158,180 @@ class baocaobangluongController extends Controller
             return view('errors.notlogin');
     }
 
+    function chitraluong_ct_pl(Request $request) {
+        if (Session::has('admin')) {
+            $inputs = $request->all();
+            $thang = $inputs['tuthang'];
+            $nam = $inputs['tunam'];
+            $madv = session('admin')->madv;
+            $maphanloai = $inputs['phanloai'];
+            $model_donvi = dmdonvi::where('macqcq',$madv)->get();
+            $model_phanloai = dmphanloaidonvi::where('maphanloai','like',$maphanloai.'%')->get();
+            $a_plgd = array('MAMNON','TIEUHOC','THCS','THvaTHCS');
+            $a_plth = array('TIEUHOC','THvaTHCS');
+            $a_plthcs = array('THCS','THvaTHCS');
+            if($maphanloai == 'GD')
+                $model_phanloai = dmphanloaidonvi::wherein('maphanloai',$a_plgd)->get();
+            if($maphanloai == 'TIEUHOC')
+                $model_phanloai = dmphanloaidonvi::wherein('maphanloai',$a_plth)->get();
+            if($maphanloai == 'THCS')
+                $model_phanloai = dmphanloaidonvi::wherein('maphanloai',$a_plthcs)->get();
+
+            $model_tonghop = tonghopluong_donvi::where('macqcq',$madv)
+                ->where('nam', $nam)
+                ->where('thang', $thang)
+                ->where('trangthai', 'DAGUI')
+                ->wherein('madv', function ($query) use ($maphanloai) {
+                    $query->select('madv')->from('dmdonvi')
+                        ->where('maphanloai','like', $maphanloai.'%')
+                        ->get();
+                })
+                ->orWhereIn('macqcq', array_column($model_donvi->toarray(),'madv'))->get();
+            if($maphanloai == 'GD')
+                $model_tonghop = tonghopluong_donvi::where('macqcq',$madv)
+                    ->where('nam', $nam)
+                    ->where('thang', $thang)
+                    ->where('trangthai', 'DAGUI')
+                    ->wherein('madv', function ($query) use ($a_plgd) {
+                        $query->select('madv')->from('dmdonvi')
+                            ->wherein('maphanloai',$a_plgd)
+                            ->get();
+                    })
+                    ->orWhereIn('macqcq', array_column($model_donvi->toarray(),'madv'))->get();
+            if($maphanloai == 'TIEUHOC')
+                $model_tonghop = tonghopluong_donvi::where('macqcq',$madv)
+                    ->where('nam', $nam)
+                    ->where('thang', $thang)
+                    ->where('trangthai', 'DAGUI')
+                    ->wherein('madv', function ($query) use ($a_plth) {
+                        $query->select('madv')->from('dmdonvi')
+                            ->wherein('maphanloai',$a_plth)
+                            ->get();
+                    })
+                    ->orWhereIn('macqcq', array_column($model_donvi->toarray(),'madv'))->get();
+            if($maphanloai == 'THCS')
+                $model_tonghop = tonghopluong_donvi::where('macqcq',$madv)
+                    ->where('nam', $nam)
+                    ->where('thang', $thang)
+                    ->where('trangthai', 'DAGUI')
+                    ->wherein('madv', function ($query) use ($a_plthcs) {
+                        $query->select('madv')->from('dmdonvi')
+                            ->wherein('maphanloai',$a_plthcs)
+                            ->get();
+                    })
+                    ->orWhereIn('macqcq', array_column($model_donvi->toarray(),'madv'))->get();
+            $model_dmdv = dmdonvi::where('macqcq',$madv)
+                ->wherein('madv',array_column($model_tonghop->toarray(),'madv'))->orWhereIn('macqcq', array_column($model_donvi->toarray(),'madv'))->get();
+            $a_dv = array_column($model_tonghop->toarray(),'madv','mathdv');
+            $a_pl = array_column($model_dmdv->toarray(),'maphanloai','madv');
+            $model = tonghopluong_donvi_bangluong::where('mact','like',$inputs['phanloaict'].'%')
+            ->wherein('mathdv', array_column($model_tonghop->toarray(),'mathdv'))->get();
+            /*
+            $check = dmdonvi::where('madv',$madv)->where('phanloaitaikhoan','TH')->first();
+            if(count($check)>0)
+                $m_mathdv = tonghopluong_khoi::where('madv', $madv)->where('thang',$thang)->where('nam',$nam)->where('trangthai', 'DAGUI')->first();
+            else
+                $m_mathdv = tonghopluong_donvi::where('madv', $madv)->where('thang',$thang)->where('nam',$nam)->where('trangthai', 'DAGUI')->first();
+            if(isset($m_mathdv)) {
+                if(count($check)>0) {
+                    $mathh = $m_mathdv->mathdv;
+                    $model = tonghopluong_donvi_bangluong::where('mathh', $mathh)->get();
+                    $model_thongtin = tonghopluong_donvi::where('mathh', $mathh)->first();
+                    $m_pc = array_column(dmphucap_donvi::wherein('madv', function($query) use($mathh){
+                        $query->select('dmdonvi.madv')->from('dmdonvi')->join('tonghopluong_khoi','dmdonvi.madv','tonghopluong_khoi.madv')->where('mathdv',$mathh)
+                            ->get();
+                    })->get()->toarray(),'report','mapc');
+                }else{
+                    $model = tonghopluong_donvi_bangluong::where('mathdv', $m_mathdv->mathdv)->get();
+                    $model_thongtin = tonghopluong_donvi::where('mathdv', $m_mathdv->mathdv)->first();
+                    $m_pc = array_column(dmphucap_donvi::where('madv', $madv)->get()->toarray(), 'report', 'mapc');
+                }
+
+
+                //$gnr = getGeneralConfigs();
+                */
+            $m_pc = array_column(dmphucap::all()->toarray(),'report','mapc');
+            $model_nguonkp = array_column(dmnguonkinhphi::all()->toArray(), 'tennguonkp', 'manguonkp');
+            $model_ct = array_column(dmphanloaict::all()->toArray(), 'tenct', 'mact');
+                //cho trương hợp đơn vị cấp trên in dữ liệu dv câp dưới mà ko sai tên đơn vị
+                $m_dv = dmdonvi::where('madv', $madv)->first();
+                $a_phucap = array();
+                $col = 0;
+                //$m_pc = array_column(dmphucap_donvi::where('madv', $madv)->get()->toarray(), 'report', 'mapc');
+
+                foreach ($model as $chitiet) {
+                    $chitiet->madv = $a_dv[$chitiet->mathdv];
+                    $chitiet->tendv = $model_donvi->where('madv',$chitiet->madv)->first()->tendv;
+
+                    $chitiet->tennguonkp = isset($model_nguonkp[$chitiet->manguonkp]) ? $model_nguonkp[$chitiet->manguonkp] : '';
+                    $chitiet->tenct = isset($model_ct[$chitiet->mact]) ? $model_ct[$chitiet->mact] : '';
+                    $thanhtien = 0;
+                    foreach (getColTongHop() as $ct) {
+                        if ($chitiet->$ct > 50000) {
+                            $thanhtien += $chitiet->$ct;
+                        }
+                    }
+                    $chitiet->tongtl = $chitiet->tonghs * $chitiet->luongcoban + $thanhtien;
+                }
+                //dd($model);
+
+                foreach (getColTongHop() as $ct) {
+                    if ($model->sum($ct) > 0) {
+                        $a_phucap[$ct] = isset($m_pc[$ct]) ? $m_pc[$ct] : '';
+                        $col++;
+                    }
+                }
+                //dd($a_phucap);
+                $thongtin = array('nguoilap' => session('admin')->name,
+                    'thang' => $inputs['tuthang'],
+                    'nam' => $inputs['tunam']);
+
+
+                //Lấy dữ liệu để lập
+                $model_congtac = $model->map(function ($data) {
+                    return collect($data->toArray())
+                        ->only(['mact', 'manguonkp', 'tennguonkp', 'tenct'])
+                        ->all();
+                });
+                //group mact đã bao gồm macongtac; manguonkp bao gồm luongcoban
+                $a_congtac = a_unique($model_congtac);
+
+                $model_nguon = $model->map(function ($data) {
+                    return collect($data->toArray())
+                        ->only(['manguonkp', 'tennguonkp'])
+                        ->all();
+                });
+                $a_nguon = a_unique($model_nguon);
+                $model_dv = $model->map(function ($data) {
+                    return collect($data->toArray())
+                        ->only(['madv','tendv','manguonkp','mact','tennguonkp','tenct'])
+                        ->all();
+                });
+                $a_dv = a_unique($model_dv);
+
+                return view('reports.tonghopluong.khoi.bangluong_pl')
+                    ->with('thongtin', $thongtin)
+                    ->with('model', $model)
+                    ->with('m_dv', $m_dv)
+                    ->with('col', $col)
+                    ->with('a_phucap', $a_phucap)
+                    ->with('a_nguon', $a_nguon)
+                    ->with('a_congtac', $a_congtac)
+                    ->with('model_dmdv', $model_dmdv)
+                    ->with('a_dv', $a_dv)
+                    ->with('pageTitle', 'Chi tiết tổng hợp lương tại đơn vị');
+
+        } else
+            return view('errors.notlogin');
+    }
+
     function chitraluong_ct_khoim_excel(Request $request) {
         if (Session::has('admin')) {
             //dd($mathdv);
             //$model = tonghopluong_donvi_chitiet::where('mathdv', $mathdv)->get();
             $inputs = $request->all();
             $madv = $inputs['donvi'];
-            $thang = $inputs['thang'];
+            $thang = $inputs['tuthang'];
             $nam = $inputs['nam'];
             $check = dmdonvi::where('madv',$madv)->where('phanloaitaikhoan','TH')->first();
             if(count($check)>0)
@@ -2182,7 +2404,7 @@ class baocaobangluongController extends Controller
                 $a_nguon = a_unique($model_nguon);
                 Excel::create('bangluong',function($excel) use($thongtin,$model,$m_dv,$col,$a_phucap,$a_nguon,$a_congtac){
                     $excel->sheet('New sheet', function($sheet) use($thongtin,$model,$m_dv,$col,$a_phucap,$a_nguon,$a_congtac){
-                        return view('reports.tonghopluong.donvi.bangluongexcel')
+                        return view('reports.tonghopluong.khoi.bangluong')
                             ->with('thongtin', $thongtin)
                             ->with('model', $model)
                             ->with('m_dv', $m_dv)

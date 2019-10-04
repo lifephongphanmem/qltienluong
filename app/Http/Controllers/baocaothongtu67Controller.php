@@ -16,6 +16,8 @@ use App\dmthongtuquyetdinh;
 use App\hosocanbo;
 use App\nguonkinhphi;
 use App\nguonkinhphi_bangluong;
+use App\nguonkinhphi_huyen_baocao;
+use App\nguonkinhphi_huyen_baocao_chitiet;
 use App\tonghopluong_donvi;
 use App\tonghopluong_donvi_bangluong;
 use App\tonghopluong_donvi_chitiet;
@@ -167,7 +169,8 @@ class baocaothongtu67Controller extends Controller
                 }
                 $ct->ttbh_dv = round(($ct->st_heso + $ct->st_vuotkhung + $ct->st_pccv + $ct->st_pctnn + $ct->st_hesopc)* 23.5 / 100);
             }
-            $model_bangluong_ct = $model_tonghop_ct->where('maphanloai', '<>', 'KVXP');
+            $model_tonghop_ct = $model_tonghop_ct->wherein('mact',getMaCongTacNhuCau());
+            $model_bangluong_ct = $model_tonghop_ct->where('macongtac', 'BIENCHE')->where('maphanloai', '<>', 'KVXP');
             $ar_I = array();
             $ar_Igr = array();
             if (isset($inputs['inchitiet'])) {
@@ -1091,7 +1094,8 @@ class baocaothongtu67Controller extends Controller
                 }
                 $ct->ttbh_dv = round(($ct->st_heso + $ct->st_vuotkhung + $ct->st_pccv + $ct->st_pctnn + $ct->st_hesopc)* 23.5 / 100);
             }
-            $model_bangluong_ct = $model_tonghop_ct->where('maphanloai', '<>', 'KVXP');
+            $model_tonghop_ct = $model_tonghop_ct->wherein('mact',getMaCongTacNhuCau());
+            $model_bangluong_ct = $model_tonghop_ct->where('macongtac', 'BIENCHE')->where('maphanloai', '<>', 'KVXP');
             $ar_I = array();
             $ar_Igr = array();
             if (isset($inputs['inchitiet'])) {
@@ -3029,7 +3033,7 @@ class baocaothongtu67Controller extends Controller
             $model_donvi = dmdonvi::where('madvbc', session('admin')->madvbc)->get();
 
             $m_dv = dmdonvi::where('madv', session('admin')->madv)->first();
-            $model_nguon = nguonkinhphi_huyen_baocao::where('madv', session('admin')->madv)
+            $model_nguon = nguonkinhphi_huyen_baocao::where('madvbc', 'like', $inputs['madv'] . '%')
                 ->where('trangthai','DAGUI')
                 ->wherein('sohieu',array_column($model_thongtu->where('namdt','2019')->toarray(),'sohieu'))->get();
             if (count($model) == 0 && count($model_nguon) == 0) {
@@ -3139,7 +3143,7 @@ class baocaothongtu67Controller extends Controller
             if (isset($inputs['excel'])) {
                 Excel::create('mau4a_tt46', function ($excel) use ($model, $a_A, $a_BII, $a_BIII, $a_TC, $m_dv, $inputs) {
                     $excel->sheet('New sheet', function ($sheet) use ($model, $a_A, $a_BII, $a_BIII, $a_TC, $m_dv, $inputs) {
-                        $sheet->loadView('reports.thongtu67.mau4a_tt68')
+                        $sheet->loadView('reports.thongtu67.mau4a_tt46')
                             ->with('model', $model)
                             ->with('a_A', $a_A)
                             ->with('a_BII', $a_BII)
@@ -3303,10 +3307,10 @@ class baocaothongtu67Controller extends Controller
                     ->wherein('nguonkinhphi.sohieu',array_column($model_thongtu->where('namdt','2019')->toarray(),'sohieu'))->get();
             }
             //dd($model);
-            $a_th = array_column(nguonkinhphi_huyen_baocao::where('trangthai','DAGUI')
+            $a_th = array_column(nguonkinhphi_huyen_baocao::where('madvbc', 'like', $inputs['madv'] . '%')
+                ->where('trangthai','DAGUI')
                 ->where('madv',session('admin')->madv)->get()->toarray(),'masodv');
-            $model_nguon = nguonkinhphi_huyen_baocao_chitiet::where('madv', session('admin')->madv)
-                ->wherein('masodv',$a_th)
+            $model_nguon = nguonkinhphi_huyen_baocao_chitiet::wherein('masodv',$a_th)
                 ->wherein('sohieu',array_column($model_thongtu->where('namdt','2019')->toarray(),'sohieu'))->get();
             if (count($model) == 0 && count($model_nguon) == 0) {
                 return view('errors.nodata');

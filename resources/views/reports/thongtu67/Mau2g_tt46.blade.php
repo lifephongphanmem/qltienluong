@@ -80,24 +80,24 @@
         <td>6</td>
         <td>7</td>
     </tr>
-    <tr style="font-weight: bold">
+    <tr style="font-weight: bold;text-align: right">
         <td></td>
-        <td>TỔNG CỘNG</td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
+        <td style=" text-align: center">TỔNG CỘNG</td>
+        <td>{{dinhdangso($a_It['soluongbienche'])}}</td>
+        <td>{{dinhdangso($a_It['heso'] + $a_It['tongpc'] + $a_It['ttbh_dv'],0,$inputs['donvitinh'])}}</td>
+        <td>{{dinhdangso($a_It['heso'],0,$inputs['donvitinh'])}}</td>
+        <td>{{dinhdangso($a_It['tongpc'],0,$inputs['donvitinh'])}}</td>
+        <td>{{dinhdangso($a_It['ttbh_dv'],0,$inputs['donvitinh'])}}</td>
     </tr>
     @foreach($ar_I as $dulieu)
         <tr style=" text-align: right">
             <td style=" text-align: center">{{$dulieu['tt']}}</td>
             <td style=" text-align: left">{{$dulieu['noidung']}}</td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
+            <td>{{dinhdangso($dulieu['soluongbienche'])}}</td>
+            <td>{{dinhdangso($dulieu['heso'] + $dulieu['tongpc'] + $dulieu['ttbh_dv'],0,$inputs['donvitinh'])}}</td>
+            <td>{{dinhdangso($dulieu['heso'],0,$inputs['donvitinh'])}}</td>
+            <td>{{dinhdangso($dulieu['tongpc'],0,$inputs['donvitinh'])}}</td>
+            <td>{{dinhdangso($dulieu['ttbh_dv'],0,$inputs['donvitinh'])}}</td>
         </tr>
     @endforeach
 </table>

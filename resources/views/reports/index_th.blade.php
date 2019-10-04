@@ -47,6 +47,7 @@
                                     <li><a href="#" data-target="#thoaichitra-khoi-modal" data-toggle="modal" onclick="chitraluong_khoi('{{$furl.'khoi/chitraluong_ct'}}')">Tổng hợp tình hình chi trả lương (Mẫu chi tiết)</a></li-->
                                     <li><a href="#" data-target="#thoaichitra-khoi-moi-modal" data-toggle="modal" onclick="baocao('{{$furl.'khoi/chitraluong_th'}}')">Tổng hợp tình hình chi trả lương (Mẫu tổng hợp)</a></li>
                                     <li><a href="#" data-target="#thoaichitra-khoi-moi-ct-modal" data-toggle="modal" onclick="baocao('{{$furl.'khoi/chitraluong_ct'}}')">Tổng hợp tình hình chi trả lương (Mẫu chi tiết)</a></li>
+                                    <li><a href="#" data-target="#thoaichitra-khoi-moi-modal" data-toggle="modal" onclick="baocao('{{$furl.'khoi/chitraluong_ctpl'}}')">Tổng hợp tình hình chi trả lương (Mẫu chi tiết - phân loại)</a></li>
                                     <li><a href="#" data-target="#thoaidutoan-khoi-modal" data-toggle="modal" onclick="dutoanluong_khoi('{{$furl.'khoi/dutoanluong'}}')">Dự toán lương</a></li>
                                     <li><a href="#" data-target="#thoaichitra-khoi-moi-modal" data-toggle="modal" onclick="baocao('{{$furl.'khoi/baocaohesoluong'}}')">Báo cáo hệ số lương của đơn vị có mặt</a></li>
 

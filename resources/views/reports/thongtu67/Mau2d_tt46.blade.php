@@ -106,11 +106,11 @@
             <td>{{dinhdangso($dulieu['tdv'])}}</td>
             <td>{{$dulieu['mk']}}</td>
             <td>{{$dulieu['mk2']}}</td>
-            <td>{{dinhdangso($dulieu['kp'],0,$inputs['donvitinh'])}}</td>
+            <td>{{dinhdangso($dulieu['dt'],0,$inputs['donvitinh'])}}</td>
+            <td>{{dinhdangso($dulieu['kqpc'],0,$inputs['donvitinh'])}}</td>
             <td>{{dinhdangso($dulieu['bhxh'],0,$inputs['donvitinh'])}}</td>
-            <td>{{dinhdangso($dulieu['bhxh'],0,$inputs['donvitinh'])}}</td>
-            <td>{{dinhdangso($dulieu['bhxh'],0,$inputs['donvitinh'])}}</td>
-            <td>{{dinhdangso($dulieu['bhxh'],0,$inputs['donvitinh'])}}</td>
+            <td>{{dinhdangso($dulieu['kqpct7'],0,$inputs['donvitinh'])}}</td>
+            <td>{{dinhdangso($dulieu['tong'],0,$inputs['donvitinh'])}}</td>
         </tr>
     @endforeach
 </table>
