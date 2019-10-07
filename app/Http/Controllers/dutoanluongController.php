@@ -462,34 +462,34 @@ class dutoanluongController extends Controller
                     if ($soluongduocgiao > $soluong) {
                         $m_data[$i]['canbo_dutoan'] = $soluongduocgiao - $soluong;
                         $luongtt = $m_data[$i]['canbo_dutoan'] * $inputs['luongcoban'] * $heso;
-                        if(isset($inputs['baohiem'])){
+                        if (isset($inputs['baohiem'])) {
                             $bhxh_dv = round($a_baohiem['bhxh_dv'] * $luongtt / 100, 0);
                             $bhtn_dv = round($a_baohiem['bhtn_dv'] * $luongtt / 100, 0);
                             $kpcd_dv = round($a_baohiem['kpcd_dv'] * $luongtt / 100, 0);
                             $bhyt_dv = round($a_baohiem['bhyt_dv'] * $luongtt / 100, 0);
                             $ttbh_dv = $bhxh_dv + $bhtn_dv + $kpcd_dv + $bhyt_dv;
-                        }else{
+                        } else {
                             $ttbh_dv = $bhxh_dv = $bhtn_dv = $kpcd_dv = $bhyt_dv = 0;
                         }
 
-                        $a_tuyenthem[] = array('mact'=>'1561606077','heso'=>$heso * $m_data[$i]['canbo_dutoan'],
-                            'st_heso'=>$luongtt,'tonghs'=>$heso * $m_data[$i]['canbo_dutoan'],
-                            'macanbo'=>$masodv,'tencanbo'=>'Cán bộ chưa tuyển','masodv'=>$masodv,
-                            'ttl'=>$luongtt,'luongtn'=>$luongtt,'stbhxh_dv'=>$bhxh_dv,
-                            'stbhtn_dv'=>$bhtn_dv,'stkpcd_dv'=>$kpcd_dv,'stbhyt_dv'=>$bhyt_dv,'ttbh_dv'=>$ttbh_dv,
-                            'luongcoban'=>$inputs['luongcoban'],'congtac'=>'CONGTAC');
+                        $a_tuyenthem[] = array('mact' => '1561606077', 'heso' => $heso * $m_data[$i]['canbo_dutoan'],
+                            'st_heso' => $luongtt, 'tonghs' => $heso * $m_data[$i]['canbo_dutoan'],
+                            'macanbo' => $masodv, 'tencanbo' => 'Cán bộ chưa tuyển', 'masodv' => $masodv,
+                            'ttl' => $luongtt, 'luongtn' => $luongtt, 'stbhxh_dv' => $bhxh_dv,
+                            'stbhtn_dv' => $bhtn_dv, 'stkpcd_dv' => $kpcd_dv, 'stbhyt_dv' => $bhyt_dv, 'ttbh_dv' => $ttbh_dv,
+                            'luongcoban' => $inputs['luongcoban'], 'congtac' => 'CONGTAC');
 
                         $m_data[$i]['luongnb'] = $luongtt * 12;
                         $m_data[$i]['luongbh'] = $ttbh_dv * 12;
                     }
                 }
                 $m_data[$i]['luongnb_dt'] = (array_sum(array_column($dutoan, 'heso')) + array_sum(array_column($dutoan, 'vuotkhung'))) * $inputs['luongcoban'];
-                $luongnb += ($m_data[$i]['luongnb_dt']+$m_data[$i]['luongnb']);
+                $luongnb += ($m_data[$i]['luongnb_dt'] + $m_data[$i]['luongnb']);
                 //dùng luongtn vì các phụ cấp tính theo số tiền đã cộng vào luongtn (ko tính vào hệ số)
                 $m_data[$i]['luonghs_dt'] = chkDbl(array_sum(array_column($dutoan, 'luongtn'))) - chkDbl($m_data[$i]['luongnb_dt']);
                 $luonghs += $m_data[$i]['luonghs_dt'];
                 $m_data[$i]['luongbh_dt'] = array_sum(array_column($dutoan, 'ttbh_dv'));
-                $luongbh += $m_data[$i]['luongbh_dt'];
+                $luongbh += $m_data[$i]['luongbh_dt'] + $m_data[$i]['luongbh'];
 
             }
             //dd($m_data);
