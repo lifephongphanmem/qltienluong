@@ -228,9 +228,9 @@
                                     <a href="{{url('nghiep_vu/chi_tieu/danh_sach?namct='.date('Y'))}}"><i class="fa fa-caret-right"></i>Chỉ tiêu biên chế</a>
                                 </li>
 
-                                <li>
-                                    <a href="{{url('nghiep_vu/qua_trinh/phu_cap/danh_sach')}}"><i class="fa fa-caret-right"></i>Quá trình hưởng lương, phụ cấp</a>
-                                </li>
+                                {{--<li>--}}
+                                    {{--<a href="{{url('nghiep_vu/qua_trinh/phu_cap/danh_sach')}}"><i class="fa fa-caret-right"></i>Quá trình hưởng lương, phụ cấp</a>--}}
+                                {{--</li>--}}
                                 @if(session('admin')->maphanloai == 'KVXP')
                                     <!-- Tạm thời bỏ để triển khai lạng sơn -->
                                     <!--li><a href="{{url('nghiep_vu/quan_ly/dia_ban_dbkk/index')}}"><i class="fa fa-caret-right"></i>Danh sách thôn, tổ dân phố</a></li-->
