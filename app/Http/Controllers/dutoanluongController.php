@@ -193,6 +193,11 @@ class dutoanluongController extends Controller
 
             $model = (new dataController())->getCanBo($model,$inputs['namdt'].'-'.$inputs['thang'].'-01',true,$thoidiem);
             foreach ($model as $cb) {
+                //xét thời hạn hợp đồng của cán bộ: nếu "ngayvao" > ngaytu => gán mact = null để lọc bỏ qua cán bộ
+                if(getDayVn($cb->ngayvao) != '' && $cb->ngayvao < $inputs['namdt'].'-'.$inputs['thang'].'-01'){
+                    $cb->mact = null;
+                    continue;
+                }
                 $cb->congtac = 'CONGTAC';
                 $cb->macongtac = $a_congtac[$cb->mact];
                 $cb->masodv = $masodv;
@@ -251,7 +256,7 @@ class dutoanluongController extends Controller
 
             $m_cb = $model->keyBy('macanbo')->toarray();
             //dd($m_cb);
-            $m_hh = $model->where('ngayvao','>=' ,$inputs['namdt'].'-01-01')->where('ngayvao','<=' ,$inputs['namdt'].'-12-31')->keyBy('macanbo')->toarray();
+            $m_hh = $model->where('ngayvao','<=' ,$inputs['namdt'].'-12-31')->keyBy('macanbo')->toarray();
             $m_nh = $model->where('nam_ns', '<>', '')->where('nam_ns', '<=', $inputs['namdt'])->keyBy('macanbo')->toarray();
             $m_nb = $model->where('nam_nb', '<>', '')->where('nam_nb', '=', $inputs['namdt'])->keyBy('macanbo')->toarray();
             $m_tnn = $model->where('nam_tnn', '<>', '')->where('nam_tnn', '=', $inputs['namdt'])->keyBy('macanbo')->toarray();
