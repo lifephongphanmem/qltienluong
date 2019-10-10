@@ -17,7 +17,7 @@ class dmchucvucqController extends Controller
             $inputs = $request->all();
             $model_pl = dmphanloaidonvi::all();
             $maphanloai = isset($inputs['maso']) ? $inputs['maso'] : $model_pl->first()->maphanloai;
-            $model = dmchucvucq::where('maphanloai', $maphanloai)->where('madv', 'SA')->get();
+            $model = dmchucvucq::wherein('madv', ['SA', session('admin')->madv])->get();
             $a_pl = getPhanLoaiNhanVien();
             foreach($model as $ct){
                 $ct->phanloai = isset($a_pl[$ct->ttdv]) ? $a_pl[$ct->ttdv] : '';
