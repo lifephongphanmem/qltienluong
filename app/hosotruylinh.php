@@ -32,6 +32,8 @@ class hosotruylinh extends Model
         'hesott',
         //chưa dùng, cho trường hợp truy lĩnh cả phụ cấp
         'heso',
+        'hesopc',
+        'hesobl',
         'vuotkhung',
         'pcct',
         'pckct',

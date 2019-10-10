@@ -429,6 +429,41 @@ class hosotruylinhController extends Controller
             return view('errors.notlogin');
     }
 
+    function create_all(Request $request)
+    {
+        if (Session::has('admin')) {
+            $inputs = $request->all();
+            $inputs['luongcoban'] = chkDbl($inputs['luongcoban']);
+            $sott = getdate()[0]; //lưu mã số
+            $model_pc = dmphucap_donvi::where('madv', session('admin')->madv)->where('phanloai','<','3')->get();
+            $a_th = array_merge(array('macanbo', 'pthuong','tencanbo', 'madv'),
+                array_column($model_pc->toarray(),'mapc'));
+
+            $a_data = array();
+            $a_nkp = array();
+            $m_hs = hosocanbo::select($a_th)->where('madv',session('admin')->madv)->where('theodoi','<','9')->get();
+            foreach($m_hs as $hs) {
+                $maso = $hs->madv . '_' . $sott++;
+                $hs->maphanloai = $inputs['maphanloai'];
+                $hs->maso = $maso;
+                $hs->thangtl = $inputs['thangtl'];
+                $hs->ngaytl = $inputs['ngaytl'];
+                $hs->ngaytu = $inputs['ngaytu'];
+                $hs->ngayden = $inputs['ngayden'];
+                $a_data[] = $hs->toarray();
+                $a_nkp[] = array(
+                    'maso' => $maso,
+                    'manguonkp' => $inputs['manguonkp'],
+                    'luongcoban' => $inputs['luongcoban'],
+                );
+            }
+            hosotruylinh::insert($a_data);
+            hosotruylinh_nguon::insert($a_nkp);
+            return redirect('nghiep_vu/truy_linh/danh_sach?thang=ALL&nam='.date('Y'));
+        } else
+            return view('errors.notlogin');
+    }
+
     function getinfor_nkp(Request $request){
         if(!Session::has('admin')) {
             $result = array(

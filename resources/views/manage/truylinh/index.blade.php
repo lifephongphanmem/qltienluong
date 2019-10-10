@@ -126,7 +126,7 @@
     {!! Form::close() !!}
 
     <!--Modal thêm mới thông tin truy lĩnh -->
-    {!! Form::open(['url'=>'/nghiep_vu/truy_linh/create_all','method'=>'get', 'id' => 'create']) !!}
+    {!! Form::open(['url'=>'/nghiep_vu/truy_linh/create_all','method'=>'POST', 'id' => 'create']) !!}
     <div id="create-all-modal" tabindex="-1" role="dialog" aria-hidden="true" class="modal fade">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -135,9 +135,44 @@
                     <h4 id="modal-header-primary-label" class="modal-title">Thông tin truy lĩnh lương của cán bộ</h4>
                 </div>
                 <div class="modal-body">
-                    <label class="form-control-label">Phân loại</label>
-                    {!!Form::select('maphanloai',getPhanLoaiTruyLinh(), 'NGAYLV', array('id' => 'maphanloai','class' => 'form-control select2me'))!!}
+                    <div class="row">
+                        <div class="col-md-12">
+                            <label class="form-control-label">Phân loại</label>
+                            {!!Form::select('maphanloai',getPhanLoaiTruyLinh(), 'NGAYLV', array('id' => 'maphanloai','class' => 'form-control select2me'))!!}
+                        </div>
+                    </div>
 
+                    <div class="row">
+                        <div class="col-md-6">
+                            <label class="form-control-label">Nguồn kinh phí</label>
+                            {!!Form::select('manguonkp',getNguonKP(false), null, array('id' => 'manguonkp','class' => 'form-control select2me'))!!}
+                        </div>
+                        <div class="col-md-6">
+                            <label class="control-label">Mức truy lĩnh </label>
+                            {!!Form::text('luongcoban', session('admin')->luongcoban, array('id' => 'luongcoban','class' => 'form-control', 'data-mask'=>'fdecimal'))!!}
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <label class="form-control-label">Từ ngày</label>
+                            {!! Form::input('date','ngaytu',null,array('id' => 'ngaytu', 'class' => 'form-control ngaythang','required'))!!}
+                        </div>
+                        <div class="col-md-6">
+                            <label class="control-label">Đến ngày</label>
+                            {!! Form::input('date','ngayden',null,array('id' => 'ngayden', 'class' => 'form-control ngaythang','required'))!!}
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <label class="control-label">Số tháng truy lĩnh </label>
+                            {!!Form::text('thangtl', null, array('id' => 'thangtl','class' => 'form-control', 'data-mask'=>'fdecimal'))!!}
+                        </div>
+                        <div class="col-md-6">
+                            <label class="control-label">Số ngày truy lĩnh </label>
+                            {!!Form::text('ngaytl', null, array('id' => 'ngaytl','class' => 'form-control', 'data-mask'=>'fdecimal'))!!}
+                        </div>
+                    </div>
                     <input type="hidden" id="madv" name="madv" value="{{session('admin')->madv}}" />
                 </div>
                 <div class="modal-footer">
@@ -160,7 +195,65 @@
             var nam = $("#namct").val();
             return '{{$furl}}'+'danh_sach?thang='+thang +'&nam='+nam;
         }
+
+        function tinhtoan() {
+            //cùng năm => so sánh tháng
+            var ngaytu = $('#ngaytu').val();
+            var ngayden = $('#ngayden').val();
+            if(ngaytu =='' || ngayden ==''){
+                $('#thangtl').val(0);
+                $('#ngaytl').val(0);
+            }else{
+                var tungay = new Date(ngaytu);
+                var denngay = new Date(ngayden);
+                var ngaycong = 22;
+
+                var nam_tu = tungay.getFullYear();
+                var ngay_tu = tungay.getDate();
+                var thang_tu = tungay.getMonth(); //bắt đầu từ 0
+
+                var nam_den = denngay.getFullYear();
+                var ngay_den = denngay.getDate();
+                var thang_den = denngay.getMonth(); //bắt đầu từ 0
+
+                var thangtl = 0;
+                var ngaytl = 0;
+                thangtl = thang_den + 12*(nam_den - nam_tu) - thang_tu + 1;//cộng 1 là do 7->8 = 2 tháng (như đếm số tự nhiên)
+                //
+                if(ngay_tu >1){//không pải từ đầu tháng => xét số ngày tl
+                    thangtl = thangtl - 1;
+                    //từ ngày xét đến cuối tháng
+                    //lấy ngày cuối cùng của tháng từ
+                    var ngay_tucuoi = new Date(nam_tu, thang_tu+1, 0).getDate();
+                    if(ngay_tucuoi - ngay_tu >= ngaycong){
+                        thangtl = thangtl + 1;
+                    }else{
+                        ngaytl = ngay_tucuoi - ngay_tu;
+                    }
+                }
+
+                var ngay_dencuoi = new Date(nam_den, thang_den+1, 0).getDate();
+                if(ngay_den < ngay_dencuoi){
+                    thangtl = thangtl - 1;
+                    if( ngay_den >= ngaycong){
+                        thangtl = thangtl + 1;
+                    }else{
+                        ngaytl += ngay_den;
+                    }
+                }
+                if(ngaytl > ngaycong){
+                    ngaytl = ngaytl - ngaycong;
+                    thangtl = thangtl + 1;
+                }
+                $('#thangtl').val(thangtl);
+                $('#ngaytl').val(ngaytl);
+            }
+        }
+
         $(function(){
+            $('.ngaythang').change(function(){
+                tinhtoan();
+            });
 
             $('#thangct').change(function(){
                 window.location.href = getLink();
@@ -169,8 +262,8 @@
             $('#namct').change(function(){
                 window.location.href = getLink();
             });
-
         })
+
     </script>
 
     @include('includes.modal.delete')

@@ -370,6 +370,7 @@ Route::group(['prefix'=>'nghiep_vu'],function(){
         Route::get('danh_sach','hosotruylinhController@index');
         Route::get('del/{id}','hosotruylinhController@destroy');
         Route::get('create','hosotruylinhController@create');
+        Route::post('create_all','hosotruylinhController@create_all');
         Route::post('store','hosotruylinhController@store');
         Route::post('update','hosotruylinhController@update');
         Route::get('get','hosotruylinhController@getinfo');
