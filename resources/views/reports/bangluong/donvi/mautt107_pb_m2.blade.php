@@ -94,7 +94,7 @@
         <thead>
         <tr style="padding-left: 2px;padding-right: 2px">
             <th style="width: 1%;" rowspan="2">S</br>T</br>T</th>
-            <th style="width: 12%;" rowspan="2">Họ và tên</th>
+            <th style="width: 15%;" rowspan="2">Họ và tên</th>
             <th style="width: 1%;" rowspan="2">Mã ngạch</th>
             <th style="width: 10%;" rowspan="2">Chức vụ</th>
             @foreach($a_phucap as $key=>$val)
@@ -106,7 +106,7 @@
 
             <th colspan="2">BHXH</th>
             <th colspan="2">BHYT</th>
-            <th colspan="2">BHTN</th>
+            {{--<th colspan="2">BHTN</th>--}}
             <th colspan="2">KPCĐ</th>
 
             <th rowspan="2">Số thực lĩnh</th>
@@ -120,12 +120,12 @@
             <th>Trừ vào lương</th>
             <th>Trừ vào CP</th>
             <th>Trừ vào lương</th>
-            <th>Trừ vào CP</th>
-            <th>Trừ vào lương</th>
+            {{--<th>Trừ vào CP</th>--}}
+            {{--<th>Trừ vào lương</th>--}}
         </tr>
 
         <tr>
-            @for($i=1;$i<=17 + $col;$i++)
+            @for($i=1;$i<=15 + $col;$i++)
                 <th>{{$i}}</th>
             @endfor
         </tr>
@@ -138,7 +138,7 @@
                 <?php $stt=1; ?>
                 <tr style="font-weight: bold;">
                     <td>{{convert2Roman($i++)}}</td>
-                    <td style="text-align: left;" colspan="{{16 + $col}}">{{$pb->tenpb}}</td>
+                    <td style="text-align: left;" colspan="{{14 + $col}}">{{$pb->tenpb}}</td>
                 </tr>
                 @foreach($model_luong as $ct)
                     <tr>
@@ -158,8 +158,8 @@
                         <td>{{dinhdangso($ct->stbhxh)}}</td>
                         <td>{{dinhdangso($ct->stbhyt_dv)}}</td>
                         <td>{{dinhdangso($ct->stbhyt)}}</td>
-                        <td>{{dinhdangso($ct->stbhtn_dv)}}</td>
-                        <td>{{dinhdangso($ct->stbhtn)}}</td>
+                        {{--<td>{{dinhdangso($ct->stbhtn_dv)}}</td>--}}
+                        {{--<td>{{dinhdangso($ct->stbhtn)}}</td>--}}
                         <td>{{dinhdangso($ct->stkpcd_dv)}}</td>
                         <td>{{dinhdangso($ct->stkpcd)}}</td>
 
@@ -183,8 +183,8 @@
                     <td class="money">{{dinhdangso($model_luong->sum('stbhxh'))}}</td>
                     <td class="money">{{dinhdangso($model_luong->sum('stbhyt_dv'))}}</td>
                     <td class="money">{{dinhdangso($model_luong->sum('stbhyt'))}}</td>
-                    <td class="money">{{dinhdangso($model_luong->sum('stbhtn_dv'))}}</td>
-                    <td class="money">{{dinhdangso($model_luong->sum('stbhtn'))}}</td>
+                    {{--<td class="money">{{dinhdangso($model_luong->sum('stbhtn_dv'))}}</td>--}}
+                    {{--<td class="money">{{dinhdangso($model_luong->sum('stbhtn'))}}</td>--}}
                     <td class="money">{{dinhdangso($model_luong->sum('stkpcd_dv'))}}</td>
                     <td class="money">{{dinhdangso($model_luong->sum('stkpcd'))}}</td>
 
@@ -207,8 +207,8 @@
             <td class="money">{{dinhdangso($model->sum('stbhyt_dv'))}}</td>
             <td class="money">{{dinhdangso($model->sum('stbhyt'))}}</td>
 
-            <td class="money">{{dinhdangso($model->sum('stbhtn_dv'))}}</td>
-            <td class="money">{{dinhdangso($model->sum('stbhtn'))}}</td>
+            {{--<td class="money">{{dinhdangso($model->sum('stbhtn_dv'))}}</td>--}}
+            {{--<td class="money">{{dinhdangso($model->sum('stbhtn'))}}</td>--}}
             <td class="money">{{dinhdangso($model->sum('stkpcd_dv'))}}</td>
             <td class="money">{{dinhdangso($model->sum('stkpcd'))}}</td>
 

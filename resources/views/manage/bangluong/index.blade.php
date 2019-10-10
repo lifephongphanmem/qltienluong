@@ -172,6 +172,10 @@
     @include('templates.modal_printf_luong')
     @include('templates.modal_printf_th_luong')
     <script>
+        function disable_btn(obj){
+            obj.prop('disabled', true);
+        }
+
         function capnhat(mabl){
             $('#mabl_capnhat').val(mabl);
         }
