@@ -93,10 +93,10 @@
     <table class="money" cellspacing="0" cellpadding="0" border="1" style="margin: 20px auto; border-collapse: collapse;font:normal {{$thongtin['cochu']}}px Times, serif;">
         <thead>
         <tr style="padding-left: 2px;padding-right: 2px">
-            <th style="width: 2%;" rowspan="2">S</br>T</br>T</th>
+            <th style="width: 1%;" rowspan="2">S</br>T</br>T</th>
             <th style="width: 12%;" rowspan="2">Họ và tên</th>
-            <th style="width: 3%;" rowspan="2">Mã ngạch</th>
-            <th style="width: 8%;" rowspan="2">Chức vụ</th>
+            <th style="width: 2%;" rowspan="2">Mã ngạch</th>
+            <th style="width: 12%;" rowspan="2">Chức vụ</th>
             @foreach($a_phucap as $key=>$val)
                 <th rowspan="2">{!!$val!!}</th>
             @endforeach
@@ -145,7 +145,7 @@
                         <td>{{$stt++}}</td>
                         <td style="text-align: left">{{$ct->tencanbo}}</td>
                         <td style="text-align: left">{{$ct->msngbac}}</td>
-                        <td style="text-align: left">{{$ct->tencvcq}}</td>
+                        <td style="text-align: left">{{$ct->tencv}}</td>
                         @foreach($a_phucap as $key=>$val)
                             <td>{{dinhdangsothapphan($ct->$key,5)}}</td>
                         @endforeach

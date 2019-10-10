@@ -36,8 +36,8 @@
                         <b>DANH SÁCH CÁN BỘ ĐƯỢC HƯỞNG TRUY LĨNH LƯƠNG</b>
                     </div>
                     <div class="actions">
-                        <button type="button" id="_btnaddPB" class="btn btn-default btn-xs" onclick="add_all()"><i class="fa fa-plus"></i>&nbsp;Thêm mới (cả đơn vị)</button>
-                        <button type="button" id="_btnaddPB" class="btn btn-default btn-xs" onclick="add()"><i class="fa fa-plus"></i>&nbsp;Thêm mới</button>
+                        <button type="button" class="btn btn-default btn-xs" data-target="#create-all-modal" data-toggle="modal"><i class="fa fa-plus"></i>&nbsp;Thêm mới (cả đơn vị)</button>
+                        <button type="button" class="btn btn-default btn-xs" onclick="add()"><i class="fa fa-plus"></i>&nbsp;Thêm mới</button>
                     </div>
                 </div>
                 <div class="portlet-body form-horizontal">
@@ -136,7 +136,7 @@
                 </div>
                 <div class="modal-body">
                     <label class="form-control-label">Phân loại</label>
-                    {!!Form::select('maphanloai',getPhanLoaiTruyLinh(), null, array('id' => 'maphanloai','class' => 'form-control select2me'))!!}
+                    {!!Form::select('maphanloai',getPhanLoaiTruyLinh(), 'NGAYLV', array('id' => 'maphanloai','class' => 'form-control select2me'))!!}
 
                     <input type="hidden" id="madv" name="madv" value="{{session('admin')->madv}}" />
                 </div>
