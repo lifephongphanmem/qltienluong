@@ -84,6 +84,12 @@
                                         </div>
                                     </div>
 
+                                    <div class="row">
+                                        <div class="col-md-offset-3 col-md-9">
+                                            <input name="trungbangluong" id="trungbangluong" type="checkbox">
+                                            <label for="trungbangluong">Tạo nhiều bảng lương trong cùng nguồn kinh phí</label>
+                                        </div>
+                                    </div>
 
                                     <input type="hidden" id="dinhmuc" name="dinhmuc" value="{{$inputs['dinhmuc']}}"/>
                                     <input type="hidden" id="thang" name="thang" value="{{$inputs['thang']}}"/>
@@ -135,7 +141,7 @@
 
         <div class="modal-footer">
             <button type="button" data-dismiss="modal" class="btn btn-default">Hủy thao tác</button>
-            <button type="submit" id="submit" name="submit" value="submit" class="btn btn-primary">Đồng ý</button>
+            <button type="submit" id="submit" name="submit" value="submit" onclick="disable_btn($this)" class="btn btn-primary">Đồng ý</button>
         </div>
     </div>
 </div>

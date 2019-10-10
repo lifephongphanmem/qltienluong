@@ -256,17 +256,19 @@ class bangluongController extends Controller
                 $inputs['phucaploaitru'] = '';
             }
 
-            //kiểm tra bảng lương cùng nguồn, lĩnh vực hoạt động, lương cơ bản =>ko cho tạo
-            $model_chk = bangluong::where('thang', $inputs['thang'])->where('nam', $inputs['nam'])
-                ->where('phanloai', 'BANGLUONG')
-                ->where('manguonkp', $inputs['manguonkp'])
-                ->where('linhvuchoatdong', $inputs['linhvuchoatdong'])
-                ->where('madv',session('admin')->madv)
-                ->first();
+            if(!isset($inputs['trungbangluong'])){
+                $model_chk = bangluong::where('thang', $inputs['thang'])->where('nam', $inputs['nam'])
+                    ->where('phanloai', 'BANGLUONG')
+                    ->where('manguonkp', $inputs['manguonkp'])
+                    ->where('linhvuchoatdong', $inputs['linhvuchoatdong'])
+                    ->where('madv',session('admin')->madv)
+                    ->first();
 
-            if(count($model_chk)>0){
-                return view('errors.trungbangluong');
+                if(count($model_chk)>0){
+                    return view('errors.trungbangluong');
+                }
             }
+
             $madv = session('admin')->madv;
             $inputs['mabl'] = $madv . '_' . getdate()[0];
             $inputs['madv'] = $madv;

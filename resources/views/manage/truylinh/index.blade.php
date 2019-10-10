@@ -190,6 +190,11 @@
             $('#create-modal').modal('show');
         }
 
+        function disable_btn($this){
+            //$this.prop('disabled',true);
+            //$('button').prop('disabled', true);
+        }
+
         function getLink(){
             var thang = $("#thangct").val();
             var nam = $("#namct").val();

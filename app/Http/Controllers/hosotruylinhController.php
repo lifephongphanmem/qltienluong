@@ -435,7 +435,7 @@ class hosotruylinhController extends Controller
             $inputs = $request->all();
             $inputs['luongcoban'] = chkDbl($inputs['luongcoban']);
             $sott = getdate()[0]; //lưu mã số
-            $model_pc = dmphucap_donvi::where('madv', session('admin')->madv)->where('phanloai','<','3')->get();
+            $model_pc = dmphucap_donvi::where('madv', session('admin')->madv)->where('phanloai','<','2')->get();
             $a_th = array_merge(array('macanbo', 'pthuong','tencanbo', 'madv'),
                 array_column($model_pc->toarray(),'mapc'));
 
