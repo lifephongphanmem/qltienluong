@@ -96,6 +96,7 @@
             <th style="width: 2%;" rowspan="2">S</br>T</br>T</th>
             <th style="width: 12%;" rowspan="2">Họ và tên</th>
             <th style="width: 3%;" rowspan="2">Mã ngạch</th>
+            <th style="width: 3%;" rowspan="2">Chức vụ</th>
             @foreach($a_phucap as $key=>$val)
                 <th rowspan="2">{!!$val!!}</th>
             @endforeach
@@ -127,7 +128,7 @@
         </tr>
 
         <tr>
-            @for($i=1;$i<=20 + $col;$i++)
+            @for($i=1;$i<=21 + $col;$i++)
                 <th>{{$i}}</th>
             @endfor
         </tr>
@@ -140,14 +141,14 @@
                 <?php $stt=1; ?>
                 <tr style="font-weight: bold;">
                     <td>{{convert2Roman($i++)}}</td>
-                    <td style="text-align: left;" colspan="{{19+ $col}}">{{$pb->tenpb}}</td>
+                    <td style="text-align: left;" colspan="{{20 + $col}}">{{$pb->tenpb}}</td>
                 </tr>
                 @foreach($model_luong as $ct)
                     <tr>
                         <td>{{$stt++}}</td>
                         <td style="text-align: left">{{$ct->tencanbo}}</td>
                         <td style="text-align: left">{{$ct->msngbac}}</td>
-
+                        <td style="text-align: left">{{$ct->tencvcq}}</td>
                         @foreach($a_phucap as $key=>$val)
                             <td>{{dinhdangsothapphan($ct->$key,5)}}</td>
                         @endforeach
@@ -175,7 +176,7 @@
                 @endforeach
 
                 <tr style="font-weight: bold; text-align: center; font-style: italic">
-                    <td colspan="3">Cộng</td>
+                    <td colspan="4">Cộng</td>
                     @foreach($a_phucap as $key=>$val)
                         <td>{{dinhdangsothapphan($model_luong->sum($key) ,5)}}</td>
                     @endforeach
@@ -203,7 +204,7 @@
             @endif
         @endforeach
         <tr style="font-weight: bold; text-align: center;">
-            <td colspan="3">Tổng cộng</td>
+            <td colspan="4">Tổng cộng</td>
             @foreach($a_phucap as $key=>$val)
                 <td>{{dinhdangsothapphan($model->sum($key) ,5)}}</td>
             @endforeach
