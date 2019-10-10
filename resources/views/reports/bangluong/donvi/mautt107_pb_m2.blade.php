@@ -95,8 +95,8 @@
         <tr style="padding-left: 2px;padding-right: 2px">
             <th style="width: 1%;" rowspan="2">S</br>T</br>T</th>
             <th style="width: 12%;" rowspan="2">Họ và tên</th>
-            <th style="width: 2%;" rowspan="2">Mã ngạch</th>
-            <th style="width: 12%;" rowspan="2">Chức vụ</th>
+            <th style="width: 1%;" rowspan="2">Mã ngạch</th>
+            <th style="width: 10%;" rowspan="2">Chức vụ</th>
             @foreach($a_phucap as $key=>$val)
                 <th rowspan="2">{!!$val!!}</th>
             @endforeach
