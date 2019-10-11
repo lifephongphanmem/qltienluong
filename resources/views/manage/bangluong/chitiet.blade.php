@@ -263,6 +263,12 @@
                                             </div>
                                         </div>
 
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <label class="control-label">Ghi chú</label>
+                                                {!! Form::textarea('ghichu',null,array('id' => 'ghichu', 'class' => 'form-control','rows'=>'3'))!!}
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>

@@ -102,7 +102,6 @@
             @endforeach
             <th rowspan="2">Cộng hệ số</th>
             <th rowspan="2">Tiền lương tháng</th>
-            <th rowspan="2">Ngày hưởng lương thực tế</th>
 
             <th colspan="2">BHXH</th>
             <th colspan="2">BHYT</th>
@@ -110,7 +109,7 @@
             <th colspan="2">KPCĐ</th>
 
             <th rowspan="2">Số thực lĩnh</th>
-            <th style="width: 5%" rowspan="2">Ghi chú</th>
+            <th style="width: 8%" rowspan="2">Ghi chú</th>
         </tr>
 
         <tr style="padding-left: 2px;padding-right: 2px">
@@ -125,7 +124,7 @@
         </tr>
 
         <tr>
-            @for($i=1;$i<=15 + $col;$i++)
+            @for($i=1;$i<15 + $col;$i++)
                 <th>{{$i}}</th>
             @endfor
         </tr>
@@ -138,7 +137,7 @@
                 <?php $stt=1; ?>
                 <tr style="font-weight: bold;">
                     <td>{{convert2Roman($i++)}}</td>
-                    <td style="text-align: left;" colspan="{{14 + $col}}">{{$pb->tenpb}}</td>
+                    <td style="text-align: left;" colspan="{{13 + $col}}">{{$pb->tenpb}}</td>
                 </tr>
                 @foreach($model_luong as $ct)
                     <tr>
@@ -151,7 +150,7 @@
                         @endforeach
 
                         <td>{{dinhdangsothapphan($ct->tonghs,5)}}</td>
-                        <td>{{dinhdangso($ct->ttl)}}</td>
+                        {{--<td>{{dinhdangso($ct->ttl)}}</td>--}}
                         <td>{{dinhdangso($ct->ttl - $ct->giaml + $ct->bhct)}}</td>
 
                         <td>{{dinhdangso($ct->stbhxh_dv)}}</td>
@@ -164,7 +163,7 @@
                         <td>{{dinhdangso($ct->stkpcd)}}</td>
 
                         <td>{{dinhdangso($ct->luongtn)}}</td>
-                        <td></td>
+                        <td style="text-align: left">{{$ct->ghichu}}</td>
                     </tr>
                 @endforeach
 
@@ -175,8 +174,7 @@
                     @endforeach
                     <td>{{dinhdangsothapphan($model_luong->sum('tonghs') ,5)}}</td>
 
-
-                    <td class="money">{{dinhdangso($model_luong->sum('ttl'))}}</td>
+                    {{--<td class="money">{{dinhdangso($model_luong->sum('ttl'))}}</td>--}}
                     <td class="money">{{dinhdangso($model_luong->sum('ttl') - $model_luong->sum('giaml') + $model_luong->sum('bhct'))}}</td>
 
                     <td class="money">{{dinhdangso($model_luong->sum('stbhxh_dv'))}}</td>
@@ -199,7 +197,7 @@
                 <td>{{dinhdangsothapphan($model->sum($key) ,5)}}</td>
             @endforeach
             <td>{{dinhdangsothapphan($model->sum('tonghs') ,5)}}</td>
-            <td class="money">{{dinhdangso($model->sum('ttl'))}}</td>
+            {{--<td class="money">{{dinhdangso($model->sum('ttl'))}}</td>--}}
             <td class="money">{{dinhdangso($model->sum('ttl') - $model->sum('giaml') + $model->sum('bhct'))}}</td>
 
             <td class="money">{{dinhdangso($model->sum('stbhxh_dv'))}}</td>
