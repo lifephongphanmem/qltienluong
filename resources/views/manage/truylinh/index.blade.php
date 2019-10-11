@@ -38,6 +38,7 @@
                     <div class="actions">
                         <button type="button" class="btn btn-default btn-xs" data-target="#create-all-modal" data-toggle="modal"><i class="fa fa-plus"></i>&nbsp;Thêm mới (cả đơn vị)</button>
                         <button type="button" class="btn btn-default btn-xs" onclick="add()"><i class="fa fa-plus"></i>&nbsp;Thêm mới</button>
+                        <button type="button" class="btn btn-default btn-xs" onclick="xoadachon()"><i class="fa fa-trash-o"></i>&nbsp;Xóa đã chọn</button>
                     </div>
                 </div>
                 <div class="portlet-body form-horizontal">
@@ -57,7 +58,7 @@
                     <table id="sample_3" class="table table-hover table-striped table-bordered" style="min-height: 230px">
                         <thead>
                             <tr>
-                                <th class="text-center" style="width: 5%">STT</th>
+                                <th class="text-center" style="width: 8%"><!--input type="checkbox" class="checkall"/-->STT</th>
                                 <th class="text-center">Phân loại</th>
                                 <th class="text-center">Họ và tên</th>
                                 <th class="text-center">Hệ số</br>truy lĩnh</th>
@@ -69,7 +70,11 @@
                         <tbody>
                             @foreach($model as $key=>$value)
                                 <tr>
-                                    <td class="text-center">{{$key+1}}</td>
+                                    <td class="text-center">
+                                        @if($value->mabl == null)
+                                        <input type="checkbox" id="{{$value->maso}}" name="cb_check"/>
+                                        {{$key+1}}</td>
+                                        @endif
                                     <td>{{isset($a_pl[$value->maphanloai])? $a_pl[$value->maphanloai]:'' }}</td>
                                     <td>{{$value->tencanbo}}</td>
                                     <td class="text-center">{{$value->heso}}</td>
@@ -137,8 +142,25 @@
                 <div class="modal-body">
                     <div class="row">
                         <div class="col-md-12">
-                            <label class="form-control-label">Phân loại</label>
+                            <label class="form-control-label">Phân loại truy lĩnh</label>
                             {!!Form::select('maphanloai',getPhanLoaiTruyLinh(), 'NGAYLV', array('id' => 'maphanloai','class' => 'form-control select2me'))!!}
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-12">
+                            <label class="control-label">Phân loại công tác</label>
+                            <select class="form-control select2me" name="mact[]" id="mact" multiple required="required">
+                                <option value="ALL">Tất cả phân loại công tác</option>
+                                @foreach($model_nhomct as $kieuct)
+                                    <optgroup label="{{$kieuct->tencongtac}}">
+                                        <?php $mode_ct=$model_tenct->where('macongtac',$kieuct->macongtac); ?>
+                                        @foreach($mode_ct as $ct)
+                                            <option value="{{$ct->mact}}">{{$ct->tenct}}</option>
+                                        @endforeach
+                                    </optgroup>
+                                @endforeach
+                            </select>
                         </div>
                     </div>
 
@@ -184,7 +206,45 @@
     </div>
     {!! Form::close() !!}
 
+    <div id="delete-mul-modal" tabindex="-1" role="dialog" aria-hidden="true" class="modal fade">
+        {!! Form::open(['url'=>'/nghiep_vu/truy_linh/del_mul','method'=>'POST', 'id' => 'frmDelete_mul']) !!}
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header modal-header-primary">
+                        <button type="button" data-dismiss="modal" aria-hidden="true"
+                                class="close">&times;</button>
+                        <h4 id="modal-header-primary-label" class="modal-title">Đồng ý xoá?</h4>
+                    </div>
+                    <input type="hidden" id="maso" name="maso" />
+                    <div class="modal-footer">
+                        <button type="button" data-dismiss="modal" class="btn btn-default">Hủy thao tác</button>
+                        <button type="submit" class="btn btn-primary">Đồng ý</button>
+                    </div>
+                </div>
+            </div>
+        {!! Form::close() !!}
+    </div>
+
     <script>
+        function xoadachon() {
+            var maso = getSelectedCheckboxes();
+            if(maso == '') {
+                toastr.error('Chưa chọn cán bộ để xóa!','Thông báo lỗi');
+            }else {
+                //alert(ids);
+                $('#delete-mul-modal').modal('show');
+                $('#frmDelete_mul').find("[id='maso']").val(maso);
+            }
+        }
+
+        function getSelectedCheckboxes() {
+            var maso = '';
+            $.each($("input[name='cb_check']:checked"), function(){
+                maso += ($(this).attr('id')) + ',';
+            });
+            return maso;
+        }
+
         function add(){
             $('#maso').val('ADD');
             $('#create-modal').modal('show');

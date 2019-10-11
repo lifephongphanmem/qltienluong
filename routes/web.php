@@ -378,6 +378,8 @@ Route::group(['prefix'=>'nghiep_vu'],function(){
         Route::get('get_nkp','hosotruylinhController@getinfor_nkp');
         Route::get('store_nkp','hosotruylinhController@store_nkp');
         Route::get('del_nkp','hosotruylinhController@destroy_nkp');
+
+        Route::post('del_mul','hosotruylinhController@destroy_mul');
     });
 
     Route::group(['prefix'=>'da_nghi'],function(){

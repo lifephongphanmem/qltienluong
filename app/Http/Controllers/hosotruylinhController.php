@@ -7,6 +7,8 @@ use App\hosocanbo;
 use App\hosotruylinh;
 use App\hosotruylinh_nguon;
 use App\hosotruylinh_nguon_temp;
+use App\dmphanloaicongtac;
+use App\dmphanloaict;
 use App\ngachluong;
 use App\nhomngachluong;
 use Illuminate\Http\Request;
@@ -23,16 +25,6 @@ class hosotruylinhController extends Controller
         if (Session::has('admin')) {
             $inputs = $request->all();
             $model_canbo = hosocanbo::where('madv', session('admin')->madv)->where('theodoi', '<', '9')->get();
-            /*
-
-            if(!isset($inputs['nam'])){
-                $inputs['nam'] = date('Y');
-            }
-
-            if(!isset($inputs['thang'])){
-                $inputs['thang'] = date('m');
-            }
-            */
 
             if($inputs['thang'] == 'ALL'){
                 $model = hosotruylinh::where('madv', session('admin')->madv)
@@ -42,15 +34,17 @@ class hosotruylinhController extends Controller
                     ->wheremonth('ngayden',$inputs['thang'])
                     ->whereyear('ngayden',$inputs['nam'])->get();
             }
-            //dd($inputs);
-            //$model = hosotruylinh::where('madv', session('admin')->madv)->get();
-            //$a = getPhanLoaiTruyLinh();
+            $model_nhomct = dmphanloaicongtac::select('macongtac','tencongtac')->get();
+            $model_tenct = dmphanloaict::select('tenct','macongtac','mact')->get();
+
             return view('manage.truylinh.index')
                 ->with('model', $model->sortby('ngaytu'))
                 ->with('inputs', $inputs)
                 ->with('a_canbo', array_column($model_canbo->toarray(), 'tencanbo', 'macanbo'))
                 ->with('a_pl', getPhanLoaiTruyLinh(false))
                 ->with('furl', '/nghiep_vu/truy_linh/')
+                ->with('model_nhomct',$model_nhomct)
+                ->with('model_tenct',$model_tenct)
                 ->with('tendv', getTenDV(session('admin')->madv))
                 ->with('pageTitle', 'Danh sách cán bộ được truy lĩnh lương');
         } else
@@ -183,6 +177,17 @@ class hosotruylinhController extends Controller
             DB::statement("Delete FROM hosotruylinh_nguon_temp WHERE maso='".$model->maso."'");
             //$macanbo = $model->macanbo;
             $model->delete();
+            return redirect('nghiep_vu/truy_linh/danh_sach?thang='.date('m').'&nam='.date('Y'));
+        } else
+            return view('errors.notlogin');
+    }
+
+    function destroy_mul(Request $request){
+        if (Session::has('admin')) {
+            $inputs = $request->all();
+            $maso = explode(',',$inputs['maso']);
+            hosotruylinh::wherein('maso',$maso)->delete();
+            hosotruylinh_nguon::wherein('maso',$maso)->delete();
             return redirect('nghiep_vu/truy_linh/danh_sach?thang='.date('m').'&nam='.date('Y'));
         } else
             return view('errors.notlogin');
@@ -435,13 +440,20 @@ class hosotruylinhController extends Controller
             $inputs = $request->all();
             $inputs['luongcoban'] = chkDbl($inputs['luongcoban']);
             $sott = getdate()[0]; //lưu mã số
-            $model_pc = dmphucap_donvi::where('madv', session('admin')->madv)->where('phanloai','<','2')->get();
+            $model_pc = dmphucap_donvi::where('madv', session('admin')->madv)->wherein('phanloai',['0','2'])->get();
             $a_th = array_merge(array('macanbo', 'pthuong','tencanbo', 'madv'),
                 array_column($model_pc->toarray(),'mapc'));
 
             $a_data = array();
             $a_nkp = array();
-            $m_hs = hosocanbo::select($a_th)->where('madv',session('admin')->madv)->where('theodoi','<','9')->get();
+            if (in_array('ALL', $inputs['mact'])) {
+                $m_hs = hosocanbo::select($a_th)->where('madv',session('admin')->madv)->where('theodoi','<','9')->get();
+            } else {
+                $m_hs = hosocanbo::select($a_th)->where('madv',session('admin')->madv)
+                    ->wherein('mact',$inputs['mact'])
+                    ->where('theodoi','<','9')->get();
+            }
+
             foreach($m_hs as $hs) {
                 $maso = $hs->madv . '_' . $sott++;
                 $hs->maphanloai = $inputs['maphanloai'];
