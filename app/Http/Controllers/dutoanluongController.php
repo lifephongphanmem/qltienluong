@@ -273,7 +273,8 @@ class dutoanluongController extends Controller
                     $m_cb_kn[$key]['stt'] = '';
                     $m_cb_kn[$key]['msngbac'] = '';
                 }
-
+                $m_cb_kn[$key]['ngayvao'] = null;
+                $m_cb_kn[$key]['ngaybc'] = null;
                 $m_cb_kn[$key]['ngaysinh'] = null;
                 $m_cb_kn[$key]['tnndenngay'] = null;
                 $m_cb_kn[$key]['macongtac'] = null;
