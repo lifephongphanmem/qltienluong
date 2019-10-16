@@ -103,7 +103,7 @@
             <th rowspan="2">Cộng hệ số</th>
             <th rowspan="2">Lương, phụ cấp 01 tháng</th>
             <th colspan="2">Các chức danh bố trí kiêm nhiệm</th>
-            <th style="width: 8%" rowspan="2">Tổng tiền</br>lương, phụ cấp</br>và trợ cấp</br>kiêm nhiệm</th>
+            <th style="width: 5%" rowspan="2">Tổng tiền</br>lương, phụ cấp</br>và trợ cấp</br>kiêm nhiệm</th>
             <th rowspan="2">Trích nộp bảo hiểm</th>
             <th rowspan="2">Số thực lĩnh</th>
             <th style="width: 5%;" rowspan="2">Ký nhận</th>
