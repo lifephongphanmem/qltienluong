@@ -2821,12 +2821,12 @@ class bangluongController extends Controller
 
     function update_chitiet(Request $request){
         if (Session::has('admin')) {
-            $inputs=$request->all();
-            $m_bl = bangluong::where('mabl',$inputs['mabl_hs'])->first();
-            $model = (new data())->getBangluong_ct_cb($m_bl->thang,$inputs['id_hs']);
+            $inputs = $request->all();
+            $m_bl = bangluong::where('mabl', $inputs['mabl_hs'])->first();
+            $model = (new data())->getBangluong_ct_cb($m_bl->thang, $inputs['id_hs']);
             //dd($model);
             $mapc = $inputs['mapc'];
-            $mapc_st ='st_'. $inputs['mapc'];
+            $mapc_st = 'st_' . $inputs['mapc'];
 
             $inputs['heso'] = chkDbl($inputs['heso']);
             $inputs['luongcb'] = chkDbl($inputs['luongcb']);
@@ -2834,11 +2834,13 @@ class bangluongController extends Controller
             //dd($inputs);
             //Tính lương mới
             $sotien_cl = $inputs['sotien'] - $model->$mapc_st;
-            $heso_cl = $inputs['heso'] - $model->$mapc;
+            $heso_cl = $inputs['heso'] > 1000? 0 : $inputs['heso'] - $model->$mapc;//nếu > 1000 - >số tiền ko pai công lại hệ số
+
             $model->$mapc_st = $inputs['sotien'];
             $model->$mapc = $inputs['heso'];
-            //Tính lại bao hiểm
-            if($model->congtac != 'THAISAN' && $model->congtac != 'DAINGAY' && $model->congtac != 'KHONGLUONG' ){
+            //Tính lại bao hiểm (các trường hợp thai sản, dai ngày, ko lương => số tiền = 0;
+            //  => nếu ko đóng bảo thì tỷ lệ bảo hiểm = 0)
+            if ($model->congtac != 'THAISAN' && $model->congtac != 'DAINGAY' && $model->congtac != 'KHONGLUONG') {
                 $baohiem = $model->st_heso + $model->st_vuotkhung + $model->st_pccv + $model->st_pctnn;
                 $model->stbhxh = round($model->bhxh * $baohiem, 0);
                 $model->stbhyt = round($model->bhyt * $baohiem, 0);
@@ -2854,11 +2856,11 @@ class bangluongController extends Controller
 
             $model->tonghs += $heso_cl;
             $model->ttl += $sotien_cl;
-            $model->luongtn = $model->ttl -  $model->ttbh - $model->giaml - $model->thuetn - $model->trichnop + $model->bhct + $model->tienthuong;
+            $model->luongtn = $model->ttl - $model->ttbh - $model->giaml - $model->thuetn - $model->trichnop + $model->bhct + $model->tienthuong;
             //dd($model);
             $model->save();
 
-            return redirect('/chuc_nang/bang_luong/can_bo?mabl='.$model->mabl.'&maso='.$model->id);
+            return redirect('/chuc_nang/bang_luong/can_bo?mabl=' . $model->mabl . '&maso=' . $model->id);
 
 
         } else

@@ -72,9 +72,10 @@
                                 <tr>
                                     <td class="text-center">
                                         @if($value->mabl == null)
-                                        <input type="checkbox" id="{{$value->maso}}" name="cb_check"/>
-                                        {{$key+1}}</td>
+                                            <input type="checkbox" onclick="setMaSo(this,'{{$value->maso}}')" name="cb_check"/>
                                         @endif
+                                        {{$key+1}}
+                                    </td>
                                     <td>{{isset($a_pl[$value->maphanloai])? $a_pl[$value->maphanloai]:'' }}</td>
                                     <td>{{$value->tencanbo}}</td>
                                     <td class="text-center">{{$value->heso}}</td>
@@ -226,14 +227,37 @@
     </div>
 
     <script>
+        var a_maso = [];
+
+        function removeA(arr) {
+            var what, a = arguments, L = a.length, ax;
+            while (L > 1 && arr.length) {
+                what = a[--L];
+                while ((ax= arr.indexOf(what)) !== -1) {
+                    arr.splice(ax, 1);
+                }
+            }
+            return arr;
+        }
+
+        function setMaSo (obj, maso) {
+            if(obj.checked){
+                a_maso.push(maso);
+            }else{
+                var index = a_maso.indexOf(maso);
+                if (index !== -1) a_maso.splice(index, 1);
+                //removeA(a_maso, maso);
+            }
+        }
+
         function xoadachon() {
-            var maso = getSelectedCheckboxes();
-            if(maso == '') {
+            //var maso = getSelectedCheckboxes();
+            if( a_maso.length == 0) {
                 toastr.error('Chưa chọn cán bộ để xóa!','Thông báo lỗi');
             }else {
                 //alert(ids);
                 $('#delete-mul-modal').modal('show');
-                $('#frmDelete_mul').find("[id='maso']").val(maso);
+                $('#frmDelete_mul').find("[id='maso']").val(a_maso);
             }
         }
 

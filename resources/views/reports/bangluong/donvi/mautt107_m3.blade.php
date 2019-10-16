@@ -93,7 +93,7 @@
     <table class="money" cellspacing="0" cellpadding="0" border="1" style="margin: 20px auto; border-collapse: collapse;font:normal {{$thongtin['cochu']}}px Times, serif;">
         <thead>
         <tr style="padding-left: 2px;padding-right: 2px">
-            <th style="width: 2%;" rowspan="2">S</br>T</br>T</th>
+            <th style="width: 1%;" rowspan="2">S</br>T</br>T</th>
             <th style="width: 12%;" rowspan="2">Họ và tên</th>
             <th rowspan="2">Chức vụ</th>
             <th style="width: 3%;" rowspan="2">Mã ngạch</th>
@@ -103,10 +103,10 @@
             <th rowspan="2">Cộng hệ số</th>
             <th rowspan="2">Lương, phụ cấp 01 tháng</th>
             <th colspan="2">Các chức danh bố trí kiêm nhiệm</th>
-            <th style="width: 8%" rowspan="2">Tổng tiền lương, phụ cấp và trợ cấp kiêm nhiệm</th>
+            <th style="width: 8%" rowspan="2">Tổng tiền</br>lương, phụ cấp</br>và trợ cấp</br>kiêm nhiệm</th>
             <th rowspan="2">Trích nộp bảo hiểm</th>
             <th rowspan="2">Số thực lĩnh</th>
-            <th rowspan="2">Ký nhận</th>
+            <th style="width: 5%;" rowspan="2">Ký nhận</th>
         </tr>
 
         <tr style="padding-left: 2px;padding-right: 2px">

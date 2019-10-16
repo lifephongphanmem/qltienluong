@@ -186,6 +186,7 @@ class hosotruylinhController extends Controller
         if (Session::has('admin')) {
             $inputs = $request->all();
             $maso = explode(',',$inputs['maso']);
+            //dd($maso);
             hosotruylinh::wherein('maso',$maso)->delete();
             hosotruylinh_nguon::wherein('maso',$maso)->delete();
             return redirect('nghiep_vu/truy_linh/danh_sach?thang='.date('m').'&nam='.date('Y'));
