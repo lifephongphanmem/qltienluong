@@ -627,7 +627,7 @@ class baocaobangluongController extends Controller
             $a_pl = array_column($model_donvi->toarray(),'maphanloai','madv');
             $model = tonghopluong_donvi_chitiet::join('tonghopluong_donvi','tonghopluong_donvi_chitiet.mathdv','tonghopluong_donvi.mathdv')
                 ->select('tonghopluong_donvi_chitiet.*','thang')
-                ->where('tonghopluong_donvi_chitiet.mact','like',$inputs['phanloaict'].'%')
+                //->where('tonghopluong_donvi_chitiet.mact','like',$inputs['phanloai'].'%')
                 ->wherein('tonghopluong_donvi_chitiet.mathdv', array_column($model_tonghop->toarray(),'mathdv'))->get();
             /*
             $model = tonghopluong_donvi_chitiet::select('luongcoban','mathdv','macongtac','mact','soluong','heso','hesobl','hesopc','hesott','vuotkhung'

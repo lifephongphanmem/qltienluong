@@ -44,7 +44,11 @@
                                 <div class="col-md-7">
                                     {!! Form::select('namns',getNam(),$inputs['namns'],array('id' => 'namns', 'class' => 'form-control'))!!}
                                 </div>
+                                <div class="col-md-2">
+                                    <button type="button" class="btn btn-default btn-xs" onclick="add()"><i class="fa fa-plus"></i>&nbsp;In danh sách</button>
+                                </div>
                             </div>
+
                         </div>
 
                     </div>
@@ -174,7 +178,59 @@
             </div>
         </div>
     </div>
+    <div id="chitiet-modal" tabindex="-1" role="dialog" aria-hidden="true" class="modal fade">
+        <div class="modal-dialog modal-lg modal-content">
+            <div class="modal-header modal-header-primary">
+                <button type="button" data-dismiss="modal" aria-hidden="true" class="close">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-horizontal">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="tabbable tabbable-custom tabbable-noborder tabbable-reversed" id="tab_cre">
+                                <div class="tab-content">
+                                    <!-- Thông tin chung -->
+                                    <div class="tab-pane active" id="tab_0_cre">
+                                        {!! Form::open(['url'=>'chuc_nang/xem_du_lieu/du_toan/danhsach','target'=>'_blank' ,'method'=>'post' , 'class'=>'form-horizontal form-validate']) !!}
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <label class="col-md-3" style="text-align: right">Năm</label>
+                                                <div class="col-md-9">
+                                                    {!! Form::select('namnds',getNam(),$inputs['namns'],array('id' => 'namnds', 'class' => 'form-control'))!!}
+                                                </div>
+                                            </div>
+                                            <div class="col-md-12">
+                                                <label class="control-label col-md-3" style="text-align: right">Trạng thái </label>
+                                                <div class="col-md-9">
+                                                    {!! Form::select('trangthaids',$a_trangthai,$inputs['trangthai'],array('id' => 'trangthaids', 'class' => 'form-control'))!!}
+                                                </div>
+                                            </div>
+                                            <div class="col-md-12">
+                                                <label class="control-label col-md-3" style="text-align: right"></label>
+                                                <input type="checkbox" name="excel" id = "excel"/>
+                                                Xuất dữ liệu ra file excel
+                                            </div>
+                                            <input type="hidden" id="id_ct" name="id_ct"/>
+                                            <input type="hidden" id="mabl" name="mabl"/>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" data-dismiss="modal" class="btn btn-default">Hủy thao tác</button>
+                    <button type="submit" id="submit" name="submit" value="submit" class="btn btn-primary">Đồng ý</button>
+                </div>
+            </div>
+        </div>
+    </div>
     <script>
+        function add(){
+            $('#chitiet-modal').modal('show');
+        }
         function inbl(madv,namns,mabl){
             $("#mabl_in").val(mabl);
             $("#madv_in").val(madv);

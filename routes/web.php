@@ -773,12 +773,14 @@ Route::group(['prefix'=>'chuc_nang'],function(){
             Route::get('khoi','xemdulieu_nguonController@index_khoi');
             Route::get('huyen','xemdulieu_nguonController@index_huyen');
             Route::get('tinh','xemdulieu_nguonController@index_tinh');
+            Route::post('danhsach','xemdulieu_nguonController@danhsach');
         });
 
         Route::group(['prefix'=>'du_toan'],function(){
             Route::get('khoi','xemdulieu_dutoanController@index_khoi');
             Route::get('huyen','xemdulieu_dutoanController@index_huyen');
             Route::get('tinh','xemdulieu_dutoanController@index_tinh');
+            Route::post('danhsach','xemdulieu_dutoanController@danhsach');
         });
 
     });

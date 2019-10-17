@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\dmdonvi;
 use App\dmphanloaidonvi;
+use App\dmthongtuquyetdinh;
 use App\nguonkinhphi;
 use App\nguonkinhphi_huyen;
 use App\nguonkinhphi_khoi;
@@ -87,11 +88,18 @@ class xemdulieu_nguonController extends Controller
         if (Session::has('admin')) {
             $inputs = $request->all();
             $madv = session('admin')->madv;
+            $nam = dmthongtuquyetdinh::where('sohieu',$inputs['sohieu'])->first()->namdt;
+            //$ngay = date("Y-m-t", strtotime($inputs['nam'].'-'.$inputs['thang'].'-01'));
             $a_trangthai = array('ALL' => '--Chọn trạng thái dữ liệu--', 'CHOGUI' => 'Chưa gửi dữ liệu', 'DAGUI' => 'Đã gửi dữ liệu');
             $model_donvi = dmdonvi::select('madv', 'tendv','maphanloai')
-                ->wherein('madv', function($query) use($madv){
-                    $query->select('madv')->from('dmdonvi')->where('macqcq',$madv)->where('madv','<>',$madv)->get();
-                })->get();
+                ->where('macqcq',$madv)->where('madv','<>',$madv)
+                ->wherenotin('madv', function ($query) use ($madv,$nam) {
+                    $query->select('madv')->from('dmdonvi')
+                        ->whereyear('ngaydung', '<=', $nam)
+                        ->where('trangthai', 'TD')
+                        ->get();
+                })
+                ->get();
             $model_phanloai = dmphanloaidonvi::wherein('maphanloai',array_column($model_donvi->toarray(),'maphanloai'))->get();
             $model_phanloai = array_column($model_phanloai->toarray(),'tenphanloai','maphanloai');
             foreach($model_phanloai as $key=>$key)
@@ -141,6 +149,89 @@ class xemdulieu_nguonController extends Controller
                 ->with('furl_th', 'chuc_nang/tong_hop_nguon/huyen/')
                 ->with('furl_xem', '/chuc_nang/xem_du_lieu/nguon/huyen')
                 ->with('pageTitle', 'Danh sách đơn vị tổng hợp nguồn');
+
+        } else
+            return view('errors.notlogin');
+    }
+
+    function danhsach(Request $request){
+
+        if (Session::has('admin')) {
+            $inputs = $request->all();
+            $madv = session('admin')->madv;
+            $nam = dmthongtuquyetdinh::where('sohieu',$inputs['sohieuds'])->first()->namdt;
+            $a_trangthai = array('CHOGUI' => 'Chưa gửi dữ liệu', 'DAGUI' => 'Đã gửi dữ liệu');
+            $model_donvi = dmdonvi::select('madv', 'tendv','maphanloai')
+                ->where('macqcq',$madv)->where('madv','<>',$madv)
+                ->wherenotin('madv', function ($query) use ($madv,$nam) {
+                    $query->select('madv')->from('dmdonvi')
+                        ->whereyear('ngaydung', '<=', $nam)
+                        ->where('trangthai', 'TD')
+                        ->get();
+                })->get();
+            $model_phanloai = dmphanloaidonvi::wherein('maphanloai',array_column($model_donvi->toarray(),'maphanloai'))->get();
+            $model_phanloai = array_column($model_phanloai->toarray(),'tenphanloai','maphanloai');
+            foreach($model_phanloai as $key=>$key)
+                $a_phanloai[$key]= $model_phanloai[$key];
+            //$a_phanloai['GD'] = 'Khối Giáo Dục';
+            $a_phanloai['ALL'] = '--Chọn tất cả--';
+
+
+            $model_nguon = nguonkinhphi::where('trangthai','DAGUI')
+                ->where('macqcq',$madv)
+                ->wherein('madv', function($query) use($madv){
+                    $query->select('madv')->from('dmdonvi')->where('macqcq',$madv)->where('madv','<>',$madv)->get();
+                })->get();
+
+            $model_nguon_khoi = nguonkinhphi_tinh::where('madv', $madv)->get();
+
+            foreach($model_donvi as $dv){
+                //kiểm tra xem đã tổng hợp thành dữ liệu huyện gửi lên tỉnh chưa?
+                $nguon_khoi = $model_nguon_khoi->where('sohieu',$inputs['sohieuds'])->first();
+                if(count($nguon_khoi)>0 && $nguon_khoi->trangthai == 'DAGUI'){
+                    $dv->tralai = false;
+                }else{
+                    $dv->tralai = true;
+                }
+
+                $nguon = $model_nguon->where('sohieu',$inputs['sohieuds'])->where('madv',$dv->madv)->first();
+                if(count($nguon)> 0 && $nguon->trangthai == 'DAGUI'){
+                    $dv->masodv = $nguon->masodv;
+                    $dv->trangthai = 'DAGUI';
+                }else{
+                    $dv->trangthai = 'CHOGUI';
+                    $dv->masodv = null;
+                }
+            }
+
+            if (!isset($inputs['trangthaids']) || $inputs['trangthaids'] != 'ALL') {
+                $model_donvi = $model_donvi->where('trangthai',$inputs['trangthaids']);
+            }
+            //  dd($model_donvi->toarray());
+            $m_dv = dmdonvi::where('madv',$madv)->first();
+            if(isset($inputs['excel'])){
+                Excel::create('THluong', function ($excel) use ($model_donvi, $a_trangthai, $m_dv, $inputs) {
+                    $excel->sheet('New sheet', function ($sheet) use ($model_donvi, $a_trangthai, $m_dv, $inputs) {
+                        $sheet->loadView('reports.nguonkinhphi.huyen.danhsach')
+                            ->with('model', $model_donvi)
+                            ->with('a_trangthai', $a_trangthai)
+                            ->with('m_dv', $m_dv)
+                            ->with('furl', '/chuc_nang/tong_hop_luong/')
+                            ->with('pageTitle', 'THluong');
+                        $sheet->setAutoSize(false);
+                        $sheet->setFontFamily('Tahoma');
+                        $sheet->setFontBold(false);
+                    });
+                })->download('xls');
+            }else{
+                return view('reports.nguonkinhphi.huyen.danhsach')
+                    ->with('model', $model_donvi)
+                    ->with('a_trangthai', $a_trangthai)
+                    ->with('m_dv', $m_dv)
+                    ->with('furl', '/chuc_nang/tong_hop_luong/')
+                    ->with('pageTitle', 'Danh sách đơn vị tổng hợp lương');
+            }
+
 
         } else
             return view('errors.notlogin');
