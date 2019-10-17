@@ -314,15 +314,17 @@ class hosocanboController extends Controller
 
     function search(){
         if (Session::has('admin')) {
-            $m_pb=dmphongban::all('mapb','tenpb');
-            $m_dt=dmdantoc::all('dantoc');
-            $m_cvcq=dmchucvucq::all('tencv', 'macvcq');
+            //$m_pb=dmphongban::all('mapb','tenpb');
+            $m_dt = dmdantoc::all('dantoc');
+            //$m_cvcq=dmchucvucq::all('tencv', 'macvcq');
+            $m_pb = getPhongBan(false);
+            $m_cvcq = getChucVuCQ(false);
 
             return view('search.hosocanbo.index')
-                ->with('m_pb',$m_pb)
-                ->with('m_cvcq',$m_cvcq)
-                ->with('m_dt',$m_dt)
-                ->with('pageTitle','Tra cứu hồ sơ cán bộ');
+                ->with('m_pb', $m_pb)
+                ->with('m_cvcq', $m_cvcq)
+                ->with('m_dt', $m_dt)
+                ->with('pageTitle', 'Tra cứu hồ sơ cán bộ');
         } else
             return view('errors.notlogin');
     }
@@ -330,16 +332,19 @@ class hosocanboController extends Controller
     function result(Request $request)
     {
         if (Session::has('admin')) {
+            /*
             $_sql = "select hosocanbo.id,hosocanbo.macanbo,hosocanbo.tencanbo,hosocanbo.anh,hosocanbo.macvcq,hosocanbo.mapb,hosocanbo.gioitinh,dmchucvucq.sapxep,hosocanbo.ngaysinh
                    from hosocanbo, dmchucvucq
                    Where hosocanbo.macvcq=dmchucvucq.macvcq and hosocanbo.theodoi < '9' and hosocanbo.madv ='".session('admin')->madv."'";
+            */
+            $_sql = "select * from hosocanbo Where theodoi < '9' and madv ='".session('admin')->madv."'";
 
             $inputs = $request->all();
             $s_dk = getConditions($inputs, array('_token'), 'hosocanbo');
             if ($s_dk != '') {
                 $_sql .= ' and ' . $s_dk;
             }
-
+            //dd($_sql);
             $model = DB::select(DB::raw($_sql));
 
             $m_pb = dmphongban::all('mapb', 'tenpb')->toArray();

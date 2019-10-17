@@ -77,16 +77,9 @@
         </tr>
 
         <tr>
-            @if($thongtin['phanloai'] == 'TRUYLINH')
-                <td colspan="2" style="text-align: center; font-weight: bold; font-size: 20px;">
-                    BẢNG THANH TOÁN TRUY LĨNH LƯƠNG VÀ CÁC KHOẢN PHỤ CẤP THEO LƯƠNG,</br>CÁC KHOẢN TRÍCH NỘP THEO LƯƠNG
-                </td>
-            @else
-                <td colspan="2" style="text-align: center; font-weight: bold; font-size: 20px;">
-                    BẢNG THANH TOÁN TIỀN LƯƠNG VÀ CÁC KHOẢN PHỤ CẤP THEO LƯƠNG,</br>CÁC KHOẢN TRÍCH NỘP THEO LƯƠNG
-                </td>
-            @endif
-
+            <td colspan="2" style="text-align: center; font-weight: bold; font-size: 20px;">
+                BẢNG THANH TOÁN TIỀN LƯƠNG VÀ CÁC KHOẢN PHỤ CẤP THEO LƯƠNG,</br>CÁC KHOẢN TRÍCH NỘP THEO LƯƠNG
+            </td>
         </tr>
 
         <tr>

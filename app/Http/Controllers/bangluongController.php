@@ -256,17 +256,19 @@ class bangluongController extends Controller
                 $inputs['phucaploaitru'] = '';
             }
 
-            //kiểm tra bảng lương cùng nguồn, lĩnh vực hoạt động, lương cơ bản =>ko cho tạo
-            $model_chk = bangluong::where('thang', $inputs['thang'])->where('nam', $inputs['nam'])
-                ->where('phanloai', 'BANGLUONG')
-                ->where('manguonkp', $inputs['manguonkp'])
-                ->where('linhvuchoatdong', $inputs['linhvuchoatdong'])
-                ->where('madv',session('admin')->madv)
-                ->first();
+            if(!isset($inputs['trungbangluong'])){
+                $model_chk = bangluong::where('thang', $inputs['thang'])->where('nam', $inputs['nam'])
+                    ->where('phanloai', 'BANGLUONG')
+                    ->where('manguonkp', $inputs['manguonkp'])
+                    ->where('linhvuchoatdong', $inputs['linhvuchoatdong'])
+                    ->where('madv',session('admin')->madv)
+                    ->first();
 
-            if(count($model_chk)>0){
-                return view('errors.trungbangluong');
+                if(count($model_chk)>0){
+                    return view('errors.trungbangluong');
+                }
             }
+
             $madv = session('admin')->madv;
             $inputs['mabl'] = $madv . '_' . getdate()[0];
             $inputs['madv'] = $madv;
@@ -2819,12 +2821,12 @@ class bangluongController extends Controller
 
     function update_chitiet(Request $request){
         if (Session::has('admin')) {
-            $inputs=$request->all();
-            $m_bl = bangluong::where('mabl',$inputs['mabl_hs'])->first();
-            $model = (new data())->getBangluong_ct_cb($m_bl->thang,$inputs['id_hs']);
+            $inputs = $request->all();
+            $m_bl = bangluong::where('mabl', $inputs['mabl_hs'])->first();
+            $model = (new data())->getBangluong_ct_cb($m_bl->thang, $inputs['id_hs']);
             //dd($model);
             $mapc = $inputs['mapc'];
-            $mapc_st ='st_'. $inputs['mapc'];
+            $mapc_st = 'st_' . $inputs['mapc'];
 
             $inputs['heso'] = chkDbl($inputs['heso']);
             $inputs['luongcb'] = chkDbl($inputs['luongcb']);
@@ -2832,11 +2834,13 @@ class bangluongController extends Controller
             //dd($inputs);
             //Tính lương mới
             $sotien_cl = $inputs['sotien'] - $model->$mapc_st;
-            $heso_cl = $inputs['heso'] - $model->$mapc;
+            $heso_cl = $inputs['heso'] > 1000? 0 : $inputs['heso'] - $model->$mapc;//nếu > 1000 - >số tiền ko pai công lại hệ số
+
             $model->$mapc_st = $inputs['sotien'];
             $model->$mapc = $inputs['heso'];
-            //Tính lại bao hiểm
-            if($model->congtac != 'THAISAN' && $model->congtac != 'DAINGAY' && $model->congtac != 'KHONGLUONG' ){
+            //Tính lại bao hiểm (các trường hợp thai sản, dai ngày, ko lương => số tiền = 0;
+            //  => nếu ko đóng bảo thì tỷ lệ bảo hiểm = 0)
+            if ($model->congtac != 'THAISAN' && $model->congtac != 'DAINGAY' && $model->congtac != 'KHONGLUONG') {
                 $baohiem = $model->st_heso + $model->st_vuotkhung + $model->st_pccv + $model->st_pctnn;
                 $model->stbhxh = round($model->bhxh * $baohiem, 0);
                 $model->stbhyt = round($model->bhyt * $baohiem, 0);
@@ -2852,11 +2856,11 @@ class bangluongController extends Controller
 
             $model->tonghs += $heso_cl;
             $model->ttl += $sotien_cl;
-            $model->luongtn = $model->ttl -  $model->ttbh - $model->giaml - $model->thuetn - $model->trichnop + $model->bhct + $model->tienthuong;
+            $model->luongtn = $model->ttl - $model->ttbh - $model->giaml - $model->thuetn - $model->trichnop + $model->bhct + $model->tienthuong;
             //dd($model);
             $model->save();
 
-            return redirect('/chuc_nang/bang_luong/can_bo?mabl='.$model->mabl.'&maso='.$model->id);
+            return redirect('/chuc_nang/bang_luong/can_bo?mabl=' . $model->mabl . '&maso=' . $model->id);
 
 
         } else
@@ -3438,8 +3442,6 @@ class bangluongController extends Controller
             $m_bl = bangluong::select('thang','nam','mabl','madv','ngaylap','phanloai','luongcoban')->where('mabl',$mabl)->first();
             $m_dv = dmdonvi::where('madv',$m_bl->madv)->first();
 
-            $model_congtac = dmphanloaict::select('mact','tenct')
-                ->wherein('mact', a_unique(array_column($model->toarray(),'mact')))->get();
 
             $thongtin=array('nguoilap'=>$m_bl->nguoilap,
                 'thang'=>$m_bl->thang,
@@ -3501,6 +3503,10 @@ class bangluongController extends Controller
                 }
             }
             */
+
+            $model_congtac = dmphanloaict::select('mact','tenct')
+                ->wherein('mact', a_unique(array_column($model->toarray(),'mact')))->get();
+
             return view('reports.bangluong.donvi.mautt107_m3')
                 ->with('model',$model->sortBy('stt'))
                 ->with('model_pb',getPhongBan())

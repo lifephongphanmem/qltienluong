@@ -40,6 +40,8 @@ class HosotruylinhTable extends Migration
             $table->double('hesott')->default(0);
             //chưa dùng, cho trường hợp truy lĩnh cả phụ cấp
             $table->double('heso')->default(0);
+            $table->double('hesobl')->default(0);
+            $table->double('hesopc')->default(0);
             $table->double('vuotkhung')->default(0);
             $table->double('pcct')->default(0);
             $table->double('pckct')->default(0);

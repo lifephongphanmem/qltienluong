@@ -370,6 +370,7 @@ Route::group(['prefix'=>'nghiep_vu'],function(){
         Route::get('danh_sach','hosotruylinhController@index');
         Route::get('del/{id}','hosotruylinhController@destroy');
         Route::get('create','hosotruylinhController@create');
+        Route::post('create_all','hosotruylinhController@create_all');
         Route::post('store','hosotruylinhController@store');
         Route::post('update','hosotruylinhController@update');
         Route::get('get','hosotruylinhController@getinfo');
@@ -377,6 +378,8 @@ Route::group(['prefix'=>'nghiep_vu'],function(){
         Route::get('get_nkp','hosotruylinhController@getinfor_nkp');
         Route::get('store_nkp','hosotruylinhController@store_nkp');
         Route::get('del_nkp','hosotruylinhController@destroy_nkp');
+
+        Route::post('del_mul','hosotruylinhController@destroy_mul');
     });
 
     Route::group(['prefix'=>'da_nghi'],function(){
@@ -555,6 +558,7 @@ Route::group(['prefix'=>'chuc_nang'],function(){
         Route::post('mautt107_m2','bangluongController@printf_mautt107_m2');
         Route::post('mautt107_m3','bangluongController@printf_mautt107_m3');
         Route::post('mautt107_pb','bangluongController@printf_mautt107_pb');
+        Route::post('mautt107_pb_m2','bangluong_inController@printf_mautt107_pb_m2');
         Route::post('mau03','bangluongController@printf_mau03');
         Route::post('mau04','bangluongController@printf_mau04');
         Route::post('mau05','bangluongController@printf_mau05');

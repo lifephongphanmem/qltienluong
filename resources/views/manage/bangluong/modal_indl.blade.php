@@ -281,6 +281,14 @@
                                                 <i class="fa fa-print"></i>&nbsp; Bảng lương mẫu các quỹ trích nộp</button>
                                         </div>
                                     </div>
+
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <button type="button" style="border-width: 0px" onclick="inblmtt107_pb('/chuc_nang/bang_luong/mautt107_pb_m2')" class="btn btn-default btn-xs mbs"
+                                                    title="Bảng lương của cán bộ theo mẫu C02-HD" data-target="#mautt107-modal" data-toggle="modal">
+                                                <i class="fa fa-print"></i>&nbsp; Bảng lương mẫu theo khối, tổ công tác</button>
+                                        </div>
+                                    </div>
                                 </div>
 
                                 <div class="row">
