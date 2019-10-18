@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 use App\Http\Requests;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\DB;
 
 class dataController extends Controller
 {
@@ -443,7 +444,8 @@ class dataController extends Controller
 
     function destroyBangluong_ct($thang, $mabl){
         //chưa chia bảng
-        \App\bangluong_ct::where('mabl', $mabl)->delete();
+        DB::statement("Delete From bangluong_ct where mabl ='".$mabl."'");
+        // \App\bangluong_ct::where('mabl', $mabl)->delete();
         /*
         switch($thang){
             case '01':{

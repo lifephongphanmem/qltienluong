@@ -11,3 +11,4 @@
 <input type="hidden" id="tencanbo" name="tencanbo" value="{{$model->tencanbo}}"/>
 <input type="hidden" id="maso" name="maso" value="{{$model->maso}}"/>
 <input type="hidden" id="maphanloai" name="maphanloai" value="{{$model->maphanloai}}"/>
+<input type="hidden" id="msngbac" name="msngbac" value="{{$model->msngbac}}"/>
