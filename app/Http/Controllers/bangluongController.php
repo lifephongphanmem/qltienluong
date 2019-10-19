@@ -44,7 +44,8 @@ use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Support\Facades\Response;
 
 class bangluongController extends Controller
-{   /*
+{
+    /*
     function index(Request $request)
     {
         if (Session::has('admin')) {
@@ -85,6 +86,7 @@ class bangluongController extends Controller
             return view('errors.notlogin');
     }
     bo*/
+
     function chitra(Request $request)
     {
         if (Session::has('admin')) {
@@ -168,9 +170,12 @@ class bangluongController extends Controller
                 ->select('nguonkinhphi_dinhmuc_ct.mapc')
                 ->where('nguonkinhphi_dinhmuc.manguonkp', $model->manguonkp)->where('nguonkinhphi_dinhmuc.madv', session('admin')->madv)
                 ->get()->count();
+            (new data())->destroyBangluong_ct($inputs['thang'],$mabl_cu);
+            /*
             $delchitiet = (new Delbangluong_ct($mabl_cu, $inputs['thang']))->delay(Carbon::now()->addSecond(10));
             //$delchitiet->delay(Carbon::now()->addSecond(10));
             dispatch($delchitiet);
+            */
             if ($dinhmuc > 0) {
                 $this->tinhluong_dinhmuc($inputs);
             } else {
