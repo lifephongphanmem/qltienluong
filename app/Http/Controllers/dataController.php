@@ -49,117 +49,114 @@ class dataController extends Controller
 
     //<editor-fold desc="Bảng chi tiết lương">
     function getBangluong_ct_th($thang, $nam, $madv, $manguonkp, $phanloai){
-        //sau này chia bảng
-        //for từng bảng rồi cộng vào trả lại mảng array
-        /*Cũ 08.08.2019
-        if ($manguonkp == null) {
-            $model = \App\bangluong::join('bangluong_ct', 'bangluong.mabl', '=', 'bangluong_ct.mabl')
-                ->where('bangluong.thang', $thang)
-                ->where('bangluong.nam', $nam)
-                ->where('bangluong.madv', $madv)
-                ->where('bangluong.phanloai', 'BANGLUONG')
-                ->select('bangluong_ct.*')
-                //->orderby('bangluong_ct.stt')
-                ->get()->sortby('stt')->toarray();
-        } else {
-            $model = \App\bangluong::join('bangluong_ct', 'bangluong.mabl', '=', 'bangluong_ct.mabl')
-                ->where('bangluong.thang', $thang)
-                ->where('bangluong.nam', $nam)
-                ->where('bangluong.madv', $madv)
-                ->wherein('bangluong.manguonkp', $manguonkp)
-                ->where('bangluong.phanloai', 'BANGLUONG')
-                ->select('bangluong_ct.*')
-                //->orderby('bangluong_ct.stt')
-                ->get()->sortby('stt')->toarray();
-        }
-
-        if ($manguonkp == null) {
-                $a_bl = \App\bangluong::select('mabl')
-                    ->where('thang', $thang)
-                    ->where('nam', $nam)
-                    ->where('madv', $madv)
-                    ->where('phanloai', $phanloai)->get();
-            } else {
-                $a_bl = \App\bangluong::select('mabl')
-                    ->where('thang', $thang)
-                    ->where('nam', $nam)
-                    ->where('madv', $madv)
-                    ->wherein('manguonkp', $manguonkp)
-                    ->where('phanloai', $phanloai)->get()->toarray();
-            }
-
-            return  \App\bangluong_ct::wherein('mabl',$a_bl)->orderby('stt')->get();
-        */
         $a_bl = \App\bangluong::select('mabl')
             ->where('thang', $thang)
             ->where('nam', $nam)
             ->where('madv', $madv)
             ->where('phanloai', $phanloai)->get()->toarray();
-        if ($manguonkp == null) {
-            return  \App\bangluong_ct::wherein('mabl',$a_bl)->orderby('stt')->get();
-        } else {
-            return  \App\bangluong_ct::wherein('mabl',$a_bl)->wherein('manguonkp', $manguonkp)->orderby('stt')->get();
-        }
 
-        /*
         switch($thang){
             case '01':{
-                return  \App\bangluong_ct_01::where('mabl',$mabl)->get();
+                if ($manguonkp == null) {
+                    return  \App\bangluong_ct_01::wherein('mabl',$a_bl)->orderby('stt')->get();
+                } else {
+                    return  \App\bangluong_ct_01::wherein('mabl',$a_bl)->wherein('manguonkp', $manguonkp)->orderby('stt')->get();
+                }
                 break;
             }
             case '02':{
-                return \App\bangluong_ct_02::where('mabl',$mabl)->get();
+                if ($manguonkp == null) {
+                    return  \App\bangluong_ct_02::wherein('mabl',$a_bl)->orderby('stt')->get();
+                } else {
+                    return  \App\bangluong_ct_02::wherein('mabl',$a_bl)->wherein('manguonkp', $manguonkp)->orderby('stt')->get();
+                }
                 break;
             }
             case '03':{
-                return \App\bangluong_ct_03::where('mabl',$mabl)->get();
+                if ($manguonkp == null) {
+                    return  \App\bangluong_ct_03::wherein('mabl',$a_bl)->orderby('stt')->get();
+                } else {
+                    return  \App\bangluong_ct_03::wherein('mabl',$a_bl)->wherein('manguonkp', $manguonkp)->orderby('stt')->get();
+                }
                 break;
             }
             case '04':{
-                return \App\bangluong_ct_04::where('mabl',$mabl)->get();
+                if ($manguonkp == null) {
+                    return  \App\bangluong_ct_04::wherein('mabl',$a_bl)->orderby('stt')->get();
+                } else {
+                    return  \App\bangluong_ct_04::wherein('mabl',$a_bl)->wherein('manguonkp', $manguonkp)->orderby('stt')->get();
+                }
                 break;
             }
             case '05':{
-                return \App\bangluong_ct_05::where('mabl',$mabl)->get();
+                if ($manguonkp == null) {
+                    return  \App\bangluong_ct_05::wherein('mabl',$a_bl)->orderby('stt')->get();
+                } else {
+                    return  \App\bangluong_ct_05::wherein('mabl',$a_bl)->wherein('manguonkp', $manguonkp)->orderby('stt')->get();
+                }
                 break;
             }
             case '06':{
-                return \App\bangluong_ct_06::where('mabl',$mabl)->get();
+                if ($manguonkp == null) {
+                    return  \App\bangluong_ct_06::wherein('mabl',$a_bl)->orderby('stt')->get();
+                } else {
+                    return  \App\bangluong_ct_06::wherein('mabl',$a_bl)->wherein('manguonkp', $manguonkp)->orderby('stt')->get();
+                }
                 break;
             }
             case '07':{
-                return \App\bangluong_ct_07::where('mabl',$mabl)->get();
+                if ($manguonkp == null) {
+                    return  \App\bangluong_ct_07::wherein('mabl',$a_bl)->orderby('stt')->get();
+                } else {
+                    return  \App\bangluong_ct_07::wherein('mabl',$a_bl)->wherein('manguonkp', $manguonkp)->orderby('stt')->get();
+                }
                 break;
             }
             case '08':{
-                return \App\bangluong_ct_08::where('mabl',$mabl)->get();
+                if ($manguonkp == null) {
+                    return  \App\bangluong_ct_08::wherein('mabl',$a_bl)->orderby('stt')->get();
+                } else {
+                    return  \App\bangluong_ct_08::wherein('mabl',$a_bl)->wherein('manguonkp', $manguonkp)->orderby('stt')->get();
+                }
                 break;
             }
             case '09':{
-                return \App\bangluong_ct_09::where('mabl',$mabl)->get();
+                if ($manguonkp == null) {
+                    return  \App\bangluong_ct_09::wherein('mabl',$a_bl)->orderby('stt')->get();
+                } else {
+                    return  \App\bangluong_ct_09::wherein('mabl',$a_bl)->wherein('manguonkp', $manguonkp)->orderby('stt')->get();
+                }
                 break;
             }
             case '10':{
-                return \App\bangluong_ct_10::where('mabl',$mabl)->get();
+                if ($manguonkp == null) {
+                    return  \App\bangluong_ct_10::wherein('mabl',$a_bl)->orderby('stt')->get();
+                } else {
+                    return  \App\bangluong_ct_10::wherein('mabl',$a_bl)->wherein('manguonkp', $manguonkp)->orderby('stt')->get();
+                }
                 break;
             }
             case '11':{
-                return \App\bangluong_ct_11::where('mabl',$mabl)->get();
+                if ($manguonkp == null) {
+                    return  \App\bangluong_ct_11::wherein('mabl',$a_bl)->orderby('stt')->get();
+                } else {
+                    return  \App\bangluong_ct_11::wherein('mabl',$a_bl)->wherein('manguonkp', $manguonkp)->orderby('stt')->get();
+                }
                 break;
             }
             case '12':{
-                return \App\bangluong_ct_12::where('mabl',$mabl)->get();
+                if ($manguonkp == null) {
+                    return  \App\bangluong_ct_12::wherein('mabl',$a_bl)->orderby('stt')->get();
+                } else {
+                    return  \App\bangluong_ct_12::wherein('mabl',$a_bl)->wherein('manguonkp', $manguonkp)->orderby('stt')->get();
+                }
                 break;
             }
         }
-        */
     }
 
     function storeBangLuong($thang, $data){
-        //chưa chia bảng
-        \App\bangluong_ct::insert($data);
-
-        /*
+        //\App\bangluong_ct::insert($data);
         switch($thang){
             case '01':{
                 \App\bangluong_ct_01::insert($data);
@@ -210,13 +207,11 @@ class dataController extends Controller
                 break;
             }
         }
-        */
     }
 
     function createBangLuong($thang, $data){
         //chưa chia bảng
-        \App\bangluong_ct::create($data);
-        /*
+        //\App\bangluong_ct::create($data);
         switch($thang){
             case '01':{
                 \App\bangluong_ct_01::create($data);
@@ -267,13 +262,10 @@ class dataController extends Controller
                 break;
             }
         }
-        */
     }
 
     function getBangluong_ct($thang, $mabl){
-        //chưa chia bảng
-        return  \App\bangluong_ct::where('mabl',$mabl)->get();
-        /*
+        //return  \App\bangluong_ct::where('mabl',$mabl)->get();
         switch($thang){
             case '01':{
                 return  \App\bangluong_ct_01::where('mabl',$mabl)->get();
@@ -324,13 +316,11 @@ class dataController extends Controller
                 break;
             }
         }
-        */
     }
 
     function getBangluong_ct_cb($thang, $id){
         //chưa chia bảng (ko dùng macanbo do 1 cán bộ có thể có nhiều bản ghi - kiêm nhiệm)
-        return  \App\bangluong_ct::findorfail($id);
-        /*
+        //return  \App\bangluong_ct::findorfail($id);
         switch($thang){
             case '01':{
                 return  \App\bangluong_ct_01::findorfail($id);
@@ -381,129 +371,120 @@ class dataController extends Controller
                 break;
             }
         }
-        */
     }
 
     //lấy bảng lương chi tiết theo mảng mabl
     function getBangluong_ct_ar($thang, $a_mabl, $a_col = '*'){
-        //chưa chia bảng
-        return  \App\bangluong_ct::select($a_col)->wherein('mabl',$a_mabl)->get();
-        /*
+        //return  \App\bangluong_ct::select($a_col)->wherein('mabl',$a_mabl)->get();
         switch($thang){
             case '01':{
-                return  \App\bangluong_ct_01::wherein('mabl',$a_mabl)->get();
+                return  \App\bangluong_ct_01::select($a_col)->wherein('mabl',$a_mabl)->get();
                 break;
             }
             case '02':{
-                return \App\bangluong_ct_02::wherein('mabl',$a_mabl)->get();
+                return \App\bangluong_ct_02::select($a_col)->wherein('mabl',$a_mabl)->get();
                 break;
             }
             case '03':{
-                return \App\bangluong_ct_03::wherein('mabl',$a_mabl)->get();
+                return \App\bangluong_ct_03::select($a_col)->wherein('mabl',$a_mabl)->get();
                 break;
             }
             case '04':{
-                return \App\bangluong_ct_04::wherein('mabl',$a_mabl)->get();
+                return \App\bangluong_ct_04::select($a_col)->wherein('mabl',$a_mabl)->get();
                 break;
             }
             case '05':{
-                return \App\bangluong_ct_05::wherein('mabl',$a_mabl)->get();
+                return \App\bangluong_ct_05::select($a_col)->wherein('mabl',$a_mabl)->get();
                 break;
             }
             case '06':{
-                return \App\bangluong_ct_06::wherein('mabl',$a_mabl)->get();
+                return \App\bangluong_ct_06::select($a_col)->wherein('mabl',$a_mabl)->get();
                 break;
             }
             case '07':{
-                return \App\bangluong_ct_07::wherein('mabl',$a_mabl)->get();
+                return \App\bangluong_ct_07::select($a_col)->wherein('mabl',$a_mabl)->get();
                 break;
             }
             case '08':{
-                return \App\bangluong_ct_08::wherein('mabl',$a_mabl)->get();
+                return \App\bangluong_ct_08::select($a_col)->wherein('mabl',$a_mabl)->get();
                 break;
             }
             case '09':{
-                return \App\bangluong_ct_09::wherein('mabl',$a_mabl)->get();
+                return \App\bangluong_ct_09::select($a_col)->wherein('mabl',$a_mabl)->get();
                 break;
             }
             case '10':{
-                return \App\bangluong_ct_10::wherein('mabl',$a_mabl)->get();
+                return \App\bangluong_ct_10::select($a_col)->wherein('mabl',$a_mabl)->get();
                 break;
             }
             case '11':{
-                return \App\bangluong_ct_11::wherein('mabl',$a_mabl)->get();
+                return \App\bangluong_ct_11::select($a_col)->wherein('mabl',$a_mabl)->get();
                 break;
             }
             case '12':{
-                return \App\bangluong_ct_12::wherein('mabl',$a_mabl)->get();
+                return \App\bangluong_ct_12::select($a_col)->wherein('mabl',$a_mabl)->get();
                 break;
             }
         }
-        */
     }
 
     function destroyBangluong_ct($thang, $mabl){
-        //chưa chia bảng
-        DB::statement("Delete From bangluong_ct where mabl ='".$mabl."'");
-        // \App\bangluong_ct::where('mabl', $mabl)->delete();
-        /*
+        //DB::statement("Delete From bangluong_ct where mabl ='".$mabl."'");
+
         switch($thang){
             case '01':{
-                \App\bangluong_ct_01::where('mabl',$mabl)->delete();
+                DB::statement("Delete From bangluong_ct_01 where mabl ='".$mabl."'");
                 break;
             }
             case '02':{
-                \App\bangluong_ct_02::where('mabl',$mabl)->delete();
+                DB::statement("Delete From bangluong_ct_02 where mabl ='".$mabl."'");
                 break;
             }
             case '03':{
-                \App\bangluong_ct_03::where('mabl',$mabl)->delete();
+                DB::statement("Delete From bangluong_ct_03 where mabl ='".$mabl."'");
                 break;
             }
             case '04':{
-                \App\bangluong_ct_04::where('mabl',$mabl)->delete();
+                DB::statement("Delete From bangluong_ct_04 where mabl ='".$mabl."'");
                 break;
             }
             case '05':{
-                \App\bangluong_ct_05::where('mabl',$mabl)->delete();
+                DB::statement("Delete From bangluong_ct_05 where mabl ='".$mabl."'");
                 break;
             }
             case '06':{
-                \App\bangluong_ct_06::where('mabl',$mabl)->delete();
+                DB::statement("Delete From bangluong_ct_06 where mabl ='".$mabl."'");
                 break;
             }
             case '07':{
-                \App\bangluong_ct_07::where('mabl',$mabl)->delete();
+                DB::statement("Delete From bangluong_ct_07 where mabl ='".$mabl."'");
                 break;
             }
             case '08':{
-                \App\bangluong_ct_08::where('mabl',$mabl)->delete();
+                DB::statement("Delete From bangluong_ct_08 where mabl ='".$mabl."'");
                 break;
             }
             case '09':{
-                \App\bangluong_ct_09::where('mabl',$mabl)->delete();
+                DB::statement("Delete From bangluong_ct_09 where mabl ='".$mabl."'");
                 break;
             }
             case '10':{
-                \App\bangluong_ct_10::where('mabl',$mabl)->delete();
+                DB::statement("Delete From bangluong_ct_10 where mabl ='".$mabl."'");
                 break;
             }
             case '11':{
-                \App\bangluong_ct_11::where('mabl',$mabl)->delete();
+                DB::statement("Delete From bangluong_ct_11 where mabl ='".$mabl."'");
                 break;
             }
             case '12':{
-                \App\bangluong_ct_12::where('mabl',$mabl)->delete();
+                DB::statement("Delete From bangluong_ct_12 where mabl ='".$mabl."'");
                 break;
             }
         }
-        */
     }
 
     function destroyBangluong_ct_cb($thang, $id){
-        //chưa chia bảng
-        \App\bangluong_ct::findorfail($id)->delete();
-        /*
+        //\App\bangluong_ct::findorfail($id)->delete();
         switch($thang){
             case '01':{
                 \App\bangluong_ct_01::findorfail($id)->delete();
@@ -554,7 +535,6 @@ class dataController extends Controller
                 break;
             }
         }
-        */
     }
     //</editor-fold>
 

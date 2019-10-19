@@ -36,5 +36,19 @@ class bangluong extends Model
     SET bangluong_ct.manguonkp = bangluong.manguonkp
     WHERE bangluong.phanloai ='BANGLUONG';
 
+INSERT INTO  bangluong_ct_01 SELECT * FROM bangluong_ct WHERE thang = '01';
+INSERT INTO  bangluong_ct_02 SELECT * FROM bangluong_ct WHERE thang = '02';
+INSERT INTO  bangluong_ct_03 SELECT * FROM bangluong_ct WHERE thang = '03';
+INSERT INTO  bangluong_ct_04 SELECT * FROM bangluong_ct WHERE thang = '04';
+INSERT INTO  bangluong_ct_05 SELECT * FROM bangluong_ct WHERE thang = '05';
+INSERT INTO  bangluong_ct_06 SELECT * FROM bangluong_ct WHERE thang = '06';
+
+INSERT bangluong_ct_07 SELECT * FROM bangluong_ct WHERE thang = '07';
+INSERT bangluong_ct_08 SELECT * FROM bangluong_ct WHERE thang = '08';
+INSERT bangluong_ct_09 SELECT * FROM bangluong_ct WHERE thang = '09';
+INSERT bangluong_ct_10 SELECT * FROM bangluong_ct WHERE thang = '10';
+INSERT bangluong_ct_11 SELECT * FROM bangluong_ct WHERE thang = '11';
+INSERT bangluong_ct_12 SELECT * FROM bangluong_ct WHERE thang = '12';
+
 
  */

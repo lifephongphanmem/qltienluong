@@ -10,6 +10,8 @@ class bangluong_ct_10 extends Model
     protected $fillable = [
         'id',
         'mabl',
+        'manguonkp',//lưu mã nguồn bảng lương truy lĩnh
+        'maso',//mã số truy lĩnh
         'macvcq',
         'mapb',
         'mact',
@@ -67,6 +69,8 @@ class bangluong_ct_10 extends Model
         'ttl',
         'giaml',
         'thuetn',
+        'tienthuong',
+        'trichnop',
         'bhct',
         'tluong',
         'stbhxh',
@@ -84,7 +88,8 @@ class bangluong_ct_10 extends Model
         'thangtl',
         'ngaytl',
         'songaytruc',
-//lưu theo số tiền
+        'songaycong',
+        //lưu theo số tiền
         'st_heso',
         'st_hesobl',
         'st_hesopc',
@@ -120,6 +125,10 @@ class bangluong_ct_10 extends Model
         'st_pcdith',
         'st_luonghd',
         'st_pcphth',
+        'st_pcctp',
+        'pcctp',
+        'st_pctaicu',
+        'pctaicu',
         //lưu tỷ lệ bảo hiểm (đã quy về hệ số)
         'bhxh',
         'bhyt',
@@ -128,6 +137,14 @@ class bangluong_ct_10 extends Model
         'bhxh_dv',
         'bhyt_dv',
         'bhtn_dv',
-        'kpcd_dv'
+        'kpcd_dv',
+        //lưu hệ số gốc 1 số loại pc tính %
+        'hs_vuotkhung',
+        'hs_pctnn',
+        'hs_pccovu',
+        'hs_pcud61',
+        'hs_pcudn',
+        'luuheso',
+        'ghichu',
     ];
 }
