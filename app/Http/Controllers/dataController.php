@@ -595,5 +595,39 @@ class dataController extends Controller
 
         return $m_canbo;
     }
+
+    //Kiểm tra hồ sơ lương cán bộ (ngạch bậc, thâm niên nghề căn cứ vào ngày tháng)
+    //xét cả tháng
+    function getCanBo_bl($m_canbo, $m_hsluong, $ngayxet){
+        $a_nglg = \App\ngachluong::all()->keyby('msngbac')->toarray();
+        foreach($m_canbo as $canbo){
+            //xet lương ngạch bậc
+            if(getDayVn($canbo->ngaytu) != '' && $canbo->ngaytu > $ngayxet) {
+                if (!isset($a_nglg[$canbo->msngbac])) {
+                    continue;
+                }
+                $nglg = $a_nglg[$canbo->msngbac];
+                $canbo->ngayden = $canbo->ngaytu;//xét lại ngày nâng lương
+                if ($canbo->vuotkhung == 0 && $canbo->heso <= $nglg['hesolonnhat']) {//cán bộ đang hưởng bâc lương cuối (kỳ sau vk)
+                    $canbo->heso -= $nglg['hesochenhlech'];
+                } else {
+                    $canbo->vuotkhung = $canbo->vuotkhung <= 5 ? 0 : $canbo->vuotkhung - 1;
+                }
+            }
+            //xét thâm niên nghề
+            if(getDayVn($canbo->tnntungay) != '' && $canbo->tnntungay > $ngayxet){
+                $canbo->pctnn = $canbo->pctnn <= 5 ? 0 : $canbo->pctnn - 1;
+                $canbo->tnndenngay = $canbo->tnntungay;//xét lại ngày nâng lương
+            }
+
+            //xét các hệ số
+            foreach ($m_hsluong->where('macanbo',$canbo->macanbo) as $hsl){
+                $maso = $hsl->mapc;
+                $canbo->$maso = $hsl->heso;
+            }
+        }
+
+        return $m_canbo;
+    }
     //</editor-fold>
 }

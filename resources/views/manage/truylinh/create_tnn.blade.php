@@ -143,7 +143,7 @@
             //cùng năm => so sánh tháng
             var ngaytu = $('#ngaytu').val();
             var ngayden = $('#ngayden').val();
-            if(ngaytu =='' || ngayden ==''){
+            if(ngaytu =='' || ngayden =='' || ngayden < ngaytu){
                 $('#thangtl').val(0);
                 $('#ngaytl').val(0);
             }else{

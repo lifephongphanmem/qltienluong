@@ -24,6 +24,7 @@ class hosophucap extends Model
         'bac',
         'heso',
         'ghichu',
+        'madv',
     ];
     /*DELETE FROM `hosocanbo` WHERE madv not in (SELECT madv FROM dmdonvi);
      * Hệ số lương

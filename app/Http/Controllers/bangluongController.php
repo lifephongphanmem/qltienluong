@@ -6,6 +6,7 @@ use App\bangluong;
 //use App\bangluong_ct;
 use App\bangluong_ct;
 use App\hosoluong;
+use App\hosophucap;
 use App\hosothoicongtac;
 use App\Http\Controllers\dataController as data;
 use App\bangluong_phucap;
@@ -359,8 +360,17 @@ class bangluongController extends Controller
 
         $m_cb = hosocanbo::select($a_th)->where('madv', $inputs['madv'])->wherenotin('macanbo', $a_cbn)->get();
         if (isset($inputs['capnhatnangluong'])) {
-            $m_cb = (new data())->getCanBo($m_cb, $ngaydauthang);
+            $m_hs = hosophucap::where('madv', session('admin')->madv)
+                ->wherenotin('mapc', ['heso', 'vuotkhung','pctnn'])
+                ->where(function ($qr) use ($ngaydauthang) {
+                    $qr->where(function($q) use ($ngaydauthang) {
+                        $q->where('ngaytu', '<=', $ngaydauthang)
+                            ->where('ngayden', '>', $ngaydauthang);
+                    })->orwhere('ngayden', '<', $ngaydauthang);
+                })->get();
+            $m_cb = (new data())->getCanBo_bl($m_cb, $m_hs, $ngaydauthang);
         }
+
         foreach ($m_cb as $canbo) {
             //Dùng tìm kiếm các bộ nào phù hợp. Do lvhd là mảng nên pải lọc
             $a_lv = explode(',', $canbo->lvhd);
@@ -936,9 +946,15 @@ class bangluongController extends Controller
         //chay hàm lấy lại hàm sửa dữ liệu
 
         if (isset($inputs['capnhatnangluong'])) {
-            $m_cb = (new data())->getCanBo($m_cb, $ngaydauthang);
-            $m_hs = hosoluong::where('madv', session('admin')->madv)->get();
-            //dd($m_hs);
+            $m_hs = hosophucap::where('madv', session('admin')->madv)
+                ->wherenotin('mapc', ['heso', 'vuotkhung','pctnn'])
+                ->where(function ($qr) use ($ngaydauthang) {
+                    $qr->where(function($q) use ($ngaydauthang) {
+                        $q->where('ngaytu', '<=', $ngaydauthang)
+                            ->where('ngayden', '>', $ngaydauthang);
+                    })->orwhere('ngayden', '<', $ngaydauthang);
+                })->get();
+            $m_cb = (new data())->getCanBo_bl($m_cb, $m_hs, $ngaydauthang);
         }
 
         $m_cb = $m_cb->keyBy('macanbo')->toArray();

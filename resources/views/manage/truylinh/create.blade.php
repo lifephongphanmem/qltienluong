@@ -31,8 +31,6 @@
 @stop
 
 @section('content')
-
-
     <h3 class="page-title">
         Thông tin truy lĩnh lương của cán bộ - {{$model->tencanbo}}
     </h3>
@@ -41,7 +39,6 @@
     <!-- BEGIN DASHBOARD STATS -->
     <div class="row center">
         <div class="col-md-12 center">
-            <!-- BEGIN VALIDATION STATES-->
             <div class="portlet box blue">
                 <!--div class="portlet-title">
                 </div-->
@@ -199,6 +196,9 @@
                 <!-- END VALIDATION STATES-->
                 </div>
             </div>
+        </div>
+    </div>
+
     <script type="text/javascript">
         $('.ngaythang').change(function(){
             tinhtoan();
@@ -208,7 +208,7 @@
             //cùng năm => so sánh tháng
             var ngaytu = $('#ngaytu').val();
             var ngayden = $('#ngayden').val();
-            if(ngaytu =='' || ngayden ==''){
+            if(ngaytu =='' || ngayden =='' || ngayden < ngaytu){
                 $('#thangtl').val(0);
                 $('#ngaytl').val(0);
             }else{
@@ -310,20 +310,6 @@
                     $('#ngaytl').val(ngaytl);
                 }
             }
-        }
-
-        function validateForm(){
-            var validator = $("#create_tttaikhoan").validate({
-                rules: {
-                    name :"required",
-                    tendv :"required"
-
-                },
-                messages: {
-                    name :"Chưa nhập dữ liệu",
-                    tendv :"Chưa nhập dữ liệu"
-                }
-            });
         }
     </script>
 

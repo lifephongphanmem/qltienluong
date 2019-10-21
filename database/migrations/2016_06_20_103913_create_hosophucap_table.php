@@ -29,6 +29,7 @@ class CreateHosophucapTable extends Migration
             $table->integer('bac')->default(1);
             $table->double('heso')->default(0);
             $table->string('ghichu')->nullable();
+            $table->string('madv', 50)->nullable();
             $table->timestamps();
         });
     }
