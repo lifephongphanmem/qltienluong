@@ -586,9 +586,12 @@ class bangluongController extends Controller
                     goto ketthuc_phucap;
                 }
 
-                if ($pc->phanloai != '2') {
+                if ($cb->$mapc < 500) {
                     $tonghs += $cb->$mapc;
                 }
+//                if ($pc->phanloai != '2') {
+//                    $tonghs += $cb->$mapc;
+//                }
 
                 $pc->sotien = $daingay ? round($pc->sotien * $ptdn, 0) : $pc->sotien;
                 $tien += $pc->sotien;
@@ -770,8 +773,8 @@ class bangluongController extends Controller
             }
 
             //
-            $canbo->pcthni = $cb->pcthni; //set vao hồ sơ cán bộ để tính công thức lương
-            $canbo->pctn = $cb->pctn;
+            $canbo->pcthni = isset($cb->pcthni) ? $cb->pcthni : 0; //set vao hồ sơ cán bộ để tính công thức lương
+            $canbo->pctn = isset($cb->pctn) ? $cb->pctn : 0;
             $ths = 0;
             $tt = 0;
             //lương cơ bản gán theo loại phụ cấp => tính tiền luôn
@@ -935,7 +938,7 @@ class bangluongController extends Controller
         if (isset($inputs['capnhatnangluong'])) {
             $m_cb = (new data())->getCanBo($m_cb, $ngaydauthang);
             $m_hs = hosoluong::where('madv', session('admin')->madv)->get();
-            dd($m_hs);
+            //dd($m_hs);
         }
 
         $m_cb = $m_cb->keyBy('macanbo')->toArray();
@@ -1131,9 +1134,14 @@ class bangluongController extends Controller
                 if ($daingay && !in_array($mapc, $a_ts)) {
                     goto ketthuc_phucap;
                 }
-                if($a_pc[$k]['phanloai'] != '2'){
+
+                if($m_cb[$key][$mapc] < 500){
                     $tonghs += $m_cb[$key][$mapc];
                 }
+
+//                if($a_pc[$k]['phanloai'] != '2'){
+//                    $tonghs += $m_cb[$key][$mapc];
+//                }
                 //$tien += $a_pc[$k]['sotien'];
                 $a_pc[$k]['sotien'] = $daingay ? round($a_pc[$k]['sotien'] * $ptdn, 0) : round($a_pc[$k]['sotien'], 0);
                 $tien += $a_pc[$k]['sotien'];
@@ -1355,8 +1363,8 @@ class bangluongController extends Controller
             }
 
             $tonghs = $tien = 0;
-            $canbo['pcthni'] = $m_cb_kn[$i]['pcthni']; //set vao hồ sơ cán bộ để tính công thức lương
-            $canbo['pctn'] = $m_cb_kn[$i]['pctn'];
+            $canbo['pcthni'] = isset($m_cb_kn[$i]['pcthni']) ? $m_cb_kn[$i]['pcthni'] : 0; //set vao hồ sơ cán bộ để tính công thức lương
+            $canbo['pctn'] = isset($m_cb_kn[$i]['pctn']) ? $m_cb_kn[$i]['pctn'] : 0;
 
             foreach ($a_pc as $k => $v) {
                 $mapc = $v['mapc'];
@@ -1411,9 +1419,12 @@ class bangluongController extends Controller
                 }
 
                 $tien += $m_cb_kn[$i]['st_' . $mapc];
-                if($a_pc[$k]['phanloai'] != '2'){
+                if($m_cb_kn[$i][$mapc] < 500){
                     $tonghs += $m_cb_kn[$i][$mapc];
                 }
+//                if($a_pc[$k]['phanloai'] != '2'){
+//                    $tonghs += $m_cb_kn[$i][$mapc];
+//                }
 
 //                $a_pc[$k]['mabl'] = $inputs['mabl'];
 //                $a_pc[$k]['luongcoban'] = $inputs['luongcoban'];
