@@ -25,8 +25,12 @@ class tonghopnguon_huyenController extends Controller
     public function index(){
         if (Session::has('admin')) {
             $madv = session('admin')->madv;
-            $model_nguon = nguonkinhphi::where('macqcq', $madv)->where('trangthai','DAGUI')->get();
+            //$model_nguon = nguonkinhphi::where('macqcq', $madv)->where('trangthai','DAGUI')->get();
             $model_nguon_tinh = nguonkinhphi_tinh::where('madv', $madv)->get();
+            $model_nguon = nguonkinhphi_huyen::wherein('madv', function($query) use($madv){
+                $query->select('madv')->from('dmdonvi')->where('macqcq',$madv)->where('madv','<>',$madv)->get();
+            })->where('trangthai', 'DAGUI')
+                ->get();
             //$model_nguon_khoi = nguonkinhphi_khoi::where('madv', $madv)->get();
             $model = dmthongtuquyetdinh::all();
             $a_trangthai = getStatus();
@@ -79,7 +83,9 @@ class tonghopnguon_huyenController extends Controller
 
         if (Session::has('admin')) {
             $inputs = $request->all();
-            $model = nguonkinhphi::where('masodv', $inputs['masodv'])->first();
+            $model = nguonkinhphi_huyen::where('masodv', $inputs['masodv'])->first();
+            //$model = nguonkinhphi::where('masodv', $inputs['masodv'])->first();
+            //dd($model->toarray());
             $model->trangthai = 'TRALAI';
             $model->lydo = $inputs['lydo'];
             $model->save();

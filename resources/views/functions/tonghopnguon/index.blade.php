@@ -56,7 +56,7 @@
                                     <td>
                                         <a href="{{url($furl_th.'tonghop?sohieu='.$value->sohieu)}}" class="btn btn-default btn-xs" target="_blank">
                                             <i class="fa fa-print"></i>&nbsp; Số liệu tổng hợp</a>
-                                            @if($value['trangthai'] == 'CHUAGUI')
+                                            @if($value['trangthai'] == 'CHUAGUI' || $value['trangthai'] == 'TRALAI')
                                                 <button type="button" class="btn btn-default btn-xs" onclick="confirmChuyen('{{$value->sohieu}}')" data-target="#chuyen-modal" data-toggle="modal"><i class="fa fa-share-square-o"></i>&nbsp;
                                                     Gửi dữ liệu</button>
                                             @else
@@ -67,6 +67,7 @@
                                         @if($value['trangthai'] == 'TRALAI')
                                             <button type="button" class="btn btn-default btn-sm" onclick="getLyDo('{{$value['masodv']}}')" data-target="#tralai-modal" data-toggle="modal"><i class="fa fa-share-square-o"></i>&nbsp;
                                                 Lý do trả lại</button>
+
                                         @endif
 
                                         <a href="{{url($furl_xem.'?sohieu='.$value->sohieu.'&trangthai=ALL&phanloai=ALL')}}" class="btn btn-default btn-xs">
@@ -113,6 +114,27 @@
     <script>
         function confirmChuyen(sohieu) {
             document.getElementById("sohieu").value = sohieu;
+        }
+        function getLyDo(masodv){
+            var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
+            $.ajax({
+                url: '{{$furl}}' + '/getlydo',
+                type: 'GET',
+                data: {
+                    _token: CSRF_TOKEN,
+                    masodv: masodv
+                },
+                dataType: 'JSON',
+                success: function (data) {
+                    $('#lydo').val(data.lydo);
+                },
+                error: function(message){
+                    toastr.error(message,'Lỗi!');
+                }
+            });
+
+            //$('#madvbc').val(madvbc);
+            //$('#phongban-modal').modal('show');
         }
     </script>
 

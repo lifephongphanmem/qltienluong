@@ -14,6 +14,7 @@ use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Session;
+use Maatwebsite\Excel\Facades\Excel;
 
 class xemdulieu_nguonController extends Controller
 {
@@ -91,7 +92,7 @@ class xemdulieu_nguonController extends Controller
             $nam = dmthongtuquyetdinh::where('sohieu',$inputs['sohieu'])->first()->namdt;
             //$ngay = date("Y-m-t", strtotime($inputs['nam'].'-'.$inputs['thang'].'-01'));
             $a_trangthai = array('ALL' => '--Chọn trạng thái dữ liệu--', 'CHOGUI' => 'Chưa gửi dữ liệu', 'DAGUI' => 'Đã gửi dữ liệu');
-            $model_donvi = dmdonvi::select('madv', 'tendv','maphanloai')
+            $model_donvi = dmdonvi::select('madv', 'tendv','maphanloai','phanloaitaikhoan')
                 ->where('macqcq',$madv)->where('madv','<>',$madv)
                 ->wherenotin('madv', function ($query) use ($madv,$nam) {
                     $query->select('madv')->from('dmdonvi')
@@ -113,6 +114,26 @@ class xemdulieu_nguonController extends Controller
             ->wherein('madv', function($query) use($madv){
                 $query->select('madv')->from('dmdonvi')->where('macqcq',$madv)->where('madv','<>',$madv)->get();
             })->get();
+
+            if(session('admin')->phamvitonghop == 'HUYEN')
+            {
+                $model_donvi = dmdonvi::select('dmdonvi.madv', 'dmdonvi.tendv','phanloaitaikhoan','maphanloai')
+                    ->where('macqcq',$madv)->where('madv','<>',$madv)
+                    ->wherenotin('madv', function ($query) use ($madv,$nam) {
+                        $query->select('madv')->from('dmdonvi')
+                            ->whereyear('ngaydung', '<=', $nam)
+                            ->where('trangthai', 'TD')
+                            ->get();
+                    })
+                    ->get();
+                $model_nguon = nguonkinhphi_huyen::where('trangthai','DAGUI')
+                    ->where('macqcq',$madv)
+                    ->wherein('madv', function($query) use($madv){
+                        $query->select('madv')->from('dmdonvi')->where('macqcq',$madv)->where('madv','<>',$madv)->get();
+                    })->get();
+            }
+            //dd($model_nguon->toarray());
+
 
             $model_nguon_khoi = nguonkinhphi_tinh::where('madv', $madv)->get();
 
@@ -231,8 +252,6 @@ class xemdulieu_nguonController extends Controller
                     ->with('furl', '/chuc_nang/tong_hop_luong/')
                     ->with('pageTitle', 'Danh sách đơn vị tổng hợp lương');
             }
-
-
         } else
             return view('errors.notlogin');
     }

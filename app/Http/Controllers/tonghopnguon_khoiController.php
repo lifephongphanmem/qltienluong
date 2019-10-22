@@ -105,11 +105,11 @@ class tonghopnguon_khoiController extends Controller
                     }
                 }
             }
-
-            return view('functions.tonghopnguon.index')
+                return view('functions.tonghopnguon.index')
                 ->with('model', $model)
                 ->with('a_trangthai', $a_trangthai)
                 ->with('soluong',$soluong)
+                ->with('furl','/chuc_nang/tong_hop_nguon/khoi')
                 ->with('furl_xem','/chuc_nang/xem_du_lieu/nguon/khoi')
                 ->with('furl_th','/chuc_nang/tong_hop_nguon/khoi/')
                 ->with('pageTitle','Danh sách đơn vị tổng hợp nguồn kinh phí');
@@ -324,5 +324,20 @@ class tonghopnguon_khoiController extends Controller
                 ->with('pageTitle','Danh sách nguồn kinh phí của đơn vị');
         } else
             return view('errors.notlogin');
+    }
+    function getlydo(Request $request){
+        if(!Session::has('admin')) {
+            $result = array(
+                'status' => 'fail',
+                'message' => 'permission denied',
+            );
+            die(json_encode($result));
+        }
+
+        $inputs = $request->all();
+
+        $model = nguonkinhphi_khoi::select('lydo')->where('masodv',$inputs['masodv'])->first();
+
+        die($model);
     }
 }
