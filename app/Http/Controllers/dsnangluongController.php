@@ -329,6 +329,8 @@ class dsnangluongController extends Controller
                 $hoso = hosocanbo::where('macanbo', $canbo->macanbo)->first();
                 $pl_phucap = $hoso->heso == $canbo->heso ? 'vuotkhung':'heso';
 
+                $hoso->hesobl = $hoso->hesobl + $hoso->heso - $canbo->heso;
+                $hoso->hesobl = $hoso->hesobl < 0 ? 0 : $hoso->hesobl;
                 $hoso->heso = $canbo->heso;
                 $hoso->bac = $canbo->bac;
                 $hoso->vuotkhung = $canbo->vuotkhung;

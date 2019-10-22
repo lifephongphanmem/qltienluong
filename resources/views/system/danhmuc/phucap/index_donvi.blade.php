@@ -58,9 +58,8 @@
                         </thead>
 
                         <tbody>
-                        @if(isset($model))
                             @foreach($model as $key=>$value)
-                                <tr>
+                                <tr class="{{$value->phanloai == 3? getTextStatus('CHUADL') : ''}}">
                                     <td class="text-center">{{$value->stt}}</td>
                                     <td>{{$value->mapc}}</td>
                                     <td>{{$value->tenpc}}</td>
@@ -79,7 +78,7 @@
                                     </td>
                                 </tr>
                             @endforeach
-                        @endif
+
                         </tbody>
                     </table>
                 </div>
