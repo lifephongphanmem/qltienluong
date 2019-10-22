@@ -69,6 +69,7 @@ class tonghopnguon_huyenController extends Controller
                 ->with('model', $model)
                 ->with('a_trangthai', $a_trangthai)
                 ->with('soluong',$soluong)
+                ->with('furl','/chuc_nang/xem_du_lieu/nguon/huyen')
                 ->with('furl_xem','/chuc_nang/xem_du_lieu/nguon/huyen')
                 ->with('furl_th','/chuc_nang/tong_hop_nguon/huyen/')
                 ->with('pageTitle','Danh sách đơn vị tổng hợp nguồn kinh phí');
