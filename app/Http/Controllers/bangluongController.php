@@ -460,7 +460,7 @@ class bangluongController extends Controller
             if ($cb->theodoi != 2) {
                 $cb->heso = round($cb->heso * $cb->pthuong / 100, session('admin')->lamtron);
             }
-            $cb->vuotkhung = round($cb->heso * $cb->vuotkhung / 100, session('admin')->lamtron);
+            $cb->vuotkhung = isset($cb->vuotkhung) ? round($cb->heso * $cb->vuotkhung / 100, session('admin')->lamtron) : 0;
 
             foreach ($a_pc_coth as $phca) {//tính trc 1 số phụ cấp làm phụ cấp cơ sở
                 $pc = $model_phucap->where('mapc', $phca)->first();
@@ -501,11 +501,9 @@ class bangluongController extends Controller
 
             //tính hệ số bảo hiểm (cán bộ thai sản + nghỉ ko lương + cán bộ điều động đến => ko pai đóng bảo hiểm =>set luon bảo hiểm = 0 để ko tính)
             if ($khongluong || $daingay || $thaisan || $cb->theodoi == 4) {
-                $cb->baohiem = $cb->ttbh_dv = $cb->ttbh = 0;
+                $cb->baohiem = 0;
                 $cb->bhxh = $cb->bhyt = $cb->kpcd = $cb->bhtn = 0;
                 $cb->bhxh_dv = $cb->bhyt_dv = $cb->kpcd_dv = $cb->bhtn_dv = 0;
-                $cb->stbhxh = $cb->stbhyt = $cb->stkpcd = $cb->stbhtn = 0;
-                $cb->stbhxh_dv = $cb->stbhyt_dv = $cb->stkpcd_dv = $cb->stbhtn_dv = 0;
             } else {
                 $cb->bhxh = floatval($cb->bhxh) / 100;
                 $cb->bhyt = floatval($cb->bhyt) / 100;
@@ -646,6 +644,10 @@ class bangluongController extends Controller
                 $cb->stkpcd_dv = $kpcd_dv;
                 $cb->stbhtn_dv = $bhtn_dv;
                 $cb->ttbh_dv = $cb->stbhxh_dv + $cb->stbhyt_dv + $cb->stkpcd_dv + $cb->stbhtn_dv;
+            }else{
+                $cb->ttbh_dv = $cb->ttbh = 0;
+                $cb->stbhxh = $cb->stbhyt = $cb->stkpcd = $cb->stbhtn = 0;
+                $cb->stbhxh_dv = $cb->stbhyt_dv = $cb->stkpcd_dv = $cb->stbhtn_dv = 0;
             }
 
             //Cán bộ đang đi công tác, đi học (bỏ qua các loại tạm ngưng theo dõi)
@@ -729,7 +731,7 @@ class bangluongController extends Controller
         $a_col_cb = array('id', 'bac', 'baohiem', 'macongtac', 'pthuong', 'theodoi', 'ngaybc',
             'khongnopbaohiem', 'ngaytu', 'tnntungay', 'ngayden', 'tnndenngay', 'lvhd');
         $a_data_canbo = unset_key($a_data_canbo, $a_col_cb);
-        dd($a_data_canbo);
+        //dd($a_data_canbo);
         foreach (array_chunk($a_data_canbo, 50) as $data) {
             (new data())->storeBangLuong($inputs['thang'], $data);
         }
@@ -991,7 +993,7 @@ class bangluongController extends Controller
                 $m_cb[$key]['heso'] = round($val['heso'] * $val['pthuong'] / 100, session('admin')->lamtron);
             }
 
-            $m_cb[$key]['vuotkhung'] = round($val['heso'] * $val['vuotkhung'] / 100, session('admin')->lamtron);
+            $m_cb[$key]['vuotkhung'] = isset($m_cb[$key]['vuotkhung']) ? round($val['heso'] * $val['vuotkhung'] / 100, session('admin')->lamtron) : 0;
             $m_cb[$key]['mabl'] = $inputs['mabl'];
             $m_cb[$key]['manguonkp'] = $inputs['manguonkp'];
             $m_cb[$key]['congtac'] = 'CONGTAC';
@@ -1070,13 +1072,10 @@ class bangluongController extends Controller
 
             //tính hệ số bảo hiểm (cán bộ thai sản + nghỉ ko lương + cán bộ điều động đến => ko pai đóng bảo hiểm =>set luon bảo hiểm = 0 để ko tính)
             if($khongluong || $daingay || $thaisan || $m_cb[$key]['theodoi'] == 4){
-                $m_cb[$key]['baohiem'] = $m_cb[$key]['ttbh_dv'] =  $m_cb[$key]['ttbh'] =0;
+                $m_cb[$key]['baohiem'] = 0;
                 $m_cb[$key]['bhxh'] = $m_cb[$key]['bhyt'] = $m_cb[$key]['kpcd'] = $m_cb[$key]['bhtn'] = 0;
                 $m_cb[$key]['bhxh_dv'] = $m_cb[$key]['bhyt_dv'] = $m_cb[$key]['kpcd_dv'] = $m_cb[$key]['bhtn_dv'] = 0;
-                $m_cb[$key]['stbhxh'] = $m_cb[$key]['stbhyt'] = $m_cb[$key]['stkpcd'] = $m_cb[$key]['stbhtn'] = 0;
-                $m_cb[$key]['stbhxh_dv'] = $m_cb[$key]['stbhyt_dv'] = $m_cb[$key]['stkpcd_dv'] = $m_cb[$key]['stbhtn_dv'] = 0;
-
-            }else{
+            }else {
                 $m_cb[$key]['bhxh'] = floatval($val['bhxh']) / 100;
                 $m_cb[$key]['bhyt'] = floatval($val['bhyt']) / 100;
                 $m_cb[$key]['kpcd'] = floatval($val['kpcd']) / 100;
@@ -1185,7 +1184,7 @@ class bangluongController extends Controller
             //$cb->tonghs = $tonghs;
 
             //if($m_cb[$key]['macongtac'] == 'KHONGCT') {
-            if ($m_cb[$key]['macongtac'] == 'KHONGCT' || $m_cb[$key]['macongtac'] == 'KHAC') { //cán bộ quân sự, đại biểu hội đồng nd đóng theo mức lương co ban
+            if ($m_cb[$key]['baohiem'] == 1 && in_array($m_cb[$key]['macongtac'], ['KHONGCT','KHAC'])) { //cán bộ quân sự, đại biểu hội đồng nd đóng theo mức lương co ban
                 $baohiem = $inputs['luongcoban'];
                 $m_cb[$key]['stbhxh'] = round($baohiem * $m_cb[$key]['bhxh'], 0);
                 $m_cb[$key]['stbhyt'] = round($baohiem * $m_cb[$key]['bhyt'], 0);
@@ -1199,7 +1198,7 @@ class bangluongController extends Controller
                 $m_cb[$key]['stbhtn_dv'] = round($baohiem * $m_cb[$key]['bhtn_dv'], 0);
                 $m_cb[$key]['ttbh_dv'] = $m_cb[$key]['stbhxh_dv'] + $m_cb[$key]['stbhyt_dv']
                     + $m_cb[$key]['stkpcd_dv'] + $m_cb[$key]['stbhtn_dv'];
-            } else {
+            } elseif ($m_cb[$key]['baohiem'] == 1){
                 $m_cb[$key]['stbhxh'] = $bhxh;
                 $m_cb[$key]['stbhyt'] = $bhyt;
                 $m_cb[$key]['stkpcd'] = $kpcd;
@@ -1212,6 +1211,9 @@ class bangluongController extends Controller
                 $m_cb[$key]['stbhtn_dv'] = $bhtn_dv;
                 $m_cb[$key]['ttbh_dv'] = $m_cb[$key]['stbhxh_dv'] + $m_cb[$key]['stbhyt_dv']
                     + $m_cb[$key]['stkpcd_dv'] + $m_cb[$key]['stbhtn_dv'];
+            }else {
+                $m_cb[$key]['stbhxh'] = $m_cb[$key]['stbhyt'] = $m_cb[$key]['stkpcd'] = $m_cb[$key]['stbhtn'] = $m_cb[$key]['ttbh'] = 0;
+                $m_cb[$key]['stbhxh_dv'] = $m_cb[$key]['stbhyt_dv'] = $m_cb[$key]['stkpcd_dv'] = $m_cb[$key]['stbhtn_dv'] = $m_cb[$key]['ttbh_dv'] = 0;
             }
 
             //Cán bộ đang đi công tác, đi học (bỏ qua các loại tạm ngưng theo dõi)
