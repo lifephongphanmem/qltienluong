@@ -645,9 +645,8 @@ class bangluongController extends Controller
                 $cb->stbhtn_dv = $bhtn_dv;
                 $cb->ttbh_dv = $cb->stbhxh_dv + $cb->stbhyt_dv + $cb->stkpcd_dv + $cb->stbhtn_dv;
             }else{
-                $cb->ttbh_dv = $cb->ttbh = 0;
-                $cb->stbhxh = $cb->stbhyt = $cb->stkpcd = $cb->stbhtn = 0;
-                $cb->stbhxh_dv = $cb->stbhyt_dv = $cb->stkpcd_dv = $cb->stbhtn_dv = 0;
+                $cb->ttbh_dv = $cb->stbhxh = $cb->stbhyt = $cb->stkpcd = $cb->stbhtn = 0;
+                $cb->ttbh = $cb->stbhxh_dv = $cb->stbhyt_dv = $cb->stkpcd_dv = $cb->stbhtn_dv = 0;
             }
 
             //Cán bộ đang đi công tác, đi học (bỏ qua các loại tạm ngưng theo dõi)
