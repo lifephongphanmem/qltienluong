@@ -18,6 +18,7 @@ class hosocanbo_kiemnhiem extends Model
         'macanbo',
         'pthuong',
         'heso',
+        'vuotkhung',
         'hesopc',
         'pcct',//dùng để thay thế phụ cấp ghép lớp
         'pckct',//dùng để thay thế phụ cấp bằng cấp cho cán bộ không chuyên trách

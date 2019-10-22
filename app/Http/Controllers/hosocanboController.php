@@ -378,8 +378,8 @@ class hosocanboController extends Controller
             );
             die(json_encode($result));
         }
-
         $inputs = $request->all();
+        //dd($inputs);
         $inputs['baohiem'] = 0;
         $inputs['madv'] = session('admin')->madv;
         $inputs['heso'] = chkDbl($inputs['heso']);
@@ -734,7 +734,7 @@ class hosocanboController extends Controller
         }
 
         $inputs = $request->all();
-
+        //dd($inputs);
         $inputs['madv'] = session('admin')->madv;
         $inputs['heso'] = chkDbl($inputs['heso']);
         $inputs['vuotkhung'] = chkDbl($inputs['vuotkhung']);
