@@ -501,9 +501,11 @@ class bangluongController extends Controller
 
             //tính hệ số bảo hiểm (cán bộ thai sản + nghỉ ko lương + cán bộ điều động đến => ko pai đóng bảo hiểm =>set luon bảo hiểm = 0 để ko tính)
             if ($khongluong || $daingay || $thaisan || $cb->theodoi == 4) {
-                $cb->baohiem == 0;
+                $cb->baohiem = $cb->ttbh_dv = $cb->ttbh = 0;
                 $cb->bhxh = $cb->bhyt = $cb->kpcd = $cb->bhtn = 0;
                 $cb->bhxh_dv = $cb->bhyt_dv = $cb->kpcd_dv = $cb->bhtn_dv = 0;
+                $cb->stbhxh = $cb->stbhyt = $cb->stkpcd = $cb->stbhtn = 0;
+                $cb->stbhxh_dv = $cb->stbhyt_dv = $cb->stkpcd_dv = $cb->stbhtn_dv = 0;
             } else {
                 $cb->bhxh = floatval($cb->bhxh) / 100;
                 $cb->bhyt = floatval($cb->bhyt) / 100;
@@ -727,7 +729,7 @@ class bangluongController extends Controller
         $a_col_cb = array('id', 'bac', 'baohiem', 'macongtac', 'pthuong', 'theodoi', 'ngaybc',
             'khongnopbaohiem', 'ngaytu', 'tnntungay', 'ngayden', 'tnndenngay', 'lvhd');
         $a_data_canbo = unset_key($a_data_canbo, $a_col_cb);
-        //dd($a_data_canbo);
+        dd($a_data_canbo);
         foreach (array_chunk($a_data_canbo, 50) as $data) {
             (new data())->storeBangLuong($inputs['thang'], $data);
         }
@@ -1068,9 +1070,12 @@ class bangluongController extends Controller
 
             //tính hệ số bảo hiểm (cán bộ thai sản + nghỉ ko lương + cán bộ điều động đến => ko pai đóng bảo hiểm =>set luon bảo hiểm = 0 để ko tính)
             if($khongluong || $daingay || $thaisan || $m_cb[$key]['theodoi'] == 4){
-                $m_cb[$key]['baohiem'] == 0;
+                $m_cb[$key]['baohiem'] = $m_cb[$key]['ttbh_dv'] =  $m_cb[$key]['ttbh'] =0;
                 $m_cb[$key]['bhxh'] = $m_cb[$key]['bhyt'] = $m_cb[$key]['kpcd'] = $m_cb[$key]['bhtn'] = 0;
                 $m_cb[$key]['bhxh_dv'] = $m_cb[$key]['bhyt_dv'] = $m_cb[$key]['kpcd_dv'] = $m_cb[$key]['bhtn_dv'] = 0;
+                $m_cb[$key]['stbhxh'] = $m_cb[$key]['stbhyt'] = $m_cb[$key]['stkpcd'] = $m_cb[$key]['stbhtn'] = 0;
+                $m_cb[$key]['stbhxh_dv'] = $m_cb[$key]['stbhyt_dv'] = $m_cb[$key]['stkpcd_dv'] = $m_cb[$key]['stbhtn_dv'] = 0;
+
             }else{
                 $m_cb[$key]['bhxh'] = floatval($val['bhxh']) / 100;
                 $m_cb[$key]['bhyt'] = floatval($val['bhyt']) / 100;
