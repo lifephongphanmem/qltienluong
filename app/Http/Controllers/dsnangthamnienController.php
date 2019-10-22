@@ -129,7 +129,6 @@ class dsnangthamnienController extends Controller
                 $ngaytl = $ngay_tucuoi - $ngay_tu;
             }
         }
-
         $ngay_dencuoi = Carbon::create($nam_den, $thang_den + 1, 0)->day;
         if($ngay_den < $ngay_dencuoi){
             $thangtl = $thangtl - 1;
@@ -144,7 +143,8 @@ class dsnangthamnienController extends Controller
             $ngaytl = $ngaytl - $ngaycong;
             $thangtl = $thangtl + 1;
         }
-
+        $thangtl = $thangtl < 0 ? 0 : $thangtl;
+        $ngaytl = $ngaytl < 0 ? 0 : $ngaytl;
         return array($thangtl, $ngaytl);
     }
 

@@ -202,4 +202,27 @@ ALTER TABLE `bangluong_ct` ADD `maso` VARCHAR(50) NULL AFTER `mabl`
         ALTER TABLE `bangluong_ct` ADD `hs_pcudn` FLOAT NOT NULL DEFAULT '0' AFTER `kpcd_dv`;
 
         UPDATE bangluong_ct SET hs_vuotkhung = vuotkhung * 100 / heso WHERE vuotkhung > 0 and hs_vuotkhung = 0
+
+    //insert data
+
+INSERT INTO `bangluong_ct_01` (`mabl`, `maso`, `manguonkp`, `macvcq`, `mapb`, `msngbac`, `mact`, `stt`, `phanloai`, `congtac`, `macanbo`,
+`tencanbo`, `macongchuc`, `heso`, `hesobl`, `hesopc`, `luuheso`, `ghichu`, `hesott`, `thangtl`, `ngaytl`, `luongcoban`, `songaytruc`, `songaycong`, `vuotkhung`,
+`pcct`, `pckct`, `pck`, `pccv`, `pckv`, `pcth`, `pcdd`, `pcdh`, `pcld`, `pcdbqh`, `pcudn`, `pctn`, `pctnn`, `pcdbn`, `pcvk`, `pckn`, `pcdang`, `pccovu`, `pclt`,
+`pcd`, `pctr`, `pctdt`, `pclade`, `pcud61`, `pcxaxe`, `pcdith`, `luonghd`, `st_pctaicu`, `pctaicu`, `pcphth`, `st_pcctp`, `pcctp`, `pctnvk`, `pcbdhdcu`, `pcthni`,
+`tonghs`, `ttl`, `giaml`, `thuetn`, `tienthuong`, `trichnop`, `bhct`, `tluong`, `stbhxh`, `stbhyt`, `stkpcd`, `stbhtn`, `ttbh`, `gttncn`, `luongtn`, `stbhxh_dv`,
+ `stbhyt_dv`, `stkpcd_dv`, `stbhtn_dv`, `ttbh_dv`, `bhxh`, `bhyt`, `bhtn`, `kpcd`, `bhxh_dv`, `bhyt_dv`, `bhtn_dv`, `kpcd_dv`, `hs_pcudn`, `hs_pcud61`, `hs_pccovu`,
+ `hs_pctnn`, `hs_vuotkhung`, `st_pcphth`, `st_luonghd`, `st_pcdith`, `st_pcxaxe`, `st_pcud61`, `st_pclade`, `st_pcthni`, `st_pcbdhdcu`, `st_pctnvk`, `st_pctdt`,
+ `st_pctr`, `st_pcd`, `st_pclt`, `st_pccovu`, `st_pcdang`, `st_pckn`, `st_pcvk`, `st_pcdbn`, `st_pctnn`, `st_pctn`, `st_pcudn`, `st_pcdbqh`, `st_pcld`, `st_pcdh`,
+ `st_pcdd`, `st_pcth`, `st_pckv`, `st_pccv`, `st_pck`, `st_pckct`, `st_pcct`, `st_vuotkhung`, `st_hesopc`, `st_hesobl`, `st_heso`)
+ select `mabl`, `maso`, `manguonkp`, `macvcq`, `mapb`, `msngbac`, `mact`, `stt`, `phanloai`, `congtac`, `macanbo`,
+`tencanbo`, `macongchuc`, `heso`, `hesobl`, `hesopc`, `luuheso`, `ghichu`, `hesott`, `thangtl`, `ngaytl`, `luongcoban`, `songaytruc`, `songaycong`, `vuotkhung`,
+`pcct`, `pckct`, `pck`, `pccv`, `pckv`, `pcth`, `pcdd`, `pcdh`, `pcld`, `pcdbqh`, `pcudn`, `pctn`, `pctnn`, `pcdbn`, `pcvk`, `pckn`, `pcdang`, `pccovu`, `pclt`,
+`pcd`, `pctr`, `pctdt`, `pclade`, `pcud61`, `pcxaxe`, `pcdith`, `luonghd`, `st_pctaicu`, `pctaicu`, `pcphth`, `st_pcctp`, `pcctp`, `pctnvk`, `pcbdhdcu`, `pcthni`,
+`tonghs`, `ttl`, `giaml`, `thuetn`, `tienthuong`, `trichnop`, `bhct`, `tluong`, `stbhxh`, `stbhyt`, `stkpcd`, `stbhtn`, `ttbh`, `gttncn`, `luongtn`, `stbhxh_dv`,
+ `stbhyt_dv`, `stkpcd_dv`, `stbhtn_dv`, `ttbh_dv`, `bhxh`, `bhyt`, `bhtn`, `kpcd`, `bhxh_dv`, `bhyt_dv`, `bhtn_dv`, `kpcd_dv`, `hs_pcudn`, `hs_pcud61`, `hs_pccovu`,
+ `hs_pctnn`, `hs_vuotkhung`, `st_pcphth`, `st_luonghd`, `st_pcdith`, `st_pcxaxe`, `st_pcud61`, `st_pclade`, `st_pcthni`, `st_pcbdhdcu`, `st_pctnvk`, `st_pctdt`,
+ `st_pctr`, `st_pcd`, `st_pclt`, `st_pccovu`, `st_pcdang`, `st_pckn`, `st_pcvk`, `st_pcdbn`, `st_pctnn`, `st_pctn`, `st_pcudn`, `st_pcdbqh`, `st_pcld`, `st_pcdh`,
+ `st_pcdd`, `st_pcth`, `st_pckv`, `st_pccv`, `st_pck`, `st_pckct`, `st_pcct`, `st_vuotkhung`, `st_hesopc`, `st_hesobl`, `st_heso`
+ from `bangluong_ct` where `bangluong_ct`.`thang` = '01'
+
 */

@@ -15,27 +15,30 @@ class CreateBangluongCt11Table extends Migration
     {
         Schema::create('bangluong_ct_11', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('mabl', 25)->nullable();
-            $table->string('macvcq', 25)->nullable();
-            $table->string('mapb', 25)->nullable();
-            $table->string('msngbac', 25)->nullable();
-            $table->string('mact', 25)->nullable();
-            $table->string('stt', 10)->nullable();
-            $table->string('phanloai',25)->default('CVCHINH');//phân loại kiêm nhiệm / chính thức
-            $table->string('congtac',25)->default('CONGTAC');//phân loại kiêm nhiệm / chính thức
-            $table->string('macanbo', 25)->nullable();
-            $table->string('tencanbo', 30)->nullable();
-            $table->string('macongchuc', 25)->nullable();
+            $table->string('mabl', 30)->nullable();
+            $table->string('manguonkp',30)->nullable();//lưu manguonkp để lấy khi tổng hợp. Do bang lương truy lĩnh ko có mã nguồn
+            $table->string('maso',30)->nullable();//lưu maso truy lĩnh
+            $table->string('macvcq', 30)->nullable();
+            $table->string('mapb', 30)->nullable();
+            $table->string('msngbac', 30)->nullable();
+            $table->string('mact', 30)->nullable();
+            $table->double('stt')->default(1);
+            $table->string('phanloai',30)->default('CVCHINH');//phân loại kiêm nhiệm / chính thức
+            $table->string('congtac',30)->default('CONGTAC');
+            $table->string('macanbo', 30)->nullable();
+            $table->string('tencanbo', 50)->nullable();
+            $table->string('macongchuc', 30)->nullable();
+            $table->integer('thangtl')->default(0);//số tháng được truy lĩnh lương
+            $table->integer('ngaytl')->default(0);//số tháng được truy lĩnh lương
+            $table->double('luongcoban',10)->default(0);//mức lương co bản được truy lĩnh lương
+            $table->integer('songaytruc')->default(0);
+            $table->integer('songaycong')->default(0);
+
             $table->double('heso')->default(0);
             $table->double('hesobl')->default(0);
             $table->double('hesopc')->default(0);
             $table->double('hesott')->default(0);//hệ số truy lĩnh
-            $table->double('thangtl')->default(0);//số tháng được truy lĩnh lương
-            $table->double('ngaytl')->default(0);//số tháng được truy lĩnh lương
-            $table->double('luongcoban')->default(0);//mức lương co bản được truy lĩnh lương
-            $table->double('songaytruc')->default(0);
             $table->double('vuotkhung')->default(0);
-
             $table->double('pcct')->default(0);//dùng để thay thế phụ cấp ghép lớp
             $table->double('pckct')->default(0);
             $table->double('pck')->default(0);
@@ -61,32 +64,14 @@ class CreateBangluongCt11Table extends Migration
             $table->double('pctnvk')->default(0);
             $table->double('pcbdhdcu')->default(0);
             $table->double('pcthni')->default(0);
-
             $table->double('pclade')->default(0); //làm đêm
             $table->double('pcud61')->default(0); //ưu đãi theo tt61
             $table->double('pcxaxe')->default(0); //điện thoại
             $table->double('pcdith')->default(0); //điện thoại
             $table->double('luonghd')->default(0); //lương hợp đồng, lương khoán (số tiền)
             $table->double('pcphth')->default(0); //phẫu thuật, thủ thuật
-
-            $table->double('tonghs')->default(0);
-            $table->double('ttl')->default(0);
-            $table->double('giaml')->default(0);
-            $table->double('thuetn')->default(0);
-            $table->double('bhct')->default(0);
-            $table->double('tluong')->default(0);
-            $table->double('stbhxh')->default(0);
-            $table->double('stbhyt')->default(0);
-            $table->double('stkpcd')->default(0);
-            $table->double('stbhtn')->default(0);
-            $table->double('ttbh')->default(0);
-            $table->double('gttncn')->default(0);
-            $table->double('luongtn')->default(0);
-            $table->double('stbhxh_dv')->default(0);
-            $table->double('stbhyt_dv')->default(0);
-            $table->double('stkpcd_dv')->default(0);
-            $table->double('stbhtn_dv')->default(0);
-            $table->double('ttbh_dv')->default(0);
+            $table->double('pcctp')->default(0);//phụ cấp công tác phí
+            $table->double('pctaicu')->default(0);//phụ cấp tái ứng cử
             //lưu theo số tiền
             $table->double('st_heso')->default(0);
             $table->double('st_hesobl')->default(0);
@@ -123,6 +108,8 @@ class CreateBangluongCt11Table extends Migration
             $table->double('st_pcdith')->default(0);
             $table->double('st_luonghd')->default(0);
             $table->double('st_pcphth')->default(0);
+            $table->double('st_pctaicu')->default(0);
+            $table->double('st_pcctp')->default(0);
             //lưu tỷ lệ bảo hiểm (đã quy về hệ số)
             $table->double('bhxh')->default(0);
             $table->double('bhyt')->default(0);
@@ -132,6 +119,37 @@ class CreateBangluongCt11Table extends Migration
             $table->double('bhyt_dv')->default(0);
             $table->double('bhtn_dv')->default(0);
             $table->double('kpcd_dv')->default(0);
+            //tính bảo hiểm
+            $table->double('stbhxh')->default(0);
+            $table->double('stbhyt')->default(0);
+            $table->double('stkpcd')->default(0);
+            $table->double('stbhtn')->default(0);
+            $table->double('ttbh')->default(0);
+            $table->double('stbhxh_dv')->default(0);
+            $table->double('stbhyt_dv')->default(0);
+            $table->double('stkpcd_dv')->default(0);
+            $table->double('stbhtn_dv')->default(0);
+            $table->double('ttbh_dv')->default(0);
+
+            //lưu hệ số gốc 1 số loại pc tính %
+            $table->double('tonghs')->default(0);
+            $table->double('ttl')->default(0);
+            $table->double('giaml')->default(0);
+            $table->double('tienthuong')->default(0);
+            $table->double('trichnop')->default(0);
+            $table->double('thuetn')->default(0);
+            $table->double('bhct')->default(0);
+            $table->double('tluong')->default(0);
+            $table->double('gttncn')->default(0);
+            $table->double('luongtn')->default(0);
+
+            $table->text('luuheso')->nullable();
+            $table->double('hs_vuotkhung')->default(0);
+            $table->double('hs_pctnn')->default(0);
+            $table->double('hs_pccovu')->default(0);
+            $table->double('hs_pcud61')->default(0);
+            $table->double('hs_pcudn')->default(0);
+            $table->string('ghichu')->nullable();
             $table->timestamps();
         });
     }

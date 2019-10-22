@@ -19,7 +19,7 @@ class hosophucapController extends Controller
             $inputs = $request->all();
             $m_cb = hosocanbo::where('madv',session('admin')->madv)->where('theodoi','<','9')->orderby('stt')->get();
             //$a_ct = array_column(dmphanloaict::all()->toArray(), 'tenct', 'mact');
-            $a_pb = getPhongBan(false);
+            //$a_pb = getPhongBan(false);
             $a_cv = getChucVuCQ(false);
             if(!isset($inputs['canbo'])) {
                 if (count($m_cb) > 0) {

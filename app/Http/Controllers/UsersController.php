@@ -184,6 +184,7 @@ class UsersController extends Controller
                 $ttuser->quanlykhuvuc = $model_donvi->phamvitonghop == 'KHOI' ? false : true;
                 $ttuser->quanlynhom = $model_donvi->phamvitonghop == 'HUYEN' ? false : true;
                 $ttuser->chuyendoi = $model_donvi->chuyendoi == 0 ? null : $ttuser->madv;//gán mã đơn vị chủ quản
+                $ttuser->ptdaingay = $model_donvi->ptdaingay;
 
                 $ttuser->diadanh = $model_donvi->diadanh;
                 $ttuser->cdlanhdao = $model_donvi->cdlanhdao;

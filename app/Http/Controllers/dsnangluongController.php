@@ -171,7 +171,8 @@ class dsnangluongController extends Controller
             $ngaytl = $ngaytl - $ngaycong;
             $thangtl = $thangtl + 1;
         }
-
+        $thangtl = $thangtl < 0 ? 0 : $thangtl;
+        $ngaytl = $ngaytl < 0 ? 0 : $ngaytl;
         return array($thangtl, $ngaytl);
     }
 

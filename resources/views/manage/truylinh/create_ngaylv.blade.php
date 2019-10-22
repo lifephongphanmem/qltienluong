@@ -24,8 +24,6 @@
 @stop
 
 @section('content')
-
-
     <h3 class="page-title">
         Thông tin truy lĩnh lương của cán bộ - {{$model->tencanbo}}
     </h3>
@@ -199,7 +197,7 @@
             //cùng năm => so sánh tháng
             var ngaytu = $('#ngaytu').val();
             var ngayden = $('#ngayden').val();
-            if(ngaytu =='' || ngayden ==''){
+            if(ngaytu =='' || ngayden =='' || ngayden < ngaytu){
                 $('#thangtl').val(0);
                 $('#ngaytl').val(0);
             }else{
