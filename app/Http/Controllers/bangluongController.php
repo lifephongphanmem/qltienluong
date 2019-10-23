@@ -1551,7 +1551,7 @@ class bangluongController extends Controller
                     ->where('hosotruylinh.ngayden', '<=', $ngaylap)->wherenull('hosotruylinh.mabl')->get();
                 //dd($model_canbo);
 
-                $a_hoso = hosocanbo::select('mapb', 'mact', 'macanbo', 'macvcq', 'bhxh', 'bhyt', 'bhtn', 'kpcd', 'bhxh_dv', 'bhyt_dv', 'bhtn_dv', 'kpcd_dv')
+                $a_hoso = hosocanbo::select('mapb', 'mact','stt', 'macanbo', 'macvcq', 'bhxh', 'bhyt', 'bhtn', 'kpcd', 'bhxh_dv', 'bhyt_dv', 'bhtn_dv', 'kpcd_dv')
                     ->where('madv', session('admin')->madv)->get()->keyby('macanbo')->toarray();
 
                 $a_goc = array('heso','vuotkhung','pccv');
@@ -1574,9 +1574,12 @@ class bangluongController extends Controller
                     $cb->mabl = $inputs['mabl'];
                     //$cb->vuotkhung = 0;//đơn vị tạo trước update
                     $cb->sunghiep = null;
-                    $cb->mact = $hoso['mact'];
-                    $cb->macvcq = $hoso['macvcq'];
-                    $cb->mapb = $hoso['macvcq'];
+                    if($cb->mact == '' || $cb->mact == null){
+                        $cb->mact = $hoso['mact'];
+                        $cb->macvcq = $hoso['macvcq'];
+                        $cb->mapb = $hoso['macvcq'];
+                        $cb->stt = $hoso['stt'];
+                    }
                     $cb->bhxh = floatval($hoso['bhxh']) / 100;
                     $cb->bhyt = floatval($hoso['bhyt']) / 100;
                     $cb->kpcd = floatval($hoso['kpcd']) / 100;

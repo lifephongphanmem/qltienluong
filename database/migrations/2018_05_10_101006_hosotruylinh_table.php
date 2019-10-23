@@ -17,7 +17,11 @@ class HosotruylinhTable extends Migration
             $table->increments('id');
             $table->string('maso', 50)->unique();
             $table->string('stt', 10)->nullable();
-            $table->string('maphanloai', 50)->nullable();
+            $table->string('macvcq', 30)->nullable();
+            $table->string('mapb', 30)->nullable();
+            $table->string('mact', 30)->nullable();
+            $table->string('maphanloai', 30)->nullable();//phân loại truy lĩnh
+            $table->string('phanloai', 30)->nullable();//phân loại công tác
             $table->string('macanbo', 50)->nullable();
             $table->string('tencanbo', 50)->nullable();
             $table->string('soqd', 50)->nullable();//chưa dùng
@@ -75,6 +79,7 @@ class HosotruylinhTable extends Migration
             $table->double('luonghd')->default(0); //lương hợp đồng, lương khoán (số tiền)
             $table->double('pcphth')->default(0); //phẫu thuật, thủ thuật
             $table->double('pcctp')->default(0);//phụ cấp công tác phí
+            $table->double('pctdt')->default(0);
 
             $table->timestamps();
         });

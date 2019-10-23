@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\bangluong_ct;
-use App\bangluong_phucap;
-use App\bangluongdangky_ct;
-use App\bangluongdangky_phucap;
+//use App\bangluong_ct;
+//use App\bangluong_phucap;
+//use App\bangluongdangky_ct;
+//use App\bangluongdangky_phucap;
 use App\dmchucvucq;
 use App\dmchucvud;
 use App\dmdantoc;
@@ -79,13 +79,13 @@ class hosocanboController extends Controller
             //$m_cvd= dmchucvud::all();
             $m_plnb = nhomngachluong::select('manhom', 'tennhom', 'heso', 'namnb')->distinct()->get();
             $m_pln = ngachluong::select('tenngachluong','manhom','msngbac','heso','namnb','hesolonnhat','bacvuotkhung')->get();
-            foreach ($m_pln as $mangach) {
-                $nhomnb = $m_plnb->where('manhom', $mangach->manhom)->first();
-                if (count($nhomnb) > 0 && $mangach->manhom != 'CBCT') {
-                    $mangach->heso = $nhomnb->heso;
-                    $mangach->namnb = $nhomnb->namnb;
-                }
-            }
+//            foreach ($m_pln as $mangach) {
+//                $nhomnb = $m_plnb->where('manhom', $mangach->manhom)->first();
+//                if (count($nhomnb) > 0 && $mangach->manhom != 'CBCT') {
+//                    $mangach->heso = $nhomnb->heso;
+//                    $mangach->namnb = $nhomnb->namnb;
+//                }
+//            }
             $macanbo = session('admin')->madv . '_' . getdate()[0];
 
             $max_stt = getDbl((hosocanbo::where('madv', session('admin')->madv)->get()->max('stt'))) + 1;
@@ -134,7 +134,7 @@ class hosocanboController extends Controller
             }
 
             if(isset($inputs['khongnopbaohiem'])){
-                $inputs['khongnopbaohiem'] = implode(',', $inputs['khongnopbaohiem']);
+                $inputs['khongnopbaohiem'] = implode(',', $insert['khongnopbaohiem']);
             }else{
                 $inputs['khongnopbaohiem'] = '';
             }

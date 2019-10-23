@@ -11,7 +11,11 @@ class hosotruylinh extends Model
         'id',
         'maso',
         'stt',
-        'maphanloai',
+        'macvcq',
+        'mapb',
+        'mact',
+        'maphanloai',//phân loại truy lĩnh
+        'phanloai', //phân loại kiêm nhiệm
         'macanbo',
         'tencanbo',
         'soqd',//chưa dùng

@@ -347,6 +347,9 @@ class dsnangluongController extends Controller
                         $a_tl[$mapc] = $hoso->$mapc;
                     }
 
+                    $a_tl['macvcq'] = $canbo->macvcq;
+                    $a_tl['mapb'] = $canbo->mapb;
+                    $a_tl['mact'] = $canbo->mact;
                     $a_tl['macanbo'] = $canbo->macanbo;
                     $a_tl['tencanbo'] = $hoso->tencanbo;
                     $a_tl['ngaytu'] = $canbo->truylinhtungay;
