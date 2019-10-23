@@ -786,6 +786,7 @@ class bangluongController extends Controller
             }
 
             //
+            $cb->vuotkhung = isset($cb->vuotkhung) ? round($cb->vuotkhung * $cb->heso / 100, session('admin')->lamtron)   : 0;
             $canbo->pcthni = isset($cb->pcthni) ? $cb->pcthni : 0; //set vao hồ sơ cán bộ để tính công thức lương
             $canbo->pctn = isset($cb->pctn) ? $cb->pctn : 0;
             $ths = 0;
@@ -813,7 +814,7 @@ class bangluongController extends Controller
                         break;
                     }
                     case 2: {//phần trăm
-                        if ($mapc != 'pcthni') {
+                        if ( !in_array($mapc,['pcthni','vuotkhung'])) {
                             $heso = 0;
                             if ($pl == 2) {
                                 foreach (explode(',', $pc->congthuc) as $cthuc) {
@@ -1330,6 +1331,7 @@ class bangluongController extends Controller
             $m_cb_kn[$i]['stt'] = $canbo['stt'];
             $m_cb_kn[$i]['mabl'] = $inputs['mabl'];
             $m_cb_kn[$i]['congtac'] = $m_cb_kn[$i]['phanloai'];
+            $m_cb_kn[$i]['vuotkhung'] = isset($m_cb_kn[$i]['vuotkhung']) ? round($m_cb_kn[$i]['vuotkhung'] * $m_cb_kn[$i]['heso'] / 100,  session('admin')->lamtron): 0 ;
             $m_cb_kn[$i]['stbhxh'] = 0;
             $m_cb_kn[$i]['stbhyt'] = 0;
             $m_cb_kn[$i]['stkpcd'] = 0;
@@ -1412,7 +1414,7 @@ class bangluongController extends Controller
                     }
                     case 2:
                     {//phần trăm
-                        if ($mapc != 'pcthni') {
+                        if (!in_array($mapc, ['pcthni', 'vuotkhung'])) {
                             $heso = 0;
                             foreach (explode(',', $v['congthuc']) as $cthuc) {
                                 if ($cthuc != '')
