@@ -493,6 +493,11 @@ class bangluongController extends Controller
                 continue;
             }
 
+            //phân loại công tác không trong đinh mức nguồn
+            if(!isset($a_nkp_dm[$cb->mact])){
+                continue;
+            }
+
             $khongluong = in_array($cb->macanbo, $a_khongluong) ? true : false;
             $daingay = in_array($cb->macanbo, $a_daingay) ? true : false;
             $nghi = isset($a_nghiphep[$cb->macanbo]) ? true : false;
