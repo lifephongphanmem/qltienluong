@@ -83,7 +83,13 @@
         </td>
     </tr>
 </table>
-<p style="text-align: center; font-weight: bold; font-size: 20px;">BẢNG THANH TOÁN TIỀN LƯƠNG VÀ PHỤ CẤP</p>
+<p style="text-align: center; font-weight: bold; font-size: 20px;text-transform: uppercase">
+    @if($thongtin['innoidung'])
+        {{$thongtin['noidung']}}
+    @else
+        BẢNG THANH TOÁN TIỀN LƯƠNG VÀ PHỤ CẤP
+    @endif
+</p>
 <p style="text-align: center; font-style: italic">Tháng {{$thongtin['thang']}} năm {{$thongtin['nam']}}</p>
 
 <table width="97%" class="money" cellspacing="0" cellpadding="0" border="1" style="margin: 20px auto; border-collapse: collapse;font:normal {{$thongtin['cochu']}}px Times, serif;">

@@ -309,7 +309,7 @@ class bangluong_inController extends Controller
             $inputs = $request->all();
             $mabl = $inputs['mabl'];
             //dd($inputs);
-            $m_bl = bangluong::select('thang','nam','mabl','madv','ngaylap','luongcoban')->where('mabl',$mabl)->first();
+            $m_bl = bangluong::select('thang','nam','mabl','madv','ngaylap','luongcoban','noidung')->where('mabl',$mabl)->first();
 
             //$model = bangluong_ct::where('mabl',$mabl)->get(); //dùng hàm lấy dữ liệu chung
             $model = (new data())->getBangluong_ct($m_bl->thang,$m_bl->mabl);
@@ -359,7 +359,9 @@ class bangluong_inController extends Controller
                 'nam'=>$m_bl->nam,
                 'ngaylap'=>$m_bl->ngaylap,
                 'luongcb' => $m_bl->luongcoban,
-                'col'=>$col);
+                'col'=>$col,
+                'innoidung'=>isset($inputs['innoidung']),
+                'noidung'=>$m_bl->noidung,);
 
             return view('reports.bangluong.donvi.mauthpl')
                 ->with('model',$model_congtac)
@@ -376,7 +378,7 @@ class bangluong_inController extends Controller
             $inputs = $request->all();
             $mabl = $inputs['mabl'];
             //dd($inputs);
-            $m_bl = bangluong::select('thang','nam','mabl','madv','ngaylap','luongcoban')->where('mabl',$mabl)->first();
+            $m_bl = bangluong::select('thang','nam','mabl','madv','ngaylap','luongcoban','noidung')->where('mabl',$mabl)->first();
             $model_bl = (new data())->getBangluong_ct($m_bl->thang,$m_bl->mabl);
             //$model_bl = bangluong_ct::where('mabl',$mabl)->get();
             //$model_hoso = hosocanbo::where('madv',$m_bl->madv)->get();
@@ -425,7 +427,9 @@ class bangluong_inController extends Controller
                 'thang'=>$m_bl->thang,
                 'nam'=>$m_bl->nam,
                 'ngaylap'=>$m_bl->ngaylap,
-                'luongcb' => $m_bl->luongcoban);
+                'luongcb' => $m_bl->luongcoban,
+                'innoidung'=>isset($inputs['innoidung']),
+                'noidung'=>$m_bl->noidung,);
 
             return view('reports.bangluong.donvi.mauthpc')
                 ->with('model',$model)
@@ -444,7 +448,7 @@ class bangluong_inController extends Controller
             $model = $this->getBangLuong($inputs)->wherein('phanloai', ['CVCHINH','KHONGCT']);
             //dd($inputs);
             $mabl = $inputs['mabl'];
-            $m_bl = bangluong::select('thang','nam','mabl','madv','ngaylap','phanloai','luongcoban')->where('mabl',$mabl)->first();
+            $m_bl = bangluong::select('thang','nam','mabl','madv','ngaylap','phanloai','luongcoban','noidung')->where('mabl',$mabl)->first();
             $m_dv = dmdonvi::where('madv',$m_bl->madv)->first();
 
             $model_congtac = dmphanloaict::select('mact','tenct')
@@ -454,7 +458,9 @@ class bangluong_inController extends Controller
                 'thang'=>$m_bl->thang,
                 'nam'=>$m_bl->nam,
                 'ngaylap'=>$m_bl->ngaylap,'phanloai'=>$m_bl->phanloai,
-                'cochu'=>$inputs['cochu']);
+                'cochu'=>$inputs['cochu'],
+                'innoidung'=>isset($inputs['innoidung']),
+                'noidung'=>$m_bl->noidung,);
             //xử lý ẩn hiện cột phụ cấp => biết tổng số cột hiện => colspan trên báo cáo
             $a_goc = array('hesott');
             $model_pc = dmphucap_donvi::where('madv',$m_bl->madv)->where('phanloai','<','3')->wherenotin('mapc',$a_goc)->get();
@@ -505,7 +511,7 @@ class bangluong_inController extends Controller
             $model = $this->getBangLuong($inputs);
 
             $mabl = $inputs['mabl'];
-            $m_bl = bangluong::select('thang','nam','mabl','madv','ngaylap','phanloai','luongcoban')->where('mabl',$mabl)->first();
+            $m_bl = bangluong::select('thang','nam','mabl','madv','ngaylap','phanloai','luongcoban','noidung')->where('mabl',$mabl)->first();
             $m_dv = dmdonvi::where('madv',$m_bl->madv)->first();
 
             $model_congtac = dmphanloaict::select('mact','tenct')
@@ -515,7 +521,9 @@ class bangluong_inController extends Controller
                 'thang'=>$m_bl->thang,
                 'nam'=>$m_bl->nam,
                 'ngaylap'=>$m_bl->ngaylap,'phanloai'=>$m_bl->phanloai,
-                'cochu'=>$inputs['cochu']);
+                'cochu'=>$inputs['cochu'],
+                'innoidung'=>isset($inputs['innoidung']),
+                'noidung'=>$m_bl->noidung,);
             //xử lý ẩn hiện cột phụ cấp => biết tổng số cột hiện => colspan trên báo cáo
             $a_goc = array('hesott');
             $model_pc = dmphucap_donvi::where('madv',$m_bl->madv)->where('phanloai','<','3')->wherenotin('mapc',$a_goc)->get();
@@ -600,7 +608,7 @@ class bangluong_inController extends Controller
             $inputs['madv'] = session('admin')->madv;
 
             $mabl = $inputs['mabl'];
-            $m_bl = bangluong::select('thang','nam','mabl','madv','ngaylap','phanloai')->where('mabl',$mabl)->first();
+            $m_bl = bangluong::select('thang','nam','mabl','madv','ngaylap','phanloai','noidung')->where('mabl',$mabl)->first();
             $model= $this->getBangLuong($inputs);
             //dd($model);
             //$model = bangluong_ct::where('mabl',$mabl)->get();
@@ -616,7 +624,9 @@ class bangluong_inController extends Controller
             $thongtin=array('nguoilap'=>$m_bl->nguoilap,
                 'thang'=>$m_bl->thang,
                 'nam'=>$m_bl->nam,
-                'ngaylap'=>$m_bl->ngaylap);
+                'ngaylap'=>$m_bl->ngaylap,
+                'innoidung'=>isset($inputs['innoidung']),
+                'noidung'=>$m_bl->noidung,);
 
             return view('reports.bangluong.donvi.maudschitra_m2')
                 ->with('model',$model->sortBy('stt'))
@@ -837,7 +847,7 @@ class bangluong_inController extends Controller
             $mapb = $inputs['mapb'];
             */
             $mabl = $inputs['mabl'];
-            $m_bl = bangluong::select('thang', 'nam', 'mabl', 'madv', 'ngaylap', 'phanloai')->where('mabl', $mabl)->first();
+            $m_bl = bangluong::select('thang', 'nam', 'mabl', 'madv', 'ngaylap', 'phanloai','noidung')->where('mabl', $mabl)->first();
             $m_dv = dmdonvi::where('madv', $m_bl->madv)->first();
 
             $inputs['madv'] = $m_dv->madv;
@@ -850,8 +860,10 @@ class bangluong_inController extends Controller
                 'thang' => $m_bl->thang,
                 'nam' => $m_bl->nam,
                 'ngaylap' => $m_bl->ngaylap, 'phanloai' => $m_bl->phanloai,
-                'cochu' => $inputs['cochu']
-            );
+                'cochu' => $inputs['cochu'],
+                'innoidung'=>isset($inputs['innoidung']),
+                'noidung'=>$m_bl->noidung,
+                );
             //xử lý ẩn hiện cột phụ cấp => biết tổng số cột hiện => colspan trên báo cáo
             $a_goc = array('hesott');
             $model_pc = dmphucap_donvi::where('madv', $m_bl->madv)->where('phanloai', '<', '3')->wherenotin('mapc', $a_goc)->get();
@@ -884,15 +896,11 @@ class bangluong_inController extends Controller
             $inputs = $request->all();
             $mabl = $inputs['mabl'];
             //dd($inputs);
-            $m_bl = bangluong::select('thang','nam','mabl','madv','ngaylap','luongcoban','phanloai')->where('mabl',$mabl)->first();
+            $m_bl = bangluong::select('thang','nam','mabl','madv','ngaylap','luongcoban','phanloai','noidung')->where('mabl',$mabl)->first();
             $a_pl = getPhanLoaiBangLuong();
             $m_bl->tenphanloai = isset($a_pl[$m_bl->phanloai]) ? $a_pl[$m_bl->phanloai] : 'Bảng thanh toán chi khác';
             //$model = bangluong_ct::where('mabl',$mabl)->get(); //dùng hàm lấy dữ liệu chung
             $model = bangluong_truc::where('mabl',$m_bl->mabl)->get();
-
-            $model_congtac = dmphanloaict::select('mact','tenct')
-                ->wherein('mact',a_unique(array_column($model->toarray(),'mact')))->get();
-            //dd($model_congtac);
 
             $m_dv = dmdonvi::where('madv',$m_bl->madv)->first();
             $m_dv->tendvcq = getTenDB($m_dv->madvbc);
@@ -902,7 +910,8 @@ class bangluong_inController extends Controller
                 'nam'=>$m_bl->nam,
                 'ngaylap'=>$m_bl->ngaylap,
                 'luongcb' => $m_bl->luongcoban,
-                ''
+                'innoidung'=>isset($inputs['innoidung']),
+                'noidung'=>$m_bl->noidung,
                 );
             //dd($model_congtac);
             return view('reports.bangluong.donvi.mauctphi')
@@ -927,9 +936,6 @@ class bangluong_inController extends Controller
             $m_bl->tenphanloai = isset($a_pl[$m_bl->phanloai]) ? $a_pl[$m_bl->phanloai] : 'Bảng thanh toán chi khác';
             $model = (new data())->getBangluong_ct($m_bl->thang,$m_bl->mabl);
 
-            $model_congtac = dmphanloaict::select('mact','tenct')
-                ->wherein('mact',a_unique(array_column($model->toarray(),'mact')))->get();
-            //dd($model_congtac);
             $a_phucap = array();
             $col = 0;
             $model_pc = dmphucap_donvi::where('madv',$m_bl->madv)->where('phanloai','<','3')->get();
@@ -949,7 +955,8 @@ class bangluong_inController extends Controller
                 'nam'=>$m_bl->nam,
                 'ngaylap'=>$m_bl->ngaylap,
                 'luongcb' => $m_bl->luongcoban,
-                ''
+                'innoidung'=>isset($inputs['innoidung']),
+                'noidung'=>$m_bl->noidung,
             );
 
             return view('reports.bangluong.donvi.mautruc')
@@ -1068,8 +1075,7 @@ class bangluong_inController extends Controller
         //dd($m_bl);
         $a_hoso = hosocanbo::select('macanbo','sunghiep','sotk','tennganhang','ngaytu','tnntungay','socmnd')
             ->where('madv', $m_bl->madv)->get()->keyby('macanbo')->toarray();
-        $dmchucvucq = array_column(dmchucvucq::all('tenvt', 'macvcq')->toArray(), 'tenvt', 'macvcq');
-        $a_cv = getChucVuCQ(false);
+        $a_cv = dmchucvucq::all('tenvt', 'macvcq','tencv')->keyBy('macvcq')->toArray();
         $nhomct = array_column(dmphanloaict::all('macongtac', 'mact')->toArray(), 'macongtac', 'mact');
 
         foreach ($model as $hs) {
@@ -1085,8 +1091,12 @@ class bangluong_inController extends Controller
                     $hs->tencanbo = $hoso['tencanbo']; //kiêm nhiệm chưa có tên cán bộ
                 }
             }
-            $hs->tencv = isset($dmchucvucq[$hs->macvcq]) ? $dmchucvucq[$hs->macvcq] : '';
-            $hs->tencvcq = isset($a_cv[$hs->macvcq]) ? $a_cv[$hs->macvcq] : '';
+            if(isset($inputs['inchucvuvt'])){
+                $hs->tencv = isset($a_cv[$hs->macvcq]) ? $a_cv[$hs->macvcq]['tenvt'] : '';
+            }else{
+                $hs->tencv = isset($a_cv[$hs->macvcq]) ? $a_cv[$hs->macvcq]['tencv'] : '';
+            }
+            //$hs->tencvcq = isset($a_cv[$hs->macvcq]) ? $a_cv[$hs->macvcq] : '';
             $hs->macongtac = isset($nhomct[$hs->mact]) ? $nhomct[$hs->mact] : '';
             // $hs->tencanbo = isset($a_ht[$hs->macanbo]) ? $a_ht[$hs->macanbo] : ''; //kiêm nhiệm chưa có tên cán bộ
         }

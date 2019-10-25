@@ -78,7 +78,7 @@
 
         <tr>
             @if($m_bl->noidung != '')
-                <td colspan="2" style="text-align: center; font-weight: bold; font-size: 20px;text-transform: uppercase;"">
+                <td colspan="2" style="text-align: center; font-weight: bold; font-size: 20px;text-transform: uppercase;">
                     {{$m_bl->noidung}}
                 </td>
             @else

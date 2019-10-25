@@ -51,6 +51,20 @@
                         {!!Form::select('cochu',getCoChu(), 10, array('id' => 'cochu','class' => 'form-control select2me'))!!}
                     </div>
                 </div>
+
+                <div class="row">
+                    <div class="col-md-offset-3 col-md-9" style="margin-top: 15px">
+                        <input name="innoidung" id="innoidung" type="checkbox">
+                        <label for="innoidung">Tiều đề bảng lương là nội dung bảng lương</label>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-offset-3 col-md-9">
+                        <input name="inchucvuvt" id="inchucvuvt" type="checkbox">
+                        <label >In chức vụ/chức danh viết tắt</label>
+                    </div>
+                </div>
+
             </div>
 
             <input type="hidden" id="mabl" name="mabl"/>
@@ -111,6 +125,18 @@
 
                     <input type="hidden" id="mabl" name="mabl"/>
                 </div>
+                <div class="row">
+                    <div class="col-md-offset-3 col-md-9" style="margin-top: 15px">
+                        <input name="innoidung" id="innoidung" type="checkbox">
+                        <label for="innoidung">Tiều đề bảng lương là nội dung bảng lương</label>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-offset-3 col-md-9">
+                        <input name="inchucvuvt" id="inchucvuvt" type="checkbox">
+                        <label>In chức vụ/chức danh viết tắt</label>
+                    </div>
+                </div>
             </div>
         </div>
         <div class="modal-footer">
@@ -169,10 +195,23 @@
                         <label class="control-label">Cỡ chữ</label>
                         {!!Form::select('cochu',getCoChu(), 10, array('id' => 'cochu','class' => 'form-control select2me'))!!}
                     </div>
-
-                    <div class="col-md-offset-3 col-md-9">
+                </div>
+                <div class="row">
+                    <div class="col-md-offset-3 col-md-9" style="margin-top: 5px">
                         <input type="checkbox" name="inbaohiem" id="inbaohiem"/>
                         <label class="control-label" for="inbaohiem">In tiểu mục bảo hiểm</label>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-offset-3 col-md-9">
+                        <input name="innoidung" id="innoidung" type="checkbox">
+                        <label for="innoidung">Tiều đề bảng lương là nội dung bảng lương</label>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-offset-3 col-md-9">
+                        <input name="inchucvuvt" id="inchucvuvt" type="checkbox">
+                        <label>In chức vụ/chức danh viết tắt</label>
                     </div>
                 </div>
             </div>
@@ -294,6 +333,18 @@
                     </div>
 
                     <input type="hidden" id="mabl" name="mabl"/>
+                </div>
+                <div class="row">
+                    <div class="col-md-offset-3 col-md-9" style="margin-top: 15px">
+                        <input name="innoidung" id="innoidung" type="checkbox">
+                        <label for="innoidung">Tiều đề bảng lương là nội dung bảng lương</label>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-offset-3 col-md-9">
+                        <input name="inchucvuvt" id="inchucvuvt" type="checkbox">
+                        <label>In chức vụ/chức danh viết tắt</label>
+                    </div>
                 </div>
             </div>
         </div>

@@ -77,8 +77,12 @@
         </tr>
 
         <tr>
-            <td colspan="2" style="text-align: center; font-weight: bold; font-size: 20px;">
-                BẢNG THANH TOÁN TIỀN LƯƠNG VÀ CÁC KHOẢN PHỤ CẤP THEO LƯƠNG,</br>CÁC KHOẢN TRÍCH NỘP THEO LƯƠNG
+            <td colspan="2" style="text-align: center; font-weight: bold; font-size: 20px;text-transform: uppercase">
+                @if($thongtin['innoidung'])
+                    {{$thongtin['noidung']}}
+                @else
+                    BẢNG THANH TOÁN TIỀN LƯƠNG VÀ CÁC KHOẢN PHỤ CẤP THEO LƯƠNG,</br>CÁC KHOẢN TRÍCH NỘP THEO LƯƠNG
+                @endif
             </td>
         </tr>
 
@@ -133,7 +137,7 @@
                     <tr>
                         <td>{{$stt++}}</td>
                         <td style="text-align: left">{{$ct->tencanbo}}</td>
-                        <td style="text-align: left">{{isset($a_chucvu[$ct->macvcq]) ? $a_chucvu[$ct->macvcq]:'' }}</td>
+                        <td style="text-align: left">{{$ct->tencv}}</td>
                         <td style="text-align: left">{{$ct->msngbac}}</td>
 
                         @foreach($a_phucap as $key=>$val)
