@@ -25,7 +25,7 @@
     <!--Loading style-->
     <link rel="stylesheet" href="{{url('css/themes/style1/zvinhtq.css')}}" class="default-style">
     <link rel="stylesheet" href="{{url('css/style-responsive.css')}}">
-    <link rel="stylesheet" href="{{url('images/icons/favicon.ico')}}" rel="shortcut icon">
+{{--    <link rel="stylesheet" href="{{url('images/icons/favicon.ico')}}" rel="shortcut icon">--}}
 </head>
 <body id="home-page" class="text-center">
 
@@ -56,12 +56,15 @@
 
 <div class="row">
     <!--p style="text"><b>Số đăng ký bản quyền: 282/2015/QTG, Khai Thác và Phần Phối bởi H2SOFT</b></p-->
+    <a href="https://phanmemcuocsong.com/" title="Công ty Phần mềm Cuộc Sống"
+       rel="dofollow noopener noreferrer" target="_blank"
+        style="color: #0D0D0D">
+        <p><b>Phát triển bởi Công ty TNHH Phát Triển Phần Mềm Cuộc Sống</b></p>
+    </a>
 
-    <p style="text"><b>Phát triển bởi Công ty TNHH Phát Triển Phần Mềm Cuộc Sống</b></p>
+    <p><b>Địa chỉ</b>: Số Nhà 77 - Lô 9a khu Tái Định Cư X2A - Phường Yên Sở - Quận Hoàng Mai - TP Hà Nội</p>
 
-    <p><b>Địa chỉ</b>: Ngũ Hiệp – Thanh trì – Hà Nội</p>
-
-    <p><b>Tel</b>: 04.36343951 - <b>Email</b>: phanmemcuocsong@gmail.com</p>
+    <p><b>Tel</b>: (024) 3634 3951 - <b>Email</b>: phanmemcuocsong@gmail.com</p>
 </div>
 
 <script type="text/javascript" src="js/jquery-1.10.2.min.js"></script>

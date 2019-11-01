@@ -48,6 +48,10 @@
     </style>
 </head>
 
+<div class="in" style="margin-right: 20px; text-align: right">
+    <button type="submit" onclick=" window.print()"> In bảng lương</button>
+</div>
+
 <body style="font:normal 11px Times, serif;">
     <table class="header" width="96%" border="0" cellspacing="0" cellpadding="8" style="margin:0 auto 25px; text-align: center;">
         <tr>
