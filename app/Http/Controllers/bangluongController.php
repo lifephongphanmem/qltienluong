@@ -2701,7 +2701,7 @@ class bangluongController extends Controller
             //chạy lại để tính lại phụ cấp
             $luongcb = $m_bl->luongcoban;
             foreach($model as $cb){
-                $cb->ttl_tn = $cb->ttl;
+                $cb->ttl_tn = 0;
                 if($cb->congtac == 'DAINGAY' || $cb->congtac == 'THAISAN' || $cb->congtac == 'KHONGLUONG'){
                     $cb->tonghs = 0;
                     foreach($a_phucap as $k=>$v) {
@@ -2713,6 +2713,8 @@ class bangluongController extends Controller
                             $cb->ttl_tn += round($cb->$k * $luongcb, 0);
                         }
                     }
+                }else{
+                    $cb->ttl_tn = $cb->ttl;
                 }
             }
             return view('reports.bangluong.donvi.mautt107_m2')
