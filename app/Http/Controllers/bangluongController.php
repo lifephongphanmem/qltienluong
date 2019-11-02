@@ -2008,7 +2008,7 @@ class bangluongController extends Controller
                     ->with('pageTitle', 'Bảng lương chi tiết');
             }
             $model = (new data())->getBangluong_ct($m_bl->thang, $m_bl->mabl);
-            if($inputs['mapb'] != ''){
+            if(isset($inputs['mapb']) && $inputs['mapb'] != ''){
                 $model = $model->where('mapb',$inputs['mapb']);
             }
 
@@ -2131,9 +2131,7 @@ class bangluongController extends Controller
             $inputs = $request->all();
             //dd($inputs);
             $model_bangluong = bangluong::where('mabl',$inputs['mabl'])->first();
-
             $model = (new data())->getBangluong_ct_cb($model_bangluong->thang,$inputs['maso']);
-
             $m_nb = ngachluong::where('msngbac',$model->msngbac)->first();
             $model->tennb = isset($m_nb)? $m_nb->tenngachluong:'';
 
@@ -2145,7 +2143,6 @@ class bangluongController extends Controller
                 $model_truylinh = hosotruylinh::where('macanbo',$model->macanbo)->where('mabl',$model->mabl)->first();
                 $model->ngaytu = $model_truylinh->ngaytu;
                 $model->ngayden = $model_truylinh->ngayden;
-
                 foreach($model_pc as $pc){
                     $mapc = $pc->mapc;
                     $mapc_st ='st_'. $mapc;
@@ -2217,7 +2214,7 @@ class bangluongController extends Controller
 
             //dd($inputs);
             $model->update($inputs);
-            return redirect('/chuc_nang/bang_luong/bang_luong?mabl='.$model->mabl.'&mapb='.$model->mapb);
+            return redirect('/chuc_nang/bang_luong/bang_luong?mabl='.$model->mabl.'&mapb=');
 
 
         } else
@@ -2243,12 +2240,6 @@ class bangluongController extends Controller
             $m_bl = bangluong::where('mabl',$inputs['mabl'])->first();
             $model = (new data())->getBangluong_ct_cb($m_bl->thang,$inputs['id']);
 
-            $model_pc = dmphucap_donvi::where('madv', session('admin')->madv)->get();
-            foreach($model_pc as $pc){
-                if(isset($inputs[$pc->mapc])){
-                    $inputs[$pc->mapc] = chkDbl($inputs[$pc->mapc]);
-                }
-            }
             //$inputs['hesott'] = chkDbl($inputs['hesott']);
             $inputs['luongcoban'] = chkDbl($inputs['luongcoban']);
             $inputs['ttl'] = chkDbl($inputs['ttl']);
@@ -2274,29 +2265,72 @@ class bangluongController extends Controller
             return view('errors.notlogin');
     }
 
-    function update_chitiet(Request $request){
+    function update_chitiet(Request $request)
+    {
         if (Session::has('admin')) {
             $inputs = $request->all();
             $m_bl = bangluong::where('mabl', $inputs['mabl_hs'])->first();
             $model = (new data())->getBangluong_ct_cb($m_bl->thang, $inputs['id_hs']);
-            //dd($model);
-            $mapc = $inputs['mapc'];
-            $mapc_st = 'st_' . $inputs['mapc'];
+            //bảng chi trả lương
+            if ($m_bl->phanloai == 'BANGLUONG') {
+                $mapc = $inputs['mapc'];
+                $mapc_st = 'st_' . $inputs['mapc'];
 
-            $inputs['heso'] = chkDbl($inputs['heso']);
-            $inputs['luongcb'] = chkDbl($inputs['luongcb']);
-            $inputs['sotien'] = chkDbl($inputs['sotien']);
-            //dd($inputs);
-            //Tính lương mới
-            $sotien_cl = $inputs['sotien'] - $model->$mapc_st;
-            $heso_cl = $inputs['heso'] > 1000? 0 : $inputs['heso'] - $model->$mapc;//nếu > 1000 - >số tiền ko pai công lại hệ số
+                $inputs['heso'] = chkDbl($inputs['heso']);
+                $inputs['luongcb'] = chkDbl($inputs['luongcb']);
+                $inputs['sotien'] = chkDbl($inputs['sotien']);
+                //dd($inputs);
+                //Tính lương mới
+                $sotien_cl = $inputs['sotien'] - $model->$mapc_st;
+                $heso_cl = $inputs['heso'] > 1000 ? 0 : $inputs['heso'] - $model->$mapc;//nếu > 1000 - >số tiền ko pai công lại hệ số
 
-            $model->$mapc_st = $inputs['sotien'];
-            $model->$mapc = $inputs['heso'];
-            //Tính lại bao hiểm (các trường hợp thai sản, dai ngày, ko lương => số tiền = 0;
-            //  => nếu ko đóng bảo thì tỷ lệ bảo hiểm = 0)
-            if ($model->congtac != 'THAISAN' && $model->congtac != 'DAINGAY' && $model->congtac != 'KHONGLUONG') {
-                $baohiem = $model->st_heso + $model->st_vuotkhung + $model->st_pccv + $model->st_pctnn;
+                $model->$mapc_st = $inputs['sotien'];
+                $model->$mapc = $inputs['heso'];
+                //Tính lại bao hiểm (các trường hợp thai sản, dai ngày, ko lương => số tiền = 0;
+                //  => nếu ko đóng bảo thì tỷ lệ bảo hiểm = 0)
+                if ($model->congtac != 'THAISAN' && $model->congtac != 'DAINGAY' && $model->congtac != 'KHONGLUONG') {
+                    $baohiem = $model->st_heso + $model->st_vuotkhung + $model->st_pccv + $model->st_pctnn;
+                    $model->stbhxh = round($model->bhxh * $baohiem, 0);
+                    $model->stbhyt = round($model->bhyt * $baohiem, 0);
+                    $model->stkpcd = round($model->kpcd * $baohiem, 0);
+                    $model->stbhtn = round($model->bhtn * $baohiem, 0);
+                    $model->ttbh = $model->stbhxh + $model->stbhyt + $model->stkpcd + $model->stbhtn;
+                    $model->stbhxh_dv = round($model->bhxh_dv * $baohiem, 0);
+                    $model->stbhyt_dv = round($model->bhyt_dv * $baohiem, 0);
+                    $model->stkpcd_dv = round($model->kpcd_dv * $baohiem, 0);
+                    $model->stbhtn_dv = round($model->bhtn_dv * $baohiem, 0);
+                    $model->ttbh_dv = $model->stbhxh_dv + $model->stbhyt_dv + $model->stkpcd_dv + $model->stbhtn_dv;
+                }
+
+                $model->tonghs += $heso_cl;
+                $model->ttl += $sotien_cl;
+                $model->luongtn = $model->ttl - $model->ttbh - $model->giaml - $model->thuetn - $model->trichnop + $model->bhct + $model->tienthuong;
+                //dd($model);
+                $model->save();
+            }
+
+            //bảng truy lĩnh lương
+            if ($m_bl->phanloai == 'TRUYLINH') {
+                $mapc = $inputs['mapc'];
+                $mapc_st = 'st_' . $inputs['mapc'];
+
+                $inputs['heso'] = chkDbl($inputs['heso']);
+                $inputs['luongcb'] = chkDbl($inputs['luongcb']);
+                $inputs['sotien'] = chkDbl($inputs['sotien']);
+                //dd($inputs);
+                //Tính lương mới
+                $sotien_cl = $inputs['sotien'] - $model->$mapc_st;
+                $heso_cl = $inputs['heso'] > 1000 ? 0 : $inputs['heso'] - $model->$mapc;//nếu > 1000 - >số tiền ko pai công lại hệ số
+
+                $model->$mapc_st = $inputs['sotien'];
+                $model->$mapc = $inputs['heso'];
+                //Tính lại bao hiểm (các trường hợp thai sản, dai ngày, ko lương => số tiền = 0;
+                //  => nếu ko đóng bảo thì tỷ lệ bảo hiểm = 0)
+                $baohiem = round(($model->st_heso + $model->st_vuotkhung + $model->st_pccv + $model->st_pctnn) * $model->thangtl);
+                if ($model->ngaytl >= session('admin')->songaycong) {
+                    $baohiem += round(($model->st_heso + $model->st_vuotkhung + $model->st_pccv + $model->st_pctnn) * $model->ngaytl / session('admin')->songaycong);
+                }
+
                 $model->stbhxh = round($model->bhxh * $baohiem, 0);
                 $model->stbhyt = round($model->bhyt * $baohiem, 0);
                 $model->stkpcd = round($model->kpcd * $baohiem, 0);
@@ -2307,17 +2341,17 @@ class bangluongController extends Controller
                 $model->stkpcd_dv = round($model->kpcd_dv * $baohiem, 0);
                 $model->stbhtn_dv = round($model->bhtn_dv * $baohiem, 0);
                 $model->ttbh_dv = $model->stbhxh_dv + $model->stbhyt_dv + $model->stkpcd_dv + $model->stbhtn_dv;
+
+                $model->tonghs += $heso_cl;
+                $model->ttl += $sotien_cl;
+                $model->luongtn = $model->ttl - $model->ttbh - $model->giaml - $model->thuetn - $model->trichnop + $model->bhct + $model->tienthuong;
+                //dd($model);
+                $model->save();
             }
-
-            $model->tonghs += $heso_cl;
-            $model->ttl += $sotien_cl;
-            $model->luongtn = $model->ttl - $model->ttbh - $model->giaml - $model->thuetn - $model->trichnop + $model->bhct + $model->tienthuong;
             //dd($model);
-            $model->save();
 
+            ketthuc:
             return redirect('/chuc_nang/bang_luong/can_bo?mabl=' . $model->mabl . '&maso=' . $model->id);
-
-
         } else
             return view('errors.notlogin');
     }
@@ -2566,7 +2600,7 @@ class bangluongController extends Controller
             //$inputs['mabl'] = $inputs['mabl'];
             //$model = $this->getBangLuong($inputs);
             $model = $this->getBangLuong($inputs)->wherein('phanloai', ['CVCHINH','KHONGCT']);
-            //dd($inputs);
+            dd($inputs);
             $mabl = $inputs['mabl'];
             $m_bl = bangluong::select('thang','nam','mabl','madv','ngaylap','phanloai','noidung')->where('mabl',$mabl)->first();
             $m_dv = dmdonvi::where('madv',$m_bl->madv)->first();

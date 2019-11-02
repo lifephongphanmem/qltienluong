@@ -71,8 +71,8 @@
         </div>
         <div class="modal-footer">
             <button type="button" data-dismiss="modal" class="btn btn-default">Hủy thao tác</button>
+            <button type="submit" data-dismiss="modal" class="btn btn-primary" onclick="ClickBC1_excel()" id="btn_xls">Xuất Excel</button>
             <button type="submit" data-dismiss="modal" class="btn btn-success" onclick="ClickBC1()">Đồng ý</button>
-            <!--button type="submit" data-dismiss="modal" class="btn btn-primary" onclick="ClickBC1_excel()">Xuất Excel</button-->
         </div>
     </div>
 </div>
@@ -141,9 +141,8 @@
         </div>
         <div class="modal-footer">
             <button type="button" data-dismiss="modal" class="btn btn-default">Hủy thao tác</button>
+            <button type="submit" data-dismiss="modal" class="btn btn-primary" onclick="ClickBCtt107_excel()" id="btn_xls">Xuất Excel</button>
             <button type="submit" data-dismiss="modal" class="btn btn-success" onclick="ClickBCtt107()">Đồng ý</button>
-            <!--button type="submit" data-dismiss="modal" class="btn btn-primary" onclick="ClickBCtt107_excel()">Xuất Excel</button-->
-
         </div>
     </div>
 </div>
@@ -220,6 +219,7 @@
         </div>
         <div class="modal-footer">
             <button type="button" data-dismiss="modal" class="btn btn-default">Hủy thao tác</button>
+            <button type="submit" data-dismiss="modal" class="btn btn-primary" onclick="ClickBC6_excel()" id="btn_xls">Xuất Excel</button>
             <button type="submit" data-dismiss="modal" class="btn btn-success" onclick="ClickBC6()">Đồng ý</button>
             {{--<button type="submit" data-dismiss="modal" class="btn btn-primary" onclick="ClickBC6_excel()">Xuất Excel</button>--}}
         </div>
@@ -275,6 +275,7 @@
         </div>
         <div class="modal-footer">
             <button type="button" data-dismiss="modal" class="btn btn-default">Hủy thao tác</button>
+            <button type="submit" data-dismiss="modal" class="btn btn-primary" onclick="ClickBCds_excel()" id="btn_xls">Xuất Excel</button>
             <button type="submit" data-dismiss="modal" class="btn btn-success" onclick="ClickBCds()">Đồng ý</button>
             <!--button type="submit" data-dismiss="modal" class="btn btn-primary" onclick="ClickBCds_excel()">Xuất Excel</button-->
         </div>
@@ -350,6 +351,7 @@
         </div>
         <div class="modal-footer">
             <button type="button" data-dismiss="modal" class="btn btn-default">Hủy thao tác</button>
+            <button type="submit" data-dismiss="modal" class="btn btn-primary" onclick="ClickBCtt107_tl_excel()" id="btn_xls">Xuất Excel</button>
             <button type="submit" data-dismiss="modal" class="btn btn-success" onclick="ClickBCtt107_tl()">Đồng ý</button>
             <!--button type="submit" data-dismiss="modal" class="btn btn-primary" onclick="ClickBCtt107_excel()">Xuất Excel</button-->
 
@@ -359,101 +361,137 @@
 {!! Form::close() !!}
 
 <script>
-    function inblm1(url){
+    function inblm1(url, exl = false){
         $('#printf_mau1').attr('action',url);
         $('#printf_mau1').find("[id^='mabl']").val($('#mabl_in').val());
         //$('#mabl_mau1').val($('#mabl_in').val());
         //$('#mau1-modal').modal('show');
     }
 
-    function inblmtt107(url){
+    function inblmtt107(url, exl = false){
         $('#printf_mautt107').find("[id^='macvcq']").attr('disabled',false);
         $('#printf_mautt107').find("[id^='mact']").attr('disabled',false);
         $('#printf_mautt107').attr('action',url);
         $('#printf_mautt107').find("[id^='mabl']").val($('#mabl_in').val());
+        var btn_xls = $('#printf_mautt107').find("[id^='btn_xls']");
+        btn_xls.removeClass('hidden');
+        if(!exl){
+            btn_xls.addClass('hidden');
+        }
     }
 
-    function inblmtt107_tl(url){
+    function inblmtt107_tl(url, exl = false){
         $('#printf_mautt107_tl').attr('action',url);
         $('#printf_mautt107_tl').find("[id^='mabl']").val($('#mabl_in').val());
+        var btn_xls = $('#printf_mautt107_tl').find("[id^='btn_xls']");
+        btn_xls.removeClass('hidden');
+        if(!exl){
+            btn_xls.addClass('hidden');
+        }
     }
 
-    function inblmtt107_pb(url){
+    function inblmtt107_pb(url, exl = false){
         $('#printf_mautt107').find("[id^='macvcq']").attr('disabled',true);
         $('#printf_mautt107').find("[id^='mact']").attr('disabled',true);
         $('#printf_mautt107').attr('action',url);
         $('#printf_mautt107').find("[id^='mabl']").val($('#mabl_in').val());
+        var btn_xls = $('#printf_mautt107').find("[id^='btn_xls']");
+        btn_xls.removeClass('hidden');
+        if(!exl){
+            btn_xls.addClass('hidden');
+        }
     }
 
-    function inblm6(){
+    function inblm6(exl = false){
         $('#mabl_mau6').val($('#mabl_in').val());
-        //$('#mau6-modal').modal('show');
+        var btn_xls = $('#printf_mau6').find("[id^='btn_xls']");
+        btn_xls.removeClass('hidden');
+        if(!exl){
+            btn_xls.addClass('hidden');
+        }
     }
     
-    function inblpc(url){
+    function inblpc(url, exl = false){
         $('#printf_mauds').find("[id^='mapb']").attr('disabled',false);
         $('#printf_mauds').find("[id^='macvcq']").attr('disabled',false);
         $('#printf_mauds').find("[id^='mact']").attr('disabled',false);
 
         $('#printf_mauds').attr('action',url);
         $('#printf_mauds').find("[id^='mabl']").val($('#mabl_in').val());
+        var btn_xls = $('#printf_mauds').find("[id^='btn_xls']");
+        btn_xls.removeClass('hidden');
+        if(!exl){
+            btn_xls.addClass('hidden');
+        }
     }
 
-    function indbhdnd(url){ //indbhdnd + bchd
+    function indbhdnd(url, exl = false){ //indbhdnd + bchd
         $('#printf_mauds').find("[id^='mapb']").attr('disabled',true);
         $('#printf_mauds').find("[id^='macvcq']").attr('disabled',true);
         $('#printf_mauds').find("[id^='mact']").attr('disabled',true);
 
         $('#printf_mauds').attr('action',url);
         $('#printf_mauds').find("[id^='mabl']").val($('#mabl_in').val());
+        var btn_xls = $('#printf_mauds').find("[id^='btn_xls']");
+        btn_xls.removeClass('hidden');
+        if(!exl){
+            btn_xls.addClass('hidden');
+        }
     }
 
-    function inqs(url){
+    function inqs(url, exl = false){
         $('#printf_mauds').find("[id^='mapb']").attr('disabled',false);
         $('#printf_mauds').find("[id^='macvcq']").attr('disabled',true);
         $('#printf_mauds').find("[id^='mact']").attr('disabled',true);
 
         $('#printf_mauds').attr('action',url);
         $('#printf_mauds').find("[id^='mabl']").val($('#mabl_in').val());
+        var btn_xls = $('#printf_mauds').find("[id^='btn_xls']");
+        btn_xls.removeClass('hidden');
+        if(!exl){
+            btn_xls.addClass('hidden');
+        }
     }
 
-    function inds(url){
+    function inds(url, exl = false){
         $('#printf_mauds').find("[id^='mapb']").attr('disabled',false);
         $('#printf_mauds').find("[id^='macvcq']").attr('disabled',false);
         $('#printf_mauds').find("[id^='mact']").attr('disabled',false);
 
         $('#printf_mauds').attr('action',url);
         $('#printf_mauds').find("[id^='mabl']").val($('#mabl_in').val());
+        var btn_xls = $('#printf_mauds').find("[id^='btn_xls']");
+        btn_xls.removeClass('hidden');
+        if(!exl){
+            btn_xls.addClass('hidden');
+        }
     }
 
     function ClickBC1() {
-        //var url = '{{(isset($furl)?$furl : '').'mau01'}}'
-        //$('#printf_mau1').attr('action', url);
         $('#printf_mau1').submit();
     }
     function ClickBC1_excel(){
-        var url = '{{(isset($furl)?$furl : '').'mau01_excel'}}'
-        $('#printf_mau1').attr('action',url);
+        var url = $('#printf_mau1').attr('action');
+        $('#printf_mau1').attr('action',url + '_xls');
         $('#printf_mau1').submit();
     }
 
     function ClickBCtt107() {
-        //var url = '{{(isset($furl)?$furl : '').'mautt107'}}'
-        //$('#printf_mautt107').attr('action', url);
+        $('#printf_mautt107').submit();
+    }
+    function ClickBCtt107_excel(){
+        var url = $('#printf_mautt107').attr('action');
+        $('#printf_mautt107').attr('action',url + '_xls');
         $('#printf_mautt107').submit();
     }
 
     function ClickBCtt107_tl() {
-        //var url = '{{(isset($furl)?$furl : '').'mautt107'}}'
-        //$('#printf_mautt107').attr('action', url);
         $('#printf_mautt107_tl').submit();
     }
-
-    function ClickBCtt107_excel(){
-        //chưa làm action += _excel
-        //var url = '{{(isset($furl)?$furl : '').'mautt107_excel'}}'
-        //$('#printf_mautt107').attr('action',url);
-        $('#printf_mautt107').submit();
+    function ClickBCtt107_tl_excel(){
+        var url = $('#printf_mautt107_tl').attr('action');
+        $('#printf_mautt107_tl').attr('action',url + '_xls');
+        $('#printf_mautt107_tl').submit();
     }
 
     function ClickBC6() {
@@ -462,8 +500,8 @@
         $('#printf_mau6').submit();
     }
     function ClickBC6_excel(){
-        var url = '{{(isset($furl)?$furl : '').'mau06_excel'}}'
-        $('#printf_mau6').attr('action',url);
+        var url = $('#printf_mau6').attr('action');
+        $('#printf_mau6').attr('action',url + '_xls');
         $('#printf_mau6').submit();
     }
 
@@ -472,8 +510,8 @@
         $('#printf_mauds').submit();
     }
     function ClickBCds_excel(){
-        //var url = '{{(isset($furl)?$furl : '').'mauds_excel'}}'
-        //$('#printf_mauds').attr('action',url);
+        var url = $('#printf_mauds').attr('action');
+        $('#printf_mauds').attr('action',url + '_xls');
         $('#printf_mauds').submit();
     }
 </script>
