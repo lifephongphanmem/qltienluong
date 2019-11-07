@@ -2600,7 +2600,7 @@ class bangluongController extends Controller
             //$inputs['mabl'] = $inputs['mabl'];
             //$model = $this->getBangLuong($inputs);
             $model = $this->getBangLuong($inputs)->wherein('phanloai', ['CVCHINH','KHONGCT']);
-            dd($inputs);
+
             $mabl = $inputs['mabl'];
             $m_bl = bangluong::select('thang','nam','mabl','madv','ngaylap','phanloai','noidung')->where('mabl',$mabl)->first();
             $m_dv = dmdonvi::where('madv',$m_bl->madv)->first();
