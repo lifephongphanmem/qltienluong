@@ -135,6 +135,7 @@ class hosonhansu extends Model
         'pcphth',
         'pcctp',
         'pctaicu',
+        'pclaunam',
         'theodoi',
         'mact',
         'baohiem',

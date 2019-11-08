@@ -146,6 +146,8 @@ class bangluong_ct_02 extends Model
         'hs_pcudn',
         'luuheso',
         'ghichu',
+        'pclaunam',
+        'st_pclaunam',
     ];
 }
 /*

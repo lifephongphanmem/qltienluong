@@ -65,6 +65,7 @@ class CreateHosocanboKiemnhiemTable extends Migration
             $table->double('pcphth')->default(0); //phẫu thuật, thủ thuật
             $table->double('pcctp')->default(0);//phụ cấp công tác phí
             $table->double('pctaicu')->default(0);//phụ cấp tái ứng cử
+            $table->double('pclaunam')->default(0);//công tác lâu năm
 
             $table->string('mact')->nullable();
             $table->double('baohiem')->default(1);

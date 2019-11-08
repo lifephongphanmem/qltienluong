@@ -71,6 +71,7 @@ class CreateHosothoicongtacTable extends Migration
             $table->double('pcphth')->default(0); //phẫu thuật, thủ thuật
             $table->double('pctaicu')->default(0);//phụ cấp tái ứng cử
             $table->double('pcctp')->default(0);
+            $table->double('pclaunam')->default(0);//công tác lâu năm
 
             $table->string('mact')->nullable();
             $table->text('ghichu')->nullable();

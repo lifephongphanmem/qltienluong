@@ -80,6 +80,7 @@ class HosotruylinhTable extends Migration
             $table->double('pcphth')->default(0); //phẫu thuật, thủ thuật
             $table->double('pcctp')->default(0);//phụ cấp công tác phí
             $table->double('pctdt')->default(0);
+            $table->double('pclaunam')->default(0);//công tác lâu năm
 
             $table->timestamps();
         });

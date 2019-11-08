@@ -68,6 +68,7 @@ class hosothoicongtac extends Model
         'mact',
 
         'ghichu',
-        'madv'
+        'madv',
+        'pclaunam',
     ];
 }

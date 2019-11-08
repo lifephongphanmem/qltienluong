@@ -364,6 +364,11 @@
     function inblm1(url, exl = false){
         $('#printf_mau1').attr('action',url);
         $('#printf_mau1').find("[id^='mabl']").val($('#mabl_in').val());
+        var btn_xls = $('#printf_mau1').find("[id^='btn_xls']");
+        btn_xls.removeClass('hidden');
+        if(!exl){
+            btn_xls.addClass('hidden');
+        }
         //$('#mabl_mau1').val($('#mabl_in').val());
         //$('#mau1-modal').modal('show');
     }

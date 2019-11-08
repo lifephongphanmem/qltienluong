@@ -107,6 +107,8 @@ class CreateTonghopluongDonviChitietTable extends Migration
             $table->double('st_pcphth')->default(0);
             $table->double('st_pcctp')->default(0);
             $table->double('st_pctaicu')->default(0);
+            $table->double('pclaunam')->default(0);//công tác lâu năm
+            $table->double('st_pclaunam')->default(0);//công tác lâu năm
 
             $table->double('tonghs')->default(0);
             $table->double('giaml')->default(0);

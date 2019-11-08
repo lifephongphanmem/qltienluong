@@ -241,7 +241,7 @@ class bangluongController extends Controller
 
         //ds cán bộ
 
-        $model_phucap = dmphucap_donvi::select('mapc', 'phanloai', 'congthuc', 'baohiem', 'tenpc', 'thaisan', 'nghiom')
+        $model_phucap = dmphucap_donvi::select('mapc', 'phanloai', 'congthuc', 'baohiem', 'tenpc', 'thaisan', 'nghiom', 'dieudong')
             ->where('madv', session('admin')->madv)->where('phanloai', '<', '3')
             ->wherenotin('mapc',array_merge(['hesott'], explode(',', $inputs['phucaploaitru'])))->get();
 
@@ -326,7 +326,8 @@ class bangluongController extends Controller
         dinhmucnguon:
         $a_ts = array_column($model_phucap->where('thaisan', 1)->toarray(), 'mapc');
         $a_no = array_column($model_phucap->where('nghiom', 1)->toarray(), 'mapc');
-        $a_dd = array_column($model_phucap->wherein('mapc', ['pclt', 'pckv'])->toarray(), 'mapc');//các loại phụ cấp cán bộ được điều động động đến được hưởng
+        $a_dd = array_column($model_phucap->where('dieudong', 1)->toarray(), 'mapc');
+        //$a_dd = array_column($model_phucap->wherein('mapc', ['pclt', 'pckv'])->toarray(), 'mapc');//các loại phụ cấp cán bộ được điều động động đến được hưởng
         $a_pc_coth = array('pcudn', 'pctnn', 'pctaicu');
         $ptdn = round(session('admin')->ptdaingay / 100, session('admin')->lamtron);
         //$ngaycong = dmdonvi::where('madv',$inputs['madv'])->first()->songaycong;
@@ -829,7 +830,7 @@ class bangluongController extends Controller
            ->whereYear('ngaytu', $inputs['nam'])->whereMonth('ngaytu', $inputs['thang'])->get()->keyBy('macanbo')->toarray();
         */
         //dd($inputs['phucaploaitru']);
-        $model_phucap = dmphucap_donvi::select('mapc', 'phanloai', 'congthuc', 'baohiem', 'tenpc', 'thaisan', 'nghiom')
+        $model_phucap = dmphucap_donvi::select('mapc', 'phanloai', 'congthuc', 'baohiem', 'tenpc', 'thaisan', 'nghiom', 'dieudong')
             ->where('madv', session('admin')->madv)->where('phanloai', '<', '3')
             ->wherenotin('mapc',array_merge(['hesott'], explode(',', $inputs['phucaploaitru'])))->get();
         //dd($model_phucap);
@@ -879,7 +880,8 @@ class bangluongController extends Controller
         //dd($a_nhomct);
         $ptdn = round(session('admin')->ptdaingay / 100, session('admin')->lamtron);//cán bộ nghỉ dài ngày hưởng 50% lương
 
-        $a_dd = array_column($model_phucap->wherein('mapc', ['pclt', 'pckv'])->toarray(), 'mapc');//các loại phụ cấp cán bộ được điều động động đến được hưởng (chưa làm cho định mức)
+        //$a_dd = array_column($model_phucap->wherein('mapc', ['pclt', 'pckv'])->toarray(), 'mapc');//các loại phụ cấp cán bộ được điều động động đến được hưởng (chưa làm cho định mức)
+        $a_dd = array_column($model_phucap->where('dieudong', 1)->toarray(), 'mapc');
         $a_ts = array_column($model_phucap->where('thaisan', 1)->toarray(), 'mapc');
         $a_no = array_column($model_phucap->where('nghiom', 1)->toarray(), 'mapc');
         //dd($a_ts);
@@ -1467,7 +1469,8 @@ class bangluongController extends Controller
                     ->where('madv', session('admin')->madv)->get()->keyby('macanbo')->toarray();
 
                 $a_goc = array('heso','vuotkhung','pccv');
-                $model_phucap = dmphucap_donvi::where('madv', session('admin')->madv)->wherenotin('mapc', array('hesott'))->get();
+                $model_phucap = dmphucap_donvi::where('madv', session('admin')->madv)
+                    ->wherenotin('mapc', array('hesott'))->get();
                 //Tạo bảng lương
 
                 $ngaycong = session('admin')->songaycong;
@@ -1524,6 +1527,7 @@ class bangluongController extends Controller
                         switch (getDbl($ct->phanloai)) {
                             case 0: {//hệ số
                                 $tonghs += $cb->$mapc;
+                                $tien = round($cb->$mapc * $cb->luongcoban,0);
                                 break;
                             }
                             case 1: {//số tiền
@@ -1540,7 +1544,9 @@ class bangluongController extends Controller
                                     }
                                     $cb->$mapc = ($heso * $cb->$mapc) / 100;
                                 }
+
                                 $tonghs += $cb->$mapc;
+                                $tien = round($cb->$mapc * $cb->luongcoban,0);
                                 break;
                             }
                             default: {//trường hợp còn lại (ẩn,...)
@@ -1548,11 +1554,11 @@ class bangluongController extends Controller
                                 break;
                             }
                         }
-                        $tiencong = round($cb->$mapc * $cb->luongcoban,0) + $tien;
-                        $ct->sotien = $tiencong;
 
+                        //tiền công 1 tháng để tính bh
+                        $ct->sotien = $tien;
                         //Tính lại số tiền để gán vào cột phụ cấp (theo ngày + tháng)
-                        $cb->$mapc_st = round(($tiencong / $ngaycong)* $cb->ngaytl,0) + $tiencong * $cb->thangtl;
+                        $cb->$mapc_st = round(($tien / $ngaycong)* $cb->ngaytl,0) + $tien * $cb->thangtl;
                         //tính bảo hiểm
                         if ($ct->baohiem == 1 &&
                             ($cb->maphanloai != 'KHAC' || ($cb->maphanloai == 'KHAC' && !in_array($mapc,$a_goc)))) {
@@ -1653,7 +1659,7 @@ class bangluongController extends Controller
                         $cb->st_pctnn = $cb->st_heso;
                         $cb->st_heso = 0;
                     }
-
+                    $cb->ghichu = $cb->noidung;
                     $kq = $cb->toarray();
                     unset($kq['id']);
                     //dd($kq);
@@ -2597,9 +2603,8 @@ class bangluongController extends Controller
     public function printf_mautt107(Request $request){
         if (Session::has('admin')) {
             $inputs = $request->all();
-            //$inputs['mabl'] = $inputs['mabl'];
-            //$model = $this->getBangLuong($inputs);
-            $model = $this->getBangLuong($inputs)->wherein('phanloai', ['CVCHINH','KHONGCT']);
+            //$model = $this->getBangLuong($inputs)->wherein('phanloai', ['CVCHINH','KHONGCT']);
+            $model = $this->getBangLuong($inputs);
 
             $mabl = $inputs['mabl'];
             $m_bl = bangluong::select('thang','nam','mabl','madv','ngaylap','phanloai','noidung')->where('mabl',$mabl)->first();

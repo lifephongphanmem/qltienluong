@@ -110,6 +110,8 @@ class CreateNguonkinhphiBangluongTable extends Migration
             $table->double('st_pcctp')->default(0);
             $table->double('pctaicu')->default(0);//phụ cấp tái ứng cử
             $table->double('st_pctaicu')->default(0);
+            $table->double('pclaunam')->default(0);//công tác lâu năm
+            $table->double('st_pclaunam')->default(0);//công tác lâu năm
 
             $table->double('tonghs')->default(0);
             $table->double('ttl')->default(0);

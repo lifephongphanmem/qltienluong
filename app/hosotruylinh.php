@@ -71,6 +71,7 @@ class hosotruylinh extends Model
         'pcphth',
         'pcctp',
         'pctdt',
+        'pclaunam',
     ];
 }
 //UPDATE `hosotruylinh` SET `mabl` = NULL WHERE mabl not in (SELECT mabl FROM bangluong);
