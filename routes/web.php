@@ -584,6 +584,7 @@ Route::group(['prefix'=>'chuc_nang'],function(){
 
         //truy lĩnh
         Route::post('mautruylinh','bangluongController@printf_mautruylinh');
+        Route::post('mautruylinh_m2','bangluong_inController@printf_mautruylinh_m2');
 
         Route::get('mauthpl','bangluong_inController@printf_mauthpl');
         Route::get('mauthpc','bangluong_inController@printf_mauthpc');

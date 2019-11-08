@@ -4671,7 +4671,7 @@ class bangluongController extends Controller
             });
             $a_nguon = a_unique($a_nguon);
             //dd($a_nguon);
-            return view('reports.bangluong.donvi.mautruylinh')
+            return view('reports.bangluong.truylinh.mautruylinh')
                 ->with('model',$model->sortBy('stt'))
                 ->with('model_pb',getPhongBan())
                 ->with('m_dv',$m_dv)

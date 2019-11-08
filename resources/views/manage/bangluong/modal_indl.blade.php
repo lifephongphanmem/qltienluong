@@ -472,7 +472,7 @@
                         <button type="button" style="border-width: 0px" class="btn btn-default btn-xs mbs"
                                 onclick="inblmtt107_tl('/chuc_nang/bang_luong/mautt107')"
                                 data-toggle="modal" data-target="#mautt107-modal-tl"
-                                title="Bảng lương của cán bộ theo mẫu C02-HD">
+                                title="Bảng truy lĩnh lương của cán bộ theo mẫu C02-HD">
                             <i class="fa fa-print"></i>&nbsp; Bảng lương mẫu C02-HD (TT107/2017/TT-BTC) - Mẫu 01</button>
                     </div>
                 </div>
@@ -481,13 +481,23 @@
                     <div class="form-group">
                         <button type="button" style="border-width: 0px" class="btn btn-default btn-xs mbs"
                                 data-toggle="modal" data-target="#mautt107-modal-tl"
-                                title="Bảng lương thêm cột giảm trừ lương, phần trăm vượt khung"
+                                title="Bảng truy lĩnh lương - thêm thời gian truy lĩnh"
                                 onclick="inblmtt107_tl('/chuc_nang/bang_luong/mautruylinh')">
                             <i class="fa fa-print"></i>&nbsp; Bảng lương mẫu C02-HD (TT107) - Mẫu 02</button>
                     </div>
                 </div>
             </div>
-
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <button type="button" style="border-width: 0px" class="btn btn-default btn-xs mbs"
+                                data-toggle="modal" data-target="#mautt107-modal-tl"
+                                title="Bảng truy lĩnh lương - lấy nội dung truy lĩnh"
+                                onclick="inblmtt107_tl('/chuc_nang/bang_luong/mautruylinh_m2')">
+                            <i class="fa fa-print"></i>&nbsp; Bảng lương mẫu C02-HD (TT107) - Mẫu 03</button>
+                    </div>
+                </div>
+            </div>
         </div>
 
         <div class="modal-footer">
