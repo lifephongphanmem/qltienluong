@@ -27,8 +27,9 @@
                         {!!Form::text('luongcoban_nkp', 0, array('id' => 'luongcoban_nkp','class' => 'form-control', 'data-mask'=>'fdecimal'))!!}
                     </div>
                 </div>
-                <input type="hidden" id="id_nkp" name="id_nkp"/>
-                <input type="hidden" id="maso_nkp" name="maso_nkp"/>
+                <input type="hidden" id="trangthai_nkp" name="trangthai_nkp" value="{{$inputs['trangthai']}}" />
+                <input type="hidden" id="id_nkp" name="id_nkp" />
+                <input type="hidden" id="maso_nkp" name="maso_nkp" />
             </div>
         </div>
 
@@ -61,14 +62,15 @@
         $('#maso_nkp').val('{{$model->maso}}');
     }
 
-    function edit_nkp(id){
+    function edit_nkp(id, trangthai){
         var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
         $.ajax({
             url: '{{$furl}}' + 'get_nkp',
             type: 'GET',
             data: {
                 _token: CSRF_TOKEN,
-                id: id
+                id: id,
+                trangthai: trangthai,
             },
             dataType: 'JSON',
             success: function (data) {

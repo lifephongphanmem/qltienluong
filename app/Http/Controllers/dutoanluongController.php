@@ -1051,10 +1051,10 @@ class dutoanluongController extends Controller
                 }
             }
             if ($a_pc[$i]['baohiem'] == 1) {
-                $stbhxh_dv += round($m_cb['bhxh_dv'] * $m_cb[$mapc] * $luongcb, 0);
-                $stbhyt_dv += round($m_cb['bhyt_dv'] * $m_cb[$mapc] * $luongcb, 0);
-                $stkpcd_dv += round($m_cb['kpcd_dv'] * $m_cb[$mapc] * $luongcb, 0);
-                $stbhtn_dv += round($m_cb['bhtn_dv'] * $m_cb[$mapc] * $luongcb, 0);
+                $stbhxh_dv += round($m_cb['bhxh_dv'] * $m_cb[$mapc_st], 0);
+                $stbhyt_dv += round($m_cb['bhyt_dv'] * $m_cb[$mapc_st], 0);
+                $stkpcd_dv += round($m_cb['kpcd_dv'] * $m_cb[$mapc_st], 0);
+                $stbhtn_dv += round($m_cb['bhtn_dv'] * $m_cb[$mapc_st], 0);
             }
         }
 

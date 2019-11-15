@@ -42,9 +42,10 @@
                     <table id="sample_3" class="table table-hover table-striped table-bordered" style="min-height: 230px">
                         <thead>
                             <tr>
-                                <th class="text-center" style="width: 10%">STT</th>
+                                <th class="text-center" style="width: 5%">STT</th>
                                 <th class="text-center">Tên khối/tổ công tác</th>
-                                <th class="text-center">Thao tác</th>
+                                <th class="text-center" style="width: 30%">Phân loại khối/tổ công tác</th>
+                                <th class="text-center" style="width: 15%">Thao tác</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -52,10 +53,11 @@
                                 @foreach($model as $key=>$value)
                                     <tr>
                                         <td class="text-center">{{$key+1}}</td>
-                                        <td name="tenpb">{{$value->tenpb}}</td>
+                                        <td>{{$value->tenpb}}</td>
+                                        <td>{{$value->diengiai}}</td>
                                         <td>
-                                            <button type="button" onclick="editPB('{{$value->mapb}}')" class="btn btn-info btn-xs mbs">
-                                                <i class="fa fa-edit"></i>&nbsp; Chỉnh sửa</button>
+                                            <button type="button" onclick="editPB('{{$value->mapb}}')" class="btn btn-default btn-xs mbs">
+                                                <i class="fa fa-edit"></i>&nbsp; Sửa</button>
 
                                             <button type="button" onclick="cfDel('/danh_muc/phong_ban/del/{{$value->id}}')" class="btn btn-danger btn-xs mbs" data-target="#delete-modal-confirm" data-toggle="modal">
                                                 <i class="fa fa-trash-o"></i>&nbsp; Xóa</button>
@@ -79,11 +81,58 @@
                     <h4 id="modal-header-primary-label" class="modal-title">Thông tin khối/tổ công tác</h4>
                 </div>
                 <div class="modal-body">
-                @include('templates.tem_phongban')
+                    <div class="row">
+                        <div class="col-md-12">
+                            <label class="form-control-label">Mã số<span class="require">*</span></label>
+                            {!!Form::text('mapb', null, array('id' => 'mapb','class' => 'form-control','readonly'=>'true'))!!}
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-12">
+                            <label class="form-control-label">Tên khối/tổ công tác<span class="require">*</span></label>
+                            {!!Form::text('tenpb', null, array('id' => 'tenpb','class' => 'form-control','required'=>'required'))!!}
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-11">
+                            <label class="form-control-label">Phân loại khối/tổ công tác</label>
+                            {!!Form::select('diengiai', $a_nhompb, null, array('id' => 'diengiai','class' => 'form-control'))!!}
+                        </div>
+                        <div class="col-md-1" style="padding-left: 0px;">
+                            <label class="control-label">&nbsp;&nbsp;&nbsp;</label>
+                            <button type="button" class="btn btn-default" data-target="#modal-nhom" data-toggle="modal"><i class="fa fa-plus"></i></button>
+                        </div>
+                    </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" data-dismiss="modal" class="btn btn-default">Hủy thao tác</button>
                     <button type="submit" id="submit" name="submit" value="submit" class="btn btn-primary" onclick="cfPB()">Đồng ý</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- -->
+    <div id="modal-nhom" tabindex="-1" role="dialog" aria-hidden="true" class="modal fade">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header modal-header-primary">
+                    <button type="button" data-dismiss="modal" aria-hidden="true" class="close">&times;</button>
+                    <h4 id="modal-header-primary-label" class="modal-title">Thông tin khối/tổ công tác</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <label class="form-control-label">Tên phân loại khối/tổ công tác<span class="require">*</span></label>
+                            {!!Form::text('tennhompb', null, array('id' => 'tennhompb','class' => 'form-control','required'=>'required'))!!}
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" data-dismiss="modal" class="btn btn-default">Hủy thao tác</button>
+                    <button class="btn btn-primary" onclick="addnhompb()">Đồng ý</button>
                 </div>
             </div>
         </div>
@@ -96,6 +145,11 @@
             $('#mapb').val('');
             $('#id_pb').val(0);
             $('#phongban-modal').modal('show');
+        }
+        function addnhompb(){
+            $('#modal-nhom').modal('hide');
+            var gt = $('#tennhompb').val();
+            $('#diengiai').append(new Option(gt, gt, true, true));
         }
 
         function editPB(mapb){
@@ -110,6 +164,7 @@
                 dataType: 'JSON',
                 success: function (data) {
                     $('#tenpb').val(data.tenpb);
+                    $('#diengiai').trigger(data.diengiai).change;
                     $('#mapb').val(mapb);
                 },
                 error: function(message){
@@ -140,7 +195,8 @@
                         type: 'GET',
                         data: {
                             _token: CSRF_TOKEN,
-                            tenpb: tenpb
+                            tenpb: tenpb,
+                            diengiai: $('#diengiai').val()
                         },
                         dataType: 'JSON',
                         success: function (data) {
@@ -159,7 +215,8 @@
                         data: {
                             _token: CSRF_TOKEN,
                             mapb: mapb,
-                            tenpb: tenpb
+                            tenpb: tenpb,
+                            diengiai: $('#diengiai').val()
                         },
                         dataType: 'JSON',
                         success: function (data) {

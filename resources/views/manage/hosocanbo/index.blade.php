@@ -67,8 +67,8 @@
                             <th width="96">Ảnh</th>
                             <th class="text-center">Họ tên</th>
                             <th class="text-center">Ngày sinh</th>
-                            <th class="text-center">Giới tính</th>
                             <th class="text-center">Phân loại</br>công tác</th>
+                            <th class="text-center">Phân loại</br>theo dõi</th>
                             <th>Thao tác</th>
                         </tr>
                     </thead>
@@ -89,12 +89,13 @@
                                 <td>
                                     <a href="{{url($url.'maso='.$hs->id.'')}}"><b>{{$hs->tencanbo}}</b></a>
                                     <p style="margin-top: 5px">Chức vụ: {{$hs->tencvcq}}</p>
+                                    <p style="margin-top: 5px">Khối/Tổ: {{$hs->tenpb}}</p>
                                 </td>
                                     <td class="text-center">{{getDayVn($hs->ngaysinh)}}</td>
-                                    <td class="text-center">{{$hs->gioitinh}}</td>
                                     <td class="text-center">{{$hs->tenct}}</td>
+                                    <td class="text-center">{{$hs->tentd}}</td>
                                 <td>
-                                    <a href="{{url($url.'maso='.$hs->id.'')}}" class="btn btn-default btn-xs mbs"><i class="fa fa-edit"></i>&nbsp; Chỉnh sửa</a>
+                                    <a href="{{url($url.'maso='.$hs->id.'')}}" class="btn btn-default btn-xs mbs"><i class="fa fa-edit"></i>&nbsp; Sửa</a>
                                     <a href="{{url($url.'inhoso?maso='.$hs->macanbo.'')}}" class="btn btn-default btn-xs mbs" target="_blank"><i class="fa fa-print"></i>&nbsp; In hồ sơ</a>
                                     <button type="button" onclick="cfDel('{{$url.'del/maso='.$hs->id}}')" class="btn btn-default btn-xs mbs" data-target="#delete-modal-confirm" data-toggle="modal">
                                         <i class="fa fa-times"></i>&nbsp; Xóa</button>

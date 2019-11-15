@@ -42,10 +42,12 @@ class hosocanboController extends Controller
             $a_ct = array_column(dmphanloaict::all()->toArray(), 'tenct', 'mact');
             $a_pb = getPhongBan(false);
             $a_cv = getChucVuCQ(false);
+            $a_tb = getPhanLoaiCanBo(false);
             foreach($m_hs as $hs){
                 $hs->tenpb = isset($a_pb[$hs->mapb])?$a_pb[$hs->mapb] : '';
                 $hs->tencvcq = isset($a_cv[$hs->macvcq])?$a_cv[$hs->macvcq] : '';
                 $hs->tenct = isset($a_ct[$hs->mact])?$a_ct[$hs->mact] : '';
+                $hs->tentd = isset($a_tb[$hs->theodoi])?$a_tb[$hs->theodoi] : '';
             }
             $model_nhomct = dmphanloaicongtac::select('macongtac', 'tencongtac')->get();
             $model_tenct = dmphanloaict::select('tenct', 'macongtac', 'mact')->get();

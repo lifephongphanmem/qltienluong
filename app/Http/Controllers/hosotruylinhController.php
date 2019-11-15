@@ -63,7 +63,6 @@ class hosotruylinhController extends Controller
             $insert['thangtl'] = getDbl($insert['thangtl']);
             $insert['ngaytl'] = getDbl($insert['ngaytl']);
             $model_pc = dmphucap_donvi::where('madv', session('admin')->madv)->get();
-
             if($insert['trangthai'] == 'ADD'){
                 $insert['madv'] = session('admin')->madv;
                 foreach($model_pc as $pc){
@@ -520,8 +519,11 @@ class hosotruylinhController extends Controller
         }
 
         $inputs = $request->all();
-        //dd(hosotruylinh_nguon::find($inputs['id']));
-        die(hosotruylinh_nguon::find($inputs['id']));
+        if($inputs['trangthai']){
+            die(hosotruylinh_nguon_temp::find($inputs['id']));
+        }else{
+            die(hosotruylinh_nguon::find($inputs['id']));
+        }
     }
 
     function store_nkp(Request $request)

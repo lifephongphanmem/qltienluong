@@ -853,8 +853,14 @@ class bangluong_inController extends Controller
             $inputs['madv'] = $m_dv->madv;
             $model = $this->getBangLuong($inputs);
 
-            $model_pb = dmphongban::select('mapb', 'tenpb')
+            $model_pb = dmphongban::select('mapb', 'tenpb', 'diengiai')
                 ->wherein('mapb', a_unique(array_column($model->toarray(),'mapb')))->get();
+            $a_nhompb = a_unique(array_column($model_pb->toarray(),'diengiai'));
+            $a_npb = array_column($model_pb->toarray(),'diengiai','mapb');
+
+            foreach ($model as $ct){
+                $ct->nhompb = $a_npb[$ct->mapb];
+            }
 
             $thongtin = array('nguoilap' => $m_bl->nguoilap,
                 'thang' => $m_bl->thang,
@@ -883,6 +889,7 @@ class bangluong_inController extends Controller
                 ->with('thongtin', $thongtin)
                 ->with('col', $col)
                 ->with('model_pb', $model_pb)
+                ->with('a_nhompb', $a_nhompb)
                 ->with('a_phucap', $a_phucap)
                 ->with('pageTitle', 'Bảng lương chi tiết');
         } else
