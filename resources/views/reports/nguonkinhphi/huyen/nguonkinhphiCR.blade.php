@@ -79,7 +79,7 @@
         </tr>
         <tr>
             <td colspan="2" style="text-align: center; font-weight: bold; font-size: 20px;">
-                DỰ TOÁN KINH PHÍ THỰC HIỆN LƯƠNG NĂM {{$nam}}
+                NGUỒN KINH PHÍ THỰC HIỆN NĂM {{$nam}}
             </td>
         </tr>
 

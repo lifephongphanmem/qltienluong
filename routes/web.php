@@ -977,6 +977,8 @@ Route::group(['prefix'=>'bao_cao'],function(){
             Route::post('chitraluong_thexcel','baocaobangluongController@chitraluong_th_huyen_excel');
             Route::post('dutoanluong','baocaobangluongController@dutoanluong_huyen');
             Route::post('dutoanluongCR','baocaobangluongController@dutoanluong_huyen_CR');
+            Route::post('tonghopluongCR','baocaobangluongController@tonghopluong_huyen_CR');
+            Route::post('nguonkinhphiCR','baocaobangluongController@nguonkinhphi_huyen_CR');
             Route::post('baocaohesoluong','baocaobangluongController@baocaohesoluong');
             Route::post('baocaohesoluongexcel','baocaobangluongController@baocaohesoluongexcel');
 
