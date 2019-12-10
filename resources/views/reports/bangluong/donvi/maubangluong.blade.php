@@ -77,15 +77,13 @@
         </tr>
 
         <tr>
-            @if($thongtin['phanloai'] == 'TRUYLINH')
-                <td colspan="2" style="text-align: center; font-weight: bold; font-size: 20px;">
-                    BẢNG THANH TOÁN TRUY LĨNH LƯƠNG VÀ PHỤ CẤP
-                </td>
-            @else
-                <td colspan="2" style="text-align: center; font-weight: bold; font-size: 20px;">
+            <td colspan="2" style="text-align: center; font-weight: bold; font-size: 20px;text-transform: uppercase">
+                @if($thongtin['innoidung'])
+                    {{$thongtin['noidung']}}
+                @else
                     BẢNG THANH TOÁN TIỀN LƯƠNG VÀ PHỤ CẤP
-                </td>
-            @endif
+                @endif
+            </td>
         </tr>
 
         <tr>

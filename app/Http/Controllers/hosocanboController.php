@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\bangluong_ct;
-use App\bangluong_phucap;
-use App\bangluongdangky_ct;
-use App\bangluongdangky_phucap;
+//use App\bangluong_ct;
+//use App\bangluong_phucap;
+//use App\bangluongdangky_ct;
+//use App\bangluongdangky_phucap;
 use App\dmchucvucq;
 use App\dmchucvud;
 use App\dmdantoc;
@@ -42,10 +42,12 @@ class hosocanboController extends Controller
             $a_ct = array_column(dmphanloaict::all()->toArray(), 'tenct', 'mact');
             $a_pb = getPhongBan(false);
             $a_cv = getChucVuCQ(false);
+            $a_tb = getPhanLoaiCanBo(false);
             foreach($m_hs as $hs){
                 $hs->tenpb = isset($a_pb[$hs->mapb])?$a_pb[$hs->mapb] : '';
                 $hs->tencvcq = isset($a_cv[$hs->macvcq])?$a_cv[$hs->macvcq] : '';
                 $hs->tenct = isset($a_ct[$hs->mact])?$a_ct[$hs->mact] : '';
+                $hs->tentd = isset($a_tb[$hs->theodoi])?$a_tb[$hs->theodoi] : '';
             }
             $model_nhomct = dmphanloaicongtac::select('macongtac', 'tencongtac')->get();
             $model_tenct = dmphanloaict::select('tenct', 'macongtac', 'mact')->get();
@@ -79,13 +81,13 @@ class hosocanboController extends Controller
             //$m_cvd= dmchucvud::all();
             $m_plnb = nhomngachluong::select('manhom', 'tennhom', 'heso', 'namnb')->distinct()->get();
             $m_pln = ngachluong::select('tenngachluong','manhom','msngbac','heso','namnb','hesolonnhat','bacvuotkhung')->get();
-            foreach ($m_pln as $mangach) {
-                $nhomnb = $m_plnb->where('manhom', $mangach->manhom)->first();
-                if (count($nhomnb) > 0 && $mangach->manhom != 'CBCT') {
-                    $mangach->heso = $nhomnb->heso;
-                    $mangach->namnb = $nhomnb->namnb;
-                }
-            }
+//            foreach ($m_pln as $mangach) {
+//                $nhomnb = $m_plnb->where('manhom', $mangach->manhom)->first();
+//                if (count($nhomnb) > 0 && $mangach->manhom != 'CBCT') {
+//                    $mangach->heso = $nhomnb->heso;
+//                    $mangach->namnb = $nhomnb->namnb;
+//                }
+//            }
             $macanbo = session('admin')->madv . '_' . getdate()[0];
 
             $max_stt = getDbl((hosocanbo::where('madv', session('admin')->madv)->get()->max('stt'))) + 1;
@@ -134,7 +136,7 @@ class hosocanboController extends Controller
             }
 
             if(isset($inputs['khongnopbaohiem'])){
-                $inputs['khongnopbaohiem'] = implode(',', $inputs['khongnopbaohiem']);
+                $inputs['khongnopbaohiem'] = implode(',', $insert['khongnopbaohiem']);
             }else{
                 $inputs['khongnopbaohiem'] = '';
             }
@@ -175,51 +177,54 @@ class hosocanboController extends Controller
             return view('errors.notlogin');
     }
 
-    function show($id){
+    function show($id)
+    {
         if (Session::has('admin')) {
             //$makhoipb=getMaKhoiPB(session('admin')->madv);
             $model = hosocanbo::find($id);
             //$m_hosoct = hosotinhtrangct::where('macanbo',$model->macanbo)->where('hientai','1')->first();
 
-            $model_nhomct = dmphanloaicongtac::select('macongtac','tencongtac')->get();
-            $model_tenct = dmphanloaict::select('tenct','macongtac','mact')->get();
-            $model_dt = array_column(dmdantoc::select(DB::raw('dantoc as maso'),'dantoc')->get()->toarray(),'dantoc','maso');
+            $model_nhomct = dmphanloaicongtac::select('macongtac', 'tencongtac')->get();
+            $model_tenct = dmphanloaict::select('tenct', 'macongtac', 'mact')->get();
+            $model_dt = array_column(dmdantoc::select(DB::raw('dantoc as maso'), 'dantoc')->get()->toarray(), 'dantoc', 'maso');
             //$m_pb= dmphongban::where('madv',session('admin')->madv)->get();
             //khối phòng ban giờ là lĩnh vực hoạt động
-            $m_linhvuc = array_column(dmkhoipb::all()->toArray(),'tenkhoipb','makhoipb');
-            $m_plnb = nhomngachluong::select('manhom','tennhom')->distinct()->get();
-            $m_pln = ngachluong::select('tenngachluong','manhom','msngbac','heso','namnb','hesolonnhat','bacvuotkhung')->get();
-            $a_linhvuc = explode(',',$model->lvhd);
-            $a_nguonkp = explode(',',$model->manguonkp);
+            $m_linhvuc = array_column(dmkhoipb::all()->toArray(), 'tenkhoipb', 'makhoipb');
+            $m_plnb = nhomngachluong::select('manhom', 'tennhom')->distinct()->get();
+            $m_pln = ngachluong::select('tenngachluong', 'manhom', 'msngbac', 'heso', 'namnb', 'hesolonnhat', 'bacvuotkhung')->get();
+            $a_linhvuc = explode(',', $model->lvhd);
+            $a_nguonkp = explode(',', $model->manguonkp);
             //lấy phụ cấp ở danh mục phụ cấp đơn vị mapc => tenform
             $model_pc = dmphucap_donvi::where('madv', session('admin')->madv)->get();
 
-            $model_kn = hosocanbo_kiemnhiem::where('macanbo',$model->macanbo)->get();
+            $model_kn = hosocanbo_kiemnhiem::where('macanbo', $model->macanbo)->get();
             $a_pl = getPhanLoaiKiemNhiem();
             $a_cv = getChucVuCQ(false);
-
-            foreach($model_kn as $ct) {
+            $nb =  $m_pln->where('msngbac', $model->msngbac)->first();
+            $namnb = count($nb) > 0 ? $nb->namnb : 0;
+            foreach ($model_kn as $ct) {
                 $ct->tenphanloai = isset($a_pl[$ct->phanloai]) ? $a_pl[$ct->phanloai] : '';
                 $ct->tenchucvu = isset($a_cv[$ct->macvcq]) ? $a_cv[$ct->macvcq] : '';
             }
-            $model_pc_bh = array_column( $model_pc->where('baohiem',1)->toarray(),'tenpc','mapc');
+            $model_pc_bh = array_column($model_pc->where('baohiem', 1)->toarray(), 'tenpc', 'mapc');
             return view('manage.hosocanbo.edit')
-                ->with('model',$model)
-                ->with('type','edit')
-                ->with('model_dt',$model_dt)
-                ->with('model_kn',$model_kn)
-                ->with('model_nhomct',$model_nhomct)
-                ->with('model_tenct',$model_tenct)
-                ->with('m_linhvuc',$m_linhvuc)
-                ->with('a_linhvuc',$a_linhvuc)
-                ->with('a_nguonkp',$a_nguonkp)
-                ->with('m_plnb',$m_plnb)
-                ->with('m_pln',$m_pln)
+                ->with('model', $model)
+                ->with('type', 'edit')
+                ->with('model_dt', $model_dt)
+                ->with('model_kn', $model_kn)
+                ->with('model_nhomct', $model_nhomct)
+                ->with('model_tenct', $model_tenct)
+                ->with('m_linhvuc', $m_linhvuc)
+                ->with('a_linhvuc', $a_linhvuc)
+                ->with('a_nguonkp', $a_nguonkp)
+                ->with('m_plnb', $m_plnb)
+                ->with('m_pln', $m_pln)
+                ->with('namnb', $namnb)
                 ->with('furl_kn', '/nghiep_vu/ho_so/')
                 ->with('a_heso', array('heso', 'vuotkhung', 'luonghd', 'hesott'))
                 ->with('a_pc_bh', $model_pc_bh)
-                ->with('model_pc',$model_pc->sortby('stt'))
-                ->with('pageTitle','Sửa thông tin hồ sơ cán bộ');
+                ->with('model_pc', $model_pc->sortby('stt'))
+                ->with('pageTitle', 'Sửa thông tin hồ sơ cán bộ');
         } else
             return view('errors.notlogin');
     }
@@ -375,8 +380,8 @@ class hosocanboController extends Controller
             );
             die(json_encode($result));
         }
-
         $inputs = $request->all();
+        //dd($inputs);
         $inputs['baohiem'] = 0;
         $inputs['madv'] = session('admin')->madv;
         $inputs['heso'] = chkDbl($inputs['heso']);
@@ -731,7 +736,7 @@ class hosocanboController extends Controller
         }
 
         $inputs = $request->all();
-
+        //dd($inputs);
         $inputs['madv'] = session('admin')->madv;
         $inputs['heso'] = chkDbl($inputs['heso']);
         $inputs['vuotkhung'] = chkDbl($inputs['vuotkhung']);

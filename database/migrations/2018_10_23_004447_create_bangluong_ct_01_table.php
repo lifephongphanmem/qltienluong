@@ -110,6 +110,9 @@ class CreateBangluongCt01Table extends Migration
             $table->double('st_pcphth')->default(0);
             $table->double('st_pctaicu')->default(0);
             $table->double('st_pcctp')->default(0);
+            $table->double('pclaunam')->default(0);//công tác lâu năm
+            $table->double('st_pclaunam')->default(0);//công tác lâu năm
+
             //lưu tỷ lệ bảo hiểm (đã quy về hệ số)
             $table->double('bhxh')->default(0);
             $table->double('bhyt')->default(0);
@@ -150,6 +153,7 @@ class CreateBangluongCt01Table extends Migration
             $table->double('hs_pcud61')->default(0);
             $table->double('hs_pcudn')->default(0);
             $table->string('ghichu')->nullable();
+
             $table->timestamps();
         });
     }

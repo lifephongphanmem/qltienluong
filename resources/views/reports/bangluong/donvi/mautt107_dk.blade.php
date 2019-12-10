@@ -77,10 +77,13 @@
         </tr>
 
         <tr>
-            <td colspan="2" style="text-align: center; font-weight: bold; font-size: 20px;">
-                BẢNG ĐĂNG KÝ TIỀN LƯƠNG VÀ CÁC KHOẢN PHỤ CẤP THEO LƯƠNG,</br>CÁC KHOẢN TRÍCH NỘP THEO LƯƠNG
+            <td colspan="2" style="text-align: center; font-weight: bold; font-size: 20px;text-transform: uppercase">
+                @if($thongtin['innoidung'])
+                    {{$thongtin['noidung']}}
+                @else
+                    BẢNG ĐĂNG KÝ TIỀN LƯƠNG VÀ CÁC KHOẢN PHỤ CẤP THEO LƯƠNG,</br>CÁC KHOẢN TRÍCH NỘP THEO LƯƠNG
+                @endif
             </td>
-
         </tr>
 
         <tr>

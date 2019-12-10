@@ -48,6 +48,10 @@
     </style>
 </head>
 
+<div class="in" style="margin-right: 20px; text-align: right">
+    <button type="submit" onclick=" window.print()"> In bảng lương</button>
+</div>
+
 <body style="font:normal 11px Times, serif;">
     <table class="header" width="96%" border="0" cellspacing="0" cellpadding="8" style="margin:0 auto 25px; text-align: center;">
         <tr>
@@ -77,10 +81,13 @@
         </tr>
 
         <tr>
-            <td colspan="2" style="text-align: center; font-weight: bold; font-size: 20px;">
-                BẢNG ĐĂNG KÝ TIỀN LƯƠNG VÀ CÁC KHOẢN PHỤ CẤP THEO LƯƠNG,</br>CÁC KHOẢN TRÍCH NỘP THEO LƯƠNG
+            <td colspan="2" style="text-align: center; font-weight: bold; font-size: 20px;text-transform: uppercase">
+                @if($thongtin['innoidung'])
+                    {{$thongtin['noidung']}}
+                @else
+                    BẢNG ĐĂNG KÝ TIỀN LƯƠNG VÀ CÁC KHOẢN PHỤ CẤP THEO LƯƠNG,</br>CÁC KHOẢN TRÍCH NỘP THEO LƯƠNG
+                @endif
             </td>
-
         </tr>
 
         <tr>

@@ -67,7 +67,7 @@
                                 <div class="col-md-3">
                                     <div class="form-group">
                                         <label class="form-control-label">Số ngày công</label>
-                                        {!!Form::text('songaycong', null, array('id' =>'songaycong', 'class' => 'form-control', 'data-mask'=>'fdecimal'))!!}
+                                        {!!Form::text('songaycong', session('admin')->songaycong, array('id' =>'songaycong', 'class' => 'form-control', 'data-mask'=>'fdecimal'))!!}
                                     </div>
                                 </div>
                                 <div class="col-md-3">

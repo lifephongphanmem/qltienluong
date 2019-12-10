@@ -90,7 +90,13 @@
         </th>
     </tr-->
 </table>
-<p style="text-align: center; font-weight: bold; font-size: 20px;">BẢNG THANH THANH TOÁN TIỀN PHỤ CẤP ĐB HĐND XÃ</p>
+<p style="text-align: center; font-weight: bold; font-size: 20px;text-transform: uppercase">
+    @if($thongtin['innoidung'])
+        {{$thongtin['noidung']}}
+    @else
+        BẢNG THANH THANH TOÁN TIỀN PHỤ CẤP ĐB HĐND XÃ
+    @endif
+</p>
 <p style="text-align: center; font-style: italic">Tháng {{$thongtin['thang']}} năm {{$thongtin['nam']}}</p>
 <p style="font-weight: bold">Chương: 805; Loại: 340; Khoản: 341;</p>
 

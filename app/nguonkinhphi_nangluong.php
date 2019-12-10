@@ -118,7 +118,9 @@ class nguonkinhphi_nangluong extends Model
         'stbhyt_dv',
         'stluonghd',
         'stbhtn_dv',
-        'ttbh_dv'
+        'ttbh_dv',
+        'pclaunam',
+        'st_pclaunam',
     ];
 }
 /*

@@ -77,11 +77,13 @@
         </tr>
 
         <tr>
-
-                <td colspan="2" style="text-align: center; font-weight: bold; font-size: 20px;">
+            <td colspan="2" style="text-align: center; font-weight: bold; font-size: 20px;text-transform: uppercase">
+                @if($thongtin['innoidung'])
+                    {{$thongtin['noidung']}}
+                @else
                     BẢNG ĐĂNG KÝ TIỀN LƯƠNG VÀ PHỤ CẤP
-                </td>
-
+                @endif
+            </td>
         </tr>
 
         <tr>

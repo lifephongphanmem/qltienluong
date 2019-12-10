@@ -103,6 +103,7 @@ class hosodieudong extends Model
         'bhtnld_dv',
         'kpcd_dv',
         'nguoiphuthuoc',
-        'sodinhdanhcanhan'
+        'sodinhdanhcanhan',
+        'pclaunam',
     ];
 }

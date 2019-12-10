@@ -70,8 +70,12 @@
         </tr>
 
         <tr>
-            <td colspan="2" style="text-align: center; font-weight: bold; font-size: 20px;">
-                BẢNG TỔNG HỢP PHỤ CẤP, TRỢ CẤP
+            <td colspan="2" style="text-align: center; font-weight: bold; font-size: 20px;text-transform: uppercase">
+                @if($thongtin['innoidung'])
+                    {{$thongtin['noidung']}}
+                @else
+                    BẢNG TỔNG HỢP PHỤ CẤP, TRỢ CẤP
+                @endif
             </td>
         </tr>
 

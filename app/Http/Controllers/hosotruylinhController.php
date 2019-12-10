@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\dmphucap_donvi;
 use App\hosocanbo;
+use App\hosocanbo_kiemnhiem;
 use App\hosotruylinh;
 use App\hosotruylinh_nguon;
 use App\hosotruylinh_nguon_temp;
@@ -36,7 +37,10 @@ class hosotruylinhController extends Controller
             }
             $model_nhomct = dmphanloaicongtac::select('macongtac','tencongtac')->get();
             $model_tenct = dmphanloaict::select('tenct','macongtac','mact')->get();
-
+            $a_cv = getChucVuCQ(false);
+            foreach($model as $hs){
+                $hs->tencvcq = isset($a_cv[$hs->macvcq])?$a_cv[$hs->macvcq] : '';
+            }
             return view('manage.truylinh.index')
                 ->with('model', $model->sortby('ngaytu'))
                 ->with('inputs', $inputs)
@@ -59,7 +63,6 @@ class hosotruylinhController extends Controller
             $insert['thangtl'] = getDbl($insert['thangtl']);
             $insert['ngaytl'] = getDbl($insert['ngaytl']);
             $model_pc = dmphucap_donvi::where('madv', session('admin')->madv)->get();
-
             if($insert['trangthai'] == 'ADD'){
                 $insert['madv'] = session('admin')->madv;
                 foreach($model_pc as $pc){
@@ -442,22 +445,51 @@ class hosotruylinhController extends Controller
             $inputs['luongcoban'] = chkDbl($inputs['luongcoban']);
             $sott = getdate()[0]; //lưu mã số
             $model_pc = dmphucap_donvi::where('madv', session('admin')->madv)->wherein('phanloai',['0','2'])->get();
-            $a_th = array_merge(array('macanbo', 'pthuong','tencanbo', 'madv'),
+            $a_th = array_merge(array('macanbo', 'pthuong', 'tencanbo', 'madv', 'macvcq', 'mapb', 'stt', 'mact'),
+                array_column($model_pc->toarray(),'mapc'));
+            $a_thkn = array_merge(array('macanbo', 'pthuong', 'phanloai', 'madv', 'macvcq', 'mapb', 'mact'),
                 array_column($model_pc->toarray(),'mapc'));
 
             $a_data = array();
             $a_nkp = array();
             if (in_array('ALL', $inputs['mact'])) {
                 $m_hs = hosocanbo::select($a_th)->where('madv',session('admin')->madv)->where('theodoi','<','9')->get();
+                $m_hskn = hosocanbo_kiemnhiem::select($a_thkn)->where('madv',session('admin')->madv)->get();
             } else {
                 $m_hs = hosocanbo::select($a_th)->where('madv',session('admin')->madv)
                     ->wherein('mact',$inputs['mact'])
                     ->where('theodoi','<','9')->get();
+                $m_hskn = hosocanbo_kiemnhiem::select($a_thkn)->where('madv',session('admin')->madv)
+                    ->wherein('mact',$inputs['mact'])
+                    ->get();
             }
 
             foreach($m_hs as $hs) {
                 $maso = $hs->madv . '_' . $sott++;
                 $hs->maphanloai = $inputs['maphanloai'];
+                $hs->phanloai = 'CONGTAC';
+                $hs->maso = $maso;
+                $hs->thangtl = $inputs['thangtl'];
+                $hs->ngaytl = $inputs['ngaytl'];
+                $hs->ngaytu = $inputs['ngaytu'];
+                $hs->ngayden = $inputs['ngayden'];
+                $a_data[] = $hs->toarray();
+                $a_nkp[] = array(
+                    'maso' => $maso,
+                    'manguonkp' => $inputs['manguonkp'],
+                    'luongcoban' => $inputs['luongcoban'],
+                );
+            }
+
+            foreach($m_hskn as $hs) {
+                $hoso = $m_hs->where('macanbo',$hs->macanbo);
+                if(count($hoso) == 0){
+                    continue;
+                }
+                $maso = $hs->madv . '_' . $sott++;
+                $hs->maphanloai = $inputs['maphanloai'];
+                $hs->tencanbo = $hoso->first()->tencanbo;
+                $hs->stt = $hoso->first()->stt;
                 $hs->maso = $maso;
                 $hs->thangtl = $inputs['thangtl'];
                 $hs->ngaytl = $inputs['ngaytl'];
@@ -487,8 +519,11 @@ class hosotruylinhController extends Controller
         }
 
         $inputs = $request->all();
-        //dd(hosotruylinh_nguon::find($inputs['id']));
-        die(hosotruylinh_nguon::find($inputs['id']));
+        if($inputs['trangthai']){
+            die(hosotruylinh_nguon_temp::find($inputs['id']));
+        }else{
+            die(hosotruylinh_nguon::find($inputs['id']));
+        }
     }
 
     function store_nkp(Request $request)

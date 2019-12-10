@@ -295,6 +295,10 @@ class dsnangthamnienController extends Controller
 
                 if (isset($canbo->truylinhtungay) && $canbo->heso > 0) {
                     //$truylinh = new hosotruylinh();
+                    $a_tl['mact'] = $canbo->mact;
+                    $a_tl['macvcq'] = $canbo->macvcq;
+                    $a_tl['mapb'] = $canbo->mapb;
+                    $a_tl['stt'] = $canbo->stt;
                     $a_tl['macanbo'] = $canbo->macanbo;
                     $a_tl['tencanbo'] = $hoso->tencanbo;
                     $a_tl['ngaytu'] = $canbo->truylinhtungay;

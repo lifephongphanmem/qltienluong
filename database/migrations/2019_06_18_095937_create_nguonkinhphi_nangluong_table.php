@@ -72,6 +72,8 @@ class CreateNguonkinhphiNangluongTable extends Migration
             $table->double('pcdith')->default(0); //điện thoại
             $table->double('luonghd')->default(0); //lương hợp đồng, lương khoán (số tiền)
             $table->double('pcphth')->default(0); //phẫu thuật, thủ thuật
+            $table->double('pclaunam')->default(0);//công tác lâu năm
+            $table->double('st_pclaunam')->default(0);//công tác lâu năm
 
             $table->double('st_heso')->default(0);
             $table->double('st_hesobl')->default(0);

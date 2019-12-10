@@ -52,7 +52,7 @@
                                                 <td>{{isset($a_nkp[$value->manguonkp]) ? $a_nkp[$value->manguonkp]: $value->manguonkp}}</td>
                                                 <td class="text-right">{{dinhdangso($value->luongcoban)}}</td>
                                                 <td>
-                                                    <button type="button" onclick="edit_nkp('{{$value->id}}')" class="btn btn-default btn-xs mbs"
+                                                    <button type="button" onclick="edit_nkp('{{$value->id}}','{{$inputs['trangthai']}}')" class="btn btn-default btn-xs mbs"
                                                             data-target="#nguonkp-modal" data-toggle="modal"><i class="fa fa-edit"></i>&nbsp; Sửa</button>
                                                     <button type="button" class="btn btn-default btn-xs mbs" onclick="cfDel('{{$value->id}}')"
                                                             data-target="#delete-modal-confirm" data-toggle="modal"><i class="fa fa-trash-o"></i>&nbsp;Xóa</button>

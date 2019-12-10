@@ -49,27 +49,28 @@
                                 <th class="text-center">Phụ cấp</th>
                                 <th class="text-center">Phân loại</th>
                                 <th class="text-center">Bao gồm các</br>loại hệ số</th>
-                                <th class="text-center">Tổng hợp</br>số liệu</th>
-                                <th class="text-center">Nộp</br>bảo hiểm</th>
-                                <th class="text-center">Trừ</br>nghỉ phép</th>
-                                <th class="text-center">Hưởng</br>thai sản</th>
+                                <th class="text-center">Tổng hợp</br>số liệu,</br>dự toán</th>
+                                <th class="text-center">Nộp</br>bảo</br>hiểm</th>
+                                <th class="text-center">Trừ</br>nghỉ</br>phép</th>
+                                <th class="text-center">Hưởng</br>thai</br>sản</th>
+                                <th class="text-center">Hưởng</br>điều</br>động</th>
                                 <th class="text-center">Thao tác</th>
                             </tr>
                         </thead>
 
                         <tbody>
-                        @if(isset($model))
                             @foreach($model as $key=>$value)
-                                <tr>
+                                <tr class="{{$value->phanloai == 3? getTextStatus('CHUADL') : ''}}">
                                     <td class="text-center">{{$value->stt}}</td>
                                     <td>{{$value->mapc}}</td>
                                     <td>{{$value->tenpc}}</td>
                                     <td>{{$value->tenphanloai}}</td>
                                     <td>{{$value->tencongthuc}}</td>
-                                    <td class="text-center">{{$value->tonghop == 1 ? 'Tổng hợp và dự toán':''}}</td>
-                                    <td class="text-center">{{$value->baohiem == 1 ? 'Nộp bảo hiểm':''}}</td>
-                                    <td class="text-center">{{$value->nghiom == 1 ? 'Trừ nghỉ phép':''}}</td>
-                                    <td class="text-center">{{$value->thaisan == 1 ? 'Hưởng chế độ thai sản':''}}</td>
+                                    <td class="text-center">{!!$value->tonghop == 1 ? '<i class="fa fa-check"></i>':''!!} </td>
+                                    <td class="text-center">{!!$value->baohiem == 1 ? '<i class="fa fa-check"></i>':''!!}</td>
+                                    <td class="text-center">{!!$value->nghiom == 1 ? '<i class="fa fa-check"></i>':''!!}</td>
+                                    <td class="text-center">{!!$value->thaisan == 1 ? '<i class="fa fa-check"></i>':''!!}</td>
+                                    <td class="text-center">{!!$value->dieudong == 1 ? '<i class="fa fa-check"></i>':''!!}</td>
                                     <td>
                                         <a href="{{$furl.'edit?maso='.$value->mapc}}" class="btn btn-default btn-xs">
                                             <i class="fa fa-edit"></i>&nbsp; Sửa</a>
@@ -79,7 +80,6 @@
                                     </td>
                                 </tr>
                             @endforeach
-                        @endif
                         </tbody>
                     </table>
                 </div>
@@ -117,6 +117,7 @@
         $(function() {
             //Multi select box
             //$("#ctpc").select2();
+            //<span class="badge badge-default">Chưa hoàn thành</span>
             $("#ctpc").change(function () {
                 $("#congthuc").val($("#ctpc").val());
             });

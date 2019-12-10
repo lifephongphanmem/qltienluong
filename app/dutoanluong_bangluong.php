@@ -117,7 +117,9 @@ class dutoanluong_bangluong extends Model
         'stbhyt_dv',
         'stkpcd_dv',
         'stbhtn_dv',
-        'ttbh_dv'
+        'ttbh_dv',
+        'pclaunam',
+        'st_pclaunam',
     ];
 
     //13.12.2018 ALTER TABLE `dutoanluong_bangluong` ADD `congtac` VARCHAR(25) NULL DEFAULT 'CONGTAC' AFTER `msngbac`;

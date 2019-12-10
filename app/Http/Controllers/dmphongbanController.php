@@ -32,7 +32,8 @@ class dmphongbanController extends Controller
          dd('OK');
     }
 
-    public function index(){
+    public function index()
+    {
         if (Session::has('admin')) {
             /*
             switch(session('admin')->level){
@@ -50,11 +51,14 @@ class dmphongbanController extends Controller
                 }
             }
             */
-            $m_pb=dmphongban::where('madv',session('admin')->madv)->get();
+            $m_pb = dmphongban::where('madv', session('admin')->madv)->get();
+            $a_nhompb = array_column($m_pb->toarray(),'diengiai','diengiai');
+            //dd($a_nhompb);
             return view('system.danhmuc.phongban.index')
-                ->with('model',$m_pb)
-                ->with('furl','/danh_muc/phong_ban/')
-                ->with('pageTitle','Danh mục phòng ban');
+                ->with('model', $m_pb)
+                ->with('a_nhompb', $a_nhompb)
+                ->with('furl', '/danh_muc/phong_ban/')
+                ->with('pageTitle', 'Danh mục phòng ban');
         } else
             return view('errors.notlogin');
     }
@@ -77,7 +81,7 @@ class dmphongbanController extends Controller
         $model = new dmphongban();
         $model->mapb = session('admin')->madv .'_'.getdate()[0];
         $model->tenpb = $inputs['tenpb'];
-        //$model->diengiai = $inputs['diengiai'];
+        $model->diengiai = $inputs['diengiai'];
         //$model->sapxep = $inputs['sapxep'];
         $model->madv = session('admin')->madv;
         $model->save();
@@ -114,7 +118,7 @@ class dmphongbanController extends Controller
         $inputs = $request->all();
         $model = dmphongban::where('mapb',$inputs['mapb'])->first();
         $model->tenpb = $inputs['tenpb'];
-        //$model->diengiai = $inputs['diengiai'];
+        $model->diengiai = $inputs['diengiai'];
         //$model->sapxep = $inputs['sapxep'];
         $model->save();
 

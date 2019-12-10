@@ -577,9 +577,14 @@ Route::group(['prefix'=>'chuc_nang'],function(){
         Route::get('mautruc','bangluongController@printf_mautruc');
         Route::get('mautinhnguyen','bangluongController@printf_mautinhnguyen');
         Route::post('maumtm','bangluongController@printf_maumtm');
+        //mẫu bảng lương lai châu
+        Route::post('mautt107_lc','bangluong_inController@printf_mautt107_lc');
+        Route::post('mautt107_lc_xp','bangluong_inController@printf_mautt107_lc_xp');
+        Route::post('mautt107_lc_pb','bangluong_inController@printf_mautt107_lc_pb');
 
         //truy lĩnh
         Route::post('mautruylinh','bangluongController@printf_mautruylinh');
+        Route::post('mautruylinh_m2','bangluong_inController@printf_mautruylinh_m2');
 
         Route::get('mauthpl','bangluong_inController@printf_mauthpl');
         Route::get('mauthpc','bangluong_inController@printf_mauthpc');

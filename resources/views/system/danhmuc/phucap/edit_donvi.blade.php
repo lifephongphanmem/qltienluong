@@ -77,44 +77,53 @@
                         </div>
 
                         <div class="row">
-                            <div class="col-md-4">
+                            <div class="col-md-6">
                                 <div class="form-group">
                                     <label class="form-control-label">Tiêu đề trên Form<span class="require">*</span></label>
                                     {!!Form::text('form', null, array('id' => 'form','class' => 'form-control','required'=>'required'))!!}
                                 </div>
                             </div>
 
-                            <div class="col-md-4">
+                            <div class="col-md-6">
                                 <div class="form-group">
                                     <label class="form-control-label">Tiêu đề trên báo cáo<span class="require">*</span></label>
                                     {!!Form::text('report', null, array('id' => 'report','class' => 'form-control','required'=>'required'))!!}
                                 </div>
                             </div>
+                        </div>
 
-                            <div class="col-md-4">
+                        <div class="row">
+                            <div class="col-md-3">
                                 <div class="form-group">
                                     <label class="form-control-label">Nộp bảo hiểm</label>
-                                    {!!Form::select('baohiem',array('0'=>'Không nộp hiểm','1'=>'Có nộp hiểm'), null, array('id' => 'baohiem','class' => 'form-control'))!!}
+                                    {!!Form::select('baohiem',array('0'=>'Không','1'=>'Có'), null, array('id' => 'baohiem','class' => 'form-control'))!!}
+                                </div>
+                            </div>
+
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label class="form-control-label">Trừ nghỉ phép, nghỉ ốm</label>
+                                    {!!Form::select('nghiom',array('0'=>'Không','1'=>'Có'), null, array('id' => 'nghiom','class' => 'form-control'))!!}
+                                </div>
+                            </div>
+
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label class="form-control-label">Chế độ thai sản</label>
+                                    {!!Form::select('thaisan',array('0'=>'Không','1'=>'Có'), null, array('id' => 'thaisan','class' => 'form-control'))!!}
+                                </div>
+                            </div>
+
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label class="form-control-label">Chế độ điều động</label>
+                                    {!!Form::select('dieudong',array('0'=>'Không','1'=>'Có'), null, array('id' => 'dieudong','class' => 'form-control'))!!}
                                 </div>
                             </div>
                         </div>
 
                         <div class="row">
-                            <div class="col-md-4">
-                                <div class="form-group">
-                                    <label class="form-control-label">Trừ nghỉ phép, nghỉ ốm</label>
-                                    {!!Form::select('nghiom',array('0'=>'Không trừ nghỉ phép, nghỉ ốm','1'=>'Có trừ nghỉ phép, nghỉ ốm'), null, array('id' => 'nghiom','class' => 'form-control'))!!}
-                                </div>
-                            </div>
-
-                            <div class="col-md-4">
-                                <div class="form-group">
-                                    <label class="form-control-label">Hưởng thai sản</label>
-                                    {!!Form::select('thaisan',array('0'=>'Không hưởng chế độ thai sản','1'=>'Có hưởng chế độ thai sản'), null, array('id' => 'thaisan','class' => 'form-control'))!!}
-                                </div>
-                            </div>
-
-                            <div class="col-md-4">
+                            <div class="col-md-3">
                                 <div class="form-group">
                                     <label class="form-control-label">Số thứ tự (sắp xếp)</label>
                                     {!!Form::text('stt', null, array('id' => 'stt','class' => 'form-control', 'data-mask'=>'fdecimal'))!!}

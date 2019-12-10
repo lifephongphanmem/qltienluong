@@ -83,20 +83,17 @@
                 DACH SÁCH CÁN BỘ ĐANG CÔNG TÁC
             </td>
         </tr>
-
-
-
     </table>
 
     <table class="money" cellspacing="0" cellpadding="0" border="1" style="margin: 20px auto; border-collapse: collapse;font:normal 11px Times, serif;">
         <tr style="padding-left: 2px;padding-right: 2px">
-            <th style="width: 2%;">S</br>T</br>T</th>
-            <th style="width: 12%;">Họ và tên</th>
+            <th style="width: 5%;">S</br>T</br>T</th>
+            <th style="width: 20%;">Họ và tên</th>
             <th>Chức vụ</th>
             <th>Phân loại</br>công tác</th>
-            <th>Mã ngạch bậc</th>
+            <th style="width: 8%;">Mã ngạch bậc</th>
             @foreach($a_phucap as $key=>$val)
-                <th>{!!$val!!}</th>
+                <th style="width: 5%;">{!!$val!!}</th>
             @endforeach
         </tr>
 
@@ -134,7 +131,7 @@
             <td style="text-align: center;" width="50%">(Ký tên, đóng dấu)</td>
         </tr>
         <tr>
-            <td><br><br><br></td>
+            <td><br><br><br><br><br><br></td>
         </tr>
 
         <tr>

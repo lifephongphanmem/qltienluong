@@ -118,7 +118,9 @@ class tonghopluong_donvi_bangluong extends Model
         'stbhyt_dv',
         'stkpcd_dv',
         'stbhtn_dv',
-        'ttbh_dv'
+        'ttbh_dv',
+        'pclaunam',
+        'st_pclaunam',
     ];
     /*
      19/02/19

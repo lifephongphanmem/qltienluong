@@ -108,7 +108,9 @@ class tonghopluong_donvi_chitiet extends Model
         'stbhyt_dv',
         'stpctaicu',
         'stbhtn_dv',
-        'ttbh_dv'
+        'ttbh_dv',
+        'pclaunam',
+        'st_pclaunam',
     ];
 }
     //19/02/2018

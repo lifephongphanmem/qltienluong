@@ -329,6 +329,8 @@ class dsnangluongController extends Controller
                 $hoso = hosocanbo::where('macanbo', $canbo->macanbo)->first();
                 $pl_phucap = $hoso->heso == $canbo->heso ? 'vuotkhung':'heso';
 
+                $hoso->hesobl = $hoso->hesobl + $hoso->heso - $canbo->heso;
+                $hoso->hesobl = $hoso->hesobl < 0 ? 0 : $hoso->hesobl;
                 $hoso->heso = $canbo->heso;
                 $hoso->bac = $canbo->bac;
                 $hoso->vuotkhung = $canbo->vuotkhung;
@@ -345,6 +347,9 @@ class dsnangluongController extends Controller
                         $a_tl[$mapc] = $hoso->$mapc;
                     }
 
+                    $a_tl['macvcq'] = $canbo->macvcq;
+                    $a_tl['mapb'] = $canbo->mapb;
+                    $a_tl['mact'] = $canbo->mact;
                     $a_tl['macanbo'] = $canbo->macanbo;
                     $a_tl['tencanbo'] = $hoso->tencanbo;
                     $a_tl['ngaytu'] = $canbo->truylinhtungay;

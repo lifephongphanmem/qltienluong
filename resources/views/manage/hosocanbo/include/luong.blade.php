@@ -15,7 +15,7 @@
                 </div>
                 <div class="portlet-body" style="display: block;">
                     <div class="row">
-                        <input type="hidden" name="namnangluong" id="namnangluong" value="0">
+                        <input type="hidden" name="namnangluong" id="namnangluong" value="{{isset($namnb)?$namnb : 0}}">
                         <div class="col-md-2">
                             <div class="form-group">
                                 <label class="control-label">Mã ngạch <span class="require">*</span></label>
@@ -248,8 +248,6 @@
                                     {!!Form::hidden('tnntungay', null, array('id' =>'tnntungay', 'class' => 'form-control'))!!}
                                     {!!Form::hidden('tnndenngay', null, array('id' =>'tnndenngay', 'class' => 'form-control'))!!}
                                 @endif
-
-
                             @endforeach
                         </div>
                     </div>
@@ -261,6 +259,35 @@
         </div>
     </div>
 </div>
+
+<script>
+    $(function(){
+        $("#ngaytu").change(function(){
+            $("#ngayden").val(add_date($('#ngaytu').val(),$('#namnangluong').val()));
+        });
+        $("#tnntungay").change(function(){
+            $("#tnndenngay").val(add_date($('#tnntungay').val(),1));
+        });
+    });
+
+    function add_date(thoidiem,sonam){
+        var date = new Date();
+        if(thoidiem != '' && sonam != ''){
+            var date = new Date(thoidiem);
+            var dd = date.getDate();
+            var mm = date.getMonth() + 1;
+            var y = date.getFullYear() + parseInt(sonam);
+            if(dd<10) {
+                dd='0'+dd;
+            }
+            if(mm<10) {
+                mm='0'+mm;
+            }
+            return (y + '-' + mm + '-' + dd);
+        }
+        return '';
+    }
+</script>
 @include('includes.script.func_msnb')
 @include('includes.modal.mangach')
 <!--end form4 -->

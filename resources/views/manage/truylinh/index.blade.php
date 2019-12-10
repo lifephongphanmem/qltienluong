@@ -77,16 +77,23 @@
                                         {{$key+1}}
                                     </td>
                                     <td>{{isset($a_pl[$value->maphanloai])? $a_pl[$value->maphanloai]:'' }}</td>
-                                    <td>{{$value->tencanbo}}</td>
+                                    <td>
+                                        @if($value->mabl == null)
+                                            <a href="{{url($furl.'create?maso='.$value->maso)}}"><b>{{$value->tencanbo}}</b></a>
+                                        @else
+                                            <b>{{$value->tencanbo}}</b>
+                                        @endif
+                                        <p style="margin-top: 5px">Chức vụ: {{$value->tencvcq}}</p>
+                                    </td>
                                     <td class="text-center">{{$value->heso}}</td>
                                     <td>{{getDayVn($value->ngaytu) .' - '. getDayVn($value->ngayden)}}</td>
                                     <td class="text-center">{{$value->mabl == null?"Chưa chi trả":'Đã chi trả'}}</td>
                                     <td>
                                         @if($value->mabl == null)
                                             <a href="{{url($furl.'create?maso='.$value->maso)}}" class="btn btn-default btn-xs">
-                                                <i class="fa fa-edit"></i>&nbsp; Sửa</a>
+                                                <i class="fa fa-edit"></i>&nbsp;Sửa</a>
                                             <button type="button" onclick="cfDel('{{$furl.'del/'.$value->id}}')" class="btn btn-default btn-xs" data-target="#delete-modal-confirm" data-toggle="modal">
-                                                <i class="fa fa-trash-o"></i>&nbsp; Xóa</button>
+                                                <i class="fa fa-trash-o"></i>&nbsp;Xóa</button>
                                         @else
                                             <a href="{{url($furl.'create?maso='.$value->maso)}}" class="btn btn-default btn-xs">
                                             <i class="fa fa-edit"></i>&nbsp; Chi tiết</a>
