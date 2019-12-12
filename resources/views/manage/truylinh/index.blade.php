@@ -58,7 +58,7 @@
                     <table id="sample_3" class="table table-hover table-striped table-bordered" style="min-height: 230px">
                         <thead>
                             <tr>
-                                <th class="text-center" style="width: 8%"><!--input type="checkbox" class="checkall"/-->STT</th>
+                                <th class="text-center" style="width: 5%"><!--input type="checkbox" class="checkall"/-->STT</th>
                                 <th class="text-center">Phân loại</th>
                                 <th class="text-center">Họ và tên</th>
                                 <th class="text-center">Hệ số</br>truy lĩnh</th>

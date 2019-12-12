@@ -1129,9 +1129,10 @@ class hosocanboController extends Controller
             Excel::load($path, function($reader) use (&$data, $inputs) {
                 $obj = $reader->getExcel();
                 $sheet = $obj->getSheet(0);
+                //dd($sheet);
                 $data = $sheet->toArray(null,true,true,true);// giữ lại tiêu đề A=>'val';
             });
-
+            //dd($data);
             $j = getDbl((hosocanbo::where('madv', session('admin')->madv)->get()->max('stt'))) + 1;
             if($inputs['macvcq'] != '') {
                 $a_pb_ex = a_split($data,array($inputs['macvcq']));
@@ -1175,6 +1176,7 @@ class hosocanboController extends Controller
                 if($inputs['sotk'] != '') {
                     $model->sotk = $data[$i][$inputs['sotk']];
                 }
+                dd($model);
                 /*
                 $timestamp = strtotime($date);
                 if ($timestamp !== FALSE) {

@@ -183,11 +183,35 @@ function getDateTime($date) {
         return NULL;
 }
 
-function getDateToDb($value){
-    if($value==''){return null;}
-    $str =  strtotime(str_replace('/', '-', $value));
-    $kq = date('Y-m-d', $str);
-    return $kq;
+function getDateToDb($value)
+{
+    if ($value == '') {
+        return null;
+    }
+
+    //file excel để format Date 01/12/2018 => 01-12-18
+    if(strpos($value,'-') > -1){
+        //định dạng 01-06-17 m-d-Y
+        $a_val = explode('-',$value);
+        $ngay = $a_val[1];
+        $thang = $a_val[0];
+        $nam = isset($a_val[2])? $a_val[2] : date(Y);
+        $nam = $nam < 2000 ? $nam + 2000 : $nam;
+        return date('Y-m-d',strtotime($ngay .'-'.$thang.'-'.$nam));
+    }
+
+    if(strpos($value,'/') > -1){
+        //định dạng06/01/2017: d-m-Y
+        $a_val = explode('/',$value);
+        $ngay = $a_val[0];
+        $thang = $a_val[1];
+        $nam = isset($a_val[2])? $a_val[2] : date(Y);
+        $nam = $nam < 2000 ? $nam + 2000 : $nam;
+        return date('Y-m-d',strtotime($ngay .'-'.$thang.'-'.$nam));
+    }
+    //$str = strtotime(str_replace('/', '-', $value));
+    //return date('Y-m-d', $str);
+    return null;
 }
 
 function getDbl($obj) {
