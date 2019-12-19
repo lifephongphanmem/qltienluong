@@ -1176,7 +1176,7 @@ class hosocanboController extends Controller
                 if($inputs['sotk'] != '') {
                     $model->sotk = $data[$i][$inputs['sotk']];
                 }
-                dd($model);
+                //dd($model);
                 /*
                 $timestamp = strtotime($date);
                 if ($timestamp !== FALSE) {
