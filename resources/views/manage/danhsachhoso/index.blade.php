@@ -35,12 +35,25 @@
                         <i class="fa fa-list-alt"></i>DANH SÁCH HỒ SƠ CÁN BỘ - {{$tendv}}
                     </div>
                 </div>
-                <div class="col-md-12">
-                    <div class="col-md-2">
+                <div class="col-md-6">
+                    <div class="col-md-4">
                         <label class="control-label " style="text-align: right">Phân loại đơn vị:</label>
                     </div>
                     <div class="col-md-8">
                         {!! Form::select('sunghiep',$a_sunghiep,$sunghiep, array('id' => 'sunghiep', 'class' => 'form-control'))!!}
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="col-md-3">
+                        <label class="control-label " style="text-align: right">Đơn vị:</label>
+                    </div>
+                    <div class="col-md-8">
+                        <select class="form-control select2me" id="madv" name="madv">
+                            <option value="ALL">--Chọn tất cả--</option>
+                            @foreach($m_donvi as $donvi)
+                                <option value="{{$donvi['madv']}} " @if($madv == $donvi['madv']) select = 'selected' @endif>{{$donvi['tendv']}}</option>
+                            @endforeach
+                        </select>
                     </div>
                 </div>
                 <div class="portlet-body">
@@ -91,11 +104,17 @@
 
         function getLink(){
             var sunghiep = $('#sunghiep').val();
-            return '/nghiep_vu/ho_so/danh_sach_th?sunghiep=' + sunghiep;
+            var madv = $('#madv').val();
+            return '/nghiep_vu/ho_so/danh_sach_th?sunghiep=' + sunghiep+'&madv=' + madv;
         }
 
         $(function(){
             $('#sunghiep').change(function() {
+                window.location.href = getLink();
+            });
+        })
+        $(function(){
+            $('#madv').change(function() {
                 window.location.href = getLink();
             });
         })

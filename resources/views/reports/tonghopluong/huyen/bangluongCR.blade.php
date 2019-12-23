@@ -85,7 +85,11 @@
 
         <tr>
             <td colspan="2" style="text-align: center; font-style: italic">
-                Tháng {{$thongtin['thang']}} năm {{$thongtin['nam']}}
+                @if($inputs['tuthang'] == 'ALL')
+                    Năm {{$thongtin['nam']}}
+                @else
+                    Tháng {{$thongtin['thang']}} năm {{$thongtin['nam']}}
+                    @endif
             </td>
         </tr>
     </table>

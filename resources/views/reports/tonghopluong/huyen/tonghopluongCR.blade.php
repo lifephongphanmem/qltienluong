@@ -156,6 +156,8 @@
             $model_gd = $model->where('linhvuchoatdong','GD');
             $model_gdT = $model_gd->groupby('tencongtac');
             $a_plcongtac = array_column($model_gd->toarray(),'mact' , 'tencongtac');
+            //dd($model_gdT->toarray());
+            //dd($a_plcongtac);
         ?>
         <tr style="font-weight: bold;">
             <td>I</td>
@@ -254,13 +256,15 @@
                 <?php
                     $ttdv = 0;
                     $model_gddv = $model_gdpl->groupby('tendv');
-                    //dd($model_gddv->toarray());
+
                     $a_donvi = array_column($model_gdplCT[$key]->toarray(),'madv' , 'tendv');
                     $a_plcongtac = array_column($model_gdpl->toarray(),'mact' , 'tencongtac');
+                //dd($model_gddv->toarray());
                 ?>
                 @foreach($a_donvi as $keydv=>$val)
                     <?php $ttdv ++;
                     $model_gddvCT= $model_gdpl->where('tendv',$keydv)->groupby('tencongtac');
+                    $a_plctdv = array_column($model_gdpl->where('tendv',$keydv)->toarray(),'mact' , 'tencongtac');
                     ?>
                     <tr class="money" style="font-weight: bold">
                         <td style="text-align: center">{{$stt.'.'.$ttdv}}</td>
@@ -282,7 +286,7 @@
                         <td>{{dinhdangso($model_gddv[$keydv]->sum('stbhtn_dv'))}}</td>
                         <td>{{dinhdangso($model_gddv[$keydv]->sum('ttbh_dv') + $model_gddv[$keydv]->sum('luongtn'))}}</td>
                     </tr>
-                        @foreach($a_plcongtac as $key=>$val)
+                        @foreach($a_plctdv as $key=>$val)
                             <tr class="money">
                                 <td style="text-align: center"></td>
                                 <td style="text-align: left">{{$key}}</td>
@@ -311,9 +315,7 @@
 
         <?php
         $model_hcsn = $model->where('linhvuchoatdong','<>','GD');
-        $model_hcsn = $model_hcsn->where('linhvuchoatdong','<>','KVXP');
-        $model_hcsn = $model_hcsn->where('linhvuchoatdong','<>','QLNN');
-        $model_hcsn = $model_hcsn->where('linhvuchoatdong','<>','DDT');
+        $model_hcsn = $model_hcsn->where('linhvuchoatdong','HCSN');
         $model_hcsnT = $model_hcsn->groupby('tencongtac');
         $a_plcongtac = array_column($model_hcsn->toarray(),'mact' , 'tencongtac');
 
@@ -420,11 +422,13 @@
             $model_hcsndv = $model_hcsnpl->groupby('tendv');
             //dd($model_hcsndv->toarray());
             $a_donvi = array_column($model_hcsnplCT[$key]->toarray(),'madv' , 'tendv');
-            $a_plcongtac = array_column($model_hcsnpl->toarray(),'mact' , 'tencongtac');
+
             ?>
             @foreach($a_donvi as $keydv=>$val)
                 <?php $ttdv ++;
-                $model_hcsndvCT= $model_hcsnpl->where('tendv',$keydv)->groupby('tencongtac');
+
+                    $model_hcsndvCT= $model_hcsnpl->where('tendv',$keydv)->groupby('tencongtac');
+                    $a_plcongtac = array_column($model_hcsnpl->where('tendv',$keydv)->toarray(),'mact' , 'tencongtac');
                 ?>
                 <tr class="money" style="font-weight: bold">
                     <td style="text-align: center">{{$stt.'.'.$ttdv}}</td>
@@ -472,8 +476,8 @@
         @endforeach
 
         <?php
-        $model_hcsn = $model->where('linhvuchoatdong','QLNN')
-                ->where('linhvuchoatdong','DDT');
+        $model_hcsn = $model->where('linhvuchoatdong','QLNN');
+        $model_hcsn = $model_hcsn->where('linhvuchoatdong','DDT');
         $model_hcsnT = $model_hcsn->groupby('tencongtac');
         $a_plcongtac = array_column($model_hcsn->toarray(),'mact' , 'tencongtac');
         ?>
@@ -582,7 +586,8 @@
             ?>
             @foreach($a_donvi as $keydv=>$val)
                 <?php $ttdv ++;
-                $model_hcsndvCT= $model_hcsnpl->where('tendv',$keydv)->groupby('tencongtac');
+                    $model_hcsndvCT= $model_hcsnpl->where('tendv',$keydv)->groupby('tencongtac');
+                    $a_plcongtac = array_column($model_hcsnpl->where('tendv',$keydv)->toarray(),'mact' , 'tencongtac');
                 ?>
                 <tr class="money" style="font-weight: bold">
                     <td style="text-align: center">{{$stt.'.'.$ttdv}}</td>
@@ -779,7 +784,7 @@
                 <?php $ttdv ++;
                 $model_xpdvCT= $model_xpT[$key]->where('tendv',$keydv)->groupby('tencongtac');
                 ?>
-                <tr class="money" style="font-weight: bold">
+                <tr class="money" >
                     <td style="text-align: center">{{$ttdv}}</td>
                     <td style="text-align: left">{{$keydv}}</td>
                     <td style="text-align: right">{{dinhdangso($model_xpdv[$keydv]->sum('soluong'))}}</td>
@@ -800,7 +805,7 @@
                     <td>{{dinhdangso($model_xpdv[$keydv]->sum('ttbh_dv') + $model_xpdv[$keydv]->sum('luongtn'))}}</td>
                 </tr>
                 @foreach($a_plcongtac as $key=>$val)
-                    <tr class="money">
+                    <tr class="money" style="font-style: italic">
                         <td style="text-align: center"></td>
                         <td style="text-align: left">{{$key}}</td>
                         <td style="text-align: right">{{dinhdangso($model_xpdvCT[$key]->sum('soluong'))}}</td>

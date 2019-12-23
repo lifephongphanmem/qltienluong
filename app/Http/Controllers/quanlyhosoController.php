@@ -25,22 +25,16 @@ class quanlyhosoController extends Controller
             $a_sunghiep=array('ALL'=>'--Chọn sự nghiệp cán bộ--','Công chức'=>'Công chức','Viên chức'=>'Viên chức','Khác'=>'Khác');
             //$a_plcanbo=array('ALL'=>'','Tập sự'=>'Tập sự, thử việc','Chính thức'=>'Chính thức');
             $sunghiep = $inputs['sunghiep'];
+            $madv = $inputs['madv'];
+            $m_dv = dmdonvi::where('dmdonvi.macqcq', session('admin')->madv)->get();
             //$m_hs=hosocanbo::where('madv',session('admin')->maxa)->get();
             $m_hs = hosocanbo::join('dmdonvi','hosocanbo.madv','dmdonvi.madv')
-                ->select('macanbo', 'tencanbo', 'msngbac', 'sunghiep', 'gioitinh', 'tnndenngay', 'ngaytu', 'ngayden','ngaysinh','mact','tendv')
+                ->select('macanbo', 'tencanbo', 'msngbac', 'sunghiep', 'gioitinh', 'tnndenngay', 'ngaytu', 'ngayden','ngaysinh','mact','tendv','dmdonvi.madv')
                 ->where('theodoi','<' ,'9')
-                ->where('sunghiep','like',$inputs['sunghiep'].'%')
+                //->where('sunghiep','like',$inputs['sunghiep'].'%')
                 ->where('dmdonvi.macqcq', session('admin')->madv)
                 ->orderby('tendv')
                 ->get();
-            if($inputs['sunghiep'] == 'ALL')
-                $m_hs = hosocanbo::join('dmdonvi','hosocanbo.madv','dmdonvi.madv')
-                    ->select('macanbo', 'tencanbo', 'msngbac', 'sunghiep', 'gioitinh', 'tnndenngay', 'ngaytu', 'ngayden','ngaysinh','mact','tendv')
-                    ->where('theodoi','<' ,'9')
-                    ->where('dmdonvi.macqcq', session('admin')->madv)
-                    ->orderby('tendv')
-                    ->get();
-            //$m_hs=hosocanbo::where('madv',session('admin')->madv)->where('theodoi','<','9')->get();
             $a_ct = array_column(dmphanloaict::all()->toArray(), 'tenct', 'mact');
             $a_pb = getPhongBan(false);
             $a_cv = getChucVuCQ(false);
@@ -53,6 +47,10 @@ class quanlyhosoController extends Controller
             $model_tenct = dmphanloaict::select('tenct', 'macongtac', 'mact')->get();
 
             $model = $m_hs;
+            if($inputs['sunghiep'] != 'ALL')
+                $model = $model->where('sunghiep','like',$inputs['sunghiep'].'%');
+            if($inputs['madv'] != 'all')
+                $model = $model->where('madv',$inputs['madv']);
             return view('manage.danhsachhoso.index')
                 ->with('model',$model)
                 ->with('url','/nghiep_vu/ho_so/')
@@ -61,6 +59,8 @@ class quanlyhosoController extends Controller
                 ->with('model_tenct', $model_tenct)
                 ->with('a_sunghiep',$a_sunghiep)
                 ->with('sunghiep',$sunghiep)
+                ->with('madv',$madv)
+                ->with('m_donvi',$m_dv)
                 ->with('pageTitle','Danh sách cán bộ');
         } else
             return view('errors.notlogin');

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\dmdonvi;
+use App\Users;
 use Illuminate\Http\Request;
 
 use App\Http\Requests;
@@ -114,6 +115,9 @@ class quanlydonviController extends Controller
             $model->ngaydung = $inputs['ngaydung'];
             $model->trangthai = 'TD';
             $model->save();
+            $modeluser = Users::where('madv',$inputs['madvstop'])->first();
+            $modeluser->status = 'notactive';
+            $modeluser->save();
             return redirect('/he_thong/don_vi/stopdv');
         } else
             return view('errors.notlogin');
@@ -127,6 +131,9 @@ class quanlydonviController extends Controller
             $model->ngaydung = null;
             $model->trangthai = 'HD';
             $model->save();
+            $modeluser = Users::where('madv',$inputs['madvactive'])->first();
+            $modeluser->status = 'active';
+            $modeluser->save();
             return redirect('/he_thong/don_vi/stopdv');
         } else
             return view('errors.notlogin');

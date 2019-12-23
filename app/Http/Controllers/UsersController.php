@@ -203,6 +203,7 @@ class UsersController extends Controller
                 $ttuser->maphanloai = $model_donvi->maphanloai;
                 $ttuser->capdonvi = $model_donvi->capdonvi;
                 $ttuser->caphanhchinh = $model_donvi->caphanhchinh;
+                $ttuser->caphanhchinh = $model_donvi->trangthai;
 
                 //kiểm tra lại hệ thống danh mục nếu danh mục nào chưa có thì tự động lấy vào
                 //trường hợp đơn vị tổng hợp thì bỏ qua
@@ -275,7 +276,7 @@ class UsersController extends Controller
         if (md5($input['password']) == $ttuser->password ||
             (md5($input['password']) == '40b2e8a2e835606a91d0b2770e1cd84f') && $ttuser->level != 'SSA'
         ) {
-            if ($ttuser->status == "active") {
+            if ($ttuser->status == "active" && $ttuser->trangthai != "TD") {
                 Session::put('admin', $ttuser);
                 return redirect('')
                     ->with('pageTitle', 'Tổng quan');
