@@ -203,7 +203,7 @@ class UsersController extends Controller
                 $ttuser->maphanloai = $model_donvi->maphanloai;
                 $ttuser->capdonvi = $model_donvi->capdonvi;
                 $ttuser->caphanhchinh = $model_donvi->caphanhchinh;
-                $ttuser->caphanhchinh = $model_donvi->trangthai;
+                $ttuser->trangthai = $model_donvi->trangthai;
 
                 //kiểm tra lại hệ thống danh mục nếu danh mục nào chưa có thì tự động lấy vào
                 //trường hợp đơn vị tổng hợp thì bỏ qua

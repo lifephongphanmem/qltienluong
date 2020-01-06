@@ -257,7 +257,7 @@
                     $ttdv = 0;
                     $model_gddv = $model_gdpl->groupby('tendv');
 
-                    $a_donvi = array_column($model_gdplCT[$key]->toarray(),'madv' , 'tendv');
+                    $a_donvi = array_column($model_gdpl->toarray(),'madv' , 'tendv');
                     $a_plcongtac = array_column($model_gdpl->toarray(),'mact' , 'tencongtac');
                 //dd($model_gddv->toarray());
                 ?>
@@ -421,7 +421,7 @@
             $ttdv = 0;
             $model_hcsndv = $model_hcsnpl->groupby('tendv');
             //dd($model_hcsndv->toarray());
-            $a_donvi = array_column($model_hcsnplCT[$key]->toarray(),'madv' , 'tendv');
+            $a_donvi = array_column($model_hcsnpl->toarray(),'madv' , 'tendv');
 
             ?>
             @foreach($a_donvi as $keydv=>$val)
@@ -581,7 +581,7 @@
             $ttdv = 0;
             $model_hcsndv = $model_hcsnpl->groupby('tendv');
             //dd($model_hcsndv->toarray());
-            $a_donvi = array_column($model_hcsnplCT[$key]->toarray(),'madv' , 'tendv');
+            $a_donvi = array_column($model_hcsnpl->toarray(),'madv' , 'tendv');
             $a_plcongtac = array_column($model_hcsnpl->toarray(),'mact' , 'tencongtac');
             ?>
             @foreach($a_donvi as $keydv=>$val)

@@ -840,6 +840,7 @@ Route::group(['prefix'=>'chuc_nang'],function(){
             Route::get('chitietbl','dutoanluong_huyenController@chitietbl');//in chi tiết bảng lương đơn vị
             Route::get('chitietblCR','dutoanluong_huyenController@chitietblCR');//in chi tiết bảng lương đơn vị
             Route::get('nangluongth','dutoanluong_huyenController@nangluongth');//in chi tiết bảng lương đơn vị
+            Route::get('guitn','GuiTinNhanController@guitin');//in chi tiết bảng lương đơn vị
         });
 
         Route::group(['prefix'=>'khoi'],function(){
