@@ -30,7 +30,10 @@
                             <a href="{{url($url.'thong_tin?maso='.$model->madv)}}" class="btn btn-default btn-sm">
                                 <i  class="fa fa-edit"></i> Chỉnh sửa </a>
                         @endif
-
+                            @if(session('admin')->phanloaitaikhoan == 'TH')
+                                <a href="{{url($url.'thong_tin_th?maso='.$model->madv)}}" class="btn btn-default btn-sm">
+                                    <i  class="fa fa-edit"></i> Chỉnh sửa </a>
+                                @endif
                         <!--a href="" class="btn btn-default btn-sm">
                             <i class="fa fa-print"></i> Print </a-->
                         @if(session('admin')->sadmin == 'ssa')

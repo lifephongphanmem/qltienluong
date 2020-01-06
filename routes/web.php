@@ -1217,6 +1217,7 @@ Route::group(['prefix'=>'he_thong'],function(){
         Route::post('stopdv/stop','quanlydonviController@stop');
         Route::post('stopdv/active','quanlydonviController@active');
         Route::get('thong_tin','dmdonviController@edit_local');
+        Route::get('thong_tin_th','dmdonviController@edit_th');
         Route::post('/{madv}','dmdonviController@update_local');
         Route::get('chung','dmdonviController@information_global');
         Route::get('maso={id}/edit_global','dmdonviController@edit_global');

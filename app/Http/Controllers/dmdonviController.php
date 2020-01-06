@@ -106,6 +106,26 @@ class dmdonviController extends Controller
         } else
             return view('errors.notlogin');
     }
+    function edit_th(Request $request)
+    {
+        if (Session::has('admin')) {
+            $inputs = $request->all();
+            if (session('admin')->level == 'SA' || session('admin')->madv == $inputs['maso']) {
+                $model = dmdonvi::where('madv', $inputs['maso'])->first();
+                $model_donvi = array_column(dmdonvi::select('madv', 'tendv')->where('madvbc', $model->madvbc)
+                    ->where('phanloaitaikhoan', 'TH')->get()->toarray(), 'tendv', 'madv');
+                return view('system.general.local.edit_th')
+                    ->with('model', $model)
+                    ->with('model_donvi', $model_donvi)
+                    ->with('url', '/he_thong/don_vi/')
+                    ->with('pageTitle', 'Chỉnh sửa thông tin đơn vị');
+            } else {
+                return view('errors.noperm');
+            }
+
+        } else
+            return view('errors.notlogin');
+    }
 
     function update_local(Request $request, $madv)
     {
@@ -114,15 +134,18 @@ class dmdonviController extends Controller
             if (session('admin')->level == 'SA' || session('admin')->madv == $madv) {
                 $inputs = $request->all();
                 $model = dmdonvi::where('madv', $madv)->first();
-                $inputs['linhvuchoatdong'] = implode(',',$inputs['linhvuchoatdong']);
-                //dd($inputs);
-                $model->update($inputs);
+                if(session('admin')->phanloaitaikhoan == 'TH')
+                    $model->update($inputs);
+                else {
+                    $inputs['linhvuchoatdong'] = implode(',', $inputs['linhvuchoatdong']);
+                    //dd($inputs);
+                    $model->update($inputs);
 
-                session('admin')->maphanloai = $inputs['maphanloai'];
-                session('admin')->macqcq = $inputs['macqcq'];
-                session('admin')->songaycong = $inputs['songaycong'];
-                session('admin')->lamtron = $inputs['lamtron'];
-
+                    session('admin')->maphanloai = $inputs['maphanloai'];
+                    session('admin')->macqcq = $inputs['macqcq'];
+                    session('admin')->songaycong = $inputs['songaycong'];
+                    session('admin')->lamtron = $inputs['lamtron'];
+                }
                 return redirect('/he_thong/don_vi/don_vi');
             } else {
                 return view('errors.noperm');
