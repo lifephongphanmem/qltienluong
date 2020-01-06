@@ -139,9 +139,7 @@
 
 <table class="header" width="96%" border="0" cellspacing="0" cellpadding="8" style="margin:20px auto; text-align: center;">
     <tr>
-        <th style="text-align: left;" width="15%"></th>
-        <th style="text-align: left;" width="15%"></th>
-        <th style="text-align: left;" width="25%"></th>
+        <th style="text-align: center;" colspan="3">Ngày ..... tháng ..... năm .......</th>
         <th style="text-align: left;" width="20%"></th>
         <th style="text-align: center; font-style: italic" width="25%">{{$m_dv->diadanh .', '.Date2Str($thongtin['ngaylap'])}}</th>
     </tr>
