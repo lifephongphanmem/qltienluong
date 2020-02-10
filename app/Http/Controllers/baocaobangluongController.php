@@ -3064,7 +3064,7 @@ class baocaobangluongController extends Controller
                 ->where('madvbc',$madvbc)
                 ->where('trangthai','DAGUI')
                 ->wherein('mact',['1506672780','1506673604','1506673695','1535613221'])
-                ->wherein('tonghopluong_donvi.madv', array_column($model_phanloai->toarray(),'madv'))
+                ->wherein('tonghopluong_donvi.madv', array_column($model_phanloai->where('maphanloai','KVXP')->toarray(),'madv'))
                 ->where('nam',$inputs['tunam'])
                 ->where('thang',$inputs['tuthang'])
                 ->groupby('tonghopluong_donvi.madv','mact')

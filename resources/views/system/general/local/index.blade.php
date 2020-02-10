@@ -66,9 +66,16 @@
                             <td style="width:15%">
                                 <b>Đơn vị tổng hợp dữ liệu</b>
                             </td>
-                            <td style="width:35%">
-                                <span class="text-muted">{{$model->donviquanly}}</span>
-                            </td>
+                            @if(session('admin')->phamvitonghop == 'HUYEN' && session('admin')->phanloaitaikhoan == 'TH')
+                                <td style="width:35%">
+                                    <span class="text-muted">Sở Tài Chính</span>
+                                </td>
+                            @else
+                                <td style="width:35%">
+                                    <span class="text-muted">{{$model->donviquanly}}</span>
+                                </td>
+                            @endif
+
                         </tr>
 
                         <tr>

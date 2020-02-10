@@ -113,7 +113,7 @@ class dmdonviController extends Controller
             if (session('admin')->level == 'SA' || session('admin')->madv == $inputs['maso']) {
                 $model = dmdonvi::where('madv', $inputs['maso'])->first();
                 $model_donvi = array_column(dmdonvi::select('madv', 'tendv')->where('madvbc', $model->madvbc)
-                    ->where('phanloaitaikhoan', 'TH')->get()->toarray(), 'tendv', 'madv');
+                    ->where('madv','<>', $model->madv)->where('phanloaitaikhoan', 'TH')->get()->toarray(), 'tendv', 'madv');
                 return view('system.general.local.edit_th')
                     ->with('model', $model)
                     ->with('model_donvi', $model_donvi)

@@ -109,8 +109,18 @@
                                     </div>
                                 </div>
                             </div>
-
+                            @if(session('admin')->phamvitonghop == 'KHOI')
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            <label class="control-label">Đơn vị tổng hợp dữ liệu<span class="require">*</span></label>
+                                            {!!Form::select('macqcq', $model_donvi, null, array('id' => 'macqcq','class' => 'form-control'))!!}
+                                        </div>
+                                    </div>
+                                </div>
+                            @endif
                         </div>
+
                     <!-- END FORM-->
                     <div class="form-actions">
                         <div class="row" style="text-align: center">

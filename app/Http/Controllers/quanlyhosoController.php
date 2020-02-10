@@ -175,7 +175,6 @@ class quanlyhosoController extends Controller
         } else
             return view('errors.notlogin');
     }
-
     function innangluong_th(Request $requests){
         if (Session::has('admin')) {
             $inputs = $requests->all();
