@@ -112,39 +112,39 @@
         <tr style="font-weight: bold;">
             <td style="text-align: center;">{{$muc['muc']}}</td>
             <td></td>
-            <td class="money">{{dinhdangso($tieumuc->sum('sotien'))}}</td>
+            <td class="money">{{dinhdangso($tieumuc->sum('sotien') - $tieumuc->sum('giaml'))}}</td>
             <td class="money">{{dinhdangso($tieumuc->sum('stbhxh'))}}</td>
             <td class="money">{{dinhdangso($tieumuc->sum('stbhyt'))}}</td>
             <td class="money">{{dinhdangso($tieumuc->sum('stkpcd'))}}</td>
             <td class="money">{{dinhdangso($tieumuc->sum('stbhtn'))}}</td>
             <td class="money">{{dinhdangso($tieumuc->sum('ttbh'))}}</td>
-            <td class="money">{{dinhdangso($tieumuc->sum('sotien') - $tieumuc->sum('ttbh'))}}</td>
+            <td class="money">{{dinhdangso($tieumuc->sum('sotien') - $tieumuc->sum('giaml') - $tieumuc->sum('ttbh'))}}</td>
         </tr>
         @foreach($tieumuc as $ct)
             <tr>
                 <td></td>
                 <td style="text-align: center">{{$ct->tieumuc}}</td>
                 <!--td>{{dinhdangsothapphan($ct->heso,5)}}</td-->
-                <td>{{dinhdangso($ct->sotien)}}</td>
+                <td>{{dinhdangso($ct->sotien - $ct->giaml)}}</td>
                 <td>{{dinhdangso($ct->stbhxh)}}</td>
                 <td>{{dinhdangso($ct->stbhyt)}}</td>
                 <td>{{dinhdangso($ct->stkpcd)}}</td>
                 <td>{{dinhdangso($ct->stbhtn)}}</td>
                 <td>{{dinhdangso($ct->ttbh)}}</td>
-                <td>{{dinhdangso($ct->sotien - $ct->ttbh)}}</td>
+                <td>{{dinhdangso($ct->sotien - $ct->ttbh - $ct->giaml)}}</td>
             </tr>
         @endforeach
     @endforeach
     <tr style="font-weight: bold; text-align: center;">
         <td colspan="2">Tổng cộng</td>
         <!--td>{{dinhdangsothapphan($model_tm->sum('heso'),5)}}</td-->
-        <td class="money">{{dinhdangso($model_tm->sum('sotien'))}}</td>
+        <td class="money">{{dinhdangso($model_tm->sum('sotien') - $model_tm->sum('giaml'))}}</td>
         <td class="money">{{dinhdangso($model_tm->sum('stbhxh'))}}</td>
         <td class="money">{{dinhdangso($model_tm->sum('stbhyt'))}}</td>
         <td class="money">{{dinhdangso($model_tm->sum('stkpcd'))}}</td>
         <td class="money">{{dinhdangso($model_tm->sum('stbhtn'))}}</td>
         <td class="money">{{dinhdangso($model_tm->sum('ttbh'))}}</td>
-        <td class="money">{{dinhdangso($model_tm->sum('sotien') - $model_tm->sum('ttbh'))}}</td>
+        <td class="money">{{dinhdangso($model_tm->sum('sotien') - $model_tm->sum('ttbh') - $model_tm->sum('giaml'))}}</td>
     </tr>
 </table>
 
