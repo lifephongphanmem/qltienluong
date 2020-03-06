@@ -49,6 +49,11 @@
                             <div class="col-md-2">
                                 <button type="button" class="btn btn-default btn-xs" onclick="add()"><i class="fa fa-plus"></i>&nbsp;In danh sách</button>
                             </div>
+                            @if(session('admin')->username == 'cs')
+                                <div class="col-md-2">
+                                    <button type="button" class="btn btn-default btn-xs" onclick="add()"><i class="fa fa-plus"></i>&nbsp;In tổng hợp</button>
+                                </div>
+                            @endif
 
                         </div>
                     </div>
@@ -210,6 +215,54 @@
             </div>
         </div>
     </div>
+    <div id="tonghop-modal" tabindex="-1" role="dialog" aria-hidden="true" class="modal fade">
+        <div class="modal-dialog modal-lg modal-content">
+            <div class="modal-header modal-header-primary">
+                <button type="button" data-dismiss="modal" aria-hidden="true" class="close">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-horizontal">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="tabbable tabbable-custom tabbable-noborder tabbable-reversed" id="tab_cre">
+                                <div class="tab-content">
+                                    <!-- Thông tin chung -->
+                                    <div class="tab-pane active" id="tab_0_cre">
+                                        {!! Form::open(['url'=>'chuc_nang/xem_du_lieu/danhsachth','target'=>'_blank' ,'method'=>'post' , 'class'=>'form-horizontal form-validate']) !!}
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <label class="col-md-3" style="text-align: right">Năm </label>
+                                                <div class="col-md-9">
+                                                    {!! Form::select('namth',getNam(),$nam,array('id' => 'namds', 'class' => 'form-control'))!!}
+                                                </div>
+                                            </div>
+                                            <!--div class="col-md-12">
+                                                <label class="control-label col-md-3" style="text-align: right">Trạng thái </label>
+                                                <div class="col-md-9">
+                                                    {!! Form::select(
+                                                    'trangthai',$a_trangthai,$trangthai,
+                                                    array('id' => 'trangthai', 'class' => 'form-control'))
+                                                    !!}
+                                                </div>
+                                            </div-->
+                                        <input type="hidden" id="phantramhuong" name="phantramhuong" value="100"/>
+                                        <input type="hidden" id="id_ct" name="id_ct"/>
+                                        <input type="hidden" id="mabl" name="mabl"/>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" data-dismiss="modal" class="btn btn-default">Hủy thao tác</button>
+                <button type="submit" id="submit" name="submit" value="submit" class="btn btn-primary">Đồng ý</button>
+            </div>
+        </div>
+    </div>
+    </div>
     <div id="chitiet-modal" tabindex="-1" role="dialog" aria-hidden="true" class="modal fade">
         <div class="modal-dialog modal-lg modal-content">
             <div class="modal-header modal-header-primary">
@@ -251,23 +304,23 @@
                                                 <input type="checkbox" name="excel" id = "excel"/>
                                                 Xuất dữ liệu ra file excel
                                             </div>
-                                        <input type="hidden" id="phantramhuong" name="phantramhuong" value="100"/>
-                                        <input type="hidden" id="id_ct" name="id_ct"/>
-                                        <input type="hidden" id="mabl" name="mabl"/>
+                                            <input type="hidden" id="phantramhuong" name="phantramhuong" value="100"/>
+                                            <input type="hidden" id="id_ct" name="id_ct"/>
+                                            <input type="hidden" id="mabl" name="mabl"/>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
 
-            <div class="modal-footer">
-                <button type="button" data-dismiss="modal" class="btn btn-default">Hủy thao tác</button>
-                <button type="submit" id="submit" name="submit" value="submit" class="btn btn-primary">Đồng ý</button>
+                <div class="modal-footer">
+                    <button type="button" data-dismiss="modal" class="btn btn-default">Hủy thao tác</button>
+                    <button type="submit" id="submit" name="submit" value="submit" class="btn btn-primary">Đồng ý</button>
+                </div>
             </div>
         </div>
-    </div>
     </div>
     {!! Form::close() !!}
     <div id="thkhoi-modal" tabindex="-1" role="dialog" aria-hidden="true" class="modal fade">
@@ -372,6 +425,9 @@
         }
         function add(){
             $('#chitiet-modal').modal('show');
+        }
+        function add(){
+            $('#tonghop-modal').modal('show');
         }
         $(function(){
             $('#thang').change(function() {

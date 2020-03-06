@@ -777,6 +777,7 @@ Route::group(['prefix'=>'chuc_nang'],function(){
         Route::get('tinh','xemdulieucapduoiController@index_tinh');
         Route::get('tinh/solieu','xemdulieucapduoiController@tonghop_huyen');
         Route::post('danhsach','xemdulieucapduoiController@danhsach');
+        Route::post('danhsachth','tonghopluong_tinhController@danhsachdv');
 
         Route::group(['prefix'=>'nguon'],function(){
             Route::get('khoi','xemdulieu_nguonController@index_khoi');
@@ -840,6 +841,7 @@ Route::group(['prefix'=>'chuc_nang'],function(){
             Route::get('chitietbl','dutoanluong_huyenController@chitietbl');//in chi tiết bảng lương đơn vị
             Route::get('chitietblCR','dutoanluong_huyenController@chitietblCR');//in chi tiết bảng lương đơn vị
             Route::get('nangluongth','dutoanluong_huyenController@nangluongth');//in chi tiết bảng lương đơn vị
+            Route::get('guitn','GuiTinNhanController@guitin');//in chi tiết bảng lương đơn vị
         });
 
         Route::group(['prefix'=>'khoi'],function(){
@@ -1216,6 +1218,7 @@ Route::group(['prefix'=>'he_thong'],function(){
         Route::post('stopdv/stop','quanlydonviController@stop');
         Route::post('stopdv/active','quanlydonviController@active');
         Route::get('thong_tin','dmdonviController@edit_local');
+        Route::get('thong_tin_th','dmdonviController@edit_th');
         Route::post('/{madv}','dmdonviController@update_local');
         Route::get('chung','dmdonviController@information_global');
         Route::get('maso={id}/edit_global','dmdonviController@edit_global');

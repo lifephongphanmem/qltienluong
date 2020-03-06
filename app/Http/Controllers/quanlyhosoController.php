@@ -31,7 +31,14 @@ class quanlyhosoController extends Controller
             $m_hs = hosocanbo::join('dmdonvi','hosocanbo.madv','dmdonvi.madv')
                 ->select('macanbo', 'tencanbo', 'msngbac', 'sunghiep', 'gioitinh', 'tnndenngay', 'ngaytu', 'ngayden','ngaysinh','mact','tendv','dmdonvi.madv')
                 ->where('theodoi','<' ,'9')
-                //->where('sunghiep','like',$inputs['sunghiep'].'%')
+                ->where('sunghiep','like',$inputs['sunghiep'].'%')
+                ->where('dmdonvi.macqcq', session('admin')->madv)
+                ->orderby('tendv')
+                ->get();
+            if($inputs['sunghiep'] == 'ALL')
+            $m_hs = hosocanbo::join('dmdonvi','hosocanbo.madv','dmdonvi.madv')
+                ->select('macanbo', 'tencanbo', 'msngbac', 'sunghiep', 'gioitinh', 'tnndenngay', 'ngaytu', 'ngayden','ngaysinh','mact','tendv','dmdonvi.madv')
+                ->where('theodoi','<' ,'9')
                 ->where('dmdonvi.macqcq', session('admin')->madv)
                 ->orderby('tendv')
                 ->get();
@@ -47,9 +54,7 @@ class quanlyhosoController extends Controller
             $model_tenct = dmphanloaict::select('tenct', 'macongtac', 'mact')->get();
 
             $model = $m_hs;
-            if($inputs['sunghiep'] != 'ALL')
-                $model = $model->where('sunghiep','like',$inputs['sunghiep'].'%');
-            if($inputs['madv'] != 'all')
+            if($inputs['madv'] != 'ALL')
                 $model = $model->where('madv',$inputs['madv']);
             return view('manage.danhsachhoso.index')
                 ->with('model',$model)
@@ -170,7 +175,6 @@ class quanlyhosoController extends Controller
         } else
             return view('errors.notlogin');
     }
-
     function innangluong_th(Request $requests){
         if (Session::has('admin')) {
             $inputs = $requests->all();
