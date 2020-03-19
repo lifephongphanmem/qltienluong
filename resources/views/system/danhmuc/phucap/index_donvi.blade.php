@@ -44,16 +44,16 @@
                     <table id="sample_3" class="table table-hover table-striped table-bordered" style="min-height: 230px">
                         <thead>
                             <tr>
-                                <th class="text-center" style="width: 5%">STT</th>
+                                <th class="text-center" style="width: 3%">STT</th>
                                 <th class="text-center">Mã số</th>
-                                <th class="text-center">Phụ cấp</th>
+                                <th>Phụ cấp</br>Tiêu đề nhập liệu</br>Tiêu đề báo cáo</th>
                                 <th class="text-center">Phân loại</th>
                                 <th class="text-center">Bao gồm các</br>loại hệ số</th>
-                                <th class="text-center">Tổng hợp</br>số liệu,</br>dự toán</th>
-                                <th class="text-center">Nộp</br>bảo</br>hiểm</th>
-                                <th class="text-center">Trừ</br>nghỉ</br>phép</th>
-                                <th class="text-center">Hưởng</br>thai</br>sản</th>
-                                <th class="text-center">Hưởng</br>điều</br>động</th>
+                                <th style="width: 5%" class="text-center">Tổng</br>hợp,</br>dự</br>toán</th>
+                                <th style="width: 5%" class="text-center">Nộp</br>bảo</br>hiểm</th>
+                                <th style="width: 5%" class="text-center">Trừ</br>nghỉ</br>phép</th>
+                                <th style="width: 5%" class="text-center">Hưởng</br>thai</br>sản</th>
+                                <th style="width: 5%" class="text-center">Hưởng</br>điều</br>động</th>
                                 <th class="text-center">Thao tác</th>
                             </tr>
                         </thead>
@@ -63,7 +63,7 @@
                                 <tr class="{{$value->phanloai == 3? getTextStatus('CHUADL') : ''}}">
                                     <td class="text-center">{{$value->stt}}</td>
                                     <td>{{$value->mapc}}</td>
-                                    <td>{{$value->tenpc}}</td>
+                                    <td>- {{$value->tenpc}}</br>- {{$value->form}}</br>- {{$value->report}}</td>
                                     <td>{{$value->tenphanloai}}</td>
                                     <td>{{$value->tencongthuc}}</td>
                                     <td class="text-center">{!!$value->tonghop == 1 ? '<i class="fa fa-check"></i>':''!!} </td>
