@@ -7,6 +7,7 @@ use App\dmdonvibaocao;
 use App\dmphanloaidonvi;
 use App\tonghop_huyen;
 use App\tonghopluong_donvi;
+use App\tonghopluong_donvi_bangluong;
 use App\tonghopluong_donvi_chitiet;
 use App\tonghopluong_huyen;
 use App\tonghopluong_khoi;
@@ -339,6 +340,7 @@ class xemdulieucapduoiController extends Controller
                     $dv->trangthai = 'DAGUI';
                     $dv->thang = $nguon->thang;
                     $dv->nam = $nguon->nam;
+                    //$dv->linhvuchoatdong = $this->linhvuc($dv->mathdv);
                 }elseif(session('admin')->phamvitonghop == 'KHOI') {
                     if ((count($nguon) > 0 && $nguon->trangthai == 'DAGUI') || (count($nguonkhoi) > 0 && $nguonkhoi->trangthai == 'DAGUI')) {
                         $dv->mathdv = $nguon->mathdv;
@@ -375,7 +377,23 @@ class xemdulieucapduoiController extends Controller
         } else
             return view('errors.notlogin');
     }
+    function linhvuc($mathdv)
+    {
+        $model = tonghopluong_donvi_bangluong::join('dmkhoipb','tonghopluong_donvi_bangluong.linhvuchoatdong','dmkhoipb.makhoipb')
+            ->select('tenkhoipb')
+            ->where('mathdv',$mathdv)
+            ->distinct()->get();
+        $kq = "";
+        foreach($model as $ct)
+        {
+            if($kq == "")
+                $kq = $ct['tenkhoipb'];
+            else
+                $kq = $kq.",". $ct['tenkhoipb'];
+        }
+        return $kq;
 
+    }
     public function index_tinh(Request $request){
         if (Session::has('admin')) {
             $inputs=$request->all();

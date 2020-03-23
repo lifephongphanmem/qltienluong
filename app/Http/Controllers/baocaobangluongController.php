@@ -3134,7 +3134,7 @@ class baocaobangluongController extends Controller
             $thongtin=array('nguoilap'=>session('admin')->name,
                 'nam'=>$inputs['tunam'],
                 'madvbc'=>$madvbc);
-            $a_lv = array('QLNN','DDT','DT');
+            $a_lv = array('QLNN','DDT','DOANTHE','DANG');
             $modelqlnn = $model->wherein('linhvuchoatdong',$a_lv)
                 ->wherein('madv', array_column($model_phanloai->where('maphanloai','<>','KVXP')->toarray(),'madv'));
             /*
