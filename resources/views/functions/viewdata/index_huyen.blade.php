@@ -84,7 +84,9 @@
                         <tr>
                             <th class="text-center" style="width: 5%">STT</th>
                             <th class="text-center">Tên đơn vị</th>
-                            <th class="text-center">Phân loại dữ liệu</th>
+                            <!--th class="text-center">Phân loại dữ liệu</th-->
+                            <th class="text-center">Phân loại đơn vị</th>
+                            <th class="text-center">Lĩnh vực hoạt động</th>
                             <th class="text-center">Thao tác</th>
                         </tr>
                         </thead>
@@ -95,7 +97,9 @@
                                 <tr>
                                     <td class="text-center">{{$i++}}</td>
                                     <td>{{$value->tendv}}</td>
+                                    <!--td>{{$value->tenphanloai}}</td-->
                                     <td>{{$value->tenphanloai}}</td>
+                                    <td>{{$value->linhvuchoatdong}}</td>
                                     <td>
                                         @if ($value->mathdv != NULL)
                                             @if($value->phanloaitaikhoan == 'TH')

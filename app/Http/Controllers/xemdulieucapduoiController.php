@@ -269,7 +269,8 @@ class xemdulieucapduoiController extends Controller
                         $query->select('madv')->from('dmdonvi')->where('macqcq',$madv)->where('madv','<>',$madv)->get();
                     })->distinct()->get();
                 */
-                $model_donvi = dmdonvi::select('dmdonvi.madv', 'dmdonvi.tendv','phanloaitaikhoan','maphanloai')
+                $model_donvi = dmdonvi::join('dmphanloaidonvi','dmphanloaidonvi.maphanloai','dmdonvi.maphanloai')
+                ->select('dmdonvi.madv', 'dmdonvi.tendv','phanloaitaikhoan','dmdonvi.maphanloai','tenphanloai')
                     ->where('macqcq',$madv)->where('madv','<>',$madv)
                     ->wherenotin('madv', function ($query) use ($madv,$ngay) {
                         $query->select('madv')->from('dmdonvi')
@@ -300,7 +301,8 @@ class xemdulieucapduoiController extends Controller
                         $query->select('madv')->from('dmdonvi')->where('macqcq',$madv)->where('madv','<>',$madv)->get();
                     })->distinct()->get();
                 */
-                $model_donvi = dmdonvi::select('dmdonvi.madv', 'dmdonvi.tendv','phanloaitaikhoan','maphanloai')
+                $model_donvi = dmdonvi::join('dmphanloaidonvi','dmphanloaidonvi.maphanloai','dmdonvi.maphanloai')
+                ->select('dmdonvi.madv', 'dmdonvi.tendv','phanloaitaikhoan','dmdonvi.maphanloai','tenphanloai','linhvuchoatdong')
                     ->where('macqcq',$madv)->where('madv','<>',$madv)
                     ->wherenotin('madv', function ($query) use ($madv,$ngay) {
                         $query->select('madv')->from('dmdonvi')

@@ -318,6 +318,7 @@
         $model_hcsn = $model_hcsn->where('linhvuchoatdong','<>','KVXP');
         $model_hcsn = $model_hcsn->where('linhvuchoatdong','<>','QLNN');
         $model_hcsn = $model_hcsn->where('linhvuchoatdong','<>','DDT');
+        $model_hcsn = $model_hcsn->where('linhvuchoatdong','<>','DT');
         $model_hcsnT = $model_hcsn->groupby('tencongtac');
         $a_plcongtac = array_column($model_hcsn->toarray(),'mact' , 'tencongtac');
 
@@ -367,6 +368,7 @@
         $model_hcsn = $model_hcsn->where('linhvuchoatdong','<>','KVXP');
         $model_hcsn = $model_hcsn->where('linhvuchoatdong','<>','QLNN');
         $model_hcsn = $model_hcsn->where('linhvuchoatdong','<>','DDT');
+        $model_hcsn = $model_hcsn->where('linhvuchoatdong','<>','DT');
         $model_hcsnpl = $model_hcsn->groupby('tenlinhvuchoatdong');
         //dd($model_hcsnpl->toarray());
         //$a_pldv = array_column($model_hcsn->toarray(),'maphanloai' , 'tenphanloai');
