@@ -315,7 +315,9 @@
 
         <?php
         $model_hcsn = $model->where('linhvuchoatdong','<>','GD');
-        $model_hcsn = $model_hcsn->where('linhvuchoatdong','HCSN');
+        $model_hcsn = $model_hcsn->where('linhvuchoatdong','<>','KVXP');
+        $model_hcsn = $model_hcsn->where('linhvuchoatdong','<>','QLNN');
+        $model_hcsn = $model_hcsn->where('linhvuchoatdong','<>','DDT');
         $model_hcsnT = $model_hcsn->groupby('tencongtac');
         $a_plcongtac = array_column($model_hcsn->toarray(),'mact' , 'tencongtac');
 
@@ -365,14 +367,15 @@
         $model_hcsn = $model_hcsn->where('linhvuchoatdong','<>','KVXP');
         $model_hcsn = $model_hcsn->where('linhvuchoatdong','<>','QLNN');
         $model_hcsn = $model_hcsn->where('linhvuchoatdong','<>','DDT');
-        $model_hcsnpl = $model_hcsn->groupby('tenphanloai');
+        $model_hcsnpl = $model_hcsn->groupby('tenlinhvuchoatdong');
         //dd($model_hcsnpl->toarray());
-        $a_pldv = array_column($model_hcsn->toarray(),'maphanloai' , 'tenphanloai');
+        //$a_pldv = array_column($model_hcsn->toarray(),'maphanloai' , 'tenphanloai');
+        $a_pldv = array_column($model_hcsn->toarray(),'linhvuchoatdong' , 'tenlinhvuchoatdong');
         $stt = 0;
         ?>
         @foreach($a_pldv as $key=>$val)
             <?php $stt ++;
-            $model_hcsnpl = $model_hcsn->where('maphanloai',$a_pldv[$key]);
+            $model_hcsnpl = $model_hcsn->where('linhvuchoatdong',$a_pldv[$key]);
             $model_hcsnplCT = $model_hcsnpl->groupby('tencongtac');
             $a_plcongtac = array_column($model_hcsnpl->toarray(),'mact' , 'tencongtac');
             ?>
@@ -476,8 +479,8 @@
         @endforeach
 
         <?php
-        $model_hcsn = $model->where('linhvuchoatdong','QLNN');
-        $model_hcsn = $model_hcsn->where('linhvuchoatdong','DDT');
+        $model_hcsn = $modelqlnn;
+        //$model_hcsn = $model_hcsn->where('linhvuchoatdong','DDT');
         $model_hcsnT = $model_hcsn->groupby('tencongtac');
         $a_plcongtac = array_column($model_hcsn->toarray(),'mact' , 'tencongtac');
         ?>
@@ -522,17 +525,17 @@
             </tr>
         @endforeach
         <?php
-        $model_hcsn = $model->where('linhvuchoatdong','<>','GD')->where('linhvuchoatdong','<>','KVXP')
-                ->where('linhvuchoatdong','<>','QLNN')
-                ->where('linhvuchoatdong','<>','DDT');
-        $model_hcsnpl = $model_hcsn->groupby('tenphanloai');
+        $model_hcsn = $modelqlnn;
+        //$model_hcsn = $model_hcsn->where('linhvuchoatdong','DDT');
+        $model_hcsnpl = $model_hcsn->groupby('tenlinhvuchoatdong');
         //dd($model_hcsnpl->toarray());
-        $a_pldv = array_column($model_hcsn->toarray(),'maphanloai' , 'tenphanloai');
+        //$a_pldv = array_column($model_hcsn->toarray(),'maphanloai' , 'tenphanloai');
+        $a_pldv = array_column($model_hcsn->toarray(),'linhvuchoatdong' , 'tenlinhvuchoatdong');
         $stt = 0;
         ?>
         @foreach($a_pldv as $key=>$val)
             <?php $stt ++;
-            $model_hcsnpl = $model_hcsn->where('maphanloai',$a_pldv[$key]);
+            $model_hcsnpl = $model_hcsn->where('linhvuchoatdong',$a_pldv[$key]);
             $model_hcsnplCT = $model_hcsnpl->groupby('tencongtac');
             $a_plcongtac = array_column($model_hcsnpl->toarray(),'mact' , 'tencongtac');
             ?>
