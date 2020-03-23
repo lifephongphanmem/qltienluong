@@ -3134,6 +3134,10 @@ class baocaobangluongController extends Controller
             $thongtin=array('nguoilap'=>session('admin')->name,
                 'nam'=>$inputs['tunam'],
                 'madvbc'=>$madvbc);
+            $a_lv = array('QLNN','DDT');
+            $modelqlnn = $model->wherein('linhvuchoatdong',$a_lv)
+                ->wherein('madv', array_column($model_phanloai->where('maphanloai','<>','KVXP')->toarray(),'madv'));
+            /*
             $modelqlnn = tonghopluong_donvi_bangluong::join('tonghopluong_donvi','tonghopluong_donvi.mathdv','tonghopluong_donvi_bangluong.mathdv')
                 ->Select('tonghopluong_donvi.madv','mact','linhvuchoatdong','trangthai','nam','thang','tonghopluong_donvi.madvbc',DB::raw('count(tonghopluong_donvi_bangluong.id) as soluong'),DB::raw('sum(heso) as heso'),DB::raw('sum(tonghs-heso) as tongpc'),DB::raw('sum(tonghs) as tonghs'),DB::raw('sum(hesobl) as hesobl')
                     ,DB::raw('sum(hesott) as hesott'),DB::raw('sum(hesopc) as hesopc'),DB::raw('sum(vuotkhung) as vuotkhung'),DB::raw('sum(pcct) as pcct'),DB::raw('sum(pckct) as pckct'),
@@ -3177,6 +3181,7 @@ class baocaobangluongController extends Controller
                 else
                     $ct->tenlinhvuchoatdong = "";
             }
+            */
             return view('reports.tonghopluong.huyen.tonghopluongCR')
                 ->with('model_dutoan',$model_dutoan)
                 ->with('model_th',$model_th)
