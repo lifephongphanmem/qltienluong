@@ -11,6 +11,7 @@ use App\dmdonvi;
 use App\dmphanloaict;
 use App\dmphucap_donvi;
 use App\hosocanbo;
+use App\hosotruc;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Request;
@@ -1149,6 +1150,73 @@ class bangluong_inController extends Controller
                 //->with('model_congtac',$model_congtac)
                 ->with('a_phucap',$a_phucap)
                 ->with('pageTitle','Bảng lương chi tiết');
+        } else
+            return view('errors.notlogin');
+    }
+
+    public function printf_mautruc_m2(Request $request){
+        if (Session::has('admin')) {
+            $inputs = $request->all();
+            $mabl = $inputs['mabl'];
+            //dd($inputs);
+            $m_bl = bangluong::select('thang', 'nam', 'mabl', 'madv', 'ngaylap', 'luongcoban', 'phanloai', 'noidung')->where('mabl', $mabl)->first();
+            $a_pl = getPhanLoaiBangLuong();
+            $m_bl->tenphanloai = isset($a_pl[$m_bl->phanloai]) ? $a_pl[$m_bl->phanloai] : 'Bảng thanh toán chi khác';
+            $model = (new data())->getBangluong_ct($m_bl->thang, $m_bl->mabl);
+            $m_hoso = hosotruc::where('thang', $m_bl->thang)->where('nam', $m_bl->nam)->get();
+            $a_phucap = array();
+            $col = 0;
+            $model_pc = dmphucap_donvi::where('madv', $m_bl->madv)->where('phanloai', '<', '3')->get();
+
+            foreach ($model_pc as $ct) {
+                if ($model->sum($ct->mapc) > 0) {
+                    $a_phucap[$ct->mapc] = $ct->report;
+                    $col++;
+                }
+            }
+
+            foreach ($model as $ct) {
+                if ($ct->maso != null && $ct->maso != '') {
+                    $hoso = $m_hoso->where('maso', $ct->maso)->first();
+                } else {
+                    $hoso = $m_hoso->where('macanbo', $ct->macanbo)->first();
+                }
+                $ct->tiencongngay = $ct->tiencong = 0;
+                foreach ($a_phucap as $k => $v) {
+                    $hs = 'hs_' . $k;
+                    $st = 'st_' . $k;
+                    $ct->$hs = isset($hoso->$k) ? $hoso->$k : 0;
+                    if ($ct->$hs < 5) { //hệ số chỉ lấy 5
+                        $ct->$st = round(round($ct->$hs * 15 / $ct->songaycong, session('admin')->lamtron) * $m_bl->luongcoban);
+                    } else {
+                        $ct->$st = round($ct->$hs * 15 / $ct->songaycong);
+                    }
+                    $ct->tiencong += $ct->$st;
+                }
+                $ct->tiencongngay = round($ct->tiencong / 15);
+            }
+
+            $m_dv = dmdonvi::where('madv', $m_bl->madv)->first();
+            $m_dv->tendvcq = getTenDB($m_dv->madvbc);
+
+            $thongtin = array('nguoilap' => $m_bl->nguoilap,
+                'thang' => $m_bl->thang,
+                'nam' => $m_bl->nam,
+                'ngaylap' => $m_bl->ngaylap,
+                'luongcb' => $m_bl->luongcoban,
+                'innoidung' => isset($inputs['innoidung']),
+                'noidung' => $m_bl->noidung,
+            );
+            //dd($m_hoso);
+            return view('reports.bangluong.donvi.mautruc_m2')
+                ->with('model', $model)
+                ->with('m_dv', $m_dv)
+                ->with('m_bl', $m_bl)
+                ->with('a_cv', getChucVuCQ(false))
+                ->with('thongtin', $thongtin)
+                ->with('col', $col)
+                ->with('a_phucap', $a_phucap)
+                ->with('pageTitle', 'Bảng lương chi tiết');
         } else
             return view('errors.notlogin');
     }

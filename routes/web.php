@@ -543,10 +543,12 @@ Route::group(['prefix'=>'chuc_nang'],function(){
         Route::post('del_ct','bangluongController@destroy_ct');
         Route::get('del_ct_chikhac/{id}','bangluongController@destroy_truc');
 
+        Route::get('get_ct','bangluongController@get_ct');
         Route::get('get_chitiet','bangluongController@get_chitiet');
         Route::post('update_chitiet','bangluongController@update_chitiet');
 
         Route::post('updatect_plct','bangluongController@updatect_plct');
+        Route::post('updatect_ngaycong','bangluongController@updatect_ngaycong');
         //Route::get('cal','bangluongController@cal'); //Tính toán lại lương cán bộ
         //Route::post('importexcel','bangluongController@importexcel');
 
@@ -574,7 +576,6 @@ Route::group(['prefix'=>'chuc_nang'],function(){
         Route::post('mauqs','bangluongController@printf_mauqs');
         Route::get('maucd','bangluongController@printf_maucd');
         Route::get('maumc','bangluongController@printf_maumc');
-        Route::get('mautruc','bangluongController@printf_mautruc');
         Route::get('mautinhnguyen','bangluongController@printf_mautinhnguyen');
         Route::post('maumtm','bangluongController@printf_maumtm');
         //mẫu bảng lương lai châu
@@ -596,6 +597,7 @@ Route::group(['prefix'=>'chuc_nang'],function(){
         //chi khác (trực, công tác phí)
         Route::get('mauctphi','bangluong_inController@printf_mauctphi');
         Route::get('mautruc','bangluong_inController@printf_mautruc');
+        Route::get('mautruc_m2','bangluong_inController@printf_mautruc_m2');
 
         //tổng hợp
         Route::post('mau185_th','bangluong_inController@printf_mau185_th');

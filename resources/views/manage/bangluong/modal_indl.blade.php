@@ -239,10 +239,20 @@
                                         <div class="form-group">
                                             <button type="button" style="border-width: 0px" onclick="inblm1('/chuc_nang/bang_luong/mau03')" class="btn btn-default btn-xs mbs"
                                                     title="Bảng lương của cán bộ thiết kế theo mẫu đặc thù" data-target="#mau1-modal" data-toggle="modal">
-                                                <i class="fa fa-print"></i>&nbsp; Bảng lương mẫu Lạng Sơn</button>
+                                                <i class="fa fa-print"></i>&nbsp; Bảng lương mẫu Lạng Sơn - Mẫu 01</button>
                                         </div>
                                     </div>
 
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <button type="button" style="border-width: 0px" onclick="inblm1('/chuc_nang/bang_luong/mau04')" class="btn btn-default btn-xs mbs"
+                                                    title="Bảng lương của cán bộ thiết kế theo mẫu đặc thù" data-target="#mau1-modal" data-toggle="modal">
+                                                <i class="fa fa-print"></i>&nbsp; Bảng lương mẫu Lạng Sơn - Mẫu 02</button>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row">
                                     <div class="col-md-6">
                                         <div class="form-group">
                                             <button type="button" style="border-width: 0px" onclick="inblm1('/chuc_nang/bang_luong/mau05')" class="btn btn-default btn-xs mbs"
@@ -257,9 +267,7 @@
                                                 {{--<i class="fa fa-print"></i>&nbsp; Bảng lương mẫu 4</button>--}}
                                         {{--</div>--}}
                                     {{--</div>--}}
-                                </div>
 
-                                <div class="row">
                                     <div class="col-md-6">
                                         <div class="form-group">
                                             <button type="button" style="border-width: 0px" onclick="inblm6()" class="btn btn-default btn-xs mbs"
@@ -267,7 +275,9 @@
                                                 <i class="fa fa-print"></i>&nbsp; Bảng lương mẫu mục tiểu mục</button>
                                         </div>
                                     </div>
+                                </div>
 
+                                <div class="row">
                                     <div class="col-md-6">
                                         <div class="form-group">
                                             <button type="button" style="border-width: 0px" onclick="inblm1('/chuc_nang/bang_luong/mau07')"
@@ -275,9 +285,7 @@
                                                 <i class="fa fa-print"></i>&nbsp; Bảng lương mẫu hệ số - số tiền</button>
                                         </div>
                                     </div>
-                                </div>
 
-                                <div class="row">
                                     <div class="col-md-6">
                                         <div class="form-group">
                                             <button type="button" style="border-width: 0px" onclick="inblm1('/chuc_nang/bang_luong/mauquy')"
@@ -285,7 +293,9 @@
                                                 <i class="fa fa-print"></i>&nbsp; Bảng lương mẫu các quỹ trích nộp</button>
                                         </div>
                                     </div>
+                                </div>
 
+                                <div class="row">
                                     <div class="col-md-6">
                                         <div class="form-group">
                                             <button type="button" style="border-width: 0px" onclick="inblmtt107_pb('/chuc_nang/bang_luong/mautt107_pb_m2')" class="btn btn-default btn-xs mbs"
@@ -293,9 +303,7 @@
                                                 <i class="fa fa-print"></i>&nbsp; Bảng lương mẫu theo khối, tổ công tác</button>
                                         </div>
                                     </div>
-                                </div>
 
-                                <div class="row">
                                     <div class="col-md-6">
                                         <div class="form-group">
                                             <button type="button" style="border-width: 0px" onclick="inblm1('/chuc_nang/bang_luong/dstangluong')" class="btn btn-default btn-xs mbs"
@@ -303,7 +311,9 @@
                                                 <i class="fa fa-print"></i>&nbsp; Danh sách cán bộ tăng lương</button>
                                         </div>
                                     </div>
+                                </div>
 
+                                <div class="row">
                                     <div class="col-md-6">
                                         <div class="form-group">
                                             <button type="button" style="border-width: 0px" onclick="inblm1('/chuc_nang/bang_luong/dsgiamluong')" class="btn btn-default btn-xs mbs"
@@ -311,9 +321,7 @@
                                                 <i class="fa fa-print"></i>&nbsp; Danh sách cán bộ giảm lương</button>
                                         </div>
                                     </div>
-                                </div>
 
-                                <div class="row">
                                     <div class="col-md-6">
                                         <div class="form-group">
                                             <button type="button" style="border-width: 0px" onclick="inds('/chuc_nang/bang_luong/mauds_m2')" class="btn btn-default btn-xs mbs"
@@ -495,6 +503,47 @@
                                 title="Bảng truy lĩnh lương - lấy nội dung truy lĩnh"
                                 onclick="inblmtt107_tl('/chuc_nang/bang_luong/mautruylinh_m2')">
                             <i class="fa fa-print"></i>&nbsp; Bảng lương mẫu C02-HD (TT107) - Mẫu 03</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal-footer">
+            <button type="button" data-dismiss="modal" class="btn btn-default">Hủy thao tác</button>
+        </div>
+    </div>
+</div>
+
+<!--Modal thông tin tùy chọn in bảng chi lương khác -->
+<div id="inbl_khac-modal" tabindex="-1" role="dialog" aria-hidden="true" class="modal fade">
+    <div class="modal-lg modal-dialog modal-content">
+        <div class="modal-header modal-header-primary">
+            <button type="button" data-dismiss="modal" aria-hidden="true" class="close">&times;</button>
+            <h4 id="hd-inbl_khac" class="modal-title">In bảng chi trả các loại phụ cấp</h4>
+        </div>
+
+        <div class="modal-body">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <a href="" onclick="setUrl(this,'/chuc_nang/bang_luong/mautruc')" style="border-width: 0px;margin-left: 5px" target="_blank">
+                            <i class="fa fa-print"></i>&nbsp;Bảng thanh toán phụ cấp (Mẫu 01)</a>
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <a href="m2" onclick="setUrl(this,'/chuc_nang/bang_luong/mautruc_m2')"  style="border-width: 0px;margin-left: 5px" target="_blank">
+                            <i class="fa fa-print"></i>&nbsp;Bảng thanh toán phụ cấp (Mẫu 02)</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <a href="m2" onclick="setUrl(this,'/chuc_nang/bang_luong/mauctphi')"  style="border-width: 0px;margin-left: 5px" target="_blank">
+                            <i class="fa fa-print"></i>&nbsp;Bảng thanh toán công tác phí</a>
                     </div>
                 </div>
             </div>

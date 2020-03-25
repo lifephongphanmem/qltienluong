@@ -9,6 +9,7 @@ class hosotruc extends Model
     protected $table = 'hosotruc';
     protected $fillable = [
         'id',
+        'maso',
         'macanbo',
         'tencanbo',
         'dantoc',
@@ -24,6 +25,8 @@ class hosotruc extends Model
         'pctn',
         'pcudn',
         'pcud61',
+        'pcld',
+        'pclade',
         'songaycong',
         'songaytruc',
         'thang',

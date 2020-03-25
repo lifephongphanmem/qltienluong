@@ -205,25 +205,32 @@
                             </a>
                             <ul class="sub-menu">
                                 <li>
-                                    <a href="{{url('nghiep_vu/ho_so/danh_sach')}}"><i class="fa fa-caret-right"></i>Danh sách cán bộ đang công tác</a>
+                                    <a href="{{url('nghiep_vu/ho_so/danh_sach')}}">
+                                        <i class="fa fa-caret-right"></i>Danh sách cán bộ đang công tác</a>
                                 </li>
                                 <li>
-                                    <a href="{{url('nghiep_vu/tam_ngung/danh_sach')}}"><i class="fa fa-caret-right"></i>Danh sách cán bộ tạm ngừng theo dõi</a>
+                                    <a href="{{url('nghiep_vu/tam_ngung/danh_sach')}}">
+                                        <i class="fa fa-caret-right"></i>Danh sách cán bộ tạm ngừng theo dõi</a>
                                 </li>
                                 <li>
-                                    <a href="{{url('nghiep_vu/truy_linh/danh_sach?thang=ALL'.'&nam='.date('Y'))}}"><i class="fa fa-caret-right"></i>Danh sách cán bộ được truy lĩnh lương</a>
+                                    <a href="{{url('nghiep_vu/truy_linh/danh_sach?thang=ALL'.'&nam='.date('Y'))}}">
+                                        <i class="fa fa-caret-right"></i>Danh sách cán bộ được truy lĩnh lương</a>
                                 </li>
                                 <li>
-                                    <a href="{{url('nghiep_vu/truc/danh_sach?thang='.date('m').'&nam='.date('Y'))}}"><i class="fa fa-caret-right"></i>Danh sách cán bộ hưởng phụ cấp độc hại</a>
+                                    <a href="{{url('nghiep_vu/truc/danh_sach?thang='.date('m').'&nam='.date('Y'))}}">
+                                        <i class="fa fa-caret-right"></i>Danh sách cán bộ hưởng phụ cấp theo ngày làm việc</a>
                                 </li>
                                 <li>
-                                    <a href="{{url('nghiep_vu/da_nghi/danh_sach')}}"><i class="fa fa-caret-right"></i>Danh sách cán bộ đã thôi công tác</a>
+                                    <a href="{{url('nghiep_vu/da_nghi/danh_sach')}}">
+                                        <i class="fa fa-caret-right"></i>Danh sách cán bộ đã thôi công tác</a>
                                 </li>
                                 <li>
-                                    <a href="{{url('nghiep_vu/chi_tieu/danh_sach?namct='.date('Y'))}}"><i class="fa fa-caret-right"></i>Chỉ tiêu biên chế</a>
+                                    <a href="{{url('nghiep_vu/chi_tieu/danh_sach?namct='.date('Y'))}}">
+                                        <i class="fa fa-caret-right"></i>Chỉ tiêu biên chế</a>
                                 </li>
                                 <li>
-                                    <a href="{{url('nghiep_vu/qua_trinh/phu_cap/danh_sach')}}"><i class="fa fa-caret-right"></i>Quá trình hưởng lương, phụ cấp</a>
+                                    <a href="{{url('nghiep_vu/qua_trinh/phu_cap/danh_sach')}}">
+                                        <i class="fa fa-caret-right"></i>Quá trình hưởng lương, phụ cấp</a>
                                 </li>
                                 @if(session('admin')->maphanloai == 'KVXP')
                                     <!-- Tạm thời bỏ để triển khai lạng sơn -->

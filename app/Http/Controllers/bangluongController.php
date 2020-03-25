@@ -854,8 +854,8 @@ class bangluongController extends Controller
         //ds cán bộ
         //$m_cb = hosocanbo::select($a_th)->where('madv', $inputs['madv'])->wherenotin('macanbo',$a_cbn)->get()->keyBy('macanbo')->toArray();
         $m_cb = hosocanbo::select($a_th)->where('madv', $inputs['madv'])->wherenotin('macanbo', $a_cbn)->get();
-        //chay hàm lấy lại hàm sửa dữ liệu
 
+        //chay hàm lấy lại hàm sửa dữ liệu
         if (isset($inputs['capnhatnangluong'])) {
             $m_hs = hosophucap::where('madv', session('admin')->madv)
                 ->wherenotin('mapc', ['heso', 'vuotkhung','pctnn'])
@@ -914,7 +914,9 @@ class bangluongController extends Controller
             $m_cb[$key]['hs_pcud61'] = isset($val['pcud61']) ? $val['pcud61'] : 0;
             $m_cb[$key]['hs_pcudn'] = isset($val['pcudn']) ? $val['pcudn'] : 0;
             $m_cb[$key]['luongcoban'] = $inputs['luongcoban'];
-            $m_cb[$key]['giaml'] = $m_cb[$key]['songaytruc'] = $m_cb[$key]['songaycong'] = 0;
+            $m_cb[$key]['giaml'] = 0;
+            $m_cb[$key]['songaytruc'] = $m_cb[$key]['songaycong'] = session('admin')->songaycong; //set mặc định = tổng số ngày công của đơn vị
+            //$m_cb[$key]['songaytruc'] = $m_cb[$key]['songaycong'] = 0;
             //tính trc 1 số phụ cấp để làm hệ số cơ sơ
             foreach ($a_pc_coth as $pc) {
                 if (isset($a_pc[$pc])) {
@@ -1705,10 +1707,10 @@ class bangluongController extends Controller
                 $inputs['madv'] = $madv;
 
                 $model = hosotruc::select('macanbo','tencanbo','songaytruc','songaycong',
-                    'heso','vuotkhung','pccv','pcdh','pctn','pcudn','pcud61')
+                    'heso','vuotkhung','pccv','pcdh','pctn','pcudn','pcud61','pcld','pclade','maso')
                     ->where('madv', $madv)->where('thang',$inputs['thang'])->where('nam',$inputs['nam'])->get();
                 $model_pc = dmphucap_donvi::where('madv', session('admin')->madv)
-                    ->wherein('mapc',['pcdh','pctn','pcudn','pcud61'])
+                    ->wherein('mapc',['pcdh','pctn','pcudn','pcud61','pcld','pclade'])
                     ->get();
                 $m_hoso = hosocanbo::select('macanbo','stt','macvcq','mapb','mact')->where('madv',session('admin')->madv)
                     ->get()->keyby('macanbo')->toarray();
@@ -2383,6 +2385,20 @@ class bangluongController extends Controller
             return view('errors.notlogin');
     }
 
+    function get_ct(Request $request){
+        if (!Session::has('admin')) {
+            $result = array(
+                'status' => 'fail',
+                'message' => 'permission denied',
+            );
+            die(json_encode($result));
+        }
+
+        $inputs = $request->all();
+        $m_bl = bangluong::where('mabl', $inputs['mabl'])->first();
+        $model = (new data())->getBangluong_ct_cb($m_bl->thang, $inputs['id']);
+        die($model);
+    }
     function updatect_plct(Request $request)
     {
         if (Session::has('admin')) {
@@ -2407,6 +2423,25 @@ class bangluongController extends Controller
                                     "kpcd_dv" => $pl->kpcd_dv,]);
                 }
             }
+
+            return redirect('/chuc_nang/bang_luong/bang_luong?mabl=' . $model->mabl . '&mapb=' . $model->mapb);
+
+        } else
+            return view('errors.notlogin');
+    }
+
+    function updatect_ngaycong(Request $request)
+    {
+        if (Session::has('admin')) {
+            $inputs = $request->all();
+            $inputs['songaycong'] = chkDbl($inputs['songaycong']);
+            $inputs['songaytruc'] = chkDbl($inputs['songaytruc']);
+
+            $m_bl = bangluong::where('mabl', $inputs['mabl'])->first();
+            $model = (new data())->getBangluong_ct_cb($m_bl->thang, $inputs['id']);
+            $model->update(['songaycong' => chkDbl($inputs['songaycong']),
+                'songaytruc' => chkDbl($inputs['songaytruc'])
+                ]);
 
             return redirect('/chuc_nang/bang_luong/bang_luong?mabl=' . $model->mabl . '&mapb=' . $model->mapb);
 
@@ -3084,37 +3119,41 @@ class bangluongController extends Controller
             $model = $this->getBangLuong($inputs)->wherein('phanloai', ['CVCHINH','KHONGCT']);
             //dd($inputs);
             $mabl = $inputs['mabl'];
-            $m_bl = bangluong::select('thang','nam','mabl','madv','ngaylap','phanloai','noidung')->where('mabl',$mabl)->first();
+            $m_bl = bangluong::select('thang','nam','mabl','madv','ngaylap','phanloai', 'noidung')->where('mabl',$mabl)->first();
             $m_dv = dmdonvi::where('madv',$m_bl->madv)->first();
 
             $model_congtac = dmphanloaict::select('mact','tenct')
                 ->wherein('mact', a_unique(array_column($model->toarray(),'mact')))->get();
 
+            //dd($a_phucap);
             $thongtin=array('nguoilap'=>$m_bl->nguoilap,
                 'thang'=>$m_bl->thang,
                 'nam'=>$m_bl->nam,
-                'ngaylap'=>$m_bl->ngaylap,'phanloai'=>$m_bl->phanloai,
+                'ngaylap'=>$m_bl->ngaylap,
+                'phanloai'=>$m_bl->phanloai,
                 'cochu'=>$inputs['cochu'],
                 'innoidung'=>isset($inputs['innoidung']),
                 'noidung'=>$m_bl->noidung,);
             //xử lý ẩn hiện cột phụ cấp => biết tổng số cột hiện => colspan trên báo cáo
-            $a_goc = array('heso','vuotkhung','hesott');
+            $a_goc = array('heso','hesott', 'pccv');
             $model_pc = dmphucap_donvi::where('madv',$m_bl->madv)->where('phanloai','<','3')->wherenotin('mapc',$a_goc)->get();
             $a_phucap = array();
             $col = 0;
 
-            foreach($model_pc as $ct){
-                $a_phucap[$ct->mapc] = $ct->report;
-                $col++;
-            }
-            $model_hoso = hosocanbo::where('madv', $m_bl->madv)->get();
             foreach ($model as $ct) {
-                if ($ct->phanloai == 'KHONGCT') {
-                    $hoso = $model_hoso->where('macanbo', $ct->macanbo)->first();
-                    $ct->tencanbo = count($hoso) > 0 ? $hoso->tencanbo : null;
+                $ct->tiencongngay = round($ct->luongtn / $ct->songaycong);
+                //làm công thức này cho đỡ sai số
+
+                $ct->tiencong = $ct->luongtn + ($ct->songaytruc - $ct->songaycong) * $ct->tiencongngay;
+            }
+
+            foreach($model_pc as $ct){
+                if ($model->sum($ct->mapc) > 0) {
+                    $a_phucap[$ct->mapc] = $ct->report;
+                    $col++;
                 }
             }
-            return view('reports.bangluong.donvi.maubangluong_phongban')
+            return view('reports.bangluong.donvi.maulangson_m2')
                 ->with('model',$model->sortBy('stt'))
                 ->with('model_pb',getPhongBan())
                 ->with('m_dv',$m_dv)
@@ -4362,35 +4401,6 @@ class bangluongController extends Controller
                 'noidung'=>$m_bl->noidung,);
 
             return view('reports.bangluong.donvi.maumc')
-                ->with('model',$model->sortBy('stt'))
-                ->with('m_dv',$m_dv)
-                ->with('thongtin',$thongtin)
-                ->with('pageTitle','Bảng lương chi tiết');
-        } else
-            return view('errors.notlogin');
-    }
-
-    public function printf_mautruc(Request $request){
-        if (Session::has('admin')) {
-            $inputs = $request->all();
-            $mabl = $inputs['mabl'];
-            $m_bl = bangluong::select('thang','nam','mabl','madv','ngaylap','luongcoban','noidung')->where('mabl',$mabl)->first();
-            $model = bangluong_truc::where('mabl',$mabl)->get();
-            foreach($model as $ct) {
-                $ct->luongcb = $m_bl->luongcoban;
-            }
-            $m_dv = dmdonvi::where('madv',$m_bl->madv)->first();
-            $m_dv->tendvcq = getTenDB($m_dv->madvbc);
-
-            $thongtin=array('nguoilap'=>$m_bl->nguoilap,
-                'thang'=>$m_bl->thang,
-                'nam'=>$m_bl->nam,
-                'ngaylap'=>$m_bl->ngaylap,
-                'luongcb' => $m_bl->luongcoban,
-                'innoidung'=>false,
-                'noidung'=>$m_bl->noidung,);
-
-            return view('reports.bangluong.donvi.mautruc')
                 ->with('model',$model->sortBy('stt'))
                 ->with('m_dv',$m_dv)
                 ->with('thongtin',$thongtin)

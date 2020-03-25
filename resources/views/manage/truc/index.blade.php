@@ -32,7 +32,7 @@
             <div class="portlet light bordered">
                 <div class="portlet-title">
                     <div class="caption">
-                        DANH SÁCH CÁN BỘ TRỰC CÔNG TÁC
+                        DANH SÁCH CÁN BỘ HƯỞNG PHỤ CẤP THEO NGÀY LÀM VIỆC
                     </div>
                     @if($inputs['trangthai'])
                         <div class="actions">
@@ -56,39 +56,47 @@
                         </div>
                     </div>
 
-                    <table id="sample_3" class="table table-hover table-striped table-bordered" style="min-height: 230px">
+                    <table id="sample_4" class="table table-hover table-striped table-bordered" style="min-height: 230px">
                         <thead>
                             <tr>
-                                <th class="text-center" style="width: 5%">STT</th>
-                                <th class="text-center">Họ tên cán bộ</th>
-                                <th class="text-center">Số</br>ngày</br>trực</th>
-                                <th class="text-center">Phụ cấp</br>ưu đãi</th>
-                                <th class="text-center">Phụ cấp</br>ưu đãi</br>chênh lệch</th>
-                                <th class="text-center">Phụ cấp</br>độc hại</th>
-                                <th class="text-center">Phụ cấp</br>trách nhiệm</th>
-                                <th class="text-center">Thao tác</th>
+                                <th class="text-center" rowspan="2" style="width: 5%">STT</th>
+                                <th class="text-center" rowspan="2" >Họ tên cán bộ</th>
+                                <th class="text-center" rowspan="2" >Số</br>ngày</br>công</th>
+                                <th class="text-center" colspan="6">Danh sách phụ cấp</th>
+                                <th class="text-center" rowspan="2" >Thao tác</th>
+                            </tr>
+                            <tr>
+                                <th style="width: 8%" class="text-center">Ưu</br>đãi</th>
+                                <th style="width: 8%" class="text-center">Ưu đãi</br>chênh</br>lệch</th>
+                                <th style="width: 8%" class="text-center">Độc</br>hại</th>
+                                <th style="width: 8%" class="text-center">Trách</br>nhiệm</th>
+                                <th style="width: 8%" class="text-center">Lưu</br>động</th>
+                                <th style="width: 8%" class="text-center">Làm</br>thêm,</br>làm</br>đêm</th>
                             </tr>
                         </thead>
+
                         <tbody>
-                        @foreach($model as $key=>$value)
-                            <tr>
-                                <td class="text-center">{{$key+1}}</td>
-                                <td>{{$value->tencanbo}}</td>
-                                <td class="text-center">{{$value->songaytruc}}</td>
-                                <td class="text-center">{{dinhdangsothapphan($value->pcudn,5)}}</td>
-                                <td class="text-center">{{dinhdangsothapphan($value->pcud61,5)}}</td>
-                                <td class="text-center">{{dinhdangsothapphan($value->pcdh,5)}}</td>
-                                <td class="text-center">{{dinhdangsothapphan($value->pctn,5)}}</td>
-                                <td>
-                                    @if($inputs['trangthai'])
-                                        <a href="{{$inputs['furl'].'edit?macanbo='.$value->macanbo.'&thang='.$value->thang.'&nam='.$value->nam}}" class="btn btn-default btn-xs mbs">
-                                            <i class="fa fa-edit"></i>&nbsp;Sửa</a>
-                                        <button type="button" onclick="cfDel('{{$inputs['furl'].'del/'.$value->id}}')" class="btn btn-danger btn-xs mbs" data-target="#delete-modal-confirm" data-toggle="modal">
-                                            <i class="fa fa-trash-o"></i>&nbsp;Xóa</button>
-                                    @endif
-                                </td>
-                            </tr>
-                        @endforeach
+                            @foreach($model as $key=>$value)
+                                <tr>
+                                    <td class="text-center">{{$key+1}}</td>
+                                    <td>{{$value->tencanbo}}</td>
+                                    <td class="text-center">{{$value->songaytruc .'/'. $value->songaycong}}</td>
+                                    <td class="text-center">{{dinhdangsothapphan($value->pcudn,5)}}</td>
+                                    <td class="text-center">{{dinhdangsothapphan($value->pcud61,5)}}</td>
+                                    <td class="text-center">{{dinhdangsothapphan($value->pcdh,5)}}</td>
+                                    <td class="text-center">{{dinhdangsothapphan($value->pctn,5)}}</td>
+                                    <td class="text-center">{{dinhdangsothapphan($value->pcld,5)}}</td>
+                                    <td class="text-center">{{dinhdangsothapphan($value->pclade,5)}}</td>
+                                    <td>
+                                        @if($inputs['trangthai'])
+                                            <a href="{{$inputs['furl'].'edit?macanbo='.$value->macanbo.'&thang='.$value->thang.'&nam='.$value->nam}}" class="btn btn-default btn-xs mbs">
+                                                <i class="fa fa-edit"></i>&nbsp;Sửa</a>
+                                            <button type="button" onclick="cfDel('{{$inputs['furl'].'del/'.$value->id}}')" class="btn btn-danger btn-xs mbs" data-target="#delete-modal-confirm" data-toggle="modal">
+                                                <i class="fa fa-trash-o"></i>&nbsp;Xóa</button>
+                                        @endif
+                                    </td>
+                                </tr>
+                            @endforeach
                         </tbody>
                     </table>
                 </div>

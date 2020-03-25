@@ -121,15 +121,19 @@
                                             @elseif($value->phanloai == 'TRUYLINH')
                                                 <button type="button" onclick="inbl_tl('{{$value->mabl}}','{{$value->thang}}','{{$value->nam}}')" class="btn btn-default btn-xs mbs">
                                                     <i class="fa fa-print"></i>&nbsp; In bảng lương</button>
+                                            @else
+                                                <button type="button" onclick="inbl_khac('{{$value->mabl}}','{{$value->thang}}','{{$value->nam}}')" class="btn btn-default btn-xs mbs">
+                                                    <i class="fa fa-print"></i>&nbsp;In chi tiết</button>
+                                            @endif
                                                 <!--button onclick="tanggiam('{{$value->mabl}}')" class="btn btn-default btn-xs mbs" data-target="#tanggiam-modal-confirm" data-toggle="modal">
                                                     <i class="fa fa-th-list"></i>&nbsp; Tăng/Giảm lương</button-->
-                                            @elseif($value->phanloai == 'TRUC')
-                                                <a href="{{url($inputs['furl'].'mautruc?mabl='.$value->mabl)}}" class="btn btn-default btn-xs mbs" target="_blank">
-                                                    <i class="fa fa-print"></i>&nbsp; In chi tiết</a>
-                                            @else
-                                                <a href="{{url($inputs['furl'].'mauctphi?mabl='.$value->mabl)}}" class="btn btn-default btn-xs mbs" target="_blank">
-                                                    <i class="fa fa-print"></i>&nbsp; In chi tiết</a>
-                                            @endif
+{{--                                            @elseif($value->phanloai == 'TRUC')--}}
+{{--                                                <a href="{{url($inputs['furl'].'mautruc?mabl='.$value->mabl)}}" class="btn btn-default btn-xs mbs" target="_blank">--}}
+{{--                                                    <i class="fa fa-print"></i>&nbsp; In chi tiết</a>--}}
+{{--                                            @else--}}
+{{--                                                <a href="{{url($inputs['furl'].'mauctphi?mabl='.$value->mabl)}}" class="btn btn-default btn-xs mbs" target="_blank">--}}
+{{--                                                    <i class="fa fa-print"></i>&nbsp; In chi tiết</a>--}}
+{{--                                            @endif--}}
 
                                             <button type="button" onclick="edit('{{$value->mabl}}','{{$value->phanloai}}')" class="btn btn-default btn-xs mbs">
                                                 <i class="fa fa-edit"></i>&nbsp; Sửa</button>
@@ -141,17 +145,21 @@
                                         @else
                                             @if($value->phanloai == 'BANGLUONG')
                                                 <button type="button" onclick="inbl('{{$value->mabl}}','{{$value->thang}}','{{$value->nam}}')" class="btn btn-default btn-xs mbs">
-                                                    <i class="fa fa-print"></i>&nbsp; In bảng lương</button>
+                                                    <i class="fa fa-print"></i>&nbsp;In bảng lương</button>
                                             @elseif($value->phanloai == 'TRUYLINH')
                                                 <button type="button" onclick="inbl_tl('{{$value->mabl}}','{{$value->thang}}','{{$value->nam}}')" class="btn btn-default btn-xs mbs">
-                                                    <i class="fa fa-print"></i>&nbsp; In bảng lương</button>
-                                            @elseif($value->phanloai == 'TRUC')
-                                                <a href="{{url($inputs['furl'].'mautruc?mabl='.$value->mabl)}}" class="btn btn-default btn-xs mbs" target="_blank">
-                                                    <i class="fa fa-print"></i>&nbsp; In chi tiết</a>
+                                                    <i class="fa fa-print"></i>&nbsp;In bảng lương</button>
                                             @else
-                                                <a href="{{url($inputs['furl'].'mauctphi?mabl='.$value->mabl)}}" class="btn btn-default btn-xs mbs" target="_blank">
-                                                    <i class="fa fa-print"></i>&nbsp; In chi tiết</a>
+                                                <button type="button" onclick="inbl_khac('{{$value->mabl}}','{{$value->thang}}','{{$value->nam}}')" class="btn btn-default btn-xs mbs">
+                                                    <i class="fa fa-print"></i>&nbsp;In chi tiết</button>
                                             @endif
+{{--                                            @elseif($value->phanloai == 'TRUC')--}}
+{{--                                                <a href="{{url($inputs['furl'].'mautruc?mabl='.$value->mabl)}}" class="btn btn-default btn-xs mbs" target="_blank">--}}
+{{--                                                    <i class="fa fa-print"></i>&nbsp; In chi tiết</a>--}}
+{{--                                            @else--}}
+{{--                                                <a href="{{url($inputs['furl'].'mauctphi?mabl='.$value->mabl)}}" class="btn btn-default btn-xs mbs" target="_blank">--}}
+{{--                                                    <i class="fa fa-print"></i>&nbsp; In chi tiết</a>--}}
+{{--                                            @endif--}}
                                         @endif
 
                                     </td>
@@ -502,10 +510,24 @@
             //$('#inbl-modal').modal('hide');
         }
 
+        function inbl_khac(mabl,thang,nam){
+            document.getElementById("hd-inbl_khac").innerHTML="In bảng chi trả các loại phụ cấp tháng " + thang + ' năm ' + nam;
+            //gán giá trị vào modal in để lấy giá trị
+            $("#mabl_in").val(mabl);
+            $("#thang_in").val(thang);
+            $("#nam_in").val(nam);
+            $('#inbl_khac-modal').modal('show');
+            //$('#inbl-modal').modal('hide');
+        }
+
         function inbl_th(mabl,thang,nam){
             //document.getElementById("hd-inbl").innerHTML="In bảng lương tháng " + thang + ' năm ' + nam;
             $('#inbl_th-modal').modal('show');
             //$('#inbl-modal').modal('hide');
+        }
+
+        function setUrl(tag,url){
+            tag.href = url + '?mabl=' + $('#mabl_in').val() ;
         }
 
         function incd(){

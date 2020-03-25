@@ -15,7 +15,8 @@ class CreateHosotrucTable extends Migration
     {
         Schema::create('hosotruc', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('macanbo', 50)->unique();
+            $table->string('maso', 50)->unique();
+            $table->string('macanbo', 50)->nullable();
             $table->string('tencanbo', 50)->nullable();
             $table->string('tenkhac', 50)->nullable();
             $table->date('ngaysinh')->nullable();
@@ -29,8 +30,10 @@ class CreateHosotrucTable extends Migration
             $table->double('pccv')->default(0);
             $table->double('pcdh')->default(0);
             $table->double('pctn')->default(0);
-            $table->double('pcudn')->default(100);
-            $table->double('pcud61')->default(100);
+            $table->double('pcudn')->default(0);
+            $table->double('pcud61')->default(0);
+            $table->double('pcld')->default(0);
+            $table->double('pclade')->default(0);
             $table->double('songaycong')->default(100);
             $table->double('songaytruc')->default(100);
             $table->string('thang',10)->nullable();

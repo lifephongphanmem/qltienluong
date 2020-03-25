@@ -57,7 +57,7 @@ class hosotrucController extends Controller
             $model->thang = $inputs['thang'];
             $model->nam = $inputs['nam'];
             $model_pc = dmphucap_donvi::where('madv', session('admin')->madv)
-                ->wherein('mapc',['heso','vuotkhung','pccv','pcdh','pctn','pcudn','pcud61'])
+                ->wherein('mapc',['heso','vuotkhung','pccv','pcdh','pctn','pcudn','pcud61','pcld','pclade'])
                 ->get();
 
             return view('manage.truc.create')
@@ -85,12 +85,13 @@ class hosotrucController extends Controller
                 ->where('thang', $inputs['thang'])
                 ->where('nam', $inputs['nam'])
                 ->get()->keyby('macanbo')->toarray();
-
+            $maso = getdate()[0];
             foreach($model as $ct){
                 if(isset($model_chk[$ct->macanbo])){
                     continue;
                 }
                 $a_data[] = array(
+                    'maso' => $maso++,
                     'macanbo'=>$ct->macanbo,
                     'tencanbo'=>$ct->tencanbo,
                     'heso'=>$ct->heso,
@@ -101,6 +102,8 @@ class hosotrucController extends Controller
                     'pctn'=>$ct->pctn,
                     'pcudn'=>$ct->pcudn,
                     'pcud61'=>$ct->pcud61,
+                    'pcld'=>$ct->pcld,
+                    'pclade'=>$ct->pclade,
                     'songaycong'=>$inputs['ngaycong_sao'],
                     'songaytruc'=>$inputs['ngaycong_sao'],
                     'thang'=>$inputs['thang'],
@@ -125,7 +128,7 @@ class hosotrucController extends Controller
                 ->first();
 
             $model_pc = dmphucap_donvi::where('madv', session('admin')->madv)
-                ->wherein('mapc',['heso','vuotkhung','pccv','pcdh','pctn','pcudn','pcud61'])
+                ->wherein('mapc',['heso','vuotkhung','pccv','pcdh','pctn','pcudn','pcud61','pcld','pclade'])
                 ->get();
 
             return view('manage.truc.create')
@@ -145,8 +148,13 @@ class hosotrucController extends Controller
             $inputs = $request->all();
             $inputs['songaycong'] = chkDbl($inputs['songaycong']) < 1 ? 1 : chkDbl($inputs['songaycong']);
             $inputs['songaytruc'] = chkDbl($inputs['songaytruc']);
+            $a_pc = ['heso','vuotkhung','pccv','pcdh','pctn','pcudn','pcud61','pcld','pclade'];
+            foreach ($a_pc as $pc){
+                $inputs[$pc] = chkDbl($inputs[$pc]);
+            }
             //dd($inputs);
             if ($inputs['trangthai'] == 'ADD') {
+                $inputs['maso'] = getdate()[0];
                 hosotruc::create($inputs);
             } else {
                 hosotruc::where('macanbo',$inputs['macanbo'])
