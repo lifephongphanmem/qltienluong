@@ -217,12 +217,12 @@
                                                 <div class="form-horizontal">
                                                     <div class="row">
                                                         <div class="col-md-6">
-                                                            <label class="control-label">Tổng số ngày công</label>
-                                                            {!!Form::text('songaycong', null, array('id' => 'songaycong','class' => 'form-control', 'data-mask'=>'fdecimal','style'=>'font-weight:bold'))!!}
+                                                            <label class="control-label">Tổng số ngày làm việc</label>
+                                                            {!!Form::text('tongngaylv', null, array('id' => 'tongngaylv','class' => 'form-control', 'data-mask'=>'fdecimal','style'=>'font-weight:bold'))!!}
                                                         </div>
                                                         <div class="col-md-6">
                                                             <label class="control-label">Số ngày làm việc</label>
-                                                            {!!Form::text('songaytruc', null, array('id' => 'songaytruc','class' => 'form-control', 'data-mask'=>'fdecimal','style'=>'font-weight:bold'))!!}
+                                                            {!!Form::text('songaylv', null, array('id' => 'songaylv','class' => 'form-control', 'data-mask'=>'fdecimal','style'=>'font-weight:bold'))!!}
                                                         </div>
                                                     </div>
 
@@ -282,8 +282,8 @@
                     form.find("[id='mact']").val(data.mact).trigger('change');
 
                     var form_nc = $('#frm_ngaycong');
-                    form_nc.find("[id='songaycong']").val(data.songaycong);
-                    form_nc.find("[id='songaytruc']").val(data.songaytruc);
+                    form_nc.find("[id='songaylv']").val(data.songaylv);
+                    form_nc.find("[id='tongngaylv']").val(data.tongngaylv);
                     form_nc.find("[id='id']").val(data.id);
                     form_nc.find("[id='mabl']").val(data.mabl);
                     //alert(data.songaycong)

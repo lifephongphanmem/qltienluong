@@ -354,6 +354,7 @@ class bangluongController extends Controller
             $cb->hs_pcudn = isset($cb->pcudn) ? $cb->pcudn : 0;
             $cb->luongcoban = $inputs['luongcoban'];
             $cb->giaml = $cb->songaytruc = $cb->songaycong = 0;
+            $cb->songaylv = $cb->tongngaylv = session('admin')->songaycong;
             //trường hợp cán bộ đang đi công tác, đi học => giữ nguyên 100% để tính bảo hiểm sau mới tính lại lương thực nhận
             if ($cb->theodoi != 2) {
                 $cb->heso = round($cb->heso * $cb->pthuong / 100, session('admin')->lamtron);
@@ -914,8 +915,8 @@ class bangluongController extends Controller
             $m_cb[$key]['hs_pcud61'] = isset($val['pcud61']) ? $val['pcud61'] : 0;
             $m_cb[$key]['hs_pcudn'] = isset($val['pcudn']) ? $val['pcudn'] : 0;
             $m_cb[$key]['luongcoban'] = $inputs['luongcoban'];
-            $m_cb[$key]['giaml'] = 0;
-            $m_cb[$key]['songaytruc'] = $m_cb[$key]['songaycong'] = session('admin')->songaycong; //set mặc định = tổng số ngày công của đơn vị
+            $m_cb[$key]['giaml'] = $m_cb[$key]['songaytruc'] = $m_cb[$key]['songaycong'] = 0;
+            $m_cb[$key]['songaylv'] = $m_cb[$key]['tongngaylv'] = session('admin')->songaycong; //set mặc định = tổng số ngày công của đơn vị
             //$m_cb[$key]['songaytruc'] = $m_cb[$key]['songaycong'] = 0;
             //tính trc 1 số phụ cấp để làm hệ số cơ sơ
             foreach ($a_pc_coth as $pc) {
@@ -2434,13 +2435,11 @@ class bangluongController extends Controller
     {
         if (Session::has('admin')) {
             $inputs = $request->all();
-            $inputs['songaycong'] = chkDbl($inputs['songaycong']);
-            $inputs['songaytruc'] = chkDbl($inputs['songaytruc']);
 
             $m_bl = bangluong::where('mabl', $inputs['mabl'])->first();
             $model = (new data())->getBangluong_ct_cb($m_bl->thang, $inputs['id']);
-            $model->update(['songaycong' => chkDbl($inputs['songaycong']),
-                'songaytruc' => chkDbl($inputs['songaytruc'])
+            $model->update(['songaylv' => chkDbl($inputs['songaylv']),
+                'tongngaylv' => chkDbl($inputs['tongngaylv'])
                 ]);
 
             return redirect('/chuc_nang/bang_luong/bang_luong?mabl=' . $model->mabl . '&mapb=' . $model->mapb);
@@ -3141,10 +3140,10 @@ class bangluongController extends Controller
             $col = 0;
 
             foreach ($model as $ct) {
-                $ct->tiencongngay = round($ct->luongtn / $ct->songaycong);
+                $ct->tiencongngay = round($ct->luongtn / $ct->tongngaylv);
                 //làm công thức này cho đỡ sai số
 
-                $ct->tiencong = $ct->luongtn + ($ct->songaytruc - $ct->songaycong) * $ct->tiencongngay;
+                $ct->tiencong = $ct->luongtn + ($ct->songaylv - $ct->tongngaylv) * $ct->tiencongngay;
             }
 
             foreach($model_pc as $ct){

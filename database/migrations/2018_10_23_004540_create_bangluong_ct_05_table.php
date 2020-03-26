@@ -31,8 +31,10 @@ class CreateBangluongCt05Table extends Migration
             $table->integer('thangtl')->default(0);//số tháng được truy lĩnh lương
             $table->integer('ngaytl')->default(0);//số tháng được truy lĩnh lương
             $table->double('luongcoban',10)->default(0);//mức lương co bản được truy lĩnh lương
-            $table->integer('songaytruc')->default(0);
-            $table->integer('songaycong')->default(0);
+            $table->double('songaytruc')->default(0);
+            $table->double('songaycong')->default(0);
+            $table->double('songaylv')->default(0);
+            $table->double('tongngaylv')->default(0);
 
             $table->double('heso')->default(0);
             $table->double('hesobl')->default(0);

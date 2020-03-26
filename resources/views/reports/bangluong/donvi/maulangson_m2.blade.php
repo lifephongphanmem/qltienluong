@@ -167,7 +167,7 @@
                     <td>{{dinhdangso($ct->ttbh)}}</td>
                     <td>{{dinhdangso($ct->luongtn)}}</td>
                     <td>{{dinhdangso($ct->tiencongngay)}}</td>
-                    <td style="text-align: center">{{dinhdangso($ct->songaytruc)}}</td>
+                    <td style="text-align: center">{{dinhdangso($ct->songaylv)}}</td>
                     <td>{{dinhdangso($ct->tiencong)}}</td>
 
                 </tr>
@@ -188,7 +188,7 @@
                 <td class="money">{{dinhdangso($model_luong->sum('luongtn'))}}</td>
 
                 <td class="money">{{dinhdangso($model_luong->sum('tiencongngay'))}}</td>
-                <td style="text-align: center">{{dinhdangso($model_luong->sum('songaytruc'))}}</td>
+                <td style="text-align: center">{{dinhdangso($model_luong->sum('songaylv'))}}</td>
                 <td class="money">{{dinhdangso($model_luong->sum('tiencong'))}}</td>
             </tr>
         @endif
@@ -213,7 +213,7 @@
         <td class="money">{{dinhdangso($model->sum('luongtn'))}}</td>
 
         <td class="money">{{dinhdangso($model->sum('tiencongngay'))}}</td>
-        <td style="text-align: center">{{dinhdangso($model->sum('songaytruc'))}}</td>
+        <td style="text-align: center">{{dinhdangso($model->sum('songaylv'))}}</td>
         <td class="money">{{dinhdangso($model->sum('tiencong'))}}</td>
 
     </tr>
