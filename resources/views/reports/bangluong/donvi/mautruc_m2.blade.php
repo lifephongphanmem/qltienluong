@@ -123,7 +123,7 @@
             </tr>
 
             <tr>
-                @for($i=1;$i<=11 + $col;$i++)
+                @for($i=1;$i<= 9 + $col;$i++)
                     <th>{{$i}}</th>
                 @endfor
             </tr>
@@ -135,7 +135,7 @@
                 <tr>
                     <td>{{$i++}}</td>
                     <td style="text-align: left">{{$ct->tencanbo}}</td>
-                    <td style="text-align: left">{{isset($a_cv[$ct->macvcq])? $a_cv[$ct->macvcq] : ''}}</td>                    <
+                    <td style="text-align: left">{{isset($a_cv[$ct->macvcq]) ? $a_cv[$ct->macvcq] : ''}}</td>
 
                     @foreach($a_phucap as $k=>$v)
                         <?php $hs = 'hs_'.$k; ?>
