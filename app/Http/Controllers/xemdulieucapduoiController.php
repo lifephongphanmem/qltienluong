@@ -340,7 +340,8 @@ class xemdulieucapduoiController extends Controller
                     $dv->trangthai = 'DAGUI';
                     $dv->thang = $nguon->thang;
                     $dv->nam = $nguon->nam;
-                    //$dv->linhvuchoatdong = $this->linhvuc($dv->mathdv);
+                    //if($this->linhvuc($dv->mathdv) == "")
+                    //  $dv->linhvuchoatdong = $this->linhvuc($nguon->mathdv);
                 }elseif(session('admin')->phamvitonghop == 'KHOI') {
                     if ((count($nguon) > 0 && $nguon->trangthai == 'DAGUI') || (count($nguonkhoi) > 0 && $nguonkhoi->trangthai == 'DAGUI')) {
                         $dv->mathdv = $nguon->mathdv;
@@ -379,9 +380,10 @@ class xemdulieucapduoiController extends Controller
     }
     function linhvuc($mathdv)
     {
-        $model = tonghopluong_donvi_bangluong::join('dmkhoipb','tonghopluong_donvi_bangluong.linhvuchoatdong','dmkhoipb.makhoipb')
+        $model = tonghopluong_donvi_bangluong::join('tonghopluong_donvi','tonghopluong_donvi_bangluong.mathdv','tonghopluong_donvi.mathdv')
+            ->join('dmkhoipb','tonghopluong_donvi_bangluong.linhvuchoatdong','dmkhoipb.makhoipb')
             ->select('tenkhoipb')
-            ->where('mathdv',$mathdv)
+            ->where('tonghopluong_donvi.mathh',$mathdv)
             ->distinct()->get();
         $kq = "";
         foreach($model as $ct)

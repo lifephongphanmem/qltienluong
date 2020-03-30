@@ -134,10 +134,10 @@ class tonghopluong_donviController extends Controller
             //lấy bảng lương
             if(isset($inputs['tonghop'])&&$inputs['tonghop'] == 'TONGHOP'){
                 $a_bangluong = bangluong::where('nam', $nam)->where('thang', $thang)
-                    ->where('madv', $madv)->wherein('phanloai', ['BANGLUONG','TRUYLINH'])->get()->keyby('mabl')->toarray();
+                    ->where('madv', $madv)->wherein('phanloai', ['BANGLUONG','TRUYLINH','TRUC'])->get()->keyby('mabl')->toarray();
             }else{
                 $a_bangluong = bangluong::where('nam', $nam)->where('thang', $thang)
-                    ->where('madv', $madv)->where('phanloai', 'BANGLUONG')->get()->keyby('mabl')->toarray();
+                    ->where('madv', $madv)->wherein('phanloai', ['BANGLUONG','TRUC'])->get()->keyby('mabl')->toarray();
             }
             //dd($a_bangluong);
             //bảng lương chi tiết
