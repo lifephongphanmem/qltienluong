@@ -106,4 +106,5 @@
             </div>
         </div>
     </div>
+    @include('manage.hosocanbo.include.modal_kiemnhiem')
 @stop

@@ -41,7 +41,7 @@
                     </div>
                 </div>
                 <div class="portlet-body form-horizontal">
-                    <table id="sample_3" class="table table-hover table-striped table-bordered" style="min-height: 230px">
+                    <table id="sample_4" class="table table-hover table-striped table-bordered" style="min-height: 230px">
                         <thead>
                             <tr>
                                 <th class="text-center" style="width: 3%">STT</th>
@@ -54,6 +54,7 @@
                                 <th style="width: 5%" class="text-center">Trừ</br>nghỉ</br>phép</th>
                                 <th style="width: 5%" class="text-center">Hưởng</br>thai</br>sản</th>
                                 <th style="width: 5%" class="text-center">Hưởng</br>điều</br>động</th>
+                                <th style="width: 5%" class="text-center">Tính</br>thuế</br>thu</br>nhập</th>
                                 <th class="text-center">Thao tác</th>
                             </tr>
                         </thead>
@@ -71,6 +72,7 @@
                                     <td class="text-center">{!!$value->nghiom == 1 ? '<i class="fa fa-check"></i>':''!!}</td>
                                     <td class="text-center">{!!$value->thaisan == 1 ? '<i class="fa fa-check"></i>':''!!}</td>
                                     <td class="text-center">{!!$value->dieudong == 1 ? '<i class="fa fa-check"></i>':''!!}</td>
+                                    <td class="text-center">{!!$value->thuetn == 1 ? '<i class="fa fa-check"></i>':''!!}</td>
                                     <td>
                                         <a href="{{$furl.'edit?maso='.$value->mapc}}" class="btn btn-default btn-xs">
                                             <i class="fa fa-edit"></i>&nbsp; Sửa</a>

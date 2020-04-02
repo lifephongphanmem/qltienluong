@@ -135,12 +135,12 @@ class hosocanboController extends Controller
                 $img->move(public_path() . '/data/uploads/anh/', $filename);
             }
 
-            if(isset($inputs['khongnopbaohiem'])){
-                $inputs['khongnopbaohiem'] = implode(',', $insert['khongnopbaohiem']);
+            if(isset($insert['khongnopbaohiem'])){
+                $insert['khongnopbaohiem'] = implode(',', $insert['khongnopbaohiem']);
             }else{
-                $inputs['khongnopbaohiem'] = '';
+                $insert['khongnopbaohiem'] = '';
             }
-            //dd($inputs);
+
             $insert['anh'] = ($filename == '' ? '' : '/data/uploads/anh/' . $filename);
             $insert['madv'] = $madv;
             $insert['ngaybc']=getDateTime($insert['ngaybc']);
@@ -151,6 +151,7 @@ class hosocanboController extends Controller
             $insert['tnndenngay'] = getDateTime($insert['tnndenngay']);
 
             $insert['pthuong']=chkDbl($insert['pthuong']) == 0 ? 100 :chkDbl($insert['pthuong']) ;
+            $insert['nguoiphuthuoc']=chkDbl($insert['nguoiphuthuoc']);
             $a_pc = dmphucap_donvi::select('mapc')->where('madv', session('admin')->madv)->get()->toarray();
             foreach($a_pc as $pc){
                 if(isset($insert[$pc['mapc']])){
@@ -163,7 +164,7 @@ class hosocanboController extends Controller
                     $insert[$bh] = chkDbl($insert[$bh]);
                 }
             }
-
+            //dd($insert);
             hosocanbo::create($insert);
 
             $model_kn = hosocanbo_kiemnhiem_temp::where('macanbo',$macanbo)->get();
@@ -295,6 +296,7 @@ class hosocanboController extends Controller
             $insert['ngaytu'] = getDateTime($insert['ngaytu']);
             $insert['ngayden'] = getDateTime($insert['ngayden']);
             $insert['pthuong'] = chkDbl($insert['pthuong']) == 0 ? 100 : chkDbl($insert['pthuong']);
+            $insert['nguoiphuthuoc']=chkDbl($insert['nguoiphuthuoc']);
             $insert['tnntungay'] = getDateTime($insert['tnntungay']);
             $insert['tnndenngay'] = getDateTime($insert['tnndenngay']);
             $model_pc = dmphucap_donvi::select('mapc')->where('madv', session('admin')->madv)->get()->toarray();
@@ -310,7 +312,7 @@ class hosocanboController extends Controller
                     $insert[$bh] = chkDbl($insert[$bh]);
                 }
             }
-
+            //dd($insert);
             $model->update($insert);
             return redirect('nghiep_vu/ho_so/danh_sach');
         } else

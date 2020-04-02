@@ -91,6 +91,13 @@
                                         </div>
                                     </div>
 
+                                    <div class="row">
+                                        <div class="col-md-offset-3 col-md-9">
+                                            <input name="thuetncn" id="thuetncn" type="checkbox" checked>
+                                            <label for="thuetncn">Tính thuế thu nhập cá nhân</label>
+                                        </div>
+                                    </div>
+
                                     <input type="hidden" id="dinhmuc" name="dinhmuc" value="{{$inputs['dinhmuc']}}"/>
                                     <input type="hidden" id="thang" name="thang" value="{{$inputs['thang']}}"/>
                                     <input type="hidden" id="nam" name="nam" value="{{$inputs['nam']}}"/>

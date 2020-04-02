@@ -2,7 +2,12 @@ $(function () {
     //còn pải tính toán
     var url = window.location.href;
 
-    var i = url.indexOf('?');
+    var i = url.indexOf('detail');
+    if (i > 0) {
+        url = url.substring(0, i - 1) + '/index';
+    }
+    //alert(url);
+    i = url.indexOf('?');
     if (i > 0) {
         url = url.substring(0, i-1);
     }
@@ -21,6 +26,8 @@ $(function () {
     if (i > 0) {
         url = url.substring(0, i - 1) + '/danh_sach';
     }
+
+
 
     i = url.indexOf('ma_so');
     if (i > 0) {

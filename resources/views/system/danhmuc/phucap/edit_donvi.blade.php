@@ -125,6 +125,13 @@
                         <div class="row">
                             <div class="col-md-3">
                                 <div class="form-group">
+                                    <label class="form-control-label">Tính thuế thu nhập cá nhân</label>
+                                    {!!Form::select('thuetn',array('0'=>'Không','1'=>'Có'), null, array('id' => 'thuetn','class' => 'form-control'))!!}
+                                </div>
+                            </div>
+
+                            <div class="col-md-3">
+                                <div class="form-group">
                                     <label class="form-control-label">Số thứ tự (sắp xếp)</label>
                                     {!!Form::text('stt', null, array('id' => 'stt','class' => 'form-control', 'data-mask'=>'fdecimal'))!!}
                                 </div>

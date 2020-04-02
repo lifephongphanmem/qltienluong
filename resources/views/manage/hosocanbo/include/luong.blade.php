@@ -136,8 +136,7 @@
                             </div>
                         </div>
 
-
-                    <?php $hesopc = $model_pc->wherein('mapc',['luonghd']); ?>
+                        <?php $hesopc = $model_pc->wherein('mapc',['luonghd']); ?>
                         @foreach($hesopc as $pc)
                             @if($pc->phanloai == 3)
                                 {!!Form::hidden($pc->mapc, null, array('id' =>$pc->mapc, 'class' => 'form-control', 'data-mask'=>'fdecimal'))!!}
@@ -171,6 +170,7 @@
                             @endif
                         @endforeach
                     </div>
+
 
                 </div>
             </div>

@@ -207,6 +207,18 @@ Route::group(['prefix'=>'danh_muc'],function(){
         Route::get('store','dmthongtuquyetdinhController@store');
         Route::get('get','dmthongtuquyetdinhController@getinfo');
     });
+
+    Route::group(['prefix'=>'thuetncn'],function(){
+        Route::get('index','dmthuetncnController@index');
+        Route::get('del/{id}','dmthuetncnController@destroy');
+        Route::post('store','dmthuetncnController@store');
+        Route::get('get','dmthuetncnController@getinfo');
+
+        Route::get('detail','dmthuetncnController@detail');
+        Route::post('store_detail','dmthuetncnController@store_detail');
+        Route::get('get_detail','dmthuetncnController@getinfo_detail');
+        Route::get('del_detail/{id}','dmthuetncnController@destroy_detail');
+    });
 });
 
 Route::group(['prefix'=>'nghiep_vu'],function(){

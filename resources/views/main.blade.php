@@ -545,14 +545,24 @@
                                     <i class="fa fa-list-alt"></i> Danh mục <span class="arrow"></span>
                                 </a>
                                 <ul class="sub-menu" style="margin-left: 15px;">
-                                    <li><a href="{{url('he_thong/chuc_vu/index')}}"><i class="fa fa-caret-right"></i>Chức vụ</a></li>
-                                    <li><a href="{{url('he_thong/phu_cap/index')}}"><i class="fa fa-caret-right"></i>Phụ cấp</a></li>
-                                    <li><a href="{{url('danh_muc/nguon_kinh_phi/index')}}"><i class="fa fa-caret-right"></i>Nguồn kinh phí</a></li>
-                                    <li><a href="{{url('danh_muc/khoi_pb/index')}}"><i class="fa fa-caret-right"></i>Lĩnh vực hoạt động</a></li>
-                                    <li><a href="{{url('danh_muc/ngach_bac/index')}}"><i class="fa fa-caret-right"></i>Mã ngạch lương</a></li>
-                                    <li><a href="{{url('danh_muc/pl_don_vi/index')}}"><i class="fa fa-caret-right"></i>Phân loại đơn vị</a></li>
-                                    <li><a href="{{url('danh_muc/cong_tac/index')}}"><i class="fa fa-caret-right"></i>Phân loại công tác</a></li>
-                                    <li><a href="{{url('danh_muc/thong_tu/index')}}"><i class="fa fa-caret-right"></i>Thông tư, quyết định</a></li>
+                                    <li><a href="{{url('he_thong/chuc_vu/index')}}">
+                                            <i class="fa fa-caret-right"></i>Chức vụ</a></li>
+                                    <li><a href="{{url('he_thong/phu_cap/index')}}">
+                                            <i class="fa fa-caret-right"></i>Phụ cấp</a></li>
+                                    <li><a href="{{url('danh_muc/nguon_kinh_phi/index')}}">
+                                            <i class="fa fa-caret-right"></i>Nguồn kinh phí</a></li>
+                                    <li><a href="{{url('danh_muc/khoi_pb/index')}}">
+                                            <i class="fa fa-caret-right"></i>Lĩnh vực hoạt động</a></li>
+                                    <li><a href="{{url('danh_muc/ngach_bac/index')}}">
+                                            <i class="fa fa-caret-right"></i>Mã ngạch lương</a></li>
+                                    <li><a href="{{url('danh_muc/pl_don_vi/index')}}">
+                                            <i class="fa fa-caret-right"></i>Phân loại đơn vị</a></li>
+                                    <li><a href="{{url('danh_muc/cong_tac/index')}}">
+                                            <i class="fa fa-caret-right"></i>Phân loại công tác</a></li>
+                                    <li><a href="{{url('danh_muc/thong_tu/index')}}">
+                                            <i class="fa fa-caret-right"></i>Thông tư, quyết định</a></li>
+                                    <li><a href="{{url('danh_muc/thuetncn/index')}}">
+                                            <i class="fa fa-caret-right"></i>Thuế thu nhập cá nhân</a></li>
                                 </ul>
                             </li>
 

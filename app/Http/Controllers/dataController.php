@@ -558,13 +558,20 @@ class dataController extends Controller
                 }
             }
             //xét thâm niên nghề
+
+
             if(getDayVn($canbo->tnntungay) != '' && $canbo->tnntungay > $ngayxet){
                 $canbo->pctnn = $canbo->pctnn <= 5 ? 0 : $canbo->pctnn - 1;
                 $canbo->tnndenngay = $canbo->tnntungay;//xét lại ngày nâng lương
             }
             //tự động nâng lương cho cán bộ chưa nâng lương (trước thời điểm xét) - dành cho dư toán, nhu cầu kp
             if($nangluong){
-                if(getDayVn($canbo->ngayden) != '' && $canbo->ngayden <= $ngaynangluong){
+                /*
+             if(getDayVn($canbo->ngayden) != '' && $canbo->ngayden <= $ngaynangluong){
+             cũ ngày 02.04.2020: nếu để ngày cuối kỳ thì sẽ tự nâng lương và thâm niên cho cán bộ
+             nếu cán bộ nâng trong năm (vd 04) ==> sai do tính nâng lương từ tháng 01
+             * */
+                if(getDayVn($canbo->ngayden) != '' && $canbo->ngayden <= $ngayxet){
                     if(!isset($a_nglg[$canbo->msngbac])){
                         continue;
                     }
@@ -581,7 +588,7 @@ class dataController extends Controller
                 }
 
                 //xét thâm niên nghề
-                if(getDayVn($canbo->tnndenngay) != '' && $canbo->tnndenngay <= $ngaynangluong){
+                if(getDayVn($canbo->tnndenngay) != '' && $canbo->tnndenngay <= $ngayxet){
                     $canbo->pctnn = $canbo->pctnn == 0 ? 5 : $canbo->pctnn + 1;
                     $canbo->tnntungay = $canbo->tnndenngay;
                     $datetn = new Carbon($canbo->tnndenngay);
