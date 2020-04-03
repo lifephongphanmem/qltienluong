@@ -1,6 +1,10 @@
 <?php
-function getPermissionDefault($level) {
+function getPermissionDefault($level)
+{
     $roles = array();
+    if(!in_array($level,['SA','SSA'])){
+        $level = 'default';
+    }
     $roles['SA'] = array(
         'dmchucvu' => array(
             'view' => 1,
@@ -67,7 +71,7 @@ function getPermissionDefault($level) {
             'create' => 0,
             'edit' => 1,
             'delete' => 0,
-            'data'=> 0
+            'data' => 0
         ),
     );
 
@@ -137,7 +141,77 @@ function getPermissionDefault($level) {
             'create' => 1,
             'edit' => 1,
             'delete' => 1,
-            'data'=> 1
+            'data' => 1
+        ),
+    );
+
+    $roles['default'] = array(
+        'dmchucvu' => array(
+            'view' => 1,
+            'create' => 0,
+            'edit' => 0,
+            'delete' => 0
+        ),
+        'dmphucap' => array(
+            'view' => 1,
+            'create' => 0,
+            'edit' => 0,
+            'delete' => 0
+        ),
+        'dmnguonkp' => array(
+            'view' => 1,
+            'create' => 0,
+            'edit' => 0,
+            'delete' => 0
+        ),
+        'dmlinhvuchd' => array(
+            'view' => 1,
+            'create' => 0,
+            'edit' => 0,
+            'delete' => 0
+        ),
+        'dmngachluong' => array(
+            'view' => 1,
+            'create' => 0,
+            'edit' => 0,
+            'delete' => 0
+        ),
+        'dmphanloaidv' => array(
+            'view' => 1,
+            'create' => 0,
+            'edit' => 0,
+            'delete' => 0
+        ),
+        'dmphanloaict' => array(
+            'view' => 1,
+            'create' => 0,
+            'edit' => 0,
+            'delete' => 0
+        ),
+        'dmttqd' => array(
+            'view' => 1,
+            'create' => 0,
+            'edit' => 0,
+            'delete' => 0
+        ),
+        'congthucmtm' => array(
+            'view' => 0,
+            'create' => 0,
+            'edit' => 0,
+            'delete' => 0
+        ),
+        'qltaikhoan' => array(
+            'view' => 0,
+            'create' => 0,
+            'edit' => 0,
+            'delete' => 0
+        ),
+        'qldonvi' => array(
+            'view' => 0,
+            'create' => 0,
+            'edit' => 0,
+            'delete' => 0,
+            'data' => 0
         ),
     );
 

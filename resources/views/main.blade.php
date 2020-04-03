@@ -334,6 +334,8 @@
                                     <li><a href="{{url('/danh_muc/phong_ban/index')}}"><i class="fa fa-caret-right"></i>Khối(tổ) công tác</a></li>
                                     <li><a href="{{url('/danh_muc/chuc_vu/index')}}"><i class="fa fa-caret-right"></i>Chức vụ</a></li>
                                     <li><a href="{{url('/danh_muc/ngach_bac/danhsach')}}"><i class="fa fa-caret-right"></i>Mã ngạch lương</a></li>
+                                    <li><a href="{{url('danh_muc/thuetncn/index')}}">
+                                            <i class="fa fa-caret-right"></i>Thuế thu nhập cá nhân</a></li>
                                     <!--li><a href="{{url('danh_muc/dan_toc/index')}}"><i class="fa fa-caret-right"></i>Dân tộc</a></li-->
                                 </ul>
                             </li>

@@ -60,14 +60,14 @@
                                     <td class="text-center">{{$key+1}}</td>
                                     <td>{{$value->sohieu}}</td>
                                     <td>{{$value->tenttqd}}</td>
-                                    <td>{{$value->ngayapdung}}</td>
+                                    <td>{{getDayVn($value->ngayapdung)}}</td>
                                     <td class="text-right">{{dinhdangso($value->banthan)}}</td>
                                     <td class="text-right">{{dinhdangso($value->phuthuoc)}}</td>
                                     <td>
-                                        @if(can('dmttqd','edit'))
-                                            <a href="{{url($furl.'detail?sohieu='.$value->sohieu)}}" class="btn btn-default btn-xs">
-                                                <i class="fa fa-edit"></i>&nbsp; Chi tiết</a>
+                                        <a href="{{url($furl.'detail?sohieu='.$value->sohieu)}}" class="btn btn-default btn-xs">
+                                            <i class="fa fa-edit"></i>&nbsp; Chi tiết</a>
 
+                                        @if(can('dmttqd','edit'))
                                             <button type="button" onclick="editCV('{{$value->sohieu}}')" class="btn btn-default btn-xs mbs">
                                                 <i class="fa fa-edit"></i>&nbsp; Sửa</button>
                                         @endif
