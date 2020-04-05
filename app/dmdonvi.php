@@ -40,5 +40,7 @@ class dmdonvi extends Model
         'caphanhchinh',
         'chuyendoi',//biến lưu chuyển đổi tài khoản
         'dinhmucnguon',
+        'sotk',
+        'tennganhang',
     ];
 }

@@ -445,7 +445,8 @@ function getStatus(){
         'CHUAGUI' => 'Dữ liệu chờ gửi',
         'CHUADL' => 'Dữ liệu chưa được gửi lên',
         'GUILOI' => 'Dữ liệu bị lỗi',
-        'BANGLUONG' => 'Đã có chi trả lương'
+        'BANGLUONG' => 'Đã có chi trả lương',
+        'DACHUYEN' => 'Đã được nhận hồ sơ',
     );
 }
 

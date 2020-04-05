@@ -137,14 +137,17 @@ class dmdonviController extends Controller
                 if(session('admin')->phanloaitaikhoan == 'TH')
                     $model->update($inputs);
                 else {
+                    //dd($inputs);
+                    session('admin')->linhvuchoatdong = $inputs['linhvuchoatdong'][0];
                     $inputs['linhvuchoatdong'] = implode(',', $inputs['linhvuchoatdong']);
                     //dd($inputs);
                     $model->update($inputs);
-
                     session('admin')->maphanloai = $inputs['maphanloai'];
                     session('admin')->macqcq = $inputs['macqcq'];
                     session('admin')->songaycong = $inputs['songaycong'];
                     session('admin')->lamtron = $inputs['lamtron'];
+                    session('admin')->sotk = $inputs['sotk'];
+                    session('admin')->tennganhang = $inputs['tennganhang'];
                 }
                 return redirect('/he_thong/don_vi/don_vi');
             } else {

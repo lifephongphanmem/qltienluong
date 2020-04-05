@@ -44,7 +44,7 @@ class hosodieudongController extends Controller
             }
             $model = $model_dv->merge($model_dd);
             $model_canbo = hosocanbo::where('madv', session('admin')->madv)->where('theodoi', '<', '9')->get();
-
+            //dd($model);
             return view('manage.dieudong.index')
                 ->with('furl', '/nghiep_vu/dieu_dong/')
                 ->with('a_canbo', array_column($model_canbo->toarray(), 'tencanbo', 'macanbo'))

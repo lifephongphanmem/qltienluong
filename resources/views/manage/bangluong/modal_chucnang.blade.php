@@ -42,7 +42,7 @@
                                     <div class="row">
                                         <div class="col-md-12">
                                             <label class="control-label">Lĩnh vực công tác</label>
-                                            {!!Form::select('linhvuchoatdong',$m_linhvuc ,session('admin')->maphanloai == 'KVXP' ?'QLNN':null , array('id' => 'linhvuchoatdong','class' => 'form-control select2me'))!!}
+                                            {!!Form::select('linhvuchoatdong',$m_linhvuc ,session('admin')->maphanloai == 'KVXP' ?'QLNN':session('admin')->linhvuchoatdong , array('id' => 'linhvuchoatdong','class' => 'form-control select2me'))!!}
                                         </div>
                                     </div>
 

@@ -44,12 +44,22 @@
                                 <div class="row">
                                     <div class="col-md-6">
                                         <div class="form-group">
+                                            <button type="button" style="border-width: 0px" onclick="inblm09nd11('/chuc_nang/bang_luong/mau09nd11')" class="btn btn-default btn-xs mbs"
+                                                    title="Bảng lương của cán bộ theo mẫu C02-HD" data-target="#mautt107-modal" data-toggle="modal">
+                                                <i class="fa fa-print"></i>&nbsp; Bảng thanh toán cho đối tượng thụ hưởng (NĐ11/2020/NĐ-CP)</button>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        <div class="form-group">
                                             <button type="button" style="border-width: 0px" onclick="inblmtt107('/chuc_nang/bang_luong/mautt107')" class="btn btn-default btn-xs mbs"
                                                     title="Bảng lương của cán bộ theo mẫu C02-HD" data-target="#mautt107-modal" data-toggle="modal">
                                                 <i class="fa fa-print"></i>&nbsp; Bảng lương mẫu C02-HD (TT107/2017/TT-BTC)</button>
                                         </div>
                                     </div>
+                                </div>
 
+                                <div class="row">
                                     <div class="col-md-6">
                                         <div class="form-group">
                                             <button type="button" style="border-width: 0px" onclick="inblm1('/chuc_nang/bang_luong/mau01')" class="btn btn-default btn-xs mbs"
@@ -57,9 +67,7 @@
                                                 <i class="fa fa-print"></i>&nbsp; Bảng lương mẫu C02-HD (TT185/2010/TT-BTC)</button>
                                         </div>
                                     </div>
-                                </div>
 
-                                <div class="row">
                                     <div class="col-md-6">
                                         <div class="form-group">
                                             <button type="button" style="border-width: 0px" onclick="inblmtt107('/chuc_nang/bang_luong/dangkyluong')" class="btn btn-default btn-xs mbs"

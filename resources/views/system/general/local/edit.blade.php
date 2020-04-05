@@ -136,6 +136,22 @@
                             <div class="row">
                                 <div class="col-md-3">
                                     <div class="form-group">
+                                        <label class="control-label">Số tài khoản ngân hàng</label>
+                                        {!!Form::text('sotk', null, array('id' => 'sotk','class' => 'form-control'))!!}
+                                    </div>
+                                </div>
+
+                                <div class="col-md-9">
+                                    <div class="form-group">
+                                        <label class="control-label">Tên đơn vị</label>
+                                        {!!Form::text('tennganhang', null, array('id' => 'tennganhang','class' => 'form-control'))!!}
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <div class="form-group">
                                         <label class="control-label">Cấp đơn vị hành chính</label>
                                         {!!Form::select('caphanhchinh', array('XA'=>'Đơn vị cấp Xã','HUYEN'=>'Đơn vị cấp Huyện','TINH'=>'Đơn vị cấp Tỉnh'), null, array('id' => 'caphanhchinh','class' => 'form-control','required'=>'required'))!!}
                                     </div>

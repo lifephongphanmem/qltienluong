@@ -348,10 +348,10 @@ Route::group(['prefix'=>'nghiep_vu'],function(){
             Route::get('/maso={macanbo}','hosoquanhegdController@index_vc');
             Route::get('del/{id}','hosoquanhegdController@destroy_vc');
         });
-        Route::group(['prefix'=>'dieu_dong'],function(){
-            Route::get('/maso={macanbo}','hosoluanchuyenController@index_dd');
-            Route::get('del/{id}','hosoluanchuyenController@destroy_dd');
-        });
+//        Route::group(['prefix'=>'dieu_dong'],function(){
+//            Route::get('/maso={macanbo}','hosoluanchuyenController@index_dd');
+//            Route::get('del/{id}','hosoluanchuyenController@destroy_dd');
+//        });
         Route::group(['prefix'=>'chuc_vu'],function(){
             Route::get('/maso={macanbo}','hosochucvuController@index');
             Route::get('del/{id}','hosochucvuController@destroy');
@@ -590,6 +590,7 @@ Route::group(['prefix'=>'chuc_nang'],function(){
         Route::get('maumc','bangluongController@printf_maumc');
         Route::get('mautinhnguyen','bangluongController@printf_mautinhnguyen');
         Route::post('maumtm','bangluongController@printf_maumtm');
+        Route::post('mau09nd11','bangluong_inController@printf_mau09nd11');
         //mẫu bảng lương lai châu
         Route::post('mautt107_lc','bangluong_inController@printf_mautt107_lc');
         Route::post('mautt107_lc_xp','bangluong_inController@printf_mautt107_lc_xp');
@@ -1199,11 +1200,11 @@ Route::group(['prefix'=>'ajax'],function(){
         Route::get('get','dsnangluongController@getinfo');
     });
 
-    Route::group(['prefix'=>'dieu_dong'],function(){
-        Route::get('add','hosoluanchuyenController@store_dd');
-        Route::get('update','hosoluanchuyenController@update_dd');
-        Route::get('get','hosoluanchuyenController@get_detail');
-    });
+//    Route::group(['prefix'=>'dieu_dong'],function(){
+//        Route::get('add','hosoluanchuyenController@store_dd');
+//        Route::get('update','hosoluanchuyenController@update_dd');
+//        Route::get('get','hosoluanchuyenController@get_detail');
+//    });
 
     Route::group(['prefix'=>'bang_luong'],function(){
         Route::get('add','bangluongController@store');
