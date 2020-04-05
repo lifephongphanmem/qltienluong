@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\bangluong;
 use App\bangluong_ct;
+use App\bangluong_ct_01;
 use App\bangluong_truc;
 use App\dmchucvucq;
 use App\dmphongban;
@@ -834,6 +835,171 @@ class bangluong_inController extends Controller
                 ->with('model_congtac',$model_congtac)
                 ->with('a_phucap',$a_phucap)
                 ->with('pageTitle','Danh sách cán bộ tăng lương');
+        } else
+            return view('errors.notlogin');
+    }
+
+    /*
+    lấy bảng lương hiện tại
+    lấy bảng lương tháng trước
+     * */
+    public function printf_mau09nd11(Request $request)
+    {
+        if (Session::has('admin')) {
+            $inputs = $request->all();
+            //$inputs['mabl'] = $inputs['mabl'];
+            //$model = $this->getBangLuong($inputs);
+            $m_bl = bangluong::select('madv', 'thang', 'mabl', 'manguonkp', 'nam')->where('mabl', $inputs['mabl'])->first();
+
+            if ($m_bl->thang == '01') {
+                $thang = '12';
+                $nam = str_pad($m_bl->nam - 1, 4, '0', STR_PAD_LEFT);
+            } else {
+                $thang = str_pad($m_bl->thang - 1, 2, '0', STR_PAD_LEFT);
+                $nam = $m_bl->nam;
+            }
+
+            $a_luong = ['heso', 'vuotkhung', 'pccv', 'pckv', 'pcth', 'pclade', 'pcdh', 'pcdbqh', 'pcudn', 'pcdbn',
+                'pcud61', 'pctnn', 'pcthni', 'pclt', 'pcdang', 'pccovu', 'pcct', 'pctn', 'pckn', 'pcdd'];
+            $a_hopdong = ['luonghd'];
+            $a_tangthem = [];
+            $a_tienthuong = [];
+            $a_phucap = ['pck'];
+            $a_khoan = ['pcctp', 'pcxaxe', 'pcdith'];
+            $a_hocbong = [];
+
+            $m_bl_trc = bangluong::select('madv', 'thang', 'mabl', 'manguonkp', 'nam')
+                ->where('thang', $thang)->where('nam', $nam)->where('manguonkp', $m_bl->manguonkp)
+                ->where('madv', $m_bl->madv)
+                ->first();
+
+            $model = $this->getBangLuong($inputs);
+            if($m_bl_trc != null){
+                $model_trc = (new data())->getBangluong_ct($m_bl_trc->thang, $m_bl_trc->mabl);
+                foreach ($model_trc as $ct) {//trường hợp giảm lương
+                    $canbo = $model->where('macanbo', $ct->macanbo)->where('mact', $ct->mact)->first();
+                    if($canbo == null){
+                        $ct->tongso = 0;
+                        $ct->luong = 0;
+                        $ct->hopdong = 0;
+                        $ct->tangthem = 0;
+                        $ct->tienthuong = 0;
+                        $ct->phucap = 0;
+                        $ct->khoan = 0;
+                        $ct->hocbong = 0;
+                        $ct->chenhlech = -$ct->ttl;
+                        $ct->ttl = 0;
+                        $model->add($ct);
+                        continue;
+                    }
+                    //kiểm tra cán bộ có dc trả lương vào tháng hiện tại ko
+                    //nếu ko thì để số tiền = 0 và chênh lệch = - ttl
+                    //sau đó tự add vào bảng tiếp theo
+
+                    $ct->tongso = $ct->ttl;
+                    $ct->luong = 0;
+                    foreach ($a_luong as $pc) {
+                        $st = 'st_' . $pc;
+                        $ct->luong += $ct->$st;
+                    }
+                    $ct->hopdong = 0;
+                    foreach ($a_hocbong as $pc) {
+                        $st = 'st_' . $pc;
+                        $ct->luong += $ct->$st;
+                    }
+                    $ct->tangthem = 0;
+                    $ct->tienthuong = 0;
+                    $ct->phucap = 0;
+                    foreach ($a_phucap as $pc) {
+                        $st = 'st_' . $pc;
+                        $ct->luong += $ct->$st;
+                    }
+                    $ct->khoan = 0;
+                    foreach ($a_khoan as $pc) {
+                        $st = 'st_' . $pc;
+                        $ct->luong += $ct->$st;
+                    }
+                    $ct->hocbong = 0;
+                    $ct->chenhlech = 0;
+
+                }
+            }else{
+                $model_trc = null;
+            }
+
+            //$model_pc = dmphucap_donvi::where('madv', $m_bl->madv)->where('phanloai', '<', '3')->get();
+            // 6001 + 6101->6149
+
+            //chưa tính cán bộ nào giảm
+            foreach ($model as $ct) {//trường hợp giảm lương
+                if($ct->ttl <= 0){
+                    continue;
+                }
+                $ct->tongso = $ct->ttl;
+                $ct->luong = 0;
+                foreach ($a_luong as $pc) {
+                    $st = 'st_' . $pc;
+                    $ct->luong += $ct->$st;
+                }
+                $ct->hopdong = 0;
+                foreach ($a_hocbong as $pc) {
+                    $st = 'st_' . $pc;
+                    $ct->luong += $ct->$st;
+                }
+                $ct->tangthem = 0;
+                $ct->tienthuong = 0;
+                $ct->phucap = 0;
+                foreach ($a_phucap as $pc) {
+                    $st = 'st_' . $pc;
+                    $ct->luong += $ct->$st;
+                }
+                $ct->khoan = 0;
+                foreach ($a_khoan as $pc) {
+                    $st = 'st_' . $pc;
+                    $ct->luong += $ct->$st;
+                }
+                $ct->hocbong = 0;
+                $ct->chenhlech = 0;
+                if($model_trc != null){
+                    $ct->chenhlech = $ct->ttl;
+                    $canbo = $model_trc->where('macanbo', $ct->macanbo)->where('mact', $ct->mact)->first();
+                    if (count($canbo) > 0) {
+                        $ct->chenhlech = $ct->ttl - $canbo->ttl;
+                    }
+                }
+            }
+            //dd($model);
+
+            $model_congtac = dmphanloaict::select('mact', 'tenct')
+                ->wherein('mact', a_unique(array_column($model->toarray(), 'mact')))->get();
+
+            $thongtin = array('nguoilap' => $m_bl->nguoilap,
+                'thang' => $m_bl->thang,
+                'nam' => $m_bl->nam,
+                'ngaylap' => $m_bl->ngaylap, 'phanloai' => $m_bl->phanloai,
+                'cochu' => $inputs['cochu']);
+            //xử lý ẩn hiện cột phụ cấp => biết tổng số cột hiện => colspan trên báo cáo
+
+//            $a_phucap = array();
+//            $col = 0;
+//
+//            foreach ($model_pc as $ct) {
+//                if ($model->sum($ct->mapc) > 0) {
+//                    $a_phucap[$ct->mapc] = $ct->report;
+//                    $col++;
+//                }
+//            }
+            $m_dv = dmdonvi::where('madv', $m_bl->madv)->first();
+            $m_dv->tendvcq = getTenDB($m_dv->madvbc);
+            //dd($model);
+            return view('reports.bangluong.donvi.mau09nd11')
+                ->with('model', $model->sortBy('stt'))
+                ->with('m_dv', $m_dv)
+                ->with('thongtin', $thongtin)
+                //->with('col',$col)
+                ->with('model_congtac', $model_congtac)
+                //->with('a_phucap',$a_phucap)
+                ->with('pageTitle', 'Danh sách cán bộ tăng lương');
         } else
             return view('errors.notlogin');
     }

@@ -906,7 +906,7 @@ class bangluongController extends Controller
         //dd($m_cb);
         foreach ($m_cb as $key => $val) {
             $a_lv = explode(',', $m_cb[$key]['lvhd']);
-            if (in_array($inputs['linhvuchoatdong'], $a_lv) || $m_cb[$key]['lvhd'] == null) {
+            if (in_array($inputs['linhvuchoatdong'], $a_lv) || $m_cb[$key]['lvhd'] == null || $m_cb[$key]['lvhd'] == '') {
                 $m_cb[$key]['lvhd'] = $inputs['linhvuchoatdong'];
             }
 
@@ -963,15 +963,18 @@ class bangluongController extends Controller
 
             //nếu cán bộ ko set nguồn (null, '') hoặc trong nguồn thì sét luôn =  ma nguồn để tạo bang lương
             if ($val['manguonkp'] != '' && $val['manguonkp'] != null && !in_array($inputs['manguonkp'], $a_nguon)) {
+                //dd($val['manguonkp']);
                 continue; //cán bộ ko thuộc nguồn quản lý => ko tính lương
             }
 
             if ($m_cb[$key]['lvhd'] != $inputs['linhvuchoatdong']) {
+                //dd($m_cb[$key]['lvhd']);
                 continue; //cán bộ ko thuộc lvhd => ko tính lương
             }
 
             //ngày công tác không thỏa mãn
             if (getDayVn($m_cb[$key]['ngaybc']) != '' && $m_cb[$key]['ngaybc'] > $ngaycuoithang) {
+                //dd($m_cb[$key]);
                 continue;
             }
 
@@ -1238,7 +1241,7 @@ class bangluongController extends Controller
                 }
                 $tienthue = $tienthue - $banthan - $phuthuoc * $m_cb[$key]['nguoiphuthuoc'];
                 if($tienthue<=0){
-                    continue;
+                    goto luuketqua;
                 }
 //                if($key == '1570522209_1585851396'){
 //                    dd($tienthue);
@@ -1246,12 +1249,13 @@ class bangluongController extends Controller
 
                 foreach ($a_mucthue as $thue){
                     if($tienthue < $thue['muctu']){
-                        break;
+                        goto luuketqua;
                     }
                     $m_cb[$key]['thuetn'] += round(($tienthue > $thue['mucden'] ? $thue['mucden']- $thue['muctu'] : $tienthue - $thue['muctu'])
                         *$thue['phantram']/100);
                 }
             }
+            luuketqua:
             $a_data_canbo[] = $m_cb[$key];
         }
 

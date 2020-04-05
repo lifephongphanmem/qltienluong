@@ -173,7 +173,7 @@
                     <div class="row">
                         <div class="col-md-6">
                             <label class="control-label">Lĩnh vực hoạt động</label>
-                            {!!Form::select('linhvuchoatdong',getLinhVucHoatDong(false), session('admin')->maphanloai == 'KVXP'?'QLNN':null, array('id' => 'linhvuchoatdong','class' => 'form-control'))!!}
+                            {!!Form::select('linhvuchoatdong',getLinhVucHoatDong(false), session('admin')->maphanloai == 'KVXP'?'QLNN':session('admin')->linhvuchoatdong, array('id' => 'linhvuchoatdong','class' => 'form-control'))!!}
                         </div>
 
                         <div class="col-md-6">
@@ -246,7 +246,7 @@
                         <div class="row">
                             <div class="col-md-6">
                                 <label class="control-label">Lĩnh vực hoạt động</label>
-                                {!!Form::select('linhvuchoatdong_mau',getLinhVucHoatDong(false), session('admin')->maphanloai == 'KVXP'?'QLNN':null, array('id' => 'linhvuchoatdong_mau','class' => 'form-control'))!!}
+                                {!!Form::select('linhvuchoatdong_mau',getLinhVucHoatDong(false), session('admin')->maphanloai == 'KVXP'?'QLNN':session('admin')->linhvuchoatdong, array('id' => 'linhvuchoatdong_mau','class' => 'form-control'))!!}
                             </div>
 
                             <div class="col-md-6">

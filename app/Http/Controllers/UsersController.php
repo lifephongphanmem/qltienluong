@@ -174,7 +174,10 @@ class UsersController extends Controller
 
             if ($ttuser->level != 'SA' && $ttuser->level != 'SSA') {
                 $model_donvi = dmdonvi::where('madv', $ttuser->madv)->first();
+                //dd($model_donvi);
                 $gen = getGeneralConfigs();
+                $a_lv = explode(';',$model_donvi->linhvuchoatdong);
+                $ttuser->linhvuchoatdong = count($a_lv)>0? $a_lv[0]: null;
                 $ttuser->tinh = $gen['tinh'];
                 $ttuser->huyen = $gen['huyen'];
                 $ttuser->luongcoban = $gen['luongcb'];
