@@ -2574,8 +2574,15 @@ class baocaobangluongController extends Controller
                 }else{
                     $ct->tencongtac = isset($model_ct[$ct->mact]) ? $model_ct[$ct->mact] : '';
                 }
-                $ct->soluonggiao = $model_slth->where('mact',$ct->mact)->first()->canbo_dutoan;
-                $ct->soluongcomat = $model_slth->where('mact',$ct->mact)->first()->canbo_congtac;
+                $m = $model_slth->where('mact',$ct->mact)->first();
+                if(isset($m)){
+                    $ct->soluonggiao = $model_slth->where('mact',$ct->mact)->first()->canbo_dutoan;
+                    $ct->soluongcomat = $model_slth->where('mact',$ct->mact)->first()->canbo_congtac;
+                }else{
+                    $ct->soluonggiao = 0;
+                    $ct->soluongcomat = 0;
+                }
+
             }
             $model = dutoanluong_bangluong::join('dutoanluong','dutoanluong.masodv','dutoanluong_bangluong.masodv')
                 ->Select('dutoanluong.madv','mact',DB::raw('sum(heso) as heso'),DB::raw('sum(tonghs-heso) as tongpc'),DB::raw('sum(tonghs) as tonghs'),DB::raw('sum(hesobl) as hesobl')
@@ -2678,8 +2685,15 @@ class baocaobangluongController extends Controller
                 }else{
                     $ct->tencongtac = isset($model_ct[$ct->mact]) ? $model_ct[$ct->mact] : '';
                 }
-                $ct->soluonggiao = $model_slhdnd->where('mact',$ct->mact)->first()->canbo_dutoan;
-                $ct->soluongcomat = $model_slhdnd->where('mact',$ct->mact)->first()->canbo_congtac;
+                $m = $model_slhdnd->where('mact','1536402868')->first();
+                if(isset($m)){
+                    $ct->soluonggiao = $model_slhdnd->where('mact','1536402868')->first()->canbo_dutoan;
+                    $ct->soluongcomat = $model_slhdnd->where('mact','1536402868')->first()->canbo_congtac;
+                }else{
+                    $ct->soluonggiao = 0;
+                    $ct->soluongcomat = 0;
+                }
+
             }
             $model_kn = dutoanluong_bangluong::join('dutoanluong','dutoanluong.masodv','dutoanluong_bangluong.masodv')
                 ->Select('mact',DB::raw('sum(heso) as heso'),DB::raw('sum(tonghs-heso-hesopc) as tongpc'),DB::raw('sum(tonghs-hesopc) as tonghs')
@@ -2722,8 +2736,14 @@ class baocaobangluongController extends Controller
                 }else{
                     $ct->tencongtac = isset($model_ct[$ct->mact]) ? $model_ct[$ct->mact] : '';
                 }
-                $ct->soluonggiao = $model_slhdnd->where('mact',$ct->mact)->first()->canbo_dutoan;
-                $ct->soluongcomat = $model_slhdnd->where('mact',$ct->mact)->first()->canbo_congtac;
+                $m = $model_slhdnd->where('mact','1536459380')->first();
+                if(isset($m)){
+                    $ct->soluonggiao = $model_slhdnd->where('mact','1536459380')->first()->canbo_dutoan;
+                    $ct->soluongcomat = $model_slhdnd->where('mact','1536459380')->first()->canbo_congtac;
+                }else{
+                    $ct->soluonggiao = 0;
+                    $ct->soluongcomat = 0;
+                }
             }
 
             //Tính toán phần xã phường
