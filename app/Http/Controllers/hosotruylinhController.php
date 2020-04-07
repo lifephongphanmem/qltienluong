@@ -26,15 +26,15 @@ class hosotruylinhController extends Controller
         if (Session::has('admin')) {
             $inputs = $request->all();
             $model_canbo = hosocanbo::where('madv', session('admin')->madv)->where('theodoi', '<', '9')->get();
-
-            if($inputs['thang'] == 'ALL'){
-                $model = hosotruylinh::where('madv', session('admin')->madv)
-                    ->whereyear('ngayden',$inputs['nam'])->get();
-            }else{
-                $model = hosotruylinh::where('madv', session('admin')->madv)
-                    ->wheremonth('ngayden',$inputs['thang'])
-                    ->whereyear('ngayden',$inputs['nam'])->get();
+            $model = hosotruylinh::where('madv', session('admin')->madv);
+            //dd($model->get());
+            if($inputs['thang'] != 'ALL'){
+                $model = $model->wheremonth('ngayden',$inputs['thang']);
             }
+            if($inputs['nam'] != 'ALL'){
+                $model = $model->whereyear('ngayden',$inputs['nam']);
+            }
+            $model = $model->get();
             $model_nhomct = dmphanloaicongtac::select('macongtac','tencongtac')->get();
             $model_tenct = dmphanloaict::select('tenct','macongtac','mact')->get();
             $a_cv = getChucVuCQ(false);

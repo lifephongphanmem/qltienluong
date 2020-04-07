@@ -50,7 +50,7 @@
                             </div>
                             <label class="control-label col-md-1" style="text-align: right">Năm </label>
                             <div class="col-md-2">
-                                {!! Form::select('namct',getNamTL(),$inputs['nam'], array('id' => 'namct', 'class' => 'form-control'))!!}
+                                {!! Form::select('namct',getNam(true),$inputs['nam'], array('id' => 'namct', 'class' => 'form-control'))!!}
                             </div>
                         </div>
                     </div>
