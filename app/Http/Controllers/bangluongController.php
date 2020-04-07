@@ -1230,7 +1230,7 @@ class bangluongController extends Controller
             tinhluong:
             $m_cb[$key]['tonghs'] = $tonghs;
             $m_cb[$key]['ttl'] = $tien;
-            $m_cb[$key]['luongtn'] = $m_cb[$key]['ttl'] - $m_cb[$key]['ttbh'] - $m_cb[$key]['giaml'];
+
             //tính thuế thu nhập
             $m_cb[$key]['thuetn'] = 0;
             if(isset($inputs['thuetncn'])){
@@ -1256,6 +1256,7 @@ class bangluongController extends Controller
                 }
             }
             luuketqua:
+            $m_cb[$key]['luongtn'] = $m_cb[$key]['ttl'] - $m_cb[$key]['ttbh'] - $m_cb[$key]['giaml'] - $m_cb[$key]['thuetn'];
             $a_data_canbo[] = $m_cb[$key];
         }
 

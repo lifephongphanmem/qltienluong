@@ -202,9 +202,9 @@
             <td class="money">{{dinhdangso($model->sum('chenhlech'))}}</td>
         </tr>
     </table>
-    <p style="text-align: left;font-size: 12px;">Tổng số tiền bằng chữ: {{Dbl2Str($model->sum('ttl'))}}</p>
+    <p style="text-align: left;font-size: 12px;">Tổng số tiền bằng chữ: {{Dbl2Str($model->sum('tongso'))}}</p>
     <p style="text-align: left; font-weight:bold; font-size: 12px;">II. Phần thuyết minh thay đổi so với tháng trước:</p>
-    <p style="text-align: left;font-size: 12px;">Số tiền chênh lệch: {{Dbl2Str($model->sum('chenhlech'))}}</p>
+    <p style="text-align: left;font-size: 12px;">Số tiền chênh lệch: {{$model->sum('chenhlech') < 0 ?'Giảm '. Dbl2Str($model->sum('chenhlech'),false,true): Dbl2Str($model->sum('chenhlech'))}}</p>
     <table class="header" width="96%" border="0" cellspacing="0" cellpadding="8" style="margin:20px auto; text-align: center;">
         <tr>
             <td style="text-align: left;" width="25%"></td>
