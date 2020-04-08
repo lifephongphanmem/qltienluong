@@ -307,29 +307,54 @@
 </div>
 {!! Form::close() !!}
 
-{!! Form::open(['url'=>'/chuc_nang/bang_luong/cap_nhat','method'=>'get' , 'files'=>true, 'id' => 'create_bangluong_truylinh']) !!}
+{!! Form::open(['url'=>'/chuc_nang/bang_luong/cap_nhat','method'=>'get' , 'files'=>true, 'id' => 'frmcapnhat']) !!}
 <div id="capnhat-modal-confirm" tabindex="-1" role="dialog" aria-hidden="true" class="modal fade">
-    <form id="frmcapnhat" method="GET" action="#" accept-charset="UTF-8">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header modal-header-primary">
-                    <button type="button" data-dismiss="modal" aria-hidden="true" class="close">&times;</button>
-                    <h4 id="modal-header-primary-label" class="modal-title">Đồng ý cập nhật lại bảng lương ?</h4>
-                </div>
-                <div class="modal-body">
-                    <div class="form-group">
-                        <label><b>Chi tiết bảng lương sẽ được cập nhật lại theo thông tin cán bộ mới nhất. Bạn có chắc chắn muốn cập nhật ?</b></label>
-                    </div>
-                </div>
-
-                <input type="hidden" id="mabl_capnhat" name="mabl_capnhat"/>
-                <div class="modal-footer">
-                    <button type="button" data-dismiss="modal" class="btn btn-default">Hủy thao tác</button>
-                    <button type="submit" id="submit" name="submit" value="submit" class="btn btn-primary">Đồng ý</button>
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header modal-header-primary">
+                <button type="button" data-dismiss="modal" aria-hidden="true" class="close">&times;</button>
+                <h4 id="modal-header-primary-label" class="modal-title">Đồng ý cập nhật lại bảng lương ?</h4>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label><b>Chi tiết bảng lương sẽ được cập nhật lại theo thông tin cán bộ mới nhất. Bạn có chắc chắn muốn cập nhật ?</b></label>
                 </div>
             </div>
+
+            <input type="hidden" id="mabl_capnhat" name="mabl_capnhat"/>
+            <div class="modal-footer">
+                <button type="button" data-dismiss="modal" class="btn btn-default">Hủy thao tác</button>
+                <button type="submit" id="submit" name="submit" value="submit" class="btn btn-primary">Đồng ý</button>
+            </div>
         </div>
-    </form>
+    </div>
+</div>
+{!! Form::close() !!}
+
+{!! Form::open(['url'=>'/chuc_nang/bang_luong/cap_nhat_nkp','method'=>'get', 'files'=>true, 'id' => 'frmcapnhat_nkp']) !!}
+<div id="capnhat_nkp-modal" tabindex="-1" role="dialog" aria-hidden="true" class="modal fade">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header modal-header-primary">
+                <button type="button" data-dismiss="modal" aria-hidden="true" class="close">&times;</button>
+                <h4 id="modal-header-primary-label" class="modal-title">Đồng ý cập nhật lại nguồn kinh phí ?</h4>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <label class="control-label">Nguồn kinh phí</label>
+                        {!!Form::select('manguonkp',$m_nguonkp, null, array('id' => 'manguonkp','class' => 'form-control'))!!}
+                    </div>
+                </div>
+            </div>
+
+            <input type="hidden" name="mabl"/>
+            <div class="modal-footer">
+                <button type="button" data-dismiss="modal" class="btn btn-default">Hủy thao tác</button>
+                <button type="submit" value="submit" class="btn btn-primary">Đồng ý</button>
+            </div>
+        </div>
+    </div>
 </div>
 {!! Form::close() !!}
 

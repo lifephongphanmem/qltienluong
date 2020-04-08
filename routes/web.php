@@ -539,6 +539,7 @@ Route::group(['prefix'=>'chuc_nang'],function(){
 
         Route::get('bang_luong','bangluongController@show');
         Route::get('cap_nhat','bangluongController@capnhat');
+        Route::get('cap_nhat_nkp','bangluongController@capnhat_nkp');
         Route::get('tang_giam','bangluongController@tanggiam');
         //Route::get('/maso={mabl}','bangluongController@show');
         Route::get('in/maso={mabl}','bangluongController@inbangluong');
