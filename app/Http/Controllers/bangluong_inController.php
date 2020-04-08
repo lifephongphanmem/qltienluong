@@ -885,6 +885,17 @@ class bangluong_inController extends Controller
             mới lấy ở cột tổng lương vì chỉ có các lại phụ cấp ở đó mới đóng bảo hiểm
              * */
             $model = $this->getBangLuong($inputs);
+
+            $model_congtac = dmphanloaict::select('mact', 'tenct', 'macongtac')
+                ->wherein('mact', a_unique(array_column($model->toarray(), 'mact')))->get();
+
+            $m_congtac_hd = dmphanloaict::where('macongtac','HOPDONG')->orwhere('tenct','like','Hợp đồng%')->get();
+
+            $a_congtac_hd = array_column($m_congtac_hd->toarray(),'mact');
+//            $m_congtac_luong = dmphanloaict::where('macongtac','BIENCHE')
+//                ->wherenotin('mact',$a_congtac_hd)->get();
+//            $a_congtac_luong = array_column($m_congtac_luong->toarray(),'mact');
+//            dd($a_congtac_luong);
             if($m_bl_trc != null){
                 $model_trc = (new data())->getBangluong_ct($m_bl_trc->thang, $m_bl_trc->mabl);
                 foreach ($model_trc as $ct) {//trường hợp giảm lương
@@ -981,6 +992,11 @@ class bangluong_inController extends Controller
                 }
                 $ct->hocbong = 0;
                 $ct->chenhlech = 0;
+                //nếu trong nhóm hợp đồng thì chuyển luong sang hopdong
+                if(in_array($ct->mact,$a_congtac_hd)){
+                    $ct->hopdong += $ct->luong;
+                    $ct->luong = 0;
+                }
                 if($model_trc != null){
                     $ct->chenhlech = $ct->luongtn;
                     $canbo = $model_trc->where('macanbo', $ct->macanbo)->where('mact', $ct->mact)->first();
@@ -989,27 +1005,14 @@ class bangluong_inController extends Controller
                     }
                 }
             }
-            //dd($model);
-
-            $model_congtac = dmphanloaict::select('mact', 'tenct')
-                ->wherein('mact', a_unique(array_column($model->toarray(), 'mact')))->get();
+            //dd($m_congtac->get());
 
             $thongtin = array('nguoilap' => $m_bl->nguoilap,
                 'thang' => $m_bl->thang,
                 'nam' => $m_bl->nam,
                 'ngaylap' => $m_bl->ngaylap, 'phanloai' => $m_bl->phanloai,
                 'cochu' => $inputs['cochu']);
-            //xử lý ẩn hiện cột phụ cấp => biết tổng số cột hiện => colspan trên báo cáo
 
-//            $a_phucap = array();
-//            $col = 0;
-//
-//            foreach ($model_pc as $ct) {
-//                if ($model->sum($ct->mapc) > 0) {
-//                    $a_phucap[$ct->mapc] = $ct->report;
-//                    $col++;
-//                }
-//            }
             $m_dv = dmdonvi::where('madv', $m_bl->madv)->first();
             $m_dv->tendvcq = getTenDB($m_dv->madvbc);
             //dd($model);
@@ -1017,9 +1020,7 @@ class bangluong_inController extends Controller
                 ->with('model', $model->sortBy('stt'))
                 ->with('m_dv', $m_dv)
                 ->with('thongtin', $thongtin)
-                //->with('col',$col)
                 ->with('model_congtac', $model_congtac)
-                //->with('a_phucap',$a_phucap)
                 ->with('pageTitle', 'Danh sách cán bộ tăng lương');
         } else
             return view('errors.notlogin');
