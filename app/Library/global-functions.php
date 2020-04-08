@@ -589,57 +589,57 @@ function dinhdangsothapphan ($number , $decimals = 0) {
     return $a_kq;
     }
 
-    function Dbl2Str($amount)
+    function Dbl2Str($amount, $upcase = true, $low = false)
     {
-        if($amount <=0)
-        {
+        if ($low) {
+            $amount = abs($amount);
+        }
+
+        if ($amount <= 0) {
             return '';
         }
         $amount = (int)chkDbl($amount);
-        $Text=array("không", "một", "hai", "ba", "bốn", "năm", "sáu", "bảy", "tám", "chín");
-        $TextLuythua =array("","nghìn", "triệu", "tỷ", "ngàn tỷ", "triệu tỷ", "tỷ tỷ");
+        $Text = array("không", "một", "hai", "ba", "bốn", "năm", "sáu", "bảy", "tám", "chín");
+        $TextLuythua = array("", "nghìn", "triệu", "tỷ", "ngàn tỷ", "triệu tỷ", "tỷ tỷ");
         $textnumber = "";
         $length = strlen($amount);
 
         for ($i = 0; $i < $length; $i++)
             $unread[$i] = 0;
 
-        for ($i = 0; $i < $length; $i++)
-        {
-            $so = substr($amount, $length - $i -1 , 1);
+        for ($i = 0; $i < $length; $i++) {
+            $so = substr($amount, $length - $i - 1, 1);
 
-            if ( ($so == 0) && ($i % 3 == 0) && ($unread[$i] == 0)){
-                for ($j = $i+1 ; $j < $length ; $j ++)
-                {
-                    $so1 = substr($amount,$length - $j -1, 1);
+            if (($so == 0) && ($i % 3 == 0) && ($unread[$i] == 0)) {
+                for ($j = $i + 1; $j < $length; $j++) {
+                    $so1 = substr($amount, $length - $j - 1, 1);
                     if ($so1 != 0)
                         break;
                 }
 
-                if (intval(($j - $i )/3) > 0){
-                    for ($k = $i ; $k <intval(($j-$i)/3)*3 + $i; $k++)
-                        $unread[$k] =1;
+                if (intval(($j - $i) / 3) > 0) {
+                    for ($k = $i; $k < intval(($j - $i) / 3) * 3 + $i; $k++)
+                        $unread[$k] = 1;
                 }
             }
         }
 
-        for ($i = 0; $i < $length; $i++)
-        {
-            $so = substr($amount,$length - $i -1, 1);
-            if ($unread[$i] ==1)
+        for ($i = 0; $i < $length; $i++) {
+            $so = substr($amount, $length - $i - 1, 1);
+            if ($unread[$i] == 1)
                 continue;
 
-            if ( ($i% 3 == 0) && ($i > 0))
-                $textnumber = $TextLuythua[$i/3] ." ". $textnumber;
+            if (($i % 3 == 0) && ($i > 0))
+                $textnumber = $TextLuythua[$i / 3] . " " . $textnumber;
 
-            if ($i % 3 == 2 )
+            if ($i % 3 == 2)
                 $textnumber = 'trăm ' . $textnumber;
 
             if ($i % 3 == 1)
                 $textnumber = 'mươi ' . $textnumber;
 
 
-            $textnumber = $Text[$so] ." ". $textnumber;
+            $textnumber = $Text[$so] . " " . $textnumber;
         }
 
         //Phai de cac ham replace theo dung thu tu nhu the nay
@@ -651,7 +651,7 @@ function dinhdangsothapphan ($number , $decimals = 0) {
         $textnumber = str_replace("mươi một", "mươi mốt", $textnumber);
         $textnumber = str_replace("mười năm", "mười lăm", $textnumber);
 
-        return ucfirst($textnumber." đồng chẵn");
+        return $upcase ? ucfirst($textnumber . " đồng chẵn") : $textnumber . " đồng chẵn";
     }
 
 ?>

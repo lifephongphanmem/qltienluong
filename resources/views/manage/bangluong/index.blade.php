@@ -113,6 +113,10 @@
                                                             <button onclick="trichnop('{{$value->mabl}}')" style="border: none;padding-top: 0px;padding-bottom: 0px;" class="btn btn-default" data-target="#trichnop-modal-confirm" data-toggle="modal">
                                                                 <i class="fa fa-list-alt"></i>&nbsp; Trích nộp lương</button>
                                                         </li>
+                                                        <li>
+                                                            <button onclick="capnhat_nkp('{{$value->mabl}}', '{{$value->manguonkp}}')" style="border: none;padding-top: 0px;padding-bottom: 0px;" class="btn btn-default" data-target="#capnhat_nkp-modal" data-toggle="modal">
+                                                                <i class="fa fa-refresh"></i>&nbsp; Cập nhật nguồn kinh phí</button>
+                                                        </li>
                                                     </ul>
                                                 </div>
 
@@ -186,6 +190,11 @@
 
         function capnhat(mabl){
             $('#mabl_capnhat').val(mabl);
+        }
+
+        function capnhat_nkp(mabl,manguonkp){
+            $('#frmcapnhat_nkp').find("[name='mabl']").val(mabl);
+            $('#frmcapnhat_nkp').find("[id='manguonkp']").val(manguonkp).trigger('change');
         }
 
         function trichnop(mabl){

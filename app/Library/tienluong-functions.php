@@ -303,8 +303,15 @@ function getNamTL(){
     return $a_tl;
 }
 
-function getNam(){
-    return array('2017' => '2017','2018' => '2018','2019' => '2019','2020' => '2020');
+function getNam($all = false){
+    $a_kq = array();
+    if($all){
+        $a_kq['ALL'] = '--Tất cả các năm--';
+    }
+    for($i=date('Y') - 2; $i <= date('Y') + 2; $i++){
+        $a_kq[$i]=$i;
+    }
+    return $a_kq;
 }
 
 function getGeneralConfigs() {

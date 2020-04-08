@@ -34,6 +34,7 @@ use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Request;
 
 use App\Http\Requests;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Str;
 use Maatwebsite\Excel\Facades\Excel;
@@ -143,6 +144,58 @@ class bangluongController extends Controller
             return view('errors.notlogin');
     }
 
+    function capnhat_nkp(Request $request)
+    {
+        if (Session::has('admin')) {
+            $inputs = $request->all();
+            $model = bangluong::where('mabl', $inputs['mabl'])->first();
+            if($model->manguonkp != $inputs['manguonkp']){
+                $model->manguonkp = $inputs['manguonkp'];
+                $model->save();
+                switch($model->thang){
+                    case '01':{
+                        DB::statement("Update bangluong_ct_01 set manguonkp='".$inputs['manguonkp']."' where mabl ='".$model->mabl."'");
+                        break;
+                    }
+                    case '02':{
+                        DB::statement("Update bangluong_ct_02 set manguonkp='".$inputs['manguonkp']."' where mabl ='".$model->mabl."'");                        break;
+                    }
+                    case '03':{
+                        DB::statement("Update bangluong_ct_03 set manguonkp='".$inputs['manguonkp']."' where mabl ='".$model->mabl."'");                        break;
+                    }
+                    case '04':{
+                        DB::statement("Update bangluong_ct_04 set manguonkp='".$inputs['manguonkp']."' where mabl ='".$model->mabl."'");                        break;
+                    }
+                    case '05':{
+                        DB::statement("Update bangluong_ct_05 set manguonkp='".$inputs['manguonkp']."' where mabl ='".$model->mabl."'");                        break;
+                    }
+                    case '06':{
+                        DB::statement("Update bangluong_ct_06 set manguonkp='".$inputs['manguonkp']."' where mabl ='".$model->mabl."'");                        break;
+                    }
+                    case '07':{
+                        DB::statement("Update bangluong_ct_07 set manguonkp='".$inputs['manguonkp']."' where mabl ='".$model->mabl."'");                        break;
+                    }
+                    case '08':{
+                        DB::statement("Update bangluong_ct_08 set manguonkp='".$inputs['manguonkp']."' where mabl ='".$model->mabl."'");                        break;
+                    }
+                    case '09':{
+                        DB::statement("Update bangluong_ct_09 set manguonkp='".$inputs['manguonkp']."' where mabl ='".$model->mabl."'");                        break;
+                    }
+                    case '10':{
+                        DB::statement("Update bangluong_ct_10 set manguonkp='".$inputs['manguonkp']."' where mabl ='".$model->mabl."'");                        break;
+                    }
+                    case '11':{
+                        DB::statement("Update bangluong_ct_11 set manguonkp='".$inputs['manguonkp']."' where mabl ='".$model->mabl."'");                        break;
+                    }
+                    case '12':{
+                        DB::statement("Update bangluong_ct_12 set manguonkp='".$inputs['manguonkp']."' where mabl ='".$model->mabl."'");                        break;
+                    }
+                }
+            }
+            return redirect('/chuc_nang/bang_luong/chi_tra?thang='.$model->thang.'&nam=' .$model->nam);
+        } else
+            return view('errors.notlogin');
+    }
     //Insert + update bảng lương
     function store(Request $request){
         $inputs = $request->all();
@@ -1230,7 +1283,7 @@ class bangluongController extends Controller
             tinhluong:
             $m_cb[$key]['tonghs'] = $tonghs;
             $m_cb[$key]['ttl'] = $tien;
-            $m_cb[$key]['luongtn'] = $m_cb[$key]['ttl'] - $m_cb[$key]['ttbh'] - $m_cb[$key]['giaml'];
+
             //tính thuế thu nhập
             $m_cb[$key]['thuetn'] = 0;
             if(isset($inputs['thuetncn'])){
@@ -1256,6 +1309,7 @@ class bangluongController extends Controller
                 }
             }
             luuketqua:
+            $m_cb[$key]['luongtn'] = $m_cb[$key]['ttl'] - $m_cb[$key]['ttbh'] - $m_cb[$key]['giaml'] - $m_cb[$key]['thuetn'];
             $a_data_canbo[] = $m_cb[$key];
         }
 

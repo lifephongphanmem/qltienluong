@@ -74,6 +74,7 @@ class hosodieudongController extends Controller
             $model_diaban = dmdonvibaocao::where('level','H')->get();
             $model_donvi = dmdonvi::where('phanloaitaikhoan','SD')->get();
             $a_phanloai = getPhanLoaiLuanChuyen();
+            //dd($model);
             return view('manage.dieudong.create')
                 ->with('furl', '/nghiep_vu/dieu_dong/')
                 ->with('inputs',$inputs)
