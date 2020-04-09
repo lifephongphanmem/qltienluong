@@ -1262,6 +1262,8 @@ class bangluongController extends Controller
             if ($duongsuc) {
                 $cb_nghi = $a_duongsuc[$m_cb[$key]['macanbo']];
                 $ngaycong = $cb_nghi['songaycong'] > 0 ? $cb_nghi['songaycong'] : $ngaycong;
+                $ngaynghi = $cb_nghi['songaynghi'] > 0 ? $cb_nghi['songaynghi'] : 0;
+
                 $m_cb[$key]['songaytruc'] = $ngaynghi;
                 $m_cb[$key]['songaycong'] = $ngaycong;
                 //$m_cb[$key]['congtac'] = 'DUONGSUC';
