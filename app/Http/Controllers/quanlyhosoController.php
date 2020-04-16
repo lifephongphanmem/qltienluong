@@ -190,7 +190,7 @@ class quanlyhosoController extends Controller
         if (Session::has('admin')) {
             $inputs = $requests->all();
             $a_nangluong=array('NB'=>'Nâng lương ngạch bậc','TNN'=>'Nâng lương thâm niên nghề');
-            $a_donvi=dmdonvi::select('madv','tendv')
+            $a_donvi=dmdonvi::select('madv','tendv','phanloaitaikhoan')
                 ->where('macqcq', session('admin')->madv)
                 ->get();
             $nangluong = $inputs['nangluong'];
@@ -203,6 +203,15 @@ class quanlyhosoController extends Controller
                 ->where('dmdonvi.macqcq', session('admin')->madv)
                 ->orderby('tendv')
                 ->get();
+            $check = $a_donvi->where('madv',$donvi)->first();
+            if(isset($check) && $check->phanloaitaikhoan == 'TH'){
+                $model = hosocanbo::join('dmdonvi','hosocanbo.madv','dmdonvi.madv')
+                    ->select('macanbo', 'tencanbo', 'msngbac', 'sunghiep', 'gioitinh', 'tnndenngay', 'ngaytu', 'ngayden','ngaysinh','mact','tendv','heso')
+                    ->where('theodoi','<' ,'9')
+                    ->where('dmdonvi.macqcq',$inputs['madv'])
+                    ->orderby('tendv')
+                    ->get();
+            }
             if($inputs['madv'] == 'ALL')
                 $model = hosocanbo::join('dmdonvi','hosocanbo.madv','dmdonvi.madv')
                     ->select('macanbo', 'tencanbo', 'msngbac', 'sunghiep', 'gioitinh', 'tnndenngay', 'ngaytu', 'ngayden','ngaysinh','mact','tendv')
