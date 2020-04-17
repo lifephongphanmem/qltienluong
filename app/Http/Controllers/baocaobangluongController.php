@@ -827,13 +827,9 @@ class baocaobangluongController extends Controller
             $m_pc = array_column(dmphucap::all()->toarray(),'report','mapc');
             $a_phucap = array();
             $col = 0;
-            /*
-            $model_tonghop = tonghopluong_donvi::where('macqcq',$madv)
-                ->orWhereIn('macqcq', array_column($model_donvi->toarray(),'madv'))
-                ->where('nam', $nam)
-                ->where('thang', $thang)
-                ->where('trangthai', 'DAGUI')->get();
-*/
+            $a_pldvgd = array_column(dmdonvi::select('madv')->wherein('maphanloai',$a_plgd)->get()->toarray(),'madv');
+            $a_pldvth = array_column(dmdonvi::select('madv')->wherein('maphanloai',$a_plth)->get()->toarray(),'madv');
+            $a_pldvthcs = array_column(dmdonvi::select('madv')->wherein('maphanloai',$a_plthcs)->get()->toarray(),'madv');
             $model_tonghop = tonghopluong_donvi::where('macqcq',$madv)
                 ->where('nam', $nam)
                 ->where('thang', $thang)
@@ -849,35 +845,32 @@ class baocaobangluongController extends Controller
                     ->where('nam', $nam)
                     ->where('thang', $thang)
                     ->where('trangthai', 'DAGUI')
-                    ->wherein('madv', function ($query) use ($a_plgd) {
-                        $query->select('madv')->from('dmdonvi')
-                            ->wherein('maphanloai',$a_plgd)
-                            ->get();
-                    })
-                    ->orWhereIn('macqcq', array_column($model_donvi->toarray(),'madv'))->get();
-            if($maphanloai == 'TIEUHOC')
-                $model_tonghop = tonghopluong_donvi::where('macqcq',$madv)
+                    ->wherein('madv', $a_pldvgd)
+                    ->orWhereIn('macqcq', array_column($model_donvi->toarray(),'madv'))
                     ->where('nam', $nam)
                     ->where('thang', $thang)
                     ->where('trangthai', 'DAGUI')
-                    ->wherein('madv', function ($query) use ($a_plth) {
-                        $query->select('madv')->from('dmdonvi')
-                            ->wherein('maphanloai',$a_plth)
-                            ->get();
-                    })
-                    ->orWhereIn('macqcq', array_column($model_donvi->toarray(),'madv'))->get();
+                    ->wherein('madv', $a_pldvgd)
+                    ->get();
+            if($maphanloai == 'TIEUHOC')
+                $model_tonghop = tonghopluong_donvi::where('macqcq',$madv)
+                    ->where('nam', $nam)->where('thang', $thang)->where('trangthai', 'DAGUI')
+                    ->wherein('madv', $a_pldvth)
+                    ->orWhereIn('macqcq', array_column($model_donvi->toarray(),'madv'))
+                    ->where('nam', $nam)->where('thang', $thang)->where('trangthai', 'DAGUI')
+                    ->wherein('madv', $a_pldvth)->get();
             if($maphanloai == 'THCS')
                 $model_tonghop = tonghopluong_donvi::where('macqcq',$madv)
                     ->where('nam', $nam)
                     ->where('thang', $thang)
                     ->where('trangthai', 'DAGUI')
-                    ->wherein('madv', function ($query) use ($a_plthcs) {
-                        $query->select('madv')->from('dmdonvi')
-                            ->wherein('maphanloai',$a_plthcs)
-                            ->get();
-                    })
-                    ->orWhereIn('macqcq', array_column($model_donvi->toarray(),'madv'))->get();
-
+                    ->wherein('madv', $a_pldvthcs)
+                    ->orWhereIn('macqcq', array_column($model_donvi->toarray(),'madv'))
+                    ->where('nam', $nam)
+                    ->where('thang', $thang)
+                    ->where('trangthai', 'DAGUI')
+                    ->wherein('madv', $a_pldvthcs)
+                    ->get();
             //dd($model_tonghop->toarray());
             $model_dmdv = dmdonvi::where('macqcq',$madv)
                 ->wherein('madv',array_column($model_tonghop->toarray(),'madv'))->orWhereIn('macqcq', array_column($model_donvi->toarray(),'madv'))->get();
@@ -961,13 +954,9 @@ class baocaobangluongController extends Controller
             $m_pc = array_column(dmphucap::all()->toarray(),'report','mapc');
             $a_phucap = array();
             $col = 0;
-            /*
-            $model_tonghop = tonghopluong_donvi::where('macqcq',$madv)
-                ->orWhereIn('macqcq', array_column($model_donvi->toarray(),'madv'))
-                ->where('nam', $nam)
-                ->where('thang', $thang)
-                ->where('trangthai', 'DAGUI')->get();
-*/
+            $a_pldvgd = array_column(dmdonvi::select('madv')->wherein('maphanloai',$a_plgd)->get()->toarray(),'madv');
+            $a_pldvth = array_column(dmdonvi::select('madv')->wherein('maphanloai',$a_plth)->get()->toarray(),'madv');
+            $a_pldvthcs = array_column(dmdonvi::select('madv')->wherein('maphanloai',$a_plthcs)->get()->toarray(),'madv');
             $model_tonghop = tonghopluong_donvi::where('macqcq',$madv)
                 ->where('nam', $nam)
                 ->where('thang', $thang)
@@ -983,41 +972,39 @@ class baocaobangluongController extends Controller
                     ->where('nam', $nam)
                     ->where('thang', $thang)
                     ->where('trangthai', 'DAGUI')
-                    ->wherein('madv', function ($query) use ($a_plgd) {
-                        $query->select('madv')->from('dmdonvi')
-                            ->wherein('maphanloai',$a_plgd)
-                            ->get();
-                    })
-                    ->orWhereIn('macqcq', array_column($model_donvi->toarray(),'madv'))->get();
-            if($maphanloai == 'TIEUHOC')
-                $model_tonghop = tonghopluong_donvi::where('macqcq',$madv)
+                    ->wherein('madv', $a_pldvgd)
+                    ->orWhereIn('macqcq', array_column($model_donvi->toarray(),'madv'))
                     ->where('nam', $nam)
                     ->where('thang', $thang)
                     ->where('trangthai', 'DAGUI')
-                    ->wherein('madv', function ($query) use ($a_plth) {
-                        $query->select('madv')->from('dmdonvi')
-                            ->wherein('maphanloai',$a_plth)
-                            ->get();
-                    })
-                    ->orWhereIn('macqcq', array_column($model_donvi->toarray(),'madv'))->get();
+                    ->wherein('madv', $a_pldvgd)
+                    ->get();
+            if($maphanloai == 'TIEUHOC')
+                $model_tonghop = tonghopluong_donvi::where('macqcq',$madv)
+                    ->where('nam', $nam)->where('thang', $thang)->where('trangthai', 'DAGUI')
+                    ->wherein('madv', $a_pldvth)
+                    ->orWhereIn('macqcq', array_column($model_donvi->toarray(),'madv'))
+                    ->where('nam', $nam)->where('thang', $thang)->where('trangthai', 'DAGUI')
+                    ->wherein('madv', $a_pldvth)->get();
             if($maphanloai == 'THCS')
                 $model_tonghop = tonghopluong_donvi::where('macqcq',$madv)
                     ->where('nam', $nam)
                     ->where('thang', $thang)
                     ->where('trangthai', 'DAGUI')
-                    ->wherein('madv', function ($query) use ($a_plthcs) {
-                        $query->select('madv')->from('dmdonvi')
-                            ->wherein('maphanloai',$a_plthcs)
-                            ->get();
-                    })
-                    ->orWhereIn('macqcq', array_column($model_donvi->toarray(),'madv'))->get();
-
+                    ->wherein('madv', $a_pldvthcs)
+                    ->orWhereIn('macqcq', array_column($model_donvi->toarray(),'madv'))
+                    ->where('nam', $nam)
+                    ->where('thang', $thang)
+                    ->where('trangthai', 'DAGUI')
+                    ->wherein('madv', $a_pldvthcs)
+                    ->get();
             //dd($model_tonghop->toarray());
             $model_dmdv = dmdonvi::where('macqcq',$madv)
                 ->wherein('madv',array_column($model_tonghop->toarray(),'madv'))->orWhereIn('macqcq', array_column($model_donvi->toarray(),'madv'))->get();
             $a_dv = array_column($model_tonghop->toarray(),'madv','mathdv');
             $a_pl = array_column($model_dmdv->toarray(),'maphanloai','madv');
-            $model = tonghopluong_donvi_bangluong::wherein('mathdv', array_column($model_tonghop->toarray(),'mathdv'))->get();
+            $model = tonghopluong_donvi_bangluong::where('mact','like',$inputs['phanloaict'].'%')
+                ->wherein('mathdv', array_column($model_tonghop->toarray(),'mathdv'))->get();
             $model_nguonkp = array_column(dmnguonkinhphi::all()->toArray(), 'tennguonkp', 'manguonkp');
             $model_phanloaict = array_column(dmphanloaicongtac::all()->toArray(), 'tencongtac', 'macongtac');
             $model_ct = array_column(dmphanloaict::all()->toArray(), 'tenct', 'mact');
