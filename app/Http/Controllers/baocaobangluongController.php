@@ -839,7 +839,15 @@ class baocaobangluongController extends Controller
                         ->where('maphanloai','like', $maphanloai.'%')
                         ->get();
                 })
-                ->orWhereIn('macqcq', array_column($model_donvi->toarray(),'madv'))->get();
+                ->orWhereIn('macqcq', array_column($model_donvi->toarray(),'madv'))
+                ->where('nam', $nam)
+                ->where('thang', $thang)
+                ->where('trangthai', 'DAGUI')
+                ->wherein('madv', function ($query) use ($maphanloai) {
+                    $query->select('madv')->from('dmdonvi')
+                        ->where('maphanloai','like', $maphanloai.'%')
+                        ->get();
+                })->get();
             if($maphanloai == 'GD')
                 $model_tonghop = tonghopluong_donvi::where('macqcq',$madv)
                     ->where('nam', $nam)
@@ -876,7 +884,7 @@ class baocaobangluongController extends Controller
                 ->wherein('madv',array_column($model_tonghop->toarray(),'madv'))->orWhereIn('macqcq', array_column($model_donvi->toarray(),'madv'))->get();
             $a_dv = array_column($model_tonghop->toarray(),'madv','mathdv');
             $a_pl = array_column($model_dmdv->toarray(),'maphanloai','madv');
-            $model = tonghopluong_donvi_bangluong::where('mact','like',$inputs['phanloaict'].'%')
+            $model = tonghopluong_donvi_chitiet::where('mact','like',$inputs['phanloaict'].'%')
             ->wherein('mathdv', array_column($model_tonghop->toarray(),'mathdv'))->get();
             $model_nguonkp = array_column(dmnguonkinhphi::all()->toArray(), 'tennguonkp', 'manguonkp');
             $model_phanloaict = array_column(dmphanloaicongtac::all()->toArray(), 'tencongtac', 'macongtac');
@@ -1866,6 +1874,7 @@ class baocaobangluongController extends Controller
                     $model_thongtin = tonghopluong_donvi::wherein('mathdv', $a_mathdv)->first();
                     $m_pc = array_column(dmphucap_donvi::where('madv', $madv)->get()->toarray(), 'report', 'mapc');
                 }
+                dd($model);
                 //$model = tonghopluong_donvi_bangluong::where('mathdv', $m_mathdv->mathdv)->get();
                 //$model_thongtin = tonghopluong_donvi::where('mathdv', $m_mathdv->mathdv)->first();
                 $model_nguonkp = array_column(dmnguonkinhphi::all()->toArray(), 'tennguonkp', 'manguonkp');
@@ -3145,8 +3154,8 @@ class baocaobangluongController extends Controller
             $modelqlnn = $model->wherein('linhvuchoatdong',$a_lv)
                 ->wherein('madv', array_column($model_phanloai->where('maphanloai','<>','KVXP')->toarray(),'madv'));
             $a_lv = array('QLNN','DDT','DOANTHE','DANG','LVXH','LVCT');
-            $modelhcsn = $model->whereNOTIn('linhvuchoatdong',$a_lv)
-                ->wherein('madv', array_column($model_phanloai->where('maphanloai','<>','KVXP')->toarray(),'madv'));
+            //$modelhcsn = $model->whereNOTIn('linhvuchoatdong',$a_lv)
+            //   ->wherein('madv', array_column($model_phanloai->where('maphanloai','<>','KVXP')->toarray(),'madv'));
             return view('reports.tonghopluong.huyen.tonghopluongCR')
                 ->with('model_dutoan',$model_dutoan)
                 ->with('model_th',$model_th)
@@ -3157,7 +3166,7 @@ class baocaobangluongController extends Controller
                 ->with('m_dv',$m_dv)
                 ->with('model',$model)
                 ->with('modelqlnn',$modelqlnn)
-                ->with('modelhcsn',$modelhcsn)
+                //->with('modelhcsn',$modelhcsn)
                 ->with('model_hdnd',$model_hdnd)
                 ->with('model_kn',$model_kn)
                 ->with('model_uv',$model_uv)
