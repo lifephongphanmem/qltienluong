@@ -113,76 +113,85 @@
     </tr>
 
     <?php $i=1; ?>
-    @foreach($a_tonghop as $th)
-        <?php $stt=1; ?>
-        <?php $chitiet = $model->where('tonghop',$th['tonghop']); ?>
-        <tr style="font-weight: bold;">
-            <td>{{convert2Roman($i++)}}</td>
-            <td style="text-align: left;" colspan="22">{{$th['tonghop']=='BANGLUONG'?'Số liệu chi trả lương':'Số liệu truy lĩnh lương'}}</td>
-        </tr>
-        @foreach($chitiet as $ct)
-            <tr class="money">
-                <td style="text-align: center">{{$stt++}}</td>
-                <td style="text-align: left">{{$ct->tennguonkp}}</td>
-                <td style="text-align: left">{{$ct->tencongtac}}</td>
-                <td style="text-align: center">{{$ct->soluong}}</td>
+    @foreach($a_pl as $key=>$val)
+        <?php
+        $model_ct = $model->where('linhvuchoatdong',$key);
+        ?>
+            <tr style="font-weight: bold;">
+                <td></td>
+                <td style="text-align: left;" colspan="22">{{$a_pl[$key]}}</td>
+            </tr>
+        @foreach($a_tonghop as $th)
+            <?php $stt=1;
+                $chitiet = $model_ct->where('tonghop',$th['tonghop']); ?>
+            <tr style="font-weight: bold;">
+                <td>{{convert2Roman($i++)}}</td>
+                <td style="text-align: left;" colspan="22">{{$th['tonghop']=='BANGLUONG'?'Số liệu chi trả lương':'Số liệu truy lĩnh lương'}}</td>
+            </tr>
+            @foreach($chitiet as $ct)
+                <tr class="money">
+                    <td style="text-align: center">{{$stt++}}</td>
+                    <td style="text-align: left">{{$ct->tennguonkp}}</td>
+                    <td style="text-align: left">{{$ct->tencongtac}}</td>
+                    <td style="text-align: center">{{$ct->soluong}}</td>
 
-                @foreach($a_phucap_hs as $key=>$val)
-                    <td>{{dinhdangsothapphan($ct->$key,5)}}</td>
+                    @foreach($a_phucap_hs as $key=>$val)
+                        <td>{{dinhdangsothapphan($ct->$key,5)}}</td>
+                    @endforeach
+                    <?php $tongluong = 0;?>
+                    @foreach($a_phucap as $key=>$val)
+                        <?php
+
+                        $ma = 'st_'.$key;
+                        $tongluong += $ct->$ma;
+                        ?>
+                        <td>{{dinhdangso($ct->$ma)}}</td>
+                    @endforeach
+
+                    <td>{{dinhdangso($tongluong)}}</td>
+                    <td>{{dinhdangso($ct->giaml)}}</td>
+                    <td>{{dinhdangso($tongluong - $ct->giaml)}}</td>
+
+
+                    <td>{{dinhdangso($ct->stbhxh_dv)}}</td>
+                    <td>{{dinhdangso($ct->stbhyt_dv)}}</td>
+                    <td>{{dinhdangso($ct->stkpcd_dv)}}</td>
+                    <td>{{dinhdangso($ct->stbhtn_dv)}}</td>
+                    <td>{{dinhdangso($ct->tongbh)}}</td>
+                    <td>{{dinhdangso($ct->tongbh +$tongluong - $ct->giaml)}}</td>
+
+                </tr>
+            @endforeach
+
+            <tr class="money" style="font-weight: bold">
+                <td colspan="3">Cộng</td>
+                <td style="text-align: center">{{dinhdangso($chitiet->sum('soluong'))}}</td>
+                @foreach($a_phucap as $key=>$val)
+                    <td>{{dinhdangsothapphan($chitiet->sum('hs'.$key) ,5)}}</td>
                 @endforeach
+
                 <?php $tongluong = 0;?>
                 @foreach($a_phucap as $key=>$val)
                     <?php
 
                     $ma = 'st_'.$key;
-                    $tongluong += $ct->$ma;
+                    $tongluong += $chitiet->sum('st_'.$key);
                     ?>
-                    <td>{{dinhdangso($ct->$ma)}}</td>
+                    <td>{{dinhdangso($chitiet->sum('st_'.$key))}}</td>
                 @endforeach
 
                 <td>{{dinhdangso($tongluong)}}</td>
-                <td>{{dinhdangso($ct->giaml)}}</td>
-                <td>{{dinhdangso($tongluong - $ct->giaml)}}</td>
+                <td>{{dinhdangso($chitiet->sum('giaml'))}}</td>
+                <td>{{dinhdangso($tongluong - $chitiet->sum('giaml'))}}</td>
 
-
-                <td>{{dinhdangso($ct->stbhxh_dv)}}</td>
-                <td>{{dinhdangso($ct->stbhyt_dv)}}</td>
-                <td>{{dinhdangso($ct->stkpcd_dv)}}</td>
-                <td>{{dinhdangso($ct->stbhtn_dv)}}</td>
-                <td>{{dinhdangso($ct->tongbh)}}</td>
-                <td>{{dinhdangso($ct->tongbh +$tongluong - $ct->giaml)}}</td>
-
+                <td>{{dinhdangso($chitiet->sum('stbhxh_dv'))}}</td>
+                <td>{{dinhdangso($chitiet->sum('stbhyt_dv'))}}</td>
+                <td>{{dinhdangso($chitiet->sum('stkpcd_dv'))}}</td>
+                <td>{{dinhdangso($chitiet->sum('stbhtn_dv'))}}</td>
+                <td>{{dinhdangso($chitiet->sum('tongbh'))}}</td>
+                <td>{{dinhdangso($chitiet->sum('tongbh') + $tongluong - $chitiet->sum('giaml'))}}</td>
             </tr>
         @endforeach
-
-        <tr class="money" style="font-weight: bold">
-            <td colspan="3">Cộng</td>
-            <td style="text-align: center">{{dinhdangso($chitiet->sum('soluong'))}}</td>
-            @foreach($a_phucap as $key=>$val)
-                <td>{{dinhdangsothapphan($chitiet->sum('hs'.$key) ,5)}}</td>
-            @endforeach
-
-            <?php $tongluong = 0;?>
-            @foreach($a_phucap as $key=>$val)
-                <?php
-
-                $ma = 'st_'.$key;
-                $tongluong += $chitiet->sum('st_'.$key);
-                ?>
-                <td>{{dinhdangso($chitiet->sum('st_'.$key))}}</td>
-            @endforeach
-
-            <td>{{dinhdangso($tongluong)}}</td>
-            <td>{{dinhdangso($chitiet->sum('giaml'))}}</td>
-            <td>{{dinhdangso($tongluong - $chitiet->sum('giaml'))}}</td>
-
-            <td>{{dinhdangso($chitiet->sum('stbhxh_dv'))}}</td>
-            <td>{{dinhdangso($chitiet->sum('stbhyt_dv'))}}</td>
-            <td>{{dinhdangso($chitiet->sum('stkpcd_dv'))}}</td>
-            <td>{{dinhdangso($chitiet->sum('stbhtn_dv'))}}</td>
-            <td>{{dinhdangso($chitiet->sum('tongbh'))}}</td>
-            <td>{{dinhdangso($chitiet->sum('tongbh') + $tongluong - $chitiet->sum('giaml'))}}</td>
-        </tr>
     @endforeach
 
     <tr class="money" style="font-weight: bold">
@@ -196,9 +205,9 @@
             <?php
 
             $ma = 'st_'.$key;
-            $tongluong += $chitiet->sum('st_'.$key);
+            $tongluong += $model->sum('st_'.$key);
             ?>
-            <td>{{dinhdangso($chitiet->sum('st_'.$key))}}</td>
+            <td>{{dinhdangso($model->sum('st_'.$key))}}</td>
         @endforeach
 
         <td>{{dinhdangso($tongluong)}}</td>

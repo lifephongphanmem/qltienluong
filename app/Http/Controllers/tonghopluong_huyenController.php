@@ -292,6 +292,10 @@ class tonghopluong_huyenController extends Controller
 
             //cho trương hợp đơn vị cấp trên in dữ liệu dv câp dưới mà ko sai tên đơn vị
             $m_dv = dmdonvi::where('madv', $model_thongtin->madv)->first();
+            $a_pl = array_column(tonghopluong_donvi_chitiet::join('dmkhoipb','dmkhoipb.makhoipb','tonghopluong_donvi_chitiet.linhvuchoatdong')
+            ->select('linhvuchoatdong','tenkhoipb')->wherein('mathdv', function($query) use($mathh,$madv){
+                $query->select('mathdv')->from('tonghopluong_donvi')->where('madv',$madv)->where('mathh',$mathh)->orwhere('matht',$mathh)->get();
+            })->distinct()->get()->toArray(), 'tenkhoipb','linhvuchoatdong');
             foreach ($model as $chitiet) {
                 $chitiet->tennguonkp = isset($model_nguonkp[$chitiet->manguonkp]) ? $model_nguonkp[$chitiet->manguonkp] : '';
                 $chitiet->tencongtac = isset($model_ct[$chitiet->mact]) ? $model_ct[$chitiet->mact] : '';
@@ -348,8 +352,8 @@ class tonghopluong_huyenController extends Controller
             });
             //dd($model->toarray());
             if(isset($input['excelbc'])){
-                Excel::create('solieuth',function($excel) use($model,$thongtin,$m_dv,$model_dulieu,$a_phucap_hs,$a_tonghop,$col,$a_phucap){
-                    $excel->sheet('New sheet', function($sheet) use($model,$thongtin,$m_dv,$model_dulieu,$a_phucap_hs,$a_tonghop,$col,$a_phucap){
+                Excel::create('solieuth',function($excel) use($model,$thongtin,$m_dv,$model_dulieu,$a_phucap_hs,$a_tonghop,$col,$a_phucap,$a_pl){
+                    $excel->sheet('New sheet', function($sheet) use($model,$thongtin,$m_dv,$model_dulieu,$a_phucap_hs,$a_tonghop,$col,$a_phucap,$a_pl){
                         $sheet->loadView('reports.tonghopluong.huyen.solieutonghopm')
                             ->with('thongtin', $thongtin)
                             ->with('model', $model)
@@ -357,6 +361,7 @@ class tonghopluong_huyenController extends Controller
                             ->with('m_dv', $m_dv)
                             ->with('col', $col)
                             ->with('a_phucap', $a_phucap)
+                            ->with('a_pl', $a_pl)
                             ->with('a_phucap_hs', $a_phucap_hs)
                             ->with('a_tonghop',a_unique($a_tonghop))
                             ->with('pageTitle','solieutonghopm');
@@ -373,6 +378,7 @@ class tonghopluong_huyenController extends Controller
                     ->with('m_dv', $m_dv)
                     ->with('col', $col)
                     ->with('a_phucap', $a_phucap)
+                    ->with('a_pl', $a_pl)
                     ->with('a_phucap_hs', $a_phucap_hs)
                     ->with('a_tonghop',a_unique($a_tonghop))
                     ->with('pageTitle', 'Chi tiết tổng hợp lương tại đơn vị theo địa bàn quản lý');
@@ -1718,7 +1724,7 @@ class tonghopluong_huyenController extends Controller
                 $a_phucap = array();
                 $col = 0;
                 //$m_pc = array_column(dmphucap_donvi::where('madv', $madv)->get()->toarray(), 'report', 'mapc');
-
+                //dd($model->toarray());
                 foreach ($model as $chitiet) {
                     $chitiet->tennguonkp = isset($model_nguonkp[$chitiet->manguonkp]) ? $model_nguonkp[$chitiet->manguonkp] : '';
                     $chitiet->tenct = isset($model_ct[$chitiet->mact]) ? $model_ct[$chitiet->mact] : '';
