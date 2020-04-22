@@ -1874,7 +1874,7 @@ class baocaobangluongController extends Controller
                     $model_thongtin = tonghopluong_donvi::wherein('mathdv', $a_mathdv)->first();
                     $m_pc = array_column(dmphucap_donvi::where('madv', $madv)->get()->toarray(), 'report', 'mapc');
                 }
-                dd($model);
+                //dd($model);
                 //$model = tonghopluong_donvi_bangluong::where('mathdv', $m_mathdv->mathdv)->get();
                 //$model_thongtin = tonghopluong_donvi::where('mathdv', $m_mathdv->mathdv)->first();
                 $model_nguonkp = array_column(dmnguonkinhphi::all()->toArray(), 'tennguonkp', 'manguonkp');
