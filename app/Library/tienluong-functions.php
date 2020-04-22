@@ -581,7 +581,7 @@ function getPhanLoaiBangLuong(){
     return array(
         'BANGLUONG' => 'Bảng chi trả lương',
         'TRUYLINH' => 'Bảng chi trả truy lĩnh',
-        'TRUC' => 'Bảng chi trả phụ cấp độc hại',
+        'TRUC' => 'Bảng chi trả theo ngày công làm việc',
         'CTPHI' => 'Bảng chi trả công tác phí',
         'TRICHNOP' => 'Bảng trích nộp lương',
         'KHAC' => 'Bảng chi trả khác',

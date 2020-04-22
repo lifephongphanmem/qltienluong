@@ -47,7 +47,7 @@
 
                                 <ul class="dropdown-menu">
                                     <li>
-                                        <button type="button" class="btn btn-default" style="padding-bottom: 5px; border: none;" onclick="add_truc()">&nbsp;Phụ cấp độc hại</button>
+                                        <button type="button" class="btn btn-default" style="padding-bottom: 5px; border: none;" onclick="add_truc()">&nbsp;Chi ngày làm việc</button>
                                     </li>
                                     <li>
                                         <button type="button" class="btn btn-default" style="padding-bottom: 5px; border: none;" onclick="add_ctp()"
