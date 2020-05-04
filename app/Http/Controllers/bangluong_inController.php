@@ -912,7 +912,6 @@ class bangluong_inController extends Controller
                         $ct->chenhlech = -$ct->luongtn;
                         $ct->ttl = 0;
                         $model->add($ct);
-                        continue;
                     }
                     //kiểm tra cán bộ có dc trả lương vào tháng hiện tại ko
                     //nếu ko thì để số tiền = 0 và chênh lệch = - ttl
@@ -953,7 +952,7 @@ class bangluong_inController extends Controller
 
             //$model_pc = dmphucap_donvi::where('madv', $m_bl->madv)->where('phanloai', '<', '3')->get();
             // 6001 + 6101->6149
-
+            //dd($model);
             //chưa tính cán bộ nào giảm
             foreach ($model as $ct) {//trường hợp giảm lương
                 if($ct->ttl <= 0){
@@ -1016,6 +1015,10 @@ class bangluong_inController extends Controller
             $m_dv = dmdonvi::where('madv', $m_bl->madv)->first();
             $m_dv->tendvcq = getTenDB($m_dv->madvbc);
             //dd($model);
+            //lấy lại nhóm công tác do có trường hợp thêm mới cán bộ tháng trc vào mà trong tháng chưa có
+            $model_congtac = dmphanloaict::select('mact', 'tenct', 'macongtac')
+                ->wherein('mact', a_unique(array_column($model->toarray(), 'mact')))->get();
+
             return view('reports.bangluong.donvi.mau09nd11')
                 ->with('model', $model->sortBy('stt'))
                 ->with('m_dv', $m_dv)
