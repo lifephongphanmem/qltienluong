@@ -424,8 +424,10 @@ class dutoanluongController extends Controller
                 }
                 //tính toán xong lưu dữ liệu
             }
-            foreach ($m_tnn as $key=>$val) {
 
+            //tính nâng lương thâm niên
+            //dd($m_tnn);
+            foreach ($m_tnn as $key=>$val) {
                 if ($val['thang_tnn'] == '01') {
                     continue;
                 }
@@ -435,10 +437,9 @@ class dutoanluongController extends Controller
 
                 for ($i = $val['thang_tnn']; $i <= 12; $i++) {
                     //chưa kiểm tra xem tháng này cán bộ nghỉ hưu ko
-                    if (isset($m_nb[$key]) && $m_nb[$key]['thang_nb'] == str_pad($i, 2, '0', STR_PAD_LEFT)) {
+                    if (isset($m_nb[$key]) && $m_nb[$key]['thang_nb'] > $val['thang_tnn']
+                            && $m_nb[$key]['thang_nb'] == str_pad($i, 2, '0', STR_PAD_LEFT)) {
                         //tính lại chỉ lấy nâng thâm niên mà trừ, tính lại bảo hiểm
-
-                        //$a_goc = $a_tt;
                         $a_tt = $m_nb[$key];
                     }
                     $a_tnn[] = $this->getSubNangLuong($a_pc, $a_tt, $a_goc);
@@ -447,6 +448,10 @@ class dutoanluongController extends Controller
                 $a_goc['maphanloai'] = 'THAMNIENNGHE';
                 $a_goc['thang'] = $val['thang_tnn'];
                 $a_goc['nam'] = $inputs['namdt'];
+
+                //ko dùng do có trường hợp đơn vị ko theo doi pctnn
+                //$a_goc['pctnn'] = array_sum(array_column($a_tnn, 'pctnn'));
+                //$a_goc['st_pctnn'] = array_sum(array_column($a_tnn, 'st_pctnn'));
 
                 for ($i = 0; $i < count($a_pc); $i++) {
                     $mapc = $a_pc[$i]['mapc'];
@@ -465,10 +470,10 @@ class dutoanluongController extends Controller
                 $a_goc['stkpcd_dv'] = round($a_goc['kpcd_dv'] * $a_goc['st_pctnn'], 0);
                 $a_goc['stbhtn_dv'] = round($a_goc['bhtn_dv'] * $a_goc['st_pctnn'], 0);
                 $a_goc['ttbh_dv'] = $a_goc['stbhxh_dv'] + $a_goc['stbhyt_dv'] + $a_goc['stkpcd_dv'] + $a_goc['stbhtn_dv'];
+
                 //dd($a_goc);
                 $a_data_nl[] = $a_goc;
             }
-
 
             $a_col = array('bac', 'bhxh_dv', 'bhtn_dv', 'kpcd_dv', 'bhyt_dv', 'gioitinh', 'nam_nb', 'nam_ns',
                 'thang_nb', 'thang_ns', 'thang_tnn', 'ngayden', 'ngaysinh', 'tnndenngay', 'pcctp', 'st_pcctp',
@@ -479,9 +484,7 @@ class dutoanluongController extends Controller
             foreach (array_chunk($a_data_nl, 100) as $data) {
                 dutoanluong_nangluong::insert($data);
             }
-            //dd($a_data[100]);
-            //chia nhỏ thành các mảng nhỏ 100 phần tử để insert
-            //$a_chunk = array_chunk($a_data, 100);
+
             foreach (array_chunk($a_data, 100) as $data) {
                 dutoanluong_bangluong::insert($data);
             }
@@ -1111,49 +1114,69 @@ class dutoanluongController extends Controller
 
     }
 
+    /*
+     * chỉ tính được nâng lương ngạch bậc, do trong tham số truyền vào đã tính bảo hiểm (có thể cả TNN)
+     * nên pải tính lại bảo hiểm của cá nhân
+     * */
     public function getHeSoPc_Sub($a_pc, $m_cb, $m_cb_cu, $phanloai, $thang, $nam)
     {
-        //dd($m_cb);
+        //dd($a_pc);
         $m_cb['maphanloai'] = $phanloai;
         $m_cb['thang'] = $thang;
         $m_cb['nam'] = $nam;
         $thang = 12 - $thang + 1;
 
+        $stbhxh_dv = 0;
+        $stbhyt_dv = 0;
+        $stkpcd_dv = 0;
+        $stbhtn_dv = 0;
+        $m_cb['tonghs'] = 0;
+        $m_cb['luongtn'] = 0;
+
         for ($i = 0; $i < count($a_pc); $i++) {
+            if($a_pc[$i]['mapc'] == 'pctnn'){
+                $m_cb['pctnn'] = 0;
+                $m_cb['st_pctnn'] = 0;
+                continue;
+            }
+
             $mapc = $a_pc[$i]['mapc'];
             $mapc_st = 'st_'.$mapc;
             $m_cb[$mapc] = ($m_cb[$mapc] - $m_cb_cu[$mapc]) * $thang;
             $m_cb[$mapc_st] = ($m_cb[$mapc_st] - $m_cb_cu[$mapc_st]) * $thang;
+            $m_cb['tonghs'] += $m_cb[$mapc];
+            $m_cb['luongtn'] += $m_cb[$mapc_st];
+
+            if ($a_pc[$i]['baohiem'] == 1) {
+                $stbhxh_dv += round($m_cb['bhxh_dv'] * $m_cb[$mapc_st], 0);
+                $stbhyt_dv += round($m_cb['bhyt_dv'] * $m_cb[$mapc_st], 0);
+                $stkpcd_dv += round($m_cb['kpcd_dv'] * $m_cb[$mapc_st], 0);
+                $stbhtn_dv += round($m_cb['bhtn_dv'] * $m_cb[$mapc_st], 0);
+            }
         }
 
-        $m_cb['tonghs'] = ($m_cb['tonghs'] - $m_cb_cu['tonghs']) * $thang;
-        $m_cb['luongtn'] = ($m_cb['luongtn'] - $m_cb_cu['luongtn']) * $thang;
-
-        $m_cb['stbhxh_dv'] = ($m_cb['stbhxh_dv'] - $m_cb_cu['stbhxh_dv']) * $thang;
-        $m_cb['stbhyt_dv'] = ($m_cb['stbhyt_dv'] - $m_cb_cu['stbhyt_dv']) * $thang;
-        $m_cb['stkpcd_dv'] = ($m_cb['stkpcd_dv'] - $m_cb_cu['stkpcd_dv']) * $thang;
-        $m_cb['stbhtn_dv'] = ($m_cb['stbhtn_dv'] - $m_cb_cu['stbhtn_dv']) * $thang;
-        $m_cb['ttbh_dv'] = ($m_cb['ttbh_dv'] - $m_cb_cu['ttbh_dv']) * $thang;
+        $m_cb['stbhxh_dv'] = $stbhxh_dv;
+        $m_cb['stbhyt_dv'] = $stbhyt_dv;
+        $m_cb['stkpcd_dv'] = $stkpcd_dv;
+        $m_cb['stbhtn_dv'] = $stbhtn_dv;
+        $m_cb['ttbh_dv'] = $stbhxh_dv + $stbhyt_dv + $stkpcd_dv + $stbhtn_dv;
         return $m_cb;
     }
 
+    //chỉ tính nâng thâm niên nghề
     public function getSubNangLuong($a_pc, $m_cb, $m_cb_cu)
     {
         for ($i = 0; $i < count($a_pc); $i++) {
-            $mapc = $a_pc[$i]['mapc'];
-            $mapc_st = 'st_'.$mapc;
-            $m_cb[$mapc] = $m_cb[$mapc] - $m_cb_cu[$mapc];
-            $m_cb[$mapc_st] = $m_cb[$mapc_st] - $m_cb_cu[$mapc_st];
+            if($a_pc[$i]['mapc'] == 'pctnn'){
+                $m_cb['pctnn'] = $m_cb['pctnn'] - $m_cb_cu['pctnn'];
+                $m_cb['st_pctnn'] = $m_cb['st_pctnn'] - $m_cb_cu['st_pctnn'];
+            }else{
+                $mapc = $a_pc[$i]['mapc'];
+                $mapc_st = 'st_'.$mapc;
+                $m_cb[$mapc] = 0;
+                $m_cb[$mapc_st] = 0;
+            }
         }
-
-        $m_cb['tonghs'] = $m_cb['tonghs'] - $m_cb_cu['tonghs'];
-        $m_cb['luongtn'] = $m_cb['luongtn'] - $m_cb_cu['luongtn'];
-
-        $m_cb['stbhxh_dv'] = $m_cb['stbhxh_dv'] - $m_cb_cu['stbhxh_dv'];
-        $m_cb['stbhyt_dv'] = $m_cb['stbhyt_dv'] - $m_cb_cu['stbhyt_dv'];
-        $m_cb['stkpcd_dv'] = $m_cb['stkpcd_dv'] - $m_cb_cu['stkpcd_dv'];
-        $m_cb['stbhtn_dv'] = $m_cb['stbhtn_dv'] - $m_cb_cu['stbhtn_dv'];
-        $m_cb['ttbh_dv'] = $m_cb['ttbh_dv'] - $m_cb_cu['ttbh_dv'];
         return $m_cb;
     }
 
