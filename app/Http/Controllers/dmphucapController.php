@@ -76,7 +76,7 @@ class dmphucapController extends Controller
             $a_pl = getPhanLoaiPhuCap();
             $a_ct = getCongThucTinhPC();
             //$a_th = getColTongHop();
-            //dd($a_th);
+            dd($a_ct);
             foreach ($model as $ct) {
                 $ct->tenphanloai = isset($a_pl[$ct->phanloai]) ? $a_pl[$ct->phanloai] : '';
                 $congthuc = explode(',', $ct->congthuc);
@@ -176,7 +176,7 @@ class dmphucapController extends Controller
             $model = dmphucap_donvi::where('madv', session('admin')->madv)->orderby('stt')->get();
 
             $a_pl = getPhanLoaiPhuCap();
-            $a_ct = getCongThucTinhPC();
+            $a_ct = getCongThucTinhPC(false);
             $a_th = getColTongHop();
             foreach ($model as $ct) {
                 $ct->tenphanloai = isset($a_pl[$ct->phanloai]) ? $a_pl[$ct->phanloai] : '';
@@ -207,7 +207,7 @@ class dmphucapController extends Controller
 
             $inputs = $request->all();
             $a_pl = getPhanLoaiPhuCap();
-            $a_ct = getCongThucTinhPC();
+            $a_ct = getCongThucTinhPC(false);
             $model = dmphucap_donvi::where('mapc', $inputs['maso'])->where('madv', session('admin')->madv)->first();
             if(in_array($inputs['maso'],$a_lock)){
                 $a_pl =  array('0' => 'Hệ số','3' => 'Ẩn');

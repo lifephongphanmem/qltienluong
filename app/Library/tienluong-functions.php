@@ -1,4 +1,8 @@
 <?php
+
+use App\dmphucap;
+use App\dmphucap_donvi;
+
 /**
  * Created by PhpStorm.
  * User: MLC
@@ -461,16 +465,22 @@ function getPhanLoaiPhuCap(){
     return array('0' => 'Hệ số','1' => 'Số tiền','2' => 'Phần trăm','3' => 'Ẩn');
 }
 
-function getCongThucTinhPC(){
-    return array('heso' => 'Lương ngạch bậc',
-        'vuotkhung' => 'Thâm niên vượt khung',
-        'pccv' => 'Phụ cấp chức vụ',
-        'hesobl' => 'Hệ số bảo lưu',
-        'pcthni' => 'Phụ cấp thâm niên',
-        'pctn' => 'Phụ cấp trách nhiệm',
-        'pcudn' => 'Phụ cấp ưu đãi ngành',
-        'pctaicu' => 'Phụ cấp tái ứng củ',
+function getCongThucTinhPC($admin=true){
+    $a_pc = array('heso',
+        'vuotkhung',
+        'pccv',
+        'hesobl',
+        'pcthni',
+        'pctn',
+        'pcudn',
+        'pctaicu',
     );
+    if($admin){
+        return array_column(dmphucap::wherein('mapc', $a_pc)->get()->toarray(), 'form', 'mapc');
+    }else{
+        return array_column(dmphucap_donvi::where('madv', session('admin')->madv)->wherein('mapc', $a_pc)->get()->toarray(), 'form', 'mapc');
+    }
+
 }
 
 function getColPhuCap(){//xem bỏ đi vì có danh mục phụ cấp

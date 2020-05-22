@@ -112,8 +112,21 @@ class tonghopluong_donviController extends Controller
 
     function tonghop(Request $requests)
     {
+//        foreach($model as $cb){
+//            $cb->ttl_tn = $cb->ttl;
+//            $cb->ttl = $cb->ttl - $cb->giaml;
+//            if($cb->congtac == 'DAINGAY' || $cb->congtac == 'THAISAN' || $cb->congtac == 'KHONGLUONG'){
+//                $cb->tonghs = 0;
+//                foreach($a_phucap as $k=>$v) {
+//                    $cb->tonghs += $cb->$k;
+//                }
+//                $cb->ttl_tn = round($cb->tonghs * $luongcb, 0);
+//                $cb->giaml = $cb->ttl_tn - $cb->ttl;//in mức giảm lương
+//            }
+//        }
         if (Session::has('admin')) {
             $inputs = $requests->all();
+            //dd($inputs);
             $thang = $inputs['thang'];
             $nam = $inputs['nam'];
             $madv = session('admin')->madv;
@@ -155,14 +168,14 @@ class tonghopluong_donviController extends Controller
             //dd($a_ct);
 
             //$model_nguondm = nguonkinhphi_dinhmuc::where('madv',$madv)->get();
-            $a_nguondm = nguonkinhphi_dinhmuc_ct::join('nguonkinhphi_dinhmuc','nguonkinhphi_dinhmuc_ct.maso','nguonkinhphi_dinhmuc.maso')
-                ->where('nguonkinhphi_dinhmuc.madv',$madv)->get()->toarray();
+//            $a_nguondm = nguonkinhphi_dinhmuc_ct::join('nguonkinhphi_dinhmuc','nguonkinhphi_dinhmuc_ct.maso','nguonkinhphi_dinhmuc.maso')
+//                ->where('nguonkinhphi_dinhmuc.madv',$madv)->get()->toarray();
             //dd($a_nguondm);
             //$a_pc = dmphucap_donvi::where('madv', $madv)->wherein('mapc',getColTongHop())->get()->keyby('mapc')->toarray();
             $a_pc = getColTongHop();
             //$a_bh = array_column(dmphucap_thaisan::select('mapc')->where('madv', session('admin')->madv)->get()->toarray(), 'mapc');
-            $a_ts = array_column(dmphucap_donvi::where('madv', session('admin')->madv)
-                ->where('phanloai','<','3')->where('thaisan','1')->get()->toarray(), 'mapc');
+//            $a_ts = array_column(dmphucap_donvi::where('madv', session('admin')->madv)
+//                ->where('phanloai','<','3')->where('thaisan','1')->get()->toarray(), 'mapc');
 
             $a_data = array();
             $a_plct = getPLCTTongHop();
@@ -177,6 +190,7 @@ class tonghopluong_donviController extends Controller
                 if(!in_array($a_ct[$i]['mact'],$a_plct)){
                     continue;
                 }
+                //dd($a_ct[$i]);
                 $a_ct[$i]['macongtac'] = isset($a_congtac[$a_ct[$i]['mact']]) ? $a_congtac[$a_ct[$i]['mact']] : null;
                 $bangluong = $a_bangluong[$a_ct[$i]['mabl']];
                 //$a_ct[$i]['manguonkp'] = $bangluong['manguonkp'];
@@ -186,35 +200,39 @@ class tonghopluong_donviController extends Controller
                 $a_ct[$i]['mathdv'] = $mathdv;
                 //$a_nguon = array_column(a_getelement_equal($a_nguondm, array('manguonkp' => $a_ct[$i]['manguonkp'])), 'mapc');
                 $tonghs = $tongst = 0;
-                foreach ($a_pc as $mapc) {
-                    $mapc_st = 'st_' . $mapc;
-                    //kiểm tra nếu số tiền == 0 => hệ số = 0;
-                    //dung hàm abs() do truy thu => số tiền âm
-                    if(abs($a_ct[$i][$mapc_st]) > 0){
-                        $tongst += $a_ct[$i][$mapc_st];
-                        if(abs($a_ct[$i][$mapc_st]) > abs($a_ct[$i][$mapc])){//phụ cấp hưởng theo số tiền
-                            $tonghs += $a_ct[$i][$mapc];
+
+                if(isset($inputs['cb_ts']) && in_array($a_ct[$i]['congtac'], ['DAINGAY', 'THAISAN', 'KHONGLUONG'])){
+                    //cán bộ nghỉ thì tính lại ô st_ do khi tính lương ô st_ gán bằng 0
+                    //sau đó gán vào phần giảm trừ
+                    foreach ($a_pc as $mapc) {
+                        $mapc_st = 'st_' . $mapc;
+                        $tonghs += $a_ct[$i][$mapc];
+                        if($a_ct[$i][$mapc] > 0 && $a_ct[$i][$mapc_st] == 0){
+                            if($a_ct[$i][$mapc] < 1000){
+                                $a_ct[$i][$mapc_st] = round($a_ct[$i][$mapc] * $a_ct[$i]['luongcoban']);
+                            }else{
+                                $a_ct[$i][$mapc_st] = $a_ct[$i][$mapc];
+                            }
+                            $a_ct[$i]['giaml'] += $a_ct[$i][$mapc_st];
                         }
-                    }else{
-                        $a_ct[$i][$mapc] = 0;
+                        $tongst += $a_ct[$i][$mapc_st];
                     }
-                    /* cũ 17.09.2019
-                    if ($a_ct[$i]['congtac'] == 'THAISAN' && !in_array($mapc, $a_ts) ) {
-                        $a_ct[$i][$mapc] = 0;
-                        $a_ct[$i][$mapc_st] = 0;
+                }else{
+                    foreach ($a_pc as $mapc) {
+                        $mapc_st = 'st_' . $mapc;
+                        //kiểm tra nếu số tiền == 0 => hệ số = 0;
+                        //dung hàm abs() do truy thu => số tiền âm
+                        if(abs($a_ct[$i][$mapc_st]) > 0){
+                            $tongst += $a_ct[$i][$mapc_st];
+                            if(abs($a_ct[$i][$mapc_st]) > abs($a_ct[$i][$mapc])){//phụ cấp hưởng theo số tiền
+                                $tonghs += $a_ct[$i][$mapc];
+                            }
+                        }else{
+                            $a_ct[$i][$mapc] = 0;
+                        }
                     }
-
-                    if ($a_ct[$i]['congtac'] == 'KHONGLUONG') {
-                        $a_ct[$i][$mapc] = 0;
-                        $a_ct[$i][$mapc_st] = 0;
-                    }
-
-                    if (count($a_nguon)> 0 && !in_array($mapc, $a_nguon)) {
-                        $a_ct[$i][$mapc] = 0;
-                        $a_ct[$i][$mapc_st] = 0;
-                    }
-                    */
                 }
+
                 $a_ct[$i]['tonghs'] = $tonghs;
                 $a_ct[$i]['ttl'] = $tongst;
                 if($a_ct[$i]['congtac'] != 'TRUYLINH'){//bảng lương truy lĩnh có luowngcb trong chi tiết

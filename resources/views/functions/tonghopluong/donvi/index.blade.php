@@ -148,6 +148,13 @@
                             </div>
                         </div>
 
+                        <div class="row">
+                            <div class="col-md-offset-3 col-md-9" style="margin-top: 15px">
+                                <input name="cb_ts" id="cb_ts" type="checkbox">
+                                <label for="cb_ts">Tính đầy đủ lương cho các cán bộ nghỉ thai sản</label>
+                            </div>
+                        </div>
+
                         <hr>
 
                         <div class="row">
