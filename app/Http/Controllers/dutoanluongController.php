@@ -435,6 +435,14 @@ class dutoanluongController extends Controller
                 $a_goc = $m_cb_goc[$key];
                 $a_tt = $val;
 
+                //trường hợp nâng lương ngạch bậc trc tnn thì duyệt từ tháng nb đến trc tnn để công vào
+                if(isset($m_nb[$key]) && $m_nb[$key]['thang_nb'] < $val['thang_tnn']){
+                    for ($i = $m_nb[$key]['thang_nb']; $i < $val['thang_tnn']; $i++) {
+                        $a_tnn[] = $this->getSubNangLuong($a_pc, $m_nb[$key], $a_goc);
+                    }
+
+                }
+
                 for ($i = $val['thang_tnn']; $i <= 12; $i++) {
                     //chưa kiểm tra xem tháng này cán bộ nghỉ hưu ko
                     if (isset($m_nb[$key]) && $m_nb[$key]['thang_nb'] > $val['thang_tnn']

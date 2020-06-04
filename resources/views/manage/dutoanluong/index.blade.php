@@ -425,11 +425,11 @@
         function confirm_create() {
             if ($('#namdt').val() == 0 || $('#namdt').val() == '') {
                 toastr.error('Năm dự toán không được bỏ trống.', 'Lỗi!');
-                $("form").submit(function (e) {
+                $("#create_dutoan").submit(function (e) {
                     e.preventDefault();
                 });
             } else {
-                $("form").unbind('submit').submit();
+                $("#create_dutoan").unbind('submit').submit();
             }
         }
 

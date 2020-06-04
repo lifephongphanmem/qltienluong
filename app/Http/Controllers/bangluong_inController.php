@@ -911,7 +911,10 @@ class bangluong_inController extends Controller
                         $ct->hocbong = 0;
                         $ct->chenhlech = -$ct->luongtn;
                         $ct->ttl = 0;
-                        $model->add($ct);
+                        //do có trường hợp tạo bảng lương xong xóa cán bộ đi nhập lại giống hệt
+                        if($model->where('tencanbo', $ct->macanbo)->where('mact', $ct->mact)->first() != null){
+                            $model->add($ct);
+                        }
                     }
                     //kiểm tra cán bộ có dc trả lương vào tháng hiện tại ko
                     //nếu ko thì để số tiền = 0 và chênh lệch = - ttl
