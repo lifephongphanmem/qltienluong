@@ -263,6 +263,16 @@
                                 <div class="row">
                                     <div class="col-md-6">
                                         <div class="form-group">
+                                            <button type="button" style="border-width: 0px" onclick="inblmtt107_m2('/chuc_nang/bang_luong/mautt107_m5')" class="btn btn-default btn-xs mbs"
+                                                    title="Bảng lương theo TT107/2017/TT-BTC - làm tròn số tiền thực nhận" data-target="#mautt107_m2-modal" data-toggle="modal">
+                                                <i class="fa fa-print"></i>&nbsp; Bảng lương mẫu C02-HD (làm tròn số tiền thực nhận)</button>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-group">
                                             <button type="button" style="border-width: 0px" onclick="inblm1('/chuc_nang/bang_luong/mau05')" class="btn btn-default btn-xs mbs"
                                                     title="Bảng lương của cán bộ thiết kế theo mẫu đặc thù" data-target="#mau1-modal" data-toggle="modal">
                                                 <i class="fa fa-print"></i>&nbsp; Bảng lương mẫu Cao Bằng</button>

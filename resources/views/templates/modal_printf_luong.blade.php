@@ -148,6 +148,81 @@
 </div>
 {!! Form::close() !!}
 
+<!--Mẫu TT107 -->
+{!! Form::open(['url'=>(isset($furl)?$furl : '').'mautt107','method'=>'post' ,'target'=>'_blank', 'files'=>true, 'id' => 'printf_mautt107_m2']) !!}
+<div id="mautt107_m2-modal" tabindex="-1" role="dialog" aria-hidden="true" class="modal fade">
+    <div class="modal-dialog modal-content">
+        <div class="modal-header modal-header-primary">
+            <button type="button" data-dismiss="modal" aria-hidden="true" class="close">&times;</button>
+            <h4 id="header-inbl" class="modal-title">In bảng lương</h4>
+        </div>
+        <div class="modal-body">
+            <div class="form-horizontal">
+                <div class="row">
+                    <div class="col-md-12">
+                        <label class="control-label">Khối/Tổ công tác</label>
+                        <select name="mapb" id="mapb" class="form-control select2me">
+                            @foreach(getPhongBan(true) as $key=>$val)
+                                <option value="{{$key}}">{{$val}}</option>
+                            @endforeach
+                        </select>
+                    </div>
+
+                    <div class="col-md-12">
+                        <label class="control-label">Chức vụ</label>
+                        {!!Form::select('macvcq',getChucVuCQ(true), null, array('id' => 'macvcq','class' => 'form-control select2me'))!!}
+                    </div>
+
+                    <div class="col-md-12">
+                        <label class="control-label">Phân loại công tác</label>
+                        <select class="form-control select2me" name="mact" id="mact">
+                            <option value="">-- Tất cả các phân loại công tác --</option>
+                            @foreach($model_nhomct as $kieuct)
+                                <optgroup label="{{$kieuct->tencongtac}}">
+                                    <?php $mode_ct=$model_tenct->where('macongtac',$kieuct->macongtac); ?>
+                                    @foreach($mode_ct as $ct)
+                                        <option value="{{$ct->mact}}">{{$ct->tenct}}</option>
+                                    @endforeach
+                                </optgroup>
+                            @endforeach
+                        </select>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label class="control-label">Làm tròn số tiền thực nhận</label>
+                        {!!Form::select('lamtron',['0'=>'0','-1'=>'1','-2'=>'2','-3'=>'3',], '-2', array('id' => 'lamtron','class' => 'form-control select2me'))!!}
+                    </div>
+
+                    <div class="col-md-6">
+                        <label class="control-label">Cỡ chữ</label>
+                        {!!Form::select('cochu',getCoChu(), 10, array('id' => 'cochu','class' => 'form-control select2me'))!!}
+                    </div>
+
+                    <input type="hidden" id="mabl" name="mabl"/>
+                </div>
+                <div class="row">
+                    <div class="col-md-offset-3 col-md-9" style="margin-top: 15px">
+                        <input name="innoidung" id="innoidung" type="checkbox">
+                        <label for="innoidung">Tiều đề bảng lương là nội dung bảng lương</label>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-offset-3 col-md-9">
+                        <input name="inchucvuvt" id="inchucvuvt" type="checkbox">
+                        <label>In chức vụ/chức danh viết tắt</label>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button type="button" data-dismiss="modal" class="btn btn-default">Hủy thao tác</button>
+            <button type="submit" class="btn btn-primary" onclick="ClickBCtt107_m2_excel()" id="btn_xls">Xuất Excel</button>
+            <button type="submit" class="btn btn-success">Đồng ý</button>
+        </div>
+    </div>
+</div>
+{!! Form::close() !!}
+
 <!--Mẫu 6 -->
 {!! Form::open(['url'=>(isset($furl)?$furl : '').'mau06','method'=>'post' ,'target'=>'_blank', 'files'=>true, 'id' => 'printf_mau6']) !!}
 <div id="mau6-modal" tabindex="-1" role="dialog" aria-hidden="true" class="modal fade">
@@ -283,7 +358,7 @@
 </div>
 {!! Form::close() !!}
 
-<!--Mẫu TT107 -->
+<!--Mẫu TT107 truy lĩnh -->
 {!! Form::open(['url'=>(isset($furl)?$furl : '').'mautt107','method'=>'post' ,'target'=>'_blank', 'files'=>true, 'id' => 'printf_mautt107_tl']) !!}
 <div id="mautt107-modal-tl" tabindex="-1" role="dialog" aria-hidden="true" class="modal fade">
     <div class="modal-dialog modal-content">
@@ -392,6 +467,18 @@
         $('#printf_mautt107').attr('action',url);
         $('#printf_mautt107').find("[id^='mabl']").val($('#mabl_in').val());
         var btn_xls = $('#printf_mautt107').find("[id^='btn_xls']");
+        btn_xls.removeClass('hidden');
+        if(!exl){
+            btn_xls.addClass('hidden');
+        }
+    }
+
+    function inblmtt107_m2(url, exl = false){
+        //$('#printf_mautt107').find("[id^='macvcq']").attr('disabled',false);
+        //$('#printf_mautt107').find("[id^='mact']").attr('disabled',false);
+        $('#printf_mautt107_m2').attr('action',url);
+        $('#printf_mautt107_m2').find("[id^='mabl']").val($('#mabl_in').val());
+        var btn_xls = $('#printf_mautt107_m2').find("[id^='btn_xls']");
         btn_xls.removeClass('hidden');
         if(!exl){
             btn_xls.addClass('hidden');
