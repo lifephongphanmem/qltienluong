@@ -661,7 +661,7 @@ class bangluongController extends Controller
                     $cb->stbhxh_dv = $cb->stbhyt_dv = $cb->stkpcd_dv = $cb->stbhtn_dv = $cb->ttbh_dv = 0;
                 }
                 //dd($tiencong);
-                $cb->giaml = $cb_nghi['songaynghi'] >= $ngaycong ? $sotiencong : round($tiencong * $cb_nghi['songaynghi'], 0);
+                $cb->giaml = $cb_nghi['songaynghi'] >= $ngaycong ? round($sotiencong) : round($tiencong * $cb_nghi['songaynghi'], 0);
             }
 
             if ($duongsuc) {
@@ -678,7 +678,7 @@ class bangluongController extends Controller
                     $cb->stbhxh = $cb->stbhyt = $cb->stkpcd = $cb->stbhtn = $cb->ttbh = 0;
                     $cb->stbhxh_dv = $cb->stbhyt_dv = $cb->stkpcd_dv = $cb->stbhtn_dv = $cb->ttbh_dv = 0;
                 }
-                $cb->giaml = $cb_nghi['songaynghi'] >= $ngaycong ? $sotiencong : round($tiencong * $cb_nghi['songaynghi'], 0);
+                $cb->giaml = $cb_nghi['songaynghi'] >= $ngaycong ? round($sotiencong) : round($tiencong * $cb_nghi['songaynghi'], 0);
             }
             tinhluong:
             $cb->tonghs = $tonghs;
@@ -1256,7 +1256,7 @@ class bangluongController extends Controller
                     $m_cb[$key]['ttbh'] = $m_cb[$key]['ttbh_dv'] = 0;
                 }
                 //dd($tiencong);
-                $m_cb[$key]['giaml'] = $cb_nghi['songaynghi'] >= $ngaycong ? $sotiencong : round($tiencong * $cb_nghi['songaynghi'], 0);
+                $m_cb[$key]['giaml'] = $cb_nghi['songaynghi'] >= $ngaycong ? round($sotiencong) : round($tiencong * $cb_nghi['songaynghi'], 0);
             }
 
             if ($duongsuc) {
@@ -1279,7 +1279,7 @@ class bangluongController extends Controller
                     $m_cb[$key]['stbhxh_dv'] = $m_cb[$key]['stbhyt_dv'] = $m_cb[$key]['stkpcd_dv'] = $m_cb[$key]['stbhtn_dv'] = 0;
                     $m_cb[$key]['ttbh'] = $m_cb[$key]['ttbh_dv'] = 0;
                 }
-                $m_cb[$key]['giaml'] = $cb_nghi['songaynghi'] >= $ngaycong ? $sotiencong : ($tiencong * $cb_nghi['songaynghi']);
+                $m_cb[$key]['giaml'] = $cb_nghi['songaynghi'] >= $ngaycong ? round($sotiencong) : ($tiencong * $cb_nghi['songaynghi']);
             }
 
             tinhluong:
