@@ -870,7 +870,7 @@ class bangluongController extends Controller
 
         $a_duongsuc = $m_nghi->where('maphanloai', 'DUONGSUC')->keyBy('macanbo')->toarray();
         $a_nghiphep = $m_nghi->wherein('maphanloai', ['NGHIPHEP', 'NGHIOM'])->keyBy('macanbo')->toarray();
-
+        //dd($a_nghiphep);
         /*
        $a_duongsuc = hosotamngungtheodoi::select('songaycong','songaynghi','macanbo')
            ->where('madv', $inputs['madv'])->where('maphanloai','DUONGSUC')
@@ -1236,18 +1236,20 @@ class bangluongController extends Controller
 
             if ($nghi) {
                 $cb_nghi = $a_nghiphep[$m_cb[$key]['macanbo']];
-                //dd($cb_nghi);songaycong
+                //dd($cb_nghi);
                 //$ngaycong = $cb_nghi['songaycong'] > 0 ? $cb_nghi['songaycong'] : $ngaycong;
                 $ngaynghi = $cb_nghi['songaynghi'] > 0 ? $cb_nghi['songaynghi'] : 0;
                 $ngaycong = $cb_nghi['songaycong'] > 0 ? $cb_nghi['songaycong'] : 1;
                 $m_cb[$key]['songaytruc'] = $ngaynghi;
                 $m_cb[$key]['songaycong'] = $ngaycong;
                 //$m_cb[$key]['congtac'] = 'NGHIPHEP';
-                $heso_no = 0;
+                $sotiencong = 0;
+
                 foreach ($a_no as $no) {
-                    $heso_no += $m_cb[$key][$no];
+                    $ma = 'st_'.$no;
+                    $sotiencong += $m_cb[$key][$ma];
                 }
-                $sotiencong = $inputs['luongcoban'] * $heso_no;
+                //$sotiencong = $inputs['luongcoban'] * $heso_no;
                 $tiencong = $sotiencong / $ngaycong;
 
                 if ($cb_nghi['songaynghi'] >= 15) {//nghỉ quá 15 ngày thì ko đóng bảo hiểm
@@ -1267,11 +1269,11 @@ class bangluongController extends Controller
                 $m_cb[$key]['songaytruc'] = $ngaynghi;
                 $m_cb[$key]['songaycong'] = $ngaycong;
                 //$m_cb[$key]['congtac'] = 'DUONGSUC';
-                $heso_no = 0;
                 foreach ($a_no as $no) {
-                    $heso_no += $m_cb[$key][$no];
+                    $ma = 'st_'.$no;
+                    $sotiencong += $m_cb[$key][$ma];
                 }
-                $sotiencong = $inputs['luongcoban'] * $heso_no;
+                //$sotiencong = $inputs['luongcoban'] * $heso_no;
                 $tiencong = round($sotiencong / $ngaycong, 0);
 
                 if ($cb_nghi['songaynghi'] >= 15) {//nghỉ quá 15 ngày thì ko đóng bảo hiểm
