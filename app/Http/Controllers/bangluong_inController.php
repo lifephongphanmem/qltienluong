@@ -31,7 +31,8 @@ class bangluong_inController extends Controller
             $inputs = $request->all();
             //dd($inputs);
             $inputs['madv'] = session('admin')->madv;
-            list($a_canbo, $a_pc) = $this->getData($inputs);
+            list($m_canbo, $a_pc) = $this->getData($inputs);
+            $a_canbo = $m_canbo->toarray();
             //dd($a_canbo);
             $m_dv = dmdonvi::where('madv',$inputs['madv'])->first();
 
@@ -133,7 +134,8 @@ class bangluong_inController extends Controller
         if (Session::has('admin')) {
             $inputs = $request->all();
             $inputs['madv'] = session('admin')->madv;
-            list($a_canbo, $a_pc) = $this->getData($inputs);
+            list($m_canbo, $a_pc) = $this->getData($inputs);
+            $a_canbo = $m_canbo->toarray();
 
             $m_dv = dmdonvi::where('madv',$inputs['madv'])->first();
             $m_bl = bangluong::select('thang', 'nam', 'mabl', 'madv', 'ngaylap')
@@ -178,7 +180,8 @@ class bangluong_inController extends Controller
         if (Session::has('admin')) {
             $inputs = $request->all();
             $inputs['madv'] = session('admin')->madv;
-            list($a_canbo, $a_pc) = $this->getData($inputs);
+            list($m_canbo, $a_pc) = $this->getData($inputs);
+            $a_canbo = $m_canbo->toarray();
 
             $m_dv = dmdonvi::where('madv',$inputs['madv'])->first();
             $m_bl = bangluong::select('thang', 'nam', 'mabl', 'madv', 'ngaylap')
@@ -221,7 +224,8 @@ class bangluong_inController extends Controller
         if (Session::has('admin')) {
             $inputs = $request->all();
             $inputs['madv'] = session('admin')->madv;
-            list($a_canbo, $a_pc) = $this->getData($inputs);
+            list($m_canbo, $a_pc) = $this->getData($inputs);
+            $a_canbo = $m_canbo->toarray();
 
             $m_dv = dmdonvi::where('madv',$inputs['madv'])->first();
             $m_bl = bangluong::select('thang', 'nam', 'mabl', 'madv', 'ngaylap')
@@ -265,7 +269,8 @@ class bangluong_inController extends Controller
         if (Session::has('admin')) {
             $inputs = $request->all();
             $inputs['madv'] = session('admin')->madv;
-            list($a_canbo, $a_pc) = $this->getData($inputs);
+            list($m_canbo, $a_pc) = $this->getData($inputs);
+            $a_canbo = $m_canbo->toarray();
 
             $m_dv = dmdonvi::where('madv',$inputs['madv'])->first();
             $m_bl = bangluong::select('thang', 'nam', 'mabl', 'madv', 'ngaylap')
@@ -300,6 +305,135 @@ class bangluong_inController extends Controller
                 ->with('a_congtac',a_unique(a_split($a_canbo,array('mact'))))
                 ->with('a_phucap',$a_phucap)
                 ->with('pageTitle','Bảng lương chi tiết');
+        } else
+            return view('errors.notlogin');
+    }
+
+    public function printf_mau09nd11_th(Request $request)
+    {
+        if (Session::has('admin')) {
+            $inputs = $request->all();
+            $inputs['madv'] = session('admin')->madv;
+            //Lấy thông tin bảng lương đầu tiên để gán lên báo cáo
+            $m_bl = bangluong::select('thang', 'nam', 'mabl', 'madv', 'ngaylap')
+                ->where('thang',$inputs['thang_th'])
+                ->where('nam',$inputs['nam_th'])
+                ->where('madv',$inputs['madv'])
+                ->where('phanloai', 'BANGLUONG')->first();
+
+            $thongtin = array('nguoilap'=>$m_bl->nguoilap,
+                'thang'=>$m_bl->thang,
+                'nam'=>$m_bl->nam,
+                'ngaylap'=>$m_bl->ngaylap,
+                'cochu'=>$inputs['cochu']);
+
+            $m_dv = dmdonvi::where('madv', $m_bl->madv)->first();
+            $m_dv->tendvcq = getTenDB($m_dv->madvbc);
+            //
+            list($m_canbo, $a_pc) = $this->getData($inputs);
+
+            if ($inputs['thang_th'] == '01') {
+                $inputs['thang_th'] = '12';
+                $inputs['nam_th'] = str_pad($inputs['nam_th'] - 1, 4, '0', STR_PAD_LEFT);
+            } else {
+                $inputs['thang_th'] = str_pad($inputs['thang_th'] - 1, 2, '0', STR_PAD_LEFT);
+            }
+            list($m_canbo_trc, $a_pc_trc) = $this->getData($inputs);
+            //dd($m_canbo_trc);
+
+            $a_luong = ['heso', 'vuotkhung', 'pccv', 'pckv', 'pcth', 'pclade', 'pcdh', 'pcdbqh', 'pcudn', 'pcdbn',
+                'pcud61', 'pctnn', 'pcthni', 'pclt', 'pcdang', 'pccovu', 'pcct', 'pctn', 'pckn', 'pcdd'];
+            $a_hopdong = ['luonghd'];
+            $a_tangthem = [];
+            $a_tienthuong = [];
+            $a_phucap = ['pck'];
+            $a_khoan = ['pcctp', 'pcxaxe', 'pcdith'];
+            $a_hocbong = [];
+            $m_congtac_hd = dmphanloaict::where('macongtac','HOPDONG')->orwhere('tenct','like','Hợp đồng%')->get();
+            $a_congtac_hd = array_column($m_congtac_hd->toarray(),'mact');
+//            dd($a_congtac_luong);
+
+                foreach ($m_canbo_trc as $ct) {//trường hợp giảm lương
+                    $canbo = $m_canbo->where('macanbo', $ct->macanbo)->where('mact', $ct->mact)->first();
+                    if($canbo == null){
+                        $ct->tongso = 0;
+                        $ct->luong = 0;
+                        $ct->hopdong = 0;
+                        $ct->tangthem = 0;
+                        $ct->tienthuong = 0;
+                        $ct->phucap = 0;
+                        $ct->khoan = 0;
+                        $ct->hocbong = 0;
+                        $ct->chenhlech = -$ct->luongtn;
+                        $ct->ttl = 0;
+                        //do có trường hợp tạo bảng lương xong xóa cán bộ đi nhập lại giống hệt
+                        if($m_canbo->where('tencanbo', $ct->macanbo)->where('mact', $ct->mact)->first() != null){
+                            $m_canbo->add($ct);
+                        }
+                    }
+
+                }
+
+            foreach ($m_canbo as $ct) {//trường hợp giảm lương
+                if($ct->ttl <= 0){
+                    continue;
+                }
+                $ct->tongso = $ct->luongtn;
+                $ct->luong = 0;
+                foreach ($a_luong as $pc) {
+                    $st = 'st_' . $pc;
+                    $ct->luong += $ct->$st;
+                }
+                if($ct->luong > 0){//trừ bảo hiểm
+                    $ct->luong -= ($ct->ttbh + $ct->giaml + $ct->thuetn);
+                }
+
+                $ct->hopdong = 0;
+                foreach ($a_hopdong as $pc) {
+                    $st = 'st_' . $pc;
+                    $ct->hopdong += $ct->$st;
+                }
+                if($ct->hopdong > 0){//trừ bảo hiểm
+                    $ct->hopdong -= ($ct->ttbh + $ct->giaml + $ct->thuetn);
+                }
+
+                $ct->tangthem = 0;
+                $ct->tienthuong = 0;
+                $ct->phucap = 0;
+                foreach ($a_phucap as $pc) {
+                    $st = 'st_' . $pc;
+                    $ct->phucap += $ct->$st;
+                }
+                $ct->khoan = 0;
+                foreach ($a_khoan as $pc) {
+                    $st = 'st_' . $pc;
+                    $ct->khoan += $ct->$st;
+                }
+                $ct->hocbong = 0;
+                $ct->chenhlech = 0;
+                //nếu trong nhóm hợp đồng thì chuyển luong sang hopdong
+                if(in_array($ct->mact,$a_congtac_hd)){
+                    $ct->hopdong += $ct->luong;
+                    $ct->luong = 0;
+                }
+                if($m_canbo_trc != null){
+                    $ct->chenhlech = $ct->luongtn;
+                    $canbo = $m_canbo_trc->where('macanbo', $ct->macanbo)->where('mact', $ct->mact)->first();
+                    if (count($canbo) > 0) {
+                        $ct->chenhlech = $ct->luongtn - $canbo->luongtn;
+                    }
+                }
+            }
+            $model_congtac = dmphanloaict::select('mact', 'tenct', 'macongtac')
+                ->wherein('mact', a_unique(array_column($m_canbo->toarray(), 'mact')))->get();
+
+            return view('reports.bangluong.tonghopbangluong.mau09nd11')
+                ->with('model', $m_canbo->sortBy('stt'))
+                ->with('m_dv', $m_dv)
+                ->with('model_congtac', $model_congtac)
+                ->with('thongtin',$thongtin)
+                ->with('pageTitle', 'Danh sách cán bộ tăng lương');
+
         } else
             return view('errors.notlogin');
     }
@@ -1622,7 +1756,8 @@ class bangluong_inController extends Controller
                 $cb->ttbh_dv += $m_canbo_tl->sum('ttbh_dv');
             }
         }
-        return array($model_canbo->toarray(), $a_pc);
+        return array($model_canbo, $a_pc);
+        //return array($model_canbo->toarray(), $a_pc);
     }
 
     function getBangLuong($inputs)

@@ -410,6 +410,14 @@
             <div class="row">
                 <div class="col-md-6">
                     <div class="form-group">
+                        <button type="button" style="border-width: 0px" class="btn btn-default btn-xs mbs" onclick="inblmnd11_th('/chuc_nang/bang_luong/mau09nd11_th')"
+                                data-toggle="modal" data-target="#mautt107_th-modal">
+                            <i class="fa fa-print"></i>&nbsp;Bảng thanh toán cho đối tượng thụ hưởng (NĐ11/2020/NĐ-CP)</button>
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <div class="form-group">
                         <button type="button" style="border-width: 0px" class="btn btn-default btn-xs mbs" onclick="inblmtt107_th('/chuc_nang/bang_luong/mautt107_th')"
                                 data-toggle="modal" data-target="#mautt107_th-modal"
                                 title="Bảng lương của cán bộ theo mẫu C02-HD">
@@ -426,9 +434,7 @@
                             <i class="fa fa-print"></i>&nbsp; Bảng lương mẫu C02-HD (TT107) - Mẫu 02</button>
                     </div>
                 </div>
-            </div>
 
-            <div class="row">
                 <div class="col-md-6">
                     <div class="form-group">
                         <button type="button" style="border-width: 0px" class="btn btn-default btn-xs mbs"

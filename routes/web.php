@@ -622,6 +622,7 @@ Route::group(['prefix'=>'chuc_nang'],function(){
         Route::post('mau07_th','bangluong_inController@printf_mau07_th');
         Route::post('mauds_th','bangluong_inController@printf_mauds_th');
         Route::post('maubh_th','bangluong_inController@printf_maubh_th');
+        Route::post('mau09nd11_th','bangluong_inController@printf_mau09nd11_th');
 
         Route::post('mau01_excel','bangluongController@printf_mau01_excel');
         Route::post('mautt107_excel','bangluongController@printf_mautt107_excel');

@@ -59,21 +59,22 @@
                     </div>
                 </div>
                 <div class="portlet-body form-horizontal">
-                    <div class="row">
-                        <div class="form-group">
-                            <label class="control-label col-md-offset-2 col-md-1" style="text-align: right">Tháng </label>
-                            <div class="col-md-2">
-                                {!! Form::select('thangct',getThang(),$inputs['thang'],array('id' => 'thangct', 'class' => 'form-control'))!!}
-                            </div>
-                            <label class="control-label col-md-1" style="text-align: right">Năm </label>
-                            <div class="col-md-2">
-                                {!! Form::select('namct',getNam(),$inputs['nam'], array('id' => 'namct', 'class' => 'form-control'))!!}
-                            </div>
-                            <div class="col-md-3 text-right">
+                    <div class="row" style="padding-bottom: 6px;">
+                        <div class="col-md-3 col-md-offset-3">
+                            <label class="control-label">Tháng </label>
+                            {!! Form::select('thangct',getThang(),$inputs['thang'],array('id' => 'thangct', 'class' => 'form-control'))!!}
+                        </div>
+
+                        <div class="col-md-3">
+                            <label class="control-label">Năm </label>
+                            {!! Form::select('namct',getNam(),$inputs['nam'], array('id' => 'namct', 'class' => 'form-control'))!!}
+                        </div>
+
+                        <div class="col-md-3 text-right">
                             <button type="button" onclick="inbl_th('{{$inputs['thang']}}','{{$inputs['nam']}}')" class="btn btn-default mbs">
                                 <i class="fa fa-print"></i>&nbsp; In tổng hợp</button>
-                            </div>
                         </div>
+
                     </div>
 
                     <table id="sample_3" class="table table-hover table-striped table-bordered" style="min-height: 230px">

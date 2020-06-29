@@ -279,11 +279,7 @@
             <div class="portlet light ">
                 <div class="portlet-title">
                     <div class="caption caption-md">
-                        <i class="icon-bar-chart theme-font-color hide"></i>
                         <span class="caption-subject theme-font-color bold uppercase">cán bộ nâng lương ngạch bậc</span>
-                    </div>
-                    <div class="actions">
-
                     </div>
                 </div>
                 <?php $i=1;?>
