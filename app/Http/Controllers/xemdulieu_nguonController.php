@@ -126,7 +126,7 @@ class xemdulieu_nguonController extends Controller
                             ->get();
                     })
                     ->get();
-                $model_nguon = nguonkinhphi_huyen::where('trangthai','DAGUI')
+                $model_nguon = nguonkinhphi::where('trangthai','DAGUI')
                     ->where('macqcq',$madv)
                     ->wherein('madv', function($query) use($madv){
                         $query->select('madv')->from('dmdonvi')->where('macqcq',$madv)->where('madv','<>',$madv)->get();
@@ -140,14 +140,14 @@ class xemdulieu_nguonController extends Controller
             foreach($model_donvi as $dv){
                 //kiểm tra xem đã tổng hợp thành dữ liệu huyện gửi lên tỉnh chưa?
                 $nguon_khoi = $model_nguon_khoi->where('sohieu',$inputs['sohieu'])->first();
-                if(count($nguon_khoi)>0 && $nguon_khoi->trangthai == 'DAGUI'){
+                if(isset($nguon_khoi) && $nguon_khoi->trangthai == 'DAGUI'){
                     $dv->tralai = false;
                 }else{
                     $dv->tralai = true;
                 }
 
                 $nguon = $model_nguon->where('sohieu',$inputs['sohieu'])->where('madv',$dv->madv)->first();
-                if(count($nguon)> 0 && $nguon->trangthai == 'DAGUI'){
+                if(isset($nguon) && $nguon->trangthai == 'DAGUI'){
                     $dv->masodv = $nguon->masodv;
                     $dv->trangthai = 'DAGUI';
                 }else{
