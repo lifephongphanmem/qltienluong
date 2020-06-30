@@ -27,7 +27,7 @@ class tonghopnguon_huyenController extends Controller
             $madv = session('admin')->madv;
             //$model_nguon = nguonkinhphi::where('macqcq', $madv)->where('trangthai','DAGUI')->get();
             $model_nguon_tinh = nguonkinhphi_tinh::where('madv', $madv)->get();
-            $model_nguon = nguonkinhphi_huyen::wherein('madv', function($query) use($madv){
+            $model_nguon = nguonkinhphi::wherein('madv', function($query) use($madv){
                 $query->select('madv')->from('dmdonvi')->where('macqcq',$madv)->where('madv','<>',$madv)->get();
             })->where('trangthai', 'DAGUI')
                 ->get();
@@ -42,7 +42,7 @@ class tonghopnguon_huyenController extends Controller
             $soluong = $model_donvi->count();
             foreach($model as $dv){
                 $nguon_huyen = $model_nguon_tinh->where('sohieu', $dv->sohieu)->first();
-                if(count($nguon_huyen)>0){
+                if(isset($nguon_huyen)){
                     //Đã tổng hợp dữ liệu
                     $dv->sldv = $soluong . '/' . $soluong;
                     $dv->masodv = $nguon_huyen->masodv;
