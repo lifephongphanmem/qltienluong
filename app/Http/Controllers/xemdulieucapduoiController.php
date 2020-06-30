@@ -323,7 +323,7 @@ class xemdulieucapduoiController extends Controller
             $model_nguon_tinh = tonghopluong_tinh::where('madv', $madv)->where('thang', $inputs['thang'])
                 ->where('nam', $inputs['nam'])->first();
             //kiểm tra xem đã tổng hợp thành dữ liệu huyện gửi lên tỉnh chưa?
-            if(count($model_nguon_tinh)>0 && $model_nguon_tinh->trangthai == 'DAGUI'){
+            if(isset($model_nguon_tinh) && $model_nguon_tinh->trangthai == 'DAGUI'){
                 $tralai = false;
             }else{
                 $tralai = true;
@@ -334,7 +334,7 @@ class xemdulieucapduoiController extends Controller
                 $nguon = $model_nguon->where('madv',$dv->madv)->first();
                 if(session('admin')->phamvitonghop == 'KHOI')
                     $nguonkhoi = $model_nguonkhoi->where('madv',$dv->madv)->first();
-                if(count($nguon)> 0 && $nguon->trangthai == 'DAGUI' && session('admin')->phamvitonghop == 'HUYEN' ) {
+                if(isset($nguon) && $nguon->trangthai == 'DAGUI' && session('admin')->phamvitonghop == 'HUYEN' ) {
                     $dv->mathdv = $nguon->mathdv;
                     $dv->mathh = $nguon->mathdv;
                     $dv->trangthai = 'DAGUI';
@@ -343,7 +343,7 @@ class xemdulieucapduoiController extends Controller
                     //if($this->linhvuc($dv->mathdv) == "")
                     //  $dv->linhvuchoatdong = $this->linhvuc($nguon->mathdv);
                 }elseif(session('admin')->phamvitonghop == 'KHOI') {
-                    if ((count($nguon) > 0 && $nguon->trangthai == 'DAGUI') || (count($nguonkhoi) > 0 && $nguonkhoi->trangthai == 'DAGUI')) {
+                    if ((isset($nguon) && $nguon->trangthai == 'DAGUI') || (isset($nguonkhoi) && $nguonkhoi->trangthai == 'DAGUI')) {
                         $dv->mathdv = $nguon->mathdv;
                         $dv->trangthai = 'DAGUI';
                         $dv->thang = $nguonkhoi->thang;
