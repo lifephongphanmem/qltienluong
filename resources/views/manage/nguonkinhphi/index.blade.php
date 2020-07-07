@@ -422,12 +422,12 @@
                 //Kết quả
                 if ( ok == false){
                     alert('Các trường: \n' + str + 'Không được để trống');
-                    $("form").submit(function (e) {
+                    $("#create_dutoan").submit(function (e) {
                         e.preventDefault();
                     });
                 }
                 else{
-                    $("form").unbind('submit').submit();
+                    $("#create_dutoan").unbind('submit').submit();
                 }
             });
         });

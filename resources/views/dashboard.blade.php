@@ -87,7 +87,7 @@
                         <tr>
                             <td style="text-align: center">3</td>
                             <td style="font-weight: bold">Tạ Đình Hữu</td>
-                            <td>0917.179.993</td>
+                            <td>0901.239.993</td>
                         </tr>
 {{--                        <tr>--}}
 {{--                            <td style="text-align: center">4</td>--}}
