@@ -100,7 +100,7 @@ function getPhanLoaiDonVi(){
 
 function getTenDB($madvbc){
     $model = App\dmdonvibaocao::select('tendvbc')->where('madvbc',$madvbc)->first();
-    return count($model)>0?Illuminate\Support\Str::upper($model->tendvbc):'';
+    return isset($model)?Illuminate\Support\Str::upper($model->tendvbc):'';
 }
 
 function getTheoDoi($tenct){

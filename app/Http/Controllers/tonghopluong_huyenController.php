@@ -145,7 +145,7 @@ class tonghopluong_huyenController extends Controller
                 ->where('trangthai', 'TD')
                 ->get();
         })->get();
-        $kq = $model_donvi->count();
+        $kq = isset($model_donvi)?count($model_donvi):0;
         return $kq;
     }
     function index(Request $requests)
@@ -218,7 +218,7 @@ class tonghopluong_huyenController extends Controller
                 }
                 //dd($dulieu);
                 //Kiểm tra xem đơn vị đã tổng hợp dữ liệu khối chưa
-                if (count($tonghop) > 0) {//lấy dữ liệu đã tổng hợp đưa ra kết quản
+                if (isset($tonghop)) {//lấy dữ liệu đã tổng hợp đưa ra kết quản
                     $a_data[$i]['noidung'] = $tonghop->noidung;
                     $a_data[$i]['mathdv'] = $tonghop->mathdv;
                     $a_data[$i]['trangthai'] = $tonghop->trangthai;
@@ -1049,8 +1049,10 @@ class tonghopluong_huyenController extends Controller
             $nam = $inputs['nambc'];
             $madv = $inputs['madv'];
             $madvbc = session('admin')->madvbc;
-            $model_donvi = dmdonvi::where('macqcq',$madv)->get();
-            //dd($model_donvi);
+            $model_donvi = dmdonvi::join('tonghopluong_donvi','tonghopluong_donvi.madv','dmdonvi.madv')
+                ->select('dmdonvi.*')
+            ->where('tonghopluong_donvi.macqcq',$madv)->distinct()->get();
+            //dd($model_donvi->toarray());
             $model_phanloai = dmphanloaidonvi::wherein('maphanloai',array_column($model_donvi->toarray(),'maphanloai'))->get();
             $m_pc = array_column(dmphucap::all()->toarray(),'report','mapc');
             $a_phucap = array();
@@ -1065,6 +1067,7 @@ class tonghopluong_huyenController extends Controller
             $model_nguonkp = array_column(dmnguonkinhphi::all()->toArray(), 'tennguonkp', 'manguonkp');
             $model_phanloaict = array_column(dmphanloaicongtac::all()->toArray(), 'tencongtac', 'macongtac');
             $model_ct = array_column(dmphanloaict::all()->toArray(), 'tenct', 'mact');
+            //dd(array_column($model_tonghop->toarray(),'mathdv'));
             foreach ($model as $chitiet) {
                 $chitiet->thang = $thang;
                 $chitiet->madv = $a_dv[$chitiet->mathdv];

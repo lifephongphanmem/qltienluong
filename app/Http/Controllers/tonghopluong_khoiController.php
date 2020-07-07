@@ -267,8 +267,8 @@ class tonghopluong_khoiController extends Controller
     {
         if (Session::has('admin')) {
             $inputs = $requests->all();
-            $thang = $inputs['thang'];
-            $nam = $inputs['nam'];
+            $thang = $inputs['thangbc'];
+            $nam = $inputs['nambc'];
             $madv = $inputs['madv'];
             $checkdv = dmdonvi::where('madv',$madv)->where('phanloaitaikhoan','TH')->get();
             if(count($checkdv) > 0) {

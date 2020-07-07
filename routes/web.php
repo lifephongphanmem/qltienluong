@@ -713,6 +713,7 @@ Route::group(['prefix'=>'chuc_nang'],function(){
             Route::get('index','tonghopluong_khoiController@index');
             Route::get('tonghop','tonghopluong_khoiController@tonghop');
             Route::get('tonghop_khoi','tonghopluong_khoiController@tonghop_khoi');
+            Route::post('tonghop_khoi','tonghopluong_khoiController@tonghop_khoi');
             //Route::get('tonghop','tonghopluong_khoiController@tonghop');
             Route::get('tonghop_diaban','tonghopluong_khoiController@tonghop_diaban');
 
