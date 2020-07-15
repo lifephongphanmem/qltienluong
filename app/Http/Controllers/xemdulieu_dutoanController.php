@@ -109,14 +109,14 @@ class xemdulieu_dutoanController extends Controller
             foreach($model_donvi as $dv){
                 //kiểm tra xem đã tổng hợp thành dữ liệu huyện gửi lên tỉnh chưa?
                 $nguon_khoi = $model_nguon_khoi->where('namns',$inputs['namns'])->first();
-                if(count($nguon_khoi)>0 && $nguon_khoi->trangthai == 'DAGUI'){
+                if(isset($nguon_khoi) && $nguon_khoi->trangthai == 'DAGUI'){
                     $dv->tralai = false;
                 }else{
                     $dv->tralai = true;
                 }
 
                 $nguon = $model_nguon->where('namns',$inputs['namns'])->where('madv',$dv->madv)->first();
-                if(count($nguon)> 0 && $nguon->trangthai == 'DAGUI'){
+                if(isset($nguon)  && $nguon->trangthai == 'DAGUI'){
                     $dv->masodv = $nguon->masodv;
                     $dv->trangthai = 'DAGUI';
                 }else{

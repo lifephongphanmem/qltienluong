@@ -41,6 +41,16 @@ class tonghopnguon_huyenController extends Controller
                 })->get();
             $soluong = $model_donvi->count();
             foreach($model as $dv){
+                $nam = $dv->namdt;
+                $model_donvi = dmdonvi::select('madv', 'tendv','maphanloai')
+                    ->where('macqcq',$madv)->where('madv','<>',$madv)
+                    ->wherenotin('madv', function ($query) use ($madv,$nam) {
+                        $query->select('madv')->from('dmdonvi')
+                            ->whereyear('ngaydung', '<=', $nam)
+                            ->where('trangthai', 'TD')
+                            ->get();
+                    })->get();
+                $soluong = $model_donvi->count();
                 $nguon_huyen = $model_nguon_tinh->where('sohieu', $dv->sohieu)->first();
                 if(isset($nguon_huyen)){
                     //Đã tổng hợp dữ liệu

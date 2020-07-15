@@ -34,6 +34,8 @@ class dutoanluong_huyenController extends Controller
             $model = dutoanluong::select('namns')->where('madvbc', session('admin')->madvbc)->distinct()->get();
             $a_trangthai = getStatus();
             //Lấy dữ liệu các đơn vị cấp dưới đã gửi lên
+
+
             $model_donvi = dmdonvi::select('madv', 'tendv')
                 ->wherein('madv', function($query) use($madv){
                     $query->select('madv')->from('dmdonvi')->where('macqcq',$madv)->where('madv','<>',$madv)->get();
@@ -41,8 +43,18 @@ class dutoanluong_huyenController extends Controller
             $soluong = $model_donvi->count();
 
             foreach($model as $dv){
+                $nam = $dv->namns;
+                $model_donvi = dmdonvi::select('madv', 'tendv','maphanloai')
+                    ->where('macqcq',$madv)->where('madv','<>',$madv)
+                    ->wherenotin('madv', function ($query) use ($madv,$nam) {
+                        $query->select('madv')->from('dmdonvi')
+                            ->whereyear('ngaydung', '<=', $nam)
+                            ->where('trangthai', 'TD')
+                            ->get();
+                    })->get();
+                $soluong = $model_donvi->count();
                 $nguon_huyen = $model_nguon_tinh->where('namns', $dv->namns)->first();
-                if(count($nguon_huyen)>0){
+                if(isset($nguon_huyen)){
                     //Đã tổng hợp dữ liệu
                     $dv->sldv = $soluong . '/' . $soluong;
                     $dv->masodv = $nguon_huyen->masodv;
