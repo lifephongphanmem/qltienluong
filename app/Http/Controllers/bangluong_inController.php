@@ -342,7 +342,7 @@ class bangluong_inController extends Controller
             //dd($m_canbo_trc);
 
             $a_luong = ['heso', 'vuotkhung', 'pccv', 'pckv', 'pcth', 'pclade', 'pcdh', 'pcdbqh', 'pcudn', 'pcdbn',
-                'pcud61', 'pctnn', 'pcthni', 'pclt', 'pcdang', 'pccovu', 'pcct', 'pctn', 'pckn', 'pcdd'];
+                'pcud61', 'pctnn', 'pcthni', 'pclt', 'pcdang', 'pccovu', 'pcct', 'pctn', 'pckn', 'pcdd', 'pcvk'];
             $a_hopdong = ['luonghd'];
             $a_tangthem = [];
             $a_tienthuong = [];
@@ -1057,7 +1057,7 @@ class bangluong_inController extends Controller
 
 
             $a_luong = ['heso', 'vuotkhung', 'pccv', 'pckv', 'pcth', 'pclade', 'pcdh', 'pcdbqh', 'pcudn', 'pcdbn',
-                'pcud61', 'pctnn', 'pcthni', 'pclt', 'pcdang', 'pccovu', 'pcct', 'pctn', 'pckn', 'pcdd'];
+                'pcud61', 'pctnn', 'pcthni', 'pclt', 'pcdang', 'pccovu', 'pcct', 'pctn', 'pckn', 'pcdd', 'pcvk'];
             $a_hopdong = ['luonghd'];
             $a_tangthem = [];
             $a_tienthuong = [];
