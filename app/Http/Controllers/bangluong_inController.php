@@ -373,8 +373,10 @@ class bangluong_inController extends Controller
                     }
 
                 }
-
-            foreach ($m_canbo as $ct) {//trường hợp giảm lương
+            $m_ttcb = hosocanbo::where('madv',$inputs['madv'])->get();
+            foreach ($m_canbo as $ct) {//trường hợp giảm lương + add sotk và tên NH (Hưởng sau này sửa lại sau nhé)
+                $ct->sotk = $m_ttcb->where('macanbo',$ct->macanbo)->first()->sotk;
+                $ct->tennganhang = $m_ttcb->where('macanbo',$ct->macanbo)->first()->tennganhang;
                 if($ct->ttl <= 0){
                     continue;
                 }
@@ -419,14 +421,14 @@ class bangluong_inController extends Controller
                 if($m_canbo_trc != null){
                     $ct->chenhlech = $ct->luongtn;
                     $canbo = $m_canbo_trc->where('macanbo', $ct->macanbo)->where('mact', $ct->mact)->first();
-                    if (count($canbo) > 0) {
+                    if (isset($canbo)) {
                         $ct->chenhlech = $ct->luongtn - $canbo->luongtn;
                     }
                 }
             }
             $model_congtac = dmphanloaict::select('mact', 'tenct', 'macongtac')
                 ->wherein('mact', a_unique(array_column($m_canbo->toarray(), 'mact')))->get();
-
+            //dd($m_canbo->toarray());
             return view('reports.bangluong.tonghopbangluong.mau09nd11')
                 ->with('model', $m_canbo->sortBy('stt'))
                 ->with('m_dv', $m_dv)

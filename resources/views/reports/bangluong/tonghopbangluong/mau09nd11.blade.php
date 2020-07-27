@@ -156,6 +156,20 @@
                     <td>{{convert2Roman($i++)}}</td>
                     <td style="text-align: left;" colspan="{{12}}">{{$congtac->tenct}}</td>
                 </tr>
+                    <tr style="font-weight: bold; text-align: center; font-style: italic">
+                        <td ></td>
+                        <td style="text-align: center">Cộng</td>
+                        <td ></td> <td ></td>
+                        <td class="money">{{dinhdangso($model_luong->sum('tongso'))}}</td>
+                        <td class="money">{{dinhdangso($model_luong->sum('luong'))}}</td>
+                        <td class="money">{{dinhdangso($model_luong->sum('hopdong'))}}</td>
+                        <td class="money">{{dinhdangso($model_luong->sum('tangthem'))}}</td>
+                        <td class="money">{{dinhdangso($model_luong->sum('tienthuong'))}}</td>
+                        <td class="money">{{dinhdangso($model_luong->sum('phucap'))}}</td>
+                        <td class="money">{{dinhdangso($model_luong->sum('khoan'))}}</td>
+                        <td class="money">{{dinhdangso($model_luong->sum('hocbong'))}}</td>
+                        <td class="money">{{dinhdangso($model_luong->sum('chenhlech'))}}</td>
+                    </tr>
                 @foreach($model_luong as $ct)
                     <tr>
                         <td>{{$stt++}}</td>
@@ -175,18 +189,7 @@
                     </tr>
                 @endforeach
 
-                <tr style="font-weight: bold; text-align: center; font-style: italic">
-                    <td colspan="4">Cộng</td>
-                    <td class="money">{{dinhdangso($model_luong->sum('tongso'))}}</td>
-                    <td class="money">{{dinhdangso($model_luong->sum('luong'))}}</td>
-                    <td class="money">{{dinhdangso($model_luong->sum('hopdong'))}}</td>
-                    <td class="money">{{dinhdangso($model_luong->sum('tangthem'))}}</td>
-                    <td class="money">{{dinhdangso($model_luong->sum('tienthuong'))}}</td>
-                    <td class="money">{{dinhdangso($model_luong->sum('phucap'))}}</td>
-                    <td class="money">{{dinhdangso($model_luong->sum('khoan'))}}</td>
-                    <td class="money">{{dinhdangso($model_luong->sum('hocbong'))}}</td>
-                    <td class="money">{{dinhdangso($model_luong->sum('chenhlech'))}}</td>
-                </tr>
+
             @endif
         @endforeach
         <tr style="font-weight: bold; text-align: center;">

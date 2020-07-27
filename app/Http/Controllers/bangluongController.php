@@ -54,7 +54,7 @@ class bangluongController extends Controller
             $inputs['dinhmuc'] = 0;
             $dinhmuc = nguonkinhphi_dinhmuc::where('manguonkp', $inputs['manguonkp'])
                 ->where('madv', session('admin')->madv)->first();
-            $maso = count($dinhmuc) > 0 ? $dinhmuc->maso : '';
+            $maso = isset($dinhmuc) ? $dinhmuc->maso : '';
             $dinhmuc_ct = nguonkinhphi_dinhmuc_ct::where('maso', $maso)->get();
 
             if (count($dinhmuc_ct) > 0) {
@@ -71,7 +71,7 @@ class bangluongController extends Controller
             $model_bl = bangluong::where('madv', session('admin')->madv)->where('phanloai', 'BANGLUONG')->orderby('nam')->orderby('thang')->get();
             $model_tonghop = tonghopluong_donvi::where('madv', session('admin')->madv)
                 ->where('thang', $inputs['thang'])->where('nam', $inputs['nam'])->first();
-            $thaotac = count($model_tonghop) > 0 ? false : true;
+            $thaotac = isset($model_tonghop) ? false : true;
             $inputs['thaotac'] = $thaotac;
 
             $a_pc = array('heso', 'vuotkhung', 'pctnn', 'pccovu', 'pcud61', 'pcudn', 'hesott',

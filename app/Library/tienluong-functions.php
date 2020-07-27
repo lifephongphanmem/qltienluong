@@ -716,7 +716,7 @@ function getKieuTangGiamLuong(){
 function getNguonTruyLinh(){
     $model = App\dmnguonkinhphi::all();
     $nkp_df = $model->where('macdinh',1)->first();
-    if(count($nkp_df) == 0){
+    if(!isset($nkp_df)){
         $nkp_df = $model->first();
     }
     return array(
