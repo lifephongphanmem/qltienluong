@@ -375,8 +375,11 @@ class bangluong_inController extends Controller
                 }
             $m_ttcb = hosocanbo::where('madv',$inputs['madv'])->get();
             foreach ($m_canbo as $ct) {//trường hợp giảm lương + add sotk và tên NH (Hưởng sau này sửa lại sau nhé)
-                $ct->sotk = $m_ttcb->where('macanbo',$ct->macanbo)->first()->sotk;
-                $ct->tennganhang = $m_ttcb->where('macanbo',$ct->macanbo)->first()->tennganhang;
+                $m_ttct = $m_ttcb->where('macanbo',$ct->macanbo)->first();
+                if (isset($m_ttct)){
+                    $ct->sotk = $m_ttct->sotk;
+                    $ct->tennganhang = $m_ttct->tennganhang;
+                }
                 if($ct->ttl <= 0){
                     continue;
                 }
