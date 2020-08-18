@@ -94,7 +94,7 @@ class tonghopnguon_huyenController extends Controller
 
         if (Session::has('admin')) {
             $inputs = $request->all();
-            $model = nguonkinhphi_huyen::where('masodv', $inputs['masodv'])->first();
+            $model = nguonkinhphi::where('masodv', $inputs['masodv'])->first();
             //$model = nguonkinhphi::where('masodv', $inputs['masodv'])->first();
             //dd($model->toarray());
             $model->trangthai = 'TRALAI';
