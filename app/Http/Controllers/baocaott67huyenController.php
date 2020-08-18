@@ -66,7 +66,7 @@ class baocaott67huyenController extends Controller
             } else {
                 $model_tonghop = nguonkinhphi::where('sohieu',$inputs['sohieu'])
                     ->where('trangthai','DAGUI')
-                    ->where('mqcqcq', session('admin')->madv)->get();
+                    ->where('macqcq', session('admin')->madv)->get();
                 $model_donvi = dmdonvi::wherein('madv', array_column($model_tonghop->toarray(),'madv'))->get();
                 $model_bienche = chitieubienche::where('nam', $nam)->wherein('madv', array_column($model_tonghop->toarray(),'madv'))->get();
             }
