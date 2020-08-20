@@ -514,7 +514,8 @@ class dsnangthamnienController extends Controller
                 $ct->tencv = isset($a_cv[$ct->macvcq]) ? $a_cv[$ct->macvcq] : '';
                 $ct->tnndenngay = $ct->ngaytu;
                 $ct->trangthai = $model_nangluong->trangthai == 'Đã nâng lương' ? 'DANANGLUONG' : 'CHUANANGLUONG';
-                $ct->pctnn_c = $ct->pctnn == 5 ? 0 : $ct->pctnn - 1;
+                $ct->pctnn_m = $ct->pctnn;//cho in trong báo cáo
+                $ct->pctnn = $ct->pctnn == 5 ? 0 : $ct->pctnn - 1;
             }
 
             $a_pl = $model->map(function($data){

@@ -115,8 +115,8 @@
                     <td style="text-align: left">{{$ct->tencv}}</td>
                     <td style="text-align: center">{{$ct->msngbac}}</td>
                     <td style="text-align: center">{{getDayVn($ct->tnndenngay)}}</td>
-                    <td style="text-align: center">{{dinhdangsothapphan($ct->pctnn_c)}}</td>
                     <td style="text-align: center">{{dinhdangsothapphan($ct->pctnn)}}</td>
+                    <td style="text-align: center">{{dinhdangsothapphan($ct->pctnn_m)}}</td>
                 </tr>
             @endforeach
         @endforeach
