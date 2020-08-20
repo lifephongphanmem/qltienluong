@@ -625,7 +625,9 @@ class bangluong_inController extends Controller
                 if($cb->congtac == 'DAINGAY' || $cb->congtac == 'THAISAN' || $cb->congtac == 'KHONGLUONG'){
                     $cb->tonghs = 0;
                     foreach($a_phucap as $k=>$v) {
-                        $cb->tonghs += $cb->$k;
+                        if($cb->$k<500){//không cộng số tiền
+                            $cb->tonghs += $cb->$k;
+                        }
                     }
                     $cb->ttl_tn = round($cb->tonghs * $luongcb, 0);
                     $cb->giaml = $cb->ttl_tn - $cb->ttl;//in mức giảm lương
@@ -699,7 +701,8 @@ class bangluong_inController extends Controller
             return view('errors.notlogin');
     }
 
-    public function printf_dangkyluong(Request $request){
+    public function printf_dangkyluong(Request $request)
+    {
         if (Session::has('admin')) {
             $inputs = $request->all();
             //$inputs['mabl'] = $inputs['mabl'];
@@ -707,27 +710,27 @@ class bangluong_inController extends Controller
             $model = $this->getBangLuong($inputs);
 
             $mabl = $inputs['mabl'];
-            $m_bl = bangluong::select('thang','nam','mabl','madv','ngaylap','phanloai','luongcoban','noidung')->where('mabl',$mabl)->first();
-            $m_dv = dmdonvi::where('madv',$m_bl->madv)->first();
+            $m_bl = bangluong::select('thang', 'nam', 'mabl', 'madv', 'ngaylap', 'phanloai', 'luongcoban', 'noidung')->where('mabl', $mabl)->first();
+            $m_dv = dmdonvi::where('madv', $m_bl->madv)->first();
 
-            $model_congtac = dmphanloaict::select('mact','tenct')
-                ->wherein('mact', a_unique(array_column($model->toarray(),'mact')))->get();
+            $model_congtac = dmphanloaict::select('mact', 'tenct')
+                ->wherein('mact', a_unique(array_column($model->toarray(), 'mact')))->get();
 
-            $thongtin=array('nguoilap'=>$m_bl->nguoilap,
-                'thang'=>$m_bl->thang,
-                'nam'=>$m_bl->nam,
-                'ngaylap'=>$m_bl->ngaylap,'phanloai'=>$m_bl->phanloai,
-                'cochu'=>$inputs['cochu'],
-                'innoidung'=>isset($inputs['innoidung']),
-                'noidung'=>$m_bl->noidung,);
+            $thongtin = array('nguoilap' => $m_bl->nguoilap,
+                'thang' => $m_bl->thang,
+                'nam' => $m_bl->nam,
+                'ngaylap' => $m_bl->ngaylap, 'phanloai' => $m_bl->phanloai,
+                'cochu' => $inputs['cochu'],
+                'innoidung' => isset($inputs['innoidung']),
+                'noidung' => $m_bl->noidung,);
             //xử lý ẩn hiện cột phụ cấp => biết tổng số cột hiện => colspan trên báo cáo
             $a_goc = array('hesott');
-            $model_pc = dmphucap_donvi::where('madv',$m_bl->madv)->where('phanloai','<','3')->wherenotin('mapc',$a_goc)->get();
+            $model_pc = dmphucap_donvi::where('madv', $m_bl->madv)->where('phanloai', '<', '3')->wherenotin('mapc', $a_goc)->get();
 
             $a_phucap = array();
             $col = 0;
 
-            foreach($model_pc as $ct) {
+            foreach ($model_pc as $ct) {
                 if ($model->sum($ct->mapc) > 0) {
                     $a_phucap[$ct->mapc] = $ct->report;
                     $col++;
@@ -735,24 +738,26 @@ class bangluong_inController extends Controller
             }
             //dd($a_phucap);
             //chạy lại để tính lại phụ cấp, bảo hiểm cho cán bộ nghỉ
-            foreach($model as $cb){
-                if($cb->congtac == 'DAINGAY' || $cb->congtac == 'THAISAN' || $cb->congtac == 'KHONGLUONG'){
+            foreach ($model as $cb) {
+                if ($cb->congtac == 'DAINGAY' || $cb->congtac == 'THAISAN' || $cb->congtac == 'KHONGLUONG') {
                     $heso = $sotien = 0;
                     $stbhxh = $stbhyt = $stkpcd = $stbhtn = 0;
                     $stbhxh_dv = $stbhyt_dv = $stkpcd_dv = $stbhtn_dv = 0;
 
-                    foreach($model_pc as $ct) {
+                    foreach ($model_pc as $ct) {
                         $mapc = $ct->mapc;
-                        $mapc_st ='st_'.$ct->mapc;
+                        $mapc_st = 'st_' . $ct->mapc;
 
                         switch ($ct->phanloai) {
-                            case 1: {//số tiền
+                            case 1:
+                            {//số tiền
                                 $sotien += $cb->$mapc;
                                 $cb->$mapc_st = $cb->$mapc;
                                 break;
                             }
 
-                            default: {//trường hợp còn lại (ẩn,...)
+                            default:
+                            {//trường hợp còn lại (ẩn,...)
                                 $heso += $cb->$mapc;
                                 $cb->$mapc_st = round($cb->$mapc * $cb->luongcoban);
                                 $sotien = 0;
@@ -774,7 +779,7 @@ class bangluong_inController extends Controller
                     $cb->stbhxh = $stbhxh;
                     $cb->stbhyt = $stbhyt;
                     $cb->stkpcd = $stkpcd;
-                    $cb->stbhtn= $stbhtn;
+                    $cb->stbhtn = $stbhtn;
                     $cb->ttbh = $stbhxh + $stbhyt + $stkpcd + $stbhtn;
                     $cb->stbhxh_dv = $stbhxh_dv;
                     $cb->stbhyt_dv = $stbhyt_dv;
@@ -787,13 +792,13 @@ class bangluong_inController extends Controller
             }
             //dd($model);
             return view('reports.bangluong.donvi.mautt107_dk_m2')
-                ->with('model',$model->sortBy('stt'))
-                ->with('m_dv',$m_dv)
-                ->with('thongtin',$thongtin)
-                ->with('col',$col)
-                ->with('model_congtac',$model_congtac)
-                ->with('a_phucap',$a_phucap)
-                ->with('pageTitle','Bảng lương chi tiết');
+                ->with('model', $model->sortBy('stt'))
+                ->with('m_dv', $m_dv)
+                ->with('thongtin', $thongtin)
+                ->with('col', $col)
+                ->with('model_congtac', $model_congtac)
+                ->with('a_phucap', $a_phucap)
+                ->with('pageTitle', 'Bảng lương chi tiết');
         } else
             return view('errors.notlogin');
     }
