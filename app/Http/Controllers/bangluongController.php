@@ -203,7 +203,7 @@ class bangluongController extends Controller
         $inputs['luongcoban'] = getDbl($inputs['luongcoban']);
         $model = bangluong::where('mabl', $inputs['mabl'])->first();
         //dd($model);
-        if (count($model) > 0) {
+        if (isset($model)) {
             //update
             $inputs['phucaploaitru'] = $model->phucaploaitru;
             $model->update($inputs);
@@ -223,7 +223,7 @@ class bangluongController extends Controller
                     ->where('madv',session('admin')->madv)
                     ->first();
 
-                if(count($model_chk)>0){
+                if(isset($model_chk)){
                     return view('errors.trungbangluong');
                 }
             }
@@ -1903,7 +1903,7 @@ class bangluongController extends Controller
         if (Session::has('admin')) {
             $inputs = $request->all();
             $model = bangluong::where('mabl', $inputs['mabl'])->first();
-            if (count($model) > 0) {
+            if (isset($model)) {
                 $model->update($inputs);
                 return redirect('/chuc_nang/bang_luong/chi_tra?thang=' . $inputs['thang'] . '&nam=' . $inputs['nam']);
             } else {
@@ -1921,7 +1921,7 @@ class bangluongController extends Controller
 
                 $m_cb = hosocanbo::select('macvcq','mapb','mact','macanbo','tencanbo','ngaybc','pcctp')
                     ->where('madv', $madv)->where('pcctp','>',0)->wherenotin('macanbo',$a_cbn)->get();
-                //dd($m_cb);
+                //dd($m_cb->toarray());
                 $a_data = array();
                 $inputs['mabl'] = $madv . '_' . getdate()[0];
                 $inputs['madv'] = $madv;
@@ -2105,7 +2105,7 @@ class bangluongController extends Controller
             $model_nhomct = dmphanloaicongtac::select('macongtac','tencongtac')->get();
             $model_tenct = dmphanloaict::select('tenct','macongtac','mact')->get();
 
-            if($m_bl->phanloai == 'TRICHNOP'){
+            if($m_bl->phanloai == 'TRICHNOP' || $m_bl->phanloai == 'CTPHI'){
                 $model = bangluong_truc::where('mabl', $inputs['mabl'])->get();
                 $a_pl = getPhanLoaiBangLuong();
                 $m_bl->tenphanloai = isset($a_pl[$m_bl->phanloai]) ? $a_pl[$m_bl->phanloai]: '';
@@ -2137,7 +2137,7 @@ class bangluongController extends Controller
     function destroy($id){
         if (Session::has('admin')) {
             $model = bangluong::find($id);
-            if(count($model) > 0 && $model->phanloai == 'TRUYLINH') {
+            if(isset($model) && $model->phanloai == 'TRUYLINH') {
                 hosotruylinh::where('mabl', $model->mabl)
                     ->update(['mabl' => null]);
             }

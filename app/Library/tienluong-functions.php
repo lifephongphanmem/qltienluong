@@ -90,7 +90,7 @@ function getCanBoX(){
 
 function getTenDV($madv){
     $model = App\dmdonvi::select('tendv')->where('madv',$madv)->first();
-    return count($model)>0?Illuminate\Support\Str::upper($model->tendv):'';
+    return isset($model)?Illuminate\Support\Str::upper($model->tendv):'';
 }
 
 function getPhanLoaiDonVi(){
