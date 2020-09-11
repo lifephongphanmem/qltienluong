@@ -966,11 +966,14 @@ class bangluongController extends Controller
             //chạy tính hệ số + vượt khung trc để tính cho kiêm nhiệm (trường hợp tạo bảng lương không hưởng ở nguồn
             // kinh phí này)
 
+            /* 09/11/2020: tính lại lương cho cán bộ thực tập: tính % cho tất cả các hệ số đang hưởng (bảo hiểm vẫn tính theo 100% lương)
             //trường hợp cán bộ đang đi công tác, đi học => giữ nguyên 100% để tính bảo hiểm sau mới tính lại lương thực nhận
+            //cán bộ tập sự thử việc tính % hưởng lương chỉ tính hệ số lương
+            //lạng sơn y.c tập sự thử việc tính % hưởng lương cho tất cả lương
             if ($m_cb[$key]['theodoi'] != 2) {
                 $m_cb[$key]['heso'] = round($val['heso'] * $val['pthuong'] / 100, session('admin')->lamtron);
             }
-
+            */
             $m_cb[$key]['vuotkhung'] = isset($m_cb[$key]['vuotkhung']) ? round($val['heso'] * $val['vuotkhung'] / 100, session('admin')->lamtron) : 0;
             $m_cb[$key]['mabl'] = $inputs['mabl'];
             $m_cb[$key]['manguonkp'] = $inputs['manguonkp'];
@@ -1199,7 +1202,7 @@ class bangluongController extends Controller
             }
 
             //Cán bộ đang đi công tác, đi học (bỏ qua các loại tạm ngưng theo dõi)
-            if ($m_cb[$key]['theodoi'] == 2) {
+            if (($m_cb[$key]['theodoi'] == 2)|| ($m_cb[$key]['theodoi'] == 1 && $m_cb[$key]['mact'] == '1506673422') ) {
                 $tien = $tonghs = 0;
                 foreach ($a_pc as $k => $v) {
                     $m_cb[$key][$k] = round($m_cb[$key][$k] * $m_cb[$key]['pthuong'] / 100, session('admin')->lamtron);
