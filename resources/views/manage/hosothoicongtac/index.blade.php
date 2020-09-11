@@ -138,6 +138,7 @@
                     $('#macanbo').val(data.macanbo);
                     $('#maphanloai').val(data.maphanloai);
                     $('#ngaynghi').val(data.ngaynghi);
+                    $('#soqd').val(data.soqd);
                     $('#ngayqd').val(data.ngayqd);
                     $('#lydo').val(data.lydo);
                     $('#nguoiky').val(data.nguoiky);

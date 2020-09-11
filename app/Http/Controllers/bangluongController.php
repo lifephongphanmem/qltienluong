@@ -1269,6 +1269,7 @@ class bangluongController extends Controller
                 $m_cb[$key]['songaytruc'] = $ngaynghi;
                 $m_cb[$key]['songaycong'] = $ngaycong;
                 //$m_cb[$key]['congtac'] = 'DUONGSUC';
+                $sotiencong = 0;
                 foreach ($a_no as $no) {
                     $ma = 'st_'.$no;
                     $sotiencong += $m_cb[$key][$ma];
