@@ -31,6 +31,10 @@ class tonghopnguon_huyenController extends Controller
                 $query->select('madv')->from('dmdonvi')->where('macqcq',$madv)->where('madv','<>',$madv)->get();
             })->where('trangthai', 'DAGUI')
                 ->get();
+            $model_nguon_huyen = nguonkinhphi_huyen::wherein('madv', function($query) use($madv){
+                $query->select('madv')->from('dmdonvi')->where('macqcq',$madv)->where('madv','<>',$madv)->get();
+            })->where('trangthai', 'DAGUI')
+                ->get();
             //$model_nguon_khoi = nguonkinhphi_khoi::where('madv', $madv)->get();
             $model = dmthongtuquyetdinh::all();
             $a_trangthai = getStatus();
@@ -61,7 +65,8 @@ class tonghopnguon_huyenController extends Controller
                 }else{
                     //Chưa tổng hợp dữ liệu
                     $sl = $model_nguon->where('sohieu', $dv->sohieu)->count();
-                    $dv->sldv = $sl . '/' . $soluong;
+                    $sl_huyen = $model_nguon_huyen->where('sohieu', $dv->sohieu)->count();
+                    $dv->sldv = $sl+$sl_huyen . '/' . $soluong;
                     $dv->masodv = null;
                     if($sl==0){
                         $dv->trangthai = 'CHUADL';

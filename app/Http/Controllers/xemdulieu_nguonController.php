@@ -131,6 +131,11 @@ class xemdulieu_nguonController extends Controller
                     ->wherein('madv', function($query) use($madv){
                         $query->select('madv')->from('dmdonvi')->where('macqcq',$madv)->where('madv','<>',$madv)->get();
                     })->get();
+                $model_nguon_huyen = nguonkinhphi_huyen::where('trangthai','DAGUI')
+                    ->where('macqcq',$madv)
+                    ->wherein('madv', function($query) use($madv){
+                        $query->select('madv')->from('dmdonvi')->where('macqcq',$madv)->where('madv','<>',$madv)->get();
+                    })->get();
             }
             //dd($model_nguon->toarray());
 
@@ -147,10 +152,15 @@ class xemdulieu_nguonController extends Controller
                 }
 
                 $nguon = $model_nguon->where('sohieu',$inputs['sohieu'])->where('madv',$dv->madv)->first();
+                $nguon_huyen = $model_nguon_huyen->where('sohieu',$inputs['sohieu'])->where('madv',$dv->madv)->first();
                 if(isset($nguon) && $nguon->trangthai == 'DAGUI'){
                     $dv->masodv = $nguon->masodv;
                     $dv->trangthai = 'DAGUI';
-                }else{
+                }elseif(isset($nguon_huyen) && $nguon_huyen->trangthai == 'DAGUI'){
+                    $dv->masodv = $nguon->masodv;
+                    $dv->trangthai = 'DAGUI';
+                }
+                else{
                     $dv->trangthai = 'CHOGUI';
                     $dv->masodv = null;
                 }
