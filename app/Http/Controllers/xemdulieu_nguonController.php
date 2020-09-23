@@ -157,7 +157,7 @@ class xemdulieu_nguonController extends Controller
                     $dv->masodv = $nguon->masodv;
                     $dv->trangthai = 'DAGUI';
                 }elseif(isset($nguon_huyen) && $nguon_huyen->trangthai == 'DAGUI'){
-                    $dv->masodv = $nguon->masodv;
+                    $dv->masodv = $nguon_huyen->masodv;
                     $dv->trangthai = 'DAGUI';
                 }
                 else{
