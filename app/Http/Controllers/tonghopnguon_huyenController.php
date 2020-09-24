@@ -164,11 +164,23 @@ class tonghopnguon_huyenController extends Controller
             $inputs = $request->all();
             //dd($inputs);
             $model_ct = nguonkinhphi_bangluong::where('masodv', $inputs['maso'])->orderby('stt')->get();
-            $model = $model_ct->unique('macanbo');
+            if(count($model_ct) > 0) {
+                $model = $model_ct->unique('macanbo');
+                $model_thongtin = nguonkinhphi::where('masodv', $inputs['maso'])->first();
+            }
             //dd($model);
+            else{
+                $check = nguonkinhphi_huyen::where('masodv', $inputs['maso'])->first();
+                if(isset($check)){
+                    $model_nkp = nguonkinhphi::where('masoh',$inputs['maso'])->get();
+                    $model_ct = nguonkinhphi_bangluong::wherein('masodv',a_unique(array_column($model_nkp->toarray(),'masodv')))->orderby('stt')->get();
+                    $model_thongtin = dmdonvi::where('madv',$check->madv)->first();
+                    $model = $model_ct->unique('macanbo');
+                }
+            }
 
             //$model = dutoanluong_bangluong::where('masodv', $inputs['masodv'])->orderby('thang')->get();
-            $model_thongtin = nguonkinhphi::where('masodv', $inputs['maso'])->first();
+
             $a_congtac = array_column(dmphanloaict::wherein('mact',a_unique(array_column($model->toarray(),'mact')))->get()->toArray(), 'tenct', 'mact');
             //dd($a_ct);
             //cho trương hợp đơn vị cấp trên in dữ liệu dv câp dưới mà ko sai tên đơn vị
