@@ -1,6 +1,7 @@
 <?php
 Route::get('', 'HomeController@index');
 //Route::get('', 'HomeController@baotri');
+Route::get('thongtinhotro', 'vanphonghotroController@thongtinhotro');
 Route::get('test', 'dataController@update');
 Route::get('ajaxtest','ajaxController@test');
 
@@ -20,7 +21,12 @@ Route::get('fix_pc','dmphucapController@fix_mapc');
     // </editor-fold>
 
     // <editor-fold defaultstate="collapsed" desc="--Quản lý chung--">
-
+    Route::group(['prefix'=>'van_phong'],function(){
+        Route::get('danh_sach','vanphonghotroController@index');
+        Route::get('get_chucnang','vanphonghotroController@edit');
+        Route::post('store','vanphonghotroController@store');
+        Route::post('delete','vanphonghotroController@destroy');
+    });
     // </editor-fold>
 // </editor-fold>
 

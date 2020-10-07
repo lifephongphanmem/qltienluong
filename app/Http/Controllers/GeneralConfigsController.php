@@ -38,16 +38,27 @@ class GeneralConfigsController extends Controller
     {
         if (Session::has('admin')) {
             $inputs = $request->all();
+            if(isset($inputs['ipf1'])){
+                $ipf1 = $request->file('ipf1');
+                $inputs['ipf1'] = '1.'.$ipf1->getClientOriginalName();
+                $ipf1->move(public_path() . '/data/huongdan/', $inputs['ipf1']);
+                session('admin')->ipf1 = $inputs['ipf1'];
+            }
+
             $model = GeneralConfigs::first();
-            $model->tuoinu = chkDbl($inputs['tuoinu']);
-            $model->tuoinam = chkDbl($inputs['tuoinam']);
-            $model->luongcb = chkDbl($inputs['luongcb']);
-            $model->tg_hetts = chkDbl($inputs['tg_hetts']);
-            $model->tg_xetnl = chkDbl($inputs['tg_xetnl']);
-            $model->save();
+            if($model != null){
+                $model->tuoinu = chkDbl($inputs['tuoinu']);
+                $model->tuoinam = chkDbl($inputs['tuoinam']);
+                $model->luongcb = chkDbl($inputs['luongcb']);
+                $model->tg_hetts = chkDbl($inputs['tg_hetts']);
+                $model->tg_xetnl = chkDbl($inputs['tg_xetnl']);
+                $model->ipf1 = $inputs['ipf1'];
+                $model->save();
+            }else{
+                GeneralConfigs::create($inputs);
+            }
 
             return redirect('/he_thong/quan_tri/he_thong');
-
         } else
             return view('errors.notlogin');
     }

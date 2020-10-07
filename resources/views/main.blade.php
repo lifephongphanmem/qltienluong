@@ -63,29 +63,18 @@
 
 		<!-- BEGIN PAGE TOP -->
 		<div class="page-top">
-			<!-- BEGIN HEADER SEARCH BOX -->
-			<!-- DOC: Apply "search-form-expanded" right after the "search-form" class to have half expanded search box -->
-			<form class="search-form" action="extra_search.html" method="GET">
-				<div class="input-group">
-					<!--input type="text" class="form-control input-sm" placeholder="Search..." name="query">
-					<span class="input-group-btn">
-					<a href="javascript:;" class="btn submit"><i class="icon-magnifier"></i></a>
-					</span-->
-				</div>
-			</form>
-			<!-- END HEADER SEARCH BOX -->
+
 			<!-- BEGIN TOP NAVIGATION MENU -->
 			<div class="top-menu">
 				<ul class="nav navbar-nav pull-right">
-					<li class="separator hide">
-					</li>
 					<!-- BEGIN USER LOGIN DROPDOWN -->
                     <li class="dropdown dropdown-user">
-                        <a href="" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-close-others="true" >
-                            <img alt="" class="img-circle" src="{{url('/images/avatar/default-user.png')}}"/>
-					<span class="username">
-					<b>{{session('admin')->name}}</b> </span>
-                            <i class="fa fa-angle-down"></i>
+                        <a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-close-others="true" >
+{{--                            <img alt="" class="img-circle" src="{{url('/images/avatar/default-user.png')}}"/>--}}
+                            <i class="fa icon-user"></i>
+                            <span class="username">
+                            <b>{{session('admin')->name}}</b> </span>
+                                <i class="fa fa-angle-down"></i>
                         </a>
                         <ul class="dropdown-menu dropdown-menu-default">
                             @if(session('admin')->chuyendoi != null)
@@ -107,7 +96,26 @@
                         </ul>
                     </li>
                     <!-- END USER LOGIN DROPDOWN -->
-				</ul>
+
+                    <li class="dropdown dropdown-user" id="header_notification_bar">
+                        <a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">
+                            <i class="fa fa-folder-open-o"></i>
+                            <span class="username"><b>Trợ giúp</b></span>
+                            <i class="fa fa-angle-down"></i>
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-default">
+                            <li>
+                                <a href="{{url('/thongtinhotro')}}" target="_blank"> Thông tin hỗ trợ</a>
+                            </li>
+                            @if(session('admin')->ipf1 != '')
+                                <li>
+                                    <a href="{{url('/data/huongdan/'.session('admin')->ipf1)}}" target="_blank">Tài liệu hướng dẫn</a>
+                                </li>
+                            @endif
+                        </ul>
+                    </li>
+
+                </ul>
 			</div>
 			<!-- END TOP NAVIGATION MENU -->
 		</div>
@@ -579,6 +587,7 @@
                             </li>
                                 <li><a href="{{url('danh_muc/tai_khoan/list_user?level=H')}}"><i class="icon-book-open"></i>Quản lý tài khoản</a></li>
                                 <li><a href="{{url('danh_muc/khu_vuc/danh_sach?level=H')}}"><i class="icon-book-open"></i>Danh sách khu vực, địa bàn quản lý</a></li>
+                                <li><a href="{{url('van_phong/danh_sach/')}}"><i class="icon-book-open"></i>Danh sách văn phòng hỗ trợ</a></li>
                         </ul>
                     </li>
                 @endif

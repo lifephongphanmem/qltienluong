@@ -22,6 +22,14 @@ class CreateGeneralConfigsTable extends Migration
             $table->text('thongbao')->nullable();
             $table->double('tg_hetts')->default(0);//Thời gian xet hết tập sự
             $table->double('tg_xetnl')->default(0);//Thời gian xet nâng lương
+            $table->string('kytuthapphan',10)->nullable()->defautt(',');
+            $table->string('kytunhom',10)->nullable()->default('.');
+            $table->string('ipf2')->nullable();
+            $table->string('ipf1')->nullable();
+            $table->string('ipf2')->nullable();
+            $table->string('ipf3')->nullable();
+            $table->string('ipf4')->nullable();
+            $table->string('ipf5')->nullable();
             $table->timestamps();
         });
     }

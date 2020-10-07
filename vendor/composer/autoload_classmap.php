@@ -123,6 +123,7 @@ return array(
     'CreateTonghopluongTinhDiabanTable' => $baseDir . '/database/migrations/2017_10_23_140946_create_tonghopluong_tinh_diaban_table.php',
     'CreateTonghopluongTinhTable' => $baseDir . '/database/migrations/2017_10_23_140923_create_tonghopluong_tinh_table.php',
     'CreateUsersTable' => $baseDir . '/database/migrations/2014_10_12_000000_create_users_table.php',
+    'CreateVanphonghotroTable' => $baseDir . '/database/migrations/2020_10_06_112911_create_vanphonghotro_table.php',
     'DatabaseSeeder' => $baseDir . '/database/seeds/DatabaseSeeder.php',
     'File_Iterator' => $vendorDir . '/phpunit/php-file-iterator/src/Iterator.php',
     'File_Iterator_Facade' => $vendorDir . '/phpunit/php-file-iterator/src/Facade.php',

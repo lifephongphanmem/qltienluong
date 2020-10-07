@@ -26,7 +26,7 @@
                 </div-->
                 <div class="portlet-body form">
                     <!-- BEGIN FORM-->
-                    {!! Form::model($model,['url'=>'/he_thong/quan_tri/he_thong/update', 'method'=>'POST', 'class'=>'horizontal-form','id'=>'update_tthethong']) !!}
+                    {!! Form::model($model,['url'=>'/he_thong/quan_tri/he_thong/update', 'method'=>'POST', 'class'=>'horizontal-form','id'=>'update_tthethong', 'files'=>true]) !!}
 
                         <div class="form-body">
                             <div class="row">
@@ -69,6 +69,17 @@
                                     </div>
                                 </div>
 
+                                @if(session('admin')->level == 'SSA')
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label class="control-label">File hướng dẫn sử dụng: </label>
+                                            @if(isset($model->ipf1))
+                                                <a href="{{url('/data/huongdan/'.$model->ipf1)}}" target="_blank">{{$model->ipf1}}</a>
+                                            @endif
+                                            <input name="ipf1" id="ipf1" type="file">
+                                        </div>
+                                    </div>
+                                @endif
                             </div>
                         </div>
 

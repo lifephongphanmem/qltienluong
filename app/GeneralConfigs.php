@@ -16,7 +16,15 @@ class GeneralConfigs extends Model
         'huyen',
         'thongbao',
         'tg_hetts',
-        'tg_xetnl'
+        'tg_xetnl',
+        'kytuthapphan',
+        'kytunhom',
+        'tg_xetnl',
+        'ipf1',
+        'ipf2',
+        'ipf3',
+        'ipf4',
+        'ipf5',
     ];
     //ALTER TABLE `general_configs` ADD `thongbao` TEXT NULL AFTER `huyen`;
 }
