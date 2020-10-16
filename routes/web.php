@@ -986,6 +986,8 @@ Route::group(['prefix'=>'bao_cao'],function(){
             Route::post('dutoanluong','baocaobangluongController@dutoanluong');
             Route::post('nangluong','baocaobangluongController@nangluong');
             Route::post('dangkyluong','baocaobangluongController@dangkyluong');
+
+            Route::post('dsnangluong','baocaobangluongController@dsnangluong');
         });
 
         Route::group(['prefix'=>'khoi'],function(){

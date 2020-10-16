@@ -67,6 +67,23 @@
 			<!-- BEGIN TOP NAVIGATION MENU -->
 			<div class="top-menu">
 				<ul class="nav navbar-nav pull-right">
+                    <li class="dropdown dropdown-user" id="header_notification_bar">
+                        <a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">
+                            <i class="fa fa-folder-open-o"></i>
+                            <span class="username"><b>Trợ giúp</b></span>
+                            <i class="fa fa-angle-down"></i>
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-default">
+                            <li>
+                                <a href="{{url('/thongtinhotro')}}" target="_blank"> Thông tin hỗ trợ</a>
+                            </li>
+                            @if(session('admin')->ipf1 != '')
+                                <li>
+                                    <a href="{{url('/data/huongdan/'.session('admin')->ipf1)}}" target="_blank">Tài liệu hướng dẫn</a>
+                                </li>
+                            @endif
+                        </ul>
+                    </li>
 					<!-- BEGIN USER LOGIN DROPDOWN -->
                     <li class="dropdown dropdown-user">
                         <a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-close-others="true" >
@@ -96,25 +113,6 @@
                         </ul>
                     </li>
                     <!-- END USER LOGIN DROPDOWN -->
-
-                    <li class="dropdown dropdown-user" id="header_notification_bar">
-                        <a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">
-                            <i class="fa fa-folder-open-o"></i>
-                            <span class="username"><b>Trợ giúp</b></span>
-                            <i class="fa fa-angle-down"></i>
-                        </a>
-                        <ul class="dropdown-menu dropdown-menu-default">
-                            <li>
-                                <a href="{{url('/thongtinhotro')}}" target="_blank"> Thông tin hỗ trợ</a>
-                            </li>
-                            @if(session('admin')->ipf1 != '')
-                                <li>
-                                    <a href="{{url('/data/huongdan/'.session('admin')->ipf1)}}" target="_blank">Tài liệu hướng dẫn</a>
-                                </li>
-                            @endif
-                        </ul>
-                    </li>
-
                 </ul>
 			</div>
 			<!-- END TOP NAVIGATION MENU -->

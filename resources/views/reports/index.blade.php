@@ -32,8 +32,11 @@
 
                                 {{--<li><a href="#" data-target="#thoaichitra-modal" data-toggle="modal" onclick="chitraluong('{{$furl.'don_vi/dangkyluong'}}')">Tổng hợp đăng ký lương</a></li>--}}
                                 <hr>
-                                <li><a href="#" data-target="#thoainangluong-modal" data-toggle="modal" onclick="nangluong('{{$furl.'don_vi/nangluong'}}','NGACHBAC')">Danh sách nâng lương ngạch bậc</a></li>
-                                <li><a href="#" data-target="#thoainangluong-modal" data-toggle="modal" onclick="nangluong('{{$furl.'don_vi/nangluong'}}','TNN')">Danh sách nâng thâm niên nghề</a></li>
+                                <li><a href="#" data-target="#thoainangluong-modal" data-toggle="modal" onclick="nangluong('{{$furl.'don_vi/nangluong'}}','NGACHBAC')">Danh sách nâng lương ngạch bậc (Theo danh sách nâng lương)</a></li>
+                                <li><a href="#" data-target="#thoainangluong-modal" data-toggle="modal" onclick="nangluong('{{$furl.'don_vi/nangluong'}}','TNN')">Danh sách nâng thâm niên nghề (Theo danh sách nâng lương)</a></li>
+                                <hr>
+                                <li><a href="#" data-target="#thoaidsnangluong-modal" data-toggle="modal" onclick="dsnangluong('{{$furl.'don_vi/dsnangluong'}}','NGACHBAC')">Danh sách nâng lương ngạch bậc (Theo danh sách cán bộ)</a></li>
+                                <li><a href="#" data-target="#thoaidsnangluong-modal" data-toggle="modal" onclick="dsnangluong('{{$furl.'don_vi/dsnangluong'}}','TNN')">Danh sách nâng thâm niên nghề (Theo danh sách cán bộ)</a></li>
 
 
                                 <!-- Tạm thời bỏ để triển khai lạng sơn -->
@@ -163,6 +166,47 @@
 
     <div id="thoainangluong-modal" tabindex="-1" role="dialog" aria-hidden="true" class="modal fade">
         {!! Form::open(['url'=>'#','target'=>'_blank' ,'method'=>'post' ,'id' => 'frm_thoainangluong', 'class'=>'form-horizontal form-validate']) !!}
+        <div class="modal-dialog modal-content">
+            <div class="modal-header modal-header-primary">
+                <button type="button" data-dismiss="modal" aria-hidden="true" class="close">&times;</button>
+                <h4 id="modal-header-primary-label" class="modal-title">Thông tin kết xuất</h4>
+            </div>
+            <div class="modal-body">
+                <div class="form-horizontal">
+                    <div class="form-group">
+                        <label class="col-md-4 control-label"> Từ ngày<span class="require">*</span></label>
+                        <div class="col-md-8">
+                            {!!Form::input('date','ngaytu',date('Y').'-01-01', array('id' => 'ngaytu','class' => 'form-control'))!!}
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-md-4 control-label"> Đến ngày<span class="require">*</span></label>
+                        <div class="col-md-8">
+                            {!!Form::input('date','ngayden', date('Y').'-12-31', array('id' => 'ngayden','class' => 'form-control'))!!}
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-md-offset-4 col-md-8">
+                            <input type="checkbox" name="indanangluong" />
+                            <label class="control-label">Bao gồm các cán bộ đã nâng lương</label>
+                        </div>
+                    </div>
+
+                    <input type="hidden" name="phanloai" id="phanloai">
+                    <input type="hidden" name="_token" value="{{ csrf_token() }}">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" data-dismiss="modal" class="btn btn-default">Hủy thao tác</button>
+                <button type="submit" id="submit" name="submit" value="submit" class="btn btn-primary">Đồng ý</button>
+            </div>
+        </div>
+        {!! Form::close() !!}
+    </div>
+
+    <div id="thoaidsnangluong-modal" tabindex="-1" role="dialog" aria-hidden="true" class="modal fade">
+        {!! Form::open(['url'=>'#','target'=>'_blank' ,'method'=>'post' ,'id' => 'frm_thoaidsnangluong', 'class'=>'form-horizontal form-validate']) !!}
         <div class="modal-dialog modal-content">
             <div class="modal-header modal-header-primary">
                 <button type="button" data-dismiss="modal" aria-hidden="true" class="close">&times;</button>
@@ -413,6 +457,11 @@
         function nangluong(url,phanloai){
             $('#frm_thoainangluong').attr('action',url);
             $('#frm_thoainangluong').find("[id='phanloai']").val(phanloai);
+        }
+
+        function dsnangluong(url,phanloai){
+            $('#frm_thoaidsnangluong').attr('action',url);
+            $('#frm_thoaidsnangluong').find("[id='phanloai']").val(phanloai);
         }
 
         function chitraluong_khoi(url){
