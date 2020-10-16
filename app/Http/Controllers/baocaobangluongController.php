@@ -3670,12 +3670,16 @@ class baocaobangluongController extends Controller
             $model = $m_cb->get();
             //dd($model);
             if ($inputs['phanloai'] == 'TNN') {
-                foreach ($model as $ct) {
+                foreach ($model as $key => $ct) {
                     $ct->tencv = isset($a_cv[$ct->macvcq]) ? $a_cv[$ct->macvcq] : '';
                     if ($ct->tnndenngay <= $inputs['ngayden']) {
                         $ct->trangthai = 'CHUANANGLUONG';
                         $ct->pctnn_m = $ct->pctnn == 0 ? 5 : $ct->pctnn + 1;
                     } else {
+                        if($ct->pctnn == 5){
+                            $model->forget($key);
+                            continue;
+                        }
                         $ct->trangthai = 'DANANGLUONG';
                         $ct->pctnn_m = $ct->pctnn;
                         $ct->pctnn = $ct->pctnn_m - 1 == 5 ? 0 : $ct->pctnn_m - 1;
@@ -3699,7 +3703,7 @@ class baocaobangluongController extends Controller
             } else {
                 $a_nb = ngachluong::all()->keyby('msngbac')->toarray();
 
-                foreach ($model as $ct) {
+                foreach ($model as $key=>$ct) {
                     $ct->tencv = isset($a_cv[$ct->macvcq]) ? $a_cv[$ct->macvcq] : '';
                     if ($ct->ngayden <= $inputs['ngayden']) {
                         $ct->trangthai = 'CHUANANGLUONG';
@@ -3721,6 +3725,10 @@ class baocaobangluongController extends Controller
                         }
 
                     } else {
+                        if($ct->bac == 1){
+                            $model->forget($key);
+                            continue;
+                        }
                         $ct->trangthai = 'DANANGLUONG';
                         $ct->bac_m = $ct->bac;
                         $ct->heso_m = $ct->heso;
@@ -3734,7 +3742,7 @@ class baocaobangluongController extends Controller
                                 $ct->bac = $ct->bac - 1;
                                 $ct->vuotkhung = 0;
                             } else {//vượt khung
-                                $ct->vuotkhung == $ngachluong['vuotkhung'] ? 0 : $ct->vuotkhung - 1;
+                                $ct->vuotkhung = $ct->vuotkhung == $ngachluong['vuotkhung'] ? 0 : $ct->vuotkhung - 1;
                                 $ct->heso_m = $ct->heso;
                                 $ct->bac_m = $ct->bac;
                             }
