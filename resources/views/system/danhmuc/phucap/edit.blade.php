@@ -127,6 +127,20 @@
                                     {!!Form::select('dieudong',array('0'=>'Không','1'=>'Có'), null, array('id' => 'dieudong','class' => 'form-control'))!!}
                                 </div>
                             </div>
+
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label class="form-control-label">Tính thuế thu nhập cá nhân</label>
+                                    {!!Form::select('thuetn',array('0'=>'Không','1'=>'Có'), null, array('id' => 'thuetn','class' => 'form-control'))!!}
+                                </div>
+                            </div>
+
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label class="form-control-label">Tính tập sự, thử việc</label>
+                                    {!!Form::select('tapsu',array('0'=>'Không','1'=>'Có'), null, array('id' => 'tapsu','class' => 'form-control'))!!}
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>

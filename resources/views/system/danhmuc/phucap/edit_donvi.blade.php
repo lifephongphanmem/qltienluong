@@ -132,6 +132,13 @@
 
                             <div class="col-md-3">
                                 <div class="form-group">
+                                    <label class="form-control-label">Tính tập sự, thử việc</label>
+                                    {!!Form::select('tapsu',array('0'=>'Không','1'=>'Có'), null, array('id' => 'tapsu','class' => 'form-control'))!!}
+                                </div>
+                            </div>
+
+                            <div class="col-md-3">
+                                <div class="form-group">
                                     <label class="form-control-label">Số thứ tự (sắp xếp)</label>
                                     {!!Form::text('stt', null, array('id' => 'stt','class' => 'form-control', 'data-mask'=>'fdecimal'))!!}
                                 </div>

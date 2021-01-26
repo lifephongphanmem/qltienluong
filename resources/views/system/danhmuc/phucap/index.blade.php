@@ -43,8 +43,8 @@
                 <div class="portlet-body form-horizontal">
                     <table id="sample_3" class="table table-hover table-striped table-bordered" style="min-height: 230px">
                         <thead>
-                            <tr>
-                                <th class="text-center" style="width: 5%">STT</th>
+                            <tr class="text-center" >
+                                <th style="width: 5%">STT</th>
                                 <th class="text-center">Mã số</th>
                                 <th class="text-center">Phụ cấp</th>
                                 <th class="text-center">Phân loại</th>
@@ -54,6 +54,8 @@
                                 <th class="text-center">Trừ</br>nghỉ</br>phép</th>
                                 <th class="text-center">Hưởng</br>thai</br>sản</th>
                                 <th class="text-center">Hưởng</br>điều</br>động</th>
+                                <th style="width: 5%" class="text-center">Tính</br>thuế</br>thu</br>nhập</th>
+                                <th style="width: 5%" class="text-center">Tính</br>tập</br>sự</th>
                                 <th class="text-center">Thao tác</th>
                             </tr>
                         </thead>
@@ -71,6 +73,8 @@
                                     <td class="text-center">{!!$value->nghiom == 1 ? '<i class="fa fa-check"></i>':''!!}</td>
                                     <td class="text-center">{!!$value->thaisan == 1 ? '<i class="fa fa-check"></i>':''!!}</td>
                                     <td class="text-center">{!!$value->dieudong == 1 ? '<i class="fa fa-check"></i>':''!!}</td>
+                                    <td class="text-center">{!!$value->thuetn == 1 ? '<i class="fa fa-check"></i>':''!!}</td>
+                                    <td class="text-center">{!!$value->tapsu == 1 ? '<i class="fa fa-check"></i>':''!!}</td>
                                     <td>
                                         @if(can('dmphucap','edit'))
                                             <a href="{{$furl.'edit?maso='.$value->mapc}}" class="btn btn-default btn-xs">

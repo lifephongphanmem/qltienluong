@@ -17,6 +17,7 @@ class dmphucap_donvi extends Model
         'nghiom',
         'dieudong',
         'thuetn',
+        'tapsu',
         'form', //tiêu đề trên Form
         'report', //tiêu đề trên Report
         'phanloai',

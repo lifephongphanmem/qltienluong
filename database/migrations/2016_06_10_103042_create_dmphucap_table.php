@@ -22,6 +22,7 @@ class CreateDmphucapTable extends Migration
             $table->boolean('nghiom')->nullable()->default(0);
             $table->boolean('dieudong')->nullable()->default(0);
             $table->boolean('thuetn')->nullable()->default(0);
+            $table->boolean('tapsu')->nullable()->default(0);
             $table->string('form')->nullable(); //tiêu đề trên Form
             $table->string('report')->nullable(); //tiêu đề trên Report
             $table->string('phanloai')->nullable();

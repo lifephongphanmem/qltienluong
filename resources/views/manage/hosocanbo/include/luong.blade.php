@@ -130,7 +130,7 @@
                             <div class="form-group">
                                 <label class="control-label">Tỷ lệ hưởng lương</label>
                                 <div class="input-group bootstrap-touchspin">
-                                    {!!Form::text('pthuong', null, array('id' => 'pthuong','class' => 'form-control', 'data-mask'=>'fdecimal'))!!}
+                                    {!!Form::text('pthuong', null, array('id' => 'pthuong','class' => 'form-control', 'data-mask'=>'fdecimal','title'=>"Áp dụng trong trường hợp: Cán bộ đi học, đi công tác; Cán bộ thử việc, tập sự"))!!}
                                     <span class="input-group-addon bootstrap-touchspin-postfix">%</span>
                                 </div>
                             </div>

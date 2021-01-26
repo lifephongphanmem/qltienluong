@@ -660,6 +660,7 @@ function getPhanLoaiCanBo_CongTac()
         '3' => 'Cán bộ đang điều động',
         '4' => 'Cán bộ được điều động đến',
         '5' => 'Cán bộ công tác tại vùng cao, biên giới, hải đảo',
+        '6' => 'Cán bộ đang tập sự, thử việc',
     );
 }
 

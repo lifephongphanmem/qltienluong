@@ -288,7 +288,7 @@ class bangluongController extends Controller
 
         //ds cán bộ
 
-        $model_phucap = dmphucap_donvi::select('mapc', 'phanloai', 'congthuc', 'baohiem', 'tenpc', 'thaisan', 'nghiom', 'dieudong')
+        $model_phucap = dmphucap_donvi::select('mapc', 'phanloai', 'congthuc', 'baohiem', 'tenpc', 'thaisan', 'nghiom', 'dieudong','thuetn','tapsu')
             ->where('madv', session('admin')->madv)->where('phanloai', '<', '3')
             ->wherenotin('mapc',array_merge(['hesott'], explode(',', $inputs['phucaploaitru'])))->get();
 
@@ -374,6 +374,7 @@ class bangluongController extends Controller
         $a_ts = array_column($model_phucap->where('thaisan', 1)->toarray(), 'mapc');
         $a_no = array_column($model_phucap->where('nghiom', 1)->toarray(), 'mapc');
         $a_dd = array_column($model_phucap->where('dieudong', 1)->toarray(), 'mapc');
+        $a_tapsu = array_column($model_phucap->where('tapsu', 1)->toarray(), 'mapc');
         //$a_dd = array_column($model_phucap->wherein('mapc', ['pclt', 'pckv'])->toarray(), 'mapc');//các loại phụ cấp cán bộ được điều động động đến được hưởng
         $a_pc_coth = array('pcudn', 'pctnn', 'pctaicu');
         $ptdn = round(session('admin')->ptdaingay / 100, session('admin')->lamtron);
@@ -625,6 +626,27 @@ class bangluongController extends Controller
                 }
                 goto tinhluong;
             }
+
+            //Cán bộ tập sự, thử việc
+            if ($cb->theodoi == 6) {
+                $tien = $tonghs = 0;
+                foreach ($model_phucap as $pc) {
+                    $maso = $pc->mapc;
+                    $maso_st = 'st_' . $maso;
+                    if(in_array($maso, $a_tapsu)){
+                        $cb->$maso = round($cb->$maso * $cb->pthuong / 100, session('admin')->lamtron);
+                        $cb->$maso_st = round($cb->$maso_st * $cb->pthuong / 100);
+                    }
+
+                    //phụ cấp ko tính theo số tiền và đc hưởng
+                    if ($cb->$maso < 10000 && $cb->$maso_st > 0) {
+                        $tonghs += $cb->$maso;
+                    }
+                    $tien += $cb->$maso_st;
+                }
+                goto tinhluong;
+            }
+
 
             if ($daingay) {
                 $cb->tencanbo .= ' (nghỉ dài ngày)';
@@ -881,7 +903,7 @@ class bangluongController extends Controller
            ->whereYear('ngaytu', $inputs['nam'])->whereMonth('ngaytu', $inputs['thang'])->get()->keyBy('macanbo')->toarray();
         */
         //dd($inputs['phucaploaitru']);
-        $model_phucap = dmphucap_donvi::select('mapc', 'phanloai', 'congthuc', 'baohiem', 'tenpc', 'thaisan', 'nghiom', 'dieudong','thuetn')
+        $model_phucap = dmphucap_donvi::select('mapc', 'phanloai', 'congthuc', 'baohiem', 'tenpc', 'thaisan', 'nghiom', 'dieudong','thuetn','tapsu')
             ->where('madv', session('admin')->madv)->where('phanloai', '<', '3')
             ->wherenotin('mapc',array_merge(['hesott'], explode(',', $inputs['phucaploaitru'])))->get();
         //dd($model_phucap);
@@ -947,6 +969,7 @@ class bangluongController extends Controller
         $a_ts = array_column($model_phucap->where('thaisan', 1)->toarray(), 'mapc');
         $a_no = array_column($model_phucap->where('nghiom', 1)->toarray(), 'mapc');
         $a_thue = array_column($model_phucap->where('thuetn', 1)->toarray(), 'mapc');
+        $a_tapsu = array_column($model_phucap->where('tapsu', 1)->toarray(), 'mapc');
         //dd($model_phucap);
 
         $a_goc = array('heso', 'vuotkhung', 'pccv'); //mảng phụ cấp làm công thức tính
@@ -1011,9 +1034,7 @@ class bangluongController extends Controller
                     }
                 }
             }
-
             //kết thúc chạy để tính môt số hệ số gốc
-
             $a_nguon = explode(',', $val['manguonkp']);
             $a_pc_kobh = explode(',', $val['khongnopbaohiem']);
 
@@ -1202,11 +1223,30 @@ class bangluongController extends Controller
             }
 
             //Cán bộ đang đi công tác, đi học (bỏ qua các loại tạm ngưng theo dõi)
-            if (($m_cb[$key]['theodoi'] == 2)|| ($m_cb[$key]['theodoi'] == 1 && $m_cb[$key]['mact'] == '1506673422') ) {
+            if (($m_cb[$key]['theodoi'] == 2)
+                || ($m_cb[$key]['theodoi'] == 1 && $m_cb[$key]['mact'] == '1506673422')) {
                 $tien = $tonghs = 0;
                 foreach ($a_pc as $k => $v) {
                     $m_cb[$key][$k] = round($m_cb[$key][$k] * $m_cb[$key]['pthuong'] / 100, session('admin')->lamtron);
                     $m_cb[$key]['st_' . $k] = round($m_cb[$key]['st_' . $k] * $m_cb[$key]['pthuong'] / 100);
+
+                    //phụ cấp ko tính theo số tiền và đc hưởng
+                    if ($m_cb[$key][$k] < 10000 && $m_cb[$key]['st_' . $k] > 0) {
+                        $tonghs += $m_cb[$key][$k];
+                    }
+                    $tien += $m_cb[$key]['st_' . $k];
+
+                }
+                goto tinhluong;
+            }
+            //Cán bộ tập sự, thử việc
+            if ($m_cb[$key]['theodoi'] == 6) {
+                $tien = $tonghs = 0;
+                foreach ($a_pc as $k => $v) {
+                    if(in_array($k,$a_tapsu)){
+                        $m_cb[$key][$k] = round($m_cb[$key][$k] * $m_cb[$key]['pthuong'] / 100, session('admin')->lamtron);
+                        $m_cb[$key]['st_' . $k] = round($m_cb[$key]['st_' . $k] * $m_cb[$key]['pthuong'] / 100);
+                    }
 
                     //phụ cấp ko tính theo số tiền và đc hưởng
                     if ($m_cb[$key][$k] < 10000 && $m_cb[$key]['st_' . $k] > 0) {
