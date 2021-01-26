@@ -628,7 +628,7 @@ class bangluongController extends Controller
             }
 
             //Cán bộ tập sự, thử việc
-            if ($cb->theodoi == 6) {
+            if ($cb->theodoi == 6 || $cb->mact == '1506673422') {
                 $tien = $tonghs = 0;
                 foreach ($model_phucap as $pc) {
                     $maso = $pc->mapc;
@@ -1240,7 +1240,7 @@ class bangluongController extends Controller
                 goto tinhluong;
             }
             //Cán bộ tập sự, thử việc
-            if ($m_cb[$key]['theodoi'] == 6) {
+            if ($m_cb[$key]['theodoi'] == 6 || $m_cb[$key]['mact'] == '1506673422') {
                 $tien = $tonghs = 0;
                 foreach ($a_pc as $k => $v) {
                     if(in_array($k,$a_tapsu)){
