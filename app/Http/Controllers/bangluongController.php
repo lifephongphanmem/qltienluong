@@ -246,7 +246,7 @@ class bangluongController extends Controller
         bangluong::create($inputs);
         return redirect('/chuc_nang/bang_luong/bang_luong?mabl=' . $inputs['mabl'].'&mapb=');
     }
-
+    //cán bộ đi học nộp 100% bảo hiểm, cán bộ tập sự nộp bảo hiểm theo lương
     //làm hàm lấy ds cán bộ đang công tác: notin thôi công tac and notin ngaycongtac < ngày cuối tháng lương
     //xác định mức lương cơ bản cán bộ (phân loại công tác - nguồn kinh phí - phụ cấp)
     //lấy theo mức lương mặc định theo nguồn kinh phí
@@ -411,9 +411,14 @@ class bangluongController extends Controller
             $cb->luongcoban = $inputs['luongcoban'];
             $cb->giaml = $cb->songaytruc = $cb->songaycong = 0;
             $cb->songaylv = $cb->tongngaylv = session('admin')->songaycong;
-            //trường hợp cán bộ đang đi công tác, đi học => giữ nguyên 100% để tính bảo hiểm sau mới tính lại lương thực nhận
-            if ($cb->theodoi != 2) {
-                $cb->heso = round($cb->heso * $cb->pthuong / 100, session('admin')->lamtron);
+            //trường hợp cán bộ tập sự, thử việc nộp bảo hiểm theo số lương thực nhận
+            // (chỉ cần tính các phụ cấp theo hệ số và số tiền; hệ số theo % sẽ đc tính lại theo phụ cấp gốc)
+            if ($cb->theodoi == 6 || $cb->mact == '1506673422') {
+                foreach ($a_tapsu as $pc) {
+                    if($cb->$pc > 0 && $cb->$pc < 50){
+                        $cb->$pc = round($cb->$pc * $cb->pthuong / 100, session('admin')->lamtron);
+                    }
+                }
             }
             $cb->vuotkhung = isset($cb->vuotkhung) ? round($cb->heso * $cb->vuotkhung / 100, session('admin')->lamtron) : 0;
 
@@ -628,24 +633,24 @@ class bangluongController extends Controller
             }
 
             //Cán bộ tập sự, thử việc
-            if ($cb->theodoi == 6 || $cb->mact == '1506673422') {
-                $tien = $tonghs = 0;
-                foreach ($model_phucap as $pc) {
-                    $maso = $pc->mapc;
-                    $maso_st = 'st_' . $maso;
-                    if(in_array($maso, $a_tapsu)){
-                        $cb->$maso = round($cb->$maso * $cb->pthuong / 100, session('admin')->lamtron);
-                        $cb->$maso_st = round($cb->$maso_st * $cb->pthuong / 100);
-                    }
-
-                    //phụ cấp ko tính theo số tiền và đc hưởng
-                    if ($cb->$maso < 10000 && $cb->$maso_st > 0) {
-                        $tonghs += $cb->$maso;
-                    }
-                    $tien += $cb->$maso_st;
-                }
-                goto tinhluong;
-            }
+//            if ($cb->theodoi == 6 || $cb->mact == '1506673422') {
+//                $tien = $tonghs = 0;
+//                foreach ($model_phucap as $pc) {
+//                    $maso = $pc->mapc;
+//                    $maso_st = 'st_' . $maso;
+//                    if(in_array($maso, $a_tapsu)){
+//                        $cb->$maso = round($cb->$maso * $cb->pthuong / 100, session('admin')->lamtron);
+//                        $cb->$maso_st = round($cb->$maso_st * $cb->pthuong / 100);
+//                    }
+//
+//                    //phụ cấp ko tính theo số tiền và đc hưởng
+//                    if ($cb->$maso < 10000 && $cb->$maso_st > 0) {
+//                        $tonghs += $cb->$maso;
+//                    }
+//                    $tien += $cb->$maso_st;
+//                }
+//                goto tinhluong;
+//            }
 
 
             if ($daingay) {
@@ -986,17 +991,18 @@ class bangluongController extends Controller
                 $m_cb[$key]['lvhd'] = $inputs['linhvuchoatdong'];
             }
 
-            //chạy tính hệ số + vượt khung trc để tính cho kiêm nhiệm (trường hợp tạo bảng lương không hưởng ở nguồn
-            // kinh phí này)
+            //chạy tính hệ số + vượt khung trc để tính cho kiêm nhiệm (trường hợp tạo bảng lương không hưởng ở nguồn kinh phí này)
 
-            /* 09/11/2020: tính lại lương cho cán bộ thực tập: tính % cho tất cả các hệ số đang hưởng (bảo hiểm vẫn tính theo 100% lương)
-            //trường hợp cán bộ đang đi công tác, đi học => giữ nguyên 100% để tính bảo hiểm sau mới tính lại lương thực nhận
-            //cán bộ tập sự thử việc tính % hưởng lương chỉ tính hệ số lương
-            //lạng sơn y.c tập sự thử việc tính % hưởng lương cho tất cả lương
-            if ($m_cb[$key]['theodoi'] != 2) {
-                $m_cb[$key]['heso'] = round($val['heso'] * $val['pthuong'] / 100, session('admin')->lamtron);
+            //trường hợp cán bộ tập sự, thử việc nộp bảo hiểm theo số lương thực nhận
+            // (chỉ cần tính các phụ cấp theo hệ số và số tiền; hệ số theo % sẽ đc tính lại theo phụ cấp gốc)
+            if ($m_cb[$key]['theodoi'] == 6 || $m_cb[$key]['mact'] == '1506673422') {
+                foreach ($a_tapsu as $pc) {
+                    if($m_cb[$key][$pc] > 0 && $m_cb[$key][$pc] < 50){
+                        $m_cb[$key][$pc] = round($m_cb[$key][$pc] * $m_cb[$key]['pthuong'] / 100, session('admin')->lamtron);
+                    }
+                }
             }
-            */
+
             $m_cb[$key]['vuotkhung'] = isset($m_cb[$key]['vuotkhung']) ? round($val['heso'] * $val['vuotkhung'] / 100, session('admin')->lamtron) : 0;
             $m_cb[$key]['mabl'] = $inputs['mabl'];
             $m_cb[$key]['manguonkp'] = $inputs['manguonkp'];
@@ -1223,8 +1229,7 @@ class bangluongController extends Controller
             }
 
             //Cán bộ đang đi công tác, đi học (bỏ qua các loại tạm ngưng theo dõi)
-            if (($m_cb[$key]['theodoi'] == 2)
-                || ($m_cb[$key]['theodoi'] == 1 && $m_cb[$key]['mact'] == '1506673422')) {
+            if (($m_cb[$key]['theodoi'] == 2)) {
                 $tien = $tonghs = 0;
                 foreach ($a_pc as $k => $v) {
                     $m_cb[$key][$k] = round($m_cb[$key][$k] * $m_cb[$key]['pthuong'] / 100, session('admin')->lamtron);
@@ -1240,23 +1245,23 @@ class bangluongController extends Controller
                 goto tinhluong;
             }
             //Cán bộ tập sự, thử việc
-            if ($m_cb[$key]['theodoi'] == 6 || $m_cb[$key]['mact'] == '1506673422') {
-                $tien = $tonghs = 0;
-                foreach ($a_pc as $k => $v) {
-                    if(in_array($k,$a_tapsu)){
-                        $m_cb[$key][$k] = round($m_cb[$key][$k] * $m_cb[$key]['pthuong'] / 100, session('admin')->lamtron);
-                        $m_cb[$key]['st_' . $k] = round($m_cb[$key]['st_' . $k] * $m_cb[$key]['pthuong'] / 100);
-                    }
-
-                    //phụ cấp ko tính theo số tiền và đc hưởng
-                    if ($m_cb[$key][$k] < 10000 && $m_cb[$key]['st_' . $k] > 0) {
-                        $tonghs += $m_cb[$key][$k];
-                    }
-                    $tien += $m_cb[$key]['st_' . $k];
-
-                }
-                goto tinhluong;
-            }
+//            if ($m_cb[$key]['theodoi'] == 6 || $m_cb[$key]['mact'] == '1506673422') {
+//                $tien = $tonghs = 0;
+//                foreach ($a_pc as $k => $v) {
+//                    if(in_array($k,$a_tapsu)){
+//                        $m_cb[$key][$k] = round($m_cb[$key][$k] * $m_cb[$key]['pthuong'] / 100, session('admin')->lamtron);
+//                        $m_cb[$key]['st_' . $k] = round($m_cb[$key]['st_' . $k] * $m_cb[$key]['pthuong'] / 100);
+//                    }
+//
+//                    //phụ cấp ko tính theo số tiền và đc hưởng
+//                    if ($m_cb[$key][$k] < 10000 && $m_cb[$key]['st_' . $k] > 0) {
+//                        $tonghs += $m_cb[$key][$k];
+//                    }
+//                    $tien += $m_cb[$key]['st_' . $k];
+//
+//                }
+//                goto tinhluong;
+//            }
 
             if ($daingay) {
                 $m_cb[$key]['tencanbo'] .= ' (nghỉ dài ngày)';
