@@ -1740,17 +1740,17 @@ class baocaobangluongController extends Controller
                 else
                     $m_mathdv = tonghopluong_donvi::where('madv', $madv)->where('thang', $thang)->where('nam', $nam)->where('trangthai', 'DAGUI')->distinct()->get();
             }
-
             if(isset($m_mathdv)) {
                 if(count($check)>0) {
-                    $mathh = array_column($m_mathdv->toArray(), 'mathdv');
+                    //$mathh = array_column($m_mathdv->toArray(), 'mathdv');
+                    $mathh =$m_mathdv->mathdv;
                     $a_math = tonghopluong_donvi::where('mathh', $mathh)->get();
                     $model = tonghopluong_donvi_bangluong::join('tonghopluong_donvi','tonghopluong_donvi_bangluong.mathdv','tonghopluong_donvi.mathdv')
                         ->select('tonghopluong_donvi_bangluong.*','thang')
                     ->wherein('tonghopluong_donvi_bangluong.mathdv',array_column($a_math->toarray(),'mathdv'))->get();
-                    $model_thongtin = tonghopluong_donvi::wherein('mathh', $mathh)->first();
+                    $model_thongtin = tonghopluong_donvi::where('mathh', $mathh)->first();
                     $m_pc = array_column(dmphucap_donvi::wherein('madv', function($query) use($mathh){
-                        $query->select('dmdonvi.madv')->from('dmdonvi')->join('tonghopluong_khoi','dmdonvi.madv','tonghopluong_khoi.madv')->wherein('mathdv',$mathh)
+                        $query->select('dmdonvi.madv')->from('dmdonvi')->join('tonghopluong_khoi','dmdonvi.madv','tonghopluong_khoi.madv')->where('mathdv',$mathh)
                             ->get();
                     })->get()->toarray(),'report','mapc');
                 }else{
