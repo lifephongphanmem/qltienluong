@@ -113,7 +113,7 @@ class xemdulieucapduoiController extends Controller
                 ->where('nam', $inputs['nam'])
                 ->where('trangthai', 'DAGUI')->first();
             //dd(count($model));
-            $tralai = count($model)>0? false : true;
+            $tralai = count((array)$model)>0? false : true;
             foreach($model_donvi as $dv) {
                 $dv->tendvcq = getTenDV($dv->macqcq);
                 $tonghop = $model_tonghop->where('madv', $dv->madv)->first();
@@ -122,12 +122,12 @@ class xemdulieucapduoiController extends Controller
                 $dv->mathdv = NULL;
                 $dv->ngaygui = '';
                 $dv->trangthai = 'CHOGUI';
-                if (count($tonghop)>0 ) {
+                if (count((array)$tonghop)>0 ) {
                     $dv->mathdv = $tonghop->mathdv;
                     $dv->trangthai = $tonghop->trangthai;
                     $dv->ngaygui = $tonghop->ngaygui;
                 }
-                if (count($tonghopkhoi)>0) {
+                if (count((array)$tonghopkhoi)>0) {
                     $dv->mathdv = $tonghopkhoi->mathdv;
                     $dv->trangthai = $tonghopkhoi->trangthai;
                     $dv->ngaygui = $tonghopkhoi->ngaygui;

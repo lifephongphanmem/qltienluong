@@ -129,11 +129,11 @@
             ?>
             <tr style="font-weight: bold;">
                 <td></td>
-                <td style="text-align: left;" colspan="{{12 + $col}}">{{$a_nguon[$j]['tennguonkp']}}</td>
-            </tr>
+                <td style="text-align: left;" colspan="{{12 + $col}}">{{($a_nguon[$j]['tonghop'] == 'BANGLUONG'? "Bảng lương - ": "Truy lĩnh - "). $a_nguon[$j]['tennguonkp']}}</td>
+                </tr>
             @foreach($model_congtac as $congtac)
                 <?php
-                    $model_luong = $model->where('mact',$congtac['mact'])->where('manguonkp',$congtac['manguonkp']);
+                    $model_luong = $model->where('mact',$congtac['mact'])->where('manguonkp',$congtac['manguonkp'])->where('tonghop',$congtac['tonghop']);
                 ?>
                 @if(count($model_luong)> 0)
                     <?php $stt=1; ?>

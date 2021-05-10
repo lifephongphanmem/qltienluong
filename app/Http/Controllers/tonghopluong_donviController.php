@@ -65,7 +65,7 @@ class tonghopluong_donviController extends Controller
                 $bangluong = $model_bangluong->where('thang', $a_data[$i]['thang']);
                 if (count($bangluong) > 0) {
                     $a_data[$i]['bangluong'] = 'ok';
-                    if (count($tonghop) > 0) {
+                    if (count((array)$tonghop) > 0) {
                         $a_data[$i]['noidung'] = $tonghop->noidung;
                         $a_data[$i]['mathdv'] = $tonghop->mathdv;
                         $a_data[$i]['trangthai'] = $tonghop->trangthai;
@@ -80,7 +80,7 @@ class tonghopluong_donviController extends Controller
                     }
                 } else {
                     //do trc xóa bảng lương nhưng chưa xóa tổng hợp
-                    if (count($tonghop) > 0) {
+                    if (count((array) $tonghop) > 0) {
                         $a_data[$i]['bangluong'] = 'ok';
                         $a_data[$i]['noidung'] = $tonghop->noidung;
                         $a_data[$i]['mathdv'] = $tonghop->mathdv;

@@ -1039,7 +1039,7 @@ class tonghopluong_khoiController extends Controller
                     $chitiet->tongtl = $chitiet->ttl;
                 }
             }
-            //dd($model);
+            //dd($model->toarray());
 
             foreach (getColTongHop() as $ct) {
                 if ($model->sum($ct) > 0) {
@@ -1067,7 +1067,7 @@ class tonghopluong_khoiController extends Controller
                     ->all();
             });
             $a_nguon = a_unique($model_nguon);
-
+            //dd($a_nguon);
             //mới thêm
             $a_tonghop = $model->map(function ($data) {
                 return collect($data->toArray())
