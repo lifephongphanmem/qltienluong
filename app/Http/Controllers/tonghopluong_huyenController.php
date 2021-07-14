@@ -311,10 +311,10 @@ class tonghopluong_huyenController extends Controller
                 $phucap = a_getelement_equal($a_bangluong, array('mact'=>$chitiet->mact,'manguonkp'=>$chitiet->manguonkp));
                 foreach (getColTongHop() as $ct) {
                     $ma = 'hs'.$ct;
-                    if($chitiet->luongcoban != 0)
+                    //if($chitiet->luongcoban != 0)
                     $chitiet->$ma = $chitiet->$ct ;
-                    else
-                        $chitiet->$ma = 0;
+                    //else
+                    //    $chitiet->$ma = 0;
                 }
                 /*
                 foreach (getColTongHop() as $ct) {
