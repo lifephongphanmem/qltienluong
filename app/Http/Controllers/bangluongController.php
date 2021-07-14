@@ -2427,40 +2427,111 @@ class bangluongController extends Controller
             $inputs = $request->all();
             $m_bl = bangluong::where('mabl', $inputs['mabl_hs'])->first();
             $model = (new data())->getBangluong_ct_cb($m_bl->thang, $inputs['id_hs']);
+            $m_cb = hosocanbo::where('macanbo', $model->macanbo)->first();
+            $model_phucap = dmphucap_donvi::where('madv', $m_bl->madv)
+                ->where('phanloai', '<', '3')
+                ->wherenotin('mapc',['hesott'])->get();
+            //dd($m_bl);
+            $m_thue = dmthuetncn::where('ngayapdung','<=',$m_bl->ngaylap)->orderby('ngayapdung','desc')->first();
+            if($m_thue!=null){
+                $banthan = $m_thue->banthan;
+                $phuthuoc = $m_thue->phuthuoc;
+                $a_mucthue = dmthuetncn_ct::where('sohieu',$m_thue->sohieu)->orderby('muctu')->get()->toarray();
+            }else{
+                $banthan = $phuthuoc = 0;
+                $a_mucthue = [];
+            }
+           // dd($inputs);
+            $a_bh = array_column($model_phucap->where('baohiem', 1)->toarray(), 'mapc');
+            $a_dd = array_column($model_phucap->where('dieudong', 1)->toarray(), 'mapc');
+            $a_ts = array_column($model_phucap->where('thaisan', 1)->toarray(), 'mapc');
+            $a_no = array_column($model_phucap->where('nghiom', 1)->toarray(), 'mapc');
+            $a_thue = array_column($model_phucap->where('thuetn', 1)->toarray(), 'mapc');
+            $a_tapsu = array_column($model_phucap->where('tapsu', 1)->toarray(), 'mapc');
+
+            $a_pc = $model_phucap->keyby('mapc')->toarray();
+//            dd($a_pc);
             //bảng chi trả lương
             if ($m_bl->phanloai == 'BANGLUONG') {
-                $mapc = $inputs['mapc'];
                 $mapc_st = 'st_' . $inputs['mapc'];
+                $model->$inputs['mapc'] = $inputs['heso'];
+                $model->$mapc_st = getDbl($inputs['sotien']);
 
-                $inputs['heso'] = chkDbl($inputs['heso']);
-                $inputs['luongcb'] = chkDbl($inputs['luongcb']);
-                $inputs['sotien'] = chkDbl($inputs['sotien']);
-                //dd($inputs);
-                //Tính lương mới
-                $sotien_cl = $inputs['sotien'] - $model->$mapc_st;
-                $heso_cl = $inputs['heso'] > 1000 ? 0 : $inputs['heso'] - $model->$mapc;//nếu > 1000 - >số tiền ko pai công lại hệ số
+                //các biển lưu để tính lương
+                $tien = $tonghs = $baohiem = 0;
+                $tienthue = 0;
 
-                $model->$mapc_st = $inputs['sotien'];
-                $model->$mapc = $inputs['heso'];
-                //Tính lại bao hiểm (các trường hợp thai sản, dai ngày, ko lương => số tiền = 0;
-                //  => nếu ko đóng bảo thì tỷ lệ bảo hiểm = 0)
-                if ($model->congtac != 'THAISAN' && $model->congtac != 'DAINGAY' && $model->congtac != 'KHONGLUONG') {
-                    $baohiem = $model->st_heso + $model->st_vuotkhung + $model->st_pccv + $model->st_pctnn;
-                    $model->stbhxh = round($model->bhxh * $baohiem, 0);
-                    $model->stbhyt = round($model->bhyt * $baohiem, 0);
-                    $model->stkpcd = round($model->kpcd * $baohiem, 0);
-                    $model->stbhtn = round($model->bhtn * $baohiem, 0);
-                    $model->ttbh = $model->stbhxh + $model->stbhyt + $model->stkpcd + $model->stbhtn;
-                    $model->stbhxh_dv = round($model->bhxh_dv * $baohiem, 0);
-                    $model->stbhyt_dv = round($model->bhyt_dv * $baohiem, 0);
-                    $model->stkpcd_dv = round($model->kpcd_dv * $baohiem, 0);
-                    $model->stbhtn_dv = round($model->bhtn_dv * $baohiem, 0);
-                    $model->ttbh_dv = $model->stbhxh_dv + $model->stbhyt_dv + $model->stkpcd_dv + $model->stbhtn_dv;
+                foreach ($a_pc as $ma=>$val){
+                    $ma_st = 'st_' . $ma;
+                    $tien += $model->$ma_st;
+                    if($model->$ma_st > 0 && $model->$ma < 50){// do 1 số loại phụ cấp lưu lại hệ số làm hệ số gốc
+                        $tonghs += $model->$ma;
+                    }
+                    if($val['baohiem'] == '1'){
+                        $baohiem += $model->$ma_st;
+                    }
+                    if(in_array($ma,$a_thue)){
+                        $tienthue += $model->$ma_st;
+                    }
                 }
 
-                $model->tonghs += $heso_cl;
-                $model->ttl += $sotien_cl;
+                $tienthue = $tienthue - $banthan - $phuthuoc * getDbl($m_cb->nguoiphuthuoc);
+                if($tienthue > 0) {
+                    foreach ($a_mucthue as $thue) {
+                        if ($tienthue > $thue['muctu']) {
+                            $model->thuetn += round(($tienthue > $thue['mucden'] ? $thue['mucden'] - $thue['muctu'] : $tienthue - $thue['muctu'])
+                                * $thue['phantram'] / 100);
+                        }
+                    }
+                }
+                $model->stbhxh = round($model->bhxh * $baohiem, 0);
+                $model->stbhyt = round($model->bhyt * $baohiem, 0);
+                $model->stkpcd = round($model->kpcd * $baohiem, 0);
+                $model->stbhtn = round($model->bhtn * $baohiem, 0);
+                $model->ttbh = $model->stbhxh + $model->stbhyt + $model->stkpcd + $model->stbhtn;
+                $model->stbhxh_dv = round($model->bhxh_dv * $baohiem, 0);
+                $model->stbhyt_dv = round($model->bhyt_dv * $baohiem, 0);
+                $model->stkpcd_dv = round($model->kpcd_dv * $baohiem, 0);
+                $model->stbhtn_dv = round($model->bhtn_dv * $baohiem, 0);
+                $model->ttbh_dv = $model->stbhxh_dv + $model->stbhyt_dv + $model->stkpcd_dv + $model->stbhtn_dv;
+
+                $model->tonghs = $tonghs;
+                $model->ttl = $tien;
                 $model->luongtn = $model->ttl - $model->ttbh - $model->giaml - $model->thuetn - $model->trichnop + $model->bhct + $model->tienthuong;
+
+////                $m_cb[$key]['luongtn'] = $m_cb[$key]['ttl'] - $m_cb[$key]['ttbh'] - $m_cb[$key]['giaml'] - $m_cb[$key]['thuetn'];
+//
+//                dd($model);
+//                $inputs['heso'] = chkDbl($inputs['heso']);
+//                $inputs['luongcb'] = chkDbl($inputs['luongcb']);
+//                $inputs['sotien'] = chkDbl($inputs['sotien']);
+//                //dd($inputs);
+//                //Tính lương mới
+//                $sotien_cl = $inputs['sotien'] - $model->$mapc_st;
+//                $heso_cl = $inputs['heso'] > 1000 ? 0 : $inputs['heso'] - $model->$mapc;//nếu > 1000 - >số tiền ko pai công lại hệ số
+//
+////                $model->$mapc_st = $inputs['sotien'];
+////                $model->$mapc = $inputs['heso'];
+//                //Tính lại bao hiểm (các trường hợp thai sản, dai ngày, ko lương => số tiền = 0;
+//                //  => nếu ko đóng bảo thì tỷ lệ bảo hiểm = 0)
+//                if ($model->congtac != 'THAISAN' && $model->congtac != 'DAINGAY' && $model->congtac != 'KHONGLUONG') {
+//                    $baohiem = $model->st_heso + $model->st_vuotkhung + $model->st_pccv + $model->st_pctnn;
+//                    $model->stbhxh = round($model->bhxh * $baohiem, 0);
+//                    $model->stbhyt = round($model->bhyt * $baohiem, 0);
+//                    $model->stkpcd = round($model->kpcd * $baohiem, 0);
+//                    $model->stbhtn = round($model->bhtn * $baohiem, 0);
+//                    $model->ttbh = $model->stbhxh + $model->stbhyt + $model->stkpcd + $model->stbhtn;
+//                    $model->stbhxh_dv = round($model->bhxh_dv * $baohiem, 0);
+//                    $model->stbhyt_dv = round($model->bhyt_dv * $baohiem, 0);
+//                    $model->stkpcd_dv = round($model->kpcd_dv * $baohiem, 0);
+//                    $model->stbhtn_dv = round($model->bhtn_dv * $baohiem, 0);
+//                    $model->ttbh_dv = $model->stbhxh_dv + $model->stbhyt_dv + $model->stkpcd_dv + $model->stbhtn_dv;
+//                }
+//
+//                $model->tonghs += $heso_cl;
+//                $model->ttl += $sotien_cl;
+//                $model->luongtn = $model->ttl - $model->ttbh - $model->giaml - $model->thuetn - $model->trichnop + $model->bhct + $model->tienthuong;
+
                 //dd($model);
                 $model->save();
             }

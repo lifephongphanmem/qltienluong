@@ -76,7 +76,7 @@ class dmphucapController extends Controller
             $a_pl = getPhanLoaiPhuCap();
             $a_ct = getCongThucTinhPC();
             //$a_th = getColTongHop();
-            dd($a_ct);
+//            dd($a_ct);
             foreach ($model as $ct) {
                 $ct->tenphanloai = isset($a_pl[$ct->phanloai]) ? $a_pl[$ct->phanloai] : '';
                 $congthuc = explode(',', $ct->congthuc);

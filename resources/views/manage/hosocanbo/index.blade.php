@@ -35,6 +35,7 @@
                         <i class="fa fa-list-alt"></i>DANH SÁCH HỒ SƠ CÁN BỘ - {{$tendv}}
                     </div>
                     <div class="actions">
+
                         <div class="btn-group btn-group-solid">
                             <button type="button" class="btn btn-lg btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="true">
                                 Excel <i class="fa fa-angle-down"></i>
