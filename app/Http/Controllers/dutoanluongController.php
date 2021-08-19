@@ -36,12 +36,17 @@ class dutoanluongController extends Controller
         if (Session::has('admin')) {
             $model = dutoanluong::where('madv',session('admin')->madv)->orderby('namns')->get();
             $model_bl = bangluong::where('madv', session('admin')->madv)->where('phanloai','BANGLUONG')->orderby('nam')->orderby('thang')->get();
+            $model_nhomct = dmphanloaicongtac::select('macongtac', 'tencongtac')->get();
+            $model_tenct = dmphanloaict::select('tenct', 'macongtac', 'mact')->get();
+
             return view('manage.dutoanluong.index')
                 ->with('furl','/nghiep_vu/quan_ly/du_toan/')
                 ->with('furl_ajax','/ajax/du_toan/')
                 ->with('model',$model)
                 ->with('model_bl',$model_bl)
                 ->with('a_nkp',getNguonKP(false))
+                ->with('model_nhomct', $model_nhomct)
+                ->with('model_tenct', $model_tenct)
                 ->with('pageTitle','Danh sách dự toán lương của đơn vị');
         } else
             return view('errors.notlogin');
@@ -178,10 +183,13 @@ class dutoanluongController extends Controller
             $a_th = array_merge(array('macanbo', 'mact', 'macvcq', 'mapb', 'ngayden'), getColTongHop());
             $a_plct = getPLCTTongHop();
 
+            //không lên đổi ra mảng do 1 cán bộ kiêm nhiêm nhiều chức vụ
             $m_cb_kn = hosocanbo_kiemnhiem::select($a_th)
                 ->where('madv', session('admin')->madv)
                 ->wherein('mact', $a_plct)
-                ->get()->keyBy('macanbo')->toarray();
+                ->get();
+//                ->get()->keyBy('macanbo')->toarray();
+            
             $a_th = array_merge(array('ngaysinh', 'tencanbo', 'stt', 'gioitinh', 'msngbac', 'bac','ngayvao','ngaybc',
                 'bhxh_dv', 'bhyt_dv', 'bhtn_dv', 'kpcd_dv','ngaytu','ngayden','tnntungay','tnndenngay'), $a_th);
             $model = hosocanbo::select($a_th)->where('madv', session('admin')->madv)
@@ -261,38 +269,40 @@ class dutoanluongController extends Controller
             $m_nb = $model->where('nam_nb', '<>', '')->where('nam_nb', '=', $inputs['namdt'])->keyBy('macanbo')->toarray();
             $m_tnn = $model->where('nam_tnn', '<>', '')->where('nam_tnn', '=', $inputs['namdt'])->keyBy('macanbo')->toarray();
             //dd($m_tnn);
-            foreach ($m_cb_kn as $key => $val) {
-                $m_cb_kn[$key]['congtac'] = 'CONGTAC';
-                if(isset($m_cb[$m_cb_kn[$key]['macanbo']])){
-                    $canbo = $m_cb[$m_cb_kn[$key]['macanbo']];
-                    $m_cb_kn[$key]['tencanbo'] = $canbo['tencanbo'];
-                    $m_cb_kn[$key]['stt'] = $canbo['stt'];
-                    $m_cb_kn[$key]['msngbac'] = $canbo['msngbac'];
+            $iKn = 1;
+            foreach ($m_cb_kn as $kn) {
+                $kn->congtac = 'CONGTAC';
+                if(isset($m_cb[$kn->macanbo])){
+                    $canbo = $m_cb[$kn->macanbo];
+                    $kn->tencanbo = $canbo['tencanbo'];
+                    $kn->stt = $canbo['stt'];
+                    $kn->msngbac = $canbo['msngbac'];
                 }else{
-                    $m_cb_kn[$key]['tencanbo'] = '';
-                    $m_cb_kn[$key]['stt'] = '';
-                    $m_cb_kn[$key]['msngbac'] = '';
+                    $kn->tencanbo = '';
+                    $kn->stt = '';
+                    $kn->msngbac = '';
                 }
-                $m_cb_kn[$key]['ngayvao'] = null;
-                $m_cb_kn[$key]['ngaybc'] = null;
-                $m_cb_kn[$key]['ngaysinh'] = null;
-                $m_cb_kn[$key]['tnndenngay'] = null;
-                $m_cb_kn[$key]['macongtac'] = null;
-                $m_cb_kn[$key]['gioitinh'] = null;
-                $m_cb_kn[$key]['nam_ns'] = null;
-                $m_cb_kn[$key]['thang_ns'] = null;
-                $m_cb_kn[$key]['nam_nb'] = null;
-                $m_cb_kn[$key]['thang_nb'] = null;
-                $m_cb_kn[$key]['nam_tnn'] = null;
-                $m_cb_kn[$key]['thang_tnn'] = null;
-                $m_cb_kn[$key]['msngbac'] = null;
-                $m_cb_kn[$key]['bac'] = null;
-                $m_cb_kn[$key]['bhxh_dv'] = 0;
-                $m_cb_kn[$key]['bhyt_dv'] = 0;
-                $m_cb_kn[$key]['bhtn_dv'] = 0;
-                $m_cb_kn[$key]['kpcd_dv'] = 0;
-                $m_cb_kn[$key]['masodv'] = $masodv;
-                $m_cb[$key . '_kn'] = $m_cb_kn[$key];
+                $kn->ngayvao = null;
+                $kn->ngaybc = null;
+                $kn->ngaysinh = null;
+                $kn->tnndenngay = null;
+                $kn->macongtac = null;
+                $kn->gioitinh = null;
+                $kn->nam_ns = null;
+                $kn->thang_ns = null;
+                $kn->nam_nb = null;
+                $kn->thang_nb = null;
+                $kn->nam_tnn = null;
+                $kn->thang_tnn = null;
+                $kn->msngbac = null;
+                $kn->bac = null;
+                $kn->bhxh_dv = 0;
+                $kn->bhyt_dv = 0;
+                $kn->bhtn_dv = 0;
+                $kn->kpcd_dv = 0;
+                $kn->masodv = $masodv;
+                $m_cb[$kn->macanbo . '_kn'.$iKn] = $kn->toarray();
+                $iKn++;
             }
 
             $a_pc = dmphucap_donvi::select('mapc', 'phanloai', 'congthuc', 'baohiem')
@@ -1652,13 +1662,16 @@ class dutoanluongController extends Controller
     function printf_tt107(Request $request){
         if (Session::has('admin')) {
             $inputs = $request->all();
-            //dd($inputs);
-            if($inputs['thang'] == 'ALL'){
-                $model = dutoanluong_bangluong::where('masodv', $inputs['masodv'])->orderby('thang')->orderby('stt')->get();
-            }else{
-                $model = dutoanluong_bangluong::where('masodv', $inputs['masodv'])->where('thang', $inputs['thang'])->orderby('thang')->orderby('stt')->get();
+            $model = dutoanluong_bangluong::where('masodv', $inputs['masodv']);
+
+            if($inputs['thang'] != 'ALL'){
+                $model = $model->where('thang', $inputs['thang']);
+            }
+            if($inputs['mact'] != 'ALL'){
+                $model = $model->where('mact', $inputs['mact']);
             }
 
+            $model = $model->orderby('thang')->orderby('stt')->get();
             //$model = dutoanluong_bangluong::where('masodv', $inputs['masodv'])->orderby('thang')->get();
             $model_thongtin = dutoanluong::where('masodv', $inputs['masodv'])->first();
             $a_ct = array_column(dmphanloaict::all()->toArray(), 'tenct', 'mact');
