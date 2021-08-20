@@ -1408,7 +1408,7 @@ class dutoanluongController extends Controller
             $model_thongtin = dutoanluong::where('masodv', $inputs['maso'])->first();
             $a_ct = getPhanLoaiCT(false);
             $model_bl = dutoanluong_bangluong::where('masodv', $inputs['maso'])->orderby('thang')->get();
-            //dd($model_bl);
+            //dd($model_bl->first());
 
             if($model->sum('canbo_dutoan')>0) {
                 $ct = clone $model->first();
@@ -1437,10 +1437,9 @@ class dutoanluongController extends Controller
                 foreach ($m_pc as $pc) {
                     $mapc = $pc['mapc'];
                     $mapc_st = 'st_'.$pc['mapc'];
-                    $tong_pc = $bangluong->sum($mapc);
-                    if ($tong_pc > 0) {
-                        $ct->$mapc = $tong_pc;
-                        $ct->$mapc_st = $tong_pc * $model_thongtin->luongcoban;//ko chạy lại sum()
+                    $ct->$mapc = $bangluong->sum($mapc);
+                    $ct->$mapc_st = $bangluong->sum($mapc_st);
+                    if ($ct->$mapc > 0) {
                         $a_phucap[$mapc] = $pc['report'];
                     }
                 }
@@ -1481,8 +1480,9 @@ class dutoanluongController extends Controller
             $inputs = $request->all();
             //dd($inputs);
             $model_ct = dutoanluong_bangluong::where('masodv', $inputs['maso'])->orderby('stt')->get();
-            $model = $model_ct->unique('macanbo');
-            //dd($model);
+            //tính lại do cán bộ kiêm nhiệm nên các mã sẽ trùng nhau
+            //==> lấy tháng nhỏ nhất
+            $model = $model_ct->where('thang',$model_ct->min('thang'));
 
             //$model = dutoanluong_bangluong::where('masodv', $inputs['masodv'])->orderby('thang')->get();
             $model_thongtin = dutoanluong::where('masodv', $inputs['maso'])->first();
