@@ -271,17 +271,16 @@ class dutoanluongController extends Controller
             //dd($m_tnn);
             $iKn = 1;
             foreach ($m_cb_kn as $kn) {
-                $kn->congtac = 'CONGTAC';
-                if(isset($m_cb[$kn->macanbo])){
-                    $canbo = $m_cb[$kn->macanbo];
-                    $kn->tencanbo = $canbo['tencanbo'];
-                    $kn->stt = $canbo['stt'];
-                    $kn->msngbac = $canbo['msngbac'];
-                }else{
-                    $kn->tencanbo = '';
-                    $kn->stt = '';
-                    $kn->msngbac = '';
+                //lọc kiêm nhiệm của cán bộ đã thôi công tác
+                if (!isset($m_cb[$kn->macanbo])) {
+                    continue;
                 }
+                $kn->congtac = 'CONGTAC';
+                $canbo = $m_cb[$kn->macanbo];
+                $kn->tencanbo = $canbo['tencanbo'];
+                $kn->stt = $canbo['stt'];
+                $kn->msngbac = $canbo['msngbac'];
+
                 $kn->ngayvao = null;
                 $kn->ngaybc = null;
                 $kn->ngaysinh = null;
@@ -301,7 +300,7 @@ class dutoanluongController extends Controller
                 $kn->bhtn_dv = 0;
                 $kn->kpcd_dv = 0;
                 $kn->masodv = $masodv;
-                $m_cb[$kn->macanbo . '_kn'.$iKn] = $kn->toarray();
+                $m_cb[$kn->macanbo . '_kn' . $iKn] = $kn->toarray();
                 $iKn++;
             }
 
