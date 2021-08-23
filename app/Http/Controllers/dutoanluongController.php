@@ -191,7 +191,7 @@ class dutoanluongController extends Controller
 //                ->get()->keyBy('macanbo')->toarray();
             
             $a_th = array_merge(array('ngaysinh', 'tencanbo', 'stt', 'gioitinh', 'msngbac', 'bac','ngayvao','ngaybc',
-                'bhxh_dv', 'bhyt_dv', 'bhtn_dv', 'kpcd_dv','ngaytu','ngayden','tnntungay','tnndenngay'), $a_th);
+                'bhxh_dv', 'bhyt_dv', 'bhtn_dv', 'kpcd_dv','ngaytu','ngayden','tnntungay','tnndenngay','theodoi'), $a_th);
             $model = hosocanbo::select($a_th)->where('madv', session('admin')->madv)
                 ->where('theodoi', '<', '9')
                 ->get();
@@ -280,6 +280,7 @@ class dutoanluongController extends Controller
                 $kn->tencanbo = $canbo['tencanbo'];
                 $kn->stt = $canbo['stt'];
                 $kn->msngbac = $canbo['msngbac'];
+                $kn->theodoi = $canbo['theodoi'];
 
                 $kn->ngayvao = null;
                 $kn->ngaybc = null;
@@ -304,8 +305,10 @@ class dutoanluongController extends Controller
                 $iKn++;
             }
 
-            $a_pc = dmphucap_donvi::select('mapc', 'phanloai', 'congthuc', 'baohiem')
-                ->where('madv', session('admin')->madv)->wherein('mapc', getColTongHop())->get()->toarray();
+            $m_pc = dmphucap_donvi::select('mapc', 'phanloai', 'congthuc', 'baohiem', 'dieudong')
+                ->where('madv', session('admin')->madv)->wherein('mapc', getColTongHop())->get();
+
+            $a_pc = $m_pc->toarray();
             $a_nhomnb = ngachluong::all()->keyBy('msngbac')->toarray();
 
             $a_thang=array();
@@ -316,6 +319,9 @@ class dutoanluongController extends Controller
             //chạy tính hệ số lương, phụ cấp trc. Sau này mỗi tháng chỉ chạy cán bộ thay đổi
             foreach ($m_cb as $key => $val) {
                 $m_cb[$key] = $this->getHeSoPc($a_pc, $m_cb[$key], $inputs['luongcoban']);
+//                if($key=='1511583374_1586190329'){
+//                    dd($m_cb[$key]);
+//                }
             }
             foreach ($m_nh as $key => $val) {
                 $m_nh[$key] = $this->getHeSoPc_nh($a_pc, $m_nh[$key]);
@@ -1079,6 +1085,7 @@ class dutoanluongController extends Controller
         if($vk){
             $m_cb['vuotkhung'] = round(($m_cb['heso'] * $m_cb['vuotkhung']) / 100, session('admin')->lamtron);
         }
+        //dd($m_cb);
         for ($i = 0; $i < count($a_pc); $i++) {
             $mapc = $a_pc[$i]['mapc'];
             $mapc_st = 'st_'.$mapc;
@@ -1113,6 +1120,7 @@ class dutoanluongController extends Controller
                     break;
                 }
             }
+
             if ($a_pc[$i]['baohiem'] == 1) {
                 $stbhxh_dv += round($m_cb['bhxh_dv'] * $m_cb[$mapc_st], 0);
                 $stbhyt_dv += round($m_cb['bhyt_dv'] * $m_cb[$mapc_st], 0);
@@ -1120,13 +1128,43 @@ class dutoanluongController extends Controller
                 $stbhtn_dv += round($m_cb['bhtn_dv'] * $m_cb[$mapc_st], 0);
             }
         }
+        if($m_cb['theodoi'] =='4'){
+            $m_cb['luongtn'] = 0;
+            $m_cb['tonghs'] = 0;
+            for ($i = 0; $i < count($a_pc); $i++) {
+                $mapc = $a_pc[$i]['mapc'];
+                $mapc_st = 'st_'.$mapc;
+                if($a_pc[$i]['dieudong'] != '1'){
+                    $m_cb[$mapc] = 0;
+                    $m_cb[$mapc_st] = 0;
+                }
+                switch (getDbl($a_pc[$i]['phanloai'])) {
+                    case 1: {//số tiền
+                        $m_cb['luongtn'] += $m_cb[$mapc_st];
+                        break;
+                    }
 
-        $m_cb['stbhxh_dv'] = $stbhxh_dv;
-        $m_cb['stbhyt_dv'] = $stbhyt_dv;
-        $m_cb['stkpcd_dv'] = $stkpcd_dv;
-        $m_cb['stbhtn_dv'] = $stbhtn_dv;
-        $m_cb['luongtn'] += round($m_cb['tonghs'] * $luongcb, 0);
-        $m_cb['ttbh_dv'] = $stbhxh_dv + $stbhyt_dv + $stkpcd_dv + $stbhtn_dv;
+                    default: {//trường hợp còn lại (ẩn,...)
+                        $m_cb['tonghs'] += $m_cb[$mapc];
+                        $m_cb['luongtn'] +=$m_cb[$mapc_st];
+                        break;
+                    }
+                }
+            }
+            $m_cb['stbhxh_dv'] = 0;
+            $m_cb['stbhyt_dv'] = 0;
+            $m_cb['stkpcd_dv'] = 0;
+            $m_cb['stbhtn_dv'] = 0;
+            $m_cb['ttbh_dv'] = 0;
+        }else {
+            $m_cb['stbhxh_dv'] = $stbhxh_dv;
+            $m_cb['stbhyt_dv'] = $stbhyt_dv;
+            $m_cb['stkpcd_dv'] = $stkpcd_dv;
+            $m_cb['stbhtn_dv'] = $stbhtn_dv;
+            $m_cb['luongtn'] += round($m_cb['tonghs'] * $luongcb, 0);
+            $m_cb['ttbh_dv'] = $stbhxh_dv + $stbhyt_dv + $stkpcd_dv + $stbhtn_dv;
+        }
+        unset($m_cb['theodoi']);
         return $m_cb;
 
     }
@@ -1214,6 +1252,7 @@ class dutoanluongController extends Controller
             $m_cb[$mapc_st] = 0;
             $m_cb['luongcoban'] = $luongcb;
         }
+        unset($m_cb['theodoi']);
         return $m_cb;
     }
 
