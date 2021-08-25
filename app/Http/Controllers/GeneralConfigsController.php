@@ -49,10 +49,14 @@ class GeneralConfigsController extends Controller
             if($model != null){
                 $model->tuoinu = chkDbl($inputs['tuoinu']);
                 $model->tuoinam = chkDbl($inputs['tuoinam']);
+                $model->thangnu = chkDbl($inputs['thangnu']);
+                $model->thangnam = chkDbl($inputs['thangnam']);
                 $model->luongcb = chkDbl($inputs['luongcb']);
                 $model->tg_hetts = chkDbl($inputs['tg_hetts']);
                 $model->tg_xetnl = chkDbl($inputs['tg_xetnl']);
-                $model->ipf1 = $inputs['ipf1'];
+                if(isset($inputs['ipf1'])){
+                    $model->ipf1 = $inputs['ipf1'];
+                }
                 $model->save();
             }else{
                 GeneralConfigs::create($inputs);

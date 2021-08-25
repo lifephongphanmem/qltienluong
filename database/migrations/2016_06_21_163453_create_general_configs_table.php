@@ -16,6 +16,8 @@ class CreateGeneralConfigsTable extends Migration
             $table->increments('id');
             $table->integer('tuoinu')->default(0);
             $table->integer('tuoinam')->default(0);
+            $table->integer('thangnu')->default(0);
+            $table->integer('thangnam')->default(0);
             $table->string('tinh', 30)->nullable();
             $table->string('huyen', 30)->nullable();
             $table->double('luongcb')->default(0);

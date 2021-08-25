@@ -218,8 +218,15 @@ class dutoanluongController extends Controller
 
                 if (isset($cb->ngaysinh)) {
                     $dt_ns = date_create($cb->ngaysinh);
-                    $cb->nam_ns = strval(date_format($dt_ns, 'Y') + ($cb->gioitinh == 'Nam' ? $gen['tuoinam'] : $gen['tuoinu']));
-                    $cb->thang_ns = convert2str(date_format($dt_ns, 'm') + 1);
+                    if($cb->gioitinh == 'Nam'){
+                        $cb->nam_ns = strval(date_format($dt_ns, 'Y') + $gen['tuoinam']);
+                        $cb->thang_ns = convert2str(date_format($dt_ns, 'm') + $gen['thangnam'] + 1);
+
+                    }else{
+                        $cb->nam_ns = strval(date_format($dt_ns, 'Y') + $gen['tuoinu']);
+                        $cb->thang_ns = convert2str(date_format($dt_ns, 'm') + $gen['thangnu'] + 1);
+
+                    }
                     if ($cb->thang_ns > 12) {
                         $cb->thang_ns = '01';
                         $cb->nam_ns = strval($cb->nam_ns + 1);

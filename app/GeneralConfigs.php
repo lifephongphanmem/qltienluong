@@ -11,6 +11,8 @@ class GeneralConfigs extends Model
         'id',
         'tuoinu',
         'tuoinam',
+        'thangnu',
+        'thangnam',
         'luongcb',
         'tinh',
         'huyen',

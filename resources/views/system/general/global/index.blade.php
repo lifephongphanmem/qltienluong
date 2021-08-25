@@ -13,7 +13,7 @@
 
 
     <h3 class="page-title">
-        Thông tin hệ thống<small> phần mềm</small>
+        Thông tin hệ thống phần mềm
     </h3>
     <!-- END PAGE HEADER-->
 
@@ -35,10 +35,10 @@
                         <tbody>
                             <tr>
                                 <td style="width:30%">
-                                    <b>Tuổi nghỉ hưu nam</b>
+                                    <b>Tuổi nghỉ hưu của nam</b>
                                 </td>
                                 <td style="width:15%">
-                                    <span class="text-muted">{{$model->tuoinam}}</span>
+                                    <span class="text-muted">{{$model->tuoinam . ' năm - '.$model->thangnam.' tháng'}}</span>
                                 </td>
 
                                 <td style="width:30%">
@@ -51,10 +51,10 @@
 
                             <tr>
                                 <td style="width:30%">
-                                    <b>Tuổi nghỉ hưu nữ</b>
+                                    <b>Tuổi nghỉ hưu của nữ</b>
                                 </td>
                                 <td style="width:20%">
-                                    <span class="text-muted">{{$model->tuoinu}}</span>
+                                    <span class="text-muted">{{$model->tuoinu . ' năm - '.$model->thangnu.' tháng'}}</span>
                                 </td>
                                 <td style="width:30%">
                                     <b>Thời gian xét nâng lương (tháng)</b>

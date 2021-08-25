@@ -30,12 +30,20 @@
 
                         <div class="form-body">
                             <div class="row">
-                                <div class="col-md-6">
+                                <div class="col-md-3">
                                     <div class="form-group">
-                                        <label class="control-label">Tuổi nghỉ hưu nam</label>
+                                        <label class="control-label">Tuổi nghỉ hưu của nam - năm</label>
                                         {!!Form::text('tuoinam', null, array('id' => 'tuoinam','class' => 'form-control'))!!}
                                     </div>
                                 </div>
+
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label class="control-label">Tuổi nghỉ hưu của nam - tháng</label>
+                                        {!!Form::text('thangnam', null, array('id' => 'thangnam','class' => 'form-control'))!!}
+                                    </div>
+                                </div>
+
 
                                 <div class="col-md-6">
                                     <div class="form-group">
@@ -46,10 +54,17 @@
                             </div>
 
                             <div class="row">
-                                <div class="col-md-6">
+                                <div class="col-md-3">
                                     <div class="form-group">
-                                        <label class="control-label">Tuổi nghỉ hưu nữ</label>
+                                        <label class="control-label">Tuổi nghỉ hưu của nữ - năm</label>
                                         {!!Form::text('tuoinu', null, array('id' => 'tuoinu','class' => 'form-control'))!!}
+                                    </div>
+                                </div>
+
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label class="control-label">Tuổi nghỉ hưu của nữ - tháng</label>
+                                        {!!Form::text('thangnu', null, array('id' => 'thangnu','class' => 'form-control'))!!}
                                     </div>
                                 </div>
 
@@ -89,7 +104,8 @@
             <div class="row" style="text-align: center">
                 <div class="col-md-12">
                     <button type="submit" class="btn green" onclick="validateForm()"><i class="fa fa-check"></i> Cập nhật</button>
-                    <button type="reset" class="btn default">Hủy</button>
+                    <a href="{{url('/he_thong/quan_tri/he_thong')}}" class="btn btn-default">
+                        <i class="fa fa-backward"></i> Quay lại </a>
                 </div>
             </div>
             {!! Form::close() !!}
