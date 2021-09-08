@@ -2487,7 +2487,6 @@ class baocaobangluongController extends Controller
 
             if(isset($inputs['phanloai']) && $inputs['phanloai'] != "")
                 $model_donvi = $model_donvi->where('maphanloai',$inputs['phanloai']);
-            dd($model_donvi->toarray());
             $model_dutoan=dutoanluong::where('namns',$inputs['namns'])
                 ->where('trangthai','DAGUI')
                 ->wherein('madv',function($qr)use($madvbc){
