@@ -249,10 +249,14 @@ class dutoanluong_huyenController extends Controller
         if (Session::has('admin')) {
             //dd($masodv);
             $inputs = $requests->all();
-            $masodv = $inputs['maso'];
+            $masodv = $inputs['mabl_pl'];
+            //$mact = $inputs['mact'];
             $model = dutoanluong_bangluong::wherein('masodv',function($query) use($masodv){
                 $query->select('masodv')->from('dutoanluong')->where('masoh',$masodv)->get();
             } )->orderby('thang')->get();
+            if (isset($inputs['mact']) && $inputs['mact'] != '') {
+                $model = $model->where('mact', $inputs['mact']);
+            }
             $model_thongtin = dutoanluong::where('masoh', $masodv)->first();
             //$model = dutoanluong_bangluong::wherein('masodv', array_column($model_thongtin->toarray(),'masodv'))->get();
             //$model_thongtin = dutoanluong::where('masoh', $masodv)->first();

@@ -1176,7 +1176,7 @@ class tonghopluong_huyenController extends Controller
                     'tonghopluong_donvi_chitiet.pctr', 'tonghopluong_donvi_chitiet.pctdt', 'tonghopluong_donvi_chitiet.pctnvk',
                     'tonghopluong_donvi_chitiet.pcbdhdcu', 'tonghopluong_donvi_chitiet.pcthni', 'tonghopluong_donvi_chitiet.tonghs', 'tonghopluong_donvi_chitiet.giaml',
                     'tonghopluong_donvi_chitiet.luongtn', 'tonghopluong_donvi_chitiet.stbhxh_dv', 'tonghopluong_donvi_chitiet.stbhyt_dv',
-                    'tonghopluong_donvi_chitiet.stkpcd_dv',
+                    'tonghopluong_donvi_chitiet.stkpcd_dv','tonghopluong_donvi_chitiet.luongtn',
                     'tonghopluong_donvi_chitiet.stbhtn_dv', 'tonghopluong_donvi_chitiet.ttbh_dv')
                 ->wherein('tonghopluong_donvi_chitiet.mathdv', array_column($model_tonghop->toarray(),'mathdv'))
                 ->groupby('mact','maphanloai','dmdonvi.madv','manguonkp','linhvuchoatdong')
@@ -1210,7 +1210,7 @@ class tonghopluong_huyenController extends Controller
                 }else{
                     $chitiet->tencongtac = isset($model_ct[$chitiet->mact]) ? $model_ct[$chitiet->mact] : '';
                 }
-                $chitiet->tongtl = $chitiet->tonghs - $chitiet->giaml;
+                $chitiet->tongtl = $chitiet->luongtn - $chitiet->giaml;
                 $chitiet->tongbh = $chitiet->stbhxh_dv + $chitiet->stbhyt_dv + $chitiet->stkpcd_dv + $chitiet->stbhtn_dv;
                 foreach (getColTongHop() as $ct) {
                     $ma = $ct;

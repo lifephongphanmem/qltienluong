@@ -64,6 +64,7 @@ class baocaobangluongController extends Controller
         if (Session::has('admin')) {
             $a_thang = getThang();
             $a_phanloai = array();
+            $a_phanloai[''] = '--Chọn tất cả--';
             if(session('admin')->phamvitonghop == 'KHOI') {
                 $model_donvi = dmdonvi::where('macqcq', session('admin')->madv)->get();
                 $model_phanloai = dmphanloaidonvi::wherein('maphanloai', array_column($model_donvi->toarray(), 'maphanloai'))->get();
@@ -71,7 +72,6 @@ class baocaobangluongController extends Controller
                 $model_phanloai = array_column($model_phanloai->toarray(), 'tenphanloai', 'maphanloai');
                 foreach ($model_phanloai as $key => $key)
                     $a_phanloai[$key] = $model_phanloai[$key];
-                $a_phanloai[''] = '--Chọn tất cả--';
             }
             if(session('admin')->phamvitonghop == 'HUYEN') {
                 $model_donvi = dmdonvi::where('macqcq', session('admin')->madv)->get();
@@ -85,7 +85,6 @@ class baocaobangluongController extends Controller
                 foreach ($model_phanloai as $key => $key)
                     $a_phanloai[$key] = $model_phanloai[$key];
                 $a_phanloai['GD'] = 'Khối Giáo Dục';
-                $a_phanloai[''] = '--Chọn tất cả--';
                 $a_thang['ALL'] = "--Chọn tất cả--";
             }
             $model_thongtu = dmthongtuquyetdinh::all();
@@ -2485,6 +2484,10 @@ class baocaobangluongController extends Controller
             $madvbc = session('admin')->madvbc;
 
             $model_donvi = dmdonvi::where('madvbc',$madvbc)->get();
+
+            if(isset($inputs['phanloai']) && $inputs['phanloai'] != "")
+                $model_donvi = $model_donvi->where('maphanloai',$inputs['phanloai']);
+            dd($model_donvi->toarray());
             $model_dutoan=dutoanluong::where('namns',$inputs['namns'])
                 ->where('trangthai','DAGUI')
                 ->wherein('madv',function($qr)use($madvbc){

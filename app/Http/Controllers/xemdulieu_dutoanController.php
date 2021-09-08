@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\dmdonvi;
+use App\dmphanloaicongtac;
+use App\dmphanloaict;
 use App\dmphanloaidonvi;
 use App\dmthongtuquyetdinh;
 use App\dutoanluong;
@@ -131,12 +133,15 @@ class xemdulieu_dutoanController extends Controller
             if (!isset($inputs['phanloai']) || $inputs['phanloai'] != 'ALL') {
                 $model_donvi = $model_donvi->where('maphanloai',$inputs['phanloai']);
             }
-
+            $model_nhomct = dmphanloaicongtac::select('macongtac','tencongtac')->get();
+            $model_tenct = dmphanloaict::select('tenct','macongtac','mact')->get();
             return view('functions.viewdata.dutoanluong.huyen.index')
                 ->with('model', $model_donvi)
                 ->with('inputs', $inputs)
                 ->with('a_trangthai', $a_trangthai)
                 ->with('a_phanloai', $a_phanloai)
+                ->with('model_nhomct', $model_nhomct)
+                ->with('model_tenct', $model_tenct)
                 ->with('furl_th', 'chuc_nang/du_toan_luong/huyen/')
                 ->with('furl_xem', '/chuc_nang/xem_du_lieu/du_toan/huyen')
                 ->with('pageTitle', 'Danh sách đơn vị tổng hợp dự toán lương');
