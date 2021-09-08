@@ -352,7 +352,10 @@ class dutoanluong_huyenController extends Controller
             $m_pc = dmphucap_donvi::where('madv', $model_thongtin->madv)->orderby('stt')->get()->toarray();
             foreach($model as $ct)
             {
-                $ct->tencanbo = $model_canbo->where('macanbo',$ct->macanbo)->first()->tencanbo;
+                $m_tencb = $model_canbo->where('macanbo',$ct->macanbo)->first();
+                $ct->tencanbo = "";
+                if(isset($m_tencb))
+                    $ct->tencanbo = $m_tencb->tencanbo;
             }
             foreach ($m_pc as $ct) {
                 if ($model->sum($ct['mapc']) > 0) {
