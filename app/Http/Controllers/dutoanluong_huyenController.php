@@ -257,6 +257,9 @@ class dutoanluong_huyenController extends Controller
             if (isset($inputs['mact']) && $inputs['mact'] != '') {
                 $model = $model->where('mact', $inputs['mact']);
             }
+            if (isset($inputs['thang']) && $inputs['thang'] != '') {
+                $model = $model->where('thang', $inputs['thang']);
+            }
             $model_thongtin = dutoanluong::where('masoh', $masodv)->first();
             //$model = dutoanluong_bangluong::wherein('masodv', array_column($model_thongtin->toarray(),'masodv'))->get();
             //$model_thongtin = dutoanluong::where('masoh', $masodv)->first();
@@ -314,7 +317,7 @@ class dutoanluong_huyenController extends Controller
         if (Session::has('admin')) {
             //dd($masodv);
             $inputs = $requests->all();
-            $masodv = $inputs['maso'];
+            $masodv = $inputs['mabl_th'];
             /*
             $model = dutoanluong_bangluong::wherein('masodv',function($query) use($masodv){
                 $query->select('masodv')->from('dutoanluong')->where('masoh',$masodv)->get();
@@ -332,11 +335,14 @@ class dutoanluong_huyenController extends Controller
                     DB::raw('sum(stbhxh_dv) as stbhxh_dv'),DB::raw('sum(stbhyt_dv) as stbhyt_dv'),DB::raw('sum(stbhtn_dv) as stbhtn_dv'),DB::raw('sum(stkpcd_dv) as stkpcd_dv')
                     ,DB::raw('sum(ttbh_dv) as ttbh_dv'))
                 //->where('dutoanluong.masoh',$masodv)
-                ->where('dutoanluong.namns',$inputs['namns'])
-                ->where('dutoanluong.madv',$inputs['madv'])
+                ->where('dutoanluong.namns',$inputs['namns_th'])
+                ->where('dutoanluong.madv',$inputs['madv_th'])
                 ->where('trangthai','DAGUI')
                 ->groupby('msngbac','mact','macanbo')
                 ->get();
+            if (isset($inputs['mact']) && $inputs['mact'] != '') {
+                $model = $model->where('mact', $inputs['mact']);
+            }
             $model_canbo = hosocanbo::wherein('madv',function($query) use($masodv){
                 $query->select('madv')->from('dutoanluong')->where('masoh',$masodv)->get();
             })->get();

@@ -87,6 +87,8 @@ class xemdulieu_dutoanController extends Controller
             $inputs = $request->all();
             $madv = session('admin')->madv;
             $nam = $inputs['namns'];
+            $a_thang = getThang();
+            $a_thang['']= "--Chọn tất cả các tháng--";
             $a_trangthai = array('ALL' => '--Chọn trạng thái dữ liệu--', 'CHOGUI' => 'Chưa gửi dữ liệu', 'DAGUI' => 'Đã gửi dữ liệu');
             $model_donvi = dmdonvi::select('madv', 'tendv','maphanloai')
                 ->where('macqcq',$madv)->where('madv','<>',$madv)
@@ -139,6 +141,7 @@ class xemdulieu_dutoanController extends Controller
                 ->with('model', $model_donvi)
                 ->with('inputs', $inputs)
                 ->with('a_trangthai', $a_trangthai)
+                ->with('a_thang', $a_thang)
                 ->with('a_phanloai', $a_phanloai)
                 ->with('model_nhomct', $model_nhomct)
                 ->with('model_tenct', $model_tenct)

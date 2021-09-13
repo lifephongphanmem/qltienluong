@@ -567,7 +567,7 @@ class baocaobangluongController extends Controller
             $madv = session('admin')->madv;
             $maphanloai = $inputs['phanloai'];
             $madvbc = session('admin')->madvbc;
-            $model_donvi = dmdonvi::where('madvbc',$madvbc)->get();
+            $model_donvi = dmdonvi::where('madvbc',$madvbc)->where('phanloaitaikhoan','<>','TH')->get();
             $model_phanloai = dmphanloaidonvi::where('maphanloai','like',$maphanloai.'%')->get();
             if($maphanloai == 'GD')
                 $model_phanloai = dmphanloaidonvi::where('tenphanloai','like','% Trường %')->get();
@@ -2617,19 +2617,19 @@ class baocaobangluongController extends Controller
                 $ct->tendv = $model_donvi->where('madv',$ct->madv)->first()->tendv;
                 $ct->maphanloai = $model_donvi->where('madv',$ct->madv)->first()->maphanloai;
                 $m = $model_phanloai->where('maphanloai',$ct->maphanloai)->first();
-                if(count($m) > 0)
+                if(count((array)$m) > 0)
                     $ct->tenphanloai = $m->tenphanloai;
                 else
                     $ct->tenphanloai = "";
 
                 $ct->linhvuchoatdong = $model_donvi->where('madv',$ct->madv)->first()->linhvuchoatdong;
                 $m = $model_khoipb->where('makhoipb',$ct->linhvuchoatdong)->first();
-                if(count($m) > 0)
+                if(count((array)$m) > 0)
                     $ct->tenlinhvuchoatdong = $m->tenkhoipb;
                 else
                     $ct->tenlinhvuchoatdong = "";
                 $m = $model_sl->where('madv',$ct->madv)->where('mact',$ct->mact)->first();
-                if(count($m) > 0)
+                if(count((array)$m) > 0)
                 {
                     $ct->soluonggiao = $m->canbo_dutoan;
                     $ct->soluongcomat = $m->canbo_congtac;
@@ -2782,19 +2782,19 @@ class baocaobangluongController extends Controller
                 $ct->tendv = $model_donvi->where('madv',$ct->madv)->first()->tendv;
                 $ct->maphanloai = $model_donvi->where('madv',$ct->madv)->first()->maphanloai;
                 $m = $model_phanloai->where('maphanloai',$ct->maphanloai)->first();
-                if(count($m) > 0)
+                if(count((array)$m) > 0)
                     $ct->tenphanloai = $m->tenphanloai;
                 else
                     $ct->tenphanloai = "";
 
                 $ct->linhvuchoatdong = $model_donvi->where('madv',$ct->madv)->first()->linhvuchoatdong;
                 $m = $model_khoipb->where('makhoipb',$ct->linhvuchoatdong)->first();
-                if(count($m) > 0)
+                if(count((array)$m) > 0)
                     $ct->tenlinhvuchoatdong = $m->tenkhoipb;
                 else
                     $ct->tenlinhvuchoatdong = "";
                 $m = $model_slxp->where('madv',$ct->madv)->where('mact',$ct->mact)->first();
-                if(count($m) > 0)
+                if(count((array)$m) > 0)
                 {
                     $ct->soluonggiao = $m->canbo_dutoan;
                     $ct->soluongcomat = $m->canbo_congtac;

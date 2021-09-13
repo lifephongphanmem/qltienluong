@@ -138,7 +138,7 @@
                     <td style="text-align: right">-</td>
                     <td style="text-align: left">{{$nguon}}</td>
                     <td style="text-align: left">{{$congtac}}</td>
-                    <td style="text-align: center">{{$chitiet_congtac->count('id')}}</td>
+                    <td style="text-align: center">{{$chitiet_congtac->sum('soluong')}}</td>
                         @foreach($a_phucap as $key=>$val)
                             <td>{{dinhdangsothapphan($chitiet_congtac->sum($key),5)}}</td>
                         @endforeach

@@ -85,19 +85,13 @@
                                 <ol>
                                     <!--li><a href="#" data-target="#thoaichitra-huyen-modal" data-toggle="modal" onclick="chitraluong_huyen('{{$furl.'huyen/chitraluong_th'}}')">Tổng hợp tình hình chi trả lương (Mẫu tổng hợp)</a></li>
                                     <li><a href="#" data-target="#thoaichitra-huyen-modal" data-toggle="modal" onclick="chitraluong_huyen('{{$furl.'huyen/chitraluong_ct'}}')">Tổng hợp tình hình chi trả lương (Mẫu chi tiết)</a></li-->
-                                    <li><a href="#" data-target="#thoaichitra-khoi-moi-modal" data-toggle="modal" onclick="baocao('{{$furl.'huyen/chitraluong_th'}}')">Tổng hợp tình hình chi trả lương (Mẫu tổng hợp)</a></li>
-                                    @if(session('admin')->username == 'THCRPTC')
-                                        <li><a href="#" data-target="#thoaichitra-khoi-moi-modal" data-toggle="modal" onclick="baocao('{{$furl.'huyen/tonghopluongCR'}}')">Tổng hợp tình hình chi trả lương (Mẫu tổng hợp - Cam Ranh)</a></li>
-                                    @endif
-                                    <li><a href="#" data-target="#thoaichitra-khoi-moi-ct-modal" data-toggle="modal" onclick="baocao('{{$furl.'huyen/chitraluong_ct'}}')">Tổng hợp tình hình chi trả lương (Mẫu chi tiết)</a></li>
-                                    @if(session('admin')->username == 'THCRPTC')
-                                    <li><a href="#" data-target="#thoaichitra-khoi-moi-ct-modal" data-toggle="modal" onclick="baocao('{{$furl.'huyen/chitraluong_ct_CR'}}')">Tổng hợp tình hình chi trả lương (Mẫu chi tiết - Cam Ranh)</a></li>
-                                    @endif
-                                    <li><a href="#" data-target="#thoaidutoan-huyen-modal" data-toggle="modal" onclick="dutoanluong_huyen('{{$furl.'huyen/dutoanluong'}}')">Dự toán lương</a></li>
-                                    @if(session('admin')->username == 'THCRPTC')
-                                    <li><a href="#" data-target="#thoaidutoan-huyen-modal" data-toggle="modal" onclick="dutoanluong_huyen('{{$furl.'huyen/dutoanluongCR'}}')">Dự toán lương (mẫu Cam Ranh)</a></li>
-                                    <li><a href="#" data-target="#thoaidutoan-huyen-modal" data-toggle="modal" onclick="dutoanluong_huyen('{{$furl.'huyen/nguonkinhphiCR'}}')">Tổng hợp nguồn kinh phí (mẫu Cam Ranh)</a></li>
-                                    @endif
+                                    <li><a href="#" data-target="#thoaichitra-khoi-moi-modal" data-toggle="modal" onclick="baocao('{{$furl.'huyen/chitraluong_th'}}')">Tổng hợp tình hình chi trả lương (Mẫu tổng hợp - Mẫu 1)</a></li>
+                                    <li><a href="#" data-target="#thoaichitra-khoi-moi-modal" data-toggle="modal" onclick="baocao('{{$furl.'huyen/tonghopluongCR'}}')">Tổng hợp tình hình chi trả lương (Mẫu tổng hợp - Mẫu 2)</a></li>
+                                    <li><a href="#" data-target="#thoaichitra-khoi-moi-ct-modal" data-toggle="modal" onclick="baocao('{{$furl.'huyen/chitraluong_ct'}}')">Tổng hợp tình hình chi trả lương (Mẫu chi tiết - Mẫu 1)</a></li>
+                                    <li><a href="#" data-target="#thoaichitra-khoi-moi-ct-modal" data-toggle="modal" onclick="baocao('{{$furl.'huyen/chitraluong_ct_CR'}}')">Tổng hợp tình hình chi trả lương (Mẫu chi tiết - Mẫu 2)</a></li>
+                                    <li><a href="#" data-target="#thoaidutoan-huyen-modal" data-toggle="modal" onclick="dutoanluong_huyen('{{$furl.'huyen/dutoanluong'}}')">Dự toán lương (mẫu 1)</a></li>
+                                    <li><a href="#" data-target="#thoaidutoan-huyen-modal" data-toggle="modal" onclick="dutoanluong_huyen('{{$furl.'huyen/dutoanluongCR'}}')">Dự toán lương (mẫu 2)</a></li>
+                                    <li><a href="#" data-target="#thoaidutoan-huyen-modal" data-toggle="modal" onclick="dutoanluong_huyen('{{$furl.'huyen/nguonkinhphiCR'}}')">Tổng hợp nguồn kinh phí (mẫu 1)</a></li>
                                     <li><a href="#" data-target="#thoaibaocaohesoluong-khoi-modal" data-toggle="modal" onclick="baocao('{{$furl.'huyen/baocaohesoluong'}}')">Báo cáo hệ số lương của đơn vị có mặt</a></li>
 
 

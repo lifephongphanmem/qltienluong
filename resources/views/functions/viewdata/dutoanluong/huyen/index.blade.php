@@ -158,15 +158,21 @@
                     <div class="col-md-6">
                         <div class="form-group">
                             <button type="button" onclick="inblpl()" style="border-width: 0px"  class="btn btn-default btn-xs mbs"
-                                    title="In số liệu chi tiết từng thán" data-target="#phanloai-modal" data-toggle="modal">
+                                    title="In số liệu chi tiết từng tháng" data-target="#phanloai-modal" data-toggle="modal">
                                 <i class="fa fa-print"></i>&nbsp; In số liệu chi tiết từng tháng</button>
                         </div>
                     </div>
 
                     <div class="col-md-6">
-                        <div class="form-group">
+                        <!--div class="form-group">
                             <a id="in_blCR" href="" onclick="insolieuCR('/chuc_nang/du_toan_luong/huyen/chitietblCR')" style="border-width: 0px;margin-left: 5px" target="_blank">
                                 <i class="fa fa-print"></i>&nbsp; In số liệu tổng hợp các tháng (CR)</a>
+                        </div-->
+
+                        <div class="form-group">
+                            <button type="button" onclick="inblth()" style="border-width: 0px"  class="btn btn-default btn-xs mbs"
+                                    title="In số liệu tổng hợp các tháng (CR)" data-target="#tonghop-modal" data-toggle="modal">
+                                <i class="fa fa-print"></i>&nbsp; In số liệu tổng hợp các tháng (CR)</button>
                         </div>
                     </div>
                     <div class="col-md-6">
@@ -203,6 +209,13 @@
                                         {!! Form::open(['url'=>'chuc_nang/du_toan_luong/huyen/chitietbl','target'=>'_blank' ,'method'=>'post' , 'class'=>'form-horizontal form-validate']) !!}
                                         <div class="row">
                                             <div class="col-md-12">
+                                                <label class="control-label"> Tháng<span class="require">*</span></label>
+                                                {!! Form::select('thang',$a_thang,'ALL',array('id' => 'thang', 'class' => 'form-control'))!!}
+                                            </div>
+                                        </div>
+
+                                        <div class="row">
+                                            <div class="col-md-12">
                                                 <label class="control-label">Phân loại công tác</label>
                                                 <select class="form-control select2me" name="mact" id="mact">
                                                     <option value="">-- Tất cả các phân loại công tác --</option>
@@ -227,6 +240,56 @@
                 <input type="hidden" id="mabl_pl" name="mabl_pl"/>
                 <input type="hidden" id="madv_pl" name="madv_pl"/>
                 <input type="hidden" id="namns_pl" name="namns_pl"/>
+
+                <div class="modal-footer">
+                    <button type="button" data-dismiss="modal" class="btn btn-default">Hủy thao tác</button>
+                    <button type="submit" id="submit" name="submit" value="submit" class="btn btn-primary">Đồng ý</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    {!! Form::close() !!}
+    <div id="tonghop-modal" tabindex="-1" role="dialog" aria-hidden="true" class="modal fade">
+        <div class="modal-dialog modal-lg modal-content">
+            <div class="modal-header modal-header-primary">
+                <button type="button" data-dismiss="modal" aria-hidden="true" class="close">&times;</button>
+                <h4 id="hd-inbl" class="modal-title">In bảng lương chi tiết</h4>
+            </div>
+            <div class="modal-body">
+                <div class="form-horizontal">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="tabbable tabbable-custom tabbable-noborder tabbable-reversed" id="tab_cre">
+                                <div class="tab-content">
+                                    <!-- Thông tin chung -->
+                                    <div class="tab-pane active" id="tab_0_cre">
+                                        {!! Form::open(['url'=>'/chuc_nang/du_toan_luong/huyen/chitietblCR','target'=>'_blank' ,'method'=>'post' , 'class'=>'form-horizontal form-validate']) !!}
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <label class="control-label">Phân loại công tác</label>
+                                                <select class="form-control select2me" name="mact" id="mact">
+                                                    <option value="">-- Tất cả các phân loại công tác --</option>
+                                                    @foreach($model_nhomct as $kieuct)
+                                                        <optgroup label="{{$kieuct->tencongtac}}">
+                                                            <?php $mode_ct=$model_tenct->where('macongtac',$kieuct->macongtac); ?>
+                                                            @foreach($mode_ct as $ct)
+                                                                <option value="{{$ct->mact}}">{{$ct->tenct}}</option>
+                                                            @endforeach
+                                                        </optgroup>
+                                                    @endforeach
+                                                </select>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <input type="hidden" id="mabl_th" name="mabl_th"/>
+                <input type="hidden" id="madv_th" name="madv_th"/>
+                <input type="hidden" id="namns_th" name="namns_th"/>
 
                 <div class="modal-footer">
                     <button type="button" data-dismiss="modal" class="btn btn-default">Hủy thao tác</button>
@@ -290,6 +353,8 @@
 
 
 
+
+
     <script>
         function add(){
             $('#chitiet-modal').modal('show');
@@ -305,6 +370,13 @@
             $("#mabl_pl").val($("#mabl_in").val());
             $("#madv_pl").val($("#madv_in").val());
             $("#namns_pl").val($("#namns_in").val());
+            //$('#phanloai-modal').modal('show');
+            //$('#inbl-modal').modal('hide');
+        }
+        function inblth(){
+            $("#mabl_th").val($("#mabl_in").val());
+            $("#madv_th").val($("#madv_in").val());
+            $("#namns_th").val($("#namns_in").val());
             //$('#phanloai-modal').modal('show');
             //$('#inbl-modal').modal('hide');
         }

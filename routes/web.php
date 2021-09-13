@@ -864,7 +864,7 @@ Route::group(['prefix'=>'chuc_nang'],function(){
             Route::get('tonghopct','dutoanluong_huyenController@tonghopct');
             Route::get('printf','dutoanluong_huyenController@printf');//in một khối trong khối
             Route::post('chitietbl','dutoanluong_huyenController@chitietbl');//in chi tiết bảng lương đơn vị
-            Route::get('chitietblCR','dutoanluong_huyenController@chitietblCR');//in chi tiết bảng lương đơn vị
+            Route::post('chitietblCR','dutoanluong_huyenController@chitietblCR');//in chi tiết bảng lương đơn vị
             Route::get('nangluongth','dutoanluong_huyenController@nangluongth');//in chi tiết bảng lương đơn vị
             Route::get('guitn','GuiTinNhanController@guitin');//in chi tiết bảng lương đơn vị
         });
