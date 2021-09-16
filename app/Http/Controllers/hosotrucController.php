@@ -104,8 +104,10 @@ class hosotrucController extends Controller
                     'pcud61'=>$ct->pcud61,
                     'pcld'=>$ct->pcld,
                     'pclade'=>$ct->pclade,
-                    'songaycong'=>$inputs['ngaycong_sao'],
-                    'songaytruc'=>$inputs['ngaycong_sao'],
+                    'songaycong'=>$ct->songaycong,
+                    'songaytruc'=>$ct->songaytruc,
+//                    'songaycong'=>$inputs['ngaycong_sao'],
+//                    'songaytruc'=>$inputs['ngaycong_sao'],
                     'thang'=>$inputs['thang'],
                     'nam'=>$inputs['nam'],
                 );

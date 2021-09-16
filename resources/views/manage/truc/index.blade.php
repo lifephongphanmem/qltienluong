@@ -115,7 +115,7 @@
             </div>
             <div class="modal-body">
                 <div class="form-horizontal">
-                    <table id="sample_4" class="table table-hover table-striped table-bordered">
+                    <table id="sample_5" class="table table-hover table-striped table-bordered">
                         <thead>
                         <tr>
                             <th class="text-center" style="width: 5%">STT</th>
@@ -164,15 +164,15 @@
 
                         <div class="col-md-6">
                             <label class="control-label">Năm</label>
-                            {!!Form::select('nam_sao', getNam(),null, array('id' => 'nam_sao','class' => 'form-control'))!!}
+                            {!!Form::select('nam_sao', getNam(),date('Y'), array('id' => 'nam_sao','class' => 'form-control'))!!}
                         </div>
                     </div>
-                    <div class="row">
-                        <div class="col-md-6">
-                            <label class="control-label">Tổng số ngày công</label>
-                            {!!Form::text('ngaycong_sao', session('admin')->songaycong, array('id' => 'ngaycong_sao','class' => 'form-control', 'data-mask'=>'fdecimal'))!!}
-                        </div>
-                    </div>
+{{--                    <div class="row">--}}
+{{--                        <div class="col-md-6">--}}
+{{--                            <label class="control-label">Tổng số ngày công</label>--}}
+{{--                            {!!Form::text('ngaycong_sao', session('admin')->songaycong, array('id' => 'ngaycong_sao','class' => 'form-control', 'data-mask'=>'fdecimal'))!!}--}}
+{{--                        </div>--}}
+{{--                    </div>--}}
                 </div>
             </div>
             <input type="hidden" name="thang" id="thang" value="{{$inputs['thang']}}" >
