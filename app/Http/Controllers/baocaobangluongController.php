@@ -74,7 +74,8 @@ class baocaobangluongController extends Controller
                     $a_phanloai[$key] = $model_phanloai[$key];
             }
             if(session('admin')->phamvitonghop == 'HUYEN') {
-                $model_donvi = dmdonvi::where('macqcq', session('admin')->madv)->get();
+                //$model_donvi = dmdonvi::where('macqcq', session('admin')->madv)->get();
+                $model_donvi = dmdonvi::where('madvbc', session('admin')->madvbc)->where('phanloaitaikhoan','<>','TH')->get();
                 if(session('admin')->caphanhchinh == 'T' && session('admin')->phanloaitaikhoan == 'TH')
                     $model_donvi = dmdonvi::where('tendv','<>','Phần mềm Cuộc Sống')->orderby('tendv')->get();
                 $model_phanloai = dmphanloaidonvi::wherein('maphanloai', array_column($model_donvi->toarray(), 'maphanloai'))->get();
@@ -1723,6 +1724,7 @@ class baocaobangluongController extends Controller
             //dd($mathdv);
             //$model = tonghopluong_donvi_chitiet::where('mathdv', $mathdv)->get();
             $inputs = $request->all();
+            //dd($inputs);
             $madv = $inputs['donvi'];
             $thang = $inputs['tuthang'];
             $nam = $inputs['nam'];
@@ -1796,6 +1798,8 @@ class baocaobangluongController extends Controller
                     }
                 }
                 //dd($a_phucap);
+                $thongtin = array('nguoilap'=>'','thang'=>'','nam'=>'');
+                if(isset($model_thongtin))
                 $thongtin = array('nguoilap' => session('admin')->name,
                     'thang' => $model_thongtin->thang,
                     'nam' => $model_thongtin->nam);
@@ -1910,6 +1914,8 @@ class baocaobangluongController extends Controller
                         }
                 }
                 //dd($a_phucap);
+                $thongtin = array('nguoilap'=>'','thang'=>'','nam'=>'');
+               if(isset($model_thongtin))
                 $thongtin = array('nguoilap' => session('admin')->name,
                     'thang' => $model_thongtin->thang,
                     'nam' => $model_thongtin->nam);
