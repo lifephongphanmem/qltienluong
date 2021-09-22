@@ -1977,13 +1977,20 @@ class dutoanluongController extends Controller
         if (Session::has('admin')) {
             $inputs = $request->all();
             //dd($inputs);
-            $model_ct = dutoanluong_bangluong::where('masodv', $inputs['maso'])->orderby('stt')->get();
+            if($inputs['mact'] != 'ALL'){
+                $model_ct = dutoanluong_bangluong::where('masodv', $inputs['masodv'])
+                    ->where('mact',$inputs['mact'])
+                    ->orderby('stt')->get();
+            }else{
+                $model_ct = dutoanluong_bangluong::where('masodv', $inputs['masodv'])->orderby('stt')->get();
+            }
+
             //tính lại do cán bộ kiêm nhiệm nên các mã sẽ trùng nhau
             //==> lấy tháng nhỏ nhất
             $model = $model_ct->where('thang',$model_ct->min('thang'));
 
             //$model = dutoanluong_bangluong::where('masodv', $inputs['masodv'])->orderby('thang')->get();
-            $model_thongtin = dutoanluong::where('masodv', $inputs['maso'])->first();
+            $model_thongtin = dutoanluong::where('masodv', $inputs['masodv'])->first();
             $a_congtac = array_column(dmphanloaict::wherein('mact',a_unique(array_column($model->toarray(),'mact')))->get()->toArray(), 'tenct', 'mact');
             //dd($a_ct);
             //cho trương hợp đơn vị cấp trên in dữ liệu dv câp dưới mà ko sai tên đơn vị

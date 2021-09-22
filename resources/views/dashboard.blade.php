@@ -10,10 +10,11 @@
     <script type="text/javascript" src="{{url('assets/global/plugins/datatables/media/js/jquery.dataTables.min.js')}}"></script>
     <script type="text/javascript" src="{{url('assets/global/plugins/datatables/plugins/bootstrap/dataTables.bootstrap.js')}}"></script>
 
-    <script src="{{url('assets/admin/pages/scripts/table-managed.js')}}"></script>
+    <script src="{{url('js/table-managed-class.js')}}"></script>
+{{--    <script src="{{url('assets/admin/pages/scripts/table-managed.js')}}"></script>--}}
     <script>
         jQuery(document).ready(function() {
-            TableManaged.init();
+            TableManagedclass.init();
         });
     </script>
 @stop
@@ -241,7 +242,7 @@
                 <div class="portlet-title">
                     <div class="caption caption-md">
                         <i class="icon-bar-chart theme-font-color hide"></i>
-                        <span class="caption-subject theme-font-color bold uppercase">Cán bộ nâng lương thâm niên nghề</span>
+                        <span class="caption-subject theme-font-color bold uppercase">danh sách Cán bộ nâng lương thâm niên nghề</span>
                     </div>
                     <div class="actions">
 
@@ -249,7 +250,7 @@
                 </div>
                 <?php $i=1;?>
                 <div class="portlet-body">
-                    <table id="sample_3" class="table table-hover table-striped table-bordered">
+                    <table class="table table-hover table-striped table-bordered dulieubang" style="min-height: 200px;">
                         <thead>
                         <tr>
                             <th class="text-center">STT</th>
@@ -264,7 +265,7 @@
                                     <td class="text-center">{{$i++}}</td>
                                     <td>{{$value->tencanbo}}</td>
                                     <td>{{$value->msngbac}}</td>
-                                    <td>{{getDayVn($value->tnndenngay)}}</td>
+                                    <td class="text-center">{{getDayVn($value->tnndenngay)}}</td>
                                 </tr>
                             @endforeach
                         </tbody>
@@ -279,12 +280,12 @@
             <div class="portlet light ">
                 <div class="portlet-title">
                     <div class="caption caption-md">
-                        <span class="caption-subject theme-font-color bold uppercase">cán bộ nâng lương ngạch bậc</span>
+                        <span class="caption-subject theme-font-color bold uppercase">danh sách cán bộ nâng lương ngạch bậc</span>
                     </div>
                 </div>
                 <?php $i=1;?>
                 <div class="portlet-body">
-                    <table id="sample_4" class="table table-hover table-striped table-bordered">
+                    <table class="dulieubang table table-hover table-striped table-bordered" style="min-height: 200px;">
                         <thead>
                         <tr>
                             <th class="text-center">STT</th>
@@ -299,7 +300,7 @@
                                     <td class="text-center">{{$i++}}</td>
                                     <td>{{$value->tencanbo}}</td>
                                     <td>{{$value->msngbac}}</td>
-                                    <td>{{getDayVn($value->ngayden)}}</td>
+                                    <td class="text-center">{{getDayVn($value->ngayden)}}</td>
                                 </tr>
                             @endforeach
                         </tbody>
@@ -325,7 +326,7 @@
                 </div>
                 <?php $i=1;?>
                 <div class="portlet-body">
-                    <table id="sample_6" class="table table-hover table-striped table-bordered">
+                    <table class="dulieubang table table-hover table-striped table-bordered" style="min-height: 200px;">
                         <thead>
                         <tr>
                             <th style="width: 10%" class="text-center">STT</th>
@@ -360,7 +361,7 @@
                 </div>
                 <?php $i=1;?>
                 <div class="portlet-body">
-                    <table id="sample_5" class="table table-hover table-striped table-bordered">
+                    <table class="dulieubang table table-hover table-striped table-bordered" style="min-height: 200px;">
                         <thead>
                         <tr>
                             <th class="text-center">STT</th>
@@ -373,7 +374,7 @@
                                 <tr>
                                     <td class="text-center">{{$i++}}</td>
                                     <td>{{$value->tencanbo}}</td>
-                                    <td>{{getDayVn($value->ngaynghi)}}</td>
+                                    <td class="text-center">{{getDayVn($value->ngaynghi)}}</td>
                                 </tr>
                             @endforeach
                         </tbody>

@@ -12,16 +12,17 @@
     <div class="modal-dialog modal-content">
         <div class="modal-header modal-header-primary">
             <button type="button" data-dismiss="modal" aria-hidden="true" class="close">&times;</button>
-            <h4 id="header-inbl" class="modal-title">In bảng lương</h4>
+            <h4 id="header-inbl" class="modal-title">Thông tin kết xuất</h4>
         </div>
         <div class="modal-body">
             <div class="form-horizontal">
                 <div class="row">
                     <div class="col-md-12">
                         <label class="control-label">Tháng</label>
-                        {!! Form::select('thang',getThangBC(), '01', array('id' => 'thang', 'class' => 'form-control'))!!}
+                        {!! Form::select('thang',getThangBC(), '01', array('id' => 'thang', 'class' => 'form-control select2me'))!!}
                     </div>
                 </div>
+
                 <div class="row">
                     <div class="col-md-12">
                         <label class="control-label">Phân loại công tác</label>
@@ -79,6 +80,12 @@
 
 
 <script>
+    function ThongTinKetXuat(thang, url){
+        var form = $('#printf_mautt107');
+        form.find("[id='thang']").prop('disabled',thang);
+        form.prop('action',url);
+    }
+
     function inblmtt107_pb(){
         $('#mabl_mautt107_pb').val($('#mabl_in').val());
         $('#mautt107_pb-modal').modal('show');

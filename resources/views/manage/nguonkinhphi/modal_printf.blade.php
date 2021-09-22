@@ -15,7 +15,7 @@
     <div class="modal-dialog modal-content">
         <div class="modal-header modal-header-primary">
             <button type="button" data-dismiss="modal" aria-hidden="true" class="close">&times;</button>
-            <h4 id="header-inbl" class="modal-title">In bảng lương</h4>
+            <h4 id="header-inbl" class="modal-title">Thông tin kết xuất</h4>
         </div>
         <div class="modal-body">
             <div class="form-horizontal">
@@ -23,6 +23,23 @@
                     <div class="col-md-12">
                         <label class="control-label">Tháng</label>
                         {!! Form::select('thang',getThangBC_nhucau(), 'ALL', array('id' => 'thang', 'class' => 'form-control'))!!}
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-12">
+                        <label class="control-label">Phân loại công tác</label>
+                        <select class="form-control select2me" name="mact" id="mact">
+                            <option value="ALL">-- Tất cả các phân loại công tác --</option>
+                            @foreach($model_nhomct as $kieuct)
+                                <optgroup label="{{$kieuct->tencongtac}}">
+                                    <?php $mode_ct=$model_tenct->where('macongtac',$kieuct->macongtac); ?>
+                                    @foreach($mode_ct as $ct)
+                                        <option value="{{$ct->mact}}">{{$ct->tenct}}</option>
+                                    @endforeach
+                                </optgroup>
+                            @endforeach
+                        </select>
                     </div>
                 </div>
             </div>
@@ -41,7 +58,7 @@
     <div class="modal-dialog modal-content">
         <div class="modal-header modal-header-primary">
             <button type="button" data-dismiss="modal" aria-hidden="true" class="close">&times;</button>
-            <h4 id="header-inbl" class="modal-title">In bảng lương</h4>
+            <h4 id="header-inbl" class="modal-title">Thông tin kết xuất</h4>
         </div>
         <div class="modal-body">
             <div class="form-horizontal">
@@ -49,6 +66,23 @@
                     <div class="col-md-12">
                         <label class="control-label">Tháng</label>
                         {!! Form::select('thang',getThangBC_nhucau(), 'ALL', array('id' => 'thang', 'class' => 'form-control'))!!}
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-12">
+                        <label class="control-label">Phân loại công tác</label>
+                        <select class="form-control select2me" name="mact" id="mact">
+                            <option value="ALL">-- Tất cả các phân loại công tác --</option>
+                            @foreach($model_nhomct as $kieuct)
+                                <optgroup label="{{$kieuct->tencongtac}}">
+                                    <?php $mode_ct=$model_tenct->where('macongtac',$kieuct->macongtac); ?>
+                                    @foreach($mode_ct as $ct)
+                                        <option value="{{$ct->mact}}">{{$ct->tenct}}</option>
+                                    @endforeach
+                                </optgroup>
+                            @endforeach
+                        </select>
                     </div>
                 </div>
             </div>
@@ -63,6 +97,12 @@
 {!! Form::close() !!}
 
 <script>
+    function ThongTinKetXuat(thang, url){
+        var form = $('#printf_mautt107');
+        form.find("[id^='thang']").prop('disabled',thang);
+        form.prop('action', url);
+    }
+
     function inblmtt107_pb(){
         $('#mabl_mautt107_pb').val($('#mabl_in').val());
         $('#mautt107_pb-modal').modal('show');

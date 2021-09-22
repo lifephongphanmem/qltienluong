@@ -41,6 +41,8 @@ class nguonkinhphiController extends Controller
             //dd($model);
             $model_bl = bangluong::where('madv', session('admin')->madv)->where('phanloai','BANGLUONG')->orderby('nam')->orderby('thang')->get();
             $model_tt_df = dmthongtuquyetdinh::first();
+            $model_nhomct = dmphanloaicongtac::select('macongtac', 'tencongtac')->get();
+            $model_tenct = dmphanloaict::select('tenct', 'macongtac', 'mact')->get();
 
             return view('manage.nguonkinhphi.index')
                 ->with('furl','/nguon_kinh_phi/')
@@ -50,6 +52,8 @@ class nguonkinhphiController extends Controller
                 ->with('model_tt_df',$model_tt_df)
                 ->with('a_nkp',getNguonKP(false))
                 ->with('a_lvhd',$lvhd)
+                ->with('model_nhomct', $model_nhomct)
+                ->with('model_tenct', $model_tenct)
                 ->with('pageTitle','Danh sách nguồn kinh phí của đơn vị');
         } else
             return view('errors.notlogin');
@@ -1032,13 +1036,15 @@ class nguonkinhphiController extends Controller
         if (Session::has('admin')) {
             $inputs = $request->all();
             //dd($inputs);
-            if($inputs['thang'] == 'ALL'){
-                $model = nguonkinhphi_bangluong::where('masodv', $inputs['masodv'])->orderby('thang')->orderby('stt')->get();
-            }else{
-                $model = nguonkinhphi_bangluong::where('masodv', $inputs['masodv'])->where('thang', $inputs['thang'])->orderby('thang')->orderby('stt')->get();
+            $model = nguonkinhphi_bangluong::where('masodv', $inputs['masodv']);
+            if($inputs['thang'] != 'ALL'){
+                $model = $model->where('thang', $inputs['thang']);
             }
+            if($inputs['mact'] != 'ALL'){
+                $model = $model->where('mact', $inputs['mact']);
+            }
+            $model = $model->orderby('thang')->orderby('stt')->get();
             //dd($model);
-            //$model = dutoanluong_bangluong::where('masodv', $inputs['masodv'])->orderby('thang')->get();
             $model_thongtin = nguonkinhphi::where('masodv', $inputs['masodv'])->first();
             $a_ct = array_column(dmphanloaict::all()->toArray(), 'tenct', 'mact');
 
@@ -1095,12 +1101,19 @@ class nguonkinhphiController extends Controller
         if (Session::has('admin')) {
             $inputs = $request->all();
             //dd($inputs);
-            $model_ct = nguonkinhphi_bangluong::where('masodv', $inputs['maso'])->orderby('stt')->get();
-            $model = $model_ct->unique('macanbo');
+            if($inputs['mact'] != 'ALL'){
+                $model_ct = nguonkinhphi_bangluong::where('masodv', $inputs['masodv'])
+                    ->where('mact',$inputs['mact'])
+                    ->orderby('stt')->get();
+            }else{
+                $model_ct = nguonkinhphi_bangluong::where('masodv', $inputs['masodv'])->orderby('stt')->get();
+            }
+
+            $model = $model_ct->where('thang',$model_ct->min('thang'));
             //dd($model);
 
             //$model = dutoanluong_bangluong::where('masodv', $inputs['masodv'])->orderby('thang')->get();
-            $model_thongtin = nguonkinhphi::where('masodv', $inputs['maso'])->first();
+            $model_thongtin = nguonkinhphi::where('masodv', $inputs['masodv'])->first();
             $a_congtac = array_column(dmphanloaict::wherein('mact',a_unique(array_column($model->toarray(),'mact')))->get()->toArray(), 'tenct', 'mact');
             //dd($a_ct);
             //cho trương hợp đơn vị cấp trên in dữ liệu dv câp dưới mà ko sai tên đơn vị
