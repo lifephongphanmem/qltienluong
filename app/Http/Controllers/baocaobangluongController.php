@@ -2521,7 +2521,6 @@ class baocaobangluongController extends Controller
             $thongtin=array('nguoilap'=>session('admin')->name,
                 'namns'=>$inputs['namns'],
                 'madvbc'=>$madvbc);
-
             return view('reports.mauchung.huyen.dutoanluong')
                 ->with('model_dutoan',$model_dutoan)
                 ->with('model_donvi',$model_donvi)

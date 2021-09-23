@@ -114,10 +114,10 @@
             @endif
 
             @if(count((array)$dutoan)>0)
-                <td>{{dinhdangso($dutoan->luongnb + $dutoan->luonghs + $dutoan->luongbh)}}</td>
-                <td>{{dinhdangso($dutoan->luongnb)}}</td>
-                <td>{{dinhdangso($dutoan->luonghs)}}</td>
-                <td>{{dinhdangso($dutoan->luongbh)}}</td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
             @else
                 <td></td>
                 <td></td>
@@ -135,10 +135,10 @@
                 <td></td>
             @endif
             @if(count((array)$dutoan)>0)
-                <td>{{dinhdangso($dutoan->luongnb_dt + $dutoan->luonghs_dt + $dutoan->luongbh_dt)}}</td>
-                <td>{{dinhdangso($dutoan->luongnb_dt)}}</td>
-                <td>{{dinhdangso($dutoan->luonghs_dt)}}</td>
-                <td>{{dinhdangso($dutoan->luongbh_dt)}}</td>
+                <td>{{dinhdangso($dutoan->sum('luongnb_dt') + $dutoan->sum('luonghs_dt') + $dutoan->sum('luongbh_dt'))}}</td>
+                <td>{{dinhdangso($dutoan->sum('luongnb_dt'))}}</td>
+                <td>{{dinhdangso($dutoan->sum('luonghs_dt'))}}</td>
+                <td>{{dinhdangso($dutoan->sum('luongbh_dt'))}}</td>
             @else
                 <td></td>
                 <td></td>
@@ -152,10 +152,10 @@
         <td colspan="2">Tổng cộng</td>
         <td></td>
         <td></td>
-        <td>{{dinhdangso($model_dutoan->sum('luongnb') + $model_dutoan->sum('luonghs') + $model_dutoan->sum('luongbh'))}}</td>
-        <td>{{dinhdangso($model_dutoan->sum('luongnb'))}}</td>
-        <td>{{dinhdangso($model_dutoan->sum('luonghs'))}}</td>
-        <td>{{dinhdangso($model_dutoan->sum('luongbh'))}}</td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
         <td></td>
         <td></td>
         <td>{{dinhdangso($model_dutoan->sum('luongnb_dt') + $model_dutoan->sum('luonghs_dt') + $model_dutoan->sum('luongbh_dt'))}}</td>
