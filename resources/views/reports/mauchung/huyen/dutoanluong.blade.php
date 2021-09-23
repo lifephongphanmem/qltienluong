@@ -97,14 +97,15 @@
     <?php $i = 1; ?>
     @foreach($model_donvi as $donvi)
         <?php
-        $dutoan = $model_dutoan->where('madv',$donvi->madv)->first();
+        $dutoan = $model_dutoan->where('madv',$donvi->madv);
+        $soluong = $m_slcb->where('madv',$donvi->madv);
         $bienche_truoc = $model_bienche_truoc->where('madv',$donvi->madv)->first();
         $bienche_dutoan = $model_bienche_dutoan->where('madv',$donvi->madv)->first();
         ?>
         <tr style="font-weight: bold; text-align: center">
             <td>{{$i++}}</td>
             <td style="text-align: left"> {{$donvi->tendv}}</td>
-            @if(count($bienche_truoc)>0)
+            @if(count((array)$bienche_truoc)>0)
                 <td>{{$bienche_truoc->soluongduocgiao}}</td>
                 <td>{{$bienche_truoc->soluongbienche}}</td>
             @else
@@ -112,7 +113,7 @@
                 <td></td>
             @endif
 
-            @if(count($dutoan)>0)
+            @if(count((array)$dutoan)>0)
                 <td>{{dinhdangso($dutoan->luongnb + $dutoan->luonghs + $dutoan->luongbh)}}</td>
                 <td>{{dinhdangso($dutoan->luongnb)}}</td>
                 <td>{{dinhdangso($dutoan->luonghs)}}</td>
@@ -123,14 +124,17 @@
                 <td></td>
                 <td></td>
             @endif
-            @if(count($bienche_dutoan)>0)
+            @if(count((array)$bienche_dutoan)>0)
                 <td>{{$bienche_dutoan->soluongduocgiao}}</td>
-                <td>{{$bienche_dutoan->soluongbienche}}</td>
             @else
                 <td></td>
+            @endif
+            @if(count((array)$soluong)>0)
+                <td>{{$soluong->sum('canbo_congtac')}}</td>
+            @else
                 <td></td>
             @endif
-            @if(count($dutoan)>0)
+            @if(count((array)$dutoan)>0)
                 <td>{{dinhdangso($dutoan->luongnb_dt + $dutoan->luonghs_dt + $dutoan->luongbh_dt)}}</td>
                 <td>{{dinhdangso($dutoan->luongnb_dt)}}</td>
                 <td>{{dinhdangso($dutoan->luonghs_dt)}}</td>

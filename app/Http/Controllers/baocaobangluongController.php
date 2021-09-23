@@ -568,10 +568,12 @@ class baocaobangluongController extends Controller
             $madv = session('admin')->madv;
             $maphanloai = $inputs['phanloai'];
             $madvbc = session('admin')->madvbc;
+            if($thang != 'ALL')
+                $ngay = date("Y-m-d", strtotime($nam.'-'.$thang.'-01'));
             $model_donvi = dmdonvi::where('madvbc',$madvbc)->where('phanloaitaikhoan','<>','TH')->get();
             $model_phanloai = dmphanloaidonvi::where('maphanloai','like',$maphanloai.'%')->get();
             if($maphanloai == 'GD')
-                $model_phanloai = dmphanloaidonvi::where('tenphanloai','like','% Trường %')->get();
+                $model_phanloai = dmphanloaidonvi::wherein('maphanloai',getPhanLoaGD())->get();
             $m_pc = array_column(dmphucap::all()->toarray(),'report','mapc');
             $a_phucap = array();
             $col = 0;
@@ -601,7 +603,7 @@ class baocaobangluongController extends Controller
                             $query->select('madv')->from('dmdonvi')
                                 ->wherein('maphanloai', function ($query) {
                                     $query->select('maphanloai')->from('dmphanloaidonvi')
-                                        ->where('tenphanloai','like', '% Trường %')
+                                        ->wherein('maphanloai',getPhanLoaGD())
                                         ->get();
                                 })
                                 ->get();
@@ -617,7 +619,7 @@ class baocaobangluongController extends Controller
                         $query->select('madv')->from('dmdonvi')
                             ->wherein('maphanloai', function ($query) {
                                 $query->select('maphanloai')->from('dmphanloaidonvi')
-                                    ->where('tenphanloai','like', '% Trường %')
+                                    ->wherein('maphanloai',getPhanLoaGD())
                                     ->get();
                             })
                             ->get();
@@ -683,6 +685,10 @@ class baocaobangluongController extends Controller
                 }
             }
             $a_thang = array_column($model->sortBy('thang')->toArray(), 'thang', 'thang');
+            if($thang != 'ALL')
+                $model_donvi = dmdonvi::where('madvbc',$madvbc)->where('phanloaitaikhoan','<>','TH')->where('ngaydung','>',$ngay)->orwherenull('ngaydung')->where('madvbc',$madvbc)->where('phanloaitaikhoan','<>','TH')->get();
+            else
+                $model_donvi = dmdonvi::where('madvbc',$madvbc)->where('phanloaitaikhoan','<>','TH')->whereyear('ngaydung','>=',$nam)->orwherenull('ngaydung')->where('madvbc',$madvbc)->where('phanloaitaikhoan','<>','TH')->get();
 
             return view('reports.tonghopluong.khoi.solieu')
                 ->with('thongtin', $thongtin)
@@ -1392,7 +1398,7 @@ class baocaobangluongController extends Controller
             $model_donvi = dmdonvi::where('madvbc',$madvbc)->get();
             $model_phanloai = dmphanloaidonvi::where('maphanloai','like',$maphanloai.'%')->get();
             if($maphanloai == 'GD')
-                $model_phanloai = dmphanloaidonvi::where('tenphanloai','like','% Trường %')->get();
+                $model_phanloai = dmphanloaidonvi::wherein('maphanloai',getPhanLoaGD())->get();
             $m_pc = array_column(dmphucap::where('mapc','<>','heso')->get()->toarray(),'report','mapc');
             //dd($model_phanloai);
             $a_phucap = array();
@@ -1424,7 +1430,7 @@ class baocaobangluongController extends Controller
                             $query->select('madv')->from('dmdonvi')
                                 ->wherein('maphanloai', function ($query) {
                                     $query->select('maphanloai')->from('dmphanloaidonvi')
-                                        ->where('tenphanloai','like', '% Trường %')
+                                        ->wherein('maphanloai',getPhanLoaGD())
                                         ->get();
                                 })
                                 ->get();
@@ -1440,7 +1446,7 @@ class baocaobangluongController extends Controller
                         $query->select('madv')->from('dmdonvi')
                             ->wherein('maphanloai', function ($query) {
                                 $query->select('maphanloai')->from('dmphanloaidonvi')
-                                    ->where('tenphanloai','like', '% Trường %')
+                                    ->wherein('maphanloai',getPhanLoaGD())
                                     ->get();
                             })
                             ->get();
@@ -2489,10 +2495,13 @@ class baocaobangluongController extends Controller
             $inputs = $request->all();
             $madvbc = session('admin')->madvbc;
 
-            $model_donvi = dmdonvi::where('madvbc',$madvbc)->get();
+            //$model_donvi = dmdonvi::where('madvbc',$madvbc)->get();
+            $model_donvi = dmdonvi::where('madvbc',$madvbc)->where('phanloaitaikhoan','<>','TH')->get();
 
-            if(isset($inputs['phanloai']) && $inputs['phanloai'] != "")
+            if(isset($inputs['phanloai']) && $inputs['phanloai'] != "GD")
                 $model_donvi = $model_donvi->where('maphanloai',$inputs['phanloai']);
+            if(isset($inputs['phanloai']) && $inputs['phanloai'] =="GD")
+                $model_donvi = $model_donvi->wherein('maphanloai',getPhanLoaGD());
             $model_dutoan=dutoanluong::where('namns',$inputs['namns'])
                 ->where('trangthai','DAGUI')
                 ->wherein('madv',function($qr)use($madvbc){
@@ -2506,17 +2515,18 @@ class baocaobangluongController extends Controller
                 ->wherein('madv',function($qr)use($madvbc){
                     $qr->select('madv')->from('dmdonvi')->where('madvbc',$madvbc);
                 })->get();
-
+            $m_slcb = dutoanluong_chitiet::join('dutoanluong','dutoanluong.masodonvi','dutoanluong_chitiet.masodonvi')
+            ->select('canbo_congtac','madv')->wherein('masodonvi', array_column($model_dutoan->toarray(),'masodonvi'))->get();
             $m_dv=dmdonvi::where('madv',session('admin')->madv)->first();
             $thongtin=array('nguoilap'=>session('admin')->name,
                 'namns'=>$inputs['namns'],
                 'madvbc'=>$madvbc);
-
             return view('reports.mauchung.huyen.dutoanluong')
                 ->with('model_dutoan',$model_dutoan)
                 ->with('model_donvi',$model_donvi)
                 ->with('model_bienche_dutoan',$model_bienche_dutoan)
                 ->with('model_bienche_truoc',$model_bienche_truoc)
+                ->with('m_slcb',$m_slcb)
                 ->with('thongtin',$thongtin)
                 ->with('m_dv',$m_dv)
                 ->with('pageTitle','Báo cáo tổng hợp dự toán lương');
@@ -2538,7 +2548,7 @@ class baocaobangluongController extends Controller
                 $model_phanloai = dmphanloaidonvi::join('dmdonvi','dmdonvi.maphanloai','dmphanloaidonvi.maphanloai')
                     ->select('madv','dmphanloaidonvi.maphanloai','tenphanloai','linhvuchoatdong')
                     ->where('madvbc',$madvbc)
-                    ->where('tenphanloai','like', '% Trường %')
+                    ->wherein('dmdonvi.maphanloai',getPhanLoaGD())
                     ->get();
             $model_th = dutoanluong_bangluong::join('dutoanluong','dutoanluong.masodv','dutoanluong_bangluong.masodv')
                 ->Select('mact',DB::raw('sum(heso) as heso'),DB::raw('sum(tonghs-heso) as tongpc'),DB::raw('sum(tonghs) as tonghs'),DB::raw('sum(hesobl) as hesobl')
@@ -2866,7 +2876,7 @@ class baocaobangluongController extends Controller
                 $model_phanloai = dmphanloaidonvi::join('dmdonvi','dmdonvi.maphanloai','dmphanloaidonvi.maphanloai')
                     ->select('madv','dmphanloaidonvi.maphanloai','tenphanloai','linhvuchoatdong')
                     ->where('madvbc',$madvbc)
-                    ->where('tenphanloai','like', '% Trường %')
+                    ->wherein('dmdonvi.maphanloai',getPhanLoaGD())
                     ->get();
             $model_th = tonghopluong_donvi_bangluong::join('tonghopluong_donvi','tonghopluong_donvi.mathdv','tonghopluong_donvi_bangluong.mathdv')
                 ->Select('mact',DB::raw('count(tonghopluong_donvi_bangluong.id) as soluong'),DB::raw('sum(heso) as heso'),DB::raw('sum(tonghs-heso) as tongpc'),DB::raw('sum(tonghs) as tonghs'),DB::raw('sum(hesobl) as hesobl')
@@ -2952,14 +2962,14 @@ class baocaobangluongController extends Controller
                 $ct->tendv = $model_donvi->where('madv',$ct->madv)->first()->tendv;
                 $ct->maphanloai = $model_donvi->where('madv',$ct->madv)->first()->maphanloai;
                 $m = $model_phanloai->where('maphanloai',$ct->maphanloai)->first();
-                if(count($m) > 0)
+                if(count((array)$m) > 0)
                     $ct->tenphanloai = $m->tenphanloai;
                 else
                     $ct->tenphanloai = "";
 
                 //$ct->linhvuchoatdong = $model_donvi->where('madv',$ct->madv)->first()->linhvuchoatdong;
                 $m = $model_khoipb->where('makhoipb',$ct->linhvuchoatdong)->first();
-                if(count($m) > 0)
+                if(count((array)$m) > 0)
                     $ct->tenlinhvuchoatdong = $m->tenkhoipb;
                 else
                     $ct->tenlinhvuchoatdong = "";
@@ -3114,14 +3124,14 @@ class baocaobangluongController extends Controller
                 $ct->tendv = $model_donvi->where('madv',$ct->madv)->first()->tendv;
                 $ct->maphanloai = $model_donvi->where('madv',$ct->madv)->first()->maphanloai;
                 $m = $model_phanloai->where('maphanloai',$ct->maphanloai)->first();
-                if(count($m) > 0)
+                if(count((array)$m) > 0)
                     $ct->tenphanloai = $m->tenphanloai;
                 else
                     $ct->tenphanloai = "";
 
                 $ct->linhvuchoatdong = $model_donvi->where('madv',$ct->madv)->first()->linhvuchoatdong;
                 $m = $model_khoipb->where('makhoipb',$ct->linhvuchoatdong)->first();
-                if(count($m) > 0)
+                if(count((array)$m) > 0)
                     $ct->tenlinhvuchoatdong = $m->tenkhoipb;
                 else
                     $ct->tenlinhvuchoatdong = "";
@@ -3204,7 +3214,7 @@ class baocaobangluongController extends Controller
                 $model_phanloai = dmphanloaidonvi::join('dmdonvi','dmdonvi.maphanloai','dmphanloaidonvi.maphanloai')
                     ->select('madv','dmphanloaidonvi.maphanloai','tenphanloai','linhvuchoatdong')
                     ->where('madvbc',$madvbc)
-                    ->where('tenphanloai','like', '% Trường %')
+                    ->wherein('dmdonvi.maphanloai',getPhanLoaGD())
                     ->get();
             $model_th = nguonkinhphi_bangluong::join('nguonkinhphi','nguonkinhphi.masodv','nguonkinhphi_bangluong.masodv')
                 ->Select('mact','nguonkinhphi_bangluong.linhvuchoatdong',DB::raw('sum(heso) as heso'),DB::raw('sum(tonghs-heso) as tongpc'),DB::raw('sum(tonghs) as tonghs'),DB::raw('sum(hesobl) as hesobl')

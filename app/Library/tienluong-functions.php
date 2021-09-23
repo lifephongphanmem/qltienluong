@@ -97,6 +97,15 @@ function getPhanLoaiDonVi(){
     $model = App\dmphanloaidonvi::select('tenphanloai', 'maphanloai')->get()->toarray();
     return array_column($model,'tenphanloai','maphanloai');
 }
+function getPhanLoaGD(){
+    $model = array(
+        'MAMNON',
+        'TIEUHOC',
+        'THCS',
+        'THvaTHCS'
+    );
+    return $model;
+}
 
 function getTenDB($madvbc){
     $model = App\dmdonvibaocao::select('tendvbc')->where('madvbc',$madvbc)->first();
