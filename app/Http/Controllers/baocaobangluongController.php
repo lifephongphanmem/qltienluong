@@ -2516,7 +2516,7 @@ class baocaobangluongController extends Controller
                     $qr->select('madv')->from('dmdonvi')->where('madvbc',$madvbc);
                 })->get();
             $m_slcb = dutoanluong_chitiet::join('dutoanluong','dutoanluong.masodv','dutoanluong_chitiet.masodv')
-            ->select('canbo_congtac','madv')->wherein('masodv', array_column($model_dutoan->toarray(),'masodv'))->get();
+            ->select('canbo_congtac','madv')->wherein('dutoanluong_chitiet.masodv', array_column($model_dutoan->toarray(),'masodv'))->get();
             $m_dv=dmdonvi::where('madv',session('admin')->madv)->first();
             $thongtin=array('nguoilap'=>session('admin')->name,
                 'namns'=>$inputs['namns'],
