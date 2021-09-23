@@ -2886,7 +2886,7 @@ class baocaobangluongController extends Controller
                     ,DB::raw('sum(pctnn) as pctnn'),DB::raw('sum(pcdbn) as pcdbn'),DB::raw('sum(pcvk) as pcvk'),DB::raw('sum(pckn) as pckn'),DB::raw('sum(pcdang) as pcdang'),
                     DB::raw('sum(pccovu) as pccovu'),DB::raw('sum(pclt) as pclt'),DB::raw('sum(pcd) as pcd'),DB::raw('sum(pctr) as pctr'),DB::raw('sum(pctdt) as pctdt')
                     ,DB::raw('sum(pctnvk) as pctnvk'),DB::raw('sum(pcbdhdcu) as pcbdhdcu'),DB::raw('sum(pcthni) as pcthni'),DB::raw('sum(pclade) as pclade'),
-                    DB::raw('sum(pcud61) as pcud61'),DB::raw('sum(pcxaxe) as pcxaxe'),DB::raw('sum(pcdith) as pcdith'),DB::raw('sum(pcphth) as pcphth'),DB::raw('sum(luongtn) as luongtn'),
+                    DB::raw('sum(pcud61) as pcud61'),DB::raw('sum(pcxaxe) as pcxaxe'),DB::raw('sum(pcdith) as pcdith'),DB::raw('sum(pcphth) as pcphth'),DB::raw('sum(ttl) as ttl'),
                     DB::raw('sum(stbhxh_dv) as stbhxh_dv'),DB::raw('sum(stbhyt_dv) as stbhyt_dv'),DB::raw('sum(stbhtn_dv) as stbhtn_dv'),DB::raw('sum(stkpcd_dv) as stkpcd_dv')
                     ,DB::raw('sum(ttbh_dv) as ttbh_dv'))
                 ->where('madvbc',$madvbc)
@@ -2931,7 +2931,7 @@ class baocaobangluongController extends Controller
                     ,DB::raw('sum(pctnn) as pctnn'),DB::raw('sum(pcdbn) as pcdbn'),DB::raw('sum(pcvk) as pcvk'),DB::raw('sum(pckn) as pckn'),DB::raw('sum(pcdang) as pcdang'),
                     DB::raw('sum(pccovu) as pccovu'),DB::raw('sum(pclt) as pclt'),DB::raw('sum(pcd) as pcd'),DB::raw('sum(pctr) as pctr'),DB::raw('sum(pctdt) as pctdt')
                     ,DB::raw('sum(pctnvk) as pctnvk'),DB::raw('sum(pcbdhdcu) as pcbdhdcu'),DB::raw('sum(pcthni) as pcthni'),DB::raw('sum(pclade) as pclade'),
-                    DB::raw('sum(pcud61) as pcud61'),DB::raw('sum(pcxaxe) as pcxaxe'),DB::raw('sum(pcdith) as pcdith'),DB::raw('sum(pcphth) as pcphth'),DB::raw('sum(luongtn) as luongtn'),
+                    DB::raw('sum(pcud61) as pcud61'),DB::raw('sum(pcxaxe) as pcxaxe'),DB::raw('sum(pcdith) as pcdith'),DB::raw('sum(pcphth) as pcphth'),DB::raw('sum(ttl) as ttl'),
                     DB::raw('sum(stbhxh_dv) as stbhxh_dv'),DB::raw('sum(stbhyt_dv) as stbhyt_dv'),DB::raw('sum(stbhtn_dv) as stbhtn_dv'),DB::raw('sum(stkpcd_dv) as stkpcd_dv')
                     ,DB::raw('sum(ttbh_dv) as ttbh_dv'))
                 ->where('tonghopluong_donvi.madvbc',$madvbc)
@@ -3003,7 +3003,7 @@ class baocaobangluongController extends Controller
 
             $model_hdnd = tonghopluong_donvi_bangluong::join('tonghopluong_donvi','tonghopluong_donvi.mathdv','tonghopluong_donvi_bangluong.mathdv')
                 ->Select('mact',DB::raw('count(tonghopluong_donvi_bangluong.id) as soluong'),DB::raw('sum(heso) as heso'),DB::raw('sum(tonghs-heso-pckn) as tongpc'),DB::raw('sum(tonghs-pckn) as tonghs')
-                    ,DB::raw('sum(hesopc) as pccv'),DB::raw('sum(pckn) as pckn'),DB::raw('sum(tonghopluong_donvi_bangluong.luongcoban*hesopc) as luongtn'),
+                    ,DB::raw('sum(hesopc) as pccv'),DB::raw('sum(pckn) as pckn'),DB::raw('sum(tonghopluong_donvi_bangluong.luongcoban*hesopc) as ttl'),
                     DB::raw('sum(stbhxh_dv) as stbhxh_dv'),DB::raw('sum(stbhyt_dv) as stbhyt_dv'),DB::raw('sum(stbhtn_dv) as stbhtn_dv'),DB::raw('sum(stkpcd_dv) as stkpcd_dv')
                     ,DB::raw('sum(ttbh_dv) as ttbh_dv'))
                 ->where('tonghopluong_donvi.madvbc',$madvbc)
@@ -3038,7 +3038,7 @@ class baocaobangluongController extends Controller
             }
             $model_kn = tonghopluong_donvi_bangluong::join('tonghopluong_donvi','tonghopluong_donvi.mathdv','tonghopluong_donvi_bangluong.mathdv')
                 ->Select('mact',DB::raw('count(tonghopluong_donvi_bangluong.id) as soluong'),DB::raw('sum(heso) as heso'),DB::raw('sum(tonghs-heso-hesopc) as tongpc'),DB::raw('sum(tonghs-hesopc) as tonghs')
-                    ,DB::raw('sum(pckn) as pccv'),DB::raw('sum(tonghopluong_donvi_bangluong.luongcoban*pckn) as luongtn'),
+                    ,DB::raw('sum(pckn) as pccv'),DB::raw('sum(tonghopluong_donvi_bangluong.luongcoban*pckn) as ttl'),
                     DB::raw('sum(stbhxh_dv) as stbhxh_dv'),DB::raw('sum(stbhyt_dv) as stbhyt_dv'),DB::raw('sum(stbhtn_dv) as stbhtn_dv'),DB::raw('sum(stkpcd_dv) as stkpcd_dv')
                     ,DB::raw('sum(ttbh_dv) as ttbh_dv'))
                 ->where('madvbc',$madvbc)
@@ -3061,7 +3061,7 @@ class baocaobangluongController extends Controller
             }
             $model_uv = tonghopluong_donvi_bangluong::join('tonghopluong_donvi','tonghopluong_donvi.mathdv','tonghopluong_donvi_bangluong.mathdv')
                 ->Select('mact',DB::raw('count(tonghopluong_donvi_bangluong.id) as soluong'),DB::raw('sum(heso) as heso'),DB::raw('sum(tonghs-heso) as tongpc'),DB::raw('sum(tonghs) as tonghs')
-                    ,DB::raw('sum(hesopc) as pccv'),DB::raw('sum(pckn) as pckn'),DB::raw('sum(tonghopluong_donvi_bangluong.luongcoban*hesopc) as luongtn'),
+                    ,DB::raw('sum(hesopc) as pccv'),DB::raw('sum(pckn) as pckn'),DB::raw('sum(tonghopluong_donvi_bangluong.luongcoban*hesopc) as ttl'),
                     DB::raw('sum(stbhxh_dv) as stbhxh_dv'),DB::raw('sum(stbhyt_dv) as stbhyt_dv'),DB::raw('sum(stbhtn_dv) as stbhtn_dv'),DB::raw('sum(stkpcd_dv) as stkpcd_dv')
                     ,DB::raw('sum(ttbh_dv) as ttbh_dv'))
                 ->where('tonghopluong_donvi.madvbc',$madvbc)
@@ -3092,7 +3092,7 @@ class baocaobangluongController extends Controller
                     ,DB::raw('sum(pctnn) as pctnn'),DB::raw('sum(pcdbn) as pcdbn'),DB::raw('sum(pcvk) as pcvk'),DB::raw('sum(pckn) as pckn'),DB::raw('sum(pcdang) as pcdang'),
                     DB::raw('sum(pccovu) as pccovu'),DB::raw('sum(pclt) as pclt'),DB::raw('sum(pcd) as pcd'),DB::raw('sum(pctr) as pctr'),DB::raw('sum(pctdt) as pctdt')
                     ,DB::raw('sum(pctnvk) as pctnvk'),DB::raw('sum(pcbdhdcu) as pcbdhdcu'),DB::raw('sum(pcthni) as pcthni'),DB::raw('sum(pclade) as pclade'),
-                    DB::raw('sum(pcud61) as pcud61'),DB::raw('sum(pcxaxe) as pcxaxe'),DB::raw('sum(pcdith) as pcdith'),DB::raw('sum(pcphth) as pcphth'),DB::raw('sum(luongtn) as luongtn'),
+                    DB::raw('sum(pcud61) as pcud61'),DB::raw('sum(pcxaxe) as pcxaxe'),DB::raw('sum(pcdith) as pcdith'),DB::raw('sum(pcphth) as pcphth'),DB::raw('sum(ttl) as ttl'),
                     DB::raw('sum(stbhxh_dv) as stbhxh_dv'),DB::raw('sum(stbhyt_dv) as stbhyt_dv'),DB::raw('sum(stbhtn_dv) as stbhtn_dv'),DB::raw('sum(stkpcd_dv) as stkpcd_dv')
                     ,DB::raw('sum(ttbh_dv) as ttbh_dv'))
                 ->where('madvbc',$madvbc)
