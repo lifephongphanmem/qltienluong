@@ -2498,10 +2498,10 @@ class baocaobangluongController extends Controller
             //$model_donvi = dmdonvi::where('madvbc',$madvbc)->get();
             $model_donvi = dmdonvi::where('madvbc',$madvbc)->where('phanloaitaikhoan','<>','TH')->get();
 
-            if(isset($inputs['phanloai']) && $inputs['phanloai'] != "GD")
+            if($inputs['phanloai'] != "GD" && $inputs['phanloai'] != '')
                 $model_donvi = $model_donvi->where('maphanloai',$inputs['phanloai']);
-            if(isset($inputs['phanloai']) && $inputs['phanloai'] =="GD")
-                $model_donvi = $model_donvi->wherein('maphanloai',getPhanLoaGD());
+            if(isset($inputs['phanloai']) && $inputs['phanloai'] == "GD")
+                $model_donvi = $model_donvi->wherein('maphanloai ',getPhanLoaGD());
             $model_dutoan=dutoanluong::where('namns',$inputs['namns'])
                 ->where('trangthai','DAGUI')
                 ->wherein('madv',function($qr)use($madvbc){
@@ -2521,6 +2521,7 @@ class baocaobangluongController extends Controller
             $thongtin=array('nguoilap'=>session('admin')->name,
                 'namns'=>$inputs['namns'],
                 'madvbc'=>$madvbc);
+
             return view('reports.mauchung.huyen.dutoanluong')
                 ->with('model_dutoan',$model_dutoan)
                 ->with('model_donvi',$model_donvi)
