@@ -2915,6 +2915,7 @@ class baocaobangluongController extends Controller
             $col = 0;
             foreach($model_th as $ct)
             {
+                $ct->soluongcomat = $ct->soluong;
                 if($ct->mact == null){
                     $ct->tencongtac = isset($model_phanloaict[$ct->macongtac]) ? $model_phanloaict[$ct->macongtac] : '';
                 }else{
@@ -2954,6 +2955,7 @@ class baocaobangluongController extends Controller
             */
             foreach($model as $ct)
             {
+                $ct->soluongcomat = $ct->soluong;
                 if($ct->mact == null){
                     $ct->tencongtac = isset($model_phanloaict[$ct->macongtac]) ? $model_phanloaict[$ct->macongtac] : '';
                 }else{
@@ -3028,6 +3030,7 @@ class baocaobangluongController extends Controller
             */
             foreach($model_hdnd as $ct)
             {
+                $ct->soluongcomat = $ct->soluong;
                 if($ct->mact == null){
                     $ct->tencongtac = isset($model_phanloaict[$ct->macongtac]) ? $model_phanloaict[$ct->macongtac] : '';
                 }else{
@@ -3051,6 +3054,7 @@ class baocaobangluongController extends Controller
                 ->get();
             foreach($model_kn as $ct)
             {
+                $ct->soluongcomat = $ct->soluong;
                 if($ct->mact == null){
                     $ct->tencongtac = isset($model_phanloaict[$ct->macongtac]) ? $model_phanloaict[$ct->macongtac] : '';
                 }else{
@@ -3074,6 +3078,7 @@ class baocaobangluongController extends Controller
                 ->get();
             foreach($model_uv as $ct)
             {
+                $ct->soluongcomat = $ct->soluong;
                 if($ct->mact == null){
                     $ct->tencongtac = isset($model_phanloaict[$ct->macongtac]) ? $model_phanloaict[$ct->macongtac] : '';
                 }else{
@@ -3116,6 +3121,7 @@ class baocaobangluongController extends Controller
             */
             foreach($model_xp as $ct)
             {
+                $ct->soluongcomat = $ct->soluong;
                 if($ct->mact == null){
                     $ct->tencongtac = isset($model_phanloaict[$ct->macongtac]) ? $model_phanloaict[$ct->macongtac] : '';
                 }else{
