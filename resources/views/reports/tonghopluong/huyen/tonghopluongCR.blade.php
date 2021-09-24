@@ -473,22 +473,22 @@
                     <tr class="money">
                         <td style="text-align: center"></td>
                         <td style="text-align: left">{{$key}}</td>
-                        <td style="text-align: right">{{dinhdangso($model_hcsnplCT[$key]->sum('soluong'))}}</td>
-                        <td style="text-align: right">{{dinhdangso($model_hcsnplCT[$key]->sum('soluongcomat'))}}</td>
-                        <td style="text-align: right">{{dinhdangsothapphan($model_hcsnplCT[$key]->sum('tonghs'),5)}}</td>
-                        <td style="text-align: right">{{dinhdangsothapphan($model_hcsnplCT[$key]->sum('heso'),5)}}</td>
-                        <td style="text-align: right">{{dinhdangsothapphan($model_hcsnplCT[$key]->sum('tongpc'),5)}}</td>
+                        <td style="text-align: right">{{dinhdangso($model_hcsndvCT[$key]->sum('soluong'))}}</td>
+                        <td style="text-align: right">{{dinhdangso($model_hcsndvCT[$key]->sum('soluongcomat'))}}</td>
+                        <td style="text-align: right">{{dinhdangsothapphan($model_hcsndvCT[$key]->sum('tonghs'),5)}}</td>
+                        <td style="text-align: right">{{dinhdangsothapphan($model_hcsndvCT[$key]->sum('heso'),5)}}</td>
+                        <td style="text-align: right">{{dinhdangsothapphan($model_hcsndvCT[$key]->sum('tongpc'),5)}}</td>
 
                         @foreach($a_phucap as $key1=>$val)
-                            <td>{{dinhdangsothapphan($model_hcsnplCT[$key]->sum($key1),5)}}</td>
+                            <td>{{dinhdangsothapphan($model_hcsndvCT[$key]->sum($key1),5)}}</td>
                         @endforeach
 
-                        <td>{{dinhdangso($model_hcsnplCT[$key]->sum('ttbh_dv'))}}</td>
-                        <td>{{dinhdangso($model_hcsnplCT[$key]->sum('stbhxh_dv'))}}</td>
-                        <td>{{dinhdangso($model_hcsnplCT[$key]->sum('stbhyt_dv'))}}</td>
-                        <td>{{dinhdangso($model_hcsnplCT[$key]->sum('stkpcd_dv'))}}</td>
-                        <td>{{dinhdangso($model_hcsnplCT[$key]->sum('stbhtn_dv'))}}</td>
-                        <td>{{dinhdangso($model_hcsnplCT[$key]->sum('ttbh_dv') + $model_hcsnplCT[$key]->sum('ttl'))}}</td>
+                        <td>{{dinhdangso($model_hcsndvCT[$key]->sum('ttbh_dv'))}}</td>
+                        <td>{{dinhdangso($model_hcsndvCT[$key]->sum('stbhxh_dv'))}}</td>
+                        <td>{{dinhdangso($model_hcsndvCT[$key]->sum('stbhyt_dv'))}}</td>
+                        <td>{{dinhdangso($model_hcsndvCT[$key]->sum('stkpcd_dv'))}}</td>
+                        <td>{{dinhdangso($model_hcsndvCT[$key]->sum('stbhtn_dv'))}}</td>
+                        <td>{{dinhdangso($model_hcsndvCT[$key]->sum('ttbh_dv') + $model_hcsndvCT[$key]->sum('ttl'))}}</td>
                     </tr>
                 @endforeach
             @endforeach
@@ -632,22 +632,22 @@
                     <tr class="money">
                         <td style="text-align: center"></td>
                         <td style="text-align: left">{{$key}}</td>
-                        <td style="text-align: right">{{dinhdangso($model_hcsnplCT[$key]->sum('soluong'))}}</td>
-                        <td style="text-align: right">{{dinhdangso($model_hcsnplCT[$key]->sum('soluongcomat'))}}</td>
-                        <td style="text-align: right">{{dinhdangsothapphan($model_hcsnplCT[$key]->sum('tonghs'),5)}}</td>
-                        <td style="text-align: right">{{dinhdangsothapphan($model_hcsnplCT[$key]->sum('heso'),5)}}</td>
-                        <td style="text-align: right">{{dinhdangsothapphan($model_hcsnplCT[$key]->sum('tongpc'),5)}}</td>
+                        <td style="text-align: right">{{dinhdangso($model_hcsndvCT[$key]->sum('soluong'))}}</td>
+                        <td style="text-align: right">{{dinhdangso($model_hcsndvCT[$key]->sum('soluongcomat'))}}</td>
+                        <td style="text-align: right">{{dinhdangsothapphan($model_hcsndvCT[$key]->sum('tonghs'),5)}}</td>
+                        <td style="text-align: right">{{dinhdangsothapphan($model_hcsndvCT[$key]->sum('heso'),5)}}</td>
+                        <td style="text-align: right">{{dinhdangsothapphan($model_hcsndvCT[$key]->sum('tongpc'),5)}}</td>
 
                         @foreach($a_phucap as $key1=>$val)
-                            <td>{{dinhdangsothapphan($model_hcsnplCT[$key]->sum($key1),5)}}</td>
+                            <td>{{dinhdangsothapphan($model_hcsndvCT[$key]->sum($key1),5)}}</td>
                         @endforeach
 
-                        <td>{{dinhdangso($model_hcsnplCT[$key]->sum('ttbh_dv'))}}</td>
-                        <td>{{dinhdangso($model_hcsnplCT[$key]->sum('stbhxh_dv'))}}</td>
-                        <td>{{dinhdangso($model_hcsnplCT[$key]->sum('stbhyt_dv'))}}</td>
-                        <td>{{dinhdangso($model_hcsnplCT[$key]->sum('stkpcd_dv'))}}</td>
-                        <td>{{dinhdangso($model_hcsnplCT[$key]->sum('stbhtn_dv'))}}</td>
-                        <td>{{dinhdangso($model_hcsnplCT[$key]->sum('ttbh_dv') + $model_hcsnplCT[$key]->sum('ttl'))}}</td>
+                        <td>{{dinhdangso($model_hcsndvCT[$key]->sum('ttbh_dv'))}}</td>
+                        <td>{{dinhdangso($model_hcsndvCT[$key]->sum('stbhxh_dv'))}}</td>
+                        <td>{{dinhdangso($model_hcsndvCT[$key]->sum('stbhyt_dv'))}}</td>
+                        <td>{{dinhdangso($model_hcsndvCT[$key]->sum('stkpcd_dv'))}}</td>
+                        <td>{{dinhdangso($model_hcsndvCT[$key]->sum('stbhtn_dv'))}}</td>
+                        <td>{{dinhdangso($model_hcsndvCT[$key]->sum('ttbh_dv') + $model_hcsndvCT[$key]->sum('ttl'))}}</td>
                     </tr>
                 @endforeach
             @endforeach
