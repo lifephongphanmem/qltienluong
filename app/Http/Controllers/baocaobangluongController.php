@@ -2783,7 +2783,7 @@ class baocaobangluongController extends Controller
                 ->select('dutoanluong.madv','mact',DB::raw('sum(canbo_congtac) as canbo_congtac'),DB::raw('sum(canbo_dutoan) as canbo_dutoan'))
                 ->where('madvbc',$madvbc)
                 ->where('trangthai','DAGUI')
-                ->wherein('mact',['1506673604','1506673695','1535613221'])
+                ->wherein('mact',['1506673604','1506673695','1535613221','1506672780'])
                 ->wherein('madv', array_column($model_phanloai->toarray(),'madv'))
                 ->where('namns',$inputs['namns'])
                 ->groupby('dutoanluong.madv','mact')
@@ -2821,7 +2821,7 @@ class baocaobangluongController extends Controller
                     $ct->soluongcomat = 0;
                 }
             }
-            //dd($model_kn->toarray());
+            //dd($model_slxp->toarray());
             $model_dutoan=dutoanluong::where('namns',$inputs['namns'])
                 ->wherein('madv',function($qr)use($madvbc){
                     $qr->select('madv')->from('dmdonvi')->where('madvbc',$madvbc);
