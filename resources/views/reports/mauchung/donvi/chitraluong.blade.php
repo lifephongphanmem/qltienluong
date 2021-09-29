@@ -124,13 +124,13 @@
                     <td>{{dinhdangsothapphan($ct->$key,5)}}</td>
                 @endforeach
 
-                <td>{{dinhdangso($ct->tongtl)}}</td>
+                <td>{{dinhdangso($ct->luongtn)}}</td>
                 <td>{{dinhdangso($ct->stbhxh_dv)}}</td>
                 <td>{{dinhdangso($ct->stbhyt_dv)}}</td>
                 <td>{{dinhdangso($ct->stkpcd_dv)}}</td>
                 <td>{{dinhdangso($ct->stbhtn_dv)}}</td>
                 <td>{{dinhdangso($ct->tongbh)}}</td>
-                <td>{{dinhdangso($ct->tongbh + $ct->tongtl)}}</td>
+                <td>{{dinhdangso($ct->tongbh + $ct->luongtn)}}</td>
 
         </tr>
         @endforeach
@@ -140,31 +140,31 @@
             <td style="text-align: center">{{dinhdangso($chitiet->sum('soluong'))}}</td>
 
             @foreach($a_phucap as $key=>$val)
-                <td>{{dinhdangso($chitiet->sum($key))}}</td>
+                <td>{{dinhdangsothapphan($chitiet->sum($key),5)}}</td>
             @endforeach
 
-            <td>{{dinhdangso($chitiet->sum('tongtl'))}}</td>
+            <td>{{dinhdangso($chitiet->sum('luongtn'))}}</td>
             <td>{{dinhdangso($chitiet->sum('stbhxh_dv'))}}</td>
             <td>{{dinhdangso($chitiet->sum('stbhyt_dv'))}}</td>
             <td>{{dinhdangso($chitiet->sum('stkpcd_dv'))}}</td>
             <td>{{dinhdangso($chitiet->sum('stbhtn_dv'))}}</td>
             <td>{{dinhdangso($chitiet->sum('tongbh'))}}</td>
-            <td>{{dinhdangso($chitiet->sum('tongbh') + $chitiet->sum('tongtl'))}}</td>
+            <td>{{dinhdangso($chitiet->sum('tongbh') + $chitiet->sum('luongtn'))}}</td>
         </tr>
     @endforeach
     <tr style="font-weight: bold; text-align: center" class="money">
         <td colspan="3">Tổng cộng</td>
-        <td>{{dinhdangso($model_tonghop_chitiet->sum('soluong'))}}</td>
+        <td style="text-align: center">{{dinhdangso($model_tonghop_chitiet->sum('soluong'))}}</td>
         @foreach($a_phucap as $key=>$val)
-            <td>{{dinhdangso($model_tonghop_chitiet->sum($key))}}</td>
+            <td>{{dinhdangsothapphan($model_tonghop_chitiet->sum($key),5)}}</td>
         @endforeach
-        <td>{{dinhdangso($model_tonghop_chitiet->sum('tongtl'))}}</td>
+        <td>{{dinhdangso($model_tonghop_chitiet->sum('luongtn'))}}</td>
         <td>{{dinhdangso($model_tonghop_chitiet->sum('stbhxh_dv'))}}</td>
         <td>{{dinhdangso($model_tonghop_chitiet->sum('stbhyt_dv'))}}</td>
         <td>{{dinhdangso($model_tonghop_chitiet->sum('stkpcd_dv'))}}</td>
         <td>{{dinhdangso($model_tonghop_chitiet->sum('stbhtn_dv'))}}</td>
         <td>{{dinhdangso($model_tonghop_chitiet->sum('tongbh'))}}</td>
-        <td>{{dinhdangso($model_tonghop_chitiet->sum('tongbh') + $model_tonghop_chitiet->sum('tongtl'))}}</td>
+        <td>{{dinhdangso($model_tonghop_chitiet->sum('tongbh') + $model_tonghop_chitiet->sum('luongtn'))}}</td>
     </tr>
 </table>
 

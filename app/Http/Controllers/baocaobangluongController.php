@@ -331,9 +331,11 @@ class baocaobangluongController extends Controller
             //dd($model_tonghop_chitiet);
             $a_phucap = array();
             $col = 0;
+            $a_dmpc = array_column(dmphucap::where('tonghop',1)->get()->toarray(),'tenpc','mapc');
+
             foreach (getColTongHop() as $ct) {
                 if ($model_tonghop_chitiet->sum($ct) > 0) {
-                    $a_phucap[$ct] = isset($m_pc[$ct]) ? $m_pc[$ct] : '';
+                    $a_phucap[$ct] = isset($a_dmpc[$ct]) ? $a_dmpc[$ct] : '';
                     $col++;
                 }
             }

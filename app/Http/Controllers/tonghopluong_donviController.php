@@ -224,7 +224,7 @@ class tonghopluong_donviController extends Controller
                         //dung hàm abs() do truy thu => số tiền âm
                         if(abs($a_ct[$i][$mapc_st]) > 0){
                             $tongst += $a_ct[$i][$mapc_st];
-                            if(abs($a_ct[$i][$mapc_st]) > abs($a_ct[$i][$mapc])){//phụ cấp hưởng theo số tiền
+                            if(abs($a_ct[$i][$mapc]) < abs($a_ct[$i][$mapc_st])){//phụ cấp hưởng theo số tiền
                                 $tonghs += $a_ct[$i][$mapc];
                             }
                         }else{
@@ -258,10 +258,11 @@ class tonghopluong_donviController extends Controller
                 $model_data[$i]['mathdv'] = $mathdv;
                 $model_data[$i]['tonghop'] = $model_data[$i]['congtac'];
                 foreach (getColTongHop() as $ct) {
-                    $model_data[$i]['st_'.$ct] = array_sum(array_column($luongct,'st_'.$ct));
-                    $model_data[$i][$ct] = array_sum(array_column($luongct,$ct));
+                    $model_data[$i]['st_' . $ct] = array_sum(array_column($luongct, 'st_' . $ct));
+                    $model_data[$i][$ct] = array_sum(array_column($luongct, $ct));
                     //$model_data[$i][$ct] = array_sum(array_column($luongct,'st_'.$ct));
-                    $tonghs += chkDbl($model_data[$i][$ct]);
+                    if (abs($model_data[$i][$ct]) < abs($model_data[$i]['st_' . $ct]))
+                        $tonghs += chkDbl($model_data[$i][$ct]);
                 }
                 $a_slcb = a_unique(a_split($luongct, array('macanbo','mact')));//lọc cán bộ kiêm nhiệm
 
