@@ -289,7 +289,8 @@ class bangluongController extends Controller
         //ds cán bộ
 
         $model_phucap = dmphucap_donvi::select('mapc', 'phanloai', 'congthuc', 'baohiem', 'tenpc', 'thaisan', 'nghiom', 'dieudong','thuetn','tapsu')
-            ->where('madv', session('admin')->madv)->where('phanloai', '<', '3')
+            ->where('madv', session('admin')->madv)
+            ->where('phanloai', '<', '3')
             ->wherenotin('mapc',array_merge(['hesott'], explode(',', $inputs['phucaploaitru'])))->get();
 
         $a_th = array_merge(array('macanbo', 'macvcq', 'mapb', 'manguonkp', 'mact', 'baohiem', 'pthuong'),
@@ -352,22 +353,27 @@ class bangluongController extends Controller
         $m_dmng = nguonkinhphi_dinhmuc::where('madv', session('admin')->madv)->where('manguonkp', $inputs['manguonkp'])->get();
         $m_dmng_ct = nguonkinhphi_dinhmuc_ct::wherein('maso',array_column($m_dmng->toarray(),'maso'))
             ->wherenotin('mapc', explode(',', $inputs['phucaploaitru']))->get();
-
+        //dd($m_dmng_ct);
         //phân loại công tác nào ko có trong định mức => gán lương cơ bản = 0
         $a_nkp_dm = array();
+        $a_nkp_tinhtheodm = array();
         foreach($m_dmng as $ng){
-            $chitiet = array_column($m_dmng_ct->where('maso',$ng->maso)->toarray(),'luongcoban','mapc');
+            $dmng_ct = $m_dmng_ct->where('maso',$ng->maso);
+            $chitiet = array_column($dmng_ct->toarray(),'luongcoban','mapc');
+            $tinhtheodm = array_column($m_dmng_ct->where('maso',$ng->maso)->toarray(),'luongcoban','mapc');
             if($ng->mact == 'ALL'){
                 //gán mảng nguồn từ đầu
                 $a_nkp_dm = array();
                 foreach($a_mact_ht as $ct){
                     $a_nkp_dm[$ct] = $chitiet;
+                    $a_nkp_tinhtheodm[$ct] = $tinhtheodm;
                 }
                 goto dinhmucnguon;
             }
 
             foreach(explode(',', $ng->mact) as $ct){
                 $a_nkp_dm[$ct] = $chitiet;
+                $a_nkp_tinhtheodm[$ct] = $tinhtheodm;
             }
         }
         dinhmucnguon:
@@ -528,7 +534,7 @@ class bangluongController extends Controller
                     }
                     case 1:
                     {//số tiền
-                        $pc->sotien = chkDbl($cb->$mapc);
+                        $pc->sotien = $a_nkp_tinhtheodm[$cb->mact][$mapc] ? $pc->luongcoban : chkDbl($cb->$mapc);
                         break;
                     }
                     case 2:
@@ -2450,11 +2456,11 @@ class bangluongController extends Controller
             $a_tapsu = array_column($model_phucap->where('tapsu', 1)->toarray(), 'mapc');
 
             $a_pc = $model_phucap->keyby('mapc')->toarray();
-//            dd($a_pc);
+            //dd($inputs);
             //bảng chi trả lương
             if ($m_bl->phanloai == 'BANGLUONG') {
                 $mapc_st = 'st_' . $inputs['mapc'];
-                $model->$inputs['mapc'] = $inputs['heso'];
+                $model->$inputs['mapc'] = chkDbl($inputs['heso']);
                 $model->$mapc_st = getDbl($inputs['sotien']);
 
                 //các biển lưu để tính lương

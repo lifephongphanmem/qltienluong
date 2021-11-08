@@ -223,6 +223,7 @@ class nguonkinhphi_dinhmucController extends Controller
             $inputs['tenpc'] = dmphucap_donvi::where('madv', session('admin')->madv)->where('mapc',$inputs['mapc'])->first()->tenpc;
             $inputs['madv'] = session('admin')->madv;
             $inputs['luongcoban'] = chkDbl($inputs['luongcoban']);
+            $inputs['tinhtheodm'] = $inputs['tinhtheodm'];
             nguonkinhphi_dinhmuc_ct::create($inputs);
             return redirect('/he_thong/dinh_muc/phu_cap?maso='.$inputs['maso']);
         } else
@@ -238,6 +239,7 @@ class nguonkinhphi_dinhmucController extends Controller
                 ->wherein('mapc', $inputs['mapc'])
                 ->get();
             foreach($model as $ct){
+                $ct->tinhtheodm = $inputs['tinhtheodm'];
                 $ct->luongcoban = $inputs['luongcoban'];
                 $ct->save();
             }
@@ -288,8 +290,9 @@ class nguonkinhphi_dinhmucController extends Controller
         }
 
         $inputs = $request->all();
+
         $inputs['luongcoban'] = chkDbl($inputs['luongcoban']);
-        nguonkinhphi_dinhmuc_ct::find($inputs['id'])->update(['luongcoban'=>$inputs['luongcoban']]);
+        nguonkinhphi_dinhmuc_ct::find($inputs['id'])->update(['luongcoban'=>$inputs['luongcoban'],'tinhtheodm'=>$inputs['tinhtheodm']]);
 
         $result['message'] = "Cập nhật thành công.";
         $result['status'] = 'success';

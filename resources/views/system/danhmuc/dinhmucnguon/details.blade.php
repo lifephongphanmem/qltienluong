@@ -40,14 +40,15 @@
                     </div>
                 </div>
                 <div class="portlet-body form-horizontal">
-                    <table id="sample_3" class="table table-hover table-striped table-bordered" style="min-height: 230px">
+                    <table id="sample_4" class="table table-hover table-striped table-bordered" style="min-height: 230px">
                         <thead>
                             <tr>
                                 <th class="text-center" style="width: 5%">STT</th>
                                 <th class="text-center">Mã số</th>
                                 <th class="text-center">Phụ cấp</th>
-                                <th class="text-center">Lương cơ bản</th>
-                                <th class="text-center">Thao tác</th>
+                                <th class="text-center" style="width: 10%">Lương cơ bản</th>
+                                <th class="text-center">Cách tính lương<br>(chỉ áp dụng hệ số tính<br>theo số tiền)</th>
+                                <th class="text-center" style="width: 15%">Thao tác</th>
                             </tr>
                         </thead>
 
@@ -55,16 +56,17 @@
                             @foreach($model as $key=>$value)
                                 <tr>
                                     <td class="text-center">{{$key+1}}</td>
-                                    <td>{{$value->mapc}}</td>
+                                    <td class="text-center">{{$value->mapc}}</td>
                                     <td>{{$value->tenpc}}</td>
                                     <td class="text-right">{{dinhdangso($value->luongcoban)}}</td>
-                                       <td>
-                                           <button type="button" data-toggle="modal" data-target="#luongcb-modal" onclick="editCV('{{$value->mapc}}','{{$value->luongcoban}}')" class="btn btn-default btn-xs">
-                                               <i class="fa fa-edit"></i>&nbsp; Sửa mức lương</button>
+                                    <td>{{$value->tinhtheodm == 0 ? "Tính lương theo hồ sơ cán bộ" : "Tính lương theo số tiền của định mức"}}</td>
+                                    <td>
+                                       <button type="button" data-toggle="modal" data-target="#luongcb-modal" onclick="editCV('{{$value->mapc}}','{{$value->luongcoban}}','{{$value->tinhtheodm}}')" class="btn btn-default btn-xs">
+                                           <i class="fa fa-edit"></i>&nbsp; Sửa</button>
 
-                                           <button type="button" onclick="cfDel('{{$furl.'del/'.$value->id}}')" class="btn btn-default btn-xs" data-target="#delete-modal-confirm" data-toggle="modal">
-                                            <i class="fa fa-trash-o"></i>&nbsp; Xóa</button>
-                                       </td>
+                                       <button type="button" onclick="cfDel('{{$furl.'del/'.$value->id}}')" class="btn btn-default btn-xs" data-target="#delete-modal-confirm" data-toggle="modal">
+                                        <i class="fa fa-trash-o"></i>&nbsp; Xóa</button>
+                                    </td>
                                 </tr>
                             @endforeach
                         </tbody>
@@ -94,6 +96,10 @@
 
                     <label class="control-label">Mức lương cơ bản</label>
                     {!!Form::text('luongcoban', $model_nguon->luongcoban, array('id' => 'luongcoban','class' => 'form-control', 'data-mask'=>'fdecimal'))!!}
+
+                    <label class="form-control-label">Cách tính lương(chỉ áp dụng hệ số tính theo số tiền)</label>
+                    {!!Form::select('tinhtheodm',['0'=>"Tính lương theo hồ sơ cán bộ" , '1'=>"Tính lương theo số tiền của định mức"] ,null, array('id' => 'tinhtheodm','class' => 'form-control select2me'))!!}
+
                 </div>
                 <input type="hidden" id="maso" name="maso" value="{{$model_nguon->maso}}"/>
                 <div class="modal-footer">
@@ -135,6 +141,13 @@
                                 {!!Form::text('luongcoban', session('admin')->luongcoban, array('id' => 'luongcoban','class' => 'form-control', 'data-mask'=>'fdecimal'))!!}
                             </div>
                         </div>
+
+                        <div class="row">
+                            <div class="col-md-12">
+                                <label class="control-label">Cách tính lương(chỉ áp dụng hệ số tính theo số tiền)</label>
+                                {!!Form::select('tinhtheodm',['0'=>"Tính lương theo hồ sơ cán bộ" , '1'=>"Tính lương theo số tiền của định mức"] ,null, array('id' => 'tinhtheodm','class' => 'form-control select2me'))!!}
+                            </div>
+                        </div>
                         <input type="hidden" id="maso" name="maso" value="{{$model_nguon->maso}}"/>
                     </div>
                 </div>
@@ -158,10 +171,11 @@
             mapc.select2("val",selectedItems);
         }
 
-        function editCV(mapc,luongcoban){
+        function editCV(mapc,luongcoban,tinhtheodm){
             var form = $('#upd_luongcb');
             var a_pc = mapc.split(',');
             form.find("[id='mapc']").select2("val",a_pc);
+            form.find("[id='tinhtheodm']").val(tinhtheodm).trigger('change');
             form.find("[id='luongcoban']").val(luongcoban);
         }
 
