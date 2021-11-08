@@ -125,6 +125,7 @@ class bangluongController extends Controller
             $inputs['manguonkp'] = $model->manguonkp;
             $inputs['linhvuchoatdong'] = $model->linhvuchoatdong;
             $inputs['phucaploaitru'] = $model->phucaploaitru;
+            $inputs['phucapluusotien'] = $model->phucapluusotien;
 
             $dinhmuc = nguonkinhphi_dinhmuc::join('nguonkinhphi_dinhmuc_ct', 'nguonkinhphi_dinhmuc.maso', '=', 'nguonkinhphi_dinhmuc_ct.maso')
                 ->select('nguonkinhphi_dinhmuc_ct.mapc')
