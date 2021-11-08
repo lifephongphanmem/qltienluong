@@ -728,9 +728,11 @@ class bangluongController extends Controller
             tinhluong:
 
             foreach (explode(',', $inputs['phucapluusotien']) as $mapc) {
-                $tonghs -= $cb->$mapc;
-                $maso_st = 'st_' . $maso;
-                $cb->$mapc = $cb->$maso_st;
+                if ($mapc != '') {
+                    $tonghs -= $cb->$mapc;
+                    $maso_st = 'st_' . $maso;
+                    $cb->$mapc = $cb->$maso_st;
+                }
             }
 
             $cb->tonghs = $tonghs;
@@ -1361,9 +1363,11 @@ class bangluongController extends Controller
             tinhluong:
 
             foreach (explode(',', $inputs['phucapluusotien']) as $mapc) {
-                $tonghs -= $m_cb[$key][$mapc];
-                $maso_st = 'st_' . $mapc;
-                $m_cb[$key][$mapc] = $m_cb[$key][$maso_st];
+                if($mapc != ''){
+                    $tonghs -= $m_cb[$key][$mapc];
+                    $maso_st = 'st_' . $mapc;
+                    $m_cb[$key][$mapc] = $m_cb[$key][$maso_st];
+                }
             }
 
             $m_cb[$key]['tonghs'] = $tonghs;
