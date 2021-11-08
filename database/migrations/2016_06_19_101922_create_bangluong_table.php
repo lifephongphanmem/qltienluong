@@ -27,6 +27,7 @@ class CreateBangluongTable extends Migration
             $table->string('linhvuchoatdong')->nullable();//Phân loại xã phường ko cần chọn lĩnh vực hoạt động
             $table->double('phantramhuong')->default(100);//Tùy theo nguồn kinh phí để tùy chọn % hưởng lương
             $table->string('phucaploaitru')->nullable();//lưu(cập nhật) khi tạo bảng lương
+            $table->string('phucapluusotien')->nullable();//lưu(cập nhật) khi tạo bảng lương
             $table->double('luongcoban')->default(0);
             $table->date('ngaygui')->nullable();
             $table->string('nguoigui')->nullable();

@@ -22,6 +22,7 @@ class bangluong extends Model
         'phanloai',
         'phantramhuong',
         'phucaploaitru',
+        'phucapluusotien',
         'madv',
         'luongcoban',
         'maquy',

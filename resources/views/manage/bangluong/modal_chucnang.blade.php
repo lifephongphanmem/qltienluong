@@ -78,6 +78,13 @@
                                     </div>
 
                                     <div class="row">
+                                        <div class="col-md-12">
+                                            <label class="control-label">Các phụ cấp lưu theo số tiền</label>
+                                            {!! Form::select('phucapluusotien[]',$a_phucaplst,null,array('id' => 'phucapluusotien','class' => 'form-control select2me','multiple'=>'multiple')) !!}
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
                                         <div class="col-md-offset-3 col-md-9" style="margin-top: 15px">
                                             <input name="capnhatnangluong" id="capnhatnangluong" type="checkbox">
                                             <label for="capnhatnangluong">Cập nhật quá trình nâng lương của cán bộ</label>

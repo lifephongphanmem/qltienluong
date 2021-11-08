@@ -24,7 +24,10 @@
         jQuery(document).ready(function() {
             TableManaged.init();
             $('#printf_mautt107_th').find("[id^='manguonkp']").select2();
-            //$("#manguonkp_th").select2();
+            var phucaploaitru = '{{$phucaploaitru}}';
+            $('#phucaploaitru').select2("val",phucaploaitru.split(',')).trigger('change');
+            var phucapluusotien = '{{$phucapluusotien}}';
+            $('#phucapluusotien').select2("val",phucapluusotien.split(',')).trigger('change');
         });
     </script>
 @stop
@@ -83,8 +86,8 @@
                                 <th class="text-center" style="width: 5%">STT</th>
                                 <th class="text-center">Phân loại</th>
                                 <th class="text-center">Nguồn kinh phí</th>
-                                <th class="text-center">Lĩnh vực</br>hoạt động</th>
-                                <th class="text-center">Nội dung</br>bảng lương</th>
+                                <th class="text-center">Lĩnh vực<br>hoạt động</th>
+                                <th class="text-center">Nội dung<br>bảng lương</th>
                                 <th class="text-center">Thao tác</th>
                             </tr>
                         </thead>

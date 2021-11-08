@@ -42,5 +42,7 @@ class dmdonvi extends Model
         'dinhmucnguon',
         'sotk',
         'tennganhang',
+        'phucaploaitru',
+        'phucapluusotien',
     ];
 }

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\bangluong;
 use App\dmphucap_donvi;
 use App\hosocanbo;
 use App\hosocanbo_kiemnhiem;
@@ -34,12 +35,22 @@ class hosotruylinhController extends Controller
             if($inputs['nam'] != 'ALL'){
                 $model = $model->whereyear('ngayden',$inputs['nam']);
             }
+            $a_bangluong = bangluong::select('mabl','thang','nam')->where('madv',session('admin')->madv)
+                ->where('phanloai','TRUYLINH')
+                ->get()->keyBy('mabl')->toarray();
+
             $model = $model->get();
             $model_nhomct = dmphanloaicongtac::select('macongtac','tencongtac')->get();
             $model_tenct = dmphanloaict::select('tenct','macongtac','mact')->get();
             $a_cv = getChucVuCQ(false);
             foreach($model as $hs){
                 $hs->tencvcq = isset($a_cv[$hs->macvcq])?$a_cv[$hs->macvcq] : '';
+                if(isset($a_bangluong[$hs->mabl])){
+                    $hs->thang = $a_bangluong[$hs->mabl]['thang'];
+                    $hs->nam = $a_bangluong[$hs->mabl]['nam'];
+                }else{
+                    $hs->mabl = null;
+                }
             }
             return view('manage.truylinh.index')
                 ->with('model', $model->sortby('ngaytu'))

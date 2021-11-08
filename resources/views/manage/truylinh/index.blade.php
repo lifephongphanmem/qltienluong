@@ -61,8 +61,8 @@
                                 <th class="text-center" style="width: 5%"><!--input type="checkbox" class="checkall"/-->STT</th>
                                 <th class="text-center">Phân loại</th>
                                 <th class="text-center">Họ và tên</th>
-                                <th class="text-center">Hệ số</br>truy lĩnh</th>
-                                <th class="text-center">Thời gian</br>truy lĩnh</th>
+                                <th class="text-center">Hệ số<br>truy lĩnh</th>
+                                <th class="text-center">Thời gian<br>truy lĩnh</th>
                                 <th class="text-center">Trạng thái</th>
                                 <th class="text-center">Thao tác</th>
                             </tr>
@@ -87,7 +87,11 @@
                                     </td>
                                     <td class="text-center">{{$value->heso}}</td>
                                     <td>{{getDayVn($value->ngaytu) .' - '. getDayVn($value->ngayden)}}</td>
-                                    <td class="text-center">{{$value->mabl == null?"Chưa chi trả":'Đã chi trả'}}</td>
+                                    @if($value->mabl == null)
+                                        <td class="text-center">Chưa chi trả</td>
+                                    @else
+                                        <td class="text-center">Đã chi trả<br>{{'('.$value->thang .'-'. $value->nam . ')'}}</td>
+                                    @endif
                                     <td>
                                         @if($value->mabl == null)
                                             <a href="{{url($furl.'create?maso='.$value->maso)}}" class="btn btn-default btn-xs">

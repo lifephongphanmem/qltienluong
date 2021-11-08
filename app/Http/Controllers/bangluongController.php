@@ -45,7 +45,7 @@ class bangluongController extends Controller
     {
         if (Session::has('admin')) {
             $inputs = $request->all();
-            foreach(getNguonTruyLinh() as $k=>$v){
+            foreach (getNguonTruyLinh() as $k => $v) {
                 $inputs['manguonkp'] = $k;
                 $inputs['luongcb'] = $v;
             }
@@ -78,9 +78,12 @@ class bangluongController extends Controller
                 'pccv', 'pctaicu', 'hesopc', 'pcthni'); //do các loại phụ cấp lưu lại
 
             $m_nguonkp_bl = $m_nguonkp->wherein('manguonkp', a_unique(array_column($model->toarray(), 'manguonkp')));
-            $a_phucap_trichnop = dmphucap_donvi::where('madv', session('admin')->madv)->where('phanloai', '<', '3')->get();
-            $a_phucap = dmphucap_donvi::where('madv', session('admin')->madv)->where('phanloai', '<', '3')->wherenotin('mapc', $a_pc)->get();
+            //$a_phucap_trichnop = dmphucap_donvi::where('madv', session('admin')->madv)->where('phanloai', '<', '3')->get();
+            $a_phucap_trichnop = array_column(dmphucap_donvi::where('madv', session('admin')->madv)->where('phanloai', '<', '3')->get()->toArray(), 'tenpc', 'mapc');
+            $a_phucap = array_column(dmphucap_donvi::where('madv', session('admin')->madv)->where('phanloai', '<', '3')->wherenotin('mapc', $a_pc)->get()->toArray(), 'tenpc', 'mapc');
+            $a_phucaplst = array_column(dmphucap_donvi::where('madv', session('admin')->madv)->wherein('phanloai', ['0', '2'])->get()->toArray(), 'tenpc', 'mapc');
             $m_linhvuc = getLinhVucHoatDong(false);
+            $m_donvi = dmdonvi::where('madv', session('admin')->madv)->first();
 
             return view('manage.bangluong.index')
                 //->with('furl', '/chuc_nang/bang_luong/')
@@ -93,9 +96,12 @@ class bangluongController extends Controller
                 ->with('model_tenct', $model_tenct)
                 ->with('m_nguonkp', array_column($m_nguonkp->toArray(), 'tennguonkp', 'manguonkp'))
                 ->with('a_nguonkp_bl', array_column($m_nguonkp_bl->toArray(), 'tennguonkp', 'manguonkp'))
-                ->with('a_phucap', array_column($a_phucap->toArray(), 'tenpc', 'mapc'))
-                ->with('a_phucap_trichnop', array_merge(array('ALL' => 'Tất cả các loại phụ cấp'), array_column($a_phucap_trichnop->toArray(), 'tenpc', 'mapc')))
+                ->with('a_phucap', $a_phucap)
+                ->with('a_phucaplst', $a_phucaplst)
+                ->with('a_phucap_trichnop', array_merge(array('ALL' => 'Tất cả các loại phụ cấp'), $a_phucap_trichnop))
                 ->with('a_phanloai', getPhanLoaiBangLuong())
+                ->with('phucaploaitru', $m_donvi->phucaploaitru)
+                ->with('phucapluusotien', $m_donvi->phucapluusotien)
                 ->with('pageTitle', 'Danh sách bảng lương');
         } else
             return view('errors.notlogin');
@@ -206,6 +212,7 @@ class bangluongController extends Controller
         if (isset($model)) {
             //update
             $inputs['phucaploaitru'] = $model->phucaploaitru;
+            $inputs['phucapluusotien'] = $model->phucapluusotien;
             $model->update($inputs);
             return redirect('/chuc_nang/bang_luong/chi_tra?thang=' . $inputs['thang'] . '&nam=' . $inputs['nam']);
         } else {
@@ -213,6 +220,11 @@ class bangluongController extends Controller
                 $inputs['phucaploaitru'] = implode(',', $inputs['phucaploaitru']);
             }else{
                 $inputs['phucaploaitru'] = '';
+            }
+            if(isset($inputs['phucapluusotien'])){
+                $inputs['phucapluusotien'] = implode(',', $inputs['phucapluusotien']);
+            }else{
+                $inputs['phucapluusotien'] = '';
             }
 
             if(!isset($inputs['trungbangluong'])){
@@ -234,7 +246,7 @@ class bangluongController extends Controller
             $inputs['phanloai'] = 'BANGLUONG';
             $inputs['linhvuchoatdong'] = !isset($inputs['linhvuchoatdong']) ? 'QLNN' : $inputs['linhvuchoatdong'];
             $inputs['luongcoban'] = getDbl($inputs['luongcoban']);
-
+            dmdonvi::where('madv',$madv)->update(['phucaploaitru'=>$inputs['phucaploaitru'],'phucapluusotien'=>$inputs['phucapluusotien']]);
             if(boolval($inputs['dinhmuc'])){
                 $this->tinhluong_dinhmuc($inputs);
             }else{
@@ -714,6 +726,13 @@ class bangluongController extends Controller
                 $cb->giaml = $cb_nghi['songaynghi'] >= $ngaycong ? round($sotiencong) : round($tiencong * $cb_nghi['songaynghi'], 0);
             }
             tinhluong:
+
+            foreach (explode(',', $inputs['phucapluusotien']) as $mapc) {
+                $tonghs -= $cb->$mapc;
+                $maso_st = 'st_' . $maso;
+                $cb->$mapc = $cb->$maso_st;
+            }
+
             $cb->tonghs = $tonghs;
             $cb->ttl = $tien;
             $cb->luongtn = $cb->ttl - $cb->ttbh - $cb->giaml;
@@ -1340,6 +1359,13 @@ class bangluongController extends Controller
             }
 
             tinhluong:
+
+            foreach (explode(',', $inputs['phucapluusotien']) as $mapc) {
+                $tonghs -= $m_cb[$key][$mapc];
+                $maso_st = 'st_' . $mapc;
+                $m_cb[$key][$mapc] = $m_cb[$key][$maso_st];
+            }
+
             $m_cb[$key]['tonghs'] = $tonghs;
             $m_cb[$key]['ttl'] = $tien;
 
