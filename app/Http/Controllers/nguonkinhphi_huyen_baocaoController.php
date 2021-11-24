@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\dmphanloaicongtac;
+use App\dmphanloaict;
 use App\dmthongtuquyetdinh;
 use App\nguonkinhphi_huyen_baocao;
 use App\nguonkinhphi_huyen_baocao_chitiet;
@@ -31,11 +33,15 @@ class nguonkinhphi_huyen_baocaoController extends Controller
                     + $ct->tietkiemchi + $ct->bosung + $ct->caicach;
                 $ct->linhvuc = isset($lvhd[$ct->linhvuchoatdong])? $lvhd[$ct->linhvuchoatdong]:'' ;
             }
+            $model_nhomct = dmphanloaicongtac::select('macongtac', 'tencongtac')->get();
+            $model_tenct = dmphanloaict::select('tenct', 'macongtac', 'mact')->get();
             //dd($model);
             return view('manage.nguonkinhphihuyen.index')
                 ->with('furl','/nguon_kinh_phi/huyen/')
                 ->with('a_trangthai',getStatus())
                 ->with('model',$model)
+                ->with('model_nhomct', $model_nhomct)
+                ->with('model_tenct', $model_tenct)
                 ->with('pageTitle','Danh sách nguồn kinh phí của đơn vị');
         } else
             return view('errors.notlogin');
