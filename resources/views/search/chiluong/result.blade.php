@@ -56,7 +56,7 @@
                                     <td>{{$value->nam}}</td>
                                     <td>{{$value->noidung}}</td>
                                     <td>
-                                        <a href="{{url('chuc_nang/bang_luong/inbangluong/maso='.$value->mabl)}}" class="btn btn-success btn-xs mbs" TARGET="_blank">
+                                        <a href="{{url('chuc_nang/bang_luong/in/maso='.$value->mabl)}}" class="btn btn-success btn-xs mbs" TARGET="_blank">
                                             <i class="fa fa-print"></i>&nbsp; In bảng lương</a>
                                         <a href="{{url('chuc_nang/bang_luong/in_bh/maso='.$value->mabl)}}" class="btn btn-success btn-xs mbs" TARGET="_blank">
                                             <i class="fa fa-print"></i>&nbsp; In bảo hiểm</a>
