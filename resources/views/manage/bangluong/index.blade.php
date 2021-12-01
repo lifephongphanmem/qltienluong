@@ -24,12 +24,16 @@
         jQuery(document).ready(function() {
             TableManaged.init();
             $('#printf_mautt107_th').find("[id^='manguonkp']").select2();
+            //$('#phucaploaitru').select2();
+            //$('#phucapluusotien').select2();
 
         });
         var phucaploaitru = '{{$phucaploaitru}}';
-        $('#phucaploaitru').select2("val",phucaploaitru.split(','));
+        //$('#phucaploaitru').val("val",phucaploaitru.split(',')).trigger('change');
         var phucapluusotien = '{{$phucapluusotien}}';
-        $('#phucapluusotien').select2("val",phucapluusotien.split(','));
+        //$('#phucapluusotien').val("val",phucapluusotien.split(',')).trigger('change');
+        //alert(phucapluusotien);
+        //$('#phucapluusotien').select2("val",phucapluusotien.split(','));
     </script>
 @stop
 

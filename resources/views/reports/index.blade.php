@@ -13,30 +13,73 @@
     <div class="row">
         <div class="col-md-12">
             <!-- BEGIN EXAMPLE TABLE PORTLET-->
-            <div class="portlet box">
-                <div class="portlet-header">
+            <div class="portlet light bordered">
+                <div class="portlet-title">
+                    <div class="caption">DANH SÁCH BÁO CÁO TẠI ĐƠN VỊ</div>
+                    <div class="actions"></div>
                 </div>
+
                 <div class="portlet-body">
                     <div class="row">
-                        <div class="col-lg-12">
+                        <div class="col-md-12">
                             <ol>
-                                <li><a href="#" data-target="#thoaidutoan-modal" data-toggle="modal" onclick="dutoanluong('{{$furl.'don_vi/dutoanluong'}}')">Dự toán lương</a></li>
+                                <li>
+                                    <a href="#" data-target="#thoaidutoan-modal" data-toggle="modal"
+                                       onclick="dutoanluong('{{$furl.'don_vi/dutoanluong'}}')">Dự toán lương</a>
+                                </li>
                                 <hr>
-                                <li><a href="#" data-target="#thoaichitra-modal" data-toggle="modal" onclick="chitraluong('{{$furl.'don_vi/chitraluong'}}')">Tổng hợp tình hình chi trả lương</a></li>
+
+                                <li>
+                                    <a href="#" data-target="#thoaichitra-modal" data-toggle="modal" title="Dữ liệu chi trả theo tổng hợp lương tại đơn vị"
+                                       onclick="chitraluong('{{$furl.'don_vi/chitraluong'}}')">Tổng hợp tình hình chi trả lương theo phân loại công tác</a>
+                                </li>
+                                <li>
+                                    <a href="#" data-target="#thoaichitra-modal" data-toggle="modal" title="Dữ liệu chi trả theo tổng hợp lương tại đơn vị"
+                                       onclick="chitraluong('{{$furl.'don_vi/chitratheonkp'}}')">Tổng hợp tình hình chi trả lương theo nguồn kinh phí</a>
+
+                                </li>
                                 <hr>
-                                <li><a href="#" onclick="nhucauluong('{{'/bao_cao/thong_tu_67/don_vi/mau2a1'}}')" data-toggle="modal" data-target="#thoainhucauluong-modal">Báo cáo nhu cầu kinh phí (Mẫu 2a/1)</a></li>
-                                <li><a href="#" onclick="nhucauluong('{{'/bao_cao/thong_tu_67/don_vi/mau2a2'}}')" data-toggle="modal" data-target="#thoainhucauluong-modal">Báo cáo nhu cầu kinh phí (Mẫu 2a/2)</a></li>
+
+                                <li>
+                                    <a href="#" onclick="nhucauluong('{{'/bao_cao/thong_tu_67/don_vi/mau2a1'}}')" data-toggle="modal"
+                                       data-target="#thoainhucauluong-modal">Báo cáo nhu cầu kinh phí (Mẫu 2a/1)</a>
+                                </li>
+                                <li>
+                                    <a href="#" onclick="nhucauluong('{{'/bao_cao/thong_tu_67/don_vi/mau2a2'}}')" data-toggle="modal"
+                                       data-target="#thoainhucauluong-modal">Báo cáo nhu cầu kinh phí (Mẫu 2a/2)</a>
+                                </li>
                                 <hr>
-                                <li><a href="#" onclick="nhucauluong('{{'/bao_cao/thong_tu_67/don_vi/mau4a'}}')" data-toggle="modal" data-target="#thoainhucauluong-modal">Báo cáo nguồn kinh phí (Mẫu 4a)</a></li>
-                                <li><a href="#" onclick="nhucauluong('{{'/bao_cao/thong_tu_67/don_vi/mau4b'}}')" data-toggle="modal" data-target="#thoainhucauluong-modal">Tổng hợp nhu cầu, nguồn kinh phí (Mẫu 4b)</a></li>
+
+                                <li>
+                                    <a href="#" onclick="nhucauluong('{{'/bao_cao/thong_tu_67/don_vi/mau4a'}}')" data-toggle="modal"
+                                       data-target="#thoainhucauluong-modal">Báo cáo nguồn kinh phí (Mẫu 4a)</a>
+                                </li>
+                                <li>
+                                    <a href="#" onclick="nhucauluong('{{'/bao_cao/thong_tu_67/don_vi/mau4b'}}')" data-toggle="modal"
+                                       data-target="#thoainhucauluong-modal">Tổng hợp nhu cầu, nguồn kinh phí (Mẫu 4b)</a>
+                                </li>
 
                                 {{--<li><a href="#" data-target="#thoaichitra-modal" data-toggle="modal" onclick="chitraluong('{{$furl.'don_vi/dangkyluong'}}')">Tổng hợp đăng ký lương</a></li>--}}
                                 <hr>
-                                <li><a href="#" data-target="#thoainangluong-modal" data-toggle="modal" onclick="nangluong('{{$furl.'don_vi/nangluong'}}','NGACHBAC')">Danh sách nâng lương ngạch bậc (Theo danh sách nâng lương)</a></li>
-                                <li><a href="#" data-target="#thoainangluong-modal" data-toggle="modal" onclick="nangluong('{{$furl.'don_vi/nangluong'}}','TNN')">Danh sách nâng thâm niên nghề (Theo danh sách nâng lương)</a></li>
+
+                                <li>
+                                    <a href="#" data-target="#thoainangluong-modal" data-toggle="modal"
+                                       onclick="nangluong('{{$furl.'don_vi/nangluong'}}','NGACHBAC')">Danh sách nâng lương ngạch bậc (Theo danh sách nâng lương)</a>
+                                </li>
+                                <li>
+                                    <a href="#" data-target="#thoainangluong-modal" data-toggle="modal"
+                                       onclick="nangluong('{{$furl.'don_vi/nangluong'}}','TNN')">Danh sách nâng thâm niên nghề (Theo danh sách nâng lương)</a>
+                                </li>
                                 <hr>
-                                <li><a href="#" data-target="#thoaidsnangluong-modal" data-toggle="modal" onclick="dsnangluong('{{$furl.'don_vi/dsnangluong'}}','NGACHBAC')">Danh sách nâng lương ngạch bậc (Theo danh sách cán bộ)</a></li>
-                                <li><a href="#" data-target="#thoaidsnangluong-modal" data-toggle="modal" onclick="dsnangluong('{{$furl.'don_vi/dsnangluong'}}','TNN')">Danh sách nâng thâm niên nghề (Theo danh sách cán bộ)</a></li>
+
+                                <li>
+                                    <a href="#" data-target="#thoaidsnangluong-modal" data-toggle="modal"
+                                       onclick="dsnangluong('{{$furl.'don_vi/dsnangluong'}}','NGACHBAC')">Danh sách nâng lương ngạch bậc (Theo danh sách cán bộ)</a>
+                                </li>
+                                <li>
+                                    <a href="#" data-target="#thoaidsnangluong-modal" data-toggle="modal"
+                                       onclick="dsnangluong('{{$furl.'don_vi/dsnangluong'}}','TNN')">Danh sách nâng thâm niên nghề (Theo danh sách cán bộ)</a>
+                                </li>
 
 
                                 <!-- Tạm thời bỏ để triển khai lạng sơn -->

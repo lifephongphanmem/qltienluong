@@ -40,6 +40,7 @@ use App\Http\Controllers\dataController as data;
 
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Support\Facades\Session;
@@ -312,6 +313,81 @@ class baocaobangluongController extends Controller
                 ->with('a_ct', $a_ct)
                 ->with('model_thang', $model_thang)
                 ->with('pageTitle', 'Tổng hợp đăng ký lương');
+        } else
+            return view('errors.notlogin');
+    }
+
+    function chitratheonkp(Request $request)
+    {
+        if (Session::has('admin')) {
+            $inputs = $request->all();
+            $tuthang = $inputs['tuthang'];
+            $tunam = $inputs['tunam'];
+            $denthang = $inputs['denthang'];
+            //$dennam = $inputs['dennam'];
+            //dd($inputs);
+            $m_tonghop = tonghopluong_donvi::whereBetween('thang', array($tuthang, $denthang))
+                ->where('nam', $tunam)->where('madv', session('admin')->madv)
+                ->orderby('thang')->get();
+
+            $m_chitiet = tonghopluong_donvi_chitiet::wherein('mathdv', a_unique(array_column($m_tonghop->toarray(), 'mathdv')))->get();
+            //dd($model_tonghop_chitiet);
+            $a_phucap_tonghop = getColTongHop();
+            $a_phucap = array();
+            $a_pc = array();
+            $col = 0;
+            $a_dmpc = array_column(dmphucap::where('tonghop', 1)->get()->toarray(), 'tenpc', 'mapc');
+            $model = new Collection();
+            $a_nguonkp = getNguonKP();
+            foreach ($m_tonghop as $tonghop){
+                foreach ($a_nguonkp as $mankp=>$tennkp){
+                    $add = new tonghopluong_donvi_chitiet();
+                    $add->mathdv = $tonghop->mathdv;
+                    $add->tennguonkp = $tennkp;
+                    $chitiet = $m_chitiet->where('mathdv',$tonghop->mathdv)->where('manguonkp',$mankp);
+                    if($chitiet->count() == 0){
+                        continue;
+                    }
+                    foreach ($a_phucap_tonghop as $mapc){
+                        $mapc_st = 'st_'.$mapc;
+                        $add->$mapc_st = $chitiet->sum($mapc_st);
+                        if ($add->$mapc_st > 0 && !isset($a_pc[$mapc])) {
+                            $a_pc[$mapc] = $mapc;
+                        }
+                    }
+
+                    $add->stbhxh_dv = $chitiet->sum('stbhxh_dv');
+                    $add->stbhyt_dv = $chitiet->sum('stbhyt_dv');
+                    $add->stkpcd_dv = $chitiet->sum('stkpcd_dv');
+                    $add->stbhtn_dv = $chitiet->sum('stbhtn_dv');
+                    $add->ttbh_dv = $chitiet->sum('ttbh_dv');
+                    $add->ttl = $chitiet->sum('luongtn');
+                    $add->tongcong = $add->ttbh_dv + $add->ttl;
+                    $model->push($add);
+                }
+            }
+
+            $m_dv = dmdonvi::where('madv', session('admin')->madv)->first();
+            $thongtin = array('nguoilap' => session('admin')->name,
+                'tu' => $inputs['tuthang'] . '/' . $inputs['tunam'],
+                'den' => $inputs['denthang'] . '/' . $inputs['tunam']);
+            //Tách riêng ra để chạy nếu ko sẽ ko sắp đc theo thứ tự
+            foreach ($a_phucap_tonghop as $mapc){
+                $mapc_st = 'st_'.$mapc;
+                if (isset($a_pc[$mapc])) {
+                    $a_phucap[$mapc_st] = isset($a_dmpc[$mapc]) ? $a_dmpc[$mapc] : '';
+                    $col++;
+                }
+            }
+            //dd($a_pc);
+            return view('reports.mauchung.donvi.chitratheonkp')
+                ->with('model', $m_tonghop)
+                ->with('model_chitiet', $model)
+                ->with('thongtin', $thongtin)
+                ->with('m_dv', $m_dv)
+                ->with('col', $col)
+                ->with('a_phucap', $a_phucap)
+                ->with('pageTitle', 'Báo cáo chi trả lương');
         } else
             return view('errors.notlogin');
     }
