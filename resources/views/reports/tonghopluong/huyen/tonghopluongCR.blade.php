@@ -671,7 +671,7 @@
 
 
 
-        <?php
+        <?php/*
         $model_xpT = $model_xp->groupby('tencongtac');
         $a_plcongtac = array_column($model_xp->toarray(),'mact' , 'tencongtac');
             $ttxp = 0;
@@ -761,7 +761,7 @@
                 @endforeach
             @endforeach
 
-        @endforeach
+        @endforeach*/?>
     </table>
 
     <table class="header" width="96%" border="0" cellspacing="0" cellpadding="8" style="margin:20px auto; text-align: center;">
