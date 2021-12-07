@@ -649,9 +649,6 @@
             <td style="text-align: right">{{dinhdangso(0)}}</td>
             <td style="text-align: right">{{dinhdangso(0)}}</td>
             <td style="text-align: right">{{dinhdangso(0)}}</td>
-            <td style="text-align: right">{{dinhdangso(0)}}</td>
-            <td style="text-align: right">{{dinhdangso(0)}}</td>
-            <td style="text-align: right">{{dinhdangso(0)}}</td>
         </tr>
         <tr style="font-weight: bold;">
             <td>IV</td>
@@ -671,97 +668,7 @@
 
 
 
-        <?php/*
-        $model_xpT = $model_xp->groupby('tencongtac');
-        $a_plcongtac = array_column($model_xp->toarray(),'mact' , 'tencongtac');
-            $ttxp = 0;
-        ?>
-        <tr style="font-weight: bold;">
-            <td>V</td>
-            <td style="font-weight: bold;text-align: left">Xã, phường</td>
-            <td style="text-align: right">{{dinhdangso($model_xp->sum('soluong'))}}</td>
-            <td style="text-align: right">{{dinhdangso($model_xp->sum('soluongcomat'))}}</td>
-            <td style="text-align: right">{{dinhdangsothapphan($model_xp->sum('tongcong'),5)}}</td>
-            <td style="text-align: right">{{dinhdangsothapphan($model_xp->sum('heso'),5)}}</td>
-            <td style="text-align: right">{{dinhdangsothapphan($model_xp->sum('tongpc'),5)}}</td>
-            @foreach($a_phucap as $key=>$val)
-                <td>{{dinhdangsothapphan($model_xp->sum($key),5)}}</td>
-            @endforeach
-            <td style="text-align: right">{{dinhdangso($model_xp->sum('stbhxh_dv')+$model_xp->sum('stbhyt_dv')+$model_xp->sum('stkpcd_dv'))}}</td>
-            <td style="text-align: right">{{dinhdangso($model_xp->sum('stbhtn_dv'))}}</td>
-            <td style="text-align: right">{{dinhdangso($model_xp->sum('tongtienluong') )}}</td>
-        </tr>
-        @foreach($a_plcongtac as $key=>$val)
-            <?php $ttxp ++;
-            $ttdv = 0;
-            $model_xpdv = $model_xpT[$key]->groupby('tendv');
-            //dd($model_xpT[$key]->toarray());
-            $a_donvi = array_column($model_xpT[$key]->toarray(),'madv' , 'tendv');
-            $a_plcongtac = array_column($model_xpT[$key]->toarray(),'mact' , 'tencongtac');
-            //dd($a_donvi);
-            ?>
-            <tr class="money" style="font-weight: bold">
-                <td style="text-align: center">{{$ttxp}}</td>
-                <td style="font-weight: bold; text-align: left">{{$key}}</td>
-                <td style="text-align: right">{{dinhdangso($model_xpT[$key]->sum('soluong'))}}</td>
-                <td style="text-align: right">{{dinhdangso($model_xpT[$key]->sum('soluongcomat'))}}</td>
-                <td style="text-align: right">{{dinhdangsothapphan($model_xpT[$key]->sum('tongcong'),5)}}</td>
-                <td style="text-align: right">{{dinhdangsothapphan($model_xpT[$key]->sum('heso'),5)}}</td>
-                <td style="text-align: right">{{dinhdangsothapphan($model_xpT[$key]->sum('tongpc'),5)}}</td>
 
-                @foreach($a_phucap as $key1=>$val)
-                    <td>{{dinhdangsothapphan($model_xpT[$key]->sum($key1),5)}}</td>
-                @endforeach
-
-                <td>{{dinhdangso($model_xpT[$key]->sum('stbhxh_dv')+$model_xpT[$key]->sum('stbhyt_dv')+$model_xpT[$key]->sum('stkpcd_dv'))}}</td>
-                <td>{{dinhdangso($model_xpT[$key]->sum('stbhtn_dv'))}}</td>
-                <td>{{dinhdangso($model_xpT[$key]->sum('tongtienluong') )}}</td>
-            </tr>
-
-
-            @foreach($a_donvi as $keydv=>$val)
-                <?php $ttdv ++;
-                $model_xpdvCT= $model_xpT[$key]->where('tendv',$keydv)->groupby('tencongtac');
-                ?>
-                <tr class="money" >
-                    <td style="text-align: center">{{$ttdv}}</td>
-                    <td style="text-align: left">{{$keydv}}</td>
-                    <td style="text-align: right">{{dinhdangso($model_xpdv[$keydv]->sum('soluong'))}}</td>
-                    <td style="text-align: right">{{dinhdangso($model_xpdv[$keydv]->sum('soluongcomat'))}}</td>
-                    <td style="text-align: right">{{dinhdangsothapphan($model_xpdv[$keydv]->sum('tongcong'),5)}}</td>
-                    <td style="text-align: right">{{dinhdangsothapphan($model_xpdv[$keydv]->sum('heso'),5)}}</td>
-                    <td style="text-align: right">{{dinhdangsothapphan($model_xpdv[$keydv]->sum('tongpc'),5)}}</td>
-
-                    @foreach($a_phucap as $key1=>$val)
-                        <td>{{dinhdangsothapphan($model_xpdv[$keydv]->sum($key1),5)}}</td>
-                    @endforeach
-
-                    <td>{{dinhdangso($model_xpdv[$keydv]->sum('stbhxh_dv')+$model_xpdv[$keydv]->sum('stbhyt_dv')+$model_xpdv[$keydv]->sum('stkpcd_dv'))}}</td>
-                    <td>{{dinhdangso($model_xpdv[$keydv]->sum('stbhtn_dv'))}}</td>
-                    <td>{{dinhdangso($model_xpdv[$keydv]->sum('tongtienluong') )}}</td>
-                </tr>
-                @foreach($a_plcongtac as $key=>$val)
-                    <tr class="money" style="font-style: italic">
-                        <td style="text-align: center"></td>
-                        <td style="text-align: left">{{$key}}</td>
-                        <td style="text-align: right">{{dinhdangso($model_xpdvCT[$key]->sum('soluong'))}}</td>
-                        <td style="text-align: right">{{dinhdangso($model_xpdvCT[$key]->sum('soluongcomat'))}}</td>
-                        <td style="text-align: right">{{dinhdangsothapphan($model_xpdvCT[$key]->sum('tongcong'),5)}}</td>
-                        <td style="text-align: right">{{dinhdangsothapphan($model_xpdvCT[$key]->sum('heso'),5)}}</td>
-                        <td style="text-align: right">{{dinhdangsothapphan($model_xpdvCT[$key]->sum('tongpc'),5)}}</td>
-
-                        @foreach($a_phucap as $key1=>$val)
-                            <td>{{dinhdangsothapphan($model_xpdvCT[$key]->sum($key1),5)}}</td>
-                        @endforeach
-
-                        <td>{{dinhdangso($model_xpdvCT[$key]->sum('stbhxh_dv')+$model_xpdvCT[$key]->sum('stbhyt_dv')+$model_xpdvCT[$key]->sum('stkpcd_dv'))}}</td>
-                        <td>{{dinhdangso($model_xpdvCT[$key]->sum('stbhtn_dv'))}}</td>
-                        <td>{{dinhdangso($model_xpdvCT[$key]->sum('tongtienluong') )}}</td>
-                    </tr>
-                @endforeach
-            @endforeach
-
-        @endforeach*/?>
     </table>
 
     <table class="header" width="96%" border="0" cellspacing="0" cellpadding="8" style="margin:20px auto; text-align: center;">
