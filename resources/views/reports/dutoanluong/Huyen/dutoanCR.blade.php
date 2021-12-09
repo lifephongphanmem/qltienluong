@@ -307,7 +307,7 @@
     <tr style="font-weight: bold;">
         <td>II</td>
         <td style="font-weight: bold;text-align: left">Tổng HCSN chưa có GD</td>
-        <td style="text-align: right">{{dinhdangso($model_hcsn->sum('soluong'))}}</td>
+        <td style="text-align: right">{{dinhdangso($model_hcsn->sum('soluonggiao'))}}</td>
         <td style="text-align: right">{{dinhdangso($model_hcsn->sum('soluongcomat'))}}</td>
         <td style="text-align: right">{{dinhdangsothapphan($model_hcsn->sum('tongcong'),5)}}</td>
         <td style="text-align: right">{{dinhdangsothapphan($model_hcsn->sum('heso'),5)}}</td>
@@ -323,7 +323,7 @@
         <tr class="money">
             <td style="text-align: center"></td>
             <td style="text-align: left">{{$key}}</td>
-            <td style="text-align: right">{{dinhdangso($model_hcsnT[$key]->sum('soluong'))}}</td>
+            <td style="text-align: right">{{dinhdangso($model_hcsnT[$key]->sum('soluonggiao'))}}</td>
             <td style="text-align: right">{{dinhdangso($model_hcsnT[$key]->sum('soluongcomat'))}}</td>
             <td style="text-align: right">{{dinhdangsothapphan($model_hcsnT[$key]->sum('tongcong'),5)}}</td>
             <td style="text-align: right">{{dinhdangsothapphan($model_hcsnT[$key]->sum('heso'),5)}}</td>
@@ -366,7 +366,7 @@
         <tr class="money">
             <td>{{$stt}}</td>
             <td style="font-weight: bold;text-align: left">{{$key}}</td>
-            <td style="text-align: right">{{dinhdangso($model_hcsnpl->sum('soluong'))}}</td>
+            <td style="text-align: right">{{dinhdangso($model_hcsnpl->sum('soluonggiao'))}}</td>
             <td style="text-align: right">{{dinhdangso($model_hcsnpl->sum('soluongcomat'))}}</td>
             <td style="text-align: right">{{dinhdangsothapphan($model_hcsnpl->sum('tongcong'),5)}}</td>
             <td style="text-align: right">{{dinhdangsothapphan($model_hcsnpl->sum('heso'),5)}}</td>
@@ -382,7 +382,7 @@
             <tr class="money">
                 <td style="text-align: center"></td>
                 <td style="text-align: left">{{$key}}</td>
-                <td style="text-align: right">{{dinhdangso($model_hcsnplCT[$key]->sum('soluong'))}}</td>
+                <td style="text-align: right">{{dinhdangso($model_hcsnplCT[$key]->sum('soluonggiao'))}}</td>
                 <td style="text-align: right">{{dinhdangso($model_hcsnplCT[$key]->sum('soluongcomat'))}}</td>
                 <td style="text-align: right">{{dinhdangsothapphan($model_hcsnplCT[$key]->sum('tongcong'),5)}}</td>
                 <td style="text-align: right">{{dinhdangsothapphan($model_hcsnplCT[$key]->sum('heso'),5)}}</td>
@@ -414,7 +414,7 @@
             <tr class="money" style="font-weight: bold">
                 <td style="text-align: center">{{$stt.'.'.$ttdv}}</td>
                 <td style="text-align: left">{{$keydv}}</td>
-                <td style="text-align: right">{{dinhdangso($model_hcsndv[$keydv]->sum('soluong'))}}</td>
+                <td style="text-align: right">{{dinhdangso($model_hcsndv[$keydv]->sum('soluonggiao'))}}</td>
                 <td style="text-align: right">{{dinhdangso($model_hcsndv[$keydv]->sum('soluongcomat'))}}</td>
                 <td style="text-align: right">{{dinhdangsothapphan($model_hcsndv[$keydv]->sum('tongcong'),5)}}</td>
                 <td style="text-align: right">{{dinhdangsothapphan($model_hcsndv[$keydv]->sum('heso'),5)}}</td>
@@ -432,7 +432,7 @@
                 <tr class="money">
                     <td style="text-align: center"></td>
                     <td style="text-align: left">{{$key}}</td>
-                    <td style="text-align: right">{{dinhdangso($model_hcsndvCT[$key]->sum('soluong'))}}</td>
+                    <td style="text-align: right">{{dinhdangso($model_hcsndvCT[$key]->sum('soluonggiao'))}}</td>
                     <td style="text-align: right">{{dinhdangso($model_hcsndvCT[$key]->sum('soluongcomat'))}}</td>
                     <td style="text-align: right">{{dinhdangsothapphan($model_hcsndvCT[$key]->sum('tongcong'),5)}}</td>
                     <td style="text-align: right">{{dinhdangsothapphan($model_hcsndvCT[$key]->sum('heso'),5)}}</td>
@@ -459,7 +459,7 @@
     <tr style="font-weight: bold;">
         <td>III</td>
         <td style="font-weight: bold;text-align: left">QLNN, Đảng, ĐT</td>
-        <td style="text-align: right">{{dinhdangso($model_hcsn->sum('soluong'))}}</td>
+        <td style="text-align: right">{{dinhdangso($model_hcsn->sum('soluonggiao'))}}</td>
         <td style="text-align: right">{{dinhdangso($model_hcsn->sum('soluongcomat'))}}</td>
         <td style="text-align: right">{{dinhdangsothapphan($model_hcsn->sum('tongcong'),5)}}</td>
         <td style="text-align: right">{{dinhdangsothapphan($model_hcsn->sum('heso'),5)}}</td>
@@ -475,7 +475,7 @@
         <tr class="money">
             <td style="text-align: center"></td>
             <td style="text-align: left">{{$key}}</td>
-            <td style="text-align: right">{{dinhdangso($model_hcsnT[$key]->sum('soluong'))}}</td>
+            <td style="text-align: right">{{dinhdangso($model_hcsnT[$key]->sum('soluonggiao'))}}</td>
             <td style="text-align: right">{{dinhdangso($model_hcsnT[$key]->sum('soluongcomat'))}}</td>
             <td style="text-align: right">{{dinhdangsothapphan($model_hcsnT[$key]->sum('tongcong'),5)}}</td>
             <td style="text-align: right">{{dinhdangsothapphan($model_hcsnT[$key]->sum('heso'),5)}}</td>
@@ -508,7 +508,7 @@
         <tr class="money">
             <td>{{$stt}}</td>
             <td style="font-weight: bold;text-align: left">{{$key}}</td>
-            <td style="text-align: right">{{dinhdangso($model_hcsnpl->sum('soluong'))}}</td>
+            <td style="text-align: right">{{dinhdangso($model_hcsnpl->sum('soluonggiao'))}}</td>
             <td style="text-align: right">{{dinhdangso($model_hcsnpl->sum('soluongcomat'))}}</td>
             <td style="text-align: right">{{dinhdangsothapphan($model_hcsnpl->sum('tongcong'),5)}}</td>
             <td style="text-align: right">{{dinhdangsothapphan($model_hcsnpl->sum('heso'),5)}}</td>
@@ -524,7 +524,7 @@
             <tr class="money">
                 <td style="text-align: center"></td>
                 <td style="text-align: left">{{$key}}</td>
-                <td style="text-align: right">{{dinhdangso($model_hcsnplCT[$key]->sum('soluong'))}}</td>
+                <td style="text-align: right">{{dinhdangso($model_hcsnplCT[$key]->sum('soluonggiao'))}}</td>
                 <td style="text-align: right">{{dinhdangso($model_hcsnplCT[$key]->sum('soluongcomat'))}}</td>
                 <td style="text-align: right">{{dinhdangsothapphan($model_hcsnplCT[$key]->sum('tongcong'),5)}}</td>
                 <td style="text-align: right">{{dinhdangsothapphan($model_hcsnplCT[$key]->sum('heso'),5)}}</td>
@@ -555,7 +555,7 @@
             <tr class="money" style="font-weight: bold">
                 <td style="text-align: center">{{$stt.'.'.$ttdv}}</td>
                 <td style="text-align: left">{{$keydv}}</td>
-                <td style="text-align: right">{{dinhdangso($model_hcsndv[$keydv]->sum('soluong'))}}</td>
+                <td style="text-align: right">{{dinhdangso($model_hcsndv[$keydv]->sum('soluonggiao'))}}</td>
                 <td style="text-align: right">{{dinhdangso($model_hcsndv[$keydv]->sum('soluongcomat'))}}</td>
                 <td style="text-align: right">{{dinhdangsothapphan($model_hcsndv[$keydv]->sum('tongcong'),5)}}</td>
                 <td style="text-align: right">{{dinhdangsothapphan($model_hcsndv[$keydv]->sum('heso'),5)}}</td>
@@ -573,7 +573,7 @@
                 <tr class="money">
                     <td style="text-align: center"></td>
                     <td style="text-align: left">{{$key}}</td>
-                    <td style="text-align: right">{{dinhdangso($model_hcsndvCT[$key]->sum('soluong'))}}</td>
+                    <td style="text-align: right">{{dinhdangso($model_hcsndvCT[$key]->sum('soluonggiao'))}}</td>
                     <td style="text-align: right">{{dinhdangso($model_hcsndvCT[$key]->sum('soluongcomat'))}}</td>
                     <td style="text-align: right">{{dinhdangsothapphan($model_hcsndvCT[$key]->sum('tongcong'),5)}}</td>
                     <td style="text-align: right">{{dinhdangsothapphan($model_hcsndvCT[$key]->sum('heso'),5)}}</td>
@@ -593,7 +593,7 @@
     <tr style="font-weight: bold;">
         <td>IV</td>
         <td style="font-weight: bold;text-align: left">Hoạt động phí HĐND</td>
-        <td style="text-align: right">{{dinhdangso($model_hdnd->sum('soluong'))}}</td>
+        <td style="text-align: right">{{dinhdangso($model_hdnd->sum('soluonggiao'))}}</td>
         <td style="text-align: right">{{dinhdangso($model_hdnd->sum('soluongcomat'))}}</td>
         <td style="text-align: right">{{dinhdangsothapphan(($model_hdnd->sum('tongcong')+$model_kn->sum('tongcong')),5)}}</td>
         <td style="text-align: right">{{dinhdangsothapphan(($model_hdnd->sum('heso')+$model_kn->sum('heso')),5)}}</td>
@@ -608,7 +608,7 @@
     <tr >
         <td>1</td>
         <td style="text-align: left">SH phí ĐB HĐND</td>
-        <td style="text-align: right">{{dinhdangso($model_hdnd->sum('soluong'))}}</td>
+        <td style="text-align: right">{{dinhdangso($model_hdnd->sum('soluonggiao'))}}</td>
         <td style="text-align: right">{{dinhdangso($model_hdnd->sum('soluongcomat'))}}</td>
         <td style="text-align: right">{{dinhdangsothapphan($model_hdnd->sum('tongcong'),5)}}</td>
         <td style="text-align: right">{{dinhdangsothapphan($model_hdnd->sum('heso'),5)}}</td>
@@ -653,7 +653,7 @@
     <tr style="font-weight: bold;">
         <td>IV</td>
         <td style="font-weight: bold;text-align: left">PC trách nhiệm cấp ủy</td>
-        <td style="text-align: right">{{dinhdangso($model_uv->sum('soluong'))}}</td>
+        <td style="text-align: right">{{dinhdangso($model_uv->sum('soluonggiao'))}}</td>
         <td style="text-align: right">{{dinhdangso($model_uv->sum('soluongcomat'))}}</td>
         <td style="text-align: right">{{dinhdangsothapphan($model_uv->sum('tongcong'),5)}}</td>
         <td style="text-align: right">{{dinhdangsothapphan($model_uv->sum('heso'),5)}}</td>
