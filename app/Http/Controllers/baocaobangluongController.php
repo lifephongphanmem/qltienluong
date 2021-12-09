@@ -2629,7 +2629,7 @@ class baocaobangluongController extends Controller
                     ->wherein('dmdonvi.maphanloai',getPhanLoaGD())
                     ->get();
             $model_th = dutoanluong_bangluong::join('dutoanluong','dutoanluong.masodv','dutoanluong_bangluong.masodv')
-                ->Select('mact',DB::raw('sum(heso) as heso'),DB::raw('sum(tonghs-heso) as tongpc'),DB::raw('sum(tonghs) as tonghs'),DB::raw('sum(hesobl) as hesobl')
+                ->Select('mact',DB::raw('avg(dutoanluong_bangluong.luongcoban) as luongcoban'),DB::raw('sum(heso) as heso'),DB::raw('sum(tonghs-heso) as tongpc'),DB::raw('sum(tonghs) as tonghs'),DB::raw('sum(hesobl) as hesobl')
                 ,DB::raw('sum(hesott) as hesott'),DB::raw('sum(hesopc) as hesopc'),DB::raw('sum(vuotkhung) as vuotkhung'),DB::raw('sum(pcct) as pcct'),DB::raw('sum(pckct) as pckct'),
                 DB::raw('sum(pck) as pck'),DB::raw('sum(pccv) as pccv'),DB::raw('sum(pckv) as pckv'),DB::raw('sum(pcth) as pcth'),DB::raw('sum(pcdd) as pcdd'),
                 DB::raw('sum(pcdh) as pcdh'),DB::raw('sum(pcld) as pcld'),DB::raw('sum(pcdbqh) as pcdbqh'),DB::raw('sum(pcudn) as pcudn'),DB::raw('sum(pctn) as pctn')
@@ -2659,6 +2659,14 @@ class baocaobangluongController extends Controller
             $m_pc = array_column(dmphucap_donvi::where('madv', session('admin')->madv)->get()->toarray(), 'report', 'mapc');
             $a_phucap = array();
             $col = 0;
+            foreach (getColTongHop() as $ct) {
+                if ($model_th->sum($ct) > 0) {
+                    $a_phucap[$ct] = isset($m_pc[$ct]) ? $m_pc[$ct] : '';
+                    $col++;
+                }
+            }
+            unset($a_phucap['heso']);
+            $col = $col -1;
             foreach($model_th as $ct)
             {
                 if($ct->mact == null){
@@ -2674,10 +2682,20 @@ class baocaobangluongController extends Controller
                     $ct->soluonggiao = 0;
                     $ct->soluongcomat = 0;
                 }
+                foreach($a_phucap as $key=>$val) {
+                    if($ct->$key > 10000)
+                        $ct->$key = $ct->$key/$ct->luongcoban;
+                }
+                $ct->stbhxh_dv = $ct->stbhxh_dv/$ct->luongcoban;
+                $ct->stbhyt_dv = $ct->stbhyt_dv/$ct->luongcoban;
+                $ct->stkpcd_dv = $ct->stkpcd_dv/$ct->luongcoban;
+                $ct->stbhtn_dv = $ct->stbhtn_dv/$ct->luongcoban;
+                $ct->tongcong = $ct->tonghs + $ct->stbhxh_dv+$ct->stbhyt_dv+$ct->stkpcd_dv+ $ct->stbhtn_dv;
+                $ct->tongtienluong = ($ct->tonghs + $ct->stbhxh_dv+$ct->stbhyt_dv+$ct->stkpcd_dv+ $ct->stbhtn_dv)*$ct->luongcoban;
 
             }
             $model = dutoanluong_bangluong::join('dutoanluong','dutoanluong.masodv','dutoanluong_bangluong.masodv')
-                ->Select('dutoanluong.madv','mact',DB::raw('sum(heso) as heso'),DB::raw('sum(tonghs-heso) as tongpc'),DB::raw('sum(tonghs) as tonghs'),DB::raw('sum(hesobl) as hesobl')
+                ->Select('dutoanluong.madv','mact',DB::raw('avg(dutoanluong_bangluong.luongcoban) as luongcoban'),DB::raw('sum(heso) as heso'),DB::raw('sum(tonghs-heso) as tongpc'),DB::raw('sum(tonghs) as tonghs'),DB::raw('sum(hesobl) as hesobl')
                     ,DB::raw('sum(hesott) as hesott'),DB::raw('sum(hesopc) as hesopc'),DB::raw('sum(vuotkhung) as vuotkhung'),DB::raw('sum(pcct) as pcct'),DB::raw('sum(pckct) as pckct'),
                     DB::raw('sum(pck) as pck'),DB::raw('sum(pccv) as pccv'),DB::raw('sum(pckv) as pckv'),DB::raw('sum(pcth) as pcth'),DB::raw('sum(pcdd) as pcdd'),
                     DB::raw('sum(pcdh) as pcdh'),DB::raw('sum(pcld) as pcld'),DB::raw('sum(pcdbqh) as pcdbqh'),DB::raw('sum(pcudn) as pcudn'),DB::raw('sum(pctn) as pctn')
@@ -2733,15 +2751,19 @@ class baocaobangluongController extends Controller
                     $ct->soluonggiao = 0;
                     $ct->soluongcomat = 0;
                 }
+                foreach($a_phucap as $key=>$val) {
+                    if($ct->$key > 10000)
+                        $ct->$key = $ct->$key/$ct->luongcoban;
+                }
+                $ct->stbhxh_dv = $ct->stbhxh_dv/$ct->luongcoban;
+                $ct->stbhyt_dv = $ct->stbhyt_dv/$ct->luongcoban;
+                $ct->stkpcd_dv = $ct->stkpcd_dv/$ct->luongcoban;
+                $ct->stbhtn_dv = $ct->stbhtn_dv/$ct->luongcoban;
+                $ct->tongcong = $ct->tonghs + $ct->stbhxh_dv+$ct->stbhyt_dv+$ct->stkpcd_dv+ $ct->stbhtn_dv;
+                $ct->tongtienluong = ($ct->tonghs + $ct->stbhxh_dv+$ct->stbhyt_dv+$ct->stkpcd_dv+ $ct->stbhtn_dv)*$ct->luongcoban;
             }
 
             //dd($model->toarray());
-            foreach (getColTongHop() as $ct) {
-                if ($model_th->sum($ct) > 0) {
-                    $a_phucap[$ct] = isset($m_pc[$ct]) ? $m_pc[$ct] : '';
-                    $col++;
-                }
-            }
             //dd($col);
             //$model_tongso = $model_th->
             //dd($model_th->toarray());
@@ -2749,7 +2771,7 @@ class baocaobangluongController extends Controller
             //Tính toán Hoạt động phí HĐND
 
             $model_hdnd = dutoanluong_bangluong::join('dutoanluong','dutoanluong.masodv','dutoanluong_bangluong.masodv')
-                ->Select('mact',DB::raw('sum(heso) as heso'),DB::raw('sum(tonghs-heso-pckn) as tongpc'),DB::raw('sum(tonghs-pckn) as tonghs')
+                ->Select('mact',DB::raw('avg(dutoanluong_bangluong.luongcoban) as luongcoban'),DB::raw('sum(heso) as heso'),DB::raw('sum(tonghs-heso-pckn) as tongpc'),DB::raw('sum(tonghs-pckn) as tonghs')
                     ,DB::raw('sum(hesopc) as pccv'),DB::raw('sum(pckn) as pckn'),DB::raw('sum(dutoanluong_bangluong.luongcoban*hesopc) as luongtn'),
                     DB::raw('sum(stbhxh_dv) as stbhxh_dv'),DB::raw('sum(stbhyt_dv) as stbhyt_dv'),DB::raw('sum(stbhtn_dv) as stbhtn_dv'),DB::raw('sum(stkpcd_dv) as stkpcd_dv')
                     ,DB::raw('sum(ttbh_dv) as ttbh_dv'))
@@ -2785,10 +2807,20 @@ class baocaobangluongController extends Controller
                     $ct->soluonggiao = 0;
                     $ct->soluongcomat = 0;
                 }
+                foreach($a_phucap as $key=>$val) {
+                    if($ct->$key > 10000)
+                        $ct->$key = $ct->$key/$ct->luongcoban;
+                }
+                $ct->stbhxh_dv = $ct->stbhxh_dv/$ct->luongcoban;
+                $ct->stbhyt_dv = $ct->stbhyt_dv/$ct->luongcoban;
+                $ct->stkpcd_dv = $ct->stkpcd_dv/$ct->luongcoban;
+                $ct->stbhtn_dv = $ct->stbhtn_dv/$ct->luongcoban;
+                $ct->tongcong = $ct->tonghs + $ct->stbhxh_dv+$ct->stbhyt_dv+$ct->stkpcd_dv+ $ct->stbhtn_dv;
+                $ct->tongtienluong = ($ct->tonghs + $ct->stbhxh_dv+$ct->stbhyt_dv+$ct->stkpcd_dv+ $ct->stbhtn_dv)*$ct->luongcoban;
 
             }
             $model_kn = dutoanluong_bangluong::join('dutoanluong','dutoanluong.masodv','dutoanluong_bangluong.masodv')
-                ->Select('mact',DB::raw('sum(heso) as heso'),DB::raw('sum(tonghs-heso-hesopc) as tongpc'),DB::raw('sum(tonghs-hesopc) as tonghs')
+                ->Select('mact',DB::raw('avg(dutoanluong_bangluong.luongcoban) as luongcoban'),DB::raw('sum(heso) as heso'),DB::raw('sum(tonghs-heso-hesopc) as tongpc'),DB::raw('sum(tonghs-hesopc) as tonghs')
                    ,DB::raw('sum(pckn) as pccv'),DB::raw('sum(dutoanluong_bangluong.luongcoban*pckn) as luongtn'),
                     DB::raw('sum(stbhxh_dv) as stbhxh_dv'),DB::raw('sum(stbhyt_dv) as stbhyt_dv'),DB::raw('sum(stbhtn_dv) as stbhtn_dv'),DB::raw('sum(stkpcd_dv) as stkpcd_dv')
                     ,DB::raw('sum(ttbh_dv) as ttbh_dv'))
@@ -2808,9 +2840,19 @@ class baocaobangluongController extends Controller
                 }
                 $ct->soluonggiao = 0;
                 $ct->soluongcomat = 0;
+                foreach($a_phucap as $key=>$val) {
+                    if($ct->$key > 10000)
+                        $ct->$key = $ct->$key/$ct->luongcoban;
+                }
+                $ct->stbhxh_dv = $ct->stbhxh_dv/$ct->luongcoban;
+                $ct->stbhyt_dv = $ct->stbhyt_dv/$ct->luongcoban;
+                $ct->stkpcd_dv = $ct->stkpcd_dv/$ct->luongcoban;
+                $ct->stbhtn_dv = $ct->stbhtn_dv/$ct->luongcoban;
+                $ct->tongcong = $ct->tonghs + $ct->stbhxh_dv+$ct->stbhyt_dv+$ct->stkpcd_dv+ $ct->stbhtn_dv;
+                $ct->tongtienluong = ($ct->tonghs + $ct->stbhxh_dv+$ct->stbhyt_dv+$ct->stkpcd_dv+ $ct->stbhtn_dv)*$ct->luongcoban;
             }
             $model_uv = dutoanluong_bangluong::join('dutoanluong','dutoanluong.masodv','dutoanluong_bangluong.masodv')
-                ->Select('mact',DB::raw('sum(heso) as heso'),DB::raw('sum(tonghs-heso) as tongpc'),DB::raw('sum(tonghs) as tonghs')
+                ->Select('mact',DB::raw('avg(dutoanluong_bangluong.luongcoban) as luongcoban'),DB::raw('sum(heso) as heso'),DB::raw('sum(tonghs-heso) as tongpc'),DB::raw('sum(tonghs) as tonghs')
                     ,DB::raw('sum(hesopc) as pccv'),DB::raw('sum(pckn) as pckn'),DB::raw('sum(dutoanluong_bangluong.luongcoban*hesopc) as luongtn'),
                     DB::raw('sum(stbhxh_dv) as stbhxh_dv'),DB::raw('sum(stbhyt_dv) as stbhyt_dv'),DB::raw('sum(stbhtn_dv) as stbhtn_dv'),DB::raw('sum(stkpcd_dv) as stkpcd_dv')
                     ,DB::raw('sum(ttbh_dv) as ttbh_dv'))
@@ -2836,11 +2878,21 @@ class baocaobangluongController extends Controller
                     $ct->soluonggiao = 0;
                     $ct->soluongcomat = 0;
                 }
+                foreach($a_phucap as $key=>$val) {
+                    if($ct->$key > 10000)
+                        $ct->$key = $ct->$key/$ct->luongcoban;
+                }
+                $ct->stbhxh_dv = $ct->stbhxh_dv/$ct->luongcoban;
+                $ct->stbhyt_dv = $ct->stbhyt_dv/$ct->luongcoban;
+                $ct->stkpcd_dv = $ct->stkpcd_dv/$ct->luongcoban;
+                $ct->stbhtn_dv = $ct->stbhtn_dv/$ct->luongcoban;
+                $ct->tongcong = $ct->tonghs + $ct->stbhxh_dv+$ct->stbhyt_dv+$ct->stkpcd_dv+ $ct->stbhtn_dv;
+                $ct->tongtienluong = ($ct->tonghs + $ct->stbhxh_dv+$ct->stbhyt_dv+$ct->stkpcd_dv+ $ct->stbhtn_dv)*$ct->luongcoban;
             }
 
             //Tính toán phần xã phường
             $model_xp = dutoanluong_bangluong::join('dutoanluong','dutoanluong.masodv','dutoanluong_bangluong.masodv')
-                ->Select('dutoanluong.madv','mact',DB::raw('sum(heso) as heso'),DB::raw('sum(tonghs-heso) as tongpc'),DB::raw('sum(tonghs) as tonghs'),DB::raw('sum(hesobl) as hesobl')
+                ->Select('dutoanluong.madv','mact',DB::raw('avg(dutoanluong_bangluong.luongcoban) as luongcoban'),DB::raw('sum(heso) as heso'),DB::raw('sum(tonghs-heso) as tongpc'),DB::raw('sum(tonghs) as tonghs'),DB::raw('sum(hesobl) as hesobl')
                     ,DB::raw('sum(hesott) as hesott'),DB::raw('sum(hesopc) as hesopc'),DB::raw('sum(vuotkhung) as vuotkhung'),DB::raw('sum(pcct) as pcct'),DB::raw('sum(pckct) as pckct'),
                     DB::raw('sum(pck) as pck'),DB::raw('sum(pccv) as pccv'),DB::raw('sum(pckv) as pckv'),DB::raw('sum(pcth) as pcth'),DB::raw('sum(pcdd) as pcdd'),
                     DB::raw('sum(pcdh) as pcdh'),DB::raw('sum(pcld) as pcld'),DB::raw('sum(pcdbqh) as pcdbqh'),DB::raw('sum(pcudn) as pcudn'),DB::raw('sum(pctn) as pctn')
@@ -2898,6 +2950,16 @@ class baocaobangluongController extends Controller
                     $ct->soluonggiao = 0;
                     $ct->soluongcomat = 0;
                 }
+                foreach($a_phucap as $key=>$val) {
+                    if($ct->$key > 10000)
+                        $ct->$key = $ct->$key/$ct->luongcoban;
+                }
+                $ct->stbhxh_dv = $ct->stbhxh_dv/$ct->luongcoban;
+                $ct->stbhyt_dv = $ct->stbhyt_dv/$ct->luongcoban;
+                $ct->stkpcd_dv = $ct->stkpcd_dv/$ct->luongcoban;
+                $ct->stbhtn_dv = $ct->stbhtn_dv/$ct->luongcoban;
+                $ct->tongcong = $ct->tonghs + $ct->stbhxh_dv+$ct->stbhyt_dv+$ct->stkpcd_dv+ $ct->stbhtn_dv;
+                $ct->tongtienluong = ($ct->tonghs + $ct->stbhxh_dv+$ct->stbhyt_dv+$ct->stkpcd_dv+ $ct->stbhtn_dv)*$ct->luongcoban;
             }
             //dd($model_slxp->toarray());
             $model_dutoan=dutoanluong::where('namns',$inputs['namns'])
@@ -2917,6 +2979,10 @@ class baocaobangluongController extends Controller
             $thongtin=array('nguoilap'=>session('admin')->name,
                 'namns'=>$inputs['namns'],
                 'madvbc'=>$madvbc);
+            $a_lv = array('QLNN','DDT','DOANTHE','DANG','LVXH','LVCT');
+            $modelqlnn = $model->wherein('linhvuchoatdong',$a_lv)
+                ->wherein('madv', array_column($model_phanloai->where('maphanloai','<>','KVXP')->toarray(),'madv'));
+            $a_lv = array('QLNN','DDT','DOANTHE','DANG','LVXH','LVCT');
             return view('reports.dutoanluong.Huyen.dutoanCR')
                 ->with('model_dutoan',$model_dutoan)
                 ->with('model_th',$model_th)
@@ -2926,6 +2992,7 @@ class baocaobangluongController extends Controller
                 ->with('thongtin',$thongtin)
                 ->with('m_dv',$m_dv)
                 ->with('model',$model)
+                ->with('modelqlnn',$modelqlnn)
                 ->with('model_hdnd',$model_hdnd)
                 ->with('model_kn',$model_kn)
                 ->with('model_uv',$model_uv)

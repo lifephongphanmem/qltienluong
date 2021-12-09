@@ -274,7 +274,7 @@
                                 <td style="text-align: right">{{dinhdangsothapphan($model_gddvCT[$key]->sum('tongpc'),5)}}</td>
 
                                 @foreach($a_phucap as $key1=>$val)
-                                    <td>{{dinhdangsothapphan($model_gddvCT[$key]->sum($key1))}}</td>
+                                    <td>{{dinhdangsothapphan($model_gddvCT[$key]->sum($key1),5)}}</td>
                                 @endforeach
 
                                 <td>{{dinhdangso($model_gddvCT[$key]->sum('stbhxh_dv')+$model_gddvCT[$key]->sum('stbhyt_dv')+$model_gddvCT[$key]->sum('stkpcd_dv'))}}</td>
