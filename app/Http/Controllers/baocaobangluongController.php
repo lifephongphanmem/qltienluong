@@ -2653,6 +2653,7 @@ class baocaobangluongController extends Controller
                 ->wherein('madv', array_column($model_phanloai->toarray(),'madv'))
                 ->groupby('mact')
                 ->get();
+            $modelctbc = chitieubienche::where('nam',$inputs['namns'])->get();
             //dd($model_soluong->toarray());
             $model_phanloaict = array_column(dmphanloaicongtac::all()->toArray(), 'tencongtac', 'macongtac');
             $model_ct = array_column(dmphanloaict::all()->toArray(), 'tenct', 'mact');
@@ -2676,7 +2677,7 @@ class baocaobangluongController extends Controller
                 }
                 $m = $model_slth->where('mact',$ct->mact)->first();
                 if(isset($m)){
-                    $ct->soluonggiao = $model_slth->where('mact',$ct->mact)->first()->canbo_dutoan;
+                    $ct->soluonggiao = $modelctbc->where('mact',$ct->mact)->sum('soluongduocgiao');
                     $ct->soluongcomat = $model_slth->where('mact',$ct->mact)->first()->canbo_congtac;
                 }else{
                     $ct->soluonggiao = 0;
@@ -2743,7 +2744,7 @@ class baocaobangluongController extends Controller
                 $m = $model_sl->where('madv',$ct->madv)->where('mact',$ct->mact)->first();
                 if(count((array)$m) > 0)
                 {
-                    $ct->soluonggiao = $m->canbo_dutoan;
+                    $ct->soluonggiao = $m->soluongduocgiao;
                     $ct->soluongcomat = $m->canbo_congtac;
                 }
                 else
@@ -2801,7 +2802,7 @@ class baocaobangluongController extends Controller
                 }
                 $m = $model_slhdnd->where('mact','1536402868')->first();
                 if(isset($m)){
-                    $ct->soluonggiao = $model_slhdnd->where('mact','1536402868')->first()->canbo_dutoan;
+                    $ct->soluonggiao = $model_slhdnd->where('mact','1536402868')->first()->soluongduocgiao;
                     $ct->soluongcomat = $model_slhdnd->where('mact','1536402868')->first()->canbo_congtac;
                 }else{
                     $ct->soluonggiao = 0;
@@ -2872,7 +2873,7 @@ class baocaobangluongController extends Controller
                 }
                 $m = $model_slhdnd->where('mact','1536459380')->first();
                 if(isset($m)){
-                    $ct->soluonggiao = $model_slhdnd->where('mact','1536459380')->first()->canbo_dutoan;
+                    $ct->soluonggiao = $model_slhdnd->where('mact','1536459380')->first()->soluongduocgiao;
                     $ct->soluongcomat = $model_slhdnd->where('mact','1536459380')->first()->canbo_congtac;
                 }else{
                     $ct->soluonggiao = 0;
