@@ -2676,11 +2676,10 @@ class baocaobangluongController extends Controller
                     $ct->tencongtac = isset($model_ct[$ct->mact]) ? $model_ct[$ct->mact] : '';
                 }
                 $m = $model_slth->where('mact',$ct->mact)->first();
+                $ct->soluonggiao = $modelctbc->where('mact',$ct->mact)->sum('soluongduocgiao');
                 if(isset($m)){
-                    $ct->soluonggiao = $modelctbc->where('mact',$ct->mact)->sum('soluongduocgiao');
                     $ct->soluongcomat = $model_slth->where('mact',$ct->mact)->first()->canbo_congtac;
                 }else{
-                    $ct->soluonggiao = 0;
                     $ct->soluongcomat = 0;
                 }
                 foreach($a_phucap as $key=>$val) {
@@ -2742,14 +2741,14 @@ class baocaobangluongController extends Controller
                 else
                     $ct->tenlinhvuchoatdong = "";
                 $m = $model_sl->where('madv',$ct->madv)->where('mact',$ct->mact)->first();
+                $msl = $modelctbc->where('madv',$ct->madv)->where('mact',$ct->mact)->first();
+                $ct->soluonggiao = $msl->soluongduocgiao;
                 if(count((array)$m) > 0)
                 {
-                    $ct->soluonggiao = $m->soluongduocgiao;
                     $ct->soluongcomat = $m->canbo_congtac;
                 }
                 else
                 {
-                    $ct->soluonggiao = 0;
                     $ct->soluongcomat = 0;
                 }
                 foreach($a_phucap as $key=>$val) {
@@ -2801,11 +2800,12 @@ class baocaobangluongController extends Controller
                     $ct->tencongtac = isset($model_ct[$ct->mact]) ? $model_ct[$ct->mact] : '';
                 }
                 $m = $model_slhdnd->where('mact','1536402868')->first();
+                $msl = $modelctbc->where('mact','1536402868')->first();
+                $ct->soluonggiao = isset($msl)?$msl->soluongduocgiao:0;
                 if(isset($m)){
-                    $ct->soluonggiao = $model_slhdnd->where('mact','1536402868')->first()->soluongduocgiao;
+
                     $ct->soluongcomat = $model_slhdnd->where('mact','1536402868')->first()->canbo_congtac;
                 }else{
-                    $ct->soluonggiao = 0;
                     $ct->soluongcomat = 0;
                 }
                 foreach($a_phucap as $key=>$val) {
@@ -2872,11 +2872,11 @@ class baocaobangluongController extends Controller
                     $ct->tencongtac = isset($model_ct[$ct->mact]) ? $model_ct[$ct->mact] : '';
                 }
                 $m = $model_slhdnd->where('mact','1536459380')->first();
+                $msl = $modelctbc->where('mact','1536459380')->first();
+                $ct->soluonggiao = isset($msl)?$msl->soluongduocgiao:0;
                 if(isset($m)){
-                    $ct->soluonggiao = $model_slhdnd->where('mact','1536459380')->first()->soluongduocgiao;
                     $ct->soluongcomat = $model_slhdnd->where('mact','1536459380')->first()->canbo_congtac;
                 }else{
-                    $ct->soluonggiao = 0;
                     $ct->soluongcomat = 0;
                 }
                 foreach($a_phucap as $key=>$val) {
@@ -2941,14 +2941,14 @@ class baocaobangluongController extends Controller
                 else
                     $ct->tenlinhvuchoatdong = "";
                 $m = $model_slxp->where('madv',$ct->madv)->where('mact',$ct->mact)->first();
+                $msl = $modelctbc->where('madv',$ct->madv)->where('mact',$ct->mact)->first();
+                $ct->soluonggiao = isset($msl)?$msl->soluongduocgiao:0;
                 if(count((array)$m) > 0)
                 {
-                    $ct->soluonggiao = $m->canbo_dutoan;
                     $ct->soluongcomat = $m->canbo_congtac;
                 }
                 else
                 {
-                    $ct->soluonggiao = 0;
                     $ct->soluongcomat = 0;
                 }
                 foreach($a_phucap as $key=>$val) {
