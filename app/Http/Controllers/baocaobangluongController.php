@@ -2661,7 +2661,7 @@ class baocaobangluongController extends Controller
                 ->where('nam',$inputs['namns'])
                 ->wherein('madv', array_column($model_slth->toarray(),'madv'))
                 ->get();
-            //dd($modelctbc->toarray());
+            dd($modelctbc->toarray());
             //dd($model_soluong->toarray());
             $model_phanloaict = array_column(dmphanloaicongtac::all()->toArray(), 'tencongtac', 'macongtac');
             $model_ct = array_column(dmphanloaict::all()->toArray(), 'tenct', 'mact');
