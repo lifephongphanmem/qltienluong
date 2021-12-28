@@ -145,7 +145,8 @@
     @endforeach
 
     <?php
-    $model_gd = $model->where('linhvuchoatdong','GD');
+    //$model_gd = $model->where('linhvuchoatdong','GD');
+    $model_gd = $model->wherein('linhvuchoatdong','GD');
     $model_gdT = $model_gd->groupby('tencongtac');
     $a_plcongtac = array_column($model_gd->toarray(),'mact' , 'tencongtac');
     //dd($model_gdT->toarray());

@@ -102,7 +102,8 @@ function getPhanLoaGD(){
         'MAMNON',
         'TIEUHOC',
         'THCS',
-        'THvaTHCS'
+        'THvaTHCS',
+        'PTDTNT'
     );
     return $model;
 }
