@@ -2646,14 +2646,21 @@ class baocaobangluongController extends Controller
                 ->groupby('mact')
                 ->get();
             $model_slth = dutoanluong_chitiet::join('dutoanluong','dutoanluong.masodv','dutoanluong_chitiet.masodv')
-                ->select('mact',DB::raw('sum(canbo_congtac) as canbo_congtac'),DB::raw('sum(canbo_dutoan) as canbo_dutoan'))
+                ->select('mact','madv',DB::raw('sum(canbo_congtac) as canbo_congtac'),DB::raw('sum(canbo_dutoan) as canbo_dutoan'))
                 ->where('madvbc',$madvbc)
                 ->where('trangthai','DAGUI')
                 ->where('namns',$inputs['namns'])
                 ->wherein('madv', array_column($model_phanloai->toarray(),'madv'))
                 ->groupby('mact')
                 ->get();
-            $modelctbc = chitieubienche::where('nam',$inputs['namns'])->get();
+            $modelctbc = chitieubienche::select('mact','madv','soluongduocgiao')
+                ->where('nam',$inputs['namns'])
+                ->wherein('madv', array_column($model_phanloai->toarray(),'madv'))
+                ->get();
+            $modelctbc_th = chitieubienche::select('mact','madv','soluongduocgiao')
+                ->where('nam',$inputs['namns'])
+                ->wherein('madv', array_column($model_slth->toarray(),'madv'))
+                ->get();
             //dd($modelctbc->toarray());
             //dd($model_soluong->toarray());
             $model_phanloaict = array_column(dmphanloaicongtac::all()->toArray(), 'tencongtac', 'macongtac');
@@ -2677,7 +2684,7 @@ class baocaobangluongController extends Controller
                     $ct->tencongtac = isset($model_ct[$ct->mact]) ? $model_ct[$ct->mact] : '';
                 }
                 $m = $model_slth->where('mact',$ct->mact)->first();
-                $ct->soluonggiao = $modelctbc->where('mact',$ct->mact)->sum('soluongduocgiao');
+                $ct->soluonggiao = $modelctbc_th->where('mact',$ct->mact)->sum('soluongduocgiao');
                 if(isset($m)){
                     $ct->soluongcomat = $model_slth->where('mact',$ct->mact)->first()->canbo_congtac;
                 }else{
@@ -3003,6 +3010,7 @@ class baocaobangluongController extends Controller
                 ->with('a_phucap',$a_phucap)
                 ->with('col',$col)
                 ->with('nam',$inputs['namns'])
+                ->with('modelctbc',$modelctbc)
                 ->with('pageTitle','Báo cáo tổng hợp dự toán lương');
         } else
             return view('errors.notlogin');

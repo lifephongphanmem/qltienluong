@@ -128,7 +128,7 @@
         <tr class="money">
             <td style="text-align: center"></td>
             <td style="text-align: left">{{$ct->tencongtac}}</td>
-            <td style="text-align: right">{{dinhdangso($ct->soluong)}}</td>
+            <td style="text-align: right">{{dinhdangso($ct->soluonggiao)}}</td>
             <td style="text-align: right">{{dinhdangso($ct->soluongcomat)}}</td>
             <td style="text-align: right">{{dinhdangsothapphan($ct->tongcong,5)}}</td>
             <td style="text-align: right">{{dinhdangsothapphan($ct->heso,5)}}</td>
