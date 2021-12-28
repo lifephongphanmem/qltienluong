@@ -2742,7 +2742,7 @@ class baocaobangluongController extends Controller
                     $ct->tenlinhvuchoatdong = "";
                 $m = $model_sl->where('madv',$ct->madv)->where('mact',$ct->mact)->first();
                 $msl = $modelctbc->where('madv',$ct->madv)->where('mact',$ct->mact)->first();
-                $ct->soluonggiao = $msl->soluongduocgiao;
+                $ct->soluonggiao = isset($msl)?$msl->soluongduocgiao:0;
                 if(count((array)$m) > 0)
                 {
                     $ct->soluongcomat = $m->canbo_congtac;
