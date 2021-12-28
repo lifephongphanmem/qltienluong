@@ -2702,7 +2702,7 @@ class baocaobangluongController extends Controller
                 $ct->tongtienluong = ($ct->tonghs + $ct->stbhxh_dv+$ct->stbhyt_dv+$ct->stkpcd_dv+ $ct->stbhtn_dv)*$ct->luongcoban;
 
             }
-            dd($model_th->toarray());
+            //dd($model_th->toarray());
             $model = dutoanluong_bangluong::join('dutoanluong','dutoanluong.masodv','dutoanluong_bangluong.masodv')
                 ->Select('dutoanluong.madv','mact',DB::raw('avg(dutoanluong_bangluong.luongcoban) as luongcoban'),DB::raw('sum(heso) as heso'),DB::raw('sum(tonghs-heso) as tongpc'),DB::raw('sum(tonghs) as tonghs'),DB::raw('sum(hesobl) as hesobl')
                     ,DB::raw('sum(hesott) as hesott'),DB::raw('sum(hesopc) as hesopc'),DB::raw('sum(vuotkhung) as vuotkhung'),DB::raw('sum(pcct) as pcct'),DB::raw('sum(pckct) as pckct'),
