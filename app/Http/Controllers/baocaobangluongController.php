@@ -2655,7 +2655,7 @@ class baocaobangluongController extends Controller
                 ->get();
             $modelctbc = chitieubienche::select('mact','madv','soluongduocgiao')
                 ->where('nam',$inputs['namns'])
-                ->wherein('madv', array_column($model_phanloai->toarray(),'madv'))
+                ->wherein('madv', array_column($model_th->toarray(),'madv'))
                 ->get();
             $modelctbc_th = chitieubienche::select('mact','madv','soluongduocgiao')
                 ->where('nam',$inputs['namns'])
@@ -2684,7 +2684,7 @@ class baocaobangluongController extends Controller
                     $ct->tencongtac = isset($model_ct[$ct->mact]) ? $model_ct[$ct->mact] : '';
                 }
                 $m = $model_slth->where('mact',$ct->mact)->first();
-                $ct->soluonggiao = $modelctbc_th->where('mact',$ct->mact)->sum('soluongduocgiao');
+                $ct->soluonggiao = $modelctbc->where('mact',$ct->mact)->sum('soluongduocgiao');
                 if(isset($m)){
                     $ct->soluongcomat = $model_slth->where('mact',$ct->mact)->first()->canbo_congtac;
                 }else{
