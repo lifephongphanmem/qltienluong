@@ -2654,6 +2654,7 @@ class baocaobangluongController extends Controller
                 ->groupby('mact')
                 ->get();
             $modelctbc = chitieubienche::where('nam',$inputs['namns'])->get();
+            //dd($modelctbc->toarray());
             //dd($model_soluong->toarray());
             $model_phanloaict = array_column(dmphanloaicongtac::all()->toArray(), 'tencongtac', 'macongtac');
             $model_ct = array_column(dmphanloaict::all()->toArray(), 'tenct', 'mact');

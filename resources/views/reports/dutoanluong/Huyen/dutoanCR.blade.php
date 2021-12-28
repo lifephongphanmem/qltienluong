@@ -112,7 +112,7 @@
     <tr style="font-weight: bold;" class="money">
         <td></td>
         <td style="font-weight: bold; text-align: center">TỔNG SỐ</td>
-        <td style="text-align: right">{{dinhdangso($model_th->sum('soluong'))}}</td>
+        <td style="text-align: right">{{dinhdangso($model_th->sum('soluonggiao'))}}</td>
         <td style="text-align: right">{{dinhdangso($model_th->sum('soluongcomat'))}}</td>
         <td style="text-align: right">{{dinhdangsothapphan($model_th->sum('tongcong'),5)}}</td>
         <td style="text-align: right">{{dinhdangsothapphan($model_th->sum('heso'),5)}}</td>
@@ -155,7 +155,7 @@
     <tr style="font-weight: bold;">
         <td>I</td>
         <td style="font-weight: bold;text-align: left">Sự nghiệp giáo dục</td>
-        <td style="text-align: right">{{dinhdangso($model_gd->sum('soluong'))}}</td>
+        <td style="text-align: right">{{dinhdangso($model_gd->sum('soluonggiao'))}}</td>
         <td style="text-align: right">{{dinhdangso($model_gd->sum('soluongcomat'))}}</td>
         <td style="text-align: right">{{dinhdangsothapphan($model_gd->sum('tongcong'),5)}}</td>
         <td style="text-align: right">{{dinhdangsothapphan($model_gd->sum('heso'),5)}}</td>
@@ -171,7 +171,7 @@
         <tr class="money">
             <td style="text-align: center"></td>
             <td style="text-align: left">{{$key}}</td>
-            <td style="text-align: right">{{dinhdangso($model_gdT[$key]->sum('soluong'))}}</td>
+            <td style="text-align: right">{{dinhdangso($model_gdT[$key]->sum('soluonggiao'))}}</td>
             <td style="text-align: right">{{dinhdangso($model_gdT[$key]->sum('soluongcomat'))}}</td>
             <td style="text-align: right">{{dinhdangsothapphan($model_gdT[$key]->sum('tongcong'),5)}}</td>
             <td style="text-align: right">{{dinhdangsothapphan($model_gdT[$key]->sum('heso'),5)}}</td>
@@ -202,7 +202,7 @@
         <tr class="money">
             <td>{{$stt}}</td>
             <td style="font-weight: bold;text-align: left">{{$key}}</td>
-            <td style="text-align: right">{{dinhdangso($model_gdpl->sum('soluong'))}}</td>
+            <td style="text-align: right">{{dinhdangso($model_gdpl->sum('soluonggiao'))}}</td>
             <td style="text-align: right">{{dinhdangso($model_gdpl->sum('soluongcomat'))}}</td>
             <td style="text-align: right">{{dinhdangsothapphan($model_gdpl->sum('tongcong'),5)}}</td>
             <td style="text-align: right">{{dinhdangsothapphan($model_gdpl->sum('heso'),5)}}</td>
@@ -218,7 +218,7 @@
             <tr class="money">
                 <td style="text-align: center"></td>
                 <td style="text-align: left">{{$key}}</td>
-                <td style="text-align: right">{{dinhdangso($model_gdplCT[$key]->sum('soluong'))}}</td>
+                <td style="text-align: right">{{dinhdangso($model_gdplCT[$key]->sum('soluonggiao'))}}</td>
                 <td style="text-align: right">{{dinhdangso($model_gdplCT[$key]->sum('soluongcomat'))}}</td>
                 <td style="text-align: right">{{dinhdangsothapphan($model_gdplCT[$key]->sum('tongcong'),5)}}</td>
                 <td style="text-align: right">{{dinhdangsothapphan($model_gdplCT[$key]->sum('heso'),5)}}</td>
@@ -250,7 +250,7 @@
             <tr class="money" style="font-weight: bold">
                 <td style="text-align: center">{{$stt.'.'.$ttdv}}</td>
                 <td style="text-align: left">{{$keydv}}</td>
-                <td style="text-align: right">{{dinhdangso($model_gddv[$keydv]->sum('soluong'))}}</td>
+                <td style="text-align: right">{{dinhdangso($model_gddv[$keydv]->sum('soluonggiao'))}}</td>
                 <td style="text-align: right">{{dinhdangso($model_gddv[$keydv]->sum('soluongcomat'))}}</td>
                 <td style="text-align: right">{{dinhdangsothapphan($model_gddv[$keydv]->sum('tongcong'),5)}}</td>
                 <td style="text-align: right">{{dinhdangsothapphan($model_gddv[$keydv]->sum('heso'),5)}}</td>
@@ -268,7 +268,7 @@
                 <tr class="money">
                     <td style="text-align: center"></td>
                     <td style="text-align: left">{{$key}}</td>
-                    <td style="text-align: right">{{dinhdangso($model_gddvCT[$key]->sum('soluong'))}}</td>
+                    <td style="text-align: right">{{dinhdangso($model_gddvCT[$key]->sum('soluonggiao'))}}</td>
                     <td style="text-align: right">{{dinhdangso($model_gddvCT[$key]->sum('soluongcomat'))}}</td>
                     <td style="text-align: right">{{dinhdangsothapphan($model_gddvCT[$key]->sum('tongcong'),5)}}</td>
                     <td style="text-align: right">{{dinhdangsothapphan($model_gddvCT[$key]->sum('heso'),5)}}</td>
