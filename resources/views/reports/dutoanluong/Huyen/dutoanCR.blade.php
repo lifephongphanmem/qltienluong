@@ -124,29 +124,51 @@
         <td style="text-align: right">{{dinhdangsothapphan($model_th->sum('stbhtn_dv'),5)}}</td>
         <td style="text-align: right">{{dinhdangso($model_th->sum('ttl') + $model_th->sum('ttbh_dv'))}}</td>
     </tr>
-    @foreach($model_th as $ct)
-        <tr class="money">
+    @foreach($a_plct as $act)
+        <?php
+            $m_ct = $model_th->where('macongtac',$act->macongtac);
+        ?>
+        <tr style="font-weight: bold" class="money">
             <td style="text-align: center"></td>
-            <td style="text-align: left">{{$ct->tencongtac}}</td>
-            <td style="text-align: right">{{dinhdangso($ct->soluonggiao)}}</td>
-            <td style="text-align: right">{{dinhdangso($ct->soluongcomat)}}</td>
-            <td style="text-align: right">{{dinhdangsothapphan($ct->tongcong,5)}}</td>
-            <td style="text-align: right">{{dinhdangsothapphan($ct->heso,5)}}</td>
-            <td style="text-align: right">{{dinhdangsothapphan($ct->tongpc,5)}}</td>
+            <td style="text-align: left">{{$act->tencongtac}}</td>
+            <td style="text-align: right">{{dinhdangso($m_ct->sum('soluonggiao'))}}</td>
+            <td style="text-align: right">{{dinhdangso($m_ct->sum('soluongcomat'))}}</td>
+            <td style="text-align: right">{{dinhdangsothapphan($m_ct->sum('tongcong'),5)}}</td>
+            <td style="text-align: right">{{dinhdangsothapphan($m_ct->sum('heso'),5)}}</td>
+            <td style="text-align: right">{{dinhdangsothapphan($m_ct->sum('tongpc'),5)}}</td>
 
             @foreach($a_phucap as $key=>$val)
-                <td>{{dinhdangsothapphan($ct->$key,5)}}</td>
+                <td>{{dinhdangsothapphan($m_ct->sum($key),5)}}</td>
             @endforeach
 
-            <td>{{dinhdangsothapphan($ct->stbhxh_dv+$ct->stbhyt_dv+$ct->stkpcd_dv,5)}}</td>
-            <td>{{dinhdangsothapphan($ct->stbhtn_dv,5)}}</td>
-            <td>{{dinhdangso($ct->tongtienluong)}}</td>
+            <td>{{dinhdangsothapphan($m_ct->sum('stbhxh_dv')+$m_ct->sum('stbhyt_dv')+$m_ct->sum('stkpcd_dv'),5)}}</td>
+            <td>{{dinhdangsothapphan($m_ct->sum('stbhtn_dv'),5)}}</td>
+            <td>{{dinhdangso($m_ct->sum('tongtienluong'))}}</td>
         </tr>
+            @foreach($m_ct as $ct)
+                <tr class="money">
+                    <td style="text-align: center"></td>
+                    <td style="text-align: left">{{$ct->tencongtac}}</td>
+                    <td style="text-align: right">{{dinhdangso($ct->soluong)}}</td>
+                    <td style="text-align: right">{{dinhdangso($ct->soluongcomat)}}</td>
+                    <td style="text-align: right">{{dinhdangsothapphan($ct->tongcong,5)}}</td>
+                    <td style="text-align: right">{{dinhdangsothapphan($ct->heso,5)}}</td>
+                    <td style="text-align: right">{{dinhdangsothapphan($ct->tongpc,5)}}</td>
+
+                    @foreach($a_phucap as $key=>$val)
+                        <td>{{dinhdangsothapphan($ct->$key,5)}}</td>
+                    @endforeach
+
+                    <td>{{dinhdangso($ct->stbhxh_dv+$ct->stbhyt_dv+$ct->stkpcd_dv)}}</td>
+                    <td>{{dinhdangso($ct->stbhtn_dv)}}</td>
+                    <td>{{dinhdangso($ct->tongtienluong)}}</td>
+                </tr>
+            @endforeach
     @endforeach
 
     <?php
     //$model_gd = $model->where('linhvuchoatdong','GD');
-    $model_gd = $model->wherein('linhvuchoatdong','GD');
+    $model_gd = $model->where('linhvuchoatdong','GD');
     $model_gdT = $model_gd->groupby('tencongtac');
     $a_plcongtac = array_column($model_gd->toarray(),'mact' , 'tencongtac');
     //dd($model_gdT->toarray());
@@ -167,25 +189,52 @@
         <td style="text-align: right">{{dinhdangsothapphan($model_gd->sum('stbhtn_dv'),5)}}</td>
         <td style="text-align: right">{{dinhdangso($model_gd->sum('ttl') + $model_gd->sum('ttbh_dv'))}}</td>
     </tr>
-    @foreach($a_plcongtac as $key=>$val)
-        <tr class="money">
-            <td style="text-align: center"></td>
-            <td style="text-align: left">{{$key}}</td>
-            <td style="text-align: right">{{dinhdangso($model_gdT[$key]->sum('soluonggiao'))}}</td>
-            <td style="text-align: right">{{dinhdangso($model_gdT[$key]->sum('soluongcomat'))}}</td>
-            <td style="text-align: right">{{dinhdangsothapphan($model_gdT[$key]->sum('tongcong'),5)}}</td>
-            <td style="text-align: right">{{dinhdangsothapphan($model_gdT[$key]->sum('heso'),5)}}</td>
-            <td style="text-align: right">{{dinhdangsothapphan($model_gdT[$key]->sum('tongpc'),5)}}</td>
 
-            @foreach($a_phucap as $key1=>$val)
-                <td>{{dinhdangsothapphan($model_gdT[$key]->sum($key1),5)}}</td>
+    @foreach($a_plct as $act)
+        <?php
+            $m_ct = $model_gd->where('macongtac',$act->macongtac);
+            $model_gdT = $m_ct->groupby('tencongtac');
+            $a_plcongtac = array_column($m_ct->toarray(),'mact' , 'tencongtac');
+        ?>
+        <tr style="font-weight: bold" class="money">
+            <td style="text-align: center"></td>
+            <td style="text-align: left">{{$act->tencongtac}}</td>
+            <td style="text-align: right">{{dinhdangso($m_ct->sum('soluonggiao'))}}</td>
+            <td style="text-align: right">{{dinhdangso($m_ct->sum('soluongcomat'))}}</td>
+            <td style="text-align: right">{{dinhdangsothapphan($m_ct->sum('tongcong'),5)}}</td>
+            <td style="text-align: right">{{dinhdangsothapphan($m_ct->sum('heso'),5)}}</td>
+            <td style="text-align: right">{{dinhdangsothapphan($m_ct->sum('tongpc'),5)}}</td>
+
+            @foreach($a_phucap as $key=>$val)
+                <td>{{dinhdangsothapphan($m_ct->sum($key),5)}}</td>
             @endforeach
 
-            <td>{{dinhdangsothapphan($model_gdT[$key]->sum('stbhxh_dv')+$model_gdT[$key]->sum('stbhyt_dv')+$model_gdT[$key]->sum('stkpcd_dv'),5)}}</td>
-            <td>{{dinhdangsothapphan($model_gdT[$key]->sum('stbhtn_dv'),5)}}</td>
-            <td>{{dinhdangso($model_gdT[$key]->sum('tongtienluong'))}}</td>
+            <td>{{dinhdangsothapphan($m_ct->sum('stbhxh_dv')+$m_ct->sum('stbhyt_dv')+$m_ct->sum('stkpcd_dv'),5)}}</td>
+            <td>{{dinhdangsothapphan($m_ct->sum('stbhtn_dv'),5)}}</td>
+            <td>{{dinhdangso($m_ct->sum('tongtienluong'))}}</td>
         </tr>
+            @foreach($a_plcongtac as $key=>$val)
+                <tr class="money">
+                    <td style="text-align: center"></td>
+                    <td style="text-align: left">{{$key}}</td>
+                    <td style="text-align: right">{{dinhdangso($model_gdT[$key]->sum('soluonggiao'))}}</td>
+                    <td style="text-align: right">{{dinhdangso($model_gdT[$key]->sum('soluongcomat'))}}</td>
+                    <td style="text-align: right">{{dinhdangsothapphan($model_gdT[$key]->sum('tongcong'),5)}}</td>
+                    <td style="text-align: right">{{dinhdangsothapphan($model_gdT[$key]->sum('heso'),5)}}</td>
+                    <td style="text-align: right">{{dinhdangsothapphan($model_gdT[$key]->sum('tongpc'),5)}}</td>
+
+                    @foreach($a_phucap as $key1=>$val)
+                        <td>{{dinhdangsothapphan($model_gdT[$key]->sum($key1),5)}}</td>
+                    @endforeach
+
+                    <td>{{dinhdangsothapphan($model_gdT[$key]->sum('stbhxh_dv')+$model_gdT[$key]->sum('stbhyt_dv')+$model_gdT[$key]->sum('stkpcd_dv'),5)}}</td>
+                    <td>{{dinhdangsothapphan($model_gdT[$key]->sum('stbhtn_dv'),5)}}</td>
+                    <td>{{dinhdangso($model_gdT[$key]->sum('tongtienluong'))}}</td>
+                </tr>
+            @endforeach
     @endforeach
+
+
     <?php
     $model_gd = $model->where('linhvuchoatdong','GD');
     $model_gdpl = $model_gd->groupby('tenphanloai');
@@ -214,26 +263,51 @@
             <td style="text-align: right">{{dinhdangsothapphan($model_gdpl->sum('stbhtn_dv'),5)}}</td>
             <td style="text-align: right">{{dinhdangso($model_gdpl->sum('tongtienluong'))}}</td>
         </tr>
-        @foreach($a_plcongtac as $key=>$val)
-            <tr class="money">
-                <td style="text-align: center"></td>
-                <td style="text-align: left">{{$key}}</td>
-                <td style="text-align: right">{{dinhdangso($model_gdplCT[$key]->sum('soluonggiao'))}}</td>
-                <td style="text-align: right">{{dinhdangso($model_gdplCT[$key]->sum('soluongcomat'))}}</td>
-                <td style="text-align: right">{{dinhdangsothapphan($model_gdplCT[$key]->sum('tongcong'),5)}}</td>
-                <td style="text-align: right">{{dinhdangsothapphan($model_gdplCT[$key]->sum('heso'),5)}}</td>
-                <td style="text-align: right">{{dinhdangsothapphan($model_gdplCT[$key]->sum('tongpc'),5)}}</td>
 
-                @foreach($a_phucap as $key1=>$val)
-                    <td>{{dinhdangsothapphan($model_gdplCT[$key]->sum($key1),5)}}</td>
-                @endforeach
+            @foreach($a_plct as $act)
+                <?php
+                $m_ct = $model_gdpl->where('macongtac',$act->macongtac);
+                $model_gdplCT = $m_ct->groupby('tencongtac');
+                $a_plcongtac = array_column($m_ct->toarray(),'mact' , 'tencongtac');
+                ?>
+                <tr style="font-weight: bold" class="money">
+                    <td style="text-align: center"></td>
+                    <td style="text-align: left">{{$act->tencongtac}}</td>
+                    <td style="text-align: right">{{dinhdangso($m_ct->sum('soluonggiao'))}}</td>
+                    <td style="text-align: right">{{dinhdangso($m_ct->sum('soluongcomat'))}}</td>
+                    <td style="text-align: right">{{dinhdangsothapphan($m_ct->sum('tongcong'),5)}}</td>
+                    <td style="text-align: right">{{dinhdangsothapphan($m_ct->sum('heso'),5)}}</td>
+                    <td style="text-align: right">{{dinhdangsothapphan($m_ct->sum('tongpc'),5)}}</td>
 
-                <td>{{dinhdangsothapphan($model_gdplCT[$key]->sum('stbhxh_dv')+$model_gdplCT[$key]->sum('stbhyt_dv')+$model_gdplCT[$key]->sum('stkpcd_dv'),5)}}</td>
-                <td>{{dinhdangsothapphan($model_gdplCT[$key]->sum('stbhtn_dv'),5)}}</td>
-                <td>{{dinhdangso($model_gdplCT[$key]->sum('tongtienluong'))}}</td>
-            </tr>
+                    @foreach($a_phucap as $key=>$val)
+                        <td>{{dinhdangsothapphan($m_ct->sum($key),5)}}</td>
+                    @endforeach
 
-        @endforeach
+                    <td>{{dinhdangsothapphan($m_ct->sum('stbhxh_dv')+$m_ct->sum('stbhyt_dv')+$m_ct->sum('stkpcd_dv'),5)}}</td>
+                    <td>{{dinhdangsothapphan($m_ct->sum('stbhtn_dv'),5)}}</td>
+                    <td>{{dinhdangso($m_ct->sum('tongtienluong'))}}</td>
+                </tr>
+                    @foreach($a_plcongtac as $key=>$val)
+                        <tr class="money">
+                            <td style="text-align: center"></td>
+                            <td style="text-align: left">{{$key}}</td>
+                            <td style="text-align: right">{{dinhdangso($model_gdplCT[$key]->sum('soluonggiao'))}}</td>
+                            <td style="text-align: right">{{dinhdangso($model_gdplCT[$key]->sum('soluongcomat'))}}</td>
+                            <td style="text-align: right">{{dinhdangsothapphan($model_gdplCT[$key]->sum('tongcong'),5)}}</td>
+                            <td style="text-align: right">{{dinhdangsothapphan($model_gdplCT[$key]->sum('heso'),5)}}</td>
+                            <td style="text-align: right">{{dinhdangsothapphan($model_gdplCT[$key]->sum('tongpc'),5)}}</td>
+
+                            @foreach($a_phucap as $key1=>$val)
+                                <td>{{dinhdangsothapphan($model_gdplCT[$key]->sum($key1),5)}}</td>
+                            @endforeach
+
+                            <td>{{dinhdangsothapphan($model_gdplCT[$key]->sum('stbhxh_dv')+$model_gdplCT[$key]->sum('stbhyt_dv')+$model_gdplCT[$key]->sum('stkpcd_dv'),5)}}</td>
+                            <td>{{dinhdangsothapphan($model_gdplCT[$key]->sum('stbhtn_dv'),5)}}</td>
+                            <td>{{dinhdangso($model_gdplCT[$key]->sum('tongtienluong'))}}</td>
+                        </tr>
+
+                    @endforeach
+            @endforeach
         <?php
         $ttdv = 0;
         $model_gddv = $model_gdpl->groupby('tendv');
@@ -264,46 +338,56 @@
                 <td>{{dinhdangsothapphan($model_gddv[$keydv]->sum('stbhtn_dv'),5)}}</td>
                 <td>{{dinhdangso($model_gddv[$keydv]->sum('tongtienluong'))}}</td>
             </tr>
-            @foreach($a_plctdv as $key=>$val)
-                <tr class="money">
-                    <td style="text-align: center"></td>
-                    <td style="text-align: left">{{$key}}</td>
-                    <td style="text-align: right">{{dinhdangso($model_gddvCT[$key]->sum('soluonggiao'))}}</td>
-                    <td style="text-align: right">{{dinhdangso($model_gddvCT[$key]->sum('soluongcomat'))}}</td>
-                    <td style="text-align: right">{{dinhdangsothapphan($model_gddvCT[$key]->sum('tongcong'),5)}}</td>
-                    <td style="text-align: right">{{dinhdangsothapphan($model_gddvCT[$key]->sum('heso'),5)}}</td>
-                    <td style="text-align: right">{{dinhdangsothapphan($model_gddvCT[$key]->sum('tongpc'),5)}}</td>
+                @foreach($a_plct as $act)
+                    <?php
+                    $m_ct = $model_gdpl->where('tendv',$keydv)->where('macongtac',$act->macongtac);
+                    $model_gddvCT = $m_ct->groupby('tencongtac');
+                    $a_plctdv = array_column($m_ct->toarray(),'mact' , 'tencongtac');
+                    ?>
+                    <tr style="font-weight: bold" class="money">
+                        <td style="text-align: center"></td>
+                        <td style="text-align: left">{{$act->tencongtac}}</td>
+                        <td style="text-align: right">{{dinhdangso($m_ct->sum('soluonggiao'))}}</td>
+                        <td style="text-align: right">{{dinhdangso($m_ct->sum('soluongcomat'))}}</td>
+                        <td style="text-align: right">{{dinhdangsothapphan($m_ct->sum('tongcong'),5)}}</td>
+                        <td style="text-align: right">{{dinhdangsothapphan($m_ct->sum('heso'),5)}}</td>
+                        <td style="text-align: right">{{dinhdangsothapphan($m_ct->sum('tongpc'),5)}}</td>
 
-                    @foreach($a_phucap as $key1=>$val)
-                        <td>{{dinhdangsothapphan($model_gddvCT[$key]->sum($key1),5)}}</td>
-                    @endforeach
+                        @foreach($a_phucap as $key=>$val)
+                            <td>{{dinhdangsothapphan($m_ct->sum($key),5)}}</td>
+                        @endforeach
 
-                    <td>{{dinhdangsothapphan($model_gddvCT[$key]->sum('stbhxh_dv')+$model_gddvCT[$key]->sum('stbhyt_dv')+$model_gddvCT[$key]->sum('stkpcd_dv'),5)}}</td>
-                    <td>{{dinhdangsothapphan($model_gddvCT[$key]->sum('stbhtn_dv'),5)}}</td>
-                    <td>{{dinhdangso($model_gddvCT[$key]->sum('tongtienluong'))}}</td>
-                </tr>
-            @endforeach
+                        <td>{{dinhdangsothapphan($m_ct->sum('stbhxh_dv')+$m_ct->sum('stbhyt_dv')+$m_ct->sum('stkpcd_dv'),5)}}</td>
+                        <td>{{dinhdangsothapphan($m_ct->sum('stbhtn_dv'),5)}}</td>
+                        <td>{{dinhdangso($m_ct->sum('tongtienluong'))}}</td>
+                    </tr>
+                        @foreach($a_plctdv as $key=>$val)
+                            <tr class="money">
+                                <td style="text-align: center"></td>
+                                <td style="text-align: left">{{$key}}</td>
+                                <td style="text-align: right">{{dinhdangso($model_gddvCT[$key]->sum('soluonggiao'))}}</td>
+                                <td style="text-align: right">{{dinhdangso($model_gddvCT[$key]->sum('soluongcomat'))}}</td>
+                                <td style="text-align: right">{{dinhdangsothapphan($model_gddvCT[$key]->sum('tongcong'),5)}}</td>
+                                <td style="text-align: right">{{dinhdangsothapphan($model_gddvCT[$key]->sum('heso'),5)}}</td>
+                                <td style="text-align: right">{{dinhdangsothapphan($model_gddvCT[$key]->sum('tongpc'),5)}}</td>
+
+                                @foreach($a_phucap as $key1=>$val)
+                                    <td>{{dinhdangsothapphan($model_gddvCT[$key]->sum($key1),5)}}</td>
+                                @endforeach
+
+                                <td>{{dinhdangsothapphan($model_gddvCT[$key]->sum('stbhxh_dv')+$model_gddvCT[$key]->sum('stbhyt_dv')+$model_gddvCT[$key]->sum('stkpcd_dv'),5)}}</td>
+                                <td>{{dinhdangsothapphan($model_gddvCT[$key]->sum('stbhtn_dv'),5)}}</td>
+                                <td>{{dinhdangso($model_gddvCT[$key]->sum('tongtienluong'))}}</td>
+                            </tr>
+                        @endforeach
+                @endforeach
         @endforeach
     @endforeach
-
-
-
     <?php
-
-    $model_hcsn = $model->where('maphanloai','<>','KVXP');
-    $model_hcsn = $model_hcsn->where('linhvuchoatdong','<>','GD');
-    $model_hcsn = $model_hcsn->where('linhvuchoatdong','<>','QLNN');
-    $model_hcsn = $model_hcsn->where('linhvuchoatdong','<>','DDT');
-    $model_hcsn = $model_hcsn->where('linhvuchoatdong','<>','DOANTHE');
-    $model_hcsn = $model_hcsn->where('linhvuchoatdong','<>','DANG');
-    $model_hcsn = $model_hcsn->where('linhvuchoatdong','<>','LVXH');
-    $model_hcsn = $model_hcsn->where('linhvuchoatdong','<>','LVCT');
     $model_hcsnT = $model_hcsn->groupby('tencongtac');
-
     //$model_hcsn = $modelhcsn;
     //$model_hcsnT = $modelhcsn->groupby('tencongtac');
     $a_plcongtac = array_column($model_hcsn->toarray(),'mact' , 'tencongtac');
-
     ?>
     <tr style="font-weight: bold;">
         <td>II</td>
@@ -320,35 +404,51 @@
         <td style="text-align: right">{{dinhdangsothapphan($model_hcsn->sum('stbhtn_dv'),5)}}</td>
         <td style="text-align: right">{{dinhdangso($model_hcsn->sum('ttl') + $model_hcsn->sum('ttbh_dv'))}}</td>
     </tr>
-    @foreach($a_plcongtac as $key=>$val)
-        <tr class="money">
-            <td style="text-align: center"></td>
-            <td style="text-align: left">{{$key}}</td>
-            <td style="text-align: right">{{dinhdangso($model_hcsnT[$key]->sum('soluonggiao'))}}</td>
-            <td style="text-align: right">{{dinhdangso($model_hcsnT[$key]->sum('soluongcomat'))}}</td>
-            <td style="text-align: right">{{dinhdangsothapphan($model_hcsnT[$key]->sum('tongcong'),5)}}</td>
-            <td style="text-align: right">{{dinhdangsothapphan($model_hcsnT[$key]->sum('heso'),5)}}</td>
-            <td style="text-align: right">{{dinhdangsothapphan($model_hcsnT[$key]->sum('tongpc'),5)}}</td>
 
-            @foreach($a_phucap as $key1=>$val)
-                <td>{{dinhdangsothapphan($model_hcsnT[$key]->sum($key1),5)}}</td>
+    @foreach($a_plct as $act)
+        <?php
+        $m_ct = $model_hcsn->where('macongtac',$act->macongtac);
+        $model_hcsnT = $m_ct->groupby('tencongtac');
+        $a_plcongtac = array_column($m_ct->toarray(),'mact' , 'tencongtac');
+        ?>
+        <tr style="font-weight: bold" class="money">
+            <td style="text-align: center"></td>
+            <td style="text-align: left">{{$act->tencongtac}}</td>
+            <td style="text-align: right">{{dinhdangso($m_ct->sum('soluonggiao'))}}</td>
+            <td style="text-align: right">{{dinhdangso($m_ct->sum('soluongcomat'))}}</td>
+            <td style="text-align: right">{{dinhdangsothapphan($m_ct->sum('tongcong'),5)}}</td>
+            <td style="text-align: right">{{dinhdangsothapphan($m_ct->sum('heso'),5)}}</td>
+            <td style="text-align: right">{{dinhdangsothapphan($m_ct->sum('tongpc'),5)}}</td>
+
+            @foreach($a_phucap as $key=>$val)
+                <td>{{dinhdangsothapphan($m_ct->sum($key),5)}}</td>
             @endforeach
 
-            <td>{{dinhdangsothapphan($model_hcsnT[$key]->sum('stbhxh_dv')+$model_hcsnT[$key]->sum('stbhyt_dv')+$model_hcsnT[$key]->sum('stkpcd_dv'),5)}}</td>
-            <td>{{dinhdangsothapphan($model_hcsnT[$key]->sum('stbhtn_dv'),5)}}</td>
-            <td>{{dinhdangso($model_hcsnT[$key]->sum('tongtienluong'))}}</td>
+            <td>{{dinhdangsothapphan($m_ct->sum('stbhxh_dv')+$m_ct->sum('stbhyt_dv')+$m_ct->sum('stkpcd_dv'),5)}}</td>
+            <td>{{dinhdangsothapphan($m_ct->sum('stbhtn_dv'),5)}}</td>
+            <td>{{dinhdangso($m_ct->sum('tongtienluong'))}}</td>
         </tr>
+            @foreach($a_plcongtac as $key=>$val)
+                <tr class="money">
+                    <td style="text-align: center"></td>
+                    <td style="text-align: left">{{$key}}</td>
+                    <td style="text-align: right">{{dinhdangso($model_hcsnT[$key]->sum('soluonggiao'))}}</td>
+                    <td style="text-align: right">{{dinhdangso($model_hcsnT[$key]->sum('soluongcomat'))}}</td>
+                    <td style="text-align: right">{{dinhdangsothapphan($model_hcsnT[$key]->sum('tongcong'),5)}}</td>
+                    <td style="text-align: right">{{dinhdangsothapphan($model_hcsnT[$key]->sum('heso'),5)}}</td>
+                    <td style="text-align: right">{{dinhdangsothapphan($model_hcsnT[$key]->sum('tongpc'),5)}}</td>
+
+                    @foreach($a_phucap as $key1=>$val)
+                        <td>{{dinhdangsothapphan($model_hcsnT[$key]->sum($key1),5)}}</td>
+                    @endforeach
+
+                    <td>{{dinhdangsothapphan($model_hcsnT[$key]->sum('stbhxh_dv')+$model_hcsnT[$key]->sum('stbhyt_dv')+$model_hcsnT[$key]->sum('stkpcd_dv'),5)}}</td>
+                    <td>{{dinhdangsothapphan($model_hcsnT[$key]->sum('stbhtn_dv'),5)}}</td>
+                    <td>{{dinhdangso($model_hcsnT[$key]->sum('tongtienluong'))}}</td>
+                </tr>
+            @endforeach
     @endforeach
     <?php
-
-    $model_hcsn = $model->where('maphanloai','<>','KVXP');
-    $model_hcsn = $model_hcsn->where('linhvuchoatdong','<>','GD');
-    $model_hcsn = $model_hcsn->where('linhvuchoatdong','<>','QLNN');
-    $model_hcsn = $model_hcsn->where('linhvuchoatdong','<>','DDT');
-    $model_hcsn = $model_hcsn->where('linhvuchoatdong','<>','DOANTHE');
-    $model_hcsn = $model_hcsn->where('linhvuchoatdong','<>','DANG');
-    $model_hcsn = $model_hcsn->where('linhvuchoatdong','<>','LVXH');
-    $model_hcsn = $model_hcsn->where('linhvuchoatdong','<>','LVCT');
     $model_hcsnpl = $model_hcsn->groupby('tenlinhvuchoatdong');
 
     //$model_hcsn = $modelhcsn;
@@ -379,26 +479,51 @@
             <td style="text-align: right">{{dinhdangsothapphan($model_hcsnpl->sum('stbhtn_dv'),5)}}</td>
             <td style="text-align: right">{{dinhdangso($model_hcsnpl->sum('tongtienluong'))}}</td>
         </tr>
-        @foreach($a_plcongtac as $key=>$val)
-            <tr class="money">
-                <td style="text-align: center"></td>
-                <td style="text-align: left">{{$key}}</td>
-                <td style="text-align: right">{{dinhdangso($model_hcsnplCT[$key]->sum('soluonggiao'))}}</td>
-                <td style="text-align: right">{{dinhdangso($model_hcsnplCT[$key]->sum('soluongcomat'))}}</td>
-                <td style="text-align: right">{{dinhdangsothapphan($model_hcsnplCT[$key]->sum('tongcong'),5)}}</td>
-                <td style="text-align: right">{{dinhdangsothapphan($model_hcsnplCT[$key]->sum('heso'),5)}}</td>
-                <td style="text-align: right">{{dinhdangsothapphan($model_hcsnplCT[$key]->sum('tongpc'),5)}}</td>
+            @foreach($a_plct as $act)
+                <?php
+                    $m_ct = $model_hcsnpl->where('macongtac',$act->macongtac);
+                    $model_hcsnplCT = $m_ct->groupby('tencongtac');
+                    $a_plcongtac = array_column($m_ct->toarray(),'mact' , 'tencongtac');
+                ?>
+                <tr style="font-weight: bold" class="money">
+                    <td style="text-align: center"></td>
+                    <td style="text-align: left">{{$act->tencongtac}}</td>
+                    <td style="text-align: right">{{dinhdangso($m_ct->sum('soluonggiao'))}}</td>
+                    <td style="text-align: right">{{dinhdangso($m_ct->sum('soluongcomat'))}}</td>
+                    <td style="text-align: right">{{dinhdangsothapphan($m_ct->sum('tongcong'),5)}}</td>
+                    <td style="text-align: right">{{dinhdangsothapphan($m_ct->sum('heso'),5)}}</td>
+                    <td style="text-align: right">{{dinhdangsothapphan($m_ct->sum('tongpc'),5)}}</td>
 
-                @foreach($a_phucap as $key1=>$val)
-                    <td>{{dinhdangsothapphan($model_hcsnplCT[$key]->sum($key1),5)}}</td>
-                @endforeach
+                    @foreach($a_phucap as $key=>$val)
+                        <td>{{dinhdangsothapphan($m_ct->sum($key),5)}}</td>
+                    @endforeach
 
-                <td>{{dinhdangsothapphan($model_hcsnplCT[$key]->sum('stbhxh_dv')+$model_hcsnplCT[$key]->sum('stbhyt_dv')+$model_hcsnplCT[$key]->sum('stkpcd_dv'),5)}}</td>
-                <td>{{dinhdangsothapphan($model_hcsnplCT[$key]->sum('stbhtn_dv'),5)}}</td>
-                <td>{{dinhdangso($model_hcsnplCT[$key]->sum('tongtienluong'))}}</td>
-            </tr>
+                    <td>{{dinhdangsothapphan($m_ct->sum('stbhxh_dv')+$m_ct->sum('stbhyt_dv')+$m_ct->sum('stkpcd_dv'),5)}}</td>
+                    <td>{{dinhdangsothapphan($m_ct->sum('stbhtn_dv'),5)}}</td>
+                    <td>{{dinhdangso($m_ct->sum('tongtienluong'))}}</td>
+                </tr>
+                    @foreach($a_plcongtac as $key=>$val)
+                        <tr class="money">
+                            <td style="text-align: center"></td>
+                            <td style="text-align: left">{{$key}}</td>
+                            <td style="text-align: right">{{dinhdangso($model_hcsnplCT[$key]->sum('soluonggiao'))}}</td>
+                            <td style="text-align: right">{{dinhdangso($model_hcsnplCT[$key]->sum('soluongcomat'))}}</td>
+                            <td style="text-align: right">{{dinhdangsothapphan($model_hcsnplCT[$key]->sum('tongcong'),5)}}</td>
+                            <td style="text-align: right">{{dinhdangsothapphan($model_hcsnplCT[$key]->sum('heso'),5)}}</td>
+                            <td style="text-align: right">{{dinhdangsothapphan($model_hcsnplCT[$key]->sum('tongpc'),5)}}</td>
 
-        @endforeach
+                            @foreach($a_phucap as $key1=>$val)
+                                <td>{{dinhdangsothapphan($model_hcsnplCT[$key]->sum($key1),5)}}</td>
+                            @endforeach
+
+                            <td>{{dinhdangsothapphan($model_hcsnplCT[$key]->sum('stbhxh_dv')+$model_hcsnplCT[$key]->sum('stbhyt_dv')+$model_hcsnplCT[$key]->sum('stkpcd_dv'),5)}}</td>
+                            <td>{{dinhdangsothapphan($model_hcsnplCT[$key]->sum('stbhtn_dv'),5)}}</td>
+                            <td>{{dinhdangso($model_hcsnplCT[$key]->sum('tongtienluong'))}}</td>
+                        </tr>
+
+                    @endforeach
+            @endforeach
+
         <?php
         $ttdv = 0;
         $model_hcsndv = $model_hcsnpl->groupby('tendv');
@@ -429,25 +554,50 @@
                 <td>{{dinhdangsothapphan($model_hcsndv[$keydv]->sum('stbhtn_dv'),5)}}</td>
                 <td>{{dinhdangso($model_hcsndv[$keydv]->sum('tongtienluong'))}}</td>
             </tr>
-            @foreach($a_plcongtac as $key=>$val)
-                <tr class="money">
-                    <td style="text-align: center"></td>
-                    <td style="text-align: left">{{$key}}</td>
-                    <td style="text-align: right">{{dinhdangso($model_hcsndvCT[$key]->sum('soluonggiao'))}}</td>
-                    <td style="text-align: right">{{dinhdangso($model_hcsndvCT[$key]->sum('soluongcomat'))}}</td>
-                    <td style="text-align: right">{{dinhdangsothapphan($model_hcsndvCT[$key]->sum('tongcong'),5)}}</td>
-                    <td style="text-align: right">{{dinhdangsothapphan($model_hcsndvCT[$key]->sum('heso'),5)}}</td>
-                    <td style="text-align: right">{{dinhdangsothapphan($model_hcsndvCT[$key]->sum('tongpc'),5)}}</td>
 
-                    @foreach($a_phucap as $key1=>$val)
-                        <td>{{dinhdangsothapphan($model_hcsndvCT[$key]->sum($key1),5)}}</td>
-                    @endforeach
+                @foreach($a_plct as $act)
+                    <?php
+                    $m_ct = $model_hcsnpl->where('tendv',$keydv)->where('macongtac',$act->macongtac);
+                    $model_hcsndvCT = $m_ct->groupby('tencongtac');
+                    $a_plcongtac = array_column($m_ct->toarray(),'mact' , 'tencongtac');
+                    ?>
+                    <tr style="font-weight: bold" class="money">
+                        <td style="text-align: center"></td>
+                        <td style="text-align: left">{{$act->tencongtac}}</td>
+                        <td style="text-align: right">{{dinhdangso($m_ct->sum('soluonggiao'))}}</td>
+                        <td style="text-align: right">{{dinhdangso($m_ct->sum('soluongcomat'))}}</td>
+                        <td style="text-align: right">{{dinhdangsothapphan($m_ct->sum('tongcong'),5)}}</td>
+                        <td style="text-align: right">{{dinhdangsothapphan($m_ct->sum('heso'),5)}}</td>
+                        <td style="text-align: right">{{dinhdangsothapphan($m_ct->sum('tongpc'),5)}}</td>
 
-                    <td>{{dinhdangsothapphan($model_hcsndvCT[$key]->sum('stbhxh_dv')+$model_hcsndvCT[$key]->sum('stbhyt_dv')+$model_hcsndvCT[$key]->sum('stkpcd_dv'),5)}}</td>
-                    <td>{{dinhdangsothapphan($model_hcsndvCT[$key]->sum('stbhtn_dv'),5)}}</td>
-                    <td>{{dinhdangso($model_hcsndvCT[$key]->sum('tongtienluong'))}}</td>
-                </tr>
-            @endforeach
+                        @foreach($a_phucap as $key=>$val)
+                            <td>{{dinhdangsothapphan($m_ct->sum($key),5)}}</td>
+                        @endforeach
+
+                        <td>{{dinhdangsothapphan($m_ct->sum('stbhxh_dv')+$m_ct->sum('stbhyt_dv')+$m_ct->sum('stkpcd_dv'),5)}}</td>
+                        <td>{{dinhdangsothapphan($m_ct->sum('stbhtn_dv'),5)}}</td>
+                        <td>{{dinhdangso($m_ct->sum('tongtienluong'))}}</td>
+                    </tr>
+                        @foreach($a_plcongtac as $key=>$val)
+                            <tr class="money">
+                                <td style="text-align: center"></td>
+                                <td style="text-align: left">{{$key}}</td>
+                                <td style="text-align: right">{{dinhdangso($model_hcsndvCT[$key]->sum('soluonggiao'))}}</td>
+                                <td style="text-align: right">{{dinhdangso($model_hcsndvCT[$key]->sum('soluongcomat'))}}</td>
+                                <td style="text-align: right">{{dinhdangsothapphan($model_hcsndvCT[$key]->sum('tongcong'),5)}}</td>
+                                <td style="text-align: right">{{dinhdangsothapphan($model_hcsndvCT[$key]->sum('heso'),5)}}</td>
+                                <td style="text-align: right">{{dinhdangsothapphan($model_hcsndvCT[$key]->sum('tongpc'),5)}}</td>
+
+                                @foreach($a_phucap as $key1=>$val)
+                                    <td>{{dinhdangsothapphan($model_hcsndvCT[$key]->sum($key1),5)}}</td>
+                                @endforeach
+
+                                <td>{{dinhdangsothapphan($model_hcsndvCT[$key]->sum('stbhxh_dv')+$model_hcsndvCT[$key]->sum('stbhyt_dv')+$model_hcsndvCT[$key]->sum('stkpcd_dv'),5)}}</td>
+                                <td>{{dinhdangsothapphan($model_hcsndvCT[$key]->sum('stbhtn_dv'),5)}}</td>
+                                <td>{{dinhdangso($model_hcsndvCT[$key]->sum('tongtienluong'))}}</td>
+                            </tr>
+                        @endforeach
+                @endforeach
         @endforeach
     @endforeach
 
@@ -472,25 +622,50 @@
         <td style="text-align: right">{{dinhdangsothapphan($model_hcsn->sum('stbhtn_dv'),5)}}</td>
         <td style="text-align: right">{{dinhdangso($model_hcsn->sum('tongtienluong'))}}</td>
     </tr>
-    @foreach($a_plcongtac as $key=>$val)
-        <tr class="money">
+    @foreach($a_plct as $act)
+        <?php
+        $m_ct = $model_hcsn->where('macongtac',$act->macongtac);
+        $model_hcsnT = $m_ct->groupby('tencongtac');
+        $a_plcongtac = array_column($m_ct->toarray(),'mact' , 'tencongtac');
+        ?>
+        <tr style="font-weight: bold" class="money">
             <td style="text-align: center"></td>
-            <td style="text-align: left">{{$key}}</td>
-            <td style="text-align: right">{{dinhdangso($model_hcsnT[$key]->sum('soluonggiao'))}}</td>
-            <td style="text-align: right">{{dinhdangso($model_hcsnT[$key]->sum('soluongcomat'))}}</td>
-            <td style="text-align: right">{{dinhdangsothapphan($model_hcsnT[$key]->sum('tongcong'),5)}}</td>
-            <td style="text-align: right">{{dinhdangsothapphan($model_hcsnT[$key]->sum('heso'),5)}}</td>
-            <td style="text-align: right">{{dinhdangsothapphan($model_hcsnT[$key]->sum('tongpc'),5)}}</td>
+            <td style="text-align: left">{{$act->tencongtac}}</td>
+            <td style="text-align: right">{{dinhdangso($m_ct->sum('soluonggiao'))}}</td>
+            <td style="text-align: right">{{dinhdangso($m_ct->sum('soluongcomat'))}}</td>
+            <td style="text-align: right">{{dinhdangsothapphan($m_ct->sum('tongcong'),5)}}</td>
+            <td style="text-align: right">{{dinhdangsothapphan($m_ct->sum('heso'),5)}}</td>
+            <td style="text-align: right">{{dinhdangsothapphan($m_ct->sum('tongpc'),5)}}</td>
 
-            @foreach($a_phucap as $key1=>$val)
-                <td>{{dinhdangsothapphan($model_hcsnT[$key]->sum($key1),5)}}</td>
+            @foreach($a_phucap as $key=>$val)
+                <td>{{dinhdangsothapphan($m_ct->sum($key),5)}}</td>
             @endforeach
 
-            <td>{{dinhdangsothapphan($model_hcsnT[$key]->sum('stbhxh_dv')+$model_hcsnT[$key]->sum('stbhyt_dv')+$model_hcsnT[$key]->sum('stkpcd_dv'),5)}}</td>
-            <td>{{dinhdangsothapphan($model_hcsnT[$key]->sum('stbhtn_dv'),5)}}</td>
-            <td>{{dinhdangso($model_hcsnT[$key]->sum('tongtienluong'))}}</td>
+            <td>{{dinhdangsothapphan($m_ct->sum('stbhxh_dv')+$m_ct->sum('stbhyt_dv')+$m_ct->sum('stkpcd_dv'),5)}}</td>
+            <td>{{dinhdangsothapphan($m_ct->sum('stbhtn_dv'),5)}}</td>
+            <td>{{dinhdangso($m_ct->sum('tongtienluong'))}}</td>
         </tr>
+            @foreach($a_plcongtac as $key=>$val)
+                <tr class="money">
+                    <td style="text-align: center"></td>
+                    <td style="text-align: left">{{$key}}</td>
+                    <td style="text-align: right">{{dinhdangso($model_hcsnT[$key]->sum('soluonggiao'))}}</td>
+                    <td style="text-align: right">{{dinhdangso($model_hcsnT[$key]->sum('soluongcomat'))}}</td>
+                    <td style="text-align: right">{{dinhdangsothapphan($model_hcsnT[$key]->sum('tongcong'),5)}}</td>
+                    <td style="text-align: right">{{dinhdangsothapphan($model_hcsnT[$key]->sum('heso'),5)}}</td>
+                    <td style="text-align: right">{{dinhdangsothapphan($model_hcsnT[$key]->sum('tongpc'),5)}}</td>
+
+                    @foreach($a_phucap as $key1=>$val)
+                        <td>{{dinhdangsothapphan($model_hcsnT[$key]->sum($key1),5)}}</td>
+                    @endforeach
+
+                    <td>{{dinhdangsothapphan($model_hcsnT[$key]->sum('stbhxh_dv')+$model_hcsnT[$key]->sum('stbhyt_dv')+$model_hcsnT[$key]->sum('stkpcd_dv'),5)}}</td>
+                    <td>{{dinhdangsothapphan($model_hcsnT[$key]->sum('stbhtn_dv'),5)}}</td>
+                    <td>{{dinhdangso($model_hcsnT[$key]->sum('tongtienluong'))}}</td>
+                </tr>
+            @endforeach
     @endforeach
+
     <?php
     $model_hcsn = $modelqlnn;
     //$model_hcsn = $model_hcsn->where('linhvuchoatdong','DDT');
@@ -521,26 +696,51 @@
             <td style="text-align: right">{{dinhdangsothapphan($model_hcsnpl->sum('stbhtn_dv'),5)}}</td>
             <td style="text-align: right">{{dinhdangso($model_hcsnpl->sum('tongtienluong'))}}</td>
         </tr>
-        @foreach($a_plcongtac as $key=>$val)
-            <tr class="money">
-                <td style="text-align: center"></td>
-                <td style="text-align: left">{{$key}}</td>
-                <td style="text-align: right">{{dinhdangso($model_hcsnplCT[$key]->sum('soluonggiao'))}}</td>
-                <td style="text-align: right">{{dinhdangso($model_hcsnplCT[$key]->sum('soluongcomat'))}}</td>
-                <td style="text-align: right">{{dinhdangsothapphan($model_hcsnplCT[$key]->sum('tongcong'),5)}}</td>
-                <td style="text-align: right">{{dinhdangsothapphan($model_hcsnplCT[$key]->sum('heso'),5)}}</td>
-                <td style="text-align: right">{{dinhdangsothapphan($model_hcsnplCT[$key]->sum('tongpc'),5)}}</td>
 
-                @foreach($a_phucap as $key1=>$val)
-                    <td>{{dinhdangsothapphan($model_hcsnplCT[$key]->sum($key1),5)}}</td>
-                @endforeach
+            @foreach($a_plct as $act)
+                <?php
+                $m_ct = $model_hcsnpl->where('macongtac',$act->macongtac);
+                $model_hcsnplCT = $m_ct->groupby('tencongtac');
+                $a_plcongtac = array_column($m_ct->toarray(),'mact' , 'tencongtac');
+                ?>
+                <tr style="font-weight: bold" class="money">
+                    <td style="text-align: center"></td>
+                    <td style="text-align: left">{{$act->tencongtac}}</td>
+                    <td style="text-align: right">{{dinhdangso($m_ct->sum('soluonggiao'))}}</td>
+                    <td style="text-align: right">{{dinhdangso($m_ct->sum('soluongcomat'))}}</td>
+                    <td style="text-align: right">{{dinhdangsothapphan($m_ct->sum('tongcong'),5)}}</td>
+                    <td style="text-align: right">{{dinhdangsothapphan($m_ct->sum('heso'),5)}}</td>
+                    <td style="text-align: right">{{dinhdangsothapphan($m_ct->sum('tongpc'),5)}}</td>
 
-                <td>{{dinhdangsothapphan($model_hcsnplCT[$key]->sum('stbhxh_dv')+$model_hcsnplCT[$key]->sum('stbhyt_dv')+$model_hcsnplCT[$key]->sum('stkpcd_dv'),5)}}</td>
-                <td>{{dinhdangsothapphan($model_hcsnplCT[$key]->sum('stbhtn_dv'),5)}}</td>
-                <td>{{dinhdangso($model_hcsnplCT[$key]->sum('tongtienluong'))}}</td>
-            </tr>
+                    @foreach($a_phucap as $key=>$val)
+                        <td>{{dinhdangsothapphan($m_ct->sum($key),5)}}</td>
+                    @endforeach
 
-        @endforeach
+                    <td>{{dinhdangsothapphan($m_ct->sum('stbhxh_dv')+$m_ct->sum('stbhyt_dv')+$m_ct->sum('stkpcd_dv'),5)}}</td>
+                    <td>{{dinhdangsothapphan($m_ct->sum('stbhtn_dv'),5)}}</td>
+                    <td>{{dinhdangso($m_ct->sum('tongtienluong'))}}</td>
+                </tr>
+                    @foreach($a_plcongtac as $key=>$val)
+                        <tr class="money">
+                            <td style="text-align: center"></td>
+                            <td style="text-align: left">{{$key}}</td>
+                            <td style="text-align: right">{{dinhdangso($model_hcsnplCT[$key]->sum('soluonggiao'))}}</td>
+                            <td style="text-align: right">{{dinhdangso($model_hcsnplCT[$key]->sum('soluongcomat'))}}</td>
+                            <td style="text-align: right">{{dinhdangsothapphan($model_hcsnplCT[$key]->sum('tongcong'),5)}}</td>
+                            <td style="text-align: right">{{dinhdangsothapphan($model_hcsnplCT[$key]->sum('heso'),5)}}</td>
+                            <td style="text-align: right">{{dinhdangsothapphan($model_hcsnplCT[$key]->sum('tongpc'),5)}}</td>
+
+                            @foreach($a_phucap as $key1=>$val)
+                                <td>{{dinhdangsothapphan($model_hcsnplCT[$key]->sum($key1),5)}}</td>
+                            @endforeach
+
+                            <td>{{dinhdangsothapphan($model_hcsnplCT[$key]->sum('stbhxh_dv')+$model_hcsnplCT[$key]->sum('stbhyt_dv')+$model_hcsnplCT[$key]->sum('stkpcd_dv'),5)}}</td>
+                            <td>{{dinhdangsothapphan($model_hcsnplCT[$key]->sum('stbhtn_dv'),5)}}</td>
+                            <td>{{dinhdangso($model_hcsnplCT[$key]->sum('tongtienluong'))}}</td>
+                        </tr>
+
+                    @endforeach
+            @endforeach
         <?php
         $ttdv = 0;
         $model_hcsndv = $model_hcsnpl->groupby('tendv');
@@ -570,25 +770,52 @@
                 <td>{{dinhdangsothapphan($model_hcsndv[$keydv]->sum('stbhtn_dv'),5)}}</td>
                 <td>{{dinhdangso($model_hcsndv[$keydv]->sum('tongtienluong'))}}</td>
             </tr>
-            @foreach($a_plcongtac as $key=>$val)
-                <tr class="money">
-                    <td style="text-align: center"></td>
-                    <td style="text-align: left">{{$key}}</td>
-                    <td style="text-align: right">{{dinhdangso($model_hcsndvCT[$key]->sum('soluonggiao'))}}</td>
-                    <td style="text-align: right">{{dinhdangso($model_hcsndvCT[$key]->sum('soluongcomat'))}}</td>
-                    <td style="text-align: right">{{dinhdangsothapphan($model_hcsndvCT[$key]->sum('tongcong'),5)}}</td>
-                    <td style="text-align: right">{{dinhdangsothapphan($model_hcsndvCT[$key]->sum('heso'),5)}}</td>
-                    <td style="text-align: right">{{dinhdangsothapphan($model_hcsndvCT[$key]->sum('tongpc'),5)}}</td>
 
-                    @foreach($a_phucap as $key1=>$val)
-                        <td>{{dinhdangsothapphan($model_hcsndvCT[$key]->sum($key1),5)}}</td>
-                    @endforeach
+                @foreach($a_plct as $act)
+                    <?php
+                    $m_ct = $model_hcsnpl->where('tendv',$keydv)->where('macongtac',$act->macongtac);
+                    $model_hcsndvCT = $m_ct->groupby('tencongtac');
+                    $a_plcongtac = array_column($m_ct->toarray(),'mact' , 'tencongtac');
+                    ?>
+                    <tr style="font-weight: bold" class="money">
+                        <td style="text-align: center"></td>
+                        <td style="text-align: left">{{$act->tencongtac}}</td>
+                        <td style="text-align: right">{{dinhdangso($m_ct->sum('soluonggiao'))}}</td>
+                        <td style="text-align: right">{{dinhdangso($m_ct->sum('soluongcomat'))}}</td>
+                        <td style="text-align: right">{{dinhdangsothapphan($m_ct->sum('tongcong'),5)}}</td>
+                        <td style="text-align: right">{{dinhdangsothapphan($m_ct->sum('heso'),5)}}</td>
+                        <td style="text-align: right">{{dinhdangsothapphan($m_ct->sum('tongpc'),5)}}</td>
 
-                    <td>{{dinhdangsothapphan($model_hcsndvCT[$key]->sum('stbhxh_dv')+$model_hcsndvCT[$key]->sum('stbhyt_dv')+$model_hcsndvCT[$key]->sum('stkpcd_dv'),5)}}</td>
-                    <td>{{dinhdangsothapphan($model_hcsndvCT[$key]->sum('stbhtn_dv'),5)}}</td>
-                    <td>{{dinhdangso($model_hcsndvCT[$key]->sum('tongtienluong'))}}</td>
-                </tr>
-            @endforeach
+                        @foreach($a_phucap as $key=>$val)
+                            <td>{{dinhdangsothapphan($m_ct->sum($key),5)}}</td>
+                        @endforeach
+
+                        <td>{{dinhdangsothapphan($m_ct->sum('stbhxh_dv')+$m_ct->sum('stbhyt_dv')+$m_ct->sum('stkpcd_dv'),5)}}</td>
+                        <td>{{dinhdangsothapphan($m_ct->sum('stbhtn_dv'),5)}}</td>
+                        <td>{{dinhdangso($m_ct->sum('tongtienluong'))}}</td>
+                    </tr>
+                        @foreach($a_plcongtac as $key=>$val)
+                            <tr class="money">
+                                <td style="text-align: center"></td>
+                                <td style="text-align: left">{{$key}}</td>
+                                <td style="text-align: right">{{dinhdangso($model_hcsndvCT[$key]->sum('soluonggiao'))}}</td>
+                                <td style="text-align: right">{{dinhdangso($model_hcsndvCT[$key]->sum('soluongcomat'))}}</td>
+                                <td style="text-align: right">{{dinhdangsothapphan($model_hcsndvCT[$key]->sum('tongcong'),5)}}</td>
+                                <td style="text-align: right">{{dinhdangsothapphan($model_hcsndvCT[$key]->sum('heso'),5)}}</td>
+                                <td style="text-align: right">{{dinhdangsothapphan($model_hcsndvCT[$key]->sum('tongpc'),5)}}</td>
+
+                                @foreach($a_phucap as $key1=>$val)
+                                    <td>{{dinhdangsothapphan($model_hcsndvCT[$key]->sum($key1),5)}}</td>
+                                @endforeach
+
+                                <td>{{dinhdangsothapphan($model_hcsndvCT[$key]->sum('stbhxh_dv')+$model_hcsndvCT[$key]->sum('stbhyt_dv')+$model_hcsndvCT[$key]->sum('stkpcd_dv'),5)}}</td>
+                                <td>{{dinhdangsothapphan($model_hcsndvCT[$key]->sum('stbhtn_dv'),5)}}</td>
+                                <td>{{dinhdangso($model_hcsndvCT[$key]->sum('tongtienluong'))}}</td>
+                            </tr>
+                        @endforeach
+                @endforeach
+
+
         @endforeach
     @endforeach
     <tr style="font-weight: bold;">
