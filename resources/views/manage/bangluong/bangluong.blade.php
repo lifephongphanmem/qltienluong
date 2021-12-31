@@ -47,13 +47,13 @@
                         </div>
                     </div>
 
-                    <table id="sample_3" class="table table-hover table-striped table-bordered" style="min-height: 230px">
+                    <table id="sample_4" class="table table-hover table-striped table-bordered" style="min-height: 230px">
                         <thead>
                             <tr>
                                 <th class="text-center" style="width: 5%">STT</th>
                                 <th class="text-center">Họ tên</th>
                                 <th class="text-center">Chức vụ</th>
-                                <th class="text-center">Phân loại</br>công tác</th>
+                                <th class="text-center">Phân loại<br>công tác</th>
                                 <th class="text-center">Mã ngạch</th>
                                 <th class="text-center">Thực lĩnh</th>
                                 <th class="text-center">Thao tác</th>

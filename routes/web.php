@@ -482,8 +482,9 @@ Route::group(['prefix'=>'nghiep_vu'],function(){
 
     Route::group(['prefix'=>'chi_tieu'],function(){
         Route::get('danh_sach','chitieubiencheController@index');
+        Route::get('create','chitieubiencheController@create');
         Route::get('del/{id}','chitieubiencheController@destroy');
-        Route::get('store','chitieubiencheController@store');
+        Route::post('store','chitieubiencheController@store');
         Route::get('get','chitieubiencheController@get_detail');
     });
 });
@@ -561,6 +562,10 @@ Route::group(['prefix'=>'chuc_nang'],function(){
         Route::get('del/{id}','bangluongController@destroy');
         Route::post('del_ct','bangluongController@destroy_ct');
         Route::get('del_ct_chikhac/{id}','bangluongController@destroy_truc');
+
+        Route::get('ThemCanBo','bangluongController@ThemCanBo');
+        Route::post('ThemCanBo','bangluongController@LuuCanBo');
+        Route::post('updatect_khenthuong','bangluongController@updatect_khenthuong');
 
         Route::get('get_ct','bangluongController@get_ct');
         Route::get('get_chitiet','bangluongController@get_chitiet');

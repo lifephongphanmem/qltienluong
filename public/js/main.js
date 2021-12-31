@@ -9,7 +9,7 @@ $(function () {
     //alert(url);
     i = url.indexOf('?');
     if (i > 0) {
-        url = url.substring(0, i-1);
+        url = url.substring(0, i);
     }
 
     i = url.indexOf('maso');
@@ -17,19 +17,17 @@ $(function () {
         url = url.substring(0, i-1);
     }
 
-    // var j = url.indexOf('create');
-    // if (j > 0) {
-    //     url = url.substring(0, j-1);
-    // }
-
     i = url.indexOf('create');
     if (i > 0) {
         url = url.substring(0, i - 1) + '/danh_sach';
     }
 
-
-
     i = url.indexOf('ma_so');
+    if (i > 0) {
+        url = url.substring(0, i-1);
+    }
+
+    i = url.indexOf('ThemCanBo');
     if (i > 0) {
         url = url.substring(0, i-1);
     }

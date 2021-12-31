@@ -41,7 +41,7 @@
                 </div>
                 <div class="portlet-body form-horizontal">
 
-                    <table id="sample_3" class="table table-hover table-striped table-bordered" style="min-height: 230px">
+                    <table id="sample_4" class="table table-hover table-striped table-bordered" style="min-height: 230px">
                         <thead>
                             <tr>
                                 <th class="text-center" style="width: 5%">STT</th>

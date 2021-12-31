@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\chitieubienche;
 use App\dmphanloaicongtac;
 use App\dmphanloaict;
+use App\dmphucap_donvi;
 use App\dutoanluong;
 use App\hosocanbo;
 use Illuminate\Http\Request;
@@ -54,50 +55,78 @@ class chitieubiencheController extends Controller
         die($model);
     }
 
-    function store(Request $request)
+    function create(Request $request)
     {
-        $result = array(
-            'status' => 'fail',
-            'message' => 'error',
-        );
-        if (!Session::has('admin')) {
-            $result = array(
-                'status' => 'fail',
-                'message' => 'permission denied',
-            );
-            die(json_encode($result));
-        }
+        if (Session::has('admin')) {
+            $inputs = $request->all();
 
-        $inputs = $request->all();
-        $inputs['soluongduocgiao'] = chkDbl($inputs['soluongduocgiao']);
-        //$inputs['soluongbienche'] = chkDbl($inputs['soluongbienche']);
-        //$inputs['soluongkhongchuyentrach'] = chkDbl($inputs['soluongkhongchuyentrach']);
-        //$inputs['soluonguyvien'] = chkDbl($inputs['soluonguyvien']);
-        //$inputs['soluongdaibieuhdnd'] = chkDbl($inputs['soluongdaibieuhdnd']);
-        if ($inputs['id'] == 'ADD') {
-            $inputs['madv'] = session('admin')->madv;
-            //chưa bắt trùng nam + mact + madv
-            $chk = chitieubienche::where('nam',$inputs['nam'])->where('mact',$inputs['mact'])->where('madv',$inputs['madv'])->first();
-            if(count($chk) > 0){
-                $result = array(
-                    'message' => 'Đã tồn tại chỉ tiêu biên chế này.',
-                    'status' => 'error',
-                );
-                die(json_encode($result));
+            $inputs['id'] = isset($inputs['id']) ? $inputs['id'] : -1;
+            $model = chitieubienche::where('id', $inputs['id'])->first();
+            $a_plct = [];
+            //tính lại lọc plct để tránh chọn lại các plct đã có trong chỉ tiêu
+            //chú ý plct khi chỉnh sửa
+
+            $model_pc = dmphucap_donvi::where('madv', \session('admin')->madv)
+                ->wherenotin('mapc',['hesott'])->get();
+            $model_nhomct = dmphanloaicongtac::select('macongtac', 'tencongtac')->get();
+
+            //dd($model);
+            if($model==null) {
+                $madv = session('admin')->madv;
+                $nam = $inputs['nam'];
+                $model_tenct = dmphanloaict::select('tenct', 'macongtac', 'mact')
+                    ->wherenotin('mact', function ($query) use ($madv, $nam) {
+                        $query->select('mact')->from('chitieubienche')
+                            ->where('madv', $madv)->where('nam', $nam)->get();
+                    })->get();
+                $model = new chitieubienche();
+                $model->id = -1;
+                $model->nam = $inputs['nam'];
+                $model->mact_tuyenthem = $model_tenct->first()->mact;
+                $model->mact = $model_tenct->first()->mact;
+            }else {
+                $id = $inputs['id'];
+                $madv = $model->madv;
+                $nam = $model->nam;
+                $model_tenct = dmphanloaict::select('tenct', 'macongtac', 'mact')
+                    ->wherenotin('mact', function ($query) use ($id, $madv, $nam) {
+                        $query->select('mact')->from('chitieubienche')
+                            ->where('madv', $madv)->where('nam', $nam)
+                            ->where('id', '<>', $id)->get();
+                    })->get();
             }
+            return view('manage.chitieubienche.create')
+                ->with('furl', '/nghiep_vu/chi_tieu/')
+                ->with('model', $model)
+                ->with('model_pc',$model_pc->sortby('stt'))
+                ->with('model_nhomct', $model_nhomct)
+                ->with('model_tenct', $model_tenct)
+                ->with('pageTitle', 'Thông tin chỉ tiêu biên chế');
 
-            unset($inputs['id']);
-            chitieubienche::create($inputs);
-        } else {
-            //unset($inputs['id']);
-            chitieubienche::find($inputs['id'])->update($inputs);
-        }
-        $result['message'] = "Thêm mới thành công.";
-        $result['status'] = 'success';
-        die(json_encode($result));
+
+        } else
+            return view('errors.notlogin');
     }
 
-
+    function store(Request $request){
+        if (!Session::has('admin')) {
+            return view('errors.notlogin');
+        }
+        $inputs = $request->all();
+        $inputs['soluongduocgiao'] = chkDbl($inputs['soluongduocgiao']);
+        $inputs['soluongbienche'] = chkDbl($inputs['soluongbienche']);
+        $inputs['soluongtuyenthem'] = chkDbl($inputs['soluongtuyenthem']);
+        $inputs['madv'] = session('admin')->madv;
+        //dd($inputs);
+        $model = chitieubienche::where('id', $inputs['id'])->first();
+        if($model == null){
+            unset($inputs['id']);
+            chitieubienche::create($inputs);
+        }else{
+            $model->update($inputs);
+        }
+        return redirect('/nghiep_vu/chi_tieu/danh_sach?namct='.$inputs['nam']);
+    }
 
     function destroy($id){
         if (Session::has('admin')) {

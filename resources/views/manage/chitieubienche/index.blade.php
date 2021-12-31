@@ -36,7 +36,7 @@
                     </div>
                     <div class="actions">
                         @if($inputs['trangthai'])
-                            <button type="button" id="_btnadd" class="btn btn-default btn-xs" onclick="add()"><i class="fa fa-plus"></i>&nbsp;Thêm mới</button>
+                            <a href="{{url($furl.'create?nam='.$inputs['namct'])}}" class="btn btn-default btn-xs"><i class="fa fa-plus"></i>&nbsp;Thêm mới</a>
                         @endif
                     </div>
                 </div>
@@ -47,18 +47,18 @@
                             <div class="col-md-3">
                                 {!! Form::select('namct', getNam(), $inputs['namct'], array('id' => 'namct', 'class' => 'form-control'))!!}
                             </div>
-
                         </div>
                     </div>
 
-                    <table id="sample_3" class="table table-hover table-striped table-bordered" style="min-height: 230px">
+                    <table id="sample_4" class="table table-hover table-striped table-bordered" style="min-height: 230px">
                         <thead>
                             <tr>
                                 <th class="text-center" style="width: 5%">STT</th>
-                                <th class="text-center">Năm được giao</th>
+                                <th class="text-center">Năm được<br>giao</th>
                                 <th class="text-center">Lĩnh vực công tác</th>
                                 <th class="text-center">Phân loại công tác</th>
-                                <th class="text-center">Số lượng biên chế</br>được giao</th>
+                                <th class="text-center">Số lượng<br>được giao</th>
+                                <th class="text-center">Số lượng<br>tuyển thêm</th>
                                 <th class="text-center">Thao tác</th>
                             </tr>
                         </thead>
@@ -71,10 +71,11 @@
                                     <td>{{isset($m_lv[$value->linhvuchoatdong])? $m_lv[$value->linhvuchoatdong] : ''}}</td>
                                     <td>{{$value->tenct}}</td>
                                     <td class="text-center">{{$value->soluongduocgiao}}</td>
+                                    <td class="text-center">{{$value->soluongtuyenthem}}</td>
                                     <td>
                                         @if($inputs['trangthai'])
-                                            <button type="button" onclick="edit({{$value->id}})" class="btn btn-default btn-xs mbs">
-                                                <i class="fa fa-edit"></i>&nbsp;Sửa</button>
+                                            <a href="{{url($furl.'create?id='.$value->id)}}" class="btn btn-default btn-xs mbs">
+                                                <i class="fa fa-edit"></i>&nbsp;Sửa</a>
                                             <button type="button" onclick="cfDel('{{$furl.'del/'.$value->id}}')" class="btn btn-danger btn-xs mbs" data-target="#delete-modal-confirm" data-toggle="modal">
                                                 <i class="fa fa-trash-o"></i>&nbsp;Xóa</button>
                                         @endif

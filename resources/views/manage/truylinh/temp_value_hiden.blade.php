@@ -1,11 +1,4 @@
-<?php
-/**
- * Created by PhpStorm.
- * User: Admin
- * Date: 05/04/2019
- * Time: 11:13 AM
- */
-        ?>
+
 <input type="hidden" id="trangthai" name="trangthai" value="{{$inputs['trangthai']}}"/>
 <input type="hidden" id="macanbo" name="macanbo" value="{{$model->macanbo}}"/>
 <input type="hidden" id="tencanbo" name="tencanbo" value="{{$model->tencanbo}}"/>

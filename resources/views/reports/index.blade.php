@@ -8,8 +8,15 @@
         ?>
 @extends('main')
 
-@section('content')
+@section('custom-style')
+    <link rel="stylesheet" type="text/css" href="{{url('assets/global/plugins/select2/select2.css')}}"/>
+@stop
 
+@section('custom-script')
+    <script type="text/javascript" src="{{url('assets/global/plugins/select2/select2.min.js')}}"></script>
+@stop
+
+@section('content')
     <div class="row">
         <div class="col-md-12">
             <!-- BEGIN EXAMPLE TABLE PORTLET-->
@@ -148,26 +155,41 @@
             </div>
             <div class="modal-body">
                 <div class="form-horizontal">
-
                     <div class="form-group">
                         <label class="col-md-4 control-label"> Từ tháng<span class="require">*</span></label>
                         <div class="col-md-8">
-                            {!! Form::select('tuthang',getThang(),'01',array('id' => 'tuthang', 'class' => 'form-control'))!!}
+                            {!! Form::select('tuthang',getThang(),'01',array('id' => 'tuthang', 'class' => 'form-control select2me'))!!}
                         </div>
                     </div>
-
 
                     <div class="form-group">
                         <label class="col-md-4 control-label"> Đến tháng<span class="require">*</span></label>
                         <div class="col-md-8">
-                            {!! Form::select('denthang',getThang(),'12',array('id' => 'denthang', 'class' => 'form-control'))!!}
+                            {!! Form::select('denthang',getThang(),'12',array('id' => 'denthang', 'class' => 'form-control select2me'))!!}
                         </div>
                     </div>
 
                     <div class="form-group">
                         <label class="col-md-4 control-label"> Năm<span class="require">*</span></label>
                         <div class="col-md-8">
-                            {!! Form::select('tunam',getNam(),date('Y'),array('id' => 'tunam', 'class' => 'form-control'))!!}
+                            {!! Form::select('tunam',getNam(),date('Y'),array('id' => 'tunam', 'class' => 'form-control select2me'))!!}
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-md-4 control-label"> Phân loại công tác<span class="require">*</span></label>
+                        <div class="col-md-8">
+                            <select class="form-control select2me" name="mact" id="mact">
+                                <option value="">-- Tất cả các phân loại công tác --</option>
+                                @foreach($model_nhomct as $kieuct)
+                                    <optgroup label="{{$kieuct->tencongtac}}">
+                                        <?php $mode_ct=$model_tenct->where('macongtac',$kieuct->macongtac); ?>
+                                        @foreach($mode_ct as $ct)
+                                            <option value="{{$ct->mact}}">{{$ct->tenct}}</option>
+                                        @endforeach
+                                    </optgroup>
+                                @endforeach
+                            </select>
                         </div>
                     </div>
                 </div>

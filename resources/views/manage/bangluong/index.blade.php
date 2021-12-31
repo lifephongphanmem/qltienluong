@@ -85,7 +85,7 @@
 
                     </div>
 
-                    <table id="sample_3" class="table table-hover table-striped table-bordered" style="min-height: 230px">
+                    <table id="sample_4" class="table table-hover table-striped table-bordered" style="min-height: 230px">
                         <thead>
                             <tr>
                                 <th class="text-center" style="width: 5%">STT</th>
@@ -116,16 +116,25 @@
                                                     <ul class="dropdown-menu" style="margin-top: 0px;position: static">
                                                         <li>
                                                             <button onclick="capnhat('{{$value->mabl}}')" style="border: none;padding-top: 0px;padding-bottom: 0px;" class="btn btn-default" data-target="#capnhat-modal-confirm" data-toggle="modal">
-                                                                <i class="fa fa-refresh"></i>&nbsp; Cập nhật lương</button>
+                                                                <i class="fa fa-caret-right"></i>Cập nhật lương</button>
                                                         </li>
                                                         <li>
                                                             <button onclick="trichnop('{{$value->mabl}}')" style="border: none;padding-top: 0px;padding-bottom: 0px;" class="btn btn-default" data-target="#trichnop-modal-confirm" data-toggle="modal">
-                                                                <i class="fa fa-list-alt"></i>&nbsp; Trích nộp lương</button>
+                                                                <i class="fa fa-caret-right"></i>Trích nộp lương</button>
                                                         </li>
                                                         <li>
                                                             <button onclick="capnhat_nkp('{{$value->mabl}}', '{{$value->manguonkp}}')" style="border: none;padding-top: 0px;padding-bottom: 0px;" class="btn btn-default" data-target="#capnhat_nkp-modal" data-toggle="modal">
-                                                                <i class="fa fa-refresh"></i>&nbsp; Cập nhật nguồn kinh phí</button>
+                                                                <i class="fa fa-caret-right"></i>Cập nhật nguồn kinh phí</button>
                                                         </li>
+                                                        <li>
+                                                            <button onclick="capnhat_khenthuong('{{$value->mabl}}')" style="border: none;padding-top: 0px;padding-bottom: 0px;" class="btn btn-default" data-target="#capnhat_nkp-modal" data-toggle="modal">
+                                                                <i class="fa fa-caret-right"></i>Khen thưởng / Giảm trừ lương</button>
+                                                        </li>
+                                                        <li>
+                                                            <a href="{{url($inputs['furl'].'ThemCanBo?mabl='.$value->mabl)}}" style="border: none;padding-top: 0px;padding-bottom: 0px;" class="btn-default">
+                                                                <i class="fa fa-caret-right"></i>Thêm cán bộ</a>
+                                                        </li>
+
                                                     </ul>
                                                 </div>
 
@@ -149,12 +158,12 @@
 {{--                                            @endif--}}
 
                                             <button type="button" onclick="edit('{{$value->mabl}}','{{$value->phanloai}}')" class="btn btn-default btn-xs mbs">
-                                                <i class="fa fa-edit"></i>&nbsp; Sửa</button>
+                                                <i class="fa fa-edit"></i>&nbsp;Sửa</button>
 
                                             <a href="{{url($inputs['furl'].'bang_luong?mabl='.$value->mabl.'&mapb=')}}" class="btn btn-default btn-xs mbs">
-                                                <i class="fa fa-th-list"></i>&nbsp; Chi tiết</a>
+                                                <i class="fa fa-th-list"></i>&nbsp;Chi tiết</a>
                                             <button type="button" onclick="cfDel('{{$inputs['furl'].'del/'.$value->id}}')" class="btn btn-danger btn-xs mbs" data-target="#delete-modal-confirm" data-toggle="modal">
-                                                <i class="fa fa-trash-o"></i>&nbsp; Xóa</button>
+                                                <i class="fa fa-trash-o"></i>&nbsp;Xóa</button>
                                         @else
                                             @if($value->phanloai == 'BANGLUONG')
                                                 <button type="button" onclick="inbl('{{$value->mabl}}','{{$value->thang}}','{{$value->nam}}')" class="btn btn-default btn-xs mbs">
@@ -204,6 +213,10 @@
         function capnhat_nkp(mabl,manguonkp){
             $('#frmcapnhat_nkp').find("[name='mabl']").val(mabl);
             $('#frmcapnhat_nkp').find("[id='manguonkp']").val(manguonkp).trigger('change');
+        }
+
+        function capnhat_khenthuong(mabl){
+            $('#frm_khenthuong').find("[name='mabl']").val(mabl);
         }
 
         function trichnop(mabl){

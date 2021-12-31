@@ -182,9 +182,7 @@ class dutoanluongController extends Controller
             }
             $inputs['luongcoban'] = getDbl($inputs['luongcoban']);
             $a_congtac = array_column(dmphanloaict::all()->toArray(), 'macongtac', 'mact');
-            $a_baohiem = dmphanloaicongtac_baohiem::where('mact','1561606077')
-                ->where('madv', session('admin')->madv)->first();
-            //dd($a_baohiem);
+
             $gen = getGeneralConfigs();
             $masodv = session('admin')->madv . '_' . getdate()[0];
             //dd($inputs);
@@ -382,6 +380,8 @@ class dutoanluongController extends Controller
 //                    $m_tnn[$key]['thang_tnn'] = $inputs['thang'];
 //                }
             }
+
+
             //dd($m_tnn);
             //bắt đầu tính lương
             //cán bộ đã nghỉ hưu thì các thông tin # bỏ qua
@@ -395,6 +395,56 @@ class dutoanluongController extends Controller
             $a_data_nl = array();
             $a_danghihuu = array();
             $m_cb_goc = $m_cb; //lưu bản gốc để tính riêng nâng thâm niên nghề
+
+
+            //dự toán cho cán bộ chưa tuyển
+            $m_chitieu = chitieubienche::select(array_merge(array('soluongtuyenthem', 'mact', 'mact_tuyenthem'), getColTongHop()))
+                ->where('madv', session('admin')->madv)
+                ->where('nam', $inputs['namdt'])->get();
+
+            $a_baohiem = dmphanloaicongtac_baohiem::wherein('mact',array_column($m_chitieu->toarray(),'mact'))
+                ->where('madv', session('admin')->madv)->get()->keyBy('mact')->toarray();
+            $a_chitieu = $m_chitieu->keyBy('mact')->toarray();
+
+            foreach ($a_chitieu as $key=>$val) {
+                if (chkDbl($val['soluongtuyenthem']) <= 0) {
+                    continue;
+                }
+                $baohiem = $a_baohiem[$val['mact']];
+                if (isset($inputs['baohiem'])) {
+                    $a_chitieu[$key]['bhxh_dv'] = floatval($baohiem['bhxh_dv']) / 100;
+                    $a_chitieu[$key]['bhyt_dv'] = floatval($baohiem['bhyt_dv']) / 100;
+                    $a_chitieu[$key]['kpcd_dv'] = floatval($baohiem['kpcd_dv']) / 100;
+                    $a_chitieu[$key]['bhtn_dv'] = floatval($baohiem['bhtn_dv']) / 100;
+                } else {
+                    $a_chitieu[$key]['bhxh_dv'] = 0;
+                    $a_chitieu[$key]['bhyt_dv'] = 0;
+                    $a_chitieu[$key]['kpcd_dv'] = 0;
+                    $a_chitieu[$key]['bhtn_dv'] = 0;
+                }
+                $a_chitieu[$key]['stt'] = 999;
+                $a_chitieu[$key]['msngbac'] = '';
+                $a_chitieu[$key]['macanbo'] = $val['mact'] . '_' . $val['soluongtuyenthem'];
+                $a_chitieu[$key]['macvcq'] = '';
+                $a_chitieu[$key]['mapb'] = '';
+                $a_chitieu[$key]['theodoi'] = '1';
+                $a_chitieu[$key]['masodv'] = $masodv;
+                $a_chitieu[$key]['tencanbo'] = 'Cán bộ chưa tuyển';
+                $a_chitieu[$key]['congtac'] = 'CONGTAC';
+                $a_chitieu[$key]['macongtac'] = $a_congtac[$val['mact']];
+                $a_chitieu[$key]['congtac'] = 'CONGTAC';
+                $a_chitieu[$key]['ngaybc'] = null;
+                $a_chitieu[$key]['mact'] = $a_chitieu[$key]['mact_tuyenthem'];
+                foreach ($a_pc as $pc) {
+                    $a_chitieu[$key][$pc['mapc']] = $val[$pc['mapc']] * chkDbl($val['soluongtuyenthem']);
+                }
+                $a_chitieu[$key] = $this->getHeSoPc($a_pc, $a_chitieu[$key], $inputs['luongcoban']);
+//                $a_col = ['id', 'madv','linhvuchoatdong','soluongduocgiao','soluongbienche','soluongkhongchuyentrach',
+//                    'soluonguyvien','soluongdaibieuhdnd','soluongtuyenthem','ghichu','mact_tuyenthem'];
+//                $a_chitieu[$key] = unset_key($a_chitieu[$key], $a_col);
+                $m_cb[$key] = $a_chitieu[$key];
+            }
+
             for ($i = 0; $i < count($a_thang); $i++) {
                 $a_nh = a_getelement($m_nh, array('thang_ns' => $a_thang[$i]['thang']));
                 if (count($a_nh) > 0) { //
@@ -513,32 +563,28 @@ class dutoanluongController extends Controller
                 $a_data_nl[] = $a_goc;
             }
 
+            //Lưu dữ liệu
             $a_col = array('bac', 'bhxh_dv', 'bhtn_dv', 'kpcd_dv', 'bhyt_dv', 'gioitinh', 'nam_nb', 'nam_ns',
-                //'thang_nb', 'thang_ns', 'thang_tnn', 'ngayden', 'ngaysinh', 'tnndenngay', 'pcctp', 'st_pcctp',
                 'thang_nb', 'thang_ns', 'thang_tnn', 'ngayden', 'ngaysinh', 'tnndenngay',
-                'ngaytu','tnntungay','nam_tnn', 'nam_hh', 'thang_hh','ngaybc', 'ngayvao');
+                'ngaytu','tnntungay','nam_tnn', 'nam_hh', 'thang_hh','ngaybc', 'ngayvao',
+                'soluongtuyenthem','mact_tuyenthem',);
             $a_data_nl = unset_key($a_data_nl, $a_col);
             $a_data = unset_key($a_data, $a_col);
-            //dd($a_data_nl);
+            //dd($a_data);
             foreach (array_chunk($a_data_nl, 100) as $data) {
                 dutoanluong_nangluong::insert($data);
             }
 
-            foreach (array_chunk($a_data, 100) as $data) {
+            foreach (array_chunk($a_data, 50) as $data) {
                 dutoanluong_bangluong::insert($data);
             }
+
+            //tổng hợp chi tiết dự toán
             $m_data = a_split($a_data, array('mact'));
             $m_data = a_unique($m_data);
-
             $luongnb = 0;
             $luonghs = 0;
             $luongbh = 0;
-            //lấy chỉ tiêu biên chế trong năm để tính
-            $a_chitieu = chitieubienche::where('madv', session('admin')->madv)->where('nam', $inputs['namdt'])->get()->keyBy('mact')->toarray();
-            //$maphanloai = dmdonvi::where('madv', session('admin')->madv)->first()->maphanloai;
-            //$heso = $maphanloai == 'MAMNON' ? 2.1 : 2.34;
-            $heso = 2.34;
-            $a_tuyenthem = array();
             for ($i = 0; $i < count($m_data); $i++) {
                 $canbo = a_getelement($m_cb, array('mact' => $m_data[$i]['mact']));
                 $dutoan = a_getelement($a_data, array('mact' => $m_data[$i]['mact']));
@@ -547,33 +593,6 @@ class dutoanluongController extends Controller
                 $m_data[$i]['canbo_congtac'] = $soluong;
                 $m_data[$i]['canbo_dutoan'] = 0;
                 $m_data[$i]['luongbh'] = $m_data[$i]['luongnb'] = 0;
-                if (isset($a_chitieu[$m_data[$i]['mact']])) {
-                    $chitieu = $a_chitieu[$m_data[$i]['mact']];
-                    $soluongduocgiao = chkDbl($chitieu['soluongduocgiao']);
-                    if ($soluongduocgiao > $soluong) {
-                        $m_data[$i]['canbo_dutoan'] = $soluongduocgiao - $soluong;
-                        $luongtt = $m_data[$i]['canbo_dutoan'] * $inputs['luongcoban'] * $heso;
-                        if (isset($inputs['baohiem'])) {
-                            $bhxh_dv = round($a_baohiem['bhxh_dv'] * $luongtt / 100, 0);
-                            $bhtn_dv = round($a_baohiem['bhtn_dv'] * $luongtt / 100, 0);
-                            $kpcd_dv = round($a_baohiem['kpcd_dv'] * $luongtt / 100, 0);
-                            $bhyt_dv = round($a_baohiem['bhyt_dv'] * $luongtt / 100, 0);
-                            $ttbh_dv = $bhxh_dv + $bhtn_dv + $kpcd_dv + $bhyt_dv;
-                        } else {
-                            $ttbh_dv = $bhxh_dv = $bhtn_dv = $kpcd_dv = $bhyt_dv = 0;
-                        }
-
-                        $a_tuyenthem[] = array('mact' => '1561606077', 'heso' => $heso * $m_data[$i]['canbo_dutoan'],
-                            'st_heso' => $luongtt, 'tonghs' => $heso * $m_data[$i]['canbo_dutoan'],
-                            'macanbo' => $masodv, 'tencanbo' => 'Cán bộ chưa tuyển', 'masodv' => $masodv,
-                            'ttl' => $luongtt, 'luongtn' => $luongtt, 'stbhxh_dv' => $bhxh_dv,
-                            'stbhtn_dv' => $bhtn_dv, 'stkpcd_dv' => $kpcd_dv, 'stbhyt_dv' => $bhyt_dv, 'ttbh_dv' => $ttbh_dv,
-                            'luongcoban' => $inputs['luongcoban'], 'congtac' => 'CONGTAC');
-
-                        $m_data[$i]['luongnb'] = $luongtt * 12;
-                        $m_data[$i]['luongbh'] = $ttbh_dv * 12;
-                    }
-                }
                 $m_data[$i]['luongnb_dt'] = (array_sum(array_column($dutoan, 'heso')) + array_sum(array_column($dutoan, 'vuotkhung'))) * $inputs['luongcoban'];
                 $luongnb += ($m_data[$i]['luongnb_dt'] + $m_data[$i]['luongnb']);
                 //dùng luongtn vì các phụ cấp tính theo số tiền đã cộng vào luongtn (ko tính vào hệ số)
@@ -582,21 +601,6 @@ class dutoanluongController extends Controller
                 $m_data[$i]['luongbh_dt'] = array_sum(array_column($dutoan, 'ttbh_dv'));
                 $luongbh += $m_data[$i]['luongbh_dt'] + $m_data[$i]['luongbh'];
 
-            }
-            //dd($m_data);
-            if(count($a_tuyenthem)>0){//đưa cán bộ tuyển thêm vào danh sách bảng lương
-                $a_data_tt = array();
-                for ($i = 0; $i < count($a_thang); $i++){
-                    for ($j = 0; $j < count($a_tuyenthem); $j++){
-                        $a_tuyenthem[$j]['thang'] = $a_thang[$i]['thang'];
-                        $a_tuyenthem[$j]['nam'] = $a_thang[$i]['nam'];
-                        $a_data_tt[] = $a_tuyenthem[$j];
-                    }
-                }
-                //dd($a_data_tt);
-                foreach (array_chunk($a_data_tt, 100) as $data) {
-                    dutoanluong_bangluong::insert($data);
-                }
             }
             dutoanluong_chitiet::insert($m_data);
             //dd($m_data);

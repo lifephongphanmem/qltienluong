@@ -338,8 +338,143 @@
 </div>
 {!! Form::close() !!}
 
-{!! Form::open(['url'=>'/chuc_nang/bang_luong/cap_nhat_nkp','method'=>'get', 'files'=>true, 'id' => 'frmcapnhat_nkp']) !!}
+<!--Modal thông tin tùy chọn in bảng lương -->
 <div id="capnhat_nkp-modal" tabindex="-1" role="dialog" aria-hidden="true" class="modal fade">
+    <div class="modal-lg modal-dialog modal-content">
+        <div class="modal-header modal-header-primary">
+            <button type="button" data-dismiss="modal" aria-hidden="true" class="close">&times;</button>
+            <h4 id="hd-inbl" class="modal-title">Cập nhật thông tin bảng lương</h4>
+        </div>
+
+        <div class="modal-body">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="tabbable tabbable-custom tabbable-noborder tabbable-reversed">
+                        <ul class="nav nav-tabs">
+                            <li class="active">
+                                <a href="#tab_0" data-toggle="tab" aria-expanded="true">
+                                    Nguồn kinh phí </a>
+                            </li>
+                            <li>
+                                <a href="#tab_1" data-toggle="tab" aria-expanded="true">
+                                    Khen thưởng, giảm trừ </a>
+                            </li>
+                            <!--li>
+                                <a href="#tab_1" data-toggle="tab" aria-expanded="true">
+                                    Sự nghiệp </a>
+                            </li>
+
+                            <li>
+                                <a href="#tab_2" data-toggle="tab" aria-expanded="true">
+                                    Nguồn kinh phí </a>
+                            </li-->
+                        </ul>
+                        <div class="tab-content">
+                            <!-- phân loại công tác -->
+                            <div class="tab-pane active" id="tab_0">
+                                <div class="portlet box blue">
+                                    <div class="portlet-title">
+                                        <div class="caption"></div>
+                                        <div class="tools"></div>
+                                    </div>
+                                    <div class="portlet-body form">
+                                        <!-- BEGIN FORM-->
+                                        {!! Form::open(['url'=>'/chuc_nang/bang_luong/cap_nhat_nkp','method'=>'get', 'files'=>true, 'id' => 'frmcapnhat_nkp']) !!}
+                                        <div class="form-body">
+                                            <div class="form-horizontal">
+                                                <div class="modal-body">
+                                                    <div class="row">
+                                                        <div class="col-md-12">
+                                                            <label class="control-label">Nguồn kinh phí</label>
+                                                            {!!Form::select('manguonkp',$m_nguonkp, null, array('id' => 'manguonkp','class' => 'form-control'))!!}
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <input type="hidden" id="mabl" name="mabl"/>
+                                            </div>
+                                        </div>
+                                        <div class="form-actions">
+                                            <div class="row text-center">
+                                                <div class="col-md-12">
+                                                    <button type="submit" class="btn default">Hoàn thành</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    {!! Form::close() !!}
+                                        <!-- END FORM-->
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Ngày công lam việc -->
+                            <div class="tab-pane" id="tab_1">
+                                <div class="portlet box blue">
+                                    <div class="portlet-title">
+                                        <div class="caption"></div>
+                                        <div class="tools"></div>
+                                    </div>
+                                    <div class="portlet-body form">
+                                        <!-- BEGIN FORM-->
+                                    {!! Form::open(['url'=>'/chuc_nang/bang_luong/updatect_khenthuong', 'method' => 'POST', 'id' => 'frm_khenthuong', 'class'=>'horizontal-form']) !!}
+                                        <div class="form-body">
+                                            <div class="form-horizontal">
+                                                <div class="row">
+                                                    <div class="col-md-12">
+                                                        <label class="control-label">Phân loại công tác</label>
+                                                        <select class="form-control select2me" name="mact[]" id="mact" multiple required="required">
+                                                            <option selected value="ALL">Tất cả phân loại công tác</option>
+                                                            @foreach($model_nhomct as $kieuct)
+                                                                <optgroup label="{{$kieuct->tencongtac}}">
+                                                                    <?php $mode_ct=$model_tenct->where('macongtac',$kieuct->macongtac); ?>
+                                                                    @foreach($mode_ct as $ct)
+                                                                        <option value="{{$ct->mact}}">{{$ct->tenct}}</option>
+                                                                    @endforeach
+                                                                </optgroup>
+                                                            @endforeach
+                                                        </select>
+                                                    </div>
+                                                </div>
+
+                                                <div class="row">
+                                                    <div class="col-md-6">
+                                                        <label class="control-label">Khen thưởng</label>
+                                                        {!!Form::text('tienthuong', null, array('id' => 'tienthuong','class' => 'form-control tienluong text-right', 'data-mask'=>'fdecimal'))!!}
+                                                    </div>
+
+                                                    <div class="col-md-6">
+                                                        <label class="control-label">Giảm trừ lương </label>
+                                                        {!!Form::text('giaml', null, array('id' => 'giaml','class' => 'form-control tienluong text-right', 'data-mask'=>'fdecimal'))!!}
+                                                    </div>
+                                                </div>
+                                                <input type="hidden" id="mabl" name="mabl"/>
+                                            </div>
+                                        </div>
+                                        <div class="form-actions">
+                                            <div class="row text-center">
+                                                <div class="col-md-12">
+                                                    <button type="submit" class="btn default">Hoàn thành</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    {!! Form::close() !!}
+                                        <!-- END FORM-->
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer"></div>
+    </div>
+</div>
+
+
+{!! Form::open(['url'=>'/chuc_nang/bang_luong/cap_nhat_nkp','method'=>'get', 'files'=>true, 'id' => 'frmcapnhat_nkp']) !!}
+<div id="capnhat_nkp-modal1" tabindex="-1" role="dialog" aria-hidden="true" class="modal fade">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header modal-header-primary">
