@@ -322,7 +322,7 @@ function getNam($all = false){
     if($all){
         $a_kq['ALL'] = '--Tất cả các năm--';
     }
-    for($i=date('Y') - 2; $i <= date('Y') + 2; $i++){
+    for($i=date('Y') - 4; $i <= date('Y') + 2; $i++){
         $a_kq[$i]=$i;
     }
     return $a_kq;

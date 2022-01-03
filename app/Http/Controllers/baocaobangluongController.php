@@ -2696,7 +2696,7 @@ class baocaobangluongController extends Controller
                 $ct->tongtienluong = ($ct->tonghs + $ct->stbhxh_dv+$ct->stbhyt_dv+$ct->stkpcd_dv+ $ct->stbhtn_dv)*$ct->luongcoban;
 
             }
-            //dd($model_th->toarray());
+            //dd($model_th->sortBy('tencongtac')->toarray());
             $model = dutoanluong_bangluong::join('dutoanluong','dutoanluong.masodv','dutoanluong_bangluong.masodv')
                 ->Select('dutoanluong.madv','macongtac','mact',DB::raw('avg(dutoanluong_bangluong.luongcoban) as luongcoban'),DB::raw('sum(heso) as heso'),DB::raw('sum(tonghs-heso) as tongpc'),DB::raw('sum(tonghs) as tonghs'),DB::raw('sum(hesobl) as hesobl')
                     ,DB::raw('sum(hesott) as hesott'),DB::raw('sum(hesopc) as hesopc'),DB::raw('sum(vuotkhung) as vuotkhung'),DB::raw('sum(pcct) as pcct'),DB::raw('sum(pckct) as pckct'),
@@ -2998,28 +2998,28 @@ class baocaobangluongController extends Controller
             ->where('linhvuchoatdong','<>','LVCT');
             //->groupby('tencongtac');
             //dd($model_hcsn->toarray());
-            $a_plct = dmphanloaicongtac::wherein('macongtac', array_column($model_th->toarray(),'macongtac'))->get();
+            $a_plct = dmphanloaicongtac::wherein('macongtac', array_column($model_th->toarray(),'macongtac'))->orderby('tencongtac')->get();
             return view('reports.dutoanluong.Huyen.dutoanCR')
                 ->with('model_dutoan',$model_dutoan)
-                ->with('model_th',$model_th)
+                ->with('model_th',$model_th->sortBy('tencongtac'))
                 ->with('model_donvi',$model_donvi)
                 ->with('model_bienche_dutoan',$model_bienche_dutoan)
                 ->with('model_bienche_truoc',$model_bienche_truoc)
                 ->with('thongtin',$thongtin)
                 ->with('m_dv',$m_dv)
-                ->with('model',$model)
-                ->with('modelqlnn',$modelqlnn)
-                ->with('model_hdnd',$model_hdnd)
-                ->with('model_kn',$model_kn)
-                ->with('model_uv',$model_uv)
-                ->with('model_xp',$model_xp)
+                ->with('model',$model->sortBy('tencongtac'))
+                ->with('modelqlnn',$modelqlnn->sortBy('tencongtac'))
+                ->with('model_hdnd',$model_hdnd->sortBy('tencongtac'))
+                ->with('model_kn',$model_kn->sortBy('tencongtac'))
+                ->with('model_uv',$model_uv->sortBy('tencongtac'))
+                ->with('model_xp',$model_xp->sortBy('tencongtac'))
                 ->with('model_phanloai',$model_phanloai)
                 ->with('a_phucap',$a_phucap)
                 ->with('col',$col)
                 ->with('nam',$inputs['namns'])
                 ->with('modelctbc',$modelctbc)
-                ->with('model_thbc',$model_thbc)
-                ->with('model_hcsn',$model_hcsn)
+                ->with('model_thbc',$model_thbc->sortBy('tencongtac'))
+                ->with('model_hcsn',$model_hcsn->sortBy('tencongtac'))
                 ->with('a_plct',$a_plct)
                 ->with('pageTitle','Báo cáo tổng hợp dự toán lương');
         } else
