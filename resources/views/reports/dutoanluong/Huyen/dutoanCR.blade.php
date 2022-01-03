@@ -239,7 +239,7 @@
     $model_gd = $model->where('linhvuchoatdong','GD')->sortBy('tencongtac');
     $model_gdpl = $model_gd->groupby('tenphanloai');
     //dd($model_gdpl->toarray());
-    $a_pldv = array_column($model_gd->toarray(),'maphanloai' , 'tenphanloai');
+    $a_pldv = array_column($model->where('linhvuchoatdong','GD')->toarray(),'maphanloai' , 'tenphanloai');
     $stt = 0;
     ?>
     @foreach($a_pldv as $key=>$val)
