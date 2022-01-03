@@ -192,7 +192,7 @@
 
     @foreach($a_plct as $act)
         <?php
-            $m_ct = $model_gd->where('macongtac',$act->macongtac);
+            $m_ct = $model_gd->where('macongtac',$act->macongtac)->sortBy('tencongtac');
             $model_gdT = $m_ct->groupby('tencongtac');
             $a_plcongtac = array_column($m_ct->toarray(),'mact' , 'tencongtac');
         ?>
@@ -236,7 +236,7 @@
 
 
     <?php
-    $model_gd = $model->where('linhvuchoatdong','GD');
+    $model_gd = $model->where('linhvuchoatdong','GD')->sortBy('tencongtac');
     $model_gdpl = $model_gd->groupby('tenphanloai');
     //dd($model_gdpl->toarray());
     $a_pldv = array_column($model_gd->toarray(),'maphanloai' , 'tenphanloai');

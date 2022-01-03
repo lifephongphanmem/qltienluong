@@ -3007,7 +3007,7 @@ class baocaobangluongController extends Controller
                 ->with('model_bienche_truoc',$model_bienche_truoc)
                 ->with('thongtin',$thongtin)
                 ->with('m_dv',$m_dv)
-                ->with('model',$model->sortBy('tencongtac'))
+                ->with('model',$model)
                 ->with('modelqlnn',$modelqlnn->sortBy('tencongtac'))
                 ->with('model_hdnd',$model_hdnd->sortBy('tencongtac'))
                 ->with('model_kn',$model_kn->sortBy('tencongtac'))
