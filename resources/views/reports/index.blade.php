@@ -45,6 +45,11 @@
                                        onclick="chitraluong('{{$furl.'don_vi/chitratheonkp'}}')">Tổng hợp tình hình chi trả lương theo nguồn kinh phí</a>
 
                                 </li>
+                                <li>
+                                    <a href="#" data-target="#thoaichitra-modal" data-toggle="modal" title="Dữ liệu chi trả theo tổng hợp lương tại đơn vị"
+                                       onclick="chitraluong('{{$furl.'don_vi/chitratheocb'}}')">Tổng hợp tình hình chi trả lương theo cán bộ</a>
+
+                                </li>
                                 <hr>
 
                                 <li>

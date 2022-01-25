@@ -7,6 +7,7 @@
  */
         ?>
 
+{!! Form::open(['url'=>'/chuc_nang/bang_luong/store','method'=>'post' , 'files'=>true, 'id' => 'create_bangluong']) !!}
 <div id="chitiet-modal" tabindex="-1" role="dialog" aria-hidden="true" class="modal fade">
     <div class="modal-dialog modal-lg modal-content">
         <div class="modal-header modal-header-primary">
@@ -16,140 +17,81 @@
             <div class="form-horizontal">
                 <div class="row">
                     <div class="col-md-12">
-                        <div class="tabbable tabbable-custom tabbable-noborder tabbable-reversed" id="tab_cre">
-                            <ul class="nav nav-tabs">
-                                <li class="active">
-                                    <a href="#tab_0_cre" data-toggle="tab" aria-expanded="true">
-                                        Thông tin chung </a>
-                                </li>
-                                <!--li class="" id="li_tab_1_cre">
-                                    <a href="#tab_1_cre" data-toggle="tab" aria-expanded="false">
-                                        Tạo bảng lương theo mẫu </a>
-                                </li-->
-
-                            </ul>
-                            <div class="tab-content">
-                                <!-- Thông tin chung -->
-                                <div class="tab-pane active" id="tab_0_cre">
-                                    {!! Form::open(['url'=>'/chuc_nang/bang_luong/store','method'=>'post' , 'files'=>true, 'id' => 'create_bangluong']) !!}
-                                    <div class="row">
-                                        <div class="col-md-12">
-                                            <label class="control-label"> Nội dung</label>
-                                            {!! Form::textarea('noidung',null,array('id' => 'noidung', 'class' => 'form-control','rows'=>'1'))!!}
-                                        </div>
-                                    </div>
-
-                                    <div class="row">
-                                        <div class="col-md-12">
-                                            <label class="control-label">Lĩnh vực công tác</label>
-                                            {!!Form::select('linhvuchoatdong',$m_linhvuc ,session('admin')->maphanloai == 'KVXP' ?'QLNN':session('admin')->linhvuchoatdong , array('id' => 'linhvuchoatdong','class' => 'form-control select2me'))!!}
-                                        </div>
-                                    </div>
-
-                                    <div class="row">
-                                        <div class="col-md-6">
-                                            <label class="control-label">Nguồn kinh phí</label>
-                                            {!!Form::select('manguonkp',$m_nguonkp, $inputs['manguonkp'], array('id' => 'manguonkp','class' => 'form-control'))!!}
-                                        </div>
-
-                                        <div class="col-md-6">
-                                            <label class="control-label">Mức lương cơ bản</label>
-                                            {!!Form::text('luongcoban', $inputs['luongcb'], array('id' => 'luongcoban','class' => 'form-control', 'data-mask'=>'fdecimal'))!!}
-                                        </div>
-                                    </div>
-
-                                    <div class="row">
-                                        <div class="col-md-6">
-                                            <label class="control-label">Ngày lập bảng lương</label>
-                                            <input type="date" name="ngaylap" id="ngaylap" class="form-control" value="{{date('Y-m-d')}}"/>
-
-                                        </div>
-                                        <div class="col-md-6">
-                                            <label class="control-label">Người lập bảng lương</label>
-                                            {!!Form::text('nguoilap', session('admin')->nguoilapbieu, array('id' => 'nguoilap','class' => 'form-control'))!!}
-                                        </div>
-                                    </div>
-
-                                    <div class="row">
-                                        <div class="col-md-12">
-                                            <label class="control-label">Không bao gồm các phụ cấp</label>
-                                            {!! Form::select('phucaploaitru[]',$a_phucap,null,array('id' => 'phucaploaitru','class' => 'form-control select2me','multiple'=>'multiple')) !!}
-                                        </div>
-                                    </div>
-
-                                    <div class="row">
-                                        <div class="col-md-12">
-                                            <label class="control-label">Các phụ cấp lưu theo số tiền</label>
-                                            {!! Form::select('phucapluusotien[]',$a_phucaplst,null,array('id' => 'phucapluusotien','class' => 'form-control select2me','multiple'=>'multiple')) !!}
-                                        </div>
-                                    </div>
-
-                                    <div class="row">
-                                        <div class="col-md-offset-3 col-md-9" style="margin-top: 15px">
-                                            <input name="capnhatnangluong" id="capnhatnangluong" type="checkbox">
-                                            <label for="capnhatnangluong">Cập nhật quá trình nâng lương của cán bộ</label>
-                                        </div>
-                                    </div>
-
-                                    <div class="row">
-                                        <div class="col-md-offset-3 col-md-9">
-                                            <input name="trungbangluong" id="trungbangluong" type="checkbox">
-                                            <label for="trungbangluong">Tạo nhiều bảng lương trong cùng nguồn kinh phí</label>
-                                        </div>
-                                    </div>
-
-                                    <div class="row">
-                                        <div class="col-md-offset-3 col-md-9">
-                                            <input name="thuetncn" id="thuetncn" type="checkbox" checked>
-                                            <label for="thuetncn">Tính thuế thu nhập cá nhân</label>
-                                        </div>
-                                    </div>
-
-                                    <input type="hidden" id="dinhmuc" name="dinhmuc" value="{{$inputs['dinhmuc']}}"/>
-                                    <input type="hidden" id="thang" name="thang" value="{{$inputs['thang']}}"/>
-                                    <input type="hidden" id="nam" name="nam" value="{{$inputs['nam']}}"/>
-                                    <input type="hidden" id="phantramhuong" name="phantramhuong" value="100"/>
-                                    <input type="hidden" id="id_ct" name="id_ct"/>
-                                    <input type="hidden" id="mabl" name="mabl"/>
-                                </div>
-
-                                <!-- Tùy chọn nâng cao -->
-                                <!--div class="tab-pane" id="tab_1_cre">
-                                    <table id="sample_4" class="table table-hover table-striped table-bordered">
-                                        <thead>
-                                        <tr>
-                                            <th class="text-center" style="width: 5%">STT</th>
-                                            <th class="text-center">Tháng</br>Năm</th>
-                                            <th class="text-center">Nguồn kinh phí</th>
-                                            <th class="text-center">Nội dung</th>
-                                            <th class="text-center">Thao tác</th>
-                                        </tr>
-                                        </thead>
-                                        <?php $i=1;?>
-                                        <tbody>
-                                        @foreach($model_bl as $key=>$value)
-                                            <tr>
-                                                <td class="text-center">{{$i++}}</td>
-                                                <td>{{$value->thang.'/'.$value->nam}}</td>
-                                                <td>{{isset($m_nguonkp[$value->manguonkp]) ? $m_nguonkp[$value->manguonkp] : ''}}</td>
-                                                <td>{{$value->noidung}}</td>
-                                                <td>
-                                                    <button type="button" onclick="taobl('{{$value->mabl}}')" class="btn btn-default btn-xs mbs">
-                                                        <i class="fa fa-edit"></i>&nbsp; Chọn</button>
-
-                                                    <a href="{{url($inputs['furl'].'bang_luong?mabl='.$value->mabl.'&mapb=')}}" class="btn btn-default btn-xs mbs" target="_blank">
-                                                        <i class="fa fa-th-list"></i>&nbsp; Danh sách</a>
-
-                                                </td>
-                                            </tr>
-                                        @endforeach
-                                        </tbody>
-                                    </table>
-                                </div-->
-                            </div>
-                        </div>
+                        <label class="control-label"> Nội dung</label>
+                        {!! Form::textarea('noidung',null,array('id' => 'noidung', 'class' => 'form-control','rows'=>'1'))!!}
                     </div>
                 </div>
+
+                <div class="row">
+                    <div class="col-md-4">
+                        <label class="control-label">Lĩnh vực công tác</label>
+                        {!!Form::select('linhvuchoatdong',$m_linhvuc ,session('admin')->maphanloai == 'KVXP' ?'QLNN':session('admin')->linhvuchoatdong , array('id' => 'linhvuchoatdong','class' => 'form-control select2me'))!!}
+                    </div>
+
+                    <div class="col-md-4">
+                        <label class="control-label">Nguồn kinh phí</label>
+                        {!!Form::select('manguonkp',$m_nguonkp, $inputs['manguonkp'], array('id' => 'manguonkp','class' => 'form-control'))!!}
+                    </div>
+
+                    <div class="col-md-4">
+                        <label class="control-label">Mức lương cơ bản</label>
+                        {!!Form::text('luongcoban', $inputs['luongcb'], array('id' => 'luongcoban','class' => 'form-control', 'data-mask'=>'fdecimal'))!!}
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-4">
+                        <label class="control-label">Ngày lập bảng lương</label>
+                        <input type="date" name="ngaylap" id="ngaylap" class="form-control" value="{{date('Y-m-d')}}"/>
+
+                    </div>
+                    <div class="col-md-4">
+                        <label class="control-label">Người lập bảng lương</label>
+                        {!!Form::text('nguoilap', session('admin')->nguoilapbieu, array('id' => 'nguoilap','class' => 'form-control'))!!}
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-12">
+                        <label class="control-label">Không bao gồm các phụ cấp</label>
+                        {!! Form::select('phucaploaitru[]',$a_phucap,null,array('id' => 'phucaploaitru','class' => 'form-control select2me','multiple'=>'multiple')) !!}
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-12">
+                        <label class="control-label">Các phụ cấp lưu theo số tiền</label>
+                        {!! Form::select('phucapluusotien[]',$a_phucaplst,null,array('id' => 'phucapluusotien','class' => 'form-control select2me','multiple'=>'multiple')) !!}
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-offset-3 col-md-9" style="margin-top: 15px">
+                        <input name="capnhatnangluong" id="capnhatnangluong" type="checkbox">
+                        <label for="capnhatnangluong">Cập nhật quá trình nâng lương của cán bộ</label>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-offset-3 col-md-9">
+                        <input name="trungbangluong" id="trungbangluong" type="checkbox">
+                        <label for="trungbangluong">Tạo nhiều bảng lương trong cùng nguồn kinh phí</label>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-offset-3 col-md-9">
+                        <input name="thuetncn" id="thuetncn" type="checkbox" checked>
+                        <label for="thuetncn">Tính thuế thu nhập cá nhân</label>
+                    </div>
+                </div>
+
+                <input type="hidden" id="dinhmuc" name="dinhmuc" value="{{$inputs['dinhmuc']}}"/>
+                <input type="hidden" id="thang" name="thang" value="{{$inputs['thang']}}"/>
+                <input type="hidden" id="nam" name="nam" value="{{$inputs['nam']}}"/>
+                <input type="hidden" id="phantramhuong" name="phantramhuong" value="100"/>
+                <input type="hidden" id="id_ct" name="id_ct"/>
+                <input type="hidden" id="mabl" name="mabl"/>
             </div>
         </div>
 

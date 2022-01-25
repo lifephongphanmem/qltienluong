@@ -21,11 +21,11 @@
                     <div class="tabbable tabbable-custom tabbable-noborder tabbable-reversed">
                         <ul class="nav nav-tabs">
                             <li class="active">
-                                <a href="#tab_0" data-toggle="tab" aria-expanded="true">
+                                <a href="#tab_5" data-toggle="tab" aria-expanded="true">
                                     Mẫu bảng lương </a>
                             </li>
                             <li class="">
-                                <a href="#tab_1" data-toggle="tab" aria-expanded="false">
+                                <a href="#tab_4" data-toggle="tab" aria-expanded="false">
                                     Mẫu Khánh Hòa </a>
                             </li>
                             <li class="">
@@ -40,7 +40,7 @@
                         </ul>
                         <div class="tab-content">
                             <!-- Mẫu bảng lương chung -->
-                            <div class="tab-pane active" id="tab_0">
+                            <div class="tab-pane active" id="tab_5">
                                 <div class="row">
                                     <div class="col-md-6">
                                         <div class="form-group">
@@ -107,7 +107,7 @@
                             </div>
 
                             <!-- Mẫu bảng lương khánh hòa -->
-                            <div class="tab-pane" id="tab_1">
+                            <div class="tab-pane" id="tab_4">
                                 <div class="row">
                                     <div class="col-md-6">
                                         <div class="form-group">
@@ -279,11 +279,11 @@
                                         </div>
                                     </div>
                                     {{--<div class="col-md-6">--}}
-                                        {{--<div class="form-group">--}}
-                                            {{--<button type="button" style="border-width: 0px" onclick="inblm1('/chuc_nang/bang_luong/mau04')" class="btn btn-default btn-xs mbs"--}}
-                                                    {{--title="Bảng lương của cán bộ theo nhóm/tổ công tác" data-target="#mau1-modal" data-toggle="modal">--}}
-                                                {{--<i class="fa fa-print"></i>&nbsp; Bảng lương mẫu 4</button>--}}
-                                        {{--</div>--}}
+                                    {{--<div class="form-group">--}}
+                                    {{--<button type="button" style="border-width: 0px" onclick="inblm1('/chuc_nang/bang_luong/mau04')" class="btn btn-default btn-xs mbs"--}}
+                                    {{--title="Bảng lương của cán bộ theo nhóm/tổ công tác" data-target="#mau1-modal" data-toggle="modal">--}}
+                                    {{--<i class="fa fa-print"></i>&nbsp; Bảng lương mẫu 4</button>--}}
+                                    {{--</div>--}}
                                     {{--</div>--}}
 
                                     <div class="col-md-6">

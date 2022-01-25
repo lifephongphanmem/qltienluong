@@ -159,9 +159,9 @@ class tonghopluong_donviController extends Controller
             for($i=0; $i<count($col); $i++){
                 $col_st[] ='st_'. $col[$i];
             }
-            $a_th = array_merge(array('macanbo','tencanbo','msngbac', 'mact', 'macvcq', 'mapb', 'mabl', 'manguonkp',
+            $a_th = array_merge(array('stt','macanbo','tencanbo','msngbac', 'mact', 'macvcq', 'mapb', 'mabl', 'manguonkp',
                 'luongcoban','thangtl','ngaytl' ,'congtac','stbhxh_dv','stbhyt_dv','stkpcd_dv','stbhtn_dv','tonghs',
-                'stbhxh','stbhyt','stkpcd','stbhtn','ttbh','ttbh_dv','ttl', 'giaml','ttbh_dv'),$col);
+                'stbhxh','stbhyt','stkpcd','stbhtn','ttbh','ttbh_dv','ttl', 'giaml','ttbh_dv', 'luongtn'),$col);
             $a_th = array_merge($a_th,$col_st);
             $a_ct = (new data())->getBangluong_ct_ar($thang,array_column($a_bangluong,'mabl'),$a_th)->toarray();
 
