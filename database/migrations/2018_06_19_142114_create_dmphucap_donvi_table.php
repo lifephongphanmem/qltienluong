@@ -30,6 +30,7 @@ class CreateDmphucapDonviTable extends Migration
             $table->string('congthuc')->nullable();//
             $table->string('ghichu')->nullable();
             $table->integer('stt')->default(99);
+            $table->string('baohiem_plct')->nullable();//phân loại công tác cho bảo hiểm
             $table->timestamps();
         });
     }

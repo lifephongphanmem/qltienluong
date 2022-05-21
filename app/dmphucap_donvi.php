@@ -23,6 +23,8 @@ class dmphucap_donvi extends Model
         'phanloai',
         'congthuc',
         'ghichu',
-        'madv'
+        'madv',
+        'stt',
+        'baohiem_plct',
     ];
 }
