@@ -1,15 +1,24 @@
 <?php
 
-use Illuminate\Support\Str;
+use Illuminate\Foundation\Mix;
 use Illuminate\Support\HtmlString;
 use Illuminate\Container\Container;
+use Illuminate\Support\Facades\Date;
+use Illuminate\Queue\CallQueuedClosure;
 use Illuminate\Contracts\Bus\Dispatcher;
+use Illuminate\Queue\SerializableClosure;
 use Illuminate\Contracts\Auth\Access\Gate;
+use Illuminate\Contracts\Support\Responsable;
 use Illuminate\Contracts\Routing\UrlGenerator;
+use Illuminate\Foundation\Bus\PendingDispatch;
+use Symfony\Component\HttpFoundation\Response;
+use Illuminate\Contracts\Debug\ExceptionHandler;
 use Illuminate\Contracts\Routing\ResponseFactory;
 use Illuminate\Contracts\Auth\Factory as AuthFactory;
 use Illuminate\Contracts\View\Factory as ViewFactory;
+use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Contracts\Cookie\Factory as CookieFactory;
+use Symfony\Component\Debug\Exception\FatalThrowableError;
 use Illuminate\Database\Eloquent\Factory as EloquentFactory;
 use Illuminate\Contracts\Validation\Factory as ValidationFactory;
 use Illuminate\Contracts\Broadcasting\Factory as BroadcastFactory;
@@ -18,7 +27,7 @@ if (! function_exists('abort')) {
     /**
      * Throw an HttpException with the given data.
      *
-     * @param  int     $code
+     * @param  \Symfony\Component\HttpFoundation\Response|\Illuminate\Contracts\Support\Responsable|int     $code
      * @param  string  $message
      * @param  array   $headers
      * @return void
@@ -28,7 +37,13 @@ if (! function_exists('abort')) {
      */
     function abort($code, $message = '', array $headers = [])
     {
-        return app()->abort($code, $message, $headers);
+        if ($code instanceof Response) {
+            throw new HttpResponseException($code);
+        } elseif ($code instanceof Responsable) {
+            throw new HttpResponseException($code->toResponse(request()));
+        }
+
+        app()->abort($code, $message, $headers);
     }
 }
 
@@ -78,8 +93,8 @@ if (! function_exists('action')) {
     /**
      * Generate the URL to a controller action.
      *
-     * @param  string  $name
-     * @param  array   $parameters
+     * @param  string|array  $name
+     * @param  mixed   $parameters
      * @param  bool    $absolute
      * @return string
      */
@@ -93,17 +108,17 @@ if (! function_exists('app')) {
     /**
      * Get the available container instance.
      *
-     * @param  string  $make
+     * @param  string|null  $abstract
      * @param  array   $parameters
-     * @return mixed|\Illuminate\Foundation\Application
+     * @return mixed|\Illuminate\Contracts\Foundation\Application
      */
-    function app($make = null, $parameters = [])
+    function app($abstract = null, array $parameters = [])
     {
-        if (is_null($make)) {
+        if (is_null($abstract)) {
             return Container::getInstance();
         }
 
-        return Container::getInstance()->make($make, $parameters);
+        return Container::getInstance()->make($abstract, $parameters);
     }
 }
 
@@ -125,7 +140,7 @@ if (! function_exists('asset')) {
      * Generate an asset path for the application.
      *
      * @param  string  $path
-     * @param  bool    $secure
+     * @param  bool|null  $secure
      * @return string
      */
     function asset($path, $secure = null)
@@ -145,9 +160,9 @@ if (! function_exists('auth')) {
     {
         if (is_null($guard)) {
             return app(AuthFactory::class);
-        } else {
-            return app(AuthFactory::class)->guard($guard);
         }
+
+        return app(AuthFactory::class)->guard($guard);
     }
 }
 
@@ -157,11 +172,12 @@ if (! function_exists('back')) {
      *
      * @param  int    $status
      * @param  array  $headers
+     * @param  mixed  $fallback
      * @return \Illuminate\Http\RedirectResponse
      */
-    function back($status = 302, $headers = [])
+    function back($status = 302, $headers = [], $fallback = false)
     {
-        return app('redirect')->back($status, $headers);
+        return app('redirect')->back($status, $headers, $fallback);
     }
 }
 
@@ -180,15 +196,15 @@ if (! function_exists('base_path')) {
 
 if (! function_exists('bcrypt')) {
     /**
-     * Hash the given value.
+     * Hash the given value against the bcrypt algorithm.
      *
      * @param  string  $value
-     * @param  array   $options
+     * @param  array  $options
      * @return string
      */
     function bcrypt($value, $options = [])
     {
-        return app('hash')->make($value, $options);
+        return app('hash')->driver('bcrypt')->make($value, $options);
     }
 }
 
@@ -197,7 +213,7 @@ if (! function_exists('broadcast')) {
      * Begin broadcasting an event.
      *
      * @param  mixed|null  $event
-     * @return \Illuminate\Broadcasting\PendingBroadcast|void
+     * @return \Illuminate\Broadcasting\PendingBroadcast
      */
     function broadcast($event = null)
     {
@@ -212,7 +228,7 @@ if (! function_exists('cache')) {
      * If an array is passed, we'll assume you want to put to the cache.
      *
      * @param  dynamic  key|key,default|data,expiration|null
-     * @return mixed
+     * @return mixed|\Illuminate\Cache\CacheManager
      *
      * @throws \Exception
      */
@@ -225,18 +241,22 @@ if (! function_exists('cache')) {
         }
 
         if (is_string($arguments[0])) {
-            return app('cache')->get($arguments[0], isset($arguments[1]) ? $arguments[1] : null);
+            return app('cache')->get(...$arguments);
         }
 
-        if (is_array($arguments[0])) {
-            if (! isset($arguments[1])) {
-                throw new Exception(
-                    'You must set an expiration time when putting to the cache.'
-                );
-            }
-
-            return app('cache')->put(key($arguments[0]), reset($arguments[0]), $arguments[1]);
+        if (! is_array($arguments[0])) {
+            throw new Exception(
+                'When setting a value in the cache, you must pass an array of key / value pairs.'
+            );
         }
+
+        if (! isset($arguments[1])) {
+            throw new Exception(
+                'You must specify an expiration time when setting a value in the cache.'
+            );
+        }
+
+        return app('cache')->put(key($arguments[0]), reset($arguments[0]), $arguments[1]);
     }
 }
 
@@ -246,9 +266,9 @@ if (! function_exists('config')) {
      *
      * If an array is passed as the key, we will assume you want to set an array of values.
      *
-     * @param  array|string  $key
+     * @param  array|string|null  $key
      * @param  mixed  $default
-     * @return mixed
+     * @return mixed|\Illuminate\Config\Repository
      */
     function config($key = null, $default = null)
     {
@@ -281,16 +301,18 @@ if (! function_exists('cookie')) {
     /**
      * Create a new cookie instance.
      *
-     * @param  string  $name
-     * @param  string  $value
-     * @param  int     $minutes
-     * @param  string  $path
-     * @param  string  $domain
-     * @param  bool    $secure
-     * @param  bool    $httpOnly
-     * @return \Symfony\Component\HttpFoundation\Cookie
+     * @param  string|null  $name
+     * @param  string|null  $value
+     * @param  int  $minutes
+     * @param  string|null  $path
+     * @param  string|null  $domain
+     * @param  bool  $secure
+     * @param  bool  $httpOnly
+     * @param  bool  $raw
+     * @param  string|null  $sameSite
+     * @return \Illuminate\Cookie\CookieJar|\Symfony\Component\HttpFoundation\Cookie
      */
-    function cookie($name = null, $value = null, $minutes = 0, $path = null, $domain = null, $secure = false, $httpOnly = true)
+    function cookie($name = null, $value = null, $minutes = 0, $path = null, $domain = null, $secure = false, $httpOnly = true, $raw = false, $sameSite = null)
     {
         $cookie = app(CookieFactory::class);
 
@@ -298,7 +320,7 @@ if (! function_exists('cookie')) {
             return $cookie;
         }
 
-        return $cookie->make($name, $value, $minutes, $path, $domain, $secure, $httpOnly);
+        return $cookie->make($name, $value, $minutes, $path, $domain, $secure, $httpOnly, $raw, $sameSite);
     }
 }
 
@@ -327,7 +349,7 @@ if (! function_exists('csrf_token')) {
         $session = app('session');
 
         if (isset($session)) {
-            return $session->getToken();
+            return $session->token();
         }
 
         throw new RuntimeException('Application session store not set.');
@@ -343,7 +365,7 @@ if (! function_exists('database_path')) {
      */
     function database_path($path = '')
     {
-        return app()->databasePath().($path ? DIRECTORY_SEPARATOR.$path : $path);
+        return app()->databasePath($path);
     }
 }
 
@@ -352,11 +374,12 @@ if (! function_exists('decrypt')) {
      * Decrypt the given value.
      *
      * @param  string  $value
-     * @return string
+     * @param  bool   $unserialize
+     * @return mixed
      */
-    function decrypt($value)
+    function decrypt($value, $unserialize = true)
     {
-        return app('encrypter')->decrypt($value);
+        return app('encrypter')->decrypt($value, $unserialize);
     }
 }
 
@@ -365,11 +388,29 @@ if (! function_exists('dispatch')) {
      * Dispatch a job to its appropriate handler.
      *
      * @param  mixed  $job
-     * @return mixed
+     * @return \Illuminate\Foundation\Bus\PendingDispatch
      */
     function dispatch($job)
     {
-        return app(Dispatcher::class)->dispatch($job);
+        if ($job instanceof Closure) {
+            $job = new CallQueuedClosure(new SerializableClosure($job));
+        }
+
+        return new PendingDispatch($job);
+    }
+}
+
+if (! function_exists('dispatch_now')) {
+    /**
+     * Dispatch a command to its appropriate handler in the current process.
+     *
+     * @param  mixed  $job
+     * @param  mixed  $handler
+     * @return mixed
+     */
+    function dispatch_now($job, $handler = null)
+    {
+        return app(Dispatcher::class)->dispatchNow($job, $handler);
     }
 }
 
@@ -397,6 +438,8 @@ if (! function_exists('elixir')) {
             }
         }
 
+        $file = ltrim($file, '/');
+
         if (isset($manifest[$file])) {
             return '/'.trim($buildDirectory.'/'.$manifest[$file], '/');
         }
@@ -415,57 +458,19 @@ if (! function_exists('encrypt')) {
     /**
      * Encrypt the given value.
      *
-     * @param  string  $value
+     * @param  mixed  $value
+     * @param  bool   $serialize
      * @return string
      */
-    function encrypt($value)
+    function encrypt($value, $serialize = true)
     {
-        return app('encrypter')->encrypt($value);
-    }
-}
-
-if (! function_exists('env')) {
-    /**
-     * Gets the value of an environment variable. Supports boolean, empty and null.
-     *
-     * @param  string  $key
-     * @param  mixed   $default
-     * @return mixed
-     */
-    function env($key, $default = null)
-    {
-        $value = getenv($key);
-
-        if ($value === false) {
-            return value($default);
-        }
-
-        switch (strtolower($value)) {
-            case 'true':
-            case '(true)':
-                return true;
-            case 'false':
-            case '(false)':
-                return false;
-            case 'empty':
-            case '(empty)':
-                return '';
-            case 'null':
-            case '(null)':
-                return;
-        }
-
-        if (strlen($value) > 1 && Str::startsWith($value, '"') && Str::endsWith($value, '"')) {
-            return substr($value, 1, -1);
-        }
-
-        return $value;
+        return app('encrypter')->encrypt($value, $serialize);
     }
 }
 
 if (! function_exists('event')) {
     /**
-     * Fire an event and call the listeners.
+     * Dispatch an event and call the listeners.
      *
      * @param  string|object  $event
      * @param  mixed  $payload
@@ -474,7 +479,7 @@ if (! function_exists('event')) {
      */
     function event(...$args)
     {
-        return app('events')->fire(...$args);
+        return app('events')->dispatch(...$args);
     }
 }
 
@@ -492,12 +497,12 @@ if (! function_exists('factory')) {
         $arguments = func_get_args();
 
         if (isset($arguments[1]) && is_string($arguments[1])) {
-            return $factory->of($arguments[0], $arguments[1])->times(isset($arguments[2]) ? $arguments[2] : 1);
+            return $factory->of($arguments[0], $arguments[1])->times($arguments[2] ?? null);
         } elseif (isset($arguments[1])) {
             return $factory->of($arguments[0])->times($arguments[1]);
-        } else {
-            return $factory->of($arguments[0]);
         }
+
+        return $factory->of($arguments[0]);
     }
 }
 
@@ -511,7 +516,7 @@ if (! function_exists('info')) {
      */
     function info($message, $context = [])
     {
-        return app('log')->info($message, $context);
+        app('log')->info($message, $context);
     }
 }
 
@@ -519,9 +524,9 @@ if (! function_exists('logger')) {
     /**
      * Log a debug message to the logs.
      *
-     * @param  string  $message
+     * @param  string|null  $message
      * @param  array  $context
-     * @return \Illuminate\Contracts\Logging\Log|null
+     * @return \Illuminate\Log\LogManager|null
      */
     function logger($message = null, array $context = [])
     {
@@ -530,6 +535,19 @@ if (! function_exists('logger')) {
         }
 
         return app('log')->debug($message, $context);
+    }
+}
+
+if (! function_exists('logs')) {
+    /**
+     * Get a log driver instance.
+     *
+     * @param  string|null  $driver
+     * @return \Illuminate\Log\LogManager|\Psr\Log\LoggerInterface
+     */
+    function logs($driver = null)
+    {
+        return $driver ? app('log')->driver($driver) : app('log');
     }
 }
 
@@ -546,11 +564,40 @@ if (! function_exists('method_field')) {
     }
 }
 
+if (! function_exists('mix')) {
+    /**
+     * Get the path to a versioned Mix file.
+     *
+     * @param  string  $path
+     * @param  string  $manifestDirectory
+     * @return \Illuminate\Support\HtmlString|string
+     *
+     * @throws \Exception
+     */
+    function mix($path, $manifestDirectory = '')
+    {
+        return app(Mix::class)(...func_get_args());
+    }
+}
+
+if (! function_exists('now')) {
+    /**
+     * Create a new Carbon instance for the current time.
+     *
+     * @param  \DateTimeZone|string|null $tz
+     * @return \Illuminate\Support\Carbon
+     */
+    function now($tz = null)
+    {
+        return Date::now($tz);
+    }
+}
+
 if (! function_exists('old')) {
     /**
      * Retrieve an old input item.
      *
-     * @param  string  $key
+     * @param  string|null  $key
      * @param  mixed   $default
      * @return mixed
      */
@@ -584,7 +631,7 @@ if (! function_exists('public_path')) {
      */
     function public_path($path = '')
     {
-        return app()->make('path.public').($path ? DIRECTORY_SEPARATOR.$path : $path);
+        return app()->make('path.public').($path ? DIRECTORY_SEPARATOR.ltrim($path, DIRECTORY_SEPARATOR) : $path);
     }
 }
 
@@ -595,7 +642,7 @@ if (! function_exists('redirect')) {
      * @param  string|null  $to
      * @param  int     $status
      * @param  array   $headers
-     * @param  bool    $secure
+     * @param  bool|null    $secure
      * @return \Illuminate\Routing\Redirector|\Illuminate\Http\RedirectResponse
      */
     function redirect($to = null, $status = 302, $headers = [], $secure = null)
@@ -608,11 +655,29 @@ if (! function_exists('redirect')) {
     }
 }
 
+if (! function_exists('report')) {
+    /**
+     * Report an exception.
+     *
+     * @param  \Throwable  $exception
+     * @return void
+     */
+    function report($exception)
+    {
+        if ($exception instanceof Throwable &&
+            ! $exception instanceof Exception) {
+            $exception = new FatalThrowableError($exception);
+        }
+
+        app(ExceptionHandler::class)->report($exception);
+    }
+}
+
 if (! function_exists('request')) {
     /**
      * Get an instance of the current request or an input item from the request.
      *
-     * @param  array|string  $key
+     * @param  array|string|null  $key
      * @param  mixed   $default
      * @return \Illuminate\Http\Request|string|array
      */
@@ -626,7 +691,32 @@ if (! function_exists('request')) {
             return app('request')->only($key);
         }
 
-        return app('request')->input($key, $default);
+        $value = app('request')->__get($key);
+
+        return is_null($value) ? value($default) : $value;
+    }
+}
+
+if (! function_exists('rescue')) {
+    /**
+     * Catch a potential exception and return a default value.
+     *
+     * @param  callable  $callback
+     * @param  mixed  $rescue
+     * @param  bool  $report
+     * @return mixed
+     */
+    function rescue(callable $callback, $rescue = null, $report = true)
+    {
+        try {
+            return $callback();
+        } catch (Throwable $e) {
+            if ($report) {
+                report($e);
+            }
+
+            return value($rescue);
+        }
     }
 }
 
@@ -638,7 +728,7 @@ if (! function_exists('resolve')) {
      * @param  array  $parameters
      * @return mixed
      */
-    function resolve($name, $parameters = [])
+    function resolve($name, array $parameters = [])
     {
         return app($name, $parameters);
     }
@@ -653,7 +743,7 @@ if (! function_exists('resource_path')) {
      */
     function resource_path($path = '')
     {
-        return app()->resourcePath().($path ? DIRECTORY_SEPARATOR.$path : $path);
+        return app()->resourcePath($path);
     }
 }
 
@@ -661,10 +751,10 @@ if (! function_exists('response')) {
     /**
      * Return a new response from the application.
      *
-     * @param  string  $content
+     * @param  \Illuminate\View\View|string|array|null  $content
      * @param  int     $status
      * @param  array   $headers
-     * @return \Symfony\Component\HttpFoundation\Response|\Illuminate\Contracts\Routing\ResponseFactory
+     * @return \Illuminate\Http\Response|\Illuminate\Contracts\Routing\ResponseFactory
      */
     function response($content = '', $status = 200, array $headers = [])
     {
@@ -682,9 +772,9 @@ if (! function_exists('route')) {
     /**
      * Generate the URL to a named route.
      *
-     * @param  string  $name
-     * @param  array   $parameters
-     * @param  bool    $absolute
+     * @param  array|string  $name
+     * @param  mixed  $parameters
+     * @param  bool  $absolute
      * @return string
      */
     function route($name, $parameters = [], $absolute = true)
@@ -726,9 +816,9 @@ if (! function_exists('session')) {
      *
      * If an array is passed as the key, we will assume you want to set an array of values.
      *
-     * @param  array|string  $key
+     * @param  array|string|null  $key
      * @param  mixed  $default
-     * @return mixed
+     * @return mixed|\Illuminate\Session\Store|\Illuminate\Session\SessionManager
      */
     function session($key = null, $default = null)
     {
@@ -757,23 +847,35 @@ if (! function_exists('storage_path')) {
     }
 }
 
+if (! function_exists('today')) {
+    /**
+     * Create a new Carbon instance for the current date.
+     *
+     * @param  \DateTimeZone|string|null $tz
+     * @return \Illuminate\Support\Carbon
+     */
+    function today($tz = null)
+    {
+        return Date::today($tz);
+    }
+}
+
 if (! function_exists('trans')) {
     /**
      * Translate the given message.
      *
-     * @param  string  $id
-     * @param  array   $parameters
-     * @param  string  $domain
-     * @param  string  $locale
-     * @return \Symfony\Component\Translation\TranslatorInterface|string
+     * @param  string|null  $key
+     * @param  array   $replace
+     * @param  string|null  $locale
+     * @return \Illuminate\Contracts\Translation\Translator|string|array|null
      */
-    function trans($id = null, $parameters = [], $domain = 'messages', $locale = null)
+    function trans($key = null, $replace = [], $locale = null)
     {
-        if (is_null($id)) {
+        if (is_null($key)) {
             return app('translator');
         }
 
-        return app('translator')->trans($id, $parameters, $domain, $locale);
+        return app('translator')->trans($key, $replace, $locale);
     }
 }
 
@@ -781,16 +883,30 @@ if (! function_exists('trans_choice')) {
     /**
      * Translates the given message based on a count.
      *
-     * @param  string  $id
+     * @param  string  $key
      * @param  int|array|\Countable  $number
-     * @param  array   $parameters
-     * @param  string  $domain
-     * @param  string  $locale
+     * @param  array   $replace
+     * @param  string|null  $locale
      * @return string
      */
-    function trans_choice($id, $number, array $parameters = [], $domain = 'messages', $locale = null)
+    function trans_choice($key, $number, array $replace = [], $locale = null)
     {
-        return app('translator')->transChoice($id, $number, $parameters, $domain, $locale);
+        return app('translator')->transChoice($key, $number, $replace, $locale);
+    }
+}
+
+if (! function_exists('__')) {
+    /**
+     * Translate the given message.
+     *
+     * @param  string  $key
+     * @param  array  $replace
+     * @param  string|null  $locale
+     * @return string|array|null
+     */
+    function __($key, $replace = [], $locale = null)
+    {
+        return app('translator')->getFromJson($key, $replace, $locale);
     }
 }
 
@@ -800,7 +916,7 @@ if (! function_exists('url')) {
      *
      * @param  string  $path
      * @param  mixed   $parameters
-     * @param  bool    $secure
+     * @param  bool|null    $secure
      * @return \Illuminate\Contracts\Routing\UrlGenerator|string
      */
     function url($path = null, $parameters = [], $secure = null)
@@ -821,7 +937,7 @@ if (! function_exists('validator')) {
      * @param  array  $rules
      * @param  array  $messages
      * @param  array  $customAttributes
-     * @return \Illuminate\Contracts\Validation\Validator
+     * @return \Illuminate\Contracts\Validation\Validator|\Illuminate\Contracts\Validation\Factory
      */
     function validator(array $data = [], array $rules = [], array $messages = [], array $customAttributes = [])
     {
@@ -839,8 +955,8 @@ if (! function_exists('view')) {
     /**
      * Get the evaluated view contents for the given view.
      *
-     * @param  string  $view
-     * @param  array   $data
+     * @param  string|null  $view
+     * @param  \Illuminate\Contracts\Support\Arrayable|array   $data
      * @param  array   $mergeData
      * @return \Illuminate\View\View|\Illuminate\Contracts\View\Factory
      */

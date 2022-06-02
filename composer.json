@@ -5,25 +5,37 @@
     "license": "MIT",
     "type": "project",
     "require": {
-        "php": ">=5.6.4",
-        "laravel/framework": "5.3.*",
-        "laravelcollective/html": "5.3.*",
+        "php": "^7.3",
+        "fideloper/proxy": "^4.0",
+        "laravel/framework": "5.8.*",
+        "laravel/helpers": "^1.5",
+        "laravel/tinker": "^1.0",
+        "laravelcollective/html": "5.8.*",
         "maatwebsite/excel": "^2.1"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",
-        "mockery/mockery": "0.9.*",
-        "phpunit/phpunit": "~5.0",
         "symfony/css-selector": "3.1.*",
-        "symfony/dom-crawler": "3.1.*"
+        "symfony/dom-crawler": "3.1.*",
+        "beyondcode/laravel-dump-server": "^1.0",
+        "filp/whoops": "^2.0",
+        "mockery/mockery": "^1.0",
+        "nunomaduro/collision": "^3.0",
+        "phpunit/phpunit": "^7.5"
     },
     "autoload": {
         "classmap": [
-            "database"
+            "database/seeds",
+            "database/factories"
         ],
         "psr-4": {
             "App\\": "app/"
-        }
+        },
+        "files": [
+            "app/Library/tienluong-functions.php",
+            "app/Library/global-functions.php",
+            "app/Library/array_function.php"
+        ]
     },
     "autoload-dev": {
         "classmap": [
@@ -47,6 +59,9 @@
         ]
     },
     "config": {
-        "preferred-install": "dist"
+        "preferred-install": "dist",
+        "allow-plugins": {
+            "kylekatarnls/update-helper": true
+        }
     }
 }
