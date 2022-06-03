@@ -20,6 +20,7 @@
             });
         });
         $('#phanloai').val('{{$model->phanloai}}').trigger('change');
+        $('#baohiem_plct').val('{{$model->baohiem_plct}}'.split(',')).trigger('change');
     </script>
 @stop
 
@@ -142,6 +143,23 @@
                                     <label class="form-control-label">Số thứ tự (sắp xếp)</label>
                                     {!!Form::text('stt', null, array('id' => 'stt','class' => 'form-control', 'data-mask'=>'fdecimal'))!!}
                                 </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-12">
+                                <label class="control-label">Áp dụng cho các phân loại công tác</label>
+                                <select class="form-control select2me" name="baohiem_plct[]" id="baohiem_plct" multiple >
+                                    <option value="ALL">Tất cả phân loại công tác</option>
+                                    @foreach($model_nhomct as $kieuct)
+                                        <optgroup label="{{$kieuct->tencongtac}}">
+                                            <?php $mode_ct=$model_tenct->where('macongtac',$kieuct->macongtac); ?>
+                                            @foreach($mode_ct as $ct)
+                                                <option value="{{$ct->mact}}">{{$ct->tenct}}</option>
+                                            @endforeach
+                                        </optgroup>
+                                    @endforeach
+                                </select>
                             </div>
                         </div>
                     </div>

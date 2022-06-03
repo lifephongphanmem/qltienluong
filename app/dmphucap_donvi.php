@@ -27,4 +27,6 @@ class dmphucap_donvi extends Model
         'stt',
         'baohiem_plct',
     ];
+    //21.05.2022
+    //ALTER TABLE `dmphucap_donvi` ADD `baohiem_plct` VARCHAR(255) NULL DEFAULT 'ALL' AFTER `congthuc`;
 }

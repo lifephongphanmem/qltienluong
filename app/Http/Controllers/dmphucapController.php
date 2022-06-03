@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\dmdonvi;
+use App\dmphanloaicongtac;
 use App\dmphanloaicongtac_baohiem;
 use App\dmphanloaict;
 use App\dmphucap;
@@ -217,10 +218,15 @@ class dmphucapController extends Controller
                 $a_pl =  array('2' => 'Phần trăm','3' => 'Ẩn');
                 $a_ct = array('heso' => 'Lương ngạch bậc');
             }
+            $model_nhomct = dmphanloaicongtac::select('macongtac','tencongtac')->get();
+            $model_tenct = dmphanloaict::select('tenct','macongtac','mact')->get();
+            //dd($model);
             return view('system.danhmuc.phucap.edit_donvi')
                 ->with('model', $model)
                 ->with('a_pl', $a_pl)
                 ->with('a_ct', $a_ct)
+                ->with('model_nhomct',$model_nhomct)
+                ->with('model_tenct',$model_tenct)
                 ->with('furl', '/danh_muc/phu_cap/don_vi/')
                 ->with('pageTitle', 'Sửa thông tin phụ cấp');
         } else
@@ -236,6 +242,11 @@ class dmphucapController extends Controller
             }
             $inputs = $request->all();
             //dd($request);
+            if (in_array('ALL', $inputs['baohiem_plct'])) {
+                $inputs['baohiem_plct'] = 'ALL';
+            } else {
+                $inputs['baohiem_plct'] = implode(',', $inputs['baohiem_plct']);
+            }
             $inputs['congthuc'] = getDbl($inputs['phanloai']) == 2 ? $inputs['congthuc'] : '';
             dmphucap_donvi::where('mapc', $inputs['mapc'])->where('madv', session('admin')->madv)->first()->update($inputs);
             return redirect('/danh_muc/phu_cap/don_vi');
