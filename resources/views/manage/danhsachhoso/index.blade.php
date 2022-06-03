@@ -32,7 +32,7 @@
             <div class="portlet light bordered">
                 <div class="portlet-title">
                     <div class="caption">
-                        <i class="fa fa-list-alt"></i>DANH SÁCH HỒ SƠ CÁN BỘ - {{$tendv}}
+                        DANH SÁCH CÁN BỘ - {{$tendv}}
                     </div>
                 </div>
                 <div class="col-md-6">

@@ -11,6 +11,7 @@
 
 namespace Prophecy\Doubler\ClassPatch;
 
+use Prophecy\Doubler\Generator\Node\ArgumentNode;
 use Prophecy\Doubler\Generator\Node\ClassNode;
 use Prophecy\Doubler\Generator\Node\MethodNode;
 use Prophecy\PhpDocumentor\ClassAndInterfaceTagRetriever;
@@ -25,6 +26,8 @@ use Prophecy\PhpDocumentor\MethodTagRetrieverInterface;
  */
 class MagicCallPatch implements ClassPatchInterface
 {
+    const MAGIC_METHODS_WITH_ARGUMENTS = ['__call', '__callStatic', '__get', '__isset', '__set', '__set_state', '__unserialize', '__unset'];
+
     private $tagRetriever;
 
     public function __construct(MethodTagRetrieverInterface $tagRetriever = null)
@@ -51,23 +54,41 @@ class MagicCallPatch implements ClassPatchInterface
      */
     public function apply(ClassNode $node)
     {
-        $parentClass = $node->getParentClass();
-        $reflectionClass = new \ReflectionClass($parentClass);
+        $types = array_filter($node->getInterfaces(), function ($interface) {
+            return 0 !== strpos($interface, 'Prophecy\\');
+        });
+        $types[] = $node->getParentClass();
 
-        $tagList = $this->tagRetriever->getTagList($reflectionClass);
+        foreach ($types as $type) {
+            $reflectionClass = new \ReflectionClass($type);
 
-        foreach($tagList as $tag) {
-            $methodName = $tag->getMethodName();
+            while ($reflectionClass) {
+                $tagList = $this->tagRetriever->getTagList($reflectionClass);
 
-            if (empty($methodName)) {
-                continue;
-            }
+                foreach ($tagList as $tag) {
+                    $methodName = $tag->getMethodName();
 
-            if (!$reflectionClass->hasMethod($methodName)) {
-                $methodNode = new MethodNode($methodName);
-                $methodNode->setStatic($tag->isStatic());
+                    if (empty($methodName)) {
+                        continue;
+                    }
 
-                $node->addMethod($methodNode);
+                    if (!$reflectionClass->hasMethod($methodName)) {
+                        $methodNode = new MethodNode($methodName);
+
+                        // only magic methods can have a contract that needs to be enforced
+                        if (in_array($methodName, self::MAGIC_METHODS_WITH_ARGUMENTS)) {
+                            foreach($tag->getArguments() as $argument) {
+                                $argumentNode = new ArgumentNode($argument['name']);
+                                $methodNode->addArgument($argumentNode);
+                            }
+                        }
+
+                        $methodNode->setStatic($tag->isStatic());
+                        $node->addMethod($methodNode);
+                    }
+                }
+
+                $reflectionClass = $reflectionClass->getParentClass();
             }
         }
     }
@@ -82,4 +103,3 @@ class MagicCallPatch implements ClassPatchInterface
         return 50;
     }
 }
-
