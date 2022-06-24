@@ -81,13 +81,7 @@ class hosocanboController extends Controller
             //$m_cvd= dmchucvud::all();
             $m_plnb = nhomngachluong::select('manhom', 'tennhom', 'heso', 'namnb')->distinct()->get();
             $m_pln = ngachluong::select('tenngachluong','manhom','msngbac','heso','namnb','hesolonnhat','bacvuotkhung')->get();
-//            foreach ($m_pln as $mangach) {
-//                $nhomnb = $m_plnb->where('manhom', $mangach->manhom)->first();
-//                if (count($nhomnb) > 0 && $mangach->manhom != 'CBCT') {
-//                    $mangach->heso = $nhomnb->heso;
-//                    $mangach->namnb = $nhomnb->namnb;
-//                }
-//            }
+
             $macanbo = session('admin')->madv . '_' . getdate()[0];
 
             $max_stt = getDbl((hosocanbo::where('madv', session('admin')->madv)->get()->max('stt'))) + 1;
@@ -122,7 +116,7 @@ class hosocanboController extends Controller
             $macanbo = $insert['macanbo'];
 
             //có 1 số trường hợp cán bộ nhấn tạo 2 lần => trùng mã
-            if(count(hosocanbo::where('macanbo',$macanbo)->first()) > 0){
+            if(hosocanbo::where('macanbo',$macanbo)->first() != null){
                 return redirect('nghiep_vu/ho_so/danh_sach');
             }
 
@@ -202,7 +196,7 @@ class hosocanboController extends Controller
             $a_pl = getPhanLoaiKiemNhiem();
             $a_cv = getChucVuCQ(false);
             $nb =  $m_pln->where('msngbac', $model->msngbac)->first();
-            $namnb = count($nb) > 0 ? $nb->namnb : 0;
+            $namnb = $nb->namnb ?? 0;
             foreach ($model_kn as $ct) {
                 $ct->tenphanloai = isset($a_pl[$ct->phanloai]) ? $a_pl[$ct->phanloai] : '';
                 $ct->tenchucvu = isset($a_cv[$ct->macvcq]) ? $a_cv[$ct->macvcq] : '';

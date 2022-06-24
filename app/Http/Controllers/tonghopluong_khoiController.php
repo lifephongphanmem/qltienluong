@@ -110,7 +110,7 @@ class tonghopluong_khoiController extends Controller
                //}
                 //dd(count($tonghop));
                 //Kiểm tra xem đơn vị đã tổng hợp dữ liệu khối chưa
-                if (count($tonghop) > 0) {//lấy dữ liệu đã tổng hợp đưa ra kết quả
+                if ($tonghop != null) {//lấy dữ liệu đã tổng hợp đưa ra kết quả
                     $a_data[$i]['noidung'] = $tonghop->noidung;
                     $a_data[$i]['mathdv'] = $tonghop->mathdv;
                     $a_data[$i]['trangthai'] = $tonghop->trangthai;
@@ -771,7 +771,7 @@ class tonghopluong_khoiController extends Controller
             $model = tonghopluong_khoi::where('nam', $nam)->where('thang', $thang)->where('madv', $madv)->first();
 
 
-            if (count($model) > 0) {
+            if ($model != null) {
                 //Trường hợp đơn vị bị trả lại dữ liệu muốn gửi lại
                 $model->trangthai = 'DAGUI';
                 $model->nguoilap = session('admin')->name;
@@ -866,7 +866,7 @@ class tonghopluong_khoiController extends Controller
             //dd($mathdv);
             $check = tonghopluong_khoi::join('dmdonvi','dmdonvi.madv','tonghopluong_khoi.madv')
                 ->where('mathdv',$mathdv)->first();
-            if(count($check)>0) {
+            if($check != null) {
                 $model = tonghopluong_donvi_chitiet::where('mathh', $mathdv)->get();
                 $model_thongtin = tonghopluong_donvi::where('mathh', $mathdv)->first();
                 $a_bangluong = tonghopluong_donvi_bangluong::where('mathh', $mathdv)->get()->toarray();
@@ -1174,7 +1174,7 @@ class tonghopluong_khoiController extends Controller
             $mathdv = $inputs['mathdv'];
             $check = tonghopluong_khoi::join('dmdonvi','dmdonvi.madv','tonghopluong_khoi.madv')
                 ->where('mathdv',$mathdv)->first();
-            if(count($check)>0) {
+            if($check != null) {
                 //$model = tonghopluong_donvi_chitiet::where('mathh', $mathdv)->get();
                 $model_th = tonghopluong_donvi::where('mathh', $mathdv)->get();
                 $model_thongtin = tonghopluong_donvi::where('mathh', $mathdv)->first();

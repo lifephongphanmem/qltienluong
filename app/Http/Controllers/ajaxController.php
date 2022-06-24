@@ -230,7 +230,7 @@ class ajaxController extends Controller
         if (isset($inputs['msngbac'])) {
             $m_nbs = ngachbac::select('tennb', 'plnb')->where('msngbac', '=', $inputs['msngbac'])->first();
 
-            if (count($m_nbs) > 0) {
+            if ($m_nbs != null) {
                 $result['message'] = $m_nbs->plnb . ';' . $m_nbs->tennb;
                 $result['status'] = 'success';
             }

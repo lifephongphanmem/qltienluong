@@ -137,7 +137,7 @@ class nguonkinhphi_dinhmucController extends Controller
                 $m_chk = nguonkinhphi_dinhmuc::where('manguonkp', $m_goc->manguonkp)
                     ->where('maso', '<>', $inputs['maso'])
                     ->where('madv', session('admin')->madv)->get();
-                //dd(count($m_chk));
+                
                 if(count($m_chk)>0){
                     if ($mact == 'ALL') {
                         return view('errors.data_error')

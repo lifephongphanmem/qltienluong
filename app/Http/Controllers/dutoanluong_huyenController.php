@@ -127,7 +127,7 @@ class dutoanluong_huyenController extends Controller
 
             $model_nguon_huyen = dutoanluong_tinh::where('namns',$inputs['namns'])->where('madv', $madv)->first();
             //$model_nguon = nguonkinhphi::where('sohieu',$inputs['sohieu'])->where('macqcq', $madv)->get();
-            if (count($model_nguon_huyen) > 0) {
+            if ($model_nguon_huyen != null) {
                 //Trường hợp đơn vị bị trả lại dữ liệu muốn gửi lại
                 $model_nguon_huyen->trangthai = 'DAGUI';
                 $model_nguon_huyen->nguoilap = session('admin')->name;
@@ -221,7 +221,7 @@ class dutoanluong_huyenController extends Controller
             foreach($model as $ct) {
                 $dutoan = $model_dutoan->where('masodv', $ct->masodv)->first();
 
-                $ct->madv = count($dutoan) > 0 ? $dutoan->madv : null;
+                $ct->madv = $dutoan->madv ?? null;
                 if($ct->mact == null){
                     $ct->tencongtac = isset($model_phanloaict[$ct->macongtac]) ? $model_phanloaict[$ct->macongtac] : '';
                 }else{
@@ -437,8 +437,6 @@ class dutoanluong_huyenController extends Controller
             $col = 0;
 
             foreach($model as $ct) {
-                //$dutoan = $model_dutoan->where('masodv', $ct->masodv)->first();
-                //$ct->madv = count($dutoan) > 0 ? $dutoan->madv : null;
                 $ct->phanloai = $m_dv->where('madv',$ct->madv)->first()->maphanloai;
                 if($ct->mact == null){
                     $ct->tencongtac = isset($model_phanloaict[$ct->macongtac]) ? $model_phanloaict[$ct->macongtac] : '';

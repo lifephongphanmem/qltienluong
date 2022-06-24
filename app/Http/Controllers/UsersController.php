@@ -233,34 +233,7 @@ class UsersController extends Controller
                         ->wherenotin('mapc', array_column($model_phucap->toarray(), 'mapc'))->get();
                     dmphucap_donvi::insert($model_dmpc->toarray());
                 }
-
-                /*định mức nguồn kinh phí
-                $model_dmn = nguonkinhphi_dinhmuc::where('madv', $ttuser->madv)->get();
-                if (count($model_dmn) == 0) {
-                    $maso = getdate()[0];
-                    $model_nguon = dmnguonkinhphi::select('manguonkp')->get();
-                    foreach($model_nguon as $nguon){
-                        $maso++;
-                        $nguon->maso = $ttuser->madv . '_' . $maso;
-                        $nguon->madv = $ttuser->madv;
-                        switch($nguon->manguonkp){
-                            case '13':{
-                                $nguon->luongcoban = 1300000;
-                                break;
-                            }
-                            case '14':{
-                                $nguon->luongcoban = 90000;
-                                break;
-                            }
-                            default:{
-                                $nguon->luongcoban = 1390000;
-                                break;
-                            }
-                        }
-                        nguonkinhphi_dinhmuc::insert($nguon->toarray());
-                    }
-                }
-                */
+                
             }
             //kiểm tra xem user thuộc đơn vị nào, nếu ko thuộc đơn vị nào (trừ tài khoản quản trị) => đăng nhập ko thành công
         }
@@ -296,7 +269,7 @@ class UsersController extends Controller
         $model_donvi = dmdonvi::where('madv', $input['maso'])->first();
         $ttuser = Users::where('madv', $model_donvi->madv)->first();
 
-        if (count($ttuser) == 0)
+        if ($ttuser == null)
             return view('errors.invalid-user');
         else {
             if ($ttuser->status != "active") {

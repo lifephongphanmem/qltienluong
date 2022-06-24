@@ -47,7 +47,7 @@ class dmphanloaicongtac_baohiemController extends Controller
         $model = dmphanloaict::where('mact',$inputs['mact'])->first();
         $model_bh = dmphanloaicongtac_baohiem::where('madv',$inputs['madv'])
             ->where('mact',$inputs['mact'])->first();
-        if(count($model_bh)>0){
+        if($model_bh != null){
             $model->bhxh = $model_bh->bhxh;
             $model->bhyt = $model_bh->bhyt;
             $model->kpcd = $model_bh->kpcd;

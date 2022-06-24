@@ -21,12 +21,8 @@ class hosophucapController extends Controller
             //$a_ct = array_column(dmphanloaict::all()->toArray(), 'tenct', 'mact');
             //$a_pb = getPhongBan(false);
             $a_cv = getChucVuCQ(false);
-            if(!isset($inputs['canbo'])) {
-                if (count($m_cb) > 0) {
-                    $inputs['canbo'] = $m_cb->first()->macanbo;
-                } else {
-                    $inputs['canbo'] = '';
-                }
+            if(!isset($inputs['canbo'])) {                
+                $inputs['canbo'] = $m_cb->first()->macanbo ?? '';                
             }
 
             $model = hosophucap::where('macanbo', $inputs['canbo'])->get();

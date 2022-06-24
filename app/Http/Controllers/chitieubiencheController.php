@@ -20,7 +20,7 @@ class chitieubiencheController extends Controller
         if (Session::has('admin')) {
             $inputs = $request->all();
             $m_dutoan = dutoanluong::where('madv',session('admin')->madv)->where('namns',$inputs['namct'])->first();
-            $inputs['trangthai'] = count($m_dutoan) > 0 ? false : true;
+            $inputs['trangthai'] = isset($m_dutoan) ? false : true;
             $model = chitieubienche::where('madv',session('admin')->madv)->where('nam',$inputs['namct'])->get();
             $model_nhomct = dmphanloaicongtac::select('macongtac', 'tencongtac')->get();
             $model_tenct = dmphanloaict::select('tenct', 'macongtac', 'mact')->get();

@@ -653,5 +653,3 @@ function dinhdangsothapphan ($number , $decimals = 0) {
 
         return $upcase ? ucfirst($textnumber . " đồng chẵn") : $textnumber . " đồng chẵn";
     }
-
-?>

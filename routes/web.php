@@ -91,6 +91,7 @@ Route::group(['prefix'=>'danh_muc'],function(){
 
         Route::get('don_vi/anhien','dmphucapController@anhien');
         Route::post('don_vi/default_pc','dmphucapController@default_pc');
+        Route::post('don_vi/pccoso','dmphucapController@set_pccoso');
     });
 
     Route::group(['prefix'=>'cong_tac'],function(){
@@ -312,6 +313,8 @@ Route::group(['prefix'=>'nghiep_vu'],function(){
             Route::get('del/{id}','dutoanluongController@destroy');
             Route::post('create','dutoanluongController@create');
             Route::get('create_mau','dutoanluongController@create_mau');
+            Route::post('thong_tin','dutoanluongController@thongtin_dutoan');
+            Route::post('tao_du_toan','dutoanluongController@tao_dutoan');
             //Route::get('checkNamDuToan','dutoanluongController@checkNamDT');
             //Route::get('checkBangLuong','dutoanluongController@checkBangLuong');
             Route::post('senddata','dutoanluongController@senddata'); //gửi dữ liệu

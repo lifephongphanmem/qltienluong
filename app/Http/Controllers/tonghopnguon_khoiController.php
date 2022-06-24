@@ -82,7 +82,7 @@ class tonghopnguon_khoiController extends Controller
             foreach($model as $dv){
                 $nguon_khoi = $model_nguon_khoi->where('sohieu', $dv->sohieu)->first();
 
-                if(count($nguon_khoi)>0){
+                if($nguon_khoi != null){
                     //Đã tổng hợp dữ liệu
                     $dv->sldv = $soluong . '/' . $soluong;
                     $dv->masodv = $nguon_khoi->masodv;
@@ -142,7 +142,7 @@ class tonghopnguon_khoiController extends Controller
             $madv = session('admin')->madv;
             $model_nguon_khoi = nguonkinhphi_khoi::where('sohieu',$inputs['sohieu'])->where('madv', $madv)->first();
             //$model_nguon = nguonkinhphi::where('sohieu',$inputs['sohieu'])->where('macqcq', $madv)->get();
-            if (count($model_nguon_khoi) > 0) {
+            if ($model_nguon_khoi != null) {
                 //Trường hợp đơn vị bị trả lại dữ liệu muốn gửi lại
                 $model_nguon_khoi->trangthai = 'DAGUI';
                 $model_nguon_khoi->nguoilap = session('admin')->name;

@@ -32,7 +32,7 @@ class dmngachluongController extends Controller
     {
         $inputs = $request->all();
         $model = nhomngachluong::where('manhom',$inputs['manhom'])->first();
-        if(count($model)>0){
+        if($model != null){
             //update
             $model->update($inputs);
         }else{
@@ -85,7 +85,7 @@ class dmngachluongController extends Controller
         $inputs = $request->all();
         //$model_nhom = nhomngachluong::where('manhom',$inputs['manhom'])->first();
         $model = ngachluong::where('msngbac',$inputs['msngbac'])->first();
-        if(count($model)>0){
+        if($model != null){
             //update
             $model->update($inputs);
         }else{

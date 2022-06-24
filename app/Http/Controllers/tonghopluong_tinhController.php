@@ -68,7 +68,7 @@ class tonghopluong_tinhController extends Controller
                 $tonghop = $model_tonghop->where('thang',$a_data[$i]['thang'])->where('nam',$inputs['nam'])->first();
                 $dulieu = $model_dulieu->where('thang',$a_data[$i]['thang'])->where('nam',$inputs['nam']);
                 //Kiểm tra xem đơn vị đã tổng hợp dữ liệu khối chưa
-                if(count($tonghop)>0){//lấy dữ liệu đã tổng hợp đưa ra kết quản
+                if($tonghop != null){//lấy dữ liệu đã tổng hợp đưa ra kết quản
                     $a_data[$i]['noidung']=$tonghop->noidung;
                     $a_data[$i]['mathdv']=$tonghop->mathdv;
                     $a_data[$i]['trangthai']=$tonghop->trangthai;

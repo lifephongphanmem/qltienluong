@@ -46,7 +46,7 @@ class dmdiabandbkkController extends Controller
         $inputs['ngaytu'] = getDateToDb($inputs['ngaytu']);
         $inputs['ngayden'] = getDateToDb($inputs['ngayden']);
 
-        if(count($model)>0){
+        if($model != null){
             //update
             $model->update($inputs);
         }else{

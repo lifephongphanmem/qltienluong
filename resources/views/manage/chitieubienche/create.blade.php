@@ -180,7 +180,7 @@
             </div>
             <div style="text-align: center; padding-bottom: 15px">
                 <button type="submit" class="btn green" onclick="validateForm()"><i class="fa fa-check"></i> Hoàn thành</button>
-                <a href="{{url('/nghiep_vu/chi_tieu/danh_sach?namct='.date('Y'))}}" class="btn btn-danger"><i class="fa fa-reply"></i>&nbsp;Quay lại</a>
+                <a href="{{url('/nghiep_vu/chi_tieu/danh_sach?namct='.$model->nam)}}" class="btn btn-danger"><i class="fa fa-reply"></i>&nbsp;Quay lại</a>
             </div>
             {!! Form::close() !!}
                 <!-- END FORM-->

@@ -39,7 +39,7 @@ class hosothoicongtacController extends Controller
             $insert = $request->all();
             //dd($insert);
             $model_chk = hosothoicongtac::where('macanbo',$insert['macanbo'])->first();
-            if(count($model_chk)>0){
+            if($model_chk != null){
                 return view('errors.thoicongtac');
             }
             $insert['ngaynghi'] = getDateTime($insert['ngaynghi']);

@@ -44,7 +44,7 @@ class dsnangluongController extends Controller
         $inputs = $request->all();
         $model = dsnangluong::where('manl', $inputs['manl'])->first();
 
-        if (count($model) > 0) {
+        if ($model != null) {
             //update
             $model->update($inputs);
             return redirect('/chuc_nang/nang_luong/danh_sach');
@@ -230,11 +230,9 @@ class dsnangluongController extends Controller
             //dd($model);
             $m_plnb = nhomngachluong::select('manhom', 'tennhom')->distinct()->get();
             $m_pln = ngachluong::select('tenngachluong', 'manhom', 'msngbac')->distinct()->get();
-            $model_canbo = hosocanbo::select('macanbo', 'macvcq', 'tencanbo')->where('macanbo', $model->macanbo)->first();
-
-            if (count($model_canbo) > 0) {
-                $model->tencanbo = $model_canbo->tencanbo;
-            }
+            $model_canbo = hosocanbo::select('macanbo', 'macvcq', 'tencanbo')->where('macanbo', $model->macanbo)->first();            
+            $model->tencanbo = $model_canbo->tencanbo ?? '';
+            
             $a_nkp = getNguonKP(false);
             $model_nangluong = dsnangluong::where('manl', $inputs['maso'])->first();
 
@@ -258,7 +256,7 @@ class dsnangluongController extends Controller
             $model_canbo = hosocanbo::select('macanbo','msngbac','bac','ngaytu','ngayden','msngbac','heso','vuotkhung')
                 ->where('macanbo', $inputs['macanbo'])->first();
             $a_nb = ngachluong::where('msngbac',$model_canbo->msngbac)->first();
-            if(count($a_nb) == 0){
+            if($a_nb != null){
                 //trả lại danh sách
                 return redirect('chuc_nang/nang_luong/maso='.$inputs['manl']);
             }
@@ -471,7 +469,7 @@ class dsnangluongController extends Controller
         $model_chk = dsnangluong_nguon::where('manl', $insert['manl'])
             ->where('macanbo', $insert['macanbo'])
             ->where('manguonkp', $insert['manguonkp'])->first();
-        if(count($model_chk) > 0){
+        if($model_chk != null ){
             $model_chk->macanbo = $insert['macanbo'];
             $model_chk->luongcoban = $insert['luongcoban'];
             $model_chk->manguonkp = $insert['manguonkp'];

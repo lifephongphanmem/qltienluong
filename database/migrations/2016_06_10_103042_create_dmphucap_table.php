@@ -28,6 +28,7 @@ class CreateDmphucapTable extends Migration
             $table->string('phanloai')->nullable();
             $table->string('congthuc')->nullable();//
             $table->double('tonghop')->default(0);
+            $table->boolean('pccoso')->nullable()->default(0);//phụ cấp cơ sở để tính
             $table->string('ghichu')->nullable();
             $table->integer('stt')->default(99);
             $table->timestamps();

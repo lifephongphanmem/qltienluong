@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
-<head><title>Dữ liệu lỗi</title>
+<head><title>Thông báo</title>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -15,10 +15,12 @@
     <!--Loading style-->
     <link rel="stylesheet" href="{{ url('css/themes/style1/zvinhtq.css') }}">
     <link rel="stylesheet" href="{{ url('css/style-responsive.css') }}">
+    <link rel="shortcut icon" href="{{ url('images/LIFESOFT.png')}}" type="image/x-icon">
 </head>
 <body id="error-page" class="animated bounceInLeft">
 <div id="error-page-content">
-    <h1>Lỗi!</h1><h2>{{isset($message) ? $message : 'Dữ liệu đã tồn tại' }}</h2>
+    <h1>Lỗi!</h1>
+    <h2>{{isset($message) ? $message : 'Dữ liệu đã tồn tại' }}</h2>
     <h3> <p><a href='{{isset($furl) ? url($furl) : url('/') }}'>Bấm vào đây</a> để quay lại.</p></h3>
 </div>
 <script src="{{ url('js/jquery-1.9.1.js') }}"></script>

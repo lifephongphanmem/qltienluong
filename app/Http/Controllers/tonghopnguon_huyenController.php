@@ -131,7 +131,7 @@ class tonghopnguon_huyenController extends Controller
             $madv = session('admin')->madv;
             $model_nguon_huyen = nguonkinhphi_tinh::where('sohieu',$inputs['sohieu'])->where('madv', $madv)->first();
             //$model_nguon = nguonkinhphi::where('sohieu',$inputs['sohieu'])->where('macqcq', $madv)->get();
-            if (count($model_nguon_huyen) > 0) {
+            if ($model_nguon_huyen != null) {
                 //Trường hợp đơn vị bị trả lại dữ liệu muốn gửi lại
                 $model_nguon_huyen->trangthai = 'DAGUI';
                 $model_nguon_huyen->nguoilap = session('admin')->name;

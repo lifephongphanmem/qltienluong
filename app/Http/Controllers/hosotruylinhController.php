@@ -150,12 +150,12 @@ class hosotruylinhController extends Controller
 
         $inputs = $request->all();
         $model = hosocanbo::where('macanbo', $inputs['maso'])->first();
-        if (count($model) == 0) {
+        if ($model == null) {
             die($model);
         }
 
         $model_nb = ngachluong::where('msngbac', $model->msngbac)->first();
-        if (count($model_nb) == 0) {
+        if ($model_nb == null) {
             die($model);
         }//cán bộ ko có msngbac => ko tính toán
 
@@ -554,7 +554,7 @@ class hosotruylinhController extends Controller
         $insert['luongcoban'] = getDbl($insert['luongcoban']);
         if($insert['trangthai'] == 'ADD'){//thao tác vào bảng tạm
             $model_chk = hosotruylinh_nguon_temp::where('maso', $insert['maso'])->where('manguonkp', $insert['manguonkp'])->first();
-            if(count($model_chk) > 0){
+            if($model_chk != null){
                 $model_chk->luongcoban = $insert['luongcoban'];
                 $model_chk->manguonkp = $insert['manguonkp'];
                 $model_chk->save();
@@ -568,7 +568,7 @@ class hosotruylinhController extends Controller
             $model = hosotruylinh_nguon_temp::where('maso', $insert['maso'])->get();
         }else{//thao tác vào bảng gốc
             $model_chk = hosotruylinh_nguon::where('maso', $insert['maso'])->where('manguonkp', $insert['manguonkp'])->first();
-            if(count($model_chk) > 0){
+            if($model_chk != null){
                 $model_chk->luongcoban = $insert['luongcoban'];
                 $model_chk->manguonkp = $insert['manguonkp'];
                 $model_chk->save();

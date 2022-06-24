@@ -36,7 +36,7 @@ class dutoanluong_khoiController extends Controller
 
             foreach($model as $dv){
                 $nguon_khoi = $model_nguon_khoi->where('namns', $dv->namns)->first();
-                if(count($nguon_khoi)>0){
+                if($nguon_khoi != null){
                     //Đã tổng hợp dữ liệu
                     $dv->sldv = $soluong . '/' . $soluong;
                     $dv->masodv = $nguon_khoi->masodv;
@@ -94,7 +94,7 @@ class dutoanluong_khoiController extends Controller
             }
             $madv = session('admin')->madv;
             $model_nguon_khoi = dutoanluong_khoi::where('namns',$inputs['namns'])->where('madv', $madv)->first();
-            if (count($model_nguon_khoi) > 0) {
+            if ($model_nguon_khoi != null) {
                 //Trường hợp đơn vị bị trả lại dữ liệu muốn gửi lại
                 $model_nguon_khoi->trangthai = 'DAGUI';
                 $model_nguon_khoi->nguoilap = session('admin')->name;
@@ -194,7 +194,7 @@ class dutoanluong_khoiController extends Controller
             //dd($model->toarray());
             foreach($model as $ct) {
                 $dutoan = $model_dutoan->where('masodv', $ct->masodv)->first();
-                $ct->madv = count($dutoan) > 0 ? $dutoan->madv : null;
+                $ct->madv = $dutoan->madv ?? null;
                 if($ct->mact == null){
                     $ct->tencongtac = isset($model_phanloaict[$ct->macongtac]) ? $model_phanloaict[$ct->macongtac] : '';
                 }else{

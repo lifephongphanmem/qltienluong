@@ -42,9 +42,7 @@ class xemdulieu_dutoanController extends Controller
             foreach($model_donvi as $dv){
                 //kiểm tra xem đã tổng hợp thành dữ liệu khối  gửi lên huyện chưa?
                 $nguon_khoi = $model_nguon_khoi->where('namns',$inputs['namns'])->first();
-
-
-                if(count($nguon_khoi)>0 && $nguon_khoi->trangthai == 'DAGUI'){
+                if($nguon_khoi != null && $nguon_khoi->trangthai == 'DAGUI'){
                     $dv->tralai = false;
                 }else{
                     $dv->tralai = true;
@@ -52,10 +50,10 @@ class xemdulieu_dutoanController extends Controller
 
                 $nguon = $model_nguon->where('namns',$inputs['namns'])->where('madv',$dv->madv)->first();
                 $khoi = $model_tonghopkhoi->where('namns',$inputs['namns'])->first();
-                if(count($nguon)> 0 && $nguon->trangthai == 'DAGUI'){
+                if($nguon != null && $nguon->trangthai == 'DAGUI'){
                     $dv->masodv = $nguon->masodv;
                     $dv->trangthai = 'DAGUI';
-                }elseif(count($khoi)> 0 && $khoi->trangthai == 'DAGUI'){
+                }elseif($khoi != null && $khoi->trangthai == 'DAGUI'){
                     $dv->masodv = $nguon->masodv;
                     $dv->trangthai = 'DAGUI';
                 }
@@ -182,14 +180,14 @@ class xemdulieu_dutoanController extends Controller
             foreach($model_donvi as $dv){
                 //kiểm tra xem đã tổng hợp thành dữ liệu huyện gửi lên tỉnh chưa?
                 $nguon_khoi = $model_nguon_khoi->where('namns',$inputs['namnds'])->first();
-                if(count($nguon_khoi)>0 && $nguon_khoi->trangthai == 'DAGUI'){
+                if($nguon_khoi != null && $nguon_khoi->trangthai == 'DAGUI'){
                     $dv->tralai = false;
                 }else{
                     $dv->tralai = true;
                 }
 
                 $nguon = $model_nguon->where('namns',$inputs['namnds'])->where('madv',$dv->madv)->first();
-                if(count($nguon)> 0 && $nguon->trangthai == 'DAGUI'){
+                if($nguon != null && $nguon->trangthai == 'DAGUI'){
                     $dv->masodv = $nguon->masodv;
                     $dv->trangthai = 'DAGUI';
                 }else{

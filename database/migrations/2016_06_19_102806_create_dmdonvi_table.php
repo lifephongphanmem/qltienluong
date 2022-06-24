@@ -47,7 +47,6 @@ class CreateDmdonviTable extends Migration
             $table->string('dinhmucnguon',15)->default('HANHCHINH');
             $table->string('sotk')->nullable();
             $table->string('tennganhang')->nullable();
-            $table->string('phucaploaitru')->nullable();//lưu(cập nhật) khi tạo bảng lương
             $table->string('phucapluusotien')->nullable();//lưu(cập nhật) khi tạo bảng lương
             $table->timestamps();
         });

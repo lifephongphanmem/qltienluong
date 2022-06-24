@@ -63,15 +63,7 @@ class hosonhansuController extends Controller
             //$m_cvd= dmchucvud::all();
             $m_plnb = nhomngachluong::select('manhom', 'tennhom', 'heso', 'namnb')->distinct()->get();
             $m_pln = ngachluong::select('tenngachluong','manhom','msngbac','heso','namnb','hesolonnhat','bacvuotkhung')->get();
-            /*
-            foreach ($m_pln as $mangach) {
-                $nhomnb = $m_plnb->where('manhom', $mangach->manhom)->first();
-                if (count($nhomnb) > 0 && $mangach->manhom != 'CBCT') {
-                    $mangach->heso = $nhomnb->heso;
-                    $mangach->namnb = $nhomnb->namnb;
-                }
-            }
-            */
+            
             $macanbo = session('admin')->madv . '_' . getdate()[0];
 
             $max_stt = getDbl((hosonhansu::where('madv', session('admin')->madv)->get()->max('stt'))) + 1;
@@ -106,7 +98,7 @@ class hosonhansuController extends Controller
             $macanbo = $insert['macanbo'];
 
             //có 1 số trường hợp cán bộ nhấn tạo 2 lần => trùng mã
-            if(count(hosonhansu::where('macanbo',$macanbo)->first()) > 0){
+            if(hosonhansu::where('macanbo',$macanbo)->first() != null){
                 return redirect('nghiep_vu/nhan_su/danh_sach');
             }
 

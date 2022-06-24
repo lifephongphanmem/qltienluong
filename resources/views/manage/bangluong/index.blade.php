@@ -672,12 +672,12 @@
                 //Kết quả
                 if ( ok == false){
                     toastr.error(message,"Lỗi!");
-                    $("form").submit(function (e) {
+                    $("create_bangluong").submit(function (e) {
                         e.preventDefault();
                     });
                 }
                 else{
-                    $("form").unbind('submit').submit();
+                    $("create_bangluong").unbind('submit').submit();
                 }
             });
         });

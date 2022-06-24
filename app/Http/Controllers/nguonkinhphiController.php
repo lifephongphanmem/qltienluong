@@ -381,27 +381,7 @@ class nguonkinhphiController extends Controller
                     }
                 }
 
-                /*
-                 *
-                 if(!isset($inputs['nghihuu']) && count($a_nh) > 0){
-                    foreach ($a_nh as $key => $val) {
-                        $m_cb[$key] = $a_nh[$key];
-                        //$m_cb[$key]['tencanbo'] .= ' (nghỉ hưu)';
-                        $m_cb[$key]['congtac'] = 'NGHIHUU';
-                        $a_danghihuu[] = $key;
-                    }
-                }
-                if (count($a_nh) > 0) {
-                    foreach ($a_nh as $key => $val) {
-                        if (isset($inputs['nghihuu'])) {
-                            $m_cb[$key] = $a_nh[$key];
-                        } else {
-                            $m_cb[$key]['tencanbo'] .= ' (nghỉ hưu)';
-                        }
-                        $a_danghihuu[] = $key;
-                    }
-                }
-                 * */
+                
 
 
                 $a_nb = a_getelement($m_nb, array('thang_nb' => $a_thang[$i]['thang']));
@@ -743,7 +723,7 @@ class nguonkinhphiController extends Controller
             $model_ct = nguonkinhphi_chitiet::where('masodv', $inputs['maso'])->get();
             $m_thongtu = dmthongtuquyetdinh::where('sohieu',$model->sohieu)->first();
 
-            if (count($model) > 0) {
+            if ($model != null) {
                 $model->nhucaukp = $model->luongphucap + $model->daibieuhdnd + $model->canbokct
                     + $model->uyvien + $model->boiduong + $model->nghihuu + $model->baohiem;
                 $model->nhucaupc = $model->thunhapthap + $model->diaban
@@ -873,7 +853,7 @@ class nguonkinhphiController extends Controller
         //Kiểm tra cấp đơn vị xem đơn vị để update trường masoh hoặc masot
         if (Session::has('admin')) {
             $model = nguonkinhphi::where('masodv',$masodv)->first();
-            if(count($model) == 0){
+            if($model == null){
                 $model = nguonkinhphi::where('masoh',$masodv)->first();
             }
             //lấy thông tư tổng hợp nguồn

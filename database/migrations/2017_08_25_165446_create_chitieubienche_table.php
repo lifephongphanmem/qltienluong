@@ -28,7 +28,6 @@ class CreateChitieubiencheTable extends Migration
             $table->double('soluongtuyenthem')->default(0);
             $table->string('ghichu')->nullable();
             //thông tin cán bộ tuyển thêm
-            $table->string('mact')->nullable();
             $table->double('pthuong')->default(100);
             $table->double('heso')->default(0);
             $table->double('hesobl')->default(0);

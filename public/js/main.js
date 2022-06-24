@@ -32,6 +32,11 @@ $(function () {
         url = url.substring(0, i-1);
     }
 
+    i = url.indexOf('thong_tin');
+    if (i > 0) {
+        url = url.substring(0, i - 1) + '/danh_sach';
+    }
+
     if (url.split('/').length>4) {
         var element = $('ul.sub-menu a').filter(function () {
             return this.href == url || this.href.indexOf(url) == 0;

@@ -37,7 +37,7 @@ class dsnangthamnienController extends Controller
         $inputs = $request->all();
         $model = dsnangthamnien::where('manl', $inputs['manl'])->first();
 
-        if (count($model) > 0) {
+        if ($model != null) {
             //update
             $model->update($inputs);
             return redirect('/chuc_nang/tham_nien/danh_sach');
@@ -150,20 +150,7 @@ class dsnangthamnienController extends Controller
 
     function show($manl){
         if (Session::has('admin')) {
-            $model = dsnangthamnien_ct::where('manl',$manl)->get();
-            /*
-            $model_canbo=hosocanbo::select('macanbo', 'macvcq','tencanbo')->get();
-            $a_cv = getChucVuCQ(false);
-            foreach($model as $hs){
-                $canbo = $model_canbo->where('macanbo',$hs->macanbo)->first();
-                if(count($canbo)>0){
-                    $hs->tencv = isset($a_cv[$canbo->macvcq]) ? $a_cv[$canbo->macvcq] : '';
-                    $hs->tencanbo = $canbo->tencanbo;
-                    $hs->stt = $canbo->stt;
-
-                }
-            }
-            */
+            $model = dsnangthamnien_ct::where('manl',$manl)->get();            
             $a_cv = getChucVuCQ(false);
             $a_cb = hosocanbo::select('macanbo', 'macvcq', 'tencanbo', 'stt')
                 ->where('madv', session('admin')->madv)->get()->keyby('macanbo')->toarray();
@@ -200,10 +187,9 @@ class dsnangthamnienController extends Controller
             $model = dsnangthamnien_ct::where('manl', $inputs['maso'])->where('macanbo', $inputs['canbo'])->first();
             $model_nguon = dsnangthamnien_nguon::where('manl', $inputs['maso'])->where('macanbo', $inputs['canbo'])->get();
             //dd($model);
-            $model_canbo = hosocanbo::select('macanbo', 'macvcq', 'tencanbo')->where('macanbo', $model->macanbo)->first();
-            if (count($model_canbo) > 0) {
-                $model->tencanbo = $model_canbo->tencanbo;
-            }
+            $model_canbo = hosocanbo::select('macanbo', 'macvcq', 'tencanbo')->where('macanbo', $model->macanbo)->first();            
+            $model->tencanbo = $model_canbo->tencanbo ?? '';
+            
             $model_nangluong = dsnangthamnien::where('manl', $inputs['maso'])->first();
             return view('manage.thamnien.detail')
                 ->with('furl', '/chuc_nang/tham_nien/')
@@ -412,7 +398,7 @@ class dsnangthamnienController extends Controller
         $model_chk = dsnangthamnien_nguon::where('manl', $insert['manl'])
             ->where('macanbo', $insert['macanbo'])
             ->where('manguonkp', $insert['manguonkp'])->first();
-        if(count($model_chk) > 0){
+        if($model_chk != null){
             $model_chk->macanbo = $insert['macanbo'];
             $model_chk->luongcoban = $insert['luongcoban'];
             $model_chk->manguonkp = $insert['manguonkp'];

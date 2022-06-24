@@ -86,20 +86,7 @@ class dmphanloaictController extends Controller
         }
         $inputs = $request->all();
         $model = dmphanloaicongtac::where('macongtac',$inputs['macongtac'])->first();
-        /*
-        //$model_bh = dmphanloaicongtac_baohiem::where('maphanloai',session('admin')->maphanloai)->where('macongtac',$inputs['macongtac'])->first();
-        $model_bh = dmphanloaicongtac_baohiem::where('macongtac',$inputs['macongtac'])->first();
-        if(count($model_bh)>0){
-            $model->bhxh = $model_bh->bhxh;
-            $model->bhyt = $model_bh->bhyt;
-            $model->kpcd = $model_bh->kpcd;
-            $model->bhtn = $model_bh->bhtn;
-            $model->bhxh_dv = $model_bh->bhxh_dv;
-            $model->bhyt_dv = $model_bh->bhyt_dv;
-            $model->kpcd_dv = $model_bh->kpcd_dv;
-            $model->bhtn_dv = $model_bh->bhtn_dv;
-        }
-        */
+        
         die($model);
     }
 

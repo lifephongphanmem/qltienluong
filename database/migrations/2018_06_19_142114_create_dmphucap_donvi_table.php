@@ -31,6 +31,7 @@ class CreateDmphucapDonviTable extends Migration
             $table->string('ghichu')->nullable();
             $table->integer('stt')->default(99);
             $table->string('baohiem_plct')->nullable();//phân loại công tác cho bảo hiểm
+            $table->boolean('pccoso')->nullable()->default(0);//phụ cấp cơ sở để tính
             $table->timestamps();
         });
     }

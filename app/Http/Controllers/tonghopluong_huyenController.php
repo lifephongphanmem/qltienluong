@@ -98,7 +98,7 @@ class tonghopluong_huyenController extends Controller
                 $tonghop = $model_tonghop->where('thang',$a_data[$i]['thang'])->where('nam',$inputs['nam'])->first();
                 $dulieu = $model_dulieu->where('thang',$a_data[$i]['thang'])->where('nam',$inputs['nam']);
                 //Kiểm tra xem đơn vị đã tổng hợp dữ liệu khối chưa
-                if(count($tonghop)>0){//lấy dữ liệu đã tổng hợp đưa ra kết quản
+                if($tonghop != null){//lấy dữ liệu đã tổng hợp đưa ra kết quản
                     $a_data[$i]['noidung']=$tonghop->noidung;
                     $a_data[$i]['mathdv']=$tonghop->mathdv;
                     $a_data[$i]['trangthai']=$tonghop->trangthai;
@@ -1681,20 +1681,7 @@ class tonghopluong_huyenController extends Controller
             //$thang = $inputs['tuthang'];
             //$nam = $inputs['nam'];
             $check = dmdonvi::where('madv', $madv)->where('phanloaitaikhoan','TH')->get();
-            /*
-            if(count($check)>0) {
-                if ($inputs['thang'] == 'ALL')
-                    $m_mathdv = tonghopluong_khoi::where('madv', $madv)->where('nam', $nam)->where('trangthai', 'DAGUI')->first();
-                else
-                    $m_mathdv = tonghopluong_khoi::where('madv', $madv)->where('thang', $thang)->where('nam', $nam)->where('trangthai', 'DAGUI')->first();
-            }
-            else {
-                if ($inputs['tuthang'] == 'ALL')
-                    $m_mathdv = tonghopluong_donvi::where('madv', $madv)->where('nam', $nam)->where('trangthai', 'DAGUI')->first();
-                else
-                    $m_mathdv = tonghopluong_donvi::where('madv', $madv)->where('thang', $thang)->where('nam', $nam)->where('trangthai', 'DAGUI')->first();
-            }
-            */
+            
             if(isset($mathdv)) {
                 if(count($check)>0) {
                     $mathh = $mathdv;

@@ -65,7 +65,7 @@ class tonghopluong_donviController extends Controller
                 $bangluong = $model_bangluong->where('thang', $a_data[$i]['thang']);
                 if (count($bangluong) > 0) {
                     $a_data[$i]['bangluong'] = 'ok';
-                    if (count((array)$tonghop) > 0) {
+                    if ($tonghop != null) {
                         $a_data[$i]['noidung'] = $tonghop->noidung;
                         $a_data[$i]['mathdv'] = $tonghop->mathdv;
                         $a_data[$i]['trangthai'] = $tonghop->trangthai;
@@ -80,7 +80,7 @@ class tonghopluong_donviController extends Controller
                     }
                 } else {
                     //do trc xóa bảng lương nhưng chưa xóa tổng hợp
-                    if (count((array) $tonghop) > 0) {
+                    if ($tonghop != null) {
                         $a_data[$i]['bangluong'] = 'ok';
                         $a_data[$i]['noidung'] = $tonghop->noidung;
                         $a_data[$i]['mathdv'] = $tonghop->mathdv;
@@ -484,7 +484,7 @@ class tonghopluong_donviController extends Controller
                 //khi trả  lại tonghophuyen set mathh = null =>tìm theo mã + thang + năm tổng hợp
                 $model_huyen = tonghopluong_huyen::where('thang', $model->thang)->where('nam', $model->nam)
                     ->where('madv', $model->madv)->first();
-                if(count($model_huyen) == 0){
+                if($model_huyen == null){
                     $masoh = getdate()[0];
                     $model->mathh = $masoh;
 
@@ -526,7 +526,7 @@ class tonghopluong_donviController extends Controller
             //dd($mathdv);
             $check = tonghopluong_khoi::join('dmdonvi','dmdonvi.madv','tonghopluong_khoi.madv')
                 ->where('mathdv',$mathdv)->first();
-            if(count($check)>0) {
+            if($check != null) {
                 $model = tonghopluong_donvi_chitiet::where('mathh', $mathdv)->get();
                 $model_thongtin = tonghopluong_donvi::where('mathh', $mathdv)->first();
                 $a_bangluong = tonghopluong_donvi_bangluong::where('mathh', $mathdv)->get()->toarray();
@@ -874,7 +874,7 @@ class tonghopluong_donviController extends Controller
             $inputs = $request->all();
             $model = tonghopluong_khoi::join('dmdonvi','dmdonvi.madv','tonghopluong_khoi.madv')
                 ->where('mathdv',$inputs['mathdv'])->first();
-            if(count($model)>0) {
+            if($model != null) {
                 tonghopluong_khoi::where('mathdv', $inputs['mathdv'])
                     ->update(['trangthai' => 'TRALAI', 'lydo' => $inputs['lydo']]);
             }
