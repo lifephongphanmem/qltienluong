@@ -11,7 +11,8 @@
         type="text/css" />
     <link href="{{ url('assets/global/plugins/simple-line-icons/simple-line-icons.min.css') }}" rel="stylesheet"
         type="text/css" />
-    <link href="{{ url('assets/global/plugins/bootstrap/css/bootstrap.min.css') }}" rel="stylesheet" type="text/css" />
+    <link href="{{ url('assets/global/plugins/bootstrap/css/bootstrap.min.css') }}" rel="stylesheet"
+        type="text/css" />
     <link href="{{ url('assets/global/plugins/uniform/css/uniform.default.css') }}" rel="stylesheet"
         type="text/css" />
     <link href="{{ url('assets/global/plugins/bootstrap-switch/css/bootstrap-switch.min.css') }}" rel="stylesheet"
@@ -179,6 +180,21 @@
             var data_body2 = document.getElementById('data_body2');
             if (data_body2) {
                 tableHTML = tableHTML + data_body2.outerHTML.replace(/ /g, '%20');
+            }
+            //Nội dung 4
+            var data_body3 = document.getElementById('data_body3');
+            if (data_body3) {
+                tableHTML = tableHTML + data_body3.outerHTML.replace(/ /g, '%20');
+            }
+            //Nội dung 5
+            var data_body4 = document.getElementById('data_body4');
+            if (data_body4) {
+                tableHTML = tableHTML + data_body4.outerHTML.replace(/ /g, '%20');
+            }
+            //Nội dung 6
+            var data_body5 = document.getElementById('data_body5');
+            if (data_body5) {
+                tableHTML = tableHTML + data_body5.outerHTML.replace(/ /g, '%20');
             }
 
             //Chữ ký

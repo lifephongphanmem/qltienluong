@@ -457,7 +457,7 @@ class bangluong_inController extends Controller
                 ->with('m_dv', $m_dv)
                 ->with('model_congtac', $model_congtac)
                 ->with('thongtin', $thongtin)
-                ->with('pageTitle', 'Danh sách cán bộ tăng lương');
+                ->with('pageTitle', 'Bảng lương chi tiết');
         } else
             return view('errors.notlogin');
     }
@@ -1067,7 +1067,7 @@ class bangluong_inController extends Controller
                 ->with('col', $col)
                 ->with('model_congtac', $model_congtac)
                 ->with('a_phucap', $a_phucap)
-                ->with('pageTitle', 'Danh sách cán bộ tăng lương');
+                ->with('pageTitle', 'Bảng lương chi tiết');
         } else
             return view('errors.notlogin');
     }
@@ -1264,7 +1264,7 @@ class bangluong_inController extends Controller
                 ->with('m_dv', $m_dv)
                 ->with('thongtin', $thongtin)
                 ->with('model_congtac', $model_congtac)
-                ->with('pageTitle', 'Danh sách cán bộ tăng lương');
+                ->with('pageTitle', 'Bảng lương chi tiết');
         } else
             return view('errors.notlogin');
     }
@@ -1291,7 +1291,10 @@ class bangluong_inController extends Controller
             $a_npb = array_column($model_pb->toarray(), 'diengiai', 'mapb');
 
             foreach ($model as $ct) {
-                $ct->nhompb = $a_npb[$ct->mapb];
+                if(!empty($a_npb[$ct->mapb])){
+                    $ct->nhompb = $a_npb[$ct->mapb];  
+                }
+                                   
             }
 
             $thongtin = array(

@@ -1,35 +1,10 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html lang="vi">
 
-<head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-    <title>{{$pageTitle}}</title>
-    <style type="text/css">
-        body {
-            font: normal 14px/16px time, serif;
-        }
+    @extends('main_baocao')
 
-        table, p {
-            width: 98%;
-            /*margin: auto;*/
-        }
+@section('content')
+    <p id="data_header" style="text-align: center; font-weight: bold; font-size: 20px;">THÔNG TIN HỒ SƠ CÁN BỘ</p>
 
-        td, th {
-            padding: 5px;
-        }
-        p{
-            padding: 5px;
-        }
-        span{
-            text-transform: uppercase;
-            font-weight: bold;
-        }
-    </style>
-</head>
-<body style="font:normal 14px Times, serif;">
-    <p style="text-align: center; font-weight: bold; font-size: 20px;">THÔNG TIN HỒ SƠ CÁN BỘ</p>
-
-    <table width="96%" border="0" cellspacing="0">
+    <table id="data_body" width="96%" border="0" cellspacing="0">
         <tr>
             <td style="width: 5%"></td>
             <td style="width: 25%">Họ và tên:</td><td>{{$model->tencanbo}}</td>
@@ -66,8 +41,8 @@
         </tr>
     </table>
 
-    <p style="text-align: left; font-weight: bold; font-size: 14px;padding-left: 20px">Thông tin các loại hệ số, phụ cấp đang hưởng</p>
-    <table cellspacing="0" cellpadding="0" border="1" style="margin: 20px auto; border-collapse: collapse;">
+    <p id="data_body1" style="text-align: left; font-weight: bold; font-size: 14px;padding-left: 20px">Thông tin các loại hệ số, phụ cấp đang hưởng</p>
+    <table id="data_body2" cellspacing="0" cellpadding="0" border="1" style="margin: 20px auto; border-collapse: collapse;">
         <tr>
             <th style="width: 10%">STT</th>
             <th>Tên hệ số, phụ cấp</th>
@@ -86,7 +61,7 @@
 
     </table>
 
-    <table width="96%" border="0" cellspacing="0" style="text-align: center">
+    <table id="data_footer" width="96%" border="0" cellspacing="0" style="text-align: center">
         <tr>
             <td style="width: 50%">&nbsp;</td>
             <td style="width: 50%">…………, Ngày…...tháng……năm……</td>
@@ -106,6 +81,4 @@
         </tr>
     </table>
     <p style="page-break-before: always">
-
-</body>
-</html>
+@stop

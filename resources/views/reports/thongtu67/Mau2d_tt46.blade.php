@@ -1,37 +1,8 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html lang="vi">
+@extends('main_baocao')
 
-<head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-    <title>{{$pageTitle}}</title>
-    <link rel="shortcut icon" href="{{ url('images/LIFESOFT.png')}}" type="image/x-icon">
-    <style type="text/css">
-        body {
-            font: normal 14px/16px time, serif;
-        }
-        table, p {
-            width: 98%;
-            margin: auto;
-        }
+@section('content')
 
-        td, th {
-            padding: 5px;
-        }
-        p{
-            padding: 5px;
-        }
-        span{
-            text-transform: uppercase;
-            font-weight: bold;
-
-        }
-
-    </style>
-</head>
-
-<body style="font:normal 12px Arial, serif;">
-
-<table width="96%" border="0" cellspacing="0" cellpadding="4" style="margin:0 auto 20px;text-align: center">
+<table id="data_header" width="96%" border="0" cellspacing="0" cellpadding="4" style="margin:0 auto 20px;text-align: center">
     <tr>
         <td style="text-align: left">
             <b>UỶ BAN NHÂN DÂN TỈNH, THÀNH PHỐ {{$m_dv->diadanh}}</b> <br>
@@ -58,7 +29,7 @@
         </td>
     </tr>
 </table>
-<table width="96%" border ="1" cellspacing="0" cellpadding="4" style="margin:0 auto 20px; text-align: center;">
+<table id="data_body" width="96%" border ="1" cellspacing="0" cellpadding="4" style="margin:0 auto 20px; text-align: center;">
     <tr >
         <th rowspan="2" style="width: 5%">STT</th>
         <th rowspan="2" style="width: 30%">CHỈ TIÊU</th>
@@ -115,7 +86,7 @@
     @endforeach
 </table>
 
-<table width="96%" border="0" cellspacing="0" cellpadding="4">
+<table id="data_footer" width="96%" border="0" cellspacing="0" cellpadding="4">
     <tr>
         <td style="text-align: left;">
             <i><b>Ghi chú:</b> (1) Mức khoán trên đã bao gồm các ché độ quy định tại khoản 3b Nghị định số 29/2013/NĐ-CP ngày 08/4/2013 của Chính phủ.</i>
@@ -129,7 +100,7 @@
         </td>
     </tr>
 </table>
-<table width="96%" border ="0" cellspacing="0" cellpadding="4" style="margin:0 auto 20px; text-align: center;">
+<table id="data_footer1" width="96%" border ="0" cellspacing="0" cellpadding="4" style="margin:0 auto 20px; text-align: center;">
     <tr>
         <td ></td>
         <td style="font-style: italic; width: 50%">Ngày... tháng... năm ...</td>
@@ -144,5 +115,4 @@
     </tr>
 </table>
 
-</body>
-</html>
+@stop

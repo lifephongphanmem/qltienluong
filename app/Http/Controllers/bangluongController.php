@@ -4384,10 +4384,10 @@ class bangluongController extends Controller
             foreach ($model as $ct) {
                 $ct->luongcb = $m_bl->luongcoban;
                 $hoso = $model_hoso->where('macanbo', $ct->macanbo)->first();
-                $ct->tencanbo = $hoso->tencanbo;
-                $ct->lvtd = $hoso->lvtd;
-                $ct->sotk = $hoso->sotk ?? null;
-                $ct->lvtd = $hoso->lvtd ?? null;
+                    $ct->tencanbo = $hoso->tencanbo;
+                    $ct->lvtd = $hoso->lvtd;
+                    $ct->sotk = $hoso->sotk ?? null;
+                    $ct->lvtd = $hoso->lvtd ?? null;
                 $ct->hspc = ($ct->phanloai == 'KHAC' || $ct->congtac == 'KHONGCT') ? $ct->hesopc : $ct->heso;
                 $ct->sotien = $ct->hspc * $ct->luongcb;
             }
