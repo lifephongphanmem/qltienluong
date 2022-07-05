@@ -1,43 +1,8 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html lang="vi">
+@extends('main_baocao')
 
-<head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-    <title>{{$pageTitle}}</title>
-    <style type="text/css">
-        body {
-            font: normal 12px/14px time, serif;
-        }
+@section('content')
 
-        .header tr td {
-            padding-top: 0px;
-            padding-bottom: 10px;
-        }
-
-        table, p {
-            width: 98%;
-            margin: auto;
-        }
-
-        table tr td:first-child {
-            text-align: center;
-        }
-
-        td, th {
-            padding: 10px;
-        }
-        p{
-            padding: 5px;
-        }
-        span{
-            text-transform: uppercase;
-            font-weight: bold;
-        }
-    </style>
-</head>
-<body style="font:normal 12px Times, serif;">
-
-<table class="header" width="96%" border="0" cellspacing="0" cellpadding="8" style="margin:0 auto 25px; text-align: center;">
+<table id="data_header" class="header" width="96%" border="0" cellspacing="0" cellpadding="8" style="margin:0 auto 25px; text-align: center;">
     <tr>
         <td  style="text-align: left;width: 60%">
             <b>Đơn vị chủ quản: {{$m_dv->tenct}}</b>
@@ -55,10 +20,10 @@
         </td>
     </tr>
 </table>
-<p style="text-align: center; font-weight: bold; font-size: 20px;">BẢNG TỔNG HỢP CHI TRẢ TIỀN LƯƠNG VÀ PHỤ CẤP</p>
-<p style="text-align: center; font-style: italic">Từ tháng 01 năm 2017 đến tháng 12 năm 2017</p>
+<p id="data_body" style="text-align: center; font-weight: bold; font-size: 20px;">BẢNG TỔNG HỢP CHI TRẢ TIỀN LƯƠNG VÀ PHỤ CẤP</p>
+<p id="data_body1" style="text-align: center; font-style: italic">Từ tháng 01 năm 2017 đến tháng 12 năm 2017</p>
 
-<table cellspacing="0" cellpadding="0" border="1" style="margin: 20px auto; border-collapse: collapse;">
+<table id="data_body2" cellspacing="0" cellpadding="0" border="1" style="margin: 20px auto; border-collapse: collapse;">
     <tr style="padding-left: 2px;padding-right: 2px">
         <th style="width: 2%;padding-left: 2px;padding-right: 2px" rowspan="2">STT</th>
         <th style="width: 7%;padding-left: 2px;padding-right: 2px" rowspan="2">Đơn vị</th>
@@ -99,7 +64,7 @@
 
 </table>
 
-<table class="header" width="96%" border="0" cellspacing="0" cellpadding="8" style="margin:20px auto; text-align: center;">
+<table id="data_footer" class="header" width="96%" border="0" cellspacing="0" cellpadding="8" style="margin:20px auto; text-align: center;">
     <tr>
         <td style="text-align: left;" width="50%"></td>
         <td style="text-align: center; font-style: italic" width="50%">........,Ngày......tháng.......năm..........</td>
@@ -121,6 +86,4 @@
         <td style="text-align: center;" width="50%">{{$m_dv->lanhdao}}</td>
     </tr>
 </table>
-
-</body>
-</html>
+@stop

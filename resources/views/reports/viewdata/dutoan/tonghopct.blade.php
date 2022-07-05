@@ -1,65 +1,8 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<!--  Danh sách chi trả cá nhân -->
-<html lang="vi">
+@extends('main_baocao')
 
-<head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-    <title>{{$pageTitle}}</title>
-    <style type="text/css">
-        body {
-            font: normal 12px/14px time, serif;
-        }
+@section('content')
 
-        .header tr td {
-            padding-top: 0px;
-            padding-bottom: 5px;
-        }
-
-        .money tr td{
-            text-align: right;
-        }
-
-        table, p {
-            width: 98%;
-            margin: auto;
-        }
-
-        table tr td:first-child {
-            text-align: center;
-        }
-
-        td, th {
-            padding: 5px;
-        }
-
-        p{
-            padding: 5px;
-        }
-
-        span{
-            text-transform: uppercase;
-            font-weight: bold;
-        }
-
-        @media print {
-            .in{
-                display: none !important;
-            }
-        }
-        
-        tr > td {
-            border: 1px solid;
-        }
-    </style>
-</head>
-
-<div class="in" style="margin-right: 20px; text-align: right">
-    <button type="submit" onclick=" window.print()"> In danh sách</button>
-</div>
-
-<body style="font:normal 12px Times, serif;">
-
-<table class="header" width="96%" border="0" cellspacing="0" cellpadding="8" style="margin:0 auto 25px; text-align: center;">
+<table id="data_header" class="header" width="96%" border="0" cellspacing="0" cellpadding="8" style="margin:0 auto 25px; text-align: center;">
     <tr>
         <th style="text-align: left;width: 60%">
             <b>Đơn vị: {{$m_dv->tendv}}</b>
@@ -79,9 +22,9 @@
         </th>
     </tr>
 </table>
-<p style="text-align: center; font-weight: bold; font-size: 20px;">DỰ TOÁN LƯƠNG CỦA ĐƠN VỊ NĂM {{$inputs['namns']}}</p>
+<p id="data_body" style="text-align: center; font-weight: bold; font-size: 20px;">DỰ TOÁN LƯƠNG CỦA ĐƠN VỊ NĂM {{$inputs['namns']}}</p>
 
-<table class="money" cellspacing="0" cellpadding="0" border="1" style="margin: 20px auto; border-collapse: collapse;">
+<table id="data_body1" class="money" cellspacing="0" cellpadding="0" border="1" style="margin: 20px auto; border-collapse: collapse;">
     <tr style="padding-left: 2px;padding-right: 2px">
         <th style="width: 5%;">STT</th>
         <th>Phân loại</br>công tác</th>
@@ -117,7 +60,7 @@
     </tr>
 </table>
 
-<table class="header" width="96%" border="0" cellspacing="0" cellpadding="8" style="margin:20px auto; text-align: center;">
+<table id="data_footer" class="header" width="96%" border="0" cellspacing="0" cellpadding="8" style="margin:20px auto; text-align: center;">
     <tr>
         <th style="text-align: left;" width="50%"></th>
         <th style="text-align: center; font-style: italic" width="50%">{{$m_dv->diadanh .', ngày ... tháng ... năm .....'}}</th>
@@ -139,6 +82,4 @@
         <th style="text-align: center;" width="50%">{{$m_dv->lanhdao}}</th>
     </tr>
 </table>
-
-</body>
-</html>
+@stop

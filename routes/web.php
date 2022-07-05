@@ -606,6 +606,7 @@ Route::group(['prefix'=>'chuc_nang'],function(){
         Route::post('maumtm','bangluongController@printf_maumtm');
         Route::post('mau09nd11','bangluong_inController@printf_mau09nd11');
         Route::post('mautt107_m5','bangluong_inController@printf_mautt107_m5');
+        Route::post('mauC02_KH','bangluongController@printf_mauC02_KH');
         //mẫu bảng lương lai châu
         Route::post('mautt107_lc','bangluong_inController@printf_mautt107_lc');
         Route::post('mautt107_lc_xp','bangluong_inController@printf_mautt107_lc_xp');

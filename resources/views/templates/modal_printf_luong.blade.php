@@ -586,6 +586,18 @@
         }
     }
 
+    function inC02(url, exl = false){
+        $('#printf_mautt107').find("[id^='macvcq']").attr('disabled', false);
+        $('#printf_mautt107').find("[id^='mact']").attr('disabled', false);
+        $('#printf_mautt107').attr('action', url);
+        $('#printf_mautt107').find("[id^='mabl']").val($('#mabl_in').val());
+        var btn_xls = $('#printf_mautt107').find("[id^='btn_xls']");
+        btn_xls.removeClass('hidden');
+        if (!exl) {
+            btn_xls.addClass('hidden');
+        }
+        }
+
     function ClickBC1() {
         $('#printf_mau1').submit();
     }

@@ -27,9 +27,9 @@ class ComposerStaticInitd7de3fb6aaadd474bf447891cb3bef8d
         '58571171fd5812e6e447dce228f52f4d' => __DIR__ . '/..' . '/laravel/framework/src/Illuminate/Support/helpers.php',
         '17d016dc52a631c1e74d2eb8fdd57342' => __DIR__ . '/..' . '/laravel/helpers/src/helpers.php',
         'f18cc91337d49233e5754e93f3ed9ec3' => __DIR__ . '/..' . '/laravelcollective/html/src/helpers.php',
-        //'c21d74cb2feba186e7566d256c0cb6c0' => __DIR__ . '/../..' . '/app/Library/tienluong-functions.php',
-        //'d27eb44c80de13f037480208689755d3' => __DIR__ . '/../..' . '/app/Library/global-functions.php',
-        //'303f3cded94c729fa5f2c7c3cf2ce864' => __DIR__ . '/../..' . '/app/Library/array_function.php',
+        'c21d74cb2feba186e7566d256c0cb6c0' => __DIR__ . '/../..' . '/app/Library/tienluong-functions.php',
+        'd27eb44c80de13f037480208689755d3' => __DIR__ . '/../..' . '/app/Library/global-functions.php',
+        '303f3cded94c729fa5f2c7c3cf2ce864' => __DIR__ . '/../..' . '/app/Library/array_function.php',
     );
 
     public static $prefixLengthsPsr4 = array (
@@ -715,7 +715,7 @@ class ComposerStaticInitd7de3fb6aaadd474bf447891cb3bef8d
         'PHPUnit\\Util\\Configuration' => __DIR__ . '/..' . '/phpunit/phpunit/src/Util/Configuration.php',
         'PHPUnit\\Util\\ConfigurationGenerator' => __DIR__ . '/..' . '/phpunit/phpunit/src/Util/ConfigurationGenerator.php',
         'PHPUnit\\Util\\ErrorHandler' => __DIR__ . '/..' . '/phpunit/phpunit/src/Util/ErrorHandler.php',
-        'PHPUnit\\Util\\FileLoader' => __DIR__ . '/..' . '/phpunit/phpunit/src/Util/FileLoader.php',
+        'PHPUnit\\Util\\FileLoader' => __DIR__ . '/..' . '/phpunit/phpunit/src/Util/Fileloader.php',
         'PHPUnit\\Util\\Filesystem' => __DIR__ . '/..' . '/phpunit/phpunit/src/Util/Filesystem.php',
         'PHPUnit\\Util\\Filter' => __DIR__ . '/..' . '/phpunit/phpunit/src/Util/Filter.php',
         'PHPUnit\\Util\\Getopt' => __DIR__ . '/..' . '/phpunit/phpunit/src/Util/Getopt.php',
@@ -740,7 +740,7 @@ class ComposerStaticInitd7de3fb6aaadd474bf447891cb3bef8d
         'PHPUnit\\Util\\TextTestListRenderer' => __DIR__ . '/..' . '/phpunit/phpunit/src/Util/TextTestListRenderer.php',
         'PHPUnit\\Util\\Type' => __DIR__ . '/..' . '/phpunit/phpunit/src/Util/Type.php',
         'PHPUnit\\Util\\XdebugFilterScriptGenerator' => __DIR__ . '/..' . '/phpunit/phpunit/src/Util/XdebugFilterScriptGenerator.php',
-        'PHPUnit\\Util\\Xml' => __DIR__ . '/..' . '/phpunit/phpunit/src/Util/Xml.php',
+        'PHPUnit\\Util\\Xml' => __DIR__ . '/..' . '/phpunit/phpunit/src/Util/XML.php',
         'PHPUnit\\Util\\XmlTestListRenderer' => __DIR__ . '/..' . '/phpunit/phpunit/src/Util/XmlTestListRenderer.php',
         'PHPUnit_Framework_MockObject_MockObject' => __DIR__ . '/..' . '/phpunit/phpunit/src/Framework/MockObject/MockObject.php',
         'PHP_Token' => __DIR__ . '/..' . '/phpunit/php-token-stream/src/Token.php',

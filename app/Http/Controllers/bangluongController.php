@@ -220,10 +220,10 @@ class bangluongController extends Controller
     function store(Request $request)
     {
         $inputs = $request->all();
-        //dd($inputs);
+        // dd($inputs);
         $inputs['luongcoban'] = getDbl($inputs['luongcoban']);
         $model = bangluong::where('mabl', $inputs['mabl'])->first();
-        //dd($model);
+        // dd($model);
         if (isset($model)) {
             //update
             $inputs['phucaploaitru'] = $model->phucaploaitru;
@@ -263,11 +263,14 @@ class bangluongController extends Controller
             $inputs['luongcoban'] = getDbl($inputs['luongcoban']);
             dmdonvi::where('madv', $madv)->update(['phucaploaitru' => $inputs['phucaploaitru'], 'phucapluusotien' => $inputs['phucapluusotien']]);
             if (boolval($inputs['dinhmuc'])) {
+                dd(1);
                 $this->tinhluong_dinhmuc($inputs);
             } else {
                 $this->tinhluong_khongdinhmuc($inputs);
             }
+            
         }
+       
         //Tạo bảng lương
         bangluong::create($inputs);
         return redirect('/chuc_nang/bang_luong/bang_luong?mabl=' . $inputs['mabl'] . '&mapb=');
@@ -5031,6 +5034,20 @@ class bangluongController extends Controller
                 ->with('pageTitle', 'Bảng lương chi tiết');
         } else
             return view('errors.notlogin');
+    } 
+
+    public function printf_mauC02_KH(Request $request){
+        $inputs=$request->all();
+        $mabl = $inputs['mabl'];
+        $model = $this->getBangLuong($inputs)->wherein('phanloai', ['CVCHINH', 'KHONGCT']);
+        $m_bl = bangluong::select('thang', 'nam', 'mabl', 'madv', 'ngaylap', 'phanloai', 'luongcoban', 'noidung')->where('mabl', $mabl)->first();
+        $model_congtac = dmphanloaict::select('mact', 'tenct')
+        ->wherein('mact', a_unique(array_column($model->toarray(), 'mact')))->get();
+        // dd($model);
+        return view('reports.bangluong.donvi.mauC02_KH')
+                ->with('model',$model)
+                ->with('model_congtac',$model_congtac)
+                ->with('pageTitle','Bảng lương chi tiết');
     }
 
     public function printf_mautruylinh(Request $request)

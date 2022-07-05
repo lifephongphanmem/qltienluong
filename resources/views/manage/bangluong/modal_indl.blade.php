@@ -238,6 +238,18 @@
                                         </div>
                                     </div>
                                 </div>
+                                
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <button type="button" style="border-width: 0px" onclick="inC02('/chuc_nang/bang_luong/mauC02_KH')" class="btn btn-default btn-xs mbs"
+                                            title="Bảng lương thêm cột giảm trừ lương, phần trăm vượt khung" data-target="#mautt107-modal" data-toggle="modal">
+                                        <i class="fa fa-print"></i>&nbsp; Bảng lương mẫu C02-KH</button>
+                                            {{-- <a id="in_C02" href="" onclick="inC02('/chuc_nang/bang_luong/mauC02_KH')" style="border-width: 0px;margin-left: 5px" target="_blank">
+                                                <i class="fa fa-print"></i>&nbsp; Bảng lương mẫu C02-KH</a> --}}
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
 
                             <!-- Mẫu bảng lương lạng sơn + cao bằng -->
