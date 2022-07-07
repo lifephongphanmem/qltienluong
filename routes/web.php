@@ -106,6 +106,8 @@ Route::group(['prefix'=>'danh_muc'],function(){
         Route::get('add_detail','dmphanloaictController@store_detail');
         Route::get('update_detail','dmphanloaictController@update_detail');
         Route::get('get_detail','dmphanloaictController@getinfo_detail');
+        //Cho đơn vị cấp dưới xem
+        Route::get('don_vi','dmphanloaictController@xemdulieu');
     });
 
     Route::group(['prefix'=>'don_vi'],function(){
@@ -315,6 +317,7 @@ Route::group(['prefix'=>'nghiep_vu'],function(){
             Route::get('create_mau','dutoanluongController@create_mau');
             Route::post('thong_tin','dutoanluongController@thongtin_dutoan');
             Route::post('tao_du_toan','dutoanluongController@tao_dutoan');
+            Route::get('updchitieu','dutoanluongController@updchitieu');
             //Route::get('checkNamDuToan','dutoanluongController@checkNamDT');
             //Route::get('checkBangLuong','dutoanluongController@checkBangLuong');
             Route::post('senddata','dutoanluongController@senddata'); //gửi dữ liệu
@@ -331,6 +334,11 @@ Route::group(['prefix'=>'nghiep_vu'],function(){
             Route::post('mautt107_m2','dutoanluongController@printf_tt107_m2');
             Route::get('mautt107_m3','dutoanluongController@printf_tt107_m3');
             Route::get('nangluong','dutoanluongController@printf_nangluong');
+            //thiết kế mẫu in cho vạn ninh
+            Route::get('baocaohesoluong','dutoanluong_insolieuController@baocaohesoluong');
+            Route::get('kinhphikhongchuyentrach','dutoanluong_insolieuController@kinhphikhongchuyentrach');
+            Route::get('tonghopcanboxa','dutoanluong_insolieuController@tonghopcanboxa');
+            Route::get('tonghopdutoan','dutoanluong_insolieuController@tonghopdutoan');
         });
         /*
         Route::group(['prefix'=>'dia_ban_dbkk'],function(){

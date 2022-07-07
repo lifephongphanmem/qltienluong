@@ -313,6 +313,16 @@ function getPLCTTongHop()
         'pccovu','pclt','pcd','pctr','pctnvk','pcbdhdcu','pcthni');
     */
 }
+function getPLCTDuToan()
+{
+    return array_column(App\dmphanloaict::where('dutoan', 1)->get()->toarray(), 'mact');
+    /*
+    return array('heso','hesopc','vuotkhung','pcct','hesobl', 'luonghd','pcud61',
+        'pckct','pck','pccv','pckv','pcth','pcdd','pcdh','pcld',
+        'pcdbqh','pcudn','pctn','pctnn','pcdbn','pcvk','pckn','pcdang',
+        'pccovu','pclt','pcd','pctr','pctnvk','pcbdhdcu','pcthni');
+    */
+}
 
 function getThang()
 {
@@ -486,11 +496,11 @@ function getTextStatus($status)
         'CHUALUONG' => 'text-danger',
         'CHUATAO' => 'text-danger',
         'CHUADL' => 'text-danger', //dùng cho đơn vị chủ quản - chưa có đơn vị cấp dưới nào gửi dữ liệu
-        'CHOGUI' => 'text-info',
+        'CHOGUI' => 'text-dark',
         'DAGUI' => 'text-success',
         'TRALAI' => 'text-danger',
         'CHUADAYDU' => 'text-warning',
-        'CHUAGUI' => 'text-info', //dùng cho đơn vị chủ quản - các đơn vị cấp dưới đã có dữ liệu nhưng chưa gửi đi
+        'CHUAGUI' => 'text-dark', //dùng cho đơn vị chủ quản - các đơn vị cấp dưới đã có dữ liệu nhưng chưa gửi đi
         'GUILOI' => 'text-danger',
         'BANGLUONG' => 'text-success',
     );

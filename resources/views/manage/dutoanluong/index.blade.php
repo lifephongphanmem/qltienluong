@@ -45,21 +45,23 @@
                 <div class="portlet-body form-horizontal">
                     <table id="sample_4" class="table table-hover table-striped table-bordered" style="min-height: 230px">
                         <thead>
-                            <tr>
-                                <th class="text-center" style="width: 5%">STT</th>
-                                <th class="text-center">Năm ngân</br>sách</th>
-                                <th class="text-center">Tổng số</th>
-                                <th class="text-center">Lương theo</br>ngạch bậc</th>
-                                <th class="text-center">Tổng các khoản</br>phụ cấp</th>
-                                <th class="text-center">Các khoản</br>đóng góp</th>
-                                <th class="text-center">Thao tác</th>
+                            <tr class="text-center">
+                                <th style="width: 5%">STT</th>
+                                <th>Năm</br>ngân</br>sách</th>
+                                <th>Tổng số</th>
+                                <th>Lương theo</br>ngạch bậc</th>
+                                <th>Tổng các khoản</br>phụ cấp</th>
+                                <th>Các khoản</br>đóng góp</th>
+                                <th>Trạng thái</th>
+                                <th>Đơn vị tiếp nhận</th>
+                                <th style="width: 15%">Thao tác</th>
                             </tr>
                         </thead>
 
                         <tbody>
                             @if (isset($model))
                                 @foreach ($model as $key => $value)
-                                    <tr>
+                                    <tr class="{{ getTextStatus($value['trangthai']) }}">
                                         <td class="text-center">{{ $key + 1 }}</td>
                                         <td class="text-center">{{ $value->namns }}</td>
                                         <td class="text-right">
@@ -68,41 +70,41 @@
                                         <td class="text-right">{{ dinhdangsothapphan($value->luongnb_dt) }}</td>
                                         <td class="text-right">{{ dinhdangsothapphan($value->luonghs_dt) }}</td>
                                         <td class="text-right">{{ dinhdangsothapphan($value->luongbh_dt) }}</td>
+                                        <td class="text-center bold">{{$a_trangthai[$value['trangthai']]}}</td>
+                                        <td>{{ getTenDV($value->macqcq) }}</td>
                                         <td>
-                                            <a href="{{ url($furl . '?maso=' . $value->masodv) }}"
-                                                class="btn btn-default btn-xs mbs">
-                                                <i class="fa fa-th-list"></i>&nbsp; Chi tiết</a>
-                                            <!--a href="{{ url($furl . 'printf/ma_so=' . $value->masodv) }}" class="btn btn-default btn-xs mbs" TARGET="_blank">
-                                                                                    <i class="fa fa-print"></i>&nbsp; In dự toán</a>
-                                                                                <a href="{{ url($furl . 'printf_bl/ma_so=' . $value->masodv) }}" class="btn btn-default btn-xs mbs" TARGET="_blank">
-                                                                                    <i class="fa fa-print"></i>&nbsp; In bảng lương</a-->
+                                            <a title="Thông tin chi tiết"
+                                                href="{{ url($furl . '?maso=' . $value->masodv) }}"
+                                                class="btn btn-default btn-sm mbs">
+                                                <i class="fa fa-th-list"></i></a>
 
-                                            <button type="button"
+                                            <button type="button" title="In số liệu"
                                                 onclick="indutoan('{{ $value->namns }}','{{ $value->masodv }}')"
-                                                class="btn btn-default btn-xs mbs" data-target="#indt-modal"
+                                                class="btn btn-default btn-sm mbs" data-target="#indt-modal"
                                                 data-toggle="modal">
-                                                <i class="fa fa-print"></i>&nbsp; In dự toán</button>
+                                                <i class="fa fa-print"></i>
+                                            </button>
 
                                             @if ($value->trangthai == 'CHUAGUI' || $value->trangthai == 'TRALAI')
-                                                <button type="button" class="btn btn-default btn-xs"
-                                                    onclick="confirmChuyen('{{ $value->masodv }}')"
-                                                    data-target="#chuyen-modal" data-toggle="modal"><i
-                                                        class="fa fa-share-square-o"></i>&nbsp;
-                                                    Gửi dữ liệu</button>
+                                                <button type="button" class="btn btn-default btn-sm mbs"
+                                                    title="Gửi dữ liệu" onclick="confirmChuyen('{{ $value->masodv }}')"
+                                                    data-target="#chuyen-modal" data-toggle="modal">
+                                                    <i class="fa fa-share-square-o"></i>
+                                                </button>
 
-                                                <button type="button"
+                                                <button type="button" title="Xóa dữ liệu"
                                                     onclick="cfDel('{{ $furl . 'del/' . $value->id }}')"
-                                                    class="btn btn-default btn-xs mbs" data-target="#delete-modal-confirm"
+                                                    class="btn btn-default btn-sm mbs" data-target="#delete-modal-confirm"
                                                     data-toggle="modal">
-                                                    <i class="fa fa-trash-o"></i>&nbsp; Xóa</button>
+                                                    <i class="fa fa-trash-o"></i></button>
                                             @endif
 
                                             @if ($value->trangthai == 'TRALAI')
-                                                <button type="button" class="btn btn-default btn-xs"
-                                                    onclick="getLyDo('{{ $value['masodv'] }}')"
-                                                    data-target="#tralai-modal" data-toggle="modal"><i
-                                                        class="fa fa-share-square-o"></i>&nbsp;
-                                                    Lý do trả lại</button>
+                                                <button type="button" class="btn btn-default btn-sm mbs"
+                                                    title="Lý do trả lại" onclick="getLyDo('{{ $value['masodv'] }}')"
+                                                    data-target="#tralai-modal" data-toggle="modal">
+                                                    <i class="fa fa-share-square-o"></i>
+                                                </button>
                                             @endif
                                         </td>
                                     </tr>
@@ -117,89 +119,175 @@
 
     <!--Modal thông tin tùy chọn in bảng lương -->
     <div id="indt-modal" tabindex="-1" role="dialog" aria-hidden="true" class="modal fade">
+        <input type="hidden" id="nam_dt" name="nam_dt" />
+        <input type="hidden" id="masodv_dt" name="masodv_dt" />
         <div class="modal-lg modal-dialog modal-content">
             <div class="modal-header modal-header-primary">
                 <button type="button" data-dismiss="modal" aria-hidden="true" class="close">&times;</button>
-                <h4 id="hd-inbl" class="modal-title">In dự toán lương</h4>
+                <h4 id="hd-inbl" class="modal-title">In số liệu</h4>
             </div>
-
             <div class="modal-body">
                 <div class="row">
-                    <div class="col-md-6">
-                        <div class="form-group">
-                            <button type="button" onclick="intonghopdt('{{ $furl . 'printf?maso=' }}')"
-                                style="border-width: 0px" class="btn btn-default btn-xs mbs">
-                                <i class="fa fa-print"></i>&nbsp; In dự toán tổng hợp - mẫu 01</button>
-                        </div>
-                    </div>
+                    <div class="col-md-12">
+                        <div class="tabbable tabbable-custom tabbable-noborder tabbable-reversed">
+                            <ul class="nav nav-tabs">
+                                <li class="active">
+                                    <a href="#tab_2" data-toggle="tab" aria-expanded="false">
+                                        In dự toán lương </a>
+                                </li>
+                                <li>
+                                    <a href="#tab_3" data-toggle="tab" aria-expanded="true">
+                                        In dự ước lương </a>
+                                </li>
 
-                    <div class="col-md-6">
-                        <div class="form-group">
-                            <button type="button" onclick="intonghopdt('{{ $furl . 'printf_m2?maso=' }}')"
-                                style="border-width: 0px" class="btn btn-default btn-xs mbs">
-                                <i class="fa fa-print"></i>&nbsp; In dự toán tổng hợp - mẫu 02</button>
+                            </ul>
+                            <div class="tab-content">
+                                <div class="tab-pane active" id="tab_2">
+                                    <div class="portlet box blue form">
+                                        <div class="portlet-title"></div>
+                                        <div class="portlet-body">
+                                            <div class="row">
+                                                <div class="col-md-12">
+                                                    <div class="form-group">
+                                                        <button type="button"
+                                                            onclick="intonghopdt('{{ $furl . 'baocaohesoluong?maso=' }}')"
+                                                            style="border-width: 0px" class="btn btn-default btn-xs mbs">
+                                                            <i class="fa fa-print"></i>&nbsp; In bảng lương</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-md-12">
+                                                    <div class="form-group">
+                                                        <button type="button"
+                                                            onclick="intonghopdt('{{ $furl . 'kinhphikhongchuyentrach?maso=' }}')"
+                                                            style="border-width: 0px" class="btn btn-default btn-xs mbs">
+                                                            <i class="fa fa-print"></i>&nbsp; Tổng hợp kinh phí thực hiện
+                                                            chế đố phụ cấp cán bộ không chuyên trách</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-md-12">
+                                                    <div class="form-group">
+                                                        <button type="button"
+                                                            onclick="intonghopdt('{{ $furl . 'tonghopcanboxa?maso=' }}')"
+                                                            style="border-width: 0px" class="btn btn-default btn-xs mbs">
+                                                            <i class="fa fa-print"></i>&nbsp; Tổng hợp cán bộ chuyên trách,
+                                                            công chức xã</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-md-12">
+                                                    <div class="form-group">
+                                                        <button type="button"
+                                                            onclick="intonghopdt('{{ $furl . 'tonghopdutoan?maso=' }}')"
+                                                            style="border-width: 0px" class="btn btn-default btn-xs mbs">
+                                                            <i class="fa fa-print"></i>&nbsp; Tổng hợp biên chế, hệ số
+                                                            lương và phụ cấp có mặt</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="tab-pane" id="tab_3">
+                                    <div class="portlet box blue form">
+                                        <div class="portlet-title"></div>
+                                        <div class="portlet-body">
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <div class="form-group">
+                                                        <button type="button"
+                                                            onclick="intonghopdt('{{ $furl . 'printf?maso=' }}')"
+                                                            style="border-width: 0px" class="btn btn-default btn-xs mbs">
+                                                            <i class="fa fa-print"></i>&nbsp; In dự toán tổng hợp - mẫu
+                                                            01</button>
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-md-6">
+                                                    <div class="form-group">
+                                                        <button type="button"
+                                                            onclick="intonghopdt('{{ $furl . 'printf_m2?maso=' }}')"
+                                                            style="border-width: 0px" class="btn btn-default btn-xs mbs">
+                                                            <i class="fa fa-print"></i>&nbsp; In dự toán tổng hợp - mẫu
+                                                            02</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <div class="form-group">
+                                                        <button type="button"
+                                                            onclick="ThongTinKetXuat(false,'{{ $furl . 'mautt107' }}')"
+                                                            style="border-width: 0px" class="btn btn-default btn-xs mbs"
+                                                            data-target="#mautt107-modal" data-toggle="modal"
+                                                            title="Bảng lương của cán bộ theo mẫu C02-HD">
+                                                            <i class="fa fa-print"></i>&nbsp;Bảng lương mẫu C02-HD
+                                                            (TT107/2017/TT-BTC)</button>
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-md-6">
+                                                    <div class="form-group">
+                                                        <button type="button"
+                                                            onclick="ThongTinKetXuat(true,'{{ $furl . 'mautt107_m2' }}')"
+                                                            style="border-width: 0px" class="btn btn-default btn-xs mbs"
+                                                            data-target="#mautt107-modal" data-toggle="modal">
+                                                            <i class="fa fa-print"></i>&nbsp; Bảng lương mẫu C02-HD
+                                                            (Tổng hợp chi lương và nâng
+                                                            lương)</button>
+                                                    </div>
+                                                </div>
+
+
+                                                <!--div class="col-md-6">
+                                                                                                        <div class="form-group">
+                                                                                                            <button type="button" style="border-width: 0px" class="btn btn-default btn-xs mbs" data-target="#mautt107-modal" data-toggle="modal"
+                                                                                                                    title="Bảng lương của cán bộ theo mẫu C02-HD">
+                                                                                                                <i class="fa fa-print"></i>&nbsp; Bảng lương mẫu C02-HD (TT185/2010/TT-BTC)</button>
+                                                                                                        </div>
+                                                                                                    </div-->
+                                            </div>
+
+                                            <div class="row">
+                                                <!--div class="col-md-6">
+                                                                                                        <div class="form-group">
+                                                                                                            <button type="button" onclick="intonghopdt('{{ $furl . 'mautt107_m2?maso=' }}')" style="border-width: 0px" class="btn btn-default btn-xs mbs">
+                                                                                                                <i class="fa fa-print"></i>&nbsp; Bảng lương mẫu C02-HD (Tổng hợp chi lương các tháng)</button>
+                                                                                                        </div>
+                                                                                                    </div-->
+
+                                                <div class="col-md-6">
+                                                    <div class="form-group">
+                                                        <button type="button" style="border-width: 0px"
+                                                            onclick="innangluong()" class="btn btn-default btn-xs mbs">
+                                                            <i class="fa fa-print"></i>&nbsp; Danh sách cán bộ nâng
+                                                            lương</button>
+                                                    </div>
+                                                </div>
+
+                                                <!--div class="col-md-6">
+                                                                                                        <div class="form-group">
+                                                                                                            <button type="button" style="border-width: 0px" onclick="innghihuu()" class="btn btn-default btn-xs mbs">
+                                                                                                                <i class="fa fa-print"></i>&nbsp; Danh sách cán bộ nghỉ hưu</button>
+                                                                                                        </div>
+                                                                                                    </div-->
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+
+                            </div>
                         </div>
                     </div>
                 </div>
-
-                <div class="row">
-                    <div class="col-md-6">
-                        <div class="form-group">
-                            <button type="button" onclick="ThongTinKetXuat(false,'{{ $furl . 'mautt107' }}')"
-                                style="border-width: 0px" class="btn btn-default btn-xs mbs"
-                                data-target="#mautt107-modal" data-toggle="modal"
-                                title="Bảng lương của cán bộ theo mẫu C02-HD">
-                                <i class="fa fa-print"></i>&nbsp;Bảng lương mẫu C02-HD (TT107/2017/TT-BTC)</button>
-                        </div>
-                    </div>
-
-                    <div class="col-md-6">
-                        <div class="form-group">
-                            <button type="button" onclick="ThongTinKetXuat(true,'{{ $furl . 'mautt107_m2' }}')"
-                                style="border-width: 0px" class="btn btn-default btn-xs mbs"
-                                data-target="#mautt107-modal" data-toggle="modal">
-                                <i class="fa fa-print"></i>&nbsp; Bảng lương mẫu C02-HD (Tổng hợp chi lương và nâng
-                                lương)</button>
-                        </div>
-                    </div>
-
-
-                    <!--div class="col-md-6">
-                                                            <div class="form-group">
-                                                                <button type="button" style="border-width: 0px" class="btn btn-default btn-xs mbs" data-target="#mautt107-modal" data-toggle="modal"
-                                                                        title="Bảng lương của cán bộ theo mẫu C02-HD">
-                                                                    <i class="fa fa-print"></i>&nbsp; Bảng lương mẫu C02-HD (TT185/2010/TT-BTC)</button>
-                                                            </div>
-                                                        </div-->
-                </div>
-
-                <div class="row">
-                    <!--div class="col-md-6">
-                                                            <div class="form-group">
-                                                                <button type="button" onclick="intonghopdt('{{ $furl . 'mautt107_m2?maso=' }}')" style="border-width: 0px" class="btn btn-default btn-xs mbs">
-                                                                    <i class="fa fa-print"></i>&nbsp; Bảng lương mẫu C02-HD (Tổng hợp chi lương các tháng)</button>
-                                                            </div>
-                                                        </div-->
-
-                    <div class="col-md-6">
-                        <div class="form-group">
-                            <button type="button" style="border-width: 0px" onclick="innangluong()"
-                                class="btn btn-default btn-xs mbs">
-                                <i class="fa fa-print"></i>&nbsp; Danh sách cán bộ nâng lương</button>
-                        </div>
-                    </div>
-
-                    <!--div class="col-md-6">
-                                                            <div class="form-group">
-                                                                <button type="button" style="border-width: 0px" onclick="innghihuu()" class="btn btn-default btn-xs mbs">
-                                                                    <i class="fa fa-print"></i>&nbsp; Danh sách cán bộ nghỉ hưu</button>
-                                                            </div>
-                                                        </div-->
-                </div>
-                <input type="hidden" id="nam_dt" name="nam_dt" />
-                <input type="hidden" id="masodv_dt" name="masodv_dt" />
             </div>
-
             <div class="modal-footer">
                 <button type="button" data-dismiss="modal" class="btn btn-default">Hủy thao tác</button>
             </div>
@@ -207,7 +295,6 @@
     </div>
 
     <!--Modal thêm mới -->
-
     <div id="create-modal" tabindex="-1" role="dialog" aria-hidden="true" class="modal fade">
         <div class="modal-dialog modal-lg modal-content">
             <div class="modal-header modal-header-primary">
@@ -236,36 +323,37 @@
                                         <div class="portlet-title"></div>
                                         <div class="portlet-body">
                                             <div class="row">
-                                                <div class="col-md-6">
-                                                    <label class="control-label">Năm được giao dự toán</label>
+                                                <div class="col-md-3">
+                                                    <label class="control-label">Năm tạo dự toán</label>
                                                     {!! Form::text('namns', date('Y') + 1, ['id' => 'namns', 'class' => 'form-control text-right']) !!}
                                                 </div>
 
+                                                <div class="col-md-3">
+                                                    <label class="control-label">Mức lương cơ bản</label>
+                                                    {!! Form::text('luongcoban', getGeneralConfigs()['luongcb'], ['id' => 'luongcoban', 'class' => 'form-control text-right', 'data-mask' => 'fdecimal']) !!}
+                                                </div>
                                                 {{-- <div class="col-md-4">
                                                     <label class="control-label">Mức lương cơ bản</label>
                                                     {!! Form::text('luongcoban', getGeneralConfigs()['luongcb'], ['id' => 'luongcoban', 'class' => 'form-control', 'data-mask' => 'fdecimal']) !!}
                                                 </div> --}}
 
-                                                <div class="col-md-6">
+                                                {{-- <div class="col-md-6">
                                                     <label class="control-label">Dự toán từ tháng</label>
                                                     {!! Form::select('thangdt', getThang(), 01, ['class' => 'form-control']) !!}
-                                                </div>
+                                                </div> --}}
                                             </div>
 
                                             <div class="row">
                                                 <div class="col-md-3">
-                                                    <label class="control-label">Tháng</label>
+                                                    <label class="control-label">Lương cơ sở - Tháng</label>
                                                     {!! Form::text('thang', '07', ['id' => 'thang', 'class' => 'form-control']) !!}
                                                 </div>
                                                 <div class="col-md-3">
-                                                    <label class="control-label">Năm lương cơ sở</label>
+                                                    <label class="control-label">Năm</label>
                                                     {!! Form::text('nam', date('Y'), ['id' => 'nam', 'class' => 'form-control']) !!}
                                                 </div>
 
-                                                {{-- <div class="col-md-4">
-                                                    <label class="control-label">Mức lương cơ bản</label>
-                                                    {!! Form::text('luongcoban', getGeneralConfigs()['luongcb'], ['id' => 'luongcoban', 'class' => 'form-control', 'data-mask' => 'fdecimal']) !!}
-                                                </div> --}}
+
 
                                                 <div class="col-md-6">
                                                     <label class="control-label">Nguồn kinh phí</label>
@@ -333,53 +421,17 @@
                                                 </div>
                                             </div>
                                         </div>
-                                            {!! Form::close() !!}
-                                        </div>
+                                        {!! Form::close() !!}
                                     </div>
                                 </div>
                             </div>
-
-                            <!--div class="tab-pane" id="tab_1">
-                                                                        <table id="sample_4" class="table table-hover table-striped table-bordered">
-                                                                            <thead>
-                                                                                <tr>
-                                                                                    <th class="text-center" style="width: 5%">STT</th>
-                                                                                    <th class="text-center">Tháng</br>Năm</th>
-                                                                                    <th class="text-center">Nguồn kinh phí</th>
-                                                                                    <th class="text-center">Nội dung</th>
-                                                                                    <th class="text-center">Thao tác</th>
-                                                                                </tr>
-                                                                            </thead>
-                                                                            <?php $i = 1; ?>
-                                                                            <tbody>
-                                                                                @foreach ($model_bl as $key => $value)
-    <tr>
-                                                                                        <td class="text-center">{{ $i++ }}</td>
-                                                                                        <td class="text-center">{{ $value->thang . '/' . $value->nam }}</td>
-                                                                                        <td>{{ isset($a_nkp[$value->manguonkp]) ? $a_nkp[$value->manguonkp] : '' }}
-                                                                                        </td>
-                                                                                        <td>{{ $value->noidung }}</td>
-                                                                                        <td>
-                                                                                            <button type="button" onclick="taobl('{{ $value->mabl }}')"
-                                                                                                class="btn btn-default btn-xs mbs">
-                                                                                                <i class="fa fa-edit"></i>&nbsp; Chọn</button>
-
-                                                                                            <a href="{{ url($furl . 'bang_luong?mabl=' . $value->mabl . '&mapb=') }}"
-                                                                                                class="btn btn-default btn-xs mbs" target="_blank">
-                                                                                                <i class="fa fa-th-list"></i>&nbsp; Danh sách</a>
-
-                                                                                        </td>
-                                                                                    </tr>
-    @endforeach
-                                                                            </tbody>
-                                                                        </table>
-                                                                    </div-->
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="modal-footer"></div>
         </div>
+        <div class="modal-footer"></div>
+    </div>
     </div>
 
 
@@ -398,6 +450,8 @@
                         <label><b>Số liệu tổng hợp khi gửi đi sẽ không thể chỉnh sửa. Bạn hãy kiểm tra kỹ số liệu trước khi
                                 gửi.</b></label>
                     </div>
+                    @if (session('admin'))
+                    @endif
                     <input type="hidden" name="masodv" id="masodv">
                     <div class="modal-footer">
                         <button type="button" class="btn default" data-dismiss="modal">Hủy</button>

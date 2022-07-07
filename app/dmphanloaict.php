@@ -11,6 +11,7 @@ class dmphanloaict extends Model
         'id',
         'macongtac',
         'tonghop',
+        'dutoan',
         'mact',
         'tenct',
         'bhxh',

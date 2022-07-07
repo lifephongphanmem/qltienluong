@@ -90,10 +90,24 @@ class dmphanloaictController extends Controller
         die($model);
     }
 
+    public function xemdulieu(){
+        if (Session::has('admin')) {
+            $a_nhomct = array_column(dmphanloaicongtac::all()->toArray(),'tencongtac','macongtac');
+            $m_pb = dmphanloaict::all();            
+            //dd($m_pb);
+            return view('system.danhmuc.congtac.xemdulieu')
+                ->with('model', $m_pb)
+                ->with('a_nhomct', $a_nhomct)
+                ->with('pageTitle', 'Danh mục phân loại công tác');
+        } else
+            return view('errors.notlogin');
+    }
+
     public function detail($macongtac){
         if (Session::has('admin')) {
             $m_pb = dmphanloaict::where('macongtac', $macongtac)->get();
             $m_nhom = dmphanloaicongtac::where('macongtac', $macongtac)->first();
+            //dd($m_pb);
             return view('system.danhmuc.congtac.detail')
                 ->with('model', $m_pb)
                 ->with('m_nhom', $m_nhom)
@@ -103,6 +117,7 @@ class dmphanloaictController extends Controller
         } else
             return view('errors.notlogin');
     }
+
 
     function store_detail(Request $request)
     {

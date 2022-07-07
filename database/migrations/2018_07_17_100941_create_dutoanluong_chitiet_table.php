@@ -33,6 +33,7 @@ class CreateDutoanluongChitietTable extends Migration
             $table->double('luongnb_dt')->default(0);
             $table->double('luonghs_dt')->default(0);
             $table->double('luongbh_dt')->default(0);
+            
             $table->string('ghichu')->nullable();
             $table->timestamps();
         });
