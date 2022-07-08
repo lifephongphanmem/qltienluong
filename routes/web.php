@@ -887,6 +887,9 @@ Route::group(['prefix'=>'chuc_nang'],function(){
             Route::get('guitn','GuiTinNhanController@guitin');//in chi tiết bảng lương đơn vị
             //Mới làm lại 07/07/2022
             Route::post('tao_du_toan','dutoanluong_huyenController@tao_du_toan');
+
+            //Thiết kế mẫu cho Vạn Ninh
+            Route::get('kinhphikhongchuyentrach','dutoanluong_insolieu_huyenController@kinhphikhongchuyentrach');//in một khối trong khối
         });
 
         Route::group(['prefix'=>'khoi'],function(){

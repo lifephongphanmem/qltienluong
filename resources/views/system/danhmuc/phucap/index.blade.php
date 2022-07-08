@@ -41,7 +41,7 @@
                     @endif
                 </div>
                 <div class="portlet-body form-horizontal">
-                    <table id="sample_3" class="table table-hover table-striped table-bordered" style="min-height: 230px">
+                    <table id="sample_4" class="table table-hover table-striped table-bordered" style="min-height: 230px">
                         <thead>
                             <tr class="text-center" >
                                 <th style="width: 5%">STT</th>
@@ -49,7 +49,7 @@
                                 <th class="text-center">Phụ cấp</th>
                                 <th class="text-center">Phân loại</th>
                                 <th class="text-center">Bao gồm các</br>loại hệ số</th>
-                                <th class="text-center">Tổng hợp</br>số liệu,</br>dự toán</th>
+                                <th class="text-center">Tổng hợp</br>số liệu</th>
                                 <th class="text-center">Dự toán</br>lương</th>
                                 <th class="text-center">Nộp</br>bảo</br>hiểm</th>
                                 <th class="text-center">Trừ</br>nghỉ</br>phép</th>

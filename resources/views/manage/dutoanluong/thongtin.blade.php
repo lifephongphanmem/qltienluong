@@ -106,7 +106,7 @@
                                                 <div class="col-md-6">
                                                     <div class="form-group">
                                                         <label class="control-label">Phân loại xã </label>
-                                                        {!! Form::select('phanloaixa', getPhanLoaiXa(),session('admin')->phanloaixa, ['class' => 'form-control']) !!}
+                                                        {!! Form::select('phanloaixa', getPhanLoaiXa(), session('admin')->phanloaixa, ['class' => 'form-control']) !!}
                                                     </div>
                                                 </div>
 
@@ -189,6 +189,19 @@
                                     <!-- END PORTLET-->
                                 </div>
                             </div>
+                        @else
+                            {!! Form::hidden('phanloaixa', session('admin')->phanloaixa, ['class' => 'form-control']) !!}
+                            {!! Form::hidden('phanloaixa_heso', 16, ['class' => 'form-control text-right', 'data-mask' => 'fdecimal']) !!}
+                            {!! Form::hidden('sothonxabiengioi', 0, ['class' => 'form-control']) !!}
+                            {!! Form::hidden('sothonxabiengioi_heso', 5, ['class' => 'form-control text-right', 'data-mask' => 'fdecimal']) !!}
+                            {!! Form::hidden('sothonxakhokhan', 0, ['class' => 'form-control']) !!}
+                            {!! Form::hidden('sothonxakhokhan_heso', 5, ['class' => 'form-control text-right', 'data-mask' => 'fdecimal']) !!}
+                            {!! Form::hidden('sothonxaloai1', 0, ['class' => 'form-control']) !!}
+                            {!! Form::hidden('sothonxaloai1_heso', 5, ['class' => 'form-control text-right', 'data-mask' => 'fdecimal']) !!}
+                            {!! Form::hidden('sothonxatrongdiem', 0, ['class' => 'form-control']) !!}
+                            {!! Form::hidden('sothonxatrongdiem_heso', 0.5, ['class' => 'form-control text-right', 'data-mask' => 'fdecimal']) !!}
+                            {!! Form::hidden('sothonxakhac', 0, ['class' => 'form-control']) !!}
+                            {!! Form::hidden('sothonxakhac_heso', 3, ['class' => 'form-control text-right', 'data-mask' => 'fdecimal']) !!}
                         @endif
 
                         <div class="row">
@@ -257,7 +270,8 @@
                     </div>
                     <hr>
                     <div style="text-align: center;">
-                        <button type="submit" class="btn btn-default">Tạo dự toán <i class="fa fa-save mlx"></i></button>
+                        <button type="submit" class="btn btn-default">Tạo dự toán <i
+                                class="fa fa-save mlx"></i></button>
                         <a href="{{ url('/nghiep_vu/quan_ly/du_toan/danh_sach') }}" class="btn btn-default"><i
                                 class="fa fa-reply mlx"></i> Quay lại</a>
                     </div>

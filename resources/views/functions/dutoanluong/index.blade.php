@@ -153,8 +153,8 @@
 
         <!--Modal thông tin tùy chọn in bảng lương -->
         <div id="indt-modal" tabindex="-1" role="dialog" aria-hidden="true" class="modal fade">
-            <input type="hidden" id="nam_dt" name="nam_dt" />
-            <input type="hidden" id="masodv_dt" name="masodv_dt" />
+            <input type="hidden" id="namns" name="namns" />
+            <input type="hidden" id="masodv" name="masodv" />
             <div class="modal-lg modal-dialog modal-content">
                 <div class="modal-header modal-header-primary">
                     <button type="button" data-dismiss="modal" aria-hidden="true" class="close">&times;</button>
@@ -166,8 +166,8 @@
                         <div class="col-md-12">
                             <div class="form-group">
                                 <button type="button"
-                                    onclick="intonghopdt('{{ $furl_th . 'kinhphikhongchuyentrach?maso=' }}')"
-                                    style="border-width: 0px" class="btn btn-default btn-xs mbs">
+                                    onclick="insolieu('{{ $furl_th . 'kinhphikhongchuyentrach' }}')"
+                                    style="border-width: 0px" class="btn btn-default btn-xs mbs" data-target="#modal-insolieu" data-toggle="modal">
                                     <i class="fa fa-print"></i>&nbsp; Tổng hợp kinh phí thực hiện
                                     chế đố phụ cấp cán bộ không chuyên trách</button>
                             </div>
@@ -177,7 +177,7 @@
                         <div class="col-md-12">
                             <div class="form-group">
                                 <button type="button"
-                                    onclick="intonghopdt('{{ $furl_th . 'tonghopcanboxa?maso=' }}')"
+                                    onclick="intonghopdt('{{ $furl_th . 'tonghopcanboxa' }}')"
                                     style="border-width: 0px" class="btn btn-default btn-xs mbs">
                                     <i class="fa fa-print"></i>&nbsp; Tổng hợp cán bộ chuyên trách,
                                     công chức xã</button>
@@ -215,12 +215,72 @@
         </div>
 
         
+        <!--Mẫu 1 -->
+{!! Form::open(['url' => '', 'method' => 'post', 'target' => '_blank', 'files' => true, 'id' => 'frm_insolieu']) !!}
+<div id="modal-insolieu" tabindex="-1" role="dialog" aria-hidden="true" class="modal fade">
+    <div class="modal-dialog modal-content">
+        <div class="modal-header modal-header-primary">
+            <button type="button" data-dismiss="modal" aria-hidden="true" class="close">&times;</button>
+            <h4 id="header-inbl" class="modal-title">In bảng lương</h4>
+        </div>
+        <div class="modal-body">
+            <div class="form-horizontal">
+                <div class="row">                    
+
+                    <div class="col-md-12">
+                        <label class="control-label">Chức vụ</label>
+                        {!! Form::select('macvcq', getChucVuCQ(true), null, ['id' => 'macvcq', 'class' => 'form-control select2me']) !!}
+                    </div>
+                    
+
+                    <div class="col-md-12">
+                        <label class="control-label">Cỡ chữ</label>
+                        {!! Form::select('cochu', getCoChu(), 10, ['id' => 'cochu', 'class' => 'form-control select2me']) !!}
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-offset-3 col-md-9" style="margin-top: 15px">
+                        <input name="innoidung" id="innoidung" type="checkbox">
+                        <label for="innoidung">Tiều đề bảng lương là nội dung bảng lương</label>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-offset-3 col-md-9">
+                        <input name="inchucvuvt" id="inchucvuvt" type="checkbox">
+                        <label>In chức vụ/chức danh viết tắt</label>
+                    </div>
+                </div>
+
+            </div>
+
+            <input type="hidden" name="masodv" />
+            <input type="hidden" name="namns" />
+        </div>
+        <div class="modal-footer">
+            <button type="button" data-dismiss="modal" class="btn btn-default">Hủy thao tác</button>
+            <button type="submit" class="btn btn-success">Đồng ý</button>
+        </div>
+    </div>
+</div>
+{!! Form::close() !!}
+
+
     <script>
+        //Gán thông tin để lấy dữ liệu
         function indutoan(namdt, masodv) {
-            $('#nam_dt').val(namdt);
-            $('#masodv_dt').val(masodv);
+            $('#namns').val(namdt);
+            $('#masodv').val(masodv);
         }
 
+        //In dữ liệu
+        function insolieu(url) {
+        
+        $('#frm_insolieu').attr('action', url);
+        $('#frm_insolieu').find("[name^='masodv']").val($('#masodv').val());
+        $('#frm_insolieu').find("[name^='namns']").val($('#namns').val());
+        
+    }
         function confirmChuyen(namns) {
             document.getElementById("namns").value = namns;
         }

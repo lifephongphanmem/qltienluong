@@ -125,7 +125,7 @@
                             </div>
 
                             <div class="col-md-12">
-                                <label class="control-label">Tên phân loại công tác</label>
+                                <label class="control-label">STT</label>
                                 {!! Form::text('sapxep', null, ['id' => 'sapxep', 'class' => 'form-control']) !!}
                             </div>
 
