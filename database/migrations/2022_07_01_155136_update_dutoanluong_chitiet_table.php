@@ -14,6 +14,8 @@ class UpdateDutoanluongChitietTable extends Migration
     public function up()
     {
         Schema::table('dutoanluong_chitiet', function (Blueprint $table) {
+            $table->string('phanloai',25)->default('COMAT');//phân loại biên chế có mặt; chưa tuyển để theo dõi
+
             //lưu theo từng phân loại sau 
             $table->double('heso')->default(0);
             $table->double('hesobl')->default(0);
@@ -101,6 +103,12 @@ class UpdateDutoanluongChitietTable extends Migration
 
             $table->double('tonghs')->default(0);
             $table->double('ttl')->default(0);
+            //
+            $table->double('bhxh_dv')->default(0);
+            $table->double('bhyt_dv')->default(0);
+            $table->double('bhtn_dv')->default(0);
+            $table->double('kpcd_dv')->default(0);
+            $table->double('tongbh_dv')->default(0);
      });
     }
 

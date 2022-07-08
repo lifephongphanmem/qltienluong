@@ -36,9 +36,8 @@
         <thead>
             <tr class="text-center">
                 <th style="width: 2%;" rowspan="3">S</br>T</br>T</th>
-                <th rowspan="3">CHỨC DANH</th>
-                <th rowspan="3">HỌ VÀ TÊN</th>
-                
+                <th style="width: 20%" rowspan="3">CHỨC DANH</th>
+                <th rowspan="3">HỌ VÀ TÊN</th>                
                 <th colspan="{{ 3 + $col }}">HỆ SỐ</th>
                 <th rowspan="3" style="width: 5%;">CỘNG HỆ SỐ</th>
                 <th style="width: 8%" rowspan="3">THÀNH TIỀN (01 THÁNG)</th>

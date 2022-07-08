@@ -124,14 +124,15 @@ class dutoanluong_insolieuController extends Controller
 
             //Sắp sếp theo chức vụ
 
-            $a_chucvu = dmchucvucq::wherein('madv', ['SSA', $m_dutoan->madv])->get()->keyBy('macvcq')->toArray();
-
+            $m_chucvu = dmchucvucq::wherein('madv', ['SA', 'SSA', $m_dutoan->madv])->get();
+            $a_tencv = array_column($m_chucvu->toarray(), 'tencv', 'macvcq');
+            $a_sapxep = array_column($m_chucvu->toarray(), 'sapxep', 'macvcq');
             foreach ($model as $ct) {
-                $ct->tencv = $a_chucvu[$ct->macvcq]['tencv'] ?? '';
-                $ct->sapxep = $a_chucvu[$ct->macvcq]['sapxep'] ?? 999;
+                $ct->tencv = $a_tencv[$ct->macvcq] ?? $ct->macvcq;
+                $ct->sapxep = $a_sapxep[$ct->macvcq] ?? 999;
                 $ct->tongphucap = $ct->tonghs - $ct->heso;
                 $ct->tongcong = $ct->tonghs + $ct->tongbh_dv;
-                $ct->quyluong = ($ct->ttl + $ct->ttbh_dv) * 12;
+                $ct->quyluong = $ct->ttl + $ct->ttbh_dv;
             }
             //dd($col);
             return view('reports.dutoanluong.donvi.tonghopcanboxa')
@@ -202,6 +203,51 @@ class dutoanluong_insolieuController extends Controller
                 ->with('col', $col)
                 ->with('lamtron', session('admin')->lamtron ?? 3)
                 //->with('model_congtac', $model_congtac)
+                ->with('a_phucap', $a_phucap)
+                ->with('m_donvi', $m_donvi)
+                ->with('m_dutoan', $m_dutoan)
+                ->with('pageTitle', 'Báo cáo tổng hợp biên chế hệ số tiền lương và phụ cấp');
+        } else
+            return view('errors.notlogin');
+    }
+
+    function tonghopdutoan_m2(Request $request)
+    {
+        if (Session::has('admin')) {
+            $inputs = $request->all();
+            //dd($inputs);            
+            $m_dutoan = dutoanluong::where('masodv', $inputs['maso'])->first();
+            //dd($m_dutoan);
+            $model = dutoanluong_chitiet::where('masodv', $inputs['maso'])->get();            
+            $a_plct = array_column(dmphanloaict::all()->toArray(),'tenct','mact');
+            foreach ($model as $chitiet) {                
+                $chitiet->tenct = $a_plct[$chitiet->mact] ?? '';               
+                $chitiet->hesotrungbinh = round($chitiet->tonghs / $chitiet->canbo_congtac, 5);
+                $chitiet->baohiem = $chitiet->sum('bhxh_dv') + $chitiet->sum('bhyt_dv') + $chitiet->sum('kpcd_dv');               
+                $chitiet->tongphucap = $chitiet->tonghs - $chitiet->heso;
+                $chitiet->tongcong = $chitiet->tonghs + $chitiet->tongbh_dv;
+                $chitiet->quyluong = $chitiet->ttl + $chitiet->ttbh_dv;                
+            }
+            //dd($model);
+            $m_donvi = dmdonvi::where('madv', $m_dutoan->madv)->first();
+            
+            //xử lý ẩn hiện cột phụ cấp => biết tổng số cột hiện => colspan trên báo cáo
+            $a_goc = array('heso'); //do hệ số lương có cột cố định
+            $model_pc = dmphucap_donvi::where('madv', $m_dutoan->madv)->where('phanloai', '<', '3')->wherenotin('mapc', $a_goc)->orderby('stt')->get();
+            $a_phucap = array();
+            $col = 0;
+            foreach ($model_pc as $ct) {
+                if ($model->sum($ct->mapc) > 0) {
+                    $a_phucap[$ct->mapc] = $ct->report;
+                    $col++;
+                }
+            }
+
+            //dd($model);
+            return view('reports.dutoanluong.donvi.tonghopdutoan_m2')
+                ->with('model', $model)
+                ->with('col', $col)
+                ->with('lamtron', session('admin')->lamtron ?? 3)
                 ->with('a_phucap', $a_phucap)
                 ->with('m_donvi', $m_donvi)
                 ->with('m_dutoan', $m_dutoan)

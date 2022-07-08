@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class UpdateDutoanluongTable extends Migration
+class UpdateDmphucapDonviTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,9 +13,8 @@ class UpdateDutoanluongTable extends Migration
      */
     public function up()
     {
-        Schema::table('dutoanluong', function (Blueprint $table) {           
-            $table->double('sothonxaloai1')->default(0);
-           
+        Schema::table('dmphucap_donvi', function (Blueprint $table) {
+            $table->double('dutoan')->default(0);
         });
     }
 

@@ -130,9 +130,9 @@ class dutoanluongController extends Controller
             ->where('nam', $inputs['nam'])
             ->where('mact', $inputs['mact'])
             ->first();
-        $model->soluongduocgiao = chkDbl($inputs['soluongduocgiao']);
         $model->soluongbienche = chkDbl($inputs['soluongbienche']);
         $model->soluongtuyenthem = chkDbl($inputs['soluongtuyenthem']);
+        $model->soluongduocgiao = chkDbl($inputs['soluongbienche']) + chkDbl($inputs['soluongtuyenthem']);
         $model->heso = chkDbl($inputs['heso']);
         $model->mact_tuyenthem = $inputs['mact_tuyenthem'];
         $model->save();
@@ -264,7 +264,7 @@ class dutoanluongController extends Controller
             $m_chitieu = chitieubienche::select(array_merge(array('soluongtuyenthem', 'soluongduocgiao', 'soluongbienche', 'mact', 'mact_tuyenthem'), $a_pc))
                 ->where('madv', session('admin')->madv)
                 ->where('nam', $inputs['namns'])->get();
-            //$a_chitieu = $m_chitieu->toarray();
+            $a_chitieu = $m_chitieu->keyBy('mact')->toarray();
             $a_baohiem = dmphanloaicongtac_baohiem::wherein('mact', array_column($m_chitieu->toarray(), 'mact'))
                 ->where('madv', session('admin')->madv)->get()->keyBy('mact')->toarray();
             foreach ($m_chitieu as $key => $val) {
@@ -322,6 +322,7 @@ class dutoanluongController extends Controller
                 $dutoan['mact'] = $data;
                 $dutoan['masodv'] = $masodv;
                 $dutoan['canbo_congtac'] = count($canbo);
+                $dutoan['canbo_dutoan'] =  $a_chitieu[$data]['soluongduocgiao'] ?? $dutoan['canbo_congtac'];
                 //Tính lại tổng các phụ cấp
                 foreach ($a_pc as $pc) {
                     $tenpc_st = 'st_' . $pc;
@@ -363,6 +364,7 @@ class dutoanluongController extends Controller
                 $dutoan['mact'] = $data;
                 $dutoan['masodv'] = $masodv;
                 $dutoan['canbo_congtac'] = $canbo->sum('soluongtuyenthem'); //trường hợp 2 phân loại cùng chọn 01 mact_chuatuyen                
+                $dutoan['canbo_dutoan'] =  $dutoan['canbo_congtac'];
                 //Tính lại tổng các phụ cấp
                 foreach ($a_pc as $pc) {
                     $tenpc_st = 'st_' . $pc;
@@ -440,6 +442,30 @@ class dutoanluongController extends Controller
             }
             dutoanluong_chitiet::insert($a_dutoan);
             dutoanluong::create($inputs);
+            return redirect('/nghiep_vu/quan_ly/du_toan/danh_sach');
+        } else
+            return view('errors.notlogin');
+    }
+
+
+    function kinhphiKoCT(Request $request)
+    {
+        if (Session::has('admin')) {
+            $inputs = $request->all();
+            $model = dutoanluong::where('masodv', $inputs['masodv'])->first();
+            $inputs['sothonxabiengioi'] = chkDbl($inputs['sothonxabiengioi']);
+            $inputs['sothonxakhokhan'] = chkDbl($inputs['sothonxakhokhan']);
+            $inputs['sothonxatrongdiem'] = chkDbl($inputs['sothonxatrongdiem']);
+            $inputs['sothonxakhac'] = chkDbl($inputs['sothonxakhac']);
+            $inputs['sothonxaloai1'] = chkDbl($inputs['sothonxaloai1']);
+
+            $inputs['sothonxabiengioi_heso'] = chkDbl($inputs['sothonxabiengioi_heso']);
+            $inputs['sothonxakhokhan_heso'] = chkDbl($inputs['sothonxakhokhan_heso']);
+            $inputs['sothonxatrongdiem_heso'] = chkDbl($inputs['sothonxatrongdiem_heso']);
+            $inputs['sothonxakhac_heso'] = chkDbl($inputs['sothonxakhac_heso']);
+            $inputs['sothonxaloai1_heso'] = chkDbl($inputs['sothonxaloai1_heso']);
+            $inputs['phanloaixa_heso'] = chkDbl($inputs['phanloaixa_heso']);
+            $model->update($inputs);
             return redirect('/nghiep_vu/quan_ly/du_toan/danh_sach');
         } else
             return view('errors.notlogin');
@@ -2201,38 +2227,44 @@ class dutoanluongController extends Controller
     {
         if (Session::has('admin')) {
             $inputs = $requests->all();
-
             if (session('admin')->macqcq == '') {
                 return view('errors.chuacqcq');
             }
             $model = dutoanluong::where('masodv', $inputs['masodv'])->first();
 
-            //check đơn vị chủ quản là gửi lên huyện => chuyển trạng thái; import bản ghi vào bảng huyện
-            //khối => chuyển trạng thái
-            if (session('admin')->macqcq == session('admin')->madvqlkv) { //đơn vị chủ quản là huyện
-                //kiểm tra xem đã có bản ghi chưa (trường hợp trả lại)
-                $model_huyen = dutoanluong_huyen::where('masodv', $model->masoh)->first();
-                if (count($model_huyen) == 0) {
-                    $masoh = getdate()[0];
-                    $inputs['namns'] = $model->namns;
-                    $inputs['madv'] = $model->madv;
-                    $inputs['masodv'] = $masoh;
-                    $inputs['trangthai'] = 'DAGUI';
-                    $inputs['noidung'] = 'Đơn vị ' . getTenDV(session('admin')->madv) . ' tổng hợp dữ liệu dự toán lương.';
-                    $inputs['nguoilap'] = session('admin')->name;
-                    $inputs['ngaylap'] = Carbon::now()->toDateTimeString();
-                    $inputs['macqcq'] = session('admin')->macqcq;
-                    $inputs['madvbc'] = session('admin')->madvbc;
-                    $model->masoh = $masoh;
-                    dutoanluong_huyen::create($inputs);
-                } else {
-                    $model_huyen->trangthai = 'DAGUI';
-                    $model_huyen->nguoilap = session('admin')->name;
-                    $model_huyen->ngaylap = Carbon::now()->toDateTimeString();
-                    $model_huyen->save();
-                }
-            }
+            //Xem lại tính năng (07/07/2022)
+            // //check đơn vị chủ quản là gửi lên huyện => chuyển trạng thái; import bản ghi vào bảng huyện khối => chuyển trạng thái
+            // if (session('admin')->macqcq == session('admin')->madvqlkv) { //đơn vị chủ quản là huyện
+            //     //kiểm tra xem đã có bản ghi chưa (trường hợp trả lại)
+            //     $model_huyen = dutoanluong_huyen::where('masodv', $model->masoh)->first();
+            //     if ($model_huyen == null) {
+            //         $masoh = getdate()[0];
+            //         $inputs['namns'] = $model->namns;
+            //         $inputs['madv'] = $model->madv;
+            //         $inputs['masodv'] = $masoh;
+            //         $inputs['trangthai'] = 'DAGUI';
+            //         $inputs['noidung'] = 'Đơn vị ' . getTenDV(session('admin')->madv) . ' tổng hợp dữ liệu dự toán lương.';
+            //         $inputs['nguoilap'] = session('admin')->name;
+            //         $inputs['ngaylap'] = Carbon::now()->toDateTimeString();
+            //         $inputs['macqcq'] = session('admin')->macqcq;
+            //         $inputs['madvbc'] = session('admin')->madvbc;
 
+            //         $model->masoh = $masoh;
+            //         dutoanluong_huyen::create($inputs);
+            //     } else {
+            //         $model_huyen->trangthai = 'DAGUI';
+            //         $model_huyen->nguoilap = session('admin')->name;
+            //         $model_huyen->ngaylap = Carbon::now()->toDateTimeString();
+            //         $model_huyen->save();
+            //     }
+            // }
+            //KT-Xem lại tính năng (07/07/2022)
+
+
+            //Kiểm tra xem nếu trên huyện đã có dự toán thì tự động gán mã vào dự toán đơn vị
+            $chk_huyen = dutoanluong_huyen::where('madv', $model->macqcq)->where('namns', $model->namns)->first();
+            if ($chk_huyen != null)
+                $model->masoh = $chk_huyen->masodv;
             $model->nguoiguidv = session('admin')->name;
             $model->ngayguidv = Carbon::now()->toDateTimeString();
             $model->trangthai = 'DAGUI';

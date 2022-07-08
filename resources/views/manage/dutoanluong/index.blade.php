@@ -70,13 +70,9 @@
                                         <td class="text-right">{{ dinhdangsothapphan($value->luongnb_dt) }}</td>
                                         <td class="text-right">{{ dinhdangsothapphan($value->luonghs_dt) }}</td>
                                         <td class="text-right">{{ dinhdangsothapphan($value->luongbh_dt) }}</td>
-                                        <td class="text-center bold">{{$a_trangthai[$value['trangthai']]}}</td>
+                                        <td class="text-center bold">{{ $a_trangthai[$value['trangthai']] }}</td>
                                         <td>{{ getTenDV($value->macqcq) }}</td>
                                         <td>
-                                            <a title="Thông tin chi tiết"
-                                                href="{{ url($furl . '?maso=' . $value->masodv) }}"
-                                                class="btn btn-default btn-sm mbs">
-                                                <i class="fa fa-th-list"></i></a>
 
                                             <button type="button" title="In số liệu"
                                                 onclick="indutoan('{{ $value->namns }}','{{ $value->masodv }}')"
@@ -86,6 +82,28 @@
                                             </button>
 
                                             @if ($value->trangthai == 'CHUAGUI' || $value->trangthai == 'TRALAI')
+                                                {{-- chức năng sửa cho cán bộ không chuyên trách --}}
+                                                @if ($value->phanloai == 'DUTOAN' && session('admin')->maphanloai == 'KVXP')
+                                                    <button type="button"
+                                                        title="Chỉnh sửa kinh phí cán bộ không chuyên trách"
+                                                        onclick="getKinhPhiKoCT('{{ $value->masodv }}', 
+                                                        '{{ $value->phanloaixa }}',
+                                                        '{{ $value->phanloaixa_heso }}',
+                                                        '{{ $value->sothonxabiengioi }}',
+                                                        '{{ $value->sothonxabiengioi_heso }}',
+                                                        '{{ $value->sothonxakhokhan }}',
+                                                        '{{ $value->sothonxakhokhan_heso }}',
+                                                        '{{ $value->sothonxatrongdiem }}',
+                                                        '{{ $value->sothonxatrongdiem_heso }}',
+                                                        '{{ $value->sothonxakhac }}',
+                                                        '{{ $value->sothonxakhac_heso }}',
+                                                        '{{ $value->sothonxaloai1 }}',
+                                                        '{{ $value->sothonxaloai1_heso }}')"
+                                                        class="btn btn-default btn-sm mbs" data-target="#modal-KinhPhiKoCT"
+                                                        data-toggle="modal">
+                                                        <i class="fa fa-edit"></i></button>
+                                                @endif
+
                                                 <button type="button" class="btn btn-default btn-sm mbs"
                                                     title="Gửi dữ liệu" onclick="confirmChuyen('{{ $value->masodv }}')"
                                                     data-target="#chuyen-modal" data-toggle="modal">
@@ -185,7 +203,18 @@
                                                             onclick="intonghopdt('{{ $furl . 'tonghopdutoan?maso=' }}')"
                                                             style="border-width: 0px" class="btn btn-default btn-xs mbs">
                                                             <i class="fa fa-print"></i>&nbsp; Tổng hợp biên chế, hệ số
-                                                            lương và phụ cấp có mặt</button>
+                                                            lương và phụ cấp có mặt (Mẫu 01)</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-md-12">
+                                                    <div class="form-group">
+                                                        <button type="button"
+                                                            onclick="intonghopdt('{{ $furl . 'tonghopdutoan_m2?maso=' }}')"
+                                                            style="border-width: 0px" class="btn btn-default btn-xs mbs">
+                                                            <i class="fa fa-print"></i>&nbsp; Tổng hợp biên chế, hệ số
+                                                            lương và phụ cấp có mặt (Mẫu 02)</button>
                                                     </div>
                                                 </div>
                                             </div>
@@ -246,21 +275,21 @@
 
 
                                                 <!--div class="col-md-6">
-                                                                                                        <div class="form-group">
-                                                                                                            <button type="button" style="border-width: 0px" class="btn btn-default btn-xs mbs" data-target="#mautt107-modal" data-toggle="modal"
-                                                                                                                    title="Bảng lương của cán bộ theo mẫu C02-HD">
-                                                                                                                <i class="fa fa-print"></i>&nbsp; Bảng lương mẫu C02-HD (TT185/2010/TT-BTC)</button>
-                                                                                                        </div>
-                                                                                                    </div-->
+                                                                                                                                            <div class="form-group">
+                                                                                                                                                <button type="button" style="border-width: 0px" class="btn btn-default btn-xs mbs" data-target="#mautt107-modal" data-toggle="modal"
+                                                                                                                                                        title="Bảng lương của cán bộ theo mẫu C02-HD">
+                                                                                                                                                    <i class="fa fa-print"></i>&nbsp; Bảng lương mẫu C02-HD (TT185/2010/TT-BTC)</button>
+                                                                                                                                            </div>
+                                                                                                                                        </div-->
                                             </div>
 
                                             <div class="row">
                                                 <!--div class="col-md-6">
-                                                                                                        <div class="form-group">
-                                                                                                            <button type="button" onclick="intonghopdt('{{ $furl . 'mautt107_m2?maso=' }}')" style="border-width: 0px" class="btn btn-default btn-xs mbs">
-                                                                                                                <i class="fa fa-print"></i>&nbsp; Bảng lương mẫu C02-HD (Tổng hợp chi lương các tháng)</button>
-                                                                                                        </div>
-                                                                                                    </div-->
+                                                                                                                                            <div class="form-group">
+                                                                                                                                                <button type="button" onclick="intonghopdt('{{ $furl . 'mautt107_m2?maso=' }}')" style="border-width: 0px" class="btn btn-default btn-xs mbs">
+                                                                                                                                                    <i class="fa fa-print"></i>&nbsp; Bảng lương mẫu C02-HD (Tổng hợp chi lương các tháng)</button>
+                                                                                                                                            </div>
+                                                                                                                                        </div-->
 
                                                 <div class="col-md-6">
                                                     <div class="form-group">
@@ -272,11 +301,11 @@
                                                 </div>
 
                                                 <!--div class="col-md-6">
-                                                                                                        <div class="form-group">
-                                                                                                            <button type="button" style="border-width: 0px" onclick="innghihuu()" class="btn btn-default btn-xs mbs">
-                                                                                                                <i class="fa fa-print"></i>&nbsp; Danh sách cán bộ nghỉ hưu</button>
-                                                                                                        </div>
-                                                                                                    </div-->
+                                                                                                                                            <div class="form-group">
+                                                                                                                                                <button type="button" style="border-width: 0px" onclick="innghihuu()" class="btn btn-default btn-xs mbs">
+                                                                                                                                                    <i class="fa fa-print"></i>&nbsp; Danh sách cán bộ nghỉ hưu</button>
+                                                                                                                                            </div>
+                                                                                                                                        </div-->
                                             </div>
                                         </div>
 
@@ -432,8 +461,6 @@
         </div>
         <div class="modal-footer"></div>
     </div>
-    </div>
-
 
     <!--Model chuyển-->
     <div class="modal fade" id="chuyen-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
@@ -450,8 +477,6 @@
                         <label><b>Số liệu tổng hợp khi gửi đi sẽ không thể chỉnh sửa. Bạn hãy kiểm tra kỹ số liệu trước khi
                                 gửi.</b></label>
                     </div>
-                    @if (session('admin'))
-                    @endif
                     <input type="hidden" name="masodv" id="masodv">
                     <div class="modal-footer">
                         <button type="button" class="btn default" data-dismiss="modal">Hủy</button>
@@ -464,6 +489,115 @@
             </div>
             <!-- /.modal-dialog -->
         </div>
+    </div>
+
+    <!--Model kinh phí cán bộ không chuyên trách-->
+    <div class="modal fade" id="modal-KinhPhiKoCT" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                {!! Form::open(['url' => $furl . 'kinhphiKoCT', 'id' => 'frm_kpkct', 'method' => 'POST']) !!}
+                <input type="hidden" name="masodv" id="masodv">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+                    <h4 class="modal-title">Thông tin chi tiết</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-8">
+                            <div class="form-group">
+                                <label class="control-label">Phân loại xã </label>
+                                {!! Form::select('phanloaixa', getPhanLoaiXa(), null, ['class' => 'form-control']) !!}
+                            </div>
+                        </div>
+
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label class="control-label">Mức khoán quỹ phụ cấp </label>
+                                {!! Form::text('phanloaixa_heso', 16, ['class' => 'form-control text-right', 'data-mask' => 'fdecimal']) !!}
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-8">
+                            <label class="control-label">Số thôn thuộc xã biên giới, hải đảo</label>
+                            {!! Form::text('sothonxabiengioi', 0, ['class' => 'form-control']) !!}
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label class="control-label">Mức khoán quỹ phụ cấp </label>
+                                {!! Form::text('sothonxabiengioi_heso', 5, ['class' => 'form-control text-right', 'data-mask' => 'fdecimal']) !!}
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-8">
+                            <label class="control-label">Số thôn thuộc xã khó khăn theo QĐ
+                                30/2007/QĐ-TTg</label>
+                            {!! Form::text('sothonxakhokhan', 0, ['class' => 'form-control']) !!}
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label class="control-label">Mức khoán quỹ phụ cấp </label>
+                                {!! Form::text('sothonxakhokhan_heso', 5, ['class' => 'form-control text-right', 'data-mask' => 'fdecimal']) !!}
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-8">
+                            <label class="control-label">Số thôn thuộc xã loại I, loại II</label>
+                            {!! Form::text('sothonxaloai1', 0, ['class' => 'form-control']) !!}
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label class="control-label">Mức khoán quỹ phụ cấp </label>
+                                {!! Form::text('sothonxaloai1_heso', 5, ['class' => 'form-control text-right', 'data-mask' => 'fdecimal']) !!}
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-8">
+                            <label class="control-label">Số thôn thuộc xã trọng điểm, phức
+                                tạp</label>
+                            {!! Form::text('sothonxatrongdiem', 0, ['class' => 'form-control']) !!}
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label class="control-label">Mức khoán quỹ phụ cấp </label>
+                                {!! Form::text('sothonxatrongdiem_heso', 0.5, ['class' => 'form-control text-right', 'data-mask' => 'fdecimal']) !!}
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-8">
+                            <label class="control-label">Số thôn thuộc xã còn lại</label>
+                            {!! Form::text('sothonxakhac', 0, ['class' => 'form-control']) !!}
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label class="control-label">Mức khoán quỹ phụ cấp </label>
+                                {!! Form::text('sothonxakhac_heso', 3, ['class' => 'form-control text-right', 'data-mask' => 'fdecimal']) !!}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn default" data-dismiss="modal">Hủy</button>
+                    <button type="submit" class="btn blue">Đồng ý</button>
+
+                </div>
+                {!! Form::close() !!}
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+    </div>
     </div>
 
     <!--Model Trả lại -->
@@ -502,6 +636,25 @@
 
         function add() {
             $('#create-modal').modal('show');
+        }
+
+        function getKinhPhiKoCT(masodv, phanloaixa, phanloaixa_heso, sothonxabiengioi,
+            sothonxabiengioi_heso, sothonxakhokhan, sothonxakhokhan_heso, sothonxatrongdiem,
+            sothonxatrongdiem_heso, sothonxakhac, sothonxakhac_heso, sothonxaloai1,
+            sothonxaloai1_heso) {
+            $('#frm_kpkct').find("[name^='masodv']").val(masodv);
+            $('#frm_kpkct').find("[name^='phanloaixa']").val(phanloaixa);
+            $('#frm_kpkct').find("[name^='phanloaixa_heso']").val(phanloaixa_heso);
+            $('#frm_kpkct').find("[name^='sothonxabiengioi']").val(sothonxabiengioi);
+            $('#frm_kpkct').find("[name^='sothonxabiengioi_heso']").val(sothonxabiengioi_heso);
+            $('#frm_kpkct').find("[name^='sothonxakhokhan']").val(sothonxakhokhan);
+            $('#frm_kpkct').find("[name^='sothonxakhokhan_heso']").val(sothonxakhokhan_heso);
+            $('#frm_kpkct').find("[name^='sothonxatrongdiem']").val(sothonxatrongdiem);
+            $('#frm_kpkct').find("[name^='sothonxatrongdiem_heso']").val(sothonxatrongdiem_heso);
+            $('#frm_kpkct').find("[name^='sothonxakhac']").val(sothonxakhac);
+            $('#frm_kpkct').find("[name^='sothonxakhac_heso']").val(sothonxakhac_heso);
+            $('#frm_kpkct').find("[name^='sothonxaloai1']").val(sothonxaloai1);
+            $('#frm_kpkct').find("[name^='sothonxaloai1_heso']").val(sothonxaloai1_heso);
         }
 
         function confirmChuyen(masodv) {

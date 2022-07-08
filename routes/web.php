@@ -318,6 +318,7 @@ Route::group(['prefix'=>'nghiep_vu'],function(){
             Route::post('thong_tin','dutoanluongController@thongtin_dutoan');
             Route::post('tao_du_toan','dutoanluongController@tao_dutoan');
             Route::get('updchitieu','dutoanluongController@updchitieu');
+            Route::post('kinhphiKoCT','dutoanluongController@kinhphiKoCT');
             //Route::get('checkNamDuToan','dutoanluongController@checkNamDT');
             //Route::get('checkBangLuong','dutoanluongController@checkBangLuong');
             Route::post('senddata','dutoanluongController@senddata'); //gửi dữ liệu
@@ -339,6 +340,7 @@ Route::group(['prefix'=>'nghiep_vu'],function(){
             Route::get('kinhphikhongchuyentrach','dutoanluong_insolieuController@kinhphikhongchuyentrach');
             Route::get('tonghopcanboxa','dutoanluong_insolieuController@tonghopcanboxa');
             Route::get('tonghopdutoan','dutoanluong_insolieuController@tonghopdutoan');
+            Route::get('tonghopdutoan_m2','dutoanluong_insolieuController@tonghopdutoan_m2');
         });
         /*
         Route::group(['prefix'=>'dia_ban_dbkk'],function(){
@@ -883,6 +885,8 @@ Route::group(['prefix'=>'chuc_nang'],function(){
             Route::post('chitietblCR','dutoanluong_huyenController@chitietblCR');//in chi tiết bảng lương đơn vị
             Route::get('nangluongth','dutoanluong_huyenController@nangluongth');//in chi tiết bảng lương đơn vị
             Route::get('guitn','GuiTinNhanController@guitin');//in chi tiết bảng lương đơn vị
+            //Mới làm lại 07/07/2022
+            Route::post('tao_du_toan','dutoanluong_huyenController@tao_du_toan');
         });
 
         Route::group(['prefix'=>'khoi'],function(){

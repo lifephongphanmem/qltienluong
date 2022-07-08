@@ -25,68 +25,64 @@ use Illuminate\Support\Facades\Session;
 
 class dutoanluong_huyenController extends Controller
 {
-    public function index(Request $request)
+    public function index()
     {
         if (Session::has('admin')) {
-            $inputs = $request->all();
-            $model = dutoanluong_huyen::where('madv', session('admin')->madv)->get();
-            //dd($model);
             $madv = session('admin')->madv;
-            // $model_nguon = dutoanluong_huyen::where('macqcq', $madv)->where('trangthai', 'DAGUI')->get();
-            // $model_nguon_tinh = dutoanluong_tinh::where('madv', $madv)->get();
+            $model_nguon = dutoanluong_huyen::where('macqcq', $madv)->where('trangthai', 'DAGUI')->get();
+            $model_nguon_tinh = dutoanluong_tinh::where('madv', $madv)->get();
             //$model_nguon_khoi = nguonkinhphi_khoi::where('madv', $madv)->get();
-            //$model = dutoanluong::select('namns')->where('madvbc', session('admin')->madvbc)->distinct()->get();
+            $model = dutoanluong::select('namns')->where('madvbc', session('admin')->madvbc)->distinct()->get();
             $a_trangthai = getStatus();
             //Lấy dữ liệu các đơn vị cấp dưới đã gửi lên
 
-            // $model_donvi = dmdonvi::select('madv', 'tendv')
-            //     ->wherein('madv', function ($query) use ($madv) {
-            //         $query->select('madv')->from('dmdonvi')->where('macqcq', $madv)->where('madv', '<>', $madv)->get();
-            //     })->get();
-            // $soluong = $model_donvi->count();
+            $model_donvi = dmdonvi::select('madv', 'tendv')
+                ->wherein('madv', function ($query) use ($madv) {
+                    $query->select('madv')->from('dmdonvi')->where('macqcq', $madv)->where('madv', '<>', $madv)->get();
+                })->get();
+            $soluong = $model_donvi->count();
 
             foreach ($model as $dv) {
                 $nam = $dv->namns;
                 $model_donvi = dmdonvi::select('madv', 'tendv', 'maphanloai')
                     ->where('macqcq', $madv)->where('madv', '<>', $madv)
-                    ->wherenotin('madv', function ($query) use ($nam) {
+                    ->wherenotin('madv', function ($query) use ($madv, $nam) {
                         $query->select('madv')->from('dmdonvi')
                             ->whereyear('ngaydung', '<=', $nam)
                             ->where('trangthai', 'TD')
                             ->get();
                     })->get();
-                $dv->soluong = $model_donvi->count();
-                $dv->dagui = dutoanluong::where('macqcq', $madv)->where('namns', $nam)->count();
+                $soluong = $model_donvi->count();
+                $nguon_huyen = $model_nguon_tinh->where('namns', $dv->namns)->first();
+                if (isset($nguon_huyen)) {
+                    //Đã tổng hợp dữ liệu
+                    $dv->sldv = $soluong . '/' . $soluong;
+                    $dv->masodv = $nguon_huyen->masodv;
+                    $dv->trangthai = $nguon_huyen->trangthai;
+                    //$dv->trangthai = 'DAGUI';
+                } else {
+                    //Chưa tổng hợp dữ liệu
+                    $sl = $model_nguon->where('namns', $dv->namns)->count();
+                    $dv->sldv = $sl . '/' . $soluong;
+                    $dv->masodv = null;
+                    if ($sl == 0) {
+                        $dv->trangthai = 'CHUADL';
+                    } elseif ($sl < $soluong) {
+                        $dv->trangthai = 'CHUADAYDU';
+                    } elseif ($sl == $soluong) {
+                        $dv->trangthai = 'CHUAGUI';
+                    } else {
+                        $dv->trangthai = 'CHUATAO';
+                    }
+                }
             }
-            //dd($model);
             return view('functions.dutoanluong.index')
-                ->with('model', $model->sortby('namns'))
+                ->with('model', $model)
                 ->with('a_trangthai', $a_trangthai)
-                // ->with('soluong', $soluong)
+                ->with('soluong', $soluong)
                 ->with('furl_xem', '/chuc_nang/xem_du_lieu/du_toan/huyen')
                 ->with('furl_th', '/chuc_nang/du_toan_luong/huyen/')
                 ->with('pageTitle', 'Danh sách đơn vị tổng hợp dự toán lương');
-        } else
-            return view('errors.notlogin');
-    }
-
-    public function tao_du_toan(Request $request)
-    {
-        //kiểm tra xem đó là đơn vị SD hay TH&KHOI
-        if (Session::has('admin')) {
-            $inputs = $request->all();
-            $model = dutoanluong_huyen::where('madv', $inputs['madv'])->where('namns', $inputs['namns'])->first();
-            if ($model != null) {
-                $inputs['masodv'] = $model->masodv;
-            } else {
-                $inputs['trangthai'] = 'CHUAGUI';
-                $inputs['masodv'] = $inputs['madv'] . '_' . getdate()[0];
-                $inputs['ngaylap'] = date('Y-m-d');
-                dutoanluong_huyen::create($inputs);
-            }
-            dutoanluong::where('macqcq', $inputs['madv'])->where('namns', $inputs['namns'])->update(['masoh' => $inputs['masodv']]);
-
-            return redirect('/chuc_nang/du_toan_luong/huyen/index');
         } else
             return view('errors.notlogin');
     }
