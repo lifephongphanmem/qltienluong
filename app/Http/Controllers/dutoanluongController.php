@@ -208,7 +208,7 @@ class dutoanluongController extends Controller
             $masodv = session('admin')->madv . '_' . getdate()[0];
             $m_bl_ct = (new dataController())->getBangluong_ct($m_bl->thang, $m_bl->mabl);
             $a_plct = getPLCTDuToan();
-            $a_pc = getColTongHop();
+            $a_pc = getColDuToan();
             foreach ($m_bl_ct as $key => $value) {
                 if (!in_array($value->mact, $a_plct)) {
                     $m_bl_ct->pull($key);

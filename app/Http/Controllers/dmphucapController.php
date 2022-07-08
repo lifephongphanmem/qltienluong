@@ -197,12 +197,14 @@ class dmphucapController extends Controller
             $a_pl = getPhanLoaiPhuCap();
             $a_ct = getCongThucTinhPC(false);
             $a_th = getColTongHop();
+            $a_dt = getColDuToan();
             $a_plct = setArrayAll(array_column(dmphanloaict::all()->toArray(), 'tenct', 'mact'));
             foreach ($model as $ct) {
                 $ct->tenphanloai = isset($a_pl[$ct->phanloai]) ? $a_pl[$ct->phanloai] : '';
                 $congthuc = explode(',', $ct->congthuc);
                 //$ct->tencongthuc = '';
                 $ct->tonghop = in_array($ct->mapc, $a_th) ? '1' : '0';
+                $ct->dutoan = in_array($ct->mapc, $a_dt) ? '1' : '0';
                 foreach ($congthuc as $bg) {
                     $ct->tencongthuc .= isset($a_ct[$bg]) ? ($a_ct[$bg] . '; ') : '';
                 }

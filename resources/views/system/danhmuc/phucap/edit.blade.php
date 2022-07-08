@@ -95,8 +95,15 @@
                         <div class="row">
                             <div class="col-md-4">
                                 <div class="form-group">
-                                    <label class="form-control-label">Tổng hợp và dự toán</label>
+                                    <label class="form-control-label">Tổng hợp số liệu</label>
                                     {!!Form::select('tonghop',array('0'=>'Không','1'=>'Có'), null, array('id' => 'tonghop','class' => 'form-control'))!!}
+                                </div>
+                            </div>
+
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label class="form-control-label">Dự toán lương</label>
+                                    {!!Form::select('dutoan',array('0'=>'Không','1'=>'Có'), null, array('id' => 'dutoan','class' => 'form-control'))!!}
                                 </div>
                             </div>
 

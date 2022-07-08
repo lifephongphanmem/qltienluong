@@ -25,7 +25,7 @@ class dmchucvucqController extends Controller
                 $ct->phanloai = isset($a_pl[$ct->ttdv]) ? $a_pl[$ct->ttdv] : '';
             }
             return view('system.danhmuc.chucvucq.index')
-                ->with('model', $model)
+                ->with('model', $model->sortby('sapxep'))
                 ->with('model_pl', array_column($model_pl->toArray(), 'tenphanloai', 'maphanloai'))
                 ->with('a_plct', $a_plct)
                 ->with('mapl', $maphanloai)
@@ -48,7 +48,7 @@ class dmchucvucqController extends Controller
             //dd($model);
             $a_plct = array_column(dmphanloaict::all()->toArray(), 'tenct', 'mact');
             return view('system.danhmuc.chucvucq.index_donvi')
-                ->with('model', $model)
+                ->with('model', $model->sortby('sapxep'))
                 ->with('a_plct', $a_plct)
                 ->with('model_pl', array_column($model_pl->toArray(), 'tenphanloai', 'maphanloai'))
                 ->with('mapl', session('admin')->maphanloai)

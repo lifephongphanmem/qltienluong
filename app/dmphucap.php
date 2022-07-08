@@ -23,6 +23,7 @@ class dmphucap extends Model
         'phanloai',
         'congthuc',
         'tonghop',
+        'dutoan',
         'pccoso',
         'ghichu'
     ];
