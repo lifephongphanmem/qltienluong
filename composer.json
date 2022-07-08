@@ -32,9 +32,9 @@
             "App\\": "app/"
         },
         "files": [
-            "app/Library/tienluong-functions.php",
-            "app/Library/global-functions.php",
-            "app/Library/array_function.php"
+            // "app/Library/tienluong-functions.php",
+            // "app/Library/global-functions.php",
+            // "app/Library/array_function.php"
         ]
     },
     "autoload-dev": {
