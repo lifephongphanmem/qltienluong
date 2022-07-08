@@ -249,6 +249,12 @@
                                                 <i class="fa fa-print"></i>&nbsp; Bảng lương mẫu C02-KH</a> --}}
                                         </div>
                                     </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <a id="in_mau09" href="" onclick="inmau09_KH()" style="border-width: 0px;margin-left: 5px" target="_blank">
+                                                <i class="fa fa-print"></i>&nbsp; Bảng thanh toán cho đối tượng thụ hưởng</a>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
 

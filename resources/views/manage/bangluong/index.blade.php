@@ -584,6 +584,9 @@
         function inthpl(){
             $("#in_thpl").attr("href", '/chuc_nang/bang_luong/mauthpl?mabl=' + $('#mabl_in').val());
         }
+        function inmau09_KH(){
+            $("#in_mau09").attr("href", '/chuc_nang/bang_luong/mau09_KH?mabl=' + $('#mabl_in').val());
+        }
 
         $(function(){
             $("input[type=radio][name=pptinh]").change(function() {

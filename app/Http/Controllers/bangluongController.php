@@ -3124,6 +3124,7 @@ class bangluongController extends Controller
                     $cb->ttl_tn = $cb->ttl;
                 }
             }
+
             return view('reports.bangluong.donvi.mautt107_m2')
                 ->with('model', $model->sortBy('stt'))
                 ->with('model_pb', getPhongBan())
@@ -3833,7 +3834,7 @@ class bangluongController extends Controller
                 }
             }
             //dd($a_pc_tm); //đổi về collection
-            //dd($model_tm);
+            // dd($model_tm);
             foreach ($model_tm as $tm) {
                 $tm->heso = 0;
                 $tm->giaml = 0;
@@ -3891,7 +3892,7 @@ class bangluongController extends Controller
                     }
                 }
             }
-            //dd($model_tm);
+            // dd($model_tm);
             $model_tm = $model_tm->where('sotien', '>', 0);
             //dd($model_tm->toArray());
             $a_muc = $model_tm->map(function ($data) {
@@ -5038,15 +5039,59 @@ class bangluongController extends Controller
 
     public function printf_mauC02_KH(Request $request){
         $inputs=$request->all();
+        $inputs['inchucvuvt']='';
         $mabl = $inputs['mabl'];
-        $model = $this->getBangLuong($inputs)->wherein('phanloai', ['CVCHINH', 'KHONGCT']);
+        $model = $this->getBangLuong($inputs)->wherein('phanloai', ['CVCHINH', 'KHONGCT'])->sortByDesc('pccv');
         $m_bl = bangluong::select('thang', 'nam', 'mabl', 'madv', 'ngaylap', 'phanloai', 'luongcoban', 'noidung')->where('mabl', $mabl)->first();
+        $m_dv = dmdonvi::where('madv', $m_bl->madv)->first();
         $model_congtac = dmphanloaict::select('mact', 'tenct')
         ->wherein('mact', a_unique(array_column($model->toarray(), 'mact')))->get();
-        // dd($model);
+        $a_goc = array('hesott','heso');
+        $model_pc = dmphucap_donvi::where('madv', $m_bl->madv)->where('phanloai', '<', '3')->wherenotin('mapc', $a_goc)->get();
+
+
+        $a_phucap = array();/* Hiển thị các cột phụ cấp*/
+        $col = 0;
+        foreach ($model_pc as $ct) {
+            if ($model->sum($ct->mapc) > 0) {
+                $a_phucap[$ct->mapc] = $ct->form;
+                $col++;
+            }
+        }
+
+        $a_bh=array(); /* Hiển thị cột không tính bảo hiểm*/
+        foreach($a_phucap as $key=>$pc){
+            foreach($model_pc as $ct){
+                if($key == $ct->mapc){
+                    $a_bh[$ct->mapc]=$ct->baohiem;
+                }
+            }
+        }
+        $a_pb = getPhongBan();
+        $thongtin = array(
+            'nguoilap' => $m_bl->nguoilap,
+            'thang' => $m_bl->thang,
+            'nam' => $m_bl->nam,
+            'ngaylap' => $m_bl->ngaylap, 'phanloai' => $m_bl->phanloai,
+            'cochu' => $inputs['cochu'],
+            'mapb' => $inputs['mapb'],
+            'tenpb' => $a_pb[$inputs['mapb']],
+            'innoidung' => isset($inputs['innoidung']),
+            'noidung' => $m_bl->noidung,
+        );
+        $model_tm=dmtieumuc_default::all();
+        $a_tm=array_column($model_tm->toarray(),'mapc');//Mảng để so sánh
         return view('reports.bangluong.donvi.mauC02_KH')
                 ->with('model',$model)
+                ->with('model_pc',$model_pc)
+                ->with('col',$col)
+                ->with('a_phucap',$a_phucap)
+                ->with('a_bh',$a_bh)
+                ->with('a_tm',$a_tm)
                 ->with('model_congtac',$model_congtac)
+                ->with('model_tm',$model_tm)
+                ->with('thongtin',$thongtin)
+                ->with('m_dv',$m_dv)
                 ->with('pageTitle','Bảng lương chi tiết');
     }
 
@@ -5107,6 +5152,7 @@ class bangluongController extends Controller
                 ->with('a_nguon', $a_nguon)
                 ->with('a_phucap', $a_phucap)
                 ->with('a_chucvu', $a_chucvu)
+                ->with('a_dmnkp', $a_dmnkp)
                 ->with('a_dmnkp', $a_dmnkp)
                 ->with('pageTitle', 'Bảng lương chi tiết');
         } else
@@ -5235,4 +5281,9 @@ class bangluongController extends Controller
             return view('errors.notlogin');
     }
     //</editor-fold>
+
+    public function printf_mau09_KH(){
+        return view('reports.bangluong.donvi.mau09kh')
+                ->with('pageTitle', 'Bảng lương chi tiết');
+    }
 }
