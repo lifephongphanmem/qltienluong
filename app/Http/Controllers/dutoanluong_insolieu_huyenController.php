@@ -34,11 +34,12 @@ use Illuminate\Support\Facades\Session;
 
 class dutoanluong_insolieu_huyenController extends Controller
 {
+    //chưa dùng
     function baocaohesoluong(Request $request)
     {
         if (Session::has('admin')) {
             $inputs = $request->all();
-            //dd($inputs);            
+            dd($inputs);            
             $m_dutoan = dutoanluong::where('masodv', $inputs['maso'])->first();
             //dd($m_dutoan);
             $model = dutoanluong_bangluong::where('masodv', $inputs['maso'])->orderby('stt')->get();
@@ -82,7 +83,9 @@ class dutoanluong_insolieu_huyenController extends Controller
     {
         if (Session::has('admin')) {
             $inputs = $request->all();
-            //dd($inputs);            
+
+            dd($inputs);    
+            $        
             $model = dutoanluong::where('masodv', $inputs['maso'])->first();
             $m_donvi = dmdonvi::where('madv', $model->madv)->first();
             //dd($model);

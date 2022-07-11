@@ -32,7 +32,13 @@
                     <div class="actions"></div>
                 </div>
                 <div class="portlet-body">
-                    {!! Form::open(['url' => '/nghiep_vu/quan_ly/du_toan/tao_du_toan', 'method' => 'POST', 'files' => true, 'id' => 'create-hscb', 'class' => 'horizontal-form form-validate']) !!}
+                    {!! Form::open([
+                        'url' => '/nghiep_vu/quan_ly/du_toan/tao_du_toan',
+                        'method' => 'POST',
+                        'files' => true,
+                        'id' => 'create-hscb',
+                        'class' => 'horizontal-form form-validate',
+                    ]) !!}
 
                     <div class="form-body">
                         <div class="row">
@@ -58,7 +64,12 @@
                                             </div>
                                             <div class="col-md-3">
                                                 <label class="control-label">Mức lương cơ bản</label>
-                                                {!! Form::text('luongcoban', $inputs['luongcoban'], ['id' => 'luongcoban', 'class' => 'form-control text-right', 'data-mask' => 'fdecimal', 'readonly' => 'true']) !!}
+                                                {!! Form::text('luongcoban', $inputs['luongcoban'], [
+                                                    'id' => 'luongcoban',
+                                                    'class' => 'form-control text-right',
+                                                    'data-mask' => 'fdecimal',
+                                                    'readonly' => 'true',
+                                                ]) !!}
                                             </div>
                                             {{-- <div class="col-md-3">
                                                 <label class="control-label">Dự toán từ tháng</label>
@@ -199,7 +210,10 @@
                             {!! Form::hidden('sothonxaloai1', 0, ['class' => 'form-control']) !!}
                             {!! Form::hidden('sothonxaloai1_heso', 5, ['class' => 'form-control text-right', 'data-mask' => 'fdecimal']) !!}
                             {!! Form::hidden('sothonxatrongdiem', 0, ['class' => 'form-control']) !!}
-                            {!! Form::hidden('sothonxatrongdiem_heso', 0.5, ['class' => 'form-control text-right', 'data-mask' => 'fdecimal']) !!}
+                            {!! Form::hidden('sothonxatrongdiem_heso', 0.5, [
+                                'class' => 'form-control text-right',
+                                'data-mask' => 'fdecimal',
+                            ]) !!}
                             {!! Form::hidden('sothonxakhac', 0, ['class' => 'form-control']) !!}
                             {!! Form::hidden('sothonxakhac_heso', 3, ['class' => 'form-control text-right', 'data-mask' => 'fdecimal']) !!}
                         @endif
@@ -302,21 +316,36 @@
                     <div class="row">
                         <div class="col-md-12">
                             <label class="control-label">Số lượng được giao</label>
-                            {!! Form::text('soluongduocgiao', null, ['id' => 'soluongduocgiao', 'class' => 'form-control', 'data-mask' => 'fdecimal']) !!}
+                            {!! Form::text('soluongduocgiao', null, [
+                                'id' => 'soluongduocgiao',
+                                'class' => 'form-control',
+                                'data-mask' => 'fdecimal',
+                                'onchange' => 'setCanBo()',
+                            ]) !!}
                         </div>
                     </div>
 
                     <div class="row">
                         <div class="col-md-12">
                             <label class="control-label">Số lượng có mặt</label>
-                            {!! Form::text('soluongbienche', null, ['id' => 'soluongbienche', 'class' => 'form-control', 'data-mask' => 'fdecimal', 'readonly' => 'true']) !!}
+                            {!! Form::text('soluongbienche', null, [
+                                'id' => 'soluongbienche',
+                                'class' => 'form-control',
+                                'data-mask' => 'fdecimal',
+                                'readonly' => 'true',
+                            ]) !!}
                         </div>
                     </div>
 
                     <div class="row">
                         <div class="col-md-12">
                             <label class="control-label">Số lượng tuyển thêm</label>
-                            {!! Form::text('soluongtuyenthem', null, ['id' => 'soluongtuyenthem', 'class' => 'form-control', 'data-mask' => 'fdecimal']) !!}
+                            {!! Form::text('soluongtuyenthem', null, [
+                                'id' => 'soluongtuyenthem',
+                                'class' => 'form-control',
+                                'data-mask' => 'fdecimal',
+                                'readonly' => 'true',
+                            ]) !!}
                         </div>
                     </div>
                     <div class="row">
@@ -345,6 +374,19 @@
     {!! Form::close() !!}
 
     <script>
+        function setCanBo() {
+            var soluongduocgiao = $('#frm_chitieu').find("[name^='soluongduocgiao']").val();
+            var soluongbienche = $('#frm_chitieu').find("[name^='soluongbienche']").val();
+            
+            var soluongtuyenthem = soluongduocgiao - soluongbienche;
+            if (soluongtuyenthem < 0)
+                soluongtuyenthem = 0;
+            $('#frm_chitieu').find("[name^='soluongtuyenthem']").val(soluongtuyenthem);
+            if(soluongduocgiao < soluongbienche){
+                $('#frm_chitieu').find("[name^='soluongduocgiao']").val(soluongbienche);}
+
+        }
+
         function setChiTieu(mact, soluongduocgiao, soluongbienche, soluongtuyenthem, mact_tuyenthem, heso) {
             $('#frm_chitieu').find("[name^='mact']").val(mact);
             $('#frm_chitieu').find("[name^='soluongduocgiao']").val(soluongduocgiao);

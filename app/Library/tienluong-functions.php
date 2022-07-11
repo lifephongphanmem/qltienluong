@@ -572,7 +572,8 @@ function SapXepPhuCap($m_phucap)
     $a_heso = $m_phucap->where('phanloai', '0')->keyBy('mapc')->toarray();
     $a_sotien = $m_phucap->where('phanloai', '1')->keyBy('mapc')->toarray();
     $a_phantram = $m_phucap->where('phanloai', '2')->keyBy('mapc')->toarray();
-    $a_ketqua = array_merge($a_heso, $a_sotien);
+    
+    $a_ketqua = array_merge($a_heso, $a_sotien);    
     $i = 1; //Biến lưu cho trường hợp lặp vô hạn
     //lấy 
     while(count($a_phantram)>0){
@@ -590,11 +591,12 @@ function SapXepPhuCap($m_phucap)
         }
         //dd($a_phantram);
         $i++;
-        if($i>=100){
+        if($i>=100){            
             return [];            
         }
     }
     //$a_ketqua = array_merge($a_ketqua, $a_phantram);
+    //dd($a_ketqua);
     return $a_ketqua;
 }
 
@@ -871,7 +873,7 @@ function getNguonTruyLinh_df()
 {
     $model = App\dmnguonkinhphi::all()->first();
     $nkp_df = $model->where('macdinh', 1)->first();
-    if (count($nkp_df) == 0) {
+    if ($nkp_df == null) {
         $nkp_df = $model->first();
     }
     return array(
