@@ -88,7 +88,7 @@
 
                 <td>{{ $chitiet->tenct }}</td>
                 @if ($chitiet->phanloai == 'COMAT')
-                    <td class="text-center">{{ dinhdangso($chitiet->canbo_congtac) }}</td>
+                    <td class="text-center">{{ dinhdangso($chitiet->canbo_dutoan) }}</td>
                     <td class="text-center">
                         {{ dinhdangso($chitiet->canbo_congtac) }}
                     </td>

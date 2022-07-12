@@ -734,7 +734,8 @@
     </div>
     </div>
     </div-->
-                <!-- END PAGE BREADCRUMB -->
+                <!-- END PAGE BREADCRUMB -->                
+                
                 @yield('content')
             </div>
         </div>

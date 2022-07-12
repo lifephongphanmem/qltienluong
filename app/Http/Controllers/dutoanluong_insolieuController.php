@@ -163,21 +163,25 @@ class dutoanluong_insolieuController extends Controller
                 $add = new Collection();
                 $add->phanloai = $key;
                 $add->tenct = $val;
-                $add->tonghs = $chitiet->sum('tonghs');
-                $add->heso = $chitiet->sum('heso');
+                $add->tonghs = $chitiet->sum('tonghs') / 12;
+                $add->heso = $chitiet->sum('heso') / 12;
                 $add->canbo_congtac = $chitiet->sum('canbo_congtac');
+                $add->canbo_dutoan = $chitiet->sum('canbo_dutoan');
                 $add->hesotrungbinh = round($add->tonghs / $add->canbo_congtac, 5);
-                $add->baohiem = $chitiet->sum('bhxh_dv') + $chitiet->sum('bhyt_dv') + $chitiet->sum('kpcd_dv');
-                $add->bhtn_dv = $chitiet->sum('bhtn_dv');
+                $add->baohiem = ($chitiet->sum('bhxh_dv') + $chitiet->sum('bhyt_dv') + $chitiet->sum('kpcd_dv')) / 12;
+                $add->bhtn_dv = $chitiet->sum('bhtn_dv') / 12;
                 $add->ttl = $chitiet->sum('ttl');
                 $add->ttbh_dv = $chitiet->sum('ttbh_dv');
-                $add->tongbh_dv = $chitiet->sum('tongbh_dv');
+                $add->quyluong = $add->ttl + $add->ttbh_dv;
+                $add->ttl = $add->ttl / 12;
+                $add->ttbh_dv = $add->ttbh_dv / 12;
+                $add->tongbh_dv = $chitiet->sum('tongbh_dv') / 12;
                 $add->tongphucap = $add->tonghs - $add->heso;
                 $add->tongcong = $add->tonghs + $add->tongbh_dv;
-                $add->quyluong = $add->ttl + $add->ttbh_dv;
+
 
                 foreach (getColTongHop() as $pc) {
-                    $add->$pc = $chitiet->sum($pc);
+                    $add->$pc = $chitiet->sum($pc) / 12;
                 }
                 $model->add($add);
             }
@@ -218,19 +222,28 @@ class dutoanluong_insolieuController extends Controller
             //dd($inputs);            
             $m_dutoan = dutoanluong::where('masodv', $inputs['maso'])->first();
             //dd($m_dutoan);
-            $model = dutoanluong_chitiet::where('masodv', $inputs['maso'])->get();            
-            $a_plct = array_column(dmphanloaict::all()->toArray(),'tenct','mact');
-            foreach ($model as $chitiet) {                
-                $chitiet->tenct = $a_plct[$chitiet->mact] ?? '';               
+            $model = dutoanluong_chitiet::where('masodv', $inputs['maso'])->get();
+            $a_plct = array_column(dmphanloaict::all()->toArray(), 'tenct', 'mact');
+            foreach ($model as $chitiet) {
+                foreach (getColTongHop() as $pc) {
+                    $chitiet->$pc = $chitiet->$pc / 12;
+                }
+                $chitiet->tenct = $a_plct[$chitiet->mact] ?? '';
+                $chitiet->tonghs = $chitiet->tonghs / 12;
                 $chitiet->hesotrungbinh = round($chitiet->tonghs / $chitiet->canbo_congtac, 5);
-                $chitiet->baohiem = $chitiet->sum('bhxh_dv') + $chitiet->sum('bhyt_dv') + $chitiet->sum('kpcd_dv');               
+                $chitiet->bhxh_dv = $chitiet->bhxh_dv / 12;
+                $chitiet->bhyt_dv = $chitiet->bhyt_dv / 12;
+                $chitiet->kpcd_dv = $chitiet->kpcd_dv / 12;
+                $chitiet->baohiem = $chitiet->bhxh_dv + $chitiet->bhyt_dv + $chitiet->kpcd_dv;
+                $chitiet->heso = $chitiet->heso / 12;
                 $chitiet->tongphucap = $chitiet->tonghs - $chitiet->heso;
+                $chitiet->tongbh_dv = $chitiet->tongbh_dv / 12;
                 $chitiet->tongcong = $chitiet->tonghs + $chitiet->tongbh_dv;
-                $chitiet->quyluong = $chitiet->ttl + $chitiet->ttbh_dv;                
+                $chitiet->quyluong = $chitiet->ttl + $chitiet->ttbh_dv;
             }
             //dd($model);
             $m_donvi = dmdonvi::where('madv', $m_dutoan->madv)->first();
-            
+
             //xử lý ẩn hiện cột phụ cấp => biết tổng số cột hiện => colspan trên báo cáo
             $a_goc = array('heso'); //do hệ số lương có cột cố định
             $model_pc = dmphucap_donvi::where('madv', $m_dutoan->madv)->where('phanloai', '<', '3')->wherenotin('mapc', $a_goc)->orderby('stt')->get();
