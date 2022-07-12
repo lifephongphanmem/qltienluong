@@ -265,14 +265,12 @@ class dutoanluongController extends Controller
                 ->where('madv', session('admin')->madv)
                 ->where('nam', $inputs['namns'])->get();
             $a_chitieu = $m_chitieu->keyBy('mact')->toarray();
-            $a_baohiem = dmphanloaicongtac_baohiem::wherein('mact', array_column($m_chitieu->toarray(), 'mact'))
-                ->where('madv', session('admin')->madv)->get()->keyBy('mact')->toarray();
+            $a_baohiem = dmphanloaicongtac_baohiem::where('madv', session('admin')->madv)->get()->keyBy('mact')->toarray();
             foreach ($m_chitieu as $key => $val) {
                 $val['soluongtuyenthem'] = chkDbl($val['soluongtuyenthem']);
                 if ($val['soluongtuyenthem'] <= 0) {
                     $m_chitieu->pull($key);
-                }
-                $baohiem = $a_baohiem[$val['mact']];
+                }                
                 $val['stt'] = 999;
                 $val['macanbo'] = $val['mact_tuyenthem'] . '_' . $val['soluongtuyenthem'];
                 $val['macvcq'] = '';
@@ -281,6 +279,7 @@ class dutoanluongController extends Controller
                 $val['tencanbo'] = 'Cán bộ chưa tuyển';
                 $val['congtac'] = 'CHUATUYEN';
                 $val['mact'] = $val['mact_tuyenthem'];
+                $baohiem = $a_baohiem[$val['mact']];
                 //thêm cho đủ trường
                 foreach ($a_pc as $pc) {
                     $tenpc_st = 'st_' . $pc;
