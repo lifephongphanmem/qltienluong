@@ -56,7 +56,7 @@ class dutoanluong_huyenController extends Controller
                             ->get();
                     })->get();
                 $dv->soluong = $model_donvi->count();
-                $dv->dagui = dutoanluong::where('macqcq', $madv)->where('namns', $nam)->count();
+                $dv->dagui = dutoanluong::where('macqcq', $madv)->where('namns', $nam)->where('trangthai','DAGUI')->count();
             }
             //dd($model);
             return view('functions.dutoanluong.index')
@@ -95,23 +95,12 @@ class dutoanluong_huyenController extends Controller
     {
         //kiểm tra xem đó là đơn vị SD hay TH&KHOI
         if (Session::has('admin')) {
-            $inputs = $request->all();
-            //dutoanluong_huyen => madv => phanloaitaikhoan => dutoanluong / dutoanluong_khoi
-            $model = dutoanluong_huyen::where('masodv', $inputs['masodv'])->first();
+            $inputs = $request->all();            
+            $model = dutoanluong::where('masodv', $inputs['masodv'])->first();
             $model->trangthai = 'TRALAI';
             $model->lydo = $inputs['lydo'];
+            $model->masoh = null;
             $model->save();
-            $madv = $model->madv;
-            $phanloai = dmdonvi::where('madv', $madv)->first()->phanloaitaikhoan;
-
-            if ($phanloai == 'SD') {
-                dutoanluong::where('namns', $model->namns)->where('madv', $madv)
-                    ->update(['trangthai' => 'TRALAI', 'lydo' => $inputs['lydo']]);
-            } else {
-                dutoanluong_khoi::where('namns', $model->namns)->where('madv', $madv)
-                    ->update(['trangthai' => 'TRALAI', 'lydo' => $inputs['lydo']]);
-            }
-
             return redirect('/chuc_nang/xem_du_lieu/du_toan/huyen?namns=' . $model->namns . '&trangthai=ALL&phanloai=ALL');
         } else
             return view('errors.notlogin');

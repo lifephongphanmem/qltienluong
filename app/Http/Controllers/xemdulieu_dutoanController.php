@@ -101,6 +101,61 @@ class xemdulieu_dutoanController extends Controller
             foreach($model_phanloai as $key=>$key)
                 $a_phanloai[$key]= $model_phanloai[$key];
             $a_phanloai['ALL'] = '--Chọn tất cả--';
+            $m_dutoan = dutoanluong::where('namns',$nam)->where('trangthai','DAGUI')->get();            
+
+            foreach($model_donvi as $dv){                
+                $dutoan = $m_dutoan->where('madv',$dv->madv)->first();
+                $dv->tralai = isset($dutoan);
+                $dv->masodv = $dutoan->masodv ?? null;
+                $dv->trangthai = $dutoan->trangthai ?? 'CHOGUI';
+            }
+
+            if (!isset($inputs['trangthai']) || $inputs['trangthai'] != 'ALL') {
+                $model_donvi = $model_donvi->where('trangthai',$inputs['trangthai']);
+            }
+            if (!isset($inputs['phanloai']) || $inputs['phanloai'] != 'ALL') {
+                $model_donvi = $model_donvi->where('maphanloai',$inputs['phanloai']);
+            }
+            $model_nhomct = dmphanloaicongtac::select('macongtac','tencongtac')->get();
+            $model_tenct = dmphanloaict::select('tenct','macongtac','mact')->get();
+            return view('functions.viewdata.dutoanluong.huyen.index')
+                ->with('model', $model_donvi)
+                ->with('inputs', $inputs)
+                ->with('a_trangthai', $a_trangthai)
+                ->with('a_thang', $a_thang)
+                ->with('a_phanloai', $a_phanloai)
+                ->with('model_nhomct', $model_nhomct)
+                ->with('model_tenct', $model_tenct)
+                ->with('furl_th', 'chuc_nang/du_toan_luong/huyen/')
+                ->with('furl_xem', '/chuc_nang/xem_du_lieu/du_toan/huyen')
+                ->with('pageTitle', 'Danh sách đơn vị tổng hợp dự toán lương');
+        } else
+            return view('errors.notlogin');
+    }
+
+
+    public function index_huyen_12072022(Request $request)
+    {
+        if (Session::has('admin')) {
+            $inputs = $request->all();
+            $madv = session('admin')->madv;
+            $nam = $inputs['namns'];
+            $a_thang = getThang();
+            $a_thang['']= "--Chọn tất cả các tháng--";
+            $a_trangthai = array('ALL' => '--Chọn trạng thái dữ liệu--', 'CHOGUI' => 'Chưa gửi dữ liệu', 'DAGUI' => 'Đã gửi dữ liệu');
+            $model_donvi = dmdonvi::select('madv', 'tendv','maphanloai')
+                ->where('macqcq',$madv)->where('madv','<>',$madv)
+                ->wherenotin('madv', function ($query) use ($madv,$nam) {
+                    $query->select('madv')->from('dmdonvi')
+                        ->whereyear('ngaydung', '<=', $nam)
+                        ->where('trangthai', 'TD')
+                        ->get();
+                })->get();
+            $model_phanloai = dmphanloaidonvi::wherein('maphanloai',array_column($model_donvi->toarray(),'maphanloai'))->get();
+            $model_phanloai = array_column($model_phanloai->toarray(),'tenphanloai','maphanloai');
+            foreach($model_phanloai as $key=>$key)
+                $a_phanloai[$key]= $model_phanloai[$key];
+            $a_phanloai['ALL'] = '--Chọn tất cả--';
 
             $model_nguon = dutoanluong_huyen::wherein('madv', function($query) use($madv){
                 $query->select('madv')->from('dmdonvi')->where('macqcq',$madv)->where('madv','<>',$madv)->get();
