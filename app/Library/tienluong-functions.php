@@ -594,7 +594,7 @@ function SapXepPhuCap($m_phucap)
        
         $chk++;
         if($chk>=100){     
-            dd($a_phantram);       
+            //dd($a_phantram);       
             return [];            
         }
     }
