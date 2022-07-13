@@ -83,14 +83,19 @@ class dutoanluongController extends Controller
             }
             $m_bl_ct = (new dataController())->getBangluong_ct($m_bl->thang, $m_bl->mabl);
             $m_bl_ct1 = (new dataController())->getBangluong_ct($m_bl1->thang ?? 'null', $m_bl1->mabl ?? 'null');
-            //kiểm tra cán bộ đã có trong bảng lương => tự động xóa trong bảng lương 1
-            $a_canbo = array_column($m_bl_ct->toarray(), 'macanbo');
-            foreach ($m_bl_ct1 as $key => $val) {
-                if (in_array($val->macanbo, $a_canbo)) {
-                    $m_bl_ct1->pull($key);
+            $a_plct_bl = array_unique(array_column($m_bl_ct->toarray(), 'mact'));
+            if ($m_bl_ct1 != null) {
+                //kiểm tra cán bộ đã có trong bảng lương => tự động xóa trong bảng lương 1
+                $a_canbo = array_column($m_bl_ct->toarray(), 'macanbo');
+                foreach ($m_bl_ct1 as $key => $val) {
+                    if (in_array($val->macanbo, $a_canbo)) {
+                        $m_bl_ct1->pull($key);
+                    }
                 }
+                $a_plct_bl = array_unique(array_merge($a_plct_bl, array_column($m_bl_ct1->toarray(), 'mact')));
             }
-            $a_plct_bl = array_unique(array_merge(array_column($m_bl_ct->toarray(), 'mact'), array_column($m_bl_ct1->toarray(), 'mact')));
+
+            
             //xóa các chỉ tiêu cũ do có thể có 1 số plct thừa
             chitieubienche::where('madv', session('admin')->madv)->where('nam', $inputs['namns'])->delete();
             $a_plct = getPLCTDuToan();
@@ -98,12 +103,12 @@ class dutoanluongController extends Controller
             foreach ($a_plct as $plct) {
                 if (!in_array($plct, $a_plct_bl)) {
                     continue;
-                }
+                }                
                 $chitieu = new chitieubienche();
                 $chitieu->mact = $plct;
                 $chitieu->madv = session('admin')->madv;
                 $chitieu->nam = $inputs['namns'];
-                $chitieu->soluongduocgiao = $m_bl_ct->where('mact', $plct)->count() + $m_bl_ct1->where('mact', $plct)->count();
+                $chitieu->soluongduocgiao = $m_bl_ct->where('mact', $plct)->count() + ($m_bl_ct1 != null ? $m_bl_ct1->where('mact', $plct)->count() : 0);
                 $chitieu->soluongbienche = $chitieu->soluongduocgiao;
                 $chitieu->soluongtuyenthem = 0;
                 $chitieu->mact_tuyenthem = '1637915601';
@@ -228,18 +233,22 @@ class dutoanluongController extends Controller
                 ->where('phanloai', 'BANGLUONG')
                 ->first();
             $m_bl_ct1 = (new dataController())->getBangluong_ct($m_bl1->thang ?? 'null', $m_bl1->mabl ?? 'null');
-            
+
             $masodv = session('admin')->madv . '_' . getdate()[0];
             $m_bl_ct = (new dataController())->getBangluong_ct($m_bl->thang, $m_bl->mabl);
             $a_plct = getPLCTDuToan();
             $a_pc = getColDuToan();
             //thêm cán bộ chưa có từ $m_bl1 (phụ) vào $m_bl (chính)
-            $a_canbo = array_column($m_bl_ct->toarray(), 'macanbo');
-            foreach ($m_bl_ct1 as $key => $val) {
-                if (!in_array($val->macanbo, $a_canbo)) {
-                    $m_bl_ct->add($val);
+
+            if ($m_bl_ct1 != null) {
+                $a_canbo = array_column($m_bl_ct->toarray(), 'macanbo');
+                foreach ($m_bl_ct1 as $key => $val) {
+                    if (!in_array($val->macanbo, $a_canbo)) {
+                        $m_bl_ct->add($val);
+                    }
                 }
             }
+
             //dd($m_bl_ct);
             foreach ($m_bl_ct as $key => $value) {
                 if (!in_array($value->mact, $a_plct)) {
@@ -247,7 +256,7 @@ class dutoanluongController extends Controller
                 } else {
                     //chạy lại 1 vòng để hệ số, số tiền (do báo cáo lấy hệ số, số tiền)
                     foreach ($a_pc as $pc) {
-                        $tenpc_st = 'st_' . $pc;                        
+                        $tenpc_st = 'st_' . $pc;
                         $value->$pc = round($value->$tenpc_st / $value->luongcoban, 5);
                     }
                 }
