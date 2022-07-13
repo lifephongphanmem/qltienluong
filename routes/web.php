@@ -339,8 +339,8 @@ Route::group(['prefix'=>'nghiep_vu'],function(){
             Route::get('baocaohesoluong','dutoanluong_insolieuController@baocaohesoluong');
             Route::get('kinhphikhongchuyentrach','dutoanluong_insolieuController@kinhphikhongchuyentrach');
             Route::get('tonghopcanboxa','dutoanluong_insolieuController@tonghopcanboxa');
-            Route::get('tonghopdutoan','dutoanluong_insolieuController@tonghopdutoan');
-            Route::get('tonghopdutoan_m2','dutoanluong_insolieuController@tonghopdutoan_m2');
+            Route::post('tonghopbienche','dutoanluong_insolieuController@tonghopbienche');
+            Route::post('tonghophopdong','dutoanluong_insolieuController@tonghophopdong');
         });
         /*
         Route::group(['prefix'=>'dia_ban_dbkk'],function(){

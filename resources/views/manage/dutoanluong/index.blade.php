@@ -196,25 +196,26 @@
                                                     </div>
                                                 </div>
                                             </div>
+
                                             <div class="row">
                                                 <div class="col-md-12">
                                                     <div class="form-group">
                                                         <button type="button"
-                                                            onclick="intonghopdt('{{ $furl . 'tonghopdutoan?maso=' }}')"
-                                                            style="border-width: 0px" class="btn btn-default btn-xs mbs">
+                                                            onclick="insolieu('{{ $furl . 'tonghopbienche' }}', '1506672780')"
+                                                            style="border-width: 0px" class="btn btn-default btn-xs mbs" data-target="#modal-insolieu" data-toggle="modal">
                                                             <i class="fa fa-print"></i>&nbsp; Tổng hợp biên chế, hệ số
-                                                            lương và phụ cấp có mặt (Mẫu 01)</button>
+                                                            lương và phụ cấp có mặt </button>
                                                     </div>
                                                 </div>
                                             </div>
+
                                             <div class="row">
                                                 <div class="col-md-12">
                                                     <div class="form-group">
                                                         <button type="button"
-                                                            onclick="intonghopdt('{{ $furl . 'tonghopdutoan_m2?maso=' }}')"
-                                                            style="border-width: 0px" class="btn btn-default btn-xs mbs">
-                                                            <i class="fa fa-print"></i>&nbsp; Tổng hợp biên chế, hệ số
-                                                            lương và phụ cấp có mặt (Mẫu 02)</button>
+                                                            onclick="insolieu('{{ $furl . 'tonghophopdong' }}','1506673585')"
+                                                            style="border-width: 0px" class="btn btn-default btn-xs mbs" data-target="#modal-insolieu" data-toggle="modal">
+                                                            <i class="fa fa-print"></i>&nbsp; Tổng hợp hợp đồng bổ sung quỹ lương</button>
                                                     </div>
                                                 </div>
                                             </div>
@@ -373,20 +374,36 @@
                                             </div>
 
                                             <div class="row">
-                                                <div class="col-md-3">
-                                                    <label class="control-label">Lương cơ sở - Tháng</label>
+                                                <div class="col-md-4">
+                                                    <label class="control-label">Bảng lương cơ sở 1 - Tháng</label>
                                                     {!! Form::text('thang', '07', ['id' => 'thang', 'class' => 'form-control']) !!}
                                                 </div>
-                                                <div class="col-md-3">
+
+                                                <div class="col-md-2">
                                                     <label class="control-label">Năm</label>
                                                     {!! Form::text('nam', date('Y'), ['id' => 'nam', 'class' => 'form-control']) !!}
                                                 </div>
 
-
-
                                                 <div class="col-md-6">
                                                     <label class="control-label">Nguồn kinh phí</label>
                                                     {!! Form::select('manguonkp', $a_nkp, '13', ['id' => 'manguonkp', 'class' => 'form-control']) !!}
+                                                </div>
+                                            </div>
+
+                                            <div class="row">
+                                                <div class="col-md-4">
+                                                    <label class="control-label">Bảng lương cơ sở 2 - Tháng</label>
+                                                    {!! Form::text('thang1', '07', ['class' => 'form-control']) !!}
+                                                </div>
+
+                                                <div class="col-md-2">
+                                                    <label class="control-label">Năm</label>
+                                                    {!! Form::text('nam1', date('Y'), ['class' => 'form-control']) !!}
+                                                </div>
+
+                                                <div class="col-md-6">
+                                                    <label class="control-label">Nguồn kinh phí</label>
+                                                    {!! Form::select('manguonkp1', $a_nkp, '12', ['id' => 'manguonkp', 'class' => 'form-control']) !!}
                                                 </div>
                                             </div>
                                         </div>

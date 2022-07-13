@@ -78,11 +78,11 @@
                                         </div>
 
                                         <div class="row">
-                                            <div class="col-md-3">
-                                                <label class="control-label">Lương cơ sở - Tháng</label>
+                                            <div class="col-md-4">
+                                                <label class="control-label">Bảng lương cơ sở 1 - Tháng</label>
                                                 {!! Form::text('thang', $inputs['thang'], ['class' => 'form-control', 'readonly' => 'true']) !!}
                                             </div>
-                                            <div class="col-md-3">
+                                            <div class="col-md-2">
                                                 <label class="control-label">Năm </label>
                                                 {!! Form::text('nam', $inputs['nam'], ['class' => 'form-control', 'readonly' => 'true']) !!}
                                             </div>
@@ -90,6 +90,22 @@
                                             <div class="col-md-6">
                                                 <label class="control-label">Nguồn kinh phí</label>
                                                 {!! Form::select('manguonkp', $a_nkp, $inputs['manguonkp'], ['class' => 'form-control', 'readonly' => 'true']) !!}
+                                            </div>
+                                        </div>
+
+                                        <div class="row">
+                                            <div class="col-md-4">
+                                                <label class="control-label">Bảng lương cơ sở 2 - Tháng</label>
+                                                {!! Form::text('thang1', $inputs['thang1'], ['class' => 'form-control', 'readonly' => 'true']) !!}
+                                            </div>
+                                            <div class="col-md-2">
+                                                <label class="control-label">Năm </label>
+                                                {!! Form::text('nam1', $inputs['nam1'], ['class' => 'form-control', 'readonly' => 'true']) !!}
+                                            </div>
+
+                                            <div class="col-md-6">
+                                                <label class="control-label">Nguồn kinh phí</label>
+                                                {!! Form::select('manguonkp1', $a_nkp, $inputs['manguonkp1'], ['class' => 'form-control', 'readonly' => 'true']) !!}
                                             </div>
                                         </div>
                                     </div>

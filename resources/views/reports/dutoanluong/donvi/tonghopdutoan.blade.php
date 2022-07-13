@@ -22,7 +22,7 @@
 
         <tr>
             <td colspan="2" style="text-align: center; font-weight: bold; font-size: 20px; text-transform: uppercase">
-                BẢNG TỔNG HỢP BIÊN CHẾ, HỆ SỐ TIỀN LƯƠNG VÀ PHỤ CẤP CÓ MẶT ĐẾN 01/07{{ $m_dutoan->namns - 1 }}
+                BẢNG TỔNG HỢP BIÊN CHẾ, HỆ SỐ TIỀN LƯƠNG VÀ PHỤ CẤP CÓ MẶT ĐẾN 01/07/{{ $m_dutoan->namns - 1 }}
             </td>
         </tr>
 

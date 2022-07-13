@@ -69,13 +69,28 @@ class dutoanluongController extends Controller
                 ->where('manguonkp', $inputs['manguonkp'])
                 ->where('phanloai', 'BANGLUONG')
                 ->first();
+
+            $m_bl1 = bangluong::where('madv', session('admin')->madv)
+                ->where('thang', $inputs['thang1'])
+                ->where('nam', $inputs['nam1'])
+                ->where('manguonkp', $inputs['manguonkp1'])
+                ->where('phanloai', 'BANGLUONG')
+                ->first();
             if ($m_bl == null) {
                 return view('errors.data_error')
                     ->with('message', 'Bảng lương tháng ' . $inputs['thang'] . ' năm ' . $inputs['nam'] . ' không tồn tại. Bạn cần tạo bảng lương trước để có thể tạo dự toán.')
                     ->with('furl', '/nghiep_vu/quan_ly/du_toan/danh_sach');
             }
             $m_bl_ct = (new dataController())->getBangluong_ct($m_bl->thang, $m_bl->mabl);
-            $a_plct_bl = array_column($m_bl_ct->toarray(), 'mact');
+            $m_bl_ct1 = (new dataController())->getBangluong_ct($m_bl1->thang ?? 'null', $m_bl1->mabl ?? 'null');
+            //kiểm tra cán bộ đã có trong bảng lương => tự động xóa trong bảng lương 1
+            $a_canbo = array_column($m_bl_ct->toarray(), 'macanbo');
+            foreach ($m_bl_ct1 as $key => $val) {
+                if (in_array($val->macanbo, $a_canbo)) {
+                    $m_bl_ct1->pull($key);
+                }
+            }
+            $a_plct_bl = array_unique(array_merge(array_column($m_bl_ct->toarray(), 'mact'), array_column($m_bl_ct1->toarray(), 'mact')));
             //xóa các chỉ tiêu cũ do có thể có 1 số plct thừa
             chitieubienche::where('madv', session('admin')->madv)->where('nam', $inputs['namns'])->delete();
             $a_plct = getPLCTDuToan();
@@ -88,7 +103,7 @@ class dutoanluongController extends Controller
                 $chitieu->mact = $plct;
                 $chitieu->madv = session('admin')->madv;
                 $chitieu->nam = $inputs['namns'];
-                $chitieu->soluongduocgiao = $m_bl_ct->where('mact', $plct)->count();
+                $chitieu->soluongduocgiao = $m_bl_ct->where('mact', $plct)->count() + $m_bl_ct1->where('mact', $plct)->count();
                 $chitieu->soluongbienche = $chitieu->soluongduocgiao;
                 $chitieu->soluongtuyenthem = 0;
                 $chitieu->mact_tuyenthem = '1637915601';
@@ -205,17 +220,34 @@ class dutoanluongController extends Controller
                     ->with('message', 'Bảng lương tháng ' . $inputs['thang'] . ' năm ' . $inputs['nam'] . ' không tồn tại. Bạn cần tạo bảng lương trước để có thể tạo dự toán.')
                     ->with('furl', '/nghiep_vu/quan_ly/du_toan/danh_sach');
             }
+
+            $m_bl1 = bangluong::where('madv', session('admin')->madv)
+                ->where('thang', $inputs['thang1'])
+                ->where('nam', $inputs['nam1'])
+                ->where('manguonkp', $inputs['manguonkp1'])
+                ->where('phanloai', 'BANGLUONG')
+                ->first();
+            $m_bl_ct1 = (new dataController())->getBangluong_ct($m_bl1->thang ?? 'null', $m_bl1->mabl ?? 'null');
+            
             $masodv = session('admin')->madv . '_' . getdate()[0];
             $m_bl_ct = (new dataController())->getBangluong_ct($m_bl->thang, $m_bl->mabl);
             $a_plct = getPLCTDuToan();
             $a_pc = getColDuToan();
+            //thêm cán bộ chưa có từ $m_bl1 (phụ) vào $m_bl (chính)
+            $a_canbo = array_column($m_bl_ct->toarray(), 'macanbo');
+            foreach ($m_bl_ct1 as $key => $val) {
+                if (!in_array($val->macanbo, $a_canbo)) {
+                    $m_bl_ct->add($val);
+                }
+            }
+            //dd($m_bl_ct);
             foreach ($m_bl_ct as $key => $value) {
                 if (!in_array($value->mact, $a_plct)) {
                     $m_bl_ct->pull($key);
                 } else {
                     //chạy lại 1 vòng để hệ số, số tiền (do báo cáo lấy hệ số, số tiền)
                     foreach ($a_pc as $pc) {
-                        $tenpc_st = 'st_' . $pc;
+                        $tenpc_st = 'st_' . $pc;                        
                         $value->$pc = round($value->$tenpc_st / $value->luongcoban, 5);
                     }
                 }
@@ -270,7 +302,7 @@ class dutoanluongController extends Controller
                 $val['soluongtuyenthem'] = chkDbl($val['soluongtuyenthem']);
                 if ($val['soluongtuyenthem'] <= 0) {
                     $m_chitieu->pull($key);
-                }                
+                }
                 $val['stt'] = 999;
                 $val['macanbo'] = $val['mact_tuyenthem'] . '_' . $val['soluongtuyenthem'];
                 $val['macvcq'] = '';
