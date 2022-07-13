@@ -82,16 +82,24 @@ class dutoanluong_insolieu_huyenController extends Controller
     function kinhphikhongchuyentrach(Request $request)
     {
         if (Session::has('admin')) {
-            $inputs = $request->all();
-
-            dd($inputs);    
-            $        
-            $model = dutoanluong::where('masodv', $inputs['maso'])->first();
-            $m_donvi = dmdonvi::where('madv', $model->madv)->first();
-            //dd($model);
-            return view('reports.dutoanluong.donvi.kinhphikhongchuyentrach')
+            $inputs = $request->all();                    
+            $model = dutoanluong::where('masoh', $inputs['masodv'])->where('namns',$inputs['namns'])->where('trangthai','DAGUI')->get();
+            $m_donvi_baocao = dmdonvi::wherein('madv', array_column($model->toarray(),'madv'))->get();
+            $m_donvi = dmdonvi::where('madv', session('admin')->madv)->get();
+            //tính toán trc số liệu
+            foreach($model as $chitiet){
+                $chitiet->sotienxabiengioi = $chitiet->sothonxabiengioi * $chitiet->sothonxabiengioi_heso;
+                $chitiet->sotienxakhokhan =$chitiet->sothonxakhokhan * $chitiet->sothonxakhokhan_heso;
+                $chitiet->sotienxatrongdiem =$chitiet->sothonxatrongdiem * $chitiet->sothonxatrongdiem_heso;
+                $chitiet->sotienxakhac =$chitiet->sothonxakhac * $chitiet->sothonxakhac_heso;
+                $chitiet->sotienxaloai1 =$chitiet->sothonxaloai1 * $chitiet->sothonxaloai1_heso;
+                $$chitiet->sotienphanloaixa_heso =$chitiet->phanloaixa_heso;
+              
+            }
+            return view('reports.dutoanluong.Huyen.kinhphikhongchuyentrach')
                 ->with('model', $model)
                 ->with('m_donvi', $m_donvi)
+                ->with('m_donvi_baocao', $m_donvi_baocao)
                 ->with('lamtron', session('admin')->lamtron ?? 3)
                 ->with('pageTitle', 'Tổng hợp kinh phí thực hiện chế độ phụ cấp cho cán bộ không chuyên trách');
         } else

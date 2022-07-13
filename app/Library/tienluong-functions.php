@@ -497,7 +497,7 @@ function getChucVuCQ($val_null = true)
 
 function getDonViTinh()
 {
-    return array('1' => 'Đồng', '2' => 'Nghìn đồng', '3' => 'Triệu đồng');
+    return array('1' => 'Đồng', '1000' => 'Nghìn đồng', '1000000' => 'Triệu đồng');
 }
 
 function getTextStatus($status)

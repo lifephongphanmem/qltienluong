@@ -95,7 +95,7 @@ class dutoanluongController extends Controller
                 $a_plct_bl = array_unique(array_merge($a_plct_bl, array_column($m_bl_ct1->toarray(), 'mact')));
             }
 
-            
+
             //xóa các chỉ tiêu cũ do có thể có 1 số plct thừa
             chitieubienche::where('madv', session('admin')->madv)->where('nam', $inputs['namns'])->delete();
             $a_plct = getPLCTDuToan();
@@ -103,7 +103,7 @@ class dutoanluongController extends Controller
             foreach ($a_plct as $plct) {
                 if (!in_array($plct, $a_plct_bl)) {
                     continue;
-                }                
+                }
                 $chitieu = new chitieubienche();
                 $chitieu->mact = $plct;
                 $chitieu->madv = session('admin')->madv;
@@ -257,7 +257,7 @@ class dutoanluongController extends Controller
                     //chạy lại 1 vòng để hệ số, số tiền (do báo cáo lấy hệ số, số tiền)
                     foreach ($a_pc as $pc) {
                         $tenpc_st = 'st_' . $pc;
-                        $value->$pc = round($value->$tenpc_st / $value->luongcoban, 5);
+                        $value->$pc = round($value->$tenpc_st / $value->luongcoban, session('admin')->lamtron);
                     }
                 }
             }
@@ -286,10 +286,10 @@ class dutoanluongController extends Controller
                     $chitiet->ttl += $chitiet->$tenpc_st;
                 }
                 //quy đổi bảo hiểm thành hệ số
-                $chitiet->bhxh_dv = round($chitiet->stbhxh_dv / $chitiet->luongcoban, 5);
-                $chitiet->bhyt_dv = round($chitiet->stbhyt_dv / $chitiet->luongcoban, 5);
-                $chitiet->bhtn_dv = round($chitiet->stbhtn_dv / $chitiet->luongcoban, 5);
-                $chitiet->kpcd_dv = round($chitiet->stkpcd_dv / $chitiet->luongcoban, 5);
+                $chitiet->bhxh_dv = round($chitiet->stbhxh_dv / $chitiet->luongcoban, session('admin')->lamtron);
+                $chitiet->bhyt_dv = round($chitiet->stbhyt_dv / $chitiet->luongcoban, session('admin')->lamtron);
+                $chitiet->bhtn_dv = round($chitiet->stbhtn_dv / $chitiet->luongcoban, session('admin')->lamtron);
+                $chitiet->kpcd_dv = round($chitiet->stkpcd_dv / $chitiet->luongcoban, session('admin')->lamtron);
                 $chitiet->tongbh_dv = $chitiet->bhxh_dv + $chitiet->bhyt_dv + $chitiet->bhtn_dv + $chitiet->kpcd_dv;
                 //quy đổi bảo hiểm thành số tiền theo mức lương cơ bản mới
                 $chitiet->stbhxh_dv = round($chitiet->bhxh_dv * $inputs['luongcoban'], 0);
