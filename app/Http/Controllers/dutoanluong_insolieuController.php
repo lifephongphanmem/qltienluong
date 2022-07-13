@@ -177,7 +177,7 @@ class dutoanluong_insolieuController extends Controller
                 $add->tongbh_dv = $chitiet->sum('tongbh_dv') / 12;
                 $add->tongphucap = $add->tonghs - $add->heso;
                 $add->tongcong = $add->tonghs + $add->tongbh_dv;
-                $add->hesotrungbinh = round($add->tonghs / $add->canbo_congtac, 5);
+                $add->hesotrungbinh = round($add->tongcong / $add->canbo_congtac, 5);
 
                 foreach (getColTongHop() as $pc) {
                     $add->$pc = $chitiet->sum($pc) / 12;
