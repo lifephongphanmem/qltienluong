@@ -889,7 +889,9 @@ Route::group(['prefix'=>'chuc_nang'],function(){
             Route::post('tao_du_toan','dutoanluong_huyenController@tao_du_toan');
 
             //Thiết kế mẫu cho Vạn Ninh
-            Route::post('kinhphikhongchuyentrach','dutoanluong_insolieu_huyenController@kinhphikhongchuyentrach');//in một khối trong khối
+            Route::post('kinhphikhongchuyentrach','dutoanluong_insolieu_huyenController@kinhphikhongchuyentrach');
+            //Route::post('tonghopcanboxa','dutoanluong_insolieu_huyenController@tonghopcanboxa');
+            Route::post('tonghopbienche','dutoanluong_insolieu_huyenController@tonghopbienche');
         });
 
         Route::group(['prefix'=>'khoi'],function(){

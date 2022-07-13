@@ -225,7 +225,7 @@ class dutoanluong_insolieuController extends Controller
             $model = dutoanluong_chitiet::where('masodv', $inputs['masodv'])->where('mact', $inputs['mact'])->get();
             $m_chuatuyen = dutoanluong_chitiet::where('masodv', $inputs['masodv'])->where('phanloai', 'CHUATUYEN')->get();
             $a_plct = array_column(dmphanloaict::all()->toArray(), 'tenct', 'mact');
-            $a_pc = getColTongHop();
+            $a_pc = getColDuToan();
             foreach ($model as $chitiet) {
                 foreach ($a_pc as $pc) {
                     $chitiet->$pc = $chitiet->$pc / 12;
@@ -299,7 +299,7 @@ class dutoanluong_insolieuController extends Controller
             //dd($m_dutoan);
             $model = dutoanluong_chitiet::where('masodv', $inputs['masodv'])->where('mact', $inputs['mact'])->get();
             $a_plct = array_column(dmphanloaict::all()->toArray(), 'tenct', 'mact');
-            $a_pc = getColTongHop();
+            $a_pc = getColDuToan();
             foreach ($model as $chitiet) {
                 foreach ($a_pc as $pc) {
                     $chitiet->$pc = $chitiet->$pc / 12;

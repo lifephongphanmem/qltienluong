@@ -59,8 +59,12 @@ class dutoanluong_huyenController extends Controller
                 $dv->dagui = dutoanluong::where('macqcq', $madv)->where('namns', $nam)->where('trangthai','DAGUI')->count();
             }
             //dd($model);
+            $model_tenct = dmphanloaict::wherein('mact',getPLCTDuToan())->get();
+            $model_nhomct = dmphanloaicongtac::wherein('macongtac',array_unique(array_column($model_tenct->toarray(),'macongtac')))->get();
             return view('functions.dutoanluong.index')
                 ->with('model', $model->sortby('namns'))
+                ->with('model_tenct', $model_tenct)
+                ->with('model_nhomct', $model_nhomct)
                 ->with('a_trangthai', $a_trangthai)
                 // ->with('soluong', $soluong)
                 ->with('furl_xem', '/chuc_nang/xem_du_lieu/du_toan/huyen')

@@ -87,8 +87,9 @@
 
                                             @if ($value['trangthai'] == 'TRALAI')
                                                 <button type="button" class="btn btn-default btn-sm"
-                                                    onclick="getLyDo('{{ $value['masodv'] }}')" data-target="#tralai-modal"
-                                                    data-toggle="modal"><i class="fa fa-share-square-o"></i>&nbsp;
+                                                    onclick="getLyDo('{{ $value['masodv'] }}')"
+                                                    data-target="#tralai-modal" data-toggle="modal"><i
+                                                        class="fa fa-share-square-o"></i>&nbsp;
                                                     Lý do trả lại</button>
                                             @endif
 
@@ -180,7 +181,8 @@
                 <div class="row">
                     <div class="col-md-12">
                         <div class="form-group">
-                            <button type="button" onclick="insolieu('{{ $furl_th . 'kinhphikhongchuyentrach' }}')"
+                            <button type="button"
+                                onclick="insolieu('{{ $furl_th . 'kinhphikhongchuyentrach' }}',null)"
                                 style="border-width: 0px" class="btn btn-default btn-xs mbs"
                                 data-target="#modal-insolieu" data-toggle="modal">
                                 <i class="fa fa-print"></i>&nbsp; Tổng hợp kinh phí thực hiện
@@ -188,33 +190,34 @@
                         </div>
                     </div>
                 </div>
-                <div class="row">
+                {{-- <div class="row">
                     <div class="col-md-12">
                         <div class="form-group">
-                            <button type="button" onclick="intonghopdt('{{ $furl_th . 'tonghopcanboxa' }}')"
-                                style="border-width: 0px" class="btn btn-default btn-xs mbs">
+                            <button type="button" onclick="insolieu('{{ $furl_th . 'tonghopcanboxa' }}')"
+                                style="border-width: 0px" class="btn btn-default btn-xs mbs" data-target="#modal-insolieu" data-toggle="modal">
                                 <i class="fa fa-print"></i>&nbsp; Tổng hợp cán bộ chuyên trách,
                                 công chức xã</button>
                         </div>
                     </div>
-                </div>
+                </div> --}}
                 <div class="row">
                     <div class="col-md-12">
                         <div class="form-group">
-                            <button type="button" onclick="intonghopdt('{{ $furl_th . 'tonghopdutoan?maso=' }}')"
-                                style="border-width: 0px" class="btn btn-default btn-xs mbs">
+                            <button type="button" onclick="insolieu('{{ $furl_th . 'tonghopbienche' }}','1506672780')"
+                                style="border-width: 0px" class="btn btn-default btn-xs mbs"
+                                data-target="#modal-insolieu" data-toggle="modal">
                                 <i class="fa fa-print"></i>&nbsp; Tổng hợp biên chế, hệ số
-                                lương và phụ cấp có mặt (Mẫu 01)</button>
+                                lương và phụ cấp có mặt </button>
                         </div>
                     </div>
                 </div>
                 <div class="row">
                     <div class="col-md-12">
                         <div class="form-group">
-                            <button type="button" onclick="intonghopdt('{{ $furl_th . 'tonghopdutoan_m2?maso=' }}')"
-                                style="border-width: 0px" class="btn btn-default btn-xs mbs">
-                                <i class="fa fa-print"></i>&nbsp; Tổng hợp biên chế, hệ số
-                                lương và phụ cấp có mặt (Mẫu 02)</button>
+                            <button type="button" onclick="insolieu('{{ $furl_th . 'tonghophopdong' }}','1506673585')"
+                                style="border-width: 0px" class="btn btn-default btn-xs mbs"
+                                data-target="#modal-insolieu" data-toggle="modal">
+                                <i class="fa fa-print"></i>&nbsp; Tổng hợp hợp đồng bổ sung quỹ lương</button>
                         </div>
                     </div>
                 </div>
@@ -237,6 +240,22 @@
             </div>
             <div class="modal-body">
                 <div class="form-horizontal">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <label class="control-label">Phân loại công tác</label>
+                            <select class="form-control select2me" name="mact" id="mact">
+                                @foreach ($model_nhomct as $kieuct)
+                                    <optgroup label="{{ $kieuct->tencongtac }}">
+                                        <?php $mode_ct = $model_tenct->where('macongtac', $kieuct->macongtac); ?>
+                                        @foreach ($mode_ct as $ct)
+                                            <option value="{{ $ct->mact }}">{{ $ct->tenct }}</option>
+                                        @endforeach
+                                    </optgroup>
+                                @endforeach
+                            </select>
+                        </div>
+                    </div>
+
                     <div class="row">
                         <div class="col-md-6">
                             <label class="control-label">Đơn vị tính</label>
@@ -270,12 +289,16 @@
         }
 
         //In dữ liệu
-        function insolieu(url) {
-
+        function insolieu(url, mact) {
+            if (mact == null) {
+                $('#frm_insolieu').find("[name^='mact']").attr('disabled', true);
+            }else{
+                $('#frm_insolieu').find("[name^='mact']").attr('disabled', false);
+                $('#frm_insolieu').find("[name^='mact']").val(mact).trigger('change');
+            }
             $('#frm_insolieu').attr('action', url);
             $('#frm_insolieu').find("[name^='masodv']").val($('#masodv').val());
             $('#frm_insolieu').find("[name^='namns']").val($('#namns').val());
-
         }
 
         function confirmChuyen(namns) {

@@ -131,7 +131,7 @@
             <td class="text-center">{{ dinhdangso($model->sum('sothonxabiengioi')) }}</td>
             <td class="text-center">{{ dinhdangsothapphan($model->first()->sothonxabiengioi_heso ?? 5, 2) }}</td>
             <td class="text-right">
-                {{ dinhdangso($model->sum('sotienxabiengioi'), 5) }}
+                {{ dinhdangsothapphan($model->sum('sotienxabiengioi'), 5) }}
             </td>
         </tr>
         <tr>
