@@ -166,8 +166,7 @@ class dutoanluong_insolieuController extends Controller
                 $add->tonghs = $chitiet->sum('tonghs') / 12;
                 $add->heso = $chitiet->sum('heso') / 12;
                 $add->canbo_congtac = $chitiet->sum('canbo_congtac');
-                $add->canbo_dutoan = $chitiet->sum('canbo_dutoan');
-                $add->hesotrungbinh = round($add->tonghs / $add->canbo_congtac, 5);
+                $add->canbo_dutoan = $chitiet->sum('canbo_dutoan');                
                 $add->baohiem = ($chitiet->sum('bhxh_dv') + $chitiet->sum('bhyt_dv') + $chitiet->sum('kpcd_dv')) / 12;
                 $add->bhtn_dv = $chitiet->sum('bhtn_dv') / 12;
                 $add->ttl = $chitiet->sum('ttl');
@@ -178,7 +177,7 @@ class dutoanluong_insolieuController extends Controller
                 $add->tongbh_dv = $chitiet->sum('tongbh_dv') / 12;
                 $add->tongphucap = $add->tonghs - $add->heso;
                 $add->tongcong = $add->tonghs + $add->tongbh_dv;
-
+                $add->hesotrungbinh = round($add->tonghs / $add->canbo_congtac, 5);
 
                 foreach (getColTongHop() as $pc) {
                     $add->$pc = $chitiet->sum($pc) / 12;
@@ -230,7 +229,7 @@ class dutoanluong_insolieuController extends Controller
                 }
                 $chitiet->tenct = $a_plct[$chitiet->mact] ?? '';
                 $chitiet->tonghs = $chitiet->tonghs / 12;
-                $chitiet->hesotrungbinh = round($chitiet->tonghs / $chitiet->canbo_congtac, 5);
+                
                 $chitiet->bhxh_dv = $chitiet->bhxh_dv / 12;
                 $chitiet->bhyt_dv = $chitiet->bhyt_dv / 12;
                 $chitiet->kpcd_dv = $chitiet->kpcd_dv / 12;
@@ -239,6 +238,7 @@ class dutoanluong_insolieuController extends Controller
                 $chitiet->tongphucap = $chitiet->tonghs - $chitiet->heso;
                 $chitiet->tongbh_dv = $chitiet->tongbh_dv / 12;
                 $chitiet->tongcong = $chitiet->tonghs + $chitiet->tongbh_dv;
+                $chitiet->hesotrungbinh = round($chitiet->tongcong / $chitiet->canbo_congtac, 5);
                 $chitiet->quyluong = $chitiet->ttl + $chitiet->ttbh_dv;
             }
             //dd($model);

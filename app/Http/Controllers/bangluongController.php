@@ -278,9 +278,15 @@ class bangluongController extends Controller
                 ->where('madv', session('admin')->madv)
                 ->where('phanloai', '<', '3')
                 ->wherenotin('mapc', array_merge(['hesott'], explode(',', $inputs['phucaploaitru'])))->get();
-            if (count(SapXepPhuCap($model_phucap)) == 0) {
+            $a_pc = SapXepPhuCap($model_phucap);
+            if (isset($a_pc['trangthai'])) {
+                $a_tenpc = array_column($model_phucap->toarray(), 'tenct', 'mact');
+                $tenpc = '';
+                foreach ($a_pc['mapc'] as $pc) {
+                    $tenpc .=  ($a_tenpc[$pc] . ';');
+                }
                 return view('errors.data_error')
-                    ->with('message', 'Phụ cấp cơ sở bị lập lại. Bạn hãy kiểm tra lại danh mục phụ cấp trước khi tính lương')
+                    ->with('message', 'Phụ cấp cơ sở:' . $tenpc . ' bị lập lại. Bạn hãy kiểm tra lại danh mục phụ cấp trước khi tính lương')
                     ->with('furl', '/chuc_nang/bang_luong/chi_tra?thang=' . date('m') . '&nam=' . date('Y'));
             }
 
@@ -1319,7 +1325,7 @@ class bangluongController extends Controller
                 $m_cb[$key]['tencanbo'] .= ' (nghỉ thai sản)';
                 $m_cb[$key]['ghichu'] .= 'Nghỉ thai sản từ ' . getDayVn($a_thaisan[$key]['ngaytu']) . ' đến ' . getDayVn($a_thaisan[$key]['ngayden']) . ';';
                 $m_cb[$key]['congtac'] = 'THAISAN';
-                
+
                 foreach ($a_pc as $k => $v) {
                     if (!in_array($k, $a_ts)) {
                         //$m_cb[$key][$k] = round($m_cb[$key][$k] * $m_cb[$key]['pthuong'] / 100, session('admin')->lamtron);

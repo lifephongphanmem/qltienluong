@@ -572,30 +572,30 @@ function SapXepPhuCap($m_phucap)
     $a_heso = $m_phucap->where('phanloai', '0')->keyBy('mapc')->toarray();
     $a_sotien = $m_phucap->where('phanloai', '1')->keyBy('mapc')->toarray();
     $a_phantram = $m_phucap->where('phanloai', '2')->keyBy('mapc')->toarray();
-    
-    $a_ketqua = array_merge($a_heso, $a_sotien);    
+
+    $a_ketqua = array_merge($a_heso, $a_sotien);
     $chk = 1; //Biến lưu cho trường hợp lặp vô hạn
     //lấy 
     //dd($a_phantram);
 
-    while(count($a_phantram)>0){
-        foreach($a_phantram as $key=>$val){
+    while (count($a_phantram) > 0) {
+        foreach ($a_phantram as $key => $val) {
             $b_chk = true;
-            foreach(explode(',', $a_phantram[$key]['congthuc']) as $ct){
-                if ($ct != '' && !array_key_exists($ct, $a_ketqua)){
+            foreach (explode(',', $a_phantram[$key]['congthuc']) as $ct) {
+                if ($ct != '' && !array_key_exists($ct, $a_ketqua)) {
                     $b_chk = false;
                 }
             }
-            if($b_chk){
+            if ($b_chk) {
                 $a_ketqua[$key] = $a_phantram[$key];
                 unset($a_phantram[$key]);
             }
-        }        
-       
+        }
+
         $chk++;
-        if($chk>=100){     
+        if ($chk >= 100) {
             //dd($a_phantram);       
-            return [];            
+            return ['trangthai'=>'false','mapc'=>array_keys($a_phantram)];
         }
     }
     //$a_ketqua = array_merge($a_ketqua, $a_phantram);
