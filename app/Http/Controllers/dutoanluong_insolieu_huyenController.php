@@ -39,7 +39,7 @@ class dutoanluong_insolieu_huyenController extends Controller
     {
         if (Session::has('admin')) {
             $inputs = $request->all();
-            dd($inputs);            
+            dd($inputs);
             $m_dutoan = dutoanluong::where('masodv', $inputs['maso'])->first();
             //dd($m_dutoan);
             $model = dutoanluong_bangluong::where('masodv', $inputs['maso'])->orderby('stt')->get();
@@ -82,24 +82,31 @@ class dutoanluong_insolieu_huyenController extends Controller
     function kinhphikhongchuyentrach(Request $request)
     {
         if (Session::has('admin')) {
-            $inputs = $request->all();                    
-            $model = dutoanluong::where('masoh', $inputs['masodv'])->where('namns',$inputs['namns'])->where('trangthai','DAGUI')->get();
-            $m_donvi_baocao = dmdonvi::wherein('madv', array_column($model->toarray(),'madv'))->get();
-            $m_donvi = dmdonvi::where('madv', session('admin')->madv)->get();
+            $inputs = $request->all();
+            $model = dutoanluong::where('masoh', $inputs['masodv'])->where('namns', $inputs['namns'])->where('trangthai', 'DAGUI')->get();
+            $m_donvi_baocao = dmdonvi::wherein('madv', array_column($model->toarray(), 'madv'))->get();
+            $m_donvi = dmdonvi::where('madv', session('admin')->madv)->first();
             //tính toán trc số liệu
-            foreach($model as $chitiet){
-                $chitiet->sotienxabiengioi = $chitiet->sothonxabiengioi * $chitiet->sothonxabiengioi_heso;
-                $chitiet->sotienxakhokhan =$chitiet->sothonxakhokhan * $chitiet->sothonxakhokhan_heso;
-                $chitiet->sotienxatrongdiem =$chitiet->sothonxatrongdiem * $chitiet->sothonxatrongdiem_heso;
-                $chitiet->sotienxakhac =$chitiet->sothonxakhac * $chitiet->sothonxakhac_heso;
-                $chitiet->sotienxaloai1 =$chitiet->sothonxaloai1 * $chitiet->sothonxaloai1_heso;
-                $$chitiet->sotienphanloaixa_heso =$chitiet->phanloaixa_heso;
-              
+
+            foreach ($model as $chitiet) {
+                $chitiet->sotienphanloaixa = ($chitiet->phanloaixa_heso * 12 * $chitiet->luongcoban) / $inputs['donvitinh'];
+
+                $chitiet->sotienxabiengioi = ($chitiet->sothonxabiengioi * $chitiet->sothonxabiengioi_heso * 12 * $chitiet->luongcoban) / $inputs['donvitinh'];
+                $chitiet->sotienxakhokhan = ($chitiet->sothonxakhokhan * $chitiet->sothonxakhokhan_heso * 12 * $chitiet->luongcoban) / $inputs['donvitinh'];
+                $chitiet->sotienxatrongdiem = ($chitiet->sothonxatrongdiem * $chitiet->sothonxatrongdiem_heso * 12 * $chitiet->luongcoban) / $inputs['donvitinh'];
+                $chitiet->sotienxakhac = ($chitiet->sothonxakhac * $chitiet->sothonxakhac_heso * 12 * $chitiet->luongcoban) / $inputs['donvitinh'];
+                $chitiet->sotienxaloai1 = ($chitiet->sothonxaloai1 * $chitiet->sothonxaloai1_heso * 12 * $chitiet->luongcoban) / $inputs['donvitinh'];
+                $chitiet->tongsotienthon = $chitiet->sotienxabiengioi + $chitiet->sotienxakhokhan
+                    + $chitiet->sotienxatrongdiem + $chitiet->sotienxakhac + $chitiet->sotienxaloai1;
+
+                $chitiet->tongsothon = $chitiet->sothonxabiengioi + $chitiet->sothonxakhokhan + $chitiet->sothonxatrongdiem + $chitiet->sothonxakhac + $chitiet->sothonxaloai1;
             }
+
             return view('reports.dutoanluong.Huyen.kinhphikhongchuyentrach')
                 ->with('model', $model)
                 ->with('m_donvi', $m_donvi)
                 ->with('m_donvi_baocao', $m_donvi_baocao)
+                ->with('inputs', $inputs)
                 ->with('lamtron', session('admin')->lamtron ?? 3)
                 ->with('pageTitle', 'Tổng hợp kinh phí thực hiện chế độ phụ cấp cho cán bộ không chuyên trách');
         } else
@@ -229,19 +236,19 @@ class dutoanluong_insolieu_huyenController extends Controller
             //dd($inputs);            
             $m_dutoan = dutoanluong::where('masodv', $inputs['maso'])->first();
             //dd($m_dutoan);
-            $model = dutoanluong_chitiet::where('masodv', $inputs['maso'])->get();            
-            $a_plct = array_column(dmphanloaict::all()->toArray(),'tenct','mact');
-            foreach ($model as $chitiet) {                
-                $chitiet->tenct = $a_plct[$chitiet->mact] ?? '';               
+            $model = dutoanluong_chitiet::where('masodv', $inputs['maso'])->get();
+            $a_plct = array_column(dmphanloaict::all()->toArray(), 'tenct', 'mact');
+            foreach ($model as $chitiet) {
+                $chitiet->tenct = $a_plct[$chitiet->mact] ?? '';
                 $chitiet->hesotrungbinh = round($chitiet->tonghs / $chitiet->canbo_congtac, 5);
-                $chitiet->baohiem = $chitiet->sum('bhxh_dv') + $chitiet->sum('bhyt_dv') + $chitiet->sum('kpcd_dv');               
+                $chitiet->baohiem = $chitiet->sum('bhxh_dv') + $chitiet->sum('bhyt_dv') + $chitiet->sum('kpcd_dv');
                 $chitiet->tongphucap = $chitiet->tonghs - $chitiet->heso;
                 $chitiet->tongcong = $chitiet->tonghs + $chitiet->tongbh_dv;
-                $chitiet->quyluong = $chitiet->ttl + $chitiet->ttbh_dv;                
+                $chitiet->quyluong = $chitiet->ttl + $chitiet->ttbh_dv;
             }
             //dd($model);
             $m_donvi = dmdonvi::where('madv', $m_dutoan->madv)->first();
-            
+
             //xử lý ẩn hiện cột phụ cấp => biết tổng số cột hiện => colspan trên báo cáo
             $a_goc = array('heso'); //do hệ số lương có cột cố định
             $model_pc = dmphucap_donvi::where('madv', $m_dutoan->madv)->where('phanloai', '<', '3')->wherenotin('mapc', $a_goc)->orderby('stt')->get();
