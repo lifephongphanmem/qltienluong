@@ -933,7 +933,7 @@ class bangluong_inController extends Controller
                     $model->add($ct);
                 }
             }
-            //dd($model);
+            // dd($model);
 
             $model_congtac = dmphanloaict::select('mact', 'tenct')
                 ->wherein('mact', a_unique(array_column($model->toarray(), 'mact')))->get();
@@ -1015,7 +1015,7 @@ class bangluong_inController extends Controller
                         $ct->$mapc_st -= $canbo->$mapc_st;
                     }
                     //tính lại lương thực nhận do đã giảm trừ
-                    $ct->luongtn = $ct->ttl - $ct->ttbh - $canbo->ttl + $canbo->ttbh;
+                    $ct->luongtn = $ct->ttl - $ct->ttbh - ($canbo->ttl + $canbo->ttbh);
                     $ct->tonghs -= $canbo->tonghs;
                     $ct->ttl -= $canbo->ttl;
                     $ct->stbhxh -= $canbo->stbhxh;
@@ -1258,7 +1258,6 @@ class bangluong_inController extends Controller
             //lấy lại nhóm công tác do có trường hợp thêm mới cán bộ tháng trc vào mà trong tháng chưa có
             $model_congtac = dmphanloaict::select('mact', 'tenct', 'macongtac')
                 ->wherein('mact', a_unique(array_column($model->toarray(), 'mact')))->get();
-
             return view('reports.bangluong.donvi.mau09nd11')
                 ->with('model', $model->sortBy('stt'))
                 ->with('m_dv', $m_dv)

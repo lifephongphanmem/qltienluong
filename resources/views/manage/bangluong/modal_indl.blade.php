@@ -251,8 +251,22 @@
                                     </div>
                                     <div class="col-md-6">
                                         <div class="form-group">
-                                            <a id="in_mau09" href="" onclick="inmau09_KH()" style="border-width: 0px;margin-left: 5px" target="_blank">
-                                                <i class="fa fa-print"></i>&nbsp; Bảng thanh toán cho đối tượng thụ hưởng</a>
+                                            <button type="button" style="border-width: 0px" onclick="in09('/chuc_nang/bang_luong/mau09_KH')" class="btn btn-default btn-xs mbs"
+                                            title="Bảng lương thêm cột giảm trừ lương, phần trăm vượt khung" data-target="#mautt107-modal" data-toggle="modal">
+                                        <i class="fa fa-print"></i>&nbsp; Bảng thanh toán cho đối tượng thụ hưởng</button>
+                                            {{-- <a id="in_mau09" href="" onclick="inmau09_KH()" style="border-width: 0px;margin-left: 5px" target="_blank">
+                                                <i class="fa fa-print"></i>&nbsp; Bảng thanh toán cho đối tượng thụ hưởng</a> --}}
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <button type="button" style="border-width: 0px" onclick="inblcbcc_mauxa('/chuc_nang/bang_luong/maublcbcc_mauxa')" class="btn btn-default btn-xs mbs"
+                                            title="Bảng lương thêm cột giảm trừ lương, phần trăm vượt khung" data-target="#mautt107-modal" data-toggle="modal">
+                                        <i class="fa fa-print"></i>&nbsp; Bảng lương cán bộ công chức, chuyên trách - Mẫu xã</button>
+                                            {{-- <a id="in_C02" href="" onclick="inC02('/chuc_nang/bang_luong/mauC02_KH')" style="border-width: 0px;margin-left: 5px" target="_blank">
+                                                <i class="fa fa-print"></i>&nbsp; Bảng lương mẫu C02-KH</a> --}}
                                         </div>
                                     </div>
                                 </div>
