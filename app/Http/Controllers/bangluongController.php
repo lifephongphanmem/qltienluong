@@ -5495,20 +5495,126 @@ class bangluongController extends Controller
         } else
             return view('errors.notlogin');
     }
-    public function printf_maublcbcc_mauxa(Request $request)
+    public function printf_maublcbct(Request $request)
     {
         if (Session::has('admin')) {
             $inputs = $request->all();
             $inputs['inchucvuvt'] = '';
             $mabl = $inputs['mabl'];
-            $model = $this->getBangLuong($inputs)->wherein('phanloai', ['CVCHINH', 'KHONGCT'])->sortByDesc('pccv');
+            $model = $this->getBangLuong($inputs)->sortByDesc('pccv');
             $m_bl = bangluong::select('thang', 'nam', 'mabl', 'madv', 'ngaylap', 'phanloai', 'luongcoban', 'noidung','manguonkp')->where('mabl', $mabl)->first();
             $m_dv = dmdonvi::where('madv', $m_bl->madv)->first();
             $model_congtac = dmphanloaict::select('mact', 'tenct')
                 ->wherein('mact', a_unique(array_column($model->toarray(), 'mact')))->get();
             $a_goc = array('hesott', 'heso');
             $model_pc = dmphucap_donvi::where('madv', $m_bl->madv)->where('phanloai', '<', '3')->wherenotin('mapc', $a_goc)->get();
+            $a_phucap = array();/* Hiển thị các cột phụ cấp*/
+            $col = 0;
+            foreach ($model_pc as $ct) {
+                if ($model->sum($ct->mapc) > 0) {
+                    $a_phucap[$ct->mapc] = $ct->form;
+                    $col++;
+                }
+            }
+            $a_bh = array(); /* Hiển thị cột không tính bảo hiểm*/
+            foreach ($a_phucap as $key => $pc) {
+                foreach ($model_pc as $ct) {
+                    if ($key == $ct->mapc) {
+                        $a_bh[$ct->mapc] = $ct->baohiem;
+                    }
+                }
+            }
+            $nguonkp=dmnguonkinhphi::select('tennguonkp')->where('manguonkp',$m_bl->manguonkp)->first();
+            $model_tm = dmtieumuc_default::all();
+            $a_tm = array_column($model_tm->toarray(), 'mapc'); //Mảng để so sánh
+            $a_pb = getPhongBan();
+            $thongtin = array(
+                'nguoilap' => $m_bl->nguoilap,
+                'thang' => $m_bl->thang,
+                'nam' => $m_bl->nam,
+                'ngaylap' => $m_bl->ngaylap, 'phanloai' => $m_bl->phanloai,
+                'cochu' => $inputs['cochu'],
+                'mapb' => $inputs['mapb'],
+                'tenpb' => $a_pb[$inputs['mapb']],
+                'innoidung' => isset($inputs['innoidung']),
+                'noidung' => $m_bl->noidung,
+                'nguonkp'=> $nguonkp->tennguonkp,
+                'mucluong'=>$m_bl->luongcoban,
+            );
+            $m_dv = dmdonvi::where('madv', $m_bl->madv)->first();
+            switch($inputs['mact']){
+                case '1506673604':{
+                    return   view('reports.bangluong.donvi.maublcbct')
+                    ->with('thongtin',$thongtin)
+                    ->with('m_dv',$m_dv)
+                    ->with('model',$model)
+                    ->with('model_congtac',$model_congtac)
+                    ->with('a_bh',$a_bh)
+                    ->with('a_phucap',$a_phucap)
+                    ->with('col',$col)
+                    ->with('model_tm',$model_tm)
+                    ->with('a_tm',$a_tm)
+                    ->with('pageTitle','Bảng lương chi tiết');
+                    break;
+                }
+                case '1506673695':{
+                    return   view('reports.bangluong.donvi.maublcbkct_xa')
+                    ->with('thongtin',$thongtin)
+                    ->with('m_dv',$m_dv)
+                    ->with('model',$model)
+                    ->with('model_congtac',$model_congtac)
+                    ->with('a_bh',$a_bh)
+                    ->with('a_phucap',$a_phucap)
+                    ->with('col',$col)
+                    ->with('model_tm',$model_tm)
+                    ->with('a_tm',$a_tm)
+                    ->with('pageTitle','Bảng lương chi tiết');
+                    break;
+                }
+                case '1535613221':{
+                    return   view('reports.bangluong.donvi.maublcbkct_thon')
+                    ->with('thongtin',$thongtin)
+                    ->with('m_dv',$m_dv)
+                    ->with('model',$model)
+                    ->with('model_congtac',$model_congtac)
+                    ->with('a_bh',$a_bh)
+                    ->with('a_phucap',$a_phucap)
+                    ->with('col',$col)
+                    ->with('model_tm',$model_tm)
+                    ->with('a_tm',$a_tm)
+                    ->with('pageTitle','Bảng lương chi tiết');
+                    break;
+                }
+            } 
 
+            // return $view
+            //         ->with('thongtin',$thongtin)
+            //         ->with('m_dv',$m_dv)
+            //         ->with('model',$model)
+            //         ->with('model_congtac',$model_congtac)
+            //         ->with('a_bh',$a_bh)
+            //         ->with('a_phucap',$a_phucap)
+            //         ->with('col',$col)
+            //         ->with('model_tm',$model_tm)
+            //         ->with('a_tm',$a_tm)
+            //         ->with('pageTitle','Bảng lương chi tiết');
+        } else
+            return view('errors.notlogin');
+    }
+
+    public function printf_maublcbkct(Request $request)
+    {
+        if (Session::has('admin')) {
+            $inputs = $request->all();
+            $inputs['inchucvuvt'] = '';
+            $mabl = $inputs['mabl'];
+            $model = $this->getBangLuong($inputs)->sortByDesc('pccv');
+            $m_bl = bangluong::select('thang', 'nam', 'mabl', 'madv', 'ngaylap', 'phanloai', 'luongcoban', 'noidung','manguonkp')->where('mabl', $mabl)->first();
+            $m_dv = dmdonvi::where('madv', $m_bl->madv)->first();
+            $model_congtac = dmphanloaict::select('mact', 'tenct')
+                ->wherein('mact', a_unique(array_column($model->toarray(), 'mact')))->get();
+            $a_goc = array('hesott', 'heso');
+            $model_pc = dmphucap_donvi::where('madv', $m_bl->madv)->where('phanloai', '<', '3')->wherenotin('mapc', $a_goc)->get();
 
             $a_phucap = array();/* Hiển thị các cột phụ cấp*/
             $col = 0;
@@ -5535,7 +5641,8 @@ class bangluongController extends Controller
                 'nguoilap' => $m_bl->nguoilap,
                 'thang' => $m_bl->thang,
                 'nam' => $m_bl->nam,
-                'ngaylap' => $m_bl->ngaylap, 'phanloai' => $m_bl->phanloai,
+                'ngaylap' => $m_bl->ngaylap, 
+                'phanloai' => $m_bl->phanloai,
                 'cochu' => $inputs['cochu'],
                 'mapb' => $inputs['mapb'],
                 'tenpb' => $a_pb[$inputs['mapb']],
@@ -5546,7 +5653,7 @@ class bangluongController extends Controller
             );
             
             $m_dv = dmdonvi::where('madv', $m_bl->madv)->first();
-            return view('reports.bangluong.donvi.maublcbcc_mauxa')
+            return view('reports.bangluong.donvi.maublcbkct_xa')
                     ->with('thongtin',$thongtin)
                     ->with('m_dv',$m_dv)
                     ->with('model',$model)

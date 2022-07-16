@@ -245,8 +245,6 @@
                                             <button type="button" style="border-width: 0px" onclick="inC02('/chuc_nang/bang_luong/mauC02_KH')" class="btn btn-default btn-xs mbs"
                                             title="Bảng lương thêm cột giảm trừ lương, phần trăm vượt khung" data-target="#mautt107-modal" data-toggle="modal">
                                         <i class="fa fa-print"></i>&nbsp; Bảng lương mẫu C02-KH</button>
-                                            {{-- <a id="in_C02" href="" onclick="inC02('/chuc_nang/bang_luong/mauC02_KH')" style="border-width: 0px;margin-left: 5px" target="_blank">
-                                                <i class="fa fa-print"></i>&nbsp; Bảng lương mẫu C02-KH</a> --}}
                                         </div>
                                     </div>
                                     <div class="col-md-6">
@@ -254,23 +252,37 @@
                                             <button type="button" style="border-width: 0px" onclick="in09('/chuc_nang/bang_luong/mau09_KH')" class="btn btn-default btn-xs mbs"
                                             title="Bảng lương thêm cột giảm trừ lương, phần trăm vượt khung" data-target="#mautt107-modal" data-toggle="modal">
                                         <i class="fa fa-print"></i>&nbsp; Bảng thanh toán cho đối tượng thụ hưởng</button>
-                                            {{-- <a id="in_mau09" href="" onclick="inmau09_KH()" style="border-width: 0px;margin-left: 5px" target="_blank">
-                                                <i class="fa fa-print"></i>&nbsp; Bảng thanh toán cho đối tượng thụ hưởng</a> --}}
                                         </div>
                                     </div>
                                 </div>
                                 <div class="row">
                                     <div class="col-md-6">
                                         <div class="form-group">
-                                            <button type="button" style="border-width: 0px" onclick="inblcbcc_mauxa('/chuc_nang/bang_luong/maublcbcc_mauxa')" class="btn btn-default btn-xs mbs"
-                                            title="Bảng lương thêm cột giảm trừ lương, phần trăm vượt khung" data-target="#mautt107-modal" data-toggle="modal">
-                                        <i class="fa fa-print"></i>&nbsp; Bảng lương cán bộ công chức, chuyên trách - Mẫu xã</button>
-                                            {{-- <a id="in_C02" href="" onclick="inC02('/chuc_nang/bang_luong/mauC02_KH')" style="border-width: 0px;margin-left: 5px" target="_blank">
-                                                <i class="fa fa-print"></i>&nbsp; Bảng lương mẫu C02-KH</a> --}}
+                                            <button type="button" style="border-width: 0px" onclick="inblcbcc_mauxa('/chuc_nang/bang_luong/maublcbct')" class="btn btn-default btn-xs mbs"
+                                            title="Bảng lương thêm cột giảm trừ lương, phần trăm vượt khung" data-target="#maucbct-modal" data-toggle="modal">
+                                        <i class="fa fa-print"></i>&nbsp; Bảng lương cán bộ công chức, chuyên trách</button>
+
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <button type="button" style="border-width: 0px" onclick="inblcbkct('/chuc_nang/bang_luong/maublcbct')" class="btn btn-default btn-xs mbs"
+                                            title="Bảng lương thêm cột giảm trừ lương, phần trăm vượt khung" data-target="#maucbkct-modal" data-toggle="modal">
+                                        <i class="fa fa-print"></i>&nbsp; Bảng lương cán bộ không chuyên trách xã</button>
                                         </div>
                                     </div>
                                 </div>
                             </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <button type="button" style="border-width: 0px" onclick="inblcbkct_thon('/chuc_nang/bang_luong/maublcbct')" class="btn btn-default btn-xs mbs"
+                                        title="Bảng lương thêm cột giảm trừ lương, phần trăm vượt khung" data-target="#maucbkct-thon-modal" data-toggle="modal">
+                                    <i class="fa fa-print"></i>&nbsp; Bảng lương cán bộ không chuyên trách cấp thôn</button>
+                                    </div>
+                                </div>
+                            </div>
+                            
 
                             <!-- Mẫu bảng lương lạng sơn + cao bằng -->
                             <div class="tab-pane" id="tab_2">

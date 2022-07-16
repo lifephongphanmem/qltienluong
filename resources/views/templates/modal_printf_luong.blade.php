@@ -448,6 +448,235 @@
     </div>
 </div>
 {!! Form::close() !!}
+<!--Mẫu can bộ chuyên trách -->
+{!! Form::open(['url' => (isset($furl) ? $furl : '') . 'mautt107', 'method' => 'post', 'target' => '_blank', 'files' => true, 'id' => 'printf_maucbct']) !!}
+<div id="maucbct-modal" tabindex="-1" role="dialog" aria-hidden="true" class="modal fade">
+    <div class="modal-dialog modal-content">
+        <div class="modal-header modal-header-primary">
+            <button type="button" data-dismiss="modal" aria-hidden="true" class="close">&times;</button>
+            <h4 id="header-inbl" class="modal-title">In bảng lương</h4>
+        </div>
+        <div class="modal-body">
+            <div class="form-horizontal">
+                <div class="row">
+                    <div class="col-md-12">
+                        <label class="control-label">Khối/Tổ công tác</label>
+                        <select name="mapb" id="mapb" class="form-control select2me">
+                            @foreach (getPhongBan(true) as $key => $val)
+                                <option value="{{ $key }}">{{ $val }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+
+                    <div class="col-md-12">
+                        <label class="control-label">Chức vụ</label>
+                        {!! Form::select('macvcq', getChucVuCQ(true), null, ['id' => 'macvcq', 'class' => 'form-control select2me']) !!}
+                    </div>
+
+                    <div class="col-md-12">
+                        <label class="control-label">Phân loại công tác</label>
+                        <select class="form-control select2me" name="mact" id="mact">
+                            {{-- <option value="">-- Tất cả các phân loại công tác --</option> --}}
+                            @foreach ($model_nhomct as $kieuct)
+                                <optgroup label="{{ $kieuct->tencongtac }}">
+                                    <?php $mode_ct = $model_tenct->where('macongtac', $kieuct->macongtac); ?>
+                                    @foreach ($mode_ct as $ct)
+                                    @if ( $ct->mact == '1506673604')
+                                    <option value="{{ $ct->mact }}" >{{ $ct->tenct }}</option>
+                                    @endif
+                                        
+                                    @endforeach
+                                </optgroup>
+                            @endforeach
+                        </select>
+                    </div>
+
+                    {{-- <div class="col-md-6">
+                        <label class="control-label">Làm tròn số tiền thực nhận</label>
+                        {!! Form::select('lamtron', ['0' => '0', '-1' => '1', '-2' => '2', '-3' => '3'], '-2', ['id' => 'lamtron', 'class' => 'form-control select2me']) !!}
+                    </div> --}}
+
+                    <div class="col-md-12">
+                        <label class="control-label">Cỡ chữ</label>
+                        {!! Form::select('cochu', getCoChu(), 10, ['id' => 'cochu', 'class' => 'form-control select2me']) !!}
+                    </div>
+
+                    <input type="hidden" id="mabl" name="mabl" />
+                </div>
+
+                <div class="row">
+                    <div class="col-md-offset-3 col-md-9" style="margin-top: 15px">
+                        <input name="innoidung" id="innoidung" type="checkbox">
+                        <label for="innoidung">Tiều đề bảng lương là nội dung bảng lương</label>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-offset-3 col-md-9">
+                        <input name="inchucvuvt" id="inchucvuvt" type="checkbox">
+                        <label>In chức vụ/chức danh viết tắt</label>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button type="button" data-dismiss="modal" class="btn btn-default">Hủy thao tác</button>
+            <button type="submit" class="btn btn-primary" onclick="ClickBCtt107_m2_excel()" id="btn_xls">Xuất
+                Excel</button>
+            <button type="submit" class="btn btn-success">Đồng ý</button>
+        </div>
+    </div>
+</div>
+{!! Form::close() !!}
+
+<!--Mẫu can bộ không chuyên trách xã -->
+{!! Form::open(['url' => (isset($furl) ? $furl : '') . 'mautt107', 'method' => 'post', 'target' => '_blank', 'files' => true, 'id' => 'printf_maucbkct']) !!}
+<div id="maucbkct-modal" tabindex="-1" role="dialog" aria-hidden="true" class="modal fade">
+    <div class="modal-dialog modal-content">
+        <div class="modal-header modal-header-primary">
+            <button type="button" data-dismiss="modal" aria-hidden="true" class="close">&times;</button>
+            <h4 id="header-inbl" class="modal-title">In bảng lương</h4>
+        </div>
+        <div class="modal-body">
+            <div class="form-horizontal">
+                <div class="row">
+                    <div class="col-md-12">
+                        <label class="control-label">Khối/Tổ công tác</label>
+                        <select name="mapb" id="mapb" class="form-control select2me">
+                            @foreach (getPhongBan(true) as $key => $val)
+                                <option value="{{ $key }}">{{ $val }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+
+                    <div class="col-md-12">
+                        <label class="control-label">Chức vụ</label>
+                        {!! Form::select('macvcq', getChucVuCQ(true), null, ['id' => 'macvcq', 'class' => 'form-control select2me']) !!}
+                    </div>
+
+                    <div class="col-md-12">
+                        <label class="control-label">Phân loại công tác</label>
+                        <select class="form-control select2me" name="mact" id="mact">
+                            {{-- <option value="">-- Tất cả các phân loại công tác --</option> --}}
+                            @foreach ($model_nhomct as $kieuct)
+                                <optgroup label="{{ $kieuct->tencongtac }}">
+                                    <?php $mode_ct = $model_tenct->where('macongtac', $kieuct->macongtac); ?>
+                                    @foreach ($mode_ct as $ct)
+                                    @if ( $ct->mact == '1506673695')
+                                    <option value="{{ $ct->mact }}" >{{ $ct->tenct }}</option>
+                                    @endif
+                                        
+                                    @endforeach
+                                </optgroup>
+                            @endforeach
+                        </select>
+                    </div>
+
+                    <div class="col-md-12">
+                        <label class="control-label">Cỡ chữ</label>
+                        {!! Form::select('cochu', getCoChu(), 10, ['id' => 'cochu', 'class' => 'form-control select2me']) !!}
+                    </div>
+
+                    <input type="hidden" id="mabl" name="mabl" />
+                </div>
+
+                <div class="row">
+                    <div class="col-md-offset-3 col-md-9" style="margin-top: 15px">
+                        <input name="innoidung" id="innoidung" type="checkbox">
+                        <label for="innoidung">Tiều đề bảng lương là nội dung bảng lương</label>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-offset-3 col-md-9">
+                        <input name="inchucvuvt" id="inchucvuvt" type="checkbox">
+                        <label>In chức vụ/chức danh viết tắt</label>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button type="button" data-dismiss="modal" class="btn btn-default">Hủy thao tác</button>
+            <button type="submit" class="btn btn-primary" onclick="ClickBCtt107_m2_excel()" id="btn_xls">Xuất
+                Excel</button>
+            <button type="submit" class="btn btn-success">Đồng ý</button>
+        </div>
+    </div>
+</div>
+{!! Form::close() !!}
+
+<!--Mẫu can bộ không chuyên trách thôn -->
+{!! Form::open(['url' => (isset($furl) ? $furl : '') . 'mautt107', 'method' => 'post', 'target' => '_blank', 'files' => true, 'id' => 'printf_maucbkct_thon']) !!}
+<div id="maucbkct-thon-modal" tabindex="-1" role="dialog" aria-hidden="true" class="modal fade">
+    <div class="modal-dialog modal-content">
+        <div class="modal-header modal-header-primary">
+            <button type="button" data-dismiss="modal" aria-hidden="true" class="close">&times;</button>
+            <h4 id="header-inbl" class="modal-title">In bảng lương</h4>
+        </div>
+        <div class="modal-body">
+            <div class="form-horizontal">
+                <div class="row">
+                    <div class="col-md-12">
+                        <label class="control-label">Khối/Tổ công tác</label>
+                        <select name="mapb" id="mapb" class="form-control select2me">
+                            @foreach (getPhongBan(true) as $key => $val)
+                                <option value="{{ $key }}">{{ $val }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+
+                    <div class="col-md-12">
+                        <label class="control-label">Chức vụ</label>
+                        {!! Form::select('macvcq', getChucVuCQ(true), null, ['id' => 'macvcq', 'class' => 'form-control select2me']) !!}
+                    </div>
+
+                    <div class="col-md-12">
+                        <label class="control-label">Phân loại công tác</label>
+                        <select class="form-control select2me" name="mact" id="mact">
+                            {{-- <option value="">-- Tất cả các phân loại công tác --</option> --}}
+                            @foreach ($model_nhomct as $kieuct)
+                                <optgroup label="{{ $kieuct->tencongtac }}">
+                                    <?php $mode_ct = $model_tenct->where('macongtac', $kieuct->macongtac); ?>
+                                    @foreach ($mode_ct as $ct)
+                                    @if ( $ct->mact == '1535613221')
+                                    <option value="{{ $ct->mact }}" >{{ $ct->tenct }}</option>
+                                    @endif
+                                        
+                                    @endforeach
+                                </optgroup>
+                            @endforeach
+                        </select>
+                    </div>
+
+                    <div class="col-md-12">
+                        <label class="control-label">Cỡ chữ</label>
+                        {!! Form::select('cochu', getCoChu(), 10, ['id' => 'cochu', 'class' => 'form-control select2me']) !!}
+                    </div>
+
+                    <input type="hidden" id="mabl" name="mabl" />
+                </div>
+
+                <div class="row">
+                    <div class="col-md-offset-3 col-md-9" style="margin-top: 15px">
+                        <input name="innoidung" id="innoidung" type="checkbox">
+                        <label for="innoidung">Tiều đề bảng lương là nội dung bảng lương</label>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-offset-3 col-md-9">
+                        <input name="inchucvuvt" id="inchucvuvt" type="checkbox">
+                        <label>In chức vụ/chức danh viết tắt</label>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button type="button" data-dismiss="modal" class="btn btn-default">Hủy thao tác</button>
+            <button type="submit" class="btn btn-primary" onclick="ClickBCtt107_m2_excel()" id="btn_xls">Xuất
+                Excel</button>
+            <button type="submit" class="btn btn-success">Đồng ý</button>
+        </div>
+    </div>
+</div>
+{!! Form::close() !!}
 
 <script>
     function inblm1(url, exl = false) {
@@ -608,12 +837,34 @@
             btn_xls.addClass('hidden');
         }
     }
-    function inblcbcc_mauxa(url, exl = false){
-        $('#printf_mautt107').find("[id^='macvcq']").attr('disabled', false);
-        $('#printf_mautt107').find("[id^='mact']").attr('disabled', false);
-        $('#printf_mautt107').attr('action', url);
-        $('#printf_mautt107').find("[id^='mabl']").val($('#mabl_in').val());
-        var btn_xls = $('#printf_mautt107').find("[id^='btn_xls']");
+    function inblcbcc_mauxa(url, mact){
+        $('#printf_maucbct').find("[id^='macvcq']").attr('disabled', false);
+        $('#printf_maucbct').find("[id^='mact']").attr('disabled', false);
+        $('#printf_maucbct').attr('action', url);
+        $('#printf_maucbct').find("[id^='mabl']").val($('#mabl_in').val());
+        var btn_xls = $('#printf_maucbct').find("[id^='btn_xls']");
+        btn_xls.removeClass('hidden');
+        if (!exl) {
+            btn_xls.addClass('hidden');
+        }
+    }
+    function inblcbkct(url, exl = false){
+        $('#printf_maucbkct').find("[id^='macvcq']").attr('disabled', false);
+        $('#printf_maucbkct').find("[id^='mact']").attr('disabled', false);
+        $('#printf_maucbkct').attr('action', url);
+        $('#printf_maucbkct').find("[id^='mabl']").val($('#mabl_in').val());
+        var btn_xls = $('#printf_maucbkct').find("[id^='btn_xls']");
+        btn_xls.removeClass('hidden');
+        if (!exl) {
+            btn_xls.addClass('hidden');
+        }
+    }
+    function inblcbkct_thon(url, exl = false){
+        $('#printf_maucbkct_thon').find("[id^='macvcq']").attr('disabled', false);
+        $('#printf_maucbkct_thon').find("[id^='mact']").attr('disabled', false);
+        $('#printf_maucbkct_thon').attr('action', url);
+        $('#printf_maucbkct_thon').find("[id^='mabl']").val($('#mabl_in').val());
+        var btn_xls = $('#printf_maucbkct_thon').find("[id^='btn_xls']");
         btn_xls.removeClass('hidden');
         if (!exl) {
             btn_xls.addClass('hidden');
