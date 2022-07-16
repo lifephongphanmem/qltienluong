@@ -28,7 +28,7 @@
 
         <tr>
             <td style="text-align: right" colspan="2" style="font-weight:bold; font-size: 12px;">
-                Đơn vị: {{getDonViTinh()[$inputs['donvitinh']]}}
+                Đơn vị: {{ getDonViTinh()[$inputs['donvitinh']] }}
             </td>
         </tr>
     </table>
@@ -37,7 +37,7 @@
         <thead>
             <tr class="text-center">
                 <th style="width: 2%;" rowspan="3">S</br>T</br>T</th>
-                <th rowspan="3">NÔI DUNG</th>
+                <th rowspan="3" style="width: 15%">NÔI DUNG</th>
                 <th colspan="3">SỐ ĐỐI TƯỢNG</th>
                 <th colspan="{{ $col + 5 }}">HỆ SỐ TIỀN LƯƠNG, PHỤ CẤP, TRỢ CẤP</th>
                 <th rowspan="3">HỆ SỐ</th>
@@ -45,21 +45,21 @@
             </tr>
 
             <tr style="padding-left: 2px;padding-right: 2px">
-                <th rowspan="2" style="width: 4%;">BIÊN<br>CHẾ<br>GIAO</th>
-                <th rowspan="2" style="width: 4%;">BIÊN<br>CHẾ<br>CÓ<br>MẶT</th>
-                <th rowspan="2" style="width: 4%;">BIÊN<br>CHẾ<br>ĐƯỢC<br>DUYỆT<br>NHƯNG<br>CHƯA<br>TUYỂN</th>
+                <th rowspan="2" style="width: 3%;">BIÊN<br>CHẾ<br>GIAO</th>
+                <th rowspan="2" style="width: 3%;">BIÊN<br>CHẾ<br>CÓ<br>MẶT</th>
+                <th rowspan="2" style="width: 3%;">BIÊN<br>CHẾ<br>ĐƯỢC<br>DUYỆT<br>NHƯNG<br>CHƯA<br>TUYỂN</th>
 
-                <th rowspan="2" style="width: 5%;">TỔNG CỘNG</th>
-                <th rowspan="2" style="width: 5%;">HỆ SỐ LƯƠNG</th>
-                <th rowspan="2" style="width: 5%;">TỔNG HỆ<br>SỐ CÁC<br>KHOẢN PHỤ<br>CẤP TRỢ<br>CẤP</th>
+                <th rowspan="2" style="width: 4%;">TỔNG CỘNG</th>
+                <th rowspan="2" style="width: 4%;">HỆ SỐ LƯƠNG</th>
+                <th rowspan="2" style="width: 4%;">TỔNG HỆ<br>SỐ CÁC<br>KHOẢN PHỤ<br>CẤP TRỢ<br>CẤP</th>
                 <th colspan="{{ $col }}">Trong đó</th>
-                <th rowspan="2" style="width: 5%;">BH THẤT<br>NGHIỆP</th>
-                <th rowspan="2" style="width: 5%;">CÁC KHOẢN<br>ĐÓNG GÓP<br>BHXH, BHYT,<br>KPCĐ</th>
+                <th rowspan="2" style="width: 4%;">BH THẤT<br>NGHIỆP</th>
+                <th rowspan="2" style="width: 4%;">CÁC KHOẢN<br>ĐÓNG GÓP<br>BHXH, BHYT,<br>KPCĐ</th>
             </tr>
 
             <tr>
                 @foreach ($a_phucap as $pc)
-                    <th class="text-uppercase" style="width: 5%;">{{ $pc }}</th>
+                    <th class="text-uppercase" style="width: 4%;">{{ $pc }}</th>
                 @endforeach
             </tr>
         </thead>
@@ -84,27 +84,26 @@
         <?php $i = 1; ?>
         @foreach ($m_phanloai as $phanloai)
             <?php
+            $j = 1;
             $model_donvi = $m_donvi_baocao->where('maphanloai', $phanloai->maphanloai);
             ?>
-            <tr style="font-weight: bold; text-align: center;">
-                <td>{{convert2Roman($i++)}}</td>
-                <td>{{$phanloai->tenphanloai}}</td>
-                
+            <tr class="font-weight-bold">
+                <td>{{ convert2Roman($i++) }}</td>
+                <td>{{ $phanloai->tenphanloai }}</td>
+
             </tr>
             @foreach ($model_donvi as $donvi)
-            <?php
-            $j=1;
-            $model_chitiet = $model->where('madv', $donvi->madv);
-            ?>
-            <tr style="font-weight: bold; text-align: center;">
-                <td></td>
-                <td>{{$donvi->tendv}}</td>
+                <?php
                 
-            </tr>
+                $model_chitiet = $model->where('madv', $donvi->madv);
+                ?>
+                <tr class="font-weight-bold font-italic">
+                    <td class="text-center">{{ $j++ }}</td>
+                    <td>{{ $donvi->tendv }}</td>
+                </tr>
                 @foreach ($model_chitiet as $chitiet)
-                    <tr style="font-weight: bold;">
-                        <td class="text-center">{{ $j++ }}</td>
-
+                    <tr>
+                        <td>-</td>
                         <td>{{ $chitiet->tenct }}</td>
                         @if ($chitiet->phanloai == 'COMAT')
                             <td class="text-center">{{ dinhdangso($chitiet->canbo_dutoan) }}</td>
@@ -132,6 +131,25 @@
                         <td class="text-right">{{ dinhdangsothapphan($chitiet->quyluong, $lamtron) }}</td>
                     </tr>
                 @endforeach
+                @if (count($model_chitiet) < 2)
+                    <tr>
+                        <td>-</td>
+                        <td>Biên chế chưa tuyển</td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        @foreach ($a_phucap as $key => $val)
+                            <td></td>
+                        @endforeach
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                @endif
             @endforeach
         @endforeach
 

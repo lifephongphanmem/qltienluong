@@ -11,6 +11,7 @@ use App\dmphanloaicongtac;
 use App\dmphanloaicongtac_baohiem;
 use App\dmphanloaict;
 use App\dmphanloaidonvi;
+use App\dmphanloaidonvi_baocao;
 use App\dmphucap;
 use App\dmphucap_donvi;
 use App\dsnangluong;
@@ -119,9 +120,10 @@ class dutoanluong_insolieu_huyenController extends Controller
     {
         if (Session::has('admin')) {
             $inputs = $request->all();
-            $m_phanloai = dmphanloaidonvi::all();
+            $m_phanloai = dmphanloaidonvi::all();            
             $m_dutoan = dutoanluong::where('masoh', $inputs['masodv'])->where('trangthai', 'DAGUI')->get();
             $m_donvi_baocao = dmdonvi::wherein('madv', array_column($m_dutoan->toarray(), 'madv'))->get();
+            //dd($m_donvi_baocao);
             $a_donvi = array_column($m_dutoan->toarray(),'madv','masodv');
             $model = dutoanluong_chitiet::wherein('masodv', array_column($m_dutoan->toarray(),'masodv'))->where('mact', $inputs['mact'])->get();
             $m_chuatuyen = dutoanluong_chitiet::wherein('masodv', array_column($m_dutoan->toarray(),'masodv'))->where('phanloai', 'CHUATUYEN')->get();

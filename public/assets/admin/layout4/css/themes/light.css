@@ -15,6 +15,30 @@ body.page-md {
   background: #f3f5f9;
 }
 
+.font-weight-light {
+  font-weight: 300 !important;
+}
+
+.font-weight-lighter {
+  font-weight: lighter !important;
+}
+
+.font-weight-normal {
+  font-weight: 400 !important;
+}
+
+.font-weight-bold {
+  font-weight: 550 !important;
+}
+
+.font-weight-bolder {
+  font-weight: 600 !important;
+}
+
+.font-italic {
+  font-style: italic !important;
+}
+
 /*********** 
 Page Header
 ***********/
