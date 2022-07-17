@@ -336,11 +336,12 @@ Route::group(['prefix'=>'nghiep_vu'],function(){
             Route::get('mautt107_m3','dutoanluongController@printf_tt107_m3');
             Route::get('nangluong','dutoanluongController@printf_nangluong');
             //thiết kế mẫu in cho vạn ninh
-            Route::get('baocaohesoluong','dutoanluong_insolieuController@baocaohesoluong');
             Route::get('kinhphikhongchuyentrach','dutoanluong_insolieuController@kinhphikhongchuyentrach');
             Route::get('tonghopcanboxa','dutoanluong_insolieuController@tonghopcanboxa');
             Route::post('tonghopbienche','dutoanluong_insolieuController@tonghopbienche');
             Route::post('tonghophopdong','dutoanluong_insolieuController@tonghophopdong');
+            Route::post('bangluongbienche','dutoanluong_insolieuController@bangluongbienche');
+            Route::post('bangluonghopdong','dutoanluong_insolieuController@bangluonghopdong');
         });
         /*
         Route::group(['prefix'=>'dia_ban_dbkk'],function(){
@@ -890,8 +891,9 @@ Route::group(['prefix'=>'chuc_nang'],function(){
 
             //Thiết kế mẫu cho Vạn Ninh
             Route::post('kinhphikhongchuyentrach','dutoanluong_insolieu_huyenController@kinhphikhongchuyentrach');
-            //Route::post('tonghopcanboxa','dutoanluong_insolieu_huyenController@tonghopcanboxa');
             Route::post('tonghopbienche','dutoanluong_insolieu_huyenController@tonghopbienche');
+            Route::post('tonghophopdong','dutoanluong_insolieu_huyenController@tonghophopdong');
+            Route::post('tonghopcanboxa','dutoanluong_insolieu_huyenController@tonghopcanboxa');
         });
 
         Route::group(['prefix'=>'khoi'],function(){

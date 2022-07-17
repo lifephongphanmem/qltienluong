@@ -163,17 +163,30 @@
                                 <div class="tab-pane active" id="tab_2">
                                     <div class="portlet box blue form">
                                         <div class="portlet-title"></div>
-                                        <div class="portlet-body">
+                                        <div class="portlet-body">                                           
+
                                             <div class="row">
                                                 <div class="col-md-12">
                                                     <div class="form-group">
                                                         <button type="button"
-                                                            onclick="intonghopdt('{{ $furl . 'baocaohesoluong?maso=' }}')"
-                                                            style="border-width: 0px" class="btn btn-default btn-xs mbs">
-                                                            <i class="fa fa-print"></i>&nbsp; In bảng lương</button>
+                                                            onclick="insolieu('{{ $furl . 'bangluongbienche' }}', '1506672780;1506673604')"
+                                                            style="border-width: 0px" class="btn btn-default btn-xs mbs" data-target="#modal-insolieu" data-toggle="modal">
+                                                            <i class="fa fa-print"></i>&nbsp; In bảng lương biên chế </button>
                                                     </div>
                                                 </div>
                                             </div>
+
+                                            <div class="row">
+                                                <div class="col-md-12">
+                                                    <div class="form-group">
+                                                        <button type="button"
+                                                            onclick="insolieu('{{ $furl . 'bangluonghopdong' }}', '1506673585')"
+                                                            style="border-width: 0px" class="btn btn-default btn-xs mbs" data-target="#modal-insolieu" data-toggle="modal">
+                                                            <i class="fa fa-print"></i>&nbsp; In bảng lương hợp đồng 68 </button>
+                                                    </div>
+                                                </div>
+                                            </div>
+
                                             <div class="row">
                                                 <div class="col-md-12">
                                                     <div class="form-group">

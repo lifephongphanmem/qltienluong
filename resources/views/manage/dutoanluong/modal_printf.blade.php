@@ -19,7 +19,7 @@
                 <div class="row">
                     <div class="col-md-12">
                         <label class="control-label">Phân loại công tác</label>
-                        <select class="form-control select2me" name="mact" id="mact">                            
+                        <select class="form-control select2me" name="mact[]" id="mact" multiple=true>                            
                             @foreach ($model_nhomct as $kieuct)
                                 <optgroup label="{{ $kieuct->tencongtac }}">
                                     <?php $mode_ct = $model_tenct->where('macongtac', $kieuct->macongtac); ?>
@@ -132,7 +132,7 @@
     //In dữ liệu
     function insolieu(url, mact) {
         $('#frm_insolieu').attr('action', url);
-        $('#frm_insolieu').find("[name^='mact']").val(mact).trigger('change');
+        $('#frm_insolieu').find("[name^='mact']").val(mact.split(';')).trigger('change');
         $('#frm_insolieu').find("[name^='masodv']").val($('#masodv_dt').val());
         $('#frm_insolieu').find("[name^='namns']").val($('#nam_dt').val());
     }

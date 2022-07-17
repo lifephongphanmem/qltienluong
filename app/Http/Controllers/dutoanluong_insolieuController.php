@@ -3,46 +3,30 @@
 namespace App\Http\Controllers;
 
 
-use App\bangluong;
-use App\chitieubienche;
 use App\dmchucvucq;
 use App\dmdonvi;
-use App\dmphanloaicongtac;
-use App\dmphanloaicongtac_baohiem;
 use App\dmphanloaict;
 use App\dmphucap_donvi;
-use App\dsnangluong;
-use App\dsnangthamnien;
 use App\dutoanluong;
 use App\dutoanluong_bangluong;
 use App\dutoanluong_chitiet;
-use App\dutoanluong_huyen;
-use App\dutoanluong_khoi;
-use App\dutoanluong_nangluong;
-use App\hosocanbo;
-use App\hosocanbo_kiemnhiem;
-use App\ngachluong;
-use App\tonghopluong_donvi;
-use Carbon\Carbon;
 use Illuminate\Http\Request;
 
-use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use Illuminate\Database\Eloquent\Collection;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
 
 class dutoanluong_insolieuController extends Controller
 {
-    function baocaohesoluong(Request $request)
+    function bangluongbienche(Request $request)
     {
         if (Session::has('admin')) {
             $inputs = $request->all();
             //dd($inputs);            
-            $m_dutoan = dutoanluong::where('masodv', $inputs['maso'])->first();
+            $m_dutoan = dutoanluong::where('masodv', $inputs['masodv'])->first();
             //dd($m_dutoan);
-            $model = dutoanluong_bangluong::where('masodv', $inputs['maso'])->orderby('stt')->get();
-            $m_chitiet = dutoanluong_chitiet::where('masodv', $inputs['maso'])->get();
+            $model = dutoanluong_bangluong::where('masodv', $inputs['masodv'])->wherein('mact',$inputs['mact'])->orderby('stt')->get();
+            $m_chitiet = dutoanluong_chitiet::where('masodv', $inputs['masodv'])->wherein('mact',$inputs['mact'])->get();
             $m_donvi = dmdonvi::where('madv', $m_dutoan->madv)->first();
             $model_congtac = dmphanloaict::wherein('mact', array_unique(array_column($model->toArray(), 'mact')))->get();
             //xử lý ẩn hiện cột phụ cấp => biết tổng số cột hiện => colspan trên báo cáo
@@ -63,7 +47,49 @@ class dutoanluong_insolieuController extends Controller
                 $ct->quyluong = ($ct->ttl + $ct->ttbh_dv) * 12;
             }
             //dd($col);
-            return view('reports.dutoanluong.donvi.baocaohesoluong')
+            return view('reports.dutoanluong.donvi.bangluongbienche')
+                ->with('model', $model)
+                ->with('m_chitiet', $m_chitiet)
+                ->with('col', $col)
+                ->with('a_plct', $a_plct)
+                ->with('lamtron', session('admin')->lamtron ?? 3)
+                ->with('model_congtac', $model_congtac)
+                ->with('a_phucap', $a_phucap)
+                ->with('m_donvi', $m_donvi)
+                ->with('m_dutoan', $m_dutoan)
+                ->with('pageTitle', 'Báo cáo hệ số lương tại đơn vị');
+        } else
+            return view('errors.notlogin');
+    }
+
+    function bangluonghopdong(Request $request)
+    {
+        if (Session::has('admin')) {
+            $inputs = $request->all();            
+            $m_dutoan = dutoanluong::where('masodv', $inputs['masodv'])->first();
+            //dd($m_dutoan);
+            $model = dutoanluong_bangluong::where('masodv', $inputs['masodv'])->wherein('mact',$inputs['mact'])->orderby('stt')->get();
+            $m_chitiet = dutoanluong_chitiet::where('masodv', $inputs['masodv'])->wherein('mact',$inputs['mact'])->get();
+            $m_donvi = dmdonvi::where('madv', $m_dutoan->madv)->first();
+            $model_congtac = dmphanloaict::wherein('mact', array_unique(array_column($model->toArray(), 'mact')))->get();
+            //xử lý ẩn hiện cột phụ cấp => biết tổng số cột hiện => colspan trên báo cáo
+            $a_goc = array('heso'); //do hệ số lương có cột cố định
+            $model_pc = dmphucap_donvi::where('madv', $m_dutoan->madv)->where('phanloai', '<', '3')->wherenotin('mapc', $a_goc)->orderby('stt')->get();
+            $a_phucap = array();
+            $col = 0;
+            $a_plct = array_column($model_congtac->toarray(), 'tenct', 'mact');
+            foreach ($model_pc as $ct) {
+                if ($model->sum($ct->mapc) > 0) {
+                    $a_phucap[$ct->mapc] = $ct->report;
+                    $col++;
+                }
+            }
+            foreach ($model as $ct) {                 
+                $ct->tongcong = $ct->ttl + $ct->ttbh_dv;               
+                $ct->quyluong = $ct->tongcong * 12;
+            }
+            //dd($col);
+            return view('reports.dutoanluong.donvi.bangluonghopdong')
                 ->with('model', $model)
                 ->with('m_chitiet', $m_chitiet)
                 ->with('col', $col)

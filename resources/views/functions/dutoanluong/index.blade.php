@@ -190,20 +190,20 @@
                         </div>
                     </div>
                 </div>
-                {{-- <div class="row">
+                <div class="row">
                     <div class="col-md-12">
                         <div class="form-group">
-                            <button type="button" onclick="insolieu('{{ $furl_th . 'tonghopcanboxa' }}')"
+                            <button type="button" onclick="insolieu('{{ $furl_th . 'tonghopcanboxa' }}','1506672780;1506673604;1637915601')"
                                 style="border-width: 0px" class="btn btn-default btn-xs mbs" data-target="#modal-insolieu" data-toggle="modal">
                                 <i class="fa fa-print"></i>&nbsp; Tổng hợp cán bộ chuyên trách,
                                 công chức xã</button>
                         </div>
                     </div>
-                </div> --}}
+                </div>
                 <div class="row">
                     <div class="col-md-12">
                         <div class="form-group">
-                            <button type="button" onclick="insolieu('{{ $furl_th . 'tonghopbienche' }}','1506672780')"
+                            <button type="button" onclick="insolieu('{{ $furl_th . 'tonghopbienche' }}','1506672780;1506673604')"
                                 style="border-width: 0px" class="btn btn-default btn-xs mbs"
                                 data-target="#modal-insolieu" data-toggle="modal">
                                 <i class="fa fa-print"></i>&nbsp; Tổng hợp biên chế, hệ số
@@ -243,7 +243,7 @@
                     <div class="row">
                         <div class="col-md-12">
                             <label class="control-label">Phân loại công tác</label>
-                            <select class="form-control select2me" name="mact" id="mact">
+                            <select class="form-control select2me" name="mact[]" id="mact" multiple=true>
                                 @foreach ($model_nhomct as $kieuct)
                                     <optgroup label="{{ $kieuct->tencongtac }}">
                                         <?php $mode_ct = $model_tenct->where('macongtac', $kieuct->macongtac); ?>
@@ -294,11 +294,13 @@
                 $('#frm_insolieu').find("[name^='mact']").attr('disabled', true);
             }else{
                 $('#frm_insolieu').find("[name^='mact']").attr('disabled', false);
-                $('#frm_insolieu').find("[name^='mact']").val(mact).trigger('change');
+                $('#frm_insolieu').find("[name^='mact']").val(mact.split(';')).trigger('change');
             }
             $('#frm_insolieu').attr('action', url);
             $('#frm_insolieu').find("[name^='masodv']").val($('#masodv').val());
             $('#frm_insolieu').find("[name^='namns']").val($('#namns').val());
+
+            
         }
 
         function confirmChuyen(namns) {
