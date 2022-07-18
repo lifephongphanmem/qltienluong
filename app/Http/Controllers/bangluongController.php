@@ -2541,7 +2541,8 @@ class bangluongController extends Controller
             //bảng chi trả lương
             if ($m_bl->phanloai == 'BANGLUONG') {
                 $mapc_st = 'st_' . $inputs['mapc'];
-                $model->$inputs['mapc'] = chkDbl($inputs['heso']);
+                $mapc = $inputs['mapc'];
+                $model->$mapc = chkDbl($inputs['heso']);
                 $model->$mapc_st = getDbl($inputs['sotien']);
 
                 //các biển lưu để tính lương
