@@ -69,9 +69,9 @@
                                                 <i class="fa fa-print"></i>
                                             </button>
 
-                                            <a href="{{ url($furl_th . 'tonghop?namns=' . $value->namns) }}"
+                                            {{-- <a href="{{ url($furl_th . 'tonghop?namns=' . $value->namns) }}"
                                                 class="btn btn-default btn-sm" target="_blank">
-                                                <i class="fa fa-print"></i>&nbsp; Số liệu tổng hợp</a>
+                                                <i class="fa fa-print"></i>&nbsp; Số liệu tổng hợp</a> --}}
 
                                             @if ($value['trangthai'] == 'CHUAGUI')
                                                 <button type="button" class="btn btn-default btn-sm"
@@ -177,6 +177,16 @@
                 <h4 id="hd-inbl" class="modal-title">In số liệu</h4>
             </div>
             <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <button type="button" onclick="indanhsachdonvi('{{ $furl_th . 'danhsachdonvi' }}')"
+                                style="border-width: 0px" class="btn btn-default btn-xs mbs"
+                                data-target="#modal-indanhsachdonvi" data-toggle="modal">
+                                <i class="fa fa-print"></i>&nbsp; Danh sách đơn vị</button>
+                        </div>
+                    </div>
+                </div>
 
                 <div class="row">
                     <div class="col-md-12">
@@ -193,8 +203,10 @@
                 <div class="row">
                     <div class="col-md-12">
                         <div class="form-group">
-                            <button type="button" onclick="insolieu('{{ $furl_th . 'tonghopcanboxa' }}','1506672780;1506673604;1637915601')"
-                                style="border-width: 0px" class="btn btn-default btn-xs mbs" data-target="#modal-insolieu" data-toggle="modal">
+                            <button type="button"
+                                onclick="insolieu('{{ $furl_th . 'tonghopcanboxa' }}','1506672780;1506673604;1637915601')"
+                                style="border-width: 0px" class="btn btn-default btn-xs mbs"
+                                data-target="#modal-insolieu" data-toggle="modal">
                                 <i class="fa fa-print"></i>&nbsp; Tổng hợp cán bộ chuyên trách,
                                 công chức xã</button>
                         </div>
@@ -203,7 +215,8 @@
                 <div class="row">
                     <div class="col-md-12">
                         <div class="form-group">
-                            <button type="button" onclick="insolieu('{{ $furl_th . 'tonghopbienche' }}','1506672780;1506673604')"
+                            <button type="button"
+                                onclick="insolieu('{{ $furl_th . 'tonghopbienche' }}','1506672780;1506673604;1637915601')"
                                 style="border-width: 0px" class="btn btn-default btn-xs mbs"
                                 data-target="#modal-insolieu" data-toggle="modal">
                                 <i class="fa fa-print"></i>&nbsp; Tổng hợp biên chế, hệ số
@@ -230,7 +243,7 @@
     </div>
 
 
-    <!--Mẫu 1 -->
+    <!--Mẫu in số liệu -->
     {!! Form::open(['url' => '', 'method' => 'post', 'target' => '_blank', 'files' => true, 'id' => 'frm_insolieu']) !!}
     <div id="modal-insolieu" tabindex="-1" role="dialog" aria-hidden="true" class="modal fade">
         <div class="modal-dialog modal-content">
@@ -280,6 +293,62 @@
     </div>
     {!! Form::close() !!}
 
+    {{-- Mẫu in danh sách đơn vị --}}
+    {!! Form::open([
+        'url' => '',
+        'method' => 'post',
+        'target' => '_blank',
+        'files' => true,
+        'id' => 'frm_indanhsachdonvi',
+    ]) !!}
+    <div id="modal-indanhsachdonvi" tabindex="-1" role="dialog" aria-hidden="true" class="modal fade">
+        <div class="modal-dialog modal-content">
+            <div class="modal-header modal-header-primary">
+                <button type="button" data-dismiss="modal" aria-hidden="true" class="close">&times;</button>
+                <h4 id="header-inbl" class="modal-title">Thông tin kết xuất</h4>
+            </div>
+            <div class="modal-body">
+                <div class="form-horizontal">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <label class="control-label" style="text-align: right">Phân loại </label>
+                            {!! Form::select('phanloai', $a_phanloai, null, ['id' => 'phanloai', 'class' => 'form-control']) !!}
+                        </div>
+                    </div>
+                
+                    <div class="row">
+                        <div class="col-md-12">
+                            <label class="control-label" style="text-align: right">Trạng thái </label>
+                            {!! Form::select('trangthai', $a_trangthai_in, null, [
+                            'id' => 'trangthai',
+                            'class' => 'form-control',
+                        ]) !!}
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <label class="control-label">Đơn vị tính</label>
+                            {!! Form::select('donvitinh', getDonViTinh(), null, ['class' => 'form-control select2me']) !!}
+                        </div>
+
+                        <div class="col-md-6">
+                            <label class="control-label">Cỡ chữ</label>
+                            {!! Form::select('cochu', getCoChu(), 10, ['id' => 'cochu', 'class' => 'form-control select2me']) !!}
+                        </div>
+                    </div>
+                </div>               
+
+                <input type="hidden" name="masodv" />
+                <input type="hidden" name="namns" />
+            </div>
+            <div class="modal-footer">
+                <button type="button" data-dismiss="modal" class="btn btn-default">Hủy thao tác</button>
+                <button type="submit" class="btn btn-success">Đồng ý</button>
+            </div>
+        </div>
+    </div>
+    {!! Form::close() !!}
 
     <script>
         //Gán thông tin để lấy dữ liệu
@@ -292,7 +361,7 @@
         function insolieu(url, mact) {
             if (mact == null) {
                 $('#frm_insolieu').find("[name^='mact']").attr('disabled', true);
-            }else{
+            } else {
                 $('#frm_insolieu').find("[name^='mact']").attr('disabled', false);
                 $('#frm_insolieu').find("[name^='mact']").val(mact.split(';')).trigger('change');
             }
@@ -300,7 +369,14 @@
             $('#frm_insolieu').find("[name^='masodv']").val($('#masodv').val());
             $('#frm_insolieu').find("[name^='namns']").val($('#namns').val());
 
-            
+
+        }
+
+        //In danh sách đơn vi
+        function indanhsachdonvi(url) {            
+            $('#frm_indanhsachdonvi').attr('action', url);
+            $('#frm_indanhsachdonvi').find("[name^='masodv']").val($('#masodv').val());
+            $('#frm_indanhsachdonvi').find("[name^='namns']").val($('#namns').val());
         }
 
         function confirmChuyen(namns) {

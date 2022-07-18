@@ -108,6 +108,7 @@ class xemdulieu_dutoanController extends Controller
                 $dv->tralai = isset($dutoan);
                 $dv->masodv = $dutoan->masodv ?? null;
                 $dv->trangthai = $dutoan->trangthai ?? 'CHOGUI';
+                $dv->namns = $nam;
             }
 
             if (!isset($inputs['trangthai']) || $inputs['trangthai'] != 'ALL') {
@@ -118,6 +119,7 @@ class xemdulieu_dutoanController extends Controller
             }
             $model_nhomct = dmphanloaicongtac::select('macongtac','tencongtac')->get();
             $model_tenct = dmphanloaict::select('tenct','macongtac','mact')->get();
+            
             return view('functions.viewdata.dutoanluong.huyen.index')
                 ->with('model', $model_donvi)
                 ->with('inputs', $inputs)
@@ -126,8 +128,8 @@ class xemdulieu_dutoanController extends Controller
                 ->with('a_phanloai', $a_phanloai)
                 ->with('model_nhomct', $model_nhomct)
                 ->with('model_tenct', $model_tenct)
-                ->with('furl_th', 'chuc_nang/du_toan_luong/huyen/')
-                ->with('furl_xem', '/chuc_nang/xem_du_lieu/du_toan/huyen')
+                ->with('furl_th', '/chuc_nang/du_toan_luong/huyen/')
+                ->with('furl_xem', '/nghiep_vu/quan_ly/du_toan/')
                 ->with('pageTitle', 'Danh sách đơn vị tổng hợp dự toán lương');
         } else
             return view('errors.notlogin');

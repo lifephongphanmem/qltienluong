@@ -894,6 +894,7 @@ Route::group(['prefix'=>'chuc_nang'],function(){
             Route::post('tonghopbienche','dutoanluong_insolieu_huyenController@tonghopbienche');
             Route::post('tonghophopdong','dutoanluong_insolieu_huyenController@tonghophopdong');
             Route::post('tonghopcanboxa','dutoanluong_insolieu_huyenController@tonghopcanboxa');
+            Route::post('danhsachdonvi','dutoanluong_insolieu_huyenController@danhsachdonvi');
         });
 
         Route::group(['prefix'=>'khoi'],function(){

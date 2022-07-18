@@ -61,11 +61,16 @@ class dutoanluong_huyenController extends Controller
             //dd($model);
             $model_tenct = dmphanloaict::wherein('mact',getPLCTDuToan())->get();
             $model_nhomct = dmphanloaicongtac::wherein('macongtac',array_unique(array_column($model_tenct->toarray(),'macongtac')))->get();
+            $a_trangthai_in = array('ALL' => '--Tất cả đơn vị--', 'CHOGUI' => 'Đơn vị chưa gửi dữ liệu', 'DAGUI' => 'Đơn vị đã gửi dữ liệu');            
+            $a_phanloai = array_column(dmphanloaidonvi::all()->toarray(),'tenphanloai','maphanloai');           
+
             return view('functions.dutoanluong.index')
                 ->with('model', $model->sortby('namns'))
                 ->with('model_tenct', $model_tenct)
                 ->with('model_nhomct', $model_nhomct)
                 ->with('a_trangthai', $a_trangthai)
+                ->with('a_trangthai_in', $a_trangthai_in)
+                ->with('a_phanloai', setArrayAll($a_phanloai))
                 // ->with('soluong', $soluong)
                 ->with('furl_xem', '/chuc_nang/xem_du_lieu/du_toan/huyen')
                 ->with('furl_th', '/chuc_nang/du_toan_luong/huyen/')
