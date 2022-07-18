@@ -9,6 +9,7 @@ class dmphanloaidonvi_baocao extends Model
     protected $table = 'dmphanloaidonvi_baocao';
     protected $fillable = [
         'id',
+        'masobc',
         'madvbc',
         'maphanloai_goc',
         'maphanloai_nhom',

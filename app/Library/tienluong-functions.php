@@ -916,3 +916,25 @@ function setArrayAll($array, $noidung = 'Tất cả')
     }
     return $a_kq;
 }
+
+function getBaoCaoDeQuy($categories, $maphanloai_goc = '', $char = '')
+{
+    foreach ($categories as $key => $item)
+    {
+        // Nếu là chuyên mục con thì hiển thị
+        if ($item['maphanloai_nhom'] == $maphanloai_goc)        
+        {
+            echo '<tr>';
+                echo '<td>';
+                    echo $char . $item['tenphanloai_nhom'];
+                echo '</td>';
+            echo '</tr>';
+             
+            // Xóa chuyên mục đã lặp
+            unset($categories[$key]);
+             
+            // Tiếp tục đệ quy để tìm chuyên mục con của chuyên mục đang lặp
+            getBaoCaoDeQuy($categories, $item['maphanloai_goc'], $char.'|---');
+        }
+    }
+}

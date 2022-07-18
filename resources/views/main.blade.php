@@ -645,6 +645,8 @@
                                     <ul class="sub-menu" style="margin-left: 15px;">
                                         <li><a href="{{ url('/he_thong/don_vi/don_vi') }}"><i
                                                     class="fa fa-caret-right"></i>Thông tin đơn vị</a></li>
+                                                    <li><a href="{{ url('/he_thong/bao_cao/danh_sach?madvbc='.session('admin')->madvbc) }}"><i
+                                                        class="fa fa-caret-right"></i>Thiết lập báo cáo</a></li>
                                         <li><a href="{{ url('/he_thong/don_vi/stopdv') }}"><i
                                                     class="fa fa-caret-right"></i>Dừng hoạt động đơn vị</a></li>
                                     </ul>

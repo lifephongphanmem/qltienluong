@@ -892,6 +892,7 @@ Route::group(['prefix'=>'chuc_nang'],function(){
             //Thiết kế mẫu cho Vạn Ninh
             Route::post('kinhphikhongchuyentrach','dutoanluong_insolieu_huyenController@kinhphikhongchuyentrach');
             Route::post('tonghopbienche','dutoanluong_insolieu_huyenController@tonghopbienche');
+            Route::post('tonghopbienche_m2','dutoanluong_insolieu_huyenController@tonghopbienche_m2');
             Route::post('tonghophopdong','dutoanluong_insolieu_huyenController@tonghophopdong');
             Route::post('tonghopcanboxa','dutoanluong_insolieu_huyenController@tonghopcanboxa');
             Route::post('danhsachdonvi','dutoanluong_insolieu_huyenController@danhsachdonvi');
@@ -1340,6 +1341,13 @@ Route::group(['prefix'=>'he_thong'],function(){
         Route::post('store_pc','nguonkinhphi_dinhmucController@store_pc');
         Route::get('del/{id}','nguonkinhphi_dinhmucController@destroy_pc');
         Route::post('update_luongcb','nguonkinhphi_dinhmucController@update_luongcb');
+    });
+
+    Route::group(['prefix'=>'bao_cao'],function(){
+        Route::get('danh_sach','dmphanloaidonvi_baocaoController@index');
+        Route::get('inbaocao','dmphanloaidonvi_baocaoController@inbaocao');
+        Route::post('store','dmphanloaidonvi_baocaoController@store');
+        Route::get('del/{id}','dmphanloaidonvi_baocaoController@destroy');        
     });
 });
 

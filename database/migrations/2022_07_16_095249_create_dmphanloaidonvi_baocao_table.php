@@ -15,6 +15,7 @@ class CreateDmphanloaidonviBaocaoTable extends Migration
     {
         Schema::create('dmphanloaidonvi_baocao', function (Blueprint $table) {
             $table->increments('id');
+            $table->string('masobc')->nullable();
             $table->string('madvbc')->nullable();
             $table->string('maphanloai_goc')->nullable();
             $table->string('maphanloai_nhom')->nullable();

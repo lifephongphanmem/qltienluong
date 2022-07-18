@@ -257,7 +257,7 @@ class dutoanluongController extends Controller
                     //chạy lại 1 vòng để hệ số, số tiền (do báo cáo lấy hệ số, số tiền)
                     foreach ($a_pc as $pc) {
                         $tenpc_st = 'st_' . $pc;
-                        $value->$pc = round($value->$tenpc_st / $value->luongcoban, session('admin')->lamtron);
+                        $value->$pc = round($value->$tenpc_st / $value->luongcoban, 10);
                     }
                 }
             }
@@ -267,6 +267,7 @@ class dutoanluongController extends Controller
             //dd($a_hoten);
             $inputs['luongcoban'] = getDbl($inputs['luongcoban']);
             foreach ($m_bl_ct as $chitiet) {
+                //$chenhlech = round($inputs['luongcoban'] / $chitiet->luongcoban, 10);
                 //chưa xử lý cán bộ kiêm nhiệm
                 if ($chitiet->tencanbo == '')
                     $chitiet->tencanbo = $a_hoten[$chitiet->macanbo] ?? '';

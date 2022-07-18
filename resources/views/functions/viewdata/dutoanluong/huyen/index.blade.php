@@ -195,10 +195,10 @@
                                 style="border-width: 0px" class="btn btn-default btn-xs mbs"
                                 data-target="#modal-insolieu" data-toggle="modal">
                                 <i class="fa fa-print"></i>&nbsp; Tổng hợp biên chế, hệ số
-                                lương và phụ cấp có mặt </button>
+                                lương và phụ cấp có mặt (Mẫu 01) </button>
                         </div>
                     </div>
-                </div>
+                </div>                
 
                 <div class="row">
                     <div class="col-md-12">

@@ -80,21 +80,21 @@
                                                         class="fa fa-share-square-o"></i>&nbsp;
                                                 </button>
                                             @else
-                                                <button disabled type="button" class="btn btn-default btn-sm" title="Gửi dữ liệu"><i
-                                                        class="fa fa-share-square-o"></i>&nbsp;
+                                                <button disabled type="button" class="btn btn-default btn-sm"
+                                                    title="Gửi dữ liệu"><i class="fa fa-share-square-o"></i>&nbsp;
                                                 </button>
                                             @endif
 
                                             @if ($value['trangthai'] == 'TRALAI')
-                                                <button type="button" class="btn btn-default btn-sm"
+                                                <button type="button" class="btn btn-default btn-sm" title="Lý do trả lại"
                                                     onclick="getLyDo('{{ $value['masodv'] }}')"
                                                     data-target="#tralai-modal" data-toggle="modal"><i
-                                                        class="fa fa-share-square-o"></i>&nbsp;
-                                                    Lý do trả lại</button>
+                                                        class="fa fa-stack-exchange"></i>&nbsp;
+                                                </button>
                                             @endif
 
-                                            <a href="{{ url($furl_xem . '?namns=' . $value->namns . '&trangthai=ALL&phanloai=ALL') }}" title="Số liệu chi tiết"
-                                                class="btn btn-default btn-sm">
+                                            <a href="{{ url($furl_xem . '?namns=' . $value->namns . '&trangthai=ALL&phanloai=ALL') }}"
+                                                title="Số liệu chi tiết" class="btn btn-default btn-sm">
                                                 <i class="fa fa-list-alt"></i>&nbsp;</a>
                                         </td>
 
@@ -212,6 +212,7 @@
                         </div>
                     </div>
                 </div>
+
                 <div class="row">
                     <div class="col-md-12">
                         <div class="form-group">
@@ -220,7 +221,20 @@
                                 style="border-width: 0px" class="btn btn-default btn-xs mbs"
                                 data-target="#modal-insolieu" data-toggle="modal">
                                 <i class="fa fa-print"></i>&nbsp; Tổng hợp biên chế, hệ số
-                                lương và phụ cấp có mặt </button>
+                                lương và phụ cấp có mặt (Mẫu 01)</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <button type="button"
+                                onclick="insolieu('{{ $furl_th . 'tonghopbienche_m2' }}', '1506672780;1506673604')"
+                                style="border-width: 0px" class="btn btn-default btn-xs mbs"
+                                data-target="#modal-insolieu" data-toggle="modal">
+                                <i class="fa fa-print"></i>&nbsp; Tổng hợp biên chế, hệ số
+                                lương và phụ cấp có mặt (Mẫu 02)</button>
                         </div>
                     </div>
                 </div>
@@ -315,14 +329,14 @@
                             {!! Form::select('phanloai', $a_phanloai, null, ['id' => 'phanloai', 'class' => 'form-control']) !!}
                         </div>
                     </div>
-                
+
                     <div class="row">
                         <div class="col-md-12">
                             <label class="control-label" style="text-align: right">Trạng thái </label>
                             {!! Form::select('trangthai', $a_trangthai_in, null, [
-                            'id' => 'trangthai',
-                            'class' => 'form-control',
-                        ]) !!}
+                                'id' => 'trangthai',
+                                'class' => 'form-control',
+                            ]) !!}
                         </div>
                     </div>
 
@@ -337,7 +351,7 @@
                             {!! Form::select('cochu', getCoChu(), 10, ['id' => 'cochu', 'class' => 'form-control select2me']) !!}
                         </div>
                     </div>
-                </div>               
+                </div>
 
                 <input type="hidden" name="masodv" />
                 <input type="hidden" name="namns" />
@@ -373,7 +387,7 @@
         }
 
         //In danh sách đơn vi
-        function indanhsachdonvi(url) {            
+        function indanhsachdonvi(url) {
             $('#frm_indanhsachdonvi').attr('action', url);
             $('#frm_indanhsachdonvi').find("[name^='masodv']").val($('#masodv').val());
             $('#frm_indanhsachdonvi').find("[name^='namns']").val($('#namns').val());
