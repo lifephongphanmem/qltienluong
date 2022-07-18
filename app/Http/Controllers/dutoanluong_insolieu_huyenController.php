@@ -84,12 +84,25 @@ class dutoanluong_insolieu_huyenController extends Controller
 
     function getMaNhomPhanLoai(&$chitiet, $m_phanloai)
     {
-        $phanloai = $m_phanloai->where('maphanloai_nhom', $chitiet->maphanloai)->first();
-        dd($phanloai);
         $chitiet->maphanloai_goc1 = '';
         $chitiet->maphanloai_goc2 = '';
         $chitiet->maphanloai_goc3 = '';
         $chitiet->maphanloai_goc4 = '';
+        $phanloai = $m_phanloai->where('maphanloai_nhom', $chitiet->maphanloai)->first();
+        if ($phanloai != null) {
+            $chitiet->capdo_nhom = $phanloai->capdo_nhom;
+            switch ($phanloai->capdo_nhom) {
+                case '2': {
+                        $chitiet->maphanloai_goc1 = $phanloai->maphanloai_goc;
+                        break;
+                    }
+                case '3': {
+                        $chitiet->maphanloai_goc2 = $phanloai->maphanloai_goc;
+                        break;
+                    }
+            }
+        }
+        //dd($chitiet);
     }
 
     function danhsachdonvi(Request $request)
@@ -209,7 +222,7 @@ class dutoanluong_insolieu_huyenController extends Controller
             }
 
 
-            dd($model->first());
+            //dd($model->first());
 
             //xử lý ẩn hiện cột phụ cấp => biết tổng số cột hiện => colspan trên báo cáo
             $a_tenpc = array_column(dmphucap::all()->toArray(), 'tenpc', 'mapc');
