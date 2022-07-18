@@ -2370,15 +2370,15 @@ class bangluongController extends Controller
             );
             die(json_encode($result));
         }
-        $inputs = $request->all();
-
-        $inputs['st'] = 'st_' . $inputs['mapc'];
+        $inputs = $request->all();        
+        $mapc = $inputs['mapc'];
+        $mapc_st = 'st_' . $inputs['mapc'];
         $m_bl = bangluong::where('mabl', $inputs['mabl'])->first();
         $model_luong = (new data())->getBangluong_ct_cb($m_bl->thang, $inputs['id']);
-        $model = dmphucap::where('mapc', $inputs['mapc'])->first();
-        $model->heso = $model_luong->$inputs['mapc'];
-        $model->sotien = $model_luong->$inputs['st'];
-        $model->luongcoban = $model_luong->$inputs['mapc'];
+        $model = dmphucap::where('mapc', $inputs['mapc'])->first();        
+        $model->heso = $model_luong->$mapc;
+        $model->sotien = $model_luong->$mapc_st;
+        $model->luongcoban = $model_luong->luongcoban;        
         die($model);
     }
 

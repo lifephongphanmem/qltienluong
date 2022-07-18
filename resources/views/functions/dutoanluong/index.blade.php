@@ -74,15 +74,15 @@
                                                 <i class="fa fa-print"></i>&nbsp; Số liệu tổng hợp</a> --}}
 
                                             @if ($value['trangthai'] == 'CHUAGUI')
-                                                <button type="button" class="btn btn-default btn-sm"
+                                                <button type="button" class="btn btn-default btn-sm" title="Gửi dữ liệu"
                                                     onclick="confirmChuyen('{{ $value->namns }}')"
                                                     data-target="#chuyen-modal" data-toggle="modal"><i
                                                         class="fa fa-share-square-o"></i>&nbsp;
-                                                    Gửi dữ liệu</button>
+                                                </button>
                                             @else
-                                                <button disabled type="button" class="btn btn-default btn-sm"><i
+                                                <button disabled type="button" class="btn btn-default btn-sm" title="Gửi dữ liệu"><i
                                                         class="fa fa-share-square-o"></i>&nbsp;
-                                                    Gửi dữ liệu</button>
+                                                </button>
                                             @endif
 
                                             @if ($value['trangthai'] == 'TRALAI')
@@ -93,9 +93,9 @@
                                                     Lý do trả lại</button>
                                             @endif
 
-                                            <a href="{{ url($furl_xem . '?namns=' . $value->namns . '&trangthai=ALL&phanloai=ALL') }}"
+                                            <a href="{{ url($furl_xem . '?namns=' . $value->namns . '&trangthai=ALL&phanloai=ALL') }}" title="Số liệu chi tiết"
                                                 class="btn btn-default btn-sm">
-                                                <i class="fa fa-list-alt"></i>&nbsp; Số liệu chi tiết</a>
+                                                <i class="fa fa-list-alt"></i>&nbsp;</a>
                                         </td>
 
                                     </tr>
