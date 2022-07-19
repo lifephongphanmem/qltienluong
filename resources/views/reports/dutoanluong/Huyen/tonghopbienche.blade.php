@@ -78,7 +78,8 @@
             @endforeach
             <td class="text-right">{{ dinhdangsothapphan($model->sum('bhtn_dv'), $lamtron) }}</td>
             <td class="text-right">{{ dinhdangsothapphan($model->sum('baohiem'), $lamtron) }}</td>
-            <td class="text-right">{{ dinhdangsothapphan($model->sum('hesotrungbinh'), $lamtron) }}</td>
+            <td class="text-right">
+                {{ dinhdangsothapphan($model->sum('tongcong') / $model->sum('canbo_congtac'), $lamtron) }}</td>
             <td class="text-right">{{ dinhdangsothapphan($model->sum('quyluong'), $lamtron) }}</td>
         </tr>
         <?php $i = 1; ?>
@@ -86,7 +87,7 @@
         @foreach ($m_phanloai->where('capdo_nhom', '1')->sortby('sapxep') as $phanloai1)
             <?php
             $model_donvi = $m_donvi_baocao->where('maphanloai', $phanloai1->maphanloai_nhom);
-            $model_chitiet = $model->where('maphanloai', $phanloai1->maphanloai_nhom);
+            $model_chitiet = $model->where('maphanloai_goc1', $phanloai1->maphanloai_nhom);
             ?>
             <tr class="font-weight-bold">
                 <td>{{ $phanloai1->sapxep }}</td>
@@ -105,7 +106,9 @@
                 @endforeach
                 <td class="text-right">{{ dinhdangsothapphan($model_chitiet->sum('bhtn_dv'), $lamtron) }}</td>
                 <td class="text-right">{{ dinhdangsothapphan($model_chitiet->sum('baohiem'), $lamtron) }}</td>
-                <td class="text-right">{{ dinhdangsothapphan($model_chitiet->sum('hesotrungbinh'), $lamtron) }}</td>
+                <td class="text-right">
+                    {{ dinhdangsothapphan($model_chitiet->sum('tongcong') / ($model_chitiet->sum('canbo_congtac') <= 0 ? 1 : $model_chitiet->sum('canbo_congtac')), $lamtron) }}
+                </td>
                 <td class="text-right">{{ dinhdangsothapphan($model_chitiet->sum('quyluong'), $lamtron) }}</td>
             </tr>
             @if (count($model_donvi) > 0)
@@ -256,7 +259,7 @@
             @foreach ($m_phanloai->where('maphanloai_goc', $phanloai1->maphanloai_nhom)->sortby('sapxep') as $phanloai2)
                 <?php
                 $model_donvi = $m_donvi_baocao->where('maphanloai', $phanloai2->maphanloai_nhom);
-                $model_chitiet = $model->where('maphanloai', $phanloai2->maphanloai_nhom);
+                $model_chitiet = $model->where('maphanloai_goc2', $phanloai2->maphanloai_nhom);
                 ?>
                 <tr class="font-weight-bold">
                     <td>{{ $phanloai1->sapxep }}.{{ $phanloai2->sapxep }}</td>
@@ -275,7 +278,7 @@
                     @endforeach
                     <td class="text-right">{{ dinhdangsothapphan($model_chitiet->sum('bhtn_dv'), $lamtron) }}</td>
                     <td class="text-right">{{ dinhdangsothapphan($model_chitiet->sum('baohiem'), $lamtron) }}</td>
-                    <td class="text-right">{{ dinhdangsothapphan($model_chitiet->sum('hesotrungbinh'), $lamtron) }}</td>
+                    <td class="text-right">{{ dinhdangsothapphan($model_chitiet->sum('tongcong')/($model_chitiet->sum('canbo_congtac') <= 0 ? 1 : $model_chitiet->sum('canbo_congtac')), $lamtron) }}</td>
                     <td class="text-right">{{ dinhdangsothapphan($model_chitiet->sum('quyluong'), $lamtron) }}</td>
                 </tr>
                 @if (count($model_donvi) > 0)
@@ -428,7 +431,7 @@
                 @foreach ($m_phanloai->where('maphanloai_goc', $phanloai2->maphanloai_nhom)->sortby('sapxep') as $phanloai3)
                     <?php
                     $model_donvi = $m_donvi_baocao->where('maphanloai', $phanloai3->maphanloai_nhom);
-                    $model_chitiet = $model->where('maphanloai', $phanloai3->maphanloai_nhom);
+                    $model_chitiet = $model->where('maphanloai_goc3', $phanloai3->maphanloai_nhom);
                     ?>
                     {{-- tự làm công thức tính --}}
                     <tr class="font-weight-bold">
@@ -449,8 +452,7 @@
                         @endforeach
                         <td class="text-right">{{ dinhdangsothapphan($model_chitiet->sum('bhtn_dv'), $lamtron) }}</td>
                         <td class="text-right">{{ dinhdangsothapphan($model_chitiet->sum('baohiem'), $lamtron) }}</td>
-                        <td class="text-right">{{ dinhdangsothapphan($model_chitiet->sum('hesotrungbinh'), $lamtron) }}
-                        </td>
+                        <td class="text-right">{{ dinhdangsothapphan($model_chitiet->sum('tongcong')/($model_chitiet->sum('canbo_congtac') <= 0 ? 1 : $model_chitiet->sum('canbo_congtac')), $lamtron) }}</td>
                         <td class="text-right">{{ dinhdangsothapphan($model_chitiet->sum('quyluong'), $lamtron) }}</td>
                     </tr>
                     @if (count($model_donvi) > 0)

@@ -78,7 +78,8 @@
             @endforeach
             <td class="text-right">{{ dinhdangsothapphan($model->sum('bhtn_dv'), $lamtron) }}</td>
             <td class="text-right">{{ dinhdangsothapphan($model->sum('baohiem'), $lamtron) }}</td>
-            <td class="text-right">{{ dinhdangsothapphan($model->sum('hesotrungbinh'), $lamtron) }}</td>
+            <td class="text-right">
+                {{ dinhdangsothapphan($model->sum('tongcong') / $model->sum('canbo_congtac'), $lamtron) }}</td>
             <td class="text-right">{{ dinhdangsothapphan($model->sum('quyluong'), $lamtron) }}</td>
         </tr>
         <?php $i = 1; ?>
@@ -104,7 +105,9 @@
                 @endforeach
                 <td class="text-right">{{ dinhdangsothapphan($model_pl_donvi->sum('bhtn_dv'), $lamtron) }}</td>
                 <td class="text-right">{{ dinhdangsothapphan($model_pl_donvi->sum('baohiem'), $lamtron) }}</td>
-                <td class="text-right">{{ dinhdangsothapphan($model_pl_donvi->sum('hesotrungbinh'), $lamtron) }}</td>
+                <td class="text-right">
+                    {{ dinhdangsothapphan($model_pl_donvi->sum('tongcong') / ($model_pl_donvi->sum('canbo_congtac') <= 0 ? 1 : $model_pl_donvi->sum('canbo_congtac')), $lamtron) }}
+                </td>
                 <td class="text-right">{{ dinhdangsothapphan($model_pl_donvi->sum('quyluong'), $lamtron) }}</td>
             </tr>
             @foreach ($model_donvi as $donvi)
@@ -127,7 +130,7 @@
                     @endforeach
                     <td class="text-right">{{ dinhdangsothapphan($model_chitiet->sum('bhtn_dv'), $lamtron) }}</td>
                     <td class="text-right">{{ dinhdangsothapphan($model_chitiet->sum('baohiem'), $lamtron) }}</td>
-                    <td class="text-right">{{ dinhdangsothapphan($model_chitiet->sum('hesotrungbinh'), $lamtron) }}</td>
+                    <td class="text-right">{{ dinhdangsothapphan($model_chitiet->sum('tongcong')/$model_chitiet->sum('canbo_congtac'), $lamtron) }}</td>
                     <td class="text-right">{{ dinhdangsothapphan($model_chitiet->sum('quyluong'), $lamtron) }}</td>
                 </tr>
                 @foreach ($model_chitiet as $chitiet)
@@ -160,7 +163,6 @@
                         <td class="text-right">{{ dinhdangsothapphan($chitiet->quyluong, $lamtron) }}</td>
                     </tr>
                 @endforeach
-                
             @endforeach
         @endforeach
 

@@ -82,27 +82,40 @@ class dutoanluong_insolieu_huyenController extends Controller
             return view('errors.notlogin');
     }
 
-    function getMaNhomPhanLoai(&$chitiet, $m_phanloai)
-    {
+    function getMaNhomPhanLoai(&$chitiet, $m_phanloai)    {
         $chitiet->maphanloai_goc1 = '';
         $chitiet->maphanloai_goc2 = '';
         $chitiet->maphanloai_goc3 = '';
-        $chitiet->maphanloai_goc4 = '';
         $phanloai = $m_phanloai->where('maphanloai_nhom', $chitiet->maphanloai)->first();
         if ($phanloai != null) {
             $chitiet->capdo_nhom = $phanloai->capdo_nhom;
             switch ($phanloai->capdo_nhom) {
+                case '1': {
+                    $chitiet->maphanloai_goc1 = $phanloai->maphanloai_nhom;
+                    break;
+                }
                 case '2': {
                         $chitiet->maphanloai_goc1 = $phanloai->maphanloai_goc;
                         break;
                     }
                 case '3': {
                         $chitiet->maphanloai_goc2 = $phanloai->maphanloai_goc;
+                        //tìm gốc 1
+                        $chitiet->maphanloai_goc1 = $m_phanloai->where('maphanloai_nhom', $chitiet->maphanloai_goc2)->first()->maphanloai_goc;
+                        break;
+                    }
+                case '4': {
+                        //tìm cấp 3                    
+                        $chitiet->maphanloai_goc3 = $phanloai->maphanloai_goc;
+                        //tìm gốc 2
+                        $chitiet->maphanloai_goc2 = $m_phanloai->where('maphanloai_nhom', $chitiet->maphanloai_goc3)->first()->maphanloai_goc;
+                        //tìm gốc 1
+                        $chitiet->maphanloai_goc1 = $m_phanloai->where('maphanloai_nhom', $chitiet->maphanloai_goc2)->first()->maphanloai_goc;                        
                         break;
                     }
             }
         }
-        //dd($chitiet);
+        
     }
 
     function danhsachdonvi(Request $request)
@@ -220,9 +233,7 @@ class dutoanluong_insolieu_huyenController extends Controller
                 $chitiet->quyluong = ($chitiet->ttl + $chitiet->ttbh_dv) / $inputs['donvitinh'];
                 $this->getMaNhomPhanLoai($chitiet, $m_phanloai);
             }
-
-
-            //dd($model->first());
+            //dd($model->where('maphanloai','KVXP')->toArray());
 
             //xử lý ẩn hiện cột phụ cấp => biết tổng số cột hiện => colspan trên báo cáo
             $a_tenpc = array_column(dmphucap::all()->toArray(), 'tenpc', 'mapc');

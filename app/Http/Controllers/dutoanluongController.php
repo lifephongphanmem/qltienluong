@@ -292,11 +292,21 @@ class dutoanluongController extends Controller
                 $chitiet->bhtn_dv = round($chitiet->stbhtn_dv / $chitiet->luongcoban, session('admin')->lamtron);
                 $chitiet->kpcd_dv = round($chitiet->stkpcd_dv / $chitiet->luongcoban, session('admin')->lamtron);
                 $chitiet->tongbh_dv = $chitiet->bhxh_dv + $chitiet->bhyt_dv + $chitiet->bhtn_dv + $chitiet->kpcd_dv;
+
                 //quy đổi bảo hiểm thành số tiền theo mức lương cơ bản mới
-                $chitiet->stbhxh_dv = round($chitiet->stbhxh_dv *  $chenhlech, 0);
-                $chitiet->stbhyt_dv = round($chitiet->stbhyt_dv  *  $chenhlech, 0);
-                $chitiet->stbhtn_dv = round($chitiet->stbhtn_dv  *  $chenhlech, 0);
-                $chitiet->stkpcd_dv = round($chitiet->stkpcd_dv  *  $chenhlech, 0);
+                //tính riêng cho HD 68 do quy đổi hệ số hay bi làm tròn
+                if($chitiet->mact == '1506673585'){
+                    $chitiet->stbhxh_dv = round($chitiet->stbhxh_dv *  $chenhlech, 0);
+                    $chitiet->stbhyt_dv = round($chitiet->stbhyt_dv  *  $chenhlech, 0);
+                    $chitiet->stbhtn_dv = round($chitiet->stbhtn_dv  *  $chenhlech, 0);
+                    $chitiet->stkpcd_dv = round($chitiet->stkpcd_dv  *  $chenhlech, 0);
+                }else{
+                    $chitiet->stbhxh_dv = round($chitiet->bhxh_dv *  $inputs['luongcoban'], 0);
+                    $chitiet->stbhyt_dv = round($chitiet->bhyt_dv  *  $inputs['luongcoban'], 0);
+                    $chitiet->stbhtn_dv = round($chitiet->bhtn_dv  *  $inputs['luongcoban'], 0);
+                    $chitiet->stkpcd_dv = round($chitiet->kpcd_dv  *  $inputs['luongcoban'], 0);
+                }
+               
                 $chitiet->ttbh_dv = $chitiet->stbhxh_dv + $chitiet->stbhyt_dv + $chitiet->stbhtn_dv + $chitiet->stkpcd_dv;
                 //gán lại lương cơ bản theo mức mới
                 $chitiet->luongcoban = $inputs['luongcoban'];
