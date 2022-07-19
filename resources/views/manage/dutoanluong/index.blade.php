@@ -121,7 +121,7 @@
                                                 <button type="button" class="btn btn-default btn-sm mbs"
                                                     title="Lý do trả lại" onclick="getLyDo('{{ $value['masodv'] }}')"
                                                     data-target="#tralai-modal" data-toggle="modal">
-                                                    <i class="fa fa-share-square-o"></i>
+                                                    <i class="fa fa-list"></i>
                                                 </button>
                                             @endif
                                         </td>

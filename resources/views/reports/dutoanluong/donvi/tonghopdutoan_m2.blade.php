@@ -52,7 +52,9 @@
                 <th rowspan="2" style="width: 5%;">TỔNG CỘNG</th>
                 <th rowspan="2" style="width: 5%;">HỆ SỐ LƯƠNG</th>
                 <th rowspan="2" style="width: 5%;">TỔNG HỆ<br>SỐ CÁC<br>KHOẢN PHỤ<br>CẤP TRỢ<br>CẤP</th>
-                <th colspan="{{ $col }}">Trong đó</th>
+                @if ($col > 0)
+                    <th colspan="{{ $col }}">Trong đó</th>
+                @endif
                 <th rowspan="2" style="width: 5%;">BH THẤT<br>NGHIỆP</th>
                 <th rowspan="2" style="width: 5%;">CÁC KHOẢN<br>ĐÓNG GÓP<br>BHXH, BHYT,<br>KPCĐ</th>
             </tr>

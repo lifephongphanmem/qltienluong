@@ -304,7 +304,7 @@ class dutoanluong_insolieuController extends Controller
                 }
             }
 
-            //dd($model);
+            //dd($a_phucap);
             return view('reports.dutoanluong.donvi.tonghopdutoan_m2')
                 ->with('model', $model)
                 ->with('col', $col)

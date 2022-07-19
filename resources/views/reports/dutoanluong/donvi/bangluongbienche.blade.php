@@ -5,24 +5,25 @@
         style="text-align: center; font-size: 12px;">
         <tr>
             <td style="text-align: left;width: 60%">
-                <b>Đơn vị: {{$m_donvi['tendv']}}</b>
+                <b>Đơn vị: {{ $m_donvi['tendv'] }}</b>
             </td>
             <td style="text-align: center;">
-               
+
             </td>
         </tr>
         <tr>
             <td style="text-align: left;width: 60%">
-                <b>Mã đơn vị SDNS: {{$m_donvi->maqhns}}</b>
+                <b>Mã đơn vị SDNS: {{ $m_donvi->maqhns }}</b>
             </td>
             <td style="text-align: center; font-style: italic">
-               
+
             </td>
-        </tr>        
+        </tr>
 
         <tr>
             <td colspan="2" style="text-align: center; font-weight: bold; font-size: 20px; text-transform: uppercase">
-                BÁO CÁO BIÊN CHẾ, HỆ SỐ TIỀN LƯƠNG VÀ PHỤ CẤP CỦA ĐƠN VỊ CÓ MẶT ĐẾN THÁNG 07 NĂM {{ $m_dutoan->namns - 1 }}
+                BÁO CÁO BIÊN CHẾ, HỆ SỐ TIỀN LƯƠNG VÀ PHỤ CẤP CỦA ĐƠN VỊ CÓ MẶT ĐẾN THÁNG 07 NĂM
+                {{ $m_dutoan->namns - 1 }}
             </td>
         </tr>
 
@@ -52,7 +53,10 @@
                 <th rowspan="2" style="width: 5%;">Tổng cộng</th>
                 <th rowspan="2" style="width: 5%;">Hệ số lương</th>
                 <th rowspan="2" style="width: 5%;">Cộng các khoản phụ cấp</th>
-                <th colspan="{{ $col }}">Trong đó</th>
+                @if ($col > 0)
+                    <th colspan="{{ $col }}">Trong đó</th>
+                @endif
+
                 <th rowspan="2" style="width: 5%;">Các khoản đóng góp</th>
             </tr>
 
