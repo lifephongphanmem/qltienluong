@@ -473,8 +473,9 @@ class dutoanluong_insolieu_huyenController extends Controller
             $m_phanloai = dmphanloaidonvi::all();
             
             $m_donvi_baocao = dmdonvi::where('madvbc', session('admin')->madvbc)->where('maphanloai','KVXP')->get();
-            $m_dutoan = dutoanluong::where('masoh', $inputs['masodv'])->where('trangthai', 'DAGUI')->get();
-
+            $a_donvi_baocao = array_column($m_donvi_baocao->toarray(),'tendv','madv');
+            $m_dutoan = dutoanluong::where('masoh', $inputs['masodv'])->wherein('madv', array_keys($a_donvi_baocao))->where('trangthai', 'DAGUI')->get();
+            
 
             $a_donvi = array_column($m_dutoan->toarray(), 'madv', 'masodv');
             $a_pl_donvi = array_column($m_donvi_baocao->toarray(), 'maphanloai', 'madv');
@@ -496,7 +497,7 @@ class dutoanluong_insolieu_huyenController extends Controller
             }
 
 
-            //dd($model);
+            dd($model);
             $m_donvi = dmdonvi::where('madv', session('admin')->madv)->first();
 
             //xử lý ẩn hiện cột phụ cấp => biết tổng số cột hiện => colspan trên báo cáo
@@ -513,9 +514,10 @@ class dutoanluong_insolieu_huyenController extends Controller
             //dd($model);
             return view('reports.dutoanluong.Huyen.tonghophopdong_m2')
                 ->with('model', $model)
-                ->with('col', $col)
+                ->with('col', count($a_donvi_baocao))
                 ->with('lamtron', session('admin')->lamtron ?? 3)
                 ->with('a_phucap', $a_phucap)
+                ->with('a_donvi_baocao', $a_donvi_baocao)
                 ->with('m_donvi', $m_donvi)
                 ->with('m_dutoan', $m_dutoan)
                 ->with('m_phanloai', $m_phanloai)

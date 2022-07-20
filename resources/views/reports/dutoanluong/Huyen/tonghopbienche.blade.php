@@ -79,7 +79,7 @@
             <td class="text-right">{{ dinhdangsothapphan($model->sum('bhtn_dv'), $lamtron) }}</td>
             <td class="text-right">{{ dinhdangsothapphan($model->sum('baohiem'), $lamtron) }}</td>
             <td class="text-right">
-                {{ dinhdangsothapphan($model->sum('tongcong') / $model->sum('canbo_congtac'), $lamtron) }}</td>
+                {{ dinhdangsothapphan($model->sum('tongcong') / $model->where('phanloai', 'COMAT')->sum('canbo_congtac'), $lamtron) }}</td>
             <td class="text-right">{{ dinhdangsothapphan($model->sum('quyluong'), $lamtron) }}</td>
         </tr>
         <?php $i = 1; ?>
@@ -292,7 +292,7 @@
                             {{ dinhdangsothapphan($model_chitiet->where('phanloai', 'COMAT')->sum('baohiem'), $lamtron) }}
                         </td>
                         <td class="text-right">
-                            {{ dinhdangsothapphan($model_chitiet->where('phanloai', 'COMAT')->sum('hesotrungbinh'), $lamtron) }}
+                            {{ dinhdangsothapphan($model_chitiet->where('phanloai', 'COMAT')->sum('tongcong')/$model_chitiet->where('phanloai', 'COMAT')->sum('canbo_congtac'), $lamtron) }}
                         </td>
                         <td class="text-right">
                             {{ dinhdangsothapphan($model_chitiet->where('phanloai', 'COMAT')->sum('quyluong'), $lamtron) }}
@@ -328,7 +328,7 @@
                             {{ dinhdangsothapphan($model_chitiet->where('phanloai', 'CHUATUYEN')->sum('baohiem'), $lamtron) }}
                         </td>
                         <td class="text-right">
-                            {{ dinhdangsothapphan($model_chitiet->where('phanloai', 'CHUATUYEN')->sum('hesotrungbinh'), $lamtron) }}
+                            {{ dinhdangsothapphan($model_chitiet->where('phanloai', 'CHUATUYEN')->sum('tongcong')/$model_chitiet->where('phanloai', 'CHUATUYEN')->sum('canbo_congtac'), $lamtron) }}
                         </td>
                         <td class="text-right">
                             {{ dinhdangsothapphan($model_chitiet->where('phanloai', 'CHUATUYEN')->sum('quyluong'), $lamtron) }}
@@ -628,7 +628,7 @@
                         <td class="text-right">{{ dinhdangsothapphan($model_chitiet->sum('bhtn_dv'), $lamtron) }}</td>
                         <td class="text-right">{{ dinhdangsothapphan($model_chitiet->sum('baohiem'), $lamtron) }}</td>
                         <td class="text-right">
-                            {{ dinhdangsothapphan($model_chitiet->sum('tongcong') / ($model_chitiet->sum('canbo_congtac') <= 0 ? 1 : $model_chitiet->sum('canbo_congtac')), $lamtron) }}
+                            {{ dinhdangsothapphan($model_chitiet->sum('tongcong') / ($model_chitiet->where('phanloai', 'COMAT')->sum('canbo_congtac') <= 0 ? 1 : $model_chitiet->where('phanloai', 'COMAT')->sum('canbo_congtac')), $lamtron) }}
                         </td>
                         <td class="text-right">{{ dinhdangsothapphan($model_chitiet->sum('quyluong'), $lamtron) }}</td>
                     </tr>
@@ -733,7 +733,7 @@
                                     {{ dinhdangsothapphan($model_chitiet->where('phanloai', 'COMAT')->sum('baohiem'), $lamtron) }}
                                 </td>
                                 <td class="text-right">
-                                    {{ dinhdangsothapphan($model_chitiet->where('phanloai', 'COMAT')->sum('hesotrungbinh'), $lamtron) }}
+                                    {{ dinhdangsothapphan($model_chitiet->where('phanloai', 'COMAT')->sum('tongcong')/$model_chitiet->where('phanloai', 'COMAT')->sum('canbo_congtac'), $lamtron) }}
                                 </td>
                                 <td class="text-right">
                                     {{ dinhdangsothapphan($model_chitiet->where('phanloai', 'COMAT')->sum('quyluong'), $lamtron) }}
@@ -769,7 +769,7 @@
                                     {{ dinhdangsothapphan($model_chitiet->where('phanloai', 'CHUATUYEN')->sum('baohiem'), $lamtron) }}
                                 </td>
                                 <td class="text-right">
-                                    {{ dinhdangsothapphan($model_chitiet->where('phanloai', 'CHUATUYEN')->sum('hesotrungbinh'), $lamtron) }}
+                                    {{ dinhdangsothapphan($model_chitiet->where('phanloai', 'CHUATUYEN')->sum('tongcong')/$model_chitiet->where('phanloai', 'CHUATUYEN')->sum('canbo_congtac'), $lamtron) }}
                                 </td>
                                 <td class="text-right">
                                     {{ dinhdangsothapphan($model_chitiet->where('phanloai', 'CHUATUYEN')->sum('quyluong'), $lamtron) }}
@@ -809,7 +809,7 @@
                             <td class="text-right">
                                 {{ dinhdangsothapphan($model_chitiet->sum('baohiem'), $lamtron) }}</td>
                             <td class="text-right">
-                                {{ dinhdangsothapphan($model_chitiet->sum('hesotrungbinh'), $lamtron) }}</td>
+                                {{ dinhdangsothapphan($model_chitiet->sum('tongcong')/$model_chitiet->where('phanloai', 'COMAT')->sum('canbo_congtac'), $lamtron) }}</td>
                             <td class="text-right">
                                 {{ dinhdangsothapphan($model_chitiet->sum('quyluong'), $lamtron) }}</td>
                         </tr>
@@ -921,7 +921,7 @@
                                         {{ dinhdangsothapphan($model_chitiet->where('phanloai', 'COMAT')->sum('baohiem'), $lamtron) }}
                                     </td>
                                     <td class="text-right">
-                                        {{ dinhdangsothapphan($model_chitiet->where('phanloai', 'COMAT')->sum('hesotrungbinh'), $lamtron) }}
+                                        {{ dinhdangsothapphan($model_chitiet->where('phanloai', 'COMAT')->sum('tongcong')/$model_chitiet->where('phanloai', 'COMAT')->sum('canbo_congtac'), $lamtron) }}
                                     </td>
                                     <td class="text-right">
                                         {{ dinhdangsothapphan($model_chitiet->where('phanloai', 'COMAT')->sum('quyluong'), $lamtron) }}
@@ -957,7 +957,7 @@
                                         {{ dinhdangsothapphan($model_chitiet->where('phanloai', 'CHUATUYEN')->sum('baohiem'), $lamtron) }}
                                     </td>
                                     <td class="text-right">
-                                        {{ dinhdangsothapphan($model_chitiet->where('phanloai', 'CHUATUYEN')->sum('hesotrungbinh'), $lamtron) }}
+                                        {{ dinhdangsothapphan($model_chitiet->where('phanloai', 'CHUATUYEN')->sum('tongcong')/$model_chitiet->where('phanloai', 'CHUATUYEN')->sum('canbo_congtac'), $lamtron) }}
                                     </td>
                                     <td class="text-right">
                                         {{ dinhdangsothapphan($model_chitiet->where('phanloai', 'CHUATUYEN')->sum('quyluong'), $lamtron) }}

@@ -73,7 +73,7 @@
                                         <td>
                                             <button type="button"
                                                 onclick="editPB('{{ $value1->maphanloai_nhom }}','{{ $value1->tenphanloai_nhom }}',
-                                                '{{ $value1->capdo_nhom }}','{{ $value1->maphanloai_goc }}','{{ $value1->chitiet }}')"
+                                                '{{ $value1->capdo_nhom }}','{{ $value1->maphanloai_goc }}','{{ $value1->chitiet }}','{{ $value1->sapxep }}')"
                                                 class="btn btn-default btn-xs mbs">
                                                 <i class="fa fa-edit"></i>&nbsp; Sửa</button>
                                             <button type="button"
@@ -94,7 +94,7 @@
                                             <td>
                                                 <button type="button"
                                                     onclick="editPB('{{ $value2->maphanloai_nhom }}','{{ $value2->tenphanloai_nhom }}',
-                                                '{{ $value2->capdo_nhom }}','{{ $value2->maphanloai_goc }}','{{ $value2->chitiet }}')"
+                                                '{{ $value2->capdo_nhom }}','{{ $value2->maphanloai_goc }}','{{ $value2->chitiet }}','{{ $value2->sapxep }}')"
                                                     class="btn btn-default btn-xs mbs">
                                                     <i class="fa fa-edit"></i>&nbsp; Sửa</button>
                                                 <button type="button"
@@ -116,7 +116,7 @@
                                                 <td>
                                                     <button type="button"
                                                         onclick="editPB('{{ $value3->maphanloai_nhom }}','{{ $value3->tenphanloai_nhom }}',
-                                                '{{ $value3->capdo_nhom }}','{{ $value3->maphanloai_goc }}','{{ $value3->chitiet }}')"
+                                                '{{ $value3->capdo_nhom }}','{{ $value3->maphanloai_goc }}','{{ $value3->chitiet }}','{{ $value3->sapxep }}')"
                                                         class="btn btn-default btn-xs mbs">
                                                         <i class="fa fa-edit"></i>&nbsp; Sửa</button>
                                                     <button type="button"
@@ -138,7 +138,7 @@
                                                     <td>
                                                         <button type="button"
                                                             onclick="editPB('{{ $value4->maphanloai_nhom }}','{{ $value4->tenphanloai_nhom }}',
-                                                                '{{ $value4->capdo_nhom }}','{{ $value4->maphanloai_goc }}','{{ $value4->chitiet }}')"
+                                                                '{{ $value4->capdo_nhom }}','{{ $value4->maphanloai_goc }}','{{ $value4->chitiet }}','{{ $value4->sapxep }}')"
                                                             class="btn btn-default btn-xs mbs">
                                                             <i class="fa fa-edit"></i>&nbsp; Sửa</button>
 
@@ -263,12 +263,13 @@
             $('#maphanloai-modal').modal('hide');
         }
 
-        function editPB(maphanloai_nhom, tenphanloai_nhom, capdo_nhom, maphanloai_goc, chitiet) {
+        function editPB(maphanloai_nhom, tenphanloai_nhom, capdo_nhom, maphanloai_goc, chitiet, sapxep) {
             $('#frm_them').find("[name^='maphanloai_nhom']").val(maphanloai_nhom);
             $('#frm_them').find("[name^='tenphanloai_nhom']").val(tenphanloai_nhom);
             $('#frm_them').find("[name^='capdo_nhom']").val(capdo_nhom).trigger('change');
             $('#frm_them').find("[name^='maphanloai_goc']").val(maphanloai_goc).trigger('change');
             $('#frm_them').find("[name^='chitiet']").val(chitiet).trigger('change');
+            $('#frm_them').find("[name^='sapxep']").val(sapxep);
             $('#create-modal').modal('show');
         }
     </script>
