@@ -51,36 +51,39 @@
         <?php $i = 1; ?>
         <tr class="font-weight-bold">
             <td>I</td>
-            <td>Hệ số (theo BC cấp thẩm quyền giao)</td>
-            <td></td>
+            <td>Hệ số (theo BC cấp thẩm quyền giao)</td>            
+            <td class="text-right">{{ dinhdangsothapphan($model_bienche->sum('tonghs'), $lamtron) }}</td>
             @foreach ($a_donvi_baocao as $key => $val)
                 <td class="text-right">{{ dinhdangsothapphan($model_bienche->sum($key), $lamtron) }}</td>
             @endforeach
         </tr>
         @foreach ($model_bienche as $chitiet)
+        <?php $mapc_tong = 'tong_' . $chitiet->mapc; ?>
             <tr>
                 <td>{{ $i++ }}</td>
                 <td>{{ $chitiet->tenpc }}</td>
-                <td></td>
+                <td class="text-right">{{ dinhdangsothapphan($chitiet->$mapc_tong, $lamtron) }}</td>
                 @foreach ($a_donvi_baocao as $key => $val)
                     <td class="text-right">{{ dinhdangsothapphan($chitiet->$key, $lamtron) }}</td>
                 @endforeach
             </tr>
         @endforeach
+
         <tr class="font-weight-bold">
             <td>II</td>
             <td>Hệ số (theo BC có mặt)</td>
-            <td></td>
+            <td class="text-right">{{ dinhdangsothapphan($model_comat->sum('tonghs'), $lamtron) }}</td>
             @foreach ($a_donvi_baocao as $key => $val)
-                <td class="text-right">{{ dinhdangsothapphan($model_bienche->sum($key), $lamtron) }}</td>
+                <td class="text-right">{{ dinhdangsothapphan($model_comat->sum($key), $lamtron) }}</td>
             @endforeach
         </tr>
         <?php $i = 1; ?>
         @foreach ($model_comat as $chitiet)
+        <?php $mapc_tong = 'tong_' . $chitiet->mapc; ?>
             <tr>
                 <td>{{ $i++ }}</td>
                 <td>{{ $chitiet->tenpc }}</td>
-                <td></td>
+                <td class="text-right">{{ dinhdangsothapphan($chitiet->$mapc_tong, $lamtron) }}</td>
                 @foreach ($a_donvi_baocao as $key => $val)
                     <td class="text-right">{{ dinhdangsothapphan($chitiet->$key, $lamtron) }}</td>
                 @endforeach

@@ -49,6 +49,7 @@
                                 <th class="text-center" style="width: 5%">STT</th>
                                 <th class="text-center">Năm ngân sách</th>
                                 <th class="text-center">Đơn vị gửi</br>số liệu</th>
+                                <th class="text-center">Đơn vị chủ quản</th>
                                 <th class="text-center">Trạng thái</th>
                                 <th class="text-center">Thao tác</th>
                             </tr>
@@ -60,6 +61,7 @@
                                         <td class="text-center">{{ $key + 1 }}</td>
                                         <td class="text-center">{{ $value->namns }}</td>
                                         <td class="text-center">{{ $value->dagui . '/' . $value->soluong }}</td>
+                                        <td class="text-center">{{ $a_donviql[$value->macqcq] }}</td>
                                         <td class="text-center bold">{{ $a_trangthai[$value['trangthai']] }}</td>
                                         <td>
                                             <button type="button" title="In số liệu"
@@ -75,7 +77,7 @@
 
                                             @if ($value['trangthai'] == 'CHUAGUI')
                                                 <button type="button" class="btn btn-default btn-sm" title="Gửi dữ liệu"
-                                                    onclick="confirmChuyen('{{ $value->namns }}')"
+                                                    onclick="confirmChuyen('{{ $value->namns }}','{{ $value->masodv }}')"
                                                     data-target="#chuyen-modal" data-toggle="modal"><i
                                                         class="fa fa-share-square-o"></i>&nbsp;
                                                 </button>
@@ -123,7 +125,17 @@
                         <label><b>Số liệu tổng hợp khi gửi đi sẽ không thể chỉnh sửa. Bạn hãy kiểm tra kỹ số liệu trước khi
                                 gửi.</b></label>
                     </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <label class="control-label" style="text-align: right">Đơn vị nhận dữ liệu </label>
+                            {!! Form::select('macqcq', $a_donviql, null, [
+                                'id' => 'trangthai',
+                                'class' => 'form-control',
+                            ]) !!}
+                        </div>
+                    </div>
                     <input type="hidden" name="namns" id="namns">
+                    <input type="hidden" name="masodv" id="masodv">
                     <div class="modal-footer">
                         <button type="button" class="btn default" data-dismiss="modal">Hủy</button>
                         <button type="submit" class="btn blue">Đồng ý</button>
@@ -404,8 +416,9 @@
             $('#frm_indanhsachdonvi').find("[name^='namns']").val($('#namns').val());
         }
 
-        function confirmChuyen(namns) {
-            document.getElementById("namns").value = namns;
+        function confirmChuyen(namns, masodv) {
+            $('#frm_chuyen').find("[name^='namns']").val(namns);
+            $('#frm_chuyen').find("[name^='masodv']").val(masodv);
         }
     </script>
 

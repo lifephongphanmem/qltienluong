@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\dmdonvi;
+use App\dmdonvibaocao;
 use App\dmphanloaicongtac;
 use App\dmphanloaict;
 use App\dmphanloaidonvi;
@@ -58,12 +59,15 @@ class dutoanluong_huyenController extends Controller
                 $dv->soluong = $model_donvi->count();
                 $dv->dagui = dutoanluong::where('macqcq', $madv)->where('namns', $nam)->where('trangthai','DAGUI')->count();
             }
-            //dd($model);
+            
             $model_tenct = dmphanloaict::wherein('mact',getPLCTDuToan())->get();
             $model_nhomct = dmphanloaicongtac::wherein('macongtac',array_unique(array_column($model_tenct->toarray(),'macongtac')))->get();
             $a_trangthai_in = array('ALL' => '--Tất cả đơn vị--', 'CHOGUI' => 'Đơn vị chưa gửi dữ liệu', 'DAGUI' => 'Đơn vị đã gửi dữ liệu');            
             $a_phanloai = array_column(dmphanloaidonvi::all()->toarray(),'tenphanloai','maphanloai');           
-
+            
+            $m_dvbc = dmdonvibaocao::where('level','T')->get();
+            $a_donviql = array_column(dmdonvi::wherein('madvbc',array_column($m_dvbc->toarray(),'madvbc'))->get()->toarray(),'tendv','madv');
+            
             return view('functions.dutoanluong.index')
                 ->with('model', $model->sortby('namns'))
                 ->with('model_tenct', $model_tenct)
@@ -71,6 +75,7 @@ class dutoanluong_huyenController extends Controller
                 ->with('a_trangthai', $a_trangthai)
                 ->with('a_trangthai_in', $a_trangthai_in)
                 ->with('a_phanloai', setArrayAll($a_phanloai))
+                ->with('a_donviql', $a_donviql)
                 // ->with('soluong', $soluong)
                 ->with('furl_xem', '/chuc_nang/xem_du_lieu/du_toan/huyen')
                 ->with('furl_th', '/chuc_nang/du_toan_luong/huyen/')
@@ -121,34 +126,19 @@ class dutoanluong_huyenController extends Controller
             $inputs = $requests->all();
             if (session('admin')->macqcq == '') {
                 return view('errors.chuacqcq');
-            }
-
-            $madv = session('admin')->madv;
-
-            $model_nguon_huyen = dutoanluong_tinh::where('namns', $inputs['namns'])->where('madv', $madv)->first();
-            //$model_nguon = nguonkinhphi::where('sohieu',$inputs['sohieu'])->where('macqcq', $madv)->get();
-            if ($model_nguon_huyen != null) {
-                //Trường hợp đơn vị bị trả lại dữ liệu muốn gửi lại
-                $model_nguon_huyen->trangthai = 'DAGUI';
-                $model_nguon_huyen->nguoilap = session('admin')->name;
-                $model_nguon_huyen->ngaylap = Carbon::now()->toDateTimeString();
-                $model_nguon_huyen->save();
-            } else {
-                $inputs['madv'] = session('admin')->madv;
-                $inputs['masodv'] = getdate()[0];;
-                $inputs['trangthai'] = 'DAGUI';
-                $inputs['noidung'] = 'Đơn vị ' . getTenDV(session('admin')->madv) . ' tổng hợp dữ liệu từ các đơn vị cấp dưới.';
-                $inputs['nguoilap'] = session('admin')->name;
-                $inputs['ngaylap'] = Carbon::now()->toDateTimeString();
-                $inputs['macqcq'] = session('admin')->macqcq;
-                $inputs['madvbc'] = session('admin')->madvbc;
-
-                dutoanluong::where('namns', $inputs['namns'])->where('macqcq', $madv)
-                    ->update(['masot' => $inputs['masodv']]);
-
-                //nguonkinhphi_huyen::create($inputs);
-                dutoanluong_tinh::create($inputs);
-            }
+            }            
+           
+            $model = dutoanluong_huyen::where('masodv', $inputs['masodv'])->first();
+            $chk_tinh = dutoanluong_tinh::where('madv', $model->macqcq)->where('namns', $model->namns)->first();
+            if ($chk_tinh != null)
+            dutoanluong::where('masoh', $inputs['masodv'])->update(['masot' => $chk_tinh->masodv]);
+                
+            $model->nguoigui = session('admin')->name;
+            $model->macqcq = $inputs['macqcq'];
+            $model->ngaygui = Carbon::now()->toDateTimeString();
+            $model->trangthai = 'DAGUI';
+            $model->save();
+            
             return redirect('/chuc_nang/du_toan_luong/huyen/index');
         } else
             return view('errors.notlogin');

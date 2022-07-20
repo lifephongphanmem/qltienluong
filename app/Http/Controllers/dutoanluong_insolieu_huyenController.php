@@ -500,6 +500,8 @@ class dutoanluong_insolieu_huyenController extends Controller
             foreach ($m_phucap as $phucap) {
                 $mapc = $phucap->mapc;
                 $mapc_st = 'st_' . $phucap->mapc;
+                $mapc_tong = 'tong_' . $phucap->mapc;
+                $mapc_tongst = 'tongst_' . $phucap->mapc;
 
                 if ($model_chitiet->sum($mapc) <= 0) {
                     continue;
@@ -507,25 +509,58 @@ class dutoanluong_insolieu_huyenController extends Controller
                 $add_comat = new dmphucap();
                 $add_comat->mapc = $phucap->mapc;
                 $add_comat->tenpc = $phucap->tenpc;
+                $add_comat->$mapc_tong = 0;
+                $add_comat->$mapc_tongst = 0;
+
                 $add_bienche = new dmphucap();
                 $add_bienche->mapc = $phucap->mapc;
                 $add_bienche->tenpc = $phucap->tenpc;
-                foreach($a_donvi_baocao  as $key=>$val){
+                $add_bienche->$mapc_tong = 0;
+                $add_bienche->$mapc_tongst = 0;
+
+                foreach ($a_donvi_baocao  as $key => $val) {
                     $st = 'st_' . $key;
-                    $add_bienche->$key = $model_chitiet->where('madv',$key)->sum($mapc);
-                    $add_bienche->$st = $model_chitiet->where('madv',$key)->sum($mapc_st);
-                    $add_comat->$key = $model_chitiet->where('phanloai','COMAT')->where('madv',$key)->sum($mapc);
-                    $add_comat->$st = $model_chitiet->where('phanloai','COMAT')->where('madv',$key)->sum($mapc_st);                    
-                }                
+                    $add_bienche->$key = $model_chitiet->where('madv', $key)->sum($mapc);
+                    $add_bienche->$st = $model_chitiet->where('madv', $key)->sum($mapc_st);
+                    $add_bienche->$mapc_tong +=  $add_bienche->$key;
+                    $add_bienche->$mapc_tongst += $add_bienche->$st;
+                    
+                    $add_comat->$key = $model_chitiet->where('phanloai', 'COMAT')->where('madv', $key)->sum($mapc);
+                    $add_comat->$st = $model_chitiet->where('phanloai', 'COMAT')->where('madv', $key)->sum($mapc_st);
+                    $add_comat->$mapc_tong += $add_comat->$key;
+                    $add_comat->$mapc_tongst += $add_comat->$st;
+                }
 
                 $model_comat->add($add_comat);
                 $model_bienche->add($add_bienche);
                 //$model_noidung->add($add_noidung);
             }
+
+            //thêm bảo hiểm
+            $add_comat = new dmphucap();
+            $add_comat->mapc = 'tongbh_dv';
+            $add_comat->tenpc = 'Các khoản đóng góp';
+            $add_bienche = new dmphucap();
+            $add_bienche->mapc = 'tongbh_dv';
+            $add_bienche->tenpc = 'Các khoản đóng góp';
+            foreach ($a_donvi_baocao  as $key => $val) {
+                $st = 'st_' . $key;
+                $add_bienche->$key = $model_chitiet->where('madv', $key)->sum('tongbh_dv');
+                $add_bienche->$key = $model_chitiet->where('madv', $key)->sum('tongbh_dv');
+                $add_bienche->tong_tongbh_dv = $add_bienche->$key;
+
+                $add_comat->$key = $model_chitiet->where('phanloai', 'COMAT')->where('madv', $key)->sum('tongbh_dv');
+                $add_comat->$st = $model_chitiet->where('phanloai', 'COMAT')->where('madv', $key)->sum('ttbh_dv');
+                $add_comat->tong_tongbh_dv = $add_comat->$key;
+            }
+
+            $model_comat->add($add_comat);
+            $model_bienche->add($add_bienche);
+
             $m_donvi = dmdonvi::where('madv', session('admin')->madv)->first();
 
-
-            //dd($model_bienche);
+            //dd($model_comat);
+            //dd($model_chitiet->where('phanloai','CHUATUYEN'));
             return view('reports.dutoanluong.Huyen.tonghopcanboxa')
                 ->with('model_comat', $model_comat)
                 ->with('model_bienche', $model_bienche)
