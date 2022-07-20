@@ -233,7 +233,7 @@ class dutoanluong_insolieu_huyenController extends Controller
                 $chitiet->quyluong = ($chitiet->ttl + $chitiet->ttbh_dv) / $inputs['donvitinh'];
                 $this->getMaNhomPhanLoai($chitiet, $m_phanloai);
             }
-            //dd($model->where('maphanloai','KVXP')->toArray());
+            //dd($model->where('maphanloai','DAOTAO')->toArray());
 
             //xử lý ẩn hiện cột phụ cấp => biết tổng số cột hiện => colspan trên báo cáo
             $a_tenpc = array_column(dmphucap::all()->toArray(), 'tenpc', 'mapc');
@@ -246,7 +246,7 @@ class dutoanluong_insolieu_huyenController extends Controller
                 }
             }
             $m_donvi = dmdonvi::where('madv', session('admin')->madv)->first();
-            //dd($m_donvi_baocao);
+            //dd($m_donvi_baocao->where('maphanloai','DAOTAO'));
             return view('reports.dutoanluong.Huyen.tonghopbienche')
                 ->with('model', $model)
                 ->with('col', $col)
@@ -393,7 +393,7 @@ class dutoanluong_insolieu_huyenController extends Controller
             //xử lý ẩn hiện cột phụ cấp => biết tổng số cột hiện => colspan trên báo cáo
             
             $m_donvi = dmdonvi::where('madv', session('admin')->madv)->first();
-            //dd($m_donvi_baocao);
+            
             return view('reports.dutoanluong.Huyen.tonghophopdong')
                 ->with('model', $model)
                 ->with('lamtron', session('admin')->lamtron ?? 3)
@@ -462,6 +462,66 @@ class dutoanluong_insolieu_huyenController extends Controller
                 ->with('m_donvi_baocao', $m_donvi_baocao)
                 ->with('inputs', $inputs)
                 ->with('pageTitle', 'Báo cáo tổng hợp biên chế hệ số tiền lương và phụ cấp');
+        } else
+            return view('errors.notlogin');
+    }
+
+    function tonghopcanboxa(Request $request)
+    {
+        if (Session::has('admin')) {
+            $inputs = $request->all();
+            $m_phanloai = dmphanloaidonvi::all();
+            
+            $m_donvi_baocao = dmdonvi::where('madvbc', session('admin')->madvbc)->where('maphanloai','KVXP')->get();
+            $m_dutoan = dutoanluong::where('masoh', $inputs['masodv'])->where('trangthai', 'DAGUI')->get();
+
+
+            $a_donvi = array_column($m_dutoan->toarray(), 'madv', 'masodv');
+            $a_pl_donvi = array_column($m_donvi_baocao->toarray(), 'maphanloai', 'madv');
+            $model = dutoanluong_chitiet::wherein('masodv', array_column($m_dutoan->toarray(), 'masodv'))->wherein('mact', $inputs['mact'])->get();
+
+            $a_plct = array_column(dmphanloaict::all()->toArray(), 'tenct', 'mact');
+            $a_pc = getColDuToan();
+            foreach ($model as $chitiet) {
+                $chitiet->madv = $a_donvi[$chitiet->masodv];
+                $chitiet->maphanloai = $a_pl_donvi[$chitiet->madv];
+                foreach ($a_pc as $pc) {
+                    $chitiet->$pc = $chitiet->$pc / 12;
+                }
+                $chitiet->tenct = $a_plct[$chitiet->mact] ?? '';
+                $chitiet->luongthang = ($chitiet->ttl / 12) / $inputs['donvitinh'];;
+                $chitiet->baohiem = ($chitiet->ttbh_dv / 12) / $inputs['donvitinh'];;
+                $chitiet->tongcong = ($chitiet->luongthang + $chitiet->baohiem) / $inputs['donvitinh'];
+                $chitiet->quyluong = ($chitiet->ttl + $chitiet->ttbh_dv) / $inputs['donvitinh'];
+            }
+
+
+            //dd($model);
+            $m_donvi = dmdonvi::where('madv', session('admin')->madv)->first();
+
+            //xử lý ẩn hiện cột phụ cấp => biết tổng số cột hiện => colspan trên báo cáo
+            $a_tenpc = array_column(dmphucap::all()->toArray(), 'tenpc', 'mapc');
+            $a_phucap = array();
+            $col = 0;
+            foreach ($a_pc as $ct) {
+                if ($model->sum($ct) > 0) {
+                    $a_phucap[$ct] = $a_tenpc[$ct];
+                    $col++;
+                }
+            }
+
+            //dd($model);
+            return view('reports.dutoanluong.Huyen.tonghophopdong_m2')
+                ->with('model', $model)
+                ->with('col', $col)
+                ->with('lamtron', session('admin')->lamtron ?? 3)
+                ->with('a_phucap', $a_phucap)
+                ->with('m_donvi', $m_donvi)
+                ->with('m_dutoan', $m_dutoan)
+                ->with('m_phanloai', $m_phanloai)
+                ->with('m_donvi_baocao', $m_donvi_baocao)
+                ->with('inputs', $inputs)
+                ->with('pageTitle', 'Báo cáo tổng hợp cán bộ chuyên trách, công chức xã');
         } else
             return view('errors.notlogin');
     }
