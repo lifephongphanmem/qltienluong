@@ -61,8 +61,8 @@
                                     <td class="text-center">{{ $key + 1 }}</td>
                                     <td class="text-center">{{ $value->namns }}</td>
                                     <td class="text-center">{{ $value->dagui . '/' . $value->soluong }}</td>
-                                    <td class="text-center">{{ $a_donviql[$value->macqcq] }}</td>
-                                    <td class="text-center bold">{{ $a_trangthai[$value['trangthai']] }}</td>
+                                    <td class="text-center">{{ $a_donviql[$value->macqcq] ?? ''}}</td>
+                                    <td class="text-center bold">{{ $a_trangthai[$value['trangthai']] ?? ''}}</td>
                                     <td>
                                         <button type="button" title="In số liệu"
                                             onclick="indutoan('{{ $value->namns }}','{{ $value->masodv }}')"
