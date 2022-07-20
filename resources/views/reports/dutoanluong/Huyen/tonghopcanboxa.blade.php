@@ -54,20 +54,38 @@
             <td>Hệ số (theo BC cấp thẩm quyền giao)</td>
             <td></td>
             @foreach ($a_donvi_baocao as $key => $val)
-                <td>{{ dinhdangsothapphan($model_bienche->sum($key), $lamtron) }}</td>
+                <td class="text-right">{{ dinhdangsothapphan($model_bienche->sum($key), $lamtron) }}</td>
             @endforeach
         </tr>
-        @foreach ($model_bienche as $bienche)
+        @foreach ($model_bienche as $chitiet)
             <tr>
                 <td>{{ $i++ }}</td>
-                <td>{{ $bienche->tenpc }}</td>
+                <td>{{ $chitiet->tenpc }}</td>
                 <td></td>
                 @foreach ($a_donvi_baocao as $key => $val)
-                    <td class="text-right">{{ dinhdangsothapphan($bienche->$key, $lamtron) }}</td>
+                    <td class="text-right">{{ dinhdangsothapphan($chitiet->$key, $lamtron) }}</td>
                 @endforeach
             </tr>
         @endforeach
-
+        <tr class="font-weight-bold">
+            <td>II</td>
+            <td>Hệ số (theo BC có mặt)</td>
+            <td></td>
+            @foreach ($a_donvi_baocao as $key => $val)
+                <td class="text-right">{{ dinhdangsothapphan($model_bienche->sum($key), $lamtron) }}</td>
+            @endforeach
+        </tr>
+        <?php $i = 1; ?>
+        @foreach ($model_comat as $chitiet)
+            <tr>
+                <td>{{ $i++ }}</td>
+                <td>{{ $chitiet->tenpc }}</td>
+                <td></td>
+                @foreach ($a_donvi_baocao as $key => $val)
+                    <td class="text-right">{{ dinhdangsothapphan($chitiet->$key, $lamtron) }}</td>
+                @endforeach
+            </tr>
+        @endforeach
     </table>
 
     <table id="data_footer" class="header" width="96%" border="0" cellspacing="0" cellpadding="8"

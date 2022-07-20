@@ -512,10 +512,10 @@ class dutoanluong_insolieu_huyenController extends Controller
                 $add_bienche->tenpc = $phucap->tenpc;
                 foreach($a_donvi_baocao  as $key=>$val){
                     $st = 'st_' . $key;
+                    $add_bienche->$key = $model_chitiet->where('madv',$key)->sum($mapc);
+                    $add_bienche->$st = $model_chitiet->where('madv',$key)->sum($mapc_st);
                     $add_comat->$key = $model_chitiet->where('phanloai','COMAT')->where('madv',$key)->sum($mapc);
-                    $add_comat->$st = $model_chitiet->where('phanloai','COMAT')->where('madv',$key)->sum($mapc_st);
-                    $add_bienche->$key = $model_chitiet->where('phanloai','COMAT')->where('madv',$key)->sum($mapc);
-                    $add_bienche->$st = $model_chitiet->where('phanloai','COMAT')->where('madv',$key)->sum($mapc_st);
+                    $add_comat->$st = $model_chitiet->where('phanloai','COMAT')->where('madv',$key)->sum($mapc_st);                    
                 }                
 
                 $model_comat->add($add_comat);
