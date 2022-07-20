@@ -175,7 +175,13 @@
                 @foreach ($m_phanloai->where('maphanloai_goc', $phanloai2->maphanloai_nhom)->sortby('sapxep') as $phanloai3)
                     <?php
                     $model_donvi = $m_donvi_baocao->where('maphanloai', $phanloai3->maphanloai_nhom);
-                    $model_chitiet = $model->where('maphanloai_goc3', $phanloai3->maphanloai_nhom);
+                    //$model_chitiet = $model->where('maphanloai_goc3', $phanloai3->maphanloai_nhom);
+
+                    if (in_array($phanloai3->maphanloai_nhom, $a_phanloai)) {
+                        $model_chitiet = $model->where('maphanloai', $phanloai3->maphanloai_nhom);
+                    } else {
+                        $model_chitiet = $model->where('maphanloai_goc3', $phanloai3->maphanloai_nhom);
+                    }
                     ?>
 
                     <tr class="font-weight-bold">
