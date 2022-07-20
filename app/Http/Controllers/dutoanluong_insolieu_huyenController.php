@@ -233,7 +233,7 @@ class dutoanluong_insolieu_huyenController extends Controller
                 $chitiet->quyluong = ($chitiet->ttl + $chitiet->ttbh_dv) / $inputs['donvitinh'];
                 $this->getMaNhomPhanLoai($chitiet, $m_phanloai);
             }
-            dd($model->where('maphanloai','DAOTAO')->toArray());
+            //dd($model->where('maphanloai','DAOTAO')->toArray());
 
             //xử lý ẩn hiện cột phụ cấp => biết tổng số cột hiện => colspan trên báo cáo
             $a_tenpc = array_column(dmphucap::all()->toArray(), 'tenpc', 'mapc');
