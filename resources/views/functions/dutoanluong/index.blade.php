@@ -34,7 +34,7 @@
         <div class="col-md-12">
             <div class="portlet light bordered">
                 <div class="portlet-title">
-                    <div class="caption">DANH SÁCH CÁC ĐƠN VỊ</div>
+                    <div class="caption">DANH SÁCH DỰ TOÁN LƯƠNG CỦA ĐƠN VỊ </div>
                     <div class="actions">
                         <button type="button" id="_btnadd" class="btn btn-default btn-xs" onclick="add()"
                             data-target="#modal-dutoan" data-toggle="modal"><i class="fa fa-plus"></i>&nbsp;Thêm mới dự
