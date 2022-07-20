@@ -626,7 +626,7 @@
                         </td>
                         <td class="text-right">{{ dinhdangsothapphan($model_chitiet->sum('quyluong'), $lamtron) }}</td>
                     </tr>
-                    @if (count($model_donvi) > 0)
+                    
                         <tr>
                             <td></td>
                             <td>Biên chế</td>
@@ -698,6 +698,7 @@
                                 {{ dinhdangsothapphan($model_chitiet->where('phanloai', 'CHUATUYEN')->sum('quyluong'), $lamtron) }}
                             </td>
                         </tr>
+                        @if (count($model_donvi) > 0)
                         {{-- in chi tiết từng đơn vị --}}
                         @if ($phanloai3->chitiet == '1')
                             @foreach ($model_donvi as $donvi)
