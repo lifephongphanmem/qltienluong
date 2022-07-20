@@ -68,7 +68,7 @@ class dutoanluong_huyenController extends Controller
             $m_dvbc = dmdonvibaocao::where('level','T')->get();
             $a_donviql = array_column(dmdonvi::wherein('madvbc',array_column($m_dvbc->toarray(),'madvbc'))->get()->toarray(),'tendv','madv');
             
-            return view('functions.dutoanluong.index')
+            return view('functions.dutoanluong.danhsach')
                 ->with('model', $model->sortby('namns'))
                 ->with('model_tenct', $model_tenct)
                 ->with('model_nhomct', $model_nhomct)
