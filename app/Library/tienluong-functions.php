@@ -938,3 +938,7 @@ function getBaoCaoDeQuy($categories, $maphanloai_goc = '', $char = '')
         }
     }
 }
+
+function chkDiv0($dbl){
+    return chkDbl($dbl) <=0 ? 1 : chkDbl($dbl);
+}

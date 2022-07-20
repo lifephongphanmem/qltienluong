@@ -79,7 +79,7 @@
             <td class="text-right">{{ dinhdangsothapphan($model->sum('bhtn_dv'), $lamtron) }}</td>
             <td class="text-right">{{ dinhdangsothapphan($model->sum('baohiem'), $lamtron) }}</td>
             <td class="text-right">
-                {{ dinhdangsothapphan($model->sum('tongcong') / $model->sum('canbo_congtac'), $lamtron) }}</td>
+                {{ dinhdangsothapphan($model->sum('tongcong') / $model->where('phanloai', 'COMAT')->sum('canbo_congtac'), $lamtron) }}</td>
             <td class="text-right">{{ dinhdangsothapphan($model->sum('quyluong'), $lamtron) }}</td>
         </tr>
         <?php $i = 1; ?>
@@ -106,7 +106,7 @@
                 <td class="text-right">{{ dinhdangsothapphan($model_pl_donvi->sum('bhtn_dv'), $lamtron) }}</td>
                 <td class="text-right">{{ dinhdangsothapphan($model_pl_donvi->sum('baohiem'), $lamtron) }}</td>
                 <td class="text-right">
-                    {{ dinhdangsothapphan($model_pl_donvi->sum('tongcong') / ($model_pl_donvi->sum('canbo_congtac') <= 0 ? 1 : $model_pl_donvi->sum('canbo_congtac')), $lamtron) }}
+                    {{ dinhdangsothapphan($model_pl_donvi->sum('tongcong') / ($model_pl_donvi->where('phanloai', 'COMAT')->sum('canbo_congtac') <= 0 ? 1 : $model_pl_donvi->sum('canbo_congtac')), $lamtron) }}
                 </td>
                 <td class="text-right">{{ dinhdangsothapphan($model_pl_donvi->sum('quyluong'), $lamtron) }}</td>
             </tr>
@@ -130,7 +130,7 @@
                     @endforeach
                     <td class="text-right">{{ dinhdangsothapphan($model_chitiet->sum('bhtn_dv'), $lamtron) }}</td>
                     <td class="text-right">{{ dinhdangsothapphan($model_chitiet->sum('baohiem'), $lamtron) }}</td>
-                    <td class="text-right">{{ dinhdangsothapphan($model_chitiet->sum('tongcong')/$model_chitiet->sum('canbo_congtac'), $lamtron) }}</td>
+                    <td class="text-right">{{ dinhdangsothapphan($model_chitiet->sum('tongcong')/$model_chitiet->where('phanloai', 'COMAT')->sum('canbo_congtac'), $lamtron) }}</td>
                     <td class="text-right">{{ dinhdangsothapphan($model_chitiet->sum('quyluong'), $lamtron) }}</td>
                 </tr>
                 @foreach ($model_chitiet as $chitiet)
