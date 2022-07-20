@@ -62,7 +62,7 @@
                         </thead>
                         <tbody>
                             @if (isset($model))
-                                @foreach ($model->where('capdo_nhom', '1') as $value1)
+                                @foreach ($model->where('capdo_nhom', '1')->sortby('sapxep') as $value1)
                                     <tr>
                                         <td>{{ $value1->sapxep }}</td>
                                         <td>{{ $value1->maphanloai_nhom }}</td>
@@ -83,7 +83,7 @@
                                                 <i class="fa fa-trash-o"></i>&nbsp; Xóa</button>
                                         </td>
                                     </tr>
-                                    @foreach ($model->where('maphanloai_goc', $value1->maphanloai_nhom) as $value2)
+                                    @foreach ($model->where('maphanloai_goc', $value1->maphanloai_nhom)->sortby('sapxep') as $value2)
                                         <tr>
                                             <td>{{ $value1->sapxep }}.{{ $value2->sapxep }}</td>
                                             <td>{{ $value2->maphanloai_nhom }}</td>
@@ -104,7 +104,7 @@
                                                     <i class="fa fa-trash-o"></i>&nbsp; Xóa</button>
                                             </td>
                                         </tr>
-                                        @foreach ($model->where('maphanloai_goc', $value2->maphanloai_nhom) as $value3)
+                                        @foreach ($model->where('maphanloai_goc', $value2->maphanloai_nhom)->sortby('sapxep') as $value3)
                                             <tr>
                                                 <td>{{ $value1->sapxep }}.{{ $value2->sapxep }}.{{ $value3->sapxep }}
                                                 </td>
@@ -126,7 +126,7 @@
                                                         <i class="fa fa-trash-o"></i>&nbsp; Xóa</button>
                                                 </td>
                                             </tr>
-                                            @foreach ($model->where('maphanloai_goc', $value3->maphanloai_nhom) as $value4)
+                                            @foreach ($model->where('maphanloai_goc', $value3->maphanloai_nhom)->sortby('sapxep') as $value4)
                                                 <tr>
                                                     <td>{{ $value1->sapxep }}.{{ $value2->sapxep }}.{{ $value3->sapxep }}.{{ $value4->sapxep }}
                                                     </td>
