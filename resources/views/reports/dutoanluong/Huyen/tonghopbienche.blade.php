@@ -22,7 +22,7 @@
 
         <tr>
             <td colspan="2" style="text-align: center; font-weight: bold; font-size: 20px; text-transform: uppercase">
-                BẢNG TỔNG HỢP BIÊN CHẾ, HỆ SỐ TIỀN LƯƠNG VÀ PHỤ CẤP CÓ MẶT NĂM ĐẾN 01/07/ {{ $inputs['namns'] - 1 }}
+                BẢNG TỔNG HỢP BIÊN CHẾ, HỆ SỐ TIỀN LƯƠNG VÀ PHỤ CẤP CÓ MẶT NĂM ĐẾN 01/07/{{ $inputs['namns'] - 1 }}
             </td>
         </tr>
 
@@ -41,7 +41,7 @@
                 <th colspan="3">SỐ ĐỐI TƯỢNG</th>
                 <th colspan="{{ $col + 5 }}">HỆ SỐ TIỀN LƯƠNG, PHỤ CẤP, TRỢ CẤP</th>
                 <th rowspan="3" style="width: 4%;">HỆ SỐ</th>
-                <th style="width: 8%" rowspan="3">QUỸ LƯƠNG CẤP NĂM {{ $inputs['namns'] - 1 }}</th>
+                <th style="width: 8%" rowspan="3">QUỸ LƯƠNG CẤP NĂM {{ $inputs['namns'] }}</th>
             </tr>
 
             <tr style="padding-left: 2px;padding-right: 2px">
