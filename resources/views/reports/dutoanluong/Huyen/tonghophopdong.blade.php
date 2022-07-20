@@ -46,7 +46,6 @@
                 <th style="width: 10%">QUỸ LƯƠNG CẤP NĂM {{ $inputs['namns'] }}</th>
                 <th style="width: 5%;">GHI CHÚ</th>
             </tr>
-
         </thead>
 
         <tr style="font-weight: bold; text-align: center;">
@@ -56,47 +55,53 @@
             <td class="text-right">{{ dinhdangsothapphan($model->sum('luongthang'), $lamtron) }}</td>
             <td class="text-right">{{ dinhdangsothapphan($model->sum('baohiem'), $lamtron) }}</td>
             <td class="text-right">{{ dinhdangsothapphan($model->sum('tongcong'), $lamtron) }}</td>
-            <td></td>
+            <td class="text-center">12</td>
             <td class="text-right">{{ dinhdangsothapphan($model->sum('quyluong'), $lamtron) }}</td>
             <td></td>
         </tr>
         <?php $i = 1; ?>
-        @foreach ($m_phanloai as $phanloai)
+        {{-- vòng 1 --}}
+        @foreach ($m_phanloai->where('capdo_nhom', '1')->sortby('sapxep') as $phanloai1)
             <?php
-            $j = 1;
-            $model_donvi = $m_donvi_baocao->where('maphanloai', $phanloai->maphanloai);
-            $model_pl_donvi = $model->where('maphanloai', $phanloai->maphanloai);
+            $model_donvi = $m_donvi_baocao->where('maphanloai', $phanloai1->maphanloai_nhom);
+            $model_chitiet = $model->where('maphanloai_goc1', $phanloai1->maphanloai_nhom);
+            $i = 1;
             ?>
             <tr class="font-weight-bold">
-                <td>{{ convert2Roman($i++) }}</td>
-                <td>{{ $phanloai->tenphanloai }}</td>
-                <td class="text-center">{{ dinhdangso($model_pl_donvi->sum('canbo_congtac')) }}</td>
-                <td class="text-right">{{ dinhdangsothapphan($model_pl_donvi->sum('luongthang'), $lamtron) }}</td>
-                <td class="text-right">{{ dinhdangsothapphan($model_pl_donvi->sum('baohiem'), $lamtron) }}</td>
-                <td class="text-right">{{ dinhdangsothapphan($model_pl_donvi->sum('tongcong'), $lamtron) }}</td>
-                <td></td>
-                <td class="text-right">{{ dinhdangsothapphan($model_pl_donvi->sum('quyluong'), $lamtron) }}</td>
+                <td>{{ convert2Roman($phanloai1->sapxep) }}</td>
+                <td>{{ $phanloai1->tenphanloai_nhom }}</td>
+                <td class="text-center">{{ dinhdangso($model_chitiet->sum('canbo_congtac')) }}</td>
+                <td class="text-right">{{ dinhdangsothapphan($model_chitiet->sum('luongthang'), $lamtron) }}</td>
+                <td class="text-right">{{ dinhdangsothapphan($model_chitiet->sum('baohiem'), $lamtron) }}</td>
+                <td class="text-right">{{ dinhdangsothapphan($model_chitiet->sum('tongcong'), $lamtron) }}</td>
+                <td class="text-center">12</td>
+                <td class="text-right">{{ dinhdangsothapphan($model_chitiet->sum('quyluong'), $lamtron) }}</td>
                 <td></td>
             </tr>
-            @foreach ($model_donvi as $donvi)
-                <?php
-                $model_chitiet = $model_pl_donvi->where('madv', $donvi->madv);
-                ?>
-                @if (count($model_chitiet) > 0)
-                    <tr class="font-weight-bold font-italic">
-                        <td class="text-center">{{ $j++ }}</td>
+            @if (count($model_donvi) > 0 && $phanloai1->chitiet == '1')
+                {{-- in chi tiết từng đơn vị --}}
+                @foreach ($model_donvi as $donvi)
+                    <?php
+                    $model_chitiet = $model->where('madv', $donvi->madv);
+                    ?>
+                    <tr class="font-weight-bold">
+                        <td>{{ $i++ }}</td>
                         <td>{{ $donvi->tendv }}</td>
                         <td class="text-center">{{ dinhdangso($model_chitiet->sum('canbo_congtac')) }}</td>
-                        <td class="text-right">{{ dinhdangsothapphan($model_chitiet->sum('luongthang'), $lamtron) }}</td>
-                        <td class="text-right">{{ dinhdangsothapphan($model_chitiet->sum('baohiem'), $lamtron) }}</td>
-                        <td class="text-right">{{ dinhdangsothapphan($model_chitiet->sum('tongcong'), $lamtron) }}</td>
-                        <td></td>
-                        <td class="text-right">{{ dinhdangsothapphan($model_chitiet->sum('quyluong'), $lamtron) }}</td>
+                        <td class="text-right">{{ dinhdangsothapphan($model_chitiet->sum('luongthang'), $lamtron) }}
+                        </td>
+                        <td class="text-right">{{ dinhdangsothapphan($model_chitiet->sum('baohiem'), $lamtron) }}
+                        </td>
+                        <td class="text-right">{{ dinhdangsothapphan($model_chitiet->sum('tongcong'), $lamtron) }}
+                        </td>
+                        <td class="text-center">12</td>
+                        <td class="text-right">{{ dinhdangsothapphan($model_chitiet->sum('quyluong'), $lamtron) }}
+                        </td>
                         <td></td>
                     </tr>
                     @foreach ($model_chitiet as $chitiet)
                         <tr>
-                            <td class="text-center">-</td>
+                            <td>-</td>
                             <td>{{ $chitiet->tenct }}</td>
                             <td class="text-center">{{ dinhdangso($chitiet->canbo_dutoan) }}</td>
                             <td class="text-right">{{ dinhdangsothapphan($chitiet->luongthang, $lamtron) }}</td>
@@ -107,7 +112,167 @@
                             <td></td>
                         </tr>
                     @endforeach
+                @endforeach
+            @endif
+            {{-- vòng 2 --}}
+            @foreach ($m_phanloai->where('maphanloai_goc', $phanloai1->maphanloai_nhom)->sortby('sapxep') as $phanloai2)
+                <?php
+                $model_donvi = $m_donvi_baocao->where('maphanloai', $phanloai2->maphanloai_nhom);
+                if (in_array($phanloai2->maphanloai_nhom, $a_phanloai)) {
+                    $model_chitiet = $model->where('maphanloai', $phanloai2->maphanloai_nhom);
+                } else {
+                    $model_chitiet = $model->where('maphanloai_goc2', $phanloai2->maphanloai_nhom);
+                }
+                $j = 1;
+                ?>
+                <tr class="font-weight-bold">
+                    <td>{{ $phanloai2->sapxep }}</td>
+                    <td>{{ $phanloai2->tenphanloai_nhom }}</td>
+                    <td class="text-center">{{ dinhdangso($model_chitiet->sum('canbo_congtac')) }}</td>
+                    <td class="text-right">{{ dinhdangsothapphan($model_chitiet->sum('luongthang'), $lamtron) }}</td>
+                    <td class="text-right">{{ dinhdangsothapphan($model_chitiet->sum('baohiem'), $lamtron) }}</td>
+                    <td class="text-right">{{ dinhdangsothapphan($model_chitiet->sum('tongcong'), $lamtron) }}</td>
+                    <td class="text-center">12</td>
+                    <td class="text-right">{{ dinhdangsothapphan($model_chitiet->sum('quyluong'), $lamtron) }}</td>
+                    <td></td>
+                </tr>
+                @if (count($model_donvi) > 0 && $phanloai2->chitiet == '1')
+                    @foreach ($model_donvi as $donvi)
+                        <?php
+                        $model_chitiet = $model->where('madv', $donvi->madv);
+                        ?>
+                        <tr class="font-weight-bold">
+                            <td>{{ $phanloai2->sapxep }}.{{ $j++ }}</td>
+                            <td>{{ $donvi->tendv }}</td>
+                            <td class="text-center">{{ dinhdangso($model_chitiet->sum('canbo_congtac')) }}</td>
+                            <td class="text-right">{{ dinhdangsothapphan($model_chitiet->sum('luongthang'), $lamtron) }}
+                            </td>
+                            <td class="text-right">{{ dinhdangsothapphan($model_chitiet->sum('baohiem'), $lamtron) }}
+                            </td>
+                            <td class="text-right">{{ dinhdangsothapphan($model_chitiet->sum('tongcong'), $lamtron) }}
+                            </td>
+                            <td class="text-center">12</td>
+                            <td class="text-right">{{ dinhdangsothapphan($model_chitiet->sum('quyluong'), $lamtron) }}
+                            </td>
+                            <td></td>
+                        </tr>
+                        @foreach ($model_chitiet as $chitiet)
+                            <tr>
+                                <td>-</td>
+                                <td>{{ $chitiet->tenct }}</td>
+                                <td class="text-center">{{ dinhdangso($chitiet->canbo_dutoan) }}</td>
+                                <td class="text-right">{{ dinhdangsothapphan($chitiet->luongthang, $lamtron) }}</td>
+                                <td class="text-right">{{ dinhdangsothapphan($chitiet->baohiem, $lamtron) }}</td>
+                                <td class="text-right">{{ dinhdangsothapphan($chitiet->tongcong, $lamtron) }}</td>
+                                <td class="text-center">12</td>
+                                <td class="text-right">{{ dinhdangsothapphan($chitiet->quyluong, $lamtron) }}</td>
+                                <td></td>
+                            </tr>
+                        @endforeach
+                    @endforeach
                 @endif
+                {{-- vòng 3 --}}
+                @foreach ($m_phanloai->where('maphanloai_goc', $phanloai2->maphanloai_nhom)->sortby('sapxep') as $phanloai3)
+                    <?php
+                    $model_donvi = $m_donvi_baocao->where('maphanloai', $phanloai3->maphanloai_nhom);
+                    $model_chitiet = $model->where('maphanloai_goc3', $phanloai3->maphanloai_nhom);
+                    ?>
+
+                    <tr class="font-weight-bold">
+                        <td>{{ $phanloai2->sapxep }}.{{ $phanloai3->sapxep }}</td>
+                        <td>{{ $phanloai3->tenphanloai_nhom }}</td>
+                        <td class="text-center">{{ dinhdangso($model_chitiet->sum('canbo_congtac')) }}</td>
+                        <td class="text-right">{{ dinhdangsothapphan($model_chitiet->sum('luongthang'), $lamtron) }}</td>
+                        <td class="text-right">{{ dinhdangsothapphan($model_chitiet->sum('baohiem'), $lamtron) }}</td>
+                        <td class="text-right">{{ dinhdangsothapphan($model_chitiet->sum('tongcong'), $lamtron) }}</td>
+                        <td class="text-center">12</td>
+                        <td class="text-right">{{ dinhdangsothapphan($model_chitiet->sum('quyluong'), $lamtron) }}</td>
+                        <td></td>
+                    </tr>
+
+                    @foreach ($model_donvi as $donvi)
+                        <?php
+                        $model_chitiet = $model->where('madv', $donvi->madv);
+                        ?>
+                        <tr>
+                            <td></td>
+                            <td>{{ $donvi->tendv }}</td>
+                            <td class="text-center">{{ dinhdangso($model_chitiet->sum('canbo_congtac')) }}</td>
+                            <td class="text-right">{{ dinhdangsothapphan($model_chitiet->sum('luongthang'), $lamtron) }}
+                            </td>
+                            <td class="text-right">{{ dinhdangsothapphan($model_chitiet->sum('baohiem'), $lamtron) }}
+                            </td>
+                            <td class="text-right">{{ dinhdangsothapphan($model_chitiet->sum('tongcong'), $lamtron) }}
+                            </td>
+                            <td class="text-center">12</td>
+                            <td class="text-right">{{ dinhdangsothapphan($model_chitiet->sum('quyluong'), $lamtron) }}
+                            </td>
+                            <td></td>
+                        </tr>
+                    @endforeach
+                    {{-- vòng 4 --}}
+                    @foreach ($m_phanloai->where('maphanloai_goc', $phanloai3->maphanloai_nhom)->sortby('sapxep') as $phanloai4)
+                        <?php
+                        $model_donvi = $m_donvi_baocao->where('maphanloai', $phanloai4->maphanloai_nhom);
+                        $model_chitiet = $model->where('maphanloai', $phanloai4->maphanloai_nhom);
+                        ?>
+                        <tr class="font-weight-bold">
+                            <td>-</td>
+                            <td>{{ $phanloai4->tenphanloai_nhom }}</td>
+                            <td class="text-center">{{ dinhdangso($model_chitiet->sum('canbo_congtac')) }}</td>
+                            <td class="text-right">{{ dinhdangsothapphan($model_chitiet->sum('luongthang'), $lamtron) }}
+                            </td>
+                            <td class="text-right">{{ dinhdangsothapphan($model_chitiet->sum('baohiem'), $lamtron) }}
+                            </td>
+                            <td class="text-right">{{ dinhdangsothapphan($model_chitiet->sum('tongcong'), $lamtron) }}
+                            </td>
+                            <td class="text-center">12</td>
+                            <td class="text-right">{{ dinhdangsothapphan($model_chitiet->sum('quyluong'), $lamtron) }}
+                            </td>
+                            <td></td>
+                        </tr>
+                        @if (count($model_donvi) > 0 && $phanloai4->chitiet == '1')
+                            @foreach ($model_donvi as $donvi)
+                                <?php
+                                $model_chitiet = $model->where('madv', $donvi->madv);
+                                ?>
+                                <tr>
+                                    <td></td>
+                                    <td>{{ $donvi->tendv }}</td>
+                                    <td class="text-center">{{ dinhdangso($model_chitiet->sum('canbo_congtac')) }}</td>
+                                    <td class="text-right">
+                                        {{ dinhdangsothapphan($model_chitiet->sum('luongthang'), $lamtron) }}</td>
+                                    <td class="text-right">
+                                        {{ dinhdangsothapphan($model_chitiet->sum('baohiem'), $lamtron) }}
+                                    </td>
+                                    <td class="text-right">
+                                        {{ dinhdangsothapphan($model_chitiet->sum('tongcong'), $lamtron) }}</td>
+                                    <td class="text-center">12</td>
+                                    <td class="text-right">
+                                        {{ dinhdangsothapphan($model_chitiet->sum('quyluong'), $lamtron) }}</td>
+                                    <td></td>
+                                </tr>
+                                @foreach ($model_chitiet as $chitiet)
+                                    <tr>
+                                        <td>-</td>
+                                        <td>{{ $chitiet->tenct }}</td>
+                                        <td class="text-center">{{ dinhdangso($chitiet->canbo_dutoan) }}</td>
+                                        <td class="text-right">{{ dinhdangsothapphan($chitiet->luongthang, $lamtron) }}
+                                        </td>
+                                        <td class="text-right">{{ dinhdangsothapphan($chitiet->baohiem, $lamtron) }}
+                                        </td>
+                                        <td class="text-right">{{ dinhdangsothapphan($chitiet->tongcong, $lamtron) }}
+                                        </td>
+                                        <td class="text-center">12</td>
+                                        <td class="text-right">{{ dinhdangsothapphan($chitiet->quyluong, $lamtron) }}
+                                        </td>
+                                        <td></td>
+                                    </tr>
+                                @endforeach
+                            @endforeach
+                        @endif
+                    @endforeach
+                @endforeach
             @endforeach
         @endforeach
 
