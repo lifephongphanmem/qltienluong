@@ -263,7 +263,6 @@ class bangluongController extends Controller
             $inputs['luongcoban'] = getDbl($inputs['luongcoban']);
             dmdonvi::where('madv', $madv)->update(['phucaploaitru' => $inputs['phucaploaitru'], 'phucapluusotien' => $inputs['phucapluusotien']]);
             if (boolval($inputs['dinhmuc'])) {
-                dd(1);
                 $this->tinhluong_dinhmuc($inputs);
             } else {
                 $this->tinhluong_khongdinhmuc($inputs);
@@ -1389,6 +1388,7 @@ class bangluongController extends Controller
                         * $thue['phantram'] / 100);
                 }
             }
+           
             luuketqua:
             $m_cb[$key]['luongtn'] = $m_cb[$key]['ttl'] - $m_cb[$key]['ttbh'] - $m_cb[$key]['giaml'] - $m_cb[$key]['thuetn'];
             $a_data_canbo[] = $m_cb[$key];
@@ -2883,7 +2883,7 @@ class bangluongController extends Controller
             }
             //dd($thongtin);
             return view('reports.bangluong.donvi.maubangluong')
-                ->with('model', $model->sortBy('stt'))
+                ->with('model', $model)
                 ->with('model_pb', getPhongBan())
                 ->with('m_dv', $m_dv)
                 ->with('thongtin', $thongtin)
@@ -2995,7 +2995,7 @@ class bangluongController extends Controller
                 }
             }
             return view('reports.bangluong.donvi.mautt107')
-                ->with('model', $model->sortBy('stt'))
+                ->with('model', $model)
                 ->with('model_pb', getPhongBan())
                 ->with('m_dv', $m_dv)
                 ->with('thongtin', $thongtin)
@@ -3124,7 +3124,7 @@ class bangluongController extends Controller
             }
 
             return view('reports.bangluong.donvi.mautt107_m2')
-                ->with('model', $model->sortBy('stt'))
+                ->with('model', $model)
                 ->with('model_pb', getPhongBan())
                 ->with('m_dv', $m_dv)
                 ->with('thongtin', $thongtin)
@@ -3221,7 +3221,7 @@ class bangluongController extends Controller
                 ->wherein('mact', a_unique(array_column($model->toarray(), 'mact')))->get();
 
             return view('reports.bangluong.donvi.mautt107_m3')
-                ->with('model', $model->sortBy('stt'))
+                ->with('model', $model)
                 ->with('model_pb', getPhongBan())
                 ->with('m_dv', $m_dv)
                 ->with('thongtin', $thongtin)
@@ -3276,7 +3276,7 @@ class bangluongController extends Controller
                 }
             }
             return view('reports.bangluong.donvi.mautt107_pb')
-                ->with('model', $model->sortBy('stt'))
+                ->with('model', $model)
                 ->with('model_pb', getPhongBan())
                 ->with('m_dv', $m_dv)
                 ->with('thongtin', $thongtin)
@@ -3325,7 +3325,7 @@ class bangluongController extends Controller
             Excel::create('BANGLUONG_02', function ($excel) use ($m_dv, $thongtin, $model, $col, $model_congtac, $a_phucap) {
                 $excel->sheet('New sheet', function ($sheet) use ($m_dv, $thongtin, $model, $col, $model_congtac, $a_phucap) {
                     $sheet->loadView('reports.bangluong.donvi.mautt107')
-                        ->with('model', $model->sortBy('stt'))
+                        ->with('model', $model)
                         ->with('model_pb', getPhongBan())
                         ->with('m_dv', $m_dv)
                         ->with('thongtin', $thongtin)
@@ -3387,7 +3387,7 @@ class bangluongController extends Controller
                 $col++;
             }
             return view('reports.bangluong.donvi.maulangson')
-                ->with('model', $model->sortBy('stt'))
+                ->with('model', $model)
                 ->with('model_pb', getPhongBan())
                 ->with('m_dv', $m_dv)
                 ->with('thongtin', $thongtin)
@@ -3439,7 +3439,7 @@ class bangluongController extends Controller
             Excel::create('BANGLUONG_03', function ($excel) use ($m_dv, $thongtin, $model, $col, $model_congtac, $a_phucap) {
                 $excel->sheet('New sheet', function ($sheet) use ($m_dv, $thongtin, $model, $col, $model_congtac, $a_phucap) {
                     $sheet->loadView('reports.bangluong.donvi.maulangson_excel')
-                        ->with('model', $model->sortBy('stt'))
+                        ->with('model', $model)
                         ->with('model_pb', getPhongBan())
                         ->with('m_dv', $m_dv)
                         ->with('thongtin', $thongtin)
@@ -3503,7 +3503,7 @@ class bangluongController extends Controller
                 }
             }
             return view('reports.bangluong.donvi.maulangson_m2')
-                ->with('model', $model->sortBy('stt'))
+                ->with('model', $model)
                 ->with('model_pb', getPhongBan())
                 ->with('m_dv', $m_dv)
                 ->with('thongtin', $thongtin)
@@ -3610,7 +3610,7 @@ class bangluongController extends Controller
             }
 
             return view('reports.bangluong.donvi.mau05')
-                ->with('model', $model->sortBy('stt'))
+                ->with('model', $model)
                 ->with('model_pb', getPhongBan())
                 ->with('m_dv', $m_dv)
                 ->with('thongtin', $thongtin)
@@ -3666,7 +3666,7 @@ class bangluongController extends Controller
             Excel::create('BANGLUONG_05', function ($excel) use ($m_dv, $thongtin, $model, $col, $model_congtac, $a_phucap) {
                 $excel->sheet('New sheet', function ($sheet) use ($m_dv, $thongtin, $model, $col, $model_congtac, $a_phucap) {
                     $sheet->loadView('reports.bangluong.donvi.mau05_excel')
-                        ->with('model', $model->sortBy('stt'))
+                        ->with('model', $model)
                         ->with('model_pb', getPhongBan())
                         ->with('m_dv', $m_dv)
                         ->with('thongtin', $thongtin)
@@ -3901,7 +3901,7 @@ class bangluongController extends Controller
             $a_muc = a_unique($a_muc);
             //dd($model_tm);
             return view('reports.bangluong.donvi.mau06')
-                ->with('model', $model->sortBy('stt'))
+                ->with('model', $model)
                 ->with('model_tm', $model_tm)
                 ->with('a_muc', $a_muc)
                 //->with('model_pb', getPhongBan())
@@ -3959,7 +3959,7 @@ class bangluongController extends Controller
             }
             //dd($model);
             return view('reports.bangluong.donvi.mau07')
-                ->with('model', $model->sortBy('stt'))
+                ->with('model', $model)
                 //->with('model_st', $model_st)
                 ->with('model_pb', getPhongBan())
                 ->with('m_dv', $m_dv)
@@ -4101,7 +4101,7 @@ class bangluongController extends Controller
 
             //dd($model->toarray());
             return view('reports.bangluong.donvi.mautrichnop')
-                ->with('model', $model->sortBy('stt'))
+                ->with('model', $model)
                 ->with('m_dv', $m_dv)
                 ->with('thongtin', $thongtin)
                 ->with('col', $col)
@@ -4524,7 +4524,7 @@ class bangluongController extends Controller
 
             return view('reports.bangluong.donvi.maubchd')
                 //->with('model',$model_cvc->sortBy('stt'))
-                ->with('model', $model->sortBy('stt'))
+                ->with('model', $model)
                 ->with('m_dv', $m_dv)
                 ->with('thongtin', $thongtin)
                 ->with('pageTitle', 'Bảng lương chi tiết');
@@ -4579,7 +4579,7 @@ class bangluongController extends Controller
             Excel::create('BCH DANGUY', function ($excel) use ($m_dv, $thongtin, $model) {
                 $excel->sheet('New sheet', function ($sheet) use ($m_dv, $thongtin, $model) {
                     $sheet->loadView('reports.bangluong.donvi.maubchd')
-                        ->with('model', $model->sortBy('stt'))
+                        ->with('model', $model)
                         ->with('m_dv', $m_dv)
                         ->with('thongtin', $thongtin)
                         ->with('pageTitle', 'DS CHI TRA');
@@ -5039,9 +5039,8 @@ class bangluongController extends Controller
     {
         if (Session::has('admin')) {
             $inputs = $request->all();
-            $inputs['inchucvuvt'] = '';
             $mabl = $inputs['mabl'];
-            $model = $this->getBangLuong($inputs)->wherein('phanloai', ['CVCHINH', 'KHONGCT'])->sortByDesc('pccv');
+            $model = $this->getBangLuong($inputs);
             $m_bl = bangluong::select('thang', 'nam', 'mabl', 'madv', 'ngaylap', 'phanloai', 'luongcoban', 'noidung')->where('mabl', $mabl)->first();
             $m_dv = dmdonvi::where('madv', $m_bl->madv)->first();
             $model_congtac = dmphanloaict::select('mact', 'tenct')
@@ -5201,7 +5200,20 @@ class bangluongController extends Controller
         if (isset($inputs['manguonkp']) && $inputs['manguonkp'] != '') {
             $model = $model->where('manguonkp', $inputs['manguonkp']);
         }
-
+        //sắp xếp 
+        $sort = []; //mảng để sắp xếp
+        $sapxep = isset($inputs['sapxep']) ? $inputs['sapxep'] : '';
+        if ($sapxep == 'stt') {
+            $sort = [[$sapxep, 'asc']];
+        }
+        if ($sapxep == 'pccv') {
+            $sort = [
+                ['pccv', 'desc'],
+                ['heso', 'asc']
+            ];
+        }
+        // dd($sort);
+        $model = $model->sortBy($sort);
         //dd($model);
         return $model;
     }
@@ -5247,6 +5259,20 @@ class bangluongController extends Controller
         if (isset($inputs['mact']) && $inputs['mact'] != '') {
             $model = $model->where('mact', $inputs['mact']);
         }
+        //sắp xếp 
+        $sort = []; //mảng để sắp xếp
+        $sapxep = isset($inputs['sapxep']) ? $inputs['sapxep'] : '';
+        if ($sapxep == 'stt') {
+            $sort = [[$sapxep, 'asc']];
+        }
+        if ($sapxep == 'pccv') {
+            $sort = [
+                ['pccv', 'desc'],
+                ['heso', 'asc']
+            ];
+        }
+        // dd($sort);
+        $model = $model->sortBy($sort);
         return $model;
     }
 
@@ -5501,8 +5527,8 @@ class bangluongController extends Controller
             $inputs = $request->all();
             $inputs['inchucvuvt'] = '';
             $mabl = $inputs['mabl'];
-            $model = $this->getBangLuong($inputs)->sortByDesc('pccv');
-            $m_bl = bangluong::select('thang', 'nam', 'mabl', 'madv', 'ngaylap', 'phanloai', 'luongcoban', 'noidung','manguonkp')->where('mabl', $mabl)->first();
+            $model = $this->getBangLuong($inputs);
+            $m_bl = bangluong::select('thang', 'nam', 'mabl', 'madv', 'ngaylap', 'phanloai', 'luongcoban', 'noidung', 'manguonkp')->where('mabl', $mabl)->first();
             $m_dv = dmdonvi::where('madv', $m_bl->madv)->first();
             $model_congtac = dmphanloaict::select('mact', 'tenct')
                 ->wherein('mact', a_unique(array_column($model->toarray(), 'mact')))->get();
@@ -5524,7 +5550,7 @@ class bangluongController extends Controller
                     }
                 }
             }
-            $nguonkp=dmnguonkinhphi::select('tennguonkp')->where('manguonkp',$m_bl->manguonkp)->first();
+            $nguonkp = dmnguonkinhphi::select('tennguonkp')->where('manguonkp', $m_bl->manguonkp)->first();
             $model_tm = dmtieumuc_default::all();
             $a_tm = array_column($model_tm->toarray(), 'mapc'); //Mảng để so sánh
             $a_pb = getPhongBan();
@@ -5538,66 +5564,79 @@ class bangluongController extends Controller
                 'tenpb' => $a_pb[$inputs['mapb']],
                 'innoidung' => isset($inputs['innoidung']),
                 'noidung' => $m_bl->noidung,
-                'nguonkp'=> $nguonkp->tennguonkp,
-                'mucluong'=>$m_bl->luongcoban,
+                'nguonkp' => $nguonkp->tennguonkp,
+                'mucluong' => $m_bl->luongcoban,
             );
             $m_dv = dmdonvi::where('madv', $m_bl->madv)->first();
-            switch($inputs['mact']){
-                case '1506673604':{
-                    return   view('reports.bangluong.donvi.maublcbct')
-                    ->with('thongtin',$thongtin)
-                    ->with('m_dv',$m_dv)
-                    ->with('model',$model)
-                    ->with('model_congtac',$model_congtac)
-                    ->with('a_bh',$a_bh)
-                    ->with('a_phucap',$a_phucap)
-                    ->with('col',$col)
-                    ->with('model_tm',$model_tm)
-                    ->with('a_tm',$a_tm)
-                    ->with('pageTitle','Bảng lương chi tiết');
-                    break;
-                }
-                case '1506673695':{
-                    return   view('reports.bangluong.donvi.maublcbkct_xa')
-                    ->with('thongtin',$thongtin)
-                    ->with('m_dv',$m_dv)
-                    ->with('model',$model)
-                    ->with('model_congtac',$model_congtac)
-                    ->with('a_bh',$a_bh)
-                    ->with('a_phucap',$a_phucap)
-                    ->with('col',$col)
-                    ->with('model_tm',$model_tm)
-                    ->with('a_tm',$a_tm)
-                    ->with('pageTitle','Bảng lương chi tiết');
-                    break;
-                }
-                case '1535613221':{
-                    return   view('reports.bangluong.donvi.maublcbkct_thon')
-                    ->with('thongtin',$thongtin)
-                    ->with('m_dv',$m_dv)
-                    ->with('model',$model)
-                    ->with('model_congtac',$model_congtac)
-                    ->with('a_bh',$a_bh)
-                    ->with('a_phucap',$a_phucap)
-                    ->with('col',$col)
-                    ->with('model_tm',$model_tm)
-                    ->with('a_tm',$a_tm)
-                    ->with('pageTitle','Bảng lương chi tiết');
-                    break;
-                }
-            } 
 
-            // return $view
-            //         ->with('thongtin',$thongtin)
-            //         ->with('m_dv',$m_dv)
-            //         ->with('model',$model)
-            //         ->with('model_congtac',$model_congtac)
-            //         ->with('a_bh',$a_bh)
-            //         ->with('a_phucap',$a_phucap)
-            //         ->with('col',$col)
-            //         ->with('model_tm',$model_tm)
-            //         ->with('a_tm',$a_tm)
-            //         ->with('pageTitle','Bảng lương chi tiết');
+            //Lấy danh sách kiêm nhiệm cho bảng lương cbkct thôn
+            $a_cv = getChucVuCQ(false);;
+            foreach ($model as $val) {
+                $a_kiemnhiem = hosocanbo_kiemnhiem::select('macanbo', 'macvcq')->where('macanbo', $val->macanbo)->first();
+                $val->chucvukiemnhiem = isset($a_cv[$a_kiemnhiem->macvcq]) ? $a_cv[$a_kiemnhiem->macvcq] : '';
+            }
+            switch ($inputs['mact']) {
+                case '1506673604': {
+                        return   view('reports.bangluong.donvi.maublcbct')
+                            ->with('thongtin', $thongtin)
+                            ->with('m_bl', $m_bl)
+                            ->with('m_dv', $m_dv)
+                            ->with('model', $model)
+                            ->with('model_congtac', $model_congtac)
+                            ->with('a_bh', $a_bh)
+                            ->with('a_phucap', $a_phucap)
+                            ->with('col', $col)
+                            ->with('model_tm', $model_tm)
+                            ->with('a_tm', $a_tm)
+                            ->with('pageTitle', 'Bảng lương chi tiết');
+                        break;
+                    }
+                case '1506673695': {
+                        return   view('reports.bangluong.donvi.maublcbkct_xa')
+                            ->with('thongtin', $thongtin)
+                            ->with('m_bl', $m_bl)
+                            ->with('m_dv', $m_dv)
+                            ->with('model', $model)
+                            ->with('model_congtac', $model_congtac)
+                            ->with('a_bh', $a_bh)
+                            ->with('a_phucap', $a_phucap)
+                            ->with('col', $col)
+                            ->with('model_tm', $model_tm)
+                            ->with('a_tm', $a_tm)
+                            ->with('pageTitle', 'Bảng lương chi tiết');
+                        break;
+                    }
+                case '1535613221': {
+                        return   view('reports.bangluong.donvi.maublcbkct_thon')
+                            ->with('thongtin', $thongtin)
+                            ->with('m_bl', $m_bl)
+                            ->with('m_dv', $m_dv)
+                            ->with('model', $model)
+                            ->with('model_congtac', $model_congtac)
+                            ->with('a_bh', $a_bh)
+                            ->with('a_phucap', $a_phucap)
+                            ->with('col', $col)
+                            ->with('model_tm', $model_tm)
+                            ->with('a_tm', $a_tm)
+                            ->with('pageTitle', 'Bảng lương chi tiết');
+                        break;
+                    }
+                case '1536402878': {
+                        return   view('reports.bangluong.donvi.maublpc_lldq')
+                            ->with('thongtin', $thongtin)
+                            ->with('m_bl', $m_bl)
+                            ->with('m_dv', $m_dv)
+                            ->with('model', $model)
+                            ->with('model_congtac', $model_congtac)
+                            ->with('a_bh', $a_bh)
+                            ->with('a_phucap', $a_phucap)
+                            ->with('col', $col)
+                            ->with('model_tm', $model_tm)
+                            ->with('a_tm', $a_tm)
+                            ->with('pageTitle', 'Bảng lương chi tiết');
+                        break;
+                    }
+            }
         } else
             return view('errors.notlogin');
     }
@@ -5609,7 +5648,7 @@ class bangluongController extends Controller
             $inputs['inchucvuvt'] = '';
             $mabl = $inputs['mabl'];
             $model = $this->getBangLuong($inputs)->sortByDesc('pccv');
-            $m_bl = bangluong::select('thang', 'nam', 'mabl', 'madv', 'ngaylap', 'phanloai', 'luongcoban', 'noidung','manguonkp')->where('mabl', $mabl)->first();
+            $m_bl = bangluong::select('thang', 'nam', 'mabl', 'madv', 'ngaylap', 'phanloai', 'luongcoban', 'noidung', 'manguonkp')->where('mabl', $mabl)->first();
             $m_dv = dmdonvi::where('madv', $m_bl->madv)->first();
             $model_congtac = dmphanloaict::select('mact', 'tenct')
                 ->wherein('mact', a_unique(array_column($model->toarray(), 'mact')))->get();
@@ -5633,7 +5672,7 @@ class bangluongController extends Controller
                     }
                 }
             }
-            $nguonkp=dmnguonkinhphi::select('tennguonkp')->where('manguonkp',$m_bl->manguonkp)->first();
+            $nguonkp = dmnguonkinhphi::select('tennguonkp')->where('manguonkp', $m_bl->manguonkp)->first();
             $model_tm = dmtieumuc_default::all();
             $a_tm = array_column($model_tm->toarray(), 'mapc'); //Mảng để so sánh
             $a_pb = getPhongBan();
@@ -5641,29 +5680,29 @@ class bangluongController extends Controller
                 'nguoilap' => $m_bl->nguoilap,
                 'thang' => $m_bl->thang,
                 'nam' => $m_bl->nam,
-                'ngaylap' => $m_bl->ngaylap, 
+                'ngaylap' => $m_bl->ngaylap,
                 'phanloai' => $m_bl->phanloai,
                 'cochu' => $inputs['cochu'],
                 'mapb' => $inputs['mapb'],
                 'tenpb' => $a_pb[$inputs['mapb']],
                 'innoidung' => isset($inputs['innoidung']),
                 'noidung' => $m_bl->noidung,
-                'nguonkp'=> $nguonkp->tennguonkp,
-                'mucluong'=>$m_bl->luongcoban,
+                'nguonkp' => $nguonkp->tennguonkp,
+                'mucluong' => $m_bl->luongcoban,
             );
-            
+
             $m_dv = dmdonvi::where('madv', $m_bl->madv)->first();
             return view('reports.bangluong.donvi.maublcbkct_xa')
-                    ->with('thongtin',$thongtin)
-                    ->with('m_dv',$m_dv)
-                    ->with('model',$model)
-                    ->with('model_congtac',$model_congtac)
-                    ->with('a_bh',$a_bh)
-                    ->with('a_phucap',$a_phucap)
-                    ->with('col',$col)
-                    ->with('model_tm',$model_tm)
-                    ->with('a_tm',$a_tm)
-                    ->with('pageTitle','Bảng lương chi tiết');
+                ->with('thongtin', $thongtin)
+                ->with('m_dv', $m_dv)
+                ->with('model', $model)
+                ->with('model_congtac', $model_congtac)
+                ->with('a_bh', $a_bh)
+                ->with('a_phucap', $a_phucap)
+                ->with('col', $col)
+                ->with('model_tm', $model_tm)
+                ->with('a_tm', $a_tm)
+                ->with('pageTitle', 'Bảng lương chi tiết');
         } else
             return view('errors.notlogin');
     }

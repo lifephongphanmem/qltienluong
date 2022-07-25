@@ -48,10 +48,8 @@
                 @if ($thongtin['innoidung'])
                     {{ $thongtin['noidung'] }}
                 @else
-                    DANH SÁCH LƯƠNG CÁN BỘ KHÔNG CHUYÊN TRÁCH THÔN_THÁNG
-                    {{ $thongtin['thang'] . '/' . $thongtin['nam'] }}.
-                    MỨC
-                    LƯƠNG {{ dinhdangso($thongtin['mucluong']) . ' đ' }}
+                    DANH SÁCH CÁN BỘ NHẬN TIỀN PHỤ CẤP TRÁCH NHIỆM QUẢN LÝ ĐƠN VỊ LLDQ THÁNG
+                    {{ $thongtin['thang'] . '/' . $thongtin['nam'] }}.MỨC LƯƠNG {{ dinhdangso($thongtin['mucluong']) . ' đ' }}
                 @endif
             </td>
         </tr>
@@ -64,7 +62,7 @@
                 <th style="width: 1%;" rowspan="2">S</br>T</br>T</th>
                 <th style="width: 5%;" rowspan="2">Họ và tên</th>
                 <th style="width: 1%;" rowspan="2">Chức vụ chính</th>
-                <th style="width: 1%;" rowspan="2">Chức vụ</br>kiêm nhiệm</th>
+                <th style="width: 1%;" rowspan="2">Chức danh</br>hưởng phụ cấp</th>
                 <th style="width: 1%;" rowspan="2">Lương cơ sở</br>{{ dinhdangso($thongtin['mucluong']) }}đ</br>tháng
                 </th>
                 <th style="width: 5%;" colspan="{{ $col }}">HỆ SỐ PHỤ CẤP</th>
@@ -82,6 +80,8 @@
                 @else
                     <th></th>
                 @endif
+                {{-- <th>Phụ cấp</br>10%</br>theo xã</th>
+                <th>CB không</br>chuyên trách</th> --}}
                 @if ($a_phucap != [])
                     @foreach ($a_phucap as $key => $val)
                         <th>{{ $val }}</th>
@@ -90,7 +90,6 @@
                     <th></th>
                 @endif
             </tr>
-            @if ($a_phucap != [])
             <tr>
                 <th></th>
                 <th></th>
@@ -138,7 +137,6 @@
                 <th></th>
                 <th></th>
             </tr>
-            @endif
         </thead>
         <?php $i = 1;
         $stt = 1; ?>
@@ -147,7 +145,7 @@
             <tr style="font-weight: bold;text-align: right;">
                 <td>{{ convert2Roman($i++) }}</td>
                 <td style="text-align: left;">{{ $congtac->tenct }}</td>
-                <td style="text-align: center">{{ dinhdangsothapphan($model_luong->count('tencv')) }}</td>
+                <td style="text-align: center"></td>
                 <td></td>
                 <td style="text-align: center"></td>
                 @if ($a_phucap != [])
@@ -199,7 +197,8 @@
             <td colspan="{{ $col == 0 ? 6 : $col + 5 }}">Thực nhận</td>
             @if ($a_phucap != [])
                 @foreach ($a_phucap as $key => $val)
-                    <td></td>
+                <?php $key = 'st_' . $key; ?>
+                    <td>{{ dinhdangso($model->sum($key)) }}</td>
                 @endforeach
             @else
                 <td></td>

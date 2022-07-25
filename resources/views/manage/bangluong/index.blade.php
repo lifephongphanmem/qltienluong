@@ -11,6 +11,7 @@
 @section('custom-style')
     <link rel="stylesheet" type="text/css" href="{{url('assets/global/plugins/datatables/plugins/bootstrap/dataTables.bootstrap.css')}}"/>
     <link rel="stylesheet" type="text/css" href="{{url('assets/global/plugins/select2/select2.css')}}"/>
+    <link rel="stylesheet" type="text/css" href="{{url('css/customstyle.css')}}"/>
 @stop
 
 @section('custom-script')
@@ -26,7 +27,7 @@
             $('#printf_mautt107_th').find("[id^='manguonkp']").select2();
             //$('#phucaploaitru').select2();
             //$('#phucapluusotien').select2();
-
+            $("#sapxep").select2();
         });
         var phucaploaitru = '{{$phucaploaitru}}';
         //$('#phucaploaitru').val("val",phucaploaitru.split(',')).trigger('change');

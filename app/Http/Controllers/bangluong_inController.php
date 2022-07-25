@@ -497,7 +497,7 @@ class bangluong_inController extends Controller
                 $canbo = $model->where('mact', $ct->mact)->where('congtac', '<>', 'CHUCVU');
                 $canbo_kn = $model->where('mact', $ct->mact)->where('congtac', 'CHUCVU');
                 $ct->soluong = count($canbo);
-                
+
                 foreach ($a_phucap as $k => $v) {
                     $st = 'st_' . $k;
                     $ct->$k = $canbo->sum($k) + $canbo_kn->sum($k);
@@ -659,7 +659,7 @@ class bangluong_inController extends Controller
                 }
             }
             return view('reports.bangluong.donvi.mautt107_m4')
-                ->with('model', $model->sortBy('stt'))
+                ->with('model', $model)
                 ->with('model_pb', getPhongBan())
                 ->with('m_dv', $m_dv)
                 ->with('thongtin', $thongtin)
@@ -717,7 +717,7 @@ class bangluong_inController extends Controller
                 $cb->luongtn = round($cb->luongtn, $inputs['lamtron']);
             }
             return view('reports.bangluong.donvi.mautt107_m5')
-                ->with('model', $model->sortBy('stt'))
+                ->with('model', $model)
                 ->with('model_pb', getPhongBan())
                 ->with('m_dv', $m_dv)
                 ->with('thongtin', $thongtin)
@@ -820,7 +820,7 @@ class bangluong_inController extends Controller
             }
             //dd($model);
             return view('reports.bangluong.donvi.mautt107_dk_m2')
-                ->with('model', $model->sortBy('stt'))
+                ->with('model', $model)
                 ->with('m_dv', $m_dv)
                 ->with('thongtin', $thongtin)
                 ->with('col', $col)
@@ -1259,7 +1259,7 @@ class bangluong_inController extends Controller
             $model_congtac = dmphanloaict::select('mact', 'tenct', 'macongtac')
                 ->wherein('mact', a_unique(array_column($model->toarray(), 'mact')))->get();
             return view('reports.bangluong.donvi.mau09nd11')
-                ->with('model', $model->sortBy('stt'))
+                ->with('model', $model)
                 ->with('m_dv', $m_dv)
                 ->with('thongtin', $thongtin)
                 ->with('model_congtac', $model_congtac)
@@ -1290,10 +1290,9 @@ class bangluong_inController extends Controller
             $a_npb = array_column($model_pb->toarray(), 'diengiai', 'mapb');
 
             foreach ($model as $ct) {
-                if(!empty($a_npb[$ct->mapb])){
-                    $ct->nhompb = $a_npb[$ct->mapb];  
+                if (!empty($a_npb[$ct->mapb])) {
+                    $ct->nhompb = $a_npb[$ct->mapb];
                 }
-                                   
             }
 
             $thongtin = array(
@@ -1318,7 +1317,7 @@ class bangluong_inController extends Controller
                 }
             }
             return view('reports.bangluong.donvi.mautt107_pb_m2')
-                ->with('model', $model->sortBy('stt'))
+                ->with('model', $model)
                 ->with('model_pb', getPhongBan())
                 ->with('m_dv', $m_dv)
                 ->with('thongtin', $thongtin)
@@ -1388,7 +1387,7 @@ class bangluong_inController extends Controller
             //chạy lại để tính lại phụ cấp
 
             return view('reports.bangluong.donvi.mautt107_lc')
-                ->with('model', $model->sortBy('stt'))
+                ->with('model', $model)
                 ->with('m_dv', $m_dv)
                 ->with('thongtin', $thongtin)
                 ->with('col', $col)
@@ -1443,7 +1442,7 @@ class bangluong_inController extends Controller
             //chạy lại để tính lại phụ cấp
 
             return view('reports.bangluong.donvi.mautt107_lc_xp')
-                ->with('model', $model->sortBy('stt'))
+                ->with('model', $model)
                 ->with('m_dv', $m_dv)
                 ->with('thongtin', $thongtin)
                 ->with('col', $col)
@@ -1499,7 +1498,7 @@ class bangluong_inController extends Controller
                 }
             }
             return view('reports.bangluong.donvi.mautt107_lc_pb')
-                ->with('model', $model->sortBy('stt'))
+                ->with('model', $model)
                 ->with('model_pb', getPhongBan())
                 ->with('m_dv', $m_dv)
                 ->with('thongtin', $thongtin)
@@ -1804,7 +1803,7 @@ class bangluong_inController extends Controller
             $cb->tonghs = 0;
             foreach ($a_pc as $k => $v) {
                 $mapc_st = 'st_' . $k;
-                $cb->$mapc_st = $m_canbo->sum($mapc_st);                
+                $cb->$mapc_st = $m_canbo->sum($mapc_st);
                 $canbo = $m_canbo->where($k, '>', 0);
                 $cb->$k = $canbo->sum($k) / (count($canbo) == 0 ? 1 : count($canbo));
                 //hệ số và tính lương
@@ -1878,6 +1877,20 @@ class bangluong_inController extends Controller
         if (isset($inputs['mact']) && $inputs['mact'] != '') {
             $model = $model->where('mact', $inputs['mact']);
         }
+        //sắp xếp 
+        $sort = []; //mảng để sắp xếp
+        $sapxep = isset($inputs['sapxep']) ? $inputs['sapxep'] : '';
+        if ($sapxep == 'stt') {
+            $sort = [[$sapxep, 'asc']];
+        }
+        if ($sapxep == 'pccv') {
+            $sort = [
+                ['pccv', 'desc'],
+                ['heso', 'asc']
+            ];
+        }
+        // dd($sort);
+        $model = $model->sortBy($sort);
         //dd($model);
         return $model;
     }

@@ -193,13 +193,13 @@
                         <td>{{ dinhdangsothapphan($ct->$key, 2) }}</td>
                     @endforeach
                     <td></td>
-                    <td>{{ dinhdangsothapphan($ct->stbhxh_dv, 2) }}</td>
-                    <td>{{ dinhdangsothapphan($ct->stbhyt_dv, 2) }}</td>
-                    <td>{{ dinhdangsothapphan($ct->stbhtn_dv, 2) }}</td>
-                    <td>{{ dinhdangsothapphan($ct->stkpcd_dv, 2) }}</td>
+                    <td>{{ dinhdangso($ct->stbhxh_dv) }}</td>
+                    <td>{{ dinhdangso($ct->stbhyt_dv) }}</td>
+                    <td>{{ dinhdangso($ct->stbhtn_dv) }}</td>
+                    <td>{{ dinhdangso($ct->stkpcd_dv) }}</td>
                     <td>{{ dinhdangso($ct->ttl) }}</td>
-                    <td>{{ dinhdangsothapphan($ct->ttbh, 2) }}</td>
-                    <td>{{ dinhdangsothapphan($ct->luongtn, 2) }}</td>
+                    <td>{{ dinhdangso($ct->ttbh) }}</td>
+                    <td>{{ dinhdangso($ct->luongtn) }}</td>
                 </tr>
             @endforeach
         @endforeach

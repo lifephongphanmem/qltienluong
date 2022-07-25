@@ -28,6 +28,11 @@
 
             </td>
         </tr>
+        <tr >
+            <td style="text-align: left;width: 60%">
+                <b>Chương 805 - 341 - Nguồn {{$m_bl->manguonkp}}</b>
+            </td>
+        </tr>
         <tr>
             <td style="text-align: left;width: 60%">
                 <b>{{ '(' . $thongtin['nguonkp'] . ')' }}</b>

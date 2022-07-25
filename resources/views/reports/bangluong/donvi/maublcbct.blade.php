@@ -28,6 +28,11 @@
 
             </td>
         </tr>
+        <tr >
+            <td style="text-align: left;width: 60%">
+                <b>Chương 805 - 341 - Nguồn {{$m_bl->manguonkp}}</b>
+            </td>
+        </tr>
         <tr>
             <td style="text-align: left;width: 60%">
                 <b>{{'('. $thongtin['nguonkp'].')' }}</b>
@@ -65,7 +70,7 @@
                 <th style="width: 5%;" colspan="{{ $col + 2 }}">SỐ TIỀN</th>
                 <th style="width: 3%;" colspan="3">CÁC KHOẢN PHẢI TRẢ</th>
                 <th style="width: 2%;" rowspan="2">BH cá</br>nhân nộp 8%</br>BHXH</br>1,5% BHYT</br>(6001+6101) </th>
-                <th style="width: 2%;" rowspan="2">Tổng số</br>luong & PC</br>được nhận</th>
+                <th style="width: 2%;" rowspan="2">Tổng số</br>lương & PC</br>được nhận</th>
 
             </tr>
 
