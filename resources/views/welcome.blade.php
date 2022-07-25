@@ -48,7 +48,7 @@
     <br>
     <br>
 
-    <h4>{!!$a_gen['thongbao']!!}</h4>
+    {{-- <h4>{!!$a_gen['thongbao']!!}</h4> --}}
 </div>
 <div class="row mtxl mbxl"></div>
 <div class="row mtxl mbxl"></div>

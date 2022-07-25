@@ -41,13 +41,14 @@
                     @endif
                 </div>
                 <div class="portlet-body form-horizontal">
-                    <table id="sample_3" class="table table-hover table-striped table-bordered" style="min-height: 230px">
+                    <table id="sample_4" class="table table-hover table-striped table-bordered" style="min-height: 230px">
                         <thead>
                             <tr>
                                 <th class="text-center" style="width: 10%">STT</th>
                                 <th class="text-center">Phân loại công tác</th>
-                                <th class="text-center">Tổng hợp số liệu</th>
-                                <th class="text-center">Thao tác</th>
+                                <th style="width: 10%" class="text-center">Tổng hợp số liệu</th>
+                                <th style="width: 10%" class="text-center">Dự toán lương</th>
+                                <th style="width: 10%" class="text-center">Thao tác</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -56,7 +57,8 @@
                                     <tr>
                                         <td class="text-center">{{$key+1}}</td>
                                         <td>{{$value->tenct}}</td>
-                                        <td class="text-center">{{$value->tonghop == 1 ? 'Tổng hợp và dự toán':''}}</td>
+                                        <td class="text-center">{!! $value->tonghop == 1 ? '<i class="fa fa-check"></i>' : '' !!} </td>
+                                        <td class="text-center">{!! $value->dutoan == 1 ? '<i class="fa fa-check"></i>' : '' !!}</td>
                                         <td>
                                             @if(can('dmphanloaict','edit'))
                                                 <button type="button" onclick="editCV('{{$value->mact}}')" class="btn btn-default btn-xs">
@@ -102,9 +104,14 @@
                     </div>
 
                     <div class="row">
-                        <div class="col-md-12" style="margin-bottom: 5px;">
-                            <label class="form-control-label">Tổng hợp và dự toán</label>
+                        <div class="col-md-6" style="margin-bottom: 5px;">
+                            <label class="form-control-label">Tổng hợp số liệu</label>
                             {!!Form::select('tonghop',array('0'=>'Không','1'=>'Có'), null, array('id' => 'tonghop','class' => 'form-control'))!!}
+                        </div>
+                    
+                        <div class="col-md-6" style="margin-bottom: 5px;">
+                            <label class="form-control-label">Dự toán lương</label>
+                            {!!Form::select('dutoan',array('0'=>'Không','1'=>'Có'), null, array('id' => 'dutoan','class' => 'form-control'))!!}
                         </div>
                     </div>
 
@@ -236,6 +243,7 @@
                     $('#mact').val(data.mact);
                     $('#tenct').val(data.tenct);
                     $('#tonghop').val(data.tonghop).trigger("change");
+                    $('#dutoan').val(data.dutoan).trigger("change");
                     $('#id').val(data.id);
                     $('#bhxh').val(data.bhxh);
                     $('#bhyt').val(data.bhyt);
@@ -278,6 +286,7 @@
                             mact: mact,
                             macongtac: macongtac,
                             tonghop: $('#tonghop').val(),
+                            dutoan: $('#dutoan').val(),
                             tenct: tenct,
                             bhxh:$('#bhxh').val(),
                             bhyt:$('#bhyt').val(),
@@ -309,6 +318,7 @@
                             mact: mact,
                             tenct: tenct,
                             tonghop: $('#tonghop').val(),
+                            dutoan: $('#dutoan').val(),
                             bhxh:$('#bhxh').val(),
                             bhyt:$('#bhyt').val(),
                             kpcd:$('#kpcd').val(),

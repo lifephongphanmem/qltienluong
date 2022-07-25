@@ -13,7 +13,7 @@ class GeneralConfigsController extends Controller
     public function index()
     {
         if (Session::has('admin')) {
-            $model = GeneralConfigs::first();
+            $model = GeneralConfigs::first();            
             return view('system.general.global.index')
                 ->with('model', $model)
                 ->with('pageTitle', 'Cấu hình hệ thống');
@@ -54,6 +54,7 @@ class GeneralConfigsController extends Controller
                 $model->luongcb = chkDbl($inputs['luongcb']);
                 $model->tg_hetts = chkDbl($inputs['tg_hetts']);
                 $model->tg_xetnl = chkDbl($inputs['tg_xetnl']);
+                $model->thongbao = $inputs['thongbao'];
                 if(isset($inputs['ipf1'])){
                     $model->ipf1 = $inputs['ipf1'];
                 }

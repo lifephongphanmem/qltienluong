@@ -27,6 +27,7 @@ class dutoanluong_bangluong extends Model
         'tencanbo',
         'stt',
         'luongcoban',
+        //Hệ số
         'heso',
         'hesobl',
         'hesopc',
@@ -56,15 +57,16 @@ class dutoanluong_bangluong extends Model
         'pctnvk',
         'pcbdhdcu',
         'pcthni',
-
-        //thêm vào chưa dùng => các loại phụ cấp ko tổng hợp
-        'pclade', //làm đêm
-        'pcud61', //ưu đãi theo tt61
-        'pcxaxe', //điện thoại
-        'pcdith', //điện thoại
-        'pcphth', //phẫu thuật, thủ thuật
-        'luonghd', //đã thêm vào tổng hợp=> ko dự toán =>thừa
-
+        'pclade', 
+        'pcud61',
+        'pcxaxe', 
+        'pcdith', 
+        'pcphth', 
+        'luonghd', 
+        'pclaunam',
+        'pcctp',
+        'pctaicu',
+        //Số tiền
         'st_heso',
         'st_hesobl',
         'st_hesopc',
@@ -100,26 +102,32 @@ class dutoanluong_bangluong extends Model
         'st_pcdith',
         'st_luonghd',
         'st_pcphth',
-        'pcctp',
-        'st_pcctp',
-        'pctaicu',
+        'st_pclaunam',
+        'st_pcctp',        
         'st_taicu',
         'tonghs',
         'ttl',
         'giaml',
         'luongtn',
+        //bảo hiểm đơn vị theo bảng lương
         'stbhxh',
         'stbhyt',
         'stkpcd',
         'stbhtn',
         'ttbh',
+        //bảo hiểm quy đổi hệ số
+        'bhxh_dv',
+        'bhyt_dv',
+        'bhtn_dv',
+        'kpcd_dv',
+        'tongbh_dv',        
+        //Số tiền bảo hiểm
         'stbhxh_dv',
         'stbhyt_dv',
         'stkpcd_dv',
         'stbhtn_dv',
         'ttbh_dv',
-        'pclaunam',
-        'st_pclaunam',
+        
     ];
 
     //13.12.2018 ALTER TABLE `dutoanluong_bangluong` ADD `congtac` VARCHAR(25) NULL DEFAULT 'CONGTAC' AFTER `msngbac`;

@@ -48,13 +48,14 @@
                         </div>
                     </div>
 
-                    <table id="sample_3" class="table table-hover table-striped table-bordered" style="min-height: 230px">
+                    <table id="sample_4" class="table table-hover table-striped table-bordered" style="min-height: 230px">
                         <thead>
                             <tr>
                                 <th class="text-center" style="width: 10%">STT</th>
                                 <th class="text-center">Tên chức vụ</th>
                                 <th class="text-center">Tên viết tắt<br>(trên bảng lương)</th>
                                 <th class="text-center">Phân loại cán bộ</th>
+                                <th class="text-center">Phân loại công tác</th>
                                 <th class="text-center">Thao tác</th>
                             </tr>
                         </thead>
@@ -62,11 +63,11 @@
                             @if(isset($model))
                                 @foreach($model as $key=>$value)
                                     <tr>
-                                        <td class="text-center">{{$key+1}}</td>
+                                        <td class="text-center">{{$value->sapxep}}</td>
                                         <td>{{$value->tencv}}</td>
                                         <td>{{$value->tenvt}}</td>
                                         <td>{{$value->phanloai}}</td>
-
+                                        <td>{{ $a_plct[$value->mact] ?? '' }}</td>
                                         <td>
                                             @if(session('admin')->level == 'SA' || session('admin')->level == 'SSA' || session('admin')->madv == $value->madv)
                                                 <button type="button" onclick="editCV('{{$value->macvcq}}')" class="btn btn-info btn-xs mbs">
@@ -118,6 +119,16 @@
                                 {!! Form::select('ttdv',getPhanLoaiNhanVien(),null,array('id' => 'ttdv', 'class' => 'form-control'))!!}
                             </div>
 
+                            <div class="col-md-12">
+                                <label class="control-label">Tên phân loại công tác</label>
+                                {!! Form::select('mact', setArrayAll($a_plct,'Không chọn'), null, ['id' => 'mact', 'class' => 'form-control']) !!}
+                            </div>
+
+                            <div class="col-md-12">
+                                <label class="control-label">STT</label>
+                                {!! Form::text('sapxep', null, ['id' => 'sapxep', 'class' => 'form-control']) !!}
+                            </div>
+
                             <input type="hidden" id="macvcq" name="macvcq"/>
                             <input type="hidden" id="id_cv" name="id_cv"/>
                         </div>
@@ -140,7 +151,7 @@
             $('#tencv').val('');
             $('#tenvt').val('');
             $('#ghichu').val('');
-            //$('#sapxep').attr('value','99');
+            $('#sapxep').attr('value','99');
             $('#macvcq').val('');
             $('#ttdv').val(0).trigger('change');
             $('#id_cv').val(0);
@@ -161,7 +172,7 @@
                     $('#tencv').val(data.tencv);
                     $('#tenvt').val(data.tenvt);
                     $('#ghichu').val(data.ghichu);
-                    //$('#sapxep').val(data.sapxep);
+                    $('#sapxep').val(data.sapxep);
                     $('#maphanloai').val(data.maphanloai);
                     $('#ttdv').val(data.ttdv).trigger('change');
                     $('#macvcq').val(macvcq);
@@ -199,6 +210,7 @@
                             maphanloai: $('#mapl').val(),
                             tencv: tencv,
                             tenvt: $('#tenvt').val(),
+                            mact: $('#mact').val(),
                             ttdv: ttdv,
                             ghichu: ghichu,
                             sapxep: sapxep
@@ -221,6 +233,7 @@
                             _token: CSRF_TOKEN,
                             macvcq: macvcq,
                             tenvt: $('#tenvt').val(),
+                            mact: $('#mact').val(),
                             tencv: tencv,
                             ttdv: ttdv,
                             ghichu: ghichu,

@@ -106,6 +106,8 @@ Route::group(['prefix'=>'danh_muc'],function(){
         Route::get('add_detail','dmphanloaictController@store_detail');
         Route::get('update_detail','dmphanloaictController@update_detail');
         Route::get('get_detail','dmphanloaictController@getinfo_detail');
+        //Cho đơn vị cấp dưới xem
+        Route::get('don_vi','dmphanloaictController@xemdulieu');
     });
 
     Route::group(['prefix'=>'don_vi'],function(){
@@ -314,6 +316,8 @@ Route::group(['prefix'=>'nghiep_vu'],function(){
             Route::get('create_mau','dutoanluongController@create_mau');
             Route::post('thong_tin','dutoanluongController@thongtin_dutoan');
             Route::post('tao_du_toan','dutoanluongController@tao_dutoan');
+            Route::get('updchitieu','dutoanluongController@updchitieu');
+            Route::post('kinhphiKoCT','dutoanluongController@kinhphiKoCT');
             //Route::get('checkNamDuToan','dutoanluongController@checkNamDT');
             //Route::get('checkBangLuong','dutoanluongController@checkBangLuong');
             Route::post('senddata','dutoanluongController@senddata'); //gửi dữ liệu
@@ -330,6 +334,13 @@ Route::group(['prefix'=>'nghiep_vu'],function(){
             Route::post('mautt107_m2','dutoanluongController@printf_tt107_m2');
             Route::get('mautt107_m3','dutoanluongController@printf_tt107_m3');
             Route::get('nangluong','dutoanluongController@printf_nangluong');
+            //thiết kế mẫu in cho vạn ninh
+            Route::get('kinhphikhongchuyentrach','dutoanluong_insolieuController@kinhphikhongchuyentrach');
+            Route::get('tonghopcanboxa','dutoanluong_insolieuController@tonghopcanboxa');
+            Route::post('tonghopbienche','dutoanluong_insolieuController@tonghopbienche');
+            Route::post('tonghophopdong','dutoanluong_insolieuController@tonghophopdong');
+            Route::post('bangluongbienche','dutoanluong_insolieuController@bangluongbienche');
+            Route::post('bangluonghopdong','dutoanluong_insolieuController@bangluonghopdong');
         });
         /*
         Route::group(['prefix'=>'dia_ban_dbkk'],function(){
@@ -878,6 +889,17 @@ Route::group(['prefix'=>'chuc_nang'],function(){
             Route::post('chitietblCR','dutoanluong_huyenController@chitietblCR');//in chi tiết bảng lương đơn vị
             Route::get('nangluongth','dutoanluong_huyenController@nangluongth');//in chi tiết bảng lương đơn vị
             Route::get('guitn','GuiTinNhanController@guitin');//in chi tiết bảng lương đơn vị
+            //Mới làm lại 07/07/2022
+            Route::post('tao_du_toan','dutoanluong_huyenController@tao_du_toan');
+
+            //Thiết kế mẫu cho Vạn Ninh
+            Route::post('kinhphikhongchuyentrach','dutoanluong_insolieu_huyenController@kinhphikhongchuyentrach');
+            Route::post('tonghopbienche','dutoanluong_insolieu_huyenController@tonghopbienche');
+            Route::post('tonghopbienche_m2','dutoanluong_insolieu_huyenController@tonghopbienche_m2');
+            Route::post('tonghophopdong','dutoanluong_insolieu_huyenController@tonghophopdong');
+            Route::post('tonghophopdong_m2','dutoanluong_insolieu_huyenController@tonghophopdong_m2');
+            Route::post('tonghopcanboxa','dutoanluong_insolieu_huyenController@tonghopcanboxa');
+            Route::post('danhsachdonvi','dutoanluong_insolieu_huyenController@danhsachdonvi');
         });
 
         Route::group(['prefix'=>'khoi'],function(){
@@ -1323,6 +1345,13 @@ Route::group(['prefix'=>'he_thong'],function(){
         Route::post('store_pc','nguonkinhphi_dinhmucController@store_pc');
         Route::get('del/{id}','nguonkinhphi_dinhmucController@destroy_pc');
         Route::post('update_luongcb','nguonkinhphi_dinhmucController@update_luongcb');
+    });
+
+    Route::group(['prefix'=>'bao_cao'],function(){
+        Route::get('danh_sach','dmphanloaidonvi_baocaoController@index');
+        Route::get('inbaocao','dmphanloaidonvi_baocaoController@inbaocao');
+        Route::post('store','dmphanloaidonvi_baocaoController@store');
+        Route::get('del/{id}','dmphanloaidonvi_baocaoController@destroy');        
     });
 });
 

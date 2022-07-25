@@ -143,7 +143,7 @@
             text-decoration: none;
         }
     </style>
-
+    @yield('style_css')
     <script>
         function ExDoc() {
             var sourceHTML = document.getElementById("data").innerHTML;
@@ -238,7 +238,7 @@
 <body style="font:normal 11px Times, serif;">
     <div class="in">
         <nav id="fixNav">
-            <ul class="text-right">
+            <ul>
                 <li>
                     <button type="button" class="btn btn-success btn-xs text-right"
                         style="border-radius: 20px; margin-left: 50px" onclick="window.print()">

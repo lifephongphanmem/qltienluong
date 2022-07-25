@@ -303,9 +303,30 @@ function getColTongHop()
     */
 }
 
+function getColDuToan()
+{
+    return array_column(App\dmphucap::where('dutoan', 1)->orderby('stt')->get()->toarray(), 'mapc');
+    /*
+    return array('heso','hesopc','vuotkhung','pcct','hesobl', 'luonghd','pcud61',
+        'pckct','pck','pccv','pckv','pcth','pcdd','pcdh','pcld',
+        'pcdbqh','pcudn','pctn','pctnn','pcdbn','pcvk','pckn','pcdang',
+        'pccovu','pclt','pcd','pctr','pctnvk','pcbdhdcu','pcthni');
+    */
+}
+
 function getPLCTTongHop()
 {
     return array_column(App\dmphanloaict::where('tonghop', 1)->get()->toarray(), 'mact');
+    /*
+    return array('heso','hesopc','vuotkhung','pcct','hesobl', 'luonghd','pcud61',
+        'pckct','pck','pccv','pckv','pcth','pcdd','pcdh','pcld',
+        'pcdbqh','pcudn','pctn','pctnn','pcdbn','pcvk','pckn','pcdang',
+        'pccovu','pclt','pcd','pctr','pctnvk','pcbdhdcu','pcthni');
+    */
+}
+function getPLCTDuToan()
+{
+    return array_column(App\dmphanloaict::where('dutoan', 1)->get()->toarray(), 'mact');
     /*
     return array('heso','hesopc','vuotkhung','pcct','hesobl', 'luonghd','pcud61',
         'pckct','pck','pccv','pckv','pcth','pcdd','pcdh','pcld',
@@ -476,7 +497,7 @@ function getChucVuCQ($val_null = true)
 
 function getDonViTinh()
 {
-    return array('1' => 'Đồng', '2' => 'Nghìn đồng', '3' => 'Triệu đồng');
+    return array('1' => 'Đồng', '1000' => 'Nghìn đồng', '1000000' => 'Triệu đồng');
 }
 
 function getTextStatus($status)
@@ -486,11 +507,11 @@ function getTextStatus($status)
         'CHUALUONG' => 'text-danger',
         'CHUATAO' => 'text-danger',
         'CHUADL' => 'text-danger', //dùng cho đơn vị chủ quản - chưa có đơn vị cấp dưới nào gửi dữ liệu
-        'CHOGUI' => 'text-info',
+        'CHOGUI' => 'text-dark',
         'DAGUI' => 'text-success',
         'TRALAI' => 'text-danger',
         'CHUADAYDU' => 'text-warning',
-        'CHUAGUI' => 'text-info', //dùng cho đơn vị chủ quản - các đơn vị cấp dưới đã có dữ liệu nhưng chưa gửi đi
+        'CHUAGUI' => 'text-dark', //dùng cho đơn vị chủ quản - các đơn vị cấp dưới đã có dữ liệu nhưng chưa gửi đi
         'GUILOI' => 'text-danger',
         'BANGLUONG' => 'text-success',
     );
@@ -551,29 +572,34 @@ function SapXepPhuCap($m_phucap)
     $a_heso = $m_phucap->where('phanloai', '0')->keyBy('mapc')->toarray();
     $a_sotien = $m_phucap->where('phanloai', '1')->keyBy('mapc')->toarray();
     $a_phantram = $m_phucap->where('phanloai', '2')->keyBy('mapc')->toarray();
+
     $a_ketqua = array_merge($a_heso, $a_sotien);
-    $i = 1; //Biến lưu cho trường hợp lặp vô hạn
+    $chk = 1; //Biến lưu cho trường hợp lặp vô hạn
     //lấy 
-    while(count($a_phantram)>0){
-        $mapc = array_key_first($a_phantram);
-        $b_chk = true;
-        foreach(explode(',', $a_phantram[$mapc]['congthuc']) as $ct){
-            if ($ct != '' && !array_key_exists($ct, $a_ketqua)){
-                $b_chk = false;
+    //dd($a_phantram);
+
+    while (count($a_phantram) > 0) {
+        foreach ($a_phantram as $key => $val) {
+            $b_chk = true;
+            foreach (explode(',', $a_phantram[$key]['congthuc']) as $ct) {
+                if ($ct != '' && !array_key_exists($ct, $a_ketqua)) {
+                    $b_chk = false;
+                }
+            }
+            if ($b_chk) {
+                $a_ketqua[$key] = $a_phantram[$key];
+                unset($a_phantram[$key]);
             }
         }
-        //dd($b_chk);
-        if($b_chk){
-            $a_ketqua[$mapc] = $a_phantram[$mapc];
-            unset($a_phantram[$mapc]);
-        }
-        //dd($a_phantram);
-        $i++;
-        if($i>=100){
-            return [];            
+
+        $chk++;
+        if ($chk >= 100) {
+            //dd($a_phantram);       
+            return ['trangthai'=>'false','mapc'=>array_keys($a_phantram)];
         }
     }
     //$a_ketqua = array_merge($a_ketqua, $a_phantram);
+    //dd($a_ketqua);
     return $a_ketqua;
 }
 
@@ -850,7 +876,7 @@ function getNguonTruyLinh_df()
 {
     $model = App\dmnguonkinhphi::all()->first();
     $nkp_df = $model->where('macdinh', 1)->first();
-    if (count($nkp_df) == 0) {
+    if ($nkp_df == null) {
         $nkp_df = $model->first();
     }
     return array(
@@ -889,4 +915,30 @@ function setArrayAll($array, $noidung = 'Tất cả')
         $a_kq[(string)$k] = $v;
     }
     return $a_kq;
+}
+
+function getBaoCaoDeQuy($categories, $maphanloai_goc = '', $char = '')
+{
+    foreach ($categories as $key => $item)
+    {
+        // Nếu là chuyên mục con thì hiển thị
+        if ($item['maphanloai_nhom'] == $maphanloai_goc)        
+        {
+            echo '<tr>';
+                echo '<td>';
+                    echo $char . $item['tenphanloai_nhom'];
+                echo '</td>';
+            echo '</tr>';
+             
+            // Xóa chuyên mục đã lặp
+            unset($categories[$key]);
+             
+            // Tiếp tục đệ quy để tìm chuyên mục con của chuyên mục đang lặp
+            getBaoCaoDeQuy($categories, $item['maphanloai_goc'], $char.'|---');
+        }
+    }
+}
+
+function chkDiv0($dbl){
+    return chkDbl($dbl) <=0 ? 1 : chkDbl($dbl);
 }

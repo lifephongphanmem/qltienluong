@@ -29,6 +29,19 @@ class dutoanluong extends Model
         'nguoiguidv',
         'ngayguih',
         'nguoiguih',
-        'lydo'
+        'lydo',
+        'phanloai',//DUTOAN; DUUOC
+        'phanloaixa',
+        'phanloaixa_heso',
+        'sothonxabiengioi',
+        'sothonxabiengioi_heso',
+        'sothonxakhokhan',
+        'sothonxakhokhan_heso',
+        'sothonxatrongdiem',
+        'sothonxatrongdiem_heso',
+        'sothonxakhac',
+        'sothonxakhac_heso',
+        'sothonxaloai1',
+        'sothonxaloai1_heso',
     ];
 }

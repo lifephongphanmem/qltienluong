@@ -17,6 +17,7 @@ class dmchucvucq extends Model
         'madv',
         'phannhom',
         'maphanloai',
+        'mact',
         'ttdv'
     ];
 }
