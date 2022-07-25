@@ -27,9 +27,9 @@ class ComposerStaticInitd7de3fb6aaadd474bf447891cb3bef8d
         '58571171fd5812e6e447dce228f52f4d' => __DIR__ . '/..' . '/laravel/framework/src/Illuminate/Support/helpers.php',
         '17d016dc52a631c1e74d2eb8fdd57342' => __DIR__ . '/..' . '/laravel/helpers/src/helpers.php',
         'f18cc91337d49233e5754e93f3ed9ec3' => __DIR__ . '/..' . '/laravelcollective/html/src/helpers.php',
-        'c21d74cb2feba186e7566d256c0cb6c0' => __DIR__ . '/../..' . '/app/Library/tienluong-functions.php',
-        'd27eb44c80de13f037480208689755d3' => __DIR__ . '/../..' . '/app/Library/global-functions.php',
-        '303f3cded94c729fa5f2c7c3cf2ce864' => __DIR__ . '/../..' . '/app/Library/array_function.php',
+        // 'c21d74cb2feba186e7566d256c0cb6c0' => __DIR__ . '/../..' . '/app/Library/tienluong-functions.php',
+        // 'd27eb44c80de13f037480208689755d3' => __DIR__ . '/../..' . '/app/Library/global-functions.php',
+        // '303f3cded94c729fa5f2c7c3cf2ce864' => __DIR__ . '/../..' . '/app/Library/array_function.php',
     );
 
     public static $prefixLengthsPsr4 = array (

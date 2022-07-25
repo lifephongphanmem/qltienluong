@@ -1160,7 +1160,9 @@ class bangluongController extends Controller
                             $sotien = round(($sotien * $m_cb[$key][$mapc]) / 100, session('admin')->lamtron);
                             $a_pc[$k]['sotien'] = $sotien;
                             $m_cb[$key][$mapc] = round($sotien / $inputs['luongcoban'], session('admin')->lamtron);
-
+                            
+                            //do tính hệ số đã làm tròn => (hệ số * lương cơ bản) != (số tiền) => nhân lại để đúng số tiền
+                            $a_pc[$k]['sotien'] = round($m_cb[$key][$mapc] * $inputs['luongcoban']);
                             break;
                         }
                     default: { //trường hợp còn lại (ẩn,...)
