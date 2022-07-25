@@ -241,7 +241,6 @@ Route::group(['prefix'=>'nghiep_vu'],function(){
 
         Route::get('nhan_excel','hosocanboController@infor_excel');
         Route::post('create_excel','hosocanboController@create_excel');
-
         //ajax
         Route::get('get_congtac','hosocanboController@get_congtac');
         Route::get('get_chucvu_bh','hosocanboController@get_chucvu_bh');
@@ -618,6 +617,10 @@ Route::group(['prefix'=>'chuc_nang'],function(){
         Route::post('maumtm','bangluongController@printf_maumtm');
         Route::post('mau09nd11','bangluong_inController@printf_mau09nd11');
         Route::post('mautt107_m5','bangluong_inController@printf_mautt107_m5');
+        Route::post('mauC02_KH','bangluongController@printf_mauC02_KH');
+        Route::post('mau09_KH','bangluongController@printf_mau09_KH');
+        Route::post('maublcbct','bangluongController@printf_maublcbct');//mẫu bảng lương cán bộ công chức, chuyên trách
+        Route::post('maublcbkct','bangluongController@printf_maublcbkct');//mẫu bảng lương can bộ không chuyên trách
         //mẫu bảng lương lai châu
         Route::post('mautt107_lc','bangluong_inController@printf_mautt107_lc');
         Route::post('mautt107_lc_xp','bangluong_inController@printf_mautt107_lc_xp');

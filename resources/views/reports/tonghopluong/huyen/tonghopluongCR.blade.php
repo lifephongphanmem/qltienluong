@@ -1,57 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html lang="vi">
+@extends('main_baocao')
 
-<head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-    <title>{{$pageTitle}}</title>
-    <style type="text/css">
-        body {
-            font: normal 12px/14px time, serif;
-        }
-
-        .header tr td {
-            padding-top: 0px;
-            padding-bottom: 5px;
-        }
-
-        .money tr td{
-            text-align: right;
-        }
-
-        table, p {
-            width: 98%;
-            margin: auto;
-        }
-
-        table tr td:first-child {
-            text-align: center;
-        }
-
-        td, th {
-            padding: 5px;
-        }
-
-        p{
-            padding: 5px;
-        }
-
-        span{
-            text-transform: uppercase;
-            font-weight: bold;
-        }
-
-        @media print {
-            .in{
-                display: none !important;
-            }
-        }
-    </style>
-</head>
-
-
-
-<body style="font:normal 11px Times, serif;">
-    <table class="header" width="96%" border="0" cellspacing="0" cellpadding="8" style="margin:0 auto 25px; text-align: center;">
+@section('content')
+    <table id="data_header" class="header" width="96%" border="0" cellspacing="0" cellpadding="8" style="margin:0 auto 25px; text-align: center;">
         <tr>
             <td  style="text-align: left;width: 60%">
 
@@ -85,7 +35,7 @@
 
     </table>
 
-    <table class="money" cellspacing="0" cellpadding="0" border="1" style="margin: 20px auto; border-collapse: collapse;font:normal 12px Times, serif;">
+    <table id="data_body" class="money" cellspacing="0" cellpadding="0" border="1" style="margin: 20px auto; border-collapse: collapse;font:normal 12px Times, serif;">
         <tr style="padding-left: 2px;padding-right: 2px">
             <th style="width: 2%;" rowspan="3">S</br>T</br>T</th>
             <th style="width: 12%;" rowspan="3">Đơn vị</th>
@@ -99,7 +49,7 @@
             <th rowspan="2">Tổng cộng </th>
             <th rowspan="2">Lương ngạch, bậc, CV</th>
             <th colspan="{{$col+1}}">Trong đó</th>
-            <th colspan="2">Các khoản đóng góp</th>
+            <th colspan="{{$col+1}}">Các khoản đóng góp</th>
         </tr>
         <tr style="padding-left: 2px;padding-right: 2px">
             <th >Tổng các khoản P/cấp</th>
@@ -671,7 +621,7 @@
 
     </table>
 
-    <table class="header" width="96%" border="0" cellspacing="0" cellpadding="8" style="margin:20px auto; text-align: center;">
+    <table id="data_footer" class="header" width="96%" border="0" cellspacing="0" cellpadding="8" style="margin:20px auto; text-align: center;">
         <tr>
             <td style="text-align: left;" width="35%"></td>
             <td style="text-align: left;" width="30%"></td>
@@ -697,6 +647,4 @@
             <td style="text-align: center;" width="35%">{{$m_dv['lanhdao']}}</td>
         </tr>
     </table>
-
-</body>
-</html>
+@stop

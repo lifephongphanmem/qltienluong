@@ -1,65 +1,8 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<!--  Danh sách chi trả cá nhân -->
-<html lang="vi">
+@extends('main_baocao')
 
-<head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-    <title>{{$pageTitle}}</title>
-    <style type="text/css">
-        body {
-            font: normal 12px/14px time, serif;
-        }
+@section('content')
 
-
-        .title {
-            text-align: right;
-        }
-
-        .money tr td{
-            text-align: right;
-        }
-
-        table, p {
-            width: 98%;
-            margin: auto;
-        }
-
-        table tr td:first-child {
-            text-align: center;
-        }
-
-        td, th {
-            padding: 5px;
-        }
-
-        p{
-            padding: 5px;
-        }
-
-        span{
-            text-transform: uppercase;
-            font-weight: bold;
-        }
-
-        @media print {
-            .in{
-                display: none !important;
-            }
-        }
-        
-        tr > td {
-            border: 1px solid;
-        }
-    </style>
-</head>
-
-<div class="in" style="margin-right: 20px; text-align: right">
-    <button type="submit" onclick=" window.print()"> In danh sách</button>
-</div>
-
-<body style="font:normal 12px Times, serif;">
-
-<table class="header" width="96%" border="0" cellspacing="0" cellpadding="8" style="margin:0 auto 25px; text-align: center;">
+<table id="data_header" class="header" width="96%" border="0" cellspacing="0" cellpadding="8" style="margin:0 auto 25px; text-align: center;">
     <tr>
         <th style="text-align: left;width: 60%">
             <b>{{$m_dv->tendvcq}}</b>
@@ -90,16 +33,16 @@
         </th>
     </tr-->
 </table>
-<p style="text-align: center; font-weight: bold; font-size: 20px;text-transform: uppercase">
+<p id="data_body" style="text-align: center; font-weight: bold; font-size: 20px;text-transform: uppercase">
     @if($thongtin['innoidung'])
         {{$thongtin['noidung']}}
     @else
         DANH SÁCH CÁN BỘ NHẬN TIỀN PHỤ CẤP UV BAN CHẤP HÀNH ĐẢNG VÀ CẤP ỦY VIÊN
     @endif
 </p>
-<p style="text-align: center; font-style: italic">Tháng {{$thongtin['thang']}} năm {{$thongtin['nam']}}</p>
+<p id="data_body1" style="text-align: center; font-style: italic">Tháng {{$thongtin['thang']}} năm {{$thongtin['nam']}}</p>
 
-<table class="money" cellspacing="0" cellpadding="0" border="1" style="margin: 20px auto; border-collapse: collapse;">
+<table id="data_body2" class="money" cellspacing="0" cellpadding="0" border="1" style="margin: 20px auto; border-collapse: collapse;">
     <thead>
     <tr style="padding-left: 2px;padding-right: 2px; text-align: center">
         <td style="width: 5%;font-weight: bold" >STT</td>
@@ -137,8 +80,8 @@
         <td></td>
     </tr>
 </table>
-<p style="text-align: left; font-weight:bold;font-style: italic ">Tổng số tiền (Viết bằng chữ): {{Dbl2Str($model->sum('sotien'))}}</p>
-<table class="header" width="96%" border="0" cellspacing="0" cellpadding="8" style="margin:20px auto; text-align: center;">
+<p id="data_footer" style="text-align: left; font-weight:bold;font-style: italic ">Tổng số tiền (Viết bằng chữ): {{Dbl2Str($model->sum('sotien'))}}</p>
+<table id="data_footer1" class="header" width="96%" border="0" cellspacing="0" cellpadding="8" style="margin:20px auto; text-align: center;">
     <tr>
         <th style="text-align: left;" width="50%"></th>
         <th style="text-align: center; font-style: italic" width="50%">{{$m_dv->diadanh .', '.Date2Str($thongtin['ngaylap'])}}</th>
@@ -160,6 +103,4 @@
         <th style="text-align: center;" width="50%">{{$m_dv->lanhdao}}</th>
     </tr>
 </table>
-
-</body>
-</html>
+@stop

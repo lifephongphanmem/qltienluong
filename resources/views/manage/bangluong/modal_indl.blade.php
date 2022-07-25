@@ -238,7 +238,59 @@
                                         </div>
                                     </div>
                                 </div>
+                                
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <button type="button" style="border-width: 0px" onclick="inC02('/chuc_nang/bang_luong/mauC02_KH')" class="btn btn-default btn-xs mbs"
+                                            title="Bảng lương thêm cột giảm trừ lương, phần trăm vượt khung" data-target="#mauC02-modal" data-toggle="modal">
+                                        <i class="fa fa-print"></i>&nbsp; Bảng lương mẫu C02</button>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <button type="button" style="border-width: 0px" onclick="in09('/chuc_nang/bang_luong/mau09_KH')" class="btn btn-default btn-xs mbs"
+                                            title="Bảng thanh toán cho đối tượng thụ hưởng" data-target="#mau09-modal" data-toggle="modal">
+                                        <i class="fa fa-print"></i>&nbsp; Bảng thanh toán cho đối tượng thụ hưởng</button>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <button type="button" style="border-width: 0px" onclick="inblcbcc_mauxa('/chuc_nang/bang_luong/maublcbct')" class="btn btn-default btn-xs mbs"
+                                            title="Bảng lương cán bộ công chức, chuyên trách" data-target="#maucbct-modal" data-toggle="modal">
+                                        <i class="fa fa-print"></i>&nbsp; Bảng lương cán bộ công chức, chuyên trách</button>
+
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <button type="button" style="border-width: 0px" onclick="inblcbkct('/chuc_nang/bang_luong/maublcbct')" class="btn btn-default btn-xs mbs"
+                                            title="Bảng lương cán bộ không chuyên trách xã" data-target="#maucbkct-modal" data-toggle="modal">
+                                        <i class="fa fa-print"></i>&nbsp; Bảng lương cán bộ không chuyên trách xã</button>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <button type="button" style="border-width: 0px" onclick="inblcbkct_thon('/chuc_nang/bang_luong/maublcbct')" class="btn btn-default btn-xs mbs"
+                                            title="Bảng lương cán bộ không chuyên trách cấp thôn" data-target="#maucbkct-thon-modal" data-toggle="modal">
+                                        <i class="fa fa-print"></i>&nbsp; Bảng lương cán bộ không chuyên trách cấp thôn</button>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <button type="button" style="border-width: 0px" onclick="inblcblldq('/chuc_nang/bang_luong/maublcbct')" class="btn btn-default btn-xs mbs"
+                                            title="Bảng thanh toán phụ cấp trách nhiệm quản lý đơn vị LLDQ" data-target="#maucblldq-modal" data-toggle="modal">
+                                        <i class="fa fa-print"></i>&nbsp; Bảng thanh toán phụ cấp trách nhiệm quản lý đơn vị LLDQ</button>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
+
+                            
 
                             <!-- Mẫu bảng lương lạng sơn + cao bằng -->
                             <div class="tab-pane" id="tab_2">
