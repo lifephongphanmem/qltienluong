@@ -557,6 +557,16 @@
                                 @endif
 
                                 @if (session('admin')->level == 'T')
+                                <li>
+                                    <a href="{{ url('chuc_nang/du_toan_luong/tinh/index') }}"><i
+                                            class="fa fa-caret-right"></i>Tổng số liệu dự toán</a>
+                                </li>
+                                <li>
+                                    <a
+                                        href="{{ url('chuc_nang/xem_du_lieu/du_toan/tinh?namns=' . date('Y') . '&trangthai=ALL&phanloai=ALL') }}"><i
+                                            class="fa fa-caret-right"></i>Xem số liệu tổng hợp từ đơn vị cấp
+                                        dưới</a>
+                                </li>
                                 @endif
                             </ul>
                         </li>
