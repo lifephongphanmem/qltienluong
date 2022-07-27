@@ -4615,4 +4615,53 @@ class baocaobangluongController extends Controller
         } else
             return view('errors.notlogin');
     }
+
+    public function dscanbo (Request $request){
+        if (Session::has('admin')) {
+            $inputs = $request->all();
+            //dd($inputs);
+            $model=hosocanbo::where('madv',session('admin')->madv)->where('theodoi','<','9')->get();
+            $a_ct = array_column(dmphanloaict::all()->toArray(), 'tenct', 'mact');
+            $a_pb = getPhongBan(false);
+            $a_cv = getChucVuCQ(false);
+            $a_plpc = getPhanLoaiPhuCap();
+
+            foreach($model as $hs){
+                $hs->tenpb = isset($a_pb[$hs->mapb])?$a_pb[$hs->mapb] : '';
+                $hs->tencv = isset($a_cv[$hs->macvcq])?$a_cv[$hs->macvcq] : '';
+                $hs->tenct = isset($a_ct[$hs->mact])?$a_ct[$hs->mact] : '';
+            }
+
+            if (isset($inputs['mapb']) && $inputs['mapb'] != '') {
+                $model = $model->where('mapb' , $inputs['mapb']);
+            }
+            if (isset($inputs['macvcq']) && $inputs['macvcq'] != '') {
+                $model = $model->where('macvcq' , $inputs['macvcq']);
+            }
+            if (isset($inputs['mact']) && $inputs['mact'] != '') {
+                $model = $model->where('mact' , $inputs['mact']);
+            }
+
+
+            $model_pc = dmphucap_donvi::where('madv',session('admin')->madv)->where('phanloai','<','3')->get();
+            $a_phucap = array();
+            $col = 0;
+
+            foreach($model_pc as $ct) {
+                if ($model->sum($ct->mapc) > 0) {
+                    $a_phucap[$ct->mapc] = $ct->report.'</br>('.$a_plpc[$ct->phanloai].')';
+                    $col++;
+                }
+            }
+            $m_dv = dmdonvi::where('madv',session('admin')->madv)->first();
+            return view('reports.hoso.danhsach')
+                ->with('model',$model->sortBy('stt'))
+                ->with('model_pb',getPhongBan())
+                ->with('col',$col)
+                ->with('m_dv',$m_dv)
+                ->with('a_phucap',$a_phucap)
+                ->with('pageTitle','Danh sách cán bộ');
+        } else
+            return view('errors.notlogin');
+    }
 }

@@ -84,15 +84,19 @@
                                 </li>
                                 <hr>
 
-                                <li>
+                                {{-- <li>
                                     <a href="#" data-target="#thoaidsnangluong-modal" data-toggle="modal"
                                        onclick="dsnangluong('{{$furl.'don_vi/dsnangluong'}}','NGACHBAC')">Danh sách nâng lương ngạch bậc (Theo danh sách cán bộ)</a>
                                 </li>
                                 <li>
                                     <a href="#" data-target="#thoaidsnangluong-modal" data-toggle="modal"
                                        onclick="dsnangluong('{{$furl.'don_vi/dsnangluong'}}','TNN')">Danh sách nâng thâm niên nghề (Theo danh sách cán bộ)</a>
-                                </li>
+                                </li> --}}
 
+                                <li>
+                                    <a href="#" data-target="#thoaicanbo-modal" data-toggle="modal"
+                                       onclick="dscanbo('{{$furl.'don_vi/dscanbo'}}')">In danh sách cán bộ</a>
+                                </li>
 
                                 <!-- Tạm thời bỏ để triển khai lạng sơn -->
                                 <!--
@@ -511,6 +515,81 @@
         {!! Form::close() !!}
     </div>
 
+    <div id="thoaicanbo-modal" tabindex="-1" role="dialog" aria-hidden="true" class="modal fade">
+        {!! Form::open(['url'=>'#','target'=>'_blank' ,'method'=>'post' ,'id' => 'frm_thoaicanbo', 'class'=>'form-horizontal form-validate']) !!}
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header modal-header-primary">
+                    <button type="button" data-dismiss="modal" aria-hidden="true" class="close">&times;</button>
+                    <h4 id="modal-header-primary-label" class="modal-title">Thông tin danh sách cán bộ</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="form-horizontal">
+                        
+                        <div class="row">
+                            <div class="col-md-6">
+                                <label class="control-label"> Từ ngày<span class="require">*</span></label>
+                                <div>
+                                    {!!Form::input('date','ngaytu',date('Y').'-01-01', array('id' => 'ngaytu','class' => 'form-control'))!!}
+                                </div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <label class="control-label"> Đến ngày<span class="require">*</span></label>
+                                <div>
+                                    {!!Form::input('date','ngayden', date('Y').'-12-31', array('id' => 'ngayden','class' => 'form-control'))!!}
+                                </div>
+                            </div>
+                        </div>
+
+                        
+                        <div class="row">
+                            <div class="col-md-12">
+                                <label class="control-label">Khối/Tổ công tác</label>
+                                <select name="mapb" id="mapb" class="form-control select2me">
+                                    @foreach(getPhongBan(true) as $key=>$val)
+                                        <option value="{{$key}}">{{$val}}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-12">
+                                <label class="control-label">Chức vụ</label>
+                                {!!Form::select('macvcq',getChucVuCQ(true), null, array('id' => 'macvcq','class' => 'form-control select2me'))!!}
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-12">
+                                <label class="control-label">Phân loại công tác</label>
+                                <select class="form-control select2me" name="mact" id="mact">
+                                    <option value="">-- Tất cả các phân loại công tác --</option>
+                                    @foreach($model_nhomct as $kieuct)
+                                        <optgroup label="{{$kieuct->tencongtac}}">
+                                            <?php $mode_ct=$model_tenct->where('macongtac',$kieuct->macongtac); ?>
+                                            @foreach($mode_ct as $ct)
+                                                <option value="{{$ct->mact}}">{{$ct->tenct}}</option>
+                                            @endforeach
+                                        </optgroup>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="modal-footer">
+                    <button type="button" data-dismiss="modal" class="btn btn-default">Hủy thao tác</button>
+                    <button type="submit" id="submit" name="submit" value="submit" class="btn btn-primary">Đồng ý</button>
+                </div>
+            </div>
+        </div>
+        {!! Form::close() !!}
+    </div>
+
     <script>
         function baocaobangluong(url){
             $('#thoaibangluong').attr('action',url);
@@ -532,6 +611,10 @@
         function dsnangluong(url,phanloai){
             $('#frm_thoaidsnangluong').attr('action',url);
             $('#frm_thoaidsnangluong').find("[id='phanloai']").val(phanloai);
+        }
+
+        function dscanbo(url){
+            $('#frm_thoaicanbo').attr('action',url);
         }
 
         function chitraluong_khoi(url){
