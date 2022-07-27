@@ -23,6 +23,8 @@ use App\dutoanluong;
 use App\dutoanluong_bangluong;
 use App\dutoanluong_chitiet;
 use App\hosocanbo;
+use App\hosoluong;
+use App\hosophucap;
 use App\ngachluong;
 use App\nguonkinhphi_bangluong;
 use App\tonghop_huyen;
@@ -2016,7 +2018,7 @@ class baocaobangluongController extends Controller
             $model_phanloaict = getNhomCongTac(false);
 
             foreach ($model_tonghop_chitiet as $chitiet) {
-                $tonghop = $model_tonghop->where('mathdv', $chitiet->mathh)->first();                
+                $tonghop = $model_tonghop->where('mathdv', $chitiet->mathh)->first();
                 $chitiet->thang = $tonghop->thang ?? 0;
                 $chitiet->nam = $tonghop->nam ?? 0;
                 $chitiet->tennguonkp = isset($model_nguonkp[$chitiet->manguonkp]) ? $model_nguonkp[$chitiet->manguonkp] : '';
@@ -2577,7 +2579,7 @@ class baocaobangluongController extends Controller
             $a_pl = array_column($model_dmdv->toarray(), 'maphanloai', 'madv');
             $model = tonghopluong_donvi_bangluong::where('mact', 'like', $inputs['phanloaict'] . '%')
                 ->wherein('mathdv', array_column($model_tonghop->toarray(), 'mathdv'))->get();
-            
+
             $m_pc = array_column(dmphucap::all()->toarray(), 'report', 'mapc');
             $model_nguonkp = array_column(dmnguonkinhphi::all()->toArray(), 'tennguonkp', 'manguonkp');
             $model_ct = array_column(dmphanloaict::all()->toArray(), 'tenct', 'mact');
@@ -3059,18 +3061,18 @@ class baocaobangluongController extends Controller
                 }
                 $ct->tendv = $model_donvi->where('madv', $ct->madv)->first()->tendv;
                 $ct->maphanloai = $model_donvi->where('madv', $ct->madv)->first()->maphanloai;
-                $m = $model_phanloai->where('maphanloai', $ct->maphanloai)->first();               
+                $m = $model_phanloai->where('maphanloai', $ct->maphanloai)->first();
                 $ct->tenphanloai = $m->tenphanloai ?? '';
 
                 $ct->linhvuchoatdong = $model_donvi->where('madv', $ct->madv)->first()->linhvuchoatdong;
-                $m = $model_khoipb->where('makhoipb', $ct->linhvuchoatdong)->first();                
+                $m = $model_khoipb->where('makhoipb', $ct->linhvuchoatdong)->first();
                 $ct->tenlinhvuchoatdong = $m->tenkhoipb ?? '';
-                
+
                 $m = $model_sl->where('madv', $ct->madv)->where('mact', $ct->mact)->first();
                 $msl = $modelctbc->where('madv', $ct->madv)->where('mact', $ct->mact)->first();
-                $ct->soluonggiao = $msl->soluongduocgiao ?? 0;                
+                $ct->soluonggiao = $msl->soluongduocgiao ?? 0;
                 $ct->soluongcomat = $m->canbo_congtac ?? 0;
-                
+
                 foreach ($a_phucap as $key => $val) {
                     if ($ct->$key > 10000)
                         $ct->$key = $ct->$key / $ct->luongcoban;
@@ -3314,18 +3316,18 @@ class baocaobangluongController extends Controller
                 }
                 $ct->tendv = $model_donvi->where('madv', $ct->madv)->first()->tendv;
                 $ct->maphanloai = $model_donvi->where('madv', $ct->madv)->first()->maphanloai;
-                $m = $model_phanloai->where('maphanloai', $ct->maphanloai)->first();                
-                $ct->tenphanloai = $m->tenphanloai ?? '';              
+                $m = $model_phanloai->where('maphanloai', $ct->maphanloai)->first();
+                $ct->tenphanloai = $m->tenphanloai ?? '';
 
                 $ct->linhvuchoatdong = $model_donvi->where('madv', $ct->madv)->first()->linhvuchoatdong;
-                $m = $model_khoipb->where('makhoipb', $ct->linhvuchoatdong)->first();                
+                $m = $model_khoipb->where('makhoipb', $ct->linhvuchoatdong)->first();
                 $ct->tenlinhvuchoatdong = $m->tenkhoipb ?? '';
-                
+
                 $m = $model_slxp->where('madv', $ct->madv)->where('mact', $ct->mact)->first();
                 $msl = $modelctbc->where('madv', $ct->madv)->where('mact', $ct->mact)->first();
-                $ct->soluonggiao = $msl->soluongduocgiao ?? 0;               
+                $ct->soluonggiao = $msl->soluongduocgiao ?? 0;
                 $ct->soluongcomat = $m->canbo_congtac ?? 0;
-               
+
                 foreach ($a_phucap as $key => $val) {
                     if ($ct->$key > 10000)
                         $ct->$key = $ct->$key / $ct->luongcoban;
@@ -3598,14 +3600,14 @@ class baocaobangluongController extends Controller
                 }
                 $ct->tendv = $model_donvi->where('madv', $ct->madv)->first()->tendv;
                 $ct->maphanloai = $model_donvi->where('madv', $ct->madv)->first()->maphanloai;
-                $m = $model_phanloai->where('maphanloai', $ct->maphanloai)->first();                
+                $m = $model_phanloai->where('maphanloai', $ct->maphanloai)->first();
                 $ct->tenphanloai = $m->tenphanloai ?? '';
-                
+
 
                 //$ct->linhvuchoatdong = $model_donvi->where('madv',$ct->madv)->first()->linhvuchoatdong;
-                $m = $model_khoipb->where('makhoipb', $ct->linhvuchoatdong)->first();                
+                $m = $model_khoipb->where('makhoipb', $ct->linhvuchoatdong)->first();
                 $ct->tenlinhvuchoatdong = $m->tenkhoipb ?? '';
-                
+
                 foreach ($a_phucap as $key => $val) {
                     if ($ct->$key > 10000)
                         $ct->$key = $ct->$key / $ct->luongcoban;
@@ -3852,14 +3854,14 @@ class baocaobangluongController extends Controller
                 }
                 $ct->tendv = $model_donvi->where('madv', $ct->madv)->first()->tendv;
                 $ct->maphanloai = $model_donvi->where('madv', $ct->madv)->first()->maphanloai;
-                $m = $model_phanloai->where('maphanloai', $ct->maphanloai)->first();                
+                $m = $model_phanloai->where('maphanloai', $ct->maphanloai)->first();
                 $ct->tenphanloai = $m->tenphanloai ?? '';
-               
+
 
                 $ct->linhvuchoatdong = $model_donvi->where('madv', $ct->madv)->first()->linhvuchoatdong;
-                $m = $model_khoipb->where('makhoipb', $ct->linhvuchoatdong)->first();                
+                $m = $model_khoipb->where('makhoipb', $ct->linhvuchoatdong)->first();
                 $ct->tenlinhvuchoatdong = $m->tenkhoipb ?? '';
-               
+
                 foreach ($a_phucap as $key => $val) {
                     if ($ct->$key > 10000)
                         $ct->$key = $ct->$key / $ct->luongcoban;
@@ -4093,14 +4095,13 @@ class baocaobangluongController extends Controller
                 }
                 $ct->tendv = $model_donvi->where('madv', $ct->madv)->first()->tendv;
                 $ct->maphanloai = $model_donvi->where('madv', $ct->madv)->first()->maphanloai;
-                $m = $model_phanloai->where('maphanloai', $ct->maphanloai)->first();                
+                $m = $model_phanloai->where('maphanloai', $ct->maphanloai)->first();
                 $ct->tenphanloai = $m->tenphanloai ?? '';
-                
+
 
                 $ct->linhvuchoatdong = $model_donvi->where('madv', $ct->madv)->first()->linhvuchoatdong;
-                $m = $model_khoipb->where('makhoipb', $ct->linhvuchoatdong)->first();               
+                $m = $model_khoipb->where('makhoipb', $ct->linhvuchoatdong)->first();
                 $ct->tenlinhvuchoatdong = $m->tenkhoipb ?? '';
-               
             }
 
             //dd($model->toarray());
@@ -4298,13 +4299,13 @@ class baocaobangluongController extends Controller
                 }
                 $ct->tendv = $model_donvi->where('madv', $ct->madv)->first()->tendv;
                 $ct->maphanloai = $model_donvi->where('madv', $ct->madv)->first()->maphanloai;
-                $m = $model_phanloai->where('maphanloai', $ct->maphanloai)->first();                
+                $m = $model_phanloai->where('maphanloai', $ct->maphanloai)->first();
                 $ct->tenphanloai = $m->tenphanloai ?? '';
-                
+
 
                 $ct->linhvuchoatdong = $model_donvi->where('madv', $ct->madv)->first()->linhvuchoatdong;
-                $m = $model_khoipb->where('makhoipb', $ct->linhvuchoatdong)->first();                
-                $ct->tenlinhvuchoatdong = $m->tenkhoipb ?? '';               
+                $m = $model_khoipb->where('makhoipb', $ct->linhvuchoatdong)->first();
+                $ct->tenlinhvuchoatdong = $m->tenkhoipb ?? '';
             }
             //dd($model_kn->toarray());
             $model_dutoan = dutoanluong::where('namns', $inputs['namns'])
@@ -4616,51 +4617,67 @@ class baocaobangluongController extends Controller
             return view('errors.notlogin');
     }
 
-    public function dscanbo (Request $request){
+    public function dscanbo(Request $request)
+    {
         if (Session::has('admin')) {
             $inputs = $request->all();
-            //dd($inputs);
-            $model=hosocanbo::where('madv',session('admin')->madv)->where('theodoi','<','9')->get();
+            
+            $model = hosocanbo::where('madv', session('admin')->madv)->where('theodoi', '<', '9')->get();
             $a_ct = array_column(dmphanloaict::all()->toArray(), 'tenct', 'mact');
             $a_pb = getPhongBan(false);
             $a_cv = getChucVuCQ(false);
             $a_plpc = getPhanLoaiPhuCap();
 
-            foreach($model as $hs){
-                $hs->tenpb = isset($a_pb[$hs->mapb])?$a_pb[$hs->mapb] : '';
-                $hs->tencv = isset($a_cv[$hs->macvcq])?$a_cv[$hs->macvcq] : '';
-                $hs->tenct = isset($a_ct[$hs->mact])?$a_ct[$hs->mact] : '';
+            $m_hs_phucap = hosophucap::wherein('macanbo', array_column($model->toarray(), 'macanbo'))->get();
+            $model_pc = dmphucap_donvi::where('madv', session('admin')->madv)->where('phanloai', '<', '3')->get();
+            //dd($m_hs_phucap->first());
+            foreach ($model as $hs) {
+                $hs->tenpb = isset($a_pb[$hs->mapb]) ? $a_pb[$hs->mapb] : '';
+                $hs->tencv = isset($a_cv[$hs->macvcq]) ? $a_cv[$hs->macvcq] : '';
+                $hs->tenct = isset($a_ct[$hs->mact]) ? $a_ct[$hs->mact] : '';
+                foreach ($model_pc as $ct) {                    
+                    $pc = $m_hs_phucap->where('macanbo', $hs->macanbo)->where('mapc', $ct->mapc)->where('ngaytu','<=',$inputs['ngaytu'])->sortbydesc('ngaytu')->first();
+                    if($pc != null){
+                       if($pc->ngayden == '' ||  $pc->ngayden == null || $pc->ngayden > $inputs['ngaytu']){
+                        $mapc = $ct->mapc;
+                        $hs->$mapc = $pc->heso;
+                       }
+                    }
+                    
+                }
             }
 
             if (isset($inputs['mapb']) && $inputs['mapb'] != '') {
-                $model = $model->where('mapb' , $inputs['mapb']);
+                $model = $model->where('mapb', $inputs['mapb']);
             }
             if (isset($inputs['macvcq']) && $inputs['macvcq'] != '') {
-                $model = $model->where('macvcq' , $inputs['macvcq']);
+                $model = $model->where('macvcq', $inputs['macvcq']);
             }
             if (isset($inputs['mact']) && $inputs['mact'] != '') {
-                $model = $model->where('mact' , $inputs['mact']);
+                $model = $model->where('mact', $inputs['mact']);
             }
 
 
-            $model_pc = dmphucap_donvi::where('madv',session('admin')->madv)->where('phanloai','<','3')->get();
             $a_phucap = array();
             $col = 0;
 
-            foreach($model_pc as $ct) {
+            foreach ($model_pc as $ct) {
                 if ($model->sum($ct->mapc) > 0) {
-                    $a_phucap[$ct->mapc] = $ct->report.'</br>('.$a_plpc[$ct->phanloai].')';
+                    $a_phucap[$ct->mapc] = $ct->report . '</br>(' . $a_plpc[$ct->phanloai] . ')';
                     $col++;
                 }
             }
-            $m_dv = dmdonvi::where('madv',session('admin')->madv)->first();
-            return view('reports.hoso.danhsach')
-                ->with('model',$model->sortBy('stt'))
-                ->with('model_pb',getPhongBan())
-                ->with('col',$col)
-                ->with('m_dv',$m_dv)
-                ->with('a_phucap',$a_phucap)
-                ->with('pageTitle','Danh sách cán bộ');
+
+            $m_dv = dmdonvi::where('madv', session('admin')->madv)->first();
+            return view('reports.donvi.danhsachcanbo')
+                ->with('model', $model->sortBy('stt'))
+                //->with('model_pb', getPhongBan())
+                ->with('col', $col)
+                ->with('inputs', $inputs)
+                ->with('m_dv', $m_dv)
+                ->with('a_phucap', $a_phucap)
+                ->with('a_ct', $a_ct)
+                ->with('pageTitle', 'Danh sách cán bộ');
         } else
             return view('errors.notlogin');
     }
