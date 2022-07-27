@@ -15,7 +15,7 @@
                 <b>Đơn vị: {{$m_dv['tendv']}} </b>
             </td>
             <td style="text-align: center; font-style: italic">
-                {{-- (Ban hành kèm theo QĐ số 19/2006/QĐ-BTC ngày 30/3/2006 và Thông tư số 185/2010/TT-BTC ngày 15/11/2010 của Bộ Tài chính) --}}
+                Ban hành kèm theo Thông tư số 107/2017/TT- BTC ngày 10/10/2017 của Bộ Tài chính
             </td>
         </tr>
         <tr>
@@ -50,14 +50,13 @@
         <thead>
             <tr style="padding-left: 2px;padding-right: 2px">
                 <th style="width: 1%;" rowspan="5">S</br>T</br>T</th>
-                <th style="width: 5%;" rowspan="5">Họ và tên</th>
+                <th style="width: 10%;" rowspan="5">Họ và tên</th>
                 <th style="width: 1%;" rowspan="5">Chức</br>danh</th>
-                <th style="width: 1%;" rowspan="5">Lương</br>tối</br>thiểu</th>
                 <th style="width: 5%;" colspan="{{ $col + 2 }}">HỆ SỐ</th>
                 <th style="width: 5%;" colspan="{{ $col + 5 }}">THÀNH TIỀN</th>
                 <th style="width: 3%;" rowspan="2" colspan="4">CÁC KHOẢN PHẢI TRẢ</th>
                 <th style="width: 2%;" rowspan="5">Tổng số</br>luong & PC</br>được nhận</th>
-                <th style="width: 2%;" rowspan="2">BH cá</br>nhân nộp</th>
+                <th style="width: 2%;" rowspan="5">BH cá</br>nhân nộp</th>
                 <th style="width: 2%;" rowspan="5">Số tiền</br>thực nhận</th>
             </tr>
 
@@ -70,33 +69,23 @@
             </tr>
             <tr>
                 @foreach ($a_phucap as $key => $val)
-                    <th rowspan="2">{{ $val }}</th>
-                @endforeach
-                <th rowspan="2">Khác (HDTS)</th>
-                <th rowspan="2">Biên chế</th>
-                <th rowspan="2">Lương BC tăng thêm</th>
-                <th rowspan="2">Hợp đồng thường xuyên</th>
-                <th rowspan="2">HĐ thường xuyên tăng thêm</th>
-                @foreach ($a_phucap as $key => $val)
-                    <th rowspan="{{ $a_bh[$key] == 0 ? '' : 2 }}">{{ $val }}</th>
+                    <th >{{ $val }}</th>
                 @endforeach
                 <th>Khác (HDTS)</th>
-                <th rowspan="2">17,5% BHXH</th>
-                <th rowspan="2">3% BHYT</th>
-                <th rowspan="2">1% BHTN</th>
-                <th rowspan="2">2% KPCD</th>
-                <th rowspan="3">8% BHXH</br>1,5% BHYT</br>1% BHTN</th>
-            </tr>
-            <tr>
+                <th >Biên chế</th>
+                <th >Lương BC tăng thêm</th>
+                <th >Hợp đồng thường xuyên</th>
+                <th >HĐ thường xuyên tăng thêm</th>
                 @foreach ($a_phucap as $key => $val)
-                    @if ($a_bh[$key] == 0)
-                        <th>Không tính BH</th>
-                    @endif
+                    <th>{{ $val }}</th>
                 @endforeach
-                <th>Không tính BH</th>
-
-
+                <th>Khác (HDTS)</th>
+                <th >17,5% BHXH</th>
+                <th >3% BHYT</th>
+                <th >1% BHTN</th>
+                <th >2% KPCD</th>
             </tr>
+            @if(!empty($a_tieumuc))
             <tr>
                 @foreach ($a_phucap as $key => $val)
                     @if ($key == 'vuotkhung' || $key == 'pctnn')
@@ -141,6 +130,7 @@
                 <th>{{ $model_tm->where('mapc', 'stbhtn_dv')->first()->tieumuc }}</th>
                 <th>{{ $model_tm->where('mapc', 'stkpcd_dv')->first()->tieumuc }}</th>
             </tr>
+            @endif
         </thead>
         <?php $i = 1;
         $stt = 1; ?>
@@ -150,7 +140,6 @@
                 <td>{{ convert2Roman($i++) }}</td>
                 <td style="text-align: left;">{{ $congtac->tenct }}</td>
                 <td style="text-align: center">{{ dinhdangsothapphan($model_luong->count('tencv')) }}</td>
-                <td></td>
                 <td style="text-align: center">{{ dinhdangsothapphan($model_luong->sum('heso'), 2) }}</td>
                 @foreach ($a_phucap as $key => $val)
                     <td style="text-align: center">{{ dinhdangsothapphan($model_luong->sum($key), 2) }}
@@ -178,7 +167,6 @@
                     <td>{{ $stt++ }}</td>
                     <td style="text-align: left">{{ $ct->tencanbo }}</td>
                     <td style="text-align: center">{{ $ct->tencv }}</td>
-                    <td>{{ dinhdangso($ct->luongcoban) }}</td>
                     <td style="text-align: center">{{ dinhdangsothapphan($ct->heso, 2) }}</td>
                     @foreach ($a_phucap as $key => $val)
                         <td  style="text-align: center">{{ dinhdangsothapphan($ct->$key, 2) }}</td>
@@ -206,7 +194,6 @@
         <tr style="font-weight: bold;text-align: right">
             <td colspan="2">Tổng cộng</td>
             <td style="text-align: center">{{ dinhdangso($model->count('tencv')) }}</td>
-            <td></td>
             <td style="text-align: center">{{ dinhdangsothapphan($model->sum('heso'), 2) }}</td>
 
             @foreach ($a_phucap as $key => $val)
@@ -231,7 +218,7 @@
             <td>{{ dinhdangso($model->sum('luongtn')) }}</td>
         </tr>
         <tr style="font-weight: bold;text-align: right">
-            <td colspan="{{ $col + 6 }}" style="text-align: center">Chuyển nộp 8% BHXH</td>
+            <td colspan="{{ $col + 5 }}" style="text-align: center">Chuyển nộp 8% BHXH</td>
             <td>{{ dinhdangso(($model->sum('st_heso') * 8) / 100) }}</td>
             <td></td>
             <td></td>
@@ -250,7 +237,7 @@
             <td></td>
         </tr>
         <tr style="font-weight: bold;text-align: right">
-            <td colspan="{{ $col + 6 }}">Chuyển nộp 1,5% BHYT</td>
+            <td colspan="{{ $col + 5 }}">Chuyển nộp 1,5% BHYT</td>
             <td>{{ dinhdangso(($model->sum('st_heso') * 1.5) / 100) }}</td>
             <td></td>
             <td></td>
@@ -269,7 +256,7 @@
             <td></td>
         </tr>
         <tr style="font-weight: bold;text-align: right">
-            <td colspan="{{ $col + 6 }}">Chuyển nộp 1% BHTN</td>
+            <td colspan="{{ $col + 5 }}">Chuyển nộp 1% BHTN</td>
             <td>{{ dinhdangso(($model->sum('st_heso') * 1) / 100) }}</td>
             <td></td>
             <td></td>
@@ -288,7 +275,7 @@
             <td></td>
         </tr>
         <tr style="font-weight: bold;text-align: right">
-            <td colspan="{{ $col + 6 }}">Cộng 10,5% BH</td>
+            <td colspan="{{ $col + 5 }}">Cộng 10,5% BH</td>
             <td>{{ dinhdangso(($model->sum('st_heso') * 10.5) / 100) }}</td>
             <td></td>
             <td></td>
@@ -308,7 +295,7 @@
         </tr>
 
         <tr style="font-weight: bold;text-align: right">
-            <td colspan="{{ $col + 6 }}">Chuyển nộp 17,5% BHXH + 3% BHYT + 1% BHTN</td>
+            <td colspan="{{ $col + 5 }}">Chuyển nộp 17,5% BHXH + 3% BHYT + 1% BHTN</td>
             <td></td>
             <td></td>
             <td></td>
@@ -328,7 +315,7 @@
 
         </tr>
         <tr style="font-weight: bold;text-align: right">
-            <td colspan="{{ $col + 6 }}">Chuyển nộp 2% KPCD</td>
+            <td colspan="{{ $col + 5 }}">Chuyển nộp 2% KPCD</td>
             <td></td>
             <td></td>
             <td></td>
@@ -346,7 +333,7 @@
             <td></td>
         </tr>
         <tr style="font-weight: bold;text-align: right">
-            <td colspan="{{ $col + 6 }}">Số chuyển qua thẻ ATM</td>
+            <td colspan="{{ $col + 5 }}">Số chuyển qua thẻ ATM</td>
             <td></td>
             <td></td>
             <td></td>
@@ -365,7 +352,7 @@
 
         </tr>
         <tr>
-            <td colspan="{{ $col + 6 }}"></td>
+            <td colspan="{{ $col + 5 }}"></td>
             <th>{{ $model_tm->where('mapc', 'heso')->where('noidung', 'Lương theo ngạch, bậc')->first()->tieumuc }}</th>
             <th>{{ $model_tm->where('mapc', 'heso')->where('noidung', 'Lương theo ngạch, bậc')->first()->tieumuc }}</th>
             <th>{{ $model_tm->where('mapc', 'heso')->where('noidung', 'Tiền công trả cho vị trí lao động thường xuyên theo hợp đồng')->first()->tieumuc }}
@@ -398,10 +385,30 @@
         </tr>
 
     </table>
-    <table id="data_footer1" class="header" width="96%" border="0" cellspacing="0" cellpadding="8"
-        style="margin:20px auto; text-align: center;">
-        <tr style="float: right">
-            <td>Dùng theo dõi và cập nhật vào giấy rút dự toán lương hàng tháng</td>
+    <table id="data_footer" class="header" width="96%" border="0" cellspacing="0" cellpadding="8" style="margin:20px auto; text-align: center;">
+        <tr>
+            <td style="text-align: left;" width="35%"></td>
+            <td style="text-align: left;" width="30%"></td>
+            <td style="text-align: center; font-style: italic" width="35%">{{$m_dv->diadanh .', '.Date2Str($thongtin['ngaylap'])}}</td>
+        </tr>
+        <tr style="font-weight: bold">
+            <td style="text-align: center;" width="35%">Người lập bảng</td>
+            <th style="text-align: center;" width="50%">{{$m_dv->cdketoan}}</th>
+            <td style="text-align: center;" width="35%">{{$m_dv['cdlanhdao']}}</td>
+        </tr>
+        <tr style="font-style: italic">
+            <td style="text-align: center;" width="35%">(Ghi rõ họ tên)</td>
+            <td style="text-align: center;" width="30%">(Ghi rõ họ tên)</td>
+            <td style="text-align: center;" width="35%">(Ký tên, đóng dấu)</td>
+        </tr>
+        <tr>
+            <td><br><br><br></td>
+        </tr>
+
+        <tr>
+            <td style="text-align: center;" width="35%">{{$m_dv['nguoilapbieu']}}</td>
+            <td style="text-align: center;" width="30%">{{$m_dv['ketoan']}}</td>
+            <td style="text-align: center;" width="35%">{{$m_dv['lanhdao']}}</td>
         </tr>
     </table>
 

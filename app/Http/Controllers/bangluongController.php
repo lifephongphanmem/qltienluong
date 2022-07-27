@@ -5497,8 +5497,9 @@ class bangluongController extends Controller
                             $ct->$mapc_st -= $canbo->$mapc_st;
                             if ($ct->$mapc_st > 0) {
                                 $ct->ghichu .= 'Tăng ' . $a_tenpc[$mapc] . '; ';
-                            } else if ($ct->mapc_st < 0) {
-                                $ct->ghichu .= 'Giảm' . $mapc . '; ';
+                            };
+                            if ($ct->$mapc_st < 0) {
+                                $ct->ghichu .= 'Giảm ' . $a_tenpc[$mapc] . '; ';
                             }
                         }
                         //tính lại lương thực nhận do đã giảm trừ
@@ -5515,12 +5516,10 @@ class bangluongController extends Controller
                         $ct->stkpcd_dv -= $canbo->stkpcd_dv;
                         $ct->stbhtn_dv -= $canbo->stbhtn_dv;
                         $ct->ttbh_dv -= $canbo->ttbh_dv;
-                        if (($ct->heso - $canbo->heso) > 0) {
-                            $ct->ghichu_luong = 'Tăng lương';
-                        };
 
                         if ($m_truylinh != null) { //nếu có bảng truy lĩnh lương của tháng trước                        
                             foreach ($model_truylinh as $val) {
+                                if(isset($model_truylinh_trc)){
                                 $cb_truylinh = $model_truylinh_trc->where('macanbo', $val->macanbo)->where('mact', $val->mact)
                                     ->where('mapb', $val->mapb)->first();
                                 if ($cb_truylinh != null) {
@@ -5529,11 +5528,11 @@ class bangluongController extends Controller
                                         $ct->ghichu .= 'Tăng do truy lĩnh lương';
                                     }
                                 }
-                            }
+                            }}
                         }
 
                         //nếu ttl > 0 =>add
-                        if ($ct->ttl > 0) {
+                        if ($ct->ttl != 0) {
                             $model_thaydoi->add($ct);
                         }
                     }
@@ -5601,9 +5600,18 @@ class bangluongController extends Controller
                     }
                 }
             }
+            
             $nguonkp = dmnguonkinhphi::select('tennguonkp')->where('manguonkp', $m_bl->manguonkp)->first();
             $model_tm = dmtieumuc_default::all();
             $a_tm = array_column($model_tm->toarray(), 'mapc'); //Mảng để so sánh
+                        //kiểm tra xem có danh mục tiểu mục hay không
+                        $a_tieumuc=[];
+                        foreach($a_phucap as $key=>$val){
+                            $tm=$model_tm->where('mapc',$key)->first();
+                            $tm== null?$a_tieumuc:array_push($a_tieumuc,$tm);
+                            
+                        }
+                        
             $a_pb = getPhongBan();
             $thongtin = array(
                 'nguoilap' => $m_bl->nguoilap,
@@ -5621,11 +5629,18 @@ class bangluongController extends Controller
             $m_dv = dmdonvi::where('madv', $m_bl->madv)->first();
 
             //Lấy danh sách kiêm nhiệm cho bảng lương cbkct thôn
-            $a_cv = getChucVuCQ(false);;
-            foreach ($model as $val) {
-                $a_kiemnhiem = hosocanbo_kiemnhiem::select('macanbo', 'macvcq')->where('macanbo', $val->macanbo)->first();
-                $val->chucvukiemnhiem = isset($a_cv[$a_kiemnhiem->macvcq]) ? $a_cv[$a_kiemnhiem->macvcq] : '';
+            $a_cv = getChucVuCQ(false);
+            foreach ($model as $key=>$val) {
+
+                $a_kiemnhiem = hosocanbo_kiemnhiem::select('macanbo', 'macvcq')->where('macanbo', $val->macanbo)->get();
+                if($a_kiemnhiem != []){
+                    foreach($a_kiemnhiem as $item){
+                        $val->chucvukiemnhiem = isset($a_cv[$item->macvcq]) ? $a_cv[$item->macvcq] : '';
+                    }
             }
+        };
+
+            // dd($model);  
             switch ($inputs['mact']) {
                 case '1506673604': {
                         return   view('reports.bangluong.donvi.maublcbct')
@@ -5634,11 +5649,12 @@ class bangluongController extends Controller
                             ->with('m_dv', $m_dv)
                             ->with('model', $model)
                             ->with('model_congtac', $model_congtac)
-                            ->with('a_bh', $a_bh)
                             ->with('a_phucap', $a_phucap)
                             ->with('col', $col)
                             ->with('model_tm', $model_tm)
                             ->with('a_tm', $a_tm)
+                            ->with('a_bh', $a_bh)
+                            ->with('a_tieumuc', $a_tieumuc)
                             ->with('pageTitle', 'Bảng lương chi tiết');
                         break;
                     }
@@ -5649,11 +5665,11 @@ class bangluongController extends Controller
                             ->with('m_dv', $m_dv)
                             ->with('model', $model)
                             ->with('model_congtac', $model_congtac)
-                            ->with('a_bh', $a_bh)
                             ->with('a_phucap', $a_phucap)
                             ->with('col', $col)
                             ->with('model_tm', $model_tm)
                             ->with('a_tm', $a_tm)
+                            ->with('a_tieumuc', $a_tieumuc)
                             ->with('pageTitle', 'Bảng lương chi tiết');
                         break;
                     }
@@ -5664,11 +5680,11 @@ class bangluongController extends Controller
                             ->with('m_dv', $m_dv)
                             ->with('model', $model)
                             ->with('model_congtac', $model_congtac)
-                            ->with('a_bh', $a_bh)
                             ->with('a_phucap', $a_phucap)
                             ->with('col', $col)
                             ->with('model_tm', $model_tm)
                             ->with('a_tm', $a_tm)
+                            ->with('a_tieumuc', $a_tieumuc)
                             ->with('pageTitle', 'Bảng lương chi tiết');
                         break;
                     }
@@ -5679,11 +5695,11 @@ class bangluongController extends Controller
                             ->with('m_dv', $m_dv)
                             ->with('model', $model)
                             ->with('model_congtac', $model_congtac)
-                            ->with('a_bh', $a_bh)
                             ->with('a_phucap', $a_phucap)
                             ->with('col', $col)
                             ->with('model_tm', $model_tm)
                             ->with('a_tm', $a_tm)
+                            ->with('a_tieumuc', $a_tieumuc)
                             ->with('pageTitle', 'Bảng lương chi tiết');
                         break;
                     }

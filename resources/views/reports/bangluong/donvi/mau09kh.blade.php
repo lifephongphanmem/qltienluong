@@ -150,6 +150,7 @@
                     <td class="text-right">{{ dinhdangso($model_luong->sum('chenhlech')) }}</td>
                 </tr>
                 @foreach ($model_luong as $ct)
+                @if($ct->tongso != 0)
                     <tr>
                         <td>{{ $stt++ }}</td>
                         <td style="text-align: left">{{ $ct->tencanbo }}</td>
@@ -168,6 +169,7 @@
                         <td class="text-right">{{ dinhdangso($ct->hocbong) }}</td>
                         <td class="text-right">{{ dinhdangso($ct->chenhlech) }}</td>
                     </tr>
+                    @endif
                 @endforeach
             @endif
         @endforeach
@@ -195,11 +197,10 @@
         @foreach ($model_thaydoi as $key=>$val)                
             <tr>
                 <td>{{ ++$key }}</td>
-                <td>{{ $val->tencanbo }}</td>
-                <td>{{ $val->tencv }}</td>
-                <td>{{ dinhdangso($val->ttl) }}</td>
+                <td >{{ $val->tencanbo }}</td>
+                <td class="text-center">{{ $val->tencv }}</td>
+                <td class="text-right">{{ dinhdangso($val->luongtn) }}</td>
                 <td>
-                    {{isset($val->ghichu_pctnn)?$val->ghichu_pctnn:''}}
                     {{isset($val->ghichu_luong)?$val->ghichu_luong:''}}
                     {{isset($val->ghichu)?$val->ghichu:''}}
                 </td>
@@ -210,7 +211,7 @@
             <td></td>
             <td>Cộng</td>
             <td></td>
-            <td>{{ dinhdangso($model_thaydoi->sum('ttl')) }}</td>
+            <td class="text-right">{{ dinhdangso($model_thaydoi->sum('luongtn')) }}</td>
             <td></td>
         </td>
         </tr>

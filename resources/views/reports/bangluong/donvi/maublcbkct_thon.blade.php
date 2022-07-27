@@ -90,7 +90,7 @@
                     <th></th>
                 @endif
             </tr>
-            @if ($a_phucap != [])
+            @if(!empty($a_tieumuc))
             <tr>
                 <th></th>
                 <th></th>
