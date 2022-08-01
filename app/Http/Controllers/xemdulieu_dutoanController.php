@@ -106,7 +106,7 @@ class xemdulieu_dutoanController extends Controller
                 $dv->tralai = isset($dutoan);
                 $dv->masodv = $dutoan->masodv ?? null;
                 $dv->trangthai = $dutoan->trangthai ?? 'CHOGUI';
-                $dv->tralai = $dutoan->trangthai == 'DAGUI'? false : $dv->tralai;
+                $dv->tralai = $dv->trangthai == 'DAGUI'? false : $dv->tralai;
                 $dv->namns = $nam;
             }
 
