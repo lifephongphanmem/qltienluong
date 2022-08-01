@@ -13,6 +13,8 @@ class dmdonvibaocao extends Model
         'tendvbc',
         'ghichu',
         'madvcq',
-        'level'
+        'level',
+        'baocao',
+        'sapxep',
     ];
 }

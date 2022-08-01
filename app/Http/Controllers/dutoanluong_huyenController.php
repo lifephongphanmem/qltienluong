@@ -31,7 +31,7 @@ class dutoanluong_huyenController extends Controller
         if (Session::has('admin')) {
             $inputs = $request->all();
             $model = dutoanluong_huyen::where('madv', session('admin')->madv)->get();
-            //dd($model);
+            
             $madv = session('admin')->madv;
             // $model_nguon = dutoanluong_huyen::where('macqcq', $madv)->where('trangthai', 'DAGUI')->get();
             // $model_nguon_tinh = dutoanluong_tinh::where('madv', $madv)->get();
@@ -68,7 +68,7 @@ class dutoanluong_huyenController extends Controller
             $m_dvbc = dmdonvibaocao::where('level','T')->get();
             $a_donviql = array_column(dmdonvi::wherein('madvbc',array_column($m_dvbc->toarray(),'madvbc'))->get()->toarray(),'tendv','madv');
             
-            return view('functions.dutoanluong.danhsach')
+            return view('functions.dutoanluong.huyen.index')
                 ->with('model', $model->sortby('namns'))
                 ->with('model_tenct', $model_tenct)
                 ->with('model_nhomct', $model_nhomct)

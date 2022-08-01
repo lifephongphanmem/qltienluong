@@ -43,22 +43,22 @@
             <tr class="text-center">
                 <th style="width: 12%;">TỔNG CỘNG</th>
                 @foreach ($a_donvi_baocao as $key => $val)
-                <th style="width: 5%;">{{$val}}</th>
-            @endforeach
+                    <th style="width: 5%;">{{ $val }}</th>
+                @endforeach
             </tr>
-            
+
         </thead>
         <?php $i = 1; ?>
         <tr class="font-weight-bold">
             <td>I</td>
-            <td>Hệ số (theo BC cấp thẩm quyền giao)</td>            
+            <td>Hệ số (theo BC cấp thẩm quyền giao)</td>
             <td class="text-right">{{ dinhdangsothapphan($model_bienche->sum('tonghs'), $lamtron) }}</td>
             @foreach ($a_donvi_baocao as $key => $val)
                 <td class="text-right">{{ dinhdangsothapphan($model_bienche->sum($key), $lamtron) }}</td>
             @endforeach
         </tr>
         @foreach ($model_bienche as $chitiet)
-        <?php $mapc_tong = 'tong_' . $chitiet->mapc; ?>
+            <?php $mapc_tong = 'tong_' . $chitiet->mapc; ?>
             <tr>
                 <td>{{ $i++ }}</td>
                 <td>{{ $chitiet->tenpc }}</td>
@@ -79,7 +79,7 @@
         </tr>
         <?php $i = 1; ?>
         @foreach ($model_comat as $chitiet)
-        <?php $mapc_tong = 'tong_' . $chitiet->mapc; ?>
+            <?php $mapc_tong = 'tong_' . $chitiet->mapc; ?>
             <tr>
                 <td>{{ $i++ }}</td>
                 <td>{{ $chitiet->tenpc }}</td>
@@ -89,6 +89,78 @@
                 @endforeach
             </tr>
         @endforeach
+
+        <tr class="font-weight-bold">
+            <td></td>
+            <td>Tiền có mặt</td>
+            <td class="text-right">{{ dinhdangsothapphan($model_comat->sum('tongtl'), $lamtron) }}</td>
+            @foreach ($a_donvi_baocao as $key => $val)
+                <?php $mapc_tongst = 'st_' . $key; ?>
+                <td class="text-right">{{ dinhdangsothapphan($model_comat->sum($mapc_tongst), $lamtron) }}</td>
+            @endforeach
+        </tr>
+
+        <tr class="font-weight-bold">
+            <td></td>
+            <td>Đã giao</td>
+            <td class="text-right">{{ dinhdangsothapphan($model_bienche->sum('tongtl'), $lamtron) }}</td>
+            @foreach ($a_donvi_baocao as $key => $val)
+                <?php $mapc_tongst = 'st_' . $key; ?>
+                <td class="text-right">{{ dinhdangsothapphan($model_bienche->sum($mapc_tongst), $lamtron) }}</td>
+            @endforeach
+        </tr>
+
+        <tr class="font-weight-bold">
+            <td></td>
+            <td>Chênh lệch</td>
+            <td class="text-right">
+                {{ dinhdangsothapphan($model_bienche->sum('tongtl') - $model_comat->sum('tongtl'), $lamtron) }}</td>
+            @foreach ($a_donvi_baocao as $key => $val)
+                <?php $mapc_tongst = 'st_' . $key; ?>
+                <td class="text-right">
+                    {{ dinhdangsothapphan($model_bienche->sum($mapc_tongst) - $model_comat->sum($mapc_tongst), $lamtron) }}
+                </td>
+            @endforeach
+        </tr>
+        <tr class="font-weight-bold">
+            <td></td>
+            <td>Hệ số bình quân</td>
+            <td class="text-right">
+                {{ dinhdangsothapphan($model_bienche->sum('tonghs') / 12 / chkDiv0($model_sl_bienche->tongsl), $lamtron) }}</td>
+            @foreach ($a_donvi_baocao as $key => $val)
+                <?php $mapc_tongst = 'st_' . $key; ?>
+                <td class="text-right">
+                    {{ dinhdangsothapphan($model_bienche->sum($key) / chkDiv0($model_sl_comat->$key * 12), $lamtron) }}</td>
+            @endforeach
+        </tr>
+        <tr class="font-weight-bold">
+            <td></td>
+            <td>Hệ số chưa tuyển</td>
+            <td class="text-right">
+                {{ dinhdangsothapphan(($model_sl_bienche->tongsl - $model_sl_comat->tongsl) * 2.34, $lamtron) }}</td>
+            @foreach ($a_donvi_baocao as $key => $val)
+                <td class="text-right">
+                    {{ dinhdangsothapphan(($model_sl_bienche->$key - $model_sl_comat->$key) * 2.34, $lamtron) }}</td>
+            @endforeach
+        </tr>
+
+        <tr class="font-weight-bold">
+            <td>I</td>
+            <td>Số lượng cán bộ xã tỉnh giao</td>
+            <td class="text-right">{{ dinhdangsothapphan($model_sl_bienche->tongsl, $lamtron) }}</td>
+            @foreach ($a_donvi_baocao as $key => $val)
+                <td class="text-right">{{ dinhdangsothapphan($model_sl_bienche->$key, $lamtron) }}</td>
+            @endforeach
+        </tr>
+
+        <tr class="font-weight-bold">
+            <td>II</td>
+            <td>Số lượng cán bộ xã hiện có</td>
+            <td class="text-right">{{ dinhdangsothapphan($model_sl_comat->tongsl, $lamtron) }}</td>
+            @foreach ($a_donvi_baocao as $key => $val)
+                <td class="text-right">{{ dinhdangsothapphan($model_sl_comat->$key, $lamtron) }}</td>
+            @endforeach
+        </tr>
     </table>
 
     <table id="data_footer" class="header" width="96%" border="0" cellspacing="0" cellpadding="8"

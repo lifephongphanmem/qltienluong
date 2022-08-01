@@ -912,6 +912,12 @@ Route::group(['prefix'=>'chuc_nang'],function(){
             Route::get('chitietbl','dutoanluong_khoiController@printfbl');//in một đơn vị trong khối
         });
 
+        Route::group(['prefix'=>'tinh'],function(){
+            Route::get('index','dutoanluong_tinhController@index');
+            Route::post('tralai','dutoanluong_tinhController@tralai');
+            Route::post('tao_du_toan','dutoanluong_tinhController@tao_du_toan');          
+        });
+
     });
 
     Route::group(['prefix'=>'dang_ky_luong'],function(){
@@ -1023,6 +1029,7 @@ Route::group(['prefix'=>'bao_cao'],function(){
             Route::post('dsnangluong','baocaobangluongController@dsnangluong');
             Route::post('chitratheonkp','baocaobangluongController@chitratheonkp');
             Route::post('chitratheocb','baocaobangluongController@chitratheocb');
+            Route::post('dscanbo','baocaobangluongController@dscanbo');
         });
 
         Route::group(['prefix'=>'khoi'],function(){

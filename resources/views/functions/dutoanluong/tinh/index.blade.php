@@ -25,6 +25,9 @@
     <script>
         jQuery(document).ready(function() {
             TableManaged.init();
+            $('#namns').change(function() {
+                window.location.href = '/chuc_nang/du_toan_luong/tinh/index?namns=' + $('#namns').val();
+            });
         });
     </script>
 @stop
@@ -34,22 +37,34 @@
         <div class="col-md-12">
             <div class="portlet light bordered">
                 <div class="portlet-title">
-                    <div class="caption">DANH SÁCH DỰ TOÁN LƯƠNG CỦA ĐƠN VỊ </div>
+                    <div class="caption">DANH SÁCH DỰ TOÁN LƯƠNG CỦA SỞ BAN NGÀNH, THÀNH PHỐ, HUYỆN, THỊ XÃ </div>
                     <div class="actions">
-                        <button type="button" id="_btnadd" class="btn btn-default btn-xs" onclick="add()"
+                        <button type="button" onclick="inbl_th('{{ $inputs['namns'] }}')" class="btn btn-default mbs">
+                            <i class="fa fa-print"></i>&nbsp; In tổng hợp</button>
+
+                        {{-- <button type="button" id="_btnadd" class="btn btn-default btn-xs" onclick="add()"
                             data-target="#modal-dutoan" data-toggle="modal"><i class="fa fa-plus"></i>&nbsp;Thêm mới dự
-                            toán</button>
+                            toán</button> --}}
                     </div>
                 </div>
                 <div class="portlet-body form-horizontal">
+                    <div class="row" style="padding-bottom: 6px;">
+                        <div class="col-md-4 col-md-offset-2">
+                            <div class="form-group">
+                                <label class="col-md-4 control-label"> Năm dự toán<span class="require">*</span></label>
+                                <div class="col-md-8">
+                                    {!! Form::select('namns', getNam(), $inputs['namns'], ['id' => 'namns', 'class' => 'form-control select2me']) !!}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
 
                     <table id="sample_4" class="table table-hover table-striped table-bordered" style="min-height: 230px">
                         <thead>
                             <tr>
                                 <th class="text-center" style="width: 5%">STT</th>
-                                <th class="text-center">Năm ngân sách</th>
-                                <th class="text-center">Đơn vị gửi</br>số liệu</th>
-                                <th class="text-center">Đơn vị chủ quản</th>
+                                <th class="text-center">Địa bàn báo cáo</th>
                                 <th class="text-center">Trạng thái</th>
                                 <th class="text-center">Thao tác</th>
                             </tr>
@@ -59,47 +74,28 @@
                                 @foreach ($model as $key => $value)
                                     <tr>
                                         <td class="text-center">{{ $key + 1 }}</td>
-                                        <td class="text-center">{{ $value->namns }}</td>
-                                        <td class="text-center">{{ $value->dagui . '/' . $value->soluong }}</td>
-                                        <td class="text-center">{{ $a_donviql[$value->macqcq] }}</td>
-                                        <td class="text-center bold">{{ $a_trangthai[$value['trangthai']] }}</td>
+                                        <td class="bold">{{ $value->tendvbc }}</td>
+                                        <td class="text-center bold">{{ $a_trangthai[$value['trangthai']] ?? '' }}</td>
                                         <td>
-                                            <button type="button" title="In số liệu"
-                                                onclick="indutoan('{{ $value->namns }}','{{ $value->masodv }}')"
-                                                class="btn btn-default btn-sm mbs" data-target="#indt-modal"
-                                                data-toggle="modal">
-                                                <i class="fa fa-print"></i>
-                                            </button>
-
-                                            {{-- <a href="{{ url($furl_th . 'tonghop?namns=' . $value->namns) }}"
-                                                class="btn btn-default btn-sm" target="_blank">
-                                                <i class="fa fa-print"></i>&nbsp; Số liệu tổng hợp</a> --}}
-
-                                            @if ($value['trangthai'] == 'CHUAGUI')
-                                                <button type="button" class="btn btn-default btn-sm" title="Gửi dữ liệu"
-                                                    onclick="confirmChuyen('{{ $value->namns }}','{{ $value->masodv }}')"
-                                                    data-target="#chuyen-modal" data-toggle="modal"><i
-                                                        class="fa fa-share-square-o"></i>&nbsp;
+                                            @if ($value->masodv != null)
+                                                <button type="button" title="In số liệu"
+                                                    onclick="indutoan('{{ $value->namns }}','{{ $value->masodv }}')"
+                                                    class="btn btn-default btn-sm mbs" data-target="#indt-modal"
+                                                    data-toggle="modal">
+                                                    <i class="fa fa-print"></i>
                                                 </button>
-                                            @else
-                                                <button disabled type="button" class="btn btn-default btn-sm"
-                                                    title="Gửi dữ liệu"><i class="fa fa-share-square-o"></i>&nbsp;
-                                                </button>
+
+                                                <a href="{{ url('/chuc_nang/xem_du_lieu/du_toan/tinh?masodv=' . $value->masodv) }}"
+                                                    title="Số liệu chi tiết" class="btn btn-default btn-sm">
+                                                    <i class="fa fa-list-alt"></i>&nbsp;</a>
+
+                                                <button type="button" title="Trả lại dữ liệu"
+                                                    class="btn btn-default btn-sm"
+                                                    onclick="confirmChuyen('{{ $value['masodv'] }}')"
+                                                    data-target="#tralai-modal" data-toggle="modal">
+                                                    <i class="fa icon-share-alt"></i>&nbsp;</button>
                                             @endif
-
-                                            @if ($value['trangthai'] == 'TRALAI')
-                                                <button type="button" class="btn btn-default btn-sm" title="Lý do trả lại"
-                                                    onclick="getLyDo('{{ $value['masodv'] }}')"
-                                                    data-target="#tralai-modal" data-toggle="modal"><i
-                                                        class="fa fa-stack-exchange"></i>&nbsp;
-                                                </button>
-                                            @endif
-
-                                            <a href="{{ url($furl_xem . '?namns=' . $value->namns . '&trangthai=ALL&phanloai=ALL') }}"
-                                                title="Số liệu chi tiết" class="btn btn-default btn-sm">
-                                                <i class="fa fa-list-alt"></i>&nbsp;</a>
                                         </td>
-
                                     </tr>
                                 @endforeach
                             @endif
@@ -107,45 +103,6 @@
                     </table>
                 </div>
             </div>
-        </div>
-    </div>
-
-    <!--Model chuyển-->
-    <div class="modal fade" id="chuyen-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
-        aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                {!! Form::open(['url' => $furl_th . 'senddata', 'id' => 'frm_chuyen', 'method' => 'POST']) !!}
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
-                    <h4 class="modal-title">Đồng ý chuyển số liệu?</h4>
-                </div>
-                <div class="modal-body">
-                    <div class="form-group">
-                        <label><b>Số liệu tổng hợp khi gửi đi sẽ không thể chỉnh sửa. Bạn hãy kiểm tra kỹ số liệu trước khi
-                                gửi.</b></label>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-12">
-                            <label class="control-label" style="text-align: right">Đơn vị nhận dữ liệu </label>
-                            {!! Form::select('macqcq', $a_donviql, null, [
-                                'id' => 'trangthai',
-                                'class' => 'form-control',
-                            ]) !!}
-                        </div>
-                    </div>
-                    <input type="hidden" name="namns" id="namns">
-                    <input type="hidden" name="masodv" id="masodv">
-                    <div class="modal-footer">
-                        <button type="button" class="btn default" data-dismiss="modal">Hủy</button>
-                        <button type="submit" class="btn blue">Đồng ý</button>
-
-                    </div>
-                    {!! Form::close() !!}
-                </div>
-                <!-- /.modal-content -->
-            </div>
-            <!-- /.modal-dialog -->
         </div>
     </div>
 
@@ -203,8 +160,7 @@
                 <div class="row">
                     <div class="col-md-12">
                         <div class="form-group">
-                            <button type="button"
-                                onclick="insolieu('{{ $furl_th . 'kinhphikhongchuyentrach' }}',null)"
+                            <button type="button" onclick="insolieu('{{ $furl_th . 'kinhphikhongchuyentrach' }}',null)"
                                 style="border-width: 0px" class="btn btn-default btn-xs mbs"
                                 data-target="#modal-insolieu" data-toggle="modal">
                                 <i class="fa fa-print"></i>&nbsp; Tổng hợp kinh phí thực hiện
@@ -264,7 +220,8 @@
                 <div class="row">
                     <div class="col-md-12">
                         <div class="form-group">
-                            <button type="button" onclick="insolieu('{{ $furl_th . 'tonghophopdong_m2' }}','1506673585')"
+                            <button type="button"
+                                onclick="insolieu('{{ $furl_th . 'tonghophopdong_m2' }}','1506673585')"
                                 style="border-width: 0px" class="btn btn-default btn-xs mbs"
                                 data-target="#modal-insolieu" data-toggle="modal">
                                 <i class="fa fa-print"></i>&nbsp; Tổng hợp hợp đồng bổ sung quỹ lương (Mẫu 02)</button>
@@ -278,7 +235,6 @@
             </div>
         </div>
     </div>
-
 
     <!--Mẫu in số liệu -->
     {!! Form::open(['url' => '', 'method' => 'post', 'target' => '_blank', 'files' => true, 'id' => 'frm_insolieu']) !!}
@@ -387,6 +343,34 @@
     </div>
     {!! Form::close() !!}
 
+    {{-- Trả lại --}}
+    <div class="modal fade" id="tralai-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            {!! Form::open(['url' => '/chuc_nang/du_toan_luong/tinh/tralai', 'id' => 'frm_tralai', 'method' => 'POST']) !!}
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+                <h4 class="modal-title">Đồng ý trả lại số liệu?</h4>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label class="control-label">Lý do trả lại dữ liệu</label>
+                    {!! Form::textarea('lydo', null, ['id' => 'lydo', 'class' => 'form-control', 'rows' => '3']) !!}
+                </div>
+                <input type="hidden" name="masodv" >
+                <div class="modal-footer">
+                    <button type="button" class="btn default" data-dismiss="modal">Hủy</button>
+                    <button type="submit" class="btn blue">Đồng ý</button>
+                </div>
+                {!! Form::close() !!}
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+    </div>
+</div>
+
     <script>
         //Gán thông tin để lấy dữ liệu
         function indutoan(namdt, masodv) {
@@ -416,10 +400,29 @@
             $('#frm_indanhsachdonvi').find("[name^='namns']").val($('#namns').val());
         }
 
-        function confirmChuyen(namns, masodv) {
-            $('#frm_chuyen').find("[name^='namns']").val(namns);
-            $('#frm_chuyen').find("[name^='masodv']").val(masodv);
+        function confirmChuyen(masodv) {
+            $('#frm_tralai').find("[name^='masodv']").val(masodv);
         }
+
+        $(function() {
+            $('#frm_tralai :submit').click(function() {
+                var chk = true;
+                if ($('#lydo').val() == '') {
+                    chk = false;
+                }
+
+                //Kết quả
+                if (chk == false) {
+                    toastr.error('Lý do trả lại không được bỏ trống.', 'Lỗi!');
+                    $("#frm_tralai").submit(function(e) {
+                        e.preventDefault();
+                    });
+                } else {
+                    $("#frm_tralai").unbind('submit').submit();
+                }
+            });
+        });
+
     </script>
 
 @stop
