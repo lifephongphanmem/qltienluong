@@ -66,7 +66,6 @@ class nguonkinhphiController extends Controller
             $model_thongtu = dmthongtuquyetdinh::where('sohieu',$inputs['sohieu'])->first();
             $ngayapdung = new Carbon($model_thongtu->ngayapdung);
             $inputs['namdt'] = chkDbl($model_thongtu->namdt) == 0 ? date('Y'): date_format($ngayapdung, 'Y');
-
             //Kiểm tra nếu có rồi thì ko tạo
             $chk = nguonkinhphi::where('sohieu',$inputs['sohieu'])
                 ->where('namns',$inputs['namdt'])
@@ -238,7 +237,7 @@ class nguonkinhphiController extends Controller
                 $m_nb = array();
                 $m_tnn = array();
             }
-            //dd($m_nb);
+            // dd($m_nb);
             foreach($m_cb_kn as $ct){
                 if(!isset($m_cb[$ct->macanbo])){
                     continue;
@@ -314,7 +313,7 @@ class nguonkinhphiController extends Controller
                 }
                 $m_nb[$key] = $this->getHeSoPc($a_pc, $m_nb[$key],$inputs['chenhlech']);
             }
-            //dd($m_tnn);
+            // dd($m_tnn);
             foreach ($m_tnn as $key => $val) {
                 if(isset($inputs['thaisan'])) {
                     //kiểm tra xem tháng đó có nâng lương có nghỉ ts ko nếu có tháng nâng lương thành tháng ngay sau ngày nghỉ
@@ -439,7 +438,8 @@ class nguonkinhphiController extends Controller
 
             $m_data = a_split($a_data,array('mact','macongtac'));
             $m_data = a_unique($m_data);
-            //dd($a_data);
+
+            // dd($a_data);
             //tính lại do lệnh với bảng lương
             for ($i = 0; $i < count($m_data); $i++) {
                 $dutoan = a_getelement($a_data, array('mact' => $m_data[$i]['mact']));
@@ -485,7 +485,7 @@ class nguonkinhphiController extends Controller
                                 +$m_data[$i]['boiduong']+$m_data[$i]['baohiem'];
             }
 
-            //dd($m_data);
+            // dd($m_data);
 
             $inputs['trangthai'] = 'CHOGUI';
             $inputs['maphanloai'] = session('admin')->maphanloai;
