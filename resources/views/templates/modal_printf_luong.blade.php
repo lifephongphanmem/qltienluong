@@ -55,7 +55,6 @@
                     <div class="col-md-12">
                         <label class="control-label">Sắp xếp theo</label>
                             <select class="form-control select2me" name="sapxep">
-                                <option value="">-- Chọn mục sắp xếp --  </option>
                                 <option value="stt">Tăng theo STT</option>
                                 <option value="pccv">Chức vụ giảm dần, Hệ số lương tăng dần</option>
                             </select>
@@ -85,8 +84,6 @@
         </div>
         <div class="modal-footer">
             <button type="button" data-dismiss="modal" class="btn btn-default">Hủy thao tác</button>
-            <button type="submit" data-dismiss="modal" class="btn btn-primary" onclick="ClickBC1_excel()"
-                id="btn_xls">Xuất Excel</button>
             <button type="submit" data-dismiss="modal" class="btn btn-success" onclick="ClickBC1()">Đồng ý</button>
         </div>
     </div>
@@ -141,7 +138,6 @@
                     <div class="col-md-12">
                         <label class="control-label">Sắp xếp theo</label>
                             <select class="form-control select2me" name="sapxep">
-                                <option value="">-- Chọn mục sắp xếp --  </option>
                                 <option value="stt">Tăng theo STT</option>
                                 <option value="pccv">Chức vụ giảm dần, Hệ số lương tăng dần</option>
                             </select>
@@ -170,8 +166,6 @@
         </div>
         <div class="modal-footer">
             <button type="button" data-dismiss="modal" class="btn btn-default">Hủy thao tác</button>
-            <button type="submit" class="btn btn-primary" onclick="ClickBCtt107_m2_excel()" id="btn_xls">Xuất
-                Excel</button>
             <button type="submit" class="btn btn-success">Đồng ý</button>
         </div>
     </div>
@@ -226,7 +220,6 @@
                     <div class="col-md-12">
                         <label class="control-label">Sắp xếp theo</label>
                             <select class="form-control select2me" name="sapxep">
-                                <option value="">-- Chọn mục sắp xếp --  </option>
                                 <option value="stt">Tăng theo STT</option>
                                 <option value="pccv">Chức vụ giảm dần, Hệ số lương tăng dần</option>
                             </select>
@@ -262,8 +255,6 @@
         </div>
         <div class="modal-footer">
             <button type="button" data-dismiss="modal" class="btn btn-default">Hủy thao tác</button>
-            <button type="submit" class="btn btn-primary" onclick="ClickBCtt107_m2_excel()" id="btn_xls">Xuất
-                Excel</button>
             <button type="submit" class="btn btn-success">Đồng ý</button>
         </div>
     </div>
@@ -323,7 +314,6 @@
                     <div class="col-md-12">
                         <label class="control-label">Sắp xếp theo</label>
                             <select class="form-control select2me" name="sapxep">
-                                <option value="">-- Chọn mục sắp xếp --  </option>
                                 <option value="stt">Tăng theo STT</option>
                                 <option value="pccv">Chức vụ giảm dần, Hệ số lương tăng dần</option>
                             </select>
@@ -357,8 +347,6 @@
         </div>
         <div class="modal-footer">
             <button type="button" data-dismiss="modal" class="btn btn-default">Hủy thao tác</button>
-            <button type="submit" data-dismiss="modal" class="btn btn-primary" onclick="ClickBC6_excel()"
-                id="btn_xls">Xuất Excel</button>
             <button type="submit" data-dismiss="modal" class="btn btn-success" onclick="ClickBC6()">Đồng ý</button>
             {{-- <button type="submit" data-dismiss="modal" class="btn btn-primary" onclick="ClickBC6_excel()">Xuất Excel</button> --}}
         </div>
@@ -420,8 +408,6 @@
         </div>
         <div class="modal-footer">
             <button type="button" data-dismiss="modal" class="btn btn-default">Hủy thao tác</button>
-            <button type="submit" data-dismiss="modal" class="btn btn-primary" onclick="ClickBCds_excel()"
-                id="btn_xls">Xuất Excel</button>
             <button type="submit" data-dismiss="modal" class="btn btn-success" onclick="ClickBCds()">Đồng
                 ý</button>
             <!--button type="submit" data-dismiss="modal" class="btn btn-primary" onclick="ClickBCds_excel()">Xuất Excel</button-->
@@ -504,8 +490,6 @@
         </div>
         <div class="modal-footer">
             <button type="button" data-dismiss="modal" class="btn btn-default">Hủy thao tác</button>
-            <button type="submit" data-dismiss="modal" class="btn btn-primary" onclick="ClickBCtt107_tl_excel()"
-                id="btn_xls">Xuất Excel</button>
             <button type="submit" data-dismiss="modal" class="btn btn-success" onclick="ClickBCtt107_tl()">Đồng
                 ý</button>
             <!--button type="submit" data-dismiss="modal" class="btn btn-primary" onclick="ClickBCtt107_excel()">Xuất Excel</button-->
@@ -565,7 +549,6 @@
                     <div class="col-md-12">
                         <label class="control-label">Sắp xếp theo</label>
                             <select class="form-control select2me" name="sapxep">
-                                <option value="">-- Chọn mục sắp xếp --  </option>
                                 <option value="stt">Tăng theo STT</option>
                                 <option value="pccv">Chức vụ giảm dần, Hệ số lương tăng dần</option>
                             </select>
@@ -594,8 +577,6 @@
         </div>
         <div class="modal-footer">
             <button type="button" data-dismiss="modal" class="btn btn-default">Hủy thao tác</button>
-            <button type="submit" class="btn btn-primary" onclick="ClickBCtt107_m2_excel()" id="btn_xls">Xuất
-                Excel</button>
             <button type="submit" class="btn btn-success">Đồng ý</button>
         </div>
     </div>
@@ -652,7 +633,6 @@
                     <div class="col-md-12">
                         <label class="control-label">Sắp xếp theo</label>
                             <select class="form-control select2me" name="sapxep">
-                                <option value="">-- Chọn mục sắp xếp --  </option>
                                 <option value="stt">Tăng theo STT</option>
                                 <option value="pccv">Chức vụ giảm dần, Hệ số lương tăng dần</option>
                             </select>
@@ -681,8 +661,6 @@
         </div>
         <div class="modal-footer">
             <button type="button" data-dismiss="modal" class="btn btn-default">Hủy thao tác</button>
-            <button type="submit" class="btn btn-primary" onclick="ClickBCtt107_m2_excel()" id="btn_xls">Xuất
-                Excel</button>
             <button type="submit" class="btn btn-success">Đồng ý</button>
         </div>
     </div>
@@ -739,7 +717,6 @@
                     <div class="col-md-12">
                         <label class="control-label">Sắp xếp theo</label>
                             <select class="form-control select2me" name="sapxep">
-                                <option value="">-- Chọn mục sắp xếp --  </option>
                                 <option value="stt">Tăng theo STT</option>
                                 <option value="pccv">Chức vụ giảm dần, Hệ số lương tăng dần</option>
                             </select>
@@ -768,8 +745,6 @@
         </div>
         <div class="modal-footer">
             <button type="button" data-dismiss="modal" class="btn btn-default">Hủy thao tác</button>
-            <button type="submit" class="btn btn-primary" onclick="ClickBCtt107_m2_excel()" id="btn_xls">Xuất
-                Excel</button>
             <button type="submit" class="btn btn-success">Đồng ý</button>
         </div>
     </div>
@@ -826,7 +801,6 @@
                     <div class="col-md-12">
                         <label class="control-label">Sắp xếp theo</label>
                             <select class="form-control select2me" name="sapxep">
-                                <option value="">-- Chọn mục sắp xếp --  </option>
                                 <option value="stt">Tăng theo STT</option>
                                 <option value="pccv">Chức vụ giảm dần, Hệ số lương tăng dần</option>
                             </select>
@@ -855,8 +829,6 @@
         </div>
         <div class="modal-footer">
             <button type="button" data-dismiss="modal" class="btn btn-default">Hủy thao tác</button>
-            <button type="submit" class="btn btn-primary" onclick="ClickBCtt107_m2_excel()" id="btn_xls">Xuất
-                Excel</button>
             <button type="submit" class="btn btn-success">Đồng ý</button>
         </div>
     </div>
@@ -911,7 +883,6 @@
                     <div class="col-md-12">
                         <label class="control-label">Sắp xếp theo</label>
                             <select class="form-control select2me" name="sapxep">
-                                <option value="">-- Chọn mục sắp xếp --  </option>
                                 <option value="stt">Tăng theo STT</option>
                                 <option value="pccv">Chức vụ giảm dần, Hệ số lương tăng dần</option>
                             </select>
@@ -950,8 +921,6 @@
         </div>
         <div class="modal-footer">
             <button type="button" data-dismiss="modal" class="btn btn-default">Hủy thao tác</button>
-            <button type="submit" class="btn btn-primary" onclick="ClickBCtt107_m2_excel()" id="btn_xls">Xuất
-                Excel</button>
             <button type="submit" class="btn btn-success">Đồng ý</button>
         </div>
     </div>
@@ -1005,7 +974,6 @@
                     <div class="col-md-12">
                         <label class="control-label">Sắp xếp theo</label>
                             <select class="form-control select2me" name="sapxep">
-                                <option value="">-- Chọn mục sắp xếp --  </option>
                                 <option value="stt">Tăng theo STT</option>
                                 <option value="pccv">Chức vụ giảm dần, Hệ số lương tăng dần</option>
                             </select>
@@ -1034,8 +1002,6 @@
         </div>
         <div class="modal-footer">
             <button type="button" data-dismiss="modal" class="btn btn-default">Hủy thao tác</button>
-            <button type="submit" class="btn btn-primary" onclick="ClickBCtt107_m2_excel()" id="btn_xls">Xuất
-                Excel</button>
             <button type="submit" class="btn btn-success">Đồng ý</button>
         </div>
     </div>

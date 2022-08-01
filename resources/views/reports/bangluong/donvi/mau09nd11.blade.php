@@ -119,7 +119,6 @@
 
                         <td class="text-right">{{dinhdangso($ct->tongso)}}</td>
                         <td class="text-right">{{dinhdangso($ct->luong)}}</td>
-                        <td></td>
                         <td class="text-right">{{dinhdangso($ct->hopdong)}}</td>
                         <td class="text-right">{{dinhdangso($ct->tangthem)}}</td>
                         <td class="text-right">{{dinhdangso($ct->tienthuong)}}</td>
