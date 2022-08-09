@@ -85,7 +85,7 @@
                                                     <i class="fa fa-print"></i>
                                                 </button>
 
-                                                <a href="{{ url('/chuc_nang/xem_du_lieu/du_toan/tinh?masodv=' . $value->masodv) }}"
+                                                <a href="{{ url('/chuc_nang/xem_du_lieu/du_toan/tinh?namns=' . $inputs['namns']) .'&madvbc='. $value->madvbc }}"
                                                     title="Số liệu chi tiết" class="btn btn-default btn-sm">
                                                     <i class="fa fa-list-alt"></i>&nbsp;</a>
 
