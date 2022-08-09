@@ -100,13 +100,17 @@ class xemdulieu_dutoanController extends Controller
                 $a_phanloai[$key] = $model_phanloai[$key];
             $a_phanloai['ALL'] = '--Chọn tất cả--';
             $m_dutoan = dutoanluong::where('namns', $nam)->where('trangthai', 'DAGUI')->get();
-
+            $m_dutoan_huyen = dutoanluong_huyen::where('namns', $nam)->where('madv', $madv)->first();
+            //dd($m_dutoan_huyen);
             foreach ($model_donvi as $dv) {
                 $dutoan = $m_dutoan->where('madv', $dv->madv)->first();
                 $dv->tralai = isset($dutoan);
                 $dv->masodv = $dutoan->masodv ?? null;
+                $dv->ngayguidv = $dutoan->ngayguidv ?? null;                
                 $dv->trangthai = $dutoan->trangthai ?? 'CHOGUI';
-                $dv->tralai = $dv->trangthai == 'DAGUI'? false : $dv->tralai;
+                if (($m_dutoan_huyen->trangthai ?? 'CHOGUI') != 'DAGUI' && $dv->trangthai == 'DAGUI') {
+                    $dv->tralai = true;
+                }
                 $dv->namns = $nam;
             }
 
@@ -118,7 +122,7 @@ class xemdulieu_dutoanController extends Controller
             }
             $model_nhomct = dmphanloaicongtac::select('macongtac', 'tencongtac')->get();
             $model_tenct = dmphanloaict::select('tenct', 'macongtac', 'mact')->get();
-
+            //dd($model_donvi->first());
             return view('functions.viewdata.dutoanluong.huyen.index')
                 ->with('model', $model_donvi)
                 ->with('inputs', $inputs)
@@ -169,7 +173,7 @@ class xemdulieu_dutoanController extends Controller
                 $dv->tralai = isset($dutoan);
                 $dv->masodv = $dutoan->masodv ?? null;
                 $dv->trangthai = $dutoan->trangthai ?? 'CHOGUI';
-                $dv->tralai = $dutoan->trangthai == 'DAGUI'? false : $dv->tralai;
+                $dv->tralai = $dutoan->trangthai == 'DAGUI' ? false : $dv->tralai;
                 $dv->namns = $nam;
             }
 

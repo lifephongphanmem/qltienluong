@@ -82,8 +82,9 @@
                             <tr>
                                 <th class="text-center" style="width: 5%">STT</th>
                                 <th class="text-center">Tên đơn vị</th>
+                                <th class="text-center">Ngày gửi</th>
                                 {{-- <th class="text-center">Tên đơn vị tổng hợp dữ liệu</th> --}}
-                                <th class="text-center">Thao tác</th>
+                                <th class="text-center" style="width: 15%">Thao tác</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -92,8 +93,9 @@
                                     <tr>
                                         <td class="text-center">{{ $key + 1 }}</td>
                                         <td>{{ $value->tendv }}</td>
+                                        <td class="text-center">{{ getDayVn($value->ngayguidv) }}</td>
                                         {{-- <td>{{ $value->tendvcq }}</td> --}}
-                                        <td>
+                                        <td class="text-center">
                                             @if ($value->masodv != null)
                                                 {{-- <a href="{{url($furl_th.'tonghopct?namns='.$inputs['namns'].'&madv='.$value['madv'])}}" class="btn btn-default btn-sm" TARGET="_blank">
                                                 <i class="fa fa-print"></i>&nbsp; Số liệu tổng hợp</a>
