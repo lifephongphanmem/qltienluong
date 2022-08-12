@@ -199,7 +199,7 @@
                 <td>{{ ++$key }}</td>
                 <td >{{ $val->tencanbo }}</td>
                 <td class="text-center">{{ $val->tencv }}</td>
-                <td class="text-right">{{ dinhdangso($val->luongtn) }}</td>
+                <td class="text-right">{{ dinhdangso($val->luongthaydoi) }}</td>
                 <td>
                     {{isset($val->ghichu_luong)?$val->ghichu_luong:''}}
                     {{isset($val->ghichu)?$val->ghichu:''}}

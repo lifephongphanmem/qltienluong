@@ -5500,11 +5500,10 @@ class bangluongController extends Controller
                     $ct->khoan += $ct->$st;
                 }
                 $ct->hocbong = 0;
-                $ct->chenhlech = 0;
                 $ct->truylinh = 0;
                 if ($m_truylinh != null) { // Nếu tháng đó có bảng lương truy lĩnh
                     foreach ($model_truylinh as $val) {
-                        if ($ct->macanbo == $val->macanbo) {
+                        if ($ct->macanbo == $val->macanbo && $ct->mact == $val->mact) {
                             $ct->truylinh = $val->luongtn;
                         }
                     }
@@ -5515,7 +5514,8 @@ class bangluongController extends Controller
                     $ct->hopdong += $ct->luong;
                     $ct->luong = 0;
                 }
-                $ct->tongso = $ct->luong + $ct->truylinh + $ct->hopdong + $ct->tangthem + $ct->tienthuong + $ct->phucap + $ct->khoan + $ct->hocbong;
+                // $ct->tongso = $ct->luong + $ct->truylinh + $ct->hopdong + $ct->tangthem + $ct->tienthuong + $ct->phucap + $ct->khoan + $ct->hocbong;
+                $ct->tongso = $ct->luongtn + $ct->truylinh;
             }
 
             //Tính toán tiền chênh giữa 2 tháng
@@ -5540,7 +5540,8 @@ class bangluongController extends Controller
                             }
                         }
                         //tính lại lương thực nhận do đã giảm trừ
-                        $ct->luongtn = $ct->ttl - $ct->ttbh - $canbo->ttl + $canbo->ttbh;
+                        // $ct->luongtn = $ct->ttl - $ct->ttbh - ($canbo->ttl - $canbo->ttbh);
+                        $ct->luongtn = $ct->luongtn - $canbo->luongtn;
                         $ct->tonghs -= $canbo->tonghs;
                         $ct->ttl -= $canbo->ttl;
                         $ct->stbhxh -= $canbo->stbhxh;
@@ -5554,23 +5555,30 @@ class bangluongController extends Controller
                         $ct->stbhtn_dv -= $canbo->stbhtn_dv;
                         $ct->ttbh_dv -= $canbo->ttbh_dv;
 
-                        if ($m_truylinh != null) { //nếu có bảng truy lĩnh lương của tháng trước                        
+                        if ($m_truylinh != null) { //nếu có bảng truy lĩnh lương 
+
                             foreach ($model_truylinh as $val) {
                                 if (isset($model_truylinh_trc)) {
                                     $cb_truylinh = $model_truylinh_trc->where('macanbo', $val->macanbo)->where('mact', $val->mact)
                                         ->where('mapb', $val->mapb)->first();
                                     if ($cb_truylinh != null) {
-                                        $ct->truylinh = $val->ttl - $cb_truylinh->ttl;
+                                        $ct->truylinh = $val->luongtn - $cb_truylinh->luongtn;
                                         if ($ct->truylinh > 0) {
                                             $ct->ghichu .= 'Tăng do truy lĩnh lương';
+                                        }else{
+                                            $ct->ghichu .= 'Giảm do truy lĩnh lương';
                                         }
                                     }
+                                }else if($val->mact == $canbo->mact && $val->macanbo == $ct->macanbo){
+                                    $ct->ghichu .= 'Tăng do truy lĩnh lương';
                                 }
                             }
                         }
 
+                        $ct->luongthaydoi=$ct->luongtn + $ct->truylinh;
+
                         //nếu ttl > 0 =>add
-                        if ($ct->ttl != 0) {
+                        if ($ct->luongthaydoi != 0) {
                             $model_thaydoi->add($ct);
                         }
                     }
@@ -5578,6 +5586,7 @@ class bangluongController extends Controller
                     $message = 'Không tìm thấy bảng lương tháng ' . $thang . ' năm ' . $nam . ' (cùng nguồn kinh phí) để so sánh.';
                 }
             }
+            // dd($model_thaydoi);
             // dd($model);
             $a_pb = getPhongBan();
             $thongtin = array(
