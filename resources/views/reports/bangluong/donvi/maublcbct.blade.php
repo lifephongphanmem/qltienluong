@@ -28,14 +28,14 @@
 
             </td>
         </tr>
-        <tr >
+        <tr>
             <td style="text-align: left;width: 60%">
-                <b>Chương 805 - 341 - Nguồn {{$m_bl->manguonkp}}</b>
+                <b>Chương 805 - 341 - Nguồn {{ $m_bl->manguonkp }}</b>
             </td>
         </tr>
         <tr>
             <td style="text-align: left;width: 60%">
-                <b>{{'('. $thongtin['nguonkp'].')' }}</b>
+                <b>{{ '(' . $thongtin['nguonkp'] . ')' }}</b>
             </td>
 
             <td style="text-align: left; font-style: italic">
@@ -63,8 +63,8 @@
                 <th style="width: 1%;" rowspan="2">S</br>T</br>T</th>
                 <th style="width: 5%;" rowspan="2">Họ và tên</th>
                 <th style="width: 1%;" rowspan="2">Chức</br>danh</th>
-                {{-- <th style="width: 1%;" rowspan="2">Lương cơ sở</br>{{ dinhdangso($thongtin['mucluong']) }}đ</br>tháng
-                </th> --}}
+                <th style="width: 1%;" rowspan="2">Lương cơ sở</br>{{ dinhdangso($thongtin['mucluong']) }}đ</br>tháng
+                </th>
                 <th rowspan="2" style="width: 2%;">Lương</th>
                 <th style="width: 5%;" colspan="{{ $col }}" rowspan="{{ $col == 0 ? 2 : '' }}">HỆ SỐ PHỤ CẤP</th>
                 <th style="width: 5%;" colspan="{{ $col + 2 }}">SỐ TIỀN</th>
@@ -89,14 +89,38 @@
                 <th>2% KPCD</th>
 
             </tr>
-            @if(!empty($a_tieumuc))
-            <tr>
-                <th></th>
-                {{-- <th></th> --}}
-                <th></th>
-                <th></th>
-                <th></th>
-                @if ($a_phucap != [])
+            @if (!empty($a_tieumuc))
+                <tr>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    @if ($a_phucap != [])
+                        @foreach ($a_phucap as $key => $val)
+                            @if ($key == 'vuotkhung' || $key == 'pctnn')
+                                <?php $m_tm = $model_tm->where('mapc', 'vuotkhung,pctnn'); ?>
+                                <?php $key = 'vuotkhung,pctnn'; ?>
+                            @else
+                                <?php $m_tm = $model_tm->where('mapc', $key); ?>
+                            @endif
+                            @if (in_array($key, $a_tm))
+                                @foreach ($m_tm as $v)
+                                    <th>{{ $v->tieumuc }}</th>
+                                @endforeach
+                            @else
+                                <th></th>
+                            @endif
+                        @endforeach
+                    @else
+                        <th></th>
+                    @endif
+
+
+                    <th>{{ $model_tm->where('mapc', 'heso')->where('noidung', 'Lương theo ngạch, bậc')->first()->tieumuc }}
+                    </th>
+                    <th>{{ $model_tm->where('mapc', 'heso')->where('noidung', 'Tiền công trả cho vị trí lao động thường xuyên theo hợp đồng')->first()->tieumuc }}
+                    </th>
                     @foreach ($a_phucap as $key => $val)
                         @if ($key == 'vuotkhung' || $key == 'pctnn')
                             <?php $m_tm = $model_tm->where('mapc', 'vuotkhung,pctnn'); ?>
@@ -112,38 +136,14 @@
                             <th></th>
                         @endif
                     @endforeach
-                @else
+                    {{-- <th>{{ $model_tm->where('mapc', 'pck')->first()->tieumuc }}</th> --}}
+                    <th>{{ $model_tm->where('mapc', 'stbhxh_dv')->first()->tieumuc }}</th>
+                    <th>{{ $model_tm->where('mapc', 'stbhyt_dv')->first()->tieumuc }}</th>
+                    {{-- <th>{{ $model_tm->where('mapc', 'stbhtn_dv')->first()->tieumuc }}</th> --}}
+                    <th>{{ $model_tm->where('mapc', 'stkpcd_dv')->first()->tieumuc }}</th>
                     <th></th>
-                @endif
-
-
-                <th>{{ $model_tm->where('mapc', 'heso')->where('noidung', 'Lương theo ngạch, bậc')->first()->tieumuc }}
-                </th>
-                <th>{{ $model_tm->where('mapc', 'heso')->where('noidung', 'Tiền công trả cho vị trí lao động thường xuyên theo hợp đồng')->first()->tieumuc }}
-                </th>
-                @foreach ($a_phucap as $key => $val)
-                    @if ($key == 'vuotkhung' || $key == 'pctnn')
-                        <?php $m_tm = $model_tm->where('mapc', 'vuotkhung,pctnn'); ?>
-                        <?php $key = 'vuotkhung,pctnn'; ?>
-                    @else
-                        <?php $m_tm = $model_tm->where('mapc', $key); ?>
-                    @endif
-                    @if (in_array($key, $a_tm))
-                        @foreach ($m_tm as $v)
-                            <th>{{ $v->tieumuc }}</th>
-                        @endforeach
-                    @else
-                        <th></th>
-                    @endif
-                @endforeach
-                {{-- <th>{{ $model_tm->where('mapc', 'pck')->first()->tieumuc }}</th> --}}
-                <th>{{ $model_tm->where('mapc', 'stbhxh_dv')->first()->tieumuc }}</th>
-                <th>{{ $model_tm->where('mapc', 'stbhyt_dv')->first()->tieumuc }}</th>
-                {{-- <th>{{ $model_tm->where('mapc', 'stbhtn_dv')->first()->tieumuc }}</th> --}}
-                <th>{{ $model_tm->where('mapc', 'stkpcd_dv')->first()->tieumuc }}</th>
-                <th></th>
-                <th></th>
-            </tr>
+                    <th></th>
+                </tr>
             @endif
         </thead>
         <?php $i = 1;
@@ -154,13 +154,17 @@
                 <td>{{ convert2Roman($i++) }}</td>
                 <td style="text-align: left;">{{ $congtac->tenct }}</td>
                 <td style="text-align: center">{{ dinhdangsothapphan($model_luong->count('tencv')) }}</td>
-                {{-- <td></td> --}}
+                <td></td>
                 <td style="text-align: center">{{ dinhdangsothapphan($model_luong->sum('heso'), 2) }}</td>
                 @foreach ($a_phucap as $key => $val)
-                    <td style="text-align: center">{{ dinhdangsothapphan($model_luong->sum($key), 2) }}
+                    @if (in_array($key, ['pccovu', 'pclt', 'pcudn', 'pctnn', 'vuotkhung']))
+                        <td style="text-align: center"></td>
+                    @else
+                        <td style="text-align: center">{{ dinhdangsothapphan($model_luong->sum($key), 2) }}
+                    @endif
                 @endforeach
                 <td>{{ dinhdangso($model_luong->sum('st_heso')) }}</td>
-                <td></td>
+                <td>{{ dinhdangso($model_luong->sum('st_luonghd')) }}</td>
                 @foreach ($a_phucap as $key => $val)
                     <?php $key = 'st_' . $key; ?>
                     <td>{{ dinhdangsothapphan($model_luong->sum($key)), 2 }}
@@ -168,7 +172,7 @@
                 <td>{{ dinhdangso($model_luong->sum('stbhxh_dv')) }}</td>
                 <td>{{ dinhdangso($model_luong->sum('stbhyt_dv')) }}</td>
                 <td>{{ dinhdangso($model_luong->sum('stkpcd_dv')) }}</td>
-                <td>{{ dinhdangso($model_luong->sum('ttbh') - $model_luong->sum('stbhtn')) }}</td>
+                <td>{{ dinhdangso($model_luong->sum('ttbh')) }}</td>
                 <td>{{ dinhdangso($model_luong->sum('luongtn')) }}</td>
             </tr>
             @foreach ($model_luong as $ct)
@@ -176,31 +180,35 @@
                     <td>{{ $stt++ }}</td>
                     <td style="text-align: left">{{ $ct->tencanbo }}</td>
                     <td style="text-align: center">{{ $ct->tencv }}</td>
-                    {{-- <td>{{ dinhdangso($ct->luongcoban) }}</td> --}}
+                    <td>{{ dinhdangso($ct->luongcoban) }}</td>
                     <td style="text-align: center">{{ dinhdangsothapphan($ct->heso, 2) }}</td>
                     @if ($a_phucap != [])
                         @foreach ($a_phucap as $key => $val)
-                            <td style="text-align: center">{{ dinhdangsothapphan($ct->$key, 2) }}</td>
+                            @if ($key == 'pclt' || $key == 'pccovu')
+                                <td style="text-align: center">{{ $ct->$key == 0 ? '' : dinhdangso($ct->$key * 100) . '%' }}</td>
+                            @else
+                                <td style="text-align: center">{{ dinhdangsothapphan($ct->$key, 2) }}</td>
+                            @endif
                         @endforeach
                     @else
                         <td></td>
                     @endif
-                    <td>{{ dinhdangsothapphan($ct->st_heso, 2) }}</td>
-                    <td></td>
+                    <td>{{ dinhdangso($ct->st_heso) }}</td>
+                    <td>{{ dinhdangso($ct->st_luonghd) }}</td>
                     @foreach ($a_phucap as $key => $val)
                         <?php $key = 'st_' . $key; ?>
-                        <td>{{ dinhdangsothapphan($ct->$key, 2) }}</td>
+                        <td>{{ dinhdangso($ct->$key) }}</td>
                     @endforeach
-                    <td>{{ dinhdangsothapphan($ct->stbhxh_dv, 2) }}</td>
-                    <td>{{ dinhdangsothapphan($ct->stbhyt_dv, 2) }}</td>
-                    <td>{{ dinhdangsothapphan($ct->stkpcd_dv, 2) }}</td>
-                    <td>{{ dinhdangsothapphan($ct->ttbh - $ct->stbhtn, 2) }}</td>
-                    <td>{{ dinhdangsothapphan($ct->luongtn, 2) }}</td>
+                    <td>{{ dinhdangso($ct->stbhxh_dv) }}</td>
+                    <td>{{ dinhdangso($ct->stbhyt_dv) }}</td>
+                    <td>{{ dinhdangso($ct->stkpcd_dv) }}</td>
+                    <td>{{ dinhdangso($ct->ttbh - $ct->stbhtn) }}</td>
+                    <td>{{ dinhdangso($ct->luongtn) }}</td>
                 </tr>
             @endforeach
         @endforeach
         <tr style="font-weight: bold;text-align: right">
-            <td colspan="{{ $col == 0 ? 5 : $col + 4 }}">Cộng: {{ $model->count('tencb') }} người
+            <td colspan="{{ $col == 0 ? 6 : $col + 5 }}">Cộng: {{ $model->count('tencb') }} người
                 {{ $model->unique('tencv')->count() }} chức danh</td>
 
             <td>{{ dinhdangso($model->sum('st_heso')) }}</td>
@@ -212,11 +220,12 @@
             <td>{{ dinhdangso($model->sum('stbhxh_dv')) }}</td>
             <td>{{ dinhdangso($model->sum('stbhyt_dv')) }}</td>
             <td>{{ dinhdangso($model->sum('stkpcd_dv')) }}</td>
-            <td>{{ dinhdangso($model->sum('ttbh') - $model->sum('stbhtn')) }}</td>
+            {{-- <td>{{ dinhdangso($model->sum('ttbh') - $model->sum('stbhtn')) }}</td> --}}
+            <td>{{ dinhdangso($model->sum('ttbh')) }}</td>
             <td>{{ dinhdangso($model->sum('luongtn')) }}</td>
         </tr>
-        <tr style="font-weight: bold;text-align: right">
-            <td colspan="{{ $col == 0 ? 5 : $col + 4 }}" style="text-align: center">Cá nhân nộp 8% BHXH</td>
+        <tr style="text-align: right">
+            <td colspan="{{ $col == 0 ? 6 : $col + 5 }}" style="text-align: center">Cá nhân nộp 8% BHXH</td>
             <td>{{ dinhdangso(($model->sum('st_heso') * 8) / 100) }}</td>
             <td></td>
             @foreach ($a_phucap as $key => $val)
@@ -226,11 +235,11 @@
             <td></td>
             <td></td>
             <td></td>
-            <td></td>
+            <td>{{ dinhdangso($model->sum('stbhxh')) }}</td>
             <td></td>
         </tr>
-        <tr style="font-weight: bold;text-align: right">
-            <td colspan="{{ $col == 0 ? 5 : $col + 4 }}">Cá nhân nộp 1,5% BHYT</td>
+        <tr style="text-align: right">
+            <td colspan="{{ $col == 0 ? 6 : $col + 5 }}">Cá nhân nộp 1,5% BHYT</td>
             <td>{{ dinhdangso(($model->sum('st_heso') * 1.5) / 100) }}</td>
             <td></td>
             @foreach ($a_phucap as $key => $val)
@@ -240,40 +249,40 @@
             <td></td>
             <td></td>
             <td></td>
-            <td></td>
+            <td>{{ dinhdangso($model->sum('stbhyt')) }}</td>
             <td></td>
         </tr>
-        <tr style="font-weight: bold;text-align: right">
-            <td colspan="{{ $col == 0 ? 5 : $col + 4 }}">Cá nhân nộp 9,5% bảo hiểm</td>
-            <td></td>
+        <tr style="text-align: right">
+            <td colspan="{{ $col == 0 ? 6 : $col + 5 }}">Cá nhân nộp 9,5% bảo hiểm</td>
+            <td>{{ dinhdangso(($model->sum('st_heso') * 9.5) / 100) }}</td>
             <td></td>
             @foreach ($a_phucap as $key => $val)
                 <?php $k = 'st_' . $key; ?>
-                <td></td>
+                <td>{{ $a_bh[$key] == 0 ? '' : dinhdangso(($model->sum($k) * 9.5) / 100) }}</td>
             @endforeach
             <td></td>
             <td></td>
             <td></td>
-            <td>{{ dinhdangso($model->sum('stbhxh') + $model->sum('stbhyt')) }}</td>
+            <td>{{ dinhdangso($model->sum('ttbh')) }}</td>
             <td></td>
 
         </tr>
         <tr style="font-weight: bold;text-align: right">
-            <td colspan="{{ $col == 0 ? 5 : $col + 4 }}">Thực nhận chuyển khoản</td>
+            <td colspan="{{ $col == 0 ? 6 : $col + 5 }}">Thực nhận chuyển khoản</td>
+            <td>{{ dinhdangso($model->sum('st_heso')-$model->sum('stbhxh')) }}</td>
             <td></td>
+            @foreach ($a_phucap as $key => $val)
+                <?php $k = 'st_' . $key; ?>
+                <td>{{ $a_bh[$key] == 0 ? dinhdangso($model->sum($k)) : dinhdangso($model->sum($k)-($model->sum($k) * 9.5) / 100) }}</td>
+            @endforeach
+            <td>{{ dinhdangso($model->sum('stbhxh_dv')) }}</td>
+            <td>{{ dinhdangso($model->sum('stbhyt_dv')) }}</td>
+            <td>{{ dinhdangso($model->sum('stkpcd_dv')) }}</td>
             <td></td>
-
-            @for ($i = 0; $i < $col; $i++)
-                <td></td>
-            @endfor
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
+            <td>{{ dinhdangso($model->sum('luongtn')) }}</td>
         </tr>
         <tr>
-            <td colspan="{{ $col == 0 ? 5 : $col + 4 }}"></td>
+            <td colspan="{{ $col == 0 ? 6 : $col + 5 }}"></td>
             <th>{{ $model_tm->where('mapc', 'heso')->where('noidung', 'Lương theo ngạch, bậc')->first()->tieumuc }}</th>
             <th>{{ $model_tm->where('mapc', 'heso')->where('noidung', 'Tiền công trả cho vị trí lao động thường xuyên theo hợp đồng')->first()->tieumuc }}
             </th>

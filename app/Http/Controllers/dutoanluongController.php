@@ -206,7 +206,7 @@ class dutoanluongController extends Controller
     {
         if (Session::has('admin')) {
             $inputs = $request->all();
-            //dd($inputs);
+            // dd($inputs);
             if (dutoanluong::where('namns', $inputs['namns'])->where('madv', session('admin')->madv)->count() > 0) {
                 return view('errors.data_error')
                     ->with('message', 'Dự toán năm ' . $inputs['namdt'] . ' đã tồn tại.')
@@ -238,6 +238,7 @@ class dutoanluongController extends Controller
             $m_bl_ct = (new dataController())->getBangluong_ct($m_bl->thang, $m_bl->mabl);
             $a_plct = getPLCTDuToan();
             $a_pc = getColDuToan();
+
             //thêm cán bộ chưa có từ $m_bl1 (phụ) vào $m_bl (chính)
 
             if ($m_bl_ct1 != null) {
@@ -261,6 +262,7 @@ class dutoanluongController extends Controller
                     }
                 }
             }
+
             //dd($m_bl_ct->where('mact','1506672780'));
             //Tính lại lương theo mức lương cơ bản mới
             $a_hoten = array_column(hosocanbo::where('madv', session('admin')->madv)->get()->toarray(), 'tencanbo', 'macanbo');

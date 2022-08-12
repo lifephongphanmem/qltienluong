@@ -185,7 +185,7 @@
                     @if ($a_phucap != [])
                         @foreach ($a_phucap as $key => $val)
                             <?php $key = 'st_' . $key; ?>
-                            <td style="text-align: center">{{ dinhdangsothapphan($ct->$key, 2) }}</td>
+                            <td class="text-right">{{ dinhdangsothapphan($ct->$key, 2) }}</td>
                         @endforeach
                     @else
                         <th></th>
@@ -199,7 +199,8 @@
             <td colspan="{{ $col == 0 ? 6 : $col + 5 }}">Thực nhận</td>
             @if ($a_phucap != [])
                 @foreach ($a_phucap as $key => $val)
-                    <td></td>
+                <?php $k = 'st_' . $key; ?>
+                    <td>{{ $a_bh[$key] == 0 ? dinhdangso($model->sum($k)) :dinhdangso($model->sum($k)-($model->sum($k)* 9.5/100)) }}</td>
                 @endforeach
             @else
                 <td></td>
@@ -211,24 +212,26 @@
             <td colspan="{{ $col == 0 ? 6 : $col + 5 }}">Chuyển khoản</td>
             @if ($a_phucap != [])
                 @foreach ($a_phucap as $key => $val)
-                    <td></td>
+                <?php $pc_ctck='ctck_'.$key ?>
+                <td>{{ dinhdangso($model->sum($pc_ctck)) }}</td>
                 @endforeach
             @else
                 <td></td>
             @endif
-            <td></td>
+            <td>{{ dinhdangso($model->sum('chuyenkhoan')) }}</td>
             <td></td>
         </tr>
         <tr style="font-weight: bold;text-align: right">
             <td colspan="{{ $col == 0 ? 6 : $col + 5 }}">Nhận tiền mặt :</td>
             @if ($a_phucap != [])
                 @foreach ($a_phucap as $key => $val)
-                    <td></td>
+                <?php $pc_cttm='cttm_'.$key ?>
+                <td>{{ dinhdangso($model->sum($pc_cttm)) }}</td>
                 @endforeach
             @else
                 <td></td>
             @endif
-            <td></td>
+            <td>{{ dinhdangso($model->sum('nhantienmat')) }}</td>
             <td></td>
         </tr>
 

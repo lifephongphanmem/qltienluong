@@ -62,7 +62,7 @@
         </tr>        <tr>
             <td colspan="2" style="text-align: left">2. Mã đơn vị: {{$m_dv->maqhns}}</td>
         </tr>        <tr>
-            <td colspan="2" style="text-align: left">3. Tài khoản thanh toán của đơn vị mở tại ngân hàng thương mại: {{$m_dv->tennganhang}}</td>
+            <td colspan="2" style="text-align: left">3. Tài khoản thanh toán của đơn vị mở tại ngân hàng thương mại: {{$m_dv->sotk.'-'.$m_dv->tennganhang}}</td>
         </tr>
     </table>
 

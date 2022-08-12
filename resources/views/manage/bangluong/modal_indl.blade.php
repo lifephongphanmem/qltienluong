@@ -266,23 +266,23 @@
                                     </div>
                                     <div class="col-md-6">
                                         <div class="form-group">
-                                            <button type="button" style="border-width: 0px" onclick="inblcbkct('/chuc_nang/bang_luong/maublcbct')" class="btn btn-default btn-xs mbs"
+                                            <button type="button" style="border-width: 0px" onclick="inblcbkct('/chuc_nang/bang_luong/maublcbkct')" class="btn btn-default btn-xs mbs"
                                             title="Bảng lương cán bộ không chuyên trách xã" data-target="#maucbkct-modal" data-toggle="modal">
-                                        <i class="fa fa-print"></i>&nbsp; Bảng lương cán bộ không chuyên trách xã</button>
+                                        <i class="fa fa-print"></i>&nbsp; Bảng lương cán bộ không chuyên trách</button>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="row">
-                                    <div class="col-md-6">
+                                    {{-- <div class="col-md-6">
                                         <div class="form-group">
-                                            <button type="button" style="border-width: 0px" onclick="inblcbkct_thon('/chuc_nang/bang_luong/maublcbct')" class="btn btn-default btn-xs mbs"
+                                            <button type="button" style="border-width: 0px" onclick="inblcbkct_thon('/chuc_nang/bang_luong/maublcbkct')" class="btn btn-default btn-xs mbs"
                                             title="Bảng lương cán bộ không chuyên trách cấp thôn" data-target="#maucbkct-thon-modal" data-toggle="modal">
                                         <i class="fa fa-print"></i>&nbsp; Bảng lương cán bộ không chuyên trách cấp thôn</button>
                                         </div>
-                                    </div>
+                                    </div> --}}
                                     <div class="col-md-6">
                                         <div class="form-group">
-                                            <button type="button" style="border-width: 0px" onclick="inblcblldq('/chuc_nang/bang_luong/maublcbct')" class="btn btn-default btn-xs mbs"
+                                            <button type="button" style="border-width: 0px" onclick="inblcblldq('/chuc_nang/bang_luong/maublcbkct')" class="btn btn-default btn-xs mbs"
                                             title="Bảng thanh toán phụ cấp trách nhiệm quản lý đơn vị LLDQ" data-target="#maucblldq-modal" data-toggle="modal">
                                         <i class="fa fa-print"></i>&nbsp; Bảng thanh toán phụ cấp trách nhiệm quản lý đơn vị LLDQ</button>
                                         </div>
