@@ -36,21 +36,38 @@
                 <div class="portlet-title">
                     <div class="caption">DANH SÁCH CÁC ĐƠN VỊ</div>
                     <div class="actions">
-                        {{-- <button type="button" class="btn btn-default btn-xs" onclick="add()"><i
-                            class="fa fa-plus"></i>&nbsp;In danh sách</button> --}}
+
                     </div>
                 </div>
                 <div class="portlet-body form-horizontal">
-                    
                     <div class="row">
                         <div class="form-group">
-                            <div class="col-md-6">
+                            <div class="col-md-10 col-md-offset-1">
                                 <label class="control-label col-md-3" style="text-align: right">Năm ngân sách</label>
                                 <div class="col-md-7">
                                     {!! Form::select('namns', getNam(), $inputs['namns'], ['id' => 'namns', 'class' => 'form-control']) !!}
-                                </div>                               
+                                </div>
+                                <div class="col-md-2">
+                                    <button type="button" class="btn btn-default btn-xs" onclick="add()"><i
+                                            class="fa fa-plus"></i>&nbsp;In danh sách</button>
+                                </div>
                             </div>
-                                             
+
+                        </div>
+
+                    </div>
+
+                    <div class="row">
+                        <div class="form-group">
+                            <div class="col-md-6">
+                                <label class="control-label col-md-3" style="text-align: right">Trạng thái </label>
+                                <div class="col-md-7">
+                                    {!! Form::select('trangthai', $a_trangthai, $inputs['trangthai'], [
+                                        'id' => 'trangthai',
+                                        'class' => 'form-control',
+                                    ]) !!}
+                                </div>
+                            </div>
                             <div class="col-md-6">
                                 <label class="control-label col-md-3" style="text-align: right">Phân loại </label>
                                 <div class="col-md-8">
@@ -60,21 +77,6 @@
                         </div>
 
                     </div>
-
-                    <div class="row">
-                        <div class="form-group">
-                            <div class="col-md-6">
-                                <label class="control-label col-md-3" style="text-align: right">Địa bàn báo cáo </label>
-                                <div class="col-md-7">
-                                    {!! Form::select('madvbc', $a_dvbc, $inputs['madvbc'], [
-                                        'id' => 'madvbc',
-                                        'class' => 'form-control',
-                                    ]) !!}
-                                </div>
-                            </div>                            
-                        </div>
-                    </div>
-
                     <table id="sample_3" class="table table-hover table-striped table-bordered" style="min-height: 230px">
                         <thead>
                             <tr>
@@ -488,7 +490,6 @@
                                                     {!! Form::select('namnds', getNam(), $inputs['namns'], ['id' => 'namnds', 'class' => 'form-control']) !!}
                                                 </div>
                                             </div>
-
                                             <div class="col-md-12">
                                                 <label class="control-label col-md-3" style="text-align: right">Trạng thái
                                                 </label>
@@ -612,7 +613,7 @@
             var namns = $('#namns').val();
             var trangthai = $('#trangthai').val();
             var phanloai = $('#phanloai').val();
-            return '/chuc_nang/xem_du_lieu/du_toan/tinh?namns=' + namns + '&trangthai=' + trangthai + '&phanloai=' + phanloai + '&madvbc=' + $('#madvbc').val();
+            return '/chuc_nang/xem_du_lieu/du_toan/huyen?namns=' + namns + '&trangthai=' + trangthai + '&phanloai=' + phanloai;
         }
 
         $(function() {
@@ -624,9 +625,6 @@
                 window.location.href = getLink();
             });
             $('#phanloai').change(function() {
-                window.location.href = getLink();
-            });
-            $('#madvbc').change(function() {
                 window.location.href = getLink();
             });
         })

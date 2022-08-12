@@ -144,6 +144,21 @@ class dutoanluong_huyenController extends Controller
             return view('errors.notlogin');
     }
 
+    function getlydo(Request $request){
+        if(!Session::has('admin')) {
+            $result = array(
+                'status' => 'fail',
+                'message' => 'permission denied',
+            );
+            die(json_encode($result));
+        }
+
+        $inputs = $request->all();
+
+        $model = dutoanluong_huyen::select('lydo')->where('masodv',$inputs['masodv'])->first();
+
+        die($model);
+    }
     //In dữ liệu 1 đơn vị trong huyen
     function printf(Request $requests)
     {

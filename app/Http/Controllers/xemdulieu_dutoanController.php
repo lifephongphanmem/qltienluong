@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\dmdonvi;
+use App\dmdonvibaocao;
 use App\dmphanloaicongtac;
 use App\dmphanloaict;
 use App\dmphanloaidonvi;
@@ -100,13 +101,17 @@ class xemdulieu_dutoanController extends Controller
                 $a_phanloai[$key] = $model_phanloai[$key];
             $a_phanloai['ALL'] = '--Chọn tất cả--';
             $m_dutoan = dutoanluong::where('namns', $nam)->where('trangthai', 'DAGUI')->get();
-
+            $m_dutoan_huyen = dutoanluong_huyen::where('namns', $nam)->where('madv', $madv)->first();
+            //dd($m_dutoan_huyen);
             foreach ($model_donvi as $dv) {
                 $dutoan = $m_dutoan->where('madv', $dv->madv)->first();
                 $dv->tralai = isset($dutoan);
                 $dv->masodv = $dutoan->masodv ?? null;
+                $dv->ngayguidv = $dutoan->ngayguidv ?? null;
                 $dv->trangthai = $dutoan->trangthai ?? 'CHOGUI';
-                $dv->tralai = $dv->trangthai == 'DAGUI'? false : $dv->tralai;
+                if (($m_dutoan_huyen->trangthai ?? 'CHOGUI') != 'DAGUI' && $dv->trangthai == 'DAGUI') {
+                    $dv->tralai = true;
+                }
                 $dv->namns = $nam;
             }
 
@@ -118,7 +123,7 @@ class xemdulieu_dutoanController extends Controller
             }
             $model_nhomct = dmphanloaicongtac::select('macongtac', 'tencongtac')->get();
             $model_tenct = dmphanloaict::select('tenct', 'macongtac', 'mact')->get();
-
+            //dd($model_donvi->first());
             return view('functions.viewdata.dutoanluong.huyen.index')
                 ->with('model', $model_donvi)
                 ->with('inputs', $inputs)
@@ -139,11 +144,16 @@ class xemdulieu_dutoanController extends Controller
     {
         if (Session::has('admin')) {
             $inputs = $request->all();
-            $m_dutoan_huyen = dutoanluong_huyen::where('masodv', $inputs['masodv'])->first();
-
-            $madv = $m_dutoan_huyen->madv;
-            $nam = $m_dutoan_huyen->namns;
-            $inputs['namns'] = $m_dutoan_huyen->namns;
+            $m_dvbc = dmdonvibaocao::where('baocao', '1')->orderby('sapxep')->get();
+            $inputs['madvbc'] = $inputs['madvbc'] ?? $m_dvbc->first();
+            $m_dutoan_huyen = dutoanluong_huyen::where('madvbc', $inputs['madvbc'])
+                ->where('namns', $inputs['namns'])
+                ->where('trangthai', 'DAGUI')->first();
+            //dd($m_dutoan_huyen);
+            //$inputs['namns'] = $m_dutoan_huyen->namns;
+            $madv = $m_dvbc->where('madvbc',$inputs['madvbc'])->first()->madvcq ?? null;
+            $nam = $inputs['namns'];
+            //dd($madv);
             $inputs['trangthai'] = $inputs['trangthai'] ?? 'ALL';
             $inputs['phanloai'] = $inputs['phanloai'] ?? 'ALL';
             $a_thang = getThang();
@@ -156,12 +166,15 @@ class xemdulieu_dutoanController extends Controller
                         ->whereyear('ngaydung', '<=', $nam)
                         ->where('trangthai', 'TD')
                         ->get();
-                })->get();
+                })
+                ->get();
             $model_phanloai = dmphanloaidonvi::wherein('maphanloai', array_column($model_donvi->toarray(), 'maphanloai'))->get();
             $model_phanloai = array_column($model_phanloai->toarray(), 'tenphanloai', 'maphanloai');
+            
+            $a_phanloai['ALL'] = '--Chọn tất cả--';
             foreach ($model_phanloai as $key => $key)
                 $a_phanloai[$key] = $model_phanloai[$key];
-            $a_phanloai['ALL'] = '--Chọn tất cả--';
+            
             $m_dutoan = dutoanluong::where('namns', $nam)->where('trangthai', 'DAGUI')->get();
 
             foreach ($model_donvi as $dv) {
@@ -169,13 +182,13 @@ class xemdulieu_dutoanController extends Controller
                 $dv->tralai = isset($dutoan);
                 $dv->masodv = $dutoan->masodv ?? null;
                 $dv->trangthai = $dutoan->trangthai ?? 'CHOGUI';
-                $dv->tralai = $dutoan->trangthai == 'DAGUI'? false : $dv->tralai;
+                $dv->tralai = $dv->trangthai == 'DAGUI' ? false : $dv->tralai;
                 $dv->namns = $nam;
             }
 
-            if (!isset($inputs['trangthai']) || $inputs['trangthai'] != 'ALL') {
-                $model_donvi = $model_donvi->where('trangthai', $inputs['trangthai']);
-            }
+            // if (!isset($inputs['trangthai']) || $inputs['trangthai'] != 'ALL') {
+            //     $model_donvi = $model_donvi->where('trangthai', $inputs['trangthai']);
+            // }
             if (!isset($inputs['phanloai']) || $inputs['phanloai'] != 'ALL') {
                 $model_donvi = $model_donvi->where('maphanloai', $inputs['phanloai']);
             }
@@ -188,6 +201,7 @@ class xemdulieu_dutoanController extends Controller
                 ->with('a_trangthai', $a_trangthai)
                 ->with('a_thang', $a_thang)
                 ->with('a_phanloai', $a_phanloai)
+                ->with('a_dvbc', array_column($m_dvbc->toarray(), 'tendvbc', 'madvbc'))
                 ->with('model_nhomct', $model_nhomct)
                 ->with('model_tenct', $model_tenct)
                 ->with('furl_th', '/chuc_nang/du_toan_luong/huyen/')

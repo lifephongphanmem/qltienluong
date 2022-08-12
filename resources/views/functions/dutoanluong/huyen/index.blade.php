@@ -61,8 +61,8 @@
                                         <td class="text-center">{{ $key + 1 }}</td>
                                         <td class="text-center">{{ $value->namns }}</td>
                                         <td class="text-center">{{ $value->dagui . '/' . $value->soluong }}</td>
-                                        <td class="text-center">{{ $a_donviql[$value->macqcq] ?? ''}}</td>
-                                        <td class="text-center bold">{{ $a_trangthai[$value['trangthai']] ?? ''}}</td>
+                                        <td class="text-center">{{ $a_donviql[$value->macqcq] ?? '' }}</td>
+                                        <td class="text-center bold">{{ $a_trangthai[$value['trangthai']] ?? '' }}</td>
                                         <td>
                                             <button type="button" title="In số liệu"
                                                 onclick="indutoan('{{ $value->namns }}','{{ $value->masodv }}')"
@@ -75,7 +75,7 @@
                                                 class="btn btn-default btn-sm" target="_blank">
                                                 <i class="fa fa-print"></i>&nbsp; Số liệu tổng hợp</a> --}}
 
-                                            @if ($value['trangthai'] == 'CHUAGUI')
+                                            @if (in_array($value['trangthai'], ['CHUAGUI', 'TRALAI']))
                                                 <button type="button" class="btn btn-default btn-sm" title="Gửi dữ liệu"
                                                     onclick="confirmChuyen('{{ $value->namns }}','{{ $value->masodv }}')"
                                                     data-target="#chuyen-modal" data-toggle="modal"><i
@@ -89,9 +89,8 @@
 
                                             @if ($value['trangthai'] == 'TRALAI')
                                                 <button type="button" class="btn btn-default btn-sm" title="Lý do trả lại"
-                                                    onclick="getLyDo('{{ $value['masodv'] }}')"
-                                                    data-target="#tralai-modal" data-toggle="modal"><i
-                                                        class="fa fa-stack-exchange"></i>&nbsp;
+                                                    onclick="getLyDo('{{ $value['masodv'] }}')" data-target="#tralai-modal"
+                                                    data-toggle="modal"><i class="fa fa-stack-exchange"></i>&nbsp;
                                                 </button>
                                             @endif
 
@@ -203,8 +202,7 @@
                 <div class="row">
                     <div class="col-md-12">
                         <div class="form-group">
-                            <button type="button"
-                                onclick="insolieu('{{ $furl_th . 'kinhphikhongchuyentrach' }}',null)"
+                            <button type="button" onclick="insolieu('{{ $furl_th . 'kinhphikhongchuyentrach' }}',null)"
                                 style="border-width: 0px" class="btn btn-default btn-xs mbs"
                                 data-target="#modal-insolieu" data-toggle="modal">
                                 <i class="fa fa-print"></i>&nbsp; Tổng hợp kinh phí thực hiện
@@ -264,7 +262,8 @@
                 <div class="row">
                     <div class="col-md-12">
                         <div class="form-group">
-                            <button type="button" onclick="insolieu('{{ $furl_th . 'tonghophopdong_m2' }}','1506673585')"
+                            <button type="button"
+                                onclick="insolieu('{{ $furl_th . 'tonghophopdong_m2' }}','1506673585')"
                                 style="border-width: 0px" class="btn btn-default btn-xs mbs"
                                 data-target="#modal-insolieu" data-toggle="modal">
                                 <i class="fa fa-print"></i>&nbsp; Tổng hợp hợp đồng bổ sung quỹ lương (Mẫu 02)</button>
@@ -387,6 +386,34 @@
     </div>
     {!! Form::close() !!}
 
+
+    <!--Model Trả lại -->
+    <div class="modal fade" id="tralai-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+                    <h4 class="modal-title">Thông tin lý do trả lại dữ liệu</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        {!! Form::textarea('lydo', null, ['id' => 'lydo', 'class' => 'form-control', 'rows' => '3']) !!}
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="submit" class="btn blue">Đồng ý</button>
+
+                    </div>
+                    {!! Form::close() !!}
+                </div>
+                <!-- /.modal-content -->
+            </div>
+            <!-- /.modal-dialog -->
+        </div>
+    </div>
+
     <script>
         //Gán thông tin để lấy dữ liệu
         function indutoan(namdt, masodv) {
@@ -419,6 +446,28 @@
         function confirmChuyen(namns, masodv) {
             $('#frm_chuyen').find("[name^='namns']").val(namns);
             $('#frm_chuyen').find("[name^='masodv']").val(masodv);
+        }
+
+        function getLyDo(masodv) {
+            var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
+            $.ajax({
+                url: '/chuc_nang/du_toan_luong/huyen/getlydo',
+                type: 'GET',
+                data: {
+                    _token: CSRF_TOKEN,
+                    masodv: masodv
+                },
+                dataType: 'JSON',
+                success: function(data) {
+                    $('#lydo').val(data.lydo);
+                },
+                error: function(message) {
+                    toastr.error(message, 'Lỗi!');
+                }
+            });
+
+            //$('#madvbc').val(madvbc);
+            //$('#phongban-modal').modal('show');
         }
     </script>
 
