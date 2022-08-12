@@ -163,7 +163,7 @@
     <!--Modal thêm mới -->
     {!! Form::open(['url'=>$furl.'create','method'=>'POST', 'id' => 'create_dutoan', 'class'=>'horizontal-form']) !!}
     <div id="create-modal" tabindex="-1" role="dialog" aria-hidden="true" class="modal fade">
-        <div class="modal-dialog">
+        <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header modal-header-primary">
                     <button type="button" data-dismiss="modal" aria-hidden="true" class="close">&times;</button>
@@ -196,13 +196,46 @@
                             {!!Form::text('chenhlech', $model_tt_df->chenhlech, array('id' => 'chenhlech','class' => 'form-control', 'data-mask'=>'fdecimal', 'readonly'))!!}
                         </div>
 
-                        <div class="col-md-12">
+                        {{-- <div class="col-md-12">
                             <label class="control-label">Nội dung</label>
                             {!!Form::textarea('noidung', null, array('id' => 'noidung','class' => 'form-control','rows'=>'3'))!!}
+                        </div> --}}
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4">
+                            <label class="control-label">Bảng lương cơ sở 1 - Tháng</label>
+                            {!! Form::text('thang', '07', ['id' => 'thang', 'class' => 'form-control']) !!}
+                        </div>
+
+                        <div class="col-md-2">
+                            <label class="control-label">Năm</label>
+                            {!! Form::text('nam', date('Y'), ['id' => 'nam', 'class' => 'form-control']) !!}
+                        </div>
+
+                        <div class="col-md-6">
+                            <label class="control-label">Nguồn kinh phí</label>
+                            {!! Form::select('manguonkp', $a_nkp, '13', ['id' => 'manguonkp', 'class' => 'form-control']) !!}
                         </div>
                     </div>
 
                     <div class="row">
+                        <div class="col-md-4">
+                            <label class="control-label">Bảng lương cơ sở 2 - Tháng</label>
+                            {!! Form::text('thang1', '07', ['class' => 'form-control']) !!}
+                        </div>
+
+                        <div class="col-md-2">
+                            <label class="control-label">Năm</label>
+                            {!! Form::text('nam1', date('Y'), ['class' => 'form-control']) !!}
+                        </div>
+
+                        <div class="col-md-6">
+                            <label class="control-label">Nguồn kinh phí</label>
+                            {!! Form::select('manguonkp1', $a_nkp, '12', ['id' => 'manguonkp', 'class' => 'form-control']) !!}
+                        </div>
+                    </div>
+
+                    {{-- <div class="row">
                         <div class="col-md-offset-3 col-md-9" style="padding-top: 15px">
                             <input type="checkbox" checked id="nghihuu" name="nghihuu" />
                             <label for="nghihuu">Tính dự toán cho cán bộ nghỉ hưu</label>
@@ -221,7 +254,7 @@
                             <input type="checkbox" checked id="nangluong" name="nangluong" />
                             <label for="nghihuu">Tính nâng lương cán bộ</label>
                         </div>
-                    </div>
+                    </div> --}}
                 </div>
                 <div class="modal-footer">
                     <button type="button" data-dismiss="modal" class="btn btn-default">Hủy thao tác</button>
