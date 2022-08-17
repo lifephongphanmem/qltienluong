@@ -89,7 +89,7 @@
                 <th>2% KPCD</th>
 
             </tr>
-            @if (!empty($a_tieumuc))
+            {{-- @if (!empty($a_tieumuc)) --}}
                 <tr>
                     <th></th>
                     <th></th>
@@ -144,7 +144,7 @@
                     <th></th>
                     <th></th>
                 </tr>
-            @endif
+            {{-- @endif --}}
         </thead>
         <?php $i = 1;
         $stt = 1; ?>

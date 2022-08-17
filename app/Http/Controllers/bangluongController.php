@@ -5786,15 +5786,17 @@ class bangluongController extends Controller
                 
                 foreach($a_phucap as $key=>$val){
                     $k='st_'.$key;
-                    $pc_cttm='cttm_'.$key;                    
+                    $pc_cttm='cttm_'.$key;                   
                     $pc_ctck='ctck_'.$key;                    
-                    if($a_bh[$key]== 0){
-                        $ct->sotk == null?$ct->$pc_cttm=$ct->$k :$ct->$pc_ctck=$ct->$k;
+                    if($key== 'heso'){
+                        if($ct->ttbh != 0){
+                            $ct->sotk == null?$ct->$pc_cttm=$ct->st_heso - $ct->ttbh :$ct->$pc_ctck=$ct->st_heso - $ct->ttbh;
+                        }else{
+                            $ct->sotk == null?$ct->$pc_cttm=$ct->st_heso :$ct->$pc_ctck=$ct->st_heso;
+                        }
                     }else{
-                        $ct->sotk == null?$ct->$pc_cttm=$ct->$k - ($ct->$k * 9.5/100):$ct->$pc_ctck=$ct->$k - ($ct->$k * 9.5/100);
-                    }
-                   
-                    
+                        $ct->sotk == null?$ct->$pc_cttm=$ct->$k:$ct->$pc_ctck=$ct->$k ;
+                    }                                      
                 }
             }
             $nguonkp = dmnguonkinhphi::select('tennguonkp')->where('manguonkp', $m_bl->manguonkp)->first();

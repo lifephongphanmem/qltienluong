@@ -68,7 +68,13 @@
                                         data-toggle="modal" data-target="#thoainhucauluong-modal">Báo cáo nhu cầu kinh phí
                                         (Mẫu 2a/2)</a>
                                 </li>
+                                <li>
+                                    <a href="#" onclick="nhucauluong('{{ '/bao_cao/thong_tu_67/don_vi/mau2a2_kh' }}')"
+                                        data-toggle="modal" data-target="#thoainhucauluong-modal">Báo cáo nhu cầu kinh phí Khánh Hòa
+                                        (Mẫu 2a/2)</a>
+                                </li>
                                 <hr>
+
 
                                 <li>
                                     <a href="#" onclick="nhucauluong('{{ '/bao_cao/thong_tu_67/don_vi/mau4a' }}')"

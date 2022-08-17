@@ -557,4 +557,359 @@ class baocaonhucaukinhphi_donviController extends Controller
             return view('errors.notlogin');
     }
 
+    function mau2a1_kh(Request $request) {
+        if (Session::has('admin')) {
+            $inputs = $request->all();
+            $m_donvi = dmdonvi::where('madv',session('admin')->madv)->first();
+            $m_thongtu = dmthongtuquyetdinh::where('sohieu',$inputs['sohieu'])->first();
+            $ngayapdung = new Carbon($m_thongtu->ngayapdung);
+            $inputs['nam'] = date_format($ngayapdung, 'Y');
+            $inputs['thang'] = date_format($ngayapdung, 'm');
+            $m_bienche = chitieubienche::where('nam', $inputs['nam'])->where('madv',session('admin')->madv)->get();
+            $_tonghop = nguonkinhphi::where('sohieu',$inputs['sohieu'])
+                ->where('madv', session('admin')->madv)->get();
+            $a_linhvuc = array_column($_tonghop->toarray(),'linhvuchoatdong','masodv');
+
+            $m_tonghop_ct = nguonkinhphi_bangluong::wherein('masodv', array_column($_tonghop->toarray(),'masodv'))
+                ->where('nam', $inputs['nam'])->where('thang', $inputs['thang'])->get();
+            //$m_tonghop_bl = tonghopluong_donvi_bangluong::wherein('mathdv', array_column($_tonghop->toarray(),'mathdv'))->get();
+            //dd($m_tonghop_ct);
+            $a_pc_goc = array('heso','vuotkhung','pckv','pccv','pcudn','pcth','pctnn','pccovu','pcdang','pcthni','pcdbqh','pcvk','pck');
+            $a_pc_th = getColTongHop();
+            $a_pc = array_diff($a_pc_th,$a_pc_goc);
+
+            foreach($m_tonghop_ct as $ct) {
+                $ct->linhvuchoatdong = $a_linhvuc[$ct->masodv];
+                foreach ($a_pc as $pc) {
+                    $pc_st = 'st_' . $pc;
+                    if ($ct->$pc < $ct->$pc_st) { //hệ số < số tiền => theo dõi khác số tiền
+                        $ct->pck += $ct->$pc;
+                        $ct->st_pck += round($ct->$pc * $m_thongtu->muccu);
+                    }else{
+                        $ct->st_pck += $ct->$pc_st;
+                    }
+                }
+                foreach ($a_pc_goc as $pc) {
+                    $pc_st = 'st_' . $pc;
+                    if ($ct->$pc < $ct->$pc_st) { //hệ số < số tiền => theo dõi khác số tiền
+                        $ct->$pc_st = round($ct->$pc * $m_thongtu->muccu);
+                    }else{
+                        //gán hệ số phụ cấp theo dõi theo số tiên = 0 để sau tính tổng hệ số phụ cấp theo hàm sum()
+                        $ct->$pc = 0;
+                    }
+                }
+                $ct->ttbh_dv = round(($ct->st_heso + $ct->st_vuotkhung + $ct->st_pccv + $ct->st_pctnn + $ct->st_hesopc)* 23.5 / 100);
+            }
+            //dd($m_tonghop_ct);
+            $ar_I[0] = array('val' => 'GD;DT', 'tt' => '1', 'noidung' => 'Sự nghiệp giáo dục - đào tạo');
+            $ar_I[1] = array('val' => 'GD', 'tt' => '-', 'noidung' => 'Giáo dục');
+            $ar_I[2] = array('val' => 'DT', 'tt' => '-', 'noidung' => 'Đào tạo');
+            $ar_I[3] = array('val' => 'YTE', 'tt' => '2', 'noidung' => 'Sự nghiệp y tế');
+            $ar_I[4] = array('val' => 'KHCN', 'tt' => '3', 'noidung' => 'Sự nghiệp khoa học-công nghệ');
+            $ar_I[5] = array('val' => 'VHTT', 'tt' => '4', 'noidung' => 'Sự nghiệp văn hóa thông tin');
+            $ar_I[6] = array('val' => 'PTTH', 'tt' => '5', 'noidung' => 'Sự nghiệp phát thanh truyền hình');
+            $ar_I[7] = array('val' => 'TDTT', 'tt' => '6', 'noidung' => 'Sự nghiệp thể dục - thể thao');
+            $ar_I[8] = array('val' => 'DBXH', 'tt' => '7', 'noidung' => 'Sự nghiệp đảm bảo xã hội');
+            $ar_I[9] = array('val' => 'KT', 'tt' => '8', 'noidung' => 'Sự nghiệp kinh tế');
+            $ar_I[10] = array('val' => 'MT', 'tt' => '9', 'noidung' => 'Sự nghiệp môi trường');
+            $ar_I[11] = array('val' => 'QLNN;DDT', 'tt' => '10', 'noidung' => 'Quản lý nhà nước, đảng, đoàn thể');
+            $ar_I[12] = array('val' => 'QLNN', 'tt' => '-', 'noidung' => ' Quản lý NN');
+            $ar_I[13] = array('val' => 'DDT', 'tt' => '-', 'noidung' => 'Đảng, đoàn thể');
+
+            $a_It = array(
+                'heso' => 0,'pckv' => 0,'pccv' => 0,'vuotkhung' => 0,
+                'pcudn' => 0,'pcth' => 0,'pctnn' => 0,'pccovu' => 0,
+                'pcdang' => 0,'pcthni' => 0,'pck' => 0,'tongpc' => 0,
+                'ttbh_dv' => 0,'soluongduocgiao' => 0,'soluongbienche'=> 0,
+            );
+
+            $a_pc_goc = array_diff($a_pc_goc,['pcdbqh','pcvk']); //bỏ 2 loại phụ cấp này ra do tính ở III và IV
+            for ($i = 0; $i < count($ar_I); $i++) {
+                $chitiet = $m_tonghop_ct->where('linhvuchoatdong', $ar_I[$i]['val']);
+
+                $ar_I[$i]['soluongduocgiao'] = $m_bienche->where('linhvuchoatdong', $ar_I[$i]['val'])->sum('soluongduocgiao');
+                $ar_I[$i]['soluongbienche'] =count($chitiet);
+
+                //$ar_I[$i]['soluongduocgiao'] = isset($model_bienche->soluongduocgiao) ? $model_bienche->soluongduocgiao : 0;
+                $a_It['soluongduocgiao'] += $ar_I[$i]['soluongduocgiao'];
+
+                //$ar_I[$i]['soluongbienche'] = isset($model_bienche->soluongbienche) ? $model_bienche->soluongbienche : 0;
+                $a_It['soluongbienche'] += $ar_I[$i]['soluongbienche'];
+                $tongpc = 0;
+                foreach ($a_pc_goc as $pc) {
+                    $pc_st = 'st_' . $pc;
+                    $ar_I[$i][$pc] = $chitiet->sum($pc_st);
+                    $a_It[$pc] += $ar_I[$i][$pc];
+                    $tongpc += $chitiet->sum($pc_st);
+                }
+
+                $ar_I[$i]['tongpc'] = $tongpc - $ar_I[$i]['heso'];
+                $a_It['tongpc'] += $ar_I[$i]['tongpc'];
+
+                $ar_I[$i]['ttbh_dv'] = $chitiet->sum('ttbh_dv');
+                $a_It['ttbh_dv'] += $ar_I[$i]['ttbh_dv'];
+            }
+            //dd($ar_I);
+            foreach ($a_pc_goc as $pc) {
+                $ar_I[11][$pc] = $ar_I[12][$pc] + $ar_I[13][$pc];
+                $ar_I[0][$pc] = $ar_I[1][$pc] + $ar_I[2][$pc];
+            }
+
+            $ar_I[11]['tongpc'] = $ar_I[12]['tongpc'] + $ar_I[13]['tongpc'];
+            $ar_I[11]['ttbh_dv'] = $ar_I[12]['ttbh_dv'] + $ar_I[13]['ttbh_dv'];
+
+            $ar_I[0]['tongpc'] = $ar_I[1]['tongpc'] + $ar_I[2]['tongpc'];
+            $ar_I[0]['ttbh_dv'] = $ar_I[1]['ttbh_dv'] + $ar_I[2]['ttbh_dv'];
+
+            $ar_II = array();
+            $ar_II['soluongduocgiao'] = isset($m_tonghop_ct->soluongduocgiao) ? $m_tonghop_ct->soluongduocgiao : 0;
+            $ar_II['soluongbienche'] = isset($m_bienche->soluongbienche) ? $m_bienche->soluongbienche : 0;
+
+            $m_xaphuong = $m_tonghop_ct->where('maphanloai','KVXP');
+
+            $tongpc = 0;
+            foreach ($a_pc_goc as $pc) {
+                $pc_st = 'st_' . $pc;
+                $ar_II[$pc] = $m_xaphuong->sum($pc_st);
+            }
+
+            $ar_II['tongpc'] = $tongpc - $ar_II['heso'];
+            $ar_II['ttbh_dv'] = $m_xaphuong->sum('ttbh_dv') ;
+
+            //dd($ar_II);
+
+            //căn cứ vào cấp dự toán để xác định đơn vị cấp xã, huyện, tỉnh
+            //chỉ có cột tổng cộng
+            $ar_III = array();
+            $ar_III[]=array('val'=>'T','tt'=>'-','noidung'=>'Cấp tỉnh','tongso'=>'0');
+            $ar_III[]=array('val'=>'H','tt'=>'-','noidung'=>'Cấp huyện','tongso'=>'0');
+            $ar_III[]=array('val'=>'X','tt'=>'-','noidung'=>'Cấp xã','tongso'=>'0');
+
+            $ar_IV = array();
+            $ar_IV[]=array('val'=>'T','tt'=>'-','noidung'=>'Ủy viên cấp tỉnh','tongso'=>'0');
+            $ar_IV[]=array('val'=>'H','tt'=>'-','noidung'=>'Ủy viên cấp huyện','tongso'=>'0');
+            $ar_IV[]=array('val'=>'X','tt'=>'-','noidung'=>'Ủy viên cấp xã','tongso'=>'0');
+
+            $a_IIIt = array('tongso'=>0);
+            $a_IVt = array('tongso'=>0);
+
+            for ($i = 0; $i < count($ar_III); $i++) {
+                if($ar_III[$i]['val'] == $m_donvi->caphanhchinh){
+                    $ar_III[$i]['tongso'] = $m_xaphuong->sum('pcdbqh');
+                }
+                $a_IIIt['tongso'] += $ar_III[$i]['tongso'];
+            }
+
+            for ($i = 0; $i < count($ar_IV); $i++) {
+                if($ar_IV[$i]['val'] == $m_donvi->caphanhchinh){
+                    $ar_IV[$i]['tongso'] = $m_xaphuong->sum('pcvk');
+                }
+                $a_IVt['tongso'] += $ar_IV[$i]['tongso'];
+            }
+            //dd($m_tonghop_ct);
+            return view('reports.thongtu46.donvi.mau2a1_tt46_kh')
+                ->with('furl','/tong_hop_bao_cao/')
+                ->with('ar_I',$ar_I)
+                ->with('ar_II',$ar_II)
+                ->with('ar_III',$ar_III)
+                ->with('ar_IV',$ar_IV)
+                ->with('a_It',$a_It)
+                ->with('a_IIIt',$a_IIIt)
+                ->with('a_IVt',$a_IVt)
+                ->with('m_dv',$m_donvi)
+                ->with('inputs',$inputs)
+                ->with('pageTitle','Báo cáo nhu cầu kinh phí');
+
+        } else
+            return view('errors.notlogin');
+    }
+
+    function mau2a2_kh(Request $request) {
+        if (Session::has('admin')) {
+            $inputs = $request->all();
+            $m_donvi = dmdonvi::where('madv',session('admin')->madv)->first();
+            $m_thongtu = dmthongtuquyetdinh::where('sohieu',$inputs['sohieu'])->first();
+            $ngayapdung = new Carbon($m_thongtu->ngayapdung);
+            $inputs['nam'] = date_format($ngayapdung, 'Y');
+            $inputs['thang'] = date_format($ngayapdung, 'm');
+
+            $m_bienche = chitieubienche::where('nam', $inputs['nam'])->where('madv',session('admin')->madv)->get();
+            $_tonghop = nguonkinhphi::where('sohieu',$inputs['sohieu'])
+                ->where('madv', session('admin')->madv)->get();
+            $a_linhvuc = array_column($_tonghop->toarray(),'linhvuchoatdong','masodv');
+
+            $m_tonghop_ct = nguonkinhphi_bangluong::wherein('masodv', array_column($_tonghop->toarray(),'masodv'))
+                ->where('nam', $inputs['nam'])->where('thang', $inputs['thang'])->get();
+
+            $a_pc_goc = array('heso','vuotkhung','pckv','pccv','pcudn','pcth','pctnn','pccovu','pcdang','pcthni','pcdbqh','pcvk','pck');
+            $a_pc_th = getColTongHop();
+            $a_pc = array_diff($a_pc_th,$a_pc_goc);
+
+            foreach($m_tonghop_ct as $ct) {
+                $ct->linhvuchoatdong = $a_linhvuc[$ct->masodv];
+                foreach ($a_pc as $pc) {
+                    $pc_st = 'st_' . $pc;
+                    if ($ct->$pc < $ct->$pc_st) { //hệ số < số tiền => theo dõi khác số tiền
+                        $ct->pck += $ct->$pc;
+                        $ct->st_pck += round($ct->$pc * $m_thongtu->mucapdung);
+                    }else{
+                        $ct->st_pck += $ct->$pc_st;
+                    }
+                }
+                foreach ($a_pc_goc as $pc) {
+                    $pc_st = 'st_' . $pc;
+                    if ($ct->$pc < $ct->$pc_st) { //hệ số < số tiền => theo dõi khác số tiền
+                        $ct->$pc_st = round($ct->$pc * $m_thongtu->mucapdung);
+                    }else{
+                        //gán hệ số phụ cấp theo dõi theo số tiên = 0 để sau tính tổng hệ số phụ cấp theo hàm sum()
+                        $ct->$pc = 0;
+                    }
+                }
+                $ct->ttbh_dv = round(($ct->st_heso + $ct->st_vuotkhung + $ct->st_pccv + $ct->st_pctnn + $ct->st_hesopc)* 23.5 / 100);
+            }
+            //dd($m_tonghop_ct);
+            $ar_I[0] = array('val' => 'GD;DT', 'tt' => '1', 'noidung' => 'Sự nghiệp giáo dục - đào tạo');
+            $ar_I[1] = array('val' => 'GD', 'tt' => '-', 'noidung' => 'Giáo dục');
+            $ar_I[2] = array('val' => 'DT', 'tt' => '-', 'noidung' => 'Đào tạo');
+            $ar_I[3] = array('val' => 'YTE', 'tt' => '2', 'noidung' => 'Sự nghiệp y tế');
+            $ar_I[4] = array('val' => 'KHCN', 'tt' => '3', 'noidung' => 'Sự nghiệp khoa học-công nghệ');
+            $ar_I[5] = array('val' => 'VHTT', 'tt' => '4', 'noidung' => 'Sự nghiệp văn hóa thông tin');
+            $ar_I[6] = array('val' => 'PTTH', 'tt' => '5', 'noidung' => 'Sự nghiệp phát thanh truyền hình');
+            $ar_I[7] = array('val' => 'TDTT', 'tt' => '6', 'noidung' => 'Sự nghiệp thể dục - thể thao');
+            $ar_I[8] = array('val' => 'DBXH', 'tt' => '7', 'noidung' => 'Sự nghiệp đảm bảo xã hội');
+            $ar_I[9] = array('val' => 'KT', 'tt' => '8', 'noidung' => 'Sự nghiệp kinh tế');
+            $ar_I[10] = array('val' => 'MT', 'tt' => '9', 'noidung' => 'Sự nghiệp môi trường');
+            $ar_I[11] = array('val' => 'QLNN;DDT', 'tt' => '10', 'noidung' => 'Quản lý nhà nước, đảng, đoàn thể');
+            $ar_I[12] = array('val' => 'QLNN', 'tt' => '-', 'noidung' => ' Quản lý NN');
+            $ar_I[13] = array('val' => 'DDT', 'tt' => '-', 'noidung' => 'Đảng, đoàn thể');
+
+            $a_It = array(
+                'heso' => 0,'pckv' => 0,'pccv' => 0,'vuotkhung' => 0,
+                'pcudn' => 0,'pcth' => 0,'pctnn' => 0,'pccovu' => 0,
+                'pcdang' => 0,'pcthni' => 0,'pck' => 0,'tongpc' => 0,
+                'ttbh_dv' => 0,'soluongduocgiao' => 0,'soluongbienche'=> 0,
+                'chenhlech' => 0
+            );
+
+            $a_pc_goc = array_diff($a_pc_goc,['pcdbqh','pcvk']); //bỏ 2 loại phụ cấp này ra do tính ở III và IV
+            for ($i = 0; $i < count($ar_I); $i++) {
+                $chitiet = $m_tonghop_ct->where('linhvuchoatdong', $ar_I[$i]['val']);
+
+                $ar_I[$i]['soluongduocgiao'] = $m_bienche->where('linhvuchoatdong', $ar_I[$i]['val'])->sum('soluongduocgiao');
+                $ar_I[$i]['soluongbienche'] =count($chitiet);
+
+                //$ar_I[$i]['soluongduocgiao'] = isset($model_bienche->soluongduocgiao) ? $model_bienche->soluongduocgiao : 0;
+                $a_It['soluongduocgiao'] += $ar_I[$i]['soluongduocgiao'];
+
+                //$ar_I[$i]['soluongbienche'] = isset($model_bienche->soluongbienche) ? $model_bienche->soluongbienche : 0;
+                $a_It['soluongbienche'] += $ar_I[$i]['soluongbienche'];
+                $tongpc = 0;
+                $tonghs = 0;
+                foreach ($a_pc_goc as $pc) {
+                    $pc_st = 'st_' . $pc;
+                    $ar_I[$i][$pc_st] = $chitiet->sum($pc_st);
+                    $ar_I[$i][$pc] = $chitiet->sum($pc);
+                    $a_It[$pc] += $ar_I[$i][$pc];
+                    // $a_It[$pc_st] += $ar_I[$i][$pc_st];
+                    $tongpc += $chitiet->sum($pc_st);
+                    $tonghs += $chitiet->sum($pc);
+                }
+
+                $ar_I[$i]['tongpc'] = $tongpc - $ar_I[$i]['st_heso'];
+                $a_It['tongpc'] += $ar_I[$i]['tongpc'];
+
+                $ar_I[$i]['ttbh_dv'] = $chitiet->sum('ttbh_dv');
+                $a_It['ttbh_dv'] += $ar_I[$i]['ttbh_dv'];
+
+                $ar_I[$i]['chenhlech'] = round($tonghs*$m_thongtu->chenhlech
+                        + ($ar_I[$i]['ttbh_dv'] / $m_thongtu->mucapdung) * $m_thongtu->chenhlech);
+                $a_It['chenhlech'] += $ar_I[$i]['chenhlech'];
+
+            }
+            // dd($ar_I);
+            // dd($a_It);
+            foreach ($a_pc_goc as $pc) {
+                $ar_I[11][$pc] = $ar_I[12][$pc] + $ar_I[13][$pc];
+                $ar_I[0][$pc] = $ar_I[1][$pc] + $ar_I[2][$pc];
+            }
+
+            $ar_I[11]['tongpc'] = $ar_I[12]['tongpc'] + $ar_I[13]['tongpc'];
+            $ar_I[11]['ttbh_dv'] = $ar_I[12]['ttbh_dv'] + $ar_I[13]['ttbh_dv'];
+            $ar_I[11]['chenhlech'] = $ar_I[12]['chenhlech'] + $ar_I[13]['chenhlech'];
+
+            $ar_I[0]['tongpc'] = $ar_I[1]['tongpc'] + $ar_I[2]['tongpc'];
+            $ar_I[0]['ttbh_dv'] = $ar_I[1]['ttbh_dv'] + $ar_I[2]['ttbh_dv'];
+            $ar_I[0]['chenhlech'] = $ar_I[1]['chenhlech'] + $ar_I[2]['chenhlech'];
+// dd($ar_I);
+            $ar_II = array();
+            $ar_II['soluongduocgiao'] = isset($m_tonghop_ct->soluongduocgiao) ? $m_tonghop_ct->soluongduocgiao : 0;
+            $ar_II['soluongbienche'] = isset($m_bienche->soluongbienche) ? $m_bienche->soluongbienche : 0;
+
+            $m_xaphuong = $m_tonghop_ct->where('maphanloai','KVXP');
+
+            $tongpc = $tonghs = 0;
+            foreach ($a_pc_goc as $pc) {
+                $pc_st = 'st_' . $pc;
+                $ar_II[$pc] = $m_xaphuong->sum($pc_st);
+                $tongpc += $ar_II[$pc];
+                $tonghs += $m_xaphuong->sum($pc);
+            }
+
+            $ar_II['tongpc'] = $tongpc - $ar_II['heso'];
+            $ar_II['ttbh_dv'] = $m_xaphuong->sum('ttbh_dv') ;
+            $ar_II['chenhlech'] = round($tonghs*$m_thongtu->chenhlech
+                + ($ar_II['ttbh_dv'] / $m_thongtu->mucapdung) * $m_thongtu->chenhlech);
+            //dd($ar_II);
+
+            //căn cứ vào cấp dự toán để xác định đơn vị cấp xã, huyện, tỉnh
+            //chỉ có cột tổng cộng
+            $ar_III = array();
+            $ar_III[]=array('val'=>'T','tt'=>'-','noidung'=>'Cấp tỉnh','tongso'=>'0','chenhlech'=>'0');
+            $ar_III[]=array('val'=>'H','tt'=>'-','noidung'=>'Cấp huyện','tongso'=>'0','chenhlech'=>'0');
+            $ar_III[]=array('val'=>'X','tt'=>'-','noidung'=>'Cấp xã','tongso'=>'0','chenhlech'=>'0');
+
+            $ar_IV = array();
+            $ar_IV[]=array('val'=>'T','tt'=>'-','noidung'=>'Ủy viên cấp tỉnh','tongso'=>'0','chenhlech'=>'0');
+            $ar_IV[]=array('val'=>'H','tt'=>'-','noidung'=>'Ủy viên cấp huyện','tongso'=>'0','chenhlech'=>'0');
+            $ar_IV[]=array('val'=>'X','tt'=>'-','noidung'=>'Ủy viên cấp xã','tongso'=>'0','chenhlech'=>'0');
+
+            $a_IIIt = array('tongso'=>0,'chenhlech'=>'0');
+            $a_IVt = array('tongso'=>0,'chenhlech'=>'0');
+
+            for ($i = 0; $i < count($ar_III); $i++) {
+                if($ar_III[$i]['val'] == $m_donvi->caphanhchinh){
+                    $ar_III[$i]['tongso'] = $m_xaphuong->sum('pcdbqh');
+                    $ar_III[$i]['chenhlech'] = round(($ar_III['tongso'] / $m_thongtu->mucapdung) * $m_thongtu->chenhlech);
+                }
+                $a_IIIt['tongso'] += $ar_III[$i]['tongso'];
+                $a_IIIt['chenhlech'] += $ar_III[$i]['chenhlech'];
+            }
+
+            for ($i = 0; $i < count($ar_IV); $i++) {
+                if($ar_IV[$i]['val'] == $m_donvi->caphanhchinh){
+                    $ar_IV[$i]['tongso'] = $m_xaphuong->sum('pcvk');
+                    $ar_IV[$i]['chenhlech'] = round(($ar_IV['tongso'] / $m_thongtu->mucapdung) * $m_thongtu->chenhlech);
+                }
+                $a_IVt['tongso'] += $ar_IV[$i]['tongso'];
+                $a_IVt['chenhlech'] += $ar_IV[$i]['chenhlech'];
+            }
+            //dd($m_tonghop_ct);
+            return view('reports.thongtu46.donvi.mau2a2_tt46_kh')
+                ->with('furl','/tong_hop_bao_cao/')
+                ->with('ar_I',$ar_I)
+                ->with('ar_II',$ar_II)
+                ->with('ar_III',$ar_III)
+                ->with('ar_IV',$ar_IV)
+                ->with('a_It',$a_It)
+                ->with('a_IIIt',$a_IIIt)
+                ->with('a_IVt',$a_IVt)
+                ->with('m_dv',$m_donvi)
+                ->with('inputs',$inputs)
+                ->with('pageTitle','Báo cáo nhu cầu kinh phí');
+
+        } else
+            return view('errors.notlogin');
+    }
+
+
 }

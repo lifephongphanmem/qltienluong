@@ -234,7 +234,7 @@
             <td colspan="{{ $col + 5 }}" style="text-align: center">Chuyển nộp 8% BHXH</td>
             <td>{{ dinhdangso(($model->sum('st_heso') * 8) / 100) }}</td>
             <td></td>
-            <td></td>
+            <td>{{ dinhdangso(($model->sum('st_luonghd') * 8) / 100) }}</td>
             <td></td>
             @foreach ($a_phucap as $key => $val)
                 <?php $k = 'st_' . $key; ?>
@@ -246,7 +246,7 @@
             <td></td>
             <td></td>
             <td></td>
-            <td></td>
+            <td>{{ dinhdangso($model->sum('stbhxh') ) }}</td>
             <td></td>
         </tr>
         <tr style="font-weight: bold;text-align: right">
@@ -265,7 +265,7 @@
             <td></td>
             <td></td>
             <td></td>
-            <td></td>
+            <td>{{ dinhdangso($model->sum('stbhyt') ) }}</td>
             <td></td>
         </tr>
         <tr style="font-weight: bold;text-align: right">
@@ -284,7 +284,7 @@
             <td></td>
             <td></td>
             <td></td>
-            <td></td>
+            <td>{{ dinhdangso($model->sum('stbhtn') ) }}</td>
             <td></td>
         </tr>
         <tr style="font-weight: bold;text-align: right">
