@@ -200,7 +200,7 @@
             @if ($a_phucap != [])
                 @foreach ($a_phucap as $key => $val)
                 <?php $k = 'st_' . $key; ?>
-                    <td>{{ $a_bh[$key] == 0 ? dinhdangso($model->sum($k)) :dinhdangso($model->sum($k)-($model->sum($k)* 9.5/100)) }}</td>
+                    <td> {{ $key == 'heso' ? dinhdangso($model->sum('st_heso')- $model->sum('ttbh')) : dinhdangso($model->sum($k)) }} </td>
                 @endforeach
             @else
                 <td></td>

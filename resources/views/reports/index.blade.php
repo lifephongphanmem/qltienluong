@@ -68,7 +68,18 @@
                                         data-toggle="modal" data-target="#thoainhucauluong-modal">Báo cáo nhu cầu kinh phí
                                         (Mẫu 2a/2)</a>
                                 </li>
+                                <li>
+                                    <a href="#" onclick="nhucauluong('{{ '/bao_cao/thong_tu_67/don_vi/mau2a2_kh' }}')"
+                                        data-toggle="modal" data-target="#thoainhucauluong-modal">Báo cáo nhu cầu kinh phí Khánh Hòa
+                                        (Mẫu 2a/2)</a>
+                                </li>
+                                <li>
+                                    <a href="#" onclick="nhucauluong('{{ '/bao_cao/thong_tu_67/don_vi/mau2b' }}')"
+                                        data-toggle="modal" data-target="#thoainhucauluong-modal">Báo cáo nhu cầu kinh phí
+                                        (Mẫu 2b)</a>
+                                </li>
                                 <hr>
+
 
                                 <li>
                                     <a href="#" onclick="nhucauluong('{{ '/bao_cao/thong_tu_67/don_vi/mau4a' }}')"
@@ -585,6 +596,18 @@
                         {!! Form::select('sohieu', getThongTuQD(false), null, ['id' => 'sohieu', 'class' => 'form-control']) !!}
                     </div>
                 </div>
+                <div class="row">
+                    <div class="col-md-offset-3 col-md-9" style="margin-top: 15px">
+                        <input name="innoidung" id="innoidung" type="checkbox">
+                        <label for="innoidung">In theo hệ số</label>
+                    </div>
+                </div>
+                {{-- <div class="row">
+                    <div class="col-md-offset-3 col-md-9">
+                        <input name="inchucvuvt" id="inchucvuvt" type="checkbox">
+                        <label>In theo hệ số</label>
+                    </div>
+                </div> --}}
 
                 <input type="hidden" name="_token" value="{{ csrf_token() }}">
             </div>
@@ -669,6 +692,7 @@
         </div>
         {!! Form::close() !!}
     </div>
+
 
     <script>
         function baocaobangluong(url) {
