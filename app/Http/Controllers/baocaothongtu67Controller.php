@@ -5046,7 +5046,7 @@ class baocaothongtu67Controller extends Controller
             $ar_I[] = array('tt' => '2', 'noidung' => 'Nguyên Phó bí thư, phó chủ tịch, Thường trực Đảng ủy, Ủy viên, Thư ký UBND Thư ký HĐND, xã đội trưởng');
             $ar_I[] = array('tt' => '3', 'noidung' => 'Các chức danh còn lại');
 
-            return view('reports.thongtu67.mau2b_tt68')
+            return view('reports.thongtu67.mau2b_tt46')
                 ->with('furl', '/tong_hop_bao_cao/')
                 ->with('ar_I', $ar_I)
                 ->with('m_dv', $m_dv)

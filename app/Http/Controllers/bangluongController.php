@@ -5741,6 +5741,7 @@ class bangluongController extends Controller
     {
         if (Session::has('admin')) {
             $inputs = $request->all();
+            // dd($inputs);
             $inputs['inchucvuvt'] = '';
             $mabl = $inputs['mabl'];
             $model = $this->getBangLuong($inputs);
@@ -5748,7 +5749,8 @@ class bangluongController extends Controller
             $m_dv = dmdonvi::where('madv', $m_bl->madv)->first();
             $model_congtac = dmphanloaict::select('mact', 'tenct','macongtac')
                 ->wherein('mact', a_unique(array_column($model->toarray(), 'mact')))->get();
-            $a_goc = array('hesott');
+            $inputs['mact'] == '1506673604'?$a_goc = array('hesott','heso','luonghd'):$a_goc = array('hesott');
+            
             $model_pc = dmphucap_donvi::where('madv', $m_bl->madv)->where('phanloai', '<', '3')->wherenotin('mapc', $a_goc)->get();
             $m_hscb=hosocanbo::wherein('macanbo',array_column($model->toarray(),'macanbo'))->get();
             $a_sotk = array_column($m_hscb->toarray(), 'sotk', 'macanbo');
@@ -5800,7 +5802,7 @@ class bangluongController extends Controller
                 }
             }
             $nguonkp = dmnguonkinhphi::select('tennguonkp')->where('manguonkp', $m_bl->manguonkp)->first();
-            $model_tm = dmtieumuc_default::all()->unique('mapc');
+            $inputs['mact'] == '1506673604'?$model_tm = dmtieumuc_default::all():$model_tm = dmtieumuc_default::all()->unique('mapc');
 
 
             $a_tm =array_column($model_tm->toarray(), 'mapc'); //Mảng để so sánh
@@ -5840,8 +5842,9 @@ class bangluongController extends Controller
                     }
                 }
             };
-
-            // dd($model);  
+            $model_bh=$model->where('ttbh',"!=",0);
+            // dd($model); 
+            // dd($model_tm); 
             switch ($inputs['mact']) {
                 case '1506673695': {
                     return   view('reports.bangluong.donvi.maublcbkct_xa')
@@ -5890,6 +5893,23 @@ class bangluongController extends Controller
                         ->with('a_tieumuc', $a_tieumuc)
                         ->with('pageTitle', 'Bảng lương chi tiết');
                     break;
+                }
+                    case '1506673604': {
+                        return   view('reports.bangluong.donvi.maublcbct')
+                            ->with('thongtin', $thongtin)
+                            ->with('m_bl', $m_bl)
+                            ->with('m_dv', $m_dv)
+                            ->with('model', $model)
+                            ->with('model_congtac', $model_congtac)
+                            ->with('a_phucap', $a_phucap)
+                            ->with('col', $col)
+                            ->with('model_tm', $model_tm)
+                            ->with('a_tm', $a_tm)
+                            ->with('a_bh', $a_bh)
+                            ->with('a_tieumuc', $a_tieumuc)
+                            ->with('model_bh', $model_bh)
+                            ->with('pageTitle', 'Bảng lương chi tiết'); 
+                        break;
             }
         }
         } else

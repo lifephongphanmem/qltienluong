@@ -87,27 +87,8 @@
         <td>33x6T</td>
     </tr>
 
+
     {{-- <tr style="font-weight: bold;text-align: right">
-        <th></th>
-        <th style="text-align: center">TỔNG CỘNG (I+II+III+IV)</th>
-        <td>{{dinhdangso($a_It['heso'] + $a_It['tongpc'] +$a_It['ttbh_dv'] + $ar_II['heso'] + $ar_II['tongpc']+ $ar_II['ttbh_dv'] + $a_IIIt['tongso'] + $a_IVt['tongso'])}}</td>
-        <td>{{dinhdangso($a_It['heso'] + $ar_II['heso'])}}</td>
-        <td>{{dinhdangso($a_It['tongpc'] + $ar_II['tongpc'])}}</td>
-        <td>{{dinhdangso($a_It['pckv'] + $ar_II['pckv'])}}</td>
-        <td>{{dinhdangso($a_It['pccv'] + $ar_II['pccv'])}}</td>
-        <td>{{dinhdangso($a_It['vuotkhung'] + $ar_II['vuotkhung'])}}</td>
-        <td>{{dinhdangso($a_It['pcudn'] + $ar_II['pcudn'])}}</td>
-        <td>{{dinhdangso($a_It['pcth'] + $ar_II['pcth'])}}</td>
-        <td>{{dinhdangso($a_It['pcthni'] + $ar_II['pcthni'])}}</td>
-        <td>{{dinhdangso($a_It['pccovu'] + $ar_II['pccovu'])}}</td>
-        <td>{{dinhdangso($a_It['pcdang'] + $ar_II['pcdang'])}}</td>
-        <td>{{dinhdangso($a_It['pctnn'] + $ar_II['pctnn'])}}</td>
-        <td>{{dinhdangso($a_It['pck'] + $ar_II['pck'])}}</td>
-        <td>{{dinhdangso($a_It['ttbh_dv'] + $ar_II['ttbh_dv'])}}</td>
-        <td>{{dinhdangso($a_It['chenhlech'] + $ar_II['chenhlech'] + $a_IIIt['chenhlech'] + $a_IVt['chenhlech'])}}</td>
-        <td>{{dinhdangso(($a_It['chenhlech'] + $ar_II['chenhlech'] + $a_IIIt['chenhlech'] + $a_IVt['chenhlech'])*6)}}</td>
-    </tr> --}}
-    <tr style="font-weight: bold;text-align: right">
         <th style="text-align: center">I</th>
         <th style="text-align: left">KHU VỰC HCSN, ĐẢNG, ĐOÀN THỂ</th>
         <td>{{dinhdangso($a_It['soluongduocgiao'])}}</td>
@@ -170,22 +151,22 @@
             <td>{{dinhdangso($dulieu['soluongbienche'])}}</td>
             <td></td>
             <td></td>
-            <td>{{dinhdangsothapphan($dulieu['heso'] + $dulieu['tongpc'] +$dulieu['ttbh_dv'],3)}}</td>
-            <td>{{dinhdangsothapphan($dulieu['heso'],3)}}</td>
-            <td>{{dinhdangsothapphan($dulieu['tongpc'],3)}}</td>
-            <td>{{dinhdangsothapphan($dulieu['pckv'],3)}}</td>
-            <td>{{dinhdangsothapphan($dulieu['pccv'],3)}}</td>
-            <td>{{dinhdangsothapphan($dulieu['vuotkhung'],3)}}</td>
-            <td>{{dinhdangsothapphan($dulieu['pcudn'],3)}}</td>
-            <td>{{dinhdangsothapphan($dulieu['pcth'],3)}}</td>
-            <td>{{dinhdangsothapphan($dulieu['pcthni'],3)}}</td>
-            <td>{{dinhdangsothapphan($dulieu['pccovu'],3)}}</td>
-            <td>{{dinhdangsothapphan($dulieu['pcdang'],3)}}</td>
-            <td>{{dinhdangsothapphan($dulieu['pctnn'],3)}}</td>
-            <td>{{dinhdangsothapphan($dulieu['pck'],3)}}</td>
-            <td>{{dinhdangsothapphan($dulieu['ttbh_dv'],3)}}</td>
-            <td>{{dinhdangsothapphan($dulieu['chenhlech'],3)}}</td>
-            <td>{{dinhdangsothapphan($dulieu['chenhlech']*6,3)}}</td>
+            <td>{{dinhdangso($dulieu['heso'] + $dulieu['tongpc'] +$dulieu['ttbh_dv'])}}</td>
+            <td>{{dinhdangso($dulieu['heso'])}}</td>
+            <td>{{dinhdangso($dulieu['tongpc'])}}</td>
+            <td>{{dinhdangso($dulieu['pckv'])}}</td>
+            <td>{{dinhdangso($dulieu['pccv'])}}</td>
+            <td>{{dinhdangso($dulieu['vuotkhung'])}}</td>
+            <td>{{dinhdangso($dulieu['pcudn'])}}</td>
+            <td>{{dinhdangso($dulieu['pcth'])}}</td>
+            <td>{{dinhdangso($dulieu['pcthni'])}}</td>
+            <td>{{dinhdangso($dulieu['pccovu'])}}</td>
+            <td>{{dinhdangso($dulieu['pcdang'])}}</td>
+            <td>{{dinhdangso($dulieu['pctnn'])}}</td>
+            <td>{{dinhdangso($dulieu['pck'])}}</td>
+            <td>{{dinhdangso($dulieu['ttbh_dv'])}}</td>
+            <td>{{dinhdangso($dulieu['chenhlech'])}}</td>
+            <td>{{dinhdangso($dulieu['chenhlech']*6)}}</td>
         </tr>
     @endforeach
 
@@ -324,7 +305,7 @@
             <td>{{dinhdangso($dulieu['chenhlech'])}}</td>
             <td>{{dinhdangso($dulieu['chenhlech']*6)}}</td>
         </tr>
-    @endforeach
+    @endforeach --}}
 </table>
 
 <table id="data_footer" class="header" width="96%" border="0" cellspacing="0" cellpadding="8" style="margin:20px auto; text-align: center;">

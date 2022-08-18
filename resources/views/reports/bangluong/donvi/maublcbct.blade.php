@@ -226,11 +226,11 @@
         </tr>
         <tr style="text-align: right">
             <td colspan="{{ $col == 0 ? 6 : $col + 5 }}" style="text-align: center">Cá nhân nộp 8% BHXH</td>
-            <td>{{ dinhdangso(($model->sum('st_heso') * 8) / 100) }}</td>
+            <td>{{ dinhdangso(($model_bh->sum('st_heso') * 8) / 100) }}</td>
             <td></td>
-            @foreach ($a_phucap as $key => $val)
+            @foreach ($a_phucap as $key => $val)           
                 <?php $k = 'st_' . $key; ?>
-                <td>{{ $a_bh[$key] == 0 ? '' : dinhdangso(($model->sum($k) * 8) / 100) }}</td>
+                <td>{{ $a_bh[$key] == 0 ? '' : dinhdangso(($model_bh->sum($k) * 8) / 100) }}</td>
             @endforeach
             <td></td>
             <td></td>
@@ -240,11 +240,11 @@
         </tr>
         <tr style="text-align: right">
             <td colspan="{{ $col == 0 ? 6 : $col + 5 }}">Cá nhân nộp 1,5% BHYT</td>
-            <td>{{ dinhdangso(($model->sum('st_heso') * 1.5) / 100) }}</td>
+            <td>{{ dinhdangso(($model_bh->sum('st_heso') * 1.5) / 100) }}</td>
             <td></td>
             @foreach ($a_phucap as $key => $val)
                 <?php $k = 'st_' . $key; ?>
-                <td>{{ $a_bh[$key] == 0 ? '' : dinhdangso(($model->sum($k) * 1.5) / 100) }}</td>
+                <td>{{ $a_bh[$key] == 0 ? '' : dinhdangso(($model_bh->sum($k) * 1.5) / 100) }}</td>
             @endforeach
             <td></td>
             <td></td>
@@ -254,11 +254,11 @@
         </tr>
         <tr style="text-align: right">
             <td colspan="{{ $col == 0 ? 6 : $col + 5 }}">Cá nhân nộp 9,5% bảo hiểm</td>
-            <td>{{ dinhdangso(($model->sum('st_heso') * 9.5) / 100) }}</td>
+            <td>{{ dinhdangso(($model_bh->sum('st_heso') * 9.5) / 100) }}</td>
             <td></td>
             @foreach ($a_phucap as $key => $val)
                 <?php $k = 'st_' . $key; ?>
-                <td>{{ $a_bh[$key] == 0 ? '' : dinhdangso(($model->sum($k) * 9.5) / 100) }}</td>
+                <td>{{ $a_bh[$key] == 0 ? '' : dinhdangso(($model_bh->sum($k) * 9.5) / 100) }}</td>
             @endforeach
             <td></td>
             <td></td>

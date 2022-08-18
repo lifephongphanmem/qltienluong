@@ -622,7 +622,7 @@
                                 <optgroup label="{{ $kieuct->tencongtac }}">
                                     <?php $mode_ct = $model_tenct->where('macongtac', $kieuct->macongtac); ?>
                                     @foreach ($mode_ct as $ct)
-                                        @if ($ct->mact == '1506673695' || $ct->mact == '1535613221')
+                                        @if ($ct->mact == '1506673695' || $ct->mact == '1535613221' ||$ct->mact == '1536402878' || $ct->mact =='1506673604')
                                             <option value="{{ $ct->mact }}">{{ $ct->tenct }}</option>
                                         @endif
                                     @endforeach
