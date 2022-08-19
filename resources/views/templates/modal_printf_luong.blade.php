@@ -617,7 +617,7 @@
                     <div class="col-md-12">
                         <label class="control-label">Phân loại công tác</label>
                         <select class="form-control select2me" name="mact" id="mact">
-                            {{-- <option value="">-- Tất cả các phân loại công tác --</option> --}}
+                            <option value="">-- Tất cả các phân loại công tác --</option>
                             @foreach ($model_nhomct as $kieuct)
                                 <optgroup label="{{ $kieuct->tencongtac }}">
                                     <?php $mode_ct = $model_tenct->where('macongtac', $kieuct->macongtac); ?>

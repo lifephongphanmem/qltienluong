@@ -48,7 +48,7 @@
                 @if ($thongtin['innoidung'])
                     {{ $thongtin['noidung'] }}
                 @else
-                    DANH SÁCH LƯƠNG CÁN BỘ CÔNG CHỨC, CHUYÊN TRÁCH THÁNG
+                    DANH SÁCH LƯƠNG CÁN BỘ THÁNG
                     {{ $thongtin['thang'] . '/' . $thongtin['nam'] }}. MỨC
                     LƯƠNG {{ dinhdangso($thongtin['mucluong']) . ' đ' }}
                 @endif
@@ -212,7 +212,7 @@
                 {{ $model->unique('tencv')->count() }} chức danh</td>
 
             <td>{{ dinhdangso($model->sum('st_heso')) }}</td>
-            <td></td>
+            <td>{{ dinhdangso($model->sum('st_luonghd')) }}</td>
             @foreach ($a_phucap as $key => $val)
                 <?php $key = 'st_' . $key; ?>
                 <td>{{ dinhdangso($model->sum($key)) }}</td>
@@ -226,12 +226,12 @@
         </tr>
         <tr style="text-align: right">
             <td colspan="{{ $col == 0 ? 6 : $col + 5 }}" style="text-align: center">Cá nhân nộp 8% BHXH</td>
-            {{-- <td>{{ dinhdangso(($model_bh->sum('st_heso') * 8) / 100) }}</td> --}}
             <td>{{ dinhdangso($model->sum('bhxh_hs') ) }}</td>
-            <td>{{ dinhdangso(($model_bh->sum('st_luonghd') * 8) / 100) }}</td>
+            <td>{{ dinhdangso($model->sum('tbhxh_luonghd') ) }}</td>
             @foreach ($a_phucap as $key => $val)           
                 <?php $k = 'st_' . $key; ?>
-                <td>{{ $a_bh[$key] == 0 ? '' : dinhdangso(($model_bh->sum($k) * 8) / 100) }}</td>
+                <?php $bhxh_pc='bhxh_'.$key;?>
+                <td>{{dinhdangso($model_bh->sum($bhxh_pc))}}</td>
             @endforeach
             <td></td>
             <td></td>
@@ -241,12 +241,13 @@
         </tr>
         <tr style="text-align: right">
             <td colspan="{{ $col == 0 ? 6 : $col + 5 }}">Cá nhân nộp 1,5% BHYT</td>
-            {{-- <td>{{ dinhdangso(($model_bh->sum('st_heso') * 1.5) / 100) }}</td> --}}
             <td>{{ dinhdangso($model->sum('bhyt_hs') ) }}</td>
-            <td>{{ dinhdangso(($model_bh->sum('st_luonghd') * 1.5) / 100) }}</td>
+            <td>{{ dinhdangso($model->sum('tbhyt_luonghd') ) }}</td>
             @foreach ($a_phucap as $key => $val)
                 <?php $k = 'st_' . $key; ?>
-                <td>{{ $a_bh[$key] == 0 ? '' : dinhdangso(($model_bh->sum($k) * 1.5) / 100) }}</td>
+                <?php $bhyt_pc='bhyt_'.$key; ?>
+                {{-- <td>{{ $a_bh[$key] == 0 ? '' : dinhdangso(($model_bh->sum($k) * 1.5) / 100) }}</td> --}}
+                <td>{{dinhdangso($model_bh->sum($bhyt_pc))}}</td>
             @endforeach
             <td></td>
             <td></td>
@@ -256,12 +257,13 @@
         </tr>
         <tr style="text-align: right">
             <td colspan="{{ $col == 0 ? 6 : $col + 5 }}">Cá nhân nộp 9,5% bảo hiểm</td>
-            {{-- <td>{{ dinhdangso(($model_bh->sum('st_heso') * 9.5) / 100) }}</td> --}}
             <td>{{ dinhdangso(($model->sum('bhxh_hs') + $model->sum('bhyt_hs') )) }}</td>
-            <td>{{ dinhdangso(($model_bh->sum('st_luonghd') * 9.5) / 100) }}</td>
+            <td></td>
             @foreach ($a_phucap as $key => $val)
                 <?php $k = 'st_' . $key; ?>
-                <td>{{ $a_bh[$key] == 0 ? '' : dinhdangso(($model_bh->sum($k) * 9.5) / 100) }}</td>
+                <?php  $bhxh_pc='bhxh_'.$key; ?>
+                <?php  $bhyt_pc='bhyt_'.$key; ?>
+                <td>{{ dinhdangso($model_bh->sum($bhxh_pc) + $model_bh->sum($bhyt_pc)) }}</td>
             @endforeach
             <td></td>
             <td></td>
@@ -273,17 +275,36 @@
         <tr style="font-weight: bold;text-align: right">
             <td colspan="{{ $col == 0 ? 6 : $col + 5 }}">Thực nhận chuyển khoản</td>
             {{-- <td>{{ dinhdangso($model->sum('st_heso')-$model->sum('stbhxh')) }}</td> --}}
+            <td>{{ dinhdangso($model->sum('ctck_heso')) }}</td>
+            <td></td>
+            @foreach ($a_phucap as $key => $val)
+                <?php $k = 'st_' . $key; ?>
+                <?php $pc_ctck='ctck_'.$key ?>
+                <td>{{ dinhdangso($model->sum($pc_ctck)) }}</td>
+                {{-- <td>{{ $a_bh[$key] == 0 ? dinhdangso($model->sum($k)) : dinhdangso($model->sum($k)-($model->sum($k) * 9.5) / 100) }}</td> --}}
+            @endforeach
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td>{{ dinhdangso($model->sum('nhanchuyenkhoan')) }}</td>
+        </tr>
+        <tr style="font-weight: bold;text-align: right">
+            <td colspan="{{ $col == 0 ? 6 : $col + 5 }}">Thực nhận tiền mặt</td>
+            {{-- <td>{{ dinhdangso($model->sum('st_heso')-$model->sum('stbhxh')) }}</td> --}}
             <td>{{ dinhdangso($model->sum('cttm_heso')) }}</td>
             <td></td>
             @foreach ($a_phucap as $key => $val)
                 <?php $k = 'st_' . $key; ?>
-                <td>{{ $a_bh[$key] == 0 ? dinhdangso($model->sum($k)) : dinhdangso($model->sum($k)-($model->sum($k) * 9.5) / 100) }}</td>
+                <?php $pc_cttm='cttm_'.$key ?>
+                <td>{{ dinhdangso($model->sum($pc_cttm)) }}</td>
+                {{-- <td>{{ $a_bh[$key] == 0 ? dinhdangso($model->sum($k)) : dinhdangso($model->sum($k)-($model->sum($k) * 9.5) / 100) }}</td> --}}
             @endforeach
-            <td>{{ dinhdangso($model->sum('stbhxh_dv')) }}</td>
-            <td>{{ dinhdangso($model->sum('stbhyt_dv')) }}</td>
-            <td>{{ dinhdangso($model->sum('stkpcd_dv')) }}</td>
             <td></td>
-            <td>{{ dinhdangso($model->sum('luongtn')) }}</td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td>{{ dinhdangso($model->sum('nhantienmat')) }}</td>
         </tr>
         <tr>
             <td colspan="{{ $col == 0 ? 6 : $col + 5 }}"></td>

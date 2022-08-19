@@ -5091,6 +5091,7 @@ class bangluongController extends Controller
         if (Session::has('admin')) {
             $inputs = $request->all();
             $mabl = $inputs['mabl'];
+            dd($inputs);
             $model = $this->getBangLuong($inputs);
             $m_bl = bangluong::select('thang', 'nam', 'mabl', 'madv', 'ngaylap', 'phanloai', 'luongcoban', 'noidung')->where('mabl', $mabl)->first();
             $m_dv = dmdonvi::where('madv', $m_bl->madv)->first();
@@ -5745,11 +5746,15 @@ class bangluongController extends Controller
             $inputs['inchucvuvt'] = '';
             $mabl = $inputs['mabl'];
             $model = $this->getBangLuong($inputs);
+            if($inputs['mact']== ''){
+                $a_mct=['1506673604','1535613221','1536402878','1506673695'];
+                $model=$model->wherein('mact',$a_mct);
+            }
             $m_bl = bangluong::select('thang', 'nam', 'mabl', 'madv', 'ngaylap', 'phanloai', 'luongcoban', 'noidung', 'manguonkp')->where('mabl', $mabl)->first();
             $m_dv = dmdonvi::where('madv', $m_bl->madv)->first();
             $model_congtac = dmphanloaict::select('mact', 'tenct','macongtac')
                 ->wherein('mact', a_unique(array_column($model->toarray(), 'mact')))->get();
-            $inputs['mact'] == '1506673604'?$a_goc = array('hesott','heso','luonghd'):$a_goc = array('hesott');
+            $inputs['mact'] == '1506673604'|| $inputs['mact'] ==''?$a_goc = array('hesott','heso','luonghd'):$a_goc = array('hesott');
             
             $model_pc = dmphucap_donvi::where('madv', $m_bl->madv)->where('phanloai', '<', '3')->wherenotin('mapc', $a_goc)->get();
             $m_hscb=hosocanbo::wherein('macanbo',array_column($model->toarray(),'macanbo'))->get();
@@ -5780,29 +5785,30 @@ class bangluongController extends Controller
             }
 
             //tính những cán bộ chuyển khoản
-            foreach($model as $ct){
+            // foreach($model as $ct){
 
-                $ct->sotk == null?$ct->nhantienmat=$ct->luongtn:$ct->chuyenkhoan=$ct->luongtn;
-                // $ct->sotk == null?$ct->nhantienmat_bc=$ct->st_heso - ($ct->st_heso * 10.5/100):$ct->chuyenkhoan_bc=$ct->st_heso - ($ct->st_heso * 10.5/100);//bc=biên chế
-                // $ct->sotk == null?$ct->nhantienmat_hd=$ct->st_luonghd- ($ct->st_luonghd * 10.5/100):$ct->chuyenkhoan_hd=$ct->st_luonghd - ($ct->st_luonghd * 10.5/100);
-                
-                foreach($a_phucap as $key=>$val){
-                    $k='st_'.$key;
-                    $pc_cttm='cttm_'.$key;                   
-                    $pc_ctck='ctck_'.$key;                    
-                    if($key== 'heso'){
-                        if($ct->ttbh != 0){
-                            $ct->sotk == null?$ct->$pc_cttm=$ct->st_heso - $ct->ttbh :$ct->$pc_ctck=$ct->st_heso - $ct->ttbh;
-                        }else{
-                            $ct->sotk == null?$ct->$pc_cttm=$ct->st_heso :$ct->$pc_ctck=$ct->st_heso;
-                        }
-                    }else{
-                        $ct->sotk == null?$ct->$pc_cttm=$ct->$k:$ct->$pc_ctck=$ct->$k ;
-                    }                                      
-                }
-            }
+            //     $ct->sotk == null?$ct->nhantienmat=$ct->luongtn:$ct->chuyenkhoan=$ct->luongtn;
+            //     foreach($a_phucap as $key=>$val){
+            //         $k='st_'.$key;
+            //         $pc_cttm='cttm_'.$key;                   
+            //         $pc_ctck='ctck_'.$key;                    
+            //         if($key== 'heso'){
+            //             if($ct->ttbh != 0){
+            //                 $ct->sotk == null?$ct->$pc_cttm=$ct->st_heso - $ct->ttbh :$ct->$pc_ctck=$ct->st_heso - $ct->ttbh;
+            //             }else{
+            //                 $ct->sotk == null?$ct->$pc_cttm=$ct->st_heso :$ct->$pc_ctck=$ct->st_heso;
+            //             }
+            //         }else{
+            //             if($a_bh[$key]!= 0){
+            //             $ct->sotk == null?$ct->$pc_cttm=$ct->$k - ($ct->k * 9.5/100):$ct->$pc_ctck=$ct->$k - ($ct->k*9.5/100);
+            //             }else{
+            //                 $ct->sotk == null?$ct->$pc_cttm=$ct->$k :$ct->$pc_ctck=$ct->$k ;
+            //             }
+            //         }                                      
+            //     }
+            // }
             $nguonkp = dmnguonkinhphi::select('tennguonkp')->where('manguonkp', $m_bl->manguonkp)->first();
-            $inputs['mact'] == '1506673604'?$model_tm = dmtieumuc_default::all():$model_tm = dmtieumuc_default::all()->unique('mapc');
+            $inputs['mact'] == '1506673604'|| $inputs['mact'] =='' ?$model_tm = dmtieumuc_default::all():$model_tm = dmtieumuc_default::all()->unique('mapc');
 
 
             $a_tm =array_column($model_tm->toarray(), 'mapc'); //Mảng để so sánh
@@ -5843,7 +5849,74 @@ class bangluongController extends Controller
                 }
             };
             $model_bh=$model->where('ttbh',"!=",0);
-            // dd($model); 
+
+            //Tính cho các cột 8%, 1.5%, 9.5% bảo hiểm
+            $a_tbh=array(
+                'bhxh_hs'=>0,
+                'bhyt_hs'=>0
+            );
+
+            foreach($model as $ct){
+                $ct->sotk == null?$ct->nhantienmat=$ct->luongtn:$ct->chuyenkhoan=$ct->luongtn;
+                //tính bảo hiểm cho nhóm cán bộ không chuyên trách
+                if(in_array($ct->mact,['1506673695','1535613221','1536402878'])){
+                    $ct->bhxh_hs=$ct->stbhxh;
+                    $ct->bhyt_hs=$ct->stbhyt;
+                    //Tính tiền ck hay nhận tiền mặt cho nhóm này luôn
+                    if($ct->ttbh != 0){
+                        $ct->sotk == null?$ct->cttm_heso=$ct->st_heso - ($ct->bhxh_hs + $ct->bhyt_hs) :$ct->ctck_heso=$ct->st_heso - ($ct->bhxh_hs + $ct->bhyt_hs);
+                    }else{
+                        $ct->sotk == null?$ct->cttm_heso=$ct->st_heso :$ct->ctck_heso=$ct->st_heso;
+                    }
+                    foreach($a_phucap as $key=>$val){
+                        $k='st_'.$key;
+                        $pc_cttm='cttm_'.$key;                   
+                        $pc_ctck='ctck_'.$key;
+                        $ct->sotk == null?$ct->$pc_cttm=$ct->$k :$ct->$pc_ctck=$ct->$k ;
+                    }
+                }else if($ct->mact == '1506673604'){ //tính bảo hiểm cho cán bộ chuyên trách
+                    $ct->bhxh_hs=$ct->ttbh==0?0:$ct->st_heso*8/100;
+                    $ct->bhyt_hs=$ct->ttbh==0?0:$ct->st_heso*1.5/100;
+                    $ct->tbhxh_luonghd=$ct->st_luonghd==0?0:$ct->st_luonghd*8/100;
+                    $ct->tbhyt_luonghd=$ct->st_luonghd==0?0:$ct->st_luonghd*1.5/100;
+
+                    if($ct->ttbh != 0){
+                        $ct->sotk == null?$ct->cttm_heso=$ct->st_heso - ($ct->bhxh_hs + $ct->bhyt_hs) :$ct->ctck_heso=$ct->st_heso - ($ct->bhxh_hs + $ct->bhyt_hs);
+                    }else{
+                        $ct->sotk == null?$ct->cttm_heso=$ct->st_heso :$ct->ctck_heso=$ct->st_heso;
+                    }
+                    foreach($a_phucap as $key=>$val){
+                        $bhxh_pc='bhxh_'.$key;
+                        $bhyt_pc='bhyt_'.$key;
+                        $st_pc='st_'.$key;
+                        $a_bh[$key] == 0 ?$ct->$bhxh_pc=0:$ct->$bhxh_pc=$ct->$st_pc*8/100;
+                        $a_bh[$key] == 0 ?$ct->$bhyt_pc=0:$ct->$bhyt_pc=$ct->$st_pc*1.5/100;
+
+                        $pc_cttm='cttm_'.$key;                   
+                        $pc_ctck='ctck_'.$key;
+                        // if($a_bh[$key]!= 0){
+                            $ct->sotk == null?$ct->$pc_cttm=$ct->$st_pc - ($ct->$bhxh_pc + $ct->$bhyt_pc ):$ct->$pc_ctck=$ct->$st_pc - ($ct->$bhxh_pc + $ct->$bhyt_pc );
+                            // }else{
+                            //     $ct->sotk == null?$ct->$pc_cttm=$ct->$st_pc :$ct->$pc_ctck=$ct->$st_pc ;
+                            // }
+                    }
+
+                    //Tính tiền chuyển khoản hoặc tiền mặt cho hệ số và luonhd
+                    // if($ct->ttbh != 0){
+                    //     $ct->sotk == null?$ct->cttm_heso=$ct->st_heso - $ct->ttbh :$ct->ctck_heso=$ct->st_heso - $ct->ttbh;
+                    // }else{
+                    //     $ct->sotk == null?$ct->cttm_heso=$ct->st_heso :$ct->ctck_heso=$ct->st_heso;
+                    // };
+                }
+
+                // if($ct->ttbh != 0){
+                    $ct->sotk == null?$ct->cttm_heso=$ct->st_heso - ($ct->bhxh_hs + $ct->bhyt_hs) :$ct->ctck_heso=$ct->st_heso - ($ct->bhxh_hs + $ct->bhyt_hs);
+                // }else{
+                //     $ct->sotk == null?$ct->cttm_heso=$ct->st_heso :$ct->ctck_heso=$ct->st_heso;
+                // };
+            }
+            // dd($a_tbh);
+            // dd($model->where('mact','1506673604')); 
             // dd($model_tm); 
             switch ($inputs['mact']) {
                 case '1506673695': {
@@ -5910,6 +5983,22 @@ class bangluongController extends Controller
                             ->with('model_bh', $model_bh)
                             ->with('pageTitle', 'Bảng lương chi tiết'); 
                         break;
+            }
+            default:{
+                return   view('reports.bangluong.donvi.maublxaphuong')
+                ->with('thongtin', $thongtin)
+                ->with('m_bl', $m_bl)
+                ->with('m_dv', $m_dv)
+                ->with('model', $model)
+                ->with('model_congtac', $model_congtac)
+                ->with('a_phucap', $a_phucap)
+                ->with('col', $col)
+                ->with('model_tm', $model_tm)
+                ->with('a_tm', $a_tm)
+                ->with('a_bh', $a_bh)
+                ->with('a_tieumuc', $a_tieumuc)
+                ->with('model_bh', $model_bh)
+                ->with('pageTitle', 'Bảng lương chi tiết'); 
             }
         }
         } else
