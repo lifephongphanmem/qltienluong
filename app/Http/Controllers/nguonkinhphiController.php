@@ -383,9 +383,6 @@ class nguonkinhphiController extends Controller
                     }
                 }
 
-
-
-
                 $a_nb = a_getelement($m_nb, array('thang_nb' => $a_thang[$i]['thang']));
                 if (count($a_nb) > 0) {
                     foreach ($a_nb as $key => $val) {
