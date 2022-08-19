@@ -5091,7 +5091,6 @@ class bangluongController extends Controller
         if (Session::has('admin')) {
             $inputs = $request->all();
             $mabl = $inputs['mabl'];
-            dd($inputs);
             $model = $this->getBangLuong($inputs);
             $m_bl = bangluong::select('thang', 'nam', 'mabl', 'madv', 'ngaylap', 'phanloai', 'luongcoban', 'noidung')->where('mabl', $mabl)->first();
             $m_dv = dmdonvi::where('madv', $m_bl->madv)->first();
@@ -5746,15 +5745,16 @@ class bangluongController extends Controller
             $inputs['inchucvuvt'] = '';
             $mabl = $inputs['mabl'];
             $model = $this->getBangLuong($inputs);
-            if($inputs['mact']== ''){
-                $a_mct=['1506673604','1535613221','1536402878','1506673695'];
-                $model=$model->wherein('mact',$a_mct);
-            }
+            // if($inputs['mact']== ''){
+            //     $a_mct=['1506673604','1535613221','1536402878','1506673695'];
+            //     $model=$model->wherein('mact',$a_mct);
+            // }
             $m_bl = bangluong::select('thang', 'nam', 'mabl', 'madv', 'ngaylap', 'phanloai', 'luongcoban', 'noidung', 'manguonkp')->where('mabl', $mabl)->first();
             $m_dv = dmdonvi::where('madv', $m_bl->madv)->first();
             $model_congtac = dmphanloaict::select('mact', 'tenct','macongtac')
                 ->wherein('mact', a_unique(array_column($model->toarray(), 'mact')))->get();
-            $inputs['mact'] == '1506673604'|| $inputs['mact'] ==''?$a_goc = array('hesott','heso','luonghd'):$a_goc = array('hesott');
+            // $inputs['mact'] == '1506673604'|| $inputs['mact'] ==''?$a_goc = array('hesott','heso','luonghd'):$a_goc = array('hesott');
+            in_array($inputs['mact'],['1506673695','1535613221','1536402878'])?$a_goc = array('hesott'):$a_goc = array('hesott','heso','luonghd');
             
             $model_pc = dmphucap_donvi::where('madv', $m_bl->madv)->where('phanloai', '<', '3')->wherenotin('mapc', $a_goc)->get();
             $m_hscb=hosocanbo::wherein('macanbo',array_column($model->toarray(),'macanbo'))->get();
@@ -5808,7 +5808,8 @@ class bangluongController extends Controller
             //     }
             // }
             $nguonkp = dmnguonkinhphi::select('tennguonkp')->where('manguonkp', $m_bl->manguonkp)->first();
-            $inputs['mact'] == '1506673604'|| $inputs['mact'] =='' ?$model_tm = dmtieumuc_default::all():$model_tm = dmtieumuc_default::all()->unique('mapc');
+            // $inputs['mact'] == '1506673604'|| $inputs['mact'] =='' ?$model_tm = dmtieumuc_default::all():$model_tm = dmtieumuc_default::all()->unique('mapc');
+           in_array($inputs['mact'],['1506673695','1535613221','1536402878']) ?$model_tm = dmtieumuc_default::all()->unique('mapc'):$model_tm = dmtieumuc_default::all();
 
 
             $a_tm =array_column($model_tm->toarray(), 'mapc'); //Mảng để so sánh
@@ -5874,12 +5875,15 @@ class bangluongController extends Controller
                         $pc_ctck='ctck_'.$key;
                         $ct->sotk == null?$ct->$pc_cttm=$ct->$k :$ct->$pc_ctck=$ct->$k ;
                     }
-                }else if($ct->mact == '1506673604'){ //tính bảo hiểm cho cán bộ chuyên trách
+                }else {
+                // if($ct->mact == '1506673604'){ //tính bảo hiểm cho cán bộ chuyên trách
                     $ct->bhxh_hs=$ct->ttbh==0?0:$ct->st_heso*8/100;
                     $ct->bhyt_hs=$ct->ttbh==0?0:$ct->st_heso*1.5/100;
-                    $ct->tbhxh_luonghd=$ct->st_luonghd==0?0:$ct->st_luonghd*8/100;
-                    $ct->tbhyt_luonghd=$ct->st_luonghd==0?0:$ct->st_luonghd*1.5/100;
-
+                    if($ct->ttbh != 0){
+                        $ct->bhxh_luonghd=$ct->st_luonghd==0?0:$ct->st_luonghd*8/100;
+                        $ct->bhyt_luonghd=$ct->st_luonghd==0?0:$ct->st_luonghd*1.5/100;
+                    }
+                    
                     if($ct->ttbh != 0){
                         $ct->sotk == null?$ct->cttm_heso=$ct->st_heso - ($ct->bhxh_hs + $ct->bhyt_hs) :$ct->ctck_heso=$ct->st_heso - ($ct->bhxh_hs + $ct->bhyt_hs);
                     }else{
@@ -5911,6 +5915,7 @@ class bangluongController extends Controller
 
                 // if($ct->ttbh != 0){
                     $ct->sotk == null?$ct->cttm_heso=$ct->st_heso - ($ct->bhxh_hs + $ct->bhyt_hs) :$ct->ctck_heso=$ct->st_heso - ($ct->bhxh_hs + $ct->bhyt_hs);
+                    $ct->sotk == null?$ct->cttm_luonghd=$ct->st_luonghd - ($ct->bhxh_luonghd + $ct->bhxh_luonghd) :$ct->ctck_heso=$ct->st_luonghd - ($ct->bhxh_luonghd + $ct->bhxh_luonghd);
                 // }else{
                 //     $ct->sotk == null?$ct->cttm_heso=$ct->st_heso :$ct->ctck_heso=$ct->st_heso;
                 // };
