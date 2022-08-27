@@ -47,6 +47,7 @@
                                 <th class="text-center" style="width: 5%">STT</th>
                                 <th class="text-center">Năm ngân</br>sách</th>
                                 <th class="text-center">Lĩnh vực hoạt động</th>
+                                <th class="text-center">Thông tư</th>
                                 <th class="text-center">Nhu cầu</br>kinh phí</th>
                                 {{--<th class="text-center">Kinh phí</br>thực hiện</th>--}}
                                 <th class="text-center">Trạng thái</th>
@@ -60,6 +61,7 @@
                                     <td class="text-center">{{$key+1}}</td>
                                     <td class="text-center">{{$value->namns}}</td>
                                     <td>{{$value->linhvuc}}</td>
+                                    <td>{{getThongTuQD()[$value->sohieu]}}</td>
                                     <td class="text-right">{{number_format($value->nhucau)}}</td>
                                     {{--<td class="text-right">{{number_format($value->nguonkp)}}</td>--}}
                                     <td>{{$a_trangthai[$value->trangthai]}}</td>
@@ -196,12 +198,12 @@
                             {!!Form::text('chenhlech', $model_tt_df->chenhlech, array('id' => 'chenhlech','class' => 'form-control', 'data-mask'=>'fdecimal', 'readonly'))!!}
                         </div>
 
-                        {{-- <div class="col-md-12">
+                        <div class="col-md-12">
                             <label class="control-label">Nội dung</label>
                             {!!Form::textarea('noidung', null, array('id' => 'noidung','class' => 'form-control','rows'=>'3'))!!}
-                        </div> --}}
+                        </div>
                     </div>
-                    <div class="row">
+                    {{-- <div class="row">
                         <div class="col-md-4">
                             <label class="control-label">Bảng lương cơ sở 1 - Tháng</label>
                             {!! Form::text('thang', '07', ['id' => 'thang', 'class' => 'form-control']) !!}
@@ -216,9 +218,9 @@
                             <label class="control-label">Nguồn kinh phí</label>
                             {!! Form::select('manguonkp', $a_nkp, '13', ['id' => 'manguonkp', 'class' => 'form-control']) !!}
                         </div>
-                    </div>
+                    </div> --}}
 
-                    <div class="row">
+                    {{-- <div class="row">
                         <div class="col-md-4">
                             <label class="control-label">Bảng lương cơ sở 2 - Tháng</label>
                             {!! Form::text('thang1', '07', ['class' => 'form-control']) !!}
@@ -233,9 +235,9 @@
                             <label class="control-label">Nguồn kinh phí</label>
                             {!! Form::select('manguonkp1', $a_nkp, '12', ['id' => 'manguonkp', 'class' => 'form-control']) !!}
                         </div>
-                    </div>
+                    </div> --}}
 
-                    {{-- <div class="row">
+                    <div class="row">
                         <div class="col-md-offset-3 col-md-9" style="padding-top: 15px">
                             <input type="checkbox" checked id="nghihuu" name="nghihuu" />
                             <label for="nghihuu">Tính dự toán cho cán bộ nghỉ hưu</label>
@@ -254,7 +256,7 @@
                             <input type="checkbox" checked id="nangluong" name="nangluong" />
                             <label for="nghihuu">Tính nâng lương cán bộ</label>
                         </div>
-                    </div> --}}
+                    </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" data-dismiss="modal" class="btn btn-default">Hủy thao tác</button>

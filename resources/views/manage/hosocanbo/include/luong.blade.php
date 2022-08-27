@@ -170,8 +170,6 @@
                             @endif
                         @endforeach
                     </div>
-
-
                 </div>
             </div>
             <!-- END PORTLET-->

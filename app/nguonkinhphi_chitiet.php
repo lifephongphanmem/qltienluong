@@ -61,5 +61,6 @@ class nguonkinhphi_chitiet extends Model
         'luongkhongchuyentrach',//thừa
         'tongnhucau1', //tổng nhu cầu kinh trước 1 năm
         'tongnhucau2', //tổng nhu cầu kinh trước 2 năm
+
     ];
 }
