@@ -44,7 +44,6 @@ class nguonkinhphiController extends Controller
             $model_tt_df = dmthongtuquyetdinh::first();
             $model_nhomct = dmphanloaicongtac::select('macongtac', 'tencongtac')->get();
             $model_tenct = dmphanloaict::select('tenct', 'macongtac', 'mact')->get();
-
             return view('manage.nguonkinhphi.index')
                 ->with('furl', '/nguon_kinh_phi/')
                 ->with('a_trangthai', getStatus())
@@ -60,7 +59,7 @@ class nguonkinhphiController extends Controller
             return view('errors.notlogin');
     }
 
-    function create_old(Request $request)
+    function create(Request $request)
     {
         if (Session::has('admin')) {
             $inputs = $request->all();
@@ -512,14 +511,14 @@ class nguonkinhphiController extends Controller
 
             // $a_data_nl = unset_key($a_data_nl, $a_col);
             //dd($a_data_nl);
-            foreach (array_chunk($a_data_nl, 100) as $data) {
+            foreach (array_chunk($a_data_nl, 10) as $data) {
                 nguonkinhphi_nangluong::insert($data);
             }
             //dd($a_data);
             //chia nhỏ thành các mảng nhỏ 100 phần tử để insert
             $a_data = unset_key($a_data, $a_col);
 
-            foreach (array_chunk($a_data, 100)  as $data) {
+            foreach (array_chunk($a_data, 10)  as $data) {
                 nguonkinhphi_bangluong::insert($data);
             }
             $m_data = unset_key($m_data, array('luonghs', 'nopbh'));
@@ -781,6 +780,26 @@ class nguonkinhphiController extends Controller
             $inputs['tongnhucau1'] = chkDbl($inputs['tongnhucau1']);
             $inputs['tongnhucau2'] = chkDbl($inputs['tongnhucau2']);
 
+            //Mẫu 2b
+            $inputs['tongsonguoi1']=chkDbl($inputs['tongsonguoi1']);
+            $inputs['tongsonguoi2']=chkDbl($inputs['tongsonguoi2']);
+            $inputs['tongsonguoi3']=chkDbl($inputs['tongsonguoi3']);
+            $inputs['quy1_1']=chkDbl($inputs['quy1_1']);
+            $inputs['quy1_2']=chkDbl($inputs['quy1_2']);
+            $inputs['quy1_3']=chkDbl($inputs['quy1_3']);
+            $inputs['quy2_1']=chkDbl($inputs['quy2_1']);
+            $inputs['quy2_2']=chkDbl($inputs['quy2_2']);
+            $inputs['quy2_3']=chkDbl($inputs['quy2_3']);
+
+            //Mẫu 2đ
+            $inputs['tongsonguoi2015']=chkDbl($inputs['tongsonguoi2015']);
+            $inputs['tongsonguoi2017']=chkDbl($inputs['tongsonguoi2017']);
+            $inputs['quyluong']=chkDbl($inputs['quyluong']);
+
+            // mẫu 2e
+            $inputs['tongsodonvi1']=chkDbl($inputs['tongsodonvi1']);
+            $inputs['tongsodonvi2']=chkDbl($inputs['tongsodonvi2']);
+            $inputs['quy_tuchu']=chkDbl($inputs['quy_tuchu']);
             //dd($inputs);
             $model->update($inputs);
 
@@ -1489,7 +1508,7 @@ class nguonkinhphiController extends Controller
         return $m_cb;
     }
 
-    public function create(Request $request)
+    public function create_260822(Request $request)
     {
         if (Session::has('admin')) {
             $inputs = $request->all();

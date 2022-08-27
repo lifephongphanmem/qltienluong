@@ -116,20 +116,20 @@
         <td>{{dinhdangso($a_It['soluongbienche'])}}</td>
         <td></td>
         <td></td>
-        <td>{{dinhdangso($a_It['st_heso'] + $a_It['tongpc'] +$a_It['ttbh_dv'])}}</td>
-        <td>{{dinhdangso($a_It['heso'])}}</td>
-        <td>{{dinhdangso($a_It['tongpc'])}}</td>
-        <td>{{dinhdangso($a_It['pckv'])}}</td>
-        <td>{{dinhdangso($a_It['pccv'])}}</td>
-        <td>{{dinhdangso($a_It['vuotkhung'])}}</td>
-        <td>{{dinhdangso($a_It['pcudn'])}}</td>
-        <td>{{dinhdangso($a_It['pcth'])}}</td>
-        <td>{{dinhdangso($a_It['pcthni'])}}</td>
-        <td>{{dinhdangso($a_It['pccovu'])}}</td>
-        <td>{{dinhdangso($a_It['pcdang'])}}</td>
-        <td>{{dinhdangso($a_It['pctnn'])}}</td>
-        <td>{{dinhdangso($a_It['pck'])}}</td>
-        <td>{{dinhdangso($a_It['ttbh_dv'])}}</td>
+        <td>{{dinhdangsothapphan($a_It['heso'] + $a_It['tongpc'] +$a_It['ttbh_dv'],2)}}</td>
+        <td>{{dinhdangsothapphan($a_It['heso'],2)}}</td>
+        <td>{{dinhdangsothapphan($a_It['tongpc'],2)}}</td>
+        <td>{{dinhdangsothapphan($a_It['pckv'],2)}}</td>
+        <td>{{dinhdangsothapphan($a_It['pccv'],2)}}</td>
+        <td>{{dinhdangsothapphan($a_It['vuotkhung'],2)}}</td>
+        <td>{{dinhdangsothapphan($a_It['pcudn'],2)}}</td>
+        <td>{{dinhdangsothapphan($a_It['pcth'],2)}}</td>
+        <td>{{dinhdangsothapphan($a_It['pcthni'],2)}}</td>
+        <td>{{dinhdangsothapphan($a_It['pccovu'],2)}}</td>
+        <td>{{dinhdangsothapphan($a_It['pcdang'],2)}}</td>
+        <td>{{dinhdangsothapphan($a_It['pctnn'],2)}}</td>
+        <td>{{dinhdangsothapphan($a_It['pck'],2)}}</td>
+        <td>{{dinhdangsothapphan($a_It['ttbh_dv'],2)}}</td>
         <td>{{dinhdangso($a_It['chenhlech'])}}</td>
         <td>{{dinhdangso($a_It['chenhlech']*6)}}</td>
     </tr>

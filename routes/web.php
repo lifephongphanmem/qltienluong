@@ -966,14 +966,20 @@ Route::group(['prefix'=>'bao_cao'],function(){
             Route::post('mau2a1','baocaonhucaukinhphi_donviController@mau2a1');
             Route::post('mau2a2','baocaonhucaukinhphi_donviController@mau2a2');
             Route::post('mau2a2_kh','baocaonhucaukinhphi_donviController@mau2a2_kh');
-            Route::post('mau2b','baocaothongtu67Controller@mau2b_donvi');
             //Route::get('mau2c','baocaothongtu67Controller@mau2c_donvi');
-            //Route::get('mau2d','baocaothongtu67Controller@mau2d_donvi');
+            // Route::get('mau2d','baocaothongtu67Controller@mau2d_donvi');
             Route::post('mau4a','baocaonhucaukinhphi_donviController@mau4a');
             Route::post('mau4b','baocaonhucaukinhphi_donviController@mau4b');
             //Route::get('mau2e','baocaothongtu67Controller@mau2e_donvi');
-            //Route::get('mau2g','baocaothongtu67Controller@mau2g_donvi');
+            // Route::get('mau2g','baocaothongtu67Controller@mau2g_donvi');
             //Route::get('mau2h','baocaothongtu67Controller@mau2h_donvi');
+
+            //Mẫu Vạn Ninh
+            Route::post('mau2a2_kh','baocaonhucaukinhphi_donviController@mau2a2_kh');
+            Route::post('mau2b','baocaonhucaukinhphi_donviController@mau2b_donvi');
+            Route::post('mau2đ','baocaonhucaukinhphi_donviController@mau2đ_donvi');
+            Route::post('mau2e','baocaonhucaukinhphi_donviController@mau2e_donvi');
+            Route::post('mau2g','baocaonhucaukinhphi_donviController@mau2g_donvi');
         });
 
         Route::group(['prefix'=>'khoi'],function(){

@@ -58,7 +58,7 @@
                                 </li>
                                 <hr>
 
-                                <li>
+                                {{-- <li>
                                     <a href="#" onclick="nhucauluong('{{ '/bao_cao/thong_tu_67/don_vi/mau2a1' }}')"
                                         data-toggle="modal" data-target="#thoainhucauluong-modal">Báo cáo nhu cầu kinh phí
                                         (Mẫu 2a/1)</a>
@@ -67,16 +67,33 @@
                                     <a href="#" onclick="nhucauluong('{{ '/bao_cao/thong_tu_67/don_vi/mau2a2' }}')"
                                         data-toggle="modal" data-target="#thoainhucauluong-modal">Báo cáo nhu cầu kinh phí
                                         (Mẫu 2a/2)</a>
-                                </li>
+                                </li> --}}
                                 <li>
                                     <a href="#" onclick="nhucauluong('{{ '/bao_cao/thong_tu_67/don_vi/mau2a2_kh' }}')"
-                                        data-toggle="modal" data-target="#thoainhucauluong-modal">Báo cáo nhu cầu kinh phí Khánh Hòa
-                                        (Mẫu 2a/2)</a>
+                                        data-toggle="modal" data-target="#thoainhucauluong-modal">Báo cáo nhu cầu kinh phí 
+                                        (Mẫu 2a)</a>
                                 </li>
-                                <li>
+                                {{-- <li>
                                     <a href="#" onclick="nhucauluong('{{ '/bao_cao/thong_tu_67/don_vi/mau2b' }}')"
                                         data-toggle="modal" data-target="#thoainhucauluong-modal">Báo cáo nhu cầu kinh phí
                                         (Mẫu 2b)</a>
+                                </li> --}}
+                                <li><a href="#" onclick="nhucauluong('{{ '/bao_cao/thong_tu_67/don_vi/mau2b' }}')" data-toggle="modal" data-target="#thoainhucauluong-modal" >Báo cáo tổng hợp quỹ trợ cấp tăng thêm của cán bộ xã, phường, thị trấn đã nghỉ việc (Mẫu 2b)</a></li>
+
+                                <li>
+                                    <a href="#" onclick="nhucauluong('{{ '/bao_cao/thong_tu_67/don_vi/mau2đ' }}')"
+                                        data-toggle="modal" data-target="#thoainhucauluong-modal">Báo cáo nguồn thực hiện cctl tiết kiệm từ tinh giản biên chế
+                                        (Mẫu 2đ)</a>
+                                </li>
+                                <li>
+                                    <a href="#" onclick="nhucauluong('{{ '/bao_cao/thong_tu_67/don_vi/mau2e' }}')"
+                                        data-toggle="modal" data-target="#thoainhucauluong-modal">Báo cáo nguồn thực hiện cctl tiết kiệm từ việc thay đổi cơ chế tự chủ
+                                        (Mẫu 2e)</a>
+                                </li>
+                                <li>
+                                    <a href="#" onclick="nhucauluong('{{ '/bao_cao/thong_tu_67/don_vi/mau2g' }}')"
+                                        data-toggle="modal" data-target="#thoainhucauluong-modal">Báo cáo quỹ tiền lương,phụ cấp
+                                        (Mẫu 2g)</a>
                                 </li>
                                 <hr>
 
@@ -106,7 +123,7 @@
                                         niên nghề (Theo danh sách nâng lương)</a>
                                 </li>
                                 <hr>
-
+                                {{-- <li><a href="{{ url('/bao_cao/thong_tu_67/don_vi/mau2b') }}" target="_blank">Báo cáo tổng hợp quỹ trợ cấp tăng thêm của cán bộ xã, phường, thị trấn đã nghỉ việc (Mẫu 2b)</a></li> --}}
                                 {{-- <li>
                                     <a href="#" data-target="#thoaidsnangluong-modal" data-toggle="modal"
                                        onclick="dsnangluong('{{$furl.'don_vi/dsnangluong'}}','NGACHBAC')">Danh sách nâng lương ngạch bậc (Theo danh sách cán bộ)</a>
