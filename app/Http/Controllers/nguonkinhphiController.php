@@ -152,7 +152,7 @@ class nguonkinhphiController extends Controller
             //dd($model_thongtu->ngayapdung);
             $model = (new dataController())->getCanBo($model, $model_thongtu->ngayapdung, true, $model_thongtu->ngayapdung);
 
-            foreach ($model as $cb) {
+            foreach ($model as $key => $cb) {
                 //xét thời hạn hợp đồng của cán bộ: nếu "ngayvao" > $model_thongtu->ngayapdung => gán lĩnh vực hoạt động = null để lọc theo lĩnh vực bỏ qua cán bộ
                 if (getDayVn($cb->ngayvao) != '' && $cb->ngayvao <= $model_thongtu->ngayapdung) {
                     $cb->lvhd = null;
@@ -220,6 +220,9 @@ class nguonkinhphiController extends Controller
                     $cb->nam_hh = null;
                     $cb->thang_hh = null;
                 }
+                //trường hợp cán bộ chỉ có tiền lương theo số tiền (tonghs = 0) =>bỏ
+                if ($cb->tonghs == 0)
+                    $model->remove($key);
             }
 
             $model = $model->wherein('mact', $a_plct)->where('lvhd', $inputs['linhvuchoatdong']);
@@ -722,7 +725,7 @@ class nguonkinhphiController extends Controller
             $model = nguonkinhphi::where('masodv', $inputs['maso'])->first();
             $model_ct = nguonkinhphi_chitiet::where('masodv', $inputs['maso'])->get();
             $m_thongtu = dmthongtuquyetdinh::where('sohieu', $model->sohieu)->first();
-// dd($model);
+            // dd($model);
             if ($model != null) {
                 $model->nhucaukp = $model->luongphucap + $model->daibieuhdnd + $model->canbokct
                     + $model->uyvien + $model->boiduong + $model->nghihuu + $model->baohiem;
@@ -730,7 +733,7 @@ class nguonkinhphiController extends Controller
                     + $model->tinhgiam + $model->nghihuusom
                     + $model->kpuudai + $model->kpthuhut;
             }
-    
+
             return view('manage.nguonkinhphi.edit')
                 ->with('furl', '/nguon_kinh_phi/')
                 ->with('model', $model)
@@ -781,25 +784,25 @@ class nguonkinhphiController extends Controller
             $inputs['tongnhucau2'] = chkDbl($inputs['tongnhucau2']);
 
             //Mẫu 2b
-            $inputs['tongsonguoi1']=chkDbl($inputs['tongsonguoi1']);
-            $inputs['tongsonguoi2']=chkDbl($inputs['tongsonguoi2']);
-            $inputs['tongsonguoi3']=chkDbl($inputs['tongsonguoi3']);
-            $inputs['quy1_1']=chkDbl($inputs['quy1_1']);
-            $inputs['quy1_2']=chkDbl($inputs['quy1_2']);
-            $inputs['quy1_3']=chkDbl($inputs['quy1_3']);
-            $inputs['quy2_1']=chkDbl($inputs['quy2_1']);
-            $inputs['quy2_2']=chkDbl($inputs['quy2_2']);
-            $inputs['quy2_3']=chkDbl($inputs['quy2_3']);
+            $inputs['tongsonguoi1'] = chkDbl($inputs['tongsonguoi1']);
+            $inputs['tongsonguoi2'] = chkDbl($inputs['tongsonguoi2']);
+            $inputs['tongsonguoi3'] = chkDbl($inputs['tongsonguoi3']);
+            $inputs['quy1_1'] = chkDbl($inputs['quy1_1']);
+            $inputs['quy1_2'] = chkDbl($inputs['quy1_2']);
+            $inputs['quy1_3'] = chkDbl($inputs['quy1_3']);
+            $inputs['quy2_1'] = chkDbl($inputs['quy2_1']);
+            $inputs['quy2_2'] = chkDbl($inputs['quy2_2']);
+            $inputs['quy2_3'] = chkDbl($inputs['quy2_3']);
 
             //Mẫu 2đ
-            $inputs['tongsonguoi2015']=chkDbl($inputs['tongsonguoi2015']);
-            $inputs['tongsonguoi2017']=chkDbl($inputs['tongsonguoi2017']);
-            $inputs['quyluong']=chkDbl($inputs['quyluong']);
+            $inputs['tongsonguoi2015'] = chkDbl($inputs['tongsonguoi2015']);
+            $inputs['tongsonguoi2017'] = chkDbl($inputs['tongsonguoi2017']);
+            $inputs['quyluong'] = chkDbl($inputs['quyluong']);
 
             // mẫu 2e
-            $inputs['tongsodonvi1']=chkDbl($inputs['tongsodonvi1']);
-            $inputs['tongsodonvi2']=chkDbl($inputs['tongsodonvi2']);
-            $inputs['quy_tuchu']=chkDbl($inputs['quy_tuchu']);
+            $inputs['tongsodonvi1'] = chkDbl($inputs['tongsodonvi1']);
+            $inputs['tongsodonvi2'] = chkDbl($inputs['tongsodonvi2']);
+            $inputs['quy_tuchu'] = chkDbl($inputs['quy_tuchu']);
             //dd($inputs);
             $model->update($inputs);
 
@@ -1515,7 +1518,7 @@ class nguonkinhphiController extends Controller
             // $model_thongtu = dmthongtuquyetdinh::where('sohieu', $inputs['sohieu'])->first();
             // $ngayapdung = new Carbon($model_thongtu->ngayapdung);
             // $inputs['namdt'] = chkDbl($model_thongtu->namdt) == 0 ? date('Y'): date_format($ngayapdung, 'Y');
-            $namns=$inputs['thang']==12?$inputs['nam']+1:$inputs['nam'];
+            $namns = $inputs['thang'] == 12 ? $inputs['nam'] + 1 : $inputs['nam'];
             // dd($inputs);
             //Kiểm tra nếu có rồi thì ko tạo
             $chk = nguonkinhphi::where('sohieu', $inputs['sohieu'])
@@ -1587,9 +1590,9 @@ class nguonkinhphiController extends Controller
                 //thêm macongtac vào colection $m_bl_ct
                 $a_plct = $a_plct->where('mact', $chitiet->mact)->first();
                 $chitiet->macongtac = $a_plct->macongtac;
-                
-                $chitiet->thang=$inputs['thang'];
-                $chitiet->nam=$inputs['nam'];
+
+                $chitiet->thang = $inputs['thang'];
+                $chitiet->nam = $inputs['nam'];
                 //chưa xử lý cán bộ kiêm nhiệm
                 if ($chitiet->tencanbo == '')
                     $chitiet->tencanbo = $a_hoten[$chitiet->macanbo] ?? '';
@@ -1641,7 +1644,7 @@ class nguonkinhphiController extends Controller
             foreach (array_unique(array_column($m_bl_ct->toarray(), 'mact')) as $data) {
                 $nhucau = [];
                 $canbo = $m_bl_ct->where('mact', $data);
-                $nhucau['mact']=$data;
+                $nhucau['mact'] = $data;
                 $nhucau['linhvuchoatdong'] = $inputs['linhvuchoatdong'];
                 $nhucau['masodv'] = $masodv;
                 $nhucau['nhucau'] = 0;
@@ -1661,7 +1664,7 @@ class nguonkinhphiController extends Controller
                 // if (in_array($data, $a_cuv)) {
                 //     $nhucau['uyvien'] += array_sum(array_column($canbo->toarray(), 'st_hesopc'));
                 // }
-                $thangs=$inputs['thang']==12?12:12 - $inputs['thang'];
+                $thangs = $inputs['thang'] == 12 ? 12 : 12 - $inputs['thang'];
                 //Tính lại tổng các phụ cấp
                 foreach ($a_pc as $pc) {
                     $tenpc_st = 'st_' . $pc;
@@ -1688,7 +1691,7 @@ class nguonkinhphiController extends Controller
 
 
                 //Tính các cột lưu vào nguonkinhphi_chitiet
-                $nhucau['baohiem']=$nhucau['ttbh_dv'];
+                $nhucau['baohiem'] = $nhucau['ttbh_dv'];
                 $nhucau['daibieuhdnd'] = $canbo->sum('st_pcdbqh') * $thangs;
                 if (in_array($data, $a_dbhdnd)) {
                     $nhucau['daibieuhdnd'] += $canbo->sum('st_hesopc') * $thangs;
@@ -1759,25 +1762,24 @@ class nguonkinhphiController extends Controller
             $a_col = array(
                 'bac', 'bhxh_dv', 'bhtn_dv', 'kpcd_dv', 'bhyt_dv', 'gioitinh', 'nam_nb', 'nam_ns', 'nam_tnn',
                 'thang_nb', 'thang_ns', 'thang_tnn', 'ngayden', 'ngaytu', 'ngaysinh', 'tnndenngay', 'tnntungay', 'pcctp',
-                'st_pcctp', 'nam_hh', 'thang_hh', 'ngaybc', 'ngayvao', 'lvhd','bhct','bhtn','bhxh','bhyt','congtac','ghichu','gttncn','hs_pccovu','hs_pctnn','hs_pcud61','hs_pcudn','hs_vuotkhung',
-                'kpcd','luuheso','mabl','macongchuc','maso','ngaytl','phanloai','songaycong','songaylv','songaytruc','thangtl','thuetn',
-                'tienthuong','tluong','tongbh_dv','tongngaylv','trichnop','manguonkp','id',
+                'st_pcctp', 'nam_hh', 'thang_hh', 'ngaybc', 'ngayvao', 'lvhd', 'bhct', 'bhtn', 'bhxh', 'bhyt', 'congtac', 'ghichu', 'gttncn', 'hs_pccovu', 'hs_pctnn', 'hs_pcud61', 'hs_pcudn', 'hs_vuotkhung',
+                'kpcd', 'luuheso', 'mabl', 'macongchuc', 'maso', 'ngaytl', 'phanloai', 'songaycong', 'songaylv', 'songaytruc', 'thangtl', 'thuetn',
+                'tienthuong', 'tluong', 'tongbh_dv', 'tongngaylv', 'trichnop', 'manguonkp', 'id',
 
             );
             $a_data = unset_key($a_data, $a_col);
             foreach (array_chunk($a_data, 100)  as $data) {
                 nguonkinhphi_bangluong::insert($data);
-               
             }
-            $a_col_nhucau=array(
-                'heso','bhtn_dv','bhxh_dv','bhyt_dv','mabl','hesobl','hesopc','kpcd_dv','luonghd','luonghs','luongtn','pcbdhdcu', 'pccovu', 'pcct',
-                 'pccv', 'pcd', 'pcdang', 'pcdbn', 'pcdbqh', 'pcdd', 'pcdh', 'pcdith', 'pck', 'pckct', 'pckn', 'pckv', 'pclaunam', 'pcld', 'pclt', 'pctaicu',
-                  'pctdt', 'pcth', 'pcthni', 'pctn', 'pctnn', 'pctr', 'pcud61', 'pcudn', 'pcvk', 'pcxaxe', 'st_heso', 'st_hesobl', 'st_hesopc', 'st_luonghd',
-                   'st_pcbdhdcu', 'st_pccovu', 'st_pcct', 'st_pccv', 'st_pcd', 'st_pcdang', 'st_pcdbn', 'st_pcdbqh', 'st_pcdd', 'st_pcdh', 'st_pcdith', 'st_pck',
-                    'st_pckct', 'st_pckn', 'st_pckv', 'st_pclaunam', 'st_pcld', 'st_pclt', 'st_pctaicu', 'st_pctdt', 'st_pcth', 'st_pcthni', 'st_pctn', 'st_pctnn', 'st_pctr',
-                     'st_pcud61', 'st_pcudn', 'st_pcvk', 'st_pcxaxe', 'st_vuotkhung','stbhtn_dv', 'stbhxh_dv', 'stbhyt_dv', 'stkpcd_dv', 'tongbh_dv','tonghs','ttbh_dv','ttl','vuotkhung'
+            $a_col_nhucau = array(
+                'heso', 'bhtn_dv', 'bhxh_dv', 'bhyt_dv', 'mabl', 'hesobl', 'hesopc', 'kpcd_dv', 'luonghd', 'luonghs', 'luongtn', 'pcbdhdcu', 'pccovu', 'pcct',
+                'pccv', 'pcd', 'pcdang', 'pcdbn', 'pcdbqh', 'pcdd', 'pcdh', 'pcdith', 'pck', 'pckct', 'pckn', 'pckv', 'pclaunam', 'pcld', 'pclt', 'pctaicu',
+                'pctdt', 'pcth', 'pcthni', 'pctn', 'pctnn', 'pctr', 'pcud61', 'pcudn', 'pcvk', 'pcxaxe', 'st_heso', 'st_hesobl', 'st_hesopc', 'st_luonghd',
+                'st_pcbdhdcu', 'st_pccovu', 'st_pcct', 'st_pccv', 'st_pcd', 'st_pcdang', 'st_pcdbn', 'st_pcdbqh', 'st_pcdd', 'st_pcdh', 'st_pcdith', 'st_pck',
+                'st_pckct', 'st_pckn', 'st_pckv', 'st_pclaunam', 'st_pcld', 'st_pclt', 'st_pctaicu', 'st_pctdt', 'st_pcth', 'st_pcthni', 'st_pctn', 'st_pctnn', 'st_pctr',
+                'st_pcud61', 'st_pcudn', 'st_pcvk', 'st_pcxaxe', 'st_vuotkhung', 'stbhtn_dv', 'stbhxh_dv', 'stbhyt_dv', 'stkpcd_dv', 'tongbh_dv', 'tonghs', 'ttbh_dv', 'ttl', 'vuotkhung'
             );
-            $a_nhucau=unset_key($a_nhucau,$a_col_nhucau);
+            $a_nhucau = unset_key($a_nhucau, $a_col_nhucau);
             nguonkinhphi_chitiet::insert($a_nhucau);
             nguonkinhphi::create($inputs);
             return redirect('/nguon_kinh_phi/danh_sach');
