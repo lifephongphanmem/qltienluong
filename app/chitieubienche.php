@@ -16,6 +16,8 @@ class chitieubienche extends Model
         'ngaylap',//chưa dùng
         'linhvuchoatdong',//chưa dùng
         'soluongduocgiao',
+        'soluongcongchuc',
+        'soluongvienchuc',
         'soluongbienche',
         'soluongtuyenthem',
         'soluongkhongchuyentrach',
