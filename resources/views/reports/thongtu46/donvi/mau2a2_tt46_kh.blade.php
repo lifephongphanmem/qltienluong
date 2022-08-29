@@ -144,8 +144,13 @@
             <td>{{ dinhdangso($a_It['soluongbienche']) }}</td>
             <td>{{ dinhdangso($a_It['congchuc']) }}</td>
             <td>{{ dinhdangso($a_It['vienchuc']) }}</td>
+            @if ($a_phucap == [])
+            <td></td>
+            <td></td>
+            @else
             <td>{{ dinhdangsothapphan($a_It['heso'] + $a_It['tongpc'] + $a_It['ttbh_dv'], 2) }}</td>
             <td>{{ dinhdangsothapphan($a_It['heso'], 2) }}</td>
+            @endif
             <td>{{ dinhdangsothapphan($a_It['tongpc'], 2) }}</td>
             {{-- <td>{{dinhdangsothapphan($a_It['pckv'],2)}}</td>
         <td>{{dinhdangsothapphan($a_It['pccv'],2)}}</td>
@@ -203,8 +208,13 @@
                 <td>{{ dinhdangso($dulieu['soluongbienche']) }}</td>
                 <td>{{ dinhdangso($dulieu['congchuc']) }}</td>
                 <td>{{ dinhdangso($dulieu['vienchuc']) }}</td>
+                @if ($a_phucap == [])
+                <td></td>
+                <td></td>
+                @else
                 <td>{{ dinhdangsothapphan($dulieu['heso'] + $dulieu['tongpc'] + $dulieu['ttbh_dv'], 3) }}</td>
                 <td>{{ dinhdangsothapphan($dulieu['heso'], 3) }}</td>
+                @endif
                 <td>{{ dinhdangsothapphan($dulieu['tongpc'], 3) }}</td>
                 @if ($a_phucap == [])
                     <td></td>
@@ -228,8 +238,13 @@
             <td></td>
             <td></td>
             <td></td>
+            @if ($a_phucap == [])
+            <td></td>
+            <td></td>
+        @else
             <td>{{ dinhdangso($ar_II['heso'] + $ar_II['tongpc'] + $ar_II['ttbh_dv']) }}</td>
             <td>{{ dinhdangso($ar_II['heso']) }}</td>
+            @endif
             <td>{{ dinhdangso($ar_II['tongpc']) }}</td>
             {{-- <td>{{dinhdangso($ar_II['pckv'])}}</td>
         <td>{{dinhdangso($ar_II['pccv'])}}</td>
