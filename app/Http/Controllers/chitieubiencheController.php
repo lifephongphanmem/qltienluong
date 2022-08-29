@@ -115,6 +115,8 @@ class chitieubiencheController extends Controller
         $inputs = $request->all();
         $inputs['soluongduocgiao'] = chkDbl($inputs['soluongduocgiao']);
         $inputs['soluongbienche'] = chkDbl($inputs['soluongbienche']);
+        $inputs['soluongcongchuc'] = chkDbl($inputs['soluongcongchuc']);
+        $inputs['soluongvienchuc'] = chkDbl($inputs['soluongvienchuc']);
         $inputs['soluongtuyenthem'] = chkDbl($inputs['soluongtuyenthem']);
         $inputs['madv'] = session('admin')->madv;
         //dd($inputs);

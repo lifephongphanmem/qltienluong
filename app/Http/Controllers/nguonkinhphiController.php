@@ -221,9 +221,12 @@ class nguonkinhphiController extends Controller
                     $cb->thang_hh = null;
                 }
                 //trường hợp cán bộ chỉ có tiền lương theo số tiền (tonghs = 0) =>bỏ
-                if ($cb->tonghs == 0)
-                    $model->remove($key);
+                if ($cb->luonghd != 0){
+                    $model->forget($key);
+                }
+                   
             }
+        
 
             $model = $model->wherein('mact', $a_plct)->where('lvhd', $inputs['linhvuchoatdong']);
             //lấy danh sách cán bộ chưa nâng lương từ tháng 01-06 => tự nâng lương
@@ -1092,7 +1095,7 @@ class nguonkinhphiController extends Controller
             });
             $model_congtac = a_unique($model_congtac);
 
-
+// dd($model);
             return view('reports.nguonkinhphi.donvi.bangluong')
                 ->with('thongtin', $thongtin)
                 ->with('model', $model)

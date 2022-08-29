@@ -71,28 +71,42 @@
                                         </div>
 
                                         <div class="row">
-                                            <div class="col-md-3">
+                                            <div class="col-md-2">
                                                 <div class="form-group">
                                                     <label class="control-label">Năm chỉ tiêu</label>
                                                     {!!Form::text('nam', null, array('class' => 'form-control text-right', 'readonly'))!!}
                                                 </div>
                                             </div>
 
-                                            <div class="col-md-3">
+                                            <div class="col-md-2">
                                                 <div class="form-group">
                                                     <label class="control-label">Số lượng được giao</label>
                                                     {!!Form::text('soluongduocgiao', null, array('id' => 'soluongduocgiao','class' => 'form-control text-right', 'data-mask'=>'fdecimal'))!!}
                                                 </div>
                                             </div>
 
-                                            <div class="col-md-3">
+                                            <div class="col-md-2">
+                                                <div class="form-group">
+                                                    <label class="control-label">Số lượng công chức được giao</label>
+                                                    {!!Form::text('soluongcongchuc', null, array('id' => 'soluongcongchuc','class' => 'form-control text-right', 'data-mask'=>'fdecimal'))!!}
+                                                </div>
+                                            </div>
+
+                                            <div class="col-md-2">
+                                                <div class="form-group">
+                                                    <label class="control-label">Số lượng viên chức được giao</label>
+                                                    {!!Form::text('soluongvienchuc', null, array('id' => 'soluongvienchuc','class' => 'form-control text-right', 'data-mask'=>'fdecimal'))!!}
+                                                </div>
+                                            </div>
+
+                                            <div class="col-md-2">
                                                 <div class="form-group">
                                                     <label class="control-label">Số lượng hiện có</label>
                                                     {!!Form::text('soluongbienche', null, array('id' => 'soluongbienche','class' => 'form-control text-right', 'data-mask'=>'fdecimal'))!!}
                                                 </div>
                                             </div>
 
-                                            <div class="col-md-3">
+                                            <div class="col-md-2">
                                                 <div class="form-group">
                                                     <label class="control-label">Số lượng chưa tuyển</label>
                                                     {!!Form::text('soluongtuyenthem', null, array('id' => 'soluongtuyenthem','class' => 'form-control text-right', 'data-mask'=>'fdecimal'))!!}
