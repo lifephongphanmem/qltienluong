@@ -794,7 +794,7 @@ class baocaonhucaukinhphi_donviController extends Controller
                 // }
                 //Lấy % bảo hiểm
                 $cb = $canbo->where('macanbo', $ct->macanbo)->first();
-                $ct->sunghiep=$cb->sunghiep;
+                $ct->sunghiep=$cb != ''?$cb->sunghiep:'';
                 // $ct->ttbh_dv = round(($ct->st_heso + $ct->st_vuotkhung + $ct->st_pccv + $ct->st_pctnn + $ct->st_hesopc) * 23.5 / 100);
 
                 $ct->ttbh_dv_hs = round($ct->ttbh_dv / $ct->luongcoban, 2);
@@ -844,6 +844,7 @@ class baocaonhucaukinhphi_donviController extends Controller
                 
                 $tongpc = 0;
                 $tonghs = 0;
+                
                 foreach ($a_phucap as $key=>$pc) {
                     $pc_st = 'st_' . $key;                   
                     $ar_I[$i][$key] = isset($inputs['innoidung']) ? $chitiet->sum($key) : $chitiet->sum($pc_st);
@@ -851,8 +852,7 @@ class baocaonhucaukinhphi_donviController extends Controller
                     $tongpc += isset($inputs['innoidung']) ? $chitiet->sum($key) : $chitiet->sum($pc_st);
                     $tonghs += $chitiet->sum($key);
                 }
-                 
-                $ar_I[$i]['tongpc'] = $tongpc - $ar_I[$i]['heso'];
+                $ar_I[$i]['tongpc'] = $a_phucap != []?$tongpc - $ar_I[$i]['heso']:0;
                 $a_It['tongpc'] += $ar_I[$i]['tongpc'];
                 // $ar_I[$i]['ttbh_dv'] = isset($inputs['innoidung'])&& $chitiet->sum('ttbh_dv')!= 0?0.235:round($chitiet->sum('ttbh_dv')/$chitiet->luongcoban, session('admin')->lamtron);
                 // $a_It['ttbh_dv'] += $ar_I[$i]['ttbh_dv'];
@@ -922,7 +922,7 @@ class baocaonhucaukinhphi_donviController extends Controller
                 $tonghs += $m_xaphuong->sum($key);
             }
 
-            $ar_II['tongpc'] = $tongpc - $ar_II['heso'];
+            $ar_II['tongpc'] =$a_phucap != []? $tongpc - $ar_II['heso']:0;
             $ar_II['ttbh_dv'] = $m_xaphuong->sum('ttbh_dv');
             $ar_II['chenhlech'] = round($tonghs * $m_thongtu->chenhlech
                 + ($ar_II['ttbh_dv'] / $m_thongtu->mucapdung) * $m_thongtu->chenhlech);
