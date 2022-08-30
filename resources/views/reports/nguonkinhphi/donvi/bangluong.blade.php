@@ -86,7 +86,7 @@
                         <td style="text-align: left;" colspan="{{11 + $col}}">{{$a_ct[$congtac['mact']]}}</td>
                     </tr>
                     @foreach($model_luong as $ct)
-                        <tr>
+                        <tr style="text-align: center">
                             <td>{{$stt++}}</td>
                             <td style="text-align: left">{{$ct->tencanbo}}</td>
                             <td style="text-align: left">{{$ct->msngbac}}</td>

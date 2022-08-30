@@ -151,7 +151,6 @@ class nguonkinhphiController extends Controller
             //dd($a_pc_ts);
             //dd($model_thongtu->ngayapdung);
             $model = (new dataController())->getCanBo($model, $model_thongtu->ngayapdung, true, $model_thongtu->ngayapdung);
-
             foreach ($model as $key => $cb) {
                 //xét thời hạn hợp đồng của cán bộ: nếu "ngayvao" > $model_thongtu->ngayapdung => gán lĩnh vực hoạt động = null để lọc theo lĩnh vực bỏ qua cán bộ
                 if (getDayVn($cb->ngayvao) != '' && $cb->ngayvao <= $model_thongtu->ngayapdung) {
@@ -356,7 +355,7 @@ class nguonkinhphiController extends Controller
             foreach ($m_cb as $key => $val) {
                 $m_cb[$key] = $this->getHeSoPc($a_pc, $m_cb[$key], $inputs['chenhlech']);
             }
-
+            // dd($m_cb);
             $a_thang = array(
                 array('thang' => '07', 'nam' => $inputs['namdt']),
                 array('thang' => '08', 'nam' => $inputs['namdt']),
@@ -374,7 +373,7 @@ class nguonkinhphiController extends Controller
             $a_data = array();
             $a_data_nl = array();
             $a_danghihuu = array();
-            //dd($m_cb);
+            // dd($m_cb);
             for ($i = 0; $i < count($a_thang); $i++) {
                 $a_nh = a_getelement($m_nh, array('thang_ns' => $a_thang[$i]['thang']));
                 if (count($a_nh) > 0) { //
@@ -410,7 +409,7 @@ class nguonkinhphiController extends Controller
                         }
                     }
                 }
-
+// dd($m_cb);
                 $ngaylap = Carbon::create($a_thang[$i]['nam'], $a_thang[$i]['thang'], '01');
                 //lưu vào 1 mảng
                 foreach ($m_cb as $key => $val) {
@@ -514,7 +513,7 @@ class nguonkinhphiController extends Controller
                 'thang_nb', 'thang_ns', 'thang_tnn', 'ngayden', 'ngaytu', 'ngaysinh', 'tnndenngay', 'tnntungay', 'pcctp',
                 'st_pcctp', 'nam_hh', 'thang_hh', 'ngaybc', 'ngayvao', 'lvhd'
             );
-
+// dd($a_data);
             // $a_data_nl = unset_key($a_data_nl, $a_col);
             //dd($a_data_nl);
             foreach (array_chunk($a_data_nl, 10) as $data) {
