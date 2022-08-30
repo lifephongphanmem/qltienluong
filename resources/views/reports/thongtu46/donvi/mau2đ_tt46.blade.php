@@ -25,7 +25,7 @@
         QUYẾT SỐ 18-NQ/TW VÀ NGHỊ QUYẾT SỐ 19-NQ/TW NGÀY 25/10/2017 CỦA BAN CHẤP HÀNH TRUNG ƯƠNG </p>
     <p id="data_body1" style="text-align: center; font-style: italic">(Kèm theo Công văn số ....../STC-HCNS ngày tháng 9 năm
         2018 của Sở Tài chính)</p>
-    <p id="data_body2" style="text-align: right; font-style: italic">Đơn vị: Đồng</p>
+    <p id="data_body2" style="text-align: right; font-style: italic">Đơn vị: Triệu đồng</p>
     <table id="data_body3" cellspacing="0" cellpadding="0" border="1"
         style="margin: 20px auto; font-size: 10px; border-collapse: collapse;">
         <tr style="padding-left: 2px;padding-right: 2px">
@@ -36,11 +36,11 @@
             <th style="width: 6%;padding-left: 2px;padding-right: 2px">Tổng số đối</br>tượng có mặt</br>đến</br>01/7/2017
             </th>
             <th style="width: 6%;padding-left: 2px;padding-right: 2px">Quỹ lương,</br>phụ cấp
-                tháng</br>7/2017</br>(luong1,39)</th>
+                tháng</br>7/2017</br>(luong 1,39)</th>
             <th style="width: 6%;padding-left: 2px;padding-right: 2px">Tổng số đối</br>tượng có mặt</br>đến</br>01/7/2019
             </th>
             <th style="width: 6%;padding-left: 2px;padding-right: 2px">Quỹ lương,</br>phụ cấp
-                tháng</br>7/2019</br>(luong1,39)</th>
+                tháng</br>7/2019</br>(luong 1,49)</th>
             <th style="width: 6%;padding-left: 2px;padding-right: 2px">Quỹ lương, phụ</br>cấp tiết kiệm</br>trong 01 tháng
             </th>
             <th style="width: 6%;padding-left: 2px;padding-right: 2px">Định mức chi</br>hoạt động</br>trong 01 tháng</br>năm
@@ -82,7 +82,7 @@
             <td>{{dinhdangso($dm_qlnn->sum('tong') + $a_It['tong'])}}</td>
 
         </tr>
-        <tr>
+        <tr  style="text-align: right">
             <td style="font-weight: bold;text-align: center">I</td>
             <td style="font-weight: bold;text-align: left">QUẢN LÝ NHÀ NƯỚC</td>
             <td style="text-align: center">{{dinhdangso($dm_qlnn->sum('tongsonguoi2015'))}}</td>

@@ -135,7 +135,7 @@
         <td>{{dinhdangso($a_It['chenhlech'] + $ar_II['chenhlech'] + $a_IIIt['chenhlech'] + $a_IVt['chenhlech'])}}</td>
         <td>{{dinhdangso(($a_It['chenhlech'] + $ar_II['chenhlech'] + $a_IIIt['chenhlech'] + $a_IVt['chenhlech'])*6)}}</td>
     </tr> --}}
-        <tr style="font-weight: bold;text-align: right">
+        <tr style="font-weight: bold;text-align: center">
             <th style="text-align: center">I</th>
             <th style="text-align: left">KHU VỰC HCSN, ĐẢNG, ĐOÀN THỂ</th>
             <td>{{ dinhdangso($a_It['soluongduocgiao']) }}</td>
@@ -144,35 +144,26 @@
             <td>{{ dinhdangso($a_It['soluongbienche']) }}</td>
             <td>{{ dinhdangso($a_It['congchuc']) }}</td>
             <td>{{ dinhdangso($a_It['vienchuc']) }}</td>
-            @if ($a_phucap == [])
+            @if ($a_phucap == [] && $a_It['ttbh_dv']== 0)
             <td></td>
             <td></td>
             @else
-            <td>{{ dinhdangsothapphan($a_It['heso'] + $a_It['tongpc'] + $a_It['ttbh_dv'], 2) }}</td>
-            <td>{{ dinhdangsothapphan($a_It['heso'], 2) }}</td>
+            <td>{{ dinhdangsothapphan($a_It['heso'] + $a_It['tongpc'] + $a_It['ttbh_dv'], session('admin')->lamtron) }}</td>
+            <td>{{ dinhdangsothapphan($a_It['heso'], session('admin')->lamtron) }}</td>
             @endif
-            <td>{{ dinhdangsothapphan($a_It['tongpc'], 2) }}</td>
-            {{-- <td>{{dinhdangsothapphan($a_It['pckv'],2)}}</td>
-        <td>{{dinhdangsothapphan($a_It['pccv'],2)}}</td>
-        <td>{{dinhdangsothapphan($a_It['vuotkhung'],2)}}</td>
-        <td>{{dinhdangsothapphan($a_It['pcudn'],2)}}</td>
-        <td>{{dinhdangsothapphan($a_It['pcth'],2)}}</td>
-        <td>{{dinhdangsothapphan($a_It['pcthni'],2)}}</td>
-        <td>{{dinhdangsothapphan($a_It['pccovu'],2)}}</td>
-        <td>{{dinhdangsothapphan($a_It['pcdang'],2)}}</td>
-        <td>{{dinhdangsothapphan($a_It['pctnn'],2)}}</td>
-        <td>{{dinhdangsothapphan($a_It['pck'],2)}}</td> --}}
+            <td>{{ dinhdangsothapphan($a_It['tongpc'], session('admin')->lamtron) }}</td>
+
             @if ($a_phucap == [])
                 <td></td>
             @else
                 @foreach ($a_phucap as $key => $pc)
-                    <td>{{ dinhdangsothapphan($a_It[$key], 2) }}</td>
+                    <td>{{ dinhdangsothapphan($a_It[$key], session('admin')->lamtron) }}</td>
                 @endforeach
             @endif
 
-            <td>{{ dinhdangsothapphan($a_It['ttbh_dv'], 2) }}</td>
-            <td>{{ dinhdangso($a_It['chenhlech']) }}</td>
-            <td>{{ dinhdangso($a_It['chenhlech'] * 6) }}</td>
+            <td>{{ dinhdangsothapphan($a_It['ttbh_dv'], session('admin')->lamtron) }}</td>
+            <td style="text-align: right">{{ dinhdangso($a_It['chenhlech']) }}</td>
+            <td style="text-align: right">{{ dinhdangso($a_It['chenhlech'] * 6) }}</td>
         </tr>
 
         <tr style="font-style: italic;">
@@ -199,7 +190,7 @@
             <td></td>
         </tr>
         @foreach ($ar_I as $dulieu)
-            <tr style="text-align: right">
+            <tr style="text-align: center">
                 <td style="text-align: center">{{ $dulieu['tt'] }}</td>
                 <td style="text-align: left">{{ $dulieu['noidung'] }}</td>
                 <td>{{ dinhdangso($dulieu['soluongduocgiao']) }}</td>
@@ -208,24 +199,24 @@
                 <td>{{ dinhdangso($dulieu['soluongbienche']) }}</td>
                 <td>{{ dinhdangso($dulieu['congchuc']) }}</td>
                 <td>{{ dinhdangso($dulieu['vienchuc']) }}</td>
-                @if ($a_phucap == [])
+                @if ($a_phucap == [] && $dulieu['ttbh_dv'] == 0 )
                 <td></td>
                 <td></td>
                 @else
-                <td>{{ dinhdangsothapphan($dulieu['heso'] + $dulieu['tongpc'] + $dulieu['ttbh_dv'], 3) }}</td>
-                <td>{{ dinhdangsothapphan($dulieu['heso'], 3) }}</td>
+                <td>{{ dinhdangsothapphan($dulieu['heso'] + $dulieu['tongpc'] + $dulieu['ttbh_dv'], session('admin')->lamtron) }}</td>
+                <td>{{ dinhdangsothapphan($dulieu['heso'], session('admin')->lamtron) }}</td>
                 @endif
-                <td>{{ dinhdangsothapphan($dulieu['tongpc'], 3) }}</td>
+                <td>{{ dinhdangsothapphan($dulieu['tongpc'], session('admin')->lamtron) }}</td>
                 @if ($a_phucap == [])
                     <td></td>
                 @else
                     @foreach ($a_phucap as $key => $pc)
-                        <td>{{ dinhdangsothapphan($dulieu[$key], 3) }}</td>
+                        <td>{{ dinhdangsothapphan($dulieu[$key], session('admin')->lamtron) }}</td>
                     @endforeach
                 @endif
-                <td>{{ dinhdangsothapphan($dulieu['ttbh_dv'], 3) }}</td>
-                <td>{{ dinhdangsothapphan($dulieu['chenhlech'], 3) }}</td>
-                <td>{{ dinhdangsothapphan($dulieu['chenhlech'] * 6, 3) }}</td>
+                <td>{{ dinhdangsothapphan($dulieu['ttbh_dv'], session('admin')->lamtron) }}</td>
+                <td style="text-align: right">{{ dinhdangso($dulieu['chenhlech']) }}</td>
+                <td style="text-align: right">{{ dinhdangsothapphan($dulieu['chenhlech'] * 6) }}</td>
             </tr>
         @endforeach
 
@@ -246,16 +237,7 @@
             <td>{{ dinhdangso($ar_II['heso']) }}</td>
             @endif
             <td>{{ dinhdangso($ar_II['tongpc']) }}</td>
-            {{-- <td>{{dinhdangso($ar_II['pckv'])}}</td>
-        <td>{{dinhdangso($ar_II['pccv'])}}</td>
-        <td>{{dinhdangso($ar_II['vuotkhung'])}}</td>
-        <td>{{dinhdangso($ar_II['pcudn'])}}</td>
-        <td>{{dinhdangso($ar_II['pcth'])}}</td>
-        <td>{{dinhdangso($ar_II['pcthni'])}}</td>
-        <td>{{dinhdangso($ar_II['pccovu'])}}</td>
-        <td>{{dinhdangso($ar_II['pcdang'])}}</td>
-        <td>{{dinhdangso($ar_II['pctnn'])}}</td>
-        <td>{{dinhdangso($ar_II['pck'])}}</td> --}}
+
             @if ($a_phucap == [])
                 <td></td>
             @else

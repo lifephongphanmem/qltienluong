@@ -5108,7 +5108,7 @@ class bangluongController extends Controller
                 in_array($ct->macanbo, $a_macanbo) ? $ct->tennganhang = $a_nganhang[$ct->macanbo] : '';
             }
 
-
+            // dd($model);
             $a_phucap = array();/* Hiển thị các cột phụ cấp*/
             $col = 0;
             foreach ($model_pc as $ct) {
@@ -5208,6 +5208,7 @@ class bangluongController extends Controller
                 $tm = $model_tm->where('mapc', $key)->first();
                 $tm == null ? $a_tieumuc : array_push($a_tieumuc, $tm);
             }
+            // dd($col);
             // dd($a_phucap);
             return view('reports.bangluong.donvi.mauC02_KH')
                 ->with('model', $model)

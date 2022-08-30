@@ -70,7 +70,7 @@
                                 </li> --}}
                                 <li>
                                     <a href="#" onclick="nhucauluong('{{ '/bao_cao/thong_tu_67/don_vi/mau2a2_kh' }}')"
-                                        data-toggle="modal" data-target="#thoainhucauluong-modal">Báo cáo nhu cầu kinh phí 
+                                        data-toggle="modal" data-target="#thoainhucauluong-mau2a-modal">Báo cáo nhu cầu kinh phí 
                                         (Mẫu 2a)</a>
                                 </li>
                                 {{-- <li>
@@ -613,6 +613,45 @@
                         {!! Form::select('sohieu', getThongTuQD(false), null, ['id' => 'sohieu', 'class' => 'form-control']) !!}
                     </div>
                 </div>
+                {{-- <div class="row">
+                    <div class="col-md-offset-3 col-md-9">
+                        <input name="inchucvuvt" id="inchucvuvt" type="checkbox">
+                        <label>In theo hệ số</label>
+                    </div>
+                </div> --}}
+
+                <input type="hidden" name="_token" value="{{ csrf_token() }}">
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" data-dismiss="modal" class="btn btn-default">Hủy thao tác</button>
+                <button type="submit" id="submit" name="submit" value="submit" class="btn btn-primary">Đồng
+                    ý</button>
+            </div>
+        </div>
+        {!! Form::close() !!}
+    </div>
+
+    <div id="thoainhucauluong-mau2a-modal" tabindex="-1" role="dialog" aria-hidden="true" class="modal fade">
+        {!! Form::open([
+            'url' => '#',
+            'target' => '_blank',
+            'method' => 'post',
+            'id' => 'thoainhucau_mau2a',
+            'class' => 'form-horizontal',
+        ]) !!}
+        <div class="modal-dialog modal-content">
+            <div class="modal-header modal-header-primary">
+                <button type="button" data-dismiss="modal" aria-hidden="true" class="close">&times;</button>
+                <h4 id="modal-header-primary-label" class="modal-title">Thông tin kết xuất nhu cầu kinh phí</h4>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <label class="control-label">Căn cứ thông tư, quyết định</label>
+                        {!! Form::select('sohieu', getThongTuQD(false), null, ['id' => 'sohieu', 'class' => 'form-control']) !!}
+                    </div>
+                </div>
                 <div class="row">
                     <div class="col-md-offset-3 col-md-9" style="margin-top: 15px">
                         <input name="innoidung" id="innoidung" type="checkbox">
@@ -756,6 +795,7 @@
 
         function nhucauluong(url) {
             $('#thoainhucau').attr('action', url);
+            $('#thoainhucau_mau2a').attr('action', url);
         }
     </script>
 @stop
