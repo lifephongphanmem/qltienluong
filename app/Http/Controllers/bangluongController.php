@@ -5582,9 +5582,11 @@ class bangluongController extends Controller
                                 $ct->ghichu .= 'Giảm ' . $a_tenpc[$mapc] . '; ';
                             }
                         }
+
+                        
                         //tính lại lương thực nhận do đã giảm trừ
                         // $ct->luongtn = $ct->ttl - $ct->ttbh - ($canbo->ttl - $canbo->ttbh);
-                        $ct->luongtn = $ct->luongtn - $canbo->luongtn;
+                        $ct->luongtn -= $canbo->luongtn;
                         $ct->tonghs -= $canbo->tonghs;
                         $ct->ttl -= $canbo->ttl;
                         $ct->stbhxh -= $canbo->stbhxh;
@@ -5597,7 +5599,21 @@ class bangluongController extends Controller
                         $ct->stkpcd_dv -= $canbo->stkpcd_dv;
                         $ct->stbhtn_dv -= $canbo->stbhtn_dv;
                         $ct->ttbh_dv -= $canbo->ttbh_dv;
-
+                    }
+                    else{
+                        foreach ($model_pc as $pc) {
+                            $mapc = $pc->mapc;
+                            $mapc_st = 'st_' . $pc->mapc;
+                            // $ct->$mapc -= $canbo->$mapc;
+                            // $ct->$mapc_st -= $canbo->$mapc_st;
+                            if ($ct->$mapc_st > 0) {
+                                $ct->ghichu .= 'Tăng ' . $a_tenpc[$mapc] . '; ';
+                            };
+                            if ($ct->$mapc_st < 0) {
+                                $ct->ghichu .= 'Giảm ' . $a_tenpc[$mapc] . '; ';
+                            }
+                        }
+                    }
                         if ($m_truylinh != null) { //nếu có bảng truy lĩnh lương 
 
                             foreach ($model_truylinh as $val) {
@@ -5616,7 +5632,7 @@ class bangluongController extends Controller
                                     $ct->ghichu .= 'Tăng do truy lĩnh lương';
                                 }
                             }
-                        }
+                        };
 
                         $ct->luongthaydoi = $ct->luongtn + $ct->truylinh;
 
@@ -5624,7 +5640,7 @@ class bangluongController extends Controller
                         if ($ct->luongthaydoi != 0) {
                             $model_thaydoi->add($ct);
                         }
-                    }
+
                 } else {
                     $message = 'Không tìm thấy bảng lương tháng ' . $thang . ' năm ' . $nam . ' (cùng nguồn kinh phí) để so sánh.';
                 }

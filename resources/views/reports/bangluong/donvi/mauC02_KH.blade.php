@@ -210,7 +210,7 @@
                     <?php $k='hs_'.$key?>
                     <td style="text-align: center">{{ $ct->$key== 0?'':dinhdangso($ct->$k).'%' }}</td>
                     @else
-                    <td style="text-align: center">{{ dinhdangsothapphan($ct->$key, 2) }}</td>
+                    <td style="text-align: center">{{ dinhdangsothapphan($ct->$key, 3) }}</td>
                     @endif
                     @endforeach
                     @endif
