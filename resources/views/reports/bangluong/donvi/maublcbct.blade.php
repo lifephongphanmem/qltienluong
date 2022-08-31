@@ -155,19 +155,19 @@
                 <td style="text-align: left;">{{ $congtac->tenct }}</td>
                 <td style="text-align: center">{{ dinhdangsothapphan($model_luong->count('tencv')) }}</td>
                 <td></td>
-                <td style="text-align: center">{{ dinhdangsothapphan($model_luong->sum('heso'), 2) }}</td>
+                <td style="text-align: center">{{ dinhdangsothapphan($model_luong->sum('heso'), 3) }}</td>
                 @foreach ($a_phucap as $key => $val)
                     @if (in_array($key, ['pccovu', 'pclt', 'pcudn', 'pctnn', 'vuotkhung']))
                         <td style="text-align: center"></td>
                     @else
-                        <td style="text-align: center">{{ dinhdangsothapphan($model_luong->sum($key), 2) }}
+                        <td style="text-align: center">{{ dinhdangsothapphan($model_luong->sum($key), 3) }}
                     @endif
                 @endforeach
                 <td>{{ dinhdangso($model_luong->sum('st_heso')) }}</td>
                 <td>{{ dinhdangso($model_luong->sum('st_luonghd')) }}</td>
                 @foreach ($a_phucap as $key => $val)
                     <?php $key = 'st_' . $key; ?>
-                    <td>{{ dinhdangsothapphan($model_luong->sum($key)), 2 }}
+                    <td>{{ dinhdangsothapphan($model_luong->sum($key)), 3 }}
                 @endforeach
                 <td>{{ dinhdangso($model_luong->sum('stbhxh_dv')) }}</td>
                 <td>{{ dinhdangso($model_luong->sum('stbhyt_dv')) }}</td>
@@ -181,11 +181,12 @@
                     <td style="text-align: left">{{ $ct->tencanbo }}</td>
                     <td style="text-align: center">{{ $ct->tencv }}</td>
                     <td>{{ dinhdangso($ct->luongcoban) }}</td>
-                    <td style="text-align: center">{{ dinhdangsothapphan($ct->heso, 2) }}</td>
+                    <td style="text-align: center">{{ dinhdangsothapphan($ct->heso, 3) }}</td>
                     @if ($a_phucap != [])
                         @foreach ($a_phucap as $key => $val)
-                            @if ($key == 'pclt' || $key == 'pccovu')
-                                <td style="text-align: center">{{ $ct->$key == 0 ? '' : dinhdangso($ct->$key * 100) . '%' }}</td>
+                        <?php $hs_pc='hs_'.$key ?>
+                            @if (in_array($key,['pccovu','pclt','pcudn','pctnn','vuotkhung']))
+                                <td style="text-align: center">{{ $ct->$key == 0 ? '' : (dinhdangso($ct->$hs_pc)== 0?'': dinhdangso($ct->$hs_pc). '%') }}</td>
                             @else
                                 <td style="text-align: center">{{ dinhdangsothapphan($ct->$key, 2) }}</td>
                             @endif

@@ -28,9 +28,9 @@
 
             </td>
         </tr>
-        <tr >
+        <tr>
             <td style="text-align: left;width: 60%">
-                <b>Chương 805 - 341 - Nguồn {{$m_bl->manguonkp}}</b>
+                <b>Chương 805 - 341 - Nguồn {{ $m_bl->manguonkp }}</b>
             </td>
         </tr>
         <tr>
@@ -49,7 +49,8 @@
                     {{ $thongtin['noidung'] }}
                 @else
                     DANH SÁCH CÁN BỘ NHẬN TIỀN PHỤ CẤP TRÁCH NHIỆM QUẢN LÝ ĐƠN VỊ LLDQ THÁNG
-                    {{ $thongtin['thang'] . '/' . $thongtin['nam'] }}.MỨC LƯƠNG {{ dinhdangso($thongtin['mucluong']) . ' đ' }}
+                    {{ $thongtin['thang'] . '/' . $thongtin['nam'] }}.MỨC LƯƠNG
+                    {{ dinhdangso($thongtin['mucluong']) . ' đ' }}
                 @endif
             </td>
         </tr>
@@ -89,54 +90,54 @@
                     <th></th>
                 @endif
             </tr>
-            @if(!empty($a_tieumuc))
-            <tr>
-                <th></th>
-                <th></th>
-                <th></th>
-                <th></th>
-                <th></th>
-                @if ($a_phucap != [])
-                    @foreach ($a_phucap as $key => $val)
-                        @if ($key == 'vuotkhung' || $key == 'pctnn')
-                            <?php $m_tm = $model_tm->where('mapc', 'vuotkhung,pctnn'); ?>
-                            <?php $key = 'vuotkhung,pctnn'; ?>
-                        @else
-                            <?php $m_tm = $model_tm->where('mapc', $key); ?>
-                        @endif
-                        @if (in_array($key, $a_tm))
-                            @foreach ($m_tm as $v)
-                                <th>{{ $v->tieumuc }}</th>
-                            @endforeach
-                        @else
-                            <th></th>
-                        @endif
-                    @endforeach
-                @else
+            @if (!empty($a_tieumuc))
+                <tr>
                     <th></th>
-                @endif
-                @if ($a_phucap != [])
-                    @foreach ($a_phucap as $key => $val)
-                        @if ($key == 'vuotkhung' || $key == 'pctnn')
-                            <?php $m_tm = $model_tm->where('mapc', 'vuotkhung,pctnn'); ?>
-                            <?php $key = 'vuotkhung,pctnn'; ?>
-                        @else
-                            <?php $m_tm = $model_tm->where('mapc', $key); ?>
-                        @endif
-                        @if (in_array($key, $a_tm))
-                            @foreach ($m_tm as $v)
-                                <th>{{ $v->tieumuc }}</th>
-                            @endforeach
-                        @else
-                            <th></th>
-                        @endif
-                    @endforeach
-                @else
                     <th></th>
-                @endif
-                <th></th>
-                <th></th>
-            </tr>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    @if ($a_phucap != [])
+                        @foreach ($a_phucap as $key => $val)
+                            @if ($key == 'vuotkhung' || $key == 'pctnn')
+                                <?php $m_tm = $model_tm->where('mapc', 'vuotkhung,pctnn'); ?>
+                                <?php $key = 'vuotkhung,pctnn'; ?>
+                            @else
+                                <?php $m_tm = $model_tm->where('mapc', $key); ?>
+                            @endif
+                            @if (in_array($key, $a_tm))
+                                @foreach ($m_tm as $v)
+                                    <th>{{ $v->tieumuc }}</th>
+                                @endforeach
+                            @else
+                                <th></th>
+                            @endif
+                        @endforeach
+                    @else
+                        <th></th>
+                    @endif
+                    @if ($a_phucap != [])
+                        @foreach ($a_phucap as $key => $val)
+                            @if ($key == 'vuotkhung' || $key == 'pctnn')
+                                <?php $m_tm = $model_tm->where('mapc', 'vuotkhung,pctnn'); ?>
+                                <?php $key = 'vuotkhung,pctnn'; ?>
+                            @else
+                                <?php $m_tm = $model_tm->where('mapc', $key); ?>
+                            @endif
+                            @if (in_array($key, $a_tm))
+                                @foreach ($m_tm as $v)
+                                    <th>{{ $v->tieumuc }}</th>
+                                @endforeach
+                            @else
+                                <th></th>
+                            @endif
+                        @endforeach
+                    @else
+                        <th></th>
+                    @endif
+                    <th></th>
+                    <th></th>
+                </tr>
             @endif
         </thead>
         <?php $i = 1;
@@ -151,7 +152,11 @@
                 <td style="text-align: center"></td>
                 @if ($a_phucap != [])
                     @foreach ($a_phucap as $key => $val)
-                        <td style="text-align: center">{{ dinhdangsothapphan($model_luong->sum($key), 2) }}
+                        @if (in_array($key, ['pccovu', 'pclt', 'pcudn', 'pctnn', 'vuotkhung']))
+                            <td style="text-align: center"></td>
+                        @else
+                            <td style="text-align: center">{{ dinhdangsothapphan($model_luong->sum($key), 3) }}
+                        @endif
                     @endforeach
                 @else
                     <td></td>
@@ -159,7 +164,7 @@
                 @if ($a_phucap != [])
                     @foreach ($a_phucap as $key => $val)
                         <?php $key = 'st_' . $key; ?>
-                        <td>{{ dinhdangsothapphan($model_luong->sum($key)), 2 }}
+                        <td>{{ dinhdangsothapphan($model_luong->sum($key)), 3 }}
                     @endforeach
                 @else
                     <td></td>
@@ -176,7 +181,14 @@
                     <td>{{ dinhdangso($ct->luongcoban) }}</td>
                     @if ($a_phucap != [])
                         @foreach ($a_phucap as $key => $val)
-                            <td style="text-align: center">{{ dinhdangsothapphan($ct->$key, 2) }}</td>
+                            <?php $hs_pc = 'hs_' . $key; ?>
+                            @if (in_array($key, ['pccovu', 'pclt', 'pcudn', 'pctnn', 'vuotkhung']))
+                                <td style="text-align: center">
+                                    {{ $ct->$key == 0 ? '' : (dinhdangso($ct->$hs_pc) == 0 ? '' : dinhdangso($ct->$hs_pc) . '%') }}
+                                </td>
+                            @else
+                                <td style="text-align: center">{{ dinhdangsothapphan($ct->$key, 3) }}</td>
+                            @endif
                         @endforeach
                     @else
                         <th></th>
@@ -184,12 +196,12 @@
                     @if ($a_phucap != [])
                         @foreach ($a_phucap as $key => $val)
                             <?php $key = 'st_' . $key; ?>
-                            <td class="text-right">{{ dinhdangsothapphan($ct->$key, 2) }}</td>
+                            <td class="text-right">{{ dinhdangsothapphan($ct->$key, 3) }}</td>
                         @endforeach
                     @else
                         <th></th>
                     @endif
-                    <td>{{ dinhdangsothapphan($ct->luongtn, 2) }}</td>
+                    <td>{{ dinhdangsothapphan($ct->luongtn, 3) }}</td>
                     <td></td>
                 </tr>
             @endforeach
@@ -198,8 +210,9 @@
             <td colspan="{{ $col == 0 ? 6 : $col + 5 }}">Thực nhận</td>
             @if ($a_phucap != [])
                 @foreach ($a_phucap as $key => $val)
-                <?php $k = 'st_' . $key; ?>
-                    <td>{{ $key == 'heso' ? dinhdangso($model->sum('st_heso')- $model->sum('ttbh')) : dinhdangso($model->sum($k)) }}</td>
+                    <?php $k = 'st_' . $key; ?>
+                    <td>{{ $key == 'heso' ? dinhdangso($model->sum('st_heso') - $model->sum('ttbh')) : dinhdangso($model->sum($k)) }}
+                    </td>
                 @endforeach
             @else
                 <td></td>
@@ -211,8 +224,8 @@
             <td colspan="{{ $col == 0 ? 6 : $col + 5 }}">Chuyển khoản</td>
             @if ($a_phucap != [])
                 @foreach ($a_phucap as $key => $val)
-                <?php $pc_ctck='ctck_'.$key ?>
-                <td>{{ dinhdangso($model->sum($pc_ctck)) }}</td>
+                    <?php $pc_ctck = 'ctck_' . $key; ?>
+                    <td>{{ dinhdangso($model->sum($pc_ctck)) }}</td>
                 @endforeach
             @else
                 <td></td>
@@ -224,8 +237,8 @@
             <td colspan="{{ $col == 0 ? 6 : $col + 5 }}">Nhận tiền mặt :</td>
             @if ($a_phucap != [])
                 @foreach ($a_phucap as $key => $val)
-                <?php $pc_cttm='cttm_'.$key ?>
-                <td>{{ dinhdangso($model->sum($pc_cttm)) }}</td>
+                    <?php $pc_cttm = 'cttm_' . $key; ?>
+                    <td>{{ dinhdangso($model->sum($pc_cttm)) }}</td>
                 @endforeach
             @else
                 <td></td>
