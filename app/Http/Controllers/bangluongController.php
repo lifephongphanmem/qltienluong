@@ -1052,7 +1052,7 @@ class bangluongController extends Controller
         $a_data_canbo = array();
         //$a_data_phucap = array();
         //$a_pc_coth = array('pcudn', 'pctnn', 'pctaicu');
-        //dd($m_cb);
+        // dd($m_cb);
         foreach ($m_cb as $key => $val) {
             $a_lv = explode(',', $m_cb[$key]['lvhd']);
             if (in_array($inputs['linhvuchoatdong'], $a_lv) || $m_cb[$key]['lvhd'] == null || $m_cb[$key]['lvhd'] == '') {
@@ -1083,6 +1083,7 @@ class bangluongController extends Controller
             $m_cb[$key]['hs_pccovu'] = isset($val['pccovu']) ? $val['pccovu'] : 0;
             $m_cb[$key]['hs_pcud61'] = isset($val['pcud61']) ? $val['pcud61'] : 0;
             $m_cb[$key]['hs_pcudn'] = isset($val['pcudn']) ? $val['pcudn'] : 0;
+            $m_cb[$key]['hs_pclt'] = isset($val['pclt']) ? $val['pclt'] : 0;
             $m_cb[$key]['luongcoban'] = $inputs['luongcoban'];
             $m_cb[$key]['giaml'] = $m_cb[$key]['songaytruc'] = $m_cb[$key]['songaycong'] = 0;
             $m_cb[$key]['songaylv'] = $m_cb[$key]['tongngaylv'] = session('admin')->songaycong; //set mặc định = tổng số ngày công của đơn vị
@@ -1135,14 +1136,14 @@ class bangluongController extends Controller
                 $m_cb[$key]['bhxh'] = $m_cb[$key]['bhyt'] = $m_cb[$key]['kpcd'] = $m_cb[$key]['bhtn'] = 0;
                 $m_cb[$key]['bhxh_dv'] = $m_cb[$key]['bhyt_dv'] = $m_cb[$key]['kpcd_dv'] = $m_cb[$key]['bhtn_dv'] = 0;
             } else {
-                $m_cb[$key]['bhxh'] = floatval($val['bhxh']) / 100;
-                $m_cb[$key]['bhyt'] = floatval($val['bhyt']) / 100;
-                $m_cb[$key]['kpcd'] = floatval($val['kpcd']) / 100;
-                $m_cb[$key]['bhtn'] = floatval($val['bhtn']) / 100;
-                $m_cb[$key]['bhxh_dv'] = floatval($val['bhxh_dv']) / 100;
-                $m_cb[$key]['bhyt_dv'] = floatval($val['bhyt_dv']) / 100;
-                $m_cb[$key]['kpcd_dv'] = floatval($val['kpcd_dv']) / 100;
-                $m_cb[$key]['bhtn_dv'] = floatval($val['bhtn_dv']) / 100;
+                $m_cb[$key]['bhxh'] = chkDbl(floatval($val['bhxh'] / 100));
+                $m_cb[$key]['bhyt'] = chkDbl(floatval($val['bhyt'] / 100));
+                $m_cb[$key]['kpcd'] = chkDbl(floatval($val['kpcd'] / 100));
+                $m_cb[$key]['bhtn'] = chkDbl(floatval($val['bhtn'] / 100));
+                $m_cb[$key]['bhxh_dv'] = chkDbl(floatval($val['bhxh_dv'] / 100));
+                $m_cb[$key]['bhyt_dv'] = chkDbl(floatval($val['bhyt_dv'] / 100));
+                $m_cb[$key]['kpcd_dv'] = chkDbl(floatval($val['kpcd_dv'] / 100));
+                $m_cb[$key]['bhtn_dv'] = chkDbl(floatval($val['bhtn_dv'] / 100));
             }
 
             //các biển lưu để tính lương
@@ -1443,7 +1444,7 @@ class bangluongController extends Controller
             $m_cb[$key]['luongtn'] = $m_cb[$key]['ttl'] - $m_cb[$key]['ttbh'] - $m_cb[$key]['giaml'] - $m_cb[$key]['thuetn'];
             $a_data_canbo[] = $m_cb[$key];
         }
-
+// dd($m_cb);
         //Mảng chứa các cột bỏ để chạy hàm insert
         $a_col_cb = array(
             'id', 'bac', 'baohiem', 'macongtac', 'pthuong', 'theodoi', 'ngaybc',
@@ -1451,8 +1452,8 @@ class bangluongController extends Controller
         );
         $a_data_canbo = unset_key($a_data_canbo, $a_col_cb);
 
-        //dd($a_data_canbo);
-        foreach (array_chunk($a_data_canbo, 50) as $data) {
+        // dd($a_data_canbo);
+        foreach (array_chunk($a_data_canbo, 1) as $data) {
             (new data())->storeBangLuong($inputs['thang'], $data);
         }
 
@@ -1643,7 +1644,7 @@ class bangluongController extends Controller
         //Mảng chứa các cột bỏ để chạy hàm insert
         $a_col_cbkn = array('id', 'bac', 'baohiem', 'macongtac', 'pthuong', 'theodoi', 'phanloai', 'khongnopbaohiem'); //'manguonkp',
         $a_kn_canbo = unset_key($a_kn_canbo, $a_col_cbkn);
-        //dd($a_kn_canbo);
+        // dd($a_kn_canbo);
         foreach (array_chunk($a_kn_canbo, 50) as $data) {
             //bangluong_ct::insert($data);
             (new data())->storeBangLuong($inputs['thang'], $data);

@@ -158,9 +158,9 @@
             <tr style="font-weight: bold;text-align: right;">
                 <td>{{ convert2Roman($i++) }}</td>
                 <td style="text-align: left;">{{ $congtac->tenct }}</td>
-                <td style="text-align: center">{{ dinhdangsothapphan($model_luong->count('tencv')) }}</td>
+                <td style="text-align: center">{{ dinhdangso($model_luong->count('tencv')) }}</td>
                 <td></td>
-                <td style="text-align: center">{{ dinhdangsothapphan($model_luong->sum('heso'), 2) }}</td>
+                <td style="text-align: center">{{ dinhdangsothapphan($model_luong->sum('heso'), 3) }}</td>
                 @if ($col == 0)
                     <td></td>
                 @else
@@ -168,7 +168,7 @@
                 @if (in_array($key,['pccovu','pclt','pcudn','pctnn','vuotkhung']))
                 <td style="text-align: center"></td>
                 @else
-                <td style="text-align: center">{{ dinhdangsothapphan($model_luong->sum($key), 2) }}
+                <td style="text-align: center">{{ dinhdangsothapphan($model_luong->sum($key), 3) }}
                 @endif
                 @endforeach
                 @endif
@@ -183,7 +183,7 @@
             @else
                 @foreach ($a_phucap as $key => $val)
                     <?php $key = 'st_' . $key; ?>
-                    <td>{{ dinhdangsothapphan($model_luong->sum($key)), 2 }}
+                    <td>{{ dinhdangsothapphan($model_luong->sum($key)), 3 }}
                 @endforeach
                 @endif
                 {{-- <td></td> --}}
@@ -201,14 +201,14 @@
                     <td style="text-align: left">{{ $ct->tencanbo }}</td>
                     <td style="text-align: center">{{ $ct->tencv }}</td>
                     <td class="text-right">{{ dinhdangso($ct->luongcoban) }}</td>
-                    <td style="text-align: center">{{ dinhdangsothapphan($ct->heso, 2) }}</td>
+                    <td style="text-align: center">{{ dinhdangsothapphan($ct->heso, 3) }}</td>
                     @if ($col == 0)
                         <td></td>
                     @else
                     @foreach ($a_phucap as $key => $val)
                     @if (in_array($key,['pccovu','pclt','pcudn','pctnn','vuotkhung']))
                     <?php $k='hs_'.$key?>
-                    <td style="text-align: center">{{ $ct->$key== 0?'':dinhdangso($ct->$k).'%' }}</td>
+                    <td style="text-align: center">{{ $ct->$key== 0?'':(dinhdangso($ct->$k) == 0?'':dinhdangso($ct->$k).'%') }}</td>
                     @else
                     <td style="text-align: center">{{ dinhdangsothapphan($ct->$key, 3) }}</td>
                     @endif
@@ -225,7 +225,7 @@
                 @else
                     @foreach ($a_phucap as $key => $val)
                         <?php $key = 'st_' . $key; ?>
-                        <td>{{ dinhdangsothapphan($ct->$key, 2) }}</td>
+                        <td>{{ dinhdangsothapphan($ct->$key, 3) }}</td>
                     @endforeach
                     @endif
                     {{-- <td></td> --}}
@@ -243,12 +243,12 @@
             <td colspan="2">Tổng cộng</td>
             <td style="text-align: center">{{ dinhdangso($model->count('tencv')) }}</td>
             <td></td>
-            <td style="text-align: center">{{ dinhdangsothapphan($model->sum('heso'), 2) }}</td>
+            <td style="text-align: center">{{ dinhdangsothapphan($model->sum('heso'), 3) }}</td>
             @if ($col == 0)
             <td></td>
         @else
             @foreach ($a_phucap as $key => $val)
-                <td style="text-align: center">{{ dinhdangsothapphan($model->sum($key), 2) }}</td>
+                <td style="text-align: center">{{ dinhdangsothapphan($model->sum($key), 3) }}</td>
             @endforeach
             @endif
             {{-- <td></td> --}}
