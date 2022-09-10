@@ -16,10 +16,8 @@
         type="text/css" />
     <link href="{{ url('assets/global/plugins/simple-line-icons/simple-line-icons.min.css') }}" rel="stylesheet"
         type="text/css" />
-    <link href="{{ url('assets/global/plugins/bootstrap/css/bootstrap.min.css') }}" rel="stylesheet"
-        type="text/css" />
-    <link href="{{ url('assets/global/plugins/uniform/css/uniform.default.css') }}" rel="stylesheet"
-        type="text/css" />
+    <link href="{{ url('assets/global/plugins/bootstrap/css/bootstrap.min.css') }}" rel="stylesheet" type="text/css" />
+    <link href="{{ url('assets/global/plugins/uniform/css/uniform.default.css') }}" rel="stylesheet" type="text/css" />
     <link href="{{ url('assets/global/plugins/bootstrap-switch/css/bootstrap-switch.min.css') }}" rel="stylesheet"
         type="text/css" />
     <!-- END GLOBAL MANDATORY STYLES -->
@@ -46,8 +44,7 @@
     <link href="{{ url('assets/admin/layout4/css/layout.css') }}" rel="stylesheet" type="text/css" />
     <link href="{{ url('assets/admin/layout4/css/themes/light.css') }}" rel="stylesheet" type="text/css"
         id="style_color" />
-    <link href="{{ url('assets/global/plugins/bootstrap-toastr/toastr.min.css') }}" rel="stylesheet"
-        type="text/css" />
+    <link href="{{ url('assets/global/plugins/bootstrap-toastr/toastr.min.css') }}" rel="stylesheet" type="text/css" />
     <!-- END THEME STYLES -->
     <link rel="shortcut icon" href="{{ url('images/LIFESOFT.png') }}" type="image/x-icon">
 </head>
@@ -497,8 +494,7 @@
 
                                 @if (session('admin')->level == 'H' && session('admin')->phamvitonghop == 'HUYEN')
                                     <li>
-                                        <a
-                                            href="{{ url('chuc_nang/tong_hop_luong/huyen/index?nam=' . date('Y')) }}"><i
+                                        <a href="{{ url('chuc_nang/tong_hop_luong/huyen/index?nam=' . date('Y')) }}"><i
                                                 class="fa fa-caret-right"></i>Tổng hợp lương toàn địa bàn</a>
                                     </li>
 
@@ -510,9 +506,10 @@
                                 @endif
 
                                 @if (session('admin')->level == 'T')
-                                    <!--li>
-                                    <a href="{{ url('chuc_nang/tong_hop_luong/tinh/index?nam=' . date('Y')) }}"><i class="fa fa-caret-right"></i>Tổng hợp chi trả lương</a>
-                                </li-->
+                                    <li>
+                                        <a href="{{ url('chuc_nang/tong_hop_luong/tinh/index?thang=' . date('m') . '&nam=' . date('Y') ) }}"><i
+                                                class="fa fa-caret-right"></i>Tổng hợp chi trả lương</a>
+                                    </li>
 
                                     <li>
                                         <a
@@ -557,16 +554,16 @@
                                 @endif
 
                                 @if (session('admin')->level == 'T')
-                                <li>
-                                    <a href="{{ url('chuc_nang/du_toan_luong/tinh/index') }}"><i
-                                            class="fa fa-caret-right"></i>Tổng số liệu dự toán</a>
-                                </li>
-                                <li>
-                                    <a
-                                        href="{{ url('chuc_nang/xem_du_lieu/du_toan/tinh?namns=' . date('Y') . '&trangthai=ALL&phanloai=ALL') }}"><i
-                                            class="fa fa-caret-right"></i>Xem số liệu tổng hợp từ đơn vị cấp
-                                        dưới</a>
-                                </li>
+                                    <li>
+                                        <a href="{{ url('chuc_nang/du_toan_luong/tinh/index') }}"><i
+                                                class="fa fa-caret-right"></i>Tổng số liệu dự toán</a>
+                                    </li>
+                                    <li>
+                                        <a
+                                            href="{{ url('chuc_nang/xem_du_lieu/du_toan/tinh?namns=' . date('Y') . '&trangthai=ALL&phanloai=ALL') }}"><i
+                                                class="fa fa-caret-right"></i>Xem số liệu tổng hợp từ đơn vị cấp
+                                            dưới</a>
+                                    </li>
                                 @endif
                             </ul>
                         </li>
@@ -655,8 +652,9 @@
                                     <ul class="sub-menu" style="margin-left: 15px;">
                                         <li><a href="{{ url('/he_thong/don_vi/don_vi') }}"><i
                                                     class="fa fa-caret-right"></i>Thông tin đơn vị</a></li>
-                                                    <li><a href="{{ url('/he_thong/bao_cao/danh_sach?madvbc='.session('admin')->madvbc) }}"><i
-                                                        class="fa fa-caret-right"></i>Thiết lập báo cáo</a></li>
+                                        <li><a
+                                                href="{{ url('/he_thong/bao_cao/danh_sach?madvbc=' . session('admin')->madvbc) }}"><i
+                                                    class="fa fa-caret-right"></i>Thiết lập báo cáo</a></li>
                                         <li><a href="{{ url('/he_thong/don_vi/stopdv') }}"><i
                                                     class="fa fa-caret-right"></i>Dừng hoạt động đơn vị</a></li>
                                     </ul>
@@ -746,8 +744,8 @@
     </div>
     </div>
     </div-->
-                <!-- END PAGE BREADCRUMB -->                
-                
+                <!-- END PAGE BREADCRUMB -->
+
                 @yield('content')
             </div>
         </div>
@@ -793,8 +791,8 @@
     <script src="{{ url('assets/global/plugins/jquery.pulsate.min.js') }}" type="text/javascript"></script>
     <script src="{{ url('assets/global/plugins/bootstrap-daterangepicker/moment.min.js') }}" type="text/javascript">
     </script>
-    <script src="{{ url('assets/global/plugins/bootstrap-daterangepicker/daterangepicker.js') }}"
-        type="text/javascript"></script>
+    <script src="{{ url('assets/global/plugins/bootstrap-daterangepicker/daterangepicker.js') }}" type="text/javascript">
+    </script>
     <!-- IMPORTANT! fullcalendar depends on jquery-ui.min.js for drag & drop support -->
     <script src="{{ url('assets/global/plugins/fullcalendar/fullcalendar.min.js') }}" type="text/javascript"></script>
     <script src="{{ url('assets/global/plugins/bootstrap-toastr/toastr.min.js') }}"></script>

@@ -7,6 +7,7 @@ use App\dmdonvibaocao;
 use App\tonghop_tinh;
 use App\tonghopluong_huyen;
 use App\tonghopluong_tinh;
+use App\tonghopluong_donvi;
 use Illuminate\Http\Request;
 
 use App\Http\Requests;
@@ -16,7 +17,7 @@ use Illuminate\Support\Facades\Session;
 
 class tonghopluong_tinhController extends Controller
 {
-    function index(Request $requests)
+    function index_080922(Request $requests)
     {
         if (Session::has('admin')) {
             $a_trangthai = getStatus();
@@ -153,5 +154,76 @@ class tonghopluong_tinhController extends Controller
             ->with('a_data', $a_data)
             ->with('nam', $input['namth'])
             ->with('pageTitle', 'Danh sách đơn vị tổng hợp lương');
+    }
+
+    public function index(Request $request)
+    {
+        if (Session::has('admin')) {
+
+            $a_trangthai = getStatus();
+            $inputs = $request->all();
+            $madv = session('admin')->madv;
+            $madvbc = session('admin')->madvbc;
+            $tendb = getTenDb($madvbc);
+            $inputs['namns'] = $inputs['namns'] ?? date('Y');
+
+            // //Lấy danh sách các dữ liệu đã tổng hợp theo huyện
+            // $model_tonghop = tonghop_tinh::where('madvbc', $madvbc)->get();
+            // //Danh sách các đơn vị đã gửi dữ liệu
+            // $model_dulieu = tonghopluong_tinh::where('madvbc', $madvbc)->get();
+            $model = dmdonvibaocao::where('baocao', '1')->orderby('sapxep')->get();
+            foreach ($model as $val) {
+                //Lấy danh sách các dữ liệu đã tổng hợp theo huyện
+                $model_tonghop = tonghop_tinh::where('madvbc', $val->madvbc)->where('thang',$inputs['thang'])->where('nam',$inputs['nam'])->first();
+                //Danh sách các đơn vị đã gửi dữ liệu
+                $model_dulieu = tonghopluong_tinh::where('madvbc',  $val->madvbc)->where('thang',$inputs['thang'])->where('nam',$inputs['nam'])->first();
+
+                if(isset($model_dulieu)){
+                    $val->trangthai= $model_dulieu->trangthai;
+                    $val->madv= $model_dulieu->madv;
+                    $val->mathdv= $model_dulieu->mathdv;
+                }else{
+                    $val->trangthai= 'CHOGUI';
+                }
+
+            }
+            // dd($model);
+            return view('functions.tonghopluong.tinh.index_new')
+                ->with('furl', '/chuc_nang/tong_hop_luong/tinh/')
+                ->with('nam', $inputs['nam'])
+                ->with('inputs', $inputs)
+                ->with('thang', $inputs['thang'])
+                ->with('nam', $inputs['nam'])
+                ->with('model', $model)
+                ->with('a_trangthai', $a_trangthai)
+                ->with('pageTitle', 'Danh sách tổng hợp lương toàn địa bàn');
+        } else
+            return view('errors.notlogin');
+    }
+
+    public function tralai(Request $request)
+    {
+        if (Session::has('admin')) {
+            $inputs = $request->all();
+            $model = tonghopluong_tinh::where('mathdv', $inputs['mathdv'])->where('thang',$inputs['thang'])->where('nam',$inputs['nam'])->first();
+
+
+            //xóa tonghopluong_tinh
+            //update lai truong trang thai tonghopluong_huyen
+            $model_huyen=tonghopluong_huyen::where('madvbc', $model->madvbc)->where('thang',$inputs['thang'])->where('nam',$inputs['nam'])
+                            ->get();
+            $model_dv=tonghopluong_donvi::where('madvbc', $model->madvbc)->where('thang',$inputs['thang'])->where('nam',$inputs['nam'])
+                                            ->get();
+            foreach($model_huyen as $val){
+                $val->update(['trangthai'=>'TRALAI','lydo'=>$inputs['lydo']]);
+            }
+            foreach($model_dv as $val){
+                $val->update(['matht'=>null]);
+            }
+            $model->delete();
+
+            return redirect('/chuc_nang/tong_hop_luong/tinh/index?thang='.$inputs['thang'].'&nam='.$inputs['nam']);
+        } else
+        return view('errors.notlogin');
     }
 }

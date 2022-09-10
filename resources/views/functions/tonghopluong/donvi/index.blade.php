@@ -91,8 +91,11 @@
                                                         <!--a href="{{url($furl.'detail_diaban/ma_so='.$value['mathdv'])}}" class="btn btn-default btn-sm">
                                                             <i class="fa fa-list-alt"></i>&nbsp; Số liệu địa bàn</a-->
                                                     @endif
-                                                    <button type="button" class="btn btn-default btn-sm" onclick="confirmChuyen('{{$value['mathdv']}}')" data-target="#chuyen-modal" data-toggle="modal"><i class="fa fa-share-square-o"></i>&nbsp;
+
+                                                    <button type="button" {{$value['matht']==true?'disabled':''}} class="btn btn-default btn-sm" onclick="confirmChuyen('{{$value['mathdv']}}')" data-target="#chuyen-modal" data-toggle="modal"><i class="fa fa-share-square-o"></i>&nbsp;
                                                         Gửi dữ liệu</button>
+
+
                                                     @if($value['trangthai'] == 'TRALAI')
                                                         <button type="button" class="btn btn-default btn-sm" onclick="getLyDo('{{$value['mathdv']}}')" data-target="#tralai-modal" data-toggle="modal"><i class="fa fa-share-square-o"></i>&nbsp;
                                                             Lý do trả lại</button>
