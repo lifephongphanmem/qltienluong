@@ -21,6 +21,7 @@ use App\tonghopluong_donvi_chitiet;
 use App\tonghopluong_donvi_diaban;
 use App\tonghopluong_huyen;
 use App\tonghopluong_khoi;
+use App\tonghopluong_tinh;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\Http\Controllers\dataController as data;
@@ -55,6 +56,9 @@ class tonghopluong_donviController extends Controller
             $a_trangthai = getStatus();
             $inputs = $requests->all();
             $model = tonghopluong_donvi::where('madv', session('admin')->madv)->where('nam', $inputs['nam'])->get();
+            $model_tinh=tonghopluong_tinh::where('nam',$inputs['nam'])->where('madvbc',session('admin')->madvbc)->get();
+            // dd($model);
+            // $model_huyen=tonghopluong_huyen::where()->get();
             $model_bangluong = bangluong::where('madv', session('admin')->madv)->where('nam', $inputs['nam'])->get();
             for ($i = 0; $i < count($a_data); $i++) {
                 $a_data[$i]['maphanloai'] = session('admin')->maphanloai;
@@ -63,6 +67,7 @@ class tonghopluong_donviController extends Controller
                 $a_data[$i]['tendvcq'] = '';
                 $a_data[$i]['noidung'] = 'Dữ liệu tổng hợp của ' . getTenDV(session('admin')->madv) . ' thời điểm ' . $a_data[$i]['thang'] . '/' . $inputs['nam'];
                 $tonghop = $model->where('thang', $a_data[$i]['thang'])->first();
+                $tonghop_tinh = $model_tinh->where('thang', $a_data[$i]['thang'])->first();
                 $bangluong = $model_bangluong->where('thang', $a_data[$i]['thang']);
                 if (count($bangluong) > 0) {
                     $a_data[$i]['bangluong'] = 'ok';
@@ -76,6 +81,9 @@ class tonghopluong_donviController extends Controller
                         if ($a_data[$i]['tendvcq'] == '') {
                             $a_data[$i]['tendvcq'] = $a_data[$i]['macqcq']; //trường hợp đơn vị gửi nhưng ko pải đơn vị trong hệ thống => đưa mã để kiểm tra
                         }
+
+                        isset($tonghop_tinh)? $a_data[$i]['matht']=true:$a_data[$i]['matht']=false;
+
                     } else {
                         $a_data[$i]['trangthai'] = 'CHUATAO';
                     }
@@ -99,7 +107,7 @@ class tonghopluong_donviController extends Controller
                 }
             }
             //dd($model);
-            //dd($a_data);
+            // dd($a_data);
             return view('functions.tonghopluong.donvi.index')
                 ->with('furl', '/chuc_nang/tong_hop_luong/don_vi/')
                 ->with('nam', $inputs['nam'])
@@ -298,7 +306,7 @@ class tonghopluong_donviController extends Controller
                 'pcxaxe','st_pcdith','pcdith','st_pcphth','pcphth','pclade', 'st_pclade', 'pcctp', 'st_pcctp'));//tạm
             */
             //dd($a_data);
-            foreach (array_chunk($a_data, 50)  as $data) {
+            foreach (array_chunk($a_data, 1)  as $data) {
                 tonghopluong_donvi_bangluong::insert($data);
             }
 
@@ -312,7 +320,10 @@ class tonghopluong_donviController extends Controller
             $inputs['macqcq'] = session('admin')->macqcq;
             $inputs['madvbc'] = session('admin')->madvbc;
             $model_data = unset_key($model_data, array('congtac', 'mabl', 'macanbo', 'macvcq', 'mapb'));
-            tonghopluong_donvi_chitiet::insert($model_data);
+            foreach (array_chunk($model_data, 1)  as $data) {
+                tonghopluong_donvi_chitiet::insert($data);
+            }
+            // tonghopluong_donvi_chitiet::insert($model_data);
             tonghopluong_donvi::create($inputs);
             return redirect('/chuc_nang/tong_hop_luong/don_vi/detail/ma_so=' . $mathdv);
         } else

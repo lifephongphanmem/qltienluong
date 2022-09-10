@@ -26,6 +26,7 @@ use App\tonghopluong_huyen_chitiet;
 use App\tonghopluong_huyen_diaban;
 use App\tonghopluong_khoi;
 use App\tonghopluong_tinh;
+use App\dmdonvibaocao;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 
@@ -83,18 +84,19 @@ class tonghopluong_huyenController extends Controller
             if (session('admin')->phamvitonghop == 'HUYEN')
                 $model_nguon = tonghopluong_huyen::wherein('madv', function ($query) use ($madv) {
                     $query->select('madv')->from('dmdonvi')->where('macqcq', $madv)->where('madv', '<>', $madv)->get();
-                })->where('trangthai', 'DAGUI')
+                })->wherein('trangthai', ['DAGUI','TRALAI'])
                     ->get();
             if (session('admin')->phamvitonghop == 'KHOI') {
                 $model_nguon = tonghopluong_donvi::wherein('madv', function ($query) use ($madv) {
                     $query->select('madv')->from('dmdonvi')->where('macqcq', $madv)->where('madv', '<>', $madv)->get();
-                })->where('trangthai', 'DAGUI')
+                })->wherein('trangthai', ['DAGUI','TRALAI'])
                     ->get();
                 $model_nguonkhoi = tonghopluong_khoi::wherein('madv', function ($query) use ($madv) {
                     $query->select('madv')->from('dmdonvi')->where('macqcq', $madv)->where('madv', '<>', $madv)->get();
-                })->where('trangthai', 'DAGUI')
+                })->wherein('trangthai', ['DAGUI','TRALAI'])
                     ->get();
             }
+            // dd($model_nguon);
             //Lấy danh sách các dữ liệu đã tổng hợp theo huyện
             $model_tonghop = tonghopluong_tinh::where('madvbc', $madvbc)->get();
             //Danh sách các đơn vị đã gửi dữ liệu
@@ -128,6 +130,7 @@ class tonghopluong_huyenController extends Controller
                 } else { //chưa tổng hợp dữ liệu
                     $a_data[$i]['noidung'] = 'Dữ liệu tổng hợp trên địa bàn ' . $tendb . ' tháng ' . $a_data[$i]['thang'] . ' năm ' . $inputs['nam'];
                     $a_data[$i]['mathdv'] = null;
+                    $a_data[$i]['madvbc'] =$madvbc;
 
                     //Kiểm tra xem đơn vị cấp dưới đã gửi dữ liệu khối chưa
                     if (count($dulieu) == 0) { //chưa gửi
@@ -142,17 +145,26 @@ class tonghopluong_huyenController extends Controller
                         $a_data[$i]['trangthai'] = 'CHUADAYDU';
                         $a_data[$i]['dvgui'] = count($dulieu);
                     }
+
+                    foreach($dulieu as $val){
+                        if($val->trangthai == 'TRALAI'){
+                            $a_data[$i]['trangthai'] = 'TRALAI';
+                        }
+                    }
                 }
                 if ($a_data[$i]['thang'] == '') {
                     $a_data[$i]['noidung'] = 'Tổng hợp dữ liệu 12 tháng';
                     $a_data[$i]['mathdv'] = $madv;
                 }
             }
-            //dd($a_data);
+            $m_dvbc = dmdonvibaocao::where('level','T')->get();
+            $a_donviql = array_column(dmdonvi::wherein('madvbc',array_column($m_dvbc->toarray(),'madvbc'))->get()->toarray(),'tendv','madv');
+            // dd($a_data);
             return view('functions.tonghopluong.huyen.index')
                 ->with('furl', '/chuc_nang/tong_hop_luong/huyen/')
                 ->with('nam', $inputs['nam'])
                 ->with('model', $a_data)
+                ->with('a_donviql', $a_donviql)
                 ->with('a_trangthai', $a_trangthai)
                 ->with('pageTitle', 'Danh sách tổng hợp lương toàn địa bàn');
         } else
@@ -1132,8 +1144,9 @@ class tonghopluong_huyenController extends Controller
                     'tonghopluong_donvi_chitiet.ttbh_dv'
                 )
                 ->wherein('tonghopluong_donvi_chitiet.mathdv', array_column($model_tonghop->toarray(), 'mathdv'))
-                ->groupby('mact', 'maphanloai', 'dmdonvi.madv', 'manguonkp', 'linhvuchoatdong')
+                // ->groupby('mact', 'maphanloai', 'dmdonvi.madv', 'manguonkp', 'linhvuchoatdong')
                 ->get();
+                // dd($model);
             $m_pl = tonghopluong_donvi_chitiet::join('tonghopluong_donvi', 'tonghopluong_donvi_chitiet.mathdv', 'tonghopluong_donvi.mathdv')
                 ->join('dmdonvi', 'dmdonvi.madv', 'tonghopluong_donvi.madv')
                 ->join('dmphanloaict', 'dmphanloaict.mact', 'tonghopluong_donvi_chitiet.mact')
@@ -1593,12 +1606,10 @@ class tonghopluong_huyenController extends Controller
 
         if (Session::has('admin')) {
             $inputs = $request->all();
-
             $model = tonghopluong_huyen::where('mathdv', $inputs['mathdv'])->first();
-            //dd($model);
-            $model->trangthai = 'TRALAI';
-            $model->lydo = $inputs['lydo'];
-            $model->save();
+            // $model->trangthai = 'TRALAI';
+            // $model->lydo = $inputs['lydo'];
+            // $model->save();
             $madv = $model->madv;
             $phanloai = dmdonvi::where('madv', $madv)->first()->phanloaitaikhoan;
 
@@ -1615,6 +1626,7 @@ class tonghopluong_huyenController extends Controller
                 tonghopluong_khoi::where('mathdv', $inputs['mathdv'])
                     ->update(['trangthai' => 'TRALAI', 'lydo' => $inputs['lydo']]);
             }
+            $model->delete();
 
             return redirect('/chuc_nang/xem_du_lieu/huyen?thang=' . $model->thang . '&nam=' . $model->nam . '&trangthai=ALL&phanloai=ALL');
         } else
@@ -1633,7 +1645,7 @@ class tonghopluong_huyenController extends Controller
 
         $inputs = $request->all();
 
-        $model = tonghopluong_donvi::select('lydo')->where('mathdv', $inputs['mathdv'])->first();
+        $model = tonghopluong_huyen::select('lydo')->where('madvbc', $inputs['madvbc'])->where('thang',$inputs['thang'],$inputs['nam'])->first();
 
         die($model);
     }

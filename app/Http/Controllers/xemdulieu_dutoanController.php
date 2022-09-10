@@ -153,7 +153,7 @@ class xemdulieu_dutoanController extends Controller
             //$inputs['namns'] = $m_dutoan_huyen->namns;
             $madv = $m_dvbc->where('madvbc',$inputs['madvbc'])->first()->madvcq ?? null;
             $nam = $inputs['namns'];
-            //dd($madv);
+            // dd($madv);
             $inputs['trangthai'] = $inputs['trangthai'] ?? 'ALL';
             $inputs['phanloai'] = $inputs['phanloai'] ?? 'ALL';
             $a_thang = getThang();
