@@ -9,6 +9,7 @@ use App\nguonkinhphi;
 use App\nguonkinhphi_huyen;
 use App\nguonkinhphi_khoi;
 use App\nguonkinhphi_tinh;
+use App\dmdonvibaocao;
 use Illuminate\Http\Request;
 
 use App\Http\Requests;
@@ -180,6 +181,44 @@ class xemdulieu_nguonController extends Controller
                 ->with('furl_th', 'chuc_nang/tong_hop_nguon/huyen/')
                 ->with('furl_xem', '/chuc_nang/xem_du_lieu/nguon/huyen')
                 ->with('pageTitle', 'Danh sách đơn vị tổng hợp nguồn');
+
+        } else
+            return view('errors.notlogin');
+    }
+
+    public function index_tinh(Request $request){
+        if (Session::has('admin')) {
+            $inputs=$request->all();
+            $madvbc = $inputs['madiaban'];
+            //$madvqlkv = dmdonvibaocao::where('madvbc',$madvbc)->first()->madvcq;
+            $model_dvbc = dmdonvibaocao::where('baocao',1)->get();
+
+            $model_nguon = nguonkinhphi::where('sohieu',$inputs['sohieu'])
+                ->where('trangthai','DAGUI')
+                ->where('madvbc', $madvbc)->get();
+
+            $a_trangthai = getStatus();
+            $model_donvi = dmdonvi::select('madv', 'tendv')->where('madvbc', $madvbc)->get();
+            foreach($model_donvi as $dv){
+                $nguon = $model_nguon->where('madv',$dv->madv)->first();
+                if(isset($nguon)){
+                    $dv->trangthai = $nguon->trangthai;
+                    $dv->masodv = $nguon->masodv;
+                }else{
+                    $dv->trangthai = 'CHUATAO';
+                    $dv->masodv = NULL;
+                }
+            }
+
+            return view('functions.tonghopnguon.index_tinh')
+                ->with('model', $model_donvi)
+                ->with('a_trangthai', $a_trangthai)
+                ->with('soluong',$model_nguon->count('madv').'/'.$model_donvi->count('madv'))
+                ->with('madvbc',$madvbc)
+                ->with('inputs',$inputs)
+                ->with('a_dvbc',array_column($model_dvbc->toArray(),'tendvbc','madvbc'))
+                ->with('furl','/chuc_nang/tong_hop_nguon/')
+                ->with('pageTitle','Danh sách đơn vị tổng hợp nguồn kinh phí');
 
         } else
             return view('errors.notlogin');

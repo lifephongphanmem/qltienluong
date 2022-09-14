@@ -170,7 +170,7 @@
     </tr>
 
     <tr>
-        <td style="text-align: center;" width="50%">{{''}}</td>
+        <td style="text-align: center;" width="50%">{{$m_dv->nguoilapbieu}}</td>
         <td style="text-align: center;" width="50%">{{$m_dv->lanhdao}}</td>
     </tr>
 </table>

@@ -612,6 +612,7 @@ class tonghopluong_donviController extends Controller
                     ->all();
             });
             //dd($model);
+            // dd($m_dv);
             return view('reports.tonghopluong.donvi.solieutonghop')
                 ->with('thongtin', $thongtin)
                 ->with('model', $model)

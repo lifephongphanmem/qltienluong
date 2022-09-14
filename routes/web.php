@@ -873,6 +873,11 @@ Route::group(['prefix'=>'chuc_nang'],function(){
             Route::get('getlydo','tonghopnguon_khoiController@getlydo');//lý do trả lại dữ liệu
             Route::get('tonghop','tonghopnguon_khoiController@tonghop');//tạm
         });
+        Route::group(['prefix'=>'tinh'],function(){
+            Route::get('index','tonghopnguon_tinhController@index');
+            Route::get('tralai','tonghopnguon_tinhController@tralai');
+            Route::get('getlydo','tonghopnguon_tinhController@getlydo');
+        });
 
     });
 

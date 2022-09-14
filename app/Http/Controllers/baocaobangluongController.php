@@ -3420,6 +3420,7 @@ class baocaobangluongController extends Controller
                     ->where('madvbc', $madvbc)
                     ->wherein('dmdonvi.maphanloai', getPhanLoaGD())
                     ->get();
+
             $model_th = tonghopluong_donvi_bangluong::join('tonghopluong_donvi', 'tonghopluong_donvi.mathdv', 'tonghopluong_donvi_bangluong.mathdv')
                 ->Select(
                     'mact',
