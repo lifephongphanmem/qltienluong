@@ -345,7 +345,6 @@ class bangluong_inController extends Controller
                 'ngaylap' => $m_bl->ngaylap,
                 'cochu' => $inputs['cochu']
             );
-
             $m_dv = dmdonvi::where('madv', $m_bl->madv)->first();
             $m_dv->tendvcq = getTenDB($m_dv->madvbc);
             //
@@ -1082,7 +1081,7 @@ class bangluong_inController extends Controller
             $inputs = $request->all();
             //$inputs['mabl'] = $inputs['mabl'];
             //$model = $this->getBangLuong($inputs);
-            $m_bl = bangluong::select('madv', 'thang', 'mabl', 'manguonkp', 'nam')->where('mabl', $inputs['mabl'])->first();
+            $m_bl = bangluong::select('madv', 'thang', 'mabl','ngaylap', 'manguonkp', 'nam')->where('mabl', $inputs['mabl'])->first();
 
             if ($m_bl->thang == '01') {
                 $thang = '12';
@@ -1243,7 +1242,6 @@ class bangluong_inController extends Controller
                 }
             }
             //dd($m_congtac->get());
-
             $thongtin = array(
                 'nguoilap' => $m_bl->nguoilap,
                 'thang' => $m_bl->thang,

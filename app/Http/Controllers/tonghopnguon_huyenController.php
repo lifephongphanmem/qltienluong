@@ -31,10 +31,12 @@ class tonghopnguon_huyenController extends Controller
                 $query->select('madv')->from('dmdonvi')->where('macqcq',$madv)->where('madv','<>',$madv)->get();
             })->where('trangthai', 'DAGUI')
                 ->get();
+                // dd($model_nguon);
             $model_nguon_huyen = nguonkinhphi_huyen::wherein('madv', function($query) use($madv){
                 $query->select('madv')->from('dmdonvi')->where('macqcq',$madv)->where('madv','<>',$madv)->get();
             })->where('trangthai', 'DAGUI')
                 ->get();
+                // dd($model_nguon_huyen);
             //$model_nguon_khoi = nguonkinhphi_khoi::where('madv', $madv)->get();
             $model = dmthongtuquyetdinh::all();
             $a_trangthai = getStatus();
@@ -66,6 +68,7 @@ class tonghopnguon_huyenController extends Controller
                     //Chưa tổng hợp dữ liệu
                     $sl = $model_nguon->where('sohieu', $dv->sohieu)->count();
                     $sl_huyen = $model_nguon_huyen->where('sohieu', $dv->sohieu)->count();
+                    // $dv->sldv = $sl+$sl_huyen . '/' . $soluong;
                     $dv->sldv = $sl+$sl_huyen . '/' . $soluong;
                     $dv->masodv = null;
                     if($sl==0){
@@ -73,13 +76,14 @@ class tonghopnguon_huyenController extends Controller
                     }elseif($sl < $soluong) {
                         $dv->trangthai = 'CHUADAYDU';
                     }
-                    elseif($sl == $soluong){
+                    elseif($sl >= $soluong){
                             $dv->trangthai = 'CHUAGUI';
                     }else{
                         $dv->trangthai = 'CHUATAO';
                     }
                 }
             }
+            // dd($model);
             return view('functions.tonghopnguon.index')
                 ->with('model', $model)
                 ->with('a_trangthai', $a_trangthai)
@@ -130,6 +134,7 @@ class tonghopnguon_huyenController extends Controller
             }
             $madv = session('admin')->madv;
             $model_nguon_huyen = nguonkinhphi_tinh::where('sohieu',$inputs['sohieu'])->where('madv', $madv)->first();
+            // dd($model_nguon_huyen);
             //$model_nguon = nguonkinhphi::where('sohieu',$inputs['sohieu'])->where('macqcq', $madv)->get();
             if ($model_nguon_huyen != null) {
                 //Trường hợp đơn vị bị trả lại dữ liệu muốn gửi lại
@@ -148,7 +153,7 @@ class tonghopnguon_huyenController extends Controller
                 $inputs['madvbc'] = session('admin')->madvbc;
 
                 nguonkinhphi::where('sohieu',$inputs['sohieu'])->where('macqcq', $madv)
-                    ->update(['masot' => $inputs['masodv']]);
+                    ->update(['masot' => $inputs['masodv'],'trangthai'=>'DAGUI']);
 
                 //nguonkinhphi_huyen::create($inputs);
                 nguonkinhphi_tinh::create($inputs);
@@ -238,21 +243,28 @@ class tonghopnguon_huyenController extends Controller
             //if ((Session::has('admin') && session('admin')->username == 'khthstc') || (Session::has('admin') && session('admin')->username == 'khthso') ) {
             $inputs = $request->all();
             $inputs['donvitinh'] = 1;
-            $madvbc = session('admin')->madvbc;
+            $madvbc = isset($inputs['madvbc'])?$inputs['madvbc'] : session('admin')->madvbc;
+            $macqcq= isset($inputs['macqcq'])?$inputs['macqcq'] : session('admin')->madv;
+            $madv=isset($inputs['madv'])?$inputs['madv'] : session('admin')->madv;
+            // dd($inputs);
+            // dd(session('admin'));
             $m_dv = dmdonvi::select('tendv','madv')
                 ->where('madvbc',$madvbc)
                 ->distinct()
                 ->get();
+                // dd($m_dv);
             $model = nguonkinhphi::where('sohieu',$inputs['sohieu'])
-                ->where('macqcq',session('admin')->madv)
+                ->where('macqcq',$macqcq)
                 ->where('trangthai','DAGUI')
                 ->get();
+
             $ardv = $m_dv->toArray();
             if(count($model) == 0){
                 return view('errors.nodata');
             }
 
-            $m_dv = dmdonvi::where('madv',session('admin')->madv)->first();
+            $m_dv = dmdonvi::where('madv',$madv)->first();
+            // dd($m_dv);
             $data = array();
             $group = array();
             if(isset($inputs['inchitiet'])) {

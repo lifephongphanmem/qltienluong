@@ -820,8 +820,10 @@ class nguonkinhphiController extends Controller
             if (session('admin')->macqcq == '') {
                 return view('errors.chuacqcq');
             }
+
             $m_nkp = nguonkinhphi::where('masodv', $inputs['masodv'])->first();
             $model = nguonkinhphi::where('sohieu', $m_nkp->sohieu)->where('madv', session('admin')->madv)->get();
+            // dd($model);
             foreach ($model as $nguon) {
                 $nguon->trangthai = 'DAGUI';
                 $nguon->macqcq = session('admin')->macqcq;

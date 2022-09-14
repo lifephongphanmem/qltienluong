@@ -79,7 +79,7 @@
                                         <td>
                                             @if ($value->masodv != null)
                                                 <button type="button" title="In số liệu"
-                                                    onclick="indutoan('{{ $value->namns }}','{{ $value->masodv }}')"
+                                                    onclick="indutoan('{{ $inputs['namns'] }}','{{ $value->masodv }}')"
                                                     class="btn btn-default btn-sm mbs" data-target="#indt-modal"
                                                     data-toggle="modal">
                                                     <i class="fa fa-print"></i>

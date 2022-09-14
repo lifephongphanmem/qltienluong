@@ -33,8 +33,8 @@
                 <div class="portlet-title">
                     <div class="caption">DANH SÁCH CÁC ĐƠN VỊ</div>
                     <div class="actions">
-                        <a href="{{url($furl.'in_tinh?sohieu=TT67_2017&madiban='.$madvbc)}}" class="btn btn-default btn-sm" TARGET="_blank">
-                            <i class="fa fa-print"></i>&nbsp; Số liệu tổng hợp ({{$soluong}} đơn vị)</a>
+                        {{-- <a href="{{url($furl.'in_tinh?sohieu=TT67_2017&madiban='.$madvbc)}}" class="btn btn-default btn-sm" TARGET="_blank">
+                            <i class="fa fa-print"></i>&nbsp; Số liệu tổng hợp ({{$soluong}} đơn vị)</a> --}}
                     </div>
                 </div>
                 <div class="portlet-body form-horizontal">
@@ -47,12 +47,12 @@
                                 </div>
                             </div>
 
-                            <div class="col-md-6">
+                            {{-- <div class="col-md-6">
                                 <label class="control-label col-md-4" style="text-align: right">Địa bàn, khu vực </label>
                                 <div class="col-md-8">
-                                    {!! Form::select('madvbc',$a_dvbc,$madvbc,array('id' => 'madvbc', 'class' => 'form-control'))!!}
+                                    {!! Form::select('madvbc',$a_dvbc,$inputs['madiaban'],array('id' => 'madvbc', 'class' => 'form-control'))!!}
                                 </div>
-                            </div>
+                            </div> --}}
                         </div>
                     </div>
 
@@ -61,7 +61,7 @@
                         <tr>
                             <th class="text-center" style="width: 5%">STT</th>
                             <th class="text-center">Tên đơn vị</th>
-                            <th class="text-center">Tên đơn vị tổng hợp dữ liệu</th>
+                            <th class="text-center">Trạng thái</th>
                             <th class="text-center">Thao tác</th>
                         </tr>
                         </thead>
@@ -70,11 +70,13 @@
                             @foreach($model as $key=>$value)
                                 <tr>
                                     <td class="text-center">{{$key+1}}</td>
-                                    <td>{{$value->tendv}}</td>
-                                    <td>{{$value->tendvcq}}</td>
+                                    <td>{{$value->tendvbc}}</td>
+                                    <td>{{$a_trangthai[$value->trangthai]}}</td>
                                     <td>
-                                        @if ($value->masodv != NULL)
-                                            <a href="{{url('/du_toan/nguon_kinh_phi/ma_so='.$value['masodv'].'/in')}}" class="btn btn-default btn-sm" TARGET="_blank">
+                                        @if ($value->trangthai == 'DAGUI')
+                                        <a href="{{url($furl_th.'tonghop?sohieu='.$value->sohieu.'&madvbc='.$value->madvbc.'&macqcq='.$value->macqcq.'&madv='.$value->madvcq)}}" class="btn btn-default btn-xs" target="_blank">
+                                            <i class="fa fa-print"></i>&nbsp; Số liệu tổng hợp</a>
+                                            <a href="{{url('/chuc_nang/xem_du_lieu/nguon/tinh?sohieu='.$value->sohieu.'&madiaban='.$value->madvbc)}}" class="btn btn-default btn-sm" TARGET="_blank">
                                                 <i class="fa fa-print"></i>&nbsp; Số liệu chi tiết</a>
 
                                             <button type="button" class="btn btn-default btn-xs mbs" onclick="confirmChuyen('{{$value['masodv']}}')" data-target="#chuyen-modal" data-toggle="modal"><i class="fa icon-share-alt"></i>&nbsp;
@@ -150,7 +152,7 @@
         function getLink(){
             var sohieu = $('#sohieu').val();
             var madvbc = $('#madvbc').val();
-            return '/chuc_nang/xem_du_lieu/nguon/tinh?sohieu=' + sohieu + '&madiaban=' + madvbc;
+            return '/chuc_nang/tong_hop_nguon/tinh/index?sohieu=' + sohieu + '&madiaban=' + madvbc;
         }
 
         $(function(){
