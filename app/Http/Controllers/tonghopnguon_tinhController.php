@@ -20,7 +20,7 @@ class tonghopnguon_tinhController extends Controller
             $inputs=$request->all();
             $model_nguon_tinh= nguonkinhphi_tinh::where('sohieu',$inputs['sohieu'])->get();
             $model_nkp=nguonkinhphi::where('sohieu',$inputs['sohieu'])->get();
-
+// dd($model_nkp->first());
             // dd($model_nguon_huyen);
             $model=dmdonvibaocao::where('baocao',1)->get();
             // dd($model);
@@ -40,11 +40,19 @@ class tonghopnguon_tinhController extends Controller
                 ->with('soluong', $soluong)
                 ->with('inputs', $inputs)
                 ->with('a_dvbc',array_column($model->toArray(),'tendvbc','madvbc'))
-                ->with('furl','/chuc_nang/xem_du_lieu/nguon/tinh')
+                ->with('furl','/chuc_nang/tong_hop_nguon/tinh/')
                 ->with('furl_xem','/chuc_nang/xem_du_lieu/nguon/tinh')
                 ->with('furl_th','/chuc_nang/tong_hop_nguon/huyen/')
                 ->with('pageTitle','Danh sách đơn vị tổng hợp nguồn kinh phí');
 
+        } else
+        return view('errors.notlogin');
+    }
+
+    public function tralai(Request $request){
+        if (Session::has('admin')) {
+            $inputs=$request->all();
+            dd($inputs);
         } else
         return view('errors.notlogin');
     }

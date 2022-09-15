@@ -3046,6 +3046,7 @@ class bangluongController extends Controller
                     $col++;
                 }
             }
+            // dd($model);
             return view('reports.bangluong.donvi.mautt107')
                 ->with('model', $model)
                 ->with('model_pb', getPhongBan())
