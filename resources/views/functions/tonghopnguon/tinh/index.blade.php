@@ -76,10 +76,10 @@
                                         @if ($value->trangthai == 'DAGUI')
                                         <a href="{{url($furl_th.'tonghop?sohieu='.$value->sohieu.'&madvbc='.$value->madvbc.'&macqcq='.$value->macqcq.'&madv='.$value->madvcq)}}" class="btn btn-default btn-xs" target="_blank">
                                             <i class="fa fa-print"></i>&nbsp; Số liệu tổng hợp</a>
-                                            <a href="{{url('/chuc_nang/xem_du_lieu/nguon/tinh?sohieu='.$value->sohieu.'&madiaban='.$value->madvbc)}}" class="btn btn-default btn-sm" TARGET="_blank">
+                                            <a href="{{url('/chuc_nang/xem_du_lieu/nguon/tinh?sohieu='.$value->sohieu.'&madiaban='.$value->madvbc)}}" class="btn btn-default btn-xs" TARGET="_blank">
                                                 <i class="fa fa-print"></i>&nbsp; Số liệu chi tiết</a>
 
-                                            <button type="button" class="btn btn-default btn-xs mbs" onclick="confirmChuyen('{{$value['masodv']}}')" data-target="#chuyen-modal" data-toggle="modal"><i class="fa icon-share-alt"></i>&nbsp;
+                                            <button type="button" class="btn btn-default btn-xs mbs" onclick="confirmChuyen('{{$value->masodv}}')" data-target="#chuyen-modal" data-toggle="modal"><i class="fa icon-share-alt"></i>&nbsp;
                                                 Trả lại dữ liệu</button>
 
                                         @else

@@ -875,7 +875,7 @@ Route::group(['prefix'=>'chuc_nang'],function(){
         });
         Route::group(['prefix'=>'tinh'],function(){
             Route::get('index','tonghopnguon_tinhController@index');
-            Route::get('tralai','tonghopnguon_tinhController@tralai');
+            Route::post('tralai','tonghopnguon_tinhController@tralai');
             Route::get('getlydo','tonghopnguon_tinhController@getlydo');
         });
 

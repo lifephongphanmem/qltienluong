@@ -66,7 +66,9 @@ class tonghopnguon_huyenController extends Controller
                     //$dv->trangthai = 'DAGUI';
                 }else{
                     //Chưa tổng hợp dữ liệu
-                    $sl = $model_nguon->where('sohieu', $dv->sohieu)->count();
+                    $a_madv=array_column($model_donvi->toarray(),'madv');
+                    $sl = $model_nguon->where('sohieu', $dv->sohieu)->wherein('madv',$a_madv)->unique('madv');
+                    $sl=$sl->count();
                     $sl_huyen = $model_nguon_huyen->where('sohieu', $dv->sohieu)->count();
                     // $dv->sldv = $sl+$sl_huyen . '/' . $soluong;
                     $dv->sldv = $sl+$sl_huyen . '/' . $soluong;
