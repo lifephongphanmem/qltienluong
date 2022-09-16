@@ -39,7 +39,6 @@ class dutoanluongController extends Controller
             $model_bl = bangluong::where('madv', session('admin')->madv)->where('phanloai', 'BANGLUONG')->orderby('nam')->orderby('thang')->get();
             $model_nhomct = dmphanloaicongtac::select('macongtac', 'tencongtac')->get();
             $model_tenct = dmphanloaict::select('tenct', 'macongtac', 'mact')->get();
-
             return view('manage.dutoanluong.index')
                 ->with('furl', '/nghiep_vu/quan_ly/du_toan/')
                 ->with('furl_ajax', '/ajax/du_toan/')
@@ -111,7 +110,7 @@ class dutoanluongController extends Controller
                 $chitieu->soluongduocgiao = $m_bl_ct->where('mact', $plct)->count() + ($m_bl_ct1 != null ? $m_bl_ct1->where('mact', $plct)->count() : 0);
                 $chitieu->soluongbienche = $chitieu->soluongduocgiao;
                 $chitieu->soluongtuyenthem = 0;
-                $chitieu->mact_tuyenthem = '1637915601';
+                $chitieu->mact_tuyenthem = session('admin')->mact_tuyenthem;
                 $chitieu->heso = '2.34';
                 $chitieu->save();
             }
@@ -219,7 +218,6 @@ class dutoanluongController extends Controller
                 ->where('manguonkp', $inputs['manguonkp'])
                 ->where('phanloai', 'BANGLUONG')
                 ->first();
-
             if ($m_bl == null) {
                 return view('errors.data_error')
                     ->with('message', 'Bảng lương tháng ' . $inputs['thang'] . ' năm ' . $inputs['nam'] . ' không tồn tại. Bạn cần tạo bảng lương trước để có thể tạo dự toán.')
@@ -318,6 +316,7 @@ class dutoanluongController extends Controller
             $m_chitieu = chitieubienche::select(array_merge(array('soluongtuyenthem', 'soluongduocgiao', 'soluongbienche', 'mact', 'mact_tuyenthem'), $a_pc))
                 ->where('madv', session('admin')->madv)
                 ->where('nam', $inputs['namns'])->get();
+                // dd($m_chitieu);
             $a_chitieu = $m_chitieu->keyBy('mact')->toarray();
             $a_baohiem = dmphanloaicongtac_baohiem::where('madv', session('admin')->madv)->get()->keyBy('mact')->toarray();
             foreach ($m_chitieu as $key => $val) {
@@ -489,7 +488,6 @@ class dutoanluongController extends Controller
             $inputs['sothonxakhac_heso'] = chkDbl($inputs['sothonxakhac_heso']);
             $inputs['sothonxaloai1_heso'] = chkDbl($inputs['sothonxaloai1_heso']);
             $inputs['phanloaixa_heso'] = chkDbl($inputs['phanloaixa_heso']);
-
             foreach (array_chunk($a_data, 50) as $data) {
                 dutoanluong_bangluong::insert($data);
             }

@@ -103,19 +103,19 @@
                                                 @if(session('admin')->phamvitonghop == 'KHOI')
                                                     <!--a href="{{url('/nguon_kinh_phi/khoi/mautt107_m2?maso='.$value['masodv'])}}" class="btn btn-default btn-sm" TARGET="_blank">
                                                         <i class="fa fa-print"></i>&nbsp; Số liệu tổng hợp</a-->
-                                                    <button type="button" onclick="indutoan('{{$value->namns}}','{{$value->masodv}}')" class="btn btn-default btn-xs mbs" data-target="#indt-modal" data-toggle="modal">
+                                                    <button type="button" onclick="innguon('{{$value->namns}}','{{$value->masodv}}')" class="btn btn-default btn-xs mbs" data-target="#indt-modal" data-toggle="modal">
                                                         <i class="fa fa-print"></i>&nbsp; In số liệu</button>
                                                 @else
                                                     <!--a href="{{url('/nguon_kinh_phi/huyen/mautt107_m2?maso='.$value['masodv'])}}" class="btn btn-default btn-sm" TARGET="_blank">
                                                         <i class="fa fa-print"></i>&nbsp; Số liệu tổng hợp</a-->
-                                                    <button type="button" onclick="indutoan('{{$value->namns}}','{{$value->masodv}}')" class="btn btn-default btn-xs mbs" data-target="#indt-modal" data-toggle="modal">
+                                                    <button type="button" onclick="innguon('{{$value->namns}}','{{$value->masodv}}')" class="btn btn-default btn-xs mbs" data-target="#indt-modal" data-toggle="modal">
                                                         <i class="fa fa-print"></i>&nbsp; In số liệu</button>
                                                     @endif
                                             @endif
                                             <!--a href="{{url('/du_toan/nguon_kinh_phi/ma_so='.$value['masodv'].'/in')}}" class="btn btn-default btn-sm" TARGET="_blank"-->
 
                                             @if($value->tralai)
-                                                <button type="button" class="btn btn-default btn-sm" onclick="confirmChuyen('{{$value['masodv']}}')" data-target="#chuyen-modal" data-toggle="modal"><i class="fa icon-share-alt"></i>&nbsp;
+                                                <button type="button" class="btn btn-default btn-xs" onclick="confirmChuyen('{{$value['masodv']}}')" data-target="#chuyen-modal" data-toggle="modal"><i class="fa icon-share-alt"></i>&nbsp;
                                                     Trả lại dữ liệu</button>
                                                 <!--a href="{{url('nguon_kinh_phi/ma_so='.$value->masodv)}}" class="btn btn-default btn-xs mbs">
                                                     <i class="fa fa-edit"></i>&nbsp; Chi tiết</a-->
@@ -288,7 +288,7 @@
 
     </script>
     <script>
-        function indutoan(namdt, masodv){
+        function innguon(namdt, masodv){
             $('#nam_dt').val(namdt);
             $('#masodv_dt').val(masodv);
         }

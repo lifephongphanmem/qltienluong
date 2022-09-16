@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\GeneralConfigs;
+use App\dmphanloaict;
 use Illuminate\Http\Request;
 
 use App\Http\Requests;
@@ -13,7 +14,9 @@ class GeneralConfigsController extends Controller
     public function index()
     {
         if (Session::has('admin')) {
-            $model = GeneralConfigs::first();            
+            $model = GeneralConfigs::first(); 
+            $a_mact=  array_column(dmphanloaict::select('tenct', 'macongtac', 'mact')->get()->toarray(), 'tenct', 'mact');
+            $model->mact = isset($model->mact_tuyenthem)? $a_mact[$model->mact_tuyenthem]:'';
             return view('system.general.global.index')
                 ->with('model', $model)
                 ->with('pageTitle', 'Cấu hình hệ thống');
@@ -28,6 +31,7 @@ class GeneralConfigsController extends Controller
             $model = GeneralConfigs::first();
             return view('system.general.global.edit')
                 ->with('model', $model)
+                ->with('a_mact', array_column(dmphanloaict::select('tenct', 'macongtac', 'mact')->get()->toarray(), 'tenct', 'mact'))
                 ->with('pageTitle', 'Chỉnh sửa cấu hình hệ thống');
 
         } else
@@ -55,6 +59,7 @@ class GeneralConfigsController extends Controller
                 $model->tg_hetts = chkDbl($inputs['tg_hetts']);
                 $model->tg_xetnl = chkDbl($inputs['tg_xetnl']);
                 $model->thongbao = $inputs['thongbao'];
+                $model->mact_tuyenthem = $inputs['mact_tuyenthem'];
                 if(isset($inputs['ipf1'])){
                     $model->ipf1 = $inputs['ipf1'];
                 }

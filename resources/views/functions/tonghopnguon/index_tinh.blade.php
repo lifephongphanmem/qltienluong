@@ -33,24 +33,30 @@
                 <div class="portlet-title">
                     <div class="caption">DANH SÁCH CÁC ĐƠN VỊ</div>
                     <div class="actions">
-                        <a href="{{url($furl.'in_tinh?sohieu=TT67_2017&madiban='.$madvbc)}}" class="btn btn-default btn-sm" TARGET="_blank">
+                        <a href="{{url($furl.'in_tinh?sohieu='.$inputs['sohieu'].'&madiban='.$madvbc)}}" class="btn btn-default btn-sm" TARGET="_blank">
                             <i class="fa fa-print"></i>&nbsp; Số liệu tổng hợp ({{$soluong}} đơn vị)</a>
                     </div>
                 </div>
                 <div class="portlet-body form-horizontal">
                     <div class="row">
                         <div class="form-group">
-                            <div class="col-md-6">
+                            <div class="col-md-4">
                                 <label class="control-label col-md-6" style="text-align: right">Căn cứ thông tư, quyết định </label>
                                 <div class="col-md-6">
                                     {!! Form::select('sohieu',getThongTuQD(false),$inputs['sohieu'],array('id' => 'sohieu', 'class' => 'form-control'))!!}
                                 </div>
                             </div>
 
-                            <div class="col-md-6">
+                            <div class="col-md-4">
                                 <label class="control-label col-md-4" style="text-align: right">Địa bàn, khu vực </label>
                                 <div class="col-md-8">
                                     {!! Form::select('madvbc',$a_dvbc,$madvbc,array('id' => 'madvbc', 'class' => 'form-control'))!!}
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <label class="control-label col-md-3" style="text-align: right">Trạng thái </label>
+                                <div class="col-md-7">
+                                    {!! Form::select('trangthai',$a_trangthai_dl,$inputs['trangthai'],array('id' => 'trangthai', 'class' => 'form-control'))!!}
                                 </div>
                             </div>
                         </div>
@@ -74,8 +80,10 @@
                                     <td>{{$value->tendvcq}}</td>
                                     <td>
                                         @if ($value->masodv != NULL)
-                                            <a href="{{url('/du_toan/nguon_kinh_phi/ma_so='.$value['masodv'].'/in')}}" class="btn btn-default btn-sm" TARGET="_blank">
-                                                <i class="fa fa-print"></i>&nbsp; Số liệu chi tiết</a>
+                                            {{-- <a href="{{url('/du_toan/nguon_kinh_phi/ma_so='.$value['masodv'].'/in')}}" class="btn btn-default btn-xs" TARGET="_blank">
+                                                <i class="fa fa-print"></i>&nbsp; Số liệu chi tiết</a> --}}
+                                                <button type="button" onclick="innguon('{{$value->namns}}','{{$value->masodv}}')" class="btn btn-default btn-xs mbs" data-target="#indt-modal" data-toggle="modal">
+                                                    <i class="fa fa-print"></i>&nbsp; Số liệu chi tiết</button>
 
                                             <button type="button" class="btn btn-default btn-xs mbs" onclick="confirmChuyen('{{$value['masodv']}}')" data-target="#chuyen-modal" data-toggle="modal"><i class="fa icon-share-alt"></i>&nbsp;
                                                 Trả lại dữ liệu</button>
@@ -121,6 +129,58 @@
             <!-- /.modal-dialog -->
         </div>
     </div>
+    <!--Model in-->
+    <div id="indt-modal" tabindex="-1" role="dialog" aria-hidden="true" class="modal fade">
+        <div class="modal-lg modal-dialog modal-content">
+            <div class="modal-header modal-header-primary">
+                <button type="button" data-dismiss="modal" aria-hidden="true" class="close">&times;</button>
+                <h4 id="hd-inbl" class="modal-title">In nhu cầu kinh phí</h4>
+            </div>
+
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <button type="button" onclick="intonghopdt('{{'/nguon_kinh_phi/printf?maso='}}')" style="border-width: 0px" class="btn btn-default btn-xs mbs">
+                                <i class="fa fa-print"></i>&nbsp; Tổng hợp nhu cầu và nguồn thực hiện (Mẫu 4b)</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <button type="button" style="border-width: 0px" class="btn btn-default btn-xs mbs" data-target="#mautt107-modal" data-toggle="modal"
+                                    title="Bảng lương của cán bộ theo mẫu C02-HD">
+                                <i class="fa fa-print"></i>&nbsp; Bảng lương mẫu C02-HD (TT107/2017/TT-BTC)</button>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <button type="button" onclick="intonghopdt('{{'/nguon_kinh_phi/huyen/mautt107_m2?maso='}}')" style="border-width: 0px" class="btn btn-default btn-xs mbs">
+                                <i class="fa fa-print"></i>&nbsp; Bảng lương mẫu C02-HD (Tổng hợp chi lương và nâng lương)</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <button type="button" style="border-width: 0px" onclick="innangluong()" class="btn btn-default btn-xs mbs">
+                                <i class="fa fa-print"></i>&nbsp; Danh sách cán bộ nâng lương</button>
+                        </div>
+                    </div>
+                </div>
+                <input type="hidden" id="nam_dt" name="nam_dt"/>
+                <input type="hidden" id="masodv_dt" name="masodv_dt"/>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" data-dismiss="modal" class="btn btn-default">Hủy thao tác</button>
+            </div>
+        </div>
+    </div>
 
     <script>
         function confirmChuyen(masodv) {
@@ -150,7 +210,8 @@
         function getLink(){
             var sohieu = $('#sohieu').val();
             var madvbc = $('#madvbc').val();
-            return '/chuc_nang/xem_du_lieu/nguon/tinh?sohieu=' + sohieu + '&madiaban=' + madvbc;
+            var trangthai = $('#trangthai').val();
+            return '/chuc_nang/xem_du_lieu/nguon/tinh?sohieu=' + sohieu + '&trangthai=' + trangthai + '&madiaban=' + madvbc;
         }
 
         $(function(){
@@ -161,7 +222,26 @@
             $('#madvbc').change(function() {
                 window.location.href = getLink();
             });
+
+            $('#trangthai').change(function() {
+                window.location.href = getLink();
+            });
         })
+
+        function innguon(namdt, masodv){
+            $('#nam_dt').val(namdt);
+            $('#masodv_dt').val(masodv);
+        }
+
+        function intonghopdt(url) {
+            var masodv = $('#masodv_dt').val();
+            window.open(url + masodv,'_blank');
+        }
+
+        function innangluong() {
+            var masodv = $('#masodv_dt').val();
+            window.open('/nguon_kinh_phi/nangluong?maso='+ masodv,'_blank');
+        }
     </script>
 
 @stop

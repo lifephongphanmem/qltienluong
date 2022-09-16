@@ -11,6 +11,7 @@ use App\dmphanloaict;
 use App\dmphucap;
 use App\dmphucap_donvi;
 use App\dmphucap_thaisan;
+use App\GeneralConfigs;
 use App\nguonkinhphi_dinhmuc;
 use App\Users;
 use Illuminate\Foundation\Auth\User;
@@ -208,6 +209,7 @@ class UsersController extends Controller
                 $ttuser->capdonvi = $model_donvi->capdonvi;
                 $ttuser->caphanhchinh = $model_donvi->caphanhchinh;
                 $ttuser->trangthai = $model_donvi->trangthai;
+                $ttuser->mact_tuyenthem=GeneralConfigs::first()->mact_tuyenthem;
 
                 //kiểm tra lại hệ thống danh mục nếu danh mục nào chưa có thì tự động lấy vào
                 //trường hợp đơn vị tổng hợp thì bỏ qua

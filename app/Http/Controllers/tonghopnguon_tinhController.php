@@ -52,7 +52,15 @@ class tonghopnguon_tinhController extends Controller
     public function tralai(Request $request){
         if (Session::has('admin')) {
             $inputs=$request->all();
-            dd($inputs);
+            $model_nguon_tinh = nguonkinhphi_tinh::where('madvbc',$inputs['masodv'])->where('sohieu',$inputs['sohieu'])->first();
+
+            $model_nguon= nguonkinhphi::where('sohieu',$model_nguon_tinh->sohieu)->where('masot',$model_nguon_tinh->masodv)->get();
+            // dd($model_nguon);
+            foreach ($model_nguon as $val){
+                $val->update(['masot'=> 'TRALAI','lydo'=>$inputs['lydo']]);
+            }
+            $model_nguon_tinh->delete();
+            return redirect('/chuc_nang/tong_hop_nguon/tinh/index?sohieu='.$inputs['sohieu']);
         } else
         return view('errors.notlogin');
     }

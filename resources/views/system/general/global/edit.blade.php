@@ -89,6 +89,12 @@
                                     <label class="control-label">Lương cơ bản</label>
                                     {!! Form::text('luongcb', null, ['id' => 'luongcb', 'class' => 'form-control', 'data-mask' => 'fdecimal']) !!}
                                 </div>
+                            </div> 
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label class="control-label">Phân loại công tác tuyển thêm</label>
+                                    {!! Form::select('mact_tuyenthem', $a_mact, null, ['class' => 'form-control']) !!}
+                                </div>
                             </div>                           
                         </div>
                         

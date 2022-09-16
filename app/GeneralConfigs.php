@@ -27,6 +27,7 @@ class GeneralConfigs extends Model
         'ipf3',
         'ipf4',
         'ipf5',
+        'mact_tuyenthem'
     ];
     //ALTER TABLE `general_configs` ADD `thongbao` TEXT NULL AFTER `huyen`;
 }

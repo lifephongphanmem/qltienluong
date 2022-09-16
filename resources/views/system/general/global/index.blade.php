@@ -72,10 +72,10 @@
                                     <span class="text-muted">{{number_format($model->luongcb)}}</span>
                                 </td>
                                 <td style="width:30%">
-
+                                    <b>Phân loại công tác tuyển thêm</b>
                                 </td>
                                 <td style="width:20%">
-
+                                    <span class="text-muted">{{$model->mact}}</span>
                                 </td>
                             </tr>
                         </tbody>

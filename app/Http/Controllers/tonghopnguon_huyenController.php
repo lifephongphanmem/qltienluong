@@ -45,6 +45,7 @@ class tonghopnguon_huyenController extends Controller
                 ->wherein('madv', function($query) use($madv){
                     $query->select('madv')->from('dmdonvi')->where('macqcq',$madv)->where('madv','<>',$madv)->get();
                 })->get();
+
             $soluong = $model_donvi->count();
             foreach($model as $dv){
                 $nam = $dv->namdt;
@@ -67,12 +68,12 @@ class tonghopnguon_huyenController extends Controller
                 }else{
                     //Chưa tổng hợp dữ liệu
                     $a_madv=array_column($model_donvi->toarray(),'madv');
-                    $sl = $model_nguon->where('sohieu', $dv->sohieu)->wherein('madv',$a_madv)->unique('madv');
-                    $sl=$sl->count();
+                    $m_sl = $model_nguon->where('sohieu', $dv->sohieu)->wherein('madv',$a_madv)->unique('madv');
+                    $sl=$m_sl->count();
                     $sl_huyen = $model_nguon_huyen->where('sohieu', $dv->sohieu)->count();
                     // $dv->sldv = $sl+$sl_huyen . '/' . $soluong;
                     $dv->sldv = $sl+$sl_huyen . '/' . $soluong;
-                    $dv->masodv = null;
+                    // $dv->masodv = null;
                     if($sl==0){
                         $dv->trangthai = 'CHUADL';
                     }elseif($sl < $soluong) {
@@ -82,6 +83,13 @@ class tonghopnguon_huyenController extends Controller
                             $dv->trangthai = 'CHUAGUI';
                     }else{
                         $dv->trangthai = 'CHUATAO';
+                    }
+
+                    foreach ($m_sl as $val){
+                        if($val->masot == 'TRALAI'){
+                            $dv->trangthai='TRALAI';
+                        }
+                        $dv->masodv = $val->masodv;
                     }
                 }
             }
@@ -343,6 +351,14 @@ class tonghopnguon_huyenController extends Controller
                 ->with('a_TC', $a_TC)
                 ->with('pageTitle', 'Danh sách nguồn kinh phí của đơn vị');
         } else
+            return view('errors.notlogin');
+    }
+    public function getlydo(Request $request){
+        if (Session::has('admin')){
+            $inputs=$request->all();
+            $model=nguonkinhphi::select('lydo')->where('masodv',$inputs['masodv'])->where('sohieu',$inputs['sohieu'])->first();
+            return response()->json($model);
+        }else
             return view('errors.notlogin');
     }
 }

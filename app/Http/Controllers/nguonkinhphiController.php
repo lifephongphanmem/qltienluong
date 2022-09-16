@@ -876,6 +876,15 @@ class nguonkinhphiController extends Controller
             return view('errors.notlogin');
     }
 
+    function getlydo(Request $request){
+        if (Session::has('admin')){
+            $inputs=$request->all();
+            $model=nguonkinhphi::select('lydo')->where('masodv',$inputs['masodv'])->first();
+            die($model);
+        }else
+            return view('errors.notlogin');
+    }
+
     function printf($masodv)
     {
         //Kiểm tra cấp đơn vị xem đơn vị để update trường masoh hoặc masot
