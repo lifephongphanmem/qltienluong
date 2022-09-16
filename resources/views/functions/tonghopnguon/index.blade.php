@@ -65,7 +65,7 @@
                                             @endif
 
                                         @if($value['trangthai'] == 'TRALAI')
-                                            <button type="button" class="btn btn-default btn-sm" onclick="getLyDo('{{$value['masodv']}}')" data-target="#tralai-modal" data-toggle="modal"><i class="fa fa-share-square-o"></i>&nbsp;
+                                            <button type="button" class="btn btn-default btn-xs" onclick="getLyDo('{{$value->masodv}}','{{$value->sohieu}}')" data-target="#tralai-modal" data-toggle="modal"><i class="fa fa-share-square-o"></i>&nbsp;
                                                 Lý do trả lại</button>
 
                                         @endif
@@ -111,18 +111,45 @@
         </div>
     </div>
 
+            <!--Model Trả lại -->
+            <div class="modal fade" id="tralai-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+        
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+                            <h4 class="modal-title">Thông tin lý do trả lại dữ liệu</h4>
+                        </div>
+                        <div class="modal-body">
+                            <div class="form-group">
+                                {!!Form::textarea('lydo', null, array('id' => 'lydo','class' => 'form-control','rows'=>'3'))!!}
+                            </div>
+        
+                            <div class="modal-footer">
+                                <button type="submit" class="btn blue">Đồng ý</button>
+        
+                            </div>
+                            {!! Form::close() !!}
+                        </div>
+                        <!-- /.modal-content -->
+                    </div>
+                    <!-- /.modal-dialog -->
+                </div>
+            </div>
+
     <script>
         function confirmChuyen(sohieu) {
             document.getElementById("sohieu").value = sohieu;
         }
-        function getLyDo(masodv){
+        function getLyDo(masodv,sohieu){
             var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
             $.ajax({
-                url: '{{$furl}}' + '/getlydo',
+                url: '{{$furl_th}}' + 'getlydo',
                 type: 'GET',
                 data: {
                     _token: CSRF_TOKEN,
-                    masodv: masodv
+                    masodv: masodv,
+                    sohieu: sohieu
                 },
                 dataType: 'JSON',
                 success: function (data) {

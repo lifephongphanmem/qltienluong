@@ -192,13 +192,13 @@ class xemdulieu_nguonController extends Controller
             $madvbc = $inputs['madiaban'];
             //$madvqlkv = dmdonvibaocao::where('madvbc',$madvbc)->first()->madvcq;
             $model_dvbc = dmdonvibaocao::where('baocao',1)->get();
-
+            $a_trangthai_dl = array('ALL' => '--Chọn trạng thái dữ liệu--', 'CHOGUI' => 'Chưa gửi dữ liệu', 'DAGUI' => 'Đã gửi dữ liệu');
             $model_nguon = nguonkinhphi::where('sohieu',$inputs['sohieu'])
                 ->where('trangthai','DAGUI')
                 ->where('madvbc', $madvbc)->get();
 
             $a_trangthai = getStatus();
-            $model_donvi = dmdonvi::select('madv', 'tendv')->where('madvbc', $madvbc)->get();
+            $model_donvi = dmdonvi::select('madv', 'tendv')->where('madvbc', $madvbc)->where('phanloaitaikhoan','SD')->get();
             foreach($model_donvi as $dv){
                 $nguon = $model_nguon->where('madv',$dv->madv)->first();
                 if(isset($nguon)){
@@ -209,11 +209,15 @@ class xemdulieu_nguonController extends Controller
                     $dv->masodv = NULL;
                 }
             }
-
+            // dd($inputs);
+            if (!isset($inputs['trangthai']) || $inputs['trangthai'] != 'ALL') {
+                $model_donvi = $model_donvi->where('trangthai',$inputs['trangthai']);
+            }
             return view('functions.tonghopnguon.index_tinh')
                 ->with('model', $model_donvi)
                 ->with('a_trangthai', $a_trangthai)
-                ->with('soluong',$model_nguon->count('madv').'/'.$model_donvi->count('madv'))
+                ->with('a_trangthai_dl', $a_trangthai_dl)
+                ->with('soluong',$model_nguon->unique('madv')->count().'/'.$model_donvi->count('madv'))
                 ->with('madvbc',$madvbc)
                 ->with('inputs',$inputs)
                 ->with('a_dvbc',array_column($model_dvbc->toArray(),'tendvbc','madvbc'))

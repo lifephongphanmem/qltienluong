@@ -79,7 +79,7 @@
                                             <a href="{{url('/chuc_nang/xem_du_lieu/nguon/tinh?sohieu='.$value->sohieu.'&madiaban='.$value->madvbc)}}" class="btn btn-default btn-xs" TARGET="_blank">
                                                 <i class="fa fa-print"></i>&nbsp; Số liệu chi tiết</a>
 
-                                            <button type="button" class="btn btn-default btn-xs mbs" onclick="confirmChuyen('{{$value->masodv}}')" data-target="#chuyen-modal" data-toggle="modal"><i class="fa icon-share-alt"></i>&nbsp;
+                                            <button type="button" class="btn btn-default btn-xs mbs" onclick="confirmChuyen('{{$value->madvbc}}','{{$value->sohieu}}')" data-target="#chuyen-modal" data-toggle="modal"><i class="fa icon-share-alt"></i>&nbsp;
                                                 Trả lại dữ liệu</button>
 
                                         @else
@@ -112,6 +112,7 @@
                             {!!Form::textarea('lydo', null, array('id' => 'lydo','class' => 'form-control','rows'=>'3'))!!}
                     </div>
                     <input type="hidden" name="masodv" id="masodv">
+                    <input type="hidden" name="sohieu" id="sohieu_tl">
                     <div class="modal-footer">
                         <button type="button" class="btn default" data-dismiss="modal">Hủy</button>
                         <button type="submit" class="btn blue">Đồng ý</button>
@@ -125,8 +126,9 @@
     </div>
 
     <script>
-        function confirmChuyen(masodv) {
+        function confirmChuyen(masodv,sohieu) {
             document.getElementById("masodv").value = masodv;
+            document.getElementById("sohieu_tl").value = sohieu;
         }
 
         $(function(){

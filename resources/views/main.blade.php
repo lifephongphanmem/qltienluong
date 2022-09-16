@@ -611,8 +611,8 @@
                                             class="fa fa-caret-right"></i>Số liệu nguồn kinh phí</a>
                                 </li> --}}
                                 <li>
-                                    <a href="{{ url('chuc_nang/tong_hop_nguon/tinh/index?sohieu=TT67_2017&madiaban=1506415809') }}"><i
-                                            class="fa fa-caret-right"></i>Tổng số liệu nhu cầu kinh phí</a>
+                                    <a href="{{ url('chuc_nang/tong_hop_nguon/tinh/index?sohieu=TT67_2017') }}"><i
+                                            class="fa fa-caret-right"></i>Tổng số liệu nguồn kinh phí</a>
                                 </li>
                                 <li>
                                     <a

@@ -513,6 +513,7 @@ Route::group(['prefix'=>'nguon_kinh_phi'],function(){
     Route::post('update','nguonkinhphiController@update');
     Route::post('senddata','nguonkinhphiController@senddata'); //gửi dữ liệu
     Route::get('ma_so={masodv}/in','nguonkinhphiController@printf');
+    Route::get('getlydo','nguonkinhphiController@getlydo');
 
     Route::get('printf','nguonkinhphiController@printf_data');//in theo thoại
     Route::post('mautt107','nguonkinhphiController@printf_tt107');
@@ -862,6 +863,7 @@ Route::group(['prefix'=>'chuc_nang'],function(){
             //Route::get('tonghop','tonghopnguon_khoiController@tonghop');//tạm
             Route::get('tonghop','tonghopnguon_huyenController@tonghop');//tạm
             Route::post('senddata','tonghopnguon_huyenController@senddata'); //gửi dữ liệu lên tỉnh
+            Route::get('getlydo','tonghopnguon_huyenController@getlydo');
         });
 
         Route::group(['prefix'=>'khoi'],function(){

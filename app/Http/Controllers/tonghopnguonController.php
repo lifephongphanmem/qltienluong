@@ -292,7 +292,7 @@ class tonghopnguonController extends Controller
             $inputs = $request->all();
             $model = nguonkinhphi::where('sohieu',$inputs['sohieu'])
                 ->where('madvbc',$inputs['madiban'])->get();
-
+            $model_thongtu=dmthongtuquyetdinh::where('sohieu',$inputs['sohieu'])->first();
             $m_dv = dmdonvi::where('madv',session('admin')->madv)->first();
             $data = array();
             $data[]=array('val'=>'GDDT','tt'=>'a','noidung'=>'Sự nghiệp giáo dục - đào tạo');
@@ -359,9 +359,10 @@ class tonghopnguonController extends Controller
             $data[4]['nguonthu'] = $model->sum('nguonthu') - $data[0]['nguonthu'] - $data[3]['nguonthu']- $data[5]['nguonthu'];
 
             return view('reports.thongtu67.donvi.mau4b')
-                //->with('model',$model)
+                // ->with('model',$model)
                 ->with('data',$data)
                 ->with('m_dv',$m_dv)
+                ->with('model_thongtu',$model_thongtu)
                 ->with('pageTitle','Danh sách nguồn kinh phí của đơn vị');
         } else
             return view('errors.notlogin');
