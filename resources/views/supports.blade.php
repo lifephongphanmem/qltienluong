@@ -1,6 +1,6 @@
 
 <?php
-	$model_vp = \App\vanphonghotro::all();
+	$model_vp = \App\vanphonghotro::orderBy('sapxep')->get();
 	$a_vp = a_unique(array_column($model_vp->toArray(),'vanphong'));
 	$col =(int) 12 / (count($a_vp)>0?count($a_vp) : 1);
 	$col = $col < 4 ? 4 : $col;
