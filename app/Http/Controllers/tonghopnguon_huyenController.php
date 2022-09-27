@@ -179,11 +179,12 @@ class tonghopnguon_huyenController extends Controller
             $inputs = $request->all();
             //dd($inputs);
             $model_ct = nguonkinhphi_bangluong::where('masodv', $inputs['maso'])->orderby('stt')->get();
+            // dd($model_ct);
             if(count($model_ct) > 0) {
                 $model = $model_ct->unique('macanbo');
                 $model_thongtin = nguonkinhphi::where('masodv', $inputs['maso'])->first();
             }
-            //dd($model);
+            // dd($model);
             else{
                 $check = nguonkinhphi_huyen::where('masodv', $inputs['maso'])->first();
                 if(isset($check)){
@@ -193,9 +194,8 @@ class tonghopnguon_huyenController extends Controller
                     $model = $model_ct->unique('macanbo');
                 }
             }
-
             //$model = dutoanluong_bangluong::where('masodv', $inputs['masodv'])->orderby('thang')->get();
-
+            
             $a_congtac = array_column(dmphanloaict::wherein('mact',a_unique(array_column($model->toarray(),'mact')))->get()->toArray(), 'tenct', 'mact');
             //dd($a_ct);
             //cho trương hợp đơn vị cấp trên in dữ liệu dv câp dưới mà ko sai tên đơn vị
@@ -247,7 +247,8 @@ class tonghopnguon_huyenController extends Controller
         } else
             return view('errors.notlogin');
     }
-    function tonghop(Request $request){
+    function tonghop(Request $request)
+    {
         //Kiểm tra cấp đơn vị xem đơn vị để update trường masoh hoặc masot
         if (Session::has('admin')) {
             //if ((Session::has('admin') && session('admin')->username == 'khthstc') || (Session::has('admin') && session('admin')->username == 'khthso') ) {
@@ -353,7 +354,8 @@ class tonghopnguon_huyenController extends Controller
         } else
             return view('errors.notlogin');
     }
-    public function getlydo(Request $request){
+    public function getlydo(Request $request)
+    {
         if (Session::has('admin')){
             $inputs=$request->all();
             $model=nguonkinhphi::select('lydo')->where('masodv',$inputs['masodv'])->where('sohieu',$inputs['sohieu'])->first();

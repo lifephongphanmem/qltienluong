@@ -88,15 +88,15 @@
                                         <td class="text-center bold">{{ $a_trangthai[$value['trangthai']] ?? '' }}</td>
                                         <td>
                                             @if ($value->trangthai == 'DAGUI')
-                                            <a href="{{url('/chuc_nang/tong_hop_luong/khoi/tonghop_khoi?thangbc='.$thang.'&nambc='.$nam.'&madv='.$value->madv)}}" class="btn btn-default btn-sm" TARGET="_blank">
+                                            <a href="{{url('/chuc_nang/tong_hop_luong/khoi/tonghop_khoi?thangbc='.$thang.'&nambc='.$nam.'&madv='.$value->madv)}}" class="btn btn-default btn-xs " TARGET="_blank">
                                                 <i class="fa fa-print"></i>&nbsp; Số liệu tổng hợp</a>
 
-                                                <a href="{{url('/chuc_nang/xem_du_lieu/tinh?thang='.$thang.'&nam='.$nam.'&trangthai=ALL&madiaban='.$value->madvbc)}}" class="btn btn-default btn-sm">
+                                                <a href="{{url('/chuc_nang/xem_du_lieu/tinh?thang='.$thang.'&nam='.$nam.'&trangthai=ALL&madiaban='.$value->madvbc)}}" class="btn btn-default btn-xs">
                                                     <i class="fa fa-list-alt"></i>&nbsp; Số liệu chi tiết</a>
 
                                                 <button type="button" title="Trả lại dữ liệu"
-                                                    class="btn btn-default btn-sm"
-                                                    onclick="confirmChuyen('{{ $value['mathdv']}}','{{$thang}}',{{$nam}})"
+                                                    class="btn btn-default btn-xs"
+                                                    onclick="confirmChuyen('{{ $value['mathdv']}}','{{$thang}}','{{$nam}}')"
                                                     data-target="#tralai-modal" data-toggle="modal">
                                                     <i class="fa icon-share-alt"></i>&nbsp;Trả lại dữ liệu</button>
                                             @endif

@@ -27,12 +27,16 @@ class tonghopnguon_tinhController extends Controller
             $a_trangthai=getStatus();
             foreach($model as $val){
                 $model_nguon=$model_nguon_tinh->where('madvbc',$val->madvbc)->first();
-                $m_nkp=$model_nkp->where('macqcq',$val->madvcq)->first();
+                if(isset($model_nguon)){
+                    $m_nkp=$model_nkp->where('masot',$model_nguon->masodv)->first();
+                }
+               
                 $val->trangthai=isset($model_nguon)?$model_nguon->trangthai:'CHUADL';
                 $val->sohieu=isset($model_nguon)?$model_nguon->sohieu:'';
                 $val->macqcq=isset($m_nkp)?$m_nkp->macqcq:'';
             }
             $soluong=0;
+            $inputs['trangthai']='DAGUI';//xem dữ liệu 
             // dd($model); 
             return view('functions.tonghopnguon.tinh.index')
                 ->with('model', $model)

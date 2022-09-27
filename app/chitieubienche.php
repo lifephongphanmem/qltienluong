@@ -83,6 +83,8 @@ class chitieubienche extends Model
 ALTER TABLE `chitieubienche` ADD `mact_tuyenthem` VARCHAR(50) NOT NULL AFTER `ghichu`,
 ADD `pthuong` DOUBLE NOT NULL DEFAULT '0' AFTER `mact_tuyenthem`,
 ADD `heso` DOUBLE NOT NULL DEFAULT '0' AFTER `pthuong`,
+ADD `hesopc` DOUBLE NOT NULL DEFAULT '0' AFTER `pthuong`,
+ADD `hesobl` DOUBLE NOT NULL DEFAULT '0' AFTER `pthuong`,
 ADD `vuotkhung` DOUBLE NOT NULL DEFAULT '0' AFTER `pthuong`,
 ADD `pcct` DOUBLE NOT NULL DEFAULT '0' AFTER `pthuong`,
 ADD `pckct` DOUBLE NOT NULL DEFAULT '0' AFTER `pthuong`,

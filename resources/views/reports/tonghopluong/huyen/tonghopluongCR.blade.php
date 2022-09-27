@@ -49,7 +49,7 @@
             <th rowspan="2">Tổng cộng </th>
             <th rowspan="2">Lương ngạch, bậc, CV</th>
             <th colspan="{{$col+1}}">Trong đó</th>
-            <th colspan="{{$col+1}}">Các khoản đóng góp</th>
+            <th colspan="2">Các khoản đóng góp</th>
         </tr>
         <tr style="padding-left: 2px;padding-right: 2px">
             <th >Tổng các khoản P/cấp</th>

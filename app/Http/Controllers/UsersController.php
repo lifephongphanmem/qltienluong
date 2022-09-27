@@ -331,6 +331,7 @@ class UsersController extends Controller
             $ttuser->maphanloai = $model_donvi->maphanloai;
             $ttuser->capdonvi = $model_donvi->capdonvi;
             $ttuser->caphanhchinh = $model_donvi->caphanhchinh;
+            $ttuser->mact_tuyenthem=GeneralConfigs::first()->mact_tuyenthem;
 
             $model_phanloai = dmphanloaicongtac_baohiem::where('madv', $ttuser->madv)->get();
             if (count($model_phanloai) == 0) {
