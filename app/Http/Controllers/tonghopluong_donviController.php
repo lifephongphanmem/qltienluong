@@ -483,7 +483,6 @@ class tonghopluong_donviController extends Controller
         //Không đơn vị chủ quản, tùy xem thuộc huyện, tỉnh để update lên bang tonghop_huyen, tonghop_tinh
         if (Session::has('admin')) {
             $inputs = $requests->all();
-
             if (!session('admin')->quanlykhuvuc && session('admin')->macqcq == '') {
                 return view('errors.chuacqcq');
             }
@@ -702,7 +701,7 @@ class tonghopluong_donviController extends Controller
     function printf_bl($mathdv)
     {
         if (Session::has('admin')) {
-            //dd($mathdv);
+            // dd($mathdv);
             //$model = tonghopluong_donvi_chitiet::where('mathdv', $mathdv)->get();
             $model = tonghopluong_donvi_bangluong::where('mathdv', $mathdv)->get();
             $model_thongtin = tonghopluong_donvi::where('mathdv', $mathdv)->first();
@@ -883,7 +882,6 @@ class tonghopluong_donviController extends Controller
                 'thang' => $model_thongtin->thang,
                 'nam' => $model_thongtin->nam
             );
-
             return view('reports.tonghopluong.donvi.solieudiaban')
                 ->with('thongtin', $thongtin)
                 ->with('model', $model)

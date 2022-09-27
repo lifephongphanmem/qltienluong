@@ -91,6 +91,7 @@ class baocaobangluongController extends Controller
                 $a_phanloai['GD'] = 'Khối Giáo Dục';
                 $a_thang['ALL'] = "--Chọn tất cả--";
             }
+            // dd($model_donvi);
             $model_thongtu = dmthongtuquyetdinh::all();
             return view('reports.index_th')
                 ->with('furl', '/bao_cao/bang_luong/')
@@ -3406,6 +3407,8 @@ class baocaobangluongController extends Controller
     {
         if (Session::has('admin')) {
             $inputs = $request->all();
+            // dd($inputs);
+            // dd(session('admin'));
             $madvbc = session('admin')->madvbc;
             $model_donvi = dmdonvi::where('madvbc', $madvbc)->get();
             $model_khoipb = dmkhoipb::all();

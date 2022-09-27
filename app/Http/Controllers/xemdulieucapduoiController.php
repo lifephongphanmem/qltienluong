@@ -424,9 +424,8 @@ class xemdulieucapduoiController extends Controller
                 ->where('trangthai', 'DAGUI')
                 ->where('madvbc', $madvbc)
                 ->get();
-
+            // $model_donvi=nguonkinhphi::where('masot',)
             //dd($model_dulieu);
-
             foreach ($model_donvi as $dv) {
                 $dv->trangthai = 'CHUAGUI';
                 $dulieu = $model_dulieu->where('madv', $dv->madv)
@@ -466,7 +465,7 @@ class xemdulieucapduoiController extends Controller
             if (!isset($inputs['trangthai']) || $inputs['trangthai'] != 'ALL') {
                 $model_donvi = $model_donvi->where('trangthai', $inputs['trangthai']);
             }
-
+// dd($model_donvi);
             return view('functions.viewdata.index_tinh')
                 ->with('model', $model_donvi)
                 ->with('thang', $inputs['thang'])
@@ -477,6 +476,7 @@ class xemdulieucapduoiController extends Controller
                 ->with('a_trangthai', $a_trangthai)
                 ->with('soluong', $soluong)
                 ->with('furl', '/chuc_nang/tong_hop_luong/')
+                ->with('furl_ct', '/chuc_nang/tong_hop_luong/don_vi/')
                 ->with('pageTitle', 'Danh sách đơn vị tổng hợp lương');
         } else
             return view('errors.notlogin');

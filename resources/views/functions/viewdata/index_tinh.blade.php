@@ -98,14 +98,21 @@
                                     <td>{{$value->tenphanloai}}</td>
                                     <td>
                                         @if ($value->mathdv != NULL)
-                                            <a href="{{url('/chuc_nang/tong_hop_luong/khoi/tonghop_khoi?thangbc='.$value['thang'].'&nambc='.$nam.'&madv='.$value['madv'])}}" class="btn btn-default btn-sm" TARGET="_blank">
+                                            <a href="{{url('/chuc_nang/tong_hop_luong/khoi/tonghop_khoi?thangbc='.$value['thang'].'&nambc='.$nam.'&madv='.$value['madv'])}}" class="btn btn-default btn-xs" TARGET="_blank">
                                                 <i class="fa fa-print"></i>&nbsp; Số liệu tổng hợp</a>
 
-                                            <!--a href="{{url('/chuc_nang/tong_hop_luong/huyen/printf_data_diaban/ma_so='.$value['mathdv'])}}" class="btn btn-default btn-sm" TARGET="_blank">
-                                                <i class="fa fa-print"></i>&nbsp; Số liệu địa bàn</a-->
+                                            {{-- <a href="{{url('/chuc_nang/tong_hop_luong/huyen/printf_data_diaban/ma_so='.$value['mathdv'])}}" class="btn btn-default btn-sm" TARGET="_blank">
+                                                <i class="fa fa-print"></i>&nbsp; Số liệu địa bàn</a> --}}
+                                                {{-- <a href="{{url($furl_ct.'printf_bl/ma_so='.$value['mathdv'])}}" class="btn btn-default btn-sm" TARGET="_blank">
+                                                    <i class="fa fa-print"></i>&nbsp; In chi tiết</a> --}}
+
+                                                    <button type="button"
+                                                    onclick="inbl('{{ $value['mathdv'] }}','{{ $value['madv'] }}')"
+                                                    class="btn btn-default btn-xs mbs">
+                                                    <i class="fa fa-print"></i>&nbsp; Số liệu chi tiết</button>
 
                                             @if($value->tralai)
-                                                <button type="button" class="btn btn-default btn-sm" onclick="confirmChuyen('{{$value['mathdv']}}')" data-target="#chuyen-modal" data-toggle="modal"><i class="fa icon-share-alt"></i>&nbsp;
+                                                <button type="button" class="btn btn-default btn-xs" onclick="confirmChuyen('{{$value['mathdv']}}')" data-target="#chuyen-modal" data-toggle="modal"><i class="fa icon-share-alt"></i>&nbsp;
                                                     Trả lại dữ liệu</button>
                                             @endif
                                         @else
@@ -150,9 +157,86 @@
         </div>
     </div>
 
+    <div id="inbl-modal" tabindex="-1" role="dialog" aria-hidden="true" class="modal fade">
+        <div class="modal-lg modal-dialog modal-content">
+            <div class="modal-header modal-header-primary">
+                <button type="button" data-dismiss="modal" aria-hidden="true" class="close">&times;</button>
+                <h4 id="hd-inbl" class="modal-title">In số liệu chi tiết</h4>
+            </div>
+
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <a id="in_bl" href=""
+                                onclick="insolieu('/chuc_nang/tong_hop_luong/huyen/printf_bl_huyen')"
+                                style="border-width: 0px;margin-left: 5px" target="_blank">
+                                <i class="fa fa-print"></i>&nbsp; In số liệu chi tiết</a>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <a id="in_blCR" href=""
+                                onclick="insolieuCR('/chuc_nang/tong_hop_luong/huyen/printf_bl_huyenCR')"
+                                style="border-width: 0px;margin-left: 5px" target="_blank">
+                                <i class="fa fa-print"></i>&nbsp; In số liệu chi tiết (CR)</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <a id="in_ttCR" href=""
+                                onclick="thanhtoanCR('/chuc_nang/tong_hop_luong/huyen/thanh_toan_CR')"
+                                style="border-width: 0px;margin-left: 5px" target="_blank">
+                                <i class="fa fa-print"></i>&nbsp; In bảng thanh toán lương (CR)</a>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <a id="in_blkhoito" href=""
+                                onclick="inkhoito('/chuc_nang/tong_hop_luong/huyen/inkhoito')"
+                                style="border-width: 0px;margin-left: 5px" target="_blank">
+                                <i class="fa fa-print"></i>&nbsp; In số liệu chi tiết (khối tổ)</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <input type="hidden" id="mathdv_in" name="mathdv_in" />
+            <input type="hidden" id="madv_in" name="madv_in" />
+            <div class="modal-footer">
+                <button type="button" data-dismiss="modal" class="btn btn-default">Hủy thao tác</button>
+            </div>
+        </div>
+    </div>
+
     <script>
         function confirmChuyen(mathdv) {
             document.getElementById("mathdv").value = mathdv;
+        }
+
+        function inbl(mathdv, madv) {
+            $("#mathdv_in").val(mathdv);
+            $("#madv_in").val(madv);
+            $('#inbl-modal').modal('show');
+            //$('#inbl-modal').modal('hide');
+        }
+
+        function insolieu($url) {
+            $("#in_bl").attr("href", $url + '?mathdv=' + $('#mathdv_in').val() + '&madv=' + $('#madv_in').val());
+        }
+
+        function insolieuCR($url) {
+            $("#in_blCR").attr("href", $url + '?mathdv=' + $('#mathdv_in').val() + '&madv=' + $('#madv_in').val());
+        }
+
+        function thanhtoanCR($url) {
+            $("#in_ttCR").attr("href", $url + '?mathdv=' + $('#mathdv_in').val() + '&madv=' + $('#madv_in').val());
+        }
+
+        function inkhoito($url) {
+            $("#in_blkhoito").attr("href", $url + '?mathdv=' + $('#mathdv_in').val() + '&madv=' + $('#madv_in').val());
         }
 
         function getLink(){

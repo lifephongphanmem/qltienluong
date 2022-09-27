@@ -1111,6 +1111,11 @@ Route::group(['prefix'=>'tong_hop_bao_cao'],function(){
     Route::post('mau4b_tt68bs','baocaothongtu67Controller@mau4b_tt67bs');
     Route::post('mau4b_tt68bsexcel','baocaothongtu67Controller@mau4b_tt67bsexcel');
 
+    Route::post('tonghopluong_huyen_CR','baocaothongtu67Controller@tonghopluong_huyen_CR');
+    Route::post('tonghopluong_tinh_CR','baocaothongtu67Controller@tonghopluong_tinh_CR');
+    Route::post('chitraluong_ct_CR','baocaothongtu67Controller@chitraluong_ct_huyenCR');
+    Route::get('danhsach','baocaothongtu67Controller@danhsachdonvi');
+
 });
 
 Route::group(['prefix'=>'tra_cuu'],function(){

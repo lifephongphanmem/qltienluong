@@ -205,7 +205,7 @@ class xemdulieu_nguonController extends Controller
                     $dv->trangthai = $nguon->trangthai;
                     $dv->masodv = $nguon->masodv;
                 }else{
-                    $dv->trangthai = 'CHUATAO';
+                    $dv->trangthai = 'CHOGUI';
                     $dv->masodv = NULL;
                 }
             }

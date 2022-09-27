@@ -22,6 +22,10 @@ use App\tonghopluong_donvi;
 use App\tonghopluong_donvi_bangluong;
 use App\tonghopluong_donvi_chitiet;
 use App\tonghopluong_huyen;
+use App\dmphanloaicongtac;
+use App\dmphanloaidonvi;
+use App\dmnguonkinhphi;
+use App\dmchucvucq;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\Http\Controllers\dataController as data;
@@ -38,19 +42,56 @@ class baocaothongtu67Controller extends Controller
     function index()
     {
         if (Session::has('admin')) {
+            // dd(session('admin'));
             $macqcq = session('admin')->madv;
+            $a_thang = getThang();
+            $a_phanloai = array();
+            $a_phanloai[''] = '--Chọn tất cả--';
             $model_dv = dmdonvi::where('macqcq', $macqcq)->orwhere('madv', $macqcq)->get();
-            $model_dvbc = dmdonvibaocao::where('level', 'H')->orwhere('level', 'T')->get();
+            $m_donvi=dmdonvi::where('phanloaitaikhoan','SD')->get();
+            $model_dvbc = dmdonvibaocao::where('level', 'H')->get();
             $model_dvbcT = dmdonvi::join('dmdonvibaocao', 'dmdonvi.madvbc', 'dmdonvibaocao.madvbc')
                 ->where('dmdonvibaocao.level', 'T')
                 ->where('dmdonvi.phanloaitaikhoan', 'TH')
                 ->get();
             $model_thongtu = dmthongtuquyetdinh::all();
+            if (session('admin')->phamvitonghop == 'HUYEN') {
+                //$model_donvi = dmdonvi::where('macqcq', session('admin')->madv)->get();
+                // $model_donvi = dmdonvibaocao::where('baocao', '1')->get();
+                // if (session('admin')->caphanhchinh == 'T' && session('admin')->phanloaitaikhoan == 'TH'){
+                // $model_donvi = dmdonvi::where('tendv', '<>', 'Phần mềm Cuộc Sống')->orderby('tendv')->get();
+                // $model_phanloai = dmphanloaidonvi::wherein('maphanloai', array_column($model_dvbc->toarray(), 'maphanloai'))
+                //                                     ->wherenotin('maphanloai',getPhanLoaGD())
+                //                                     ->get();
+                // };
+                $model_phanloaict = dmphanloaict::All();
+
+                if (session('admin')->level == 'T'){
+                    $m_donvi = dmdonvi::wherein('madvbc',array_column($model_dvbc->toarray(),'madvbc'))->get();
+                    $model_phanloai = dmphanloaidonvi::wherein('maphanloai', array_column($m_donvi->toarray(), 'maphanloai'))
+                                                        ->wherenotin('maphanloai',getPhanLoaGD())
+                                                        ->get();
+                };
+                if(isset($model_phanloai)){
+                $model_phanloai = array_column($model_phanloai->toarray(), 'tenphanloai', 'maphanloai');
+                foreach ($model_phanloai as $key => $key){
+                    $a_phanloai[$key] = $model_phanloai[$key];
+                }
+            }
+                $a_phanloai['GD'] = 'Khối Giáo Dục';
+                $a_thang['ALL'] = "--Chọn tất cả--";
+                // dd($model_phanloai);
+            }
+
             return view('reports.thongtu67.index')
                 ->with('model_dv', $model_dv)
+                ->with('a_thang', $a_thang)
+                ->with('m_donvi', $m_donvi)
+                ->with('a_phanloai', $a_phanloai)
                 ->with('model_dvbc', $model_dvbc)
                 ->with('model_dvbcT', $model_dvbcT)
                 ->with('model_thongtu', $model_thongtu)
+                ->with('model_phanloaict', $model_phanloaict)
                 ->with('furl', '/tong_hop_bao_cao/')
                 ->with('pageTitle', 'Báo cáo tổng hợp lương');
         } else
@@ -5719,7 +5760,915 @@ class baocaothongtu67Controller extends Controller
             return view('errors.notlogin');
     }
 
+    function tonghopluong_tinh_CR(Request $request)
+    {
+        if (Session::has('admin')) {
+            $inputs = $request->all();
+            // dd($inputs);
+            $madvbc = session('admin')->madvbc;
+            // $model_donvi = dmdonvi::where('madvbc', $madvbc)->get();
+            $model_donvi=dmdonvibaocao::where('baocao',1)
+                                        ->get();
+            $model_khoipb = dmkhoipb::all();
+            $model_phanloai = dmphanloaidonvi::join('dmdonvi', 'dmdonvi.maphanloai', 'dmphanloaidonvi.maphanloai')
+                ->select('madv', 'dmphanloaidonvi.maphanloai', 'tenphanloai', 'linhvuchoatdong')
+                ->wherein('madvbc', array_column($model_donvi->toarray(),'madvbc'))
+                ->where('dmphanloaidonvi.maphanloai', 'like', $inputs['phanloai'] . '%')
+                ->get();
+            if ($inputs['phanloai'] == 'GD')
+                $model_phanloai = dmphanloaidonvi::join('dmdonvi', 'dmdonvi.maphanloai', 'dmphanloaidonvi.maphanloai')
+                    ->select('madv', 'dmphanloaidonvi.maphanloai', 'tenphanloai', 'linhvuchoatdong')
+                    ->wherein('madvbc', array_column($model_donvi->toarray(),'madvbc'))
+                    ->wherein('dmdonvi.maphanloai', getPhanLoaGD())
+                    ->get();
+            $model_th = tonghopluong_donvi_bangluong::join('tonghopluong_donvi', 'tonghopluong_donvi.mathdv', 'tonghopluong_donvi_bangluong.mathdv')
+                ->Select(
+                    'mact',
+                    'tonghopluong_donvi.madvbc',
+                    DB::raw('avg(tonghopluong_donvi_bangluong.luongcoban) as luongcoban'),
+                    DB::raw('count(tonghopluong_donvi_bangluong.id) as soluong'),
+                    DB::raw('sum(heso) as heso'),
+                    DB::raw('sum(tonghs-heso) as tongpc'),
+                    DB::raw('sum(tonghs) as tonghs'),
+                    DB::raw('sum(hesobl) as hesobl'),
+                    DB::raw('sum(hesott) as hesott'),
+                    DB::raw('sum(hesopc) as hesopc'),
+                    DB::raw('sum(vuotkhung) as vuotkhung'),
+                    DB::raw('sum(pcct) as pcct'),
+                    DB::raw('sum(pckct) as pckct'),
+                    DB::raw('sum(pck) as pck'),
+                    DB::raw('sum(pccv) as pccv'),
+                    DB::raw('sum(pckv) as pckv'),
+                    DB::raw('sum(pcth) as pcth'),
+                    DB::raw('sum(pcdd) as pcdd'),
+                    DB::raw('sum(pcdh) as pcdh'),
+                    DB::raw('sum(pcld) as pcld'),
+                    DB::raw('sum(pcdbqh) as pcdbqh'),
+                    DB::raw('sum(pcudn) as pcudn'),
+                    DB::raw('sum(pctn) as pctn'),
+                    DB::raw('sum(pctnn) as pctnn'),
+                    DB::raw('sum(pcdbn) as pcdbn'),
+                    DB::raw('sum(pcvk) as pcvk'),
+                    DB::raw('sum(pckn) as pckn'),
+                    DB::raw('sum(pcdang) as pcdang'),
+                    DB::raw('sum(pccovu) as pccovu'),
+                    DB::raw('sum(pclt) as pclt'),
+                    DB::raw('sum(pcd) as pcd'),
+                    DB::raw('sum(pctr) as pctr'),
+                    DB::raw('sum(pctdt) as pctdt'),
+                    DB::raw('sum(pctnvk) as pctnvk'),
+                    DB::raw('sum(pcbdhdcu) as pcbdhdcu'),
+                    DB::raw('sum(pcthni) as pcthni'),
+                    DB::raw('sum(pclade) as pclade'),
+                    DB::raw('sum(pcud61) as pcud61'),
+                    DB::raw('sum(pcxaxe) as pcxaxe'),
+                    DB::raw('sum(pcdith) as pcdith'),
+                    DB::raw('sum(pcphth) as pcphth'),
+                    DB::raw('sum(ttl) as ttl'),
+                    DB::raw('sum(stbhxh_dv) as stbhxh_dv'),
+                    DB::raw('sum(stbhyt_dv) as stbhyt_dv'),
+                    DB::raw('sum(stbhtn_dv) as stbhtn_dv'),
+                    DB::raw('sum(stkpcd_dv) as stkpcd_dv'),
+                    DB::raw('sum(ttbh_dv) as ttbh_dv')
+                )
+                ->wherein('madvbc', array_column($model_donvi->toarray(),'madvbc'))
+                ->where('trangthai', 'DAGUI')
+                ->where('nam', $inputs['tunam'])
+                ->where('thang', $inputs['tuthang'])
+                ->wherein('tonghopluong_donvi.madv', array_column($model_phanloai->toarray(), 'madv'))
+                ->groupby('mact','tonghopluong_donvi.madvbc')
+                ->get();
+                // dd($model_th);
+            /*
+            $model_slth = tonghopluong_donvi_chitiet::join('tonghopluong_donvi','tonghopluong_donvi.mathdv','tonghopluong_donvi_chitiet.mathdv')
+                ->select('mact',DB::raw('sum(canbo_congtac) as canbo_congtac'),DB::raw('sum(canbo_dutoan) as canbo_dutoan'))
+                ->where('madvbc',$madvbc)
+                ->where('trangthai','DAGUI')
+                ->where('nam',$inputs['tunam'])
+                ->where('thang',$inputs['tuthang'])
+                ->wherein('madv', array_column($model_phanloai->toarray(),'madv'))
+                ->groupby('mact')
+                ->get();
+            */
+            //dd($model_soluong->toarray());
+                    // dd($model_donvi);
+            $model_phanloaict = array_column(dmphanloaicongtac::all()->toArray(), 'tencongtac', 'macongtac');
+            $model_ct = array_column(dmphanloaict::all()->toArray(), 'tenct', 'mact');
+            $m_pc = array_column(dmphucap_donvi::where('madv', session('admin')->madv)->get()->toarray(), 'report', 'mapc');
+            $a_donvi=array_column($model_donvi->toarray(),'madvbc');
+            $a_phucap = array();
+            $col = 0;
+            foreach (getColTongHop() as $ct) {
+                if ($model_th->sum($ct) > 0) {
+                    $a_phucap[$ct] = isset($m_pc[$ct]) ? $m_pc[$ct] : '';
+                    $col++;
+                }
+            }
+            unset($a_phucap['heso']);
+            $col = $col - 1;
+            foreach ($model_th as $ct) {
+                $ct->soluongcomat = $ct->soluong;
+                if ($ct->mact == null) {
+                    $ct->tencongtac = isset($model_phanloaict[$ct->macongtac]) ? $model_phanloaict[$ct->macongtac] : '';
+                } else {
+                    $ct->tencongtac = isset($model_ct[$ct->mact]) ? $model_ct[$ct->mact] : '';
+                }
+                foreach ($a_phucap as $key => $val) {
+                    if ($ct->$key > 10000)
+                        $ct->$key = $ct->$key / $ct->luongcoban;
+                }
+                $ct->stbhxh_dv = $ct->stbhxh_dv / $ct->luongcoban;
+                $ct->stbhyt_dv = $ct->stbhyt_dv / $ct->luongcoban;
+                $ct->stkpcd_dv = $ct->stkpcd_dv / $ct->luongcoban;
+                $ct->stbhtn_dv = $ct->stbhtn_dv / $ct->luongcoban;
+                $ct->tongcong = $ct->tonghs + $ct->stbhxh_dv + $ct->stbhyt_dv + $ct->stkpcd_dv + $ct->stbhtn_dv;
+                $ct->tongtienluong = ($ct->tonghs + $ct->stbhxh_dv + $ct->stbhyt_dv + $ct->stkpcd_dv + $ct->stbhtn_dv) * $ct->luongcoban;
+                //$ct->soluonggiao = $model_slth->where('mact',$ct->mact)->first()->canbo_dutoan;
+                //$ct->soluongcomat = $model_slth->where('mact',$ct->mact)->first()->canbo_congtac;
+            }
+            // dd($model_th);
+            /*
+            $model = tonghopluong_donvi_bangluong::join('tonghopluong_donvi', 'tonghopluong_donvi.mathdv', 'tonghopluong_donvi_bangluong.mathdv')
+                ->Select(
+                    'tonghopluong_donvi.madv',
+                    'mact',
+                    'linhvuchoatdong',
+                    DB::raw('avg(tonghopluong_donvi_bangluong.luongcoban) as luongcoban'),
+                    DB::raw('count(tonghopluong_donvi_bangluong.id) as soluong'),
+                    DB::raw('sum(heso) as heso'),
+                    DB::raw('sum(tonghs-heso) as tongpc'),
+                    DB::raw('sum(tonghs) as tonghs'),
+                    DB::raw('sum(hesobl) as hesobl'),
+                    DB::raw('sum(hesott) as hesott'),
+                    DB::raw('sum(hesopc) as hesopc'),
+                    DB::raw('sum(vuotkhung) as vuotkhung'),
+                    DB::raw('sum(pcct) as pcct'),
+                    DB::raw('sum(pckct) as pckct'),
+                    DB::raw('sum(pck) as pck'),
+                    DB::raw('sum(pccv) as pccv'),
+                    DB::raw('sum(pckv) as pckv'),
+                    DB::raw('sum(pcth) as pcth'),
+                    DB::raw('sum(pcdd) as pcdd'),
+                    DB::raw('sum(pcdh) as pcdh'),
+                    DB::raw('sum(pcld) as pcld'),
+                    DB::raw('sum(pcdbqh) as pcdbqh'),
+                    DB::raw('sum(pcudn) as pcudn'),
+                    DB::raw('sum(pctn) as pctn'),
+                    DB::raw('sum(pctnn) as pctnn'),
+                    DB::raw('sum(pcdbn) as pcdbn'),
+                    DB::raw('sum(pcvk) as pcvk'),
+                    DB::raw('sum(pckn) as pckn'),
+                    DB::raw('sum(pcdang) as pcdang'),
+                    DB::raw('sum(pccovu) as pccovu'),
+                    DB::raw('sum(pclt) as pclt'),
+                    DB::raw('sum(pcd) as pcd'),
+                    DB::raw('sum(pctr) as pctr'),
+                    DB::raw('sum(pctdt) as pctdt'),
+                    DB::raw('sum(pctnvk) as pctnvk'),
+                    DB::raw('sum(pcbdhdcu) as pcbdhdcu'),
+                    DB::raw('sum(pcthni) as pcthni'),
+                    DB::raw('sum(pclade) as pclade'),
+                    DB::raw('sum(pcud61) as pcud61'),
+                    DB::raw('sum(pcxaxe) as pcxaxe'),
+                    DB::raw('sum(pcdith) as pcdith'),
+                    DB::raw('sum(pcphth) as pcphth'),
+                    DB::raw('sum(ttl) as ttl'),
+                    DB::raw('sum(stbhxh_dv) as stbhxh_dv'),
+                    DB::raw('sum(stbhyt_dv) as stbhyt_dv'),
+                    DB::raw('sum(stbhtn_dv) as stbhtn_dv'),
+                    DB::raw('sum(stkpcd_dv) as stkpcd_dv'),
+                    DB::raw('sum(ttbh_dv) as ttbh_dv')
+                )
+                ->wherein('tonghopluong_donvi.madvbc', array_column($model_donvi->toarray(),'madvbc'))
+                ->where('trangthai', 'DAGUI')
+                ->where('nam', $inputs['tunam'])
+                ->where('thang', $inputs['tuthang'])
+                ->wherein('madv', array_column($model_phanloai->toarray(), 'madv'))
+                ->groupby('tonghopluong_donvi.madv', 'mact', 'linhvuchoatdong')
+                ->get();
+                */
+            /*
+            $model_sl = tonghopluong_donvi_chitiet::join('tonghopluong_donvi','tonghopluong_donvi.mathdv','tonghopluong_donvi_chitiet.mathdv')
+                ->select('tonghopluong_donvi.madv','mact',DB::raw('sum(canbo_congtac) as canbo_congtac'),DB::raw('sum(canbo_dutoan) as canbo_dutoan'))
+                ->where('tonghopluong_donvi.madvbc',$madvbc)
+                ->where('tonghopluong_donvi.trangthai','DAGUI')
+                ->where('nam',$inputs['tunam'])
+                ->where('thang',$inputs['tuthang'])
+                ->wherein('tonghopluong_donvi.madv', array_column($model_phanloai->toarray(),'madv'))
+                ->groupby('tonghopluong_donvi.madv','mact')
+                ->get();
+            */
+            // dd($model);
+            // foreach ($model as $ct) {
+            //     $ct->soluongcomat = $ct->soluong;
+            //     if ($ct->mact == null) {
+            //         $ct->tencongtac = isset($model_phanloaict[$ct->macongtac]) ? $model_phanloaict[$ct->macongtac] : '';
+            //     } else {
+            //         $ct->tencongtac = isset($model_ct[$ct->mact]) ? $model_ct[$ct->mact] : '';
+            //     }
+            //     $ct->tendv = $model_donvi->where('madv', $ct->madv)->first()->tendv;
+            //     $ct->maphanloai = $model_donvi->where('madv', $ct->madv)->first()->maphanloai;
+            //     $m = $model_phanloai->where('maphanloai', $ct->maphanloai)->first();
+            //     $ct->tenphanloai = $m->tenphanloai ?? '';
 
+
+            //     //$ct->linhvuchoatdong = $model_donvi->where('madv',$ct->madv)->first()->linhvuchoatdong;
+            //     $m = $model_khoipb->where('makhoipb', $ct->linhvuchoatdong)->first();
+            //     $ct->tenlinhvuchoatdong = $m->tenkhoipb ?? '';
+
+            //     foreach ($a_phucap as $key => $val) {
+            //         if ($ct->$key > 10000)
+            //             $ct->$key = $ct->$key / $ct->luongcoban;
+            //     }
+            //     $ct->stbhxh_dv = $ct->stbhxh_dv / $ct->luongcoban;
+            //     $ct->stbhyt_dv = $ct->stbhyt_dv / $ct->luongcoban;
+            //     $ct->stkpcd_dv = $ct->stkpcd_dv / $ct->luongcoban;
+            //     $ct->stbhtn_dv = $ct->stbhtn_dv / $ct->luongcoban;
+            //     $ct->tongcong = $ct->tonghs + $ct->stbhxh_dv + $ct->stbhyt_dv + $ct->stkpcd_dv + $ct->stbhtn_dv;
+            //     $ct->tongtienluong = ($ct->tonghs + $ct->stbhxh_dv + $ct->stbhyt_dv + $ct->stkpcd_dv + $ct->stbhtn_dv) * $ct->luongcoban;
+            // }
+            // dd($model);
+            $m_dv = dmdonvi::where('madv', session('admin')->madv)->first();
+            $thongtin = array(
+                'nguoilap' => session('admin')->name,
+                'nam' => $inputs['tunam'],
+                'madvbc' => $madvbc
+            );
+            return view('reports.tonghopluong.tinh.tonghopluongCR')
+                ->with('model_th', $model_th)
+                ->with('model_donvi', $model_donvi)
+                //->with('model_bienche_dutoan',$model_bienche_dutoan)
+                //->with('model_bienche_truoc',$model_bienche_truoc)
+                ->with('thongtin', $thongtin)
+                ->with('m_dv', $m_dv)
+                //->with('modelhcsn',$modelhcsn)
+                ->with('model_phanloai', $model_phanloai)
+                ->with('a_phucap', $a_phucap)
+                ->with('col', $col)
+                ->with('nam', $inputs['tunam'])
+                ->with('thang', $inputs['tuthang'])
+                ->with('pageTitle', 'Báo cáo tổng hợp dự toán lương');
+        } else
+            return view('errors.notlogin');
+    }
+
+    function tonghopluong_huyen_CR(Request $request)
+    {
+        if (Session::has('admin')) {
+            $inputs = $request->all();
+            $madvbc = $inputs['donvi'];
+            $model_donvi = dmdonvi::where('madvbc', $madvbc)->get();
+            $model_khoipb = dmkhoipb::all();
+            $model_phanloai = dmphanloaidonvi::join('dmdonvi', 'dmdonvi.maphanloai', 'dmphanloaidonvi.maphanloai')
+                ->select('madv', 'dmphanloaidonvi.maphanloai', 'tenphanloai', 'linhvuchoatdong')
+                ->where('madvbc', $madvbc)
+                ->where('dmphanloaidonvi.maphanloai', 'like', $inputs['phanloai'] . '%')
+                ->get();
+            if ($inputs['phanloai'] == 'GD')
+                $model_phanloai = dmphanloaidonvi::join('dmdonvi', 'dmdonvi.maphanloai', 'dmphanloaidonvi.maphanloai')
+                    ->select('madv', 'dmphanloaidonvi.maphanloai', 'tenphanloai', 'linhvuchoatdong')
+                    ->where('madvbc', $madvbc)
+                    ->wherein('dmdonvi.maphanloai', getPhanLoaGD())
+                    ->get();
+
+            $model_th = tonghopluong_donvi_bangluong::join('tonghopluong_donvi', 'tonghopluong_donvi.mathdv', 'tonghopluong_donvi_bangluong.mathdv')
+                ->Select(
+                    'mact',
+                    DB::raw('avg(tonghopluong_donvi_bangluong.luongcoban) as luongcoban'),
+                    DB::raw('count(tonghopluong_donvi_bangluong.id) as soluong'),
+                    DB::raw('sum(heso) as heso'),
+                    DB::raw('sum(tonghs-heso) as tongpc'),
+                    DB::raw('sum(tonghs) as tonghs'),
+                    DB::raw('sum(hesobl) as hesobl'),
+                    DB::raw('sum(hesott) as hesott'),
+                    DB::raw('sum(hesopc) as hesopc'),
+                    DB::raw('sum(vuotkhung) as vuotkhung'),
+                    DB::raw('sum(pcct) as pcct'),
+                    DB::raw('sum(pckct) as pckct'),
+                    DB::raw('sum(pck) as pck'),
+                    DB::raw('sum(pccv) as pccv'),
+                    DB::raw('sum(pckv) as pckv'),
+                    DB::raw('sum(pcth) as pcth'),
+                    DB::raw('sum(pcdd) as pcdd'),
+                    DB::raw('sum(pcdh) as pcdh'),
+                    DB::raw('sum(pcld) as pcld'),
+                    DB::raw('sum(pcdbqh) as pcdbqh'),
+                    DB::raw('sum(pcudn) as pcudn'),
+                    DB::raw('sum(pctn) as pctn'),
+                    DB::raw('sum(pctnn) as pctnn'),
+                    DB::raw('sum(pcdbn) as pcdbn'),
+                    DB::raw('sum(pcvk) as pcvk'),
+                    DB::raw('sum(pckn) as pckn'),
+                    DB::raw('sum(pcdang) as pcdang'),
+                    DB::raw('sum(pccovu) as pccovu'),
+                    DB::raw('sum(pclt) as pclt'),
+                    DB::raw('sum(pcd) as pcd'),
+                    DB::raw('sum(pctr) as pctr'),
+                    DB::raw('sum(pctdt) as pctdt'),
+                    DB::raw('sum(pctnvk) as pctnvk'),
+                    DB::raw('sum(pcbdhdcu) as pcbdhdcu'),
+                    DB::raw('sum(pcthni) as pcthni'),
+                    DB::raw('sum(pclade) as pclade'),
+                    DB::raw('sum(pcud61) as pcud61'),
+                    DB::raw('sum(pcxaxe) as pcxaxe'),
+                    DB::raw('sum(pcdith) as pcdith'),
+                    DB::raw('sum(pcphth) as pcphth'),
+                    DB::raw('sum(ttl) as ttl'),
+                    DB::raw('sum(stbhxh_dv) as stbhxh_dv'),
+                    DB::raw('sum(stbhyt_dv) as stbhyt_dv'),
+                    DB::raw('sum(stbhtn_dv) as stbhtn_dv'),
+                    DB::raw('sum(stkpcd_dv) as stkpcd_dv'),
+                    DB::raw('sum(ttbh_dv) as ttbh_dv')
+                )
+                ->where('madvbc', $madvbc)
+                ->where('trangthai', 'DAGUI')
+                ->where('nam', $inputs['tunam'])
+                ->where('thang', $inputs['tuthang'])
+                ->wherein('tonghopluong_donvi.madv', array_column($model_phanloai->toarray(), 'madv'))
+                ->groupby('mact')
+                ->get();
+            /*
+            $model_slth = tonghopluong_donvi_chitiet::join('tonghopluong_donvi','tonghopluong_donvi.mathdv','tonghopluong_donvi_chitiet.mathdv')
+                ->select('mact',DB::raw('sum(canbo_congtac) as canbo_congtac'),DB::raw('sum(canbo_dutoan) as canbo_dutoan'))
+                ->where('madvbc',$madvbc)
+                ->where('trangthai','DAGUI')
+                ->where('nam',$inputs['tunam'])
+                ->where('thang',$inputs['tuthang'])
+                ->wherein('madv', array_column($model_phanloai->toarray(),'madv'))
+                ->groupby('mact')
+                ->get();
+            */
+            //dd($model_soluong->toarray());
+
+            $model_phanloaict = array_column(dmphanloaicongtac::all()->toArray(), 'tencongtac', 'macongtac');
+            $model_ct = array_column(dmphanloaict::all()->toArray(), 'tenct', 'mact');
+            $m_pc = array_column(dmphucap_donvi::where('madv', session('admin')->madv)->get()->toarray(), 'report', 'mapc');
+            $a_phucap = array();
+            $col = 0;
+            foreach (getColTongHop() as $ct) {
+                if ($model_th->sum($ct) > 0) {
+                    $a_phucap[$ct] = isset($m_pc[$ct]) ? $m_pc[$ct] : '';
+                    $col++;
+                }
+            }
+            unset($a_phucap['heso']);
+            $col = $col - 1;
+            foreach ($model_th as $ct) {
+                $ct->soluongcomat = $ct->soluong;
+                if ($ct->mact == null) {
+                    $ct->tencongtac = isset($model_phanloaict[$ct->macongtac]) ? $model_phanloaict[$ct->macongtac] : '';
+                } else {
+                    $ct->tencongtac = isset($model_ct[$ct->mact]) ? $model_ct[$ct->mact] : '';
+                }
+                foreach ($a_phucap as $key => $val) {
+                    if ($ct->$key > 10000)
+                        $ct->$key = $ct->$key / $ct->luongcoban;
+                }
+                $ct->stbhxh_dv = $ct->stbhxh_dv / $ct->luongcoban;
+                $ct->stbhyt_dv = $ct->stbhyt_dv / $ct->luongcoban;
+                $ct->stkpcd_dv = $ct->stkpcd_dv / $ct->luongcoban;
+                $ct->stbhtn_dv = $ct->stbhtn_dv / $ct->luongcoban;
+                $ct->tongcong = $ct->tonghs + $ct->stbhxh_dv + $ct->stbhyt_dv + $ct->stkpcd_dv + $ct->stbhtn_dv;
+                $ct->tongtienluong = ($ct->tonghs + $ct->stbhxh_dv + $ct->stbhyt_dv + $ct->stkpcd_dv + $ct->stbhtn_dv) * $ct->luongcoban;
+                //$ct->soluonggiao = $model_slth->where('mact',$ct->mact)->first()->canbo_dutoan;
+                //$ct->soluongcomat = $model_slth->where('mact',$ct->mact)->first()->canbo_congtac;
+            }
+            $model = tonghopluong_donvi_bangluong::join('tonghopluong_donvi', 'tonghopluong_donvi.mathdv', 'tonghopluong_donvi_bangluong.mathdv')
+                ->Select(
+                    'tonghopluong_donvi.madv',
+                    'mact',
+                    'linhvuchoatdong',
+                    DB::raw('avg(tonghopluong_donvi_bangluong.luongcoban) as luongcoban'),
+                    DB::raw('count(tonghopluong_donvi_bangluong.id) as soluong'),
+                    DB::raw('sum(heso) as heso'),
+                    DB::raw('sum(tonghs-heso) as tongpc'),
+                    DB::raw('sum(tonghs) as tonghs'),
+                    DB::raw('sum(hesobl) as hesobl'),
+                    DB::raw('sum(hesott) as hesott'),
+                    DB::raw('sum(hesopc) as hesopc'),
+                    DB::raw('sum(vuotkhung) as vuotkhung'),
+                    DB::raw('sum(pcct) as pcct'),
+                    DB::raw('sum(pckct) as pckct'),
+                    DB::raw('sum(pck) as pck'),
+                    DB::raw('sum(pccv) as pccv'),
+                    DB::raw('sum(pckv) as pckv'),
+                    DB::raw('sum(pcth) as pcth'),
+                    DB::raw('sum(pcdd) as pcdd'),
+                    DB::raw('sum(pcdh) as pcdh'),
+                    DB::raw('sum(pcld) as pcld'),
+                    DB::raw('sum(pcdbqh) as pcdbqh'),
+                    DB::raw('sum(pcudn) as pcudn'),
+                    DB::raw('sum(pctn) as pctn'),
+                    DB::raw('sum(pctnn) as pctnn'),
+                    DB::raw('sum(pcdbn) as pcdbn'),
+                    DB::raw('sum(pcvk) as pcvk'),
+                    DB::raw('sum(pckn) as pckn'),
+                    DB::raw('sum(pcdang) as pcdang'),
+                    DB::raw('sum(pccovu) as pccovu'),
+                    DB::raw('sum(pclt) as pclt'),
+                    DB::raw('sum(pcd) as pcd'),
+                    DB::raw('sum(pctr) as pctr'),
+                    DB::raw('sum(pctdt) as pctdt'),
+                    DB::raw('sum(pctnvk) as pctnvk'),
+                    DB::raw('sum(pcbdhdcu) as pcbdhdcu'),
+                    DB::raw('sum(pcthni) as pcthni'),
+                    DB::raw('sum(pclade) as pclade'),
+                    DB::raw('sum(pcud61) as pcud61'),
+                    DB::raw('sum(pcxaxe) as pcxaxe'),
+                    DB::raw('sum(pcdith) as pcdith'),
+                    DB::raw('sum(pcphth) as pcphth'),
+                    DB::raw('sum(ttl) as ttl'),
+                    DB::raw('sum(stbhxh_dv) as stbhxh_dv'),
+                    DB::raw('sum(stbhyt_dv) as stbhyt_dv'),
+                    DB::raw('sum(stbhtn_dv) as stbhtn_dv'),
+                    DB::raw('sum(stkpcd_dv) as stkpcd_dv'),
+                    DB::raw('sum(ttbh_dv) as ttbh_dv')
+                )
+                ->where('tonghopluong_donvi.madvbc', $madvbc)
+                ->where('trangthai', 'DAGUI')
+                ->where('nam', $inputs['tunam'])
+                ->where('thang', $inputs['tuthang'])
+                ->wherein('madv', array_column($model_phanloai->toarray(), 'madv'))
+                ->groupby('tonghopluong_donvi.madv', 'mact', 'linhvuchoatdong')
+                ->get();
+            /*
+            $model_sl = tonghopluong_donvi_chitiet::join('tonghopluong_donvi','tonghopluong_donvi.mathdv','tonghopluong_donvi_chitiet.mathdv')
+                ->select('tonghopluong_donvi.madv','mact',DB::raw('sum(canbo_congtac) as canbo_congtac'),DB::raw('sum(canbo_dutoan) as canbo_dutoan'))
+                ->where('tonghopluong_donvi.madvbc',$madvbc)
+                ->where('tonghopluong_donvi.trangthai','DAGUI')
+                ->where('nam',$inputs['tunam'])
+                ->where('thang',$inputs['tuthang'])
+                ->wherein('tonghopluong_donvi.madv', array_column($model_phanloai->toarray(),'madv'))
+                ->groupby('tonghopluong_donvi.madv','mact')
+                ->get();
+            */
+            foreach ($model as $ct) {
+                $ct->soluongcomat = $ct->soluong;
+                if ($ct->mact == null) {
+                    $ct->tencongtac = isset($model_phanloaict[$ct->macongtac]) ? $model_phanloaict[$ct->macongtac] : '';
+                } else {
+                    $ct->tencongtac = isset($model_ct[$ct->mact]) ? $model_ct[$ct->mact] : '';
+                }
+                $ct->tendv = $model_donvi->where('madv', $ct->madv)->first()->tendv;
+                $ct->maphanloai = $model_donvi->where('madv', $ct->madv)->first()->maphanloai;
+                $m = $model_phanloai->where('maphanloai', $ct->maphanloai)->first();
+                $ct->tenphanloai = $m->tenphanloai ?? '';
+
+
+                //$ct->linhvuchoatdong = $model_donvi->where('madv',$ct->madv)->first()->linhvuchoatdong;
+                $m = $model_khoipb->where('makhoipb', $ct->linhvuchoatdong)->first();
+                $ct->tenlinhvuchoatdong = $m->tenkhoipb ?? '';
+
+                foreach ($a_phucap as $key => $val) {
+                    if ($ct->$key > 10000)
+                        $ct->$key = $ct->$key / $ct->luongcoban;
+                }
+                $ct->stbhxh_dv = $ct->stbhxh_dv / $ct->luongcoban;
+                $ct->stbhyt_dv = $ct->stbhyt_dv / $ct->luongcoban;
+                $ct->stkpcd_dv = $ct->stkpcd_dv / $ct->luongcoban;
+                $ct->stbhtn_dv = $ct->stbhtn_dv / $ct->luongcoban;
+                $ct->tongcong = $ct->tonghs + $ct->stbhxh_dv + $ct->stbhyt_dv + $ct->stkpcd_dv + $ct->stbhtn_dv;
+                $ct->tongtienluong = ($ct->tonghs + $ct->stbhxh_dv + $ct->stbhyt_dv + $ct->stkpcd_dv + $ct->stbhtn_dv) * $ct->luongcoban;
+            }
+
+            //dd($model->toarray());
+
+            //dd($a_phucap);
+            //$model_tongso = $model_th->
+            //dd($model_th->toarray());
+
+            //Tính toán Hoạt động phí HĐND
+
+            $model_hdnd = tonghopluong_donvi_bangluong::join('tonghopluong_donvi', 'tonghopluong_donvi.mathdv', 'tonghopluong_donvi_bangluong.mathdv')
+                ->Select(
+                    'mact',
+                    DB::raw('avg(tonghopluong_donvi_bangluong.luongcoban) as luongcoban'),
+                    DB::raw('count(tonghopluong_donvi_bangluong.id) as soluong'),
+                    DB::raw('sum(heso) as heso'),
+                    DB::raw('sum(tonghs-heso-pckn) as tongpc'),
+                    DB::raw('sum(tonghs-pckn) as tonghs'),
+                    DB::raw('sum(hesopc) as pccv'),
+                    DB::raw('sum(pckn) as pckn'),
+                    DB::raw('sum(tonghopluong_donvi_bangluong.luongcoban*hesopc) as ttl'),
+                    DB::raw('sum(stbhxh_dv) as stbhxh_dv'),
+                    DB::raw('sum(stbhyt_dv) as stbhyt_dv'),
+                    DB::raw('sum(stbhtn_dv) as stbhtn_dv'),
+                    DB::raw('sum(stkpcd_dv) as stkpcd_dv'),
+                    DB::raw('sum(ttbh_dv) as ttbh_dv')
+                )
+                ->where('tonghopluong_donvi.madvbc', $madvbc)
+                ->where('trangthai', 'DAGUI')
+                ->where('mact', '1536402868')
+                ->wherein('tonghopluong_donvi.madv', array_column($model_phanloai->toarray(), 'madv'))
+                ->where('nam', $inputs['tunam'])
+                ->where('thang', $inputs['tuthang'])
+                ->groupby('mact')
+                ->get();
+            /*
+            $model_slhdnd = tonghopluong_donvi_chitiet::join('tonghopluong_donvi','tonghopluong_donvi.mathdv','tonghopluong_donvi_chitiet.mathdv')
+                ->select('mact',DB::raw('sum(canbo_congtac) as canbo_congtac'),DB::raw('sum(canbo_dutoan) as canbo_dutoan'))
+                ->where('tonghopluong_donvi.madvbc',$madvbc)
+                ->where('trangthai','DAGUI')
+                ->where('mact','1536402868')
+                ->wherein('tonghopluong_donvi.madv', array_column($model_phanloai->toarray(),'madv'))
+                ->where('nam',$inputs['tunam'])
+                ->where('thang',$inputs['tuthang'])
+                ->groupby('mact')
+                ->get();
+            */
+            foreach ($model_hdnd as $ct) {
+                $ct->soluongcomat = $ct->soluong;
+                if ($ct->mact == null) {
+                    $ct->tencongtac = isset($model_phanloaict[$ct->macongtac]) ? $model_phanloaict[$ct->macongtac] : '';
+                } else {
+                    $ct->tencongtac = isset($model_ct[$ct->mact]) ? $model_ct[$ct->mact] : '';
+                }
+                //$ct->soluonggiao = $model_slhdnd->where('mact',$ct->mact)->first()->canbo_dutoan;
+                //$ct->soluongcomat = $model_slhdnd->where('mact',$ct->mact)->first()->canbo_congtac;
+                foreach ($a_phucap as $key => $val) {
+                    if ($ct->$key > 10000)
+                        $ct->$key = $ct->$key / $ct->luongcoban;
+                }
+                $ct->stbhxh_dv = $ct->stbhxh_dv / $ct->luongcoban;
+                $ct->stbhyt_dv = $ct->stbhyt_dv / $ct->luongcoban;
+                $ct->stkpcd_dv = $ct->stkpcd_dv / $ct->luongcoban;
+                $ct->stbhtn_dv = $ct->stbhtn_dv / $ct->luongcoban;
+                $ct->tongcong = $ct->tonghs + $ct->stbhxh_dv + $ct->stbhyt_dv + $ct->stkpcd_dv + $ct->stbhtn_dv;
+                $ct->tongtienluong = ($ct->tonghs + $ct->stbhxh_dv + $ct->stbhyt_dv + $ct->stkpcd_dv + $ct->stbhtn_dv) * $ct->luongcoban;
+            }
+            $model_kn = tonghopluong_donvi_bangluong::join('tonghopluong_donvi', 'tonghopluong_donvi.mathdv', 'tonghopluong_donvi_bangluong.mathdv')
+                ->Select(
+                    'mact',
+                    DB::raw('avg(tonghopluong_donvi_bangluong.luongcoban) as luongcoban'),
+                    DB::raw('count(tonghopluong_donvi_bangluong.id) as soluong'),
+                    DB::raw('sum(heso) as heso'),
+                    DB::raw('sum(tonghs-heso-hesopc) as tongpc'),
+                    DB::raw('sum(tonghs-hesopc) as tonghs'),
+                    DB::raw('sum(pckn) as pccv'),
+                    DB::raw('sum(tonghopluong_donvi_bangluong.luongcoban*pckn) as ttl'),
+                    DB::raw('sum(stbhxh_dv) as stbhxh_dv'),
+                    DB::raw('sum(stbhyt_dv) as stbhyt_dv'),
+                    DB::raw('sum(stbhtn_dv) as stbhtn_dv'),
+                    DB::raw('sum(stkpcd_dv) as stkpcd_dv'),
+                    DB::raw('sum(ttbh_dv) as ttbh_dv')
+                )
+                ->where('madvbc', $madvbc)
+                ->where('trangthai', 'DAGUI')
+                ->where('mact', '1536402868')
+                ->wherein('tonghopluong_donvi.madv', array_column($model_phanloai->toarray(), 'madv'))
+                ->where('nam', $inputs['tunam'])
+                ->where('thang', $inputs['tuthang'])
+                ->groupby('mact')
+                ->get();
+            foreach ($model_kn as $ct) {
+                $ct->soluongcomat = $ct->soluong;
+                if ($ct->mact == null) {
+                    $ct->tencongtac = isset($model_phanloaict[$ct->macongtac]) ? $model_phanloaict[$ct->macongtac] : '';
+                } else {
+                    $ct->tencongtac = isset($model_ct[$ct->mact]) ? $model_ct[$ct->mact] : '';
+                }
+                $ct->soluonggiao = 0;
+                $ct->soluongcomat = 0;
+                foreach ($a_phucap as $key => $val) {
+                    if ($ct->$key > 10000)
+                        $ct->$key = $ct->$key / $ct->luongcoban;
+                }
+                $ct->stbhxh_dv = $ct->stbhxh_dv / $ct->luongcoban;
+                $ct->stbhyt_dv = $ct->stbhyt_dv / $ct->luongcoban;
+                $ct->stkpcd_dv = $ct->stkpcd_dv / $ct->luongcoban;
+                $ct->stbhtn_dv = $ct->stbhtn_dv / $ct->luongcoban;
+                $ct->tongcong = $ct->tonghs + $ct->stbhxh_dv + $ct->stbhyt_dv + $ct->stkpcd_dv + $ct->stbhtn_dv;
+                $ct->tongtienluong = ($ct->tonghs + $ct->stbhxh_dv + $ct->stbhyt_dv + $ct->stkpcd_dv + $ct->stbhtn_dv) * $ct->luongcoban;
+            }
+            $model_uv = tonghopluong_donvi_bangluong::join('tonghopluong_donvi', 'tonghopluong_donvi.mathdv', 'tonghopluong_donvi_bangluong.mathdv')
+                ->Select(
+                    'mact',
+                    DB::raw('avg(tonghopluong_donvi_bangluong.luongcoban) as luongcoban'),
+                    DB::raw('count(tonghopluong_donvi_bangluong.id) as soluong'),
+                    DB::raw('sum(heso) as heso'),
+                    DB::raw('sum(tonghs-heso) as tongpc'),
+                    DB::raw('sum(tonghs) as tonghs'),
+                    DB::raw('sum(hesopc) as pccv'),
+                    DB::raw('sum(pckn) as pckn'),
+                    DB::raw('sum(tonghopluong_donvi_bangluong.luongcoban*hesopc) as ttl'),
+                    DB::raw('sum(stbhxh_dv) as stbhxh_dv'),
+                    DB::raw('sum(stbhyt_dv) as stbhyt_dv'),
+                    DB::raw('sum(stbhtn_dv) as stbhtn_dv'),
+                    DB::raw('sum(stkpcd_dv) as stkpcd_dv'),
+                    DB::raw('sum(ttbh_dv) as ttbh_dv')
+                )
+                ->where('tonghopluong_donvi.madvbc', $madvbc)
+                ->where('trangthai', 'DAGUI')
+                ->where('mact', '1536459380')
+                ->wherein('tonghopluong_donvi.madv', array_column($model_phanloai->toarray(), 'madv'))
+                ->where('nam', $inputs['tunam'])
+                ->where('thang', $inputs['tuthang'])
+                ->groupby('mact')
+                ->get();
+            foreach ($model_uv as $ct) {
+                $ct->soluongcomat = $ct->soluong;
+                if ($ct->mact == null) {
+                    $ct->tencongtac = isset($model_phanloaict[$ct->macongtac]) ? $model_phanloaict[$ct->macongtac] : '';
+                } else {
+                    $ct->tencongtac = isset($model_ct[$ct->mact]) ? $model_ct[$ct->mact] : '';
+                }
+                //$ct->soluonggiao = $model_slhdnd->where('mact',$ct->mact)->first()->canbo_dutoan;
+                //$ct->soluongcomat = $model_slhdnd->where('mact',$ct->mact)->first()->canbo_congtac;
+                foreach ($a_phucap as $key => $val) {
+                    if ($ct->$key > 10000)
+                        $ct->$key = $ct->$key / $ct->luongcoban;
+                }
+                $ct->stbhxh_dv = $ct->stbhxh_dv / $ct->luongcoban;
+                $ct->stbhyt_dv = $ct->stbhyt_dv / $ct->luongcoban;
+                $ct->stkpcd_dv = $ct->stkpcd_dv / $ct->luongcoban;
+                $ct->stbhtn_dv = $ct->stbhtn_dv / $ct->luongcoban;
+                $ct->tongcong = $ct->tonghs + $ct->stbhxh_dv + $ct->stbhyt_dv + $ct->stkpcd_dv + $ct->stbhtn_dv;
+                $ct->tongtienluong = ($ct->tonghs + $ct->stbhxh_dv + $ct->stbhyt_dv + $ct->stkpcd_dv + $ct->stbhtn_dv) * $ct->luongcoban;
+            }
+
+            //Tính toán phần xã phường
+            $model_xp = tonghopluong_donvi_bangluong::join('tonghopluong_donvi', 'tonghopluong_donvi.mathdv', 'tonghopluong_donvi_bangluong.mathdv')
+                ->Select(
+                    'tonghopluong_donvi.madv',
+                    'mact',
+                    DB::raw('avg(tonghopluong_donvi_bangluong.luongcoban) as luongcoban'),
+                    DB::raw('count(tonghopluong_donvi_bangluong.id) as soluong'),
+                    DB::raw('sum(heso) as heso'),
+                    DB::raw('sum(tonghs-heso) as tongpc'),
+                    DB::raw('sum(tonghs) as tonghs'),
+                    DB::raw('sum(hesobl) as hesobl'),
+                    DB::raw('sum(hesott) as hesott'),
+                    DB::raw('sum(hesopc) as hesopc'),
+                    DB::raw('sum(vuotkhung) as vuotkhung'),
+                    DB::raw('sum(pcct) as pcct'),
+                    DB::raw('sum(pckct) as pckct'),
+                    DB::raw('sum(pck) as pck'),
+                    DB::raw('sum(pccv) as pccv'),
+                    DB::raw('sum(pckv) as pckv'),
+                    DB::raw('sum(pcth) as pcth'),
+                    DB::raw('sum(pcdd) as pcdd'),
+                    DB::raw('sum(pcdh) as pcdh'),
+                    DB::raw('sum(pcld) as pcld'),
+                    DB::raw('sum(pcdbqh) as pcdbqh'),
+                    DB::raw('sum(pcudn) as pcudn'),
+                    DB::raw('sum(pctn) as pctn'),
+                    DB::raw('sum(pctnn) as pctnn'),
+                    DB::raw('sum(pcdbn) as pcdbn'),
+                    DB::raw('sum(pcvk) as pcvk'),
+                    DB::raw('sum(pckn) as pckn'),
+                    DB::raw('sum(pcdang) as pcdang'),
+                    DB::raw('sum(pccovu) as pccovu'),
+                    DB::raw('sum(pclt) as pclt'),
+                    DB::raw('sum(pcd) as pcd'),
+                    DB::raw('sum(pctr) as pctr'),
+                    DB::raw('sum(pctdt) as pctdt'),
+                    DB::raw('sum(pctnvk) as pctnvk'),
+                    DB::raw('sum(pcbdhdcu) as pcbdhdcu'),
+                    DB::raw('sum(pcthni) as pcthni'),
+                    DB::raw('sum(pclade) as pclade'),
+                    DB::raw('sum(pcud61) as pcud61'),
+                    DB::raw('sum(pcxaxe) as pcxaxe'),
+                    DB::raw('sum(pcdith) as pcdith'),
+                    DB::raw('sum(pcphth) as pcphth'),
+                    DB::raw('sum(ttl) as ttl'),
+                    DB::raw('sum(stbhxh_dv) as stbhxh_dv'),
+                    DB::raw('sum(stbhyt_dv) as stbhyt_dv'),
+                    DB::raw('sum(stbhtn_dv) as stbhtn_dv'),
+                    DB::raw('sum(stkpcd_dv) as stkpcd_dv'),
+                    DB::raw('sum(ttbh_dv) as ttbh_dv')
+                )
+                ->where('madvbc', $madvbc)
+                ->where('trangthai', 'DAGUI')
+                ->wherein('mact', ['1506672780', '1506673604', '1506673695', '1535613221'])
+                ->wherein('tonghopluong_donvi.madv', array_column($model_phanloai->where('maphanloai', 'KVXP')->toarray(), 'madv'))
+                ->where('nam', $inputs['tunam'])
+                ->where('thang', $inputs['tuthang'])
+                ->groupby('tonghopluong_donvi.madv', 'mact')
+                ->get();
+            /*
+            $model_slxp = tonghopluong_donvi_chitiet::join('tonghopluong_donvi','tonghopluong_donvi.mathdv','tonghopluong_donvi_chitiet.mathdv')
+                ->select('dutoanluong.madv','mact',DB::raw('sum(canbo_congtac) as canbo_congtac'),DB::raw('sum(canbo_dutoan) as canbo_dutoan'))
+                ->where('madvbc',$madvbc)
+                ->where('trangthai','DAGUI')
+                ->wherein('mact',['1506673604','1506673695','1535613221'])
+                ->wherein('tonghopluong_donvi.madv', array_column($model_phanloai->toarray(),'madv'))
+                ->where('namns',$inputs['namns'])
+                ->groupby('tonghopluong_donvi.madv','mact')
+                ->get();
+            */
+            foreach ($model_xp as $ct) {
+                $ct->soluongcomat = $ct->soluong;
+                if ($ct->mact == null) {
+                    $ct->tencongtac = isset($model_phanloaict[$ct->macongtac]) ? $model_phanloaict[$ct->macongtac] : '';
+                } else {
+                    $ct->tencongtac = isset($model_ct[$ct->mact]) ? $model_ct[$ct->mact] : '';
+                }
+                $ct->tendv = $model_donvi->where('madv', $ct->madv)->first()->tendv;
+                $ct->maphanloai = $model_donvi->where('madv', $ct->madv)->first()->maphanloai;
+                $m = $model_phanloai->where('maphanloai', $ct->maphanloai)->first();
+                $ct->tenphanloai = $m->tenphanloai ?? '';
+
+
+                $ct->linhvuchoatdong = $model_donvi->where('madv', $ct->madv)->first()->linhvuchoatdong;
+                $m = $model_khoipb->where('makhoipb', $ct->linhvuchoatdong)->first();
+                $ct->tenlinhvuchoatdong = $m->tenkhoipb ?? '';
+
+                foreach ($a_phucap as $key => $val) {
+                    if ($ct->$key > 10000)
+                        $ct->$key = $ct->$key / $ct->luongcoban;
+                }
+                $ct->stbhxh_dv = $ct->stbhxh_dv / $ct->luongcoban;
+                $ct->stbhyt_dv = $ct->stbhyt_dv / $ct->luongcoban;
+                $ct->stkpcd_dv = $ct->stkpcd_dv / $ct->luongcoban;
+                $ct->stbhtn_dv = $ct->stbhtn_dv / $ct->luongcoban;
+                $ct->tongcong = $ct->tonghs + $ct->stbhxh_dv + $ct->stbhyt_dv + $ct->stkpcd_dv + $ct->stbhtn_dv;
+                $ct->tongtienluong = ($ct->tonghs + $ct->stbhxh_dv + $ct->stbhyt_dv + $ct->stkpcd_dv + $ct->stbhtn_dv) * $ct->luongcoban;
+            }
+            //dd($model_kn->toarray());
+            $model_dutoan = tonghopluong_donvi::where('nam', $inputs['tunam'])
+                ->wherein('madv', function ($qr) use ($madvbc) {
+                    $qr->select('madv')->from('dmdonvi')->where('madvbc', $madvbc);
+                })->get();
+            /*
+            $model_bienche_dutoan=chitieubienche::where('nam',$inputs['tunam'])
+                ->wherein('madv',function($qr)use($madvbc){
+                    $qr->select('madv')->from('dmdonvi')->where('madvbc',$madvbc);
+                })->get();
+            $model_bienche_truoc=chitieubienche::where('nam',$inputs['namns'] - 1)
+                ->wherein('madv',function($qr)use($madvbc){
+                    $qr->select('madv')->from('dmdonvi')->where('madvbc',$madvbc);
+                })->get();
+            */
+            $m_dv = dmdonvi::where('madvbc', $madvbc)->where('phanloaitaikhoan','TH')->first();
+            $thongtin = array(
+                'nguoilap' => session('admin')->name,
+                'nam' => $inputs['tunam'],
+                'madvbc' => $madvbc
+            );
+            $a_lv = array('QLNN', 'DDT', 'DOANTHE', 'DANG', 'LVXH', 'LVCT');
+            $modelqlnn = $model->wherein('linhvuchoatdong', $a_lv)
+                ->wherein('madv', array_column($model_phanloai->where('maphanloai', '<>', 'KVXP')->toarray(), 'madv'));
+            $a_lv = array('QLNN', 'DDT', 'DOANTHE', 'DANG', 'LVXH', 'LVCT');
+            //$modelhcsn = $model->whereNOTIn('linhvuchoatdong',$a_lv)
+            //   ->wherein('madv', array_column($model_phanloai->where('maphanloai','<>','KVXP')->toarray(),'madv'));
+            return view('reports.tonghopluong.huyen.tonghopluongCR')
+                ->with('model_dutoan', $model_dutoan)
+                ->with('model_th', $model_th)
+                ->with('model_donvi', $model_donvi)
+                //->with('model_bienche_dutoan',$model_bienche_dutoan)
+                //->with('model_bienche_truoc',$model_bienche_truoc)
+                ->with('thongtin', $thongtin)
+                ->with('m_dv', $m_dv)
+                ->with('model', $model)
+                ->with('modelqlnn', $modelqlnn)
+                //->with('modelhcsn',$modelhcsn)
+                ->with('model_hdnd', $model_hdnd)
+                ->with('model_kn', $model_kn)
+                ->with('model_uv', $model_uv)
+                ->with('model_xp', $model_xp)
+                ->with('model_phanloai', $model_phanloai)
+                ->with('a_phucap', $a_phucap)
+                ->with('col', $col)
+                ->with('nam', $inputs['tunam'])
+                ->with('thang', $inputs['tuthang'])
+                ->with('pageTitle', 'Báo cáo tổng hợp dự toán lương');
+        } else
+            return view('errors.notlogin');
+    }
+
+    function chitraluong_ct_huyenCR(Request $request)
+    {
+        if (Session::has('admin')) {
+            //$model = tonghopluong_donvi_chitiet::where('mathdv', $mathdv)->get();
+            $inputs = $request->all();
+            // dd($inputs);
+            $madv = $inputs['donvicapduoi'];
+            $thang = $inputs['tuthang'];
+            $nam = $inputs['tunam'];
+            $check = dmdonvi::where('madv', $madv)->where('phanloaitaikhoan', 'TH')->get();
+            if (count($check) > 0) {
+                if ($inputs['tuthang'] == 'ALL')
+                    $m_mathdv = tonghopluong_khoi::where('madv', $madv)->where('nam', $nam)->where('trangthai', 'DAGUI')->first();
+                else
+                    $m_mathdv = tonghopluong_khoi::where('madv', $madv)->where('thang', $thang)->where('nam', $nam)->where('trangthai', 'DAGUI')->first();
+            } else {
+                if ($inputs['tuthang'] == 'ALL')
+                    $m_mathdv = tonghopluong_donvi::where('madv', $madv)->where('nam', $nam)->where('trangthai', 'DAGUI')->get();
+                else
+                    $m_mathdv = tonghopluong_donvi::where('madv', $madv)->where('thang', $thang)->where('nam', $nam)->where('trangthai', 'DAGUI')->distinct()->get();
+            }
+
+            if (isset($m_mathdv)) {
+                if (count($check) > 0) {
+                    $mathh = array_column($m_mathdv->toArray(), 'mathdv');
+                    $a_math = tonghopluong_donvi::wherein('mathh', $mathh)->get();
+                    $model = tonghopluong_donvi_bangluong::join('tonghopluong_donvi', 'tonghopluong_donvi_bangluong.mathdv', 'tonghopluong_donvi.mathdv')
+                        ->select('tonghopluong_donvi_bangluong.*', 'thang')
+                        ->wherein('tonghopluong_donvi_bangluong.mathdv', array_column($a_math->toarray(), 'mathdv'))->get();
+                    $model_thongtin = tonghopluong_donvi::wherein('mathh', $mathh)->first();
+                    $m_pc = array_column(dmphucap_donvi::wherein('madv', function ($query) use ($mathh) {
+                        $query->select('dmdonvi.madv')->from('dmdonvi')->join('tonghopluong_khoi', 'dmdonvi.madv', 'tonghopluong_khoi.madv')->wherein('mathdv', $mathh)
+                            ->get();
+                    })->get()->toarray(), 'report', 'mapc');
+                } else {
+                    $a_mathdv = array_column($m_mathdv->toArray(), 'mathdv');
+                    $model = tonghopluong_donvi_bangluong::join('tonghopluong_donvi', 'tonghopluong_donvi_bangluong.mathdv', 'tonghopluong_donvi.mathdv')
+                        ->select('tonghopluong_donvi_bangluong.*', 'thang')
+                        ->wherein('tonghopluong_donvi_bangluong.mathdv', $a_mathdv)->get();
+                    $model_thongtin = tonghopluong_donvi::wherein('mathdv', $a_mathdv)->first();
+                    $m_pc = array_column(dmphucap_donvi::where('madv', $madv)->get()->toarray(), 'report', 'mapc');
+                }
+                //dd($model);
+                //$model = tonghopluong_donvi_bangluong::where('mathdv', $m_mathdv->mathdv)->get();
+                //$model_thongtin = tonghopluong_donvi::where('mathdv', $m_mathdv->mathdv)->first();
+                $model_nguonkp = array_column(dmnguonkinhphi::all()->toArray(), 'tennguonkp', 'manguonkp');
+                $model_chucvu = array_column(dmchucvucq::all()->toArray(), 'tencv', 'macvcq');
+                $model_ct = array_column(dmphanloaict::all()->toArray(), 'tenct', 'mact');
+                $a_thang = array_column($model->toArray(), 'thang', 'thang');
+                //$gnr = getGeneralConfigs();
+
+                //cho trương hợp đơn vị cấp trên in dữ liệu dv câp dưới mà ko sai tên đơn vị
+                $m_dv = dmdonvi::where('madv', $madv)->first();
+                $a_phucap = array();
+                $col = 0;
+                //$m_pc = array_column(dmphucap_donvi::where('madv', $madv)->get()->toarray(), 'report', 'mapc');
+
+                foreach ($model as $chitiet) {
+                    $chitiet->tennguonkp = isset($model_nguonkp[$chitiet->manguonkp]) ? $model_nguonkp[$chitiet->manguonkp] : '';
+                    $chitiet->tenct = isset($model_ct[$chitiet->mact]) ? $model_ct[$chitiet->mact] : '';
+                    $chitiet->tencv = isset($model_chucvu[$chitiet->macvcq]) ? $model_chucvu[$chitiet->macvcq] : '';
+                    $thanhtien = 0;
+                    foreach (getColTongHop() as $ct) {
+                        if ($chitiet->$ct > 50000) {
+                            $thanhtien += $chitiet->$ct;
+                        }
+                    }
+                    $chitiet->tongtl = $chitiet->tonghs * $chitiet->luongcoban + $thanhtien;
+                }
+                //dd($model->toarray());
+
+                foreach (getColTongHop() as $ct) {
+                    if ($ct != 'heso')
+                        if ($model->sum($ct) > 0) {
+                            $a_phucap[$ct] = isset($m_pc[$ct]) ? $m_pc[$ct] : '';
+                            $col++;
+                        }
+                }
+                //dd($a_phucap);
+                $thongtin = array('nguoilap' => '', 'thang' => '', 'nam' => '');
+                if (isset($model_thongtin))
+                    $thongtin = array(
+                        'nguoilap' => session('admin')->name,
+                        'thang' => $model_thongtin->thang,
+                        'nam' => $model_thongtin->nam
+                    );
+
+                //Lấy dữ liệu để lập
+                $model_congtac = $model->map(function ($data) {
+                    return collect($data->toArray())
+                        ->only(['mact', 'manguonkp', 'tennguonkp', 'tenct'])
+                        ->all();
+                });
+                //group mact đã bao gồm macongtac; manguonkp bao gồm luongcoban
+                $a_congtac = a_unique($model_congtac);
+
+                $model_nguon = $model->map(function ($data) {
+                    return collect($data->toArray())
+                        ->only(['manguonkp', 'tennguonkp'])
+                        ->all();
+                });
+                $a_nguon = a_unique($model_nguon);
+                return view('reports.tonghopluong.huyen.bangluongCR')
+                    ->with('thongtin', $thongtin)
+                    ->with('model', $model)
+                    ->with('m_dv', $m_dv)
+                    ->with('a_thang', $a_thang)
+                    ->with('col', $col)
+                    ->with('a_phucap', $a_phucap)
+                    ->with('a_nguon', $a_nguon)
+                    ->with('a_congtac', $a_congtac)
+                    ->with('inputs', $inputs)
+                    ->with('pageTitle', 'Chi tiết tổng hợp lương tại đơn vị');
+            } else {
+                return view('errors.nodata');
+            }
+        } else
+            return view('errors.notlogin');
+    }
+
+    function danhsachdonvi(Request $request)
+    {
+        $inputs=$request->all();
+        $output = '';
+        $m_dv=dmdonvi::select('tendv','madv','madvbc')->where('madvbc',$inputs['donvi'])->where('phanloaitaikhoan','SD')->get();
+        if(count($m_dv) > 0){
+            foreach($m_dv as $key=>$val){
+                $output.='<option class="baocaoct" value="'. $val->madv .'">'. $val->tendv.'</option>';
+
+            }
+        }
+        return response()->json($output);
+    }
 
 
 }
