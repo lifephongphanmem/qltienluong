@@ -10,6 +10,8 @@ use App\nguonkinhphi_huyen;
 use App\nguonkinhphi_khoi;
 use App\nguonkinhphi_tinh;
 use App\dmdonvibaocao;
+use App\dmphanloaicongtac;
+use App\dmphanloaict;
 use Illuminate\Http\Request;
 
 use App\Http\Requests;
@@ -173,10 +175,14 @@ class xemdulieu_nguonController extends Controller
             if (!isset($inputs['phanloai']) || $inputs['phanloai'] != 'ALL') {
                 $model_donvi = $model_donvi->where('maphanloai',$inputs['phanloai']);
             }
+            $model_nhomct = dmphanloaicongtac::select('macongtac', 'tencongtac')->get();
+            $model_tenct = dmphanloaict::select('tenct', 'macongtac', 'mact')->get();
             return view('functions.viewdata.nguonkinhphi.index')
                 ->with('model', $model_donvi)
                 ->with('inputs', $inputs)
                 ->with('a_trangthai', $a_trangthai)
+                ->with('model_nhomct', $model_nhomct)
+                ->with('model_tenct', $model_tenct)
                 ->with('a_phanloai', $a_phanloai)
                 ->with('furl_th', 'chuc_nang/tong_hop_nguon/huyen/')
                 ->with('furl_xem', '/chuc_nang/xem_du_lieu/nguon/huyen')
@@ -213,6 +219,8 @@ class xemdulieu_nguonController extends Controller
             if (!isset($inputs['trangthai']) || $inputs['trangthai'] != 'ALL') {
                 $model_donvi = $model_donvi->where('trangthai',$inputs['trangthai']);
             }
+            $model_nhomct = dmphanloaicongtac::select('macongtac', 'tencongtac')->get();
+            $model_tenct = dmphanloaict::select('tenct', 'macongtac', 'mact')->get();
             return view('functions.tonghopnguon.index_tinh')
                 ->with('model', $model_donvi)
                 ->with('a_trangthai', $a_trangthai)
@@ -220,6 +228,8 @@ class xemdulieu_nguonController extends Controller
                 ->with('soluong',$model_nguon->unique('madv')->count().'/'.$model_donvi->count('madv'))
                 ->with('madvbc',$madvbc)
                 ->with('inputs',$inputs)
+                ->with('model_nhomct', $model_nhomct)
+                ->with('model_tenct', $model_tenct)
                 ->with('a_dvbc',array_column($model_dvbc->toArray(),'tendvbc','madvbc'))
                 ->with('furl','/chuc_nang/tong_hop_nguon/')
                 ->with('pageTitle','Danh sách đơn vị tổng hợp nguồn kinh phí');

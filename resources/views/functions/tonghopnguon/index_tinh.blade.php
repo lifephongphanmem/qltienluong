@@ -85,8 +85,8 @@
                                                 <button type="button" onclick="innguon('{{$value->namns}}','{{$value->masodv}}')" class="btn btn-default btn-xs mbs" data-target="#indt-modal" data-toggle="modal">
                                                     <i class="fa fa-print"></i>&nbsp; Số liệu chi tiết</button>
 
-                                            <button type="button" class="btn btn-default btn-xs mbs" onclick="confirmChuyen('{{$value['masodv']}}')" data-target="#chuyen-modal" data-toggle="modal"><i class="fa icon-share-alt"></i>&nbsp;
-                                                Trả lại dữ liệu</button>
+                                            {{-- <button type="button" class="btn btn-default btn-xs mbs" onclick="confirmChuyen('{{$value['masodv']}}')" data-target="#chuyen-modal" data-toggle="modal"><i class="fa icon-share-alt"></i>&nbsp;
+                                                Trả lại dữ liệu</button> --}}
 
                                         @else
                                             <button class="btn btn-danger btn-xs mbs">
@@ -150,7 +150,7 @@
                 <div class="row">
                     <div class="col-md-6">
                         <div class="form-group">
-                            <button type="button" style="border-width: 0px" class="btn btn-default btn-xs mbs" data-target="#mautt107-modal" data-toggle="modal"
+                            <button onclick="ThongTinKetXuat(false,'{{ '/nguon_kinh_phi/mautt107' }}')" type="button" style="border-width: 0px" class="btn btn-default btn-xs mbs" data-target="#mautt107-modal" data-toggle="modal"
                                     title="Bảng lương của cán bộ theo mẫu C02-HD">
                                 <i class="fa fa-print"></i>&nbsp; Bảng lương mẫu C02-HD (TT107/2017/TT-BTC)</button>
                         </div>
@@ -181,6 +181,50 @@
             </div>
         </div>
     </div>
+
+    <!--Mẫu TT107 -->
+    {!! Form::open(['url'=>(isset($furl)?$furl : '').'mautt107','method'=>'post' ,'target'=>'_blank', 'files'=>true, 'id' => 'printf_mautt107']) !!}
+    <div id="mautt107-modal" tabindex="-1" role="dialog" aria-hidden="true" class="modal fade">
+        <div class="modal-dialog modal-content">
+            <div class="modal-header modal-header-primary">
+                <button type="button" data-dismiss="modal" aria-hidden="true" class="close">&times;</button>
+                <h4 id="header-inbl" class="modal-title">In nhu cầu kinh phí</h4>
+            </div>
+            <div class="modal-body">
+                <div class="form-horizontal">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <label class="control-label">Tháng</label>
+                            {!! Form::select('thang',getThangBC_nhucau(), 'ALL', array('id' => 'thang', 'class' => 'form-control'))!!}
+                        </div>
+                    </div>
+    
+                    <div class="row">
+                        <div class="col-md-12">
+                            <label class="control-label">Phân loại công tác</label>
+                            <select class="form-control select2me" name="mact" id="mact">
+                                <option value="ALL">-- Tất cả các phân loại công tác --</option>
+                                @foreach($model_nhomct as $kieuct)
+                                    <optgroup label="{{$kieuct->tencongtac}}">
+                                        <?php $mode_ct=$model_tenct->where('macongtac',$kieuct->macongtac); ?>
+                                        @foreach($mode_ct as $ct)
+                                            <option value="{{$ct->mact}}">{{$ct->tenct}}</option>
+                                        @endforeach
+                                    </optgroup>
+                                @endforeach
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <input type="hidden" id="masodv" name="masodv" value=""/>
+            <div class="modal-footer">
+                <button type="button" data-dismiss="modal" class="btn btn-default">Hủy thao tác</button>
+                <button type="submit" data-dismiss="modal" class="btn btn-success" onclick="ClickBCtt107()">Đồng ý</button>
+            </div>
+        </div>
+    </div>
+    {!! Form::close() !!}
 
     <script>
         function confirmChuyen(masodv) {
@@ -242,6 +286,17 @@
             var masodv = $('#masodv_dt').val();
             window.open('/nguon_kinh_phi/nangluong?maso='+ masodv,'_blank');
         }
+
+        function ThongTinKetXuat(thang, url){
+        var form = $('#printf_mautt107');
+        form.find("[id^='thang']").prop('disabled',thang);
+        form.prop('action', url);
+    }
+    function ClickBCtt107() {
+        var masodv = $('#masodv_dt').val();
+        $('#printf_mautt107').find("[id^='masodv']").val(masodv);
+        $('#printf_mautt107').submit();
+    }
     </script>
 
 @stop
