@@ -180,7 +180,7 @@
                 <div class="row">
                     <div class="col-md-6">
                         <div class="form-group">
-                            <button type="button" style="border-width: 0px" class="btn btn-default btn-xs mbs" data-target="#mautt107-modal" data-toggle="modal"
+                            <button onclick="ThongTinKetXuat(false,'{{ '/nguon_kinh_phi/mautt107' }}')" type="button" style="border-width: 0px" class="btn btn-default btn-xs mbs" data-target="#mautt107-modal" data-toggle="modal"
                                     title="Bảng lương của cán bộ theo mẫu C02-HD">
                                 <i class="fa fa-print"></i>&nbsp; Bảng lương mẫu C02-HD (TT107/2017/TT-BTC)</button>
                         </div>
@@ -260,6 +260,8 @@
             </div>
         </div>
     </div>
+
+
     <script>
         function confirmChuyen(masodv) {
             document.getElementById("masodv").value = masodv;

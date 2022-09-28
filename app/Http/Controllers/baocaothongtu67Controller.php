@@ -5769,7 +5769,7 @@ class baocaothongtu67Controller extends Controller
             // $model_donvi = dmdonvi::where('madvbc', $madvbc)->get();
             $model_donvi=dmdonvibaocao::where('baocao',1)
                                         ->get();
-            $model_khoipb = dmkhoipb::all();
+            // $model_khoipb = dmkhoipb::all();
             $model_phanloai = dmphanloaidonvi::join('dmdonvi', 'dmdonvi.maphanloai', 'dmphanloaidonvi.maphanloai')
                 ->select('madv', 'dmphanloaidonvi.maphanloai', 'tenphanloai', 'linhvuchoatdong')
                 ->wherein('madvbc', array_column($model_donvi->toarray(),'madvbc'))

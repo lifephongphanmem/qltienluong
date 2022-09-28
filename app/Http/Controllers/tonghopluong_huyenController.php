@@ -1763,6 +1763,7 @@ class tonghopluong_huyenController extends Controller
             $model = tonghopluong_donvi_bangluong::join('tonghopluong_donvi', 'tonghopluong_donvi_bangluong.mathdv', 'tonghopluong_donvi.mathdv')
                 ->select('tonghopluong_donvi_bangluong.*', 'thang')
                 ->where('tonghopluong_donvi.mathh', $mathdv)->where('madv', $madv)->get();
+                // dd($model);
             $model_thongtin = tonghopluong_donvi::where('mathh', $mathdv)->where('madv', $madv)->first();
             $m_bl = tonghopluong_donvi::select('thang', 'nam', 'madv', 'ngaylap', 'phanloai')->where('mathh', $mathdv)->first();
             $m_dv = dmdonvi::where('madv', $madv)->first();

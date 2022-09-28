@@ -106,15 +106,18 @@
                                                 {{-- <a href="{{url($furl_ct.'printf_bl/ma_so='.$value['mathdv'])}}" class="btn btn-default btn-sm" TARGET="_blank">
                                                     <i class="fa fa-print"></i>&nbsp; In chi tiết</a> --}}
 
-                                                    <button type="button"
+                                                    {{-- <button type="button"
                                                     onclick="inbl('{{ $value['mathdv'] }}','{{ $value['madv'] }}')"
                                                     class="btn btn-default btn-xs mbs">
-                                                    <i class="fa fa-print"></i>&nbsp; Số liệu chi tiết</button>
+                                                    <i class="fa fa-print"></i>&nbsp; Số liệu chi tiết</button> --}}
 
-                                            @if($value->tralai)
+                                                    <a href="{{url('/chuc_nang/tong_hop_luong/huyen/inkhoito?mathdv='.$value['mathdv'].'&madv='.$value['madv'])}}" class="btn btn-default btn-xs" TARGET="_blank">
+                                                        <i class="fa fa-print"></i>&nbsp; Số liệu chi tiết</a>
+
+                                            {{-- @if($value->tralai)
                                                 <button type="button" class="btn btn-default btn-xs" onclick="confirmChuyen('{{$value['mathdv']}}')" data-target="#chuyen-modal" data-toggle="modal"><i class="fa icon-share-alt"></i>&nbsp;
                                                     Trả lại dữ liệu</button>
-                                            @endif
+                                            @endif --}}
                                         @else
                                             <button class="btn btn-danger btn-xs mbs">
                                                 <i class="fa fa-warning"></i>&nbsp; Đơn vị chưa tổng hợp dữ liệu</button>
@@ -131,7 +134,7 @@
     </div>
     </div>
 
-    <div class="modal fade" id="chuyen-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    {{-- <div class="modal fade" id="chuyen-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 {!! Form::open(['url'=>$furl.'huyen/tralai','id' => 'frm_chuyen','method'=>'POST'])!!}
@@ -155,7 +158,7 @@
             </div>
             <!-- /.modal-dialog -->
         </div>
-    </div>
+    </div> --}}
 
     <div id="inbl-modal" tabindex="-1" role="dialog" aria-hidden="true" class="modal fade">
         <div class="modal-lg modal-dialog modal-content">

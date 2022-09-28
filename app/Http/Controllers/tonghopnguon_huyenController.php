@@ -177,9 +177,8 @@ class tonghopnguon_huyenController extends Controller
     {
         if (Session::has('admin')) {
             $inputs = $request->all();
-            //dd($inputs);
+            // dd($inputs);
             $model_ct = nguonkinhphi_bangluong::where('masodv', $inputs['maso'])->orderby('stt')->get();
-            // dd($model_ct);
             if(count($model_ct) > 0) {
                 $model = $model_ct->unique('macanbo');
                 $model_thongtin = nguonkinhphi::where('masodv', $inputs['maso'])->first();
@@ -195,46 +194,63 @@ class tonghopnguon_huyenController extends Controller
                 }
             }
             //$model = dutoanluong_bangluong::where('masodv', $inputs['masodv'])->orderby('thang')->get();
-            
-            $a_congtac = array_column(dmphanloaict::wherein('mact',a_unique(array_column($model->toarray(),'mact')))->get()->toArray(), 'tenct', 'mact');
+
             //dd($a_ct);
             //cho trương hợp đơn vị cấp trên in dữ liệu dv câp dưới mà ko sai tên đơn vị
-            $m_dv = dmdonvi::where('madv', $model_thongtin->madv)->first();
             $a_phucap = array();
             $col = 0;
-            $m_pc = dmphucap_donvi::where('madv', $model_thongtin->madv)->orderby('stt')->get()->toarray();
-
-            foreach ($m_pc as $ct) {
-                if ($model->sum($ct['mapc']) > 0) {
-                    $a_phucap[$ct['mapc']] = $ct['report'];
-                    $col++;
+            if(isset($model_thongtin)){
+                $m_dv = dmdonvi::where('madv', $model_thongtin->madv)->first();
+                $m_pc = dmphucap_donvi::where('madv', $model_thongtin->madv)->orderby('stt')->get()->toarray();
+                foreach ($m_pc as $ct) {
+                    if ($model->sum($ct['mapc']) > 0) {
+                        $a_phucap[$ct['mapc']] = $ct['report'];
+                        $col++;
+                    }
                 }
+
+                $thongtin = array('nguoilap' => session('admin')->name,
+                'namns' => $model_thongtin->namns);
+            }else{
+                $thongtin = array('nguoilap' => session('admin')->name,
+                'namns' => '');
+                $m_dv=[];
             }
 
-            foreach ($model as $ct) {
-                $bl = $model_ct->where('macanbo',$ct->macanbo);
-                foreach ($m_pc as $pc) {
-                    $ma = $pc['mapc'];
-                    $ma_st = 'st_'.$pc['mapc'];
-                    $ct->$ma = $bl->sum($ma);
-                    $ct->$ma_st = $bl->sum($ma_st);
-                }
-                $ct->tonghs = $bl->sum('tonghs');
-                $ct->ttl = $bl->sum('luongtn');
-                $ct->stbhxh_dv = $bl->sum('stbhxh_dv');
-                $ct->stbhyt_dv = $bl->sum('stbhyt_dv');
-                $ct->stkpcd_dv = $bl->sum('stkpcd_dv');
-                $ct->stbhtn_dv = $bl->sum('stbhtn_dv');
-                $ct->ttbh_dv = $bl->sum('ttbh_dv');
 
-                $ct->tencanbo = str_replace('(nghỉ thai sản)','',$ct->tencanbo);
-                $ct->tencanbo = str_replace('(nghỉ hưu)','',$ct->tencanbo);
-                $ct->tencanbo = trim($ct->tencanbo);
+            if(isset($model)){
+                $a_congtac = array_column(dmphanloaict::wherein('mact',a_unique(array_column($model->toarray(),'mact')))->get()->toArray(), 'tenct', 'mact');
+
+                foreach ($model as $ct) {
+                    $bl = $model_ct->where('macanbo',$ct->macanbo);
+                    foreach ($m_pc as $pc) {
+                        $ma = $pc['mapc'];
+                        $ma_st = 'st_'.$pc['mapc'];
+                        $ct->$ma = $bl->sum($ma);
+                        $ct->$ma_st = $bl->sum($ma_st);
+                    }
+                    $ct->tonghs = $bl->sum('tonghs');
+                    $ct->ttl = $bl->sum('luongtn');
+                    $ct->stbhxh_dv = $bl->sum('stbhxh_dv');
+                    $ct->stbhyt_dv = $bl->sum('stbhyt_dv');
+                    $ct->stkpcd_dv = $bl->sum('stkpcd_dv');
+                    $ct->stbhtn_dv = $bl->sum('stbhtn_dv');
+                    $ct->ttbh_dv = $bl->sum('ttbh_dv');
+    
+                    $ct->tencanbo = str_replace('(nghỉ thai sản)','',$ct->tencanbo);
+                    $ct->tencanbo = str_replace('(nghỉ hưu)','',$ct->tencanbo);
+                    $ct->tencanbo = trim($ct->tencanbo);
+                }
+    
+            }else{
+                $a_congtac=[];
+                $model=[];
             }
+
+
 
             //dd($model);
-            $thongtin = array('nguoilap' => session('admin')->name,
-                'namns' => $model_thongtin->namns);
+
 
             return view('reports.nguonkinhphi.huyen.bangluong_m2')
                 ->with('thongtin', $thongtin)

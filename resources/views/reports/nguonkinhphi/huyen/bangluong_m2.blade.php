@@ -12,7 +12,7 @@
         </tr>
         <tr>
             <td style="text-align: left;width: 60%">
-                <b>Đơn vị: {{$m_dv['tendv']}}</b>
+                <b>Đơn vị: {{empty($m_dv)?'':$m_dv['tendv']}}</b>
             </td>
             <td style="text-align: center; font-style: italic">
 
@@ -20,7 +20,7 @@
         </tr>
         <tr>
             <td style="text-align: left;width: 60%">
-                <b>Mã đơn vị SDNS: {{$m_dv->maqhns}}</b>
+                <b>Mã đơn vị SDNS: {{empty($m_dv)?'':$m_dv->maqhns}}</b>
             </td>
 
             <td style="text-align: center; font-style: italic">
