@@ -1783,7 +1783,6 @@ class tonghopluong_huyenController extends Controller
             $model_pc = dmphucap_donvi::where('madv', $madv)->where('phanloai', '<', '3')->wherenotin('mapc', $a_goc)->get();
             $a_phucap = array();
             $col = 0;
-
             foreach ($model_pc as $ct) {
                 if ($model->sum($ct->mapc) > 0) {
                     $a_phucap[$ct->mapc] = $ct->report;

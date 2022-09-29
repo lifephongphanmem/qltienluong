@@ -211,7 +211,7 @@
             <td></td>
             <td>Cộng</td>
             <td></td>
-            <td class="text-right">{{ dinhdangso($model_thaydoi->sum('luongtn')) }}</td>
+            <td class="text-right">{{ dinhdangso($model_thaydoi->sum('luongthaydoi')) }}</td>
             <td></td>
         </td>
         </tr>
