@@ -5645,14 +5645,36 @@ class bangluongController extends Controller
                     }
                 }
 
+                $a_mpl=array(
+                    'NGHIHUU'=>'nghỉ hưu',
+                    'NGHIVIEC'=> 'nghỉ việc',
+                    'BUOCNGHI'=> 'buộc thôi việc',
+                    'DIEUDONG' => 'hết thời gian điều động',
+                    'LUANCHUYEN'=> 'luân chuyển cán bộ',
+                    'KHAC'=>''
+                );
+
                 //Cán bộ nghỉ việc
                 $canbo_nghiviec = $model_bl_trc->wherenotin('macanbo', $a_cb);
                 if ($canbo_nghiviec != null) {
                     $a_cv = dmchucvucq::all('tenvt', 'macvcq', 'tencv')->keyBy('macvcq')->toArray();
                     foreach ($canbo_nghiviec as $cbnghiviec) {
+                        // $cb_tamnghi=hosotamngungtheodoi::where('macanbo',$cbnghiviec->macanbo)->first();
+                        $cb_nghiviec= hosothoicongtac::where('macanbo',$cbnghiviec->macanbo)->first();
+                        // if($cb_tamnghi !=null){
+                        //     $cbnghiviec->ghichu = 'Cán bộ tạm nghỉ do '.$cb_tamnghi->lydo;
+                        // }
+                        if($cb_nghiviec !=null){
+                            if($cb_nghiviec->maphanloai == 'KHAC'){
+                                $cbnghiviec->ghichu = 'Cán bộ nghỉ việc do '.$cb_nghiviec->lydo;
+                            }else{
+                                $cbnghiviec->ghichu = 'Cán bộ nghỉ việc do '.$a_mpl[$cb_nghiviec->maphanloai];
+                            }
+
+                        }
                         $cbnghiviec->tencv = isset($a_cv[$cbnghiviec->macvcq]) ? $a_cv[$cbnghiviec->macvcq]['tencv'] : '';
                         $cbnghiviec->luongthaydoi = 0 - $cbnghiviec->luongtn;
-                        $cbnghiviec->ghichu = ' Cán bộ đã nghỉ việc';
+                        
                         $model_thaydoi->add($cbnghiviec);
                     }
                 }
