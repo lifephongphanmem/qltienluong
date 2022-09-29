@@ -1444,7 +1444,7 @@ class bangluongController extends Controller
             $m_cb[$key]['luongtn'] = $m_cb[$key]['ttl'] - $m_cb[$key]['ttbh'] - $m_cb[$key]['giaml'] - $m_cb[$key]['thuetn'];
             $a_data_canbo[] = $m_cb[$key];
         }
-// dd($m_cb);
+        // dd($m_cb);
         //Mảng chứa các cột bỏ để chạy hàm insert
         $a_col_cb = array(
             'id', 'bac', 'baohiem', 'macongtac', 'pthuong', 'theodoi', 'ngaybc',
@@ -5307,11 +5307,11 @@ class bangluongController extends Controller
         $a_cv = dmchucvucq::all('tenvt', 'macvcq', 'tencv')->keyBy('macvcq')->toArray();
 
         foreach ($model as $hs) {
-            if (isset($inputs['inchucvuvt'])) {
-                $hs->tencv = isset($a_cv[$hs->macvcq]) ? $a_cv[$hs->macvcq]['tenvt'] : '';
-            } else {
-                $hs->tencv = isset($a_cv[$hs->macvcq]) ? $a_cv[$hs->macvcq]['tencv'] : '';
-            }
+            // if (isset($inputs['inchucvuvt'])) {
+            //     $hs->tencv = isset($a_cv[$hs->macvcq]) ? $a_cv[$hs->macvcq]['tenvt'] : '';
+            // } else {
+            $hs->tencv = isset($a_cv[$hs->macvcq]) ? $a_cv[$hs->macvcq]['tencv'] : '';
+            // }
 
             $hs->sunghiep = isset($sunghiep[$hs->macanbo]) ? $sunghiep[$hs->macanbo] : '';
             $hs->macongtac = isset($nhomct[$hs->mact]) ? $nhomct[$hs->mact] : '';
@@ -5566,8 +5566,9 @@ class bangluongController extends Controller
             //Tính toán tiền chênh giữa 2 tháng
             $model_thaydoi = new Collection();
             $message = '';
-            foreach ($model as $ct) {
-                if ($m_bl_trc != null) {
+            $a_cb = array_column($model->toarray(), 'macanbo');
+            if ($m_bl_trc != null) {
+                foreach ($model as $ct) {
                     $canbo = $model_bl_trc->where('macanbo', $ct->macanbo)->where('mact', $ct->mact)
                         ->where('mapb', $ct->mapb)->first();
 
@@ -5585,7 +5586,7 @@ class bangluongController extends Controller
                             }
                         }
 
-                        
+
                         //tính lại lương thực nhận do đã giảm trừ
                         // $ct->luongtn = $ct->ttl - $ct->ttbh - ($canbo->ttl - $canbo->ttbh);
                         $ct->luongtn -= $canbo->luongtn;
@@ -5601,52 +5602,78 @@ class bangluongController extends Controller
                         $ct->stkpcd_dv -= $canbo->stkpcd_dv;
                         $ct->stbhtn_dv -= $canbo->stbhtn_dv;
                         $ct->ttbh_dv -= $canbo->ttbh_dv;
-                    }
-                    else{
+                    } else {
                         foreach ($model_pc as $pc) {
                             $mapc = $pc->mapc;
                             $mapc_st = 'st_' . $pc->mapc;
                             // $ct->$mapc -= $canbo->$mapc;
                             // $ct->$mapc_st -= $canbo->$mapc_st;
-                            if ($ct->$mapc_st > 0) {
-                                $ct->ghichu .= 'Tăng ' . $a_tenpc[$mapc] . '; ';
-                            };
-                            if ($ct->$mapc_st < 0) {
-                                $ct->ghichu .= 'Giảm ' . $a_tenpc[$mapc] . '; ';
-                            }
+                            // if ($ct->$mapc_st > 0) {
+                            //     $ct->ghichu .= 'Tăng ' . $a_tenpc[$mapc] . '; ';
+                            // };
+                            // if ($ct->$mapc_st < 0) {
+                            //     $ct->ghichu .= 'Giảm ' . $a_tenpc[$mapc] . '; ';
+                            // }
                         }
+                        $ct->ghichu .= 'Cán bộ mới';
                     }
-                        if ($m_truylinh != null) { //nếu có bảng truy lĩnh lương 
+                    if ($m_truylinh != null) { //nếu có bảng truy lĩnh lương 
 
-                            foreach ($model_truylinh as $val) {
-                                if (isset($model_truylinh_trc)) {
-                                    $cb_truylinh = $model_truylinh_trc->where('macanbo', $val->macanbo)->where('mact', $val->mact)
-                                        ->where('mapb', $val->mapb)->first();
-                                    if ($cb_truylinh != null) {
-                                        $ct->truylinh = $val->luongtn - $cb_truylinh->luongtn;
-                                        if ($ct->truylinh > 0) {
-                                            $ct->ghichu .= 'Tăng do truy lĩnh lương';
-                                        } else {
-                                            $ct->ghichu .= 'Giảm do truy lĩnh lương';
-                                        }
+                        foreach ($model_truylinh as $val) {
+                            if (isset($model_truylinh_trc)) {
+                                $cb_truylinh = $model_truylinh_trc->where('macanbo', $val->macanbo)->where('mact', $val->mact)
+                                    ->where('mapb', $val->mapb)->first();
+                                if ($cb_truylinh != null) {
+                                    $ct->truylinh = $val->luongtn - $cb_truylinh->luongtn;
+                                    if ($ct->truylinh > 0) {
+                                        $ct->ghichu .= 'Tăng do truy lĩnh lương';
+                                    } else {
+                                        $ct->ghichu .= 'Giảm do truy lĩnh lương';
                                     }
-                                } else if ($val->mact == $canbo->mact && $val->macanbo == $ct->macanbo) {
-                                    $ct->ghichu .= 'Tăng do truy lĩnh lương';
                                 }
+                            } else if ($val->mact == $canbo->mact && $val->macanbo == $ct->macanbo) {
+                                $ct->ghichu .= 'Tăng do truy lĩnh lương';
                             }
-                        };
-
-                        $ct->luongthaydoi = $ct->luongtn + $ct->truylinh;
-
-                        //nếu ttl > 0 =>add
-                        if ($ct->luongthaydoi != 0) {
-                            $model_thaydoi->add($ct);
                         }
+                    };
 
-                } else {
-                    $message = 'Không tìm thấy bảng lương tháng ' . $thang . ' năm ' . $nam . ' (cùng nguồn kinh phí) để so sánh.';
+                    $ct->luongthaydoi = $ct->luongtn + $ct->truylinh;
+
+                    //nếu ttl > 0 =>add
+                    if ($ct->luongthaydoi != 0) {
+                        $model_thaydoi->add($ct);
+                    }
                 }
+
+                //Cán bộ nghỉ việc
+                $canbo_nghiviec = $model_bl_trc->wherenotin('macanbo', $a_cb);
+                if ($canbo_nghiviec != null) {
+                    $a_cv = dmchucvucq::all('tenvt', 'macvcq', 'tencv')->keyBy('macvcq')->toArray();
+                    foreach ($canbo_nghiviec as $cbnghiviec) {
+                        $cbnghiviec->tencv = isset($a_cv[$cbnghiviec->macvcq]) ? $a_cv[$cbnghiviec->macvcq]['tencv'] : '';
+                        $cbnghiviec->luongthaydoi = 0 - $cbnghiviec->luongtn;
+                        $cbnghiviec->ghichu = ' Cán bộ đã nghỉ việc';
+                        $model_thaydoi->add($cbnghiviec);
+                    }
+                }
+            } else {
+                $message = 'Không tìm thấy bảng lương tháng ' . $thang . ' năm ' . $nam . ' (cùng nguồn kinh phí) để so sánh.';
             }
+
+
+            //Cán bộ nghỉ việc
+            //     if($m_bl_trc != null){
+            //     $canbo_nghiviec=$model_bl_trc->wherenotin('macanbo',$a_cb);
+            //     if($canbo_nghiviec != null){
+            //         $a_cv = dmchucvucq::all('tenvt', 'macvcq', 'tencv')->keyBy('macvcq')->toArray();
+            //         foreach($canbo_nghiviec as $cbnghiviec){
+            //             $cbnghiviec->tencv = isset($a_cv[$cbnghiviec->macvcq]) ? $a_cv[$cbnghiviec->macvcq]['tencv'] : '';
+            //             $cbnghiviec->luongthaydoi=0 - $cbnghiviec->luongtn;
+            //             $cbnghiviec->ghichu = 'Nghỉ việc';
+            //             $model_thaydoi->add($cbnghiviec);
+            //         }
+            //     }
+            // }
             // dd($model_thaydoi);
             // dd($model);
             $a_pb = getPhongBan();
