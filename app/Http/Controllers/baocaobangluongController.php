@@ -2972,9 +2972,9 @@ class baocaobangluongController extends Controller
                     $ct->tencongtac = isset($model_ct[$ct->mact]) ? $model_ct[$ct->mact] : '';
                 }
                 $m = $model_slth->where('mact', $ct->mact)->first();
-                $ct->soluonggiao = $modelctbc->where('mact', $ct->mact)->sum('soluongduocgiao');
+                $ct->soluonggiao = $modelctbc->where('mact', $ct->mact)->where('madv',$ct->madv)->sum('soluongduocgiao');
                 if (isset($m)) {
-                    $ct->soluongcomat = $model_slth->where('mact', $ct->mact)->first()->canbo_congtac;
+                    $ct->soluongcomat = $model_slth->where('mact', $ct->mact)->where('madv',$ct->madv)->first()->canbo_congtac;
                 } else {
                     $ct->soluongcomat = 0;
                 }
