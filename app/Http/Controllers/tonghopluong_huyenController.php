@@ -183,6 +183,7 @@ class tonghopluong_huyenController extends Controller
             $input = $requests->all();
             $mathh = $input['mathdvbc'];
             $madv = $input['madv'];
+            // dd($input);
             //$model = tonghopluong_donvi_chitiet::where('mathdv', $mathdv)->get();
             //$a_bangluong = tonghopluong_donvi_bangluong::where('mathdv', $mathdv)->get()->toarray();
 

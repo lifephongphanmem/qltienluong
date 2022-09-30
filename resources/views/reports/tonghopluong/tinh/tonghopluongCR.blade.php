@@ -110,7 +110,7 @@
 
                 <td>{{dinhdangso($m_tonghop->sum('stbhxh_dv')+$m_tonghop->sum('stbhyt_dv')+$m_tonghop->sum('stkpcd_dv'))}}</td>
                 <td>{{dinhdangso($m_tonghop->sum('stbhtn_dv'))}}</td>
-                <td>{{dinhdangso($m_tonghop->sum('tongtienluong'))}}</td>
+                <td>{{dinhdangso($m_tonghop->sum('ttl') + $m_tonghop->sum('ttbh_dv'))}}</td>
             </tr>
         @endforeach
 

@@ -132,7 +132,7 @@
 
                 <td>{{dinhdangso($model_gdT[$key]->sum('stbhxh_dv')+$model_gdT[$key]->sum('stbhyt_dv')+$model_gdT[$key]->sum('stkpcd_dv'))}}</td>
                 <td>{{dinhdangso($model_gdT[$key]->sum('stbhtn_dv'))}}</td>
-                <td>{{dinhdangso($model_gdT[$key]->sum('tongtienluong'))}}</td>
+                <td>{{dinhdangso($model_gdT[$key]->sum('ttl') + $model_gdT[$key]->sum('ttbh_dv'))}}</td>
             </tr>
         @endforeach
         <?php
@@ -161,7 +161,7 @@
                 @endforeach
                 <td style="text-align: right">{{dinhdangso($model_gdpl->sum('stbhxh_dv')+$model_gdpl->sum('stbhyt_dv')+$model_gdpl->sum('stkpcd_dv'))}}</td>
                 <td style="text-align: right">{{dinhdangso($model_gdpl->sum('stbhtn_dv'))}}</td>
-                <td style="text-align: right">{{dinhdangso($model_gdpl->sum('tongtienluong'))}}</td>
+                <td style="text-align: right">{{dinhdangso($model_gdpl->sum('ttl') + $model_gdpl->sum('ttbh_dv'))}}</td>
             </tr>
             @foreach($a_plcongtac as $key=>$val)
                 <tr class="money">
@@ -179,7 +179,7 @@
 
                     <td>{{dinhdangso($model_gdplCT[$key]->sum('stbhxh_dv')+$model_gdplCT[$key]->sum('stbhyt_dv')+$model_gdplCT[$key]->sum('stkpcd_dv'))}}</td>
                     <td>{{dinhdangso($model_gdplCT[$key]->sum('stbhtn_dv'))}}</td>
-                    <td>{{dinhdangso($model_gdplCT[$key]->sum('tongtienluong'))}}</td>
+                    <td>{{dinhdangso($model_gdplCT[$key]->sum('ttl') + $model_gdplCT[$key]->sum('ttbh_dv'))}}</td>
                 </tr>
 
             @endforeach
@@ -211,7 +211,7 @@
 
                         <td>{{dinhdangso($model_gddv[$keydv]->sum('stbhxh_dv')+$model_gddv[$keydv]->sum('stbhyt_dv')+$model_gddv[$keydv]->sum('stkpcd_dv'))}}</td>
                         <td>{{dinhdangso($model_gddv[$keydv]->sum('stbhtn_dv'))}}</td>
-                        <td>{{dinhdangso($model_gddv[$keydv]->sum('tongtienluong'))}}</td>
+                        <td>{{dinhdangso($model_gddv[$keydv]->sum('ttl') + $model_gddv[$keydv]->sum('ttbh_dv'))}}</td>
                     </tr>
                         @foreach($a_plctdv as $key=>$val)
                             <tr class="money">
@@ -229,7 +229,7 @@
 
                                 <td>{{dinhdangso($model_gddvCT[$key]->sum('stbhxh_dv')+$model_gddvCT[$key]->sum('stbhyt_dv')+$model_gddvCT[$key]->sum('stkpcd_dv'))}}</td>
                                 <td>{{dinhdangso($model_gddvCT[$key]->sum('stbhtn_dv'))}}</td>
-                                <td>{{dinhdangso($model_gddvCT[$key]->sum('tongtienluong'))}}</td>
+                                <td>{{dinhdangso($model_gddvCT[$key]->sum('ttl') + $model_gddvCT[$key]->sum('ttbh_dv'))}}</td>
                             </tr>
                         @endforeach
                 @endforeach
@@ -285,7 +285,7 @@
 
                 <td>{{dinhdangso($model_hcsnT[$key]->sum('stbhxh_dv')+$model_hcsnT[$key]->sum('stbhyt_dv')+$model_hcsnT[$key]->sum('stkpcd_dv'))}}</td>
                 <td>{{dinhdangso($model_hcsnT[$key]->sum('stbhtn_dv'))}}</td>
-                <td>{{dinhdangso($model_hcsnT[$key]->sum('tongtienluong'))}}</td>
+                <td>{{dinhdangso($model_hcsnT[$key]->sum('ttl') + $model_hcsnT[$key]->sum('ttbh_dv'))}}</td>
             </tr>
         @endforeach
         <?php
@@ -326,7 +326,7 @@
                 @endforeach
                 <td style="text-align: right">{{dinhdangso($model_hcsnpl->sum('stbhxh_dv')+$model_hcsnpl->sum('stbhyt_dv')+$model_hcsnpl->sum('stkpcd_dv'))}}</td>
                 <td style="text-align: right">{{dinhdangso($model_hcsnpl->sum('stbhtn_dv'))}}</td>
-                <td style="text-align: right">{{dinhdangso($model_hcsnpl->sum('tongtienluong'))}}</td>
+                <td style="text-align: right">{{dinhdangso($model_hcsnpl->sum('ttl') + $model_hcsnpl->sum('ttbh_dv'))}}</td>
             </tr>
             @foreach($a_plcongtac as $key=>$val)
                 <tr class="money">
@@ -344,7 +344,7 @@
 
                     <td>{{dinhdangso($model_hcsnplCT[$key]->sum('stbhxh_dv')+$model_hcsnplCT[$key]->sum('stbhyt_dv')+$model_hcsnplCT[$key]->sum('stkpcd_dv'))}}</td>
                     <td>{{dinhdangso($model_hcsnplCT[$key]->sum('stbhtn_dv'))}}</td>
-                    <td>{{dinhdangso($model_hcsnplCT[$key]->sum('tongtienluong'))}}</td>
+                    <td>{{dinhdangso($model_hcsnplCT[$key]->sum('ttl') + $model_hcsnplCT[$key]->sum('ttbh_dv'))}}</td>
                 </tr>
 
             @endforeach
@@ -376,7 +376,7 @@
 
                     <td>{{dinhdangso($model_hcsndv[$keydv]->sum('stbhxh_dv')+$model_hcsndv[$keydv]->sum('stbhyt_dv'))}}</td>
                     <td>{{dinhdangso($model_hcsndv[$keydv]->sum('stbhtn_dv'))}}</td>
-                    <td>{{dinhdangso($model_hcsndv[$keydv]->sum('tongtienluong'))}}</td>
+                    <td>{{dinhdangso($model_hcsndv[$keydv]->sum('ttl') + $model_hcsndv[$keydv]->sum('ttbh_dv'))}}</td>
                 </tr>
                 @foreach($a_plcongtac as $key=>$val)
                     <tr class="money">
@@ -394,7 +394,7 @@
 
                         <td>{{dinhdangso($model_hcsndvCT[$key]->sum('stbhxh_dv')+$model_hcsndvCT[$key]->sum('stbhyt_dv')+$model_hcsndvCT[$key]->sum('stkpcd_dv'))}}</td>
                         <td>{{dinhdangso($model_hcsndvCT[$key]->sum('stbhtn_dv'))}}</td>
-                        <td>{{dinhdangso($model_hcsndvCT[$key]->sum('tongtienluong'))}}</td>
+                        <td>{{dinhdangso($model_hcsndvCT[$key]->sum('ttl') + $model_hcsndvCT[$key]->sum('ttbh_dv'))}}</td>
                     </tr>
                 @endforeach
             @endforeach
@@ -419,7 +419,7 @@
             @endforeach
             <td style="text-align: right">{{dinhdangso($model_hcsn->sum('stbhxh_dv')+$model_hcsn->sum('stbhyt_dv')+$model_hcsn->sum('stkpcd_dv'))}}</td>
             <td style="text-align: right">{{dinhdangso($model_hcsn->sum('stbhtn_dv'))}}</td>
-            <td style="text-align: right">{{dinhdangso($model_hcsn->sum('tongtienluong'))}}</td>
+            <td style="text-align: right">{{dinhdangso($model_hcsn->sum('ttl') + $model_hcsn->sum('ttbh_dv'))}}</td>
         </tr>
         @foreach($a_plcongtac as $key=>$val)
             <tr class="money">
@@ -437,7 +437,7 @@
 
                 <td>{{dinhdangso($model_hcsnT[$key]->sum('stbhxh_dv')+$model_hcsnT[$key]->sum('stbhyt_dv')+$model_hcsnT[$key]->sum('stkpcd_dv'))}}</td>
                 <td>{{dinhdangso($model_hcsnT[$key]->sum('stbhtn_dv'))}}</td>
-                <td>{{dinhdangso($model_hcsnT[$key]->sum('tongtienluong'))}}</td>
+                <td>{{dinhdangso($model_hcsnT[$key]->sum('ttl') + $model_hcsnT[$key]->sum('ttbh_dv'))}}</td>
             </tr>
         @endforeach
         <?php
@@ -468,7 +468,7 @@
                 @endforeach
                 <td style="text-align: right">{{dinhdangso($model_hcsnpl->sum('stbhxh_dv')+$model_hcsnpl->sum('stbhyt_dv')+$model_hcsnpl->sum('stkpcd_dv'))}}</td>
                 <td style="text-align: right">{{dinhdangso($model_hcsnpl->sum('stbhtn_dv'))}}</td>
-                <td style="text-align: right">{{dinhdangso($model_hcsnpl->sum('tongtienluong'))}}</td>
+                <td style="text-align: right">{{dinhdangso($model_hcsnpl->sum('ttl') + $model_hcsnpl->sum('ttbh_dv'))}}</td>
             </tr>
             @foreach($a_plcongtac as $key=>$val)
                 <tr class="money">
@@ -486,7 +486,7 @@
 
                     <td>{{dinhdangso($model_hcsnplCT[$key]->sum('stbhxh_dv')+$model_hcsnplCT[$key]->sum('stbhyt_dv')+$model_hcsnplCT[$key]->sum('stkpcd_dv'))}}</td>
                     <td>{{dinhdangso($model_hcsnplCT[$key]->sum('stbhtn_dv'))}}</td>
-                    <td>{{dinhdangso($model_hcsnplCT[$key]->sum('tongtienluong'))}}</td>
+                    <td>{{dinhdangso($model_hcsnplCT[$key]->sum('ttl') + $model_hcsnplCT[$key]->sum('ttbh_dv'))}}</td>
                 </tr>
 
             @endforeach
@@ -517,7 +517,7 @@
 
                     <td>{{dinhdangso($model_hcsndv[$keydv]->sum('stbhxh_dv')+$model_hcsndv[$keydv]->sum('stbhyt_dv')+$model_hcsndv[$keydv]->sum('stkpcd_dv'))}}</td>
                     <td>{{dinhdangso($model_hcsndv[$keydv]->sum('stbhtn_dv'))}}</td>
-                    <td>{{dinhdangso($model_hcsndv[$keydv]->sum('tongtienluong'))}}</td>
+                    <td>{{dinhdangso($model_hcsndv[$keydv]->sum('ttl') + $model_hcsndv[$keydv]->sum('ttbh_dv'))}}</td>
                 </tr>
                 @foreach($a_plcongtac as $key=>$val)
                     <tr class="money">
@@ -535,7 +535,7 @@
 
                         <td>{{dinhdangso($model_hcsndvCT[$key]->sum('stbhxh_dv')+$model_hcsndvCT[$key]->sum('stbhyt_dv')+$model_hcsndvCT[$key]->sum('stkpcd_dv'))}}</td>
                         <td>{{dinhdangso($model_hcsndvCT[$key]->sum('stbhtn_dv'))}}</td>
-                        <td>{{dinhdangso($model_hcsndvCT[$key]->sum('tongtienluong'))}}</td>
+                        <td>{{dinhdangso($model_hcsndvCT[$key]->sum('ttl') + $model_hcsndvCT[$key]->sum('ttbh_dv'))}}</td>
                     </tr>
                 @endforeach
             @endforeach
@@ -553,7 +553,7 @@
             @endforeach
             <td style="text-align: right">{{dinhdangso($model_hdnd->sum('stbhxh_dv')+$model_kn->sum('stbhxh_dv'))}}</td>
             <td style="text-align: right">{{dinhdangso($model_hdnd->sum('stbhtn_dv')+$model_kn->sum('stbhtn_dv'))}}</td>
-            <td style="text-align: right">{{dinhdangso($model_hdnd->sum('tongtienluong')+$model_kn->sum('tongtienluong'))}}</td>
+            <td style="text-align: right">{{dinhdangso($model_hdnd->sum('ttl')+$model_kn->sum('ttl') + $model_hdnd->sum('ttbh_dv')+$model_kn->sum('ttbh_dv'))}}</td>
         </tr>
         <tr >
             <td>1</td>
@@ -568,7 +568,7 @@
             @endforeach
             <td style="text-align: right">{{dinhdangso($model_hdnd->sum('stbhxh_dv')+$model_hdnd->sum('stbhyt_dv')+$model_hdnd->sum('stkpcd_dv'))}}</td>
             <td style="text-align: right">{{dinhdangso($model_hdnd->sum('stbhtn_dv'))}}</td>
-            <td style="text-align: right">{{dinhdangso($model_hdnd->sum('tongtienluong'))}}</td>
+            <td style="text-align: right">{{dinhdangso($model_hdnd->sum('ttl') + $model_hdnd->sum('ttbh_dv'))}}</td>
         </tr>
         <tr >
             <td>2</td>
@@ -583,7 +583,7 @@
             @endforeach
             <td style="text-align: right">{{dinhdangso($model_kn->sum('stbhxh_dv')+$model_kn->sum('stbhyt_dv')+$model_kn->sum('stkpcd_dv'))}}</td>
             <td style="text-align: right">{{dinhdangso($model_kn->sum('stbhtn_dv'))}}</td>
-            <td style="text-align: right">{{dinhdangso($model_kn->sum('tongtienluong'))}}</td>
+            <td style="text-align: right">{{dinhdangso($model_kn->sum('ttl') + $model_kn->sum('ttbh_dv'))}}</td>
         </tr>
         <tr >
             <td>3</td>
@@ -613,7 +613,7 @@
             @endforeach
             <td style="text-align: right">{{dinhdangso($model_uv->sum('stbhxh_dv')+$model_uv->sum('stbhyt_dv')+$model_uv->sum('stkpcd_dv'))}}</td>
             <td style="text-align: right">{{dinhdangso($model_uv->sum('stbhtn_dv'))}}</td>
-            <td style="text-align: right">{{dinhdangso($model_uv->sum('tongtienluong'))}}</td>
+            <td style="text-align: right">{{dinhdangso($model_uv->sum('ttl') + $model_uv->sum('ttbh_dv'))}}</td>
         </tr>
 
 
