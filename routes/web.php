@@ -1075,6 +1075,10 @@ Route::group(['prefix'=>'bao_cao'],function(){
 
         });
 
+        Route::group(['prefix'=> 'tinh'],function(){
+            Route::post('dutoanluongCR','baocaobangluongController@dutoanluong_tinh_CR');
+        });
+
         Route::get('dutoanluong_th','baocaobangluongController@dutoanluong_th');
         Route::post('chitraluong_th','baocaobangluongController@chitraluong_th');
         Route::post('mauc02ahd_th','baocaobangluongController@mauc02ahd_th');
