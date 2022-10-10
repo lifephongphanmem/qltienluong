@@ -1564,7 +1564,7 @@ class tonghopluong_huyenController extends Controller
             }
             $madvbc = session('admin')->madvbc;
             $inputs['madv'] = session('admin')->madv;
-            $inputs['mathdv'] = getdate()[0];;
+            $inputs['mathdv'] = getdate()[0];
             $inputs['trangthai'] = 'DAGUI';
             $inputs['phanloai'] = 'TONGHOP';
             $inputs['noidung'] = 'Đơn vị ' . getTenDV(session('admin')->madv) . ' tổng hợp dữ liệu trên địa bàn ' . getTenDB($madvbc) . ' thời điểm ' . $inputs['thang'] . '/' . $inputs['nam'];
@@ -1579,7 +1579,8 @@ class tonghopluong_huyenController extends Controller
 
             tonghopluong_donvi::where('nam', $nam)->where('thang', $thang)->where('madvbc', $madvbc)
                 ->update(['matht' => $inputs['mathdv']]);
-
+            tonghopluong_huyen::where('nam', $nam)->where('thang',$thang)->where('madvbc',$madvbc)
+                ->update(['trangthai'=>'DAGUI']);
             tonghopluong_donvi_chitiet::wherein('mathdv', function ($query) use ($nam, $thang, $madvbc) {
                 $query->select('mathdv')->from('tonghopluong_donvi')->where('nam', $nam)->where('thang', $thang)->where('madvbc', $madvbc)->distinct();
             })->update(['matht' => $inputs['mathdv']]);

@@ -171,7 +171,7 @@ class tonghopluong_tinhController extends Controller
             // $model_tonghop = tonghop_tinh::where('madvbc', $madvbc)->get();
             // //Danh sách các đơn vị đã gửi dữ liệu
             // $model_dulieu = tonghopluong_tinh::where('madvbc', $madvbc)->get();
-            $model = dmdonvibaocao::where('baocao', '1')->orderby('sapxep')->get();
+            $model = dmdonvibaocao::where('level', 'H')->orderby('sapxep')->get();
             foreach ($model as $val) {
                 //Lấy danh sách các dữ liệu đã tổng hợp theo huyện
                 $model_tonghop = tonghop_tinh::where('madvbc', $val->madvbc)->where('thang',$inputs['thang'])->where('nam',$inputs['nam'])->first();
