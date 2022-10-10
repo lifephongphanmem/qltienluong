@@ -88,7 +88,7 @@
                                             <td>{{ $value->tendv }}</td>
                                             <td>{{ $value->tenphanloai }}</td>
                                             <td>
-                                                @if (isset($model_th))
+                                                @if (count($model_th) > 0)
                                                     @if ($value->mathdv != null)
                                                         <a href="#" data-target="#thkhoi-modal" data-toggle="modal"
                                                             onclick="baocao('{{ '/chuc_nang/tong_hop_luong/huyen/printf_data_huyen' }}','{{ $value['thang'] }}','{{ $nam }}','{{ $value['tendv'] }}','{{ $value['madv'] }}','{{ $value['mathdv'] }}') "
