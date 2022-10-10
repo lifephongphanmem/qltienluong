@@ -72,7 +72,8 @@
         @endforeach
         <td style="text-align: right">{{dinhdangsothapphan($model_th->sum('stbhxh_dv')+$model_th->sum('stbhyt_dv')+$model_th->sum('stkpcd_dv'),5)}}</td>
         <td style="text-align: right">{{dinhdangsothapphan($model_th->sum('stbhtn_dv'),5)}}</td>
-        <td style="text-align: right">{{dinhdangso($model_th->sum('ttl') + $model_th->sum('ttbh_dv'))}}</td>
+        {{-- <td style="text-align: right">{{dinhdangso($model_th->sum('ttl') + $model_th->sum('ttbh_dv'))}}</td> --}}
+        <td style="text-align: right">{{dinhdangso($model_th->sum('tongtienluong'))}}</td>
     </tr>
     @foreach($model_donvi as $key=>$donvi)
         <?php
@@ -93,7 +94,8 @@
 
             <td>{{dinhdangsothapphan($m_ct->sum('stbhxh_dv')+$m_ct->sum('stbhyt_dv')+$m_ct->sum('stkpcd_dv'),5)}}</td>
             <td>{{dinhdangsothapphan($m_ct->sum('stbhtn_dv'),5)}}</td>
-            <td>{{dinhdangso($m_ct->sum('ttl') + $m_ct->sum('ttbh_dv'))}}</td>
+            {{-- <td>{{dinhdangso($m_ct->sum('ttl') + $m_ct->sum('ttbh_dv'))}}</td> --}}
+            <td>{{dinhdangso($m_ct->sum('tongtienluong'))}}</td>
         </tr>
     @endforeach
 

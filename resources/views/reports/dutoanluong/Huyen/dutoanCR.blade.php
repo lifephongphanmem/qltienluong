@@ -66,13 +66,14 @@
         <td style="text-align: right">{{dinhdangso($model_th->sum('soluongcomat'))}}</td>
         <td style="text-align: right">{{dinhdangsothapphan($model_th->sum('tongcong'),5)}}</td>
         <td style="text-align: right">{{dinhdangsothapphan($model_th->sum('heso'),5)}}</td>
-        <td style="text-align: right">{{dinhdangsothapphan($model_th->sum('tongpc'),5)}}</td>
+        <td style="text-align: right">{{dinhdangsothapphan($model_th->sum('tonghs') - $model_th->sum('heso'),5)}}</td>
         @foreach($a_phucap as $key=>$val)
             <td>{{dinhdangsothapphan($model_th->sum($key),5)}}</td>
         @endforeach
         <td style="text-align: right">{{dinhdangsothapphan($model_th->sum('stbhxh_dv')+$model_th->sum('stbhyt_dv')+$model_th->sum('stkpcd_dv'),5)}}</td>
         <td style="text-align: right">{{dinhdangsothapphan($model_th->sum('stbhtn_dv'),5)}}</td>
-        <td style="text-align: right">{{dinhdangso($model_th->sum('ttl') + $model_th->sum('ttbh_dv'))}}</td>
+        {{-- <td style="text-align: right">{{dinhdangso($model_th->sum('ttl') + $model_th->sum('ttbh_dv'))}}</td> --}}
+        <td style="text-align: right">{{dinhdangso($model_th->sum('tongtienluong'))}}</td>
     </tr>
     @foreach($a_plct as $act)
         <?php
@@ -99,7 +100,7 @@
                 <tr class="money">
                     <td style="text-align: center"></td>
                     <td style="text-align: left">{{$ct->tencongtac}}</td>
-                    <td style="text-align: right">{{dinhdangso($ct->soluong)}}</td>
+                    <td style="text-align: right">{{dinhdangso($ct->soluonggiao)}}</td>
                     <td style="text-align: right">{{dinhdangso($ct->soluongcomat)}}</td>
                     <td style="text-align: right">{{dinhdangsothapphan($ct->tongcong,5)}}</td>
                     <td style="text-align: right">{{dinhdangsothapphan($ct->heso,5)}}</td>
@@ -137,7 +138,8 @@
         @endforeach
         <td style="text-align: right">{{dinhdangsothapphan($model_gd->sum('stbhxh_dv')+$model_gd->sum('stbhyt_dv')+$model_gd->sum('stkpcd_dv'),5)}}</td>
         <td style="text-align: right">{{dinhdangsothapphan($model_gd->sum('stbhtn_dv'),5)}}</td>
-        <td style="text-align: right">{{dinhdangso($model_gd->sum('ttl') + $model_gd->sum('ttbh_dv'))}}</td>
+        {{-- <td style="text-align: right">{{dinhdangso($model_gd->sum('ttl') + $model_gd->sum('ttbh_dv'))}}</td> --}}
+        <td style="text-align: right">{{dinhdangso($model_gd->sum('tongtienluong'))}}</td>
     </tr>
 
     @foreach($a_plct as $act)
@@ -352,7 +354,8 @@
         @endforeach
         <td style="text-align: right">{{dinhdangsothapphan($model_hcsn->sum('stbhxh_dv')+$model_hcsn->sum('stbhyt_dv')+$model_hcsn->sum('stkpcd_dv'),5)}}</td>
         <td style="text-align: right">{{dinhdangsothapphan($model_hcsn->sum('stbhtn_dv'),5)}}</td>
-        <td style="text-align: right">{{dinhdangso($model_hcsn->sum('ttl') + $model_hcsn->sum('ttbh_dv'))}}</td>
+        {{-- <td style="text-align: right">{{dinhdangso($model_hcsn->sum('ttl') + $model_hcsn->sum('ttbh_dv'))}}</td> --}}
+        <td style="text-align: right">{{dinhdangso($model_hcsn->sum('tongtienluong'))}}</td>
     </tr>
 
     @foreach($a_plct as $act)
