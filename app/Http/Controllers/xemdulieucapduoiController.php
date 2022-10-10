@@ -410,9 +410,6 @@ class xemdulieucapduoiController extends Controller
             $a_phanloai = array('DONVI' => 'Dữ liệu tổng hợp của đơn vị', 'CAPDUOI' => 'Dữ liệu tổng hợp của các đơn vị cấp dưới');
             //$list_donvi= dmdonvi::select('madv', 'tendv')->where('madvbc', $madvbc)->get();
             $model_dvbc = dmdonvibaocao::where('level', 'H')->get();
-
-
-
             $model_dulieu = tonghopluong_huyen::where('thang', $inputs['thang'])
                 ->where('nam', $inputs['nam'])
                 ->where('trangthai', 'DAGUI')
@@ -426,16 +423,21 @@ class xemdulieucapduoiController extends Controller
                 ->get();
             // $model_donvi=nguonkinhphi::where('masot',)
             //dd($model_dulieu);
+            // dd($model_tonghop);
+// dd($model_donvi);
             foreach ($model_donvi as $dv) {
                 $dv->trangthai = 'CHUAGUI';
                 $dulieu = $model_dulieu->where('madv', $dv->madv)
                     ->first();
 
-                $tonghop = $model_tonghop->where('madv', $dv->madv)->first();
+                $tonghop = $model_tonghop->where('madv', $dv->macqcq)->first();
                 $dv->tralai = true;
                 if (isset($tonghop)) {
-                    $model_bangluong_ct = tonghopluong_donvi_chitiet::where('matht', $tonghop->madvth)->first();
+                    $model_bangluong_ct = tonghopluong_donvi_chitiet::where('matht', $tonghop->mathdv)->first();
                     $dv->tralai = isset($model_bangluong_ct->mathh) ? false : true;
+                    $dv->matht=$tonghop->mathdv;
+                }else{
+                    $dv->matht= null;
                 }
 
                 if (isset($dulieu)) {
@@ -468,6 +470,7 @@ class xemdulieucapduoiController extends Controller
 // dd($model_donvi);
             return view('functions.viewdata.index_tinh')
                 ->with('model', $model_donvi)
+                ->with('model_th', $model_tonghop)
                 ->with('thang', $inputs['thang'])
                 ->with('nam', $inputs['nam'])
                 ->with('madvbc', $madvbc)
