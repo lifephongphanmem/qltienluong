@@ -79,7 +79,7 @@
                                     <td>{{$value->tendv}}</td>
                                     <td>{{$value->tendvcq}}</td>
                                     <td>
-                                        @if ($value->masodv != NULL)
+                                        @if ($value->masot != NULL)
                                             {{-- <a href="{{url('/du_toan/nguon_kinh_phi/ma_so='.$value['masodv'].'/in')}}" class="btn btn-default btn-xs" TARGET="_blank">
                                                 <i class="fa fa-print"></i>&nbsp; Số liệu chi tiết</a> --}}
                                                 <button type="button" onclick="innguon('{{$value->namns}}','{{$value->masodv}}')" class="btn btn-default btn-xs mbs" data-target="#indt-modal" data-toggle="modal">

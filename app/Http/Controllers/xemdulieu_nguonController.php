@@ -197,12 +197,14 @@ class xemdulieu_nguonController extends Controller
             $inputs=$request->all();
             $madvbc = $inputs['madiaban'];
             //$madvqlkv = dmdonvibaocao::where('madvbc',$madvbc)->first()->madvcq;
-            $model_dvbc = dmdonvibaocao::where('baocao',1)->get();
+            $model_dvbc = dmdonvibaocao::where('level','H')->get();
             $a_trangthai_dl = array('ALL' => '--Chọn trạng thái dữ liệu--', 'CHOGUI' => 'Chưa gửi dữ liệu', 'DAGUI' => 'Đã gửi dữ liệu');
             $model_nguon = nguonkinhphi::where('sohieu',$inputs['sohieu'])
                 ->where('trangthai','DAGUI')
                 ->where('madvbc', $madvbc)->get();
-
+            $model_tinh= nguonkinhphi_tinh::where('sohieu',$inputs['sohieu'])
+                                            ->where('madvbc',$madvbc)
+                                            ->first();
             $a_trangthai = getStatus();
             $model_donvi = dmdonvi::select('madv', 'tendv')->where('madvbc', $madvbc)->where('phanloaitaikhoan','SD')->get();
             foreach($model_donvi as $dv){
@@ -213,6 +215,11 @@ class xemdulieu_nguonController extends Controller
                 }else{
                     $dv->trangthai = 'CHOGUI';
                     $dv->masodv = NULL;
+                }
+                if(isset($model_tinh)){
+                    $dv->masot = $model_tinh->masodv;
+                }else{
+                    $dv->masot= null;
                 }
             }
             // dd($inputs);
