@@ -22,6 +22,7 @@ use App\tonghopluong_donvi;
 use App\tonghopluong_donvi_bangluong;
 use App\tonghopluong_donvi_chitiet;
 use App\tonghopluong_huyen;
+use App\dmphanloaidonvi;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\Http\Controllers\dataController as data;
@@ -51,24 +52,24 @@ class baocaott67huyenController extends Controller
                 $chekdv = dmdonvi::where('madv', $inputs['madv'])->where('phanloaitaikhoan', 'TH')->get();
                 if (count($chekdv) > 0) {
 
-                    $model_tonghop = nguonkinhphi::where('sohieu',$inputs['sohieu'])
-                        ->where('trangthai','DAGUI')
+                    $model_tonghop = nguonkinhphi::where('sohieu', $inputs['sohieu'])
+                        ->where('trangthai', 'DAGUI')
                         ->where('macqcq', $inputs['madv'])->get();
-                    $model_donvi = dmdonvi::wherein('madv', array_column($model_tonghop->toarray(),'madv'))->get();
-                    $model_bienche = chitieubienche::where('nam', $nam)->wherein('madv', array_column($model_tonghop->toarray(),'madv'))->get();
+                    $model_donvi = dmdonvi::wherein('madv', array_column($model_tonghop->toarray(), 'madv'))->get();
+                    $model_bienche = chitieubienche::where('nam', $nam)->wherein('madv', array_column($model_tonghop->toarray(), 'madv'))->get();
                 } else {
                     $model_donvi = dmdonvi::where('madv', $madv)->get();
                     $model_bienche = chitieubienche::where('nam', $nam)->where('madv', $madv)->get();
-                    $model_tonghop = nguonkinhphi::where('sohieu',$inputs['sohieu'])
-                        ->where('trangthai','DAGUI')
+                    $model_tonghop = nguonkinhphi::where('sohieu', $inputs['sohieu'])
+                        ->where('trangthai', 'DAGUI')
                         ->where('madv', $inputs['madv'])->get();
                 }
             } else {
-                $model_tonghop = nguonkinhphi::where('sohieu',$inputs['sohieu'])
-                    ->where('trangthai','DAGUI')
+                $model_tonghop = nguonkinhphi::where('sohieu', $inputs['sohieu'])
+                    ->where('trangthai', 'DAGUI')
                     ->where('macqcq', session('admin')->madv)->get();
-                $model_donvi = dmdonvi::wherein('madv', array_column($model_tonghop->toarray(),'madv'))->get();
-                $model_bienche = chitieubienche::where('nam', $nam)->wherein('madv', array_column($model_tonghop->toarray(),'madv'))->get();
+                $model_donvi = dmdonvi::wherein('madv', array_column($model_tonghop->toarray(), 'madv'))->get();
+                $model_bienche = chitieubienche::where('nam', $nam)->wherein('madv', array_column($model_tonghop->toarray(), 'madv'))->get();
             }
             foreach ($model_bienche as $bienche) {
                 $bienche->maphanloai = $model_donvi->where('madv', $bienche->madv)->first()->maphanloai;
@@ -79,7 +80,7 @@ class baocaott67huyenController extends Controller
                     ->where('trangthai', 'DAGUI')
                     ->where('macqcq', session('admin')->madv)->get();
             }
-            $model_tonghop_ct = nguonkinhphi_bangluong::wherein('masodv', array_column($model_tonghop->toarray(),'masodv'))
+            $model_tonghop_ct = nguonkinhphi_bangluong::wherein('masodv', array_column($model_tonghop->toarray(), 'masodv'))
                 ->where('nam', $nam)->where('thang', $thang)->get();
             if (session('admin')->username == 'khthso') {
                 $model_bienche = chitieubienche::join('dmdonvi', 'dmdonvi.madv', '=', 'chitieubienche.madv')
@@ -98,10 +99,10 @@ class baocaott67huyenController extends Controller
                             ->distinct()->get();
                     })->get();
             }
-            $a_linhvuc = array_column($model_tonghop->toarray(),'linhvuchoatdong','masodv');
+            $a_linhvuc = array_column($model_tonghop->toarray(), 'linhvuchoatdong', 'masodv');
             $a_phucap = getColTongHop();
-            $a_pchien = array('heso','vuotkhung','pckv','pccv','pcudn','pcth','pctnn','pccovu','pcdang','pcthni','pcdbqh','pck');
-            $a_pc = array_diff($a_phucap,$a_pchien);
+            $a_pchien = array('heso', 'vuotkhung', 'pckv', 'pccv', 'pcudn', 'pcth', 'pctnn', 'pccovu', 'pcdang', 'pcthni', 'pcdbqh', 'pck');
+            $a_pc = array_diff($a_phucap, $a_pchien);
             foreach ($model_tonghop_ct as $ct) {
                 if ($inputs['madv'] != "" && count($chekdv) > 0) {
                     $tonghop = $model_tonghop->where('masodv', $ct->masodv)->first();
@@ -113,27 +114,27 @@ class baocaott67huyenController extends Controller
                 $ct->madv = $model_tonghop->where('masodv', $ct->masodv)->first()->madv;
                 $ct->tendv = $model_donvi->where('madv', $ct->madv)->first()->tendv;
                 $ct->linhvuchoatdong = $a_linhvuc[$ct->masodv];
-                    foreach ($a_pc as $pc) {
-                        $pc_st = 'st_' . $pc;
-                        if ($ct->$pc < $ct->$pc_st) { //hệ số < số tiền => theo dõi khác số tiền
-                            $ct->pck += $ct->$pc;
-                            $ct->st_pck += round($ct->$pc * $model_thongtu->muccu);
-                        }else{
-                            $ct->st_pck += $ct->$pc_st;
-                        }
+                foreach ($a_pc as $pc) {
+                    $pc_st = 'st_' . $pc;
+                    if ($ct->$pc < $ct->$pc_st) { //hệ số < số tiền => theo dõi khác số tiền
+                        $ct->pck += $ct->$pc;
+                        $ct->st_pck += round($ct->$pc * $model_thongtu->muccu);
+                    } else {
+                        $ct->st_pck += $ct->$pc_st;
                     }
-                    foreach ($a_pchien as $pc) {
-                        $pc_st = 'st_' . $pc;
-                        if ($ct->$pc < $ct->$pc_st) { //hệ số < số tiền => theo dõi khác số tiền
-                            $ct->$pc_st = round($ct->$pc * $model_thongtu->muccu);
-                        }else{
-                            //gán hệ số phụ cấp theo dõi theo số tiên = 0 để sau tính tổng hệ số phụ cấp theo hàm sum()
-                            $ct->$pc = 0;
-                        }
+                }
+                foreach ($a_pchien as $pc) {
+                    $pc_st = 'st_' . $pc;
+                    if ($ct->$pc < $ct->$pc_st) { //hệ số < số tiền => theo dõi khác số tiền
+                        $ct->$pc_st = round($ct->$pc * $model_thongtu->muccu);
+                    } else {
+                        //gán hệ số phụ cấp theo dõi theo số tiên = 0 để sau tính tổng hệ số phụ cấp theo hàm sum()
+                        $ct->$pc = 0;
                     }
-                    $ct->ttbh_dv = round(($ct->st_heso + $ct->st_vuotkhung + $ct->st_pccv + $ct->st_pctnn + $ct->st_hesopc)* 23.5 / 100);
+                }
+                $ct->ttbh_dv = round(($ct->st_heso + $ct->st_vuotkhung + $ct->st_pccv + $ct->st_pctnn + $ct->st_hesopc) * 23.5 / 100);
             }
-            $model_tonghop_ct = $model_tonghop_ct->wherein('mact',getMaCongTacNhuCau());
+            $model_tonghop_ct = $model_tonghop_ct->wherein('mact', getMaCongTacNhuCau());
             $model_bangluong_ct = $model_tonghop_ct->where('macongtac', 'BIENCHE')->where('maphanloai', '<>', 'KVXP');
             $ar_I = array();
             $ar_Igr = array();
@@ -169,10 +170,10 @@ class baocaott67huyenController extends Controller
                 $ar_I[13] = array('val' => 'DDT', 'tt' => '-', 'noidung' => 'Đảng, đoàn thể');
             }
             $a_It = array(
-                'heso' => 0,'pckv' => 0,'pccv' => 0,'vuotkhung' => 0,
-                'pcudn' => 0,'pcth' => 0,'pctnn' => 0,'pccovu' => 0,
-                'pcdang' => 0,'pcthni' => 0,'pck' => 0,'pcdbqh' => 0,'tongpc' => 0,
-                'ttbh_dv' => 0,'soluongduocgiao' => 0,'soluongbienche'=> 0,
+                'heso' => 0, 'pckv' => 0, 'pccv' => 0, 'vuotkhung' => 0,
+                'pcudn' => 0, 'pcth' => 0, 'pctnn' => 0, 'pccovu' => 0,
+                'pcdang' => 0, 'pcthni' => 0, 'pck' => 0, 'pcdbqh' => 0, 'tongpc' => 0,
+                'ttbh_dv' => 0, 'soluongduocgiao' => 0, 'soluongbienche' => 0,
             );
             //thiếu chỉ tiêu biên chế
             if (isset($inputs['inchitiet'])) {
@@ -208,41 +209,41 @@ class baocaott67huyenController extends Controller
                     $ar_I[$i]['soluongbienche'] = 0;
                     if (isset($model_bangluong_ct)) {
                         $chitiet = $model_bangluong_ct->where('linhvuchoatdong', $ar_Igr[$j]['val']);
-                        $m_dvct = $model_donvi->wherein('madv', a_unique(array_column($chitiet->toarray(),'madv')));
+                        $m_dvct = $model_donvi->wherein('madv', a_unique(array_column($chitiet->toarray(), 'madv')));
                     }
                     $d = 1;
                     $luugr = $i;
                     if (isset($chitiet) && count($chitiet) > 0) {
                         //$thongtin = $chitiet->toArray();
-                        $m_dvct =a_unique(array_column($m_dvct->toarray(),'madv'));
+                        $m_dvct = a_unique(array_column($m_dvct->toarray(), 'madv'));
                         foreach ($m_dvct as $dv) {
-                            $thongtin = $chitiet->where('madv',$dv);
+                            $thongtin = $chitiet->where('madv', $dv);
                             //foreach ($thongtin as $ttchitiet) {
-                                $d++;
-                                $i += $d;
-                                $ar_I[$i]['tt'] = '+';
-                                $ar_I[$i]['noidung'] = $model_donvi->where('madv',$dv)->first()->tendv;
-                                $ar_I[$i]['soluongduocgiao'] = $model_bienche->where('linhvuchoatdong', $ar_Igr[$j]['val'])->where('madv',$dv)->sum('soluongduocgiao');
-                                $ar_I[$i]['soluongbienche'] =count($thongtin);
-                                $a_It['soluongduocgiao'] += $ar_I[$i]['soluongduocgiao'];
-                                $a_It['soluongbienche'] += $ar_I[$i]['soluongbienche'];
-                                $tongpc = 0;
-                                foreach ($a_pchien as $pc) {
-                                    $pc_st = 'st_' . $pc;
-                                    $ar_I[$i][$pc] = $thongtin->sum($pc_st);
-                                    $a_It[$pc] += $ar_I[$i][$pc];
-                                    $tongpc += $thongtin->sum($pc_st);
-                                }
+                            $d++;
+                            $i += $d;
+                            $ar_I[$i]['tt'] = '+';
+                            $ar_I[$i]['noidung'] = $model_donvi->where('madv', $dv)->first()->tendv;
+                            $ar_I[$i]['soluongduocgiao'] = $model_bienche->where('linhvuchoatdong', $ar_Igr[$j]['val'])->where('madv', $dv)->sum('soluongduocgiao');
+                            $ar_I[$i]['soluongbienche'] = count($thongtin);
+                            $a_It['soluongduocgiao'] += $ar_I[$i]['soluongduocgiao'];
+                            $a_It['soluongbienche'] += $ar_I[$i]['soluongbienche'];
+                            $tongpc = 0;
+                            foreach ($a_pchien as $pc) {
+                                $pc_st = 'st_' . $pc;
+                                $ar_I[$i][$pc] = $thongtin->sum($pc_st);
+                                $a_It[$pc] += $ar_I[$i][$pc];
+                                $tongpc += $thongtin->sum($pc_st);
+                            }
 
-                                $ar_I[$i]['tongpc'] = $tongpc - $ar_I[$i]['heso'];
-                                $a_It['tongpc'] += $ar_I[$i]['tongpc'];
-                                $ar_I[$i]['ttbh_dv'] = $thongtin->sum('ttbh_dv');
-                                $a_It['ttbh_dv'] += $ar_I[$i]['ttbh_dv'];
+                            $ar_I[$i]['tongpc'] = $tongpc - $ar_I[$i]['heso'];
+                            $a_It['tongpc'] += $ar_I[$i]['tongpc'];
+                            $ar_I[$i]['ttbh_dv'] = $thongtin->sum('ttbh_dv');
+                            $a_It['ttbh_dv'] += $ar_I[$i]['ttbh_dv'];
 
-                                foreach ($a_pchien as $pc) {
-                                    $ar_I[$luugr][$pc] += $ar_I[$i][$pc];
-                                }
-                                /*
+                            foreach ($a_pchien as $pc) {
+                                $ar_I[$luugr][$pc] += $ar_I[$i][$pc];
+                            }
+                            /*
                                 $ar_I[$luugr]['heso'] += $ar_I[$i]['heso'];
                                 $ar_I[$luugr]['pckv'] += $ar_I[$i]['pckv'];
                                 $ar_I[$luugr]['pccv'] += $ar_I[$i]['pccv'];
@@ -255,10 +256,10 @@ class baocaott67huyenController extends Controller
                                 $ar_I[$luugr]['pcthni'] += $ar_I[$i]['pcthni'];
                                 $ar_I[$luugr]['pck'] += $ar_I[$i]['pck'];
                                 */
-                                $ar_I[$luugr]['soluongduocgiao'] += $ar_I[$i]['soluongduocgiao'];
-                                $ar_I[$luugr]['soluongbienche'] += $ar_I[$i]['soluongbienche'];
-                                $ar_I[$luugr]['tongpc'] += $ar_I[$i]['tongpc'];
-                                $ar_I[$luugr]['ttbh_dv'] += $ar_I[$i]['ttbh_dv'];
+                            $ar_I[$luugr]['soluongduocgiao'] += $ar_I[$i]['soluongduocgiao'];
+                            $ar_I[$luugr]['soluongbienche'] += $ar_I[$i]['soluongbienche'];
+                            $ar_I[$luugr]['tongpc'] += $ar_I[$i]['tongpc'];
+                            $ar_I[$luugr]['ttbh_dv'] += $ar_I[$i]['ttbh_dv'];
                             //}
                         }
                     } else {
@@ -285,7 +286,6 @@ class baocaott67huyenController extends Controller
                 $ar_I[$qlnnddt]['soluongbienche'] = $ar_I[$qlnn]['soluongbienche'] + $ar_I[$ddt]['soluongbienche'];
                 $ar_I[$qlnnddt]['tongpc'] = $ar_I[$qlnn]['tongpc'] + $ar_I[$ddt]['tongpc'];
                 $ar_I[$qlnnddt]['ttbh_dv'] = $ar_I[$qlnn]['ttbh_dv'] + $ar_I[$ddt]['ttbh_dv'];
-
             } else {
                 for ($i = 0; $i < count($ar_I); $i++) {
                     if (isset($model_bangluong_ct)) {
@@ -296,7 +296,7 @@ class baocaott67huyenController extends Controller
                     $ar_I[$i]['soluongbienche'] = 0;
                     if (isset($chitiet) && count($chitiet) > 0) {
                         $ar_I[$i]['soluongduocgiao'] = $model_bienche->where('linhvuchoatdong', $ar_I[$i]['val'])->sum('soluongduocgiao');
-                        $ar_I[$i]['soluongbienche'] =count($chitiet);
+                        $ar_I[$i]['soluongbienche'] = count($chitiet);
                         $a_It['soluongduocgiao'] += $ar_I[$i]['soluongduocgiao'];
                         $a_It['soluongbienche'] += $ar_I[$i]['soluongbienche'];
                         $tongpc = 0;
@@ -363,7 +363,7 @@ class baocaott67huyenController extends Controller
             $a_IIIt = array('tongso' => 0);
             $a_IVt = array('tongso' => 0);
             for ($i = 0; $i < count($ar_III); $i++) {
-                $chitiet = $model_bangluong_ct->where('caphanhchinh',$ar_III[$i]['val']);
+                $chitiet = $model_bangluong_ct->where('caphanhchinh', $ar_III[$i]['val']);
                 //if($ar_III[$i]['val'] == $model_donvi->caphanhchinh){
                 $ar_III[$i]['tongso'] = $chitiet->sum('pcdbqh');
                 //}
@@ -371,7 +371,7 @@ class baocaott67huyenController extends Controller
             }
 
             for ($i = 0; $i < count($ar_IV); $i++) {
-                $chitiet = $model_bangluong_ct->where('caphanhchinh',$ar_III[$i]['val']);
+                $chitiet = $model_bangluong_ct->where('caphanhchinh', $ar_III[$i]['val']);
                 //if($ar_IV[$i]['val'] == $model_donvi->caphanhchinh){
                 $ar_IV[$i]['tongso'] = $chitiet->sum('pcvk');
                 //}
@@ -410,7 +410,6 @@ class baocaott67huyenController extends Controller
                     ->with('inputs', $inputs)
                     ->with('pageTitle', 'Báo cáo nhu cầu kinh phí thực hiện nghị định 47/2017/NĐ-CP');
             }
-
         } else
             return view('errors.notlogin');
     }
@@ -524,7 +523,6 @@ class baocaott67huyenController extends Controller
                 $ct->pcdbqh = $ct->pcdbqh * $luongcb;
                 $ct->pcvk = $ct->pcvk * $luongcb;
                 $ct->ttbh_dv = ($ct->stbhxh_dv + $ct->stbhyt_dv + $ct->stkpcd_dv + $ct->stbhtn_dv) * $luongcb;
-
             }
             $model_bangluong_ct = $model_tonghop_ct->where('macongtac', 'BIENCHE')->where('maphanloai', '<>', 'KVXP');
 
@@ -562,7 +560,8 @@ class baocaott67huyenController extends Controller
                 $ar_I[12] = array('val' => 'QLNN', 'tt' => '-', 'noidung' => ' Quản lý NN');
                 $ar_I[13] = array('val' => 'DDT', 'tt' => '-', 'noidung' => 'Đảng, đoàn thể');
             }
-            $a_It = array('heso' => 0,
+            $a_It = array(
+                'heso' => 0,
                 'pckv' => 0,
                 'pccv' => 0,
                 'pctnvk' => 0,
@@ -703,8 +702,6 @@ class baocaott67huyenController extends Controller
                             $ar_I[$luugr]['pck'] += $ar_I[$i]['pck'];
                             $ar_I[$luugr]['tongpc'] += $ar_I[$i]['tongpc'];
                             $ar_I[$luugr]['ttbh_dv'] += $ar_I[$i]['ttbh_dv'];
-
-
                         }
                     } else {
                         $ar_I[$i]['soluongduocgiao'] = 0;
@@ -752,7 +749,6 @@ class baocaott67huyenController extends Controller
                 $ar_I[$qlnnddt]['pck'] = $ar_I[$qlnn]['pck'] + $ar_I[$ddt]['pck'];
                 $ar_I[$qlnnddt]['tongpc'] = $ar_I[$qlnn]['tongpc'] + $ar_I[$ddt]['tongpc'];
                 $ar_I[$qlnnddt]['ttbh_dv'] = $ar_I[$qlnn]['ttbh_dv'] + $ar_I[$ddt]['ttbh_dv'];
-
             } else {
                 for ($i = 0; $i < count($ar_I); $i++) {
                     if (isset($model_bangluong_ct)) {
@@ -952,7 +948,6 @@ class baocaott67huyenController extends Controller
                     }
                     $a_IVt['tongso'] += $ar_IV[2]['tongso'];
                     $a_IIIt['tongso'] += $ar_III[2]['tongso'];
-
                 } else {
                     if (isset($model_bangluong_ct)) {
                         $ar_III[1]['tongso'] = $model_bangluong_ct->sum('pcdbqh');
@@ -1017,24 +1012,24 @@ class baocaott67huyenController extends Controller
                 $chekdv = dmdonvi::where('madv', $inputs['madv'])->where('phanloaitaikhoan', 'TH')->get();
                 if (count($chekdv) > 0) {
 
-                    $model_tonghop = nguonkinhphi::where('sohieu',$inputs['sohieu'])
-                        ->where('trangthai','DAGUI')
+                    $model_tonghop = nguonkinhphi::where('sohieu', $inputs['sohieu'])
+                        ->where('trangthai', 'DAGUI')
                         ->where('macqcq', $inputs['madv'])->get();
-                    $model_donvi = dmdonvi::wherein('madv', array_column($model_tonghop->toarray(),'madv'))->get();
-                    $model_bienche = chitieubienche::where('nam', $nam)->wherein('madv', array_column($model_tonghop->toarray(),'madv'))->get();
+                    $model_donvi = dmdonvi::wherein('madv', array_column($model_tonghop->toarray(), 'madv'))->get();
+                    $model_bienche = chitieubienche::where('nam', $nam)->wherein('madv', array_column($model_tonghop->toarray(), 'madv'))->get();
                 } else {
                     $model_donvi = dmdonvi::where('madv', $madv)->get();
                     $model_bienche = chitieubienche::where('nam', $nam)->where('madv', $madv)->get();
-                    $model_tonghop = nguonkinhphi::where('sohieu',$inputs['sohieu'])
-                        ->where('trangthai','DAGUI')
+                    $model_tonghop = nguonkinhphi::where('sohieu', $inputs['sohieu'])
+                        ->where('trangthai', 'DAGUI')
                         ->where('madv', $inputs['madv'])->get();
                 }
             } else {
-                $model_tonghop = nguonkinhphi::where('sohieu',$inputs['sohieu'])
-                    ->where('trangthai','DAGUI')
+                $model_tonghop = nguonkinhphi::where('sohieu', $inputs['sohieu'])
+                    ->where('trangthai', 'DAGUI')
                     ->where('madvbc', $madvbc)->get();
-                $model_donvi = dmdonvi::wherein('madv', array_column($model_tonghop->toarray(),'madv'))->get();
-                $model_bienche = chitieubienche::where('nam', $nam)->wherein('madv', array_column($model_tonghop->toarray(),'madv'))->get();
+                $model_donvi = dmdonvi::wherein('madv', array_column($model_tonghop->toarray(), 'madv'))->get();
+                $model_bienche = chitieubienche::where('nam', $nam)->wherein('madv', array_column($model_tonghop->toarray(), 'madv'))->get();
             }
             foreach ($model_bienche as $bienche) {
                 $bienche->maphanloai = $model_donvi->where('madv', $bienche->madv)->first()->maphanloai;
@@ -1045,7 +1040,7 @@ class baocaott67huyenController extends Controller
                     ->where('trangthai', 'DAGUI')
                     ->where('macqcq', session('admin')->madv)->get();
             }
-            $model_tonghop_ct = nguonkinhphi_bangluong::wherein('masodv', array_column($model_tonghop->toarray(),'masodv'))
+            $model_tonghop_ct = nguonkinhphi_bangluong::wherein('masodv', array_column($model_tonghop->toarray(), 'masodv'))
                 ->where('nam', $nam)->where('thang', $thang)->get();
             if (session('admin')->username == 'khthso') {
                 $model_bienche = chitieubienche::join('dmdonvi', 'dmdonvi.madv', '=', 'chitieubienche.madv')
@@ -1064,10 +1059,10 @@ class baocaott67huyenController extends Controller
                             ->distinct()->get();
                     })->get();
             }
-            $a_linhvuc = array_column($model_tonghop->toarray(),'linhvuchoatdong','masodv');
+            $a_linhvuc = array_column($model_tonghop->toarray(), 'linhvuchoatdong', 'masodv');
             $a_phucap = getColTongHop();
-            $a_pchien = array('heso','vuotkhung','pckv','pccv','pcudn','pcth','pctnn','pccovu','pcdang','pcthni','pcdbqh','pck');
-            $a_pc = array_diff($a_phucap,$a_pchien);
+            $a_pchien = array('heso', 'vuotkhung', 'pckv', 'pccv', 'pcudn', 'pcth', 'pctnn', 'pccovu', 'pcdang', 'pcthni', 'pcdbqh', 'pck');
+            $a_pc = array_diff($a_phucap, $a_pchien);
             foreach ($model_tonghop_ct as $ct) {
                 if ($inputs['madv'] != "" && count($chekdv) > 0) {
                     $tonghop = $model_tonghop->where('masodv', $ct->masodv)->first();
@@ -1085,7 +1080,7 @@ class baocaott67huyenController extends Controller
                     if ($ct->$pc < $ct->$pc_st) { //hệ số < số tiền => theo dõi khác số tiền
                         $ct->pck += $ct->$pc;
                         $ct->st_pck += round($ct->$pc * $model_thongtu->mucapdung);
-                    }else{
+                    } else {
                         $ct->st_pck += $ct->$pc_st;
                     }
                 }
@@ -1093,14 +1088,14 @@ class baocaott67huyenController extends Controller
                     $pc_st = 'st_' . $pc;
                     if ($ct->$pc < $ct->$pc_st) { //hệ số < số tiền => theo dõi khác số tiền
                         $ct->$pc_st = round($ct->$pc * $model_thongtu->mucapdung);
-                    }else{
+                    } else {
                         //gán hệ số phụ cấp theo dõi theo số tiên = 0 để sau tính tổng hệ số phụ cấp theo hàm sum()
                         $ct->$pc = 0;
                     }
                 }
-                $ct->ttbh_dv = round(($ct->st_heso + $ct->st_vuotkhung + $ct->st_pccv + $ct->st_pctnn + $ct->st_hesopc)* 23.5 / 100);
+                $ct->ttbh_dv = round(($ct->st_heso + $ct->st_vuotkhung + $ct->st_pccv + $ct->st_pctnn + $ct->st_hesopc) * 23.5 / 100);
             }
-            $model_tonghop_ct = $model_tonghop_ct->wherein('mact',getMaCongTacNhuCau());
+            $model_tonghop_ct = $model_tonghop_ct->wherein('mact', getMaCongTacNhuCau());
             $model_bangluong_ct = $model_tonghop_ct->where('macongtac', 'BIENCHE')->where('maphanloai', '<>', 'KVXP');
             $ar_I = array();
             $ar_Igr = array();
@@ -1136,10 +1131,10 @@ class baocaott67huyenController extends Controller
                 $ar_I[13] = array('val' => 'DDT', 'tt' => '-', 'noidung' => 'Đảng, đoàn thể');
             }
             $a_It = array(
-                'heso' => 0,'pckv' => 0,'pccv' => 0,'vuotkhung' => 0,
-                'pcudn' => 0,'pcth' => 0,'pctnn' => 0,'pccovu' => 0,
-                'pcdang' => 0,'pcthni' => 0,'pck' => 0,'pcdbqh' => 0,'tongpc' => 0,
-                'ttbh_dv' => 0,'soluongduocgiao' => 0,'soluongbienche'=> 0,'chenhlech' => 0,
+                'heso' => 0, 'pckv' => 0, 'pccv' => 0, 'vuotkhung' => 0,
+                'pcudn' => 0, 'pcth' => 0, 'pctnn' => 0, 'pccovu' => 0,
+                'pcdang' => 0, 'pcthni' => 0, 'pck' => 0, 'pcdbqh' => 0, 'tongpc' => 0,
+                'ttbh_dv' => 0, 'soluongduocgiao' => 0, 'soluongbienche' => 0, 'chenhlech' => 0,
             );
             //thiếu chỉ tiêu biên chế
             if (isset($inputs['inchitiet'])) {
@@ -1176,22 +1171,22 @@ class baocaott67huyenController extends Controller
                     $ar_I[$i]['chenhlech'] = 0;
                     if (isset($model_bangluong_ct)) {
                         $chitiet = $model_bangluong_ct->where('linhvuchoatdong', $ar_Igr[$j]['val']);
-                        $m_dvct = $model_donvi->wherein('madv', a_unique(array_column($chitiet->toarray(),'madv')));
+                        $m_dvct = $model_donvi->wherein('madv', a_unique(array_column($chitiet->toarray(), 'madv')));
                     }
                     $d = 1;
                     $luugr = $i;
                     if (isset($chitiet) && count($chitiet) > 0) {
                         //$thongtin = $chitiet->toArray();
-                        $m_dvct =a_unique(array_column($m_dvct->toarray(),'madv'));
+                        $m_dvct = a_unique(array_column($m_dvct->toarray(), 'madv'));
                         foreach ($m_dvct as $dv) {
-                            $thongtin = $chitiet->where('madv',$dv);
+                            $thongtin = $chitiet->where('madv', $dv);
                             //foreach ($thongtin as $ttchitiet) {
                             $d++;
                             $i += $d;
                             $ar_I[$i]['tt'] = '+';
-                            $ar_I[$i]['noidung'] = $model_donvi->where('madv',$dv)->first()->tendv;
-                            $ar_I[$i]['soluongduocgiao'] = $model_bienche->where('linhvuchoatdong', $ar_Igr[$j]['val'])->where('madv',$dv)->sum('soluongduocgiao');
-                            $ar_I[$i]['soluongbienche'] =count($thongtin);
+                            $ar_I[$i]['noidung'] = $model_donvi->where('madv', $dv)->first()->tendv;
+                            $ar_I[$i]['soluongduocgiao'] = $model_bienche->where('linhvuchoatdong', $ar_Igr[$j]['val'])->where('madv', $dv)->sum('soluongduocgiao');
+                            $ar_I[$i]['soluongbienche'] = count($thongtin);
                             $a_It['soluongduocgiao'] += $ar_I[$i]['soluongduocgiao'];
                             $a_It['soluongbienche'] += $ar_I[$i]['soluongbienche'];
                             $tongpc = 0;
@@ -1209,7 +1204,7 @@ class baocaott67huyenController extends Controller
                             $ar_I[$i]['ttbh_dv'] = $thongtin->sum('ttbh_dv');
                             $a_It['ttbh_dv'] += $ar_I[$i]['ttbh_dv'];
 
-                            $ar_I[$i]['chenhlech'] = round($tonghs*$model_thongtu->chenhlech
+                            $ar_I[$i]['chenhlech'] = round($tonghs * $model_thongtu->chenhlech
                                 + ($ar_I[$i]['ttbh_dv'] / $model_thongtu->mucapdung) * $model_thongtu->chenhlech);
                             $a_It['chenhlech'] += $ar_I[$i]['chenhlech'];
 
@@ -1264,7 +1259,6 @@ class baocaott67huyenController extends Controller
                 $ar_I[$qlnnddt]['tongpc'] = $ar_I[$qlnn]['tongpc'] + $ar_I[$ddt]['tongpc'];
                 $ar_I[$qlnnddt]['ttbh_dv'] = $ar_I[$qlnn]['ttbh_dv'] + $ar_I[$ddt]['ttbh_dv'];
                 $ar_I[$qlnnddt]['chenhlech'] = $ar_I[$qlnn]['chenhlech'] + $ar_I[$ddt]['chenhlech'];
-
             } else {
                 for ($i = 0; $i < count($ar_I); $i++) {
                     if (isset($model_bangluong_ct)) {
@@ -1275,7 +1269,7 @@ class baocaott67huyenController extends Controller
                     $ar_I[$i]['soluongbienche'] = 0;
                     if (isset($chitiet) && count($chitiet) > 0) {
                         $ar_I[$i]['soluongduocgiao'] = $model_bienche->where('linhvuchoatdong', $ar_I[$i]['val'])->sum('soluongduocgiao');
-                        $ar_I[$i]['soluongbienche'] =count($chitiet);
+                        $ar_I[$i]['soluongbienche'] = count($chitiet);
                         $a_It['soluongduocgiao'] += $ar_I[$i]['soluongduocgiao'];
                         $a_It['soluongbienche'] += $ar_I[$i]['soluongbienche'];
                         $tongpc = 0;
@@ -1291,7 +1285,7 @@ class baocaott67huyenController extends Controller
                         $a_It['tongpc'] += $ar_I[$i]['tongpc'];
                         $ar_I[$i]['ttbh_dv'] = $chitiet->sum('ttbh_dv');
                         $a_It['ttbh_dv'] += $ar_I[$i]['ttbh_dv'];
-                        $ar_I[$i]['chenhlech'] = round($tonghs*$model_thongtu->chenhlech
+                        $ar_I[$i]['chenhlech'] = round($tonghs * $model_thongtu->chenhlech
                             + ($ar_I[$i]['ttbh_dv'] / $model_thongtu->mucapdung) * $model_thongtu->chenhlech);
                         $a_It['chenhlech'] += $ar_I[$i]['chenhlech'];
                     } else {
@@ -1330,7 +1324,7 @@ class baocaott67huyenController extends Controller
                 }
                 $ar_II['tongpc'] = $tongpc;
                 $ar_II['ttbh_dv'] = $model_bangluong_ct->sum('ttbh_dv');
-                $ar_II['chenhlech'] = round($tonghs*$model_thongtu->chenhlech
+                $ar_II['chenhlech'] = round($tonghs * $model_thongtu->chenhlech
                     + ($ar_II['ttbh_dv'] / $model_thongtu->mucapdung) * $model_thongtu->chenhlech);
             } else {
 
@@ -1355,25 +1349,25 @@ class baocaott67huyenController extends Controller
             $ar_IV[] = array('val' => 'H', 'tt' => '-', 'noidung' => 'Ủy viên cấp huyện', 'tongso' => '0');
             $ar_IV[] = array('val' => 'X', 'tt' => '-', 'noidung' => 'Ủy viên cấp xã', 'tongso' => '0');
 
-            $a_IIIt = array('tongso' => 0,'chenhlech' => 0);
-            $a_IVt = array('tongso' => 0,'chenhlech' => 0);
+            $a_IIIt = array('tongso' => 0, 'chenhlech' => 0);
+            $a_IVt = array('tongso' => 0, 'chenhlech' => 0);
             //dd($model_donvi->toarray());
             for ($i = 0; $i < count($ar_III); $i++) {
-                $chitiet = $model_bangluong_ct->where('caphanhchinh',$ar_III[$i]['val']);
+                $chitiet = $model_bangluong_ct->where('caphanhchinh', $ar_III[$i]['val']);
                 //if($ar_III[$i]['val'] == $model_donvi->caphanhchinh){
-                    $ar_III[$i]['tongso'] = $chitiet->sum('pcdbqh');
-                    $ar_III[$i]['chenhlech'] = round(($ar_III[$i]['tongso'] / $model_thongtu->mucapdung) * $model_thongtu->chenhlech);
+                $ar_III[$i]['tongso'] = $chitiet->sum('pcdbqh');
+                $ar_III[$i]['chenhlech'] = round(($ar_III[$i]['tongso'] / $model_thongtu->mucapdung) * $model_thongtu->chenhlech);
                 //}
                 $a_IIIt['tongso'] += $ar_III[$i]['tongso'];
                 $a_IIIt['chenhlech'] += $ar_III[$i]['chenhlech'];
             }
 
             for ($i = 0; $i < count($ar_IV); $i++) {
-                $chitiet = $model_bangluong_ct->where('caphanhchinh',$ar_III[$i]['val']);
+                $chitiet = $model_bangluong_ct->where('caphanhchinh', $ar_III[$i]['val']);
                 //if($ar_IV[$i]['val'] == $model_donvi->caphanhchinh){
-                    $ar_IV[$i]['tongso'] = $model_bangluong_ct->sum('pcvk');
-                    $ar_IV[$i]['chenhlech'] = round(($ar_IV[$i]['tongso'] / $model_thongtu->mucapdung) * $model_thongtu->chenhlech);
-               // }
+                $ar_IV[$i]['tongso'] = $model_bangluong_ct->sum('pcvk');
+                $ar_IV[$i]['chenhlech'] = round(($ar_IV[$i]['tongso'] / $model_thongtu->mucapdung) * $model_thongtu->chenhlech);
+                // }
                 $a_IVt['tongso'] += $ar_IV[$i]['tongso'];
                 $a_IVt['chenhlech'] += $ar_IV[$i]['chenhlech'];
             }
@@ -1411,7 +1405,6 @@ class baocaott67huyenController extends Controller
                     ->with('pageTitle', 'Báo cáo nhu cầu kinh phí thực hiện nghị định 38/2019/NĐ-CP');
         } else
             return view('errors.notlogin');
-
     }
 
     function mau2a2_huyen_excel(Request $request)
@@ -1523,7 +1516,6 @@ class baocaott67huyenController extends Controller
                 $ct->pcdbqh = $ct->pcdbqh * $luongcb;
                 $ct->pcvk = $ct->pcvk * $luongcb;
                 $ct->ttbh_dv = ($ct->stbhxh_dv + $ct->stbhyt_dv + $ct->stkpcd_dv + $ct->stbhtn_dv) * $luongcb;
-
             }
             $model_bangluong_ct = $model_tonghop_ct->where('macongtac', 'BIENCHE')->where('maphanloai', '<>', 'KVXP');
 
@@ -1561,7 +1553,8 @@ class baocaott67huyenController extends Controller
                 $ar_I[] = array('val' => 'QLNN', 'tt' => '-', 'noidung' => ' Quản lý NN');
                 $ar_I[] = array('val' => 'DDT', 'tt' => '-', 'noidung' => 'Đảng, đoàn thể');
             }
-            $a_It = array('luong' => 0,
+            $a_It = array(
+                'luong' => 0,
                 'pckv' => 0,
                 'pccv' => 0,
                 'pctnvk' => 0,
@@ -1692,7 +1685,6 @@ class baocaott67huyenController extends Controller
                             $ar_I[$luugr]['tongpc'] += $ar_I[$i]['tongpc'];
                             $ar_I[$luugr]['ttbh_dv'] += $ar_I[$i]['ttbh_dv'];
                             $ar_I[$luugr]['chenhlech'] += $ar_I[$i]['chenhlech'];
-
                         }
                     } else {
                         $ar_I[$i]['luong'] = 0;
@@ -1798,7 +1790,6 @@ class baocaott67huyenController extends Controller
                         $a_It['tongpc'] += $ar_I[$i]['tongpc'];
                         $ar_I[$i]['chenhlech'] = round(($tongpc + $ar_I[$i]['ttbh_dv'] + $ar_I[$i]['luong']) * 90000 / 1390000);
                         $a_It['chenhlech'] += $ar_I[$i]['chenhlech'];
-
                     } else {
                         $ar_I[$i]['luong'] = 0;
                         $ar_I[$i]['pckv'] = 0;
@@ -1883,7 +1874,6 @@ class baocaott67huyenController extends Controller
                 $ar_II['tongpc'] = $tongpc;
 
                 $ar_II['chenhlech'] = round(($tongpc + $ar_II['ttbh_dv'] + $ar_II['luong']) * 90000 / 1390000);
-
             } else {
                 $ar_II['luong'] = 0;
                 $ar_II['pckv'] = 0;
@@ -1996,7 +1986,6 @@ class baocaott67huyenController extends Controller
             })->download('xls');
         } else
             return view('errors.notlogin');
-
     }
 
     function mau2b_huyen(Request $request)
@@ -2046,7 +2035,8 @@ class baocaott67huyenController extends Controller
                 $ar_I[1] = array('val' => 'P', 'tt' => '2', 'noidung' => 'Nguyên Phó bí thư, phó chủ tịch, Thường trực Đảng ủy, Ủy viên, Thư ký UBND Thư ký HĐND, xã đội trưởng');
                 $ar_I[2] = array('val' => 'K', 'tt' => '3', 'noidung' => 'Các chức danh còn lại');
             }
-            $a_It = array('cb' => 0,
+            $a_It = array(
+                'cb' => 0,
                 'quy09' => 0,
                 'quy76' => 0,
                 'quytang' => 0,
@@ -2128,7 +2118,8 @@ class baocaott67huyenController extends Controller
                 $ar_I[1] = array('val' => 'P', 'tt' => '2', 'noidung' => 'Nguyên Phó bí thư, phó chủ tịch, Thường trực Đảng ủy, Ủy viên, Thư ký UBND Thư ký HĐND, xã đội trưởng');
                 $ar_I[2] = array('val' => 'K', 'tt' => '3', 'noidung' => 'Các chức danh còn lại');
             }
-            $a_It = array('cb' => 0,
+            $a_It = array(
+                'cb' => 0,
                 'quy09' => 0,
                 'quy76' => 0,
                 'quytang' => 0,
@@ -2179,27 +2170,87 @@ class baocaott67huyenController extends Controller
                 $chekdv = dmdonvi::where('madv', $inputs['madv'])->where('phanloaitaikhoan', 'TH')->get();
                 if (count($chekdv) > 0) {
                     $m_cb = hosocanbo::join('dmdonvi', 'hosocanbo.madv', '=', 'dmdonvi.madv')
-                        ->select('linhvuchoatdong', 'heso', 'dmdonvi.maphanloai', 'hosocanbo.pck', 'hosocanbo.pccv', 'hosocanbo.pckv', 'hosocanbo.pcth', 'hosocanbo.pcdh',
-                            'hosocanbo.pcld', 'hosocanbo.pcudn', 'hosocanbo.pctn', 'hosocanbo.pctnn', 'hosocanbo.pcdbn',
-                            'hosocanbo.pcvk', 'hosocanbo.pckn', 'hosocanbo.pccovu', 'hosocanbo.pcdbqh',
-                            'hosocanbo.pctnvk', 'hosocanbo.pcbdhdcu', 'hosocanbo.pcdang', 'hosocanbo.pcthni', 'dmdonvi.tendv')
+                        ->select(
+                            'linhvuchoatdong',
+                            'heso',
+                            'dmdonvi.maphanloai',
+                            'hosocanbo.pck',
+                            'hosocanbo.pccv',
+                            'hosocanbo.pckv',
+                            'hosocanbo.pcth',
+                            'hosocanbo.pcdh',
+                            'hosocanbo.pcld',
+                            'hosocanbo.pcudn',
+                            'hosocanbo.pctn',
+                            'hosocanbo.pctnn',
+                            'hosocanbo.pcdbn',
+                            'hosocanbo.pcvk',
+                            'hosocanbo.pckn',
+                            'hosocanbo.pccovu',
+                            'hosocanbo.pcdbqh',
+                            'hosocanbo.pctnvk',
+                            'hosocanbo.pcbdhdcu',
+                            'hosocanbo.pcdang',
+                            'hosocanbo.pcthni',
+                            'dmdonvi.tendv'
+                        )
                         ->where('dmdonvi.macqcq', $madv)
                         ->get();
                 } else {
                     $m_cb = hosocanbo::join('dmdonvi', 'hosocanbo.madv', '=', 'dmdonvi.madv')
-                        ->select('linhvuchoatdong', 'dmdonvi.maphanloai', 'heso', 'hosocanbo.pck', 'hosocanbo.pccv', 'hosocanbo.pckv', 'hosocanbo.pcth', 'hosocanbo.pcdh',
-                            'hosocanbo.pcld', 'hosocanbo.pcudn', 'hosocanbo.pctn', 'hosocanbo.pctnn', 'hosocanbo.pcdbn',
-                            'hosocanbo.pcvk', 'hosocanbo.pckn', 'hosocanbo.pccovu', 'hosocanbo.pcdbqh',
-                            'hosocanbo.pctnvk', 'hosocanbo.pcbdhdcu', 'hosocanbo.pcdang', 'hosocanbo.pcthni', 'dmdonvi.tendv')
+                        ->select(
+                            'linhvuchoatdong',
+                            'dmdonvi.maphanloai',
+                            'heso',
+                            'hosocanbo.pck',
+                            'hosocanbo.pccv',
+                            'hosocanbo.pckv',
+                            'hosocanbo.pcth',
+                            'hosocanbo.pcdh',
+                            'hosocanbo.pcld',
+                            'hosocanbo.pcudn',
+                            'hosocanbo.pctn',
+                            'hosocanbo.pctnn',
+                            'hosocanbo.pcdbn',
+                            'hosocanbo.pcvk',
+                            'hosocanbo.pckn',
+                            'hosocanbo.pccovu',
+                            'hosocanbo.pcdbqh',
+                            'hosocanbo.pctnvk',
+                            'hosocanbo.pcbdhdcu',
+                            'hosocanbo.pcdang',
+                            'hosocanbo.pcthni',
+                            'dmdonvi.tendv'
+                        )
                         ->where('dmdonvi.madv', $madv)
                         ->get();
                 }
             } else {
                 $m_cb = hosocanbo::join('dmdonvi', 'hosocanbo.madv', '=', 'dmdonvi.madv')
-                    ->select('linhvuchoatdong', 'dmdonvi.maphanloai', 'heso', 'hosocanbo.pck', 'hosocanbo.pccv', 'hosocanbo.pckv', 'hosocanbo.pcth', 'hosocanbo.pcdh',
-                        'hosocanbo.pcld', 'hosocanbo.pcudn', 'hosocanbo.pctn', 'hosocanbo.pctnn', 'hosocanbo.pcdbn',
-                        'hosocanbo.pcvk', 'hosocanbo.pckn', 'hosocanbo.pccovu', 'hosocanbo.pcdbqh',
-                        'hosocanbo.pctnvk', 'hosocanbo.pcbdhdcu', 'hosocanbo.pcdang', 'hosocanbo.pcthni', 'dmdonvi.tendv')
+                    ->select(
+                        'linhvuchoatdong',
+                        'dmdonvi.maphanloai',
+                        'heso',
+                        'hosocanbo.pck',
+                        'hosocanbo.pccv',
+                        'hosocanbo.pckv',
+                        'hosocanbo.pcth',
+                        'hosocanbo.pcdh',
+                        'hosocanbo.pcld',
+                        'hosocanbo.pcudn',
+                        'hosocanbo.pctn',
+                        'hosocanbo.pctnn',
+                        'hosocanbo.pcdbn',
+                        'hosocanbo.pcvk',
+                        'hosocanbo.pckn',
+                        'hosocanbo.pccovu',
+                        'hosocanbo.pcdbqh',
+                        'hosocanbo.pctnvk',
+                        'hosocanbo.pcbdhdcu',
+                        'hosocanbo.pcdang',
+                        'hosocanbo.pcthni',
+                        'dmdonvi.tendv'
+                    )
                     ->where('dmdonvi.madvbc', $madvbc)
                     ->get();
             }
@@ -2208,9 +2259,30 @@ class baocaott67huyenController extends Controller
             if (session('admin')->username == 'khthso') {
                 $m_cb = hosocanbo::join('dmdonvi', 'hosocanbo.madv', '=', 'dmdonvi.madv')
                     ->join('dmdonvibaocao', 'dmdonvibaocao.madvbc', '=', 'dmdonvi.madvbc')
-                    ->select('macanbo', 'dmdonvi.maphanloai', 'linhvuchoatdong', 'heso', 'hosocanbo.pck', 'hosocanbo.pccv', 'hosocanbo.pckv', 'hosocanbo.pcth', 'hosocanbo.pcdh',
-                        'hosocanbo.pcld', 'hosocanbo.pcudn', 'hosocanbo.pctn', 'hosocanbo.pctnn', 'hosocanbo.pcdbn', 'hosocanbo.pcvk', 'hosocanbo.pckn', 'hosocanbo.pccovu', 'hosocanbo.pcdbqh',
-                        'hosocanbo.pctnvk', 'hosocanbo.pcbdhdcu', 'hosocanbo.pcdang', 'hosocanbo.pcthni')
+                    ->select(
+                        'macanbo',
+                        'dmdonvi.maphanloai',
+                        'linhvuchoatdong',
+                        'heso',
+                        'hosocanbo.pck',
+                        'hosocanbo.pccv',
+                        'hosocanbo.pckv',
+                        'hosocanbo.pcth',
+                        'hosocanbo.pcdh',
+                        'hosocanbo.pcld',
+                        'hosocanbo.pcudn',
+                        'hosocanbo.pctn',
+                        'hosocanbo.pctnn',
+                        'hosocanbo.pcdbn',
+                        'hosocanbo.pcvk',
+                        'hosocanbo.pckn',
+                        'hosocanbo.pccovu',
+                        'hosocanbo.pcdbqh',
+                        'hosocanbo.pctnvk',
+                        'hosocanbo.pcbdhdcu',
+                        'hosocanbo.pcdang',
+                        'hosocanbo.pcthni'
+                    )
                     ->where('dmdonvi.madvbc', 'like', $inputs['madv'] . '%')
                     ->where('dmdonvibaocao.level', 'T')
                     ->get();
@@ -2250,7 +2322,8 @@ class baocaott67huyenController extends Controller
                 $ar_I[] = array('val' => 'DDT', 'tt' => '-', 'noidung' => 'Đảng, đoàn thể');
             }
 
-            $a_It = array('dt' => 0,
+            $a_It = array(
+                'dt' => 0,
                 'hstl' => 0,
                 'hspc' => 0,
                 'cl' => 0,
@@ -2392,7 +2465,6 @@ class baocaott67huyenController extends Controller
                         $a_It['cl'] += $ar_I[$i]['cl'];
                         $ar_I[$i]['nc'] = $ar_I[$i]['cl'] * 6;
                         $a_It['nc'] += $ar_I[$i]['nc'];
-
                     } else {
                         $ar_I[$i]['dt'] = 0;
                         $ar_I[$i]['hstl'] = 0;
@@ -2455,29 +2527,89 @@ class baocaott67huyenController extends Controller
                 $chekdv = dmdonvi::where('madv', $inputs['madv'])->where('phanloaitaikhoan', 'TH')->get();
                 if (count($chekdv) > 0) {
                     $m_cb = hosocanbo::join('dmdonvi', 'hosocanbo.madv', '=', 'dmdonvi.madv')
-                        ->select('linhvuchoatdong', 'heso', 'dmdonvi.maphanloai', 'hosocanbo.pck', 'hosocanbo.pccv', 'hosocanbo.pckv', 'hosocanbo.pcth', 'hosocanbo.pcdh',
-                            'hosocanbo.pcld', 'hosocanbo.pcudn', 'hosocanbo.pctn', 'hosocanbo.pctnn', 'hosocanbo.pcdbn',
-                            'hosocanbo.pcvk', 'hosocanbo.pckn', 'hosocanbo.pccovu', 'hosocanbo.pcdbqh',
-                            'hosocanbo.pctnvk', 'hosocanbo.pcbdhdcu', 'hosocanbo.pcdang', 'hosocanbo.pcthni', 'dmdonvi.tendv')
+                        ->select(
+                            'linhvuchoatdong',
+                            'heso',
+                            'dmdonvi.maphanloai',
+                            'hosocanbo.pck',
+                            'hosocanbo.pccv',
+                            'hosocanbo.pckv',
+                            'hosocanbo.pcth',
+                            'hosocanbo.pcdh',
+                            'hosocanbo.pcld',
+                            'hosocanbo.pcudn',
+                            'hosocanbo.pctn',
+                            'hosocanbo.pctnn',
+                            'hosocanbo.pcdbn',
+                            'hosocanbo.pcvk',
+                            'hosocanbo.pckn',
+                            'hosocanbo.pccovu',
+                            'hosocanbo.pcdbqh',
+                            'hosocanbo.pctnvk',
+                            'hosocanbo.pcbdhdcu',
+                            'hosocanbo.pcdang',
+                            'hosocanbo.pcthni',
+                            'dmdonvi.tendv'
+                        )
                         ->where('dmdonvi.macqcq', $madv)
                         ->where('heso', '<=', 2.34)
                         ->get();
                 } else {
                     $m_cb = hosocanbo::join('dmdonvi', 'hosocanbo.madv', '=', 'dmdonvi.madv')
-                        ->select('linhvuchoatdong', 'dmdonvi.maphanloai', 'heso', 'hosocanbo.pck', 'hosocanbo.pccv', 'hosocanbo.pckv', 'hosocanbo.pcth', 'hosocanbo.pcdh',
-                            'hosocanbo.pcld', 'hosocanbo.pcudn', 'hosocanbo.pctn', 'hosocanbo.pctnn', 'hosocanbo.pcdbn',
-                            'hosocanbo.pcvk', 'hosocanbo.pckn', 'hosocanbo.pccovu', 'hosocanbo.pcdbqh',
-                            'hosocanbo.pctnvk', 'hosocanbo.pcbdhdcu', 'hosocanbo.pcdang', 'hosocanbo.pcthni', 'dmdonvi.tendv')
+                        ->select(
+                            'linhvuchoatdong',
+                            'dmdonvi.maphanloai',
+                            'heso',
+                            'hosocanbo.pck',
+                            'hosocanbo.pccv',
+                            'hosocanbo.pckv',
+                            'hosocanbo.pcth',
+                            'hosocanbo.pcdh',
+                            'hosocanbo.pcld',
+                            'hosocanbo.pcudn',
+                            'hosocanbo.pctn',
+                            'hosocanbo.pctnn',
+                            'hosocanbo.pcdbn',
+                            'hosocanbo.pcvk',
+                            'hosocanbo.pckn',
+                            'hosocanbo.pccovu',
+                            'hosocanbo.pcdbqh',
+                            'hosocanbo.pctnvk',
+                            'hosocanbo.pcbdhdcu',
+                            'hosocanbo.pcdang',
+                            'hosocanbo.pcthni',
+                            'dmdonvi.tendv'
+                        )
                         ->where('dmdonvi.madv', $madv)
                         ->where('heso', '<=', 2.34)
                         ->get();
                 }
             } else {
                 $m_cb = hosocanbo::join('dmdonvi', 'hosocanbo.madv', '=', 'dmdonvi.madv')
-                    ->select('linhvuchoatdong', 'dmdonvi.maphanloai', 'heso', 'hosocanbo.pck', 'hosocanbo.pccv', 'hosocanbo.pckv', 'hosocanbo.pcth', 'hosocanbo.pcdh',
-                        'hosocanbo.pcld', 'hosocanbo.pcudn', 'hosocanbo.pctn', 'hosocanbo.pctnn', 'hosocanbo.pcdbn',
-                        'hosocanbo.pcvk', 'hosocanbo.pckn', 'hosocanbo.pccovu', 'hosocanbo.pcdbqh',
-                        'hosocanbo.pctnvk', 'hosocanbo.pcbdhdcu', 'hosocanbo.pcdang', 'hosocanbo.pcthni', 'dmdonvi.tendv')
+                    ->select(
+                        'linhvuchoatdong',
+                        'dmdonvi.maphanloai',
+                        'heso',
+                        'hosocanbo.pck',
+                        'hosocanbo.pccv',
+                        'hosocanbo.pckv',
+                        'hosocanbo.pcth',
+                        'hosocanbo.pcdh',
+                        'hosocanbo.pcld',
+                        'hosocanbo.pcudn',
+                        'hosocanbo.pctn',
+                        'hosocanbo.pctnn',
+                        'hosocanbo.pcdbn',
+                        'hosocanbo.pcvk',
+                        'hosocanbo.pckn',
+                        'hosocanbo.pccovu',
+                        'hosocanbo.pcdbqh',
+                        'hosocanbo.pctnvk',
+                        'hosocanbo.pcbdhdcu',
+                        'hosocanbo.pcdang',
+                        'hosocanbo.pcthni',
+                        'dmdonvi.tendv'
+                    )
                     ->where('dmdonvi.madvbc', $madvbc)
                     ->where('heso', '<=', 2.34)
                     ->get();
@@ -2487,9 +2619,30 @@ class baocaott67huyenController extends Controller
             if (session('admin')->username == 'khthso') {
                 $m_cb = hosocanbo::join('dmdonvi', 'hosocanbo.madv', '=', 'dmdonvi.madv')
                     ->join('dmdonvibaocao', 'dmdonvibaocao.madvbc', '=', 'dmdonvi.madvbc')
-                    ->select('macanbo', 'dmdonvi.maphanloai', 'linhvuchoatdong', 'heso', 'hosocanbo.pck', 'hosocanbo.pccv', 'hosocanbo.pckv', 'hosocanbo.pcth', 'hosocanbo.pcdh',
-                        'hosocanbo.pcld', 'hosocanbo.pcudn', 'hosocanbo.pctn', 'hosocanbo.pctnn', 'hosocanbo.pcdbn', 'hosocanbo.pcvk', 'hosocanbo.pckn', 'hosocanbo.pccovu', 'hosocanbo.pcdbqh',
-                        'hosocanbo.pctnvk', 'hosocanbo.pcbdhdcu', 'hosocanbo.pcdang', 'hosocanbo.pcthni')
+                    ->select(
+                        'macanbo',
+                        'dmdonvi.maphanloai',
+                        'linhvuchoatdong',
+                        'heso',
+                        'hosocanbo.pck',
+                        'hosocanbo.pccv',
+                        'hosocanbo.pckv',
+                        'hosocanbo.pcth',
+                        'hosocanbo.pcdh',
+                        'hosocanbo.pcld',
+                        'hosocanbo.pcudn',
+                        'hosocanbo.pctn',
+                        'hosocanbo.pctnn',
+                        'hosocanbo.pcdbn',
+                        'hosocanbo.pcvk',
+                        'hosocanbo.pckn',
+                        'hosocanbo.pccovu',
+                        'hosocanbo.pcdbqh',
+                        'hosocanbo.pctnvk',
+                        'hosocanbo.pcbdhdcu',
+                        'hosocanbo.pcdang',
+                        'hosocanbo.pcthni'
+                    )
                     ->where('dmdonvi.madvbc', 'like', $inputs['madv'] . '%')
                     ->where('hosocanbo.heso', '<=', 2.34)
                     ->where('dmdonvibaocao.level', 'T')
@@ -2530,7 +2683,8 @@ class baocaott67huyenController extends Controller
                 $ar_I[] = array('val' => 'DDT', 'tt' => '-', 'noidung' => 'Đảng, đoàn thể');
             }
 
-            $a_It = array('dt' => 0,
+            $a_It = array(
+                'dt' => 0,
                 'hstl' => 0,
                 'hspc' => 0,
                 'cl' => 0,
@@ -2672,7 +2826,6 @@ class baocaott67huyenController extends Controller
                         $a_It['cl'] += $ar_I[$i]['cl'];
                         $ar_I[$i]['nc'] = $ar_I[$i]['cl'] * 6;
                         $a_It['nc'] += $ar_I[$i]['nc'];
-
                     } else {
                         $ar_I[$i]['dt'] = 0;
                         $ar_I[$i]['hstl'] = 0;
@@ -2743,20 +2896,20 @@ class baocaott67huyenController extends Controller
                 $chekdv = dmdonvi::where('madv', $inputs['madv'])->where('phanloaitaikhoan', 'TH')->get();
                 if (count($chekdv) > 0) {
                     $m_thon = dmdiabandbkk::join('dmdonvi', 'dmdiabandbkk.madv', '=', 'dmdonvi.madv')
-                        ->select('dmdiabandbkk.id', 'phanloai','dmdonvi.madv')
+                        ->select('dmdiabandbkk.id', 'phanloai', 'dmdonvi.madv')
                         ->where('dmdonvi.macqcq', $madv)
                         ->where('maphanloai', 'KVXP')
                         ->get();
                 } else {
                     $m_thon = dmdiabandbkk::join('dmdonvi', 'dmdiabandbkk.madv', '=', 'dmdonvi.madv')
-                        ->select('dmdiabandbkk.id', 'phanloai','dmdonvi.madv')
+                        ->select('dmdiabandbkk.id', 'phanloai', 'dmdonvi.madv')
                         ->where('dmdonvi.madv', $madv)
                         ->where('maphanloai', 'KVXP')
                         ->get();
                 }
             } else {
                 $m_thon = dmdiabandbkk::join('dmdonvi', 'dmdiabandbkk.madv', '=', 'dmdonvi.madv')
-                    ->select('dmdiabandbkk.id', 'phanloai','dmdonvi.madv')
+                    ->select('dmdiabandbkk.id', 'phanloai', 'dmdonvi.madv')
                     ->where('dmdonvi.madvbc', $madvbc)
                     ->where('maphanloai', 'KVXP')
                     ->get();
@@ -2764,17 +2917,17 @@ class baocaott67huyenController extends Controller
             if (session('admin')->username == 'khthso') {
                 $m_thon = dmdiabandbkk::join('dmdonvi', 'dmdiabandbkk.madv', '=', 'dmdonvi.madv')
                     ->join('dmdonvibaocao', 'dmdonvibaocao.madvbc', '=', 'dmdonvi.madvbc')
-                    ->select('dmdiabandbkk.id', 'phanloai','dmdonvi.madv')
+                    ->select('dmdiabandbkk.id', 'phanloai', 'dmdonvi.madv')
                     ->where('dmdonvi.madvbc', 'like', $inputs['madv'] . '%')
                     ->where('dmdonvi.maphanloai', 'KVXP')
                     ->where('dmdonvibaocao.level', 'T')
                     ->get();
             }
-            $m_xa = dmdonvi::where('maphanloai','KVXP')->get();
+            $m_xa = dmdonvi::where('maphanloai', 'KVXP')->get();
             $m_dt = dmdiabandbkk_chitiet::join('dmdiabandbkk', 'dmdiabandbkk_chitiet.madiaban', '=', 'dmdiabandbkk.madiaban')
                 ->select('dmdiabandbkk_chitiet.id', 'phanloai')->get();
 
-            $model = nguonkinhphi_bangluong::where('mact','1506673695')->get();
+            $model = nguonkinhphi_bangluong::where('mact', '1506673695')->get();
             $ar_I = array();
             $ar_I[] = array('val' => 'XL1;XL2;XL3', 'tt' => 'I', 'noidung' => 'Xã, phường, thị trấn');
             $ar_I[] = array('val' => 'XL1', 'tt' => '1', 'noidung' => 'Xã loại I');
@@ -2789,7 +2942,8 @@ class baocaott67huyenController extends Controller
             $ar_I[] = array('val' => 'TK', 'tt' => '', 'noidung' => '- Thôn còn lại');
             $ar_I[] = array('val' => 'TDP', 'tt' => '', 'noidung' => '- Tổ dân phố');
 
-            $a_It = array('tdv' => 0,
+            $a_It = array(
+                'tdv' => 0,
                 'mk' => 0,
                 'mk2' => 0,
                 'dt' => 0,
@@ -2802,7 +2956,7 @@ class baocaott67huyenController extends Controller
             for ($i = 0; $i < count($ar_I); $i++) {
                 if (isset($m_xa)) {
                     $chitiet = $m_xa->where('phanloaixa', $ar_I[$i]['val']);
-                    $a_dv = array_column($chitiet->toarray(),'madv');
+                    $a_dv = array_column($chitiet->toarray(), 'madv');
                     $doituong = $model->wherein('madv', $a_dv);
                 }
 
@@ -2846,13 +3000,12 @@ class baocaott67huyenController extends Controller
 
                     $ar_I[$i]['kqpc'] = $ar_I[$i]['tdv'] * $kpk * 1.39;
                     $a_It['kqpc'] += $ar_I[$i]['kqpc'];
-                    $ar_I[$i]['bhxh'] = $ar_I[$i]['dt'] * 0.14*1.39;
+                    $ar_I[$i]['bhxh'] = $ar_I[$i]['dt'] * 0.14 * 1.39;
                     $a_It['bhxh'] += $ar_I[$i]['bhxh'];
                     $ar_I[$i]['kqpct7'] = $ar_I[$i]['tdv'] * $kpk2 * 1.49;
                     $a_It['kqpct7'] += $ar_I[$i]['kqpct7'];
                     $ar_I[$i]['tong'] = $ar_I[$i]['kqpct7'] - $ar_I[$i]['bhxh'] - $ar_I[$i]['kqpc'];
                     $a_It['tong'] += $ar_I[$i]['tong'];
-
                 } else {
                     $ar_I[$i]['tdv'] = 0;
                     $ar_I[$i]['mk'] = 0;
@@ -2934,7 +3087,8 @@ class baocaott67huyenController extends Controller
             $ar_I[] = array('val' => 'TK', 'tt' => '', 'noidung' => '- Thôn còn lại');
             $ar_I[] = array('val' => 'TDP', 'tt' => '', 'noidung' => '- Tổ dân phố');
 
-            $a_It = array('tdv' => 0,
+            $a_It = array(
+                'tdv' => 0,
                 'mk' => 0,
                 'kp' => 0,
                 'bhxh' => 0
@@ -2970,7 +3124,6 @@ class baocaott67huyenController extends Controller
                     $a_It['kp'] += $ar_I[$i]['kp'];
                     $ar_I[$i]['bhxh'] = 0;
                     $a_It['bhxh'] += $ar_I[$i]['bhxh'];
-
                 } else {
                     $ar_I[$i]['tdv'] = 0;
                     $ar_I[$i]['mk'] = 0;
@@ -3002,8 +3155,8 @@ class baocaott67huyenController extends Controller
             $inputs = $request->all();
             $madvbc = session('admin')->madvbc;
             $m_dv = dmdonvi::where('madv', session('admin')->madv)->first();
-            $model_donvi = dmdonvi::where('macqcq',session('admin')->madv)->get();
-            $model_thongtu = dmthongtuquyetdinh::where('sohieu',$inputs['sohieu'])->get();
+            $model_donvi = dmdonvi::where('macqcq', session('admin')->madv)->get();
+            $model_thongtu = dmthongtuquyetdinh::where('sohieu', $inputs['sohieu'])->get();
             $ar_I = array();
             $ar_I[0] = array('val' => 'QLNN', 'tt' => 'I', 'noidung' => 'Quản lý nhà nước');
             $ar_I[1] = array('val' => 'SNCL', 'tt' => 'II', 'noidung' => 'Sự nghiệp công lập');
@@ -3011,29 +3164,29 @@ class baocaott67huyenController extends Controller
             $ar_I[3] = array('val' => 'CTX', 'tt' => '2', 'noidung' => 'Đơn vị đảm bảo chi thường xuyên (2)');
             $ar_I[4] = array('val' => 'CTXMP', 'tt' => '3', 'noidung' => 'Đơn vị đảm bảo một phần chi thường xuyên');
             $ar_I[5] = array('val' => 'NGANSACH', 'tt' => '4', 'noidung' => 'Đơn vị được nhà nước đảm bảo chi thường xuyên');
-            $model_th15 = tonghopluong_donvi::select('mathdv','madv','thang','nam')
-                ->where('trangthai','DAGUI')
-                ->where('thang','12')->where('nam','2015')
+            $model_th15 = tonghopluong_donvi::select('mathdv', 'madv', 'thang', 'nam')
+                ->where('trangthai', 'DAGUI')
+                ->where('thang', '12')->where('nam', '2015')
                 ->wherein('madv', array_column($model_donvi->toarray(), 'madv'))
                 ->distinct()->get();
-            $model_th17 = tonghopluong_donvi::select('mathdv','madv','thang','nam')
-                ->where('trangthai','DAGUI')
-                ->where('thang','07')->where('nam','2017')
+            $model_th17 = tonghopluong_donvi::select('mathdv', 'madv', 'thang', 'nam')
+                ->where('trangthai', 'DAGUI')
+                ->where('thang', '07')->where('nam', '2017')
                 ->wherein('madv', array_column($model_donvi->toarray(), 'madv'))
                 ->distinct()->get();
-            $model_th19 = tonghopluong_donvi::select('mathdv','madv','thang','nam')
-                ->where('trangthai','DAGUI')
-                ->where('thang','07')->where('nam','2019')
+            $model_th19 = tonghopluong_donvi::select('mathdv', 'madv', 'thang', 'nam')
+                ->where('trangthai', 'DAGUI')
+                ->where('thang', '07')->where('nam', '2019')
                 ->wherein('madv', array_column($model_donvi->toarray(), 'madv'))
                 ->distinct()->get();
             $modelsl15 = tonghopluong_donvi_chitiet::select('soluong', 'linhvuchoatdong', 'mathdv')
-                    ->wherein('mathdv',array_column($model_th15->toarray(), 'mathdv'))
+                ->wherein('mathdv', array_column($model_th15->toarray(), 'mathdv'))
                 ->get();
-            $model17 = tonghopluong_donvi_chitiet::select('soluong', 'linhvuchoatdong', 'luongtn','mathdv')
-                ->wherein('mathdv',array_column($model_th17->toarray(), 'mathdv'))
+            $model17 = tonghopluong_donvi_chitiet::select('soluong', 'linhvuchoatdong', 'luongtn', 'mathdv')
+                ->wherein('mathdv', array_column($model_th17->toarray(), 'mathdv'))
                 ->get();
-            $model19 = tonghopluong_donvi_chitiet::select('soluong', 'linhvuchoatdong', 'luongtn','mathdv')
-                ->wherein('mathdv',array_column($model_th19->toarray(), 'mathdv'))
+            $model19 = tonghopluong_donvi_chitiet::select('soluong', 'linhvuchoatdong', 'luongtn', 'mathdv')
+                ->wherein('mathdv', array_column($model_th19->toarray(), 'mathdv'))
                 ->get();
             foreach ($modelsl15 as $ct) {
                 $ct->madv = $model_th15->where('mathdv', $ct->mathdv)->first()->madv;
@@ -3075,7 +3228,7 @@ class baocaott67huyenController extends Controller
             $ar_I[0]['tkthang'] = $ar_I[0]['luong19'] - $ar_I[0]['luong17'];
             $ar_I[0]['luong'] = ($ar_I[0]['luong19'] - $ar_I[0]['luong17']) * 6;
             for ($i = 2; $i < count($ar_I); $i++) {
-                $chitiet15 = $modelsl15->where('linhvuchoatdong', '<>', 'QLNN')->where('phanloainguon',$ar_I[$i]['val'] );
+                $chitiet15 = $modelsl15->where('linhvuchoatdong', '<>', 'QLNN')->where('phanloainguon', $ar_I[$i]['val']);
                 $chitiet17 = $model17->where('linhvuchoatdong', '<>', 'QLNN')->where('phanloainguon', $ar_I[$i]['val']);
                 $chitiet19 = $model19->where('linhvuchoatdong', '<>', 'QLNN')->where('phanloainguon', $ar_I[$i]['val']);
 
@@ -3122,36 +3275,107 @@ class baocaott67huyenController extends Controller
             return view('errors.notlogin');
     }
 
-    function mau2e_huyen(Request $request) {
-        if (Session::has('admin')) {
-            $m_dv = dmdonvi::where('madv', session('admin')->madv)->first();
+    function mau2e_huyen(Request $request)
+    {
+        if (Session::has('admin')) {           
             $inputs = $request->all();
             $madvbc = session('admin')->madvbc;
-            $m_dv = dmdonvi::where('madv', session('admin')->madv)->first();
-            $model_donvi = dmdonvi::where('macqcq',session('admin')->madv)->get();
-            $model_thongtu = dmthongtuquyetdinh::where('sohieu',$inputs['sohieu'])->get();
-            $ar_I = array();
-            $ar_I[]=array('val'=>'CHITXDT','tt'=>'1','noidung'=>'Đơn vị đảm bảo chi thường xuyên và chi đầu tư');
-            $ar_I[]=array('val'=>'CTX','tt'=>'2','noidung'=>'Đơn vị đảm bảo chi thường xuyên');
-            $ar_I[]=array('val'=>'CTXMP','tt'=>'3','noidung'=>'Đơn vị đảm bảo một phần chi thường xuyên');
-            $ar_I[]=array('val'=>'NGANSACH','tt'=>'4','noidung'=>'Đơn vị được nhà nước đảm bảo chi thường xuyên');
+            if($inputs['madv'] != ''){
+                $m_donvi = dmdonvi::where('madv', $inputs['madv'])->get();
+                $m_dv= dmdonvi::where('madv', $inputs['madv'])->first();
+            }else{
+                $m_donvi = dmdonvi::where('madvbc',$madvbc)->get();
+                $m_dv = dmdonvi::where('madv', session('admin')->madv)->first();
+            }
+            // dd($m_dv);
+            // $model_donvi = dmdonvi::where('macqcq', session('admin')->madv)->get();
+            $m_thongtu = dmthongtuquyetdinh::where('sohieu', $inputs['sohieu'])->first();
+            $ngayapdung = new Carbon($m_thongtu->ngayapdung);
+            $inputs['nam'] = date_format($ngayapdung, 'Y');
+            $inputs['thang'] = date_format($ngayapdung, 'm');
+            if($inputs['madv'] != null){
+                $_tonghop = nguonkinhphi::where('sohieu', $inputs['sohieu'])
+                ->where('madv', $inputs['madv'])->get();
+            }else{
+                $_tonghop = nguonkinhphi::where('sohieu', $inputs['sohieu'])
+                ->where('madvbc', $madvbc)->get();
+            }
+            $m_tonghop_ct = nguonkinhphi_bangluong::wherein('masodv', array_column($_tonghop->toarray(), 'masodv'))
+                ->where('nam', $inputs['nam'])->where('thang', $inputs['thang'])->get();
+            $a_pc_goc = array('heso', 'vuotkhung', 'pckv', 'pccv', 'pcudn', 'pcth', 'pctnn', 'pccovu', 'pcdang', 'pcthni', 'pcdbqh', 'pcvk', 'pck');
+            $a_pc_th = getColTongHop();
+            $a_pc = array_diff($a_pc_th, $a_pc_goc);
+            foreach ($m_tonghop_ct as $ct) {
+                foreach ($m_donvi as $dv){
+                    $ct->phanloainguon = $dv->phanloainguon;
+                    $ct->phanloaidonvi = $dv->maphanloai;
+                }
+
+            }
+            $pldv = dmphanloaidonvi::all();
+            $a_qlnn = ['MAMNON', 'TIEUHOC', 'THCS', 'THvaTHCS', 'PTDTNT'];
+            $a_sunghiep = array_column($pldv->wherenotin('maphanloai', $a_qlnn)->toarray(), 'maphanloai');
+            $m_sunghiep = $m_tonghop_ct->wherein('phanloaidonvi', $a_sunghiep);
+            // $ar_I = array();
+            $ar_I[0] = array('val' => 'CHITXDT', 'tt' => '1', 'noidung' => 'Đơn vị đảm bảo chi thường xuyên và chi đầu tư');
+            $ar_I[1] = array('val' => 'CTX', 'tt' => '2', 'noidung' => 'Đơn vị đảm bảo chi thường xuyên');
+            $ar_I[2] = array('val' => 'CTXMP', 'tt' => '3', 'noidung' => 'Đơn vị đảm bảo một phần chi thường xuyên');
+            $ar_I[3] = array('val' => 'NGANSACH', 'tt' => '4', 'noidung' => 'Đơn vị được nhà nước đảm bảo chi thường xuyên');
+
+            $a_It = array(
+                'tongsodonvi1' => 0, 'tongsodonvi2' => 0, 'quy_tuchu' => 0, 'kp_tk' => 0, 'tang' => 0, 'giam' => 0
+            );
+
+            for ($i = 0; $i < 4; $i++) {
+                $chitiet = $m_sunghiep->where('phanloainguon', $ar_I[$i]['val']);
+                // $ar_I[$i]['soluongbienche'] = count($chitiet);
+                if (count($chitiet) != 0) {
+                    $ar_I[$i]['tongsodonvi1'] = $_tonghop->sum('tongsodonvi1');
+                    $ar_I[$i]['tongsodonvi2'] = $_tonghop->sum('tongsodonvi2');
+                    $ar_I[$i]['quy_tuchu'] = $_tonghop->sum('quy_tuchu');
+                    $ar_I[$i]['kp_tk'] = $ar_I[$i]['quy_tuchu'] * 12;
+                } else {
+                    $ar_I[$i]['tongsodonvi1'] = 0;
+                    $ar_I[$i]['tongsodonvi2'] = 0;
+                    $ar_I[$i]['quy_tuchu'] = 0;
+                    $ar_I[$i]['kp_tk'] = 0;
+                }
+                $ar_I[$i]['tang'] = 0;
+                $ar_I[$i]['giam'] = 0;
+                $result = $ar_I[$i]['tongsodonvi2'] - $ar_I[$i]['tongsodonvi1'];
+                if ($result > 0) {
+                    $ar_I[$i]['tang'] = $result;
+                } else if ($result < 0) {
+                    $ar_I[$i]['giam'] = abs($result);
+                }
+
+                $a_It['tongsodonvi1'] += $ar_I[$i]['tongsodonvi1'];
+                $a_It['tongsodonvi2'] += $ar_I[$i]['tongsodonvi2'];
+                $a_It['quy_tuchu'] += $ar_I[$i]['quy_tuchu'];
+                $a_It['kp_tk'] += $ar_I[$i]['kp_tk'];
+                $a_It['tang'] += $ar_I[$i]['tang'];
+                $a_It['giam'] += $ar_I[$i]['giam'];
+            }
+            // dd($inputs);
             return view('reports.thongtu67.Mau2e_tt46')
-                ->with('inputs',$inputs)
-                ->with('ar_I',$ar_I)
-                ->with('m_dv',$m_dv)
-                ->with('pageTitle','BÁO CÁO NGUỒN THỰC HIỆN CCTL TIẾT KIỆM TỪ VIỆC THAY ĐỔI CƠ CHÉ TỰ CHỦ TRONG NĂM 2019');
+                ->with('inputs', $inputs)
+                ->with('ar_I', $ar_I)
+                ->with('a_It', $a_It)
+                ->with('m_dv', $m_dv)
+                ->with('pageTitle', 'BÁO CÁO NGUỒN THỰC HIỆN CCTL TIẾT KIỆM TỪ VIỆC THAY ĐỔI CƠ CHÉ TỰ CHỦ TRONG NĂM 2019');
         } else
             return view('errors.notlogin');
     }
 
-    function mau2e_huyen_excel(Request $request) {
-        if (Session::has('admin')  ) {
-            $inputs=$request->all();
+    function mau2e_huyen_excel(Request $request)
+    {
+        if (Session::has('admin')) {
+            $inputs = $request->all();
             $madvbc = session('admin')->madvbc;
-            $m_dv = dmdonvi::where('madv',session('admin')->madv)->first();
-            $m_dsh = dmdonvibaocao::where('level','H')->distinct()->get();
-            $m_xa = dmdiabandbkk::join('dmdonvi','dmdonvi.madv', '=', 'dmdiabandbkk.madv')
-                ->join('dmdonvibaocao','dmdonvibaocao.madvbc','=','dmdonvi.madvbc')->get();
+            $m_dv = dmdonvi::where('madv', session('admin')->madv)->first();
+            $m_dsh = dmdonvibaocao::where('level', 'H')->distinct()->get();
+            $m_xa = dmdiabandbkk::join('dmdonvi', 'dmdonvi.madv', '=', 'dmdiabandbkk.madv')
+                ->join('dmdonvibaocao', 'dmdonvibaocao.madvbc', '=', 'dmdonvi.madvbc')->get();
             $ar_h = array();
             $tt = 0;
             foreach ($m_dsh as $h) {
@@ -3161,11 +3385,11 @@ class baocaott67huyenController extends Controller
                     $ar_h[$i]['noidung'] = $h['tendvbc'];
                 }
             }
-            Excel::create('Mau2e_ThKPTG',function($excel) use($ar_h){
-                $excel->sheet('New sheet', function($sheet) use($ar_h){
+            Excel::create('Mau2e_ThKPTG', function ($excel) use ($ar_h) {
+                $excel->sheet('New sheet', function ($sheet) use ($ar_h) {
                     $sheet->loadView('reports.thongtu67.Mau2e_ThKPTGexcel')
-                        ->with('ar_h',$ar_h)
-                        ->with('pageTitle','Mau2e_ThKPTG');
+                        ->with('ar_h', $ar_h)
+                        ->with('pageTitle', 'Mau2e_ThKPTG');
                     $sheet->setAutoSize(false);
                     $sheet->setFontFamily('Tahoma');
                     $sheet->setFontBold(false);
@@ -3175,7 +3399,8 @@ class baocaott67huyenController extends Controller
             return view('errors.notlogin');
     }
 
-    function mau2g_huyen(Request $request) {
+    function mau2g_huyen(Request $request)
+    {
         if (Session::has('admin')) {
             $inputs = $request->all();
             $madvbc = session('admin')->madvbc;
@@ -3190,24 +3415,24 @@ class baocaott67huyenController extends Controller
                 $chekdv = dmdonvi::where('madv', $inputs['madv'])->where('phanloaitaikhoan', 'TH')->get();
                 if (count($chekdv) > 0) {
 
-                    $model_tonghop = nguonkinhphi::where('sohieu',$inputs['sohieu'])
-                        ->where('trangthai','DAGUI')
+                    $model_tonghop = nguonkinhphi::where('sohieu', $inputs['sohieu'])
+                        ->where('trangthai', 'DAGUI')
                         ->where('macqcq', $inputs['madv'])->get();
-                    $model_donvi = dmdonvi::wherein('madv', array_column($model_tonghop->toarray(),'madv'))->get();
-                    $model_bienche = chitieubienche::where('nam', $nam)->wherein('madv', array_column($model_tonghop->toarray(),'madv'))->get();
+                    $model_donvi = dmdonvi::wherein('madv', array_column($model_tonghop->toarray(), 'madv'))->get();
+                    $model_bienche = chitieubienche::where('nam', $nam)->wherein('madv', array_column($model_tonghop->toarray(), 'madv'))->get();
                 } else {
                     $model_donvi = dmdonvi::where('madv', $madv)->get();
                     $model_bienche = chitieubienche::where('nam', $nam)->where('madv', $madv)->get();
-                    $model_tonghop = nguonkinhphi::where('sohieu',$inputs['sohieu'])
-                        ->where('trangthai','DAGUI')
+                    $model_tonghop = nguonkinhphi::where('sohieu', $inputs['sohieu'])
+                        ->where('trangthai', 'DAGUI')
                         ->where('madv', $inputs['madv'])->get();
                 }
             } else {
-                $model_tonghop = nguonkinhphi::where('sohieu',$inputs['sohieu'])
-                    ->where('trangthai','DAGUI')
+                $model_tonghop = nguonkinhphi::where('sohieu', $inputs['sohieu'])
+                    ->where('trangthai', 'DAGUI')
                     ->where('madvbc', $madvbc)->get();
-                $model_donvi = dmdonvi::wherein('madv', array_column($model_tonghop->toarray(),'madv'))->get();
-                $model_bienche = chitieubienche::where('nam', $nam)->wherein('madv', array_column($model_tonghop->toarray(),'madv'))->get();
+                $model_donvi = dmdonvi::wherein('madv', array_column($model_tonghop->toarray(), 'madv'))->get();
+                $model_bienche = chitieubienche::where('nam', $nam)->wherein('madv', array_column($model_tonghop->toarray(), 'madv'))->get();
             }
             foreach ($model_bienche as $bienche) {
                 $bienche->maphanloai = $model_donvi->where('madv', $bienche->madv)->first()->maphanloai;
@@ -3218,13 +3443,13 @@ class baocaott67huyenController extends Controller
                     ->where('trangthai', 'DAGUI')
                     ->where('macqcq', session('admin')->madv)->get();
             }
-            $model_tonghop_ct = nguonkinhphi_bangluong::wherein('masodv', array_column($model_tonghop->toarray(),'masodv'))
+            $model_tonghop_ct = nguonkinhphi_bangluong::wherein('masodv', array_column($model_tonghop->toarray(), 'masodv'))
                 ->where('nam', $nam)->where('thang', $thang)->get();
 
-            $a_linhvuc = array_column($model_tonghop->toarray(),'linhvuchoatdong','masodv');
+            $a_linhvuc = array_column($model_tonghop->toarray(), 'linhvuchoatdong', 'masodv');
             $a_phucap = getColTongHop();
-            $a_pchien = array('heso','vuotkhung','pckv','pccv','pcudn','pcth','pctnn','pccovu','pcdang','pcthni','pcdbqh','pck');
-            $a_pc = array_diff($a_phucap,$a_pchien);
+            $a_pchien = array('heso', 'vuotkhung', 'pckv', 'pccv', 'pcudn', 'pcth', 'pctnn', 'pccovu', 'pcdang', 'pcthni', 'pcdbqh', 'pck');
+            $a_pc = array_diff($a_phucap, $a_pchien);
             foreach ($model_tonghop_ct as $ct) {
                 if ($inputs['madv'] != "" && count($chekdv) > 0) {
                     $tonghop = $model_tonghop->where('masodv', $ct->masodv)->first();
@@ -3241,7 +3466,7 @@ class baocaott67huyenController extends Controller
                     if ($ct->$pc < $ct->$pc_st) { //hệ số < số tiền => theo dõi khác số tiền
                         $ct->pck += $ct->$pc;
                         $ct->st_pck += round($ct->$pc * $model_thongtu->muccu);
-                    }else{
+                    } else {
                         $ct->st_pck += $ct->$pc_st;
                     }
                 }
@@ -3249,15 +3474,15 @@ class baocaott67huyenController extends Controller
                     $pc_st = 'st_' . $pc;
                     if ($ct->$pc < $ct->$pc_st) { //hệ số < số tiền => theo dõi khác số tiền
                         $ct->$pc_st = round($ct->$pc * $model_thongtu->muccu);
-                    }else{
+                    } else {
                         //gán hệ số phụ cấp theo dõi theo số tiên = 0 để sau tính tổng hệ số phụ cấp theo hàm sum()
                         $ct->$pc = 0;
                     }
                 }
-                $ct->ttbh_dv = round(($ct->st_heso + $ct->st_vuotkhung + $ct->st_pccv + $ct->st_pctnn + $ct->st_hesopc)* 23.5 / 100);
+                $ct->ttbh_dv = round(($ct->st_heso + $ct->st_vuotkhung + $ct->st_pccv + $ct->st_pctnn + $ct->st_hesopc) * 23.5 / 100);
             }
-            $a_pl = array_diff(getPLCTTongHop(),getMaCongTacNhuCau());
-            $model_tonghop_ct = $model_tonghop_ct->wherein('mact',$a_pl);
+            $a_pl = array_diff(getPLCTTongHop(), getMaCongTacNhuCau());
+            $model_tonghop_ct = $model_tonghop_ct->wherein('mact', $a_pl);
             $model_bangluong_ct = $model_tonghop_ct->where('macongtac', 'BIENCHE')->where('maphanloai', '<>', 'KVXP');
             $ar_I = array();
             $ar_Igr = array();
@@ -3293,10 +3518,10 @@ class baocaott67huyenController extends Controller
                 $ar_I[13] = array('val' => 'DDT', 'tt' => '-', 'noidung' => 'Đảng, đoàn thể');
             }
             $a_It = array(
-                'heso' => 0,'pckv' => 0,'pccv' => 0,'vuotkhung' => 0,
-                'pcudn' => 0,'pcth' => 0,'pctnn' => 0,'pccovu' => 0,
-                'pcdang' => 0,'pcthni' => 0,'pck' => 0,'pcdbqh' => 0,'tongpc' => 0,
-                'ttbh_dv' => 0,'soluongduocgiao' => 0,'soluongbienche'=> 0,
+                'heso' => 0, 'pckv' => 0, 'pccv' => 0, 'vuotkhung' => 0,
+                'pcudn' => 0, 'pcth' => 0, 'pctnn' => 0, 'pccovu' => 0,
+                'pcdang' => 0, 'pcthni' => 0, 'pck' => 0, 'pcdbqh' => 0, 'tongpc' => 0,
+                'ttbh_dv' => 0, 'soluongduocgiao' => 0, 'soluongbienche' => 0,
             );
             //thiếu chỉ tiêu biên chế
             if (isset($inputs['inchitiet'])) {
@@ -3332,22 +3557,22 @@ class baocaott67huyenController extends Controller
                     $ar_I[$i]['soluongbienche'] = 0;
                     if (isset($model_bangluong_ct)) {
                         $chitiet = $model_bangluong_ct->where('linhvuchoatdong', $ar_Igr[$j]['val']);
-                        $m_dvct = $model_donvi->wherein('madv', a_unique(array_column($chitiet->toarray(),'madv')));
+                        $m_dvct = $model_donvi->wherein('madv', a_unique(array_column($chitiet->toarray(), 'madv')));
                     }
                     $d = 1;
                     $luugr = $i;
                     if (isset($chitiet) && count($chitiet) > 0) {
                         //$thongtin = $chitiet->toArray();
-                        $m_dvct =a_unique(array_column($m_dvct->toarray(),'madv'));
+                        $m_dvct = a_unique(array_column($m_dvct->toarray(), 'madv'));
                         foreach ($m_dvct as $dv) {
-                            $thongtin = $chitiet->where('madv',$dv);
+                            $thongtin = $chitiet->where('madv', $dv);
                             //foreach ($thongtin as $ttchitiet) {
                             $d++;
                             $i += $d;
                             $ar_I[$i]['tt'] = '+';
-                            $ar_I[$i]['noidung'] = $model_donvi->where('madv',$dv)->first()->tendv;
-                            $ar_I[$i]['soluongduocgiao'] = $model_bienche->where('linhvuchoatdong', $ar_Igr[$j]['val'])->where('madv',$dv)->sum('soluongduocgiao');
-                            $ar_I[$i]['soluongbienche'] =count($thongtin);
+                            $ar_I[$i]['noidung'] = $model_donvi->where('madv', $dv)->first()->tendv;
+                            $ar_I[$i]['soluongduocgiao'] = $model_bienche->where('linhvuchoatdong', $ar_Igr[$j]['val'])->where('madv', $dv)->sum('soluongduocgiao');
+                            $ar_I[$i]['soluongbienche'] = count($thongtin);
                             $a_It['soluongduocgiao'] += $ar_I[$i]['soluongduocgiao'];
                             $a_It['soluongbienche'] += $ar_I[$i]['soluongbienche'];
                             $tongpc = 0;
@@ -3396,7 +3621,6 @@ class baocaott67huyenController extends Controller
                 $ar_I[$qlnnddt]['soluongbienche'] = $ar_I[$qlnn]['soluongbienche'] + $ar_I[$ddt]['soluongbienche'];
                 $ar_I[$qlnnddt]['tongpc'] = $ar_I[$qlnn]['tongpc'] + $ar_I[$ddt]['tongpc'];
                 $ar_I[$qlnnddt]['ttbh_dv'] = $ar_I[$qlnn]['ttbh_dv'] + $ar_I[$ddt]['ttbh_dv'];
-
             } else {
                 for ($i = 0; $i < count($ar_I); $i++) {
                     if (isset($model_bangluong_ct)) {
@@ -3407,7 +3631,7 @@ class baocaott67huyenController extends Controller
                     $ar_I[$i]['soluongbienche'] = 0;
                     if (isset($chitiet) && count($chitiet) > 0) {
                         $ar_I[$i]['soluongduocgiao'] = $model_bienche->where('linhvuchoatdong', $ar_I[$i]['val'])->sum('soluongduocgiao');
-                        $ar_I[$i]['soluongbienche'] =count($chitiet);
+                        $ar_I[$i]['soluongbienche'] = count($chitiet);
                         $a_It['soluongduocgiao'] += $ar_I[$i]['soluongduocgiao'];
                         $a_It['soluongbienche'] += $ar_I[$i]['soluongbienche'];
                         $tongpc = 0;
@@ -3441,7 +3665,7 @@ class baocaott67huyenController extends Controller
             }
             if (isset($inputs['excel'])) {
                 Excel::create('Mau2g_TT46', function ($excel) use ($ar_I, $a_It, $m_dv, $inputs) {
-                    $excel->sheet('New sheet', function ($sheet) use ($ar_I, $a_It,$m_dv, $inputs) {
+                    $excel->sheet('New sheet', function ($sheet) use ($ar_I, $a_It, $m_dv, $inputs) {
                         $sheet->loadView('reports.thongtu67.mau2g_tt46')
                             ->with('ar_I', $ar_I)
                             ->with('a_It', $a_It)
@@ -3462,19 +3686,19 @@ class baocaott67huyenController extends Controller
                     ->with('inputs', $inputs)
                     ->with('pageTitle', 'Báo cáo nhu cầu kinh phí thực hiện nghị định 47/2017/NĐ-CP');
             }
-
         } else
             return view('errors.notlogin');
     }
 
-    function mau2g_huyen_excel() {
+    function mau2g_huyen_excel()
+    {
         if (Session::has('admin')) {
-            $m_dv = dmdonvi::where('madv',session('admin')->madv)->first();
-            Excel::create('Mau2g_ThPCUDTG',function($excel) use($m_dv){
-                $excel->sheet('New sheet', function($sheet) use($m_dv){
+            $m_dv = dmdonvi::where('madv', session('admin')->madv)->first();
+            Excel::create('Mau2g_ThPCUDTG', function ($excel) use ($m_dv) {
+                $excel->sheet('New sheet', function ($sheet) use ($m_dv) {
                     $sheet->loadView('reports.thongtu67.Mau2g_ThPCUDTGexcel')
-                        ->with('m_dv',$m_dv)
-                        ->with('pageTitle','Mau2g_ThPCUDTG');
+                        ->with('m_dv', $m_dv)
+                        ->with('pageTitle', 'Mau2g_ThPCUDTG');
                     $sheet->setAutoSize(false);
                     $sheet->setFontFamily('Tahoma');
                     $sheet->setFontBold(false);
@@ -3484,24 +3708,26 @@ class baocaott67huyenController extends Controller
             return view('errors.notlogin');
     }
 
-    function mau2h_huyen() {
+    function mau2h_huyen()
+    {
         if (Session::has('admin')) {
-            $m_dv = dmdonvi::where('madv',session('admin')->madv)->first();
+            $m_dv = dmdonvi::where('madv', session('admin')->madv)->first();
             return view('reports.thongtu67.Mau2h_ThPCTHTG')
-                ->with('m_dv',$m_dv)
-                ->with('pageTitle','TỔNG HỢP PHỤ CẤP THU HÚT TĂNG, GIẢM DO ĐIỀU CHỈNH ĐỊA BÀN VÙNG KINH TẾ XÃ HỘI ĐẶC BIỆT KHÓ KHĂN');
+                ->with('m_dv', $m_dv)
+                ->with('pageTitle', 'TỔNG HỢP PHỤ CẤP THU HÚT TĂNG, GIẢM DO ĐIỀU CHỈNH ĐỊA BÀN VÙNG KINH TẾ XÃ HỘI ĐẶC BIỆT KHÓ KHĂN');
         } else
             return view('errors.notlogin');
     }
 
-    function mau2h_huyen_excel() {
+    function mau2h_huyen_excel()
+    {
         if (Session::has('admin')) {
-            $m_dv = dmdonvi::where('madv',session('admin')->madv)->first();
-            Excel::create('Mau2h_ThPCTHTG',function($excel) use($m_dv){
-                $excel->sheet('New sheet', function($sheet) use($m_dv){
+            $m_dv = dmdonvi::where('madv', session('admin')->madv)->first();
+            Excel::create('Mau2h_ThPCTHTG', function ($excel) use ($m_dv) {
+                $excel->sheet('New sheet', function ($sheet) use ($m_dv) {
                     $sheet->loadView('reports.thongtu67.Mau2h_ThPCTHTGexcel')
-                        ->with('m_dv',$m_dv)
-                        ->with('pageTitle','Mau2h_ThPCTHTG');
+                        ->with('m_dv', $m_dv)
+                        ->with('pageTitle', 'Mau2h_ThPCTHTG');
                     $sheet->setAutoSize(false);
                     $sheet->setFontFamily('Tahoma');
                     $sheet->setFontBold(false);
@@ -3517,32 +3743,46 @@ class baocaott67huyenController extends Controller
         if (Session::has('admin')) {
             ///if ((Session::has('admin') && session('admin')->username == 'khthstc') || (Session::has('admin') && session('admin')->username == 'khthso') ) {
             $inputs = $request->all();
-            $model_thongtu = dmthongtuquyetdinh::select('sohieu','namdt')->distinct()->get();
-            if($inputs['madv'] != '')
-            {
+            // dd($inputs);
+            $model_thongtu = dmthongtuquyetdinh::select('sohieu', 'namdt')->distinct()->get();
+            if ($inputs['madv'] != '') {
                 $madv = $inputs['madv'];
-                $chekdv = dmdonvi::where('madv', $inputs['madv'])->where('phanloaitaikhoan','TH')->get();
-                if(count($chekdv) > 0) {
+                $chekdv = dmdonvi::where('madv', $inputs['madv'])->where('phanloaitaikhoan', 'TH')->get();
+                // dd($chekdv);
+                if (count($chekdv) > 0) {
+                    // $model = nguonkinhphi::where('macqcq', $inputs['madv'])
+                    //     ->where('trangthai','DAGUI')
+                    //     ->wherein('sohieu',array_column($model_thongtu->where('namdt','2019')->toarray(),'sohieu'))->get();
                     $model = nguonkinhphi::where('macqcq', $inputs['madv'])
-                        ->where('trangthai','DAGUI')
-                        ->wherein('sohieu',array_column($model_thongtu->where('namdt','2019')->toarray(),'sohieu'))->get();
-                }else{
+                        ->where('trangthai', 'DAGUI')
+                        ->where('sohieu', $inputs['sohieu'])->get();
+                } else {
+                    // $model = nguonkinhphi::where('madv', $inputs['madv'])
+                    //     ->where('trangthai','DAGUI')
+                    //     ->wherein('sohieu',array_column($model_thongtu->where('namdt','2019')->toarray(),'sohieu'))->get();
                     $model = nguonkinhphi::where('madv', $inputs['madv'])
-                        ->where('trangthai','DAGUI')
-                        ->wherein('sohieu',array_column($model_thongtu->where('namdt','2019')->toarray(),'sohieu'))->get();
+                        ->where('trangthai', 'DAGUI')
+                        ->where('sohieu', $inputs['sohieu'])->get();
                 }
-            }
-            else
+            } else {
+                // $model = nguonkinhphi::where('macqcq', session('admin')->madv)
+                //     ->where('trangthai','DAGUI')
+                //     ->wherein('sohieu',array_column($model_thongtu->where('namdt','2019')->toarray(),'sohieu'))->get();
                 $model = nguonkinhphi::where('macqcq', session('admin')->madv)
-                    ->where('trangthai','DAGUI')
-                    ->wherein('sohieu',array_column($model_thongtu->where('namdt','2019')->toarray(),'sohieu'))->get();
-
+                    ->where('trangthai', 'DAGUI')
+                    ->where('sohieu', $inputs['sohieu'])->get();
+            }
+            // dd($model);
             $model_donvi = dmdonvi::where('macqcq', session('admin')->madv)->get();
+            if($inputs['madv'] != ''){
+                $m_dv = dmdonvi::where('madv', $inputs['madv'])->first();
+            }else{
+                $m_dv = dmdonvi::where('madv', session('admin')->madv)->first();
+            }
 
-            $m_dv = dmdonvi::where('madv', session('admin')->madv)->first();
             $model_nguon = nguonkinhphi_huyen_baocao::where('madv', session('admin')->madv)
-                ->where('trangthai','DAGUI')
-                ->wherein('sohieu',array_column($model_thongtu->where('namdt','2019')->toarray(),'sohieu'))->get();
+                ->where('trangthai', 'DAGUI')
+                ->wherein('sohieu', array_column($model_thongtu->where('namdt', '2019')->toarray(), 'sohieu'))->get();
             if (count($model) == 0 && count($model_nguon) == 0) {
                 return view('errors.nodata');
             }
@@ -3594,34 +3834,51 @@ class baocaott67huyenController extends Controller
             $a_C[1] = array('tt' => '2', 'noidung' => 'Nguồn thực hiện cải cách tiền lương còn dư', 'sotien' => '0');
 
             //Tính toán
-            $a_A[0]['sotien'] = $model_nguon->sum('thuchien');
-            $a_A[1]['sotien'] = $model_nguon->sum('dutoan19');
-            $a_A[2]['sotien'] = $model_nguon->sum('dutoan18');
-            $a_A[3]['sotien'] = $model_nguon->sum('tietkiem17');
-            $a_A[4]['sotien'] = $model_nguon->sum('tietkiem18');
-            $a_A[5]['sotien'] = $model_nguon->sum('tietkiem19');
-            //Tự đảm bảo
-            $a_A[8]['sotien'] = $model_nguon->sum('dbhocphi');
-            $a_A[9]['sotien'] = $model_nguon->sum('dbvienphi');
-            $a_A[10]['sotien'] = $model_nguon->sum('dbkhac');
-            $a_A[7]['sotien'] = $a_A[8]['sotien'] + $a_A[9]['sotien'] + $a_A[10]['sotien'];
+            // $a_A[0]['sotien'] = $model->sum('thuchien');
+            // $a_A[1]['sotien'] = $model->sum('dutoan19');
+            // $a_A[2]['sotien'] = $model->sum('dutoan18');
+            // $a_A[3]['sotien'] = $model->sum('tietkiem17');
+            // $a_A[4]['sotien'] = $model->sum('tietkiem18');
+            // $a_A[5]['sotien'] = $model->sum('tietkiem19');
 
-            $a_A[12]['sotien'] = $model_nguon->sum('kdbhocphi');
-            $a_A[13]['sotien'] = $model_nguon->sum('kdbvienphi');
-            $a_A[14]['sotien'] = $model_nguon->sum('kdbkhac');
-            $a_A[11]['sotien'] = $a_A[12]['sotien'] + $a_A[13]['sotien'] + $a_A[14]['sotien'];
+            $a_A[0]['sotien'] = $model->sum('thuchien1');
+            $a_A[1]['sotien'] = $model->sum('dutoan');
+            $a_A[2]['sotien'] = $model->sum('dutoan1');
+
+            $a_A[3]['sotien'] = $model->sum('tietkiem2');
+            $a_A[4]['sotien'] = $model->sum('tietkiem1');
+            $a_A[5]['sotien'] = $model->sum('tietkiem');
+            //Tự đảm bảo
+            $model_tudb = $model->wherein('phanloainguon', array('CHITXDT', 'CTX'));
+            // $a_A[8]['sotien'] = $model->sum('dbhocphi');
+            // $a_A[9]['sotien'] = $model->sum('dbvienphi');
+            // $a_A[10]['sotien'] = $model->sum('dbkhac');
+            // $a_A[7]['sotien'] = $a_A[8]['sotien'] + $a_A[9]['sotien'] + $a_A[10]['sotien'];
+            $a_A[8]['sotien'] = $model_tudb->sum('hocphi');
+            $a_A[9]['sotien'] = $model_tudb->sum('vienphi');
+            $a_A[10]['sotien'] = $model_tudb->sum('nguonthu');
+            $a_A[7]['sotien'] =  $a_A[8]['sotien'] +  $a_A[9]['sotien'] +  $a_A[10]['sotien'];
+
+            // $a_A[12]['sotien'] = $model->sum('kdbhocphi');
+            // $a_A[13]['sotien'] = $model->sum('kdbvienphi');
+            // $a_A[14]['sotien'] = $model->sum('kdbkhac');
+            // $a_A[11]['sotien'] = $a_A[12]['sotien'] + $a_A[13]['sotien'] + $a_A[14]['sotien'];
+            $a_A[12]['sotien'] = $model->sum('hocphi') - $a_A[8]['sotien'];
+            $a_A[13]['sotien'] = $model->sum('vienphi') - $a_A[9]['sotien'];
+            $a_A[14]['sotien'] = $model->sum('nguonthu') - $a_A[10]['sotien'];
+            $a_A[11]['sotien'] =  $a_A[12]['sotien'] +  $a_A[13]['sotien'] +  $a_A[14]['sotien'];
             $a_A[6]['sotien'] = $a_A[7]['sotien'] + $a_A[11]['sotien'];
 
-            $a_A[15]['sotien'] = $model_nguon->sum('tietkiemchi');
-            $a_A[20]['sotien'] = $model_nguon->sum('bosung');
-            $a_A[21]['sotien'] = $model_nguon->sum('caicach');
+            $a_A[15]['sotien'] = $model->sum('tietkiemchi');
+            $a_A[20]['sotien'] = $model->sum('bosung');
+            $a_A[21]['sotien'] = $model->sum('caicach');
             //Tổng nhu cầu năm 2017
             $model_nc2017 = nguonkinhphi::where('madvbc', 'like', $inputs['madv'] . '%')
-                ->wherein('sohieu',array_column($model_thongtu->where('namdt','2017')->toarray(),'sohieu'))->get();
+                ->wherein('sohieu', array_column($model_thongtu->where('namdt', '2017')->toarray(), 'sohieu'))->get();
             //Tổng nhu cầu năm 2018
             $model_nc2018 = nguonkinhphi::where('madvbc', 'like', $inputs['madv'] . '%')
-                ->wherein('sohieu',array_column($model_thongtu->where('namdt','2018')->toarray(),'sohieu'))->get();
-            $model_tudb = $model->wherein('phanloainguon', array('CHITXDT', 'CTX'));
+                ->wherein('sohieu', array_column($model_thongtu->where('namdt', '2018')->toarray(), 'sohieu'))->get();
+
             $model_xp = $model->where('maphanloai', 'KVXP');
             $a_BII[1]['sotien'] = $model_tudb->sum('luongphucap') + $model_tudb->sum('baohiem');
             $a_BII[2]['sotien'] = $model_xp->sum('luongphucap') + $model_xp->sum('baohiem');
@@ -3645,7 +3902,7 @@ class baocaott67huyenController extends Controller
 
             $a_TC = array(
                 'A' => ($a_A[0]['sotien'] + $a_A[1]['sotien'] + $a_A[2]['sotien'] + $a_A[3]['sotien']
-                    + $a_A[4]['sotien']+ $a_A[5]['sotien'] + $a_A[6]['sotien'] + $a_A[15]['sotien'] + $a_A[20]['sotien']+ $a_A[21]['sotien']),
+                    + $a_A[4]['sotien'] + $a_A[5]['sotien'] + $a_A[6]['sotien'] + $a_A[15]['sotien'] + $a_A[20]['sotien'] + $a_A[21]['sotien']),
                 'BI' => $model->sum('tongnhucau1'),
                 'BI1' => $model->sum('tongnhucau2'),
                 'BII' => (array_sum(array_column($a_BII, 'sotien')) - $a_BII[1]['sotien']),
@@ -3689,17 +3946,16 @@ class baocaott67huyenController extends Controller
         if (Session::has('admin')) {
             ///if ((Session::has('admin') && session('admin')->username == 'khthstc') || (Session::has('admin') && session('admin')->username == 'khthso') ) {
             $inputs = $request->all();
-            $model = nguonkinhphi::where('madvbc','like',$inputs['madv'].'%')
-                ->where('sohieu','ND38_2019')->get();
-            if(session('admin')->username == 'khthso')
-            {
-                $model = nguonkinhphi::join('dmdonvibaocao','dmdonvibaocao.madvbc','=','nguonkinhphi.madvbc')
-                    ->where('nguonkinhphi.madvbc','like',$inputs['madv'].'%')
-                    ->where('dmdonvibaocao.level','T')
-                    ->where('nguonkinhphi.sohieu','ND38_2019')->get();
+            $model = nguonkinhphi::where('madvbc', 'like', $inputs['madv'] . '%')
+                ->where('sohieu', 'ND38_2019')->get();
+            if (session('admin')->username == 'khthso') {
+                $model = nguonkinhphi::join('dmdonvibaocao', 'dmdonvibaocao.madvbc', '=', 'nguonkinhphi.madvbc')
+                    ->where('nguonkinhphi.madvbc', 'like', $inputs['madv'] . '%')
+                    ->where('dmdonvibaocao.level', 'T')
+                    ->where('nguonkinhphi.sohieu', 'ND38_2019')->get();
             }
-            $model_donvi = dmdonvi::where('madvbc',session('admin')->madvbc)->get();
-            if(count($model) == 0){
+            $model_donvi = dmdonvi::where('madvbc', session('admin')->madvbc)->get();
+            if (count($model) == 0) {
                 return view('errors.nodata');
             }
             //foreach($model as $ct){
@@ -3707,54 +3963,54 @@ class baocaott67huyenController extends Controller
             //    $ct->phanloainguon = $donvi->phanloainguon;
             //    $ct->maphanloai = $donvi->maphanloai;
             //}
-            $m_dv = dmdonvi::where('madv',session('admin')->madv)->first();
+            $m_dv = dmdonvi::where('madv', session('admin')->madv)->first();
 
             $a_A = array();
-            $a_A[0] = array('tt'=>'1','noidung'=>'50% tăng thu NSĐP (không kể tăng thu tiền sử dụng đất) thực hiện 2016 so dự toán Thủ tướng Chính phủ giao năm 2016','sotien'=>'0');
-            $a_A[1] = array('tt'=>'2','noidung'=>'Số tiết kiệm 10% chi thường xuyên dự toán năm 2017','sotien'=>'0');
-            $a_A[2] = array('tt'=>'3','noidung'=>'Số thu được huy động từ nguồn để lại đơn vị năm 2017','sotien'=>'0');
-            $a_A[3] = array('tt'=>'a','noidung'=>'Nguồn huy động từ các đơn vị tự đảm bảo','sotien'=>'0');
-            $a_A[4] = array('tt'=>'+','noidung'=>'Học phí','sotien'=>'0');
-            $a_A[5] = array('tt'=>'+','noidung'=>'Viện phí','sotien'=>'0');
-            $a_A[6] = array('tt'=>'+','noidung'=>'Nguồn thu khác','sotien'=>'0');
-            $a_A[7] = array('tt'=>'b','noidung'=>'Nguồn huy động từ các đơn vị chưa tự đảm bảo','sotien'=>'0');
-            $a_A[8] = array('tt'=>'+','noidung'=>'Học phí','sotien'=>'0');
-            $a_A[9] = array('tt'=>'+','noidung'=>'Viện phí','sotien'=>'0');
-            $a_A[10] = array('tt'=>'+','noidung'=>'Nguồn thu khác','sotien'=>'0');
-            $a_A[11] = array('tt'=>'4','noidung'=>'Nguồn thực hiện cải cách tiền lương năm 2016 chưa sử dụng hết chuyển sang 2017','sotien'=>'0');
+            $a_A[0] = array('tt' => '1', 'noidung' => '50% tăng thu NSĐP (không kể tăng thu tiền sử dụng đất) thực hiện 2016 so dự toán Thủ tướng Chính phủ giao năm 2016', 'sotien' => '0');
+            $a_A[1] = array('tt' => '2', 'noidung' => 'Số tiết kiệm 10% chi thường xuyên dự toán năm 2017', 'sotien' => '0');
+            $a_A[2] = array('tt' => '3', 'noidung' => 'Số thu được huy động từ nguồn để lại đơn vị năm 2017', 'sotien' => '0');
+            $a_A[3] = array('tt' => 'a', 'noidung' => 'Nguồn huy động từ các đơn vị tự đảm bảo', 'sotien' => '0');
+            $a_A[4] = array('tt' => '+', 'noidung' => 'Học phí', 'sotien' => '0');
+            $a_A[5] = array('tt' => '+', 'noidung' => 'Viện phí', 'sotien' => '0');
+            $a_A[6] = array('tt' => '+', 'noidung' => 'Nguồn thu khác', 'sotien' => '0');
+            $a_A[7] = array('tt' => 'b', 'noidung' => 'Nguồn huy động từ các đơn vị chưa tự đảm bảo', 'sotien' => '0');
+            $a_A[8] = array('tt' => '+', 'noidung' => 'Học phí', 'sotien' => '0');
+            $a_A[9] = array('tt' => '+', 'noidung' => 'Viện phí', 'sotien' => '0');
+            $a_A[10] = array('tt' => '+', 'noidung' => 'Nguồn thu khác', 'sotien' => '0');
+            $a_A[11] = array('tt' => '4', 'noidung' => 'Nguồn thực hiện cải cách tiền lương năm 2016 chưa sử dụng hết chuyển sang 2017', 'sotien' => '0');
 
             //
             $a_BI = array();
-            $a_BI[0] = array('tt'=>'1','noidung'=>'Quỹ tiền lương, phụ cấp tăng thêm đối với cán bộ công chức khu vực hành chính, sự nghiệp ','sotien'=>'0');
-            $a_BI[1] = array('tt'=>'','noidung'=>'Trong đó: nhu cầu tăng thêm đối với các đơn vị sự nghiệp tự đảm bảo ','sotien'=>'0');
-            $a_BI[2] = array('tt'=>'2','noidung'=>'Quỹ lương, phụ cấp tăng thêm đối với cán bộ chuyên trách và công chức cấp xã','sotien'=>'0');
-            $a_BI[3] = array('tt'=>'3','noidung'=>'Hoạt động phí tăng thêm đối với đại biểu hội đồng nhân dân các cấp','sotien'=>'0');
-            $a_BI[4] = array('tt'=>'4','noidung'=>'Quỹ trợ cấp tăng thêm đối với cán bộ xã nghỉ việc hưởng trợ cấp hàng tháng theo NĐ 76/2017/NĐ-CP','sotien'=>'0');
-            $a_BI[5] = array('tt'=>'5','noidung'=>'Kinh phí tăng thêm để thực hiện chế độ đối với cán bộ không chuyên trách cấp xã, thôn và tổ dân phố','sotien'=>'0');
-            $a_BI[6] = array('tt'=>'6','noidung'=>'Kinh phí tăng thêm để thực hiện phụ cấp trách nhiệm đối với cấp ủy viên các cấp theo QĐ số 169-QĐ/TW ngày 24/6/2008','sotien'=>'0');
-            $a_BI[7] = array('tt'=>'7','noidung'=>'Kinh phí tăng thêm thực hiện chế độ bồi dưỡng phục vụ hoạt động cấp ủy thuộc cấp tỉnh theo Quy định 3115-QĐ/VVPTW','sotien'=>'0');
+            $a_BI[0] = array('tt' => '1', 'noidung' => 'Quỹ tiền lương, phụ cấp tăng thêm đối với cán bộ công chức khu vực hành chính, sự nghiệp ', 'sotien' => '0');
+            $a_BI[1] = array('tt' => '', 'noidung' => 'Trong đó: nhu cầu tăng thêm đối với các đơn vị sự nghiệp tự đảm bảo ', 'sotien' => '0');
+            $a_BI[2] = array('tt' => '2', 'noidung' => 'Quỹ lương, phụ cấp tăng thêm đối với cán bộ chuyên trách và công chức cấp xã', 'sotien' => '0');
+            $a_BI[3] = array('tt' => '3', 'noidung' => 'Hoạt động phí tăng thêm đối với đại biểu hội đồng nhân dân các cấp', 'sotien' => '0');
+            $a_BI[4] = array('tt' => '4', 'noidung' => 'Quỹ trợ cấp tăng thêm đối với cán bộ xã nghỉ việc hưởng trợ cấp hàng tháng theo NĐ 76/2017/NĐ-CP', 'sotien' => '0');
+            $a_BI[5] = array('tt' => '5', 'noidung' => 'Kinh phí tăng thêm để thực hiện chế độ đối với cán bộ không chuyên trách cấp xã, thôn và tổ dân phố', 'sotien' => '0');
+            $a_BI[6] = array('tt' => '6', 'noidung' => 'Kinh phí tăng thêm để thực hiện phụ cấp trách nhiệm đối với cấp ủy viên các cấp theo QĐ số 169-QĐ/TW ngày 24/6/2008', 'sotien' => '0');
+            $a_BI[7] = array('tt' => '7', 'noidung' => 'Kinh phí tăng thêm thực hiện chế độ bồi dưỡng phục vụ hoạt động cấp ủy thuộc cấp tỉnh theo Quy định 3115-QĐ/VVPTW', 'sotien' => '0');
 
             $a_BII = array();
-            $a_BII[0] = array('tt'=>'1','noidung'=>'Kinh phí hỗ trợ chênh lệch tiền lương cho người có thu nhập thấp (NĐ17/2015/NĐ-CP) và mức lương 1,21 (6 tháng)','sotien'=>'0');
-            $a_BII[1] = array('tt'=>'2','noidung'=>'Kinh phí tăng, giảm do điều chỉnh địa bàn vùng KTXH ĐBKK năm 2017 theo Quyết định số 131/QĐ-TTg và Quyết định số 582/QĐ-TTg của Thủ tướng Chính phủ','sotien'=>'0');
-            $a_BII[2] = array('tt'=>'3','noidung'=>'Nhu cầu kinh phí thực hiện chính sách tinh giản biên chế năm 2017 theo NĐ số 108/2014/NĐ-CP ngày 20/11/2014 (Đối tượng đã được Bộ Nội vụ thẩm định)','sotien'=>'0');
-            $a_BII[3] = array('tt'=>'4','noidung'=>'Nhu cầu kinh phí thực hiện chính sách nghỉ hưu trước tuổi năm 2017 theo NĐ số 26/2014/NĐ-CP ngày 09/3/2015','sotien'=>'0');
+            $a_BII[0] = array('tt' => '1', 'noidung' => 'Kinh phí hỗ trợ chênh lệch tiền lương cho người có thu nhập thấp (NĐ17/2015/NĐ-CP) và mức lương 1,21 (6 tháng)', 'sotien' => '0');
+            $a_BII[1] = array('tt' => '2', 'noidung' => 'Kinh phí tăng, giảm do điều chỉnh địa bàn vùng KTXH ĐBKK năm 2017 theo Quyết định số 131/QĐ-TTg và Quyết định số 582/QĐ-TTg của Thủ tướng Chính phủ', 'sotien' => '0');
+            $a_BII[2] = array('tt' => '3', 'noidung' => 'Nhu cầu kinh phí thực hiện chính sách tinh giản biên chế năm 2017 theo NĐ số 108/2014/NĐ-CP ngày 20/11/2014 (Đối tượng đã được Bộ Nội vụ thẩm định)', 'sotien' => '0');
+            $a_BII[3] = array('tt' => '4', 'noidung' => 'Nhu cầu kinh phí thực hiện chính sách nghỉ hưu trước tuổi năm 2017 theo NĐ số 26/2014/NĐ-CP ngày 09/3/2015', 'sotien' => '0');
 
             //Tính toán
             $a_A[1]['sotien'] = $model->sum('tietkiem');
-            $model_tudb = $model->wherein('phanloainguon',array('CHITXDT','CTX'));
-            $a_A[4]['sotien'] =$model_tudb->sum('hocphi');
-            $a_A[5]['sotien'] =$model_tudb->sum('vienphi');
-            $a_A[6]['sotien'] =$model_tudb->sum('nguonthu');
-            $a_A[3]['sotien'] =  $a_A[4]['sotien'] +  $a_A[5]['sotien']+  $a_A[6]['sotien'];
+            $model_tudb = $model->wherein('phanloainguon', array('CHITXDT', 'CTX'));
+            $a_A[4]['sotien'] = $model_tudb->sum('hocphi');
+            $a_A[5]['sotien'] = $model_tudb->sum('vienphi');
+            $a_A[6]['sotien'] = $model_tudb->sum('nguonthu');
+            $a_A[3]['sotien'] =  $a_A[4]['sotien'] +  $a_A[5]['sotien'] +  $a_A[6]['sotien'];
             //$a_BI[1]['sotien'] = $model->luongphucap;
             $a_A[8]['sotien'] = $model->sum('hocphi') - $model_tudb->sum('hocphi');
-            $a_A[9]['sotien'] = $model->sum('vienphi')- $model_tudb->sum('vienphi');
-            $a_A[10]['sotien'] = $model->sum('nguonthu')- $model_tudb->sum('nguonthu');
-            $a_A[7]['sotien'] =  $a_A[8]['sotien'] +  $a_A[9]['sotien']+  $a_A[10]['sotien'];
+            $a_A[9]['sotien'] = $model->sum('vienphi') - $model_tudb->sum('vienphi');
+            $a_A[10]['sotien'] = $model->sum('nguonthu') - $model_tudb->sum('nguonthu');
+            $a_A[7]['sotien'] =  $a_A[8]['sotien'] +  $a_A[9]['sotien'] +  $a_A[10]['sotien'];
             $a_A[2]['sotien'] =  $a_A[3]['sotien'] +  $a_A[7]['sotien'];
 
-            $model_xp = $model->where('maphanloai','KVXP');
+            $model_xp = $model->where('maphanloai', 'KVXP');
 
             $a_BI[1]['sotien'] = $model_tudb->sum('luongphucap');
             $a_BI[2]['sotien'] = $model_xp->sum('luongphucap');
@@ -3772,21 +4028,21 @@ class baocaott67huyenController extends Controller
             $a_BII[3]['sotien'] = $model->sum('nghihuusom');
 
             $a_TC = array(
-                'A'=>($a_A[0]['sotien'] + $a_A[1]['sotien'] +$a_A[2]['sotien'] + $a_A[11]['sotien']),
-                'BI'=>(array_sum(array_column($a_BI,'sotien')) - $a_BI[1]['sotien']),
-                'BII'=>(array_sum(array_column($a_BII,'sotien')))
+                'A' => ($a_A[0]['sotien'] + $a_A[1]['sotien'] + $a_A[2]['sotien'] + $a_A[11]['sotien']),
+                'BI' => (array_sum(array_column($a_BI, 'sotien')) - $a_BI[1]['sotien']),
+                'BII' => (array_sum(array_column($a_BII, 'sotien')))
             );
-            Excel::create('Mau2h_ThPCTHTG',function($excel) use($model,$a_A,$a_BI,$a_BII,$a_TC,$m_dv,$inputs){
-                $excel->sheet('New sheet', function($sheet) use($model,$a_A,$a_BI,$a_BII,$a_TC,$m_dv,$inputs){
+            Excel::create('Mau2h_ThPCTHTG', function ($excel) use ($model, $a_A, $a_BI, $a_BII, $a_TC, $m_dv, $inputs) {
+                $excel->sheet('New sheet', function ($sheet) use ($model, $a_A, $a_BI, $a_BII, $a_TC, $m_dv, $inputs) {
                     $sheet->loadView('reports.thongtu67.Mau2h_ThPCTHTGexcel')
-                        ->with('model',$model)
-                        ->with('a_A',$a_A)
-                        ->with('a_BI',$a_BI)
-                        ->with('a_BII',$a_BII)
-                        ->with('a_TC',$a_TC)
-                        ->with('m_dv',$m_dv)
-                        ->with('inputs',$inputs)
-                        ->with('pageTitle','Mau2h_ThPCTHTG');
+                        ->with('model', $model)
+                        ->with('a_A', $a_A)
+                        ->with('a_BI', $a_BI)
+                        ->with('a_BII', $a_BII)
+                        ->with('a_TC', $a_TC)
+                        ->with('m_dv', $m_dv)
+                        ->with('inputs', $inputs)
+                        ->with('pageTitle', 'Mau2h_ThPCTHTG');
                     $sheet->setAutoSize(false);
                     $sheet->setFontFamily('Tahoma');
                     $sheet->setFontBold(false);
@@ -3803,81 +4059,84 @@ class baocaott67huyenController extends Controller
             //if ((Session::has('admin') && session('admin')->username == 'khthstc') || (Session::has('admin') && session('admin')->username == 'khthso') ) {
             $inputs = $request->all();
             $madvbc = session('admin')->madvbc;
-            $model_thongtu = dmthongtuquyetdinh::select('sohieu','namdt')->distinct()->get();
-            if($inputs['madv'] != "")
-            {
+            $model_thongtu = dmthongtuquyetdinh::select('sohieu', 'namdt')->distinct()->get();
+            if ($inputs['madv'] != "") {
                 $madv = $inputs['madv'];
-                $chekdv = dmdonvi::where('madv', $inputs['madv'])->where('phanloaitaikhoan','TH')->get();
-                if(count($chekdv) > 0) {
+                $chekdv = dmdonvi::where('madv', $inputs['madv'])->where('phanloaitaikhoan', 'TH')->get();
+                if (count($chekdv) > 0) {
                     $m_dv = dmdonvi::select('tendv', 'madv')
                         ->where('macqcq', $madv)
                         ->distinct()
                         ->get();
-                    $model = nguonkinhphi::where('macqcq',$madv)
-                        ->where('macqcq',session('admin')->madv)
-                        ->where('trangthai','DAGUI')
-                        ->wherein('sohieu',array_column($model_thongtu->where('namdt','2019')->toarray(),'sohieu'))
+                    $model = nguonkinhphi::where('macqcq', $madv)
+                        ->where('macqcq', session('admin')->madv)
+                        ->where('trangthai', 'DAGUI')
+                        // ->wherein('sohieu',array_column($model_thongtu->where('namdt','2019')->toarray(),'sohieu'))
+                        ->where('sohieu', $inputs['sohieu'])
                         ->get();
-                }
-                else
-                {
+                        // dd($m_dv);
+                } else {
                     $m_dv = dmdonvi::select('tendv', 'madv')
                         ->where('madv', $madv)
-                        ->distinct()
+                        ->first();
+                        // ->distinct()
+                        // ->get();
+                    $model = nguonkinhphi::where('madv', $madv)
+                        ->where('macqcq', session('admin')->madv)
+                        ->where('trangthai', 'DAGUI')
+                        // ->wherein('sohieu',array_column($model_thongtu->where('namdt','2019')->toarray(),'sohieu'))
+                        ->where('sohieu', $inputs['sohieu'])
                         ->get();
-                    $model = nguonkinhphi::where('madv',$madv)
-                        ->where('macqcq',session('admin')->madv)
-                        ->where('trangthai','DAGUI')
-                        ->wherein('sohieu',array_column($model_thongtu->where('namdt','2019')->toarray(),'sohieu'))
-                        ->get();
+                        // dd($m_dv);
                 }
-            }
-            else {
-                $m_dv = dmdonvi::select('tendv','madv')
-                    ->where('macqcq',session('admin')->madv)
-                    ->distinct()
-                    ->get();
-                $model = nguonkinhphi::where('macqcq',session('admin')->madv)
-                    ->where('trangthai','DAGUI')
-                    ->wherein('sohieu',array_column($model_thongtu->where('namdt','2019')->toarray(),'sohieu'))
+            } else {
+                $m_dv = dmdonvi::select('tendv', 'madv')
+                    ->where('madv', session('admin')->madv)
+                    ->first();
+                    // ->distinct()
+                    // ->get();
+                $model = nguonkinhphi::where('macqcq', session('admin')->madv)
+                    ->where('trangthai', 'DAGUI')
+                    // ->wherein('sohieu',array_column($model_thongtu->where('namdt','2019')->toarray(),'sohieu'))
+                    ->where('sohieu', $inputs['sohieu'])
                     ->get();
             }
             $ardv = $m_dv->toArray();
 
-            $a_th = array_column(nguonkinhphi_huyen_baocao::where('trangthai','DAGUI')
-                ->where('madv',session('admin')->madv)->get()->toarray(),'masodv');
+            $a_th = array_column(nguonkinhphi_huyen_baocao::where('trangthai', 'DAGUI')
+                ->where('madv', session('admin')->madv)->get()->toarray(), 'masodv');
             $model_nguon = nguonkinhphi_huyen_baocao_chitiet::where('madv', session('admin')->madv)
-                ->wherein('masodv',$a_th)
-                ->wherein('sohieu',array_column($model_thongtu->where('namdt','2019')->toarray(),'sohieu'))->get();
+                ->wherein('masodv', $a_th)
+                // ->wherein('sohieu',array_column($model_thongtu->where('namdt','2019')->toarray(),'sohieu'))->get();
+                ->where('sohieu', $inputs['sohieu'])->get();
             if (count($model) == 0 && count($model_nguon) == 0) {
                 return view('errors.nodata');
             }
-            $m_dv = dmdonvi::where('madv',session('admin')->madv)->first();
+            // $m_dv = dmdonvi::where('madv', session('admin')->madv)->first();
             $data = array();
             $group = array();
-            if(isset($inputs['inchitiet'])) {
-                $group[0] = array('val' => 'GDDT', 'tt' => 'a', 'noidung' => 'Sự nghiệp giáo dục - đào tạo', 'nhucau' => 0, 'nguonkp' => 0, 'tietkiem' => 0, 'hocphi' => 0, 'vienphi' => 0,'khac' => 0, 'nguonthu' => 0);
-                $group[1] = array('val' => 'GD', 'tt' => '-', 'noidung' => 'Giáo dục', 'nhucau' => 0, 'nguonkp' => 0, 'tietkiem' => 0, 'hocphi' => 0, 'vienphi' => 0,'khac' => 0, 'nguonthu' => 0);
-                $group[2] = array('val' => 'DT', 'tt' => '-', 'noidung' => 'Đào tạo', 'nhucau' => 0, 'nguonkp' => 0, 'tietkiem' => 0, 'hocphi' => 0, 'vienphi' => 0,'khac' => 0, 'nguonthu' => 0);
-                $group[3] = array('val' => 'YTE', 'tt' => 'b', 'noidung' => 'Sự nghiệp y tế', 'nhucau' => 0, 'nguonkp' => 0, 'tietkiem' => 0, 'hocphi' => 0, 'vienphi' => 0,'khac' => 0, 'nguonthu' => 0);
-                $group[4] = array('val' => 'KHAC', 'tt' => 'c', 'noidung' => 'Sự nghiệp khác', 'nhucau' => 0, 'nguonkp' => 0, 'tietkiem' => 0, 'hocphi' => 0, 'vienphi' => 0,'khac' => 0, 'nguonthu' => 0);
-                $group[5] = array('val' => 'QLNN', 'tt' => 'd', 'noidung' => ' Quản lý nhà nước, Đảng, đoàn thể', 'nhucau' => 0, 'nguonkp' => 0, 'tietkiem' => 0, 'hocphi' => 0, 'vienphi' => 0,'khac' => 0, 'nguonthu' => 0);
-                $group[6] = array('val' => 'KVXP', 'tt' => '-', 'noidung' => 'Trong đó: Cán bộ, công chức cấp xã', 'nhucau' => 0, 'nguonkp' => 0, 'tietkiem' => 0, 'hocphi' => 0, 'vienphi' => 0,'khac' => 0, 'nguonthu' => 0);
-            }
-            else {
-                $data[0] = array('val' => 'GDDT', 'tt' => 'a', 'noidung' => 'Sự nghiệp giáo dục - đào tạo', 'nhucau' => 0, 'nguonkp' => 0, 'tietkiem' => 0, 'hocphi' => 0, 'vienphi' => 0,'khac' => 0, 'nguonthu' => 0);
-                $data[1] = array('val' => 'GD', 'tt' => '-', 'noidung' => 'Giáo dục', 'nhucau' => 0, 'nguonkp' => 0, 'tietkiem' => 0, 'hocphi' => 0, 'vienphi' => 0,'khac' => 0, 'nguonthu' => 0);
-                $data[2] = array('val' => 'DT', 'tt' => '-', 'noidung' => 'Đào tạo', 'nhucau' => 0, 'nguonkp' => 0, 'tietkiem' => 0, 'hocphi' => 0, 'vienphi' => 0,'khac' => 0, 'nguonthu' => 0);
-                $data[3] = array('val' => 'YTE', 'tt' => 'b', 'noidung' => 'Sự nghiệp y tế', 'nhucau' => 0, 'nguonkp' => 0, 'tietkiem' => 0, 'hocphi' => 0, 'vienphi' => 0,'khac' => 0, 'nguonthu' => 0);
-                $data[4] = array('val' => 'KHAC', 'tt' => 'c', 'noidung' => 'Sự nghiệp khác', 'nhucau' => 0, 'nguonkp' => 0, 'tietkiem' => 0, 'hocphi' => 0, 'vienphi' => 0,'khac' => 0, 'nguonthu' => 0);
-                $data[5] = array('val' => 'QLNN', 'tt' => 'd', 'noidung' => ' Quản lý nhà nước, Đảng, đoàn thể', 'nhucau' => 0, 'nguonkp' => 0, 'tietkiem' => 0, 'hocphi' => 0, 'vienphi' => 0,'khac' => 0, 'nguonthu' => 0);
-                $data[6] = array('val' => 'KVXP', 'tt' => '-', 'noidung' => 'Trong đó: Cán bộ, công chức cấp xã', 'nhucau' => 0, 'nguonkp' => 0, 'tietkiem' => 0, 'hocphi' => 0, 'vienphi' => 0,'khac' => 0, 'nguonthu' => 0);
+            if (isset($inputs['inchitiet'])) {
+                $group[0] = array('val' => 'GDDT', 'tt' => 'a', 'noidung' => 'Sự nghiệp giáo dục - đào tạo', 'nhucau' => 0, 'nguonkp' => 0, 'tietkiem' => 0, 'hocphi' => 0, 'vienphi' => 0, 'khac' => 0, 'nguonthu' => 0);
+                $group[1] = array('val' => 'GD', 'tt' => '-', 'noidung' => 'Giáo dục', 'nhucau' => 0, 'nguonkp' => 0, 'tietkiem' => 0, 'hocphi' => 0, 'vienphi' => 0, 'khac' => 0, 'nguonthu' => 0);
+                $group[2] = array('val' => 'DT', 'tt' => '-', 'noidung' => 'Đào tạo', 'nhucau' => 0, 'nguonkp' => 0, 'tietkiem' => 0, 'hocphi' => 0, 'vienphi' => 0, 'khac' => 0, 'nguonthu' => 0);
+                $group[3] = array('val' => 'YTE', 'tt' => 'b', 'noidung' => 'Sự nghiệp y tế', 'nhucau' => 0, 'nguonkp' => 0, 'tietkiem' => 0, 'hocphi' => 0, 'vienphi' => 0, 'khac' => 0, 'nguonthu' => 0);
+                $group[4] = array('val' => 'KHAC', 'tt' => 'c', 'noidung' => 'Sự nghiệp khác', 'nhucau' => 0, 'nguonkp' => 0, 'tietkiem' => 0, 'hocphi' => 0, 'vienphi' => 0, 'khac' => 0, 'nguonthu' => 0);
+                $group[5] = array('val' => 'QLNN', 'tt' => 'd', 'noidung' => ' Quản lý nhà nước, Đảng, đoàn thể', 'nhucau' => 0, 'nguonkp' => 0, 'tietkiem' => 0, 'hocphi' => 0, 'vienphi' => 0, 'khac' => 0, 'nguonthu' => 0);
+                $group[6] = array('val' => 'KVXP', 'tt' => '-', 'noidung' => 'Trong đó: Cán bộ, công chức cấp xã', 'nhucau' => 0, 'nguonkp' => 0, 'tietkiem' => 0, 'hocphi' => 0, 'vienphi' => 0, 'khac' => 0, 'nguonthu' => 0);
+            } else {
+                $data[0] = array('val' => 'GDDT', 'tt' => 'a', 'noidung' => 'Sự nghiệp giáo dục - đào tạo', 'nhucau' => 0, 'nguonkp' => 0, 'tietkiem' => 0, 'hocphi' => 0, 'vienphi' => 0, 'khac' => 0, 'nguonthu' => 0);
+                $data[1] = array('val' => 'GD', 'tt' => '-', 'noidung' => 'Giáo dục', 'nhucau' => 0, 'nguonkp' => 0, 'tietkiem' => 0, 'hocphi' => 0, 'vienphi' => 0, 'khac' => 0, 'nguonthu' => 0);
+                $data[2] = array('val' => 'DT', 'tt' => '-', 'noidung' => 'Đào tạo', 'nhucau' => 0, 'nguonkp' => 0, 'tietkiem' => 0, 'hocphi' => 0, 'vienphi' => 0, 'khac' => 0, 'nguonthu' => 0);
+                $data[3] = array('val' => 'YTE', 'tt' => 'b', 'noidung' => 'Sự nghiệp y tế', 'nhucau' => 0, 'nguonkp' => 0, 'tietkiem' => 0, 'hocphi' => 0, 'vienphi' => 0, 'khac' => 0, 'nguonthu' => 0);
+                $data[4] = array('val' => 'KHAC', 'tt' => 'c', 'noidung' => 'Sự nghiệp khác', 'nhucau' => 0, 'nguonkp' => 0, 'tietkiem' => 0, 'hocphi' => 0, 'vienphi' => 0, 'khac' => 0, 'nguonthu' => 0);
+                $data[5] = array('val' => 'QLNN', 'tt' => 'd', 'noidung' => ' Quản lý nhà nước, Đảng, đoàn thể', 'nhucau' => 0, 'nguonkp' => 0, 'tietkiem' => 0, 'hocphi' => 0, 'vienphi' => 0, 'khac' => 0, 'nguonthu' => 0);
+                $data[6] = array('val' => 'KVXP', 'tt' => '-', 'noidung' => 'Trong đó: Cán bộ, công chức cấp xã', 'nhucau' => 0, 'nguonkp' => 0, 'tietkiem' => 0, 'hocphi' => 0, 'vienphi' => 0, 'khac' => 0, 'nguonthu' => 0);
             }
             $a_sunghiep = dmkhoipb::all();
-            $a_sn = array('GD','DT','YTE','QLNN');
+            $a_sn = array('GD', 'DT', 'YTE', 'QLNN');
             $a_sunghiep = array_column($a_sunghiep->toarray(), 'makhoipb');
 
-            if(isset($inputs['inchitiet'])) {
+            if (isset($inputs['inchitiet'])) {
                 $gddt = 0;
                 $daotao = 0;
                 $giaoduc = 0;
@@ -3909,23 +4168,23 @@ class baocaott67huyenController extends Controller
                     $data[$i]['khac'] = 0;
                     $data[$i]['nguonthu'] = 0;
                     $luugr = $i;
-                    if($group[$j]['val'] == 'KHAC'){
-                        foreach($a_sunghiep as $sn){
+                    if ($group[$j]['val'] == 'KHAC') {
+                        foreach ($a_sunghiep as $sn) {
                             if (!in_array($sn, $a_sn))
                                 $dulieu = $model->where('linhvuchoatdong', $sn);
                             if (isset($dulieu) && count($dulieu) > 0) {
                                 foreach ($ardv as $chitietdv) {
                                     $solieu = $dulieu->where('madv', $chitietdv['madv']);
-                                    $d =1;
+                                    $d = 1;
                                     if (isset($solieu) && count($solieu) > 0) {
                                         $d++;
                                         $i += $d;
                                         $data[$i]['tt'] = '+';
                                         $data[$i]['noidung'] = $chitietdv['tendv'];
                                         $data[$i]['nhucau'] = $solieu->sum('luongphucap') + $solieu->sum('baohiem') +
-                                            $solieu->sum('daibieuhdnd')+ $solieu->sum('nghihuu')+ $solieu->sum('canbokct')+
-                                            $solieu->sum('uyvien')+ $solieu->sum('boiduong')+ $solieu->sum('diaban')+
-                                            $solieu->sum('tinhgiam')+ $solieu->sum('nghihuusom')+ $solieu->sum('kpthuhut')+
+                                            $solieu->sum('daibieuhdnd') + $solieu->sum('nghihuu') + $solieu->sum('canbokct') +
+                                            $solieu->sum('uyvien') + $solieu->sum('boiduong') + $solieu->sum('diaban') +
+                                            $solieu->sum('tinhgiam') + $solieu->sum('nghihuusom') + $solieu->sum('kpthuhut') +
                                             $solieu->sum('kpuudai');
                                         //$data[$i]['nhucau'] = $solieu->sum('nhucau');
                                         $data[$i]['nguonkp'] = $solieu->sum('nguonkp');
@@ -3936,9 +4195,9 @@ class baocaott67huyenController extends Controller
                                         $data[$i]['nguonthu'] = $solieu->sum('nguonthu');
 
                                         $data[$luugr]['nhucau'] += $solieu->sum('luongphucap') + $solieu->sum('baohiem') +
-                                            $solieu->sum('daibieuhdnd')+ $solieu->sum('nghihuu')+ $solieu->sum('canbokct')+
-                                            $solieu->sum('uyvien')+ $solieu->sum('boiduong')+ $solieu->sum('diaban')+
-                                            $solieu->sum('tinhgiam')+ $solieu->sum('nghihuusom')+ $solieu->sum('kpthuhut')+
+                                            $solieu->sum('daibieuhdnd') + $solieu->sum('nghihuu') + $solieu->sum('canbokct') +
+                                            $solieu->sum('uyvien') + $solieu->sum('boiduong') + $solieu->sum('diaban') +
+                                            $solieu->sum('tinhgiam') + $solieu->sum('nghihuusom') + $solieu->sum('kpthuhut') +
                                             $solieu->sum('kpuudai');
 
                                         //$data[$luugr]['nhucau'] += $solieu->sum('nhucau');
@@ -3952,8 +4211,7 @@ class baocaott67huyenController extends Controller
                                 }
                             }
                         }
-                    }
-                    else {
+                    } else {
                         $dulieu = $model->where('linhvuchoatdong', $group[$j]['val']);
                         if (isset($dulieu) && count($dulieu) > 0) {
                             //$luugr = 0;
@@ -3967,9 +4225,9 @@ class baocaott67huyenController extends Controller
                                     $data[$i]['tt'] = '+';
                                     $data[$i]['noidung'] = $chitietdv['tendv'];
                                     $data[$i]['nhucau'] = $solieu->sum('luongphucap') + $solieu->sum('baohiem') +
-                                        $solieu->sum('daibieuhdnd')+ $solieu->sum('nghihuu')+ $solieu->sum('canbokct')+
-                                        $solieu->sum('uyvien')+ $solieu->sum('boiduong')+ $solieu->sum('diaban')+
-                                        $solieu->sum('tinhgiam')+ $solieu->sum('nghihuusom')+ $solieu->sum('kpthuhut')+
+                                        $solieu->sum('daibieuhdnd') + $solieu->sum('nghihuu') + $solieu->sum('canbokct') +
+                                        $solieu->sum('uyvien') + $solieu->sum('boiduong') + $solieu->sum('diaban') +
+                                        $solieu->sum('tinhgiam') + $solieu->sum('nghihuusom') + $solieu->sum('kpthuhut') +
                                         $solieu->sum('kpuudai');
                                     //$data[$i]['nhucau'] = $solieu->sum('nhucau');
                                     $data[$i]['nguonkp'] = $solieu->sum('nguonkp');
@@ -3980,9 +4238,9 @@ class baocaott67huyenController extends Controller
                                     $data[$i]['nguonthu'] = $solieu->sum('nguonthu');
 
                                     $data[$luugr]['nhucau'] += $solieu->sum('luongphucap') + $solieu->sum('baohiem') +
-                                        $solieu->sum('daibieuhdnd')+ $solieu->sum('nghihuu')+ $solieu->sum('canbokct')+
-                                        $solieu->sum('uyvien')+ $solieu->sum('boiduong')+ $solieu->sum('diaban')+
-                                        $solieu->sum('tinhgiam')+ $solieu->sum('nghihuusom')+ $solieu->sum('kpthuhut')+
+                                        $solieu->sum('daibieuhdnd') + $solieu->sum('nghihuu') + $solieu->sum('canbokct') +
+                                        $solieu->sum('uyvien') + $solieu->sum('boiduong') + $solieu->sum('diaban') +
+                                        $solieu->sum('tinhgiam') + $solieu->sum('nghihuusom') + $solieu->sum('kpthuhut') +
                                         $solieu->sum('kpuudai');
 
                                     //$data[$luugr]['nhucau'] += $solieu->sum('nhucau');
@@ -3996,7 +4254,6 @@ class baocaott67huyenController extends Controller
                             }
                         }
                     }
-
                 }
                 $data[$gddt]['nhucau'] = $data[$giaoduc]['nhucau'] + $data[$daotao]['nhucau'];
                 $data[$gddt]['nguonkp'] = $data[$giaoduc]['nguonkp'] + $data[$daotao]['nguonkp'];
@@ -4005,14 +4262,13 @@ class baocaott67huyenController extends Controller
                 $data[$gddt]['vienphi'] = $data[$giaoduc]['vienphi'] + $data[$daotao]['vienphi'];
                 $data[$gddt]['khac'] = 0;
                 $data[$gddt]['nguonthu'] = $data[$giaoduc]['nguonthu'] + $data[$daotao]['nguonthu'];
-            }
-            else {
+            } else {
                 for ($i = 0; $i < count($data); $i++) {
-                    if($data[$i]['val'] == 'KHAC') {
-                        foreach($a_sunghiep as $sn){
+                    if ($data[$i]['val'] == 'KHAC') {
+                        foreach ($a_sunghiep as $sn) {
                             if (!in_array($sn, $a_sn))
                                 $solieu = $model->where('linhvuchoatdong', $sn);
-                                $solieu_nguon = $model_nguon->where('linhvuchoatdong',$sn);
+                            $solieu_nguon = $model_nguon->where('linhvuchoatdong', $sn);
                             if (isset($dulieu) && count($dulieu) > 0) {
                                 $data[$i]['nhucau'] = $solieu->sum('luongphucap') + $solieu->sum('baohiem') +
                                     $solieu->sum('daibieuhdnd') + $solieu->sum('nghihuu') + $solieu->sum('canbokct') +
@@ -4028,8 +4284,7 @@ class baocaott67huyenController extends Controller
                                 $data[$i]['nguonkp'] = $data[$i]['hocphi'] + $data[$i]['vienphi'] + $data[$i]['khac'] + $data[$i]['nguonthu'];
                             }
                         }
-                    }
-                    else{
+                    } else {
                         $solieu = $model->where('linhvuchoatdong', $data[$i]['val']);
                         $solieu_nguon = $model_nguon->where('linhvuchoatdong', $data[$i]['val']);
                         $data[$i]['nhucau'] = $solieu->sum('luongphucap') + $solieu->sum('baohiem') +
@@ -4038,12 +4293,19 @@ class baocaott67huyenController extends Controller
                             $solieu->sum('tinhgiam') + $solieu->sum('nghihuusom') + $solieu->sum('kpthuhut') +
                             $solieu->sum('kpuudai');
                         //$data[$i]['nhucau'] = $solieu->sum('nhucau');
-                        $data[$i]['tietkiem'] = $solieu_nguon->sum('tietkiem');
-                        $data[$i]['hocphi'] = $solieu_nguon->sum('dbhocphi') + $solieu_nguon->sum('kdbhocphi');
-                        $data[$i]['vienphi'] = $solieu_nguon->sum('dbvienphi') + $solieu_nguon->sum('kdbvienphi');
-                        $data[$i]['khac'] = $solieu_nguon->sum('dbkhac') + $solieu_nguon->sum('kdbkhac');
-                        $data[$i]['nguonthu'] = $solieu_nguon->sum('tietkiemchi');
-                        $data[$i]['nguonkp'] = $data[$i]['tietkiem'] + $data[$i]['hocphi'] + $data[$i]['vienphi'] + $data[$i]['khac'] + $data[$i]['nguonthu'];
+                        // $data[$i]['tietkiem'] = $solieu_nguon->sum('tietkiem');
+                        // $data[$i]['hocphi'] = $solieu_nguon->sum('dbhocphi') + $solieu_nguon->sum('kdbhocphi');
+                        // $data[$i]['vienphi'] = $solieu_nguon->sum('dbvienphi') + $solieu_nguon->sum('kdbvienphi');
+                        // $data[$i]['khac'] = $solieu_nguon->sum('dbkhac') + $solieu_nguon->sum('kdbkhac');
+                        // $data[$i]['nguonthu'] = $solieu_nguon->sum('tietkiemchi');
+                        // $data[$i]['nguonkp'] = $data[$i]['tietkiem'] + $data[$i]['hocphi'] + $data[$i]['vienphi'] + $data[$i]['khac'] + $data[$i]['nguonthu'];
+
+                        $data[$i]['tietkiem'] = $solieu->sum('tietkiem');
+                        $data[$i]['hocphi'] = $solieu->sum('hocphi');
+                        $data[$i]['vienphi'] = $solieu->sum('vienphi');
+                        $data[$i]['khac'] = $solieu->sum('nguonthu');
+                        $data[$i]['nguonthu'] = $solieu->sum('tietkiem1');
+                        $data[$i]['nguonkp'] = $solieu->sum('nguonkp');
                     }
                 }
                 $data[0]['nhucau'] = $data[1]['nhucau'] + $data[2]['nhucau'];
@@ -4055,7 +4317,7 @@ class baocaott67huyenController extends Controller
                 $data[0]['nguonthu'] = $data[1]['nguonthu'] + $data[2]['nguonthu'];
             }
             //dd($data);
-            if(isset($inputs['inchitiet'])) {
+            if (isset($inputs['inchitiet'])) {
                 $a_TC = array(
                     'nhucau' => ($data[$gddt]['nhucau'] + $data[$yte]['nhucau'] + $data[$snkhac]['nhucau'] + $data[$qlnn]['nhucau']),
                     'nguonkp' => ($data[$gddt]['nguonkp'] + $data[$yte]['nguonkp'] + $data[$snkhac]['nguonkp'] + $data[$qlnn]['nguonkp']),
@@ -4065,7 +4327,7 @@ class baocaott67huyenController extends Controller
                     'khac' => ($data[$gddt]['khac'] + $data[$yte]['khac'] + $data[$snkhac]['khac'] + $data[$qlnn]['khac']),
                     'nguonthu' => ($data[$gddt]['nguonthu'] + $data[$yte]['nguonthu'] + $data[$snkhac]['nguonthu'] + $data[$qlnn]['nguonthu'])
                 );
-            }else{
+            } else {
                 $a_TC = array(
                     'nhucau' => ($data[0]['nhucau'] + $data[3]['nhucau'] + $data[4]['nhucau'] + $data[5]['nhucau']),
                     'nguonkp' => ($data[0]['nguonkp'] + $data[3]['nguonkp'] + $data[4]['nguonkp'] + $data[5]['nguonkp']),
@@ -4076,9 +4338,10 @@ class baocaott67huyenController extends Controller
                     'nguonthu' => ($data[0]['nguonthu'] + $data[3]['nguonthu'] + $data[4]['nguonthu'] + $data[5]['nguonthu'])
                 );
             }
+            // dd($m_dv);
             if (isset($inputs['excel'])) {
-                Excel::create('mau4b_tt46', function ($excel) use ($model, $data, $m_dv, $inputs,$a_TC) {
-                    $excel->sheet('New sheet', function ($sheet) use ($model, $data, $m_dv, $inputs,$a_TC) {
+                Excel::create('mau4b_tt46', function ($excel) use ($model, $data, $m_dv, $inputs, $a_TC) {
+                    $excel->sheet('New sheet', function ($sheet) use ($model, $data, $m_dv, $inputs, $a_TC) {
                         $sheet->loadView('reports.thongtu46.huyen.mau4b_tt46')
                             ->with('model', $model)
                             ->with('data', $data)
@@ -4111,57 +4374,52 @@ class baocaott67huyenController extends Controller
             //if ((Session::has('admin') && session('admin')->username == 'khthstc') || (Session::has('admin') && session('admin')->username == 'khthso') ) {
             $inputs = $request->all();
             $madvbc = session('admin')->madvbc;
-            if($inputs['madv'] != "")
-            {
+            if ($inputs['madv'] != "") {
                 $madv = $inputs['madv'];
-                $chekdv = dmdonvi::where('madv', $inputs['madv'])->where('phanloaitaikhoan','TH')->get();
-                if(count($chekdv) > 0) {
+                $chekdv = dmdonvi::where('madv', $inputs['madv'])->where('phanloaitaikhoan', 'TH')->get();
+                if (count($chekdv) > 0) {
                     $m_dv = dmdonvi::select('tendv', 'madv')
                         ->where('macqcq', $madv)
                         ->distinct()
                         ->get();
-                    $model = nguonkinhphi::where('macqcq',$madv)
-                        ->where('sohieu','ND38_2019')->get();
-                }
-                else
-                {
+                    $model = nguonkinhphi::where('macqcq', $madv)
+                        ->where('sohieu', 'ND38_2019')->get();
+                } else {
                     $m_dv = dmdonvi::select('tendv', 'madv')
                         ->where('madv', $madv)
                         ->distinct()
                         ->get();
-                    $model = nguonkinhphi::where('madv',$madv)
-                        ->where('sohieu','ND38_2019')->get();
+                    $model = nguonkinhphi::where('madv', $madv)
+                        ->where('sohieu', 'ND38_2019')->get();
                 }
-            }
-            else {
-                $m_dv = dmdonvi::select('tendv','madv')
-                    ->where('madvbc',$madvbc)
+            } else {
+                $m_dv = dmdonvi::select('tendv', 'madv')
+                    ->where('madvbc', $madvbc)
                     ->distinct()
                     ->get();
-                $model = nguonkinhphi::where('madvbc',$madvbc)
-                    ->where('sohieu','ND38_2019')->get();
+                $model = nguonkinhphi::where('madvbc', $madvbc)
+                    ->where('sohieu', 'ND38_2019')->get();
             }
             $ardv = $m_dv->toArray();
             /*
             $model = nguonkinhphi::where('madvbc','like',$inputs['madv'].'%')
                 ->where('sohieu','ND38_2019')->get();
             */
-            if(session('admin')->username == 'khthso')
-            {
-                $model = nguonkinhphi::join('dmdonvibaocao','dmdonvibaocao.madvbc','=','nguonkinhphi.madvbc')
-                    ->where('nguonkinhphi.madvbc','like',$inputs['madv'].'%')
-                    ->where('dmdonvibaocao.level','T')
-                    ->where('nguonkinhphi.sohieu','ND38_2019')->get();
+            if (session('admin')->username == 'khthso') {
+                $model = nguonkinhphi::join('dmdonvibaocao', 'dmdonvibaocao.madvbc', '=', 'nguonkinhphi.madvbc')
+                    ->where('nguonkinhphi.madvbc', 'like', $inputs['madv'] . '%')
+                    ->where('dmdonvibaocao.level', 'T')
+                    ->where('nguonkinhphi.sohieu', 'ND38_2019')->get();
             }
             //dd($model);
-            if(count($model) == 0){
+            if (count($model) == 0) {
                 return view('errors.nodata');
             }
 
-            $m_dv = dmdonvi::where('madv',session('admin')->madv)->first();
+            $m_dv = dmdonvi::where('madv', session('admin')->madv)->first();
             $data = array();
             $group = array();
-            if(isset($inputs['inchitiet'])) {
+            if (isset($inputs['inchitiet'])) {
                 $group[0] = array('val' => 'GDDT', 'tt' => 'a', 'noidung' => 'Sự nghiệp giáo dục - đào tạo', 'nhucau' => 0, 'nguonkp' => 0, 'tietkiem' => 0, 'hocphi' => 0, 'vienphi' => 0, 'nguonthu' => 0);
                 $group[1] = array('val' => 'GD', 'tt' => '-', 'noidung' => 'Giáo dục', 'nhucau' => 0, 'nguonkp' => 0, 'tietkiem' => 0, 'hocphi' => 0, 'vienphi' => 0, 'nguonthu' => 0);
                 $group[2] = array('val' => 'DT', 'tt' => '-', 'noidung' => 'Đào tạo', 'nhucau' => 0, 'nguonkp' => 0, 'tietkiem' => 0, 'hocphi' => 0, 'vienphi' => 0, 'nguonthu' => 0);
@@ -4169,8 +4427,7 @@ class baocaott67huyenController extends Controller
                 $group[4] = array('val' => 'KHAC', 'tt' => 'c', 'noidung' => 'Sự nghiệp khác', 'nhucau' => 0, 'nguonkp' => 0, 'tietkiem' => 0, 'hocphi' => 0, 'vienphi' => 0, 'nguonthu' => 0);
                 $group[5] = array('val' => 'QLNN', 'tt' => 'd', 'noidung' => ' Quản lý nhà nước, Đảng, đoàn thể', 'nhucau' => 0, 'nguonkp' => 0, 'tietkiem' => 0, 'hocphi' => 0, 'vienphi' => 0, 'nguonthu' => 0);
                 $group[6] = array('val' => 'QLNN', 'tt' => '-', 'noidung' => 'Trong đó: Cán bộ, công chức cấp xã', 'nhucau' => 0, 'nguonkp' => 0, 'tietkiem' => 0, 'hocphi' => 0, 'vienphi' => 0, 'nguonthu' => 0);
-            }
-            else {
+            } else {
                 $data[0] = array('val' => 'GDDT', 'tt' => 'a', 'noidung' => 'Sự nghiệp giáo dục - đào tạo', 'nhucau' => 0, 'nguonkp' => 0, 'tietkiem' => 0, 'hocphi' => 0, 'vienphi' => 0, 'nguonthu' => 0);
                 $data[1] = array('val' => 'GD', 'tt' => '-', 'noidung' => 'Giáo dục', 'nhucau' => 0, 'nguonkp' => 0, 'tietkiem' => 0, 'hocphi' => 0, 'vienphi' => 0, 'nguonthu' => 0);
                 $data[2] = array('val' => 'DT', 'tt' => '-', 'noidung' => 'Đào tạo', 'nhucau' => 0, 'nguonkp' => 0, 'tietkiem' => 0, 'hocphi' => 0, 'vienphi' => 0, 'nguonthu' => 0);
@@ -4181,7 +4438,7 @@ class baocaott67huyenController extends Controller
             }
             //Thiếu trường hợp 'Sự nghiệp khác' và GDDT
 
-            if(isset($inputs['inchitiet'])) {
+            if (isset($inputs['inchitiet'])) {
                 $gddt = 0;
                 $daotao = 0;
                 $giaoduc = 0;
@@ -4238,8 +4495,7 @@ class baocaott67huyenController extends Controller
                 $data[$gddt]['hocphi'] = $data[$giaoduc]['hocphi'] + $data[$daotao]['hocphi'];
                 $data[$gddt]['vienphi'] = $data[$giaoduc]['vienphi'] + $data[$daotao]['vienphi'];
                 $data[$gddt]['nguonthu'] = $data[$giaoduc]['nguonthu'] + $data[$daotao]['nguonthu'];
-            }
-            else {
+            } else {
                 for ($i = 0; $i < count($data); $i++) {
                     $solieu = $model->where('linhvuchoatdong', $data[$i]['val']);
                     $data[$i]['nhucau'] = $solieu->sum('nhucau');
@@ -4263,14 +4519,14 @@ class baocaott67huyenController extends Controller
                 $data[4]['vienphi'] = $model->sum('vienphi') - $data[0]['vienphi'] - $data[5]['vienphi'] - $data[3]['vienphi'];
                 $data[4]['nguonthu'] = $model->sum('nguonthu') - $data[0]['nguonthu'] - $data[5]['nguonthu'] - $data[3]['nguonthu'];
             }
-            Excel::create('mau4b',function($excel) use($model,$data,$m_dv,$inputs){
-                $excel->sheet('New sheet', function($sheet) use($model,$data,$m_dv,$inputs){
+            Excel::create('mau4b', function ($excel) use ($model, $data, $m_dv, $inputs) {
+                $excel->sheet('New sheet', function ($sheet) use ($model, $data, $m_dv, $inputs) {
                     $sheet->loadView('reports.thongtu67.mau4bexcel')
-                        ->with('model',$model)
-                        ->with('data',$data)
-                        ->with('m_dv',$m_dv)
-                        ->with('inputs',$inputs)
-                        ->with('pageTitle','mau4b');
+                        ->with('model', $model)
+                        ->with('data', $data)
+                        ->with('m_dv', $m_dv)
+                        ->with('inputs', $inputs)
+                        ->with('pageTitle', 'mau4b');
                     $sheet->setAutoSize(false);
                     $sheet->setFontFamily('Tahoma');
                     $sheet->setFontBold(false);
@@ -4287,76 +4543,71 @@ class baocaott67huyenController extends Controller
             //if ((Session::has('admin') && session('admin')->username == 'khthstc') || (Session::has('admin') && session('admin')->username == 'khthso') ) {
             $inputs = $request->all();
             $madvbc = session('admin')->madvbc;
-            $model_thongtu = dmthongtuquyetdinh::select('sohieu','namdt')->distinct()->get();
-            if($inputs['madv'] != "")
-            {
+            $model_thongtu = dmthongtuquyetdinh::select('sohieu', 'namdt')->distinct()->get();
+            if ($inputs['madv'] != "") {
                 $madv = $inputs['madv'];
-                $chekdv = dmdonvi::where('madv', $inputs['madv'])->where('phanloaitaikhoan','TH')->get();
-                if(count($chekdv) > 0) {
+                $chekdv = dmdonvi::where('madv', $inputs['madv'])->where('phanloaitaikhoan', 'TH')->get();
+                if (count($chekdv) > 0) {
                     $m_dv = dmdonvi::select('tendv', 'madv')
                         ->where('macqcq', $madv)
                         ->distinct()
                         ->get();
-                    $model = nguonkinhphi::where('macqcq',$madv)
-                        ->where('macqcq',session('admin')->madv)
-                        ->where('trangthai','DAGUI')
-                        ->wherein('sohieu',array_column($model_thongtu->where('namdt','2019')->toarray(),'sohieu'))
+                    $model = nguonkinhphi::where('macqcq', $madv)
+                        ->where('macqcq', session('admin')->madv)
+                        ->where('trangthai', 'DAGUI')
+                        ->wherein('sohieu', array_column($model_thongtu->where('namdt', '2019')->toarray(), 'sohieu'))
                         ->get();
-                }
-                else
-                {
+                } else {
                     $m_dv = dmdonvi::select('tendv', 'madv')
                         ->where('madv', $madv)
                         ->distinct()
                         ->get();
-                    $model = nguonkinhphi::where('madv',$madv)
-                        ->where('macqcq',session('admin')->madv)
-                        ->where('trangthai','DAGUI')
-                        ->wherein('sohieu',array_column($model_thongtu->where('namdt','2019')->toarray(),'sohieu'))
+                    $model = nguonkinhphi::where('madv', $madv)
+                        ->where('macqcq', session('admin')->madv)
+                        ->where('trangthai', 'DAGUI')
+                        ->wherein('sohieu', array_column($model_thongtu->where('namdt', '2019')->toarray(), 'sohieu'))
                         ->get();
                 }
-            }
-            else {
-                $m_dv = dmdonvi::select('tendv','madv')
-                    ->where('macqcq',session('admin')->madv)
+            } else {
+                $m_dv = dmdonvi::select('tendv', 'madv')
+                    ->where('macqcq', session('admin')->madv)
                     ->distinct()
                     ->get();
-                $model = nguonkinhphi::where('macqcq',session('admin')->madv)
-                    ->where('trangthai','DAGUI')
-                    ->wherein('sohieu',array_column($model_thongtu->where('namdt','2019')->toarray(),'sohieu'))
+                $model = nguonkinhphi::where('macqcq', session('admin')->madv)
+                    ->where('trangthai', 'DAGUI')
+                    ->wherein('sohieu', array_column($model_thongtu->where('namdt', '2019')->toarray(), 'sohieu'))
                     ->get();
             }
             $ardv = $m_dv->toArray();
-            if(count($model) == 0){
+            if (count($model) == 0) {
                 return view('errors.nodata');
             }
 
-            $m_dv = dmdonvi::where('madv',session('admin')->madv)->first();
+            $m_dv = dmdonvi::where('madv', session('admin')->madv)->first();
             $data = array();
             $group = array();
-            if(isset($inputs['inchitiet'])) {
-                $group[0] = array('val' => 'GDDT', 'tt' => 'a', 'noidung' => 'Sự nghiệp giáo dục - đào tạo', 'nhucau' => 0, 'nguonkp' => 0, 'tietkiem' => 0, 'hocphi' => 0, 'vienphi' => 0,'khac' => 0, 'nguonthu' => 0);
-                $group[1] = array('val' => 'GD', 'tt' => '-', 'noidung' => 'Giáo dục', 'nhucau' => 0, 'nguonkp' => 0, 'tietkiem' => 0, 'hocphi' => 0, 'vienphi' => 0,'khac' => 0, 'nguonthu' => 0);
-                $group[2] = array('val' => 'DT', 'tt' => '-', 'noidung' => 'Đào tạo', 'nhucau' => 0, 'nguonkp' => 0, 'tietkiem' => 0, 'hocphi' => 0, 'vienphi' => 0,'khac' => 0, 'nguonthu' => 0);
-                $group[3] = array('val' => 'YTE', 'tt' => 'b', 'noidung' => 'Sự nghiệp y tế', 'nhucau' => 0, 'nguonkp' => 0, 'tietkiem' => 0, 'hocphi' => 0, 'vienphi' => 0,'khac' => 0, 'nguonthu' => 0);
-                $group[4] = array('val' => 'KHAC', 'tt' => 'c', 'noidung' => 'Sự nghiệp khác', 'nhucau' => 0, 'nguonkp' => 0, 'tietkiem' => 0, 'hocphi' => 0, 'vienphi' => 0,'khac' => 0, 'nguonthu' => 0);
-                $group[5] = array('val' => 'QLNN', 'tt' => 'd', 'noidung' => ' Quản lý nhà nước, Đảng, đoàn thể', 'nhucau' => 0, 'nguonkp' => 0, 'tietkiem' => 0, 'hocphi' => 0, 'vienphi' => 0,'khac' => 0, 'nguonthu' => 0);
-                $group[6] = array('val' => 'KVXP', 'tt' => '-', 'noidung' => 'Trong đó: Cán bộ, công chức cấp xã', 'nhucau' => 0, 'nguonkp' => 0, 'tietkiem' => 0, 'hocphi' => 0, 'vienphi' => 0,'khac' => 0, 'nguonthu' => 0);
-            }
-            else {
-                $data[0] = array('val' => 'GDDT', 'tt' => 'a', 'noidung' => 'Sự nghiệp giáo dục - đào tạo', 'nhucau' => 0, 'nguonkp' => 0, 'tietkiem' => 0, 'hocphi' => 0, 'vienphi' => 0,'khac' => 0, 'nguonthu' => 0);
-                $data[1] = array('val' => 'GD', 'tt' => '-', 'noidung' => 'Giáo dục', 'nhucau' => 0, 'nguonkp' => 0, 'tietkiem' => 0, 'hocphi' => 0, 'vienphi' => 0,'khac' => 0, 'nguonthu' => 0);
-                $data[2] = array('val' => 'DT', 'tt' => '-', 'noidung' => 'Đào tạo', 'nhucau' => 0, 'nguonkp' => 0, 'tietkiem' => 0, 'hocphi' => 0, 'vienphi' => 0,'khac' => 0, 'nguonthu' => 0);
-                $data[3] = array('val' => 'YTE', 'tt' => 'b', 'noidung' => 'Sự nghiệp y tế', 'nhucau' => 0, 'nguonkp' => 0, 'tietkiem' => 0, 'hocphi' => 0, 'vienphi' => 0,'khac' => 0, 'nguonthu' => 0);
-                $data[4] = array('val' => 'KHAC', 'tt' => 'c', 'noidung' => 'Sự nghiệp khác', 'nhucau' => 0, 'nguonkp' => 0, 'tietkiem' => 0, 'hocphi' => 0, 'vienphi' => 0,'khac' => 0, 'nguonthu' => 0);
-                $data[5] = array('val' => 'QLNN', 'tt' => 'd', 'noidung' => ' Quản lý nhà nước, Đảng, đoàn thể', 'nhucau' => 0, 'nguonkp' => 0, 'tietkiem' => 0, 'hocphi' => 0, 'vienphi' => 0,'khac' => 0, 'nguonthu' => 0);
-                $data[6] = array('val' => 'KVXP', 'tt' => '-', 'noidung' => 'Trong đó: Cán bộ, công chức cấp xã', 'nhucau' => 0, 'nguonkp' => 0, 'tietkiem' => 0, 'hocphi' => 0, 'vienphi' => 0,'khac' => 0, 'nguonthu' => 0);
+            if (isset($inputs['inchitiet'])) {
+                $group[0] = array('val' => 'GDDT', 'tt' => 'a', 'noidung' => 'Sự nghiệp giáo dục - đào tạo', 'nhucau' => 0, 'nguonkp' => 0, 'tietkiem' => 0, 'hocphi' => 0, 'vienphi' => 0, 'khac' => 0, 'nguonthu' => 0);
+                $group[1] = array('val' => 'GD', 'tt' => '-', 'noidung' => 'Giáo dục', 'nhucau' => 0, 'nguonkp' => 0, 'tietkiem' => 0, 'hocphi' => 0, 'vienphi' => 0, 'khac' => 0, 'nguonthu' => 0);
+                $group[2] = array('val' => 'DT', 'tt' => '-', 'noidung' => 'Đào tạo', 'nhucau' => 0, 'nguonkp' => 0, 'tietkiem' => 0, 'hocphi' => 0, 'vienphi' => 0, 'khac' => 0, 'nguonthu' => 0);
+                $group[3] = array('val' => 'YTE', 'tt' => 'b', 'noidung' => 'Sự nghiệp y tế', 'nhucau' => 0, 'nguonkp' => 0, 'tietkiem' => 0, 'hocphi' => 0, 'vienphi' => 0, 'khac' => 0, 'nguonthu' => 0);
+                $group[4] = array('val' => 'KHAC', 'tt' => 'c', 'noidung' => 'Sự nghiệp khác', 'nhucau' => 0, 'nguonkp' => 0, 'tietkiem' => 0, 'hocphi' => 0, 'vienphi' => 0, 'khac' => 0, 'nguonthu' => 0);
+                $group[5] = array('val' => 'QLNN', 'tt' => 'd', 'noidung' => ' Quản lý nhà nước, Đảng, đoàn thể', 'nhucau' => 0, 'nguonkp' => 0, 'tietkiem' => 0, 'hocphi' => 0, 'vienphi' => 0, 'khac' => 0, 'nguonthu' => 0);
+                $group[6] = array('val' => 'KVXP', 'tt' => '-', 'noidung' => 'Trong đó: Cán bộ, công chức cấp xã', 'nhucau' => 0, 'nguonkp' => 0, 'tietkiem' => 0, 'hocphi' => 0, 'vienphi' => 0, 'khac' => 0, 'nguonthu' => 0);
+            } else {
+                $data[0] = array('val' => 'GDDT', 'tt' => 'a', 'noidung' => 'Sự nghiệp giáo dục - đào tạo', 'nhucau' => 0, 'nguonkp' => 0, 'tietkiem' => 0, 'hocphi' => 0, 'vienphi' => 0, 'khac' => 0, 'nguonthu' => 0);
+                $data[1] = array('val' => 'GD', 'tt' => '-', 'noidung' => 'Giáo dục', 'nhucau' => 0, 'nguonkp' => 0, 'tietkiem' => 0, 'hocphi' => 0, 'vienphi' => 0, 'khac' => 0, 'nguonthu' => 0);
+                $data[2] = array('val' => 'DT', 'tt' => '-', 'noidung' => 'Đào tạo', 'nhucau' => 0, 'nguonkp' => 0, 'tietkiem' => 0, 'hocphi' => 0, 'vienphi' => 0, 'khac' => 0, 'nguonthu' => 0);
+                $data[3] = array('val' => 'YTE', 'tt' => 'b', 'noidung' => 'Sự nghiệp y tế', 'nhucau' => 0, 'nguonkp' => 0, 'tietkiem' => 0, 'hocphi' => 0, 'vienphi' => 0, 'khac' => 0, 'nguonthu' => 0);
+                $data[4] = array('val' => 'KHAC', 'tt' => 'c', 'noidung' => 'Sự nghiệp khác', 'nhucau' => 0, 'nguonkp' => 0, 'tietkiem' => 0, 'hocphi' => 0, 'vienphi' => 0, 'khac' => 0, 'nguonthu' => 0);
+                $data[5] = array('val' => 'QLNN', 'tt' => 'd', 'noidung' => ' Quản lý nhà nước, Đảng, đoàn thể', 'nhucau' => 0, 'nguonkp' => 0, 'tietkiem' => 0, 'hocphi' => 0, 'vienphi' => 0, 'khac' => 0, 'nguonthu' => 0);
+                $data[6] = array('val' => 'KVXP', 'tt' => '-', 'noidung' => 'Trong đó: Cán bộ, công chức cấp xã', 'nhucau' => 0, 'nguonkp' => 0, 'tietkiem' => 0, 'hocphi' => 0, 'vienphi' => 0, 'khac' => 0, 'nguonthu' => 0);
             }
             $a_sunghiep = dmkhoipb::all();
-            $a_sn = array('GD','DT','YTE','QLNN');
+            $a_sn = array('GD', 'DT', 'YTE', 'QLNN');
             $a_sunghiep = array_column($a_sunghiep->toarray(), 'makhoipb');
 
-            if(isset($inputs['inchitiet'])) {
+            if (isset($inputs['inchitiet'])) {
                 $gddt = 0;
                 $daotao = 0;
                 $giaoduc = 0;
@@ -4389,23 +4640,23 @@ class baocaott67huyenController extends Controller
                     $data[$i]['nguonthu'] = 0;
                     $data[$i]['bosung'] = 0;
                     $luugr = $i;
-                    if($group[$j]['val'] == 'KHAC'){
-                        foreach($a_sunghiep as $sn){
+                    if ($group[$j]['val'] == 'KHAC') {
+                        foreach ($a_sunghiep as $sn) {
                             if (!in_array($sn, $a_sn))
                                 $dulieu = $model->where('linhvuchoatdong', $sn);
                             if (isset($dulieu) && count($dulieu) > 0) {
                                 foreach ($ardv as $chitietdv) {
                                     $solieu = $dulieu->where('madv', $chitietdv['madv']);
-                                    $d =1;
+                                    $d = 1;
                                     if (isset($solieu) && count($solieu) > 0) {
                                         $d++;
                                         $i += $d;
                                         $data[$i]['tt'] = '+';
                                         $data[$i]['noidung'] = $chitietdv['tendv'];
                                         $data[$i]['nhucau'] = $solieu->sum('luongphucap') + $solieu->sum('baohiem') +
-                                            $solieu->sum('daibieuhdnd')+ $solieu->sum('nghihuu')+ $solieu->sum('canbokct')+
-                                            $solieu->sum('uyvien')+ $solieu->sum('boiduong')+ $solieu->sum('diaban')+
-                                            $solieu->sum('tinhgiam')+ $solieu->sum('nghihuusom')+ $solieu->sum('kpthuhut')+
+                                            $solieu->sum('daibieuhdnd') + $solieu->sum('nghihuu') + $solieu->sum('canbokct') +
+                                            $solieu->sum('uyvien') + $solieu->sum('boiduong') + $solieu->sum('diaban') +
+                                            $solieu->sum('tinhgiam') + $solieu->sum('nghihuusom') + $solieu->sum('kpthuhut') +
                                             $solieu->sum('kpuudai');
                                         //$data[$i]['nhucau'] = $solieu->sum('nhucau');
                                         $data[$i]['nguonkp'] = $solieu->sum('nguonkp');
@@ -4417,9 +4668,9 @@ class baocaott67huyenController extends Controller
                                         $data[$i]['bosung'] = $data[$i]['nhucau'] - $data[$i]['nguonkp'];
 
                                         $data[$luugr]['nhucau'] += $solieu->sum('luongphucap') + $solieu->sum('baohiem') +
-                                            $solieu->sum('daibieuhdnd')+ $solieu->sum('nghihuu')+ $solieu->sum('canbokct')+
-                                            $solieu->sum('uyvien')+ $solieu->sum('boiduong')+ $solieu->sum('diaban')+
-                                            $solieu->sum('tinhgiam')+ $solieu->sum('nghihuusom')+ $solieu->sum('kpthuhut')+
+                                            $solieu->sum('daibieuhdnd') + $solieu->sum('nghihuu') + $solieu->sum('canbokct') +
+                                            $solieu->sum('uyvien') + $solieu->sum('boiduong') + $solieu->sum('diaban') +
+                                            $solieu->sum('tinhgiam') + $solieu->sum('nghihuusom') + $solieu->sum('kpthuhut') +
                                             $solieu->sum('kpuudai');
 
                                         //$data[$luugr]['nhucau'] += $solieu->sum('nhucau');
@@ -4434,8 +4685,7 @@ class baocaott67huyenController extends Controller
                                 }
                             }
                         }
-                    }
-                    else {
+                    } else {
                         $dulieu = $model->where('linhvuchoatdong', $group[$j]['val']);
                         if (isset($dulieu) && count($dulieu) > 0) {
                             //$luugr = 0;
@@ -4449,9 +4699,9 @@ class baocaott67huyenController extends Controller
                                     $data[$i]['tt'] = '+';
                                     $data[$i]['noidung'] = $chitietdv['tendv'];
                                     $data[$i]['nhucau'] = $solieu->sum('luongphucap') + $solieu->sum('baohiem') +
-                                        $solieu->sum('daibieuhdnd')+ $solieu->sum('nghihuu')+ $solieu->sum('canbokct')+
-                                        $solieu->sum('uyvien')+ $solieu->sum('boiduong')+ $solieu->sum('diaban')+
-                                        $solieu->sum('tinhgiam')+ $solieu->sum('nghihuusom')+ $solieu->sum('kpthuhut')+
+                                        $solieu->sum('daibieuhdnd') + $solieu->sum('nghihuu') + $solieu->sum('canbokct') +
+                                        $solieu->sum('uyvien') + $solieu->sum('boiduong') + $solieu->sum('diaban') +
+                                        $solieu->sum('tinhgiam') + $solieu->sum('nghihuusom') + $solieu->sum('kpthuhut') +
                                         $solieu->sum('kpuudai');
                                     //$data[$i]['nhucau'] = $solieu->sum('nhucau');
                                     $data[$i]['nguonkp'] = $solieu->sum('nguonkp');
@@ -4463,9 +4713,9 @@ class baocaott67huyenController extends Controller
                                     $data[$i]['bosung'] =  $data[$i]['nhucau'] - $data[$i]['nguonkp'];
 
                                     $data[$luugr]['nhucau'] += $solieu->sum('luongphucap') + $solieu->sum('baohiem') +
-                                        $solieu->sum('daibieuhdnd')+ $solieu->sum('nghihuu')+ $solieu->sum('canbokct')+
-                                        $solieu->sum('uyvien')+ $solieu->sum('boiduong')+ $solieu->sum('diaban')+
-                                        $solieu->sum('tinhgiam')+ $solieu->sum('nghihuusom')+ $solieu->sum('kpthuhut')+
+                                        $solieu->sum('daibieuhdnd') + $solieu->sum('nghihuu') + $solieu->sum('canbokct') +
+                                        $solieu->sum('uyvien') + $solieu->sum('boiduong') + $solieu->sum('diaban') +
+                                        $solieu->sum('tinhgiam') + $solieu->sum('nghihuusom') + $solieu->sum('kpthuhut') +
                                         $solieu->sum('kpuudai');
 
                                     //$data[$luugr]['nhucau'] += $solieu->sum('nhucau');
@@ -4475,7 +4725,7 @@ class baocaott67huyenController extends Controller
                                     $data[$luugr]['vienphi'] += $solieu->sum('vienphi');
                                     $data[$luugr]['khac'] += 0;
                                     $data[$luugr]['nguonthu'] += $solieu->sum('nguonthu');
-                                    $data[$luugr]['bosung'] += $data[$luugr]['nhucau'] - $data[$luugr]['nguonkp'] ;
+                                    $data[$luugr]['bosung'] += $data[$luugr]['nhucau'] - $data[$luugr]['nguonkp'];
                                 }
                             }
                         }
@@ -4489,14 +4739,13 @@ class baocaott67huyenController extends Controller
                 $data[$gddt]['khac'] = 0;
                 $data[$gddt]['nguonthu'] = $data[$giaoduc]['nguonthu'] + $data[$daotao]['nguonthu'];
                 $data[$gddt]['bosung'] = $data[$giaoduc]['bosung'] + $data[$daotao]['bosung'];
-            }
-            else {
+            } else {
                 for ($i = 0; $i < count($data); $i++) {
                     $solieu = $model->where('linhvuchoatdong', $data[$i]['val']);
                     $data[$i]['nhucau'] = $solieu->sum('luongphucap') + $solieu->sum('baohiem') +
-                        $solieu->sum('daibieuhdnd')+ $solieu->sum('nghihuu')+ $solieu->sum('canbokct')+
-                        $solieu->sum('uyvien')+ $solieu->sum('boiduong')+ $solieu->sum('diaban')+
-                        $solieu->sum('tinhgiam')+ $solieu->sum('nghihuusom')+ $solieu->sum('kpthuhut')+
+                        $solieu->sum('daibieuhdnd') + $solieu->sum('nghihuu') + $solieu->sum('canbokct') +
+                        $solieu->sum('uyvien') + $solieu->sum('boiduong') + $solieu->sum('diaban') +
+                        $solieu->sum('tinhgiam') + $solieu->sum('nghihuusom') + $solieu->sum('kpthuhut') +
                         $solieu->sum('kpuudai');
                     //$data[$i]['nhucau'] = $solieu->sum('nhucau');
                     $data[$i]['nguonkp'] = $solieu->sum('nguonkp');
@@ -4517,9 +4766,9 @@ class baocaott67huyenController extends Controller
                 $data[0]['bosung'] = $data[1]['bosung'] + $data[2]['bosung'];
 
                 $data[4]['nhucau'] = $model->sum('luongphucap') + $model->sum('baohiem') +
-                    $model->sum('daibieuhdnd')+ $model->sum('nghihuu')+ $model->sum('canbokct')+
-                    $model->sum('uyvien')+ $model->sum('boiduong')+ $model->sum('diaban')+
-                    $model->sum('tinhgiam')+ $model->sum('nghihuusom')+ $model->sum('kpthuhut')+
+                    $model->sum('daibieuhdnd') + $model->sum('nghihuu') + $model->sum('canbokct') +
+                    $model->sum('uyvien') + $model->sum('boiduong') + $model->sum('diaban') +
+                    $model->sum('tinhgiam') + $model->sum('nghihuusom') + $model->sum('kpthuhut') +
                     $model->sum('kpuudai') - $data[0]['nhucau'] - $data[5]['nhucau'] - $data[3]['nhucau'];
                 $data[4]['nguonkp'] = $model->sum('nguonkp') - $data[0]['nguonkp'] - $data[5]['nguonkp'] - $data[3]['nguonkp'];
                 $data[4]['tietkiem'] = $model->sum('tietkiem') - $data[0]['tietkiem'] - $data[5]['tietkiem'] - $data[3]['tietkiem'];
@@ -4530,7 +4779,7 @@ class baocaott67huyenController extends Controller
                 $data[4]['bosung'] = $data[4]['nhucau'] - $data[4]['nguonkp'];
             }
             //dd($data);
-            if(isset($inputs['inchitiet'])) {
+            if (isset($inputs['inchitiet'])) {
                 $a_TC = array(
                     'nhucau' => ($data[$gddt]['nhucau'] + $data[$yte]['nhucau'] + $data[$snkhac]['nhucau'] + $data[$qlnn]['nhucau']),
                     'nguonkp' => ($data[$gddt]['nguonkp'] + $data[$yte]['nguonkp'] + $data[$snkhac]['nguonkp'] + $data[$qlnn]['nguonkp']),
@@ -4541,7 +4790,7 @@ class baocaott67huyenController extends Controller
                     'nguonthu' => ($data[$gddt]['nguonthu'] + $data[$yte]['nguonthu'] + $data[$snkhac]['nguonthu'] + $data[$qlnn]['nguonthu']),
                     'bosung' => ($data[$gddt]['bosung'] + $data[$yte]['bosung'] + $data[$snkhac]['bosung'] + $data[$qlnn]['bosung'])
                 );
-            }else{
+            } else {
                 $a_TC = array(
                     'nhucau' => ($data[0]['nhucau'] + $data[3]['nhucau'] + $data[4]['nhucau'] + $data[5]['nhucau']),
                     'nguonkp' => ($data[0]['nguonkp'] + $data[3]['nguonkp'] + $data[4]['nguonkp'] + $data[5]['nguonkp']),
@@ -4554,8 +4803,8 @@ class baocaott67huyenController extends Controller
                 );
             }
             if (isset($inputs['excel'])) {
-                Excel::create('mau4b_tt46bosung', function ($excel) use ($model, $data, $m_dv, $inputs,$a_TC) {
-                    $excel->sheet('New sheet', function ($sheet) use ($model, $data, $m_dv, $inputs,$a_TC) {
+                Excel::create('mau4b_tt46bosung', function ($excel) use ($model, $data, $m_dv, $inputs, $a_TC) {
+                    $excel->sheet('New sheet', function ($sheet) use ($model, $data, $m_dv, $inputs, $a_TC) {
                         $sheet->loadView('reports.thongtu46.huyen.mau4b_tt46bosung')
                             ->with('model', $model)
                             ->with('data', $data)
@@ -4588,7 +4837,7 @@ class baocaott67huyenController extends Controller
             //if ((Session::has('admin') && session('admin')->username == 'khthstc') || (Session::has('admin') && session('admin')->username == 'khthso') ) {
             $inputs = $request->all();
             $madvbc = session('admin')->madvbc;
-            if($inputs['madv'] != "") {
+            if ($inputs['madv'] != "") {
                 $madv = $inputs['madv'];
                 $chekdv = dmdonvi::where('madv', $inputs['madv'])->where('phanloaitaikhoan', 'TH')->get();
                 if (count($chekdv) > 0) {
@@ -4606,31 +4855,30 @@ class baocaott67huyenController extends Controller
                     $model = nguonkinhphi::where('madv', $madv)
                         ->where('sohieu', 'ND38_2019')->get();
                 }
-            }
-            else {
-                $m_dv = dmdonvi::select('tendv','madv')
-                    ->where('madvbc',$madvbc)
+            } else {
+                $m_dv = dmdonvi::select('tendv', 'madv')
+                    ->where('madvbc', $madvbc)
                     ->distinct()
                     ->get();
-                $model = nguonkinhphi::where('madvbc',$madvbc)
-                    ->where('sohieu','ND38_2019')->get();
+                $model = nguonkinhphi::where('madvbc', $madvbc)
+                    ->where('sohieu', 'ND38_2019')->get();
             }
             $ardv = $m_dv->toArray();
-            if(session('admin')->username == 'khthso') {
+            if (session('admin')->username == 'khthso') {
                 $model = nguonkinhphi::join('dmdonvibaocao', 'dmdonvibaocao.madvbc', '=', 'nguonkinhphi.madvbc')
                     ->where('nguonkinhphi.madvbc', 'like', $inputs['madv'] . '%')
                     ->where('dmdonvibaocao.level', 'T')
                     ->where('nguonkinhphi.sohieu', 'ND38_2019')->get();
             }
             //dd($model);
-            if(count($model) == 0){
+            if (count($model) == 0) {
                 return view('errors.nodata');
             }
 
-            $m_dv = dmdonvi::where('madv',session('admin')->madv)->first();
+            $m_dv = dmdonvi::where('madv', session('admin')->madv)->first();
             $data = array();
             $group = array();
-            if(isset($inputs['inchitiet'])) {
+            if (isset($inputs['inchitiet'])) {
                 $group[0] = array('val' => 'GDDT', 'tt' => 'a', 'noidung' => 'Sự nghiệp giáo dục - đào tạo', 'nhucau' => 0, 'nguonkp' => 0, 'tietkiem' => 0, 'hocphi' => 0, 'vienphi' => 0, 'nguonthu' => 0);
                 $group[1] = array('val' => 'GD', 'tt' => '-', 'noidung' => 'Giáo dục', 'nhucau' => 0, 'nguonkp' => 0, 'tietkiem' => 0, 'hocphi' => 0, 'vienphi' => 0, 'nguonthu' => 0);
                 $group[2] = array('val' => 'DT', 'tt' => '-', 'noidung' => 'Đào tạo', 'nhucau' => 0, 'nguonkp' => 0, 'tietkiem' => 0, 'hocphi' => 0, 'vienphi' => 0, 'nguonthu' => 0);
@@ -4638,8 +4886,7 @@ class baocaott67huyenController extends Controller
                 $group[4] = array('val' => 'KHAC', 'tt' => 'c', 'noidung' => 'Sự nghiệp khác', 'nhucau' => 0, 'nguonkp' => 0, 'tietkiem' => 0, 'hocphi' => 0, 'vienphi' => 0, 'nguonthu' => 0);
                 $group[5] = array('val' => 'QLNN', 'tt' => 'd', 'noidung' => ' Quản lý nhà nước, Đảng, đoàn thể', 'nhucau' => 0, 'nguonkp' => 0, 'tietkiem' => 0, 'hocphi' => 0, 'vienphi' => 0, 'nguonthu' => 0);
                 $group[6] = array('val' => 'QLNN', 'tt' => '-', 'noidung' => 'Trong đó: Cán bộ, công chức cấp xã', 'nhucau' => 0, 'nguonkp' => 0, 'tietkiem' => 0, 'hocphi' => 0, 'vienphi' => 0, 'nguonthu' => 0);
-            }
-            else {
+            } else {
                 $data[0] = array('val' => 'GDDT', 'tt' => 'a', 'noidung' => 'Sự nghiệp giáo dục - đào tạo', 'nhucau' => 0, 'nguonkp' => 0, 'tietkiem' => 0, 'hocphi' => 0, 'vienphi' => 0, 'nguonthu' => 0);
                 $data[1] = array('val' => 'GD', 'tt' => '-', 'noidung' => 'Giáo dục', 'nhucau' => 0, 'nguonkp' => 0, 'tietkiem' => 0, 'hocphi' => 0, 'vienphi' => 0, 'nguonthu' => 0);
                 $data[2] = array('val' => 'DT', 'tt' => '-', 'noidung' => 'Đào tạo', 'nhucau' => 0, 'nguonkp' => 0, 'tietkiem' => 0, 'hocphi' => 0, 'vienphi' => 0, 'nguonthu' => 0);
@@ -4650,7 +4897,7 @@ class baocaott67huyenController extends Controller
             }
             //Thiếu trường hợp 'Sự nghiệp khác' và GDDT
 
-            if(isset($inputs['inchitiet'])) {
+            if (isset($inputs['inchitiet'])) {
                 $gddt = 0;
                 $daotao = 0;
                 $giaoduc = 0;
@@ -4678,7 +4925,7 @@ class baocaott67huyenController extends Controller
                         $luugr = $i;
                         foreach ($ardv as $chitietdv) {
                             $solieu = $model->where('madv', $chitietdv['madv'])->where('linhvuchoatdong', $group[$j]['val']);
-                            $d =1;
+                            $d = 1;
                             if (isset($solieu) && count($solieu) > 0) {
                                 //dd($solieu);
                                 $d++;
@@ -4703,7 +4950,6 @@ class baocaott67huyenController extends Controller
                             }
                         }
                     }
-
                 }
                 $data[$gddt]['nhucau'] = $data[$giaoduc]['nhucau'] + $data[$daotao]['nhucau'];
                 $data[$gddt]['nguonkp'] = $data[$giaoduc]['nguonkp'] + $data[$daotao]['nguonkp'];
@@ -4712,8 +4958,7 @@ class baocaott67huyenController extends Controller
                 $data[$gddt]['vienphi'] = $data[$giaoduc]['vienphi'] + $data[$daotao]['vienphi'];
                 $data[$gddt]['nguonthu'] = $data[$giaoduc]['nguonthu'] + $data[$daotao]['nguonthu'];
                 $data[$gddt]['bosung'] = $data[$giaoduc]['nhucau'] + $data[$daotao]['nhucau'] - $data[$giaoduc]['nguonthu'] - $data[$daotao]['nguonthu'];
-            }
-            else {
+            } else {
                 for ($i = 0; $i < count($data); $i++) {
                     $solieu = $model->where('linhvuchoatdong', $data[$i]['val']);
                     $data[$i]['nhucau'] = $solieu->sum('nhucau');
@@ -4740,19 +4985,299 @@ class baocaott67huyenController extends Controller
                 $data[4]['nguonthu'] = $model->sum('nguonthu') - $data[0]['nguonthu'] - $data[5]['nguonthu'] - $data[3]['nguonthu'];
                 $data[4]['bosung'] = $model->sum('nhucau') - $data[0]['nhucau'] - $data[5]['nhucau'] - $data[3]['nhucau'] - ($model->sum('nguonkp') - $data[0]['nguonkp'] - $data[5]['nguonkp'] - $data[3]['nguonkp']);
             }
-            Excel::create('mau4b_bosung',function($excel) use($model,$data,$m_dv,$inputs){
-                $excel->sheet('New sheet', function($sheet) use($model,$data,$m_dv,$inputs){
+            Excel::create('mau4b_bosung', function ($excel) use ($model, $data, $m_dv, $inputs) {
+                $excel->sheet('New sheet', function ($sheet) use ($model, $data, $m_dv, $inputs) {
                     $sheet->loadView('reports.thongtu67.mau4b_bosungexcel')
-                        ->with('model',$model)
-                        ->with('data',$data)
-                        ->with('m_dv',$m_dv)
-                        ->with('inputs',$inputs)
-                        ->with('pageTitle','mau4b_bosung');
+                        ->with('model', $model)
+                        ->with('data', $data)
+                        ->with('m_dv', $m_dv)
+                        ->with('inputs', $inputs)
+                        ->with('pageTitle', 'mau4b_bosung');
                     $sheet->setAutoSize(false);
                     $sheet->setFontFamily('Tahoma');
                     $sheet->setFontBold(false);
                 });
             })->download('xls');
+        } else
+            return view('errors.notlogin');
+    }
+
+    function mau2a_huyen(Request $request)
+    {
+        if (Session::has('admin')) {
+            $inputs = $request->all();
+            if ($inputs['madv'] != null) {
+                $m_donvi = dmdonvi::where('madv', $inputs['madv'])->first();
+            } else {
+                $m_donvi = dmdonvi::where('madv', session('admin')->madv)->first();
+            }
+
+            $m_thongtu = dmthongtuquyetdinh::where('sohieu', $inputs['sohieu'])->first();
+            $ngayapdung = new Carbon($m_thongtu->ngayapdung);
+            $inputs['nam'] = date_format($ngayapdung, 'Y');
+            $inputs['thang'] = date_format($ngayapdung, 'm');
+
+            $m_bienche = chitieubienche::where('nam', $inputs['nam'])->where('madv', session('admin')->madv)->get();
+            if ($inputs['madv'] != null) {
+                $_tonghop = nguonkinhphi::where('sohieu', $inputs['sohieu'])
+                    ->where('madv', $inputs['madv'])->get();
+            } else {
+                $_tonghop = nguonkinhphi::where('sohieu', $inputs['sohieu'])
+                    ->where('madvbc', session('admin')->madvbc)->get();
+            }
+            $a_linhvuc = array_column($_tonghop->toarray(), 'linhvuchoatdong', 'masodv');
+
+            $m_tonghop_ct = nguonkinhphi_bangluong::wherein('masodv', array_column($_tonghop->toarray(), 'masodv'))
+                ->where('nam', $inputs['nam'])->where('thang', $inputs['thang'])->where('macongtac', 'BIENCHE')->get();
+            $canbo = hosocanbo::wherein('macanbo', array_column($m_tonghop_ct->toarray(), 'macanbo'))->get();
+            $a_pc_goc = array('heso');
+            // $a_pc_goc = array('heso', 'vuotkhung', 'pckv', 'pccv', 'pcudn', 'pcth', 'pctnn', 'pccovu', 'pcdang', 'pcthni', 'pcdbqh', 'pcvk', 'pck');
+            $a_pc_th = dmphucap_donvi::where('madv',  session('admin')->madv)->where('phanloai', '<', '3')->get();
+            // $a_pc_th=getColTongHop();
+
+            $a_phucap = array();
+            $col = 0;
+            foreach ($a_pc_th as $ct) {
+                if ($m_tonghop_ct->sum($ct->mapc) > 0) {
+                    $a_phucap[$ct->mapc] = $ct->form;
+                    if ($ct->mapc !== 'heso') {
+                        $col++;
+                    }
+                }
+            }
+            // dd($a_phucap);
+            // $a_pc = array_diff($a_pc_th, $a_pc_goc);
+            foreach ($m_tonghop_ct as $ct) {
+                $ct->linhvuchoatdong = $a_linhvuc[$ct->masodv];
+                // foreach ($a_pc as $pc) {
+                //     $pc_st = 'st_' . $pc;
+                //     if ($ct->$pc < $ct->$pc_st) { //hệ số < số tiền => theo dõi khác số tiền
+                //         $ct->pck += $ct->$pc;
+                //         $ct->st_pck += round($ct->$pc * $m_thongtu->mucapdung);
+                //     } else {
+                //         $ct->st_pck += $ct->$pc_st;
+                //     }
+                // }
+                // foreach ($a_pc_goc as $pc) {
+                //     $pc_st = 'st_' . $pc;
+                //     if ($ct->$pc < $ct->$pc_st) { //hệ số < số tiền => theo dõi khác số tiền
+                //         $ct->$pc_st = round($ct->$pc * $m_thongtu->mucapdung);
+                //     }
+                //      else {
+                //         //gán hệ số phụ cấp theo dõi theo số tiên = 0 để sau tính tổng hệ số phụ cấp theo hàm sum()
+                //         $ct->$pc = 0;
+                //     }
+                // }
+                // foreach($a_phucap as $key=>$pc){
+                //     $pc_st='st_'.$key;
+                //     $ct->$pc_st=
+                // }
+                //Lấy % bảo hiểm
+                $cb = $canbo->where('macanbo', $ct->macanbo)->first();
+                $ct->sunghiep = $cb != '' ? $cb->sunghiep : '';
+                // $ct->ttbh_dv = round(($ct->st_heso + $ct->st_vuotkhung + $ct->st_pccv + $ct->st_pctnn + $ct->st_hesopc) * 23.5 / 100);
+
+                $ct->ttbh_dv_hs = round($ct->ttbh_dv / $ct->luongcoban, 2);
+            }
+            $m_tonghop_ct = $m_tonghop_ct->wherein('sunghiep', ['Công chức', 'Viên chức']);
+            // dd($m_tonghop_ct);
+            $ar_I[0] = array('val' => 'GD;DT', 'tt' => '1', 'noidung' => 'Sự nghiệp giáo dục - đào tạo');
+            $ar_I[1] = array('val' => 'GD', 'tt' => '-', 'noidung' => 'Giáo dục');
+            $ar_I[2] = array('val' => 'DT', 'tt' => '-', 'noidung' => 'Đào tạo');
+            $ar_I[3] = array('val' => 'YTE', 'tt' => '2', 'noidung' => 'Sự nghiệp y tế');
+            $ar_I[4] = array('val' => 'KHCN', 'tt' => '3', 'noidung' => 'Sự nghiệp khoa học-công nghệ');
+            $ar_I[5] = array('val' => 'VHTT', 'tt' => '4', 'noidung' => 'Sự nghiệp văn hóa thông tin');
+            $ar_I[6] = array('val' => 'PTTH', 'tt' => '5', 'noidung' => 'Sự nghiệp phát thanh truyền hình');
+            $ar_I[7] = array('val' => 'TDTT', 'tt' => '6', 'noidung' => 'Sự nghiệp thể dục - thể thao');
+            $ar_I[8] = array('val' => 'DBXH', 'tt' => '7', 'noidung' => 'Sự nghiệp đảm bảo xã hội');
+            $ar_I[9] = array('val' => 'KT', 'tt' => '8', 'noidung' => 'Sự nghiệp kinh tế');
+            $ar_I[10] = array('val' => 'MT', 'tt' => '9', 'noidung' => 'Sự nghiệp môi trường');
+            $ar_I[11] = array('val' => 'QLNN;DDT', 'tt' => '10', 'noidung' => 'Quản lý nhà nước, đảng, đoàn thể');
+            $ar_I[12] = array('val' => 'QLNN', 'tt' => '-', 'noidung' => ' Quản lý NN');
+            $ar_I[13] = array('val' => 'DDT', 'tt' => '-', 'noidung' => 'Đảng, đoàn thể');
+            $a_It = array();
+            foreach ($a_phucap as $key => $val) {
+                $pc_st = 'st_' . $key;
+                $arr_pc = array(
+                    $key => 0, $pc_st => 0
+                );
+
+                $a_It = array_merge($a_It, $arr_pc);
+            }
+
+            $arr = array(
+                'tongpc' => 0, 'chenhlech' => 0,
+                'ttbh_dv' => 0, 'soluongduocgiao' => 0, 'soluongbienche' => 0, 'tbh_dv', 'congchuc' => 0, 'vienchuc' => 0, 'soluongcongchuc' => 0, 'soluongvienchuc' => 0
+            );
+            $a_It = array_merge($a_It, $arr);
+            $a_phucap = array_diff($a_phucap, ['pcdbqh', 'pcvk']); //bỏ 2 loại phụ cấp này ra do tính ở III và IV
+            for ($i = 0; $i < count($ar_I); $i++) {
+                $chitiet = $m_tonghop_ct->where('linhvuchoatdong', $ar_I[$i]['val']);
+
+                $ar_I[$i]['soluongduocgiao'] = $m_bienche->where('linhvuchoatdong', $ar_I[$i]['val'])->sum('soluongduocgiao');
+                $ar_I[$i]['soluongcongchuc'] = $m_bienche->where('linhvuchoatdong', $ar_I[$i]['val'])->sum('soluongcongchuc');
+                $ar_I[$i]['soluongvienchuc'] = $m_bienche->where('linhvuchoatdong', $ar_I[$i]['val'])->sum('soluongvienchuc');
+                $ar_I[$i]['soluongbienche'] = count($chitiet);
+
+                //$ar_I[$i]['soluongduocgiao'] = isset($model_bienche->soluongduocgiao) ? $model_bienche->soluongduocgiao : 0;
+                $a_It['soluongduocgiao'] += $ar_I[$i]['soluongduocgiao'];
+
+                //$ar_I[$i]['soluongbienche'] = isset($model_bienche->soluongbienche) ? $model_bienche->soluongbienche : 0;
+                $a_It['soluongcongchuc'] += $ar_I[$i]['soluongcongchuc'];
+                $a_It['soluongvienchuc'] += $ar_I[$i]['soluongvienchuc'];
+                $a_It['soluongbienche'] += $ar_I[$i]['soluongbienche'];
+
+
+                $tongpc = 0;
+                $tonghs = 0;
+                foreach ($a_phucap as $key => $pc) {
+                    $pc_st = 'st_' . $key;
+                    $ar_I[$i][$key] = isset($inputs['inheso']) ? $chitiet->sum($key) : $chitiet->sum($pc_st);
+                    $a_It[$key] += $ar_I[$i][$key];
+                    $tongpc += isset($inputs['inheso']) ? $chitiet->sum($key) : $chitiet->sum($pc_st);
+                    $tonghs += $chitiet->sum($key);
+                }
+                $ar_I[$i]['tongpc'] = $a_phucap != [] ? $tongpc - $ar_I[$i]['heso'] : 0;
+                $a_It['tongpc'] += $ar_I[$i]['tongpc'];
+
+                if (isset($inputs['inheso'])) {
+                    $ar_I[$i]['ttbh_dv'] = count($chitiet) > 0 ? $chitiet->sum('ttbh_dv_hs') : 0;
+                } else {
+                    $ar_I[$i]['ttbh_dv'] =  count($chitiet) > 0 ? $chitiet->sum('ttbh_dv') : 0;
+                }
+                $a_It['ttbh_dv'] += $ar_I[$i]['ttbh_dv'];
+
+                if (isset($inputs['inheso'])) {
+                    // $ar_I[$i]['chenhlech'] = round(($ar_I[$i]['heso'] + $ar_I[$i]['tongpc'] + $ar_I[$i]['ttbh_dv']) * 100000);
+                    $ar_I[$i]['chenhlech'] = round(($chitiet->sum('luongtn') + $chitiet->sum('ttbh_dv')));
+                } else {
+                    $ar_I[$i]['chenhlech'] = round($tonghs * $m_thongtu->chenhlech
+                        + ($chitiet->sum('ttbh_dv') / $m_thongtu->mucapdung) * $m_thongtu->chenhlech);
+                }
+                $a_It['chenhlech'] += $ar_I[$i]['chenhlech'];
+
+                //Tính số lượng cb công chức, viên chức
+                $congchuc = $chitiet->where('sunghiep', 'Công chức');
+                $vienchuc = $chitiet->where('sunghiep', 'Viên chức');
+                $ar_I[$i]['congchuc'] = count($congchuc);
+                $ar_I[$i]['vienchuc'] = count($vienchuc);
+                $a_It['congchuc'] += $ar_I[$i]['congchuc'];
+                $a_It['vienchuc'] += $ar_I[$i]['vienchuc'];
+            }
+            // dd($ar_I);
+            // dd($a_It);
+            foreach ($a_phucap as $key => $pc) {
+                $pc_st = 'st_' . $key;
+                $ar_I[11][$key] = $ar_I[12][$key] + $ar_I[13][$key];
+                $ar_I[0][$key] = $ar_I[1][$key] + $ar_I[2][$key];
+            }
+
+            $ar_I[11]['tongpc'] = $ar_I[12]['tongpc'] + $ar_I[13]['tongpc'];
+            $ar_I[11]['ttbh_dv'] = $ar_I[12]['ttbh_dv'] + $ar_I[13]['ttbh_dv'];
+            $ar_I[11]['chenhlech'] = $ar_I[12]['chenhlech'] + $ar_I[13]['chenhlech'];
+            $ar_I[11]['soluongduocgiao'] = $ar_I[12]['soluongduocgiao'] + $ar_I[13]['soluongduocgiao'];
+            $ar_I[11]['soluongbienche'] = $ar_I[12]['soluongbienche'] + $ar_I[13]['soluongbienche'];
+            $ar_I[11]['congchuc'] = $ar_I[12]['congchuc'] + $ar_I[13]['congchuc'];
+            $ar_I[11]['soluongcongchuc'] = $ar_I[12]['soluongcongchuc'] + $ar_I[13]['soluongcongchuc'];
+            $ar_I[11]['vienchuc'] = $ar_I[12]['vienchuc'] + $ar_I[13]['vienchuc'];
+            $ar_I[11]['soluongvienchuc'] = $ar_I[12]['soluongvienchuc'] + $ar_I[13]['soluongvienchuc'];
+
+            $ar_I[0]['tongpc'] = $ar_I[1]['tongpc'] + $ar_I[2]['tongpc'];
+            $ar_I[0]['ttbh_dv'] = $ar_I[1]['ttbh_dv'] + $ar_I[2]['ttbh_dv'];
+            $ar_I[0]['chenhlech'] = $ar_I[1]['chenhlech'] + $ar_I[2]['chenhlech'];
+            $ar_I[0]['soluongduocgiao'] = $ar_I[1]['soluongduocgiao'] + $ar_I[2]['soluongduocgiao'];
+            $ar_I[0]['soluongbienche'] = $ar_I[1]['soluongbienche'] + $ar_I[2]['soluongbienche'];
+            $ar_I[0]['congchuc'] = $ar_I[1]['congchuc'] + $ar_I[2]['congchuc'];
+            $ar_I[0]['soluongcongchuc'] = $ar_I[1]['soluongcongchuc'] + $ar_I[2]['soluongcongchuc'];
+            $ar_I[0]['vienchuc'] = $ar_I[1]['vienchuc'] + $ar_I[2]['vienchuc'];
+            $ar_I[0]['soluongvienchuc'] = $ar_I[1]['soluongvienchuc'] + $ar_I[2]['soluongvienchuc'];
+
+            $ar_II = array();
+            $ar_II['soluongduocgiao'] = isset($m_tonghop_ct->soluongduocgiao) ? $m_tonghop_ct->soluongduocgiao : 0;
+            $ar_II['soluongcongchuc'] = isset($m_tonghop_ct->soluongcongchuc) ? $m_tonghop_ct->soluongcongchuc : 0;
+            $ar_II['soluongvienchuc'] = isset($m_tonghop_ct->soluongvienchuc) ? $m_tonghop_ct->soluongvienchuc : 0;
+            $ar_II['soluongbienche'] = isset($m_bienche->soluongbienche) ? $m_bienche->soluongbienche : 0;
+
+            $m_xaphuong = $m_tonghop_ct->where('maphanloai', 'KVXP');
+
+            $tongpc = $tonghs = 0;
+            foreach ($a_phucap as $key => $pc) {
+                $pc_st = 'st_' . $key;
+                $ar_II[$key] = isset($inputs['heso']) ? $m_xaphuong->sum($key) : $m_xaphuong->sum($pc_st);
+                $tongpc += $ar_II[$key];
+                $tonghs += $m_xaphuong->sum($key);
+            }
+
+            $ar_II['tongpc'] = $a_phucap != [] ? $tongpc - $ar_II['heso'] : 0;
+            if (isset($inputs['inheso'])) {
+                $ar_II['ttbh_dv'] = count($m_xaphuong) > 0 ? $m_xaphuong->sum('ttbh_dv_hs') : 0;
+
+                // $ar_I[$i]['ttbh_dv'] = $chitiet == [] ? 0 : $chitiet->sum('ttbh_dv');
+
+            } else {
+                $ar_II['ttbh_dv'] = count($m_xaphuong) > 0 ? $m_xaphuong->sum('ttbh_dv') : 0;
+            }
+
+            // $ar_II['ttbh_dv'] = $m_xaphuong->sum('ttbh_dv');
+
+            if (isset($inputs['inheso'])) {
+                $ar_II['chenhlech'] = round(($tonghs + $ar_II['ttbh_dv']) * 100000);
+            } else {
+                $ar_II['chenhlech'] = round($tonghs * $m_thongtu->chenhlech
+                    + ($ar_II['ttbh_dv'] / $m_thongtu->mucapdung) * $m_thongtu->chenhlech);
+            }
+            // $ar_II['chenhlech'] = round($tonghs * $m_thongtu->chenhlech
+            //     + ($ar_II['ttbh_dv'] / $m_thongtu->mucapdung) * $m_thongtu->chenhlech);
+            //dd($ar_II);
+
+            //căn cứ vào cấp dự toán để xác định đơn vị cấp xã, huyện, tỉnh
+            //chỉ có cột tổng cộng
+            $ar_III = array();
+            $ar_III[] = array('val' => 'T', 'tt' => '-', 'noidung' => 'Cấp tỉnh', 'tongso' => '0', 'chenhlech' => '0');
+            $ar_III[] = array('val' => 'H', 'tt' => '-', 'noidung' => 'Cấp huyện', 'tongso' => '0', 'chenhlech' => '0');
+            $ar_III[] = array('val' => 'X', 'tt' => '-', 'noidung' => 'Cấp xã', 'tongso' => '0', 'chenhlech' => '0');
+
+            $ar_IV = array();
+            $ar_IV[] = array('val' => 'T', 'tt' => '-', 'noidung' => 'Ủy viên cấp tỉnh', 'tongso' => '0', 'chenhlech' => '0');
+            $ar_IV[] = array('val' => 'H', 'tt' => '-', 'noidung' => 'Ủy viên cấp huyện', 'tongso' => '0', 'chenhlech' => '0');
+            $ar_IV[] = array('val' => 'X', 'tt' => '-', 'noidung' => 'Ủy viên cấp xã', 'tongso' => '0', 'chenhlech' => '0');
+
+            $a_IIIt = array('tongso' => 0, 'chenhlech' => '0');
+            $a_IVt = array('tongso' => 0, 'chenhlech' => '0');
+
+            for ($i = 0; $i < count($ar_III); $i++) {
+                if ($ar_III[$i]['val'] == $m_donvi->caphanhchinh) {
+                    $ar_III[$i]['tongso'] = count($m_xaphuong) > 0 ? $m_xaphuong->sum('pcdbqh') : 0;
+                    $ar_III[$i]['chenhlech'] = round(($ar_III['tongso'] / $m_thongtu->mucapdung) * $m_thongtu->chenhlech);
+                }
+                $a_IIIt['tongso'] += $ar_III[$i]['tongso'];
+                $a_IIIt['chenhlech'] += $ar_III[$i]['chenhlech'];
+            }
+
+            for ($i = 0; $i < count($ar_IV); $i++) {
+                if ($ar_IV[$i]['val'] == $m_donvi->caphanhchinh) {
+                    $ar_IV[$i]['tongso'] = count($m_xaphuong) > 0 ? $m_xaphuong->sum('pcvk') : 0;
+                    $ar_IV[$i]['chenhlech'] = round(($ar_IV['tongso'] / $m_thongtu->mucapdung) * $m_thongtu->chenhlech);
+                }
+                $a_IVt['tongso'] += $ar_IV[$i]['tongso'];
+                $a_IVt['chenhlech'] += $ar_IV[$i]['chenhlech'];
+            }
+
+            //dd($m_tonghop_ct);
+            return view('reports.thongtu46.donvi.mau2a2_tt46_kh')
+                ->with('furl', '/tong_hop_bao_cao/')
+                ->with('ar_I', $ar_I)
+                ->with('ar_II', $ar_II)
+                ->with('ar_III', $ar_III)
+                ->with('ar_IV', $ar_IV)
+                ->with('a_It', $a_It)
+                ->with('a_IIIt', $a_IIIt)
+                ->with('a_IVt', $a_IVt)
+                ->with('m_dv', $m_donvi)
+                ->with('inputs', $inputs)
+                ->with('a_phucap', $a_phucap)
+                ->with('col', $col)
+                ->with('pageTitle', 'Báo cáo nhu cầu kinh phí');
         } else
             return view('errors.notlogin');
     }

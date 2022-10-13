@@ -389,9 +389,9 @@ class baocaonhucaukinhphi_donviController extends Controller
             $inputs['thang'] = date_format($ngayapdung, 'm');
 
             $model = nguonkinhphi::where('madv', session('admin')->madv)->where('sohieu', $inputs['sohieu'])->get();
+            // dd($model);
             //$model_donvi = dmdonvi::where('madvbc',session('admin')->madvbc)->get();
             $m_dv = dmdonvi::where('madv', session('admin')->madv)->first();
-
             $a_A = array();
             $a_A[0] = array('tt' => '1', 'noidung' => '50% tăng thu NSĐP (không kể tăng thu tiền sử dụng đất, xổ số kiến thiết) thực hiện 2018 so dự toán Thủ tướng Chính phủ giao năm 2018', 'sotien' => '0');
             $a_A[1] = array('tt' => '2', 'noidung' => '50% tăng thu NSĐP (không kể tăng thu tiền sử dụng đất, xổ số kiến thiết) dự toán 2019 so dự toán 2018 Thủ tướng Chính phủ giao', 'sotien' => '0');
@@ -449,14 +449,16 @@ class baocaonhucaukinhphi_donviController extends Controller
             $a_BII[5] = array('tt' => '5', 'noidung' => 'Kinh phí tăng thêm để thực hiện chế độ đối với cán bộ không chuyên trách cấp xã, thôn và tổ dân phố', 'sotien' => '0');
             $a_BII[6] = array('tt' => '6', 'noidung' => 'Kinh phí tăng thêm để thực hiện phụ cấp trách nhiệm đối với cấp ủy viên các cấp theo QĐ số 169-QĐ/TW ngày 24/6/2008', 'sotien' => '0');
             $a_BII[7] = array('tt' => '7', 'noidung' => 'Kinh phí tăng thêm thực hiện chế độ bồi dưỡng phục vụ hoạt động cấp ủy thuộc cấp tỉnh theo Quy định 09-QĐ/VVPTW ngày 22/9/2017', 'sotien' => '0');
-            if (session('admin')->maphanloai == 'KVXP') {
-                $a_BII[0]['sotien'] = 0;
-                $a_BII[2]['sotien'] = $model->sum('luongphucap') + $model->sum('baohiem');
-            } else {
-                $a_BII[0]['sotien'] = $model->sum('luongphucap') + $model->sum('baohiem');
-                $a_BII[2]['sotien'] = 0;
-            }
-
+            // if (session('admin')->maphanloai == 'KVXP') {
+            //     $a_BII[0]['sotien'] = 0;
+            //     $a_BII[2]['sotien'] = $model->sum('luongphucap') + $model->sum('baohiem');
+            // } else {
+            //     $a_BII[0]['sotien'] = $model->sum('luongphucap') + $model->sum('baohiem');
+            //     $a_BII[2]['sotien'] = 0;
+            // }
+            $model_xp = $model->where('maphanloai', 'KVXP');
+            $a_BII[2]['sotien'] = $model_xp->sum('luongphucap') + $model_xp->sum('baohiem');
+            $a_BII[0]['sotien'] = $model->sum('luongphucap') + $model->sum('baohiem') - $model_xp->sum('luongphucap') - $model_xp->sum('baohiem');
             $a_BII[1]['sotien'] = $model_tudb->sum('luongphucap') + $model_tudb->sum('baohiem');
 
             $a_BII[3]['sotien'] = $model->sum('daibieuhdnd');
@@ -464,7 +466,6 @@ class baocaonhucaukinhphi_donviController extends Controller
             $a_BII[5]['sotien'] = $model->sum('canbokct');
             $a_BII[6]['sotien'] = $model->sum('uyvien');
             $a_BII[7]['sotien'] = $model->sum('boiduong');
-
             //phần III
             $a_BIII = array();
             $a_BIII[0] = array('tt' => '1', 'noidung' => 'Kinh phí tăng, giảm do điều chỉnh địa bàn vùng KTXH ĐBKK năm 2017 theo Quyết định số 131/QĐ-TTg và Quyết định số 582/QĐ-TTg của Thủ tướng Chính phủ tính đủ 12 tháng (6)', 'sotien' => '0');
@@ -526,13 +527,14 @@ class baocaonhucaukinhphi_donviController extends Controller
                 $solieu = $model->where('linhvuchoatdong', $data[$i]['val']);
                 $data[$i]['nhucau'] = $solieu->sum('nhucau');
                 $data[$i]['nguonkp'] = $solieu->sum('nguonkp');
-                $data[$i]['tietkiem'] = $solieu->sum('tietkiem') + $solieu->sum('tietkiem1') + $solieu->sum('tietkiem2');
+                $data[$i]['tietkiem'] = $solieu->sum('tietkiem') ;
                 $data[$i]['hocphi'] = $solieu->sum('hocphi');
                 $data[$i]['vienphi'] = $solieu->sum('vienphi');
-                $data[$i]['nguonthu'] = $solieu->sum('nguonthu');
+                $data[$i]['nguonthu'] = $solieu->sum('tietkiem1');
 
-                $data[$i]['khac'] = $solieu->sum('thuchien1') + $solieu->sum('dutoan') + $solieu->sum('dutoan1')
-                    + $solieu->sum('bosung') + $solieu->sum('caicach');
+                // $data[$i]['khac'] = $solieu->sum('thuchien1') + $solieu->sum('dutoan') + $solieu->sum('dutoan1')
+                //     + $solieu->sum('bosung') + $solieu->sum('caicach');
+                    $data[$i]['khac'] = $solieu->sum('nguonthu');
             }
 
             $data[0]['nhucau'] = $data[1]['nhucau'] + $data[2]['nhucau'];
@@ -545,8 +547,10 @@ class baocaonhucaukinhphi_donviController extends Controller
 
             $data[4]['nhucau'] = $model->sum('nhucau') - $data[0]['nhucau'] - $data[5]['nhucau'] - $data[3]['nhucau'];
             $data[4]['nguonkp'] = $model->sum('nguonkp') - $data[0]['nguonkp'] - $data[5]['nguonkp'] - $data[3]['nguonkp'];
-            $data[4]['tietkiem'] = $model->sum('tietkiem') + $model->sum('tietkiem1') + $model->sum('tietkiem2')
-                - $data[0]['tietkiem'] - $data[5]['tietkiem'] - $data[3]['tietkiem'];
+            // $data[4]['tietkiem'] = $model->sum('tietkiem') + $model->sum('tietkiem1') + $model->sum('tietkiem2')
+            //     - $data[0]['tietkiem'] - $data[5]['tietkiem'] - $data[3]['tietkiem'];
+            $data[4]['tietkiem'] = $model->sum('tietkiem')
+            - $data[0]['tietkiem'] - $data[5]['tietkiem'] - $data[3]['tietkiem'];
             $data[4]['hocphi'] = $model->sum('hocphi') - $data[0]['hocphi'] - $data[5]['hocphi'] - $data[3]['hocphi'];
             $data[4]['vienphi'] = $model->sum('vienphi') - $data[0]['vienphi'] - $data[5]['vienphi'] - $data[3]['vienphi'];
             $data[4]['nguonthu'] = $model->sum('nguonthu') - $data[0]['nguonthu'] - $data[5]['nguonthu'] - $data[3]['nguonthu'];
@@ -869,7 +873,7 @@ class baocaonhucaukinhphi_donviController extends Controller
 
                 if (isset($inputs['innoidung'])) {
                     // $ar_I[$i]['chenhlech'] = round(($ar_I[$i]['heso'] + $ar_I[$i]['tongpc'] + $ar_I[$i]['ttbh_dv']) * 100000);
-                    $ar_I[$i]['chenhlech'] = round(($tonghs + $ar_I[$i]['ttbh_dv']) * 100000);
+                    $ar_I[$i]['chenhlech'] = round(($chitiet->sum('luongtn') + $chitiet->sum('ttbh_dv')));
                 }else{
                 $ar_I[$i]['chenhlech'] = round($tonghs * $m_thongtu->chenhlech
                     + ($chitiet->sum('ttbh_dv') / $m_thongtu->mucapdung) * $m_thongtu->chenhlech);
@@ -1207,7 +1211,7 @@ class baocaonhucaukinhphi_donviController extends Controller
             // $ar_I[$i]['soluongbienche'] = count($chitiet);
             if (count($chitiet) != 0){
                 $ar_I[$i]['tongsodonvi1']= $_tonghop->sum('tongsodonvi1');
-                $ar_I[$i]['tongsodonvi2']= $_tonghop->sum('tongdonvi2');
+                $ar_I[$i]['tongsodonvi2']= $_tonghop->sum('tongsodonvi2');
                 $ar_I[$i]['quy_tuchu']= $_tonghop->sum('quy_tuchu');
                 $ar_I[$i]['kp_tk']= $ar_I[$i]['quy_tuchu']*12;
             }else{

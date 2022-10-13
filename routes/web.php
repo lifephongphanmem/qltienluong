@@ -972,7 +972,7 @@ Route::group(['prefix'=>'bao_cao'],function(){
         Route::group(['prefix'=>'don_vi'],function(){
             Route::post('mau2a1','baocaonhucaukinhphi_donviController@mau2a1');
             Route::post('mau2a2','baocaonhucaukinhphi_donviController@mau2a2');
-            Route::post('mau2a2_kh','baocaonhucaukinhphi_donviController@mau2a2_kh');
+            // Route::post('mau2a2_kh','baocaonhucaukinhphi_donviController@mau2a2_kh');
             //Route::get('mau2c','baocaothongtu67Controller@mau2c_donvi');
             // Route::get('mau2d','baocaothongtu67Controller@mau2d_donvi');
             Route::post('mau4a','baocaonhucaukinhphi_donviController@mau4a');
@@ -1023,6 +1023,7 @@ Route::group(['prefix'=>'bao_cao'],function(){
             Route::post('mau4bexcel','baocaott67huyenController@mau4b_huyen_excel');
             Route::post('mau4bbs','baocaott67huyenController@mau4bbs_huyen');
             Route::post('mau4bbsexcel','baocaott67huyenController@mau4bbs_huyen_excel');
+            Route::post('mau2a','baocaott67huyenController@mau2a_huyen');
         });
     });
 

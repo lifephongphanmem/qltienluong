@@ -589,10 +589,10 @@
                                 @endif
 
                                 @if (session('admin')->level == 'H' && session('admin')->phamvitonghop == 'HUYEN')
-                                    <li>
+                                    {{-- <li>
                                         <a href="{{ url('nguon_kinh_phi/huyen/danh_sach') }}"><i
                                                 class="fa fa-caret-right"></i>Số liệu nguồn kinh phí</a>
-                                    </li>
+                                    </li> --}}
                                     <li>
                                         <a href="{{ url('chuc_nang/tong_hop_nguon/huyen/index') }}"><i
                                                 class="fa fa-caret-right"></i>Tổng số liệu nhu cầu kinh phí</a>
