@@ -32,7 +32,7 @@ class dutoanluong_tinhController extends Controller
             $inputs = $request->all();
             $inputs['namns'] = $inputs['namns'] ?? date('Y');
             //$m_dutoan = dutoanluong_tinh::where('madv', session('admin')->madv)->where('namns', $inputs['namns'])->get();
-            $model = dmdonvibaocao::where('baocao', '1')->orderby('sapxep')->get();
+            $model = dmdonvibaocao::where('level', 'H')->orderby('sapxep')->get();
             $m_dutoan_huyen = dutoanluong_huyen::where('namns', $inputs['namns'])
                 ->where('macqcq', session('admin')->madv)
                 ->where('trangthai', 'DAGUI')->get();

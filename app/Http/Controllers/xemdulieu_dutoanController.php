@@ -144,7 +144,7 @@ class xemdulieu_dutoanController extends Controller
     {
         if (Session::has('admin')) {
             $inputs = $request->all();
-            $m_dvbc = dmdonvibaocao::where('baocao', '1')->orderby('sapxep')->get();
+            $m_dvbc = dmdonvibaocao::where('level', 'H')->orderby('sapxep')->get();
             $inputs['madvbc'] = $inputs['madvbc'] ?? $m_dvbc->first();
             $m_dutoan_huyen = dutoanluong_huyen::where('madvbc', $inputs['madvbc'])
                 ->where('namns', $inputs['namns'])
