@@ -155,6 +155,10 @@
                                                 <p class="description"><i class="glyphicon glyphicon-check"></i>Mẫu 4a</p>
                                             </a>
                                         </li>
+                                        <li><a href="#tab3" data-toggle="tab" class="step">
+                                            <p class="description"><i class="glyphicon glyphicon-check"></i>Mẫu 4b</p>
+                                        </a>
+                                    </li>
                                         <li><a href="#tab2" data-toggle="tab" class="step">
                                                 <p class="description"><i class="glyphicon glyphicon-check"></i>Mẫu 2b</p>
                                             </a>
@@ -180,6 +184,7 @@
                                         @include('manage.nguonkinhphi.includes.mau2b')
                                         @include('manage.nguonkinhphi.includes.mau2đ')
                                         @include('manage.nguonkinhphi.includes.mau2e')
+                                        @include('manage.nguonkinhphi.includes.mau4b')
                                     </div>
                                 </div>
                             </div>

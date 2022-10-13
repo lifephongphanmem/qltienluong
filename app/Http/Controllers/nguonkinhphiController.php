@@ -760,18 +760,18 @@ class nguonkinhphiController extends Controller
             $inputs['nghihuu'] = chkDbl($inputs['nghihuu']);
             $inputs['baohiem'] = chkDbl($inputs['baohiem']);
 
-            //$inputs['tietkiem'] = chkDbl($inputs['tietkiem']);
-            //$inputs['hocphi'] = chkDbl($inputs['hocphi']);
-            //$inputs['vienphi'] = chkDbl($inputs['vienphi']);
-            //$inputs['nguonthu'] = chkDbl($inputs['nguonthu']);
-            //$inputs['nguonkp'] = chkDbl($inputs['nguonkp']);
+            $inputs['tietkiem'] = chkDbl($inputs['tietkiem']);
+            $inputs['hocphi'] = chkDbl($inputs['hocphi']);
+            $inputs['vienphi'] = chkDbl($inputs['vienphi']);
+            $inputs['nguonthu'] = chkDbl($inputs['nguonthu']);
+            $inputs['nguonkp'] = chkDbl($inputs['nguonkp']);
 
             $inputs['thunhapthap'] = chkDbl($inputs['thunhapthap']);
             $inputs['diaban'] = chkDbl($inputs['diaban']);
             $inputs['tinhgiam'] = chkDbl($inputs['tinhgiam']);
             $inputs['nghihuusom'] = chkDbl($inputs['nghihuusom']);
 
-            //$inputs['tietkiem1'] = chkDbl($inputs['tietkiem1']);
+            $inputs['tietkiem1'] = chkDbl($inputs['tietkiem1']);
             //$inputs['tietkiem2'] = chkDbl($inputs['tietkiem2']);
             //$inputs['thuchien1'] = chkDbl($inputs['thuchien1']);
             //$inputs['dutoan'] = chkDbl($inputs['dutoan']);

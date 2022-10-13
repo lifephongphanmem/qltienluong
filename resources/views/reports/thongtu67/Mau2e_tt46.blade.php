@@ -5,8 +5,14 @@
 <table id="data_header" width="96%" border="0" cellspacing="0" cellpadding="4" style="margin:0 auto 20px;text-align: center">
     <tr>
         <td style="text-align: left">
+            @if ($inputs != '')
+            <b>{{'Đơn vị: '.$m_dv->tendv}}</b> 
+            @else
             <b>UỶ BAN NHÂN DÂN TỈNH, THÀNH PHỐ {{$m_dv->diadanh}}</b><br>
+            @endif
         </td>
+          
+            
         <td style="text-align: right">
             <b>Biểu số 2e</b><br>
         </td>
@@ -53,26 +59,27 @@
         <td>5</td>
         <td>6</td>
     </tr>
-    <tr style="font-weight: bold">
+    <tr style="font-weight: bold; text-align: center">
         <td></td>
         <td>TỔNG CỘNG</td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
+        <td>{{dinhdangso($a_It['tongsodonvi1'])}}</td>
+        <td>{{dinhdangso($a_It['tongsodonvi2'])}}</td>
+        <td>{{dinhdangso($a_It['tang'])}}</td>
+        <td>{{dinhdangso($a_It['giam'])}}</td>
+        <td style="text-align: right">{{dinhdangso($a_It['quy_tuchu'])}}</td>
+        <td style="text-align: right">{{dinhdangso($a_It['kp_tk'])}}</td>
+
     </tr>
-    @foreach($ar_I as $dulieu)
-        <tr style=" text-align: right">
-            <td style=" text-align: center">{{$dulieu['tt']}}</td>
-            <td style=" text-align: left">{{$dulieu['noidung']}}</td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
+    @foreach ($ar_I as $dulieu )
+        <tr style="text-align: center">
+            <td>{{$dulieu['tt']}}</td>
+            <td style="text-align: left">{{$dulieu['noidung']}}</td>
+            <td>{{dinhdangso($dulieu['tongsodonvi1'])}}</td>
+            <td>{{dinhdangso($dulieu['tongsodonvi2'])}}</td>
+            <td>{{dinhdangso($dulieu['tang'])}}</td>
+            <td>{{dinhdangso($dulieu['giam'])}}</td>
+            <td style="text-align: right">{{dinhdangso($dulieu['quy_tuchu'])}}</td>
+            <td style="text-align: right">{{dinhdangso($dulieu['kp_tk'])}}</td>
         </tr>
     @endforeach
 </table>
