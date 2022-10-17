@@ -873,14 +873,15 @@ class baocaonhucaukinhphi_donviController extends Controller
                     $ar_I[$i]['ttbh_dv'] =  count($chitiet) > 0 ? $chitiet->sum('ttbh_dv') : 0;
                 }
                 $a_It['ttbh_dv'] += $ar_I[$i]['ttbh_dv'];
-
-                if (isset($inputs['innoidung'])) {
-                    // $ar_I[$i]['chenhlech'] = round(($ar_I[$i]['heso'] + $ar_I[$i]['tongpc'] + $ar_I[$i]['ttbh_dv']) * 100000);
-                    $ar_I[$i]['chenhlech'] = round(($chitiet->sum('luongtn') + $chitiet->sum('ttbh_dv')));
-                } else {
-                    $ar_I[$i]['chenhlech'] = round($tonghs * $m_thongtu->chenhlech
-                        + ($chitiet->sum('ttbh_dv') / $m_thongtu->mucapdung) * $m_thongtu->chenhlech);
-                }
+                $ar_I[$i]['chenhlech'] = round(($chitiet->sum('luongtn') + $chitiet->sum('ttbh_dv')));
+                //17.10.2022
+                // if (isset($inputs['innoidung'])) {
+                //     // $ar_I[$i]['chenhlech'] = round(($ar_I[$i]['heso'] + $ar_I[$i]['tongpc'] + $ar_I[$i]['ttbh_dv']) * 100000);
+                //     $ar_I[$i]['chenhlech'] = round(($chitiet->sum('luongtn') + $chitiet->sum('ttbh_dv')));
+                // } else {
+                //     $ar_I[$i]['chenhlech'] = round($tonghs * $m_thongtu->chenhlech
+                //         + ($chitiet->sum('ttbh_dv') / $m_thongtu->mucapdung) * $m_thongtu->chenhlech);
+                // }
                 $a_It['chenhlech'] += $ar_I[$i]['chenhlech'];
 
                 //Tính số lượng cb công chức, viên chức
