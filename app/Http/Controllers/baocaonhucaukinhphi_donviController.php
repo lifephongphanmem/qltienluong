@@ -751,7 +751,7 @@ class baocaonhucaukinhphi_donviController extends Controller
             $a_linhvuc = array_column($_tonghop->toarray(), 'linhvuchoatdong', 'masodv');
 
             $m_tonghop_ct = nguonkinhphi_bangluong::wherein('masodv', array_column($_tonghop->toarray(), 'masodv'))
-                ->where('nam', $inputs['nam'])->where('thang', $inputs['thang'])->where('macongtac', 'BIENCHE')->get();
+                ->where('nam', $inputs['nam'])->where('thang', $inputs['thang'])->get();
             $canbo = hosocanbo::wherein('macanbo', array_column($m_tonghop_ct->toarray(), 'macanbo'))->get();
             $a_pc_goc = array('heso');
             // $a_pc_goc = array('heso', 'vuotkhung', 'pckv', 'pccv', 'pcudn', 'pcth', 'pctnn', 'pccovu', 'pcdang', 'pcthni', 'pcdbqh', 'pcvk', 'pck');
