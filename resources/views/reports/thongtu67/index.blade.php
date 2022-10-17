@@ -32,10 +32,10 @@
                                         </a></li>
                                 <li><a href="#" data-target="#chitiet-modal" data-toggle="modal"
                                         onclick="baocao('{{ $furl . 'mau2a1_tt68' }}')">Báo cáo nhu cầu kinh phí thực hiện
-                                        nghị định 72/2018/NĐ-CP (Mẫu 2a/1)</a></li>
+                                        nghị định 38/2019/NĐ-CP (Mẫu 2a/1)</a></li>
                                 <li><a href="#" data-target="#chitiet-modal" data-toggle="modal"
                                         onclick="baocao('{{ $furl . 'mau2a2_tt68' }}')">Báo cáo nhu cầu kinh phí thực hiện
-                                        nghị định 72/2018/NĐ-CP (Mẫu 2a/2)</a></li>
+                                        nghị định 38/2019/NĐ-CP (Mẫu 2a/2)</a></li>
                                 <li><a href="#" data-target="#chitiet-modal" data-toggle="modal"
                                         onclick="baocao('{{ $furl . 'mau2b_tt68' }}')">Báo cáo tổng hợp quỹ trợ cấp tăng
                                         thêm
@@ -67,10 +67,10 @@
                                 <li><a href="#" data-target="#chitiet-modal" data-toggle="modal"
                                         onclick="baocao('{{ $furl . 'mau4b_tt68' }}')">Tổng hợp nhu cầu, nguồn thực hiện
                                         nghị
-                                        định 72/2018/NĐ-CP (Mẫu 4b)</a></li>
+                                        định 38/2019/NĐ-CP (Mẫu 4b)</a></li>
                                 <li><a href="#" data-target="#chitiet-modal" data-toggle="modal"
                                         onclick="baocao('{{ $furl . 'mau4b_tt68bs' }}')">Tổng hợp nhu cầu, nguồn thực hiện
-                                        nghị định 72/2018/NĐ-CP (Mẫu 4b bổ sung)</a></li>
+                                        nghị định 38/2019/NĐ-CP (Mẫu 4b bổ sung)</a></li>
                             </ol>
                         </div>
                     </div>

@@ -446,7 +446,8 @@
 
                         <!-- dành cho đơn vị chủ quản -->
                     @elseif(session('admin')->phanloaitaikhoan == 'TH')
-                        <li>
+                    @if (session('admin')->level != 'T')
+                    <li>
                             <a href="javascript:;">
                                 <i class="fa icon-book-open"></i>
                                 <span class="title">Quản lý hồ sơ</span>
@@ -470,7 +471,7 @@
                                 @endif
                             </ul>
                         </li>
-
+                        @endif
                         <li>
                             <a href="javascript:;">
                                 <i class="fa icon-book-open"></i>
