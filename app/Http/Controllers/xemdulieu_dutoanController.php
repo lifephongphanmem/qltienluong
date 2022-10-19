@@ -124,6 +124,7 @@ class xemdulieu_dutoanController extends Controller
             $model_nhomct = dmphanloaicongtac::select('macongtac', 'tencongtac')->get();
             $model_tenct = dmphanloaict::select('tenct', 'macongtac', 'mact')->get();
             //dd($model_donvi->first());
+            // dd($model_donvi);
             return view('functions.viewdata.dutoanluong.huyen.index')
                 ->with('model', $model_donvi)
                 ->with('inputs', $inputs)

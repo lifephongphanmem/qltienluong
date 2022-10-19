@@ -488,6 +488,7 @@ class dutoanluongController extends Controller
             $inputs['sothonxakhac_heso'] = chkDbl($inputs['sothonxakhac_heso']);
             $inputs['sothonxaloai1_heso'] = chkDbl($inputs['sothonxaloai1_heso']);
             $inputs['phanloaixa_heso'] = chkDbl($inputs['phanloaixa_heso']);
+            // dd($inputs);
             foreach (array_chunk($a_data, 50) as $data) {
                 dutoanluong_bangluong::insert($data);
             }

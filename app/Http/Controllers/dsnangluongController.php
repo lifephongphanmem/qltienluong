@@ -42,8 +42,8 @@ class dsnangluongController extends Controller
     function store(Request $request)
     {
         $inputs = $request->all();
+        // dd($inputs);
         $model = dsnangluong::where('manl', $inputs['manl'])->first();
-
         if ($model != null) {
             //update
             $model->update($inputs);
@@ -256,9 +256,12 @@ class dsnangluongController extends Controller
             $model_canbo = hosocanbo::select('macanbo','msngbac','bac','ngaytu','ngayden','msngbac','heso','vuotkhung')
                 ->where('macanbo', $inputs['macanbo'])->first();
             $a_nb = ngachluong::where('msngbac',$model_canbo->msngbac)->first();
-            if($a_nb != null){
+            if($a_nb == null){
                 //trả lại danh sách
-                return redirect('chuc_nang/nang_luong/maso='.$inputs['manl']);
+                // return redirect('chuc_nang/nang_luong/maso='.$inputs['manl']);
+                return view('thongbao.data_error')
+                        ->with('message','Cán bộ chưa chọn ngạch lương')
+                        ->with('furl','chuc_nang/nang_luong/maso='.$inputs['manl']);
             }
 
             $ngayxet = new Carbon($model_nangluong->ngayxet);
