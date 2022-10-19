@@ -97,8 +97,8 @@
 
 
 
-                                    {{-- <li><a href="#" data-target="#chitiet-modal" data-toggle="modal" onclick="baocao('{{'/bao_cao/thong_tu_67/huyen/mau2a1'}}')">Báo cáo nhu cầu kinh phí thực hiện nghị định 38/2019/NĐ-CP (Mẫu 2a/1)</a></li>
-                                    <li><a href="#" data-target="#chitiet-modal" data-toggle="modal" onclick="baocao('{{'/bao_cao/thong_tu_67/huyen/mau2a2'}}')">Báo cáo nhu cầu kinh phí thực hiện nghị định 38/2019/NĐ-CP (Mẫu 2a/2)</a></li> --}}
+                                    <li><a href="#" data-target="#chitiet-modal" data-toggle="modal" onclick="baocao('{{'/bao_cao/thong_tu_67/huyen/mau2a1'}}')">Báo cáo nhu cầu kinh phí thực hiện nghị định 38/2019/NĐ-CP (Mẫu 2a/1)</a></li>
+                                    <li><a href="#" data-target="#chitiet-modal" data-toggle="modal" onclick="baocao('{{'/bao_cao/thong_tu_67/huyen/mau2a2'}}')">Báo cáo nhu cầu kinh phí thực hiện nghị định 38/2019/NĐ-CP (Mẫu 2a/2)</a></li>
                                     <li><a href="#" data-target="#chitiet-modal" data-toggle="modal" onclick="baocao('{{'/bao_cao/thong_tu_67/huyen/mau2a'}}')">Báo cáo nhu cầu kinh phí thực hiện nghị định 38/2019/NĐ-CP (Mẫu 2a)</a></li>
                                     <li><a href="#" data-target="#chitiet-modal" data-toggle="modal" onclick="baocao('{{'/bao_cao/thong_tu_67/huyen/mau2b'}}')">Báo cáo tổng hợp quỹ trợ cấp tăng thêm của cán bộ xã, phường, thị trấn đã nghỉ việc (Mẫu 2b)</a></li>
                                     <li><a href="#" data-target="#chitiet-modal" data-toggle="modal" onclick="baocao('{{'/bao_cao/thong_tu_67/huyen/mau2c'}}')">Báo cáo nhu cầu kinh phí thực hiện BHTN theo nghị định 28/2015 (Mẫu 2c)</a></li>

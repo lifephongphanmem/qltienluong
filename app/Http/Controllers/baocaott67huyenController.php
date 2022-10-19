@@ -3277,14 +3277,14 @@ class baocaott67huyenController extends Controller
 
     function mau2e_huyen(Request $request)
     {
-        if (Session::has('admin')) {           
+        if (Session::has('admin')) {
             $inputs = $request->all();
             $madvbc = session('admin')->madvbc;
-            if($inputs['madv'] != ''){
+            if ($inputs['madv'] != '') {
                 $m_donvi = dmdonvi::where('madv', $inputs['madv'])->get();
-                $m_dv= dmdonvi::where('madv', $inputs['madv'])->first();
-            }else{
-                $m_donvi = dmdonvi::where('madvbc',$madvbc)->get();
+                $m_dv = dmdonvi::where('madv', $inputs['madv'])->first();
+            } else {
+                $m_donvi = dmdonvi::where('madvbc', $madvbc)->get();
                 $m_dv = dmdonvi::where('madv', session('admin')->madv)->first();
             }
             // dd($m_dv);
@@ -3293,12 +3293,12 @@ class baocaott67huyenController extends Controller
             $ngayapdung = new Carbon($m_thongtu->ngayapdung);
             $inputs['nam'] = date_format($ngayapdung, 'Y');
             $inputs['thang'] = date_format($ngayapdung, 'm');
-            if($inputs['madv'] != null){
+            if ($inputs['madv'] != null) {
                 $_tonghop = nguonkinhphi::where('sohieu', $inputs['sohieu'])
-                ->where('madv', $inputs['madv'])->get();
-            }else{
+                    ->where('madv', $inputs['madv'])->get();
+            } else {
                 $_tonghop = nguonkinhphi::where('sohieu', $inputs['sohieu'])
-                ->where('madvbc', $madvbc)->get();
+                    ->where('madvbc', $madvbc)->get();
             }
             $m_tonghop_ct = nguonkinhphi_bangluong::wherein('masodv', array_column($_tonghop->toarray(), 'masodv'))
                 ->where('nam', $inputs['nam'])->where('thang', $inputs['thang'])->get();
@@ -3306,11 +3306,10 @@ class baocaott67huyenController extends Controller
             $a_pc_th = getColTongHop();
             $a_pc = array_diff($a_pc_th, $a_pc_goc);
             foreach ($m_tonghop_ct as $ct) {
-                foreach ($m_donvi as $dv){
+                foreach ($m_donvi as $dv) {
                     $ct->phanloainguon = $dv->phanloainguon;
                     $ct->phanloaidonvi = $dv->maphanloai;
                 }
-
             }
             $pldv = dmphanloaidonvi::all();
             $a_qlnn = ['MAMNON', 'TIEUHOC', 'THCS', 'THvaTHCS', 'PTDTNT'];
@@ -3774,9 +3773,9 @@ class baocaott67huyenController extends Controller
             }
             // dd($model);
             $model_donvi = dmdonvi::where('macqcq', session('admin')->madv)->get();
-            if($inputs['madv'] != ''){
+            if ($inputs['madv'] != '') {
                 $m_dv = dmdonvi::where('madv', $inputs['madv'])->first();
-            }else{
+            } else {
                 $m_dv = dmdonvi::where('madv', session('admin')->madv)->first();
             }
 
@@ -4074,27 +4073,27 @@ class baocaott67huyenController extends Controller
                         // ->wherein('sohieu',array_column($model_thongtu->where('namdt','2019')->toarray(),'sohieu'))
                         ->where('sohieu', $inputs['sohieu'])
                         ->get();
-                        // dd($m_dv);
+                    // dd($m_dv);
                 } else {
                     $m_dv = dmdonvi::select('tendv', 'madv')
                         ->where('madv', $madv)
                         ->first();
-                        // ->distinct()
-                        // ->get();
+                    // ->distinct()
+                    // ->get();
                     $model = nguonkinhphi::where('madv', $madv)
                         ->where('macqcq', session('admin')->madv)
                         ->where('trangthai', 'DAGUI')
                         // ->wherein('sohieu',array_column($model_thongtu->where('namdt','2019')->toarray(),'sohieu'))
                         ->where('sohieu', $inputs['sohieu'])
                         ->get();
-                        // dd($m_dv);
+                    // dd($m_dv);
                 }
             } else {
                 $m_dv = dmdonvi::select('tendv', 'madv')
                     ->where('madv', session('admin')->madv)
                     ->first();
-                    // ->distinct()
-                    // ->get();
+                // ->distinct()
+                // ->get();
                 $model = nguonkinhphi::where('macqcq', session('admin')->madv)
                     ->where('trangthai', 'DAGUI')
                     // ->wherein('sohieu',array_column($model_thongtu->where('namdt','2019')->toarray(),'sohieu'))
@@ -5017,13 +5016,31 @@ class baocaott67huyenController extends Controller
             $inputs['nam'] = date_format($ngayapdung, 'Y');
             $inputs['thang'] = date_format($ngayapdung, 'm');
 
-            $m_bienche = chitieubienche::where('nam', $inputs['nam'])->where('madv', session('admin')->madv)->get();
+            // $m_bienche = chitieubienche::where('nam', $inputs['nam'])->where('madv', session('admin')->madv)->get();
             if ($inputs['madv'] != null) {
-                $_tonghop = nguonkinhphi::where('sohieu', $inputs['sohieu'])
-                    ->where('madv', $inputs['madv'])->get();
+                $madv = $inputs['madv'];
+                $chekdv = dmdonvi::where('madv', $inputs['madv'])->where('phanloaitaikhoan', 'TH')->get();
+                // $_tonghop = nguonkinhphi::where('sohieu', $inputs['sohieu'])
+                //     ->where('madv', $inputs['madv'])->get();
+                if (count($chekdv) > 0) {
+
+                    $$_tonghop = nguonkinhphi::where('sohieu', $inputs['sohieu'])
+                        ->where('trangthai', 'DAGUI')
+                        ->where('macqcq', $inputs['madv'])->get();
+                    $model_donvi = dmdonvi::wherein('madv', array_column($_tonghop->toarray(), 'madv'))->get();
+                    $m_bienche = chitieubienche::where('nam',  $inputs['nam'])->wherein('madv', array_column($_tonghop->toarray(), 'madv'))->get();
+                } else {
+                    $model_donvi = dmdonvi::where('madv', $madv)->get();
+                    $m_bienche = chitieubienche::where('nam',  $inputs['nam'])->where('madv', $madv)->get();
+                    $$_tonghop = nguonkinhphi::where('sohieu', $inputs['sohieu'])
+                        ->where('trangthai', 'DAGUI')
+                        ->where('madv', $inputs['madv'])->get();
+                }
             } else {
                 $_tonghop = nguonkinhphi::where('sohieu', $inputs['sohieu'])
                     ->where('madvbc', session('admin')->madvbc)->get();
+                $model_donvi = dmdonvi::wherein('madv', array_column($_tonghop->toarray(), 'madv'))->get();
+                $m_bienche = chitieubienche::where('nam', $inputs['nam'])->wherein('madv', array_column($_tonghop->toarray(), 'madv'))->get();
             }
             $a_linhvuc = array_column($_tonghop->toarray(), 'linhvuchoatdong', 'masodv');
 
@@ -5081,6 +5098,24 @@ class baocaott67huyenController extends Controller
             }
             $m_tonghop_ct = $m_tonghop_ct->wherein('sunghiep', ['Công chức', 'Viên chức']);
             // dd($m_tonghop_ct);
+            $ar_I = array();
+            $ar_Igr = array();
+            // if (isset($inputs['inchitiet'])) {
+            //     $ar_Igr[0] = array('val' => 'GD;DT', 'tt' => '1', 'noidung' => 'Sự nghiệp giáo dục - đào tạo');
+            //     $ar_Igr[1] = array('val' => 'GD', 'tt' => '-', 'noidung' => 'Giáo dục');
+            //     $ar_Igr[2] = array('val' => 'DT', 'tt' => '-', 'noidung' => 'Đào tạo');
+            //     $ar_Igr[3] = array('val' => 'YTE', 'tt' => '2', 'noidung' => 'Sự nghiệp y tế');
+            //     $ar_Igr[4] = array('val' => 'KHCN', 'tt' => '3', 'noidung' => 'Sự nghiệp khoa học-công nghệ');
+            //     $ar_Igr[5] = array('val' => 'VHTT', 'tt' => '4', 'noidung' => 'Sự nghiệp văn hóa thông tin');
+            //     $ar_Igr[6] = array('val' => 'PTTH', 'tt' => '5', 'noidung' => 'Sự nghiệp phát thanh truyền hình');
+            //     $ar_Igr[7] = array('val' => 'TDTT', 'tt' => '6', 'noidung' => 'Sự nghiệp thể dục - thể thao');
+            //     $ar_Igr[8] = array('val' => 'DBXH', 'tt' => '7', 'noidung' => 'Sự nghiệp đảm bảo xã hội');
+            //     $ar_Igr[9] = array('val' => 'KT', 'tt' => '8', 'noidung' => 'Sự nghiệp kinh tế');
+            //     $ar_Igr[10] = array('val' => 'MT', 'tt' => '9', 'noidung' => 'Sự nghiệp môi trường');
+            //     $ar_Igr[11] = array('val' => 'QLNN;DDT', 'tt' => '10', 'noidung' => 'Quản lý nhà nước, đảng, đoàn thể');
+            //     $ar_Igr[12] = array('val' => 'QLNN', 'tt' => '-', 'noidung' => ' Quản lý NN');
+            //     $ar_Igr[13] = array('val' => 'DDT', 'tt' => '-', 'noidung' => 'Đảng, đoàn thể');
+            // } else {
             $ar_I[0] = array('val' => 'GD;DT', 'tt' => '1', 'noidung' => 'Sự nghiệp giáo dục - đào tạo');
             $ar_I[1] = array('val' => 'GD', 'tt' => '-', 'noidung' => 'Giáo dục');
             $ar_I[2] = array('val' => 'DT', 'tt' => '-', 'noidung' => 'Đào tạo');
@@ -5095,6 +5130,7 @@ class baocaott67huyenController extends Controller
             $ar_I[11] = array('val' => 'QLNN;DDT', 'tt' => '10', 'noidung' => 'Quản lý nhà nước, đảng, đoàn thể');
             $ar_I[12] = array('val' => 'QLNN', 'tt' => '-', 'noidung' => ' Quản lý NN');
             $ar_I[13] = array('val' => 'DDT', 'tt' => '-', 'noidung' => 'Đảng, đoàn thể');
+            // }
             $a_It = array();
             foreach ($a_phucap as $key => $val) {
                 $pc_st = 'st_' . $key;
@@ -5111,87 +5147,192 @@ class baocaott67huyenController extends Controller
             );
             $a_It = array_merge($a_It, $arr);
             $a_phucap = array_diff($a_phucap, ['pcdbqh', 'pcvk']); //bỏ 2 loại phụ cấp này ra do tính ở III và IV
-            for ($i = 0; $i < count($ar_I); $i++) {
-                $chitiet = $m_tonghop_ct->where('linhvuchoatdong', $ar_I[$i]['val']);
 
-                $ar_I[$i]['soluongduocgiao'] = $m_bienche->where('linhvuchoatdong', $ar_I[$i]['val'])->sum('soluongduocgiao');
-                $ar_I[$i]['soluongcongchuc'] = $m_bienche->where('linhvuchoatdong', $ar_I[$i]['val'])->sum('soluongcongchuc');
-                $ar_I[$i]['soluongvienchuc'] = $m_bienche->where('linhvuchoatdong', $ar_I[$i]['val'])->sum('soluongvienchuc');
-                $ar_I[$i]['soluongbienche'] = count($chitiet);
+            if (isset($inputs['inchitiet'])) {
 
-                //$ar_I[$i]['soluongduocgiao'] = isset($model_bienche->soluongduocgiao) ? $model_bienche->soluongduocgiao : 0;
-                $a_It['soluongduocgiao'] += $ar_I[$i]['soluongduocgiao'];
+                for ($i = 0; $i < count($ar_I); $i++) {
+                    if (isset($m_tonghop_ct)) {
+                        $chitiet = $m_tonghop_ct->where('linhvuchoatdong', $ar_I[$i]['val']);
+                        $m_dvct = $model_donvi->wherein('madv', a_unique(array_column($chitiet->toarray(), 'madv')));
+                    };
+                    if (isset($chitiet) && count($chitiet) > 0) {
+                        //$thongtin = $chitiet->toArray();
+                        $m_dvct = a_unique(array_column($m_dvct->toarray(), 'madv'));
+                        foreach ($m_dvct as $dv) {
+                            $thongtin = $chitiet->where('madv', $dv);
+                            $ar_I[$i]['tt'] = '+';
+                            $ar_I[$i]['noidung'] = $model_donvi->where('madv', $dv)->first()->tendv;
+                            $ar_I[$i]['soluongduocgiao'] = $m_bienche->where('linhvuchoatdong', $ar_I[$i]['val'])->sum('soluongduocgiao');
+                            $ar_I[$i]['soluongcongchuc'] = $m_bienche->where('linhvuchoatdong', $ar_I[$i]['val'])->sum('soluongcongchuc');
+                            $ar_I[$i]['soluongvienchuc'] = $m_bienche->where('linhvuchoatdong', $ar_I[$i]['val'])->sum('soluongvienchuc');
+                            $ar_I[$i]['soluongbienche'] = count($thongtin);
 
-                //$ar_I[$i]['soluongbienche'] = isset($model_bienche->soluongbienche) ? $model_bienche->soluongbienche : 0;
-                $a_It['soluongcongchuc'] += $ar_I[$i]['soluongcongchuc'];
-                $a_It['soluongvienchuc'] += $ar_I[$i]['soluongvienchuc'];
-                $a_It['soluongbienche'] += $ar_I[$i]['soluongbienche'];
+                            $a_It['soluongduocgiao'] += $ar_I[$i]['soluongduocgiao'];
+                            $a_It['soluongcongchuc'] += $ar_I[$i]['soluongcongchuc'];
+                            $a_It['soluongvienchuc'] += $ar_I[$i]['soluongvienchuc'];
+                            $a_It['soluongbienche'] += $ar_I[$i]['soluongbienche'];
+
+                            $congchuc = $thongtin->where('sunghiep', 'Công chức');
+                            $vienchuc = $thongtin->where('sunghiep', 'Viên chức');
+                            $ar_I[$i]['congchuc'] = count($congchuc);
+                            $ar_I[$i]['vienchuc'] = count($vienchuc);
+                            $a_It['congchuc'] += $ar_I[$i]['congchuc'];
+                            $a_It['vienchuc'] += $ar_I[$i]['vienchuc'];
+
+                            $tongpc = 0;
+                            $tonghs = 0;
+                            foreach ($a_phucap as $key => $pc) {
+                                $pc_st = 'st_' . $key;
+                                $ar_I[$i][$key] = isset($inputs['inheso']) ? $thongtin->sum($key) : $thongtin->sum($pc_st);
+                                $a_It[$key] += $ar_I[$i][$key];
+                                $tongpc += isset($inputs['inheso']) ? $thongtin->sum($key) : $thongtin->sum($pc_st);
+                                $tonghs += $thongtin->sum($key);
+                            }
+
+                            $ar_I[$i]['tongpc'] = $a_phucap != [] ? $tongpc - $ar_I[$i]['heso'] : 0;
+                            $a_It['tongpc'] += $ar_I[$i]['tongpc'];
+
+                            if (isset($inputs['inheso'])) {
+                                $ar_I[$i]['ttbh_dv'] = count($thongtin) > 0 ? $thongtin->sum('ttbh_dv_hs') : 0;
+                            } else {
+                                $ar_I[$i]['ttbh_dv'] =  count($thongtin) > 0 ? $thongtin->sum('ttbh_dv') : 0;
+                            }
+                            $a_It['ttbh_dv'] += $ar_I[$i]['ttbh_dv'];
+
+                            if (isset($inputs['inheso'])) {
+                                // $ar_I[$i]['chenhlech'] = round(($ar_I[$i]['heso'] + $ar_I[$i]['tongpc'] + $ar_I[$i]['ttbh_dv']) * 100000);
+                                $ar_I[$i]['chenhlech'] = round(($thongtin->sum('luongtn') + $thongtin->sum('ttbh_dv')));
+                            } else {
+                                $ar_I[$i]['chenhlech'] = round($tonghs * $m_thongtu->chenhlech
+                                    + ($thongtin->sum('ttbh_dv') / $m_thongtu->mucapdung) * $m_thongtu->chenhlech);
+                            }
+                            $a_It['chenhlech'] += $ar_I[$i]['chenhlech'];
+
+                            foreach ($a_phucap as $key => $pc) {
+                                $pc_st = 'st_' . $key;
+                                $ar_I[11][$key] = $ar_I[12][$key] + $ar_I[13][$key];
+                                $ar_I[0][$key] = $ar_I[1][$key] + $ar_I[2][$key];
+                            }
+
+                            $ar_I[11]['tongpc'] = $ar_I[12]['tongpc'] + $ar_I[13]['tongpc'];
+                            $ar_I[11]['ttbh_dv'] = $ar_I[12]['ttbh_dv'] + $ar_I[13]['ttbh_dv'];
+                            $ar_I[11]['chenhlech'] = $ar_I[12]['chenhlech'] + $ar_I[13]['chenhlech'];
+                            $ar_I[11]['soluongduocgiao'] = $ar_I[12]['soluongduocgiao'] + $ar_I[13]['soluongduocgiao'];
+                            $ar_I[11]['soluongbienche'] = $ar_I[12]['soluongbienche'] + $ar_I[13]['soluongbienche'];
+                            $ar_I[11]['congchuc'] = $ar_I[12]['congchuc'] + $ar_I[13]['congchuc'];
+                            $ar_I[11]['soluongcongchuc'] = $ar_I[12]['soluongcongchuc'] + $ar_I[13]['soluongcongchuc'];
+                            $ar_I[11]['vienchuc'] = $ar_I[12]['vienchuc'] + $ar_I[13]['vienchuc'];
+                            $ar_I[11]['soluongvienchuc'] = $ar_I[12]['soluongvienchuc'] + $ar_I[13]['soluongvienchuc'];
+
+                            $ar_I[0]['tongpc'] = $ar_I[1]['tongpc'] + $ar_I[2]['tongpc'];
+                            $ar_I[0]['ttbh_dv'] = $ar_I[1]['ttbh_dv'] + $ar_I[2]['ttbh_dv'];
+                            $ar_I[0]['chenhlech'] = $ar_I[1]['chenhlech'] + $ar_I[2]['chenhlech'];
+                            $ar_I[0]['soluongduocgiao'] = $ar_I[1]['soluongduocgiao'] + $ar_I[2]['soluongduocgiao'];
+                            $ar_I[0]['soluongbienche'] = $ar_I[1]['soluongbienche'] + $ar_I[2]['soluongbienche'];
+                            $ar_I[0]['congchuc'] = $ar_I[1]['congchuc'] + $ar_I[2]['congchuc'];
+                            $ar_I[0]['soluongcongchuc'] = $ar_I[1]['soluongcongchuc'] + $ar_I[2]['soluongcongchuc'];
+                            $ar_I[0]['vienchuc'] = $ar_I[1]['vienchuc'] + $ar_I[2]['vienchuc'];
+                            $ar_I[0]['soluongvienchuc'] = $ar_I[1]['soluongvienchuc'] + $ar_I[2]['soluongvienchuc'];
+                        }
+                    } else {
+                        $ar_I[$i]['soluongduocgiao'] = 0;
+                        $ar_I[$i]['soluongcongchuc'] = 0;
+                        $ar_I[$i]['soluongvienchuc'] = 0;
+                        $ar_I[$i]['congchuc'] = 0;
+                        $ar_I[$i]['vienchuc'] = 0;
+                        $ar_I[$i]['soluongbienche'] = 0;
+                        foreach ($a_phucap as $key => $pc) {
+                            $ar_I[$i][$key] = 0;
+                        }
+                        $ar_I[$i]['tongpc'] = 0;
+                        $ar_I[$i]['ttbh_dv'] = 0;
+                        $ar_I[$i]['chenhlech'] = 0;
+                    }
+                }
+            } else {
+                for ($i = 0; $i < count($ar_I); $i++) {
+                    $chitiet = $m_tonghop_ct->where('linhvuchoatdong', $ar_I[$i]['val']);
+
+                    $ar_I[$i]['soluongduocgiao'] = $m_bienche->where('linhvuchoatdong', $ar_I[$i]['val'])->sum('soluongduocgiao');
+                    $ar_I[$i]['soluongcongchuc'] = $m_bienche->where('linhvuchoatdong', $ar_I[$i]['val'])->sum('soluongcongchuc');
+                    $ar_I[$i]['soluongvienchuc'] = $m_bienche->where('linhvuchoatdong', $ar_I[$i]['val'])->sum('soluongvienchuc');
+                    $ar_I[$i]['soluongbienche'] = count($chitiet);
+
+                    //$ar_I[$i]['soluongduocgiao'] = isset($model_bienche->soluongduocgiao) ? $model_bienche->soluongduocgiao : 0;
+                    $a_It['soluongduocgiao'] += $ar_I[$i]['soluongduocgiao'];
+
+                    //$ar_I[$i]['soluongbienche'] = isset($model_bienche->soluongbienche) ? $model_bienche->soluongbienche : 0;
+                    $a_It['soluongcongchuc'] += $ar_I[$i]['soluongcongchuc'];
+                    $a_It['soluongvienchuc'] += $ar_I[$i]['soluongvienchuc'];
+                    $a_It['soluongbienche'] += $ar_I[$i]['soluongbienche'];
 
 
-                $tongpc = 0;
-                $tonghs = 0;
+
+
+                    $tongpc = 0;
+                    $tonghs = 0;
+                    foreach ($a_phucap as $key => $pc) {
+                        $pc_st = 'st_' . $key;
+                        $ar_I[$i][$key] = isset($inputs['inheso']) ? $chitiet->sum($key) : $chitiet->sum($pc_st);
+                        $a_It[$key] += $ar_I[$i][$key];
+                        $tongpc += isset($inputs['inheso']) ? $chitiet->sum($key) : $chitiet->sum($pc_st);
+                        $tonghs += $chitiet->sum($key);
+                    }
+                    $ar_I[$i]['tongpc'] = $a_phucap != [] ? $tongpc - $ar_I[$i]['heso'] : 0;
+                    $a_It['tongpc'] += $ar_I[$i]['tongpc'];
+
+                    if (isset($inputs['inheso'])) {
+                        $ar_I[$i]['ttbh_dv'] = count($chitiet) > 0 ? $chitiet->sum('ttbh_dv_hs') : 0;
+                    } else {
+                        $ar_I[$i]['ttbh_dv'] =  count($chitiet) > 0 ? $chitiet->sum('ttbh_dv') : 0;
+                    }
+                    $a_It['ttbh_dv'] += $ar_I[$i]['ttbh_dv'];
+
+                    if (isset($inputs['inheso'])) {
+                        // $ar_I[$i]['chenhlech'] = round(($ar_I[$i]['heso'] + $ar_I[$i]['tongpc'] + $ar_I[$i]['ttbh_dv']) * 100000);
+                        $ar_I[$i]['chenhlech'] = round(($chitiet->sum('luongtn') + $chitiet->sum('ttbh_dv')));
+                    } else {
+                        $ar_I[$i]['chenhlech'] = round($tonghs * $m_thongtu->chenhlech
+                            + ($chitiet->sum('ttbh_dv') / $m_thongtu->mucapdung) * $m_thongtu->chenhlech);
+                    }
+                    $a_It['chenhlech'] += $ar_I[$i]['chenhlech'];
+
+                    //Tính số lượng cb công chức, viên chức
+                    $congchuc = $chitiet->where('sunghiep', 'Công chức');
+                    $vienchuc = $chitiet->where('sunghiep', 'Viên chức');
+                    $ar_I[$i]['congchuc'] = count($congchuc);
+                    $ar_I[$i]['vienchuc'] = count($vienchuc);
+                    $a_It['congchuc'] += $ar_I[$i]['congchuc'];
+                    $a_It['vienchuc'] += $ar_I[$i]['vienchuc'];
+                }
+                // dd($ar_I);
+                // dd($a_It);
                 foreach ($a_phucap as $key => $pc) {
                     $pc_st = 'st_' . $key;
-                    $ar_I[$i][$key] = isset($inputs['inheso']) ? $chitiet->sum($key) : $chitiet->sum($pc_st);
-                    $a_It[$key] += $ar_I[$i][$key];
-                    $tongpc += isset($inputs['inheso']) ? $chitiet->sum($key) : $chitiet->sum($pc_st);
-                    $tonghs += $chitiet->sum($key);
+                    $ar_I[11][$key] = $ar_I[12][$key] + $ar_I[13][$key];
+                    $ar_I[0][$key] = $ar_I[1][$key] + $ar_I[2][$key];
                 }
-                $ar_I[$i]['tongpc'] = $a_phucap != [] ? $tongpc - $ar_I[$i]['heso'] : 0;
-                $a_It['tongpc'] += $ar_I[$i]['tongpc'];
 
-                if (isset($inputs['inheso'])) {
-                    $ar_I[$i]['ttbh_dv'] = count($chitiet) > 0 ? $chitiet->sum('ttbh_dv_hs') : 0;
-                } else {
-                    $ar_I[$i]['ttbh_dv'] =  count($chitiet) > 0 ? $chitiet->sum('ttbh_dv') : 0;
-                }
-                $a_It['ttbh_dv'] += $ar_I[$i]['ttbh_dv'];
+                $ar_I[11]['tongpc'] = $ar_I[12]['tongpc'] + $ar_I[13]['tongpc'];
+                $ar_I[11]['ttbh_dv'] = $ar_I[12]['ttbh_dv'] + $ar_I[13]['ttbh_dv'];
+                $ar_I[11]['chenhlech'] = $ar_I[12]['chenhlech'] + $ar_I[13]['chenhlech'];
+                $ar_I[11]['soluongduocgiao'] = $ar_I[12]['soluongduocgiao'] + $ar_I[13]['soluongduocgiao'];
+                $ar_I[11]['soluongbienche'] = $ar_I[12]['soluongbienche'] + $ar_I[13]['soluongbienche'];
+                $ar_I[11]['congchuc'] = $ar_I[12]['congchuc'] + $ar_I[13]['congchuc'];
+                $ar_I[11]['soluongcongchuc'] = $ar_I[12]['soluongcongchuc'] + $ar_I[13]['soluongcongchuc'];
+                $ar_I[11]['vienchuc'] = $ar_I[12]['vienchuc'] + $ar_I[13]['vienchuc'];
+                $ar_I[11]['soluongvienchuc'] = $ar_I[12]['soluongvienchuc'] + $ar_I[13]['soluongvienchuc'];
 
-                if (isset($inputs['inheso'])) {
-                    // $ar_I[$i]['chenhlech'] = round(($ar_I[$i]['heso'] + $ar_I[$i]['tongpc'] + $ar_I[$i]['ttbh_dv']) * 100000);
-                    $ar_I[$i]['chenhlech'] = round(($chitiet->sum('luongtn') + $chitiet->sum('ttbh_dv')));
-                } else {
-                    $ar_I[$i]['chenhlech'] = round($tonghs * $m_thongtu->chenhlech
-                        + ($chitiet->sum('ttbh_dv') / $m_thongtu->mucapdung) * $m_thongtu->chenhlech);
-                }
-                $a_It['chenhlech'] += $ar_I[$i]['chenhlech'];
-
-                //Tính số lượng cb công chức, viên chức
-                $congchuc = $chitiet->where('sunghiep', 'Công chức');
-                $vienchuc = $chitiet->where('sunghiep', 'Viên chức');
-                $ar_I[$i]['congchuc'] = count($congchuc);
-                $ar_I[$i]['vienchuc'] = count($vienchuc);
-                $a_It['congchuc'] += $ar_I[$i]['congchuc'];
-                $a_It['vienchuc'] += $ar_I[$i]['vienchuc'];
+                $ar_I[0]['tongpc'] = $ar_I[1]['tongpc'] + $ar_I[2]['tongpc'];
+                $ar_I[0]['ttbh_dv'] = $ar_I[1]['ttbh_dv'] + $ar_I[2]['ttbh_dv'];
+                $ar_I[0]['chenhlech'] = $ar_I[1]['chenhlech'] + $ar_I[2]['chenhlech'];
+                $ar_I[0]['soluongduocgiao'] = $ar_I[1]['soluongduocgiao'] + $ar_I[2]['soluongduocgiao'];
+                $ar_I[0]['soluongbienche'] = $ar_I[1]['soluongbienche'] + $ar_I[2]['soluongbienche'];
+                $ar_I[0]['congchuc'] = $ar_I[1]['congchuc'] + $ar_I[2]['congchuc'];
+                $ar_I[0]['soluongcongchuc'] = $ar_I[1]['soluongcongchuc'] + $ar_I[2]['soluongcongchuc'];
+                $ar_I[0]['vienchuc'] = $ar_I[1]['vienchuc'] + $ar_I[2]['vienchuc'];
+                $ar_I[0]['soluongvienchuc'] = $ar_I[1]['soluongvienchuc'] + $ar_I[2]['soluongvienchuc'];
             }
-            // dd($ar_I);
-            // dd($a_It);
-            foreach ($a_phucap as $key => $pc) {
-                $pc_st = 'st_' . $key;
-                $ar_I[11][$key] = $ar_I[12][$key] + $ar_I[13][$key];
-                $ar_I[0][$key] = $ar_I[1][$key] + $ar_I[2][$key];
-            }
-
-            $ar_I[11]['tongpc'] = $ar_I[12]['tongpc'] + $ar_I[13]['tongpc'];
-            $ar_I[11]['ttbh_dv'] = $ar_I[12]['ttbh_dv'] + $ar_I[13]['ttbh_dv'];
-            $ar_I[11]['chenhlech'] = $ar_I[12]['chenhlech'] + $ar_I[13]['chenhlech'];
-            $ar_I[11]['soluongduocgiao'] = $ar_I[12]['soluongduocgiao'] + $ar_I[13]['soluongduocgiao'];
-            $ar_I[11]['soluongbienche'] = $ar_I[12]['soluongbienche'] + $ar_I[13]['soluongbienche'];
-            $ar_I[11]['congchuc'] = $ar_I[12]['congchuc'] + $ar_I[13]['congchuc'];
-            $ar_I[11]['soluongcongchuc'] = $ar_I[12]['soluongcongchuc'] + $ar_I[13]['soluongcongchuc'];
-            $ar_I[11]['vienchuc'] = $ar_I[12]['vienchuc'] + $ar_I[13]['vienchuc'];
-            $ar_I[11]['soluongvienchuc'] = $ar_I[12]['soluongvienchuc'] + $ar_I[13]['soluongvienchuc'];
-
-            $ar_I[0]['tongpc'] = $ar_I[1]['tongpc'] + $ar_I[2]['tongpc'];
-            $ar_I[0]['ttbh_dv'] = $ar_I[1]['ttbh_dv'] + $ar_I[2]['ttbh_dv'];
-            $ar_I[0]['chenhlech'] = $ar_I[1]['chenhlech'] + $ar_I[2]['chenhlech'];
-            $ar_I[0]['soluongduocgiao'] = $ar_I[1]['soluongduocgiao'] + $ar_I[2]['soluongduocgiao'];
-            $ar_I[0]['soluongbienche'] = $ar_I[1]['soluongbienche'] + $ar_I[2]['soluongbienche'];
-            $ar_I[0]['congchuc'] = $ar_I[1]['congchuc'] + $ar_I[2]['congchuc'];
-            $ar_I[0]['soluongcongchuc'] = $ar_I[1]['soluongcongchuc'] + $ar_I[2]['soluongcongchuc'];
-            $ar_I[0]['vienchuc'] = $ar_I[1]['vienchuc'] + $ar_I[2]['vienchuc'];
-            $ar_I[0]['soluongvienchuc'] = $ar_I[1]['soluongvienchuc'] + $ar_I[2]['soluongvienchuc'];
-
             $ar_II = array();
             $ar_II['soluongduocgiao'] = isset($m_tonghop_ct->soluongduocgiao) ? $m_tonghop_ct->soluongduocgiao : 0;
             $ar_II['soluongcongchuc'] = isset($m_tonghop_ct->soluongcongchuc) ? $m_tonghop_ct->soluongcongchuc : 0;
@@ -5262,7 +5403,7 @@ class baocaott67huyenController extends Controller
                 $a_IVt['tongso'] += $ar_IV[$i]['tongso'];
                 $a_IVt['chenhlech'] += $ar_IV[$i]['chenhlech'];
             }
-
+dd($ar_I);
             //dd($m_tonghop_ct);
             return view('reports.thongtu46.donvi.mau2a2_tt46_kh')
                 ->with('furl', '/tong_hop_bao_cao/')

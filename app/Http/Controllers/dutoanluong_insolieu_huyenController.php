@@ -168,10 +168,15 @@ class dutoanluong_insolieu_huyenController extends Controller
             $inputs = $request->all();
             $model = dutoanluong::where('masoh', $inputs['masodv'])->where('namns', $inputs['namns'])->where('trangthai', 'DAGUI')->get();
             $m_donvi_baocao = dmdonvi::wherein('madv', array_column($model->toarray(), 'madv'))->get();
+// dd($m_donvi_baocao);
             $m_donvi = dmdonvi::where('madv', session('admin')->madv)->first();
             //tính toán trc số liệu
 
-            foreach ($model as $chitiet) {
+            foreach ($model as $k=>$chitiet) {
+                    $m_dv=$m_donvi_baocao->where('madv',$chitiet->madv)->first();
+                    if($m_dv->maphanloai != 'KVXP'){
+                        $model->forget($k);
+                    }
                 $chitiet->sotienphanloaixa = ($chitiet->phanloaixa_heso * 12 * $chitiet->luongcoban) / $inputs['donvitinh'];
 
                 $chitiet->sotienxabiengioi = ($chitiet->sothonxabiengioi * $chitiet->sothonxabiengioi_heso * 12 * $chitiet->luongcoban) / $inputs['donvitinh'];
@@ -184,7 +189,6 @@ class dutoanluong_insolieu_huyenController extends Controller
 
                 $chitiet->tongsothon = $chitiet->sothonxabiengioi + $chitiet->sothonxakhokhan + $chitiet->sothonxatrongdiem + $chitiet->sothonxakhac + $chitiet->sothonxaloai1;
             }
-
             return view('reports.dutoanluong.Huyen.kinhphikhongchuyentrach')
                 ->with('model', $model)
                 ->with('m_donvi', $m_donvi)

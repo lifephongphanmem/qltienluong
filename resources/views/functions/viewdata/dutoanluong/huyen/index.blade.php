@@ -102,7 +102,7 @@
                                             <button type="button" onclick="inbl('{{$value['madv']}}','{{$inputs['namns']}}','{{$value['masodv']}}')" class="btn btn-default btn-xs mbs">
                                                 <i class="fa fa-print"></i>&nbsp; In số liệu chi tiết</button> --}}
                                                 <button type="button" title="In số liệu"
-                                                    onclick="indutoan('{{ $value->namns }}','{{ $value->masodv }}')"
+                                                    onclick="indutoan('{{ $value->namns }}','{{ $value->masodv }}','{{$value->madv}}')"
                                                     class="btn btn-default btn-sm mbs" data-target="#indt-modal"
                                                     data-toggle="modal">
                                                     <i class="fa fa-print"></i>
@@ -135,6 +135,7 @@
     <div id="indt-modal" tabindex="-1" role="dialog" aria-hidden="true" class="modal fade">
         <input type="hidden" id="nam_dt" name="nam_dt" />
         <input type="hidden" id="masodv_dt" name="masodv_dt" />
+        <input type="hidden" id="madv" name="madv" />
         <div class="modal-lg modal-dialog modal-content">
             <div class="modal-header modal-header-primary">
                 <button type="button" data-dismiss="modal" aria-hidden="true" class="close">&times;</button>
@@ -537,12 +538,14 @@
 
         function intonghopdt(url) {
             var masodv = $('#masodv_dt').val();
-            window.open(url + masodv, '_blank');
+            var madv = $('#madv').val();
+            window.open(url + masodv+'&madv='+madv, '_blank');
         }
 
-        function indutoan(namdt, masodv) {
+        function indutoan(namdt, masodv, madv) {
             $('#nam_dt').val(namdt);
             $('#masodv_dt').val(masodv);
+            $('#madv').val(madv);
         }
 
         function add() {

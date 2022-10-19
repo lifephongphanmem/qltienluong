@@ -108,9 +108,20 @@ class dutoanluong_insolieuController extends Controller
     {
         if (Session::has('admin')) {
             $inputs = $request->all();
-            //dd($inputs);            
-            $model = dutoanluong::where('masodv', $inputs['maso'])->first();
-            $m_donvi = dmdonvi::where('madv', $model->madv)->first();
+            if(isset($inputs['madv'])){
+                $maphanloai=dmdonvi::where('madv',$inputs['madv'])->first()->maphanloai;
+            }else{
+                $maphanloai= session('admin')->maphanloai;
+            }
+            // dd(session('admin'));
+            // dd($inputs); 
+            if($maphanloai == 'KVXP'){
+                $model = dutoanluong::where('masodv', $inputs['maso'])->first();
+            }else{
+                $model=[];
+            }           
+// dd($model);
+            $m_donvi = dmdonvi::where('madv', session('admin')->madv)->first();
             //dd($model);
             return view('reports.dutoanluong.donvi.kinhphikhongchuyentrach')
                 ->with('model', $model)
@@ -127,22 +138,30 @@ class dutoanluong_insolieuController extends Controller
             $inputs = $request->all();
             //dd($inputs);            
             $m_dutoan = dutoanluong::where('masodv', $inputs['maso'])->first();
-            //dd($m_dutoan);
-            $model = dutoanluong_bangluong::where('masodv', $inputs['maso'])->orderby('stt')->get();
-            $m_chitiet = dutoanluong_chitiet::where('masodv', $inputs['maso'])->get();
             $m_donvi = dmdonvi::where('madv', $m_dutoan->madv)->first();
-            $model_congtac = dmphanloaict::wherein('mact', array_unique(array_column($model->toArray(), 'mact')))->get();
+            // dd($m_dutoan);
+                $model = dutoanluong_bangluong::where('masodv', $inputs['maso'])->orderby('stt')->get();
+                $model_congtac = dmphanloaict::wherein('mact', array_unique(array_column($model->toArray(), 'mact')))->get();
+
+            // dd($model);
+            $m_chitiet = dutoanluong_chitiet::where('masodv', $inputs['maso'])->get();
+           
+            // dd($m_donvi);
+           
             //xử lý ẩn hiện cột phụ cấp => biết tổng số cột hiện => colspan trên báo cáo
             $a_goc = array('heso'); //do hệ số lương có cột cố định
             $model_pc = dmphucap_donvi::where('madv', $m_dutoan->madv)->where('phanloai', '<', '3')->wherenotin('mapc', $a_goc)->orderby('stt')->get();
             $a_phucap = array();
             $col = 0;
-            foreach ($model_pc as $ct) {
-                if ($model->sum($ct->mapc) > 0) {
-                    $a_phucap[$ct->mapc] = $ct->report;
-                    $col++;
+            if(isset($model)){
+                foreach ($model_pc as $ct) {
+                    if ($model->sum($ct->mapc) > 0) {
+                        $a_phucap[$ct->mapc] = $ct->report;
+                        $col++;
+                    }
                 }
             }
+
 
             //Lấy danh mục theo qd chức vụ
             $m_chucvu = dmchucvucq::wherein('mact', array_unique(array_column($model->toArray(), 'mact')))->get();
@@ -153,16 +172,23 @@ class dutoanluong_insolieuController extends Controller
             $m_chucvu = dmchucvucq::wherein('madv', ['SA', 'SSA', $m_dutoan->madv])->get();
             $a_tencv = array_column($m_chucvu->toarray(), 'tencv', 'macvcq');
             $a_sapxep = array_column($m_chucvu->toarray(), 'sapxep', 'macvcq');
-            foreach ($model as $ct) {
-                $ct->tencv = $a_tencv[$ct->macvcq] ?? $ct->macvcq;
-                $ct->sapxep = $a_sapxep[$ct->macvcq] ?? 999;
-                $ct->tongphucap = $ct->tonghs - $ct->heso;
-                $ct->tongcong = $ct->tonghs + $ct->tongbh_dv;
-                $ct->quyluong = $ct->ttl + $ct->ttbh_dv;
+            if($m_donvi->maphanloai == 'KVXP'){
+                $model=$model;
+            }else{
+                $model=[];
             }
+                foreach ($model as $ct) {
+                    $ct->tencv = $a_tencv[$ct->macvcq] ?? $ct->macvcq;
+                    $ct->sapxep = $a_sapxep[$ct->macvcq] ?? 999;
+                    $ct->tongphucap = $ct->tonghs - $ct->heso;
+                    $ct->tongcong = $ct->tonghs + $ct->tongbh_dv;
+                    $ct->quyluong = $ct->ttl + $ct->ttbh_dv;
+                }
+            
+
             //dd($col);
             return view('reports.dutoanluong.donvi.tonghopcanboxa')
-                ->with('model', $model->sortby('sapxep'))
+                ->with('model', $model)
                 ->with('m_chitiet', $m_chitiet)
                 ->with('col', $col)
                 ->with('lamtron', session('admin')->lamtron ?? 3)
