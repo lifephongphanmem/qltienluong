@@ -514,7 +514,7 @@ class nguonkinhphiController extends Controller
                 'st_pcctp', 'nam_hh', 'thang_hh', 'ngaybc', 'ngayvao', 'lvhd'
             );
 // dd($a_data);
-            // $a_data_nl = unset_key($a_data_nl, $a_col);
+             $a_data_nl = unset_key($a_data_nl, $a_col);
             //dd($a_data_nl);
             foreach (array_chunk($a_data_nl, 10) as $data) {
                 nguonkinhphi_nangluong::insert($data);
