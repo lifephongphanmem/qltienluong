@@ -9,6 +9,7 @@ use App\chitieubienche;
 use App\dmchucvucq;
 use App\dmdonvi;
 use App\dmdonvibaocao;
+use App\dmphanloaidonvi_baocao;
 use App\dmkhoipb;
 use App\dmnguonkinhphi;
 use App\dmphanloaicongtac;
@@ -4871,7 +4872,7 @@ class baocaobangluongController extends Controller
     }
 
     //Tạm cho huyện Vạn Ninh
-    function tonghopluong_huyen_th(Request $request)
+    function tonghopluong_huyen_th_25102022(Request $request)
     {
         if (Session::has('admin')) {
             $inputs = $request->all();
@@ -5395,5 +5396,200 @@ class baocaobangluongController extends Controller
                 ->with('pageTitle', 'Báo cáo tổng hợp dự toán lương');
         } else
             return view('errors.notlogin');
+    }
+    function tonghopluong_huyen_th(Request $request)
+    {
+        if (Session::has('admin')) {
+            $inputs = $request->all();
+           
+            // dd($inputs);
+            // dd(session('admin'));
+            $madvbc = session('admin')->madvbc;
+            $m_donvi_baocao = dmdonvi::where('madvbc', $madvbc)->get();
+            $model_phanloai = dmphanloaidonvi::join('dmdonvi', 'dmdonvi.maphanloai', 'dmphanloaidonvi.maphanloai')
+                ->select('madv', 'dmphanloaidonvi.maphanloai', 'tenphanloai', 'linhvuchoatdong')
+                ->where('madvbc', $madvbc)
+                ->where('dmphanloaidonvi.maphanloai', 'like', $inputs['phanloai'] . '%')
+                ->get();
+                $m_phanloai = dmphanloaidonvi_baocao::where('madvbc', $madvbc)->get();
+                $a_phanloai = array_column(dmphanloaidonvi::all()->toArray(), 'maphanloai');
+                $model_phanloaict = array_column(dmphanloaicongtac::all()->toArray(), 'tencongtac', 'macongtac');
+                $m_ct=dmphanloaict::all();
+                $model_ct = array_column($m_ct->toArray(), 'tenct', 'mact');
+                $a_ct=array_column($m_ct->toArray(),'mact');
+                isset($inputs['phanloaict'])?$inputs['mact']=$inputs['phanloaict']:$inputs['mact']=$a_ct;
+                $m_pc = array_column(dmphucap_donvi::where('madv', session('admin')->madv)->get()->toarray(), 'report', 'mapc');
+                $a_pl_donvi = array_column($m_donvi_baocao->toarray(), 'maphanloai', 'madv');
+
+            $model_th = tonghopluong_donvi_bangluong::join('tonghopluong_donvi', 'tonghopluong_donvi.mathdv', 'tonghopluong_donvi_bangluong.mathdv')
+                ->Select(
+                    'mact','madv',
+                    DB::raw('avg(tonghopluong_donvi_bangluong.luongcoban) as luongcoban'),
+                    DB::raw('count(tonghopluong_donvi_bangluong.id) as soluong'),
+                    DB::raw('sum(heso) as heso'),
+                    DB::raw('sum(tonghs-heso) as tongpc'),
+                    DB::raw('sum(tonghs) as tonghs'),
+                    DB::raw('sum(hesobl) as hesobl'),
+                    DB::raw('sum(hesott) as hesott'),
+                    DB::raw('sum(hesopc) as hesopc'),
+                    DB::raw('sum(vuotkhung) as vuotkhung'),
+                    DB::raw('sum(pcct) as pcct'),
+                    DB::raw('sum(pckct) as pckct'),
+                    DB::raw('sum(pck) as pck'),
+                    DB::raw('sum(pccv) as pccv'),
+                    DB::raw('sum(pckv) as pckv'),
+                    DB::raw('sum(pcth) as pcth'),
+                    DB::raw('sum(pcdd) as pcdd'),
+                    DB::raw('sum(pcdh) as pcdh'),
+                    DB::raw('sum(pcld) as pcld'),
+                    DB::raw('sum(pcdbqh) as pcdbqh'),
+                    DB::raw('sum(pcudn) as pcudn'),
+                    DB::raw('sum(pctn) as pctn'),
+                    DB::raw('sum(pctnn) as pctnn'),
+                    DB::raw('sum(pcdbn) as pcdbn'),
+                    DB::raw('sum(pcvk) as pcvk'),
+                    DB::raw('sum(pckn) as pckn'),
+                    DB::raw('sum(pcdang) as pcdang'),
+                    DB::raw('sum(pccovu) as pccovu'),
+                    DB::raw('sum(pclt) as pclt'),
+                    DB::raw('sum(pcd) as pcd'),
+                    DB::raw('sum(pctr) as pctr'),
+                    DB::raw('sum(pctdt) as pctdt'),
+                    DB::raw('sum(pctnvk) as pctnvk'),
+                    DB::raw('sum(pcbdhdcu) as pcbdhdcu'),
+                    DB::raw('sum(pcthni) as pcthni'),
+                    DB::raw('sum(pclade) as pclade'),
+                    DB::raw('sum(pcud61) as pcud61'),
+                    DB::raw('sum(pcxaxe) as pcxaxe'),
+                    DB::raw('sum(pcdith) as pcdith'),
+                    DB::raw('sum(pcphth) as pcphth'),
+                    DB::raw('sum(ttl) as ttl'),
+                    DB::raw('sum(stbhxh_dv) as stbhxh_dv'),
+                    DB::raw('sum(stbhyt_dv) as stbhyt_dv'),
+                    DB::raw('sum(stbhtn_dv) as stbhtn_dv'),
+                    DB::raw('sum(stkpcd_dv) as stkpcd_dv'),
+                    DB::raw('sum(ttbh_dv) as ttbh_dv')
+                )
+                ->where('madvbc', $madvbc)
+                ->where('trangthai', 'DAGUI')
+                ->where('nam', $inputs['tunam'])
+                ->where('thang', $inputs['tuthang'])
+                ->wherein('tonghopluong_donvi.madv', array_column($model_phanloai->toarray(), 'madv'))
+                ->wherein('mact',$inputs['mact'])
+                ->groupby('mact','madv')
+                ->get();
+            /*
+            $model_slth = tonghopluong_donvi_chitiet::join('tonghopluong_donvi','tonghopluong_donvi.mathdv','tonghopluong_donvi_chitiet.mathdv')
+                ->select('mact',DB::raw('sum(canbo_congtac) as canbo_congtac'),DB::raw('sum(canbo_dutoan) as canbo_dutoan'))
+                ->where('madvbc',$madvbc)
+                ->where('trangthai','DAGUI')
+                ->where('nam',$inputs['tunam'])
+                ->where('thang',$inputs['tuthang'])
+                ->wherein('madv', array_column($model_phanloai->toarray(),'madv'))
+                ->groupby('mact')
+                ->get();
+            */
+            //dd($model_soluong->toarray());
+
+// dd($model_th);
+            $a_phucap = array();
+            $col = 0;
+            foreach (getColTongHop() as $ct) {
+                if ($model_th->sum($ct) > 0) {
+                    $a_phucap[$ct] = isset($m_pc[$ct]) ? $m_pc[$ct] : '';
+                    $col++;
+                }
+            }
+            unset($a_phucap['heso']);
+            $col = $col - 1;
+            foreach ($model_th as $ct) {
+                $ct->maphanloai = $a_pl_donvi[$ct->madv];
+                $ct->soluongcomat = $ct->soluong;
+                if ($ct->mact == null) {
+                    $ct->tencongtac = isset($model_phanloaict[$ct->macongtac]) ? $model_phanloaict[$ct->macongtac] : '';
+                } else {
+                    $ct->tencongtac = isset($model_ct[$ct->mact]) ? $model_ct[$ct->mact] : '';
+                }
+                foreach ($a_phucap as $key => $val) {
+                    if ($ct->$key > 10000)
+                        $ct->$key = $ct->$key / $ct->luongcoban;
+                }
+                $ct->stbhxh_dv = $ct->stbhxh_dv / $ct->luongcoban;
+                $ct->stbhyt_dv = $ct->stbhyt_dv / $ct->luongcoban;
+                $ct->stkpcd_dv = $ct->stkpcd_dv / $ct->luongcoban;
+                $ct->stbhtn_dv = $ct->stbhtn_dv / $ct->luongcoban;
+                $ct->tongcong = $ct->tonghs + $ct->stbhxh_dv + $ct->stbhyt_dv + $ct->stkpcd_dv + $ct->stbhtn_dv;
+                $ct->tongtienluong = ($ct->tonghs + $ct->stbhxh_dv + $ct->stbhyt_dv + $ct->stkpcd_dv + $ct->stbhtn_dv) * $ct->luongcoban;
+                //$ct->soluonggiao = $model_slth->where('mact',$ct->mact)->first()->canbo_dutoan;
+                //$ct->soluongcomat = $model_slth->where('mact',$ct->mact)->first()->canbo_congtac;
+                $this->getMaNhomPhanLoai($ct, $m_phanloai);
+            }
+
+            //dd($model_kn->toarray());
+            $model_dutoan = tonghopluong_donvi::where('nam', $inputs['tunam'])
+                ->wherein('madv', function ($qr) use ($madvbc) {
+                    $qr->select('madv')->from('dmdonvi')->where('madvbc', $madvbc);
+                })->get();
+            $m_dv = dmdonvi::where('madv', session('admin')->madv)->first();
+            $thongtin = array(
+                'nguoilap' => session('admin')->name,
+                'nam' => $inputs['tunam'],
+                'madvbc' => $madvbc
+            );
+            return view('reports.tonghopluong.huyen.tonghopluong_VanNinh')
+                ->with('model_dutoan', $model_dutoan)
+                ->with('model_th', $model_th)
+                ->with('m_donvi_baocao', $m_donvi_baocao)
+                //->with('model_bienche_dutoan',$model_bienche_dutoan)
+                //->with('model_bienche_truoc',$model_bienche_truoc)
+                ->with('thongtin', $thongtin)
+                ->with('m_dv', $m_dv)                
+                ->with('model_ct', $model_ct)                
+                ->with('model_phanloai', $model_phanloai)
+                ->with('m_phanloai', $m_phanloai)
+                ->with('a_phanloai', $a_phanloai)
+                ->with('a_phucap', $a_phucap)
+                ->with('col', $col)
+                ->with('nam', $inputs['tunam'])
+                ->with('thang', $inputs['tuthang'])
+                ->with('pageTitle', 'Báo cáo tổng hợp dự toán lương');
+        } else
+            return view('errors.notlogin');
+    }
+
+    function getMaNhomPhanLoai(&$chitiet, $m_phanloai)
+    {
+        $chitiet->maphanloai_goc1 = '';
+        $chitiet->maphanloai_goc2 = '';
+        $chitiet->maphanloai_goc3 = '';
+        $phanloai = $m_phanloai->where('maphanloai_nhom', $chitiet->maphanloai)->first();
+        if ($phanloai != null) {
+            $chitiet->capdo_nhom = $phanloai->capdo_nhom;
+            switch ($phanloai->capdo_nhom) {
+                case '1': {
+                        $chitiet->maphanloai_goc1 = $phanloai->maphanloai_nhom;
+                        break;
+                    }
+                case '2': {
+                        $chitiet->maphanloai_goc1 = $phanloai->maphanloai_goc;
+                        break;
+                    }
+                case '3': {
+                        $chitiet->maphanloai_goc2 = $phanloai->maphanloai_goc;
+                        //tìm gốc 1
+                        $chitiet->maphanloai_goc1 = $m_phanloai->where('maphanloai_nhom', $chitiet->maphanloai_goc2)->first()->maphanloai_goc;
+                        break;
+                    }
+                case '4': {
+                        //tìm cấp 3                    
+                        $chitiet->maphanloai_goc3 = $phanloai->maphanloai_goc;
+                        //tìm gốc 2
+                        $chitiet->maphanloai_goc2 = $m_phanloai->where('maphanloai_nhom', $chitiet->maphanloai_goc3)->first()->maphanloai_goc;
+                        //tìm gốc 1
+                        $chitiet->maphanloai_goc1 = $m_phanloai->where('maphanloai_nhom', $chitiet->maphanloai_goc2)->first()->maphanloai_goc;
+                        break;
+                    }
+            }
+        }
     }
 }

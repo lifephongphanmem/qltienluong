@@ -130,7 +130,7 @@
 
     <script>
         function addCV(){
-            $('#frm_create').find("[name='id']").val('NEW');
+            $('#frm_create').find("[name='id']").val();
             $('#chucvu-modal').modal('show');
         }
 

@@ -90,9 +90,10 @@ class dmthuetncnController extends Controller
             $inputs['muctu'] = chkDbl($inputs['muctu']);
             $inputs['mucden'] = chkDbl($inputs['mucden']);
             $inputs['phantram'] = chkDbl($inputs['phantram']);
-            //dd($inputs);
+            // dd($inputs);
             $model = dmthuetncn_ct::where('id', $inputs['id'])->first();
             unset($inputs['id']);
+            // dd($inputs);
             if ($model == null) {
                 dmthuetncn_ct::create($inputs);
             } else {

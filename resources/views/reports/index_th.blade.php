@@ -88,7 +88,7 @@
                                     <li><a href="#" data-target="#thoaichitra-huyen-modal" data-toggle="modal" onclick="chitraluong_huyen('{{$furl.'huyen/chitraluong_ct'}}')">Tổng hợp tình hình chi trả lương (Mẫu chi tiết)</a></li-->
                                     <li><a href="#" data-target="#thoaichitra-khoi-moi-modal" data-toggle="modal" onclick="baocao('{{$furl.'huyen/chitraluong_th'}}')">Tổng hợp tình hình chi trả lương (Mẫu tổng hợp - Mẫu 1)</a></li>
                                     <li><a href="#" data-target="#thoaichitra-khoi-moi-modal" data-toggle="modal" onclick="baocao('{{$furl.'huyen/tonghopluongCR'}}')">Tổng hợp tình hình chi trả lương (Mẫu tổng hợp - Mẫu 2)</a></li>
-                                    <li><a href="#" data-target="#thoaichitra-khoi-moi-modal" data-toggle="modal" onclick="baocao('{{$furl.'huyen/tonghopluong_th'}}')">Tổng hợp tình hình chi trả lương (Mẫu tổng hợp - Mẫu 3)</a></li>
+                                    <li><a href="#" data-target="#thoaichitra-khoi-moi-vn-modal" data-toggle="modal" onclick="baocao('{{$furl.'huyen/tonghopluong_th'}}')">Tổng hợp tình hình chi trả lương (Mẫu tổng hợp - Mẫu 3)</a></li>
                                     <li><a href="#" data-target="#thoaichitra-khoi-moi-ct-modal" data-toggle="modal" onclick="baocao('{{$furl.'huyen/chitraluong_ct'}}')">Tổng hợp tình hình chi trả lương (Mẫu chi tiết - Mẫu 1)</a></li>
                                     <li><a href="#" data-target="#thoaichitra-khoi-moi-ct-modal" data-toggle="modal" onclick="baocao('{{$furl.'huyen/chitraluong_ct_CR'}}')">Tổng hợp tình hình chi trả lương (Mẫu chi tiết - Mẫu 2)</a></li>
                                     <li><a href="#" data-target="#thoaidutoan-huyen-modal" data-toggle="modal" onclick="dutoanluong_huyen('{{$furl.'huyen/dutoanluong'}}')">Dự toán lương (mẫu 1)</a></li>
@@ -174,6 +174,67 @@
                     Xuất dữ liệu ra file excel
                     <input type="hidden" name="_token" value="{{ csrf_token() }}">
                     <input type="hidden" id="urlbcsoluong" name="urlbcsoluong" >
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" data-dismiss="modal" class="btn btn-default">Hủy thao tác</button>
+                <button type="submit" id="submit" name="submit" value="submit" class="btn btn-primary">Đồng ý</button>
+            </div>
+        </div>
+        {!! Form::close() !!}
+    </div>
+    <div id="thoaichitra-khoi-moi-vn-modal" tabindex="-1" role="dialog" aria-hidden="true" class="modal fade">
+        {!! Form::open(['url'=>'#','target'=>'_blank' ,'method'=>'post' ,'id' => 'thoaichitra_khoi_moi_vn', 'class'=>'form-horizontal form-validate']) !!}
+        <div class="modal-dialog modal-content">
+            <div class="modal-header modal-header-primary">
+                <button type="button" data-dismiss="modal" aria-hidden="true" class="close">&times;</button>
+                <h4 id="modal-header-primary-label" class="modal-title">Thông tin kết xuất tổng hợp chi trả bảng lương</h4>
+            </div>
+            <div class="modal-body">
+                <div class="form-horizontal">
+                    <div class="form-group">
+                        <label class="col-md-4 control-label"> Tháng<span class="require">*</span></label>
+                        <div class="col-md-8">
+                            {!! Form::select('tuthang',$a_thang,'ALL',array('id' => 'tuthang', 'class' => 'form-control'))!!}
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-4 control-label"> Năm<span class="require">*</span></label>
+                        <div class="col-md-8">
+                            {!! Form::select('tunam',getNam(),date('Y'),array('id' => 'tunam', 'class' => 'form-control'))!!}
+                        </div>
+                    </div>
+                    <div class="form-group">
+                            <label class="col-md-4 control-label">Phân loại<span class="require">*</span></label>
+                            <div class="col-md-8">
+                                {!! Form::select('phanloai',$a_phanloai,date('Y'),array('id' => 'phanloai', 'class' => 'form-control select2me'))!!}
+                            </div>
+                        </div>
+                    {{-- @if(!session('admin')->quanlykhuvuc) --}}
+                    <div class="form-group">
+                        <label class="col-md-4 control-label">Phân loại công tác<span class="require">*</span></label>
+                        <div class="col-md-8">
+                            <select class="form-control select2me" id="phanloaict" name="phanloaict[]"  multiple=true>
+                                <option value="">--Chọn tất cả--</option>
+
+                                @foreach($model_phanloaict as $phanloaict)
+                                    <option value="{{$phanloaict['mact']}}">{{$phanloaict['tenct']}}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                    </div>
+                    {{-- @endif --}}
+                    <div class="form-group">
+                        <label class="col-md-4 control-label"> Đơn vị tính</label>
+                        <div class="col-md-8">
+                            {!! Form::select('donvitinh',getDonViTinh(),'1',array('id' => 'donvitinh', 'class' => 'form-control'))!!}
+                        </div>
+                    </div>
+                    <label class="col-md-4 control-label"> </label>
+                    <input type="checkbox" name="excelth" id = "excelth"/>
+                    Xuất dữ liệu ra file excel
+                    <input type="hidden" name="_token" value="{{ csrf_token() }}">
+                    <input type="hidden" id="urlbcluong" name="urlbcluong" >
                 </div>
             </div>
             <div class="modal-footer">
@@ -723,6 +784,9 @@
         function chitraluong_khoi_moi(url){
             $('#thoaichitra_khoi_moi').attr('action',url);
         }
+        function chitraluong_khoi_moi(url){
+            $('#thoaichitra_khoi_moi_vn').attr('action',url);
+        }
         function chitraluong_khoi_ct_moi(url){
             $('#thoaichitra_khoi_ct_moi').attr('action',url);
         }
@@ -766,6 +830,7 @@
             else {
                 $('#thoaichitra_khoi_moi').attr('action', url1);
             }
+            $('#thoaichitra_khoi_moi_vn').attr('action', url1);
             if ($("input[name='excelct']:checked").length == 1) {
                 url2 = $('#urlbcluongct').val() + 'excel';
                 $('#thoaichitra_khoi_ct_moi').attr('action', url2);
