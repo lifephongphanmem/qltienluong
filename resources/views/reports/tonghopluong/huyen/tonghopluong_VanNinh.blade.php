@@ -93,7 +93,7 @@
                 <td style="text-align: right">{{ dinhdangso($model_chitiet->sum('soluongcomat')) }}</td>
                 <td style="text-align: right">{{ dinhdangsothapphan($model_chitiet->sum('tongcong'), 5) }}</td>
                 <td style="text-align: right">{{ dinhdangsothapphan($model_chitiet->sum('heso'), 5) }}</td>
-                <td style="text-align: right">{{ dinhdangsothapphan($model_gd->sum('tongpc'), 5) }}</td>
+                <td style="text-align: right">{{ dinhdangsothapphan($model_chitiet->sum('tongpc'), 5) }}</td>
                 @foreach ($a_phucap as $key => $val)
                     <td>{{ dinhdangsothapphan($model_chitiet->sum($key), 5) }}</td>
                 @endforeach
