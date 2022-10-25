@@ -666,6 +666,12 @@ Route::group(['prefix' => 'chuc_nang'], function () {
         Route::post('maublpc_excel', 'bangluongController@printf_maublpc_excel');
         Route::post('maubchd_excel', 'bangluongController@printf_maubchd_excel');
         Route::post('mauqs_excel', 'bangluongController@printf_mauqs_excel');
+
+        //mẫu thanh toán 09 cho vạn ninh
+        Route::post('mau09_vn_hc', 'bangluong_inController@mau09_vn_hc');
+        Route::post('mau09_vn_ck_bc', 'bangluong_inController@mau09_vn_ck_bc');
+        Route::post('mau09_vn_ck_kct', 'bangluong_inController@mau09_vn_ck_kct');
+        Route::post('mau09_vn_tm', 'bangluong_inController@mau09_vn_tm');
     });
 
     Route::group(['prefix' => 'nang_luong'], function () {

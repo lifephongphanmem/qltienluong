@@ -36,7 +36,10 @@
                                 <a href="#tab_3" data-toggle="tab" aria-expanded="false">
                                     Mẫu Lai Châu </a>
                             </li>
-
+                            <li class="">
+                                <a href="#tab_vn" data-toggle="tab" aria-expanded="false">
+                                    Mẫu Vạn Ninh </a>
+                            </li>
                         </ul>
                         <div class="tab-content">
                             <!-- Mẫu bảng lương chung -->
@@ -290,8 +293,6 @@
                                 </div>
                             </div>
 
-                            
-
                             <!-- Mẫu bảng lương lạng sơn + cao bằng -->
                             <div class="tab-pane" id="tab_2">
                                 <div class="row">
@@ -429,6 +430,49 @@
                                             <button type="button" style="border-width: 0px" onclick="inblmtt107_pb('/chuc_nang/bang_luong/mautt107_lc_pb')" class="btn btn-default btn-xs mbs"
                                                     title="Bảng lương của cán bộ theo mẫu C02-HD" data-target="#mautt107-modal" data-toggle="modal">
                                                 <i class="fa fa-print"></i>&nbsp;Bảng lương mẫu C02-HD - theo khối, tổ công tác</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Mẫu bảng lương Vạn Ninh -->
+                            <div class="tab-pane" id="tab_vn">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            <button type="button" style="border-width: 0px" onclick="inblm1('/chuc_nang/bang_luong/mau09_vn_hc')" class="btn btn-default btn-xs mbs"
+                                                    title="Bảng lương của cán bộ thiết kế theo mẫu đặc thù" data-target="#mau1-modal" data-toggle="modal">
+                                                <i class="fa fa-print"></i> Bảng thanh toán cho đối tượng thụ hưởng (Mẫu đơn vị hành chính)</button>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            <button type="button" style="border-width: 0px" onclick="inblm1('/chuc_nang/bang_luong/mau09_vn_ck_bc')" class="btn btn-default btn-xs mbs"
+                                                    title="Bảng lương của cán bộ thiết kế theo mẫu đặc thù" data-target="#mau1-modal" data-toggle="modal">
+                                                <i class="fa fa-print"></i> Bảng thanh toán chuyển khoản cho công chức (Mẫu xã, phường, thị trấn)</button>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            <button type="button" style="border-width: 0px" onclick="inblm1('/chuc_nang/bang_luong/mau09_vn_ck_kct')" class="btn btn-default btn-xs mbs"
+                                                    title="Bảng lương của cán bộ thiết kế theo mẫu đặc thù" data-target="#mau1-modal" data-toggle="modal">
+                                                <i class="fa fa-print"></i> Bảng thanh toán chuyển khoản cho cán bộ không chuyên trách (Mẫu xã, phường, thị trấn)</button>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            <button type="button" style="border-width: 0px" onclick="inblm1('/chuc_nang/bang_luong/mau09_vn_tm')" class="btn btn-default btn-xs mbs"
+                                                    title="Bảng lương của cán bộ thiết kế theo mẫu đặc thù" data-target="#mau1-modal" data-toggle="modal">
+                                                <i class="fa fa-print"></i> Bảng thanh toán tiền mặt (Mẫu xã, phường, thị trấn)</button>
                                         </div>
                                     </div>
                                 </div>
