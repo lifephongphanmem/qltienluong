@@ -669,9 +669,14 @@ Route::group(['prefix' => 'chuc_nang'], function () {
 
         //mẫu thanh toán 09 cho vạn ninh
         Route::post('mau09_vn_hc', 'bangluong_inController@mau09_vn_hc');
-        Route::post('mau09_vn_ck_bc', 'bangluong_inController@mau09_vn_ck_bc');
-        Route::post('mau09_vn_ck_kct', 'bangluong_inController@mau09_vn_ck_kct');
-        Route::post('mau09_vn_tm', 'bangluong_inController@mau09_vn_tm');
+        //chạy tạm để ko lỗi
+        Route::post('mau09_vn_ck_bc', 'bangluong_inController@mau09_vn_hc');
+        Route::post('mau09_vn_ck_kct', 'bangluong_inController@mau09_vn_hc');
+        Route::post('mau09_vn_tm', 'bangluong_inController@mau09_vn_hc');
+        //lưu
+        // Route::post('mau09_vn_ck_bc', 'bangluong_inController@mau09_vn_ck_bc');
+        // Route::post('mau09_vn_ck_kct', 'bangluong_inController@mau09_vn_ck_kct');
+        // Route::post('mau09_vn_tm', 'bangluong_inController@mau09_vn_tm');
     });
 
     Route::group(['prefix' => 'nang_luong'], function () {
@@ -1077,6 +1082,7 @@ Route::group(['prefix' => 'bao_cao'], function () {
 
             //Tạm cho huyện Vạn Ninh
             Route::post('tonghopluong_th', 'baocaobangluongController@tonghopluong_huyen_th');
+            Route::post('tonghopluong_vn', 'baocaobangluongController@tonghopluong_vn');
         });
 
         Route::group(['prefix' => 'tinh'], function () {
