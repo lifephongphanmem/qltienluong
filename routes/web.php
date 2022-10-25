@@ -1068,6 +1068,9 @@ Route::group(['prefix' => 'bao_cao'], function () {
             Route::post('nguonkinhphiCR', 'baocaobangluongController@nguonkinhphi_huyen_CR');
             Route::post('baocaohesoluong', 'baocaobangluongController@baocaohesoluong');
             Route::post('baocaohesoluongexcel', 'baocaobangluongController@baocaohesoluongexcel');
+
+            //Tạm cho huyện Vạn Ninh
+            Route::post('tonghopluong_th', 'baocaobangluongController@tonghopluong_huyen_th');
         });
 
         Route::group(['prefix' => 'tinh'], function () {
