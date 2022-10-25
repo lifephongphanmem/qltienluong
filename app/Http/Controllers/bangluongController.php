@@ -5618,21 +5618,23 @@ class bangluongController extends Controller
                         $ct->ghichu .= 'Cán bộ mới';
                     }
                     if ($m_truylinh != null) { //nếu có bảng truy lĩnh lương 
-
-                        foreach ($model_truylinh as $val) {
-                            if (isset($model_truylinh_trc)) {
-                                $cb_truylinh = $model_truylinh_trc->where('macanbo', $val->macanbo)->where('mact', $val->mact)
-                                    ->where('mapb', $val->mapb)->first();
-                                if ($cb_truylinh != null) {
-                                    $ct->truylinh = $val->luongtn - $cb_truylinh->luongtn;
-                                    if ($ct->truylinh > 0) {
-                                        $ct->ghichu .= 'Tăng do truy lĩnh lương';
-                                    } else {
-                                        $ct->ghichu .= 'Giảm do truy lĩnh lương';
+                        if($canbo != null){
+                            foreach ($model_truylinh as $val) {
+                                
+                                if (isset($model_truylinh_trc)) {
+                                    $cb_truylinh = $model_truylinh_trc->where('macanbo', $val->macanbo)->where('mact', $val->mact)
+                                        ->where('mapb', $val->mapb)->first();
+                                    if ($cb_truylinh != null) {
+                                        $ct->truylinh = $val->luongtn - $cb_truylinh->luongtn;
+                                        if ($ct->truylinh > 0) {
+                                            $ct->ghichu .= 'Tăng do truy lĩnh lương';
+                                        } else {
+                                            $ct->ghichu .= 'Giảm do truy lĩnh lương';
+                                        }
                                     }
+                                } else if ($val->mact == $canbo->mact && $val->macanbo == $ct->macanbo) {
+                                    $ct->ghichu .= 'Tăng do truy lĩnh lương';
                                 }
-                            } else if ($val->mact == $canbo->mact && $val->macanbo == $ct->macanbo) {
-                                $ct->ghichu .= 'Tăng do truy lĩnh lương';
                             }
                         }
                     };

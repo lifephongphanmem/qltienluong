@@ -37,7 +37,7 @@ class hosothoicongtacController extends Controller
     function store(Request $request){
         if (Session::has('admin')) {
             $insert = $request->all();
-            //dd($insert);
+            // dd($insert);
             $model_chk = hosothoicongtac::where('macanbo',$insert['macanbo'])->first();
             if($model_chk != null){
                 return view('errors.thoicongtac');
