@@ -3919,6 +3919,7 @@ class baocaobangluongController extends Controller
             $a_lv = array('QLNN', 'DDT', 'DOANTHE', 'DANG', 'LVXH', 'LVCT');
             //$modelhcsn = $model->whereNOTIn('linhvuchoatdong',$a_lv)
             //   ->wherein('madv', array_column($model_phanloai->where('maphanloai','<>','KVXP')->toarray(),'madv'));
+            //dd($model_xp);
             return view('reports.tonghopluong.huyen.tonghopluongCR')
                 ->with('model_dutoan', $model_dutoan)
                 ->with('model_th', $model_th)
@@ -5445,12 +5446,12 @@ class baocaobangluongController extends Controller
                 $chitiet->maphanloai = $a_pl_donvi[$chitiet->madv];
                 $chitiet->tenct = $a_plct[$chitiet->mact] ?? '';
 
-                $chitiet->baohiem = round(($chitiet->stbhxh + $chitiet->stbhyt + $chitiet->stkpcd) / 1490000, 5);
-                $chitiet->stbhtn = round($chitiet->stbhtn / 1490000, 5);
+                $chitiet->baohiem = round(($chitiet->stbhxh_dv + $chitiet->stbhyt_dv + $chitiet->stkpcd_dv) / 1490000, 5);
+                $chitiet->stbhtn = round($chitiet->stbhtn_dv / 1490000, 5);
                 $chitiet->tongphucap = $chitiet->tonghs - $chitiet->heso;
 
-                $chitiet->tongcong = $chitiet->tonghs;
-                $chitiet->quyluong = ($chitiet->luongtn + $chitiet->ttbh) / $inputs['donvitinh'];
+                $chitiet->tongcong = $chitiet->tonghs + $chitiet->baohiem + $chitiet->stbhtn;
+                $chitiet->quyluong = ($chitiet->luongtn + $chitiet->ttbh_dv) / $inputs['donvitinh'];
                 $this->getMaNhomPhanLoai($chitiet, $m_phanloai);
             }
             //dd($model->where('maphanloai','DAOTAO')->toArray());
@@ -5465,7 +5466,7 @@ class baocaobangluongController extends Controller
                     $col++;
                 }
             }
-
+            //dd($model->sum('quyluong'));
             // $m_donvi = dmdonvi::where('madv', session('admin')->madv)->first();
             //dd($m_donvi_baocao->where('maphanloai','DAOTAO'));
             return view('reports.tonghopluong.huyen.tonghopluong_vn')

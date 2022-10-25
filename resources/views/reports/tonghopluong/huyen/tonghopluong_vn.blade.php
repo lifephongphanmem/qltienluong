@@ -67,7 +67,7 @@
             <td>TỔNG CỘNG</td>
             <td class="text-center">{{ dinhdangso($model->sum('soluong')) }}</td>
             <td class="text-center">{{ dinhdangso($model->sum('soluong')) }}</td>
-            <td class="text-right">{{ dinhdangsothapphan($model->sum('tonghs'), $lamtron) }}</td>
+            <td class="text-right">{{ dinhdangsothapphan($model->sum('tongcong'), $lamtron) }}</td>
             <td class="text-right">{{ dinhdangsothapphan($model->sum('heso'), $lamtron) }}</td>
             <td class="text-right">{{ dinhdangsothapphan($model->sum('tongphucap'), $lamtron) }}</td>
             @foreach ($a_phucap as $key => $val)
@@ -321,7 +321,7 @@
                                 @foreach ($model_chitiet as $chitiet)
                                     <tr>
                                         <td>-</td>
-                                        <td>{{ $chitiet->tenct }}3</td>
+                                        <td>{{ $chitiet->tenct }}</td>
 
                                         <td class="text-center">
                                             {{ dinhdangsothapphan($chitiet->soluong, $lamtron) }}</td>
@@ -419,7 +419,7 @@
                                     @foreach ($model_chitiet as $chitiet)
                                         <tr>
                                             <td>-</td>
-                                            <td>{{ $chitiet->tenct }}4</td>
+                                            <td>{{ $chitiet->tenct }}</td>
 
                                             <td class="text-center">
                                                 {{ dinhdangsothapphan($chitiet->soluong, $lamtron) }}</td>

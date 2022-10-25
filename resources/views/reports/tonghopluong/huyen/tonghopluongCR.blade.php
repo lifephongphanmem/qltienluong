@@ -542,6 +542,70 @@
         @endforeach
         <tr style="font-weight: bold;">
             <td>IV</td>
+            <td style="font-weight: bold;text-align: left">Khối Xã, phường, thị trấn</td>
+            <td style="text-align: right">{{dinhdangso($model_xp->sum('soluong'))}}</td>
+            <td style="text-align: right">{{dinhdangso($model_xp->sum('soluongcomat'))}}</td>
+            <td style="text-align: right">{{dinhdangsothapphan($model_xp->sum('tongcong'),5)}}</td>
+            <td style="text-align: right">{{dinhdangsothapphan($model_xp->sum('heso'),5)}}</td>
+            <td style="text-align: right">{{dinhdangsothapphan($model_hcsn->sum('tongpc'),5)}}</td>
+            @foreach($a_phucap as $key=>$val)
+                <td>{{dinhdangsothapphan($model_xp->sum($key),5)}}</td>
+            @endforeach
+            <td style="text-align: right">{{dinhdangso($model_xp->sum('stbhxh_dv')+$model_xp->sum('stbhyt_dv')+$model_xp->sum('stkpcd_dv'))}}</td>
+            <td style="text-align: right">{{dinhdangso($model_xp->sum('stbhtn_dv'))}}</td>
+            <td style="text-align: right">{{dinhdangso($model_xp->sum('ttl') + $model_xp->sum('ttbh_dv'))}}</td>
+        </tr>        
+        <?php
+        $ttdv = 0;
+        $model_hcsndv = $model_xp->groupby('tendv');
+        //dd($model_hcsndv->toarray());
+        $a_donvi = array_column($model_xp->toarray(),'madv' , 'tendv');
+        $a_plcongtac = array_column($model_xp->toarray(),'mact' , 'tencongtac');
+        ?>
+        @foreach($a_donvi as $keydv=>$val)
+            <?php $ttdv ++;
+                $model_hcsndvCT= $model_xp->where('tendv',$keydv)->groupby('tencongtac');
+                $a_plcongtac = array_column($model_xp->where('tendv',$keydv)->toarray(),'mact' , 'tencongtac');
+            ?>
+            <tr class="money" style="font-weight: bold">
+                <td style="text-align: center">{{$ttdv}}</td>
+                <td style="text-align: left">{{$keydv}}</td>
+                <td style="text-align: right">{{dinhdangso($model_hcsndv[$keydv]->sum('soluong'))}}</td>
+                <td style="text-align: right">{{dinhdangso($model_hcsndv[$keydv]->sum('soluongcomat'))}}</td>
+                <td style="text-align: right">{{dinhdangsothapphan($model_hcsndv[$keydv]->sum('tongcong'),5)}}</td>
+                <td style="text-align: right">{{dinhdangsothapphan($model_hcsndv[$keydv]->sum('heso'),5)}}</td>
+                <td style="text-align: right">{{dinhdangsothapphan($model_hcsndv[$keydv]->sum('tongpc'),5)}}</td>
+
+                @foreach($a_phucap as $key1=>$val)
+                    <td>{{dinhdangsothapphan($model_hcsndv[$keydv]->sum($key1),5)}}</td>
+                @endforeach
+
+                <td>{{dinhdangso($model_hcsndv[$keydv]->sum('stbhxh_dv')+$model_hcsndv[$keydv]->sum('stbhyt_dv')+$model_hcsndv[$keydv]->sum('stkpcd_dv'))}}</td>
+                <td>{{dinhdangso($model_hcsndv[$keydv]->sum('stbhtn_dv'))}}</td>
+                <td>{{dinhdangso($model_hcsndv[$keydv]->sum('ttl') + $model_hcsndv[$keydv]->sum('ttbh_dv'))}}</td>
+            </tr>
+            @foreach($a_plcongtac as $key=>$val)
+                <tr class="money">
+                    <td style="text-align: center"></td>
+                    <td style="text-align: left">{{$key}}</td>
+                    <td style="text-align: right">{{dinhdangso($model_hcsndvCT[$key]->sum('soluong'))}}</td>
+                    <td style="text-align: right">{{dinhdangso($model_hcsndvCT[$key]->sum('soluongcomat'))}}</td>
+                    <td style="text-align: right">{{dinhdangsothapphan($model_hcsndvCT[$key]->sum('tongcong'),5)}}</td>
+                    <td style="text-align: right">{{dinhdangsothapphan($model_hcsndvCT[$key]->sum('heso'),5)}}</td>
+                    <td style="text-align: right">{{dinhdangsothapphan($model_hcsndvCT[$key]->sum('tongpc'),5)}}</td>
+
+                    @foreach($a_phucap as $key1=>$val)
+                        <td>{{dinhdangsothapphan($model_hcsndvCT[$key]->sum($key1),5)}}</td>
+                    @endforeach
+
+                    <td>{{dinhdangso($model_hcsndvCT[$key]->sum('stbhxh_dv')+$model_hcsndvCT[$key]->sum('stbhyt_dv')+$model_hcsndvCT[$key]->sum('stkpcd_dv'))}}</td>
+                    <td>{{dinhdangso($model_hcsndvCT[$key]->sum('stbhtn_dv'))}}</td>
+                    <td>{{dinhdangso($model_hcsndvCT[$key]->sum('ttl') + $model_hcsndvCT[$key]->sum('ttbh_dv'))}}</td>
+                </tr>
+            @endforeach
+        @endforeach
+        <tr style="font-weight: bold;">
+            <td>V</td>
             <td style="font-weight: bold;text-align: left">Hoạt động phí HĐND</td>
             <td style="text-align: right">{{dinhdangso($model_hdnd->sum('soluong'))}}</td>
             <td style="text-align: right">{{dinhdangso($model_hdnd->sum('soluongcomat'))}}</td>
@@ -601,7 +665,7 @@
             <td style="text-align: right">{{dinhdangso(0)}}</td>
         </tr>
         <tr style="font-weight: bold;">
-            <td>V</td>
+            <td>VI</td>
             <td style="font-weight: bold;text-align: left">PC trách nhiệm cấp ủy</td>
             <td style="text-align: right">{{dinhdangso($model_uv->sum('soluong'))}}</td>
             <td style="text-align: right">{{dinhdangso($model_uv->sum('soluongcomat'))}}</td>
