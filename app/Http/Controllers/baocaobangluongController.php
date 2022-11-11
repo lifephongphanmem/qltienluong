@@ -23,6 +23,7 @@ use App\dsnangthamnien;
 use App\dutoanluong;
 use App\dutoanluong_bangluong;
 use App\dutoanluong_chitiet;
+use App\dutoanluong_huyen;
 use App\hosocanbo;
 use App\hosoluong;
 use App\hosophucap;
@@ -2938,17 +2939,17 @@ class baocaobangluongController extends Controller
                 ->where('trangthai', 'DAGUI')
                 ->where('namns', $inputs['namns'])
                 ->wherein('madv', array_column($model_phanloai->toarray(), 'madv'))
-                ->groupby('mact','madv','dutoanluong.masodv','macongtac')
+                ->groupby('mact', 'madv', 'dutoanluong.masodv', 'macongtac')
                 ->get();
-                // dd($model_th);
+            // dd($model_th);
             $model_slth = dutoanluong_chitiet::join('dutoanluong', 'dutoanluong.masodv', 'dutoanluong_chitiet.masodv')
-                ->select('mact','dutoanluong.masodv', DB::raw('sum(canbo_congtac) as canbo_congtac'), DB::raw('sum(canbo_dutoan) as canbo_dutoan'))
+                ->select('mact', 'dutoanluong.masodv', DB::raw('sum(canbo_congtac) as canbo_congtac'), DB::raw('sum(canbo_dutoan) as canbo_dutoan'))
                 // ->select('mact', 'madv', 'canbo_congtac','canbo_dutoan')
                 ->where('madvbc', $madvbc)
                 ->where('trangthai', 'DAGUI')
                 ->where('namns', $inputs['namns'])
                 ->wherein('madv', array_column($model_phanloai->toarray(), 'madv'))
-                ->groupby('mact','dutoanluong.masodv')
+                ->groupby('mact', 'dutoanluong.masodv')
                 ->get();
             $modelctbc = chitieubienche::select('mact', 'madv', 'soluongduocgiao')
                 ->where('nam', $inputs['namns'])
@@ -2976,9 +2977,9 @@ class baocaobangluongController extends Controller
                     $ct->tencongtac = isset($model_ct[$ct->mact]) ? $model_ct[$ct->mact] : '';
                 }
                 $m = $model_slth->where('mact', $ct->mact)->first();
-                $ct->soluonggiao = $modelctbc->where('mact', $ct->mact)->where('madv',$ct->madv)->sum('soluongduocgiao');
+                $ct->soluonggiao = $modelctbc->where('mact', $ct->mact)->where('madv', $ct->madv)->sum('soluongduocgiao');
                 if (isset($m)) {
-                    $ct->soluongcomat = $model_slth->where('mact', $ct->mact)->where('masodv',$ct->masodv)->first()->canbo_congtac;
+                    $ct->soluongcomat = $model_slth->where('mact', $ct->mact)->where('masodv', $ct->masodv)->first()->canbo_congtac;
                 } else {
                     $ct->soluongcomat = 0;
                 }
@@ -3050,7 +3051,7 @@ class baocaobangluongController extends Controller
                 ->where('trangthai', 'DAGUI')
                 ->where('namns', $inputs['namns'])
                 ->wherein('madv', array_column($model_phanloai->toarray(), 'madv'))
-                ->groupby('madv', 'mact','dutoanluong.masodv','macongtac')
+                ->groupby('madv', 'mact', 'dutoanluong.masodv', 'macongtac')
                 ->get();
             $model_sl = dutoanluong_chitiet::join('dutoanluong', 'dutoanluong.masodv', 'dutoanluong_chitiet.masodv')
                 ->select('dutoanluong.masodv', 'mact', DB::raw('sum(canbo_congtac) as canbo_congtac'), DB::raw('sum(canbo_dutoan) as canbo_dutoan'))
@@ -3123,17 +3124,17 @@ class baocaobangluongController extends Controller
                 ->where('mact', '1536402868')
                 ->wherein('madv', array_column($model_phanloai->toarray(), 'madv'))
                 ->where('namns', $inputs['namns'])
-                ->groupby('mact','madv','dutoanluong.masodv','macongtac')
+                ->groupby('mact', 'madv', 'dutoanluong.masodv', 'macongtac')
                 ->get();
 
             $model_slhdnd = dutoanluong_chitiet::join('dutoanluong', 'dutoanluong.masodv', 'dutoanluong_chitiet.masodv')
-                ->select('mact','dutoanluong.masodv', DB::raw('sum(canbo_congtac) as canbo_congtac'), DB::raw('sum(canbo_dutoan) as canbo_dutoan'))
+                ->select('mact', 'dutoanluong.masodv', DB::raw('sum(canbo_congtac) as canbo_congtac'), DB::raw('sum(canbo_dutoan) as canbo_dutoan'))
                 ->where('madvbc', $madvbc)
                 ->where('trangthai', 'DAGUI')
                 ->where('mact', '1536402868')
                 ->wherein('madv', array_column($model_phanloai->toarray(), 'madv'))
                 ->where('namns', $inputs['namns'])
-                ->groupby('mact','dutoanluong.masodv')
+                ->groupby('mact', 'dutoanluong.masodv')
                 ->get();
             foreach ($model_hdnd as $ct) {
                 if ($ct->mact == null) {
@@ -3141,8 +3142,8 @@ class baocaobangluongController extends Controller
                 } else {
                     $ct->tencongtac = isset($model_ct[$ct->mact]) ? $model_ct[$ct->mact] : '';
                 }
-                $m = $model_slhdnd->where('mact', '1536402868')->where('masodv',$ct->masodv)->first();
-                $msl = $modelctbc->where('mact', '1536402868')->where('madv',$ct->madv)->first();
+                $m = $model_slhdnd->where('mact', '1536402868')->where('masodv', $ct->masodv)->first();
+                $msl = $modelctbc->where('mact', '1536402868')->where('madv', $ct->madv)->first();
                 $ct->soluonggiao = isset($msl) ? $msl->soluongduocgiao : 0;
                 if (isset($m)) {
                     $ct->soluongcomat = $m->canbo_congtac;
@@ -3182,7 +3183,7 @@ class baocaobangluongController extends Controller
                 ->where('mact', '1536402868')
                 ->wherein('madv', array_column($model_phanloai->toarray(), 'madv'))
                 ->where('namns', $inputs['namns'])
-                ->groupby('mact','macongtac')
+                ->groupby('mact', 'macongtac')
                 ->get();
             foreach ($model_kn as $ct) {
                 if ($ct->mact == null) {
@@ -3227,7 +3228,7 @@ class baocaobangluongController extends Controller
                 ->where('mact', '1536459380')
                 ->wherein('madv', array_column($model_phanloai->toarray(), 'madv'))
                 ->where('namns', $inputs['namns'])
-                ->groupby('mact','madv','macongtac', 'dutoanluong.masodv')
+                ->groupby('mact', 'madv', 'macongtac', 'dutoanluong.masodv')
                 ->get();
             foreach ($model_uv as $ct) {
                 if ($ct->mact == null) {
@@ -3235,8 +3236,8 @@ class baocaobangluongController extends Controller
                 } else {
                     $ct->tencongtac = isset($model_ct[$ct->mact]) ? $model_ct[$ct->mact] : '';
                 }
-                $m = $model_slhdnd->where('mact', '1536459380')->where('masodv',$ct->masodv)->first();
-                $msl = $modelctbc->where('mact', '1536459380')->where('madv',$ct->madv)->first();
+                $m = $model_slhdnd->where('mact', '1536459380')->where('masodv', $ct->masodv)->first();
+                $msl = $modelctbc->where('mact', '1536459380')->where('madv', $ct->madv)->first();
                 $ct->soluonggiao = isset($msl) ? $msl->soluongduocgiao : 0;
                 if (isset($m)) {
                     $ct->soluongcomat = $m->canbo_congtac;
@@ -3312,7 +3313,7 @@ class baocaobangluongController extends Controller
                 ->wherein('mact', ['1506672780', '1506673604', '1506673695', '1535613221'])
                 ->wherein('madv', array_column($model_phanloai->toarray(), 'madv'))
                 ->where('namns', $inputs['namns'])
-                ->groupby('dutoanluong.madv', 'mact','dutoanluong.masodv','macongtac')
+                ->groupby('dutoanluong.madv', 'mact', 'dutoanluong.masodv', 'macongtac')
                 ->get();
             $model_slxp = dutoanluong_chitiet::join('dutoanluong', 'dutoanluong.masodv', 'dutoanluong_chitiet.masodv')
                 ->select('dutoanluong.masodv', 'mact', DB::raw('sum(canbo_congtac) as canbo_congtac'), DB::raw('sum(canbo_dutoan) as canbo_dutoan'))
@@ -3918,6 +3919,7 @@ class baocaobangluongController extends Controller
             $a_lv = array('QLNN', 'DDT', 'DOANTHE', 'DANG', 'LVXH', 'LVCT');
             //$modelhcsn = $model->whereNOTIn('linhvuchoatdong',$a_lv)
             //   ->wherein('madv', array_column($model_phanloai->where('maphanloai','<>','KVXP')->toarray(),'madv'));
+            //dd($model_xp);
             return view('reports.tonghopluong.huyen.tonghopluongCR')
                 ->with('model_dutoan', $model_dutoan)
                 ->with('model_th', $model_th)
@@ -4639,7 +4641,7 @@ class baocaobangluongController extends Controller
     {
         if (Session::has('admin')) {
             $inputs = $request->all();
-            
+
             $model = hosocanbo::where('madv', session('admin')->madv)->where('theodoi', '<', '9')->get();
             $a_ct = array_column(dmphanloaict::all()->toArray(), 'tenct', 'mact');
             $a_pb = getPhongBan(false);
@@ -4653,15 +4655,14 @@ class baocaobangluongController extends Controller
                 $hs->tenpb = isset($a_pb[$hs->mapb]) ? $a_pb[$hs->mapb] : '';
                 $hs->tencv = isset($a_cv[$hs->macvcq]) ? $a_cv[$hs->macvcq] : '';
                 $hs->tenct = isset($a_ct[$hs->mact]) ? $a_ct[$hs->mact] : '';
-                foreach ($model_pc as $ct) {                    
-                    $pc = $m_hs_phucap->where('macanbo', $hs->macanbo)->where('mapc', $ct->mapc)->where('ngaytu','<=',$inputs['ngaytu'])->sortbydesc('ngaytu')->first();
-                    if($pc != null){
-                       if($pc->ngayden == '' ||  $pc->ngayden == null || $pc->ngayden > $inputs['ngaytu']){
-                        $mapc = $ct->mapc;
-                        $hs->$mapc = $pc->heso;
-                       }
+                foreach ($model_pc as $ct) {
+                    $pc = $m_hs_phucap->where('macanbo', $hs->macanbo)->where('mapc', $ct->mapc)->where('ngaytu', '<=', $inputs['ngaytu'])->sortbydesc('ngaytu')->first();
+                    if ($pc != null) {
+                        if ($pc->ngayden == '' ||  $pc->ngayden == null || $pc->ngayden > $inputs['ngaytu']) {
+                            $mapc = $ct->mapc;
+                            $hs->$mapc = $pc->heso;
+                        }
                     }
-                    
                 }
             }
 
@@ -4706,18 +4707,18 @@ class baocaobangluongController extends Controller
             $inputs = $request->all();
             $madvbc = session('admin')->madvbc;
             // $model_donvi = dmdonvi::where('madvbc', $madvbc)->get();
-            $model_donvi=dmdonvibaocao::where('baocao',1)->get();
-            $model_dv=dmdonvi::wherein('madvbc',array_column($model_donvi->toarray(),'madvbc'))->get();
+            $model_donvi = dmdonvibaocao::where('baocao', 1)->get();
+            $model_dv = dmdonvi::wherein('madvbc', array_column($model_donvi->toarray(), 'madvbc'))->get();
             $model_khoipb = dmkhoipb::all();
             $model_phanloai = dmphanloaidonvi::join('dmdonvi', 'dmdonvi.maphanloai', 'dmphanloaidonvi.maphanloai')
                 ->select('madv', 'dmphanloaidonvi.maphanloai', 'tenphanloai', 'linhvuchoatdong')
-                ->wherein('madvbc', array_column($model_donvi->toarray(),'madvbc'))
+                ->wherein('madvbc', array_column($model_donvi->toarray(), 'madvbc'))
                 ->where('dmphanloaidonvi.maphanloai', 'like', $inputs['phanloai'] . '%')
                 ->get();
             if ($inputs['phanloai'] == 'GD')
                 $model_phanloai = dmphanloaidonvi::join('dmdonvi', 'dmdonvi.maphanloai', 'dmphanloaidonvi.maphanloai')
                     ->select('madv', 'dmphanloaidonvi.maphanloai', 'tenphanloai', 'linhvuchoatdong')
-                    ->wherein('madvbc', array_column($model_donvi->toarray(),'madvbc'))
+                    ->wherein('madvbc', array_column($model_donvi->toarray(), 'madvbc'))
                     ->wherein('dmdonvi.maphanloai', getPhanLoaGD())
                     ->get();
             $model_th = dutoanluong_bangluong::join('dutoanluong', 'dutoanluong.masodv', 'dutoanluong_bangluong.masodv')
@@ -4770,21 +4771,21 @@ class baocaobangluongController extends Controller
                     DB::raw('sum(stkpcd_dv) as stkpcd_dv'),
                     DB::raw('sum(ttbh_dv) as ttbh_dv')
                 )
-                ->wherein('madvbc', array_column($model_donvi->toarray(),'madvbc'))
+                ->wherein('madvbc', array_column($model_donvi->toarray(), 'madvbc'))
                 ->where('trangthai', 'DAGUI')
                 ->where('namns', $inputs['namns'])
                 ->wherein('madv', array_column($model_phanloai->toarray(), 'madv'))
-                ->groupby('mact','madvbc','madv')
+                ->groupby('mact', 'madvbc', 'madv')
                 // ->limit(14)
                 ->get();
-                // dd($model_th);
+            // dd($model_th);
             $model_slth = dutoanluong_chitiet::join('dutoanluong', 'dutoanluong.masodv', 'dutoanluong_chitiet.masodv')
                 ->select('mact', 'madv', DB::raw('sum(canbo_congtac) as canbo_congtac'), DB::raw('sum(canbo_dutoan) as canbo_dutoan'))
-                ->wherein('madvbc', array_column($model_donvi->toarray(),'madvbc'))
+                ->wherein('madvbc', array_column($model_donvi->toarray(), 'madvbc'))
                 ->where('trangthai', 'DAGUI')
                 ->where('namns', $inputs['namns'])
                 ->wherein('madv', array_column($model_phanloai->toarray(), 'madv'))
-                ->groupby('mact','madv')
+                ->groupby('mact', 'madv')
                 ->get();
             $modelctbc = chitieubienche::select('mact', 'madv', 'soluongduocgiao')
                 ->where('nam', $inputs['namns'])
@@ -4794,7 +4795,7 @@ class baocaobangluongController extends Controller
             //dd($model_soluong->toarray());
             $model_phanloaict = array_column(dmphanloaicongtac::all()->toArray(), 'tencongtac', 'macongtac');
             $model_ct = array_column(dmphanloaict::all()->toArray(), 'tenct', 'mact');
-            $m_pc = array_column(dmphucap_donvi::wherein('madv', array_column($model_dv->toarray(),'madv'))->get()->toarray(), 'report', 'mapc');
+            $m_pc = array_column(dmphucap_donvi::wherein('madv', array_column($model_dv->toarray(), 'madv'))->get()->toarray(), 'report', 'mapc');
             $a_phucap = array();
             $col = 0;
             foreach (getColTongHop() as $ct) {
@@ -4812,9 +4813,9 @@ class baocaobangluongController extends Controller
                     $ct->tencongtac = isset($model_ct[$ct->mact]) ? $model_ct[$ct->mact] : '';
                 }
                 $m = $model_slth->where('mact', $ct->mact)->first();
-                $ct->soluonggiao = $modelctbc->where('mact', $ct->mact)->where('madv',$ct->madv)->sum('soluongduocgiao');
+                $ct->soluonggiao = $modelctbc->where('mact', $ct->mact)->where('madv', $ct->madv)->sum('soluongduocgiao');
                 if (isset($m)) {
-                    $ct->soluongcomat = $model_slth->where('mact', $ct->mact)->where('madv',$ct->madv)->first()->canbo_congtac;
+                    $ct->soluongcomat = $model_slth->where('mact', $ct->mact)->where('madv', $ct->madv)->first()->canbo_congtac;
                 } else {
                     $ct->soluongcomat = 0;
                 }
@@ -5397,11 +5398,98 @@ class baocaobangluongController extends Controller
         } else
             return view('errors.notlogin');
     }
+
+    function tonghopluong_vn(Request $request)
+    {
+        if (Session::has('admin')) {
+            $inputs = $request->all();
+            //dd($inputs);
+            $madvbc = session('admin')->madvbc;
+            $model_tonghop = tonghopluong_donvi::where('madvbc', $madvbc)
+                ->where('nam', $inputs['tunam'])
+                ->where('thang', $inputs['tuthang'])
+                ->where('trangthai', 'DAGUI')->get();
+            if (isset($inputs['phanloaict']))
+                $model = tonghopluong_donvi_chitiet::wherein('mathdv', array_column($model_tonghop->toarray(), 'mathdv'))
+                    ->wherein('mact', $inputs['phanloaict'])
+                    ->get();
+            else
+                $model = tonghopluong_donvi_chitiet::wherein('mathdv', array_column($model_tonghop->toarray(), 'mathdv'))->get();
+
+            //dd($model);
+            //$m_dutoan_huyen = dutoanluong_huyen::where('masodv', $inputs['masodv'])->first();
+            //$inputs['namns'] = $m_dutoan_huyen->namns;
+            $m_donvi = dmdonvi::where('madv', session('admin')->madv)->first();
+
+            $m_phanloai = dmphanloaidonvi_baocao::all();
+
+            $a_phanloai = array_column(dmphanloaidonvi::all()->toArray(), 'maphanloai');
+            $m_donvi_baocao = dmdonvi::wherein('madv', array_column($model_tonghop->toarray(), 'madv'))->get();
+
+            $a_donvi = array_column($model_tonghop->toarray(), 'madv', 'mathdv');
+            $a_pl_donvi = array_column($m_donvi_baocao->toarray(), 'maphanloai', 'madv');
+            $a_plct = array_column(dmphanloaict::all()->toArray(), 'tenct', 'mact');
+            $a_pc = getColDuToan();
+
+            foreach ($model as $chitiet) {
+                //dd($chitiet);
+                $chitiet->tonghs = 0;
+                foreach ($a_pc as $pc) {
+                    //$chitiet->$pc = $chitiet->$pc / 12;
+                    //làm tạm
+                    if ($chitiet->$pc > 10000) {
+                        $chitiet->$pc = round($chitiet->$pc / 1490000, 5);
+                    }
+                    $chitiet->tonghs += $chitiet->$pc;
+                }
+                $chitiet->madv = $a_donvi[$chitiet->mathdv];
+                $chitiet->maphanloai = $a_pl_donvi[$chitiet->madv];
+                $chitiet->tenct = $a_plct[$chitiet->mact] ?? '';
+
+                $chitiet->baohiem = round(($chitiet->stbhxh_dv + $chitiet->stbhyt_dv + $chitiet->stkpcd_dv) / 1490000, 5);
+                $chitiet->stbhtn = round($chitiet->stbhtn_dv / 1490000, 5);
+                $chitiet->tongphucap = $chitiet->tonghs - $chitiet->heso;
+
+                $chitiet->tongcong = $chitiet->tonghs + $chitiet->baohiem + $chitiet->stbhtn;
+                $chitiet->quyluong = ($chitiet->luongtn + $chitiet->ttbh_dv) / $inputs['donvitinh'];
+                $this->getMaNhomPhanLoai($chitiet, $m_phanloai);
+            }
+            //dd($model->where('maphanloai','DAOTAO')->toArray());
+
+            //xử lý ẩn hiện cột phụ cấp => biết tổng số cột hiện => colspan trên báo cáo
+            $a_tenpc = array_column(dmphucap::all()->toArray(), 'tenpc', 'mapc');
+            $a_phucap = array();
+            $col = 0;
+            foreach ($a_pc as $ct) {
+                if ($model->sum($ct) > 0 && $ct != 'heso') {
+                    $a_phucap[$ct] = $a_tenpc[$ct];
+                    $col++;
+                }
+            }
+            //dd($model->sum('quyluong'));
+            // $m_donvi = dmdonvi::where('madv', session('admin')->madv)->first();
+            //dd($m_donvi_baocao->where('maphanloai','DAOTAO'));
+            return view('reports.tonghopluong.huyen.tonghopluong_vn')
+                ->with('model', $model)
+                ->with('col', $col)
+                ->with('lamtron', session('admin')->lamtron ?? 3)
+                ->with('a_phucap', $a_phucap)
+                ->with('m_donvi', $m_donvi)
+                //->with('m_dutoan', $m_dutoan)
+                ->with('m_phanloai', $m_phanloai)
+                ->with('a_phanloai', $a_phanloai)
+                ->with('m_donvi_baocao', $m_donvi_baocao)
+                ->with('inputs', $inputs)
+                ->with('pageTitle', 'Báo cáo tổng hợp biên chế hệ số tiền lương và phụ cấp');
+        } else
+            return view('errors.notlogin');
+    }
+
     function tonghopluong_huyen_th(Request $request)
     {
         if (Session::has('admin')) {
             $inputs = $request->all();
-           
+
             // dd($inputs);
             // dd(session('admin'));
             $madvbc = session('admin')->madvbc;
@@ -5411,19 +5499,20 @@ class baocaobangluongController extends Controller
                 ->where('madvbc', $madvbc)
                 ->where('dmphanloaidonvi.maphanloai', 'like', $inputs['phanloai'] . '%')
                 ->get();
-                $m_phanloai = dmphanloaidonvi_baocao::where('madvbc', $madvbc)->get();
-                $a_phanloai = array_column(dmphanloaidonvi::all()->toArray(), 'maphanloai');
-                $model_phanloaict = array_column(dmphanloaicongtac::all()->toArray(), 'tencongtac', 'macongtac');
-                $m_ct=dmphanloaict::all();
-                $model_ct = array_column($m_ct->toArray(), 'tenct', 'mact');
-                $a_ct=array_column($m_ct->toArray(),'mact');
-                isset($inputs['phanloaict'])?$inputs['mact']=$inputs['phanloaict']:$inputs['mact']=$a_ct;
-                $m_pc = array_column(dmphucap_donvi::where('madv', session('admin')->madv)->get()->toarray(), 'report', 'mapc');
-                $a_pl_donvi = array_column($m_donvi_baocao->toarray(), 'maphanloai', 'madv');
+            $m_phanloai = dmphanloaidonvi_baocao::where('madvbc', $madvbc)->get();
+            $a_phanloai = array_column(dmphanloaidonvi::all()->toArray(), 'maphanloai');
+            $model_phanloaict = array_column(dmphanloaicongtac::all()->toArray(), 'tencongtac', 'macongtac');
+            $m_ct = dmphanloaict::all();
+            $model_ct = array_column($m_ct->toArray(), 'tenct', 'mact');
+            $a_ct = array_column($m_ct->toArray(), 'mact');
+            isset($inputs['phanloaict']) ? $inputs['mact'] = $inputs['phanloaict'] : $inputs['mact'] = $a_ct;
+            $m_pc = array_column(dmphucap_donvi::where('madv', session('admin')->madv)->get()->toarray(), 'report', 'mapc');
+            $a_pl_donvi = array_column($m_donvi_baocao->toarray(), 'maphanloai', 'madv');
 
             $model_th = tonghopluong_donvi_bangluong::join('tonghopluong_donvi', 'tonghopluong_donvi.mathdv', 'tonghopluong_donvi_bangluong.mathdv')
                 ->Select(
-                    'mact','madv',
+                    'mact',
+                    'madv',
                     DB::raw('avg(tonghopluong_donvi_bangluong.luongcoban) as luongcoban'),
                     DB::raw('count(tonghopluong_donvi_bangluong.id) as soluong'),
                     DB::raw('sum(heso) as heso'),
@@ -5475,8 +5564,8 @@ class baocaobangluongController extends Controller
                 ->where('nam', $inputs['tunam'])
                 ->where('thang', $inputs['tuthang'])
                 ->wherein('tonghopluong_donvi.madv', array_column($model_phanloai->toarray(), 'madv'))
-                ->wherein('mact',$inputs['mact'])
-                ->groupby('mact','madv')
+                ->wherein('mact', $inputs['mact'])
+                ->groupby('mact', 'madv')
                 ->get();
             /*
             $model_slth = tonghopluong_donvi_chitiet::join('tonghopluong_donvi','tonghopluong_donvi.mathdv','tonghopluong_donvi_chitiet.mathdv')
@@ -5491,7 +5580,7 @@ class baocaobangluongController extends Controller
             */
             //dd($model_soluong->toarray());
 
-// dd($model_th);
+            // dd($model_th);
             $a_phucap = array();
             $col = 0;
             foreach (getColTongHop() as $ct) {
@@ -5543,8 +5632,8 @@ class baocaobangluongController extends Controller
                 //->with('model_bienche_dutoan',$model_bienche_dutoan)
                 //->with('model_bienche_truoc',$model_bienche_truoc)
                 ->with('thongtin', $thongtin)
-                ->with('m_dv', $m_dv)                
-                ->with('model_ct', $model_ct)                
+                ->with('m_dv', $m_dv)
+                ->with('model_ct', $model_ct)
                 ->with('model_phanloai', $model_phanloai)
                 ->with('m_phanloai', $m_phanloai)
                 ->with('a_phanloai', $a_phanloai)

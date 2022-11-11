@@ -286,6 +286,7 @@ class baocaott67huyenController extends Controller
                 $ar_I[$qlnnddt]['soluongbienche'] = $ar_I[$qlnn]['soluongbienche'] + $ar_I[$ddt]['soluongbienche'];
                 $ar_I[$qlnnddt]['tongpc'] = $ar_I[$qlnn]['tongpc'] + $ar_I[$ddt]['tongpc'];
                 $ar_I[$qlnnddt]['ttbh_dv'] = $ar_I[$qlnn]['ttbh_dv'] + $ar_I[$ddt]['ttbh_dv'];
+                
             } else {
                 for ($i = 0; $i < count($ar_I); $i++) {
                     if (isset($model_bangluong_ct)) {
@@ -1063,6 +1064,7 @@ class baocaott67huyenController extends Controller
             $a_phucap = getColTongHop();
             $a_pchien = array('heso', 'vuotkhung', 'pckv', 'pccv', 'pcudn', 'pcth', 'pctnn', 'pccovu', 'pcdang', 'pcthni', 'pcdbqh', 'pck');
             $a_pc = array_diff($a_phucap, $a_pchien);
+            //dd($model_tonghop);
             foreach ($model_tonghop_ct as $ct) {
                 if ($inputs['madv'] != "" && count($chekdv) > 0) {
                     $tonghop = $model_tonghop->where('masodv', $ct->masodv)->first();
@@ -1084,6 +1086,7 @@ class baocaott67huyenController extends Controller
                         $ct->st_pck += $ct->$pc_st;
                     }
                 }
+
                 foreach ($a_pchien as $pc) {
                     $pc_st = 'st_' . $pc;
                     if ($ct->$pc < $ct->$pc_st) { //hệ số < số tiền => theo dõi khác số tiền
@@ -1097,6 +1100,7 @@ class baocaott67huyenController extends Controller
             }
             $model_tonghop_ct = $model_tonghop_ct->wherein('mact', getMaCongTacNhuCau());
             $model_bangluong_ct = $model_tonghop_ct->where('macongtac', 'BIENCHE')->where('maphanloai', '<>', 'KVXP');
+            //dd($model_tonghop_ct->toarray());
             $ar_I = array();
             $ar_Igr = array();
             if (isset($inputs['inchitiet'])) {
@@ -1204,8 +1208,9 @@ class baocaott67huyenController extends Controller
                             $ar_I[$i]['ttbh_dv'] = $thongtin->sum('ttbh_dv');
                             $a_It['ttbh_dv'] += $ar_I[$i]['ttbh_dv'];
 
-                            $ar_I[$i]['chenhlech'] = round($tonghs * $model_thongtu->chenhlech
-                                + ($ar_I[$i]['ttbh_dv'] / $model_thongtu->mucapdung) * $model_thongtu->chenhlech);
+                            // $ar_I[$i]['chenhlech'] = round($tonghs * $model_thongtu->chenhlech
+                            //     + ($ar_I[$i]['ttbh_dv'] / $model_thongtu->mucapdung) * $model_thongtu->chenhlech);
+                            $ar_I[$i]['chenhlech'] = round(($chitiet->sum('luongtn') + $chitiet->sum('ttbh_dv')));
                             $a_It['chenhlech'] += $ar_I[$i]['chenhlech'];
 
                             foreach ($a_pchien as $pc) {
@@ -5431,7 +5436,7 @@ class baocaott67huyenController extends Controller
                 $a_IVt['tongso'] += $ar_IV[$i]['tongso'];
                 $a_IVt['chenhlech'] += $ar_IV[$i]['chenhlech'];
             }
-// dd($ar_I);
+            unset($ar_I[14]);
             //dd($m_tonghop_ct);
             return view('reports.thongtu46.donvi.mau2a2_tt46_kh')
                 ->with('furl', '/tong_hop_bao_cao/')
