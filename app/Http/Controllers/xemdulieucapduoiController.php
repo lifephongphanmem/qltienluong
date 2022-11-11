@@ -328,6 +328,7 @@ class xemdulieucapduoiController extends Controller
                 $tralai = true;
             }
             //dd(session('admin'));
+
             foreach ($model_donvi as $dv) {
                 $dv->tralai = $tralai;
                 $nguon = $model_nguon->where('madv', $dv->madv)->first();

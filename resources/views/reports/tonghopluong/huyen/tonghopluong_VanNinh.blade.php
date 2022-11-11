@@ -128,7 +128,7 @@
                     @endforeach
                     @foreach ($model_donvi as $donvi)
                         <?php
-                        $model_chitiet = $model->where('madv', $donvi->madv);
+                        $model_chitiet = $model_th->where('madv', $donvi->madv);
                         ?>
                         <tr class="font-weight-bold">
                             <td>{{ $i++ }}</td>
