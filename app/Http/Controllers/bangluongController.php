@@ -968,6 +968,7 @@ class bangluongController extends Controller
         //$a_pc = $model_phucap->keyBy('mapc')->toarray();
         //dd($a_pc);
         //thuế thu nhập cá nhân
+        // dd($model_phucap);
         $m_thue = dmthuetncn::where('ngayapdung', '<=', $ngaylap)->orderby('ngayapdung', 'desc')->first();
         if ($m_thue != null) {
             $banthan = $m_thue->banthan;
@@ -1084,6 +1085,7 @@ class bangluongController extends Controller
             $m_cb[$key]['hs_pcud61'] = isset($val['pcud61']) ? $val['pcud61'] : 0;
             $m_cb[$key]['hs_pcudn'] = isset($val['pcudn']) ? $val['pcudn'] : 0;
             $m_cb[$key]['hs_pclt'] = isset($val['pclt']) ? $val['pclt'] : 0;
+            $m_cb[$key]['hs_pcth'] = isset($val['pcth']) ? $val['pcth'] : 0;//TH trường Khánh Thành - Khánh Vĩnh
             $m_cb[$key]['luongcoban'] = $inputs['luongcoban'];
             $m_cb[$key]['giaml'] = $m_cb[$key]['songaytruc'] = $m_cb[$key]['songaycong'] = 0;
             $m_cb[$key]['songaylv'] = $m_cb[$key]['tongngaylv'] = session('admin')->songaycong; //set mặc định = tổng số ngày công của đơn vị
@@ -1245,6 +1247,7 @@ class bangluongController extends Controller
                 }
                 ketthuc_phucap:
             }
+            
 
             //$ths = $ths + $heso_goc - $cb->heso;//do chỉ lương nb hưởng 85%, các hệ số hưởng %, bảo hiểm thì lấy 100% để tính
             //nếu cán bộ nghỉ thai sản (không gộp vào phần tính phụ cấp do trên bảng lương hiển thị hệ số nhưng ko có tiền)

@@ -825,6 +825,7 @@ Route::group(['prefix' => 'chuc_nang'], function () {
         Route::get('tinh/solieu', 'xemdulieucapduoiController@tonghop_huyen');
         Route::post('danhsach', 'xemdulieucapduoiController@danhsach');
         Route::post('danhsachth', 'tonghopluong_tinhController@danhsachdv');
+        Route::post('danhsach_thh', 'tonghopluong_huyenController@danhsachth');
 
         Route::group(['prefix' => 'nguon'], function () {
             Route::get('khoi', 'xemdulieu_nguonController@index_khoi');

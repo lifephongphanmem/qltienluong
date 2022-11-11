@@ -147,6 +147,7 @@ class bangluong_ct_11 extends Model
         'hs_pcud61',
         'hs_pcudn',
         'hs_pclt',
+        'hs_pcth',
         'luuheso',
         'ghichu',
         'pclaunam',

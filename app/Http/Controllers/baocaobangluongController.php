@@ -5524,7 +5524,7 @@ class baocaobangluongController extends Controller
                 //$ct->soluongcomat = $model_slth->where('mact',$ct->mact)->first()->canbo_congtac;
                 $this->getMaNhomPhanLoai($ct, $m_phanloai);
             }
-
+            // dd($model_th);
             //dd($model_kn->toarray());
             $model_dutoan = tonghopluong_donvi::where('nam', $inputs['tunam'])
                 ->wherein('madv', function ($qr) use ($madvbc) {

@@ -234,7 +234,7 @@
             </div>
         </div>
     </div>
-    <div id="tonghop-modal" tabindex="-1" role="dialog" aria-hidden="true" class="modal fade">
+    {{-- <div id="tonghop-modal" tabindex="-1" role="dialog" aria-hidden="true" class="modal fade">
         <div class="modal-dialog modal-lg modal-content">
             <div class="modal-header modal-header-primary">
                 <button type="button" data-dismiss="modal" aria-hidden="true" class="close">&times;</button>
@@ -266,6 +266,63 @@
                                                         {!! Form::select('trangthai', $a_trangthai, $trangthai, ['id' => 'trangthai', 'class' => 'form-control']) !!}
                                                     </div>
                                                 </div-->
+                                            <input type="hidden" id="phantramhuong" name="phantramhuong"
+                                                value="100" />
+                                            <input type="hidden" id="id_ct" name="id_ct" />
+                                            <input type="hidden" id="mabl" name="mabl" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" data-dismiss="modal" class="btn btn-default">Hủy thao tác</button>
+                    <button type="submit" id="submit" name="submit" value="submit" class="btn btn-primary">Đồng
+                        ý</button>
+                </div>
+            </div>
+        </div>
+    </div> --}}
+    <div id="tonghop-modal" tabindex="-1" role="dialog" aria-hidden="true" class="modal fade">
+        <div class="modal-dialog modal-lg modal-content">
+            <div class="modal-header modal-header-primary">
+                <button type="button" data-dismiss="modal" aria-hidden="true" class="close">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-horizontal">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="tabbable tabbable-custom tabbable-noborder tabbable-reversed" id="tab_cre">
+                                <div class="tab-content">
+                                    <!-- Thông tin chung -->
+                                    <div class="tab-pane active" id="tab_0_cre">
+                                        {!! Form::open([
+                                            'url' => 'chuc_nang/xem_du_lieu/danhsach_thh',
+                                            'target' => '_blank',
+                                            'method' => 'post',
+                                            'class' => 'form-horizontal form-validate',
+                                        ]) !!}
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <label class="col-md-3" style="text-align: right">Tháng</label>
+                                                <div class="col-md-9">
+                                                   <select name="thang" id="" class="form-control">
+                                                    <option value="all">Tất cả các tháng</option>
+                                                    @for ($i=1;$i<13;$i++)
+                                                        <option value={{$i}}>{{$i}}</option>
+                                                    @endfor
+                                                   </select>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <label class="col-md-3" style="text-align: right">Năm </label>
+                                                <div class="col-md-9">
+                                                    {!! Form::select('namth', getNam(), $nam, ['id' => 'namds', 'class' => 'form-control']) !!}
+                                                </div>
+                                            </div>
                                             <input type="hidden" id="phantramhuong" name="phantramhuong"
                                                 value="100" />
                                             <input type="hidden" id="id_ct" name="id_ct" />

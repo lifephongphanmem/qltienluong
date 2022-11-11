@@ -1802,4 +1802,53 @@ class tonghopluong_huyenController extends Controller
         } else
             return view('errors.notlogin');
     }
+
+    public function danhsachth(Request $request)
+    {
+        $inputs=$request->all();
+        $madv = session('admin')->madv;
+        // $model = dmdonvi::where('madvbc',session('admin')->madvbc)->where('phanloaitaikhoan','SD')->get();
+        // $model = dmdonvi::where('macqcq',$madv)->where('madv', '<>', $madv)
+        // ->wherenotin('madv', function ($query) use ($madv, $ngay) {
+        //     $query->select('madv')->from('dmdonvi')
+        //         ->where('ngaydung', '<=', $ngay)
+        //         ->where('trangthai', 'TD')
+        //         ->get();
+        // })->distinct()->get();
+        $model=  dmdonvi::where('macqcq', $madv)->where('madv', '<>', $madv)
+            ->wherenotin('madv', function ($query) use ($madv) {
+            $query->select('madv')->from('dmdonvi')
+                ->where('trangthai', 'TD')
+                ->get();
+        })
+        ->distinct()->get();
+        // dd($model);
+        $a_madv=array_column($model->toarray(),'madv');
+        $model_th=tonghopluong_donvi::where('nam',$inputs['namth'])->wherein('madv',$a_madv)->get();
+        
+        foreach($model as $dv)
+        {
+            if(count($model_th)> 0)
+            {
+                for($i=1;$i<13;$i++){
+                    $thang='thang'.$i;
+                    $m_th=$model_th->where('madv',$dv->madv)->where('thang',$i)->first();
+                    // $dv->trangthai=$m_th->trangthai;
+                    if(isset($m_th)){
+                        $dv->$thang=$m_th->trangthai;
+                    }else{
+                        $dv->$thang='CHUAGUI';
+                    }
+
+                }
+               
+            }
+        }
+      return view('reports.tonghopluong.huyen.danhsachth')
+                ->with('model',$model)
+                ->with('nam',$inputs['namth'])
+                ->with('thang',$inputs['thang'])
+                ->with('pageTitle','Danh sách đơn vị gửi tổng hợp lương');
+
+    }
 }
