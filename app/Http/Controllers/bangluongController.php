@@ -1176,7 +1176,6 @@ class bangluongController extends Controller
                     $m_cb[$key][$mapc] = 0;
                     continue;
                 }
-
                 switch ($a_pc[$k]['phanloai']) {
                     case 0: { //hệ số
                             $a_pc[$k]['sotien'] = round($m_cb[$key][$mapc] * $inputs['luongcoban']);
