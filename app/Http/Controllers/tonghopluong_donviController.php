@@ -90,6 +90,8 @@ class tonghopluong_donviController extends Controller
                 } else {
                     //do trc xóa bảng lương nhưng chưa xóa tổng hợp
                     if ($tonghop != null) {
+
+
                         $a_data[$i]['bangluong'] = 'ok';
                         $a_data[$i]['noidung'] = $tonghop->noidung;
                         $a_data[$i]['mathdv'] = $tonghop->mathdv;
@@ -100,6 +102,7 @@ class tonghopluong_donviController extends Controller
                         if ($a_data[$i]['tendvcq'] == '') {
                             $a_data[$i]['tendvcq'] = $a_data[$i]['macqcq']; //trường hợp đơn vị gửi nhưng ko pải đơn vị trong hệ thống => đưa mã để kiểm tra
                         }
+                        isset($tonghop_tinh)? $a_data[$i]['matht']=true:$a_data[$i]['matht']=false;
                     } else {
                         $a_data[$i]['bangluong'] = null;
                         $a_data[$i]['trangthai'] = 'CHUALUONG';
