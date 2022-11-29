@@ -13,9 +13,9 @@ define('LARAVEL_START', microtime(true));
 | loading of any our classes "manually". Feels great to relax.
 |
 */
-require __DIR__ . '/../app/Library/array_function.php';
-require __DIR__ . '/../app/Library/global-functions.php';
-require __DIR__ . '/../app/Library/tienluong-functions.php';
+// require __DIR__ . '/../app/Library/array_function.php';
+// require __DIR__ . '/../app/Library/global-functions.php';
+// require __DIR__ . '/../app/Library/tienluong-functions.php';
 require __DIR__.'/../vendor/autoload.php';
 
 /*

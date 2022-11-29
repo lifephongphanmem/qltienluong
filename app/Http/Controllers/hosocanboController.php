@@ -30,8 +30,8 @@ use App\Http\Requests;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Session;
-use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Support\Str;
+use Maatwebsite\Excel\Facades\Excel;
 
 class hosocanboController extends Controller
 {
@@ -1121,13 +1121,14 @@ class hosocanboController extends Controller
             $path = public_path() . '/data/uploads/excels/' . $filename . '.xls';
 
             $data = [];
-
+            //dd();
             Excel::load($path, function($reader) use (&$data, $inputs) {
                 $obj = $reader->getExcel();
-                $sheet = $obj->getSheet(0);
-                //dd($sheet);
+                $sheet = $obj->getSheet(0);                
                 $data = $sheet->toArray(null,true,true,true);// giữ lại tiêu đề A=>'val';
             });
+
+            
             //dd($data);
             $j = getDbl((hosocanbo::where('madv', session('admin')->madv)->get()->max('stt'))) + 1;
             if($inputs['macvcq'] != '') {

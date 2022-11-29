@@ -6,7 +6,9 @@ $vendorDir = dirname(__DIR__);
 $baseDir = dirname($vendorDir);
 
 return array(
+    'UpdateHelper\\' => array($vendorDir . '/kylekatarnls/update-helper/src'),
     'Parsedown' => array($vendorDir . '/erusev/parsedown'),
+    'PHPExcel' => array($vendorDir . '/phpoffice/phpexcel/Classes'),
     'Mockery' => array($vendorDir . '/mockery/mockery/library'),
-    'HTMLPurifier' => array($vendorDir . '/ezyang/htmlpurifier/library'),
+    'Maatwebsite\\Excel\\' => array($vendorDir . '/maatwebsite/excel/src'),
 );

@@ -16,7 +16,6 @@ class ComposerStaticInitd7de3fb6aaadd474bf447891cb3bef8d
         '667aeda72477189d0494fecd327c3641' => __DIR__ . '/..' . '/symfony/var-dumper/Resources/functions/dump.php',
         '0d59ee240a4cd96ddbb4ff164fccea4d' => __DIR__ . '/..' . '/symfony/polyfill-php73/bootstrap.php',
         '320cde22f66dd4f5d3fd621d3e88b98f' => __DIR__ . '/..' . '/symfony/polyfill-ctype/bootstrap.php',
-        '2cffec82183ee1cea088009cef9a6fc3' => __DIR__ . '/..' . '/ezyang/htmlpurifier/library/HTMLPurifier.composer.php',
         'def43f6c87e4f8dfd0c9e1b1bab14fe8' => __DIR__ . '/..' . '/symfony/polyfill-iconv/bootstrap.php',
         '6124b4c8570aa390c21fafd04a26c69f' => __DIR__ . '/..' . '/myclabs/deep-copy/src/DeepCopy/deep_copy.php',
         '538ca81a9a966a6716601ecf48f4eaef' => __DIR__ . '/..' . '/opis/closure/functions.php',
@@ -28,17 +27,15 @@ class ComposerStaticInitd7de3fb6aaadd474bf447891cb3bef8d
         '58571171fd5812e6e447dce228f52f4d' => __DIR__ . '/..' . '/laravel/framework/src/Illuminate/Support/helpers.php',
         '17d016dc52a631c1e74d2eb8fdd57342' => __DIR__ . '/..' . '/laravel/helpers/src/helpers.php',
         'f18cc91337d49233e5754e93f3ed9ec3' => __DIR__ . '/..' . '/laravelcollective/html/src/helpers.php',
-
+        'c21d74cb2feba186e7566d256c0cb6c0' => __DIR__ . '/../..' . '/app/Library/tienluong-functions.php',
+        'd27eb44c80de13f037480208689755d3' => __DIR__ . '/../..' . '/app/Library/global-functions.php',
+        '303f3cded94c729fa5f2c7c3cf2ce864' => __DIR__ . '/../..' . '/app/Library/array_function.php',
     );
 
     public static $prefixLengthsPsr4 = array (
         'p' => 
         array (
             'phpDocumentor\\Reflection\\' => 25,
-        ),
-        'Z' => 
-        array (
-            'ZipStream\\' => 10,
         ),
         'X' => 
         array (
@@ -77,10 +74,10 @@ class ComposerStaticInitd7de3fb6aaadd474bf447891cb3bef8d
             'Symfony\\Component\\Finder\\' => 25,
             'Symfony\\Component\\EventDispatcher\\' => 34,
             'Symfony\\Component\\ErrorHandler\\' => 31,
-            'Symfony\\Component\\DomCrawler\\' => 29,
             'Symfony\\Component\\Debug\\' => 24,
             'Symfony\\Component\\CssSelector\\' => 30,
             'Symfony\\Component\\Console\\' => 26,
+            'SuperClosure\\' => 13,
         ),
         'R' => 
         array (
@@ -91,13 +88,10 @@ class ComposerStaticInitd7de3fb6aaadd474bf447891cb3bef8d
             'Psy\\' => 4,
             'Psr\\SimpleCache\\' => 16,
             'Psr\\Log\\' => 8,
-            'Psr\\Http\\Message\\' => 17,
-            'Psr\\Http\\Client\\' => 16,
             'Psr\\Container\\' => 14,
             'Prophecy\\' => 9,
             'PhpParser\\' => 10,
             'PhpOption\\' => 10,
-            'PhpOffice\\PhpSpreadsheet\\' => 25,
         ),
         'O' => 
         array (
@@ -109,10 +103,7 @@ class ComposerStaticInitd7de3fb6aaadd474bf447891cb3bef8d
         ),
         'M' => 
         array (
-            'MyCLabs\\Enum\\' => 13,
             'Monolog\\' => 8,
-            'Matrix\\' => 7,
-            'Maatwebsite\\Excel\\' => 18,
         ),
         'L' => 
         array (
@@ -150,9 +141,7 @@ class ComposerStaticInitd7de3fb6aaadd474bf447891cb3bef8d
         'C' => 
         array (
             'Cron\\' => 5,
-            'Complex\\' => 8,
             'Collective\\Html\\' => 16,
-            'Carbon\\' => 7,
         ),
         'B' => 
         array (
@@ -170,10 +159,6 @@ class ComposerStaticInitd7de3fb6aaadd474bf447891cb3bef8d
             0 => __DIR__ . '/..' . '/phpdocumentor/reflection-common/src',
             1 => __DIR__ . '/..' . '/phpdocumentor/reflection-docblock/src',
             2 => __DIR__ . '/..' . '/phpdocumentor/type-resolver/src',
-        ),
-        'ZipStream\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/maennchen/zipstream-php/src',
         ),
         'XdgBaseDir\\' => 
         array (
@@ -279,10 +264,6 @@ class ComposerStaticInitd7de3fb6aaadd474bf447891cb3bef8d
         array (
             0 => __DIR__ . '/..' . '/symfony/error-handler',
         ),
-        'Symfony\\Component\\DomCrawler\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/symfony/dom-crawler',
-        ),
         'Symfony\\Component\\Debug\\' => 
         array (
             0 => __DIR__ . '/..' . '/symfony/debug',
@@ -294,6 +275,10 @@ class ComposerStaticInitd7de3fb6aaadd474bf447891cb3bef8d
         'Symfony\\Component\\Console\\' => 
         array (
             0 => __DIR__ . '/..' . '/symfony/console',
+        ),
+        'SuperClosure\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/jeremeamia/superclosure/src',
         ),
         'Ramsey\\Uuid\\' => 
         array (
@@ -311,15 +296,6 @@ class ComposerStaticInitd7de3fb6aaadd474bf447891cb3bef8d
         array (
             0 => __DIR__ . '/..' . '/psr/log/Psr/Log',
         ),
-        'Psr\\Http\\Message\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/psr/http-factory/src',
-            1 => __DIR__ . '/..' . '/psr/http-message/src',
-        ),
-        'Psr\\Http\\Client\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/psr/http-client/src',
-        ),
         'Psr\\Container\\' => 
         array (
             0 => __DIR__ . '/..' . '/psr/container/src',
@@ -336,10 +312,6 @@ class ComposerStaticInitd7de3fb6aaadd474bf447891cb3bef8d
         array (
             0 => __DIR__ . '/..' . '/phpoption/phpoption/src/PhpOption',
         ),
-        'PhpOffice\\PhpSpreadsheet\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/phpoffice/phpspreadsheet/src/PhpSpreadsheet',
-        ),
         'Opis\\Closure\\' => 
         array (
             0 => __DIR__ . '/..' . '/opis/closure/src',
@@ -348,21 +320,9 @@ class ComposerStaticInitd7de3fb6aaadd474bf447891cb3bef8d
         array (
             0 => __DIR__ . '/..' . '/nunomaduro/collision/src',
         ),
-        'MyCLabs\\Enum\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/myclabs/php-enum/src',
-        ),
         'Monolog\\' => 
         array (
             0 => __DIR__ . '/..' . '/monolog/monolog/src/Monolog',
-        ),
-        'Matrix\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/markbaker/matrix/classes/src',
-        ),
-        'Maatwebsite\\Excel\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/maatwebsite/excel/src',
         ),
         'League\\MimeTypeDetection\\' => 
         array (
@@ -428,17 +388,9 @@ class ComposerStaticInitd7de3fb6aaadd474bf447891cb3bef8d
         array (
             0 => __DIR__ . '/..' . '/dragonmantank/cron-expression/src/Cron',
         ),
-        'Complex\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/markbaker/complex/classes/src',
-        ),
         'Collective\\Html\\' => 
         array (
             0 => __DIR__ . '/..' . '/laravelcollective/html/src',
-        ),
-        'Carbon\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/nesbot/carbon/src/Carbon',
         ),
         'BeyondCode\\DumpServer\\' => 
         array (
@@ -450,12 +402,27 @@ class ComposerStaticInitd7de3fb6aaadd474bf447891cb3bef8d
         ),
     );
 
+    public static $fallbackDirsPsr4 = array (
+        0 => __DIR__ . '/..' . '/nesbot/carbon/src',
+    );
+
     public static $prefixesPsr0 = array (
+        'U' => 
+        array (
+            'UpdateHelper\\' => 
+            array (
+                0 => __DIR__ . '/..' . '/kylekatarnls/update-helper/src',
+            ),
+        ),
         'P' => 
         array (
             'Parsedown' => 
             array (
                 0 => __DIR__ . '/..' . '/erusev/parsedown',
+            ),
+            'PHPExcel' => 
+            array (
+                0 => __DIR__ . '/..' . '/phpoffice/phpexcel/Classes',
             ),
         ),
         'M' => 
@@ -464,12 +431,9 @@ class ComposerStaticInitd7de3fb6aaadd474bf447891cb3bef8d
             array (
                 0 => __DIR__ . '/..' . '/mockery/mockery/library',
             ),
-        ),
-        'H' => 
-        array (
-            'HTMLPurifier' => 
+            'Maatwebsite\\Excel\\' => 
             array (
-                0 => __DIR__ . '/..' . '/ezyang/htmlpurifier/library',
+                0 => __DIR__ . '/..' . '/maatwebsite/excel/src',
             ),
         ),
     );
@@ -547,6 +511,34 @@ class ComposerStaticInitd7de3fb6aaadd474bf447891cb3bef8d
         'Hamcrest\\Util' => __DIR__ . '/..' . '/hamcrest/hamcrest-php/hamcrest/Hamcrest/Util.php',
         'Hamcrest\\Xml\\HasXPath' => __DIR__ . '/..' . '/hamcrest/hamcrest-php/hamcrest/Hamcrest/Xml/HasXPath.php',
         'JsonException' => __DIR__ . '/..' . '/symfony/polyfill-php73/Resources/stubs/JsonException.php',
+        'Maatwebsite\\Excel\\Classes\\Cache' => __DIR__ . '/..' . '/maatwebsite/excel/src/Maatwebsite/Excel/Classes/Cache.php',
+        'Maatwebsite\\Excel\\Classes\\FormatIdentifier' => __DIR__ . '/..' . '/maatwebsite/excel/src/Maatwebsite/Excel/Classes/FormatIdentifier.php',
+        'Maatwebsite\\Excel\\Classes\\LaravelExcelWorksheet' => __DIR__ . '/..' . '/maatwebsite/excel/src/Maatwebsite/Excel/Classes/LaravelExcelWorksheet.php',
+        'Maatwebsite\\Excel\\Classes\\PHPExcel' => __DIR__ . '/..' . '/maatwebsite/excel/src/Maatwebsite/Excel/Classes/PHPExcel.php',
+        'Maatwebsite\\Excel\\Collections\\CellCollection' => __DIR__ . '/..' . '/maatwebsite/excel/src/Maatwebsite/Excel/Collections/CellCollection.php',
+        'Maatwebsite\\Excel\\Collections\\ExcelCollection' => __DIR__ . '/..' . '/maatwebsite/excel/src/Maatwebsite/Excel/Collections/ExcelCollection.php',
+        'Maatwebsite\\Excel\\Collections\\RowCollection' => __DIR__ . '/..' . '/maatwebsite/excel/src/Maatwebsite/Excel/Collections/RowCollection.php',
+        'Maatwebsite\\Excel\\Collections\\SheetCollection' => __DIR__ . '/..' . '/maatwebsite/excel/src/Maatwebsite/Excel/Collections/SheetCollection.php',
+        'Maatwebsite\\Excel\\Excel' => __DIR__ . '/..' . '/maatwebsite/excel/src/Maatwebsite/Excel/Excel.php',
+        'Maatwebsite\\Excel\\ExcelServiceProvider' => __DIR__ . '/..' . '/maatwebsite/excel/src/Maatwebsite/Excel/ExcelServiceProvider.php',
+        'Maatwebsite\\Excel\\Exceptions\\LaravelExcelException' => __DIR__ . '/..' . '/maatwebsite/excel/src/Maatwebsite/Excel/Exceptions/LaravelExcelException.php',
+        'Maatwebsite\\Excel\\Facades\\Excel' => __DIR__ . '/..' . '/maatwebsite/excel/src/Maatwebsite/Excel/Facades/Excel.php',
+        'Maatwebsite\\Excel\\Files\\ExcelFile' => __DIR__ . '/..' . '/maatwebsite/excel/src/Maatwebsite/Excel/Files/ExcelFile.php',
+        'Maatwebsite\\Excel\\Files\\ExportHandler' => __DIR__ . '/..' . '/maatwebsite/excel/src/Maatwebsite/Excel/Files/ExportHandler.php',
+        'Maatwebsite\\Excel\\Files\\File' => __DIR__ . '/..' . '/maatwebsite/excel/src/Maatwebsite/Excel/Files/File.php',
+        'Maatwebsite\\Excel\\Files\\ImportHandler' => __DIR__ . '/..' . '/maatwebsite/excel/src/Maatwebsite/Excel/Files/ImportHandler.php',
+        'Maatwebsite\\Excel\\Files\\NewExcelFile' => __DIR__ . '/..' . '/maatwebsite/excel/src/Maatwebsite/Excel/Files/NewExcelFile.php',
+        'Maatwebsite\\Excel\\Filters\\ChunkReadFilter' => __DIR__ . '/..' . '/maatwebsite/excel/src/Maatwebsite/Excel/Filters/ChunkReadFilter.php',
+        'Maatwebsite\\Excel\\Parsers\\CssParser' => __DIR__ . '/..' . '/maatwebsite/excel/src/Maatwebsite/Excel/Parsers/CssParser.php',
+        'Maatwebsite\\Excel\\Parsers\\ExcelParser' => __DIR__ . '/..' . '/maatwebsite/excel/src/Maatwebsite/Excel/Parsers/ExcelParser.php',
+        'Maatwebsite\\Excel\\Parsers\\ViewParser' => __DIR__ . '/..' . '/maatwebsite/excel/src/Maatwebsite/Excel/Parsers/ViewParser.php',
+        'Maatwebsite\\Excel\\Readers\\Batch' => __DIR__ . '/..' . '/maatwebsite/excel/src/Maatwebsite/Excel/Readers/Batch.php',
+        'Maatwebsite\\Excel\\Readers\\ChunkedReadJob' => __DIR__ . '/..' . '/maatwebsite/excel/src/Maatwebsite/Excel/Readers/ChunkedReadJob.php',
+        'Maatwebsite\\Excel\\Readers\\ConfigReader' => __DIR__ . '/..' . '/maatwebsite/excel/src/Maatwebsite/Excel/Readers/ConfigReader.php',
+        'Maatwebsite\\Excel\\Readers\\Html' => __DIR__ . '/..' . '/maatwebsite/excel/src/Maatwebsite/Excel/Readers/HtmlReader.php',
+        'Maatwebsite\\Excel\\Readers\\LaravelExcelReader' => __DIR__ . '/..' . '/maatwebsite/excel/src/Maatwebsite/Excel/Readers/LaravelExcelReader.php',
+        'Maatwebsite\\Excel\\Writers\\CellWriter' => __DIR__ . '/..' . '/maatwebsite/excel/src/Maatwebsite/Excel/Writers/CellWriter.php',
+        'Maatwebsite\\Excel\\Writers\\LaravelExcelWriter' => __DIR__ . '/..' . '/maatwebsite/excel/src/Maatwebsite/Excel/Writers/LaravelExcelWriter.php',
         'Normalizer' => __DIR__ . '/..' . '/symfony/polyfill-intl-normalizer/Resources/stubs/Normalizer.php',
         'PHPUnit\\Exception' => __DIR__ . '/..' . '/phpunit/phpunit/src/Exception.php',
         'PHPUnit\\Framework\\Assert' => __DIR__ . '/..' . '/phpunit/phpunit/src/Framework/Assert.php',
@@ -718,7 +710,7 @@ class ComposerStaticInitd7de3fb6aaadd474bf447891cb3bef8d
         'PHPUnit\\Util\\Configuration' => __DIR__ . '/..' . '/phpunit/phpunit/src/Util/Configuration.php',
         'PHPUnit\\Util\\ConfigurationGenerator' => __DIR__ . '/..' . '/phpunit/phpunit/src/Util/ConfigurationGenerator.php',
         'PHPUnit\\Util\\ErrorHandler' => __DIR__ . '/..' . '/phpunit/phpunit/src/Util/ErrorHandler.php',
-        'PHPUnit\\Util\\FileLoader' => __DIR__ . '/..' . '/phpunit/phpunit/src/Util/Fileloader.php',
+        'PHPUnit\\Util\\FileLoader' => __DIR__ . '/..' . '/phpunit/phpunit/src/Util/FileLoader.php',
         'PHPUnit\\Util\\Filesystem' => __DIR__ . '/..' . '/phpunit/phpunit/src/Util/Filesystem.php',
         'PHPUnit\\Util\\Filter' => __DIR__ . '/..' . '/phpunit/phpunit/src/Util/Filter.php',
         'PHPUnit\\Util\\Getopt' => __DIR__ . '/..' . '/phpunit/phpunit/src/Util/Getopt.php',
@@ -743,7 +735,7 @@ class ComposerStaticInitd7de3fb6aaadd474bf447891cb3bef8d
         'PHPUnit\\Util\\TextTestListRenderer' => __DIR__ . '/..' . '/phpunit/phpunit/src/Util/TextTestListRenderer.php',
         'PHPUnit\\Util\\Type' => __DIR__ . '/..' . '/phpunit/phpunit/src/Util/Type.php',
         'PHPUnit\\Util\\XdebugFilterScriptGenerator' => __DIR__ . '/..' . '/phpunit/phpunit/src/Util/XdebugFilterScriptGenerator.php',
-        'PHPUnit\\Util\\Xml' => __DIR__ . '/..' . '/phpunit/phpunit/src/Util/XML.php',
+        'PHPUnit\\Util\\Xml' => __DIR__ . '/..' . '/phpunit/phpunit/src/Util/Xml.php',
         'PHPUnit\\Util\\XmlTestListRenderer' => __DIR__ . '/..' . '/phpunit/phpunit/src/Util/XmlTestListRenderer.php',
         'PHPUnit_Framework_MockObject_MockObject' => __DIR__ . '/..' . '/phpunit/phpunit/src/Framework/MockObject/MockObject.php',
         'PHP_Token' => __DIR__ . '/..' . '/phpunit/php-token-stream/src/Token.php',
@@ -1108,6 +1100,7 @@ class ComposerStaticInitd7de3fb6aaadd474bf447891cb3bef8d
         return \Closure::bind(function () use ($loader) {
             $loader->prefixLengthsPsr4 = ComposerStaticInitd7de3fb6aaadd474bf447891cb3bef8d::$prefixLengthsPsr4;
             $loader->prefixDirsPsr4 = ComposerStaticInitd7de3fb6aaadd474bf447891cb3bef8d::$prefixDirsPsr4;
+            $loader->fallbackDirsPsr4 = ComposerStaticInitd7de3fb6aaadd474bf447891cb3bef8d::$fallbackDirsPsr4;
             $loader->prefixesPsr0 = ComposerStaticInitd7de3fb6aaadd474bf447891cb3bef8d::$prefixesPsr0;
             $loader->classMap = ComposerStaticInitd7de3fb6aaadd474bf447891cb3bef8d::$classMap;
 

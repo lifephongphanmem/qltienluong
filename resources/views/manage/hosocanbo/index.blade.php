@@ -47,7 +47,7 @@
                                 </li>
 
                                 <li>
-                                    <a href="{{url('/data/download/MAU DS CAN BO.xls')}}" class="btn btn-default btn-xs"><i class="fa fa-download"></i>Tải file Excel mẫu</a>
+                                    <a href="{{url('/data/download/MAU DS CAN BO.xlsx')}}" class="btn btn-default btn-xs"><i class="fa fa-download"></i>Tải file Excel mẫu</a>
                                 </li>
                             </ul>
                         </div>
