@@ -58,7 +58,7 @@
                 "shasum": ""
             },
             "require": {
-                "php": "^7.1 || ^8.0"
+                "php": "7.3"
             },
             "require-dev": {
                 "doctrine/coding-standard": "^8.0",

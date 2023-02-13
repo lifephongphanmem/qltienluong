@@ -8,7 +8,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta content="width=device-width, initial-scale=1" name="viewport" />
     <meta content="" name="Phần mềm quản lý biên chế" />
-    <meta content="" name="HuongVu-LifeSoft" />
+    <meta content="" name="LifeSoft" />
     <!-- BEGIN GLOBAL MANDATORY STYLES -->
     <link href="http://fonts.googleapis.com/css?family=Open+Sans:400,300,600,700&subset=all" rel="stylesheet"
         type="text/css" />
@@ -203,9 +203,10 @@
                                             {{-- <li><a href="{{url('nghiep_vu/quan_ly/dieu_dong/maso=all')}}">Hồ sơ luân chuyển</a></li> --}}
                                             {{-- <li><a href="{{url('nghiep_vu/quan_ly/chuc_vu/maso=all')}}">Hồ sơ phòng ban, chức vụ</a></li> --}}
                                             {{-- <li><a href="{{url('nghiep_vu/quan_ly/bhyt/maso=all')}}">Theo dõi bảo hiểm y tế</a></li> --}}
-                                            <li><a href="{{ url('nghiep_vu/quan_ly/llvt/maso=all') }}">Hồ sơ lực
-                                                    lượng
-                                                    vũ trang</a></li>
+                                            <li>
+                                                <a href="{{ url('nghiep_vu/quan_ly/llvt/maso=all') }}">Hồ sơ lực lượng
+                                                    vũ trang</a>
+                                            </li>
                                         </ul>
                                     </li>
                                     <li>
@@ -280,14 +281,17 @@
                                         <a href="{{ url('nghiep_vu/da_nghi/danh_sach') }}">
                                             <i class="fa fa-caret-right"></i>Danh sách cán bộ đã thôi công tác</a>
                                     </li>
+                                    {{-- Bỏ qua do chỉ tiêu biên chế nhập tại dự toán lương 11/02/2023
                                     <li>
                                         <a href="{{ url('nghiep_vu/chi_tieu/danh_sach?namct=' . date('Y')) }}">
                                             <i class="fa fa-caret-right"></i>Chỉ tiêu biên chế</a>
-                                    </li>
+                                    </li> --}}
+
+                                    {{-- Bỏ qua do chưa hoàn thiện 11/02/2023
                                     <li>
                                         <a href="{{ url('nghiep_vu/qua_trinh/phu_cap/danh_sach') }}">
                                             <i class="fa fa-caret-right"></i>Quá trình hưởng lương, phụ cấp</a>
-                                    </li>
+                                    </li> --}}
                                     @if (session('admin')->maphanloai == 'KVXP')
                                         <!-- Tạm thời bỏ để triển khai lạng sơn -->
                                         <!--li><a href="{{ url('nghiep_vu/quan_ly/dia_ban_dbkk/index') }}"><i class="fa fa-caret-right"></i>Danh sách thôn, tổ dân phố</a></li-->
@@ -446,31 +450,32 @@
 
                         <!-- dành cho đơn vị chủ quản -->
                     @elseif(session('admin')->phanloaitaikhoan == 'TH')
-                    @if (session('admin')->level != 'T')
-                    <li>
-                            <a href="javascript:;">
-                                <i class="fa icon-book-open"></i>
-                                <span class="title">Quản lý hồ sơ</span>
-                                <span class="arrow "></span>
-                            </a>
-                            <ul class="sub-menu">
-                                @if (session('admin')->phamvitonghop == 'HUYEN')
-                                    <li>
-                                        <a href="{{ url('nghiep_vu/ho_so/danh_sach_th?sunghiep=ALL&madv=ALL') }}"><i
-                                                class="fa fa-caret-right"></i>Danh sách cán bộ</a>
-                                    </li>
+                        @if (session('admin')->level != 'T')
+                            <li>
+                                <a href="javascript:;">
+                                    <i class="fa icon-book-open"></i>
+                                    <span class="title">Quản lý hồ sơ</span>
+                                    <span class="arrow "></span>
+                                </a>
+                                <ul class="sub-menu">
+                                    @if (session('admin')->phamvitonghop == 'HUYEN')
+                                        <li>
+                                            <a href="{{ url('nghiep_vu/ho_so/danh_sach_th?sunghiep=ALL&madv=ALL') }}"><i
+                                                    class="fa fa-caret-right"></i>Danh sách cán bộ</a>
+                                        </li>
 
-                                    <li>
-                                        <a href="{{ url('nghiep_vu/ho_so/nang_luong_th?madv=ALL&nangluong=NB') }}"><i
-                                                class="fa fa-caret-right"></i>Danh sách nâng lương</a>
-                                    </li>
-                                    <li>
-                                        <a href="{{ url('nghiep_vu/ho_so/nghi_huu_th?madv=ALL') }}"><i
-                                                class="fa fa-caret-right"></i>Danh sách nghỉ hưu</a>
-                                    </li>
-                                @endif
-                            </ul>
-                        </li>
+                                        <li>
+                                            <a
+                                                href="{{ url('nghiep_vu/ho_so/nang_luong_th?madv=ALL&nangluong=NB') }}"><i
+                                                    class="fa fa-caret-right"></i>Danh sách nâng lương</a>
+                                        </li>
+                                        <li>
+                                            <a href="{{ url('nghiep_vu/ho_so/nghi_huu_th?madv=ALL') }}"><i
+                                                    class="fa fa-caret-right"></i>Danh sách nghỉ hưu</a>
+                                        </li>
+                                    @endif
+                                </ul>
+                            </li>
                         @endif
                         <li>
                             <a href="javascript:;">
@@ -508,7 +513,8 @@
 
                                 @if (session('admin')->level == 'T')
                                     <li>
-                                        <a href="{{ url('chuc_nang/tong_hop_luong/tinh/index?thang=' . date('m') . '&nam=' . date('Y') ) }}"><i
+                                        <a
+                                            href="{{ url('chuc_nang/tong_hop_luong/tinh/index?thang=' . date('m') . '&nam=' . date('Y')) }}"><i
                                                 class="fa fa-caret-right"></i>Tổng hợp chi trả lương</a>
                                     </li>
 
@@ -607,20 +613,20 @@
                                 @endif
 
                                 @if (session('admin')->level == 'T')
-                                {{-- <li>
+                                    {{-- <li>
                                     <a href="{{ url('nguon_kinh_phi/huyen/danh_sach') }}"><i
                                             class="fa fa-caret-right"></i>Số liệu nguồn kinh phí</a>
                                 </li> --}}
-                                <li>
-                                    <a href="{{ url('chuc_nang/tong_hop_nguon/tinh/index?sohieu=TT67_2017') }}"><i
-                                            class="fa fa-caret-right"></i>Tổng số liệu nguồn kinh phí</a>
-                                </li>
-                                <li>
-                                    <a
-                                        href="{{ url('chuc_nang/xem_du_lieu/nguon/tinh?sohieu=TT67_2017&trangthai=ALL&phanloai=ALL&madiaban=1506415809') }}"><i
-                                            class="fa fa-caret-right"></i>Xem số liệu tổng hợp từ đơn vị cấp
-                                        dưới</a>
-                                </li>
+                                    <li>
+                                        <a href="{{ url('chuc_nang/tong_hop_nguon/tinh/index?sohieu=TT67_2017') }}"><i
+                                                class="fa fa-caret-right"></i>Tổng số liệu nguồn kinh phí</a>
+                                    </li>
+                                    <li>
+                                        <a
+                                            href="{{ url('chuc_nang/xem_du_lieu/nguon/tinh?sohieu=TT67_2017&trangthai=ALL&phanloai=ALL&madiaban=1506415809') }}"><i
+                                                class="fa fa-caret-right"></i>Xem số liệu tổng hợp từ đơn vị cấp
+                                            dưới</a>
+                                    </li>
                                 @endif
                             </ul>
                         </li>

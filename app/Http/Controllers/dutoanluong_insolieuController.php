@@ -201,71 +201,71 @@ class dutoanluong_insolieuController extends Controller
             return view('errors.notlogin');
     }
 
-    //bỏ
-    function tonghopdutoan(Request $request)
-    {
-        if (Session::has('admin')) {
-            $inputs = $request->all();
-            //dd($inputs);            
-            $m_dutoan = dutoanluong::where('masodv', $inputs['maso'])->first();
-            //dd($m_dutoan);
-            $m_chitiet = dutoanluong_chitiet::where('masodv', $inputs['maso'])->get();
-            $model = new Collection();
-            foreach (['COMAT' => 'Biên chế', 'CHUATUYEN' => 'Biên chế được duyệt nhưng chưa tuyển'] as $key => $val) {
-                $chitiet = $m_chitiet->where('phanloai', $key);
-                $add = new Collection();
-                $add->phanloai = $key;
-                $add->tenct = $val;
-                $add->tonghs = $chitiet->sum('tonghs') / 12;
-                $add->heso = $chitiet->sum('heso') / 12;
-                $add->canbo_congtac = $chitiet->sum('canbo_congtac');
-                $add->canbo_dutoan = $chitiet->sum('canbo_dutoan');                
-                $add->baohiem = ($chitiet->sum('bhxh_dv') + $chitiet->sum('bhyt_dv') + $chitiet->sum('kpcd_dv')) / 12;
-                $add->bhtn_dv = $chitiet->sum('bhtn_dv') / 12;
-                $add->ttl = $chitiet->sum('ttl');
-                $add->ttbh_dv = $chitiet->sum('ttbh_dv');
-                $add->quyluong = $add->ttl + $add->ttbh_dv;
-                $add->ttl = $add->ttl / 12;
-                $add->ttbh_dv = $add->ttbh_dv / 12;
-                $add->tongbh_dv = $chitiet->sum('tongbh_dv') / 12;
-                $add->tongphucap = $add->tonghs - $add->heso;
-                $add->tongcong = $add->tonghs + $add->tongbh_dv;
-                $add->hesotrungbinh = round($add->sum('tongcong') / $add->sum('canbo_congtac'), 5);
+    // //bỏ
+    // function tonghopdutoan(Request $request)
+    // {
+    //     if (Session::has('admin')) {
+    //         $inputs = $request->all();
+    //         //dd($inputs);            
+    //         $m_dutoan = dutoanluong::where('masodv', $inputs['maso'])->first();
+    //         //dd($m_dutoan);
+    //         $m_chitiet = dutoanluong_chitiet::where('masodv', $inputs['maso'])->get();
+    //         $model = new Collection();
+    //         foreach (['COMAT' => 'Biên chế', 'CHUATUYEN' => 'Biên chế được duyệt nhưng chưa tuyển'] as $key => $val) {
+    //             $chitiet = $m_chitiet->where('phanloai', $key);
+    //             $add = new Collection();
+    //             $add->phanloai = $key;
+    //             $add->tenct = $val;
+    //             $add->tonghs = $chitiet->sum('tonghs') / 12;
+    //             $add->heso = $chitiet->sum('heso') / 12;
+    //             $add->canbo_congtac = $chitiet->sum('canbo_congtac');
+    //             $add->canbo_dutoan = $chitiet->sum('canbo_dutoan');                
+    //             $add->baohiem = ($chitiet->sum('bhxh_dv') + $chitiet->sum('bhyt_dv') + $chitiet->sum('kpcd_dv')) / 12;
+    //             $add->bhtn_dv = $chitiet->sum('bhtn_dv') / 12;
+    //             $add->ttl = $chitiet->sum('ttl');
+    //             $add->ttbh_dv = $chitiet->sum('ttbh_dv');
+    //             $add->quyluong = $add->ttl + $add->ttbh_dv;
+    //             $add->ttl = $add->ttl / 12;
+    //             $add->ttbh_dv = $add->ttbh_dv / 12;
+    //             $add->tongbh_dv = $chitiet->sum('tongbh_dv') / 12;
+    //             $add->tongphucap = $add->tonghs - $add->heso;
+    //             $add->tongcong = $add->tonghs + $add->tongbh_dv;
+    //             $add->hesotrungbinh = round($add->sum('tongcong') / $add->sum('canbo_congtac'), 5);
 
-                foreach (getColTongHop() as $pc) {
-                    $add->$pc = $chitiet->sum($pc) / 12;
-                }
-                $model->add($add);
-            }
-            //dd($model);
-            $m_donvi = dmdonvi::where('madv', $m_dutoan->madv)->first();
-            //$a_plct = array_column(dmphanloaict::all()->toArray(),'tenct','mact');
-            //xử lý ẩn hiện cột phụ cấp => biết tổng số cột hiện => colspan trên báo cáo
-            $a_goc = array('heso'); //do hệ số lương có cột cố định
-            $model_pc = dmphucap_donvi::where('madv', $m_dutoan->madv)->where('phanloai', '<', '3')->wherenotin('mapc', $a_goc)->orderby('stt')->get();
-            $a_phucap = array();
-            $col = 0;
-            foreach ($model_pc as $ct) {
-                if ($model->sum($ct->mapc) > 0) {
-                    $a_phucap[$ct->mapc] = $ct->report;
-                    $col++;
-                }
-            }
+    //             foreach (getColTongHop() as $pc) {
+    //                 $add->$pc = $chitiet->sum($pc) / 12;
+    //             }
+    //             $model->add($add);
+    //         }
+    //         //dd($model);
+    //         $m_donvi = dmdonvi::where('madv', $m_dutoan->madv)->first();
+    //         //$a_plct = array_column(dmphanloaict::all()->toArray(),'tenct','mact');
+    //         //xử lý ẩn hiện cột phụ cấp => biết tổng số cột hiện => colspan trên báo cáo
+    //         $a_goc = array('heso'); //do hệ số lương có cột cố định
+    //         $model_pc = dmphucap_donvi::where('madv', $m_dutoan->madv)->where('phanloai', '<', '3')->wherenotin('mapc', $a_goc)->orderby('stt')->get();
+    //         $a_phucap = array();
+    //         $col = 0;
+    //         foreach ($model_pc as $ct) {
+    //             if ($model->sum($ct->mapc) > 0) {
+    //                 $a_phucap[$ct->mapc] = $ct->report;
+    //                 $col++;
+    //             }
+    //         }
 
-            //dd($model);
-            return view('reports.dutoanluong.donvi.tonghopdutoan')
-                ->with('model', $model)
-                //->with('m_chitiet', $m_chitiet)
-                ->with('col', $col)
-                ->with('lamtron', session('admin')->lamtron ?? 3)
-                //->with('model_congtac', $model_congtac)
-                ->with('a_phucap', $a_phucap)
-                ->with('m_donvi', $m_donvi)
-                ->with('m_dutoan', $m_dutoan)
-                ->with('pageTitle', 'Báo cáo tổng hợp biên chế hệ số tiền lương và phụ cấp');
-        } else
-            return view('errors.notlogin');
-    }
+    //         //dd($model);
+    //         return view('reports.dutoanluong.donvi.tonghopdutoan')
+    //             ->with('model', $model)
+    //             //->with('m_chitiet', $m_chitiet)
+    //             ->with('col', $col)
+    //             ->with('lamtron', session('admin')->lamtron ?? 3)
+    //             //->with('model_congtac', $model_congtac)
+    //             ->with('a_phucap', $a_phucap)
+    //             ->with('m_donvi', $m_donvi)
+    //             ->with('m_dutoan', $m_dutoan)
+    //             ->with('pageTitle', 'Báo cáo tổng hợp biên chế hệ số tiền lương và phụ cấp');
+    //     } else
+    //         return view('errors.notlogin');
+    // }
 
     function tonghopbienche(Request $request)
     {
@@ -273,7 +273,7 @@ class dutoanluong_insolieuController extends Controller
             $inputs = $request->all();
             
             $m_dutoan = dutoanluong::where('masodv', $inputs['masodv'])->first();
-            //dd($m_dutoan);
+            //dd($inputs);
             $model = dutoanluong_chitiet::where('masodv', $inputs['masodv'])->where('mact', $inputs['mact'])->get();
             $m_chuatuyen = dutoanluong_chitiet::where('masodv', $inputs['masodv'])->where('phanloai', 'CHUATUYEN')->get();
             $a_plct = array_column(dmphanloaict::all()->toArray(), 'tenct', 'mact');
@@ -348,7 +348,7 @@ class dutoanluong_insolieuController extends Controller
         if (Session::has('admin')) {
             $inputs = $request->all();            
             $m_dutoan = dutoanluong::where('masodv', $inputs['masodv'])->first();
-            //dd($m_dutoan);
+            //dd($inputs);
             $model = dutoanluong_chitiet::where('masodv', $inputs['masodv'])->where('mact', $inputs['mact'])->get();
             $a_plct = array_column(dmphanloaict::all()->toArray(), 'tenct', 'mact');
             $a_pc = getColDuToan();

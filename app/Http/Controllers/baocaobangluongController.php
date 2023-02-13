@@ -337,7 +337,15 @@ class baocaobangluongController extends Controller
                 ->orderby('thang')->get();
 
             $m_chitiet = tonghopluong_donvi_chitiet::wherein('mathdv', a_unique(array_column($m_tonghop->toarray(), 'mathdv')))->get();
-            //dd($model_tonghop_chitiet);
+            //loại các mact
+            if ($inputs['mact'] != '') {
+                foreach ($m_chitiet as $key => $ct) {
+                    if ($ct->mact != $inputs['mact']) {
+                        $m_chitiet->forget($key);
+                    }
+                }
+            }
+            //dd($m_chitiet);
             $a_phucap_tonghop = getColTongHop();
             $a_phucap = array();
             $a_pc = array();
@@ -409,6 +417,7 @@ class baocaobangluongController extends Controller
             $tunam = $inputs['tunam'];
             $denthang = $inputs['denthang'];
             //$dennam = $inputs['dennam'];
+            //dd($inputs);
 
             $m_tonghop = tonghopluong_donvi::whereBetween('thang', array($tuthang, $denthang))
                 ->where('nam', $tunam)
@@ -420,7 +429,7 @@ class baocaobangluongController extends Controller
             $model = $m_chitiet->unique(function ($ct) {
                 return $ct['macanbo'] . $ct['mact'];
             });
-            //dd($model);
+
 
             $m_dv = dmdonvi::where('madv', \session('admin')->madv)->first();
             $a_phucap = array();
@@ -433,7 +442,13 @@ class baocaobangluongController extends Controller
                     $col++;
                 }
             }
-            foreach ($model as $ct) {
+
+            foreach ($model as $key => $ct) {
+                if ($inputs['mact'] != '' && $ct->mact != $inputs['mact']) {
+                    $model->forget($key);
+                    continue;
+                }
+
                 $bl = $m_chitiet->where('macanbo', $ct->macanbo)->where('mact', $ct->mact);
                 foreach ($m_pc as $pc) {
                     $ma = $pc['mapc'];
@@ -490,7 +505,16 @@ class baocaobangluongController extends Controller
                 ->where('nam', $tunam)->where('madv', session('admin')->madv)->orderby('thang')->get();
 
             $model_tonghop_chitiet = tonghopluong_donvi_chitiet::wherein('mathdv', a_unique(array_column($model_tonghop->toarray(), 'mathdv')))->get();
-            //dd($model_tonghop_chitiet);
+
+            //loại các mact
+            if ($inputs['mact'] != '') {
+                foreach ($model_tonghop_chitiet as $key => $ct) {
+                    if ($ct->mact != $inputs['mact']) {
+                        $model_tonghop_chitiet->forget($key);
+                    }
+                }
+            }
+            
             $a_phucap = array();
             $col = 0;
             $a_dmpc = array_column(dmphucap::where('tonghop', 1)->get()->toarray(), 'tenpc', 'mapc');
@@ -503,10 +527,13 @@ class baocaobangluongController extends Controller
             }
 
             $model_nguonkp = getNguonKP();
-            $model_phanloaict = getNhomCongTac();
+            $model_phanloai = getNhomCongTac();
+            $a_phanloai = getPhanLoaiCT(false);
+
             foreach ($model_tonghop_chitiet as $chitiet) {
                 $chitiet->tennguonkp = isset($model_nguonkp[$chitiet->manguonkp]) ? $model_nguonkp[$chitiet->manguonkp] : '';
-                $chitiet->tencongtac = isset($model_phanloaict[$chitiet->macongtac]) ? $model_phanloaict[$chitiet->macongtac] : '';
+                $chitiet->tencongtac = isset($model_phanloai[$chitiet->macongtac]) ? $model_phanloai[$chitiet->macongtac] : '';
+                $chitiet->tenct = $a_phanloai[$chitiet->mact]?? '';
                 $chitiet->tongtl = $chitiet->tonghs;
                 $chitiet->tongbh = $chitiet->stbhxh_dv + $chitiet->stbhyt_dv + $chitiet->stkpcd_dv + $chitiet->stbhtn_dv;
             }
@@ -518,7 +545,7 @@ class baocaobangluongController extends Controller
                 'den' => $inputs['denthang'] . '/' . $inputs['tunam']
             );
 
-
+            //dd($a_phanloai);
             return view('reports.mauchung.donvi.chitraluong')
                 ->with('model_tonghop', $model_tonghop)
                 ->with('model_tonghop_chitiet', $model_tonghop_chitiet)

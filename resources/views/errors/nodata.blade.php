@@ -5,9 +5,9 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <!--Loading bootstrap css-->
-    <link href='http://fonts.googleapis.com/css?family=Open+Sans:400italic,400,300,700&subset=vietnamese' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400italic,400,300,700&subset=vietnamese' rel='stylesheet' type='text/css'>
     <link type="text/css" rel="stylesheet" href="http://fonts.googleapis.com/css?family=Oswald:400,700,300">
-    <link type="text/css" rel="stylesheet" href="{{ url('vendors/jquery-ui-1.10.3.custom/css/ui-lightness/jquery-ui-1.10.3.custom.css')}}">
+    {{-- <link type="text/css" rel="stylesheet" href="{{ url('vendors/jquery-ui-1.10.3.custom/css/ui-lightness/jquery-ui-1.10.3.custom.css')}}"> --}}
     <link rel="stylesheet" href="{{ url('vendors/font-awesome/css/font-awesome.min.css')}}">
     <link rel="stylesheet" href="{{ url('vendors/bootstrap/css/bootstrap.min.css')}}">
     <!--Loading style vendors-->
@@ -20,19 +20,19 @@
 <div id="error-page-content">
     <h1>Thông báo!</h1>
     @if(isset($message))
-        <h3>{{$message}}</h3>
+        <h2>{{$message}}</h2>
     @else
-        <h3>Không tìm thấy dữ liệu bạn yêu cầu. Kiểm tra lại dữ liệu nhập!</h3>
+        <h2>Không tìm thấy dữ liệu bạn yêu cầu. Kiểm tra lại dữ liệu nhập!</h2>
     @endif
 
 
 </div>
-<script src="{{ url('js/jquery-1.9.1.js') }}"></script>
-<script src="{{ url('js/jquery-migrate-1.2.1.min.js') }}"></script>
-<script src="{{ url('js/jquery-ui.js') }}"></script>
+{{-- <script src="{{ url('js/jquery-1.9.1.js') }}"></script> --}}
+{{-- <script src="{{ url('js/jquery-migrate-1.2.1.min.js') }}"></script> --}}
+{{-- <script src="{{ url('js/jquery-ui.js') }}"></script> --}}
 <!--loading bootstrap js-->
-<script src="{{ url('vendors/bootstrap/js/bootstrap.min.js') }}"></script>
-<script src="{{ url('vendors/bootstrap-hover-dropdown.js') }}"></script>
+{{-- <script src="{{ url('vendors/bootstrap/js/bootstrap.min.js') }}"></script> --}}
+{{-- <script src="{{ url('vendors/bootstrap-hover-dropdown.js') }}"></script> --}}
 <script src="{{ url('js/html5shiv.js') }}"></script>
 <script src="{{ url('js/respond.min.js') }}"></script>
 </body>

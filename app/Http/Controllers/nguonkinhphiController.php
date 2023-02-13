@@ -41,9 +41,10 @@ class nguonkinhphiController extends Controller
             }
             //dd($model);
             $model_bl = bangluong::where('madv', session('admin')->madv)->where('phanloai', 'BANGLUONG')->orderby('nam')->orderby('thang')->get();
-            $model_tt_df = dmthongtuquyetdinh::first();
+            $model_tt_df = dmthongtuquyetdinh::orderby('ngayapdung', 'desc')->first();
             $model_nhomct = dmphanloaicongtac::select('macongtac', 'tencongtac')->get();
             $model_tenct = dmphanloaict::select('tenct', 'macongtac', 'mact')->get();
+            //dd($model_tt_df);
             return view('manage.nguonkinhphi.index')
                 ->with('furl', '/nguon_kinh_phi/')
                 ->with('a_trangthai', getStatus())
