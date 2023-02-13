@@ -67,7 +67,7 @@
                                     <td class="text-center">{{ $key + 1 }}</td>
                                     <td class="text-center">{{ $value->namns }}</td>
                                     <td>{{ $value->linhvuc }}</td>
-                                    <td>{{ getThongTuQD()[$value->sohieu] }}</td>
+                                    <td>{{ getThongTuQD()[$value->sohieu]  ?? ''}}</td>
                                     <td class="text-right">{{ number_format($value->nhucau) }}</td>
                                     {{-- <td class="text-right">{{number_format($value->nguonkp)}}</td> --}}
                                     <td>{{ $a_trangthai[$value->trangthai] }}</td>
