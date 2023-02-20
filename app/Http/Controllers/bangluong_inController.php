@@ -6,6 +6,8 @@ use App\bangluong;
 use App\bangluong_ct;
 use App\bangluong_ct_01;
 use App\bangluong_truc;
+use App\bangthuyetminh;
+use App\bangthuyetminh_chitiet;
 use App\dmchucvucq;
 use App\dmphongban;
 use App\dmdonvi;
@@ -1743,6 +1745,17 @@ class bangluong_inController extends Controller
                 ->where('nam', $m_bl->nam)
                 ->where('madv', $m_bl->madv)->where('phanloai', 'TRUYLINH')
                 ->first();
+
+            //Lấy thông tin thuyết minh
+            $m_thuyetminh = bangthuyetminh::where('thang', $m_bl->thang)
+                ->where('nam', $m_bl->nam)
+                ->where('madv', $m_bl->madv)->first();
+            if ($m_thuyetminh != null) {
+                $model_thuyetminh_chitiet = bangthuyetminh_chitiet::where('mathuyetminh', $m_thuyetminh->mathuyetminh)->get();
+            } else {
+                $model_thuyetminh_chitiet = new Collection();
+            }
+
             if ($m_truylinh != null) {
                 $model_truylinh = (new data())->getBangluong_ct($m_truylinh->thang, $m_truylinh->mabl);
             }
@@ -1857,7 +1870,7 @@ class bangluong_inController extends Controller
             $model_tang = new Collection();
             $model_giam = new Collection();
 
-           
+
             //chưa hoàn thiện => tìm cán bộ trùng với đk: macanbo; mact
             //chưa tính trường hợp tăng giảm người
 
@@ -1892,8 +1905,7 @@ class bangluong_inController extends Controller
                         $model_giam->add($giam);
                     }
                 }
-                
-            } 
+            }
 
 
             $a_pb = getPhongBan();
@@ -1919,8 +1931,9 @@ class bangluong_inController extends Controller
                 ->with('model_congtac', $model_congtac)
                 ->with('thongtin', $thongtin)
                 ->with('m_dv', $m_dv)
-                ->with('model_tang', $model_tang)
-                ->with('model_giam', $model_giam)
+                //->with('model_thuyetminh_chitiet', $model_thuyetminh_chitiet)//18/02/2023 -> lấy thuyết minh đơn vị nhập 
+                ->with('model_tang', $model_thuyetminh_chitiet->where('tanggiam','TANG'))
+                ->with('model_giam', $model_thuyetminh_chitiet->where('tanggiam','GIAM'))
                 ->with('pageTitle', 'Bảng lương chi tiết');
         } else
             return view('errors.notlogin');
@@ -1931,7 +1944,7 @@ class bangluong_inController extends Controller
         if (Session::has('admin')) {
             $inputs = $request->all();
             $m_bl = bangluong::select('madv', 'thang', 'mabl', 'manguonkp', 'nam')->where('mabl', $inputs['mabl'])->first();
-            
+
 
             if ($m_bl != null && $m_bl->thang == '01') {
                 $thang = '12';
@@ -1953,7 +1966,7 @@ class bangluong_inController extends Controller
                 $model_bl_trc = (new data())->getBangluong_ct($m_bl_trc->thang, $m_bl_trc->mabl);
             }
             $model = $this->getBangLuong($inputs);
-            
+
             $model_congtac = dmphanloaict::select('mact', 'tenct', 'macongtac')
                 ->wherein('mact', a_unique(array_column($model->toarray(), 'mact')))->get();
             // $hscb=hosocanbo::all();
@@ -2026,7 +2039,7 @@ class bangluong_inController extends Controller
             $model_tang = new Collection();
             $model_giam = new Collection();
 
-           
+
             //chưa hoàn thiện => tìm cán bộ trùng với đk: macanbo; mact
             //chưa tính trường hợp tăng giảm người
 
@@ -2061,8 +2074,7 @@ class bangluong_inController extends Controller
                         $model_giam->add($giam);
                     }
                 }
-                
-            } 
+            }
 
             $a_pb = getPhongBan();
             $thongtin = array(

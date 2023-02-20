@@ -20,6 +20,14 @@ function getInfoDonVI($hoso, $dmdonvi)
     }
 }
 
+function getPhanLoaiThuyetMinh()
+{
+    return [
+        'CANBO' => 'Thuyết minh theo cán bộ',
+        'PHUCAP' => 'Thuyết minh theo phụ cấp',
+    ];
+}
+
 function getInfoPhongBan($hoso, $dmphongban)
 {
     $phongban = array_column($dmphongban, 'tenpb', 'mapb');
@@ -562,12 +570,15 @@ function getCongThucTinhPC($admin = true)
         }
         return array_column(dmphucap_donvi::where('madv', session('admin')->madv)
             ->wherein('mapc', $a_pc)
-            ->where('phanloai', '<', '3')->get()->toarray(), 'form', 'mapc');
+            //->where('phanloai', '<', '3')
+            ->get()
+            ->toarray(), 'form', 'mapc');
     }
 }
 
 function SapXepPhuCap($m_phucap)
 {
+    //dd($m_phucap);
     $a_ketqua = [];
     $a_heso = $m_phucap->where('phanloai', '0')->keyBy('mapc')->toarray();
     $a_sotien = $m_phucap->where('phanloai', '1')->keyBy('mapc')->toarray();
@@ -576,7 +587,7 @@ function SapXepPhuCap($m_phucap)
     $a_ketqua = array_merge($a_heso, $a_sotien);
     $chk = 1; //Biến lưu cho trường hợp lặp vô hạn
     //lấy 
-    //dd($a_phantram);
+    //dd($a_ketqua);
 
     while (count($a_phantram) > 0) {
         foreach ($a_phantram as $key => $val) {
@@ -595,7 +606,7 @@ function SapXepPhuCap($m_phucap)
         $chk++;
         if ($chk >= 100) {
             //dd($a_phantram);       
-            return ['trangthai'=>'false','mapc'=>array_keys($a_phantram)];
+            return ['trangthai' => false, 'mapc' => array_keys($a_phantram)];
         }
     }
     //$a_ketqua = array_merge($a_ketqua, $a_phantram);
@@ -720,6 +731,7 @@ function getPhanLoaiBangLuong()
         'CTPHI' => 'Bảng chi trả công tác phí',
         'TRICHNOP' => 'Bảng trích nộp lương',
         'KHAC' => 'Bảng chi trả khác',
+        'THUYETMINH' => 'Thuyết minh chi tiết',
     );
 }
 
@@ -919,26 +931,25 @@ function setArrayAll($array, $noidung = 'Tất cả')
 
 function getBaoCaoDeQuy($categories, $maphanloai_goc = '', $char = '')
 {
-    foreach ($categories as $key => $item)
-    {
+    foreach ($categories as $key => $item) {
         // Nếu là chuyên mục con thì hiển thị
-        if ($item['maphanloai_nhom'] == $maphanloai_goc)        
-        {
+        if ($item['maphanloai_nhom'] == $maphanloai_goc) {
             echo '<tr>';
-                echo '<td>';
-                    echo $char . $item['tenphanloai_nhom'];
-                echo '</td>';
+            echo '<td>';
+            echo $char . $item['tenphanloai_nhom'];
+            echo '</td>';
             echo '</tr>';
-             
+
             // Xóa chuyên mục đã lặp
             unset($categories[$key]);
-             
+
             // Tiếp tục đệ quy để tìm chuyên mục con của chuyên mục đang lặp
-            getBaoCaoDeQuy($categories, $item['maphanloai_goc'], $char.'|---');
+            getBaoCaoDeQuy($categories, $item['maphanloai_goc'], $char . '|---');
         }
     }
 }
 
-function chkDiv0($dbl){
-    return chkDbl($dbl) <=0 ? 1 : chkDbl($dbl);
+function chkDiv0($dbl)
+{
+    return chkDbl($dbl) <= 0 ? 1 : chkDbl($dbl);
 }

@@ -196,6 +196,7 @@ class dmphucapController extends Controller
 
             $a_pl = getPhanLoaiPhuCap();
             $a_ct = getCongThucTinhPC(false);
+            //dd($a_ct);
             $a_th = getColTongHop();
             $a_dt = getColDuToan();
             $a_plct = setArrayAll(array_column(dmphanloaict::all()->toArray(), 'tenct', 'mact'));

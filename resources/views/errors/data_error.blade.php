@@ -20,7 +20,7 @@
 <body id="error-page" class="animated bounceInLeft">
 <div id="error-page-content">
     <h1>Lỗi!</h1>
-    <h2>{{isset($message) ? $message : 'Dữ liệu đã tồn tại' }}</h2>
+    <h2>{!!isset($message) ? $message : 'Dữ liệu đã tồn tại' !!}</h2>
     <h3> <p><a href='{{isset($furl) ? url($furl) : url('/') }}'>Bấm vào đây</a> để quay lại.</p></h3>
 </div>
 <script src="{{ url('js/jquery-1.9.1.js') }}"></script>

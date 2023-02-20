@@ -155,7 +155,7 @@
         <thead>
             <tr>
                 <th style="width: 5%;">STT</th>
-                <th>Họ và tên</th>
+                <th>Họ và tên / Nội dung</th>
                 <th style="width: 10%;">Số tiền thay đổi</th>
                 <th>Ghi chú</th>
             </tr>
@@ -164,15 +164,15 @@
         <tr style="font-weight: bold">
             <td>I</td>
             <td>Tăng</td>
-            <td class="text-right">{{ dinhdangso($model_tang->sum('chenhlech')) }}</td>
+            <td class="text-right">{{ dinhdangso($model_tang->sum('sotien')) }}</td>
             <td></td>
         </tr>
-        <?php $i=1; ?>
+        <?php $i = 1; ?>
         @foreach ($model_tang as $val)
             <tr>
                 <td>{{ $i++ }}</td>
-                <td>{{ $val->tenpc }}</td>
-                <td class="text-right">{{ dinhdangso($val->chenhlech) }}</td>
+                <td>{{ $val->noidung }}</td>
+                <td class="text-right">{{ dinhdangso($val->sotien) }}</td>
                 <td>
                     {{ $val->ghichu }}
                 </td>
@@ -181,23 +181,24 @@
         <tr style="font-weight: bold">
             <td>II</td>
             <td>Giảm</td>
-            <td class="text-right">{{ dinhdangso($model_giam->sum('chenhlech')) }}</td>
+            <td class="text-right">{{ dinhdangso($model_giam->sum('sotien')) }}</td>
             <td></td>
         </tr>
-        <?php $i=1; ?>
+        <?php $i = 1; ?>
         @foreach ($model_giam as $key => $val)
-        <tr>
+            <tr>
             <tr>
                 <td>{{ $i++ }}</td>
-                <td>{{ $val->tenpc }}</td>
-                <td class="text-right">{{ dinhdangso($val->chenhlech) }}</td>
+                <td>{{ $val->noidung }}</td>
+                <td class="text-right">{{ dinhdangso($val->sotien) }}</td>
                 <td>
                     {{ $val->ghichu }}
                 </td>
             </tr>
-        </tr>
-    @endforeach
+            </tr>
+        @endforeach
     </table>
+
     <table id="data_footer" class="header" width="96%" border="0" cellspacing="0" cellpadding="8"
         style="margin:20px auto; text-align: center;">
         <tr>

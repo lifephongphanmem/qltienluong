@@ -1,11 +1,13 @@
 <?php
 
+use App\Http\Controllers\bangluong_thuyetminhController;
+use App\Http\Controllers\bangluongController;
 use Illuminate\Support\Facades\Route;
 
 
 Route::group(['prefix' => 'chuc_nang'], function () {
     Route::group(['prefix' => 'bang_luong'], function () {
-        Route::get('danh_sach', 'bangluongController@index');
+        Route::get('danh_sach',[bangluongController::class,'index']);
         Route::get('chi_tra', 'bangluongController@chitra');
         Route::post('store', 'bangluongController@store');
         Route::post('store_truylinh', 'bangluongController@store_truylinh');
@@ -110,20 +112,21 @@ Route::group(['prefix' => 'chuc_nang'], function () {
         Route::post('maubh_th', 'bangluong_inController@printf_maubh_th');
         Route::post('mau09nd11_th', 'bangluong_inController@printf_mau09nd11_th');
 
-        Route::post('mau01_excel', 'bangluongController@printf_mau01_excel');
-        Route::post('mautt107_excel', 'bangluongController@printf_mautt107_excel');
-        Route::post('mau03_excel', 'bangluongController@printf_mau03_excel');
-        Route::post('mau04_excel', 'bangluongController@printf_mau04_excel');
-        Route::post('mau05_excel', 'bangluongController@printf_mau05_excel');
-        Route::post('mau07_excel', 'bangluongController@printf_mau07_excel');
-        Route::post('mau08_excel', 'bangluongController@printf_mau08_excel');
-        Route::post('mau06_excel', 'bangluongController@printf_mau06_excel');
-        Route::post('mauds_excel', 'bangluongController@printf_mauds_excel');
-        Route::post('maubh_excel', 'bangluongController@printf_maubh_excel');
-        Route::post('maudbhdnd_excel', 'bangluongController@printf_maudbhdnd_excel');
-        Route::post('maublpc_excel', 'bangluongController@printf_maublpc_excel');
-        Route::post('maubchd_excel', 'bangluongController@printf_maubchd_excel');
-        Route::post('mauqs_excel', 'bangluongController@printf_mauqs_excel');
+        //13/02/2023 => Bỏ
+        // Route::post('mau01_excel', 'bangluongController@printf_mau01_excel');
+        // Route::post('mautt107_excel', 'bangluongController@printf_mautt107_excel');
+        // Route::post('mau03_excel', 'bangluongController@printf_mau03_excel');
+        // Route::post('mau04_excel', 'bangluongController@printf_mau04_excel');
+        // Route::post('mau05_excel', 'bangluongController@printf_mau05_excel');
+        // Route::post('mau07_excel', 'bangluongController@printf_mau07_excel');
+        // Route::post('mau08_excel', 'bangluongController@printf_mau08_excel');
+        // Route::post('mau06_excel', 'bangluongController@printf_mau06_excel');
+        // Route::post('mauds_excel', 'bangluongController@printf_mauds_excel');
+        // Route::post('maubh_excel', 'bangluongController@printf_maubh_excel');
+        // Route::post('maudbhdnd_excel', 'bangluongController@printf_maudbhdnd_excel');
+        // Route::post('maublpc_excel', 'bangluongController@printf_maublpc_excel');
+        // Route::post('maubchd_excel', 'bangluongController@printf_maubchd_excel');
+        // Route::post('mauqs_excel', 'bangluongController@printf_mauqs_excel');
 
         //mẫu thanh toán 09 cho vạn ninh
         Route::post('mau09_vn_hc', 'bangluong_inController@mau09_vn_hc');
@@ -135,6 +138,15 @@ Route::group(['prefix' => 'chuc_nang'], function () {
         // Route::post('mau09_vn_ck_bc', 'bangluong_inController@mau09_vn_ck_bc');
         // Route::post('mau09_vn_ck_kct', 'bangluong_inController@mau09_vn_ck_kct');
         // Route::post('mau09_vn_tm', 'bangluong_inController@mau09_vn_tm');
+
+        //Thuyết minh chi tiết
+        Route::get('ThuyetMinhChiTiet',[bangluong_thuyetminhController::class,'ThuyetMinhChiTiet']);
+        Route::post('LuuThuyetMinh',[bangluong_thuyetminhController::class,'LuuThuyetMinh']);
+        Route::post('TaoThuyetMinh',[bangluong_thuyetminhController::class,'TaoThuyetMinh']);
+        Route::get('LayThuyetMinh',[bangluong_thuyetminhController::class,'LayThuyetMinh']);
+        Route::get('XoaThuyetMinhChiTiet',[bangluong_thuyetminhController::class,'XoaThuyetMinhChiTiet']);
+        Route::get('XoaThuyetMinh/{id}',[bangluong_thuyetminhController::class,'XoaThuyetMinh']);
+       
     });
 
     Route::group(['prefix' => 'nang_luong'], function () {
