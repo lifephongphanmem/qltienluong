@@ -1,4 +1,6 @@
 <?php
+
+use App\Http\Controllers\hosotamngungtheodoiController;
 use Illuminate\Support\Facades\Route;
 
 Route::group(['prefix' => 'nghiep_vu'], function () {
@@ -157,7 +159,7 @@ Route::group(['prefix' => 'nghiep_vu'], function () {
     });
 
     Route::group(['prefix' => 'tam_ngung'], function () {
-        Route::get('danh_sach', 'hosotamngungtheodoiController@index');
+        Route::get('danh_sach', [hosotamngungtheodoiController::class,'index']);
         Route::get('del/{id}', 'hosotamngungtheodoiController@destroy');
 
         Route::get('create', 'hosotamngungtheodoiController@create');

@@ -194,6 +194,12 @@
                 <div class="modal-body">
                     <div class="form-group">
                         <label><b>Số liệu tổng hợp khi gửi đi sẽ không thể chỉnh sửa. Bạn hãy kiểm tra kỹ số liệu trước khi gửi.</b></label>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <label class="control-label">Đơn vị nhận dữ liệu</label>
+                                {!! Form::select('macqcq', $a_donvi, null, ['class' => 'form-control']) !!}
+                            </div>
+                        </div>
                     </div>
                 <input type="hidden" name="mathdv" id="mathdv">
                 <div class="modal-footer">

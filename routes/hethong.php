@@ -1,8 +1,15 @@
 <?php
 
+use App\Http\Controllers\dsdonviquanlyController;
 use Illuminate\Support\Facades\Route;
 
 Route::group(['prefix' => 'he_thong'], function () {
+    Route::group(['prefix' => 'DonViQuanLy'], function () {
+        Route::get('danh_sach',[dsdonviquanlyController::class,'danh_sach']);
+        Route::post('ThayDoi', [dsdonviquanlyController::class,'ThayDoi']);
+        Route::get('Xoa/{id}', [dsdonviquanlyController::class,'Xoa']);
+    });
+
     Route::group(['prefix' => 'don_vi'], function () {
         Route::get('don_vi', 'dmdonviController@information_local');
         Route::get('stopdv', 'quanlydonviController@index');

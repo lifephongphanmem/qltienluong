@@ -443,6 +443,10 @@
                                         <li><a href="{{ url('/he_thong/dinh_muc/danh_sach') }}"><i
                                                     class="fa fa-caret-right"></i>Thông tin định mức nguồn kinh phí</a>
                                         </li>
+                                        <li>
+                                            <a href="{{ url('/he_thong/DonViQuanLy/danh_sach') }}"><i
+                                                    class="fa fa-caret-right"></i>Thông tin đơn vị quản lý</a>
+                                        </li>
                                     </ul>
                                 </li>
                             </ul>

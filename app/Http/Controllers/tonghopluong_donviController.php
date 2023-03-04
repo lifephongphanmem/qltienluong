@@ -12,6 +12,7 @@ use App\dmphanloaicongtac;
 use App\dmphanloaict;
 use App\dmphucap_donvi;
 use App\dmphucap_thaisan;
+use App\dsdonviquanly;
 use App\hosocanbo;
 use App\nguonkinhphi_dinhmuc;
 use App\nguonkinhphi_dinhmuc_ct;
@@ -56,7 +57,7 @@ class tonghopluong_donviController extends Controller
             $a_trangthai = getStatus();
             $inputs = $requests->all();
             $model = tonghopluong_donvi::where('madv', session('admin')->madv)->where('nam', $inputs['nam'])->get();
-            $model_tinh=tonghopluong_tinh::where('nam',$inputs['nam'])->where('madvbc',session('admin')->madvbc)->get();
+            $model_tinh = tonghopluong_tinh::where('nam', $inputs['nam'])->where('madvbc', session('admin')->madvbc)->get();
             // dd($model);
             // $model_huyen=tonghopluong_huyen::where()->get();
             $model_bangluong = bangluong::where('madv', session('admin')->madv)->where('nam', $inputs['nam'])->get();
@@ -82,8 +83,7 @@ class tonghopluong_donviController extends Controller
                             $a_data[$i]['tendvcq'] = $a_data[$i]['macqcq']; //trường hợp đơn vị gửi nhưng ko pải đơn vị trong hệ thống => đưa mã để kiểm tra
                         }
 
-                        isset($tonghop_tinh)? $a_data[$i]['matht']=true:$a_data[$i]['matht']=false;
-
+                        isset($tonghop_tinh) ? $a_data[$i]['matht'] = true : $a_data[$i]['matht'] = false;
                     } else {
                         $a_data[$i]['trangthai'] = 'CHUATAO';
                     }
@@ -102,7 +102,7 @@ class tonghopluong_donviController extends Controller
                         if ($a_data[$i]['tendvcq'] == '') {
                             $a_data[$i]['tendvcq'] = $a_data[$i]['macqcq']; //trường hợp đơn vị gửi nhưng ko pải đơn vị trong hệ thống => đưa mã để kiểm tra
                         }
-                        isset($tonghop_tinh)? $a_data[$i]['matht']=true:$a_data[$i]['matht']=false;
+                        isset($tonghop_tinh) ? $a_data[$i]['matht'] = true : $a_data[$i]['matht'] = false;
                     } else {
                         $a_data[$i]['bangluong'] = null;
                         $a_data[$i]['trangthai'] = 'CHUALUONG';
@@ -111,11 +111,17 @@ class tonghopluong_donviController extends Controller
             }
             //dd($model);
             // dd($a_data);
+            $inputs['macqcq'] = dsdonviquanly::where('nam', $inputs['nam'])->where('madv', session('admin')->madv)->first()->macqcq ?? session('admin')->macqcq;
+            $madvbc = dmdonvi::where('madv', session('admin')->madv)->first()->madvbc;
+            $a_donvi = array_column(dmdonvi::select('madv', 'tendv')->where('madvbc', $madvbc)
+                ->where('phanloaitaikhoan', 'TH')->get()->toarray(), 'tendv', 'madv');
+
             return view('functions.tonghopluong.donvi.index')
                 ->with('furl', '/chuc_nang/tong_hop_luong/don_vi/')
                 ->with('nam', $inputs['nam'])
                 ->with('model', $a_data)
                 ->with('a_trangthai', $a_trangthai)
+                ->with('a_donvi', $a_donvi)
                 ->with('pageTitle', 'Danh sách tổng hợp lương tại đơn vị');
         } else
             return view('errors.notlogin');
@@ -480,7 +486,8 @@ class tonghopluong_donviController extends Controller
             return view('errors.notlogin');
     }
 
-    function senddata(Request $requests)
+    //lưu
+    function senddata_03032023(Request $requests)
     {
         //Kiểm tra xem đơn vị có đơn vị chủ quản => ko cần update đi đâu chỉ cần chuyên trạng thái
         //Không đơn vị chủ quản, tùy xem thuộc huyện, tỉnh để update lên bang tonghop_huyen, tonghop_tinh
@@ -489,6 +496,7 @@ class tonghopluong_donviController extends Controller
             if (!session('admin')->quanlykhuvuc && session('admin')->macqcq == '') {
                 return view('errors.chuacqcq');
             }
+            dd($inputs);
             $model = tonghopluong_donvi::where('mathdv', $inputs['mathdv'])->first();
 
             //dd(session('admin')->macqcq == session('admin')->madvqlkv);
@@ -530,6 +538,35 @@ class tonghopluong_donviController extends Controller
             $model->nguoigui = session('admin')->name;
             $model->ngaygui = Carbon::now()->toDateTimeString();
             $model->trangthai = 'DAGUI';
+            $model->save();
+
+            return redirect('/chuc_nang/tong_hop_luong/don_vi/index?nam=' . $model->nam);
+        } else
+            return view('errors.notlogin');
+    }
+
+    function senddata(Request $requests)
+    {
+        if (Session::has('admin')) {
+            $inputs = $requests->all();
+            if ($inputs['macqcq'] == '') {
+                return view('errors.chuacqcq');
+            }
+
+            $model = tonghopluong_donvi::where('mathdv', $inputs['mathdv'])->first();
+            $model->macqcq = $inputs['macqcq'];
+            $model->nguoigui = session('admin')->name;
+            $model->ngaygui = Carbon::now()->toDateTimeString();
+            $model->trangthai = 'DAGUI';
+            //1.tự động thêm danh sách quản lý
+            $chk_ql = dsdonviquanly::where('nam', $model->nam)->where('madv', $model->madv)->first();
+            if ($chk_ql == null)
+                dsdonviquanly::create([
+                    'nam' => $model->nam,
+                    'madv' => $model->madv,
+                    'macqcq' => $model->macqcq,
+                ]);
+            //1. hết
             $model->save();
 
             return redirect('/chuc_nang/tong_hop_luong/don_vi/index?nam=' . $model->nam);
