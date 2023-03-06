@@ -197,7 +197,7 @@
                         <div class="row">
                             <div class="col-md-12">
                                 <label class="control-label">Đơn vị nhận dữ liệu</label>
-                                {!! Form::select('macqcq', $a_donvi, null, ['class' => 'form-control']) !!}
+                                {!! Form::select('macqcq', $a_donvi, $inputs['macqcq'], ['class' => 'form-control']) !!}
                             </div>
                         </div>
                     </div>
