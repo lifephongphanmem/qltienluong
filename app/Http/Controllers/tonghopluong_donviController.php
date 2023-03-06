@@ -119,6 +119,7 @@ class tonghopluong_donviController extends Controller
             return view('functions.tonghopluong.donvi.index')
                 ->with('furl', '/chuc_nang/tong_hop_luong/don_vi/')
                 ->with('nam', $inputs['nam'])
+                ->with('inputs', $inputs)
                 ->with('model', $a_data)
                 ->with('a_trangthai', $a_trangthai)
                 ->with('a_donvi', $a_donvi)
