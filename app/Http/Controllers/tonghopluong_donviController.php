@@ -115,10 +115,10 @@ class tonghopluong_donviController extends Controller
             $madvbc = dmdonvi::where('madv', session('admin')->madv)->first()->madvbc;
             $a_donvi = array_column(dmdonvi::select('madv', 'tendv')->where('madvbc', $madvbc)
                 ->where('phanloaitaikhoan', 'TH')->get()->toarray(), 'tendv', 'madv');
-
+            //dd($inputs);
             return view('functions.tonghopluong.donvi.index')
                 ->with('furl', '/chuc_nang/tong_hop_luong/don_vi/')
-                ->with('nam', $inputs['nam'])
+                //->with('nam', $inputs['nam'])
                 ->with('inputs', $inputs)
                 ->with('model', $a_data)
                 ->with('a_trangthai', $a_trangthai)
