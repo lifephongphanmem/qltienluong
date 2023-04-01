@@ -1,18 +1,19 @@
 @extends('main')
 
 @section('custom-style')
-    <link rel="stylesheet" type="text/css" href="{{url('assets/global/plugins/select2/select2.css')}}"/>
+    <link rel="stylesheet" type="text/css" href="{{ url('assets/global/plugins/select2/select2.css') }}" />
 @stop
 
 
 @section('custom-script')
-    <script type="text/javascript" src="{{url('assets/global/plugins/jquery-validation/js/jquery.validate.min.js')}}"></script>
-    <script type="text/javascript" src="{{url('assets/global/plugins/select2/select2.min.js')}}"></script>
+    <script type="text/javascript" src="{{ url('assets/global/plugins/jquery-validation/js/jquery.validate.min.js') }}">
+    </script>
+    <script type="text/javascript" src="{{ url('assets/global/plugins/select2/select2.min.js') }}"></script>
     <script>
         $(function() {
             //Multi select box
             //$("#ctpc").select2();
-            $("#ctpc").change(function () {
+            $("#ctpc").change(function() {
                 $("#congthuc").val($("#ctpc").val());
             });
         });
@@ -33,57 +34,71 @@
             <!-- BEGIN VALIDATION STATES-->
             <div class="portlet box blue">
                 <!--div class="portlet-title">
-                </div-->
+                            </div-->
                 <div class="portlet-body form">
                     <!-- BEGIN FORM-->
-                    {!! Form::model($model,['url'=>$furl.'update', 'id' => 'create_tttaikhoan', 'class'=>'horizontal-form']) !!}
-                    <input type="hidden" id="maso" name="maso" value="{{$model->maso}}"/>
+                    {!! Form::model($model, ['url' => $furl . 'update', 'id' => 'create_tttaikhoan', 'class' => 'horizontal-form']) !!}
+                    <input type="hidden" id="maso" name="maso" value="{{ $model->maso }}" />
                     <div class="form-body">
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label class="form-control-label">Họ tên cán bộ<span class="require">*</span></label>
-                                    {!!Form::select('macanbo',$a_canbo, null, array('id' => 'macanbo','class' => 'form-control select2me','required','autofocus'=>'true'))!!}
+                                    {!! Form::select('macanbo', $a_canbo, null, [
+                                        'id' => 'macanbo',
+                                        'class' => 'form-control select2me',
+                                        'required',
+                                        'autofocus' => 'true',
+                                    ]) !!}
                                 </div>
                             </div>
 
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label class="form-control-label">Phân loại</label>
-                                    {!!Form::select('maphanloai',$a_phanloai, null, array('id' => 'maphanloai','class' => 'form-control'))!!}
+                                    {!! Form::select('maphanloai', $a_phanloai, null, ['id' => 'maphanloai', 'class' => 'form-control']) !!}
                                 </div>
                             </div>
                         </div>
 
                         <div class="row">
-                            <div class="col-md-6">
+                            <div class="col-md-3">
                                 <div class="form-group">
                                     <label class="form-control-label">Từ ngày<span class="require">*</span></label>
-                                    {!! Form::input('date','ngaytu',null,array('id' => 'ngaytu', 'class' => 'form-control','required'))!!}
+                                    {!! Form::input('date', 'ngaytu', null, ['id' => 'ngaytu', 'class' => 'form-control', 'required']) !!}
                                 </div>
                             </div>
 
-                            @if(!in_array($model->maphanloai, array('THAISAN','KHONGLUONG','DAINGAY')))
+                            @if (!in_array($model->maphanloai, ['THAISAN', 'KHONGLUONG', 'DAINGAY']))
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label class="form-control-label">Ngày thanh toán<span
+                                                class="require">*</span></label>
+                                        {!! Form::input('date', 'ngaythanhtoan', null, ['id' => 'ngaythanhtoan', 'class' => 'form-control', 'required']) !!}
+                                    </div>
+                                </div>
+
                                 <div class="col-md-3">
                                     <div class="form-group">
                                         <label class="form-control-label">Số ngày công</label>
-                                        {!!Form::text('songaycong', null, array('id' =>'songaycong', 'class' => 'form-control', 'data-mask'=>'fdecimal'))!!}
+                                        {!! Form::text('songaycong', null, ['id' => 'songaycong', 'class' => 'form-control', 'data-mask' => 'fdecimal']) !!}
                                     </div>
                                 </div>
                                 <div class="col-md-3">
                                     <div class="form-group">
                                         <label class="form-control-label">Số ngày nghỉ</label>
-                                        {!!Form::text('songaynghi', null, array('id' =>'songaynghi', 'class' => 'form-control', 'data-mask'=>'fdecimal'))!!}
+                                        {!! Form::text('songaynghi', null, ['id' => 'songaynghi', 'class' => 'form-control', 'data-mask' => 'fdecimal']) !!}
                                     </div>
                                 </div>
-                                <input type="hidden" id="ngayden" name="ngayden"/>
+                                <input type="hidden" id="ngayden" name="ngayden" />
                             @else
                                 <div class="col-md-6">
                                     <div class="form-group">
                                         <label class="form-control-label">Đến ngày</label>
-                                        {!! Form::input('date','ngayden',null,array('id' => 'ngayden', 'class' => 'form-control','required'))!!}
+                                        {!! Form::input('date', 'ngayden', null, ['id' => 'ngayden', 'class' => 'form-control', 'required']) !!}
                                     </div>
                                 </div>
+                                <input type="hidden" id="ngaythanhtoan" name="ngaythanhtoan" value="0" />
                                 <input type="hidden" id="songaynghi" name="songaynghi" value="0" />
                                 <input type="hidden" id="songaycong" name="songaycong" value="0" />
                             @endif
@@ -93,35 +108,36 @@
                             <div class="col-md-12">
                                 <div class="form-group">
                                     <label class="form-control-label">Nội dung tạm ngưng theo dõi</label>
-                                    {!!Form::textarea('noidung', null, array('id' => 'noidung','class' => 'form-control','rows'=>'3'))!!}
+                                    {!! Form::textarea('noidung', null, ['id' => 'noidung', 'class' => 'form-control', 'rows' => '3']) !!}
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-                <div style="text-align: center">
-                    <button type="submit" class="btn green" onclick="validateForm()"><i class="fa fa-check"></i> Hoàn thành</button>
-                    <a href="{{url($furl.'danh_sach')}}" class="btn btn-danger"><i class="fa fa-reply"></i>&nbsp;Quay lại</a>
-                </div>
-                {!! Form::close() !!}
-                <!-- END FORM-->
+            <div style="text-align: center">
+                <button type="submit" class="btn green" onclick="validateForm()"><i class="fa fa-check"></i> Hoàn
+                    thành</button>
+                <a href="{{ url($furl . 'danh_sach') }}" class="btn btn-danger"><i class="fa fa-reply"></i>&nbsp;Quay
+                    lại</a>
+            </div>
+            {!! Form::close() !!}
+            <!-- END FORM-->
 
             <!-- END VALIDATION STATES-->
         </div>
     </div>
     <script type="text/javascript">
-
-        function validateForm(){
+        function validateForm() {
             var validator = $("#create_tttaikhoan").validate({
                 rules: {
-                    name :"required",
-                    tendv :"required"
+                    name: "required",
+                    tendv: "required"
 
                 },
                 messages: {
-                    name :"Chưa nhập dữ liệu",
-                    tendv :"Chưa nhập dữ liệu"
+                    name: "Chưa nhập dữ liệu",
+                    tendv: "Chưa nhập dữ liệu"
                 }
             });
         }

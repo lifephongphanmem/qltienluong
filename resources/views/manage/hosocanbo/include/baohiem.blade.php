@@ -1,16 +1,16 @@
 <!--form6 thông tin cơ bản -->
-<div id="tab6" class="tab-pane active" >
+<div id="tab6" class="tab-pane active">
     <div class="form-body">
         <div class="row">
             <div class="col-md-3">
                 <div class="form-group">
                     <label class="control-label">Phân loại công tác</label>
                     <select class="form-control select2me" name="mact" id="mact" required="required">
-                        @foreach($model_nhomct as $kieuct)
-                            <optgroup label="{{$kieuct->tencongtac}}">
-                                <?php $mode_ct=$model_tenct->where('macongtac',$kieuct->macongtac); ?>
-                                @foreach($mode_ct as $ct)
-                                    <option value="{{$ct->mact}}">{{$ct->tenct}}</option>
+                        @foreach ($model_nhomct as $kieuct)
+                            <optgroup label="{{ $kieuct->tencongtac }}">
+                                <?php $mode_ct = $model_tenct->where('macongtac', $kieuct->macongtac); ?>
+                                @foreach ($mode_ct as $ct)
+                                    <option value="{{ $ct->mact }}">{{ $ct->tenct }}</option>
                                 @endforeach
                             </optgroup>
                         @endforeach
@@ -31,15 +31,12 @@
 
             <div class="col-md-3">
                 <div class="form-group">
-                    <label class="control-label">Nộp bảo hiểm</label>
-                    {!! Form::select('baohiem',getNopBaoHiem(),null,array('id' => 'baohiem', 'class' => 'form-control select2me'))!!}
-                </div>
-            </div>
-
-            <div class="col-md-3">
-                <div class="form-group">
                     <label class="control-label">Số người phụ thuộc</label>
-                    {!!Form::text('nguoiphuthuoc', null, array('id' => 'nguoiphuthuoc','class' => 'form-control baohiem text-right', 'data-mask'=>'fdecimal'))!!}
+                    {!! Form::text('nguoiphuthuoc', null, [
+                        'id' => 'nguoiphuthuoc',
+                        'class' => 'form-control baohiem text-right',
+                        'data-mask' => 'fdecimal',
+                    ]) !!}
                 </div>
             </div>
         </div>
@@ -47,59 +44,114 @@
         <div class="row">
             <div class="col-md-3">
                 <div class="form-group">
+                    <label class="control-label">Nộp bảo hiểm</label>
+                    {!! Form::select('baohiem', getNopBaoHiem(), null, ['id' => 'baohiem', 'class' => 'form-control select2me']) !!}
+                </div>
+            </div>
+
+            <div class="col-md-3">
+                <div class="form-group">
+                    <label class="control-label">Mức lương tính bảo hiểm</label>
+                    <div class="input-group bootstrap-touchspin" title="Để trống khi nộp bảo hiểm theo lương thực lĩnh">
+                        {!!Form::text('mucluongbaohiem', null, array('id' =>'mucluongbaohiem', 'class' => 'form-control', 'data-mask'=>'fdecimal'))!!}
+                        <span class="input-group-addon bootstrap-touchspin-postfix">VNĐ</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <hr>
+        <h4>Cá nhân nộp</h4>
+        <div class="row">
+            <div class="col-md-3">
+                <div class="form-group">
                     <label class="control-label">Bảo hiểm xã hội</label>
-                    {!!Form::text('bhxh', null, array('id' => 'bhxh','class' => 'form-control baohiem text-right', 'data-mask'=>'fdecimal'))!!}
+                    {!! Form::text('bhxh', null, [
+                        'id' => 'bhxh',
+                        'class' => 'form-control baohiem text-right',
+                        'data-mask' => 'fdecimal',
+                    ]) !!}
                 </div>
             </div>
 
             <div class="col-md-3">
                 <div class="form-group">
                     <label class="control-label">Bảo hiểm y tế</label>
-                    {!!Form::text('bhyt', null, array('id' => 'bhyt','class' => 'form-control baohiem text-right', 'data-mask'=>'fdecimal'))!!}
+                    {!! Form::text('bhyt', null, [
+                        'id' => 'bhyt',
+                        'class' => 'form-control baohiem text-right',
+                        'data-mask' => 'fdecimal',
+                    ]) !!}
                 </div>
             </div>
 
             <div class="col-md-3">
                 <div class="form-group">
                     <label class="control-label">Kinh phí công đoàn</label>
-                    {!!Form::text('kpcd', null, array('id' => 'kpcd','class' => 'form-control baohiem text-right', 'data-mask'=>'fdecimal'))!!}
+                    {!! Form::text('kpcd', null, [
+                        'id' => 'kpcd',
+                        'class' => 'form-control baohiem text-right',
+                        'data-mask' => 'fdecimal',
+                    ]) !!}
                 </div>
             </div>
 
             <div class="col-md-3">
                 <div class="form-group">
                     <label class="control-label">Bảo hiểm thất nghiệp</label>
-                    {!!Form::text('bhtn', null, array('id' => 'bhtn','class' => 'form-control baohiem text-right', 'data-mask'=>'fdecimal'))!!}
+                    {!! Form::text('bhtn', null, [
+                        'id' => 'bhtn',
+                        'class' => 'form-control baohiem text-right',
+                        'data-mask' => 'fdecimal',
+                    ]) !!}
                 </div>
             </div>
         </div>
 
+        <hr>
+        <h4>Đơn vị nộp</h4>
         <div class="row">
             <div class="col-md-3">
                 <div class="form-group">
                     <label class="control-label">BHXH đơn vị nộp</label>
-                    {!!Form::text('bhxh_dv', null, array('id' => 'bhxh_dv','class' => 'form-control baohiem_dv text-right', 'data-mask'=>'fdecimal'))!!}
+                    {!! Form::text('bhxh_dv', null, [
+                        'id' => 'bhxh_dv',
+                        'class' => 'form-control baohiem_dv text-right',
+                        'data-mask' => 'fdecimal',
+                    ]) !!}
                 </div>
             </div>
 
             <div class="col-md-3">
                 <div class="form-group">
                     <label class="control-label">BHYT đơn vị nộp</label>
-                    {!!Form::text('bhyt_dv', null, array('id' => 'bhyt_dv','class' => 'form-control baohiem_dv text-right', 'data-mask'=>'fdecimal'))!!}
+                    {!! Form::text('bhyt_dv', null, [
+                        'id' => 'bhyt_dv',
+                        'class' => 'form-control baohiem_dv text-right',
+                        'data-mask' => 'fdecimal',
+                    ]) !!}
                 </div>
             </div>
 
             <div class="col-md-3">
                 <div class="form-group">
                     <label class="control-label">KPCĐ đơn vị nộp</label>
-                    {!!Form::text('kpcd_dv', null, array('id' => 'kpcd_dv','class' => 'form-control baohiem_dv text-right', 'data-mask'=>'fdecimal'))!!}
+                    {!! Form::text('kpcd_dv', null, [
+                        'id' => 'kpcd_dv',
+                        'class' => 'form-control baohiem_dv text-right',
+                        'data-mask' => 'fdecimal',
+                    ]) !!}
                 </div>
             </div>
 
             <div class="col-md-3">
                 <div class="form-group">
                     <label class="control-label">BHTN đơn vị nộp</label>
-                    {!!Form::text('bhtn_dv', null, array('id' => 'bhtn_dv','class' => 'form-control baohiem_dv text-right', 'data-mask'=>'fdecimal'))!!}
+                    {!! Form::text('bhtn_dv', null, [
+                        'id' => 'bhtn_dv',
+                        'class' => 'form-control baohiem_dv text-right',
+                        'data-mask' => 'fdecimal',
+                    ]) !!}
                 </div>
             </div>
         </div>
@@ -108,7 +160,11 @@
             <div class="col-md-12">
                 <div class="form-group">
                     <label class="control-label">Các phụ cấp không nộp bảo hiểm</label>
-                    {!! Form::select('khongnopbaohiem[]',$a_pc_bh,null,array('id' => 'khongnopbaohiem','class' => 'form-control select2me','multiple'=>'multiple')) !!}
+                    {!! Form::select('khongnopbaohiem[]', $a_pc_bh, null, [
+                        'id' => 'khongnopbaohiem',
+                        'class' => 'form-control select2me',
+                        'multiple' => 'multiple',
+                    ]) !!}
                 </div>
             </div>
         </div>
@@ -126,7 +182,7 @@
                 mact: $("#mact").val()
             },
             dataType: 'JSON',
-            success: function (data) {
+            success: function(data) {
                 $("#bhxh").val(data.bhxh);
                 $("#bhyt").val(data.bhyt);
                 $("#bhtn").val(data.bhtn);
@@ -136,7 +192,7 @@
                 $("#bhtn_dv").val(data.bhtn_dv);
                 $("#kpcd_dv").val(data.kpcd_dv);
                 var sunghiep = $("#sunghiep").val();
-                if(sunghiep == 'Công chức'){
+                if (sunghiep == 'Công chức') {
                     $("#bhtn").val(0);
                     $("#bhtn_dv").val(0);
                 }
@@ -154,9 +210,9 @@
                 macvcq: $("#macvcq").val()
             },
             dataType: 'JSON',
-            success: function (data) {
+            success: function(data) {
 
-                if(data.ttdv == '1'){
+                if (data.ttdv == '1') {
                     $("#bhtn").val(0);
                     $("#bhtn_dv").val(0);
                 }
@@ -164,20 +220,20 @@
         });
     }
 
-    $(function(){
-        $("#macvcq").change(function(){
+    $(function() {
+        $("#macvcq").change(function() {
             getbaohiem_cv();
 
         });
 
-        $("#mact").change(function(){
+        $("#mact").change(function() {
             getbaohiem();
 
         });
 
-        $("#baohiem").change(function(){
+        $("#baohiem").change(function() {
             var baohiem = $("#baohiem").val();
-            if(baohiem ==0){
+            if (baohiem == 0) {
                 $("#bhxh").val(0);
                 $("#bhyt").val(0);
                 $("#bhtn").val(0);
@@ -186,17 +242,17 @@
                 $("#bhyt_dv").val(0);
                 $("#bhtn_dv").val(0);
                 $("#kpcd_dv").val(0);
-            }else {
+            } else {
                 getbaohiem();
             }
         });
 
-        $("#sunghiep").change(function(){
+        $("#sunghiep").change(function() {
             var sunghiep = $("#sunghiep").val();
-            if(sunghiep == 'Công chức'){
+            if (sunghiep == 'Công chức') {
                 $("#bhtn").val(0);
                 $("#bhtn_dv").val(0);
-            }else{
+            } else {
                 getbaohiem();
             }
         });

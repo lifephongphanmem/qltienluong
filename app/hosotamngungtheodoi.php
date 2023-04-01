@@ -22,6 +22,9 @@ class hosotamngungtheodoi extends Model
         'ngayden',
         'songaynghi',
         'songaycong',
+        'ngaythanhtoan',
         'madv'
     ];
 }
+//31.03.2023 thêm trường 'ngaythanhtoan' 
+// update hosotamngungtheodoi set ngaythanhtoan = ngaytu where id >0

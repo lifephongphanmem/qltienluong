@@ -101,6 +101,7 @@ class hosocanbo extends Model
         'lvhd',
         'khongnopbaohiem',
         'pclaunam',
+        'mucluongbaohiem',
     ];
 }
 

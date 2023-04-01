@@ -17,7 +17,7 @@ class hosotamngungtheodoiController extends Controller
         if (Session::has('admin')) {
             $model = hosotamngungtheodoi::where('madv', session('admin')->madv)->get();
             $a_phanloai = getPhanLoaiTamNgungTheoDoi();
-            $a_canbo = array_column(hosocanbo::where('madv', session('admin')->madv)->where('theodoi','<','9')->get()->toarray(), 'tencanbo', 'macanbo');
+            $a_canbo = array_column(hosocanbo::where('madv', session('admin')->madv)->where('theodoi', '<', '9')->get()->toarray(), 'tencanbo', 'macanbo');
             foreach ($model as $hs) {
                 $hs->phanloai = isset($a_phanloai[$hs->maphanloai]) ? $a_phanloai[$hs->maphanloai] : "";
                 $hs->tencanbo = isset($a_canbo[$hs->macanbo]) ? $a_canbo[$hs->macanbo] : "";
@@ -48,8 +48,9 @@ class hosotamngungtheodoiController extends Controller
             return view('errors.notlogin');
     }
 
-    function getinfo(Request $request){
-        if(!Session::has('admin')) {
+    function getinfo(Request $request)
+    {
+        if (!Session::has('admin')) {
             $result = array(
                 'status' => 'fail',
                 'message' => 'permission denied',
@@ -58,11 +59,12 @@ class hosotamngungtheodoiController extends Controller
         }
 
         $inputs = $request->all();
-        $model = hosotamngungtheodoi::where('maso',$inputs['maso'])->first();
+        $model = hosotamngungtheodoi::where('maso', $inputs['maso'])->first();
         die($model);
     }
 
-    function destroy($id){
+    function destroy($id)
+    {
         if (Session::has('admin')) {
             $model = hosotamngungtheodoi::find($id);
             //$macanbo = $model->macanbo;
@@ -77,49 +79,56 @@ class hosotamngungtheodoiController extends Controller
         if (Session::has('admin')) {
             $inputs = $request->all();
             $phanloai = $inputs['phanloai'];
-            switch($phanloai) {
+            switch ($phanloai) {
                 case 'THAISAN': {
-                    $a_phanloai = array('THAISAN' => 'Nghỉ thai sản');
-                    $a_canbo = array_column(hosocanbo::where('madv', session('admin')->madv)
-                        ->where('theodoi', '<', '9')->where('gioitinh', 'Nữ')->get()->toarray(), 'tencanbo', 'macanbo');
-                    break;
-                }
+                        $a_phanloai = array('THAISAN' => 'Nghỉ thai sản');
+                        $a_canbo = array_column(hosocanbo::where('madv', session('admin')->madv)
+                            ->where('theodoi', '<', '9')->where('gioitinh', 'Nữ')->get()->toarray(), 'tencanbo', 'macanbo');
+                        break;
+                    }
+                case 'DUONGSUC':
+                case 'NGHIOM':
                 case 'NGHIPHEP': {
-                    $a_phanloai = array(
-                        'NGHIPHEP' => 'Nghỉ phép',
-                        'NGHIOM' => 'Nghỉ ốm');
-                    $a_canbo = array_column(hosocanbo::where('madv', session('admin')->madv)
-                        ->where('theodoi', '<', '9')->get()->toarray(), 'tencanbo', 'macanbo');
-                    break;
-                }
+                        $a_phanloai = array(
+                            'NGHIPHEP' => 'Nghỉ phép',
+                            'NGHIOM' => 'Nghỉ ốm'
+                        );
+                        $a_canbo = array_column(hosocanbo::where('madv', session('admin')->madv)
+                            ->where('theodoi', '<', '9')->get()->toarray(), 'tencanbo', 'macanbo');
+                        break;
+                    }
                 case 'DUONGSUC': {
-                    $a_phanloai = array(
-                        'DUONGSUC' => 'Nghỉ dưỡng sức sau sinh');
-                    $a_canbo = array_column(hosocanbo::where('madv', session('admin')->madv)
-                        ->where('theodoi', '<', '9')->where('gioitinh', 'Nữ')->get()->toarray(), 'tencanbo', 'macanbo');
-                    break;
-                }
+                        $a_phanloai = array(
+                            'DUONGSUC' => 'Nghỉ dưỡng sức sau sinh'
+                        );
+                        $a_canbo = array_column(hosocanbo::where('madv', session('admin')->madv)
+                            ->where('theodoi', '<', '9')->where('gioitinh', 'Nữ')->get()->toarray(), 'tencanbo', 'macanbo');
+                        break;
+                    }
                 case 'KHONGLUONG': {
-                    $a_phanloai = array(
-                        'KHONGLUONG' => 'Nghỉ không lương');
-                    $a_canbo = array_column(hosocanbo::where('madv', session('admin')->madv)
-                        ->where('theodoi', '<', '9')->get()->toarray(), 'tencanbo', 'macanbo');
-                    break;
-                }
+                        $a_phanloai = array(
+                            'KHONGLUONG' => 'Nghỉ không lương'
+                        );
+                        $a_canbo = array_column(hosocanbo::where('madv', session('admin')->madv)
+                            ->where('theodoi', '<', '9')->get()->toarray(), 'tencanbo', 'macanbo');
+                        break;
+                    }
                 case 'DAINGAY': {
-                    $a_phanloai = array(
-                        'DAINGAY' => 'Nghỉ dài ngày');
-                    $a_canbo = array_column(hosocanbo::where('madv', session('admin')->madv)
-                        ->where('theodoi', '<', '9')->get()->toarray(), 'tencanbo', 'macanbo');
-                    break;
-                }
-                default: {//Nghỉ ko lưởng
-                    $a_phanloai = array(
-                        'NGHIPHEP' => 'Nghỉ phép',
-                        'NGHIOM' => 'Nghỉ ốm');
-                    $a_canbo = array_column(hosocanbo::where('madv', session('admin')->madv)
-                        ->where('theodoi', '<', '9')->get()->toarray(), 'tencanbo', 'macanbo');
-                }
+                        $a_phanloai = array(
+                            'DAINGAY' => 'Nghỉ dài ngày'
+                        );
+                        $a_canbo = array_column(hosocanbo::where('madv', session('admin')->madv)
+                            ->where('theodoi', '<', '9')->get()->toarray(), 'tencanbo', 'macanbo');
+                        break;
+                    }
+                default: { //Nghỉ ko lưởng
+                        $a_phanloai = array(
+                            'NGHIPHEP' => 'Nghỉ phép',
+                            'NGHIOM' => 'Nghỉ ốm'
+                        );
+                        $a_canbo = array_column(hosocanbo::where('madv', session('admin')->madv)
+                            ->where('theodoi', '<', '9')->get()->toarray(), 'tencanbo', 'macanbo');
+                    }
             }
             /*
             if($inputs['phanloai'] == 'THAISAN'){
@@ -132,11 +141,12 @@ class hosotamngungtheodoiController extends Controller
 
             }
             */
+
             return view('manage.tamngungtheodoi.create')
                 ->with('furl', '/nghiep_vu/tam_ngung/')
-                ->with('inputs',$inputs)
-                ->with('a_phanloai',$a_phanloai)
-                ->with('a_canbo',$a_canbo)
+                ->with('inputs', $inputs)
+                ->with('a_phanloai', $a_phanloai)
+                ->with('a_canbo', $a_canbo)
                 ->with('pageTitle', 'Thêm mới cán bộ tạm ngưng theo dõi');
         } else
             return view('errors.notlogin');
@@ -156,46 +166,53 @@ class hosotamngungtheodoiController extends Controller
             return view('errors.notlogin');
     }
 
-    function edit(Request $request){
+    function edit(Request $request)
+    {
         if (Session::has('admin')) {
             $inputs = $request->all();
-            $model = hosotamngungtheodoi::where('maso',$inputs['maso'])->first();
+            $model = hosotamngungtheodoi::where('maso', $inputs['maso'])->first();
             $phanloai = $model->maphanloai;
-            switch($phanloai) {
+            switch ($phanloai) {
                 case 'THAISAN': {
-                    $a_phanloai = array('THAISAN' => 'Nghỉ thai sản');
-                    $a_canbo = array_column(hosocanbo::where('madv', session('admin')->madv)->where('theodoi','<','9')->where('gioitinh','Nữ')->get()->toarray(), 'tencanbo', 'macanbo');
-                    break;
-                }
+                        $a_phanloai = array('THAISAN' => 'Nghỉ thai sản');
+                        $a_canbo = array_column(hosocanbo::where('madv', session('admin')->madv)->where('theodoi', '<', '9')->where('gioitinh', 'Nữ')->get()->toarray(), 'tencanbo', 'macanbo');
+                        break;
+                    }
+                case 'DUONGSUC':
+                case 'NGHIOM':
                 case 'NGHIPHEP': {
-                    $a_phanloai = array(
-                        'NGHIPHEP' => 'Nghỉ phép',
-                        'NGHIOM' => 'Nghỉ ốm');
-                    $a_canbo = array_column(hosocanbo::where('madv', session('admin')->madv)
-                        ->where('theodoi', '<', '9')->get()->toarray(), 'tencanbo', 'macanbo');
-                    break;
-                }
+                        $a_phanloai = array(
+                            'NGHIPHEP' => 'Nghỉ phép',
+                            'NGHIOM' => 'Nghỉ ốm'
+                        );
+                        $a_canbo = array_column(hosocanbo::where('madv', session('admin')->madv)
+                            ->where('theodoi', '<', '9')->get()->toarray(), 'tencanbo', 'macanbo');
+                        break;
+                    }
                 case 'KHONGLUONG': {
-                    $a_phanloai = array(
-                        'KHONGLUONG' => 'Nghỉ không lương');
-                    $a_canbo = array_column(hosocanbo::where('madv', session('admin')->madv)
-                        ->where('theodoi', '<', '9')->get()->toarray(), 'tencanbo', 'macanbo');
-                    break;
-                }
+                        $a_phanloai = array(
+                            'KHONGLUONG' => 'Nghỉ không lương'
+                        );
+                        $a_canbo = array_column(hosocanbo::where('madv', session('admin')->madv)
+                            ->where('theodoi', '<', '9')->get()->toarray(), 'tencanbo', 'macanbo');
+                        break;
+                    }
                 case 'DAINGAY': {
-                    $a_phanloai = array(
-                        'DAINGAY' => 'Nghỉ dài ngày');
-                    $a_canbo = array_column(hosocanbo::where('madv', session('admin')->madv)
-                        ->where('theodoi', '<', '9')->get()->toarray(), 'tencanbo', 'macanbo');
-                    break;
-                }
+                        $a_phanloai = array(
+                            'DAINGAY' => 'Nghỉ dài ngày'
+                        );
+                        $a_canbo = array_column(hosocanbo::where('madv', session('admin')->madv)
+                            ->where('theodoi', '<', '9')->get()->toarray(), 'tencanbo', 'macanbo');
+                        break;
+                    }
                 default: {
-                    $a_phanloai = array(
-                        'NGHIPHEP' => 'Nghỉ phép',
-                        'NGHIOM' => 'Nghỉ ốm');
-                    $a_canbo = array_column(hosocanbo::where('madv', session('admin')->madv)
-                        ->where('theodoi', '<', '9')->get()->toarray(), 'tencanbo', 'macanbo');
-                }
+                        $a_phanloai = array(
+                            'NGHIPHEP' => 'Nghỉ phép',
+                            'NGHIOM' => 'Nghỉ ốm'
+                        );
+                        $a_canbo = array_column(hosocanbo::where('madv', session('admin')->madv)
+                            ->where('theodoi', '<', '9')->get()->toarray(), 'tencanbo', 'macanbo');
+                    }
             }
             /*
             if($model->maphanloai == 'THAISAN'){
@@ -212,9 +229,9 @@ class hosotamngungtheodoiController extends Controller
 
             return view('manage.tamngungtheodoi.edit')
                 ->with('model', $model)
-                ->with('a_phanloai',$a_phanloai)
-                ->with('a_canbo',$a_canbo)
-                ->with('inputs',$inputs)
+                ->with('a_phanloai', $a_phanloai)
+                ->with('a_canbo', $a_canbo)
+                ->with('inputs', $inputs)
                 ->with('furl', '/nghiep_vu/tam_ngung/')
                 ->with('pageTitle', 'Sửa thông tin tạm ngưng theo dõi');
         } else

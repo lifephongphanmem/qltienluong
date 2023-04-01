@@ -300,7 +300,7 @@ class hosocanboController extends Controller
                 }
             }
 
-            $a_bh = array('nguoiphuthuoc', 'bhxh', 'bhyt', 'bhtn', 'kpcd', 'bhxh_dv', 'bhyt_dv', 'bhtn_dv', 'kpcd_dv',);
+            $a_bh = array('nguoiphuthuoc', 'bhxh', 'bhyt', 'bhtn', 'kpcd', 'bhxh_dv', 'bhyt_dv', 'bhtn_dv', 'kpcd_dv','mucluongbaohiem');
             foreach ($a_bh as $bh) {
                 if (isset($insert[$bh])) {
                     $insert[$bh] = chkDbl($insert[$bh]);
