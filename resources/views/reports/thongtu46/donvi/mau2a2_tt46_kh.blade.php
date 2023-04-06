@@ -359,7 +359,7 @@
         </tr>
         <tr style="font-weight: bold">
             <td style="text-align: center;" width="50%"></td>
-            <td style="text-align: center;" width="50%">CHỦ TỊCH ỦY BAN NHÂN DÂN TỈNH, THÀNH PHỐ</td>
+            <td style="text-align: center;" width="50%">{{$m_dv->cdlanhdao}}</td>
         </tr>
         <tr style="font-style: italic">
             <td style="text-align: center;" width="50%"></td>

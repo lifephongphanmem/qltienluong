@@ -147,186 +147,68 @@
             <div class="modal-body">
                 <div class="row">
                     <div class="col-md-12">
-                        <div class="tabbable tabbable-custom tabbable-noborder tabbable-reversed">
-                            <ul class="nav nav-tabs">
-                                <li class="active">
-                                    <a href="#tab_2" data-toggle="tab" aria-expanded="false">
-                                        In dự toán lương </a>
-                                </li>
-                                <li>
-                                    <a href="#tab_3" data-toggle="tab" aria-expanded="true">
-                                        In dự ước lương </a>
-                                </li>
+                        <div class="form-group">
+                            <button type="button"
+                                onclick="insolieu('{{ $furl . 'bangluongbienche' }}', '1506672780;1506673604;1637915601')"
+                                style="border-width: 0px" class="btn btn-default btn-xs mbs" data-target="#modal-insolieu"
+                                data-toggle="modal">
+                                <i class="fa fa-print"></i>&nbsp; In bảng lương biên chế </button>
+                        </div>
+                    </div>
+                </div>
 
-                            </ul>
-                            <div class="tab-content">
-                                <div class="tab-pane active" id="tab_2">
-                                    <div class="portlet box blue form">
-                                        <div class="portlet-title"></div>
-                                        <div class="portlet-body">                                           
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <button type="button" onclick="insolieu('{{ $furl . 'bangluonghopdong' }}', '1506673585')"
+                                style="border-width: 0px" class="btn btn-default btn-xs mbs"
+                                data-target="#modal-insolieu" data-toggle="modal">
+                                <i class="fa fa-print"></i>&nbsp; In bảng lương hợp đồng 68 </button>
+                        </div>
+                    </div>
+                </div>
 
-                                            <div class="row">
-                                                <div class="col-md-12">
-                                                    <div class="form-group">
-                                                        <button type="button"
-                                                            onclick="insolieu('{{ $furl . 'bangluongbienche' }}', '1506672780;1506673604;1637915601')"
-                                                            style="border-width: 0px" class="btn btn-default btn-xs mbs" data-target="#modal-insolieu" data-toggle="modal">
-                                                            <i class="fa fa-print"></i>&nbsp; In bảng lương biên chế </button>
-                                                    </div>
-                                                </div>
-                                            </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <button type="button" onclick="intonghopdt('{{ $furl . 'kinhphikhongchuyentrach?maso=' }}')"
+                                style="border-width: 0px" class="btn btn-default btn-xs mbs">
+                                <i class="fa fa-print"></i>&nbsp; Tổng hợp kinh phí thực hiện
+                                chế đố phụ cấp cán bộ không chuyên trách</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <button type="button" onclick="intonghopdt('{{ $furl . 'tonghopcanboxa?maso=' }}')"
+                                style="border-width: 0px" class="btn btn-default btn-xs mbs">
+                                <i class="fa fa-print"></i>&nbsp; Tổng hợp cán bộ chuyên trách,
+                                công chức xã</button>
+                        </div>
+                    </div>
+                </div>
 
-                                            <div class="row">
-                                                <div class="col-md-12">
-                                                    <div class="form-group">
-                                                        <button type="button"
-                                                            onclick="insolieu('{{ $furl . 'bangluonghopdong' }}', '1506673585')"
-                                                            style="border-width: 0px" class="btn btn-default btn-xs mbs" data-target="#modal-insolieu" data-toggle="modal">
-                                                            <i class="fa fa-print"></i>&nbsp; In bảng lương hợp đồng 68 </button>
-                                                    </div>
-                                                </div>
-                                            </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <button type="button"
+                                onclick="insolieu('{{ $furl . 'tonghopbienche' }}', '1506672780;1506673604')"
+                                style="border-width: 0px" class="btn btn-default btn-xs mbs"
+                                data-target="#modal-insolieu" data-toggle="modal">
+                                <i class="fa fa-print"></i>&nbsp; Tổng hợp biên chế, hệ số
+                                lương và phụ cấp có mặt </button>
+                        </div>
+                    </div>
+                </div>
 
-                                            <div class="row">
-                                                <div class="col-md-12">
-                                                    <div class="form-group">
-                                                        <button type="button"
-                                                            onclick="intonghopdt('{{ $furl . 'kinhphikhongchuyentrach?maso=' }}')"
-                                                            style="border-width: 0px" class="btn btn-default btn-xs mbs">
-                                                            <i class="fa fa-print"></i>&nbsp; Tổng hợp kinh phí thực hiện
-                                                            chế đố phụ cấp cán bộ không chuyên trách</button>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="row">
-                                                <div class="col-md-12">
-                                                    <div class="form-group">
-                                                        <button type="button"
-                                                            onclick="intonghopdt('{{ $furl . 'tonghopcanboxa?maso=' }}')"
-                                                            style="border-width: 0px" class="btn btn-default btn-xs mbs">
-                                                            <i class="fa fa-print"></i>&nbsp; Tổng hợp cán bộ chuyên trách,
-                                                            công chức xã</button>
-                                                    </div>
-                                                </div>
-                                            </div>
-
-                                            <div class="row">
-                                                <div class="col-md-12">
-                                                    <div class="form-group">
-                                                        <button type="button"
-                                                            onclick="insolieu('{{ $furl . 'tonghopbienche' }}', '1506672780;1506673604')"
-                                                            style="border-width: 0px" class="btn btn-default btn-xs mbs" data-target="#modal-insolieu" data-toggle="modal">
-                                                            <i class="fa fa-print"></i>&nbsp; Tổng hợp biên chế, hệ số
-                                                            lương và phụ cấp có mặt </button>
-                                                    </div>
-                                                </div>
-                                            </div>
-
-                                            <div class="row">
-                                                <div class="col-md-12">
-                                                    <div class="form-group">
-                                                        <button type="button"
-                                                            onclick="insolieu('{{ $furl . 'tonghophopdong' }}','1506673585')"
-                                                            style="border-width: 0px" class="btn btn-default btn-xs mbs" data-target="#modal-insolieu" data-toggle="modal">
-                                                            <i class="fa fa-print"></i>&nbsp; Tổng hợp hợp đồng bổ sung quỹ lương</button>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="tab-pane" id="tab_3">
-                                    <div class="portlet box blue form">
-                                        <div class="portlet-title"></div>
-                                        <div class="portlet-body">
-                                            <div class="row">
-                                                <div class="col-md-6">
-                                                    <div class="form-group">
-                                                        <button type="button"
-                                                            onclick="intonghopdt('{{ $furl . 'printf?maso=' }}')"
-                                                            style="border-width: 0px" class="btn btn-default btn-xs mbs">
-                                                            <i class="fa fa-print"></i>&nbsp; In dự toán tổng hợp - mẫu
-                                                            01</button>
-                                                    </div>
-                                                </div>
-
-                                                <div class="col-md-6">
-                                                    <div class="form-group">
-                                                        <button type="button"
-                                                            onclick="intonghopdt('{{ $furl . 'printf_m2?maso=' }}')"
-                                                            style="border-width: 0px" class="btn btn-default btn-xs mbs">
-                                                            <i class="fa fa-print"></i>&nbsp; In dự toán tổng hợp - mẫu
-                                                            02</button>
-                                                    </div>
-                                                </div>
-                                            </div>
-
-                                            <div class="row">
-                                                <div class="col-md-6">
-                                                    <div class="form-group">
-                                                        <button type="button"
-                                                            onclick="ThongTinKetXuat(false,'{{ $furl . 'mautt107' }}')"
-                                                            style="border-width: 0px" class="btn btn-default btn-xs mbs"
-                                                            data-target="#mautt107-modal" data-toggle="modal"
-                                                            title="Bảng lương của cán bộ theo mẫu C02-HD">
-                                                            <i class="fa fa-print"></i>&nbsp;Bảng lương mẫu C02-HD
-                                                            (TT107/2017/TT-BTC)</button>
-                                                    </div>
-                                                </div>
-
-                                                <div class="col-md-6">
-                                                    <div class="form-group">
-                                                        <button type="button"
-                                                            onclick="ThongTinKetXuat(true,'{{ $furl . 'mautt107_m2' }}')"
-                                                            style="border-width: 0px" class="btn btn-default btn-xs mbs"
-                                                            data-target="#mautt107-modal" data-toggle="modal">
-                                                            <i class="fa fa-print"></i>&nbsp; Bảng lương mẫu C02-HD
-                                                            (Tổng hợp chi lương và nâng
-                                                            lương)</button>
-                                                    </div>
-                                                </div>
-
-
-                                                <!--div class="col-md-6">
-                                                                                                                                            <div class="form-group">
-                                                                                                                                                <button type="button" style="border-width: 0px" class="btn btn-default btn-xs mbs" data-target="#mautt107-modal" data-toggle="modal"
-                                                                                                                                                        title="Bảng lương của cán bộ theo mẫu C02-HD">
-                                                                                                                                                    <i class="fa fa-print"></i>&nbsp; Bảng lương mẫu C02-HD (TT185/2010/TT-BTC)</button>
-                                                                                                                                            </div>
-                                                                                                                                        </div-->
-                                            </div>
-
-                                            <div class="row">
-                                                <!--div class="col-md-6">
-                                                                                                                                            <div class="form-group">
-                                                                                                                                                <button type="button" onclick="intonghopdt('{{ $furl . 'mautt107_m2?maso=' }}')" style="border-width: 0px" class="btn btn-default btn-xs mbs">
-                                                                                                                                                    <i class="fa fa-print"></i>&nbsp; Bảng lương mẫu C02-HD (Tổng hợp chi lương các tháng)</button>
-                                                                                                                                            </div>
-                                                                                                                                        </div-->
-
-                                                <div class="col-md-6">
-                                                    <div class="form-group">
-                                                        <button type="button" style="border-width: 0px"
-                                                            onclick="innangluong()" class="btn btn-default btn-xs mbs">
-                                                            <i class="fa fa-print"></i>&nbsp; Danh sách cán bộ nâng
-                                                            lương</button>
-                                                    </div>
-                                                </div>
-
-                                                <!--div class="col-md-6">
-                                                                                                                                            <div class="form-group">
-                                                                                                                                                <button type="button" style="border-width: 0px" onclick="innghihuu()" class="btn btn-default btn-xs mbs">
-                                                                                                                                                    <i class="fa fa-print"></i>&nbsp; Danh sách cán bộ nghỉ hưu</button>
-                                                                                                                                            </div>
-                                                                                                                                        </div-->
-                                            </div>
-                                        </div>
-
-                                    </div>
-                                </div>
-
-                            </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <button type="button" onclick="insolieu('{{ $furl . 'tonghophopdong' }}','1506673585')"
+                                style="border-width: 0px" class="btn btn-default btn-xs mbs"
+                                data-target="#modal-insolieu" data-toggle="modal">
+                                <i class="fa fa-print"></i>&nbsp; Tổng hợp hợp đồng bổ sung quỹ lương</button>
                         </div>
                     </div>
                 </div>
@@ -338,6 +220,7 @@
     </div>
 
     <!--Modal thêm mới -->
+    {!! Form::open(['url' => $furl . 'thong_tin', 'id' => 'frm_dutoan', 'class' => 'form-horizontal']) !!}
     <div id="create-modal" tabindex="-1" role="dialog" aria-hidden="true" class="modal fade">
         <div class="modal-dialog modal-lg modal-content">
             <div class="modal-header modal-header-primary">
@@ -347,150 +230,73 @@
             <div class="modal-body">
                 <div class="row">
                     <div class="col-md-12">
-                        <div class="tabbable tabbable-custom tabbable-noborder tabbable-reversed">
-                            <ul class="nav nav-tabs">
-                                <li class="active">
-                                    <a href="#tab_0" data-toggle="tab" aria-expanded="false">
-                                        Tạo dự toán lương </a>
-                                </li>
-                                <li>
-                                    <a href="#tab_1" data-toggle="tab" aria-expanded="true">
-                                        Tạo dự ước lương </a>
-                                </li>
+                        <label><b>Phần mềm sẽ tổng hợp cán bộ ở 02 bảng lương để tạo dự toán (ưu tiên cán bộ ở bảng lương thứ nhất).</b></label>
+                    </div>
+                </div>
 
-                            </ul>
-                            <div class="tab-content">
-                                <div class="tab-pane active" id="tab_0">
-                                    {!! Form::open(['url' => $furl . 'thong_tin', 'id' => 'frm_dutoan', 'class' => 'form-horizontal']) !!}
-                                    <div class="portlet box blue form">
-                                        <div class="portlet-title"></div>
-                                        <div class="portlet-body">
-                                            <div class="row">
-                                                <div class="col-md-3">
-                                                    <label class="control-label">Năm tạo dự toán</label>
-                                                    {!! Form::text('namns', date('Y') + 1, ['id' => 'namns', 'class' => 'form-control text-right']) !!}
-                                                </div>
+                <div class="row">
+                    <div class="col-md-3">
+                        <label class="control-label">Năm tạo dự toán</label>
+                        {!! Form::text('namns', date('Y') + 1, ['id' => 'namns', 'class' => 'form-control text-right']) !!}
+                    </div>
 
-                                                <div class="col-md-3">
-                                                    <label class="control-label">Mức lương cơ bản</label>
-                                                    {!! Form::text('luongcoban', getGeneralConfigs()['luongcb'], ['id' => 'luongcoban', 'class' => 'form-control text-right', 'data-mask' => 'fdecimal']) !!}
-                                                </div>
-                                                {{-- <div class="col-md-4">
-                                                    <label class="control-label">Mức lương cơ bản</label>
-                                                    {!! Form::text('luongcoban', getGeneralConfigs()['luongcb'], ['id' => 'luongcoban', 'class' => 'form-control', 'data-mask' => 'fdecimal']) !!}
-                                                </div> --}}
+                    <div class="col-md-3">
+                        <label class="control-label">Mức lương cơ bản</label>
+                        {!! Form::text('luongcoban', getGeneralConfigs()['luongcb'], [
+                            'id' => 'luongcoban',
+                            'class' => 'form-control text-right',
+                            'data-mask' => 'fdecimal',
+                        ]) !!}
+                    </div>
+                </div>
 
-                                                {{-- <div class="col-md-6">
-                                                    <label class="control-label">Dự toán từ tháng</label>
-                                                    {!! Form::select('thangdt', getThang(), 01, ['class' => 'form-control']) !!}
-                                                </div> --}}
-                                            </div>
+                <div class="row">
+                    <div class="col-md-4">
+                        <label class="control-label">Bảng lương cơ sở 1 - Tháng</label>
+                        {!! Form::text('thang', '07', ['id' => 'thang', 'class' => 'form-control']) !!}
+                    </div>
 
-                                            <div class="row">
-                                                <div class="col-md-4">
-                                                    <label class="control-label">Bảng lương cơ sở 1 - Tháng</label>
-                                                    {!! Form::text('thang', '07', ['id' => 'thang', 'class' => 'form-control']) !!}
-                                                </div>
+                    <div class="col-md-2">
+                        <label class="control-label">Năm</label>
+                        {!! Form::text('nam', date('Y'), ['id' => 'nam', 'class' => 'form-control']) !!}
+                    </div>
 
-                                                <div class="col-md-2">
-                                                    <label class="control-label">Năm</label>
-                                                    {!! Form::text('nam', date('Y'), ['id' => 'nam', 'class' => 'form-control']) !!}
-                                                </div>
+                    <div class="col-md-6">
+                        <label class="control-label">Nguồn kinh phí</label>
+                        {!! Form::select('manguonkp', $a_nkp, '13', ['id' => 'manguonkp', 'class' => 'form-control']) !!}
+                    </div>
+                </div>
 
-                                                <div class="col-md-6">
-                                                    <label class="control-label">Nguồn kinh phí</label>
-                                                    {!! Form::select('manguonkp', $a_nkp, '13', ['id' => 'manguonkp', 'class' => 'form-control']) !!}
-                                                </div>
-                                            </div>
+                <div class="row">
+                    <div class="col-md-4">
+                        <label class="control-label">Bảng lương cơ sở 2 - Tháng</label>
+                        {!! Form::text('thang1', '07', ['class' => 'form-control']) !!}
+                    </div>
 
-                                            <div class="row">
-                                                <div class="col-md-4">
-                                                    <label class="control-label">Bảng lương cơ sở 2 - Tháng</label>
-                                                    {!! Form::text('thang1', '07', ['class' => 'form-control']) !!}
-                                                </div>
+                    <div class="col-md-2">
+                        <label class="control-label">Năm</label>
+                        {!! Form::text('nam1', date('Y'), ['class' => 'form-control']) !!}
+                    </div>
 
-                                                <div class="col-md-2">
-                                                    <label class="control-label">Năm</label>
-                                                    {!! Form::text('nam1', date('Y'), ['class' => 'form-control']) !!}
-                                                </div>
+                    <div class="col-md-6">
+                        <label class="control-label">Nguồn kinh phí</label>
+                        {!! Form::select('manguonkp1', $a_nkp, '12', ['id' => 'manguonkp', 'class' => 'form-control']) !!}
+                    </div>
+                </div>
+            </div>
 
-                                                <div class="col-md-6">
-                                                    <label class="control-label">Nguồn kinh phí</label>
-                                                    {!! Form::select('manguonkp1', $a_nkp, '12', ['id' => 'manguonkp', 'class' => 'form-control']) !!}
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <div class="form-actions">
-                                            <div class="row text-center">
-                                                <div class="col-md-12">
-                                                    <button type="submit" class="btn default">Hoàn thành</button>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        {!! Form::close() !!}
-                                        <!-- END FORM-->
-                                    </div>
-                                </div>
-
-
-                                <div class="tab-pane" id="tab_1">
-                                    {!! Form::open(['url' => $furl . 'create', 'id' => 'create_dutoan', 'class' => 'horizontal-form']) !!}
-                                    <div class="portlet box blue form">
-                                        <div class="portlet-title"></div>
-                                        <div class="portlet-body">
-                                            <div class="row">
-                                                <div class="col-md-4">
-                                                    <label class="control-label">Năm được giao dự toán</label>
-                                                    {!! Form::text('namdt', date('Y') + 1, ['id' => 'namdt', 'class' => 'form-control']) !!}
-                                                </div>
-
-                                                <div class="col-md-4">
-                                                    <label class="control-label">Mức lương cơ bản</label>
-                                                    {!! Form::text('luongcoban', getGeneralConfigs()['luongcb'], ['id' => 'luongcoban', 'class' => 'form-control', 'data-mask' => 'fdecimal']) !!}
-                                                </div>
-
-                                                <div class="col-md-4">
-                                                    <label class="control-label">Dự toán từ tháng</label>
-                                                    {!! Form::select('thang', getThang(), 01, ['id' => 'thang', 'class' => 'form-control']) !!}
-                                                </div>
-                                            </div>
-
-                                            <div class="row">
-                                                <div class="col-md-offset-4 col-md-8" style="padding-top: 15px">
-                                                    <input type="checkbox" checked id="nghihuu" name="nghihuu" />
-                                                    <label for="nghihuu">Tính dự toán cho cán bộ nghỉ hưu</label>
-                                                </div>
-
-                                                <div class="col-md-offset-4 col-md-8" style="padding-top: 15px">
-                                                    <input type="checkbox" id="baohiem" name="baohiem" />
-                                                    <label for="baohiem">Tính bảo hiểm cho cán bộ chưa tuyển</label>
-                                                </div>
-
-                                                {{-- <div class="col-md-offset-4 col-md-8" style="padding-top: 15px"> --}}
-                                                {{-- <input type="checkbox" id="thaisan" name="thaisan" /> --}}
-                                                {{-- <label for="thaisan">Tính thời gian nghỉ thai sản của cán bộ</label> --}}
-                                                {{-- </div> --}}
-                                            </div>
-                                        </div>
-                                        <div class="form-actions">
-                                            <div class="row text-center">
-                                                <div class="col-md-12">
-                                                    <button type="submit" class="btn default">Hoàn thành</button>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        {!! Form::close() !!}
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+            <div class="modal-footer">
+                <div class="row text-center">
+                    <div class="col-md-12">
+                        <button type="submit" class="btn default">Hoàn thành</button>
                     </div>
                 </div>
             </div>
         </div>
-        <div class="modal-footer"></div>
     </div>
+    {!! Form::close() !!}
+    <!-- END FORM-->
+
 
     <!--Model chuyển-->
     <div class="modal fade" id="chuyen-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"

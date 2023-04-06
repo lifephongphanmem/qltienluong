@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\dutoanluongController;
 use App\Http\Controllers\hosotamngungtheodoiController;
 use Illuminate\Support\Facades\Route;
 
@@ -81,8 +82,9 @@ Route::group(['prefix' => 'nghiep_vu'], function () {
     });
 
     Route::group(['prefix' => 'quan_ly'], function () {
+
         Route::group(['prefix' => 'du_toan'], function () {
-            Route::get('', 'dutoanluongController@show');
+            Route::get('', [dutoanluongController::class, 'show']);
             Route::get('danh_sach', 'dutoanluongController@index');
             Route::get('del/{id}', 'dutoanluongController@destroy');
             Route::post('create', 'dutoanluongController@create');
@@ -159,7 +161,7 @@ Route::group(['prefix' => 'nghiep_vu'], function () {
     });
 
     Route::group(['prefix' => 'tam_ngung'], function () {
-        Route::get('danh_sach', [hosotamngungtheodoiController::class,'index']);
+        Route::get('danh_sach', [hosotamngungtheodoiController::class, 'index']);
         Route::get('del/{id}', 'hosotamngungtheodoiController@destroy');
 
         Route::get('create', 'hosotamngungtheodoiController@create');
@@ -274,4 +276,3 @@ Route::group(['prefix' => 'nghiep_vu'], function () {
         Route::get('get', 'chitieubiencheController@get_detail');
     });
 });
-
