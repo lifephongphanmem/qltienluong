@@ -1794,7 +1794,7 @@ class bangluongController extends Controller
                                             if ($cthuc != '')
                                                 $heso += $cb->$cthuc;
                                         }
-                                        $cb->$mapc = ($heso * $cb->$mapc) / 100;
+                                        $cb->$mapc = round(($heso * $cb->$mapc) / 100, session('admin')->lamtron);
                                     }
 
                                     $tonghs += $cb->$mapc;
