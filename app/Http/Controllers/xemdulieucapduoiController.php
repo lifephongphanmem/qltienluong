@@ -277,7 +277,7 @@ class xemdulieucapduoiController extends Controller
                             ->get();
                     })
                     ->distinct()->get();
-                    
+
                 $model_nguon = tonghopluong_donvi::wherein('madv', function ($query) use ($madv) {
                     $query->select('madv')->from('dmdonvi')->where('macqcq', $madv)->where('madv', '<>', $madv)->get();
                 })->where('thang', $inputs['thang'])
@@ -309,14 +309,21 @@ class xemdulieucapduoiController extends Controller
                             ->get();
                     })
                     ->distinct()->get();
-                    
+                /* 13.04.23 bỏ phần lấy ở huyện vì giờ chuyển trực tiếp lên huyện ko có khối
                 $model_nguon = tonghopluong_huyen::wherein('madv', function ($query) use ($madv) {
                     $query->select('madv')->from('dmdonvi')->where('macqcq', $madv)->where('madv', '<>', $madv)->get();
                 })->where('thang', $inputs['thang'])
                     ->where('nam', $inputs['nam'])
-                    ->wherein('trangthai', ['DAGUI','TRALAI'])
+                    ->wherein('trangthai', ['DAGUI', 'TRALAI'])
                     ->get();
-                    // dd($model_nguon);
+                // dd($model_nguon);
+                */
+                $model_nguon = tonghopluong_donvi::wherein('madv', function ($query) use ($madv) {
+                    $query->select('madv')->from('dmdonvi')->where('macqcq', $madv)->where('madv', '<>', $madv)->get();
+                })->where('thang', $inputs['thang'])
+                    ->where('nam', $inputs['nam'])
+                    ->where('trangthai', 'DAGUI')
+                    ->get();
             }
             //dd($model_nguon->toarray());
             $model_nguon_tinh = tonghopluong_tinh::where('madv', $madv)->where('thang', $inputs['thang'])
@@ -335,7 +342,8 @@ class xemdulieucapduoiController extends Controller
                 if (session('admin')->phamvitonghop == 'KHOI')
                     $nguonkhoi = $model_nguonkhoi->where('madv', $dv->madv)->first();
                 // if (isset($nguon) && $nguon->trangthai == 'DAGUI' && session('admin')->phamvitonghop == 'HUYEN') {
-                    if (isset($nguon) &&in_array($nguon->trangthai,['DAGUI','TRALAI']) && session('admin')->phamvitonghop == 'HUYEN') {
+                
+                    if (isset($nguon) && in_array($nguon->trangthai, ['DAGUI', 'TRALAI']) && session('admin')->phamvitonghop == 'HUYEN') {
                     $dv->mathdv = $nguon->mathdv;
                     $dv->mathh = $nguon->mathdv;
                     $dv->trangthai = $nguon->trangthai;
@@ -355,7 +363,7 @@ class xemdulieucapduoiController extends Controller
                     $dv->mathdv = null;
                 }
             }
-            // dd($model_donvi);
+            //dd($model_donvi);
             //dd($model_donvi->toarray());
             if (!isset($inputs['trangthai']) || $inputs['trangthai'] != 'ALL') {
                 $model_donvi = $model_donvi->where('trangthai', $inputs['trangthai']);
@@ -425,7 +433,7 @@ class xemdulieucapduoiController extends Controller
             // $model_donvi=nguonkinhphi::where('masot',)
             //dd($model_dulieu);
             // dd($model_tonghop);
-// dd($model_donvi);
+            // dd($model_donvi);
             foreach ($model_donvi as $dv) {
                 $dv->trangthai = 'CHUAGUI';
                 $dulieu = $model_dulieu->where('madv', $dv->madv)
@@ -436,9 +444,9 @@ class xemdulieucapduoiController extends Controller
                 if (isset($tonghop)) {
                     $model_bangluong_ct = tonghopluong_donvi_chitiet::where('matht', $tonghop->mathdv)->first();
                     $dv->tralai = isset($model_bangluong_ct->mathh) ? false : true;
-                    $dv->matht=$tonghop->mathdv;
-                }else{
-                    $dv->matht= null;
+                    $dv->matht = $tonghop->mathdv;
+                } else {
+                    $dv->matht = null;
                 }
 
                 if (isset($dulieu)) {
@@ -468,7 +476,7 @@ class xemdulieucapduoiController extends Controller
             if (!isset($inputs['trangthai']) || $inputs['trangthai'] != 'ALL') {
                 $model_donvi = $model_donvi->where('trangthai', $inputs['trangthai']);
             }
-// dd($model_donvi);
+            // dd($model_donvi);
             return view('functions.viewdata.index_tinh')
                 ->with('model', $model_donvi)
                 ->with('model_th', $model_tonghop)
