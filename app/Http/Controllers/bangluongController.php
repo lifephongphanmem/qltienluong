@@ -1687,6 +1687,7 @@ class bangluongController extends Controller
         if (Session::has('admin')) {
             //lương cơ bản và nguồn lấy trong chi tiết truy lĩnh
             $inputs = $request->all();
+            //dd($inputs);
             $inputs['mabl'] = $inputs['mabl_truylinh'];
             $inputs['thang'] = $inputs['thang_truylinh'];
             $inputs['nam'] = $inputs['nam_truylinh'];

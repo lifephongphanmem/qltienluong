@@ -196,13 +196,13 @@ class tonghopluong_huyenController extends Controller
 
             //đơn vị có macqcq = madv (bang dmdonvi)
             $model_dmdv = dmdonvi::where('macqcq', $madv)
-                ->wherenotin('madv', function($qr) use($inputs){
+                ->wherenotin('madv', function ($qr) use ($inputs) {
                     $qr->select('madv')->from('dsdonviquanly')->where('nam', $inputs['nam'])->distinct()->get();
                 }) //lọc các đơn vị đã khai báo trong dsdonviquanly
                 ->get();
-             $a_donvicapduoi = array_unique(array_merge(array_column($model_dmdv->toarray(), 'madv'), $a_donvicapduoi));
+            $a_donvicapduoi = array_unique(array_merge(array_column($model_dmdv->toarray(), 'madv'), $a_donvicapduoi));
             //dd($model_dmdv);
-            $model_donvitamdung = dmdonvi::where('trangthai', 'TD')->wherein('madv', $a_donvicapduoi)->get();            
+            $model_donvitamdung = dmdonvi::where('trangthai', 'TD')->wherein('madv', $a_donvicapduoi)->get();
 
             $a_data = array(
                 array('thang' => '01', 'mathdv' => null, 'noidung' => null, 'sldv' => $this->laySoLuongDV('01', $inputs['nam'], $a_donvicapduoi, $model_donvitamdung), 'dvgui' => 0),
@@ -1746,7 +1746,31 @@ class tonghopluong_huyenController extends Controller
         //khối =>trả, xóa bang tonghopluong_huyen, update trường mathh = null;
 
         if (Session::has('admin')) {
+            $inputs = $request->all();           
+            $model = tonghopluong_donvi::where('mathdv', $inputs['mathdv'])->first();
+            tonghopluong_huyen::where('mathdv', $model->mathh)->delete();
+            $model->trangthai = 'TRALAI';
+            $model->mathh = null;
+            $model->matht = null;
+            $model->mathk = null;
+            $model->lydo = $inputs['lydo'];
+            $model->save();
+            
+            return redirect('/chuc_nang/xem_du_lieu/huyen?thang=' . $model->thang . '&nam=' . $model->nam . '&trangthai=ALL&phanloai=ALL');
+        } else
+            return view('errors.notlogin');
+    }
+
+    function tralai_130423(Request $request)
+    {
+        //xem dữ liệu khối or đơn vị
+        //đơn vị =>trả, xóa bang tonghopluong_huyen
+        //khối =>trả, xóa bang tonghopluong_huyen, update trường mathh = null;
+
+        if (Session::has('admin')) {
             $inputs = $request->all();
+            dd($inputs);
+
             $model = tonghopluong_huyen::where('mathdv', $inputs['mathdv'])->first();
             // $model->trangthai = 'TRALAI';
             // $model->lydo = $inputs['lydo'];
@@ -1773,6 +1797,7 @@ class tonghopluong_huyenController extends Controller
         } else
             return view('errors.notlogin');
     }
+
 
     function getlydo(Request $request)
     {

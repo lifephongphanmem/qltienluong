@@ -211,7 +211,7 @@
                                                     <i class="fa fa-print"></i>&nbsp;In chi tiết</button>
                                             @endif
                                             <!--button onclick="tanggiam('{{ $value->mabl }}')" class="btn btn-default btn-xs mbs" data-target="#tanggiam-modal-confirm" data-toggle="modal">
-                                                                                    <i class="fa fa-th-list"></i>&nbsp; Tăng/Giảm lương</button-->
+                                                                                        <i class="fa fa-th-list"></i>&nbsp; Tăng/Giảm lương</button-->
                                             {{--                                            @elseif($value->phanloai == 'TRUC') --}}
                                             {{--                                                <a href="{{url($inputs['furl'].'mautruc?mabl='.$value->mabl)}}" class="btn btn-default btn-xs mbs" target="_blank"> --}}
                                             {{--                                                    <i class="fa fa-print"></i>&nbsp; In chi tiết</a> --}}
@@ -428,7 +428,7 @@
                             $('#noidung_truylinh').val(data.noidung);
                             //$('#manguonkp_truylinh').val(data.manguonkp);
                             //$('#luongcoban_truylinh').val(data.luongcoban);
-                            $('#linhvuchoatdong_truylinh').val(data.linhvuchoatdong_truylinh).trigger('change');
+                            $('#linhvuchoatdong_truylinh').val(data.linhvuchoatdong).trigger('change');
                             $('#mabl_truylinh').val(data.mabl);
                             $('#phanloai_truylinh').val(data.phanloai);
                             $('#ngaylap_truylinh').val(data.ngaylap);

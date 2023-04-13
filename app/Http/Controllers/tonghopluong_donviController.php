@@ -568,6 +568,38 @@ class tonghopluong_donviController extends Controller
                     'macqcq' => $model->macqcq,
                 ]);
             //1. hết
+
+            if (session('admin')->macqcq == session('admin')->madvqlkv) {
+                //kiểm tra xem đã có bản ghi chưa (trường hợp trả lại)
+                //$model_huyen = tonghopluong_huyen::where('mathdv', $model->mathh)->first();
+                //khi trả  lại tonghophuyen set mathh = null =>tìm theo mã + thang + năm tổng hợp
+                $model_huyen = tonghopluong_huyen::where('thang', $model->thang)->where('nam', $model->nam)
+                    ->where('madv', $model->madv)->first();
+                if ($model_huyen == null) {
+                    $masoh = getdate()[0];
+                    $model->mathh = $masoh;
+
+                    $inputs['thang'] = $model->thang;
+                    $inputs['nam'] = $model->nam;
+                    $inputs['madv'] = $model->madv;
+                    $inputs['mathdv'] = $masoh;
+                    $inputs['trangthai'] = 'DAGUI';
+                    $inputs['noidung'] = 'Đơn vị ' . getTenDV(session('admin')->madv) . ' tổng hợp dữ liệu chi trả lương.';
+                    $inputs['nguoilap'] = session('admin')->name;
+                    $inputs['ngaylap'] = Carbon::now()->toDateTimeString();
+                    $inputs['macqcq'] = session('admin')->macqcq;
+                    $inputs['madvbc'] = session('admin')->madvbc;
+                    tonghopluong_huyen::create($inputs);
+                } else {
+                    $model->mathh = $model_huyen->mathdv; //set lại mã vào tonghopdv
+
+                    $model_huyen->macqcq = session('admin')->macqcq;
+                    $model_huyen->trangthai = 'DAGUI';
+                    $model_huyen->nguoilap = session('admin')->name;
+                    $model_huyen->ngaylap = Carbon::now()->toDateTimeString();
+                    $model_huyen->save();
+                }
+            }
             $model->save();
 
             return redirect('/chuc_nang/tong_hop_luong/don_vi/index?nam=' . $model->nam);
