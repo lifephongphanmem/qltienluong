@@ -37,7 +37,7 @@ class tonghopnguon_huyenController extends Controller
                 $query->select('madv')->from('dmdonvi')->where('macqcq', $madv)->where('madv', '<>', $madv)->get();
             })->where('trangthai', 'DAGUI')
                 ->get();
-            // dd($model_nguon_huyen);
+            //dd($model_nguon_huyen);
             //$model_nguon_khoi = nguonkinhphi_khoi::where('madv', $madv)->get();
             $model = dmthongtuquyetdinh::all();
             $a_trangthai = getStatus();
@@ -50,8 +50,7 @@ class tonghopnguon_huyenController extends Controller
             $soluong = $model_donvi->count();
 
             foreach ($model as $dv) {
-                $nam = $dv->namdt;
-
+                $nam =  $dv->namdt = date('Y', strtotime($dv->ngayapdung)) ?? date('Y');
                 $model_donvi = dmdonvi::select('madv', 'tendv', 'maphanloai')
                     ->where('macqcq', $madv)->where('madv', '<>', $madv)
                     ->wherenotin('madv', function ($query) use ($madv, $nam) {
@@ -61,7 +60,7 @@ class tonghopnguon_huyenController extends Controller
                             ->get();
                     })->get();
 
-               
+
                 $soluong = $model_donvi->count();
 
                 $nguon_huyen = $model_nguon_tinh->where('sohieu', $dv->sohieu)->first();

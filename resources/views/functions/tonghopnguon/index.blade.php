@@ -55,7 +55,7 @@
                                         <td class="text-center">{{ $key + 1 }}</td>
                                         <td>{{ $value->tenttqd }}</td>
                                         <td class="text-center">{{ $value->sldv }}</td>
-                                        <td class="text-center bold">{{ $a_trangthai[$value['trangthai']] }}</td>
+                                        <td class="text-center bold">{{ $a_trangthai[$value['trangthai']] ?? '' }}</td>
                                         <td>
                                             <a href="{{ url($furl_th . 'tonghop?sohieu=' . $value->sohieu) }}"
                                                 class="btn btn-default btn-xs" target="_blank">
