@@ -18,6 +18,7 @@ class dmthongtuquyetdinh extends Model
         'muccu',
         'mucapdung',//mức thay đổi có thể là hệ số hoặc %
         'chenhlech',
-        'ghichu'
+        'ghichu',
+        'masobaocao',
     ];
 }

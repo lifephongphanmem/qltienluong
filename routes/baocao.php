@@ -49,7 +49,7 @@ Route::group(['prefix' => 'bao_cao'], function () {
             //Route::get('mau2h','baocaothongtu67Controller@mau2h_donvi');
 
             //Mẫu Vạn Ninh
-            Route::post('mau2a2_kh', 'baocaonhucaukinhphi_donviController@mau2a2_kh');
+            Route::post('mau2a2_kh', [baocaonhucaukinhphi_donviController::class, 'mau2a2_kh']);
             Route::post('mau2b', 'baocaonhucaukinhphi_donviController@mau2b_donvi');
             Route::post('mau2đ', 'baocaonhucaukinhphi_donviController@mau2đ_donvi');
             Route::post('mau2e', 'baocaonhucaukinhphi_donviController@mau2e_donvi');

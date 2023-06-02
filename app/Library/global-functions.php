@@ -269,7 +269,7 @@ function getDateToDb($value)
         $a_val = explode('-',$value);
         $ngay = $a_val[1];
         $thang = $a_val[0];
-        $nam = isset($a_val[2])? $a_val[2] : date(Y);
+        $nam = isset($a_val[2])? $a_val[2] : date('Y');
         $nam = $nam < 2000 ? $nam + 2000 : $nam;
         return date('Y-m-d',strtotime($ngay .'-'.$thang.'-'.$nam));
     }
@@ -279,7 +279,7 @@ function getDateToDb($value)
         $a_val = explode('/',$value);
         $ngay = $a_val[0];
         $thang = $a_val[1];
-        $nam = isset($a_val[2])? $a_val[2] : date(Y);
+        $nam = isset($a_val[2])? $a_val[2] : date('Y');
         $nam = $nam < 2000 ? $nam + 2000 : $nam;
         return date('Y-m-d',strtotime($ngay .'-'.$thang.'-'.$nam));
     }
@@ -320,30 +320,6 @@ function canGeneral($module = null, $action =null)
         return false;
 }
 
-function canDvCc($module = null, $action = null)
-{
-    $permission = !empty(session('ttdnvt')->dvcc) ? session('ttdnvt')->dvcc : getDvCcDefault('T');
-    $permission = json_decode($permission, true);
-
-    //check permission
-    if(isset($permission[$module][$action]) && $permission[$module][$action] == 1) {
-        return true;
-    }else
-        return false;
-}
-
-function canDV($perm=null,$module = null, $action = null){
-    if($perm == ''){
-        return false;
-    }else {
-        $permission = json_decode($perm,true);
-        if (isset($permission[$module][$action]) && $permission[$module][$action] == 1) {
-            return true;
-        } else
-            return false;
-    }
-}
-
 function getDouble($str)
 {
     $sKQ = 0;
@@ -352,28 +328,6 @@ function getDouble($str)
     //if (is_double($str))
     $sKQ = $str;
     return floatval($sKQ);
-}
-
-function canDVVT($setting = null,$module = null, $action = null){
-    $setting = json_decode($setting, true);
-
-    //check permission
-    if(isset($setting[$module][$action]) && $setting[$module][$action] == 1) {
-        return true;
-    }else
-        return false;
-}
-
-function canshow($module = null, $action = null)
-{
-    $permission = !empty(session('admin')->dvvtcc) ? session('admin')->dvvtcc : '{"dvvt":{"vtxk":"1","vtxb":"1","vtxtx":"1","vtch":"1"}}';
-    $permission = json_decode($permission, true);
-
-    //check permission
-    if(isset($permission[$module][$action]) && $permission[$module][$action] == 1) {
-        return true;
-    }else
-        return false;
 }
 
 function chuyenkhongdau($str)

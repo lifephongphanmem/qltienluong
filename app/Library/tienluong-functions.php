@@ -953,3 +953,15 @@ function chkDiv0($dbl)
 {
     return chkDbl($dbl) <= 0 ? 1 : chkDbl($dbl);
 }
+
+
+//2023.06.02 Xây dựng danh mục báo cáo nhu cầu kinh phí
+function getBaoCaoNhuCauKP()
+{
+    return array(
+        'TT67_2017' => 'Thông tư số 67/2017/TT-BTC',
+        'TT68_2018' => 'Thông tư số 68/2018/TT-BTC',
+        'TT46_2019' => 'Thông tư số 46/2019/TT-BTC',
+        'TT78_2022' => 'Thông tư số 78/2022/TT-BTC',
+    );
+}

@@ -37,7 +37,7 @@ class dmthongtuquyetdinhController extends Controller
             die(json_encode($result));
         }
         $inputs = $request->all();
-
+        $inputs['namdt'] = date('Y', strtotime($inputs['ngayapdung'])) ?? date('Y');        
         $inputs['muccu'] = chkDbl($inputs['muccu']);
         $inputs['mucapdung'] = chkDbl($inputs['mucapdung']);
         $inputs['chenhlech'] = chkDbl($inputs['chenhlech']);
@@ -56,17 +56,19 @@ class dmthongtuquyetdinhController extends Controller
         die(json_encode($result));
     }
 
-    function destroy($id){
+    function destroy($id)
+    {
         if (Session::has('admin')) {
             $model = dmthongtuquyetdinh::findOrFail($id);
             $model->delete();
             return redirect('/danh_muc/thong_tu/index');
-        }else
+        } else
             return view('errors.notlogin');
     }
 
-    function getinfo(Request $request){
-        if(!Session::has('admin')) {
+    function getinfo(Request $request)
+    {
+        if (!Session::has('admin')) {
             $result = array(
                 'status' => 'fail',
                 'message' => 'permission denied',
@@ -75,7 +77,7 @@ class dmthongtuquyetdinhController extends Controller
         }
 
         $inputs = $request->all();
-        $model = dmthongtuquyetdinh::where('id',$inputs['id'])->first();
+        $model = dmthongtuquyetdinh::where('id', $inputs['id'])->first();
         die($model);
     }
 }
