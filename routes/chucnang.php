@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\bangluong_thuyetminhController;
 use App\Http\Controllers\bangluongController;
+use App\Http\Controllers\dutoanluong_khoiController;
 use App\Http\Controllers\tonghopluong_huyenController;
 use Illuminate\Support\Facades\Route;
 
@@ -391,7 +392,7 @@ Route::group(['prefix' => 'chuc_nang'], function () {
         });
 
         Route::group(['prefix' => 'khoi'], function () {
-            Route::get('index', 'dutoanluong_khoiController@index');
+            Route::get('index', [dutoanluong_khoiController::class,'index']);
             Route::post('tralai', 'dutoanluong_khoiController@tralai'); //trả về đơn vị
             Route::post('senddata', 'dutoanluong_khoiController@senddata'); //gửi dữ liệu lên huyện
 

@@ -23,6 +23,22 @@ function a_split($array, $field)
     return $kq;
 }
 
+//Hàm tạo mảng mới bằng cách lấy 1 số cột trong mảng cũ
+function a_split_key($array, $field, $field_key)
+{
+    $kq = array();
+    foreach ($array as $ar) {
+        $holding = array();
+        foreach ($ar as $k => $v) {
+            if (in_array($k, $field)) {
+                $holding[$k] = $v;
+            }
+        }
+        $kq[$ar[$field_key]] = $holding;
+    }
+    return $kq;
+}
+
 //Hàm tạo mảng mới bằng cách gộp những giá trị trùng nhau trong mảng cũ lại
 function a_unique($array)
 {

@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class UpdateDutoanluongChitietTable extends Migration
+class CreateNguonkinhphiPhucapTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,9 +13,18 @@ class UpdateDutoanluongChitietTable extends Migration
      */
     public function up()
     {
-        Schema::table('dutoanluong_chitiet', function (Blueprint $table) {
-            $table->string('phanloai', 25)->default('COMAT'); //phân loại biên chế có mặt; chưa tuyển để theo dõi
-
+        Schema::create('nguonkinhphi_phucap', function (Blueprint $table) {
+            $table->bigIncrements('id');
+            $table->string('masodv', 50)->nullable();
+            $table->string('masok', 50)->nullable();
+            $table->string('masoh', 50)->nullable();
+            $table->string('masot', 50)->nullable();
+            $table->string('sohieu')->nullable();
+            $table->string('manguonkp', 50)->nullable(); //chưa dùng
+            $table->string('macongtac', 50)->nullable();
+            $table->string('mact', 50)->nullable();
+            $table->integer('canbo_congtac')->default(0);
+            $table->integer('canbo_dutoan')->default(0);
             //lưu theo từng phân loại sau 
             $table->double('heso')->default(0);
             $table->double('hesobl')->default(0);
@@ -100,15 +109,15 @@ class UpdateDutoanluongChitietTable extends Migration
             $table->double('stkpcd_dv')->default(0);
             $table->double('stbhtn_dv')->default(0);
             $table->double('ttbh_dv')->default(0);
-
-            $table->double('tonghs')->default(0);
-            $table->double('ttl')->default(0);
-            //
             $table->double('bhxh_dv')->default(0);
             $table->double('bhyt_dv')->default(0);
             $table->double('bhtn_dv')->default(0);
             $table->double('kpcd_dv')->default(0);
             $table->double('tongbh_dv')->default(0);
+            //
+            $table->double('tonghs')->default(0);
+            $table->double('ttl')->default(0);
+            $table->timestamps();
         });
     }
 
@@ -119,6 +128,6 @@ class UpdateDutoanluongChitietTable extends Migration
      */
     public function down()
     {
-        //
+        Schema::dropIfExists('nguonkinhphi_phucap');
     }
 }
