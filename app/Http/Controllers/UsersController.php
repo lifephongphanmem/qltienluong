@@ -18,6 +18,9 @@ use Illuminate\Foundation\Auth\User;
 use Illuminate\Http\Request;
 
 use App\Http\Requests;
+use App\nguonkinhphi;
+use App\nguonkinhphi_bangluong;
+use App\nguonkinhphi_phucap;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
 
@@ -209,7 +212,7 @@ class UsersController extends Controller
                 $ttuser->capdonvi = $model_donvi->capdonvi;
                 $ttuser->caphanhchinh = $model_donvi->caphanhchinh;
                 $ttuser->trangthai = $model_donvi->trangthai;
-                $ttuser->mact_tuyenthem=GeneralConfigs::first()->mact_tuyenthem;
+                $ttuser->mact_tuyenthem = GeneralConfigs::first()->mact_tuyenthem;
 
                 //kiểm tra lại hệ thống danh mục nếu danh mục nào chưa có thì tự động lấy vào
                 //trường hợp đơn vị tổng hợp thì bỏ qua
@@ -261,6 +264,34 @@ class UsersController extends Controller
                     )
                         ->wherenotin('mapc', array_column($model_phucap->toarray(), 'mapc'))->get();
                     dmphucap_donvi::insert($model_dmpc->toarray());
+                }
+
+                //2023.06.07 Tự cập nhật các nhu cầu kinh phí cũ 
+                $m_nhucau = nguonkinhphi::where('madv', $ttuser->madv)->where('nangcap_phucap', 0)->get();
+                if ($m_nhucau->count() > 0) {
+                    $m_bangluong = nguonkinhphi_bangluong::wherein('masodv', array_column($m_nhucau->toarray(), 'masodv'))->get();
+                    $m_data_phucap = a_unique(a_split($m_bangluong->toarray(), array('mact', 'macongtac', 'masodv')));
+
+                    $a_col_khac = ["stbhxh_dv", "stbhyt_dv", "stkpcd_dv", "stbhtn_dv", "ttbh_dv", "tonghs"];
+                    $a_pc_tonghop = getColTongHop();
+
+                    for ($i = 0; $i < count($m_data_phucap); $i++) {
+                        $dutoan = $m_bangluong->where('mact', $m_data_phucap[$i]['mact']);
+
+                        $m_data_phucap[$i]['ttl'] = $dutoan->sum("luongtn");
+                        foreach ($a_pc_tonghop as $pc) {
+                            $mapc_st = 'st_' . $pc;
+                            $m_data_phucap[$i][$pc] = $dutoan->sum($pc);
+                            $m_data_phucap[$i][$mapc_st] = $dutoan->sum($mapc_st);
+                        }
+                        foreach ($a_col_khac as $col) {
+                            $m_data_phucap[$i][$col] = $dutoan->sum($col);
+                        }
+                    }
+
+                    foreach (array_chunk($m_data_phucap, 10) as $data) {
+                        nguonkinhphi_phucap::insert($data);
+                    }
                 }
             }
             //kiểm tra xem user thuộc đơn vị nào, nếu ko thuộc đơn vị nào (trừ tài khoản quản trị) => đăng nhập ko thành công
@@ -331,7 +362,7 @@ class UsersController extends Controller
             $ttuser->maphanloai = $model_donvi->maphanloai;
             $ttuser->capdonvi = $model_donvi->capdonvi;
             $ttuser->caphanhchinh = $model_donvi->caphanhchinh;
-            $ttuser->mact_tuyenthem=GeneralConfigs::first()->mact_tuyenthem;
+            $ttuser->mact_tuyenthem = GeneralConfigs::first()->mact_tuyenthem;
 
             $model_phanloai = dmphanloaicongtac_baohiem::where('madv', $ttuser->madv)->get();
             if (count($model_phanloai) == 0) {

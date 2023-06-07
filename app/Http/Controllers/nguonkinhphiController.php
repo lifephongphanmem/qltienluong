@@ -462,7 +462,7 @@ class nguonkinhphiController extends Controller
             $a_col_khac = ["stbhxh_dv", "stbhyt_dv", "stkpcd_dv", "stbhtn_dv", "ttbh_dv", "tonghs"];
             for ($i = 0; $i < count($m_data_phucap); $i++) {
                 $m_data_phucap[$i]['masodv'] = $masodv;
-                $dutoan = a_getelement($a_data, array('mact' => $m_data[$i]['mact']));
+                $dutoan = a_getelement($a_data, array('mact' => $m_data_phucap[$i]['mact']));
 
                 $m_data_phucap[$i]['ttl'] = array_sum(array_column($dutoan, "luongtn"));
                 foreach ($a_pc_tonghop as $pc) {
@@ -516,6 +516,7 @@ class nguonkinhphiController extends Controller
             $m_data = unset_key($m_data, array('luonghs', 'nopbh'));
             nguonkinhphi_chitiet::insert($m_data);
             nguonkinhphi_phucap::insert($m_data_phucap);
+            $inputs['nangcap_phucap'] = true;
             nguonkinhphi::create($inputs);
             return redirect('/nguon_kinh_phi/danh_sach');
         } else
@@ -770,6 +771,7 @@ class nguonkinhphiController extends Controller
             nguonkinhphi_chitiet::where('masodv', $model->masodv)->delete();
             nguonkinhphi_bangluong::where('masodv', $model->masodv)->delete();
             nguonkinhphi_nangluong::where('masodv', $model->masodv)->delete();
+            nguonkinhphi_phucap::where('masodv', $model->masodv)->delete();
             nguonkinhphi_khoi::where('masodv', $model->masok)->delete();
             nguonkinhphi_huyen::where('masodv', $model->masoh)->delete();
             $model->delete();
@@ -984,6 +986,83 @@ class nguonkinhphiController extends Controller
             );
 
             return view('reports.nguonkinhphi.donvi.bangluong_m2')
+                ->with('thongtin', $thongtin)
+                ->with('model', $model)
+                ->with('m_dv', $m_dv)
+                ->with('col', $col)
+                ->with('a_phucap', $a_phucap)
+                ->with('a_congtac', $a_congtac)
+                ->with('pageTitle', 'Tổng hợp dự toán lương tại đơn vị');
+        } else
+            return view('errors.notlogin');
+    }
+
+    function tonghopnhucau_donvi(Request $request)
+    {
+        if (Session::has('admin')) {
+            $inputs = $request->all();
+            $model_thongtin = nguonkinhphi::where('masodv', $inputs['masodv'])->first();
+            $m_dv = dmdonvi::where('madv', $model_thongtin->madv)->first();
+            $a_phucap = array();
+            $col = 0;
+            $m_pc = dmphucap_donvi::where('madv', $model_thongtin->madv)->orderby('stt')->get()->toarray();
+
+            //kiểm tra xem đây là dữ liệu đã nâng cấp chưa
+
+            if ($model_thongtin->nangcap_phucap) {
+                $model = nguonkinhphi_phucap::where('masodv', $inputs['masodv'])->get();
+                //Lấy phụ cấp
+                foreach ($m_pc as $ct) {
+                    if ($model->sum($ct['mapc']) > 0) {
+                        $a_phucap[$ct['mapc']] = $ct['report'];
+                        $col++;
+                    }
+                }
+                //Lấy mã công tác
+                $a_congtac = array_column(dmphanloaict::wherein('mact', a_unique(array_column($model->toarray(), 'mact')))->get()->toArray(), 'tenct', 'mact');
+            } else {
+                if ($inputs['mact'] != 'ALL') {
+                    $model_ct = nguonkinhphi_bangluong::where('masodv', $inputs['masodv'])
+                        ->where('mact', $inputs['mact'])
+                        ->orderby('stt')->get();
+                } else {
+                    $model_ct = nguonkinhphi_bangluong::where('masodv', $inputs['masodv'])->orderby('stt')->get();
+                }
+
+                $model = $model_ct->where('thang', $model_ct->min('thang'));
+
+                $a_congtac = array_column(dmphanloaict::wherein('mact', a_unique(array_column($model->toarray(), 'mact')))->get()->toArray(), 'tenct', 'mact');
+                //dd($a_ct);
+                
+                foreach ($model as $ct) {
+                    $bl = $model_ct->where('macanbo', $ct->macanbo);
+                    foreach ($m_pc as $pc) {
+                        $ma = $pc['mapc'];
+                        $ma_st = 'st_' . $pc['mapc'];
+                        $ct->$ma = $bl->sum($ma);
+                        $ct->$ma_st = $bl->sum($ma_st);
+                    }
+                    $ct->tonghs = $bl->sum('tonghs');
+                    $ct->luongtn = $bl->sum('luongtn');
+                    $ct->stbhxh_dv = $bl->sum('stbhxh_dv');
+                    $ct->stbhyt_dv = $bl->sum('stbhyt_dv');
+                    $ct->stkpcd_dv = $bl->sum('stkpcd_dv');
+                    $ct->stbhtn_dv = $bl->sum('stbhtn_dv');
+                    $ct->ttbh_dv = $bl->sum('ttbh_dv');
+
+                    $ct->tencanbo = str_replace('(nghỉ thai sản)', '', $ct->tencanbo);
+                    $ct->tencanbo = str_replace('(nghỉ hưu)', '', $ct->tencanbo);
+                    $ct->tencanbo = trim($ct->tencanbo);
+                }
+            }
+
+            //dd($model);
+            $thongtin = array(
+                'nguoilap' => session('admin')->name,
+                'namns' => $model_thongtin->namns
+            );
+            
+            return view('reports.nguonkinhphi.donvi.tonghopnhucau')
                 ->with('thongtin', $thongtin)
                 ->with('model', $model)
                 ->with('m_dv', $m_dv)

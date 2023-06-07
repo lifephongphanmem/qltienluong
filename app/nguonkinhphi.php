@@ -74,6 +74,7 @@ class nguonkinhphi extends Model
         'quyluong', //mẫu 2đ
         'tongsodonvi1', //mẫu 2e
         'tongsodonvi2', //mẫu 2e
-        'quy_tuchu' //mẫu 2e
+        'quy_tuchu', //mẫu 2e
+        'nangcap_phucap',//trường để xác định xem đã tổng hợp phụ cấp ra bảng: nguonkinhphi_phucap
     ];
 }

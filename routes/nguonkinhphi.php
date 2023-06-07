@@ -23,9 +23,10 @@ Route::group(['prefix' => 'nguon_kinh_phi'], function () {
     Route::get('nangluong', 'nguonkinhphiController@printf_nangluong');
 
     Route::get('del/{id}', 'nguonkinhphiController@destroy');
-
     Route::get('get_thongtu', 'nguonkinhphiController@getinfor_thongtu');
-
+    //2023.06.07 làm theo TT78/2022 cho vạn ninh
+    Route::post('tonghopnhucau_donvi', 'nguonkinhphiController@tonghopnhucau_donvi');
+    //2023.06.07
 
     Route::group(['prefix' => 'khoi'], function () {
         Route::post('senddata', 'tonghopluong_khoiController@senddata'); //gửi dữ liệu
