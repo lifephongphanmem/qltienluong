@@ -464,6 +464,8 @@ class nguonkinhphiController extends Controller
                 $m_data_phucap[$i]['masodv'] = $masodv;
                 $dutoan = a_getelement($a_data, array('mact' => $m_data_phucap[$i]['mact']));
 
+                $m_data_phucap[$i]['canbo_congtac'] = count($dutoan);
+                $m_data_phucap[$i]['canbo_dutoan'] = $m_data_phucap[$i]['canbo_congtac'];
                 $m_data_phucap[$i]['ttl'] = array_sum(array_column($dutoan, "luongtn"));
                 foreach ($a_pc_tonghop as $pc) {
                     $mapc_st = 'st_' . $pc;
@@ -1006,62 +1008,25 @@ class nguonkinhphiController extends Controller
             $a_phucap = array();
             $col = 0;
             $m_pc = dmphucap_donvi::where('madv', $model_thongtin->madv)->orderby('stt')->get()->toarray();
-
-            //kiểm tra xem đây là dữ liệu đã nâng cấp chưa
-
-            if ($model_thongtin->nangcap_phucap) {
-                $model = nguonkinhphi_phucap::where('masodv', $inputs['masodv'])->get();
-                //Lấy phụ cấp
-                foreach ($m_pc as $ct) {
-                    if ($model->sum($ct['mapc']) > 0) {
-                        $a_phucap[$ct['mapc']] = $ct['report'];
-                        $col++;
-                    }
-                }
-                //Lấy mã công tác
-                $a_congtac = array_column(dmphanloaict::wherein('mact', a_unique(array_column($model->toarray(), 'mact')))->get()->toArray(), 'tenct', 'mact');
-            } else {
-                if ($inputs['mact'] != 'ALL') {
-                    $model_ct = nguonkinhphi_bangluong::where('masodv', $inputs['masodv'])
-                        ->where('mact', $inputs['mact'])
-                        ->orderby('stt')->get();
-                } else {
-                    $model_ct = nguonkinhphi_bangluong::where('masodv', $inputs['masodv'])->orderby('stt')->get();
-                }
-
-                $model = $model_ct->where('thang', $model_ct->min('thang'));
-
-                $a_congtac = array_column(dmphanloaict::wherein('mact', a_unique(array_column($model->toarray(), 'mact')))->get()->toArray(), 'tenct', 'mact');
-                //dd($a_ct);
-                
-                foreach ($model as $ct) {
-                    $bl = $model_ct->where('macanbo', $ct->macanbo);
-                    foreach ($m_pc as $pc) {
-                        $ma = $pc['mapc'];
-                        $ma_st = 'st_' . $pc['mapc'];
-                        $ct->$ma = $bl->sum($ma);
-                        $ct->$ma_st = $bl->sum($ma_st);
-                    }
-                    $ct->tonghs = $bl->sum('tonghs');
-                    $ct->luongtn = $bl->sum('luongtn');
-                    $ct->stbhxh_dv = $bl->sum('stbhxh_dv');
-                    $ct->stbhyt_dv = $bl->sum('stbhyt_dv');
-                    $ct->stkpcd_dv = $bl->sum('stkpcd_dv');
-                    $ct->stbhtn_dv = $bl->sum('stbhtn_dv');
-                    $ct->ttbh_dv = $bl->sum('ttbh_dv');
-
-                    $ct->tencanbo = str_replace('(nghỉ thai sản)', '', $ct->tencanbo);
-                    $ct->tencanbo = str_replace('(nghỉ hưu)', '', $ct->tencanbo);
-                    $ct->tencanbo = trim($ct->tencanbo);
+            
+            $model = nguonkinhphi_phucap::where('masodv', $inputs['masodv'])->get();
+            //Lấy phụ cấp
+            foreach ($m_pc as $ct) {
+                if ($model->sum($ct['mapc']) > 0) {
+                    $a_phucap[$ct['mapc']] = $ct['report'];
+                    $col++;
                 }
             }
+            //Lấy mã công tác
+            $a_congtac = array_column(dmphanloaict::wherein('mact', a_unique(array_column($model->toarray(), 'mact')))->get()->toArray(), 'tenct', 'mact');
+
 
             //dd($model);
             $thongtin = array(
                 'nguoilap' => session('admin')->name,
                 'namns' => $model_thongtin->namns
             );
-            
+
             return view('reports.nguonkinhphi.donvi.tonghopnhucau')
                 ->with('thongtin', $thongtin)
                 ->with('model', $model)

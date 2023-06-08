@@ -26,6 +26,7 @@ Route::group(['prefix' => 'nguon_kinh_phi'], function () {
     Route::get('get_thongtu', 'nguonkinhphiController@getinfor_thongtu');
     //2023.06.07 làm theo TT78/2022 cho vạn ninh
     Route::post('tonghopnhucau_donvi', 'nguonkinhphiController@tonghopnhucau_donvi');
+    Route::post('tonghopnhucau_donvi_2a', 'nguonkinhphiController@tonghopnhucau_donvi_2a');
     //2023.06.07
 
     Route::group(['prefix' => 'khoi'], function () {

@@ -271,12 +271,14 @@ class UsersController extends Controller
                 if ($m_nhucau->count() > 0) {
                     $m_bangluong = nguonkinhphi_bangluong::wherein('masodv', array_column($m_nhucau->toarray(), 'masodv'))->get();
                     $m_data_phucap = a_unique(a_split($m_bangluong->toarray(), array('mact', 'macongtac', 'masodv')));
-
+                    //dd($m_data_phucap);
                     $a_col_khac = ["stbhxh_dv", "stbhyt_dv", "stkpcd_dv", "stbhtn_dv", "ttbh_dv", "tonghs"];
                     $a_pc_tonghop = getColTongHop();
 
                     for ($i = 0; $i < count($m_data_phucap); $i++) {
-                        $dutoan = $m_bangluong->where('mact', $m_data_phucap[$i]['mact']);
+                        $dutoan = $m_bangluong->where('mact', $m_data_phucap[$i]['mact'])->where('masodv', $m_data_phucap[$i]['masodv']);
+                        $m_data_phucap[$i]['canbo_congtac'] = $dutoan->count();
+                        $m_data_phucap[$i]['canbo_dutoan'] = $m_data_phucap[$i]['canbo_congtac'];
 
                         $m_data_phucap[$i]['ttl'] = $dutoan->sum("luongtn");
                         foreach ($a_pc_tonghop as $pc) {
@@ -292,6 +294,7 @@ class UsersController extends Controller
                     foreach (array_chunk($m_data_phucap, 10) as $data) {
                         nguonkinhphi_phucap::insert($data);
                     }
+                    nguonkinhphi::where('madv', $ttuser->madv)->where('nangcap_phucap', 0)->update(['nangcap_phucap' => 1]);
                 }
             }
             //kiểm tra xem user thuộc đơn vị nào, nếu ko thuộc đơn vị nào (trừ tài khoản quản trị) => đăng nhập ko thành công

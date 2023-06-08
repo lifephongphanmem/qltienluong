@@ -25,12 +25,15 @@
                     </div>
                 </div>
 
-                <!--div class="col-md-6">
-                                    <div class="form-group">
-                                        <button type="button" onclick="intonghopdt('{{ $furl . 'printf_m2?maso=' }}')" style="border-width: 0px" class="btn btn-default btn-xs mbs">
-                                            <i class="fa fa-print"></i>&nbsp; In dự toán tổng hợp - mẫu 02</button>
-                                    </div>
-                                </div-->
+                {{-- <div class="col-md-6">
+                    <div class="form-group">
+                        <button type="button" onclick="ThongTinKetXuat(true,'{{ $furl . 'tonghopnhucau_donvi_2a' }}')"
+                            style="border-width: 0px" class="btn btn-default btn-xs mbs" data-target="#mautt107-modal"
+                            data-toggle="modal">
+                            <i class="fa fa-print"></i>&nbsp; Bảng tổng hợp nhu cầu kinh phí (Mẫu 2a)</button>
+                    </div>
+                </div> --}}
+                
             </div>
 
             <div class="row">
