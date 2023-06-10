@@ -26,6 +26,7 @@ use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Request;
 
 use App\Http\Controllers\Controller;
+use App\nguonkinhphi_01thang;
 use App\nguonkinhphi_phucap;
 use Illuminate\Support\Facades\Session;
 
@@ -80,7 +81,7 @@ class nguonkinhphiController extends Controller
                     ->with('furl', '/nguon_kinh_phi/danh_sach');
             }
 
-            $a_plct = getPLCTTongHop();
+            $a_plct = getPLCTNhuCau();
             $a_congtac = array_column(dmphanloaict::all()->toArray(), 'macongtac', 'mact');
             $gen = getGeneralConfigs();
             $a_pc_tonghop = getColTongHop();
@@ -150,7 +151,7 @@ class nguonkinhphiController extends Controller
                 if (isset($cb->ngaysinh)) {
                     $dt_ns = date_create($cb->ngaysinh);
                     $cb->nam_ns = (string) date_format($dt_ns, 'Y') + ($cb->gioitinh == 'Nam' ? $gen['tuoinam'] : $gen['tuoinu']);
-                    $cb->thang_ns = date_format($dt_ns, 'm') + 1;
+                    $cb->thang_ns = date_format($dt_ns, 'm') + 1 + ($cb->gioitinh == 'Nam' ? $gen['thangnam'] : $gen['thangnu']);
                     if ($cb->thang_ns > 12) {
                         $cb->thang_ns = '01';
                         $cb->nam_ns = strval($cb->nam_ns + 1);
@@ -411,7 +412,7 @@ class nguonkinhphiController extends Controller
 
             $m_data = a_split_key($a_data, array('mact', 'macongtac'), 'mact');
             $m_data_phucap = a_unique($m_data);
-
+            $m_data_01thang = a_unique($m_data);
             $m_data = a_unique($m_data);
             //tính lại do lệnh với bảng lương
             for ($i = 0; $i < count($m_data); $i++) {
@@ -476,7 +477,33 @@ class nguonkinhphiController extends Controller
                     $m_data_phucap[$i][$col] = array_sum(array_column($dutoan, $col));
                 }
             }
-            //dd($m_data_phucap);
+
+
+            //Tổng hợp 01 tháng để tính
+            for ($i = 0; $i < count($m_data_01thang); $i++) {
+                $m_data_01thang[$i]['masodv'] = $masodv;
+                $dutoan = a_getelement($a_data, array('mact' => $m_data_01thang[$i]['mact'], 'thang' => '07'));
+
+                $m_data_01thang[$i]['canbo_congtac'] = count($dutoan);
+                $m_data_01thang[$i]['canbo_dutoan'] = $m_data_01thang[$i]['canbo_congtac'];
+                $m_data_01thang[$i]['ttl'] = array_sum(array_column($dutoan, "luongtn"));
+                foreach ($a_pc_tonghop as $pc) {
+                    $mapc_st = 'st_' . $pc;
+                    $m_data_01thang[$i][$pc] = array_sum(array_column($dutoan, $pc));
+                    $m_data_01thang[$i][$mapc_st] = array_sum(array_column($dutoan, $mapc_st));
+                }
+                foreach ($a_col_khac as $col) {
+                    $m_data_01thang[$i][$col] = array_sum(array_column($dutoan, $col));
+                }
+                //Tính lại hệ số bảo hiểm lấy tương đối
+                $m_data_01thang[$i]['bhxh_dv'] = round($m_data_01thang[$i]['stbhxh_dv'] / $inputs['chenhlech'], 7);
+                $m_data_01thang[$i]['bhyt_dv'] = round($m_data_01thang[$i]['stbhyt_dv'] / $inputs['chenhlech'], 7);
+                $m_data_01thang[$i]['bhtn_dv'] = round($m_data_01thang[$i]['stbhtn_dv'] / $inputs['chenhlech'], 7);
+                $m_data_01thang[$i]['kpcd_dv'] = round($m_data_01thang[$i]['stkpcd_dv'] / $inputs['chenhlech'], 7);
+                $m_data_01thang[$i]['tongbh_dv'] = $m_data_01thang[$i]['bhxh_dv'] + $m_data_01thang[$i]['bhyt_dv'] + $m_data_01thang[$i]['bhtn_dv'] + $m_data_01thang[$i]['kpcd_dv'];
+            }
+
+            //dd($m_data_01thang);
 
             $inputs['trangthai'] = 'CHOGUI';
             $inputs['maphanloai'] = session('admin')->maphanloai;
@@ -518,6 +545,7 @@ class nguonkinhphiController extends Controller
             $m_data = unset_key($m_data, array('luonghs', 'nopbh'));
             nguonkinhphi_chitiet::insert($m_data);
             nguonkinhphi_phucap::insert($m_data_phucap);
+            nguonkinhphi_01thang::insert($m_data_01thang);
             $inputs['nangcap_phucap'] = true;
             nguonkinhphi::create($inputs);
             return redirect('/nguon_kinh_phi/danh_sach');
@@ -530,7 +558,7 @@ class nguonkinhphiController extends Controller
         if (Session::has('admin')) {
             $inputs = $request->all();
             $model = nguonkinhphi::where('masodv', $inputs['maso'])->first();
-            $model_ct = nguonkinhphi_chitiet::where('masodv', $inputs['maso'])->get();
+
             $m_thongtu = dmthongtuquyetdinh::where('sohieu', $model->sohieu)->first();
             // dd($model);
             if ($model != null) {
@@ -541,10 +569,23 @@ class nguonkinhphiController extends Controller
                     + $model->kpuudai + $model->kpthuhut;
             }
 
+            //Mẫu 2a
+            $model_2a = nguonkinhphi_01thang::where('masodv', $inputs['maso'])->get();
+            //lấy ds phu cap
+
+            //Tinh toán số liệu
+            //Mẫu 2đ (2dd)
+            //     'soluonghientai_2dd', //lấy số lượng cán bộ hiện tại
+            // 'quyluonghientai_2dd', //lấy tll trong nguonkinhphi_phucap nhan chia số tiền theo thông tư
+
+            //2h
+
+            //dd($m_thongtu );
             return view('manage.nguonkinhphi.edit')
                 ->with('furl', '/nguon_kinh_phi/')
                 ->with('model', $model)
-                ->with('model_ct', $model_ct)
+                ->with('model_2a', $model_2a)
+                ->with('m_thongtu', $m_thongtu)
                 ->with('a_ct', getPhanLoaiCT(false))
                 ->with('nam', date_format(date_create($m_thongtu->ngayapdung), 'Y'))
                 ->with('pageTitle', 'Danh sách nguồn kinh phí của đơn vị');
@@ -773,6 +814,7 @@ class nguonkinhphiController extends Controller
             nguonkinhphi_chitiet::where('masodv', $model->masodv)->delete();
             nguonkinhphi_bangluong::where('masodv', $model->masodv)->delete();
             nguonkinhphi_nangluong::where('masodv', $model->masodv)->delete();
+            nguonkinhphi_01thang::where('masodv', $model->masodv)->delete();
             nguonkinhphi_phucap::where('masodv', $model->masodv)->delete();
             nguonkinhphi_khoi::where('masodv', $model->masok)->delete();
             nguonkinhphi_huyen::where('masodv', $model->masoh)->delete();
@@ -1008,7 +1050,7 @@ class nguonkinhphiController extends Controller
             $a_phucap = array();
             $col = 0;
             $m_pc = dmphucap_donvi::where('madv', $model_thongtin->madv)->orderby('stt')->get()->toarray();
-            
+
             $model = nguonkinhphi_phucap::where('masodv', $inputs['masodv'])->get();
             //Lấy phụ cấp
             foreach ($m_pc as $ct) {

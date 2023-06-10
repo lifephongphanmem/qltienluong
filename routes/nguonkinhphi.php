@@ -4,7 +4,7 @@ use App\Http\Controllers\nguonkinhphiController;
 use Illuminate\Support\Facades\Route;
 
 Route::group(['prefix' => 'nguon_kinh_phi'], function () {
-    Route::get('danh_sach', [nguonkinhphiController::class,'index']);
+    Route::get('danh_sach', [nguonkinhphiController::class, 'index']);
     Route::get('chi_tiet', 'nguonkinhphiController@edit');
 
     Route::post('create', 'nguonkinhphiController@create');
@@ -15,18 +15,17 @@ Route::group(['prefix' => 'nguon_kinh_phi'], function () {
     Route::post('senddata', 'nguonkinhphiController@senddata'); //gửi dữ liệu
     Route::get('ma_so={masodv}/in', 'nguonkinhphiController@printf');
     Route::get('getlydo', 'nguonkinhphiController@getlydo');
-
-    Route::get('printf', 'nguonkinhphiController@printf_data'); //in theo thoại
-    Route::post('mautt107', 'nguonkinhphiController@printf_tt107');
-    Route::post('mautt107_m2', 'nguonkinhphiController@printf_tt107_m2');
-    Route::get('mautt107_m3', 'nguonkinhphiController@printf_tt107_m3');
-    Route::get('nangluong', 'nguonkinhphiController@printf_nangluong');
-
     Route::get('del/{id}', 'nguonkinhphiController@destroy');
     Route::get('get_thongtu', 'nguonkinhphiController@getinfor_thongtu');
+
+    Route::get('printf', 'nguonkinhphi_donvi_baocaoController@printf_data'); //in theo thoại
+    Route::post('mautt107', 'nguonkinhphi_donvi_baocaoController@printf_tt107');
+    Route::post('mautt107_m2', 'nguonkinhphi_donvi_baocaoController@printf_tt107_m2');
+    Route::get('mautt107_m3', 'nguonkinhphi_donvi_baocaoController@printf_tt107_m3');
+    Route::get('nangluong', 'nguonkinhphi_donvi_baocaoController@printf_nangluong');
     //2023.06.07 làm theo TT78/2022 cho vạn ninh
-    Route::post('tonghopnhucau_donvi', 'nguonkinhphiController@tonghopnhucau_donvi');
-    Route::post('tonghopnhucau_donvi_2a', 'nguonkinhphiController@tonghopnhucau_donvi_2a');
+    Route::post('tonghopnhucau_donvi', 'nguonkinhphi_donvi_baocaoController@tonghopnhucau_donvi');
+    Route::post('tonghopnhucau_donvi_2a', 'nguonkinhphi_donvi_baocaoController@tonghopnhucau_donvi_2a');
     //2023.06.07
 
     Route::group(['prefix' => 'khoi'], function () {
@@ -48,4 +47,3 @@ Route::group(['prefix' => 'nguon_kinh_phi'], function () {
         Route::get('mautt107_m2', 'tonghopnguon_huyenController@printf_tt107_m2');
     });
 });
-

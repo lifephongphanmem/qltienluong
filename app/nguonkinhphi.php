@@ -76,5 +76,28 @@ class nguonkinhphi extends Model
         'tongsodonvi2', //mẫu 2e
         'quy_tuchu', //mẫu 2e
         'nangcap_phucap',//trường để xác định xem đã tổng hợp phụ cấp ra bảng: nguonkinhphi_phucap
+        //Mẫu 2đ
+        'soluonghientai_2dd',
+        'quyluonghientai_2dd',
+        'kinhphitietkiem_2dd',
+        'quyluongtietkiem_2dd',
+        //Mẫu 2h
+        'soluonghientai_2h',
+        'hesoluong_2h',
+        'hesophucap_2h',
+        'tonghesophucapnd61_2h',
+        'tonghesophucapqd244_2h',
+        //Mẫu 2i
+        'soluonghientai_2i',
+        'hesoluong_2i',
+        'hesophucap_2i',
+        //Mẫu 2k
+        'soluonggiam_2k',
+        'quyluonggiam_2k',
+        //Mẫu 2d
+        'sothonbiengioi_2d',
+        'sothontrongdiem_2d',
+        'sothonconlai_2d',
+        'sotoconlai_2d',
     ];
 }

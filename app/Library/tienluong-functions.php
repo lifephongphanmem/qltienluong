@@ -332,6 +332,18 @@ function getPLCTTongHop()
         'pccovu','pclt','pcd','pctr','pctnvk','pcbdhdcu','pcthni');
     */
 }
+
+function getPLCTNhuCau()
+{
+    return array_column(App\dmphanloaict::where('tonghop', 1)->get()->toarray(), 'mact');
+    /*
+    return array('heso','hesopc','vuotkhung','pcct','hesobl', 'luonghd','pcud61',
+        'pckct','pck','pccv','pckv','pcth','pcdd','pcdh','pcld',
+        'pcdbqh','pcudn','pctn','pctnn','pcdbn','pcvk','pckn','pcdang',
+        'pccovu','pclt','pcd','pctr','pctnvk','pcbdhdcu','pcthni');
+    */
+}
+
 function getPLCTDuToan()
 {
     return array_column(App\dmphanloaict::where('dutoan', 1)->get()->toarray(), 'mact');
@@ -964,4 +976,52 @@ function getBaoCaoNhuCauKP()
         'TT46_2019' => 'Thông tư số 46/2019/TT-BTC',
         'TT78_2022' => 'Thông tư số 78/2022/TT-BTC',
     );
+}
+
+function getHCSN()
+{
+    //tonghop: 9 => bỏ qua
+    //tonghop: 0 => Tính toán số liêu theo công thức
+    //tonghop: 1 => lấy các ô trong chitiet để cộng
+    $ar_I[0] = array('tt' => 'I', 'noidung' => 'KHU VỰC HCSN, ĐẢNG, ĐOÀN THỂ', 'phanloai' => '1', 'chitiet' => []);
+    $ar_I[1] = array('tt' => '-', 'noidung' => 'Trong đó', 'phanloai' => '9', 'chitiet' => []);
+    $ar_I[2] = array('tt' => '1', 'noidung' => 'Sự nghiệp giáo dục - đào tạo', 'phanloai' => '1', 'chitiet' => [3, 4]);
+    $ar_I[3] = array('tt' => '-', 'noidung' => 'Giáo dục', 'phanloai' => '0', 'chitiet' => ['linhvuchoatdong' => 'GD',]);
+    $ar_I[4] = array('tt' => '-', 'noidung' => 'Đào tạo', 'phanloai' => '0', 'chitiet' => ['linhvuchoatdong' => 'DT',]);
+    $ar_I[5] = array('tt' => '2', 'noidung' => 'Sự nghiệp y tế', 'phanloai' => '0', 'chitiet' => ['linhvuchoatdong' => 'YTE',]);
+    $ar_I[6] = array('tt' => '3', 'noidung' => 'Sự nghiệp khoa học-công nghệ', 'phanloai' => '0', 'chitiet' => ['linhvuchoatdong' => 'KHCN',]);
+    $ar_I[7] = array('tt' => '4', 'noidung' => 'Sự nghiệp văn hóa thông tin', 'phanloai' => '0', 'chitiet' => ['linhvuchoatdong' => 'VHTT',]);
+    $ar_I[8] = array('tt' => '5', 'noidung' => 'Sự nghiệp phát thanh truyền hình', 'phanloai' => '0', 'chitiet' => ['linhvuchoatdong' => 'PTTH',]);
+    $ar_I[9] = array('tt' => '6', 'noidung' => 'Sự nghiệp thể dục - thể thao', 'phanloai' => '0', 'chitiet' => ['linhvuchoatdong' => 'TDTT',]);
+    $ar_I[10] = array('tt' => '7', 'noidung' => 'Sự nghiệp đảm bảo xã hội', 'phanloai' => '0', 'chitiet' => ['linhvuchoatdong' => 'DBXH',]);
+    $ar_I[11] = array('tt' => '8', 'noidung' => 'Sự nghiệp kinh tế', 'phanloai' => '0', 'chitiet' => ['linhvuchoatdong' => 'KT',]);
+    $ar_I[12] = array('tt' => '9', 'noidung' => 'Sự nghiệp môi trường', 'phanloai' => '0', 'chitiet' => ['linhvuchoatdong' => 'MT',]);
+    $ar_I[13] = array('tt' => '10', 'noidung' => 'Quản lý nhà nước, đảng, đoàn thể', 'phanloai' => '1', 'chitiet' => [14, 15]);
+    $ar_I[14] = array('tt' => '-', 'noidung' => ' Quản lý NN', 'phanloai' => '0', 'chitiet' => ['linhvuchoatdong' => 'QLNN',]);
+    $ar_I[15] = array('tt' => '-', 'noidung' => 'Đảng, đoàn thể', 'phanloai' => '0', 'chitiet' => ['linhvuchoatdong' => 'DDT',]);
+    return $ar_I;
+}
+
+function getChuyenTrach()
+{
+    $ar_II[0] = array('tt' => 'I', 'noidung' => 'CÁN BỘ CHUYÊN TRÁCH, CÔNG CHỨC XÃ', 'phanloai' => '1', 'chitiet' => ['maphanloai' => 'KVXP']);
+    return $ar_II;
+}
+
+function getHDND()
+{
+    $ar_III = array();
+    $ar_III[] = array('val' => 'T', 'tt' => '-', 'noidung' => 'Cấp tỉnh', 'tongso' => '0', 'chenhlech' => '0');
+    $ar_III[] = array('val' => 'H', 'tt' => '-', 'noidung' => 'Cấp huyện', 'tongso' => '0', 'chenhlech' => '0');
+    $ar_III[] = array('val' => 'X', 'tt' => '-', 'noidung' => 'Cấp xã', 'tongso' => '0', 'chenhlech' => '0');
+    return $ar_III;
+}
+
+function getCapUy()
+{
+    $ar_IV = array();
+    $ar_IV[] = array('val' => 'T', 'tt' => '-', 'noidung' => 'Ủy viên cấp tỉnh', 'tongso' => '0', 'chenhlech' => '0');
+    $ar_IV[] = array('val' => 'H', 'tt' => '-', 'noidung' => 'Ủy viên cấp huyện', 'tongso' => '0', 'chenhlech' => '0');
+    $ar_IV[] = array('val' => 'X', 'tt' => '-', 'noidung' => 'Ủy viên cấp xã', 'tongso' => '0', 'chenhlech' => '0');
+    return $ar_IV;
 }
