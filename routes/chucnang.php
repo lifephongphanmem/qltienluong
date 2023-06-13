@@ -343,9 +343,15 @@ Route::group(['prefix' => 'chuc_nang'], function () {
             Route::post('tralai', 'tonghopnguon_huyenController@tralai');
             Route::get('ma_so={sohieu}/in', 'tonghopnguon_huyenController@printf');
             //Route::get('tonghop','tonghopnguon_khoiController@tonghop');//tạm
-            Route::get('tonghop', 'tonghopnguon_huyenController@tonghop'); //tạm
+            //Route::get('tonghop', 'tonghopnguon_huyenController@tonghop'); //tạm
             Route::post('senddata', 'tonghopnguon_huyenController@senddata'); //gửi dữ liệu lên tỉnh
             Route::get('getlydo', 'tonghopnguon_huyenController@getlydo');
+            //2023.06.13 Thiết kế kết xuất
+            Route::post('mau2a', 'tonghopnguon_huyenController@mau2a');
+            Route::post('mau2b', 'tonghopnguon_huyenController@mau2b');
+            Route::post('mau2c', 'tonghopnguon_huyenController@mau2c');
+            Route::post('mau2d', 'tonghopnguon_huyenController@mau2d');
+            Route::post('mau4b', 'tonghopnguon_huyenController@mau4b');
         });
 
         Route::group(['prefix' => 'khoi'], function () {

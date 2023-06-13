@@ -539,7 +539,7 @@ class nguonkinhphiController extends Controller
             //chia nhỏ thành các mảng nhỏ 100 phần tử để insert
             $a_data = unset_key($a_data, $a_col);
 
-            foreach (array_chunk($a_data, 10)  as $data) {
+            foreach ($a_data  as $data) {
                 nguonkinhphi_bangluong::insert($data);
             }
             $m_data = unset_key($m_data, array('luonghs', 'nopbh'));

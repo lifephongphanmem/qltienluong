@@ -57,9 +57,13 @@
                                         <td class="text-center">{{ $value->sldv }}</td>
                                         <td class="text-center bold">{{ $a_trangthai[$value['trangthai']] ?? '' }}</td>
                                         <td>
-                                            <a href="{{ url($furl_th . 'tonghop?sohieu=' . $value->sohieu) }}"
-                                                class="btn btn-default btn-xs" target="_blank">
-                                                <i class="fa fa-print"></i>&nbsp; Số liệu tổng hợp</a>
+                                            <button type="button" title="In số liệu"
+                                                onclick="innhucau('{{ $value->sohieu }}', '{{ $inputs['madvbc'] }}', '{{ $inputs['macqcq'] }}')"
+                                                class="btn btn-default btn-sm mbs" data-target="#indt-modal"
+                                                data-toggle="modal">
+                                                <i class="fa fa-print"></i>
+                                            </button>
+
                                             @if ($value['trangthai'] != 'DAGUI')
                                                 <button type="button" class="btn btn-default btn-xs"
                                                     onclick="confirmChuyen('{{ $value->sohieu }}')"
@@ -154,6 +158,124 @@
         </div>
     </div>
 
+    <!--Modal thông tin tùy chọn in  -->
+    <div id="indt-modal" tabindex="-1" role="dialog" aria-hidden="true" class="modal fade">
+        <input type="hidden" id="sohieu_in" />
+        <input type="hidden" id="madvbc_in" />
+        <input type="hidden" id="macqcq_in" />
+        <div class="modal-lg modal-dialog modal-content">
+            <div class="modal-header modal-header-primary">
+                <button type="button" data-dismiss="modal" aria-hidden="true" class="close">&times;</button>
+                <h4 id="hd-inbl" class="modal-title">In số liệu</h4>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <button type="button" onclick="indanhsachdonvi('{{ $furl_th . 'danhsachdonvi' }}')"
+                                style="border-width: 0px" class="btn btn-default btn-xs mbs"
+                                data-target="#modal-indanhsachdonvi" data-toggle="modal">
+                                <i class="fa fa-print"></i>&nbsp; Danh sách đơn vị</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <button type="button" onclick="insolieu('{{ $furl_th . 'mau2a' }}',null)"
+                                style="border-width: 0px" class="btn btn-default btn-xs mbs"
+                                data-target="#modal-insolieu" data-toggle="modal">
+                                <i class="fa fa-print"></i>&nbsp;Bảng tổng hợp nhu cầu kinh phí (Mẫu 2a)</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <button type="button" onclick="insolieu('{{ $furl_th . 'mau2b' }}',null)"
+                                style="border-width: 0px" class="btn btn-default btn-xs mbs"
+                                data-target="#modal-insolieu" data-toggle="modal">
+                                <i class="fa fa-print"></i>&nbsp;Bảng tổng quỹ trợ cấp tăng thêm cho cán bộ đã nghỉ hưu (Mẫu 2b)</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <button type="button" onclick="insolieu('{{ $furl_th . 'mau2c' }}',null)"
+                                style="border-width: 0px" class="btn btn-default btn-xs mbs"
+                                data-target="#modal-insolieu" data-toggle="modal">
+                                <i class="fa fa-print"></i>&nbsp;Báo cáo nhu cầu kinh phí thực hiện bảo hiểm thất nghiệp (Mẫu 2c)</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <button type="button" onclick="insolieu('{{ $furl_th . 'mau2d' }}',null)"
+                                style="border-width: 0px" class="btn btn-default btn-xs mbs"
+                                data-target="#modal-insolieu" data-toggle="modal">
+                                <i class="fa fa-print"></i>&nbsp;Tổng hợp kinh phí tăng thêm để thực hiện chế độ cho cán bộ không chuyên trách (Mẫu 2d)</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <button type="button" onclick="insolieu('{{ $furl_th . 'mau4b' }}',null)"
+                                style="border-width: 0px" class="btn btn-default btn-xs mbs"
+                                data-target="#modal-insolieu" data-toggle="modal">
+                                <i class="fa fa-print"></i>&nbsp;Tổng hợp nhu cầu, nguồn thực hiện (Mẫu 4b)</button>
+                        </div>
+                    </div>
+                </div>                
+            </div>
+            <div class="modal-footer">
+                <button type="button" data-dismiss="modal" class="btn btn-default">Hủy thao tác</button>
+            </div>
+        </div>
+    </div>
+
+    <!--Mẫu in số liệu -->
+    {!! Form::open(['url' => '', 'method' => 'post', 'target' => '_blank', 'files' => true, 'id' => 'frm_insolieu']) !!}
+    <div id="modal-insolieu" tabindex="-1" role="dialog" aria-hidden="true" class="modal fade">
+        <div class="modal-dialog modal-content">
+            <div class="modal-header modal-header-primary">
+                <button type="button" data-dismiss="modal" aria-hidden="true" class="close">&times;</button>
+                <h4 id="header-inbl" class="modal-title">Thông tin kết xuất</h4>
+            </div>
+            <div class="modal-body">
+                <div class="form-horizontal">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <label class="control-label">Đơn vị tính</label>
+                            {!! Form::select('donvitinh', getDonViTinh(), null, ['class' => 'form-control select2me']) !!}
+                        </div>
+
+                        <div class="col-md-6">
+                            <label class="control-label">Cỡ chữ</label>
+                            {!! Form::select('cochu', getCoChu(), 10, ['id' => 'cochu', 'class' => 'form-control select2me']) !!}
+                        </div>
+                    </div>
+                </div>
+
+                <input type="hidden" name="sohieu" />
+                <input type="hidden" name="madvbc" />
+                <input type="hidden" name="macqcq" />
+            </div>
+            <div class="modal-footer">
+                <button type="button" data-dismiss="modal" class="btn btn-default">Hủy thao tác</button>
+                <button type="submit" class="btn btn-success">Đồng ý</button>
+            </div>
+        </div>
+    </div>
+    {!! Form::close() !!}
+
     <script>
         function confirmChuyen(sohieu) {
             document.getElementById("sohieu").value = sohieu;
@@ -180,6 +302,28 @@
 
             //$('#madvbc').val(madvbc);
             //$('#phongban-modal').modal('show');
+        }
+
+        //Gán thông tin để lấy dữ liệu
+        function innhucau(sohieu, madvbc, macqcq) {
+            $('#sohieu_in').val(sohieu);
+            $('#madvbc_in').val(madvbc);
+            $('#macqcq_in').val(macqcq);
+        }
+
+        function insolieu(url, mact) {
+            // if (mact == null) {
+            //     $('#frm_insolieu').find("[name^='mact']").attr('disabled', true);
+            // } else {
+            //     $('#frm_insolieu').find("[name^='mact']").attr('disabled', false);
+            //     $('#frm_insolieu').find("[name^='mact']").val(mact.split(';')).trigger('change');
+            // }
+            $('#frm_insolieu').attr('action', url);
+            $('#frm_insolieu').find("[name^='sohieu']").val($('#sohieu_in').val());
+            $('#frm_insolieu').find("[name^='macqcq']").val($('#macqcq_in').val());
+            $('#frm_insolieu').find("[name^='madvbc']").val($('#madvbc_in').val());
+
+
         }
     </script>
 

@@ -180,6 +180,7 @@ class xemdulieu_nguonController extends Controller
             return view('functions.viewdata.nguonkinhphi.index')
                 ->with('model', $model_donvi)
                 ->with('inputs', $inputs)
+                ->with('furl', '/nguon_kinh_phi/')
                 ->with('a_trangthai', $a_trangthai)
                 ->with('model_nhomct', $model_nhomct)
                 ->with('model_tenct', $model_tenct)

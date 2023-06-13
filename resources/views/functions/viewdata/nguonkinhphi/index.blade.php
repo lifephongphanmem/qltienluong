@@ -175,6 +175,15 @@
                                 <i class="fa fa-print"></i>&nbsp; Tổng hợp nhu cầu và nguồn thực hiện (Mẫu 4b)</button>
                         </div>
                     </div>
+
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <button type="button" onclick="ThongTinKetXuat(true,'{{ $furl . 'tonghopnhucau_donvi_2a' }}')"
+                                style="border-width: 0px" class="btn btn-default btn-xs mbs" data-target="#mautt107-modal"
+                                data-toggle="modal">
+                                <i class="fa fa-print"></i>&nbsp; Bảng tổng hợp nhu cầu kinh phí (Mẫu 2a)</button>
+                        </div>
+                    </div>
                 </div>
 
                 <div class="row">
@@ -188,8 +197,8 @@
 
                     <div class="col-md-6">
                         <div class="form-group">
-                            <button type="button" onclick="intonghopdt('{{'/nguon_kinh_phi/huyen/mautt107_m2?maso='}}')" style="border-width: 0px" class="btn btn-default btn-xs mbs">
-                                <i class="fa fa-print"></i>&nbsp; Bảng lương mẫu C02-HD (Tổng hợp chi lương và nâng lương)</button>
+                            <button type="button" style="border-width: 0px" onclick="innangluong()" class="btn btn-default btn-xs mbs">
+                                <i class="fa fa-print"></i>&nbsp; Danh sách cán bộ nâng lương</button>
                         </div>
                     </div>
                 </div>
@@ -197,11 +206,22 @@
                 <div class="row">
                     <div class="col-md-6">
                         <div class="form-group">
-                            <button type="button" style="border-width: 0px" onclick="innangluong()" class="btn btn-default btn-xs mbs">
-                                <i class="fa fa-print"></i>&nbsp; Danh sách cán bộ nâng lương</button>
+                            <button type="button" onclick="ThongTinKetXuat(true,'{{ $furl . 'tonghopnhucau_donvi' }}')"
+                                style="border-width: 0px" class="btn btn-default btn-xs mbs" data-target="#mautt107-modal"
+                                data-toggle="modal">
+                                <i class="fa fa-print"></i>&nbsp; Bảng tổng hợp nhu cầu kinh phí</button>
                         </div>
                     </div>
-                </div>
+    
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <button type="button" onclick="ThongTinKetXuat(true,'{{ $furl . 'mautt107_m2' }}')"
+                                style="border-width: 0px" class="btn btn-default btn-xs mbs" data-target="#mautt107-modal"
+                                data-toggle="modal">
+                                <i class="fa fa-print"></i>&nbsp; Bảng chi tiết nhu cầu kinh phí</button>
+                        </div>
+                    </div>
+                </div>                
                 <input type="hidden" id="nam_dt" name="nam_dt"/>
                 <input type="hidden" id="masodv_dt" name="masodv_dt"/>
             </div>
