@@ -353,6 +353,88 @@ class UsersController extends Controller
 
                     nguonkinhphi::where('madv', $ttuser->madv)->where('nangcap_phucap', 0)->update(['nangcap_phucap' => 1]);
                 }
+            }else{
+
+                //2023.06.07 Tự cập nhật các nhu cầu kinh phí cũ 
+                $m_nhucau = nguonkinhphi::where('nangcap_phucap', 0)->where('sohieu','tt78_2022')->get();
+                if ($m_nhucau->count() > 0) {
+                    $a_luongchenhlech = array_column(dmthongtuquyetdinh::all()->toArray(), 'chenhlech', 'sohieu');
+                    $a_sohieu = array_column($m_nhucau->toarray(), 'sohieu', 'masodv');
+                    //$a_linhvuc = array_column($m_nhucau->toarray(), 'linhvuchoatdong', 'masodv');
+                    $m_bangluong = nguonkinhphi_bangluong::wherein('masodv', array_column($m_nhucau->toarray(), 'masodv'))->get();
+                    $m_data_phucap = a_unique(a_split($m_bangluong->toarray(), array('mact', 'macongtac', 'masodv')));
+                    $m_data_01thang = $m_data_phucap;
+                    //dd($m_data_phucap);
+                    $a_col_khac = ["stbhxh_dv", "stbhyt_dv", "stkpcd_dv", "stbhtn_dv", "ttbh_dv", "tonghs"];
+                    $a_pc_tonghop = getColTongHop();
+
+                    for ($i = 0; $i < count($m_data_phucap); $i++) {
+                        $dutoan = $m_bangluong->where('mact', $m_data_phucap[$i]['mact'])->where('masodv', $m_data_phucap[$i]['masodv']);
+                        //$m_data_phucap[$i]['canbo_congtac'] = $dutoan->count();
+                        //$m_data_phucap[$i]['canbo_dutoan'] = $m_data_phucap[$i]['canbo_congtac'];
+
+                        $m_data_phucap[$i]['ttl'] = $dutoan->sum("luongtn");
+                        foreach ($a_pc_tonghop as $pc) {
+                            $mapc_st = 'st_' . $pc;
+                            $m_data_phucap[$i][$pc] = $dutoan->sum($pc);
+                            $m_data_phucap[$i][$mapc_st] = $dutoan->sum($mapc_st);
+                        }
+                        foreach ($a_col_khac as $col) {
+                            $m_data_phucap[$i][$col] = $dutoan->sum($col);
+                        }
+                    }
+
+                    for ($i = 0; $i < count($m_data_phucap); $i++) {
+                        $dutoan = $m_bangluong->where('mact', $m_data_phucap[$i]['mact'])->where('masodv', $m_data_phucap[$i]['masodv']);
+                        //$m_data_phucap[$i]['canbo_congtac'] = $dutoan->count();
+                        //$m_data_phucap[$i]['canbo_dutoan'] = $m_data_phucap[$i]['canbo_congtac'];
+
+                        $m_data_phucap[$i]['ttl'] = $dutoan->sum("luongtn");
+                        foreach ($a_pc_tonghop as $pc) {
+                            $mapc_st = 'st_' . $pc;
+                            $m_data_phucap[$i][$pc] = $dutoan->sum($pc);
+                            $m_data_phucap[$i][$mapc_st] = $dutoan->sum($mapc_st);
+                        }
+                        foreach ($a_col_khac as $col) {
+                            $m_data_phucap[$i][$col] = $dutoan->sum($col);
+                        }
+                    }
+
+                    //Tính toán cho bảng 01 tháng
+                    for ($i = 0; $i < count($m_data_01thang); $i++) {
+                        $dutoan = $m_bangluong->where('mact', $m_data_01thang[$i]['mact'])
+                            ->where('masodv', $m_data_01thang[$i]['masodv'])
+                            ->where('thang', '07');
+
+                        $m_data_01thang[$i]['canbo_congtac'] = $dutoan->count();
+                        $m_data_01thang[$i]['canbo_dutoan'] = $m_data_01thang[$i]['canbo_congtac'];
+
+                        $m_data_01thang[$i]['ttl'] = $dutoan->sum("luongtn");
+                        foreach ($a_pc_tonghop as $pc) {
+                            $mapc_st = 'st_' . $pc;
+                            $m_data_01thang[$i][$pc] = $dutoan->sum($pc);
+                            $m_data_01thang[$i][$mapc_st] = $dutoan->sum($mapc_st);
+                        }
+                        foreach ($a_col_khac as $col) {
+                            $m_data_01thang[$i][$col] = $dutoan->sum($col);
+                        }
+                        $chenhlech = $a_luongchenhlech[$a_sohieu[$m_data_01thang[$i]['masodv']] ?? ''] ?? '1';
+                        $m_data_01thang[$i]['bhxh_dv'] = round($m_data_01thang[$i]['stbhxh_dv'] / $chenhlech, 7);
+                        $m_data_01thang[$i]['bhyt_dv'] = round($m_data_01thang[$i]['stbhyt_dv'] / $chenhlech, 7);
+                        $m_data_01thang[$i]['bhtn_dv'] = round($m_data_01thang[$i]['stbhtn_dv'] / $chenhlech, 7);
+                        $m_data_01thang[$i]['kpcd_dv'] = round($m_data_01thang[$i]['stkpcd_dv'] / $chenhlech, 7);
+                        $m_data_01thang[$i]['tongbh_dv'] = $m_data_01thang[$i]['bhxh_dv'] + $m_data_01thang[$i]['bhyt_dv'] + $m_data_01thang[$i]['bhtn_dv'] + $m_data_01thang[$i]['kpcd_dv'];
+                    }
+
+                    foreach (array_chunk($m_data_phucap, 10) as $data) {
+                        nguonkinhphi_phucap::insert($data);
+                    }
+                    foreach (array_chunk($m_data_01thang, 10) as $data) {
+                        nguonkinhphi_01thang::insert($data);
+                    }
+
+                    nguonkinhphi::where('madv', $ttuser->madv)->where('nangcap_phucap', 0)->update(['nangcap_phucap' => 1]);
+                }
             }
             //kiểm tra xem user thuộc đơn vị nào, nếu ko thuộc đơn vị nào (trừ tài khoản quản trị) => đăng nhập ko thành công
         }
