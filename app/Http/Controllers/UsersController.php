@@ -268,12 +268,17 @@ class UsersController extends Controller
                     dmphucap_donvi::insert($model_dmpc->toarray());
                 }
 
+                //xoá phụ cấp ko có trong danh mục
+                dmphucap_donvi::wherenotin('mapc', function ($qr) {
+                    $qr->select('mapc')->from('dmphucap');
+                })->delete();
+
                 //2023.06.07 Tự cập nhật các nhu cầu kinh phí cũ 
                 $m_nhucau = nguonkinhphi::where('madv', $ttuser->madv)->where('nangcap_phucap', 0)->get();
                 if ($m_nhucau->count() > 0) {
                     $a_luongchenhlech = array_column(dmthongtuquyetdinh::all()->toArray(), 'chenhlech', 'sohieu');
                     $a_sohieu = array_column($m_nhucau->toarray(), 'sohieu', 'masodv');
-                    $a_linhvuc = array_column($m_nhucau->toarray(), 'linhvuchoatdong', 'masodv');
+                    //$a_linhvuc = array_column($m_nhucau->toarray(), 'linhvuchoatdong', 'masodv');
                     $m_bangluong = nguonkinhphi_bangluong::wherein('masodv', array_column($m_nhucau->toarray(), 'masodv'))->get();
                     $m_data_phucap = a_unique(a_split($m_bangluong->toarray(), array('mact', 'macongtac', 'masodv')));
                     $m_data_01thang = $m_data_phucap;
@@ -301,7 +306,7 @@ class UsersController extends Controller
                         $dutoan = $m_bangluong->where('mact', $m_data_phucap[$i]['mact'])->where('masodv', $m_data_phucap[$i]['masodv']);
                         //$m_data_phucap[$i]['canbo_congtac'] = $dutoan->count();
                         //$m_data_phucap[$i]['canbo_dutoan'] = $m_data_phucap[$i]['canbo_congtac'];
-                        
+
                         $m_data_phucap[$i]['ttl'] = $dutoan->sum("luongtn");
                         foreach ($a_pc_tonghop as $pc) {
                             $mapc_st = 'st_' . $pc;

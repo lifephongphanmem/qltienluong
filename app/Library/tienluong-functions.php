@@ -983,45 +983,62 @@ function getHCSN()
     //tonghop: 9 => bỏ qua
     //tonghop: 0 => Tính toán số liêu theo công thức
     //tonghop: 1 => lấy các ô trong chitiet để cộng
-    $ar_I[0] = array('tt' => 'I', 'noidung' => 'KHU VỰC HCSN, ĐẢNG, ĐOÀN THỂ', 'phanloai' => '1', 'chitiet' => []);
-    $ar_I[1] = array('tt' => '-', 'noidung' => 'Trong đó', 'phanloai' => '9', 'chitiet' => []);
-    $ar_I[2] = array('tt' => '1', 'noidung' => 'Sự nghiệp giáo dục - đào tạo', 'phanloai' => '1', 'chitiet' => [3, 4]);
-    $ar_I[3] = array('tt' => '-', 'noidung' => 'Giáo dục', 'phanloai' => '0', 'chitiet' => ['linhvuchoatdong' => 'GD',]);
-    $ar_I[4] = array('tt' => '-', 'noidung' => 'Đào tạo', 'phanloai' => '0', 'chitiet' => ['linhvuchoatdong' => 'DT',]);
-    $ar_I[5] = array('tt' => '2', 'noidung' => 'Sự nghiệp y tế', 'phanloai' => '0', 'chitiet' => ['linhvuchoatdong' => 'YTE',]);
-    $ar_I[6] = array('tt' => '3', 'noidung' => 'Sự nghiệp khoa học-công nghệ', 'phanloai' => '0', 'chitiet' => ['linhvuchoatdong' => 'KHCN',]);
-    $ar_I[7] = array('tt' => '4', 'noidung' => 'Sự nghiệp văn hóa thông tin', 'phanloai' => '0', 'chitiet' => ['linhvuchoatdong' => 'VHTT',]);
-    $ar_I[8] = array('tt' => '5', 'noidung' => 'Sự nghiệp phát thanh truyền hình', 'phanloai' => '0', 'chitiet' => ['linhvuchoatdong' => 'PTTH',]);
-    $ar_I[9] = array('tt' => '6', 'noidung' => 'Sự nghiệp thể dục - thể thao', 'phanloai' => '0', 'chitiet' => ['linhvuchoatdong' => 'TDTT',]);
-    $ar_I[10] = array('tt' => '7', 'noidung' => 'Sự nghiệp đảm bảo xã hội', 'phanloai' => '0', 'chitiet' => ['linhvuchoatdong' => 'DBXH',]);
-    $ar_I[11] = array('tt' => '8', 'noidung' => 'Sự nghiệp kinh tế', 'phanloai' => '0', 'chitiet' => ['linhvuchoatdong' => 'KT',]);
-    $ar_I[12] = array('tt' => '9', 'noidung' => 'Sự nghiệp môi trường', 'phanloai' => '0', 'chitiet' => ['linhvuchoatdong' => 'MT',]);
-    $ar_I[13] = array('tt' => '10', 'noidung' => 'Quản lý nhà nước, đảng, đoàn thể', 'phanloai' => '1', 'chitiet' => [14, 15]);
-    $ar_I[14] = array('tt' => '-', 'noidung' => ' Quản lý NN', 'phanloai' => '0', 'chitiet' => ['linhvuchoatdong' => 'QLNN',]);
-    $ar_I[15] = array('tt' => '-', 'noidung' => 'Đảng, đoàn thể', 'phanloai' => '0', 'chitiet' => ['linhvuchoatdong' => 'DDT',]);
+    $ar_I[0] = array('style' => 'font-weight: bold;', 'tt' => 'I', 'noidung' => 'KHU VỰC HCSN, ĐẢNG, ĐOÀN THỂ', 'phanloai' => '1', 'chitiet' => [2, 5, 6, 7, 8, 9, 10, 11, 12, 13], 'capdo' => '1');
+    $ar_I[1] = array('style' => '', 'tt' => '-', 'noidung' => 'Trong đó', 'phanloai' => '9', 'chitiet' => [], 'capdo' => '9');
+    $ar_I[2] = array('style' => '', 'tt' => '1', 'noidung' => 'Sự nghiệp giáo dục - đào tạo', 'phanloai' => '1', 'chitiet' => [3, 4], 'capdo' => '2');
+    $ar_I[3] = array('style' => '', 'tt' => '-', 'noidung' => 'Giáo dục', 'phanloai' => '0', 'chitiet' => ['linhvuchoatdong' => 'GD',], 'capdo' => '3');
+    $ar_I[4] = array('style' => '', 'tt' => '-', 'noidung' => 'Đào tạo', 'phanloai' => '0', 'chitiet' => ['linhvuchoatdong' => 'DT',], 'capdo' => '3');
+    $ar_I[5] = array('style' => '', 'tt' => '2', 'noidung' => 'Sự nghiệp y tế', 'phanloai' => '0', 'chitiet' => ['linhvuchoatdong' => 'YTE',], 'capdo' => '3');
+    $ar_I[6] = array('style' => '', 'tt' => '3', 'noidung' => 'Sự nghiệp khoa học-công nghệ', 'phanloai' => '0', 'chitiet' => ['linhvuchoatdong' => 'KHCN',], 'capdo' => '3');
+    $ar_I[7] = array('style' => '', 'tt' => '4', 'noidung' => 'Sự nghiệp văn hóa thông tin', 'phanloai' => '0', 'chitiet' => ['linhvuchoatdong' => 'VHTT',], 'capdo' => '3');
+    $ar_I[8] = array('style' => '', 'tt' => '5', 'noidung' => 'Sự nghiệp phát thanh truyền hình', 'phanloai' => '0', 'chitiet' => ['linhvuchoatdong' => 'PTTH',], 'capdo' => '3');
+    $ar_I[9] = array('style' => '', 'tt' => '6', 'noidung' => 'Sự nghiệp thể dục - thể thao', 'phanloai' => '0', 'chitiet' => ['linhvuchoatdong' => 'TDTT',], 'capdo' => '3');
+    $ar_I[10] = array('style' => '', 'tt' => '7', 'noidung' => 'Sự nghiệp đảm bảo xã hội', 'phanloai' => '0', 'chitiet' => ['linhvuchoatdong' => 'DBXH',], 'capdo' => '3');
+    $ar_I[11] = array('style' => '', 'tt' => '8', 'noidung' => 'Sự nghiệp kinh tế', 'phanloai' => '0', 'chitiet' => ['linhvuchoatdong' => 'KT',], 'capdo' => '3');
+    $ar_I[12] = array('style' => '', 'tt' => '9', 'noidung' => 'Sự nghiệp môi trường', 'phanloai' => '0', 'chitiet' => ['linhvuchoatdong' => 'MT',], 'capdo' => '3');
+    $ar_I[13] = array('style' => '', 'tt' => '10', 'noidung' => 'Quản lý nhà nước, đảng, đoàn thể', 'phanloai' => '1', 'chitiet' => [14, 15], 'capdo' => '2');
+    $ar_I[14] = array('style' => '', 'tt' => '-', 'noidung' => ' Quản lý NN', 'phanloai' => '0', 'chitiet' => ['linhvuchoatdong' => 'QLNN',], 'capdo' => '3');
+    $ar_I[15] = array('style' => '', 'tt' => '-', 'noidung' => 'Đảng, đoàn thể', 'phanloai' => '0', 'chitiet' => ['linhvuchoatdong' => 'DDT',], 'capdo' => '3');
     return $ar_I;
 }
 
 function getChuyenTrach()
 {
-    $ar_II[0] = array('tt' => 'I', 'noidung' => 'CÁN BỘ CHUYÊN TRÁCH, CÔNG CHỨC XÃ', 'phanloai' => '1', 'chitiet' => ['maphanloai' => 'KVXP']);
+    $ar_II[0] = array('style' => 'font-weight: bold;', 'tt' => 'II', 'noidung' => 'CÁN BỘ CHUYÊN TRÁCH, CÔNG CHỨC XÃ', 'phanloai' => '0', 'chitiet' => ['maphanloai' => 'KVXP']);
     return $ar_II;
 }
 
 function getHDND()
 {
     $ar_III = array();
-    $ar_III[] = array('val' => 'T', 'tt' => '-', 'noidung' => 'Cấp tỉnh', 'tongso' => '0', 'chenhlech' => '0');
-    $ar_III[] = array('val' => 'H', 'tt' => '-', 'noidung' => 'Cấp huyện', 'tongso' => '0', 'chenhlech' => '0');
-    $ar_III[] = array('val' => 'X', 'tt' => '-', 'noidung' => 'Cấp xã', 'tongso' => '0', 'chenhlech' => '0');
+    $ar_III[0] = array('style' => 'font-weight: bold;', 'tt' => 'III', 'noidung' => 'HOẠT ĐỘNG PHÍ ĐẠI BIỂU HĐND CÁC CẤP', 'phanloai' => '1', 'chitiet' => [1, 2, 3]);
+    $ar_III[1] = array('style' => '', 'tt' => '-', 'noidung' => 'Cấp tỉnh', 'phanloai' => '0', 'chitiet' => ['level' => 'T']);
+    $ar_III[2] = array('style' => '', 'tt' => '-', 'noidung' => 'Cấp huyện', 'phanloai' => '0', 'chitiet' => ['level' => 'H']);
+    $ar_III[3] = array('style' => '', 'tt' => '-', 'noidung' => 'Cấp xã', 'phanloai' => '0', 'chitiet' => ['level' => 'X']);
     return $ar_III;
 }
 
 function getCapUy()
 {
     $ar_IV = array();
-    $ar_IV[] = array('val' => 'T', 'tt' => '-', 'noidung' => 'Ủy viên cấp tỉnh', 'tongso' => '0', 'chenhlech' => '0');
-    $ar_IV[] = array('val' => 'H', 'tt' => '-', 'noidung' => 'Ủy viên cấp huyện', 'tongso' => '0', 'chenhlech' => '0');
-    $ar_IV[] = array('val' => 'X', 'tt' => '-', 'noidung' => 'Ủy viên cấp xã', 'tongso' => '0', 'chenhlech' => '0');
+    $ar_IV[0] = array('style' => 'font-weight: bold;', 'tt' => 'III', 'noidung' => 'PHỤ CẤP TRÁCH NHIỆM CẤP ỦY', 'phanloai' => '1', 'chitiet' => [1, 2, 3]);
+    $ar_IV[1] = array('style' => '', 'tt' => '-', 'noidung' => 'Ủy viên cấp tỉnh', 'phanloai' => '0', 'chitiet' => ['level' => 'T']);
+    $ar_IV[2] = array('style' => '', 'tt' => '-', 'noidung' => 'Ủy viên cấp huyện', 'phanloai' => '0', 'chitiet' => ['level' => 'H']);
+    $ar_IV[3] = array('style' => '', 'tt' => '-', 'noidung' => 'Ủy viên cấp xã', 'phanloai' => '0', 'chitiet' => ['level' => 'X']);
     return $ar_IV;
+}
+
+function getChuyenTrach_plct()
+{
+    return [];
+}
+
+function getHDND_plct()
+{
+    return [];
+}
+
+function getCapUy_plct()
+{
+    return [];
 }

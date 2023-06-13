@@ -71,6 +71,11 @@
         td,
         th {
             padding: 5px;
+            /* padding-left: 2px;padding-right: 2px */
+        }
+
+        tr {
+            padding-left: 2px;padding-right: 2px
         }
 
         p {
