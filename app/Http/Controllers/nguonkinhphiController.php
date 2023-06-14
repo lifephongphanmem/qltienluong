@@ -571,6 +571,16 @@ class nguonkinhphiController extends Controller
 
             //Mẫu 2a
             $model_2a = nguonkinhphi_01thang::where('masodv', $inputs['maso'])->get();
+            $m_plct = dmphanloaict::all();
+            $a_nhomplct_hc = array_column($m_plct->toArray(), 'nhomnhucau_hc', 'mact');
+            $a_nhomplct_xp = array_column($m_plct->toArray(), 'nhomnhucau_xp', 'mact');
+            foreach ($model_2a as $chitiet) {
+                if (session('admin')->maphanloai == 'KVXP') {
+                    $chitiet->nhomnhucau = $a_nhomplct_xp[$chitiet->mact];
+                } else {
+                    $chitiet->nhomnhucau = $a_nhomplct_hc[$chitiet->mact];
+                }
+            }
             //lấy ds phu cap
 
             //Tinh toán số liệu
@@ -586,6 +596,7 @@ class nguonkinhphiController extends Controller
                 ->with('model', $model)
                 ->with('model_2a', $model_2a)
                 ->with('m_thongtu', $m_thongtu)
+                ->with('a_nhucau', array_merge(getNhomNhuCauKP('KVHCSN'), getNhomNhuCauKP('KVXP')))
                 ->with('a_ct', getPhanLoaiCT(false))
                 ->with('nam', date_format(date_create($m_thongtu->ngayapdung), 'Y'))
                 ->with('pageTitle', 'Danh sách nguồn kinh phí của đơn vị');

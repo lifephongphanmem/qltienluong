@@ -294,16 +294,23 @@ class tonghopnguon_huyenController extends Controller
             $m_thongtu = dmthongtuquyetdinh::where('sohieu', $inputs['sohieu'])->first();
             $m_nguonkp = nguonkinhphi::where('macqcq', $inputs['macqcq'])->where('sohieu', $inputs['sohieu'])->where('trangthai', 'DAGUI')->get();
             $a_linhvuc = array_column($m_nguonkp->toarray(), 'linhvuchoatdong', 'masodv');
+            $a_donvi =  array_column($m_nguonkp->toarray(), 'madv', 'masodv');
 
-            $m_donvi = dmdonvi::where('madv', $inputs['macqcq'])->first();
-            $a_diaban = array_column(dmdonvibaocao::all()->toArray(), 'level', 'madvbc');
-
+            $m_dsdv = dmdonvi::all();
+            $a_phanloai = array_column($m_dsdv->toArray(), 'maphanloai', 'madv');
+            //$a_madvbc = array_column($m_dsdv->toArray(), 'madvbc', 'madv');
+            $a_level = array_column($m_dsdv->toArray(), 'caphanhchinh', 'madv');
+            //$a_diaban = array_column(dmdonvibaocao::all()->toArray(), 'level', 'madvbc');
+            //dd($a_donvi);
             $m_chitiet = nguonkinhphi_01thang::wherein('masodv', array_column($m_nguonkp->toarray(), 'masodv'))->get();
 
             foreach ($m_chitiet as $chitiet) {
-                $chitiet->level = $a_diaban[$m_donvi->madvbc];
-                $chitiet->maphanloai = $m_donvi->maphanloai;
+                $chitiet->madv = $a_donvi[$chitiet->masodv];
+                //$chitiet->madvbc = $a_madvbc[$chitiet->madv];
+
+                $chitiet->maphanloai = $a_phanloai[$chitiet->madv];
                 $chitiet->linhvuchoatdong = $a_linhvuc[$chitiet->masodv];
+                $chitiet->level = $a_level[$chitiet->madv];
             }
             $a_pc_th = dmphucap::wherenotin('mapc', ['heso'])->get();
 
@@ -716,11 +723,13 @@ class tonghopnguon_huyenController extends Controller
             //Tính toán số liệu phần IV
             $ar_IV = getCapUy();
             $dulieu_pIV = $m_chitiet->where('maphanloai',  'KVXP');
+
             $aIV_plct = getCapUy_plct();
             foreach ($dulieu_pIV as $key => $value) {
                 if (count($aIV_plct) > 0 && !in_array($value->mact, $aIV_plct))
                     $dulieu_pIV->forget($key);
             }
+
             //Vòng cấp độ 3
             foreach ($ar_IV as $key => $chitiet) {
                 if ($chitiet['phanloai'] == '0') {
@@ -834,6 +843,7 @@ class tonghopnguon_huyenController extends Controller
                     $ar_IV[$key]['solieu_moi'] = $a_solieu_moi;
                 }
             }
+            $m_donvi = dmdonvi::where('madv', $inputs['macqcq'])->first();
             //dd($m_tonghop_ct);
             return view('reports.thongtu78.donvi.mau2a2')
                 ->with('furl', '/tong_hop_bao_cao/')

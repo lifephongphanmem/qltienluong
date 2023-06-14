@@ -63,11 +63,17 @@
                             style="min-height: 230px">
                             <thead>
                                 <tr>
-                                    <th class="text-center" style="width: 10%">STT</th>
-                                    <th class="text-center">Phân loại công tác</th>
-                                    <th style="width: 10%" class="text-center">Tổng hợp số liệu</th>
-                                    <th style="width: 10%" class="text-center">Dự toán lương</th>
-                                    <th style="width: 10%" class="text-center">Thao tác</th>
+                                    <th rowspan="2" class="text-center" style="width: 10%">STT</th>
+                                    <th rowspan="2" class="text-center">Phân loại công tác</th>
+                                    <th colspan="2" class="text-center">Phân nhóm nhu cầu</th>
+                                    <th rowspan="2" style="width: 7%" class="text-center">Tổng hợp số liệu</th>
+                                    <th rowspan="2" style="width: 7%" class="text-center">Dự toán lương</th>
+                                    <th rowspan="2" style="width: 10%" class="text-center">Thao tác</th>
+                                </tr>
+
+                                <tr>
+                                    <th style="width: 15%" class="text-center">Đơn vị HCSN</th>
+                                    <th style="width: 15%" class="text-center">Đơn vị Xã phường</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -76,6 +82,8 @@
                                         <tr>
                                             <td class="text-center">{{ $key + 1 }}</td>
                                             <td>{{ $value->tenct }}</td>
+                                            <td>{{ $a_nhucau[$value->nhomnhucau_hc] ?? $value->nhomnhucau_hc }}</td>
+                                            <td>{{ $a_nhucau[$value->nhomnhucau_xp] ?? $value->nhomnhucau_xp }}</td>
                                             <td class="text-center">{!! $value->tonghop == 1 ? '<i class="fa fa-check"></i>' : '' !!} </td>
                                             <td class="text-center">{!! $value->dutoan == 1 ? '<i class="fa fa-check"></i>' : '' !!}</td>
                                             <td>
@@ -112,6 +120,8 @@
     </div>
 
     <!--Modal thông tin chức vụ -->
+
+    {!! Form::open(['url'=>'/danh_muc/cong_tac/update_detail', 'id' => 'create_tttaikhoan','method' => 'post', 'class'=>'horizontal-form']) !!}
     <div id="create-modal" tabindex="-1" role="dialog" aria-hidden="true" class="modal fade">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -141,6 +151,18 @@
                         <div class="col-md-6" style="margin-bottom: 5px;">
                             <label class="form-control-label">Dự toán lương</label>
                             {!! Form::select('dutoan', ['0' => 'Không', '1' => 'Có'], null, ['id' => 'dutoan', 'class' => 'form-control']) !!}
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6" style="margin-bottom: 5px;">
+                            <label class="form-control-label">Nhóm nhu cầu KP (Đơn vị HCSN)</label>
+                            {!! Form::select('nhomnhucau_hc', getNhomNhuCauKP('KVHCSN'), null, ['id' => 'nhomnhucau_hc', 'class' => 'form-control']) !!}
+                        </div>
+
+                        <div class="col-md-6" style="margin-bottom: 5px;">
+                            <label class="form-control-label">Nhóm nhu cầu KP (Đơn vị HCSN)</label>
+                            {!! Form::select('nhomnhucau_xp', getNhomNhuCauKP('KVXP'), null, ['id' => 'nhomnhucau_xp', 'class' => 'form-control']) !!}
                         </div>
                     </div>
 
@@ -259,13 +281,13 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" data-dismiss="modal" class="btn btn-default">Hủy thao tác</button>
-                    <button type="submit" id="submit" name="submit" value="submit" class="btn btn-primary"
-                        onclick="cfPB()">Đồng ý</button>
+                    <button type="submit" id="submit" name="submit" value="submit" class="btn btn-primary"">Đồng ý</button>
                 </div>
             </div>
         </div>
     </div>
-
+    
+    {!! Form::close() !!}
     <script>
         function add() {
             $('#tenct').val('');
@@ -290,6 +312,8 @@
                     $('#tenct').val(data.tenct);
                     $('#tonghop').val(data.tonghop).trigger("change");
                     $('#dutoan').val(data.dutoan).trigger("change");
+                    $('#nhomnhucau_hc').val(data.nhomnhucau_hc).trigger("change");
+                    $('#nhomnhucau_xp').val(data.nhomnhucau_xp).trigger("change");
                     $('#id').val(data.id);
                     $('#bhxh').val(data.bhxh);
                     $('#bhyt').val(data.bhyt);
@@ -315,7 +339,6 @@
             var mact = $('#mact').val();
             var tenct = $('#tenct').val();
             var macongtac = $('#macongtac').val();
-
             if (tenct == '') {
                 valid = false;
                 message += 'Tên phân loại công tác không được bỏ trống \n';
@@ -333,6 +356,8 @@
                             macongtac: macongtac,
                             tonghop: $('#tonghop').val(),
                             dutoan: $('#dutoan').val(),
+                            nhomnhucau_hc: $('#nhomnhucau_hc').val(),
+                            nhomnhucau_xp: $('#nhomnhucau_xp').val(),
                             tenct: tenct,
                             bhxh: $('#bhxh').val(),
                             bhyt: $('#bhyt').val(),

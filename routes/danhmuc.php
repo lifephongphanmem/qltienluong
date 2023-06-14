@@ -44,7 +44,7 @@ Route::group(['prefix' => 'danh_muc'], function () {
         Route::get('ma_so={macongtac}', 'dmphanloaictController@detail');
         Route::get('del_detail/{id}', 'dmphanloaictController@destroy_detail');
         Route::get('add_detail', 'dmphanloaictController@store_detail');
-        Route::get('update_detail', 'dmphanloaictController@update_detail');
+        Route::post('update_detail', 'dmphanloaictController@update_detail');
         Route::get('get_detail', 'dmphanloaictController@getinfo_detail');
         //Cho đơn vị cấp dưới xem
         Route::get('don_vi', 'dmphanloaictController@xemdulieu');

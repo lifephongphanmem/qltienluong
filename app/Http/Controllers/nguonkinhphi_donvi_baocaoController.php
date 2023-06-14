@@ -401,12 +401,12 @@ class nguonkinhphi_donvi_baocaoController extends Controller
             $inputs = $request->all();
             $m_nguonkp = nguonkinhphi::where('masodv', $inputs['masodv'])->first();
             $m_donvi = dmdonvi::where('madv', $m_nguonkp->madv)->first();
-            $a_diaban = array_column(dmdonvibaocao::all()->toArray(), 'level', 'madvbc');
+            //$a_diaban = array_column(dmdonvibaocao::all()->toArray(), 'level', 'madvbc');
             $m_thongtu = dmthongtuquyetdinh::where('sohieu', $m_nguonkp->sohieu)->first();
             $m_chitiet = nguonkinhphi_01thang::where('masodv', $m_nguonkp->masodv)->get();
-
+           
             foreach ($m_chitiet as $chitiet) {
-                $chitiet->level = $a_diaban[$m_donvi->madvbc];
+                $chitiet->level = $m_donvi->caphanhchinh;
                 $chitiet->maphanloai = $m_donvi->maphanloai;
                 $chitiet->linhvuchoatdong = $m_nguonkp->linhvuchoatdong;
             }

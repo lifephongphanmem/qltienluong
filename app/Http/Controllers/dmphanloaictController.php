@@ -114,11 +114,13 @@ class dmphanloaictController extends Controller
             $m_pb = dmphanloaict::where('macongtac', $macongtac)->get();
             $m_nhom = dmphanloaicongtac::where('macongtac', $macongtac)->first();
             $a_nhom = array_column(dmphanloaicongtac::all()->toArray(), 'tencongtac', 'macongtac');
+            $a_nhucau = array_merge(getNhomNhuCauKP('KVHCSN'), getNhomNhuCauKP('KVXP'));
             //dd($m_pb);
             return view('system.danhmuc.congtac.detail')
                 ->with('model', $m_pb)
                 ->with('m_nhom', $m_nhom)
                 ->with('a_nhom', $a_nhom)
+                ->with('a_nhucau', $a_nhucau)
                 ->with('macongtac', $macongtac)
                 ->with('furl', '/danh_muc/cong_tac/')
                 ->with('pageTitle', 'Danh mục phân loại công tác');
@@ -153,8 +155,6 @@ class dmphanloaictController extends Controller
             }
         }
 
-
-
         $inputs['mact'] = getdate()[0];
         dmphanloaict::create($inputs);
         //Trả lại kết quả
@@ -176,26 +176,13 @@ class dmphanloaictController extends Controller
 
     function update_detail(Request $request)
     {
-        $result = array(
-            'status' => 'fail',
-            'message' => 'error',
-        );
-        if (!Session::has('admin')) {
-            $result = array(
-                'status' => 'fail',
-                'message' => 'permission denied',
-            );
-            die(json_encode($result));
-        }
-
-        $inputs = $request->all();
-
-        $model = dmphanloaict::where('mact', $inputs['mact'])->first();
-        $model->update($inputs);
-
-        $result['message'] = "Cập nhật thành công.";
-        $result['status'] = 'success';
-        die(json_encode($result));
+        if (Session::has('admin')) {
+            $inputs = $request->all();
+            $model = dmphanloaict::where('mact', $inputs['mact'])->first();
+            $model->update($inputs);
+            return redirect('/danh_muc/cong_tac/ma_so=' . $inputs['macongtac']);
+        } else
+            return view('errors.notlogin');
     }
 
     function getinfo_detail(Request $request)

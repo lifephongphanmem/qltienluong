@@ -22,6 +22,9 @@ class dmphanloaict extends Model
         'bhyt_dv',
         'bhtn_dv',
         'kpcd_dv',
-        'ghichu'
+        'ghichu',
+        'nhomnhucau_hc',
+        'nhomnhucau_xp',
+        'nhucaukp',
     ];
 }

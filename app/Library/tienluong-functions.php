@@ -1,5 +1,6 @@
 <?php
 
+use App\dmphanloaict;
 use App\dmphucap;
 use App\dmphucap_donvi;
 
@@ -1012,9 +1013,9 @@ function getHDND()
 {
     $ar_III = array();
     $ar_III[0] = array('style' => 'font-weight: bold;', 'tt' => 'III', 'noidung' => 'HOẠT ĐỘNG PHÍ ĐẠI BIỂU HĐND CÁC CẤP', 'phanloai' => '1', 'chitiet' => [1, 2, 3]);
-    $ar_III[1] = array('style' => '', 'tt' => '-', 'noidung' => 'Cấp tỉnh', 'phanloai' => '0', 'chitiet' => ['level' => 'T']);
-    $ar_III[2] = array('style' => '', 'tt' => '-', 'noidung' => 'Cấp huyện', 'phanloai' => '0', 'chitiet' => ['level' => 'H']);
-    $ar_III[3] = array('style' => '', 'tt' => '-', 'noidung' => 'Cấp xã', 'phanloai' => '0', 'chitiet' => ['level' => 'X']);
+    $ar_III[1] = array('style' => '', 'tt' => '-', 'noidung' => 'Cấp tỉnh', 'phanloai' => '0', 'chitiet' => ['level' => 'TINH']);
+    $ar_III[2] = array('style' => '', 'tt' => '-', 'noidung' => 'Cấp huyện', 'phanloai' => '0', 'chitiet' => ['level' => 'HUYEN']);
+    $ar_III[3] = array('style' => '', 'tt' => '-', 'noidung' => 'Cấp xã', 'phanloai' => '0', 'chitiet' => ['level' => 'XA']);
     return $ar_III;
 }
 
@@ -1022,23 +1023,35 @@ function getCapUy()
 {
     $ar_IV = array();
     $ar_IV[0] = array('style' => 'font-weight: bold;', 'tt' => 'III', 'noidung' => 'PHỤ CẤP TRÁCH NHIỆM CẤP ỦY', 'phanloai' => '1', 'chitiet' => [1, 2, 3]);
-    $ar_IV[1] = array('style' => '', 'tt' => '-', 'noidung' => 'Ủy viên cấp tỉnh', 'phanloai' => '0', 'chitiet' => ['level' => 'T']);
-    $ar_IV[2] = array('style' => '', 'tt' => '-', 'noidung' => 'Ủy viên cấp huyện', 'phanloai' => '0', 'chitiet' => ['level' => 'H']);
-    $ar_IV[3] = array('style' => '', 'tt' => '-', 'noidung' => 'Ủy viên cấp xã', 'phanloai' => '0', 'chitiet' => ['level' => 'X']);
+    $ar_IV[1] = array('style' => '', 'tt' => '-', 'noidung' => 'Ủy viên cấp tỉnh', 'phanloai' => '0', 'chitiet' => ['level' => 'TINH']);
+    $ar_IV[2] = array('style' => '', 'tt' => '-', 'noidung' => 'Ủy viên cấp huyện', 'phanloai' => '0', 'chitiet' => ['level' => 'HUYEN']);
+    $ar_IV[3] = array('style' => '', 'tt' => '-', 'noidung' => 'Ủy viên cấp xã', 'phanloai' => '0', 'chitiet' => ['level' => 'XA']);
     return $ar_IV;
 }
 
 function getChuyenTrach_plct()
 {
-    return [];
+    return array_column(dmphanloaict::where('nhomnhucau_xp', 'CANBOCT')->get()->toarray(), 'mact');
 }
 
 function getHDND_plct()
 {
-    return [];
+    return array_column(dmphanloaict::where('nhomnhucau_xp', 'HDND')->get()->toarray(), 'mact');
 }
 
 function getCapUy_plct()
 {
-    return [];
+    return array_column(dmphanloaict::where('nhomnhucau_xp', 'CAPUY')->get()->toarray(), 'mact');
+}
+
+function getNhomNhuCauKP($phanloai = 'KVHCSN')
+{
+    $a_nhom['KVHCSN'] = ['KVHCSN' => 'KHU VỰC HCSN, ĐẢNG, ĐOÀN THỂ'];
+    $a_nhom['KVXP'] = [
+        'CANBOCT' => 'CÁN BỘ CHUYÊN TRÁCH, CÔNG CHỨC XÃ',
+        'HDND' => 'HOẠT ĐỘNG PHÍ ĐẠI BIỂU HĐND CÁC CẤP',
+        'CAPUY' => 'PHỤ CẤP TRÁCH NHIỆM CẤP ỦY',
+        'CANBOKCT' => 'CÁN BỘ KHÔNG CHUYÊN TRÁCH',
+    ];
+    return $a_nhom[$phanloai];
 }
