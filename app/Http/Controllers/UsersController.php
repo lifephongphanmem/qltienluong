@@ -356,6 +356,7 @@ class UsersController extends Controller
             }else{
 
                 //2023.06.07 Tự cập nhật các nhu cầu kinh phí cũ 
+                /*
                 $m_nhucau = nguonkinhphi::where('nangcap_phucap', 0)->where('sohieu','tt78_2022')->get();
                 if ($m_nhucau->count() > 0) {
                     $a_luongchenhlech = array_column(dmthongtuquyetdinh::all()->toArray(), 'chenhlech', 'sohieu');
@@ -433,8 +434,9 @@ class UsersController extends Controller
                         nguonkinhphi_01thang::insert($data);
                     }
 
-                    nguonkinhphi::where('madv', $ttuser->madv)->where('nangcap_phucap', 0)->update(['nangcap_phucap' => 1]);
+                    nguonkinhphi::where('nangcap_phucap', 0)->where('sohieu','tt78_2022')->update(['nangcap_phucap' => 1]);
                 }
+                */
             }
             //kiểm tra xem user thuộc đơn vị nào, nếu ko thuộc đơn vị nào (trừ tài khoản quản trị) => đăng nhập ko thành công
         }

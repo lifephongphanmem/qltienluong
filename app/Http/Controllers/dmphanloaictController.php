@@ -11,13 +11,14 @@ use Illuminate\Support\Facades\Session;
 
 class dmphanloaictController extends Controller
 {
-    public function index(){
+    public function index()
+    {
         if (Session::has('admin')) {
-            $m_pb=dmphanloaicongtac::all();
+            $m_pb = dmphanloaicongtac::all();
             return view('system.danhmuc.congtac.index')
-                ->with('model',$m_pb)
-                ->with('furl','/danh_muc/cong_tac/')
-                ->with('pageTitle','Danh mục nhóm phân loại công tác');
+                ->with('model', $m_pb)
+                ->with('furl', '/danh_muc/cong_tac/')
+                ->with('pageTitle', 'Danh mục nhóm phân loại công tác');
         } else
             return view('errors.notlogin');
     }
@@ -37,7 +38,7 @@ class dmphanloaictController extends Controller
         }
         $inputs = $request->all();
 
-        $inputs['macongtac']= getdate()[0];
+        $inputs['macongtac'] = getdate()[0];
         dmphanloaicongtac::create($inputs);
         //Trả lại kết quả
         $result['message'] = 'Thao tác thành công.';
@@ -46,21 +47,23 @@ class dmphanloaictController extends Controller
         die(json_encode($result));
     }
 
-    function destroy($id){
+    function destroy($id)
+    {
         if (Session::has('admin')) {
             $model = dmphanloaicongtac::findOrFail($id);
             $model->delete();
             return redirect('/danh_muc/cong_tac/index');
-        }else
+        } else
             return view('errors.notlogin');
     }
 
-    function update(Request $request){
+    function update(Request $request)
+    {
         $result = array(
             'status' => 'fail',
             'message' => 'error',
         );
-        if(!Session::has('admin')) {
+        if (!Session::has('admin')) {
             $result = array(
                 'status' => 'fail',
                 'message' => 'permission denied',
@@ -69,15 +72,16 @@ class dmphanloaictController extends Controller
         }
 
         $inputs = $request->all();
-        $model = dmphanloaicongtac::where('macongtac',$inputs['macongtac'])->first();
+        $model = dmphanloaicongtac::where('macongtac', $inputs['macongtac'])->first();
         $model->update($inputs);
         $result['message'] = "Cập nhật thành công.";
         $result['status'] = 'success';
         die(json_encode($result));
     }
 
-    function getinfo(Request $request){
-        if(!Session::has('admin')) {
+    function getinfo(Request $request)
+    {
+        if (!Session::has('admin')) {
             $result = array(
                 'status' => 'fail',
                 'message' => 'permission denied',
@@ -85,15 +89,16 @@ class dmphanloaictController extends Controller
             die(json_encode($result));
         }
         $inputs = $request->all();
-        $model = dmphanloaicongtac::where('macongtac',$inputs['macongtac'])->first();
-        
+        $model = dmphanloaicongtac::where('macongtac', $inputs['macongtac'])->first();
+
         die($model);
     }
 
-    public function xemdulieu(){
+    public function xemdulieu()
+    {
         if (Session::has('admin')) {
-            $a_nhomct = array_column(dmphanloaicongtac::all()->toArray(),'tencongtac','macongtac');
-            $m_pb = dmphanloaict::all();            
+            $a_nhomct = array_column(dmphanloaicongtac::all()->toArray(), 'tencongtac', 'macongtac');
+            $m_pb = dmphanloaict::all();
             //dd($m_pb);
             return view('system.danhmuc.congtac.xemdulieu')
                 ->with('model', $m_pb)
@@ -103,14 +108,17 @@ class dmphanloaictController extends Controller
             return view('errors.notlogin');
     }
 
-    public function detail($macongtac){
+    public function detail($macongtac)
+    {
         if (Session::has('admin')) {
             $m_pb = dmphanloaict::where('macongtac', $macongtac)->get();
             $m_nhom = dmphanloaicongtac::where('macongtac', $macongtac)->first();
+            $a_nhom = array_column(dmphanloaicongtac::all()->toArray(), 'tencongtac', 'macongtac');
             //dd($m_pb);
             return view('system.danhmuc.congtac.detail')
                 ->with('model', $m_pb)
                 ->with('m_nhom', $m_nhom)
+                ->with('a_nhom', $a_nhom)
                 ->with('macongtac', $macongtac)
                 ->with('furl', '/danh_muc/cong_tac/')
                 ->with('pageTitle', 'Danh mục phân loại công tác');
@@ -135,8 +143,8 @@ class dmphanloaictController extends Controller
 
         $inputs = $request->all();
         $model_chk = dmphanloaict::all();
-        foreach($model_chk as $ct){
-            if(chuanhoatruong(trim($ct->tenct)) == chuanhoatruong(trim($inputs['tenct']))){
+        foreach ($model_chk as $ct) {
+            if (chuanhoatruong(trim($ct->tenct)) == chuanhoatruong(trim($inputs['tenct']))) {
                 $result = array(
                     'status' => 'fail',
                     'message' => 'Phân loại công tác này đã có trong phần mềm.',
@@ -156,21 +164,23 @@ class dmphanloaictController extends Controller
         die(json_encode($result));
     }
 
-    function destroy_detail($id){
+    function destroy_detail($id)
+    {
         if (Session::has('admin')) {
             $model = dmphanloaict::findOrFail($id);
             $model->delete();
             return redirect('/danh_muc/cong_tac/index');
-        }else
+        } else
             return view('errors.notlogin');
     }
 
-    function update_detail(Request $request){
+    function update_detail(Request $request)
+    {
         $result = array(
             'status' => 'fail',
             'message' => 'error',
         );
-        if(!Session::has('admin')) {
+        if (!Session::has('admin')) {
             $result = array(
                 'status' => 'fail',
                 'message' => 'permission denied',
@@ -180,7 +190,7 @@ class dmphanloaictController extends Controller
 
         $inputs = $request->all();
 
-        $model = dmphanloaict::where('mact',$inputs['mact'])->first();
+        $model = dmphanloaict::where('mact', $inputs['mact'])->first();
         $model->update($inputs);
 
         $result['message'] = "Cập nhật thành công.";
@@ -188,8 +198,9 @@ class dmphanloaictController extends Controller
         die(json_encode($result));
     }
 
-    function getinfo_detail(Request $request){
-        if(!Session::has('admin')) {
+    function getinfo_detail(Request $request)
+    {
+        if (!Session::has('admin')) {
             $result = array(
                 'status' => 'fail',
                 'message' => 'permission denied',
@@ -198,9 +209,7 @@ class dmphanloaictController extends Controller
         }
 
         $inputs = $request->all();
-        $model = dmphanloaict::where('mact',$inputs['mact'])->first();
+        $model = dmphanloaict::where('mact', $inputs['mact'])->first();
         die($model);
     }
-
-
 }
