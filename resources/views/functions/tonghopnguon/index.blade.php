@@ -172,10 +172,10 @@
                 <div class="row">
                     <div class="col-md-12">
                         <div class="form-group">
-                            <button type="button" onclick="indanhsachdonvi('{{ $furl_th . 'danhsachdonvi' }}')"
+                            <button type="button" onclick="insolieu('{{ $furl_th . 'tonghop' }}',null)"
                                 style="border-width: 0px" class="btn btn-default btn-xs mbs"
-                                data-target="#modal-indanhsachdonvi" data-toggle="modal">
-                                <i class="fa fa-print"></i>&nbsp; Danh sách đơn vị</button>
+                                data-target="#modal-insolieu" data-toggle="modal">
+                                <i class="fa fa-print"></i>&nbsp;Bảng tổng hợp nhu cầu kinh phí</button>
                         </div>
                     </div>
                 </div>

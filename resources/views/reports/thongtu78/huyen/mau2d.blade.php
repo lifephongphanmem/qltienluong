@@ -9,7 +9,7 @@
 
             </td>
             <td style="text-align: center;">
-                <b>Biểu số 4b</b>
+                <b>Biểu số 2d</b>
             </td>
         </tr>
         <tr>
@@ -18,6 +18,11 @@
             </td>
             <td style="text-align: center; font-style: italic">
 
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2">
+                <b>TỔNG HỢP KINH PHÍ TĂNG THÊM ĐỂ THỰC HIỆN CHẾ ĐỘ PHỤ CẤP ĐỐI VỚI CÁN BỘ KHÔNG CHUYÊN TRÁCH CẤP XÃ, THÔN VÀ TỔ DÂN PHỐ NĂM 2023</b>
             </td>
         </tr>
     </table>
@@ -29,9 +34,9 @@
             <th rowspan="2">TỔNG ĐƠN VỊ HÀNH CHÍNH CẤP XÃ, THÔN </th>
             <th colspan="2">MỨC KHOÁN QUỸ PHỤ CẤP 1 THÁNG</th>
             <th rowspan="2">SỐ LƯỢNG CÁN BỘ KCT CẤP XÃ CÓ MẶT</th>
-            <th colspan="2"> KHOÁN QUỸ PHỤ CẤP THÁNG 7 THEO NGHỊ ĐỊNH 29 (LƯƠNG 1,39)</th>
-            <th rowspan="2">KHOÁN QUỸ PHỤ CẤP THÁNG 7 THEO NGHỊ ĐỊNH 34 (LƯƠNG 1,49)</th>
-            <th rowspan="2">CHÊNH LỆCH KINH PHÍ KHOÁN QUỸ PHỤ CẤP 6 T NĂM 2019</th>
+            <th colspan="2">KHOÁN QUỸ PHỤ CẤP THÁNG 7 THEO NGHỊ ĐỊNH 34 (LƯƠNG 1,49)</th>
+            <th rowspan="2">KHOÁN QUỸ PHỤ CẤP THÁNG 7 THEO NGHỊ ĐỊNH 24 (LƯƠNG 1,8)</th>
+            <th rowspan="2">CHÊNH LỆCH KINH PHÍ KHOÁN QUỸ PHỤ CẤP 6 T NĂM 2023</th>
         </tr>
         <tr>
             <th>Theo Nghị định 29/2013/NĐ-CP <sup>(1)</sup></th>
@@ -46,9 +51,9 @@
             <td>2</td>
             <td>3</td>
             <td>4</td>
-            <td>5 = 1*2*1,39</td>
-            <td>6=4x14%x1,39</td>
-            <td>7=1x3x1,49</td>
+            <td>5= 1*2*1,8</td>
+            <td>6=4x14%x1,8</td>
+            <td>7=1x3x1,8</td>
             <td>8= (7-6-5) x 6T</td>
         </tr>
         <tr style="font-weight: bold">
@@ -67,14 +72,14 @@
             <tr style=" text-align: right">
                 <td style=" text-align: center">{{ $dulieu['tt'] }}</td>
                 <td style=" text-align: left">{{ $dulieu['noidung'] }}</td>
-                <td>{{ dinhdangso($dulieu['tdv']) }}</td>
-                <td>{{ $dulieu['mk'] }}</td>
-                <td>{{ $dulieu['mk2'] }}</td>
-                <td>{{ dinhdangso($dulieu['dt'], 0, $inputs['donvitinh']) }}</td>
-                <td>{{ dinhdangso($dulieu['kqpc'], 0, $inputs['donvitinh']) }}</td>
-                <td>{{ dinhdangso($dulieu['bhxh'], 0, $inputs['donvitinh']) }}</td>
-                <td>{{ dinhdangso($dulieu['kqpct7'], 0, $inputs['donvitinh']) }}</td>
-                <td>{{ dinhdangso($dulieu['tong'], 0, $inputs['donvitinh']) }}</td>
+                <td>{{ dinhdangsothapphan($dulieu['solieu']['tdv']) }}</td>
+                <td>{{ dinhdangsothapphan($dulieu['solieu']['mk'], 3) }}</td>
+                <td>{{ dinhdangsothapphan($dulieu['solieu']['mk2'], 3) }}</td>
+                <td>{{ dinhdangsothapphan($dulieu['solieu']['dt'], 0, $inputs['donvitinh']) }}</td>
+                <td>{{ dinhdangsothapphan($dulieu['solieu']['kqpc'], 0, $inputs['donvitinh']) }}</td>
+                <td>{{ dinhdangsothapphan($dulieu['solieu']['bhxh'], 0, $inputs['donvitinh']) }}</td>
+                <td>{{ dinhdangsothapphan($dulieu['solieu']['kqpct7'], 0, $inputs['donvitinh']) }}</td>
+                <td>{{ dinhdangsothapphan($dulieu['solieu']['tong'], 0, $inputs['donvitinh']) }}</td>
             </tr>
         @endforeach
     </table>

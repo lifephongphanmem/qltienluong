@@ -1022,7 +1022,7 @@ function getHDND()
 function getCapUy()
 {
     $ar_IV = array();
-    $ar_IV[0] = array('style' => 'font-weight: bold;', 'tt' => 'III', 'noidung' => 'PHỤ CẤP TRÁCH NHIỆM CẤP ỦY', 'phanloai' => '1', 'chitiet' => [1, 2, 3]);
+    $ar_IV[0] = array('style' => 'font-weight: bold;', 'tt' => 'IV', 'noidung' => 'PHỤ CẤP TRÁCH NHIỆM CẤP ỦY', 'phanloai' => '1', 'chitiet' => [1, 2, 3]);
     $ar_IV[1] = array('style' => '', 'tt' => '-', 'noidung' => 'Ủy viên cấp tỉnh', 'phanloai' => '0', 'chitiet' => ['level' => 'TINH']);
     $ar_IV[2] = array('style' => '', 'tt' => '-', 'noidung' => 'Ủy viên cấp huyện', 'phanloai' => '0', 'chitiet' => ['level' => 'HUYEN']);
     $ar_IV[3] = array('style' => '', 'tt' => '-', 'noidung' => 'Ủy viên cấp xã', 'phanloai' => '0', 'chitiet' => ['level' => 'XA']);
