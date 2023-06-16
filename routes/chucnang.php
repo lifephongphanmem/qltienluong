@@ -352,6 +352,15 @@ Route::group(['prefix' => 'chuc_nang'], function () {
             Route::post('mau2b', 'tonghopnguon_huyenController@mau2b');
             Route::post('mau2c', 'tonghopnguon_huyenController@mau2c');
             Route::post('mau2d', 'tonghopnguon_huyenController@mau2d');
+            Route::post('mau2dd', 'tonghopnguon_huyenController@mau2dd');
+            Route::post('mau2e', 'tonghopnguon_huyenController@mau2e');
+            Route::post('mau2g', 'tonghopnguon_huyenController@mau2g');
+            Route::post('mau2h', 'tonghopnguon_huyenController@mau2h');
+            Route::post('mau2i', 'tonghopnguon_huyenController@mau2i');
+            Route::post('mau2k', 'tonghopnguon_huyenController@mau2k');
+            Route::post('mau2l', 'tonghopnguon_huyenController@mau2l');
+            
+            Route::post('mau4a', 'tonghopnguon_huyenController@mau4a');
             Route::post('mau4b', 'tonghopnguon_huyenController@mau4b');
         });
 

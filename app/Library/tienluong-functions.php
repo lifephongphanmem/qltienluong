@@ -1046,7 +1046,11 @@ function getCapUy_plct()
 
 function getNhomNhuCauKP($phanloai = 'KVHCSN')
 {
-    $a_nhom['KVHCSN'] = ['KVHCSN' => 'KHU VỰC HCSN, ĐẢNG, ĐOÀN THỂ'];
+    $a_nhom['KVHCSN'] = [
+        'BIENCHE' => 'CÁN BỘ BIÊN CHẾ',
+        'HOPDONG' => 'CÁN BỘ HỢP ĐỒNG',
+        
+];
     $a_nhom['KVXP'] = [
         'CANBOCT' => 'CÁN BỘ CHUYÊN TRÁCH, CÔNG CHỨC XÃ',
         'HDND' => 'HOẠT ĐỘNG PHÍ ĐẠI BIỂU HĐND CÁC CẤP',

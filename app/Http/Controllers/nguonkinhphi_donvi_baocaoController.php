@@ -404,11 +404,21 @@ class nguonkinhphi_donvi_baocaoController extends Controller
             //$a_diaban = array_column(dmdonvibaocao::all()->toArray(), 'level', 'madvbc');
             $m_thongtu = dmthongtuquyetdinh::where('sohieu', $m_nguonkp->sohieu)->first();
             $m_chitiet = nguonkinhphi_01thang::where('masodv', $m_nguonkp->masodv)->get();
-           
+
+            $m_plct = dmphanloaict::all();
+            $a_nhomplct_hc = array_column($m_plct->toArray(), 'nhomnhucau_hc', 'mact');
+            $a_nhomplct_xp = array_column($m_plct->toArray(), 'nhomnhucau_xp', 'mact');
+
             foreach ($m_chitiet as $chitiet) {
                 $chitiet->level = $m_donvi->caphanhchinh;
                 $chitiet->maphanloai = $m_donvi->maphanloai;
                 $chitiet->linhvuchoatdong = $m_nguonkp->linhvuchoatdong;
+
+                if ($chitiet->maphanloai == 'KVXP') {
+                    $chitiet->nhomnhucau = $a_nhomplct_xp[$chitiet->mact];
+                } else {
+                    $chitiet->nhomnhucau = $a_nhomplct_hc[$chitiet->mact];
+                }
             }
             //dd($m_chitiet);
             $a_pc_th = dmphucap_donvi::where('madv',  session('admin')->madv)->where('phanloai', '<', '3')->wherenotin('mapc', ['heso'])->get();
@@ -432,7 +442,7 @@ class nguonkinhphi_donvi_baocaoController extends Controller
 
             //Tính toán số liệu phần I
             $ar_I = getHCSN();
-            $dulieu_pI = $m_chitiet->where('maphanloai', '<>', 'KVXP');
+            $dulieu_pI = $m_chitiet->where('nhomnhucau', 'BIENCHE');
             //Vòng cấp độ 3
             foreach ($ar_I as $key => $chitiet) {
                 if ($chitiet['phanloai'] == '0') {
@@ -637,7 +647,7 @@ class nguonkinhphi_donvi_baocaoController extends Controller
             //
             //Tính toán số liệu phần II
             $ar_II = getChuyenTrach();
-            $dulieu_pII = $m_chitiet->where('maphanloai',  'KVXP');
+            $dulieu_pII = $m_chitiet->where('nhomnhucau', 'CANBOCT');
             $aII_plct = getChuyenTrach_plct();
             foreach ($dulieu_pII as $key => $value) {
                 if (count($aII_plct) > 0 && !in_array($value->mact, $aII_plct))
@@ -699,12 +709,12 @@ class nguonkinhphi_donvi_baocaoController extends Controller
             //Tính toán số liệu phần III
             $ar_III = getHDND();
             $aIII_plct = getHDND_plct();
-            $dulieu_pIII = $m_chitiet->where('maphanloai',  'KVXP');
+            $dulieu_pIII = $m_chitiet->where('nhomnhucau',  'HDND');
             foreach ($dulieu_pIII as $key => $value) {
                 if (count($aIII_plct) > 0 && !in_array($value->mact, $aIII_plct))
                     $dulieu_pIII->forget($key);
             }
-            
+
             //Vòng cấp độ 3
             foreach ($ar_III as $key => $chitiet) {
                 if ($chitiet['phanloai'] == '0') {
@@ -821,7 +831,7 @@ class nguonkinhphi_donvi_baocaoController extends Controller
 
             //Tính toán số liệu phần IV
             $ar_IV = getCapUy();
-            $dulieu_pIV = $m_chitiet->where('maphanloai',  'KVXP');
+            $dulieu_pIV = $m_chitiet->where('nhomnhucau',  'CAPUY');;
             $aIV_plct = getCapUy_plct();
             foreach ($dulieu_pIV as $key => $value) {
                 if (count($aIV_plct) > 0 && !in_array($value->mact, $aIV_plct))

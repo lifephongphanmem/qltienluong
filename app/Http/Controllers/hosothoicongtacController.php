@@ -37,10 +37,13 @@ class hosothoicongtacController extends Controller
     function store(Request $request){
         if (Session::has('admin')) {
             $insert = $request->all();
-            // dd($insert);
+            //dd($insert);
             $model_chk = hosothoicongtac::where('macanbo',$insert['macanbo'])->first();
             if($model_chk != null){
-                return view('errors.thoicongtac');
+                $model_chk->update($insert);
+                //dd(1);
+                return redirect('nghiep_vu/da_nghi/danh_sach');
+                //return view('errors.thoicongtac');
             }
             $insert['ngaynghi'] = getDateTime($insert['ngaynghi']);
             $insert['ngayqd'] = getDateTime($insert['ngayqd']);
@@ -92,7 +95,8 @@ class hosothoicongtacController extends Controller
 
     function destroy($id){
         if (Session::has('admin')) {
-            $model = hosothoicongtac::find($id);
+
+            $model = hosothoicongtac::find($id);           
             $model_hoso = hosocanbo::where('macanbo',$model->macanbo)->first();
             $stt = $model_hoso->stt;//lưu lại do $m_canbo chứa cả thông tin $model_hoso nên stt bị thay đổi theo
             //dd($model_hoso);
@@ -102,7 +106,7 @@ class hosothoicongtacController extends Controller
                 $tt = chkDbl($cb->stt) + 1;
                 hosocanbo::where('macanbo',$cb->macanbo)->update(['stt'=>$tt]);
             }
-            hosocanbo::where('macanbo',$model->macanbo)->first()->update(['theodoi'=>'0','stt'=>$stt]);
+            hosocanbo::where('macanbo',$model->macanbo)->update(['theodoi'=>'0','stt'=>$stt]);
             //$macanbo = $model->macanbo;
             $model->delete();
             return redirect('/nghiep_vu/da_nghi/danh_sach');

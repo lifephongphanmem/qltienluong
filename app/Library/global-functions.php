@@ -2,7 +2,7 @@
 function getPermissionDefault($level)
 {
     $roles = array();
-    if(!in_array($level,['SA','SSA'])){
+    if (!in_array($level, ['SA', 'SSA'])) {
         $level = 'default';
     }
     $roles['SA'] = array(
@@ -224,15 +224,16 @@ function can($module = null, $action = null)
     $per = getPermissionDefault(session('admin')->sadmin);
     $per = json_decode($per, true);
     //dd($per);
-    if(isset($per[$module][$action]) && $per[$module][$action] == 1) {
+    if (isset($per[$module][$action]) && $per[$module][$action] == 1) {
         return true;
-    }else{
+    } else {
         return false;
     }
 }
 
 
-function getDayVn($date) {
+function getDayVn($date)
+{
     if ($date == NULL || $date == null || $date == '' || $date == '0000-00-00') {
         return '';
     } else {
@@ -250,8 +251,9 @@ function Date2Str($date)
     }
 }
 
-function getDateTime($date) {
-    if($date != '')
+function getDateTime($date)
+{
+    if ($date != '')
         return $date;
     else
         return NULL;
@@ -264,57 +266,58 @@ function getDateToDb($value)
     }
 
     //file excel để format Date 01/12/2018 => 01-12-18
-    if(strpos($value,'-') > -1){
+    if (strpos($value, '-') > -1) {
         //định dạng 01-06-17 m-d-Y
-        $a_val = explode('-',$value);
+        $a_val = explode('-', $value);
         $ngay = $a_val[1];
         $thang = $a_val[0];
-        $nam = isset($a_val[2])? $a_val[2] : date('Y');
+        $nam = isset($a_val[2]) ? $a_val[2] : date('Y');
         $nam = $nam < 2000 ? $nam + 2000 : $nam;
-        return date('Y-m-d',strtotime($ngay .'-'.$thang.'-'.$nam));
+        return date('Y-m-d', strtotime($ngay . '-' . $thang . '-' . $nam));
     }
 
-    if(strpos($value,'/') > -1){
+    if (strpos($value, '/') > -1) {
         //định dạng06/01/2017: d-m-Y
-        $a_val = explode('/',$value);
+        $a_val = explode('/', $value);
         $ngay = $a_val[0];
         $thang = $a_val[1];
-        $nam = isset($a_val[2])? $a_val[2] : date('Y');
+        $nam = isset($a_val[2]) ? $a_val[2] : date('Y');
         $nam = $nam < 2000 ? $nam + 2000 : $nam;
-        return date('Y-m-d',strtotime($ngay .'-'.$thang.'-'.$nam));
+        return date('Y-m-d', strtotime($ngay . '-' . $thang . '-' . $nam));
     }
     //$str = strtotime(str_replace('/', '-', $value));
     //return date('Y-m-d', $str);
     return null;
 }
 
-function getDbl($obj) {
-    $obj=str_replace(',','',$obj);
-    $obj=str_replace('.','',$obj);
-    if(is_numeric($obj)){
+function getDbl($obj)
+{
+    $obj = str_replace(',', '', $obj);
+    $obj = str_replace('.', '', $obj);
+    if (is_numeric($obj)) {
         return $obj;
-    }else {
+    } else {
         return 0;
     }
 }
 
-function chkDbl($obj) {
-    $obj=str_replace(',','',$obj);
-    $obj=str_replace('%','',$obj);
-    if(is_numeric($obj)){
+function chkDbl($obj)
+{
+    $obj = str_replace(',', '', $obj);
+    $obj = str_replace('%', '', $obj);
+    if (is_numeric($obj)) {
         return $obj;
-    }else {
+    } else {
         return 0;
     }
 }
 
-
-function canGeneral($module = null, $action =null)
+function canGeneral($module = null, $action = null)
 {
     $model = \App\GeneralConfigs::first();
     $setting = json_decode($model->setting, true);
 
-    if(isset($setting[$module][$action]) && $setting[$module][$action] ==1 )
+    if (isset($setting[$module][$action]) && $setting[$module][$action] == 1)
         return true;
     else
         return false;
@@ -323,8 +326,8 @@ function canGeneral($module = null, $action =null)
 function getDouble($str)
 {
     $sKQ = 0;
-    $str = str_replace(',','',$str);
-    $str = str_replace('.','',$str);
+    $str = str_replace(',', '', $str);
+    $str = str_replace('.', '', $str);
     //if (is_double($str))
     $sKQ = $str;
     return floatval($sKQ);
@@ -343,7 +346,7 @@ function chuyenkhongdau($str)
         'y' => 'ý|ỳ|ỷ|ỹ|ỵ|Ý|Ỳ|Ỷ|Ỹ|Ỵ',
     );
     foreach ($utf8 as $ascii => $uni) $str = preg_replace("/($uni)/i", $ascii, $str);
-     return $str;
+    return $str;
 }
 
 function chuanhoachuoi($text)
@@ -383,68 +386,76 @@ function removespace($text)
     return $text;
 }
 
-function getPhanTram1($giatri, $thaydoi){
-    $kq=0;
-    if($thaydoi==0||$giatri==0){
+function getPhanTram1($giatri, $thaydoi)
+{
+    $kq = 0;
+    if ($thaydoi == 0 || $giatri == 0) {
         return '';
     }
-    if($giatri<$thaydoi){
-        $kq=round((($thaydoi-$giatri)/$giatri)*100,2).'%';
-    }else{
-        $kq='-'.round((($giatri-$thaydoi)/$giatri)*100,2).'%';
+    if ($giatri < $thaydoi) {
+        $kq = round((($thaydoi - $giatri) / $giatri) * 100, 2) . '%';
+    } else {
+        $kq = '-' . round((($giatri - $thaydoi) / $giatri) * 100, 2) . '%';
     }
     return $kq;
 }
 
-function getPhanTram2($giatri, $thaydoi){
-    if($thaydoi==0||$giatri==0){
+function getPhanTram2($giatri, $thaydoi)
+{
+    if ($thaydoi == 0 || $giatri == 0) {
         return '';
     }
-    return round(($thaydoi/$giatri)*100,2).'%';
+    return round(($thaydoi / $giatri) * 100, 2) . '%';
 }
 
 function getConditions($inputs, $exists, $table)
 {
     $b_dk = false;
     $s_sql = '';
-    if(!is_array($inputs)) return $s_sql;
+    if (!is_array($inputs)) return $s_sql;
 
     foreach ($inputs as $key => $value) {
-        if (in_array($key,$exists) || $value == '') continue;
+        if (in_array($key, $exists) || $value == '') continue;
         if ($b_dk) {
             $s_sql .= ' and ';
         }
         if (strtotime($value)) {
-            if($key=='tungay'){$s_sql .= $table.'.'.$key . ">='" . $value . "'";}
-            else{$s_sql .= $table.'.'.$key . "<='" . $value . "'";}
+            if ($key == 'tungay') {
+                $s_sql .= $table . '.' . $key . ">='" . $value . "'";
+            } else {
+                $s_sql .= $table . '.' . $key . "<='" . $value . "'";
+            }
         } else {
-            $s_sql .= $table.'.'.$key . "='" . $value . "'";
+            $s_sql .= $table . '.' . $key . "='" . $value . "'";
         }
         $b_dk = true;
     }
     return $s_sql;
 }
 
-function convert2date($ngaythang){
-    if($ngaythang==''){
+function convert2date($ngaythang)
+{
+    if ($ngaythang == '') {
         return null;
     }
     return date('Y-m-d', strtotime(str_replace('/', '-', $ngaythang)));
 }
 
-function convert2str($number){
-    if(!is_numeric($number)){
+function convert2str($number)
+{
+    if (!is_numeric($number)) {
         return '';
-    }else{
-        if($number<10){
-            return '0'.strval($number);
-        }else{
+    } else {
+        if ($number < 10) {
+            return '0' . strval($number);
+        } else {
             return strval($number);
         }
     }
 }
 
-function convert2Roman($num){
+function convert2Roman($num)
+{
     $n = intval($num);
     $res = '';
 
@@ -462,9 +473,10 @@ function convert2Roman($num){
         'IX' => 9,
         'V'  => 5,
         'IV' => 4,
-        'I'  => 1);
+        'I'  => 1
+    );
 
-    foreach ($romanNumber_Array as $roman => $number){
+    foreach ($romanNumber_Array as $roman => $number) {
         //divide to get  matches
         $matches = intval($n / $number);
 
@@ -482,42 +494,49 @@ function convert2Roman($num){
 //$unit = 1 => đơn vị tính đồng
 //$unit = 2 => đơn vị tính nghìn đồng
 //$unit = 3 => đơn vị tính triệu đồng
-function dinhdangso ($number , $decimals = 0, $unit = '1' , $dec_point = ',' , $thousands_sep = '.' ) {
-    if(!is_numeric($number) || $number == 0){return '';}
+function dinhdangso($number, $decimals = 0, $unit = '1', $dec_point = ',', $thousands_sep = '.')
+{
+    if (!is_numeric($number) || $number == 0) {
+        return '';
+    }
     $r = $unit;
 
     switch ($unit) {
-        case 2:{
-            $decimals = 3;
-            $r = 1000;
-            break;
-        }
-        case 3:{
-            $decimals = 5;
-            $r = 1000000;
-            break;
-        }
+        case 2: {
+                $decimals = 3;
+                $r = 1000;
+                break;
+            }
+        case 3: {
+                $decimals = 5;
+                $r = 1000000;
+                break;
+            }
     }
 
-    $number = round($number / $r , $decimals);
-    return number_format($number, $decimals ,$dec_point, $thousands_sep);
+    $number = round($number / $r, $decimals);
+    return number_format($number, $decimals, $dec_point, $thousands_sep);
 }
 
-function trim_zeros($str) {
-    if(!is_string($str)) return $str;
-    return preg_replace(array('`\.0+$`','`(\.\d+?)0+$`'),array('','$1'),$str);
+function trim_zeros($str)
+{
+    if (!is_string($str)) return $str;
+    return preg_replace(array('`\.0+$`', '`(\.\d+?)0+$`'), array('', '$1'), $str);
 }
 
-function dinhdangsothapphan ($number , $decimals = 0) {
-    if(!is_numeric($number) || $number == 0){return '';}
-    $number = round($number , $decimals);
-    $str_kq = trim_zeros(number_format($number, $decimals ));
-    for ($i = 0; $i < strlen($str_kq); $i++){
-       if($str_kq[$i]== '.'){
-           $str_kq[$i]= ',';
-       }elseif($str_kq[$i]== ','){
-           $str_kq[$i]= '.';
-       }
+function dinhdangsothapphan($number, $decimals = 0)
+{
+    if (!is_numeric($number) || $number == 0) {
+        return '';
+    }
+    $number = round($number, $decimals);
+    $str_kq = trim_zeros(number_format($number, $decimals));
+    for ($i = 0; $i < strlen($str_kq); $i++) {
+        if ($str_kq[$i] == '.') {
+            $str_kq[$i] = ',';
+        } elseif ($str_kq[$i] == ',') {
+            $str_kq[$i] = '.';
+        }
     }
     //$a_so = str_split($str_kq);
 
@@ -529,81 +548,82 @@ function dinhdangsothapphan ($number , $decimals = 0) {
     // round(5.4,4) = 5,4000
 }
 
-    function unset_key ($data, $array_key){
-        $a_kq = array();
-       foreach($data as $dt){
-           foreach($array_key as $value){
-               if(array_key_exists($value,$dt)){
-                   unset($dt[$value]);
-               }
-           }
-           $a_kq[]=$dt;
-       }
-
-    return $a_kq;
-    }
-
-    function Dbl2Str($amount, $upcase = true, $low = false)
-    {
-        if ($low) {
-            $amount = abs($amount);
-        }
-
-        if ($amount <= 0) {
-            return '';
-        }
-        $amount = (int)chkDbl($amount);
-        $Text = array("không", "một", "hai", "ba", "bốn", "năm", "sáu", "bảy", "tám", "chín");
-        $TextLuythua = array("", "nghìn", "triệu", "tỷ", "ngàn tỷ", "triệu tỷ", "tỷ tỷ");
-        $textnumber = "";
-        $length = strlen($amount);
-
-        for ($i = 0; $i < $length; $i++)
-            $unread[$i] = 0;
-
-        for ($i = 0; $i < $length; $i++) {
-            $so = substr($amount, $length - $i - 1, 1);
-
-            if (($so == 0) && ($i % 3 == 0) && ($unread[$i] == 0)) {
-                for ($j = $i + 1; $j < $length; $j++) {
-                    $so1 = substr($amount, $length - $j - 1, 1);
-                    if ($so1 != 0)
-                        break;
-                }
-
-                if (intval(($j - $i) / 3) > 0) {
-                    for ($k = $i; $k < intval(($j - $i) / 3) * 3 + $i; $k++)
-                        $unread[$k] = 1;
-                }
+function unset_key($data, $array_key)
+{
+    $a_kq = array();
+    foreach ($data as $dt) {
+        foreach ($array_key as $value) {
+            if (array_key_exists($value, $dt)) {
+                unset($dt[$value]);
             }
         }
-
-        for ($i = 0; $i < $length; $i++) {
-            $so = substr($amount, $length - $i - 1, 1);
-            if ($unread[$i] == 1)
-                continue;
-
-            if (($i % 3 == 0) && ($i > 0))
-                $textnumber = $TextLuythua[$i / 3] . " " . $textnumber;
-
-            if ($i % 3 == 2)
-                $textnumber = 'trăm ' . $textnumber;
-
-            if ($i % 3 == 1)
-                $textnumber = 'mươi ' . $textnumber;
-
-
-            $textnumber = $Text[$so] . " " . $textnumber;
-        }
-
-        //Phai de cac ham replace theo dung thu tu nhu the nay
-        $textnumber = str_replace("không mươi", "lẻ", $textnumber);
-        $textnumber = str_replace("lẻ không", "", $textnumber);
-        $textnumber = str_replace("mươi không", "mươi", $textnumber);
-        $textnumber = str_replace("một mươi", "mười", $textnumber);
-        $textnumber = str_replace("mươi năm", "mươi lăm", $textnumber);
-        $textnumber = str_replace("mươi một", "mươi mốt", $textnumber);
-        $textnumber = str_replace("mười năm", "mười lăm", $textnumber);
-
-        return $upcase ? ucfirst($textnumber . " đồng chẵn") : $textnumber . " đồng chẵn";
+        $a_kq[] = $dt;
     }
+
+    return $a_kq;
+}
+
+function Dbl2Str($amount, $upcase = true, $low = false)
+{
+    if ($low) {
+        $amount = abs($amount);
+    }
+
+    if ($amount <= 0) {
+        return '';
+    }
+    $amount = (int)chkDbl($amount);
+    $Text = array("không", "một", "hai", "ba", "bốn", "năm", "sáu", "bảy", "tám", "chín");
+    $TextLuythua = array("", "nghìn", "triệu", "tỷ", "ngàn tỷ", "triệu tỷ", "tỷ tỷ");
+    $textnumber = "";
+    $length = strlen($amount);
+
+    for ($i = 0; $i < $length; $i++)
+        $unread[$i] = 0;
+
+    for ($i = 0; $i < $length; $i++) {
+        $so = substr($amount, $length - $i - 1, 1);
+
+        if (($so == 0) && ($i % 3 == 0) && ($unread[$i] == 0)) {
+            for ($j = $i + 1; $j < $length; $j++) {
+                $so1 = substr($amount, $length - $j - 1, 1);
+                if ($so1 != 0)
+                    break;
+            }
+
+            if (intval(($j - $i) / 3) > 0) {
+                for ($k = $i; $k < intval(($j - $i) / 3) * 3 + $i; $k++)
+                    $unread[$k] = 1;
+            }
+        }
+    }
+
+    for ($i = 0; $i < $length; $i++) {
+        $so = substr($amount, $length - $i - 1, 1);
+        if ($unread[$i] == 1)
+            continue;
+
+        if (($i % 3 == 0) && ($i > 0))
+            $textnumber = $TextLuythua[$i / 3] . " " . $textnumber;
+
+        if ($i % 3 == 2)
+            $textnumber = 'trăm ' . $textnumber;
+
+        if ($i % 3 == 1)
+            $textnumber = 'mươi ' . $textnumber;
+
+
+        $textnumber = $Text[$so] . " " . $textnumber;
+    }
+
+    //Phai de cac ham replace theo dung thu tu nhu the nay
+    $textnumber = str_replace("không mươi", "lẻ", $textnumber);
+    $textnumber = str_replace("lẻ không", "", $textnumber);
+    $textnumber = str_replace("mươi không", "mươi", $textnumber);
+    $textnumber = str_replace("một mươi", "mười", $textnumber);
+    $textnumber = str_replace("mươi năm", "mươi lăm", $textnumber);
+    $textnumber = str_replace("mươi một", "mươi mốt", $textnumber);
+    $textnumber = str_replace("mười năm", "mười lăm", $textnumber);
+
+    return $upcase ? ucfirst($textnumber . " đồng chẵn") : $textnumber . " đồng chẵn";
+}
