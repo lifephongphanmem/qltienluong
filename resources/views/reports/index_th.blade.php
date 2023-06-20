@@ -156,7 +156,7 @@
 
 
 
-                                    <li><a href="#" data-target="#chitiet-modal" data-toggle="modal"
+                                    {{-- <li><a href="#" data-target="#chitiet-modal" data-toggle="modal"
                                             onclick="baocao('{{ '/bao_cao/thong_tu_67/huyen/mau2a1' }}')">Báo cáo nhu cầu
                                             kinh phí thực hiện nghị định 38/2019/NĐ-CP (Mẫu 2a/1)</a></li>
                                     <li><a href="#" data-target="#chitiet-modal" data-toggle="modal"
@@ -196,7 +196,7 @@
                                             nguồn thực hiện nghị định 38/2019/NĐ-CP (Mẫu 4b)</a></li>
                                     <li><a href="#" data-target="#chitiet-modal" data-toggle="modal"
                                             onclick="baocao('{{ '/bao_cao/thong_tu_67/huyen/mau4bbs' }}')">Tổng hợp nhu
-                                            cầu, nguồn thực hiện nghị định 38/2019/NĐ-CP (Mẫu 4b bổ sung)</a></li>
+                                            cầu, nguồn thực hiện nghị định 38/2019/NĐ-CP (Mẫu 4b bổ sung)</a></li> --}}
 
                                 </ol>
                             </div>

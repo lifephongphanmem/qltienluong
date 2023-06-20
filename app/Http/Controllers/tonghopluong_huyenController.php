@@ -199,11 +199,11 @@ class tonghopluong_huyenController extends Controller
                 ->wherenotin('madv', function ($qr) use ($inputs) {
                     $qr->select('madv')->from('dsdonviquanly')->where('nam', $inputs['nam'])->distinct()->get();
                 }) //lọc các đơn vị đã khai báo trong dsdonviquanly
+                    ->where('madv','!=',$madv) //bỏ đơn vị tổng hợp
                 ->get();
             $a_donvicapduoi = array_unique(array_merge(array_column($model_dmdv->toarray(), 'madv'), $a_donvicapduoi));
-            //dd($model_dmdv);
             $model_donvitamdung = dmdonvi::where('trangthai', 'TD')->wherein('madv', $a_donvicapduoi)->get();
-
+// dd($a_donvicapduoi);
             $a_data = array(
                 array('thang' => '01', 'mathdv' => null, 'noidung' => null, 'sldv' => $this->laySoLuongDV('01', $inputs['nam'], $a_donvicapduoi, $model_donvitamdung), 'dvgui' => 0),
                 array('thang' => '02', 'mathdv' => null, 'noidung' => null, 'sldv' => $this->laySoLuongDV('02', $inputs['nam'], $a_donvicapduoi, $model_donvitamdung), 'dvgui' => 0),
@@ -667,21 +667,29 @@ class tonghopluong_huyenController extends Controller
             $input = $requests->all();
             $mathdv = $input['mathdv'];
             $madv = $input['madv'];
+            // dd($input);
             //$model = tonghopluong_donvi_chitiet::where('mathdv', $mathdv)->get();
             $model = tonghopluong_donvi_bangluong::wherein('mathdv', function ($query) use ($mathdv, $madv) {
                 $query->select('mathdv')->from('tonghopluong_donvi')->where('mathh', $mathdv)->where('madv', $madv)->get();
             })->get();
+            // $model = tonghopluong_donvi_bangluong::where('mathdv', $mathdv)->get();
             $model_thongtin = tonghopluong_huyen::where('mathdv', $mathdv)->where('madv', $madv)->first();
             $model_nguonkp = array_column(dmnguonkinhphi::all()->toArray(), 'tennguonkp', 'manguonkp');
             $model_ct = array_column(dmphanloaict::all()->toArray(), 'tenct', 'mact');
             //$gnr = getGeneralConfigs();
 
             //cho trương hợp đơn vị cấp trên in dữ liệu dv câp dưới mà ko sai tên đơn vị
-            $m_dv = dmdonvi::where('madv', $model_thongtin->madv)->first();
+            if(isset($model_thongtin)){
+                $m_dv = dmdonvi::where('madv', $model_thongtin->madv)->first();
+                $m_pc = array_column(dmphucap_donvi::where('madv', $model_thongtin->madv)->get()->toarray(), 'report', 'mapc');
+            }else{
+                $m_dv=new dmdonvi();
+            }
+
             $a_phucap = array();
             $col = 0;
-            $m_pc = array_column(dmphucap_donvi::where('madv', $model_thongtin->madv)->get()->toarray(), 'report', 'mapc');
 
+// dd($model);
             foreach ($model as $chitiet) {
                 if (!isset($model_nguonkp[$chitiet->manguonkp]))
                     $chitiet->manguonkp = 12;
@@ -710,8 +718,8 @@ class tonghopluong_huyenController extends Controller
             //dd($a_phucap);
             $thongtin = array(
                 'nguoilap' => session('admin')->name,
-                'thang' => $model_thongtin->thang,
-                'nam' => $model_thongtin->nam
+                'thang' => isset($model_thongtin)?$model_thongtin->thang:'',
+                'nam' => isset($model_thongtin)?$model_thongtin->nam:''
             );
 
             //Lấy dữ liệu để lập
@@ -781,6 +789,7 @@ class tonghopluong_huyenController extends Controller
             $model = tonghopluong_donvi_bangluong::wherein('mathdv', function ($query) use ($mathdv, $madv) {
                 $query->select('mathdv')->from('tonghopluong_donvi')->where('mathh', $mathdv)->where('madv', $madv)->get();
             })->get();
+            // $model = tonghopluong_donvi_bangluong::where('mathdv', $mathdv)->get();
             $model_thongtin = tonghopluong_huyen::where('mathdv', $mathdv)->where('madv', $madv)->first();
             $model_nguonkp = array_column(dmnguonkinhphi::all()->toArray(), 'tennguonkp', 'manguonkp');
             $model_ct = array_column(dmphanloaict::all()->toArray(), 'tenct', 'mact');

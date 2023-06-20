@@ -50,6 +50,7 @@ class tonghopluong_donviController extends Controller
                 array('thang' => '11', 'mathdv' => null),
                 array('thang' => '12', 'mathdv' => null)
             );
+            // dd(session('admin'));
             /*
             $a_trangthai=array('CHUALUONG'=>'Chưa tạo bảng lương','CHUATAO'=>'Chưa tổng hợp dữ liệu'
                 ,'CHOGUI'=>'Chưa gửi dữ liệu','DAGUI'=>'Đã gửi dữ liệu','TRALAI'=>'Trả lại dữ liệu');
@@ -497,7 +498,7 @@ class tonghopluong_donviController extends Controller
             if (!session('admin')->quanlykhuvuc && session('admin')->macqcq == '') {
                 return view('errors.chuacqcq');
             }
-            dd($inputs);
+            // dd($inputs);
             $model = tonghopluong_donvi::where('mathdv', $inputs['mathdv'])->first();
 
             //dd(session('admin')->macqcq == session('admin')->madvqlkv);
@@ -575,6 +576,7 @@ class tonghopluong_donviController extends Controller
                 //khi trả  lại tonghophuyen set mathh = null =>tìm theo mã + thang + năm tổng hợp
                 $model_huyen = tonghopluong_huyen::where('thang', $model->thang)->where('nam', $model->nam)
                     ->where('madv', $model->madv)->first();
+                    // dd($model_huyen);
                 if ($model_huyen == null) {
                     $masoh = getdate()[0];
                     $model->mathh = $masoh;
@@ -583,6 +585,7 @@ class tonghopluong_donviController extends Controller
                     $inputs['nam'] = $model->nam;
                     $inputs['madv'] = $model->madv;
                     $inputs['mathdv'] = $masoh;
+                    // $inputs['mathdv'] = $model->mathdv;
                     $inputs['trangthai'] = 'DAGUI';
                     $inputs['noidung'] = 'Đơn vị ' . getTenDV(session('admin')->madv) . ' tổng hợp dữ liệu chi trả lương.';
                     $inputs['nguoilap'] = session('admin')->name;

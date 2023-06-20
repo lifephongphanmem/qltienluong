@@ -78,7 +78,7 @@
                                             {!! Form::select('linhvuchoatdong', getLinhVucHoatDong(), null, [
                                                 'id' => 'linhvuchoatdong',
                                                 'class' => 'form-control',
-                                                'disabled' => 'true',
+                                                // 'disabled' => 'true',
                                             ]) !!}
                                         </div>
                                     </div>
@@ -104,8 +104,10 @@
                 <hr>
                 <div class="form-actions" style="text-align: center;">
                     <button type="submit" class="btn btn-default">Hoàn thành <i class="fa fa-save mlx"></i></button>
-                    <a href="{{ url($furl . 'danh_sach') }}" class="btn btn-default"><i class="fa fa-reply"></i>&nbsp;Quay
-                        lại</a>
+                    {{-- <a href="{{ url($furl . 'danh_sach') }}" class="btn btn-default"><i class="fa fa-reply"></i>&nbsp;Quay
+                        lại</a> --}}
+                        <a onclick="history.back()" class="btn btn-default"><i class="fa fa-reply"></i>&nbsp;Quay
+                            lại</a>
                 </div>
             </div>
             {!! Form::close() !!}

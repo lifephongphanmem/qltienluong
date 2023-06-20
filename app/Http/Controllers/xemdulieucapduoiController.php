@@ -244,7 +244,6 @@ class xemdulieucapduoiController extends Controller
             $inputs = $request->all();
             $madv = session('admin')->madv;
             $madvbc = session('admin')->madvbc;
-
             $ngay = date("Y-m-t", strtotime($inputs['nam'] . '-' . $inputs['thang'] . '-01'));
             $a_trangthai = array('ALL' => '--Chọn trạng thái dữ liệu--', 'CHOGUI' => 'Chưa gửi dữ liệu', 'DAGUI' => 'Đã gửi dữ liệu');
             $model_donvi = dmdonvi::where('macqcq', session('admin')->madv)->get();
@@ -325,6 +324,7 @@ class xemdulieucapduoiController extends Controller
                     ->where('trangthai', 'DAGUI')
                     ->get();
             }
+            // dd($model_nguon);
             //dd($model_nguon->toarray());
             $model_nguon_tinh = tonghopluong_tinh::where('madv', $madv)->where('thang', $inputs['thang'])
                 ->where('nam', $inputs['nam'])->first();
@@ -353,6 +353,7 @@ class xemdulieucapduoiController extends Controller
                     //  $dv->linhvuchoatdong = $this->linhvuc($nguon->mathdv);
                 } elseif (session('admin')->phamvitonghop == 'KHOI') {
                     if ((isset($nguon) && $nguon->trangthai == 'DAGUI') || (isset($nguonkhoi) && $nguonkhoi->trangthai == 'DAGUI')) {
+
                         $dv->mathdv = $nguon->mathdv;
                         $dv->trangthai = 'DAGUI';
                         $dv->thang = $nguonkhoi->thang;
@@ -363,7 +364,7 @@ class xemdulieucapduoiController extends Controller
                     $dv->mathdv = null;
                 }
             }
-            //dd($model_donvi);
+            // dd($model_donvi);
             //dd($model_donvi->toarray());
             if (!isset($inputs['trangthai']) || $inputs['trangthai'] != 'ALL') {
                 $model_donvi = $model_donvi->where('trangthai', $inputs['trangthai']);
