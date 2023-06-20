@@ -61,11 +61,29 @@
                                                 onclick="innhucau('{{ $value->sohieu }}', '{{ $inputs['madvbc'] }}', '{{ $inputs['macqcq'] }}')"
                                                 class="btn btn-default btn-sm mbs" data-target="#indt-modal"
                                                 data-toggle="modal">
-                                                <i class="fa fa-print"></i>
+                                                <i class="fa fa-print"></i>&nbsp;In số liệu
                                             </button>
 
-                                            @if ($value['trangthai'] != 'DAGUI')
+                                            <a href="{{ url($furl_th . 'dulieu_dvql?sohieu=' . $value->sohieu . '&madv=' . $inputs['macqcq']) }}"
+                                                class="btn btn-default btn-sm">
+                                                <i class="fa fa-list-alt"></i>&nbsp; Số liệu Huyện (Khối)
+                                            </a>
+
+                                            @if ($value['trangthai'] == 'TRALAI')
                                                 <button type="button" class="btn btn-default btn-xs"
+                                                    onclick="getLyDo('{{ $value->masodv }}','{{ $value->sohieu }}')"
+                                                    data-target="#tralai-modal" data-toggle="modal"><i
+                                                        class="fa fa-share-square-o"></i>&nbsp;
+                                                    Lý do trả lại</button>
+                                            @endif
+
+                                            <a href="{{ url($furl_xem . '?sohieu=' . $value->sohieu . '&trangthai=ALL&phanloai=ALL') }}"
+                                                class="btn btn-default btn-sm">
+                                                <i class="fa fa-list-alt"></i>&nbsp; Số liệu chi tiết
+                                            </a>
+
+                                            @if ($value['trangthai'] != 'DAGUI')
+                                                <button type="button" class="btn btn-default btn-sm"
                                                     onclick="confirmChuyen('{{ $value->sohieu }}')"
                                                     data-target="#chuyen-modal" data-toggle="modal"><i
                                                         class="fa fa-share-square-o"></i>&nbsp;
@@ -78,18 +96,6 @@
                                                 <button disabled type="button" class="btn btn-default btn-xs" onclick="confirmChuyen('{{$value->sohieu}}')" data-target="#chuyen-modal" data-toggle="modal"><i class="fa fa-share-square-o"></i>&nbsp;
                                                     Gửi dữ liệu</button>
                                             @endif --}}
-
-                                            @if ($value['trangthai'] == 'TRALAI')
-                                                <button type="button" class="btn btn-default btn-xs"
-                                                    onclick="getLyDo('{{ $value->masodv }}','{{ $value->sohieu }}')"
-                                                    data-target="#tralai-modal" data-toggle="modal"><i
-                                                        class="fa fa-share-square-o"></i>&nbsp;
-                                                    Lý do trả lại</button>
-                                            @endif
-
-                                            <a href="{{ url($furl_xem . '?sohieu=' . $value->sohieu . '&trangthai=ALL&phanloai=ALL') }}"
-                                                class="btn btn-default btn-xs">
-                                                <i class="fa fa-list-alt"></i>&nbsp; Số liệu chi tiết</a>
                                         </td>
 
                                     </tr>
@@ -197,7 +203,8 @@
                             <button type="button" onclick="insolieu('{{ $furl_th . 'mau2b' }}',null)"
                                 style="border-width: 0px" class="btn btn-default btn-xs mbs"
                                 data-target="#modal-insolieu" data-toggle="modal">
-                                <i class="fa fa-print"></i>&nbsp;Bảng tổng quỹ trợ cấp tăng thêm cho cán bộ đã nghỉ hưu (Mẫu 2b)</button>
+                                <i class="fa fa-print"></i>&nbsp;Bảng tổng quỹ trợ cấp tăng thêm cho cán bộ đã nghỉ hưu
+                                (Mẫu 2b)</button>
                         </div>
                     </div>
                 </div>
@@ -208,10 +215,11 @@
                             <button type="button" onclick="insolieu('{{ $furl_th . 'mau2c' }}',null)"
                                 style="border-width: 0px" class="btn btn-default btn-xs mbs"
                                 data-target="#modal-insolieu" data-toggle="modal">
-                                <i class="fa fa-print"></i>&nbsp;Báo cáo nhu cầu kinh phí thực hiện bảo hiểm thất nghiệp (Mẫu 2c)</button>
+                                <i class="fa fa-print"></i>&nbsp;Báo cáo nhu cầu kinh phí thực hiện bảo hiểm thất nghiệp
+                                (Mẫu 2c)</button>
                         </div>
                     </div>
-                </div>                
+                </div>
 
                 <div class="row">
                     <div class="col-md-12">
@@ -219,7 +227,8 @@
                             <button type="button" onclick="insolieu('{{ $furl_th . 'mau2d' }}',null)"
                                 style="border-width: 0px" class="btn btn-default btn-xs mbs"
                                 data-target="#modal-insolieu" data-toggle="modal">
-                                <i class="fa fa-print"></i>&nbsp;Tổng hợp kinh phí tăng thêm để thực hiện chế độ cho cán bộ không chuyên trách (Mẫu 2d)</button>
+                                <i class="fa fa-print"></i>&nbsp;Tổng hợp kinh phí tăng thêm để thực hiện chế độ cho cán bộ
+                                không chuyên trách (Mẫu 2d)</button>
                         </div>
                     </div>
                 </div>
@@ -241,7 +250,8 @@
                             <button type="button" onclick="insolieu('{{ $furl_th . 'mau2e' }}',null)"
                                 style="border-width: 0px" class="btn btn-default btn-xs mbs"
                                 data-target="#modal-insolieu" data-toggle="modal">
-                                <i class="fa fa-print"></i>&nbsp;Báo cáo nguồn thực hiện CCTL tiết kiệm trong năm (Mẫu 2e)</button>
+                                <i class="fa fa-print"></i>&nbsp;Báo cáo nguồn thực hiện CCTL tiết kiệm trong năm (Mẫu
+                                2e)</button>
                         </div>
                     </div>
                 </div>
@@ -252,7 +262,8 @@
                             <button type="button" onclick="insolieu('{{ $furl_th . 'mau2g' }}',null)"
                                 style="border-width: 0px" class="btn btn-default btn-xs mbs"
                                 data-target="#modal-insolieu" data-toggle="modal">
-                                <i class="fa fa-print"></i>&nbsp;Báo cáo quỹ tiền lương, phụ cấp đối với lao động theo hợp đồng khu vực hành chính và đơn vị sự nghiệp
+                                <i class="fa fa-print"></i>&nbsp;Báo cáo quỹ tiền lương, phụ cấp đối với lao động theo hợp
+                                đồng khu vực hành chính và đơn vị sự nghiệp
                                 (Mẫu 2g)</button>
                         </div>
                     </div>
@@ -264,7 +275,8 @@
                             <button type="button" onclick="insolieu('{{ $furl_th . 'mau2h' }}',null)"
                                 style="border-width: 0px" class="btn btn-default btn-xs mbs"
                                 data-target="#modal-insolieu" data-toggle="modal">
-                                <i class="fa fa-print"></i>&nbsp;Tổng hợp phụ cấp ưu đãi giảm do điều chỉnh danh sách huyện nghèo (Mẫu 2h)</button>
+                                <i class="fa fa-print"></i>&nbsp;Tổng hợp phụ cấp ưu đãi giảm do điều chỉnh danh sách huyện
+                                nghèo (Mẫu 2h)</button>
                         </div>
                     </div>
                 </div>
@@ -275,7 +287,8 @@
                             <button type="button" onclick="insolieu('{{ $furl_th . 'mau2i' }}',null)"
                                 style="border-width: 0px" class="btn btn-default btn-xs mbs"
                                 data-target="#modal-insolieu" data-toggle="modal">
-                                <i class="fa fa-print"></i>&nbsp;Tổng hợp phụ cấp thu hút giảm do điều chỉnh danh sách huyện nghèo (Mẫu 2i)</button>
+                                <i class="fa fa-print"></i>&nbsp;Tổng hợp phụ cấp thu hút giảm do điều chỉnh danh sách
+                                huyện nghèo (Mẫu 2i)</button>
                         </div>
                     </div>
                 </div>
@@ -286,7 +299,8 @@
                             <button type="button" onclick="insolieu('{{ $furl_th . 'mau2k' }}',null)"
                                 style="border-width: 0px" class="btn btn-default btn-xs mbs"
                                 data-target="#modal-insolieu" data-toggle="modal">
-                                <i class="fa fa-print"></i>&nbsp;Tổng hợp kinh phí giảm  theo nghị định số 34/2019/NĐ-CP - cán bộ, công chức cấp xã
+                                <i class="fa fa-print"></i>&nbsp;Tổng hợp kinh phí giảm theo nghị định số 34/2019/NĐ-CP -
+                                cán bộ, công chức cấp xã
                                 (Mẫu 2k)</button>
                         </div>
                     </div>
@@ -298,7 +312,8 @@
                             <button type="button" onclick="insolieu('{{ $furl_th . 'mau2l' }}',null)"
                                 style="border-width: 0px" class="btn btn-default btn-xs mbs"
                                 data-target="#modal-insolieu" data-toggle="modal">
-                                <i class="fa fa-print"></i>&nbsp;Tổng hợp kinh phí giảm  theo nghị định số 34/2019/NĐ-CP - người hoạt động không chuyên trách
+                                <i class="fa fa-print"></i>&nbsp;Tổng hợp kinh phí giảm theo nghị định số 34/2019/NĐ-CP -
+                                người hoạt động không chuyên trách
                                 (Mẫu 2l)</button>
                         </div>
                     </div>
@@ -310,7 +325,8 @@
                             <button type="button" onclick="insolieu('{{ $furl_th . 'mau4a' }}',null)"
                                 style="border-width: 0px" class="btn btn-default btn-xs mbs"
                                 data-target="#modal-insolieu" data-toggle="modal">
-                                <i class="fa fa-print"></i>&nbsp;Báo cáo nguồn kinh phí để thực hiện cải cách tiền lương (Mẫu 4a)</button>
+                                <i class="fa fa-print"></i>&nbsp;Báo cáo nguồn kinh phí để thực hiện cải cách tiền lương
+                                (Mẫu 4a)</button>
                         </div>
                     </div>
                 </div>
@@ -324,7 +340,7 @@
                                 <i class="fa fa-print"></i>&nbsp;Tổng hợp nhu cầu, nguồn thực hiện (Mẫu 4b)</button>
                         </div>
                     </div>
-                </div>                
+                </div>
             </div>
             <div class="modal-footer">
                 <button type="button" data-dismiss="modal" class="btn btn-default">Hủy thao tác</button>

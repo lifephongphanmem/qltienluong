@@ -69,18 +69,18 @@ class tonghopnguon_huyenController extends Controller
                 $model_dsql = dsdonviquanly::where('nam', $nam)->where('macqcq', $madv)->get();
                 $a_donvicapduoi = array_unique(array_column($model_dsql->toarray(), 'madv'));
                 //dd($a_donvicapduoi);
-    
+
                 //đơn vị có macqcq = madv (bang dmdonvi)
                 $model_dmdv = dmdonvi::where('macqcq', $madv)
                     ->wherenotin('madv', function ($qr) use ($nam) {
                         $qr->select('madv')->from('dsdonviquanly')->where('nam', $nam)->distinct()->get();
                     }) //lọc các đơn vị đã khai báo trong dsdonviquanly
-                        ->where('madv','!=',$madv)
+                    ->where('madv', '!=', $madv)
                     ->get();
                 $a_donvicapduoi = array_unique(array_merge(array_column($model_dmdv->toarray(), 'madv'), $a_donvicapduoi));
                 $model_donvitamdung = dmdonvi::where('trangthai', 'TD')->wherein('madv', $a_donvicapduoi)->get();
 
-                $soluong =count(array_diff($a_donvicapduoi, array_column($model_donvitamdung->toarray(), 'madv')));
+                $soluong = count(array_diff($a_donvicapduoi, array_column($model_donvitamdung->toarray(), 'madv')));
 
                 $nguon_huyen = $model_nguon_tinh->where('sohieu', $dv->sohieu)->first();
 
@@ -161,6 +161,106 @@ class tonghopnguon_huyenController extends Controller
             return view('errors.notlogin');
     }
 
+    function dulieu_dvql(Request $requests)
+    {
+        if (Session::has('admin')) {
+            $inputs = $requests->all();
+            $model = nguonkinhphi::where('madv', $inputs['madv'])->where('sohieu', $inputs['sohieu'])->first();
+            if ($model == null) {
+                $model = new nguonkinhphi();
+                $model->madv = $inputs['madv'];
+                $model->sohieu = $inputs['sohieu'];
+                $model->masodv = session('admin')->madv . '_' . getdate()[0];
+                $model->trangthai = 'CHOGUI';
+                $model->linhvuchoatdong = 'QLNN';
+                //$model->macqcq = session('admin')->macqcq;
+                $model->nangcap_phucap = 1;
+            }
+            $m_thongtu = dmthongtuquyetdinh::where('sohieu', $model->sohieu)->first();
+            return view('functions.tonghopnguon.huyen.edit')
+                ->with('furl', '/chuc_nang/tong_hop_nguon/huyen/')
+                ->with('model', $model)
+                ->with('m_thongtu', $m_thongtu)
+                ->with('a_nhucau', array_merge(getNhomNhuCauKP('KVHCSN'), getNhomNhuCauKP('KVXP')))
+                ->with('a_ct', getPhanLoaiCT(false))
+                ->with('nam', date_format(date_create($m_thongtu->ngayapdung), 'Y'))
+                ->with('pageTitle', 'Danh sách nguồn kinh phí của đơn vị');
+        } else
+            return view('errors.notlogin');
+    }
+
+    function luu_dulieu_dvql(Request $requests)
+    {
+        if (Session::has('admin')) {
+            $inputs = $requests->all();
+            $model = nguonkinhphi::where('masodv', $inputs['masodv'])->first();
+            $a_truong = [
+                'tietkiem1', //trước 1 năm
+                'tietkiem2', //trước 2 năm
+                'thuchien1', //trước 1 năm
+                'dutoan',
+                'dutoan1', //trước 1 năm
+                'bosung',
+                'caicach',
+                'kpthuhut',
+                'kpuudai',
+                'luongchuyentrach', //thừa
+                'luongkhongchuyentrach', //thừa
+                'tongnhucau1', //tổng nhu cầu kinh trước 1 năm
+                'tongnhucau2', //tổng nhu cầu kinh trước 2 năm
+                //Báo cáo nhu cầu kinh phí mẫu Vạn Ninh
+                'tongsonguoi1', //mẫu 2b
+                'quy1_1', //mẫu 2b
+                'quy1_2', //mẫu 2b
+                'quy1_3', //mẫu 2b
+                'tongsonguoi2', //mẫu 2b
+                'quy2_1', //mẫu 2b
+                'quy2_2', //mẫu 2b
+                'quy2_3', //mẫu 2b
+                'tongsonguoi3', //mẫu 2b
+                'tongsonguoi2015', //mẫu 2đ
+                'tongsonguoi2017', //mẫu 2đ
+                'quyluong', //mẫu 2đ
+                'tongsodonvi1', //mẫu 2e
+                'tongsodonvi2', //mẫu 2e
+                'quy_tuchu', //mẫu 2e
+                'nangcap_phucap', //trường để xác định xem đã tổng hợp phụ cấp ra bảng: nguonkinhphi_phucap
+                //Mẫu 2đ
+                'soluonghientai_2dd',
+                'quyluonghientai_2dd',
+                'kinhphitietkiem_2dd',
+                'quyluongtietkiem_2dd',
+                //Mẫu 2h
+                'soluonghientai_2h',
+                'hesoluong_2h',
+                'hesophucap_2h',
+                'tonghesophucapnd61_2h',
+                'tonghesophucapqd244_2h',
+                //Mẫu 2i
+                'soluonghientai_2i',
+                'hesoluong_2i',
+                'hesophucap_2i',
+                //Mẫu 2k
+                'soluonggiam_2k',
+                'quyluonggiam_2k',
+                //Mẫu 2d
+                'sothonbiengioi_2d',
+                'sothontrongdiem_2d',
+                'sothonconlai_2d',
+                'sotoconlai_2d',
+            ];
+            foreach ($a_truong  as $truong) {
+                $inputs[$truong] = chkDbl($inputs[$truong] ?? 0);
+            }
+
+            if ($model == null) {
+                nguonkinhphi::create($inputs);
+            } else {
+                $model->update($inputs);
+            }
+            return redirect('/chuc_nang/tong_hop_nguon/huyen/index');
+        }
+    }
     function senddata(Request $requests)
     {
         if (Session::has('admin')) {
@@ -2012,54 +2112,9 @@ class tonghopnguon_huyenController extends Controller
                 }
             }
 
-            $a_A = array();
-            $a_A[0] = array('tt' => '1', 'noidung' => '50% tăng/giảm thu NSĐP (không kể tăng thu tiền sử dụng đất, xổ số kiến thiết) thực hiện 2022 so dự toán Thủ tướng Chính phủ giao năm 2022', 'sotien' => '0');
-            $a_A[1] = array('tt' => '2', 'noidung' => '50% tăng thu NSĐP (không kể tăng thu tiền sử dụng đất, xổ số kiến thiết) dự toán 2023 so dự toán 2022 Thủ tướng Chính phủ giao', 'sotien' => '0');
-            $a_A[2] = array('tt' => '3', 'noidung' => '50% tăng thu NSĐP (không kể tăng thu tiền sử dụng đất, xổ số kiến thiết) dự toán 2022 so dự toán 2021 Thủ tướng Chính phủ giao', 'sotien' => '0');
-            $a_A[3] = array('tt' => '4', 'noidung' => 'Số tiết kiệm 10% chi thường xuyên dự toán năm 2021', 'sotien' => '0');
-            $a_A[4] = array('tt' => '5', 'noidung' => 'Số tiết kiệm 10% chi thường xuyên dự toán tăng thêm năm 2022', 'sotien' => '0');
-            $a_A[5] = array('tt' => '6', 'noidung' => 'Số tiết kiệm 10% chi thường xuyên dự toán tăng thêm năm 2023', 'sotien' => '0');
-            $a_A[6] = array('tt' => '7', 'noidung' => 'Số thu được huy động từ nguồn để lại đơn vị năm 2023:', 'sotien' => '0');
-            $a_A[7] = array('tt' => 'a', 'noidung' => 'Nguồn huy động từ các đơn vị tự đảm bảo(1):', 'sotien' => '0');
-            $a_A[8] = array('tt' => '', 'noidung' => '+ Học phí', 'sotien' => '0');
-            $a_A[9] = array('tt' => '', 'noidung' => '+ Viện phí', 'sotien' => '0');
-            $a_A[10] = array('tt' => '', 'noidung' => '+ Nguồn thu khác', 'sotien' => '0');
-            $a_A[11] = array('tt' => 'b', 'noidung' => 'Nguồn huy động từ các đơn vị chưa tự đảm bảo chi thường xuyên:', 'sotien' => '0');
-            $a_A[12] = array('tt' => '', 'noidung' => '+ Học phí', 'sotien' => '0');
-            $a_A[13] = array('tt' => '', 'noidung' => '+ Viện phí', 'sotien' => '0');
-            $a_A[14] = array('tt' => '', 'noidung' => '+ Nguồn thu khác', 'sotien' => '0');
-            $a_A[15] = array('tt' => '8', 'noidung' => 'Nguồn 50% phần ngân sách nhà nước giảm chi hỗ trợ hoạt động thường xuyên trong lĩnh vực hành chính (do tinh giản biên chế và đổi mới, sắp xếp lại bộ máy của hệ thống chính trị tinh gọn, hoạt động hiệu lực, hiệu quả) và các đơn vị sự nghiệp công lập (do thực hiện đổi mới hệ thống tổ chức và quản lý, nâng cao chất lượng và hiệu quả hoạt động của đơn vị sự nghiệp công lập) năm 2023', 'sotien' => '0');
-            $a_A[16] = array('tt' => '', 'noidung' => '+ Từ việc tinh giản biên chế tổ chức lại bộ máy (2)', 'sotien' => '0');
-            $a_A[17] = array('tt' => '', 'noidung' => '+ Từ việc sát nhập các đầu mối, cơ quan, đơn vị (2)', 'sotien' => '0');
-            $a_A[18] = array('tt' => '', 'noidung' => '+ Từ việc thay đổi cơ chế tự chủ của đơn vị sư nghiệp (3)', 'sotien' => '0');
-            $a_A[19] = array('tt' => '', 'noidung' => '+ Từ việc sát nhập các xã không đủ điều kiện tiêu chuẩn', 'sotien' => '0');
-            $a_A[20] = array('tt' => '9', 'noidung' => 'Nguồn NSTW đã bổ sung trong dự toán 2023', 'sotien' => '0');
-            $a_A[21] = array('tt' => '10', 'noidung' => 'Nguồn thực hiện cải cách tiền lương năm 2022 chưa sử dụng hết chuyển sang năm 2023', 'sotien' => '0');
-
-             //Tính toán
-             $a_A[0]['sotien'] = $m_nguonkp->sum('thuchien');
-             $a_A[1]['sotien'] = $m_nguonkp->sum('dutoan19');
-             $a_A[2]['sotien'] = $m_nguonkp->sum('dutoan18');
-             $a_A[3]['sotien'] = $m_nguonkp->sum('tietkiem17');
-             $a_A[4]['sotien'] = $m_nguonkp->sum('tietkiem18');
-             $a_A[5]['sotien'] = $m_nguonkp->sum('tietkiem19');
-             //Tự đảm bảo
-             $a_A[8]['sotien'] = $m_nguonkp->sum('dbhocphi');
-             $a_A[9]['sotien'] = $m_nguonkp->sum('dbvienphi');
-             $a_A[10]['sotien'] = $m_nguonkp->sum('dbkhac');
-             $a_A[7]['sotien'] = $a_A[8]['sotien'] + $a_A[9]['sotien'] + $a_A[10]['sotien'];
- 
-             $a_A[12]['sotien'] = $m_nguonkp->sum('kdbhocphi');
-             $a_A[13]['sotien'] = $m_nguonkp->sum('kdbvienphi');
-             $a_A[14]['sotien'] = $m_nguonkp->sum('kdbkhac');
-             $a_A[11]['sotien'] = $a_A[12]['sotien'] + $a_A[13]['sotien'] + $a_A[14]['sotien'];
-             $a_A[6]['sotien'] = $a_A[7]['sotien'] + $a_A[11]['sotien'];
- 
-             $a_A[15]['sotien'] = $m_nguonkp->sum('tietkiemchi');
-             $a_A[20]['sotien'] = $m_nguonkp->sum('bosung');
-             $a_A[21]['sotien'] = $m_nguonkp->sum('caicach');
-
-             //Phần B
+            $a_A = get4a_A();
+            
+            //Phần B
             $a_BII = array();
             $a_BII[0] = array('tt' => '1', 'noidung' => 'Quỹ tiền lương, phụ cấp tăng thêm đối với cán bộ công chức khu vực hành chính, sự nghiệp ', 'sotien' => '0');
             $a_BII[1] = array('tt' => '', 'noidung' => 'Trong đó: nhu cầu tăng thêm đối với các đơn vị sự nghiệp tự đảm bảo (5)', 'sotien' => '0');
@@ -2070,14 +2125,14 @@ class tonghopnguon_huyenController extends Controller
             $a_BII[6] = array('tt' => '6', 'noidung' => 'Kinh phí tăng thêm để thực hiện phụ cấp trách nhiệm đối với cấp ủy viên các cấp theo QĐ số 169-QĐ/TW ngày 24/6/2008', 'sotien' => '0');
             $a_BII[7] = array('tt' => '7', 'noidung' => 'Kinh phí tăng thêm thực hiện chế độ bồi dưỡng phục vụ hoạt động cấp ủy thuộc cấp tỉnh theo Quy định 09-QĐ/VVPTW ngày 22/9/2021', 'sotien' => '0');
 
-            
-            $a_BII[0]['sotien'] = $m_chitiet->where('nhomnhucau','BIENCHE')->sum('ttl');
-            $a_BII[2]['sotien'] = $m_chitiet->where('nhomnhucau','CANBOCT')->sum('ttl');           
-            $a_BII[3]['sotien'] = $m_chitiet->where('nhomnhucau','HDND')->sum('ttl');
-            $a_BII[4]['sotien'] = $m_nguonkp->sum('nghihuu_4a');//Nhaaph thên
-            $a_BII[5]['sotien'] = $m_chitiet->where('nhomnhucau','CANBOKCT')->sum('ttl');
-            $a_BII[6]['sotien'] = $m_chitiet->where('nhomnhucau','CAPUY')->sum('ttl');
-            $a_BII[7]['sotien'] = $m_nguonkp->sum('boiduong_4a');//Nhaaph thên
+
+            $a_BII[0]['sotien'] = $m_chitiet->where('nhomnhucau', 'BIENCHE')->sum('ttl');
+            $a_BII[2]['sotien'] = $m_chitiet->where('nhomnhucau', 'CANBOCT')->sum('ttl');
+            $a_BII[3]['sotien'] = $m_chitiet->where('nhomnhucau', 'HDND')->sum('ttl');
+            $a_BII[4]['sotien'] = $m_nguonkp->sum('nghihuu_4a'); //Nhaaph thên
+            $a_BII[5]['sotien'] = $m_chitiet->where('nhomnhucau', 'CANBOKCT')->sum('ttl');
+            $a_BII[6]['sotien'] = $m_chitiet->where('nhomnhucau', 'CAPUY')->wherein('level',['X','H'])->sum('ttl');
+            $a_BII[7]['sotien'] = $m_chitiet->where('nhomnhucau', 'CAPUY')->where('level','T')->sum('ttl');
 
 
             $a_BIII = array();
@@ -2088,8 +2143,8 @@ class tonghopnguon_huyenController extends Controller
             $a_BIII[4] = array('tt' => 'a', 'noidung' => 'Kinh phí thu hút', 'sotien' => '0');
             $a_BIII[5] = array('tt' => 'b', 'noidung' => 'Chênh lệch kinh phí ưu đãi', 'sotien' => '0');
             $a_BIII[6] = array('tt' => '5', 'noidung' => 'Kinh phí giảm do điều chỉnh số lượng cán bộ, công chức cấp xã; mức khoán phụ cấp đối với người hoạt động không chuyên trách ở cấp xã theo Nghị định số 34/2023/NĐ-CP của Chính phủ (7)', 'sotien' => '0');
-         
-           
+
+
             $a_BIII[0]['sotien'] = $m_nguonkp->sum('diaban');
             $a_BIII[1]['sotien'] = $m_nguonkp->sum('tinhgiam');
             $a_BIII[2]['sotien'] = $m_nguonkp->sum('nghihuusom');

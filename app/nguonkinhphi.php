@@ -46,11 +46,7 @@ class nguonkinhphi extends Model
         'nguoiguih',
         'lydo',
         //thêm mới theo thông tư 46/2019
-        'tietkiem1', //trước 1 năm
-        'tietkiem2', //trước 2 năm
-        'thuchien1', //trước 1 năm
-        'dutoan',
-        'dutoan1', //trước 1 năm
+        
         'bosung',
         'caicach',
         'kpthuhut',
@@ -99,5 +95,24 @@ class nguonkinhphi extends Model
         'sothontrongdiem_2d',
         'sothonconlai_2d',
         'sotoconlai_2d',
+        //Mẫu 4a
+        'tinhgiambc_4a',
+        'nghihuu_4a',
+        'boiduong_4a',
+        'satnhapdaumoi_4a',
+        'thaydoicochetuchu_4a',
+        'satnhapxa_4a',
+
+        'tietkiem1', //trước 1 năm
+        'tietkiem2', //trước 2 năm
+        'thuchien1', //trước 1 năm
+        'dutoan',
+        'dutoan1', //trước 1 năm
+        'huydongtx_hocphi_4a',
+        'huydongtx_vienphi_4a',
+        'huydongtx_khac_4a',
+        'huydongktx_hocphi_4a',
+        'huydongktx_vienphi_4a',
+        'huydongktx_khac_4a',
     ];
 }
