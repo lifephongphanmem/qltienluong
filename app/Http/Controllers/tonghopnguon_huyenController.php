@@ -195,11 +195,6 @@ class tonghopnguon_huyenController extends Controller
             $inputs = $requests->all();
             $model = nguonkinhphi::where('masodv', $inputs['masodv'])->first();
             $a_truong = [
-                'tietkiem1', //trước 1 năm
-                'tietkiem2', //trước 2 năm
-                'thuchien1', //trước 1 năm
-                'dutoan',
-                'dutoan1', //trước 1 năm
                 'bosung',
                 'caicach',
                 'kpthuhut',
@@ -248,6 +243,25 @@ class tonghopnguon_huyenController extends Controller
                 'sothontrongdiem_2d',
                 'sothonconlai_2d',
                 'sotoconlai_2d',
+                //Mẫu 4a
+                'tinhgiambc_4a',
+                'nghihuu_4a',
+                'boiduong_4a',
+                'satnhapdaumoi_4a',
+                'thaydoicochetuchu_4a',
+                'satnhapxa_4a',
+
+                'tietkiem1', //trước 1 năm
+                'tietkiem2', //trước 2 năm
+                'thuchien1', //trước 1 năm
+                'dutoan',
+                'dutoan1', //trước 1 năm
+                'huydongtx_hocphi_4a',
+                'huydongtx_vienphi_4a',
+                'huydongtx_khac_4a',
+                'huydongktx_hocphi_4a',
+                'huydongktx_vienphi_4a',
+                'huydongktx_khac_4a',
             ];
             foreach ($a_truong  as $truong) {
                 $inputs[$truong] = chkDbl($inputs[$truong] ?? 0);
@@ -2113,7 +2127,7 @@ class tonghopnguon_huyenController extends Controller
             }
 
             $a_A = get4a_A();
-            
+
             //Phần B
             $a_BII = array();
             $a_BII[0] = array('tt' => '1', 'noidung' => 'Quỹ tiền lương, phụ cấp tăng thêm đối với cán bộ công chức khu vực hành chính, sự nghiệp ', 'sotien' => '0');
@@ -2131,8 +2145,8 @@ class tonghopnguon_huyenController extends Controller
             $a_BII[3]['sotien'] = $m_chitiet->where('nhomnhucau', 'HDND')->sum('ttl');
             $a_BII[4]['sotien'] = $m_nguonkp->sum('nghihuu_4a'); //Nhaaph thên
             $a_BII[5]['sotien'] = $m_chitiet->where('nhomnhucau', 'CANBOKCT')->sum('ttl');
-            $a_BII[6]['sotien'] = $m_chitiet->where('nhomnhucau', 'CAPUY')->wherein('level',['X','H'])->sum('ttl');
-            $a_BII[7]['sotien'] = $m_chitiet->where('nhomnhucau', 'CAPUY')->where('level','T')->sum('ttl');
+            $a_BII[6]['sotien'] = $m_chitiet->where('nhomnhucau', 'CAPUY')->wherein('level', ['X', 'H'])->sum('ttl');
+            $a_BII[7]['sotien'] = $m_chitiet->where('nhomnhucau', 'CAPUY')->where('level', 'T')->sum('ttl');
 
 
             $a_BIII = array();
