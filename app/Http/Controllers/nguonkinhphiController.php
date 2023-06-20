@@ -657,12 +657,34 @@ class nguonkinhphiController extends Controller
             $inputs['tongsonguoi2015'] = chkDbl($inputs['tongsonguoi2015']);
             $inputs['tongsonguoi2017'] = chkDbl($inputs['tongsonguoi2017']);
             $inputs['quyluong'] = chkDbl($inputs['quyluong']);
+            $inputs['soluonghientai_2dd'] = chkDbl($inputs['soluonghientai_2dd']);
+            $inputs['quyluonghientai_2dd'] = chkDbl($inputs['quyluonghientai_2dd']);
+            $inputs['kinhphitietkiem_2dd'] = chkDbl($inputs['kinhphitietkiem_2dd']);
+            $inputs['quyluongtietkiem_2dd'] = chkDbl($inputs['quyluongtietkiem_2dd']);
 
             // mẫu 2e
             $inputs['tongsodonvi1'] = chkDbl($inputs['tongsodonvi1']);
             $inputs['tongsodonvi2'] = chkDbl($inputs['tongsodonvi2']);
             $inputs['quy_tuchu'] = chkDbl($inputs['quy_tuchu']);
-            //dd($inputs);
+            // mẫu 2h
+            $inputs['soluonghientai_2h'] = chkDbl($inputs['soluonghientai_2h']);
+            $inputs['hesoluong_2h'] = chkDbl($inputs['hesoluong_2h']);
+            $inputs['hesophucap_2h'] = chkDbl($inputs['hesophucap_2h']);
+            $inputs['tonghesophucapnd61_2h'] = chkDbl($inputs['tonghesophucapnd61_2h']);
+            $inputs['tonghesophucapqd244_2h'] = chkDbl($inputs['tonghesophucapqd244_2h']);
+            // mẫu 2i
+            $inputs['soluonghientai_2i'] = chkDbl($inputs['soluonghientai_2i']);
+            $inputs['hesoluong_2i'] = chkDbl($inputs['hesoluong_2i']);
+            $inputs['hesophucap_2i'] = chkDbl($inputs['hesophucap_2i']);
+            // mẫu 2k
+            $inputs['soluonggiam_2k'] = chkDbl($inputs['soluonggiam_2k']);
+            $inputs['quyluonggiam_2k'] = chkDbl($inputs['quyluonggiam_2k']);
+            // mẫu 2d
+            $inputs['sothonbiengioi_2d'] = chkDbl($inputs['sothonbiengioi_2d']);
+            $inputs['sothontrongdiem_2d'] = chkDbl($inputs['sothontrongdiem_2d']);
+            $inputs['sothonconlai_2d'] = chkDbl($inputs['sothonconlai_2d']);
+            $inputs['sotoconlai_2d'] = chkDbl($inputs['sotoconlai_2d']);
+            // dd($inputs);
             $model->update($inputs);
 
             return redirect('/nguon_kinh_phi/danh_sach');

@@ -54,11 +54,11 @@
                                 <p class="description"> <i class="glyphicon glyphicon-check"></i> Mẫu 2k</p>
                             </a>
                         </li>
-                        <li>
+                        {{-- <li>
                             <a href="#tab2l" data-toggle="tab" class="step">
                                 <p class="description"> <i class="glyphicon glyphicon-check"></i> Mẫu 2l</p>
                             </a>
-                        </li>
+                        </li> --}}
 
                         <li><a href="#tab4a" data-toggle="tab" class="step">
                             <p class="description"><i class="glyphicon glyphicon-check"></i>Mẫu 4a</p>

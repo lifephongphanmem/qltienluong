@@ -111,6 +111,9 @@
                                                     <button type="button" onclick="innguon('{{$value->namns}}','{{$value->masodv}}')" class="btn btn-default btn-xs mbs" data-target="#indt-modal" data-toggle="modal">
                                                         <i class="fa fa-print"></i>&nbsp; In số liệu</button>
                                                     @endif
+                                                    <a href="{{'/nguon_kinh_phi/chi_tiet?maso='.$value->masodv}}"
+                                                        class="btn btn-default btn-xs mbs">
+                                                        <i class="fa fa-edit"></i>&nbsp; Chi tiết</a>
                                             @endif
                                             <!--a href="{{url('/du_toan/nguon_kinh_phi/ma_so='.$value['masodv'].'/in')}}" class="btn btn-default btn-sm" TARGET="_blank"-->
 

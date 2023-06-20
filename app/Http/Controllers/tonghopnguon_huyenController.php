@@ -52,21 +52,35 @@ class tonghopnguon_huyenController extends Controller
                     $query->select('madv')->from('dmdonvi')->where('macqcq', $madv)->where('madv', '<>', $madv)->get();
                 })->get();
 
-            $soluong = $model_donvi->count();
+            // $soluong = $model_donvi->count();
 
             foreach ($model as $dv) {
                 $nam =  $dv->namdt = date('Y', strtotime($dv->ngayapdung)) ?? date('Y');
-                $model_donvi = dmdonvi::select('madv', 'tendv', 'maphanloai')
-                    ->where('macqcq', $madv)->where('madv', '<>', $madv)
-                    ->wherenotin('madv', function ($query) use ($madv, $nam) {
-                        $query->select('madv')->from('dmdonvi')
-                            ->whereyear('ngaydung', '<=', $nam)
-                            ->where('trangthai', 'TD')
-                            ->get();
-                    })->get();
+                // $model_donvi = dmdonvi::select('madv', 'tendv', 'maphanloai')
+                //     ->where('macqcq', $madv)->where('madv', '<>', $madv)
+                //     ->wherenotin('madv', function ($query) use ($madv, $nam) {
+                //         $query->select('madv')->from('dmdonvi')
+                //             ->whereyear('ngaydung', '<=', $nam)
+                //             ->where('trangthai', 'TD')
+                //             ->get();
+                //     })->get();
+                $a_donvicapduoi = [];
+                //đơn vị nam=nam && macqcq=madv
+                $model_dsql = dsdonviquanly::where('nam', $nam)->where('macqcq', $madv)->get();
+                $a_donvicapduoi = array_unique(array_column($model_dsql->toarray(), 'madv'));
+                //dd($a_donvicapduoi);
+    
+                //đơn vị có macqcq = madv (bang dmdonvi)
+                $model_dmdv = dmdonvi::where('macqcq', $madv)
+                    ->wherenotin('madv', function ($qr) use ($nam) {
+                        $qr->select('madv')->from('dsdonviquanly')->where('nam', $nam)->distinct()->get();
+                    }) //lọc các đơn vị đã khai báo trong dsdonviquanly
+                        ->where('madv','!=',$madv)
+                    ->get();
+                $a_donvicapduoi = array_unique(array_merge(array_column($model_dmdv->toarray(), 'madv'), $a_donvicapduoi));
+                $model_donvitamdung = dmdonvi::where('trangthai', 'TD')->wherein('madv', $a_donvicapduoi)->get();
 
-
-                $soluong = $model_donvi->count();
+                $soluong =count(array_diff($a_donvicapduoi, array_column($model_donvitamdung->toarray(), 'madv')));
 
                 $nguon_huyen = $model_nguon_tinh->where('sohieu', $dv->sohieu)->first();
 
