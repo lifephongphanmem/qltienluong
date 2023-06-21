@@ -222,7 +222,7 @@
 
                                     <div class="col-md-3">
                                         <div class="form-group">
-                                            <label class="control-label">Nguồn thực hiện cải cách tiền lương</label>
+                                            <label class="control-label">Nguồn Cải cách tiền lương năm trước chuyển sang</label>
                                             {!! Form::text('caicach', null, [
                                                 'id' => 'caicach',
                                                 'class' => 'form-control nguonkp text-right',

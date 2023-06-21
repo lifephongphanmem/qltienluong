@@ -2098,6 +2098,10 @@ class tonghopnguon_huyenController extends Controller
 
             $inputs = $request->all();
             $m_nguonkp = nguonkinhphi::where('macqcq', $inputs['macqcq'])->where('sohieu', $inputs['sohieu'])->where('trangthai', 'DAGUI')->get();
+            foreach (nguonkinhphi::where('madv', $inputs['macqcq'])->where('sohieu', $inputs['sohieu'])->get() as $chitiet) {
+                $m_nguonkp->add($chitiet);
+            }
+
             $a_linhvuc = array_column($m_nguonkp->toarray(), 'linhvuchoatdong', 'masodv');
             $a_donvi =  array_column($m_nguonkp->toarray(), 'madv', 'masodv');
             $m_dsdv = dmdonvi::all();
@@ -2125,9 +2129,24 @@ class tonghopnguon_huyenController extends Controller
                     $chitiet->nhomnhucau = $a_nhomplct_hc[$chitiet->mact];
                 }
             }
-
+            //Phần A
             $a_A = get4a_A();
 
+            for ($capdo = 0; $capdo < 5; $capdo++) {
+                foreach ($a_A as $key => $chitiet) {
+                    if ($chitiet['phanloai'] == $capdo) {
+                        if (!is_array($chitiet['tentruong'])) {
+                            $a_A[$key]['sotien'] = $m_nguonkp->sum($chitiet['tentruong']);
+                        } else {
+                            foreach ($chitiet['tentruong'] as $k) {
+                                $a_A[$key]['sotien'] += $a_A[$k]['sotien'];
+                            }
+                        }
+                    }
+                }
+            }
+
+            //dd($a_A);
             //Phần B
             $a_BII = array();
             $a_BII[0] = array('tt' => '1', 'noidung' => 'Quỹ tiền lương, phụ cấp tăng thêm đối với cán bộ công chức khu vực hành chính, sự nghiệp ', 'sotien' => '0');

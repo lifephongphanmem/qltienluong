@@ -1144,6 +1144,7 @@ function get4a_A()
         'sotien' => '0', 'phanloai' => '0', 'tentruong' => 'caicach'
     );
 
+    return $a_A;
     //Tính toán
     //$a_A[0]['sotien'] = $m_nguonkp->sum('thuchien');
     //$a_A[1]['sotien'] = $m_nguonkp->sum('dutoan19');
