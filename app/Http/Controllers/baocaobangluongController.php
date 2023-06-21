@@ -5448,7 +5448,8 @@ class baocaobangluongController extends Controller
             //$inputs['namns'] = $m_dutoan_huyen->namns;
             $m_donvi = dmdonvi::where('madv', session('admin')->madv)->first();
 
-            $m_phanloai = dmphanloaidonvi_baocao::all();
+            // $m_phanloai = dmphanloaidonvi_baocao::all();
+            $m_phanloai = dmphanloaidonvi_baocao::where('madvbc', session('admin')->madvbc)->get();
 
             $a_phanloai = array_column(dmphanloaidonvi::all()->toArray(), 'maphanloai');
             $m_donvi_baocao = dmdonvi::wherein('madv', array_column($model_tonghop->toarray(), 'madv'))->get();
@@ -5459,7 +5460,7 @@ class baocaobangluongController extends Controller
             $a_pc = getColDuToan();
 
             foreach ($model as $chitiet) {
-                //dd($chitiet);
+                // dd($chitiet);
                 $chitiet->tonghs = 0;
                 foreach ($a_pc as $pc) {
                     //$chitiet->$pc = $chitiet->$pc / 12;

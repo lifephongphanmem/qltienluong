@@ -118,28 +118,32 @@
                                 <ol>
                                     <!--li><a href="#" data-target="#thoaichitra-huyen-modal" data-toggle="modal" onclick="chitraluong_huyen('{{ $furl . 'huyen/chitraluong_th' }}')">Tổng hợp tình hình chi trả lương (Mẫu tổng hợp)</a></li>
                                         <li><a href="#" data-target="#thoaichitra-huyen-modal" data-toggle="modal" onclick="chitraluong_huyen('{{ $furl . 'huyen/chitraluong_ct' }}')">Tổng hợp tình hình chi trả lương (Mẫu chi tiết)</a></li-->
-                                    <li><a href="#" data-target="#thoaichitra-khoi-moi-modal" data-toggle="modal"
+                                   <!-- <li><a href="#" data-target="#thoaichitra-khoi-moi-modal" data-toggle="modal"
                                             onclick="baocao('{{ $furl . 'huyen/chitraluong_th' }}')">Tổng hợp tình hình chi
                                             trả lương (Mẫu tổng hợp - Mẫu 1)</a></li>
                                     <li><a href="#" data-target="#thoaichitra-khoi-moi-modal" data-toggle="modal"
                                             onclick="baocao('{{ $furl . 'huyen/tonghopluongCR' }}')">Tổng hợp tình hình chi
-                                            trả lương (Mẫu tổng hợp - Mẫu 2)</a></li>
+                                            trả lương (Mẫu tổng hợp - Mẫu 2)</a></li> -->
                                     {{-- <li><a href="#" data-target="#thoaichitra-khoi-moi-vn-modal"
                                             data-toggle="modal"
                                             onclick="baocao('{{ $furl . 'huyen/tonghopluong_th' }}')">Tổng hợp tình hình chi
                                             trả lương (Mẫu tổng hợp - Mẫu 3)</a></li> --}}
-                                    <li><a href="#" data-target="#thoaichitra-khoi-moi-vn-modal"
+                                    {{-- <li><a href="#" data-target="#thoaichitra-khoi-moi-vn-modal"
                                             data-toggle="modal"
                                             onclick="baocao('{{ $furl . 'huyen/tonghopluong_vn' }}')">Tổng hợp tình hình chi
-                                            trả lương (Mẫu tổng hợp - Mẫu 3)</a></li>
-                                    <li><a href="#" data-target="#thoaichitra-khoi-moi-ct-modal"
+                                            trả lương (Mẫu tổng hợp - Mẫu 3)</a></li> --}}
+                                            <li><a href="#" data-target="#thoaichitra-khoi-moi-vn-modal"
+                                                data-toggle="modal"
+                                                onclick="baocao('{{ $furl . 'huyen/tonghopluong_vn' }}')">Tổng hợp tình hình chi
+                                                trả lương (Mẫu tổng hợp - Mẫu Vạn Ninh)</a></li>
+                                   <!-- <li><a href="#" data-target="#thoaichitra-khoi-moi-ct-modal"
                                             data-toggle="modal"
                                             onclick="baocao('{{ $furl . 'huyen/chitraluong_ct' }}')">Tổng hợp tình hình chi
                                             trả lương (Mẫu chi tiết - Mẫu 1)</a></li>
                                     <li><a href="#" data-target="#thoaichitra-khoi-moi-ct-modal"
                                             data-toggle="modal"
                                             onclick="baocao('{{ $furl . 'huyen/chitraluong_ct_CR' }}')">Tổng hợp tình hình
-                                            chi trả lương (Mẫu chi tiết - Mẫu 2)</a></li>
+                                            chi trả lương (Mẫu chi tiết - Mẫu 2)</a></li> -->
                                     <li><a href="#" data-target="#thoaidutoan-huyen-modal" data-toggle="modal"
                                             onclick="dutoanluong_huyen('{{ $furl . 'huyen/dutoanluong' }}')">Dự toán lương
                                             (mẫu 1)</a></li>
@@ -155,7 +159,7 @@
                                             của đơn vị có mặt</a></li>
 
 
-
+                                        <!-- Tạm thời bỏ, không dùng 20062023 -->
                                     {{-- <li><a href="#" data-target="#chitiet-modal" data-toggle="modal"
                                             onclick="baocao('{{ '/bao_cao/thong_tu_67/huyen/mau2a1' }}')">Báo cáo nhu cầu
                                             kinh phí thực hiện nghị định 38/2019/NĐ-CP (Mẫu 2a/1)</a></li>

@@ -22,7 +22,8 @@
 
         <tr>
             <td colspan="2" style="text-align: center; font-weight: bold; font-size: 20px; text-transform: uppercase">
-                TỔNG HỢP KINH PHÍ TIỀN LƯƠNG THÁNG {{ $inputs['tuthang'] }} NĂM {{ $inputs['tunam'] }}
+                {{-- TỔNG HỢP KINH PHÍ TIỀN LƯƠNG THÁNG {{ $inputs['tuthang'] }} NĂM {{ $inputs['tunam'] }} --}}
+                TỔNG HỢP TÌNH HÌNH CHI TRẢ TIỀN LƯƠNG THÁNG {{ $inputs['tuthang'] }} NĂM {{ $inputs['tunam'] }}
             </td>
         </tr>
 
@@ -112,6 +113,7 @@
                         $model_chitiet = $model->where('madv', $donvi->madv);
                         ?>
                         <tr class="font-weight-bold">
+                            {{-- <td>{{ $i++ }}</td> --}}
                             <td>{{ $i++ }}</td>
                             <td>{{ $donvi->tendv }}</td>
                             <td class="text-center">{{ dinhdangsothapphan($model_chitiet->sum('soluong'), $lamtron) }}</td>
