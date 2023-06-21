@@ -113,7 +113,7 @@
                             <td style="text-align: left">{{$ct->tencanbo}}</td>
                             <td style="text-align: left">{{$ct->tencv}}</td>
                             <td style="text-align: left">{{$ct->msngbac}}</td>
-                            <td style="text-align: right">{{$ct->heso}}</td>
+                            <td style="text-align: right">{{dinhdangsothapphan($ct->heso,5)}}</td>
 
                             @foreach($a_phucap as $key=>$val)
                                 <td>{{dinhdangsothapphan($ct->$key,5)}}</td>

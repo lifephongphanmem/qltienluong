@@ -321,19 +321,23 @@ class tonghopluong_huyenController extends Controller
         if (Session::has('admin')) {
             $input = $requests->all();
             $mathh = $input['mathdvbc'];
+            $mathdv = $input['mathdvbc'];
             $madv = $input['madv'];
             // dd($input);
+            // dd(session('admin'));
             //$model = tonghopluong_donvi_chitiet::where('mathdv', $mathdv)->get();
             //$a_bangluong = tonghopluong_donvi_bangluong::where('mathdv', $mathdv)->get()->toarray();
 
             //$model_thongtin = tonghopluong_donvi::where('mathdv', $mathdv)->first();
-            $model = tonghopluong_donvi_chitiet::wherein('mathdv', function ($query) use ($mathh, $madv) {
-                $query->select('mathdv')->from('tonghopluong_donvi')->where('madv', $madv)->where('mathh', $mathh)->orwhere('matht', $mathh)->get();
-            })->get();
+            // $model = tonghopluong_donvi_chitiet::wherein('mathdv', function ($query) use ($mathh, $madv) {
+            //     $query->select('mathdv')->from('tonghopluong_donvi')->where('madv', $madv)->where('mathh', $mathh)->orwhere('matht', $mathh)->get();
+            // })->get();
+            $model = tonghopluong_donvi_chitiet::where('mathdv',$mathdv)->get();
             $a_bangluong = tonghopluong_donvi_bangluong::wherein('mathdv', function ($query) use ($mathh, $madv) {
                 $query->select('mathdv')->from('tonghopluong_donvi')->where('madv', $madv)->where('mathh', $mathh)->orwhere('matht', $mathh)->get();
             })->get();
-            $model_thongtin = tonghopluong_donvi::where('madv', $madv)->where('mathh', $mathh)->orwhere('matht', $mathh)->first();
+            // $model_thongtin = tonghopluong_donvi::where('madv', $madv)->where('mathh', $mathh)->orwhere('matht', $mathh)->first();
+            $model_thongtin = tonghopluong_donvi::where('madv', $madv)->where('macqcq', session('admin')->madv)->where('thang', $input['thangbc'])->where('nam',$input['nambc'])->first();
 
             $model_nguonkp = array_column(dmnguonkinhphi::all()->toArray(), 'tennguonkp', 'manguonkp');
             //$model_phanloaict = array_column(dmphanloaicongtac::all()->toArray(), 'tencongtac', 'macongtac');
@@ -342,10 +346,15 @@ class tonghopluong_huyenController extends Controller
 
             //cho trương hợp đơn vị cấp trên in dữ liệu dv câp dưới mà ko sai tên đơn vị
             $m_dv = dmdonvi::where('madv', $model_thongtin->madv)->first();
+            // $a_pl = array_column(tonghopluong_donvi_chitiet::join('dmkhoipb', 'dmkhoipb.makhoipb', 'tonghopluong_donvi_chitiet.linhvuchoatdong')
+            //     ->select('linhvuchoatdong', 'tenkhoipb')->wherein('mathdv', function ($query) use ($mathh, $madv) {
+            //         $query->select('mathdv')->from('tonghopluong_donvi')->where('madv', $madv)->where('mathh', $mathh)->orwhere('matht', $mathh)->get();
+            //     })->distinct()->get()->toArray(), 'tenkhoipb', 'linhvuchoatdong');
+
             $a_pl = array_column(tonghopluong_donvi_chitiet::join('dmkhoipb', 'dmkhoipb.makhoipb', 'tonghopluong_donvi_chitiet.linhvuchoatdong')
-                ->select('linhvuchoatdong', 'tenkhoipb')->wherein('mathdv', function ($query) use ($mathh, $madv) {
-                    $query->select('mathdv')->from('tonghopluong_donvi')->where('madv', $madv)->where('mathh', $mathh)->orwhere('matht', $mathh)->get();
-                })->distinct()->get()->toArray(), 'tenkhoipb', 'linhvuchoatdong');
+            ->select('linhvuchoatdong', 'tenkhoipb')->wherein('mathdv', function ($query) use ($mathh, $madv,$mathdv) {
+                $query->select('mathdv')->from('tonghopluong_donvi')->where('madv', $madv)->where('mathdv', $mathdv)->get();
+            })->distinct()->get()->toArray(), 'tenkhoipb', 'linhvuchoatdong');
             foreach ($model as $chitiet) {
                 $chitiet->tennguonkp = isset($model_nguonkp[$chitiet->manguonkp]) ? $model_nguonkp[$chitiet->manguonkp] : '';
                 $chitiet->tencongtac = isset($model_ct[$chitiet->mact]) ? $model_ct[$chitiet->mact] : '';
@@ -669,22 +678,22 @@ class tonghopluong_huyenController extends Controller
             $madv = $input['madv'];
             // dd($input);
             //$model = tonghopluong_donvi_chitiet::where('mathdv', $mathdv)->get();
+            /* Bỏ không lấy theo mathh
             $model = tonghopluong_donvi_bangluong::wherein('mathdv', function ($query) use ($mathdv, $madv) {
                 $query->select('mathdv')->from('tonghopluong_donvi')->where('mathh', $mathdv)->where('madv', $madv)->get();
             })->get();
-            // $model = tonghopluong_donvi_bangluong::where('mathdv', $mathdv)->get();
-            $model_thongtin = tonghopluong_huyen::where('mathdv', $mathdv)->where('madv', $madv)->first();
+            */
+            $model = tonghopluong_donvi_bangluong::where('mathdv', $mathdv)->get();
+            $model_thongtin = tonghopluong_donvi::where('mathdv', $mathdv)->where('madv', $madv)->first();
             $model_nguonkp = array_column(dmnguonkinhphi::all()->toArray(), 'tennguonkp', 'manguonkp');
             $model_ct = array_column(dmphanloaict::all()->toArray(), 'tenct', 'mact');
             //$gnr = getGeneralConfigs();
 
             //cho trương hợp đơn vị cấp trên in dữ liệu dv câp dưới mà ko sai tên đơn vị
-            if(isset($model_thongtin)){
-                $m_dv = dmdonvi::where('madv', $model_thongtin->madv)->first();
-                $m_pc = array_column(dmphucap_donvi::where('madv', $model_thongtin->madv)->get()->toarray(), 'report', 'mapc');
-            }else{
-                $m_dv=new dmdonvi();
-            }
+
+                $m_dv = dmdonvi::where('madv', $madv)->first();
+                $m_pc = array_column(dmphucap_donvi::where('madv', $madv)->get()->toarray(), 'report', 'mapc');
+
 
             $a_phucap = array();
             $col = 0;
@@ -786,17 +795,19 @@ class tonghopluong_huyenController extends Controller
             $mathdv = $input['mathdv'];
             $madv = $input['madv'];
             //$model = tonghopluong_donvi_chitiet::where('mathdv', $mathdv)->get();
-            $model = tonghopluong_donvi_bangluong::wherein('mathdv', function ($query) use ($mathdv, $madv) {
-                $query->select('mathdv')->from('tonghopluong_donvi')->where('mathh', $mathdv)->where('madv', $madv)->get();
-            })->get();
-            // $model = tonghopluong_donvi_bangluong::where('mathdv', $mathdv)->get();
-            $model_thongtin = tonghopluong_huyen::where('mathdv', $mathdv)->where('madv', $madv)->first();
+            // $model = tonghopluong_donvi_bangluong::wherein('mathdv', function ($query) use ($mathdv, $madv) {
+            //     $query->select('mathdv')->from('tonghopluong_donvi')->where('mathh', $mathdv)->where('madv', $madv)->get();
+            // })->get();
+            $model = tonghopluong_donvi_bangluong::where('mathdv', $mathdv)->get();
+            // $model_thongtin = tonghopluong_huyen::where('mathdv', $mathdv)->where('madv', $madv)->first();
+            $model_thongtin = tonghopluong_donvi::where('mathdv', $mathdv)->where('madv', $madv)->first();
             $model_nguonkp = array_column(dmnguonkinhphi::all()->toArray(), 'tennguonkp', 'manguonkp');
             $model_ct = array_column(dmphanloaict::all()->toArray(), 'tenct', 'mact');
             //$gnr = getGeneralConfigs();
             $m_pc = array_column(dmphucap::all()->toarray(), 'report', 'mapc');
             //cho trương hợp đơn vị cấp trên in dữ liệu dv câp dưới mà ko sai tên đơn vị
-            $m_dv = dmdonvi::where('madv', $model_thongtin->madv)->first();
+            // $m_dv = dmdonvi::where('madv', $model_thongtin->madv)->first();
+            $m_dv = dmdonvi::where('madv', $madv)->first();
             $a_phucap = array();
             $col = 0;
             //$m_pc = array_column(dmphucap_donvi::where('madv', $model_thongtin->madv)->get()->toarray(),'report','mapc');
@@ -1831,7 +1842,7 @@ class tonghopluong_huyenController extends Controller
             //dd($mathdv);
             //$model = tonghopluong_donvi_chitiet::where('mathdv', $mathdv)->get();
             $inputs = $request->all();
-            //dd($inputs);
+            // dd($inputs);
             $madv = $inputs['madv'];
             $mathdv = $inputs['mathdv'];
             //$thang = $inputs['tuthang'];
@@ -1851,10 +1862,11 @@ class tonghopluong_huyenController extends Controller
                             ->get();
                     })->get()->toarray(), 'report', 'mapc');
                 } else {
+
                     $model = tonghopluong_donvi_bangluong::join('tonghopluong_donvi', 'tonghopluong_donvi_bangluong.mathdv', 'tonghopluong_donvi.mathdv')
                         ->select('tonghopluong_donvi_bangluong.*', 'thang')
-                        ->where('tonghopluong_donvi.mathh', $mathdv)->where('madv', $madv)->get();
-                    $model_thongtin = tonghopluong_donvi::where('mathh', $mathdv)->where('madv', $madv)->first();
+                        ->where('tonghopluong_donvi.mathdv', $mathdv)->where('madv', $madv)->get();
+                    $model_thongtin = tonghopluong_donvi::where('mathdv', $mathdv)->where('madv', $madv)->first();
                     $m_pc = array_column(dmphucap_donvi::where('madv', $madv)->get()->toarray(), 'report', 'mapc');
                 }
 
@@ -1937,10 +1949,10 @@ class tonghopluong_huyenController extends Controller
             $mathdv = $inputs['mathdv'];
             $model = tonghopluong_donvi_bangluong::join('tonghopluong_donvi', 'tonghopluong_donvi_bangluong.mathdv', 'tonghopluong_donvi.mathdv')
                 ->select('tonghopluong_donvi_bangluong.*', 'thang')
-                ->where('tonghopluong_donvi.mathh', $mathdv)->where('madv', $madv)->get();
+                ->where('tonghopluong_donvi.mathdv', $mathdv)->where('madv', $madv)->get();
             // dd($model);
             $model_thongtin = tonghopluong_donvi::where('mathh', $mathdv)->where('madv', $madv)->first();
-            $m_bl = tonghopluong_donvi::select('thang', 'nam', 'madv', 'ngaylap', 'phanloai')->where('mathh', $mathdv)->first();
+            $m_bl = tonghopluong_donvi::select('thang', 'nam', 'madv', 'ngaylap', 'phanloai')->where('mathdv', $mathdv)->first();
             $m_dv = dmdonvi::where('madv', $madv)->first();
             $model_pb = dmphongban::select('mapb', 'tenpb')
                 ->where('madv', $inputs['madv'])
