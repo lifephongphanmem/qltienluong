@@ -6,7 +6,7 @@
         style="margin:0 auto 20px;text-align: center">
         <tr>
             <td style="text-align: left">
-                <b>UỶ BAN NHÂN DÂN TỈNH, THÀNH PHỐ {{ $m_dv->diadanh }}</b><br>
+                <b>{{ 'Đơn vị: ' . $m_dv->tendv }}</b>
             </td>
             <td style="text-align: right">
                 <b>Biểu số 2c</b><br>
@@ -212,19 +212,21 @@
             <td></td>
         </tr>
     </table>
-    <table id="data_footer" width="96%" border="0" cellspacing="0" cellpadding="4"
-        style="margin:0 auto 20px; text-align: center;">
+    
+    <table id="data_footer" class="header" width="96%" border="0" cellspacing="0" cellpadding="8"
+        style="margin:20px auto; text-align: center;">
         <tr>
-            <td></td>
-            <td style="font-style: italic; width: 50%">Ngày... tháng... năm ...</td>
+            <td style="text-align: left;" width="50%"></td>
+            <td style="text-align: center; font-style: italic" width="50%">........,Ngày......tháng.......năm..........
+            </td>
         </tr>
-        <tr>
-            <td style="font-weight: bold">XÁC NHẬN CỦA CƠ QUAN BẢO HIỂM XÃ HỘI</td>
-            <td style="font-weight: bold">CHỦ TỊCH ỦY BAN NHÂN DÂN TỈNH, THÀNH PHỐ</td>
+        <tr style="font-weight: bold">
+            <td style="text-align: center;" width="50%"></td>
+            <td style="text-align: center;" width="50%">{{ $m_dv->cdlanhdao }}</td>
         </tr>
-        <tr>
-            <td></td>
-            <td style="font-style: italic">(Ký tên, đóng dấu)</td>
+        <tr style="font-style: italic">
+            <td style="text-align: center;" width="50%"></td>
+            <td style="text-align: center;" width="50%">(Ký tên, đóng dấu)</td>
         </tr>
         <tr>
             <td><br><br><br></td>
