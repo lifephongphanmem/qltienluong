@@ -66,7 +66,7 @@ class dutoanluong_huyenController extends Controller
                 ->get();
             $a_donvicapduoi = array_unique(array_merge(array_column($model_dmdv->toarray(), 'madv'), $a_donvicapduoi));
             $model_donvitamdung = dmdonvi::where('trangthai', 'TD')->wherein('madv', $a_donvicapduoi)->get();
-
+// dd($model_donvitamdung);
                 // $model_donvi = dmdonvi::select('madv', 'tendv', 'maphanloai')
                 //     ->where('macqcq', $madv)->where('madv', '<>', $madv)
                 //     ->wherenotin('madv', function ($query) use ($nam) {
@@ -77,7 +77,7 @@ class dutoanluong_huyenController extends Controller
                 //     })->get();
                 // $dv->soluong = $model_donvi->count();
                 $dv->soluong=count(array_diff($a_donvicapduoi, array_column($model_donvitamdung->toarray(), 'madv')));
-                $dv->dagui = dutoanluong::where('macqcq', $madv)->where('namns', $nam)->where('trangthai', 'DAGUI')->count();
+                $dv->dagui = dutoanluong::where('macqcq', $madv)->where('namns', $nam)->where('trangthai', 'DAGUI')->wherenotin('madv',array_column($model_donvitamdung->toarray(),'madv'))->count();
             }
 
             $model_tenct = dmphanloaict::wherein('mact', getPLCTDuToan())->get();
