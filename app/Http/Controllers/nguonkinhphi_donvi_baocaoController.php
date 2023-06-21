@@ -257,7 +257,7 @@ class nguonkinhphi_donvi_baocaoController extends Controller
             }
 
             foreach ($model as $ct) {
-                $bl = $model_ct->where('macanbo', $ct->macanbo);
+                $bl = $model_ct->where('macanbo', $ct->macanbo)->where('macvcq', $ct->macvcq)->where('mact', $ct->mact);
                 foreach ($m_pc as $pc) {
                     $ma = $pc['mapc'];
                     $ma_st = 'st_' . $pc['mapc'];

@@ -324,7 +324,7 @@ class nguonkinhphiController extends Controller
             foreach ($m_cb as $key => $val) {
                 $m_cb[$key] = $this->getHeSoPc($a_pc, $m_cb[$key], $inputs['chenhlech']);
             }
-            // dd($m_cb);
+             
             $a_thang = array(
                 array('thang' => '07', 'nam' => $inputs['namdt']),
                 array('thang' => '08', 'nam' => $inputs['namdt']),
@@ -343,7 +343,8 @@ class nguonkinhphiController extends Controller
             $a_data_nl = array();
             $a_danghihuu = array();
 
-            // dd($m_cb);
+            //dd($m_cb['1511709280_1656041351_KHONGCT']);
+
             for ($i = 0; $i < count($a_thang); $i++) {
                 $a_nh = a_getelement($m_nh, array('thang_ns' => $a_thang[$i]['thang']));
                 if (count($a_nh) > 0) { //
@@ -407,6 +408,7 @@ class nguonkinhphiController extends Controller
                     $a_data[] = $m_cb[$key];
                 }
             }
+            //dd($a_data);
             $a_dbhdnd = ['1536402868', '1536402870',];
             $a_cuv = ['1536459380', '1558600713', '1536459382', '1558945077',];
 
