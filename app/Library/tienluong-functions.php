@@ -1049,8 +1049,8 @@ function getNhomNhuCauKP($phanloai = 'KVHCSN')
     $a_nhom['KVHCSN'] = [
         'BIENCHE' => 'CÁN BỘ BIÊN CHẾ',
         'HOPDONG' => 'CÁN BỘ HỢP ĐỒNG',
-        
-];
+
+    ];
     $a_nhom['KVXP'] = [
         'CANBOCT' => 'CÁN BỘ CHUYÊN TRÁCH, CÔNG CHỨC XÃ',
         'HDND' => 'HOẠT ĐỘNG PHÍ ĐẠI BIỂU HĐND CÁC CẤP',
@@ -1058,4 +1058,113 @@ function getNhomNhuCauKP($phanloai = 'KVHCSN')
         'CANBOKCT' => 'CÁN BỘ KHÔNG CHUYÊN TRÁCH',
     ];
     return $a_nhom[$phanloai];
+}
+function get4a_A()
+{
+    $a_A = array();
+
+    $a_A[0] = array(
+        'tt' => '1', 'noidung' => '50% tăng/giảm thu NSĐP (không kể tăng thu tiền sử dụng đất, xổ số kiến thiết) thực hiện 2022 so dự toán Thủ tướng Chính phủ giao năm 2022',
+        'sotien' => '0', 'phanloai' => '0', 'tentruong' => 'thuchien1'
+    );
+    $a_A[1] = array(
+        'tt' => '2', 'noidung' => '50% tăng thu NSĐP (không kể tăng thu tiền sử dụng đất, xổ số kiến thiết) dự toán 2023 so dự toán 2022 Thủ tướng Chính phủ giao',
+        'sotien' => '0', 'phanloai' => '0', 'tentruong' => 'dutoan'
+    );
+    $a_A[2] = array(
+        'tt' => '3', 'noidung' => '50% tăng thu NSĐP (không kể tăng thu tiền sử dụng đất, xổ số kiến thiết) dự toán 2022 so dự toán 2021 Thủ tướng Chính phủ giao',
+        'sotien' => '0', 'phanloai' => '0', 'tentruong' => 'dutoan1'
+    );
+    $a_A[3] = array(
+        'tt' => '4', 'noidung' => 'Số tiết kiệm 10% chi thường xuyên dự toán năm 2021',
+        'sotien' => '0', 'phanloai' => '0', 'tentruong' => 'tietkiem2'
+    );
+    $a_A[4] = array(
+        'tt' => '5', 'noidung' => 'Số tiết kiệm 10% chi thường xuyên dự toán tăng thêm năm 2022',
+        'sotien' => '0', 'phanloai' => '0', 'tentruong' => 'tietkiem1'
+    );
+    $a_A[5] = array(
+        'tt' => '6', 'noidung' => 'Số tiết kiệm 10% chi thường xuyên dự toán tăng thêm năm 2023',
+        'sotien' => '0', 'phanloai' => '0', 'tentruong' => 'tietkiem'
+    );
+
+    $a_A[6] = array(
+        'tt' => '7', 'noidung' => 'Số thu được huy động từ nguồn để lại đơn vị năm 2023:', 'sotien' => '0', 'phanloai' => '2', 'tentruong' => [7, 11]
+    );
+    $a_A[7] = array(
+        'tt' => 'a', 'noidung' => 'Nguồn huy động từ các đơn vị tự đảm bảo(1):',
+        'sotien' => '0', 'phanloai' => '1', 'tentruong' => [8, 9, 10]
+    );
+    $a_A[8] = array(
+        'tt' => '', 'noidung' => '+ Học phí',
+        'sotien' => '0', 'phanloai' => '0', 'tentruong' => 'huydongtx_hocphi_4a'
+    );
+    $a_A[9] = array(
+        'tt' => '', 'noidung' => '+ Viện phí', 'sotien' => '0', 'phanloai' => '0', 'tentruong' => 'huydongtx_vienphi_4a'
+    );
+    $a_A[10] = array(
+        'tt' => '', 'noidung' => '+ Nguồn thu khác', 'sotien' => '0', 'phanloai' => '0', 'tentruong' => 'huydongtx_khac_4a'
+    );
+
+    $a_A[11] = array(
+        'tt' => 'b', 'noidung' => 'Nguồn huy động từ các đơn vị chưa tự đảm bảo chi thường xuyên:', 'sotien' => '0', 'phanloai' => '1', 'tentruong' => [12, 13, 14]
+    );
+    $a_A[12] = array('tt' => '', 'noidung' => '+ Học phí', 'sotien' => '0', 'phanloai' => '0', 'tentruong' => 'huydongktx_hocphi_4a');
+    $a_A[13] = array('tt' => '', 'noidung' => '+ Viện phí', 'sotien' => '0', 'phanloai' => '0', 'tentruong' => 'huydongktx_vienphi_4a');
+    $a_A[14] = array('tt' => '', 'noidung' => '+ Nguồn thu khác', 'sotien' => '0', 'phanloai' => '0', 'tentruong' => 'huydongktx_khac_4a');
+
+    $a_A[15] = array(
+        'tt' => '8', 'noidung' => 'Nguồn 50% phần ngân sách nhà nước giảm chi hỗ trợ hoạt động thường xuyên trong lĩnh vực hành chính (do tinh giản biên chế và đổi mới, sắp xếp lại bộ máy của hệ thống chính trị tinh gọn, hoạt động hiệu lực, hiệu quả) và các đơn vị sự nghiệp công lập (do thực hiện đổi mới hệ thống tổ chức và quản lý, nâng cao chất lượng và hiệu quả hoạt động của đơn vị sự nghiệp công lập) năm 2023',
+        'sotien' => '0', 'phanloai' => '1', 'tentruong' => [16, 17, 18, 19]
+    );
+    $a_A[16] = array(
+        'tt' => '', 'noidung' => '+ Từ việc tinh giản biên chế tổ chức lại bộ máy (2)',
+        'sotien' => '0', 'sotien' => '0', 'phanloai' => '0', 'tentruong' => 'tinhgiambc_4a'
+    );
+    $a_A[17] = array(
+        'tt' => '', 'noidung' => '+ Từ việc sát nhập các đầu mối, cơ quan, đơn vị (2)',
+        'sotien' => '0', 'sotien' => '0', 'phanloai' => '0', 'tentruong' => 'satnhapdaumoi_4a'
+    );
+    $a_A[18] = array(
+        'tt' => '', 'noidung' => '+ Từ việc thay đổi cơ chế tự chủ của đơn vị sư nghiệp (3)',
+        'sotien' => '0', 'sotien' => '0', 'phanloai' => '0', 'tentruong' => 'thaydoicochetuchu_4a'
+    );
+    $a_A[19] = array(
+        'tt' => '', 'noidung' => '+ Từ việc sát nhập các xã không đủ điều kiện tiêu chuẩn',
+        'sotien' => '0', 'sotien' => '0', 'phanloai' => '0', 'tentruong' => 'satnhapxa_4a'
+    );
+
+    $a_A[20] = array(
+        'tt' => '9', 'noidung' => 'Nguồn NSTW đã bổ sung trong dự toán 2023',
+        'sotien' => '0', 'phanloai' => '0', 'tentruong' => 'bosung'
+    );
+
+    $a_A[21] = array(
+        'tt' => '10', 'noidung' => 'Nguồn thực hiện cải cách tiền lương năm 2022 chưa sử dụng hết chuyển sang năm 2023',
+        'sotien' => '0', 'phanloai' => '0', 'tentruong' => 'caicach'
+    );
+
+    return $a_A;
+    //Tính toán
+    //$a_A[0]['sotien'] = $m_nguonkp->sum('thuchien');
+    //$a_A[1]['sotien'] = $m_nguonkp->sum('dutoan19');
+    //$a_A[2]['sotien'] = $m_nguonkp->sum('dutoan18');
+    //$a_A[3]['sotien'] = $m_nguonkp->sum('tietkiem17');
+    // $a_A[4]['sotien'] = $m_nguonkp->sum('tietkiem18');
+    //$a_A[5]['sotien'] = $m_nguonkp->sum('tietkiem19');
+    //Tự đảm bảo
+    // $a_A[8]['sotien'] = $m_nguonkp->sum('dbhocphi');
+    // $a_A[9]['sotien'] = $m_nguonkp->sum('dbvienphi');
+    // $a_A[10]['sotien'] = $m_nguonkp->sum('dbkhac');
+    // $a_A[7]['sotien'] = $a_A[8]['sotien'] + $a_A[9]['sotien'] + $a_A[10]['sotien'];
+
+    // $a_A[12]['sotien'] = $m_nguonkp->sum('kdbhocphi');
+    // $a_A[13]['sotien'] = $m_nguonkp->sum('kdbvienphi');
+    // $a_A[14]['sotien'] = $m_nguonkp->sum('kdbkhac');
+    // $a_A[11]['sotien'] = $a_A[12]['sotien'] + $a_A[13]['sotien'] + $a_A[14]['sotien'];
+    // $a_A[6]['sotien'] = $a_A[7]['sotien'] + $a_A[11]['sotien'];
+
+    // $a_A[15]['sotien'] = $m_nguonkp->sum('tietkiemchi');
+    // $a_A[20]['sotien'] = $m_nguonkp->sum('bosung');
+    // $a_A[21]['sotien'] = $m_nguonkp->sum('caicach');
 }
