@@ -51,6 +51,7 @@ class tonghopluong_donvi_diaban extends Model
         'pcdith',
         'luonghd',
         'pcphth',
+        'pcdp',//thêm phụ cấp dân phòng
         'tonghs',
 
         'stbhxh_dv',

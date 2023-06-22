@@ -64,7 +64,7 @@ class chitieubienche extends Model
         'pcctp',//phụ cấp công tác phí
         'pctaicu',//phụ cấp tái ứng cử
         'pclaunam',//công tác lâu năm
-
+        'pcdp',//thêm phụ cấp dân phòng
         'baohiem',
         'bhxh',
         'bhyt',

@@ -120,6 +120,9 @@ class nguonkinhphi_bangluong extends Model
         'ttbh_dv',
         'pclaunam',
         'st_pclaunam',
+                        //thêm phụ cấp dân phòng
+                        'pcdp',
+                        'st_pcdp'
     ];
 }
 /*20.06.19

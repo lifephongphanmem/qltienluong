@@ -40,7 +40,7 @@
                     'class' => 'horizontal-form form-validate',
                 ]) !!}
                 <input type="hidden" id="masodv" name="masodv" value="{{ $model->masodv }}" />
-
+                <input type="hidden" id='huyen' name="huyen" value="{{$inputs['huyen']??0}}">
                 <div class="row">
                     <div class="col-md-12">
                         <!-- BEGIN PORTLET-->
