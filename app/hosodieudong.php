@@ -105,5 +105,6 @@ class hosodieudong extends Model
         'nguoiphuthuoc',
         'sodinhdanhcanhan',
         'pclaunam',
+        'pcdp',//thêm phụ cấp dân phòng
     ];
 }

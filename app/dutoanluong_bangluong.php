@@ -127,6 +127,9 @@ class dutoanluong_bangluong extends Model
         'stkpcd_dv',
         'stbhtn_dv',
         'ttbh_dv',
+                //thêm phụ cấp dân phòng
+                'pcdp',
+                'st_pcdp'
         
     ];
 

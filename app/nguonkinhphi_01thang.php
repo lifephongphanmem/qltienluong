@@ -111,5 +111,8 @@ class nguonkinhphi_01thang extends Model
         //
         'tonghs',
         'ttl',
+                        //thêm phụ cấp dân phòng
+                        'pcdp',
+                        'st_pcdp'
     ];
 }

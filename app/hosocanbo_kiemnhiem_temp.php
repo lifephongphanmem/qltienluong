@@ -55,5 +55,6 @@ class hosocanbo_kiemnhiem_temp extends Model
         'pctaicu',
         'madv',
         'pclaunam',
+        'pcdp',//thêm phụ cấp dân phòng
     ];
 }

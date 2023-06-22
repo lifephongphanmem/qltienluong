@@ -596,6 +596,7 @@ class nguonkinhphiController extends Controller
             return view('manage.nguonkinhphi.edit')
                 ->with('furl', '/nguon_kinh_phi/')
                 ->with('model', $model)
+                ->with('inputs', $inputs)
                 ->with('model_2a', $model_2a)
                 ->with('m_thongtu', $m_thongtu)
                 ->with('a_nhucau', array_merge(getNhomNhuCauKP('KVHCSN'), getNhomNhuCauKP('KVXP')))
@@ -699,7 +700,9 @@ class nguonkinhphiController extends Controller
     {
         if (Session::has('admin')) {
             $inputs = $request->all();
+            // dd($inputs);
             $model = nguonkinhphi::where('masodv', $inputs['masodv'])->first();
+            dd($model);
             $a_truong = [
                 'bosung',
                 'caicach',
@@ -783,8 +786,12 @@ class nguonkinhphiController extends Controller
             }
 
             $model->update($inputs);
+            if($inputs['huyen']==1){
+                return redirect('chuc_nang/xem_du_lieu/nguon/huyen?sohieu='.$model->sohieu.'&trangthai=ALL&phanloai=ALL');
+            }else{
+                return redirect('/nguon_kinh_phi/danh_sach');
+            }
 
-            return redirect('/nguon_kinh_phi/danh_sach');
         } else
             return view('errors.notlogin');
     }

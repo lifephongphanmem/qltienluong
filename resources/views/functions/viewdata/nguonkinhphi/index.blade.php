@@ -109,6 +109,9 @@
                                                             class="btn btn-default btn-sm" TARGET="_blank">
                                                             <i class="fa fa-print"></i>&nbsp; Số liệu tổng hợp khối</a>
                                                     @endif
+
+                                                    
+
                                                 @else
                                                     @if (session('admin')->phamvitonghop == 'KHOI')
                                                         <!--a href="{{ url('/nguon_kinh_phi/khoi/mautt107_m2?maso=' . $value['masodv']) }}" class="btn btn-default btn-sm" TARGET="_blank">
@@ -127,7 +130,7 @@
                                                             data-toggle="modal">
                                                             <i class="fa fa-print"></i>&nbsp; In số liệu</button>
                                                     @endif
-                                                    <a href="{{ '/nguon_kinh_phi/chi_tiet?maso=' . $value->masodv }}"
+                                                    <a href="{{'/nguon_kinh_phi/chi_tiet?maso='.$value->masodv.'&huyen=1'}}"
                                                         class="btn btn-default btn-xs mbs">
                                                         <i class="fa fa-edit"></i>&nbsp; Chi tiết</a>
                                                 @endif

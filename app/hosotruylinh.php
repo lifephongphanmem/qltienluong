@@ -72,6 +72,7 @@ class hosotruylinh extends Model
         'pcctp',
         'pctdt',
         'pclaunam',
+        'pcdp',//thêm phụ cấp dân phòng
     ];
 }
 //UPDATE `hosotruylinh` SET `mabl` = NULL WHERE mabl not in (SELECT mabl FROM bangluong);
