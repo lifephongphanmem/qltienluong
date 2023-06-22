@@ -979,6 +979,27 @@ function getBaoCaoNhuCauKP()
     );
 }
 
+function getHCSN_2c()
+{
+    //tonghop: 9 => bỏ qua
+    //tonghop: 0 => Tính toán số liêu theo công thức
+    //tonghop: 1 => lấy các ô trong chitiet để cộng
+
+    $ar_I[0] = array('style' => '', 'tt' => '1', 'noidung' => 'Sự nghiệp giáo dục - đào tạo', 'phanloai' => '1', 'chitiet' => [1, 2],);
+    $ar_I[1] = array('style' => '', 'tt' => '-', 'noidung' => 'Giáo dục', 'phanloai' => '0', 'chitiet' => ['linhvuchoatdong' => ['GD',]],);
+    $ar_I[2] = array('style' => '', 'tt' => '-', 'noidung' => 'Đào tạo', 'phanloai' => '0', 'chitiet' => ['linhvuchoatdong' => ['DT',]],);
+    $ar_I[3] = array('style' => '', 'tt' => '2', 'noidung' => 'Sự nghiệp y tế', 'phanloai' => '0', 'chitiet' => ['linhvuchoatdong' => ['YTE',]],);
+    $ar_I[4] = array('style' => '', 'tt' => '3', 'noidung' => 'Sự nghiệp khoa học-công nghệ', 'phanloai' => '0', 'chitiet' => ['linhvuchoatdong' => ['KHCN',]],);
+    $ar_I[5] = array('style' => '', 'tt' => '4', 'noidung' => 'Sự nghiệp văn hóa thông tin', 'phanloai' => '0', 'chitiet' => ['linhvuchoatdong' => ['VHTT'],],);
+    $ar_I[6] = array('style' => '', 'tt' => '5', 'noidung' => 'Sự nghiệp phát thanh truyền hình', 'phanloai' => '0', 'chitiet' => ['linhvuchoatdong' => ['PTTH',]],);
+    $ar_I[7] = array('style' => '', 'tt' => '6', 'noidung' => 'Sự nghiệp thể dục - thể thao', 'phanloai' => '0', 'chitiet' => ['linhvuchoatdong' => ['TDTT',]],);
+    $ar_I[8] = array('style' => '', 'tt' => '7', 'noidung' => 'Sự nghiệp đảm bảo xã hội', 'phanloai' => '0', 'chitiet' => ['linhvuchoatdong' => ['DBXH',]],);
+    $ar_I[9] = array('style' => '', 'tt' => '8', 'noidung' => 'Sự nghiệp kinh tế', 'phanloai' => '0', 'chitiet' => ['linhvuchoatdong' => ['KT',]],);
+    $ar_I[10] = array('style' => '', 'tt' => '9', 'noidung' => 'Sự nghiệp môi trường', 'phanloai' => '0', 'chitiet' => ['linhvuchoatdong' => ['MT',]],);
+    $ar_I[11] = array('style' => '', 'tt' => '10', 'noidung' => 'Quản lý nhà nước, đảng, đoàn thể', 'phanloai' => '0', 'chitiet' => ['linhvuchoatdong' => ['QLNN', 'DDT']],);
+    return $ar_I;
+}
+
 function getHCSN()
 {
     //tonghop: 9 => bỏ qua
@@ -1145,26 +1166,4 @@ function get4a_A()
     );
 
     return $a_A;
-    //Tính toán
-    //$a_A[0]['sotien'] = $m_nguonkp->sum('thuchien');
-    //$a_A[1]['sotien'] = $m_nguonkp->sum('dutoan19');
-    //$a_A[2]['sotien'] = $m_nguonkp->sum('dutoan18');
-    //$a_A[3]['sotien'] = $m_nguonkp->sum('tietkiem17');
-    // $a_A[4]['sotien'] = $m_nguonkp->sum('tietkiem18');
-    //$a_A[5]['sotien'] = $m_nguonkp->sum('tietkiem19');
-    //Tự đảm bảo
-    // $a_A[8]['sotien'] = $m_nguonkp->sum('dbhocphi');
-    // $a_A[9]['sotien'] = $m_nguonkp->sum('dbvienphi');
-    // $a_A[10]['sotien'] = $m_nguonkp->sum('dbkhac');
-    // $a_A[7]['sotien'] = $a_A[8]['sotien'] + $a_A[9]['sotien'] + $a_A[10]['sotien'];
-
-    // $a_A[12]['sotien'] = $m_nguonkp->sum('kdbhocphi');
-    // $a_A[13]['sotien'] = $m_nguonkp->sum('kdbvienphi');
-    // $a_A[14]['sotien'] = $m_nguonkp->sum('kdbkhac');
-    // $a_A[11]['sotien'] = $a_A[12]['sotien'] + $a_A[13]['sotien'] + $a_A[14]['sotien'];
-    // $a_A[6]['sotien'] = $a_A[7]['sotien'] + $a_A[11]['sotien'];
-
-    // $a_A[15]['sotien'] = $m_nguonkp->sum('tietkiemchi');
-    // $a_A[20]['sotien'] = $m_nguonkp->sum('bosung');
-    // $a_A[21]['sotien'] = $m_nguonkp->sum('caicach');
 }

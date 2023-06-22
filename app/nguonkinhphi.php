@@ -18,6 +18,7 @@ class nguonkinhphi extends Model
         'noidung',
         'namns',
         'linhvuchoatdong',
+        'sobiencheduocgiao',
         'nhucau',
         'luongphucap',
         'daibieuhdnd',

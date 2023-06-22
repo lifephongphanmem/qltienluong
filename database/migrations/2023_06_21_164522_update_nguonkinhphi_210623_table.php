@@ -14,6 +14,7 @@ class UpdateNguonkinhphi210623Table extends Migration
     public function up()
     {
         Schema::table('nguonkinhphi', function (Blueprint $table) {
+            $table->double('sobiencheduocgiao')->default(0);
             //Mẫu 2c           
             $table->double('soluongqt_2c')->default(0);
             $table->double('sotienqt_2c')->default(0);
@@ -33,6 +34,7 @@ class UpdateNguonkinhphi210623Table extends Migration
     public function down()
     {
         Schema::table('nguonkinhphi', function (Blueprint $table) {
+            $table->dropColumn('sobiencheduocgiao');
             $table->dropColumn('soluongqt_2c');
             $table->dropColumn('sotienqt_2c');
             $table->dropColumn('soluongcanbo_2c');
