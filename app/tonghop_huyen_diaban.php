@@ -40,6 +40,7 @@ class tonghop_huyen_diaban extends Model
         'pctnvk',
         'pcbdhdcu',
         'pcthni',
+        'pcdp',//thêm phụ cấp dân phòng
         'tonghs',
 
         'stbhxh_dv',

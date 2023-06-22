@@ -121,6 +121,9 @@ class dutoanluong_nangluong extends Model
         'ttbh_dv',
         'pclaunam',
         'st_pclaunam',
+                        //thêm phụ cấp dân phòng
+                        'pcdp',
+                        'st_pcdp'
     ];
 }
 

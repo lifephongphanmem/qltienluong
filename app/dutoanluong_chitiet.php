@@ -117,5 +117,8 @@ class dutoanluong_chitiet extends Model
         'tonghs',
         'ttl',
         'ghichu',
+                //thêm phụ cấp dân phòng
+                'pcdp',
+                'st_pcdp'
     ];
 }

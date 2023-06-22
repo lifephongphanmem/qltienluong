@@ -87,6 +87,9 @@ class bangluongdangky_ct extends Model
         'pcctp',
         'pctaicu',
         'st_pctaicu',
+                        //thêm phụ cấp dân phòng
+                        'pcdp',
+                        'st_pcdp'
     ];
 
     /*

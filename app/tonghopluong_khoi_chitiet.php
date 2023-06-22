@@ -42,6 +42,7 @@ class tonghopluong_khoi_chitiet extends Model
         'pctnvk',
         'pcbdhdcu',
         'pcthni',
+        'pcdp',//thêm phụ cấp dân phòng
         'tonghs',
         'stbhxh_dv',
         'stbhyt_dv',

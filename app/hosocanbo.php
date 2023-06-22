@@ -82,6 +82,7 @@ class hosocanbo extends Model
         'pcphth',
         'pcctp',
         'pctaicu',
+        'pcdp',//thêm phụ cấp dân phòng
         'theodoi',
         'mact',
         'baohiem',
@@ -102,6 +103,7 @@ class hosocanbo extends Model
         'khongnopbaohiem',
         'pclaunam',
         'mucluongbaohiem',
+
     ];
 }
 

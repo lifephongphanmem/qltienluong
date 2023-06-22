@@ -151,6 +151,9 @@ class bangluong_ct_03 extends Model
         'ghichu',
         'pclaunam',
         'st_pclaunam',
+                //thêm phụ cấp dân phòng
+                'pcdp',
+                'st_pcdp'
     ];
 }
 

@@ -70,5 +70,6 @@ class hosothoicongtac extends Model
         'ghichu',
         'madv',
         'pclaunam',
+        'pcdp',//thêm phụ cấp dân phòng
     ];
 }
