@@ -102,7 +102,6 @@ class nguonkinhphi extends Model
         'satnhapdaumoi_4a',
         'thaydoicochetuchu_4a',
         'satnhapxa_4a',
-
         'tietkiem1', //trước 1 năm
         'tietkiem2', //trước 2 năm
         'thuchien1', //trước 1 năm
@@ -114,5 +113,13 @@ class nguonkinhphi extends Model
         'huydongktx_hocphi_4a',
         'huydongktx_vienphi_4a',
         'huydongktx_khac_4a',
+        //Mẫu 2c
+        'soluongqt_2c',
+        'sotienqt_2c',
+        'soluongcanbo_2c',
+        'hesoluong_2c',
+        'phucapchucvu_2c',
+        'phucapvuotkhung_2c',
+        'phucaptnn_2c',
     ];
 }

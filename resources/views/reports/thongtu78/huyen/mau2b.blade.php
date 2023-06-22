@@ -9,7 +9,7 @@
 
             </td>
             <td style="text-align: center;">
-                <b>Biểu số 4b</b>
+                <b>Biểu số 2b</b>
             </td>
         </tr>
         <tr>

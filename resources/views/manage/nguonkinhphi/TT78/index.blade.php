@@ -25,6 +25,11 @@
                             </a>
                         </li>
                         <li>
+                            <a href="#tab2c" data-toggle="tab" class="step">
+                                <p class="description"><i class="glyphicon glyphicon-check"></i>Mẫu 2c</p>
+                            </a>
+                        </li>
+                        <li>
                             <a href="#tab2d" data-toggle="tab" class="step">
                                 <p class="description"><i class="glyphicon glyphicon-check"></i>Mẫu 2d</p>
                             </a>
@@ -81,6 +86,7 @@
                         @include('manage.nguonkinhphi.TT78.mau4b')
                         @include('manage.nguonkinhphi.TT78.mau2a')
                         @include('manage.nguonkinhphi.TT78.mau2b')
+                        @include('manage.nguonkinhphi.TT78.mau2c')
                         @include('manage.nguonkinhphi.TT78.mau2d')
                         @include('manage.nguonkinhphi.TT78.mau2dd')
                         @include('manage.nguonkinhphi.TT78.mau2e')

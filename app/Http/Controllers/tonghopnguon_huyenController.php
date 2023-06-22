@@ -262,9 +262,18 @@ class tonghopnguon_huyenController extends Controller
                 'huydongktx_hocphi_4a',
                 'huydongktx_vienphi_4a',
                 'huydongktx_khac_4a',
+                //Mẫu 2c
+                'soluongqt_2c',
+                'sotienqt_2c',
+                'soluongcanbo_2c',
+                'hesoluong_2c',
+                'phucapchucvu_2c',
+                'phucapvuotkhung_2c',
+                'phucaptnn_2c',
             ];
             foreach ($a_truong  as $truong) {
-                $inputs[$truong] = chkDbl($inputs[$truong] ?? 0);
+                if (isset($inputs[$truong]))
+                    $inputs[$truong] = chkDbl($inputs[$truong]);
             }
 
             if ($model == null) {
