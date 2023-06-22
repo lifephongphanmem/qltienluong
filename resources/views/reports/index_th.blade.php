@@ -153,10 +153,11 @@
                                     <li><a href="#" data-target="#thoaidutoan-huyen-modal" data-toggle="modal"
                                             onclick="dutoanluong_huyen('{{ $furl . 'huyen/nguonkinhphiCR' }}')">Tổng hợp
                                             nguồn kinh phí (mẫu 1)</a></li>
-                                    <li><a href="#" data-target="#thoaibaocaohesoluong-khoi-modal"
+                                   {{-- 2023/22/06 Tạm thời bỏ để thiết kế lại --}}
+                                            {{-- <li><a href="#" data-target="#thoaibaocaohesoluong-khoi-modal"
                                             data-toggle="modal"
                                             onclick="baocao('{{ $furl . 'huyen/baocaohesoluong' }}')">Báo cáo hệ số lương
-                                            của đơn vị có mặt</a></li>
+                                            của đơn vị có mặt</a></li> --}}
 
 
                                         <!-- Tạm thời bỏ, không dùng 20062023 -->

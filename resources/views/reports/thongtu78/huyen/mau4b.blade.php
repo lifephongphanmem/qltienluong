@@ -28,50 +28,49 @@
         {{ $inputs['donvitinh'] == 1 ? 'Đồng' : ($inputs['donvitinh'] == 2 ? 'Nghìn đồng' : 'Triệu đồng') }}</p>
     <table id="data_body3" cellspacing="0" cellpadding="0" border="1"
         style="margin: 10px auto; border-collapse: collapse;">
-        <tr style="padding-left: 2px;padding-right: 2px">
-            <th style="width: 5%;padding-left: 2px;padding-right: 2px" rowspan="3">TT</th>
-            <th style="padding-left: 2px;padding-right: 2px" rowspan="3">CHỈ TIÊU</th>
-            <th style="width: 10%;padding-left: 2px;padding-right: 2px" rowspan="3">NHU CẦU KINH PHÍ THỰC HIỆN CCTL NĂM
-                2019</th>
-            <th style="width: 40%;padding-left: 2px;padding-right: 2px" colspan="6">NGUỒN TỪ TIẾT KIỆM 10% CHI THƯỜNG
+        <tr >
+            <th style="width: 3%;" rowspan="3">TT</th>
+            <th rowspan="3">CHỈ TIÊU</th>
+            <th style="width: 8%;" rowspan="3">NHU CẦU KINH PHÍ THỰC HIỆN CCTL NĂM 2023</th>
+            <th colspan="6">NGUỒN TỪ TIẾT KIỆM 10% CHI THƯỜNG
                 XUYÊN VÀ NGUỒN THU ĐỂ LẠI ĐƠN VỊ VÀ NGUỒN TIẾT KIỆM THEO NGHỊ QUYẾT 18, 19</th>
 
         </tr>
 
-        <tr style="padding-left: 2px;padding-right: 2px">
-            <th rowspan="2">TỔNG SỐ</th>
-            <th rowspan="2">TIẾT KIỆM 10% CHI THƯỜNG XUYÊN</th>
+        <tr>
+            <th style="width: 8%;" rowspan="2">TỔNG SỐ</th>
+            <th style="width: 8%;" rowspan="2">TIẾT KIỆM 10% CHI THƯỜNG XUYÊN</th>
             <th colspan="3">NGUỒN THU TỪ ĐƠN VỊ HÀNH CHÍNH, SỰ NGHIỆP</th>
-            <th rowspan="2">TIẾT KIỆM CHI THEO NGHỊ QUYẾT 18,19</th>
+            <th style="width: 8%;" rowspan="2">TIẾT KIỆM CHI THEO NGHỊ QUYẾT 18, 19</th>
         </tr>
 
-        <tr style="padding-left: 2px;padding-right: 2px">
-            <th>HỌC PHÍ</th>
-            <th>VIỆN PHÍ</th>
-            <th>KHÁC</th>
+        <tr >
+            <th style="width: 8%;">HỌC PHÍ</th>
+            <th style="width: 8%;">VIỆN PHÍ</th>
+            <th style="width: 8%;">KHÁC</th>
         </tr>
         <tr style="font-weight: bold;">
             <td></td>
             <td>TỔNG SỐ</td>
-            <td class="text-right">{{ dinhdangso($a_TC['nhucau'], 0, $inputs['donvitinh']) }}</td>
+            {{-- <td class="text-right">{{ dinhdangso($a_TC['nhucau'], 0, $inputs['donvitinh']) }}</td>
             <td class="text-right">{{ dinhdangso($a_TC['nguonkp'], 0, $inputs['donvitinh']) }}</td>
             <td class="text-right">{{ dinhdangso($a_TC['tietkiem'], 0, $inputs['donvitinh']) }}</td>
             <td class="text-right">{{ dinhdangso($a_TC['hocphi'], 0, $inputs['donvitinh']) }}</td>
             <td class="text-right">{{ dinhdangso($a_TC['vienphi'], 0, $inputs['donvitinh']) }}</td>
             <td class="text-right">{{ dinhdangso($a_TC['khac'], 0, $inputs['donvitinh']) }}</td>
-            <td class="text-right">{{ dinhdangso($a_TC['nguonthu'], 0, $inputs['donvitinh']) }}</td>
+            <td class="text-right">{{ dinhdangso($a_TC['nguonthu'], 0, $inputs['donvitinh']) }}</td> --}}
         </tr>
         @foreach ($data as $dulieu)
             <tr>
                 <td>{{ $dulieu['tt'] }}</td>
                 <td>{{ $dulieu['noidung'] }}</td>
-                <td class="text-right">{{ dinhdangso($dulieu['nhucau'], 0, $inputs['donvitinh']) }}</td>
-                <td class="text-right">{{ dinhdangso($dulieu['nguonkp'], 0, $inputs['donvitinh']) }}</td>
-                <td class="text-right">{{ dinhdangso($dulieu['tietkiem'], 0, $inputs['donvitinh']) }}</td>
-                <td class="text-right">{{ dinhdangso($dulieu['hocphi'], 0, $inputs['donvitinh']) }}</td>
-                <td class="text-right">{{ dinhdangso($dulieu['vienphi'], 0, $inputs['donvitinh']) }}</td>
-                <td class="text-right">{{ dinhdangso($dulieu['khac'], 0, $inputs['donvitinh']) }}</td>
-                <td class="text-right">{{ dinhdangso($dulieu['nguonthu'], 0, $inputs['donvitinh']) }}</td>
+                <td class="text-right">{{ dinhdangso($dulieu['solieu']['nhucau'], 0, $inputs['donvitinh']) }}</td>
+                <td class="text-right">{{ dinhdangso($dulieu['solieu']['tongso'], 0, $inputs['donvitinh']) }}</td>
+                <td class="text-right">{{ dinhdangso($dulieu['solieu']['tietkiem'], 0, $inputs['donvitinh']) }}</td>
+                <td class="text-right">{{ dinhdangso($dulieu['solieu']['hocphi'], 0, $inputs['donvitinh']) }}</td>
+                <td class="text-right">{{ dinhdangso($dulieu['solieu']['vienphi'], 0, $inputs['donvitinh']) }}</td>
+                <td class="text-right">{{ dinhdangso($dulieu['solieu']['nguonthu'], 0, $inputs['donvitinh']) }}</td>
+                <td class="text-right">{{ dinhdangso($dulieu['solieu']['quyluongtietkiem'], 0, $inputs['donvitinh']) }}</td>
             </tr>
         @endforeach
     </table>

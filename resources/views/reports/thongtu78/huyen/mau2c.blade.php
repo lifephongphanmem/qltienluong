@@ -90,8 +90,8 @@
             <td>22=21*6T</td>
         </tr>
         <tr style="font-weight: bold">
-            <td>A</td>
-            <td>TÔNG HỢP TOÀN TỈNH, TP THEO LĨNH VỰC</td>
+            <td></td>
+            <td>TÔNG SỐ</td>
             <td></td>
             <td></td>
             <td></td>
@@ -117,100 +117,32 @@
             <tr style=" text-align: right">
                 <td style=" text-align: center">{{ $dulieu['tt'] }}</td>
                 <td style=" text-align: left">{{ $dulieu['noidung'] }}</td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
+                <td>{{ dinhdangsothapphan($dulieu['solieu']['soluongqt_2c'], 2) }}</td>
+                <td>{{ dinhdangsothapphan($dulieu['solieu']['sotienqt_2c'], 2) }}</td>
+                <td>{{ dinhdangsothapphan($dulieu['solieu']['sobiencheduocgiao'], 2) }}</td>
+                <td>{{ dinhdangsothapphan($dulieu['solieu']['soluongcanbo_2c'], 2) }}</td>
+
+                <td>{{ dinhdangsothapphan($dulieu['solieu']['tongluong_cu'], 3) }}</td>
+                <td>{{ dinhdangsothapphan($dulieu['solieu']['hesoluong_cu'], 3) }}</td>
+                <td>{{ dinhdangsothapphan($dulieu['solieu']['tongphucap_cu'], 3) }}</td>
+                <td>{{ dinhdangsothapphan($dulieu['solieu']['phucapchucvu_cu'], 3) }}</td>
+                <td>{{ dinhdangsothapphan($dulieu['solieu']['phucapvuotkhung_cu'], 3) }}</td>
+                <td>{{ dinhdangsothapphan($dulieu['solieu']['phucaptnn_cu'], 3) }}</td>
+                <td>{{ dinhdangsothapphan($dulieu['solieu']['baohiem_cu'], 3) }}</td>
+
+                <td>{{ dinhdangsothapphan($dulieu['solieu']['tongluong_moi'], 3) }}</td>
+                <td>{{ dinhdangsothapphan($dulieu['solieu']['hesoluong_moi'], 3) }}</td>
+                <td>{{ dinhdangsothapphan($dulieu['solieu']['tongphucap_moi'], 3) }}</td>
+                <td>{{ dinhdangsothapphan($dulieu['solieu']['phucapchucvu_moi'], 3) }}</td>
+                <td>{{ dinhdangsothapphan($dulieu['solieu']['phucapvuotkhung_moi'], 3) }}</td>
+                <td>{{ dinhdangsothapphan($dulieu['solieu']['phucaptnn_moi'], 3) }}</td>
+                <td>{{ dinhdangsothapphan($dulieu['solieu']['baohiem_moi'], 3) }}</td>
+
+                <td>{{ dinhdangsothapphan($dulieu['solieu']['chenhlech'], 3) }}</td>
+                <td>{{ dinhdangsothapphan($dulieu['solieu']['tongchenhlech'], 3) }}</td>                
             </tr>
         @endforeach
-        <tr style="font-weight: bold">
-            <td>B</td>
-            <td>CHI TIẾT THEO ĐỊA BÀN</td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-        </tr>
-        <tr style="font-weight: bold">
-            <td>I</td>
-            <td>KHỐI TỈNH</td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-        </tr>
-        <tr style="font-weight: bold">
-            <td>I</td>
-            <td>KHỐI HUYỆN</td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-        </tr>
+        
     </table>
     
     <table id="data_footer" class="header" width="96%" border="0" cellspacing="0" cellpadding="8"

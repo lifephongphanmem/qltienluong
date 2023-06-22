@@ -722,7 +722,7 @@ class nguonkinhphiController extends Controller
             $inputs = $request->all();
             // dd($inputs);
             $model = nguonkinhphi::where('masodv', $inputs['masodv'])->first();
-            
+
             $a_truong = [
                 'bosung',
                 'caicach',
@@ -773,13 +773,13 @@ class nguonkinhphiController extends Controller
                 'sothonconlai_2d',
                 'sotoconlai_2d',
                 //Mẫu 4a
+                'tietkiem',
                 'tinhgiambc_4a',
                 'nghihuu_4a',
                 'boiduong_4a',
                 'satnhapdaumoi_4a',
                 'thaydoicochetuchu_4a',
                 'satnhapxa_4a',
-
                 'tietkiem1', //trước 1 năm
                 'tietkiem2', //trước 2 năm
                 'thuchien1', //trước 1 năm
@@ -806,12 +806,11 @@ class nguonkinhphiController extends Controller
             }
 
             $model->update($inputs);
-            if($inputs['huyen']==1){
-                return redirect('chuc_nang/xem_du_lieu/nguon/huyen?sohieu='.$model->sohieu.'&trangthai=ALL&phanloai=ALL');
-            }else{
+            if ($inputs['huyen'] == 1) {
+                return redirect('chuc_nang/xem_du_lieu/nguon/huyen?sohieu=' . $model->sohieu . '&trangthai=ALL&phanloai=ALL');
+            } else {
                 return redirect('/nguon_kinh_phi/danh_sach');
             }
-
         } else
             return view('errors.notlogin');
     }

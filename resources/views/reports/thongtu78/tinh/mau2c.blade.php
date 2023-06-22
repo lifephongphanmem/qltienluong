@@ -90,8 +90,8 @@
             <td>22=21*6T</td>
         </tr>
         <tr style="font-weight: bold">
-            <td></td>
-            <td>TÔNG SỐ</td>
+            <td>A</td>
+            <td>TÔNG HỢP TOÀN TỈNH, TP THEO LĨNH VỰC</td>
             <td></td>
             <td></td>
             <td></td>
@@ -139,7 +139,78 @@
                 <td></td>
             </tr>
         @endforeach
-        
+        <tr style="font-weight: bold">
+            <td>B</td>
+            <td>CHI TIẾT THEO ĐỊA BÀN</td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+        <tr style="font-weight: bold">
+            <td>I</td>
+            <td>KHỐI TỈNH</td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+        <tr style="font-weight: bold">
+            <td>I</td>
+            <td>KHỐI HUYỆN</td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
     </table>
     
     <table id="data_footer" class="header" width="96%" border="0" cellspacing="0" cellpadding="8"

@@ -250,7 +250,7 @@ class tonghopnguon_huyenController extends Controller
                 'satnhapdaumoi_4a',
                 'thaydoicochetuchu_4a',
                 'satnhapxa_4a',
-
+                'tietkiem',
                 'tietkiem1', //trước 1 năm
                 'tietkiem2', //trước 2 năm
                 'thuchien1', //trước 1 năm

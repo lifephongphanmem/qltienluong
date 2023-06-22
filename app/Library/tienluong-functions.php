@@ -1000,6 +1000,39 @@ function getHCSN_2c()
     return $ar_I;
 }
 
+function getHCSN_4b()//Chưa dùng
+{
+    //tonghop: 9 => bỏ qua
+    //tonghop: 0 => Tính toán số liêu theo công thức
+    //tonghop: 1 => lấy các ô trong chitiet để cộng
+
+    $data = array();
+    $data[] = array('val' => 'GDDT', 'tt' => 'a', 'noidung' => 'Sự nghiệp giáo dục - đào tạo', 'nhucau' => 0, 'nguonkp' => 0, 'tietkiem' => 0, 'hocphi' => 0, 'vienphi' => 0, 'khac' => 0, 'nguonthu' => 0);
+    $data[] = array('val' => 'GD', 'tt' => '-', 'noidung' => 'Giáo dục', 'nhucau' => 0, 'nguonkp' => 0, 'tietkiem' => 0, 'hocphi' => 0, 'vienphi' => 0, 'khac' => 0, 'nguonthu' => 0);
+    $data[] = array('val' => 'DT', 'tt' => '-', 'noidung' => 'Đào tạo', 'nhucau' => 0, 'nguonkp' => 0, 'tietkiem' => 0, 'hocphi' => 0, 'vienphi' => 0, 'khac' => 0, 'nguonthu' => 0);
+    $data[] = array('val' => 'YTE', 'tt' => 'b', 'noidung' => 'Sự nghiệp y tế', 'nhucau' => 0, 'nguonkp' => 0, 'tietkiem' => 0, 'hocphi' => 0, 'vienphi' => 0, 'khac' => 0, 'nguonthu' => 0);
+    $data[] = array('val' => 'KHAC', 'tt' => 'c', 'noidung' => 'Sự nghiệp khác', 'nhucau' => 0, 'nguonkp' => 0, 'tietkiem' => 0, 'hocphi' => 0, 'vienphi' => 0, 'khac' => 0, 'nguonthu' => 0);
+    $data[] = array('val' => 'QLNN', 'tt' => 'd', 'noidung' => ' Quản lý nhà nước, Đảng, đoàn thể', 'nhucau' => 0, 'nguonkp' => 0, 'tietkiem' => 0, 'hocphi' => 0, 'vienphi' => 0, 'khac' => 0, 'nguonthu' => 0);
+    $data[] = array('val' => 'QLNN', 'tt' => '-', 'noidung' => 'Trong đó: Cán bộ, công chức cấp xã', 'nhucau' => 0, 'nguonkp' => 0, 'tietkiem' => 0, 'hocphi' => 0, 'vienphi' => 0, 'khac' => 0, 'nguonthu' => 0);
+    
+
+
+    $ar_I[0] = array('style' => '', 'tt' => '1', 'noidung' => 'Sự nghiệp giáo dục - đào tạo', 'phanloai' => '1', 'chitiet' => [1, 2],);
+    $ar_I[1] = array('style' => '', 'tt' => '-', 'noidung' => 'Trong đó', 'phanloai' => '9', 'chitiet' => '',);
+    $ar_I[1] = array('style' => '', 'tt' => '-', 'noidung' => 'Giáo dục', 'phanloai' => '0', 'chitiet' => ['linhvuchoatdong' => ['GD',]],);
+    $ar_I[2] = array('style' => '', 'tt' => '-', 'noidung' => 'Đào tạo', 'phanloai' => '0', 'chitiet' => ['linhvuchoatdong' => ['DT',]],);
+    $ar_I[3] = array('style' => '', 'tt' => '2', 'noidung' => 'Sự nghiệp y tế', 'phanloai' => '0', 'chitiet' => ['linhvuchoatdong' => ['YTE',]],);
+    $ar_I[4] = array('style' => '', 'tt' => '3', 'noidung' => 'Sự nghiệp khoa học-công nghệ', 'phanloai' => '0', 'chitiet' => ['linhvuchoatdong' => ['KHCN',]],);
+    $ar_I[5] = array('style' => '', 'tt' => '4', 'noidung' => 'Sự nghiệp văn hóa thông tin', 'phanloai' => '0', 'chitiet' => ['linhvuchoatdong' => ['VHTT'],],);
+    $ar_I[6] = array('style' => '', 'tt' => '5', 'noidung' => 'Sự nghiệp phát thanh truyền hình', 'phanloai' => '0', 'chitiet' => ['linhvuchoatdong' => ['PTTH',]],);
+    $ar_I[7] = array('style' => '', 'tt' => '6', 'noidung' => 'Sự nghiệp thể dục - thể thao', 'phanloai' => '0', 'chitiet' => ['linhvuchoatdong' => ['TDTT',]],);
+    $ar_I[8] = array('style' => '', 'tt' => '7', 'noidung' => 'Sự nghiệp đảm bảo xã hội', 'phanloai' => '0', 'chitiet' => ['linhvuchoatdong' => ['DBXH',]],);
+    $ar_I[9] = array('style' => '', 'tt' => '8', 'noidung' => 'Sự nghiệp kinh tế', 'phanloai' => '0', 'chitiet' => ['linhvuchoatdong' => ['KT',]],);
+    $ar_I[10] = array('style' => '', 'tt' => '9', 'noidung' => 'Sự nghiệp môi trường', 'phanloai' => '0', 'chitiet' => ['linhvuchoatdong' => ['MT',]],);
+    $ar_I[11] = array('style' => '', 'tt' => '10', 'noidung' => 'Quản lý nhà nước, đảng, đoàn thể', 'phanloai' => '0', 'chitiet' => ['linhvuchoatdong' => ['QLNN', 'DDT']],);
+    return $ar_I;
+}
+
 function getHCSN()
 {
     //tonghop: 9 => bỏ qua

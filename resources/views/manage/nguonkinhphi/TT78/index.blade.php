@@ -69,11 +69,11 @@
                             <p class="description"><i class="glyphicon glyphicon-check"></i>Mẫu 4a</p>
                         </a>
                     </li>
-                    <li>
+                    {{-- <li>
                         <a href="#tab4b" data-toggle="tab" class="step">
                             <p class="description"><i class="glyphicon glyphicon-check"></i>Mẫu 4b</p>
                         </a>
-                    </li>
+                    </li> --}}
                     </ul>
 
                     <div id="bar" class="progress progress-striped" role="progressbar">
@@ -83,7 +83,7 @@
 
                     <div class="tab-content">
                         @include('manage.nguonkinhphi.TT78.mau4a')
-                        @include('manage.nguonkinhphi.TT78.mau4b')
+                        {{-- @include('manage.nguonkinhphi.TT78.mau4b') --}}
                         @include('manage.nguonkinhphi.TT78.mau2a')
                         @include('manage.nguonkinhphi.TT78.mau2b')
                         @include('manage.nguonkinhphi.TT78.mau2c')
