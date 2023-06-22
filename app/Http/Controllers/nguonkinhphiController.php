@@ -722,7 +722,7 @@ class nguonkinhphiController extends Controller
             $inputs = $request->all();
             // dd($inputs);
             $model = nguonkinhphi::where('masodv', $inputs['masodv'])->first();
-            dd($model);
+            
             $a_truong = [
                 'bosung',
                 'caicach',
