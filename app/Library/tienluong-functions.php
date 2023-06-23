@@ -1000,7 +1000,7 @@ function getHCSN_2c()
     return $ar_I;
 }
 
-function getHCSN_4b()//Chưa dùng
+function getHCSN_4b() //Chưa dùng
 {
     //tonghop: 9 => bỏ qua
     //tonghop: 0 => Tính toán số liêu theo công thức
@@ -1014,7 +1014,7 @@ function getHCSN_4b()//Chưa dùng
     $data[] = array('val' => 'KHAC', 'tt' => 'c', 'noidung' => 'Sự nghiệp khác', 'nhucau' => 0, 'nguonkp' => 0, 'tietkiem' => 0, 'hocphi' => 0, 'vienphi' => 0, 'khac' => 0, 'nguonthu' => 0);
     $data[] = array('val' => 'QLNN', 'tt' => 'd', 'noidung' => ' Quản lý nhà nước, Đảng, đoàn thể', 'nhucau' => 0, 'nguonkp' => 0, 'tietkiem' => 0, 'hocphi' => 0, 'vienphi' => 0, 'khac' => 0, 'nguonthu' => 0);
     $data[] = array('val' => 'QLNN', 'tt' => '-', 'noidung' => 'Trong đó: Cán bộ, công chức cấp xã', 'nhucau' => 0, 'nguonkp' => 0, 'tietkiem' => 0, 'hocphi' => 0, 'vienphi' => 0, 'khac' => 0, 'nguonthu' => 0);
-    
+
 
 
     $ar_I[0] = array('style' => '', 'tt' => '1', 'noidung' => 'Sự nghiệp giáo dục - đào tạo', 'phanloai' => '1', 'chitiet' => [1, 2],);
@@ -1030,6 +1030,30 @@ function getHCSN_4b()//Chưa dùng
     $ar_I[9] = array('style' => '', 'tt' => '8', 'noidung' => 'Sự nghiệp kinh tế', 'phanloai' => '0', 'chitiet' => ['linhvuchoatdong' => ['KT',]],);
     $ar_I[10] = array('style' => '', 'tt' => '9', 'noidung' => 'Sự nghiệp môi trường', 'phanloai' => '0', 'chitiet' => ['linhvuchoatdong' => ['MT',]],);
     $ar_I[11] = array('style' => '', 'tt' => '10', 'noidung' => 'Quản lý nhà nước, đảng, đoàn thể', 'phanloai' => '0', 'chitiet' => ['linhvuchoatdong' => ['QLNN', 'DDT']],);
+    return $ar_I;
+}
+
+function getHCSN_vn()
+{
+    //tonghop: 9 => bỏ qua
+    //tonghop: 0 => Tính toán số liêu theo công thức
+    //tonghop: 1 => lấy các ô trong chitiet để cộng
+    $ar_I[0] = array('style' => 'font-weight: bold;', 'tt' => 'I', 'noidung' => 'KHU VỰC HCSN, ĐẢNG, ĐOÀN THỂ', 'phanloai' => '2', 'chitiet' => [2, 5, 6, 7, 8, 9, 10, 11, 12, 13]);
+    $ar_I[1] = array('style' => '', 'tt' => '-', 'noidung' => 'Trong đó', 'phanloai' => '9', 'chitiet' => []);
+    $ar_I[2] = array('style' => '', 'tt' => '1', 'noidung' => 'Sự nghiệp giáo dục - đào tạo', 'phanloai' => '1', 'chitiet' => [3, 4]);
+    $ar_I[3] = array('style' => '', 'tt' => '-', 'noidung' => 'Giáo dục', 'phanloai' => '0', 'chitiet' => ['linhvuchoatdong' => 'GD',]);
+    $ar_I[4] = array('style' => '', 'tt' => '-', 'noidung' => 'Đào tạo', 'phanloai' => '0', 'chitiet' => ['linhvuchoatdong' => 'DT',]);
+    $ar_I[5] = array('style' => '', 'tt' => '2', 'noidung' => 'Sự nghiệp y tế', 'phanloai' => '0', 'chitiet' => ['linhvuchoatdong' => 'YTE',]);
+    $ar_I[6] = array('style' => '', 'tt' => '3', 'noidung' => 'Sự nghiệp khoa học-công nghệ', 'phanloai' => '0', 'chitiet' => ['linhvuchoatdong' => 'KHCN',]);
+    $ar_I[7] = array('style' => '', 'tt' => '4', 'noidung' => 'Sự nghiệp văn hóa thông tin', 'phanloai' => '0', 'chitiet' => ['linhvuchoatdong' => 'VHTT',]);
+    $ar_I[8] = array('style' => '', 'tt' => '5', 'noidung' => 'Sự nghiệp phát thanh truyền hình', 'phanloai' => '0', 'chitiet' => ['linhvuchoatdong' => 'PTTH',]);
+    $ar_I[9] = array('style' => '', 'tt' => '6', 'noidung' => 'Sự nghiệp thể dục - thể thao', 'phanloai' => '0', 'chitiet' => ['linhvuchoatdong' => 'TDTT',]);
+    $ar_I[10] = array('style' => '', 'tt' => '7', 'noidung' => 'Sự nghiệp đảm bảo xã hội', 'phanloai' => '0', 'chitiet' => ['linhvuchoatdong' => 'DBXH',]);
+    $ar_I[11] = array('style' => '', 'tt' => '8', 'noidung' => 'Sự nghiệp kinh tế', 'phanloai' => '0', 'chitiet' => ['linhvuchoatdong' => 'KT',]);
+    $ar_I[12] = array('style' => '', 'tt' => '9', 'noidung' => 'Sự nghiệp môi trường', 'phanloai' => '0', 'chitiet' => ['linhvuchoatdong' => 'MT',]);
+    $ar_I[13] = array('style' => '', 'tt' => '10', 'noidung' => 'Quản lý nhà nước, đảng, đoàn thể', 'phanloai' => '1', 'chitiet' => [14, 15]);
+    $ar_I[14] = array('style' => '', 'tt' => '-', 'noidung' => ' Quản lý NN', 'phanloai' => '0', 'chitiet' => ['linhvuchoatdong' => 'QLNN',]);
+    $ar_I[15] = array('style' => '', 'tt' => '-', 'noidung' => 'Đảng, đoàn thể', 'phanloai' => '0', 'chitiet' => ['linhvuchoatdong' => 'DDT',],);
     return $ar_I;
 }
 
@@ -1171,7 +1195,7 @@ function get4a_A()
         'tt' => '8', 'noidung' => 'Nguồn 50% phần ngân sách nhà nước giảm chi hỗ trợ hoạt động thường xuyên trong lĩnh vực hành chính (do tinh giản biên chế và đổi mới, sắp xếp lại bộ máy của hệ thống chính trị tinh gọn, hoạt động hiệu lực, hiệu quả) và các đơn vị sự nghiệp công lập (do thực hiện đổi mới hệ thống tổ chức và quản lý, nâng cao chất lượng và hiệu quả hoạt động của đơn vị sự nghiệp công lập) năm 2023',
         'sotien' => '0', 'phanloai' => '9', 'tentruong' => []
     );
-    
+
     /*2023.23.06 Phần này lấy số liệu từ mẫu 2đ chứ ko pải cộng dồn lên
     $a_A[15] = array(
         'tt' => '8', 'noidung' => 'Nguồn 50% phần ngân sách nhà nước giảm chi hỗ trợ hoạt động thường xuyên trong lĩnh vực hành chính (do tinh giản biên chế và đổi mới, sắp xếp lại bộ máy của hệ thống chính trị tinh gọn, hoạt động hiệu lực, hiệu quả) và các đơn vị sự nghiệp công lập (do thực hiện đổi mới hệ thống tổ chức và quản lý, nâng cao chất lượng và hiệu quả hoạt động của đơn vị sự nghiệp công lập) năm 2023',

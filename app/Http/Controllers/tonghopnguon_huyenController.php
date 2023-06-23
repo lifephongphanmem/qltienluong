@@ -1057,7 +1057,7 @@ class tonghopnguon_huyenController extends Controller
                 }
             }
 
-            
+
             //Tính toán tổng cộng
             $a_Tong = [
                 'canbo_congtac' => $ar_I[0]['canbo_congtac'] + $ar_II[0]['canbo_congtac'] + $ar_III[0]['canbo_congtac'] + $ar_IV[0]['canbo_congtac'],
@@ -1126,6 +1126,7 @@ class tonghopnguon_huyenController extends Controller
 
             $m_dsdv = dmdonvi::all();
             $a_phanloai = array_column($m_dsdv->toArray(), 'maphanloai', 'madv');
+            $a_thongtindv = array_column($m_dsdv->toArray(), 'tendv', 'madv');
             //$a_madvbc = array_column($m_dsdv->toArray(), 'madvbc', 'madv');
             $a_level = array_column($m_dsdv->toArray(), 'caphanhchinh', 'madv');
             //$a_diaban = array_column(dmdonvibaocao::all()->toArray(), 'level', 'madvbc');
@@ -1136,7 +1137,7 @@ class tonghopnguon_huyenController extends Controller
             $a_nhomplct_xp = array_column($m_plct->toArray(), 'nhomnhucau_xp', 'mact');
             foreach ($m_chitiet as $chitiet) {
                 $chitiet->madv = $a_donvi[$chitiet->masodv];
-                //$chitiet->madvbc = $a_madvbc[$chitiet->madv];
+                $chitiet->tendv = $a_thongtindv[$chitiet->madv];
 
                 $chitiet->maphanloai = $a_phanloai[$chitiet->madv];
                 $chitiet->linhvuchoatdong = $a_linhvuc[$chitiet->masodv];
@@ -1672,7 +1673,7 @@ class tonghopnguon_huyenController extends Controller
                 }
             }
 
-            
+
             //Tính toán tổng cộng
             $a_Tong = [
                 'canbo_congtac' => $ar_I[0]['canbo_congtac'] + $ar_II[0]['canbo_congtac'] + $ar_III[0]['canbo_congtac'] + $ar_IV[0]['canbo_congtac'],
@@ -1706,8 +1707,37 @@ class tonghopnguon_huyenController extends Controller
                 $a_Tong['solieu'][$mapc] = $ar_I[0]['solieu'][$mapc] + $ar_II[0]['solieu'][$mapc]
                     + $ar_III[0]['solieu'][$mapc] + $ar_IV[0]['solieu'][$mapc];
             }
+
+            //Tính lại chi tiết để dải đơn vị
+            $a_plct = array_column(dmphanloaict::all()->toArray(),'tenct' , 'mact');
+            foreach ($m_chitiet as $chitiet) {
+                $chitiet->tenct = $a_plct[$chitiet->mact] ?? $chitiet->mact;
+                $chitiet->tongbh_dv = $chitiet->ttbh_dv / $chenhlech; //tính toán để dùng
+                $chitiet->tongpc = $chitiet->tonghs - $chitiet->heso; //tính toán để dùng
+                //Tính mức lương cũ
+                $chitiet->st_heso_cu =  round($chitiet->heso * $luongcb);
+                $chitiet->ttbh_dv_cu = round($chitiet->tongbh_dv * $luongcb);
+                $chitiet->st_tongpc_cu = round($chitiet->tongpc * $luongcb);
+                $chitiet->tongcong_cu = $chitiet->st_tongpc_cu + $chitiet->st_heso_cu + $chitiet->ttbh_dv_cu;
+                foreach ($a_phucap as $mapc => $tenpc) {
+                    $mapc_st = 'st_' . $mapc . '_cu';
+                    $chitiet->$mapc_st  = round($chitiet->$mapc * $luongcb);
+                }
+                //Mức lương mới
+                $chitiet->st_heso_moi =  round($chitiet->heso * $luongcb_moi);
+                $chitiet->ttbh_dv_moi = round($chitiet->tongbh_dv * $luongcb_moi);
+                $chitiet->st_tongpc_moi = round($chitiet->tongpc * $luongcb_moi);
+                $chitiet->tongcong_moi = $chitiet->st_tongpc_moi + $chitiet->st_heso_moi + $chitiet->ttbh_dv_moi;
+                foreach ($a_phucap as $mapc => $tenpc) {
+                    $mapc_st = 'st_' . $mapc . '_moi';
+                    $chitiet->$mapc_st  = round($chitiet->$mapc * $luongcb_moi);
+                }
+                //Chênh lệch
+                $chitiet->chenhlech01thang = $chitiet->tongcong_moi - $chitiet->tongcong_cu;
+                $chitiet->chenhlech06thang = $chitiet->chenhlech01thang * 6;
+            }
             $m_donvi = dmdonvi::where('madv', $inputs['macqcq'])->first();
-            //dd($m_tonghop_ct);
+            //dd($m_chitiet);
             return view('reports.thongtu78.huyen.mau2a_vn')
                 ->with('furl', '/tong_hop_bao_cao/')
                 ->with('ar_I', $ar_I)
@@ -1716,6 +1746,7 @@ class tonghopnguon_huyenController extends Controller
                 ->with('ar_IV', $ar_IV)
                 ->with('a_Tong', $a_Tong)
                 ->with('m_dv', $m_donvi)
+                ->with('m_chitiet', $m_chitiet)
                 ->with('inputs', $inputs)
                 ->with('a_phucap', $a_phucap)
                 ->with('a_phucap_st', $a_phucap_st)
