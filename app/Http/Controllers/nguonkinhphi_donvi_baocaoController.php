@@ -876,6 +876,13 @@ class nguonkinhphi_donvi_baocaoController extends Controller
                     $ar_IV[$key]['solieu_moi'] = $a_solieu_moi;
                 }
             }
+
+            // $a_Tong = [
+            //      'canbo_congtac' = $ar_I[$k]['canbo_congtac'];
+            // 'canbo_dutoan' += $ar_IV[$k]['canbo_dutoan'];
+            // 'chenhlech01thang' = $a_solieu_moi['tongcong'] - $a_solieu['tongcong'];
+            // 'chenhlech06thang' = $ar_IV[$key]['chenhlech01thang'] * 6;];
+            
             //dd($m_tonghop_ct);
             return view('reports.thongtu78.donvi.mau2a2')
                 ->with('furl', '/tong_hop_bao_cao/')

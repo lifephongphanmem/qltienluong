@@ -172,7 +172,7 @@
                         </div>
                     </div>
 
-                    <?php $a_kct = array('pckn','pcdith'); ?>
+                    <?php $a_kct = array('pckn','pcdith','pcdbqh'); ?>
                     @foreach($model_pc as $pc)
                         @if(!in_array($pc->mapc,$a_kct))
                             @continue
@@ -379,7 +379,7 @@
                         </div>
                     </div>
 
-                    <?php $a_kct = array('pckn'); ?>
+                    <?php $a_kct = array('pckn','pcvk'); ?>
                     @foreach($model_pc as $pc)
                         @if(!in_array($pc->mapc,$a_kct))
                             @continue

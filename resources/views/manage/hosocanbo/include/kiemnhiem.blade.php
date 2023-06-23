@@ -53,6 +53,8 @@
                         <th class="text-center">Phụ</br>cấp</br>đặc</br>thù</th>
                         <th class="text-center">Phụ</br>cấp</br>một</br>cửa</th>
                         <th class="text-center">Phụ</br>cấp</br>điện</br>thoại</th>
+                        <th class="text-center">Phụ</br>cấp</br>đại</br>biểu<br>HDND</th>
+                        <th class="text-center">Phụ</br>cấp</br>cấp</br>uỷ</th>
                         <th class="text-center">Phụ</br>cấp</br>khác</th>
                         <th class="text-center">Thao tác</th>
                     </tr>
@@ -73,6 +75,8 @@
                             <td class="text-right">{{$value->pcdbn}}</td>
                             <td class="text-right">{{$value->pcd}}</td>
                             <td class="text-right">{{$value->pcdith}}</td>
+                            <td class="text-right">{{$value->pcdbqh}}</td>
+                            <td class="text-right">{{$value->pcvk}}</td>
                             <td class="text-right">{{$value->pck}}</td>
                             <td>
                                 <button type="button" class="btn btn-default btn-xs mbs" onclick="edit_kn({{$value->id}});"><i class="fa fa-edit"></i>&nbsp;Sửa</button>
