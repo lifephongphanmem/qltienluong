@@ -463,6 +463,7 @@ class hosocanboController extends Controller
         $inputs['hesopc'] = chkDbl($inputs['hesopc']);
         $inputs['pckn'] = chkDbl($inputs['pckn']);
         $inputs['pcdith'] = chkDbl($inputs['pcdith']);
+        $inputs['pcdbqh'] = chkDbl($inputs['pcdbqh']);
         $inputs['manguonkp'] = (implode(',',$inputs['manguonkp']));
 
         if ($inputs['id'] > 0) {
@@ -543,6 +544,7 @@ class hosocanboController extends Controller
         $inputs['madv'] = session('admin')->madv;
         $inputs['hesopc'] = chkDbl($inputs['hesopc']);
         $inputs['pckn'] = chkDbl($inputs['pckn']);
+        $inputs['pcvk'] = chkDbl($inputs['pcvk']);
         $inputs['manguonkp'] = (implode(',',$inputs['manguonkp']));
         if ($inputs['id'] > 0) {
             hosocanbo_kiemnhiem::find($inputs['id'])->update($inputs);

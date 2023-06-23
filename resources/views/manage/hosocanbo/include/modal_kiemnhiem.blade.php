@@ -951,6 +951,7 @@
                      $('#hesopc_dbhdnd').val(data.hesopc);
                      $('#pckn_dbhdnd').val(data.pckn);
                      $('#pcdith_dbhdnd').val(data.pcdith);
+                     $('#pcdbqh_dbhdnd').val(data.pcdbqh);
                      $('#dbhdnd-modal').modal('show');
                 }
                 if(data.phanloai == 'QUANSU'){
@@ -975,6 +976,7 @@
                     $('#id_cuv').val(data.id);
                     $('#hesopc_cuv').val(data.hesopc);
                     $('#pckn_cuv').val(data.pckn);
+                    $('#pcvk_cuv').val(data.pcvk);
                     $('#cuv-modal').modal('show');
                 }
                 if(data.phanloai == 'CONGDONG'){
@@ -1064,6 +1066,7 @@
                     id: $('#id_dbhdnd').val(),
                     hesopc: $('#hesopc_dbhdnd').val(),
                     pcdith: $('#pcdith_dbhdnd').val(),
+                    pcdbqh: $('#pcdbqh_dbhdnd').val(),
                     phanloai: $('#phanloai_dbhdnd').val(),
                     pckn: $('#pckn_dbhdnd').val()
                 },
@@ -1132,7 +1135,8 @@
                     id: $('#id_cuv').val(),
                     hesopc: $('#hesopc_cuv').val(),
                     phanloai: $('#phanloai_cuv').val(),
-                    pckn: $('#pckn_cuv').val()
+                    pckn: $('#pckn_cuv').val(),
+                    pcvk: $('#pcvk_cuv').val()
                 },
                 dataType: 'JSON',
                 success: function (data) {
