@@ -347,7 +347,7 @@ class nguonkinhphi_donvi_baocaoController extends Controller
                 }
             }
             //dd($m_chitiet);
-            $a_pc_th = dmphucap_donvi::where('madv',  session('admin')->madv)->where('phanloai', '<', '3')->wherenotin('mapc', ['heso'])->get();
+            $a_pc_th = dmphucap_donvi::where('madv',  $m_nguonkp->madv)->where('phanloai', '<', '3')->wherenotin('mapc', ['heso'])->get();
 
             $a_phucap = array();
             $col = 0;
