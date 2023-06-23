@@ -1343,6 +1343,8 @@ class hosocanboController extends Controller
         $result['message'] .= '<th class="text-center">Phụ</br>cấp</br>đặc</br>thù</th>';
         $result['message'] .= '<th class="text-center">Phụ</br>cấp</br>một</br>cửa</th>';
         $result['message'] .= '<th class="text-center">Phụ</br>cấp</br>điện</br>thoại</th>';
+        $result['message'] .= '<th class="text-center">Phụ</br>cấp</br>đại</br>biểu</br>HDND</th>';
+        $result['message'] .= '<th class="text-center">Phụ</br>cấp</br>cấp</br>uỷ</th>';
         $result['message'] .= '<th class="text-center">Phụ</br>cấp</br>khác</th>';
         $result['message'] .= '<th class="text-center">Thao tác</th>';
 
@@ -1364,6 +1366,8 @@ class hosocanboController extends Controller
                 $result['message'] .= '<td>' . $value->pcdbn . '</td>';
                 $result['message'] .= '<td>' . $value->pcd . '</td>';
                 $result['message'] .= '<td>' . $value->pcdith . '</td>';
+                $result['message'] .= '<td>' . $value->pcdbqh . '</td>';
+                $result['message'] .= '<td>' . $value->pcvk . '</td>';
                 $result['message'] .= '<td>' . $value->pck . '</td>';
                 $result['message'] .= '<td>' .
                     '<button type="button" data-target="#kiemnhiem-modal" data-toggle="modal" class="btn btn-default btn-xs mbs" onclick="edit_kn(' . $value->id . ');"><i class="fa fa-edit"></i>&nbsp;Sửa</button>' .
