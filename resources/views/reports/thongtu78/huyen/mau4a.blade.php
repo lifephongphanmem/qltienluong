@@ -111,7 +111,7 @@
         <tr>
             <td>2</td>
             <td>Nguồn thực hiện cải cách tiền lương còn dư</td>
-            <td></td>
+            <td class="money">{{ dinhdangso($a_TC['A'] - $a_TC['BII'] - $a_TC['BIII'], 0, $inputs['donvitinh']) }}</td>
         </tr>
     </table>
     

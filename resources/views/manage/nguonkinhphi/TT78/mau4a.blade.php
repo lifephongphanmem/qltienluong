@@ -171,6 +171,7 @@
                                                 'id' => 'tinhgiambc_4a',
                                                 'class' => 'form-control nguonkp text-right',
                                                 'data-mask' => 'fdecimal',
+                                                'readonly',
                                             ]) !!}
                                         </div>
                                     </div>
@@ -182,6 +183,7 @@
                                                 'id' => 'satnhapdaumoi_4a',
                                                 'class' => 'form-control nguonkp text-right',
                                                 'data-mask' => 'fdecimal',
+                                                'readonly',
                                             ]) !!}
                                         </div>
                                     </div>
@@ -192,7 +194,9 @@
                                                 'id' => 'thaydoicochetuchu_4a',
                                                 'class' => 'form-control nguonkp text-right',
                                                 'data-mask' => 'fdecimal',
+                                                'readonly',
                                             ]) !!}
+
                                         </div>
                                     </div>
                                     <div class="col-md-3">
@@ -202,6 +206,7 @@
                                                 'id' => 'satnhapxa_4a',
                                                 'class' => 'form-control nguonkp text-right',
                                                 'data-mask' => 'fdecimal',
+                                                'readonly',
                                             ]) !!}
                                         </div>
                                     </div>
@@ -222,7 +227,8 @@
 
                                     <div class="col-md-3">
                                         <div class="form-group">
-                                            <label class="control-label">Nguồn Cải cách tiền lương năm trước chuyển sang</label>
+                                            <label class="control-label">Nguồn Cải cách tiền lương năm trước chuyển
+                                                sang</label>
                                             {!! Form::text('caicach', null, [
                                                 'id' => 'caicach',
                                                 'class' => 'form-control nguonkp text-right',
@@ -288,7 +294,7 @@
                                             {!! Form::text('nghihuu_4a', null, [
                                                 'id' => 'nghihuu_4a',
                                                 'class' => 'form-control nhucaupc text-right',
-                                                'data-mask' => 'fdecimal',
+                                                'data-mask' => 'fdecimal', 'readonly'
                                             ]) !!}
                                         </div>
                                     </div>
@@ -361,7 +367,7 @@
 
                                 <div class="row">
 
-                                    
+
 
                                 </div>
 
@@ -392,7 +398,9 @@
 
                                     <div class="col-md-4">
                                         <div class="form-group">
-                                            <label class="control-label">Kinh phí giảm ở cấp xã(do điều chỉnh số lượng cán bộ, công chức cấp xã; mức khoán phụ cấp đối với người hoạt động KCT)</label>
+                                            <label class="control-label">Kinh phí giảm ở cấp xã(do điều chỉnh số lượng
+                                                cán bộ, công chức cấp xã; mức khoán phụ cấp đối với người hoạt động
+                                                KCT)</label>
                                             {!! Form::text('kinhphigiamxa_4a', null, [
                                                 'id' => 'kinhphigiamxa_4a',
                                                 'class' => 'form-control nhucaupc text-right',

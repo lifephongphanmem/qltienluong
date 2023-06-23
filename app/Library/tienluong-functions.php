@@ -1169,23 +1169,30 @@ function get4a_A()
 
     $a_A[15] = array(
         'tt' => '8', 'noidung' => 'Nguồn 50% phần ngân sách nhà nước giảm chi hỗ trợ hoạt động thường xuyên trong lĩnh vực hành chính (do tinh giản biên chế và đổi mới, sắp xếp lại bộ máy của hệ thống chính trị tinh gọn, hoạt động hiệu lực, hiệu quả) và các đơn vị sự nghiệp công lập (do thực hiện đổi mới hệ thống tổ chức và quản lý, nâng cao chất lượng và hiệu quả hoạt động của đơn vị sự nghiệp công lập) năm 2023',
+        'sotien' => '0', 'phanloai' => '9', 'tentruong' => []
+    );
+    
+    /*2023.23.06 Phần này lấy số liệu từ mẫu 2đ chứ ko pải cộng dồn lên
+    $a_A[15] = array(
+        'tt' => '8', 'noidung' => 'Nguồn 50% phần ngân sách nhà nước giảm chi hỗ trợ hoạt động thường xuyên trong lĩnh vực hành chính (do tinh giản biên chế và đổi mới, sắp xếp lại bộ máy của hệ thống chính trị tinh gọn, hoạt động hiệu lực, hiệu quả) và các đơn vị sự nghiệp công lập (do thực hiện đổi mới hệ thống tổ chức và quản lý, nâng cao chất lượng và hiệu quả hoạt động của đơn vị sự nghiệp công lập) năm 2023',
         'sotien' => '0', 'phanloai' => '1', 'tentruong' => [16, 17, 18, 19]
     );
+    */
     $a_A[16] = array(
         'tt' => '', 'noidung' => '+ Từ việc tinh giản biên chế tổ chức lại bộ máy (2)',
-        'sotien' => '0', 'sotien' => '0', 'phanloai' => '0', 'tentruong' => 'tinhgiambc_4a'
+        'sotien' => '0', 'sotien' => '0', 'phanloai' => '9', 'tentruong' => 'tinhgiambc_4a'
     );
     $a_A[17] = array(
         'tt' => '', 'noidung' => '+ Từ việc sát nhập các đầu mối, cơ quan, đơn vị (2)',
-        'sotien' => '0', 'sotien' => '0', 'phanloai' => '0', 'tentruong' => 'satnhapdaumoi_4a'
+        'sotien' => '0', 'sotien' => '0', 'phanloai' => '9', 'tentruong' => 'satnhapdaumoi_4a'
     );
     $a_A[18] = array(
         'tt' => '', 'noidung' => '+ Từ việc thay đổi cơ chế tự chủ của đơn vị sư nghiệp (3)',
-        'sotien' => '0', 'sotien' => '0', 'phanloai' => '0', 'tentruong' => 'thaydoicochetuchu_4a'
+        'sotien' => '0', 'sotien' => '0', 'phanloai' => '9', 'tentruong' => 'thaydoicochetuchu_4a'
     );
     $a_A[19] = array(
         'tt' => '', 'noidung' => '+ Từ việc sát nhập các xã không đủ điều kiện tiêu chuẩn',
-        'sotien' => '0', 'sotien' => '0', 'phanloai' => '0', 'tentruong' => 'satnhapxa_4a'
+        'sotien' => '0', 'sotien' => '0', 'phanloai' => '9', 'tentruong' => 'satnhapxa_4a'
     );
 
     $a_A[20] = array(
