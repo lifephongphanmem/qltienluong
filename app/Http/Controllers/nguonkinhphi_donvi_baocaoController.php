@@ -877,12 +877,40 @@ class nguonkinhphi_donvi_baocaoController extends Controller
                 }
             }
 
-            // $a_Tong = [
-            //      'canbo_congtac' = $ar_I[$k]['canbo_congtac'];
-            // 'canbo_dutoan' += $ar_IV[$k]['canbo_dutoan'];
-            // 'chenhlech01thang' = $a_solieu_moi['tongcong'] - $a_solieu['tongcong'];
-            // 'chenhlech06thang' = $ar_IV[$key]['chenhlech01thang'] * 6;];
-            
+            //Tính toán tổng cộng
+            $a_Tong = [
+                'canbo_congtac' => $ar_I[0]['canbo_congtac'] + $ar_II[0]['canbo_congtac'] + $ar_III[0]['canbo_congtac'] + $ar_IV[0]['canbo_congtac'],
+                'canbo_dutoan' => $ar_I[0]['canbo_dutoan'] + $ar_II[0]['canbo_dutoan'] + $ar_III[0]['canbo_dutoan'] + $ar_IV[0]['canbo_dutoan'],
+                'chenhlech01thang' => $ar_I[0]['chenhlech01thang'] + $ar_II[0]['chenhlech01thang'] + $ar_III[0]['chenhlech01thang'] + $ar_IV[0]['chenhlech01thang'],
+                'chenhlech06thang' => $ar_I[0]['chenhlech06thang'] + $ar_II[0]['chenhlech06thang'] + $ar_III[0]['chenhlech06thang'] + $ar_IV[0]['chenhlech06thang'],
+            ];
+            $a_Tong['solieu'] = [
+                'tongcong' => $ar_I[0]['solieu']['tongcong'] + $ar_II[0]['solieu']['tongcong']
+                    + $ar_III[0]['solieu']['tongcong'] + $ar_IV[0]['solieu']['tongcong'],
+                'st_heso' => $ar_I[0]['solieu']['st_heso'] + $ar_II[0]['solieu']['st_heso']
+                    + $ar_III[0]['solieu']['st_heso'] + $ar_IV[0]['solieu']['st_heso'],
+                'st_tongpc' => $ar_I[0]['solieu']['st_tongpc'] + $ar_II[0]['solieu']['st_tongpc']
+                    + $ar_III[0]['solieu']['st_tongpc'] + $ar_IV[0]['solieu']['st_tongpc'],
+                'ttbh_dv' => $ar_I[0]['solieu']['ttbh_dv'] + $ar_II[0]['solieu']['ttbh_dv']
+                    + $ar_III[0]['solieu']['ttbh_dv'] + $ar_IV[0]['solieu']['ttbh_dv'],
+            ];
+            $a_Tong['solieu_moi'] = [
+                'tongcong' => $ar_I[0]['solieu_moi']['tongcong'] + $ar_II[0]['solieu_moi']['tongcong']
+                    + $ar_III[0]['solieu_moi']['tongcong'] + $ar_IV[0]['solieu_moi']['tongcong'],
+                'st_heso' => $ar_I[0]['solieu_moi']['st_heso'] + $ar_II[0]['solieu_moi']['st_heso']
+                    + $ar_III[0]['solieu_moi']['st_heso'] + $ar_IV[0]['solieu_moi']['st_heso'],
+                'st_tongpc' => $ar_I[0]['solieu_moi']['st_tongpc'] + $ar_II[0]['solieu_moi']['st_tongpc']
+                    + $ar_III[0]['solieu_moi']['st_tongpc'] + $ar_IV[0]['solieu_moi']['st_tongpc'],
+                'ttbh_dv' => $ar_I[0]['solieu_moi']['ttbh_dv'] + $ar_II[0]['solieu_moi']['ttbh_dv']
+                    + $ar_III[0]['solieu_moi']['ttbh_dv'] + $ar_IV[0]['solieu_moi']['ttbh_dv'],
+            ];
+            foreach ($a_phucap_st as $mapc => $tenpc) {
+                $a_Tong['solieu_moi'][$mapc] = $ar_I[0]['solieu_moi'][$mapc] + $ar_II[0]['solieu_moi'][$mapc]
+                    + $ar_III[0]['solieu_moi'][$mapc] + $ar_IV[0]['solieu_moi'][$mapc];
+                $a_Tong['solieu'][$mapc] = $ar_I[0]['solieu'][$mapc] + $ar_II[0]['solieu'][$mapc]
+                    + $ar_III[0]['solieu'][$mapc] + $ar_IV[0]['solieu'][$mapc];
+            }
+           
             //dd($m_tonghop_ct);
             return view('reports.thongtu78.donvi.mau2a2')
                 ->with('furl', '/tong_hop_bao_cao/')
@@ -890,7 +918,7 @@ class nguonkinhphi_donvi_baocaoController extends Controller
                 ->with('ar_II', $ar_II)
                 ->with('ar_III', $ar_III)
                 ->with('ar_IV', $ar_IV)
-
+                ->with('a_Tong', $a_Tong)
                 ->with('m_dv', $m_donvi)
                 ->with('inputs', $inputs)
                 ->with('a_phucap', $a_phucap)

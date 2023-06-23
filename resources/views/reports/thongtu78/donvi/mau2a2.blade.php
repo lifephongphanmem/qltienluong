@@ -125,6 +125,27 @@
         <tr style="font-weight: bold;text-align: center">
             <td style="text-align: center"></td>
             <td style="text-align: left">TỔNG SỐ</td>
+            <td>{{ dinhdangso($a_Tong['canbo_congtac']) }}</td>
+            <td>{{ dinhdangso($a_Tong['canbo_dutoan']) }}</td>
+            {{-- Mức lương cũ --}}
+            <td>{{ dinhdangso($a_Tong['solieu']['tongcong']) }}</td>
+            <td>{{ dinhdangso($a_Tong['solieu']['st_heso']) }}</td>
+            <td>{{ dinhdangso($a_Tong['solieu']['st_tongpc']) }}</td>
+            @foreach ($a_phucap_st as $mapc => $pc)
+                <td>{{ dinhdangso($a_Tong['solieu'][$mapc]) }}</td>
+            @endforeach
+            <td>{{ dinhdangso($a_Tong['solieu']['ttbh_dv']) }}</td>
+            {{-- Mức lương mới --}}
+            <td>{{ dinhdangso($a_Tong['solieu_moi']['tongcong']) }}</td>
+            <td>{{ dinhdangso($a_Tong['solieu_moi']['st_heso']) }}</td>
+            <td>{{ dinhdangso($a_Tong['solieu_moi']['st_tongpc']) }}</td>
+            @foreach ($a_phucap_st as $mapc => $pc)
+                <td>{{ dinhdangso($a_Tong['solieu_moi'][$mapc]) }}</td>
+            @endforeach
+            <td>{{ dinhdangso($a_Tong['solieu_moi']['ttbh_dv']) }}</td>
+            {{-- Chênh lệch --}}
+            <td>{{ dinhdangso($a_Tong['chenhlech01thang']) }}</td>
+            <td>{{ dinhdangso($a_Tong['chenhlech06thang']) }}</td>
         </tr>
         @foreach ($ar_I as $dulieu)
             <tr style="text-align: center">
@@ -140,7 +161,7 @@
                     <td style="{{ $dulieu['style'] }}">{{ dinhdangso($dulieu['solieu'][$mapc]) }}</td>
                 @endforeach
                 <td style="{{ $dulieu['style'] }}">{{ dinhdangso($dulieu['solieu']['ttbh_dv']) }}</td>
-                
+
                 {{-- Mức lương mới --}}
                 <td style="{{ $dulieu['style'] }}">{{ dinhdangso($dulieu['solieu_moi']['tongcong']) }}</td>
                 <td style="{{ $dulieu['style'] }}">{{ dinhdangso($dulieu['solieu_moi']['st_heso']) }}</td>
@@ -169,7 +190,7 @@
                     <td style="{{ $dulieu['style'] }}">{{ dinhdangso($dulieu['solieu'][$mapc]) }}</td>
                 @endforeach
                 <td style="{{ $dulieu['style'] }}">{{ dinhdangso($dulieu['solieu']['ttbh_dv']) }}</td>
-                
+
                 {{-- Mức lương mới --}}
                 <td style="{{ $dulieu['style'] }}">{{ dinhdangso($dulieu['solieu_moi']['tongcong']) }}</td>
                 <td style="{{ $dulieu['style'] }}">{{ dinhdangso($dulieu['solieu_moi']['st_heso']) }}</td>
@@ -198,7 +219,7 @@
                     <td style="{{ $dulieu['style'] }}">{{ dinhdangso($dulieu['solieu'][$mapc]) }}</td>
                 @endforeach
                 <td style="{{ $dulieu['style'] }}">{{ dinhdangso($dulieu['solieu']['ttbh_dv']) }}</td>
-                
+
                 {{-- Mức lương mới --}}
                 <td style="{{ $dulieu['style'] }}">{{ dinhdangso($dulieu['solieu_moi']['tongcong']) }}</td>
                 <td style="{{ $dulieu['style'] }}">{{ dinhdangso($dulieu['solieu_moi']['st_heso']) }}</td>
@@ -227,7 +248,7 @@
                     <td style="{{ $dulieu['style'] }}">{{ dinhdangso($dulieu['solieu'][$mapc]) }}</td>
                 @endforeach
                 <td style="{{ $dulieu['style'] }}">{{ dinhdangso($dulieu['solieu']['ttbh_dv']) }}</td>
-                
+
                 {{-- Mức lương mới --}}
                 <td style="{{ $dulieu['style'] }}">{{ dinhdangso($dulieu['solieu_moi']['tongcong']) }}</td>
                 <td style="{{ $dulieu['style'] }}">{{ dinhdangso($dulieu['solieu_moi']['st_heso']) }}</td>
