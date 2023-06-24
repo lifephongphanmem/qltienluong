@@ -1093,9 +1093,42 @@ class nguonkinhphi_donvi_baocaoController extends Controller
                 }
             }
 
+            //Tính tổng cộng
+            $a_Tong = [
+                'soluongqt_2c' => 0,
+                'soluongqt_2c' => 0,
+                'sotienqt_2c' => 0,
+                'sobiencheduocgiao' => 0,
+                'soluongcanbo_2c' => 0,
+                'tongluong_cu' => 0,
+                'hesoluong_cu' => 0,
+                'tongphucap_cu' => 0,
+                'phucapchucvu_cu' => 0,
+                'phucapvuotkhung_cu' => 0,
+                'phucaptnn_cu' => 0,
+                'baohiem_cu' => 0,
+                'tongluong_moi' => 0,
+                'hesoluong_moi' => 0,
+                'tongphucap_moi' => 0,
+                'phucapchucvu_moi' => 0,
+                'phucapvuotkhung_moi' => 0,
+                'phucaptnn_moi' => 0,
+                'baohiem_moi' => 0,
+                'chenhlech' => 0,
+                'tongchenhlech' => 0,
+            ];
+            foreach($ar_I as $chitiet){
+                if($chitiet['phanloai'] == '0'){
+                    foreach(array_keys($a_Tong) as $col){
+                        $a_Tong[$col] += $chitiet['solieu'][$col];
+                    }
+                }
+            }
+
             return view('reports.thongtu78.huyen.mau2c')
                 ->with('m_dv', $m_donvi)
                 ->with('ar_I', $ar_I)
+                ->with('a_Tong', $a_Tong)
                 ->with('inputs', $inputs)
                 ->with('pageTitle', 'BÁO CÁO NHU CẦU KINH PHÍ THỰC HIỆN BHTN');
         } else
