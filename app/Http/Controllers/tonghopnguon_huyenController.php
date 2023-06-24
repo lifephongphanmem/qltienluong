@@ -1709,7 +1709,7 @@ class tonghopnguon_huyenController extends Controller
             }
 
             //Tính lại chi tiết để dải đơn vị
-            $a_plct = array_column(dmphanloaict::all()->toArray(),'tenct' , 'mact');
+            $a_plct = array_column(dmphanloaict::all()->toArray(), 'tenct', 'mact');
             foreach ($m_chitiet as $chitiet) {
                 $chitiet->tenct = $a_plct[$chitiet->mact] ?? $chitiet->mact;
                 $chitiet->tongbh_dv = $chitiet->ttbh_dv / $chenhlech; //tính toán để dùng
@@ -1833,16 +1833,20 @@ class tonghopnguon_huyenController extends Controller
             //$ar_I = array();
             //$ar_Igr = array();
             $ar_I = getHCSN_2c();
-
+            $m_bangluong = nguonkinhphi_bangluong::where('thang', '07')
+                ->where('stbhtn_dv', '>', '0')->get();
             //dd($m_nguonkp);
-
-            $a_It = array(
-                'dt' => 0,
-                'hstl' => 0,
-                'hspc' => 0,
-                'cl' => 0,
-                'nc' => 0
-            );
+            foreach ($m_nguonkp as $key => $chitiet) {
+                $dulieu = $m_bangluong->where('masodv', $chitiet->masodv);
+                $chitiet->soluongcanbo_2c = $dulieu->count();
+                $chitiet->hesoluong_2c = $dulieu->sum('heso');
+                $chitiet->phucapchucvu_2c = $dulieu->sum('pccv');
+                $chitiet->phucapvuotkhung_2c = $dulieu->sum('vuotkhung');
+                $chitiet->phucaptnn_2c = $dulieu->sum('pctnn');
+                if ($chitiet->hesoluong_2c <= 0) {
+                    $m_nguonkp->forget($key);
+                }
+            }
 
             for ($i = 0; $i < 3; $i++) {
                 foreach ($ar_I as $key => $chitiet) {
@@ -1930,20 +1934,9 @@ class tonghopnguon_huyenController extends Controller
                 }
             }
             //dd($ar_I);
-            $ar_II = array();
-
-
-            $ar_II['dt'] = 0;
-            $ar_II['hstl'] = 0;
-            $ar_II['hspc'] = 0;
-            $ar_II['cl'] = 0;
-            $ar_II['nc'] = 0;
-
             return view('reports.thongtu78.huyen.mau2c')
                 ->with('m_dv', $m_donvi)
                 ->with('ar_I', $ar_I)
-                ->with('ar_II', $ar_II)
-                ->with('a_It', $a_It)
                 ->with('inputs', $inputs)
                 ->with('pageTitle', 'BÁO CÁO NHU CẦU KINH PHÍ THỰC HIỆN BHTN');
         } else

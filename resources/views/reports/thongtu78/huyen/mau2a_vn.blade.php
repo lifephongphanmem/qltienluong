@@ -187,26 +187,26 @@
                         <td style="text-align: right">{{ $idv++ }}</td>
                         <td style="text-align: left">{{ $tendv }}</td>
 
-                        <td style="{{ $dulieu['style'] }}">{{ dinhdangso($m_donvi->sum('canbo_congtac')) }}</td>
-                        <td style="{{ $dulieu['style'] }}">{{ dinhdangso($m_donvi->sum('canbo_dutoan')) }}</td>
+                        <td>{{ dinhdangso($m_donvi->sum('canbo_congtac')) }}</td>
+                        <td>{{ dinhdangso($m_donvi->sum('canbo_dutoan')) }}</td>
                         {{-- Mức lương cũ --}}
-                        <td style="{{ $dulieu['style'] }}">{{ dinhdangso($m_donvi->sum('tongcong_cu')) }}</td>
-                        <td style="{{ $dulieu['style'] }}">{{ dinhdangso($m_donvi->sum('st_heso_cu')) }}</td>
-                        <td style="{{ $dulieu['style'] }}">{{ dinhdangso($m_donvi->sum('st_tongpc_cu')) }}</td>
+                        <td>{{ dinhdangso($m_donvi->sum('tongcong_cu')) }}</td>
+                        <td>{{ dinhdangso($m_donvi->sum('st_heso_cu')) }}</td>
+                        <td>{{ dinhdangso($m_donvi->sum('st_tongpc_cu')) }}</td>
                         @foreach ($a_phucap_st as $mapc => $pc)
                             <?php $ten = $mapc . '_cu'; ?>
-                            <td style="{{ $dulieu['style'] }}">{{ dinhdangso($m_donvi->sum($ten)) }}</td>
+                            <td>{{ dinhdangso($m_donvi->sum($ten)) }}</td>
                         @endforeach
-                        <td style="{{ $dulieu['style'] }}">{{ dinhdangso($m_donvi->sum('ttbh_dv_cu')) }}</td>
+                        <td>{{ dinhdangso($m_donvi->sum('ttbh_dv_cu')) }}</td>
                         {{-- Mức lương mới --}}
-                        <td style="{{ $dulieu['style'] }}">{{ dinhdangso($m_donvi->sum('tongcong_moi')) }}</td>
-                        <td style="{{ $dulieu['style'] }}">{{ dinhdangso($m_donvi->sum('st_heso_moi')) }}</td>
-                        <td style="{{ $dulieu['style'] }}">{{ dinhdangso($m_donvi->sum('st_tongpc_moi')) }}</td>
+                        <td>{{ dinhdangso($m_donvi->sum('tongcong_moi')) }}</td>
+                        <td>{{ dinhdangso($m_donvi->sum('st_heso_moi')) }}</td>
+                        <td>{{ dinhdangso($m_donvi->sum('st_tongpc_moi')) }}</td>
                         @foreach ($a_phucap_st as $mapc => $pc)
                             <?php $ten = $mapc . '_moi'; ?>
-                            <td style="{{ $dulieu['style'] }}">{{ dinhdangso($m_donvi->sum($ten)) }}</td>
+                            <td>{{ dinhdangso($m_donvi->sum($ten)) }}</td>
                         @endforeach
-                        <td style="{{ $dulieu['style'] }}">{{ dinhdangso($m_donvi->sum('ttbh_dv_moi')) }}</td>
+                        <td>{{ dinhdangso($m_donvi->sum('ttbh_dv_moi')) }}</td>
                         {{-- Chenh lệch --}}
                         <td style="text-align: right;">{{ dinhdangso($m_donvi->sum('chenhlech01thang')) }}</td>
                         <td style="text-align: right;">{{ dinhdangso($m_donvi->sum('chenhlech06thang')) }}</td>
@@ -216,26 +216,26 @@
                             <td style="text-align: center;{{ $dulieu['style'] }}"></td>
                             <td style="text-align: left">{{ $ct->tenct }}</td>
 
-                            <td style="{{ $dulieu['style'] }}">{{ dinhdangso($ct->canbo_congtac) }}</td>
-                            <td style="{{ $dulieu['style'] }}">{{ dinhdangso($ct->canbo_dutoan) }}</td>
+                            <td>{{ dinhdangso($ct->canbo_congtac) }}</td>
+                            <td>{{ dinhdangso($ct->canbo_dutoan) }}</td>
                             {{-- Mức lương cũ --}}
-                            <td style="{{ $dulieu['style'] }}">{{ dinhdangso($ct->tongcong_cu) }}</td>
-                            <td style="{{ $dulieu['style'] }}">{{ dinhdangso($ct->st_heso_cu) }}</td>
-                            <td style="{{ $dulieu['style'] }}">{{ dinhdangso($ct->st_tongpc_cu) }}</td>
+                            <td>{{ dinhdangso($ct->tongcong_cu) }}</td>
+                            <td>{{ dinhdangso($ct->st_heso_cu) }}</td>
+                            <td>{{ dinhdangso($ct->st_tongpc_cu) }}</td>
                             @foreach ($a_phucap_st as $mapc => $pc)
                                 <?php $ten = $mapc . '_cu'; ?>
-                                <td style="{{ $dulieu['style'] }}">{{ dinhdangso($ct->$ten) }}</td>
+                                <td>{{ dinhdangso($ct->$ten) }}</td>
                             @endforeach
-                            <td style="{{ $dulieu['style'] }}">{{ dinhdangso($ct->ttbh_dv_cu) }}</td>
+                            <td>{{ dinhdangso($ct->ttbh_dv_cu) }}</td>
                             {{-- Mức lương mới --}}
-                            <td style="{{ $dulieu['style'] }}">{{ dinhdangso($ct->tongcong_moi) }}</td>
-                            <td style="{{ $dulieu['style'] }}">{{ dinhdangso($ct->st_heso_moi) }}</td>
-                            <td style="{{ $dulieu['style'] }}">{{ dinhdangso($ct->st_tongpc_moi) }}</td>
+                            <td>{{ dinhdangso($ct->tongcong_moi) }}</td>
+                            <td>{{ dinhdangso($ct->st_heso_moi) }}</td>
+                            <td>{{ dinhdangso($ct->st_tongpc_moi) }}</td>
                             @foreach ($a_phucap_st as $mapc => $pc)
                                 <?php $ten = $mapc . '_moi'; ?>
-                                <td style="{{ $dulieu['style'] }}">{{ dinhdangso($ten) }}</td>
+                                <td>{{ dinhdangso($ten) }}</td>
                             @endforeach
-                            <td style="{{ $dulieu['style'] }}">{{ dinhdangso($ct->ttbh_dv_moi) }}</td>
+                            <td>{{ dinhdangso($ct->ttbh_dv_moi) }}</td>
                             {{-- Chenh lệch --}}
                             <td style="text-align: right;">{{ dinhdangso($ct->chenhlech01thang) }}</td>
                             <td style="text-align: right;">{{ dinhdangso($ct->chenhlech06thang) }}</td>
@@ -286,26 +286,26 @@
                         <td style="text-align: right">{{ $idv++ }}</td>
                         <td style="text-align: left">{{ $tendv }}</td>
 
-                        <td style="{{ $dulieu['style'] }}">{{ dinhdangso($m_donvi->sum('canbo_congtac')) }}</td>
-                        <td style="{{ $dulieu['style'] }}">{{ dinhdangso($m_donvi->sum('canbo_dutoan')) }}</td>
+                        <td>{{ dinhdangso($m_donvi->sum('canbo_congtac')) }}</td>
+                        <td>{{ dinhdangso($m_donvi->sum('canbo_dutoan')) }}</td>
                         {{-- Mức lương cũ --}}
-                        <td style="{{ $dulieu['style'] }}">{{ dinhdangso($m_donvi->sum('tongcong_cu')) }}</td>
-                        <td style="{{ $dulieu['style'] }}">{{ dinhdangso($m_donvi->sum('st_heso_cu')) }}</td>
-                        <td style="{{ $dulieu['style'] }}">{{ dinhdangso($m_donvi->sum('st_tongpc_cu')) }}</td>
+                        <td>{{ dinhdangso($m_donvi->sum('tongcong_cu')) }}</td>
+                        <td>{{ dinhdangso($m_donvi->sum('st_heso_cu')) }}</td>
+                        <td>{{ dinhdangso($m_donvi->sum('st_tongpc_cu')) }}</td>
                         @foreach ($a_phucap_st as $mapc => $pc)
                             <?php $ten = $mapc . '_cu'; ?>
-                            <td style="{{ $dulieu['style'] }}">{{ dinhdangso($m_donvi->sum($ten)) }}</td>
+                            <td>{{ dinhdangso($m_donvi->sum($ten)) }}</td>
                         @endforeach
-                        <td style="{{ $dulieu['style'] }}">{{ dinhdangso($m_donvi->sum('ttbh_dv_cu')) }}</td>
+                        <td>{{ dinhdangso($m_donvi->sum('ttbh_dv_cu')) }}</td>
                         {{-- Mức lương mới --}}
-                        <td style="{{ $dulieu['style'] }}">{{ dinhdangso($m_donvi->sum('tongcong_moi')) }}</td>
-                        <td style="{{ $dulieu['style'] }}">{{ dinhdangso($m_donvi->sum('st_heso_moi')) }}</td>
-                        <td style="{{ $dulieu['style'] }}">{{ dinhdangso($m_donvi->sum('st_tongpc_moi')) }}</td>
+                        <td>{{ dinhdangso($m_donvi->sum('tongcong_moi')) }}</td>
+                        <td>{{ dinhdangso($m_donvi->sum('st_heso_moi')) }}</td>
+                        <td>{{ dinhdangso($m_donvi->sum('st_tongpc_moi')) }}</td>
                         @foreach ($a_phucap_st as $mapc => $pc)
                             <?php $ten = $mapc . '_moi'; ?>
-                            <td style="{{ $dulieu['style'] }}">{{ dinhdangso($m_donvi->sum($ten)) }}</td>
+                            <td>{{ dinhdangso($m_donvi->sum($ten)) }}</td>
                         @endforeach
-                        <td style="{{ $dulieu['style'] }}">{{ dinhdangso($m_donvi->sum('ttbh_dv_moi')) }}</td>
+                        <td>{{ dinhdangso($m_donvi->sum('ttbh_dv_moi')) }}</td>
                         {{-- Chenh lệch --}}
                         <td style="text-align: right;">{{ dinhdangso($m_donvi->sum('chenhlech01thang')) }}</td>
                         <td style="text-align: right;">{{ dinhdangso($m_donvi->sum('chenhlech06thang')) }}</td>
@@ -315,26 +315,26 @@
                             <td style="text-align: center;{{ $dulieu['style'] }}"></td>
                             <td style="text-align: left">{{ $ct->tenct }}</td>
 
-                            <td style="{{ $dulieu['style'] }}">{{ dinhdangso($ct->canbo_congtac) }}</td>
-                            <td style="{{ $dulieu['style'] }}">{{ dinhdangso($ct->canbo_dutoan) }}</td>
+                            <td>{{ dinhdangso($ct->canbo_congtac) }}</td>
+                            <td>{{ dinhdangso($ct->canbo_dutoan) }}</td>
                             {{-- Mức lương cũ --}}
-                            <td style="{{ $dulieu['style'] }}">{{ dinhdangso($ct->tongcong_cu) }}</td>
-                            <td style="{{ $dulieu['style'] }}">{{ dinhdangso($ct->st_heso_cu) }}</td>
-                            <td style="{{ $dulieu['style'] }}">{{ dinhdangso($ct->st_tongpc_cu) }}</td>
+                            <td>{{ dinhdangso($ct->tongcong_cu) }}</td>
+                            <td>{{ dinhdangso($ct->st_heso_cu) }}</td>
+                            <td>{{ dinhdangso($ct->st_tongpc_cu) }}</td>
                             @foreach ($a_phucap_st as $mapc => $pc)
                                 <?php $ten = $mapc . '_cu'; ?>
-                                <td style="{{ $dulieu['style'] }}">{{ dinhdangso($ct->$ten) }}</td>
+                                <td>{{ dinhdangso($ct->$ten) }}</td>
                             @endforeach
-                            <td style="{{ $dulieu['style'] }}">{{ dinhdangso($ct->ttbh_dv_cu) }}</td>
+                            <td>{{ dinhdangso($ct->ttbh_dv_cu) }}</td>
                             {{-- Mức lương mới --}}
-                            <td style="{{ $dulieu['style'] }}">{{ dinhdangso($ct->tongcong_moi) }}</td>
-                            <td style="{{ $dulieu['style'] }}">{{ dinhdangso($ct->st_heso_moi) }}</td>
-                            <td style="{{ $dulieu['style'] }}">{{ dinhdangso($ct->st_tongpc_moi) }}</td>
+                            <td>{{ dinhdangso($ct->tongcong_moi) }}</td>
+                            <td>{{ dinhdangso($ct->st_heso_moi) }}</td>
+                            <td>{{ dinhdangso($ct->st_tongpc_moi) }}</td>
                             @foreach ($a_phucap_st as $mapc => $pc)
                                 <?php $ten = $mapc . '_moi'; ?>
-                                <td style="{{ $dulieu['style'] }}">{{ dinhdangso($ten) }}</td>
+                                <td>{{ dinhdangso($ten) }}</td>
                             @endforeach
-                            <td style="{{ $dulieu['style'] }}">{{ dinhdangso($ct->ttbh_dv_moi) }}</td>
+                            <td>{{ dinhdangso($ct->ttbh_dv_moi) }}</td>
                             {{-- Chenh lệch --}}
                             <td style="text-align: right;">{{ dinhdangso($ct->chenhlech01thang) }}</td>
                             <td style="text-align: right;">{{ dinhdangso($ct->chenhlech06thang) }}</td>
