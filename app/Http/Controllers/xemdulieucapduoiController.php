@@ -409,6 +409,7 @@ class xemdulieucapduoiController extends Controller
 
             $madvbc = $inputs['madiaban'];
             $model_dvbc = dmdonvibaocao::where('madvbc', $madvbc)->first();
+
             $madvqlkv = $model_dvbc->madvcq;
 
             $model_donvi = dmdonvi::select('madv', 'tendv')
@@ -423,7 +424,8 @@ class xemdulieucapduoiController extends Controller
             $model_dulieu = tonghopluong_huyen::where('thang', $inputs['thang'])
                 ->where('nam', $inputs['nam'])
                 ->where('trangthai', 'DAGUI')
-                ->where('madvbc', $madvbc)
+                // ->where('madvbc', $madvbc)
+                ->where('macqcq', $madvqlkv)
                 ->get();
 
             $model_tonghop = tonghopluong_tinh::where('thang', $inputs['thang'])
@@ -432,14 +434,15 @@ class xemdulieucapduoiController extends Controller
                 ->where('madvbc', $madvbc)
                 ->get();
             // $model_donvi=nguonkinhphi::where('masot',)
-            //dd($model_dulieu);
+            // dd($model_dulieu);
             // dd($model_tonghop);
             // dd($model_donvi);
             foreach ($model_donvi as $dv) {
                 $dv->trangthai = 'CHUAGUI';
                 $dulieu = $model_dulieu->where('madv', $dv->madv)
                     ->first();
-
+                //Lấy dữ liệu theo macqcq, năm, tháng, madv 
+               
                 $tonghop = $model_tonghop->where('madv', $dv->macqcq)->first();
                 $dv->tralai = true;
                 if (isset($tonghop)) {
@@ -451,9 +454,11 @@ class xemdulieucapduoiController extends Controller
                 }
 
                 if (isset($dulieu)) {
+                    $dulieudv=tonghopluong_donvi::where('thang',$dulieu->thang)->where('nam',$dulieu->nam)->where('madv',$dulieu->madv)->first();
                     $dv->phanloai = $dulieu->phanloai;
                     $dv->trangthai = $dulieu->trangthai;
-                    $dv->mathdv = $dulieu->mathdv;
+                    // $dv->mathdv = $dulieu->mathdv;
+                    $dv->mathdv = $dulieudv->mathdv;
                     $dv->thang = $dulieu->thang;
                     $dv->nam = $dulieu->nam;
                 } else {

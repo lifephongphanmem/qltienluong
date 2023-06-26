@@ -2221,7 +2221,7 @@ class bangluong_inController extends Controller
 
         foreach ($model as $hs) {
             if (isset($a_hoso[$hs->macanbo])) {
-                $hoso = $a_hoso[$hs->macanbo];
+                $hoso = $a_hoso[$hs->macanbo]??'';
                 $hs->sunghiep = $hoso['sunghiep'];
                 $hs->ngaytu = $hoso['ngaytu'];
                 $hs->tnntungay = $hoso['tnntungay'];

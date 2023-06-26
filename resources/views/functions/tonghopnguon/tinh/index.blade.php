@@ -74,8 +74,13 @@
                                     <td>{{$a_trangthai[$value->trangthai]}}</td>
                                     <td>
                                         @if ($value->trangthai == 'DAGUI')
-                                        <a href="{{url($furl_th.'tonghop?sohieu='.$value->sohieu.'&madvbc='.$value->madvbc.'&macqcq='.$value->macqcq.'&madv='.$value->madvcq)}}" class="btn btn-default btn-xs" target="_blank">
-                                            <i class="fa fa-print"></i>&nbsp; Số liệu tổng hợp</a>
+                                        {{-- <a href="{{url($furl_th.'tonghop?sohieu='.$value->sohieu.'&madvbc='.$value->madvbc.'&macqcq='.$value->macqcq.'&madv='.$value->madvcq)}}" class="btn btn-default btn-xs" target="_blank">
+                                            <i class="fa fa-print"></i>&nbsp; Số liệu tổng hợp</a> --}}
+
+                                            <button type="button" onclick="insolieu('{{ $furl_th . 'tonghop' }}','{{$value->sohieu}}',{{$value->macqcq}},{{$value->madvbc}})"
+                                             class="btn btn-default btn-xs"
+                                            data-target="#modal-insolieu" data-toggle="modal">
+                                            <i class="fa fa-print"></i>&nbsp;Số liệu tổng hợp</button>
                                             <a href="{{url('/chuc_nang/xem_du_lieu/nguon/tinh?sohieu='.$value->sohieu.'&trangthai='.$inputs['trangthai'].'&madiaban='.$value->madvbc)}}" class="btn btn-default btn-xs" TARGET="_blank">
                                                 <i class="fa fa-print"></i>&nbsp; Số liệu chi tiết</a>
 
@@ -97,6 +102,40 @@
         </div>
     </div>
 
+        <!--Mẫu in số liệu -->
+        {!! Form::open(['url' => '', 'method' => 'post', 'target' => '_blank', 'files' => true, 'id' => 'frm_insolieu']) !!}
+        <div id="modal-insolieu" tabindex="-1" role="dialog" aria-hidden="true" class="modal fade">
+            <div class="modal-dialog modal-content">
+                <div class="modal-header modal-header-primary">
+                    <button type="button" data-dismiss="modal" aria-hidden="true" class="close">&times;</button>
+                    <h4 id="header-inbl" class="modal-title">Thông tin kết xuất</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="form-horizontal">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <label class="control-label">Đơn vị tính</label>
+                                {!! Form::select('donvitinh', getDonViTinh(), null, ['class' => 'form-control select2me']) !!}
+                            </div>
+    
+                            <div class="col-md-6">
+                                <label class="control-label">Cỡ chữ</label>
+                                {!! Form::select('cochu', getCoChu(), 10, ['id' => 'cochu', 'class' => 'form-control select2me']) !!}
+                            </div>
+                        </div>
+                    </div>
+    
+                    <input type="hidden" name="sohieu" />
+                    <input type="hidden" name="madvbc" />
+                    <input type="hidden" name="macqcq" />
+                </div>
+                <div class="modal-footer">
+                    <button type="button" data-dismiss="modal" class="btn btn-default">Hủy thao tác</button>
+                    <button type="submit" class="btn btn-success">Đồng ý</button>
+                </div>
+            </div>
+        </div>
+        {!! Form::close() !!}
     <!--Model chuyển-->
     <div class="modal fade" id="chuyen-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
         <div class="modal-dialog">
@@ -166,6 +205,21 @@
                 window.location.href = getLink();
             });
         })
+        function insolieu(url, sohieu, macqcq, madvbc) {
+            // if (mact == null) {
+            //     $('#frm_insolieu').find("[name^='mact']").attr('disabled', true);
+            // } else {
+            //     $('#frm_insolieu').find("[name^='mact']").attr('disabled', false);
+            //     $('#frm_insolieu').find("[name^='mact']").val(mact.split(';')).trigger('change');
+            // }
+            console.log(url);
+            $('#frm_insolieu').attr('action', url);
+            $('#frm_insolieu').find("[name^='sohieu']").val(sohieu);
+            $('#frm_insolieu').find("[name^='macqcq']").val(macqcq);
+            $('#frm_insolieu').find("[name^='madvbc']").val(madvbc);
+
+
+        }
     </script>
 
 @stop

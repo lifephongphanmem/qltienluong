@@ -237,7 +237,7 @@
                 <div class="modal-footer">
                     <button type="button" data-dismiss="modal" class="btn btn-default">Hủy thao tác</button>
                     <button type="submit" id="submit" name="submit" value="submit" class="btn btn-primary"
-                        onclick="confirm_create()">Đồng ý</button>
+                        onclick="disable_btn(this)">Đồng ý</button>
                 </div>
             </div>
         </div>
@@ -306,6 +306,10 @@
             form.find("[id='mabl']").val(mabl);
             form.find("[id='thang']").val(thang);
             form.submit();
+        }
+
+        function disable_btn(obj) {
+            obj.prop('disabled', true);
         }
 
         function indutoan(namdt, masodv) {

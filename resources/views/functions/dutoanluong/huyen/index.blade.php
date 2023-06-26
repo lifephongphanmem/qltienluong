@@ -432,8 +432,6 @@
             $('#frm_insolieu').attr('action', url);
             $('#frm_insolieu').find("[name^='masodv']").val($('#masodv').val());
             $('#frm_insolieu').find("[name^='namns']").val($('#namns').val());
-
-
         }
 
         //In danh sách đơn vi

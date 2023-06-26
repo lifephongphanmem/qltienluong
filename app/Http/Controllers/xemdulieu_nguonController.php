@@ -216,15 +216,18 @@ class xemdulieu_nguonController extends Controller
         if (Session::has('admin')) {
             $inputs=$request->all();
             $madvbc = $inputs['madiaban'];
+            // dd($inputs);
             //$madvqlkv = dmdonvibaocao::where('madvbc',$madvbc)->first()->madvcq;
             $model_dvbc = dmdonvibaocao::where('level','H')->get();
             $a_trangthai_dl = array('ALL' => '--Chọn trạng thái dữ liệu--', 'CHOGUI' => 'Chưa gửi dữ liệu', 'DAGUI' => 'Đã gửi dữ liệu');
             $model_nguon = nguonkinhphi::where('sohieu',$inputs['sohieu'])
                 ->where('trangthai','DAGUI')
                 ->where('madvbc', $madvbc)->get();
+                // dd($model_nguon);
             $model_tinh= nguonkinhphi_tinh::where('sohieu',$inputs['sohieu'])
                                             ->where('madvbc',$madvbc)
                                             ->first();
+                                            // dd($model_tinh);
             $a_trangthai = getStatus();
             $model_donvi = dmdonvi::select('madv', 'tendv')->where('madvbc', $madvbc)->where('phanloaitaikhoan','SD')->get();
             foreach($model_donvi as $dv){
@@ -232,20 +235,25 @@ class xemdulieu_nguonController extends Controller
                 if(isset($nguon)){
                     $dv->trangthai = $nguon->trangthai;
                     $dv->masodv = $nguon->masodv;
+                    $dv->masot=$nguon->masot;
                 }else{
                     $dv->trangthai = 'CHOGUI';
                     $dv->masodv = NULL;
+                    $dv->masot=null;
                 }
                 if(isset($model_tinh)){
-                    $dv->masot = $model_tinh->masodv;
+                    // $dv->masot = $model_tinh->masodv;
+                    $dv->dulieu = isset($nguon)?$nguon->trangthai:'CHOGUI';
                 }else{
-                    $dv->masot= null;
+                    $dv->dulieu= 'CHOGUI';
                 }
             }
             // dd($inputs);
             if (!isset($inputs['trangthai']) || $inputs['trangthai'] != 'ALL') {
-                $model_donvi = $model_donvi->where('trangthai',$inputs['trangthai']);
+                // $model_donvi = $model_donvi->where('trangthai',$inputs['trangthai']);
+                $model_donvi = $model_donvi->where('dulieu',$inputs['trangthai'])->where('trangthai',$inputs['trangthai']);
             }
+            // dd($model_donvi);
             $model_nhomct = dmphanloaicongtac::select('macongtac', 'tencongtac')->get();
             $model_tenct = dmphanloaict::select('tenct', 'macongtac', 'mact')->get();
             return view('functions.tonghopnguon.index_tinh')
