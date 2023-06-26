@@ -288,7 +288,7 @@
             <div class="modal-footer">
                 <div class="row text-center">
                     <div class="col-md-12">
-                        <button type="submit" class="btn default">Hoàn thành</button>
+                        <button type="submit" class="btn default" onclick="disable_btn(this)">Hoàn thành</button>
                     </div>
                 </div>
             </div>
@@ -474,6 +474,9 @@
             $('#create-modal').modal('show');
         }
 
+        function disable_btn(obj) {
+            obj.prop('disabled', true);
+        }
         function getKinhPhiKoCT(masodv, phanloaixa, phanloaixa_heso, sothonxabiengioi,
             sothonxabiengioi_heso, sothonxakhokhan, sothonxakhokhan_heso, sothonxatrongdiem,
             sothonxatrongdiem_heso, sothonxakhac, sothonxakhac_heso, sothonxaloai1,

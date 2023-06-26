@@ -333,12 +333,13 @@ class tonghopluong_huyenController extends Controller
             //     $query->select('mathdv')->from('tonghopluong_donvi')->where('madv', $madv)->where('mathh', $mathh)->orwhere('matht', $mathh)->get();
             // })->get();
             $model = tonghopluong_donvi_chitiet::where('mathdv',$mathdv)->get();
+            // dd($model);
             $a_bangluong = tonghopluong_donvi_bangluong::wherein('mathdv', function ($query) use ($mathh, $madv) {
                 $query->select('mathdv')->from('tonghopluong_donvi')->where('madv', $madv)->where('mathh', $mathh)->orwhere('matht', $mathh)->get();
             })->get();
             // $model_thongtin = tonghopluong_donvi::where('madv', $madv)->where('mathh', $mathh)->orwhere('matht', $mathh)->first();
-            $model_thongtin = tonghopluong_donvi::where('madv', $madv)->where('macqcq', session('admin')->madv)->where('thang', $input['thangbc'])->where('nam',$input['nambc'])->first();
-
+            // $model_thongtin = tonghopluong_donvi::where('madv', $madv)->where('macqcq', session('admin')->madv)->where('thang', $input['thangbc'])->where('nam',$input['nambc'])->first();
+            $model_thongtin=tonghopluong_donvi::where('mathdv',$mathdv)->first();
             $model_nguonkp = array_column(dmnguonkinhphi::all()->toArray(), 'tennguonkp', 'manguonkp');
             //$model_phanloaict = array_column(dmphanloaicongtac::all()->toArray(), 'tencongtac', 'macongtac');
             $model_ct = array_column(dmphanloaict::all()->toArray(), 'tenct', 'mact');

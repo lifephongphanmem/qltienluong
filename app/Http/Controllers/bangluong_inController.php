@@ -2229,7 +2229,7 @@ class bangluong_inController extends Controller
                 $hs->socmnd = $hoso['socmnd'];
                 $hs->tennganhang = $hoso['tennganhang'];
                 if ($hs->tencanbo == '') {
-                    $hs->tencanbo = $hoso['tencanbo']; //kiêm nhiệm chưa có tên cán bộ
+                    $hs->tencanbo = $hoso['tencanbo']??''; //kiêm nhiệm chưa có tên cán bộ
                 }
             }
             if (isset($inputs['inchucvuvt'])) {
