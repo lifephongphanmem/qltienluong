@@ -42,7 +42,7 @@ class tonghopnguon_huyenController extends Controller
                 $query->select('madv')->from('dmdonvi')->where('macqcq', $madv)->where('madv', '<>', $madv)->get();
             })->where('trangthai', 'DAGUI')
                 ->get();
-            //dd($model_nguon_huyen);
+            // dd($model_nguon_huyen);
             //$model_nguon_khoi = nguonkinhphi_khoi::where('madv', $madv)->get();
             $model = dmthongtuquyetdinh::all();
             $a_trangthai = getStatus();

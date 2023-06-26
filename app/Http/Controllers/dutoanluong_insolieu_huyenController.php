@@ -204,9 +204,16 @@ class dutoanluong_insolieu_huyenController extends Controller
     {
         if (Session::has('admin')) {
             $inputs = $request->all();
-            
-            $m_dutoan_huyen = dutoanluong_huyen::where('masodv', $inputs['masodv'])->first();
-            $inputs['namns'] = $m_dutoan_huyen->namns;
+            // dd($inputs);
+            // $m_dutoan_huyen = dutoanluong_huyen::where('masodv', $inputs['masodv'])->first();
+            $m_dutoan_huyen = dutoanluong_huyen::where('namns', $inputs['namns'])->where('madv',session('admin')->madv)->first();
+            if(!isset($m_dutoan_huyen)){
+                return view('errors.nodata')
+                        ->with('message','Chưa có dữ liệu năm '.$inputs['namns'])
+                        ->with('furl','/bao_cao/bang_luong/tong_hop');
+            }
+            // $inputs['namns'] = $m_dutoan_huyen->namns;
+            $inputs['masodv']=$m_dutoan_huyen->masodv;
             $m_donvi = dmdonvi::where('madv', $m_dutoan_huyen->madv)->first();
 
             //$m_phanloai = dmphanloaidonvi_baocao::where('madvbc', $m_donvi->madvbc)->get();
@@ -279,8 +286,15 @@ class dutoanluong_insolieu_huyenController extends Controller
         if (Session::has('admin')) {
             $inputs = $request->all();
             $m_phanloai = dmphanloaidonvi::all();
-            $m_dutoan_huyen = dutoanluong_huyen::where('masodv', $inputs['masodv'])->first();
+            // $m_dutoan_huyen = dutoanluong_huyen::where('masodv', $inputs['masodv'])->first();
+            $m_dutoan_huyen = dutoanluong_huyen::where('namns', $inputs['namns'])->where('madv',session('admin')->madv)->first();
+            if(!isset($m_dutoan_huyen)){
+                return view('errors.nodata')
+                        ->with('message','Chưa có dữ liệu năm '.$inputs['namns'])
+                        ->with('furl','/bao_cao/bang_luong/tong_hop');
+            }
             $inputs['namns'] = $m_dutoan_huyen->namns;
+            $inputs['masodv']=$m_dutoan_huyen->masodv;
             $m_donvi = dmdonvi::where('madv', $m_dutoan_huyen->madv)->first();
             $m_dutoan = dutoanluong::where('masoh', $inputs['masodv'])->where('trangthai', 'DAGUI')->get();
             $m_donvi_baocao = dmdonvi::wherein('madv', array_column($m_dutoan->toarray(), 'madv'))->get();
@@ -377,8 +391,15 @@ class dutoanluong_insolieu_huyenController extends Controller
     {
         if (Session::has('admin')) {
             $inputs = $request->all();
-            $m_dutoan_huyen = dutoanluong_huyen::where('masodv', $inputs['masodv'])->first();
+            // $m_dutoan_huyen = dutoanluong_huyen::where('masodv', $inputs['masodv'])->first();
+            $m_dutoan_huyen = dutoanluong_huyen::where('namns', $inputs['namns'])->where('madv',session('admin')->madv)->first();
+            if(!isset($m_dutoan_huyen)){
+                return view('errors.nodata')
+                        ->with('message','Chưa có dữ liệu năm '.$inputs['namns'])
+                        ->with('furl','/bao_cao/bang_luong/tong_hop');
+            }
             $inputs['namns'] = $m_dutoan_huyen->namns;
+            $inputs['masodv'] = $m_dutoan_huyen->masodv;
             $m_donvi = dmdonvi::where('madv', $m_dutoan_huyen->madv)->first();
 
             $m_phanloai = dmphanloaidonvi_baocao::where('madvbc', $m_donvi->madvbc)->get();
@@ -431,6 +452,13 @@ class dutoanluong_insolieu_huyenController extends Controller
         if (Session::has('admin')) {
             $inputs = $request->all();
             $m_phanloai = dmphanloaidonvi::all();
+            $m_dutoan_huyen = dutoanluong_huyen::where('namns', $inputs['namns'])->where('madv',session('admin')->madv)->first();
+            if(!isset($m_dutoan_huyen)){
+                return view('errors.nodata')
+                        ->with('message','Chưa có dữ liệu năm '.$inputs['namns'])
+                        ->with('furl','/bao_cao/bang_luong/tong_hop');
+            }
+            $inputs['masodv'] = $m_dutoan_huyen->masodv;
             $m_dutoan = dutoanluong::where('masoh', $inputs['masodv'])->where('trangthai', 'DAGUI')->get();
             $m_donvi_baocao = dmdonvi::wherein('madv', array_column($m_dutoan->toarray(), 'madv'))->get();
 

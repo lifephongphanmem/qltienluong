@@ -92,17 +92,23 @@ class baocaobangluongController extends Controller
                     $a_phanloai[$key] = $model_phanloai[$key];
                 $a_phanloai['GD'] = 'Khối Giáo Dục';
                 $a_thang['ALL'] = "--Chọn tất cả--";
+                $model_tenct = dmphanloaict::wherein('mact', getPLCTDuToan())->get();
+                $model_nhomct = dmphanloaicongtac::wherein('macongtac', array_unique(array_column($model_tenct->toarray(), 'macongtac')))->get();
             }
+            // dd(session('admin'));
             // dd($model_donvi);
             $model_thongtu = dmthongtuquyetdinh::all();
             return view('reports.index_th')
                 ->with('furl', '/bao_cao/bang_luong/')
+                ->with('furl_th', '/chuc_nang/du_toan_luong/huyen/')
                 ->with('model_phanloai', $model_phanloai)
                 ->with('a_thang', $a_thang)
                 ->with('a_phanloai', $a_phanloai)
                 ->with('model_dv', $model_donvi)
                 ->with('model_phanloaict', $model_phanloaict)
                 ->with('model_thongtu', $model_thongtu)
+                ->with('model_tenct', $model_tenct)
+                ->with('model_nhomct', $model_nhomct)
                 //->with('model_dvbc', $model_dvbc)
                 ->with('pageTitle', 'Báo cáo chi trả lương');
         } else
@@ -5450,7 +5456,6 @@ class baocaobangluongController extends Controller
 
             // $m_phanloai = dmphanloaidonvi_baocao::all();
             $m_phanloai = dmphanloaidonvi_baocao::where('madvbc', session('admin')->madvbc)->get();
-
             $a_phanloai = array_column(dmphanloaidonvi::all()->toArray(), 'maphanloai');
             $m_donvi_baocao = dmdonvi::wherein('madv', array_column($model_tonghop->toarray(), 'madv'))->get();
 

@@ -48,7 +48,7 @@
                             <div class="col-lg-12">
                                 <ol>
                                     <!--li><a href="#" data-target="#thoaichitra-khoi-modal" data-toggle="modal" onclick="chitraluong_khoi('{{ $furl . 'khoi/chitraluong_th' }}')">Tổng hợp tình hình chi trả lương (Mẫu tổng hợp)</a></li>
-                                        <li><a href="#" data-target="#thoaichitra-khoi-modal" data-toggle="modal" onclick="chitraluong_khoi('{{ $furl . 'khoi/chitraluong_ct' }}')">Tổng hợp tình hình chi trả lương (Mẫu chi tiết)</a></li-->
+                                                        <li><a href="#" data-target="#thoaichitra-khoi-modal" data-toggle="modal" onclick="chitraluong_khoi('{{ $furl . 'khoi/chitraluong_ct' }}')">Tổng hợp tình hình chi trả lương (Mẫu chi tiết)</a></li-->
                                     <li><a href="#" data-target="#thoaichitra-khoi-moi-modal" data-toggle="modal"
                                             onclick="baocao('{{ $furl . 'khoi/chitraluong_th' }}')">Tổng hợp tình hình chi
                                             trả lương (Mẫu tổng hợp)</a></li>
@@ -56,22 +56,25 @@
                                             onclick="baocao('{{ $furl . 'khoi/chitraluong_ct' }}')">Tổng hợp tình hình chi
                                             trả lương (Mẫu chi tiết)</a></li>
                                     <li><a href="#" data-target="#thoaichitra-khoi-moi-modal" data-toggle="modal"
-                                            onclick="baocao('{{ $furl . 'khoi/chitraluong_ctpl' }}')">Tổng hợp tình hình chi
+                                            onclick="baocao('{{ $furl . 'khoi/chitraluong_ctpl' }}')">Tổng hợp tình hình
+                                            chi
                                             trả lương (Mẫu chi tiết - phân loại) </a></li>
                                     <li><a href="#" data-target="#thoaidutoan-khoi-modal" data-toggle="modal"
-                                            onclick="dutoanluong_khoi('{{ $furl . 'khoi/dutoanluong' }}')">Dự toán lương</a>
+                                            onclick="dutoanluong_khoi('{{ $furl . 'khoi/dutoanluong' }}')">Dự toán
+                                            lương</a>
                                     </li>
                                     <li><a href="#" data-target="#thoaichitra-khoi-moi-modal" data-toggle="modal"
-                                            onclick="baocao('{{ $furl . 'khoi/baocaohesoluong' }}')">Báo cáo hệ số lương của
+                                            onclick="baocao('{{ $furl . 'khoi/baocaohesoluong' }}')">Báo cáo hệ số lương
+                                            của
                                             đơn vị có mặt</a></li>
 
                                     <!--li><a href="{{ url('/bao_cao/thong_tu_67/khoi/mau2a1') }}" target="_blank">Báo cáo nhu cầu kinh phí thực hiện nghị định 38/2019/NĐ-CP (Mẫu 2a/1)</a></li>
-                                        <li><a href="{{ url('/bao_cao/thong_tu_67/khoi/mau2a2') }}" target="_blank">Báo cáo nhu cầu kinh phí thực hiện nghị định 38/2019/NĐ-CP (Mẫu 2a/2)</a></li>
-                                        <li><a href="{{ url('/bao_cao/thong_tu_67/khoi/mau2b') }}" target="_blank">Báo cáo tổng hợp quỹ trợ cấp tăng thêm của cán bộ xã, phường, thị trấn đã nghỉ việc (Mẫu 2b)</a></li>
-                                        <li><a href="{{ url('/bao_cao/thong_tu_67/khoi/mau2c') }}" target="_blank">Báo cáo nhu cầu kinh phí thực hiện BHTN theo nghị định 28/2015 (Mẫu 2c)</a></li>
-                                        <li><a href="{{ url('/bao_cao/thong_tu_67/khoi/mau2d') }}" target="_blank">Tổng hợp kinh phí tăng thêm để thực hiện chế độ phụ cấp đối với cán bộ không chuyên trách (Mẫu 2d)</a></li>
-                                        <li><a href="{{ url('/bao_cao/thong_tu_67/khoi/mau4a') }}" target="_blank">Báo cáo nguồn kinh phí (Mẫu 4a)</a></li>
-                                        <li><a href="{{ url('/bao_cao/thong_tu_67/khoi/mau4b') }}" target="_blank">Tổng hợp nhu cầu, nguồn kinh phí (Mẫu 4b)</a></li-->
+                                                        <li><a href="{{ url('/bao_cao/thong_tu_67/khoi/mau2a2') }}" target="_blank">Báo cáo nhu cầu kinh phí thực hiện nghị định 38/2019/NĐ-CP (Mẫu 2a/2)</a></li>
+                                                        <li><a href="{{ url('/bao_cao/thong_tu_67/khoi/mau2b') }}" target="_blank">Báo cáo tổng hợp quỹ trợ cấp tăng thêm của cán bộ xã, phường, thị trấn đã nghỉ việc (Mẫu 2b)</a></li>
+                                                        <li><a href="{{ url('/bao_cao/thong_tu_67/khoi/mau2c') }}" target="_blank">Báo cáo nhu cầu kinh phí thực hiện BHTN theo nghị định 28/2015 (Mẫu 2c)</a></li>
+                                                        <li><a href="{{ url('/bao_cao/thong_tu_67/khoi/mau2d') }}" target="_blank">Tổng hợp kinh phí tăng thêm để thực hiện chế độ phụ cấp đối với cán bộ không chuyên trách (Mẫu 2d)</a></li>
+                                                        <li><a href="{{ url('/bao_cao/thong_tu_67/khoi/mau4a') }}" target="_blank">Báo cáo nguồn kinh phí (Mẫu 4a)</a></li>
+                                                        <li><a href="{{ url('/bao_cao/thong_tu_67/khoi/mau4b') }}" target="_blank">Tổng hợp nhu cầu, nguồn kinh phí (Mẫu 4b)</a></li-->
 
                                     <li><a href="#" data-target="#chitiet-modal" data-toggle="modal"
                                             onclick="baocao('{{ '/bao_cao/thong_tu_67/huyen/mau2a1' }}')">Báo cáo nhu cầu
@@ -117,13 +120,13 @@
                             <div class="col-lg-12">
                                 <ol>
                                     <!--li><a href="#" data-target="#thoaichitra-huyen-modal" data-toggle="modal" onclick="chitraluong_huyen('{{ $furl . 'huyen/chitraluong_th' }}')">Tổng hợp tình hình chi trả lương (Mẫu tổng hợp)</a></li>
-                                        <li><a href="#" data-target="#thoaichitra-huyen-modal" data-toggle="modal" onclick="chitraluong_huyen('{{ $furl . 'huyen/chitraluong_ct' }}')">Tổng hợp tình hình chi trả lương (Mẫu chi tiết)</a></li-->
-                                   <!-- <li><a href="#" data-target="#thoaichitra-khoi-moi-modal" data-toggle="modal"
-                                            onclick="baocao('{{ $furl . 'huyen/chitraluong_th' }}')">Tổng hợp tình hình chi
-                                            trả lương (Mẫu tổng hợp - Mẫu 1)</a></li>
-                                    <li><a href="#" data-target="#thoaichitra-khoi-moi-modal" data-toggle="modal"
-                                            onclick="baocao('{{ $furl . 'huyen/tonghopluongCR' }}')">Tổng hợp tình hình chi
-                                            trả lương (Mẫu tổng hợp - Mẫu 2)</a></li> -->
+                                                        <li><a href="#" data-target="#thoaichitra-huyen-modal" data-toggle="modal" onclick="chitraluong_huyen('{{ $furl . 'huyen/chitraluong_ct' }}')">Tổng hợp tình hình chi trả lương (Mẫu chi tiết)</a></li-->
+                                    <!-- <li><a href="#" data-target="#thoaichitra-khoi-moi-modal" data-toggle="modal"
+                                                            onclick="baocao('{{ $furl . 'huyen/chitraluong_th' }}')">Tổng hợp tình hình chi
+                                                            trả lương (Mẫu tổng hợp - Mẫu 1)</a></li>
+                                                    <li><a href="#" data-target="#thoaichitra-khoi-moi-modal" data-toggle="modal"
+                                                            onclick="baocao('{{ $furl . 'huyen/tonghopluongCR' }}')">Tổng hợp tình hình chi
+                                                            trả lương (Mẫu tổng hợp - Mẫu 2)</a></li> -->
                                     {{-- <li><a href="#" data-target="#thoaichitra-khoi-moi-vn-modal"
                                             data-toggle="modal"
                                             onclick="baocao('{{ $furl . 'huyen/tonghopluong_th' }}')">Tổng hợp tình hình chi
@@ -132,24 +135,26 @@
                                             data-toggle="modal"
                                             onclick="baocao('{{ $furl . 'huyen/tonghopluong_vn' }}')">Tổng hợp tình hình chi
                                             trả lương (Mẫu tổng hợp - Mẫu 3)</a></li> --}}
-                                            <li><a href="#" data-target="#thoaichitra-khoi-moi-vn-modal"
-                                                data-toggle="modal"
-                                                onclick="baocao('{{ $furl . 'huyen/tonghopluong_vn' }}')">Tổng hợp tình hình chi
-                                                trả lương (Mẫu tổng hợp - Mẫu Vạn Ninh)</a></li>
-                                   <!-- <li><a href="#" data-target="#thoaichitra-khoi-moi-ct-modal"
+                                    <li><a href="#" data-target="#thoaichitra-khoi-moi-vn-modal"
                                             data-toggle="modal"
-                                            onclick="baocao('{{ $furl . 'huyen/chitraluong_ct' }}')">Tổng hợp tình hình chi
-                                            trả lương (Mẫu chi tiết - Mẫu 1)</a></li>
-                                    <li><a href="#" data-target="#thoaichitra-khoi-moi-ct-modal"
-                                            data-toggle="modal"
-                                            onclick="baocao('{{ $furl . 'huyen/chitraluong_ct_CR' }}')">Tổng hợp tình hình
-                                            chi trả lương (Mẫu chi tiết - Mẫu 2)</a></li> -->
-                                    <li><a href="#" data-target="#thoaidutoan-huyen-modal" data-toggle="modal"
-                                            onclick="dutoanluong_huyen('{{ $furl . 'huyen/dutoanluong' }}')">Dự toán lương
-                                            (mẫu 1)</a></li>
-                                    <li><a href="#" data-target="#thoaidutoan-huyen-modal" data-toggle="modal"
-                                            onclick="dutoanluong_huyen('{{ $furl . 'huyen/dutoanluongCR' }}')">Dự toán lương
-                                            (mẫu 2)</a></li>
+                                            onclick="baocao('{{ $furl . 'huyen/tonghopluong_vn' }}')">Tổng hợp tình hình
+                                            chi
+                                            trả lương (Mẫu tổng hợp - Mẫu Vạn Ninh)</a></li>
+                                    <!-- <li><a href="#" data-target="#thoaichitra-khoi-moi-ct-modal"
+                                                            data-toggle="modal"
+                                                            onclick="baocao('{{ $furl . 'huyen/chitraluong_ct' }}')">Tổng hợp tình hình chi
+                                                            trả lương (Mẫu chi tiết - Mẫu 1)</a></li>
+                                                    <li><a href="#" data-target="#thoaichitra-khoi-moi-ct-modal"
+                                                            data-toggle="modal"
+                                                            onclick="baocao('{{ $furl . 'huyen/chitraluong_ct_CR' }}')">Tổng hợp tình hình
+                                                            chi trả lương (Mẫu chi tiết - Mẫu 2)</a></li> -->
+                                    <!-- Bỏ không dùng 22062023
+                                                    <li><a href="#" data-target="#thoaidutoan-huyen-modal" data-toggle="modal"
+                                                            onclick="dutoanluong_huyen('{{ $furl . 'huyen/dutoanluong' }}')">Dự toán lương
+                                                            (mẫu 1)</a></li>
+                                                    <li><a href="#" data-target="#thoaidutoan-huyen-modal" data-toggle="modal"
+                                                            onclick="dutoanluong_huyen('{{ $furl . 'huyen/dutoanluongCR' }}')">Dự toán lương
+                                                            (mẫu 2)</a></li> -->
                                     <li><a href="#" data-target="#thoaidutoan-huyen-modal" data-toggle="modal"
                                             onclick="dutoanluong_huyen('{{ $furl . 'huyen/nguonkinhphiCR' }}')">Tổng hợp
                                             nguồn kinh phí (mẫu 1)</a></li>
@@ -157,9 +162,32 @@
                                             data-toggle="modal"
                                             onclick="baocao('{{ $furl . 'huyen/baocaohesoluong' }}')">Báo cáo hệ số lương
                                             của đơn vị có mặt</a></li>
-
-
-                                        <!-- Tạm thời bỏ, không dùng 20062023 -->
+                                    <li><a href="#"
+                                            onclick="insolieu('{{ $furl_th . 'tonghopbienche' }}','1506672780;1506673604;1637915601')"                                            
+                                            data-target="#modal-insolieu" data-toggle="modal">
+                                            Tổng hợp biên chế, hệ số
+                                            lương và phụ cấp có mặt (Mẫu 01)</a></li>
+                                    <li><a href="#"
+                                            onclick="insolieu('{{ $furl_th . 'tonghopbienche_m2' }}','1506672780;1506673604;1637915601')"                                            
+                                            data-target="#modal-insolieu" data-toggle="modal">
+                                            Tổng hợp biên chế, hệ số
+                                            lương và phụ cấp có mặt (Mẫu 02)</a></li>
+                                    <li>
+                                        <a href="#"
+                                            onclick="insolieu('{{ $furl_th . 'tonghophopdong' }}','1506673585')"                                          
+                                            data-target="#modal-insolieu" data-toggle="modal">
+                                           Tổng hợp hợp đồng bổ sung quỹ lương (Mẫu
+                                            01)</a>
+                                    </li>
+                                    <li>
+                                        <a href="#"
+                                            onclick="insolieu('{{ $furl_th . 'tonghophopdong_m2' }}','1506673585')"                                            
+                                            data-target="#modal-insolieu" data-toggle="modal">
+                                           Tổng hợp hợp đồng bổ sung quỹ lương (Mẫu
+                                            02)</a>
+                                    </li>
+                                    
+                                    <!-- Tạm thời bỏ, không dùng 20062023 -->
                                     {{-- <li><a href="#" data-target="#chitiet-modal" data-toggle="modal"
                                             onclick="baocao('{{ '/bao_cao/thong_tu_67/huyen/mau2a1' }}')">Báo cáo nhu cầu
                                             kinh phí thực hiện nghị định 38/2019/NĐ-CP (Mẫu 2a/1)</a></li>
@@ -210,6 +238,60 @@
             @endif
         </div>
     </div>
+
+    <!--Mẫu in số liệu -->
+    {!! Form::open(['url' => '', 'method' => 'post', 'target' => '_blank', 'files' => true, 'id' => 'frm_insolieu']) !!}
+    <div id="modal-insolieu" tabindex="-1" role="dialog" aria-hidden="true" class="modal fade">
+        <div class="modal-dialog modal-content">
+            <div class="modal-header modal-header-primary">
+                <button type="button" data-dismiss="modal" aria-hidden="true" class="close">&times;</button>
+                <h4 id="header-inbl" class="modal-title">Thông tin kết xuất</h4>
+            </div>
+            <div class="modal-body">
+                <div class="form-horizontal">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <label class="control-label">Phân loại công tác</label>
+                            <select class="form-control select2me" name="mact[]" id="mact" multiple=true>
+                                @foreach ($model_nhomct as $kieuct)
+                                    <optgroup label="{{ $kieuct->tencongtac }}">
+                                        <?php $mode_ct = $model_tenct->where('macongtac', $kieuct->macongtac); ?>
+                                        @foreach ($mode_ct as $ct)
+                                            <option value="{{ $ct->mact }}">{{ $ct->tenct }}</option>
+                                        @endforeach
+                                    </optgroup>
+                                @endforeach
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-4">
+                            <label class="control-label">Đơn vị tính</label>
+                            {!! Form::select('donvitinh', getDonViTinh(), null, ['class' => 'form-control select2me']) !!}
+                        </div>
+
+                        <div class="col-md-4">
+                            <label class="control-label">Cỡ chữ</label>
+                            {!! Form::select('cochu', getCoChu(), 10, ['id' => 'cochu', 'class' => 'form-control select2me']) !!}
+                        </div>
+                        <div class="col-md-4">
+                            <label class="control-label">Năm</label>
+                            {!! Form::select('namns', getNam(), date('Y'), ['id' => 'namns', 'class' => 'form-control']) !!}
+                        </div>
+                    </div>
+                </div>
+
+                <input type="hidden" name="masodv" />
+                {{-- <input type="hidden" name="namns" /> --}}
+            </div>
+            <div class="modal-footer">
+                <button type="button" data-dismiss="modal" class="btn btn-default">Hủy thao tác</button>
+                <button type="submit" class="btn btn-success">Đồng ý</button>
+            </div>
+        </div>
+    </div>
+    {!! Form::close() !!}
 
     <div id="thoaibaocaohesoluong-khoi-modal" tabindex="-1" role="dialog" aria-hidden="true" class="modal fade">
         {!! Form::open([
@@ -818,38 +900,38 @@
                     <div class="modal-body">
                         <div class="form-horizontal">
                             <!--
-                                    <div class="form-group">
-                                        <label class="col-md-4 control-label"> Tháng<span class="require">*</span></label>
-                                        <div class="col-md-8">
-                                            {!! Form::select(
-                                                'thang',
-                                                [
-                                                    '01' => '01',
-                                                    '02' => '02',
-                                                    '03' => '03',
-                                                    '04' => '04',
-                                                    '05' => '05',
-                                                    '06' => '06',
-                                                    '07' => '07',
-                                                    '08' => '08',
-                                                    '09' => '09',
-                                                    '10' => '10',
-                                                    '11' => '11',
-                                                    '12' => '12',
-                                                ],
-                                                null,
-                                                ['id' => 'thang', 'class' => 'form-control'],
-                                            ) !!}
-                                        </div>
-                                    </div>
+                                                    <div class="form-group">
+                                                        <label class="col-md-4 control-label"> Tháng<span class="require">*</span></label>
+                                                        <div class="col-md-8">
+                                                            {!! Form::select(
+                                                                'thang',
+                                                                [
+                                                                    '01' => '01',
+                                                                    '02' => '02',
+                                                                    '03' => '03',
+                                                                    '04' => '04',
+                                                                    '05' => '05',
+                                                                    '06' => '06',
+                                                                    '07' => '07',
+                                                                    '08' => '08',
+                                                                    '09' => '09',
+                                                                    '10' => '10',
+                                                                    '11' => '11',
+                                                                    '12' => '12',
+                                                                ],
+                                                                null,
+                                                                ['id' => 'thang', 'class' => 'form-control'],
+                                                            ) !!}
+                                                        </div>
+                                                    </div>
 
-                                    <div class="form-group">
-                                        <label class="col-md-4 control-label"> Năm<span class="require">*</span></label>
-                                        <div class="col-md-8">
-                                            {!! Form::select('nam', getNam(), date('Y'), ['id' => 'nam', 'class' => 'form-control']) !!}
-                                        </div>
-                                    </div>
-                                    -->
+                                                    <div class="form-group">
+                                                        <label class="col-md-4 control-label"> Năm<span class="require">*</span></label>
+                                                        <div class="col-md-8">
+                                                            {!! Form::select('nam', getNam(), date('Y'), ['id' => 'nam', 'class' => 'form-control']) !!}
+                                                        </div>
+                                                    </div>
+                                                    -->
                             @if (session('admin')->level == 'H')
                                 <div class="form-group">
                                     <label class="col-md-4 control-label"> Đơn vị<span class="require">*</span></label>
@@ -978,6 +1060,20 @@
 
         function baocaohesoluong(url) {
             $('#thoai_baocaohesoluong').attr('action', url);
+        }
+                //In dữ liệu
+                function insolieu(url, mact) {
+            if (mact == null) {
+                $('#frm_insolieu').find("[name^='mact']").attr('disabled', true);
+            } else {
+                $('#frm_insolieu').find("[name^='mact']").attr('disabled', false);
+                $('#frm_insolieu').find("[name^='mact']").val(mact.split(';')).trigger('change');
+            }
+            $('#frm_insolieu').attr('action', url);
+            $('#frm_insolieu').find("[name^='masodv']").val($('#masodv').val());
+            $('#frm_insolieu').find("[name^='namns']").val($('#namns').val());
+
+
         }
     </script>
 
