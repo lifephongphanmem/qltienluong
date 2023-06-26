@@ -158,9 +158,11 @@
                                     <li><a href="#" data-target="#thoaidutoan-huyen-modal" data-toggle="modal"
                                             onclick="dutoanluong_huyen('{{ $furl . 'huyen/nguonkinhphiCR' }}')">Tổng hợp
                                             nguồn kinh phí (mẫu 1)</a></li>
-                                    <li><a href="#" data-target="#thoaibaocaohesoluong-khoi-modal"
+                                   {{-- 2023/22/06 Tạm thời bỏ để thiết kế lại --}}
+                                            {{-- <li><a href="#" data-target="#thoaibaocaohesoluong-khoi-modal"
                                             data-toggle="modal"
                                             onclick="baocao('{{ $furl . 'huyen/baocaohesoluong' }}')">Báo cáo hệ số lương
+
                                             của đơn vị có mặt</a></li>
                                     <li><a href="#"
                                             onclick="insolieu('{{ $furl_th . 'tonghopbienche' }}','1506672780;1506673604;1637915601')"                                            
@@ -188,6 +190,12 @@
                                     </li>
                                     
                                     <!-- Tạm thời bỏ, không dùng 20062023 -->
+
+                                            của đơn vị có mặt</a></li> --}}
+
+
+                                        <!-- Tạm thời bỏ, không dùng 20062023 -->
+
                                     {{-- <li><a href="#" data-target="#chitiet-modal" data-toggle="modal"
                                             onclick="baocao('{{ '/bao_cao/thong_tu_67/huyen/mau2a1' }}')">Báo cáo nhu cầu
                                             kinh phí thực hiện nghị định 38/2019/NĐ-CP (Mẫu 2a/1)</a></li>

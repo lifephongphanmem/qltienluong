@@ -83,6 +83,17 @@
                                         </div>
                                     </div>
 
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label class="control-label">Số biên chế được giao</label>
+                                            {!! Form::text('sobiencheduocgiao', null, [
+                                                'id' => 'sobiencheduocgiao',
+                                                'class' => 'form-control text-right',
+                                                'data-mask' => 'fdecimal',
+                                            ]) !!}
+                                        </div>
+                                    </div>
+
                                     <div class="col-md-12">
                                         <label class="control-label">Nội dung</label>
                                         {!! Form::textarea('noidung', null, ['id' => 'noidung', 'class' => 'form-control', 'rows' => '3']) !!}

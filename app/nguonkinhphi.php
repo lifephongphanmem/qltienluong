@@ -18,6 +18,7 @@ class nguonkinhphi extends Model
         'noidung',
         'namns',
         'linhvuchoatdong',
+        'sobiencheduocgiao',
         'nhucau',
         'luongphucap',
         'daibieuhdnd',
@@ -31,10 +32,7 @@ class nguonkinhphi extends Model
         'nghihuusom',
         'baohiem',
         'nguonkp',
-        'tietkiem',
-        'hocphi',
-        'vienphi',
-        'nguonthu',
+        
         'madv',
         'macqcq',
         'madvbc',
@@ -96,6 +94,7 @@ class nguonkinhphi extends Model
         'sothonconlai_2d',
         'sotoconlai_2d',
         //Mẫu 4a
+        'tietkiem',
         'tinhgiambc_4a',
         'nghihuu_4a',
         'boiduong_4a',
@@ -120,6 +119,6 @@ class nguonkinhphi extends Model
         'hesoluong_2c',
         'phucapchucvu_2c',
         'phucapvuotkhung_2c',
-        'phucaptnn_2c',
+        'phucaptnn_2c',        
     ];
 }

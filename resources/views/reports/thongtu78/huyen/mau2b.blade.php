@@ -24,14 +24,14 @@
     <p id="data_body" style="text-align: center; font-weight: bold; font-size: 20px;">BẢNG TỔNG HỢP QUỸ TRỢ CẤP TĂNG THÊM
         NĂM 2023 CỦA CÁN BỘ XÃ, PHƯỜNG, THỊ TRẤN ĐÃ NGHỈ VIỆC HƯỞNG TRỢ CẤP HÀNG THÁNG TỪ NGÂN SÁCH NHÀ NƯỚC</p>
     {{-- <p id="data_body1" style="text-align: center; font-style: italic">(Ban hành kèm theo Thông tư số 67/2017/TT-BTC)</p> --}}
-    <p id="data_body2" style="text-align: right; font-style: italic">Đơn vị: triệu đồng</p>
+    <p id="data_body2" style="text-align: right; font-style: italic">Đơn vị: đồng</p>
     <table id="data_body3" cellspacing="0" cellpadding="0" border="1"
         style="margin: 20px auto; border-collapse: collapse;">
         <tr style="padding-left: 2px;padding-right: 2px">
             <th style="width: 2%;padding-left: 2px;padding-right: 2px">STT</th>
             <th style="padding-left: 2px;padding-right: 2px">NỘI DUNG</th>
             <th style="width: 6%;padding-left: 2px;padding-right: 2px">TỔNG SỐ NGƯỜI NGHỈ VIỆC HƯỞNG TRỢ CẤP HÀNG THÁNG ĐẾN
-                01/07/2017</th>
+                01/07/2023</th>
             <th style="width: 6%;padding-left: 2px;padding-right: 2px">QUỸ TRỢ CẤP 1 THÁNG THEO QUY ĐỊNH TẠI NGHỊ ĐỊNH SỐ
                 09/2015/NĐ-CP VÀ 55/2016/NĐ-CP</th>
             <th style="width: 6%;padding-left: 2px;padding-right: 2px">QUỸ TRỢ CẤP 1 THÁNG THEO QUY ĐỊNH TẠI NGHỊ ĐỊNH SỐ
@@ -48,7 +48,7 @@
             <td>2</td>
             <td>3</td>
             <td>(4)=(3)-(2)</td>
-            <td>(5)=(1)x0,09x4,5%</td>
+            <td>(5)=(1)x0,1x4,5%</td>
             <td>(7)=((4)+(5))x6T</td>
         </tr>
 
@@ -69,13 +69,13 @@
             <tr>
                 <td>{{ $dulieu['tt'] }}</td>
                 <td>{{ $dulieu['noidung'] }}</td>
-                <td>{{ round($dulieu['songuoi']) }}</td>
-                <td>{{ round($dulieu['quy1']) }}</td>
-                <td>{{ round($dulieu['quy2']) }}</td>
+                <td>{{ dinhdangsothapphan($dulieu['songuoi']) }}</td>
+                <td>{{ dinhdangsothapphan($dulieu['quy1']) }}</td>
+                <td>{{ dinhdangsothapphan($dulieu['quy2']) }}</td>
 
-                <td>{{ round($dulieu['quy2'] - $dulieu['quy1']) }}</td>
-                <td>{{ round($dulieu['songuoi'] * 0.09 * 0.45, 3) }}</td>
-                <td>{{ round($dulieu['quy2'] - $dulieu['quy1'] + $dulieu['songuoi'] * 0.09 * 0.45, 3) }}</td>
+                <td>{{ dinhdangsothapphan($dulieu['quy2'] - $dulieu['quy1']) }}</td>
+                <td>{{ dinhdangsothapphan($dulieu['songuoi'] * 450000, 3) }}</td>
+                <td>{{ dinhdangsothapphan(($dulieu['quy2'] - $dulieu['quy1'] + $dulieu['songuoi'] * 450000) * 6, 3) }}</td>
             </tr>
         @endforeach
     </table>

@@ -23,7 +23,8 @@
             </div>
         </div>  
 
-        <div class="row">
+        {{-- 2023.06.24 nôi dung này lấy những cán bộ đóng BHTN trong mẫu 2a --}}
+        {{-- <div class="row">
              <div class="col-md-3">
                 <div class="form-group">
                     <label class="control-label font-weight-bold">Số cán bộ đóng BHTN</label>
@@ -78,7 +79,7 @@
                     ]) !!}
                 </div>
             </div>
-        </div>  
+        </div>   --}}
               
     </div>
 

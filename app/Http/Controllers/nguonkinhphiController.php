@@ -562,7 +562,7 @@ class nguonkinhphiController extends Controller
             $model = nguonkinhphi::where('masodv', $inputs['maso'])->first();
 
             $m_thongtu = dmthongtuquyetdinh::where('sohieu', $model->sohieu)->first();
-            // dd($model);
+            //dd($model);
             if ($model != null) {
                 $model->nhucaukp = $model->luongphucap + $model->daibieuhdnd + $model->canbokct
                     + $model->uyvien + $model->boiduong + $model->nghihuu + $model->baohiem;
@@ -583,15 +583,35 @@ class nguonkinhphiController extends Controller
                     $chitiet->nhomnhucau = $a_nhomplct_hc[$chitiet->mact];
                 }
             }
+            //Mẫu 2c
+            if ($model->soluongcanbo_2c == 0) {
+                $model_bangluong = nguonkinhphi_bangluong::where('masodv', $model->masodv)->where('thang', '07')
+                    ->where('stbhtn_dv', '>', '0')->get(); //Chỉ lấy cán bộ đóng bảo hiểm thất nghiệp
+                if ($model_bangluong->count() > 0) {
+                    $model->soluongcanbo_2c = $model_bangluong->count();
+                    $model->hesoluong_2c = $model_bangluong->sum('heso');
+                    $model->phucapchucvu_2c = $model_bangluong->sum('pccv');
+                    $model->phucapvuotkhung_2c = $model_bangluong->sum('vuotkhung');
+                    $model->phucaptnn_2c = $model_bangluong->sum('pctnn');
+                }
+            }
             //lấy ds phu cap
 
             //Tinh toán số liệu
             //Mẫu 2đ (2dd)
-            //     'soluonghientai_2dd', //lấy số lượng cán bộ hiện tại
-            // 'quyluonghientai_2dd', //lấy tll trong nguonkinhphi_phucap nhan chia số tiền theo thông tư
+            //'soluonghientai_2dd', //lấy số lượng cán bộ hiện tại
+            //'quyluonghientai_2dd', //lấy tll trong nguonkinhphi_phucap nhan chia số tiền theo thông tư
 
             //2h
 
+            //Tính tổng số lượng cán bộ biên chế được giao cho các mẫu ko có chi tiết
+            if ($model->sobiencheduocgiao == 0) {
+                if (session('admin')->maphanloai == 'KVXP') {
+                    $model->sobiencheduocgiao = $model_2a->where('nhomnhucau', 'CANBOCT')->sum('canbo_congtac');
+                } else {
+                    $model->sobiencheduocgiao = $model_2a->where('nhomnhucau', 'BIENCHE')->sum('canbo_congtac');
+                }
+            }
             //dd($m_thongtu );
             return view('manage.nguonkinhphi.edit')
                 ->with('furl', '/nguon_kinh_phi/')
@@ -702,7 +722,7 @@ class nguonkinhphiController extends Controller
             $inputs = $request->all();
             // dd($inputs);
             $model = nguonkinhphi::where('masodv', $inputs['masodv'])->first();
-            dd($model);
+
             $a_truong = [
                 'bosung',
                 'caicach',
@@ -753,13 +773,13 @@ class nguonkinhphiController extends Controller
                 'sothonconlai_2d',
                 'sotoconlai_2d',
                 //Mẫu 4a
+                'tietkiem',
                 'tinhgiambc_4a',
                 'nghihuu_4a',
                 'boiduong_4a',
                 'satnhapdaumoi_4a',
                 'thaydoicochetuchu_4a',
                 'satnhapxa_4a',
-
                 'tietkiem1', //trước 1 năm
                 'tietkiem2', //trước 2 năm
                 'thuchien1', //trước 1 năm
@@ -786,12 +806,11 @@ class nguonkinhphiController extends Controller
             }
 
             $model->update($inputs);
-            if($inputs['huyen']==1){
-                return redirect('chuc_nang/xem_du_lieu/nguon/huyen?sohieu='.$model->sohieu.'&trangthai=ALL&phanloai=ALL');
-            }else{
+            if ($inputs['huyen'] == 1) {
+                return redirect('chuc_nang/xem_du_lieu/nguon/huyen?sohieu=' . $model->sohieu . '&trangthai=ALL&phanloai=ALL');
+            } else {
                 return redirect('/nguon_kinh_phi/danh_sach');
             }
-
         } else
             return view('errors.notlogin');
     }

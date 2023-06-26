@@ -194,11 +194,20 @@
 
                 <div class="col-md-6">
                     <div class="form-group">
+                        <button type="button" onclick="ThongTinKetXuat(true,'{{ $furl . 'mau4b' }}',null)"
+                            style="border-width: 0px" class="btn btn-default btn-xs mbs"
+                            data-target="#mautt107-modal" data-toggle="modal">
+                            <i class="fa fa-print"></i>&nbsp;Tổng hợp nhu cầu và nguồn thực hiện (Mẫu 4b)</button>
+                    </div>
+                </div>
+
+                {{-- <div class="col-md-6">
+                    <div class="form-group">
                         <button type="button" onclick="intonghopdt('{{ '/nguon_kinh_phi/printf?maso=' }}')"
                             style="border-width: 0px" class="btn btn-default btn-xs mbs">
                             <i class="fa fa-print"></i>&nbsp; Tổng hợp nhu cầu và nguồn thực hiện (Mẫu 4b)</button>
                     </div>
-                </div>
+                </div> --}}
             </div>
             <input type="hidden" id="nam_dt" name="nam_dt" />
             <input type="hidden" id="masodv_dt" name="masodv_dt" />
