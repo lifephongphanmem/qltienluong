@@ -25,6 +25,7 @@
     <script>
         jQuery(document).ready(function() {
             TableManaged.init();
+            $('#mact').val('{{ session('admin')->mact_tuyenthem }}').trigger();
         });
     </script>
 @stop
@@ -108,7 +109,7 @@
             </div>
         </div>
     </div>
-   
+
 
     <!--Modal thêm mới -->
     {!! Form::open([
@@ -177,6 +178,46 @@
                         <div class="col-md-12">
                             <label class="control-label">Nội dung</label>
                             {!! Form::textarea('noidung', null, ['id' => 'noidung', 'class' => 'form-control', 'rows' => '3']) !!}
+                        </div>
+                    </div>
+                    <div class="row">
+
+                        <div class="col-md-12">
+                            <h4 class="form-group te">Thông tin cán bộ chưa tuyển</h4>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label class="control-label">Phân loại công tác</label>
+                            <select class="form-control" name="mact" id="mact" required="required">
+                                @foreach ($model_nhomct as $kieuct)
+                                    <optgroup label="{{ $kieuct->tencongtac }}">
+                                        <?php $mode_ct = $model_tenct->where('macongtac', $kieuct->macongtac); ?>
+                                        @foreach ($mode_ct as $ct)
+                                            <option value="{{ $ct->mact }}">{{ $ct->tenct }}</option>
+                                        @endforeach
+                                    </optgroup>
+                                @endforeach
+                            </select>
+                        </div>
+
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label class="control-label">Số lượng cán bộ</label>
+                                {!! Form::text('soluongchuatuyen', 0, [
+                                    'class' => 'form-control',
+                                    'data-mask' => 'fdecimal',
+                                ]) !!}
+                            </div>
+                        </div>
+
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label class="control-label">Hệ số lương</label>
+                                {!! Form::text('heso', 2.34, [
+                                    'class' => 'form-control',
+                                    'data-mask' => 'fdecimal',
+                                ]) !!}
+                            </div>
                         </div>
                     </div>
                     {{-- <div class="row">

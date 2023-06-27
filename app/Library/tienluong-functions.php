@@ -1127,6 +1127,7 @@ function getNhomNhuCauKP($phanloai = 'KVHCSN')
     $a_nhom['KVHCSN'] = [
         'BIENCHE' => 'CÁN BỘ BIÊN CHẾ',
         'HOPDONG' => 'CÁN BỘ HỢP ĐỒNG',
+        'CHUATUYENHC' => 'CÁN BỘ CHƯA TUYỂN',
 
     ];
     $a_nhom['KVXP'] = [
@@ -1134,6 +1135,7 @@ function getNhomNhuCauKP($phanloai = 'KVHCSN')
         'HDND' => 'HOẠT ĐỘNG PHÍ ĐẠI BIỂU HĐND CÁC CẤP',
         'CAPUY' => 'PHỤ CẤP TRÁCH NHIỆM CẤP ỦY',
         'CANBOKCT' => 'CÁN BỘ KHÔNG CHUYÊN TRÁCH',
+        'CHUATUYENXP' => 'CÁN BỘ CHƯA TUYỂN',
     ];
     return $a_nhom[$phanloai];
 }
