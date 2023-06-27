@@ -89,8 +89,11 @@ class hosocanboController extends Controller
             $model_pc = dmphucap_donvi::where('madv', session('admin')->madv)->get();
             $model_pc_bh = array_column($model_pc->where('baohiem', 1)->toarray(), 'tenpc', 'mapc');
             //dd($model_pc_bh);
+            $model = new hosocanbo();
+            $model->macanbo = $macanbo;
             return view('manage.hosocanbo.create')
                 ->with('type', 'create')
+                ->with('model', $model)
                 ->with('macanbo', $macanbo)
                 ->with('max_stt', $max_stt)
                 //danh mục
