@@ -1504,7 +1504,8 @@ class bangluongController extends Controller
             $m_cb_kn[$i]['luongcoban'] = $inputs['luongcoban'];
             $m_cb_kn[$i]['stt'] = $canbo['stt'];
             $m_cb_kn[$i]['mabl'] = $inputs['mabl'];
-            $m_cb_kn[$i]['congtac'] = $m_cb_kn[$i]['phanloai'];
+            // $m_cb_kn[$i]['congtac'] = $m_cb_kn[$i]['phanloai'];
+            $m_cb_kn[$i]['congtac'] = 'KIEMNHIEM';
             $m_cb_kn[$i]['vuotkhung'] = isset($m_cb_kn[$i]['vuotkhung']) ? round($m_cb_kn[$i]['vuotkhung'] * $m_cb_kn[$i]['heso'] / 100,  session('admin')->lamtron) : 0;
             $m_cb_kn[$i]['stbhxh'] = 0;
             $m_cb_kn[$i]['stbhyt'] = 0;
@@ -1614,32 +1615,21 @@ class bangluongController extends Controller
                 if ($m_cb_kn[$i][$mapc] < 500) {
                     $tonghs += $m_cb_kn[$i][$mapc];
                 }
-                //                if($a_pc[$k]['phanloai'] != '2'){
-                //                    $tonghs += $m_cb_kn[$i][$mapc];
-                //                }
-
-                //                $a_pc[$k]['mabl'] = $inputs['mabl'];
-                //                $a_pc[$k]['luongcoban'] = $inputs['luongcoban'];
-                //                $a_pc[$k]['macanbo'] = $m_cb[$key]['macanbo'];
-                //                $a_pc[$k]['tencanbo'] = $m_cb[$key]['tencanbo'];
-                //                $a_pc[$k]['maso'] = $mapc;
-                //                $a_pc[$k]['ten'] = $a_pc[$k]['tenpc'];
-                //                $a_pc[$k]['heso'] = $m_cb[$key][$mapc];
-                //                //$m_cb_kn[$i]['st_'.$mapc] = $a_pc[$k]['sotien']; round($inputs['luongcoban'] * $tonghs
-                //                //$a_pc[$k]['sotien'] = round($inputs['luongcoban'] * $tonghs + $tien, 0);
-                //                $a_kn_phucap[] = $a_pc[$k];
             }
+            //Tính % hưởng cho cán bộ
+            if ($m_cb_kn[$i]['pthuong'] < 100) {                
+                $tonghs = 0;
+                $tien = 0;
+                foreach ($a_pc as $k => $v) {
+                    $mapc = $v['mapc'];
+                    $mapc_st = 'st_' . $v['mapc'];                    
 
-            //ko tính % trong công thức duyệt phụ cấp vì khi tính % sẽ sai
-            if ($m_cb_kn[$i]['phanloai'] == 'CHUCVU') {
-                $m_cb_kn[$i]['heso'] = round($m_cb_kn[$i]['heso'] * $m_cb_kn[$i]['pthuong'] / 100, session('admin')->lamtron);
-                $m_cb_kn[$i]['st_heso'] = round($m_cb_kn[$i]['st_heso'] * $m_cb_kn[$i]['pthuong'] / 100, 0);
-                $m_cb_kn[$i]['pccv'] = round($m_cb_kn[$i]['pccv'] * $m_cb_kn[$i]['pthuong'] / 100, session('admin')->lamtron);
-                $m_cb_kn[$i]['st_pccv'] = round($m_cb_kn[$i]['st_pccv'] * $m_cb_kn[$i]['pthuong'] / 100, 0);
-                $m_cb_kn[$i]['vuotkhung'] = round($m_cb_kn[$i]['vuotkhung'] * $m_cb_kn[$i]['pthuong'] / 100, session('admin')->lamtron);
-                $m_cb_kn[$i]['st_vuotkhung'] = round($m_cb_kn[$i]['st_vuotkhung'] * $m_cb_kn[$i]['pthuong'] / 100, 0);
-                $tonghs = round($tonghs * $m_cb_kn[$i]['pthuong'] / 100, session('admin')->lamtron);
-                $tien = round($tien * $m_cb_kn[$i]['pthuong'] / 100, 0);
+                    $m_cb_kn[$i][$mapc] = round($m_cb_kn[$i][$mapc] * $m_cb_kn[$i]['pthuong'] / 100, session('admin')->lamtron);
+                    $m_cb_kn[$i][$mapc_st] = round($m_cb_kn[$i][$mapc_st] * $m_cb_kn[$i]['pthuong'] / 100, 0);
+
+                    $tonghs += $m_cb_kn[$i][$mapc];
+                    $tien += $m_cb_kn[$i][$mapc_st];
+                }                
             }
 
             $m_cb_kn[$i]['tonghs'] = $tonghs;
@@ -3228,6 +3218,10 @@ class bangluongController extends Controller
             $a_chucvu = getChucVuCQ(false);
             //dd($a_chucvu);
             $model_canbo = $this->getBangLuong($inputs);
+
+            	//$model = $model_canbo->unique(['macanbo']);
+                //dd($model);
+                
             //dd($model_canbo->toarray());
             $model = $model_canbo->where('congtac', '<>', 'CHUCVU');
             $model_kn = $model_canbo->where('congtac', 'CHUCVU');
