@@ -3161,12 +3161,16 @@ class bangluongController extends Controller
             //dd($a_chucvu);
             $model_canbo = $this->getBangLuong($inputs);
 
-            	//$model = $model_canbo->unique(['macanbo']);
-                //dd($model);
-                
-           
             $model = $model_canbo->where('congtac', 'CONGTAC');
             $model_kn = $model_canbo->where('congtac', '<>', 'CONGTAC');
+            //Duyệt lại bảng kiêm nhiêm => nếu kiêm nhiệm và chính # phân loại công tác => chuyển cán bộ về bảng chính
+            foreach($model_kn as $key=>$kn){
+                $chk = $model->where('macanbo',$kn->macanbo)->where('mact',$kn->mact);
+                if($chk->count() == 0){
+                    $model->add($kn);
+                    $model_kn->forget($key);
+                }
+            }
             //dd($model_kn->toarray());
             // $model_kn = $model_canbo->where('congtac', 'CHUCVU');
             //dd($model_kn);
