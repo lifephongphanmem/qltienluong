@@ -97,14 +97,14 @@
                         @endforeach
 
                         <td>{{dinhdangsothapphan($ct->tonghs,5)}}</td>
-                        <td>{{dinhdangso($ct->ttl)}}</td>
+                        <td style="text-align: right">{{dinhdangso($ct->ttl)}}</td>
                         <!--td style="text-align: left">{{isset($a_chucvu[$ct->macvcq_kn]) ? $a_chucvu[$ct->macvcq_kn]:'' }}</td-->
                         <td style="text-align: left">{{$ct->macvcq_kn}}</td>
-                        <td>{{dinhdangso($ct->ttl_kn)}}</td>
-                        <td>{{dinhdangso($ct->ttl + $ct->ttl_kn)}}</td>
+                        <td style="text-align: right">{{dinhdangso($ct->ttl_kn)}}</td>
+                        <td style="text-align: right">{{dinhdangso($ct->ttl + $ct->ttl_kn)}}</td>
 
-                        <td>{{dinhdangso($ct->ttbh)}}</td>
-                        <td>{{dinhdangso($ct->luongtn + $ct->luongtn_kn)}}</td>
+                        <td style="text-align: right">{{dinhdangso($ct->ttbh)}}</td>
+                        <td style="text-align: right">{{dinhdangso($ct->luongtn + $ct->luongtn_kn)}}</td>
                         <td></td>
                     </tr>
                 @endforeach
@@ -116,13 +116,13 @@
                     @endforeach
 
                     <td>{{dinhdangsothapphan($model_luong->sum('tonghs') ,5)}}</td>
-                    <td class="money">{{dinhdangso($model_luong->sum('ttl'))}}</td>
+                    <td style="text-align: right">{{dinhdangso($model_luong->sum('ttl'))}}</td>
                     <td></td>
-                    <td class="money">{{dinhdangso($model_luong->sum('ttl_kn'))}}</td>
-                    <td class="money">{{dinhdangso($model_luong->sum('ttl') + $model_luong->sum('ttl_kn'))}}</td>
+                    <td style="text-align: right">{{dinhdangso($model_luong->sum('ttl_kn'))}}</td>
+                    <td style="text-align: right">{{dinhdangso($model_luong->sum('ttl') + $model_luong->sum('ttl_kn'))}}</td>
 
-                    <td class="money">{{dinhdangso($model_luong->sum('ttbh'))}}</td>
-                    <td class="money">{{dinhdangso($model_luong->sum('luongtn') + $model_luong->sum('luongtn_kn'))}}</td>
+                    <td style="text-align: right">{{dinhdangso($model_luong->sum('ttbh'))}}</td>
+                    <td style="text-align: right">{{dinhdangso($model_luong->sum('luongtn') + $model_luong->sum('luongtn_kn'))}}</td>
                     <td></td>
                 </tr>
             @endif
@@ -135,12 +135,12 @@
 
             <td>{{dinhdangsothapphan($model->sum('tonghs') ,5)}}</td>
 
-            <td class="money">{{dinhdangso($model->sum('ttl'))}}</td>
+            <td style="text-align: right">{{dinhdangso($model->sum('ttl'))}}</td>
             <td></td>
-            <td class="money">{{dinhdangso($model->sum('ttl_kn'))}}</td>
-            <td class="money">{{dinhdangso($model->sum('ttl') + $model->sum('ttl_kn'))}}</td>
-            <td class="money">{{dinhdangso($model->sum('ttbh'))}}</td>
-            <td class="money">{{dinhdangso($model->sum('luongtn') + $model->sum('luongtn_kn'))}}</td>
+            <td style="text-align: right">{{dinhdangso($model->sum('ttl_kn'))}}</td>
+            <td style="text-align: right">{{dinhdangso($model->sum('ttl') + $model->sum('ttl_kn'))}}</td>
+            <td style="text-align: right">{{dinhdangso($model->sum('ttbh'))}}</td>
+            <td style="text-align: right">{{dinhdangso($model->sum('luongtn') + $model->sum('luongtn_kn'))}}</td>
             <td></td>
         </tr>
     </table>

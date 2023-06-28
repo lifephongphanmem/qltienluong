@@ -3079,65 +3079,7 @@ class bangluongController extends Controller
         } else
             return view('errors.notlogin');
     }
-
-    public function printf_mautt107_excel(Request $request)
-    {
-        if (Session::has('admin')) {
-            $inputs = $request->all();
-            $inputs['mabl'] = $inputs['mabl_mautt107'];
-            //$model = $this->getBangLuong($inputs);
-            $model = $this->getBangLuong($inputs)->wherein('phanloai', ['CVCHINH', 'KHONGCT']);
-            //dd($inputs);
-            $mabl = $inputs['mabl'];
-            $m_bl = bangluong::select('thang', 'nam', 'mabl', 'madv', 'ngaylap', 'phanloai')->where('mabl', $mabl)->first();
-            $m_dv = dmdonvi::where('madv', $m_bl->madv)->first();
-
-            $model_congtac = dmphanloaict::select('mact', 'tenct')
-                ->wherein('mact', a_unique(array_column($model->toarray(), 'mact')))->get();
-
-            $thongtin = array(
-                'nguoilap' => $m_bl->nguoilap,
-                'thang' => $m_bl->thang,
-                'nam' => $m_bl->nam,
-                'ngaylap' => $m_bl->ngaylap, 'phanloai' => $m_bl->phanloai,
-                'cochu' => $inputs['cochu']
-            );
-            //xử lý ẩn hiện cột phụ cấp => biết tổng số cột hiện => colspan trên báo cáo
-            $a_goc = array('hesott');
-            $model_pc = dmphucap_donvi::where('madv', $m_bl->madv)->where('phanloai', '<', '3')->wherenotin('mapc', $a_goc)->get();
-            $a_phucap = array();
-            $col = 0;
-
-            foreach ($model_pc as $ct) {
-                if ($model->sum($ct->mapc) > 0) {
-                    $a_phucap[$ct->mapc] = $ct->report;
-                    $col++;
-                }
-            }
-
-            Excel::create('BANGLUONG_107', function ($excel) use ($m_dv, $thongtin, $model, $col, $model_congtac, $a_phucap) {
-                $excel->sheet('New sheet', function ($sheet) use ($m_dv, $thongtin, $model, $col, $model_congtac, $a_phucap) {
-                    $sheet->loadView('reports.bangluong.donvi.mautt107_excel')
-                        ->with('model', $model->sortBy('stt'))
-                        ->with('model_pb', getPhongBan())
-                        ->with('m_dv', $m_dv)
-                        ->with('thongtin', $thongtin)
-                        ->with('col', $col)
-                        ->with('model_congtac', $model_congtac)
-                        ->with('a_phucap', $a_phucap)
-                        ->with('pageTitle', 'Bảng lương chi tiết');
-                    //$sheet->setPageMargin(0.25);
-                    $sheet->setAutoSize(false);
-                    $sheet->setFontFamily('Tahoma');
-                    $sheet->setFontBold(false);
-
-                    //$sheet->setColumnFormat(array('D' => '#,##0.00'));
-                });
-            })->download('xls');
-        } else
-            return view('errors.notlogin');
-    }
-
+   
     public function printf_mautt107_m2(Request $request)
     {
         if (Session::has('admin')) {
@@ -3222,9 +3164,11 @@ class bangluongController extends Controller
             	//$model = $model_canbo->unique(['macanbo']);
                 //dd($model);
                 
-            //dd($model_canbo->toarray());
-            $model = $model_canbo->where('congtac', '<>', 'CHUCVU');
-            $model_kn = $model_canbo->where('congtac', 'CHUCVU');
+           
+            $model = $model_canbo->where('congtac', 'CONGTAC');
+            $model_kn = $model_canbo->where('congtac', '<>', 'CONGTAC');
+            //dd($model_kn->toarray());
+            // $model_kn = $model_canbo->where('congtac', 'CHUCVU');
             //dd($model_kn);
             $mabl = $inputs['mabl'];
             $m_bl = bangluong::select('thang', 'nam', 'mabl', 'madv', 'ngaylap', 'phanloai', 'luongcoban', 'noidung')->where('mabl', $mabl)->first();
@@ -3254,6 +3198,7 @@ class bangluongController extends Controller
             $a_cb = a_unique(array_column($model->toarray(), 'macanbo'));
             $a_cb_kn = a_unique(array_column($model_kn->toarray(), 'macanbo'));
             //dd($model_kn->toarray());
+            //Thêm các cán bộ chỉ có kiêm nhiệm nhưng ko có chức danh chính
             foreach (array_diff($a_cb_kn, $a_cb) as $ct) {
                 $cb = clone $model_kn->where('macanbo', $ct)->first();
                 $cb->macvcq = '';
