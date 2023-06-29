@@ -1201,10 +1201,10 @@ class bangluongController extends Controller
                                 if ($ct != '')
                                     $sotien += $m_cb[$key]['st_' . $ct];
                             }
+                            
                             $sotien = round(($sotien * $m_cb[$key][$mapc]) / 100, session('admin')->lamtron);
-                            $a_pc[$k]['sotien'] = $sotien;
+                            $a_pc[$k]['sotien'] = $sotien; 
                             $m_cb[$key][$mapc] = round($sotien / $inputs['luongcoban'], session('admin')->lamtron);
-
                             //do tính hệ số đã làm tròn => (hệ số * lương cơ bản) != (số tiền) => nhân lại để đúng số tiền
                             $a_pc[$k]['sotien'] = round($m_cb[$key][$mapc] * $inputs['luongcoban']);
                             break;
@@ -1256,7 +1256,7 @@ class bangluongController extends Controller
                 }
                 ketthuc_phucap:
             }
-
+           
             //$ths = $ths + $heso_goc - $cb->heso;//do chỉ lương nb hưởng 85%, các hệ số hưởng %, bảo hiểm thì lấy 100% để tính
             //nếu cán bộ nghỉ thai sản (không gộp vào phần tính phụ cấp do trên bảng lương hiển thị hệ số nhưng ko có tiền)
             //$cb->tonghs = $tonghs;

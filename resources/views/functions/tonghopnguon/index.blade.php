@@ -192,7 +192,18 @@
                             <button type="button" onclick="insolieu('{{ $furl_th . 'mau2a' }}',null)"
                                 style="border-width: 0px" class="btn btn-default btn-xs mbs"
                                 data-target="#modal-insolieu" data-toggle="modal">
-                                <i class="fa fa-print"></i>&nbsp;Bảng tổng hợp nhu cầu kinh phí (Mẫu 2a)</button>
+                                <i class="fa fa-print"></i>&nbsp;Bảng tổng hợp nhu cầu kinh phí (Mẫu 2a - Mẫu 1)</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <button type="button" onclick="insolieu('{{ $furl_th . 'mau2a_2' }}',null)"
+                                style="border-width: 0px" class="btn btn-default btn-xs mbs"
+                                data-target="#modal-insolieu" data-toggle="modal">
+                                <i class="fa fa-print"></i>&nbsp;Bảng tổng hợp nhu cầu kinh phí (Mẫu 2a - Mẫu 2)</button>
                         </div>
                     </div>
                 </div>
