@@ -189,10 +189,6 @@
                                             02)</a>
                                     </li>
                                     
-                                    <!-- Tạm thời bỏ, không dùng 20062023 -->
-
-                                            của đơn vị có mặt</a></li> --}}
-
 
                                         <!-- Tạm thời bỏ, không dùng 20062023 -->
 
