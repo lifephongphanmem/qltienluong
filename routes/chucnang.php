@@ -399,7 +399,7 @@ Route::group(['prefix' => 'chuc_nang'], function () {
             Route::post('chitietbl', 'dutoanluong_huyenController@chitietbl'); //in chi tiết bảng lương đơn vị
             Route::post('chitietblCR', 'dutoanluong_huyenController@chitietblCR'); //in chi tiết bảng lương đơn vị
             Route::get('nangluongth', 'dutoanluong_huyenController@nangluongth'); //in chi tiết bảng lương đơn vị
-            Route::get('guitn', 'GuiTinNhanController@guitin'); //in chi tiết bảng lương đơn vị
+            // Route::get('guitn', 'GuiTinNhanController@guitin'); //in chi tiết bảng lương đơn vị
             //Mới làm lại 07/07/2022
             Route::post('tao_du_toan', 'dutoanluong_huyenController@tao_du_toan');
 

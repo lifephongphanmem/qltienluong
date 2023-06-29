@@ -13,11 +13,11 @@ Route::group(['prefix' => 'ajax'], function () {
     Route::get('checkmadv', 'ajaxController@checkmadv');
     //Route::get('phucap','ajaxController@getPhuCap');
 
-    Route::group(['prefix' => 'tai_lieu'], function () {
-        Route::get('add', 'hosotailieuController@store');
-        Route::get('update', 'hosotailieuController@update');
-        Route::get('get', 'hosotailieuController@get_detail');
-    });
+    // Route::group(['prefix' => 'tai_lieu'], function () {
+    //     Route::get('add', 'hosotailieuController@store');
+    //     Route::get('update', 'hosotailieuController@update');
+    //     Route::get('get', 'hosotailieuController@get_detail');
+    // });
     Route::group(['prefix' => 'quan_he_gd'], function () {
         Route::get('add_bt', 'hosoquanhegdController@store_bt');
         Route::get('update_bt', 'hosoquanhegdController@update_bt');
@@ -26,16 +26,16 @@ Route::group(['prefix' => 'ajax'], function () {
         Route::get('get', 'hosoquanhegdController@get_detail');
     });
 
-    Route::group(['prefix' => 'chuc_vu'], function () {
-        Route::get('add', 'hosochucvuController@store');
-        Route::get('update', 'hosochucvuController@update');
-        Route::get('get', 'hosochucvuController@get_detail');
-    });
-    Route::group(['prefix' => 'bao_hiem'], function () {
-        Route::get('add', 'hosobaohiemyteController@store');
-        Route::get('update', 'hosobaohiemyteController@update');
-        Route::get('get', 'hosobaohiemyteController@get_detail');
-    });
+    // Route::group(['prefix' => 'chuc_vu'], function () {
+    //     Route::get('add', 'hosochucvuController@store');
+    //     Route::get('update', 'hosochucvuController@update');
+    //     Route::get('get', 'hosochucvuController@get_detail');
+    // });
+    // Route::group(['prefix' => 'bao_hiem'], function () {
+    //     Route::get('add', 'hosobaohiemyteController@store');
+    //     Route::get('update', 'hosobaohiemyteController@update');
+    //     Route::get('get', 'hosobaohiemyteController@get_detail');
+    // });
     Route::group(['prefix' => 'luc_luong_vu_trang'], function () {
         Route::get('add', 'hosollvtController@store');
         Route::get('update', 'hosollvtController@update');
@@ -74,11 +74,11 @@ Route::group(['prefix' => 'ajax'], function () {
         Route::get('get','hosophucapController@getinfo');
     });
     */
-    Route::group(['prefix' => 'binh_bau'], function () {
-        Route::get('add', 'hosobinhbauController@store');
-        Route::get('update', 'hosobinhbauController@update');
-        Route::get('get', 'hosobinhbauController@getinfo');
-    });
+    // Route::group(['prefix' => 'binh_bau'], function () {
+    //     Route::get('add', 'hosobinhbauController@store');
+    //     Route::get('update', 'hosobinhbauController@update');
+    //     Route::get('get', 'hosobinhbauController@getinfo');
+    // });
     Route::group(['prefix' => 'khen_thuong'], function () {
         Route::get('add', 'hosokhenthuongController@store');
         Route::get('update', 'hosokhenthuongController@update');
@@ -89,27 +89,27 @@ Route::group(['prefix' => 'ajax'], function () {
         Route::get('update', 'hosokyluatController@update');
         Route::get('get', 'hosokyluatController@getinfo');
     });
-    Route::group(['prefix' => 'thanh_tra'], function () {
-        Route::get('add', 'hosothanhtraController@store');
-        Route::get('update', 'hosothanhtraController@update');
-        Route::get('get', 'hosothanhtraController@getinfo');
-    });
+    // Route::group(['prefix' => 'thanh_tra'], function () {
+    //     Route::get('add', 'hosothanhtraController@store');
+    //     Route::get('update', 'hosothanhtraController@update');
+    //     Route::get('get', 'hosothanhtraController@getinfo');
+    // });
     Route::group(['prefix' => 'nhan_xet'], function () {
         Route::get('add', 'hosonhanxetdgController@store');
         Route::get('update', 'hosonhanxetdgController@update');
         Route::get('get', 'hosonhanxetdgController@getinfo');
     });
 
-    Route::group(['prefix' => 'het_tap_su'], function () {
-        Route::get('add', 'dshettapsuController@store');
-        Route::get('update', 'dshettapsuController@update');
-        Route::get('get', 'dshettapsuController@getinfo');
-    });
-    Route::group(['prefix' => 'huu_tri'], function () {
-        Route::get('add', 'dshuutriController@store');
-        Route::get('update', 'dshuutriController@update');
-        Route::get('get', 'dshuutriController@getinfo');
-    });
+    // Route::group(['prefix' => 'het_tap_su'], function () {
+    //     Route::get('add', 'dshettapsuController@store');
+    //     Route::get('update', 'dshettapsuController@update');
+    //     Route::get('get', 'dshettapsuController@getinfo');
+    // });
+    // Route::group(['prefix' => 'huu_tri'], function () {
+    //     Route::get('add', 'dshuutriController@store');
+    //     Route::get('update', 'dshuutriController@update');
+    //     Route::get('get', 'dshuutriController@getinfo');
+    // });
 
     Route::group(['prefix' => 'nang_luong'], function () {
         Route::get('add', 'dsnangluongController@store');
