@@ -81,7 +81,7 @@
                                              class="btn btn-default btn-xs"
                                             data-target="#modal-insolieu" data-toggle="modal">
                                             <i class="fa fa-print"></i>&nbsp;Số liệu tổng hợp</button>
-                                            <a href="{{url('/chuc_nang/xem_du_lieu/nguon/tinh?sohieu='.$value->sohieu.'&trangthai='.$inputs['trangthai'].'&madiaban='.$value->madvbc)}}" class="btn btn-default btn-xs" TARGET="_blank">
+                                            <a href="{{url('/chuc_nang/xem_du_lieu/nguon/tinh?sohieu='.$value->sohieu.'&trangthai='.$inputs['trangthai'].'&madiaban='.$value->madvbc)}}" class="btn btn-default btn-xs">
                                                 <i class="fa fa-print"></i>&nbsp; Số liệu chi tiết</a>
 
                                             <button type="button" class="btn btn-default btn-xs mbs" onclick="confirmChuyen('{{$value->madvbc}}','{{$value->sohieu}}')" data-target="#chuyen-modal" data-toggle="modal"><i class="fa icon-share-alt"></i>&nbsp;

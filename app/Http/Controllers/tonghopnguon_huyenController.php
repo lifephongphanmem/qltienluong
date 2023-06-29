@@ -37,7 +37,7 @@ class tonghopnguon_huyenController extends Controller
                 $query->select('madv')->from('dmdonvi')->where('macqcq', $madv)->where('madv', '<>', $madv)->get();
             })->where('trangthai', 'DAGUI')
                 ->get();
-            // dd($model_nguon);
+            // dd($model_nguon->where('sohieu','tt78_2022'));
             $model_nguon_huyen = nguonkinhphi_huyen::wherein('madv', function ($query) use ($madv) {
                 $query->select('madv')->from('dmdonvi')->where('macqcq', $madv)->where('madv', '<>', $madv)->get();
             })->where('trangthai', 'DAGUI')
@@ -83,10 +83,11 @@ class tonghopnguon_huyenController extends Controller
                 $soluong = count(array_diff($a_donvicapduoi, array_column($model_donvitamdung->toarray(), 'madv')));
 
                 $nguon_huyen = $model_nguon_tinh->where('sohieu', $dv->sohieu)->first();
-
+                $m_dv=$model_nguon->where('sohieu',$dv->sohieu);
                 if (isset($nguon_huyen)) {
                     //Đã tổng hợp dữ liệu
-                    $dv->sldv = $soluong . '/' . $soluong;
+                    // $dv->sldv = $soluong . '/' . $soluong;
+                    $dv->sldv = count($m_dv) . '/' . $soluong;
                     $dv->masodv = $nguon_huyen->masodv;
                     $dv->trangthai = $nguon_huyen->trangthai;
                     //$dv->trangthai = 'DAGUI';
