@@ -1128,6 +1128,9 @@ function getNhomNhuCauKP($phanloai = 'KVHCSN')
         'BIENCHE' => 'CÁN BỘ BIÊN CHẾ',
         'HOPDONG' => 'CÁN BỘ HỢP ĐỒNG',
         'CHUATUYENHC' => 'CÁN BỘ CHƯA TUYỂN',
+        //2023.29.06 mới thêm do đơn vị Văn phòng uỷ ban có cả 2 loại hình hoạt động
+        'HDND' => 'HOẠT ĐỘNG PHÍ ĐẠI BIỂU HĐND CÁC CẤP',
+        'CAPUY' => 'PHỤ CẤP TRÁCH NHIỆM CẤP ỦY',
 
     ];
     $a_nhom['KVXP'] = [

@@ -273,6 +273,7 @@ class UsersController extends Controller
                     $qr->select('mapc')->from('dmphucap');
                 })->delete();
             } else {
+                /* 30.06
                 $m_nhucau = nguonkinhphi::where('sobiencheduocgiao', 0)->where('sohieu', 'tt78_2022')->get();
                 $a_nhomplct_xp = array_column(dmphanloaict::all()->toArray(), 'nhomnhucau_xp', 'mact');
                 $a_nhomplct_hc = array_column(dmphanloaict::all()->toArray(), 'nhomnhucau_hc', 'mact');
@@ -301,6 +302,8 @@ class UsersController extends Controller
                     //dd($ct);
                     $ct->update();
                 }
+                */
+
                 //2023.06.07 Tự cập nhật các nhu cầu kinh phí cũ 
                 /*
                 $m_nhucau = nguonkinhphi::where('nangcap_phucap', 0)->where('sohieu','tt78_2022')->get();
