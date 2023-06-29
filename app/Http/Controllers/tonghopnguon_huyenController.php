@@ -285,6 +285,7 @@ class tonghopnguon_huyenController extends Controller
             return redirect('/chuc_nang/tong_hop_nguon/huyen/index');
         }
     }
+
     function senddata(Request $requests)
     {
         if (Session::has('admin')) {
@@ -499,7 +500,7 @@ class tonghopnguon_huyenController extends Controller
     function mau2a(Request $request)
     {
         if (Session::has('admin')) {
-            $inputs = $request->all();
+            $inputs= $request->all();
             $m_thongtu = dmthongtuquyetdinh::where('sohieu', $inputs['sohieu'])->first();
             $m_nguonkp = nguonkinhphi::where(function ($qr) use ($inputs) {
                 $qr->where('macqcq', $inputs['macqcq'])->where('trangthai', 'DAGUI')->where('sohieu', $inputs['sohieu']);
@@ -534,29 +535,18 @@ class tonghopnguon_huyenController extends Controller
                     $chitiet->nhomnhucau = $a_nhomplct_hc[$chitiet->mact];
                 }
             }
+            //dd($m_nguonkp);
 
-            $a_pc_th = dmphucap::wherenotin('mapc', ['heso'])->get();
+            $m_phucap = dmphucap_donvi::where('madv',  $m_nguonkp->first()->madv)->wherenotin('mapc', ['heso'])->get();
 
-            $a_phucap = array();
-            $col = 0;
-            $a_phucap_st = array();
-            foreach ($a_pc_th as $ct) {
-                if ($m_chitiet->sum($ct->mapc) > 0) {
-                    $mapc_st = 'st_' . $ct->mapc;
-                    $a_phucap[$ct->mapc] = $ct->form;
-                    $a_phucap_st[$mapc_st] = $ct->form;
-                    if ($ct->mapc !== 'heso') {
-                        $col++;
-                    }
-                }
-            }
+            $a_phucap = getPhuCap2a_78();
+
             $luongcb = $m_thongtu->muccu;
             $luongcb_moi = $m_thongtu->mucapdung;
             $chenhlech = $m_thongtu->chenhlech;
 
             //Tính toán số liệu phần I
             $ar_I = getHCSN();
-            //$dulieu_pI = $m_chitiet->where('maphanloai', '<>', 'KVXP');
             $dulieu_pI = $m_chitiet->where('nhomnhucau', 'BIENCHE');
             //Vòng cấp độ 3
             foreach ($ar_I as $key => $chitiet) {
@@ -564,6 +554,7 @@ class tonghopnguon_huyenController extends Controller
                     $dulieu_chitiet = $dulieu_pI;
                     foreach ($chitiet['chitiet'] as $k => $v) {
                         $dulieu_chitiet  = $dulieu_chitiet->where($k, $v);
+                        $dulieu_nguonkp = $m_nguonkp->wherein('masodv', array_unique(array_column($dulieu_chitiet->toarray(),'masodv')));
                     }
                     //Tính bảng lương theo số tiền cũ
                     $a_solieu = [];
@@ -574,10 +565,19 @@ class tonghopnguon_huyenController extends Controller
                     $a_solieu['tongbh_dv'] = $dulieu_chitiet->sum('tongbh_dv');
                     $a_solieu['ttbh_dv'] = round(($dulieu_chitiet->sum('ttbh_dv') / $chenhlech) * $luongcb);
                     //dd($a_solieu);
-                    foreach ($a_phucap as $mapc => $tenpc) {
-                        $mapc_st = 'st_' . $mapc;
-                        $a_solieu[$mapc] = $dulieu_chitiet->sum($mapc);
-                        $a_solieu[$mapc_st] = round($a_solieu[$mapc] * $luongcb);
+                    foreach ($m_phucap as $pc) {
+                        $mapc_st = 'st_' . $pc->mapc;
+                        $a_solieu[$pc->mapc] = $dulieu_chitiet->sum($pc->mapc);
+                        $a_solieu[$mapc_st] = round($a_solieu[$pc->mapc] * $luongcb);
+                    }
+                    //Ở ngoài nhóm phụ cấp => đưa hết vào pck
+                    foreach ($m_phucap as $pc) {
+                        if (!in_array($pc->mapc, $a_phucap)) {
+                            $a_solieu['pck'] += $a_solieu[$pc->mapc];
+                            $a_solieu['st_pck'] += $a_solieu[$mapc_st];
+                            $a_solieu[$pc->mapc] = 0;
+                            $a_solieu[$mapc_st] = 0;
+                        }
                     }
                     $a_solieu['tongpc'] = $dulieu_chitiet->sum('tonghs') - $dulieu_chitiet->sum('heso');
                     $a_solieu['st_tongpc'] = round($a_solieu['tongpc'] * $luongcb);
@@ -593,10 +593,19 @@ class tonghopnguon_huyenController extends Controller
                     $a_solieu_moi['tongbh_dv'] = $dulieu_chitiet->sum('tongbh_dv');
                     $a_solieu_moi['ttbh_dv'] = round(($dulieu_chitiet->sum('ttbh_dv') / $chenhlech) * $luongcb_moi);
 
-                    foreach ($a_phucap as $mapc => $tenpc) {
-                        $mapc_st = 'st_' . $mapc;
-                        $a_solieu_moi[$mapc] = $dulieu_chitiet->sum($mapc);
-                        $a_solieu_moi[$mapc_st] = round($a_solieu_moi[$mapc] * $luongcb_moi);
+                    foreach ($m_phucap as $pc) {
+                        $mapc_st = 'st_' . $pc->mapc;
+                        $a_solieu_moi[$pc->mapc] = $dulieu_chitiet->sum($pc->mapc);
+                        $a_solieu_moi[$mapc_st] = round($a_solieu_moi[$pc->mapc] * $luongcb);
+                    }
+                    //Ở ngoài nhóm phụ cấp => đưa hết vào pck
+                    foreach ($m_phucap as $pc) {
+                        if (!in_array($pc->mapc, $a_phucap)) {
+                            $a_solieu_moi['pck'] += $a_solieu_moi[$pc->mapc];
+                            $a_solieu['st_pck'] += $a_solieu_moi[$mapc_st];
+                            $a_solieu_moi[$pc->mapc] = 0;
+                            $a_solieu_moi[$mapc_st] = 0;
+                        }
                     }
                     $a_solieu_moi['tongpc'] = $dulieu_chitiet->sum('tonghs') - $dulieu_chitiet->sum('heso');
                     $a_solieu_moi['st_tongpc'] = round($a_solieu_moi['tongpc'] * $luongcb_moi);
@@ -604,7 +613,8 @@ class tonghopnguon_huyenController extends Controller
                     $ar_I[$key]['solieu_moi'] = $a_solieu_moi;
 
                     $ar_I[$key]['canbo_congtac'] = $dulieu_chitiet->sum('canbo_congtac');
-                    $ar_I[$key]['canbo_dutoan'] = $dulieu_chitiet->sum('canbo_dutoan');
+                    // $ar_I[$key]['canbo_dutoan'] = $dulieu_chitiet->sum('canbo_dutoan');
+                    $ar_I[$key]['canbo_dutoan'] = $dulieu_nguonkp->sum('sobiencheduocgiao');
                     $ar_I[$key]['chenhlech01thang'] = $a_solieu_moi['tongcong'] - $a_solieu['tongcong'];
                     $ar_I[$key]['chenhlech06thang'] = $ar_I[$key]['chenhlech01thang'] * 6;
                 }
@@ -622,9 +632,10 @@ class tonghopnguon_huyenController extends Controller
 
                     $a_solieu_moi['canbo_congtac'] = $a_solieu_moi['canbo_dutoan'] = $a_solieu_moi['heso'] = $a_solieu_moi['st_heso'] = $a_solieu_moi['tongpc'] = $a_solieu_moi['st_tongpc']
                         = $a_solieu_moi['tongbh_dv'] = $a_solieu_moi['ttbh_dv'] = $a_solieu_moi['tongcong'] = 0;
-                    foreach ($a_phucap as $mapc => $tenpc) {
-                        $mapc_st = 'st_' . $mapc;
-                        $a_solieu[$mapc] = $a_solieu[$mapc_st] = $a_solieu_moi[$mapc] = $a_solieu_moi[$mapc_st] = 0;
+
+                    foreach ($m_phucap as $pc) {
+                        $mapc_st = 'st_' . $pc->mapc;
+                        $a_solieu[$pc->mapc] = $a_solieu[$mapc_st] = $a_solieu_moi[$pc->mapc] = $a_solieu_moi[$mapc_st] = 0;
                     }
 
                     foreach ($chitiet['chitiet'] as $k) {
@@ -635,9 +646,9 @@ class tonghopnguon_huyenController extends Controller
                         $a_solieu['tongbh_dv'] += $ar_I[$k]['solieu']['tongbh_dv'];
                         $a_solieu['ttbh_dv'] += $ar_I[$k]['solieu']['ttbh_dv'];
 
-                        foreach ($a_phucap as $mapc => $tenpc) {
-                            $mapc_st = 'st_' . $mapc;
-                            $a_solieu[$mapc] += $ar_I[$k]['solieu'][$mapc];
+                        foreach ($m_phucap as $pc) {
+                            $mapc_st = 'st_' . $pc->mapc;
+                            $a_solieu[$pc->mapc] += $ar_I[$k]['solieu'][$pc->mapc];
                             $a_solieu[$mapc_st] += $ar_I[$k]['solieu'][$mapc_st];
                         }
                         $a_solieu['tongpc'] += $ar_I[$k]['solieu']['tongpc'];
@@ -651,9 +662,9 @@ class tonghopnguon_huyenController extends Controller
                         $a_solieu_moi['tongbh_dv'] += $ar_I[$k]['solieu_moi']['tongbh_dv'];
                         $a_solieu_moi['ttbh_dv'] += $ar_I[$k]['solieu_moi']['ttbh_dv'];
 
-                        foreach ($a_phucap as $mapc => $tenpc) {
-                            $mapc_st = 'st_' . $mapc;
-                            $a_solieu_moi[$mapc] += $ar_I[$k]['solieu_moi'][$mapc];
+                        foreach ($m_phucap as $pc) {
+                            $mapc_st = 'st_' . $pc->mapc;
+                            $a_solieu_moi[$pc->mapc] += $ar_I[$k]['solieu_moi'][$pc->mapc];
                             $a_solieu_moi[$mapc_st] += $ar_I[$k]['solieu_moi'][$mapc_st];
                         }
                         $a_solieu_moi['tongpc'] += $ar_I[$k]['solieu_moi']['tongpc'];
@@ -684,9 +695,9 @@ class tonghopnguon_huyenController extends Controller
 
                     $a_solieu_moi['canbo_congtac'] = $a_solieu_moi['canbo_dutoan'] = $a_solieu_moi['heso'] = $a_solieu_moi['st_heso'] = $a_solieu_moi['tongpc'] = $a_solieu_moi['st_tongpc']
                         = $a_solieu_moi['tongbh_dv'] = $a_solieu_moi['ttbh_dv'] = $a_solieu_moi['tongcong'] = 0;
-                    foreach ($a_phucap as $mapc => $tenpc) {
-                        $mapc_st = 'st_' . $mapc;
-                        $a_solieu[$mapc] = $a_solieu[$mapc_st] = $a_solieu_moi[$mapc] = $a_solieu_moi[$mapc_st] = 0;
+                    foreach ($m_phucap as $pc) {
+                        $mapc_st = 'st_' . $pc->mapc;
+                        $a_solieu[$pc->mapc] = $a_solieu[$mapc_st] = $a_solieu_moi[$pc->mapc] = $a_solieu_moi[$mapc_st] = 0;
                     }
 
                     foreach ($chitiet['chitiet'] as $k) {
@@ -697,9 +708,9 @@ class tonghopnguon_huyenController extends Controller
                         $a_solieu['tongbh_dv'] += $ar_I[$k]['solieu']['tongbh_dv'];
                         $a_solieu['ttbh_dv'] += $ar_I[$k]['solieu']['ttbh_dv'];
 
-                        foreach ($a_phucap as $mapc => $tenpc) {
-                            $mapc_st = 'st_' . $mapc;
-                            $a_solieu[$mapc] += $ar_I[$k]['solieu'][$mapc];
+                        foreach ($m_phucap as $pc) {
+                            $mapc_st = 'st_' . $pc->mapc;
+                            $a_solieu[$pc->mapc] += $ar_I[$k]['solieu'][$pc->mapc];
                             $a_solieu[$mapc_st] += $ar_I[$k]['solieu'][$mapc_st];
                         }
                         $a_solieu['tongpc'] += $ar_I[$k]['solieu']['tongpc'];
@@ -713,9 +724,9 @@ class tonghopnguon_huyenController extends Controller
                         $a_solieu_moi['tongbh_dv'] += $ar_I[$k]['solieu_moi']['tongbh_dv'];
                         $a_solieu_moi['ttbh_dv'] += $ar_I[$k]['solieu_moi']['ttbh_dv'];
 
-                        foreach ($a_phucap as $mapc => $tenpc) {
-                            $mapc_st = 'st_' . $mapc;
-                            $a_solieu_moi[$mapc] += $ar_I[$k]['solieu_moi'][$mapc];
+                        foreach ($m_phucap as $pc) {
+                            $mapc_st = 'st_' . $pc->mapc;
+                            $a_solieu_moi[$pc->mapc] += $ar_I[$k]['solieu_moi'][$pc->mapc];
                             $a_solieu_moi[$mapc_st] += $ar_I[$k]['solieu_moi'][$mapc_st];
                         }
                         $a_solieu_moi['tongpc'] += $ar_I[$k]['solieu_moi']['tongpc'];
@@ -744,9 +755,9 @@ class tonghopnguon_huyenController extends Controller
                         = $a_solieu['tongbh_dv'] = $a_solieu['ttbh_dv'] = $a_solieu['tongcong'] = 0;
                     $a_solieu_moi['heso'] = $a_solieu_moi['st_heso'] = $a_solieu_moi['tongpc'] = $a_solieu_moi['st_tongpc']
                         = $a_solieu_moi['tongbh_dv'] = $a_solieu_moi['ttbh_dv'] = $a_solieu_moi['tongcong'] = 0;
-                    foreach ($a_phucap as $mapc => $tenpc) {
-                        $mapc_st = 'st_' . $mapc;
-                        $a_solieu[$mapc] = $a_solieu[$mapc_st] = $a_solieu_moi[$mapc] = $a_solieu_moi[$mapc_st] = 0;
+                    foreach ($m_phucap as $pc) {
+                        $mapc_st = 'st_' . $pc->mapc;
+                        $a_solieu[$pc->mapc] = $a_solieu[$mapc_st] = $a_solieu_moi[$pc->mapc] = $a_solieu_moi[$mapc_st] = 0;
                     }
                     $ar_I[$key]['chenhlech01thang'] = 0;
                     $ar_I[$key]['chenhlech06thang'] = 0;
@@ -757,17 +768,24 @@ class tonghopnguon_huyenController extends Controller
                 }
             }
             //
+
+
             //
             //Tính toán số liệu phần II
             $ar_II = getChuyenTrach();
             $dulieu_pII = $m_chitiet->where('nhomnhucau', 'CANBOCT');
-
+            $aII_plct = getChuyenTrach_plct();
+            foreach ($dulieu_pII as $key => $value) {
+                if (count($aII_plct) > 0 && !in_array($value->mact, $aII_plct))
+                    $dulieu_pII->forget($key);
+            }
             //Vòng cấp độ 3
             foreach ($ar_II as $key => $chitiet) {
                 if ($chitiet['phanloai'] == '0') {
                     $dulieu_chitiet = $dulieu_pII;
                     foreach ($chitiet['chitiet'] as $k => $v) {
                         $dulieu_chitiet  = $dulieu_chitiet->where($k, $v);
+                        $dulieu_nguonkp = $m_nguonkp->wherein('masodv', array_unique(array_column($dulieu_chitiet->toarray(),'masodv')));
                     }
                     //Tính bảng lương theo số tiền cũ
                     $a_solieu = [];
@@ -778,10 +796,19 @@ class tonghopnguon_huyenController extends Controller
                     $a_solieu['tongbh_dv'] = $dulieu_chitiet->sum('tongbh_dv');
                     $a_solieu['ttbh_dv'] = round(($dulieu_chitiet->sum('ttbh_dv') / $chenhlech) * $luongcb);
                     //dd($a_solieu);
-                    foreach ($a_phucap as $mapc => $tenpc) {
-                        $mapc_st = 'st_' . $mapc;
-                        $a_solieu[$mapc] = $dulieu_chitiet->sum($mapc);
-                        $a_solieu[$mapc_st] = round($a_solieu[$mapc] * $luongcb);
+                    foreach ($m_phucap as $pc) {
+                        $mapc_st = 'st_' . $pc->mapc;
+                        $a_solieu[$pc->mapc] = $dulieu_chitiet->sum($pc->mapc);
+                        $a_solieu[$mapc_st] = round($a_solieu[$pc->mapc] * $luongcb);
+                    }
+                    //Ở ngoài nhóm phụ cấp => đưa hết vào pck
+                    foreach ($m_phucap as $pc) {
+                        if (!in_array($pc->mapc, $a_phucap)) {
+                            $a_solieu['pck'] += $a_solieu[$pc->mapc];
+                            $a_solieu['st_pck'] += $a_solieu[$mapc_st];
+                            $a_solieu[$pc->mapc] = 0;
+                            $a_solieu[$mapc_st] = 0;
+                        }
                     }
                     $a_solieu['tongpc'] = $dulieu_chitiet->sum('tonghs') - $dulieu_chitiet->sum('heso');
                     $a_solieu['st_tongpc'] = round($a_solieu['tongpc'] * $luongcb);
@@ -797,10 +824,19 @@ class tonghopnguon_huyenController extends Controller
                     $a_solieu_moi['tongbh_dv'] = $dulieu_chitiet->sum('tongbh_dv');
                     $a_solieu_moi['ttbh_dv'] = round(($dulieu_chitiet->sum('ttbh_dv') / $chenhlech) * $luongcb_moi);
 
-                    foreach ($a_phucap as $mapc => $tenpc) {
-                        $mapc_st = 'st_' . $mapc;
-                        $a_solieu_moi[$mapc] = $dulieu_chitiet->sum($mapc);
-                        $a_solieu_moi[$mapc_st] = round($a_solieu_moi[$mapc] * $luongcb_moi);
+                    foreach ($m_phucap as $pc) {
+                        $mapc_st = 'st_' . $pc->mapc;
+                        $a_solieu_moi[$pc->mapc] = $dulieu_chitiet->sum($pc->mapc);
+                        $a_solieu_moi[$mapc_st] = round($a_solieu_moi[$pc->mapc] * $luongcb_moi);
+                    }
+                    //Ở ngoài nhóm phụ cấp => đưa hết vào pck
+                    foreach ($m_phucap as $pc) {
+                        if (!in_array($pc->mapc, $a_phucap)) {
+                            $a_solieu_moi['pck'] += $a_solieu_moi[$pc->mapc];
+                            $a_solieu_moi['st_pck'] += $a_solieu_moi[$mapc_st];
+                            $a_solieu_moi[$pc->mapc] = 0;
+                            $a_solieu_moi[$mapc_st] = 0;
+                        }
                     }
                     $a_solieu_moi['tongpc'] = $dulieu_chitiet->sum('tonghs') - $dulieu_chitiet->sum('heso');
                     $a_solieu_moi['st_tongpc'] = round($a_solieu_moi['tongpc'] * $luongcb_moi);
@@ -808,7 +844,7 @@ class tonghopnguon_huyenController extends Controller
                     $ar_II[$key]['solieu_moi'] = $a_solieu_moi;
 
                     $ar_II[$key]['canbo_congtac'] = $dulieu_chitiet->sum('canbo_congtac');
-                    $ar_II[$key]['canbo_dutoan'] = $dulieu_chitiet->sum('canbo_dutoan');
+                    $ar_II[$key]['canbo_dutoan'] = $dulieu_nguonkp->sum('sobiencheduocgiao');                    ;
                     $ar_II[$key]['chenhlech01thang'] = $a_solieu_moi['tongcong'] - $a_solieu['tongcong'];
                     $ar_II[$key]['chenhlech06thang'] = $ar_II[$key]['chenhlech01thang'] * 6;
                 }
@@ -817,8 +853,12 @@ class tonghopnguon_huyenController extends Controller
 
             //Tính toán số liệu phần III
             $ar_III = getHDND();
+            $aIII_plct = getHDND_plct();
             $dulieu_pIII = $m_chitiet->where('nhomnhucau',  'HDND');
-
+            foreach ($dulieu_pIII as $key => $value) {
+                if (count($aIII_plct) > 0 && !in_array($value->mact, $aIII_plct))
+                    $dulieu_pIII->forget($key);
+            }
 
             //Vòng cấp độ 3
             foreach ($ar_III as $key => $chitiet) {
@@ -836,11 +876,21 @@ class tonghopnguon_huyenController extends Controller
                     $a_solieu['tongbh_dv'] = $dulieu_chitiet->sum('tongbh_dv');
                     $a_solieu['ttbh_dv'] = round(($dulieu_chitiet->sum('ttbh_dv') / $chenhlech) * $luongcb);
                     //dd($a_solieu);
-                    foreach ($a_phucap as $mapc => $tenpc) {
-                        $mapc_st = 'st_' . $mapc;
-                        $a_solieu[$mapc] = $dulieu_chitiet->sum($mapc);
-                        $a_solieu[$mapc_st] = round($a_solieu[$mapc] * $luongcb);
+                    foreach ($m_phucap as $pc) {
+                        $mapc_st = 'st_' . $pc->mapc;
+                        $a_solieu[$pc->mapc] = $dulieu_chitiet->sum($pc->mapc);
+                        $a_solieu[$mapc_st] = round($a_solieu[$pc->mapc] * $luongcb);
                     }
+                    //Ở ngoài nhóm phụ cấp => đưa hết vào pck
+                    foreach ($m_phucap as $pc) {
+                        if (!in_array($pc->mapc, $a_phucap)) {
+                            $a_solieu['pck'] += $a_solieu[$pc->mapc];
+                            $a_solieu['st_pck'] += $a_solieu[$mapc_st];
+                            $a_solieu[$pc->mapc] = 0;
+                            $a_solieu[$mapc_st] = 0;
+                        }
+                    }
+
                     $a_solieu['tongpc'] = $dulieu_chitiet->sum('tonghs') - $dulieu_chitiet->sum('heso');
                     $a_solieu['st_tongpc'] = round($a_solieu['tongpc'] * $luongcb);
                     $a_solieu['tongcong'] = $a_solieu['st_tongpc'] + $a_solieu['st_heso'] + $a_solieu['ttbh_dv'];
@@ -855,11 +905,22 @@ class tonghopnguon_huyenController extends Controller
                     $a_solieu_moi['tongbh_dv'] = $dulieu_chitiet->sum('tongbh_dv');
                     $a_solieu_moi['ttbh_dv'] = round(($dulieu_chitiet->sum('ttbh_dv') / $chenhlech) * $luongcb_moi);
 
-                    foreach ($a_phucap as $mapc => $tenpc) {
-                        $mapc_st = 'st_' . $mapc;
-                        $a_solieu_moi[$mapc] = $dulieu_chitiet->sum($mapc);
-                        $a_solieu_moi[$mapc_st] = round($a_solieu_moi[$mapc] * $luongcb_moi);
+                    foreach ($m_phucap as $pc) {
+                        $mapc_st = 'st_' . $pc->mapc;
+                        $a_solieu_moi[$pc->mapc] = $dulieu_chitiet->sum($pc->mapc);
+                        $a_solieu_moi[$mapc_st] = round($a_solieu_moi[$pc->mapc] * $luongcb_moi);
                     }
+
+                    //Ở ngoài nhóm phụ cấp => đưa hết vào pck
+                    foreach ($m_phucap as $pc) {
+                        if (!in_array($pc->mapc, $a_phucap)) {
+                            $a_solieu_moi['pck'] += $a_solieu_moi[$pc->mapc];
+                            $a_solieu_moi['st_pck'] += $a_solieu_moi[$mapc_st];
+                            $a_solieu_moi[$pc->mapc] = 0;
+                            $a_solieu_moi[$mapc_st] = 0;
+                        }
+                    }
+
                     $a_solieu_moi['tongpc'] = $dulieu_chitiet->sum('tonghs') - $dulieu_chitiet->sum('heso');
                     $a_solieu_moi['st_tongpc'] = round($a_solieu_moi['tongpc'] * $luongcb_moi);
                     $a_solieu_moi['tongcong'] = $a_solieu_moi['st_tongpc'] + $a_solieu_moi['st_heso'] + $a_solieu_moi['ttbh_dv'];
@@ -884,9 +945,9 @@ class tonghopnguon_huyenController extends Controller
 
                     $a_solieu_moi['canbo_congtac'] = $a_solieu_moi['canbo_dutoan'] = $a_solieu_moi['heso'] = $a_solieu_moi['st_heso'] = $a_solieu_moi['tongpc'] = $a_solieu_moi['st_tongpc']
                         = $a_solieu_moi['tongbh_dv'] = $a_solieu_moi['ttbh_dv'] = $a_solieu_moi['tongcong'] = 0;
-                    foreach ($a_phucap as $mapc => $tenpc) {
-                        $mapc_st = 'st_' . $mapc;
-                        $a_solieu[$mapc] = $a_solieu[$mapc_st] = $a_solieu_moi[$mapc] = $a_solieu_moi[$mapc_st] = 0;
+                    foreach ($m_phucap as $pc) {
+                        $mapc_st = 'st_' . $pc->mapc;
+                        $a_solieu[$pc->mapc] = $a_solieu[$mapc_st] = $a_solieu_moi[$pc->mapc] = $a_solieu_moi[$mapc_st] = 0;
                     }
 
                     foreach ($chitiet['chitiet'] as $k) {
@@ -897,9 +958,9 @@ class tonghopnguon_huyenController extends Controller
                         $a_solieu['tongbh_dv'] += $ar_III[$k]['solieu']['tongbh_dv'];
                         $a_solieu['ttbh_dv'] += $ar_III[$k]['solieu']['ttbh_dv'];
 
-                        foreach ($a_phucap as $mapc => $tenpc) {
-                            $mapc_st = 'st_' . $mapc;
-                            $a_solieu[$mapc] += $ar_III[$k]['solieu'][$mapc];
+                        foreach ($m_phucap as $pc) {
+                            $mapc_st = 'st_' . $pc->mapc;
+                            $a_solieu[$pc->mapc] += $ar_III[$k]['solieu'][$pc->mapc];
                             $a_solieu[$mapc_st] += $ar_III[$k]['solieu'][$mapc_st];
                         }
                         $a_solieu['tongpc'] += $ar_III[$k]['solieu']['tongpc'];
@@ -913,9 +974,9 @@ class tonghopnguon_huyenController extends Controller
                         $a_solieu_moi['tongbh_dv'] += $ar_III[$k]['solieu_moi']['tongbh_dv'];
                         $a_solieu_moi['ttbh_dv'] += $ar_III[$k]['solieu_moi']['ttbh_dv'];
 
-                        foreach ($a_phucap as $mapc => $tenpc) {
-                            $mapc_st = 'st_' . $mapc;
-                            $a_solieu_moi[$mapc] += $ar_III[$k]['solieu_moi'][$mapc];
+                        foreach ($m_phucap as $pc) {
+                            $mapc_st = 'st_' . $pc->mapc;
+                            $a_solieu_moi[$pc->mapc] += $ar_III[$k]['solieu_moi'][$pc->mapc];
                             $a_solieu_moi[$mapc_st] += $ar_III[$k]['solieu_moi'][$mapc_st];
                         }
                         $a_solieu_moi['tongpc'] += $ar_III[$k]['solieu_moi']['tongpc'];
@@ -936,14 +997,12 @@ class tonghopnguon_huyenController extends Controller
 
             //Tính toán số liệu phần IV
             $ar_IV = getCapUy();
-            $dulieu_pIV = $m_chitiet->where('nhomnhucau',  'CAPUY');
-
+            $dulieu_pIV = $m_chitiet->where('nhomnhucau',  'CAPUY');;
             $aIV_plct = getCapUy_plct();
             foreach ($dulieu_pIV as $key => $value) {
                 if (count($aIV_plct) > 0 && !in_array($value->mact, $aIV_plct))
                     $dulieu_pIV->forget($key);
             }
-
             //Vòng cấp độ 3
             foreach ($ar_IV as $key => $chitiet) {
                 if ($chitiet['phanloai'] == '0') {
@@ -960,10 +1019,19 @@ class tonghopnguon_huyenController extends Controller
                     $a_solieu['tongbh_dv'] = $dulieu_chitiet->sum('tongbh_dv');
                     $a_solieu['ttbh_dv'] = round(($dulieu_chitiet->sum('ttbh_dv') / $chenhlech) * $luongcb);
                     //dd($a_solieu);
-                    foreach ($a_phucap as $mapc => $tenpc) {
-                        $mapc_st = 'st_' . $mapc;
-                        $a_solieu[$mapc] = $dulieu_chitiet->sum($mapc);
-                        $a_solieu[$mapc_st] = round($a_solieu[$mapc] * $luongcb);
+                    foreach ($m_phucap as $pc) {
+                        $mapc_st = 'st_' . $pc->mapc;
+                        $a_solieu[$pc->mapc] = $dulieu_chitiet->sum($pc->mapc);
+                        $a_solieu[$mapc_st] = round($a_solieu[$pc->mapc] * $luongcb);
+                    }
+                    //Ở ngoài nhóm phụ cấp => đưa hết vào pck
+                    foreach ($m_phucap as $pc) {
+                        if (!in_array($pc->mapc, $a_phucap)) {
+                            $a_solieu['pck'] += $a_solieu[$pc->mapc];
+                            $a_solieu['st_pck'] += $a_solieu[$mapc_st];
+                            $a_solieu[$pc->mapc] = 0;
+                            $a_solieu[$mapc_st] = 0;
+                        }
                     }
                     $a_solieu['tongpc'] = $dulieu_chitiet->sum('tonghs') - $dulieu_chitiet->sum('heso');
                     $a_solieu['st_tongpc'] = round($a_solieu['tongpc'] * $luongcb);
@@ -979,10 +1047,19 @@ class tonghopnguon_huyenController extends Controller
                     $a_solieu_moi['tongbh_dv'] = $dulieu_chitiet->sum('tongbh_dv');
                     $a_solieu_moi['ttbh_dv'] = round(($dulieu_chitiet->sum('ttbh_dv') / $chenhlech) * $luongcb_moi);
 
-                    foreach ($a_phucap as $mapc => $tenpc) {
-                        $mapc_st = 'st_' . $mapc;
-                        $a_solieu_moi[$mapc] = $dulieu_chitiet->sum($mapc);
-                        $a_solieu_moi[$mapc_st] = round($a_solieu_moi[$mapc] * $luongcb_moi);
+                    foreach ($m_phucap as $pc) {
+                        $mapc_st = 'st_' . $pc->mapc;
+                        $a_solieu_moi[$pc->mapc] = $dulieu_chitiet->sum($pc->mapc);
+                        $a_solieu_moi[$mapc_st] = round($a_solieu_moi[$pc->mapc] * $luongcb_moi);
+                    }
+                    //Ở ngoài nhóm phụ cấp => đưa hết vào pck
+                    foreach ($m_phucap as $pc) {
+                        if (!in_array($pc->mapc, $a_phucap)) {
+                            $a_solieu_moi['pck'] += $a_solieu_moi[$pc->mapc];
+                            $a_solieu_moi['st_pck'] += $a_solieu_moi[$mapc_st];
+                            $a_solieu_moi[$pc->mapc] = 0;
+                            $a_solieu_moi[$mapc_st] = 0;
+                        }
                     }
                     $a_solieu_moi['tongpc'] = $dulieu_chitiet->sum('tonghs') - $dulieu_chitiet->sum('heso');
                     $a_solieu_moi['st_tongpc'] = round($a_solieu_moi['tongpc'] * $luongcb_moi);
@@ -1008,9 +1085,9 @@ class tonghopnguon_huyenController extends Controller
 
                     $a_solieu_moi['canbo_congtac'] = $a_solieu_moi['canbo_dutoan'] = $a_solieu_moi['heso'] = $a_solieu_moi['st_heso'] = $a_solieu_moi['tongpc'] = $a_solieu_moi['st_tongpc']
                         = $a_solieu_moi['tongbh_dv'] = $a_solieu_moi['ttbh_dv'] = $a_solieu_moi['tongcong'] = 0;
-                    foreach ($a_phucap as $mapc => $tenpc) {
-                        $mapc_st = 'st_' . $mapc;
-                        $a_solieu[$mapc] = $a_solieu[$mapc_st] = $a_solieu_moi[$mapc] = $a_solieu_moi[$mapc_st] = 0;
+                    foreach ($m_phucap as $pc) {
+                        $mapc_st = 'st_' . $pc->mapc;
+                        $a_solieu[$pc->mapc] = $a_solieu[$mapc_st] = $a_solieu_moi[$pc->mapc] = $a_solieu_moi[$mapc_st] = 0;
                     }
 
                     foreach ($chitiet['chitiet'] as $k) {
@@ -1021,9 +1098,9 @@ class tonghopnguon_huyenController extends Controller
                         $a_solieu['tongbh_dv'] += $ar_IV[$k]['solieu']['tongbh_dv'];
                         $a_solieu['ttbh_dv'] += $ar_IV[$k]['solieu']['ttbh_dv'];
 
-                        foreach ($a_phucap as $mapc => $tenpc) {
-                            $mapc_st = 'st_' . $mapc;
-                            $a_solieu[$mapc] += $ar_IV[$k]['solieu'][$mapc];
+                        foreach ($m_phucap as $pc) {
+                            $mapc_st = 'st_' . $pc->mapc;
+                            $a_solieu[$pc->mapc] += $ar_IV[$k]['solieu'][$pc->mapc];
                             $a_solieu[$mapc_st] += $ar_IV[$k]['solieu'][$mapc_st];
                         }
                         $a_solieu['tongpc'] += $ar_IV[$k]['solieu']['tongpc'];
@@ -1037,9 +1114,9 @@ class tonghopnguon_huyenController extends Controller
                         $a_solieu_moi['tongbh_dv'] += $ar_IV[$k]['solieu_moi']['tongbh_dv'];
                         $a_solieu_moi['ttbh_dv'] += $ar_IV[$k]['solieu_moi']['ttbh_dv'];
 
-                        foreach ($a_phucap as $mapc => $tenpc) {
-                            $mapc_st = 'st_' . $mapc;
-                            $a_solieu_moi[$mapc] += $ar_IV[$k]['solieu_moi'][$mapc];
+                        foreach ($m_phucap as $pc) {
+                            $mapc_st = 'st_' . $pc->mapc;
+                            $a_solieu_moi[$pc->mapc] += $ar_IV[$k]['solieu_moi'][$pc->mapc];
                             $a_solieu_moi[$mapc_st] += $ar_IV[$k]['solieu_moi'][$mapc_st];
                         }
                         $a_solieu_moi['tongpc'] += $ar_IV[$k]['solieu_moi']['tongpc'];
@@ -1057,7 +1134,6 @@ class tonghopnguon_huyenController extends Controller
                     $ar_IV[$key]['solieu_moi'] = $a_solieu_moi;
                 }
             }
-
 
             //Tính toán tổng cộng
             $a_Tong = [
@@ -1086,14 +1162,16 @@ class tonghopnguon_huyenController extends Controller
                 'ttbh_dv' => $ar_I[0]['solieu_moi']['ttbh_dv'] + $ar_II[0]['solieu_moi']['ttbh_dv']
                     + $ar_III[0]['solieu_moi']['ttbh_dv'] + $ar_IV[0]['solieu_moi']['ttbh_dv'],
             ];
-            foreach ($a_phucap_st as $mapc => $tenpc) {
-                $a_Tong['solieu_moi'][$mapc] = $ar_I[0]['solieu_moi'][$mapc] + $ar_II[0]['solieu_moi'][$mapc]
-                    + $ar_III[0]['solieu_moi'][$mapc] + $ar_IV[0]['solieu_moi'][$mapc];
-                $a_Tong['solieu'][$mapc] = $ar_I[0]['solieu'][$mapc] + $ar_II[0]['solieu'][$mapc]
-                    + $ar_III[0]['solieu'][$mapc] + $ar_IV[0]['solieu'][$mapc];
+            foreach ($m_phucap as $pc) {
+                $mapc_st = 'st_' . $pc->mapc;
+                $a_Tong['solieu_moi'][$mapc_st] = $ar_I[0]['solieu_moi'][$mapc_st] + $ar_II[0]['solieu_moi'][$mapc_st]
+                    + $ar_III[0]['solieu_moi'][$mapc_st] + $ar_IV[0]['solieu_moi'][$mapc_st];
+                $a_Tong['solieu'][$mapc_st] = $ar_I[0]['solieu'][$mapc_st] + $ar_II[0]['solieu'][$mapc_st]
+                    + $ar_III[0]['solieu'][$mapc_st] + $ar_IV[0]['solieu'][$mapc_st];
             }
-            $m_donvi = dmdonvi::where('madv', $inputs['macqcq'])->first();
+
             //dd($m_tonghop_ct);
+            $m_dv = dmdonvi::where('madv', $inputs['macqcq'])->first();
             return view('reports.thongtu78.donvi.mau2a2')
                 ->with('furl', '/tong_hop_bao_cao/')
                 ->with('ar_I', $ar_I)
@@ -1101,15 +1179,16 @@ class tonghopnguon_huyenController extends Controller
                 ->with('ar_III', $ar_III)
                 ->with('ar_IV', $ar_IV)
                 ->with('a_Tong', $a_Tong)
-                ->with('m_dv', $m_donvi)
+                ->with('m_dv', $m_dv)
                 ->with('inputs', $inputs)
-                ->with('a_phucap', $a_phucap)
-                ->with('a_phucap_st', $a_phucap_st)
-                ->with('col', $col)
+                //->with('a_phucap', $a_phucap)
+                ->with('a_phucap', getPhuCap2a_78())
+                //->with('a_phucap_st', $a_phucap_st)
+                //->with('col', $col)
                 ->with('pageTitle', 'Báo cáo nhu cầu kinh phí');
         } else
             return view('errors.notlogin');
-    }
+    }    
 
     function mau2a_2(Request $request)
     {
@@ -1179,7 +1258,7 @@ class tonghopnguon_huyenController extends Controller
                     $dulieu_chitiet = $dulieu_pI;
                     foreach ($chitiet['chitiet'] as $k => $v) {
                         $dulieu_chitiet  = $dulieu_chitiet->where($k, $v);
-                        $dulieu_nguonkp = $m_nguonkp->where($k, $v);
+                        $dulieu_nguonkp = $m_nguonkp->wherein('masodv', array_unique(array_column($dulieu_chitiet->toarray(),'masodv')));
                     }
                     //Tính bảng lương theo số tiền cũ
                     $a_solieu = [];
@@ -1384,7 +1463,7 @@ class tonghopnguon_huyenController extends Controller
                     $dulieu_chitiet = $dulieu_pII;
                     foreach ($chitiet['chitiet'] as $k => $v) {
                         $dulieu_chitiet  = $dulieu_chitiet->where($k, $v);
-                        $dulieu_nguonkp = $m_nguonkp->where($k, $v);
+                        $dulieu_nguonkp = $m_nguonkp->wherein('masodv', array_unique(array_column($dulieu_chitiet->toarray(),'masodv')));
                     }
                     //Tính bảng lương theo số tiền cũ
                     $a_solieu = [];
@@ -1728,7 +1807,6 @@ class tonghopnguon_huyenController extends Controller
             return view('errors.notlogin');
     }
 
-
     function mau2a_vn(Request $request)
     {
         if (Session::has('admin')) {
@@ -1787,7 +1865,7 @@ class tonghopnguon_huyenController extends Controller
             $luongcb = $m_thongtu->muccu;
             $luongcb_moi = $m_thongtu->mucapdung;
             $chenhlech = $m_thongtu->chenhlech;
-
+            //dd($m_nguonkp->where('linhvuchoatdong', 'QLNN')->toarray());
             //Tính toán số liệu phần I
             $ar_I = getHCSN();
             //$dulieu_pI = $m_chitiet->where('maphanloai', '<>', 'KVXP');
@@ -1798,6 +1876,7 @@ class tonghopnguon_huyenController extends Controller
                     $dulieu_chitiet = $dulieu_pI;
                     foreach ($chitiet['chitiet'] as $k => $v) {
                         $dulieu_chitiet  = $dulieu_chitiet->where($k, $v);
+                        $dulieu_nguonkp = $m_nguonkp->wherein('masodv', array_unique(array_column($dulieu_chitiet->toarray(),'masodv')));
                     }
                     //Tính bảng lương theo số tiền cũ
                     $a_solieu = [];
@@ -1838,7 +1917,7 @@ class tonghopnguon_huyenController extends Controller
                     $ar_I[$key]['solieu_moi'] = $a_solieu_moi;
 
                     $ar_I[$key]['canbo_congtac'] = $dulieu_chitiet->sum('canbo_congtac');
-                    $ar_I[$key]['canbo_dutoan'] = $dulieu_chitiet->sum('canbo_dutoan');
+                    $ar_I[$key]['canbo_dutoan'] = $dulieu_nguonkp->sum('sobiencheduocgiao');
                     $ar_I[$key]['chenhlech01thang'] = $a_solieu_moi['tongcong'] - $a_solieu['tongcong'];
                     $ar_I[$key]['chenhlech06thang'] = $ar_I[$key]['chenhlech01thang'] * 6;
                 }
@@ -2002,6 +2081,7 @@ class tonghopnguon_huyenController extends Controller
                     $dulieu_chitiet = $dulieu_pII;
                     foreach ($chitiet['chitiet'] as $k => $v) {
                         $dulieu_chitiet  = $dulieu_chitiet->where($k, $v);
+                        $dulieu_nguonkp = $m_nguonkp->wherein('masodv', array_unique(array_column($dulieu_chitiet->toarray(),'masodv')));
                     }
                     //Tính bảng lương theo số tiền cũ
                     $a_solieu = [];
@@ -2042,7 +2122,7 @@ class tonghopnguon_huyenController extends Controller
                     $ar_II[$key]['solieu_moi'] = $a_solieu_moi;
 
                     $ar_II[$key]['canbo_congtac'] = $dulieu_chitiet->sum('canbo_congtac');
-                    $ar_II[$key]['canbo_dutoan'] = $dulieu_chitiet->sum('canbo_dutoan');
+                    $ar_II[$key]['canbo_dutoan'] = $dulieu_nguonkp->sum('sobiencheduocgiao');
                     $ar_II[$key]['chenhlech01thang'] = $a_solieu_moi['tongcong'] - $a_solieu['tongcong'];
                     $ar_II[$key]['chenhlech06thang'] = $ar_II[$key]['chenhlech01thang'] * 6;
                 }

@@ -544,7 +544,22 @@ class nguonkinhphiController extends Controller
                 $m_data_01thang[$i]['tongbh_dv'] = $m_data_01thang[$i]['bhxh_dv'] + $m_data_01thang[$i]['bhyt_dv'] + $m_data_01thang[$i]['bhtn_dv'] + $m_data_01thang[$i]['kpcd_dv'];
             }
 
-            //dd($m_data_01thang);
+            $inputs['sobiencheduocgiao'] = 0;
+            if (session('admin')->maphanloai == 'KVXP') {
+                $a_nhomplct = array_column(dmphanloaict::all()->toArray(), 'nhomnhucau_xp', 'mact');
+                foreach ($m_data_01thang as $ct) {
+                    if (($a_nhomplct[$ct['mact']] ?? '') == 'CANBOCT') {
+                        $inputs['sobiencheduocgiao'] += $ct['canbo_congtac'];
+                    }
+                }
+            } else {
+                $a_nhomplct = array_column(dmphanloaict::all()->toArray(), 'nhomnhucau_hc', 'mact');
+                foreach ($m_data_01thang as $ct) {
+                    if (($a_nhomplct[$ct['mact']] ?? '') == 'BIENCHE') {
+                        $inputs['sobiencheduocgiao'] += $ct['canbo_congtac'];
+                    }
+                }
+            }
 
             $inputs['trangthai'] = 'CHOGUI';
             $inputs['maphanloai'] = session('admin')->maphanloai;
