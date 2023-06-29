@@ -349,13 +349,13 @@ class nguonkinhphi_donvi_baocaoController extends Controller
             //dd($m_nguonkp);
 
             $m_phucap = dmphucap_donvi::where('madv',  $m_nguonkp->first()->madv)->wherenotin('mapc', ['heso'])->get();
-
+            $m_nguonkp = nguonkinhphi::where('masodv', $inputs['masodv'])->get();//đưa về mảng cho dễ làm
             $a_phucap = getPhuCap2a_78();
 
             $luongcb = $m_thongtu->muccu;
             $luongcb_moi = $m_thongtu->mucapdung;
             $chenhlech = $m_thongtu->chenhlech;
-
+            //dd($m_nguonkp);
             //Tính toán số liệu phần I
             $ar_I = getHCSN();
             $dulieu_pI = $m_chitiet->where('nhomnhucau', 'BIENCHE');
@@ -365,7 +365,7 @@ class nguonkinhphi_donvi_baocaoController extends Controller
                     $dulieu_chitiet = $dulieu_pI;
                     foreach ($chitiet['chitiet'] as $k => $v) {
                         $dulieu_chitiet  = $dulieu_chitiet->where($k, $v);
-                        $dulieu_nguonkp = $m_nguonkp->where($k, $v);
+                        $dulieu_nguonkp = $m_nguonkp->wherein('masodv', array_unique(array_column($dulieu_chitiet->toarray(),'masodv')));
                     }
                     //Tính bảng lương theo số tiền cũ
                     $a_solieu = [];
@@ -596,7 +596,7 @@ class nguonkinhphi_donvi_baocaoController extends Controller
                     $dulieu_chitiet = $dulieu_pII;
                     foreach ($chitiet['chitiet'] as $k => $v) {
                         $dulieu_chitiet  = $dulieu_chitiet->where($k, $v);
-                        $dulieu_nguonkp = $m_nguonkp->where($k, $v);
+                        $dulieu_nguonkp = $m_nguonkp->wherein('masodv', array_unique(array_column($dulieu_chitiet->toarray(),'masodv')));
                     }
                     //Tính bảng lương theo số tiền cũ
                     $a_solieu = [];
@@ -1055,7 +1055,7 @@ class nguonkinhphi_donvi_baocaoController extends Controller
                     $dulieu_chitiet = $dulieu_pI;
                     foreach ($chitiet['chitiet'] as $k => $v) {
                         $dulieu_chitiet  = $dulieu_chitiet->where($k, $v);
-                        $dulieu_nguonkp = $m_nguonkp->where($k, $v);
+                        $dulieu_nguonkp = $m_nguonkp->wherein('masodv', array_unique(array_column($dulieu_chitiet->toarray(),'masodv')));
                     }
                     //Tính bảng lương theo số tiền cũ
                     $a_solieu = [];
@@ -1266,7 +1266,7 @@ class nguonkinhphi_donvi_baocaoController extends Controller
                     $dulieu_chitiet = $dulieu_pII;
                     foreach ($chitiet['chitiet'] as $k => $v) {
                         $dulieu_chitiet  = $dulieu_chitiet->where($k, $v);
-                        $dulieu_nguonkp = $m_nguonkp->where($k, $v);
+                        $dulieu_nguonkp = $m_nguonkp->wherein('masodv', array_unique(array_column($dulieu_chitiet->toarray(),'masodv')));
                     }
                     //Tính bảng lương theo số tiền cũ
                     $a_solieu = [];
