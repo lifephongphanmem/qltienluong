@@ -25,7 +25,7 @@
     <script>
         jQuery(document).ready(function() {
             TableManaged.init();
-            $('#mact').val('{{ session('admin')->mact_tuyenthem }}').trigger();
+            //$('#mact').val('{{ session('admin')->mact_tuyenthem }}').trigger();
         });
     </script>
 @stop
@@ -193,7 +193,9 @@
                                     <optgroup label="{{ $kieuct->tencongtac }}">
                                         <?php $mode_ct = $model_tenct->where('macongtac', $kieuct->macongtac); ?>
                                         @foreach ($mode_ct as $ct)
-                                            <option value="{{ $ct->mact }}">{{ $ct->tenct }}</option>
+                                            <option
+                                                value="{{ $ct->mact }}" {{ session('admin')->mact_tuyenthem == $ct->mact ? 'selected' : '' }}>
+                                                {{ $ct->tenct }}</option>
                                         @endforeach
                                     </optgroup>
                                 @endforeach
@@ -272,6 +274,13 @@
                         <div class="col-md-offset-3 col-md-9" style="padding-top: 15px">
                             <input type="checkbox" checked id="nangluong" name="nangluong" />
                             <label for="nghihuu">Tính nâng lương cán bộ</label>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-offset-3 col-md-9" style="padding-top: 15px">
+                            <input type="checkbox" checked id="tachkiemnhiem" name="tachkiemnhiem" />
+                            <label for="tachkiemnhiem">Tách cán bộ HĐND và Cấp uỷ ra làm cán bộ mới</label>
                         </div>
                     </div>
                 </div>

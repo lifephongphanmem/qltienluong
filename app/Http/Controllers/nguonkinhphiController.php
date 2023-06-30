@@ -130,6 +130,8 @@ class nguonkinhphiController extends Controller
             //dd($model_thongtu->ngayapdung);
             $model = (new dataController())->getCanBo($model, $model_thongtu->ngayapdung, true, $model_thongtu->ngayapdung);
 
+
+
             //Thêm cán bộ chưa tuyển
             if ($inputs['soluongchuatuyen'] > 0) {
                 $a_baohiem = dmphanloaicongtac_baohiem::where('madv', session('admin')->madv)->get()->keyBy('mact')->toarray();
@@ -229,7 +231,81 @@ class nguonkinhphiController extends Controller
                 }
             }
 
+            if (isset($inputs['tachkiemnhiem'])) {
+                if (session('admin')->maphanloai == 'KVXP') {
+                    $a_nhomplct_hnnd = dmphanloaict::where('nhomnhucau_xp', 'HDND')->first();
+                    $a_nhomplct_capuy = dmphanloaict::where('nhomnhucau_xp', 'CAPUY')->first();
+                } else {
+                    $a_nhomplct_hnnd = dmphanloaict::wherein('nhomnhucau_hc', 'HDND')->first();
+                    $a_nhomplct_capuy = dmphanloaict::wherein('nhomnhucau_hc', 'CAPUY')->first();
+                }
 
+                
+                foreach ($model as $key => $ct) {
+                    //tách hội đồng nhân dân
+                    if ($ct->pcdbqh > 0) {
+                        $add = clone $ct;
+                        $add->mact = $a_nhomplct_hnnd->mact;
+                        $add->macongtac = $a_nhomplct_hnnd->macongtac;
+                        $add->ngaysinh = null;
+                        $add->tnndenngay = null;
+                        //$ct->macongtac = null;
+                        $add->gioitinh = null;
+                        $add->nam_ns = null;
+                        $add->thang_ns = null;
+                        $add->nam_nb = null;
+                        $add->thang_nb = null;
+                        $add->nam_tnn = null;
+                        $add->thang_tnn = null;
+                        $add->msngbac = null;
+                        $add->bac = null;
+                        //ko đóng bh
+                        $add->bhxh_dv = 0;
+                        $add->bhyt_dv = 0;
+                        $add->bhtn_dv = 0;
+                        $add->kpcd_dv = 0;
+                        //xoá thông tin phụ cấp
+                        foreach ($a_pc_tonghop as $pc) {
+                            $add->$pc = 0;
+                        }
+                        $add->pcdbqh = $ct->pcdbqh;
+                        $ct->pcdbqh = 0;                        
+                        $model->add($add);
+                    }
+
+                    //tách cấp uỷ
+                    if ($ct->pcvk > 0) {
+                        $add = clone $ct;
+                        $add->mact = $a_nhomplct_capuy->mact;
+                        $add->macongtac = $a_nhomplct_capuy->macongtac;
+                        $add->ngaysinh = null;
+                        $add->tnndenngay = null;
+                        //$ct->macongtac = null;
+                        $add->gioitinh = null;
+                        $add->nam_ns = null;
+                        $add->thang_ns = null;
+                        $add->nam_nb = null;
+                        $add->thang_nb = null;
+                        $add->nam_tnn = null;
+                        $add->thang_tnn = null;
+                        $add->msngbac = null;
+                        $add->bac = null;
+                        //ko đóng bh
+                        $add->bhxh_dv = 0;
+                        $add->bhyt_dv = 0;
+                        $add->bhtn_dv = 0;
+                        $add->kpcd_dv = 0;
+                        //xoá thông tin phụ cấp
+                        foreach ($a_pc_tonghop as $pc) {
+                            $add->$pc = 0;
+                        }
+                        $add->pcvk = $ct->pcvk;
+                        $ct->pcvk = 0;                        
+                        $model->add($add);
+                    }
+                }
+            }
+           // dd($model);
 
             $model = $model->wherein('mact', $a_plct)->where('lvhd', $inputs['linhvuchoatdong']);
             //lấy danh sách cán bộ chưa nâng lương từ tháng 01-06 => tự nâng lương
