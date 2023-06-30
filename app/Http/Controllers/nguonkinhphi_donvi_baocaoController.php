@@ -266,20 +266,40 @@ class nguonkinhphi_donvi_baocaoController extends Controller
         if (Session::has('admin')) {
             $inputs = $request->all();
             //dd($inputs);
-            $model = nguonkinhphi_nangluong::where('masodv', $inputs['maso'])->orderby('stt')->get();
-            //dd($model);
-            //$model = dutoanluong_bangluong::where('masodv', $inputs['masodv'])->orderby('thang')->get();
-            $model_thongtin = nguonkinhphi::where('masodv', $inputs['maso'])->first();
-            $a_pl = getPhanLoaiNangLuong();
+            //$model = nguonkinhphi_nangluong::where('masodv', $inputs['maso'])->orderby('stt')->get();
 
-            // $model_tonghop = nguonkinhphi_bangluong::where('masodv', $inputs['maso'])->orderby('stt');
-            // $model = $model_tonghop->where('thang', '07')->get();
-           // dd();
+            $model_thongtin = nguonkinhphi::where('masodv', $inputs['maso'])->first();
+            $model_tonghop = nguonkinhphi_bangluong::where('masodv', $inputs['maso'])->orderby('stt')->get();
+            $model = $model_tonghop->where('thang', '07');
+
             //cho trương hợp đơn vị cấp trên in dữ liệu dv câp dưới mà ko sai tên đơn vị
             $m_dv = dmdonvi::where('madv', $model_thongtin->madv)->first();
             $a_phucap = array();
             $col = 0;
             $m_pc = dmphucap_donvi::where('madv', $model_thongtin->madv)->orderby('stt')->get()->toarray();
+
+            foreach ($model as $key => $chitiet) {
+                $canbo = $model_tonghop->where('macanbo', $chitiet->macanbo)->where('mact', $chitiet->mact);
+                if ($chitiet->luongtn * 6 < $canbo->sum('luongtn')) {
+                    foreach ($m_pc as $ct) {
+                        $mapc = $ct['mapc'];
+                        //dd($mapc);
+                        $chitiet->$mapc = $canbo->sum($mapc) - $chitiet->$mapc * 6;
+                    }
+                    $chitiet->tonghs = $canbo->sum('tonghs') - $chitiet->tonghs * 6;
+                    $chitiet->luongtn = $canbo->sum('luongtn') - $chitiet->luongtn * 6;
+
+                    $chitiet->stbhxh_dv = $canbo->sum('stbhxh_dv') - $chitiet->stbhxh_dv * 6;
+                    $chitiet->stbhyt_dv = $canbo->sum('stbhyt_dv') - $chitiet->stbhyt_dv * 6;
+                    $chitiet->stkpcd_dv = $canbo->sum('stkpcd_dv') - $chitiet->stkpcd_dv * 6;
+                    $chitiet->stbhtn_dv = $canbo->sum('stbhtn_dv') - $chitiet->stbhtn_dv * 6;
+                    $chitiet->ttbh_dv = $canbo->sum('ttbh_dv') - $chitiet->ttbh_dv * 6;
+                } else {
+                    $model->forget($key);
+                }
+            }
+            //dd($model);
+
             //dd($m_pc);
             foreach ($m_pc as $ct) {
                 if ($model->sum($ct['mapc']) > 0) {
@@ -294,31 +314,12 @@ class nguonkinhphi_donvi_baocaoController extends Controller
                 'nam' => $model_thongtin->nam
             );
 
-            //Lấy dữ liệu để lập
-            $model_thang = $model->map(function ($data) {
-                return collect($data->toArray())
-                    ->only(['thang'])
-                    ->all();
-            });
-            //group mact đã bao gồm macongtac; manguonkp bao gồm luongcoban
-            $model_thang = a_unique($model_thang);
-
-            $model_phanloai = $model->map(function ($data) {
-                return collect($data->toArray())
-                    ->only(['maphanloai'])
-                    ->all();
-            });
-            $model_phanloai = a_unique($model_phanloai);
-
             return view('reports.nguonkinhphi.donvi.nangluong')
                 ->with('thongtin', $thongtin)
                 ->with('model', $model)
                 ->with('m_dv', $m_dv)
                 ->with('col', $col)
                 ->with('a_phucap', $a_phucap)
-                ->with('a_pl', $a_pl)
-                ->with('model_thang', $model_thang)
-                ->with('model_phanloai', $model_phanloai)
                 ->with('pageTitle', 'Chi tiết tổng hợp lương tại đơn vị');
         } else
             return view('errors.notlogin');
@@ -352,7 +353,7 @@ class nguonkinhphi_donvi_baocaoController extends Controller
             //dd($m_nguonkp);
 
             $m_phucap = dmphucap_donvi::where('madv',  $m_nguonkp->first()->madv)->wherenotin('mapc', ['heso'])->get();
-            $m_nguonkp = nguonkinhphi::where('masodv', $inputs['masodv'])->get();//đưa về mảng cho dễ làm
+            $m_nguonkp = nguonkinhphi::where('masodv', $inputs['masodv'])->get(); //đưa về mảng cho dễ làm
             $a_phucap = getPhuCap2a_78();
 
             $luongcb = $m_thongtu->muccu;
@@ -368,7 +369,7 @@ class nguonkinhphi_donvi_baocaoController extends Controller
                     $dulieu_chitiet = $dulieu_pI;
                     foreach ($chitiet['chitiet'] as $k => $v) {
                         $dulieu_chitiet  = $dulieu_chitiet->where($k, $v);
-                        $dulieu_nguonkp = $m_nguonkp->wherein('masodv', array_unique(array_column($dulieu_chitiet->toarray(),'masodv')));
+                        $dulieu_nguonkp = $m_nguonkp->wherein('masodv', array_unique(array_column($dulieu_chitiet->toarray(), 'masodv')));
                     }
                     //Tính bảng lương theo số tiền cũ
                     $a_solieu = [];
@@ -599,7 +600,7 @@ class nguonkinhphi_donvi_baocaoController extends Controller
                     $dulieu_chitiet = $dulieu_pII;
                     foreach ($chitiet['chitiet'] as $k => $v) {
                         $dulieu_chitiet  = $dulieu_chitiet->where($k, $v);
-                        $dulieu_nguonkp = $m_nguonkp->wherein('masodv', array_unique(array_column($dulieu_chitiet->toarray(),'masodv')));
+                        $dulieu_nguonkp = $m_nguonkp->wherein('masodv', array_unique(array_column($dulieu_chitiet->toarray(), 'masodv')));
                     }
                     //Tính bảng lương theo số tiền cũ
                     $a_solieu = [];
@@ -658,7 +659,7 @@ class nguonkinhphi_donvi_baocaoController extends Controller
                     $ar_II[$key]['solieu_moi'] = $a_solieu_moi;
 
                     $ar_II[$key]['canbo_congtac'] = $dulieu_chitiet->sum('canbo_congtac');
-                    $ar_II[$key]['canbo_dutoan'] = $dulieu_nguonkp->sum('sobiencheduocgiao');                    ;
+                    $ar_II[$key]['canbo_dutoan'] = $dulieu_nguonkp->sum('sobiencheduocgiao');;
                     $ar_II[$key]['chenhlech01thang'] = $a_solieu_moi['tongcong'] - $a_solieu['tongcong'];
                     $ar_II[$key]['chenhlech06thang'] = $ar_II[$key]['chenhlech01thang'] * 6;
                 }
@@ -1030,7 +1031,7 @@ class nguonkinhphi_donvi_baocaoController extends Controller
             }
             //dd($m_chitiet);
             $a_pc_th = dmphucap_donvi::where('madv',  $m_nguonkp->madv)->where('phanloai', '<', '3')->wherenotin('mapc', ['heso'])->get();
-            $m_nguonkp = nguonkinhphi::where('masodv', $inputs['masodv'])->get();//đưa về mảng cho dễ làm
+            $m_nguonkp = nguonkinhphi::where('masodv', $inputs['masodv'])->get(); //đưa về mảng cho dễ làm
 
             $a_phucap = array();
             $col = 0;
@@ -1058,7 +1059,7 @@ class nguonkinhphi_donvi_baocaoController extends Controller
                     $dulieu_chitiet = $dulieu_pI;
                     foreach ($chitiet['chitiet'] as $k => $v) {
                         $dulieu_chitiet  = $dulieu_chitiet->where($k, $v);
-                        $dulieu_nguonkp = $m_nguonkp->wherein('masodv', array_unique(array_column($dulieu_chitiet->toarray(),'masodv')));
+                        $dulieu_nguonkp = $m_nguonkp->wherein('masodv', array_unique(array_column($dulieu_chitiet->toarray(), 'masodv')));
                     }
                     //Tính bảng lương theo số tiền cũ
                     $a_solieu = [];
@@ -1269,7 +1270,7 @@ class nguonkinhphi_donvi_baocaoController extends Controller
                     $dulieu_chitiet = $dulieu_pII;
                     foreach ($chitiet['chitiet'] as $k => $v) {
                         $dulieu_chitiet  = $dulieu_chitiet->where($k, $v);
-                        $dulieu_nguonkp = $m_nguonkp->wherein('masodv', array_unique(array_column($dulieu_chitiet->toarray(),'masodv')));
+                        $dulieu_nguonkp = $m_nguonkp->wherein('masodv', array_unique(array_column($dulieu_chitiet->toarray(), 'masodv')));
                     }
                     //Tính bảng lương theo số tiền cũ
                     $a_solieu = [];

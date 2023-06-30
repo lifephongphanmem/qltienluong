@@ -141,6 +141,7 @@ class nguonkinhphiController extends Controller
                 $model_tuyenthem->lvhd = $inputs['linhvuchoatdong'];
                 $model_tuyenthem->macanbo = $inputs['mact'] . '_' . $inputs['soluongchuatuyen'];
                 $model_tuyenthem->tencanbo = 'Cán bộ chưa tuyển';
+                $model_tuyenthem->mucluongbaohiem = 0;
                 $model_tuyenthem->ngaybc = null;
                 $model_tuyenthem->ngayvao = null;
                 $model_tuyenthem->ngaysinh = null;
