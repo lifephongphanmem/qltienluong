@@ -70,7 +70,7 @@
                                     <th class="text-center">Bao gồm các</br>loại hệ số</th>
                                     <th style="width: 25%" class="text-center">Áp dụng cho các</br>phân loại công tác
                                     </th>
-                                    <th style="width: 3%" class="text-center">Tổng</br>hợp,</br>dự</br>toán</th>
+                                    <th style="width: 3%" class="text-center">Tổng</br>hợp</th>
                                     <th style="width: 3%" class="text-center">Nộp</br>bảo</br>hiểm</th>
                                     <th style="width: 3%" class="text-center">Trừ</br>nghỉ</br>phép</th>
                                     <th style="width: 3%" class="text-center">Chế</br>độ</br>thai</br>sản</th>

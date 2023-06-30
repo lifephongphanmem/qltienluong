@@ -99,8 +99,8 @@ class nguonkinhphiController extends Controller
                 //->get()->keyBy('macanbo')->toarray();
                 ->get();
             $a_th = array_merge(array(
-                'stt', 'ngaysinh', 'tencanbo', 'gioitinh', 'msngbac', 'bac',
-                'bhxh_dv', 'bhyt_dv', 'bhtn_dv', 'kpcd_dv', 'ngaybc', 'ngayvao', 'lvhd', 'ngaytu', 'tnntungay', 'tnndenngay'
+                'stt', 'ngaysinh', 'tencanbo', 'gioitinh', 'msngbac', 'bac', 'bhxh_dv', 'bhyt_dv',
+                'bhtn_dv', 'kpcd_dv', 'ngaybc', 'ngayvao', 'lvhd', 'ngaytu', 'tnntungay', 'tnndenngay', 'mucluongbaohiem'
             ), $a_th);
 
             $model = hosocanbo::select($a_th)->where('madv', session('admin')->madv)
@@ -129,7 +129,6 @@ class nguonkinhphiController extends Controller
             //dd($a_pc_ts);
             //dd($model_thongtu->ngayapdung);
             $model = (new dataController())->getCanBo($model, $model_thongtu->ngayapdung, true, $model_thongtu->ngayapdung);
-
 
 
             //Thêm cán bộ chưa tuyển
@@ -240,7 +239,7 @@ class nguonkinhphiController extends Controller
                     $a_nhomplct_capuy = dmphanloaict::where('nhomnhucau_hc', 'CAPUY')->first();
                 }
 
-                
+
                 foreach ($model as $key => $ct) {
                     //tách hội đồng nhân dân
                     if ($ct->pcdbqh > 0) {
@@ -269,7 +268,7 @@ class nguonkinhphiController extends Controller
                             $add->$pc = 0;
                         }
                         $add->pcdbqh = $ct->pcdbqh;
-                        $ct->pcdbqh = 0;                        
+                        $ct->pcdbqh = 0;
                         $model->add($add);
                     }
 
@@ -300,12 +299,12 @@ class nguonkinhphiController extends Controller
                             $add->$pc = 0;
                         }
                         $add->pcvk = $ct->pcvk;
-                        $ct->pcvk = 0;                        
+                        $ct->pcvk = 0;
                         $model->add($add);
                     }
                 }
             }
-           // dd($model);
+            // dd($model);
 
             $model = $model->wherein('mact', $a_plct)->where('lvhd', $inputs['linhvuchoatdong']);
             //lấy danh sách cán bộ chưa nâng lương từ tháng 01-06 => tự nâng lương
@@ -335,6 +334,7 @@ class nguonkinhphiController extends Controller
                 $ct->msngbac = $canbo['msngbac'];
                 $ct->ngaybc = $canbo['ngaybc'];
                 $ct->ngayvao = $canbo['ngayvao'];
+                $ct->mucluongbaohiem = 0;
                 $ct->ngaysinh = null;
                 $ct->tnndenngay = null;
                 //$ct->macongtac = null;
@@ -517,7 +517,7 @@ class nguonkinhphiController extends Controller
                     $a_data[] = $m_cb[$key];
                 }
             }
-            //dd($a_data);
+            //dd($a_data_nl);
             $a_dbhdnd = ['1536402868', '1536402870',];
             $a_cuv = ['1536459380', '1558600713', '1536459382', '1558945077',];
 
@@ -659,7 +659,7 @@ class nguonkinhphiController extends Controller
             $a_col = array(
                 'bac', 'bhxh_dv', 'bhtn_dv', 'kpcd_dv', 'bhyt_dv', 'gioitinh', 'nam_nb', 'nam_ns', 'nam_tnn',
                 'thang_nb', 'thang_ns', 'thang_tnn', 'ngayden', 'ngaytu', 'ngaysinh', 'tnndenngay', 'tnntungay', 'pcctp',
-                'st_pcctp', 'nam_hh', 'thang_hh', 'ngaybc', 'ngayvao', 'lvhd'
+                'st_pcctp', 'nam_hh', 'thang_hh', 'ngaybc', 'ngayvao', 'lvhd', 'mucluongbaohiem'
             );
             //dd($m_data_phucap);
             $a_data_nl = unset_key($a_data_nl, $a_col);
@@ -1367,6 +1367,7 @@ class nguonkinhphiController extends Controller
             return view('errors.notlogin');
     }
 
+    //bỏ
     function printf_nangluong(Request $request)
     {
         if (Session::has('admin')) {
@@ -1377,7 +1378,7 @@ class nguonkinhphiController extends Controller
             //$model = dutoanluong_bangluong::where('masodv', $inputs['masodv'])->orderby('thang')->get();
             $model_thongtin = nguonkinhphi::where('masodv', $inputs['maso'])->first();
             $a_pl = getPhanLoaiNangLuong();
-
+            dd();
             //cho trương hợp đơn vị cấp trên in dữ liệu dv câp dưới mà ko sai tên đơn vị
             $m_dv = dmdonvi::where('madv', $model_thongtin->madv)->first();
             $a_phucap = array();
@@ -1488,12 +1489,20 @@ class nguonkinhphiController extends Controller
                 $stbhtn_dv += round($m_cb['bhtn_dv'] * $m_cb[$mapc] * $luongcb, 0);
             }
         }
+        $m_cb['luongtn'] = round($m_cb['tonghs'] * $luongcb);
+        //trường hợp đặc biêt mức lương khoán 
+        if ($m_cb['mucluongbaohiem'] > 0) {
+            $stbhxh_dv = round($m_cb['bhxh_dv'] * $m_cb['luongtn'], 0);
+            $stbhyt_dv = round($m_cb['bhyt_dv'] * $m_cb['luongtn'], 0);
+            $stkpcd_dv = round($m_cb['kpcd_dv'] * $m_cb['luongtn'], 0);
+            $stbhtn_dv = round($m_cb['bhtn_dv'] * $m_cb['luongtn'], 0);
+        } 
 
         $m_cb['stbhxh_dv'] = $stbhxh_dv;
         $m_cb['stbhyt_dv'] = $stbhyt_dv;
         $m_cb['stkpcd_dv'] = $stkpcd_dv;
         $m_cb['stbhtn_dv'] = $stbhtn_dv;
-        $m_cb['luongtn'] = round($m_cb['tonghs'] * $luongcb);
+       
         $m_cb['ttbh_dv'] = $stbhxh_dv + $stbhyt_dv + $stkpcd_dv + $stbhtn_dv;
         return $m_cb;
     }

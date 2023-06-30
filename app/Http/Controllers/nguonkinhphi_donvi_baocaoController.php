@@ -272,6 +272,9 @@ class nguonkinhphi_donvi_baocaoController extends Controller
             $model_thongtin = nguonkinhphi::where('masodv', $inputs['maso'])->first();
             $a_pl = getPhanLoaiNangLuong();
 
+            // $model_tonghop = nguonkinhphi_bangluong::where('masodv', $inputs['maso'])->orderby('stt');
+            // $model = $model_tonghop->where('thang', '07')->get();
+           // dd();
             //cho trương hợp đơn vị cấp trên in dữ liệu dv câp dưới mà ko sai tên đơn vị
             $m_dv = dmdonvi::where('madv', $model_thongtin->madv)->first();
             $a_phucap = array();
