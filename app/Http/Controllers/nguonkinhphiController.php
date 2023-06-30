@@ -236,8 +236,8 @@ class nguonkinhphiController extends Controller
                     $a_nhomplct_hnnd = dmphanloaict::where('nhomnhucau_xp', 'HDND')->first();
                     $a_nhomplct_capuy = dmphanloaict::where('nhomnhucau_xp', 'CAPUY')->first();
                 } else {
-                    $a_nhomplct_hnnd = dmphanloaict::wherein('nhomnhucau_hc', 'HDND')->first();
-                    $a_nhomplct_capuy = dmphanloaict::wherein('nhomnhucau_hc', 'CAPUY')->first();
+                    $a_nhomplct_hnnd = dmphanloaict::where('nhomnhucau_hc', 'HDND')->first();
+                    $a_nhomplct_capuy = dmphanloaict::where('nhomnhucau_hc', 'CAPUY')->first();
                 }
 
                 
