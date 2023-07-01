@@ -56,7 +56,7 @@
                         </div>
 
                         <div class="row">
-                            <div class="col-md-6">
+                            <div class="col-md-3">
                                 <div class="form-group">
                                     <label class="form-control-label">Từ ngày<span class="require">*</span></label>
                                     {!! Form::input('date','ngaytu',null,array('id' => 'ngaytu', 'class' => 'form-control','required'))!!}
@@ -66,27 +66,37 @@
                             @if(!in_array($inputs['phanloai'], array('THAISAN','KHONGLUONG','DAINGAY')))
                                 <div class="col-md-3">
                                     <div class="form-group">
+                                        <label class="form-control-label">Ngày thanh toán<span
+                                                class="require">*</span></label>
+                                        {!! Form::input('date', 'ngaythanhtoan', null, ['id' => 'ngaythanhtoan', 'class' => 'form-control', 'required']) !!}
+                                    </div>
+                                </div>
+
+                                <div class="col-md-3">
+                                    <div class="form-group">
                                         <label class="form-control-label">Số ngày công</label>
-                                        {!!Form::text('songaycong', session('admin')->songaycong, array('id' =>'songaycong', 'class' => 'form-control', 'data-mask'=>'fdecimal'))!!}
+                                        {!! Form::text('songaycong', null, ['id' => 'songaycong', 'class' => 'form-control', 'data-mask' => 'fdecimal']) !!}
                                     </div>
                                 </div>
                                 <div class="col-md-3">
                                     <div class="form-group">
                                         <label class="form-control-label">Số ngày nghỉ</label>
-                                        {!!Form::text('songaynghi', null, array('id' =>'songaynghi', 'class' => 'form-control', 'data-mask'=>'fdecimal'))!!}
+                                        {!! Form::text('songaynghi', null, ['id' => 'songaynghi', 'class' => 'form-control', 'data-mask' => 'fdecimal']) !!}
                                     </div>
                                 </div>
-                                <input type="hidden" id="ngayden" name="ngayden"/>
+                                <input type="hidden" id="ngayden" name="ngayden" />
                             @else
                                 <div class="col-md-6">
                                     <div class="form-group">
                                         <label class="form-control-label">Đến ngày</label>
-                                        {!! Form::input('date','ngayden',null,array('id' => 'ngayden', 'class' => 'form-control','required'))!!}
+                                        {!! Form::input('date', 'ngayden', null, ['id' => 'ngayden', 'class' => 'form-control', 'required']) !!}
                                     </div>
                                 </div>
+                                <input type="hidden" id="ngaythanhtoan" name="ngaythanhtoan" value="0" />
                                 <input type="hidden" id="songaynghi" name="songaynghi" value="0" />
                                 <input type="hidden" id="songaycong" name="songaycong" value="0" />
                             @endif
+                            
                         </div>
 
                         <div class="row">
