@@ -275,8 +275,9 @@ class dutoanluong_insolieuController extends Controller
             
             $m_dutoan = dutoanluong::where('masodv', $inputs['masodv'])->first();
             //dd($inputs);
-            $model = dutoanluong_chitiet::where('masodv', $inputs['masodv'])->where('mact', $inputs['mact'])->get();
-            $m_chuatuyen = dutoanluong_chitiet::where('masodv', $inputs['masodv'])->where('phanloai', 'CHUATUYEN')->get();
+            $model = dutoanluong_chitiet::where('masodv', $inputs['masodv'])->wherein('mact', $inputs['mact'])->where('phanloai','<>' ,'CHUATUYEN')->get();
+            
+            $m_chuatuyen = dutoanluong_chitiet::where('masodv', $inputs['masodv'])->wherein('mact', $inputs['mact'])->where('phanloai', 'CHUATUYEN')->get();
             $a_plct = array_column(dmphanloaict::all()->toArray(), 'tenct', 'mact');
             $a_pc = getColDuToan();
             foreach ($model as $chitiet) {
