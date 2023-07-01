@@ -43,7 +43,7 @@
                 <th style="width: 2%;" rowspan="2">S</br>T</br>T</th>
                 <th rowspan="2">Họ và tên</th>
                 <th style="width: 3%;" rowspan="2">Mã ngạch</th>
-
+                <th style="width: 3%;" rowspan="2">Nâng từ tháng</th>
                 @foreach ($a_phucap as $key => $val)
                     <th style="width: 4%;" rowspan="2">{!! $val !!}</th>
                 @endforeach
@@ -63,7 +63,7 @@
             </tr>
 
             <tr>
-                @for ($i = 1; $i <= 11 + $col; $i++)
+                @for ($i = 1; $i <= 12 + $col; $i++)
                     <th>{{ $i }}</th>
                 @endfor
             </tr>
@@ -79,7 +79,7 @@
                 <td>{{ $stt++ }}</td>
                 <td style="text-align: left">{{ $ct->tencanbo }}</td>
                 <td style="text-align: left">{{ $ct->msngbac }}</td>
-
+                <td style="text-align: center">{{$ct->thangnangluong}}</td>
                 @foreach ($a_phucap as $key => $val)
                     <td style="text-align: center">{{ dinhdangsothapphan($ct->$key, 5) }}</td>
                 @endforeach
@@ -97,7 +97,7 @@
         @endforeach
 
         <tr style="font-weight: bold; text-align: center; font-style: italic">
-            <td colspan="3">Cộng</td>
+            <td colspan="4">Cộng</td>
             @foreach ($a_phucap as $key => $val)
                 <td>{{ dinhdangsothapphan($model->sum($key), 5) }}</td>
             @endforeach
