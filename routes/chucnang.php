@@ -349,6 +349,7 @@ Route::group(['prefix' => 'chuc_nang'], function () {
             Route::get('getlydo', 'tonghopnguon_huyenController@getlydo');
             //2023.06.13 Thiết kế kết xuất
             Route::post('tonghop', 'tonghopnguon_huyenController@tonghop');
+            Route::post('tonghop_m2', 'tonghopnguon_huyenController@tonghop_m2');
             Route::post('mau2a', 'tonghopnguon_huyenController@mau2a');
             Route::post('mau2a_2', 'tonghopnguon_huyenController@mau2a_2');
             Route::post('mau2a_vn', 'tonghopnguon_huyenController@mau2a_vn');

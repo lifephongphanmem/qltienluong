@@ -129,43 +129,6 @@ class nguonkinhphiController extends Controller
             //dd($a_pc_ts);
             //dd($model_thongtu->ngayapdung);
             $model = (new dataController())->getCanBo($model, $model_thongtu->ngayapdung, true, $model_thongtu->ngayapdung);
-            //Thêm cán bộ chưa tuyển
-            if ($inputs['soluongchuatuyen'] > 0) {
-                $a_baohiem = dmphanloaicongtac_baohiem::where('madv', session('admin')->madv)->get()->keyBy('mact')->toarray();
-                $baohiem = $a_baohiem[$inputs['mact']];
-
-                $model_tuyenthem = new hosocanbo();
-
-                $model_tuyenthem->macvcq = null;
-                $model_tuyenthem->mapb = null;
-                $model_tuyenthem->stt = 99;
-                $model_tuyenthem->msngbac = null;
-               
-                $model_tuyenthem->mact = $inputs['mact'];
-                $model_tuyenthem->lvhd = $inputs['linhvuchoatdong'];
-                $model_tuyenthem->macanbo = $inputs['mact'] . '_' . $inputs['soluongchuatuyen'];
-                $model_tuyenthem->tencanbo = 'Cán bộ chưa tuyển';
-                $model_tuyenthem->mucluongbaohiem = 0;
-                $model_tuyenthem->ngaybc = null;
-                $model_tuyenthem->ngayvao = null;
-                $model_tuyenthem->ngaysinh = null;
-                $model_tuyenthem->tnndenngay = null;
-
-                //thêm cho đủ trường
-                for ($i = 0; $i < count($a_pc); $i++) {
-                    $mapc = $a_pc[$i]['mapc'];
-                    $mapc_st = 'st_' . $mapc;
-                    $model_tuyenthem->$mapc = 0;
-                    $model_tuyenthem->$mapc_st = 0;
-                }
-                $model_tuyenthem->heso = round($inputs['heso'] * $inputs['soluongchuatuyen'], 5);
-                $model_tuyenthem->bhxh_dv = round((floatval($baohiem['bhxh_dv']) / 100), 5);
-                $model_tuyenthem->bhyt_dv = round((floatval($baohiem['bhyt_dv']) / 100), 5);
-                $model_tuyenthem->bhtn_dv = round((floatval($baohiem['bhtn_dv']) / 100), 5);
-                $model_tuyenthem->kpcd_dv = round((floatval($baohiem['kpcd_dv']) / 100), 5);
-
-                $model->add($model_tuyenthem);
-            }
 
             foreach ($model as $key => $cb) {
                 //xét thời hạn hợp đồng của cán bộ: nếu "ngayvao" > $model_thongtu->ngayapdung => gán lĩnh vực hoạt động = null để lọc theo lĩnh vực bỏ qua cán bộ
@@ -603,9 +566,6 @@ class nguonkinhphiController extends Controller
                 $dutoan = a_getelement($a_data, array('mact' => $m_data_phucap[$i]['mact']));
 
                 $m_data_phucap[$i]['canbo_congtac'] = count($dutoan);
-                if ($m_data_phucap[$i]['mact'] == $inputs['mact']) {
-                    $m_data_phucap[$i]['canbo_congtac'] = $inputs['soluongchuatuyen'];
-                }
                 $m_data_phucap[$i]['canbo_dutoan'] = $m_data_phucap[$i]['canbo_congtac'];
                 $m_data_phucap[$i]['ttl'] = array_sum(array_column($dutoan, "luongtn"));
                 foreach ($a_pc_tonghop as $pc) {
@@ -625,9 +585,6 @@ class nguonkinhphiController extends Controller
                 $dutoan = a_getelement($a_data, array('mact' => $m_data_01thang[$i]['mact'], 'thang' => '07'));
 
                 $m_data_01thang[$i]['canbo_congtac'] = count($dutoan);
-                if ($m_data_01thang[$i]['mact'] == $inputs['mact']) {
-                    $m_data_01thang[$i]['canbo_congtac'] = $inputs['soluongchuatuyen'];
-                }
                 $m_data_01thang[$i]['canbo_dutoan'] = $m_data_01thang[$i]['canbo_congtac'];
                 $m_data_01thang[$i]['ttl'] = array_sum(array_column($dutoan, "luongtn"));
                 foreach ($a_pc_tonghop as $pc) {

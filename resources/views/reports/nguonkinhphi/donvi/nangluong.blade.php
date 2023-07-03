@@ -79,7 +79,7 @@
                 <td>{{ $stt++ }}</td>
                 <td style="text-align: left">{{ $ct->tencanbo }}</td>
                 <td style="text-align: left">{{ $ct->msngbac }}</td>
-                <td style="text-align: center">{{$ct->thangnangluong}}</td>
+                <td style="text-align: center">{{ $ct->thangnangluong }}</td>
                 @foreach ($a_phucap as $key => $val)
                     <td style="text-align: center">{{ dinhdangsothapphan($ct->$key, 5) }}</td>
                 @endforeach
@@ -88,7 +88,7 @@
                 <td style="text-align: right">{{ dinhdangso($ct->luongtn) }}</td>
                 <td style="text-align: right">{{ dinhdangso($ct->stbhxh_dv) }}</td>
                 <td style="text-align: right">{{ dinhdangso($ct->stbhyt_dv) }}</td>
-                <td style="text-align: right"> {{ dinhdangso($ct->stkpcd_dv) }}</td>
+                <td style="text-align: right">{{ dinhdangso($ct->stkpcd_dv) }}</td>
                 <td style="text-align: right">{{ dinhdangso($ct->stbhtn_dv) }}</td>
                 <td style="text-align: right">{{ dinhdangso($ct->ttbh_dv) }}</td>
                 <td style="text-align: right">{{ dinhdangso($ct->ttbh_dv + $ct->luongtn) }}</td>

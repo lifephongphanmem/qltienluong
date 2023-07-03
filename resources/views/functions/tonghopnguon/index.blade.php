@@ -180,8 +180,21 @@
                         <div class="form-group">
                             <button type="button" onclick="insolieu('{{ $furl_th . 'tonghop' }}',null)"
                                 style="border-width: 0px" class="btn btn-default btn-xs mbs"
-                                data-target="#modal-insolieu" data-toggle="modal">
-                                <i class="fa fa-print"></i>&nbsp;Bảng tổng hợp nhu cầu kinh phí</button>
+                                data-target="#modal-insolieu" data-toggle="modal"
+                                title="Dữ liệu (bao gồm cả cán bộ hợp đồng, không chuyên trách) theo phân loại đơn vị của thông tin đơn vị">
+                                <i class="fa fa-print"></i>&nbsp;Bảng tổng hợp nhu cầu kinh phí (Mẫu 01)</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <button type="button" onclick="insolieu('{{ $furl_th . 'tonghop_m2' }}',null)"
+                                style="border-width: 0px" class="btn btn-default btn-xs mbs"
+                                data-target="#modal-insolieu" data-toggle="modal"
+                                title="Dữ liệu (bao gồm cả cán bộ hợp đồng, không chuyên trách) theo lĩnh vực hoạt động của nhu cầu kinh phí">
+                                <i class="fa fa-print"></i>&nbsp;Bảng tổng hợp nhu cầu kinh phí (Mẫu 02)</button>
                         </div>
                     </div>
                 </div>
