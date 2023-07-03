@@ -1218,6 +1218,7 @@ class bangluongController extends Controller
                     goto ketthuc_phucap;
                 }
                 if ($thaisan && !in_array($mapc, $a_ts) && !in_array($mapc, $a_goc)) {
+                    //dd($m_cb[$key]);
                     goto ketthuc_phucap;
                 }
                 if ($daingay && !in_array($mapc, $a_ts) && !in_array($mapc, $a_goc)) {
@@ -1630,6 +1631,27 @@ class bangluongController extends Controller
                     $tonghs += $m_cb_kn[$i][$mapc];
                     $tien += $m_cb_kn[$i][$mapc_st];
                 }                
+            }
+            //dd($a_thaisan);
+            //Tính thai sản cho cán bộ kiêm nhiệm
+            $thaisan = isset($a_thaisan[$m_cb_kn[$i]['macanbo']]) ? true : false;
+            $m_cb_kn[$i]['ghichu'] = '';
+            if ($thaisan) {
+                $tien = $tonghs = 0;                
+                $m_cb_kn[$i]['ghichu'] .= 'Nghỉ thai sản từ ' . getDayVn($a_thaisan[$m_cb_kn[$i]['macanbo']]['ngaytu']) . ' đến ' . getDayVn($a_thaisan[$m_cb_kn[$i]['macanbo']]['ngayden']) . ';';
+                $m_cb_kn[$i]['congtac'] = 'THAISAN';
+
+                foreach ($a_pc as $k => $v) {
+                    if (!in_array($k, $a_ts)) {
+                        $m_cb_kn[$i]['st_' . $k] = 0;
+                    }
+
+                    //phụ cấp ko tính theo số tiền và đc hưởng
+                    if ($m_cb_kn[$i][$k] < 10000 && $m_cb_kn[$i]['st_' . $k] > 0) {
+                        $tonghs += $m_cb_kn[$i][$k];
+                    }
+                    $tien += $m_cb_kn[$i]['st_' . $k];
+                }
             }
 
             $m_cb_kn[$i]['tonghs'] = $tonghs;
