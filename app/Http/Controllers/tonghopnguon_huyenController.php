@@ -292,20 +292,19 @@ class tonghopnguon_huyenController extends Controller
             $inputs = $requests->all();
             if (session('admin')->macqcq == '') {
                 return view('errors.chuacqcq');
-            }
+            }            
             $madv = session('admin')->madv;
-            $model_nguon_huyen = nguonkinhphi_tinh::where('sohieu', $inputs['sohieu'])->where('madv', $madv)->first();
-            // dd($model_nguon_huyen);
-            //$model_nguon = nguonkinhphi::where('sohieu',$inputs['sohieu'])->where('macqcq', $madv)->get();
-            if ($model_nguon_huyen != null) {
+            $model_nguon_tinh = nguonkinhphi_tinh::where('sohieu', $inputs['sohieu'])->where('madv', $madv)->first();
+
+            if ($model_nguon_tinh != null) {
                 //Trường hợp đơn vị bị trả lại dữ liệu muốn gửi lại
-                $model_nguon_huyen->trangthai = 'DAGUI';
-                $model_nguon_huyen->nguoilap = session('admin')->name;
-                $model_nguon_huyen->ngaylap = Carbon::now()->toDateTimeString();
-                $model_nguon_huyen->save();
+                $model_nguon_tinh->trangthai = 'DAGUI';
+                $model_nguon_tinh->nguoilap = session('admin')->name;
+                $model_nguon_tinh->ngaylap = Carbon::now()->toDateTimeString();
+                $model_nguon_tinh->save();
             } else {
                 $inputs['madv'] = session('admin')->madv;
-                $inputs['masodv'] = getdate()[0];;
+                $inputs['masodv'] = getdate()[0];
                 $inputs['trangthai'] = 'DAGUI';
                 $inputs['noidung'] = 'Đơn vị ' . getTenDV(session('admin')->madv) . ' tổng hợp dữ liệu từ các đơn vị cấp dưới.';
                 $inputs['nguoilap'] = session('admin')->name;
@@ -314,7 +313,7 @@ class tonghopnguon_huyenController extends Controller
                 $inputs['madvbc'] = session('admin')->madvbc;
 
                 nguonkinhphi::where('sohieu', $inputs['sohieu'])->where('macqcq', $madv)
-                    ->update(['masot' => $inputs['masodv'], 'trangthai' => 'DAGUI']);
+                    ->update(['masot' => $inputs['masodv']]);
 
                 //nguonkinhphi_huyen::create($inputs);
                 nguonkinhphi_tinh::create($inputs);

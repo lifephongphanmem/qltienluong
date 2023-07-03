@@ -64,11 +64,6 @@
                                                 <i class="fa fa-print"></i>&nbsp;In số liệu
                                             </button>
 
-                                            <a href="{{ url($furl_th . 'dulieu_dvql?sohieu=' . $value->sohieu . '&madv=' . $inputs['macqcq']) }}"
-                                                class="btn btn-default btn-sm">
-                                                <i class="fa fa-list-alt"></i>&nbsp; Số liệu Huyện (Khối)
-                                            </a>
-
                                             @if ($value['trangthai'] == 'TRALAI')
                                                 <button type="button" class="btn btn-default btn-xs"
                                                     onclick="getLyDo('{{ $value->masodv }}','{{ $value->sohieu }}')"
@@ -83,6 +78,11 @@
                                             </a>
 
                                             @if ($value['trangthai'] != 'DAGUI')
+                                                <a href="{{ url($furl_th . 'dulieu_dvql?sohieu=' . $value->sohieu . '&madv=' . $inputs['macqcq']) }}"
+                                                    class="btn btn-default btn-sm">
+                                                    <i class="fa fa-list-alt"></i>&nbsp; Số liệu Huyện (Khối)
+                                                </a>
+
                                                 <button type="button" class="btn btn-default btn-sm"
                                                     onclick="confirmChuyen('{{ $value->sohieu }}')"
                                                     data-target="#chuyen-modal" data-toggle="modal"><i
@@ -227,7 +227,8 @@
                             <button type="button" onclick="insolieu('{{ $furl_th . 'mau2a_vn' }}',null)"
                                 style="border-width: 0px" class="btn btn-default btn-xs mbs"
                                 data-target="#modal-insolieu" data-toggle="modal">
-                                <i class="fa fa-print"></i>&nbsp;Bảng tổng hợp nhu cầu kinh phí (Mẫu 2a - Vạn Ninh)</button>
+                                <i class="fa fa-print"></i>&nbsp;Bảng tổng hợp nhu cầu kinh phí (Mẫu 2a - Vạn
+                                Ninh)</button>
                         </div>
                     </div>
                 </div>
@@ -464,8 +465,6 @@
             $('#frm_insolieu').find("[name^='sohieu']").val($('#sohieu_in').val());
             $('#frm_insolieu').find("[name^='macqcq']").val($('#macqcq_in').val());
             $('#frm_insolieu').find("[name^='madvbc']").val($('#madvbc_in').val());
-
-
         }
     </script>
 
