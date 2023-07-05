@@ -25,7 +25,7 @@
     <script>
         jQuery(document).ready(function() {
             TableManaged.init();
-            $('#mact').val('{{ session('admin')->mact_tuyenthem }}').trigger();
+            //$('#mact').val('{{ session('admin')->mact_tuyenthem }}').trigger();
         });
     </script>
 @stop
@@ -179,80 +179,7 @@
                             <label class="control-label">Nội dung</label>
                             {!! Form::textarea('noidung', null, ['id' => 'noidung', 'class' => 'form-control', 'rows' => '3']) !!}
                         </div>
-                    </div>
-                    <div class="row">
-
-                        <div class="col-md-12">
-                            <h4 class="form-group te">Thông tin cán bộ chưa tuyển</h4>
-                        </div>
-
-                        <div class="col-md-6">
-                            <label class="control-label">Phân loại công tác</label>
-                            <select class="form-control" name="mact" id="mact" required="required">
-                                @foreach ($model_nhomct as $kieuct)
-                                    <optgroup label="{{ $kieuct->tencongtac }}">
-                                        <?php $mode_ct = $model_tenct->where('macongtac', $kieuct->macongtac); ?>
-                                        @foreach ($mode_ct as $ct)
-                                            <option value="{{ $ct->mact }}">{{ $ct->tenct }}</option>
-                                        @endforeach
-                                    </optgroup>
-                                @endforeach
-                            </select>
-                        </div>
-
-                        <div class="col-md-3">
-                            <div class="form-group">
-                                <label class="control-label">Số lượng cán bộ</label>
-                                {!! Form::text('soluongchuatuyen', 0, [
-                                    'class' => 'form-control',
-                                    'data-mask' => 'fdecimal',
-                                ]) !!}
-                            </div>
-                        </div>
-
-                        <div class="col-md-3">
-                            <div class="form-group">
-                                <label class="control-label">Hệ số lương</label>
-                                {!! Form::text('heso', 2.34, [
-                                    'class' => 'form-control',
-                                    'data-mask' => 'fdecimal',
-                                ]) !!}
-                            </div>
-                        </div>
-                    </div>
-                    {{-- <div class="row">
-                        <div class="col-md-4">
-                            <label class="control-label">Bảng lương cơ sở 1 - Tháng</label>
-                            {!! Form::text('thang', '07', ['id' => 'thang', 'class' => 'form-control']) !!}
-                        </div>
-
-                        <div class="col-md-2">
-                            <label class="control-label">Năm</label>
-                            {!! Form::text('nam', date('Y'), ['id' => 'nam', 'class' => 'form-control']) !!}
-                        </div>
-
-                        <div class="col-md-6">
-                            <label class="control-label">Nguồn kinh phí</label>
-                            {!! Form::select('manguonkp', $a_nkp, '13', ['id' => 'manguonkp', 'class' => 'form-control']) !!}
-                        </div>
-                    </div> --}}
-
-                    {{-- <div class="row">
-                        <div class="col-md-4">
-                            <label class="control-label">Bảng lương cơ sở 2 - Tháng</label>
-                            {!! Form::text('thang1', '07', ['class' => 'form-control']) !!}
-                        </div>
-
-                        <div class="col-md-2">
-                            <label class="control-label">Năm</label>
-                            {!! Form::text('nam1', date('Y'), ['class' => 'form-control']) !!}
-                        </div>
-
-                        <div class="col-md-6">
-                            <label class="control-label">Nguồn kinh phí</label>
-                            {!! Form::select('manguonkp1', $a_nkp, '12', ['id' => 'manguonkp', 'class' => 'form-control']) !!}
-                        </div>
-                    </div> --}}
+                    </div>                    
 
                     <div class="row">
                         <div class="col-md-offset-3 col-md-9" style="padding-top: 15px">
@@ -272,6 +199,13 @@
                         <div class="col-md-offset-3 col-md-9" style="padding-top: 15px">
                             <input type="checkbox" checked id="nangluong" name="nangluong" />
                             <label for="nghihuu">Tính nâng lương cán bộ</label>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-offset-3 col-md-9" style="padding-top: 15px">
+                            <input type="checkbox" checked id="tachkiemnhiem" name="tachkiemnhiem" />
+                            <label for="tachkiemnhiem">Tách cán bộ HĐND và Cấp uỷ ra làm cán bộ mới</label>
                         </div>
                     </div>
                 </div>

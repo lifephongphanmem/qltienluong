@@ -65,7 +65,7 @@
             <tr style="font-weight: bold;">
                 <td class="text-center">{{ $i++ }}</td>
                 <td>{{ $chitiet->tenct }}</td>
-                <td class="text-center">{{ dinhdangso($chitiet->canbo_dutoan) }}</td>
+                <td class="text-center">{{ dinhdangso($chitiet->canbo_congtac) }}</td>
                 <td class="text-right">{{ dinhdangsothapphan($chitiet->luongthang, $lamtron) }}</td>
                 <td class="text-right">{{ dinhdangsothapphan($chitiet->baohiem, $lamtron) }}</td>
                 <td class="text-right">{{ dinhdangsothapphan($chitiet->tongcong, $lamtron) }}</td>

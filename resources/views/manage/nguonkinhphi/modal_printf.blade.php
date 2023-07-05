@@ -35,9 +35,7 @@
                             <i class="fa fa-print"></i>&nbsp; Danh sách cán bộ nâng lương</button>
                     </div>
                 </div>
-            </div>
-
-            <div class="row">
+           
                 <div class="col-md-6">
                     <div class="form-group">
                         <button type="button" onclick="ThongTinKetXuat(true,'{{ $furl . 'tonghopnhucau_donvi' }}')"
@@ -64,7 +62,17 @@
                             onclick="ThongTinKetXuat(true,'{{ $furl . 'tonghopnhucau_donvi_2a' }}')"
                             style="border-width: 0px" class="btn btn-default btn-xs mbs"
                             data-target="#mautt107-modal" data-toggle="modal">
-                            <i class="fa fa-print"></i>&nbsp; Bảng tổng hợp nhu cầu kinh phí (Mẫu 2a)</button>
+                            <i class="fa fa-print"></i>&nbsp; Bảng tổng hợp nhu cầu kinh phí (Mẫu 2a - Mẫu 1)</button>
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <button type="button"
+                            onclick="ThongTinKetXuat(true,'{{ $furl . 'tonghopnhucau_donvi_2a_2' }}')"
+                            style="border-width: 0px" class="btn btn-default btn-xs mbs"
+                            data-target="#mautt107-modal" data-toggle="modal">
+                            <i class="fa fa-print"></i>&nbsp; Bảng tổng hợp nhu cầu kinh phí (Mẫu 2a- Mẫu 2)</button>
                     </div>
                 </div>
 
@@ -77,9 +85,7 @@
                             (Mẫu 2b)</button>
                     </div>
                 </div>
-            </div>
-
-            <div class="row">
+            
                 <div class="col-md-6">
                     <div class="form-group">
                         <button type="button" onclick="ThongTinKetXuat(true,'{{ $furl . 'mau2c' }}',null)"
@@ -99,9 +105,7 @@
                             không chuyên trách (Mẫu 2d)</button>
                     </div>
                 </div>
-            </div>
-
-            <div class="row">
+           
                 <div class="col-md-6">
                     <div class="form-group">
                         <button type="button" onclick="ThongTinKetXuat(true,'{{ $furl . 'mau2dd' }}',null)"

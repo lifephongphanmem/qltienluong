@@ -70,6 +70,7 @@ class dutoanluong_insolieuController extends Controller
             //dd($m_dutoan);
             $model = dutoanluong_bangluong::where('masodv', $inputs['masodv'])->wherein('mact',$inputs['mact'])->orderby('stt')->get();
             $m_chitiet = dutoanluong_chitiet::where('masodv', $inputs['masodv'])->wherein('mact',$inputs['mact'])->get();
+            //dd($m_chitiet);
             $m_donvi = dmdonvi::where('madv', $m_dutoan->madv)->first();
             $model_congtac = dmphanloaict::wherein('mact', array_unique(array_column($model->toArray(), 'mact')))->get();
             //xử lý ẩn hiện cột phụ cấp => biết tổng số cột hiện => colspan trên báo cáo
@@ -88,7 +89,7 @@ class dutoanluong_insolieuController extends Controller
                 $ct->tongcong = $ct->ttl + $ct->ttbh_dv;               
                 $ct->quyluong = $ct->tongcong * 12;
             }
-            //dd($col);
+            // dd($model);
             return view('reports.dutoanluong.donvi.bangluonghopdong')
                 ->with('model', $model)
                 ->with('m_chitiet', $m_chitiet)
@@ -274,8 +275,9 @@ class dutoanluong_insolieuController extends Controller
             
             $m_dutoan = dutoanluong::where('masodv', $inputs['masodv'])->first();
             //dd($inputs);
-            $model = dutoanluong_chitiet::where('masodv', $inputs['masodv'])->where('mact', $inputs['mact'])->get();
-            $m_chuatuyen = dutoanluong_chitiet::where('masodv', $inputs['masodv'])->where('phanloai', 'CHUATUYEN')->get();
+            $model = dutoanluong_chitiet::where('masodv', $inputs['masodv'])->wherein('mact', $inputs['mact'])->where('phanloai','<>' ,'CHUATUYEN')->get();
+            
+            $m_chuatuyen = dutoanluong_chitiet::where('masodv', $inputs['masodv'])->wherein('mact', $inputs['mact'])->where('phanloai', 'CHUATUYEN')->get();
             $a_plct = array_column(dmphanloaict::all()->toArray(), 'tenct', 'mact');
             $a_pc = getColDuToan();
             foreach ($model as $chitiet) {

@@ -26,6 +26,7 @@ Route::group(['prefix' => 'nguon_kinh_phi'], function () {
     //2023.06.07 làm theo TT78/2022 cho vạn ninh
     Route::post('tonghopnhucau_donvi', 'nguonkinhphi_donvi_baocaoController@tonghopnhucau_donvi');
     Route::post('tonghopnhucau_donvi_2a', 'nguonkinhphi_donvi_baocaoController@tonghopnhucau_donvi_2a');
+    Route::post('tonghopnhucau_donvi_2a_2', 'nguonkinhphi_donvi_baocaoController@tonghopnhucau_donvi_2a_2');
 
     Route::post('mau2b', 'nguonkinhphi_donvi_baocaoController@mau2b');
     Route::post('mau2c', 'nguonkinhphi_donvi_baocaoController@mau2c');

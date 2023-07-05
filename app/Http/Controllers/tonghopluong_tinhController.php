@@ -187,7 +187,7 @@ class tonghopluong_tinhController extends Controller
                 }
 
             }
-            // dd($model);
+            //\\ dd($model);
             return view('functions.tonghopluong.tinh.index_new')
                 ->with('furl', '/chuc_nang/tong_hop_luong/tinh/')
                 ->with('nam', $inputs['nam'])
@@ -205,6 +205,7 @@ class tonghopluong_tinhController extends Controller
     {
         if (Session::has('admin')) {
             $inputs = $request->all();
+            //B1 
             $model = tonghopluong_tinh::where('mathdv', $inputs['mathdv'])->where('thang',$inputs['thang'])->where('nam',$inputs['nam'])->first();
 
 

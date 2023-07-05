@@ -64,11 +64,6 @@
                                                 <i class="fa fa-print"></i>&nbsp;In số liệu
                                             </button>
 
-                                            <a href="{{ url($furl_th . 'dulieu_dvql?sohieu=' . $value->sohieu . '&madv=' . $inputs['macqcq']) }}"
-                                                class="btn btn-default btn-sm">
-                                                <i class="fa fa-list-alt"></i>&nbsp; Số liệu Huyện (Khối)
-                                            </a>
-
                                             @if ($value['trangthai'] == 'TRALAI')
                                                 <button type="button" class="btn btn-default btn-xs"
                                                     onclick="getLyDo('{{ $value->masodv }}','{{ $value->sohieu }}')"
@@ -83,6 +78,11 @@
                                             </a>
 
                                             @if ($value['trangthai'] != 'DAGUI')
+                                                <a href="{{ url($furl_th . 'dulieu_dvql?sohieu=' . $value->sohieu . '&madv=' . $inputs['macqcq']) }}"
+                                                    class="btn btn-default btn-sm">
+                                                    <i class="fa fa-list-alt"></i>&nbsp; Số liệu Huyện (Khối)
+                                                </a>
+
                                                 <button type="button" class="btn btn-default btn-sm"
                                                     onclick="confirmChuyen('{{ $value->sohieu }}')"
                                                     data-target="#chuyen-modal" data-toggle="modal"><i
@@ -180,8 +180,21 @@
                         <div class="form-group">
                             <button type="button" onclick="insolieu('{{ $furl_th . 'tonghop' }}',null)"
                                 style="border-width: 0px" class="btn btn-default btn-xs mbs"
-                                data-target="#modal-insolieu" data-toggle="modal">
-                                <i class="fa fa-print"></i>&nbsp;Bảng tổng hợp nhu cầu kinh phí</button>
+                                data-target="#modal-insolieu" data-toggle="modal"
+                                title="Dữ liệu (bao gồm cả cán bộ hợp đồng, không chuyên trách) theo phân loại đơn vị của thông tin đơn vị">
+                                <i class="fa fa-print"></i>&nbsp;Bảng tổng hợp nhu cầu kinh phí (Mẫu 01)</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <button type="button" onclick="insolieu('{{ $furl_th . 'tonghop_m2' }}',null)"
+                                style="border-width: 0px" class="btn btn-default btn-xs mbs"
+                                data-target="#modal-insolieu" data-toggle="modal"
+                                title="Dữ liệu (bao gồm cả cán bộ hợp đồng, không chuyên trách) theo lĩnh vực hoạt động của nhu cầu kinh phí">
+                                <i class="fa fa-print"></i>&nbsp;Bảng tổng hợp nhu cầu kinh phí (Mẫu 02)</button>
                         </div>
                     </div>
                 </div>
@@ -192,7 +205,18 @@
                             <button type="button" onclick="insolieu('{{ $furl_th . 'mau2a' }}',null)"
                                 style="border-width: 0px" class="btn btn-default btn-xs mbs"
                                 data-target="#modal-insolieu" data-toggle="modal">
-                                <i class="fa fa-print"></i>&nbsp;Bảng tổng hợp nhu cầu kinh phí (Mẫu 2a)</button>
+                                <i class="fa fa-print"></i>&nbsp;Bảng tổng hợp nhu cầu kinh phí (Mẫu 2a - Mẫu 1)</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <button type="button" onclick="insolieu('{{ $furl_th . 'mau2a_2' }}',null)"
+                                style="border-width: 0px" class="btn btn-default btn-xs mbs"
+                                data-target="#modal-insolieu" data-toggle="modal">
+                                <i class="fa fa-print"></i>&nbsp;Bảng tổng hợp nhu cầu kinh phí (Mẫu 2a - Mẫu 2)</button>
                         </div>
                     </div>
                 </div>
@@ -203,7 +227,8 @@
                             <button type="button" onclick="insolieu('{{ $furl_th . 'mau2a_vn' }}',null)"
                                 style="border-width: 0px" class="btn btn-default btn-xs mbs"
                                 data-target="#modal-insolieu" data-toggle="modal">
-                                <i class="fa fa-print"></i>&nbsp;Bảng tổng hợp nhu cầu kinh phí (Mẫu 2a - Vạn Ninh)</button>
+                                <i class="fa fa-print"></i>&nbsp;Bảng tổng hợp nhu cầu kinh phí (Mẫu 2a - Vạn
+                                Ninh)</button>
                         </div>
                     </div>
                 </div>
@@ -440,8 +465,6 @@
             $('#frm_insolieu').find("[name^='sohieu']").val($('#sohieu_in').val());
             $('#frm_insolieu').find("[name^='macqcq']").val($('#macqcq_in').val());
             $('#frm_insolieu').find("[name^='madvbc']").val($('#madvbc_in').val());
-
-
         }
     </script>
 

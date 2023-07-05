@@ -265,6 +265,15 @@ class dutoanluongController extends Controller
             //dd($a_hoten);
             $inputs['luongcoban'] = getDbl($inputs['luongcoban']);
             foreach ($m_bl_ct as $chitiet) {
+                if ($chitiet->mact == '1506673585') {
+                    //do hợp đồng 68 lương cố định
+                    //gán lại lương cơ bản theo mức mới
+                    $chitiet->luongcoban = $inputs['luongcoban'];
+                    $chitiet->masodv = $masodv;
+                    $chitiet->tongbh_dv = $chitiet->bhxh_dv + $chitiet->bhyt_dv + $chitiet->bhtn_dv + $chitiet->kpcd_dv;
+                    //dd($chitiet);
+                    continue;
+                }
                 $chenhlech = round($inputs['luongcoban'] / $chitiet->luongcoban, 10);
                 //chưa xử lý cán bộ kiêm nhiệm
                 if ($chitiet->tencanbo == '')
@@ -486,7 +495,7 @@ class dutoanluongController extends Controller
             $inputs['sothonxakhac_heso'] = chkDbl($inputs['sothonxakhac_heso']);
             $inputs['sothonxaloai1_heso'] = chkDbl($inputs['sothonxaloai1_heso']);
             $inputs['phanloaixa_heso'] = chkDbl($inputs['phanloaixa_heso']);
-            // dd($inputs);
+             //dd($a_data);
             foreach (array_chunk($a_data, 50) as $data) {
                 dutoanluong_bangluong::insert($data);
             }
@@ -1093,7 +1102,7 @@ class dutoanluongController extends Controller
         } else
             return view('errors.notlogin');
     }
-    
+
     /**
      * @param $a_pc
      * @param $m_cb
@@ -1623,7 +1632,7 @@ class dutoanluongController extends Controller
         } else
             return view('errors.notlogin');
     }
-  
+
     function printf_bl($masodv)
     {
         if (Session::has('admin')) {

@@ -1201,10 +1201,10 @@ class bangluongController extends Controller
                                 if ($ct != '')
                                     $sotien += $m_cb[$key]['st_' . $ct];
                             }
+                            
                             $sotien = round(($sotien * $m_cb[$key][$mapc]) / 100, session('admin')->lamtron);
-                            $a_pc[$k]['sotien'] = $sotien;
+                            $a_pc[$k]['sotien'] = $sotien; 
                             $m_cb[$key][$mapc] = round($sotien / $inputs['luongcoban'], session('admin')->lamtron);
-
                             //do tính hệ số đã làm tròn => (hệ số * lương cơ bản) != (số tiền) => nhân lại để đúng số tiền
                             $a_pc[$k]['sotien'] = round($m_cb[$key][$mapc] * $inputs['luongcoban']);
                             break;
@@ -1218,6 +1218,7 @@ class bangluongController extends Controller
                     goto ketthuc_phucap;
                 }
                 if ($thaisan && !in_array($mapc, $a_ts) && !in_array($mapc, $a_goc)) {
+                    //dd($m_cb[$key]);
                     goto ketthuc_phucap;
                 }
                 if ($daingay && !in_array($mapc, $a_ts) && !in_array($mapc, $a_goc)) {
@@ -1256,7 +1257,7 @@ class bangluongController extends Controller
                 }
                 ketthuc_phucap:
             }
-
+           
             //$ths = $ths + $heso_goc - $cb->heso;//do chỉ lương nb hưởng 85%, các hệ số hưởng %, bảo hiểm thì lấy 100% để tính
             //nếu cán bộ nghỉ thai sản (không gộp vào phần tính phụ cấp do trên bảng lương hiển thị hệ số nhưng ko có tiền)
             //$cb->tonghs = $tonghs;
@@ -1630,6 +1631,27 @@ class bangluongController extends Controller
                     $tonghs += $m_cb_kn[$i][$mapc];
                     $tien += $m_cb_kn[$i][$mapc_st];
                 }                
+            }
+            //dd($a_thaisan);
+            //Tính thai sản cho cán bộ kiêm nhiệm
+            $thaisan = isset($a_thaisan[$m_cb_kn[$i]['macanbo']]) ? true : false;
+            $m_cb_kn[$i]['ghichu'] = '';
+            if ($thaisan) {
+                $tien = $tonghs = 0;                
+                $m_cb_kn[$i]['ghichu'] .= 'Nghỉ thai sản từ ' . getDayVn($a_thaisan[$m_cb_kn[$i]['macanbo']]['ngaytu']) . ' đến ' . getDayVn($a_thaisan[$m_cb_kn[$i]['macanbo']]['ngayden']) . ';';
+                $m_cb_kn[$i]['congtac'] = 'THAISAN';
+
+                foreach ($a_pc as $k => $v) {
+                    if (!in_array($k, $a_ts)) {
+                        $m_cb_kn[$i]['st_' . $k] = 0;
+                    }
+
+                    //phụ cấp ko tính theo số tiền và đc hưởng
+                    if ($m_cb_kn[$i][$k] < 10000 && $m_cb_kn[$i]['st_' . $k] > 0) {
+                        $tonghs += $m_cb_kn[$i][$k];
+                    }
+                    $tien += $m_cb_kn[$i]['st_' . $k];
+                }
             }
 
             $m_cb_kn[$i]['tonghs'] = $tonghs;

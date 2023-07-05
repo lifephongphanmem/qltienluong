@@ -50,7 +50,8 @@
         <tr style="font-weight: bold; text-align: center;">
             <td></td>
             <td>TỔNG SỐ</td>
-            <td class="text-right">{{ dinhdangso($m_chitiet->sum('canbo_congtac')) }}</td>           
+            <td class="text-right">{{ dinhdangso($model->count()) }}</td>           
+            {{-- <td class="text-right">{{ dinhdangso($m_chitiet->sum('canbo_congtac')) }}</td>            --}}
             <td class="text-right">{{ dinhdangsothapphan($model->sum('ttl'), $lamtron) }}</td>
             <td class="text-right">{{ dinhdangsothapphan($model->sum('ttbh_dv'), $lamtron) }}</td>
             <td class="text-right">{{ dinhdangsothapphan($model->sum('tongcong'), $lamtron) }}</td>           
