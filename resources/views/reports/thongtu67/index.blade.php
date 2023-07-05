@@ -7,6 +7,26 @@
  */
 ?>
 @extends('main')
+@section('custom-style')
+    <link rel="stylesheet" type="text/css"
+        href="{{ url('assets/global/plugins/datatables/plugins/bootstrap/dataTables.bootstrap.css') }}" />
+    <link rel="stylesheet" type="text/css" href="{{ url('assets/global/plugins/select2/select2.css') }}" />
+@stop
+
+@section('custom-script')
+    <script type="text/javascript" src="{{ url('assets/global/plugins/select2/select2.min.js') }}"></script>
+    <script type="text/javascript" src="{{ url('assets/global/plugins/datatables/media/js/jquery.dataTables.min.js') }}">
+    </script>
+    <script type="text/javascript"
+        src="{{ url('assets/global/plugins/datatables/plugins/bootstrap/dataTables.bootstrap.js') }}"></script>
+
+    <script src="{{ url('assets/admin/pages/scripts/table-managed.js') }}"></script>
+    <script>
+        jQuery(document).ready(function() {
+            TableManaged.init();
+        });
+    </script>
+@stop
 
 @section('content')
     <h3 class="page-title">
@@ -22,15 +42,17 @@
                         <div class="col-lg-12">
                             <ol>
                                 <li><a href="#" data-target="#thoaichitra-khoi-moi-modal" data-toggle="modal"
-                                        onclick="baocao('{{ $furl . 'tonghopluong_tinh_CR' }}')">Tổng hợp tình hình chi trả
+                                        onclick="baocao('{{ $furl . 'tonghopluong_tinh' }}')">Tổng hợp tình hình chi trả
                                         lương (Mẫu tổng hợp tỉnh)</a></li>
-                                <li><a href="#" data-target="#thoaichitra-huyen-moi-modal" data-toggle="modal"
+                                        <li><a href="#"  data-target="#indt-modal"  data-toggle="modal">Dự toán lương 
+                                            </a></li>
+                                {{-- <li><a href="#" data-target="#thoaichitra-huyen-moi-modal" data-toggle="modal"
                                         onclick="baocao('{{ $furl . 'tonghopluong_huyen_CR' }}')">Tổng hợp tình hình chi trả
-                                        lương (Mẫu tổng hợp chi tiết đơn vị)</a></li>
-                                <li><a href="#" data-target="#thoaidutoan-huyen-modal" data-toggle="modal"
+                                        lương (Mẫu tổng hợp chi tiết đơn vị)</a></li> --}}
+                                {{-- <li><a href="#" data-target="#thoaidutoan-huyen-modal" data-toggle="modal"
                                         onclick="dutoanluong_huyen('{{ '/bao_cao/bang_luong/tinh/dutoanluongCR' }}')">Dự toán lương 
-                                        </a></li>
-                                <li><a href="#" data-target="#chitiet-modal" data-toggle="modal"
+                                        </a></li> --}}
+                                {{-- <li><a href="#" data-target="#chitiet-modal" data-toggle="modal"
                                         onclick="baocao('{{ $furl . 'mau2a1_tt68' }}')">Báo cáo nhu cầu kinh phí thực hiện
                                         nghị định 38/2019/NĐ-CP (Mẫu 2a/1)</a></li>
                                 <li><a href="#" data-target="#chitiet-modal" data-toggle="modal"
@@ -44,9 +66,9 @@
                                 <li><a href="#" data-target="#chitiet-modal" data-toggle="modal"
                                         onclick="baocao('{{ $furl . 'mau2c_tt68' }}')">Báo cáo nhu cầu kinh phí thực hiện
                                         BHTN
-                                        theo nghị định 28/2015 (Mẫu 2c)</a></li>
+                                        theo nghị định 28/2015 (Mẫu 2c)</a></li> --}}
                                 <!--li><a href="#" data-target="#chitiet-modal" data-toggle="modal" onclick="baocao('{{ $furl . 'maubckpbhtn' }}')">Báo cáo nhu cầu kinh phí thực hiện bảo hiểm thất nghiệp theo nghị định 28/2015/NĐ-CP</a></li-->
-                                <li><a href="#" data-target="#chitiet-modal" data-toggle="modal"
+                                {{-- <li><a href="#" data-target="#chitiet-modal" data-toggle="modal"
                                         onclick="baocao('{{ $furl . 'mau2d_tt68' }}')">Tổng hợp kinh phí tăng thêm để thực
                                         hiện chế độ phụ cấp đối với cán bộ không chuyên trách (Mẫu 2d)</a></li>
                                 <li><a href="#" data-target="#chitiet-modal" data-toggle="modal"
@@ -59,9 +81,9 @@
                                         từ việc thay đổi cơ chế tự chủ (Mẫu 2e)</a></li>
                                 <li><a href="#" data-target="#chitiet-modal" data-toggle="modal"
                                         onclick="baocao('{{ $furl . 'mau2g_tt68' }}')">Báo cáo quỹ tiền lương, phụ cấp đối
-                                        với lao động theo hợp đồng khu vực hành chính và đơn vị sự nghiệp (Mẫu 2g)</a></li>
+                                        với lao động theo hợp đồng khu vực hành chính và đơn vị sự nghiệp (Mẫu 2g)</a></li> --}}
                                 <!--li><a href="#" data-target="#chitiet-modal" data-toggle="modal" onclick="baocao('{{ $furl . 'mau2h_tt67' }}')">Tổng hợp phụ cấp thu hút tăng, giảm do điều chỉnh địa bàn vùng kinh tế xã hội đặc biệt khó khăn (Mẫu 2h)</a></li-->
-                                <li><a href="#" data-target="#chitiet-modal" data-toggle="modal"
+                                {{-- <li><a href="#" data-target="#chitiet-modal" data-toggle="modal"
                                         onclick="baocao('{{ $furl . 'mau4a_tt68' }}')">Báo cáo nguồn kinh phí để thực hiện
                                         cải cách tiền lương (Mẫu 4a)</a></li>
                                 <li><a href="#" data-target="#chitiet-modal" data-toggle="modal"
@@ -70,7 +92,7 @@
                                         định 38/2019/NĐ-CP (Mẫu 4b)</a></li>
                                 <li><a href="#" data-target="#chitiet-modal" data-toggle="modal"
                                         onclick="baocao('{{ $furl . 'mau4b_tt68bs' }}')">Tổng hợp nhu cầu, nguồn thực hiện
-                                        nghị định 38/2019/NĐ-CP (Mẫu 4b bổ sung)</a></li>
+                                        nghị định 38/2019/NĐ-CP (Mẫu 4b bổ sung)</a></li> --}}
                             </ol>
                         </div>
                     </div>
@@ -78,6 +100,104 @@
             </div>
         </div>
     </div>
+
+        <!--Modal thông tin tùy chọn in bảng lương -->
+        <div id="indt-modal" tabindex="-1" role="dialog" aria-hidden="true" class="modal fade">
+            <input type="hidden" id="namns" name="namns" />
+            <input type="hidden" id="masodv" name="masodv" />
+            <div class="modal-lg modal-dialog modal-content">
+                <div class="modal-header modal-header-primary">
+                    <button type="button" data-dismiss="modal" aria-hidden="true" class="close">&times;</button>
+                    <h4 id="hd-inbl" class="modal-title">In số liệu</h4>
+                </div>
+                <div class="modal-body">
+    
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <button type="button"
+                                    onclick="insolieu('{{ $furl . 'tonghopbienche' }}','1506672780;1506673604;1637915601')"
+                                    style="border-width: 0px" class="btn btn-default btn-xs mbs"
+                                    data-target="#modal-insolieu" data-toggle="modal">
+                                    <i class="fa fa-print"></i>&nbsp; Tổng hợp biên chế, hệ số
+                                    lương và phụ cấp có mặt (Mẫu 01)</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <button type="button" onclick="insolieu('{{ $furl . 'tonghophopdong' }}','1506673585')"
+                                    style="border-width: 0px" class="btn btn-default btn-xs mbs"
+                                    data-target="#modal-insolieu" data-toggle="modal">
+                                    <i class="fa fa-print"></i>&nbsp; Tổng hợp hợp đồng bổ sung quỹ lương (Mẫu 01)</button>
+                            </div>
+                        </div>
+                    </div>
+    
+                </div>
+                <div class="modal-footer">
+                    <button type="button" data-dismiss="modal" class="btn btn-default">Hủy thao tác</button>
+                </div>
+            </div>
+        </div>
+
+            <!--Mẫu in số liệu -->
+    {!! Form::open(['url' => '', 'method' => 'post', 'target' => '_blank', 'files' => true, 'id' => 'frm_insolieu']) !!}
+    <div id="modal-insolieu" tabindex="-1" role="dialog" aria-hidden="true" class="modal fade">
+        <div class="modal-dialog modal-content">
+            <div class="modal-header modal-header-primary">
+                <button type="button" data-dismiss="modal" aria-hidden="true" class="close">&times;</button>
+                <h4 id="header-inbl" class="modal-title">Thông tin kết xuất</h4>
+            </div>
+            <div class="modal-body">
+                <div class="form-horizontal">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <label class="control-label">Phân loại công tác</label>
+                            <select class="form-control select2me" name="mact[]" id="mact" multiple=true>
+                                @foreach ($model_nhomct as $kieuct)
+                                    <optgroup label="{{ $kieuct->tencongtac }}">
+                                        <?php $mode_ct = $model_tenct->where('macongtac', $kieuct->macongtac); ?>
+                                        @foreach ($mode_ct as $ct)
+                                            <option value="{{ $ct->mact }}">{{ $ct->tenct }}</option>
+                                        @endforeach
+                                    </optgroup>
+                                @endforeach
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <label class="control-label">Năm dự toán</label>
+                            {!! Form::select('namns', getNam(), date('Y'), ['class' => 'form-control select2me']) !!}
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <label class="control-label">Đơn vị tính</label>
+                            {!! Form::select('donvitinh', getDonViTinh(), null, ['class' => 'form-control select2me']) !!}
+                        </div>
+
+                        <div class="col-md-6">
+                            <label class="control-label">Cỡ chữ</label>
+                            {!! Form::select('cochu', getCoChu(), 10, ['id' => 'cochu', 'class' => 'form-control select2me']) !!}
+                        </div>
+                    </div>
+                </div>
+
+                {{-- <input type="hidden" name="masodv" />
+                <input type="hidden" name="namns" /> --}}
+            </div>
+            <div class="modal-footer">
+                <button type="button" data-dismiss="modal" class="btn btn-default">Hủy thao tác</button>
+                <button type="submit" class="btn btn-success">Đồng ý</button>
+            </div>
+        </div>
+    </div>
+    {!! Form::close() !!}
 
     <div id="chitiet-modal" tabindex="-1" role="dialog" aria-hidden="true" class="modal fade">
         {!! Form::open([
@@ -530,6 +650,18 @@
 
         function dutoanluong_huyen(url){
             $('#thoaidutoan_huyen').attr('action',url);
+        }
+                //In dữ liệu
+                function insolieu(url, mact) {
+            if (mact == null) {
+                $('#frm_insolieu').find("[name^='mact']").attr('disabled', true);
+            } else {
+                $('#frm_insolieu').find("[name^='mact']").attr('disabled', false);
+                $('#frm_insolieu').find("[name^='mact']").val(mact.split(';')).trigger('change');
+            }
+            $('#frm_insolieu').attr('action', url);
+            // $('#frm_insolieu').find("[name^='masodv']").val($('#masodv').val());
+            // $('#frm_insolieu').find("[name^='namns']").val($('#namns').val());
         }
 
         $(document).ready(function() {

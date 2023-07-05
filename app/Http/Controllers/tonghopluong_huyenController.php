@@ -1307,7 +1307,7 @@ class tonghopluong_huyenController extends Controller
                 ->wherein('tonghopluong_donvi_chitiet.mathdv', array_column($model_tonghop->toarray(), 'mathdv'))
                 // ->groupby('mact', 'maphanloai', 'dmdonvi.madv', 'manguonkp', 'linhvuchoatdong')
                 ->get();
-            // dd($model);
+            // dd($model->take(10));
             $m_pl = tonghopluong_donvi_chitiet::join('tonghopluong_donvi', 'tonghopluong_donvi_chitiet.mathdv', 'tonghopluong_donvi.mathdv')
                 ->join('dmdonvi', 'dmdonvi.madv', 'tonghopluong_donvi.madv')
                 ->join('dmphanloaict', 'dmphanloaict.mact', 'tonghopluong_donvi_chitiet.mact')
@@ -1359,6 +1359,7 @@ class tonghopluong_huyenController extends Controller
                     ->only(['madv', 'tendv', 'linhvuchoatdong', 'maphanloai'])
                     ->all();
             });
+            // dd($model_khoipb);
             //$a_khoipb = a_unique($model_khoipb);
 
             $a_soluong = a_unique($model_data);
@@ -1377,7 +1378,7 @@ class tonghopluong_huyenController extends Controller
                     $col++;
                 }
             }
-
+// dd($model_phanloai);
             //dd($model->toarray());
             return view('reports.tonghopluong.huyen.solieuth')
                 ->with('thongtin', $thongtin)
