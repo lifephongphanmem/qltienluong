@@ -289,10 +289,10 @@ class nguonkinhphi_donvi_baocaoController extends Controller
                     foreach ($canbo as $cb) {
                         if ($chitiet->luongtn < $cb->luongtn) {
                             $chitiet->thangnangluong = $cb->thang;
-                            goto tinhnangluong;
+                           break;
                         }
                     }
-                    tinhnangluong:
+                    
                     foreach ($m_pc as $ct) {
                         $mapc = $ct['mapc'];
                         //dd($mapc);
@@ -423,7 +423,7 @@ class nguonkinhphi_donvi_baocaoController extends Controller
                     foreach ($m_phucap as $pc) {
                         $mapc_st = 'st_' . $pc->mapc;
                         $a_solieu_moi[$pc->mapc] = $dulieu_chitiet->sum($pc->mapc);
-                        $a_solieu_moi[$mapc_st] = round($a_solieu_moi[$pc->mapc] * $luongcb);
+                        $a_solieu_moi[$mapc_st] = round($a_solieu_moi[$pc->mapc] * $luongcb_moi);
                     }
                     //Ở ngoài nhóm phụ cấp => đưa hết vào pck
                     foreach ($m_phucap as $pc) {
@@ -996,7 +996,7 @@ class nguonkinhphi_donvi_baocaoController extends Controller
                 $a_Tong['solieu'][$mapc_st] = $ar_I[0]['solieu'][$mapc_st] + $ar_II[0]['solieu'][$mapc_st]
                     + $ar_III[0]['solieu'][$mapc_st] + $ar_IV[0]['solieu'][$mapc_st];
             }
-
+            // dd($ar_I);
             //dd($m_tonghop_ct);
             return view('reports.thongtu78.donvi.mau2a2')
                 ->with('furl', '/tong_hop_bao_cao/')
@@ -1608,7 +1608,7 @@ class nguonkinhphi_donvi_baocaoController extends Controller
                 $a_Tong['solieu'][$mapc] = $ar_I[0]['solieu'][$mapc] + $ar_II[0]['solieu'][$mapc]
                     + $ar_III[0]['solieu'][$mapc] + $ar_IV[0]['solieu'][$mapc];
             }
-
+            // dd($ar_I);
             //dd($m_tonghop_ct);
             return view('reports.thongtu78.donvi.mau2a2_2')
                 ->with('furl', '/tong_hop_bao_cao/')

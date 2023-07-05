@@ -1030,7 +1030,7 @@ class tonghopnguon_huyenController extends Controller
                     foreach ($m_phucap as $pc) {
                         $mapc_st = 'st_' . $pc->mapc;
                         $a_solieu_moi[$pc->mapc] = $dulieu_chitiet->sum($pc->mapc);
-                        $a_solieu_moi[$mapc_st] = round($a_solieu_moi[$pc->mapc] * $luongcb);
+                        $a_solieu_moi[$mapc_st] = round($a_solieu_moi[$pc->mapc] * $luongcb_moi);
                     }
                     //Ở ngoài nhóm phụ cấp => đưa hết vào pck
                     foreach ($m_phucap as $pc) {
