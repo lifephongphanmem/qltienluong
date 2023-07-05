@@ -102,7 +102,6 @@
             <td>9</td>
             <td>10</td>
             <td>11</td>
-
             @if ($a_phucap == [])
                 <td>12</td>
                 <td>12</td>
@@ -214,7 +213,7 @@
                     @foreach ($m_donvi as $ct)
                         <tr style="text-align: center; font-style: italic">
                             <td style="text-align: center;{{ $dulieu['style'] }}"></td>
-                            <td style="text-align: left">{{ $ct->tenct }}</td>
+                            <td style="text-align: left">- {{ $ct->tenct }}</td>
 
                             <td>{{ dinhdangso($ct->canbo_dutoan) }}</td>
                             <td>{{ dinhdangso($ct->canbo_congtac) }}</td>

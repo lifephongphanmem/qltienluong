@@ -279,17 +279,19 @@ class nguonkinhphi_donvi_baocaoController extends Controller
             $m_pc = dmphucap_donvi::where('madv', $model_thongtin->madv)->orderby('stt')->get()->toarray();
 
             foreach ($model as $key => $chitiet) {
-                $canbo = $model_tonghop->where('macanbo', $chitiet->macanbo)->where('mact', $chitiet->mact);  
-                        
+                $canbo = $model_tonghop->where('macanbo', $chitiet->macanbo)
+                    ->where('mact', $chitiet->mact)
+                    ->where('macvcq', $chitiet->macvcq);
+
                 if ($chitiet->luongtn * 6 < $canbo->sum('luongtn')) {
                     //lấy thời gian nâng lương
-                    foreach($canbo as $cb){
-                        if($chitiet->luongtn < $cb->luongtn){
+                    foreach ($canbo as $cb) {
+                        if ($chitiet->luongtn < $cb->luongtn) {
                             $chitiet->thangnangluong = $cb->thang;
                             break;
                         }
                     }
-                    
+
                     foreach ($m_pc as $ct) {
                         $mapc = $ct['mapc'];
                         //dd($mapc);
@@ -303,7 +305,6 @@ class nguonkinhphi_donvi_baocaoController extends Controller
                     $chitiet->stkpcd_dv = $canbo->sum('stkpcd_dv') - $chitiet->stkpcd_dv * 6;
                     $chitiet->stbhtn_dv = $canbo->sum('stbhtn_dv') - $chitiet->stbhtn_dv * 6;
                     $chitiet->ttbh_dv = $canbo->sum('ttbh_dv') - $chitiet->ttbh_dv * 6;
-                    
                 } else {
                     $model->forget($key);
                 }
@@ -2837,9 +2838,10 @@ class nguonkinhphi_donvi_baocaoController extends Controller
             $a_BII[3]['sotien'] = $m_chitiet->where('nhomnhucau', 'HDND')->sum('tongnhucau');
             $a_BII[4]['sotien'] = $m_nguonkp->sum('nhucau2b'); //Lấy dữ liệu mẫu 2b
             $a_BII[5]['sotien'] = $m_chitiet->where('nhomnhucau', 'CANBOKCT')->sum('tongnhucau');
-            $a_BII[6]['sotien'] = $m_chitiet->where('nhomnhucau', 'CAPUY')->wherein('level', ['X', 'H'])->sum('tongnhucau');
-            $a_BII[7]['sotien'] = $m_chitiet->where('nhomnhucau', 'CAPUY')->where('level', 'T')->sum('tongnhucau');
+            $a_BII[6]['sotien'] = $m_chitiet->where('nhomnhucau', 'CAPUY')->wherein('level', ['XA', 'HUYEN'])->sum('tongnhucau');
+            $a_BII[7]['sotien'] = $m_chitiet->where('nhomnhucau', 'CAPUY')->where('level', 'TINH')->sum('tongnhucau');
 
+            // dd($m_chitiet->where('nhomnhucau', 'CAPUY'));
 
             $a_BIII = array();
             $a_BIII[0] = array('tt' => '1', 'noidung' => 'Kinh phí tăng, giảm do điều chỉnh địa bàn vùng KTXH ĐBKK năm 2017 theo Quyết định số 131/QĐ-TTg và Quyết định số 582/QĐ-TTg của Thủ tướng Chính phủ tính đủ 12 tháng (6)', 'sotien' => '0');

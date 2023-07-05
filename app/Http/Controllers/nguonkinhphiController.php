@@ -310,7 +310,7 @@ class nguonkinhphiController extends Controller
                 $m_nb = array();
                 $m_tnn = array();
             }
-
+            $i = 1;
             foreach ($m_cb_kn as $ct) {
                 if (!isset($m_cb[$ct->macanbo])) {
                     continue;
@@ -344,7 +344,7 @@ class nguonkinhphiController extends Controller
                 $ct->lvhd = $canbo['lvhd'];
                 $a_kq = $ct->toarray();
                 unset($a_kq['phanloai']);
-                $m_cb[$ct->macanbo . '_' . $ct->phanloai] = $a_kq;
+                $m_cb[$ct->macanbo . '_' . $i++] = $a_kq;
             }
 
             foreach ($m_nh as $key => $val) {
@@ -422,7 +422,7 @@ class nguonkinhphiController extends Controller
             foreach ($m_cb as $key => $val) {
                 $m_cb[$key] = $this->getHeSoPc($a_pc, $m_cb[$key], $inputs['chenhlech']);
             }
-            //dd($m_cb);
+
             $a_thang = array(
                 array('thang' => '07', 'nam' => $inputs['namdt']),
                 array('thang' => '08', 'nam' => $inputs['namdt']),
