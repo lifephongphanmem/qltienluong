@@ -281,18 +281,18 @@ class nguonkinhphi_donvi_baocaoController extends Controller
             foreach ($model as $key => $chitiet) {
                 $canbo = $model_tonghop->where('macanbo', $chitiet->macanbo)
                     ->where('mact', $chitiet->mact)
-                    ->where('macvcq', $chitiet->macvcq);
+                    ->where('macvcq', $chitiet->macvcq)->sortby('thang');
 
                 if ($chitiet->luongtn * 6 < $canbo->sum('luongtn')) {
-                    //dd($chitiet);
+                    //dd($canbo->toarray());
                     //lấy thời gian nâng lương
                     foreach ($canbo as $cb) {
                         if ($chitiet->luongtn < $cb->luongtn) {
                             $chitiet->thangnangluong = $cb->thang;
-                            break;
+                            goto tinhnangluong;
                         }
                     }
-
+                    tinhnangluong:
                     foreach ($m_pc as $ct) {
                         $mapc = $ct['mapc'];
                         //dd($mapc);
