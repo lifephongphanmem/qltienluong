@@ -284,6 +284,7 @@ class nguonkinhphi_donvi_baocaoController extends Controller
                     ->where('macvcq', $chitiet->macvcq);
 
                 if ($chitiet->luongtn * 6 < $canbo->sum('luongtn')) {
+                    //dd($chitiet);
                     //lấy thời gian nâng lương
                     foreach ($canbo as $cb) {
                         if ($chitiet->luongtn < $cb->luongtn) {
