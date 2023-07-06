@@ -39,7 +39,7 @@ class nguonkinhphiController extends Controller
             $inputs = $request->all();
             $inputs['furl'] = '/nguon_kinh_phi/';
             $a_thongtuqd = array_column(dmthongtuquyetdinh::orderby('ngayapdung')->get()->toarray(), 'tenttqd', 'sohieu');
-            $inputs['sohieu'] = $inputs['sohieu'] ?? array_key_first($a_thongtuqd);
+            $inputs['sohieu'] = $inputs['sohieu'] ?? array_key_last($a_thongtuqd);
             $model = nguonkinhphi::where('madv', session('admin')->madv)->where('sohieu', $inputs['sohieu'])->orderby('namns')->get();
             $model_phucap = nguonkinhphi_phucap::wherein('masodv', array_column($model->toarray(), 'masodv'))->get();
             $lvhd = getLinhVucHoatDong(false);

@@ -273,8 +273,16 @@ class nguonkinhphi_donvi_baocaoController extends Controller
             //dd($inputs);
             //$model = nguonkinhphi_nangluong::where('masodv', $inputs['maso'])->orderby('stt')->get();
 
-            $model_thongtin = nguonkinhphi::where('masodv', $inputs['maso'])->first();
-            $model_tonghop = nguonkinhphi_bangluong::where('masodv', $inputs['maso'])->orderby('stt')->get();
+            $model_thongtin = nguonkinhphi::where('masodv', $inputs['masodv'])->first();
+            $model_tonghop = nguonkinhphi_bangluong::where('masodv', $inputs['masodv']);
+
+            if ($inputs['mact'] != 'ALL') {
+                $model_tonghop = $model_tonghop->where('mact', $inputs['mact']);
+            }
+            if ($inputs['mapb'] != 'ALL') {
+                $model_tonghop = $model_tonghop->where('mapb', $inputs['mapb']);
+            }
+            $model_tonghop = $model_tonghop->orderby('stt')->get();
             $model = $model_tonghop->where('thang', '07');
 
             //cho trương hợp đơn vị cấp trên in dữ liệu dv câp dưới mà ko sai tên đơn vị
@@ -324,19 +332,16 @@ class nguonkinhphi_donvi_baocaoController extends Controller
                     $col++;
                 }
             }
-
-            $thongtin = array(
-                'nguoilap' => session('admin')->name,
-                'thang' => $model_thongtin->thang,
-                'nam' => $model_thongtin->nam
-            );
-
+            $a_phongban = array_column(dmphongban::where('madv', $model_thongtin->madv)->get()->toArray(), 'tenpb', 'mapb');
+            $a_congtac = array_column(dmphanloaict::all()->toArray(), 'tenct', 'mact');
             return view('reports.nguonkinhphi.donvi.nangluong')
-                ->with('thongtin', $thongtin)
+                ->with('inputs', $inputs)
                 ->with('model', $model)
                 ->with('m_dv', $m_dv)
                 ->with('col', $col)
+                ->with('a_phongban', $a_phongban)
                 ->with('a_phucap', $a_phucap)
+                ->with('a_congtac', $a_congtac)
                 ->with('pageTitle', 'Chi tiết tổng hợp lương tại đơn vị');
         } else
             return view('errors.notlogin');

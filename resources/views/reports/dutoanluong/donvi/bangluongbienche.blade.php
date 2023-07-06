@@ -26,6 +26,13 @@
                 {{ $m_dutoan->namns - 1 }}
             </td>
         </tr>
+       
+        <tr>
+            <td colspan="2" style="text-align: center; font-weight: bold;font-style: italic; font-size: 14px;">
+                Khối/Tổ công tác:
+                {{ $inputs['mapb'] == 'ALL' ? 'Tất cả các khối/tổ công tác' : $a_phongban[$inputs['mapb']] ?? $inputs['mapb'] }}
+            </td>
+        </tr>
 
         <tr>
             <td style="text-align: right" colspan="2" style="font-weight:bold; font-size: 12px;">

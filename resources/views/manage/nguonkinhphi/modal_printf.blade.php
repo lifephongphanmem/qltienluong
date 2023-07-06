@@ -29,11 +29,20 @@
 
                 <div class="col-md-6">
                     <div class="form-group">
+                        <button onclick="ThongTinKetXuat(false,'{{ '/nguon_kinh_phi/nangluong' }}')" type="button"
+                            style="border-width: 0px" class="btn btn-default btn-xs mbs" data-target="#mautt107-modal"
+                            data-toggle="modal" title="Danh sách cán bộ nâng lương">
+                            <i class="fa fa-print"></i>&nbsp; Danh sách cán bộ nâng lương</button>
+                    </div>
+                </div>
+
+                {{-- <div class="col-md-6">
+                    <div class="form-group">
                         <button type="button" style="border-width: 0px" onclick="innangluong()"
                             class="btn btn-default btn-xs mbs">
                             <i class="fa fa-print"></i>&nbsp; Danh sách cán bộ nâng lương</button>
                     </div>
-                </div>
+                </div> --}}
 
                 <div class="col-md-6">
                     <div class="form-group">
