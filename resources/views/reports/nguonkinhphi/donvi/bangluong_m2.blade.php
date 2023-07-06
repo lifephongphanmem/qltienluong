@@ -33,7 +33,18 @@
                 BẢNG CHI TIẾT NHU CẦU KINH PHÍ LƯƠNG VÀ CÁC KHOẢN PHỤ CẤP THEO LƯƠNG CỦA ĐƠN VỊ
             </td>
         </tr>
-
+        <tr>
+            <td colspan="2" style="text-align: center; font-weight: bold;font-style: italic; font-size: 14px;">
+                Phân loại công tác:
+                {{ $inputs['mact'] == 'ALL' ? 'Tất cả các phân loại công tác' : $a_congtac[$inputs['mact']] ?? $inputs['mact'] }}
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2" style="text-align: center; font-weight: bold;font-style: italic; font-size: 14px;">
+                Khối/Tổ công tác:
+                {{ $inputs['mapb'] == 'ALL' ? 'Tất cả các khối/tổ công tác' : $a_phongban[$inputs['mapb']] ?? $inputs['mapb'] }}
+            </td>
+        </tr>
     </table>
 
     <table id="data_body" class="money" cellspacing="0" cellpadding="0" border="1"

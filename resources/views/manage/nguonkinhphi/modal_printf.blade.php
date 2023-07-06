@@ -21,9 +21,8 @@
                 <div class="col-md-6">
                     <div class="form-group">
                         <button onclick="ThongTinKetXuat(false,'{{ '/nguon_kinh_phi/mautt107' }}')" type="button"
-                            style="border-width: 0px" class="btn btn-default btn-xs mbs"
-                            data-target="#mautt107-modal" data-toggle="modal"
-                            title="Bảng lương của cán bộ theo mẫu C02-HD">
+                            style="border-width: 0px" class="btn btn-default btn-xs mbs" data-target="#mautt107-modal"
+                            data-toggle="modal" title="Bảng lương của cán bộ theo mẫu C02-HD">
                             <i class="fa fa-print"></i>&nbsp; Bảng lương mẫu C02-HD (TT107/2017/TT-BTC)</button>
                     </div>
                 </div>
@@ -35,21 +34,22 @@
                             <i class="fa fa-print"></i>&nbsp; Danh sách cán bộ nâng lương</button>
                     </div>
                 </div>
-           
+
                 <div class="col-md-6">
                     <div class="form-group">
-                        <button type="button" onclick="ThongTinKetXuat(true,'{{ $furl . 'tonghopnhucau_donvi' }}')"
-                            style="border-width: 0px" class="btn btn-default btn-xs mbs"
-                            data-target="#mautt107-modal" data-toggle="modal">
+                        <button type="button"
+                            onclick="ThongTinKetXuat(true,'{{ $inputs['furl'] . 'tonghopnhucau_donvi' }}')"
+                            style="border-width: 0px" class="btn btn-default btn-xs mbs" data-target="#mautt107-modal"
+                            data-toggle="modal">
                             <i class="fa fa-print"></i>&nbsp; Bảng tổng hợp nhu cầu kinh phí</button>
                     </div>
                 </div>
 
                 <div class="col-md-6">
                     <div class="form-group">
-                        <button type="button" onclick="ThongTinKetXuat(true,'{{ $furl . 'mautt107_m2' }}')"
-                            style="border-width: 0px" class="btn btn-default btn-xs mbs"
-                            data-target="#mautt107-modal" data-toggle="modal">
+                        <button type="button" onclick="ThongTinKetXuat(false,'{{ $inputs['furl'] . 'mautt107_m2' }}')"
+                            style="border-width: 0px" class="btn btn-default btn-xs mbs" data-target="#mautt107-modal"
+                            data-toggle="modal">
                             <i class="fa fa-print"></i>&nbsp; Bảng chi tiết nhu cầu kinh phí</button>
                     </div>
                 </div>
@@ -59,9 +59,9 @@
                 <div class="col-md-6">
                     <div class="form-group">
                         <button type="button"
-                            onclick="ThongTinKetXuat(true,'{{ $furl . 'tonghopnhucau_donvi_2a' }}')"
-                            style="border-width: 0px" class="btn btn-default btn-xs mbs"
-                            data-target="#mautt107-modal" data-toggle="modal">
+                            onclick="ThongTinKetXuat(true,'{{ $inputs['furl'] . 'tonghopnhucau_donvi_2a' }}')"
+                            style="border-width: 0px" class="btn btn-default btn-xs mbs" data-target="#mautt107-modal"
+                            data-toggle="modal">
                             <i class="fa fa-print"></i>&nbsp; Bảng tổng hợp nhu cầu kinh phí (Mẫu 2a - Mẫu 1)</button>
                     </div>
                 </div>
@@ -69,28 +69,28 @@
                 <div class="col-md-6">
                     <div class="form-group">
                         <button type="button"
-                            onclick="ThongTinKetXuat(true,'{{ $furl . 'tonghopnhucau_donvi_2a_2' }}')"
-                            style="border-width: 0px" class="btn btn-default btn-xs mbs"
-                            data-target="#mautt107-modal" data-toggle="modal">
+                            onclick="ThongTinKetXuat(true,'{{ $inputs['furl'] . 'tonghopnhucau_donvi_2a_2' }}')"
+                            style="border-width: 0px" class="btn btn-default btn-xs mbs" data-target="#mautt107-modal"
+                            data-toggle="modal">
                             <i class="fa fa-print"></i>&nbsp; Bảng tổng hợp nhu cầu kinh phí (Mẫu 2a- Mẫu 2)</button>
                     </div>
                 </div>
 
                 <div class="col-md-6">
                     <div class="form-group">
-                        <button type="button" onclick="ThongTinKetXuat(true,'{{ $furl . 'mau2b' }}',null)"
-                            style="border-width: 0px" class="btn btn-default btn-xs mbs"
-                            data-target="#mautt107-modal" data-toggle="modal">
+                        <button type="button" onclick="ThongTinKetXuat(true,'{{ $inputs['furl'] . 'mau2b' }}',null)"
+                            style="border-width: 0px" class="btn btn-default btn-xs mbs" data-target="#mautt107-modal"
+                            data-toggle="modal">
                             <i class="fa fa-print"></i>&nbsp;Bảng tổng quỹ trợ cấp tăng thêm cho cán bộ đã nghỉ hưu
                             (Mẫu 2b)</button>
                     </div>
                 </div>
-            
+
                 <div class="col-md-6">
                     <div class="form-group">
-                        <button type="button" onclick="ThongTinKetXuat(true,'{{ $furl . 'mau2c' }}',null)"
-                            style="border-width: 0px" class="btn btn-default btn-xs mbs"
-                            data-target="#mautt107-modal" data-toggle="modal">
+                        <button type="button" onclick="ThongTinKetXuat(true,'{{ $inputs['furl'] . 'mau2c' }}',null)"
+                            style="border-width: 0px" class="btn btn-default btn-xs mbs" data-target="#mautt107-modal"
+                            data-toggle="modal">
                             <i class="fa fa-print"></i>&nbsp;Báo cáo nhu cầu kinh phí thực hiện bảo hiểm thất nghiệp
                             (Mẫu 2c)</button>
                     </div>
@@ -98,17 +98,17 @@
 
                 <div class="col-md-6">
                     <div class="form-group">
-                        <button type="button" onclick="ThongTinKetXuat(true,'{{ $furl . 'mau2d' }}',null)"
-                            style="border-width: 0px" class="btn btn-default btn-xs mbs"
-                            data-target="#mautt107-modal" data-toggle="modal">
+                        <button type="button" onclick="ThongTinKetXuat(true,'{{ $inputs['furl'] . 'mau2d' }}',null)"
+                            style="border-width: 0px" class="btn btn-default btn-xs mbs" data-target="#mautt107-modal"
+                            data-toggle="modal">
                             <i class="fa fa-print"></i>&nbsp;Tổng hợp kinh phí tăng thêm để thực hiện chế độ cho cán bộ
                             không chuyên trách (Mẫu 2d)</button>
                     </div>
                 </div>
-           
+
                 <div class="col-md-6">
                     <div class="form-group">
-                        <button type="button" onclick="ThongTinKetXuat(true,'{{ $furl . 'mau2dd' }}',null)"
+                        <button type="button" onclick="ThongTinKetXuat(true,'{{ $inputs['furl'] . 'mau2dd' }}',null)"
                             style="border-width: 0px" class="btn btn-default btn-xs mbs"
                             data-target="#mautt107-modal" data-toggle="modal">
                             <i class="fa fa-print"></i>&nbsp;Báo cáo nguồn thực hiện CCTL tiết kiệm (Mẫu 2đ)</button>
@@ -117,7 +117,7 @@
 
                 <div class="col-md-6">
                     <div class="form-group">
-                        <button type="button" onclick="ThongTinKetXuat(true,'{{ $furl . 'mau2e' }}',null)"
+                        <button type="button" onclick="ThongTinKetXuat(true,'{{ $inputs['furl'] . 'mau2e' }}',null)"
                             style="border-width: 0px" class="btn btn-default btn-xs mbs"
                             data-target="#mautt107-modal" data-toggle="modal">
                             <i class="fa fa-print"></i>&nbsp;Báo cáo nguồn thực hiện CCTL tiết kiệm trong năm (Mẫu
@@ -129,7 +129,7 @@
             <div class="row">
                 <div class="col-md-6">
                     <div class="form-group">
-                        <button type="button" onclick="ThongTinKetXuat(true,'{{ $furl . 'mau2g' }}',null)"
+                        <button type="button" onclick="ThongTinKetXuat(true,'{{ $inputs['furl'] . 'mau2g' }}',null)"
                             style="border-width: 0px" class="btn btn-default btn-xs mbs"
                             data-target="#mautt107-modal" data-toggle="modal">
                             <i class="fa fa-print"></i>&nbsp;Báo cáo quỹ tiền lương, phụ cấp đối với lao động theo hợp
@@ -140,7 +140,7 @@
 
                 <div class="col-md-6">
                     <div class="form-group">
-                        <button type="button" onclick="ThongTinKetXuat(true,'{{ $furl . 'mau2h' }}',null)"
+                        <button type="button" onclick="ThongTinKetXuat(true,'{{ $inputs['furl'] . 'mau2h' }}',null)"
                             style="border-width: 0px" class="btn btn-default btn-xs mbs"
                             data-target="#mautt107-modal" data-toggle="modal">
                             <i class="fa fa-print"></i>&nbsp;Tổng hợp phụ cấp ưu đãi giảm do điều chỉnh danh sách huyện
@@ -152,7 +152,7 @@
             <div class="row">
                 <div class="col-md-6">
                     <div class="form-group">
-                        <button type="button" onclick="ThongTinKetXuat(true,'{{ $furl . 'mau2i' }}',null)"
+                        <button type="button" onclick="ThongTinKetXuat(true,'{{ $inputs['furl'] . 'mau2i' }}',null)"
                             style="border-width: 0px" class="btn btn-default btn-xs mbs"
                             data-target="#mautt107-modal" data-toggle="modal">
                             <i class="fa fa-print"></i>&nbsp;Tổng hợp phụ cấp thu hút giảm do điều chỉnh danh sách
@@ -162,7 +162,7 @@
 
                 <div class="col-md-6">
                     <div class="form-group">
-                        <button type="button" onclick="ThongTinKetXuat(true,'{{ $furl . 'mau2k' }}',null)"
+                        <button type="button" onclick="ThongTinKetXuat(true,'{{ $inputs['furl'] . 'mau2k' }}',null)"
                             style="border-width: 0px" class="btn btn-default btn-xs mbs"
                             data-target="#mautt107-modal" data-toggle="modal">
                             <i class="fa fa-print"></i>&nbsp;Tổng hợp kinh phí giảm theo nghị định số 34/2019/NĐ-CP -
@@ -175,7 +175,7 @@
             <div class="row">
                 <div class="col-md-6">
                     <div class="form-group">
-                        <button type="button" onclick="ThongTinKetXuat(true,'{{ $furl . 'mau2l' }}',null)"
+                        <button type="button" onclick="ThongTinKetXuat(true,'{{ $inputs['furl'] . 'mau2l' }}',null)"
                             style="border-width: 0px" class="btn btn-default btn-xs mbs"
                             data-target="#mautt107-modal" data-toggle="modal">
                             <i class="fa fa-print"></i>&nbsp;Tổng hợp kinh phí giảm theo nghị định số 34/2019/NĐ-CP -
@@ -188,7 +188,7 @@
             <div class="row">
                 <div class="col-md-6">
                     <div class="form-group">
-                        <button type="button" onclick="ThongTinKetXuat(true,'{{ $furl . 'mau4a' }}',null)"
+                        <button type="button" onclick="ThongTinKetXuat(true,'{{ $inputs['furl'] . 'mau4a' }}',null)"
                             style="border-width: 0px" class="btn btn-default btn-xs mbs"
                             data-target="#mautt107-modal" data-toggle="modal">
                             <i class="fa fa-print"></i>&nbsp;Báo cáo nguồn kinh phí để thực hiện cải cách tiền lương
@@ -198,7 +198,7 @@
 
                 <div class="col-md-6">
                     <div class="form-group">
-                        <button type="button" onclick="ThongTinKetXuat(true,'{{ $furl . 'mau4b' }}',null)"
+                        <button type="button" onclick="ThongTinKetXuat(true,'{{ $inputs['furl'] . 'mau4b' }}',null)"
                             style="border-width: 0px" class="btn btn-default btn-xs mbs"
                             data-target="#mautt107-modal" data-toggle="modal">
                             <i class="fa fa-print"></i>&nbsp;Tổng hợp nhu cầu và nguồn thực hiện (Mẫu 4b)</button>
@@ -225,7 +225,7 @@
 
 <!--Mẫu QD19 -->
 {!! Form::open([
-    'url' => (isset($furl) ? $furl : '') . 'mauqd19',
+    'url' => (isset($inputs['furl']) ? $inputs['furl'] : '') . 'mauqd19',
     'method' => 'post',
     'target' => '_blank',
     'files' => true,
@@ -275,7 +275,7 @@
 {!! Form::close() !!}
 
 {!! Form::open([
-    'url' => (isset($furl) ? $furl : '') . 'mautt107',
+    'url' => (isset($inputs['furl']) ? $inputs['furl'] : '') . 'mautt107',
     'method' => 'post',
     'target' => '_blank',
     'files' => true,
@@ -289,10 +289,18 @@
         </div>
         <div class="modal-body">
             <div class="form-horizontal">
+
                 <div class="row">
                     <div class="col-md-12">
                         <label class="control-label">Tháng</label>
                         {!! Form::select('thang', getThangBC_nhucau(), 'ALL', ['id' => 'thang', 'class' => 'form-control']) !!}
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-12">
+                        <label class="control-label">Khối/Tổ công tác</label>
+                        {!! Form::select('mapb', setArrayAll($a_phongban), 'ALL', ['id' => 'mapb', 'class' => 'form-control']) !!}
                     </div>
                 </div>
 
@@ -312,6 +320,8 @@
                         </select>
                     </div>
                 </div>
+
+
             </div>
         </div>
         <input type="hidden" id="masodv" name="masodv" value="" />
@@ -328,6 +338,7 @@
     function ThongTinKetXuat(thang, url) {
         var form = $('#printf_mautt107');
         form.find("[id^='thang']").prop('disabled', thang);
+        form.find("[id^='mapb']").prop('disabled', thang);
         form.prop('action', url);
     }
 
