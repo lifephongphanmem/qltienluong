@@ -306,7 +306,7 @@ class nguonkinhphiController extends Controller
             $model = $model->wherein('mact', $a_plct)->where('lvhd', $inputs['linhvuchoatdong']);
             //lấy danh sách cán bộ chưa nâng lương từ tháng 01-06 => tự nâng lương
 
-            $m_cb = $model->keyBy('macanbo')->toarray();
+            $m_cb = $model->keyBy('macanbo')->toarray();            
             //làm tùy chọn tính nghỉ hưu
             $m_hh = $model->where('ngayvao', '>=', $model_thongtu->ngayapdung)->where('ngayvao', '<=', $inputs['namdt'] . '-12-31')->keyBy('macanbo')->toarray();
 
@@ -435,7 +435,7 @@ class nguonkinhphiController extends Controller
             //TÍnh lương cho phu cấp kiêm nhiệm
             $i = 1;
             foreach ($m_cb_kn as $val) {
-                $a_kq = $this->getHeSoPc_kiemnhiem($a_pc, $m_cb[$ct->macanbo], $val, $inputs['chenhlech'])->toarray();
+                $a_kq = $this->getHeSoPc_kiemnhiem($a_pc, $m_cb[$val->macanbo], $val, $inputs['chenhlech'])->toarray();
                 unset($a_kq['phanloai']);
                 $m_cb[$ct->macanbo . '_' . $i++] = $a_kq;
             }
