@@ -95,6 +95,7 @@ class nguonkinhphi_donvi_baocaoController extends Controller
             if ($inputs['mact'] != 'ALL') {
                 $model = $model->where('mact', $inputs['mact']);
             }
+            $inputs['mapb']  = $inputs['mapb'] ?? 'ALL';
             if ($inputs['mapb'] != 'ALL') {
                 $model = $model->where('mapb', $inputs['mapb']);
             }
@@ -158,12 +159,14 @@ class nguonkinhphi_donvi_baocaoController extends Controller
             $inputs = $request->all();
             //dd($inputs);
             $model_ct = nguonkinhphi_bangluong::where('masodv', $inputs['masodv']);
+            $inputs['thang']  = $inputs['thang'] ?? 'ALL';
             if ($inputs['thang'] != 'ALL') {
                 $model_ct = $model_ct->where('thang', $inputs['thang']);
             }
             if ($inputs['mact'] != 'ALL') {
                 $model_ct = $model_ct->where('mact', $inputs['mact']);
             }
+            $inputs['mapb']  = $inputs['mapb'] ?? 'ALL';
             if ($inputs['mapb'] != 'ALL') {
                 $model_ct = $model_ct->where('mapb', $inputs['mapb']);
             }
@@ -279,6 +282,7 @@ class nguonkinhphi_donvi_baocaoController extends Controller
             if ($inputs['mact'] != 'ALL') {
                 $model_tonghop = $model_tonghop->where('mact', $inputs['mact']);
             }
+            $inputs['mapb']  = $inputs['mapb'] ?? 'ALL';
             if ($inputs['mapb'] != 'ALL') {
                 $model_tonghop = $model_tonghop->where('mapb', $inputs['mapb']);
             }
