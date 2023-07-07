@@ -27,6 +27,7 @@ class dutoanluong_insolieuController extends Controller
             $m_dutoan = dutoanluong::where('masodv', $inputs['masodv'])->first();
             //dd($m_dutoan);
             $model = dutoanluong_bangluong::where('masodv', $inputs['masodv'])->wherein('mact', $inputs['mact']);
+            $inputs['mapb']  = $inputs['mapb'] ?? 'ALL';
             if ($inputs['mapb'] != 'ALL') {
                 $model = $model->where('mapb', $inputs['mapb']);
             }
@@ -77,6 +78,7 @@ class dutoanluong_insolieuController extends Controller
             $m_dutoan = dutoanluong::where('masodv', $inputs['masodv'])->first();
             //dd($m_dutoan);
             $model = dutoanluong_bangluong::where('masodv', $inputs['masodv'])->wherein('mact', $inputs['mact']);
+            $inputs['mapb']  = $inputs['mapb'] ?? 'ALL';
             if ($inputs['mapb'] != 'ALL') {
                 $model = $model->where('mapb', $inputs['mapb']);
             }
