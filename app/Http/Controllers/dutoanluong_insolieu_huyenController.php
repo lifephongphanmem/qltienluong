@@ -204,9 +204,14 @@ class dutoanluong_insolieu_huyenController extends Controller
     {
         if (Session::has('admin')) {
             $inputs = $request->all();
-            // dd($inputs);
+
             // $m_dutoan_huyen = dutoanluong_huyen::where('masodv', $inputs['masodv'])->first();
-            $m_dutoan_huyen = dutoanluong_huyen::where('namns', $inputs['namns'])->where('madv',session('admin')->madv)->first();
+            if(session('admin')->level == 'T'){
+                $m_dutoan_huyen = dutoanluong_huyen::where('namns', $inputs['namns'])->where('madv',$inputs['madv'])->first();
+            }else{
+                $m_dutoan_huyen = dutoanluong_huyen::where('namns', $inputs['namns'])->where('madv',session('admin')->madv)->first();
+            }
+
             if(!isset($m_dutoan_huyen)){
                 return view('errors.nodata')
                         ->with('message','Chưa có dữ liệu năm '.$inputs['namns'])
@@ -392,7 +397,11 @@ class dutoanluong_insolieu_huyenController extends Controller
         if (Session::has('admin')) {
             $inputs = $request->all();
             // $m_dutoan_huyen = dutoanluong_huyen::where('masodv', $inputs['masodv'])->first();
-            $m_dutoan_huyen = dutoanluong_huyen::where('namns', $inputs['namns'])->where('madv',session('admin')->madv)->first();
+            if(session('admin')->level == 'T'){
+                $m_dutoan_huyen = dutoanluong_huyen::where('namns', $inputs['namns'])->where('madv',$inputs['madv'])->first();
+            }else{
+                $m_dutoan_huyen = dutoanluong_huyen::where('namns', $inputs['namns'])->where('madv',session('admin')->madv)->first();
+            }
             if(!isset($m_dutoan_huyen)){
                 return view('errors.nodata')
                         ->with('message','Chưa có dữ liệu năm '.$inputs['namns'])

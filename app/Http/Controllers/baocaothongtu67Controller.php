@@ -6884,7 +6884,7 @@ class baocaothongtu67Controller extends Controller
                 // dd($chitiet);
                 $chitiet->tendv = $model_donvi->where('madv', $chitiet->madv)->first()->tendv;
                 //$chitiet->maphanloai = $a_pl[$chitiet->madv];
-                $chitiet->tenlinhvuc = $m_linhvuc->where('makhoipb', $chitiet->linhvuchoatdong)->first()->tenkhoipb;
+                $chitiet->tenlinhvuc = $m_linhvuc->where('makhoipb', $chitiet->linhvuchoatdong)->first()->tenkhoipb??'';
                 $chitiet->tennguonkp = isset($model_nguonkp[$chitiet->manguonkp]) ? $model_nguonkp[$chitiet->manguonkp] : '';
                 if ($chitiet->mact == null) {
                     $chitiet->tencongtac = isset($model_phanloaict[$chitiet->macongtac]) ? $model_phanloaict[$chitiet->macongtac] : '';
@@ -6976,7 +6976,7 @@ class baocaothongtu67Controller extends Controller
             $inputs = $request->all();
             // dd($inputs);
             // $m_dutoan_huyen = dutoanluong_huyen::where('masodv', $inputs['masodv'])->first();
-            $m_dutoan = dutoanluong::where('namns', $inputs['namns'])->wherenotnull('masot')->get();
+            $m_dutoan = dutoanluong::where('namns', $inputs['namns'])->wherenotnull('masot')->where('trangthai','DAGUI')->get();
             // dd($m_dutoan);
             if(count($m_dutoan)<=0){
                 return view('errors.nodata')
@@ -7100,7 +7100,7 @@ class baocaothongtu67Controller extends Controller
         if (Session::has('admin')) {
             $inputs = $request->all();
 // dd($inputs);
-            $m_dutoan = dutoanluong::where('namns', $inputs['namns'])->wherenotnull('masot')->get();
+            $m_dutoan = dutoanluong::where('namns', $inputs['namns'])->wherenotnull('masot')->where('trangthai','DAGUI')->get();
             if(!isset($m_dutoan)){
                 return view('errors.nodata')
                         ->with('message','Chưa có dữ liệu năm '.$inputs['namns'])

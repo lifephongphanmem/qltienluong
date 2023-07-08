@@ -37,7 +37,7 @@ class dutoanluong_tinhController extends Controller
                 ->where('macqcq', session('admin')->madv)
                 ->where('trangthai', 'DAGUI')->get();
             $a_trangthai = getStatus();
-            //dd($model);
+            // dd($model);
             foreach ($model as $dv) {
                 $dutoan_huyen = $m_dutoan_huyen->where('madv', $dv->madvcq)->first();
                 $dv->trangthai = $dutoan_huyen->trangthai ?? 'CHOGUI';
@@ -51,7 +51,6 @@ class dutoanluong_tinhController extends Controller
 
             $m_dvbc = dmdonvibaocao::where('level', 'T')->get();
             $a_donviql = array_column(dmdonvi::wherein('madvbc', array_column($m_dvbc->toarray(), 'madvbc'))->get()->toarray(), 'tendv', 'madv');
-    //    dd($model);
             return view('functions.dutoanluong.tinh.index')
                 ->with('model', $model->sortby('namns'))
                 ->with('model_tenct', $model_tenct)
