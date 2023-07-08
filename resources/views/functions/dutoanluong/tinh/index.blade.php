@@ -79,7 +79,7 @@
                                         <td>
                                             @if ($value->masodv != null)
                                                 <button type="button" title="In số liệu"
-                                                    onclick="indutoan('{{ $inputs['namns'] }}','{{ $value->masodv }}')"
+                                                    onclick="indutoan('{{ $inputs['namns'] }}','{{ $value->masodv }}',{{$value->madvcq}})"
                                                     class="btn btn-default btn-sm mbs" data-target="#indt-modal"
                                                     data-toggle="modal">
                                                     <i class="fa fa-print"></i>
@@ -140,6 +140,7 @@
     <div id="indt-modal" tabindex="-1" role="dialog" aria-hidden="true" class="modal fade">
         <input type="hidden" id="namns" name="namns" />
         <input type="hidden" id="masodv" name="masodv" />
+        <input type="hidden" id="madonvi" name="madv" />
         <div class="modal-lg modal-dialog modal-content">
             <div class="modal-header modal-header-primary">
                 <button type="button" data-dismiss="modal" aria-hidden="true" class="close">&times;</button>
@@ -277,6 +278,7 @@
 
                 <input type="hidden" name="masodv" />
                 <input type="hidden" name="namns" />
+                <input type="hidden" name="madv" />
             </div>
             <div class="modal-footer">
                 <button type="button" data-dismiss="modal" class="btn btn-default">Hủy thao tác</button>
@@ -373,9 +375,10 @@
 
     <script>
         //Gán thông tin để lấy dữ liệu
-        function indutoan(namdt, masodv) {
+        function indutoan(namdt, masodv,madv) {
             $('#namns').val(namdt);
             $('#masodv').val(masodv);
+            $('#madonvi').val(madv);
         }
 
         //In dữ liệu
@@ -389,6 +392,7 @@
             $('#frm_insolieu').attr('action', url);
             $('#frm_insolieu').find("[name^='masodv']").val($('#masodv').val());
             $('#frm_insolieu').find("[name^='namns']").val($('#namns').val());
+            $('#frm_insolieu').find("[name^='madv']").val($('#madonvi').val());
 
 
         }
