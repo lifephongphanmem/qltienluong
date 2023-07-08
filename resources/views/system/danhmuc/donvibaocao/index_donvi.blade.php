@@ -86,24 +86,24 @@
                                                     <i class="fa fa-list-alt"></i> Gán thông tin
                                                 </button>
 
-                                                {{-- @if(can('qldonvi','edit')) --}}
+                                                @if(can('qldonvi','edit'))
                                                     <a class="btn btn-default btn-xs mbs" href="{{url($url.'ma_so='.$value->madvbc.'&don_vi='.$value->madv.'/edit')}}">
                                                         <i class="fa fa-edit"></i> Chỉnh sửa
                                                     </a>
-                                                {{-- @endif --}}
+                                                @endif
 
-                                                {{-- @if(can('qldonvi','data')) --}}
+                                                @if(can('qldonvi','data'))
                                                     <button type="button" onclick="cfDel_All('{{$value->madv}}')" class="btn btn-default btn-xs mbs" data-target="#delete-all-modal-confirm" data-toggle="modal">
                                                         <i class="fa fa-trash-o"></i>&nbsp; Xóa cán bộ</button>
 
                                                     <button type="button" onclick="getcanbo('{{$value->madv}}')" class="btn btn-default btn-xs mbs" data-target="#getcanbo-modal-confirm" data-toggle="modal">
                                                         <i class="fa fa-stack-overflow"></i>&nbsp; Lấy thông tin cán bộ</button>
-                                                {{-- @endif --}}
+                                                @endif
 
-                                                {{-- @if(can('qldonvi','delete')) --}}
+                                                @if(can('qldonvi','delete'))
                                                     <button type="button" onclick="cfDel('{{$url.'del_donvi/'.$value->madv}}')" class="btn btn-default btn-xs mbs" data-target="#delete-modal-confirm" data-toggle="modal">
                                                         <i class="fa fa-trash-o"></i>&nbsp; Xóa</button>
-                                                {{-- @endif --}}
+                                                @endif
                                             </td>
                                         </tr>
                                     @endforeach

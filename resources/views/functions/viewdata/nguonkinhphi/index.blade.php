@@ -109,13 +109,10 @@
                                                             class="btn btn-default btn-sm" TARGET="_blank">
                                                             <i class="fa fa-print"></i>&nbsp; Số liệu tổng hợp khối</a>
                                                     @endif
-
-                                                    
-
                                                 @else
                                                     @if (session('admin')->phamvitonghop == 'KHOI')
                                                         <!--a href="{{ url('/nguon_kinh_phi/khoi/mautt107_m2?maso=' . $value['masodv']) }}" class="btn btn-default btn-sm" TARGET="_blank">
-                                                            <i class="fa fa-print"></i>&nbsp; Số liệu tổng hợp</a-->
+                                                                <i class="fa fa-print"></i>&nbsp; Số liệu tổng hợp</a-->
                                                         <button type="button"
                                                             onclick="innguon('{{ $value->namns }}','{{ $value->masodv }}')"
                                                             class="btn btn-default btn-xs mbs" data-target="#indt-modal"
@@ -123,14 +120,14 @@
                                                             <i class="fa fa-print"></i>&nbsp; In số liệu</button>
                                                     @else
                                                         <!--a href="{{ url('/nguon_kinh_phi/huyen/mautt107_m2?maso=' . $value['masodv']) }}" class="btn btn-default btn-sm" TARGET="_blank">
-                                                            <i class="fa fa-print"></i>&nbsp; Số liệu tổng hợp</a-->
+                                                                <i class="fa fa-print"></i>&nbsp; Số liệu tổng hợp</a-->
                                                         <button type="button"
                                                             onclick="innguon('{{ $value->namns }}','{{ $value->masodv }}')"
                                                             class="btn btn-default btn-xs mbs" data-target="#indt-modal"
                                                             data-toggle="modal">
                                                             <i class="fa fa-print"></i>&nbsp; In số liệu</button>
                                                     @endif
-                                                    <a href="{{'/nguon_kinh_phi/chi_tiet?maso='.$value->masodv.'&huyen=1'}}"
+                                                    <a href="{{ '/nguon_kinh_phi/chi_tiet?maso=' . $value->masodv . '&huyen=1' }}"
                                                         class="btn btn-default btn-xs mbs">
                                                         <i class="fa fa-edit"></i>&nbsp; Chi tiết</a>
                                                 @endif
@@ -143,7 +140,7 @@
                                                             class="fa icon-share-alt"></i>&nbsp;
                                                         Trả lại dữ liệu</button>
                                                     <!--a href="{{ url('nguon_kinh_phi/ma_so=' . $value->masodv) }}" class="btn btn-default btn-xs mbs">
-                                                        <i class="fa fa-edit"></i>&nbsp; Chi tiết</a-->
+                                                            <i class="fa fa-edit"></i>&nbsp; Chi tiết</a-->
                                                 @endif
                                             @else
                                                 <button class="btn btn-danger btn-xs mbs">
@@ -209,11 +206,13 @@
 
                     <div class="col-md-6">
                         <div class="form-group">
-                            <button type="button" style="border-width: 0px" onclick="innangluong()"
-                                class="btn btn-default btn-xs mbs">
+                            <button onclick="ThongTinKetXuat(false,'{{ '/nguon_kinh_phi/nangluong' }}')" type="button"
+                                style="border-width: 0px" class="btn btn-default btn-xs mbs"
+                                data-target="#mautt107-modal" data-toggle="modal" title="Danh sách cán bộ nâng lương">
                                 <i class="fa fa-print"></i>&nbsp; Danh sách cán bộ nâng lương</button>
                         </div>
                     </div>
+
                 </div>
 
                 <div class="row">

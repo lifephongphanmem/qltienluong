@@ -19,7 +19,7 @@
                 <div class="row">
                     <div class="col-md-12">
                         <label class="control-label">Phân loại công tác</label>
-                        <select class="form-control select2me" name="mact[]" id="mact" multiple=true>                            
+                        <select class="form-control select2me" name="mact[]" id="mact" multiple=true>
                             @foreach ($model_nhomct as $kieuct)
                                 <optgroup label="{{ $kieuct->tencongtac }}">
                                     <?php $mode_ct = $model_tenct->where('macongtac', $kieuct->macongtac); ?>
@@ -30,7 +30,14 @@
                             @endforeach
                         </select>
                     </div>
-                </div>               
+                </div>
+                
+                <div class="row">
+                    <div class="col-md-12">
+                        <label class="control-label">Khối/Tổ công tác</label>
+                        {!! Form::select('mapb', setArrayAll($a_phongban), 'ALL', ['id' => 'mapb', 'class' => 'form-control']) !!}
+                    </div>
+                </div>
             </div>
 
             <input type="hidden" name="masodv" />

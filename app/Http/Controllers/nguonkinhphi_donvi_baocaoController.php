@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\dmdonvi;
 use App\dmdonvibaocao;
 use App\dmphanloaict;
+use App\dmphongban;
 use App\dmphucap_donvi;
 use App\dmthongtuquyetdinh;
 use App\nguonkinhphi;
@@ -94,6 +95,11 @@ class nguonkinhphi_donvi_baocaoController extends Controller
             if ($inputs['mact'] != 'ALL') {
                 $model = $model->where('mact', $inputs['mact']);
             }
+            $inputs['mapb']  = $inputs['mapb'] ?? 'ALL';
+            if ($inputs['mapb'] != 'ALL') {
+                $model = $model->where('mapb', $inputs['mapb']);
+            }
+
             $model = $model->orderby('thang')->orderby('stt')->get();
             //dd($model);
             $model_thongtin = nguonkinhphi::where('masodv', $inputs['masodv'])->first();
@@ -112,11 +118,6 @@ class nguonkinhphi_donvi_baocaoController extends Controller
                 }
             }
 
-            $thongtin = array(
-                'nguoilap' => session('admin')->name,
-                'thang' => $model_thongtin->thang,
-                'nam' => $model_thongtin->nam
-            );
 
             //Lấy dữ liệu để lập
             $model_thang = $model->map(function ($data) {
@@ -135,12 +136,15 @@ class nguonkinhphi_donvi_baocaoController extends Controller
             $model_congtac = a_unique($model_congtac);
 
             // dd($model);
+            $a_phongban = array_column(dmphongban::where('madv', $model_thongtin->madv)->get()->toArray(), 'tenpb', 'mapb');
+
             return view('reports.nguonkinhphi.donvi.bangluong')
-                ->with('thongtin', $thongtin)
+                ->with('inputs', $inputs)
                 ->with('model', $model)
                 ->with('m_dv', $m_dv)
                 ->with('col', $col)
                 ->with('a_phucap', $a_phucap)
+                ->with('a_phongban', $a_phongban)
                 ->with('a_ct', $a_ct)
                 ->with('model_thang', $model_thang)
                 ->with('model_congtac', $model_congtac)
@@ -154,13 +158,19 @@ class nguonkinhphi_donvi_baocaoController extends Controller
         if (Session::has('admin')) {
             $inputs = $request->all();
             //dd($inputs);
-            if ($inputs['mact'] != 'ALL') {
-                $model_ct = nguonkinhphi_bangluong::where('masodv', $inputs['masodv'])
-                    ->where('mact', $inputs['mact'])
-                    ->orderby('stt')->get();
-            } else {
-                $model_ct = nguonkinhphi_bangluong::where('masodv', $inputs['masodv'])->orderby('stt')->get();
+            $model_ct = nguonkinhphi_bangluong::where('masodv', $inputs['masodv']);
+            $inputs['thang']  = $inputs['thang'] ?? 'ALL';
+            if ($inputs['thang'] != 'ALL') {
+                $model_ct = $model_ct->where('thang', $inputs['thang']);
             }
+            if ($inputs['mact'] != 'ALL') {
+                $model_ct = $model_ct->where('mact', $inputs['mact']);
+            }
+            $inputs['mapb']  = $inputs['mapb'] ?? 'ALL';
+            if ($inputs['mapb'] != 'ALL') {
+                $model_ct = $model_ct->where('mapb', $inputs['mapb']);
+            }
+            $model_ct = $model_ct->orderby('thang')->orderby('stt')->get();
 
             $model = $model_ct->where('thang', $model_ct->min('thang'));
             //dd($model);
@@ -183,7 +193,9 @@ class nguonkinhphi_donvi_baocaoController extends Controller
             }
 
             foreach ($model as $ct) {
-                $bl = $model_ct->where('macanbo', $ct->macanbo)->where('macvcq', $ct->macvcq)->where('mact', $ct->mact);
+                $bl = $model_ct->where('macanbo', $ct->macanbo)
+                    ->where('macvcq', $ct->macvcq)
+                    ->where('mact', $ct->mact);
                 foreach ($m_pc as $pc) {
                     $ma = $pc['mapc'];
                     $ma_st = 'st_' . $pc['mapc'];
@@ -203,17 +215,13 @@ class nguonkinhphi_donvi_baocaoController extends Controller
                 $ct->tencanbo = trim($ct->tencanbo);
             }
 
-            //dd($model);
-            $thongtin = array(
-                'nguoilap' => session('admin')->name,
-                'namns' => $model_thongtin->namns
-            );
-
+            $a_phongban = array_column(dmphongban::where('madv', $model_thongtin->madv)->get()->toArray(), 'tenpb', 'mapb');
             return view('reports.nguonkinhphi.donvi.bangluong_m2')
-                ->with('thongtin', $thongtin)
+                ->with('inputs', $inputs)
                 ->with('model', $model)
                 ->with('m_dv', $m_dv)
                 ->with('col', $col)
+                ->with('a_phongban', $a_phongban)
                 ->with('a_phucap', $a_phucap)
                 ->with('a_congtac', $a_congtac)
                 ->with('pageTitle', 'Tổng hợp dự toán lương tại đơn vị');
@@ -268,8 +276,17 @@ class nguonkinhphi_donvi_baocaoController extends Controller
             //dd($inputs);
             //$model = nguonkinhphi_nangluong::where('masodv', $inputs['maso'])->orderby('stt')->get();
 
-            $model_thongtin = nguonkinhphi::where('masodv', $inputs['maso'])->first();
-            $model_tonghop = nguonkinhphi_bangluong::where('masodv', $inputs['maso'])->orderby('stt')->get();
+            $model_thongtin = nguonkinhphi::where('masodv', $inputs['masodv'])->first();
+            $model_tonghop = nguonkinhphi_bangluong::where('masodv', $inputs['masodv']);
+
+            if ($inputs['mact'] != 'ALL') {
+                $model_tonghop = $model_tonghop->where('mact', $inputs['mact']);
+            }
+            $inputs['mapb']  = $inputs['mapb'] ?? 'ALL';
+            if ($inputs['mapb'] != 'ALL') {
+                $model_tonghop = $model_tonghop->where('mapb', $inputs['mapb']);
+            }
+            $model_tonghop = $model_tonghop->orderby('stt')->get();
             $model = $model_tonghop->where('thang', '07');
 
             //cho trương hợp đơn vị cấp trên in dữ liệu dv câp dưới mà ko sai tên đơn vị
@@ -279,17 +296,20 @@ class nguonkinhphi_donvi_baocaoController extends Controller
             $m_pc = dmphucap_donvi::where('madv', $model_thongtin->madv)->orderby('stt')->get()->toarray();
 
             foreach ($model as $key => $chitiet) {
-                $canbo = $model_tonghop->where('macanbo', $chitiet->macanbo)->where('mact', $chitiet->mact);  
-                        
+                $canbo = $model_tonghop->where('macanbo', $chitiet->macanbo)
+                    ->where('mact', $chitiet->mact)
+                    ->where('macvcq', $chitiet->macvcq)->sortby('thang');
+
                 if ($chitiet->luongtn * 6 < $canbo->sum('luongtn')) {
+                    //dd($canbo->toarray());
                     //lấy thời gian nâng lương
-                    foreach($canbo as $cb){
-                        if($chitiet->luongtn < $cb->luongtn){
+                    foreach ($canbo as $cb) {
+                        if ($chitiet->luongtn < $cb->luongtn) {
                             $chitiet->thangnangluong = $cb->thang;
                             break;
                         }
                     }
-                    
+
                     foreach ($m_pc as $ct) {
                         $mapc = $ct['mapc'];
                         //dd($mapc);
@@ -303,7 +323,6 @@ class nguonkinhphi_donvi_baocaoController extends Controller
                     $chitiet->stkpcd_dv = $canbo->sum('stkpcd_dv') - $chitiet->stkpcd_dv * 6;
                     $chitiet->stbhtn_dv = $canbo->sum('stbhtn_dv') - $chitiet->stbhtn_dv * 6;
                     $chitiet->ttbh_dv = $canbo->sum('ttbh_dv') - $chitiet->ttbh_dv * 6;
-                    
                 } else {
                     $model->forget($key);
                 }
@@ -317,19 +336,16 @@ class nguonkinhphi_donvi_baocaoController extends Controller
                     $col++;
                 }
             }
-
-            $thongtin = array(
-                'nguoilap' => session('admin')->name,
-                'thang' => $model_thongtin->thang,
-                'nam' => $model_thongtin->nam
-            );
-
+            $a_phongban = array_column(dmphongban::where('madv', $model_thongtin->madv)->get()->toArray(), 'tenpb', 'mapb');
+            $a_congtac = array_column(dmphanloaict::all()->toArray(), 'tenct', 'mact');
             return view('reports.nguonkinhphi.donvi.nangluong')
-                ->with('thongtin', $thongtin)
+                ->with('inputs', $inputs)
                 ->with('model', $model)
                 ->with('m_dv', $m_dv)
                 ->with('col', $col)
+                ->with('a_phongban', $a_phongban)
                 ->with('a_phucap', $a_phucap)
+                ->with('a_congtac', $a_congtac)
                 ->with('pageTitle', 'Chi tiết tổng hợp lương tại đơn vị');
         } else
             return view('errors.notlogin');
@@ -421,7 +437,7 @@ class nguonkinhphi_donvi_baocaoController extends Controller
                     foreach ($m_phucap as $pc) {
                         $mapc_st = 'st_' . $pc->mapc;
                         $a_solieu_moi[$pc->mapc] = $dulieu_chitiet->sum($pc->mapc);
-                        $a_solieu_moi[$mapc_st] = round($a_solieu_moi[$pc->mapc] * $luongcb);
+                        $a_solieu_moi[$mapc_st] = round($a_solieu_moi[$pc->mapc] * $luongcb_moi);
                     }
                     //Ở ngoài nhóm phụ cấp => đưa hết vào pck
                     foreach ($m_phucap as $pc) {
@@ -994,7 +1010,7 @@ class nguonkinhphi_donvi_baocaoController extends Controller
                 $a_Tong['solieu'][$mapc_st] = $ar_I[0]['solieu'][$mapc_st] + $ar_II[0]['solieu'][$mapc_st]
                     + $ar_III[0]['solieu'][$mapc_st] + $ar_IV[0]['solieu'][$mapc_st];
             }
-
+            // dd($ar_I);
             //dd($m_tonghop_ct);
             return view('reports.thongtu78.donvi.mau2a2')
                 ->with('furl', '/tong_hop_bao_cao/')
@@ -1606,7 +1622,7 @@ class nguonkinhphi_donvi_baocaoController extends Controller
                 $a_Tong['solieu'][$mapc] = $ar_I[0]['solieu'][$mapc] + $ar_II[0]['solieu'][$mapc]
                     + $ar_III[0]['solieu'][$mapc] + $ar_IV[0]['solieu'][$mapc];
             }
-
+            // dd($ar_I);
             //dd($m_tonghop_ct);
             return view('reports.thongtu78.donvi.mau2a2_2')
                 ->with('furl', '/tong_hop_bao_cao/')
@@ -2837,9 +2853,10 @@ class nguonkinhphi_donvi_baocaoController extends Controller
             $a_BII[3]['sotien'] = $m_chitiet->where('nhomnhucau', 'HDND')->sum('tongnhucau');
             $a_BII[4]['sotien'] = $m_nguonkp->sum('nhucau2b'); //Lấy dữ liệu mẫu 2b
             $a_BII[5]['sotien'] = $m_chitiet->where('nhomnhucau', 'CANBOKCT')->sum('tongnhucau');
-            $a_BII[6]['sotien'] = $m_chitiet->where('nhomnhucau', 'CAPUY')->wherein('level', ['X', 'H'])->sum('tongnhucau');
-            $a_BII[7]['sotien'] = $m_chitiet->where('nhomnhucau', 'CAPUY')->where('level', 'T')->sum('tongnhucau');
+            $a_BII[6]['sotien'] = $m_chitiet->where('nhomnhucau', 'CAPUY')->wherein('level', ['XA', 'HUYEN'])->sum('tongnhucau');
+            $a_BII[7]['sotien'] = $m_chitiet->where('nhomnhucau', 'CAPUY')->where('level', 'TINH')->sum('tongnhucau');
 
+            // dd($m_chitiet->where('nhomnhucau', 'CAPUY'));
 
             $a_BIII = array();
             $a_BIII[0] = array('tt' => '1', 'noidung' => 'Kinh phí tăng, giảm do điều chỉnh địa bàn vùng KTXH ĐBKK năm 2017 theo Quyết định số 131/QĐ-TTg và Quyết định số 582/QĐ-TTg của Thủ tướng Chính phủ tính đủ 12 tháng (6)', 'sotien' => '0');

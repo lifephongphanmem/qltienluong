@@ -68,10 +68,10 @@ function getPermissionDefault($level)
         ),
         'qldonvi' => array(
             'view' => 1,
-            'create' => 0,
+            'create' => 1,
             'edit' => 1,
-            'delete' => 0,
-            'data' => 0
+            'delete' => 1,
+            'data' => 1
         ),
     );
 
@@ -230,7 +230,6 @@ function can($module = null, $action = null)
         return false;
     }
 }
-
 
 function getDayVn($date)
 {

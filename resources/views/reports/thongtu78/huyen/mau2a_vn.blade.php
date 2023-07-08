@@ -102,7 +102,6 @@
             <td>9</td>
             <td>10</td>
             <td>11</td>
-
             @if ($a_phucap == [])
                 <td>12</td>
                 <td>12</td>
@@ -147,7 +146,7 @@
         </tr>
         <?php $dulieu_pI = $m_chitiet->where('nhomnhucau', 'BIENCHE'); ?>
         @foreach ($ar_I as $dulieu)
-            <tr style="text-align: center">
+            <tr style="font-weight: bold;text-align: center">
                 <td style="text-align: center;{{ $dulieu['style'] }}">{{ $dulieu['tt'] }}</td>
                 <td style="text-align: left;{{ $dulieu['style'] }}">{{ $dulieu['noidung'] }}</td>
                 <td style="{{ $dulieu['style'] }}">{{ dinhdangso($dulieu['canbo_dutoan']) }}</td>
@@ -214,7 +213,7 @@
                     @foreach ($m_donvi as $ct)
                         <tr style="text-align: center; font-style: italic">
                             <td style="text-align: center;{{ $dulieu['style'] }}"></td>
-                            <td style="text-align: left">{{ $ct->tenct }}</td>
+                            <td style="text-align: left">- {{ $ct->tenct }}</td>
 
                             <td>{{ dinhdangso($ct->canbo_dutoan) }}</td>
                             <td>{{ dinhdangso($ct->canbo_congtac) }}</td>
@@ -282,7 +281,7 @@
                 <?php
                 $m_donvi = $model->where('madv', $madv);
                 ?>
-                <tr style="text-align: center; font-style: italic">
+                <tr style="text-align: center;">
                     <td style="text-align: right">{{ $idv++ }}</td>
                     <td style="text-align: left">{{ $tendv }}</td>
 
@@ -311,9 +310,9 @@
                     <td style="text-align: right;">{{ dinhdangso($m_donvi->sum('chenhlech06thang')) }}</td>
                 </tr>
                 @foreach ($m_donvi as $ct)
-                    <tr style="text-align: center">
+                    <tr style="text-align: center; font-style: italic">
                         <td style="text-align: center;{{ $dulieu['style'] }}"></td>
-                        <td style="text-align: left">{{ $ct->tenct }}</td>
+                        <td style="text-align: left">- {{ $ct->tenct }}</td>
 
                         <td>{{ dinhdangso($ct->canbo_dutoan) }}</td>
                         <td>{{ dinhdangso($ct->canbo_congtac) }}</td>

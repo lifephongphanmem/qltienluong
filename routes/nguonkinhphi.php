@@ -22,7 +22,8 @@ Route::group(['prefix' => 'nguon_kinh_phi'], function () {
     Route::post('mautt107', 'nguonkinhphi_donvi_baocaoController@printf_tt107');
     Route::post('mautt107_m2', 'nguonkinhphi_donvi_baocaoController@printf_tt107_m2');
     Route::get('mautt107_m3', 'nguonkinhphi_donvi_baocaoController@printf_tt107_m3');
-    Route::get('nangluong', 'nguonkinhphi_donvi_baocaoController@printf_nangluong');
+    //Route::get('nangluong', 'nguonkinhphi_donvi_baocaoController@printf_nangluong');
+    Route::post('nangluong', 'nguonkinhphi_donvi_baocaoController@printf_nangluong');
     //2023.06.07 làm theo TT78/2022 cho vạn ninh
     Route::post('tonghopnhucau_donvi', 'nguonkinhphi_donvi_baocaoController@tonghopnhucau_donvi');
     Route::post('tonghopnhucau_donvi_2a', 'nguonkinhphi_donvi_baocaoController@tonghopnhucau_donvi_2a');

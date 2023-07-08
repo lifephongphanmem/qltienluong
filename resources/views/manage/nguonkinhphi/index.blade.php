@@ -25,7 +25,9 @@
     <script>
         jQuery(document).ready(function() {
             TableManaged.init();
-            //$('#mact').val('{{ session('admin')->mact_tuyenthem }}').trigger();
+            $('#sohieu').change(function() {
+                window.location.href = "{{ $inputs['furl'] }}" + 'danh_sach?sohieu=' + $("#sohieu").val();
+            });
         });
     </script>
 @stop
@@ -45,13 +47,24 @@
                     </div>
                 </div>
                 <div class="portlet-body form-horizontal">
+                    <div class="row">
+                        <div class="form-group">
+                            <div class="col-md-offset-3 col-md-6">
+                                <label class="form-control-label text-bold">Thông tư, quyết định</label>
+                                {!! Form::select('sohieu', $a_thongtuqd, $inputs['sohieu'], [
+                                    'id' => 'sohieu',
+                                    'class' => 'form-control',
+                                ]) !!}
+                            </div>
+                        </div>
+                    </div>
+
                     <table id="sample_3" class="table table-hover table-striped table-bordered" style="min-height: 300px">
                         <thead>
                             <tr>
                                 <th class="text-center" style="width: 5%">STT</th>
                                 <th class="text-center">Năm ngân</br>sách</th>
                                 <th class="text-center">Lĩnh vực hoạt động</th>
-                                <th class="text-center">Căn cứ thông tư, quyết định</th>
                                 <th class="text-center">Nhu cầu</br>kinh phí</th>
                                 <th class="text-center">Đơn vị nhận dữ liệu</th>
                                 <th class="text-center">Trạng thái</th>
@@ -65,13 +78,12 @@
                                     <td class="text-center">{{ $key + 1 }}</td>
                                     <td class="text-center">{{ $value->namns }}</td>
                                     <td>{{ $value->linhvuc }}</td>
-                                    <td>{{ getThongTuQD()[$value->sohieu] ?? '' }}</td>
                                     <td class="text-right">{{ number_format($value->nhucau) }}</td>
                                     <td>{{ getTenDV($value->macqcq) }}</td>
                                     <td>{{ $a_trangthai[$value->trangthai] }}</td>
                                     <td>
                                         @if ($value->trangthai != 'DAGUI')
-                                            <a href="{{ url($furl . 'chi_tiet?maso=' . $value->masodv) }}"
+                                            <a href="{{ url($inputs['furl'] . 'chi_tiet?maso=' . $value->masodv) }}"
                                                 class="btn btn-default btn-xs mbs">
                                                 <i class="fa fa-edit"></i>&nbsp; Chi tiết</a>
 
@@ -81,7 +93,8 @@
                                                     class="fa fa-share-square-o"></i>&nbsp;
                                                 Gửi dữ liệu</button>
 
-                                            <button type="button" onclick="cfDel('{{ $furl . 'del/' . $value->id }}')"
+                                            <button type="button"
+                                                onclick="cfDel('{{ $inputs['furl'] . 'del/' . $value->id }}')"
                                                 class="btn btn-default btn-xs mbs" data-target="#delete-modal-confirm"
                                                 data-toggle="modal">
                                                 <i class="fa fa-trash-o"></i>&nbsp; Xóa</button>
@@ -113,7 +126,7 @@
 
     <!--Modal thêm mới -->
     {!! Form::open([
-        'url' => $furl . 'create',
+        'url' => $inputs['furl'] . 'create',
         'method' => 'POST',
         'id' => 'create_dutoan',
         'class' => 'horizontal-form',
@@ -139,8 +152,7 @@
 
                         <div class="col-md-6">
                             <label class="control-label">Căn cứ thông tư, quyết định</label>
-                            {!! Form::select('sohieu', getThongTuQD(false), $model_tt_df->sohieu, [
-                                'id' => 'sohieu',
+                            {!! Form::select('sohieu', $a_thongtuqd, $model_tt_df->sohieu, [
                                 'class' => 'form-control',
                             ]) !!}
                         </div>
@@ -179,7 +191,7 @@
                             <label class="control-label">Nội dung</label>
                             {!! Form::textarea('noidung', null, ['id' => 'noidung', 'class' => 'form-control', 'rows' => '3']) !!}
                         </div>
-                    </div>                    
+                    </div>
 
                     <div class="row">
                         <div class="col-md-offset-3 col-md-9" style="padding-top: 15px">
@@ -224,7 +236,7 @@
         aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
-                {!! Form::open(['url' => $furl . 'senddata', 'id' => 'frm_chuyen', 'method' => 'POST']) !!}
+                {!! Form::open(['url' => $inputs['furl'] . 'senddata', 'id' => 'frm_chuyen', 'method' => 'POST']) !!}
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
                     <h4 class="modal-title">Đồng ý chuyển số liệu?</h4>
@@ -283,8 +295,8 @@
             form.submit();
         }
 
-        function disable_btn(obj) {
-            obj.prop('disabled', true);
+        function disable_btn(obj) {            
+            obj.visibled = false;
         }
 
         function indutoan(namdt, masodv) {
@@ -299,13 +311,13 @@
 
         function innangluong() {
             var masodv = $('#masodv_dt').val();
-            window.open('{{ $furl }}' + 'nangluong?maso=' + masodv, '_blank');
+            window.open('{{ $inputs['furl'] }}' + 'nangluong?maso=' + masodv, '_blank');
         }
 
         function getLyDo(masodv) {
             var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
             $.ajax({
-                url: '{{ $furl }}' + 'getlydo',
+                url: '{{ $inputs['furl'] }}' + 'getlydo',
                 type: 'GET',
                 data: {
                     _token: CSRF_TOKEN,

@@ -37,12 +37,14 @@ class dutoanluongController extends Controller
             $model_bl = bangluong::where('madv', session('admin')->madv)->where('phanloai', 'BANGLUONG')->orderby('nam')->orderby('thang')->get();
             $model_nhomct = dmphanloaicongtac::select('macongtac', 'tencongtac')->get();
             $model_tenct = dmphanloaict::select('tenct', 'macongtac', 'mact')->get();
+
             return view('manage.dutoanluong.index')
                 ->with('furl', '/nghiep_vu/quan_ly/du_toan/')
                 ->with('furl_ajax', '/ajax/du_toan/')
                 ->with('model', $model)
                 ->with('model_bl', $model_bl)
                 ->with('a_nkp', getNguonKP(false))
+                ->with('a_phongban', getPhongBan(false))
                 ->with('model_nhomct', $model_nhomct)
                 ->with('model_tenct', $model_tenct)
                 ->with('a_trangthai', getStatus())

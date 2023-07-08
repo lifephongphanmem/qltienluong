@@ -178,8 +178,23 @@ class dmphanloaictController extends Controller
     {
         if (Session::has('admin')) {
             $inputs = $request->all();
+
             $model = dmphanloaict::where('mact', $inputs['mact'])->first();
-            $model->update($inputs);
+            if ($model == null) {
+                $model_chk = dmphanloaict::all();
+                foreach ($model_chk as $ct) {
+                    if (chuanhoatruong(trim($ct->tenct)) == chuanhoatruong(trim($inputs['tenct']))) {
+                        return view('errors.data_error.blade')
+                            ->with('message', 'Phân loại công tác này đã tồn tại trên hệ thống')
+                            ->with('furl', '/');
+                    }
+                }
+                $inputs['mact'] = getdate()[0];
+                dmphanloaict::create($inputs);
+            } else {
+                $model->update($inputs);
+            }
+
             return redirect('/danh_muc/cong_tac/ma_so=' . $inputs['macongtac']);
         } else
             return view('errors.notlogin');

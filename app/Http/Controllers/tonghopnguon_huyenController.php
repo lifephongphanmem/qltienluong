@@ -292,7 +292,7 @@ class tonghopnguon_huyenController extends Controller
             $inputs = $requests->all();
             if (session('admin')->macqcq == '') {
                 return view('errors.chuacqcq');
-            }            
+            }
             $madv = session('admin')->madv;
             $model_nguon_tinh = nguonkinhphi_tinh::where('sohieu', $inputs['sohieu'])->where('madv', $madv)->first();
 
@@ -1030,7 +1030,7 @@ class tonghopnguon_huyenController extends Controller
                     foreach ($m_phucap as $pc) {
                         $mapc_st = 'st_' . $pc->mapc;
                         $a_solieu_moi[$pc->mapc] = $dulieu_chitiet->sum($pc->mapc);
-                        $a_solieu_moi[$mapc_st] = round($a_solieu_moi[$pc->mapc] * $luongcb);
+                        $a_solieu_moi[$mapc_st] = round($a_solieu_moi[$pc->mapc] * $luongcb_moi);
                     }
                     //Ở ngoài nhóm phụ cấp => đưa hết vào pck
                     foreach ($m_phucap as $pc) {
@@ -4054,7 +4054,7 @@ class tonghopnguon_huyenController extends Controller
             $a_phanloai = array_column($m_dsdv->toArray(), 'maphanloai', 'madv');
             $a_phanloainguon = array_column($m_dsdv->toArray(), 'phanloainguon', 'madv');
 
-            $m_chitiet = nguonkinhphi_phucap::wherein('masodv', array_column($m_nguonkp->toarray(), 'masodv'))->get();
+            $m_chitiet = nguonkinhphi_01thang::wherein('masodv', array_column($m_nguonkp->toarray(), 'masodv'))->get();
 
             $m_plct = dmphanloaict::all();
             $a_nhomplct_hc = array_column($m_plct->toArray(), 'nhomnhucau_hc', 'mact');
@@ -4073,6 +4073,7 @@ class tonghopnguon_huyenController extends Controller
                 } else {
                     $chitiet->nhomnhucau = $a_nhomplct_hc[$chitiet->mact];
                 }
+                $chitiet->tongnhucau = ($chitiet->ttbh_dv + $chitiet->ttl) * 6;
             }
             //Số liệu đơn vị
             foreach ($m_nguonkp as $chitiet) {
@@ -4114,13 +4115,13 @@ class tonghopnguon_huyenController extends Controller
             $a_BII[7] = array('tt' => '7', 'noidung' => 'Kinh phí tăng thêm thực hiện chế độ bồi dưỡng phục vụ hoạt động cấp ủy thuộc cấp tỉnh theo Quy định 09-QĐ/VVPTW ngày 22/9/2021', 'sotien' => '0');
 
 
-            $a_BII[0]['sotien'] = $m_chitiet->where('nhomnhucau', 'BIENCHE')->sum('ttl');
-            $a_BII[2]['sotien'] = $m_chitiet->where('nhomnhucau', 'CANBOCT')->sum('ttl');
-            $a_BII[3]['sotien'] = $m_chitiet->where('nhomnhucau', 'HDND')->sum('ttl');
+            $a_BII[0]['sotien'] = $m_chitiet->where('nhomnhucau', 'BIENCHE')->sum('tongnhucau');
+            $a_BII[2]['sotien'] = $m_chitiet->where('nhomnhucau', 'CANBOCT')->sum('tongnhucau');
+            $a_BII[3]['sotien'] = $m_chitiet->where('nhomnhucau', 'HDND')->sum('tongnhucau');
             $a_BII[4]['sotien'] = $m_nguonkp->sum('nhucau2b'); //Mẫu 2b
-            $a_BII[5]['sotien'] = $m_chitiet->where('nhomnhucau', 'CANBOKCT')->sum('ttl');
-            $a_BII[6]['sotien'] = $m_chitiet->where('nhomnhucau', 'CAPUY')->wherein('level', ['X', 'H'])->sum('ttl');
-            $a_BII[7]['sotien'] = $m_chitiet->where('nhomnhucau', 'CAPUY')->where('level', 'T')->sum('ttl');
+            $a_BII[5]['sotien'] = $m_chitiet->where('nhomnhucau', 'CANBOKCT')->sum('tongnhucau');
+            $a_BII[6]['sotien'] = $m_chitiet->where('nhomnhucau', 'CAPUY')->wherein('level', ['XA', 'HUYEN'])->sum('tongnhucau');
+            $a_BII[7]['sotien'] = $m_chitiet->where('nhomnhucau', 'CAPUY')->where('level', 'TINH')->sum('tongnhucau');
 
 
             $a_BIII = array();
