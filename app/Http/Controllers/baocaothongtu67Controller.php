@@ -6767,12 +6767,14 @@ class baocaothongtu67Controller extends Controller
         if (Session::has('admin')) {
             $inputs = $request->all();
             // dd($inputs);
+          
             $thang = $inputs['tuthang'];
             $nam = $inputs['tunam'];
             $madv = session('admin')->madv;
             $madvbc = session('admin')->madvbc;
             $model_donvi_bc = dmdonvibaocao::where('baocao', 1)
             ->get();
+
             $model_donvi = dmdonvi::where('phanloaitaikhoan', 'SD')->get();
             $model_phanloai = dmphanloaidonvi::wherein('maphanloai', array_column($model_donvi->toarray(), 'maphanloai'))->get();
             // dd($model_phanloai);
@@ -6781,8 +6783,8 @@ class baocaothongtu67Controller extends Controller
             $col = 0;
             $model_tonghop = tonghopluong_donvi::where('nam', $nam)
                 ->where('thang', $thang)
-                ->where('trangthai', 'DAGUI')->get();
-
+                ->where('trangthai', 'DAGUI')->wherenotnull('matht')->get();
+                $m_donvi_baocao = dmdonvi::wherein('madv', array_column($model_tonghop->toarray(), 'madv'))->get();
             $a_dv = array_column($model_tonghop->toarray(), 'madv', 'mathdv');
             $a_pl = array_column($model_donvi->toarray(), 'maphanloai', 'madv');
             $model = tonghopluong_donvi_chitiet::join('tonghopluong_donvi', 'tonghopluong_donvi_chitiet.mathdv', 'tonghopluong_donvi.mathdv')
@@ -6844,20 +6846,25 @@ class baocaothongtu67Controller extends Controller
             // ->groupby('mact', 'maphanloai', 'dmdonvi.madv', 'manguonkp', 'linhvuchoatdong')
             ->get();
             // dd($model->take(10));
-            $m_pl = tonghopluong_donvi_chitiet::join('tonghopluong_donvi', 'tonghopluong_donvi_chitiet.mathdv', 'tonghopluong_donvi.mathdv')
-                ->join('dmdonvi', 'dmdonvi.madv', 'tonghopluong_donvi.madv')
-                ->join('dmphanloaict', 'dmphanloaict.mact', 'tonghopluong_donvi_chitiet.mact')
-                ->select('maphanloai', 'tenct', 'dmphanloaict.mact', 'tonghopluong_donvi.madv', 'tonghopluong_donvi_chitiet.linhvuchoatdong')
-                ->wherein('tonghopluong_donvi_chitiet.mathdv', array_column($model_tonghop->toarray(), 'mathdv'))
-                ->orderby('maphanloai')
-                ->distinct()
-                ->get();
+            // $m_pl = tonghopluong_donvi_chitiet::join('tonghopluong_donvi', 'tonghopluong_donvi_chitiet.mathdv', 'tonghopluong_donvi.mathdv')
+            //     ->join('dmdonvi', 'dmdonvi.madv', 'tonghopluong_donvi.madv')
+            //     ->join('dmphanloaict', 'dmphanloaict.mact', 'tonghopluong_donvi_chitiet.mact')
+            //     ->select('maphanloai', 'tenct', 'dmphanloaict.mact', 'tonghopluong_donvi.madv', 'tonghopluong_donvi_chitiet.linhvuchoatdong')
+            //     ->wherein('tonghopluong_donvi_chitiet.mathdv', array_column($model_tonghop->toarray(), 'mathdv'))
+            //     ->orderby('maphanloai')
+            //     ->distinct()
+            //     ->get();
             // dd($m_pl->toarray());
             $m_linhvuc = dmkhoipb::all();
             //$model = tonghopluong_donvi_chitiet::wherein('mathdv', array_column($model_tonghop->toarray(),'mathdv'))->get();
             $model_nguonkp = array_column(dmnguonkinhphi::all()->toArray(), 'tennguonkp', 'manguonkp');
             $model_phanloaict = array_column(dmphanloaicongtac::all()->toArray(), 'tencongtac', 'macongtac');
             $model_ct = array_column(dmphanloaict::all()->toArray(), 'tenct', 'mact');
+            $m_phanloai = dmphanloaidonvi_baocao::where('madvbc',session('admin')->madvbc)->where('maphanloai_nhom','!=','KVXP')->get();
+            if(count($m_phanloai) <= 0){
+                $m_phanloai = dmphanloaidonvi_baocao::where('madvbc',1511580911)->where('maphanloai_nhom','!=','KVXP')->get();//Lấy phân loại của Vạn Ninh để in báo cáo.
+            }
+            $a_phanloai = array_column(dmphanloaidonvi::all()->toArray(), 'maphanloai');
             /*
             foreach ($m_pl as $chitiet) {
                 $chitiet->tennguonkp = isset($model_nguonkp[$chitiet->manguonkp]) ? $model_nguonkp[$chitiet->manguonkp] : '';
@@ -6897,16 +6904,9 @@ class baocaothongtu67Controller extends Controller
                 } else {
                     $chitiet->tencongtac = isset($model_ct[$chitiet->mact]) ? $model_ct[$chitiet->mact] : '';
                 }
-                // foreach ($a_phucap as $key => $val) {
-                //     if ($chitiet->$key > 10000)
-                //         $chitiet->$key =$chitiet->luongcoban==0?0:$chitiet->$key / $chitiet->luongcoban;
-                // }
-                // $chitiet->stbhxh_dv =$chitiet->luongcoban==0?0: $chitiet->stbhxh_dv / $chitiet->luongcoban;
-                // $chitiet->stbhyt_dv =$chitiet->luongcoban==0?0: $chitiet->stbhyt_dv / $chitiet->luongcoban;
-                // $chitiet->stkpcd_dv =$chitiet->luongcoban==0?0: $chitiet->stkpcd_dv / $chitiet->luongcoban;
-                // $chitiet->stbhtn_dv =$chitiet->luongcoban==0?0: $chitiet->stbhtn_dv / $chitiet->luongcoban;
+
                 $chitiet->tongcong = $chitiet->tonghs + $chitiet->stbhxh_dv + $chitiet->stbhyt_dv + $chitiet->stkpcd_dv + $chitiet->stbhtn_dv;
-                // $chitiet->tongtienluong = $chitiet->luongcoban==0?0:($chitiet->tonghs + $chitiet->stbhxh_dv + $chitiet->stbhyt_dv + $chitiet->stkpcd_dv + $chitiet->stbhtn_dv) * $chitiet->luongcoban;
+
             }
             $model_data = $model->map(function ($data) {
                 return collect($data->toArray())
@@ -6952,14 +6952,17 @@ class baocaothongtu67Controller extends Controller
                 ->with('model', $model)
                 ->with('model_tonghop', $model_tonghop)
                 ->with('model_phanloai', $model_phanloai)
+                ->with('m_phanloai', $m_phanloai)
+                ->with('a_phanloai', $a_phanloai)
                 ->with('model_donvi', $model_donvi)
                 ->with('model_donvi_bc', $model_donvi_bc)
                 ->with('m_donvi', $m_donvi)
+                ->with('m_donvi_baocao', $m_donvi_baocao)
                 ->with('a_soluong', $a_soluong)
                 ->with('model_khoipb', $model_khoipb)
                 ->with('m_dv', $m_dv)
-                ->with('m_pl', $m_pl)
-                ->with('col', $col)
+                // ->with('m_pl', $m_pl)
+                ->with('col', $col-1)
                 ->with('a_phucap', $a_phucap)
                 ->with('nam', $inputs['tunam'])
                 ->with('thang', $inputs['tuthang'])
@@ -6985,7 +6988,10 @@ class baocaothongtu67Controller extends Controller
             // $m_donvi = dmdonvi::where('madv', $m_dutoan_huyen->madv)->first();
 
             //$m_phanloai = dmphanloaidonvi_baocao::where('madvbc', $m_donvi->madvbc)->get();
-            $m_phanloai = dmphanloaidonvi_baocao::where('madvbc',1511580911)->where('maphanloai_nhom','!=','KVXP')->get();//Lấy phân loại của Vạn Ninh để in báo cáo, Khi nào set cho tỉnh thì đổi lại.
+            $m_phanloai = dmphanloaidonvi_baocao::where('madvbc',session('admin')->madvbc)->where('maphanloai_nhom','!=','KVXP')->get();
+            if(count($m_phanloai) <= 0){
+                $m_phanloai = dmphanloaidonvi_baocao::where('madvbc',1511580911)->where('maphanloai_nhom','!=','KVXP')->get();//Lấy phân loại của Vạn Ninh để in báo cáo.
+            }
             $a_phanloai = array_column(dmphanloaidonvi::all()->toArray(), 'maphanloai');
             // $m_dutoan = dutoanluong::where('masoh', $inputs['masodv'])->where('trangthai', 'DAGUI')->get();
             $m_donvi_baocao = dmdonvi::wherein('madv', array_column($m_dutoan->toarray(), 'madv'))->get();
@@ -7103,7 +7109,11 @@ class baocaothongtu67Controller extends Controller
             $m_donvi = dmdonvi::where('madv', session('admin')->madv)->first();
 
             // $m_phanloai = dmphanloaidonvi_baocao::where('madvbc', $m_donvi->madvbc)->get();
-            $m_phanloai = dmphanloaidonvi_baocao::where('madvbc',1511580911)->where('maphanloai_nhom','!=','KVXP')->get();//Lấy phân loại của Vạn Ninh để in báo cáo, Khi nào set cho tỉnh thì đổi lại.
+            $m_phanloai = dmphanloaidonvi_baocao::where('madvbc',session('admin')->madvbc)->where('maphanloai_nhom','!=','KVXP')->get();
+            if(count($m_phanloai) <= 0){
+                $m_phanloai = dmphanloaidonvi_baocao::where('madvbc',1511580911)->where('maphanloai_nhom','!=','KVXP')->get();//Lấy phân loại của Vạn Ninh để in báo cáo.
+            }
+
             $a_phanloai = array_column(dmphanloaidonvi::all()->toArray(), 'maphanloai');
             // $m_dutoan = dutoanluong::where('masoh', $inputs['masodv'])->where('trangthai', 'DAGUI')->get();
             $m_donvi_baocao = dmdonvi::wherein('madv', array_column($m_dutoan->toarray(), 'madv'))->get();
