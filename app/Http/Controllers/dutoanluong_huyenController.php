@@ -144,11 +144,13 @@ class dutoanluong_huyenController extends Controller
     {
         if (Session::has('admin')) {
             $inputs = $requests->all();
+            // dd($inputs);
             if (session('admin')->macqcq == '') {
                 return view('errors.chuacqcq');
             }
 
             $model = dutoanluong_huyen::where('masodv', $inputs['masodv'])->first();
+           
             $chk_tinh = dutoanluong_tinh::where('madv', $model->macqcq)->where('namns', $model->namns)->first();
             if ($chk_tinh != null)
                 dutoanluong::where('masoh', $inputs['masodv'])->update(['masot' => $chk_tinh->masodv]);
@@ -159,6 +161,8 @@ class dutoanluong_huyenController extends Controller
             $model->trangthai = 'DAGUI';
             $model->save();
 
+            $masot=$model->madv.'_'.getdate()[0];
+            dutoanluong::where('macqcq',$model->madv)->where('namns',$inputs['namns'])->update(['masot'=>$masot]);
             return redirect('/chuc_nang/du_toan_luong/huyen/index');
         } else
             return view('errors.notlogin');

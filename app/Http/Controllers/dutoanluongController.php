@@ -1409,6 +1409,7 @@ class dutoanluongController extends Controller
             $model->nguoiguidv = session('admin')->name;
             $model->ngayguidv = Carbon::now()->toDateTimeString();
             $model->trangthai = 'DAGUI';
+            // dd($model);
             $model->save();
 
             return redirect('/nghiep_vu/quan_ly/du_toan/danh_sach');
