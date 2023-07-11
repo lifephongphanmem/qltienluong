@@ -23,6 +23,7 @@ use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use App\nguonkinhphi_01thang;
 use App\nguonkinhphi_phucap;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Session;
 
 class tonghopnguon_huyenController extends Controller
@@ -522,7 +523,7 @@ class tonghopnguon_huyenController extends Controller
 
             $m_dsdv = dmdonvi::all();
             $a_phanloai = array_column($m_dsdv->toArray(), 'maphanloai', 'madv');
-            //$a_madvbc = array_column($m_dsdv->toArray(), 'madvbc', 'madv');
+            $a_thongtindv = array_column($m_dsdv->toArray(), 'tendv', 'madv');
             $a_level = array_column($m_dsdv->toArray(), 'caphanhchinh', 'madv');
             //$a_diaban = array_column(dmdonvibaocao::all()->toArray(), 'level', 'madvbc');
             //dd($a_donvi);
@@ -532,8 +533,7 @@ class tonghopnguon_huyenController extends Controller
             $a_nhomplct_xp = array_column($m_plct->toArray(), 'nhomnhucau_xp', 'mact');
             foreach ($m_chitiet as $chitiet) {
                 $chitiet->madv = $a_donvi[$chitiet->masodv];
-                //$chitiet->madvbc = $a_madvbc[$chitiet->madv];
-
+                $chitiet->tendv = $a_thongtindv[$chitiet->madv];
                 $chitiet->maphanloai = $a_phanloai[$chitiet->madv];
                 $chitiet->linhvuchoatdong = $a_linhvuc[$chitiet->masodv];
                 $chitiet->level = $a_level[$chitiet->madv];
@@ -543,11 +543,15 @@ class tonghopnguon_huyenController extends Controller
                 } else {
                     $chitiet->nhomnhucau = $a_nhomplct_hc[$chitiet->mact];
                 }
+
+                $chitiet->tongpc = $chitiet->tonghs - $chitiet->heso;
+                $chitiet->st_tongpc = $chitiet->ttl - $chitiet->st_heso;
+                $chitiet->tongcong = $chitiet->st_tongpc + $chitiet->st_heso + $chitiet->ttbh_dv;
             }
             //dd($m_nguonkp);
 
             $m_phucap = dmphucap_donvi::where('madv',  $m_nguonkp->first()->madv)->wherenotin('mapc', ['heso'])->get();
-            $a_phucap = getPhuCap2a_78();
+            $a_phucap = array_keys(getPhuCap2a_78());
 
             //Tính toán số liệu phần I
             $ar_I = getHCSN();
@@ -970,7 +974,8 @@ class tonghopnguon_huyenController extends Controller
                     }
                 }
             }
-            dd($dulieu_pI);
+            // dd($ar_II);
+
             $m_dv = dmdonvi::where('madv', $inputs['macqcq'])->first();
             return view('reports.thongtu78.huyen.mautonghop')
                 ->with('furl', '/tong_hop_bao_cao/')
@@ -1036,7 +1041,7 @@ class tonghopnguon_huyenController extends Controller
 
             $m_phucap = dmphucap_donvi::where('madv',  $m_nguonkp->first()->madv)->wherenotin('mapc', ['heso'])->get();
 
-            $a_phucap = getPhuCap2a_78();
+            $a_phucap = array_keys(getPhuCap2a_78());
 
             $luongcb = $m_thongtu->muccu;
             $luongcb_moi = $m_thongtu->mucapdung;

@@ -1240,15 +1240,15 @@ function getPhuCap2a_78()
 {
     return
         [
-            'pckv'=>'Phụ cấp khu vực',
-            'pccv'=>'Phụ cấp chức vụ',
-            'vuotkhung'=>'Phụ cấp thâm niên vượt khung',
-            'pcudn'=>'Phụ cấp ưu đãi ngành',
-            'pcth'=>'Phụ cấp thu hút',
-            'pcthni'=>'Phụ cấp công tác lâu năm',
-            'pccovu'=>'Phụ cấp công vụ',
-            'pcdang'=>'Phụ cấp công tác đảng',
-            'pctnn'=>'Phụ cấp thâm niên nghề',
-            'pck'=>'Phụ cấp khác',
+            'pckv' => 'Phụ cấp khu vực',
+            'pccv' => 'Phụ cấp chức vụ',
+            'vuotkhung' => 'Phụ cấp thâm niên vượt khung',
+            'pcudn' => 'Phụ cấp ưu đãi ngành',
+            'pcth' => 'Phụ cấp thu hút',
+            'pcthni' => 'Phụ cấp công tác lâu năm',
+            'pccovu' => 'Phụ cấp công vụ',
+            'pcdang' => 'Phụ cấp công tác đảng',
+            'pctnn' => 'Phụ cấp thâm niên nghề',
+            'pck' => 'Phụ cấp khác',
         ];
 }

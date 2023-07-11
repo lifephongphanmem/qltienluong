@@ -68,7 +68,6 @@
             <td>16</td>
         </tr>
 
-
         <tr style="font-weight: bold;text-align: center">
             <td style="text-align: center"></td>
             <td style="text-align: left">TỔNG SỐ</td>
@@ -84,7 +83,7 @@
 
         </tr>
         @foreach ($ar_I as $dulieu)
-            <tr style="text-align: center">
+            <tr style="text-align: center; font-weight: bold">
                 <td style="text-align: center;{{ $dulieu['style'] }}">{{ $dulieu['tt'] }}</td>
                 <td style="text-align: left;{{ $dulieu['style'] }}">{{ $dulieu['noidung'] }}</td>
                 {{-- Mức lương cũ --}}
@@ -102,6 +101,7 @@
                 $model = $dulieu_pI->where('linhvuchoatdong', $dulieu['chitiet']['linhvuchoatdong']);
                 $a_dv = array_unique(array_column($model->toarray(), 'tendv', 'madv'));
                 $idv = 1;
+                // echo  count($a_dv);
                 ?>
                 @foreach ($a_dv as $madv => $tendv)
                     <?php
@@ -114,7 +114,7 @@
                         <td>{{ dinhdangso($m_donvi->sum('st_heso')) }}</td>
                         <td>{{ dinhdangso($m_donvi->sum('st_tongpc')) }}</td>
                         @foreach ($a_phucap as $mapc => $pc)
-                            <?php $ten = $mapc; ?>
+                            <?php $ten = 'st_' . $mapc; ?>
                             <td>{{ dinhdangso($m_donvi->sum($ten)) }}</td>
                         @endforeach
                         <td>{{ dinhdangso($m_donvi->sum('ttbh_dv')) }}</td>
@@ -129,7 +129,7 @@
                             <td>{{ dinhdangso($ct->st_heso) }}</td>
                             <td>{{ dinhdangso($ct->st_tongpc) }}</td>
                             @foreach ($a_phucap as $mapc => $pc)
-                                <?php $ten = $mapc; ?>
+                                <?php $ten = 'st_' . $mapc; ?>
                                 <td>{{ dinhdangso($ct->$ten) }}</td>
                             @endforeach
                             <td>{{ dinhdangso($ct->ttbh_dv) }}</td>
@@ -154,6 +154,48 @@
                 @endforeach
                 <td style="{{ $dulieu['style'] }}">{{ dinhdangso($dulieu['solieu']['ttbh_dv']) }}</td>
             </tr>
+            @if ($dulieu['phanloai'] == '0')
+                <?php
+                // $model = $dulieu_pII->where('linhvuchoatdong', $dulieu['chitiet']['linhvuchoatdong']);
+                $a_dv = array_unique(array_column($dulieu_pII->toarray(), 'tendv', 'madv'));
+                $idv = 1;
+                // echo  count($a_dv);
+                ?>
+                @foreach ($a_dv as $madv => $tendv)
+                    <?php
+                    $m_donvi = $dulieu_pII->where('madv', $madv);
+                    ?>
+                    <tr style="text-align: center">
+                        <td style="text-align: right">{{ $idv++ }}</td>
+                        <td style="text-align: left">{{ $tendv }}</td>
+                        <td>{{ dinhdangso($m_donvi->sum('tongcong')) }}</td>
+                        <td>{{ dinhdangso($m_donvi->sum('st_heso')) }}</td>
+                        <td>{{ dinhdangso($m_donvi->sum('st_tongpc')) }}</td>
+                        @foreach ($a_phucap as $mapc => $pc)
+                            <?php $ten = 'st_' . $mapc; ?>
+                            <td>{{ dinhdangso($m_donvi->sum($ten)) }}</td>
+                        @endforeach
+                        <td>{{ dinhdangso($m_donvi->sum('ttbh_dv')) }}</td>
+
+                    </tr>
+                    @foreach ($m_donvi as $ct)
+                        <tr style="text-align: center; font-style: italic">
+                            <td style="text-align: center;{{ $dulieu['style'] }}"></td>
+                            <td style="text-align: left">- {{ $ct->tenct }}</td>
+
+                            <td>{{ dinhdangso($ct->tongcong) }}</td>
+                            <td>{{ dinhdangso($ct->st_heso) }}</td>
+                            <td>{{ dinhdangso($ct->st_tongpc) }}</td>
+                            @foreach ($a_phucap as $mapc => $pc)
+                                <?php $ten = 'st_' . $mapc; ?>
+                                <td>{{ dinhdangso($ct->$ten) }}</td>
+                            @endforeach
+                            <td>{{ dinhdangso($ct->ttbh_dv) }}</td>
+
+                        </tr>
+                    @endforeach
+                @endforeach
+            @endif
         @endforeach
 
         @foreach ($ar_III as $dulieu)
