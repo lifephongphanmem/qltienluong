@@ -81,6 +81,13 @@
                         </select>
                     </div>
                 </div>
+
+                <div id="row_khoitocongtac" class="row">
+                    <div class="col-md-12">
+                        <label class="control-label">Khối/Tổ công tác</label>
+                        {!! Form::select('mapb', [], 'ALL', ['class' => 'form-control']) !!}
+                    </div>
+                </div>
             </div>
         </div>
         <input type="hidden" id="masodv" name="masodv" value="" />
@@ -100,8 +107,29 @@
 
     function ThongTinKetXuat(thang, url) {
         var form = $('#printf_mautt107');
-        form.find("[id^='thang']").prop('disabled', thang);
+        form.find("[name^='thang']").prop('disabled', thang);
+
         form.prop('action', url);
+        var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
+        $.ajax({
+            url: '/chuc_nang/xem_du_lieu/nguon/getKhoiToCongTac',
+            type: 'GET',
+            data: {
+                _token: CSRF_TOKEN,
+                madv: $('#madv_dt').val()
+            },
+            dataType: 'JSON',
+            success: function(data) {
+                if (data.status == 'success') {
+                    $('#row_khoitocongtac').replaceWith(data.message);
+                    form.find("[name^='mapb']").prop('disabled', thang);
+                }
+            },
+            error: function(message) {
+                alert(message);
+            }
+        });
+
     }
 
     function ClickBCtt107() {

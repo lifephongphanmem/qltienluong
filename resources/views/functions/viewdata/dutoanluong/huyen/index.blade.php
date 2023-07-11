@@ -102,7 +102,7 @@
                                             <button type="button" onclick="inbl('{{$value['madv']}}','{{$inputs['namns']}}','{{$value['masodv']}}')" class="btn btn-default btn-xs mbs">
                                                 <i class="fa fa-print"></i>&nbsp; In số liệu chi tiết</button> --}}
                                                 <button type="button" title="In số liệu"
-                                                    onclick="indutoan('{{ $value->namns }}','{{ $value->masodv }}','{{$value->madv}}')"
+                                                    onclick="indutoan('{{ $value->namns }}','{{ $value->masodv }}','{{ $value->madv }}')"
                                                     class="btn btn-default btn-sm mbs" data-target="#indt-modal"
                                                     data-toggle="modal">
                                                     <i class="fa fa-print"></i>
@@ -159,10 +159,9 @@
                 <div class="row">
                     <div class="col-md-12">
                         <div class="form-group">
-                            <button type="button"
-                                onclick="insolieu('{{ $furl_xem . 'bangluonghopdong' }}', '1506673585')"
-                                style="border-width: 0px" class="btn btn-default btn-xs mbs" data-target="#modal-insolieu"
-                                data-toggle="modal">
+                            <button type="button" onclick="insolieu('{{ $furl_xem . 'bangluonghopdong' }}', '1506673585')"
+                                style="border-width: 0px" class="btn btn-default btn-xs mbs"
+                                data-target="#modal-insolieu" data-toggle="modal">
                                 <i class="fa fa-print"></i>&nbsp; In bảng lương hợp đồng 68 </button>
                         </div>
                     </div>
@@ -201,13 +200,12 @@
                                 lương và phụ cấp có mặt (Mẫu 01) </button>
                         </div>
                     </div>
-                </div>                
+                </div>
 
                 <div class="row">
                     <div class="col-md-12">
                         <div class="form-group">
-                            <button type="button"
-                                onclick="insolieu('{{ $furl_xem . 'tonghophopdong' }}','1506673585')"
+                            <button type="button" onclick="insolieu('{{ $furl_xem . 'tonghophopdong' }}','1506673585')"
                                 style="border-width: 0px" class="btn btn-default btn-xs mbs"
                                 data-target="#modal-insolieu" data-toggle="modal">
                                 <i class="fa fa-print"></i>&nbsp; Tổng hợp hợp đồng bổ sung quỹ lương</button>
@@ -246,6 +244,13 @@
                             </select>
                         </div>
                     </div>
+
+                    <div id="row_khoitocongtac" class="row">
+                        <div class="col-md-12">
+                            <label class="control-label">Khối/Tổ công tác</label>
+                            {!! Form::select('mapb', [], 'ALL', ['class' => 'form-control']) !!}
+                        </div>
+                    </div>
                 </div>
 
                 <input type="hidden" name="masodv" />
@@ -258,8 +263,6 @@
         </div>
     </div>
     {!! Form::close() !!}
-
-
 
     <div class="modal fade" id="chuyen-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
         aria-hidden="true">
@@ -298,11 +301,11 @@
             <div class="modal-body">
                 <div class="row">
                     <!--div class="col-md-6">
-                                <div class="form-group">
-                                    <a id="in_bl" href="" onclick="insolieu('/chuc_nang/du_toan_luong/huyen/chitietbl')" style="border-width: 0px;margin-left: 5px" target="_blank">
-                                        <i class="fa fa-print"></i>&nbsp; In số liệu chi tiết từng tháng</a>
-                                </div>
-                            </div-->
+                                    <div class="form-group">
+                                        <a id="in_bl" href="" onclick="insolieu('/chuc_nang/du_toan_luong/huyen/chitietbl')" style="border-width: 0px;margin-left: 5px" target="_blank">
+                                            <i class="fa fa-print"></i>&nbsp; In số liệu chi tiết từng tháng</a>
+                                    </div>
+                                </div-->
                     <div class="col-md-6">
                         <div class="form-group">
                             <button type="button" onclick="inblpl()" style="border-width: 0px"
@@ -314,9 +317,9 @@
 
                     <div class="col-md-6">
                         <!--div class="form-group">
-                                    <a id="in_blCR" href="" onclick="insolieuCR('/chuc_nang/du_toan_luong/huyen/chitietblCR')" style="border-width: 0px;margin-left: 5px" target="_blank">
-                                        <i class="fa fa-print"></i>&nbsp; In số liệu tổng hợp các tháng (CR)</a>
-                                </div-->
+                                        <a id="in_blCR" href="" onclick="insolieuCR('/chuc_nang/du_toan_luong/huyen/chitietblCR')" style="border-width: 0px;margin-left: 5px" target="_blank">
+                                            <i class="fa fa-print"></i>&nbsp; In số liệu tổng hợp các tháng (CR)</a>
+                                    </div-->
 
                         <div class="form-group">
                             <button type="button" onclick="inblth()" style="border-width: 0px"
@@ -534,12 +537,31 @@
             $('#frm_insolieu').find("[name^='mact']").val(mact.split(';')).trigger('change');
             $('#frm_insolieu').find("[name^='masodv']").val($('#masodv_dt').val());
             $('#frm_insolieu').find("[name^='namns']").val($('#nam_dt').val());
+
+            var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
+            $.ajax({
+                url: '/chuc_nang/xem_du_lieu/nguon/getKhoiToCongTac',
+                type: 'GET',
+                data: {
+                    _token: CSRF_TOKEN,
+                    madv: $('#madv').val()
+                },
+                dataType: 'JSON',
+                success: function(data) {
+                    if (data.status == 'success') {
+                        $('#row_khoitocongtac').replaceWith(data.message);
+                    }
+                },
+                error: function(message) {
+                    alert(message);
+                }
+            });
         }
 
         function intonghopdt(url) {
             var masodv = $('#masodv_dt').val();
             var madv = $('#madv').val();
-            window.open(url + masodv+'&madv='+madv, '_blank');
+            window.open(url + masodv + '&madv=' + madv, '_blank');
         }
 
         function indutoan(namdt, masodv, madv) {
@@ -618,7 +640,8 @@
             var namns = $('#namns').val();
             var trangthai = $('#trangthai').val();
             var phanloai = $('#phanloai').val();
-            return '/chuc_nang/xem_du_lieu/du_toan/huyen?namns=' + namns + '&trangthai=' + trangthai + '&phanloai=' + phanloai;
+            return '/chuc_nang/xem_du_lieu/du_toan/huyen?namns=' + namns + '&trangthai=' + trangthai + '&phanloai=' +
+                phanloai;
         }
 
         $(function() {

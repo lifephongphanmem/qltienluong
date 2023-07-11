@@ -316,6 +316,8 @@ Route::group(['prefix' => 'chuc_nang'], function () {
             Route::get('huyen', 'xemdulieu_nguonController@index_huyen');
             Route::get('tinh', 'xemdulieu_nguonController@index_tinh');
             Route::post('danhsach', 'xemdulieu_nguonController@danhsach');
+            
+            Route::get('getKhoiToCongTac', 'xemdulieu_nguonController@getKhoiToCongTac');
         });
 
         Route::group(['prefix' => 'du_toan'], function () {

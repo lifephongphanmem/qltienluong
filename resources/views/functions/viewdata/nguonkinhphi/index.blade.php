@@ -114,7 +114,7 @@
                                                         <!--a href="{{ url('/nguon_kinh_phi/khoi/mautt107_m2?maso=' . $value['masodv']) }}" class="btn btn-default btn-sm" TARGET="_blank">
                                                                 <i class="fa fa-print"></i>&nbsp; Số liệu tổng hợp</a-->
                                                         <button type="button"
-                                                            onclick="innguon('{{ $value->namns }}','{{ $value->masodv }}')"
+                                                            onclick="innguon('{{ $value->namns }}','{{ $value->masodv }}','{{ $value->madv }}')"
                                                             class="btn btn-default btn-xs mbs" data-target="#indt-modal"
                                                             data-toggle="modal">
                                                             <i class="fa fa-print"></i>&nbsp; In số liệu</button>
@@ -122,7 +122,7 @@
                                                         <!--a href="{{ url('/nguon_kinh_phi/huyen/mautt107_m2?maso=' . $value['masodv']) }}" class="btn btn-default btn-sm" TARGET="_blank">
                                                                 <i class="fa fa-print"></i>&nbsp; Số liệu tổng hợp</a-->
                                                         <button type="button"
-                                                            onclick="innguon('{{ $value->namns }}','{{ $value->masodv }}')"
+                                                            onclick="innguon('{{ $value->namns }}','{{ $value->masodv }}','{{ $value->madv }}')"
                                                             class="btn btn-default btn-xs mbs" data-target="#indt-modal"
                                                             data-toggle="modal">
                                                             <i class="fa fa-print"></i>&nbsp; In số liệu</button>
@@ -380,6 +380,7 @@
                 </div>
                 <input type="hidden" id="nam_dt" name="nam_dt" />
                 <input type="hidden" id="masodv_dt" name="masodv_dt" />
+                <input type="hidden" id="madv_dt" name="madv_dt" />
             </div>
 
             <div class="modal-footer">
@@ -476,9 +477,10 @@
         });
     </script>
     <script>
-        function innguon(namdt, masodv) {
+        function innguon(namdt, masodv, madv) {
             $('#nam_dt').val(namdt);
             $('#masodv_dt').val(masodv);
+            $('#madv_dt').val(madv);
         }
 
         function intonghopdt(url) {
