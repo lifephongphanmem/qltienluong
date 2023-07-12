@@ -162,8 +162,9 @@ class nguonkinhphiController extends Controller
                     $dt_ns = date_create($cb->ngaysinh);
                     $cb->nam_ns = (string) date_format($dt_ns, 'Y') + ($cb->gioitinh == 'Nam' ? $gen['tuoinam'] : $gen['tuoinu']);
                     $cb->thang_ns = date_format($dt_ns, 'm') + 1 + ($cb->gioitinh == 'Nam' ? $gen['thangnam'] : $gen['thangnu']);
+                    //dd($cb->thang_ns);
                     if ($cb->thang_ns > 12) {
-                        $cb->thang_ns = '01';
+                        $cb->thang_ns = str_pad($cb->thang_ns - 12, 2, '0', STR_PAD_LEFT);
                         $cb->nam_ns = strval($cb->nam_ns + 1);
                     }
                 } else {
@@ -306,7 +307,7 @@ class nguonkinhphiController extends Controller
             $model = $model->wherein('mact', $a_plct)->where('lvhd', $inputs['linhvuchoatdong']);
             //lấy danh sách cán bộ chưa nâng lương từ tháng 01-06 => tự nâng lương
 
-            $m_cb = $model->keyBy('macanbo')->toarray();            
+            $m_cb = $model->keyBy('macanbo')->toarray();
             //làm tùy chọn tính nghỉ hưu
             $m_hh = $model->where('ngayvao', '>=', $model_thongtu->ngayapdung)->where('ngayvao', '<=', $inputs['namdt'] . '-12-31')->keyBy('macanbo')->toarray();
 
