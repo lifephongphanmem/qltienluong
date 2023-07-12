@@ -192,8 +192,8 @@ class baocaothongtu67Controller extends Controller
                 //     $tonghop = $model_tonghop->where('masodv', $ct->masodv)->first();
                 //     $ct->maphanloai = $tonghop->maphanloai;
                 // } else {
-                    $tonghop = $model_tonghop->where('masodv', $ct->masodv)->first();
-                    $ct->maphanloai = $model_donvi->where('madv', $tonghop->madv)->first()->maphanloai;
+                $tonghop = $model_tonghop->where('masodv', $ct->masodv)->first();
+                $ct->maphanloai = $model_donvi->where('madv', $tonghop->madv)->first()->maphanloai;
                 // }
                 $ct->madv = $model_tonghop->where('masodv', $ct->masodv)->first()->madv;
                 $ct->tendv = $model_donvi->where('madv', $ct->madv)->first()->tendv;
@@ -1113,8 +1113,8 @@ class baocaothongtu67Controller extends Controller
                 //     $tonghop = $model_tonghop->where('masodv', $ct->masodv)->first();
                 //     $ct->maphanloai = $tonghop->maphanloai;
                 // } else {
-                    $tonghop = $model_tonghop->where('masodv', $ct->masodv)->first();
-                    $ct->maphanloai = $model_donvi->where('madv', $tonghop->madv)->first()->maphanloai;
+                $tonghop = $model_tonghop->where('masodv', $ct->masodv)->first();
+                $ct->maphanloai = $model_donvi->where('madv', $tonghop->madv)->first()->maphanloai;
                 // }
                 $ct->madv = $model_tonghop->where('masodv', $ct->masodv)->first()->madv;
                 $ct->tendv = $model_donvi->where('madv', $ct->madv)->first()->tendv;
@@ -5861,7 +5861,7 @@ class baocaothongtu67Controller extends Controller
             // $model_donvi = dmdonvi::where('madvbc', $madvbc)->get();
             $model_donvi = dmdonvibaocao::where('baocao', 1)
                 ->get();
-                
+
             // $model_khoipb = dmkhoipb::all();
             $model_phanloai = dmphanloaidonvi::join('dmdonvi', 'dmdonvi.maphanloai', 'dmphanloaidonvi.maphanloai')
                 ->select('madv', 'dmphanloaidonvi.maphanloai', 'tenphanloai', 'linhvuchoatdong')
@@ -5874,7 +5874,7 @@ class baocaothongtu67Controller extends Controller
                     ->wherein('madvbc', array_column($model_donvi->toarray(), 'madvbc'))
                     ->wherein('dmdonvi.maphanloai', getPhanLoaGD())
                     ->get();
-                    // dd($model_phanloai->take(10));
+            // dd($model_phanloai->take(10));
             $model_th = tonghopluong_donvi_bangluong::join('tonghopluong_donvi', 'tonghopluong_donvi.mathdv', 'tonghopluong_donvi_bangluong.mathdv')
                 ->Select(
                     'mact',
@@ -6763,17 +6763,17 @@ class baocaothongtu67Controller extends Controller
         }
         return response()->json($output);
     }
-     public function tonghopluong_tinh(Request $request){
+    public function tonghopluong_tinh(Request $request)
+    {
         if (Session::has('admin')) {
             $inputs = $request->all();
-            // dd($inputs);
-          
+
             $thang = $inputs['tuthang'];
             $nam = $inputs['tunam'];
             $madv = session('admin')->madv;
             $madvbc = session('admin')->madvbc;
             $model_donvi_bc = dmdonvibaocao::where('baocao', 1)
-            ->get();
+                ->get();
 
             $model_donvi = dmdonvi::where('phanloaitaikhoan', 'SD')->get();
             $model_phanloai = dmphanloaidonvi::wherein('maphanloai', array_column($model_donvi->toarray(), 'maphanloai'))->get();
@@ -6784,67 +6784,73 @@ class baocaothongtu67Controller extends Controller
             $model_tonghop = tonghopluong_donvi::where('nam', $nam)
                 ->where('thang', $thang)
                 ->where('trangthai', 'DAGUI')->wherenotnull('matht')->get();
-                $m_donvi_baocao = dmdonvi::wherein('madv', array_column($model_tonghop->toarray(), 'madv'))->get();
-            $a_dv = array_column($model_tonghop->toarray(), 'madv', 'mathdv');
-            $a_pl = array_column($model_donvi->toarray(), 'maphanloai', 'madv');
+            $m_donvi_baocao = dmdonvi::wherein('madv', array_column($model_tonghop->toarray(), 'madv'))->get();
+            // $a_dv = array_column($model_tonghop->toarray(), 'madv', 'mathdv');
+            // $a_pl = array_column($model_donvi->toarray(), 'maphanloai', 'madv');
+            $a_dv=array_column($model_donvi_bc->toarray(),'tendvbc','madvcq');
             $model = tonghopluong_donvi_chitiet::join('tonghopluong_donvi', 'tonghopluong_donvi_chitiet.mathdv', 'tonghopluong_donvi.mathdv')
-            ->join('dmdonvi', 'dmdonvi.madv', 'tonghopluong_donvi.madv')
-            ->join('dmphanloaict', 'dmphanloaict.mact', 'tonghopluong_donvi_chitiet.mact')
-            ->select(
-                'dmdonvi.madv',
-                'dmdonvi.madvbc',
-                'dmdonvi.macqcq',
-                'maphanloai',
-                'tonghopluong_donvi.madvbc',
-                'tonghopluong_donvi_chitiet.mact',
-                'tenct',
-                'manguonkp',
-                'luongcoban',
-                'soluong',
-                'heso',
-                'hesobl',
-                'hesopc',
-                'hesott',
-                'vuotkhung',
-                'tonghopluong_donvi_chitiet.linhvuchoatdong',
-                'tonghopluong_donvi_chitiet.pcct',
-                'tonghopluong_donvi_chitiet.pckct',
-                'tonghopluong_donvi_chitiet.pck',
-                'tonghopluong_donvi_chitiet.pccv',
-                'tonghopluong_donvi_chitiet.pckv',
-                'tonghopluong_donvi_chitiet.pcth',
-                'tonghopluong_donvi_chitiet.pcdd',
-                'tonghopluong_donvi_chitiet.pcdh',
-                'tonghopluong_donvi_chitiet.pcld',
-                'tonghopluong_donvi_chitiet.pcdbqh',
-                'tonghopluong_donvi_chitiet.pcudn',
-                'tonghopluong_donvi_chitiet.pctn',
-                'tonghopluong_donvi_chitiet.pctnn',
-                'tonghopluong_donvi_chitiet.pcdbn',
-                'tonghopluong_donvi_chitiet.pcvk',
-                'tonghopluong_donvi_chitiet.pckn',
-                'tonghopluong_donvi_chitiet.pcdang',
-                'tonghopluong_donvi_chitiet.pccovu',
-                'tonghopluong_donvi_chitiet.pclt',
-                'tonghopluong_donvi_chitiet.pcd',
-                'tonghopluong_donvi_chitiet.pctr',
-                'tonghopluong_donvi_chitiet.pctdt',
-                'tonghopluong_donvi_chitiet.pctnvk',
-                'tonghopluong_donvi_chitiet.pcbdhdcu',
-                'tonghopluong_donvi_chitiet.pcthni',
-                'tonghopluong_donvi_chitiet.tonghs',
-                'tonghopluong_donvi_chitiet.giaml',
-                'tonghopluong_donvi_chitiet.luongtn',
-                'tonghopluong_donvi_chitiet.stbhxh_dv',
-                'tonghopluong_donvi_chitiet.stbhyt_dv',
-                'tonghopluong_donvi_chitiet.stkpcd_dv',
-                'tonghopluong_donvi_chitiet.luongtn',
-                'tonghopluong_donvi_chitiet.stbhtn_dv',
-                'tonghopluong_donvi_chitiet.ttbh_dv'
-            )
-            ->wherein('tonghopluong_donvi_chitiet.mathdv', array_column($model_tonghop->toarray(), 'mathdv'))
-            // ->groupby('mact', 'maphanloai', 'dmdonvi.madv', 'manguonkp', 'linhvuchoatdong')
-            ->get();
+                ->join('dmdonvi', 'dmdonvi.madv', 'tonghopluong_donvi.madv')
+                ->join('dmphanloaict', 'dmphanloaict.mact', 'tonghopluong_donvi_chitiet.mact')
+                ->select(
+                    'dmdonvi.madv',
+                    'dmdonvi.madvbc',
+                    'dmdonvi.macqcq',
+                    'maphanloai',
+                    'tonghopluong_donvi.madvbc',
+                    'tonghopluong_donvi_chitiet.mact',
+                    'tenct',
+                    'manguonkp',
+                    'luongcoban',
+                    'soluong',
+                    'heso',
+                    'hesobl',
+                    'hesopc',
+                    'hesott',
+                    'vuotkhung',
+                    'tonghopluong_donvi_chitiet.linhvuchoatdong',
+                    'tonghopluong_donvi_chitiet.pcct',
+                    'tonghopluong_donvi_chitiet.pckct',
+                    'tonghopluong_donvi_chitiet.pck',
+                    'tonghopluong_donvi_chitiet.pccv',
+                    'tonghopluong_donvi_chitiet.pckv',
+                    'tonghopluong_donvi_chitiet.pcth',
+                    'tonghopluong_donvi_chitiet.pcdd',
+                    'tonghopluong_donvi_chitiet.pcdh',
+                    'tonghopluong_donvi_chitiet.pcld',
+                    'tonghopluong_donvi_chitiet.pcdbqh',
+                    'tonghopluong_donvi_chitiet.pcudn',
+                    'tonghopluong_donvi_chitiet.pctn',
+                    'tonghopluong_donvi_chitiet.pctnn',
+                    'tonghopluong_donvi_chitiet.pcdbn',
+                    'tonghopluong_donvi_chitiet.pcvk',
+                    'tonghopluong_donvi_chitiet.pckn',
+                    'tonghopluong_donvi_chitiet.pcdang',
+                    'tonghopluong_donvi_chitiet.pccovu',
+                    'tonghopluong_donvi_chitiet.pclt',
+                    'tonghopluong_donvi_chitiet.pcd',
+                    'tonghopluong_donvi_chitiet.pctr',
+                    'tonghopluong_donvi_chitiet.pctdt',
+                    'tonghopluong_donvi_chitiet.pctnvk',
+                    'tonghopluong_donvi_chitiet.pcbdhdcu',
+                    'tonghopluong_donvi_chitiet.pcthni',
+                    'tonghopluong_donvi_chitiet.tonghs',
+                    'tonghopluong_donvi_chitiet.giaml',
+                    'tonghopluong_donvi_chitiet.luongtn',
+                    'tonghopluong_donvi_chitiet.stbhxh_dv',
+                    'tonghopluong_donvi_chitiet.stbhyt_dv',
+                    'tonghopluong_donvi_chitiet.stkpcd_dv',
+                    'tonghopluong_donvi_chitiet.luongtn',
+                    'tonghopluong_donvi_chitiet.stbhtn_dv',
+                    'tonghopluong_donvi_chitiet.ttbh_dv'
+                )
+                ->wherein('tonghopluong_donvi_chitiet.mathdv', array_column($model_tonghop->toarray(), 'mathdv'))
+                ->where(function ($query) use ($inputs){
+                    if(isset($inputs['madv'])){
+                        $query->where('dmdonvi.macqcq',$inputs['madv']);
+                    }
+                })
+                // ->groupby('mact', 'maphanloai', 'dmdonvi.madv', 'manguonkp', 'linhvuchoatdong')
+                ->get();
             // dd($model->take(10));
             // $m_pl = tonghopluong_donvi_chitiet::join('tonghopluong_donvi', 'tonghopluong_donvi_chitiet.mathdv', 'tonghopluong_donvi.mathdv')
             //     ->join('dmdonvi', 'dmdonvi.madv', 'tonghopluong_donvi.madv')
@@ -6860,9 +6866,9 @@ class baocaothongtu67Controller extends Controller
             $model_nguonkp = array_column(dmnguonkinhphi::all()->toArray(), 'tennguonkp', 'manguonkp');
             $model_phanloaict = array_column(dmphanloaicongtac::all()->toArray(), 'tencongtac', 'macongtac');
             $model_ct = array_column(dmphanloaict::all()->toArray(), 'tenct', 'mact');
-            $m_phanloai = dmphanloaidonvi_baocao::where('madvbc',session('admin')->madvbc)->where('maphanloai_nhom','!=','KVXP')->get();
-            if(count($m_phanloai) <= 0){
-                $m_phanloai = dmphanloaidonvi_baocao::where('madvbc',1511580911)->where('maphanloai_nhom','!=','KVXP')->get();//Lấy phân loại của Vạn Ninh để in báo cáo.
+            $m_phanloai = dmphanloaidonvi_baocao::where('madvbc', session('admin')->madvbc)->where('maphanloai_nhom', '!=', 'KVXP')->get();
+            if (count($m_phanloai) <= 0) {
+                $m_phanloai = dmphanloaidonvi_baocao::where('madvbc', 1511580911)->where('maphanloai_nhom', '!=', 'KVXP')->get(); //Lấy phân loại của Vạn Ninh để in báo cáo.
             }
             $a_phanloai = array_column(dmphanloaidonvi::all()->toArray(), 'maphanloai');
             /*
@@ -6884,7 +6890,7 @@ class baocaothongtu67Controller extends Controller
                 // dd($chitiet);
                 $chitiet->tendv = $model_donvi->where('madv', $chitiet->madv)->first()->tendv;
                 //$chitiet->maphanloai = $a_pl[$chitiet->madv];
-                $chitiet->tenlinhvuc = $m_linhvuc->where('makhoipb', $chitiet->linhvuchoatdong)->first()->tenkhoipb??'';
+                $chitiet->tenlinhvuc = $m_linhvuc->where('makhoipb', $chitiet->linhvuchoatdong)->first()->tenkhoipb ?? '';
                 $chitiet->tennguonkp = isset($model_nguonkp[$chitiet->manguonkp]) ? $model_nguonkp[$chitiet->manguonkp] : '';
                 if ($chitiet->mact == null) {
                     $chitiet->tencongtac = isset($model_phanloaict[$chitiet->macongtac]) ? $model_phanloaict[$chitiet->macongtac] : '';
@@ -6906,7 +6912,6 @@ class baocaothongtu67Controller extends Controller
                 }
 
                 $chitiet->tongcong = $chitiet->tonghs + $chitiet->stbhxh_dv + $chitiet->stbhyt_dv + $chitiet->stkpcd_dv + $chitiet->stbhtn_dv;
-
             }
             $model_data = $model->map(function ($data) {
                 return collect($data->toArray())
@@ -6920,7 +6925,7 @@ class baocaothongtu67Controller extends Controller
             });
             $m_donvi = $model->map(function ($data) {
                 return collect($data->toArray())
-                    ->only(['madv', 'tendv', 'linhvuchoatdong', 'maphanloai','madvbc'])
+                    ->only(['madv', 'tendv', 'linhvuchoatdong', 'maphanloai', 'madvbc'])
                     ->all();
             });
             // dd($model_khoipb);
@@ -6943,11 +6948,10 @@ class baocaothongtu67Controller extends Controller
                 }
             }
             unset($a_phucap['heso']);
-            // dd($a_phucap);
-            // dd($model->take(10));
-// dd($model_phanloai);
-            //dd($model->toarray());
-            return view('reports.tonghopluong.tinh.tonghopluong')
+
+                $view=isset($inputs['madv'])?'reports.tonghopluong.tinh.tonghopluong_ct':'reports.tonghopluong.tinh.tonghopluong';
+
+            return view($view)
                 ->with('thongtin', $thongtin)
                 ->with('model', $model)
                 ->with('model_tonghop', $model_tonghop)
@@ -6961,45 +6965,54 @@ class baocaothongtu67Controller extends Controller
                 ->with('a_soluong', $a_soluong)
                 ->with('model_khoipb', $model_khoipb)
                 ->with('m_dv', $m_dv)
+                ->with('a_dv', $a_dv)
+                ->with('inputs', $inputs)
                 // ->with('m_pl', $m_pl)
-                ->with('col', $col-1)
+                ->with('col', $col - 1)
                 ->with('a_phucap', $a_phucap)
                 ->with('nam', $inputs['tunam'])
                 ->with('thang', $inputs['tuthang'])
                 ->with('pageTitle', 'Chi tiết tổng hợp lương tại đơn vị cấp dưới');
         } else
             return view('errors.notlogin');
-     }
-     
-     public function tonghopbienche(Request $request){
+    }
+
+    public function tonghopbienche(Request $request)
+    {
         if (Session::has('admin')) {
             $inputs = $request->all();
-            // dd($inputs);
+
             // $m_dutoan_huyen = dutoanluong_huyen::where('masodv', $inputs['masodv'])->first();
-            $m_dutoan = dutoanluong::where('namns', $inputs['namns'])->wherenotnull('masot')->where('trangthai','DAGUI')->get();
+            $m_dutoan = dutoanluong::where('namns', $inputs['namns'])->wherenotnull('masot')->where('trangthai', 'DAGUI')
+            ->where(function ($query) use ($inputs){
+                if(isset($inputs['madv'])){
+                    $query->where('macqcq',$inputs['madv']);
+                }
+            })->get();
             // dd($m_dutoan);
-            if(count($m_dutoan)<=0){
+            if (count($m_dutoan) <= 0) {
                 return view('errors.nodata')
-                        ->with('message','Chưa có dữ liệu năm '.$inputs['namns'])
-                        ->with('furl','/tong_hop_bao_cao/danh_sach');
+                    ->with('message', 'Chưa có dữ liệu năm ' . $inputs['namns'])
+                    ->with('furl', '/tong_hop_bao_cao/danh_sach');
             }
             // $inputs['namns'] = $m_dutoan_huyen->namns;
             // $inputs['masodv']=$m_dutoan_huyen->masodv;
             // $m_donvi = dmdonvi::where('madv', $m_dutoan_huyen->madv)->first();
 
             //$m_phanloai = dmphanloaidonvi_baocao::where('madvbc', $m_donvi->madvbc)->get();
-            $m_phanloai = dmphanloaidonvi_baocao::where('madvbc',session('admin')->madvbc)->where('maphanloai_nhom','!=','KVXP')->get();
-            if(count($m_phanloai) <= 0){
-                $m_phanloai = dmphanloaidonvi_baocao::where('madvbc',1511580911)->where('maphanloai_nhom','!=','KVXP')->get();//Lấy phân loại của Vạn Ninh để in báo cáo.
+            $m_phanloai = dmphanloaidonvi_baocao::where('madvbc', session('admin')->madvbc)->where('maphanloai_nhom', '!=', 'KVXP')->get();
+            if (count($m_phanloai) <= 0) {
+                $m_phanloai = dmphanloaidonvi_baocao::where('madvbc', 1511580911)->where('maphanloai_nhom', '!=', 'KVXP')->get(); //Lấy phân loại của Vạn Ninh để in báo cáo.
             }
+
             $a_phanloai = array_column(dmphanloaidonvi::all()->toArray(), 'maphanloai');
             // $m_dutoan = dutoanluong::where('masoh', $inputs['masodv'])->where('trangthai', 'DAGUI')->get();
             $m_donvi_baocao = dmdonvi::wherein('madv', array_column($m_dutoan->toarray(), 'madv'))->get();
-            
+
             $a_donvi = array_column($m_dutoan->toarray(), 'madv', 'masodv');
             $a_pl_donvi = array_column($m_donvi_baocao->toarray(), 'maphanloai', 'madv');
             $model = dutoanluong_chitiet::wherein('masodv', array_column($m_dutoan->toarray(), 'masodv'))->wherein('mact', $inputs['mact'])->get();
-            // dd($model);
+
             //$m_chuatuyen = dutoanluong_chitiet::wherein('masodv', array_column($m_dutoan->toarray(), 'masodv'))->where('phanloai', 'CHUATUYEN')->get();
             $a_plct = array_column(dmphanloaict::all()->toArray(), 'tenct', 'mact');
             $a_pc = getColDuToan();
@@ -7008,8 +7021,8 @@ class baocaothongtu67Controller extends Controller
                 foreach ($a_pc as $pc) {
                     $chitiet->$pc = $chitiet->$pc / 12;
                 }
-                $dutoan=$m_dutoan->where('masodv',$chitiet->masodv)->first();
-                $chitiet->macqcq=$dutoan->macqcq;
+                $dutoan = $m_dutoan->where('masodv', $chitiet->masodv)->first();
+                $chitiet->macqcq = $dutoan->macqcq;
                 $chitiet->madv = $a_donvi[$chitiet->masodv];
                 $chitiet->maphanloai = $a_pl_donvi[$chitiet->madv];
                 $chitiet->tenct = $a_plct[$chitiet->mact] ?? '';
@@ -7039,18 +7052,21 @@ class baocaothongtu67Controller extends Controller
                     $col++;
                 }
             };
-            $m_huyen= dmdonvibaocao::where('baocao',1)->get();
+            $m_huyen = dmdonvibaocao::where('baocao', 1)->get();
+            $a_dv=array_column($m_huyen->toarray(),'tendvbc','madvcq');
             // $m_huyen= dmdonvibaocao::where('baocao',1)->orderBy('id','desc')->get();
             // dd($model);
-           $m_donvi = dmdonvi::where('madv', session('admin')->madv)->first();
+            $m_donvi = dmdonvi::where('madv', session('admin')->madv)->first();
             //dd($m_donvi_baocao->where('maphanloai','DAOTAO'));
-            return view('reports.dutoanluong.tinh.tonghopbienche')
+            $view=isset($inputs['madv'])?'reports.dutoanluong.tinh.tonghopbienche_ct':'reports.dutoanluong.tinh.tonghopbienche';
+            return view($view)
                 ->with('model', $model)
                 ->with('col', $col)
                 ->with('lamtron', session('admin')->lamtron ?? 3)
                 ->with('a_phucap', $a_phucap)
                 ->with('m_donvi', $m_donvi)
                 ->with('m_huyen', $m_huyen)
+                ->with('a_dv', $a_dv)
                 ->with('m_dutoan', $m_dutoan)
                 ->with('m_phanloai', $m_phanloai)
                 ->with('a_phanloai', $a_phanloai)
@@ -7059,59 +7075,66 @@ class baocaothongtu67Controller extends Controller
                 ->with('pageTitle', 'Báo cáo tổng hợp biên chế hệ số tiền lương và phụ cấp');
         } else
             return view('errors.notlogin');
-     }
-     function getMaNhomPhanLoai(&$chitiet, $m_phanloai)
-     {
-         $chitiet->maphanloai_goc1 = '';
-         $chitiet->maphanloai_goc2 = '';
-         $chitiet->maphanloai_goc3 = '';
-         $phanloai = $m_phanloai->where('maphanloai_nhom', $chitiet->maphanloai)->first();
-         if ($phanloai != null) {
-             $chitiet->capdo_nhom = $phanloai->capdo_nhom;
-             switch ($phanloai->capdo_nhom) {
-                 case '1': {
-                         $chitiet->maphanloai_goc1 = $phanloai->maphanloai_nhom;
-                         break;
-                     }
-                 case '2': {
-                         $chitiet->maphanloai_goc1 = $phanloai->maphanloai_goc;
-                         break;
-                     }
-                 case '3': {
-                         $chitiet->maphanloai_goc2 = $phanloai->maphanloai_goc;
-                         //tìm gốc 1
-                         $chitiet->maphanloai_goc1 = $m_phanloai->where('maphanloai_nhom', $chitiet->maphanloai_goc2)->first()->maphanloai_goc;
-                         break;
-                     }
-                 case '4': {
-                         //tìm cấp 3                    
-                         $chitiet->maphanloai_goc3 = $phanloai->maphanloai_goc;
-                         //tìm gốc 2
-                         $chitiet->maphanloai_goc2 = $m_phanloai->where('maphanloai_nhom', $chitiet->maphanloai_goc3)->first()->maphanloai_goc;
-                         //tìm gốc 1
-                         $chitiet->maphanloai_goc1 = $m_phanloai->where('maphanloai_nhom', $chitiet->maphanloai_goc2)->first()->maphanloai_goc;
-                         break;
-                     }
-             }
-         }
-     }
+    }
+    function getMaNhomPhanLoai(&$chitiet, $m_phanloai)
+    {
+        $chitiet->maphanloai_goc1 = '';
+        $chitiet->maphanloai_goc2 = '';
+        $chitiet->maphanloai_goc3 = '';
+        $phanloai = $m_phanloai->where('maphanloai_nhom', $chitiet->maphanloai)->first();
+        if ($phanloai != null) {
+            $chitiet->capdo_nhom = $phanloai->capdo_nhom;
+            switch ($phanloai->capdo_nhom) {
+                case '1': {
+                        $chitiet->maphanloai_goc1 = $phanloai->maphanloai_nhom;
+                        break;
+                    }
+                case '2': {
+                        $chitiet->maphanloai_goc1 = $phanloai->maphanloai_goc;
+                        break;
+                    }
+                case '3': {
+                        $chitiet->maphanloai_goc2 = $phanloai->maphanloai_goc;
+                        //tìm gốc 1
+                        $chitiet->maphanloai_goc1 = $m_phanloai->where('maphanloai_nhom', $chitiet->maphanloai_goc2)->first()->maphanloai_goc;
+                        break;
+                    }
+                case '4': {
+                        //tìm cấp 3                    
+                        $chitiet->maphanloai_goc3 = $phanloai->maphanloai_goc;
+                        //tìm gốc 2
+                        $chitiet->maphanloai_goc2 = $m_phanloai->where('maphanloai_nhom', $chitiet->maphanloai_goc3)->first()->maphanloai_goc;
+                        //tìm gốc 1
+                        $chitiet->maphanloai_goc1 = $m_phanloai->where('maphanloai_nhom', $chitiet->maphanloai_goc2)->first()->maphanloai_goc;
+                        break;
+                    }
+            }
+        }
+    }
 
-     public function tonghophopdong(Request $request){
+    public function tonghophopdong(Request $request)
+    {
         if (Session::has('admin')) {
             $inputs = $request->all();
-// dd($inputs);
-            $m_dutoan = dutoanluong::where('namns', $inputs['namns'])->wherenotnull('masot')->where('trangthai','DAGUI')->get();
-            if(!isset($m_dutoan)){
+            // dd($inputs);
+            $m_dutoan = dutoanluong::where('namns', $inputs['namns'])->wherenotnull('masot')->where('trangthai', 'DAGUI')
+            ->where(function ($query) use ($inputs){
+                if(isset($inputs['madv'])){
+                    $query->where('macqcq',$inputs['madv']);
+                }
+            })
+            ->get();
+            if (!isset($m_dutoan)) {
                 return view('errors.nodata')
-                        ->with('message','Chưa có dữ liệu năm '.$inputs['namns'])
-                        ->with('furl','/tong_hop_bao_cao/danh_sach');
+                    ->with('message', 'Chưa có dữ liệu năm ' . $inputs['namns'])
+                    ->with('furl', '/tong_hop_bao_cao/danh_sach');
             }
             $m_donvi = dmdonvi::where('madv', session('admin')->madv)->first();
 
             // $m_phanloai = dmphanloaidonvi_baocao::where('madvbc', $m_donvi->madvbc)->get();
-            $m_phanloai = dmphanloaidonvi_baocao::where('madvbc',session('admin')->madvbc)->where('maphanloai_nhom','!=','KVXP')->get();
-            if(count($m_phanloai) <= 0){
-                $m_phanloai = dmphanloaidonvi_baocao::where('madvbc',1511580911)->where('maphanloai_nhom','!=','KVXP')->get();//Lấy phân loại của Vạn Ninh để in báo cáo.
+            $m_phanloai = dmphanloaidonvi_baocao::where('madvbc', session('admin')->madvbc)->where('maphanloai_nhom', '!=', 'KVXP')->get();
+            if (count($m_phanloai) <= 0) {
+                $m_phanloai = dmphanloaidonvi_baocao::where('madvbc', 1511580911)->where('maphanloai_nhom', '!=', 'KVXP')->get(); //Lấy phân loại của Vạn Ninh để in báo cáo.
             }
 
             $a_phanloai = array_column(dmphanloaidonvi::all()->toArray(), 'maphanloai');
@@ -7128,8 +7151,8 @@ class baocaothongtu67Controller extends Controller
             foreach ($model as $chitiet) {
                 $chitiet->madv = $a_donvi[$chitiet->masodv];
                 $chitiet->maphanloai = $a_pl_donvi[$chitiet->madv];
-                $dutoan=$m_dutoan->where('masodv',$chitiet->masodv)->first();
-                $chitiet->macqcq=$dutoan->macqcq;
+                $dutoan = $m_dutoan->where('masodv', $chitiet->masodv)->first();
+                $chitiet->macqcq = $dutoan->macqcq;
                 foreach ($a_pc as $pc) {
                     $chitiet->$pc = $chitiet->$pc / 12;
                 }
@@ -7145,9 +7168,11 @@ class baocaothongtu67Controller extends Controller
             //xử lý ẩn hiện cột phụ cấp => biết tổng số cột hiện => colspan trên báo cáo
 
             //$m_donvi = dmdonvi::where('madv', session('admin')->madv)->first();
-            $m_huyen= dmdonvibaocao::where('baocao',1)->get();
+            $m_huyen = dmdonvibaocao::where('baocao', 1)->get(); 
+            $a_dv=array_column($m_huyen->toarray(),'tendvbc','madvcq');
+            $view=isset($inputs['madv'])?'reports.dutoanluong.tinh.tonghophopdong_ct':'reports.dutoanluong.tinh.tonghophopdong';
             // dd($model);
-            return view('reports.dutoanluong.tinh.tonghophopdong')
+            return view($view)
                 ->with('model', $model)
                 ->with('lamtron', session('admin')->lamtron ?? 3)
                 ->with('m_donvi', $m_donvi)
@@ -7157,8 +7182,9 @@ class baocaothongtu67Controller extends Controller
                 ->with('a_phanloai', $a_phanloai)
                 ->with('m_donvi_baocao', $m_donvi_baocao)
                 ->with('inputs', $inputs)
+                ->with('a_dv', $a_dv)
                 ->with('pageTitle', 'Báo cáo tổng hợp biên chế hệ số tiền lương và phụ cấp');
         } else
             return view('errors.notlogin');
-     }
+    }
 }

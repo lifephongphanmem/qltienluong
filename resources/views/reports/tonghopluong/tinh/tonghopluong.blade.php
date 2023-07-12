@@ -80,19 +80,11 @@
 
         @foreach ($model_donvi_bc as $k => $ct)
             <?php
-            $model_bc = $model->where('macqcq', $ct->madvcq);
-            $model_donvi_baocao = $m_donvi_baocao->where('macqcq', $ct->madvcq);
-            // dd($model_donvi_baocao);
+            $model_chitiet = $model->where('macqcq', $ct->madvcq);
             ?>
             {{-- vòng 1 --}}
-            @foreach ($m_phanloai->where('capdo_nhom', '1')->sortby('sapxep') as $phanloai1)
-                <?php
-                $model_donvi = $model_donvi_baocao->where('maphanloai', $phanloai1->maphanloai_nhom);
-                $model_chitiet = $model_bc->where('maphanloai_goc1', $phanloai1->maphanloai_nhom);
-                $i = 1;
-                ?>
-                <tr class="font-weight-bold" style="font-size: 13px">
-                    <td>{{ convert2Roman(++$k) }}</td>
+                <tr class="font-weight-bold" >
+                    <td>{{ ++$k }}</td>
                     <td>{{ $ct->tendvbc }}</td>
                     <td style="text-align: right">{{ dinhdangso($model_chitiet->sum('soluong')) }}</td>
                     <td style="text-align: right">{{ dinhdangso($model_chitiet->sum('soluongcomat')) }}</td>
@@ -104,219 +96,13 @@
                         <td>{{ dinhdangsothapphan($model_chitiet->sum($key), 5) }}</td>
                     @endforeach
 
-                    <td>{{ dinhdangso($model_chitiet->sum('stbhxh_dv') + $model_chitiet->sum('stbhyt_dv') + $model_chitiet->sum('stkpcd_dv')) }}
+                    <td style="text-align: right">{{ dinhdangso($model_chitiet->sum('stbhxh_dv') + $model_chitiet->sum('stbhyt_dv') + $model_chitiet->sum('stkpcd_dv')) }}
                     </td>
-                    <td>{{ dinhdangso($model_chitiet->sum('stbhtn_dv')) }}</td>
-                    <td>{{ dinhdangso($model_chitiet->sum('tongtl') + $model_chitiet->sum('tongbh')) }}</td>
+                    <td style="text-align: right">{{ dinhdangso($model_chitiet->sum('stbhtn_dv')) }}</td>
+                    <td style="text-align: right">{{ dinhdangso($model_chitiet->sum('tongtl') + $model_chitiet->sum('tongbh')) }}</td>
                 </tr>
 
                 {{-- vòng 2 --}}
-                @if (count($model_donvi_baocao) > 0)
-                    @foreach ($m_phanloai->where('maphanloai_goc', $phanloai1->maphanloai_nhom)->sortby('sapxep') as $phanloai2)
-                        <?php
-                        $model_donvi = $model_donvi_baocao->where('maphanloai', $phanloai2->maphanloai_nhom);
-                        if (in_array($phanloai2->maphanloai_nhom, $a_phanloai)) {
-                            $model_chitiet = $model_bc->where('maphanloai', $phanloai2->maphanloai_nhom);
-                        } else {
-                            $model_chitiet = $model_bc->where('maphanloai_goc2', $phanloai2->maphanloai_nhom);
-                        }
-                        $j = 1;
-                        ?>
-                        <tr class="font-weight-bold">
-                            <td>{{ $phanloai2->sapxep }}</td>
-                            <td>{{ $phanloai2->tenphanloai_nhom }}</td>
-                            <td style="text-align: right">{{ dinhdangso($model_chitiet->sum('soluong')) }}</td>
-                            <td style="text-align: right">{{ dinhdangso($model_chitiet->sum('soluongcomat')) }}</td>
-                            <td style="text-align: right">{{ dinhdangsothapphan($model_chitiet->sum('tongtl'), 5) }}</td>
-                            <td style="text-align: right">{{ dinhdangsothapphan($model_chitiet->sum('heso'), 5) }}</td>
-                            <td style="text-align: right">{{ dinhdangsothapphan($model_chitiet->sum('tongpc'), 5) }}</td>
-
-                            @foreach ($a_phucap as $key => $val)
-                                <td>{{ dinhdangsothapphan($model_chitiet->sum($key), 5) }}</td>
-                            @endforeach
-
-                            <td>{{ dinhdangso($model_chitiet->sum('stbhxh_dv') + $model_chitiet->sum('stbhyt_dv') + $model_chitiet->sum('stkpcd_dv')) }}
-                            </td>
-                            <td>{{ dinhdangso($model_chitiet->sum('stbhtn_dv')) }}</td>
-                            <td>{{ dinhdangso($model_chitiet->sum('tongtl') + $model_chitiet->sum('tongbh')) }}</td>
-                        </tr>
-                        @if (count($model_donvi) > 0 && $phanloai2->chitiet == '1' && $model_chitiet->sum('soluong') > 0)
-                        @foreach ($model_donvi as $donvi)
-                            <?php
-                            $model_chitiet = $model_bc->where('madv', $donvi->madv);
-                            ?>
-                            <tr class="font-weight-bold">
-                                <td>{{ $phanloai2->sapxep }}.{{ $j++ }}</td>
-                                <td>{{ $donvi->tendv }}</td>
-                                <td style="text-align: right">{{ dinhdangso($model_chitiet->sum('soluong')) }}</td>
-                                <td style="text-align: right">{{ dinhdangso($model_chitiet->sum('soluongcomat')) }}</td>
-                                <td style="text-align: right">{{ dinhdangsothapphan($model_chitiet->sum('tongtl'), 5) }}</td>
-                                <td style="text-align: right">{{ dinhdangsothapphan($model_chitiet->sum('heso'), 5) }}</td>
-                                <td style="text-align: right">{{ dinhdangsothapphan($model_chitiet->sum('tongpc'), 5) }}</td>
-    
-                                @foreach ($a_phucap as $key => $val)
-                                    <td>{{ dinhdangsothapphan($model_chitiet->sum($key), 5) }}</td>
-                                @endforeach
-    
-                                <td>{{ dinhdangso($model_chitiet->sum('stbhxh_dv') + $model_chitiet->sum('stbhyt_dv') + $model_chitiet->sum('stkpcd_dv')) }}
-                                </td>
-                                <td>{{ dinhdangso($model_chitiet->sum('stbhtn_dv')) }}</td>
-                                <td>{{ dinhdangso($model_chitiet->sum('tongtl') + $model_chitiet->sum('tongbh')) }}</td>
-                            </tr>
-                            @foreach ($model_chitiet as $chitiet)
-                                <tr>
-                                    <td>{{ $phanloai2->sapxep }}.{{ $j++ }}</td>
-                                    <td>{{ $chitiet->tenct }}</td>
-                                    <td style="text-align: right">{{ dinhdangso($chitiet->soluong) }}</td>
-                                <td style="text-align: right">{{ dinhdangso($chitiet->soluongcomat) }}</td>
-                                <td style="text-align: right">{{ dinhdangsothapphan($chitiet->tongtl, 5) }}</td>
-                                <td style="text-align: right">{{ dinhdangsothapphan($chitiet->heso, 5) }}</td>
-                                <td style="text-align: right">{{ dinhdangsothapphan($chitiet->tongpc, 5) }}</td>
-    
-                                @foreach ($a_phucap as $key => $val)
-                                    <td>{{ dinhdangsothapphan($model_chitiet->sum($key), 5) }}</td>
-                                @endforeach
-    
-                                <td>{{ dinhdangso($chitiet->stbhxh_dv + $chitiet->stbhyt_dv + $chitiet->stkpcd_dv) }}
-                                </td>
-                                <td>{{ dinhdangso($chitiet->stbhtn_dv) }}</td>
-                                <td>{{ dinhdangso($chitiet->tongtl + $chitiet->tongbh) }}</td>
-                                </tr>
-                            @endforeach
-                        @endforeach
-                    @endif
-                        {{-- vòng 3 --}}
-                        @foreach ($m_phanloai->where('maphanloai_goc', $phanloai2->maphanloai_nhom)->sortby('sapxep') as $phanloai3)
-                            <?php
-                            $model_donvi = $model_donvi_baocao->where('maphanloai', $phanloai3->maphanloai_nhom);
-                            //$model_chitiet = $model->where('maphanloai_goc3', $phanloai3->maphanloai_nhom);
-                            
-                            if (in_array($phanloai3->maphanloai_nhom, $a_phanloai)) {
-                                $model_chitiet = $model_bc->where('maphanloai', $phanloai3->maphanloai_nhom);
-                            } else {
-                                $model_chitiet = $model_bc->where('maphanloai_goc3', $phanloai3->maphanloai_nhom);
-                            }
-                            $i3 = 1;
-                            ?>
-
-                            <tr class="font-weight-bold">
-                                <td>{{ $phanloai2->sapxep }}.{{ $phanloai3->sapxep }}</td>
-                                <td>{{ $phanloai3->tenphanloai_nhom }}</td>
-                                <td style="text-align: right">{{ dinhdangso($model_chitiet->sum('soluong')) }}</td>
-                                <td style="text-align: right">{{ dinhdangso($model_chitiet->sum('soluongcomat')) }}</td>
-                                <td style="text-align: right">{{ dinhdangsothapphan($model_chitiet->sum('tongtl'), 5) }}
-                                </td>
-                                <td style="text-align: right">{{ dinhdangsothapphan($model_chitiet->sum('heso'), 5) }}</td>
-                                <td style="text-align: right">{{ dinhdangsothapphan($model_chitiet->sum('tongpc'), 5) }}
-                                </td>
-
-                                @foreach ($a_phucap as $key => $val)
-                                    <td>{{ dinhdangsothapphan($model_chitiet->sum($key), 5) }}</td>
-                                @endforeach
-
-                                <td>{{ dinhdangso($model_chitiet->sum('stbhxh_dv') + $model_chitiet->sum('stbhyt_dv') + $model_chitiet->sum('stkpcd_dv')) }}
-                                </td>
-                                <td>{{ dinhdangso($model_chitiet->sum('stbhtn_dv')) }}</td>
-                                <td>{{ dinhdangso($model_chitiet->sum('tongtl') + $model_chitiet->sum('tongbh')) }}</td>
-                            </tr>
-                            @if (count($model_donvi) > 0 && $model_chitiet->sum('soluong') > 0)
-                            @foreach ($model_donvi as $donvi)
-                                <?php
-                                $model_chitiet = $model->where('madv', $donvi->madv);
-                                ?>
-                                <tr>
-                                    <td>{{ $phanloai2->sapxep }}.{{ $phanloai3->sapxep }}.{{ $i3++ }}</td>
-                                    <td>{{ $donvi->tendv }}</td>
-                                    <td style="text-align: right">{{ dinhdangso($model_chitiet->sum('soluong')) }}</td>
-                                    <td style="text-align: right">{{ dinhdangso($model_chitiet->sum('soluongcomat')) }}</td>
-                                    <td style="text-align: right">{{ dinhdangsothapphan($model_chitiet->sum('tongtl'), 5) }}
-                                    </td>
-                                    <td style="text-align: right">{{ dinhdangsothapphan($model_chitiet->sum('heso'), 5) }}</td>
-                                    <td style="text-align: right">{{ dinhdangsothapphan($model_chitiet->sum('tongpc'), 5) }}
-                                    </td>
-    
-                                    @foreach ($a_phucap as $key => $val)
-                                        <td>{{ dinhdangsothapphan($model_chitiet->sum($key), 5) }}</td>
-                                    @endforeach
-    
-                                    <td>{{ dinhdangso($model_chitiet->sum('stbhxh_dv') + $model_chitiet->sum('stbhyt_dv') + $model_chitiet->sum('stkpcd_dv')) }}
-                                    </td>
-                                    <td>{{ dinhdangso($model_chitiet->sum('stbhtn_dv')) }}</td>
-                                    <td>{{ dinhdangso($model_chitiet->sum('tongtl') + $model_chitiet->sum('tongbh')) }}</td>
-                                </tr>
-                            @endforeach
-                        @endif
-                            {{-- vòng 4 --}}
-                            @foreach ($m_phanloai->where('maphanloai_goc', $phanloai3->maphanloai_nhom)->sortby('sapxep') as $phanloai4)
-                                <?php
-                                $model_donvi = $model_donvi_baocao->where('maphanloai', $phanloai4->maphanloai_nhom);
-                                $model_chitiet = $model_bc->where('maphanloai', $phanloai4->maphanloai_nhom);
-                                $i4 = 1;
-                                ?>
-                                <tr class="font-weight-bold">
-                                    <td>{{ $phanloai2->sapxep }}.{{ $phanloai3->sapxep }}.{{ $phanloai4->sapxep }}</td>
-                                    <td>{{ $phanloai4->tenphanloai_nhom }}</td>
-                                    <td style="text-align: right">{{ dinhdangso($model_chitiet->sum('soluong')) }}</td>
-                                    <td style="text-align: right">{{ dinhdangso($model_chitiet->sum('soluongcomat')) }}
-                                    </td>
-                                    <td style="text-align: right">
-                                        {{ dinhdangsothapphan($model_chitiet->sum('tongtl'), 5) }}</td>
-                                    <td style="text-align: right">{{ dinhdangsothapphan($model_chitiet->sum('heso'), 5) }}
-                                    </td>
-                                    <td style="text-align: right">
-                                        {{ dinhdangsothapphan($model_chitiet->sum('tongpc'), 5) }}</td>
-
-                                    @foreach ($a_phucap as $key => $val)
-                                        <td>{{ dinhdangsothapphan($model_chitiet->sum($key), 5) }}</td>
-                                    @endforeach
-
-                                    <td>{{ dinhdangso($model_chitiet->sum('stbhxh_dv') + $model_chitiet->sum('stbhyt_dv') + $model_chitiet->sum('stkpcd_dv')) }}
-                                    </td>
-                                    <td>{{ dinhdangso($model_chitiet->sum('stbhtn_dv')) }}</td>
-                                    <td>{{ dinhdangso($model_chitiet->sum('tongtl') + $model_chitiet->sum('tongbh')) }}
-                                    </td>
-                                </tr>
-                                @if (count($model_donvi) > 0 && $phanloai4->chitiet == '1')
-                                @foreach ($model_donvi as $donvi)
-                                    <?php
-                                    $model_chitiet = $model->where('madv', $donvi->madv);
-                                    ?>
-                                    <tr>
-                                        <td>{{ $phanloai2->sapxep }}.{{ $phanloai3->sapxep }}.{{ $phanloai4->sapxep }}.{{ $i4++ }}
-                                        </td>
-                                        <td>{{ $donvi->tendv }}</td>
-                                        <td style="text-align: right">{{ dinhdangso($model_chitiet->sum('soluong')) }}</td>
-                                        <td style="text-align: right">{{ dinhdangso($model_chitiet->sum('soluongcomat')) }}
-                                        </td>
-                                        <td style="text-align: right">
-                                            {{ dinhdangsothapphan($model_chitiet->sum('tongtl'), 5) }}</td>
-                                        <td style="text-align: right">{{ dinhdangsothapphan($model_chitiet->sum('heso'), 5) }}
-                                        </td>
-                                        <td style="text-align: right">
-                                            {{ dinhdangsothapphan($model_chitiet->sum('tongpc'), 5) }}</td>
-    
-                                        @foreach ($a_phucap as $key => $val)
-                                            <td>{{ dinhdangsothapphan($model_chitiet->sum($key), 5) }}</td>
-                                        @endforeach
-    
-                                        <td>{{ dinhdangso($model_chitiet->sum('stbhxh_dv') + $model_chitiet->sum('stbhyt_dv') + $model_chitiet->sum('stkpcd_dv')) }}
-                                        </td>
-                                        <td>{{ dinhdangso($model_chitiet->sum('stbhtn_dv')) }}</td>
-                                        <td>{{ dinhdangso($model_chitiet->sum('tongtl') + $model_chitiet->sum('tongbh')) }}
-                                        </td>
-                                    </tr>
-                                @endforeach
-                            @endif
-                            @endforeach
-                        @endforeach
-                    @endforeach
-                @endif
-            @endforeach
-            <tr>
-                @if($k<count($model_donvi_bc))
-                <td colspan="{{$col+10}}"></td>
-                @endif
-            </tr>
         @endforeach
 
     </table>
