@@ -391,25 +391,25 @@ class UsersController extends Controller
                 }
                 */
                 //update lai masot trong bang dutoanluong va dutoanluong_chitiet
-                $dutoan_huyen=dutoanluong_huyen::where('trangthai','DAGUI')->get();
-                foreach($dutoan_huyen as $ct){
-                    $masot=$ct->madv.'_'.$ct->namns;
-                    $dutoan=dutoanluong::where('macqcq',$ct->madv)->where('namns',$ct->namns)->where('trangthai','DAGUI')->get();
-                    $masotinh_dutoan=$dutoan->where('masot','!=',null);
+                // $dutoan_huyen=dutoanluong_huyen::where('trangthai','DAGUI')->get();
+                // foreach($dutoan_huyen as $ct){
+                //     $masot=$ct->madv.'_'.$ct->namns;
+                //     $dutoan=dutoanluong::where('macqcq',$ct->madv)->where('namns',$ct->namns)->where('trangthai','DAGUI')->get();
+                //     $masotinh_dutoan=$dutoan->where('masot','!=',null);
 
-                    if(count($masotinh_dutoan) > 0){
-                        $masotinh=$masotinh_dutoan->unique('masot')->first();
-                        foreach($dutoan as $val){
-                                $val->update(['masot'=>$masotinh->masot]);           
-                           }
-                        dutoanluong_chitiet::wherein('masodv',array_column($dutoan->toarray(),'masodv'))->update(['masot'=>$masotinh->masot]);
-                    }else{
-                        foreach($dutoan as $val){
-                                $val->update(['masot'=>$masot]);
-                                dutoanluong_chitiet::where('masodv',$val->masodv)->update(['masot'=>$masot]);                
-                           }
-                    }                    
-                }
+                //     if(count($masotinh_dutoan) > 0){
+                //         $masotinh=$masotinh_dutoan->unique('masot')->first();
+                //         foreach($dutoan as $val){
+                //                 $val->update(['masot'=>$masotinh->masot]);           
+                //            }
+                //         dutoanluong_chitiet::wherein('masodv',array_column($dutoan->toarray(),'masodv'))->update(['masot'=>$masotinh->masot]);
+                //     }else{
+                //         foreach($dutoan as $val){
+                //                 $val->update(['masot'=>$masot]);
+                //                 dutoanluong_chitiet::where('masodv',$val->masodv)->update(['masot'=>$masot]);                
+                //            }
+                //     }                    
+                // }
 
             }
             //kiểm tra xem user thuộc đơn vị nào, nếu ko thuộc đơn vị nào (trừ tài khoản quản trị) => đăng nhập ko thành công

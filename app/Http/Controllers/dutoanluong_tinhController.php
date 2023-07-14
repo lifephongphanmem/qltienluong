@@ -98,6 +98,7 @@ class dutoanluong_tinhController extends Controller
             $model->trangthai = 'TRALAI';
             $model->lydo = $inputs['lydo'];            
             $model->save();
+            dutoanluong::where('macqcq',$model->madv)->where('namns',$model->namns)->update(['masot'=>null]);
             return redirect('/chuc_nang/du_toan_luong/tinh/index?namns=' . $model->namns);
         } else
             return view('errors.notlogin');

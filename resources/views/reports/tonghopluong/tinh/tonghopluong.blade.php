@@ -41,20 +41,20 @@
         <tr style="padding-left: 2px;padding-right: 2px">
             <th style="width: 2%;" rowspan="3">S</br>T</br>T</th>
             <th style="width: 12%;" rowspan="3">Đơn vị</th>
-            <th style="width: 3%;" colspan="2">Biên chế</th>
-            <th colspan="{{ $col + 5 }}">Hệ số lương, p/cấp và các khoản đ/góp</th>
+            {{-- <th style="width: 3%;" colspan="2">Biên chế</th> --}}
+            <th colspan="{{ $col + 2 }}">Hệ số lương, p/cấp và các khoản đ/góp</th>
             <th rowspan="3">Tổng lương tháng {{ $thang }}/{{ $nam }}</th>
         </tr>
         <tr style="padding-left: 2px;padding-right: 2px">
-            <th style="width: 3%;" rowspan="2">Được cấp có thẩm quyền giao</th>
+            {{-- <th style="width: 3%;" rowspan="2">Được cấp có thẩm quyền giao</th>
             <th style="width: 3%;" rowspan="2">Có mặt</th>
             <th rowspan="2">Tổng cộng </th>
-            <th rowspan="2">Lương ngạch, bậc, CV</th>
-            <th colspan="{{ $col + 1 }}">Trong đó</th>
+            <th rowspan="2">Lương ngạch, bậc, CV</th> --}}
+            <th colspan="{{ $col }}">Trong đó</th>
             <th colspan="2">Các khoản đóng góp</th>
         </tr>
         <tr style="padding-left: 2px;padding-right: 2px">
-            <th>Tổng các khoản P/cấp</th>
+            {{-- <th>Tổng các khoản P/cấp</th> --}}
             @foreach ($a_phucap as $key => $val)
                 <th>{!! $val !!}</th>
             @endforeach
@@ -64,11 +64,11 @@
         <tr style="font-weight: bold;" class="money">
             <td></td>
             <td style="font-weight: bold; text-align: center">TỔNG SỐ</td>
-            <td style="text-align: right">{{ dinhdangso($model->sum('soluong')) }}</td>
+            {{-- <td style="text-align: right">{{ dinhdangso($model->sum('soluong')) }}</td>
             <td style="text-align: right">{{ dinhdangso($model->sum('soluongcomat')) }}</td>
             <td style="text-align: right">{{ dinhdangsothapphan($model->sum('tongtl'), 5) }}</td>
             <td style="text-align: right">{{ dinhdangsothapphan($model->sum('heso'), 5) }}</td>
-            <td style="text-align: right">{{ dinhdangsothapphan($model->sum('tongpc'), 5) }}</td>
+            <td style="text-align: right">{{ dinhdangsothapphan($model->sum('tongpc'), 5) }}</td> --}}
             @foreach ($a_phucap as $key => $val)
                 <td>{{ dinhdangsothapphan($model->sum($key), 5) }}</td>
             @endforeach
@@ -86,11 +86,11 @@
                 <tr class="font-weight-bold" >
                     <td>{{ ++$k }}</td>
                     <td>{{ $ct->tendvbc }}</td>
-                    <td style="text-align: right">{{ dinhdangso($model_chitiet->sum('soluong')) }}</td>
+                    {{-- <td style="text-align: right">{{ dinhdangso($model_chitiet->sum('soluong')) }}</td>
                     <td style="text-align: right">{{ dinhdangso($model_chitiet->sum('soluongcomat')) }}</td>
                     <td style="text-align: right">{{ dinhdangsothapphan($model_chitiet->sum('tongtl'), 5) }}</td>
                     <td style="text-align: right">{{ dinhdangsothapphan($model_chitiet->sum('heso'), 5) }}</td>
-                    <td style="text-align: right">{{ dinhdangsothapphan($model_chitiet->sum('tongpc'), 5) }}</td>
+                    <td style="text-align: right">{{ dinhdangsothapphan($model_chitiet->sum('tongpc'), 5) }}</td> --}}
 
                     @foreach ($a_phucap as $key => $val)
                         <td>{{ dinhdangsothapphan($model_chitiet->sum($key), 5) }}</td>
