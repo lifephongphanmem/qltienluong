@@ -41,20 +41,20 @@
         <tr style="padding-left: 2px;padding-right: 2px">
             <th style="width: 2%;" rowspan="3">S</br>T</br>T</th>
             <th style="width: 12%;" rowspan="3">Đơn vị</th>
-            <th style="width: 3%;" colspan="2">Biên chế</th>
-            <th colspan="{{ $col + 5 }}">Hệ số lương, p/cấp và các khoản đ/góp</th>
+            {{-- <th style="width: 3%;" colspan="2">Biên chế</th> --}}
+            <th colspan="{{ $col + 2 }}">Hệ số lương, p/cấp và các khoản đ/góp</th>
             <th rowspan="3">Tổng lương tháng {{ $thang }}/{{ $nam }}</th>
         </tr>
         <tr style="padding-left: 2px;padding-right: 2px">
-            <th style="width: 3%;" rowspan="2">Được cấp có thẩm quyền giao</th>
-            <th style="width: 3%;" rowspan="2">Có mặt</th>
-            <th rowspan="2">Tổng cộng </th>
-            <th rowspan="2">Lương ngạch, bậc, CV</th>
-            <th colspan="{{ $col + 1 }}">Trong đó</th>
+            {{-- <th style="width: 3%;" rowspan="2">Được cấp có thẩm quyền giao</th>
+            <th style="width: 3%;" rowspan="2">Có mặt</th> --}}
+            {{-- <th rowspan="2">Tổng cộng </th> --}}
+            {{-- <th rowspan="2">Lương ngạch, bậc, CV</th> --}}
+            <th colspan="{{ $col}}">Trong đó</th>
             <th colspan="2">Các khoản đóng góp</th>
         </tr>
         <tr style="padding-left: 2px;padding-right: 2px">
-            <th>Tổng các khoản P/cấp</th>
+            {{-- <th>Tổng các khoản P/cấp</th> --}}
             @foreach ($a_phucap as $key => $val)
                 <th>{!! $val !!}</th>
             @endforeach
@@ -64,11 +64,11 @@
         <tr style="font-weight: bold;" class="money">
             <td></td>
             <td style="font-weight: bold; text-align: center">TỔNG SỐ</td>
-            <td style="text-align: right">{{ dinhdangso($model->sum('soluong')) }}</td>
+            {{-- <td style="text-align: right">{{ dinhdangso($model->sum('soluong')) }}</td>
             <td style="text-align: right">{{ dinhdangso($model->sum('soluongcomat')) }}</td>
             <td style="text-align: right">{{ dinhdangsothapphan($model->sum('tongtl'), 5) }}</td>
             <td style="text-align: right">{{ dinhdangsothapphan($model->sum('heso'), 5) }}</td>
-            <td style="text-align: right">{{ dinhdangsothapphan($model->sum('tongpc'), 5) }}</td>
+            <td style="text-align: right">{{ dinhdangsothapphan($model->sum('tongpc'), 5) }}</td> --}}
             @foreach ($a_phucap as $key => $val)
                 <td>{{ dinhdangsothapphan($model->sum($key), 5) }}</td>
             @endforeach
@@ -81,18 +81,18 @@
         {{-- vòng 1 --}}
         @foreach ($m_phanloai->where('capdo_nhom', '1')->sortby('sapxep') as $phanloai1)
             <?php
-            $model_donvi = $m_donvi_baocao->where('maphanloai', $phanloai1->maphanloai_nhom);
+            $model_donvi = $m_donvi_baocao->where('maphanloai', $phanloai1->maphanloai_nhom)->where('macqcq',$inputs['madv']);
             $model_chitiet = $model->where('maphanloai_goc1', $phanloai1->maphanloai_nhom);
             $i = 1;
             ?>
             <tr class="font-weight-bold" style="font-size: 13px">
                 <td>{{ convert2Roman($phanloai1->sapxep) }}</td>
                 <td>{{ isset($inputs['madv'])?$a_dv[$inputs['madv']]:'' }}</td>
-                <td style="text-align: right">{{ dinhdangso($model_chitiet->sum('soluong')) }}</td>
+                {{-- <td style="text-align: right">{{ dinhdangso($model_chitiet->sum('soluong')) }}</td>
                 <td style="text-align: right">{{ dinhdangso($model_chitiet->sum('soluongcomat')) }}</td>
                 <td style="text-align: right">{{ dinhdangsothapphan($model_chitiet->sum('tongtl'), 5) }}</td>
                 <td style="text-align: right">{{ dinhdangsothapphan($model_chitiet->sum('heso'), 5) }}</td>
-                <td style="text-align: right">{{ dinhdangsothapphan($model_chitiet->sum('tongpc'), 5) }}</td>
+                <td style="text-align: right">{{ dinhdangsothapphan($model_chitiet->sum('tongpc'), 5) }}</td> --}}
 
                 @foreach ($a_phucap as $key => $val)
                     <td>{{ dinhdangsothapphan($model_chitiet->sum($key), 5) }}</td>
@@ -109,7 +109,7 @@
             {{-- vòng 2 --}}
             @foreach ($m_phanloai->where('maphanloai_goc', $phanloai1->maphanloai_nhom)->sortby('sapxep') as $phanloai2)
                 <?php
-                $model_donvi = $m_donvi_baocao->where('maphanloai', $phanloai2->maphanloai_nhom);
+                $model_donvi = $m_donvi_baocao->where('maphanloai', $phanloai2->maphanloai_nhom)->where('macqcq',$inputs['madv']);
                 if (in_array($phanloai2->maphanloai_nhom, $a_phanloai)) {
                     $model_chitiet = $model->where('maphanloai', $phanloai2->maphanloai_nhom);
                 } else {
@@ -120,11 +120,11 @@
                 <tr class="font-weight-bold">
                     <td>{{ $phanloai2->sapxep }}</td>
                     <td>{{ $phanloai2->tenphanloai_nhom }}</td>
-                    <td style="text-align: right">{{ dinhdangso($model_chitiet->sum('soluong')) }}</td>
+                    {{-- <td style="text-align: right">{{ dinhdangso($model_chitiet->sum('soluong')) }}</td>
                     <td style="text-align: right">{{ dinhdangso($model_chitiet->sum('soluongcomat')) }}</td>
                     <td style="text-align: right">{{ dinhdangsothapphan($model_chitiet->sum('tongtl'), 5) }}</td>
                     <td style="text-align: right">{{ dinhdangsothapphan($model_chitiet->sum('heso'), 5) }}</td>
-                    <td style="text-align: right">{{ dinhdangsothapphan($model_chitiet->sum('tongpc'), 5) }}</td>
+                    <td style="text-align: right">{{ dinhdangsothapphan($model_chitiet->sum('tongpc'), 5) }}</td> --}}
 
                     @foreach ($a_phucap as $key => $val)
                         <td>{{ dinhdangsothapphan($model_chitiet->sum($key), 5) }}</td>
@@ -145,11 +145,11 @@
                         <tr class="font-weight-bold">
                             <td>{{ $phanloai2->sapxep }}.{{ $j++ }}</td>
                             <td>{{ $donvi->tendv }}</td>
-                            <td style="text-align: right">{{ dinhdangso($model_chitiet->sum('soluong')) }}</td>
+                            {{-- <td style="text-align: right">{{ dinhdangso($model_chitiet->sum('soluong')) }}</td>
                             <td style="text-align: right">{{ dinhdangso($model_chitiet->sum('soluongcomat')) }}</td>
                             <td style="text-align: right">{{ dinhdangsothapphan($model_chitiet->sum('tongtl'), 5) }}</td>
                             <td style="text-align: right">{{ dinhdangsothapphan($model_chitiet->sum('heso'), 5) }}</td>
-                            <td style="text-align: right">{{ dinhdangsothapphan($model_chitiet->sum('tongpc'), 5) }}</td>
+                            <td style="text-align: right">{{ dinhdangsothapphan($model_chitiet->sum('tongpc'), 5) }}</td> --}}
 
                             @foreach ($a_phucap as $key => $val)
                                 <td>{{ dinhdangsothapphan($model_chitiet->sum($key), 5) }}</td>
@@ -166,11 +166,11 @@
                             <tr>
                                 <td>{{ $phanloai2->sapxep }}.{{ $j++ }}</td>
                                 <td>{{ $chitiet->tenct }}</td>
-                                <td style="text-align: right">{{ dinhdangso($chitiet->soluong) }}</td>
+                                {{-- <td style="text-align: right">{{ dinhdangso($chitiet->soluong) }}</td>
                                 <td style="text-align: right">{{ dinhdangso($chitiet->soluongcomat) }}</td>
                                 <td style="text-align: right">{{ dinhdangsothapphan($chitiet->tongtl, 5) }}</td>
                                 <td style="text-align: right">{{ dinhdangsothapphan($chitiet->heso, 5) }}</td>
-                                <td style="text-align: right">{{ dinhdangsothapphan($chitiet->tongpc, 5) }}</td>
+                                <td style="text-align: right">{{ dinhdangsothapphan($chitiet->tongpc, 5) }}</td> --}}
 
                                 @foreach ($a_phucap as $key => $val)
                                     <td>{{ dinhdangsothapphan($model_chitiet->sum($key), 5) }}</td>
@@ -188,7 +188,7 @@
                 {{-- vòng 3 --}}
                 @foreach ($m_phanloai->where('maphanloai_goc', $phanloai2->maphanloai_nhom)->sortby('sapxep') as $phanloai3)
                     <?php
-                    $model_donvi = $m_donvi_baocao->where('maphanloai', $phanloai3->maphanloai_nhom);
+                    $model_donvi = $m_donvi_baocao->where('maphanloai', $phanloai3->maphanloai_nhom)->where('macqcq',$inputs['madv']);
                     //$model_chitiet = $model->where('maphanloai_goc3', $phanloai3->maphanloai_nhom);
                     
                     if (in_array($phanloai3->maphanloai_nhom, $a_phanloai)) {
@@ -202,13 +202,13 @@
                     <tr class="font-weight-bold">
                         <td>{{ $phanloai2->sapxep }}.{{ $phanloai3->sapxep }}</td>
                         <td>{{ $phanloai3->tenphanloai_nhom }}</td>
-                        <td style="text-align: right">{{ dinhdangso($model_chitiet->sum('soluong')) }}</td>
+                        {{-- <td style="text-align: right">{{ dinhdangso($model_chitiet->sum('soluong')) }}</td>
                         <td style="text-align: right">{{ dinhdangso($model_chitiet->sum('soluongcomat')) }}</td>
                         <td style="text-align: right">{{ dinhdangsothapphan($model_chitiet->sum('tongtl'), 5) }}
                         </td>
                         <td style="text-align: right">{{ dinhdangsothapphan($model_chitiet->sum('heso'), 5) }}</td>
                         <td style="text-align: right">{{ dinhdangsothapphan($model_chitiet->sum('tongpc'), 5) }}
-                        </td>
+                        </td> --}}
 
                         @foreach ($a_phucap as $key => $val)
                             <td>{{ dinhdangsothapphan($model_chitiet->sum($key), 5) }}</td>
@@ -229,13 +229,13 @@
                             <tr>
                                 <td>{{ $phanloai2->sapxep }}.{{ $phanloai3->sapxep }}.{{ $i3++ }}</td>
                                 <td>{{ $donvi->tendv }}</td>
-                                <td style="text-align: right">{{ dinhdangso($model_chitiet->sum('soluong')) }}</td>
+                                {{-- <td style="text-align: right">{{ dinhdangso($model_chitiet->sum('soluong')) }}</td>
                                 <td style="text-align: right">{{ dinhdangso($model_chitiet->sum('soluongcomat')) }}</td>
                                 <td style="text-align: right">{{ dinhdangsothapphan($model_chitiet->sum('tongtl'), 5) }}
                                 </td>
                                 <td style="text-align: right">{{ dinhdangsothapphan($model_chitiet->sum('heso'), 5) }}</td>
                                 <td style="text-align: right">{{ dinhdangsothapphan($model_chitiet->sum('tongpc'), 5) }}
-                                </td>
+                                </td> --}}
 
                                 @foreach ($a_phucap as $key => $val)
                                     <td>{{ dinhdangsothapphan($model_chitiet->sum($key), 5) }}</td>
@@ -253,14 +253,14 @@
                     {{-- vòng 4 --}}
                     @foreach ($m_phanloai->where('maphanloai_goc', $phanloai3->maphanloai_nhom)->sortby('sapxep') as $phanloai4)
                         <?php
-                        $model_donvi = $m_donvi_baocao->where('maphanloai', $phanloai4->maphanloai_nhom);
+                        $model_donvi = $m_donvi_baocao->where('maphanloai', $phanloai4->maphanloai_nhom)->where('macqcq',$inputs['madv']);
                         $model_chitiet = $model->where('maphanloai', $phanloai4->maphanloai_nhom);
                         $i4 = 1;
                         ?>
                         <tr class="font-weight-bold">
                             <td>{{ $phanloai2->sapxep }}.{{ $phanloai3->sapxep }}.{{ $phanloai4->sapxep }}</td>
                             <td>{{ $phanloai4->tenphanloai_nhom }}</td>
-                            <td style="text-align: right">{{ dinhdangso($model_chitiet->sum('soluong')) }}</td>
+                            {{-- <td style="text-align: right">{{ dinhdangso($model_chitiet->sum('soluong')) }}</td>
                             <td style="text-align: right">{{ dinhdangso($model_chitiet->sum('soluongcomat')) }}
                             </td>
                             <td style="text-align: right">
@@ -268,7 +268,7 @@
                             <td style="text-align: right">{{ dinhdangsothapphan($model_chitiet->sum('heso'), 5) }}
                             </td>
                             <td style="text-align: right">
-                                {{ dinhdangsothapphan($model_chitiet->sum('tongpc'), 5) }}</td>
+                                {{ dinhdangsothapphan($model_chitiet->sum('tongpc'), 5) }}</td> --}}
 
                             @foreach ($a_phucap as $key => $val)
                                 <td>{{ dinhdangsothapphan($model_chitiet->sum($key), 5) }}</td>
@@ -291,7 +291,7 @@
                                     <td>{{ $phanloai2->sapxep }}.{{ $phanloai3->sapxep }}.{{ $phanloai4->sapxep }}.{{ $i4++ }}
                                     </td>
                                     <td>{{ $donvi->tendv }}</td>
-                                    <td style="text-align: right">{{ dinhdangso($model_chitiet->sum('soluong')) }}</td>
+                                    {{-- <td style="text-align: right">{{ dinhdangso($model_chitiet->sum('soluong')) }}</td>
                                     <td style="text-align: right">{{ dinhdangso($model_chitiet->sum('soluongcomat')) }}
                                     </td>
                                     <td style="text-align: right">
@@ -300,7 +300,7 @@
                                         {{ dinhdangsothapphan($model_chitiet->sum('heso'), 5) }}
                                     </td>
                                     <td style="text-align: right">
-                                        {{ dinhdangsothapphan($model_chitiet->sum('tongpc'), 5) }}</td>
+                                        {{ dinhdangsothapphan($model_chitiet->sum('tongpc'), 5) }}</td> --}}
 
                                     @foreach ($a_phucap as $key => $val)
                                         <td>{{ dinhdangsothapphan($model_chitiet->sum($key), 5) }}</td>

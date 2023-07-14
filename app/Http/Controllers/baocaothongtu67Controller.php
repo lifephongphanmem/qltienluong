@@ -6884,7 +6884,7 @@ class baocaothongtu67Controller extends Controller
                     $col++;
                 }
             }
-
+// dd(getColTongHop());
             // $col = $col - 1;
             foreach ($model as $chitiet) {
                 // dd($chitiet);
@@ -6899,9 +6899,13 @@ class baocaothongtu67Controller extends Controller
                 }
                 $chitiet->tongtl = $chitiet->luongtn - $chitiet->giaml;
                 $chitiet->tongbh = $chitiet->stbhxh_dv + $chitiet->stbhyt_dv + $chitiet->stkpcd_dv + $chitiet->stbhtn_dv;
-                foreach (getColTongHop() as $ct) {
-                    $ma = $ct;
+                foreach (getColTongHop() as $ct) {                    
+                    $ma = $ct;                   
                     $chitiet->$ma = $chitiet->$ct;
+                    if($chitiet->$ct > 100000){
+                        $chitiet->$ct=$chitiet->luongcoban == 0?0:$chitiet->$ct/$chitiet->luongcoban;
+                    }
+
                 }
 
                 $chitiet->soluongcomat = $chitiet->soluong;
@@ -6910,7 +6914,7 @@ class baocaothongtu67Controller extends Controller
                 } else {
                     $chitiet->tencongtac = isset($model_ct[$chitiet->mact]) ? $model_ct[$chitiet->mact] : '';
                 }
-
+                $chitiet->tongpc=$chitiet->tonghs-$chitiet->heso;
                 $chitiet->tongcong = $chitiet->tonghs + $chitiet->stbhxh_dv + $chitiet->stbhyt_dv + $chitiet->stkpcd_dv + $chitiet->stbhtn_dv;
             }
             $model_data = $model->map(function ($data) {
@@ -6928,6 +6932,7 @@ class baocaothongtu67Controller extends Controller
                     ->only(['madv', 'tendv', 'linhvuchoatdong', 'maphanloai', 'madvbc'])
                     ->all();
             });
+            // dd($model->take(10));
             // dd($model_khoipb);
             //$a_khoipb = a_unique($model_khoipb);
 
@@ -6941,13 +6946,12 @@ class baocaothongtu67Controller extends Controller
                 'thang' => $thang,
                 'nam' => $nam
             );
-            foreach (getColTongHop() as $ct) {
-                if ($model->sum($ct) > 0) {
-                    $a_phucap[$ct] = isset($m_pc[$ct]) ? $m_pc[$ct] : '';
-                    // $col++;
-                }
-            }
-            unset($a_phucap['heso']);
+            // foreach (getColTongHop() as $ct) {
+            //     if ($model->sum($ct) > 0) {
+            //         $a_phucap[$ct] = isset($m_pc[$ct]) ? $m_pc[$ct] : '';
+            //         // $col++;
+            //     }
+            // }
 
                 $view=isset($inputs['madv'])?'reports.tonghopluong.tinh.tonghopluong_ct':'reports.tonghopluong.tinh.tonghopluong';
 
@@ -6968,7 +6972,7 @@ class baocaothongtu67Controller extends Controller
                 ->with('a_dv', $a_dv)
                 ->with('inputs', $inputs)
                 // ->with('m_pl', $m_pl)
-                ->with('col', $col - 1)
+                ->with('col', $col)
                 ->with('a_phucap', $a_phucap)
                 ->with('nam', $inputs['tunam'])
                 ->with('thang', $inputs['tuthang'])
@@ -6989,7 +6993,7 @@ class baocaothongtu67Controller extends Controller
                     $query->where('macqcq',$inputs['madv']);
                 }
             })->get();
-            // dd($m_dutoan);
+            // dd(count($m_dutoan));
             if (count($m_dutoan) <= 0) {
                 return view('errors.nodata')
                     ->with('message', 'Chưa có dữ liệu năm ' . $inputs['namns'])
