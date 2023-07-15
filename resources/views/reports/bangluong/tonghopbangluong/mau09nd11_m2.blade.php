@@ -116,7 +116,8 @@
                     <td style="text-align: right">{{ dinhdangso($model_luong->sum('phucap')) }}</td>
                     <td style="text-align: right">{{ dinhdangso($model_luong->sum('khoan')) }}</td>
                     <td style="text-align: right">{{ dinhdangso($model_luong->sum('hocbong')) }}</td>
-                    <td style="text-align: right">{{ dinhdangso($model_luong->sum('chenhlech')) }}</td>
+                    <td style="text-align: right"></td>
+                    {{-- <td style="text-align: right">{{ dinhdangso($model_luong->sum('chenhlech')) }}</td> --}}
                 </tr>
                 @foreach ($model_luong as $ct)
                     <tr>
@@ -133,7 +134,8 @@
                         <td style="text-align: right">{{ dinhdangso($ct->phucap) }}</td>
                         <td style="text-align: right">{{ dinhdangso($ct->khoan) }}</td>
                         <td style="text-align: right">{{ dinhdangso($ct->hocbong) }}</td>
-                        <td style="text-align: right">{{ dinhdangso($ct->chenhlech) }}</td>
+                        <td style="text-align: right"></td>
+                        {{-- <td style="text-align: right">{{ dinhdangso($ct->chenhlech) }}</td> --}}
                     </tr>
                 @endforeach
             @endif
@@ -148,7 +150,8 @@
             <td class="text-align: right">{{ dinhdangso($model->sum('phucap')) }}</td>
             <td class="text-align: right">{{ dinhdangso($model->sum('khoan')) }}</td>
             <td class="text-align: right">{{ dinhdangso($model->sum('hocbong')) }}</td>
-            <td class="text-align: right">{{ dinhdangso($model->sum('chenhlech')) }}</td>
+            <td class="text-align: right"></td>
+            {{-- <td class="text-align: right">{{ dinhdangso($model->sum('chenhlech')) }}</td> --}}
         </tr>
     </table>
     <p id='data_body3' style="text-align: left; font-weight:bold; font-size: 12px;">II. Phần thuyết minh thay đổi so với

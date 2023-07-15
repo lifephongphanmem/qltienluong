@@ -531,7 +531,7 @@ class bangluong_inController extends Controller
                     $ct->chenhlech = $ct->tongso;
                     $canbo = $m_canbo_trc->where('macanbo', $ct->macanbo);
                     if (isset($canbo)) {
-                        $ct->chenhlech = $ct->luongtn - $canbo->sum('luongtn');
+                        $ct->chenhlech = $ct->tongso - $canbo->sum('luongtn');
                     }
                 }
             }
