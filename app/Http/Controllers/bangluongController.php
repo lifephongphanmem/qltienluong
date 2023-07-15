@@ -800,10 +800,10 @@ class bangluongController extends Controller
         //Mảng chứa các cột bỏ để chạy hàm insert
         $a_col_cb = array(
             'id', 'bac', 'baohiem', 'macongtac', 'pthuong', 'theodoi', 'ngaybc',
-            'khongnopbaohiem', 'ngaytu', 'tnntungay', 'ngayden', 'tnndenngay', 'lvhd', 'mucluongbaohiem'
+            'khongnopbaohiem', 'ngaytu', 'tnntungay', 'ngayden', 'tnndenngay', 'lvhd', 'mucluongbaohiem', 'phanloai'
         );
         $a_data_canbo = unset_key($a_data_canbo, $a_col_cb);
-        //dd($a_data_canbo);
+        // dd($a_data_canbo);
         foreach (array_chunk($a_data_canbo, 50) as $data) {
             (new data())->storeBangLuong($inputs['thang'], $data);
         }
@@ -829,7 +829,7 @@ class bangluongController extends Controller
             $cb->mabl = $inputs['mabl'];
             $cb->manguonkp = $inputs['manguonkp'];
             $cb->luongcoban = $inputs['luongcoban'];
-            $cb->congtac = $cb->phanloai;
+            $cb->congtac = 'KIEMNHIEM';
             //tính thâm niên
             $pctn = $model_phucap->where('mapc', 'pcthni')->first();
             //trường đơn vị ko mở phụ cấp thâm niên
@@ -879,7 +879,7 @@ class bangluongController extends Controller
                     case 0: { //hệ số
                             $ths += $cb->$mapc;
                             $cb->$mapc_st = round($cb->$mapc * $inputs['luongcoban'], 0);
-                            $tt += round($cb->$mapc * $pc->luongcoban, 0);
+                            $tt += $cb->$mapc_st;
                             break;
                         }
                     case 1: { //số tiền
@@ -900,8 +900,8 @@ class bangluongController extends Controller
                                 $heso += $canbo->hesopc;
                                 $cb->$mapc = round($heso * $cb->$mapc / 100, session('admin')->lamtron);
                                 $ths += $cb->$mapc;
-                                $tt += round($cb->$mapc * $pc->luongcoban, 0);
                                 $cb->$mapc_st = round($cb->$mapc * $inputs['luongcoban'], 0);
+                                $tt += $cb->$mapc_st;
                             }
                             break;
                         }
@@ -921,9 +921,10 @@ class bangluongController extends Controller
                 $tt = round($tt * $cb->pthuong / 100, 0);
             }
 
+           
             $cb->tonghs = $ths;
             $cb->ttl = $tt;
-
+            $cb->ttbh = $cb->ttbh_dv = 0;
             if ($cb->baohiem) {
                 $cb->stbhxh = round($inputs['luongcoban'] * $cb->bhxh, 0);
                 $cb->stbhyt = round($inputs['luongcoban'] * $cb->bhyt, 0);
@@ -947,8 +948,12 @@ class bangluongController extends Controller
             }
 
             $cb->luongtn = $cb->ttl - $cb->ttbh;
+            // if ($cb->macanbo = '1511709119_1689318626') {
+            //     dd($cb);
+            // }
             $a_k = $cb->toarray();
             unset($a_k['id']);
+            unset($a_k['phanloai']);
             //bangluong_ct::create($a_k);
             (new data())->createBangLuong($inputs['thang'], $a_k);
         }

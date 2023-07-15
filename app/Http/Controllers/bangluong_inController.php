@@ -434,7 +434,7 @@ class bangluong_inController extends Controller
 
             //
             list($m_canbo, $a_pc) = $this->getData($inputs);
-
+            //dd($m_canbo->where('phanloai','KIEMNHIEM'));
             if ($inputs['thang_th'] == '01') {
                 $inputs['thang_th'] = '12';
                 $inputs['nam_th'] = str_pad($inputs['nam_th'] - 1, 4, '0', STR_PAD_LEFT);
@@ -446,7 +446,7 @@ class bangluong_inController extends Controller
 
             $a_luong = [
                 'heso', 'vuotkhung', 'pccv', 'pckv', 'pcth', 'pclade', 'pcdh', 'pcdbqh', 'pcudn', 'pcdbn',
-                'pcud61', 'pctnn', 'pcthni', 'pclt', 'pcdang', 'pccovu', 'pcct', 'pctn', 'pckn', 'pcdd', 'pcvk'
+                'pcud61', 'pctnn', 'pcthni', 'pclt', 'pcdang', 'pccovu', 'pcct', 'pctn', 'pckn', 'pcdd', 'pcvk', 'hesopc'
             ];
             $a_hopdong = ['luonghd'];
             $a_tangthem = [];
@@ -479,32 +479,33 @@ class bangluong_inController extends Controller
             }
             $m_ttcb = hosocanbo::where('madv', $inputs['madv'])->get();
             //dd($m_canbo);
-            foreach ($m_canbo as $ct) { //trường hợp giảm lương + add sotk và tên NH (Hưởng sau này sửa lại sau nhé)
-                $m_ttct = $m_ttcb->where('macanbo', $ct->macanbo)->first();
-                if (isset($m_ttct)) {
-                    $ct->sotk = $m_ttct->sotk;
-                    $ct->tennganhang = $m_ttct->tennganhang;
+            //lấy danh sách cán bộ để làm thông tin dải dữ liệu
+            $model = hosocanbo::where('madv', $inputs['madv'])->get();
+            foreach ($model as $key => $ct) {
+                $solieu = $m_canbo->where('macanbo', $ct->macanbo);
+                if ($solieu->count() == 0) {
+                    $model->forget($key);
                 }
-                if ($ct->ttl <= 0) {
-                    continue;
+                $ct->tongso = $solieu->sum('luongtn');
+                if ($ct->tongso <= 0) {
+                    $model->forget($key);
                 }
-                $ct->tongso = $ct->luongtn;
                 $ct->luong = 0;
                 foreach ($a_luong as $pc) {
                     $st = 'st_' . $pc;
-                    $ct->luong += $ct->$st;
+                    $ct->luong += $solieu->sum($st);
                 }
                 if ($ct->luong > 0) { //trừ bảo hiểm
-                    $ct->luong -= ($ct->ttbh + $ct->giaml + $ct->thuetn);
+                    $ct->luong = $ct->luong - ($solieu->sum('ttbh') + $solieu->sum('giaml') + $solieu->sum('thuetn'));
                 }
 
                 $ct->hopdong = 0;
                 foreach ($a_hopdong as $pc) {
                     $st = 'st_' . $pc;
-                    $ct->hopdong += $ct->$st;
+                    $ct->hopdong += $solieu->sum($st);
                 }
                 if ($ct->hopdong > 0) { //trừ bảo hiểm
-                    $ct->hopdong -= ($ct->ttbh + $ct->giaml + $ct->thuetn);
+                    $ct->hopdong = $ct->hopdong - ($solieu->sum('ttbh') + $solieu->sum('giaml') + $solieu->sum('thuetn'));
                 }
 
                 $ct->tangthem = 0;
@@ -512,12 +513,12 @@ class bangluong_inController extends Controller
                 $ct->phucap = 0;
                 foreach ($a_phucap as $pc) {
                     $st = 'st_' . $pc;
-                    $ct->phucap += $ct->$st;
+                    $ct->phucap += $solieu->sum($st);
                 }
                 $ct->khoan = 0;
                 foreach ($a_khoan as $pc) {
                     $st = 'st_' . $pc;
-                    $ct->khoan += $ct->$st;
+                    $ct->khoan += $solieu->sum($st);
                 }
                 $ct->hocbong = 0;
                 $ct->chenhlech = 0;
@@ -527,10 +528,10 @@ class bangluong_inController extends Controller
                     $ct->luong = 0;
                 }
                 if ($m_canbo_trc != null) {
-                    $ct->chenhlech = $ct->luongtn;
-                    $canbo = $m_canbo_trc->where('macanbo', $ct->macanbo)->where('mact', $ct->mact)->first();
+                    $ct->chenhlech = $ct->tongso;
+                    $canbo = $m_canbo_trc->where('macanbo', $ct->macanbo);
                     if (isset($canbo)) {
-                        $ct->chenhlech = $ct->luongtn - $canbo->luongtn;
+                        $ct->chenhlech = $ct->luongtn - $canbo->sum('luongtn');
                     }
                 }
             }
@@ -539,7 +540,7 @@ class bangluong_inController extends Controller
                 ->wherein('mact', a_unique(array_column($m_canbo->toarray(), 'mact')))->get();
             //dd($m_canbo->toarray());
             return view('reports.bangluong.tonghopbangluong.mau09nd11_m2')
-                ->with('model', $m_canbo->sortBy('stt'))
+                ->with('model', $model->sortBy('stt'))
                 ->with('model_thuyetminh', $model_thuyetminh)
                 ->with('m_dv', $m_dv)
                 ->with('model_congtac', $model_congtac)
