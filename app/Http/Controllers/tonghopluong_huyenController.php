@@ -199,11 +199,11 @@ class tonghopluong_huyenController extends Controller
                 ->wherenotin('madv', function ($qr) use ($inputs) {
                     $qr->select('madv')->from('dsdonviquanly')->where('nam', $inputs['nam'])->distinct()->get();
                 }) //lọc các đơn vị đã khai báo trong dsdonviquanly
-                    ->where('madv','!=',$madv) //bỏ đơn vị tổng hợp
+                ->where('madv', '!=', $madv) //bỏ đơn vị tổng hợp
                 ->get();
             $a_donvicapduoi = array_unique(array_merge(array_column($model_dmdv->toarray(), 'madv'), $a_donvicapduoi));
             $model_donvitamdung = dmdonvi::where('trangthai', 'TD')->wherein('madv', $a_donvicapduoi)->get();
-// dd($a_donvicapduoi);
+            // dd($a_donvicapduoi);
             $a_data = array(
                 array('thang' => '01', 'mathdv' => null, 'noidung' => null, 'sldv' => $this->laySoLuongDV('01', $inputs['nam'], $a_donvicapduoi, $model_donvitamdung), 'dvgui' => 0),
                 array('thang' => '02', 'mathdv' => null, 'noidung' => null, 'sldv' => $this->laySoLuongDV('02', $inputs['nam'], $a_donvicapduoi, $model_donvitamdung), 'dvgui' => 0),
@@ -238,14 +238,7 @@ class tonghopluong_huyenController extends Controller
             // dd($model_nguon);
             //Lấy danh sách các dữ liệu đã tổng hợp theo huyện
             $model_tonghop = tonghopluong_tinh::where('madvbc', $madvbc)->where('nam', $inputs['nam'])->get();
-            //Danh sách các đơn vị đã gửi dữ liệu
-            //$model_dulieu = tonghopluong_huyen::where('madvbc',$madvbc)->get();
-            //$model_dulieu = tonghopluong_huyen::where('macqcq', $madv)->where('trangthai','DAGUI')->get();
-            // $model_dulieu = tonghopluong_donvi::wherein('madv', function ($query) use ($madv) {
-            //     $query->select('madv')->from('dmdonvi')->where('macqcq', $madv)->where('madv', '<>', $madv)->get();
-            // })->where('trangthai', 'DAGUI')->get();
 
-            //dd($model_dulieu);
             for ($i = 0; $i < count($a_data); $i++) {
                 //$a_data[$i]['maphanloai'] = session('admin')->maphanloai;
                 $tonghop = $model_tonghop->where('thang', $a_data[$i]['thang'])->first();
@@ -299,9 +292,9 @@ class tonghopluong_huyenController extends Controller
             $m_dvbc = dmdonvibaocao::where('level', 'T')->get();
             $a_donviql = array_column(dmdonvi::wherein('madvbc', array_column($m_dvbc->toarray(), 'madvbc'))->get()->toarray(), 'tendv', 'madv');
             // dd($a_data);
+            $inputs['furl'] = '/chuc_nang/tong_hop_luong/huyen/';
             return view('functions.tonghopluong.huyen.index')
-                ->with('furl', '/chuc_nang/tong_hop_luong/huyen/')
-                ->with('nam', $inputs['nam'])
+                ->with('inputs', $inputs)
                 ->with('model', $a_data)
                 ->with('a_donviql', $a_donviql)
                 ->with('a_trangthai', $a_trangthai)
@@ -332,14 +325,14 @@ class tonghopluong_huyenController extends Controller
             // $model = tonghopluong_donvi_chitiet::wherein('mathdv', function ($query) use ($mathh, $madv) {
             //     $query->select('mathdv')->from('tonghopluong_donvi')->where('madv', $madv)->where('mathh', $mathh)->orwhere('matht', $mathh)->get();
             // })->get();
-            $model = tonghopluong_donvi_chitiet::where('mathdv',$mathdv)->get();
+            $model = tonghopluong_donvi_chitiet::where('mathdv', $mathdv)->get();
             // dd($model);
             $a_bangluong = tonghopluong_donvi_bangluong::wherein('mathdv', function ($query) use ($mathh, $madv) {
                 $query->select('mathdv')->from('tonghopluong_donvi')->where('madv', $madv)->where('mathh', $mathh)->orwhere('matht', $mathh)->get();
             })->get();
             // $model_thongtin = tonghopluong_donvi::where('madv', $madv)->where('mathh', $mathh)->orwhere('matht', $mathh)->first();
             // $model_thongtin = tonghopluong_donvi::where('madv', $madv)->where('macqcq', session('admin')->madv)->where('thang', $input['thangbc'])->where('nam',$input['nambc'])->first();
-            $model_thongtin=tonghopluong_donvi::where('mathdv',$mathdv)->first();
+            $model_thongtin = tonghopluong_donvi::where('mathdv', $mathdv)->first();
             $model_nguonkp = array_column(dmnguonkinhphi::all()->toArray(), 'tennguonkp', 'manguonkp');
             //$model_phanloaict = array_column(dmphanloaicongtac::all()->toArray(), 'tencongtac', 'macongtac');
             $model_ct = array_column(dmphanloaict::all()->toArray(), 'tenct', 'mact');
@@ -353,9 +346,9 @@ class tonghopluong_huyenController extends Controller
             //     })->distinct()->get()->toArray(), 'tenkhoipb', 'linhvuchoatdong');
 
             $a_pl = array_column(tonghopluong_donvi_chitiet::join('dmkhoipb', 'dmkhoipb.makhoipb', 'tonghopluong_donvi_chitiet.linhvuchoatdong')
-            ->select('linhvuchoatdong', 'tenkhoipb')->wherein('mathdv', function ($query) use ($mathh, $madv,$mathdv) {
-                $query->select('mathdv')->from('tonghopluong_donvi')->where('madv', $madv)->where('mathdv', $mathdv)->get();
-            })->distinct()->get()->toArray(), 'tenkhoipb', 'linhvuchoatdong');
+                ->select('linhvuchoatdong', 'tenkhoipb')->wherein('mathdv', function ($query) use ($mathh, $madv, $mathdv) {
+                    $query->select('mathdv')->from('tonghopluong_donvi')->where('madv', $madv)->where('mathdv', $mathdv)->get();
+                })->distinct()->get()->toArray(), 'tenkhoipb', 'linhvuchoatdong');
             foreach ($model as $chitiet) {
                 $chitiet->tennguonkp = isset($model_nguonkp[$chitiet->manguonkp]) ? $model_nguonkp[$chitiet->manguonkp] : '';
                 $chitiet->tencongtac = isset($model_ct[$chitiet->mact]) ? $model_ct[$chitiet->mact] : '';
@@ -692,14 +685,14 @@ class tonghopluong_huyenController extends Controller
 
             //cho trương hợp đơn vị cấp trên in dữ liệu dv câp dưới mà ko sai tên đơn vị
 
-                $m_dv = dmdonvi::where('madv', $madv)->first();
-                $m_pc = array_column(dmphucap_donvi::where('madv', $madv)->get()->toarray(), 'report', 'mapc');
+            $m_dv = dmdonvi::where('madv', $madv)->first();
+            $m_pc = array_column(dmphucap_donvi::where('madv', $madv)->get()->toarray(), 'report', 'mapc');
 
 
             $a_phucap = array();
             $col = 0;
 
-// dd($model);
+            // dd($model);
             foreach ($model as $chitiet) {
                 if (!isset($model_nguonkp[$chitiet->manguonkp]))
                     $chitiet->manguonkp = 12;
@@ -728,8 +721,8 @@ class tonghopluong_huyenController extends Controller
             //dd($a_phucap);
             $thongtin = array(
                 'nguoilap' => session('admin')->name,
-                'thang' => isset($model_thongtin)?$model_thongtin->thang:'',
-                'nam' => isset($model_thongtin)?$model_thongtin->nam:''
+                'thang' => isset($model_thongtin) ? $model_thongtin->thang : '',
+                'nam' => isset($model_thongtin) ? $model_thongtin->nam : ''
             );
 
             //Lấy dữ liệu để lập
@@ -1378,7 +1371,7 @@ class tonghopluong_huyenController extends Controller
                     $col++;
                 }
             }
-// dd($model_phanloai);
+            // dd($model_phanloai);
             //dd($model->toarray());
             return view('reports.tonghopluong.huyen.solieuth')
                 ->with('thongtin', $thongtin)
@@ -1397,6 +1390,7 @@ class tonghopluong_huyenController extends Controller
         } else
             return view('errors.notlogin');
     }
+
     function tonghopnam(Request $request)
     {
         if (Session::has('admin')) {
@@ -1768,7 +1762,7 @@ class tonghopluong_huyenController extends Controller
         //khối =>trả, xóa bang tonghopluong_huyen, update trường mathh = null;
 
         if (Session::has('admin')) {
-            $inputs = $request->all();           
+            $inputs = $request->all();
             $model = tonghopluong_donvi::where('mathdv', $inputs['mathdv'])->first();
             tonghopluong_huyen::where('mathdv', $model->mathh)->delete();
             $model->trangthai = 'TRALAI';
@@ -1777,7 +1771,7 @@ class tonghopluong_huyenController extends Controller
             $model->mathk = null;
             $model->lydo = $inputs['lydo'];
             $model->save();
-            
+
             return redirect('/chuc_nang/xem_du_lieu/huyen?thang=' . $model->thang . '&nam=' . $model->nam . '&trangthai=ALL&phanloai=ALL');
         } else
             return view('errors.notlogin');
