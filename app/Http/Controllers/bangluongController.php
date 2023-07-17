@@ -800,10 +800,10 @@ class bangluongController extends Controller
         //Mảng chứa các cột bỏ để chạy hàm insert
         $a_col_cb = array(
             'id', 'bac', 'baohiem', 'macongtac', 'pthuong', 'theodoi', 'ngaybc',
-            'khongnopbaohiem', 'ngaytu', 'tnntungay', 'ngayden', 'tnndenngay', 'lvhd', 'mucluongbaohiem'
+            'khongnopbaohiem', 'ngaytu', 'tnntungay', 'ngayden', 'tnndenngay', 'lvhd', 'mucluongbaohiem', 'phanloai'
         );
         $a_data_canbo = unset_key($a_data_canbo, $a_col_cb);
-        //dd($a_data_canbo);
+        // dd($a_data_canbo);
         foreach (array_chunk($a_data_canbo, 50) as $data) {
             (new data())->storeBangLuong($inputs['thang'], $data);
         }
@@ -825,10 +825,11 @@ class bangluongController extends Controller
                 continue;
             }
 
+            $cb->tencanbo = $canbo->tencanbo;
             $cb->mabl = $inputs['mabl'];
             $cb->manguonkp = $inputs['manguonkp'];
             $cb->luongcoban = $inputs['luongcoban'];
-            $cb->congtac = $cb->phanloai;
+            $cb->congtac = 'KIEMNHIEM';
             //tính thâm niên
             $pctn = $model_phucap->where('mapc', 'pcthni')->first();
             //trường đơn vị ko mở phụ cấp thâm niên
@@ -878,7 +879,7 @@ class bangluongController extends Controller
                     case 0: { //hệ số
                             $ths += $cb->$mapc;
                             $cb->$mapc_st = round($cb->$mapc * $inputs['luongcoban'], 0);
-                            $tt += round($cb->$mapc * $pc->luongcoban, 0);
+                            $tt += $cb->$mapc_st;
                             break;
                         }
                     case 1: { //số tiền
@@ -899,8 +900,8 @@ class bangluongController extends Controller
                                 $heso += $canbo->hesopc;
                                 $cb->$mapc = round($heso * $cb->$mapc / 100, session('admin')->lamtron);
                                 $ths += $cb->$mapc;
-                                $tt += round($cb->$mapc * $pc->luongcoban, 0);
                                 $cb->$mapc_st = round($cb->$mapc * $inputs['luongcoban'], 0);
+                                $tt += $cb->$mapc_st;
                             }
                             break;
                         }
@@ -920,9 +921,10 @@ class bangluongController extends Controller
                 $tt = round($tt * $cb->pthuong / 100, 0);
             }
 
+           
             $cb->tonghs = $ths;
             $cb->ttl = $tt;
-
+            $cb->ttbh = $cb->ttbh_dv = 0;
             if ($cb->baohiem) {
                 $cb->stbhxh = round($inputs['luongcoban'] * $cb->bhxh, 0);
                 $cb->stbhyt = round($inputs['luongcoban'] * $cb->bhyt, 0);
@@ -946,8 +948,12 @@ class bangluongController extends Controller
             }
 
             $cb->luongtn = $cb->ttl - $cb->ttbh;
+            // if ($cb->macanbo = '1511709119_1689318626') {
+            //     dd($cb);
+            // }
             $a_k = $cb->toarray();
             unset($a_k['id']);
+            unset($a_k['phanloai']);
             //bangluong_ct::create($a_k);
             (new data())->createBangLuong($inputs['thang'], $a_k);
         }
@@ -1037,7 +1043,7 @@ class bangluongController extends Controller
         }
 
         $m_cb = $m_cb->keyBy('macanbo')->toArray();
-
+        //dd($m_cb);
         $a_phanloai = dmphanloaicongtac_baohiem::where('madv', session('admin')->madv)->get()->keyBy('mact')->toArray();
         $a_nhomct = array_column(dmphanloaict::all()->toarray(), 'macongtac', 'mact');
         //dd($a_phanloai);
@@ -1201,9 +1207,9 @@ class bangluongController extends Controller
                                 if ($ct != '')
                                     $sotien += $m_cb[$key]['st_' . $ct];
                             }
-                            
+
                             $sotien = round(($sotien * $m_cb[$key][$mapc]) / 100, session('admin')->lamtron);
-                            $a_pc[$k]['sotien'] = $sotien; 
+                            $a_pc[$k]['sotien'] = $sotien;
                             $m_cb[$key][$mapc] = round($sotien / $inputs['luongcoban'], session('admin')->lamtron);
                             //do tính hệ số đã làm tròn => (hệ số * lương cơ bản) != (số tiền) => nhân lại để đúng số tiền
                             $a_pc[$k]['sotien'] = round($m_cb[$key][$mapc] * $inputs['luongcoban']);
@@ -1257,7 +1263,7 @@ class bangluongController extends Controller
                 }
                 ketthuc_phucap:
             }
-           
+
             //$ths = $ths + $heso_goc - $cb->heso;//do chỉ lương nb hưởng 85%, các hệ số hưởng %, bảo hiểm thì lấy 100% để tính
             //nếu cán bộ nghỉ thai sản (không gộp vào phần tính phụ cấp do trên bảng lương hiển thị hệ số nhưng ko có tiền)
             //$cb->tonghs = $tonghs;
@@ -1478,7 +1484,7 @@ class bangluongController extends Controller
         //Mảng chứa các cột bỏ để chạy hàm insert
         $a_col_cb = array(
             'id', 'bac', 'baohiem', 'macongtac', 'pthuong', 'theodoi', 'ngaybc',
-            'khongnopbaohiem', 'ngaytu', 'tnntungay', 'ngayden', 'tnndenngay', 'lvhd', 'nguoiphuthuoc', 'mucluongbaohiem'
+            'khongnopbaohiem', 'ngaytu', 'tnntungay', 'ngayden', 'tnndenngay', 'lvhd', 'nguoiphuthuoc', 'mucluongbaohiem', 'phanloai'
         );
         $a_data_canbo = unset_key($a_data_canbo, $a_col_cb);
 
@@ -1618,26 +1624,26 @@ class bangluongController extends Controller
                 }
             }
             //Tính % hưởng cho cán bộ
-            if ($m_cb_kn[$i]['pthuong'] < 100) {                
+            if ($m_cb_kn[$i]['pthuong'] < 100) {
                 $tonghs = 0;
                 $tien = 0;
                 foreach ($a_pc as $k => $v) {
                     $mapc = $v['mapc'];
-                    $mapc_st = 'st_' . $v['mapc'];                    
+                    $mapc_st = 'st_' . $v['mapc'];
 
                     $m_cb_kn[$i][$mapc] = round($m_cb_kn[$i][$mapc] * $m_cb_kn[$i]['pthuong'] / 100, session('admin')->lamtron);
                     $m_cb_kn[$i][$mapc_st] = round($m_cb_kn[$i][$mapc_st] * $m_cb_kn[$i]['pthuong'] / 100, 0);
 
                     $tonghs += $m_cb_kn[$i][$mapc];
                     $tien += $m_cb_kn[$i][$mapc_st];
-                }                
+                }
             }
             //dd($a_thaisan);
             //Tính thai sản cho cán bộ kiêm nhiệm
             $thaisan = isset($a_thaisan[$m_cb_kn[$i]['macanbo']]) ? true : false;
             $m_cb_kn[$i]['ghichu'] = '';
             if ($thaisan) {
-                $tien = $tonghs = 0;                
+                $tien = $tonghs = 0;
                 $m_cb_kn[$i]['ghichu'] .= 'Nghỉ thai sản từ ' . getDayVn($a_thaisan[$m_cb_kn[$i]['macanbo']]['ngaytu']) . ' đến ' . getDayVn($a_thaisan[$m_cb_kn[$i]['macanbo']]['ngayden']) . ';';
                 $m_cb_kn[$i]['congtac'] = 'THAISAN';
 
@@ -1685,7 +1691,7 @@ class bangluongController extends Controller
         //Mảng chứa các cột bỏ để chạy hàm insert
         $a_col_cbkn = array('id', 'bac', 'baohiem', 'macongtac', 'pthuong', 'theodoi', 'phanloai', 'khongnopbaohiem'); //'manguonkp',
         $a_kn_canbo = unset_key($a_kn_canbo, $a_col_cbkn);
-        // dd($a_kn_canbo);
+        //dd($a_kn_canbo);
         foreach (array_chunk($a_kn_canbo, 50) as $data) {
             //bangluong_ct::insert($data);
             (new data())->storeBangLuong($inputs['thang'], $data);
@@ -3101,7 +3107,7 @@ class bangluongController extends Controller
         } else
             return view('errors.notlogin');
     }
-   
+
     public function printf_mautt107_m2(Request $request)
     {
         if (Session::has('admin')) {
@@ -3186,9 +3192,9 @@ class bangluongController extends Controller
             $model = $model_canbo->where('congtac', 'CONGTAC');
             $model_kn = $model_canbo->where('congtac', '<>', 'CONGTAC');
             //Duyệt lại bảng kiêm nhiêm => nếu kiêm nhiệm và chính # phân loại công tác => chuyển cán bộ về bảng chính
-            foreach($model_kn as $key=>$kn){
-                $chk = $model->where('macanbo',$kn->macanbo)->where('mact',$kn->mact);
-                if($chk->count() == 0){
+            foreach ($model_kn as $key => $kn) {
+                $chk = $model->where('macanbo', $kn->macanbo)->where('mact', $kn->mact);
+                if ($chk->count() == 0) {
                     $model->add($kn);
                     $model_kn->forget($key);
                 }

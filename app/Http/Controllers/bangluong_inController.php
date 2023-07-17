@@ -77,7 +77,7 @@ class bangluong_inController extends Controller
         } else
             return view('errors.notlogin');
     }
-    
+
     public function printf_mautt107_th_m2(Request $request)
     {
         if (Session::has('admin')) {
@@ -269,6 +269,7 @@ class bangluong_inController extends Controller
             return view('errors.notlogin');
     }
 
+    //Dải theo phân loại công tác
     public function printf_mau09nd11_th(Request $request)
     {
         if (Session::has('admin')) {
@@ -396,6 +397,151 @@ class bangluong_inController extends Controller
             //dd($m_canbo->toarray());
             return view('reports.bangluong.tonghopbangluong.mau09nd11')
                 ->with('model', $m_canbo->sortBy('stt'))
+                ->with('m_dv', $m_dv)
+                ->with('model_congtac', $model_congtac)
+                ->with('thongtin', $thongtin)
+                ->with('pageTitle', 'Bảng lương chi tiết');
+        } else
+            return view('errors.notlogin');
+    }
+
+    //Dải theo cán bộ ở thông tin lương chính
+    public function printf_mau09nd11_th_m2(Request $request)
+    {
+        if (Session::has('admin')) {
+            $inputs = $request->all();
+            $inputs['madv'] = session('admin')->madv;
+            //Lấy thông tin bảng lương đầu tiên để gán lên báo cáo
+            $m_bl = bangluong::select('thang', 'nam', 'mabl', 'madv', 'ngaylap')
+                ->where('thang', $inputs['thang_th'])
+                ->where('nam', $inputs['nam_th'])
+                ->where('madv', $inputs['madv'])
+                ->where('phanloai', 'BANGLUONG')->first();
+
+            $thongtin = array(
+                'nguoilap' => $m_bl->nguoilap,
+                'thang' => $m_bl->thang,
+                'nam' => $m_bl->nam,
+                'ngaylap' => $m_bl->ngaylap,
+                'cochu' => $inputs['cochu']
+            );
+            $m_dv = dmdonvi::where('madv', $m_bl->madv)->first();
+            $m_dv->tendvcq = getTenDB($m_dv->madvbc);
+            //Lấy bảng thuyết minh
+            $model_thuyetminh = bangthuyetminh_chitiet::where('mathuyetminh', function ($qr) use ($inputs) {
+                $qr->select('mathuyetminh')->from('bangthuyetminh')->where('thang', $inputs['thang_th'])->where('nam', $inputs['nam_th'])->where('madv', $inputs['madv'])->first();
+            })->get();
+
+            //
+            list($m_canbo, $a_pc) = $this->getData($inputs);
+            //dd($m_canbo->where('phanloai','KIEMNHIEM'));
+            if ($inputs['thang_th'] == '01') {
+                $inputs['thang_th'] = '12';
+                $inputs['nam_th'] = str_pad($inputs['nam_th'] - 1, 4, '0', STR_PAD_LEFT);
+            } else {
+                $inputs['thang_th'] = str_pad($inputs['thang_th'] - 1, 2, '0', STR_PAD_LEFT);
+            }
+            list($m_canbo_trc, $a_pc_trc) = $this->getData($inputs);
+            //dd($m_canbo_trc);
+
+            $a_luong = [
+                'heso', 'vuotkhung', 'pccv', 'pckv', 'pcth', 'pclade', 'pcdh', 'pcdbqh', 'pcudn', 'pcdbn',
+                'pcud61', 'pctnn', 'pcthni', 'pclt', 'pcdang', 'pccovu', 'pcct', 'pctn', 'pckn', 'pcdd', 'pcvk', 'hesopc'
+            ];
+            $a_hopdong = ['luonghd'];
+            $a_tangthem = [];
+            $a_tienthuong = [];
+            $a_phucap = ['pck'];
+            $a_khoan = ['pcctp', 'pcxaxe', 'pcdith'];
+            $a_hocbong = [];
+            $m_congtac_hd = dmphanloaict::where('macongtac', 'HOPDONG')->orwhere('tenct', 'like', 'Hợp đồng%')->get();
+            $a_congtac_hd = array_column($m_congtac_hd->toarray(), 'mact');
+            //            dd($a_congtac_luong);
+
+            foreach ($m_canbo_trc as $ct) { //trường hợp giảm lương
+                $canbo = $m_canbo->where('macanbo', $ct->macanbo)->where('mact', $ct->mact)->first();
+                if ($canbo == null) {
+                    $ct->tongso = 0;
+                    $ct->luong = 0;
+                    $ct->hopdong = 0;
+                    $ct->tangthem = 0;
+                    $ct->tienthuong = 0;
+                    $ct->phucap = 0;
+                    $ct->khoan = 0;
+                    $ct->hocbong = 0;
+                    $ct->chenhlech = -$ct->luongtn;
+                    $ct->ttl = 0;
+                    //do có trường hợp tạo bảng lương xong xóa cán bộ đi nhập lại giống hệt
+                    if ($m_canbo->where('tencanbo', $ct->macanbo)->where('mact', $ct->mact)->first() != null) {
+                        $m_canbo->add($ct);
+                    }
+                }
+            }
+            $m_ttcb = hosocanbo::where('madv', $inputs['madv'])->get();
+            //dd($m_canbo);
+            //lấy danh sách cán bộ để làm thông tin dải dữ liệu
+            $model = hosocanbo::where('madv', $inputs['madv'])->get();
+            foreach ($model as $key => $ct) {
+                $solieu = $m_canbo->where('macanbo', $ct->macanbo);
+                if ($solieu->count() == 0) {
+                    $model->forget($key);
+                }
+                $ct->tongso = $solieu->sum('luongtn');
+                if ($ct->tongso <= 0) {
+                    $model->forget($key);
+                }
+                $ct->luong = 0;
+                foreach ($a_luong as $pc) {
+                    $st = 'st_' . $pc;
+                    $ct->luong += $solieu->sum($st);
+                }
+                if ($ct->luong > 0) { //trừ bảo hiểm
+                    $ct->luong = $ct->luong - ($solieu->sum('ttbh') + $solieu->sum('giaml') + $solieu->sum('thuetn'));
+                }
+
+                $ct->hopdong = 0;
+                foreach ($a_hopdong as $pc) {
+                    $st = 'st_' . $pc;
+                    $ct->hopdong += $solieu->sum($st);
+                }
+                if ($ct->hopdong > 0) { //trừ bảo hiểm
+                    $ct->hopdong = $ct->hopdong - ($solieu->sum('ttbh') + $solieu->sum('giaml') + $solieu->sum('thuetn'));
+                }
+
+                $ct->tangthem = 0;
+                $ct->tienthuong = 0;
+                $ct->phucap = 0;
+                foreach ($a_phucap as $pc) {
+                    $st = 'st_' . $pc;
+                    $ct->phucap += $solieu->sum($st);
+                }
+                $ct->khoan = 0;
+                foreach ($a_khoan as $pc) {
+                    $st = 'st_' . $pc;
+                    $ct->khoan += $solieu->sum($st);
+                }
+                $ct->hocbong = 0;
+                $ct->chenhlech = 0;
+                //nếu trong nhóm hợp đồng thì chuyển luong sang hopdong
+                if (in_array($ct->mact, $a_congtac_hd)) {
+                    $ct->hopdong += $ct->luong;
+                    $ct->luong = 0;
+                }
+                if ($m_canbo_trc != null) {
+                    $ct->chenhlech = $ct->tongso;
+                    $canbo = $m_canbo_trc->where('macanbo', $ct->macanbo);
+                    if (isset($canbo)) {
+                        $ct->chenhlech = $ct->tongso - $canbo->sum('luongtn');
+                    }
+                }
+            }
+
+            $model_congtac = dmphanloaict::select('mact', 'tenct', 'macongtac')
+                ->wherein('mact', a_unique(array_column($m_canbo->toarray(), 'mact')))->get();
+            //dd($m_canbo->toarray());
+            return view('reports.bangluong.tonghopbangluong.mau09nd11_m2')
+                ->with('model', $model->sortBy('stt'))
+                ->with('model_thuyetminh', $model_thuyetminh)
                 ->with('m_dv', $m_dv)
                 ->with('model_congtac', $model_congtac)
                 ->with('thongtin', $thongtin)
@@ -1872,8 +2018,8 @@ class bangluong_inController extends Controller
                 ->with('thongtin', $thongtin)
                 ->with('m_dv', $m_dv)
                 //->with('model_thuyetminh_chitiet', $model_thuyetminh_chitiet)//18/02/2023 -> lấy thuyết minh đơn vị nhập 
-                ->with('model_tang', $model_thuyetminh_chitiet->where('tanggiam','TANG'))
-                ->with('model_giam', $model_thuyetminh_chitiet->where('tanggiam','GIAM'))
+                ->with('model_tang', $model_thuyetminh_chitiet->where('tanggiam', 'TANG'))
+                ->with('model_giam', $model_thuyetminh_chitiet->where('tanggiam', 'GIAM'))
                 ->with('pageTitle', 'Bảng lương chi tiết');
         } else
             return view('errors.notlogin');
@@ -2169,7 +2315,7 @@ class bangluong_inController extends Controller
                 $hs->socmnd = $hoso['socmnd'];
                 $hs->tennganhang = $hoso['tennganhang'];
                 if ($hs->tencanbo == '') {
-                    $hs->tencanbo = $hoso['tencanbo']??''; //kiêm nhiệm chưa có tên cán bộ
+                    $hs->tencanbo = $hoso['tencanbo'] ?? ''; //kiêm nhiệm chưa có tên cán bộ
                 }
             }
             if (isset($inputs['inchucvuvt'])) {

@@ -29,7 +29,7 @@
         $(function() {
             $('#nambc').change(function() {
                 var nambc = $('#nambc').val();
-                var url = '{{ $furl }}' + 'index?nam=' + nambc;
+                var url = '{{ $inputs['furl'] }}' + 'index?nam=' + nambc;
                 window.location.href = url;
             });
         })
@@ -57,16 +57,7 @@
                         </div>
                         <div class="col-md-3">
                             <div class="form-group">
-                                <select name="nambc" id="nambc" class="form-control">
-                                    @if ($nam_start = intval(date('Y')) - 2)
-                                    @endif
-                                    @if ($nam_stop = intval(date('Y')))
-                                    @endif
-                                    @for ($i = $nam_start; $i <= $nam_stop; $i++)
-                                        <option value="{{ $i }}" {{ $i == $nam ? 'selected' : '' }}>
-                                            {{ $i }}</option>
-                                    @endfor
-                                </select>
+                                {!! Form::select('nambc', getNamTL(), $inputs['nam'], ['id' => 'nambc', 'class' => 'form-control select2me']) !!}
                             </div>
                         </div>
                     </div>
@@ -88,60 +79,59 @@
                                     @if ($value['thang'] != '')
                                         <tr class="{{ getTextStatus($value['trangthai']) }}">
                                             <td class="text-center">{{ $i++ }}</td>
-                                            <td class="text-center">{{ $value['thang'] . '/' . $nam }}</td>
+                                            <td class="text-center">{{ $value['thang'] . '/' . $inputs['nam'] }}</td>
                                             <td>{{ $value['noidung'] }}</td>
                                             <td class="text-center bold"> {{ $value['dvgui'] . '/' . $value['sldv'] }}</td>
                                             <td class="text-center bold">{{ $a_trangthai[$value['trangthai']] }}</td>
                                             <td>
+                                                <button type="button" title="In số liệu"
+                                                    onclick="indutoan('{{ $value['thang'] }}', '{{ $inputs['nam'] }}','{{ session('admin')->madv }}')"
+                                                    class="btn btn-default btn-sm mbs" data-target="#indt-modal"
+                                                    data-toggle="modal">
+                                                    <i class="fa fa-print"></i>
+                                                </button>
+
                                                 @if ($value['mathdv'] != null)
-                                                    <!--a href="{{ url($furl . 'tonghop?thang=' . $value['thang'] . '&nam=' . $nam) }}" class="btn btn-default btn-xs" target="_blank"-->
-                                                    <a href="{{ url('/chuc_nang/tong_hop_luong/khoi/tonghop_khoi?thangbc=' . $value['thang'] . '&nambc=' . $nam . '&madv=' . session('admin')->madv) }}"
+                                                    <!--a href="{{ url($inputs['furl'] . 'tonghop?thang=' . $value['thang'] . '&nam=' . $inputs['nam']) }}" class="btn btn-default btn-xs" target="_blank"-->
+                                                    <a href="{{ url('/chuc_nang/tong_hop_luong/khoi/tonghop_khoi?thangbc=' . $value['thang'] . '&nambc=' . $inputs['nam'] . '&madv=' . session('admin')->madv) }}"
                                                         class="btn btn-default btn-sm" TARGET="_blank">
                                                         <i class="fa fa-print"></i>&nbsp; Số liệu tổng hợp</a>
-                                                    <!--a href="{{ url($furl . 'tonghop_diaban?thang=' . $value['thang'] . '&nam=' . $nam) }}" class="btn btn-default btn-xs" target="_blank">
-                                                        <i class="fa fa-print"></i>&nbsp; Số liệu địa bàn</a-->
-                                                    <a href="{{ url('/chuc_nang/xem_du_lieu/huyen?thang=' . $value['thang'] . '&nam=' . $nam . '&trangthai=ALL&phanloai=ALL') }}"
+                                                    <!--a href="{{ url($inputs['furl'] . 'tonghop_diaban?thang=' . $value['thang'] . '&nam=' . $inputs['nam']) }}" class="btn btn-default btn-xs" target="_blank">
+                                                                                                                            <i class="fa fa-print"></i>&nbsp; Số liệu địa bàn</a-->
+                                                    <a href="{{ url('/chuc_nang/xem_du_lieu/huyen?thang=' . $value['thang'] . '&nam=' . $inputs['nam'] . '&trangthai=ALL&phanloai=ALL') }}"
                                                         class="btn btn-default btn-xs">
                                                         <i class="fa fa-list-alt"></i>&nbsp; Số liệu chi tiết</a>
                                                 @else
                                                     @if ($value['trangthai'] != 'CHUADL')
-                                                        <a href="{{ url($furl . 'tonghop_huyen?thang=' . $value['thang'] . '&nam=' . $nam) }}"
-                                                            class="btn btn-default btn-xs" target="_blank">
-                                                            <!--a href="{{ url('/chuc_nang/tong_hop_luong/khoi/tonghop_khoi?thangbc=' . $value['thang'] . '&nambc=' . $nam . '&madv=' . session('admin')->madv) }}" class="btn btn-default btn-sm" TARGET="_blank"-->
-                                                            <i class="fa fa-print"></i>&nbsp; Số liệu tổng hợp
-                                                        </a>
-                                                        <!--a href="{{ url($furl . 'tonghop_diaban?thang=' . $value['thang'] . '&nam=' . $nam) }}" class="btn btn-default btn-xs" target="_blank">
-                                                            <i class="fa fa-print"></i>&nbsp; Số liệu địa bàn</a-->
-
                                                         @if ($value['trangthai'] != 'CHUADAYDU')
-                                                            <a href="{{ url('/chuc_nang/xem_du_lieu/huyen?thang=' . $value['thang'] . '&nam=' . $nam . '&trangthai=ALL&phanloai=ALL') }}"
+                                                            <a href="{{ url('/chuc_nang/xem_du_lieu/huyen?thang=' . $value['thang'] . '&nam=' . $inputs['nam'] . '&trangthai=ALL&phanloai=ALL') }}"
                                                                 class="btn btn-default btn-xs">
                                                                 <i class="fa fa-list-alt"></i>&nbsp; Số liệu chi tiết</a>
                                                             <button type="button" class="btn btn-default btn-xs"
-                                                                onclick="confirmChuyen('{{ $value['thang'] }}','{{ $nam }}')"
+                                                                onclick="confirmChuyen('{{ $value['thang'] }}','{{ $inputs['nam'] }}')"
                                                                 data-target="#chuyen-modal" data-toggle="modal"><i
                                                                     class="fa fa-share-square-o"></i>&nbsp;
                                                                 Gửi dữ liệu</button>
                                                         @else
                                                             <button type="button" class="btn btn-default btn-xs"
-                                                                onclick="confirmChuyen('{{ $value['thang'] }}','{{ $nam }}')"
+                                                                onclick="confirmChuyen('{{ $value['thang'] }}','{{ $inputs['nam'] }}')"
                                                                 data-target="#chuyen-modal" data-toggle="modal"><i
                                                                     class="fa fa-share-square-o"></i>&nbsp;
                                                                 Gửi dữ liệu</button>
-                                                            <a href="{{ url('/chuc_nang/xem_du_lieu/huyen?thang=' . $value['thang'] . '&nam=' . $nam . '&trangthai=CHOGUI&phanloai=ALL') }}"
+                                                            <a href="{{ url('/chuc_nang/xem_du_lieu/huyen?thang=' . $value['thang'] . '&nam=' . $inputs['nam'] . '&trangthai=CHOGUI&phanloai=ALL') }}"
                                                                 class="btn btn-default btn-xs">
                                                                 <i class="fa fa-list-alt"></i>&nbsp; Đơn vị chưa gửi dữ
                                                                 liệu</a>
                                                         @endif
                                                         @if ($value['trangthai'] == 'TRALAI')
                                                             <button type="button" class="btn btn-default btn-sm"
-                                                                onclick="getLyDo('{{ $value['madvbc'] }}','{{ $value['thang'] }}','{{ $nam }}')"
+                                                                onclick="getLyDo('{{ $value['madvbc'] }}','{{ $value['thang'] }}','{{ $inputs['nam'] }}')"
                                                                 data-target="#tralai-modal" data-toggle="modal"><i
                                                                     class="fa fa-share-square-o"></i>&nbsp;
                                                                 Lý do trả lại</button>
                                                         @endif
                                                     @else
-                                                        <a href="{{ url('/chuc_nang/xem_du_lieu/huyen?thang=' . $value['thang'] . '&nam=' . $nam . '&trangthai=ALL&phanloai=ALL') }}"
+                                                        <a href="{{ url('/chuc_nang/xem_du_lieu/huyen?thang=' . $value['thang'] . '&nam=' . $inputs['nam'] . '&trangthai=ALL&phanloai=ALL') }}"
                                                             class="btn btn-default btn-xs">
                                                             <i class="fa fa-stack-overflow"></i>&nbsp; Chưa có dữ liệu</a>
                                                     @endif
@@ -151,12 +141,12 @@
                                     @else
                                         <tr class="{{ getTextStatus($value['trangthai']) }}">
                                             <td class="text-center">{{ $i++ }}</td>
-                                            <td class="text-center">{{ $nam }}</td>
+                                            <td class="text-center">{{ $inputs['nam'] }}</td>
                                             <td>{{ $value['noidung'] }}</td>
                                             <td class="text-center bold"></td>
                                             <td class="text-center bold"></td>
                                             <td>
-                                                <a href="{{ url($furl . 'tonghopnam?nam=' . $nam) }}"
+                                                <a href="{{ url($inputs['furl'] . 'tonghopnam?nam=' . $inputs['nam']) }}"
                                                     class="btn btn-default btn-xs" target="_blank">
                                                     <i class="fa fa-print"></i>&nbsp; Số liệu tổng hợp</a>
                                             </td>
@@ -176,7 +166,7 @@
         aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
-                {!! Form::open(['url' => $furl . 'senddata', 'id' => 'frm_chuyen', 'method' => 'POST']) !!}
+                {!! Form::open(['url' => $inputs['furl'] . 'senddata', 'id' => 'frm_chuyen', 'method' => 'POST']) !!}
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
                     <h4 class="modal-title">Đồng ý chuyển số liệu?</h4>
@@ -237,66 +227,132 @@
             <!-- /.modal-dialog -->
         </div>
     </div>
-        <!--Model Trả lại -->
-        <div class="modal fade" id="tralai-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-            <div class="modal-dialog">
-                <div class="modal-content">
-    
-                    <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
-                        <h4 class="modal-title">Thông tin lý do trả lại dữ liệu</h4>
-                    </div>
-                    <div class="modal-body">
-                        <div class="form-group">
-                            {!!Form::textarea('lydo', null, array('id' => 'lydo','class' => 'form-control','rows'=>'3'))!!}
-                        </div>
-    
-                        <div class="modal-footer">
-                            <button type="submit" class="btn blue">Đồng ý</button>
-    
-                        </div>
-                        {!! Form::close() !!}
-                    </div>
-                    <!-- /.modal-content -->
+
+    <!--Model Trả lại -->
+    <div class="modal fade" id="tralai-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+                    <h4 class="modal-title">Thông tin lý do trả lại dữ liệu</h4>
                 </div>
-                <!-- /.modal-dialog -->
+                <div class="modal-body">
+                    <div class="form-group">
+                        {!! Form::textarea('lydo', null, ['id' => 'lydo', 'class' => 'form-control', 'rows' => '3']) !!}
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="submit" class="btn blue">Đồng ý</button>
+
+                    </div>
+                    {!! Form::close() !!}
+                </div>
+                <!-- /.modal-content -->
+            </div>
+            <!-- /.modal-dialog -->
+        </div>
+    </div>
+
+    <!--Modal in tổng hợp lương -->
+    <div id="indt-modal" tabindex="-1" role="dialog" aria-hidden="true" class="modal fade">
+        <input type="hidden" id="thang_bc" name="thang" />
+        <input type="hidden" id="nam_bc" name="namns" />
+        <input type="hidden" id="macqcq_bc" name="macqcq" />
+        <div class="modal-lg modal-dialog modal-content">
+            <div class="modal-header modal-header-primary">
+                <button type="button" data-dismiss="modal" aria-hidden="true" class="close">&times;</button>
+                <h4 id="hd-inbl" class="modal-title">In số liệu</h4>
+            </div>
+            <div class="modal-body">
+                {{-- <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <button type="button" onclick="indanhsachdonvi('{{ $inputs['furl'] . 'danhsachdonvi' }}')"
+                                style="border-width: 0px" class="btn btn-default btn-xs mbs"
+                                data-target="#modal-indanhsachdonvi" data-toggle="modal">
+                                <i class="fa fa-print"></i>&nbsp; Danh sách đơn vị</button>
+                        </div>
+                    </div>
+                </div> --}}
+
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <a id="in_bl" href="" class="btn btn-default btn-xs mbs"
+                                onclick="insolieu(this,'/chuc_nang/tong_hop_luong/huyen/TongHop')"
+                                style="border-width: 0px;" target="_blank">
+                                <i class="fa fa-print"></i>&nbsp; In số liệu tổng hợp (mẫu 01)</a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <a id="in_bl" href="" class="btn btn-default btn-xs mbs"
+                                onclick="insolieu(this,'/chuc_nang/tong_hop_luong/huyen/tonghop_huyen')"
+                                style="border-width: 0px;" target="_blank">
+                                <i class="fa fa-print"></i>&nbsp; In số liệu tổng hợp (mẫu 02)</a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" data-dismiss="modal" class="btn btn-default">Hủy thao tác</button>
+                </div>
             </div>
         </div>
-    @include('includes.modal.delete')
-    <script>
-        function confirmChuyen(thang, nam) {
-            document.getElementById("thang").value = thang;
-            document.getElementById("nam").value = nam;
-        }
 
-        function confirmTonghop(url) {
-            $('#frm_tonghop').attr('action', url);
-        }
-        function getLyDo(madvbc,thang,nam){
-            var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
-            console.log(madvbc);
-            $.ajax({
-                url: '{{$furl}}' + 'getlydo',
-                type: 'GET',
-                data: {
-                    _token: CSRF_TOKEN,
-                    madvbc: madvbc,
-                    thang: thang, 
-                    nam: nam
-                },
-                dataType: 'JSON',
-                success: function (data) {
-                    // console.log(data);
-                    $('#lydo').val(data.lydo);
-                },
-                error: function(message){
-                    toastr.error(message,'Lỗi!');
-                }
-            });
+        @include('includes.modal.delete')
 
-            //$('#madvbc').val(madvbc);
-            //$('#phongban-modal').modal('show');
-        }
-    </script>
+        <script>
+            function confirmChuyen(thang, nam) {
+                document.getElementById("thang").value = thang;
+                document.getElementById("nam").value = nam;
+            }
 
-@stop
+            function insolieu(obj, url) {
+                obj.href = url + '?thang=' + $('#thang_bc').val() + '&nam=' + $('#nam_bc').val() + '&macqcq=' + $('#macqcq_bc')
+                    .val();
+            }
+
+            function confirmTonghop(url) {
+                $('#frm_tonghop').attr('action', url);
+            }
+
+            function getLyDo(madvbc, thang, nam) {
+                var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
+                console.log(madvbc);
+                $.ajax({
+                    url: '{{ $inputs['furl'] }}' + 'getlydo',
+                    type: 'GET',
+                    data: {
+                        _token: CSRF_TOKEN,
+                        madvbc: madvbc,
+                        thang: thang,
+                        nam: nam
+                    },
+                    dataType: 'JSON',
+                    success: function(data) {
+                        // console.log(data);
+                        $('#lydo').val(data.lydo);
+                    },
+                    error: function(message) {
+                        toastr.error(message, 'Lỗi!');
+                    }
+                });
+
+                //$('#madvbc').val(madvbc);
+                //$('#phongban-modal').modal('show');
+            }
+
+            function indutoan(thang, nam, macqcq) {
+                $('#thang_bc').val(thang);
+                $('#nam_bc').val(nam);
+                $('#macqcq_bc').val(macqcq);
+            }
+        </script>
+
+    @stop

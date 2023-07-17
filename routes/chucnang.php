@@ -113,7 +113,8 @@ Route::group(['prefix' => 'chuc_nang'], function () {
         Route::post('mau07_th', 'bangluong_inController@printf_mau07_th');
         Route::post('mauds_th', 'bangluong_inController@printf_mauds_th');
         Route::post('maubh_th', 'bangluong_inController@printf_maubh_th');
-        Route::post('mau09nd11_th', 'bangluong_inController@printf_mau09nd11_th');
+        Route::post('mau09nd11_th', 'bangluong_inController@printf_mau09nd11_th'); //Dải theo phân loại công tác
+        Route::post('mau09nd11_th_m2', 'bangluong_inController@printf_mau09nd11_th_m2'); //Dải theo cá nhân
 
         //13/02/2023 => Bỏ
         // Route::post('mau01_excel', 'bangluongController@printf_mau01_excel');
@@ -277,6 +278,9 @@ Route::group(['prefix' => 'chuc_nang'], function () {
             Route::post('store_detail_diaban', 'tonghopluong_huyenController@store_detail_diaban'); //chỉnh sửa dữ liêu
             Route::get('thanh_toan_CR', 'tonghopluong_huyenController@thanhtoanluongCR');
             Route::get('inkhoito', 'tonghopluong_huyenController@inkhoito');
+
+            //2023.07.14 Mẫu theo yêu STC
+            Route::get('TongHop', 'tonghopluong_huyen_baocaoController@TongHop_PhanLoaiDV');
         });
 
         Route::group(['prefix' => 'tinh'], function () {

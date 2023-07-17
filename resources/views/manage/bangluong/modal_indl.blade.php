@@ -508,7 +508,15 @@
                     <div class="form-group">
                         <button type="button" style="border-width: 0px" class="btn btn-default btn-xs mbs" onclick="inblmnd11_th('/chuc_nang/bang_luong/mau09nd11_th')"
                                 data-toggle="modal" data-target="#mautt107_th-modal">
-                            <i class="fa fa-print"></i>&nbsp;Bảng thanh toán cho đối tượng thụ hưởng (NĐ11/2020/NĐ-CP)</button>
+                            <i class="fa fa-print"></i>&nbsp;Bảng thanh toán cho đối tượng thụ hưởng (Theo phân loại)</button>
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <button type="button" style="border-width: 0px" class="btn btn-default btn-xs mbs" onclick="inblmnd11_th('/chuc_nang/bang_luong/mau09nd11_th_m2')"
+                                data-toggle="modal" data-target="#mautt107_th-modal">
+                            <i class="fa fa-print"></i>&nbsp;Bảng thanh toán cho đối tượng thụ hưởng (Theo cá nhân)</button>
                     </div>
                 </div>
 
