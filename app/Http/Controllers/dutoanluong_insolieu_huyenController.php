@@ -222,7 +222,7 @@ class dutoanluong_insolieu_huyenController extends Controller
             $m_donvi = dmdonvi::where('madv', $m_dutoan_huyen->madv)->first();
 
             //$m_phanloai = dmphanloaidonvi_baocao::where('madvbc', $m_donvi->madvbc)->get();
-            $m_phanloai = dmphanloaidonvi_baocao::all();
+            $m_phanloai = dmphanloaidonvi_baocao::where('madvbc',$m_donvi->madvbc)->get();
             $a_phanloai = array_column(dmphanloaidonvi::all()->toArray(), 'maphanloai');
             $m_dutoan = dutoanluong::where('masoh', $inputs['masodv'])->where('trangthai', 'DAGUI')->get();
             $m_donvi_baocao = dmdonvi::wherein('madv', array_column($m_dutoan->toarray(), 'madv'))->get();
@@ -267,7 +267,6 @@ class dutoanluong_insolieu_huyenController extends Controller
                     $col++;
                 }
             }
-            
            // $m_donvi = dmdonvi::where('madv', session('admin')->madv)->first();
             //dd($m_donvi_baocao->where('maphanloai','DAOTAO'));
             return view('reports.dutoanluong.Huyen.tonghopbienche')
