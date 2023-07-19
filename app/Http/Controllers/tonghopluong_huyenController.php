@@ -288,6 +288,9 @@ class tonghopluong_huyenController extends Controller
                     $a_data[$i]['noidung'] = 'Tổng hợp dữ liệu 12 tháng';
                     $a_data[$i]['mathdv'] = $madv;
                 }
+                //2023.07.19 Lỗi phòng TC Diên Khánh 102/101 đơn vị (xử lý tạm)
+                if ($a_data[$i]['dvgui'] > $a_data[$i]['sldv'])
+                    $a_data[$i]['dvgui'] = $a_data[$i]['sldv'];
             }
             $m_dvbc = dmdonvibaocao::where('level', 'T')->get();
             $a_donviql = array_column(dmdonvi::wherein('madvbc', array_column($m_dvbc->toarray(), 'madvbc'))->get()->toarray(), 'tendv', 'madv');

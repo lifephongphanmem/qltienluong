@@ -336,7 +336,7 @@ function getPLCTTongHop()
 
 function getPLCTNhuCau()
 {
-    return array_column(App\dmphanloaict::where('tonghop', 1)->get()->toarray(), 'mact');
+    return array_column(App\dmphanloaict::where('nhucaukp', 1)->get()->toarray(), 'mact');
     /*
     return array('heso','hesopc','vuotkhung','pcct','hesobl', 'luonghd','pcud61',
         'pckct','pck','pccv','pckv','pcth','pcdd','pcdh','pcld',

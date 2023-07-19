@@ -42,8 +42,9 @@
                                 <th class="text-center" style="width: 10%">STT</th>
                                 <th class="text-center">Tên nhóm</th>
                                 <th class="text-center">Tên phân loại công tác</th>
-                                <th style="width: 10%" class="text-center">Tổng hợp số liệu</th>
-                                <th style="width: 10%" class="text-center">Dự toán lương</th>
+                                <th style="width: 10%" class="text-center">Tổng hợp</br>số liệu</th>
+                                <th style="width: 10%" class="text-center">Dự toán</br>lương</th>
+                                <th style="width: 10%" class="text-center">Nhu cầu</br>kinh phí</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -55,6 +56,7 @@
                                         <td>{{$value->tenct}}</td>
                                         <td class="text-center">{!! $value->tonghop == 1 ? '<i class="fa fa-check"></i>' : '' !!} </td>
                                         <td class="text-center">{!! $value->dutoan == 1 ? '<i class="fa fa-check"></i>' : '' !!}</td>                                        
+                                        <td class="text-center">{!! $value->nhucaukp == 1 ? '<i class="fa fa-check"></i>' : '' !!}</td>                                        
                                     </tr>
                                 @endforeach
                             @endif

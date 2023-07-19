@@ -66,8 +66,9 @@
                                     <th rowspan="2" class="text-center" style="width: 10%">STT</th>
                                     <th rowspan="2" class="text-center">Phân loại công tác</th>
                                     <th colspan="2" class="text-center">Phân nhóm nhu cầu</th>
-                                    <th rowspan="2" style="width: 7%" class="text-center">Tổng hợp số liệu</th>
-                                    <th rowspan="2" style="width: 7%" class="text-center">Dự toán lương</th>
+                                    <th rowspan="2" style="width: 7%" class="text-center">Tổng hợp</br>số liệu</th>
+                                    <th rowspan="2" style="width: 7%" class="text-center">Dự toán</br>lương</th>
+                                    <th rowspan="2" style="width: 7%" class="text-center">Nhu cầu</br>kinh phí</th>
                                     <th rowspan="2" style="width: 10%" class="text-center">Thao tác</th>
                                 </tr>
 
@@ -86,6 +87,7 @@
                                             <td>{{ $a_nhucau[$value->nhomnhucau_xp] ?? $value->nhomnhucau_xp }}</td>
                                             <td class="text-center">{!! $value->tonghop == 1 ? '<i class="fa fa-check"></i>' : '' !!} </td>
                                             <td class="text-center">{!! $value->dutoan == 1 ? '<i class="fa fa-check"></i>' : '' !!}</td>
+                                            <td class="text-center">{!! $value->nhucaukp == 1 ? '<i class="fa fa-check"></i>' : '' !!}</td>
                                             <td>
                                                 @if (can('dmphanloaict', 'edit'))
                                                     <button type="button" onclick="editCV('{{ $value->mact }}')"
@@ -143,14 +145,19 @@
                     </div>
 
                     <div class="row">
-                        <div class="col-md-6" style="margin-bottom: 5px;">
+                        <div class="col-md-4" style="margin-bottom: 5px;">
                             <label class="form-control-label">Tổng hợp số liệu</label>
                             {!! Form::select('tonghop', ['0' => 'Không', '1' => 'Có'], null, ['id' => 'tonghop', 'class' => 'form-control']) !!}
                         </div>
 
-                        <div class="col-md-6" style="margin-bottom: 5px;">
+                        <div class="col-md-4" style="margin-bottom: 5px;">
                             <label class="form-control-label">Dự toán lương</label>
                             {!! Form::select('dutoan', ['0' => 'Không', '1' => 'Có'], null, ['id' => 'dutoan', 'class' => 'form-control']) !!}
+                        </div>
+
+                        <div class="col-md-4" style="margin-bottom: 5px;">
+                            <label class="form-control-label">Nhu cầu kinh phí</label>
+                            {!! Form::select('nhucaukp', ['0' => 'Không', '1' => 'Có'], null, ['id' => 'nhucaukp', 'class' => 'form-control']) !!}
                         </div>
                     </div>
 
@@ -312,6 +319,7 @@
                     $('#tenct').val(data.tenct);
                     $('#tonghop').val(data.tonghop).trigger("change");
                     $('#dutoan').val(data.dutoan).trigger("change");
+                    $('#nhucaukp').val(data.nhucaukp).trigger("change");
                     $('#nhomnhucau_hc').val(data.nhomnhucau_hc).trigger("change");
                     $('#nhomnhucau_xp').val(data.nhomnhucau_xp).trigger("change");
                     $('#id').val(data.id);
@@ -356,6 +364,7 @@
                             macongtac: macongtac,
                             tonghop: $('#tonghop').val(),
                             dutoan: $('#dutoan').val(),
+                            nhucaukp: $('#nhucaukp').val(),
                             nhomnhucau_hc: $('#nhomnhucau_hc').val(),
                             nhomnhucau_xp: $('#nhomnhucau_xp').val(),
                             tenct: tenct,
@@ -390,6 +399,9 @@
                             tenct: tenct,
                             tonghop: $('#tonghop').val(),
                             dutoan: $('#dutoan').val(),
+                            nhucaukp: $('#nhucaukp').val(),
+                            nhomnhucau_hc: $('#nhomnhucau_hc').val(),
+                            nhomnhucau_xp: $('#nhomnhucau_xp').val(),
                             bhxh: $('#bhxh').val(),
                             bhyt: $('#bhyt').val(),
                             kpcd: $('#kpcd').val(),
