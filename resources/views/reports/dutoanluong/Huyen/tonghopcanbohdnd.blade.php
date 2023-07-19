@@ -65,8 +65,8 @@
         <tr style="font-weight: bold; text-align: center;">
             <td></td>
             <td>TỔNG CỘNG</td>
+            <td class="text-center">{{ dinhdangso($model->sum('canbo_dutoan')) }}</td>
             <td class="text-center">{{ dinhdangso($model->sum('canbo_congtac')) }}</td>
-            <td class="text-center">{{ dinhdangso($model->sum('soluongbienche')) }}</td>
             <td class="text-right">{{ dinhdangsothapphan($model->sum('tongcong'), $lamtron) }}</td>
             <td class="text-right">{{ dinhdangsothapphan($model->sum('heso'), $lamtron) }}</td>
             <td class="text-right">{{ dinhdangsothapphan($model->sum('tongphucap'), $lamtron) }}</td>
@@ -88,8 +88,8 @@
             <tr class="font-weight-bold">
                 <td>{{ convert2Roman($phanloai1->sapxep) }}</td>
                 <td>{{ $phanloai1->tenphanloai_nhom }}</td>
+                <td class="text-center">{{ dinhdangso($model_chitiet->sum('canbo_dutoan')) }}</td>
                 <td class="text-center">{{ dinhdangso($model_chitiet->sum('canbo_congtac')) }}</td>
-                <td class="text-center">{{ dinhdangso($model_chitiet->sum('soluongbienche')) }}</td>
                 <td class="text-right">{{ dinhdangsothapphan($model_chitiet->sum('tongcong'), $lamtron) }}</td>
                 <td class="text-right">{{ dinhdangsothapphan($model_chitiet->sum('heso'), $lamtron) }}</td>
                 <td class="text-right">{{ dinhdangsothapphan($model_chitiet->sum('tongphucap'), $lamtron) }}</td>
