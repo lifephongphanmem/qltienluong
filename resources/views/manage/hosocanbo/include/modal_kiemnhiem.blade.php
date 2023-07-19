@@ -58,7 +58,7 @@
                         <div class="form-group">
                             <label class="control-label">Tỷ lệ hưởng lương</label>
                             <div class="input-group bootstrap-touchspin">
-                                {!! Form::text('pthuong', 10, [
+                                {!! Form::text('pthuong', 100, [
                                     'class' => 'form-control',
                                     'data-mask' => 'fdecimal',
                                 ]) !!}

@@ -227,6 +227,18 @@
                     <div class="col-md-12">
                         <div class="form-group">
                             <button type="button"
+                                onclick="insolieu('{{ $furl_th . 'tonghopcanbohdnd' }}','1536402868;1536402870;1536459380;1536459382;1558600713;1558945077')"
+                                style="border-width: 0px" class="btn btn-default btn-xs mbs"
+                                data-target="#modal-insolieu" data-toggle="modal">
+                                <i class="fa fa-print"></i>&nbsp; Tổng hợp đại biểu HĐND; cấp uỷ viên</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <button type="button"
                                 onclick="insolieu('{{ $furl_th . 'tonghopbienche' }}','1506672780;1506673604;1637915601')"
                                 style="border-width: 0px" class="btn btn-default btn-xs mbs"
                                 data-target="#modal-insolieu" data-toggle="modal">
@@ -385,7 +397,6 @@
         </div>
     </div>
     {!! Form::close() !!}
-
 
     <!--Model Trả lại -->
     <div class="modal fade" id="tralai-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"

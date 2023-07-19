@@ -418,6 +418,7 @@ Route::group(['prefix' => 'chuc_nang'], function () {
             Route::post('tonghophopdong', 'dutoanluong_insolieu_huyenController@tonghophopdong');
             Route::post('tonghophopdong_m2', 'dutoanluong_insolieu_huyenController@tonghophopdong_m2');
             Route::post('tonghopcanboxa', 'dutoanluong_insolieu_huyenController@tonghopcanboxa');
+            Route::post('tonghopcanbohdnd', 'dutoanluong_insolieu_huyenController@tonghopcanbohdnd');
             Route::post('danhsachdonvi', 'dutoanluong_insolieu_huyenController@danhsachdonvi');
         });
 
