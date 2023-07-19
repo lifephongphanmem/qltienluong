@@ -113,11 +113,9 @@
                         <tr class="font-weight-bold">
                             <td>{{ $i++ }}</td>
                             <td>{{ $donvi->tendv }}</td>
-                            <td class="text-center">{{ dinhdangso($model_chitiet->sum('canbo_congtac')) }}
-                            </td>
-                            <td class="text-center">
-                                {{ dinhdangso($model_chitiet->sum('soluongbienche')) }}
-                            </td>
+                            <td class="text-center">{{ dinhdangso($model_chitiet->sum('canbo_dutoan')) }}
+                                <td class="text-center">{{ dinhdangso($model_chitiet->sum('canbo_congtac')) }}
+                            </td>                           
 
                             <td class="text-right">
                                 {{ dinhdangsothapphan($model_chitiet->sum('tongcong'), $lamtron) }}</td>
