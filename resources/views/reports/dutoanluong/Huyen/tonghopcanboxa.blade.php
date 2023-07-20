@@ -43,7 +43,7 @@
             <tr class="text-center">
                 <th style="width: 12%;">TỔNG CỘNG</th>
                 @foreach ($a_donvi_baocao as $key => $val)
-                    <th style="width: 5%;">{{ $val }}</th>
+                    <th style="width: 5%;">{!! $val !!}</th>
                 @endforeach
             </tr>
 

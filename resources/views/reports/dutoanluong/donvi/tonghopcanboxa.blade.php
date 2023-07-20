@@ -52,7 +52,7 @@
             <tr>
                 <th style="width: 5%;">Cộng</th>
                 @foreach ($a_phucap as $pc)
-                    <th style="width: 5%;">{{ $pc }}</th>
+                    <th style="width: 5%;">{!! $pc !!}</th>
                 @endforeach
             </tr>
         </thead>

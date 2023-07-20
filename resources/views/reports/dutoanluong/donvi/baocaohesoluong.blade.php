@@ -47,7 +47,7 @@
             <tr style="padding-left: 2px;padding-right: 2px">
                 <th rowspan="2" style="width: 4%;">Tổng cộng</th>
                 @foreach ($a_plct as $plct)
-                    <th rowspan="2" style="width: 4%;">{{ $plct }}</th>
+                    <th rowspan="2" style="width: 4%;">{!! $plct !!}</th>
                 @endforeach
                 <th rowspan="2" style="width: 5%;">Tổng cộng</th>
                 <th rowspan="2" style="width: 5%;">Hệ số lương</th>

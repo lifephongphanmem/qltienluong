@@ -57,7 +57,7 @@
 
             <tr>
                 @foreach ($a_phucap as $pc)
-                    <th class="text-uppercase" style="width: 4%;">{{ $pc }}</th>
+                    <th class="text-uppercase" style="width: 4%;">{!! $pc !!}</th>
                 @endforeach
             </tr>
         </thead>
