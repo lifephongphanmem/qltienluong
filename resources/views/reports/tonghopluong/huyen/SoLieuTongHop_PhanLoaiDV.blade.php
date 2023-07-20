@@ -22,7 +22,12 @@
 
         <tr>
             <td colspan="2" style="text-align: center; font-weight: bold; font-size: 20px; text-transform: uppercase">
-                BẢNG TỔNG HỢP BIÊN CHẾ, HỆ SỐ TIỀN LƯƠNG VÀ PHỤ CẤP CÓ MẶT NĂM ĐẾN 01/07/{{ $inputs['nam'] - 1 }}
+                BẢNG TỔNG HỢP TIỀN LƯƠNG, PHỤ CẤP VÀ CÁC KHOẢN ĐÓNG GÓP THEO LƯƠNG CỦA ĐƠN VỊ
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2" style="text-align: center; font-style: italic; font-weight: bold; font-size: 12px;">
+                Tháng: {{$inputs['thang']}} năm {{$inputs['nam']}}
             </td>
         </tr>
 
@@ -38,16 +43,16 @@
             <tr class="text-center">
                 <th style="width: 2%;" rowspan="3">S</br>T</br>T</th>
                 <th rowspan="3">NÔI DUNG</th>
-                <th colspan="{{ $col + 5 }}">HỆ SỐ TIỀN LƯƠNG, PHỤ CẤP, TRỢ CẤP</th>
+                <th colspan="{{ $col + 5 }}">HỆ SỐ TIỀN LƯƠNG, PHỤ CẤP, TRỢ CẤP VÀ CÁC KHOẢN ĐÓNG GÓP</th>
 
-                <th style="width: 8%" rowspan="3">QUỸ LƯƠNG CẤP NĂM {{ $inputs['nam'] }}</th>
+                <th style="width: 8%" rowspan="3">TỔNG SỐ TIỀN</th>
             </tr>
 
             <tr style="padding-left: 2px;padding-right: 2px">
                 <th rowspan="2" style="width: 4%;">TỔNG CỘNG</th>
                 <th rowspan="2" style="width: 4%;">HỆ SỐ LƯƠNG</th>
                 <th rowspan="2" style="width: 4%;">TỔNG HỆ<br>SỐ CÁC<br>KHOẢN PHỤ<br>CẤP TRỢ<br>CẤP</th>
-                <th colspan="{{ $col }}">Trong đó</th>
+                <th colspan="{{ $col }}">TRONG ĐÓ</th>
                 <th rowspan="2" style="width: 4%;">BH THẤT<br>NGHIỆP</th>
                 <th rowspan="2" style="width: 4%;">CÁC KHOẢN<br>ĐÓNG GÓP<br>BHXH, BHYT,<br>KPCĐ</th>
             </tr>
@@ -63,7 +68,7 @@
             <td></td>
             <td>TỔNG CỘNG</td>
 
-            <td class="text-right">{{ dinhdangsothapphan($model->sum('tongcong'), $lamtron) }}</td>
+            <td class="text-right">{{ dinhdangsothapphan($model->sum('tonghs'), $lamtron) }}</td>
             <td class="text-right">{{ dinhdangsothapphan($model->sum('heso'), $lamtron) }}</td>
             <td class="text-right">{{ dinhdangsothapphan($model->sum('tongphucap'), $lamtron) }}</td>
             @foreach ($a_phucap as $key => $val)
@@ -85,7 +90,7 @@
                 <td>{{ convert2Roman($phanloai1->sapxep) }}</td>
                 <td>{{ $phanloai1->tenphanloai_nhom }}</td>
 
-                <td class="text-right">{{ dinhdangsothapphan($model_chitiet->sum('tongcong'), $lamtron) }}</td>
+                <td class="text-right">{{ dinhdangsothapphan($model_chitiet->sum('tonghs'), $lamtron) }}</td>
                 <td class="text-right">{{ dinhdangsothapphan($model_chitiet->sum('heso'), $lamtron) }}</td>
                 <td class="text-right">{{ dinhdangsothapphan($model_chitiet->sum('tongphucap'), $lamtron) }}</td>
                 @foreach ($a_phucap as $key => $val)
@@ -107,7 +112,7 @@
                             <td>{{ $donvi->tendv }}</td>
 
                             <td class="text-right">
-                                {{ dinhdangsothapphan($model_chitiet->sum('tongcong'), $lamtron) }}</td>
+                                {{ dinhdangsothapphan($model_chitiet->sum('tonghs'), $lamtron) }}</td>
                             <td class="text-right">
                                 {{ dinhdangsothapphan($model_chitiet->sum('heso'), $lamtron) }}</td>
                             <td class="text-right">
@@ -128,7 +133,7 @@
                                 <td>-</td>
                                 <td>{{ $chitiet->tenct }}</td>
 
-                                <td class="text-right">{{ dinhdangsothapphan($chitiet->tongcong, $lamtron) }}</td>
+                                <td class="text-right">{{ dinhdangsothapphan($chitiet->tonghs, $lamtron) }}</td>
                                 <td class="text-right">{{ dinhdangsothapphan($chitiet->heso, $lamtron) }}</td>
                                 <td class="text-right">{{ dinhdangsothapphan($chitiet->tongphucap, $lamtron) }}</td>
                                 @foreach ($a_phucap as $key => $val)
@@ -159,7 +164,7 @@
                     <td>{{ $phanloai2->sapxep }}</td>
                     <td>{{ $phanloai2->tenphanloai_nhom }}</td>
 
-                    <td class="text-right">{{ dinhdangsothapphan($model_chitiet->sum('tongcong'), $lamtron) }}</td>
+                    <td class="text-right">{{ dinhdangsothapphan($model_chitiet->sum('tonghs'), $lamtron) }}</td>
                     <td class="text-right">{{ dinhdangsothapphan($model_chitiet->sum('heso'), $lamtron) }}</td>
                     <td class="text-right">{{ dinhdangsothapphan($model_chitiet->sum('tongphucap'), $lamtron) }}</td>
                     @foreach ($a_phucap as $key => $val)
@@ -183,7 +188,7 @@
                                 <td>{{ $donvi->tendv }}</td>
 
                                 <td class="text-right">
-                                    {{ dinhdangsothapphan($model_chitiet->sum('tongcong'), $lamtron) }}</td>
+                                    {{ dinhdangsothapphan($model_chitiet->sum('tonghs'), $lamtron) }}</td>
                                 <td class="text-right">
                                     {{ dinhdangsothapphan($model_chitiet->sum('heso'), $lamtron) }}</td>
                                 <td class="text-right">
@@ -205,7 +210,7 @@
                                     <td>-</td>
                                     <td>{{ $chitiet->tenct }}</td>
 
-                                    <td class="text-right">{{ dinhdangsothapphan($chitiet->tongcong, $lamtron) }}</td>
+                                    <td class="text-right">{{ dinhdangsothapphan($chitiet->tonghs, $lamtron) }}</td>
                                     <td class="text-right">{{ dinhdangsothapphan($chitiet->heso, $lamtron) }}</td>
                                     <td class="text-right">{{ dinhdangsothapphan($chitiet->tongphucap, $lamtron) }}
                                     </td>
@@ -243,7 +248,7 @@
                         </td>
                         <td>{{ $phanloai3->tenphanloai_nhom }}</td>
 
-                        <td class="text-right">{{ dinhdangsothapphan($model_chitiet->sum('tongcong'), $lamtron) }}</td>
+                        <td class="text-right">{{ dinhdangsothapphan($model_chitiet->sum('tonghs'), $lamtron) }}</td>
                         <td class="text-right">{{ dinhdangsothapphan($model_chitiet->sum('heso'), $lamtron) }}</td>
                         <td class="text-right">{{ dinhdangsothapphan($model_chitiet->sum('tongphucap'), $lamtron) }}
                         </td>
@@ -270,7 +275,7 @@
                                         <td>-</td>
                                         <td>{{ $chitiet->tenct }}</td>
 
-                                        <td class="text-right">{{ dinhdangsothapphan($chitiet->tongcong, $lamtron) }}
+                                        <td class="text-right">{{ dinhdangsothapphan($chitiet->tonghs, $lamtron) }}
                                         </td>
                                         <td class="text-right">{{ dinhdangsothapphan($chitiet->heso, $lamtron) }}</td>
                                         <td class="text-right">{{ dinhdangsothapphan($chitiet->tongphucap, $lamtron) }}
@@ -315,7 +320,7 @@
                                         <td>{{ $donvi->tendv }}</td>
 
                                         <td class="text-right">
-                                            {{ dinhdangsothapphan($model_chitiet->sum('tongcong'), $lamtron) }}</td>
+                                            {{ dinhdangsothapphan($model_chitiet->sum('tonghs'), $lamtron) }}</td>
                                         <td class="text-right">
                                             {{ dinhdangsothapphan($model_chitiet->sum('heso'), $lamtron) }}</td>
                                         <td class="text-right">
@@ -339,7 +344,7 @@
 
 
                                             <td class="text-right">
-                                                {{ dinhdangsothapphan($chitiet->tongcong, $lamtron) }}</td>
+                                                {{ dinhdangsothapphan($chitiet->tonghs, $lamtron) }}</td>
                                             <td class="text-right">{{ dinhdangsothapphan($chitiet->heso, $lamtron) }}
                                             </td>
                                             <td class="text-right">

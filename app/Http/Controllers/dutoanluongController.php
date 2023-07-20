@@ -82,19 +82,20 @@ class dutoanluongController extends Controller
             }
             $m_bl_ct = (new dataController())->getBangluong_ct($m_bl->thang, $m_bl->mabl);
             $m_bl_ct1 = (new dataController())->getBangluong_ct($m_bl1->thang ?? 'null', $m_bl1->mabl ?? 'null');
-            $a_plct_bl = array_unique(array_column($m_bl_ct->toarray(), 'mact'));
+
             if ($m_bl_ct1 != null) {
                 //kiểm tra cán bộ đã có trong bảng lương => tự động xóa trong bảng lương 1
-                $a_canbo = array_column($m_bl_ct->toarray(), 'macanbo');
+                //$a_canbo = array_column($m_bl_ct->toarray(), 'macanbo');
                 foreach ($m_bl_ct1 as $key => $val) {
-                    if (in_array($val->macanbo, $a_canbo)) {
-                        $m_bl_ct1->pull($key);
+                    $canbo = $m_bl_ct->where('macanbo', $val->macanbo)->where('mact', $val->mact)->where('macvcq', $val->macvcq);
+                    if ($canbo->count() == 0) {
+                        $m_bl_ct->add($val);
                     }
                 }
-                $a_plct_bl = array_unique(array_merge($a_plct_bl, array_column($m_bl_ct1->toarray(), 'mact')));
             }
 
-
+            //dd($m_bl_ct);
+            $a_plct_bl = array_unique(array_column($m_bl_ct->toarray(), 'mact'));
             //xóa các chỉ tiêu cũ do có thể có 1 số plct thừa
             chitieubienche::where('madv', session('admin')->madv)->where('nam', $inputs['namns'])->delete();
             $a_plct = getPLCTDuToan();
@@ -205,7 +206,7 @@ class dutoanluongController extends Controller
     {
         if (Session::has('admin')) {
             $inputs = $request->all();
-            // dd($inputs);
+            //dd($inputs);
             if (dutoanluong::where('namns', $inputs['namns'])->where('madv', session('admin')->madv)->count() > 0) {
                 return view('errors.data_error')
                     ->with('message', 'Dự toán năm ' . $inputs['namdt'] . ' đã tồn tại.')
@@ -238,17 +239,20 @@ class dutoanluongController extends Controller
             $a_pc = getColDuToan();
 
             //thêm cán bộ chưa có từ $m_bl1 (phụ) vào $m_bl (chính)
-
+            //dd($m_bl_ct);
             if ($m_bl_ct1 != null) {
-                $a_canbo = array_column($m_bl_ct->toarray(), 'macanbo');
+                $i = 1;
                 foreach ($m_bl_ct1 as $key => $val) {
-                    if (!in_array($val->macanbo, $a_canbo)) {
+                    $canbo = $m_bl_ct->where('macanbo', $val->macanbo)->where('mact', $val->mact)->where('macvcq', $val->macvcq);
+                    if ($canbo->count() == 0) {
+                        $val->macanbo = $val->macanbo . '_' . $i++;
                         $m_bl_ct->add($val);
                     }
-                }
+                }                
             }
 
             //dd($m_bl_ct);
+
             foreach ($m_bl_ct as $key => $value) {
                 if (!in_array($value->mact, $a_plct)) {
                     $m_bl_ct->pull($key);
@@ -257,6 +261,27 @@ class dutoanluongController extends Controller
                     foreach ($a_pc as $pc) {
                         $tenpc_st = 'st_' . $pc;
                         $value->$pc = round($value->$tenpc_st / $value->luongcoban, 10);
+                    }
+
+                    if (in_array($value->congtac, ['DAINGAY', 'THAISAN', 'KHONGLUONG'])) {
+                        //cán bộ nghỉ thì tính lại ô st_ do khi tính lương ô st_ gán bằng 0
+                        //sau đó gán vào phần giảm trừ
+
+                        // foreach ($a_pc as $mapc) {
+                        //     $mapc_st = 'st_' . $mapc;
+                        //     $tonghs += $a_ct[$i][$mapc];
+                        //     if ($a_ct[$i][$mapc] > 0 && $a_ct[$i][$mapc_st] == 0) {
+                        //         if ($a_ct[$i][$mapc] < 1000) {
+                        //             $a_ct[$i][$mapc_st] = round($a_ct[$i][$mapc] * $a_ct[$i]['luongcoban']);
+                        //         } else {
+                        //             $a_ct[$i][$mapc_st] = $a_ct[$i][$mapc];
+                        //         }
+                        //         $a_ct[$i]['giaml'] += $a_ct[$i][$mapc_st];
+                        //     }
+                        //     $tongst += $a_ct[$i][$mapc_st];
+                        // }
+
+                        //dd($value);
                     }
                 }
             }
@@ -497,7 +522,7 @@ class dutoanluongController extends Controller
             $inputs['sothonxakhac_heso'] = chkDbl($inputs['sothonxakhac_heso']);
             $inputs['sothonxaloai1_heso'] = chkDbl($inputs['sothonxaloai1_heso']);
             $inputs['phanloaixa_heso'] = chkDbl($inputs['phanloaixa_heso']);
-             //dd($a_data);
+            //dd($a_data);
             foreach (array_chunk($a_data, 50) as $data) {
                 dutoanluong_bangluong::insert($data);
             }

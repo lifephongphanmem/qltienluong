@@ -45,19 +45,39 @@ class tonghopluong_huyen_baocaoController extends Controller
             $a_pl_donvi = array_column($m_donvi_baocao->toarray(), 'maphanloai', 'madv');
             $model = tonghopluong_donvi_chitiet::wherein('mathdv', array_column($model_tonghop->toarray(), 'mathdv'))->get();
             $a_plct = array_column(dmphanloaict::all()->toArray(), 'tenct', 'mact');
-            $a_pc = getColDuToan();
+            $a_pc = getColTongHop();
+            //$a_luongcb = array_column($model_tonghop->toarray(),'luongcoban','mathdv');
+            //Cho các trường hợp phụ cấp theo số tiền lấy theo lương cơ bản (đơn vi nào cá biệt pải tổng hợp lại chi trả lương)
+            $ngayketxuat = Carbon::create($inputs['nam'], $inputs['thang'], 01)->toDateString();
+            $luongcb = 1800000;
+            if ($ngayketxuat < '2023-07-01' && $ngayketxuat > '2019-07-01') {
+                $luongcb = 1490000;
+            } else
+                $luongcb = 1390000;
 
+            //dd($luongcb);
             foreach ($model as $chitiet) {
                 $chitiet->madv = $a_donvi[$chitiet->mathdv];
                 $chitiet->maphanloai = $a_pl_donvi[$chitiet->madv];
-                foreach ($a_pc as $pc) {
-                    $chitiet->$pc = $chitiet->$pc / 12;
-                }
                 $chitiet->tenct = $a_plct[$chitiet->mact] ?? '';
-                $chitiet->luongthang = ($chitiet->ttl / 12) / $inputs['donvitinh'];
-                $chitiet->baohiem = ($chitiet->ttbh_dv / 12) / $inputs['donvitinh'];
-                $chitiet->tongcong = ($chitiet->luongthang + $chitiet->baohiem) / $inputs['donvitinh'];
-                $chitiet->quyluong = ($chitiet->ttl + $chitiet->ttbh_dv) / $inputs['donvitinh'];
+                $chitiet->luongcoban = $luongcb;
+                foreach ($a_pc as $pc) {
+                    if ($chitiet->$pc > 10000) {
+                        //dd($chitiet);
+                        $chitiet->$pc = round($chitiet->$pc / $chitiet->luongcoban, 5);
+                        $chitiet->tonghs += $chitiet->$pc;
+                    }
+                }
+
+                $chitiet->bhtn_dv = round($chitiet->stbhtn_dv / $chitiet->luongcoban, 5);
+                $chitiet->baohiem = round(($chitiet->ttbh_dv - $chitiet->stbhtn_dv) / $chitiet->luongcoban, 5);
+
+                $chitiet->quyluong = $chitiet->ttl + $chitiet->ttbh_dv;
+                $chitiet->tongphucap = $chitiet->tonghs - $chitiet->heso;
+                // $chitiet->luongthang = ($chitiet->ttl / 12) / $inputs['donvitinh'];
+                // $chitiet->baohiem = ($chitiet->ttbh_dv / 12) / $inputs['donvitinh'];
+                //$chitiet->tongcong = ($chitiet->luongthang + $chitiet->baohiem) / $inputs['donvitinh'];
+                // $chitiet->quyluong = ($chitiet->ttl + $chitiet->ttbh_dv) / $inputs['donvitinh'];
                 $this->getMaNhomPhanLoai($chitiet, $m_phanloai);
             }
 

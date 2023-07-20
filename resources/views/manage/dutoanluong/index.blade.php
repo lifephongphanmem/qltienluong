@@ -475,7 +475,7 @@
         }
 
         function disable_btn(obj) {
-            obj.prop('disabled', true);
+            // obj.prop('disabled', true);
         }
         function getKinhPhiKoCT(masodv, phanloaixa, phanloaixa_heso, sothonxabiengioi,
             sothonxabiengioi_heso, sothonxakhokhan, sothonxakhokhan_heso, sothonxatrongdiem,
