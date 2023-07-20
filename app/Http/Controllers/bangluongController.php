@@ -410,7 +410,7 @@ class bangluongController extends Controller
         $m_dmng = nguonkinhphi_dinhmuc::where('madv', session('admin')->madv)->where('manguonkp', $inputs['manguonkp'])->get();
         $m_dmng_ct = nguonkinhphi_dinhmuc_ct::wherein('maso', array_column($m_dmng->toarray(), 'maso'))
             ->wherenotin('mapc', explode(',', $inputs['phucaploaitru']))->get();
-        //dd($m_dmng_ct);
+        //dd($m_dmng);
         //phân loại công tác nào ko có trong định mức => gán lương cơ bản = 0
         $a_nkp_dm = array();
         $a_nkp_tinhtheodm = array();
@@ -433,6 +433,7 @@ class bangluongController extends Controller
                 $a_nkp_tinhtheodm[$ct] = $tinhtheodm;
             }
         }
+        //dd($a_nkp_dm);
         dinhmucnguon:
         $a_ts = array_column($model_phucap->where('thaisan', 1)->toarray(), 'mapc');
         $a_no = array_column($model_phucap->where('nghiom', 1)->toarray(), 'mapc');
@@ -809,6 +810,7 @@ class bangluongController extends Controller
         }
         //Tính toán lương cho cán bộ kiêm nhiệm
         //$m_donvi = dmdonvi::where('madv',$madv)->first();
+        //dd($a_nkp_dm);
         foreach ($model_canbo_kn as $cb) {
             $a_nguon = explode(',', $cb->manguonkp);
             //nếu cán bộ ko set nguồn (null, '') hoặc trong nguồn thì sét luôn =  ma nguồn để tạo bang lương
@@ -868,6 +870,7 @@ class bangluongController extends Controller
             //lương cơ bản gán theo loại phụ cấp => tính tiền luôn
             foreach ($model_phucap as $pc) {
                 $mapc = $pc->mapc;
+                $pc->luongcoban = $a_nkp_dm[$cb->mact][$mapc] ?? 0; //Nếu phân loại công tác ko có thì gán lương cơ bản = 0;
                 $mapc_st = 'st_' . $pc->mapc;
                 if ($cb->$mapc <= 0) {
                     continue;
@@ -878,13 +881,14 @@ class bangluongController extends Controller
                 switch ($pl) {
                     case 0: { //hệ số
                             $ths += $cb->$mapc;
-                            $cb->$mapc_st = round($cb->$mapc * $inputs['luongcoban'], 0);
+                            $cb->$mapc_st = round($cb->$mapc * $pc->luongcoban, 0);
                             $tt += $cb->$mapc_st;
                             break;
                         }
                     case 1: { //số tiền
-                            $tt += chkDbl($cb->$mapc);
-                            $cb->$mapc_st = chkDbl($cb->$mapc);
+                            $cb->$mapc = $a_nkp_tinhtheodm[$cb->mact][$mapc] ? $pc->luongcoban : chkDbl($cb->$mapc);
+                            $cb->$mapc_st = $cb->$mapc;
+                            $tt += chkDbl($cb->$mapc_st);
                             break;
                         }
                     case 2: { //phần trăm
@@ -896,11 +900,10 @@ class bangluongController extends Controller
                                             $heso += $canbo->$cthuc;
                                     }
                                 }
-                                //công thức hệ số (lấy thêm hệ số phụ cấp do cán bộ không chuyên trách nhập hệ số vào hesopc)
-                                $heso += $canbo->hesopc;
+
                                 $cb->$mapc = round($heso * $cb->$mapc / 100, session('admin')->lamtron);
                                 $ths += $cb->$mapc;
-                                $cb->$mapc_st = round($cb->$mapc * $inputs['luongcoban'], 0);
+                                $cb->$mapc_st = round($cb->$mapc * $pc->luongcoban, 0);
                                 $tt += $cb->$mapc_st;
                             }
                             break;
@@ -911,17 +914,7 @@ class bangluongController extends Controller
                         }
                 }
             }
-            //ko tính % trong công thức duyệt phụ cấp vì khi tính % sẽ sai
-            if ($cb->phanloai == 'CHUCVU') {
-                $cb->heso = round($cb->heso * $cb->pthuong / 100, session('admin')->lamtron);
-                $cb->st_heso = round($cb->st_heso * $cb->pthuong / 100, 0);
-                $cb->vuotkhung = round($cb->vuotkhung * $cb->pthuong / 100, session('admin')->lamtron);
-                $cb->st_vuotkhung = round($cb->st_vuotkhung * $cb->pthuong / 100, 0);
-                $ths = round($ths * $cb->pthuong / 100, session('admin')->lamtron);
-                $tt = round($tt * $cb->pthuong / 100, 0);
-            }
 
-           
             $cb->tonghs = $ths;
             $cb->ttl = $tt;
             $cb->ttbh = $cb->ttbh_dv = 0;
@@ -954,7 +947,7 @@ class bangluongController extends Controller
             $a_k = $cb->toarray();
             unset($a_k['id']);
             unset($a_k['phanloai']);
-            //bangluong_ct::create($a_k);
+
             (new data())->createBangLuong($inputs['thang'], $a_k);
         }
     }
