@@ -86,9 +86,9 @@
                                             <td>
                                                 <button type="button" title="In số liệu"
                                                     onclick="indutoan('{{ $value['thang'] }}', '{{ $inputs['nam'] }}','{{ session('admin')->madv }}')"
-                                                    class="btn btn-default btn-sm mbs" data-target="#indt-modal"
+                                                    class="btn btn-default btn-sm" data-target="#indt-modal"
                                                     data-toggle="modal">
-                                                    <i class="fa fa-print"></i>
+                                                    <i class="fa fa-print"> In số liệu</i>
                                                 </button>
 
                                                 @if ($value['mathdv'] != null)
@@ -97,7 +97,7 @@
                                                         class="btn btn-default btn-sm" TARGET="_blank">
                                                         <i class="fa fa-print"></i>&nbsp; Số liệu tổng hợp</a>
                                                     <!--a href="{{ url($inputs['furl'] . 'tonghop_diaban?thang=' . $value['thang'] . '&nam=' . $inputs['nam']) }}" class="btn btn-default btn-xs" target="_blank">
-                                                                                                                            <i class="fa fa-print"></i>&nbsp; Số liệu địa bàn</a-->
+                                                                                                                                <i class="fa fa-print"></i>&nbsp; Số liệu địa bàn</a-->
                                                     <a href="{{ url('/chuc_nang/xem_du_lieu/huyen?thang=' . $value['thang'] . '&nam=' . $inputs['nam'] . '&trangthai=ALL&phanloai=ALL') }}"
                                                         class="btn btn-default btn-xs">
                                                         <i class="fa fa-list-alt"></i>&nbsp; Số liệu chi tiết</a>
@@ -107,22 +107,18 @@
                                                             <a href="{{ url('/chuc_nang/xem_du_lieu/huyen?thang=' . $value['thang'] . '&nam=' . $inputs['nam'] . '&trangthai=ALL&phanloai=ALL') }}"
                                                                 class="btn btn-default btn-xs">
                                                                 <i class="fa fa-list-alt"></i>&nbsp; Số liệu chi tiết</a>
-                                                            <button type="button" class="btn btn-default btn-xs"
+                                                            <button type="button" class="btn btn-default btn-sm"
                                                                 onclick="confirmChuyen('{{ $value['thang'] }}','{{ $inputs['nam'] }}')"
                                                                 data-target="#chuyen-modal" data-toggle="modal"><i
                                                                     class="fa fa-share-square-o"></i>&nbsp;
                                                                 Gửi dữ liệu</button>
                                                         @else
-                                                            <button type="button" class="btn btn-default btn-xs"
-                                                                onclick="confirmChuyen('{{ $value['thang'] }}','{{ $inputs['nam'] }}')"
-                                                                data-target="#chuyen-modal" data-toggle="modal"><i
-                                                                    class="fa fa-share-square-o"></i>&nbsp;
-                                                                Gửi dữ liệu</button>
                                                             <a href="{{ url('/chuc_nang/xem_du_lieu/huyen?thang=' . $value['thang'] . '&nam=' . $inputs['nam'] . '&trangthai=CHOGUI&phanloai=ALL') }}"
-                                                                class="btn btn-default btn-xs">
+                                                                class="btn btn-default btn-sm">
                                                                 <i class="fa fa-list-alt"></i>&nbsp; Đơn vị chưa gửi dữ
                                                                 liệu</a>
                                                         @endif
+
                                                         @if ($value['trangthai'] == 'TRALAI')
                                                             <button type="button" class="btn btn-default btn-sm"
                                                                 onclick="getLyDo('{{ $value['madvbc'] }}','{{ $value['thang'] }}','{{ $inputs['nam'] }}')"
@@ -132,7 +128,7 @@
                                                         @endif
                                                     @else
                                                         <a href="{{ url('/chuc_nang/xem_du_lieu/huyen?thang=' . $value['thang'] . '&nam=' . $inputs['nam'] . '&trangthai=ALL&phanloai=ALL') }}"
-                                                            class="btn btn-default btn-xs">
+                                                            class="btn btn-default btn-sm">
                                                             <i class="fa fa-stack-overflow"></i>&nbsp; Chưa có dữ liệu</a>
                                                     @endif
                                                 @endif

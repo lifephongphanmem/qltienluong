@@ -217,7 +217,7 @@ class tonghopluong_huyenController extends Controller
                 array('thang' => '10', 'mathdv' => null, 'noidung' => null, 'sldv' => $this->laySoLuongDV('10', $inputs['nam'], $a_donvicapduoi, $model_donvitamdung), 'dvgui' => 0),
                 array('thang' => '11', 'mathdv' => null, 'noidung' => null, 'sldv' => $this->laySoLuongDV('11', $inputs['nam'], $a_donvicapduoi, $model_donvitamdung), 'dvgui' => 0),
                 array('thang' => '12', 'mathdv' => null, 'noidung' => null, 'sldv' => $this->laySoLuongDV('12', $inputs['nam'], $a_donvicapduoi, $model_donvitamdung), 'dvgui' => 0),
-                array('thang' => '', 'mathdv' => null, 'noidung' => null, 'sldv' => '', 'dvgui' => 0)
+                // array('thang' => '', 'mathdv' => null, 'noidung' => null, 'sldv' => '', 'dvgui' => 0)
             );
 
             if (session('admin')->phamvitonghop == 'HUYEN')
