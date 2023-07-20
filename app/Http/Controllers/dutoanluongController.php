@@ -108,7 +108,7 @@ class dutoanluongController extends Controller
                 $chitieu->mact = $plct;
                 $chitieu->madv = session('admin')->madv;
                 $chitieu->nam = $inputs['namns'];
-                $chitieu->soluongduocgiao = $m_bl_ct->where('mact', $plct)->count() + ($m_bl_ct1 != null ? $m_bl_ct1->where('mact', $plct)->count() : 0);
+                $chitieu->soluongduocgiao = $m_bl_ct->where('mact', $plct)->count();
                 $chitieu->soluongbienche = $chitieu->soluongduocgiao;
                 $chitieu->soluongtuyenthem = 0;
                 $chitieu->mact_tuyenthem = session('admin')->mact_tuyenthem;
