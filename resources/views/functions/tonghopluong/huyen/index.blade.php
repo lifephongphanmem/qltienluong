@@ -97,7 +97,7 @@
                                                         class="btn btn-default btn-sm" TARGET="_blank">
                                                         <i class="fa fa-print"></i>&nbsp; Số liệu tổng hợp</a>
                                                     <!--a href="{{ url($inputs['furl'] . 'tonghop_diaban?thang=' . $value['thang'] . '&nam=' . $inputs['nam']) }}" class="btn btn-default btn-xs" target="_blank">
-                                                                                                                                <i class="fa fa-print"></i>&nbsp; Số liệu địa bàn</a-->
+                                                                                                                                    <i class="fa fa-print"></i>&nbsp; Số liệu địa bàn</a-->
                                                     <a href="{{ url('/chuc_nang/xem_du_lieu/huyen?thang=' . $value['thang'] . '&nam=' . $inputs['nam'] . '&trangthai=ALL&phanloai=ALL') }}"
                                                         class="btn btn-default btn-xs">
                                                         <i class="fa fa-list-alt"></i>&nbsp; Số liệu chi tiết</a>
@@ -113,6 +113,11 @@
                                                                     class="fa fa-share-square-o"></i>&nbsp;
                                                                 Gửi dữ liệu</button>
                                                         @else
+                                                            <button type="button" class="btn btn-default btn-sm" disabled
+                                                                onclick="confirmChuyen('{{ $value['thang'] }}','{{ $inputs['nam'] }}')"
+                                                                data-target="#chuyen-modal" data-toggle="modal"><i
+                                                                    class="fa fa-share-square-o"></i>&nbsp;
+                                                                Gửi dữ liệu</button>
                                                             <a href="{{ url('/chuc_nang/xem_du_lieu/huyen?thang=' . $value['thang'] . '&nam=' . $inputs['nam'] . '&trangthai=CHOGUI&phanloai=ALL') }}"
                                                                 class="btn btn-default btn-sm">
                                                                 <i class="fa fa-list-alt"></i>&nbsp; Đơn vị chưa gửi dữ

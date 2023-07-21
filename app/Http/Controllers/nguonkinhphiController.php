@@ -1477,6 +1477,22 @@ class nguonkinhphiController extends Controller
                 $stbhtn_dv += round($m_cb['bhtn_dv'] * $m_cb[$mapc] * $luongcb, 0);
             }
         }
+
+        if ($m_cb['pthuong'] < 100) {
+            $m_cb['tonghs'] = 0;
+            //$tien = 0;
+            for ($i = 0; $i < count($a_pc); $i++) {
+                $mapc = $a_pc[$i]['mapc'];
+                $mapc_st = 'st_' . $mapc;
+
+                $m_cb[$mapc] = round($m_cb[$mapc] * $m_cb['pthuong'] / 100, session('admin')->lamtron);
+                $m_cb[$mapc_st] = round($m_cb[$mapc_st] * $m_cb['pthuong'] / 100, 0);
+
+                $m_cb['tonghs'] += $m_cb[$mapc];
+                //$tien += $m_cb[$mapc_st];
+            }            
+        }
+
         $m_cb['luongtn'] = round($m_cb['tonghs'] * $luongcb);
         //trường hợp đặc biêt mức lương khoán 
         if ($m_cb['mucluongbaohiem'] > 0) {

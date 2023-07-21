@@ -140,7 +140,7 @@
                                                 <div class="col-md-3">
                                                     <div class="form-group">
                                                         <label class="control-label">Mức khoán quỹ phụ cấp </label>
-                                                        {!! Form::text('phanloaixa_heso', 16, ['class' => 'form-control text-right', 'data-mask' => 'fdecimal']) !!}
+                                                        {!! Form::text('phanloaixa_heso', 21, ['class' => 'form-control text-right', 'data-mask' => 'fdecimal']) !!}
                                                     </div>
                                                 </div>
                                             </div>
@@ -153,7 +153,7 @@
                                                 <div class="col-md-3">
                                                     <div class="form-group">
                                                         <label class="control-label">Mức khoán quỹ phụ cấp </label>
-                                                        {!! Form::text('sothonxabiengioi_heso', 5, ['class' => 'form-control text-right', 'data-mask' => 'fdecimal']) !!}
+                                                        {!! Form::text('sothonxabiengioi_heso', 6, ['class' => 'form-control text-right', 'data-mask' => 'fdecimal']) !!}
                                                     </div>
                                                 </div>
                                             </div>
@@ -167,7 +167,7 @@
                                                 <div class="col-md-3">
                                                     <div class="form-group">
                                                         <label class="control-label">Mức khoán quỹ phụ cấp </label>
-                                                        {!! Form::text('sothonxakhokhan_heso', 5, ['class' => 'form-control text-right', 'data-mask' => 'fdecimal']) !!}
+                                                        {!! Form::text('sothonxakhokhan_heso', 6, ['class' => 'form-control text-right', 'data-mask' => 'fdecimal']) !!}
                                                     </div>
                                                 </div>
                                             </div>
@@ -180,7 +180,7 @@
                                                 <div class="col-md-3">
                                                     <div class="form-group">
                                                         <label class="control-label">Mức khoán quỹ phụ cấp </label>
-                                                        {!! Form::text('sothonxaloai1_heso', 5, ['class' => 'form-control text-right', 'data-mask' => 'fdecimal']) !!}
+                                                        {!! Form::text('sothonxaloai1_heso', 6, ['class' => 'form-control text-right', 'data-mask' => 'fdecimal']) !!}
                                                     </div>
                                                 </div>
                                             </div>
@@ -194,7 +194,7 @@
                                                 <div class="col-md-3">
                                                     <div class="form-group">
                                                         <label class="control-label">Mức khoán quỹ phụ cấp </label>
-                                                        {!! Form::text('sothonxatrongdiem_heso', 0.5, ['class' => 'form-control text-right', 'data-mask' => 'fdecimal']) !!}
+                                                        {!! Form::text('sothonxatrongdiem_heso', 6, ['class' => 'form-control text-right', 'data-mask' => 'fdecimal']) !!}
                                                     </div>
                                                 </div>
                                             </div>
@@ -207,7 +207,7 @@
                                                 <div class="col-md-3">
                                                     <div class="form-group">
                                                         <label class="control-label">Mức khoán quỹ phụ cấp </label>
-                                                        {!! Form::text('sothonxakhac_heso', 3, ['class' => 'form-control text-right', 'data-mask' => 'fdecimal']) !!}
+                                                        {!! Form::text('sothonxakhac_heso', 4.5, ['class' => 'form-control text-right', 'data-mask' => 'fdecimal']) !!}
                                                     </div>
                                                 </div>
                                             </div>
@@ -218,20 +218,20 @@
                             </div>
                         @else
                             {!! Form::hidden('phanloaixa', session('admin')->phanloaixa, ['class' => 'form-control']) !!}
-                            {!! Form::hidden('phanloaixa_heso', 16, ['class' => 'form-control text-right', 'data-mask' => 'fdecimal']) !!}
+                            {!! Form::hidden('phanloaixa_heso', 21, ['class' => 'form-control text-right', 'data-mask' => 'fdecimal']) !!}
                             {!! Form::hidden('sothonxabiengioi', 0, ['class' => 'form-control']) !!}
-                            {!! Form::hidden('sothonxabiengioi_heso', 5, ['class' => 'form-control text-right', 'data-mask' => 'fdecimal']) !!}
+                            {!! Form::hidden('sothonxabiengioi_heso', 6, ['class' => 'form-control text-right', 'data-mask' => 'fdecimal']) !!}
                             {!! Form::hidden('sothonxakhokhan', 0, ['class' => 'form-control']) !!}
-                            {!! Form::hidden('sothonxakhokhan_heso', 5, ['class' => 'form-control text-right', 'data-mask' => 'fdecimal']) !!}
+                            {!! Form::hidden('sothonxakhokhan_heso', 6, ['class' => 'form-control text-right', 'data-mask' => 'fdecimal']) !!}
                             {!! Form::hidden('sothonxaloai1', 0, ['class' => 'form-control']) !!}
-                            {!! Form::hidden('sothonxaloai1_heso', 5, ['class' => 'form-control text-right', 'data-mask' => 'fdecimal']) !!}
+                            {!! Form::hidden('sothonxaloai1_heso', 6, ['class' => 'form-control text-right', 'data-mask' => 'fdecimal']) !!}
                             {!! Form::hidden('sothonxatrongdiem', 0, ['class' => 'form-control']) !!}
-                            {!! Form::hidden('sothonxatrongdiem_heso', 0.5, [
+                            {!! Form::hidden('sothonxatrongdiem_heso', 6, [
                                 'class' => 'form-control text-right',
                                 'data-mask' => 'fdecimal',
                             ]) !!}
                             {!! Form::hidden('sothonxakhac', 0, ['class' => 'form-control']) !!}
-                            {!! Form::hidden('sothonxakhac_heso', 3, ['class' => 'form-control text-right', 'data-mask' => 'fdecimal']) !!}
+                            {!! Form::hidden('sothonxakhac_heso', 4.5, ['class' => 'form-control text-right', 'data-mask' => 'fdecimal']) !!}
                         @endif
 
                         <div class="row">
