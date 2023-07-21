@@ -132,6 +132,11 @@
 <script>
     function add_kiemnhiem() {
         $('#id_chvu').val(0);
+        Array.from(document.getElementsByClassName("phucap_kn")).forEach(
+            function(element) {
+                element.value = 0;
+            }
+        );
         $('#chvu-modal').modal('show');
     }
 

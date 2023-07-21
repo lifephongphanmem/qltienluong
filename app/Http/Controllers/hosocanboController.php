@@ -103,7 +103,7 @@ class hosocanboController extends Controller
                 ->with('model_tenct', $model_tenct)
                 ->with('m_plnb', $m_plnb)
                 ->with('m_pln', $m_pln)
-                ->with('furl_kn', '/nghiep_vu/ho_so/temp/')
+                ->with('furl_kn', '/nghiep_vu/ho_so/')
                 ->with('a_heso', array('heso', 'vuotkhung', 'luonghd', 'hesott'))
                 ->with('a_pc_bh', $model_pc_bh)
                 ->with('model_pc', $model_pc)
@@ -408,7 +408,6 @@ class hosocanboController extends Controller
         if ($model != null) {
             $model->update($inputs);
         } else {
-
             hosocanbo_kiemnhiem::create($inputs);
         }
         $model = hosocanbo_kiemnhiem::where('macanbo', $inputs['macanbo'])->get();
