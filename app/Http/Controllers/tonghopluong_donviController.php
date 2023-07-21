@@ -58,7 +58,7 @@ class tonghopluong_donviController extends Controller
             $a_trangthai = getStatus();
             $inputs = $requests->all();
             $model = tonghopluong_donvi::where('madv', session('admin')->madv)->where('nam', $inputs['nam'])->get();
-            $model_tinh = tonghopluong_tinh::where('nam', $inputs['nam'])->where('trangthai','DAGUI')->where('madvbc', session('admin')->madvbc)->get();
+            $model_tinh = tonghopluong_tinh::where('nam', $inputs['nam'])->where('trangthai', 'DAGUI')->where('madvbc', session('admin')->madvbc)->get();
             // dd($model);
             // $model_huyen=tonghopluong_huyen::where()->get();
             $model_bangluong = bangluong::where('madv', session('admin')->madv)->where('nam', $inputs['nam'])->get();
@@ -131,18 +131,6 @@ class tonghopluong_donviController extends Controller
 
     function tonghop(Request $requests)
     {
-        //        foreach($model as $cb){
-        //            $cb->ttl_tn = $cb->ttl;
-        //            $cb->ttl = $cb->ttl - $cb->giaml;
-        //            if($cb->congtac == 'DAINGAY' || $cb->congtac == 'THAISAN' || $cb->congtac == 'KHONGLUONG'){
-        //                $cb->tonghs = 0;
-        //                foreach($a_phucap as $k=>$v) {
-        //                    $cb->tonghs += $cb->$k;
-        //                }
-        //                $cb->ttl_tn = round($cb->tonghs * $luongcb, 0);
-        //                $cb->giaml = $cb->ttl_tn - $cb->ttl;//in mức giảm lương
-        //            }
-        //        }
         if (Session::has('admin')) {
             $inputs = $requests->all();
             //dd($inputs);
@@ -576,7 +564,7 @@ class tonghopluong_donviController extends Controller
                 //khi trả  lại tonghophuyen set mathh = null =>tìm theo mã + thang + năm tổng hợp
                 $model_huyen = tonghopluong_huyen::where('thang', $model->thang)->where('nam', $model->nam)
                     ->where('madv', $model->madv)->first();
-                    // dd($model_huyen);
+                // dd($model_huyen);
                 if ($model_huyen == null) {
                     $masoh = getdate()[0];
                     $model->mathh = $masoh;

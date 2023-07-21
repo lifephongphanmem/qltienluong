@@ -49,31 +49,34 @@ class tonghopluong_huyen_baocaoController extends Controller
             //$a_luongcb = array_column($model_tonghop->toarray(),'luongcoban','mathdv');
             //Cho các trường hợp phụ cấp theo số tiền lấy theo lương cơ bản (đơn vi nào cá biệt pải tổng hợp lại chi trả lương)
             $ngayketxuat = Carbon::create($inputs['nam'], $inputs['thang'], 01)->toDateString();
-            $luongcb = 1800000;
+            $luongcb = 1390000;
             if ($ngayketxuat < '2023-07-01' && $ngayketxuat > '2019-07-01') {
                 $luongcb = 1490000;
             } else
-                $luongcb = 1390000;
+                $luongcb = 1800000;
 
-            //dd($luongcb);
+            //dd($ngayketxuat);
             foreach ($model as $chitiet) {
                 $chitiet->madv = $a_donvi[$chitiet->mathdv];
                 $chitiet->maphanloai = $a_pl_donvi[$chitiet->madv];
                 $chitiet->tenct = $a_plct[$chitiet->mact] ?? '';
                 $chitiet->luongcoban = $luongcb;
+                $chitiet->ttl = 0; //do trong bảng tonghopluong_donvi_chitiet khong có ttl
                 foreach ($a_pc as $pc) {
                     if ($chitiet->$pc > 10000) {
                         //dd($chitiet);
-                        $chitiet->$pc = round($chitiet->$pc / $chitiet->luongcoban, 5);
+                        $chitiet->$pc = round($chitiet->$pc / $chitiet->luongcoban, 7);
                         $chitiet->tonghs += $chitiet->$pc;
                     }
                 }
-
-                $chitiet->bhtn_dv = round($chitiet->stbhtn_dv / $chitiet->luongcoban, 5);
-                $chitiet->baohiem = round(($chitiet->ttbh_dv - $chitiet->stbhtn_dv) / $chitiet->luongcoban, 5);
+                $chitiet->ttl = $chitiet->luongtn;
+                $chitiet->bhtn_dv = round($chitiet->stbhtn_dv / $chitiet->luongcoban, 7);
+                $chitiet->baohiem = round(($chitiet->ttbh_dv - $chitiet->stbhtn_dv) / $chitiet->luongcoban, 7);
 
                 $chitiet->quyluong = $chitiet->ttl + $chitiet->ttbh_dv;
                 $chitiet->tongphucap = $chitiet->tonghs - $chitiet->heso;
+
+                $chitiet->tongcong = $chitiet->tonghs + $chitiet->baohiem + $chitiet->bhtn_dv;
                 // $chitiet->luongthang = ($chitiet->ttl / 12) / $inputs['donvitinh'];
                 // $chitiet->baohiem = ($chitiet->ttbh_dv / 12) / $inputs['donvitinh'];
                 //$chitiet->tongcong = ($chitiet->luongthang + $chitiet->baohiem) / $inputs['donvitinh'];
@@ -97,10 +100,10 @@ class tonghopluong_huyen_baocaoController extends Controller
             //xử lý ẩn hiện cột phụ cấp => biết tổng số cột hiện => colspan trên báo cáo
 
             //$m_donvi = dmdonvi::where('madv', session('admin')->madv)->first();
-
+            //dd($model);
             return view('reports.tonghopluong.huyen.SoLieuTongHop_PhanLoaiDV')
                 ->with('model', $model)
-                ->with('lamtron', session('admin')->lamtron ?? 3)
+                ->with('lamtron', 5)
                 ->with('m_donvi', $m_donvi)
                 ->with('col', $col)
                 ->with('a_phucap', $a_phucap)

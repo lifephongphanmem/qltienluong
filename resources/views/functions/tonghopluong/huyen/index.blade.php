@@ -88,7 +88,7 @@
                                                     onclick="indutoan('{{ $value['thang'] }}', '{{ $inputs['nam'] }}','{{ session('admin')->madv }}')"
                                                     class="btn btn-default btn-sm" data-target="#indt-modal"
                                                     data-toggle="modal">
-                                                    <i class="fa fa-print">&nbsp;In số liệu</i>
+                                                    <i class="fa fa-print"></i>&nbsp;In số liệu
                                                 </button>
 
                                                 @if ($value['mathdv'] != null)
