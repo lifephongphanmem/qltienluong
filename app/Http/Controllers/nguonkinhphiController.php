@@ -100,7 +100,7 @@ class nguonkinhphiController extends Controller
             $masodv = session('admin')->madv . '_' . getdate()[0];
             $inputs['chenhlech'] = chkDbl($inputs['chenhlech']);
 
-            $a_th = array_merge(array('macanbo', 'mact', 'macvcq', 'mapb', 'ngayden'), $a_pc_tonghop);
+            $a_th = array_merge(array('macanbo', 'mact', 'macvcq', 'mapb', 'ngayden', 'pthuong'), $a_pc_tonghop);
             $m_cb_kn = hosocanbo_kiemnhiem::select(array_merge($a_th, ['phanloai']))
                 ->where('madv', session('admin')->madv)
                 ->wherein('mact', $a_plct)
@@ -531,52 +531,7 @@ class nguonkinhphiController extends Controller
             //dd( $m_data);
             $m_data_phucap = a_unique($m_data);
             $m_data_01thang = a_unique($m_data);
-            //$m_data = a_unique($m_data);
-
-            //tính lại do lệnh với bảng lương
-            // for ($i = 0; $i < count($m_data); $i++) {
-            //     $dutoan = a_getelement($a_data, array('mact' => $m_data[$i]['mact']));
-            //     $m_data[$i]['linhvuchoatdong'] = $inputs['linhvuchoatdong'];
-            //     $m_data[$i]['masodv'] = $masodv;
-            //     $m_data[$i]['nhucau'] = 0;
-            //     $m_data[$i]['daibieuhdnd'] = 0;
-            //     $m_data[$i]['uyvien'] = 0;
-            //     $m_data[$i]['boiduong'] = 0;
-            //     $m_data[$i]['luongphucap'] = 0;
-            //     $m_data[$i]['nghihuu'] = 0;
-            //     $m_data[$i]['canbokct'] = 0;
-            //     $m_data[$i]['boiduong'] = array_sum(array_column($dutoan, 'st_pcbdhdcu'));
-
-            //     $m_data[$i]['daibieuhdnd'] = array_sum(array_column($dutoan, 'st_pcdbqh'));
-            //     if (in_array($m_data[$i]['mact'], $a_dbhdnd)) {
-            //         $m_data[$i]['daibieuhdnd'] += array_sum(array_column($dutoan, 'st_hesopc'));
-            //     }
-
-            //     $m_data[$i]['uyvien'] = array_sum(array_column($dutoan, 'st_pcvk'));
-            //     if (in_array($m_data[$i]['mact'], $a_cuv)) {
-            //         $m_data[$i]['uyvien'] += array_sum(array_column($dutoan, 'st_hesopc'));
-            //     }
-
-            //     $m_data[$i]['baohiem'] = array_sum(array_column($dutoan, 'ttbh_dv'));
-            //     //dùng luongtn vì các phụ cấp tính theo số tiền đã cộng vào luongtn (ko tính vào hệ số)
-            //     $m_data[$i]['luonghs'] = array_sum(array_column($dutoan, 'luongtn'))  - $m_data[$i]['boiduong'] - $m_data[$i]['daibieuhdnd'] - $m_data[$i]['uyvien'];
-            //     switch ($m_data[$i]['macongtac']) {
-            //         case 'NGHIHUU': {
-            //                 $m_data[$i]['nghihuu'] = $m_data[$i]['luonghs'];
-            //                 break;
-            //             }
-            //         case 'KHONGCT': {
-            //                 $m_data[$i]['canbokct'] = $m_data[$i]['luonghs'];
-            //                 break;
-            //             }
-            //         default: { //BIENCHE, KHAC
-            //                 $m_data[$i]['luongphucap'] = $m_data[$i]['luonghs'];
-            //                 break;
-            //             }
-            //     }
-            //     $m_data[$i]['nhucau'] = $m_data[$i]['luonghs'] + $m_data[$i]['uyvien'] + $m_data[$i]['daibieuhdnd']
-            //         + $m_data[$i]['boiduong'] + $m_data[$i]['baohiem'];
-            // }
+            //$m_data = a_unique($m_data);            
 
             //Tính lại tổng phụ cấp
             $a_col_khac = ["stbhxh_dv", "stbhyt_dv", "stkpcd_dv", "stbhtn_dv", "ttbh_dv", "tonghs"];
@@ -661,7 +616,7 @@ class nguonkinhphiController extends Controller
             $a_col = array(
                 'bac', 'bhxh_dv', 'bhtn_dv', 'kpcd_dv', 'bhyt_dv', 'gioitinh', 'nam_nb', 'nam_ns', 'nam_tnn',
                 'thang_nb', 'thang_ns', 'thang_tnn', 'ngayden', 'ngaytu', 'ngaysinh', 'tnndenngay', 'tnntungay', 'pcctp',
-                'st_pcctp', 'nam_hh', 'thang_hh', 'ngaybc', 'ngayvao', 'lvhd', 'mucluongbaohiem',
+                'st_pcctp', 'nam_hh', 'thang_hh', 'ngaybc', 'ngayvao', 'lvhd', 'mucluongbaohiem', 'pthuong'
             );
             //dd($m_data_phucap);
             $a_data_nl = unset_key($a_data_nl, $a_col);
@@ -1424,6 +1379,7 @@ class nguonkinhphiController extends Controller
     //Cán bộ kiêm nhiệm các phụ cấp tính % theo các hệ số của thông tin lương chính
     function getHeSoPc_kiemnhiem($a_pc, $canbo, $m_cb, $luongcb = 0, $vk = true)
     {
+        //dd($m_cb);
         $stbhxh_dv = 0;
         $stbhyt_dv = 0;
         $stkpcd_dv = 0;
@@ -1508,6 +1464,7 @@ class nguonkinhphiController extends Controller
         $m_cb['stbhtn_dv'] = $stbhtn_dv;
 
         $m_cb['ttbh_dv'] = $stbhxh_dv + $stbhyt_dv + $stkpcd_dv + $stbhtn_dv;
+        
         return $m_cb;
     }
 
