@@ -97,10 +97,13 @@ class baocaobangluongController extends Controller
             }
             // dd(session('admin'));
             // dd($model_donvi);
+            $inputs['madv'] = session('admin')->madv;
+            $inputs['furl'] = '/bao_cao/bang_luong/';
+            $inputs['furl_th'] = '/chuc_nang/du_toan_luong/huyen/';
+            $inputs['furl_dutoan'] = '/chuc_nang/du_toan_luong/huyen/';
             $model_thongtu = dmthongtuquyetdinh::all();
             return view('reports.index_th')
-                ->with('furl', '/bao_cao/bang_luong/')
-                ->with('furl_th', '/chuc_nang/du_toan_luong/huyen/')
+                ->with('inputs', $inputs)
                 ->with('model_phanloai', $model_phanloai)
                 ->with('a_thang', $a_thang)
                 ->with('a_phanloai', $a_phanloai)
@@ -520,7 +523,7 @@ class baocaobangluongController extends Controller
                     }
                 }
             }
-            
+
             $a_phucap = array();
             $col = 0;
             $a_dmpc = array_column(dmphucap::where('tonghop', 1)->get()->toarray(), 'tenpc', 'mapc');
@@ -539,7 +542,7 @@ class baocaobangluongController extends Controller
             foreach ($model_tonghop_chitiet as $chitiet) {
                 $chitiet->tennguonkp = isset($model_nguonkp[$chitiet->manguonkp]) ? $model_nguonkp[$chitiet->manguonkp] : '';
                 $chitiet->tencongtac = isset($model_phanloai[$chitiet->macongtac]) ? $model_phanloai[$chitiet->macongtac] : '';
-                $chitiet->tenct = $a_phanloai[$chitiet->mact]?? '';
+                $chitiet->tenct = $a_phanloai[$chitiet->mact] ?? '';
                 $chitiet->tongtl = $chitiet->tonghs;
                 $chitiet->tongbh = $chitiet->stbhxh_dv + $chitiet->stbhyt_dv + $chitiet->stkpcd_dv + $chitiet->stbhtn_dv;
             }

@@ -151,6 +151,15 @@ class dutoanluong_insolieu_huyenController extends Controller
     {
         if (Session::has('admin')) {
             $inputs = $request->all();
+            //Trường hợp được gọi từ chức năng "Báo cáo tổng hợp"
+            if (isset($inputs['macqcq']) &&  $inputs['macqcq'] != '') {
+                $m_dutoan_huyen = dutoanluong_huyen::where('madv', $inputs['macqcq'])->where('namns', $inputs['namns'])->first();
+                if ($m_dutoan_huyen != null)
+                    $inputs['masodv'] = $m_dutoan_huyen->masodv;
+                else
+                    $inputs['masodv'] = '';
+            }
+            //
             $model = dutoanluong::where('masoh', $inputs['masodv'])->where('namns', $inputs['namns'])->where('trangthai', 'DAGUI')->get();
             $m_donvi_baocao = dmdonvi::wherein('madv', array_column($model->toarray(), 'madv'))->get();
             // dd($m_donvi_baocao);
@@ -189,21 +198,17 @@ class dutoanluong_insolieu_huyenController extends Controller
     {
         if (Session::has('admin')) {
             $inputs = $request->all();
-
-            // $m_dutoan_huyen = dutoanluong_huyen::where('masodv', $inputs['masodv'])->first();
-            if (session('admin')->level == 'T') {
-                $m_dutoan_huyen = dutoanluong_huyen::where('namns', $inputs['namns'])->where('madv', $inputs['madv'])->first();
-            } else {
-                $m_dutoan_huyen = dutoanluong_huyen::where('namns', $inputs['namns'])->where('madv', session('admin')->madv)->first();
+            //dd($inputs);
+            //Trường hợp được gọi từ chức năng "Báo cáo tổng hợp"
+            if (isset($inputs['macqcq']) &&  $inputs['macqcq'] != '') {
+                $m_dutoan_huyen = dutoanluong_huyen::where('madv', $inputs['macqcq'])->where('namns', $inputs['namns'])->first();
+                if ($m_dutoan_huyen != null)
+                    $inputs['masodv'] = $m_dutoan_huyen->masodv;
+                else
+                    $inputs['masodv'] = '';
             }
-
-            if (!isset($m_dutoan_huyen)) {
-                return view('errors.nodata')
-                    ->with('message', 'Chưa có dữ liệu năm ' . $inputs['namns'])
-                    ->with('furl', '/bao_cao/bang_luong/tong_hop');
-            }
-            // $inputs['namns'] = $m_dutoan_huyen->namns;
-            $inputs['masodv'] = $m_dutoan_huyen->masodv;
+            //
+            $m_dutoan_huyen = dutoanluong_huyen::where('masodv', $inputs['masodv'])->first();
             $m_donvi = dmdonvi::where('madv', $m_dutoan_huyen->madv)->first();
 
             //$m_phanloai = dmphanloaidonvi_baocao::where('madvbc', $m_donvi->madvbc)->get();
@@ -252,10 +257,6 @@ class dutoanluong_insolieu_huyenController extends Controller
                     $col++;
                 }
             }
-
-
-            // $m_donvi = dmdonvi::where('madv', session('admin')->madv)->first();
-            //dd($m_donvi_baocao->where('maphanloai','DAOTAO'));
             return view('reports.dutoanluong.Huyen.tonghopcanbohdnd')
                 ->with('model', $model)
                 ->with('col', $col)
@@ -276,21 +277,18 @@ class dutoanluong_insolieu_huyenController extends Controller
     {
         if (Session::has('admin')) {
             $inputs = $request->all();
-
-            // $m_dutoan_huyen = dutoanluong_huyen::where('masodv', $inputs['masodv'])->first();
-            if (session('admin')->level == 'T') {
-                $m_dutoan_huyen = dutoanluong_huyen::where('namns', $inputs['namns'])->where('madv', $inputs['madv'])->first();
-            } else {
-                $m_dutoan_huyen = dutoanluong_huyen::where('namns', $inputs['namns'])->where('madv', session('admin')->madv)->first();
+            //dd($inputs);
+            //Trường hợp được gọi từ chức năng "Báo cáo tổng hợp"
+            if (isset($inputs['macqcq']) &&  $inputs['macqcq'] != '') {
+                $m_dutoan_huyen = dutoanluong_huyen::where('madv', $inputs['macqcq'])->where('namns', $inputs['namns'])->first();
+                if ($m_dutoan_huyen != null)
+                    $inputs['masodv'] = $m_dutoan_huyen->masodv;
+                else
+                    $inputs['masodv'] = '';
             }
+            //
 
-            if (!isset($m_dutoan_huyen)) {
-                return view('errors.nodata')
-                    ->with('message', 'Chưa có dữ liệu năm ' . $inputs['namns'])
-                    ->with('furl', '/bao_cao/bang_luong/tong_hop');
-            }
-            // $inputs['namns'] = $m_dutoan_huyen->namns;
-            $inputs['masodv'] = $m_dutoan_huyen->masodv;
+            $m_dutoan_huyen = dutoanluong_huyen::where('masodv', $inputs['masodv'])->first();
             $m_donvi = dmdonvi::where('madv', $m_dutoan_huyen->madv)->first();
 
             //$m_phanloai = dmphanloaidonvi_baocao::where('madvbc', $m_donvi->madvbc)->get();
@@ -469,19 +467,16 @@ class dutoanluong_insolieu_huyenController extends Controller
     {
         if (Session::has('admin')) {
             $inputs = $request->all();
-            // $m_dutoan_huyen = dutoanluong_huyen::where('masodv', $inputs['masodv'])->first();
-            if (session('admin')->level == 'T') {
-                $m_dutoan_huyen = dutoanluong_huyen::where('namns', $inputs['namns'])->where('madv', $inputs['madv'])->first();
-            } else {
-                $m_dutoan_huyen = dutoanluong_huyen::where('namns', $inputs['namns'])->where('madv', session('admin')->madv)->first();
+            //Trường hợp được gọi từ chức năng "Báo cáo tổng hợp"
+            if (isset($inputs['macqcq']) &&  $inputs['macqcq'] != '') {
+                $m_dutoan_huyen = dutoanluong_huyen::where('madv', $inputs['macqcq'])->where('namns', $inputs['namns'])->first();
+                if ($m_dutoan_huyen != null)
+                    $inputs['masodv'] = $m_dutoan_huyen->masodv;
+                else
+                    $inputs['masodv'] = '';
             }
-            if (!isset($m_dutoan_huyen)) {
-                return view('errors.nodata')
-                    ->with('message', 'Chưa có dữ liệu năm ' . $inputs['namns'])
-                    ->with('furl', '/bao_cao/bang_luong/tong_hop');
-            }
-            $inputs['namns'] = $m_dutoan_huyen->namns;
-            $inputs['masodv'] = $m_dutoan_huyen->masodv;
+            //
+            $m_dutoan_huyen = dutoanluong_huyen::where('masodv', $inputs['masodv'])->first();
             $m_donvi = dmdonvi::where('madv', $m_dutoan_huyen->madv)->first();
 
             $m_phanloai = dmphanloaidonvi_baocao::where('madvbc', $m_donvi->madvbc)->get();
@@ -598,8 +593,16 @@ class dutoanluong_insolieu_huyenController extends Controller
     {
         if (Session::has('admin')) {
             $inputs = $request->all();
+            //Trường hợp được gọi từ chức năng "Báo cáo tổng hợp"
+            if (isset($inputs['macqcq']) &&  $inputs['macqcq'] != '') {
+                $m_dutoan_huyen = dutoanluong_huyen::where('madv', $inputs['macqcq'])->where('namns', $inputs['namns'])->first();
+                if ($m_dutoan_huyen != null)
+                    $inputs['masodv'] = $m_dutoan_huyen->masodv;
+                else
+                    $inputs['masodv'] = '';
+            }
+            //
             $m_phanloai = dmphanloaidonvi::all();
-
             $m_dutoan_huyen = dutoanluong_huyen::where('masodv', $inputs['masodv'])->first();
             $m_donvi = dmdonvi::where('madv', $m_dutoan_huyen->madv)->first();
             $m_donvi_baocao = dmdonvi::where('madvbc', $m_donvi->madvbc)->where('maphanloai', 'KVXP')->get();

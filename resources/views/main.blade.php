@@ -648,7 +648,7 @@
 
                                 @if (session('admin')->level == 'H')
                                     <li><a href="{{ url('bao_cao/bang_luong/tong_hop') }}"><i
-                                                class="fa fa-caret-right"></i>Báo cáo chi trả lương</a></li>
+                                                class="fa fa-caret-right"></i>Báo cáo tổng hợp</a></li>
                                 @endif
                             </ul>
                         </li>
