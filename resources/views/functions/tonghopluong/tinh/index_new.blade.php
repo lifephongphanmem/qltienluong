@@ -37,7 +37,7 @@
         <div class="col-md-12">
             <div class="portlet light bordered">
                 <div class="portlet-title">
-                    <div class="caption">DANH SÁCH TỔNG HỢP CHI TRẢ LƯƠNG CÁC ĐƠN VỊ BÁO CÁO VÀ ĐƠN VỊ QUẢN LÝ  </div>
+                    <div class="caption">DANH SÁCH TỔNG HỢP CHI TRẢ LƯƠNG CÁC ĐƠN VỊ BÁO CÁO VÀ ĐƠN VỊ QUẢN LÝ </div>
                     <div class="actions">
                         {{-- <button type="button" onclick="inbl_th('{{ $inputs['namns'] }}')" class="btn btn-default mbs">
                             <i class="fa fa-print"></i>&nbsp; In tổng hợp</button> --}}
@@ -52,19 +52,11 @@
                         <div class="form-group">
                             <label class="control-label col-md-1" style="text-align: right">Tháng </label>
                             <div class="col-md-2">
-                                {!! Form::select(
-                                'thang',
-                                getThang(),$thang,
-                                array('id' => 'thang', 'class' => 'form-control'))
-                                !!}
+                                {!! Form::select('thang', getThang(), $inputs['thang'], ['id' => 'thang', 'class' => 'form-control']) !!}
                             </div>
                             <label class="control-label col-md-1" style="text-align: right">Năm </label>
                             <div class="col-md-2">
-                                {!! Form::select(
-                                'nam',
-                                getNam(),$nam,
-                                array('id' => 'nam', 'class' => 'form-control'))
-                                !!}
+                                {!! Form::select('nam', getNam(), $inputs['nam'], ['id' => 'nam', 'class' => 'form-control']) !!}
                             </div>
                         </div>
                     </div>
@@ -88,15 +80,20 @@
                                         <td class="text-center bold">{{ $a_trangthai[$value['trangthai']] ?? '' }}</td>
                                         <td>
                                             @if ($value->trangthai == 'DAGUI')
-                                            <a href="{{url('/chuc_nang/tong_hop_luong/khoi/tonghop_khoi?thangbc='.$thang.'&nambc='.$nam.'&madv='.$value->madv)}}" class="btn btn-default btn-xs " TARGET="_blank">
-                                                <i class="fa fa-print"></i>&nbsp; Số liệu tổng hợp</a>
-
-                                                <a href="{{url('/chuc_nang/xem_du_lieu/tinh?thang='.$thang.'&nam='.$nam.'&trangthai=ALL&madiaban='.$value->madvbc)}}" class="btn btn-default btn-xs">
+                                                <button type="button" title="In số liệu"
+                                                    onclick="setInChiLuong('{{ $inputs['thang'] }}','{{ $inputs['nam'] }}','{{ $value->madvcq }}')"
+                                                    class="btn btn-default btn-sm mbs" data-target="#inChiLuong-modal"
+                                                    data-toggle="modal">
+                                                    <i class="fa fa-print"></i>&nbsp;In số liệu
+                                                </button>
+                                                
+                                                <a href="{{ url('/chuc_nang/xem_du_lieu/tinh?thang=' . $inputs['thang'] . '&nam=' . $inputs['nam'] . '&trangthai=ALL&madiaban=' . $value->madvbc) }}"
+                                                    class="btn btn-default btn-sm">
                                                     <i class="fa fa-list-alt"></i>&nbsp; Số liệu chi tiết</a>
 
                                                 <button type="button" title="Trả lại dữ liệu"
-                                                    class="btn btn-default btn-xs"
-                                                    onclick="confirmChuyen('{{ $value['mathdv']}}','{{$thang}}','{{$nam}}')"
+                                                    class="btn btn-default btn-sm"
+                                                    onclick="confirmChuyen('{{ $value['mathdv'] }}','{{ $inputs['thang'] }}','{{ $inputs['nam'] }}')"
                                                     data-target="#tralai-modal" data-toggle="modal">
                                                     <i class="fa icon-share-alt"></i>&nbsp;Trả lại dữ liệu</button>
                                             @endif
@@ -142,27 +139,94 @@
         </div>
     </div>
 
+    <!--Modal in tổng hợp lương -->
+    <div id="inChiLuong-modal" tabindex="-1" role="dialog" aria-hidden="true" class="modal fade">
+        <input type="hidden" id="thang_bc" />
+        <input type="hidden" id="nam_bc" />
+        <input type="hidden" id="macqcq_bc" />
+        <input type="hidden" id="madvbc_bc" />
+        <div class="modal-lg modal-dialog modal-content">
+            <div class="modal-header modal-header-primary">
+                <button type="button" data-dismiss="modal" aria-hidden="true" class="close">&times;</button>
+                <h4 id="hd-inbl" class="modal-title">In số liệu</h4>
+            </div>
+            <div class="modal-body">
+                {{-- <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <button type="button" onclick="indanhsachdonvi('{{ $inputs['furl'] . 'danhsachdonvi' }}')"
+                                style="border-width: 0px" class="btn btn-default btn-xs mbs"
+                                data-target="#modal-indanhsachdonvi" data-toggle="modal">
+                                <i class="fa fa-print"></i>&nbsp; Danh sách đơn vị</button>
+                        </div>
+                    </div>
+                </div> --}}
+
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <a id="in_bl" href="" class="btn btn-default btn-xs mbs"
+                                onclick="insolieu(this,'/chuc_nang/tong_hop_luong/huyen/TongHop')"
+                                style="border-width: 0px;" target="_blank">
+                                <i class="fa fa-print"></i>&nbsp; In số liệu tổng hợp (mẫu 01)</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" data-dismiss="modal" class="btn btn-default">Hủy thao tác</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!--Mẫu in số liệu -->
+    {!! Form::open(['url' => '', 'method' => 'post', 'target' => '_blank', 'files' => true, 'id' => 'frm_insolieu']) !!}
+    <div id="modal-insolieu" tabindex="-1" role="dialog" aria-hidden="true" class="modal fade">
+        <div class="modal-dialog modal-content">
+            <div class="modal-header modal-header-primary">
+                <button type="button" data-dismiss="modal" aria-hidden="true" class="close">&times;</button>
+                <h4 id="header-inbl" class="modal-title">Thông tin kết xuất</h4>
+            </div>
+            <div class="modal-body">
+                <div class="form-horizontal">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <label class="control-label">Đơn vị tính</label>
+                            {!! Form::select('donvitinh', getDonViTinh(), null, ['class' => 'form-control select2me']) !!}
+                        </div>
+
+                        <div class="col-md-6">
+                            <label class="control-label">Cỡ chữ</label>
+                            {!! Form::select('cochu', getCoChu(), 10, ['id' => 'cochu', 'class' => 'form-control select2me']) !!}
+                        </div>
+                    </div>
+                </div>
+
+                <input type="hidden" name="sohieu" />
+                <input type="hidden" name="madvbc" />
+                <input type="hidden" name="macqcq" />
+            </div>
+            <div class="modal-footer">
+                <button type="button" data-dismiss="modal" class="btn btn-default">Hủy thao tác</button>
+                <button type="submit" class="btn btn-success">Đồng ý</button>
+            </div>
+        </div>
+    </div>
+    {!! Form::close() !!}
+
     <script>
-        //Gán thông tin để lấy dữ liệu
-        function indutoan(namdt, masodv) {
-            $('#namns').val(namdt);
-            $('#masodv').val(masodv);
+        function setInChiLuong(thang, nam, madvbc) {
+            $('#thang_bc').val(thang);
+            $('#nam_bc').val(nam);
+            $('#madvbc_bc').val(madvbc);
+            $('#macqcq_bc').val(madvbc);
         }
 
-        //In dữ liệu
-        function insolieu(url, mact) {
-            if (mact == null) {
-                $('#frm_insolieu').find("[name^='mact']").attr('disabled', true);
-            } else {
-                $('#frm_insolieu').find("[name^='mact']").attr('disabled', false);
-                $('#frm_insolieu').find("[name^='mact']").val(mact.split(';')).trigger('change');
-            }
-            $('#frm_insolieu').attr('action', url);
-            $('#frm_insolieu').find("[name^='masodv']").val($('#masodv').val());
-            $('#frm_insolieu').find("[name^='namns']").val($('#namns').val());
-
-
+        function insolieu(obj, url) {
+            obj.href = url + '?thang=' + $('#thang_bc').val() + '&nam=' + $('#nam_bc').val() + '&macqcq=' + $('#macqcq_bc')
+                .val();
         }
+
 
         //In danh sách đơn vi
         function indanhsachdonvi(url) {
@@ -171,7 +235,7 @@
             $('#frm_indanhsachdonvi').find("[name^='namns']").val($('#namns').val());
         }
 
-        function confirmChuyen(mathdv,thang,nam) {
+        function confirmChuyen(mathdv, thang, nam) {
             $('#frm_tralai').find("[name^='mathdv']").val(mathdv);
             $('#frm_tralai').find("[name^='thang']").val(thang);
             $('#frm_tralai').find("[name^='nam']").val(nam);
@@ -197,14 +261,14 @@
             });
         });
 
-        function getLink(){
+        function getLink() {
             var thang = $('#thang').val();
             var nam = $('#nam').val();
             var madvbc = $('#madvbc').val();
-            return '/chuc_nang/tong_hop_luong/tinh/index?thang='+ thang +'&nam=' + nam ;
+            return '/chuc_nang/tong_hop_luong/tinh/index?thang=' + thang + '&nam=' + nam;
         }
 
-        $(function(){
+        $(function() {
             $('#thang').change(function() {
                 window.location.href = getLink();
             });

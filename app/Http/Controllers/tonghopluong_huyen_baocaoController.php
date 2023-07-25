@@ -31,7 +31,7 @@ class tonghopluong_huyen_baocaoController extends Controller
             if ($model_tonghop->count() == 0) {
                 return view('errors.nodata')
                     ->with('message', 'Chưa có dữ liệu năm ' . $inputs['nam'])
-                    ->with('furl', '/chuc_nang/tong_hop_luong/huyen/index?nam=' . $inputs['namns']);
+                    ->with('furl', '/chuc_nang/tong_hop_luong/huyen/index?nam=' . $inputs['nam']);
             }
 
             $m_donvi = dmdonvi::where('madv', $inputs['macqcq'])->first();

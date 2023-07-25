@@ -670,6 +670,7 @@ class tonghopluong_huyenController extends Controller
         } else
             return view('errors.notlogin');
     }
+
     function printf_bl_huyen(Request $requests)
     {
         if (Session::has('admin')) {
@@ -788,6 +789,7 @@ class tonghopluong_huyenController extends Controller
         } else
             return view('errors.notlogin');
     }
+
     function printf_bl_huyenCR(Request $requests)
     {
         if (Session::has('admin')) {
@@ -1736,7 +1738,7 @@ class tonghopluong_huyenController extends Controller
 
             $thang = $inputs['thang'];
             $nam = $inputs['nam'];
-            $madv = session('admin')->madv;
+            //$madv = session('admin')->madv;
 
             tonghopluong_donvi::where('nam', $nam)->where('thang', $thang)->where('madvbc', $madvbc)
                 ->update(['matht' => $inputs['mathdv']]);
@@ -1750,8 +1752,6 @@ class tonghopluong_huyenController extends Controller
             tonghopluong_donvi_diaban::wherein('mathdv', function ($query) use ($nam, $thang, $madvbc) {
                 $query->select('mathdv')->from('tonghopluong_donvi')->where('nam', $nam)->where('thang', $thang)->where('madvbc', $madvbc)->distinct();
             })->update(['matht' => $inputs['mathdv']]);
-
-
 
             tonghopluong_tinh::create($inputs);
             tonghop_huyen::create($inputs);

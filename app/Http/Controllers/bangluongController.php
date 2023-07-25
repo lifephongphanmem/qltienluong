@@ -166,7 +166,8 @@ class bangluongController extends Controller
             //Tạo bảng lương
             $model->mabl = $mabl;
             $model->save();
-            return redirect('/chuc_nang/bang_luong/bang_luong?mabl=' . $inputs['mabl'] . '&mapb=');
+            return redirect('/chuc_nang/bang_luong/chi_tra?thang=' . $inputs['thang'] . '&nam=' . $inputs['nam']);
+            //return redirect('/chuc_nang/bang_luong/bang_luong?mabl=' . $inputs['mabl'] . '&mapb=');
         } else
             return view('errors.notlogin');
     }
@@ -309,7 +310,7 @@ class bangluongController extends Controller
 
         //Tạo bảng lương
         bangluong::create($inputs);
-        return redirect('/chuc_nang/bang_luong/bang_luong?mabl=' . $inputs['mabl'] . '&mapb=');
+        return redirect('/chuc_nang/bang_luong/chi_tra?thang=' . $inputs['thang'] . '&nam=' . $inputs['nam']);
     }
     //cán bộ đi học nộp 100% bảo hiểm, cán bộ tập sự nộp bảo hiểm theo lương
     //làm hàm lấy ds cán bộ đang công tác: notin thôi công tac and notin ngaycongtac < ngày cuối tháng lương

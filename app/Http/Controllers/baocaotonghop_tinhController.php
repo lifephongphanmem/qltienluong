@@ -43,7 +43,7 @@ use Illuminate\Support\Facades\Session;
 use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Support\Str;
 
-class baocaothongtu67Controller extends Controller
+class baocaotonghop_tinhController extends Controller
 {
     function index()
     {
@@ -118,7 +118,7 @@ class baocaothongtu67Controller extends Controller
                 ->where('dmdonvi.phanloaitaikhoan', 'TH')
                 ->get();
             $model_thongtu = dmthongtuquyetdinh::all();
-            return view('reports.baocaotonghop.tinh.index')
+            return view('reports.thongtu67.index')
                 ->with('model_dv', $model_dv)
                 ->with('model_dvbcT', $model_dvbcT)
                 ->with('model_thongtu', $model_thongtu)

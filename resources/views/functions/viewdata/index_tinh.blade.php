@@ -35,11 +35,7 @@
             <div class="portlet light bordered">
                 <div class="portlet-title">
                     <div class="caption">DANH SÁCH CÁC ĐƠN VỊ BÁO CÁO VÀ ĐƠN VỊ QUẢN LÝ</div>
-                    <div class="actions">
-                        <a href="{{ url('chuc_nang/xem_du_lieu/tinh/solieu?thang=' . $thang . '&nam=' . $nam . '&madiaban=' . $madvbc) }}"
-                            class="btn btn-default btn-sm" TARGET="_blank">
-                            <i class="fa fa-print"></i>&nbsp; Số liệu tổng hợp ({{ $soluong }} đơn vị)</a>
-                    </div>
+                    
                 </div>
                 <div class="portlet-body form-horizontal">
                     <div class="row">
@@ -88,38 +84,15 @@
                                             <td>{{ $value->tendv }}</td>
                                             <td>{{ $value->tenphanloai }}</td>
                                             <td>
-                                                @if (count($model_th) > 0)
-                                                    @if ($value->mathdv != null)
-                                                        <a href="#" data-target="#thkhoi-modal" data-toggle="modal"
-                                                            onclick="baocao('{{ '/chuc_nang/tong_hop_luong/huyen/printf_data_huyen' }}','{{ $value['thang'] }}','{{ $nam }}','{{ $value['tendv'] }}','{{ $value['madv'] }}','{{ $value['mathdv'] }}') "
-                                                            class="btn btn-default btn-xs" TARGET="_blank">
-                                                            <i class="fa fa-print"></i>&nbsp; Số liệu tổng hợp</a>
-                                                        {{-- <a href="{{url('/chuc_nang/tong_hop_luong/huyen/printf_data_huyen?thangbc='.$value['thang'].'&nambc='.$nam.'&madv='.$value['madv'])}}" class="btn btn-default btn-xs" TARGET="_blank">
-                                                <i class="fa fa-print"></i>&nbsp; Số liệu tổng hợp</a> --}}
+                                                @if ($value->mathdv != null)
+                                                    <a href="#" data-target="#thkhoi-modal" data-toggle="modal"
+                                                        onclick="baocao('{{ '/chuc_nang/tong_hop_luong/huyen/printf_data_huyen' }}','{{ $value['thang'] }}','{{ $nam }}','{{ $value['tendv'] }}','{{ $value['madv'] }}','{{ $value['mathdv'] }}') "
+                                                        class="btn btn-default btn-xs" TARGET="_blank">
+                                                        <i class="fa fa-print"></i>&nbsp; Số liệu tổng hợp</a>
 
-                                                        {{-- <a href="{{url('/chuc_nang/tong_hop_luong/huyen/printf_data_diaban/ma_so='.$value['mathdv'])}}" class="btn btn-default btn-sm" TARGET="_blank">
-                                                <i class="fa fa-print"></i>&nbsp; Số liệu địa bàn</a> --}}
-                                                        {{-- <a href="{{url($furl_ct.'printf_bl/ma_so='.$value['mathdv'])}}" class="btn btn-default btn-sm" TARGET="_blank">
-                                                    <i class="fa fa-print"></i>&nbsp; In chi tiết</a> --}}
-
-                                                        {{-- <button type="button"
-                                                    onclick="inbl('{{ $value['mathdv'] }}','{{ $value['madv'] }}')"
-                                                    class="btn btn-default btn-xs mbs">
-                                                    <i class="fa fa-print"></i>&nbsp; Số liệu chi tiết</button> --}}
-
-                                                        <a href="{{ url('/chuc_nang/tong_hop_luong/huyen/printf_bl_huyenCR?mathdv=' . $value['mathdv'] . '&madv=' . $value['madv']) }}"
-                                                            class="btn btn-default btn-xs" TARGET="_blank">
-                                                            <i class="fa fa-print"></i>&nbsp; Số liệu chi tiết</a>
-
-                                                        {{-- @if ($value->tralai)
-                                                <button type="button" class="btn btn-default btn-xs" onclick="confirmChuyen('{{$value['mathdv']}}')" data-target="#chuyen-modal" data-toggle="modal"><i class="fa icon-share-alt"></i>&nbsp;
-                                                    Trả lại dữ liệu</button>
-                                            @endif --}}
-                                                    @else
-                                                        <button class="btn btn-danger btn-xs mbs">
-                                                            <i class="fa fa-warning"></i>&nbsp; Đơn vị chưa tổng hợp dữ
-                                                            liệu</button>
-                                                    @endif
+                                                    <a href="{{ url('/chuc_nang/tong_hop_luong/huyen/printf_bl_huyenCR?mathdv=' . $value['mathdv'] . '&madv=' . $value['madv']) }}"
+                                                        class="btn btn-default btn-xs" TARGET="_blank">
+                                                        <i class="fa fa-print"></i>&nbsp; Số liệu chi tiết</a>
                                                 @else
                                                     <button class="btn btn-danger btn-xs mbs">
                                                         <i class="fa fa-warning"></i>&nbsp; Đơn vị chưa tổng hợp dữ
