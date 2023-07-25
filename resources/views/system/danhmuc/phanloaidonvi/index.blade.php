@@ -65,7 +65,7 @@
                                                 class="btn btn-info btn-xs mbs">
                                                 <i class="fa fa-edit"></i>&nbsp; Chỉnh sửa</button>
                                             <button type="button"
-                                                onclick="cfDel(/'danh_muc/pl_don_vi/del/{{ $value->id }}')"
+                                                onclick="cfDel('/danh_muc/pl_don_vi/del/{{ $value->id }}')"
                                                 class="btn btn-danger btn-xs mbs" data-target="#delete-modal-confirm"
                                                 data-toggle="modal">
                                                 <i class="fa fa-trash-o"></i>&nbsp; Xóa</button>
@@ -90,7 +90,7 @@
                 </div>
                 <div class="modal-body">
                     <label class="form-control-label">Mã số<span class="require">*</span></label>
-                    {!! Form::text('maphanloai', null, ['id' => 'maphanloai', 'class' => 'form-control', 'readonly' => 'true']) !!}
+                    {!! Form::text('maphanloai', null, ['id' => 'maphanloai', 'class' => 'form-control']) !!}
 
                     <label class="form-control-label">Tên phân loại đơn vị<span class="require">*</span></label>
                     {!! Form::text('tenphanloai', null, [

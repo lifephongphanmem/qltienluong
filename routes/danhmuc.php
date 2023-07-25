@@ -111,8 +111,8 @@ Route::group(['prefix' => 'danh_muc'], function () {
     Route::group(['prefix' => 'pl_don_vi'], function () {
         Route::get('index', 'dmphanloaidonviController@index');
         Route::get('del/{id}', 'dmphanloaidonviController@destroy');
-        Route::get('add', 'dmphanloaidonviController@store');
-        Route::get('update', 'dmphanloaidonviController@update');
+        Route::get('store', 'dmphanloaidonviController@store');
+        // Route::get('update', 'dmphanloaidonviController@update');
         Route::get('get', 'dmphanloaidonviController@getinfo');
 
         Route::get('', 'dmphanloaidonviController@phucap');

@@ -14,13 +14,14 @@ use Illuminate\Support\Facades\Session;
 
 class dmphanloaidonviController extends Controller
 {
-    public function index(){
+    public function index()
+    {
         if (Session::has('admin')) {
-            $model= dmphanloaidonvi::all();
+            $model = dmphanloaidonvi::all();
             return view('system.danhmuc.phanloaidonvi.index')
-                ->with('model',$model)
-                ->with('furl','/danh_muc/pl_don_vi/')
-                ->with('pageTitle','Danh mục phân loại đơn vị');
+                ->with('model', $model)
+                ->with('furl', '/danh_muc/pl_don_vi/')
+                ->with('pageTitle', 'Danh mục phân loại đơn vị');
         } else
             return view('errors.notlogin');
     }
@@ -39,8 +40,18 @@ class dmphanloaidonviController extends Controller
             die(json_encode($result));
         }
         $inputs = $request->all();
-        if($inputs['maphanloai']==''){$inputs['maphanloai']=getdate()[0];}
-        dmphanloaidonvi::create($inputs);
+        if ($inputs['maphanloai'] == '') {
+            $inputs['maphanloai'] = getdate()[0];
+        }
+        unset($inputs['id']);
+        $model = dmphanloaidonvi::where('maphanloai', $inputs['maphanloai'])->first();
+        if($model != null){
+            $model->update($inputs);
+        }else{
+            dmphanloaidonvi::create($inputs);
+        }
+        
+        
         //Trả lại kết quả
         $result['message'] = 'Thao tác thành công.';
         $result['status'] = 'success';
@@ -48,21 +59,23 @@ class dmphanloaidonviController extends Controller
         die(json_encode($result));
     }
 
-    function destroy($id){
+    function destroy($id)
+    {
         if (Session::has('admin')) {
             $model = dmphanloaidonvi::findOrFail($id);
             $model->delete();
             return redirect('/danh_muc/pl_don_vi/index');
-        }else
+        } else
             return view('errors.notlogin');
     }
 
-    function update(Request $request){
+    function update(Request $request)
+    {
         $result = array(
             'status' => 'fail',
             'message' => 'error',
         );
-        if(!Session::has('admin')) {
+        if (!Session::has('admin')) {
             $result = array(
                 'status' => 'fail',
                 'message' => 'permission denied',
@@ -71,7 +84,7 @@ class dmphanloaidonviController extends Controller
         }
 
         $inputs = $request->all();
-        $model = dmphanloaidonvi::where('maphanloai',$inputs['maphanloai'])->first();
+        $model = dmphanloaidonvi::where('maphanloai', $inputs['maphanloai'])->first();
         $model->update($inputs);
 
         $result['message'] = "Cập nhật thành công.";
@@ -79,8 +92,9 @@ class dmphanloaidonviController extends Controller
         die(json_encode($result));
     }
 
-    function getinfo(Request $request){
-        if(!Session::has('admin')) {
+    function getinfo(Request $request)
+    {
+        if (!Session::has('admin')) {
             $result = array(
                 'status' => 'fail',
                 'message' => 'permission denied',
@@ -89,7 +103,7 @@ class dmphanloaidonviController extends Controller
         }
 
         $inputs = $request->all();
-        $model = dmphanloaidonvi::where('maphanloai',$inputs['maphanloai'])->first();
+        $model = dmphanloaidonvi::where('maphanloai', $inputs['maphanloai'])->first();
         die($model);
     }
 
@@ -148,24 +162,25 @@ class dmphanloaidonviController extends Controller
             $inputs = $request->all();
             $inputs['congthuc'] = getDbl($inputs['phanloai']) == 2 ? $inputs['congthuc'] : '';
             dmphucap_phanloai::find($inputs['id'])->update($inputs);
-            return redirect('/danh_muc/pl_don_vi?maso='.$inputs['maphanloai']);
+            return redirect('/danh_muc/pl_don_vi?maso=' . $inputs['maphanloai']);
         } else
             return view('errors.notlogin');
     }
 
-    function anhien(Request $request){
+    function anhien(Request $request)
+    {
         if (Session::has('admin')) {
             $inputs = $request->all();
             $model = dmphucap_phanloai::find($inputs['id']);
-            if($model->phanloai == 3){
+            if ($model->phanloai == 3) {
                 $model->congthuc = '';
                 $model->phanloai = 0;
-            }else{
+            } else {
                 $model->phanloai = 3;
             }
             $model->save();
 
-            return redirect('/danh_muc/pl_don_vi?maso='.$model->maphanloai);
+            return redirect('/danh_muc/pl_don_vi?maso=' . $model->maphanloai);
         } else
             return view('errors.notlogin');
     }
