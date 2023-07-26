@@ -47,15 +47,13 @@
                             <ol>
                                 <li>
                                     <a href="#" data-target="#thoaichitra-modal" data-toggle="modal"
-                                        onclick="ChiTraLuong('{{ $furl . 'tonghopluong_tinh' }}','POST')">Tổng hợp tình hình
-                                        chi trả
-                                        lương (Mẫu tổng hợp )</a>
+                                        onclick="ChiTraLuong('{{ $furl . 'tonghopluong_tinh' }}','POST', true)">Tổng hợp tình hình
+                                        chi trả lương (Mẫu tổng hợp )</a>
                                 </li>
                                 <li>
                                     <a href="#" data-target="#thoaichitra-modal" data-toggle="modal"
-                                        onclick="ChiTraLuong('{{ $furl . 'tonghopluong_tinh' }}','GET')">Tổng hợp tình hình
-                                        chi trả
-                                        lương (Mẫu chi tiết )</a>
+                                        onclick="ChiTraLuong('{{ $inputs['furl_chiluong'] . 'TongHop' }}','GET', false)">Tổng hợp tình hình
+                                        chi trả lương (Mẫu chi tiết )</a>
                                 </li>
                             </ol>
                         </div>
@@ -70,31 +68,169 @@
                             <ol>
                                 <li>
                                     <a href="#"
-                                        onclick="insolieu('{{ $furl . 'tonghopbienche' }}','1506672780;1506673604;1637915601')"
-                                        data-target="#modal-insolieu" data-toggle="modal">Dự toán lương - Tổng hợp biên chế,
+                                        onclick="inDuToan('{{ $furl . 'tonghopbienche' }}','1506672780;1506673604;1637915601')"
+                                        data-target="#modal-indutoan" data-toggle="modal">Dự toán lương - Tổng hợp biên chế,
                                         hệ số
                                         lương và phụ cấp có mặt (Mẫu tổng hợp)
                                     </a>
                                 </li>
                                 <li>
                                     <a href="#"
-                                        onclick="insolieu('{{ $furl . 'tonghopbienche' }}','1506672780;1506673604;1637915601')"
-                                        data-target="#modal-insolieu-ct" data-toggle="modal">Dự toán lương - Tổng hợp biên
+                                        onclick="inDuToan('{{ $furl . 'tonghopbienche' }}','1506672780;1506673604;1637915601')"
+                                        data-target="#modal-indutoan" data-toggle="modal">Dự toán lương - Tổng hợp biên
                                         chế, hệ số
                                         lương và phụ cấp có mặt (Mẫu chi tiết)
                                     </a>
                                 </li>
                                 <li>
-                                    <a href="#" onclick="insolieu('{{ $furl . 'tonghophopdong' }}','1506673585')"
-                                        data-target="#modal-insolieu" data-toggle="modal">Dự toán lương - Tổng hợp hợp đồng
+                                    <a href="#" onclick="inDuToan('{{ $furl . 'tonghophopdong' }}','1506673585')"
+                                        data-target="#modal-indutoan" data-toggle="modal">Dự toán lương - Tổng hợp hợp đồng
                                         bổ sung quỹ lương (Mẫu tổng hợp)
                                     </a>
                                 </li>
                                 <li>
-                                    <a href="#" onclick="insolieu('{{ $furl . 'tonghophopdong' }}','1506673585')"
-                                        data-target="#modal-insolieu-ct" data-toggle="modal">Dự toán lương - Tổng hợp hợp
+                                    <a href="#" onclick="inDuToan('{{ $furl . 'tonghophopdong' }}','1506673585')"
+                                        data-target="#modal-indutoan" data-toggle="modal">Dự toán lương - Tổng hợp hợp
                                         đồng bổ sung quỹ lương (Mẫu chi tiết)
                                     </a>
+                                </li>
+                            </ol>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div style="margin-bottom: 5px;margin-left: 5px;font-weight: bold;"
+                            class="col-lg-12 caption text-uppercase">
+                            BÁO CÁO TỔNG HỢP nhu cầu kinh phí
+                        </div>
+                        <div class="col-lg-12">
+                            <ol>
+                                <li>
+                                    <button type="button"
+                                        onclick="inNhuCauKP('{{ $inputs['furl_nhucaukp'] . 'tonghop_m2' }}',null)"
+                                        style="border-width: 0px" class="btn btn-default btn-xs mbs"
+                                        data-target="#modal-innhucaukp" data-toggle="modal"
+                                        title="Dữ liệu (bao gồm cả cán bộ hợp đồng, không chuyên trách) theo lĩnh vực hoạt động của nhu cầu kinh phí">
+                                        Bảng tổng hợp nhu cầu kinh phí </button>
+                                </li>
+
+                                <li>
+                                    <button type="button"
+                                        onclick="inNhuCauKP('{{ $inputs['furl_nhucaukp'] . 'mau2a' }}',null)"
+                                        style="border-width: 0px" class="btn btn-default btn-xs mbs"
+                                        data-target="#modal-innhucaukp" data-toggle="modal">
+                                        Bảng tổng hợp nhu cầu kinh phí (Mẫu 2a)</button>
+                                </li>
+
+                                <li>
+                                    <button type="button"
+                                        onclick="inNhuCauKP('{{ $inputs['furl_nhucaukp'] . 'mau2b' }}',null)"
+                                        style="border-width: 0px" class="btn btn-default btn-xs mbs"
+                                        data-target="#modal-innhucaukp" data-toggle="modal">
+                                        Bảng tổng quỹ trợ cấp tăng thêm cho cán bộ đã
+                                        nghỉ hưu
+                                        (Mẫu 2b)</button>
+                                </li>
+
+                                <li>
+                                    <button type="button"
+                                        onclick="inNhuCauKP('{{ $inputs['furl_nhucaukp'] . 'mau2c' }}',null)"
+                                        style="border-width: 0px" class="btn btn-default btn-xs mbs"
+                                        data-target="#modal-innhucaukp" data-toggle="modal">
+                                        Báo cáo nhu cầu kinh phí thực hiện bảo hiểm
+                                        thất nghiệp
+                                        (Mẫu 2c)</button>
+                                </li>
+
+                                <li>
+                                    <button type="button"
+                                        onclick="inNhuCauKP('{{ $inputs['furl_nhucaukp'] . 'mau2d' }}',null)"
+                                        style="border-width: 0px" class="btn btn-default btn-xs mbs"
+                                        data-target="#modal-innhucaukp" data-toggle="modal">
+                                        Tổng hợp kinh phí tăng thêm để thực hiện chế
+                                        độ cho cán bộ
+                                        không chuyên trách (Mẫu 2d)</button>
+                                </li>
+
+                                <li>
+                                    <button type="button"
+                                        onclick="inNhuCauKP('{{ $inputs['furl_nhucaukp'] . 'mau2dd' }}',null)"
+                                        style="border-width: 0px" class="btn btn-default btn-xs mbs"
+                                        data-target="#modal-innhucaukp" data-toggle="modal">
+                                        Báo cáo nguồn thực hiện CCTL tiết kiệm (Mẫu 2đ)</button>
+                                </li>
+
+                                <li>
+                                    <button type="button"
+                                        onclick="inNhuCauKP('{{ $inputs['furl_nhucaukp'] . 'mau2e' }}',null)"
+                                        style="border-width: 0px" class="btn btn-default btn-xs mbs"
+                                        data-target="#modal-innhucaukp" data-toggle="modal">
+                                        Báo cáo nguồn thực hiện CCTL tiết kiệm trong
+                                        năm (Mẫu 2e)</button>
+                                </li>
+
+                                <li>
+                                    <button type="button"
+                                        onclick="inNhuCauKP('{{ $inputs['furl_nhucaukp'] . 'mau2g' }}',null)"
+                                        style="border-width: 0px" class="btn btn-default btn-xs mbs"
+                                        data-target="#modal-innhucaukp" data-toggle="modal">
+                                        Báo cáo quỹ tiền lương, phụ cấp đối với lao động theo hợp đồng khu vực hành
+                                        chính và đơn vị sự nghiệp (Mẫu 2g)</button>
+                                </li>
+
+                                <li>
+                                    <button type="button"
+                                        onclick="inNhuCauKP('{{ $inputs['furl_nhucaukp'] . 'mau2h' }}',null)"
+                                        style="border-width: 0px" class="btn btn-default btn-xs mbs"
+                                        data-target="#modal-innhucaukp" data-toggle="modal">
+                                        Tổng hợp phụ cấp ưu đãi giảm do điều chỉnh
+                                        danh sách huyện nghèo (Mẫu 2h)</button>
+                                </li>
+
+                                <li>
+                                    <button type="button"
+                                        onclick="inNhuCauKP('{{ $inputs['furl_nhucaukp'] . 'mau2i' }}',null)"
+                                        style="border-width: 0px" class="btn btn-default btn-xs mbs"
+                                        data-target="#modal-innhucaukp" data-toggle="modal">
+                                        Tổng hợp phụ cấp thu hút giảm do điều chỉnh
+                                        danh sách huyện nghèo (Mẫu 2i)</button>
+                                </li>
+
+                                <li>
+                                    <button type="button"
+                                        onclick="inNhuCauKP('{{ $inputs['furl_nhucaukp'] . 'mau2k' }}',null)"
+                                        style="border-width: 0px" class="btn btn-default btn-xs mbs"
+                                        data-target="#modal-innhucaukp" data-toggle="modal">
+                                        Tổng hợp kinh phí giảm theo nghị định số
+                                        34/2019/NĐ-CP - cán bộ, công chức cấp xã
+                                        (Mẫu 2k)</button>
+                                </li>
+
+                                <li>
+                                    <button type="button"
+                                        onclick="inNhuCauKP('{{ $inputs['furl_nhucaukp'] . 'mau2l' }}',null)"
+                                        style="border-width: 0px" class="btn btn-default btn-xs mbs"
+                                        data-target="#modal-innhucaukp" data-toggle="modal">
+                                        Tổng hợp kinh phí giảm theo nghị định số
+                                        34/2019/NĐ-CP - người hoạt động không chuyên trách
+                                        (Mẫu 2l)</button>
+                                </li>
+
+                                <li>
+                                    <button type="button"
+                                        onclick="inNhuCauKP('{{ $inputs['furl_nhucaukp'] . 'mau4a' }}',null)"
+                                        style="border-width: 0px" class="btn btn-default btn-xs mbs"
+                                        data-target="#modal-innhucaukp" data-toggle="modal">
+                                        Báo cáo nguồn kinh phí để thực hiện cải cách
+                                        tiền lương (Mẫu 4a)</button>
+                                </li>
+
+                                <li>
+                                    <button type="button"
+                                        onclick="inNhuCauKP('{{ $inputs['furl_nhucaukp'] . 'mau4b' }}',null)"
+                                        style="border-width: 0px" class="btn btn-default btn-xs mbs"
+                                        data-target="#modal-innhucaukp" data-toggle="modal">
+                                        Tổng hợp nhu cầu, nguồn thực hiện (Mẫu 4b)</button>
                                 </li>
                             </ol>
                         </div>
@@ -104,10 +240,9 @@
         </div>
     </div>
 
-
-    <!--Mẫu in số liệu -->
-    {!! Form::open(['url' => '', 'method' => 'post', 'target' => '_blank', 'files' => true, 'id' => 'frm_insolieu']) !!}
-    <div id="modal-insolieu" tabindex="-1" role="dialog" aria-hidden="true" class="modal fade">
+    <!--Mẫu in số liệu chi trả lương -->
+    {!! Form::open(['url' => '', 'method' => 'post', 'target' => '_blank', 'files' => true, 'id' => 'frm_indutoan']) !!}
+    <div id="modal-indutoan" tabindex="-1" role="dialog" aria-hidden="true" class="modal fade">
         <div class="modal-dialog modal-content">
             <div class="modal-header modal-header-primary">
                 <button type="button" data-dismiss="modal" aria-hidden="true" class="close">&times;</button>
@@ -130,6 +265,7 @@
                             </select>
                         </div>
                     </div>
+
                     <div class="row">
                         <div class="col-md-12">
                             <label class="control-label">Năm dự toán</label>
@@ -232,14 +368,13 @@
     </div>
     {!! Form::close() !!}
 
-
     <!-- modal báo cáo tổng hợp tỉnh -->
     <div id="thoaichitra-modal" tabindex="-1" role="dialog" aria-hidden="true" class="modal fade">
         {!! Form::open([
             'url' => '#',
             'target' => '_blank',
             'method' => 'post',
-            'id' => 'thoaichitra_khoi_moi',
+            'id' => 'frm_chitraluong',
             'class' => 'form-horizontal form-validate',
         ]) !!}
         <div class="modal-dialog modal-content">
@@ -250,34 +385,37 @@
             </div>
             <div class="modal-body">
                 <div class="form-horizontal">
-                    <div class="form-group">
-                        <label class="col-md-4 control-label"> Tháng<span class="require">*</span></label>
-                        <div class="col-md-8">
-                            {!! Form::select('tuthang', $a_thang, 'ALL', ['id' => 'tuthang', 'class' => 'form-control']) !!}
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="col-md-4 control-label"> Năm<span class="require">*</span></label>
-                        <div class="col-md-8">
-                            {!! Form::select('tunam', getNam(), date('Y'), ['id' => 'tunam', 'class' => 'form-control']) !!}
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="col-md-4 control-label">Phân loại<span class="require">*</span></label>
-                        <div class="col-md-8">
-                            {!! Form::select('phanloai', $a_phanloai, date('Y'), ['id' => 'phanloai', 'class' => 'form-control select2me']) !!}
+                    <div class="row">
+                        <div class="col-md-12">
+                            <label class="control-label">Địa bàn báo cáo</label>
+                            <select class="form-control select2me" id="madvbc" name="madvbc">
+                                @foreach ($model_dvbc as $donvi)
+                                    <option value="{{ $donvi['madvbc'] }}">{{ $donvi->tendvbc }}</option>
+                                @endforeach
+                            </select>
                         </div>
                     </div>
 
-                    <div class="form-group">
-                        <label class="col-md-4 control-label"> Đơn vị tính</label>
-                        <div class="col-md-8">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <label> Tháng</label>
+                            {!! Form::select('thang', $a_thang, 'ALL', ['id' => 'tuthang', 'class' => 'form-control']) !!}
+                        </div>
+                   
+                        <div class="col-md-6">
+                            <label class="control-label"> Năm<span class="require">*</span></label>
+                            {!! Form::select('nam', getNam(), date('Y'), ['id' => 'tunam', 'class' => 'form-control']) !!}
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <label class="control-label"> Đơn vị tính</label>
                             {!! Form::select('donvitinh', getDonViTinh(), '1', ['id' => 'donvitinh', 'class' => 'form-control']) !!}
                         </div>
                     </div>
 
                     <input type="hidden" name="_token" value="{{ csrf_token() }}">
-                    <input type="hidden" id="urlbcluong" name="urlbcluong">
                 </div>
             </div>
             <div class="modal-footer">
@@ -289,14 +427,87 @@
         {!! Form::close() !!}
     </div>
 
+    <!--Mẫu in số liệu nhu cầu kinh phí -->
+    {!! Form::open([
+        'url' => '',
+        'method' => 'post',
+        'target' => '_blank',
+        'files' => true,
+        'id' => 'frm_innhucaukp',
+    ]) !!}
+    <div id="modal-innhucaukp" tabindex="-1" role="dialog" aria-hidden="true" class="modal fade">
+        <div class="modal-dialog modal-content">
+            <div class="modal-header modal-header-primary">
+                <button type="button" data-dismiss="modal" aria-hidden="true" class="close">&times;</button>
+                <h4 id="header-inbl" class="modal-title">Thông tin kết xuất</h4>
+            </div>
+            <div class="modal-body">
+                <div class="form-horizontal">
+
+                    <div class="row">
+                        <div class="col-md-12">
+                            <label class="control-label">Địa bàn báo cáo</label>
+                            <select class="form-control select2me" id="madvbc" name="madvbc">
+                                @foreach ($model_dvbc as $donvi)
+                                    <option value="{{ $donvi['madvbc'] }}">{{ $donvi->tendvbc }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-12">
+                            <label class="control-label">Thông tư, quyết định</label>
+                            {!! Form::select('sohieu', $a_thongtuqd, null, ['class' => 'form-control', 'required']) !!}
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <label class="control-label">Đơn vị tính</label>
+                            {!! Form::select('donvitinh', getDonViTinh(), null, ['class' => 'form-control select2me']) !!}
+                        </div>
+
+                        <div class="col-md-6">
+                            <label class="control-label">Cỡ chữ</label>
+                            {!! Form::select('cochu', getCoChu(), 10, ['id' => 'cochu', 'class' => 'form-control select2me']) !!}
+                        </div>
+                    </div>
+                </div>
+
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" data-dismiss="modal" class="btn btn-default">Hủy thao tác</button>
+                <button type="submit" class="btn btn-success">Đồng ý</button>
+            </div>
+        </div>
+    </div>
+    {!! Form::close() !!}
+
     <script type="text/javascript">
-        function ChiTraLuong(url) {
-            $('#urlbc').val(url);
-            $('#urlbcluong_ct').val(url);
+        //In chi trả lương
+        function ChiTraLuong(url, method, trangthai_madvbc) {
+            $('#frm_chitraluong').attr('action', url);
+            $('#frm_chitraluong').attr('method', method);
+            $('#frm_chitraluong').find("[name^='madvbc']").attr('disabled', trangthai_madvbc);
         }
 
-        function dutoanluong_huyen(url) {
-            $('#thoaidutoan_huyen').attr('action', url);
+        //In dự toán
+        function inDuToan(url, mact) {
+            if (mact == null) {
+                $('#frm_indutoan').find("[name^='mact']").attr('disabled', true);
+            } else {
+                $('#frm_indutoan').find("[name^='mact']").attr('disabled', false);
+                $('#frm_indutoan').find("[name^='mact']").val(mact.split(';')).trigger('change');
+
+            }
+            $('#frm_indutoan').attr('action', url);
+        }
+
+        //In nhu cầu kinh phí
+        function inNhuCauKP(url) {
+            $('#frm_innhucaukp').attr('action', url);
         }
     </script>
 @stop

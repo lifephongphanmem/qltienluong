@@ -512,6 +512,11 @@ class tonghopnguon_huyenController extends Controller
     {
         if (Session::has('admin')) {
             $inputs = $request->all();
+            //lấy mã đơn vị quản lý trong trường hợp gọi từ "Báo cáo tổng hợp" giao diện Tỉnh
+            if (!isset($inputs['macqcq'])) {
+                $inputs['macqcq'] = dmdonvibaocao::where('madvbc', $inputs['madvbc'])->first()->madvcq;
+            }
+
             $m_nguonkp = nguonkinhphi::where(function ($qr) use ($inputs) {
                 $qr->where('macqcq', $inputs['macqcq'])->where('trangthai', 'DAGUI')->where('sohieu', $inputs['sohieu']);
             })->orwhere(function ($qr) use ($inputs) {
@@ -1003,6 +1008,10 @@ class tonghopnguon_huyenController extends Controller
     {
         if (Session::has('admin')) {
             $inputs = $request->all();
+            //lấy mã đơn vị quản lý trong trường hợp gọi từ "Báo cáo tổng hợp" giao diện Tỉnh
+            if (!isset($inputs['macqcq'])) {
+                $inputs['macqcq'] = dmdonvibaocao::where('madvbc', $inputs['madvbc'])->first()->madvcq;
+            }
             $m_thongtu = dmthongtuquyetdinh::where('sohieu', $inputs['sohieu'])->first();
             $m_nguonkp = nguonkinhphi::where(function ($qr) use ($inputs) {
                 $qr->where('macqcq', $inputs['macqcq'])->where('trangthai', 'DAGUI')->where('sohieu', $inputs['sohieu']);
@@ -2968,20 +2977,19 @@ class tonghopnguon_huyenController extends Controller
     {
         if (Session::has('admin')) {
             $inputs = $request->all();
-            //$m_thongtu = dmthongtuquyetdinh::where('sohieu', $inputs['sohieu'])->first();
+            //lấy mã đơn vị quản lý trong trường hợp gọi từ "Báo cáo tổng hợp" giao diện Tỉnh
+            if (!isset($inputs['macqcq'])) {
+                $inputs['macqcq'] = dmdonvibaocao::where('madvbc', $inputs['madvbc'])->first()->madvcq;
+            }
             $m_nguonkp = nguonkinhphi::where(function ($qr) use ($inputs) {
                 $qr->where('macqcq', $inputs['macqcq'])->where('trangthai', 'DAGUI')->where('sohieu', $inputs['sohieu']);
             })->orwhere(function ($qr) use ($inputs) {
                 $qr->where('madv', $inputs['macqcq'])->where('sohieu', $inputs['sohieu']);
             })->get();
-            //$a_linhvuc = array_column($m_nguonkp->toarray(), 'linhvuchoatdong', 'masodv');
-
-            $m_donvi = dmdonvi::where('madv', $inputs['macqcq'])->first();
-            //$a_diaban = array_column(dmdonvibaocao::all()->toArray(), 'level', 'madvbc');
-
+            
+            $m_donvi = dmdonvi::where('madv', $inputs['macqcq'])->first();           
 
             $ar_I = array();
-
             $ar_I[0] = array(
                 'val' => 'BT', 'tt' => '1', 'noidung' => 'Nguyên bí thư, chủ tịch',
                 'songuoi' => $m_nguonkp->sum('tongsonguoi1'),
@@ -3003,15 +3011,6 @@ class tonghopnguon_huyenController extends Controller
                 'quy2' => $m_nguonkp->sum('quy2_3'),
             );
 
-            $a_It = array(
-                'cb' => 0,
-                'quy09' => 0,
-                'quy76' => 0,
-                'quytang' => 0,
-                'bhyt' => 0,
-                'tongquy' => 0
-            );
-
             //dd($m_tonghop_ct);
             return view('reports.thongtu78.huyen.mau2b')
                 ->with('ar_I', $ar_I)
@@ -3026,6 +3025,10 @@ class tonghopnguon_huyenController extends Controller
     {
         if (Session::has('admin')) {
             $inputs = $request->all();
+            //lấy mã đơn vị quản lý trong trường hợp gọi từ "Báo cáo tổng hợp" giao diện Tỉnh
+            if(!isset($inputs['macqcq'])){
+                $inputs['macqcq'] = dmdonvibaocao::where('madvbc',$inputs['madvbc'])->first()->madvcq;
+            }
             $m_nguonkp = nguonkinhphi::where(function ($qr) use ($inputs) {
                 $qr->where('macqcq', $inputs['macqcq'])->where('trangthai', 'DAGUI')->where('sohieu', $inputs['sohieu']);
             })->orwhere(function ($qr) use ($inputs) {
@@ -3190,7 +3193,10 @@ class tonghopnguon_huyenController extends Controller
     {
         if (Session::has('admin')) {
             $inputs = $request->all();
-            //$m_thongtu = dmthongtuquyetdinh::where('sohieu', $inputs['sohieu'])->first();
+            //lấy mã đơn vị quản lý trong trường hợp gọi từ "Báo cáo tổng hợp" giao diện Tỉnh
+            if(!isset($inputs['macqcq'])){
+                $inputs['macqcq'] = dmdonvibaocao::where('madvbc',$inputs['madvbc'])->first()->madvcq;
+            }
             $m_nguonkp = nguonkinhphi::where(function ($qr) use ($inputs) {
                 $qr->where('macqcq', $inputs['macqcq'])->where('trangthai', 'DAGUI')->where('sohieu', $inputs['sohieu']);
             })->orwhere(function ($qr) use ($inputs) {
@@ -3412,7 +3418,11 @@ class tonghopnguon_huyenController extends Controller
     {
         if (Session::has('admin')) {
             $inputs = $request->all();
-            //$m_thongtu = dmthongtuquyetdinh::where('sohieu', $inputs['sohieu'])->first();
+            //lấy mã đơn vị quản lý trong trường hợp gọi từ "Báo cáo tổng hợp" giao diện Tỉnh
+            if(!isset($inputs['macqcq'])){
+                $inputs['macqcq'] = dmdonvibaocao::where('madvbc',$inputs['madvbc'])->first()->madvcq;
+            }
+
             $m_nguonkp = nguonkinhphi::where(function ($qr) use ($inputs) {
                 $qr->where('macqcq', $inputs['macqcq'])->where('trangthai', 'DAGUI')->where('sohieu', $inputs['sohieu']);
             })->orwhere(function ($qr) use ($inputs) {
@@ -3513,6 +3523,10 @@ class tonghopnguon_huyenController extends Controller
     {
         if (Session::has('admin')) {
             $inputs = $request->all();
+            //lấy mã đơn vị quản lý trong trường hợp gọi từ "Báo cáo tổng hợp" giao diện Tỉnh
+            if(!isset($inputs['macqcq'])){
+                $inputs['macqcq'] = dmdonvibaocao::where('madvbc',$inputs['madvbc'])->first()->madvcq;
+            }
             //$m_thongtu = dmthongtuquyetdinh::where('sohieu', $inputs['sohieu'])->first();
             $m_nguonkp = nguonkinhphi::where(function ($qr) use ($inputs) {
                 $qr->where('macqcq', $inputs['macqcq'])->where('trangthai', 'DAGUI')->where('sohieu', $inputs['sohieu']);
@@ -3587,6 +3601,10 @@ class tonghopnguon_huyenController extends Controller
     {
         if (Session::has('admin')) {
             $inputs = $request->all();
+            //lấy mã đơn vị quản lý trong trường hợp gọi từ "Báo cáo tổng hợp" giao diện Tỉnh
+            if(!isset($inputs['macqcq'])){
+                $inputs['macqcq'] = dmdonvibaocao::where('madvbc',$inputs['madvbc'])->first()->madvcq;
+            }
             $m_thongtu = dmthongtuquyetdinh::where('sohieu', $inputs['sohieu'])->first();
             $m_nguonkp = nguonkinhphi::where(function ($qr) use ($inputs) {
                 $qr->where('macqcq', $inputs['macqcq'])->where('trangthai', 'DAGUI')->where('sohieu', $inputs['sohieu']);
@@ -3744,6 +3762,10 @@ class tonghopnguon_huyenController extends Controller
     {
         if (Session::has('admin')) {
             $inputs = $request->all();
+            //lấy mã đơn vị quản lý trong trường hợp gọi từ "Báo cáo tổng hợp" giao diện Tỉnh
+            if(!isset($inputs['macqcq'])){
+                $inputs['macqcq'] = dmdonvibaocao::where('madvbc',$inputs['madvbc'])->first()->madvcq;
+            }
             $m_nguonkp = nguonkinhphi::where(function ($qr) use ($inputs) {
                 $qr->where('macqcq', $inputs['macqcq'])->where('trangthai', 'DAGUI')->where('sohieu', $inputs['sohieu']);
             })->orwhere(function ($qr) use ($inputs) {
@@ -3788,6 +3810,10 @@ class tonghopnguon_huyenController extends Controller
     {
         if (Session::has('admin')) {
             $inputs = $request->all();
+            //lấy mã đơn vị quản lý trong trường hợp gọi từ "Báo cáo tổng hợp" giao diện Tỉnh
+            if(!isset($inputs['macqcq'])){
+                $inputs['macqcq'] = dmdonvibaocao::where('madvbc',$inputs['madvbc'])->first()->madvcq;
+            }
             $m_nguonkp = nguonkinhphi::where(function ($qr) use ($inputs) {
                 $qr->where('macqcq', $inputs['macqcq'])->where('trangthai', 'DAGUI')->where('sohieu', $inputs['sohieu']);
             })->orwhere(function ($qr) use ($inputs) {
@@ -3832,6 +3858,10 @@ class tonghopnguon_huyenController extends Controller
     {
         if (Session::has('admin')) {
             $inputs = $request->all();
+            //lấy mã đơn vị quản lý trong trường hợp gọi từ "Báo cáo tổng hợp" giao diện Tỉnh
+            if(!isset($inputs['macqcq'])){
+                $inputs['macqcq'] = dmdonvibaocao::where('madvbc',$inputs['madvbc'])->first()->madvcq;
+            }
             $m_thongtu = dmthongtuquyetdinh::where('sohieu', $inputs['sohieu'])->first();
             $m_nguonkp = nguonkinhphi::where(function ($qr) use ($inputs) {
                 $qr->where('macqcq', $inputs['macqcq'])->where('trangthai', 'DAGUI')->where('sohieu', $inputs['sohieu']);
@@ -3989,6 +4019,10 @@ class tonghopnguon_huyenController extends Controller
     {
         if (Session::has('admin')) {
             $inputs = $request->all();
+            //lấy mã đơn vị quản lý trong trường hợp gọi từ "Báo cáo tổng hợp" giao diện Tỉnh
+            if(!isset($inputs['macqcq'])){
+                $inputs['macqcq'] = dmdonvibaocao::where('madvbc',$inputs['madvbc'])->first()->madvcq;
+            }
             $m_nguonkp = nguonkinhphi::where(function ($qr) use ($inputs) {
                 $qr->where('macqcq', $inputs['macqcq'])->where('trangthai', 'DAGUI')->where('sohieu', $inputs['sohieu']);
             })->orwhere(function ($qr) use ($inputs) {
@@ -4115,8 +4149,11 @@ class tonghopnguon_huyenController extends Controller
     {
         //Kiểm tra cấp đơn vị xem đơn vị để update trường masoh hoặc masot
         if (Session::has('admin')) {
-
             $inputs = $request->all();
+            //lấy mã đơn vị quản lý trong trường hợp gọi từ "Báo cáo tổng hợp" giao diện Tỉnh
+            if(!isset($inputs['macqcq'])){
+                $inputs['macqcq'] = dmdonvibaocao::where('madvbc',$inputs['madvbc'])->first()->madvcq;
+            }
             $m_nguonkp = nguonkinhphi::where(function ($qr) use ($inputs) {
                 $qr->where('macqcq', $inputs['macqcq'])->where('trangthai', 'DAGUI')->where('sohieu', $inputs['sohieu']);
             })->orwhere(function ($qr) use ($inputs) {
@@ -4246,6 +4283,10 @@ class tonghopnguon_huyenController extends Controller
         //Kiểm tra cấp đơn vị xem đơn vị để update trường masoh hoặc masot
         if (Session::has('admin')) {
             $inputs = $request->all();
+            //lấy mã đơn vị quản lý trong trường hợp gọi từ "Báo cáo tổng hợp" giao diện Tỉnh
+            if(!isset($inputs['macqcq'])){
+                $inputs['macqcq'] = dmdonvibaocao::where('madvbc',$inputs['madvbc'])->first()->madvcq;
+            }
             $m_nguonkp = nguonkinhphi::where(function ($qr) use ($inputs) {
                 $qr->where('macqcq', $inputs['macqcq'])->where('trangthai', 'DAGUI')->where('sohieu', $inputs['sohieu']);
             })->orwhere(function ($qr) use ($inputs) {

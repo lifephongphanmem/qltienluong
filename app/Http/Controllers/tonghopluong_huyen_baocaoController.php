@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\dmdonvi;
+use App\dmdonvibaocao;
 use App\dmphanloaict;
 use App\dmphanloaidonvi;
 use App\dmphanloaidonvi_baocao;
@@ -21,8 +22,12 @@ class tonghopluong_huyen_baocaoController extends Controller
     function TongHop_PhanLoaiDV(Request $request)
     {
         if (Session::has('admin')) {
-            $inputs = $request->all();
-            $inputs['donvitinh'] = 1;
+            $inputs = $request->all();            
+            $inputs['donvitinh'] = $inputs['donvitinh'] ?? 1;
+            //lấy mã đơn vị quản lý trong trường hợp gọi từ "Báo cáo tổng hợp" giao diện Tỉnh
+            if(!isset($inputs['macqcq'])){
+                $inputs['macqcq'] = dmdonvibaocao::where('madvbc',$inputs['madvbc'])->first()->madvcq;
+            }
             $model_tonghop = tonghopluong_donvi::where('thang', $inputs['thang'])->where('nam', $inputs['nam'])->where('macqcq', $inputs['macqcq'])
                 ->where('trangthai', 'DAGUI')->get();
             //dd($model_tonghop);

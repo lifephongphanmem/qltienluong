@@ -95,12 +95,17 @@ class baocaobangluongController extends Controller
                 $model_tenct = dmphanloaict::wherein('mact', getPLCTDuToan())->get();
                 $model_nhomct = dmphanloaicongtac::wherein('macongtac', array_unique(array_column($model_tenct->toarray(), 'macongtac')))->get();
             }
+            $a_thongtuqd = array_column(dmthongtuquyetdinh::orderby('ngayapdung', 'desc')->get()->toarray(), 'tenttqd', 'sohieu');
             // dd(session('admin'));
             // dd($model_donvi);
             $inputs['madv'] = session('admin')->madv;
             $inputs['furl'] = '/bao_cao/bang_luong/';
             $inputs['furl_th'] = '/chuc_nang/du_toan_luong/huyen/';
             $inputs['furl_dutoan'] = '/chuc_nang/du_toan_luong/huyen/';
+            $inputs['furl_nhucaukp'] = '/chuc_nang/tong_hop_nguon/huyen/';
+            //$inputs['sohieu'] =   array_key_first($a_thongtuqd);
+            $inputs['madvbc'] =   session('admin')->madvbc;
+            //dd($inputs);
             $model_thongtu = dmthongtuquyetdinh::all();
             return view('reports.index_th')
                 ->with('inputs', $inputs)
@@ -112,6 +117,7 @@ class baocaobangluongController extends Controller
                 ->with('model_thongtu', $model_thongtu)
                 ->with('model_tenct', $model_tenct)
                 ->with('model_nhomct', $model_nhomct)
+                ->with('a_thongtuqd', $a_thongtuqd)
                 //->with('model_dvbc', $model_dvbc)
                 ->with('pageTitle', 'Báo cáo chi trả lương');
         } else
