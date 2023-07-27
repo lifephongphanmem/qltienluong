@@ -48,7 +48,7 @@
                             <div class="col-lg-12">
                                 <ol>
                                     <!--li><a href="#" data-target="#thoaichitra-khoi-modal" data-toggle="modal" onclick="chitraluong_khoi('{{ $inputs['furl'] . 'khoi/chitraluong_th' }}')">Tổng hợp tình hình chi trả lương (Mẫu tổng hợp)</a></li>
-                                                                                                                                                        <li><a href="#" data-target="#thoaichitra-khoi-modal" data-toggle="modal" onclick="chitraluong_khoi('{{ $inputs['furl'] . 'khoi/chitraluong_ct' }}')">Tổng hợp tình hình chi trả lương (Mẫu chi tiết)</a></li-->
+                                                                                                                                                            <li><a href="#" data-target="#thoaichitra-khoi-modal" data-toggle="modal" onclick="chitraluong_khoi('{{ $inputs['furl'] . 'khoi/chitraluong_ct' }}')">Tổng hợp tình hình chi trả lương (Mẫu chi tiết)</a></li-->
                                     <li><a href="#" data-target="#thoaichitra-khoi-moi-modal" data-toggle="modal"
                                             onclick="baocao('{{ $inputs['furl'] . 'khoi/chitraluong_th' }}')">Tổng hợp tình
                                             hình chi
@@ -74,12 +74,12 @@
                                             đơn vị có mặt</a></li>
 
                                     <!--li><a href="{{ url('/bao_cao/thong_tu_67/khoi/mau2a1') }}" target="_blank">Báo cáo nhu cầu kinh phí thực hiện nghị định 38/2019/NĐ-CP (Mẫu 2a/1)</a></li>
-                                                                                                                                                        <li><a href="{{ url('/bao_cao/thong_tu_67/khoi/mau2a2') }}" target="_blank">Báo cáo nhu cầu kinh phí thực hiện nghị định 38/2019/NĐ-CP (Mẫu 2a/2)</a></li>
-                                                                                                                                                        <li><a href="{{ url('/bao_cao/thong_tu_67/khoi/mau2b') }}" target="_blank">Báo cáo tổng hợp quỹ trợ cấp tăng thêm của cán bộ xã, phường, thị trấn đã nghỉ việc (Mẫu 2b)</a></li>
-                                                                                                                                                        <li><a href="{{ url('/bao_cao/thong_tu_67/khoi/mau2c') }}" target="_blank">Báo cáo nhu cầu kinh phí thực hiện BHTN theo nghị định 28/2015 (Mẫu 2c)</a></li>
-                                                                                                                                                        <li><a href="{{ url('/bao_cao/thong_tu_67/khoi/mau2d') }}" target="_blank">Tổng hợp kinh phí tăng thêm để thực hiện chế độ phụ cấp đối với cán bộ không chuyên trách (Mẫu 2d)</a></li>
-                                                                                                                                                        <li><a href="{{ url('/bao_cao/thong_tu_67/khoi/mau4a') }}" target="_blank">Báo cáo nguồn kinh phí (Mẫu 4a)</a></li>
-                                                                                                                                                        <li><a href="{{ url('/bao_cao/thong_tu_67/khoi/mau4b') }}" target="_blank">Tổng hợp nhu cầu, nguồn kinh phí (Mẫu 4b)</a></li-->
+                                                                                                                                                            <li><a href="{{ url('/bao_cao/thong_tu_67/khoi/mau2a2') }}" target="_blank">Báo cáo nhu cầu kinh phí thực hiện nghị định 38/2019/NĐ-CP (Mẫu 2a/2)</a></li>
+                                                                                                                                                            <li><a href="{{ url('/bao_cao/thong_tu_67/khoi/mau2b') }}" target="_blank">Báo cáo tổng hợp quỹ trợ cấp tăng thêm của cán bộ xã, phường, thị trấn đã nghỉ việc (Mẫu 2b)</a></li>
+                                                                                                                                                            <li><a href="{{ url('/bao_cao/thong_tu_67/khoi/mau2c') }}" target="_blank">Báo cáo nhu cầu kinh phí thực hiện BHTN theo nghị định 28/2015 (Mẫu 2c)</a></li>
+                                                                                                                                                            <li><a href="{{ url('/bao_cao/thong_tu_67/khoi/mau2d') }}" target="_blank">Tổng hợp kinh phí tăng thêm để thực hiện chế độ phụ cấp đối với cán bộ không chuyên trách (Mẫu 2d)</a></li>
+                                                                                                                                                            <li><a href="{{ url('/bao_cao/thong_tu_67/khoi/mau4a') }}" target="_blank">Báo cáo nguồn kinh phí (Mẫu 4a)</a></li>
+                                                                                                                                                            <li><a href="{{ url('/bao_cao/thong_tu_67/khoi/mau4b') }}" target="_blank">Tổng hợp nhu cầu, nguồn kinh phí (Mẫu 4b)</a></li-->
 
                                     <li><a href="#" data-target="#chitiet-modal" data-toggle="modal"
                                             onclick="baocao('{{ '/bao_cao/thong_tu_67/huyen/mau2a1' }}')">Báo cáo nhu cầu
@@ -205,127 +205,150 @@
                                             style="border-width: 0px" class="btn btn-default btn-xs mbs"
                                             data-target="#modal-innhucaukp" data-toggle="modal"
                                             title="Dữ liệu (bao gồm cả cán bộ hợp đồng, không chuyên trách) theo lĩnh vực hoạt động của nhu cầu kinh phí">
-                                            Bảng tổng hợp nhu cầu kinh phí </button>
+                                            Bảng tổng hợp nhu cầu kinh phí (Theo lĩnh vực hoạt động) </button>
                                     </li>
-
+                                    <li>
+                                        <button type="button"
+                                            onclick="inNhuCauKP('{{ $inputs['furl_nhucaukp'] . 'tonghop_pldv' }}',null)"
+                                            style="border-width: 0px" class="btn btn-default btn-xs mbs"
+                                            data-target="#modal-innhucaukp" data-toggle="modal"
+                                            title="Dữ liệu (bao gồm cả cán bộ hợp đồng, không chuyên trách) theo lĩnh vực hoạt động của nhu cầu kinh phí">
+                                            Bảng tổng hợp nhu cầu kinh phí (Theo phân loại đơn vị) </button>
+                                    </li>
                                     <li>
                                         <button type="button"
                                             onclick="inNhuCauKP('{{ $inputs['furl_nhucaukp'] . 'mau2a' }}',null)"
                                             style="border-width: 0px" class="btn btn-default btn-xs mbs"
                                             data-target="#modal-innhucaukp" data-toggle="modal">
-                                            Bảng tổng hợp nhu cầu kinh phí (Mẫu 2a)</button>
+                                            Bảng tổng hợp nhu cầu kinh phí (Mẫu 2a - Theo lĩnh vực hoạt động)</button>
                                     </li>
-
                                     <li>
                                         <button type="button"
-                                            onclick="inNhuCauKP('{{ $inputs['furl_nhucaukp'] . 'mau2b' }}',null)"
+                                            onclick="inNhuCauKP('{{ $inputs['furl_nhucaukp'] . 'mau2a_pldv' }}',null)"
                                             style="border-width: 0px" class="btn btn-default btn-xs mbs"
                                             data-target="#modal-innhucaukp" data-toggle="modal">
-                                            Bảng tổng quỹ trợ cấp tăng thêm cho cán bộ đã
-                                            nghỉ hưu
-                                            (Mẫu 2b)</button>
+                                            Bảng tổng hợp nhu cầu kinh phí (Mẫu 2a - Theo phân loại đơn vị)</button>
                                     </li>
+                                    <!-- 2023.07.27 tạm thời vô hiệu hoa để đỡ bị hỏi
+                                        <li>
+                                            <button type="button"
+                                                onclick="inNhuCauKP('{{ $inputs['furl_nhucaukp'] . 'mau2a' }}',null)"
+                                                style="border-width: 0px" class="btn btn-default btn-xs mbs"
+                                                data-target="#modal-innhucaukp" data-toggle="modal">
+                                                Bảng tổng hợp nhu cầu kinh phí (Mẫu 2a)</button>
+                                        </li>
 
-                                    <li>
-                                        <button type="button"
-                                            onclick="inNhuCauKP('{{ $inputs['furl_nhucaukp'] . 'mau2c' }}',null)"
-                                            style="border-width: 0px" class="btn btn-default btn-xs mbs"
-                                            data-target="#modal-innhucaukp" data-toggle="modal">
-                                            Báo cáo nhu cầu kinh phí thực hiện bảo hiểm
-                                            thất nghiệp
-                                            (Mẫu 2c)</button>
-                                    </li>
+                                        <li>
+                                            <button type="button"
+                                                onclick="inNhuCauKP('{{ $inputs['furl_nhucaukp'] . 'mau2b' }}',null)"
+                                                style="border-width: 0px" class="btn btn-default btn-xs mbs"
+                                                data-target="#modal-innhucaukp" data-toggle="modal">
+                                                Bảng tổng quỹ trợ cấp tăng thêm cho cán bộ đã
+                                                nghỉ hưu
+                                                (Mẫu 2b)</button>
+                                        </li>
 
-                                    <li>
-                                        <button type="button"
-                                            onclick="inNhuCauKP('{{ $inputs['furl_nhucaukp'] . 'mau2d' }}',null)"
-                                            style="border-width: 0px" class="btn btn-default btn-xs mbs"
-                                            data-target="#modal-innhucaukp" data-toggle="modal">
-                                            Tổng hợp kinh phí tăng thêm để thực hiện chế
-                                            độ cho cán bộ
-                                            không chuyên trách (Mẫu 2d)</button>
-                                    </li>
+                                        <li>
+                                            <button type="button"
+                                                onclick="inNhuCauKP('{{ $inputs['furl_nhucaukp'] . 'mau2c' }}',null)"
+                                                style="border-width: 0px" class="btn btn-default btn-xs mbs"
+                                                data-target="#modal-innhucaukp" data-toggle="modal">
+                                                Báo cáo nhu cầu kinh phí thực hiện bảo hiểm
+                                                thất nghiệp
+                                                (Mẫu 2c)</button>
+                                        </li>
 
-                                    <li>
-                                        <button type="button"
-                                            onclick="inNhuCauKP('{{ $inputs['furl_nhucaukp'] . 'mau2dd' }}',null)"
-                                            style="border-width: 0px" class="btn btn-default btn-xs mbs"
-                                            data-target="#modal-innhucaukp" data-toggle="modal">
-                                            Báo cáo nguồn thực hiện CCTL tiết kiệm (Mẫu 2đ)</button>
-                                    </li>
+                                        <li>
+                                            <button type="button"
+                                                onclick="inNhuCauKP('{{ $inputs['furl_nhucaukp'] . 'mau2d' }}',null)"
+                                                style="border-width: 0px" class="btn btn-default btn-xs mbs"
+                                                data-target="#modal-innhucaukp" data-toggle="modal">
+                                                Tổng hợp kinh phí tăng thêm để thực hiện chế
+                                                độ cho cán bộ
+                                                không chuyên trách (Mẫu 2d)</button>
+                                        </li>
 
-                                    <li>
-                                        <button type="button"
-                                            onclick="inNhuCauKP('{{ $inputs['furl_nhucaukp'] . 'mau2e' }}',null)"
-                                            style="border-width: 0px" class="btn btn-default btn-xs mbs"
-                                            data-target="#modal-innhucaukp" data-toggle="modal">
-                                            Báo cáo nguồn thực hiện CCTL tiết kiệm trong
-                                            năm (Mẫu 2e)</button>
-                                    </li>
+                                        <li>
+                                            <button type="button"
+                                                onclick="inNhuCauKP('{{ $inputs['furl_nhucaukp'] . 'mau2dd' }}',null)"
+                                                style="border-width: 0px" class="btn btn-default btn-xs mbs"
+                                                data-target="#modal-innhucaukp" data-toggle="modal">
+                                                Báo cáo nguồn thực hiện CCTL tiết kiệm (Mẫu 2đ)</button>
+                                        </li>
 
-                                    <li>
-                                        <button type="button"
-                                            onclick="inNhuCauKP('{{ $inputs['furl_nhucaukp'] . 'mau2g' }}',null)"
-                                            style="border-width: 0px" class="btn btn-default btn-xs mbs"
-                                            data-target="#modal-innhucaukp" data-toggle="modal">
-                                            Báo cáo quỹ tiền lương, phụ cấp đối với lao động theo hợp đồng khu vực hành
-                                            chính và đơn vị sự nghiệp (Mẫu 2g)</button>
-                                    </li>
+                                        <li>
+                                            <button type="button"
+                                                onclick="inNhuCauKP('{{ $inputs['furl_nhucaukp'] . 'mau2e' }}',null)"
+                                                style="border-width: 0px" class="btn btn-default btn-xs mbs"
+                                                data-target="#modal-innhucaukp" data-toggle="modal">
+                                                Báo cáo nguồn thực hiện CCTL tiết kiệm trong
+                                                năm (Mẫu 2e)</button>
+                                        </li>
 
-                                    <li>
-                                        <button type="button"
-                                            onclick="inNhuCauKP('{{ $inputs['furl_nhucaukp'] . 'mau2h' }}',null)"
-                                            style="border-width: 0px" class="btn btn-default btn-xs mbs"
-                                            data-target="#modal-innhucaukp" data-toggle="modal">
-                                            Tổng hợp phụ cấp ưu đãi giảm do điều chỉnh
-                                            danh sách huyện nghèo (Mẫu 2h)</button>
-                                    </li>
+                                        <li>
+                                            <button type="button"
+                                                onclick="inNhuCauKP('{{ $inputs['furl_nhucaukp'] . 'mau2g' }}',null)"
+                                                style="border-width: 0px" class="btn btn-default btn-xs mbs"
+                                                data-target="#modal-innhucaukp" data-toggle="modal">
+                                                Báo cáo quỹ tiền lương, phụ cấp đối với lao động theo hợp đồng khu vực hành
+                                                chính và đơn vị sự nghiệp (Mẫu 2g)</button>
+                                        </li>
 
-                                    <li>
-                                        <button type="button"
-                                            onclick="inNhuCauKP('{{ $inputs['furl_nhucaukp'] . 'mau2i' }}',null)"
-                                            style="border-width: 0px" class="btn btn-default btn-xs mbs"
-                                            data-target="#modal-innhucaukp" data-toggle="modal">
-                                            Tổng hợp phụ cấp thu hút giảm do điều chỉnh
-                                            danh sách huyện nghèo (Mẫu 2i)</button>
-                                    </li>
+                                        <li>
+                                            <button type="button"
+                                                onclick="inNhuCauKP('{{ $inputs['furl_nhucaukp'] . 'mau2h' }}',null)"
+                                                style="border-width: 0px" class="btn btn-default btn-xs mbs"
+                                                data-target="#modal-innhucaukp" data-toggle="modal">
+                                                Tổng hợp phụ cấp ưu đãi giảm do điều chỉnh
+                                                danh sách huyện nghèo (Mẫu 2h)</button>
+                                        </li>
 
-                                    <li>
-                                        <button type="button"
-                                            onclick="inNhuCauKP('{{ $inputs['furl_nhucaukp'] . 'mau2k' }}',null)"
-                                            style="border-width: 0px" class="btn btn-default btn-xs mbs"
-                                            data-target="#modal-innhucaukp" data-toggle="modal">
-                                            Tổng hợp kinh phí giảm theo nghị định số
-                                            34/2019/NĐ-CP - cán bộ, công chức cấp xã
-                                            (Mẫu 2k)</button>
-                                    </li>
+                                        <li>
+                                            <button type="button"
+                                                onclick="inNhuCauKP('{{ $inputs['furl_nhucaukp'] . 'mau2i' }}',null)"
+                                                style="border-width: 0px" class="btn btn-default btn-xs mbs"
+                                                data-target="#modal-innhucaukp" data-toggle="modal">
+                                                Tổng hợp phụ cấp thu hút giảm do điều chỉnh
+                                                danh sách huyện nghèo (Mẫu 2i)</button>
+                                        </li>
 
-                                    <li>
-                                        <button type="button"
-                                            onclick="inNhuCauKP('{{ $inputs['furl_nhucaukp'] . 'mau2l' }}',null)"
-                                            style="border-width: 0px" class="btn btn-default btn-xs mbs"
-                                            data-target="#modal-innhucaukp" data-toggle="modal">
-                                            Tổng hợp kinh phí giảm theo nghị định số
-                                            34/2019/NĐ-CP - người hoạt động không chuyên trách
-                                            (Mẫu 2l)</button>
-                                    </li>
+                                        <li>
+                                            <button type="button"
+                                                onclick="inNhuCauKP('{{ $inputs['furl_nhucaukp'] . 'mau2k' }}',null)"
+                                                style="border-width: 0px" class="btn btn-default btn-xs mbs"
+                                                data-target="#modal-innhucaukp" data-toggle="modal">
+                                                Tổng hợp kinh phí giảm theo nghị định số
+                                                34/2019/NĐ-CP - cán bộ, công chức cấp xã
+                                                (Mẫu 2k)</button>
+                                        </li>
 
-                                    <li>
-                                        <button type="button"
-                                            onclick="inNhuCauKP('{{ $inputs['furl_nhucaukp'] . 'mau4a' }}',null)"
-                                            style="border-width: 0px" class="btn btn-default btn-xs mbs"
-                                            data-target="#modal-innhucaukp" data-toggle="modal">
-                                            Báo cáo nguồn kinh phí để thực hiện cải cách
-                                            tiền lương (Mẫu 4a)</button>
-                                    </li>
+                                        <li>
+                                            <button type="button"
+                                                onclick="inNhuCauKP('{{ $inputs['furl_nhucaukp'] . 'mau2l' }}',null)"
+                                                style="border-width: 0px" class="btn btn-default btn-xs mbs"
+                                                data-target="#modal-innhucaukp" data-toggle="modal">
+                                                Tổng hợp kinh phí giảm theo nghị định số
+                                                34/2019/NĐ-CP - người hoạt động không chuyên trách
+                                                (Mẫu 2l)</button>
+                                        </li>
 
-                                    <li>
-                                        <button type="button"
-                                            onclick="inNhuCauKP('{{ $inputs['furl_nhucaukp'] . 'mau4b' }}',null)"
-                                            style="border-width: 0px" class="btn btn-default btn-xs mbs"
-                                            data-target="#modal-innhucaukp" data-toggle="modal">
-                                            Tổng hợp nhu cầu, nguồn thực hiện (Mẫu 4b)</button>
-                                    </li>
+                                        <li>
+                                            <button type="button"
+                                                onclick="inNhuCauKP('{{ $inputs['furl_nhucaukp'] . 'mau4a' }}',null)"
+                                                style="border-width: 0px" class="btn btn-default btn-xs mbs"
+                                                data-target="#modal-innhucaukp" data-toggle="modal">
+                                                Báo cáo nguồn kinh phí để thực hiện cải cách
+                                                tiền lương (Mẫu 4a)</button>
+                                        </li>
+
+                                        <li>
+                                            <button type="button"
+                                                onclick="inNhuCauKP('{{ $inputs['furl_nhucaukp'] . 'mau4b' }}',null)"
+                                                style="border-width: 0px" class="btn btn-default btn-xs mbs"
+                                                data-target="#modal-innhucaukp" data-toggle="modal">
+                                                Tổng hợp nhu cầu, nguồn thực hiện (Mẫu 4b)</button>
+                                        </li>
+                                    -->
                                 </ol>
                             </div>
                         </div>
@@ -500,7 +523,7 @@
         </div>
     </div>
     {!! Form::close() !!}
-    
+
     <script>
         //In dữ liệu
         function insolieu(url, mact) {
@@ -517,7 +540,7 @@
         //
 
         function inNhuCauKP(url) {
-            $('#frm_innhucaukp').attr('action', url);            
+            $('#frm_innhucaukp').attr('action', url);
         }
 
         function inchitraluong(url) {

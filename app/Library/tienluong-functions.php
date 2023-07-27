@@ -301,6 +301,17 @@ function getDiaBan($val_null = true)
     return $model;
 }
 
+function getColNhuCau()
+{
+    return array_column(App\dmphucap::where('tonghop', 1)->orderby('stt')->get()->toarray(), 'mapc');
+    /*
+    return array('heso','hesopc','vuotkhung','pcct','hesobl', 'luonghd','pcud61',
+        'pckct','pck','pccv','pckv','pcth','pcdd','pcdh','pcld',
+        'pcdbqh','pcudn','pctn','pctnn','pcdbn','pcvk','pckn','pcdang',
+        'pccovu','pclt','pcd','pctr','pctnvk','pcbdhdcu','pcthni');
+    */
+}
+
 function getColTongHop()
 {
     return array_column(App\dmphucap::where('tonghop', 1)->orderby('stt')->get()->toarray(), 'mapc');

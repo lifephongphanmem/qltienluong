@@ -6,6 +6,8 @@ use App\dmdonvi;
 use App\dmdonvibaocao;
 use App\dmkhoipb;
 use App\dmphanloaict;
+use App\dmphanloaidonvi;
+use App\dmphanloaidonvi_baocao;
 use App\dmphucap;
 use App\dmphucap_donvi;
 use App\dmthongtuquyetdinh;
@@ -1000,6 +1002,226 @@ class tonghopnguon_huyenController extends Controller
                 //->with('a_phucap_st', $a_phucap_st)
                 //->with('col', $col)
                 ->with('pageTitle', 'Báo cáo nhu cầu kinh phí');
+        } else
+            return view('errors.notlogin');
+    }
+
+    function tonghop_pldv(Request $request)
+    {
+        if (Session::has('admin')) {
+            $inputs = $request->all();
+            //dd($inputs);
+            $inputs['donvitinh'] = $inputs['donvitinh'] ?? 1;
+            //lấy mã đơn vị quản lý trong trường hợp gọi từ "Báo cáo tổng hợp" giao diện Tỉnh
+            if (!isset($inputs['macqcq'])) {
+                $inputs['macqcq'] = dmdonvibaocao::where('madvbc', $inputs['madvbc'])->first()->madvcq;
+            }
+            $model_tonghop = nguonkinhphi::where('macqcq', $inputs['macqcq'])->where('sohieu', $inputs['sohieu'])->where('trangthai', 'DAGUI')->get();
+            $model_thongtu = dmthongtuquyetdinh::where('sohieu', $inputs['sohieu'])->first();
+            //dd($model_thongtu);
+            if ($model_tonghop->count() == 0) {
+                return view('errors.nodata')
+                    ->with('message', 'Chưa có dữ liệu năm ' . $inputs['nam'])
+                    ->with('furl', '/chuc_nang/tong_hop_luong/huyen/index?nam=' . $inputs['nam']);
+            }
+
+            $m_donvi = dmdonvi::where('madv', $inputs['macqcq'])->first();
+
+            $m_phanloai = dmphanloaidonvi_baocao::where('madvbc', $m_donvi->madvbc)->get();
+            $a_phanloai = array_column(dmphanloaidonvi::all()->toArray(), 'maphanloai');
+
+            $m_donvi_baocao = dmdonvi::wherein('madv', array_column($model_tonghop->toarray(), 'madv'))->get();
+            //dd($m_donvi_baocao);
+            $a_donvi = array_column($model_tonghop->toarray(), 'madv', 'masodv');
+            $a_pl_donvi = array_column($m_donvi_baocao->toarray(), 'maphanloai', 'madv');
+            $model = nguonkinhphi_phucap::wherein('masodv', array_column($model_tonghop->toarray(), 'masodv'))->get();
+            $a_plct = array_column(dmphanloaict::all()->toArray(), 'tenct', 'mact');
+            $a_pc = getColNhuCau();
+
+            foreach ($model as $chitiet) {
+                $chitiet->madv = $a_donvi[$chitiet->masodv];
+                $chitiet->maphanloai = $a_pl_donvi[$chitiet->madv];
+                $chitiet->tenct = $a_plct[$chitiet->mact] ?? '';
+                $chitiet->luongcoban = $model_thongtu->chenhlech;
+                $chitiet->bhtn_dv = round($chitiet->stbhtn_dv / $chitiet->luongcoban, 7);
+                $chitiet->baohiem = round(($chitiet->ttbh_dv - $chitiet->stbhtn_dv) / $chitiet->luongcoban, 7);
+
+                $chitiet->quyluong = $chitiet->ttl + $chitiet->ttbh_dv;
+                $chitiet->tongphucap = $chitiet->tonghs - $chitiet->heso;
+                $chitiet->tongcong = $chitiet->tonghs + $chitiet->baohiem + $chitiet->bhtn_dv;
+                $this->getMaNhomPhanLoai($chitiet, $m_phanloai);
+            }
+
+            //xử lý ẩn hiện cột phụ cấp => biết tổng số cột hiện => colspan trên báo cáo
+            $a_tenpc = array_column(dmphucap::all()->toArray(), 'tenpc', 'mapc');
+            $a_phucap = array();
+            $col = 0;
+            foreach ($a_pc as $ct) {
+                if ($model->sum($ct) > 0 && $ct != 'heso') {
+                    $a_phucap[$ct] = $a_tenpc[$ct];
+                    $col++;
+                }
+            }
+            //dd($model);
+            return view('reports.thongtu78.huyen.SoLieuTongHop_PhanLoaiDV')
+                ->with('model', $model)
+                ->with('lamtron', session('admin')->lamtron ?? 3)
+                ->with('m_donvi', $m_donvi)
+                ->with('col', $col)
+                ->with('a_phucap', $a_phucap)
+                //->with('m_dutoan', $m_dutoan)
+                ->with('m_phanloai', $m_phanloai)
+                ->with('a_phanloai', $a_phanloai)
+                ->with('m_donvi_baocao', $m_donvi_baocao)
+                ->with('inputs', $inputs)
+                ->with('pageTitle', 'Báo cáo tổng hợp tiền lương và phụ cấp');
+        } else
+            return view('errors.notlogin');
+    }
+
+    function getMaNhomPhanLoai(&$chitiet, $m_phanloai)
+    {
+        $chitiet->maphanloai_goc1 = '';
+        $chitiet->maphanloai_goc2 = '';
+        $chitiet->maphanloai_goc3 = '';
+        $phanloai = $m_phanloai->where('maphanloai_nhom', $chitiet->maphanloai)->first();
+        if ($phanloai != null) {
+            $chitiet->capdo_nhom = $phanloai->capdo_nhom;
+            switch ($phanloai->capdo_nhom) {
+                case '1': {
+                        $chitiet->maphanloai_goc1 = $phanloai->maphanloai_nhom;
+                        break;
+                    }
+                case '2': {
+                        $chitiet->maphanloai_goc1 = $phanloai->maphanloai_goc;
+                        break;
+                    }
+                case '3': {
+                        $chitiet->maphanloai_goc2 = $phanloai->maphanloai_goc;
+                        //tìm gốc 1
+                        $chitiet->maphanloai_goc1 = $m_phanloai->where('maphanloai_nhom', $chitiet->maphanloai_goc2)->first()->maphanloai_goc;
+                        break;
+                    }
+                case '4': {
+                        //tìm cấp 3                    
+                        $chitiet->maphanloai_goc3 = $phanloai->maphanloai_goc;
+                        //tìm gốc 2
+                        $chitiet->maphanloai_goc2 = $m_phanloai->where('maphanloai_nhom', $chitiet->maphanloai_goc3)->first()->maphanloai_goc;
+                        //tìm gốc 1
+                        $chitiet->maphanloai_goc1 = $m_phanloai->where('maphanloai_nhom', $chitiet->maphanloai_goc2)->first()->maphanloai_goc;
+                        break;
+                    }
+            }
+        }
+    }
+
+    function mau2a_pldv(Request $request)
+    {
+        if (Session::has('admin')) {
+            $inputs = $request->all();
+            //dd($inputs);
+            $inputs['donvitinh'] = $inputs['donvitinh'] ?? 1;
+            //lấy mã đơn vị quản lý trong trường hợp gọi từ "Báo cáo tổng hợp" giao diện Tỉnh
+            if (!isset($inputs['macqcq'])) {
+                $inputs['macqcq'] = dmdonvibaocao::where('madvbc', $inputs['madvbc'])->first()->madvcq;
+            }
+            $model_tonghop = nguonkinhphi::where('macqcq', $inputs['macqcq'])->where('sohieu', $inputs['sohieu'])->where('trangthai', 'DAGUI')->get();
+            $model_thongtu = dmthongtuquyetdinh::where('sohieu', $inputs['sohieu'])->first();
+            //dd($model_thongtu);
+            if ($model_tonghop->count() == 0) {
+                return view('errors.nodata')
+                    ->with('message', 'Chưa có dữ liệu năm ' . $inputs['nam'])
+                    ->with('furl', '/chuc_nang/tong_hop_luong/huyen/index?nam=' . $inputs['nam']);
+            }
+
+            $m_donvi = dmdonvi::where('madv', $inputs['macqcq'])->first();
+
+            $m_phanloai = dmphanloaidonvi_baocao::where('madvbc', $m_donvi->madvbc)->get();
+            $a_phanloai = array_column(dmphanloaidonvi::all()->toArray(), 'maphanloai');
+
+            $m_donvi_baocao = dmdonvi::wherein('madv', array_column($model_tonghop->toarray(), 'madv'))->get();
+            //dd($m_donvi_baocao);
+            $a_donvi = array_column($model_tonghop->toarray(), 'madv', 'masodv');
+            $a_pl_donvi = array_column($m_donvi_baocao->toarray(), 'maphanloai', 'madv');
+            $model = nguonkinhphi_01thang::wherein('masodv', array_column($model_tonghop->toarray(), 'masodv'))->get();
+            $a_plct = array_column(dmphanloaict::all()->toArray(), 'tenct', 'mact');
+            $a_pc = getColNhuCau();
+
+            $luongcb_cu = $model_thongtu->muccu;
+            $luongcb_moi = $model_thongtu->mucapdung;
+            $chenhlech = $model_thongtu->chenhlech;
+            $m_dsdv = dmdonvi::all();
+            $a_phanloai = array_column($m_dsdv->toArray(), 'maphanloai', 'madv');
+            
+            $m_plct = dmphanloaict::all();
+            $a_nhomplct_hc = array_column($m_plct->toArray(), 'nhomnhucau_hc', 'mact');
+            $a_nhomplct_xp = array_column($m_plct->toArray(), 'nhomnhucau_xp', 'mact');
+            $a_nhomnhucau = ['BIENCHE', 'CANBOCT', 'HDND', 'CAPUY'];
+            foreach ($model as $key => $chitiet) {
+                $chitiet->madv = $a_donvi[$chitiet->masodv];
+                $chitiet->maphanloai = $a_phanloai[$chitiet->madv];
+                if ($chitiet->maphanloai == 'KVXP') {
+                    $chitiet->nhomnhucau = $a_nhomplct_xp[$chitiet->mact];
+                } else {
+                    $chitiet->nhomnhucau = $a_nhomplct_hc[$chitiet->mact];
+                }
+
+                if (!in_array($chitiet->nhomnhucau, $a_nhomnhucau)) {
+                    $model->forget($key);
+                }
+                
+                $chitiet->maphanloai = $a_pl_donvi[$chitiet->madv];
+                $chitiet->tenct = $a_plct[$chitiet->mact] ?? '';
+                $this->getMaNhomPhanLoai($chitiet, $m_phanloai);
+
+                //Bảng lương theo mức lương cũ                
+                $chitiet->ttbh_dv_cu = round(($chitiet->ttbh_dv / $chenhlech) * $luongcb_cu);
+                foreach ($a_pc as $mapc) {
+                    $mapc_st = 'st_' . $mapc . '_cu';
+                    $chitiet->$mapc_st = round($chitiet->$mapc * $luongcb_cu);
+                }
+                $chitiet->tongpc_cu = $chitiet->tonghs - $chitiet->heso;
+                $chitiet->st_tongpc_cu = round($chitiet->tongpc_cu * $luongcb_cu);
+                $chitiet->tongcong_cu = $chitiet->st_tongpc_cu + $chitiet->st_heso_cu + $chitiet->ttbh_dv_cu;
+
+                //Bảng lương theo mức lương mới
+                $chitiet->ttbh_dv_moi = round(($chitiet->ttbh_dv / $chenhlech) * $luongcb_moi);
+                foreach ($a_pc as $mapc) {
+                    $mapc_st = 'st_' . $mapc . '_moi';
+                    $chitiet->$mapc_st = round($chitiet->$mapc * $luongcb_moi);
+                }
+                $chitiet->tongpc_moi = $chitiet->tonghs - $chitiet->heso;
+                $chitiet->st_tongpc_moi = round($chitiet->tongpc_moi * $luongcb_moi);
+                $chitiet->tongcong_moi = $chitiet->st_tongpc_moi + $chitiet->st_heso_moi + $chitiet->ttbh_dv_moi;
+                //Tính mức tăng thêm
+                $chitiet->tang01thang = $chitiet->tongcong_moi - $chitiet->tongcong_cu;
+                $chitiet->tang06thang = $chitiet->tang01thang * 6;
+                //dd($chitiet);
+            }
+
+            //xử lý ẩn hiện cột phụ cấp => biết tổng số cột hiện => colspan trên báo cáo
+            $a_tenpc = array_column(dmphucap::all()->toArray(), 'tenpc', 'mapc');
+            $a_phucap = array();
+            $col = 0;
+            foreach ($a_pc as $ct) {
+                if ($model->sum($ct) > 0 && $ct != 'heso') {
+                    $a_phucap[$ct] = $a_tenpc[$ct];
+                    $col++;
+                }
+            }
+            //dd($model->first());
+            return view('reports.thongtu78.huyen.mau2a_PhanLoaiDV')
+                ->with('model', $model)
+                ->with('lamtron', session('admin')->lamtron ?? 3)
+                ->with('m_donvi', $m_donvi)
+                ->with('col', $col)
+                ->with('a_phucap', $a_phucap)
+                //->with('m_dutoan', $m_dutoan)
+                ->with('m_phanloai', $m_phanloai)
+                ->with('a_phanloai', $a_phanloai)
+                ->with('m_donvi_baocao', $m_donvi_baocao)
+                ->with('inputs', $inputs)
+                ->with('pageTitle', 'Báo cáo tổng hợp tiền lương và phụ cấp');
         } else
             return view('errors.notlogin');
     }
@@ -2986,8 +3208,8 @@ class tonghopnguon_huyenController extends Controller
             })->orwhere(function ($qr) use ($inputs) {
                 $qr->where('madv', $inputs['macqcq'])->where('sohieu', $inputs['sohieu']);
             })->get();
-            
-            $m_donvi = dmdonvi::where('madv', $inputs['macqcq'])->first();           
+
+            $m_donvi = dmdonvi::where('madv', $inputs['macqcq'])->first();
 
             $ar_I = array();
             $ar_I[0] = array(
@@ -3026,8 +3248,8 @@ class tonghopnguon_huyenController extends Controller
         if (Session::has('admin')) {
             $inputs = $request->all();
             //lấy mã đơn vị quản lý trong trường hợp gọi từ "Báo cáo tổng hợp" giao diện Tỉnh
-            if(!isset($inputs['macqcq'])){
-                $inputs['macqcq'] = dmdonvibaocao::where('madvbc',$inputs['madvbc'])->first()->madvcq;
+            if (!isset($inputs['macqcq'])) {
+                $inputs['macqcq'] = dmdonvibaocao::where('madvbc', $inputs['madvbc'])->first()->madvcq;
             }
             $m_nguonkp = nguonkinhphi::where(function ($qr) use ($inputs) {
                 $qr->where('macqcq', $inputs['macqcq'])->where('trangthai', 'DAGUI')->where('sohieu', $inputs['sohieu']);
@@ -3194,8 +3416,8 @@ class tonghopnguon_huyenController extends Controller
         if (Session::has('admin')) {
             $inputs = $request->all();
             //lấy mã đơn vị quản lý trong trường hợp gọi từ "Báo cáo tổng hợp" giao diện Tỉnh
-            if(!isset($inputs['macqcq'])){
-                $inputs['macqcq'] = dmdonvibaocao::where('madvbc',$inputs['madvbc'])->first()->madvcq;
+            if (!isset($inputs['macqcq'])) {
+                $inputs['macqcq'] = dmdonvibaocao::where('madvbc', $inputs['madvbc'])->first()->madvcq;
             }
             $m_nguonkp = nguonkinhphi::where(function ($qr) use ($inputs) {
                 $qr->where('macqcq', $inputs['macqcq'])->where('trangthai', 'DAGUI')->where('sohieu', $inputs['sohieu']);
@@ -3419,8 +3641,8 @@ class tonghopnguon_huyenController extends Controller
         if (Session::has('admin')) {
             $inputs = $request->all();
             //lấy mã đơn vị quản lý trong trường hợp gọi từ "Báo cáo tổng hợp" giao diện Tỉnh
-            if(!isset($inputs['macqcq'])){
-                $inputs['macqcq'] = dmdonvibaocao::where('madvbc',$inputs['madvbc'])->first()->madvcq;
+            if (!isset($inputs['macqcq'])) {
+                $inputs['macqcq'] = dmdonvibaocao::where('madvbc', $inputs['madvbc'])->first()->madvcq;
             }
 
             $m_nguonkp = nguonkinhphi::where(function ($qr) use ($inputs) {
@@ -3524,8 +3746,8 @@ class tonghopnguon_huyenController extends Controller
         if (Session::has('admin')) {
             $inputs = $request->all();
             //lấy mã đơn vị quản lý trong trường hợp gọi từ "Báo cáo tổng hợp" giao diện Tỉnh
-            if(!isset($inputs['macqcq'])){
-                $inputs['macqcq'] = dmdonvibaocao::where('madvbc',$inputs['madvbc'])->first()->madvcq;
+            if (!isset($inputs['macqcq'])) {
+                $inputs['macqcq'] = dmdonvibaocao::where('madvbc', $inputs['madvbc'])->first()->madvcq;
             }
             //$m_thongtu = dmthongtuquyetdinh::where('sohieu', $inputs['sohieu'])->first();
             $m_nguonkp = nguonkinhphi::where(function ($qr) use ($inputs) {
@@ -3602,8 +3824,8 @@ class tonghopnguon_huyenController extends Controller
         if (Session::has('admin')) {
             $inputs = $request->all();
             //lấy mã đơn vị quản lý trong trường hợp gọi từ "Báo cáo tổng hợp" giao diện Tỉnh
-            if(!isset($inputs['macqcq'])){
-                $inputs['macqcq'] = dmdonvibaocao::where('madvbc',$inputs['madvbc'])->first()->madvcq;
+            if (!isset($inputs['macqcq'])) {
+                $inputs['macqcq'] = dmdonvibaocao::where('madvbc', $inputs['madvbc'])->first()->madvcq;
             }
             $m_thongtu = dmthongtuquyetdinh::where('sohieu', $inputs['sohieu'])->first();
             $m_nguonkp = nguonkinhphi::where(function ($qr) use ($inputs) {
@@ -3763,8 +3985,8 @@ class tonghopnguon_huyenController extends Controller
         if (Session::has('admin')) {
             $inputs = $request->all();
             //lấy mã đơn vị quản lý trong trường hợp gọi từ "Báo cáo tổng hợp" giao diện Tỉnh
-            if(!isset($inputs['macqcq'])){
-                $inputs['macqcq'] = dmdonvibaocao::where('madvbc',$inputs['madvbc'])->first()->madvcq;
+            if (!isset($inputs['macqcq'])) {
+                $inputs['macqcq'] = dmdonvibaocao::where('madvbc', $inputs['madvbc'])->first()->madvcq;
             }
             $m_nguonkp = nguonkinhphi::where(function ($qr) use ($inputs) {
                 $qr->where('macqcq', $inputs['macqcq'])->where('trangthai', 'DAGUI')->where('sohieu', $inputs['sohieu']);
@@ -3811,8 +4033,8 @@ class tonghopnguon_huyenController extends Controller
         if (Session::has('admin')) {
             $inputs = $request->all();
             //lấy mã đơn vị quản lý trong trường hợp gọi từ "Báo cáo tổng hợp" giao diện Tỉnh
-            if(!isset($inputs['macqcq'])){
-                $inputs['macqcq'] = dmdonvibaocao::where('madvbc',$inputs['madvbc'])->first()->madvcq;
+            if (!isset($inputs['macqcq'])) {
+                $inputs['macqcq'] = dmdonvibaocao::where('madvbc', $inputs['madvbc'])->first()->madvcq;
             }
             $m_nguonkp = nguonkinhphi::where(function ($qr) use ($inputs) {
                 $qr->where('macqcq', $inputs['macqcq'])->where('trangthai', 'DAGUI')->where('sohieu', $inputs['sohieu']);
@@ -3859,8 +4081,8 @@ class tonghopnguon_huyenController extends Controller
         if (Session::has('admin')) {
             $inputs = $request->all();
             //lấy mã đơn vị quản lý trong trường hợp gọi từ "Báo cáo tổng hợp" giao diện Tỉnh
-            if(!isset($inputs['macqcq'])){
-                $inputs['macqcq'] = dmdonvibaocao::where('madvbc',$inputs['madvbc'])->first()->madvcq;
+            if (!isset($inputs['macqcq'])) {
+                $inputs['macqcq'] = dmdonvibaocao::where('madvbc', $inputs['madvbc'])->first()->madvcq;
             }
             $m_thongtu = dmthongtuquyetdinh::where('sohieu', $inputs['sohieu'])->first();
             $m_nguonkp = nguonkinhphi::where(function ($qr) use ($inputs) {
@@ -4020,8 +4242,8 @@ class tonghopnguon_huyenController extends Controller
         if (Session::has('admin')) {
             $inputs = $request->all();
             //lấy mã đơn vị quản lý trong trường hợp gọi từ "Báo cáo tổng hợp" giao diện Tỉnh
-            if(!isset($inputs['macqcq'])){
-                $inputs['macqcq'] = dmdonvibaocao::where('madvbc',$inputs['madvbc'])->first()->madvcq;
+            if (!isset($inputs['macqcq'])) {
+                $inputs['macqcq'] = dmdonvibaocao::where('madvbc', $inputs['madvbc'])->first()->madvcq;
             }
             $m_nguonkp = nguonkinhphi::where(function ($qr) use ($inputs) {
                 $qr->where('macqcq', $inputs['macqcq'])->where('trangthai', 'DAGUI')->where('sohieu', $inputs['sohieu']);
@@ -4151,8 +4373,8 @@ class tonghopnguon_huyenController extends Controller
         if (Session::has('admin')) {
             $inputs = $request->all();
             //lấy mã đơn vị quản lý trong trường hợp gọi từ "Báo cáo tổng hợp" giao diện Tỉnh
-            if(!isset($inputs['macqcq'])){
-                $inputs['macqcq'] = dmdonvibaocao::where('madvbc',$inputs['madvbc'])->first()->madvcq;
+            if (!isset($inputs['macqcq'])) {
+                $inputs['macqcq'] = dmdonvibaocao::where('madvbc', $inputs['madvbc'])->first()->madvcq;
             }
             $m_nguonkp = nguonkinhphi::where(function ($qr) use ($inputs) {
                 $qr->where('macqcq', $inputs['macqcq'])->where('trangthai', 'DAGUI')->where('sohieu', $inputs['sohieu']);
@@ -4284,8 +4506,8 @@ class tonghopnguon_huyenController extends Controller
         if (Session::has('admin')) {
             $inputs = $request->all();
             //lấy mã đơn vị quản lý trong trường hợp gọi từ "Báo cáo tổng hợp" giao diện Tỉnh
-            if(!isset($inputs['macqcq'])){
-                $inputs['macqcq'] = dmdonvibaocao::where('madvbc',$inputs['madvbc'])->first()->madvcq;
+            if (!isset($inputs['macqcq'])) {
+                $inputs['macqcq'] = dmdonvibaocao::where('madvbc', $inputs['madvbc'])->first()->madvcq;
             }
             $m_nguonkp = nguonkinhphi::where(function ($qr) use ($inputs) {
                 $qr->where('macqcq', $inputs['macqcq'])->where('trangthai', 'DAGUI')->where('sohieu', $inputs['sohieu']);

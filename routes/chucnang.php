@@ -356,9 +356,13 @@ Route::group(['prefix' => 'chuc_nang'], function () {
             //2023.06.13 Thiết kế kết xuất
             Route::post('tonghop', 'tonghopnguon_huyenController@tonghop');
             Route::post('tonghop_m2', 'tonghopnguon_huyenController@tonghop_m2');
+            Route::post('tonghop_pldv', 'tonghopnguon_huyenController@tonghop_pldv');
+
             Route::post('mau2a', 'tonghopnguon_huyenController@mau2a');
             Route::post('mau2a_2', 'tonghopnguon_huyenController@mau2a_2');
             Route::post('mau2a_vn', 'tonghopnguon_huyenController@mau2a_vn');
+            Route::post('mau2a_pldv', 'tonghopnguon_huyenController@mau2a_pldv');
+
             Route::post('mau2b', 'tonghopnguon_huyenController@mau2b');
             Route::post('mau2c', 'tonghopnguon_huyenController@mau2c');
             Route::post('mau2d', 'tonghopnguon_huyenController@mau2d');
