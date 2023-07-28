@@ -37,4 +37,7 @@ Route::group(['prefix' => 'tong_hop_bao_cao'], function () {
     Route::post('tonghopluong_tinh', 'baocaotonghop_tinhController@tonghopluong_tinh');
     Route::post('tonghopbienche', 'baocaotonghop_tinhController@tonghopbienche');
     Route::post('tonghophopdong', 'baocaotonghop_tinhController@tonghophopdong');
+    //Nhu cầu
+    Route::post('tonghopnhucau_tinh', 'baocaotonghop_tinhController@tonghopnhucau_tinh');
+    Route::post('tonghopnhucau2a_tinh', 'baocaotonghop_tinhController@tonghopnhucau2a_tinh');
 });

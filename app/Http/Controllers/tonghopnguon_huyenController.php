@@ -514,6 +514,7 @@ class tonghopnguon_huyenController extends Controller
     {
         if (Session::has('admin')) {
             $inputs = $request->all();
+            
             //lấy mã đơn vị quản lý trong trường hợp gọi từ "Báo cáo tổng hợp" giao diện Tỉnh
             if (!isset($inputs['macqcq'])) {
                 $inputs['macqcq'] = dmdonvibaocao::where('madvbc', $inputs['madvbc'])->first()->madvcq;
@@ -525,6 +526,12 @@ class tonghopnguon_huyenController extends Controller
                 $qr->where('madv', $inputs['macqcq'])->where('sohieu', $inputs['sohieu']);
             })->get();
 
+            if ($m_nguonkp->count() == 0) {
+                return view('errors.nodata')
+                    ->with('message', 'Chưa có dữ liệu nhu cầu kinh phí của đơn vị.')
+                    ->with('furl', '/tong_hop_bao_cao/danh_sach');
+            }
+            
             $a_linhvuc = array_column($m_nguonkp->toarray(), 'linhvuchoatdong', 'masodv');
             $a_donvi =  array_column($m_nguonkp->toarray(), 'madv', 'masodv');
 
@@ -1021,8 +1028,8 @@ class tonghopnguon_huyenController extends Controller
             //dd($model_thongtu);
             if ($model_tonghop->count() == 0) {
                 return view('errors.nodata')
-                    ->with('message', 'Chưa có dữ liệu năm ' . $inputs['nam'])
-                    ->with('furl', '/chuc_nang/tong_hop_luong/huyen/index?nam=' . $inputs['nam']);
+                ->with('message', 'Chưa có dữ liệu nhu cầu kinh phí của đơn vị.')
+                ->with('furl', '/tong_hop_bao_cao/danh_sach');
             }
 
             $m_donvi = dmdonvi::where('madv', $inputs['macqcq'])->first();
@@ -1130,8 +1137,8 @@ class tonghopnguon_huyenController extends Controller
             //dd($model_thongtu);
             if ($model_tonghop->count() == 0) {
                 return view('errors.nodata')
-                    ->with('message', 'Chưa có dữ liệu năm ' . $inputs['nam'])
-                    ->with('furl', '/chuc_nang/tong_hop_luong/huyen/index?nam=' . $inputs['nam']);
+                    ->with('message', 'Chưa có dữ liệu nhu cầu kinh phí của đơn vị.')
+                    ->with('furl', '/tong_hop_bao_cao/danh_sach');
             }
 
             $m_donvi = dmdonvi::where('madv', $inputs['macqcq'])->first();
@@ -1152,7 +1159,7 @@ class tonghopnguon_huyenController extends Controller
             $chenhlech = $model_thongtu->chenhlech;
             $m_dsdv = dmdonvi::all();
             $a_phanloai = array_column($m_dsdv->toArray(), 'maphanloai', 'madv');
-            
+
             $m_plct = dmphanloaict::all();
             $a_nhomplct_hc = array_column($m_plct->toArray(), 'nhomnhucau_hc', 'mact');
             $a_nhomplct_xp = array_column($m_plct->toArray(), 'nhomnhucau_xp', 'mact');
@@ -1169,7 +1176,7 @@ class tonghopnguon_huyenController extends Controller
                 if (!in_array($chitiet->nhomnhucau, $a_nhomnhucau)) {
                     $model->forget($key);
                 }
-                
+
                 $chitiet->maphanloai = $a_pl_donvi[$chitiet->madv];
                 $chitiet->tenct = $a_plct[$chitiet->mact] ?? '';
                 $this->getMaNhomPhanLoai($chitiet, $m_phanloai);
@@ -1241,6 +1248,12 @@ class tonghopnguon_huyenController extends Controller
                 $qr->where('madv', $inputs['macqcq'])->where('sohieu', $inputs['sohieu']);
             })->get();
 
+            if ($m_nguonkp->count() == 0) {
+                return view('errors.nodata')
+                    ->with('message', 'Chưa có dữ liệu nhu cầu kinh phí của đơn vị.')
+                    ->with('furl', '/tong_hop_bao_cao/danh_sach');
+            }
+            
             $a_linhvuc = array_column($m_nguonkp->toarray(), 'linhvuchoatdong', 'masodv');
             $a_donvi =  array_column($m_nguonkp->toarray(), 'madv', 'masodv');
 
