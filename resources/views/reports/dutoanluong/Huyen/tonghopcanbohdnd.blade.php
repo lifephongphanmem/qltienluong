@@ -100,6 +100,32 @@
                 <td class="text-right">{{ dinhdangsothapphan($model_chitiet->sum('baohiem'), $lamtron) }}</td>
                 <td class="text-right">{{ dinhdangsothapphan($model_chitiet->sum('quyluong'), $lamtron) }}</td>
             </tr>
+
+            <!-- Làm nhóm tổng cộng -->
+            <?php
+            $a_phanloaicongtac = array_column($model_chitiet->toarray(), 'mact');
+            ?>
+            @foreach ($a_phanloaicongtac as $phanloaicongtac)
+                <?php
+                $chitiet = $model_chitiet->where('mact', $phanloaicongtac);
+                ?>
+                <tr>
+                    <td></td>
+                    <td>{{ $a_plct[$phanloaicongtac] ?? $phanloaicongtac }}</td>
+                    <td class="text-center">{{ dinhdangso($chitiet->sum('canbo_dutoan')) }}</td>
+                    <td class="text-center">{{ dinhdangso($chitiet->sum('canbo_congtac')) }}</td>
+                    <td class="text-right">{{ dinhdangsothapphan($chitiet->sum('tongcong'), $lamtron) }}</td>
+                    <td class="text-right">{{ dinhdangsothapphan($chitiet->sum('heso'), $lamtron) }}</td>
+                    <td class="text-right">{{ dinhdangsothapphan($chitiet->sum('tongphucap'), $lamtron) }}</td>
+                    @foreach ($a_phucap as $key => $val)
+                        <td class="text-right">{{ dinhdangsothapphan($chitiet->sum($key), $lamtron) }}</td>
+                    @endforeach
+                    <td class="text-right">{{ dinhdangsothapphan($chitiet->sum('bhtn_dv'), $lamtron) }}</td>
+                    <td class="text-right">{{ dinhdangsothapphan($chitiet->sum('baohiem'), $lamtron) }}</td>
+                    <td class="text-right">{{ dinhdangsothapphan($chitiet->sum('quyluong'), $lamtron) }}</td>
+                </tr>
+            @endforeach
+
             @if (count($model_donvi) > 0)
                 {{-- in chi tiết từng đơn vị --}}
                 @if ($phanloai1->chitiet == '1')
@@ -114,8 +140,8 @@
                             <td>{{ $i++ }}</td>
                             <td>{{ $donvi->tendv }}</td>
                             <td class="text-center">{{ dinhdangso($model_chitiet->sum('canbo_dutoan')) }}
-                                <td class="text-center">{{ dinhdangso($model_chitiet->sum('canbo_congtac')) }}
-                            </td>                           
+                            <td class="text-center">{{ dinhdangso($model_chitiet->sum('canbo_congtac')) }}
+                            </td>
 
                             <td class="text-right">
                                 {{ dinhdangsothapphan($model_chitiet->sum('tongcong'), $lamtron) }}</td>
@@ -185,6 +211,30 @@
                     <td class="text-right">{{ dinhdangsothapphan($model_chitiet->sum('baohiem'), $lamtron) }}</td>
                     <td class="text-right">{{ dinhdangsothapphan($model_chitiet->sum('quyluong'), $lamtron) }}</td>
                 </tr>
+                <!-- Làm nhóm tổng cộng -->
+                <?php
+                $a_phanloaicongtac = array_column($model_chitiet->toarray(), 'mact');
+                ?>
+                @foreach ($a_phanloaicongtac as $phanloaicongtac)
+                    <?php
+                    $chitiet = $model_chitiet->where('mact', $phanloaicongtac);
+                    ?>
+                    <tr>
+                        <td></td>
+                        <td>{{ $a_plct[$phanloaicongtac] ?? $phanloaicongtac }}</td>
+                        <td class="text-center">{{ dinhdangso($chitiet->sum('canbo_dutoan')) }}</td>
+                        <td class="text-center">{{ dinhdangso($chitiet->sum('canbo_congtac')) }}</td>
+                        <td class="text-right">{{ dinhdangsothapphan($chitiet->sum('tongcong'), $lamtron) }}</td>
+                        <td class="text-right">{{ dinhdangsothapphan($chitiet->sum('heso'), $lamtron) }}</td>
+                        <td class="text-right">{{ dinhdangsothapphan($chitiet->sum('tongphucap'), $lamtron) }}</td>
+                        @foreach ($a_phucap as $key => $val)
+                            <td class="text-right">{{ dinhdangsothapphan($chitiet->sum($key), $lamtron) }}</td>
+                        @endforeach
+                        <td class="text-right">{{ dinhdangsothapphan($chitiet->sum('bhtn_dv'), $lamtron) }}</td>
+                        <td class="text-right">{{ dinhdangsothapphan($chitiet->sum('baohiem'), $lamtron) }}</td>
+                        <td class="text-right">{{ dinhdangsothapphan($chitiet->sum('quyluong'), $lamtron) }}</td>
+                    </tr>
+                @endforeach
 
                 @if (count($model_donvi) > 0)
                     {{-- in chi tiết từng đơn vị --}}
@@ -260,7 +310,7 @@
                     }
                     $i3 = 1;
                     ?>
-                    {{-- tự làm công thức tính --}}
+
                     <tr class="font-weight-bold">
                         <td>{{ $phanloai2->sapxep }}.{{ $phanloai3->sapxep }}
                         </td>
@@ -281,7 +331,30 @@
                         <td class="text-right">{{ dinhdangsothapphan($model_chitiet->sum('quyluong'), $lamtron) }}</td>
                     </tr>
 
-
+                    <!-- Làm nhóm tổng cộng -->
+                    <?php
+                    $a_phanloaicongtac = array_column($model_chitiet->toarray(), 'mact');
+                    ?>
+                    @foreach ($a_phanloaicongtac as $phanloaicongtac)
+                        <?php
+                        $chitiet = $model_chitiet->where('mact', $phanloaicongtac);
+                        ?>
+                        <tr>
+                            <td></td>
+                            <td>{{ $a_plct[$phanloaicongtac] ?? $phanloaicongtac }}</td>
+                            <td class="text-center">{{ dinhdangso($chitiet->sum('canbo_dutoan')) }}</td>
+                            <td class="text-center">{{ dinhdangso($chitiet->sum('canbo_congtac')) }}</td>
+                            <td class="text-right">{{ dinhdangsothapphan($chitiet->sum('tongcong'), $lamtron) }}</td>
+                            <td class="text-right">{{ dinhdangsothapphan($chitiet->sum('heso'), $lamtron) }}</td>
+                            <td class="text-right">{{ dinhdangsothapphan($chitiet->sum('tongphucap'), $lamtron) }}</td>
+                            @foreach ($a_phucap as $key => $val)
+                                <td class="text-right">{{ dinhdangsothapphan($chitiet->sum($key), $lamtron) }}</td>
+                            @endforeach
+                            <td class="text-right">{{ dinhdangsothapphan($chitiet->sum('bhtn_dv'), $lamtron) }}</td>
+                            <td class="text-right">{{ dinhdangsothapphan($chitiet->sum('baohiem'), $lamtron) }}</td>
+                            <td class="text-right">{{ dinhdangsothapphan($chitiet->sum('quyluong'), $lamtron) }}</td>
+                        </tr>
+                    @endforeach
                     @if (count($model_donvi) > 0)
                         {{-- in chi tiết từng đơn vị --}}
                         @if ($phanloai3->chitiet == '1')
@@ -376,6 +449,32 @@
                             <td class="text-right">
                                 {{ dinhdangsothapphan($model_chitiet->sum('quyluong'), $lamtron) }}</td>
                         </tr>
+                        <!-- Làm nhóm tổng cộng -->
+                        <?php
+                        $a_phanloaicongtac = array_column($model_chitiet->toarray(), 'mact');
+                        ?>
+                        @foreach ($a_phanloaicongtac as $phanloaicongtac)
+                            <?php
+                            $chitiet = $model_chitiet->where('mact', $phanloaicongtac);
+                            ?>
+                            <tr>
+                                <td></td>
+                                <td>{{ $a_plct[$phanloaicongtac] ?? $phanloaicongtac }}</td>
+                                <td class="text-center">{{ dinhdangso($chitiet->sum('canbo_dutoan')) }}</td>
+                                <td class="text-center">{{ dinhdangso($chitiet->sum('canbo_congtac')) }}</td>
+                                <td class="text-right">{{ dinhdangsothapphan($chitiet->sum('tongcong'), $lamtron) }}</td>
+                                <td class="text-right">{{ dinhdangsothapphan($chitiet->sum('heso'), $lamtron) }}</td>
+                                <td class="text-right">{{ dinhdangsothapphan($chitiet->sum('tongphucap'), $lamtron) }}
+                                </td>
+                                @foreach ($a_phucap as $key => $val)
+                                    <td class="text-right">{{ dinhdangsothapphan($chitiet->sum($key), $lamtron) }}</td>
+                                @endforeach
+                                <td class="text-right">{{ dinhdangsothapphan($chitiet->sum('bhtn_dv'), $lamtron) }}</td>
+                                <td class="text-right">{{ dinhdangsothapphan($chitiet->sum('baohiem'), $lamtron) }}</td>
+                                <td class="text-right">{{ dinhdangsothapphan($chitiet->sum('quyluong'), $lamtron) }}</td>
+                            </tr>
+                        @endforeach
+
                         @if (count($model_donvi) > 0)
                             {{-- in chi tiết từng đơn vị --}}
                             @if ($phanloai4->chitiet == '1')
@@ -413,7 +512,7 @@
                                         <td class="text-right">
                                             {{ dinhdangsothapphan($model_chitiet->sum('quyluong'), $lamtron) }}</td>
                                     </tr>
-                                    @foreach ($model_chitiet as $chitiet)                                       
+                                    @foreach ($model_chitiet as $chitiet)
                                         <tr>
                                             <td>-</td>
                                             <td>{{ $chitiet->tenct }}</td>

@@ -514,7 +514,7 @@ class tonghopnguon_huyenController extends Controller
     {
         if (Session::has('admin')) {
             $inputs = $request->all();
-            
+
             //lấy mã đơn vị quản lý trong trường hợp gọi từ "Báo cáo tổng hợp" giao diện Tỉnh
             if (!isset($inputs['macqcq'])) {
                 $inputs['macqcq'] = dmdonvibaocao::where('madvbc', $inputs['madvbc'])->first()->madvcq;
@@ -531,7 +531,7 @@ class tonghopnguon_huyenController extends Controller
                     ->with('message', 'Chưa có dữ liệu nhu cầu kinh phí của đơn vị.')
                     ->with('furl', '/tong_hop_bao_cao/danh_sach');
             }
-            
+
             $a_linhvuc = array_column($m_nguonkp->toarray(), 'linhvuchoatdong', 'masodv');
             $a_donvi =  array_column($m_nguonkp->toarray(), 'madv', 'masodv');
 
@@ -1028,8 +1028,8 @@ class tonghopnguon_huyenController extends Controller
             //dd($model_thongtu);
             if ($model_tonghop->count() == 0) {
                 return view('errors.nodata')
-                ->with('message', 'Chưa có dữ liệu nhu cầu kinh phí của đơn vị.')
-                ->with('furl', '/tong_hop_bao_cao/danh_sach');
+                    ->with('message', 'Chưa có dữ liệu nhu cầu kinh phí của đơn vị.')
+                    ->with('furl', '/tong_hop_bao_cao/danh_sach');
             }
 
             $m_donvi = dmdonvi::where('madv', $inputs['macqcq'])->first();
@@ -1044,19 +1044,34 @@ class tonghopnguon_huyenController extends Controller
             $model = nguonkinhphi_phucap::wherein('masodv', array_column($model_tonghop->toarray(), 'masodv'))->get();
             $a_plct = array_column(dmphanloaict::all()->toArray(), 'tenct', 'mact');
             $a_pc = getColNhuCau();
-
+            //dd($a_pc);
+            $a_phucap = array_keys(getPhuCap2a_78());
+            $a_phucap[] = 'heso';
+            //dd($a_phucap);
             foreach ($model as $chitiet) {
                 $chitiet->madv = $a_donvi[$chitiet->masodv];
                 $chitiet->maphanloai = $a_pl_donvi[$chitiet->madv];
                 $chitiet->tenct = $a_plct[$chitiet->mact] ?? '';
                 $chitiet->luongcoban = $model_thongtu->chenhlech;
-                $chitiet->bhtn_dv = round($chitiet->stbhtn_dv / $chitiet->luongcoban, 7);
-                $chitiet->baohiem = round(($chitiet->ttbh_dv - $chitiet->stbhtn_dv) / $chitiet->luongcoban, 7);
+                //$chitiet->bhtn_dv = round($chitiet->stbhtn_dv / $chitiet->luongcoban, 7);
+                //$chitiet->baohiem = round(($chitiet->ttbh_dv - $chitiet->stbhtn_dv) / $chitiet->luongcoban, 7);                
+                //Ở ngoài nhóm phụ cấp => đưa hết vào pck
+                foreach ($a_pc as $pc) {
+                    if (!in_array($pc, $a_phucap)) {
+                        $mapc_st = 'st_' . $pc;
+                        $chitiet->pck +=  $chitiet->$pc;
+                        $chitiet->st_pck += $chitiet->$mapc_st;
+                        $chitiet->$pc = 0;
+                        $chitiet->$mapc_st = 0;
+                    }
+                }
 
                 $chitiet->quyluong = $chitiet->ttl + $chitiet->ttbh_dv;
                 $chitiet->tongphucap = $chitiet->tonghs - $chitiet->heso;
+                $chitiet->st_tongphucap = $chitiet->ttl - $chitiet->st_heso;
                 $chitiet->tongcong = $chitiet->tonghs + $chitiet->baohiem + $chitiet->bhtn_dv;
                 $this->getMaNhomPhanLoai($chitiet, $m_phanloai);
+                //dd($chitiet);
             }
 
             //xử lý ẩn hiện cột phụ cấp => biết tổng số cột hiện => colspan trên báo cáo
@@ -1149,6 +1164,7 @@ class tonghopnguon_huyenController extends Controller
             $m_donvi_baocao = dmdonvi::wherein('madv', array_column($model_tonghop->toarray(), 'madv'))->get();
             //dd($m_donvi_baocao);
             $a_donvi = array_column($model_tonghop->toarray(), 'madv', 'masodv');
+            $a_sobiencheduocgiao = array_column($model_tonghop->toarray(), 'sobiencheduocgiao', 'masodv');
             $a_pl_donvi = array_column($m_donvi_baocao->toarray(), 'maphanloai', 'madv');
             $model = nguonkinhphi_01thang::wherein('masodv', array_column($model_tonghop->toarray(), 'masodv'))->get();
             $a_plct = array_column(dmphanloaict::all()->toArray(), 'tenct', 'mact');
@@ -1176,7 +1192,10 @@ class tonghopnguon_huyenController extends Controller
                 if (!in_array($chitiet->nhomnhucau, $a_nhomnhucau)) {
                     $model->forget($key);
                 }
-
+                //Số lượng cán bộ biên chế đã được tạo ở nhu cầu               
+                if ($chitiet->nhomnhucau == 'BIENCHE') {
+                    $chitiet->canbo_dutoan = $a_sobiencheduocgiao[$chitiet->masodv] ?? $chitiet->canbo_dutoan;
+                }
                 $chitiet->maphanloai = $a_pl_donvi[$chitiet->madv];
                 $chitiet->tenct = $a_plct[$chitiet->mact] ?? '';
                 $this->getMaNhomPhanLoai($chitiet, $m_phanloai);
@@ -1253,7 +1272,7 @@ class tonghopnguon_huyenController extends Controller
                     ->with('message', 'Chưa có dữ liệu nhu cầu kinh phí của đơn vị.')
                     ->with('furl', '/tong_hop_bao_cao/danh_sach');
             }
-            
+
             $a_linhvuc = array_column($m_nguonkp->toarray(), 'linhvuchoatdong', 'masodv');
             $a_donvi =  array_column($m_nguonkp->toarray(), 'madv', 'masodv');
 

@@ -262,6 +262,7 @@ class dutoanluong_insolieu_huyenController extends Controller
                 ->with('col', $col)
                 ->with('lamtron', session('admin')->lamtron ?? 3)
                 ->with('a_phucap', $a_phucap)
+                ->with('a_plct', $a_plct)
                 ->with('m_donvi', $m_donvi)
                 ->with('m_dutoan', $m_dutoan)
                 ->with('m_phanloai', $m_phanloai)
