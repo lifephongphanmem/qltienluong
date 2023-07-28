@@ -103,7 +103,7 @@
 
             <!-- Làm nhóm tổng cộng -->
             <?php
-            $a_phanloaicongtac = array_column($model_chitiet->toarray(), 'mact');
+            $a_phanloaicongtac =array_unique(array_column($model_chitiet->toarray(), 'mact'));
             ?>
             @foreach ($a_phanloaicongtac as $phanloaicongtac)
                 <?php
@@ -213,7 +213,7 @@
                 </tr>
                 <!-- Làm nhóm tổng cộng -->
                 <?php
-                $a_phanloaicongtac = array_column($model_chitiet->toarray(), 'mact');
+                $a_phanloaicongtac =array_unique(array_column($model_chitiet->toarray(), 'mact'));
                 ?>
                 @foreach ($a_phanloaicongtac as $phanloaicongtac)
                     <?php
@@ -333,7 +333,7 @@
 
                     <!-- Làm nhóm tổng cộng -->
                     <?php
-                    $a_phanloaicongtac = array_column($model_chitiet->toarray(), 'mact');
+                    $a_phanloaicongtac =array_unique(array_column($model_chitiet->toarray(), 'mact'));
                     ?>
                     @foreach ($a_phanloaicongtac as $phanloaicongtac)
                         <?php
@@ -451,7 +451,7 @@
                         </tr>
                         <!-- Làm nhóm tổng cộng -->
                         <?php
-                        $a_phanloaicongtac = array_column($model_chitiet->toarray(), 'mact');
+                        $a_phanloaicongtac =array_unique(array_column($model_chitiet->toarray(), 'mact'));
                         ?>
                         @foreach ($a_phanloaicongtac as $phanloaicongtac)
                             <?php
