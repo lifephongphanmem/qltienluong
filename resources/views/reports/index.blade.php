@@ -32,20 +32,18 @@
                             <ol>
                                 {{-- <li> Bỏ 11/02/2023
                                     <a href="#" data-target="#thoaidutoan-modal" data-toggle="modal"
-                                        onclick="dutoanluong('{{ $furl . 'don_vi/dutoanluong' }}')">Dự toán lương</a>
+                                        onclick="dutoanluong('{{ $inputs['furl_th'] . 'don_vi/dutoanluong' }}')">Dự toán lương</a>
                                 </li> --}}
                                 <li>
                                     <a href="#" data-target="#thoaidutoan-modal" data-toggle="modal"
-                                        onclick="dutoanluong('{{ '/bao_cao/don_vi/du_toan/kinhphikhongchuyentrach' }}')">Tổng
-                                        hợp kinh phí thực hiện
-                                        chế đố phụ cấp cán bộ không chuyên trách</a>
+                                        onclick="dutoanluong('{{ '/bao_cao/don_vi/du_toan/kinhphikhongchuyentrach' }}')">
+                                        Tổng hợp kinh phí thực hiện chế đố phụ cấp cán bộ không chuyên trách</a>
                                 </li>
 
                                 <li>
                                     <a href="#" data-target="#thoaidutoan-modal" data-toggle="modal"
-                                        onclick="dutoanluong('{{ '/bao_cao/don_vi/du_toan/tonghopcanboxa' }}')">Tổng hợp cán
-                                        bộ chuyên trách,
-                                        công chức xã</a>
+                                        onclick="dutoanluong('{{ '/bao_cao/don_vi/du_toan/tonghopcanboxa' }}')">
+                                        Tổng hợp cán bộ chuyên trách, công chức xã</a>
                                 </li>
                                 <li>
                                     <a href="#" data-target="#thoaidutoan-modal" data-toggle="modal"
@@ -63,128 +61,45 @@
                                 <li>
                                     <a href="#" data-target="#thoaichitra-modal" data-toggle="modal"
                                         title="Dữ liệu chi trả theo tổng hợp lương tại đơn vị"
-                                        onclick="chitraluong('{{ $furl . 'don_vi/chitraluong' }}')">Tổng hợp tình hình chi
-                                        trả
-                                        lương theo phân loại công tác</a>
+                                        onclick="chitraluong('{{ $inputs['furl_th'] . 'don_vi/chitraluong' }}')">
+                                        Tổng hợp tình hình chi trả lương theo phân loại công tác</a>
                                 </li>
                                 <li>
                                     <a href="#" data-target="#thoaichitra-modal" data-toggle="modal"
                                         title="Dữ liệu chi trả theo tổng hợp lương tại đơn vị"
-                                        onclick="chitraluong('{{ $furl . 'don_vi/chitratheonkp' }}')">Tổng hợp tình hình chi
-                                        trả lương theo nguồn kinh phí</a>
+                                        onclick="chitraluong('{{ $inputs['furl_th'] . 'don_vi/chitratheonkp' }}')">
+                                        Tổng hợp tình hình chi trả lương theo nguồn kinh phí</a>
 
                                 </li>
                                 <li>
                                     <a href="#" data-target="#thoaichitra-modal" data-toggle="modal"
                                         title="Dữ liệu chi trả theo tổng hợp lương tại đơn vị"
-                                        onclick="chitraluong('{{ $furl . 'don_vi/chitratheocb' }}')">Tổng hợp tình hình chi
+                                        onclick="chitraluong('{{ $inputs['furl_th'] . 'don_vi/chitratheocb' }}')">Tổng hợp
+                                        tình hình chi
                                         trả lương theo cán bộ</a>
 
                                 </li>
+
                                 <hr>
-
-                                {{-- <li>
-                                    <a href="#" onclick="nhucauluong('{{ '/bao_cao/thong_tu_67/don_vi/mau2a1' }}')"
-                                        data-toggle="modal" data-target="#thoainhucauluong-modal">Báo cáo nhu cầu kinh phí
-                                        (Mẫu 2a/1)</a>
-                                </li>
-                                <li>
-                                    <a href="#" onclick="nhucauluong('{{ '/bao_cao/thong_tu_67/don_vi/mau2a2' }}')"
-                                        data-toggle="modal" data-target="#thoainhucauluong-modal">Báo cáo nhu cầu kinh phí
-                                        (Mẫu 2a/2)</a>
-                                </li> --}}
-                                <li>
-                                    <a href="#" onclick="nhucauluong('{{ '/bao_cao/thong_tu_67/don_vi/mau2a2_kh' }}')"
-                                        data-toggle="modal" data-target="#thoainhucauluong-mau2a-modal">Báo cáo nhu cầu kinh
-                                        phí
-                                        (Mẫu 2a)</a>
-                                </li>
-                                {{-- <li>
-                                    <a href="#" onclick="nhucauluong('{{ '/bao_cao/thong_tu_67/don_vi/mau2b' }}')"
-                                        data-toggle="modal" data-target="#thoainhucauluong-modal">Báo cáo nhu cầu kinh phí
-                                        (Mẫu 2b)</a>
-                                </li> --}}
-                                <li><a href="#" onclick="nhucauluong('{{ '/bao_cao/thong_tu_67/don_vi/mau2b' }}')"
-                                        data-toggle="modal" data-target="#thoainhucauluong-modal">Báo cáo tổng hợp quỹ trợ
-                                        cấp tăng thêm của cán bộ xã, phường, thị trấn đã nghỉ việc (Mẫu 2b)</a></li>
-
-                                <li>
-                                    <a href="#" onclick="nhucauluong('{{ '/bao_cao/thong_tu_67/don_vi/mau2đ' }}')"
-                                        data-toggle="modal" data-target="#thoainhucauluong-modal">Báo cáo nguồn thực hiện
-                                        cctl tiết kiệm từ tinh giản biên chế
-                                        (Mẫu 2đ)</a>
-                                </li>
-                                <li>
-                                    <a href="#" onclick="nhucauluong('{{ '/bao_cao/thong_tu_67/don_vi/mau2e' }}')"
-                                        data-toggle="modal" data-target="#thoainhucauluong-modal">Báo cáo nguồn thực hiện
-                                        cctl tiết kiệm từ việc thay đổi cơ chế tự chủ
-                                        (Mẫu 2e)</a>
-                                </li>
-                                <li>
-                                    <a href="#" onclick="nhucauluong('{{ '/bao_cao/thong_tu_67/don_vi/mau2g' }}')"
-                                        data-toggle="modal" data-target="#thoainhucauluong-modal">Báo cáo quỹ tiền lương,phụ
-                                        cấp
-                                        (Mẫu 2g)</a>
-                                </li>
-                                <hr>
-
-
-                                <li>
-                                    <a href="#" onclick="nhucauluong('{{ '/bao_cao/thong_tu_67/don_vi/mau4a' }}')"
-                                        data-toggle="modal" data-target="#thoainhucauluong-modal">Báo cáo nguồn kinh phí
-                                        (Mẫu 4a)</a>
-                                </li>
-                                <li>
-                                    <a href="#" onclick="nhucauluong('{{ '/bao_cao/thong_tu_67/don_vi/mau4b' }}')"
-                                        data-toggle="modal" data-target="#thoainhucauluong-modal">Tổng hợp nhu cầu, nguồn
-                                        kinh phí (Mẫu 4b)</a>
-                                </li>
-
-                                {{-- <li><a href="#" data-target="#thoaichitra-modal" data-toggle="modal" onclick="chitraluong('{{$furl.'don_vi/dangkyluong'}}')">Tổng hợp đăng ký lương</a></li> --}}
-                                <hr>
-
                                 <li>
                                     <a href="#" data-target="#thoainangluong-modal" data-toggle="modal"
-                                        onclick="nangluong('{{ $furl . 'don_vi/nangluong' }}','NGACHBAC')">Danh sách nâng
+                                        onclick="nangluong('{{ $inputs['furl_th'] . 'don_vi/nangluong' }}','NGACHBAC')">Danh
+                                        sách nâng
                                         lương ngạch bậc (Theo danh sách nâng lương)</a>
                                 </li>
                                 <li>
                                     <a href="#" data-target="#thoainangluong-modal" data-toggle="modal"
-                                        onclick="nangluong('{{ $furl . 'don_vi/nangluong' }}','TNN')">Danh sách nâng thâm
+                                        onclick="nangluong('{{ $inputs['furl_th'] . 'don_vi/nangluong' }}','TNN')">Danh
+                                        sách nâng thâm
                                         niên nghề (Theo danh sách nâng lương)</a>
                                 </li>
-                                <hr>
-                                {{-- <li><a href="{{ url('/bao_cao/thong_tu_67/don_vi/mau2b') }}" target="_blank">Báo cáo tổng hợp quỹ trợ cấp tăng thêm của cán bộ xã, phường, thị trấn đã nghỉ việc (Mẫu 2b)</a></li> --}}
-                                {{-- <li>
-                                    <a href="#" data-target="#thoaidsnangluong-modal" data-toggle="modal"
-                                       onclick="dsnangluong('{{$furl.'don_vi/dsnangluong'}}','NGACHBAC')">Danh sách nâng lương ngạch bậc (Theo danh sách cán bộ)</a>
-                                </li>
-                                <li>
-                                    <a href="#" data-target="#thoaidsnangluong-modal" data-toggle="modal"
-                                       onclick="dsnangluong('{{$furl.'don_vi/dsnangluong'}}','TNN')">Danh sách nâng thâm niên nghề (Theo danh sách cán bộ)</a>
-                                </li> --}}
 
+                                <hr>
                                 <li>
                                     <a href="#" data-target="#thoaicanbo-modal" data-toggle="modal"
-                                        onclick="dscanbo('{{ $furl . 'don_vi/dscanbo' }}')">In danh sách cán bộ</a>
+                                        onclick="dscanbo('{{ $inputs['furl_th'] . 'don_vi/dscanbo' }}')">In danh sách cán
+                                        bộ</a>
                                 </li>
-
-                                <!-- Tạm thời bỏ để triển khai lạng sơn -->
-                                <!--
-                                        <li><a href="{{ url('/bao_cao/thong_tu_67/don_vi/mau2a1') }}" target="_blank">Báo cáo nhu cầu kinh phí thực hiện nghị định 47/2017/NĐ-CP (Mẫu 2a/1)</a></li>
-                                        <li><a href="{{ url('/bao_cao/thong_tu_67/don_vi/mau2a2') }}" target="_blank">Báo cáo nhu cầu kinh phí thực hiện nghị định 47/2017/NĐ-CP (Mẫu 2a/2)</a></li>
-                                        <li><a href="{{ url('/bao_cao/thong_tu_67/don_vi/mau2b') }}" target="_blank">Báo cáo tổng hợp quỹ trợ cấp tăng thêm của cán bộ xã, phường, thị trấn đã nghỉ việc (Mẫu 2b)</a></li>
-                                        <li><a href="{{ url('/bao_cao/thong_tu_67/don_vi/mau2c') }}" target="_blank">Báo cáo nhu cầu chênh lệch (Mẫu 2c)</a></li>
-                                        <li><a href="{{ url('/bao_cao/thong_tu_67/don_vi/mau2d') }}" target="_blank">Tổng hợp kinh phí tăng thêm để thực hiện chế độ phụ cấp đối với cán bộ không chuyên trách (Mẫu 2d)</a></li>
-                                        @if (session('admin')->maphanloai == 'KVXP')
-    <li><a href="{{ url('/bao_cao/thong_tu_67/don_vi/mau2e') }}" target="_blank">Tổng hợp kinh phí tăng, giảm do điều chỉnh địa bàn vùng kinh tế xã hội đặc biệt khó khăn (Mẫu 2e)</a></li>
-                                            <li><a href="{{ url('/bao_cao/thong_tu_67/don_vi/mau2g') }}" target="_blank">Tổng hợp phụ cấp ưu đãi tăng, giảm do điều chỉnh địa bàn vùng kinh tế xã hội đặc biệt khó khăn (Mẫu 2g)</a></li>
-                                            <li><a href="{{ url('/bao_cao/thong_tu_67/don_vi/mau2h') }}" target="_blank">Tổng hợp phụ cấp thu hút tăng, giảm do điều chỉnh địa bàn vùng kinh tế xã hội đặc biệt khó khăn (Mẫu 2h)</a></li>
-    @endif
-                                        <li><a href="{{ url('/bao_cao/thong_tu_67/don_vi/mau4a') }}" target="_blank">Báo cáo nguồn kinh phí (Mẫu 4a)</a></li>
-                                        <li><a href="{{ url('/bao_cao/thong_tu_67/don_vi/mau4b') }}" target="_blank">Tổng hợp nhu cầu, nguồn kinh phí (Mẫu 4b)</a></li>
-                                        -->
-
                             </ol>
                         </div>
                     </div>

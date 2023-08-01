@@ -55,8 +55,12 @@ class baocaobangluongController extends Controller
         if (Session::has('admin')) {
             $model_nhomct = dmphanloaicongtac::select('macongtac', 'tencongtac')->get();
             $model_tenct = dmphanloaict::select('tenct', 'macongtac', 'mact')->get();
+            $inputs['furl_th'] = '/bao_cao/bang_luong/';
+            $inputs['furl_dutoan'] = '/chuc_nang/du_toan_luong/huyen/';
+            $inputs['furl_nhucaukp'] = '/chuc_nang/tong_hop_nguon/huyen/';
             return view('reports.index')
                 ->with('furl', '/bao_cao/bang_luong/')
+                ->with('inputs', $inputs)
                 ->with('model_nhomct', $model_nhomct)
                 ->with('model_tenct', $model_tenct)
                 ->with('pageTitle', 'Báo cáo chi trả lương');

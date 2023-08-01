@@ -215,6 +215,7 @@
                                             title="Dữ liệu (bao gồm cả cán bộ hợp đồng, không chuyên trách) theo lĩnh vực hoạt động của nhu cầu kinh phí">
                                             Bảng tổng hợp nhu cầu kinh phí (Theo phân loại đơn vị) </button>
                                     </li>
+                                    <!-- 2023.07.27 tạm thời vô hiệu hoa để đỡ bị hỏi
                                     <li>
                                         <button type="button"
                                             onclick="inNhuCauKP('{{ $inputs['furl_nhucaukp'] . 'mau2a' }}',null)"
@@ -229,7 +230,7 @@
                                             data-target="#modal-innhucaukp" data-toggle="modal">
                                             Bảng tổng hợp nhu cầu kinh phí (Mẫu 2a - Theo phân loại đơn vị)</button>
                                     </li>
-                                    <!-- 2023.07.27 tạm thời vô hiệu hoa để đỡ bị hỏi
+                                    
                                         <li>
                                             <button type="button"
                                                 onclick="inNhuCauKP('{{ $inputs['furl_nhucaukp'] . 'mau2a' }}',null)"
