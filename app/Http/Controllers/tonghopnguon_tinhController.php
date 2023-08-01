@@ -20,7 +20,7 @@ class tonghopnguon_tinhController extends Controller
     {
         if (Session::has('admin')) {
             $inputs = $request->all();
-            $model_nguon_tinh = nguonkinhphi_tinh::where('sohieu', $inputs['sohieu'])->get();
+            $model_nguon_tinh = nguonkinhphi_tinh::where('sohieu', $inputs['sohieu'])->where('trangthai','DAGUI')->get();
            
             $model = dmdonvibaocao::where('level', 'H')->get();
             // dd($model);
@@ -29,6 +29,7 @@ class tonghopnguon_tinhController extends Controller
                 $model_nguon = $model_nguon_tinh->where('madv', $val->madvcq)->first();
                 $val->trangthai = $model_nguon->trangthai ?? 'CHUADL';
                 $val->sohieu = $model_nguon->sohieu ?? $inputs['sohieu'];
+                $val->masodv = $model_nguon->masodv ?? null;
               
             }
             //$soluong = 0;
@@ -52,8 +53,9 @@ class tonghopnguon_tinhController extends Controller
     {
         if (Session::has('admin')) {
             $inputs = $request->all();
-            $model = nguonkinhphi_tinh::where('madvbc', $inputs['masodv'])->first();
-            $model->trangthai = 'DAGUI';
+            $model = nguonkinhphi_tinh::where('masodv', $inputs['masodv'])->first();
+            //dd($model);
+            $model->trangthai = 'CHOGUI';
             $model->ngaylap = Carbon::now()->toDateTimeString();
             $model->save();
             return redirect('/chuc_nang/tong_hop_nguon/tinh/index?sohieu=' . $inputs['sohieu']);

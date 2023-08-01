@@ -305,6 +305,7 @@ class tonghopnguon_huyenController extends Controller
                 $model_nguon_tinh->nguoilap = session('admin')->name;
                 $model_nguon_tinh->ngaylap = Carbon::now()->toDateTimeString();
                 $model_nguon_tinh->save();
+                $inputs['masot'] = $model_nguon_tinh->masodv;
             } else {
                 $inputs['madv'] = session('admin')->madv;
                 $inputs['masodv'] = getdate()[0];
@@ -315,12 +316,14 @@ class tonghopnguon_huyenController extends Controller
                 $inputs['macqcq'] = session('admin')->macqcq;
                 $inputs['madvbc'] = session('admin')->madvbc;
 
-                nguonkinhphi::where('sohieu', $inputs['sohieu'])->where('macqcq', $madv)
-                    ->update(['masot' => $inputs['masodv']]);
-
                 //nguonkinhphi_huyen::create($inputs);
                 nguonkinhphi_tinh::create($inputs);
+                $inputs['masot'] = $inputs['masodv'];
             }
+
+            //Cập nhật lại mã số tỉnh
+            nguonkinhphi::where('sohieu', $inputs['sohieu'])->where('macqcq', $madv)->where('trangthai', 'DAGUI')
+                ->update(['masot' => $inputs['masot']]);
             return redirect('/chuc_nang/tong_hop_nguon/huyen/index');
         } else
             return view('errors.notlogin');

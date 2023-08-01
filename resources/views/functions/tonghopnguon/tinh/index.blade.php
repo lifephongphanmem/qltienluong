@@ -95,7 +95,7 @@
                                                     <i class="fa fa-print"></i>&nbsp; Số liệu chi tiết</a>
 
                                                 <button type="button" class="btn btn-default btn-xs mbs"
-                                                    onclick="confirmChuyen('{{ $value->madvbc }}','{{ $value->sohieu }}')"
+                                                    onclick="confirmChuyen('{{ $value->masodv }}','{{ $value->sohieu }}')"
                                                     data-target="#chuyen-modal" data-toggle="modal"><i
                                                         class="fa icon-share-alt"></i>&nbsp;
                                                     Trả lại dữ liệu</button>
