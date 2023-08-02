@@ -26,7 +26,7 @@
                 {{ $m_dutoan->namns - 1 }}
             </td>
         </tr>
-       
+
         <tr>
             <td colspan="2" style="text-align: center; font-weight: bold;font-style: italic; font-size: 14px;">
                 Khối/Tổ công tác:
@@ -55,7 +55,7 @@
             <tr style="padding-left: 2px;padding-right: 2px">
                 <th rowspan="2" style="width: 4%;">Tổng cộng</th>
                 @foreach ($a_plct as $plct)
-                    <th rowspan="2" style="width: 4%;">{!!$plct!!}</th>
+                    <th rowspan="2" style="width: 4%;">{!! $plct !!}</th>
                 @endforeach
                 <th rowspan="2" style="width: 5%;">Tổng cộng</th>
                 <th rowspan="2" style="width: 5%;">Hệ số lương</th>
@@ -77,10 +77,11 @@
         <tr style="font-weight: bold; text-align: center;">
             <td></td>
             <td>TỔNG SỐ</td>
+            <td class="text-right">{{ dinhdangso($m_chitiet->sum('canbo_dutoan')) }}</td>
             <td class="text-right">{{ dinhdangso($m_chitiet->sum('canbo_congtac')) }}</td>
-            <th class="text-right">{{ dinhdangsothapphan($model->count(), $lamtron) }}</th>
+            {{-- <th class="text-right">{{ dinhdangsothapphan($model->count(), $lamtron) }}</th> --}}
             @foreach ($a_plct as $key => $val)
-                <th class="text-right">{{ dinhdangsothapphan($model->where('mact', $key)->count(), $lamtron) }}</th>
+                <th class="text-right">{{ dinhdangsothapphan($m_chitiet->where('mact', $key)->first()->canbo_congtac, $lamtron) }}</th>
             @endforeach
             <td class="text-right">{{ dinhdangsothapphan($model->sum('tongcong'), $lamtron) }}</td>
             <td class="text-right">{{ dinhdangsothapphan($model->sum('heso'), $lamtron) }}</td>
@@ -95,19 +96,24 @@
         @foreach ($model_congtac as $congtac)
             <?php $model_luong = $model->where('mact', $congtac->mact); ?>
             @if (count($model_luong) > 0)
-                <?php $stt = 1; ?>
+                <?php
+                $stt = 0;
+                $a_stt = [];
+                $chitiet_ct = $m_chitiet->where('mact', $congtac->mact)
+                ?>
                 <tr style="font-weight: bold;">
                     <td class="text-center">{{ convert2Roman($i++) }}</td>
                     <td style="text-align: left;">{{ $congtac->tenct }}</td>
                     <td class="text-right">
-                        {{ dinhdangso($m_chitiet->where('mact', $congtac->mact)->sum('canbo_congtac')) }}
+                        {{ dinhdangso($chitiet_ct->sum('canbo_dutoan')) }}
                     </td>
                     <td class="text-right">
-                        {{ dinhdangsothapphan($model->where('mact', $congtac->mact)->count(), $lamtron) }}</td>
+                        {{ dinhdangso($chitiet_ct->sum('canbo_congtac')) }}
+                    </td>
                     @foreach ($a_plct as $key => $val)
                         @if ($congtac->mact == $key)
                             <td class="text-right">
-                                {{ dinhdangsothapphan($model->where('mact', $key)->count(), $lamtron) }}</td>
+                                {{ dinhdangsothapphan($chitiet_ct->first()->canbo_congtac, $lamtron) }}</td>
                         @else
                             <td class="text-right"></td>
                         @endif
@@ -123,7 +129,7 @@
                 </tr>
                 @foreach ($model_luong as $ct)
                     <tr>
-                        <td class="text-center">{{ $stt++ }}</td>
+                        <td class="text-center">{{ in_array($ct->stt, $a_stt) ? $stt : ++$stt }}</td>
                         <td style="text-align: left">{{ $ct->tencanbo }}</td>
                         <td style="text-align: left"></td>
                         <td style="text-align: left"></td>
@@ -139,6 +145,10 @@
                         <td class="text-right">{{ dinhdangsothapphan($ct->tongbh_dv, $lamtron) }}</td>
                         <td class="text-right">{{ dinhdangsothapphan($ct->quyluong, $lamtron) }}</td>
                     </tr>
+                    <!-- Thêm số thứ tự vào mảng để khi gặp lại sẽ bỏ qua ko tự động tăng -->
+                    <?php                     
+                    $a_stt[] = $ct->stt; 
+                    ?>
                 @endforeach
             @endif
         @endforeach

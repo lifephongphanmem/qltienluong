@@ -47,12 +47,19 @@ class dutoanluong_insolieuController extends Controller
                     $col++;
                 }
             }
+
+            //Xử lý lại mã cán bộ do trong lúc tạo dự toán đã gán hậu tố vào các cán bộ kiêm nhiệm
+            //Cán bộ cùng mact + macanbo tính là 01 ng
             foreach ($model as $ct) {
+                $a_macanbo = explode('_', $ct->macanbo);
+                if (count($a_macanbo) > 1) {
+                    $ct->macanbo = $a_macanbo[0] . '_' . $a_macanbo[1];
+                }
                 $ct->tongphucap = $ct->tonghs - $ct->heso;
                 $ct->tongcong = $ct->tonghs + $ct->tongbh_dv;
                 $ct->quyluong = ($ct->ttl + $ct->ttbh_dv) * 12;
             }
-            // dd($inputs);
+            //dd($m_chitiet->toarray());
             $a_phongban = array_column(dmphongban::where('madv', $m_dutoan->madv)->get()->toArray(), 'tenpb', 'mapb');
             return view('reports.dutoanluong.donvi.bangluongbienche')
                 ->with('model', $model)

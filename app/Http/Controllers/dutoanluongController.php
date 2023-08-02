@@ -99,16 +99,20 @@ class dutoanluongController extends Controller
             //xóa các chỉ tiêu cũ do có thể có 1 số plct thừa
             chitieubienche::where('madv', session('admin')->madv)->where('nam', $inputs['namns'])->delete();
             $a_plct = getPLCTDuToan();
-            //dd($m_chitieu);
+            //dd($m_bl_ct->toarray());
             foreach ($a_plct as $plct) {
                 if (!in_array($plct, $a_plct_bl)) {
                     continue;
                 }
+                //Cán bộ kiêm nhiệm có cùng mã phân loại công tác với lương chính => chỉ tính là 01 cán bộ
+                $canbo = $m_bl_ct->where('mact', $plct);
+                $a_data = a_unique(a_split($canbo->toarray(), array('mact', 'macanbo')));
+                //dd($a_data);
                 $chitieu = new chitieubienche();
                 $chitieu->mact = $plct;
                 $chitieu->madv = session('admin')->madv;
                 $chitieu->nam = $inputs['namns'];
-                $chitieu->soluongduocgiao = $m_bl_ct->where('mact', $plct)->count();
+                $chitieu->soluongduocgiao = count($a_data);
                 $chitieu->soluongbienche = $chitieu->soluongduocgiao;
                 $chitieu->soluongtuyenthem = 0;
                 $chitieu->mact_tuyenthem = session('admin')->mact_tuyenthem;
@@ -248,7 +252,7 @@ class dutoanluongController extends Controller
                         $val->macanbo = $val->macanbo . '_' . $i++;
                         $m_bl_ct->add($val);
                     }
-                }                
+                }
             }
 
             //dd($m_bl_ct);
@@ -285,13 +289,14 @@ class dutoanluongController extends Controller
                     }
                 }
             }
-
+            // dd($m_bl_ct->toarray());
             //dd($m_bl_ct->where('mact','1506672780'));
             //Tính lại lương theo mức lương cơ bản mới
             $a_hoten = array_column(hosocanbo::where('madv', session('admin')->madv)->get()->toarray(), 'tencanbo', 'macanbo');
             //dd($a_hoten);
             $inputs['luongcoban'] = getDbl($inputs['luongcoban']);
             foreach ($m_bl_ct as $chitiet) {
+                $chitiet->macanbo_goc = $chitiet->macanbo;
                 if ($chitiet->mact == '1506673585') {
                     //do hợp đồng 68 lương cố định
                     //gán lại lương cơ bản theo mức mới
@@ -400,6 +405,7 @@ class dutoanluongController extends Controller
             $inputs['luonghs_dt'] = 0;
             $inputs['luongbh_dt'] = 0;
             $a_dutoan = [];
+            //dd($m_bl_ct->toarray());
             //Tổng hợp lại dự toán cho cán bộ theo bảng lương
             foreach (array_unique(array_column($m_bl_ct->toarray(), 'mact')) as $data) {
                 $dutoan = [];
@@ -407,7 +413,8 @@ class dutoanluongController extends Controller
                 $dutoan['phanloai'] = 'COMAT';
                 $dutoan['mact'] = $data;
                 $dutoan['masodv'] = $masodv;
-                $dutoan['canbo_congtac'] = count($canbo);
+                //Do 2 cán bộ trong cùng 1 pân loại công tác => tính làm 01 cán bộ
+                $dutoan['canbo_congtac'] = count(array_unique(array_column($canbo->toarray(), 'macanbo_goc')));
                 $dutoan['canbo_dutoan'] =  $a_chitieu[$data]['soluongduocgiao'] ?? $dutoan['canbo_congtac'];
                 //Tính lại tổng các phụ cấp
                 foreach ($a_pc as $pc) {
@@ -492,7 +499,7 @@ class dutoanluongController extends Controller
             $a_th = array_merge(array(
                 'stt', 'macanbo', 'tencanbo', 'mact', 'macvcq', 'mapb',   'tonghs', 'ttl', 'luongcoban', 'masodv',
                 'stbhxh_dv', 'stbhyt_dv', 'stbhtn_dv', 'stkpcd_dv', 'ttbh_dv',
-                'bhxh_dv', 'bhyt_dv', 'bhtn_dv', 'kpcd_dv', 'tongbh_dv',
+                'bhxh_dv', 'bhyt_dv', 'bhtn_dv', 'kpcd_dv', 'tongbh_dv'
             ), $a_th);
 
             foreach ($a_data as $key => $val) {
