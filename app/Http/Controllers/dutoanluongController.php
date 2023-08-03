@@ -123,7 +123,8 @@ class dutoanluongController extends Controller
             //$model_nhomct = dmphanloaicongtac::select('macongtac', 'tencongtac')->get();
             //$model_tenct = dmphanloaict::select('tenct', 'macongtac', 'mact')->get();
             $m_chitieu = chitieubienche::where('madv', session('admin')->madv)->where('nam', $inputs['namns'])->get();
-            $model_pc = dmphucap_donvi::where('madv', session('admin')->madv)->get();
+            $model_pc = dmphucap_donvi::where('madv', session('admin')->madv)
+                ->wherein('mapc', getColDuToan())->get();
             $a_pc = [];
 
             foreach ($model_pc as $pc) {
@@ -180,7 +181,7 @@ class dutoanluongController extends Controller
         $model_pc = dmphucap_donvi::where('madv', session('admin')->madv)->get();
         $a_pc = array_column(dmphucap_donvi::where('madv', session('admin')->madv)->get()->toarray(), 'mapc');
         foreach ($model_pc as $pc) {
-            $inputs[$pc->mapc] = chkDbl($inputs[$pc->mapc]);
+            $inputs[$pc->mapc] = chkDbl($inputs[$pc->mapc] ?? 0);
         }
         $inputs['soluongbienche'] = chkDbl($inputs['soluongbienche']);
         $inputs['soluongtuyenthem'] = chkDbl($inputs['soluongtuyenthem']);
@@ -312,7 +313,7 @@ class dutoanluongController extends Controller
                     $m_bl_ct->pull($key);
                 } else {
                     if (in_array($value->congtac, ['DAINGAY', 'THAISAN', 'KHONGLUONG'])) {
-                        $value->tencanbo = '';//Gán tên rỗng để sau cập nhập lại tên
+                        $value->tencanbo = ''; //Gán tên rỗng để sau cập nhập lại tên
                         //cán bộ nghỉ thì tính lại ô st_ do khi tính lương ô st_ gán bằng 0
                         //sau đó gán vào phần giảm trừ
                         $value->tonghs = 0;
@@ -344,8 +345,8 @@ class dutoanluongController extends Controller
                         $value['stbhtn_dv'] = round($value['bhtn_dv'] * $sotienbaohiem, 0);
                         $value['stkpcd_dv'] = round($value['kpcd_dv'] * $sotienbaohiem, 0);
                         $value->ttbh_dv = $value->stbhxh_dv + $value->stbhyt_dv + $value->stbhtn_dv + $value->stkpcd_dv;
-        
-                       
+
+
                         //dd($value);
                     } else {
                         //chạy lại 1 vòng để hệ số, số tiền (do báo cáo lấy hệ số, số tiền)
@@ -424,7 +425,7 @@ class dutoanluongController extends Controller
                 ->where('nam', $inputs['namns'])->get();
             // dd($m_chitieu);
             $a_chitieu = $m_chitieu->keyBy('mact')->toarray();
-
+            //dd($model_phucap->toarray());
             foreach ($m_chitieu as $key => $val) {
                 $val['soluongtuyenthem'] = chkDbl($val['soluongtuyenthem']);
                 if ($val['soluongtuyenthem'] <= 0) {
@@ -439,7 +440,7 @@ class dutoanluongController extends Controller
                 $val['congtac'] = 'CHUATUYEN';
                 $val['mact'] = $val['mact_tuyenthem'];
                 $baohiem = $a_baohiem[$val['mact']];
-
+                
                 $val->tonghs = 0;
                 $val->ttl = 0;
                 $sotienbaohiem = 0;
@@ -455,7 +456,10 @@ class dutoanluongController extends Controller
                                 break;
                             }
                         case 1: { //số tiền
+                                $val->$mapc_st = $val->$mapc;
+                                $val->$mapc = round($val->$mapc_st / $inputs['luongcoban'], 5);
                                 $val->ttl += $val->$mapc_st;
+                                $val->tonghs += $val->$mapc;
                                 break;
                             }
                         case 2: { //phần trăm
@@ -481,8 +485,8 @@ class dutoanluongController extends Controller
                         $sotienbaohiem += $val->$mapc_st;
                     // $a_pc_bh
                 }
-               
-                
+
+
                 $val['stbhxh_dv'] = round((floatval($baohiem['bhxh_dv']) / 100) * $sotienbaohiem, 0);
                 $val['stbhyt_dv'] = round((floatval($baohiem['bhyt_dv']) / 100) * $sotienbaohiem, 0);
                 $val['stbhtn_dv'] = round((floatval($baohiem['bhtn_dv']) / 100) * $sotienbaohiem, 0);
@@ -498,7 +502,7 @@ class dutoanluongController extends Controller
                 $val->luongcoban = $inputs['luongcoban'];
             }
 
-            // dd($m_chitieu);
+            //dd($m_chitieu);
             //Mảng lưu thông tin dự toán chi tiết
             $inputs['luongnb_dt'] = 0;
             $inputs['luonghs_dt'] = 0;
