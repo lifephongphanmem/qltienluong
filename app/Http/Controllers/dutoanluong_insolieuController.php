@@ -32,7 +32,8 @@ class dutoanluong_insolieuController extends Controller
                 $model = $model->where('mapb', $inputs['mapb']);
             }
             $model = $model->orderby('stt')->get();
-            $m_chitiet = dutoanluong_chitiet::where('masodv', $inputs['masodv'])->wherein('mact', $inputs['mact'])->get();
+
+            $m_chitiet = dutoanluong_chitiet::where('masodv', $inputs['masodv'])->wherein('mact',array_unique(array_column($model->toarray(),'mact')))->get();
             $m_donvi = dmdonvi::where('madv', $m_dutoan->madv)->first();
             $model_congtac = dmphanloaict::wherein('mact', array_unique(array_column($model->toArray(), 'mact')))->get();
             //xử lý ẩn hiện cột phụ cấp => biết tổng số cột hiện => colspan trên báo cáo
