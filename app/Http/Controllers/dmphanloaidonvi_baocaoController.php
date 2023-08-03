@@ -77,9 +77,14 @@ class dmphanloaidonvi_baocaoController extends Controller
     public function store(Request $request)
     {
         if (Session::has('admin')) {
-            $inputs = $request->all();
+            $inputs = $request->all();            
             $inputs['madvbc'] = session('admin')->madvbc;
             $model = dmphanloaidonvi_baocao::where('madvbc', $inputs['madvbc'])->where('maphanloai_nhom', $inputs['maphanloai_nhom'])->first();
+            //Kiểm tra nếu mã nhóm trùng với mã trong phân loại đơn vị thì báo lỗi
+            $chk = dmphanloaidonvi::where('maphanloai',$inputs['maphanloai_goc'])->get();
+            if($chk->count() > 0){
+                dd('Mã số này đã có trong danh mục phân loại đơn vị nên không thể dùng làm mã gốc');
+            }
             //dd($model);
             if ($model != null) {
                 $model->update($inputs);

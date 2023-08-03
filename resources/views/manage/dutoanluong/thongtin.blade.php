@@ -252,12 +252,20 @@
                                             <table id="sample_4" class="table table-hover table-striped table-bordered">
                                                 <thead>
                                                     <tr class="text-center">
-                                                        <th style="width: 5%">STT</th>
-                                                        <th>Phân loại công tác</th>
-                                                        <th>Số lượng<br>được giao</th>
-                                                        <th>Số lượng<br>có mặt</th>
-                                                        <th>Số lượng<br>tuyển thêm</th>
-                                                        <th style="width: 10%">Thao tác</th>
+                                                        <th rowspan="2" style="width: 2%">STT</th>
+                                                        <th rowspan="2">Phân loại công tác</th>
+                                                        <th rowspan="2" style="width: 5%">Số<br>lượng<br>được<br>giao
+                                                        </th>
+                                                        <th rowspan="2" style="width: 5%">Số<br>lượng<br>có<br>mặt</th>
+                                                        <th rowspan="2" style="width: 5%">Số<br>lượng<br>tuyển<br>thêm
+                                                        </th>
+                                                        <th colspan="{{ count($a_pc) }}">Hệ số lương và phụ cấp</th>
+                                                        <th rowspan="2" style="width: 5%">Thao tác</th>
+                                                    </tr>
+                                                    <tr class="text-center">
+                                                        @foreach ($a_pc as $mapc => $tenpc)
+                                                            <th style="width: 5%">{!! $tenpc !!}</th>
+                                                        @endforeach
                                                     </tr>
                                                 </thead>
                                                 <?php $i = 1; ?>
@@ -273,13 +281,12 @@
                                                             <td class="text-center">
                                                                 {{ dinhdangso($value->soluongtuyenthem) }}</td>
                                                             </td>
+                                                            @foreach ($a_pc as $mapc => $tenpc)
+                                                                <td>{!! dinhdangsothapphan($value->$mapc, 3) !!}</td>
+                                                            @endforeach
                                                             <td class="text-center">
-                                                                {{-- <a href="{{'/nghiep_vu/chi_tieu/danh_sach?namct='.$inputs['namns']}}"
-                                                                    class="btn btn-default btn-xs mbs"
-                                                                    <i class="fa fa-edit"></i>&nbsp; Sửa</a> --}}
                                                                 <button type="button"
-                                                                    onclick="setChiTieu('{{ $value->mact }}','{{ $value->soluongduocgiao }}','{{ $value->soluongbienche }}',
-                                                                    '{{ $value->soluongtuyenthem }}','{{ $value->mact_tuyenthem }}','{{ $value->heso }}')"
+                                                                    onclick="setChiTieu('{{ $value->id }}')"
                                                                     class="btn btn-default btn-xs mbs"
                                                                     data-target="#chitiet-modal" data-toggle="modal">
                                                                     <i class="fa fa-edit"></i>&nbsp; Sửa</button>
@@ -313,9 +320,9 @@
         </div>
     </div>
 
-    {!! Form::open(['url' => '', 'method' => 'GET', 'id' => 'frm_chitieu']) !!}
+    {!! Form::open(['url' => '', 'method' => 'POST', 'id' => 'frm_chitieu']) !!}
     <div id="chitiet-modal" tabindex="-1" role="dialog" aria-hidden="true" class="modal fade">
-        <div class="modal-dialog modal-content">
+        <div class="modal-dialog modal-content modal-full">
             <div class="modal-header modal-header-primary">
                 <button type="button" data-dismiss="modal" aria-hidden="true" class="close">&times;</button>
                 <h4 id="modal-header-primary-label" class="modal-title">Thông tin chỉ tiêu biên chế</h4>
@@ -323,14 +330,12 @@
             <div class="modal-body">
                 <div class="form-horizontal">
                     <div class="row">
-                        <div class="col-md-12">
+                        <div class="col-md-3">
                             <label class="control-label">Tên phân loại công tác</label>
                             {!! Form::select('mact', $a_mact, null, ['class' => 'form-control']) !!}
                         </div>
-                    </div>
 
-                    <div class="row">
-                        <div class="col-md-12">
+                        <div class="col-md-2">
                             <label class="control-label">Số lượng được giao</label>
                             {!! Form::text('soluongduocgiao', null, [
                                 'id' => 'soluongduocgiao',
@@ -339,10 +344,8 @@
                                 'onchange' => 'setCanBo()',
                             ]) !!}
                         </div>
-                    </div>
 
-                    <div class="row">
-                        <div class="col-md-12">
+                        <div class="col-md-2">
                             <label class="control-label">Số lượng có mặt</label>
                             {!! Form::text('soluongbienche', null, [
                                 'id' => 'soluongbienche',
@@ -351,10 +354,8 @@
                                 'readonly' => 'true',
                             ]) !!}
                         </div>
-                    </div>
 
-                    <div class="row">
-                        <div class="col-md-12">
+                        <div class="col-md-2">
                             <label class="control-label">Số lượng tuyển thêm</label>
                             {!! Form::text('soluongtuyenthem', null, [
                                 'id' => 'soluongtuyenthem',
@@ -363,20 +364,53 @@
                                 'readonly' => 'true',
                             ]) !!}
                         </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-12">
+
+                        <div class="col-md-3">
                             <label class="control-label">Tên phân loại công tác tuyển thêm</label>
                             {!! Form::select('mact_tuyenthem', $a_mact, null, ['class' => 'form-control']) !!}
                         </div>
                     </div>
+
                     <div class="row">
-                        <div class="col-md-12">
-                            <label class="control-label">Hệ số lương</label>
-                            {!! Form::text('heso', null, ['id' => 'heso', 'class' => 'form-control', 'data-mask' => 'fdecimal']) !!}
-                        </div>
+                        @foreach ($model_pc as $pc)
+                            @if ($pc->phanloai == 3)
+                                {!! Form::hidden($pc->mapc, null, ['class' => 'form-control phucap_kn', 'data-mask' => 'fdecimal']) !!}
+                            @elseif ($pc->phanloai == 2)
+                                <div class="col-md-2">
+                                    <label class="control-label">{{ $pc->form }}</label>
+                                    <div class="input-group bootstrap-touchspin">
+                                        {!! Form::text($pc->mapc, null, [
+                                            'class' => 'form-control phucap_kn',
+                                            'data-mask' => 'fdecimal',
+                                        ]) !!}
+                                        <span class="input-group-addon bootstrap-touchspin-postfix">%</span>
+                                    </div>
+                                </div>
+                            @elseif($pc->phanloai == 1)
+                                <div class="col-md-2">
+                                    <label class="control-label">{{ $pc->form }}</label>
+                                    <div class="input-group bootstrap-touchspin">
+                                        {!! Form::text($pc->mapc, null, [
+                                            'class' => 'form-control phucap_kn',
+                                            'data-mask' => 'fdecimal',
+                                        ]) !!}
+                                        <span class="input-group-addon bootstrap-touchspin-postfix">VNĐ</span>
+                                    </div>
+                                </div>
+                            @else
+                                <div class="col-md-2">
+                                    <label class="control-label">{{ $pc->form }}</label>
+                                    {!! Form::text($pc->mapc, null, [
+                                        'class' => 'form-control phucap_kn',
+                                        'data-mask' => 'fdecimal',
+                                    ]) !!}
+                                </div>
+                            @endif
+                        @endforeach
                     </div>
+
                     <input type="hidden" name="namns" value="{{ $inputs['namns'] }}" />
+                    <input type="hidden" name="id" />
                 </div>
             </div>
 
@@ -393,52 +427,64 @@
         function setCanBo() {
             var soluongduocgiao = $('#frm_chitieu').find("[name^='soluongduocgiao']").val();
             var soluongbienche = $('#frm_chitieu').find("[name^='soluongbienche']").val();
-            
+
             var soluongtuyenthem = soluongduocgiao - soluongbienche;
             if (soluongtuyenthem < 0)
                 soluongtuyenthem = 0;
             $('#frm_chitieu').find("[name^='soluongtuyenthem']").val(soluongtuyenthem);
-            if(soluongduocgiao < soluongbienche){
-                $('#frm_chitieu').find("[name^='soluongduocgiao']").val(soluongbienche);}
+            if (soluongduocgiao < soluongbienche) {
+                $('#frm_chitieu').find("[name^='soluongduocgiao']").val(soluongbienche);
+            }
 
         }
 
-        function setChiTieu(mact, soluongduocgiao, soluongbienche, soluongtuyenthem, mact_tuyenthem, heso) {
-            $('#frm_chitieu').find("[name^='mact']").val(mact);
-            $('#frm_chitieu').find("[name^='soluongduocgiao']").val(soluongduocgiao);
-            $('#frm_chitieu').find("[name^='soluongbienche']").val(soluongbienche);
-            $('#frm_chitieu').find("[name^='soluongtuyenthem']").val(soluongtuyenthem);
-            $('#frm_chitieu').find("[name^='heso']").val(heso);
-            $('#frm_chitieu').find("[name^='mact_tuyenthem']").val(mact_tuyenthem);
-        }
-
-        function updChiTieu() {
-            //var tr = $(e).closest('tr');
+        function setChiTieu(id) {
             var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
-            var form = $('#frm_chitieu');
             $.ajax({
-                url: '{{ $furl }}' + 'updchitieu',
+                url: '{{ $furl }}' + 'getchitieu',
                 type: 'GET',
                 data: {
                     _token: CSRF_TOKEN,
-                    mact: form.find("[name^='mact']").val(),
-                    soluongduocgiao: form.find("[name^='soluongduocgiao']").val(),
-                    soluongbienche: form.find("[name^='soluongbienche']").val(),
-                    soluongtuyenthem: form.find("[name^='soluongtuyenthem']").val(),
-                    mact_tuyenthem: form.find("[name^='mact_tuyenthem']").val(),
-                    heso: form.find("[name^='heso']").val(),
-                    nam: form.find("[name^='namns']").val()
+                    id: id
                 },
                 dataType: 'JSON',
                 success: function(data) {
+                    Array.from(document.getElementsByClassName("phucap_kn")).forEach(
+                        function(element) {
+                            element.value = data[element.name];
+                        }
+                    );
+                    //console.log(data);
+                    var form = $('#frm_chitieu');
+                    form.find("[name='id']").val(data.id);
+                    form.find("[name='mact']").val(data.mact).trigger('change');
+                    form.find("[name^='mact_tuyenthem']").val(data.mact_tuyenthem).trigger('change');
+                    form.find("[name^='soluongduocgiao']").val(data.soluongduocgiao);
+                    form.find("[name^='soluongbienche']").val(data.soluongbienche);
+                    form.find("[name^='soluongtuyenthem']").val(data.soluongtuyenthem);
+                }
+            });
+            $('#chvu-modal').modal('show');
+        }        
+
+        function updChiTieu() {
+            var formData = new FormData($('#frm_chitieu')[0]);
+
+            $.ajax({                
+                url: '{{ $furl }}' + "updchitieu",
+                method: "POST",
+                cache: false,
+                dataType: false,
+                processData: false,
+                contentType: false,
+                data: formData,
+                success: function(data) {
+                    //console.log(data);
                     toastr.success("Cập nhật thông tin thành công", "Thành công!");
                     $('#dschitieu').replaceWith(data.message);
                     TableManaged.init();
-                },
-                error: function(message) {
-                    toastr.error(message, 'Lỗi!');
                 }
-            });
+            })
             $('#chitiet-modal').modal('hide');
         }
     </script>

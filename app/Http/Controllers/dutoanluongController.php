@@ -123,15 +123,41 @@ class dutoanluongController extends Controller
             //$model_nhomct = dmphanloaicongtac::select('macongtac', 'tencongtac')->get();
             //$model_tenct = dmphanloaict::select('tenct', 'macongtac', 'mact')->get();
             $m_chitieu = chitieubienche::where('madv', session('admin')->madv)->where('nam', $inputs['namns'])->get();
+            $model_pc = dmphucap_donvi::where('madv', session('admin')->madv)->get();
+            $a_pc = [];
+
+            foreach ($model_pc as $pc) {
+                if ($m_chitieu->sum($pc->mapc) > 0) {
+                    $a_pc[$pc->mapc] = $pc->tenpc;
+                }
+            }
+
             return view('manage.dutoanluong.thongtin')
                 ->with('furl', '/nghiep_vu/quan_ly/du_toan/')
                 ->with('inputs', $inputs)
                 ->with('m_chitieu', $m_chitieu)
+                ->with('model_pc', $model_pc)
+                ->with('a_pc', $a_pc)
                 ->with('a_nkp', getNguonKP(false))
                 ->with('a_mact', array_column(dmphanloaict::select('tenct', 'macongtac', 'mact')->get()->toarray(), 'tenct', 'mact'))
                 ->with('pageTitle', 'Thông tin dự toán lương của đơn vị');
         } else
             return view('errors.notlogin');
+    }
+
+    function getchitieu(Request $request)
+    {
+        if (!Session::has('admin')) {
+            $result = array(
+                'status' => 'fail',
+                'message' => 'permission denied',
+            );
+            die(json_encode($result));
+        }
+
+        $inputs = $request->all();
+        $model = chitieubienche::find($inputs['id']);
+        die($model);
     }
 
     public function updchitieu(Request $request)
@@ -150,31 +176,49 @@ class dutoanluongController extends Controller
 
         $inputs = $request->all();
         //dd($inputs);
-        $model = chitieubienche::where('madv', session('admin')->madv)
-            ->where('nam', $inputs['nam'])
-            ->where('mact', $inputs['mact'])
-            ->first();
-        $model->soluongbienche = chkDbl($inputs['soluongbienche']);
-        $model->soluongtuyenthem = chkDbl($inputs['soluongtuyenthem']);
-        $model->soluongduocgiao = chkDbl($inputs['soluongbienche']) + chkDbl($inputs['soluongtuyenthem']);
-        $model->heso = chkDbl($inputs['heso']);
-        $model->mact_tuyenthem = $inputs['mact_tuyenthem'];
-        $model->save();
+        //return response()->json($inputs);
+        $model_pc = dmphucap_donvi::where('madv', session('admin')->madv)->get();
+        $a_pc = array_column(dmphucap_donvi::where('madv', session('admin')->madv)->get()->toarray(), 'mapc');
+        foreach ($model_pc as $pc) {
+            $inputs[$pc->mapc] = chkDbl($inputs[$pc->mapc]);
+        }
+        $inputs['soluongbienche'] = chkDbl($inputs['soluongbienche']);
+        $inputs['soluongtuyenthem'] = chkDbl($inputs['soluongtuyenthem']);
+        $inputs['soluongduocgiao'] = $inputs['soluongbienche'] + $inputs['soluongtuyenthem'];
+        $model_chitieu = chitieubienche::find($inputs['id']);
+        unset($inputs['id']);
+        $model_chitieu->update($inputs);
 
-        $model = chitieubienche::where('madv', session('admin')->madv)
-            ->where('nam', $inputs['nam'])
+        $model = chitieubienche::where('madv', $model_chitieu->madv)
+            ->where('nam', $model_chitieu->nam)
             ->get();
+
+        $a_pc = [];
+
+        foreach ($model_pc as $pc) {
+            if ($model->sum($pc->mapc) > 0) {
+                $a_pc[$pc->mapc] = $pc->tenpc;
+            }
+        }
+
         $result['message'] = '<div class="row" id="dschitieu">';
         $result['message'] .= '<div class="col-md-12">';
         $result['message'] .= '<table class="table table-striped table-bordered table-hover" id="sample_4">';
         $result['message'] .= '<thead>';
         $result['message'] .= '<tr class="text-center">';
-        $result['message'] .= '<th style="width: 5%">STT</th>';
-        $result['message'] .= '<th>Phân loại công tác</th>';
-        $result['message'] .= '<th>Số lượng<br>được giao</th>';
-        $result['message'] .= '<th>Số lượng<br>có mặt</th>';
-        $result['message'] .= '<th>Số lượng<br>tuyển thêm</th>';
-        $result['message'] .= '<th style="width: 10%">Thao tác</th>';
+        $result['message'] .= '<th rowspan="2" style="width: 5%">STT</th>';
+        $result['message'] .= '<th rowspan="2">Phân loại công tác</th>';
+        $result['message'] .= '<th rowspan="2">Số<br>lượng<br>được<br>giao</th>';
+        $result['message'] .= '<th rowspan="2">Số<br>lượng<br>có<br>mặt</th>';
+        $result['message'] .= '<th rowspan="2">Số<br>lượng<br>tuyển<br>thêm</th>';
+        $result['message'] .= '<th colspan="' . count($a_pc) . '">Hệ số lương và phụ cấp</th>';
+        $result['message'] .= '<th rowspan="2" style="width: 5%">Thao tác</th>';
+        $result['message'] .= '</tr>';
+        $result['message'] .= '<tr class="text-center">';
+        foreach ($a_pc as $mapc => $tenpc) {
+            $result['message'] .= '<th style="width: 5%">' . $tenpc . '</th>';
+        }
+
         $result['message'] .= '</tr>';
         $result['message'] .= '</thead>';
         $result['message'] .= '<tbody>';
@@ -187,10 +231,11 @@ class dutoanluongController extends Controller
             $result['message'] .= '<td class="text-center">' . dinhdangso($value->soluongduocgiao) . '</td>';
             $result['message'] .= '<td class="text-center">' . dinhdangso($value->soluongbienche) . '</td>';
             $result['message'] .= '<td class="text-center">' . dinhdangso($value->soluongtuyenthem) . '</td>';
-
+            foreach ($a_pc as $mapc => $tenpc) {
+                $result['message'] .= '<td>' . dinhdangsothapphan($value->$mapc, 3) . '</td>';
+            }
             $result['message'] .= '<td class="text-center">';
-            $result['message'] .= '<button type="button" onclick="setChiTieu(&#39;' . $value->mact . '&#39;,' . $value->soluongduocgiao . ',' . $value->soluongbienche . ',' . $value->soluongtuyenthem
-                . ',&#39;' . $value->mact_tuyenthem .  '&#39;,' . $value->heso . ')" class="btn btn-default btn-xs mbs"';
+            $result['message'] .= '<button type="button" onclick="setChiTieu(&#39;' . $value->id . '&#39;,)" class="btn btn-default btn-xs mbs"';
             $result['message'] .= ' data-target="#chitiet-modal" data-toggle="modal">';
             $result['message'] .= ' <i class="fa fa-edit"></i>&nbsp; Sửa</button>';
             $result['message'] .= '</td>';
@@ -202,7 +247,7 @@ class dutoanluongController extends Controller
         $result['message'] .= '</div>';
         $result['status'] = 'success';
 
-        die(json_encode($result));
+        return response()->json($result);
     }
 
     //Tạo dự toán theo bảng lương *12
@@ -256,40 +301,62 @@ class dutoanluongController extends Controller
             }
 
             //dd($m_bl_ct);
-
+            $a_baohiem = dmphanloaicongtac_baohiem::where('madv', session('admin')->madv)->get()->keyBy('mact')->toarray();
+            $model_phucap = dmphucap_donvi::select('mapc', 'phanloai', 'congthuc', 'baohiem', 'tenpc', 'thaisan', 'nghiom', 'dieudong', 'thuetn', 'tapsu')
+                ->where('madv', session('admin')->madv)
+                ->wherein('mapc', $a_pc)->get();
+            $a_pc_bh = array_column($model_phucap->where('baohiem', 1)->toarray(), 'mapc');
+            //dd($m_bl_ct);
             foreach ($m_bl_ct as $key => $value) {
                 if (!in_array($value->mact, $a_plct)) {
                     $m_bl_ct->pull($key);
                 } else {
-                    //chạy lại 1 vòng để hệ số, số tiền (do báo cáo lấy hệ số, số tiền)
-                    foreach ($a_pc as $pc) {
-                        $tenpc_st = 'st_' . $pc;
-                        $value->$pc = round($value->$tenpc_st / $value->luongcoban, 10);
-                    }
-
                     if (in_array($value->congtac, ['DAINGAY', 'THAISAN', 'KHONGLUONG'])) {
+                        $value->tencanbo = '';//Gán tên rỗng để sau cập nhập lại tên
                         //cán bộ nghỉ thì tính lại ô st_ do khi tính lương ô st_ gán bằng 0
                         //sau đó gán vào phần giảm trừ
+                        $value->tonghs = 0;
+                        $value->ttl = 0;
+                        $sotienbaohiem = 0;
+                        foreach ($a_pc as $mapc) {
+                            $mapc_st = 'st_' . $mapc;
+                            //chia lại phụ cấp lưu theo số tiền
+                            if ($value->$mapc > 1000) {
+                                $value->$mapc_st = $value->$mapc;
+                                $value->$mapc = round($value->$mapc_st / $value->luongcoban, 10);
+                            } else {
+                                $value->$mapc_st =  round($value->$mapc * $value->luongcoban);
+                            }
+                            $value->tonghs += $value->$mapc;
+                            $value->ttl += $value->$mapc_st;
+                            if (in_array($mapc, $a_pc_bh))
+                                $sotienbaohiem += $value->$mapc_st;
+                        }
+                        $baohiem = $a_baohiem[$value['mact']];
+                        $value['bhxh_dv'] = round(floatval($baohiem['bhxh_dv']) / 100, 5);
+                        $value['bhyt_dv'] = round(floatval($baohiem['bhyt_dv']) / 100, 5);
+                        $value['bhtn_dv'] = round(floatval($baohiem['bhtn_dv']) / 100, 5);
+                        $value['kpcd_dv'] = round(floatval($baohiem['kpcd_dv']) / 100, 5);
+                        $value['tongbh_dv'] = $value->bhxh_dv + $value->bhyt_dv + $value->bhtn_dv + $value->kpcd_dv;
 
-                        // foreach ($a_pc as $mapc) {
-                        //     $mapc_st = 'st_' . $mapc;
-                        //     $tonghs += $a_ct[$i][$mapc];
-                        //     if ($a_ct[$i][$mapc] > 0 && $a_ct[$i][$mapc_st] == 0) {
-                        //         if ($a_ct[$i][$mapc] < 1000) {
-                        //             $a_ct[$i][$mapc_st] = round($a_ct[$i][$mapc] * $a_ct[$i]['luongcoban']);
-                        //         } else {
-                        //             $a_ct[$i][$mapc_st] = $a_ct[$i][$mapc];
-                        //         }
-                        //         $a_ct[$i]['giaml'] += $a_ct[$i][$mapc_st];
-                        //     }
-                        //     $tongst += $a_ct[$i][$mapc_st];
-                        // }
-
+                        $value['stbhxh_dv'] = round($value['bhxh_dv'] * $sotienbaohiem, 0);
+                        $value['stbhyt_dv'] = round($value['bhyt_dv']  * $sotienbaohiem, 0);
+                        $value['stbhtn_dv'] = round($value['bhtn_dv'] * $sotienbaohiem, 0);
+                        $value['stkpcd_dv'] = round($value['kpcd_dv'] * $sotienbaohiem, 0);
+                        $value->ttbh_dv = $value->stbhxh_dv + $value->stbhyt_dv + $value->stbhtn_dv + $value->stkpcd_dv;
+        
+                       
                         //dd($value);
+                    } else {
+                        //chạy lại 1 vòng để hệ số, số tiền (do báo cáo lấy hệ số, số tiền)
+                        foreach ($a_pc as $pc) {
+                            $tenpc_st = 'st_' . $pc;
+                            $value->$pc = round($value->$tenpc_st / $value->luongcoban, 10);
+                        }
                     }
                 }
             }
-            // dd($m_bl_ct->toarray());
+            //dd($m_bl_ct->toarray());
             //dd($m_bl_ct->where('mact','1506672780'));
             //Tính lại lương theo mức lương cơ bản mới
             $a_hoten = array_column(hosocanbo::where('madv', session('admin')->madv)->get()->toarray(), 'tencanbo', 'macanbo');
@@ -357,7 +424,7 @@ class dutoanluongController extends Controller
                 ->where('nam', $inputs['namns'])->get();
             // dd($m_chitieu);
             $a_chitieu = $m_chitieu->keyBy('mact')->toarray();
-            $a_baohiem = dmphanloaicongtac_baohiem::where('madv', session('admin')->madv)->get()->keyBy('mact')->toarray();
+
             foreach ($m_chitieu as $key => $val) {
                 $val['soluongtuyenthem'] = chkDbl($val['soluongtuyenthem']);
                 if ($val['soluongtuyenthem'] <= 0) {
@@ -372,34 +439,66 @@ class dutoanluongController extends Controller
                 $val['congtac'] = 'CHUATUYEN';
                 $val['mact'] = $val['mact_tuyenthem'];
                 $baohiem = $a_baohiem[$val['mact']];
-                //thêm cho đủ trường
-                foreach ($a_pc as $pc) {
-                    $tenpc_st = 'st_' . $pc;
-                    $val->$tenpc_st = 0;
+
+                $val->tonghs = 0;
+                $val->ttl = 0;
+                $sotienbaohiem = 0;
+                foreach ($model_phucap as $pc) {
+                    $mapc = $pc->mapc;
+                    $mapc_st = 'st_' . $mapc;
+                    $pl = getDbl($pc->phanloai);
+                    switch ($pl) {
+                        case 0: { //hệ số
+                                $val->$mapc_st = round($val->$mapc * $inputs['luongcoban'], 0);
+                                $val->ttl += $val->$mapc_st;
+                                $val->tonghs += $val->$mapc;
+                                break;
+                            }
+                        case 1: { //số tiền
+                                $val->ttl += $val->$mapc_st;
+                                break;
+                            }
+                        case 2: { //phần trăm
+                                if ($mapc != 'vuotkhung') {
+                                    $heso = 0;
+                                    foreach (explode(',', $pc->congthuc) as $cthuc) {
+                                        if ($cthuc != '')
+                                            $heso += $val->$cthuc;
+                                    }
+                                    $val->$mapc = round($heso * $val->$mapc / 100, session('admin')->lamtron);
+                                }
+
+                                $val->$mapc_st = round($val->$mapc * $inputs['luongcoban'], 0);
+                                $val->ttl += $val->$mapc_st;
+                                $val->tonghs += $val->$mapc;
+                                break;
+                            }
+                        default: { //trường hợp còn lại (ẩn,...)
+                                break;
+                            }
+                    }
+                    if (in_array($mapc, $a_pc_bh))
+                        $sotienbaohiem += $val->$mapc_st;
+                    // $a_pc_bh
                 }
-                //tạm thời chỉ tính lương theo hệ số
-                $val['heso'] = $val['heso'] * $val['soluongtuyenthem'];
-                $val['st_heso'] = round($val['heso'] * $inputs['luongcoban'], 0);
-                $val->tonghs = $val['heso'];
-                $val->ttl = $val['st_heso'];
-                //quy đổi bảo hiểm thành hệ số
-                //dd($baohiem);
-                $val['bhxh_dv'] = round((floatval($baohiem['bhxh_dv']) / 100) * $val['heso'], 5);
-                $val['bhyt_dv'] = round((floatval($baohiem['bhyt_dv']) / 100) * $val['heso'], 5);
-                $val['bhtn_dv'] = round((floatval($baohiem['bhtn_dv']) / 100) * $val['heso'], 5);
-                $val['kpcd_dv'] = round((floatval($baohiem['kpcd_dv']) / 100) * $val['heso'], 5);
-                $val['tongbh_dv'] = $val->bhxh_dv + $val->bhyt_dv + $val->bhtn_dv + $val->kpcd_dv;
-                //quy đổi bảo hiểm thành số tiền theo mức lương cơ bản
-                $val['stbhxh_dv'] = round($val['bhxh_dv'] * $inputs['luongcoban'], 0);
-                $val['stbhyt_dv'] = round($val['bhyt_dv'] * $inputs['luongcoban'], 0);
-                $val['stbhtn_dv'] = round($val['bhtn_dv'] * $inputs['luongcoban'], 0);
-                $val['stkpcd_dv'] = round($val['kpcd_dv'] * $inputs['luongcoban'], 0);
+               
+                
+                $val['stbhxh_dv'] = round((floatval($baohiem['bhxh_dv']) / 100) * $sotienbaohiem, 0);
+                $val['stbhyt_dv'] = round((floatval($baohiem['bhyt_dv']) / 100) * $sotienbaohiem, 0);
+                $val['stbhtn_dv'] = round((floatval($baohiem['bhtn_dv']) / 100) * $sotienbaohiem, 0);
+                $val['stkpcd_dv'] = round((floatval($baohiem['kpcd_dv']) / 100) * $sotienbaohiem, 0);
                 $val->ttbh_dv = $val->stbhxh_dv + $val->stbhyt_dv + $val->stbhtn_dv + $val->stkpcd_dv;
+
+                $val['bhxh_dv'] = round($val['stbhxh_dv'] / $inputs['luongcoban'], 5);
+                $val['bhyt_dv'] = round($val['stbhyt_dv'] / $inputs['luongcoban'], 5);
+                $val['bhtn_dv'] = round($val['stbhtn_dv'] / $inputs['luongcoban'], 5);
+                $val['kpcd_dv'] = round($val['stkpcd_dv'] / $inputs['luongcoban'], 5);
+                $val['tongbh_dv'] = $val->bhxh_dv + $val->bhyt_dv + $val->bhtn_dv + $val->kpcd_dv;
                 //gán lại lương cơ bản
                 $val->luongcoban = $inputs['luongcoban'];
             }
 
-            //dd($m_chitieu);
+            // dd($m_chitieu);
             //Mảng lưu thông tin dự toán chi tiết
             $inputs['luongnb_dt'] = 0;
             $inputs['luonghs_dt'] = 0;

@@ -98,7 +98,7 @@
             @if (count($model_luong) > 0)
                 <?php
                 $stt = 0;
-                $a_stt = [];
+                $a_macanbo = [];
                 $chitiet_ct = $m_chitiet->where('mact', $congtac->mact)
                 ?>
                 <tr style="font-weight: bold;">
@@ -129,7 +129,7 @@
                 </tr>
                 @foreach ($model_luong as $ct)
                     <tr>
-                        <td class="text-center">{{ in_array($ct->stt, $a_stt) ? $stt : ++$stt }}</td>
+                        <td class="text-center">{{ in_array($ct->macanbo, $a_macanbo) ? $stt : ++$stt }}</td>
                         <td style="text-align: left">{{ $ct->tencanbo }}</td>
                         <td style="text-align: left"></td>
                         <td style="text-align: left"></td>
@@ -147,7 +147,7 @@
                     </tr>
                     <!-- Thêm số thứ tự vào mảng để khi gặp lại sẽ bỏ qua ko tự động tăng -->
                     <?php                     
-                    $a_stt[] = $ct->stt; 
+                    $a_macanbo[] = $ct->macanbo; 
                     ?>
                 @endforeach
             @endif

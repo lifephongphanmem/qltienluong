@@ -93,7 +93,8 @@ Route::group(['prefix' => 'nghiep_vu'], function () {
             Route::get('create_mau', 'dutoanluongController@create_mau');
             Route::post('thong_tin', 'dutoanluongController@thongtin_dutoan');
             Route::post('tao_du_toan', 'dutoanluongController@tao_dutoan');
-            Route::get('updchitieu', 'dutoanluongController@updchitieu');
+            Route::get('getchitieu', 'dutoanluongController@getchitieu');
+            Route::post('updchitieu', 'dutoanluongController@updchitieu');
             Route::post('kinhphiKoCT', 'dutoanluongController@kinhphiKoCT');
             //Route::get('checkNamDuToan','dutoanluongController@checkNamDT');
             //Route::get('checkBangLuong','dutoanluongController@checkBangLuong');

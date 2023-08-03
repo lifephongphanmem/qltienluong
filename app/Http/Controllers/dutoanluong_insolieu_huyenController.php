@@ -338,8 +338,8 @@ class dutoanluong_insolieu_huyenController extends Controller
                     $col++;
                 }
             }
-
-
+            // $model->where('maphanloai_goc3', $phanloai3->maphanloai_nhom)KVHCSN
+            //dd($model->where('maphanloai_goc3', 'KVHCSN')->toarray());
             // $m_donvi = dmdonvi::where('madv', session('admin')->madv)->first();
             //dd($m_donvi_baocao->where('maphanloai','DAOTAO'));
             return view('reports.dutoanluong.Huyen.tonghopbienche')
