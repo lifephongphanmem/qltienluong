@@ -343,7 +343,7 @@ class dutoanluong_insolieu_huyenController extends Controller
                     $chitiet->kpcd_dv = $chitiet->kpcd_dv / 12 * $chitiet->canbo_congtac;
                     $chitiet->bhtn_dv = $chitiet->bhtn_dv / 12 * $chitiet->canbo_congtac;
                     $chitiet->baohiem = $chitiet->bhxh_dv + $chitiet->bhyt_dv + $chitiet->kpcd_dv;
-                    $chitiet->tongphucap = ($chitiet->tonghs - $chitiet->heso) * $chitiet->canbo_congtac;
+                    $chitiet->tongphucap = $chitiet->tonghs - $chitiet->heso;
                     $chitiet->tongbh_dv = $chitiet->tongbh_dv / 12 * $chitiet->canbo_congtac;
                     $chitiet->tongcong = $chitiet->tonghs + $chitiet->tongbh_dv;
                     $chitiet->hesotrungbinh = $chitiet->tongcong;
@@ -479,7 +479,7 @@ class dutoanluong_insolieu_huyenController extends Controller
                     $chitiet->kpcd_dv = $chitiet->kpcd_dv / 12 * $chitiet->canbo_dutoan;
                     $chitiet->bhtn_dv = $chitiet->bhtn_dv / 12 * $chitiet->canbo_dutoan;
                     $chitiet->baohiem = $chitiet->bhxh_dv + $chitiet->bhyt_dv + $chitiet->kpcd_dv;
-                    $chitiet->tongphucap = ($chitiet->tonghs - $chitiet->heso) * $chitiet->canbo_dutoan;
+                    $chitiet->tongphucap = $chitiet->tonghs - $chitiet->heso;
                     $chitiet->tongbh_dv = $chitiet->tongbh_dv / 12 * $chitiet->canbo_dutoan;
                     $chitiet->tongcong = $chitiet->tonghs + $chitiet->tongbh_dv;
                     $chitiet->hesotrungbinh = $chitiet->tongcong;
