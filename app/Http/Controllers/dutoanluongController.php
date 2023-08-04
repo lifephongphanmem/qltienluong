@@ -37,6 +37,29 @@ class dutoanluongController extends Controller
             $model_bl = bangluong::where('madv', session('admin')->madv)->where('phanloai', 'BANGLUONG')->orderby('nam')->orderby('thang')->get();
             $model_nhomct = dmphanloaicongtac::select('macongtac', 'tencongtac')->get();
             $model_tenct = dmphanloaict::select('tenct', 'macongtac', 'mact')->get();
+            $model_chitiet = dutoanluong_chitiet::wherein('masodv', array_column($model->toarray(), 'masodv'))->get();
+            //Do chưa tuyển chỉ tính 12 tháng chưa nhân với số lượng cán bộ
+            foreach ($model_chitiet as $chitiet) {
+                if($chitiet->phanloai == 'CHUATUYEN'){
+                    $chitiet->st_heso = $chitiet->st_heso * $chitiet->canbo_congtac;
+                    $chitiet->ttl = $chitiet->ttl * $chitiet->canbo_congtac;
+                    $chitiet->ttbh_dv = $chitiet->ttbh_dv * $chitiet->canbo_congtac;                    
+                }
+            }
+            foreach ($model as $dutoan) {
+                //loại dữ liệu cũ
+                $dutoan->luongnb_dt = 0;
+                $dutoan->luonghs_dt = 0;
+                $dutoan->luongbh_dt =  0;
+                //TÍnh toán lại
+                $chitiet = $model_chitiet->where('masodv', $dutoan->masodv);
+                //dd($chitiet);
+                $dutoan->luongnb_dt = $chitiet->sum('st_heso');
+                $dutoan->luonghs_dt = $chitiet->sum('ttl') - $dutoan->luongnb_dt;
+                $dutoan->luongbh_dt =  $chitiet->sum('ttbh_dv');
+                $dutoan->tongdutoan = $dutoan->luongnb_dt + $dutoan->luonghs_dt + $dutoan->luongbh_dt;
+                //dd($chitiet);
+            }
 
             return view('manage.dutoanluong.index')
                 ->with('furl', '/nghiep_vu/quan_ly/du_toan/')
@@ -440,7 +463,7 @@ class dutoanluongController extends Controller
                 $val['congtac'] = 'CHUATUYEN';
                 $val['mact'] = $val['mact_tuyenthem'];
                 $baohiem = $a_baohiem[$val['mact']];
-                
+
                 $val->tonghs = 0;
                 $val->ttl = 0;
                 $sotienbaohiem = 0;

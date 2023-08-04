@@ -65,7 +65,7 @@
                                         <td class="text-center">{{ $key + 1 }}</td>
                                         <td class="text-center">{{ $value->namns }}</td>
                                         <td class="text-right">
-                                            {{ dinhdangsothapphan($value->luongnb_dt + $value->luonghs_dt + $value->luongbh_dt) }}
+                                            {{ dinhdangsothapphan($value->tongdutoan) }}
                                         </td>
                                         <td class="text-right">{{ dinhdangsothapphan($value->luongnb_dt) }}</td>
                                         <td class="text-right">{{ dinhdangsothapphan($value->luonghs_dt) }}</td>
