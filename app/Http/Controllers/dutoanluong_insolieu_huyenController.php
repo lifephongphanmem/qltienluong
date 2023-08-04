@@ -304,29 +304,55 @@ class dutoanluong_insolieu_huyenController extends Controller
             //$m_chuatuyen = dutoanluong_chitiet::wherein('masodv', array_column($m_dutoan->toarray(), 'masodv'))->where('phanloai', 'CHUATUYEN')->get();
             $a_plct = array_column(dmphanloaict::all()->toArray(), 'tenct', 'mact');
             $a_pc = getColDuToan();
-
+            //dd($model->toArray());
             foreach ($model as $chitiet) {
-                foreach ($a_pc as $pc) {
-                    $chitiet->$pc = $chitiet->$pc / 12;
-                }
-                $chitiet->madv = $a_donvi[$chitiet->masodv];
-                $chitiet->maphanloai = $a_pl_donvi[$chitiet->madv];
-                $chitiet->tenct = $a_plct[$chitiet->mact] ?? '';
-                $chitiet->tonghs = $chitiet->tonghs / 12;
+                //Chia làm 02 nhóm COMAT và CHUATUYEN
+                if ($chitiet->phanloai == 'COMAT') {
+                    //COMAT => chia 12
+                    foreach ($a_pc as $pc) {
+                        $chitiet->$pc = $chitiet->$pc / 12;
+                    }
+                    $chitiet->madv = $a_donvi[$chitiet->masodv];
+                    $chitiet->maphanloai = $a_pl_donvi[$chitiet->madv];
+                    $chitiet->tenct = $a_plct[$chitiet->mact] ?? '';
+                    $chitiet->tonghs = $chitiet->tonghs / 12;
 
-                $chitiet->bhxh_dv = $chitiet->bhxh_dv / 12;
-                $chitiet->bhyt_dv = $chitiet->bhyt_dv / 12;
-                $chitiet->kpcd_dv = $chitiet->kpcd_dv / 12;
-                $chitiet->bhtn_dv = $chitiet->bhtn_dv / 12;
-                $chitiet->baohiem = $chitiet->bhxh_dv + $chitiet->bhyt_dv + $chitiet->kpcd_dv;
-                $chitiet->tongphucap = $chitiet->tonghs - $chitiet->heso;
-                $chitiet->tongbh_dv = $chitiet->tongbh_dv / 12;
-                $chitiet->tongcong = $chitiet->tonghs + $chitiet->tongbh_dv;
-                $chitiet->hesotrungbinh = round($chitiet->tongcong / $chitiet->canbo_congtac, 5);
-                $chitiet->quyluong = ($chitiet->ttl + $chitiet->ttbh_dv) / $inputs['donvitinh'];
+                    $chitiet->bhxh_dv = $chitiet->bhxh_dv / 12;
+                    $chitiet->bhyt_dv = $chitiet->bhyt_dv / 12;
+                    $chitiet->kpcd_dv = $chitiet->kpcd_dv / 12;
+                    $chitiet->bhtn_dv = $chitiet->bhtn_dv / 12;
+                    $chitiet->baohiem = $chitiet->bhxh_dv + $chitiet->bhyt_dv + $chitiet->kpcd_dv;
+                    $chitiet->tongphucap = $chitiet->tonghs - $chitiet->heso;
+                    $chitiet->tongbh_dv = $chitiet->tongbh_dv / 12;
+                    $chitiet->tongcong = $chitiet->tonghs + $chitiet->tongbh_dv;
+                    $chitiet->hesotrungbinh = round($chitiet->tongcong / $chitiet->canbo_congtac, 5);
+                    $chitiet->quyluong = ($chitiet->ttl + $chitiet->ttbh_dv) / $inputs['donvitinh'];
+                } else {
+                    //CHUATUYEN => nhân với số lượng cán bộ
+
+                    foreach ($a_pc as $pc) {
+                        $chitiet->$pc = ($chitiet->$pc / 12) * $chitiet->canbo_congtac;
+                    }
+                    $chitiet->madv = $a_donvi[$chitiet->masodv];
+                    $chitiet->maphanloai = $a_pl_donvi[$chitiet->madv];
+                    $chitiet->tenct = $a_plct[$chitiet->mact] ?? '';
+                    $chitiet->tonghs = ($chitiet->tonghs / 12) * $chitiet->canbo_congtac;
+
+                    $chitiet->bhxh_dv = $chitiet->bhxh_dv / 12 * $chitiet->canbo_congtac;
+                    $chitiet->bhyt_dv = $chitiet->bhyt_dv / 12 * $chitiet->canbo_congtac;
+                    $chitiet->kpcd_dv = $chitiet->kpcd_dv / 12 * $chitiet->canbo_congtac;
+                    $chitiet->bhtn_dv = $chitiet->bhtn_dv / 12 * $chitiet->canbo_congtac;
+                    $chitiet->baohiem = $chitiet->bhxh_dv + $chitiet->bhyt_dv + $chitiet->kpcd_dv;
+                    $chitiet->tongphucap = ($chitiet->tonghs - $chitiet->heso) * $chitiet->canbo_congtac;
+                    $chitiet->tongbh_dv = $chitiet->tongbh_dv / 12 * $chitiet->canbo_congtac;
+                    $chitiet->tongcong = $chitiet->tonghs + $chitiet->tongbh_dv;
+                    $chitiet->hesotrungbinh = $chitiet->tongcong;
+                    $chitiet->quyluong = ($chitiet->ttl + $chitiet->ttbh_dv) * $chitiet->canbo_congtac / $inputs['donvitinh'];
+                }
+
                 $this->getMaNhomPhanLoai($chitiet, $m_phanloai);
             }
-            //dd($model->where('maphanloai','DAOTAO')->toArray());
+            //dd($model->toArray());
 
             //xử lý ẩn hiện cột phụ cấp => biết tổng số cột hiện => colspan trên báo cáo
             $a_tenpc = array_column(dmphucap::all()->toArray(), 'tenpc', 'mapc');
@@ -405,32 +431,59 @@ class dutoanluong_insolieu_huyenController extends Controller
             //     $model->add($chitiet);
             // }
             //tính toán lại
+            //Chia làm 02 nhóm COMAT và CHUATUYEN
+
             foreach ($model as $chitiet) {
-                foreach ($a_pc as $pc) {
-                    $chitiet->$pc = $chitiet->$pc / 12;
-                }
-                $chitiet->madv = $a_donvi[$chitiet->masodv];
-                $chitiet->maphanloai = $a_pl_donvi[$chitiet->madv];
-                $chitiet->tenct = $a_plct[$chitiet->mact] ?? '';
-                $chitiet->tonghs = $chitiet->tonghs / 12;
+                if ($chitiet->phanloai == 'COMAT') {
+                    //COMAT => chia 12
+                    foreach ($a_pc as $pc) {
+                        $chitiet->$pc = $chitiet->$pc / 12;
+                    }
+                    $chitiet->madv = $a_donvi[$chitiet->masodv];
+                    $chitiet->maphanloai = $a_pl_donvi[$chitiet->madv];
+                    $chitiet->tenct = $a_plct[$chitiet->mact] ?? '';
+                    $chitiet->tonghs = $chitiet->tonghs / 12;
 
-                $chitiet->bhxh_dv = $chitiet->bhxh_dv / 12;
-                $chitiet->bhyt_dv = $chitiet->bhyt_dv / 12;
-                $chitiet->kpcd_dv = $chitiet->kpcd_dv / 12;
-                $chitiet->bhtn_dv = $chitiet->bhtn_dv / 12;
-                $chitiet->baohiem = $chitiet->bhxh_dv + $chitiet->bhyt_dv + $chitiet->kpcd_dv;
-                $chitiet->tongphucap = $chitiet->tonghs - $chitiet->heso;
-                $chitiet->tongbh_dv = $chitiet->tongbh_dv / 12;
-                $chitiet->tongcong = $chitiet->tonghs + $chitiet->tongbh_dv;
-                $chitiet->hesotrungbinh = round($chitiet->tongcong / $chitiet->canbo_congtac, 5);
+                    $chitiet->bhxh_dv = $chitiet->bhxh_dv / 12;
+                    $chitiet->bhyt_dv = $chitiet->bhyt_dv / 12;
+                    $chitiet->kpcd_dv = $chitiet->kpcd_dv / 12;
+                    $chitiet->bhtn_dv = $chitiet->bhtn_dv / 12;
+                    $chitiet->baohiem = $chitiet->bhxh_dv + $chitiet->bhyt_dv + $chitiet->kpcd_dv;
+                    $chitiet->tongphucap = $chitiet->tonghs - $chitiet->heso;
+                    $chitiet->tongbh_dv = $chitiet->tongbh_dv / 12;
+                    $chitiet->tongcong = $chitiet->tonghs + $chitiet->tongbh_dv;
+                    $chitiet->hesotrungbinh = round($chitiet->tongcong / $chitiet->canbo_congtac, 5);
 
-                $chitiet->quyluong = ($chitiet->ttl + $chitiet->ttbh_dv) / $inputs['donvitinh'];
-                if ($model->where('madv', $chitiet->madv)->where('phanloai', 'CHUATUYEN')->count() == 0) {
-                    $new =  new dutoanluong_chitiet();
-                    $new->madv =  $chitiet->madv;
-                    $new->maphanloai = $chitiet->madv;
-                    $new->tenct = 'Biên chế chưa tuyển';
-                    $model->add($new);
+                    $chitiet->quyluong = ($chitiet->ttl + $chitiet->ttbh_dv) / $inputs['donvitinh'];
+
+                    //2023.08.04 tạm thời bỏ do chưa rõ chức năng
+                    // if ($model->where('madv', $chitiet->madv)->where('phanloai', 'CHUATUYEN')->count() == 0) {
+                    //     $new =  new dutoanluong_chitiet();
+                    //     $new->madv =  $chitiet->madv;
+                    //     $new->maphanloai = $chitiet->madv;
+                    //     $new->tenct = 'Biên chế chưa tuyển';
+                    //     $model->add($new);
+                    // }
+                } else {
+                    //CHUATUYEN => nhân với số lượng cán bộ
+                    foreach ($a_pc as $pc) {
+                        $chitiet->$pc = $chitiet->$pc / 12 * $chitiet->canbo_dutoan;
+                    }
+                    $chitiet->madv = $a_donvi[$chitiet->masodv];
+                    $chitiet->maphanloai = $a_pl_donvi[$chitiet->madv];
+                    $chitiet->tenct = $a_plct[$chitiet->mact] ?? '';
+                    $chitiet->tonghs = $chitiet->tonghs / 12 * $chitiet->canbo_dutoan;
+
+                    $chitiet->bhxh_dv = $chitiet->bhxh_dv / 12 * $chitiet->canbo_dutoan;
+                    $chitiet->bhyt_dv = $chitiet->bhyt_dv / 12 * $chitiet->canbo_dutoan;
+                    $chitiet->kpcd_dv = $chitiet->kpcd_dv / 12 * $chitiet->canbo_dutoan;
+                    $chitiet->bhtn_dv = $chitiet->bhtn_dv / 12 * $chitiet->canbo_dutoan;
+                    $chitiet->baohiem = $chitiet->bhxh_dv + $chitiet->bhyt_dv + $chitiet->kpcd_dv;
+                    $chitiet->tongphucap = ($chitiet->tonghs - $chitiet->heso) * $chitiet->canbo_dutoan;
+                    $chitiet->tongbh_dv = $chitiet->tongbh_dv / 12 * $chitiet->canbo_dutoan;
+                    $chitiet->tongcong = $chitiet->tonghs + $chitiet->tongbh_dv;
+                    $chitiet->hesotrungbinh = $chitiet->tongcong;
+                    $chitiet->quyluong = ($chitiet->ttl + $chitiet->ttbh_dv) * $chitiet->canbo_dutoan / $inputs['donvitinh'];
                 }
             }
 
