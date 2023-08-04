@@ -33,7 +33,7 @@ class dutoanluong_insolieuController extends Controller
             }
             $model = $model->orderby('stt')->get();
 
-            $m_chitiet = dutoanluong_chitiet::where('masodv', $inputs['masodv'])->wherein('mact',array_unique(array_column($model->toarray(),'mact')))->get();
+            $m_chitiet = dutoanluong_chitiet::where('masodv', $inputs['masodv'])->wherein('mact', array_unique(array_column($model->toarray(), 'mact')))->get();
             $m_donvi = dmdonvi::where('madv', $m_dutoan->madv)->first();
             $model_congtac = dmphanloaict::wherein('mact', array_unique(array_column($model->toArray(), 'mact')))->get();
             //xử lý ẩn hiện cột phụ cấp => biết tổng số cột hiện => colspan trên báo cáo
@@ -325,24 +325,24 @@ class dutoanluong_insolieuController extends Controller
 
             foreach ($m_chuatuyen as $chitiet) {
                 foreach ($a_pc as $pc) {
-                    $chitiet->$pc = $chitiet->$pc / 12;
+                    $chitiet->$pc = ($chitiet->$pc / 12) * $chitiet->canbo_congtac;
                 }
                 $chitiet->tenct = $a_plct[$chitiet->mact] ?? '';
-                $chitiet->tonghs = $chitiet->tonghs / 12;
+                $chitiet->tonghs = ($chitiet->tonghs / 12) * $chitiet->canbo_congtac;
 
-                $chitiet->bhxh_dv = $chitiet->bhxh_dv / 12;
-                $chitiet->bhyt_dv = $chitiet->bhyt_dv / 12;
-                $chitiet->kpcd_dv = $chitiet->kpcd_dv / 12;
+                $chitiet->bhxh_dv = ($chitiet->bhxh_dv / 12) * $chitiet->canbo_congtac;
+                $chitiet->bhyt_dv = ($chitiet->bhyt_dv / 12) * $chitiet->canbo_congtac;
+                $chitiet->kpcd_dv = ($chitiet->kpcd_dv / 12) * $chitiet->canbo_congtac;
                 $chitiet->baohiem = $chitiet->bhxh_dv + $chitiet->bhyt_dv + $chitiet->kpcd_dv;
                 $chitiet->tongphucap = $chitiet->tonghs - $chitiet->heso;
-                $chitiet->tongbh_dv = $chitiet->tongbh_dv / 12;
+                $chitiet->tongbh_dv = ($chitiet->tongbh_dv / 12) * $chitiet->canbo_congtac;
                 $chitiet->tongcong = $chitiet->tonghs + $chitiet->tongbh_dv;
                 $chitiet->hesotrungbinh = round($chitiet->tongcong / $chitiet->canbo_congtac, 5);
-                $chitiet->quyluong = $chitiet->ttl + $chitiet->ttbh_dv;
+                $chitiet->quyluong = ($chitiet->ttl + $chitiet->ttbh_dv) *  $chitiet->canbo_congtac;
                 //thêm vào model để in báo cáo
                 $model->add($chitiet);
             }
-            //dd($model);
+            //dd($m_chuatuyen);
             $m_donvi = dmdonvi::where('madv', $m_dutoan->madv)->first();
 
             //xử lý ẩn hiện cột phụ cấp => biết tổng số cột hiện => colspan trên báo cáo
