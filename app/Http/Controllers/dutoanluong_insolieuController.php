@@ -315,6 +315,7 @@ class dutoanluong_insolieuController extends Controller
                 $chitiet->bhxh_dv = $chitiet->bhxh_dv / 12;
                 $chitiet->bhyt_dv = $chitiet->bhyt_dv / 12;
                 $chitiet->kpcd_dv = $chitiet->kpcd_dv / 12;
+                $chitiet->bhtn_dv = $chitiet->bhtn_dv / 12;
                 $chitiet->baohiem = $chitiet->bhxh_dv + $chitiet->bhyt_dv + $chitiet->kpcd_dv;
                 $chitiet->tongphucap = $chitiet->tonghs - $chitiet->heso;
                 $chitiet->tongbh_dv = $chitiet->tongbh_dv / 12;
