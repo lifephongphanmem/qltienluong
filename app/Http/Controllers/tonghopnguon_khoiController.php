@@ -105,13 +105,18 @@ class tonghopnguon_khoiController extends Controller
                     }
                 }
             }
+            $inputs['madvbc']=session('admin')->madvbc;
+            $inputs['macqcq']=session('admin')->madv;
+            // dd($model);
                 return view('functions.tonghopnguon.index')
                 ->with('model', $model)
+                ->with('inputs', $inputs)
                 ->with('a_trangthai', $a_trangthai)
                 ->with('soluong',$soluong)
                 ->with('furl','/chuc_nang/tong_hop_nguon/khoi')
                 ->with('furl_xem','/chuc_nang/xem_du_lieu/nguon/khoi')
-                ->with('furl_th','/chuc_nang/tong_hop_nguon/khoi/')
+                // ->with('furl_th','/chuc_nang/tong_hop_nguon/khoi/')
+                ->with('furl_th','/chuc_nang/tong_hop_nguon/huyen/')
                 ->with('pageTitle','Danh sách đơn vị tổng hợp nguồn kinh phí');
 
         } else
