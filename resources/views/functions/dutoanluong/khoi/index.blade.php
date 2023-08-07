@@ -60,7 +60,8 @@
                                     <tr>
                                         <td class="text-center">{{ $key + 1 }}</td>
                                         <td class="text-center">{{ $value->namns }}</td>
-                                        <td class="text-center">{{ $value->dagui . '/' . $value->soluong }}</td>
+                                        {{-- <td class="text-center">{{ $value->dagui . '/' . $value->soluong }}</td> --}}
+                                        <td class="text-center">{{ $value->sldv }}</td>
                                         <td class="text-center">{{ $a_donviql[$value->macqcq] ?? '' }}</td>
                                         <td class="text-center bold">{{ $a_trangthai[$value['trangthai']] ?? '' }}</td>
                                         <td>
