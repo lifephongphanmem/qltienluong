@@ -26,16 +26,24 @@ class xemdulieu_dutoanController extends Controller
     {
         if (Session::has('admin')) {
             $inputs = $request->all();
+            $nam = $inputs['namns'];
             $madv = session('admin')->madv;
             $a_trangthai = array('ALL' => '--Chọn trạng thái dữ liệu--', 'CHOGUI' => 'Chưa gửi dữ liệu', 'DAGUI' => 'Đã gửi dữ liệu');
 
             $model_donvi = dmdonvi::select('madv', 'tendv', 'macqcq', 'maphanloai', 'phanloaitaikhoan')
                 ->wherein('madv', function ($query) use ($madv) {
                     $query->select('madv')->from('dmdonvi')->where('macqcq', $madv)->where('madv', '<>', $madv)->get();
+                })
+                ->wherenotin('madv', function ($query) use ($madv, $nam) {
+                    $query->select('madv')->from('dmdonvi')
+                        ->whereyear('ngaydung', '<=', $nam)
+                        ->where('trangthai', 'TD')
+                        ->get();
                 })->get();
             $model_nguon = dutoanluong::wherein('madv', function ($query) use ($madv) {
                 $query->select('madv')->from('dmdonvi')->where('macqcq', $madv)->where('madv', '<>', $madv)->get();
             })->get();
+
 
             $model_nguon_khoi = dutoanluong_khoi::where('madv', $madv)->get();
             $model_tonghopkhoi = dutoanluong_khoi::where('macqcq', $madv)
