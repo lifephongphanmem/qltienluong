@@ -28,12 +28,20 @@ class xemdulieu_nguonController extends Controller
         if (Session::has('admin')) {
             $inputs = $request->all();
             $madv = session('admin')->madv;
+            $nam = dmthongtuquyetdinh::where('sohieu', $inputs['sohieu'])->first()->namdt;
             $a_trangthai = array('ALL' => '--Chọn trạng thái dữ liệu--', 'CHOGUI' => 'Chưa gửi dữ liệu', 'DAGUI' => 'Đã gửi dữ liệu');
 
             $model_donvi = dmdonvi::select('madv', 'tendv', 'macqcq', 'maphanloai', 'phanloaitaikhoan')
                 ->wherein('madv', function ($query) use ($madv) {
                     $query->select('madv')->from('dmdonvi')->where('macqcq', $madv)->where('madv', '<>', $madv)->get();
+                })
+                ->wherenotin('madv', function ($query) use ($madv, $nam) {
+                    $query->select('madv')->from('dmdonvi')
+                        ->whereyear('ngaydung', '<=', $nam)
+                        ->where('trangthai', 'TD')
+                        ->get();
                 })->get();
+                // dd($model_donvi);
             $model_phanloai = dmphanloaidonvi::wherein('maphanloai', array_column($model_donvi->toarray(), 'maphanloai'))->get();
             $model_phanloai = array_column($model_phanloai->toarray(), 'tenphanloai', 'maphanloai');
             foreach ($model_phanloai as $key => $key)
@@ -74,12 +82,16 @@ class xemdulieu_nguonController extends Controller
             if (!isset($inputs['trangthai']) || $inputs['trangthai'] != 'ALL') {
                 $model_donvi = $model_donvi->where('trangthai', $inputs['trangthai']);
             }
-
+            $model_nhomct = dmphanloaicongtac::select('macongtac', 'tencongtac')->get();            
+            $model_tenct = dmphanloaict::select('tenct', 'macongtac', 'mact')->get();
             return view('functions.viewdata.nguonkinhphi.index')
                 ->with('model', $model_donvi)
+                ->with('model_nhomct', $model_nhomct)
+                ->with('model_tenct', $model_tenct)
                 ->with('inputs', $inputs)
                 ->with('a_trangthai', $a_trangthai)
                 ->with('a_phanloai', $a_phanloai)
+                ->with('furl', '/nguon_kinh_phi/')
                 ->with('furl_th', 'chuc_nang/tong_hop_nguon/khoi/')
                 ->with('furl_xem', '/chuc_nang/xem_du_lieu/nguon/khoi')
                 ->with('pageTitle', 'Danh sách đơn vị tổng hợp nguồn');
