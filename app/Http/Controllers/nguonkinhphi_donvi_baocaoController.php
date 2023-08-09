@@ -2239,7 +2239,7 @@ class nguonkinhphi_donvi_baocaoController extends Controller
             return view('errors.notlogin');
     }
 
-    function mau2g(Request $request)
+    function mau2g_20230809(Request $request)
     {
         if (Session::has('admin')) {
             $inputs = $request->all();
@@ -2395,7 +2395,7 @@ class nguonkinhphi_donvi_baocaoController extends Controller
             return view('errors.notlogin');
     }
 
-    function mau2g_20230809(Request $request)
+    function mau2g(Request $request)
     {
         if (Session::has('admin')) {
             $inputs = $request->all();
