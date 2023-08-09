@@ -60,10 +60,10 @@
             <tr style="text-align: right">
                 <td style="text-align: center;{{ $dulieu['style'] }}">{{ $dulieu['tt'] }}</td>
                 <td style="text-align: left;{{ $dulieu['style'] }}">{{ $dulieu['noidung'] }}</td>
-                <td style="{{ $dulieu['style'] }}">{{ dinhdangsothapphan($dulieu['canbo_congtac']) }}</td>
+                <td style="text-align: center;{{ $dulieu['style'] }}">{{ dinhdangsothapphan($dulieu['canbo_congtac']) }}</td>
                 <td style="{{ $dulieu['style'] }}">{{ dinhdangsothapphan($dulieu['solieu']['tongcong']) }}</td>
-                <td style="{{ $dulieu['style'] }}">{{ dinhdangsothapphan($dulieu['solieu']['st_tongpc']) }}</td>
                 <td style="{{ $dulieu['style'] }}">{{ dinhdangsothapphan($dulieu['solieu']['st_heso']) }}</td>
+                <td style="{{ $dulieu['style'] }}">{{ dinhdangsothapphan($dulieu['solieu']['st_tongpc']) }}</td>
                 <td style="{{ $dulieu['style'] }}">{{ dinhdangsothapphan($dulieu['solieu']['ttbh_dv']) }}</td>
             </tr>
         @endforeach
