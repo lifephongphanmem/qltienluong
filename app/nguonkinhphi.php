@@ -28,8 +28,8 @@ class nguonkinhphi extends Model
         'boiduong',
         'thunhapthap',
         'diaban',
-        'tinhgiam',
-        'nghihuusom',
+        
+        
         'baohiem',
         'nguonkp',
         
@@ -47,8 +47,7 @@ class nguonkinhphi extends Model
         
         'bosung',
         'caicach',
-        'kpthuhut',
-        'kpuudai',
+       
         'luongchuyentrach', //thừa
         'luongkhongchuyentrach', //thừa
         'tongnhucau1', //tổng nhu cầu kinh trước 1 năm
@@ -94,6 +93,10 @@ class nguonkinhphi extends Model
         'sothonconlai_2d',
         'sotoconlai_2d',
         //Mẫu 4a
+        'tinhgiam',
+        'nghihuusom',
+        'kpthuhut',
+        'kpuudai',
         'tietkiem',
         'tinhgiambc_4a',
         'nghihuu_4a',
@@ -112,6 +115,7 @@ class nguonkinhphi extends Model
         'huydongktx_hocphi_4a',
         'huydongktx_vienphi_4a',
         'huydongktx_khac_4a',
+        'kinhphigiamxa_4a',
         //Mẫu 2c
         'soluongqt_2c',
         'sotienqt_2c',
