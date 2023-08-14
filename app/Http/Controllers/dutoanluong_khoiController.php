@@ -27,6 +27,7 @@ class dutoanluong_khoiController extends Controller
         if (Session::has('admin')) {
             $madv = session('admin')->madv;
             $model_nguon = dutoanluong::where('trangthai', 'DAGUI')->where('macqcq', $madv)->get();
+
             $model_nguon_khoi = dutoanluong_khoi::where('madv', $madv)->get();
             $model = dutoanluong::select('namns')->where('madvbc', session('admin')->madvbc)->distinct()->get();
             $a_trangthai = getStatus();
@@ -36,12 +37,15 @@ class dutoanluong_khoiController extends Controller
                     $query->select('madv')->from('dmdonvi')->where('macqcq', $madv)->where('madv', '<>', $madv)->get();
                 })->get();
             $soluong = $model_donvi->count();
-
+// dd($model);
             foreach ($model as $dv) {
-                $nguon_khoi = $model_nguon_khoi->where('namns', $dv->namns)->first();
+                // $nguon_khoi = $model_nguon_khoi->where('namns', $dv->namns)->first();
+                $nguon_khoi = $model_nguon->where('namns', $dv->namns)->first();
+                $sl = $model_nguon->where('namns', $dv->namns)->count();
                 if ($nguon_khoi != null) {
                     //Đã tổng hợp dữ liệu
-                    $dv->sldv = $soluong . '/' . $soluong;
+                    // $dv->sldv = $soluong . '/' . $soluong;
+                    $dv->sldv = $sl . '/' . $soluong;
                     $dv->masodv = $nguon_khoi->masodv;
                     $dv->trangthai = $nguon_khoi->trangthai;
                     //$dv->trangthai = 'DAGUI';
@@ -61,7 +65,7 @@ class dutoanluong_khoiController extends Controller
                     }
                 }
             }
-
+            // dd($model);
             $a_phanloai = array_column(dmphanloaidonvi::all()->toarray(), 'tenphanloai', 'maphanloai');
             $model_tenct = dmphanloaict::wherein('mact', getPLCTDuToan())->get();
             $model_nhomct = dmphanloaicongtac::wherein('macongtac', array_unique(array_column($model_tenct->toarray(), 'macongtac')))->get();
@@ -79,7 +83,8 @@ class dutoanluong_khoiController extends Controller
                 ->with('a_trangthai_in', $a_trangthai_in)
                 ->with('a_phanloai', setArrayAll($a_phanloai))
                 ->with('furl_xem', '/chuc_nang/xem_du_lieu/du_toan/khoi')
-                ->with('furl_th', '/chuc_nang/du_toan_luong/khoi/')
+                // ->with('furl_th', '/chuc_nang/du_toan_luong/khoi/')
+                ->with('furl_th', '/chuc_nang/du_toan_luong/huyen/')
                 ->with('pageTitle', 'Danh sách đơn vị tổng hợp dự toán lương');
         } else
             return view('errors.notlogin');

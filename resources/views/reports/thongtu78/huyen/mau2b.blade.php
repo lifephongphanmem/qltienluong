@@ -24,6 +24,8 @@
     <p id="data_body" style="text-align: center; font-weight: bold; font-size: 20px;">BẢNG TỔNG HỢP QUỸ TRỢ CẤP TĂNG THÊM
         NĂM 2023 CỦA CÁN BỘ XÃ, PHƯỜNG, THỊ TRẤN ĐÃ NGHỈ VIỆC HƯỞNG TRỢ CẤP HÀNG THÁNG TỪ NGÂN SÁCH NHÀ NƯỚC</p>
     {{-- <p id="data_body1" style="text-align: center; font-style: italic">(Ban hành kèm theo Thông tư số 67/2017/TT-BTC)</p> --}}
+    <p id="data_body1" style="text-align: center; font-style: italic">(Ban hành kèm theo Thông tư số 50/2023/TT-BTC ngày 17
+        tháng 7 năm 2023 của Bộ trưởng Bộ Tài chính)</p>
     <p id="data_body2" style="text-align: right; font-style: italic">Đơn vị: đồng</p>
     <table id="data_body3" cellspacing="0" cellpadding="0" border="1"
         style="margin: 20px auto; border-collapse: collapse;">

@@ -22,7 +22,14 @@
         </tr>
         <tr>
             <td colspan="2">
-                <b>TỔNG HỢP KINH PHÍ TĂNG THÊM ĐỂ THỰC HIỆN CHẾ ĐỘ PHỤ CẤP ĐỐI VỚI CÁN BỘ KHÔNG CHUYÊN TRÁCH CẤP XÃ, THÔN VÀ TỔ DÂN PHỐ NĂM 2023</b>
+                {{-- <b>TỔNG HỢP KINH PHÍ TĂNG THÊM ĐỂ THỰC HIỆN CHẾ ĐỘ PHỤ CẤP ĐỐI VỚI CÁN BỘ KHÔNG CHUYÊN TRÁCH CẤP XÃ, THÔN VÀ TỔ DÂN PHỐ NĂM 2023</b> --}}
+                <b>TỔNG HỢP KINH PHÍ TĂNG/GIẢM THEO NGHỊ ĐỊNH SỐ 33/2023/NĐ-CP - CÁN BỘ, CÔNG CHỨC XÃ</b>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2">
+                <p style="text-align: center; font-style: italic">(Ban hành kèm theo Thông tư số 50/2023/TT-BTC ngày 17
+                    tháng 7 năm 2023 của Bộ trưởng Bộ Tài chính)</p>
             </td>
         </tr>
     </table>

@@ -14,12 +14,15 @@
         </tr>
         <tr>
             <td colspan="2">
-                <b>BÁO CÁO QUỸ LƯƠNG, PHỤ CẤP ĐỐI VỚI LAO ĐỘNG THEO HỢP ĐỒNG KHU VỰC HÀNH CHÍNH VÀ ĐƠN VỊ SỰ NGHIỆP</b>
+                {{-- <b>BÁO CÁO QUỸ LƯƠNG, PHỤ CẤP ĐỐI VỚI LAO ĐỘNG THEO HỢP ĐỒNG KHU VỰC HÀNH CHÍNH VÀ ĐƠN VỊ SỰ NGHIỆP</b> --}}
+                <b>TỔNG HỢP PHỤ CẤP ƯU ĐÃI NGHỀ THEO NGHỊ ĐỊNH SỐ 05/2023/NĐ-CP NGÀY 15/02/2023 CỦA CHÍNH PHỦ</b>
             </td>
         </tr>
         <tr>
             <td colspan="2">
-                <i>(Ban hành kèm theo Thông tư số 68/2018/TT-BTC)</i>
+                {{-- <i>(Ban hành kèm theo Thông tư số 68/2018/TT-BTC)</i> --}}
+                <i>(Ban hành kèm theo Thông tư số 50/2023/TT-BTC ngày 17
+                    tháng 7 năm 2023 của Bộ trưởng Bộ Tài chính)</i>
             </td>
         </tr>
         <tr>

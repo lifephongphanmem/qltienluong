@@ -68,20 +68,38 @@
                 <div class="col-md-6">
                     <div class="form-group">
                         <button type="button"
-                            onclick="ThongTinKetXuat(true,'{{ $inputs['furl'] . 'tonghopnhucau_donvi_2a' }}')"
+                            onclick="ThongTinKetXuat(true,'{{ $inputs['furl'] . 'tonghopnhucau_donvi_2a?mau=1' }}')"
                             style="border-width: 0px" class="btn btn-default btn-xs mbs" data-target="#mautt107-modal"
                             data-toggle="modal">
-                            <i class="fa fa-print"></i>&nbsp; Bảng tổng hợp nhu cầu kinh phí (Mẫu 2a - Mẫu 1)</button>
+                            <i class="fa fa-print"></i>&nbsp; Bảng tổng hợp nhu cầu kinh phí (Mẫu 2a (1) - Mẫu 1)</button>
                     </div>
                 </div>
 
                 <div class="col-md-6">
                     <div class="form-group">
                         <button type="button"
-                            onclick="ThongTinKetXuat(true,'{{ $inputs['furl'] . 'tonghopnhucau_donvi_2a_2' }}')"
+                            onclick="ThongTinKetXuat(true,'{{ $inputs['furl'] . 'tonghopnhucau_donvi_2a_2?mau=1' }}')"
                             style="border-width: 0px" class="btn btn-default btn-xs mbs" data-target="#mautt107-modal"
                             data-toggle="modal">
-                            <i class="fa fa-print"></i>&nbsp; Bảng tổng hợp nhu cầu kinh phí (Mẫu 2a- Mẫu 2)</button>
+                            <i class="fa fa-print"></i>&nbsp; Bảng tổng hợp nhu cầu kinh phí (Mẫu 2a (1)- Mẫu 2)</button>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <button type="button"
+                            onclick="ThongTinKetXuat(true,'{{ $inputs['furl'] . 'tonghopnhucau_donvi_2a?mau=2' }}')"
+                            style="border-width: 0px" class="btn btn-default btn-xs mbs" data-target="#mautt107-modal"
+                            data-toggle="modal">
+                            <i class="fa fa-print"></i>&nbsp; Bảng tổng hợp nhu cầu kinh phí (Mẫu 2a (2) - Mẫu 1)</button>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <button type="button"
+                            onclick="ThongTinKetXuat(true,'{{ $inputs['furl'] . 'tonghopnhucau_donvi_2a_2?mau=2' }}')"
+                            style="border-width: 0px" class="btn btn-default btn-xs mbs" data-target="#mautt107-modal"
+                            data-toggle="modal">
+                            <i class="fa fa-print"></i>&nbsp; Bảng tổng hợp nhu cầu kinh phí (Mẫu 2a (2)- Mẫu 2)</button>
                     </div>
                 </div>
 

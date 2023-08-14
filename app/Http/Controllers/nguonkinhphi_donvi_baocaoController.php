@@ -1012,7 +1012,12 @@ class nguonkinhphi_donvi_baocaoController extends Controller
             }
             // dd($ar_I);
             //dd($m_tonghop_ct);
-            return view('reports.thongtu78.donvi.mau2a2')
+            if($inputs['mau']==1){
+                $view='reports.thongtu78.donvi.mau2a_1';
+            }else{
+                $view='reports.thongtu78.donvi.mau2a_2';
+            }
+            return view($view)
                 ->with('furl', '/tong_hop_bao_cao/')
                 ->with('ar_I', $ar_I)
                 ->with('ar_II', $ar_II)
@@ -1624,7 +1629,12 @@ class nguonkinhphi_donvi_baocaoController extends Controller
             }
             // dd($ar_I);
             //dd($m_tonghop_ct);
-            return view('reports.thongtu78.donvi.mau2a2_2')
+            if($inputs['mau']==1){
+                $view='reports.thongtu78.donvi.mau2a2_1';
+            }else{
+                $view='reports.thongtu78.donvi.mau2a2_2';
+            }
+            return view($view)
                 ->with('furl', '/tong_hop_bao_cao/')
                 ->with('ar_I', $ar_I)
                 ->with('ar_II', $ar_II)
