@@ -192,7 +192,7 @@
                 <div class="row">
                     <div class="col-md-12">
                         <div class="form-group">
-                            <button type="button" onclick="indanhsachdonvi('{{ $furl_th . 'danhsachdonvi' }}')"
+                            <button type="button" onclick="indanhsachdonvi('{{ $furl_th . 'danhsachdonvi?tonghopkhoi=1' }}')"
                                 style="border-width: 0px" class="btn btn-default btn-xs mbs"
                                 data-target="#modal-indanhsachdonvi" data-toggle="modal">
                                 <i class="fa fa-print"></i>&nbsp; Danh sách đơn vị</button>
@@ -215,7 +215,7 @@
                     <div class="col-md-12">
                         <div class="form-group">
                             <button type="button"
-                                onclick="insolieu('{{ $furl_th . 'tonghopcanboxa' }}','1506672780;1506673604;1637915601')"
+                                onclick="insolieu('{{ $furl_th . 'tonghopcanboxa?tonghopkhoi=1' }}','1506672780;1506673604;1637915601')"
                                 style="border-width: 0px" class="btn btn-default btn-xs mbs"
                                 data-target="#modal-insolieu" data-toggle="modal">
                                 <i class="fa fa-print"></i>&nbsp; Tổng hợp cán bộ chuyên trách,
@@ -228,7 +228,7 @@
                     <div class="col-md-12">
                         <div class="form-group">
                             <button type="button"
-                                onclick="insolieu('{{ $furl_th . 'tonghopbienche' }}','1506672780;1506673604;1637915601')"
+                                onclick="insolieu('{{ $furl_th . 'tonghopbienche?tonghopkhoi=1' }}','1506672780;1506673604;1637915601')"
                                 style="border-width: 0px" class="btn btn-default btn-xs mbs"
                                 data-target="#modal-insolieu" data-toggle="modal">
                                 <i class="fa fa-print"></i>&nbsp; Tổng hợp biên chế, hệ số
@@ -241,7 +241,7 @@
                     <div class="col-md-12">
                         <div class="form-group">
                             <button type="button"
-                                onclick="insolieu('{{ $furl_th . 'tonghopbienche_m2' }}', '1506672780;1506673604;1637915601')"
+                                onclick="insolieu('{{ $furl_th . 'tonghopbienche_m2?tonghopkhoi=1' }}', '1506672780;1506673604;1637915601')"
                                 style="border-width: 0px" class="btn btn-default btn-xs mbs"
                                 data-target="#modal-insolieu" data-toggle="modal">
                                 <i class="fa fa-print"></i>&nbsp; Tổng hợp biên chế, hệ số
@@ -252,7 +252,7 @@
                 <div class="row">
                     <div class="col-md-12">
                         <div class="form-group">
-                            <button type="button" onclick="insolieu('{{ $furl_th . 'tonghophopdong' }}','1506673585')"
+                            <button type="button" onclick="insolieu('{{ $furl_th . 'tonghophopdong?tonghopkhoi=1' }}','1506673585')"
                                 style="border-width: 0px" class="btn btn-default btn-xs mbs"
                                 data-target="#modal-insolieu" data-toggle="modal">
                                 <i class="fa fa-print"></i>&nbsp; Tổng hợp hợp đồng bổ sung quỹ lương (Mẫu 01)</button>
@@ -264,7 +264,7 @@
                     <div class="col-md-12">
                         <div class="form-group">
                             <button type="button"
-                                onclick="insolieu('{{ $furl_th . 'tonghophopdong_m2' }}','1506673585')"
+                                onclick="insolieu('{{ $furl_th . 'tonghophopdong_m2?tonghopkhoi=1' }}','1506673585')"
                                 style="border-width: 0px" class="btn btn-default btn-xs mbs"
                                 data-target="#modal-insolieu" data-toggle="modal">
                                 <i class="fa fa-print"></i>&nbsp; Tổng hợp hợp đồng bổ sung quỹ lương (Mẫu 02)</button>

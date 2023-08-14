@@ -25,6 +25,8 @@
         NGHỊ ĐỊNH SỐ 24/2023/NĐ-CP NĂM 2023</p>
     {{-- <p id="data_body1" style="text-align: center; font-style: italic">(Ban hành kèm theo Thông tư số 46/2019/TT-BTC ngày 23
         tháng 7 năm 2019 của Bộ Tài chính)</p> --}}
+        <p id="data_body1" style="text-align: center; font-style: italic">(Ban hành kèm theo Thông tư số 50/2023/TT-BTC ngày 17
+            tháng 7 năm 2023 của Bộ trưởng Bộ Tài chính)</p>
     <p id="data_body2" style="text-align: right; font-style: italic">Đơn vị: Đồng</p>
     <table id="data_body3" cellspacing="0" cellpadding="0" border="1"
         style="margin: 20px auto; font-size: 10px; border-collapse: collapse;">

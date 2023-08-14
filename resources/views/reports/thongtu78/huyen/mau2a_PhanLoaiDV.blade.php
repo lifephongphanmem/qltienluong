@@ -25,6 +25,12 @@
                 BÁO CÁO NHU CẦU KINH PHÍ THỰC HIỆN NGHỊ ĐỊNH SỐ 24/2023/NĐ-CP NĂM 2023</p>
             </td>
         </tr>
+        <tr>
+            <td colspan="2">
+                <p style="text-align: center; font-style: italic">(Ban hành kèm theo Thông tư số 50/2023/TT-BTC ngày 17
+                    tháng 7 năm 2023 của Bộ trưởng Bộ Tài chính)</p>
+            </td>
+        </tr>
 
         <tr>
             <td style="text-align: right" colspan="2" style="font-weight:bold; font-size: 12px;">

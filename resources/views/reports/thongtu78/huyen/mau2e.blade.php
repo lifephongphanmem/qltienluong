@@ -16,13 +16,16 @@
         </tr>
         <tr>
             <td colspan="2">
-                <b>BÁO CÁO NGUỒN THỰC HIỆN CCTL TIẾT KIỆM TỪ VIỆC THAY ĐỔI CƠ CHÉ TỰ CHỦ TRONG NĂM 2023 <br> THEO NGHỊ QUYẾT
-                    CỐ 19-NQ/TW NGÀY 25/10/2017 CỦA BAN CHẤP HÀNH TRUNG ƯƠNG</b>
+                {{-- <b>BÁO CÁO NGUỒN THỰC HIỆN CCTL TIẾT KIỆM TỪ VIỆC THAY ĐỔI CƠ CHÉ TỰ CHỦ TRONG NĂM 2023 <br> THEO NGHỊ QUYẾT
+                    CỐ 19-NQ/TW NGÀY 25/10/2017 CỦA BAN CHẤP HÀNH TRUNG ƯƠNG</b> --}}
+                    <b>TỔNG HỢP KINH PHÍ TĂNG THEO NGHỊ ĐỊNH SỐ 33/2023/NĐ-CP - NGƯỜI HOẠT ĐỘNG KHÔNG CHUYÊN TRÁCH<br> Ở CẤP XÃ, Ở THÔN, TỔ DÂN PHỐ</br>
             </td>
         </tr>
         <tr>
             <td colspan="2">
                 {{-- <i>(Ban hành kèm theo Thông tư số 46/2019/TT-BTC ngày 23 tháng 7 năm 2019 của Bộ Tài chính)</i> --}}
+                <i>(Ban hành kèm theo Thông tư số 50/2023/TT-BTC ngày 17
+                    tháng 7 năm 2023 của Bộ trưởng Bộ Tài chính)</i>
             </td>
         </tr>
         <tr>

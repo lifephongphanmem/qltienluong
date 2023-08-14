@@ -32,9 +32,9 @@
         style="margin: 20px auto; font-size: 10px; border-collapse: collapse;">
         <tr>
             <th style="width: 2%;" rowspan="3">STT</th>
-            <th rowspan="3">NỘI DUNG</th>
+            <th rowspan="3" style="width:8%">NỘI DUNG</th>
 
-            <th style="width: 6%;" colspan="{{ $col != 0 ? 4 + $col : 5 }}"> QUỸ TIỀN LƯƠNG, PHỤ CẤP VÀ CÁC KHOẢN ĐÓNG GÓP
+            <th style="width: 6%;" colspan="14"> QUỸ TIỀN LƯƠNG, PHỤ CẤP VÀ CÁC KHOẢN ĐÓNG GÓP
                 THÁNG 07/2023 THEO NGHỊ ĐỊNH SỐ 24/2023/NĐ-CP
             </th>
             <th style="width: 2%;" rowspan="3">
@@ -44,54 +44,38 @@
 
         </tr>
         <tr style="">
-            <th style="width: 2%;" rowspan="2">TỔNG</br>CỘNG</th>
+            <th style="width: 3%;" rowspan="2">TỔNG CỘNG</th>
             <th style="width: 2%;" rowspan="2">
                 HỆ</br>SỐ</br>LƯƠNG</br>THEO</br>NGẠCH,</br>BẬC</br>CHỨC</br>VỤ</th>
-            <th style="width: 2%;" rowspan="2">TỔNG</br>CÁC</br>KHOẢN</br>PHỤ</br>CẤP</th>
-            <th style="width: 6%;" colspan="{{ $col }}">TRONG ĐÓ</th>
+            <th style="width: 3%;" rowspan="2">TỔNG</br>CÁC</br>KHOẢN</br>PHỤ</br>CẤP</th>
+            <th style="width: 6%;" colspan="10">TRONG ĐÓ</th>
             <th style="width: 2%;"rowspan="2">CÁC</br>KHOẢN</br>ĐÓNG</br>GÓP</br>BHXH,</br>BHYT,</br>BHTN,</br>KPCĐ</th>
         </tr>
-        <tr style="">
-
-            <?php
-            foreach ($a_phucap as $key => $val) {
-                if ($key == 'heso') {
-                    unset($a_phucap[$key]);
-                }
-            }
-            ?>
-            @if ($a_phucap == [])
-                <th></th>{{-- Bảng lương mới --}}
-            @else
-                @foreach ($a_phucap as $pc)
-                    <th>{{ $pc }}</th>
-                @endforeach
-            @endif
-
+        <tr style="text-align: center">
+            @foreach ($a_phucap as $mapc => $pc)
+                <th style="width: 3%;">{{ $pc }}</th>
+            @endforeach
         </tr>
-
-
 
         <tr style="font-weight: bold; text-align: center">
             <td>1</td>
             <td>2</td>
-            <td>16</td>
-            <td>17</td>
-            <td>18</td>
-            @if ($a_phucap == [])
-                <td>19</td>
-                <td>20</td>
-                <td>21</td>
-                <td>22</td>
-                <td>23</td>
-                <td>24</td>
-                <td>25</td>
-                <td>26</td>
-            @else
-                @for ($j = 1; $j < $col + 4; $j++)
-                    <td>{{ 18 + $j }}</td>
-                @endfor
-            @endif
+            <td>19 = 20 + 21 + 32</td>
+            <td>20</td>
+            <td>21 = 22 + ... + 32</td>
+            <td>22</td>
+            <td>22</td>
+            <td>24</td>
+            <td>25</td>
+            <td>26</td>
+            <td>27</td>
+            <td>28</td>
+            <td>29</td>
+            <td>30</td>
+            <td>31</td>
+            <td>32</td>
+            <td>33 = 19 - 5</td>
+            <td>34 = 33 * 6</td>
         </tr>
 
 
@@ -102,7 +86,8 @@
             <td>{{ dinhdangso($a_Tong['solieu_moi']['tongcong']) }}</td>
             <td>{{ dinhdangso($a_Tong['solieu_moi']['st_heso']) }}</td>
             <td>{{ dinhdangso($a_Tong['solieu_moi']['st_tongpc']) }}</td>
-            @foreach ($a_phucap_st as $mapc => $pc)
+            @foreach ($a_phucap as $k => $v)
+                <?php $mapc = 'st_' . $k; ?>
                 <td>{{ dinhdangso($a_Tong['solieu_moi'][$mapc]) }}</td>
             @endforeach
             <td>{{ dinhdangso($a_Tong['solieu_moi']['ttbh_dv']) }}</td>
@@ -119,7 +104,8 @@
                 <td style="{{ $dulieu['style'] }}">{{ dinhdangso($dulieu['solieu_moi']['tongcong']) }}</td>
                 <td style="{{ $dulieu['style'] }}">{{ dinhdangso($dulieu['solieu_moi']['st_heso']) }}</td>
                 <td style="{{ $dulieu['style'] }}">{{ dinhdangso($dulieu['solieu_moi']['st_tongpc']) }}</td>
-                @foreach ($a_phucap_st as $mapc => $pc)
+                @foreach ($a_phucap as $k => $v)
+                    <?php $mapc = 'st_' . $k; ?>
                     <td style="{{ $dulieu['style'] }}">{{ dinhdangso($dulieu['solieu_moi'][$mapc]) }}</td>
                 @endforeach
                 <td style="{{ $dulieu['style'] }}">{{ dinhdangso($dulieu['solieu_moi']['ttbh_dv']) }}</td>
@@ -133,12 +119,12 @@
             <tr>
                 <td style="text-align: center;{{ $dulieu['style'] }}">{{ $dulieu['tt'] }}</td>
                 <td style="text-align: left;{{ $dulieu['style'] }}">{{ $dulieu['noidung'] }}</td>
-
                 {{-- Mức lương mới --}}
                 <td style="{{ $dulieu['style'] }}">{{ dinhdangso($dulieu['solieu_moi']['tongcong']) }}</td>
                 <td style="{{ $dulieu['style'] }}">{{ dinhdangso($dulieu['solieu_moi']['st_heso']) }}</td>
                 <td style="{{ $dulieu['style'] }}">{{ dinhdangso($dulieu['solieu_moi']['st_tongpc']) }}</td>
-                @foreach ($a_phucap_st as $mapc => $pc)
+                @foreach ($a_phucap as $k => $v)
+                    <?php $mapc = 'st_' . $k; ?>
                     <td style="{{ $dulieu['style'] }}">{{ dinhdangso($dulieu['solieu_moi'][$mapc]) }}</td>
                 @endforeach
                 <td style="{{ $dulieu['style'] }}">{{ dinhdangso($dulieu['solieu_moi']['ttbh_dv']) }}</td>
@@ -157,7 +143,8 @@
                 <td style="{{ $dulieu['style'] }}">{{ dinhdangso($dulieu['solieu_moi']['tongcong']) }}</td>
                 <td style="{{ $dulieu['style'] }}">{{ dinhdangso($dulieu['solieu_moi']['st_heso']) }}</td>
                 <td style="{{ $dulieu['style'] }}">{{ dinhdangso($dulieu['solieu_moi']['st_tongpc']) }}</td>
-                @foreach ($a_phucap_st as $mapc => $pc)
+                @foreach ($a_phucap as $k => $v)
+                    <?php $mapc = 'st_' . $k; ?>
                     <td style="{{ $dulieu['style'] }}">{{ dinhdangso($dulieu['solieu_moi'][$mapc]) }}</td>
                 @endforeach
                 <td style="{{ $dulieu['style'] }}">{{ dinhdangso($dulieu['solieu_moi']['ttbh_dv']) }}</td>
@@ -171,12 +158,12 @@
             <tr style="text-align: center">
                 <td style="text-align: center;{{ $dulieu['style'] }}">{{ $dulieu['tt'] }}</td>
                 <td style="text-align: left;{{ $dulieu['style'] }}">{{ $dulieu['noidung'] }}</td>
-
                 {{-- Mức lương mới --}}
                 <td style="{{ $dulieu['style'] }}">{{ dinhdangso($dulieu['solieu_moi']['tongcong']) }}</td>
                 <td style="{{ $dulieu['style'] }}">{{ dinhdangso($dulieu['solieu_moi']['st_heso']) }}</td>
                 <td style="{{ $dulieu['style'] }}">{{ dinhdangso($dulieu['solieu_moi']['st_tongpc']) }}</td>
-                @foreach ($a_phucap_st as $mapc => $pc)
+                @foreach ($a_phucap as $k => $v)
+                    <?php $mapc = 'st_' . $k; ?>
                     <td style="{{ $dulieu['style'] }}">{{ dinhdangso($dulieu['solieu_moi'][$mapc]) }}</td>
                 @endforeach
                 <td style="{{ $dulieu['style'] }}">{{ dinhdangso($dulieu['solieu_moi']['ttbh_dv']) }}</td>

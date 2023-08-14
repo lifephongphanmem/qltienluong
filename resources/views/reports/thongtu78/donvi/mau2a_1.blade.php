@@ -32,16 +32,25 @@
         style="margin: 20px auto; font-size: 10px; border-collapse: collapse;">
         <tr>
             <th style="width: 2%;" rowspan="3">STT</th>
-            <th rowspan="3">NỘI DUNG</th>
-            <th style="width: 2%;" rowspan="3">TỔNG CỘNG</br>NHU CẦU KINH PHÍ</th>
-            <th style="width: 6%;" colspan="13"> QUỸ TIỀN LƯƠNG, PHỤ CẤP VÀ CÁC KHOẢN ĐÓNG GÓP
+            <th rowspan="3" style="width: 8%">NỘI DUNG</th>
+            <th style="width: 2%;" rowspan="3">
+                BIÊN</br>CHẾ</br>ĐƯỢC</br>CẤP</br>CÓ</br>THẨM</br>QUYỀN</br>GIAO</br>HOẶC</br>PHÊ</br>DUYỆT</br>NĂM</br>2023
             </th>
+
+            <th style="width: 2%;" rowspan="3">
+                TỔNG</br>SỐ</br>ĐỐI</br>TƯỢNG</br>HƯỞNG</br>LƯƠNG</br>CÓ</br>MẶT</br>ĐẾN</br>01/07/2023
+            </th>
+
+            <th style="width: 6%;" colspan="14"> QUỸ TIỀN LƯƠNG, PHỤ CẤP VÀ CÁC KHOẢN ĐÓNG GÓP
+                THÁNG 07/2023 THEO NGHỊ ĐỊNH SỐ 38/2019/NĐ-CP
+            </th>
+
         </tr>
         <tr style="">
-
+            <th style="width: 3%;" rowspan="2">TỔNG CỘNG</th>
             <th style="width: 2%;" rowspan="2">
                 HỆ</br>SỐ</br>LƯƠNG</br>THEO</br>NGẠCH,</br>BẬC</br>CHỨC</br>VỤ</th>
-            <th style="width: 2%;" rowspan="2">TỔNG</br>CÁC</br>KHOẢN</br>PHỤ</br>CẤP</th>
+            <th style="width: 3%;" rowspan="2">TỔNG</br>CÁC</br>KHOẢN</br>PHỤ</br>CẤP</th>
             <th style="width: 6%;" colspan="10">TRONG ĐÓ</th>
             <th style="width: 2%;"rowspan="2">CÁC</br>KHOẢN</br>ĐÓNG</br>GÓP</br>BHXH,</br>BHYT,</br>BHTN,</br>KPCĐ</th>
         </tr>
@@ -56,9 +65,9 @@
             <td>2</td>
             <td>3</td>
             <td>4</td>
-            <td>5</td>
+            <td>5 = 6 + 7 + 18</td>
             <td>6</td>
-            <td>7</td>
+            <td>7 = 8 + ... + 17</td>
             <td>8</td>
             <td>9</td>
             <td>10</td>
@@ -68,11 +77,16 @@
             <td>14</td>
             <td>15</td>
             <td>16</td>
+            <td>17</td>
+            <td>18</td>
         </tr>
+
 
         <tr style="font-weight: bold;text-align: center">
             <td style="text-align: center"></td>
             <td style="text-align: left">TỔNG SỐ</td>
+            <td>{{ dinhdangso($a_Tong['canbo_dutoan']) }}</td>
+            <td>{{ dinhdangso($a_Tong['canbo_congtac']) }}</td>
             {{-- Mức lương cũ --}}
             <td>{{ dinhdangso($a_Tong['solieu']['tongcong']) }}</td>
             <td>{{ dinhdangso($a_Tong['solieu']['st_heso']) }}</td>
@@ -85,9 +99,11 @@
 
         </tr>
         @foreach ($ar_I as $dulieu)
-            <tr style="text-align: center; font-weight: bold">
+            <tr style="text-align: center">
                 <td style="text-align: center;{{ $dulieu['style'] }}">{{ $dulieu['tt'] }}</td>
                 <td style="text-align: left;{{ $dulieu['style'] }}">{{ $dulieu['noidung'] }}</td>
+                <td style="{{ $dulieu['style'] }}">{{ dinhdangso($dulieu['canbo_dutoan']) }}</td>
+                <td style="{{ $dulieu['style'] }}">{{ dinhdangso($dulieu['canbo_congtac']) }}</td>
                 {{-- Mức lương cũ --}}
                 <td style="{{ $dulieu['style'] }}">{{ dinhdangso($dulieu['solieu']['tongcong']) }}</td>
                 <td style="{{ $dulieu['style'] }}">{{ dinhdangso($dulieu['solieu']['st_heso']) }}</td>
@@ -97,55 +113,17 @@
                     <td style="{{ $dulieu['style'] }}">{{ dinhdangso($dulieu['solieu'][$mapc]) }}</td>
                 @endforeach
                 <td style="{{ $dulieu['style'] }}">{{ dinhdangso($dulieu['solieu']['ttbh_dv']) }}</td>
+
+
             </tr>
-            @if ($dulieu['phanloai'] == '0')
-                <?php
-                $model = $dulieu_pI->where('linhvuchoatdong', $dulieu['chitiet']['linhvuchoatdong']);
-                $a_dv = array_unique(array_column($model->toarray(), 'tendv', 'madv'));
-                $idv = 1;
-                // echo  count($a_dv);
-                ?>
-                @foreach ($a_dv as $madv => $tendv)
-                    <?php
-                    $m_donvi = $model->where('madv', $madv);
-                    ?>
-                    <tr style="text-align: center">
-                        <td style="text-align: right">{{ $idv++ }}</td>
-                        <td style="text-align: left">{{ $tendv }}</td>
-                        <td>{{ dinhdangso($m_donvi->sum('tongcong')) }}</td>
-                        <td>{{ dinhdangso($m_donvi->sum('st_heso')) }}</td>
-                        <td>{{ dinhdangso($m_donvi->sum('st_tongpc')) }}</td>
-                        @foreach ($a_phucap as $mapc => $pc)
-                            <?php $ten = 'st_' . $mapc; ?>
-                            <td>{{ dinhdangso($m_donvi->sum($ten)) }}</td>
-                        @endforeach
-                        <td>{{ dinhdangso($m_donvi->sum('ttbh_dv')) }}</td>
-
-                    </tr>
-                    @foreach ($m_donvi as $ct)
-                        <tr style="text-align: center; font-style: italic">
-                            <td style="text-align: center;{{ $dulieu['style'] }}"></td>
-                            <td style="text-align: left">- {{ $ct->tenct }}</td>
-
-                            <td>{{ dinhdangso($ct->tongcong) }}</td>
-                            <td>{{ dinhdangso($ct->st_heso) }}</td>
-                            <td>{{ dinhdangso($ct->st_tongpc) }}</td>
-                            @foreach ($a_phucap as $mapc => $pc)
-                                <?php $ten = 'st_' . $mapc; ?>
-                                <td>{{ dinhdangso($ct->$ten) }}</td>
-                            @endforeach
-                            <td>{{ dinhdangso($ct->ttbh_dv) }}</td>
-
-                        </tr>
-                    @endforeach
-                @endforeach
-            @endif
         @endforeach
 
         @foreach ($ar_II as $dulieu)
             <tr>
                 <td style="text-align: center;{{ $dulieu['style'] }}">{{ $dulieu['tt'] }}</td>
                 <td style="text-align: left;{{ $dulieu['style'] }}">{{ $dulieu['noidung'] }}</td>
+                <td style="{{ $dulieu['style'] }}">{{ dinhdangso($dulieu['canbo_dutoan']) }}</td>
+                <td style="{{ $dulieu['style'] }}">{{ dinhdangso($dulieu['canbo_congtac']) }}</td>
                 {{-- Mức lương cũ --}}
                 <td style="{{ $dulieu['style'] }}">{{ dinhdangso($dulieu['solieu']['tongcong']) }}</td>
                 <td style="{{ $dulieu['style'] }}">{{ dinhdangso($dulieu['solieu']['st_heso']) }}</td>
@@ -155,55 +133,17 @@
                     <td style="{{ $dulieu['style'] }}">{{ dinhdangso($dulieu['solieu'][$mapc]) }}</td>
                 @endforeach
                 <td style="{{ $dulieu['style'] }}">{{ dinhdangso($dulieu['solieu']['ttbh_dv']) }}</td>
+
+
             </tr>
-            @if ($dulieu['phanloai'] == '0')
-                <?php
-                // $model = $dulieu_pII->where('linhvuchoatdong', $dulieu['chitiet']['linhvuchoatdong']);
-                $a_dv = array_unique(array_column($dulieu_pII->toarray(), 'tendv', 'madv'));
-                $idv = 1;
-                // echo  count($a_dv);
-                ?>
-                @foreach ($a_dv as $madv => $tendv)
-                    <?php
-                    $m_donvi = $dulieu_pII->where('madv', $madv);
-                    ?>
-                    <tr style="text-align: center">
-                        <td style="text-align: right">{{ $idv++ }}</td>
-                        <td style="text-align: left">{{ $tendv }}</td>
-                        <td>{{ dinhdangso($m_donvi->sum('tongcong')) }}</td>
-                        <td>{{ dinhdangso($m_donvi->sum('st_heso')) }}</td>
-                        <td>{{ dinhdangso($m_donvi->sum('st_tongpc')) }}</td>
-                        @foreach ($a_phucap as $mapc => $pc)
-                            <?php $ten = 'st_' . $mapc; ?>
-                            <td>{{ dinhdangso($m_donvi->sum($ten)) }}</td>
-                        @endforeach
-                        <td>{{ dinhdangso($m_donvi->sum('ttbh_dv')) }}</td>
-
-                    </tr>
-                    @foreach ($m_donvi as $ct)
-                        <tr style="text-align: center; font-style: italic">
-                            <td style="text-align: center;{{ $dulieu['style'] }}"></td>
-                            <td style="text-align: left">- {{ $ct->tenct }}</td>
-
-                            <td>{{ dinhdangso($ct->tongcong) }}</td>
-                            <td>{{ dinhdangso($ct->st_heso) }}</td>
-                            <td>{{ dinhdangso($ct->st_tongpc) }}</td>
-                            @foreach ($a_phucap as $mapc => $pc)
-                                <?php $ten = 'st_' . $mapc; ?>
-                                <td>{{ dinhdangso($ct->$ten) }}</td>
-                            @endforeach
-                            <td>{{ dinhdangso($ct->ttbh_dv) }}</td>
-
-                        </tr>
-                    @endforeach
-                @endforeach
-            @endif
         @endforeach
 
         @foreach ($ar_III as $dulieu)
             <tr style="text-align: center">
                 <td style="text-align: center;{{ $dulieu['style'] }}">{{ $dulieu['tt'] }}</td>
                 <td style="text-align: left;{{ $dulieu['style'] }}">{{ $dulieu['noidung'] }}</td>
+                <td style="{{ $dulieu['style'] }}">{{ dinhdangso($dulieu['canbo_dutoan']) }}</td>
+                <td style="{{ $dulieu['style'] }}">{{ dinhdangso($dulieu['canbo_congtac']) }}</td>
                 {{-- Mức lương cũ --}}
                 <td style="{{ $dulieu['style'] }}">{{ dinhdangso($dulieu['solieu']['tongcong']) }}</td>
                 <td style="{{ $dulieu['style'] }}">{{ dinhdangso($dulieu['solieu']['st_heso']) }}</td>
@@ -213,6 +153,8 @@
                     <td style="{{ $dulieu['style'] }}">{{ dinhdangso($dulieu['solieu'][$mapc]) }}</td>
                 @endforeach
                 <td style="{{ $dulieu['style'] }}">{{ dinhdangso($dulieu['solieu']['ttbh_dv']) }}</td>
+
+
             </tr>
         @endforeach
 
@@ -220,6 +162,8 @@
             <tr style="text-align: center">
                 <td style="text-align: center;{{ $dulieu['style'] }}">{{ $dulieu['tt'] }}</td>
                 <td style="text-align: left;{{ $dulieu['style'] }}">{{ $dulieu['noidung'] }}</td>
+                <td style="{{ $dulieu['style'] }}">{{ dinhdangso($dulieu['canbo_dutoan']) }}</td>
+                <td style="{{ $dulieu['style'] }}">{{ dinhdangso($dulieu['canbo_congtac']) }}</td>
                 {{-- Mức lương cũ --}}
                 <td style="{{ $dulieu['style'] }}">{{ dinhdangso($dulieu['solieu']['tongcong']) }}</td>
                 <td style="{{ $dulieu['style'] }}">{{ dinhdangso($dulieu['solieu']['st_heso']) }}</td>
@@ -229,6 +173,8 @@
                     <td style="{{ $dulieu['style'] }}">{{ dinhdangso($dulieu['solieu'][$mapc]) }}</td>
                 @endforeach
                 <td style="{{ $dulieu['style'] }}">{{ dinhdangso($dulieu['solieu']['ttbh_dv']) }}</td>
+
+
             </tr>
         @endforeach
     </table>
