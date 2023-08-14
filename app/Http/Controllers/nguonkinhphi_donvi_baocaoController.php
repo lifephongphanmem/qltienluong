@@ -2975,7 +2975,7 @@ class nguonkinhphi_donvi_baocaoController extends Controller
             }
 
             //Phần A
-            $a_A = get4a_A();
+            $a_A = get4a_TT50_A();
 
             for ($capdo = 0; $capdo < 5; $capdo++) {
                 foreach ($a_A as $key => $chitiet) {
@@ -2990,64 +2990,57 @@ class nguonkinhphi_donvi_baocaoController extends Controller
                     }
                 }
             }
-            //Xử lý ngoại lệ            
-            $a_A[15]['sotien'] = round($m_nguonkp->sum('quyluongtietkiem_2dd') / 2, 3); //do chỉ lấy 50%
+
             //dd($a_A);
             //Phần B
-            $a_BII = array();
-            $a_BII[0] = array('tt' => '1', 'noidung' => 'Quỹ tiền lương, phụ cấp tăng thêm đối với cán bộ công chức khu vực hành chính, sự nghiệp ', 'sotien' => '0');
-            $a_BII[1] = array('tt' => '', 'noidung' => 'Trong đó: nhu cầu tăng thêm đối với các đơn vị sự nghiệp tự đảm bảo (5)', 'sotien' => '0');
-            $a_BII[2] = array('tt' => '2', 'noidung' => 'Quỹ lương, phụ cấp tăng thêm đối với cán bộ chuyên trách và công chức cấp xã', 'sotien' => '0');
-            $a_BII[3] = array('tt' => '3', 'noidung' => 'Hoạt động phí tăng thêm đối với đại biểu hội đồng nhân dân các cấp', 'sotien' => '0');
-            $a_BII[4] = array('tt' => '4', 'noidung' => 'Quỹ trợ cấp tăng thêm đối với cán bộ xã nghỉ việc hưởng trợ cấp hàng tháng theo NĐ 44/2023/NĐ-CP', 'sotien' => '0');
-            $a_BII[5] = array('tt' => '5', 'noidung' => 'Kinh phí tăng thêm để thực hiện chế độ đối với cán bộ không chuyên trách cấp xã, thôn và tổ dân phố', 'sotien' => '0');
-            $a_BII[6] = array('tt' => '6', 'noidung' => 'Kinh phí tăng thêm để thực hiện phụ cấp trách nhiệm đối với cấp ủy viên các cấp theo QĐ số 169-QĐ/TW ngày 24/6/2008', 'sotien' => '0');
-            $a_BII[7] = array('tt' => '7', 'noidung' => 'Kinh phí tăng thêm thực hiện chế độ bồi dưỡng phục vụ hoạt động cấp ủy thuộc cấp tỉnh theo Quy định 09-QĐ/VVPTW ngày 22/9/2021', 'sotien' => '0');
+            $a_BI = array();
+            $a_BI[0] = array('tt' => '1', 'noidung' => 'Quỹ tiền lương, phụ cấp tăng thêm đối với cán bộ công chức khu vực hành chính, sự nghiệp ', 'sotien' => '0');
+            $a_BI[1] = array('tt' => '2', 'noidung' => 'Quỹ lương, phụ cấp tăng thêm đối với cán bộ chuyên trách và công chức cấp xã', 'sotien' => '0');
+            $a_BI[2] = array('tt' => '3', 'noidung' => 'Hoạt động phí tăng thêm đối với đại biểu hội đồng nhân dân các cấp', 'sotien' => '0');
+            $a_BI[3] = array('tt' => '4', 'noidung' => 'Quỹ trợ cấp tăng thêm đối với cán bộ xã nghỉ việc hưởng trợ cấp hàng tháng theo NĐ 44/2023/NĐ-CP', 'sotien' => '0');
+            $a_BI[4] = array('tt' => '5', 'noidung' => 'Kinh phí tăng thêm để thực hiện chế độ đối với cán bộ không chuyên trách cấp xã, thôn và tổ dân phố', 'sotien' => '0');
+            $a_BI[5] = array('tt' => '6', 'noidung' => 'Kinh phí tăng thêm để thực hiện phụ cấp trách nhiệm đối với cấp ủy viên các cấp theo QĐ số 169-QĐ/TW ngày 24/6/2008', 'sotien' => '0');
+            $a_BI[6] = array('tt' => '7', 'noidung' => 'Kinh phí tăng thêm thực hiện chế độ bồi dưỡng phục vụ hoạt động cấp ủy thuộc cấp tỉnh theo Quy định 09-QĐ/VVPTW ngày 22/9/2021', 'sotien' => '0');
 
 
-            $a_BII[0]['sotien'] = $m_chitiet->where('nhomnhucau', 'BIENCHE')->sum('tongnhucau');
-            $a_BII[2]['sotien'] = $m_chitiet->where('nhomnhucau', 'CANBOCT')->sum('tongnhucau');
-            $a_BII[3]['sotien'] = $m_chitiet->where('nhomnhucau', 'HDND')->sum('tongnhucau');
-            $a_BII[4]['sotien'] = $m_nguonkp->sum('nhucau2b'); //Lấy dữ liệu mẫu 2b
-            $a_BII[5]['sotien'] = $m_chitiet->where('nhomnhucau', 'CANBOKCT')->sum('tongnhucau');
-            $a_BII[6]['sotien'] = $m_chitiet->where('nhomnhucau', 'CAPUY')->wherein('level', ['XA', 'HUYEN'])->sum('tongnhucau');
-            $a_BII[7]['sotien'] = $m_chitiet->where('nhomnhucau', 'CAPUY')->where('level', 'TINH')->sum('tongnhucau');
+            $a_BI[0]['sotien'] = $m_chitiet->where('nhomnhucau', 'BIENCHE')->sum('tongnhucau');
+            $a_BI[1]['sotien'] = $m_chitiet->where('nhomnhucau', 'CANBOCT')->sum('tongnhucau');
+            $a_BI[2]['sotien'] = $m_chitiet->where('nhomnhucau', 'HDND')->sum('tongnhucau');
+            $a_BI[3]['sotien'] = $m_nguonkp->sum('nhucau2b'); //Lấy dữ liệu mẫu 2b
+            $a_BI[4]['sotien'] = $m_chitiet->where('nhomnhucau', 'CANBOKCT')->sum('tongnhucau');
+            $a_BI[5]['sotien'] = $m_chitiet->where('nhomnhucau', 'CAPUY')->wherein('level', ['XA', 'HUYEN'])->sum('tongnhucau');
+            $a_BI[6]['sotien'] = $m_chitiet->where('nhomnhucau', 'CAPUY')->where('level', 'TINH')->sum('tongnhucau');
 
             // dd($m_chitiet->where('nhomnhucau', 'CAPUY'));
 
-            $a_BIII = array();
-            $a_BIII[0] = array('tt' => '1', 'noidung' => 'Kinh phí tăng, giảm do điều chỉnh địa bàn vùng KTXH ĐBKK năm 2017 theo Quyết định số 131/QĐ-TTg và Quyết định số 582/QĐ-TTg của Thủ tướng Chính phủ tính đủ 12 tháng (6)', 'sotien' => '0');
-            $a_BIII[1] = array('tt' => '2', 'noidung' => 'Nhu cầu kinh phí thực hiện chính sách tinh giản biên chế năm 2023 theo NĐ số 108/2014/NĐ-CP ngày 20/11/2014 (Đối tượng đã được Bộ Nội vụ thẩm định)', 'sotien' => '0');
-            $a_BIII[2] = array('tt' => '3', 'noidung' => 'Nhu cầu kinh phí thực hiện chính sách nghỉ hưu trước tuổi năm 2023 theo NĐ số 26/2014/NĐ-CP ngày 09/3/2015', 'sotien' => '0');
-            $a_BIII[3] = array('tt' => '4', 'noidung' => 'Kinh phí giảm do điều chỉnh danh sách huyện nghèo theo Quyết định số 275/QĐ-TTg ngày 07/3/2022 của Thủ tướng Chính phủ (quy định tại điểm b khoản 2 Công văn số 1044/BNV-TL ngày 11/3/2023 của Bộ Nội vụ)', 'sotien' => '0');
-            $a_BIII[4] = array('tt' => 'a', 'noidung' => 'Kinh phí thu hút', 'sotien' => '0');
-            $a_BIII[5] = array('tt' => 'b', 'noidung' => 'Chênh lệch kinh phí ưu đãi', 'sotien' => '0');
-            $a_BIII[6] = array('tt' => '5', 'noidung' => 'Kinh phí giảm do điều chỉnh số lượng cán bộ, công chức cấp xã; mức khoán phụ cấp đối với người hoạt động không chuyên trách ở cấp xã theo Nghị định số 34/2023/NĐ-CP của Chính phủ (7)', 'sotien' => '0');
+            $a_BII = array();
+            $a_BII[0] = array('tt' => '1', 'noidung' => 'Phụ cấp Ưu đãi nghề đối với công chức viên chức tại các cơ sở y tế', 'sotien' => '0');
+            $a_BII[1] = array('tt' => '2', 'noidung' => 'Kinh phí thực hiện chính sách tinh giản biên chế năm 2023', 'sotien' => '0');
+            $a_BII[2] = array('tt' => '3', 'noidung' => 'Nhu cầu kinh phí thực hiện chính sách nghỉ hưu trước tuổi năm 2023 theo NĐ số 26/2014/NĐ-CP ngày 09/3/2015', 'sotien' => '0');
+            $a_BII[3] = array('tt' => '4', 'noidung' => 'Nhu cầu kinh phí trả thực hiện chế độ thù lao đối với người đã nghỉ hưu lanh đạo Hội đặc thù', 'sotien' => '0');
+            $a_BII[4] = array('tt' => '5', 'noidung' => 'Nhu cầu kinh phí tăng thêm thực hiện chế độ trợ cấp lần đầu nhận công tác vùng ĐBKK', 'sotien' => '0');
+            $a_BII[5] = array('tt' => '6', 'noidung' => 'Kinh phí tăng/giảm do thực hiện Nghị định số 33/2023/NĐ-CP', 'sotien' => '0');
 
 
-            $a_BIII[0]['sotien'] = $m_nguonkp->sum('diaban');
-            $a_BIII[1]['sotien'] = $m_nguonkp->sum('tinhgiam');
-            $a_BIII[2]['sotien'] = $m_nguonkp->sum('nghihuusom');
-            $a_BIII[4]['sotien'] = $m_nguonkp->sum('kpthuhut');
-            $a_BIII[5]['sotien'] = $m_nguonkp->sum('kpuudai');
-            $a_BIII[3]['sotien'] = $a_BIII[4]['sotien'] + $a_BIII[5]['sotien'];
-            $a_BIII[6]['sotien'] = 0;
+            $a_BII[0]['sotien'] = $m_nguonkp->sum('kpthuhut');
+            $a_BII[1]['sotien'] = $m_nguonkp->sum('tinhgiam');
+            $a_BII[2]['sotien'] = $m_nguonkp->sum('nghihuusom');
+            $a_BII[3]['sotien'] = $m_nguonkp->sum('kpuudai');
+            $a_BII[4]['sotien'] = $m_nguonkp->sum('kinhphigiamxa_4a');
+            $a_BII[5]['sotien'] = $m_nguonkp->sum('nhucau');
 
             $a_TC = array(
-                'A' => ($a_A[0]['sotien'] + $a_A[1]['sotien'] + $a_A[2]['sotien'] + $a_A[3]['sotien']
-                    + $a_A[4]['sotien'] + $a_A[5]['sotien'] + $a_A[6]['sotien'] + $a_A[15]['sotien'] + $a_A[20]['sotien'] + $a_A[21]['sotien']),
-                'BI' => $m_nguonkp->sum('tongnhucau2'),
-                'BI1' => $m_nguonkp->sum('tongnhucau1'),
-                'BII' => (array_sum(array_column($a_BII, 'sotien')) - $a_BII[1]['sotien']),
-                'BIII' => (array_sum(array_column($a_BIII, 'sotien')))
+                'A' => ($a_A[0]['sotien'] + $a_A[1]['sotien'] + $a_A[2]['sotien'] + $a_A[6]['sotien']),
+                'BI' => array_sum(array_column($a_BI, 'sotien')),
+                'BII' => array_sum(array_column($a_BII, 'sotien'))
             );
-            //dd($a_A);
+            // dd($a_A);
 
             return view('reports.thongtu78.huyen.mau4a')
                 ->with('model', $m_nguonkp)
                 ->with('a_A', $a_A)
+                ->with('a_BI', $a_BI)
                 ->with('a_BII', $a_BII)
-                ->with('a_BIII', $a_BIII)
                 ->with('a_TC', $a_TC)
                 ->with('m_dv', $m_donvi)
                 ->with('inputs', $inputs)
@@ -3124,12 +3117,12 @@ class nguonkinhphi_donvi_baocaoController extends Controller
             $data[1]['solieu'] = [
                 'nhucau' => $m_bl->sum('tongnhucau'),
                 'tietkiem' => $m_data->sum('tietkiem'), //Lấy tiết kiệm 2023 ở mẫu 4a
-                'hocphi' => $m_data->sum('huydongtx_hocphi_4a'), //Lấy tiết kiệm 2023 ở mẫu 4a
-                'vienphi' => $m_data->sum('huydongtx_vienphi_4a'), //Lấy tiết kiệm 2023 ở mẫu 4a
-                'nguonthu' => $m_data->sum('huydongtx_khac_4a'), //Lấy tiết kiệm 2023 ở mẫu 4a
-                'quyluongtietkiem' => round($m_data->sum('quyluongtietkiem_2dd') / 2), //Lấy 50% tổng tiết kiệm ở mẫu 2đ
+                'hocphi' => $m_data->sum('huydongktx_hocphi_4a'), //Lấy tiết kiệm 2023 ở mẫu 4a
+                'vienphi' => $m_data->sum('huydongktx_vienphi_4a'), //Lấy tiết kiệm 2023 ở mẫu 4a
+                'nguonthu' => $m_data->sum('huydongktx_khac_4a'), //Lấy tiết kiệm 2023 ở mẫu 4a
+                
             ];
-            $data[1]['solieu']['tongso'] = $data[1]['solieu']['tietkiem'] + $data[1]['solieu']['hocphi'] + $data[1]['solieu']['vienphi'] + $data[1]['solieu']['nguonthu'] + $data[1]['solieu']['quyluongtietkiem'];
+            $data[1]['solieu']['tongso'] = $data[1]['solieu']['tietkiem'] + $data[1]['solieu']['hocphi'] + $data[1]['solieu']['vienphi'] + $data[1]['solieu']['nguonthu'] ;
             //dd($data);
             //
             $data[2] = array('val' => 'DT', 'tt' => '-', 'noidung' => 'Đào tạo',);
@@ -3138,20 +3131,19 @@ class nguonkinhphi_donvi_baocaoController extends Controller
             $data[2]['solieu'] = [
                 'nhucau' => $m_bl->sum('tongnhucau'),
                 'tietkiem' => $m_data->sum('tietkiem'), //Lấy tiết kiệm 2023 ở mẫu 4a
-                'hocphi' => $m_data->sum('huydongtx_hocphi_4a'), //Lấy tiết kiệm 2023 ở mẫu 4a
-                'vienphi' => $m_data->sum('huydongtx_vienphi_4a'), //Lấy tiết kiệm 2023 ở mẫu 4a
-                'nguonthu' => $m_data->sum('huydongtx_khac_4a'), //Lấy tiết kiệm 2023 ở mẫu 4a
-                'quyluongtietkiem' => round($m_data->sum('quyluongtietkiem_2dd') / 2), //Lấy 50% tổng tiết kiệm ở mẫu 2đ
+                'hocphi' => $m_data->sum('huydongktx_hocphi_4a'), //Lấy tiết kiệm 2023 ở mẫu 4a
+                'vienphi' => $m_data->sum('huydongktx_vienphi_4a'), //Lấy tiết kiệm 2023 ở mẫu 4a
+                'nguonthu' => $m_data->sum('huydongktx_khac_4a'), //Lấy tiết kiệm 2023 ở mẫu 4a
+                
             ];
-            $data[2]['solieu']['tongso'] = $data[2]['solieu']['tietkiem'] + $data[2]['solieu']['hocphi'] + $data[2]['solieu']['vienphi'] + $data[2]['solieu']['nguonthu'] + $data[2]['solieu']['quyluongtietkiem'];
+            $data[2]['solieu']['tongso'] = $data[2]['solieu']['tietkiem'] + $data[2]['solieu']['hocphi'] + $data[2]['solieu']['vienphi'] + $data[2]['solieu']['nguonthu'] ;
             //Dòng 0
             $data[0]['solieu'] = [
                 'nhucau' => $data[2]['solieu']['nhucau'] + $data[1]['solieu']['nhucau'],
                 'tietkiem' => $data[2]['solieu']['tietkiem'] + $data[1]['solieu']['tietkiem'], //Lấy tiết kiệm 2023 ở mẫu 4a
                 'hocphi' => $data[2]['solieu']['hocphi'] + $data[1]['solieu']['hocphi'], //Lấy tiết kiệm 2023 ở mẫu 4a
                 'vienphi' => $data[2]['solieu']['vienphi'] + $data[1]['solieu']['vienphi'], //Lấy tiết kiệm 2023 ở mẫu 4a
-                'nguonthu' => $data[2]['solieu']['nguonthu'] + $data[1]['solieu']['nguonthu'], //Lấy tiết kiệm 2023 ở mẫu 4a
-                'quyluongtietkiem' => $data[2]['solieu']['quyluongtietkiem'] + $data[1]['solieu']['quyluongtietkiem'], //Lấy 50% tổng tiết kiệm ở mẫu 2đ
+                'nguonthu' => $data[2]['solieu']['nguonthu'] + $data[1]['solieu']['nguonthu'], //Lấy tiết kiệm 2023 ở mẫu 4a                
                 'tongso' => $data[2]['solieu']['tongso'] + $data[1]['solieu']['tongso'], //Lấy 50% tổng tiết kiệm ở mẫu 2đ
 
             ];
@@ -3162,12 +3154,12 @@ class nguonkinhphi_donvi_baocaoController extends Controller
             $data[3]['solieu'] = [
                 'nhucau' => $m_bl->sum('tongnhucau'),
                 'tietkiem' => $m_data->sum('tietkiem'), //Lấy tiết kiệm 2023 ở mẫu 4a
-                'hocphi' => $m_data->sum('huydongtx_hocphi_4a'), //Lấy tiết kiệm 2023 ở mẫu 4a
-                'vienphi' => $m_data->sum('huydongtx_vienphi_4a'), //Lấy tiết kiệm 2023 ở mẫu 4a
-                'nguonthu' => $m_data->sum('huydongtx_khac_4a'), //Lấy tiết kiệm 2023 ở mẫu 4a
-                'quyluongtietkiem' => round($m_data->sum('quyluongtietkiem_2dd') / 2), //Lấy 50% tổng tiết kiệm ở mẫu 2đ
+                'hocphi' => $m_data->sum('huydongktx_hocphi_4a'), //Lấy tiết kiệm 2023 ở mẫu 4a
+                'vienphi' => $m_data->sum('huydongktx_vienphi_4a'), //Lấy tiết kiệm 2023 ở mẫu 4a
+                'nguonthu' => $m_data->sum('huydongktx_khac_4a'), //Lấy tiết kiệm 2023 ở mẫu 4a
+                
             ];
-            $data[3]['solieu']['tongso'] = $data[3]['solieu']['tietkiem'] + $data[3]['solieu']['hocphi'] + $data[3]['solieu']['vienphi'] + $data[3]['solieu']['nguonthu'] + $data[3]['solieu']['quyluongtietkiem'];
+            $data[3]['solieu']['tongso'] = $data[3]['solieu']['tietkiem'] + $data[3]['solieu']['hocphi'] + $data[3]['solieu']['vienphi'] + $data[3]['solieu']['nguonthu'] ;
             //
             $data[4] = array('val' => 'KHAC', 'tt' => 'c', 'noidung' => 'Sự nghiệp khác', 'nhucau' => 0, 'nguonkp' => 0, 'tietkiem' => 0, 'hocphi' => 0, 'vienphi' => 0, 'khac' => 0, 'nguonthu' => 0);
             $m_data = $m_nguonkp->wherenotin('linhvuchoatdong', ['QLNN', 'DDT', 'YTE', 'GD', 'DT'])->where('maphanloai', '<>', 'KVXP');
@@ -3179,13 +3171,13 @@ class nguonkinhphi_donvi_baocaoController extends Controller
             $data[4]['solieu'] = [
                 'nhucau' => $m_bl->sum('tongnhucau') + $m_bl2->sum('tongnhucau'),
                 'tietkiem' => $m_data->sum('tietkiem') + $m_data2->sum('tietkiem'), //Lấy tiết kiệm 2023 ở mẫu 4a
-                'hocphi' => $m_data->sum('huydongtx_hocphi_4a') + $m_data2->sum('huydongtx_hocphi_4a'), //Lấy tiết kiệm 2023 ở mẫu 4a
-                'vienphi' => $m_data->sum('huydongtx_vienphi_4a') + $m_data2->sum('huydongtx_vienphi_4a'), //Lấy tiết kiệm 2023 ở mẫu 4a
-                'nguonthu' => $m_data->sum('huydongtx_khac_4a') + $m_data2->sum('huydongtx_khac_4a'), //Lấy tiết kiệm 2023 ở mẫu 4a
-                'quyluongtietkiem' => round(($m_data->sum('quyluongtietkiem_2dd') + $m_data2->sum('quyluongtietkiem_2dd')) / 2), //Lấy 50% tổng tiết kiệm ở mẫu 2đ
+                'hocphi' => $m_data->sum('huydongktx_hocphi_4a') + $m_data2->sum('huydongktx_hocphi_4a'), //Lấy tiết kiệm 2023 ở mẫu 4a
+                'vienphi' => $m_data->sum('huydongktx_vienphi_4a') + $m_data2->sum('huydongktx_vienphi_4a'), //Lấy tiết kiệm 2023 ở mẫu 4a
+                'nguonthu' => $m_data->sum('huydongktx_khac_4a') + $m_data2->sum('huydongktx_khac_4a'), //Lấy tiết kiệm 2023 ở mẫu 4a
+                
             ];
             $data[4]['solieu']['tongso'] = $data[4]['solieu']['tietkiem'] + $data[4]['solieu']['hocphi'] + $data[4]['solieu']['vienphi']
-                + $data[4]['solieu']['nguonthu'] + $data[4]['solieu']['quyluongtietkiem'];
+                + $data[4]['solieu']['nguonthu'] ;
 
             //Quản lý nhà nước + Biên chế xã + Các cán bộ đã nghỉ hưu (2b)
             $data[5] = array('val' => 'QLNN', 'tt' => 'd', 'noidung' => ' Quản lý nhà nước, Đảng, đoàn thể',);
@@ -3198,24 +3190,22 @@ class nguonkinhphi_donvi_baocaoController extends Controller
             $data[5]['solieu'] = [
                 'nhucau' => $m_bl->sum('tongnhucau') + $m_bl2->sum('tongnhucau') + $m_nguonkp->sum('nhucau2b'),
                 'tietkiem' => $m_data->sum('tietkiem') + $m_data2->sum('tietkiem'), //Lấy tiết kiệm 2023 ở mẫu 4a
-                'hocphi' => $m_data->sum('huydongtx_hocphi_4a') + $m_data2->sum('huydongtx_hocphi_4a'), //Lấy tiết kiệm 2023 ở mẫu 4a
-                'vienphi' => $m_data->sum('huydongtx_vienphi_4a') + $m_data2->sum('huydongtx_vienphi_4a'), //Lấy tiết kiệm 2023 ở mẫu 4a
-                'nguonthu' => $m_data->sum('huydongtx_khac_4a') + $m_data2->sum('huydongtx_khac_4a'), //Lấy tiết kiệm 2023 ở mẫu 4a
-                'quyluongtietkiem' => round(($m_data->sum('quyluongtietkiem_2dd') + $m_data2->sum('quyluongtietkiem_2dd')) / 2), //Lấy 50% tổng tiết kiệm ở mẫu 2đ
+                'hocphi' => $m_data->sum('huydongktx_hocphi_4a') + $m_data2->sum('huydongktx_hocphi_4a'), //Lấy tiết kiệm 2023 ở mẫu 4a
+                'vienphi' => $m_data->sum('huydongktx_vienphi_4a') + $m_data2->sum('huydongktx_vienphi_4a'), //Lấy tiết kiệm 2023 ở mẫu 4a
+                'nguonthu' => $m_data->sum('huydongktx_khac_4a') + $m_data2->sum('huydongktx_khac_4a'), //Lấy tiết kiệm 2023 ở mẫu 4a
             ];
 
-            $data[5]['solieu']['tongso'] = $data[5]['solieu']['tietkiem'] + $data[5]['solieu']['hocphi'] + $data[5]['solieu']['vienphi'] + $data[5]['solieu']['nguonthu'] + $data[5]['solieu']['quyluongtietkiem'];
+            $data[5]['solieu']['tongso'] = $data[5]['solieu']['tietkiem'] + $data[5]['solieu']['hocphi'] + $data[5]['solieu']['vienphi'] + $data[5]['solieu']['nguonthu'] ;
             //
             $data[6] = array('val' => 'QLNN', 'tt' => '-', 'noidung' => 'Trong đó: Cán bộ, công chức cấp xã',);
             $data[6]['solieu'] = [
                 'nhucau' => $m_bl2->sum('tongnhucau'),
                 'tietkiem' => $m_data2->sum('tietkiem'), //Lấy tiết kiệm 2023 ở mẫu 4a
-                'hocphi' => $m_data2->sum('huydongtx_hocphi_4a'), //Lấy tiết kiệm 2023 ở mẫu 4a
-                'vienphi' =>  $m_data2->sum('huydongtx_vienphi_4a'), //Lấy tiết kiệm 2023 ở mẫu 4a
-                'nguonthu' => $m_data2->sum('huydongtx_khac_4a'), //Lấy tiết kiệm 2023 ở mẫu 4a
-                'quyluongtietkiem' => round($m_data2->sum('quyluongtietkiem_2dd') / 2), //Lấy 50% tổng tiết kiệm ở mẫu 2đ
+                'hocphi' => $m_data2->sum('huydongktx_hocphi_4a'), //Lấy tiết kiệm 2023 ở mẫu 4a
+                'vienphi' =>  $m_data2->sum('huydongktx_vienphi_4a'), //Lấy tiết kiệm 2023 ở mẫu 4a
+                'nguonthu' => $m_data2->sum('huydongktx_khac_4a'), //Lấy tiết kiệm 2023 ở mẫu 4a
             ];
-            $data[6]['solieu']['tongso'] = $data[6]['solieu']['tietkiem'] + $data[6]['solieu']['hocphi'] + $data[6]['solieu']['vienphi'] + $data[6]['solieu']['nguonthu'] + $data[6]['solieu']['quyluongtietkiem'];
+            $data[6]['solieu']['tongso'] = $data[6]['solieu']['tietkiem'] + $data[6]['solieu']['hocphi'] + $data[6]['solieu']['vienphi'] + $data[6]['solieu']['nguonthu'];
 
             //dd($data);
             $inputs['donvitinh'] = 1;
