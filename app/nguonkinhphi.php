@@ -69,8 +69,25 @@ class nguonkinhphi extends Model
         'quy1_tong',
         'quy2_tong',
         'quy3_tong',
-
-        'tongsonguoi2015', //mẫu 2đ
+        //Mẫu 2c lưu theo thông tư 50
+        'sotodanphobiengioi_2d',
+        'sothon350hgd_2d',
+        'sotodanpho500hgd_2d',
+        'sochuyentuthon350hgd_2d',
+        'sothonbiengioi_tong',
+        'sotodanphobiengioi_tong',
+        'sothon350hgd__tong',
+        'sotodanpho500hgd_tong',
+        'sothontrongdiem_tong',
+        'sochuyentuthon350hgd_tong',
+        'sothonconlai_tong',
+        'sotoconlai_tong',
+        'sothonbiengioi_2d',
+        'sothontrongdiem_2d',
+        'sothonconlai_2d',
+        'sotoconlai_2d',
+        //mẫu 2đ
+        'tongsonguoi2015',
         'tongsonguoi2017', //mẫu 2đ
         'quyluong', //mẫu 2đ
         'tongsodonvi1', //mẫu 2e
@@ -95,11 +112,8 @@ class nguonkinhphi extends Model
         //Mẫu 2k
         'soluonggiam_2k',
         'quyluonggiam_2k',
-        //Mẫu 2d
-        'sothonbiengioi_2d',
-        'sothontrongdiem_2d',
-        'sothonconlai_2d',
-        'sotoconlai_2d',
+
+
         //Mẫu 4a
         'tinhgiam',
         'nghihuusom',
@@ -124,7 +138,7 @@ class nguonkinhphi extends Model
         'huydongktx_vienphi_4a',
         'huydongktx_khac_4a',
         'kinhphigiamxa_4a',
-        //Mẫu 2c
+        //Mẫu 2c 
         'soluongqt_2c',
         'sotienqt_2c',
         'soluongcanbo_2c',

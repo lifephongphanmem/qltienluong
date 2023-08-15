@@ -111,25 +111,15 @@
                             <i class="fa fa-print"></i>&nbsp;Bảng tổng quỹ trợ cấp tăng thêm cho cán bộ đã nghỉ hưu
                             (Mẫu 2b)</button>
                     </div>
-                </div>
+                </div>                
 
                 <div class="col-md-6">
                     <div class="form-group">
                         <button type="button" onclick="ThongTinKetXuat(true,'{{ $inputs['furl'] . 'mau2c' }}',null)"
                             style="border-width: 0px" class="btn btn-default btn-xs mbs" data-target="#mautt107-modal"
                             data-toggle="modal">
-                            <i class="fa fa-print"></i>&nbsp;Báo cáo nhu cầu kinh phí thực hiện bảo hiểm thất nghiệp
-                            (Mẫu 2c)</button>
-                    </div>
-                </div>
-
-                <div class="col-md-6">
-                    <div class="form-group">
-                        <button type="button" onclick="ThongTinKetXuat(true,'{{ $inputs['furl'] . 'mau2d' }}',null)"
-                            style="border-width: 0px" class="btn btn-default btn-xs mbs" data-target="#mautt107-modal"
-                            data-toggle="modal">
                             <i class="fa fa-print"></i>&nbsp;Tổng hợp kinh phí tăng thêm để thực hiện chế độ cho cán bộ
-                            không chuyên trách (Mẫu 2d)</button>
+                            không chuyên trách (Mẫu 2c)</button>
                     </div>
                 </div>
 

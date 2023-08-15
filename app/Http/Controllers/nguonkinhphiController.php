@@ -672,17 +672,7 @@ class nguonkinhphiController extends Controller
                 }
             }
             //Mẫu 2c
-            if ($model->soluongcanbo_2c == 0) {
-                $model_bangluong = nguonkinhphi_bangluong::where('masodv', $model->masodv)->where('thang', '07')
-                    ->where('stbhtn_dv', '>', '0')->get(); //Chỉ lấy cán bộ đóng bảo hiểm thất nghiệp
-                if ($model_bangluong->count() > 0) {
-                    $model->soluongcanbo_2c = $model_bangluong->count();
-                    $model->hesoluong_2c = $model_bangluong->sum('heso');
-                    $model->phucapchucvu_2c = $model_bangluong->sum('pccv');
-                    $model->phucapvuotkhung_2c = $model_bangluong->sum('vuotkhung');
-                    $model->phucaptnn_2c = $model_bangluong->sum('pctnn');
-                }
-            }
+            //dd(session('admin'));
             //lấy ds phu cap
 
             //Tinh toán số liệu
@@ -744,6 +734,23 @@ class nguonkinhphiController extends Controller
                 'quy3_1', //mẫu 2b
                 'quy3_2', //mẫu 2b
                 'quy3_3', //mẫu 2b
+                //2c thông tư 50
+                'sotodanphobiengioi_2d',
+                'sothon350hgd_2d',
+                'sotodanpho500hgd_2d',
+                'sochuyentuthon350hgd_2d',
+                'sothonbiengioi_tong',
+                'sotodanphobiengioi_tong',
+                'sothon350hgd__tong',
+                'sotodanpho500hgd_tong',
+                'sothontrongdiem_tong',
+                'sochuyentuthon350hgd_tong',
+                'sothonconlai_tong',
+                'sotoconlai_tong',
+                'sothonbiengioi_2d',
+                'sothontrongdiem_2d',
+                'sothonconlai_2d',
+                'sotoconlai_2d',
 
                 'tongsonguoi2015', //mẫu 2đ
                 'tongsonguoi2017', //mẫu 2đ
@@ -770,11 +777,7 @@ class nguonkinhphiController extends Controller
                 //Mẫu 2k
                 'soluonggiam_2k',
                 'quyluonggiam_2k',
-                //Mẫu 2d
-                'sothonbiengioi_2d',
-                'sothontrongdiem_2d',
-                'sothonconlai_2d',
-                'sotoconlai_2d',
+                
                 //Mẫu 4a
                 'nhucau',
                 'kinhphigiamxa_4a',
@@ -798,14 +801,7 @@ class nguonkinhphiController extends Controller
                 'huydongktx_hocphi_4a',
                 'huydongktx_vienphi_4a',
                 'huydongktx_khac_4a',
-                //Mẫu 2c
-                'soluongqt_2c',
-                'sotienqt_2c',
-                'soluongcanbo_2c',
-                'hesoluong_2c',
-                'phucapchucvu_2c',
-                'phucapvuotkhung_2c',
-                'phucaptnn_2c',
+                
             ];
             foreach ($a_truong  as $truong) {
                 if (isset($inputs[$truong]))

@@ -31,6 +31,11 @@ use Illuminate\Support\Facades\Session;
 
 class tonghopnguon_huyenController extends Controller
 {
+    
+    /* 2023.08.15 chưa lọc theo các t.c trên
+     1. Các đơn vị có macqcq và phân loại = SD
+     2. Các đơn vị có macqcq và phân loại = THKHOI
+     */
     public function index()
     {
         if (Session::has('admin')) {
