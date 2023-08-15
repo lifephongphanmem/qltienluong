@@ -12,7 +12,7 @@
                     </div>
                 </div>
 
-                <div class="col-md-3">
+                <div class="col-md-2">
                     <div class="form-group">
                         <label class="control-label font-weight-bold">Tổng số hưởng trợ cấp hàng
                             tháng đến 01/07/2023 </label>
@@ -24,24 +24,30 @@
                     </div>
                 </div>
 
-                <div class="col-md-3">
+                <div class="col-md-2">
                     <div class="form-group">
                         <label class="control-label font-weight-bold">Quỹ trợ cấp 01 tháng theo Nghị định
                             44/2019/NĐ-CP</label>
                         {!! Form::text('quy1_1', null, ['id' => 'quy1_1', 'class' => 'form-control', 'data-mask' => 'fdecimal']) !!}
                     </div>
                 </div>
-
-                <div class="col-md-3">
+                <div class="col-md-2">
                     <div class="form-group">
                         <label class="control-label font-weight-bold">Quỹ trợ cấp 01 tháng theo Nghị định
-                            24/2023/NĐ-CP</label>
-                        {!! Form::text('quy2_1', null, ['id' => 'quy2_1', 'class' => 'form-control', 'data-mask' => 'fdecimal']) !!}
+                            108/2021/NĐ-CP</label>
+                        {!! Form::text('quy3_1', null, ['id' => 'quy3_1', 'class' => 'form-control', 'data-mask' => 'fdecimal']) !!}
                     </div>
                 </div>
 
-
+                <div class="col-md-2">
+                    <div class="form-group">
+                        <label class="control-label font-weight-bold">Quỹ trợ cấp 01 tháng theo Nghị định
+                            42/2023/NĐ-CP</label>
+                        {!! Form::text('quy2_1', null, ['id' => 'quy2_1', 'class' => 'form-control', 'data-mask' => 'fdecimal']) !!}
+                    </div>
+                </div>
             </div>
+
             <div class="row">
                 <div class="col-md-3">
                     <div class="form-group">
@@ -54,7 +60,7 @@
                     </div>
                 </div>
 
-                <div class="col-md-3">
+                <div class="col-md-2">
                     <div class="form-group">
                         <label class="control-label"> </label>
                         {!! Form::text('tongsonguoi2', null, [
@@ -65,22 +71,27 @@
                     </div>
                 </div>
 
-                <div class="col-md-3">
+                <div class="col-md-2">
                     <div class="form-group">
                         <label class="control-label"></label>
                         {!! Form::text('quy1_2', null, ['id' => 'quy1_2', 'class' => 'form-control', 'data-mask' => 'fdecimal']) !!}
                     </div>
                 </div>
+                <div class="col-md-2">
+                    <div class="form-group">
+                        <label class="control-label"></label>
+                        {!! Form::text('quy3_2', null, ['id' => 'quy3_2', 'class' => 'form-control', 'data-mask' => 'fdecimal']) !!}
+                    </div>
+                </div>
 
-                <div class="col-md-3">
+                <div class="col-md-2">
                     <div class="form-group">
                         <label class="control-label"></label>
                         {!! Form::text('quy2_2', null, ['id' => 'quy2_2', 'class' => 'form-control', 'data-mask' => 'fdecimal']) !!}
                     </div>
                 </div>
-
-
             </div>
+
             <div class="row">
                 <div class="col-md-3">
                     <div class="form-group">
@@ -91,7 +102,7 @@
                     </div>
                 </div>
 
-                <div class="col-md-3">
+                <div class="col-md-2">
                     <div class="form-group">
                         <label class="control-label"> </label>
                         {!! Form::text('tongsonguoi3', null, [
@@ -102,14 +113,21 @@
                     </div>
                 </div>
 
-                <div class="col-md-3">
+                <div class="col-md-2">
                     <div class="form-group">
                         <label class="control-label"></label>
                         {!! Form::text('quy1_3', null, ['id' => 'quy1_3', 'class' => 'form-control', 'data-mask' => 'fdecimal']) !!}
                     </div>
                 </div>
 
-                <div class="col-md-3">
+                <div class="col-md-2">
+                    <div class="form-group">
+                        <label class="control-label"></label>
+                        {!! Form::text('quy3_3', null, ['id' => 'quy3_3', 'class' => 'form-control', 'data-mask' => 'fdecimal']) !!}
+                    </div>
+                </div>
+
+                <div class="col-md-2">
                     <div class="form-group">
                         <label class="control-label"></label>
                         {!! Form::text('quy2_3', null, ['id' => 'quy2_3', 'class' => 'form-control', 'data-mask' => 'fdecimal']) !!}

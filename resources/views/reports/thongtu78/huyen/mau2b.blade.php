@@ -35,10 +35,13 @@
             <th style="width: 6%;padding-left: 2px;padding-right: 2px">TỔNG SỐ NGƯỜI NGHỈ VIỆC HƯỞNG TRỢ CẤP HÀNG THÁNG ĐẾN
                 01/07/2023</th>
             <th style="width: 6%;padding-left: 2px;padding-right: 2px">QUỸ TRỢ CẤP 1 THÁNG THEO QUY ĐỊNH TẠI NGHỊ ĐỊNH SỐ
-                09/2015/NĐ-CP VÀ 55/2016/NĐ-CP</th>
+                44/2019/NĐ-CP</th>
             <th style="width: 6%;padding-left: 2px;padding-right: 2px">QUỸ TRỢ CẤP 1 THÁNG THEO QUY ĐỊNH TẠI NGHỊ ĐỊNH SỐ
-                76/2017/NĐ-CP</th>
+                108/2021/NĐ-CP</th>
+            <th style="width: 6%;padding-left: 2px;padding-right: 2px">QUỸ TRỢ CẤP 1 THÁNG THEO QUY ĐỊNH TẠI NGHỊ ĐỊNH SỐ
+                42/2023/NĐ-CP</th>
             <th style="width: 6%;padding-left: 2px;padding-right: 2px">QUỸ TRỢ 1 THÁNG TĂNG THÊM</th>
+            <th style="width: 6%;padding-left: 2px;padding-right: 2px">QUỸ TRỢ CẤP TĂNG THÊM THÁNG 07</th>
             <th style="width: 6%;padding-left: 2px;padding-right: 2px">BẢO HIỂM Y TẾ TĂNG THÊM 1 THÁNG</th>
             <th style="width: 6%;padding-left: 2px;padding-right: 2px">TỔNG QUỸ TRỢ CẤP TĂNG THÊM NĂM 2023</th>
         </tr>
@@ -49,20 +52,28 @@
             <td>1</td>
             <td>2</td>
             <td>3</td>
-            <td>(4)=(3)-(2)</td>
-            <td>(5)=(1)x0,1x4,5%</td>
-            <td>(7)=((4)+(5))x6T</td>
+            <td>4</td>
+            <td>5=3-2</td>
+            <td>6=4-2</td>
+            <td>7=1x0.31x4,5%</td>
+            <td>8=(5+6+7)x6T</td>
         </tr>
 
         <tr style="font-weight: bold;">
             <th></th>
             <th>TỔNG CỘNG</th>
-            <th></th>
-            <th></th>
-            <th></th>
-            <th></th>
-            <th></th>
-            <th></th>
+            <td class="text-center">{{ dinhdangsothapphan(array_sum(array_column($ar_I, 'songuoi'))) }}</td>
+            <td class="text-right">{{ dinhdangsothapphan(array_sum(array_column($ar_I, 'quy1'))) }}</td>
+            <td class="text-right">{{ dinhdangsothapphan(array_sum(array_column($ar_I, 'quy2'))) }}</td>
+            <td class="text-right">{{ dinhdangsothapphan(array_sum(array_column($ar_I, 'quy3'))) }}</td>
+            <td class="text-right">
+                {{ dinhdangsothapphan(array_sum(array_column($ar_I, 'quy3')) - array_sum(array_column($ar_I, 'quy1'))) }}
+            </td>
+            <td class="text-right">
+                {{ dinhdangsothapphan(array_sum(array_column($ar_I, 'quy3')) - array_sum(array_column($ar_I, 'quy1'))) }}
+            </td>
+            <td class="text-right">{{ dinhdangsothapphan(array_sum(array_column($ar_I, 'songuoi')) * 13950) }}</td>
+            <td class="text-right">{{ dinhdangsothapphan(array_sum(array_column($ar_I, 'tongquy'))) }}</td>
         </tr>
 
 
@@ -71,13 +82,14 @@
             <tr>
                 <td>{{ $dulieu['tt'] }}</td>
                 <td>{{ $dulieu['noidung'] }}</td>
-                <td>{{ dinhdangsothapphan($dulieu['songuoi']) }}</td>
-                <td>{{ dinhdangsothapphan($dulieu['quy1']) }}</td>
-                <td>{{ dinhdangsothapphan($dulieu['quy2']) }}</td>
-
-                <td>{{ dinhdangsothapphan($dulieu['quy2'] - $dulieu['quy1']) }}</td>
-                <td>{{ dinhdangsothapphan($dulieu['songuoi'] * 450000, 3) }}</td>
-                <td>{{ dinhdangsothapphan(($dulieu['quy2'] - $dulieu['quy1'] + $dulieu['songuoi'] * 450000) * 6, 3) }}</td>
+                <td class="text-center">{{ dinhdangsothapphan($dulieu['songuoi']) }}</td>
+                <td class="text-right">{{ dinhdangsothapphan($dulieu['quy1']) }}</td>
+                <td class="text-right">{{ dinhdangsothapphan($dulieu['quy2']) }}</td>
+                <td class="text-right">{{ dinhdangsothapphan($dulieu['quy3']) }}</td>
+                <td class="text-right">{{ dinhdangsothapphan($dulieu['quy2'] - $dulieu['quy1']) }}</td>
+                <td class="text-right">{{ dinhdangsothapphan($dulieu['quy3'] - $dulieu['quy1']) }}</td>
+                <td class="text-right">{{ dinhdangsothapphan($dulieu['songuoi'] * 13950, 3) }}</td>
+                <td class="text-right">{{ dinhdangsothapphan($dulieu['tongquy']) }}</td>
             </tr>
         @endforeach
     </table>

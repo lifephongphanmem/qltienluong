@@ -1668,6 +1668,8 @@ class nguonkinhphi_donvi_baocaoController extends Controller
                 'songuoi' => $m_nguonkp->tongsonguoi1,
                 'quy1' => $m_nguonkp->quy1_1,
                 'quy2' => $m_nguonkp->quy2_1,
+                'quy3' => $m_nguonkp->quy3_1,
+                'tongquy' => $m_nguonkp->quy1_tong,
 
             );
 
@@ -1676,21 +1678,16 @@ class nguonkinhphi_donvi_baocaoController extends Controller
                 'songuoi' => $m_nguonkp->tongsonguoi2,
                 'quy1' => $m_nguonkp->quy1_2,
                 'quy2' => $m_nguonkp->quy2_2,
+                'quy3' => $m_nguonkp->quy3_2,
+                'tongquy' => $m_nguonkp->quy2_tong,
             );
             $ar_I[2] = array(
                 'val' => 'K', 'tt' => '3', 'noidung' => 'Các chức danh còn lại',
                 'songuoi' => $m_nguonkp->tongsonguoi3,
                 'quy1' => $m_nguonkp->quy1_3,
                 'quy2' => $m_nguonkp->quy2_3,
-            );
-
-            $a_It = array(
-                'cb' => 0,
-                'quy09' => 0,
-                'quy76' => 0,
-                'quytang' => 0,
-                'bhyt' => 0,
-                'tongquy' => 0
+                'quy3' => $m_nguonkp->quy3_3,
+                'tongquy' => $m_nguonkp->quy3_tong,
             );
 
             //dd($m_tonghop_ct);

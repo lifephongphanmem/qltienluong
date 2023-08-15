@@ -741,6 +741,10 @@ class nguonkinhphiController extends Controller
                 'quy2_2', //mẫu 2b
                 'quy2_3', //mẫu 2b
                 'tongsonguoi3', //mẫu 2b
+                'quy3_1', //mẫu 2b
+                'quy3_2', //mẫu 2b
+                'quy3_3', //mẫu 2b
+
                 'tongsonguoi2015', //mẫu 2đ
                 'tongsonguoi2017', //mẫu 2đ
                 'quyluong', //mẫu 2đ
@@ -807,7 +811,11 @@ class nguonkinhphiController extends Controller
                 if (isset($inputs[$truong]))
                     $inputs[$truong] = chkDbl($inputs[$truong]);
             }
-
+            //Tính toán số liệu mẫu 2b (310000*4.5% = 13950)
+            $inputs['quy1_tong'] = round(($inputs['quy3_1'] - $inputs['quy1_1'] + $inputs['quy2_1'] - $inputs['quy1_1'] + $inputs['tongsonguoi1'] * 13950) * 6);
+            $inputs['quy2_tong'] = round(($inputs['quy3_2'] - $inputs['quy1_2'] + $inputs['quy2_2'] - $inputs['quy1_2'] + $inputs['tongsonguoi2'] * 13950) * 6);
+            $inputs['quy3_tong'] = round(($inputs['quy3_3'] - $inputs['quy1_3'] + $inputs['quy2_3'] - $inputs['quy1_3'] + $inputs['tongsonguoi3'] * 13950) * 6);
+            //dd($inputs);
             $model->update($inputs);
             if ($inputs['huyen'] == 1) {
                 return redirect('chuc_nang/xem_du_lieu/nguon/huyen?sohieu=' . $model->sohieu . '&trangthai=ALL&phanloai=ALL');

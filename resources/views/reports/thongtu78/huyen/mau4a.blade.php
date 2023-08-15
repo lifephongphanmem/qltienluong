@@ -23,7 +23,7 @@
     </table>
     <p id="data_body" style="text-align: center; font-weight: bold; font-size: 20px;">BÁO CÁO NGUỒN KINH PHÍ ĐỂ THỰC HIỆN
         CẢI CÁCH TIỀN LƯƠNG NĂM 2023</p>
-        
+
     <p id="data_body1" style="text-align: center; font-style: italic">(Ban hành kèm theo Thông tư số 50/2023/TT-BTC ngày 17
         tháng 7 năm 2023 của Bộ trưởng Bộ Tài chính)</p>
     <p id="data_body2" style="text-align: right; font-style: italic">Đơn vị:
@@ -59,11 +59,11 @@
             <td>B</td>
             <td>TỔNG NHU CẦU NĂM 2023</td>
             <td class="money">
-                {{ dinhdangso($a_TC['BI'] + $a_TC['BII'] , 0, $inputs['donvitinh']) }}
+                {{ dinhdangso($a_TC['BI'] + $a_TC['BII'], 0, $inputs['donvitinh']) }}
             </td>
         </tr>
 
-        
+
         <tr style="font-weight: bold;">
             <td>I</td>
             <td>Tổng nhu cầu kinh phí tăng thêm để thực hiện cải cách tiền lương theo Nghị định số 24/2023/NĐ-CP</td>
@@ -91,21 +91,25 @@
         <tr style="font-weight: bold;">
             <td>C</td>
             <td>CHÊNH LỆCH NHU CẦU VÀ NGUỒN NĂM 2023</td>
-            <td class="money">{{ dinhdangso($a_TC['A'] - $a_TC['BI'] - $a_TC['BII'], 0, $inputs['donvitinh']) }}
+            <td class="money">{{ dinhdangso(abs($a_TC['A'] - $a_TC['BI'] - $a_TC['BII']), 0, $inputs['donvitinh']) }}
             </td>
         </tr>
         <tr>
             <td>1</td>
             <td>Phần thiếu nguồn ngân sách trung ương hỗ trợ</td>
-            <td></td>
+            <td>
+                {{ dinhdangso($a_TC['A'] > $a_TC['BI'] + $a_TC['BII'] ? 0 : abs($a_TC['A'] - $a_TC['BI'] - $a_TC['BII']), 0, $inputs['donvitinh']) }}
+            </td>
         </tr>
         <tr>
             <td>2</td>
             <td>Nguồn thực hiện cải cách tiền lương còn dư</td>
-            <td class="money">{{ dinhdangso($a_TC['A'] - $a_TC['BI'] - $a_TC['BII'], 0, $inputs['donvitinh']) }}</td>
+            <td class="money">
+                {{ dinhdangso($a_TC['A'] > $a_TC['BI'] + $a_TC['BII'] ? $a_TC['A'] - $a_TC['BI'] - $a_TC['BII'] : 0, 0, $inputs['donvitinh']) }}
+            </td>
         </tr>
     </table>
-    
+
     <table id="data_footer1" class="header" width="96%" border="0" cellspacing="0" cellpadding="8"
         style="margin:20px auto; text-align: center;">
         <tr>
