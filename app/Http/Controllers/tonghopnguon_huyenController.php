@@ -208,7 +208,8 @@ class tonghopnguon_huyenController extends Controller
                 'luongkhongchuyentrach', //thừa
                 'tongnhucau1', //tổng nhu cầu kinh trước 1 năm
                 'tongnhucau2', //tổng nhu cầu kinh trước 2 năm
-                //Báo cáo nhu cầu kinh phí mẫu Vạn Ninh
+
+                //mẫu 2b
                 'tongsonguoi1', //mẫu 2b
                 'quy1_1', //mẫu 2b
                 'quy1_2', //mẫu 2b
@@ -218,6 +219,10 @@ class tonghopnguon_huyenController extends Controller
                 'quy2_2', //mẫu 2b
                 'quy2_3', //mẫu 2b
                 'tongsonguoi3', //mẫu 2b
+                'quy3_1', //mẫu 2b
+                'quy3_2', //mẫu 2b
+                'quy3_3', //mẫu 2b
+
                 'tongsonguoi2015', //mẫu 2đ
                 'tongsonguoi2017', //mẫu 2đ
                 'quyluong', //mẫu 2đ
@@ -3227,7 +3232,7 @@ class tonghopnguon_huyenController extends Controller
                 'THCS' => 'Khối Trường Trung học cơ sở',
                 'THvaTHCS' => 'Khối Trường Tiểu học và Trung học cơ sở',
             ];
-            
+
             foreach ($a_giaoduc as $key => $val) {
                 $dulieu = $m_nhomgiaoduc->where('maphanloai', $key);
                 if ($dulieu->count() == 0) {
@@ -3235,12 +3240,12 @@ class tonghopnguon_huyenController extends Controller
                 }
 
                 foreach (array_unique(array_column($dulieu->toarray(), 'tenct', 'mact')) as $k => $v) {
-                    $dulieu_ct = $dulieu->where('mact',$k);
+                    $dulieu_ct = $dulieu->where('mact', $k);
                     $chitiet = clone $m_chitiet->first();
                     $chitiet->madv = $key;
                     $chitiet->tendv = $val;
                     $chitiet->tenct = $v;
-                    $chitiet->mact = $k;                  
+                    $chitiet->mact = $k;
                     $chitiet->linhvuchoatdong = 'GD';
                     //Tính mức lương cũ
 
@@ -3314,6 +3319,8 @@ class tonghopnguon_huyenController extends Controller
                 'songuoi' => $m_nguonkp->sum('tongsonguoi1'),
                 'quy1' => $m_nguonkp->sum('quy1_1'),
                 'quy2' => $m_nguonkp->sum('quy2_1'),
+                'quy3' => $m_nguonkp->sum('quy3_1'),
+                'tongquy' => $m_nguonkp->sum('quy1_tong'),
 
             );
 
@@ -3322,12 +3329,16 @@ class tonghopnguon_huyenController extends Controller
                 'songuoi' => $m_nguonkp->sum('tongsonguoi2'),
                 'quy1' => $m_nguonkp->sum('quy1_2'),
                 'quy2' => $m_nguonkp->sum('quy2_2'),
+                'quy3' => $m_nguonkp->sum('quy3_2'),
+                'tongquy' => $m_nguonkp->sum('quy2_tong'),
             );
             $ar_I[2] = array(
                 'val' => 'K', 'tt' => '3', 'noidung' => 'Các chức danh còn lại',
                 'songuoi' => $m_nguonkp->sum('tongsonguoi3'),
                 'quy1' => $m_nguonkp->sum('quy1_3'),
                 'quy2' => $m_nguonkp->sum('quy2_3'),
+                'quy3' => $m_nguonkp->sum('quy3_3'),
+                'tongquy' => $m_nguonkp->sum('quy3_tong'),
             );
 
             //dd($m_tonghop_ct);
