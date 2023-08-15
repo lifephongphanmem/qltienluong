@@ -2604,6 +2604,9 @@ class tonghopnguon_huyenController extends Controller
             $m_dsdv = dmdonvi::all();
             $a_phanloai = array_column($m_dsdv->toArray(), 'maphanloai', 'madv');
             $a_thongtindv = array_column($m_dsdv->toArray(), 'tendv', 'madv');
+            $a_chuong = array_column($m_dsdv->toArray(), 'machuong', 'madv');
+            $a_loaikhoan = array_column($m_dsdv->toArray(), 'maloaikhoan', 'madv');
+            $a_maqhns = array_column($m_dsdv->toArray(), 'maqhns', 'madv');
             //$a_madvbc = array_column($m_dsdv->toArray(), 'madvbc', 'madv');
             $a_level = array_column($m_dsdv->toArray(), 'caphanhchinh', 'madv');
             //$a_diaban = array_column(dmdonvibaocao::all()->toArray(), 'level', 'madvbc');
@@ -2615,7 +2618,9 @@ class tonghopnguon_huyenController extends Controller
             foreach ($m_chitiet as $chitiet) {
                 $chitiet->madv = $a_donvi[$chitiet->masodv];
                 $chitiet->tendv = $a_thongtindv[$chitiet->madv];
-
+                $chitiet->machuong = $a_chuong[$chitiet->madv];
+                $chitiet->maloaikhoan = $a_loaikhoan[$chitiet->madv];
+                $chitiet->maqhns = $a_maqhns[$chitiet->madv];
                 $chitiet->maphanloai = $a_phanloai[$chitiet->madv];
                 $chitiet->linhvuchoatdong = $a_linhvuc[$chitiet->masodv];
                 $chitiet->level = $a_level[$chitiet->madv];
@@ -2911,6 +2916,7 @@ class tonghopnguon_huyenController extends Controller
             //Tính toán số liệu phần III
             $ar_III = getHDND();
             $dulieu_pIII = $m_chitiet->where('nhomnhucau',  'HDND');
+            //dd($dulieu_pIII);
 
             //Vòng cấp độ 3
             foreach ($ar_III as $key => $chitiet) {
@@ -3234,7 +3240,7 @@ class tonghopnguon_huyenController extends Controller
                     $chitiet->madv = $key;
                     $chitiet->tendv = $val;
                     $chitiet->tenct = $v;
-                    $chitiet->mact = $k;
+                    $chitiet->mact = $k;                  
                     $chitiet->linhvuchoatdong = 'GD';
                     //Tính mức lương cũ
 
@@ -3274,12 +3280,12 @@ class tonghopnguon_huyenController extends Controller
                 ->with('ar_IV', $ar_IV)
                 ->with('a_Tong', $a_Tong)
                 ->with('m_dv', $m_donvi)
-                ->with('m_chitiet', $m_chitiet)
+                ->with('m_chitiet', $m_chitiet->sortby('machuong'))
                 ->with('inputs', $inputs)
                 ->with('a_phucap', $a_phucap)
                 ->with('a_phucap_st', $a_phucap_st)
                 ->with('a_nhomgd', array_keys($a_giaoduc))
-                ->with('m_nhomgiaoduc', $m_nhomgiaoduc)
+                ->with('m_nhomgiaoduc', $m_nhomgiaoduc->sortby('maqhns'))
                 ->with('col', $col)
                 ->with('pageTitle', 'Báo cáo nhu cầu kinh phí');
         } else

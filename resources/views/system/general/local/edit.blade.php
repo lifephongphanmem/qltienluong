@@ -41,8 +41,21 @@
                                         {!!Form::text('maqhns', null, array('id' => 'maqhns','class' => 'form-control'))!!}
                                     </div>
                                 </div>
-
-                                <div class="col-md-9">
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label class="control-label">Mã chương</label>
+                                        {!!Form::text('machuong', null, array('class' => 'form-control'))!!}
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label class="control-label">Mã loại khoản</label>
+                                        {!!Form::text('maloaikhoan', null, array('class' => 'form-control'))!!}
+                                    </div>
+                                </div>
+                            </div>
+                                <div class="row">
+                                <div class="col-md-12">
                                     <div class="form-group">
                                         <label class="control-label">Tên đơn vị</label>
                                         {!!Form::text('tendv', null, array('id' => 'tendv','class' => 'form-control', 'readonly'))!!}
