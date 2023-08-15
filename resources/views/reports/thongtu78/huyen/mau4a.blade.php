@@ -23,7 +23,7 @@
     </table>
     <p id="data_body" style="text-align: center; font-weight: bold; font-size: 20px;">BÁO CÁO NGUỒN KINH PHÍ ĐỂ THỰC HIỆN
         CẢI CÁCH TIỀN LƯƠNG NĂM 2023</p>
-    {{-- <p id="data_body1" style="text-align: center; font-style: italic">(Ban hành kèm theo Thông tư số 46/2019/TT-BTC ngày 23 tháng 7 năm 2019 của Bộ Tài chính)</p> --}}
+        
     <p id="data_body1" style="text-align: center; font-style: italic">(Ban hành kèm theo Thông tư số 50/2023/TT-BTC ngày 17
         tháng 7 năm 2023 của Bộ trưởng Bộ Tài chính)</p>
     <p id="data_body2" style="text-align: right; font-style: italic">Đơn vị:
@@ -59,25 +59,26 @@
             <td>B</td>
             <td>TỔNG NHU CẦU NĂM 2023</td>
             <td class="money">
-                {{ dinhdangso($a_TC['BII'] + $a_TC['BIII'] + $a_TC['BI'] + $a_TC['BI1'], 0, $inputs['donvitinh']) }}
+                {{ dinhdangso($a_TC['BI'] + $a_TC['BII'] , 0, $inputs['donvitinh']) }}
             </td>
         </tr>
 
+        
         <tr style="font-weight: bold;">
             <td>I</td>
-            <td>Tổng nhu cầu kinh phí tăng thêm để thực hiện cải cách tiền lương theo nghị định số 72/2018/NĐ-CP và
-                Nghị định số 88/2018/NĐ-CP</td>
+            <td>Tổng nhu cầu kinh phí tăng thêm để thực hiện cải cách tiền lương theo Nghị định số 24/2023/NĐ-CP</td>
             <td class="money">{{ dinhdangso($a_TC['BI'], 0, $inputs['donvitinh']) }}</td>
         </tr>
+        @foreach ($a_BI as $dulieu)
+            <tr>
+                <td>{{ $dulieu['tt'] }}</td>
+                <td>{{ $dulieu['noidung'] }}</td>
+                <td class="money">{{ dinhdangso($dulieu['sotien'], 0, $inputs['donvitinh']) }}</td>
+            </tr>
+        @endforeach
         <tr style="font-weight: bold;">
             <td>II</td>
-            <td>Tổng nhu cầu kinh phí tăng thêm để thực hiện cải cách tiền lương theo nghị định số 38/2019/NĐ-CP và
-                Nghị định số 44/2019/NĐ-CP</td>
-            <td class="money">{{ dinhdangso($a_TC['BI1'], 0, $inputs['donvitinh']) }}</td>
-        </tr>
-        <tr style="font-weight: bold;">
-            <td>III</td>
-            <td>Tổng nhu cầu kinh phí tăng thêm để thực hiện cải cách tiền lương theo Nghị định số 24/2023/NĐ-CP</td>
+            <td>Nhu cầu thực hiện một số loại phụ cấp, trợ cấp theo quy định</td>
             <td class="money">{{ dinhdangso($a_TC['BII'], 0, $inputs['donvitinh']) }}</td>
         </tr>
         @foreach ($a_BII as $dulieu)
@@ -88,21 +89,9 @@
             </tr>
         @endforeach
         <tr style="font-weight: bold;">
-            <td>III</td>
-            <td>Nhu cầu thực hiện một số loại phụ cấp, trợ cấp theo quy định</td>
-            <td class="money">{{ dinhdangso($a_TC['BIII'], 0, $inputs['donvitinh']) }}</td>
-        </tr>
-        @foreach ($a_BIII as $dulieu)
-            <tr>
-                <td>{{ $dulieu['tt'] }}</td>
-                <td>{{ $dulieu['noidung'] }}</td>
-                <td class="money">{{ dinhdangso($dulieu['sotien'], 0, $inputs['donvitinh']) }}</td>
-            </tr>
-        @endforeach
-        <tr style="font-weight: bold;">
             <td>C</td>
             <td>CHÊNH LỆCH NHU CẦU VÀ NGUỒN NĂM 2023</td>
-            <td class="money">{{ dinhdangso($a_TC['A'] - $a_TC['BII'] - $a_TC['BIII'], 0, $inputs['donvitinh']) }}
+            <td class="money">{{ dinhdangso($a_TC['A'] - $a_TC['BI'] - $a_TC['BII'], 0, $inputs['donvitinh']) }}
             </td>
         </tr>
         <tr>
@@ -113,7 +102,7 @@
         <tr>
             <td>2</td>
             <td>Nguồn thực hiện cải cách tiền lương còn dư</td>
-            <td class="money">{{ dinhdangso($a_TC['A'] - $a_TC['BII'] - $a_TC['BIII'], 0, $inputs['donvitinh']) }}</td>
+            <td class="money">{{ dinhdangso($a_TC['A'] - $a_TC['BI'] - $a_TC['BII'], 0, $inputs['donvitinh']) }}</td>
         </tr>
     </table>
     

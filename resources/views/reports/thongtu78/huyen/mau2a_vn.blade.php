@@ -25,8 +25,8 @@
         NGHỊ ĐỊNH SỐ 24/2023/NĐ-CP NĂM 2023</p>
     {{-- <p id="data_body1" style="text-align: center; font-style: italic">(Ban hành kèm theo Thông tư số 46/2019/TT-BTC ngày 23
         tháng 7 năm 2019 của Bộ Tài chính)</p> --}}
-        <p id="data_body1" style="text-align: center; font-style: italic">(Ban hành kèm theo Thông tư số 50/2023/TT-BTC ngày 17
-            tháng 7 năm 2023 của Bộ trưởng Bộ Tài chính)</p>
+    <p id="data_body1" style="text-align: center; font-style: italic">(Ban hành kèm theo Thông tư số 50/2023/TT-BTC ngày 17
+        tháng 7 năm 2023 của Bộ trưởng Bộ Tài chính)</p>
     <p id="data_body2" style="text-align: right; font-style: italic">Đơn vị: Đồng</p>
     <table id="data_body3" cellspacing="0" cellpadding="0" border="1"
         style="margin: 20px auto; font-size: 10px; border-collapse: collapse;">
@@ -234,7 +234,7 @@
                             <td>{{ dinhdangso($ct->st_tongpc_moi) }}</td>
                             @foreach ($a_phucap_st as $mapc => $pc)
                                 <?php $ten = $mapc . '_moi'; ?>
-                                <td>{{ dinhdangso($ten) }}</td>
+                                <td>{{ dinhdangso($ct->$ten) }}</td>
                             @endforeach
                             <td>{{ dinhdangso($ct->ttbh_dv_moi) }}</td>
                             {{-- Chenh lệch --}}
@@ -242,6 +242,77 @@
                             <td style="text-align: right;">{{ dinhdangso($ct->chenhlech06thang) }}</td>
                         </tr>
                     @endforeach
+                    <!-- Dải từng đơn vị cho nhóm giáo dục -->
+                    @if (in_array($madv, $a_nhomgd))
+                        <?php
+                        $donvi_gd = $m_nhomgiaoduc->where('maphanloai', $madv);
+                        $a_dv = array_unique(array_column($donvi_gd->toarray(), 'tendv', 'madv'));
+                        //lấy danh sách đơn vị để duyệt
+                        ?>
+                        @foreach ($a_dv as $madv => $tendv)
+                            <?php
+                            $m_donvi_gd = $donvi_gd->where('madv', $madv);
+                            ?>
+                            <tr style="text-align: center">
+                                <td style="text-align: right"></td>
+                                <td style="text-align: left">{{ $tendv }}</td>
+
+                                <td>{{ dinhdangso($m_donvi_gd->sum('canbo_dutoan')) }}</td>
+                                <td>{{ dinhdangso($m_donvi_gd->sum('canbo_congtac')) }}</td>
+                                {{-- Mức lương cũ --}}
+                                <td>{{ dinhdangso($m_donvi_gd->sum('tongcong_cu')) }}</td>
+                                <td>{{ dinhdangso($m_donvi_gd->sum('st_heso_cu')) }}</td>
+                                <td>{{ dinhdangso($m_donvi_gd->sum('st_tongpc_cu')) }}</td>
+                                @foreach ($a_phucap_st as $mapc => $pc)
+                                    <?php $ten = $mapc . '_cu'; ?>
+                                    <td>{{ dinhdangso($m_donvi_gd->sum($ten)) }}</td>
+                                @endforeach
+                                <td>{{ dinhdangso($m_donvi_gd->sum('ttbh_dv_cu')) }}</td>
+                                {{-- Mức lương mới --}}
+                                <td>{{ dinhdangso($m_donvi_gd->sum('tongcong_moi')) }}</td>
+                                <td>{{ dinhdangso($m_donvi_gd->sum('st_heso_moi')) }}</td>
+                                <td>{{ dinhdangso($m_donvi_gd->sum('st_tongpc_moi')) }}</td>
+                                @foreach ($a_phucap_st as $mapc => $pc)
+                                    <?php $ten = $mapc . '_moi'; ?>
+                                    <td>{{ dinhdangso($m_donvi_gd->sum($ten)) }}</td>
+                                @endforeach
+                                <td>{{ dinhdangso($m_donvi_gd->sum('ttbh_dv_moi')) }}</td>
+                                {{-- Chenh lệch --}}
+                                <td style="text-align: right;">{{ dinhdangso($m_donvi_gd->sum('chenhlech01thang')) }}</td>
+                                <td style="text-align: right;">{{ dinhdangso($m_donvi_gd->sum('chenhlech06thang')) }}</td>
+                            </tr>
+                            @foreach ($m_donvi_gd as $ct_gd)
+                                <tr style="text-align: center; font-style: italic">
+                                    <td style="text-align: center;{{ $dulieu['style'] }}"></td>
+                                    <td style="text-align: left">- {{ $ct_gd->tenct }}</td>
+
+                                    <td>{{ dinhdangso($ct_gd->canbo_dutoan) }}</td>
+                                    <td>{{ dinhdangso($ct_gd->canbo_congtac) }}</td>
+                                    {{-- Mức lương cũ --}}
+                                    <td>{{ dinhdangso($ct_gd->tongcong_cu) }}</td>
+                                    <td>{{ dinhdangso($ct_gd->st_heso_cu) }}</td>
+                                    <td>{{ dinhdangso($ct_gd->st_tongpc_cu) }}</td>
+                                    @foreach ($a_phucap_st as $mapc => $pc)
+                                        <?php $ten = $mapc . '_cu'; ?>
+                                        <td>{{ dinhdangso($ct_gd->$ten) }}</td>
+                                    @endforeach
+                                    <td>{{ dinhdangso($ct_gd->ttbh_dv_cu) }}</td>
+                                    {{-- Mức lương mới --}}
+                                    <td>{{ dinhdangso($ct_gd->tongcong_moi) }}</td>
+                                    <td>{{ dinhdangso($ct_gd->st_heso_moi) }}</td>
+                                    <td>{{ dinhdangso($ct_gd->st_tongpc_moi) }}</td>
+                                    @foreach ($a_phucap_st as $mapc => $pc)
+                                        <?php $ten = $mapc . '_moi'; ?>
+                                        <td>{{ dinhdangso($ct_gd->$ten) }}</td>
+                                    @endforeach
+                                    <td>{{ dinhdangso($ct_gd->ttbh_dv_moi) }}</td>
+                                    {{-- Chenh lệch --}}
+                                    <td style="text-align: right;">{{ dinhdangso($ct_gd->chenhlech01thang) }}</td>
+                                    <td style="text-align: right;">{{ dinhdangso($ct_gd->chenhlech06thang) }}</td>
+                                </tr>
+                            @endforeach
+                        @endforeach
+                    @endif
                 @endforeach
             @endif
         @endforeach

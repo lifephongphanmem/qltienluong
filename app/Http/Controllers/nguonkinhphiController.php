@@ -134,10 +134,9 @@ class nguonkinhphiController extends Controller
             //$a_pc_ts = array_column(dmphucap_thaisan::where('madv', session('admin')->madv)->get()->toarray(), 'mapc');
             $a_pc_ts = array_column(dmphucap_donvi::where('madv', session('admin')->madv)
                 ->where('phanloai', '<', '3')->where('thaisan', '1')->get()->toarray(), 'mapc');
-            //dd($a_pc_ts);
-            //dd($model_thongtu->ngayapdung);
-            $model = (new dataController())->getCanBo($model, $model_thongtu->ngayapdung, true, $model_thongtu->ngayapdung);
-
+            //dd($a_pc_ts);           
+            $model = (new dataController())->getCanBo($model, $model_thongtu->ngayapdung, isset($inputs['nangluong']), $model_thongtu->ngayapdung);
+            //dd($model);
             foreach ($model as $key => $cb) {
                 //xét thời hạn hợp đồng của cán bộ: nếu "ngayvao" > $model_thongtu->ngayapdung => gán lĩnh vực hoạt động = null để lọc theo lĩnh vực bỏ qua cán bộ
                 if (getDayVn($cb->ngayvao) != '' && $cb->ngayvao <= $model_thongtu->ngayapdung) {
@@ -308,6 +307,7 @@ class nguonkinhphiController extends Controller
             //lấy danh sách cán bộ chưa nâng lương từ tháng 01-06 => tự nâng lương
 
             $m_cb = $model->keyBy('macanbo')->toarray();
+
             //làm tùy chọn tính nghỉ hưu
             $m_hh = $model->where('ngayvao', '>=', $model_thongtu->ngayapdung)->where('ngayvao', '<=', $inputs['namdt'] . '-12-31')->keyBy('macanbo')->toarray();
 
@@ -432,7 +432,7 @@ class nguonkinhphiController extends Controller
             foreach ($m_cb as $key => $val) {
                 $m_cb[$key] = $this->getHeSoPc($a_pc, $m_cb[$key], $inputs['chenhlech']);
             }
-
+            // dd($m_cb);
             //TÍnh lương cho phu cấp kiêm nhiệm
             $i = 1;
             foreach ($m_cb_kn as $val) {
@@ -772,6 +772,10 @@ class nguonkinhphiController extends Controller
                 'sothonconlai_2d',
                 'sotoconlai_2d',
                 //Mẫu 4a
+                'nhucau',
+                'kinhphigiamxa_4a',
+                'tinhgiam',
+                'nghihuusom',
                 'tietkiem',
                 'tinhgiambc_4a',
                 'nghihuu_4a',
@@ -1446,7 +1450,7 @@ class nguonkinhphiController extends Controller
 
                 $m_cb['tonghs'] += $m_cb[$mapc];
                 //$tien += $m_cb[$mapc_st];
-            }            
+            }
         }
 
         $m_cb['luongtn'] = round($m_cb['tonghs'] * $luongcb);
@@ -1464,7 +1468,7 @@ class nguonkinhphiController extends Controller
         $m_cb['stbhtn_dv'] = $stbhtn_dv;
 
         $m_cb['ttbh_dv'] = $stbhxh_dv + $stbhyt_dv + $stkpcd_dv + $stbhtn_dv;
-        
+
         return $m_cb;
     }
 

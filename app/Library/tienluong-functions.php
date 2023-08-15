@@ -1153,6 +1153,7 @@ function getNhomNhuCauKP($phanloai = 'KVHCSN')
     ];
     return $a_nhom[$phanloai];
 }
+
 function get4a_A()
 {
     $a_A = array();
@@ -1247,6 +1248,35 @@ function get4a_A()
 
     return $a_A;
 }
+
+function get4a_TT50_A()
+{
+    $a_A = array();
+
+    $a_A[0] = array(
+        'tt' => '1', 'noidung' => '70% tăng thu NSĐP ( không thể thu tiền sử dụng đất, thu sổ số kiến thiết, thu cổ phần hóa và thoái vốn doanh nghiệp nhà nước do địa phương quản lý, thu tiền thuê đất một lần được nhà nước đầu tư trước để bồi thường, giải phóng mặt bằng và thu từ xử lý tài sản công tại cơ quan, tổ chức , đơn vị được cơ quan có thẩm quyền quyết định sử dụng để chi đầu tư theo quy định; thu tiền bảo vệ và phát triển đất trồng lúa; phí tham quan các di tích, di sản thể giới; phí sử dụng công trình kết cấu hạ tầng, công trình dịch vụ, tiện ích công cộng trong khu vực cửa khẩu; phí bảo vệ môi trường đối với khai thác khoáng sản; phí bảo vệ môi trường với nước thải; thu từ quỹ đất công ích, thu hoa lợi, công sản tại xã và thu tiền cho thuê, cho thuê mua, bán nhà thuộc sở hữu nhà nước) thực hiện 2022 so dự toán Thủ tướng Chính phủ giao năm 2022',
+        'sotien' => '0', 'phanloai' => '0', 'tentruong' => 'thuchien1'
+    );
+    $a_A[1] = array(
+        'tt' => '2', 'noidung' => 'Số tiết kiệm chi 10 chi thường xuyên năm 2023',
+        'sotien' => '0', 'phanloai' => '0', 'tentruong' => 'tietkiem'
+    );
+    $a_A[2] = array(
+        'tt' => '3', 'noidung' => 'Số thu được huy động từ nguồn để lại đơn vị 2023 ( các đơn vị chưa tự đảm bảo chi thường xuyên )', 'sotien' => '0', 'phanloai' => '1', 'tentruong' => [3, 4, 5]
+    );
+    $a_A[3] = array('tt' => '', 'noidung' => '+ Học phí', 'sotien' => '0', 'phanloai' => '0', 'tentruong' => 'huydongktx_hocphi_4a');
+    $a_A[4] = array('tt' => '', 'noidung' => '+ Viện phí', 'sotien' => '0', 'phanloai' => '0', 'tentruong' => 'huydongktx_vienphi_4a');
+    $a_A[5] = array('tt' => '', 'noidung' => '+ Nguồn thu khác', 'sotien' => '0', 'phanloai' => '0', 'tentruong' => 'huydongktx_khac_4a');
+
+    $a_A[6] = array(
+        'tt' => '4', 'noidung' => 'Nguồn thực hiện cải cách tiền lương năm 2022 chưa sử dụng hết chuyển sang năm 2023',
+        'sotien' => '0', 'phanloai' => '0', 'tentruong' => 'caicach'
+    );
+
+    return $a_A;
+}
+
+
 function getPhuCap2a_78()
 {
     return
