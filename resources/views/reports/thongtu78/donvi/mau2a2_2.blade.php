@@ -31,8 +31,8 @@
     <table id="data_body3" cellspacing="0" cellpadding="0" border="1"
         style="margin: 20px auto; font-size: 10px; border-collapse: collapse;">
         <tr>
-            <th style="width: 2%;" rowspan="3">STT</th>
-            <th rowspan="3">NỘI DUNG</th>
+            <th style="width: 1%;" rowspan="3">STT</th>
+            <th rowspan="3" style="width:5%">NỘI DUNG</th>
 
             <th style="width: 6%;" colspan="{{ $col != 0 ? 4 + $col : 5 }}"> QUỸ TIỀN LƯƠNG, PHỤ CẤP VÀ CÁC KHOẢN ĐÓNG GÓP
                 THÁNG 07/2023 THEO NGHỊ ĐỊNH SỐ 24/2023/NĐ-CP
