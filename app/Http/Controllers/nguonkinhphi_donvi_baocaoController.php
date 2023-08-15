@@ -381,7 +381,8 @@ class nguonkinhphi_donvi_baocaoController extends Controller
             $m_phucap = dmphucap_donvi::where('madv',  $m_nguonkp->first()->madv)->wherenotin('mapc', ['heso'])->get();
             $m_nguonkp = nguonkinhphi::where('masodv', $inputs['masodv'])->get(); //đưa về mảng cho dễ làm
             $a_phucap = getPhuCap2a_78();
-
+            $array_phucap=array_keys($a_phucap);//mảng các phụ cấp 
+// dd(array_column($m_phucap->toarray(),'mapc'));
             $luongcb = $m_thongtu->muccu;
             $luongcb_moi = $m_thongtu->mucapdung;
             $chenhlech = $m_thongtu->chenhlech;
@@ -413,7 +414,8 @@ class nguonkinhphi_donvi_baocaoController extends Controller
                     }
                     //Ở ngoài nhóm phụ cấp => đưa hết vào pck
                     foreach ($m_phucap as $pc) {
-                        if (!in_array($pc->mapc, $a_phucap)) {
+                        if (!in_array($pc->mapc, $array_phucap)) {
+                            $mapc_st = 'st_' . $pc->mapc;
                             $a_solieu['pck'] += $a_solieu[$pc->mapc];
                             $a_solieu['st_pck'] += $a_solieu[$mapc_st];
                             $a_solieu[$pc->mapc] = 0;
@@ -441,9 +443,10 @@ class nguonkinhphi_donvi_baocaoController extends Controller
                     }
                     //Ở ngoài nhóm phụ cấp => đưa hết vào pck
                     foreach ($m_phucap as $pc) {
-                        if (!in_array($pc->mapc, $a_phucap)) {
+                        if (!in_array($pc->mapc, $array_phucap)) {
+                            $mapc_st = 'st_' . $pc->mapc;
                             $a_solieu_moi['pck'] += $a_solieu_moi[$pc->mapc];
-                            $a_solieu['st_pck'] += $a_solieu_moi[$mapc_st];
+                            $a_solieu_moi['st_pck'] += $a_solieu_moi[$mapc_st];
                             $a_solieu_moi[$pc->mapc] = 0;
                             $a_solieu_moi[$mapc_st] = 0;
                         }
@@ -644,7 +647,8 @@ class nguonkinhphi_donvi_baocaoController extends Controller
                     }
                     //Ở ngoài nhóm phụ cấp => đưa hết vào pck
                     foreach ($m_phucap as $pc) {
-                        if (!in_array($pc->mapc, $a_phucap)) {
+                        if (!in_array($pc->mapc, $array_phucap)) {
+                            $mapc_st = 'st_' . $pc->mapc;
                             $a_solieu['pck'] += $a_solieu[$pc->mapc];
                             $a_solieu['st_pck'] += $a_solieu[$mapc_st];
                             $a_solieu[$pc->mapc] = 0;
@@ -672,7 +676,8 @@ class nguonkinhphi_donvi_baocaoController extends Controller
                     }
                     //Ở ngoài nhóm phụ cấp => đưa hết vào pck
                     foreach ($m_phucap as $pc) {
-                        if (!in_array($pc->mapc, $a_phucap)) {
+                        if (!in_array($pc->mapc, $array_phucap)) {
+                            $mapc_st = 'st_' . $pc->mapc;
                             $a_solieu_moi['pck'] += $a_solieu_moi[$pc->mapc];
                             $a_solieu_moi['st_pck'] += $a_solieu_moi[$mapc_st];
                             $a_solieu_moi[$pc->mapc] = 0;
@@ -724,7 +729,8 @@ class nguonkinhphi_donvi_baocaoController extends Controller
                     }
                     //Ở ngoài nhóm phụ cấp => đưa hết vào pck
                     foreach ($m_phucap as $pc) {
-                        if (!in_array($pc->mapc, $a_phucap)) {
+                        if (!in_array($pc->mapc, $array_phucap)) {
+                            $mapc_st = 'st_' . $pc->mapc;
                             $a_solieu['pck'] += $a_solieu[$pc->mapc];
                             $a_solieu['st_pck'] += $a_solieu[$mapc_st];
                             $a_solieu[$pc->mapc] = 0;
@@ -754,7 +760,8 @@ class nguonkinhphi_donvi_baocaoController extends Controller
 
                     //Ở ngoài nhóm phụ cấp => đưa hết vào pck
                     foreach ($m_phucap as $pc) {
-                        if (!in_array($pc->mapc, $a_phucap)) {
+                        if (!in_array($pc->mapc, $array_phucap)) {
+                            $mapc_st = 'st_' . $pc->mapc;
                             $a_solieu_moi['pck'] += $a_solieu_moi[$pc->mapc];
                             $a_solieu_moi['st_pck'] += $a_solieu_moi[$mapc_st];
                             $a_solieu_moi[$pc->mapc] = 0;
@@ -773,7 +780,7 @@ class nguonkinhphi_donvi_baocaoController extends Controller
                     $ar_III[$key]['chenhlech06thang'] = $ar_III[$key]['chenhlech01thang'] * 6;
                 }
             }
-
+// dd($ar_III);
             //Vòng cấp độ 2
             foreach ($ar_III as $key => $chitiet) {
                 if ($chitiet['phanloai'] == '1') {
@@ -867,7 +874,8 @@ class nguonkinhphi_donvi_baocaoController extends Controller
                     }
                     //Ở ngoài nhóm phụ cấp => đưa hết vào pck
                     foreach ($m_phucap as $pc) {
-                        if (!in_array($pc->mapc, $a_phucap)) {
+                        if (!in_array($pc->mapc, $array_phucap)) {
+                            $mapc_st = 'st_' . $pc->mapc;
                             $a_solieu['pck'] += $a_solieu[$pc->mapc];
                             $a_solieu['st_pck'] += $a_solieu[$mapc_st];
                             $a_solieu[$pc->mapc] = 0;
@@ -895,7 +903,8 @@ class nguonkinhphi_donvi_baocaoController extends Controller
                     }
                     //Ở ngoài nhóm phụ cấp => đưa hết vào pck
                     foreach ($m_phucap as $pc) {
-                        if (!in_array($pc->mapc, $a_phucap)) {
+                        if (!in_array($pc->mapc, $array_phucap)) {
+                            $mapc_st = 'st_' . $pc->mapc;
                             $a_solieu_moi['pck'] += $a_solieu_moi[$pc->mapc];
                             $a_solieu_moi['st_pck'] += $a_solieu_moi[$mapc_st];
                             $a_solieu_moi[$pc->mapc] = 0;
@@ -1010,7 +1019,7 @@ class nguonkinhphi_donvi_baocaoController extends Controller
                 $a_Tong['solieu'][$mapc_st] = $ar_I[0]['solieu'][$mapc_st] + $ar_II[0]['solieu'][$mapc_st]
                     + $ar_III[0]['solieu'][$mapc_st] + $ar_IV[0]['solieu'][$mapc_st];
             }
-            // dd($ar_I);
+            // dd($ar_III);
             //dd($m_tonghop_ct);
 
             if($inputs['mau']==1){
