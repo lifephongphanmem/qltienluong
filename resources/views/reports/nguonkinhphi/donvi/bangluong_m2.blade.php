@@ -84,14 +84,17 @@
             $model_luong = $model->where('mact', $key);
             ?>
             @if (count($model_luong) > 0)
-                <?php $stt = 1; ?>
+            <?php
+            $stt = 0;
+            $a_macanbo = [];
+            ?>
                 <tr style="font-weight: bold; font-style:italic ">
                     <td>{{ convert2Roman($i++) }}</td>
                     <td style="text-align: left;" colspan="{{ 11 + $col }}">{{ $val }}</td>
                 </tr>
                 @foreach ($model_luong as $ct)
                     <tr>
-                        <td>{{ $stt++ }}</td>
+                        <td>{{ in_array($ct->macanbo, $a_macanbo) ? $stt : ++$stt }}</td>
                         <td style="text-align: left">{{ $ct->tencanbo }}</td>
                         <td style="text-align: left">{{ $ct->msngbac }}</td>
 
@@ -109,6 +112,10 @@
                         <td class="text-right">{{ dinhdangso($ct->ttbh_dv + $ct->luongtn) }}</td>
                         <td></td>
                     </tr>
+                    <!-- Thêm số thứ tự vào mảng để khi gặp lại sẽ bỏ qua ko tự động tăng -->
+                    <?php
+                    $a_macanbo[] = $ct->macanbo;
+                    ?>
                 @endforeach
 
                 <tr style="font-weight: bold; text-align: center; font-style: italic">

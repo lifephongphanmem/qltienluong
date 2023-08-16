@@ -528,7 +528,7 @@ class nguonkinhphiController extends Controller
             // $a_cuv = ['1536459380', '1558600713', '1536459382', '1558945077',];
 
             $m_data = a_split_key($a_data, array('mact', 'macongtac'), 'mact');
-            //dd( $m_data);
+            // dd( $a_data);
             $m_data_phucap = a_unique($m_data);
             $m_data_01thang = a_unique($m_data);
             //$m_data = a_unique($m_data);            
@@ -538,8 +538,7 @@ class nguonkinhphiController extends Controller
             for ($i = 0; $i < count($m_data_phucap); $i++) {
                 $m_data_phucap[$i]['masodv'] = $masodv;
                 $dutoan = a_getelement($a_data, array('mact' => $m_data_phucap[$i]['mact']));
-
-                $m_data_phucap[$i]['canbo_congtac'] = count($dutoan);
+                $m_data_phucap[$i]['canbo_congtac'] = count(array_unique(array_column($dutoan, 'macanbo')));
                 $m_data_phucap[$i]['canbo_dutoan'] = $m_data_phucap[$i]['canbo_congtac'];
                 $m_data_phucap[$i]['ttl'] = array_sum(array_column($dutoan, "luongtn"));
                 foreach ($a_pc_tonghop as $pc) {
@@ -557,8 +556,9 @@ class nguonkinhphiController extends Controller
             for ($i = 0; $i < count($m_data_01thang); $i++) {
                 $m_data_01thang[$i]['masodv'] = $masodv;
                 $dutoan = a_getelement($a_data, array('mact' => $m_data_01thang[$i]['mact'], 'thang' => '07'));
-
-                $m_data_01thang[$i]['canbo_congtac'] = count($dutoan);
+                //dd();
+                $m_data_01thang[$i]['canbo_congtac'] = count(array_unique(array_column($dutoan, 'macanbo')));
+                // $m_data_01thang[$i]['canbo_congtac'] = count($dutoan);
                 $m_data_01thang[$i]['canbo_dutoan'] = $m_data_01thang[$i]['canbo_congtac'];
                 $m_data_01thang[$i]['ttl'] = array_sum(array_column($dutoan, "luongtn"));
                 foreach ($a_pc_tonghop as $pc) {
@@ -576,7 +576,7 @@ class nguonkinhphiController extends Controller
                 $m_data_01thang[$i]['kpcd_dv'] = round($m_data_01thang[$i]['stkpcd_dv'] / $inputs['chenhlech'], 7);
                 $m_data_01thang[$i]['tongbh_dv'] = $m_data_01thang[$i]['bhxh_dv'] + $m_data_01thang[$i]['bhyt_dv'] + $m_data_01thang[$i]['bhtn_dv'] + $m_data_01thang[$i]['kpcd_dv'];
             }
-
+            //dd($m_data_01thang);
             $inputs['sobiencheduocgiao'] = 0;
             if (session('admin')->maphanloai == 'KVXP') {
                 $a_nhomplct = array_column(dmphanloaict::all()->toArray(), 'nhomnhucau_xp', 'mact');
@@ -777,7 +777,7 @@ class nguonkinhphiController extends Controller
                 //Mẫu 2k
                 'soluonggiam_2k',
                 'quyluonggiam_2k',
-                
+
                 //Mẫu 4a
                 'nhucau',
                 'kinhphigiamxa_4a',
@@ -801,7 +801,7 @@ class nguonkinhphiController extends Controller
                 'huydongktx_hocphi_4a',
                 'huydongktx_vienphi_4a',
                 'huydongktx_khac_4a',
-                
+
             ];
             foreach ($a_truong  as $truong) {
                 if (isset($inputs[$truong]))
