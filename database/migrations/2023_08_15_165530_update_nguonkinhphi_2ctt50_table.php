@@ -28,8 +28,6 @@ class UpdateNguonkinhphi2ctt50Table extends Migration
             $table->double('sochuyentuthon350hgd_tong')->default(0);
             $table->double('sothonconlai_tong')->default(0);
             $table->double('sotoconlai_tong')->default(0);
-            
-           
         });
     }
 

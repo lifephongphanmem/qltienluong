@@ -712,6 +712,13 @@ class nguonkinhphiController extends Controller
             // dd($inputs);
             $model = nguonkinhphi::where('masodv', $inputs['masodv'])->first();
 
+            //Sau xây dựng các trường trong thông tư
+            $a_solieu = [
+                '2b' => 13950,
+                '2d' => 1490000,
+                '2d_ndcu' => 'ND34/2019',
+            ];
+
             $a_truong = [
                 'bosung',
                 'caicach',
@@ -752,6 +759,14 @@ class nguonkinhphiController extends Controller
                 'sothonconlai_2d',
                 'sotoconlai_2d',
 
+                //mẫu 2d tt50
+                'soluongcanbo_2d',
+                'hesoluongbq_2d',
+                'hesophucapbq_2d',
+                'tyledonggop_2d',
+                'soluongdinhbien_2d',
+                'quyluonggiam_2k',
+
                 'tongsonguoi2015', //mẫu 2đ
                 'tongsonguoi2017', //mẫu 2đ
                 'quyluong', //mẫu 2đ
@@ -776,7 +791,6 @@ class nguonkinhphiController extends Controller
                 'hesophucap_2i',
                 //Mẫu 2k
                 'soluonggiam_2k',
-                'quyluonggiam_2k',
 
                 //Mẫu 4a
                 'nhucau',
@@ -808,10 +822,15 @@ class nguonkinhphiController extends Controller
                     $inputs[$truong] = chkDbl($inputs[$truong]);
             }
             //Tính toán số liệu mẫu 2b (310000*4.5% = 13950)
-            $inputs['quy1_tong'] = round(($inputs['quy3_1'] - $inputs['quy1_1'] + $inputs['quy2_1'] - $inputs['quy1_1'] + $inputs['tongsonguoi1'] * 13950) * 6);
-            $inputs['quy2_tong'] = round(($inputs['quy3_2'] - $inputs['quy1_2'] + $inputs['quy2_2'] - $inputs['quy1_2'] + $inputs['tongsonguoi2'] * 13950) * 6);
-            $inputs['quy3_tong'] = round(($inputs['quy3_3'] - $inputs['quy1_3'] + $inputs['quy2_3'] - $inputs['quy1_3'] + $inputs['tongsonguoi3'] * 13950) * 6);
-            //dd($inputs);
+            $inputs['quy1_tong'] = round(($inputs['quy3_1'] - $inputs['quy1_1'] + $inputs['quy2_1'] - $inputs['quy1_1'] + $inputs['tongsonguoi1'] * $a_solieu['2b']) * 6);
+            $inputs['quy2_tong'] = round(($inputs['quy3_2'] - $inputs['quy1_2'] + $inputs['quy2_2'] - $inputs['quy1_2'] + $inputs['tongsonguoi2'] * $a_solieu['2b']) * 6);
+            $inputs['quy3_tong'] = round(($inputs['quy3_3'] - $inputs['quy1_3'] + $inputs['quy2_3'] - $inputs['quy1_3'] + $inputs['tongsonguoi3'] * $a_solieu['2b']) * 6);
+
+            //dd(getSoLuongCanBoDinhMuc($a_solieu['2d_ndcu'], session('admin')->phanloaixa) - $inputs['soluongdinhbien_2d']);
+            //Tính toán số liệu mẫu 2d
+            $inputs['quyluonggiam_2k'] = round((getSoLuongCanBoDinhMuc($a_solieu['2d_ndcu'], session('admin')->phanloaixa) - $inputs['soluongdinhbien_2d'])
+                * ($inputs['hesoluongbq_2d'] + $inputs['hesophucapbq_2d'] + $inputs['tyledonggop_2d']) * $a_solieu['2d']);
+           
             $model->update($inputs);
             if ($inputs['huyen'] == 1) {
                 return redirect('chuc_nang/xem_du_lieu/nguon/huyen?sohieu=' . $model->sohieu . '&trangthai=ALL&phanloai=ALL');

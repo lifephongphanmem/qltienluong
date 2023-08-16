@@ -1293,3 +1293,25 @@ function getPhuCap2a_78()
             'pck' => 'Phụ cấp khác',
         ];
 }
+
+function getSoLuongCanBoDinhMuc($nghidinh, $phanloaixa)
+{
+    $a_kq = [
+        'ND34/2019' => [
+            'XL1'=> 23,
+            'XL2'=> 21,
+            'XL3'=> 19,
+        ],
+        'ND33/2023/XA' => [
+            'XL1'=> 22,
+            'XL2'=> 20,
+            'XL3'=> 18,
+        ],
+        'ND33/2023/PHUONG' => [
+            'XL1'=> 23,
+            'XL2'=> 21,
+            'XL3'=> 19,
+        ]
+    ];
+    return $a_kq[$nghidinh][$phanloaixa] ?? 0;
+}

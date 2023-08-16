@@ -2,151 +2,83 @@
 
 @section('content')
 
-    <table id="data_header" width="96%" border="0" cellspacing="0" cellpadding="4"
-        style="margin:0 auto 20px;text-align: center">
+    <table id="data_header" class="header" width="96%" border="0" cellspacing="0" cellpadding="8"
+        style="margin:0 auto 25px; text-align: center;">
         <tr>
-            <td style="text-align: left">
+            <td style="text-align: left;width: 60%">
+
+            </td>
+            <td style="text-align: center;">
+                <b>Biểu số 2c</b>
+            </td>
+        </tr>
+        <tr>
+            <td style="text-align: left;width: 60%">
                 <b>{{ 'Đơn vị: ' . $m_dv->tendv }}</b>
             </td>
-            <td style="text-align: right">
-                <b>Biểu số 2c</b><br>
+            <td style="text-align: center; font-style: italic">
+
             </td>
         </tr>
         <tr>
             <td colspan="2">
-                <b>BÁO CÁO NHU CẦU KINH PHÍ THỰC HIỆN BẢO HIỂM THẤT NGHIỆP </br> </b>
+                <b>TỔNG HỢP KINH PHÍ TĂNG THÊM THỰC HIỆN CHẾ ĐỘ PHỤ CẤP ĐỐI VỚI CÁN BỘ KHÔNG CHUYÊN TRÁCH CẤP XÃ, THÔN VÀ TỔ
+                    DÂN PHỐ NĂM 2023</b>
             </td>
         </tr>
         <tr>
             <td colspan="2">
-                {{-- <i>(Ban hành kèm theo Thông tư số 46/2019/TT-BTC ngày 23 tháng 7 năm 2019 của Bộ Tài chính)</i> --}}
-            </td>
-        </tr>
-        <tr>
-            <td>
-            </td>
-            <td style="text-align: right">
-                <i>Đơn vị:
-                    {{ $inputs['donvitinh'] == 1 ? 'Đồng' : ($inputs['donvitinh'] == 2 ? 'Nghìn đồng' : 'Triệu đồng') }}</i>
+                <p style="text-align: center; font-style: italic">(Ban hành kèm theo Thông tư số 50/2023/TT-BTC ngày 17
+                    tháng 7 năm 2023 của Bộ trưởng Bộ Tài chính)</p>
             </td>
         </tr>
     </table>
     <table id="data_body" width="96%" border="1" cellspacing="0" cellpadding="4"
         style="margin:0 auto 20px; text-align: center;">
         <tr>
-            <th style="width: 5%" rowspan="3">STT</th>
-            <th style="width: 30%" rowspan="3">Nội dung</th>
-            <th colspan="2">QT thu BHTN 2022</th>
-            <th rowspan="3">Biên chế được cấp có thẩm quyền giao hoặc phê duyệt năm 2023</th>
-            <th rowspan="3">Tổng số đối tượng hưởng lương có mặt đến 01/07/2023 nộp BHTN</th>
-            <th colspan="7">Tổng QL, phụ cấp và BH thất nghiệp tháng 07/2019 theo NĐ 38/2019/NĐ-CP</th>
-            <th colspan="7">Tổng QL, phụ cấp và BH thất nghiệp tháng 07/2019 theo NĐ 24/2023/NĐ-CP</th>
-            <th rowspan="3">Chênh lệch bảo hiểm thất nghiệp tăng thêm 1 tháng</th>
-            <th rowspan="3">Nhu cầu thực hiện BHTN năm 2023</th>
+            <th style="width: 2%">STT</th>
+            <th>CHỈ TIÊU</th>
+            <th style="width: 8%">TỔNG ĐƠN VỊ HÀNH CHÍNH CẤP XÃ, THÔN </th>
+            <th style="width: 8%">MỨC KHOÁN QUỸ PHỤ CẤP 1 THÁNG THEO NGHỊ ĐỊNH 34/2019/NĐ-CP</th>
+            <th style="width: 8%">MỨC KHOÁN QUỸ PHỤ CẤP 1 THÁNG THEO NGHỊ ĐỊNH 33/2023/NĐ-CP</th>
+            <th style="width: 8%">CHÊNH LỆCH KINH PHÍ KHOÁN QUỸ PHỤ CẤP THÁNG 07 NĂM 2023</th>
+            <th style="width: 8%">CHÊNH LỆCH KINH PHÍ KHOÁN QUỸ PHỤ CẤP 05 THÁNG CUỐI NĂM 2023</th>
+            <th style="width: 8%">CHÊNH LỆCH KINH PHÍ KHOÁN QUỸ PHỤ CẤP NĂM 2023</th>
         </tr>
+
         <tr>
-            <th rowspan="2">Tổng số đối tượng</th>
-            <th rowspan="2">Thu của người lao động và người sử dụng lao động (2%) (đơn vị thuộc địa phương quản lý)</th>
-            <th rowspan="2">Tổng cộng</th>
-            <th rowspan="2">Mức lương theo ngạch, bậc, chức vụ</th>
-            <th rowspan="2">Tổng các khoản phụ cấp tính BHXH</th>
-            <th colspan="3">Trong đó</th>
-            <th rowspan="2">1% Bảo hiểm thất nghiệp</th>
-            <th rowspan="2">Tổng cộng</th>
-            <th rowspan="2">Mức lương theo ngạch, bậc, chức vụ</th>
-            <th rowspan="2">Tổng các khoản phụ cấp tính BHXH</th>
-            <th colspan="3">Trong đó</th>
-            <th rowspan="2">1% Bảo hiểm thất nghiệp</th>
-        </tr>
-        <tr>
-            <th>Phụ cấp chức vụ</th>
-            <th>Phụ cấp vượt khung</th>
-            <th>p.cấp thâm niên nghề</th>
-            <th>Phụ cấp chức vụ</th>
-            <th>Phụ cấp vượt khung</th>
-            <th>p.cấp thâm niên nghề</th>
-        </tr>
-        <tr>
-            <td></td>
-            <td></td>
+            <td>A</td>
+            <td>B</td>
             <td>1</td>
+            <td>2</td>
             <td>3</td>
-            <td>5</td>
-            <td>6</td>
-            <td>7</td>
-            <td>8</td>
-            <td>9</td>
-            <td>10</td>
-            <td>11</td>
-            <td>12</td>
-            <td>13</td>
-            <td>14</td>
-            <td>15</td>
-            <td>16</td>
-            <td>17</td>
-            <td>18</td>
-            <td>19</td>
-            <td>20</td>
-            <td>21</td>
-            <td>22=21*6T</td>
+            <td>4= 1x2x(1,8-1,49)</td>
+            <td>5=1x3x(1,8-1,49)</td>
+            <td>6=4+5</td>
         </tr>
         <tr style="font-weight: bold">
             <td></td>
-            <td>TÔNG SỐ</td>
-            <td>{{ dinhdangsothapphan($a_Tong['soluongqt_2c'], 2) }}</td>
-            <td>{{ dinhdangsothapphan($a_Tong['sotienqt_2c'], 2) }}</td>
-            <td>{{ dinhdangsothapphan($a_Tong['sobiencheduocgiao'], 2) }}</td>
-            <td>{{ dinhdangsothapphan($a_Tong['soluongcanbo_2c'], 2) }}</td>
+            <td>TỔNG SỐ</td>
+            <td class="text-center">{{ dinhdangsothapphan($a_It['tdv']) }}</td>
+            <td class="text-center">{{ dinhdangsothapphan($a_It['mk']) }}</td>
+            <td class="text-center">{{ dinhdangsothapphan($a_It['mk2']) }}</td>
+            <td class="text-right">{{ dinhdangsothapphan($a_It['clt7']) }}</td>
+            <td class="text-right">{{ dinhdangsothapphan($a_It['cl5t']) }}</td>
+            <td class="text-right">{{ dinhdangsothapphan($a_It['tong']) }}</td>
 
-            <td>{{ dinhdangsothapphan($a_Tong['tongluong_cu'], 3) }}</td>
-            <td>{{ dinhdangsothapphan($a_Tong['hesoluong_cu'], 3) }}</td>
-            <td>{{ dinhdangsothapphan($a_Tong['tongphucap_cu'], 3) }}</td>
-            <td>{{ dinhdangsothapphan($a_Tong['phucapchucvu_cu'], 3) }}</td>
-            <td>{{ dinhdangsothapphan($a_Tong['phucapvuotkhung_cu'], 3) }}</td>
-            <td>{{ dinhdangsothapphan($a_Tong['phucaptnn_cu'], 3) }}</td>
-            <td>{{ dinhdangsothapphan($a_Tong['baohiem_cu'], 3) }}</td>
-
-            <td>{{ dinhdangsothapphan($a_Tong['tongluong_moi'], 3) }}</td>
-            <td>{{ dinhdangsothapphan($a_Tong['hesoluong_moi'], 3) }}</td>
-            <td>{{ dinhdangsothapphan($a_Tong['tongphucap_moi'], 3) }}</td>
-            <td>{{ dinhdangsothapphan($a_Tong['phucapchucvu_moi'], 3) }}</td>
-            <td>{{ dinhdangsothapphan($a_Tong['phucapvuotkhung_moi'], 3) }}</td>
-            <td>{{ dinhdangsothapphan($a_Tong['phucaptnn_moi'], 3) }}</td>
-            <td>{{ dinhdangsothapphan($a_Tong['baohiem_moi'], 3) }}</td>
-
-            <td>{{ dinhdangsothapphan($a_Tong['chenhlech'], 3) }}</td>
-            <td>{{ dinhdangsothapphan($a_Tong['tongchenhlech'], 3) }}</td>
         </tr>
         @foreach ($ar_I as $dulieu)
-            <tr style=" text-align: right">
+            <tr style="text-align: right; {{ isset($dulieu['style']) ? $dulieu['style'] : '' }}">
                 <td style=" text-align: center">{{ $dulieu['tt'] }}</td>
                 <td style=" text-align: left">{{ $dulieu['noidung'] }}</td>
-                <td style=" text-align: center">{{ dinhdangsothapphan($dulieu['solieu']['soluongqt_2c'], 2) }}</td>
-                <td style=" text-align: center">{{ dinhdangsothapphan($dulieu['solieu']['sotienqt_2c'], 2) }}</td>
-                <td>{{ dinhdangsothapphan($dulieu['solieu']['sobiencheduocgiao'], 2) }}</td>
-                <td>{{ dinhdangsothapphan($dulieu['solieu']['soluongcanbo_2c'], 2) }}</td>
-
-                <td>{{ dinhdangsothapphan($dulieu['solieu']['tongluong_cu'], 3) }}</td>
-                <td>{{ dinhdangsothapphan($dulieu['solieu']['hesoluong_cu'], 3) }}</td>
-                <td>{{ dinhdangsothapphan($dulieu['solieu']['tongphucap_cu'], 3) }}</td>
-                <td>{{ dinhdangsothapphan($dulieu['solieu']['phucapchucvu_cu'], 3) }}</td>
-                <td>{{ dinhdangsothapphan($dulieu['solieu']['phucapvuotkhung_cu'], 3) }}</td>
-                <td>{{ dinhdangsothapphan($dulieu['solieu']['phucaptnn_cu'], 3) }}</td>
-                <td>{{ dinhdangsothapphan($dulieu['solieu']['baohiem_cu'], 3) }}</td>
-
-                <td>{{ dinhdangsothapphan($dulieu['solieu']['tongluong_moi'], 3) }}</td>
-                <td>{{ dinhdangsothapphan($dulieu['solieu']['hesoluong_moi'], 3) }}</td>
-                <td>{{ dinhdangsothapphan($dulieu['solieu']['tongphucap_moi'], 3) }}</td>
-                <td>{{ dinhdangsothapphan($dulieu['solieu']['phucapchucvu_moi'], 3) }}</td>
-                <td>{{ dinhdangsothapphan($dulieu['solieu']['phucapvuotkhung_moi'], 3) }}</td>
-                <td>{{ dinhdangsothapphan($dulieu['solieu']['phucaptnn_moi'], 3) }}</td>
-                <td>{{ dinhdangsothapphan($dulieu['solieu']['baohiem_moi'], 3) }}</td>
-
-                <td>{{ dinhdangsothapphan($dulieu['solieu']['chenhlech'], 3) }}</td>
-                <td>{{ dinhdangsothapphan($dulieu['solieu']['tongchenhlech'], 3) }}</td>
+                <td class="text-center">{{ dinhdangsothapphan($dulieu['solieu']['tdv']) }}</td>
+                <td class="text-center">{{ dinhdangsothapphan($dulieu['solieu']['mk'], 3) }}</td>
+                <td class="text-center">{{ dinhdangsothapphan($dulieu['solieu']['mk2'], 3) }}</td>
+                <td>{{ dinhdangsothapphan($dulieu['solieu']['clt7'], 0, $inputs['donvitinh']) }}</td>
+                <td>{{ dinhdangsothapphan($dulieu['solieu']['cl5t'], 0, $inputs['donvitinh']) }}</td>
+                <td>{{ dinhdangsothapphan($dulieu['solieu']['tong'], 0, $inputs['donvitinh']) }}</td>
             </tr>
         @endforeach
-
     </table>
 
     <table id="data_footer" class="header" width="96%" border="0" cellspacing="0" cellpadding="8"

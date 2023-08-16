@@ -69,7 +69,7 @@ class nguonkinhphi extends Model
         'quy1_tong',
         'quy2_tong',
         'quy3_tong',
-        //Mẫu 2c lưu theo thông tư 50
+        //Mẫu 2c tận dụng lại các trường theo tt cũ (lưu theo thông tư 50)
         'sotodanphobiengioi_2d',
         'sothon350hgd_2d',
         'sotodanpho500hgd_2d',
@@ -86,6 +86,14 @@ class nguonkinhphi extends Model
         'sothontrongdiem_2d',
         'sothonconlai_2d',
         'sotoconlai_2d',
+        //mẫu 2d tt50
+        'soluongcanbo_2d',
+        'hesoluongbq_2d',
+        'hesophucapbq_2d',
+        'tyledonggop_2d',
+        'soluongdinhbien_2d',
+        'quyluonggiam_2k',
+        
         //mẫu 2đ
         'tongsonguoi2015',
         'tongsonguoi2017', //mẫu 2đ
@@ -111,7 +119,7 @@ class nguonkinhphi extends Model
         'hesophucap_2i',
         //Mẫu 2k
         'soluonggiam_2k',
-        'quyluonggiam_2k',
+        
 
 
         //Mẫu 4a

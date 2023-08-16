@@ -22,8 +22,7 @@
         </tr>
         <tr>
             <td colspan="2">
-                {{-- <b>TỔNG HỢP KINH PHÍ TĂNG THÊM ĐỂ THỰC HIỆN CHẾ ĐỘ PHỤ CẤP ĐỐI VỚI CÁN BỘ KHÔNG CHUYÊN TRÁCH CẤP XÃ, THÔN VÀ TỔ DÂN PHỐ NĂM 2023</b> --}}
-                <b>TỔNG HỢP KINH PHÍ TĂNG/GIẢM THEO NGHỊ ĐỊNH SỐ 33/2023/NĐ-CP - CÁN BỘ, CÔNG CHỨC XÃ</b>
+                <b>TỔNG HỢP KINH PHÍ TĂNG/GIẢM THEO NGHỊ ĐỊNH SỐ 33/2023/NĐ-CP - CÁN BỘ, CÔNG CHỨC CẤP XÃ</b>
             </td>
         </tr>
         <tr>
@@ -35,58 +34,68 @@
     </table>
     <table id="data_body" width="96%" border="1" cellspacing="0" cellpadding="4"
         style="margin:0 auto 20px; text-align: center;">
-        <tr>
-            <th rowspan="2" style="width: 5%">STT</th>
-            <th rowspan="2" style="width: 30%">CHỈ TIÊU</th>
-            <th rowspan="2">TỔNG ĐƠN VỊ HÀNH CHÍNH CẤP XÃ, THÔN </th>
-            <th colspan="2">MỨC KHOÁN QUỸ PHỤ CẤP 1 THÁNG</th>
-            <th rowspan="2">SỐ LƯỢNG CÁN BỘ KCT CẤP XÃ CÓ MẶT</th>
-            <th colspan="2">KHOÁN QUỸ PHỤ CẤP THÁNG 7 THEO NGHỊ ĐỊNH 34 (LƯƠNG 1,49)</th>
-            <th rowspan="2">KHOÁN QUỸ PHỤ CẤP THÁNG 7 THEO NGHỊ ĐỊNH 24 (LƯƠNG 1,8)</th>
-            <th rowspan="2">CHÊNH LỆCH KINH PHÍ KHOÁN QUỸ PHỤ CẤP 6 T NĂM 2023</th>
-        </tr>
-        <tr>
-            <th>Theo Nghị định 29/2013/NĐ-CP <sup>(1)</sup></th>
-            <th>Theo Nghị định 34/2019/NĐ-CP</th>
-            <th>KHOÁN QUỸ <br> PHỤ CẤP</th>
-            <th>BHXH (14%) CHO <br> CÁN BỘ KCT CẤP XÃ</th>
-        </tr>
-        <tr>
-            <td>A</td>
-            <td>B</td>
-            <td>1</td>
-            <td>2</td>
-            <td>3</td>
-            <td>4</td>
-            <td>5= 1*2*1,8</td>
-            <td>6=4x14%x1,8</td>
-            <td>7=1x3x1,8</td>
-            <td>8= (7-6-5) x 6T</td>
-        </tr>
-        <tr style="font-weight: bold">
-            <td></td>
-            <td>TỔNG SỐ</td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-        </tr>
+        <thead>
+            <tr>
+                <th rowspan="2" style="width: 5%">STT</th>
+                <th rowspan="2">Chỉ tiêu</th>
+                <th rowspan="2" style="width: 5%">Tổng số đơn vị hành chính cấp xã</th>
+                <th colspan="2">Số lượng cán bộ, công chức cấp xã theo Nghị định 34/2019/NĐ-CP</th>
+                <th rowspan="2" style="width: 5%">Số lượng công chức cấp xã đã tính định mức năm 2022</th>
+                <th colspan="3">Trong đó hệ số tính định mức năm 2022</th>
+                <th colspan="2">Số lượng cán bộ, công chức cấp xã theo quy định tại Nghị định 33/2023/NĐ-CP</th>
+                <th rowspan="2" style="width: 5%">Số lượng cán bộ, công chức cấp xã tăng/giảm so với định mức</th>
+                <th rowspan="2" style="width: 5%">Qũy lương, phụ cấp, các khoản đóng góp tăng/giảm 1 tháng (lương 1,49)
+                </th>
+                <th rowspan="2" style="width: 5%">Quỹ lương, phụ cấp tăng/giảm năm 2023 (lương 1,49)</th>
+            </tr>
+            <tr>
+                <th style="width: 5%">Định biên theo Nghị định 34/2019/NĐ-CP</th>
+                <th style="width: 5%">Tổng số</th>
+
+                <th style="width: 5%">Hệ số lương ngạch bậc bình quân</th>
+                <th style="width: 5%">Hệ số phụ cấp bình quân</th>
+                <th style="width: 5%">Tỷ lệ phụ cấp tính các khoản đóng góp</th>
+
+                <th style="width: 5%">Định biên theo Nghị định 33/2023/NĐ-CP</th>
+                <th style="width: 5%">Tổng số</th>
+
+            </tr>
+            <tr>
+                <td>A</td>
+                <td>B</td>
+                <td>1</td>
+                <td>2</td>
+                <td>3=1*2</td>
+                <td>4</td>
+                <td>5</td>
+                <td>6</td>
+                <td>7</td>
+                <td>8</td>
+                <td>9=1*8</td>
+                <td>10=3-9</td>
+                <td>11</td>
+                <td>12=11x5T</td>
+            </tr>
+        </thead>
+
         @foreach ($ar_I as $dulieu)
-            <tr style=" text-align: right">
-                <td style=" text-align: center">{{ $dulieu['tt'] }}</td>
-                <td style=" text-align: left">{{ $dulieu['noidung'] }}</td>
-                <td>{{ dinhdangsothapphan($dulieu['solieu']['tdv']) }}</td>
-                <td>{{ dinhdangsothapphan($dulieu['solieu']['mk'], 3) }}</td>
-                <td>{{ dinhdangsothapphan($dulieu['solieu']['mk2'], 3) }}</td>
-                <td>{{ dinhdangsothapphan($dulieu['solieu']['dt'], 0, $inputs['donvitinh']) }}</td>
-                <td>{{ dinhdangsothapphan($dulieu['solieu']['kqpc'], 0, $inputs['donvitinh']) }}</td>
-                <td>{{ dinhdangsothapphan($dulieu['solieu']['bhxh'], 0, $inputs['donvitinh']) }}</td>
-                <td>{{ dinhdangsothapphan($dulieu['solieu']['kqpct7'], 0, $inputs['donvitinh']) }}</td>
-                <td>{{ dinhdangsothapphan($dulieu['solieu']['tong'], 0, $inputs['donvitinh']) }}</td>
+            <tr style=" text-align: right;{{ $dulieu['style'] }}">
+                <td style=" text-align: center;">{{ $dulieu['tt'] }}</td>
+                <td style=" text-align: left;">{{ $dulieu['noidung'] }}</td>
+                <td>{{ dinhdangsothapphan($dulieu['solieu']['soluongdonvi_2k'], $inputs['lamtron']) }}</td>
+                <td>{{ dinhdangsothapphan($dulieu['solieu']['qd34_2d'], $inputs['lamtron']) }}</td>
+                <td>{{ dinhdangsothapphan($dulieu['solieu']['tongqd34_2d'], $inputs['lamtron']) }}</td>
+                <td>{{ dinhdangsothapphan($dulieu['solieu']['soluongcanbo_2d'], $inputs['lamtron']) }}</td>
+                <td>{{ dinhdangsothapphan($dulieu['solieu']['hesoluongbq_2d'], $inputs['lamtron']) }}</td>
+                <td>{{ dinhdangsothapphan($dulieu['solieu']['hesophucapbq_2d'], $inputs['lamtron']) }}</td>
+                <td>{{ dinhdangsothapphan($dulieu['solieu']['tyledonggop_2d'], $inputs['lamtron']) }}</td>
+                <td></td>
+                <td>{{ dinhdangsothapphan($dulieu['solieu']['soluongdinhbien_2d'], $inputs['lamtron']) }}</td>
+                <td>{{ dinhdangsothapphan($dulieu['solieu']['tongqd34_2d'] - $dulieu['solieu']['soluongdinhbien_2d'], $inputs['lamtron']) }}
+                </td>
+               
+                <td>{{ dinhdangsothapphan($dulieu['solieu']['quyluonggiam_2k'], $inputs['lamtron']) }}</td>
+                <td>{{ dinhdangsothapphan($dulieu['solieu']['tongquyluonggiam_2k'], $inputs['lamtron']) }}</td>
             </tr>
         @endforeach
     </table>

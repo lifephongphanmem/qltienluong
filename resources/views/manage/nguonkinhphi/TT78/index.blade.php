@@ -34,37 +34,12 @@
                                 <p class="description"><i class="glyphicon glyphicon-check"></i>Mẫu 2d</p>
                             </a>
                         </li>
-                        <li><a href="#tab2dd" data-toggle="tab" class="step">
-                                <p class="description"><i class="glyphicon glyphicon-check"></i>
-                                    Mẫu 2đ</p>
-                            </a>
-                        </li>
-                        <li><a href="#tab2e" data-toggle="tab" class="step">
+                       
+                        {{-- <li><a href="#tab2e" data-toggle="tab" class="step">
                                 <p class="description"> <i class="glyphicon glyphicon-check"></i> Mẫu 2e</p>
                             </a>
-                        </li>
-
-                        <li>
-                            <a href="#tab2h" data-toggle="tab" class="step">
-                                <p class="description"> <i class="glyphicon glyphicon-check"></i> Mẫu 2h</p>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="#tab2i" data-toggle="tab" class="step">
-                                <p class="description"> <i class="glyphicon glyphicon-check"></i> Mẫu 2i</p>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="#tab2k" data-toggle="tab" class="step">
-                                <p class="description"> <i class="glyphicon glyphicon-check"></i> Mẫu 2k</p>
-                            </a>
-                        </li>
-                        {{-- <li>
-                            <a href="#tab2l" data-toggle="tab" class="step">
-                                <p class="description"> <i class="glyphicon glyphicon-check"></i> Mẫu 2l</p>
-                            </a>
                         </li> --}}
-
+                        
                         <li><a href="#tab4a" data-toggle="tab" class="step">
                             <p class="description"><i class="glyphicon glyphicon-check"></i>Mẫu 4a</p>
                         </a>
@@ -88,11 +63,7 @@
                         @include('manage.nguonkinhphi.TT78.mau2b')
                         @include('manage.nguonkinhphi.TT78.mau2c')
                         @include('manage.nguonkinhphi.TT78.mau2d')
-                        @include('manage.nguonkinhphi.TT78.mau2dd')
                         @include('manage.nguonkinhphi.TT78.mau2e')
-                        @include('manage.nguonkinhphi.TT78.mau2h')
-                        @include('manage.nguonkinhphi.TT78.mau2i')
-                        @include('manage.nguonkinhphi.TT78.mau2k')
                     </div>
                 </div>
             </div>
