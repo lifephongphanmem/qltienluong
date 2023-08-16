@@ -104,7 +104,7 @@
                     @foreach ($model_luong as $ct)
                         <?php
                         if ($ct->tonghs <= 0) {
-                            continous;
+                            continue;
                         }
                         ?>
                         <tr style="text-align: center">
