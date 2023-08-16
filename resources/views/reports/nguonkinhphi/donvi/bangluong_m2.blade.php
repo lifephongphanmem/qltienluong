@@ -84,15 +84,20 @@
             $model_luong = $model->where('mact', $key);
             ?>
             @if (count($model_luong) > 0)
-            <?php
-            $stt = 0;
-            $a_macanbo = [];
-            ?>
+                <?php
+                $stt = 0;
+                $a_macanbo = [];
+                ?>
                 <tr style="font-weight: bold; font-style:italic ">
                     <td>{{ convert2Roman($i++) }}</td>
                     <td style="text-align: left;" colspan="{{ 11 + $col }}">{{ $val }}</td>
                 </tr>
                 @foreach ($model_luong as $ct)
+                    <?php
+                    if ($ct->tonghs <= 0) {
+                        continous;
+                    }
+                    ?>
                     <tr>
                         <td>{{ in_array($ct->macanbo, $a_macanbo) ? $stt : ++$stt }}</td>
                         <td style="text-align: left">{{ $ct->tencanbo }}</td>
@@ -131,7 +136,8 @@
                     <td class="text-right">{{ dinhdangso($model_luong->sum('stkpcd_dv')) }}</td>
                     <td class="text-right">{{ dinhdangso($model_luong->sum('stbhtn_dv')) }}</td>
                     <td class="text-right">{{ dinhdangso($model_luong->sum('ttbh_dv')) }}</td>
-                    <td class="text-right">{{ dinhdangso($model_luong->sum('ttbh_dv') + $model_luong->sum('luongtn')) }}</td>
+                    <td class="text-right">{{ dinhdangso($model_luong->sum('ttbh_dv') + $model_luong->sum('luongtn')) }}
+                    </td>
                     <td></td>
                 </tr>
             @endif

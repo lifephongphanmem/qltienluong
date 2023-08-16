@@ -143,7 +143,7 @@
                             style="border-width: 0px" class="btn btn-default btn-xs mbs"
                             data-target="#mautt107-modal" data-toggle="modal">
                             <i class="fa fa-print"></i>&nbsp;Tổng hợp kinh phí tăng theo nghị định 34/2023/NĐ-CP -
-                            người hoạt động không chuyên trách ở cấp xã, ở thôn, tổ dân phố(Mẫu 2e)</button>
+                            người hoạt động không chuyên trách ở cấp xã, ở thôn, tổ dân phố (Mẫu 2e)</button>
                     </div>
                 </div>                
             </div>           

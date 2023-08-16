@@ -1843,12 +1843,12 @@ class nguonkinhphi_donvi_baocaoController extends Controller
             ];
 
             $a_It = array(
-                'tdv' =>  $ar_I[1]['solieu']['tdv'] + $ar_I[4]['solieu']['tdv'],
+                'tdv' =>  $ar_I[0]['solieu']['tdv'] + $ar_I[4]['solieu']['tdv'],
                 'mk' => 0,
                 'mk2' => 0,
-                'clt7' =>  $ar_I[1]['solieu']['clt7'] + $ar_I[4]['solieu']['clt7'],
-                'cl5t' =>  $ar_I[1]['solieu']['cl5t'] + $ar_I[4]['solieu']['cl5t'],
-                'tong' =>  $ar_I[1]['solieu']['tong'] + $ar_I[4]['solieu']['tong'],
+                'clt7' =>  $ar_I[0]['solieu']['clt7'] + $ar_I[4]['solieu']['clt7'],
+                'cl5t' =>  $ar_I[0]['solieu']['cl5t'] + $ar_I[4]['solieu']['cl5t'],
+                'tong' =>  $ar_I[0]['solieu']['tong'] + $ar_I[4]['solieu']['tong'],
             );
 
 
@@ -2152,12 +2152,12 @@ class nguonkinhphi_donvi_baocaoController extends Controller
             ];
 
             $a_It = array(
-                'tdv' =>  $ar_I[1]['solieu']['tdv'] + $ar_I[4]['solieu']['tdv'],
+                'tdv' =>  $ar_I[0]['solieu']['tdv'] + $ar_I[4]['solieu']['tdv'],
                 'mk' => 0,
                 'mk2' => 0,
-                'clt7' =>  $ar_I[1]['solieu']['clt7'] + $ar_I[4]['solieu']['clt7'],
-                'cl5t' =>  $ar_I[1]['solieu']['cl5t'] + $ar_I[4]['solieu']['cl5t'],
-                'tong' =>  $ar_I[1]['solieu']['tong'] + $ar_I[4]['solieu']['tong'],
+                'clt7' =>  $ar_I[0]['solieu']['clt7'] + $ar_I[4]['solieu']['clt7'],
+                'cl5t' =>  $ar_I[0]['solieu']['cl5t'] + $ar_I[4]['solieu']['cl5t'],
+                'tong' =>  $ar_I[0]['solieu']['tong'] + $ar_I[4]['solieu']['tong'],
             );
 
 
@@ -2216,11 +2216,8 @@ class nguonkinhphi_donvi_baocaoController extends Controller
 
             //Số liệu đơn vị
             foreach ($m_nguonkp as $chitiet) {
-                //Tinh số liệu 2b
-                //BH=tongsonguoi1 * 0.1 * 4,5% (đơn vị: Triệu đồng) 
-                $chitiet->nhucau2b = round(($chitiet->quy2_1 - $chitiet->quy1_1 + $chitiet->tongsonguoi1 * 450000) * 6) +
-                    round(($chitiet->quy2_2 - $chitiet->quy1_2 + $chitiet->tongsonguoi2 * 450000) * 6) +
-                    round(($chitiet->quy2_3 - $chitiet->quy1_3 + $chitiet->tongsonguoi3 * 450000) * 6);
+                //Tinh số liệu 2b                
+                $chitiet->nhucau2b = round($chitiet->quy1_tong + $chitiet->quy2_tong + $chitiet->quy3_tong);
             }
 
             //Phần A
@@ -2468,5 +2465,4 @@ class nguonkinhphi_donvi_baocaoController extends Controller
         } else
             return view('errors.notlogin');
     }
-
 }

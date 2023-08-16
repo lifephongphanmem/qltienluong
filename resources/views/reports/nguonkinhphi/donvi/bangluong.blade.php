@@ -102,6 +102,11 @@
                         <td style="text-align: left;" colspan="{{ 11 + $col }}">{{ $a_ct[$congtac['mact']] }}</td>
                     </tr>
                     @foreach ($model_luong as $ct)
+                        <?php
+                        if ($ct->tonghs <= 0) {
+                            continous;
+                        }
+                        ?>
                         <tr style="text-align: center">
                             <td>{{ in_array($ct->macanbo, $a_macanbo) ? $stt : ++$stt }}</td>
                             <td style="text-align: left">{{ $ct->tencanbo }}</td>
