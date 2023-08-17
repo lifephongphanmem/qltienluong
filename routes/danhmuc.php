@@ -86,6 +86,7 @@ Route::group(['prefix' => 'danh_muc'], function () {
         Route::get('update_sunghiep', 'dmdonvibaocaoController@update_sunghiep');
         Route::get('update_nguonkp', 'dmdonvibaocaoController@update_nguonkp');
         Route::get('del_dscanbo/{maso}', 'dmdonvibaocaoController@del_dscanbo');
+        Route::get('update_linhvuchoatdong', 'dmdonvibaocaoController@update_linhvuchoatdong');
 
         Route::get('getPhanLoai', 'ajaxController@getPhanLoai');
     });

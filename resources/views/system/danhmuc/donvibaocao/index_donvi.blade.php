@@ -146,6 +146,10 @@
                                     <a href="#tab_2" data-toggle="tab" aria-expanded="true">
                                         Nguồn kinh phí </a>
                                 </li>
+                                <li>
+                                    <a href="#tab_3" data-toggle="tab" aria-expanded="true">
+                                        Lĩnh vực hoạt động </a>
+                                </li>
                             </ul>
                             <div class="tab-content">
                                 <!-- phân loại công tác -->
@@ -303,6 +307,45 @@
                                         </div>
                                     </div>
                                 </div>
+
+                                <!-- Lĩnh vực hoạt đôngf -->
+                                <div class="tab-pane" id="tab_3">
+                                    <div class="portlet box blue">
+                                        <div class="portlet-title">
+                                            <div class="caption"></div>
+                                            <div class="tools"></div>
+                                        </div>
+                                        <div class="portlet-body form">
+                                            <!-- BEGIN FORM-->
+                                            <form action="/danh_muc/khu_vuc/update_linhvuchoatdong" class="form-horizontal" id="frm_lvhd">
+                                                <div class="form-body">
+                                                    <div class="form-horizontal">
+                                                        <div class="col-md-6">
+                                                            <div class="form-group">
+                                                                <label class="control-label">Lĩnh vực công tác </label>
+                                                                <select class="form-control select2me" name="linhvuchoatdong[]" multiple="multiple">                                                                    
+                                                                        @foreach($m_linhvuc as $key=>$value)
+                                                                            <option value="{{$key}}">{{$value}}</option>
+                                                                        @endforeach
+                                                                    
+                                                                </select>
+                                                            </div>
+                                                        </div>
+                                                        <input type="hidden" id="madv" name="madv"/>
+                                                    </div>
+                                                </div>
+                                                <div class="form-actions">
+                                                    <div class="row text-center">
+                                                        <div class="col-md-12">
+                                                            <button type="submit" class="btn default">Hoàn thành</button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </form>
+                                            <!-- END FORM-->
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -323,6 +366,7 @@
             $('#frm_plct').find("[id^='madv']").val(madv);
             $('#frm_sunghiep').find("[id^='madv']").val(madv);
             $('#frm_nguonkp').find("[id^='madv']").val(madv);
+            $('#frm_lvhd').find("[id^='madv']").val(madv);
         }
 
         $(function(){

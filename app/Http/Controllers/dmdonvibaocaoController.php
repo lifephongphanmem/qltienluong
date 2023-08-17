@@ -130,11 +130,13 @@ class dmdonvibaocaoController extends Controller
             }
             $model_nhomct = dmphanloaicongtac::select('macongtac', 'tencongtac')->get();
             $model_tenct = dmphanloaict::select('tenct', 'macongtac', 'mact')->get();
+            $m_linhvuc = array_column(dmkhoipb::all()->toArray(), 'tenkhoipb', 'makhoipb');
 
             return view('system.danhmuc.donvibaocao.index_donvi')
                 ->with('model', $model)
                 ->with('model_nhomct', $model_nhomct)
                 ->with('model_tenct', $model_tenct)
+                ->with('m_linhvuc', $m_linhvuc)
                 ->with('a_donvi', array_column($model_donvi->where('phanloaitaikhoan','<>','TH')->toarray(),'tendv', 'madv'))
                 ->with('inputs', $inputs)
                 ->with('url', '/danh_muc/khu_vuc/')
@@ -384,6 +386,23 @@ class dmdonvibaocaoController extends Controller
             $model = dmdonvi::where('madv',$inputs['madv'])->first();
             DB::statement("Update hosocanbo set manguonkp = '".$inputs['manguonkp']."' where mact='".$inputs['mact']."' and madv ='".$inputs['madv']."'");
             DB::statement("Update hosocanbo_kiemnhiem set manguonkp = '".$inputs['manguonkp']."' where mact='".$inputs['mact']."' and madv ='".$inputs['madv']."'");
+            return redirect('/danh_muc/khu_vuc/chi_tiet?ma_so='.$model->madvbc.'&phan_loai='.$model->phanloaitaikhoan);
+        }else
+            return view('errors.notlogin');
+    }
+
+    function update_linhvuchoatdong(Request $request){
+        if (Session::has('admin')) {
+            $inputs = $request->all();
+            if(isset($inputs['linhvuchoatdong'])){
+                $inputs['linhvuchoatdong'] = implode(',',$inputs['linhvuchoatdong']);
+            }else{
+                $inputs['linhvuchoatdong'] = '';
+            }
+
+            $model = dmdonvi::where('madv',$inputs['madv'])->first();
+            DB::statement("Update hosocanbo set lvhd = '".$inputs['linhvuchoatdong']."' where madv ='".$inputs['madv']."'");
+            // DB::statement("Update hosocanbo_kiemnhiem set lvhd = '".$inputs['linhvuchoatdong']."' where madv ='".$inputs['madv']."'");
             return redirect('/danh_muc/khu_vuc/chi_tiet?ma_so='.$model->madvbc.'&phan_loai='.$model->phanloaitaikhoan);
         }else
             return view('errors.notlogin');
