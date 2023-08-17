@@ -609,9 +609,9 @@ class dataController extends Controller
                 }
             }
 
-            if ($canbo->macanbo == '1539662570_1643164043') {
-                dd($canbo);
-            }
+            // if ($canbo->macanbo == '1539662570_1643164043') {
+            //     dd($canbo);
+            // }
         }
 
         return $m_canbo;

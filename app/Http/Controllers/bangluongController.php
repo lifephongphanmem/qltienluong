@@ -3224,19 +3224,7 @@ class bangluongController extends Controller
             $a_cb = a_unique(array_column($model->toarray(), 'macanbo'));
             $a_cb_kn = a_unique(array_column($model_kn->toarray(), 'macanbo'));
             //dd($model_kn->toarray());
-            //Thêm các cán bộ chỉ có kiêm nhiệm nhưng ko có chức danh chính
-            foreach (array_diff($a_cb_kn, $a_cb) as $ct) {
-                $cb = clone $model_kn->where('macanbo', $ct)->first();
-                $cb->macvcq = '';
-                foreach ($a_phucap as $k => $v) {
-                    $cb->$k = 0;
-                }
-                $cb->tonghs = 0;
-                $cb->ttl = 0;
-                $cb->luongtn = 0;
-                $cb->congtac = 'CONGTAC';
-                $model->add($cb);
-            }
+            
             //dd($model);
             foreach ($model as $cb) {
                 $canbo = $model_kn->where('macanbo', $cb->macanbo);
