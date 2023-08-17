@@ -3195,7 +3195,7 @@ class bangluongController extends Controller
             }
             //dd($model_kn->toarray());
             // $model_kn = $model_canbo->where('congtac', 'CHUCVU');
-            //dd($model_kn);
+            //dd($model->where('macanbo', '1511749299_1690123438'));
             $mabl = $inputs['mabl'];
             $m_bl = bangluong::select('thang', 'nam', 'mabl', 'madv', 'ngaylap', 'phanloai', 'luongcoban', 'noidung')->where('mabl', $mabl)->first();
             $m_dv = dmdonvi::where('madv', $m_bl->madv)->first();
@@ -3224,12 +3224,13 @@ class bangluongController extends Controller
             $a_cb = a_unique(array_column($model->toarray(), 'macanbo'));
             $a_cb_kn = a_unique(array_column($model_kn->toarray(), 'macanbo'));
             //dd($model_kn->toarray());
-            
+
             //dd($model);
             foreach ($model as $cb) {
-                $canbo = $model_kn->where('macanbo', $cb->macanbo);
+                $canbo = $model_kn->where('macanbo', $cb->macanbo)->where('mact',$cb->mact);
+
                 //làm lại chức danh kiêm nhiệm chỉ vào chức danh chính (...)
-                if ($canbo != null && $cb->congtac == 'CONGTAC') {
+                if ($canbo != null) {
                     foreach ($canbo as $cbkn) {
                         $cb->ttl_kn += $cbkn->ttl;
                         $cb->luongtn_kn += $cbkn->luongtn;
