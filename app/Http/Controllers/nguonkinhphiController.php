@@ -462,6 +462,9 @@ class nguonkinhphiController extends Controller
             //TÍnh lương cho phu cấp kiêm nhiệm
             $i = 1;
             foreach ($m_cb_kn as $val) {
+                if(!isset($m_cb[$val->macanbo])){//cán bộ đã bị xoá trong ds cán bộ
+                    continue;
+                }
                 $a_kq = $this->getHeSoPc_kiemnhiem($a_pc, $m_cb[$val->macanbo], $val, $inputs['chenhlech'])->toarray();
                 unset($a_kq['phanloai']);
 
