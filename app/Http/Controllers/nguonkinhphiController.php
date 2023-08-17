@@ -201,9 +201,9 @@ class nguonkinhphiController extends Controller
                     $cb->thang_hh = null;
                 }
                 //trường hợp cán bộ chỉ có tiền lương theo số tiền (tonghs = 0) =>bỏ
-                if ($cb->luonghd != 0) {
-                    $model->forget($key);
-                }
+                // if ($cb->luonghd != 0) {
+                //     $model->forget($key);
+                // }
             }
 
             //Tách kiêm nhiệm
@@ -358,7 +358,12 @@ class nguonkinhphiController extends Controller
             }
 
             foreach ($m_nh as $key => $val) {
-                $m_nh[$key] = $this->getHeSoPc_nh($a_pc, $m_nh[$key]);
+                $canbo = $this->getHeSoPc_nh($a_pc, $m_nh[$key]);
+                if ($canbo['tonghs'] > 0) {
+                    $m_nh[$key] = $canbo;
+                } else {
+                    unset($m_nh[$key]);
+                }
             }
 
             foreach ($m_nb as $key => $val) {
@@ -395,7 +400,12 @@ class nguonkinhphiController extends Controller
                     $m_nb[$key]['pctnn'] = $m_nb[$key]['pctnn'] == 0 ? 5 : $m_nb[$key]['pctnn'] + 1;
                     //dd($m_tnn[$key]);
                 }
-                $m_nb[$key] = $this->getHeSoPc($a_pc, $m_nb[$key], $inputs['chenhlech']);
+                $canbo =  $this->getHeSoPc($a_pc, $m_nb[$key], $inputs['chenhlech']);
+                if ($canbo['tonghs'] > 0) {
+                    $m_nb[$key] = $canbo;
+                } else {
+                    unset($m_nb[$key]);
+                }
             }
             // dd($m_tnn);
             foreach ($m_tnn as $key => $val) {
@@ -414,9 +424,20 @@ class nguonkinhphiController extends Controller
                 if (isset($m_nb[$key]) && $m_tnn[$key]['thang_tnn'] >= $m_nb[$key]['thang_nb']) {
                     $m_tnn[$key]['heso'] = $m_nb[$key]['heso'];
                     $m_tnn[$key]['vuotkhung'] = $m_nb[$key]['vuotkhung'];
-                    $m_tnn[$key] = $this->getHeSoPc($a_pc, $m_tnn[$key], $inputs['chenhlech'], false);
+
+                    $canbo =  $this->getHeSoPc($a_pc, $m_tnn[$key], $inputs['chenhlech'], false);
+                    if ($canbo['tonghs'] > 0) {
+                        $m_tnn[$key] = $canbo;
+                    } else {
+                        unset($m_tnn[$key]);
+                    }
                 } else {
-                    $m_tnn[$key] = $this->getHeSoPc($a_pc, $m_tnn[$key], $inputs['chenhlech']);
+                    $canbo = $this->getHeSoPc($a_pc, $m_tnn[$key], $inputs['chenhlech']);
+                    if ($canbo['tonghs'] > 0) {
+                        $m_tnn[$key] = $canbo;
+                    } else {
+                        unset($m_tnn[$key]);
+                    }
                 }
 
                 //kiểm tra xem thời gian nâng lương của cán bộ từ tháng 01-06 => tự nâng
@@ -430,16 +451,25 @@ class nguonkinhphiController extends Controller
             //chạy tính hệ số lương, phụ cấp trc. Sau này mỗi tháng chỉ chạy cán bộ thay đổi
             //chạy sau các nâng lương để tính cán bộ chưa nâng lương trc tháng 06
             foreach ($m_cb as $key => $val) {
-                $m_cb[$key] = $this->getHeSoPc($a_pc, $m_cb[$key], $inputs['chenhlech']);
+                $canbo = $this->getHeSoPc($a_pc, $m_cb[$key], $inputs['chenhlech']);
+                if ($canbo['tonghs'] > 0) {
+                    $m_cb[$key] = $canbo;
+                } else {
+                    unset($m_cb[$key]);
+                }
             }
-            // dd($m_cb);
+
             //TÍnh lương cho phu cấp kiêm nhiệm
             $i = 1;
             foreach ($m_cb_kn as $val) {
                 $a_kq = $this->getHeSoPc_kiemnhiem($a_pc, $m_cb[$val->macanbo], $val, $inputs['chenhlech'])->toarray();
                 unset($a_kq['phanloai']);
-                $m_cb[$ct->macanbo . '_' . $i++] = $a_kq;
+
+                if ($a_kq['tonghs'] > 0)
+                    $m_cb[$ct->macanbo . '_' . $i++] = $a_kq;
             }
+            //Lọc lại các cán bộ có tonghs = 0;
+
 
             //dd($m_cb['1565583148_1669774144_1']);
             $a_thang = array(
@@ -830,7 +860,7 @@ class nguonkinhphiController extends Controller
             //Tính toán số liệu mẫu 2d
             $inputs['quyluonggiam_2k'] = round((getSoLuongCanBoDinhMuc($a_solieu['2d_ndcu'], session('admin')->phanloaixa) - $inputs['soluongdinhbien_2d'])
                 * ($inputs['hesoluongbq_2d'] + $inputs['hesophucapbq_2d'] + $inputs['tyledonggop_2d']) * $a_solieu['2d']);
-           
+
             $model->update($inputs);
             if ($inputs['huyen'] == 1) {
                 return redirect('chuc_nang/xem_du_lieu/nguon/huyen?sohieu=' . $model->sohieu . '&trangthai=ALL&phanloai=ALL');
