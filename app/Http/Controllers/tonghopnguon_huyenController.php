@@ -2625,6 +2625,8 @@ class tonghopnguon_huyenController extends Controller
             $m_plct = dmphanloaict::all();
             $a_nhomplct_hc = array_column($m_plct->toArray(), 'nhomnhucau_hc', 'mact');
             $a_nhomplct_xp = array_column($m_plct->toArray(), 'nhomnhucau_xp', 'mact');
+
+            $a_donvibienche = [];
             foreach ($m_chitiet as $chitiet) {
                 $chitiet->madv = $a_donvi[$chitiet->masodv];
                 $chitiet->tendv = $a_thongtindv[$chitiet->madv];
@@ -2639,6 +2641,12 @@ class tonghopnguon_huyenController extends Controller
                     $chitiet->nhomnhucau = $a_nhomplct_xp[$chitiet->mact];
                 } else {
                     $chitiet->nhomnhucau = $a_nhomplct_hc[$chitiet->mact];
+                }
+                //lấy thông tin cán bộ dự toán cho nhóm biên chế
+                
+                if(!in_array($chitiet->madv, $a_donvibienche) && in_array($chitiet->nhomnhucau, ['BIENCHE','CANBOCT'])){                    
+                    $chitiet->canbo_dutoan = $m_nguonkp->where('masodv',$chitiet->masodv)->first()->sobiencheduocgiao ?? $chitiet->canbo_dutoan;
+                    $a_donvibienche[] = $chitiet->madv;
                 }
             }
 
