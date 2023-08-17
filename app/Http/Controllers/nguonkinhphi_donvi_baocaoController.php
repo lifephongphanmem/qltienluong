@@ -2358,7 +2358,7 @@ class nguonkinhphi_donvi_baocaoController extends Controller
             //
             $data[1] = array('val' => 'GD', 'tt' => '-', 'noidung' => 'Giáo dục',);
             $m_data = $m_nguonkp->where('linhvuchoatdong', 'GD');
-            $m_bl = $m_chitiet->where('linhvuchoatdong', 'GD');
+            $m_bl = $m_chitiet->where('linhvuchoatdong', 'GD')->wherein('nhomnhucau', ['CANBOCT', 'BIENCHE']);
 
             $data[1]['solieu'] = [
                 'nhucau' => $m_bl->sum('tongnhucau'),
@@ -2370,10 +2370,10 @@ class nguonkinhphi_donvi_baocaoController extends Controller
             ];
             $data[1]['solieu']['tongso'] = $data[1]['solieu']['tietkiem'] + $data[1]['solieu']['hocphi'] + $data[1]['solieu']['vienphi'] + $data[1]['solieu']['nguonthu'];
             //dd($data);
-            //
+            //Sự nghiệp đào tạo
             $data[2] = array('val' => 'DT', 'tt' => '-', 'noidung' => 'Đào tạo',);
             $m_data = $m_nguonkp->where('linhvuchoatdong', 'DT');
-            $m_bl = $m_chitiet->where('linhvuchoatdong', 'DT');
+            $m_bl = $m_chitiet->where('linhvuchoatdong', 'DT')->wherein('nhomnhucau', ['CANBOCT', 'BIENCHE']);
             $data[2]['solieu'] = [
                 'nhucau' => $m_bl->sum('tongnhucau'),
                 'tietkiem' => $m_data->sum('tietkiem'), //Lấy tiết kiệm 2023 ở mẫu 4a
@@ -2393,10 +2393,11 @@ class nguonkinhphi_donvi_baocaoController extends Controller
                 'tongso' => $data[2]['solieu']['tongso'] + $data[1]['solieu']['tongso'], //Lấy 50% tổng tiết kiệm ở mẫu 2đ
 
             ];
-            //
+
+            //Sự nghiệp y tế
             $data[3] = array('val' => 'YTE', 'tt' => 'b', 'noidung' => 'Sự nghiệp y tế', 'nhucau' => 0, 'nguonkp' => 0, 'tietkiem' => 0, 'hocphi' => 0, 'vienphi' => 0, 'khac' => 0, 'nguonthu' => 0);
             $m_data = $m_nguonkp->where('linhvuchoatdong', 'YTE');
-            $m_bl = $m_chitiet->where('linhvuchoatdong', 'YTE');
+            $m_bl = $m_chitiet->where('linhvuchoatdong', 'YTE')->wherein('nhomnhucau', ['CANBOCT', 'BIENCHE']);
             $data[3]['solieu'] = [
                 'nhucau' => $m_bl->sum('tongnhucau'),
                 'tietkiem' => $m_data->sum('tietkiem'), //Lấy tiết kiệm 2023 ở mẫu 4a
@@ -2406,15 +2407,15 @@ class nguonkinhphi_donvi_baocaoController extends Controller
 
             ];
             $data[3]['solieu']['tongso'] = $data[3]['solieu']['tietkiem'] + $data[3]['solieu']['hocphi'] + $data[3]['solieu']['vienphi'] + $data[3]['solieu']['nguonthu'];
-            //
+
+            //Bao gồm: Sự nghiệp khác + đại biểu hội đồng nhân dân + cấp uỷ
             $data[4] = array('val' => 'KHAC', 'tt' => 'c', 'noidung' => 'Sự nghiệp khác', 'nhucau' => 0, 'nguonkp' => 0, 'tietkiem' => 0, 'hocphi' => 0, 'vienphi' => 0, 'khac' => 0, 'nguonthu' => 0);
             $m_data = $m_nguonkp->wherenotin('linhvuchoatdong', ['QLNN', 'DDT', 'YTE', 'GD', 'DT']);
             $m_bl = $m_chitiet->wherenotin('linhvuchoatdong', ['QLNN', 'DDT', 'YTE', 'GD', 'DT']);
-
-            // $m_data2 = $m_nguonkp->where('maphanloai', 'KVXP')->where('nhomnhucau', 'CANBOCT');
-            // $m_bl2 = $m_chitiet->where('maphanloai', 'KVXP')->where('nhomnhucau', 'CANBOCT');
+            $m_bl2 = $m_chitiet->wherein('nhomnhucau', ['HDND', 'CAPUY']);
+            
             $data[4]['solieu'] = [
-                'nhucau' => $m_bl->sum('tongnhucau'),
+                'nhucau' => $m_bl->sum('tongnhucau') +  $m_bl2->sum('tongnhucau'),
                 'tietkiem' => $m_data->sum('tietkiem'), //Lấy tiết kiệm 2023 ở mẫu 4a
                 'hocphi' => $m_data->sum('huydongktx_hocphi_4a'), //Lấy tiết kiệm 2023 ở mẫu 4a
                 'vienphi' => $m_data->sum('huydongktx_vienphi_4a'), //Lấy tiết kiệm 2023 ở mẫu 4a
@@ -2429,7 +2430,7 @@ class nguonkinhphi_donvi_baocaoController extends Controller
             $m_data = $m_nguonkp->wherein('linhvuchoatdong', ['QLNN', 'DDT']);
             // $m_data2 = $m_nguonkp->where('maphanloai', 'KVXP')->wherein('nhomnhucau', ['HDND', 'CAPUY']);
 
-            $m_bl = $m_chitiet->wherein('linhvuchoatdong', ['QLNN', 'DDT']);
+            $m_bl = $m_chitiet->wherein('linhvuchoatdong', ['QLNN', 'DDT'])->wherein('nhomnhucau', ['CANBOCT', 'BIENCHE']);
             // $m_bl2 = $m_chitiet->where('maphanloai', 'KVXP')->wherein('nhomnhucau', ['HDND', 'CAPUY']);
             $data[5]['solieu'] = [
                 'nhucau' => $m_bl->sum('tongnhucau')  + $m_nguonkp->sum('nhucau2b'),
@@ -2439,7 +2440,7 @@ class nguonkinhphi_donvi_baocaoController extends Controller
                 'nguonthu' => $m_data->sum('huydongktx_khac_4a'), //Lấy tiết kiệm 2023 ở mẫu 4a
             ];
             $data[5]['solieu']['tongso'] = $data[5]['solieu']['tietkiem'] + $data[5]['solieu']['hocphi'] + $data[5]['solieu']['vienphi'] + $data[5]['solieu']['nguonthu'];
-            
+
             //
             $data[6] = array('val' => 'QLNN', 'tt' => '-', 'noidung' => 'Trong đó: Cán bộ, công chức cấp xã',);
             $m_data2 = $m_nguonkp->where('maphanloai', 'KVXP')->wherein('nhomnhucau', ['CANBOCT']);
