@@ -4500,6 +4500,8 @@ class tonghopnguon_huyenController extends Controller
             foreach ($m_nguonkp as $chitiet) {
                 //Tinh số liệu 2b
                 $chitiet->nhucau2b = round($chitiet->quy1_tong + $chitiet->quy2_tong + $chitiet->quy3_tong);
+                //Tính số liệu 2d
+                $chitiet->nhucau = round($chitiet->quyluonggiam_2k * 5);
             }
             //dd($m_nguonkp);
             //Phần A

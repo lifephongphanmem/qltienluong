@@ -723,7 +723,7 @@ class nguonkinhphiController extends Controller
                     $model->sobiencheduocgiao = $model_2a->where('nhomnhucau', 'BIENCHE')->sum('canbo_congtac');
                 }
             }
-            //dd($m_thongtu );
+            //dd(session('admin') );
             return view('manage.nguonkinhphi.edit')
                 ->with('furl', '/nguon_kinh_phi/')
                 ->with('model', $model)

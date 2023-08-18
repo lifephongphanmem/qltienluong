@@ -6,7 +6,6 @@
                     <label class="control-label font-weight-bold">Phân loại xã</label>
                     {!! Form::select('phanloaixa', getPhanLoaiXa(), session('admin')->phanloaixa, [
                         'class' => 'form-control',
-                        'data-mask' => 'fdecimal',
                         'disabled',
                     ]) !!}
                 </div>

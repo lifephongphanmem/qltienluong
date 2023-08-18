@@ -4,10 +4,19 @@
             <div class="col-md-3">
                 <div class="form-group">
                     <label class="control-label font-weight-bold">Phân loại xã</label>
-                    {!! Form::select('phanloaixa', getPhanLoaiXa(), session('admin')->phanloaixa, [
+                    {!! Form::select('', getPhanLoaiXa(), session('admin')->phanloaixa, [
                         'class' => 'form-control',
-                        'data-mask' => 'fdecimal',
                         'disabled',
+                    ]) !!}
+                </div>
+            </div>
+
+            <div class="col-md-3">
+                <div class="form-group">
+                    <label class="control-label font-weight-bold">Số lượng cán bộ định biên (NĐ/2019/NĐ-CP)</label>
+                    {!! Form::text('', getSoLuongCanBoDinhMuc('ND34/2019', session('admin')->phanloaixa), [
+                        'class' => 'form-control',
+                        'readonly',
                     ]) !!}
                 </div>
             </div>

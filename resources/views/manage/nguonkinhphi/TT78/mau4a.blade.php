@@ -236,7 +236,7 @@
                                             {!! Form::text('nhucau', null, [
                                                 'id' => 'nhucau',
                                                 'class' => 'form-control nhucaupc text-right',
-                                                'data-mask' => 'fdecimal',
+                                                'data-mask' => 'fdecimal','readonly'=>'true'
                                             ]) !!}
                                         </div>
                                     </div>

@@ -2218,6 +2218,8 @@ class nguonkinhphi_donvi_baocaoController extends Controller
             foreach ($m_nguonkp as $chitiet) {
                 //Tinh số liệu 2b                
                 $chitiet->nhucau2b = round($chitiet->quy1_tong + $chitiet->quy2_tong + $chitiet->quy3_tong);
+                //Tính số liệu 2d
+                $chitiet->nhucau = round($chitiet->quyluonggiam_2k * 5);
             }
 
             //Phần A
@@ -2413,7 +2415,7 @@ class nguonkinhphi_donvi_baocaoController extends Controller
             $m_data = $m_nguonkp->wherenotin('linhvuchoatdong', ['QLNN', 'DDT', 'YTE', 'GD', 'DT']);
             $m_bl = $m_chitiet->wherenotin('linhvuchoatdong', ['QLNN', 'DDT', 'YTE', 'GD', 'DT']);
             $m_bl2 = $m_chitiet->wherein('nhomnhucau', ['HDND', 'CAPUY']);
-            
+
             $data[4]['solieu'] = [
                 'nhucau' => $m_bl->sum('tongnhucau') +  $m_bl2->sum('tongnhucau'),
                 'tietkiem' => $m_data->sum('tietkiem'), //Lấy tiết kiệm 2023 ở mẫu 4a
