@@ -144,7 +144,7 @@ Route::group(['prefix' => 'bao_cao'], function () {
 
             //Tạm cho huyện Vạn Ninh
             Route::post('tonghopluong_th', 'baocaobangluongController@tonghopluong_huyen_th');
-            Route::post('tonghopluong_vn', 'baocaobangluongController@tonghopluong_vn');
+            Route::post('tonghopluong_vn', 'baocaobangluongController@tonghopluong_vn');            
         });
 
         Route::group(['prefix' => 'tinh'], function () {

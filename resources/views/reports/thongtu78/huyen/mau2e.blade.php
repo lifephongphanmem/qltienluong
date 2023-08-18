@@ -40,8 +40,8 @@
             <th style="width: 8%">TỔNG ĐƠN VỊ HÀNH CHÍNH CẤP XÃ, THÔN </th>
             <th style="width: 8%">MỨC KHOÁN QUỸ PHỤ CẤP 1 THÁNG THEO NGHỊ ĐỊNH 34/2019/NĐ-CP</th>
             <th style="width: 8%">MỨC KHOÁN QUỸ PHỤ CẤP 1 THÁNG THEO NGHỊ ĐỊNH 33/2023/NĐ-CP</th>
-            <th style="width: 8%">CHÊNH LỆCH KINH PHÍ KHOÁN QUỸ PHỤ CẤP THÁNG 07 NĂM 2023</th>
-            <th style="width: 8%">CHÊNH LỆCH KINH PHÍ KHOÁN QUỸ PHỤ CẤP 05 THÁNG CUỐI NĂM 2023</th>
+            <th style="width: 8%">KHOÁN QUỸ PHỤ CẤP 01 THÁNG THEO NGHỊ ĐỊNH 34 (LƯƠNG 1,49)</th>
+            <th style="width: 8%">KHOÁN QUỸ PHỤ CẤP 01 THÁNG THEO NGHỊ ĐỊNH 33 (LƯƠNG 1,49)</th>
             <th style="width: 8%">CHÊNH LỆCH KINH PHÍ KHOÁN QUỸ PHỤ CẤP NĂM 2023</th>
         </tr>
 
@@ -51,8 +51,8 @@
             <td>1</td>
             <td>2</td>
             <td>3</td>
-            <td>4= 1x2x(1,8-1,49)</td>
-            <td>5=1x3x(1,8-1,49)</td>
+            <td>4= 1x2x1,49</td>
+            <td>5=1x3x1,49</td>
             <td>6=4+5</td>
         </tr>
         <tr style="font-weight: bold">
@@ -61,8 +61,8 @@
             <td class="text-center">{{ dinhdangsothapphan($a_It['tdv']) }}</td>
             <td class="text-center">{{ dinhdangsothapphan($a_It['mk']) }}</td>
             <td class="text-center">{{ dinhdangsothapphan($a_It['mk2']) }}</td>
-            <td class="text-right">{{ dinhdangsothapphan($a_It['clt7']) }}</td>
-            <td class="text-right">{{ dinhdangsothapphan($a_It['cl5t']) }}</td>
+            <td class="text-right">{{ dinhdangsothapphan($a_It['quyluong34']) }}</td>
+            <td class="text-right">{{ dinhdangsothapphan($a_It['quyluong33']) }}</td>
             <td class="text-right">{{ dinhdangsothapphan($a_It['tong']) }}</td>
 
         </tr>
@@ -73,8 +73,8 @@
                 <td class="text-center">{{ dinhdangsothapphan($dulieu['solieu']['tdv']) }}</td>
                 <td class="text-center">{{ dinhdangsothapphan($dulieu['solieu']['mk'], 3) }}</td>
                 <td class="text-center">{{ dinhdangsothapphan($dulieu['solieu']['mk2'], 3) }}</td>
-                <td>{{ dinhdangsothapphan($dulieu['solieu']['clt7'], 0, $inputs['donvitinh']) }}</td>
-                <td>{{ dinhdangsothapphan($dulieu['solieu']['cl5t'], 0, $inputs['donvitinh']) }}</td>
+                <td>{{ dinhdangsothapphan($dulieu['solieu']['quyluong34'], 0, $inputs['donvitinh']) }}</td>
+                <td>{{ dinhdangsothapphan($dulieu['solieu']['quyluong33'], 0, $inputs['donvitinh']) }}</td>
                 <td>{{ dinhdangsothapphan($dulieu['solieu']['tong'], 0, $inputs['donvitinh']) }}</td>
             </tr>
         @endforeach

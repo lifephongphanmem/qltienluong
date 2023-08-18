@@ -353,6 +353,23 @@
                                 </ol>
                             </div>
                         </div>
+
+                        <div class="row">
+                            <div style="margin-bottom: 5px;margin-left: 5px;font-weight: bold"
+                                class="col-lg-12 caption text-uppercase">
+                                BÁO CÁO TỔNG HỢP KHÁC
+                            </div>
+                            <div class="col-lg-12">
+                                <ol>
+                                    <li>
+                                        <a href="#" data-target="#modal-khac" data-toggle="modal"
+                                            onclick="inkhac('/chuc_nang/tong_hop_luong/huyen/DSDonVi')">
+                                            Danh sách đơn vị cấp dưới
+                                        </a>
+                                    </li>
+                                </ol>
+                            </div>
+                        </div>
                     </div>
                 </div>
             @endif
@@ -525,6 +542,41 @@
     </div>
     {!! Form::close() !!}
 
+        <!--Mẫu in số liệu -->
+        {!! Form::open(['url' => '', 'method' => 'post', 'target' => '_blank', 'files' => true, 'id' => 'frm_khac']) !!}
+        {{-- Các trường dữ liệu ẩn --}}
+        <input type="hidden" name="macqcq" value="{{ $inputs['madv'] }}">
+        <div id="modal-khac" tabindex="-1" role="dialog" aria-hidden="true" class="modal fade">
+            <div class="modal-dialog modal-content">
+                <div class="modal-header modal-header-primary">
+                    <button type="button" data-dismiss="modal" aria-hidden="true" class="close">&times;</button>
+                    <h4 id="header-inbl" class="modal-title">Thông tin kết xuất</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="form-horizontal">
+                        {{-- <div class="row">
+                            <div class="col-md-12">
+                                <label class="control-label">Phân loại đơn vị</label>
+                                {!! Form::select('maphanloai', [], null, ['class' => 'form-control', 'required']) !!}
+                            </div>
+                        </div> --}}
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <label class="control-label">Năm ngân sách</label>
+                                {!! Form::select('namns', getNam(), date('Y'), ['id' => 'namns', 'class' => 'form-control']) !!}
+                            </div>
+                        </div>
+                    </div>    
+                </div>
+                <div class="modal-footer">
+                    <button type="button" data-dismiss="modal" class="btn btn-default">Hủy thao tác</button>
+                    <button type="submit" class="btn btn-success">Đồng ý</button>
+                </div>
+            </div>
+        </div>
+        {!! Form::close() !!}
+
     <script>
         //In dữ liệu
         function insolieu(url, mact) {
@@ -546,6 +598,10 @@
 
         function inchitraluong(url) {
             $('#frm_chitraluong').attr('action', url);
+        }
+
+        function inkhac(url) {
+            $('#frm_khac').attr('action', url);
         }
     </script>
 @stop

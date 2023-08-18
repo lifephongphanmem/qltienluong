@@ -75,8 +75,7 @@
                                     <a href="#" data-target="#thoaichitra-modal" data-toggle="modal"
                                         title="Dữ liệu chi trả theo tổng hợp lương tại đơn vị"
                                         onclick="chitraluong('{{ $inputs['furl_th'] . 'don_vi/chitratheocb' }}')">Tổng hợp
-                                        tình hình chi
-                                        trả lương theo cán bộ</a>
+                                        tình hình chi trả lương theo cán bộ</a>
 
                                 </li>
 

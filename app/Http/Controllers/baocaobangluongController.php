@@ -18,6 +18,7 @@ use App\dmphanloaidonvi;
 use App\dmphucap;
 use App\dmphucap_donvi;
 use App\dmthongtuquyetdinh;
+use App\dsdonviquanly;
 use App\dsnangluong;
 use App\dsnangthamnien;
 use App\dutoanluong;
@@ -5725,6 +5726,35 @@ class baocaobangluongController extends Controller
                         break;
                     }
             }
+        }
+    }
+
+    function DSDonVi(Request $request)
+    {
+        if (Session::has('admin')) {
+            $inputs = $request->all();
+            $model_donvi = dmdonvi::all();
+            $a_donvi = array_column($model_donvi->toarray(), 'tendv', 'madv');
+            $model = $model_donvi->where('madvbc', session('admin')->madvbc);
+            $model_donvi_quanly = dsdonviquanly::where('nam', $inputs['namns'])->get();
+            $a_donvi_quanly = array_column($model_donvi_quanly->toarray(), 'macqcq', 'madv');
+            foreach ($model as $donvi) {
+                $donvi->macqcq_ql = $a_donvi_quanly[$donvi->madv] ?? '';
+                $donvi->tencqcq = $a_donvi[$donvi->macqcq] ?? $donvi->macqcq;
+                $donvi->tencqcq_ql = $a_donvi[$donvi->macqcq_ql] ?? $donvi->macqcq_ql;
+            }
+
+            $model_phanloai = dmphanloaidonvi::all();
+            $m_donvi = $model_donvi->where('madv',session('admin')->madv)->first();
+             
+            return view('reports.baocaokhac.danhsachdonvi')
+                ->with('model', $model)
+                ->with('model_phanloai', $model_phanloai)
+                ->with('m_donvi', $m_donvi)
+                ->with('inputs', $inputs)
+                ->with('pageTitle', 'Báo cáo tổng hợp dự toán lương');
+        } else {
+            return view('errors.notlogin');
         }
     }
 }

@@ -13,7 +13,7 @@
 
             <div class="col-md-3">
                 <div class="form-group">
-                    <label class="control-label font-weight-bold">Số lượng cán bộ định biên (NĐ/2019/NĐ-CP)</label>
+                    <label class="control-label font-weight-bold">Số lượng cán bộ định biên (NĐ34/2019/NĐ-CP)</label>
                     {!! Form::text('', getSoLuongCanBoDinhMuc('ND34/2019', session('admin')->phanloaixa), [
                         'class' => 'form-control',
                         'readonly',

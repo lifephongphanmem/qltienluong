@@ -1321,3 +1321,20 @@ function getSoLuongCanBoDinhMuc($nghidinh, $phanloaixa)
     ];
     return $a_kq[$nghidinh][$phanloaixa] ?? 0;
 }
+
+function getMucKhoanPhuCapXa($nghidinh, $phanloaixa)
+{
+    $a_kq = [        
+        'ND34/2019' => [
+            'XL1'=> 16,
+            'XL2'=> 13.7,
+            'XL3'=> 11.4,
+        ],
+        'ND33/2023' => [
+            'XL1'=> 21,
+            'XL2'=> 18,
+            'XL3'=> 15,
+        ],        
+    ];
+    return $a_kq[$nghidinh][$phanloaixa] ?? 0;
+}

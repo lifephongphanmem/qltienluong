@@ -281,6 +281,8 @@ Route::group(['prefix' => 'chuc_nang'], function () {
 
             //2023.07.14 Mẫu theo yêu STC
             Route::get('TongHop', 'tonghopluong_huyen_baocaoController@TongHop_PhanLoaiDV');
+            //Báo cáo khác
+            Route::post('DSDonVi', 'baocaobangluongController@DSDonVi');
         });
 
         Route::group(['prefix' => 'tinh'], function () {

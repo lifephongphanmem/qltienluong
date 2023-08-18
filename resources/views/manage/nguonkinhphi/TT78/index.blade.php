@@ -26,7 +26,7 @@
                         </li>
                         <li>
                             <a href="#tab2c" data-toggle="tab" class="step">
-                                <p class="description"><i class="glyphicon glyphicon-check"></i>Mẫu 2c</p>
+                                <p class="description"><i class="glyphicon glyphicon-check"></i>Mẫu 2c và 2e</p>
                             </a>
                         </li>
                         <li>
