@@ -1,9 +1,41 @@
-@extends('main_baocao')
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html lang="vi">
 
-@section('content')
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>{{ $pageTitle }}</title>
+    <link rel="shortcut icon" href="{{ url('images/LIFESOFT.png') }}" type="image/x-icon">
+    <style type="text/css">
+        body {
+            font: normal 14px/16px time, serif;
+        }
 
-    <table id="data_header" width="96%" border="0" cellspacing="0" cellpadding="4"
-        style="margin:0 auto 20px;text-align: center">
+        table,
+        p {
+            width: 98%;
+            margin: auto;
+        }
+
+        td,
+        th {
+            padding: 5px;
+        }
+
+        p {
+            padding: 5px;
+        }
+
+        span {
+            text-transform: uppercase;
+            font-weight: bold;
+
+        }
+    </style>
+</head>
+
+<body style="font:normal 12px Arial, serif;">
+
+    <table width="96%" border="0" cellspacing="0" cellpadding="4" style="margin:0 auto 20px;text-align: center">
         <tr>
             <td style="text-align: left">
                 <b>{{ 'Đơn vị: ' . $m_dv->tendv }}</b>
@@ -14,69 +46,200 @@
         </tr>
         <tr>
             <td colspan="2">
-                {{-- <b>BÁO CÁO QUỸ LƯƠNG, PHỤ CẤP ĐỐI VỚI LAO ĐỘNG THEO HỢP ĐỒNG KHU VỰC HÀNH CHÍNH VÀ ĐƠN VỊ SỰ NGHIỆP</b> --}}
                 <b>TỔNG HỢP PHỤ CẤP ƯU ĐÃI NGHỀ THEO NGHỊ ĐỊNH SỐ 05/2023/NĐ-CP NGÀY 15/02/2023 CỦA CHÍNH PHỦ</b>
             </td>
         </tr>
         <tr>
             <td colspan="2">
-                {{-- <i>(Ban hành kèm theo Thông tư số 68/2018/TT-BTC)</i> --}}
-                <i>(Ban hành kèm theo Thông tư số 50/2023/TT-BTC ngày 17
-                    tháng 7 năm 2023 của Bộ trưởng Bộ Tài chính)</i>
+                <p style="text-align: center; font-style: italic">(Ban hành kèm theo Thông tư số 50/2023/TT-BTC ngày 17
+                    tháng 7 năm 2023 của Bộ trưởng Bộ Tài chính)</p>
             </td>
         </tr>
         <tr>
             <td>
             </td>
             <td style="text-align: right">
-                <i>Đơn vị:
-                    {{ $inputs['donvitinh'] == 1 ? 'Đồng' : ($inputs['donvitinh'] == 2 ? 'Nghìn đồng' : 'Triệu đồng') }}</i>
+                <i>
+                    Đơn vị:
+                    {{ $inputs['donvitinh'] == 1 ? 'Đồng' : ($inputs['donvitinh'] == 2 ? 'Nghìn đồng' : 'Triệu đồng') }}
+                </i>
             </td>
         </tr>
     </table>
-    <table id="data_body" width="96%" border="1" cellspacing="0" cellpadding="4"
+    <table width="96%" border="1" cellspacing="0" cellpadding="4"
         style="margin:0 auto 20px; text-align: center;">
-        <tr>
-            <th rowspan="2" style="width: 5%">STT</th>
-            <th rowspan="2">NỘI DUNG</th>
-            <th style="width: 8%" rowspan="2">TỔNG SỐ ĐỐI TƯỢNG HƯỞNG LƯƠNG CÓ MẶT ĐẾN 01/07/2023</th>
-            <th colspan="4">QUỸ TIỀN LƯƠNG, PHỤ CẤP VÀ CÁC KHOẢN ĐÓNG GÓP THÁNG 07/2023 THEO NGHỊ ĐỊNH SỐ 24/2023/NĐ-CP
-            </th>
-        </tr>
-        <tr>
-            <th style="width: 8%">TỔNG CỘNG</th>
-            <th style="width: 8%">LƯƠNG THEO NGẠCH, BẬC CHỨC VỤ</th>
-            <th style="width: 8%">TỔNG CÁC KHOẢN PHỤ CẤP</th>
-            <th style="width: 8%">CÁC KHOẢN ĐÓNG GÓP BHXH, BHYT, BHTN, KPCĐ</th>
-        </tr>
-        <tr>
-            <td>1</td>
-            <td>2</td>
-            <td>3</td>
-            <td>4=5+6+7</td>
-            <td>5</td>
-            <td>6</td>
-            <td>7</td>
-        </tr>
-        
-        @foreach ($ar_I as $dulieu)
-            <tr style="text-align: right">
-                <td style="text-align: center;{{ $dulieu['style'] }}">{{ $dulieu['tt'] }}</td>
-                <td style="text-align: left;{{ $dulieu['style'] }}">{{ $dulieu['noidung'] }}</td>
-                <td style="text-align: center;{{ $dulieu['style'] }}">{{ dinhdangsothapphan($dulieu['canbo_congtac']) }}</td>
-                <td style="{{ $dulieu['style'] }}">{{ dinhdangsothapphan($dulieu['solieu']['tongcong']) }}</td>
-                <td style="{{ $dulieu['style'] }}">{{ dinhdangsothapphan($dulieu['solieu']['st_heso']) }}</td>
-                <td style="{{ $dulieu['style'] }}">{{ dinhdangsothapphan($dulieu['solieu']['st_tongpc']) }}</td>
-                <td style="{{ $dulieu['style'] }}">{{ dinhdangsothapphan($dulieu['solieu']['ttbh_dv']) }}</td>
+        <thead>
+            <tr>
+                <th rowspan="3" style="width: 3%">STT</th>
+                <th rowspan="3">Chỉ tiêu</th>
+                <th rowspan="3" style="width: 5%">Tổng số đối tượng</th>
+                <th rowspan="3" style="width: 5%">Tổng hệ số</th>
+                <th colspan="4">Bao gồm</th>
+                <th rowspan="3" style="width: 5%">Mức phụ cấp ưu đãi theo Nghị định 56/2011/NĐ-CP của Chính phủ</th>
+                <th rowspan="3" style="width: 5%">Mức phụ cấp ưu đãi theo Nghị định 05/2023/NĐ-CP của Chính phủ</th>
+                <th rowspan="3" style="width: 5%">Chênh lệch phụ cấp ưu đãi</th>
+                <th rowspan="3" style="width: 5%">Nhu cầu kinh phí tăng thêm 01 tháng (lương 1,49)</th>
+                <th rowspan="3" style="width: 5%">Nhu cầu kinh phí thực hiện năm 2022</th>
+                <th rowspan="3" style="width: 5%">Nhu cầu kinh phí thực hiện năm 2023</th>
             </tr>
+            <tr>
+                <th rowspan="2" style="width: 5%">Hệ số lương theo ngạch bậc, chức vụ</th>
+                <th rowspan="2" style="width: 5%">Tổng hệ số phụ cấp</th>
+                <th colspan="2">Trong đó</th>
+            </tr>
+
+            <tr>
+                <th style="width: 5%">Phụ cấp chức vụ</th>
+                <th style="width: 5%">Phụ cấp chức vụ, vượt khung</th>
+            </tr>
+            <tr>
+                <td>1</td>
+                <td>2</td>
+                <td>3</td>
+                <td>4=5+6</td>
+                <td>5</td>
+                <td>6=7+8</td>
+                <td>7</td>
+                <td>8</td>
+                <td>9</td>
+                <td>10</td>
+                <td>11=10-9</td>
+                <td>12=4x11x1,49</td>
+                <td>13=12x12T</td>
+                <td>14=12x6T + 12x1,8/1,49x6T</td>
+            </tr>
+        </thead>
+
+        <tr style="font-weight: bold">
+            <td></td>
+            <td>Tổng số</td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+
+        <?php
+        $m_khoitinh = $m_chitiet->where('level', 'T');
+        $i = 1;
+        ?>
+        <tr style="font-weight: bold">
+            <td>I</td>
+            <td style="text-align: left">Khối Tỉnh</td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+        @if ($m_khoitinh->count() > 0)
+            @foreach ($m_khoitinh as $chitiet)
+                <tr>
+                    <td>{{ $i++ }}</td>
+                    <td style="text-align: left">{{ $chitiet->tendv }}</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+            @endforeach
+        @endif
+
+        <?php
+        $m_khoihuyen = $m_chitiet->where('level', '<>', 'T');
+        $i = 1;
+        ?>
+        <tr style="font-weight: bold">
+            <td>II</td>
+            <td style="text-align: left">Khối huyện</td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+
+        @foreach ($m_dshuyen as $huyen)
+            <?php
+            $m_huyen = $m_chitiet->where('madvbc', $huyen->madvbc);
+            $j = 1;
+            ?>
+            @if ($m_huyen->count() > 0)
+                <tr style="font-weight: bold; font-style: italic">
+                    <td>{{ $i++ }}</td>
+                    <td style="text-align: left">{{ $huyen->tendvbc }}</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                @foreach ($m_huyen as $chitiet)
+                    <tr>
+                        <td>{{ $j++ }}</td>
+                        <td style="text-align: left">{{ $chitiet->tendv }}</td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                @endforeach
+            @endif
         @endforeach
+
     </table>
 
     <table id="data_footer" class="header" width="96%" border="0" cellspacing="0" cellpadding="8"
         style="margin:20px auto; text-align: center;">
         <tr>
             <td style="text-align: left;" width="50%"></td>
-            <td style="text-align: center; font-style: italic" width="50%">........,Ngày......tháng.......năm..........
+            <td style="text-align: center; font-style: italic" width="50%">
+                ........,Ngày......tháng.......năm..........
             </td>
         </tr>
         <tr style="font-weight: bold">
@@ -96,4 +259,7 @@
             <td style="text-align: center;" width="50%">{{ $m_dv->lanhdao }}</td>
         </tr>
     </table>
-@stop
+
+</body>
+
+</html>

@@ -2178,6 +2178,50 @@ class nguonkinhphi_donvi_baocaoController extends Controller
             return view('errors.notlogin');
     }
 
+    function mau2g(Request $request)
+    {
+        //Chưa tính toán số liệu
+        if (Session::has('admin')) {
+            $inputs = $request->all();
+            $m_nguonkp = nguonkinhphi::where('masodv', $inputs['masodv'])->get();
+            $m_donvi = dmdonvi::where('madv', $m_nguonkp->first()->madv)->first();
+            $inputs['donvitinh'] = 1;
+            // $m_thongtu = dmthongtuquyetdinh::where('sohieu', $m_nguonkp->first()->sohieu)->first();
+            $m_dsdv = dmdonvi::all();
+            $a_level = array_column($m_dsdv->toArray(), 'caphanhchinh', 'madv');
+            $a_phanloai = array_column($m_dsdv->toArray(), 'maphanloai', 'madv');
+            $a_phanloaixa = array_column($m_dsdv->toArray(), 'phanloaixa', 'madv');
+            $a_madvbc = array_column($m_dsdv->toArray(), 'madvbc', 'madv');
+            $a_thongtindv = array_column($m_dsdv->toArray(), 'tendv', 'madv');
+
+            //Số liệu cho các thôn, xã 
+            foreach ($m_nguonkp as $chitiet) {
+                $chitiet->phanloaixa = $a_phanloaixa[$chitiet->madv];
+                $chitiet->maphanloai = $a_phanloai[$chitiet->madv];
+                $chitiet->level = $a_level[$chitiet->madv];
+                $chitiet->madvbc = $a_madvbc[$chitiet->madv];
+                $chitiet->tendv = $a_thongtindv[$chitiet->madv];
+
+                //Tính toán số liêu
+                $chitiet->tongluong_2i = 0;
+                $chitiet->chenhlech_2i = 0;
+                $chitiet->quyluong_2i = 0;
+            }
+
+            //dd($m_nguonkp);
+            $m_dshuyen = dmdonvibaocao::where('level', 'H')->get();
+
+            //dd($m_nguonkp);
+            return view('reports.thongtu78.huyen.mau2g')
+                ->with('m_chitiet', $m_nguonkp)
+                ->with('m_dshuyen', $m_dshuyen)
+                ->with('m_dv', $m_donvi)
+                ->with('inputs', $inputs)
+                ->with('pageTitle', 'TỔNG HỢP PHỤ CẤP THU HÚT TĂNG, GIẢM DO ĐIỀU CHỈNH ĐỊA BÀN VÙNG KINH TẾ XÃ HỘI ĐẶC BIỆT KHÓ KHĂN');
+        } else
+            return view('errors.notlogin');
+    }
+
     function mau4a(Request $request)
     {
         //Kiểm tra cấp đơn vị xem đơn vị để update trường masoh hoặc masot

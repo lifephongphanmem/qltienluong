@@ -145,7 +145,16 @@
                             <i class="fa fa-print"></i>&nbsp;Tổng hợp kinh phí tăng theo nghị định 34/2023/NĐ-CP -
                             người hoạt động không chuyên trách ở cấp xã, ở thôn, tổ dân phố (Mẫu 2e)</button>
                     </div>
-                </div>                
+                </div>
+                
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <button type="button" onclick="ThongTinKetXuat(true,'{{ $inputs['furl'] . 'mau2g' }}',null)"
+                            style="border-width: 0px" class="btn btn-default btn-xs mbs"
+                            data-target="#mautt107-modal" data-toggle="modal">
+                            <i class="fa fa-print"></i>&nbsp;Tổng hợp phụ cấp ưu đãi nghề theo nghị định số 05/2023/NĐ-CP (Mẫu 2g)</button>
+                    </div>
+                </div>      
             </div>           
 
             <div class="row">

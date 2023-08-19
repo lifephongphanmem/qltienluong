@@ -280,6 +280,17 @@
                         </div>
                     </div>
                 </div>
+
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <button type="button" onclick="insolieu('{{ $furl_th . 'mau2g' }}',null)"
+                                style="border-width: 0px" class="btn btn-default btn-xs mbs"
+                                data-target="#modal-insolieu" data-toggle="modal">
+                                <i class="fa fa-print"></i>&nbsp;Tổng hợp phụ cấp ưu đãi nghề theo nghị định số 05/2023/NĐ-CP (Mẫu 2g)</button>
+                        </div>
+                    </div>
+                </div>
                
                 <div class="row">
                     <div class="col-md-12">

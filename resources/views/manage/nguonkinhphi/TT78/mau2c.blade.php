@@ -1,4 +1,5 @@
 <div id="tab2c" class="tab-pane">
+    <h3 class="text-warning">Số liệu chỉ dành cho các đơn vị: Xã, phường, thị trấn</h3>
     <div class="form-body">
         <div class="row">
             <div class="col-md-3">

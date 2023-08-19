@@ -3930,144 +3930,35 @@ class tonghopnguon_huyenController extends Controller
             $a_donvi =  array_column($m_nguonkp->toarray(), 'madv', 'masodv');
 
             $m_dsdv = dmdonvi::all();
-            $a_phanloai = array_column($m_dsdv->toArray(), 'maphanloai', 'madv');
-            //$a_madvbc = array_column($m_dsdv->toArray(), 'madvbc', 'madv');
             $a_level = array_column($m_dsdv->toArray(), 'caphanhchinh', 'madv');
-            //$a_diaban = array_column(dmdonvibaocao::all()->toArray(), 'level', 'madvbc');
-            //dd($a_donvi);
-            $m_chitiet = nguonkinhphi_01thang::wherein('masodv', array_column($m_nguonkp->toarray(), 'masodv'))->get();
+            $a_phanloai = array_column($m_dsdv->toArray(), 'maphanloai', 'madv');
+            $a_phanloaixa = array_column($m_dsdv->toArray(), 'phanloaixa', 'madv');
+            $a_madvbc = array_column($m_dsdv->toArray(), 'madvbc', 'madv');
+            $a_thongtindv = array_column($m_dsdv->toArray(), 'tendv', 'madv');
 
-            $m_plct = dmphanloaict::all();
-            $a_nhomplct_hc = array_column($m_plct->toArray(), 'nhomnhucau_hc', 'mact');
-            $a_nhomplct_xp = array_column($m_plct->toArray(), 'nhomnhucau_xp', 'mact');
-
-            foreach ($m_chitiet as $chitiet) {
-                $chitiet->madv = $a_donvi[$chitiet->masodv];
-
+            //Số liệu cho các thôn, xã 
+            foreach ($m_nguonkp as $chitiet) {
+                $chitiet->phanloaixa = $a_phanloaixa[$chitiet->madv];
                 $chitiet->maphanloai = $a_phanloai[$chitiet->madv];
-                $chitiet->linhvuchoatdong = $a_linhvuc[$chitiet->masodv];
                 $chitiet->level = $a_level[$chitiet->madv];
+                $chitiet->madvbc = $a_madvbc[$chitiet->madv];
+                $chitiet->tendv = $a_thongtindv[$chitiet->madv];
 
-                if ($chitiet->maphanloai == 'KVXP') {
-                    $chitiet->nhomnhucau = $a_nhomplct_xp[$chitiet->mact];
-                } else {
-                    $chitiet->nhomnhucau = $a_nhomplct_hc[$chitiet->mact];
-                }
-            }
-            //dd($m_chitiet);
-            $luongcb = $m_thongtu->mucapdung;
-            $chenhlech = $m_thongtu->chenhlech;
-
-            //Tính toán số liệu phần I
-            $ar_I = getHCSN();
-            $dulieu_pI = $m_chitiet->where('nhomnhucau', 'HOPDONG');
-            //Vòng cấp độ 3
-            foreach ($ar_I as $key => $chitiet) {
-                if ($chitiet['phanloai'] == '0') {
-                    $dulieu_chitiet = $dulieu_pI;
-                    foreach ($chitiet['chitiet'] as $k => $v) {
-                        $dulieu_chitiet  = $dulieu_chitiet->where($k, $v);
-                    }
-                    //Tính bảng lương theo số tiền cũ
-                    $a_solieu = [];
-
-                    $a_solieu['heso'] = $dulieu_chitiet->sum('heso');
-                    $a_solieu['st_heso'] = round($a_solieu['heso'] * $luongcb);
-
-                    $a_solieu['tongbh_dv'] = $dulieu_chitiet->sum('tongbh_dv');
-                    $a_solieu['ttbh_dv'] = round(($dulieu_chitiet->sum('ttbh_dv') / $chenhlech) * $luongcb);
-
-                    $a_solieu['tongpc'] = $dulieu_chitiet->sum('tonghs') - $dulieu_chitiet->sum('heso');
-                    $a_solieu['st_tongpc'] = round($a_solieu['tongpc'] * $luongcb);
-                    $a_solieu['tongcong'] = $a_solieu['st_tongpc'] + $a_solieu['st_heso'] + $a_solieu['ttbh_dv'];
-                    $ar_I[$key]['solieu'] = $a_solieu;
-
-                    $ar_I[$key]['canbo_congtac'] = $dulieu_chitiet->sum('canbo_congtac');
-                    $ar_I[$key]['canbo_dutoan'] = $dulieu_chitiet->sum('canbo_dutoan');
-                }
+                //Tính toán số liêu
+                $chitiet->tongluong_2i =0;
+                $chitiet->chenhlech_2i = 0;
+                $chitiet->quyluong_2i = 0;
             }
 
-            //Vòng cấp độ 2
-            foreach ($ar_I as $key => $chitiet) {
-                if ($chitiet['capdo'] == '2') {
-                    $a_solieu = [];
-                    $a_solieu_moi = [];
-                    //lấy thông tin trường trc
-                    $ar_I[$key]['canbo_congtac'] = $ar_I[$key]['canbo_dutoan'] = 0;
-                    $a_solieu['canbo_congtac'] = $a_solieu['canbo_dutoan'] = $a_solieu['heso'] = $a_solieu['st_heso'] = $a_solieu['tongpc'] = $a_solieu['st_tongpc']
-                        = $a_solieu['tongbh_dv'] = $a_solieu['ttbh_dv'] = $a_solieu['tongcong'] = 0;
-
-                    $a_solieu_moi['canbo_congtac'] = $a_solieu_moi['canbo_dutoan'] = $a_solieu_moi['heso'] = $a_solieu_moi['st_heso'] = $a_solieu_moi['tongpc'] = $a_solieu_moi['st_tongpc']
-                        = $a_solieu_moi['tongbh_dv'] = $a_solieu_moi['ttbh_dv'] = $a_solieu_moi['tongcong'] = 0;
-
-
-                    foreach ($chitiet['chitiet'] as $k) {
-                        //bảng lương cũ
-
-                        $a_solieu['heso'] += $ar_I[$k]['solieu']['heso'];
-                        $a_solieu['st_heso'] += $ar_I[$k]['solieu']['st_heso'];
-                        $a_solieu['tongbh_dv'] += $ar_I[$k]['solieu']['tongbh_dv'];
-                        $a_solieu['ttbh_dv'] += $ar_I[$k]['solieu']['ttbh_dv'];
-
-
-                        $a_solieu['tongpc'] += $ar_I[$k]['solieu']['tongpc'];
-                        $a_solieu['st_tongpc'] += $ar_I[$k]['solieu']['st_tongpc'];
-                        $a_solieu['tongcong'] += $ar_I[$k]['solieu']['tongcong'];
-
-
-
-                        $ar_I[$key]['canbo_congtac'] += $ar_I[$k]['canbo_congtac'];
-                        $ar_I[$key]['canbo_dutoan'] += $ar_I[$k]['canbo_dutoan'];
-                    }
-                    $ar_I[$key]['solieu'] = $a_solieu;
-                }
-            }
-            //Vòng cấp độ 1
-            foreach ($ar_I as $key => $chitiet) {
-                if ($chitiet['capdo'] == '1') {
-                    $a_solieu = [];
-                    $a_solieu_moi = [];
-                    //lấy thông tin trường trc
-                    $ar_I[$key]['canbo_congtac'] = $ar_I[$key]['canbo_dutoan'] = 0;
-
-                    $a_solieu['canbo_congtac'] = $a_solieu['canbo_dutoan'] = $a_solieu['heso'] = $a_solieu['st_heso'] = $a_solieu['tongpc'] = $a_solieu['st_tongpc']
-                        = $a_solieu['tongbh_dv'] = $a_solieu['ttbh_dv'] = $a_solieu['tongcong'] = 0;
-
-
-
-                    foreach ($chitiet['chitiet'] as $k) {
-                        //bảng lương cũ
-                        $a_solieu['heso'] += $ar_I[$k]['solieu']['heso'];
-                        $a_solieu['st_heso'] += $ar_I[$k]['solieu']['st_heso'];
-                        $a_solieu['tongbh_dv'] += $ar_I[$k]['solieu']['tongbh_dv'];
-                        $a_solieu['ttbh_dv'] += $ar_I[$k]['solieu']['ttbh_dv'];
-
-
-                        $a_solieu['tongpc'] += $ar_I[$k]['solieu']['tongpc'];
-                        $a_solieu['st_tongpc'] += $ar_I[$k]['solieu']['st_tongpc'];
-                        $a_solieu['tongcong'] += $ar_I[$k]['solieu']['tongcong'];
-
-                        $ar_I[$key]['canbo_congtac'] += $ar_I[$k]['canbo_congtac'];
-                        $ar_I[$key]['canbo_dutoan'] += $ar_I[$k]['canbo_dutoan'];
-                    }
-
-                    $ar_I[$key]['solieu'] = $a_solieu;
-                }
-            }
-
-            //
-            unset($ar_I[1]);
-            $ar_I[0]['noidung'] = 'TỔNG CỘNG';
-            //dd($ar_I) ;    
-
+            //dd($m_nguonkp);
+            $m_dshuyen = dmdonvibaocao::where('level', 'H')->get();
             $m_donvi = dmdonvi::where('madv', $inputs['macqcq'])->first();
             //dd($m_tonghop_ct);
             return view('reports.thongtu78.huyen.mau2g')
-                ->with('furl', '/tong_hop_bao_cao/')
-                ->with('ar_I', $ar_I)
-                ->with('m_dv', $m_donvi)
-                ->with('inputs', $inputs)
-
+            ->with('m_chitiet', $m_nguonkp)
+            ->with('m_dshuyen', $m_dshuyen)
+            ->with('m_dv', $m_donvi)
+            ->with('inputs', $inputs)
                 ->with('pageTitle', 'Báo cáo nhu cầu kinh phí');
         } else
             return view('errors.notlogin');
