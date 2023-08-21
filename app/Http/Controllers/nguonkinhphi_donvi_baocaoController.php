@@ -2292,6 +2292,21 @@ class nguonkinhphi_donvi_baocaoController extends Controller
                     //2e
                     $solieu_2e = $chenhlech_plxa + $chenhlech_xabg + $chenhlech_xahgd + $chenhlech_xacl;
                     $chitiet->nhucau = $solieu_2d + $solieu_2e;
+
+                    //số liệu 2c
+                    
+                    if($chitiet->phanloaixa == 'XL1'){
+                        $clt7=round( 16 * 310000);
+                        $cl5t=round( 21 * 310000 * 5);
+                    }else if($chitiet->phanloaixa == 'XL2'){
+                        $clt7=round( 13.7 * 310000);
+                        $cl5t=round( 18 * 310000 * 5);
+                    }else if($chitiet->phanloaixa == 'XL3'){
+                        $clt7=round( 11.4 * 310000);
+                        $cl5t=round( 15 * 310000 * 5);
+                    }
+                    $solieu_2c=$clt7 + $cl5t;
+                    $chitiet->nhucau2c=$solieu_2d + $solieu_2c;
                 }
             }
 
@@ -2348,7 +2363,8 @@ class nguonkinhphi_donvi_baocaoController extends Controller
             $a_BII[2]['sotien'] = $m_nguonkp->sum('nghihuusom');
             $a_BII[3]['sotien'] = $m_nguonkp->sum('kpuudai');
             $a_BII[4]['sotien'] = $m_nguonkp->sum('kinhphigiamxa_4a');
-            $a_BII[5]['sotien'] = $m_nguonkp->sum('nhucau');
+            // $a_BII[5]['sotien'] = $m_nguonkp->sum('nhucau');
+            $a_BII[5]['sotien'] = $m_nguonkp->sum('nhucau2c');
 
             $a_TC = array(
                 'A' => ($a_A[0]['sotien'] + $a_A[1]['sotien'] + $a_A[2]['sotien'] + $a_A[6]['sotien']),
@@ -2499,13 +2515,13 @@ class nguonkinhphi_donvi_baocaoController extends Controller
             ];
             $data[4]['solieu']['tongso'] = $data[4]['solieu']['tietkiem'] + $data[4]['solieu']['hocphi'] + $data[4]['solieu']['vienphi']
                 + $data[4]['solieu']['nguonthu'];
-
+// dd($m_chitiet);
             //Quản lý nhà nước + Biên chế xã + Các cán bộ đã nghỉ hưu (2b)
             $data[5] = array('val' => 'QLNN', 'tt' => 'd', 'noidung' => ' Quản lý nhà nước, Đảng, đoàn thể',);
             $m_data = $m_nguonkp->wherein('linhvuchoatdong', ['QLNN', 'DDT']);
             // $m_data2 = $m_nguonkp->where('maphanloai', 'KVXP')->wherein('nhomnhucau', ['HDND', 'CAPUY']);
 
-            $m_bl = $m_chitiet->wherein('linhvuchoatdong', ['QLNN', 'DDT'])->wherein('nhomnhucau', ['CANBOCT', 'BIENCHE']);
+            $m_bl = $m_chitiet->wherein('linhvuchoatdong', ['QLNN', 'DDT'])->wherein('nhomnhucau', ['CANBOCT', 'BIENCHE','HDND','CAPUY','CANBOKCT']);
             // $m_bl2 = $m_chitiet->where('maphanloai', 'KVXP')->wherein('nhomnhucau', ['HDND', 'CAPUY']);
             $data[5]['solieu'] = [
                 'nhucau' => $m_bl->sum('tongnhucau')  + $m_nguonkp->sum('nhucau2b'),
@@ -2515,11 +2531,11 @@ class nguonkinhphi_donvi_baocaoController extends Controller
                 'nguonthu' => $m_data->sum('huydongktx_khac_4a'), //Lấy tiết kiệm 2023 ở mẫu 4a
             ];
             $data[5]['solieu']['tongso'] = $data[5]['solieu']['tietkiem'] + $data[5]['solieu']['hocphi'] + $data[5]['solieu']['vienphi'] + $data[5]['solieu']['nguonthu'];
-
             //
             $data[6] = array('val' => 'QLNN', 'tt' => '-', 'noidung' => 'Trong đó: Cán bộ, công chức cấp xã',);
             $m_data2 = $m_nguonkp->where('maphanloai', 'KVXP')->wherein('nhomnhucau', ['CANBOCT']);
             $m_bl2 = $m_chitiet->where('maphanloai', 'KVXP')->wherein('nhomnhucau', ['CANBOCT']);
+
             $data[6]['solieu'] = [
                 'nhucau' => $m_bl2->sum('tongnhucau'),
                 'tietkiem' => $m_data2->sum('tietkiem'), //Lấy tiết kiệm 2023 ở mẫu 4a
@@ -2531,6 +2547,7 @@ class nguonkinhphi_donvi_baocaoController extends Controller
 
             //dd($data);
             $inputs['donvitinh'] = 1;
+
             return view('reports.thongtu78.huyen.mau4b')
                 //->with('model', $model)
                 // ->with('model_thongtu', $model_thongtu)
