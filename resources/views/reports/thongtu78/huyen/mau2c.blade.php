@@ -53,7 +53,7 @@
             <td>2</td>
             <td>3</td>
             <td>4= 1x2x(1,8-1,49)</td>
-            <td>5=1x3x(1,8-1,49)</td>
+            <td>5=1x3x(1,8-1,49)x5T</td>
             <td>6=4+5</td>
         </tr>
         <tr style="font-weight: bold">
