@@ -487,7 +487,7 @@ class nguonkinhphiController extends Controller
             //lưu lại mảng thông tin cũ do đã tách riêng: nâng lương ngạch bậc và nâng lương thâm niên
             //nâng tnn: 02; nâng nb: 06 => mảng chênh lệch 'NGACHBAC' lấy thông tin cũ để tính
             $a_luu = $m_cb;
-            //dd($a_luu);
+            // dd($a_luu);
 
             $a_data = array();
             $a_data_nl = array();
@@ -507,6 +507,7 @@ class nguonkinhphiController extends Controller
                 }
 
                 $a_nb = a_getelement($m_nb, array('thang_nb' => $a_thang[$i]['thang']));
+                
                 if (count($a_nb) > 0) {
                     foreach ($a_nb as $key => $val) {
                         if (!in_array($key, $a_danghihuu)) {
