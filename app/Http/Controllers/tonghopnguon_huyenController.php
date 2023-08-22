@@ -4055,8 +4055,36 @@ class tonghopnguon_huyenController extends Controller
                         $clt7 = round(11.4 * 310000);
                         $cl5t = round(15 * 310000 * 5);
                     }
-                    $solieu_2c = $clt7 + $cl5t;
-                    $chitiet->nhucau2c = $solieu_2c;
+                    $solieu_plxa=$clt7 + $cl5t;
+                    //Số xã biên giới
+                    $solieu_xabiengioi_clt7=round($chitiet->sothonbiengioi_2d * 5 * 310000);
+                    $solieu_xabiengioi_cl5t=round($chitiet->sothonbiengioi_2d * 6 * 310000 * 5);
+                    $solieu_xabiengioi=$solieu_xabiengioi_clt7 +  $solieu_xabiengioi_cl5t;
+                    //số thôn có 350 hộ trở lên
+                    $soho_350_clt7= round($chitiet->sothon350hgd_2d * 5 * 310000);
+                    $soho_350_cl5t= round($chitiet->sothon350hgd_2d * 6 * 310000 * 5);
+                    $soho_350=$soho_350_clt7 + $soho_350_cl5t;
+                     $soho_500_clt7=round($chitiet->sotodanpho500hgd_2d * 3 * 310000);
+                     $soho_500_cl5t=round($chitiet->sotodanpho500hgd_2d * 6 * 310000 * 5);
+                     $soho_500= $soho_500_clt7 + $soho_500_cl5t;
+                     //tổ dân phố trọng điểm an ninh
+                     $sothon_trongdiem_clt7=round($chitiet->sothontrongdiem_2d * 3 * 310000);
+                     $sothon_trongdiem_cl5t=round($chitiet->sothontrongdiem_2d * 6 * 310000 * 5);
+                     $sothon_trongdiem= $sothon_trongdiem_clt7 + $sothon_trongdiem_cl5t;
+                     //tổ dân phố chuyển từ thôn
+                     $sochuyentuthon_clt7=round($chitiet->sochuyentuthon350hgd_2d * 3 * 310000);
+                     $sochuyentuthon_cl5t=round($chitiet->sochuyentuthon350hgd_2d * 6 * 310000 * 5);
+                     $sochuyentuthon= $sochuyentuthon_clt7 +  $sochuyentuthon_cl5t;
+                     //Thôn còn lại
+                     $sothonconlai_clt7=round($chitiet->sothonconlai_2d * 3 * 310000);
+                     $sothonconlai_cl5t=round($chitiet->sothonconlai_2d * 4.5 * 310000 * 5);
+                     $sothonconlai=  $sothonconlai_clt7 +  $sothonconlai_cl5t;
+                     //tổ dân phố còn lại
+                     $sotoconlai_clt7=round($chitiet->sotoconlai_2d * 3 * 310000);
+                     $sotoconlai_cl5t=round($chitiet->sotoconlai_2d * 4.5 * 310000 * 5);
+                     $sotoconlai=$sotoconlai_clt7 + $sotoconlai_cl5t;
+                     $thontodanpho=$solieu_xabiengioi +  $soho_350 + $soho_500 + $sothon_trongdiem +  $sochuyentuthon + $sothonconlai +  $sotoconlai;
+                    $chitiet->nhucau2c= $solieu_plxa + $thontodanpho;
                 }
             }
             //dd($m_nguonkp);
