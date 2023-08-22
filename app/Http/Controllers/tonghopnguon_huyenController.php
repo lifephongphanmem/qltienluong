@@ -295,7 +295,7 @@ class tonghopnguon_huyenController extends Controller
                 if (isset($inputs[$truong]))
                     $inputs[$truong] = chkDbl($inputs[$truong]);
             }
-
+// dd($inputs);
             if ($model == null) {
                 nguonkinhphi::create($inputs);
             } else {
@@ -4043,6 +4043,20 @@ class tonghopnguon_huyenController extends Controller
                     //2e
                     $solieu_2e = $chenhlech_plxa + $chenhlech_xabg + $chenhlech_xahgd + $chenhlech_xacl;
                     $chitiet->nhucau = $solieu_2d + $solieu_2e;
+                                        //số liệu 2c
+                    
+                                        if($chitiet->phanloaixa == 'XL1'){
+                                            $clt7=round( 16 * 310000);
+                                            $cl5t=round( 21 * 310000 * 5);
+                                        }else if($chitiet->phanloaixa == 'XL2'){
+                                            $clt7=round( 13.7 * 310000);
+                                            $cl5t=round( 18 * 310000 * 5);
+                                        }else if($chitiet->phanloaixa == 'XL3'){
+                                            $clt7=round( 11.4 * 310000);
+                                            $cl5t=round( 15 * 310000 * 5);
+                                        }
+                                        $solieu_2c=$clt7 + $cl5t;
+                                        $chitiet->nhucau2c=$solieu_2d + $solieu_2c;
                 }
             }
             //dd($m_nguonkp);
@@ -4099,7 +4113,8 @@ class tonghopnguon_huyenController extends Controller
             $a_BII[2]['sotien'] = $m_nguonkp->sum('nghihuusom');
             $a_BII[3]['sotien'] = $m_nguonkp->sum('kpuudai');
             $a_BII[4]['sotien'] = $m_nguonkp->sum('kinhphigiamxa_4a');
-            $a_BII[5]['sotien'] = $m_nguonkp->sum('nhucau');
+            // $a_BII[5]['sotien'] = $m_nguonkp->sum('nhucau');
+            $a_BII[5]['sotien'] = $m_nguonkp->sum('nhucau2c');
 
             $a_TC = array(
                 'A' => ($a_A[0]['sotien'] + $a_A[1]['sotien'] + $a_A[2]['sotien'] + $a_A[6]['sotien']),
