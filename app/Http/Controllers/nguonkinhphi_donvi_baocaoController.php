@@ -2504,13 +2504,21 @@ class nguonkinhphi_donvi_baocaoController extends Controller
             $m_data = $m_nguonkp->wherenotin('linhvuchoatdong', ['QLNN', 'DDT', 'YTE', 'GD', 'DT']);
             $m_bl = $m_chitiet->wherenotin('linhvuchoatdong', ['QLNN', 'DDT', 'YTE', 'GD', 'DT']);
             $m_bl2 = $m_chitiet->wherein('nhomnhucau', ['HDND', 'CAPUY']);
+            //tạm ẩn số liệu dòng này 22/8/2023
+            // $data[4]['solieu'] = [
+            //     'nhucau' => $m_bl->sum('tongnhucau') +  $m_bl2->sum('tongnhucau'),
+            //     'tietkiem' => $m_data->sum('tietkiem'), //Lấy tiết kiệm 2023 ở mẫu 4a
+            //     'hocphi' => $m_data->sum('huydongktx_hocphi_4a'), //Lấy tiết kiệm 2023 ở mẫu 4a
+            //     'vienphi' => $m_data->sum('huydongktx_vienphi_4a'), //Lấy tiết kiệm 2023 ở mẫu 4a
+            //     'nguonthu' => $m_data->sum('huydongktx_khac_4a'), //Lấy tiết kiệm 2023 ở mẫu 4a
 
+            // ];
             $data[4]['solieu'] = [
-                'nhucau' => $m_bl->sum('tongnhucau') +  $m_bl2->sum('tongnhucau'),
-                'tietkiem' => $m_data->sum('tietkiem'), //Lấy tiết kiệm 2023 ở mẫu 4a
-                'hocphi' => $m_data->sum('huydongktx_hocphi_4a'), //Lấy tiết kiệm 2023 ở mẫu 4a
-                'vienphi' => $m_data->sum('huydongktx_vienphi_4a'), //Lấy tiết kiệm 2023 ở mẫu 4a
-                'nguonthu' => $m_data->sum('huydongktx_khac_4a'), //Lấy tiết kiệm 2023 ở mẫu 4a
+                'nhucau' =>0,
+                'tietkiem' =>0, //Lấy tiết kiệm 2023 ở mẫu 4a
+                'hocphi' => 0, //Lấy tiết kiệm 2023 ở mẫu 4a
+                'vienphi' =>0, //Lấy tiết kiệm 2023 ở mẫu 4a
+                'nguonthu' => 0, //Lấy tiết kiệm 2023 ở mẫu 4a
 
             ];
             $data[4]['solieu']['tongso'] = $data[4]['solieu']['tietkiem'] + $data[4]['solieu']['hocphi'] + $data[4]['solieu']['vienphi']
