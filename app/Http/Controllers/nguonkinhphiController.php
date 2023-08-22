@@ -851,6 +851,7 @@ class nguonkinhphiController extends Controller
                 'huydongktx_khac_4a',
 
             ];
+            // dd($inputs);
             foreach ($a_truong  as $truong) {
                 if (isset($inputs[$truong]))
                     $inputs[$truong] = chkDbl($inputs[$truong]);
