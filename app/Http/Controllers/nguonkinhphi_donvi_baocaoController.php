@@ -2307,7 +2307,7 @@ class nguonkinhphi_donvi_baocaoController extends Controller
                         $cl5t=round( 15 * 310000 * 5);
                     }
                     $solieu_2c=$clt7 + $cl5t;
-                    $chitiet->nhucau2c=$solieu_2d + $solieu_2c;
+                    $chitiet->nhucau2c= $solieu_2c;
                 }
             }
 
@@ -2505,7 +2505,7 @@ class nguonkinhphi_donvi_baocaoController extends Controller
             $m_data = $m_nguonkp->wherenotin('linhvuchoatdong', ['QLNN', 'DDT', 'YTE', 'GD', 'DT']);
             $m_bl = $m_chitiet->wherenotin('linhvuchoatdong', ['QLNN', 'DDT', 'YTE', 'GD', 'DT']);
             $m_bl2 = $m_chitiet->wherein('nhomnhucau', ['HDND', 'CAPUY']);
-            //tạm ẩn số liệu dòng này 22/8/2023
+
             $data[4]['solieu'] = [
                 // 'nhucau' => $m_bl->sum('tongnhucau') +  $m_bl2->sum('tongnhucau'),
                 'nhucau' => $m_bl->sum('tongnhucau'),
