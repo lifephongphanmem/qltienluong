@@ -295,7 +295,7 @@ class tonghopnguon_huyenController extends Controller
                 if (isset($inputs[$truong]))
                     $inputs[$truong] = chkDbl($inputs[$truong]);
             }
-// dd($inputs);
+            // dd($inputs);
             if ($model == null) {
                 nguonkinhphi::create($inputs);
             } else {
@@ -3953,7 +3953,7 @@ class tonghopnguon_huyenController extends Controller
                 $chitiet->tendv = $a_thongtindv[$chitiet->madv];
 
                 //Tính toán số liêu
-                $chitiet->tongluong_2i =0;
+                $chitiet->tongluong_2i = 0;
                 $chitiet->chenhlech_2i = 0;
                 $chitiet->quyluong_2i = 0;
             }
@@ -3963,10 +3963,10 @@ class tonghopnguon_huyenController extends Controller
             $m_donvi = dmdonvi::where('madv', $inputs['macqcq'])->first();
             //dd($m_tonghop_ct);
             return view('reports.thongtu78.huyen.mau2g')
-            ->with('m_chitiet', $m_nguonkp)
-            ->with('m_dshuyen', $m_dshuyen)
-            ->with('m_dv', $m_donvi)
-            ->with('inputs', $inputs)
+                ->with('m_chitiet', $m_nguonkp)
+                ->with('m_dshuyen', $m_dshuyen)
+                ->with('m_dv', $m_donvi)
+                ->with('inputs', $inputs)
                 ->with('pageTitle', 'Báo cáo nhu cầu kinh phí');
         } else
             return view('errors.notlogin');
@@ -4043,20 +4043,20 @@ class tonghopnguon_huyenController extends Controller
                     //2e
                     $solieu_2e = $chenhlech_plxa + $chenhlech_xabg + $chenhlech_xahgd + $chenhlech_xacl;
                     $chitiet->nhucau = $solieu_2d + $solieu_2e;
-                                        //số liệu 2c
-                    
-                                        if($chitiet->phanloaixa == 'XL1'){
-                                            $clt7=round( 16 * 310000);
-                                            $cl5t=round( 21 * 310000 * 5);
-                                        }else if($chitiet->phanloaixa == 'XL2'){
-                                            $clt7=round( 13.7 * 310000);
-                                            $cl5t=round( 18 * 310000 * 5);
-                                        }else if($chitiet->phanloaixa == 'XL3'){
-                                            $clt7=round( 11.4 * 310000);
-                                            $cl5t=round( 15 * 310000 * 5);
-                                        }
-                                        $solieu_2c=$clt7 + $cl5t;
-                                        $chitiet->nhucau2c=$solieu_2d + $solieu_2c;
+                    //số liệu 2c
+
+                    if ($chitiet->phanloaixa == 'XL1') {
+                        $clt7 = round(16 * 310000);
+                        $cl5t = round(21 * 310000 * 5);
+                    } else if ($chitiet->phanloaixa == 'XL2') {
+                        $clt7 = round(13.7 * 310000);
+                        $cl5t = round(18 * 310000 * 5);
+                    } else if ($chitiet->phanloaixa == 'XL3') {
+                        $clt7 = round(11.4 * 310000);
+                        $cl5t = round(15 * 310000 * 5);
+                    }
+                    $solieu_2c = $clt7 + $cl5t;
+                    $chitiet->nhucau2c = $solieu_2c;
                 }
             }
             //dd($m_nguonkp);
