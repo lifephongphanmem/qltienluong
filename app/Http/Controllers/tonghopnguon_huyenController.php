@@ -204,6 +204,7 @@ class tonghopnguon_huyenController extends Controller
         if (Session::has('admin')) {
             $inputs = $requests->all();
             $model = nguonkinhphi::where('masodv', $inputs['masodv'])->first();
+
             $a_truong = [
                 'bosung',
                 'caicach',
@@ -1278,6 +1279,8 @@ class tonghopnguon_huyenController extends Controller
             if (!isset($inputs['macqcq'])) {
                 $inputs['macqcq'] = dmdonvibaocao::where('madvbc', $inputs['madvbc'])->first()->madvcq;
             }
+            $m_banhanh = nguonkinhphi::where('madv', $inputs['macqcq'])->where('sohieu', $inputs['sohieu'])->first();
+
             $m_thongtu = dmthongtuquyetdinh::where('sohieu', $inputs['sohieu'])->first();
             $m_nguonkp = nguonkinhphi::where(function ($qr) use ($inputs) {
                 $qr->where('macqcq', $inputs['macqcq'])->where('trangthai', 'DAGUI')->where('sohieu', $inputs['sohieu']);
@@ -1971,7 +1974,8 @@ class tonghopnguon_huyenController extends Controller
                 ->with('ar_IV', $ar_IV)
                 ->with('a_Tong', $a_Tong)
                 ->with('m_dv', $m_dv)
-                ->with('inputs', $inputs)
+                ->with('m_dv', $m_dv)
+                ->with('m_banhanh', $m_banhanh)
                 //->with('a_phucap', $a_phucap)
                 ->with('a_phucap', getPhuCap2a_78())
                 //->with('a_phucap_st', $a_phucap_st)
@@ -1986,6 +1990,7 @@ class tonghopnguon_huyenController extends Controller
         if (Session::has('admin')) {
             $inputs = $request->all();
             $m_thongtu = dmthongtuquyetdinh::where('sohieu', $inputs['sohieu'])->first();
+            $m_banhanh = nguonkinhphi::where('madv', $inputs['macqcq'])->where('sohieu', $inputs['sohieu'])->first();
             $m_nguonkp = nguonkinhphi::where(function ($qr) use ($inputs) {
                 $qr->where('macqcq', $inputs['macqcq'])->where('trangthai', 'DAGUI')->where('sohieu', $inputs['sohieu']);
             })->orwhere(function ($qr) use ($inputs) {
@@ -2590,6 +2595,7 @@ class tonghopnguon_huyenController extends Controller
                 ->with('m_dv', $m_donvi)
                 ->with('inputs', $inputs)
                 ->with('a_phucap', $a_phucap)
+                ->with('m_banhanh', $m_banhanh)
                 ->with('a_phucap_st', $a_phucap_st)
                 ->with('col', $col)
                 ->with('pageTitle', 'Báo cáo nhu cầu kinh phí');
@@ -2602,6 +2608,7 @@ class tonghopnguon_huyenController extends Controller
         if (Session::has('admin')) {
             $inputs = $request->all();
             $m_thongtu = dmthongtuquyetdinh::where('sohieu', $inputs['sohieu'])->first();
+            $m_banhanh = nguonkinhphi::where('madv', $inputs['macqcq'])->where('sohieu', $inputs['sohieu'])->first();
             $m_nguonkp = nguonkinhphi::where(function ($qr) use ($inputs) {
                 $qr->where('macqcq', $inputs['macqcq'])->where('trangthai', 'DAGUI')->where('sohieu', $inputs['sohieu']);
             })->orwhere(function ($qr) use ($inputs) {
@@ -3302,6 +3309,7 @@ class tonghopnguon_huyenController extends Controller
                 ->with('inputs', $inputs)
                 ->with('a_phucap', $a_phucap)
                 ->with('a_phucap_st', $a_phucap_st)
+                ->with('m_banhanh', $m_banhanh)
                 ->with('a_nhomgd', array_keys($a_giaoduc))
                 ->with('m_nhomgiaoduc', $m_nhomgiaoduc->sortby('maqhns'))
                 ->with('col', $col)
