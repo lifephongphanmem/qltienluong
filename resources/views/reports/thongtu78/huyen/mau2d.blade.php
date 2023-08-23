@@ -92,7 +92,7 @@
                 <td>{{ dinhdangsothapphan($dulieu['solieu']['soluongdinhbien_2d'], $inputs['lamtron']) }}</td>
                 <td>{{ dinhdangsothapphan($dulieu['solieu']['soluongdonvi_2k']*$dulieu['solieu']['soluongdinhbien_2d'], $inputs['lamtron']) }}</td>
                 {{-- <td>{{ dinhdangsothapphan($dulieu['solieu']['tongqd34_2d'] - $dulieu['solieu']['soluongdinhbien_2d'], $inputs['lamtron']) }} --}}
-                    <td>{{ dinhdangsothapphan($dulieu['solieu']['tongqd34_2d'] - ($dulieu['solieu']['soluongdonvi_2k']*$dulieu['solieu']['soluongdinhbien_2d']), $inputs['lamtron']) }}
+                    <td>{{ dinhdangsothapphan($dulieu['solieu']['tongsodinhbien_2d'], $inputs['lamtron']) }}
                 </td>
                
                 <td>{{ dinhdangsothapphan($dulieu['solieu']['quyluonggiam_2k'], $inputs['lamtron']) }}</td>
