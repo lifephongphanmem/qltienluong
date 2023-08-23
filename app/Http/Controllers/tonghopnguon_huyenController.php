@@ -3687,7 +3687,6 @@ class tonghopnguon_huyenController extends Controller
             ];
 // dd($ar_I[1]);
             $inputs['lamtron'] = session('admin')->lamtron;
-
             //dd($ar_I);
             $m_donvi = dmdonvi::where('madv', $inputs['macqcq'])->first();
             return view('reports.thongtu78.huyen.mau2d')
