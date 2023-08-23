@@ -1902,6 +1902,7 @@ class nguonkinhphi_donvi_baocaoController extends Controller
                 'hesophucapbq_2d' => $m_xl1->sum('hesophucapbq_2d'),
                 'tyledonggop_2d' => $m_xl1->sum('tyledonggop_2d'),
                 'soluongdinhbien_2d' => $m_xl1->sum('soluongdinhbien_2d'),
+                'tongsodinhbien_2d'=>$m_xl1->count() * $m_xl1->sum('soluongdinhbien_2d'),
                 'quyluonggiam_2k' => $m_xl1->sum('quyluonggiam_2k'),
                 'tongquyluonggiam_2k' => $m_xl1->sum('quyluonggiam_2k') * 5,
             ];
@@ -1917,6 +1918,7 @@ class nguonkinhphi_donvi_baocaoController extends Controller
                 'hesophucapbq_2d' => $m_xl2->sum('hesophucapbq_2d'),
                 'tyledonggop_2d' => $m_xl2->sum('tyledonggop_2d'),
                 'soluongdinhbien_2d' => $m_xl2->sum('soluongdinhbien_2d'),
+                'tongsodinhbien_2d'=>$m_xl2->count() * $m_xl2->sum('soluongdinhbien_2d'),
                 'quyluonggiam_2k' => $m_xl2->sum('quyluonggiam_2k'),
                 'tongquyluonggiam_2k' => $m_xl2->sum('quyluonggiam_2k') * 5,
             ];
@@ -1932,6 +1934,7 @@ class nguonkinhphi_donvi_baocaoController extends Controller
                 'hesophucapbq_2d' => $m_xl3->sum('hesophucapbq_2d'),
                 'tyledonggop_2d' => $m_xl3->sum('tyledonggop_2d'),
                 'soluongdinhbien_2d' => $m_xl3->sum('soluongdinhbien_2d'),
+                'tongsodinhbien_2d'=>$m_xl3->count() * $m_xl3->sum('soluongdinhbien_2d'),
                 'quyluonggiam_2k' => $m_xl3->sum('quyluonggiam_2k'),
                 'tongquyluonggiam_2k' => $m_xl3->sum('quyluonggiam_2k') * 5,
             ];
@@ -1945,6 +1948,7 @@ class nguonkinhphi_donvi_baocaoController extends Controller
                 'hesophucapbq_2d' => $ar_I[1]['solieu']['hesophucapbq_2d'] + $ar_I[2]['solieu']['hesophucapbq_2d'] + $ar_I[3]['solieu']['hesophucapbq_2d'],
                 'tyledonggop_2d' => $ar_I[1]['solieu']['tyledonggop_2d'] + $ar_I[2]['solieu']['tyledonggop_2d'] + $ar_I[3]['solieu']['tyledonggop_2d'],
                 'soluongdinhbien_2d' => $ar_I[1]['solieu']['soluongdinhbien_2d'] + $ar_I[2]['solieu']['soluongdinhbien_2d'] + $ar_I[3]['solieu']['soluongdinhbien_2d'],
+                'tongsodinhbien_2d' => $ar_I[1]['solieu']['tongsodinhbien_2d'] + $ar_I[2]['solieu']['tongsodinhbien_2d'] + $ar_I[3]['solieu']['tongsodinhbien_2d'],
                 'quyluonggiam_2k' => $ar_I[1]['solieu']['quyluonggiam_2k'] + $ar_I[2]['solieu']['quyluonggiam_2k'] + $ar_I[3]['solieu']['quyluonggiam_2k'],
                 'tongquyluonggiam_2k' => $ar_I[1]['solieu']['tongquyluonggiam_2k'] + $ar_I[2]['solieu']['tongquyluonggiam_2k'] + $ar_I[3]['solieu']['tongquyluonggiam_2k'],
             ];
