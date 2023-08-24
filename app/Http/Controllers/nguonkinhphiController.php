@@ -743,7 +743,6 @@ class nguonkinhphiController extends Controller
     {
         if (Session::has('admin')) {
             $inputs = $request->all();
-            // dd($inputs);
             $model = nguonkinhphi::where('masodv', $inputs['masodv'])->first();
 
             //Sau xây dựng các trường trong thông tư
@@ -861,8 +860,12 @@ class nguonkinhphiController extends Controller
             $inputs['quy2_tong'] = round(($inputs['quy3_2'] - $inputs['quy1_2'] + $inputs['quy2_2'] - $inputs['quy1_2'] + $inputs['tongsonguoi2'] * $a_solieu['2b']) * 6);
             $inputs['quy3_tong'] = round(($inputs['quy3_3'] - $inputs['quy1_3'] + $inputs['quy2_3'] - $inputs['quy1_3'] + $inputs['tongsonguoi3'] * $a_solieu['2b']) * 6);
 
-            //dd(getSoLuongCanBoDinhMuc($a_solieu['2d_ndcu'], session('admin')->phanloaixa) - $inputs['soluongdinhbien_2d']);
+
             //Tính toán số liệu mẫu 2d
+            //Nếu xã không nhập soluongdinhbien thì lấy max theo nđ33
+            // $inputs['soluongdinhbien_2d']=$inputs['soluongdinhbien_2d'] != 0?$inputs['soluongdinhbien_2d']:getSoLuongCanBoDinhMuc('ND33/2023/XA', session('admin')->phanloaixa);
+            $inputs['soluongdinhbien_2d']=getSoLuongCanBoDinhMuc('ND33/2023/XA', session('admin')->phanloaixa);
+
             $inputs['quyluonggiam_2k'] = round((getSoLuongCanBoDinhMuc($a_solieu['2d_ndcu'], session('admin')->phanloaixa) - $inputs['soluongdinhbien_2d'])
                 * ($inputs['hesoluongbq_2d'] + $inputs['hesophucapbq_2d'] + $inputs['tyledonggop_2d']) * $a_solieu['2d']);
 

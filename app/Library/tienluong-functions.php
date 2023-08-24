@@ -1297,17 +1297,17 @@ function getPhuCap2a_78()
 function getSoLuongCanBoDinhMuc($nghidinh, $phanloaixa)
 {
     $a_kq = [
-        // 'ND34/2019' => [
-        //     'XL1'=> 23,
-        //     'XL2'=> 21,
-        //     'XL3'=> 19,
-        // ],
-        //Do theo QĐ 11/2020-UBND Tỉnh Trưởng công an xã là CA chính quy => định biên theo NĐ 34 giảm 01 cán bộ
         'ND34/2019' => [
-            'XL1'=> 22,
-            'XL2'=> 20,
-            'XL3'=> 18,
+            'XL1'=> 23,
+            'XL2'=> 21,
+            'XL3'=> 19,
         ],
+        //Do theo QĐ 11/2020-UBND Tỉnh Trưởng công an xã là CA chính quy => định biên theo NĐ 34 giảm 01 cán bộ
+        // 'ND34/2019' => [
+        //     'XL1'=> 22,
+        //     'XL2'=> 20,
+        //     'XL3'=> 18,
+        // ],
         'ND33/2023/XA' => [
             'XL1'=> 22,
             'XL2'=> 20,
