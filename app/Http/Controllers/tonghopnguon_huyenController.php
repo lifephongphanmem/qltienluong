@@ -3625,7 +3625,8 @@ class tonghopnguon_huyenController extends Controller
             $ar_I[0] = array('style' => 'font-weight: bold;', 'tt' => '', 'noidung' => 'TỔNG SỐ',);
 
             $ar_I[1] = array('style' => '', 'tt' => '1', 'noidung' => 'Xã loại 1',);
-            $m_xl1 = $m_nguonkp->where('phanloaixa', 'XL1');
+            $m_xl1 = $m_nguonkp->where('phanloaixa', 'XL1')->where('quyluonggiam_2k','<>',0);
+            // dd($m_xl1);
             $ar_I[1]['solieu'] = [
                 'soluongdonvi_2k' => $m_xl1->count(),
                 'qd34_2d' => getSoLuongCanBoDinhMuc('ND34/2019', 'XL1'),
@@ -3634,14 +3635,15 @@ class tonghopnguon_huyenController extends Controller
                 'hesoluongbq_2d' => $m_xl1->sum('hesoluongbq_2d'),
                 'hesophucapbq_2d' => $m_xl1->sum('hesophucapbq_2d'),
                 'tyledonggop_2d' => $m_xl1->sum('tyledonggop_2d'),
-                'soluongdinhbien_2d' => $m_xl1->sum('soluongdinhbien_2d'),
-                'tongsodinhbien_2d'=>$m_xl1->count() * $m_xl1->sum('soluongdinhbien_2d'),
+                // 'soluongdinhbien_2d' => $m_xl1->sum('soluongdinhbien_2d'),
+                'soluongdinhbien_2d' => getSoLuongCanBoDinhMuc('ND33/2023/XA', 'XL1'),
+                'tongsodinhbien_2d'=>$m_xl1->count() * getSoLuongCanBoDinhMuc('ND33/2023/XA', 'XL1'),
                 'quyluonggiam_2k' => $m_xl1->sum('quyluonggiam_2k'),
                 'tongquyluonggiam_2k' => $m_xl1->sum('quyluonggiam_2k') * 5,
             ];
 
             $ar_I[2] = array('style' => '', 'tt' => '2', 'noidung' => 'Xã loại 2',);
-            $m_xl2 = $m_nguonkp->where('phanloaixa', 'XL2');
+            $m_xl2 = $m_nguonkp->where('phanloaixa', 'XL2')->where('quyluonggiam_2k','<>',0);
             $ar_I[2]['solieu'] = [
                 'soluongdonvi_2k' => $m_xl2->count(),
                 'qd34_2d' => getSoLuongCanBoDinhMuc('ND34/2019', 'XL2'),
@@ -3650,14 +3652,15 @@ class tonghopnguon_huyenController extends Controller
                 'hesoluongbq_2d' => $m_xl2->sum('hesoluongbq_2d'),
                 'hesophucapbq_2d' => $m_xl2->sum('hesophucapbq_2d'),
                 'tyledonggop_2d' => $m_xl2->sum('tyledonggop_2d'),
-                'soluongdinhbien_2d' => $m_xl2->sum('soluongdinhbien_2d'),
-                'tongsodinhbien_2d'=>$m_xl2->count() * $m_xl2->sum('soluongdinhbien_2d'),
+                // 'soluongdinhbien_2d' => $m_xl2->sum('soluongdinhbien_2d'),
+                'soluongdinhbien_2d' => getSoLuongCanBoDinhMuc('ND33/2023/XA', 'XL2'),
+                'tongsodinhbien_2d'=>$m_xl2->count() * getSoLuongCanBoDinhMuc('ND33/2023/XA', 'XL2'),
                 'quyluonggiam_2k' => $m_xl2->sum('quyluonggiam_2k'),
                 'tongquyluonggiam_2k' => $m_xl2->sum('quyluonggiam_2k') * 5,
             ];
 
             $ar_I[3] = array('style' => '', 'tt' => '3', 'noidung' => 'Xã loại 3',);
-            $m_xl3 = $m_nguonkp->where('phanloaixa', 'XL3');
+            $m_xl3 = $m_nguonkp->where('phanloaixa', 'XL3')->where('quyluonggiam_2k','<>',0);
             $ar_I[3]['solieu'] = [
                 'soluongdonvi_2k' => $m_xl3->count(),
                 'qd34_2d' => getSoLuongCanBoDinhMuc('ND34/2019', 'XL3'),
@@ -3666,8 +3669,9 @@ class tonghopnguon_huyenController extends Controller
                 'hesoluongbq_2d' => $m_xl3->sum('hesoluongbq_2d'),
                 'hesophucapbq_2d' => $m_xl3->sum('hesophucapbq_2d'),
                 'tyledonggop_2d' => $m_xl3->sum('tyledonggop_2d'),
-                'soluongdinhbien_2d' => $m_xl3->sum('soluongdinhbien_2d'),
-                'tongsodinhbien_2d'=>$m_xl3->count() * $m_xl3->sum('soluongdinhbien_2d'),
+                // 'soluongdinhbien_2d' => $m_xl3->sum('soluongdinhbien_2d'),
+                'soluongdinhbien_2d' => getSoLuongCanBoDinhMuc('ND33/2023/XA', 'XL3'),
+                'tongsodinhbien_2d'=>$m_xl3->count() * getSoLuongCanBoDinhMuc('ND33/2023/XA', 'XL3'),
                 'quyluonggiam_2k' => $m_xl3->sum('quyluonggiam_2k'),
                 'tongquyluonggiam_2k' => $m_xl3->sum('quyluonggiam_2k') * 5,
             ];
