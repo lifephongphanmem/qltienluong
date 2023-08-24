@@ -1280,7 +1280,7 @@ class tonghopnguon_huyenController extends Controller
                 $inputs['macqcq'] = dmdonvibaocao::where('madvbc', $inputs['madvbc'])->first()->madvcq;
             }
             $m_banhanh = nguonkinhphi::where('madv', $inputs['macqcq'])->where('sohieu', $inputs['sohieu'])->first();
-
+            dd($m_banhanh);
             $m_thongtu = dmthongtuquyetdinh::where('sohieu', $inputs['sohieu'])->first();
             $m_nguonkp = nguonkinhphi::where(function ($qr) use ($inputs) {
                 $qr->where('macqcq', $inputs['macqcq'])->where('trangthai', 'DAGUI')->where('sohieu', $inputs['sohieu']);
@@ -1470,6 +1470,7 @@ class tonghopnguon_huyenController extends Controller
                     $ar_I[$key]['solieu_moi'] = $a_solieu_moi;
                 }
             }
+
             //Vòng cấp độ 1
             foreach ($ar_I as $key => $chitiet) {
                 if ($chitiet['capdo'] == '1') {
@@ -1533,6 +1534,7 @@ class tonghopnguon_huyenController extends Controller
                     $ar_I[$key]['solieu_moi'] = $a_solieu_moi;
                 }
             }
+
             //Vòng cấp độ 9
             foreach ($ar_I as $key => $chitiet) {
                 if ($chitiet['capdo'] == '9') {
@@ -1640,7 +1642,7 @@ class tonghopnguon_huyenController extends Controller
                 }
             }
 
-
+ 
             //Tính toán số liệu phần III
             $ar_III = getHDND();
             $aIII_plct = getHDND_plct();
@@ -3624,7 +3626,7 @@ class tonghopnguon_huyenController extends Controller
             //Tính toán số liệu phần I
             $ar_I[0] = array('phanloai'=>'','style' => 'font-weight: bold;', 'tt' => '', 'noidung' => 'TỔNG SỐ',);
 
-            $ar_I[1] = array('phanloai'=>'XL1','style' => '', 'tt' => '1', 'noidung' => 'Xã loại 1',);
+            $ar_I[1] = array('phanloai'=>'XL1','style' => 'font-weight: bold;', 'tt' => '1', 'noidung' => 'Xã loại 1',);
             $m_xl1 = $m_nguonkp->where('phanloaixa', 'XL1')->where('quyluonggiam_2k','<>',0);
             // dd($m_xl1);
             $ar_I[1]['solieu'] = [
@@ -3642,7 +3644,7 @@ class tonghopnguon_huyenController extends Controller
                 'tongquyluonggiam_2k' => $m_xl1->sum('quyluonggiam_2k') * 5,
             ];
 
-            $ar_I[2] = array('phanloai'=>'XL2','style' => '', 'tt' => '2', 'noidung' => 'Xã loại 2',);
+            $ar_I[2] = array('phanloai'=>'XL2','style' => 'font-weight: bold;', 'tt' => '2', 'noidung' => 'Xã loại 2',);
             $m_xl2 = $m_nguonkp->where('phanloaixa', 'XL2')->where('quyluonggiam_2k','<>',0);
             $ar_I[2]['solieu'] = [
                 'soluongdonvi_2k' => $m_xl2->count(),
@@ -3659,7 +3661,7 @@ class tonghopnguon_huyenController extends Controller
                 'tongquyluonggiam_2k' => $m_xl2->sum('quyluonggiam_2k') * 5,
             ];
 
-            $ar_I[3] = array('phanloai'=>'XL3','style' => '', 'tt' => '3', 'noidung' => 'Xã loại 3',);
+            $ar_I[3] = array('phanloai'=>'XL3','style' => 'font-weight: bold;', 'tt' => '3', 'noidung' => 'Xã loại 3',);
             $m_xl3 = $m_nguonkp->where('phanloaixa', 'XL3')->where('quyluonggiam_2k','<>',0);
             $ar_I[3]['solieu'] = [
                 'soluongdonvi_2k' => $m_xl3->count(),

@@ -101,7 +101,7 @@
             @if($dulieu['phanloai'] != '')
             <?php $m_xa=$ar_tong[$dulieu['phanloai']] ?>
             @foreach ($m_xa as $xa )
-            <tr style=" text-align: right;{{ $dulieu['style'] }}">
+            <tr style=" text-align: right;">
                 <td style=" text-align: center;">-</td>
                 <td style=" text-align: left;">{{ $xa->tendv }}</td>
                 <td>1</td>
