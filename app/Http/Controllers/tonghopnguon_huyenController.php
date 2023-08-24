@@ -3622,9 +3622,9 @@ class tonghopnguon_huyenController extends Controller
             }
             $m_nguonkp = $m_nguonkp->where('maphanloai', 'KVXP');
             //Tính toán số liệu phần I
-            $ar_I[0] = array('style' => 'font-weight: bold;', 'tt' => '', 'noidung' => 'TỔNG SỐ',);
+            $ar_I[0] = array('phanloai'=>'','style' => 'font-weight: bold;', 'tt' => '', 'noidung' => 'TỔNG SỐ',);
 
-            $ar_I[1] = array('style' => '', 'tt' => '1', 'noidung' => 'Xã loại 1',);
+            $ar_I[1] = array('phanloai'=>'XL1','style' => '', 'tt' => '1', 'noidung' => 'Xã loại 1',);
             $m_xl1 = $m_nguonkp->where('phanloaixa', 'XL1')->where('quyluonggiam_2k','<>',0);
             // dd($m_xl1);
             $ar_I[1]['solieu'] = [
@@ -3642,7 +3642,7 @@ class tonghopnguon_huyenController extends Controller
                 'tongquyluonggiam_2k' => $m_xl1->sum('quyluonggiam_2k') * 5,
             ];
 
-            $ar_I[2] = array('style' => '', 'tt' => '2', 'noidung' => 'Xã loại 2',);
+            $ar_I[2] = array('phanloai'=>'XL2','style' => '', 'tt' => '2', 'noidung' => 'Xã loại 2',);
             $m_xl2 = $m_nguonkp->where('phanloaixa', 'XL2')->where('quyluonggiam_2k','<>',0);
             $ar_I[2]['solieu'] = [
                 'soluongdonvi_2k' => $m_xl2->count(),
@@ -3659,7 +3659,7 @@ class tonghopnguon_huyenController extends Controller
                 'tongquyluonggiam_2k' => $m_xl2->sum('quyluonggiam_2k') * 5,
             ];
 
-            $ar_I[3] = array('style' => '', 'tt' => '3', 'noidung' => 'Xã loại 3',);
+            $ar_I[3] = array('phanloai'=>'XL2','style' => '', 'tt' => '3', 'noidung' => 'Xã loại 3',);
             $m_xl3 = $m_nguonkp->where('phanloaixa', 'XL3')->where('quyluonggiam_2k','<>',0);
             $ar_I[3]['solieu'] = [
                 'soluongdonvi_2k' => $m_xl3->count(),
@@ -3689,15 +3689,20 @@ class tonghopnguon_huyenController extends Controller
                 'quyluonggiam_2k' => $ar_I[1]['solieu']['quyluonggiam_2k'] + $ar_I[2]['solieu']['quyluonggiam_2k'] + $ar_I[3]['solieu']['quyluonggiam_2k'],
                 'tongquyluonggiam_2k' => $ar_I[1]['solieu']['tongquyluonggiam_2k'] + $ar_I[2]['solieu']['tongquyluonggiam_2k'] + $ar_I[3]['solieu']['tongquyluonggiam_2k'],
             ];
-// dd($ar_I[1]);
+            $ar_tong=[
+                'XL1'=>$m_xl1,
+                'XL2'=>$m_xl2,
+                'XL3'=>$m_xl3
+            ];
             $inputs['lamtron'] = session('admin')->lamtron;
             //dd($ar_I);
             $m_donvi = dmdonvi::where('madv', $inputs['macqcq'])->first();
-            return view('reports.thongtu78.huyen.mau2d')
+            return view('reports.thongtu78.huyen.mau2d_huyen')
                 ->with('furl', '/tong_hop_bao_cao/')
                 ->with('ar_I', $ar_I)
                 ->with('m_dv', $m_donvi)
                 ->with('inputs', $inputs)
+                ->with('ar_tong',$ar_tong)
                 ->with('pageTitle', 'Tổng hợp kinh phí giảm  theo nghị định số 33/2023/NĐ-CP');
         } else
             return view('errors.notlogin');
