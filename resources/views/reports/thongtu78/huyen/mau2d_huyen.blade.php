@@ -107,16 +107,16 @@
                 <td>1</td>
                 <td>{{  getSoLuongCanBoDinhMuc('ND34/2019', $dulieu['phanloai']) }}</td>
                 <td>{{  getSoLuongCanBoDinhMuc('ND34/2019', $dulieu['phanloai']) }}</td>
-                <td>{{$xa->soluongcanbo_2d }}</td>
-                <td>{{ $xa->hesoluongbq_2d}}</td>
-                <td>{{$xa->hesophucapbq_2d }}</td>
-                <td>{{ $xa->tyledonggop_2d }}</td>
+                <td>{{dinhdangsothapphan($xa->soluongcanbo_2d,$inputs['lamtron']) }}</td>
+                <td>{{ dinhdangsothapphan($xa->hesoluongbq_2d,$inputs['lamtron'])}}</td>
+                <td>{{dinhdangsothapphan($xa->hesophucapbq_2d,$inputs['lamtron']) }}</td>
+                <td>{{ dinhdangsothapphan($xa->tyledonggop_2d,$inputs['lamtron']) }}</td>
                 <td>{{getSoLuongCanBoDinhMuc('ND33/2023/XA', $dulieu['phanloai']) }}</td>
                 <td>{{getSoLuongCanBoDinhMuc('ND33/2023/XA', $dulieu['phanloai']) }}</td>
-                    <td>{{ dinhdangsothapphan( getSoLuongCanBoDinhMuc('ND34/2019', 'XL3') - getSoLuongCanBoDinhMuc('ND33/2023/XA', 'XL3')) }}
+                    <td>{{ dinhdangsothapphan( getSoLuongCanBoDinhMuc('ND34/2019', $dulieu['phanloai']) - getSoLuongCanBoDinhMuc('ND33/2023/XA', $dulieu['phanloai'])) }}
                 </td>               
-                <td>{{ $xa->quyluonggiam_2k }}</td>
-                <td>{{ $xa->quyluonggiam_2k * 5 }}</td>
+                <td>{{  dinhdangsothapphan($xa->quyluonggiam_2k) }}</td>
+                <td>{{  dinhdangsothapphan($xa->quyluonggiam_2k * 5) }}</td>
             </tr>
             @endforeach
             @endif
