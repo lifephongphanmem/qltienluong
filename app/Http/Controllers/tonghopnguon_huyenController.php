@@ -1280,7 +1280,6 @@ class tonghopnguon_huyenController extends Controller
                 $inputs['macqcq'] = dmdonvibaocao::where('madvbc', $inputs['madvbc'])->first()->madvcq;
             }
             $m_banhanh = nguonkinhphi::where('madv', $inputs['macqcq'])->where('sohieu', $inputs['sohieu'])->first();
-            dd($m_banhanh);
             $m_thongtu = dmthongtuquyetdinh::where('sohieu', $inputs['sohieu'])->first();
             $m_nguonkp = nguonkinhphi::where(function ($qr) use ($inputs) {
                 $qr->where('macqcq', $inputs['macqcq'])->where('trangthai', 'DAGUI')->where('sohieu', $inputs['sohieu']);
