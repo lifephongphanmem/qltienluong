@@ -746,12 +746,16 @@ class nguonkinhphiController extends Controller
             $model = nguonkinhphi::where('masodv', $inputs['masodv'])->first();
 
             //Sau xây dựng các trường trong thông tư
+            $a_caphanhchinh=[
+                'XA'=>'ND33/2023/XA',
+                'PHUONG'=>'ND33/2023/PHUONG'
+               ];
             $a_solieu = [
                 '2b' => 13950,
                 '2d' => 1490000,
                 '2d_ndcu' => 'ND34/2019',
+                '2d_nd33'=>$a_caphanhchinh[session('admin')->caphanhchinh]
             ];
-
             $a_truong = [
                 'bosung',
                 'caicach',
@@ -864,10 +868,14 @@ class nguonkinhphiController extends Controller
             //Tính toán số liệu mẫu 2d
             //Nếu xã không nhập soluongdinhbien thì lấy max theo nđ33
             // $inputs['soluongdinhbien_2d']=$inputs['soluongdinhbien_2d'] != 0?$inputs['soluongdinhbien_2d']:getSoLuongCanBoDinhMuc('ND33/2023/XA', session('admin')->phanloaixa);
-            $inputs['soluongdinhbien_2d']=getSoLuongCanBoDinhMuc('ND33/2023/XA', session('admin')->phanloaixa);
+            // $inputs['soluongdinhbien_2d']=getSoLuongCanBoDinhMuc('ND33/2023/XA', session('admin')->phanloaixa);
+            
+            // Thay đổi số lượng định biên ndd34 cho nhập và số lương định biên nđ 33 thì lấy mặc định
 
-            $inputs['quyluonggiam_2k'] = round((getSoLuongCanBoDinhMuc($a_solieu['2d_ndcu'], session('admin')->phanloaixa) - $inputs['soluongdinhbien_2d'])
-                * ($inputs['hesoluongbq_2d'] + $inputs['hesophucapbq_2d'] + $inputs['tyledonggop_2d']) * $a_solieu['2d']);
+            // $inputs['quyluonggiam_2k'] = round((getSoLuongCanBoDinhMuc($a_solieu['2d_ndcu'], session('admin')->phanloaixa) - $inputs['soluongdinhbien_2d'])
+            //     * ($inputs['hesoluongbq_2d'] + $inputs['hesophucapbq_2d'] + $inputs['tyledonggop_2d']) * $a_solieu['2d']);
+            $inputs['quyluonggiam_2k'] = round(($inputs['soluongdinhbien_2d'] -getSoLuongCanBoDinhMuc($a_solieu['2d_nd33'], session('admin')->phanloaixa))
+            * ($inputs['hesoluongbq_2d'] + $inputs['hesophucapbq_2d'] + $inputs['tyledonggop_2d']) * $a_solieu['2d']);
 
             $model->update($inputs);
             if ($inputs['huyen'] == 1) {

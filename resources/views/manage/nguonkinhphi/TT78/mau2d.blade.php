@@ -15,9 +15,9 @@
             <div class="col-md-3">
                 <div class="form-group">
                     <label class="control-label font-weight-bold">Số lượng cán bộ định biên (NĐ34/2019/NĐ-CP)</label>
-                    {!! Form::text('', getSoLuongCanBoDinhMuc('ND34/2019', session('admin')->phanloaixa), [
+                    {!! Form::text('soluongdinhbien_2d', null, [
                         'class' => 'form-control',
-                        'readonly',
+                        // 'readonly',
                     ]) !!}
                 </div>
             </div>
@@ -69,7 +69,7 @@
             <div class="col-md-3">
                 <div class="form-group">
                     <label class="control-label">Số lượng cán bộ định biên theo NĐ 33/2023/NĐ-CP</label>
-                    {!! Form::text('soluongdinhbien_2d', getSoLuongCanBoDinhMuc('ND33/2023/XA', session('admin')->phanloaixa), [                        
+                    {!! Form::text('', getSoLuongCanBoDinhMuc('ND33/2023/XA', session('admin')->phanloaixa), [                        
                         'class' => 'form-control',
                         'data-mask' => 'fdecimal',
                         'readonly'

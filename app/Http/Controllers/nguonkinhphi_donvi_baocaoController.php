@@ -1895,14 +1895,14 @@ class nguonkinhphi_donvi_baocaoController extends Controller
             // dd($m_xl1);
             $ar_I[1]['solieu'] = [
                 'soluongdonvi_2k' => $m_xl1->count(),
-                'qd34_2d' => getSoLuongCanBoDinhMuc('ND34/2019', 'XL1'),
-                'tongqd34_2d' => getSoLuongCanBoDinhMuc('ND34/2019', 'XL1') * $m_xl1->count(),
+                'qd34_2d' => $m_xl1->sum('soluongdinhbien_2d'),//số định biên ndd34 lấy theo nhập
+                'tongqd34_2d' => $m_xl1->count() * $m_xl1->sum('soluongdinhbien_2d'),
                 'soluongcanbo_2d' => $m_xl1->sum('soluongcanbo_2d'),
                 'hesoluongbq_2d' => $m_xl1->sum('hesoluongbq_2d'),
                 'hesophucapbq_2d' => $m_xl1->sum('hesophucapbq_2d'),
                 'tyledonggop_2d' => $m_xl1->sum('tyledonggop_2d'),
-                'soluongdinhbien_2d' => $m_xl1->sum('soluongdinhbien_2d'),
-                'tongsodinhbien_2d'=>$m_xl1->count() * $m_xl1->sum('soluongdinhbien_2d'),
+                'soluongdinhbien_2d' => getSoLuongCanBoDinhMuc('ND33/2023/XA', 'XL1'),//số lượng định biên ndd33 lấy mặc định
+                'tongsodinhbien_2d'=>getSoLuongCanBoDinhMuc('ND33/2023/XA', 'XL1') * $m_xl1->count(),
                 'quyluonggiam_2k' => $m_xl1->sum('quyluonggiam_2k'),
                 'tongquyluonggiam_2k' => $m_xl1->sum('quyluonggiam_2k') * 5,
             ];
@@ -1911,14 +1911,16 @@ class nguonkinhphi_donvi_baocaoController extends Controller
             $m_xl2 = $m_nguonkp->where('phanloaixa', 'XL2');
             $ar_I[2]['solieu'] = [
                 'soluongdonvi_2k' => $m_xl2->count(),
-                'qd34_2d' => getSoLuongCanBoDinhMuc('ND34/2019', 'XL2'),
-                'tongqd34_2d' => getSoLuongCanBoDinhMuc('ND34/2019', 'XL2') * $m_xl2->count(),
+                'qd34_2d' => $m_xl2->sum('soluongdinhbien_2d'),//số định biên ndd34 lấy theo nhập
+                'tongqd34_2d' => $m_xl2->count() * $m_xl2->sum('soluongdinhbien_2d'),
                 'soluongcanbo_2d' => $m_xl2->sum('soluongcanbo_2d'),
                 'hesoluongbq_2d' => $m_xl2->sum('hesoluongbq_2d'),
                 'hesophucapbq_2d' => $m_xl2->sum('hesophucapbq_2d'),
                 'tyledonggop_2d' => $m_xl2->sum('tyledonggop_2d'),
-                'soluongdinhbien_2d' => $m_xl2->sum('soluongdinhbien_2d'),
-                'tongsodinhbien_2d'=>$m_xl2->count() * $m_xl2->sum('soluongdinhbien_2d'),
+                'soluongdinhbien_2d' => getSoLuongCanBoDinhMuc('ND33/2023/XA', 'XL1'),//số lượng định biên ndd33 lấy mặc định
+                'tongsodinhbien_2d'=>getSoLuongCanBoDinhMuc('ND33/2023/XA', 'XL1') * $m_xl2->count(),
+                // 'soluongdinhbien_2d' => $m_xl2->sum('soluongdinhbien_2d'),
+                // 'tongsodinhbien_2d'=>$m_xl2->count() * $m_xl2->sum('soluongdinhbien_2d'),
                 'quyluonggiam_2k' => $m_xl2->sum('quyluonggiam_2k'),
                 'tongquyluonggiam_2k' => $m_xl2->sum('quyluonggiam_2k') * 5,
             ];
@@ -1927,14 +1929,18 @@ class nguonkinhphi_donvi_baocaoController extends Controller
             $m_xl3 = $m_nguonkp->where('phanloaixa', 'XL3');
             $ar_I[3]['solieu'] = [
                 'soluongdonvi_2k' => $m_xl3->count(),
-                'qd34_2d' => getSoLuongCanBoDinhMuc('ND34/2019', 'XL3'),
-                'tongqd34_2d' => getSoLuongCanBoDinhMuc('ND34/2019', 'XL3') * $m_xl3->count(),
+                'qd34_2d' => $m_xl3->sum('soluongdinhbien_2d'),//số định biên ndd34 lấy theo nhập
+                'tongqd34_2d' => $m_xl3->count() * $m_xl3->sum('soluongdinhbien_2d'),
+                // 'qd34_2d' => getSoLuongCanBoDinhMuc('ND34/2019', 'XL3'),
+                // 'tongqd34_2d' => getSoLuongCanBoDinhMuc('ND34/2019', 'XL3') * $m_xl3->count(),
                 'soluongcanbo_2d' => $m_xl3->sum('soluongcanbo_2d'),
                 'hesoluongbq_2d' => $m_xl3->sum('hesoluongbq_2d'),
                 'hesophucapbq_2d' => $m_xl3->sum('hesophucapbq_2d'),
                 'tyledonggop_2d' => $m_xl3->sum('tyledonggop_2d'),
-                'soluongdinhbien_2d' => $m_xl3->sum('soluongdinhbien_2d'),
-                'tongsodinhbien_2d'=>$m_xl3->count() * $m_xl3->sum('soluongdinhbien_2d'),
+                'soluongdinhbien_2d' => getSoLuongCanBoDinhMuc('ND33/2023/XA', 'XL1'),//số lượng định biên ndd33 lấy mặc định
+                'tongsodinhbien_2d'=>getSoLuongCanBoDinhMuc('ND33/2023/XA', 'XL1') * $m_xl3->count(),
+                // 'soluongdinhbien_2d' => $m_xl3->sum('soluongdinhbien_2d'),
+                // 'tongsodinhbien_2d'=>$m_xl3->count() * $m_xl3->sum('soluongdinhbien_2d'),
                 'quyluonggiam_2k' => $m_xl3->sum('quyluonggiam_2k'),
                 'tongquyluonggiam_2k' => $m_xl3->sum('quyluonggiam_2k') * 5,
             ];
