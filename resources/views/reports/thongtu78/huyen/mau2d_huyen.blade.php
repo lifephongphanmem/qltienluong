@@ -111,8 +111,8 @@
                 <td>{{ dinhdangsothapphan($xa->hesoluongbq_2d,$inputs['lamtron'])}}</td>
                 <td>{{dinhdangsothapphan($xa->hesophucapbq_2d,$inputs['lamtron']) }}</td>
                 <td>{{ dinhdangsothapphan($xa->tyledonggop_2d,$inputs['lamtron']) }}</td>
-                <td>{{getSoLuongCanBoDinhMuc('ND33/2023/XA', $dulieu['phanloai']) }}</td>
-                <td>{{getSoLuongCanBoDinhMuc('ND33/2023/XA', $dulieu['phanloai']) }}</td>
+                <td>{{dinhdangsothapphan(getSoLuongCanBoDinhMuc('ND33/2023/XA', $dulieu['phanloai']), $inputs['lamtron']) }}</td>
+                <td>{{dinhdangsothapphan(getSoLuongCanBoDinhMuc('ND33/2023/XA', $dulieu['phanloai']), $inputs['lamtron']) }}</td>
                     <td>{{ dinhdangsothapphan( $xa->soluongdinhbien_2d - getSoLuongCanBoDinhMuc('ND33/2023/XA', $dulieu['phanloai'])) }}
                 </td>               
                 <td>{{  dinhdangsothapphan($xa->quyluonggiam_2k) }}</td>
