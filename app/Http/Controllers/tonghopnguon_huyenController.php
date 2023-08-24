@@ -3659,7 +3659,7 @@ class tonghopnguon_huyenController extends Controller
                 'tongquyluonggiam_2k' => $m_xl2->sum('quyluonggiam_2k') * 5,
             ];
 
-            $ar_I[3] = array('phanloai'=>'XL2','style' => '', 'tt' => '3', 'noidung' => 'Xã loại 3',);
+            $ar_I[3] = array('phanloai'=>'XL3','style' => '', 'tt' => '3', 'noidung' => 'Xã loại 3',);
             $m_xl3 = $m_nguonkp->where('phanloaixa', 'XL3')->where('quyluonggiam_2k','<>',0);
             $ar_I[3]['solieu'] = [
                 'soluongdonvi_2k' => $m_xl3->count(),
