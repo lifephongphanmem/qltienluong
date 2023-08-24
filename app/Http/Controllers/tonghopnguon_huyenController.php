@@ -3639,7 +3639,7 @@ class tonghopnguon_huyenController extends Controller
                 'hesophucapbq_2d' => $m_xl1->sum('hesophucapbq_2d'),
                 'tyledonggop_2d' => $m_xl1->sum('tyledonggop_2d'),
                 // 'soluongdinhbien_2d' => $m_xl1->sum('soluongdinhbien_2d'),
-                'soluongdinhbien_2d' => getSoLuongCanBoDinhMuc('ND33/2023/XA', 'XL1'),
+                'soluongdinhbien_2d' => $m_xl1->count() == 0? 0:getSoLuongCanBoDinhMuc('ND33/2023/XA', 'XL1') * $m_xl1->count(),
                 'tongsodinhbien_2d'=>$m_xl1->count() * getSoLuongCanBoDinhMuc('ND33/2023/XA', 'XL1'),
                 'quyluonggiam_2k' => $m_xl1->sum('quyluonggiam_2k'),
                 'tongquyluonggiam_2k' => $m_xl1->sum('quyluonggiam_2k') * 5,
@@ -3660,7 +3660,7 @@ class tonghopnguon_huyenController extends Controller
                 // 'soluongdinhbien_2d' => $m_xl2->sum('soluongdinhbien_2d'),
                 // 'soluongdinhbien_2d' => getSoLuongCanBoDinhMuc('ND33/2023/XA', 'XL2'),
                 // 'tongsodinhbien_2d'=>$m_xl2->count() * getSoLuongCanBoDinhMuc('ND33/2023/XA', 'XL2'),
-                'soluongdinhbien_2d' => getSoLuongCanBoDinhMuc('ND33/2023/XA', 'XL2'),//số lượng định biên ndd33 lấy mặc định
+                'soluongdinhbien_2d' => $m_xl2->count() == 0? 0:getSoLuongCanBoDinhMuc('ND33/2023/XA', 'XL2') * $m_xl2->count(),//số lượng định biên ndd33 lấy mặc định
                 'tongsodinhbien_2d'=>getSoLuongCanBoDinhMuc('ND33/2023/XA', 'XL2') * $m_xl2->count(),
                 'quyluonggiam_2k' => $m_xl2->sum('quyluonggiam_2k'),
                 'tongquyluonggiam_2k' => $m_xl2->sum('quyluonggiam_2k') * 5,
@@ -3681,7 +3681,7 @@ class tonghopnguon_huyenController extends Controller
                 // 'soluongdinhbien_2d' => $m_xl3->sum('soluongdinhbien_2d'),
                 // 'soluongdinhbien_2d' => getSoLuongCanBoDinhMuc('ND33/2023/XA', 'XL3'),
                 // 'tongsodinhbien_2d'=>$m_xl3->count() * getSoLuongCanBoDinhMuc('ND33/2023/XA', 'XL3'),
-                'soluongdinhbien_2d' => getSoLuongCanBoDinhMuc('ND33/2023/XA', 'XL3'),//số lượng định biên ndd33 lấy mặc định
+                'soluongdinhbien_2d' => $m_xl3->count() == 0? 0:getSoLuongCanBoDinhMuc('ND33/2023/XA', 'XL3') * $m_xl3->count(),//số lượng định biên ndd33 lấy mặc định
                 'tongsodinhbien_2d'=>getSoLuongCanBoDinhMuc('ND33/2023/XA', 'XL3') * $m_xl3->count(),
                 'quyluonggiam_2k' => $m_xl3->sum('quyluonggiam_2k'),
                 'tongquyluonggiam_2k' => $m_xl3->sum('quyluonggiam_2k') * 5,
@@ -3695,7 +3695,8 @@ class tonghopnguon_huyenController extends Controller
                 'hesoluongbq_2d' => $ar_I[1]['solieu']['hesoluongbq_2d'] + $ar_I[2]['solieu']['hesoluongbq_2d'] + $ar_I[3]['solieu']['hesoluongbq_2d'],
                 'hesophucapbq_2d' => $ar_I[1]['solieu']['hesophucapbq_2d'] + $ar_I[2]['solieu']['hesophucapbq_2d'] + $ar_I[3]['solieu']['hesophucapbq_2d'],
                 'tyledonggop_2d' => $ar_I[1]['solieu']['tyledonggop_2d'] + $ar_I[2]['solieu']['tyledonggop_2d'] + $ar_I[3]['solieu']['tyledonggop_2d'],
-                'soluongdinhbien_2d' => $ar_I[1]['solieu']['soluongdinhbien_2d'] + $ar_I[2]['solieu']['soluongdinhbien_2d'] + $ar_I[3]['solieu']['soluongdinhbien_2d'],
+                // 'soluongdinhbien_2d' => $ar_I[1]['solieu']['soluongdinhbien_2d'] + $ar_I[2]['solieu']['soluongdinhbien_2d'] + $ar_I[3]['solieu']['soluongdinhbien_2d'],
+                'soluongdinhbien_2d' => 0,
                 'tongsodinhbien_2d' => $ar_I[1]['solieu']['tongsodinhbien_2d'] + $ar_I[2]['solieu']['tongsodinhbien_2d'] + $ar_I[3]['solieu']['tongsodinhbien_2d'],
                 'quyluonggiam_2k' => $ar_I[1]['solieu']['quyluonggiam_2k'] + $ar_I[2]['solieu']['quyluonggiam_2k'] + $ar_I[3]['solieu']['quyluonggiam_2k'],
                 'tongquyluonggiam_2k' => $ar_I[1]['solieu']['tongquyluonggiam_2k'] + $ar_I[2]['solieu']['tongquyluonggiam_2k'] + $ar_I[3]['solieu']['tongquyluonggiam_2k'],
