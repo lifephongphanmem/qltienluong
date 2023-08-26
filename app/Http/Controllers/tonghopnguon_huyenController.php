@@ -1321,7 +1321,7 @@ class tonghopnguon_huyenController extends Controller
                 }
             }
             //dd($m_nguonkp);
-
+            // dd($m_chitiet);
             $m_phucap = dmphucap_donvi::where('madv',  $m_nguonkp->first()->madv)->wherenotin('mapc', ['heso'])->get();
 
             $a_phucap = array_keys(getPhuCap2a_78());
@@ -1343,7 +1343,7 @@ class tonghopnguon_huyenController extends Controller
                     }
                     //Tính bảng lương theo số tiền cũ
                     $a_solieu = [];
-
+                
                     $a_solieu['heso'] = $dulieu_chitiet->sum('heso');
                     $a_solieu['st_heso'] = round($a_solieu['heso'] * $luongcb);
 
@@ -1402,14 +1402,19 @@ class tonghopnguon_huyenController extends Controller
                     $ar_I[$key]['canbo_congtac'] = $dulieu_chitiet->sum('canbo_congtac');
                     // $ar_I[$key]['canbo_dutoan'] = $dulieu_chitiet->sum('canbo_dutoan');
                     $ar_I[$key]['canbo_dutoan'] = $dulieu_nguonkp->sum('sobiencheduocgiao');
-                    $ar_I[$key]['chenhlech01thang'] = $a_solieu_moi['tongcong'] - $a_solieu['tongcong'];
+                    //28/6/2023: tạm thời bỏ để lấy dữ liệu giống 4a
+                    // $ar_I[$key]['chenhlech01thang'] = $a_solieu_moi['tongcong'] - $a_solieu['tongcong'];
+                    // $ar_I[$key]['chenhlech06thang'] = $ar_I[$key]['chenhlech01thang'] * 6;
+                    $ar_I[$key]['chenhlech01thang'] = $dulieu_chitiet->sum('ttl') + $dulieu_chitiet->sum('ttbh_dv');
                     $ar_I[$key]['chenhlech06thang'] = $ar_I[$key]['chenhlech01thang'] * 6;
                 }
             }
 
             //Vòng cấp độ 2
             foreach ($ar_I as $key => $chitiet) {
+               
                 if ($chitiet['capdo'] == '2') {
+
                     $a_solieu = [];
                     $a_solieu_moi = [];
                     //lấy thông tin trường trc
@@ -1424,10 +1429,9 @@ class tonghopnguon_huyenController extends Controller
                         $mapc_st = 'st_' . $pc->mapc;
                         $a_solieu[$pc->mapc] = $a_solieu[$mapc_st] = $a_solieu_moi[$pc->mapc] = $a_solieu_moi[$mapc_st] = 0;
                     }
-
+                    $ar_I[$key]['chenhlech01thang']=0;
                     foreach ($chitiet['chitiet'] as $k) {
                         //bảng lương cũ
-
                         $a_solieu['heso'] += $ar_I[$k]['solieu']['heso'];
                         $a_solieu['st_heso'] += $ar_I[$k]['solieu']['st_heso'];
                         $a_solieu['tongbh_dv'] += $ar_I[$k]['solieu']['tongbh_dv'];
@@ -1460,16 +1464,17 @@ class tonghopnguon_huyenController extends Controller
 
                         $ar_I[$key]['canbo_congtac'] += $ar_I[$k]['canbo_congtac'];
                         $ar_I[$key]['canbo_dutoan'] += $ar_I[$k]['canbo_dutoan'];
+                        $ar_I[$key]['chenhlech01thang'] += $ar_I[$k]['chenhlech01thang'];
                     }
 
-                    $ar_I[$key]['chenhlech01thang'] = $a_solieu_moi['tongcong'] - $a_solieu['tongcong'];
+                    // $ar_I[$key]['chenhlech01thang'] = $a_solieu_moi['tongcong'] - $a_solieu['tongcong'];
+                    
                     $ar_I[$key]['chenhlech06thang'] = $ar_I[$key]['chenhlech01thang'] * 6;
-
                     $ar_I[$key]['solieu'] = $a_solieu;
                     $ar_I[$key]['solieu_moi'] = $a_solieu_moi;
                 }
             }
-
+            // dd($ar_I);
             //Vòng cấp độ 1
             foreach ($ar_I as $key => $chitiet) {
                 if ($chitiet['capdo'] == '1') {
@@ -1487,7 +1492,7 @@ class tonghopnguon_huyenController extends Controller
                         $mapc_st = 'st_' . $pc->mapc;
                         $a_solieu[$pc->mapc] = $a_solieu[$mapc_st] = $a_solieu_moi[$pc->mapc] = $a_solieu_moi[$mapc_st] = 0;
                     }
-
+                    $ar_I[$key]['chenhlech01thang']=0;
                     foreach ($chitiet['chitiet'] as $k) {
                         //bảng lương cũ
 
@@ -1523,10 +1528,11 @@ class tonghopnguon_huyenController extends Controller
 
                         $ar_I[$key]['canbo_congtac'] += $ar_I[$k]['canbo_congtac'];
                         $ar_I[$key]['canbo_dutoan'] += $ar_I[$k]['canbo_dutoan'];
+                        $ar_I[$key]['chenhlech01thang'] += $ar_I[$k]['chenhlech01thang'];//sửa lại cho khớp với dữ liệu 4a (26/8/2023)
                     }
 
 
-                    $ar_I[$key]['chenhlech01thang'] = $a_solieu_moi['tongcong'] - $a_solieu['tongcong'];
+                    // $ar_I[$key]['chenhlech01thang'] = $a_solieu_moi['tongcong'] - $a_solieu['tongcong'];
                     $ar_I[$key]['chenhlech06thang'] = $ar_I[$key]['chenhlech01thang'] * 6;
 
                     $ar_I[$key]['solieu'] = $a_solieu;
@@ -1636,7 +1642,10 @@ class tonghopnguon_huyenController extends Controller
 
                     $ar_II[$key]['canbo_congtac'] = $dulieu_chitiet->sum('canbo_congtac');
                     $ar_II[$key]['canbo_dutoan'] = $dulieu_nguonkp->sum('sobiencheduocgiao');;
-                    $ar_II[$key]['chenhlech01thang'] = $a_solieu_moi['tongcong'] - $a_solieu['tongcong'];
+                    //26/8/2023: tạm thời bỏ để khớp dữ liệu 4a
+                    // $ar_II[$key]['chenhlech01thang'] = $a_solieu_moi['tongcong'] - $a_solieu['tongcong'];
+                    // $ar_II[$key]['chenhlech06thang'] = $ar_II[$key]['chenhlech01thang'] * 6;
+                    $ar_II[$key]['chenhlech01thang'] = $dulieu_chitiet->sum('ttl') + $dulieu_chitiet->sum('ttbh_dv');
                     $ar_II[$key]['chenhlech06thang'] = $ar_II[$key]['chenhlech01thang'] * 6;
                 }
             }
@@ -1721,7 +1730,10 @@ class tonghopnguon_huyenController extends Controller
 
                     $ar_III[$key]['canbo_congtac'] = $dulieu_chitiet->sum('canbo_congtac');
                     $ar_III[$key]['canbo_dutoan'] = $dulieu_chitiet->sum('canbo_dutoan');
-                    $ar_III[$key]['chenhlech01thang'] = $a_solieu_moi['tongcong'] - $a_solieu['tongcong'];
+                    //26/8/2023: tạm thời bỏ để khớp dữ liệu 4a
+                    // $ar_III[$key]['chenhlech01thang'] = $a_solieu_moi['tongcong'] - $a_solieu['tongcong'];
+                    // $ar_III[$key]['chenhlech06thang'] = $ar_III[$key]['chenhlech01thang'] * 6;
+                    $ar_III[$key]['chenhlech01thang'] = $dulieu_chitiet->sum('ttl') + $dulieu_chitiet->sum('ttbh_dv');
                     $ar_III[$key]['chenhlech06thang'] = $ar_III[$key]['chenhlech01thang'] * 6;
                 }
             }
@@ -1742,7 +1754,7 @@ class tonghopnguon_huyenController extends Controller
                         $mapc_st = 'st_' . $pc->mapc;
                         $a_solieu[$pc->mapc] = $a_solieu[$mapc_st] = $a_solieu_moi[$pc->mapc] = $a_solieu_moi[$mapc_st] = 0;
                     }
-
+                    $ar_III[$key]['chenhlech01thang']=0;
                     foreach ($chitiet['chitiet'] as $k) {
                         //bảng lương cũ
 
@@ -1778,9 +1790,10 @@ class tonghopnguon_huyenController extends Controller
 
                         $ar_III[$key]['canbo_congtac'] += $ar_III[$k]['canbo_congtac'];
                         $ar_III[$key]['canbo_dutoan'] += $ar_III[$k]['canbo_dutoan'];
+                        $ar_III[$key]['chenhlech01thang'] += $ar_III[$k]['chenhlech01thang'];//sửa cho khớp dữ liệu 4a (26/8/2023)
                     }
 
-                    $ar_III[$key]['chenhlech01thang'] = $a_solieu_moi['tongcong'] - $a_solieu['tongcong'];
+                    // $ar_III[$key]['chenhlech01thang'] = $a_solieu_moi['tongcong'] - $a_solieu['tongcong'];
                     $ar_III[$key]['chenhlech06thang'] = $ar_III[$key]['chenhlech01thang'] * 6;
 
                     $ar_III[$key]['solieu'] = $a_solieu;
@@ -1863,6 +1876,9 @@ class tonghopnguon_huyenController extends Controller
 
                     $ar_IV[$key]['canbo_congtac'] = $dulieu_chitiet->sum('canbo_congtac');
                     $ar_IV[$key]['canbo_dutoan'] = $dulieu_chitiet->sum('canbo_dutoan');
+                    //26/8/2023: tạm thời bỏ để khớp dữ liệu 4a
+                    // $ar_IV[$key]['chenhlech01thang'] = $a_solieu_moi['tongcong'] - $a_solieu['tongcong'];
+                    // $ar_IV[$key]['chenhlech06thang'] = $ar_IV[$key]['chenhlech01thang'] * 6;
                     $ar_IV[$key]['chenhlech01thang'] = $a_solieu_moi['tongcong'] - $a_solieu['tongcong'];
                     $ar_IV[$key]['chenhlech06thang'] = $ar_IV[$key]['chenhlech01thang'] * 6;
                 }
@@ -1884,7 +1900,7 @@ class tonghopnguon_huyenController extends Controller
                         $mapc_st = 'st_' . $pc->mapc;
                         $a_solieu[$pc->mapc] = $a_solieu[$mapc_st] = $a_solieu_moi[$pc->mapc] = $a_solieu_moi[$mapc_st] = 0;
                     }
-
+                    $ar_IV[$key]['chenhlech01thang']=0;
                     foreach ($chitiet['chitiet'] as $k) {
                         //bảng lương cũ
 
@@ -1920,9 +1936,10 @@ class tonghopnguon_huyenController extends Controller
 
                         $ar_IV[$key]['canbo_congtac'] += $ar_IV[$k]['canbo_congtac'];
                         $ar_IV[$key]['canbo_dutoan'] += $ar_IV[$k]['canbo_dutoan'];
+                        $ar_IV[$key]['chenhlech01thang'] += $ar_IV[$k]['chenhlech01thang'];//sửa cho khớp dữ liệu 4a (26/8/2023)
                     }
 
-                    $ar_IV[$key]['chenhlech01thang'] = $a_solieu_moi['tongcong'] - $a_solieu['tongcong'];
+                    // $ar_IV[$key]['chenhlech01thang'] = $a_solieu_moi['tongcong'] - $a_solieu['tongcong'];
                     $ar_IV[$key]['chenhlech06thang'] = $ar_IV[$key]['chenhlech01thang'] * 6;
 
                     $ar_IV[$key]['solieu'] = $a_solieu;
@@ -4040,6 +4057,7 @@ class tonghopnguon_huyenController extends Controller
                 }
                 $chitiet->tongnhucau = ($chitiet->ttbh_dv + $chitiet->ttl) * 6;
             }
+            // dd($m_chitiet);
             //Số liệu đơn vị
             foreach ($m_nguonkp as $chitiet) {
                 $chitiet->phanloaixa = $a_phanloaixa[$chitiet->madv];
@@ -4066,7 +4084,8 @@ class tonghopnguon_huyenController extends Controller
                         $chitiet->sotoconlai_2d * (4.5 - 3) * $sotien;
                     //2e
                     $solieu_2e = $chenhlech_plxa + $chenhlech_xabg + $chenhlech_xahgd + $chenhlech_xacl;
-                    $chitiet->nhucau = $solieu_2d + $solieu_2e;
+                    $chitiet->solieu2e=$solieu_2e;
+                    $chitiet->nhucau_4a = $solieu_2d + $solieu_2e;
                     //số liệu 2c
 
                     if ($chitiet->phanloaixa == 'XL1') {
@@ -4111,7 +4130,6 @@ class tonghopnguon_huyenController extends Controller
                     $chitiet->nhucau2c= $solieu_plxa + $thontodanpho;
                 }
             }
-            //dd($m_nguonkp);
             //Phần A
             $a_A = get4a_TT50_A();
 
@@ -4145,7 +4163,8 @@ class tonghopnguon_huyenController extends Controller
             $a_BI[1]['sotien'] = $m_chitiet->where('nhomnhucau', 'CANBOCT')->sum('tongnhucau');
             $a_BI[2]['sotien'] = $m_chitiet->where('nhomnhucau', 'HDND')->sum('tongnhucau');
             $a_BI[3]['sotien'] = $m_nguonkp->sum('nhucau2b'); //Lấy dữ liệu mẫu 2b
-            $a_BI[4]['sotien'] = $m_chitiet->where('nhomnhucau', 'CANBOKCT')->sum('tongnhucau');
+            // $a_BI[4]['sotien'] = $m_chitiet->where('nhomnhucau', 'CANBOKCT')->sum('tongnhucau');
+            $a_BI[4]['sotien'] =  $m_nguonkp->sum('nhucau2c');//lấy dữ liệu mẫu 2c
             $a_BI[5]['sotien'] = $m_chitiet->where('nhomnhucau', 'CAPUY')->wherein('level', ['XA', 'HUYEN'])->sum('tongnhucau');
             $a_BI[6]['sotien'] = $m_chitiet->where('nhomnhucau', 'CAPUY')->where('level', 'TINH')->sum('tongnhucau');
 
@@ -4165,8 +4184,8 @@ class tonghopnguon_huyenController extends Controller
             $a_BII[2]['sotien'] = $m_nguonkp->sum('nghihuusom');
             $a_BII[3]['sotien'] = $m_nguonkp->sum('kpuudai');
             $a_BII[4]['sotien'] = $m_nguonkp->sum('kinhphigiamxa_4a');
-            // $a_BII[5]['sotien'] = $m_nguonkp->sum('nhucau');
-            $a_BII[5]['sotien'] = $m_nguonkp->sum('nhucau2c');
+            $a_BII[5]['sotien'] = $m_nguonkp->sum('nhucau_4a');
+            // $a_BII[5]['sotien'] = $m_nguonkp->sum('nhucau2c');
 
             $a_TC = array(
                 'A' => ($a_A[0]['sotien'] + $a_A[1]['sotien'] + $a_A[2]['sotien'] + $a_A[6]['sotien']),
@@ -4250,7 +4269,53 @@ class tonghopnguon_huyenController extends Controller
                 $chitiet->nhucau2b = round(($chitiet->quy2_1 - $chitiet->quy1_1 + $chitiet->tongsonguoi1 * 450000) * 6) +
                     round(($chitiet->quy2_2 - $chitiet->quy1_2 + $chitiet->tongsonguoi2 * 450000) * 6) +
                     round(($chitiet->quy2_3 - $chitiet->quy1_3 + $chitiet->tongsonguoi3 * 450000) * 6);
+
+                    //số liệu 2c
+                    if ($chitiet->maphanloai == 'KVXP') {
+                    if ($chitiet->phanloaixa == 'XL1') {
+                        $clt7 = round(16 * 310000);
+                        $cl5t = round(21 * 310000 * 5);
+                    } else if ($chitiet->phanloaixa == 'XL2') {
+                        $clt7 = round(13.7 * 310000);
+                        $cl5t = round(18 * 310000 * 5);
+                    } else if ($chitiet->phanloaixa == 'XL3') {
+                        $clt7 = round(11.4 * 310000);
+                        $cl5t = round(15 * 310000 * 5);
+                    }
+                    $solieu_plxa=$clt7 + $cl5t;
+                    //Số xã biên giới
+                    $solieu_xabiengioi_clt7=round($chitiet->sothonbiengioi_2d * 5 * 310000);
+                    $solieu_xabiengioi_cl5t=round($chitiet->sothonbiengioi_2d * 6 * 310000 * 5);
+                    $solieu_xabiengioi=$solieu_xabiengioi_clt7 +  $solieu_xabiengioi_cl5t;
+                    //số thôn có 350 hộ trở lên
+                    $soho_350_clt7= round($chitiet->sothon350hgd_2d * 5 * 310000);
+                    $soho_350_cl5t= round($chitiet->sothon350hgd_2d * 6 * 310000 * 5);
+                    $soho_350=$soho_350_clt7 + $soho_350_cl5t;
+                     $soho_500_clt7=round($chitiet->sotodanpho500hgd_2d * 3 * 310000);
+                     $soho_500_cl5t=round($chitiet->sotodanpho500hgd_2d * 6 * 310000 * 5);
+                     $soho_500= $soho_500_clt7 + $soho_500_cl5t;
+                     //tổ dân phố trọng điểm an ninh
+                     $sothon_trongdiem_clt7=round($chitiet->sothontrongdiem_2d * 3 * 310000);
+                     $sothon_trongdiem_cl5t=round($chitiet->sothontrongdiem_2d * 6 * 310000 * 5);
+                     $sothon_trongdiem= $sothon_trongdiem_clt7 + $sothon_trongdiem_cl5t;
+                     //tổ dân phố chuyển từ thôn
+                     $sochuyentuthon_clt7=round($chitiet->sochuyentuthon350hgd_2d * 3 * 310000);
+                     $sochuyentuthon_cl5t=round($chitiet->sochuyentuthon350hgd_2d * 6 * 310000 * 5);
+                     $sochuyentuthon= $sochuyentuthon_clt7 +  $sochuyentuthon_cl5t;
+                     //Thôn còn lại
+                     $sothonconlai_clt7=round($chitiet->sothonconlai_2d * 3 * 310000);
+                     $sothonconlai_cl5t=round($chitiet->sothonconlai_2d * 4.5 * 310000 * 5);
+                     $sothonconlai=  $sothonconlai_clt7 +  $sothonconlai_cl5t;
+                     //tổ dân phố còn lại
+                     $sotoconlai_clt7=round($chitiet->sotoconlai_2d * 3 * 310000);
+                     $sotoconlai_cl5t=round($chitiet->sotoconlai_2d * 4.5 * 310000 * 5);
+                     $sotoconlai=$sotoconlai_clt7 + $sotoconlai_cl5t;
+                     $thontodanpho=$solieu_xabiengioi +  $soho_350 + $soho_500 + $sothon_trongdiem +  $sochuyentuthon + $sothonconlai +  $sotoconlai;
+                    $chitiet->nhucau2c= $solieu_plxa + $thontodanpho;
+                }
+
             }
+
             // dd($m_nguonkp);
             $data = array();
             $data[0] = array('val' => 'GDDT', 'tt' => 'a', 'noidung' => 'Sự nghiệp giáo dục - đào tạo');
@@ -4330,7 +4395,8 @@ class tonghopnguon_huyenController extends Controller
             $m_data2 = $m_nguonkp->where('maphanloai', 'KVXP')->wherein('nhomnhucau', ['HDND', 'CAPUY']);
 
             $m_bl = $m_chitiet->wherein('linhvuchoatdong', ['QLNN', 'DDT'])->where('maphanloai', '<>', 'KVXP');
-            $m_bl2 = $m_chitiet->where('maphanloai', 'KVXP')->wherein('nhomnhucau', ['HDND', 'CAPUY']);
+            $m_bl2 = $m_chitiet->where('maphanloai', 'KVXP')->wherein('nhomnhucau', ['HDND', 'CAPUY','CANBOCT']);
+            $m_bl3 = $m_chitiet->where('maphanloai', 'KVXP')->where('nhomnhucau', 'CANBOCT');
 
             $data[5]['solieu'] = [
                 'nhucau' => $m_bl->sum('tongnhucau') + $m_bl2->sum('tongnhucau') + $m_nguonkp->sum('nhucau2b'),

@@ -2302,7 +2302,7 @@ class nguonkinhphi_donvi_baocaoController extends Controller
                         $chitiet->sotoconlai_2d * (4.5 - 3) * $sotien;
                     //2e
                     $solieu_2e = $chenhlech_plxa + $chenhlech_xabg + $chenhlech_xahgd + $chenhlech_xacl;
-                    $chitiet->nhucau = $solieu_2d + $solieu_2e;
+                    $chitiet->nhucau_4a = $solieu_2d + $solieu_2e;
 
                     //số liệu 2c
                     
@@ -2382,8 +2382,10 @@ class nguonkinhphi_donvi_baocaoController extends Controller
             $a_BI[1]['sotien'] = $m_chitiet->where('nhomnhucau', 'CANBOCT')->sum('tongnhucau');
             $a_BI[2]['sotien'] = $m_chitiet->where('nhomnhucau', 'HDND')->sum('tongnhucau');
             $a_BI[3]['sotien'] = $m_nguonkp->sum('nhucau2b'); //Lấy dữ liệu mẫu 2b
-            $a_BI[4]['sotien'] = $m_chitiet->where('nhomnhucau', 'CANBOKCT')->sum('tongnhucau');
+            // $a_BI[4]['sotien'] = $m_chitiet->where('nhomnhucau', 'CANBOKCT')->sum('tongnhucau');
+            $a_BI[4]['sotien'] =  $m_nguonkp->sum('nhucau2c');//lấy dữ liệu mẫu 2c
             $a_BI[5]['sotien'] = $m_chitiet->where('nhomnhucau', 'CAPUY')->wherein('level', ['XA', 'HUYEN'])->sum('tongnhucau');
+            $a_BI[5]['sotien'] = $m_nguonkp->sum('nhucau2c');;
             $a_BI[6]['sotien'] = $m_chitiet->where('nhomnhucau', 'CAPUY')->where('level', 'TINH')->sum('tongnhucau');
 
             // dd($m_chitiet->where('nhomnhucau', 'CAPUY'));
@@ -2402,8 +2404,8 @@ class nguonkinhphi_donvi_baocaoController extends Controller
             $a_BII[2]['sotien'] = $m_nguonkp->sum('nghihuusom');
             $a_BII[3]['sotien'] = $m_nguonkp->sum('kpuudai');
             $a_BII[4]['sotien'] = $m_nguonkp->sum('kinhphigiamxa_4a');
-            // $a_BII[5]['sotien'] = $m_nguonkp->sum('nhucau');
-            $a_BII[5]['sotien'] = $m_nguonkp->sum('nhucau2c');
+            $a_BII[5]['sotien'] = $m_nguonkp->sum('nhucau_4a');
+            // $a_BII[5]['sotien'] = $m_nguonkp->sum('nhucau2c');
 
             $a_TC = array(
                 'A' => ($a_A[0]['sotien'] + $a_A[1]['sotien'] + $a_A[2]['sotien'] + $a_A[6]['sotien']),
