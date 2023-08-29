@@ -113,7 +113,7 @@
                     $data[0]['solieu']['nguonthu'] +
                         $data[3]['solieu']['nguonthu'] +
                         $data[4]['solieu']['nguonthu'] +
-                        $data[5]['solieu']['nguonthu'],
+                        $data[5 ]['solieu']['nguonthu'],
                     0,
                     $inputs['donvitinh'],
                 ) }}

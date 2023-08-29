@@ -499,7 +499,7 @@ function dinhdangso($number, $decimals = 0, $unit = '1', $dec_point = ',', $thou
         return '';
     }
     $r = $unit;
-
+    //dd($unit);
     switch ($unit) {
         case 2: {
                 $decimals = 3;
@@ -514,6 +514,7 @@ function dinhdangso($number, $decimals = 0, $unit = '1', $dec_point = ',', $thou
     }
 
     $number = round($number / $r, $decimals);
+    //kết quả dạng 985,40000 => dùng là duyệt ngược nếu = 0 => loại bỏ
     return number_format($number, $decimals, $dec_point, $thousands_sep);
 }
 

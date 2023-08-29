@@ -40,4 +40,9 @@ Route::group(['prefix' => 'tong_hop_bao_cao'], function () {
     //Nhu cầu
     Route::post('tonghopnhucau_tinh', 'baocaotonghop_tinhController@tonghopnhucau_tinh');
     Route::post('tonghopnhucau2a_tinh', 'baocaotonghop_tinhController@tonghopnhucau2a_tinh');
+    
+    Route::group(['prefix' => 'nhu_cau_kinh_phi'], function () {
+        Route::post('mau2a_tonghop', 'baocaotonghop_tinhController@mau2a_tonghop');
+        Route::post('mau2a', 'baocaotonghop_tinhController@mau2a');
+    });
 });

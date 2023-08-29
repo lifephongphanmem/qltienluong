@@ -532,6 +532,12 @@ function getDonViTinh()
     return array('1' => 'Đồng', '1000' => 'Nghìn đồng', '1000000' => 'Triệu đồng');
 }
 
+//Hàm dùng kết hợp với định dạnh số
+function getDVT()
+{
+    return array('1' => 'Đồng', '2' => 'Nghìn đồng', '3' => 'Triệu đồng');
+}
+
 function getTextStatus($status)
 {
     //text-danger; text-warning; text-success; text-info
@@ -1068,6 +1074,30 @@ function getHCSN_vn()
     return $ar_I;
 }
 
+function getHCSN_tinh()
+{
+    $ar_I['TONGSO'] = array(
+        'stt' => '0', 'tt' => 'I', 'noidung' => 'KHU VỰC HCSN, ĐẢNG, ĐOÀN THỂ', 'phanloai' => '0',
+        'chitiet' => ['GDDT', 'YTE', 'KHCN', 'VHTT', 'PTTH', 'TDTT', 'DBXH', 'KT', 'MT', 'QLNNDDT'], 'capdo' => '1', 'style' => 'font-weight: bold;font-style: italic;',
+    );
+    $ar_I['TRONGDO'] = array('stt' => '1', 'tt' => '-', 'noidung' => 'Trong đó', 'phanloai' => '9', 'chitiet' => [], 'capdo' => '9', 'style' => '');
+    $ar_I['GDDT'] = array('stt' => '2', 'tt' => '1', 'noidung' => 'Sự nghiệp giáo dục - đào tạo', 'phanloai' => '1', 'chitiet' => ['GD', 'DT'], 'capdo' => '2', 'style' => '',);
+    $ar_I['GD'] = array('stt' => '3', 'tt' => '-', 'noidung' => 'Giáo dục', 'phanloai' => '2', 'chitiet' => ['linhvuchoatdong' => 'GD',], 'capdo' => '3', 'style' => '',);
+    $ar_I['DT'] = array('stt' => '4', 'tt' => '-', 'noidung' => 'Đào tạo', 'phanloai' => '2', 'chitiet' => ['linhvuchoatdong' => 'DT',], 'capdo' => '3', 'style' => '',);
+    $ar_I['YTE'] = array('stt' => '5', 'tt' => '2', 'noidung' => 'Sự nghiệp y tế', 'phanloai' => '2', 'chitiet' => ['linhvuchoatdong' => 'YTE',], 'capdo' => '3', 'style' => '',);
+    $ar_I['KHCN'] = array('stt' => '6', 'tt' => '3', 'noidung' => 'Sự nghiệp khoa học-công nghệ', 'phanloai' => '2', 'chitiet' => ['linhvuchoatdong' => 'KHCN',], 'capdo' => '3', 'style' => '',);
+    $ar_I['VHTT'] = array('stt' => '7', 'tt' => '4', 'noidung' => 'Sự nghiệp văn hóa thông tin', 'phanloai' => '2', 'chitiet' => ['linhvuchoatdong' => 'VHTT',], 'capdo' => '3', 'style' => '',);
+    $ar_I['PTTH'] = array('stt' => '8', 'tt' => '5', 'noidung' => 'Sự nghiệp phát thanh truyền hình', 'phanloai' => '2', 'chitiet' => ['linhvuchoatdong' => 'PTTH',], 'capdo' => '3', 'style' => '',);
+    $ar_I['TDTT'] = array('stt' => '9', 'tt' => '6', 'noidung' => 'Sự nghiệp thể dục - thể thao', 'phanloai' => '2', 'chitiet' => ['linhvuchoatdong' => 'TDTT',], 'capdo' => '3', 'style' => '',);
+    $ar_I['DBXH'] = array('stt' => '10', 'tt' => '7', 'noidung' => 'Sự nghiệp đảm bảo xã hội', 'phanloai' => '2', 'chitiet' => ['linhvuchoatdong' => 'DBXH',], 'capdo' => '3', 'style' => '',);
+    $ar_I['KT'] = array('stt' => '11', 'tt' => '8', 'noidung' => 'Sự nghiệp kinh tế', 'phanloai' => '2', 'chitiet' => ['linhvuchoatdong' => 'KT',], 'capdo' => '3', 'style' => '',);
+    $ar_I['MT'] = array('stt' => '12', 'tt' => '9', 'noidung' => 'Sự nghiệp môi trường', 'phanloai' => '2', 'chitiet' => ['linhvuchoatdong' => 'MT',], 'capdo' => '3', 'style' => '',);
+    $ar_I['QLNNDDT'] = array('stt' => '13', 'tt' => '10', 'noidung' => 'Quản lý nhà nước, đảng, đoàn thể', 'phanloai' => '1', 'chitiet' => ['QLNN', 'DDT'], 'capdo' => '2', 'style' => '',);
+    $ar_I['QLNN'] = array('stt' => '14', 'tt' => '-', 'noidung' => ' Quản lý NN', 'phanloai' => '2', 'chitiet' => ['linhvuchoatdong' => 'QLNN',], 'capdo' => '3', 'style' => '',);
+    $ar_I['DDT'] = array('stt' => '15', 'tt' => '-', 'noidung' => 'Đảng, đoàn thể', 'phanloai' => '2', 'chitiet' => ['linhvuchoatdong' => 'DDT',], 'capdo' => '3', 'style' => '',);
+    return $ar_I;
+}
+
 function getHCSN()
 {
     //tonghop: 9 => bỏ qua
@@ -1298,9 +1328,9 @@ function getSoLuongCanBoDinhMuc($nghidinh, $phanloaixa)
 {
     $a_kq = [
         'ND34/2019' => [
-            'XL1'=> 23,
-            'XL2'=> 21,
-            'XL3'=> 19,
+            'XL1' => 23,
+            'XL2' => 21,
+            'XL3' => 19,
         ],
         //Do theo QĐ 11/2020-UBND Tỉnh Trưởng công an xã là CA chính quy => định biên theo NĐ 34 giảm 01 cán bộ
         // 'ND34/2019' => [
@@ -1309,14 +1339,14 @@ function getSoLuongCanBoDinhMuc($nghidinh, $phanloaixa)
         //     'XL3'=> 18,
         // ],
         'ND33/2023/XA' => [
-            'XL1'=> 22,
-            'XL2'=> 20,
-            'XL3'=> 18,
+            'XL1' => 22,
+            'XL2' => 20,
+            'XL3' => 18,
         ],
         'ND33/2023/PHUONG' => [
-            'XL1'=> 23,
-            'XL2'=> 21,
-            'XL3'=> 19,
+            'XL1' => 23,
+            'XL2' => 21,
+            'XL3' => 19,
         ]
     ];
     return $a_kq[$nghidinh][$phanloaixa] ?? 0;
@@ -1324,17 +1354,17 @@ function getSoLuongCanBoDinhMuc($nghidinh, $phanloaixa)
 
 function getMucKhoanPhuCapXa($nghidinh, $phanloaixa)
 {
-    $a_kq = [        
+    $a_kq = [
         'ND34/2019' => [
-            'XL1'=> 16,
-            'XL2'=> 13.7,
-            'XL3'=> 11.4,
+            'XL1' => 16,
+            'XL2' => 13.7,
+            'XL3' => 11.4,
         ],
         'ND33/2023' => [
-            'XL1'=> 21,
-            'XL2'=> 18,
-            'XL3'=> 15,
-        ],        
+            'XL1' => 21,
+            'XL2' => 18,
+            'XL3' => 15,
+        ],
     ];
     return $a_kq[$nghidinh][$phanloaixa] ?? 0;
 }
