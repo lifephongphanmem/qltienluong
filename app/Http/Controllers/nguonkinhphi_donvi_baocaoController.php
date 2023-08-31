@@ -2604,7 +2604,7 @@ class nguonkinhphi_donvi_baocaoController extends Controller
             $data[4] = array('val' => 'KHAC', 'tt' => 'c', 'noidung' => 'Sự nghiệp khác', 'nhucau' => 0, 'nguonkp' => 0, 'tietkiem' => 0, 'hocphi' => 0, 'vienphi' => 0, 'khac' => 0, 'nguonthu' => 0);
             $m_data = $m_nguonkp->wherenotin('linhvuchoatdong', ['QLNN', 'DDT', 'YTE', 'GD', 'DT']);
             $m_bl = $m_chitiet->wherenotin('linhvuchoatdong', ['QLNN', 'DDT', 'YTE', 'GD', 'DT']);
-            $m_bl2 = $m_chitiet->wherein('nhomnhucau', ['HDND', 'CAPUY']);
+            // $m_bl2 = $m_chitiet->wherein('nhomnhucau', ['HDND', 'CAPUY']);
 
             $data[4]['solieu'] = [
                 // 'nhucau' => $m_bl->sum('tongnhucau') +  $m_bl2->sum('tongnhucau'),
@@ -2626,9 +2626,9 @@ class nguonkinhphi_donvi_baocaoController extends Controller
 
             // $m_bl = $m_chitiet->wherein('linhvuchoatdong', ['QLNN', 'DDT'])->wherein('nhomnhucau', ['CANBOCT', 'BIENCHE','HDND','CAPUY','CANBOKCT']);
             $m_bl = $m_chitiet->wherein('linhvuchoatdong', ['QLNN', 'DDT'])->where('maphanloai', '<>', 'KVXP');
-            $m_bl2 = $m_chitiet->where('maphanloai', 'KVXP')->wherein('nhomnhucau', ['HDND', 'CAPUY']);
-            $m_bl3 = $m_chitiet->where('maphanloai', 'KVXP')->wherein('nhomnhucau', ['CANBOCT']);
             // $m_bl2 = $m_chitiet->where('maphanloai', 'KVXP')->wherein('nhomnhucau', ['HDND', 'CAPUY']);
+            $m_bl2 = $m_chitiet->wherein('nhomnhucau', ['HDND', 'CAPUY']);
+            $m_bl3 = $m_chitiet->where('maphanloai', 'KVXP')->wherein('nhomnhucau', ['CANBOCT']);
             $data[5]['solieu'] = [
                 // 'nhucau' => $m_bl->sum('tongnhucau')  + $m_nguonkp->sum('nhucau2c'),
                 'nhucau' => $m_bl->sum('tongnhucau') + $m_bl2->sum('tongnhucau') + $m_nguonkp->sum('nhucau2c') + $m_bl3->sum('tongnhucau'),
