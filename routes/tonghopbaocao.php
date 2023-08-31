@@ -40,4 +40,23 @@ Route::group(['prefix' => 'tong_hop_bao_cao'], function () {
     //Nhu cầu
     Route::post('tonghopnhucau_tinh', 'baocaotonghop_tinhController@tonghopnhucau_tinh');
     Route::post('tonghopnhucau2a_tinh', 'baocaotonghop_tinhController@tonghopnhucau2a_tinh');
+
+    Route::group(['prefix' => 'nhu_cau_kinh_phi'], function () {
+        Route::post('mau2a_tonghop', 'baocaonhucaukinhphi_tinhController@mau2a_tonghop');
+        Route::post('mau2a', 'baocaonhucaukinhphi_tinhController@mau2a');
+        Route::post('mau2b_tonghop', 'baocaonhucaukinhphi_tinhController@mau2b_tonghop');
+        Route::post('mau2b', 'baocaonhucaukinhphi_tinhController@mau2b');
+        Route::post('mau2c_tonghop', 'baocaonhucaukinhphi_tinhController@mau2c_tonghop');
+        Route::post('mau2c', 'baocaonhucaukinhphi_tinhController@mau2c');
+        Route::post('mau2d_tonghop', 'baocaonhucaukinhphi_tinhController@mau2d_tonghop');
+        Route::post('mau2d', 'baocaonhucaukinhphi_tinhController@mau2d');
+        Route::post('mau2e_tonghop', 'baocaonhucaukinhphi_tinhController@mau2e_tonghop');
+        Route::post('mau2e', 'baocaonhucaukinhphi_tinhController@mau2e');
+        Route::post('mau2g_tonghop', 'baocaonhucaukinhphi_tinhController@mau2g_tonghop');
+        Route::post('mau2g', 'baocaonhucaukinhphi_tinhController@mau2g');
+        Route::post('mau4a_tonghop', 'baocaonhucaukinhphi_tinhController@mau4a_tonghop');
+        Route::post('mau4a', 'baocaonhucaukinhphi_tinhController@mau4a');
+        Route::post('mau4b_tonghop', 'baocaonhucaukinhphi_tinhController@mau4b_tonghop');
+        Route::post('mau4b', 'baocaonhucaukinhphi_tinhController@mau4b');
+    });
 });
