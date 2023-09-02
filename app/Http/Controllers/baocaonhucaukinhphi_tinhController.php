@@ -3383,12 +3383,25 @@ class baocaonhucaukinhphi_tinhController  extends Controller
                 ];
                 $data[$diaban->madvbc][6]['solieu']['tongso'] = $data[$diaban->madvbc][6]['solieu']['tietkiem'] + $data[$diaban->madvbc][6]['solieu']['hocphi'] + $data[$diaban->madvbc][6]['solieu']['vienphi'] + $data[$diaban->madvbc][6]['solieu']['nguonthu'];
             }
-            // dd($data);
+            
+            $a_dulieutong = $data;
+            $a_Tong = array_shift($a_dulieutong);
+            //dd($a_Tong[0]['solieu']);
+            $a_truongdl = array_keys($a_Tong[0]['solieu']);
+            foreach($a_dulieutong as $val){                
+                foreach($val as $key=>$dulieu){
+                    foreach($a_truongdl as $col){
+                        $a_Tong[$key]['solieu'][$col] += $dulieu['solieu'][$col];
+                    }
+                } 
+            }
+            //dd($a_Tong);
             $inputs['donvitinh'] =  $inputs['donvitinh'] ?? 1;
             $m_donvi = dmdonvi::where('madv', $inputs['madv'])->first();
             return view('reports.thongtu78.tinh.mau4b')
                 //->with('model', $model)
                 ->with('model_donvi_bc', $model_donvi_bc)
+                ->with('a_Tong', $a_Tong)
                 ->with('data', $data)
                 ->with('m_dv', $m_donvi)
                 ->with('inputs', $inputs)

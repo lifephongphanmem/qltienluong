@@ -8,7 +8,7 @@
             <td style="text-align: left;width: 60%">
 
             </td>
-            <td style="text-align: center;">
+            <td style="text-align: right;">
                 <b>Biểu số 4b</b>
             </td>
         </tr>
@@ -52,10 +52,95 @@
                 <th style="width: 8%;">KHÁC</th>
             </tr>
         </thead>
+        <!-- Tổng cộng -->
+        <tr style="font-weight: bold;">
+            <td style="text-align: left"></td>
+            <td style="text-align: left">TỔNG SỐ</td>
+            <td class="text-right">
+                {{ dinhdangso(
+                    $a_Tong[0]['solieu']['nhucau'] +
+                        $a_Tong[3]['solieu']['nhucau'] +
+                        $a_Tong[4]['solieu']['nhucau'] +
+                        $a_Tong[5]['solieu']['nhucau'],
+                    0,
+                    $inputs['donvitinh'],
+                ) }}
+            </td>
+
+            <td class="text-right">
+                {{ dinhdangso(
+                    $a_Tong[0]['solieu']['tongso'] +
+                        $a_Tong[3]['solieu']['tongso'] +
+                        $a_Tong[4]['solieu']['tongso'] +
+                        $a_Tong[5]['solieu']['tongso'],
+                    0,
+                    $inputs['donvitinh'],
+                ) }}
+            </td>
+
+            <td class="text-right">
+                {{ dinhdangso(
+                    $a_Tong[0]['solieu']['tietkiem'] +
+                        $a_Tong[3]['solieu']['tietkiem'] +
+                        $a_Tong[4]['solieu']['tietkiem'] +
+                        $a_Tong[5]['solieu']['tietkiem'],
+                    0,
+                    $inputs['donvitinh'],
+                ) }}
+            </td>
+
+            <td class="text-right">
+                {{ dinhdangso(
+                    $a_Tong[0]['solieu']['hocphi'] +
+                        $a_Tong[3]['solieu']['hocphi'] +
+                        $a_Tong[4]['solieu']['hocphi'] +
+                        $a_Tong[5]['solieu']['hocphi'],
+                    0,
+                    $inputs['donvitinh'],
+                ) }}
+            </td>
+
+            <td class="text-right">
+                {{ dinhdangso(
+                    $a_Tong[0]['solieu']['vienphi'] +
+                        $a_Tong[3]['solieu']['vienphi'] +
+                        $a_Tong[4]['solieu']['vienphi'] +
+                        $a_Tong[5]['solieu']['vienphi'],
+                    0,
+                    $inputs['donvitinh'],
+                ) }}
+            </td>
+
+            <td class="text-right">
+                {{ dinhdangso(
+                    $a_Tong[0]['solieu']['nguonthu'] +
+                        $a_Tong[3]['solieu']['nguonthu'] +
+                        $a_Tong[4]['solieu']['nguonthu'] +
+                        $a_Tong[5]['solieu']['nguonthu'],
+                    0,
+                    $inputs['donvitinh'],
+                ) }}
+            </td>
+        </tr>
+        @foreach ($a_Tong as $dulieu)
+            <tr>
+                <td>{{ $dulieu['tt'] }}</td>
+                <td>{{ $dulieu['noidung'] }}</td>
+                <td class="text-right">{{ dinhdangso($dulieu['solieu']['nhucau'], 0, $inputs['donvitinh']) }}</td>
+                <td class="text-right">{{ dinhdangso($dulieu['solieu']['tongso'], 0, $inputs['donvitinh']) }}</td>
+                <td class="text-right">{{ dinhdangso($dulieu['solieu']['tietkiem'], 0, $inputs['donvitinh']) }}</td>
+                <td class="text-right">{{ dinhdangso($dulieu['solieu']['hocphi'], 0, $inputs['donvitinh']) }}</td>
+                <td class="text-right">{{ dinhdangso($dulieu['solieu']['vienphi'], 0, $inputs['donvitinh']) }}</td>
+                <td class="text-right">{{ dinhdangso($dulieu['solieu']['nguonthu'], 0, $inputs['donvitinh']) }}</td>
+            </tr>
+        @endforeach
+
+        <!-- Dải chi tiết -->
+        <?php $i=1; ?>
         @foreach ($model_donvi_bc as $diaban)
-            <tr style="font-weight: bold;">                
-                <td style="text-align: left"></td>
-                <td style="text-align: left">{{$diaban->tendvbc}}</td>
+            <tr style="font-weight: bold;">
+                <td>{{$i++}}</td>
+                <td style="text-align: left">{{ $diaban->tendvbc }}</td>
                 <td class="text-right">
                     {{ dinhdangso(
                         $data[$diaban->madvbc][0]['solieu']['nhucau'] +
