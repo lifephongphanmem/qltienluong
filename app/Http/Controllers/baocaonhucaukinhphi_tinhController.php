@@ -3076,7 +3076,7 @@ class baocaonhucaukinhphi_tinhController  extends Controller
                     }
                 }
 
-                //dd($a_A);
+                //dd(array_column($dulieu_chitiet->where('nhomnhucau', 'CANBOCT')->toarray(),'maphanloai'));
                 //Phần B
                 $a_BI[$diaban->madvbc] = array();
                 $a_BI[$diaban->madvbc][0] = array('tt' => '1', 'noidung' => 'Quỹ tiền lương, phụ cấp tăng thêm đối với cán bộ công chức khu vực hành chính, sự nghiệp ', 'sotien' => '0');
@@ -3258,7 +3258,9 @@ class baocaonhucaukinhphi_tinhController  extends Controller
             $a_nhomplct_hc = array_column($m_plct->toArray(), 'nhomnhucau_hc', 'mact');
             $a_nhomplct_xp = array_column($m_plct->toArray(), 'nhomnhucau_xp', 'mact');
             //Số liệu chi tiết
-            foreach ($m_chitiet as $chitiet) {
+
+            $a_plnhucau = ['BIENCHE', 'CANBOCT', 'HDND', 'CAPUY']; //lọc dữ liệu cho giống 4a
+            foreach ($m_chitiet as $key => $chitiet) {
                 $chitiet->madv = $a_donvi[$chitiet->masodv];
                 $chitiet->madvbc = $a_madvbc[$chitiet->madv];
                 //$chitiet->phanloainguon = $a_phanloainguon[$chitiet->madv];
@@ -3271,9 +3273,15 @@ class baocaonhucaukinhphi_tinhController  extends Controller
                 } else {
                     $chitiet->nhomnhucau = $a_nhomplct_hc[$chitiet->mact];
                 }
-
+                
+                //lọc dữ liệu cho giống 4a
+                if (!in_array($chitiet->nhomnhucau, $a_plnhucau)) {
+                    $m_chitiet->forget($key);
+                    continue;
+                }
                 $chitiet->tongnhucau = ($chitiet->ttbh_dv + $chitiet->ttl) * 6;
             }
+
 
             //Tính toán số liệu
             foreach ($model_donvi_bc as $diaban) {
@@ -3307,6 +3315,7 @@ class baocaonhucaukinhphi_tinhController  extends Controller
                     'nguonthu' => $m_data->sum('huydongktx_khac_4a'), //Lấy tiết kiệm 2023 ở mẫu 4a
 
                 ];
+                //dd($dulieu_chitiet->where('linhvuchoatdong', 'DT'));
                 $data[$diaban->madvbc][2]['solieu']['tongso'] = $data[$diaban->madvbc][2]['solieu']['tietkiem'] + $data[$diaban->madvbc][2]['solieu']['hocphi'] + $data[$diaban->madvbc][2]['solieu']['vienphi'] + $data[$diaban->madvbc][2]['solieu']['nguonthu'];
                 //Dòng 0
                 $data[$diaban->madvbc][0]['solieu'] = [
@@ -3383,17 +3392,17 @@ class baocaonhucaukinhphi_tinhController  extends Controller
                 ];
                 $data[$diaban->madvbc][6]['solieu']['tongso'] = $data[$diaban->madvbc][6]['solieu']['tietkiem'] + $data[$diaban->madvbc][6]['solieu']['hocphi'] + $data[$diaban->madvbc][6]['solieu']['vienphi'] + $data[$diaban->madvbc][6]['solieu']['nguonthu'];
             }
-            
+
             $a_dulieutong = $data;
             $a_Tong = array_shift($a_dulieutong);
             //dd($a_Tong[0]['solieu']);
             $a_truongdl = array_keys($a_Tong[0]['solieu']);
-            foreach($a_dulieutong as $val){                
-                foreach($val as $key=>$dulieu){
-                    foreach($a_truongdl as $col){
+            foreach ($a_dulieutong as $val) {
+                foreach ($val as $key => $dulieu) {
+                    foreach ($a_truongdl as $col) {
                         $a_Tong[$key]['solieu'][$col] += $dulieu['solieu'][$col];
                     }
-                } 
+                }
             }
             //dd($a_Tong);
             $inputs['donvitinh'] =  $inputs['donvitinh'] ?? 1;
