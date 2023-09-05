@@ -511,20 +511,21 @@ class tonghopluong_donviController extends Controller
                     $inputs['noidung'] = 'Đơn vị ' . getTenDV(session('admin')->madv) . ' tổng hợp dữ liệu chi trả lương.';
                     $inputs['nguoilap'] = session('admin')->name;
                     $inputs['ngaylap'] = Carbon::now()->toDateTimeString();
-                    $inputs['macqcq'] = session('admin')->macqcq;
+                    $inputs['macqcq'] = $inputs['macqcq'];
                     $inputs['madvbc'] = session('admin')->madvbc;
                     tonghopluong_huyen::create($inputs);
                 } else {
                     $model->mathh = $model_huyen->mathdv; //set lại mã vào tonghopdv
 
-                    $model_huyen->macqcq = session('admin')->macqcq;
+                    $model_huyen->macqcq = $inputs['macqcq'];
                     $model_huyen->trangthai = 'DAGUI';
                     $model_huyen->nguoilap = session('admin')->name;
                     $model_huyen->ngaylap = Carbon::now()->toDateTimeString();
+                    //$model->macqcq = $inputs['macqcq'];
                     $model_huyen->save();
                 }
             }
-            $model->macqcq = session('admin')->macqcq;
+            $model->macqcq = $inputs['macqcq'];
             $model->nguoigui = session('admin')->name;
             $model->ngaygui = Carbon::now()->toDateTimeString();
             $model->trangthai = 'DAGUI';
@@ -578,13 +579,12 @@ class tonghopluong_donviController extends Controller
                     $inputs['noidung'] = 'Đơn vị ' . getTenDV(session('admin')->madv) . ' tổng hợp dữ liệu chi trả lương.';
                     $inputs['nguoilap'] = session('admin')->name;
                     $inputs['ngaylap'] = Carbon::now()->toDateTimeString();
-                    $inputs['macqcq'] = session('admin')->macqcq;
+                    $inputs['macqcq'] = $inputs['macqcq'];;
                     $inputs['madvbc'] = session('admin')->madvbc;
                     tonghopluong_huyen::create($inputs);
                 } else {
                     $model->mathh = $model_huyen->mathdv; //set lại mã vào tonghopdv
-
-                    $model_huyen->macqcq = session('admin')->macqcq;
+                    $model_huyen->macqcq = $inputs['macqcq'];;
                     $model_huyen->trangthai = 'DAGUI';
                     $model_huyen->nguoilap = session('admin')->name;
                     $model_huyen->ngaylap = Carbon::now()->toDateTimeString();

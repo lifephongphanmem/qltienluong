@@ -193,7 +193,7 @@
                     <div class="col-md-12">
                         <div class="form-group">
                             <button type="button"
-                                onclick="insolieu('{{ $furl . 'tonghopbienche' }}', '1506672780;1506673604;{{session('admin')->mact_tuyenthem}}')"
+                                onclick="insolieu('{{ $furl . 'tonghopbienche' }}', '1506672780;1506673604;{{ session('admin')->mact_tuyenthem }}')"
                                 style="border-width: 0px" class="btn btn-default btn-xs mbs"
                                 data-target="#modal-insolieu" data-toggle="modal">
                                 <i class="fa fa-print"></i>&nbsp; Tổng hợp biên chế, hệ số
@@ -230,7 +230,8 @@
             <div class="modal-body">
                 <div class="row">
                     <div class="col-md-12">
-                        <label><b>Phần mềm sẽ tổng hợp cán bộ ở 02 bảng lương để tạo dự toán (ưu tiên cán bộ ở bảng lương thứ nhất).</b></label>
+                        <label><b>Phần mềm sẽ tổng hợp cán bộ ở 02 bảng lương để tạo dự toán (ưu tiên cán bộ ở bảng lương
+                                thứ nhất).</b></label>
                     </div>
                 </div>
 
@@ -312,6 +313,15 @@
                     <div class="form-group">
                         <label><b>Số liệu tổng hợp khi gửi đi sẽ không thể chỉnh sửa. Bạn hãy kiểm tra kỹ số liệu trước khi
                                 gửi.</b></label>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label class="control-label">Đơn vị tiếp nhận dữ liệu<span
+                                            class="require">*</span></label>
+                                    {!! Form::select('macqcq', $a_cqcq, session('admin')->macqcq, ['class' => 'form-control']) !!}
+                                </div>
+                            </div>
+                        </div>
                     </div>
                     <input type="hidden" name="masodv" id="masodv">
                     <div class="modal-footer">
@@ -477,6 +487,7 @@
         function disable_btn(obj) {
             // obj.prop('disabled', true);
         }
+
         function getKinhPhiKoCT(masodv, phanloaixa, phanloaixa_heso, sothonxabiengioi,
             sothonxabiengioi_heso, sothonxakhokhan, sothonxakhokhan_heso, sothonxatrongdiem,
             sothonxatrongdiem_heso, sothonxakhac, sothonxakhac_heso, sothonxaloai1,

@@ -54,6 +54,8 @@ class nguonkinhphiController extends Controller
             $model_nhomct = dmphanloaicongtac::select('macongtac', 'tencongtac')->get();
             $model_tenct = dmphanloaict::select('tenct', 'macongtac', 'mact')->get();
 
+            $a_cqcq = array_column(dmdonvi::select('madv', 'tendv')->where('madvbc', session('admin')->madvbc)
+            ->where('phanloaitaikhoan', 'TH')->get()->toarray(), 'tendv', 'madv');
             //dd(session('admin'));
             return view('manage.nguonkinhphi.index')
                 //->with('furl', '/nguon_kinh_phi/')
@@ -63,6 +65,7 @@ class nguonkinhphiController extends Controller
                 // ->with('model_bl', $model_bl)
                 ->with('model_tt_df', $model_tt_df)
                 ->with('a_phongban', getPhongBan(false))
+                ->with('a_cqcq', $a_cqcq)
                 ->with('a_lvhd', $lvhd)
                 ->with('a_thongtuqd', $a_thongtuqd)
                 ->with('model_nhomct', $model_nhomct)
@@ -903,6 +906,7 @@ class nguonkinhphiController extends Controller
                 $nguon->macqcq = session('admin')->macqcq;
                 $nguon->nguoiguidv = session('admin')->name;
                 $nguon->ngayguidv = Carbon::now()->toDateTimeString();
+                $model->macqcq = $inputs['macqcq'];
                 $nguon->save();
             }
 

@@ -40,10 +40,10 @@ class dutoanluongController extends Controller
             $model_chitiet = dutoanluong_chitiet::wherein('masodv', array_column($model->toarray(), 'masodv'))->get();
             //Do chưa tuyển chỉ tính 12 tháng chưa nhân với số lượng cán bộ
             foreach ($model_chitiet as $chitiet) {
-                if($chitiet->phanloai == 'CHUATUYEN'){
+                if ($chitiet->phanloai == 'CHUATUYEN') {
                     $chitiet->st_heso = $chitiet->st_heso * $chitiet->canbo_congtac;
                     $chitiet->ttl = $chitiet->ttl * $chitiet->canbo_congtac;
-                    $chitiet->ttbh_dv = $chitiet->ttbh_dv * $chitiet->canbo_congtac;                    
+                    $chitiet->ttbh_dv = $chitiet->ttbh_dv * $chitiet->canbo_congtac;
                 }
             }
             foreach ($model as $dutoan) {
@@ -60,7 +60,8 @@ class dutoanluongController extends Controller
                 $dutoan->tongdutoan = $dutoan->luongnb_dt + $dutoan->luonghs_dt + $dutoan->luongbh_dt;
                 //dd($chitiet);
             }
-
+            $a_cqcq = array_column(dmdonvi::select('madv', 'tendv')->where('madvbc', session('admin')->madvbc)
+                ->where('phanloaitaikhoan', 'TH')->get()->toarray(), 'tendv', 'madv');
             return view('manage.dutoanluong.index')
                 ->with('furl', '/nghiep_vu/quan_ly/du_toan/')
                 ->with('furl_ajax', '/ajax/du_toan/')
@@ -71,6 +72,7 @@ class dutoanluongController extends Controller
                 ->with('model_nhomct', $model_nhomct)
                 ->with('model_tenct', $model_tenct)
                 ->with('a_trangthai', getStatus())
+                ->with('a_cqcq', $a_cqcq)
                 ->with('pageTitle', 'Danh sách dự toán lương của đơn vị');
         } else
             return view('errors.notlogin');
@@ -1567,7 +1569,8 @@ class dutoanluongController extends Controller
             $model->nguoiguidv = session('admin')->name;
             $model->ngayguidv = Carbon::now()->toDateTimeString();
             $model->trangthai = 'DAGUI';
-            // dd($model);
+            $model->macqcq = $inputs['macqcq'];
+            //dd($model);
             $model->save();
 
             return redirect('/nghiep_vu/quan_ly/du_toan/danh_sach');
