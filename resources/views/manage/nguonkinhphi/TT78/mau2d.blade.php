@@ -69,7 +69,7 @@
             <div class="col-md-3">
                 <div class="form-group">
                     <label class="control-label">Số lượng cán bộ định biên theo NĐ 33/2023/NĐ-CP</label>
-                    {!! Form::text('', getSoLuongCanBoDinhMuc('ND33/2023/XA', session('admin')->phanloaixa), [                        
+                    {!! Form::text('', getSoLuongCanBoDinhMuc(getNghiDinhPLXaPhuong(session('admin')->phanloaixa), session('admin')->phanloaixa), [                        
                         'class' => 'form-control',
                         'data-mask' => 'fdecimal',
                         'readonly'

@@ -77,6 +77,68 @@
                 <td>12=11x5T</td>
             </tr>
         </thead>
+        <tr style=" text-align: right;{{ $a_tong['style'] }}">
+            <td style=" text-align: center;">{{ $a_tong['tt'] }}</td>
+            <td style=" text-align: left;">{{ $a_tong['noidung'] }}</td>
+            <td>{{ dinhdangsothapphan($a_tong['soluongdonvi_2k'], $inputs['lamtron']) }}</td>
+            <td>{{ dinhdangsothapphan($a_tong['qd34_2d'], $inputs['lamtron']) }}</td>
+            <td>{{ dinhdangsothapphan($a_tong['tongqd34_2d'], $inputs['lamtron']) }}</td>
+            <td>{{ dinhdangsothapphan($a_tong['soluongcanbo_2d'], $inputs['lamtron']) }}</td>
+            <td>{{ dinhdangsothapphan($a_tong['hesoluongbq_2d'], $inputs['lamtron']) }}</td>
+            <td>{{ dinhdangsothapphan($a_tong['hesophucapbq_2d'], $inputs['lamtron']) }}</td>
+            <td>{{ dinhdangsothapphan($a_tong['tyledonggop_2d'], $inputs['lamtron']) }}</td>
+            <td>{{ dinhdangsothapphan($a_tong['soluongdinhbien_2d'], $inputs['lamtron']) }}</td>
+            <td>{{ dinhdangsothapphan($a_tong['tongsodinhbien_2d'], $inputs['lamtron']) }}</td>
+            {{-- <td>{{ dinhdangsothapphan($dulieu['solieu']['tongqd34_2d'] - $dulieu['solieu']['soluongdinhbien_2d'], $inputs['lamtron']) }} --}}
+                <td>{{ dinhdangsothapphan($a_tong['tongqd34_2d'] - $a_tong['tongsodinhbien_2d'], $inputs['lamtron']) }}
+            </td>
+           
+            <td>{{ dinhdangsothapphan($a_tong['quyluonggiam_2k'], $inputs['lamtron']) }}</td>
+            <td>{{ dinhdangsothapphan($a_tong['tongquyluonggiam_2k'], $inputs['lamtron']) }}</td>
+        </tr>
+        @foreach ($ar_II as $dulieu)
+        <tr style=" text-align: right;{{ $dulieu['style'] }}">
+            <td style=" text-align: center;">{{ $dulieu['tt'] }}</td>
+            <td style=" text-align: left;">{{ $dulieu['noidung'] }}</td>
+            <td>{{ dinhdangsothapphan($dulieu['solieu']['soluongdonvi_2k'], $inputs['lamtron']) }}</td>
+            <td>{{ dinhdangsothapphan($dulieu['solieu']['qd34_2d'], $inputs['lamtron']) }}</td>
+            <td>{{ dinhdangsothapphan($dulieu['solieu']['tongqd34_2d'], $inputs['lamtron']) }}</td>
+            <td>{{ dinhdangsothapphan($dulieu['solieu']['soluongcanbo_2d'], $inputs['lamtron']) }}</td>
+            <td>{{ dinhdangsothapphan($dulieu['solieu']['hesoluongbq_2d'], $inputs['lamtron']) }}</td>
+            <td>{{ dinhdangsothapphan($dulieu['solieu']['hesophucapbq_2d'], $inputs['lamtron']) }}</td>
+            <td>{{ dinhdangsothapphan($dulieu['solieu']['tyledonggop_2d'], $inputs['lamtron']) }}</td>
+            <td>{{ dinhdangsothapphan($dulieu['solieu']['soluongdinhbien_2d'], $inputs['lamtron']) }}</td>
+            <td>{{ dinhdangsothapphan($dulieu['solieu']['tongsodinhbien_2d'], $inputs['lamtron']) }}</td>
+            {{-- <td>{{ dinhdangsothapphan($dulieu['solieu']['tongqd34_2d'] - $dulieu['solieu']['soluongdinhbien_2d'], $inputs['lamtron']) }} --}}
+                <td>{{ dinhdangsothapphan($dulieu['solieu']['tongqd34_2d'] - $dulieu['solieu']['tongsodinhbien_2d'], $inputs['lamtron']) }}
+            </td>
+           
+            <td>{{ dinhdangsothapphan($dulieu['solieu']['quyluonggiam_2k'], $inputs['lamtron']) }}</td>
+            <td>{{ dinhdangsothapphan($dulieu['solieu']['tongquyluonggiam_2k'], $inputs['lamtron']) }}</td>
+        </tr>
+        @if($dulieu['phanloai'] != '')
+        <?php $m_phuong=$ar_tong_phuong[$dulieu['phanloai']] ?>
+        @foreach ($m_phuong as $phuong )
+        <tr style=" text-align: right;">
+            <td style=" text-align: center;">-</td>
+            <td style=" text-align: left;">{{ $phuong->tendv }}</td>
+            <td>1</td>
+            <td>{{ dinhdangsothapphan($phuong->soluongdinhbien_2d, $inputs['lamtron']) }}</td>
+            <td>{{ dinhdangsothapphan($phuong->soluongdinhbien_2d, $inputs['lamtron']) }}</td>
+            <td>{{dinhdangsothapphan($phuong->soluongcanbo_2d,$inputs['lamtron']) }}</td>
+            <td>{{ dinhdangsothapphan($phuong->hesoluongbq_2d,$inputs['lamtron'])}}</td>
+            <td>{{dinhdangsothapphan($phuong->hesophucapbq_2d,$inputs['lamtron']) }}</td>
+            <td>{{ dinhdangsothapphan($phuong->tyledonggop_2d,$inputs['lamtron']) }}</td>
+            <td>{{dinhdangsothapphan(getSoLuongCanBoDinhMuc('ND33/2023/PHUONG', $dulieu['phanloai']), $inputs['lamtron']) }}</td>
+            <td>{{dinhdangsothapphan(getSoLuongCanBoDinhMuc('ND33/2023/PHUONG', $dulieu['phanloai']), $inputs['lamtron']) }}</td>
+                <td>{{ dinhdangsothapphan( $phuong->soluongdinhbien_2d - getSoLuongCanBoDinhMuc('ND33/2023/PHUONG', $dulieu['phanloai'])) }}
+            </td>               
+            <td>{{  dinhdangsothapphan($phuong->quyluonggiam_2k) }}</td>
+            <td>{{  dinhdangsothapphan($phuong->quyluonggiam_2k * 5) }}</td>
+        </tr>
+        @endforeach
+        @endif
+    @endforeach
 
         @foreach ($ar_I as $dulieu)
             <tr style=" text-align: right;{{ $dulieu['style'] }}">

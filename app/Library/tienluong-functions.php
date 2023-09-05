@@ -221,7 +221,10 @@ function getPhanLoaiXa($val_null = true)
     $model = array(
         'XL1' => 'Xã loại 1',
         'XL2' => 'Xã loại 2',
-        'XL3' => 'Xã loại 3'
+        'XL3' => 'Xã loại 3',
+        'PL1' => 'Phường loại 1',
+        'PL2' => 'Phường loại 2',
+        'PL3' => 'Phường loại 3',
     );
     /*
     if($val_null){
@@ -1344,9 +1347,9 @@ function getSoLuongCanBoDinhMuc($nghidinh, $phanloaixa)
             'XL3' => 18,
         ],
         'ND33/2023/PHUONG' => [
-            'XL1' => 23,
-            'XL2' => 21,
-            'XL3' => 19,
+            'PL1' => 23,
+            'PL2' => 21,
+            'PL3' => 19,
         ]
     ];
     return $a_kq[$nghidinh][$phanloaixa] ?? 0;
@@ -1367,4 +1370,8 @@ function getMucKhoanPhuCapXa($nghidinh, $phanloaixa)
         ],
     ];
     return $a_kq[$nghidinh][$phanloaixa] ?? 0;
+}
+function getNghiDinhPLXaPhuong($phanloaixa){
+    $kq=in_array($phanloaixa,['XL1','XL2','XL3'])?'ND33/2023/XA':'ND33/2023/PHUONG';
+    return $kq;
 }

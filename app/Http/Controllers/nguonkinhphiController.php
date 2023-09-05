@@ -746,15 +746,11 @@ class nguonkinhphiController extends Controller
             $model = nguonkinhphi::where('masodv', $inputs['masodv'])->first();
 
             //Sau xây dựng các trường trong thông tư
-            $a_caphanhchinh=[
-                'XA'=>'ND33/2023/XA',
-                'PHUONG'=>'ND33/2023/PHUONG'
-               ];
             $a_solieu = [
                 '2b' => 13950,
                 '2d' => 1490000,
                 '2d_ndcu' => 'ND34/2019',
-                '2d_nd33'=>$a_caphanhchinh[session('admin')->caphanhchinh]
+                '2d_nd33'=> getNghiDinhPLXaPhuong(session('admin')->phanloaixa)
             ];
             $a_truong = [
                 'bosung',
