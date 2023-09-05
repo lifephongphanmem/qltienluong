@@ -245,6 +245,15 @@
                     <div class="form-group">
                         <label><b>Số liệu tổng hợp khi gửi đi sẽ không thể chỉnh sửa. Bạn hãy kiểm tra kỹ số liệu trước khi
                                 gửi.</b></label>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label class="control-label">Đơn vị tiếp nhận dữ liệu<span
+                                            class="require">*</span></label>
+                                    {!! Form::select('macqcq', $a_cqcq, session('admin')->macqcq, ['class' => 'form-control']) !!}
+                                </div>
+                            </div>
+                        </div>
                     </div>
                     <input type="hidden" name="masodv" id="masodv">
                     <div class="modal-footer">
@@ -295,7 +304,7 @@
             form.submit();
         }
 
-        function disable_btn(obj) {            
+        function disable_btn(obj) {
             obj.visibled = false;
         }
 

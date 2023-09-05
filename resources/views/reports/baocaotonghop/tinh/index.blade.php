@@ -203,7 +203,8 @@
                                         style="border-width: 0px" class="btn btn-default btn-xs mbs"
                                         data-target="#modal-innhucaukp" data-toggle="modal">
                                         Tổng hợp kinh phí tăng theo nghị định 34/2023/NĐ-CP -
-                                        người hoạt động không chuyên trách ở cấp xã, ở thôn, tổ dân phố (Mẫu 2e - Tổng hợp)</button>
+                                        người hoạt động không chuyên trách ở cấp xã, ở thôn, tổ dân phố (Mẫu 2e - Tổng
+                                        hợp)</button>
                                 </li>
                                 <li>
                                     <button type="button"
@@ -212,6 +213,38 @@
                                         data-target="#modal-innhucaukp" data-toggle="modal">
                                         Tổng hợp kinh phí tăng theo nghị định 34/2023/NĐ-CP -
                                         người hoạt động không chuyên trách ở cấp xã, ở thôn, tổ dân phố (Mẫu 2e)</button>
+                                </li>
+                                
+                                <li>
+                                    <button type="button"
+                                        onclick="inNhuCauKP('{{ '/tong_hop_bao_cao/nhu_cau_kinh_phi/mau4a_tonghop' }}',true)"
+                                        style="border-width: 0px" class="btn btn-default btn-xs mbs"
+                                        data-target="#modal-innhucaukp" data-toggle="modal">
+                                        Báo cáo nguồn kinh phí để thực hiện cải cách tiền lương (Mẫu 4a - Tổng hợp)
+                                    </button>
+                                </li>
+                                <li>
+                                    <button type="button"
+                                        onclick="inNhuCauKP('{{ '/tong_hop_bao_cao/nhu_cau_kinh_phi/mau4a' }}',false)"
+                                        style="border-width: 0px" class="btn btn-default btn-xs mbs"
+                                        data-target="#modal-innhucaukp" data-toggle="modal">
+                                        Báo cáo nguồn kinh phí để thực hiện cải cách tiền lương (Mẫu 4a)
+                                    </button>
+                                </li>
+                                
+                                {{-- <li>
+                                    <button type="button"
+                                        onclick="inNhuCauKP('{{ '/tong_hop_bao_cao/nhu_cau_kinh_phi/mau4b_tonghop' }}',true)"
+                                        style="border-width: 0px" class="btn btn-default btn-xs mbs"
+                                        data-target="#modal-innhucaukp" data-toggle="modal">
+                                        Tổng hợp nhu cầu, nguồn thực hiện (Mẫu 4b - Tổng hợp)</button>
+                                </li> --}}
+                                <li>
+                                    <button type="button"
+                                        onclick="inNhuCauKP('{{ '/tong_hop_bao_cao/nhu_cau_kinh_phi/mau4b' }}',false)"
+                                        style="border-width: 0px" class="btn btn-default btn-xs mbs"
+                                        data-target="#modal-innhucaukp" data-toggle="modal">
+                                        Tổng hợp nhu cầu, nguồn thực hiện (Mẫu 4b)</button>
                                 </li>
                             </ol>
                         </div>
