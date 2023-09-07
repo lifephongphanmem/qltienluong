@@ -1982,9 +1982,9 @@ class nguonkinhphi_donvi_baocaoController extends Controller
                 'XL3'=>$m_xl3
             ];
             //Tính toán số liệu cho phân loại phường
-            $ar_II[0] = array('phanloai'=>'','style' => 'font-weight: bold;', 'tt' => 'I', 'noidung' => 'Phường',);
+            $ar_II[0] = array('phanloai'=>'','style' => 'font-weight: bold;', 'tt' => 'I', 'noidung' => 'PHƯỜNG',);
 
-            $ar_II[1] = array('phanloai'=>'PL1','style' => 'font-weight: bold;', 'tt' => '1', 'noidung' => 'Phường loại 1',);
+            $ar_II[1] = array('phanloai'=>'PL1','style' => '', 'tt' => '1', 'noidung' => 'Phường loại 1',);
             $m_pl1 = $m_nguonkp->where('phanloaixa', 'PL1')->where('soluongdinhbien_2d','<>',0);
             // dd($m_pl1);
             // dd($m_xl1);
@@ -2005,7 +2005,7 @@ class nguonkinhphi_donvi_baocaoController extends Controller
                 'tongquyluonggiam_2k' => $m_pl1->sum('quyluonggiam_2k') * 5,
             ];
 
-            $ar_II[2] = array('phanloai'=>'PL2','style' => 'font-weight: bold;', 'tt' => '2', 'noidung' => 'Phường loại 2',);
+            $ar_II[2] = array('phanloai'=>'PL2','style' => '', 'tt' => '2', 'noidung' => 'Phường loại 2',);
             $m_pl2 = $m_nguonkp->where('phanloaixa', 'PL2')->where('soluongdinhbien_2d','<>',0);
             $ar_II[2]['solieu'] = [
                 'soluongdonvi_2k' => $m_pl2->count(),
@@ -2026,7 +2026,7 @@ class nguonkinhphi_donvi_baocaoController extends Controller
                 'tongquyluonggiam_2k' => $m_pl2->sum('quyluonggiam_2k') * 5,
             ];
 
-            $ar_II[3] = array('phanloai'=>'PL3','style' => 'font-weight: bold;', 'tt' => '3', 'noidung' => 'Phường loại 3',);
+            $ar_II[3] = array('phanloai'=>'PL3','style' => '', 'tt' => '3', 'noidung' => 'Phường loại 3',);
             $m_pl3 = $m_nguonkp->where('phanloaixa', 'PL3')->where('soluongdinhbien_2d','<>',0);
             $ar_II[3]['solieu'] = [
                 'soluongdonvi_2k' => $m_pl3->count(),
@@ -2590,8 +2590,9 @@ class nguonkinhphi_donvi_baocaoController extends Controller
             $m_plct = dmphanloaict::all();
             $a_nhomplct_hc = array_column($m_plct->toArray(), 'nhomnhucau_hc', 'mact');
             $a_nhomplct_xp = array_column($m_plct->toArray(), 'nhomnhucau_xp', 'mact');
+            $a_plnhucau = ['BIENCHE', 'CANBOCT', 'HDND', 'CAPUY']; //lọc dữ liệu cho giống 4a
             //Số liệu chi tiết
-            foreach ($m_chitiet as $chitiet) {
+            foreach ($m_chitiet as $key=>$chitiet) {
                 $chitiet->madv = $a_donvi[$chitiet->masodv];
                 //$chitiet->phanloainguon = $a_phanloainguon[$chitiet->madv];
                 $chitiet->maphanloai = $a_phanloai[$chitiet->madv];
@@ -2603,10 +2604,13 @@ class nguonkinhphi_donvi_baocaoController extends Controller
                 } else {
                     $chitiet->nhomnhucau = $a_nhomplct_hc[$chitiet->mact];
                 }
-
+                //lọc dữ liệu cho giống 4a
+                if (!in_array($chitiet->nhomnhucau, $a_plnhucau)) {
+                    $m_chitiet->forget($key);
+                    continue;
+                }
                 $chitiet->tongnhucau = ($chitiet->ttbh_dv + $chitiet->ttl) * 6;
             }
-
             //Số liệu đơn vị
             foreach ($m_nguonkp as $chitiet) {
                 $chitiet->phanloaixa = $a_phanloaixa[$chitiet->madv];
@@ -2725,7 +2729,7 @@ class nguonkinhphi_donvi_baocaoController extends Controller
             //Bao gồm: Sự nghiệp khác + đại biểu hội đồng nhân dân + cấp uỷ
             $data[4] = array('val' => 'KHAC', 'tt' => 'c', 'noidung' => 'Sự nghiệp khác', 'nhucau' => 0, 'nguonkp' => 0, 'tietkiem' => 0, 'hocphi' => 0, 'vienphi' => 0, 'khac' => 0, 'nguonthu' => 0);
             $m_data = $m_nguonkp->wherenotin('linhvuchoatdong', ['QLNN', 'DDT', 'YTE', 'GD', 'DT']);
-            $m_bl = $m_chitiet->wherenotin('linhvuchoatdong', ['QLNN', 'DDT', 'YTE', 'GD', 'DT']);
+            $m_bl = $m_chitiet->wherenotin('linhvuchoatdong', ['QLNN', 'DDT', 'YTE', 'GD', 'DT'])->where('maphanloai', '<>', 'KVXP')->wherein('nhomnhucau', ['CANBOCT', 'BIENCHE']);
             // $m_bl2 = $m_chitiet->wherein('nhomnhucau', ['HDND', 'CAPUY']);
 
             $data[4]['solieu'] = [
@@ -2747,7 +2751,7 @@ class nguonkinhphi_donvi_baocaoController extends Controller
             // $m_data2 = $m_nguonkp->where('maphanloai', 'KVXP')->wherein('nhomnhucau', ['HDND', 'CAPUY']);
 
             // $m_bl = $m_chitiet->wherein('linhvuchoatdong', ['QLNN', 'DDT'])->wherein('nhomnhucau', ['CANBOCT', 'BIENCHE','HDND','CAPUY','CANBOKCT']);
-            $m_bl = $m_chitiet->wherein('linhvuchoatdong', ['QLNN', 'DDT'])->where('maphanloai', '<>', 'KVXP');
+            $m_bl = $m_chitiet->wherein('linhvuchoatdong', ['QLNN', 'DDT'])->where('maphanloai', '<>', 'KVXP')->wherein('nhomnhucau', ['CANBOCT', 'BIENCHE']);
             // $m_bl2 = $m_chitiet->where('maphanloai', 'KVXP')->wherein('nhomnhucau', ['HDND', 'CAPUY']);
             $m_bl2 = $m_chitiet->wherein('nhomnhucau', ['HDND', 'CAPUY']);
             $m_bl3 = $m_chitiet->where('maphanloai', 'KVXP')->wherein('nhomnhucau', ['CANBOCT']);
@@ -2764,7 +2768,7 @@ class nguonkinhphi_donvi_baocaoController extends Controller
             //
             $data[6] = array('val' => 'QLNN', 'tt' => '-', 'noidung' => 'Trong đó: Cán bộ, công chức cấp xã',);
             $m_data2 = $m_nguonkp->where('maphanloai', 'KVXP')->wherein('nhomnhucau', ['CANBOCT']);
-            $m_bl2 = $m_chitiet->where('maphanloai', 'KVXP')->wherein('nhomnhucau', ['CANBOCT']);
+            // $m_bl2 = $m_chitiet->where('maphanloai', 'KVXP')->wherein('nhomnhucau', ['CANBOCT']);
 
             $data[6]['solieu'] = [
                 // 'nhucau' => $m_bl2->sum('tongnhucau'),

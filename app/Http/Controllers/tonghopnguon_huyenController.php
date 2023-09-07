@@ -3639,6 +3639,7 @@ class tonghopnguon_huyenController extends Controller
                 $chitiet->tendv = $a_thongtindv[$chitiet->madv];
             }
             $m_nguonkp = $m_nguonkp->where('maphanloai', 'KVXP');
+            // dd($m_nguonkp);
             //Tính toán số liệu phần I
             // $ar_I[0] = array('phanloai'=>'','style' => 'font-weight: bold;', 'tt' => '', 'noidung' => 'TỔNG SỐ',);
             $ar_I[0] = array('phanloai'=>'','style' => 'font-weight: bold;', 'tt' => 'II', 'noidung' => 'XÃ',);
@@ -4365,8 +4366,9 @@ class tonghopnguon_huyenController extends Controller
             $m_plct = dmphanloaict::all();
             $a_nhomplct_hc = array_column($m_plct->toArray(), 'nhomnhucau_hc', 'mact');
             $a_nhomplct_xp = array_column($m_plct->toArray(), 'nhomnhucau_xp', 'mact');
+            $a_plnhucau = ['BIENCHE', 'CANBOCT', 'HDND', 'CAPUY']; //lọc dữ liệu cho giống 4a
             //Số liệu chi tiết
-            foreach ($m_chitiet as $chitiet) {
+            foreach ($m_chitiet as $key =>$chitiet) {
                 $chitiet->madv = $a_donvi[$chitiet->masodv];
                 //$chitiet->phanloainguon = $a_phanloainguon[$chitiet->madv];
                 $chitiet->maphanloai = $a_phanloai[$chitiet->madv];
@@ -4378,10 +4380,14 @@ class tonghopnguon_huyenController extends Controller
                 } else {
                     $chitiet->nhomnhucau = $a_nhomplct_hc[$chitiet->mact];
                 }
-
+                //lọc dữ liệu cho giống 4a
+                if (!in_array($chitiet->nhomnhucau, $a_plnhucau)) {
+                    $m_chitiet->forget($key);
+                    continue;
+                }
                 $chitiet->tongnhucau = ($chitiet->ttbh_dv + $chitiet->ttl) * 6;
             }
-
+// dd($m_chitiet);
             //Số liệu đơn vị
             foreach ($m_nguonkp as $chitiet) {
                 $chitiet->phanloaixa = $a_phanloaixa[$chitiet->madv];
@@ -4450,7 +4456,7 @@ class tonghopnguon_huyenController extends Controller
             //
             $data[1] = array('val' => 'GD', 'tt' => '-', 'noidung' => 'Giáo dục',);
             $m_data = $m_nguonkp->where('linhvuchoatdong', 'GD')->where('maphanloai', '<>', 'KVXP');
-            $m_bl = $m_chitiet->where('linhvuchoatdong', 'GD')->where('nhomnhucau','BIENCHE')->where('maphanloai', '<>', 'KVXP');
+            $m_bl = $m_chitiet->where('linhvuchoatdong', 'GD')->where('maphanloai', '<>', 'KVXP')->wherein('nhomnhucau', ['CANBOCT', 'BIENCHE']);
             $data[1]['solieu'] = [
                 'nhucau' => $m_bl->sum('tongnhucau'),
                 'tietkiem' => $m_data->sum('tietkiem'), //Lấy tiết kiệm 2023 ở mẫu 4a
@@ -4464,7 +4470,7 @@ class tonghopnguon_huyenController extends Controller
             //
             $data[2] = array('val' => 'DT', 'tt' => '-', 'noidung' => 'Đào tạo',);
             $m_data = $m_nguonkp->where('linhvuchoatdong', 'DT')->where('maphanloai', '<>', 'KVXP');
-            $m_bl = $m_chitiet->where('linhvuchoatdong', 'DT')->where('maphanloai', '<>', 'KVXP');
+            $m_bl = $m_chitiet->where('linhvuchoatdong', 'DT')->where('maphanloai', '<>', 'KVXP')->wherein('nhomnhucau', ['CANBOCT', 'BIENCHE']);
             $data[2]['solieu'] = [
                 'nhucau' => $m_bl->sum('tongnhucau'),
                 'tietkiem' => $m_data->sum('tietkiem'), //Lấy tiết kiệm 2023 ở mẫu 4a
@@ -4487,7 +4493,7 @@ class tonghopnguon_huyenController extends Controller
             //
             $data[3] = array('val' => 'YTE', 'tt' => 'b', 'noidung' => 'Sự nghiệp y tế', 'nhucau' => 0, 'nguonkp' => 0, 'tietkiem' => 0, 'hocphi' => 0, 'vienphi' => 0, 'khac' => 0, 'nguonthu' => 0);
             $m_data = $m_nguonkp->where('linhvuchoatdong', 'YTE')->where('maphanloai', '<>', 'KVXP');
-            $m_bl = $m_chitiet->where('linhvuchoatdong', 'YTE')->where('maphanloai', '<>', 'KVXP');
+            $m_bl = $m_chitiet->where('linhvuchoatdong', 'YTE')->where('maphanloai', '<>', 'KVXP')->wherein('nhomnhucau', ['CANBOCT', 'BIENCHE']);
             $data[3]['solieu'] = [
                 'nhucau' => $m_bl->sum('tongnhucau'),
                 'tietkiem' => $m_data->sum('tietkiem'), //Lấy tiết kiệm 2023 ở mẫu 4a
@@ -4502,7 +4508,7 @@ class tonghopnguon_huyenController extends Controller
             $m_data = $m_nguonkp->wherenotin('linhvuchoatdong', ['QLNN', 'DDT', 'YTE', 'GD', 'DT'])->where('maphanloai', '<>', 'KVXP');
             $m_data2 = $m_nguonkp->where('maphanloai', 'KVXP')->where('nhomnhucau', 'CANBOCT');
 
-            $m_bl = $m_chitiet->wherenotin('linhvuchoatdong', ['QLNN', 'DDT', 'YTE', 'GD', 'DT'])->where('maphanloai', '<>', 'KVXP')->where('nhomnhucau','BIENCHE');
+            $m_bl = $m_chitiet->wherenotin('linhvuchoatdong', ['QLNN', 'DDT', 'YTE', 'GD', 'DT'])->where('maphanloai', '<>', 'KVXP')->wherein('nhomnhucau', ['CANBOCT', 'BIENCHE']);
             // $m_bl2 = $m_chitiet->where('maphanloai', 'KVXP')->where('nhomnhucau', 'CANBOCT');
 
             $data[4]['solieu'] = [
@@ -4522,7 +4528,7 @@ class tonghopnguon_huyenController extends Controller
             $m_data = $m_nguonkp->wherein('linhvuchoatdong', ['QLNN', 'DDT'])->where('maphanloai', '<>', 'KVXP');
             $m_data2 = $m_nguonkp->where('maphanloai', 'KVXP')->wherein('nhomnhucau', ['HDND', 'CAPUY']);
 
-            $m_bl = $m_chitiet->wherein('linhvuchoatdong', ['QLNN', 'DDT'])->where('maphanloai', '<>', 'KVXP')->where('nhomnhucau','BIENCHE');
+            $m_bl = $m_chitiet->wherein('linhvuchoatdong', ['QLNN', 'DDT'])->where('maphanloai', '<>', 'KVXP')->wherein('nhomnhucau', ['CANBOCT', 'BIENCHE']);
             // $m_bl2 = $m_chitiet->where('maphanloai', 'KVXP')->wherein('nhomnhucau', ['HDND', 'CAPUY']);
             $m_bl2 = $m_chitiet->wherein('nhomnhucau', ['HDND', 'CAPUY']);
             $m_bl3 = $m_chitiet->where('maphanloai', 'KVXP')->wherein('nhomnhucau', ['CANBOCT']);
