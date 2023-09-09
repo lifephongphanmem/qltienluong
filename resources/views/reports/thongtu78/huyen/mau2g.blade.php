@@ -1,4 +1,4 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+{{-- <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html lang="vi">
 
 <head>
@@ -31,9 +31,11 @@
 
         }
     </style>
-</head>
+</head> --}}
 
-<body style="font:normal 12px Arial, serif;">
+@extends('main_baocao')
+
+@section('content')
 
     <table width="96%" border="0" cellspacing="0" cellpadding="4" style="margin:0 auto 20px;text-align: center">
         <tr>
@@ -191,7 +193,7 @@
 
         @foreach ($m_dshuyen as $huyen)
             <?php
-            $m_huyen = $m_chitiet->where('madvbc', $huyen->madvbc);
+            $m_huyen = $m_chitiet->where('madvbc', $huyen->madvbc)->where('pcud61','<',0);//Chưa rõ lấy theo phụ cấp nào nên tạm thời để dữ liệu trống bằng cách dùng điều kiện where sai 
             $j = 1;
             ?>
             @if ($m_huyen->count() > 0)
@@ -199,36 +201,64 @@
                     <td>{{ $i++ }}</td>
                     <td style="text-align: left">{{ $huyen->tendvbc }}</td>
                     <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
+                    <td>{{dinhdangsothapphan($m_huyen->sum('tongheso'),$inputs['lamtron'])}}</td>
+                    <td>{{dinhdangsothapphan($m_huyen->sum('heso'),$inputs['lamtron'])}}</td>
+                    <td>{{dinhdangsothapphan($m_huyen->sum('tonghesophucap'),$inputs['lamtron'])}}</td>
+                    <td>{{dinhdangsothapphan($m_huyen->sum('pccv'),$inputs['lamtron'])}}</td>
+                    <td>{{dinhdangsothapphan($m_huyen->sum('pcvk'),$inputs['lamtron'])}}</td>
+                    <td>{{dinhdangsothapphan($m_huyen->sum('pcud61'),$inputs['lamtron'])}}</td>
                     <td></td>
                     <td></td>
                     <td></td>
                     <td></td>
                     <td></td>
                 </tr>
+                {{-- @if (isset($model)) --}}
                 @foreach ($m_huyen as $chitiet)
+                <tr style="font-weight: bold;">
+                    <td>{{ $j++ }}</td>
+                    <td style="text-align: left;font-weight: bold">{{ $chitiet->tendv }}</td>
+                    <td></td>
+                    <td>{{dinhdangsothapphan($chitiet->tongheso,$inputs['lamtron'])}}</td>
+                    <td>{{dinhdangsothapphan($chitiet->heso,$inputs['lamtron'])}}</td>
+                    <td>{{dinhdangsothapphan($chitiet->tonghesophucap,$inputs['lamtron'])}}</td>
+                    <td>{{dinhdangsothapphan($chitiet->pccv,$inputs['lamtron'])}}</td>
+                    <td>{{dinhdangsothapphan($chitiet->pcvk,$inputs['lamtron'])}}</td>
+                    <td>{{dinhdangsothapphan($chitiet->pcud61,$inputs['lamtron'])}}</td>
+                    <td>{{dinhdangsothapphan($chitiet->tongheso,$inputs['lamtron'])}}</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <?php 
+                    $_chitiet=$m_nguonkp_ct->where('masodv',$chitiet->masodv);
+                ?>
+                <!-- Rải chi tiết cán bộ -->
+                    @foreach ($_chitiet as $val )
                     <tr>
-                        <td>{{ $j++ }}</td>
-                        <td style="text-align: left">{{ $chitiet->tendv }}</td>
+                        <td>-</td>
+                        <td style="text-align: left">{{$val->tencanbo}}</td>
                         <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
+                        <td>{{dinhdangsothapphan($val->tongheso,$inputs['lamtron'])}}</td>
+                        <td>{{dinhdangsothapphan($val->heso,$inputs['lamtron'])}}</td>
+                        <td>{{dinhdangsothapphan($val->tonghesophucap,$inputs['lamtron'])}}</td>
+                        <td>{{dinhdangsothapphan($val->pccv,$inputs['lamtron'])}}</td>
+                        <td>{{dinhdangsothapphan($val->pcvk,$inputs['lamtron'])}}</td>
+
+                        <td>{{dinhdangsothapphan($val->pcud61,$inputs['lamtron'])}}</td>
+                        <td>{{dinhdangsothapphan($val->tongheso,$inputs['lamtron'])}}</td>
+                        <td>{{dinhdangsothapphan($val->chenhlech,$inputs['lamtron'])}}</td>
+                        <td>{{dinhdangsothapphan($val->nhucau1t)}}</td>
+                        <td>{{dinhdangsothapphan($val->nhucau2022)}}</td>
+                        <td>{{dinhdangsothapphan($val->nhucau2023)}}</td>
                     </tr>
-                @endforeach
+
+                    @endforeach
+
+                @endforeach   
+                {{-- @endif --}}
+
             @endif
         @endforeach
 
@@ -260,6 +290,4 @@
         </tr>
     </table>
 
-</body>
-
-</html>
+@stop

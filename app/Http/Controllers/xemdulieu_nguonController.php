@@ -279,6 +279,7 @@ class xemdulieu_nguonController extends Controller
                     $dv->dulieu = 'CHOGUI';
                 }
             }
+            // dd($model_donvi);
             // dd($inputs);
             if (!isset($inputs['trangthai']) || $inputs['trangthai'] != 'ALL') {
                 // $model_donvi = $model_donvi->where('trangthai',$inputs['trangthai']);
@@ -298,6 +299,7 @@ class xemdulieu_nguonController extends Controller
                 ->with('model_tenct', $model_tenct)
                 ->with('a_dvbc', array_column($model_dvbc->toArray(), 'tendvbc', 'madvbc'))
                 ->with('furl', '/chuc_nang/tong_hop_nguon/')
+                ->with('furl_dv', '/nguon_kinh_phi/')
                 ->with('pageTitle', 'Danh sách đơn vị tổng hợp nguồn kinh phí');
         } else
             return view('errors.notlogin');

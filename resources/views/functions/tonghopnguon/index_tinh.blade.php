@@ -95,7 +95,7 @@
                                                 {{-- <a href="{{url('/du_toan/nguon_kinh_phi/ma_so='.$value['masodv'].'/in')}}" class="btn btn-default btn-xs" TARGET="_blank">
                                                 <i class="fa fa-print"></i>&nbsp; Số liệu chi tiết</a> --}}
                                                 <button type="button"
-                                                    onclick="innguon('{{ $value->namns }}','{{ $value->masodv }}')"
+                                                    onclick="innguon('{{ $value->madv }}','{{ $value->masodv }}')"
                                                     class="btn btn-default btn-xs mbs" data-target="#indt-modal"
                                                     data-toggle="modal">
                                                     <i class="fa fa-print"></i>&nbsp; Số liệu chi tiết</button>
@@ -146,6 +146,7 @@
         </div>
     </div>
     <!--Model in-->
+    <!-- Bỏ dùng của huyện
     <div id="indt-modal" tabindex="-1" role="dialog" aria-hidden="true" class="modal fade">
         <div class="modal-lg modal-dialog modal-content">
             <div class="modal-header modal-header-primary">
@@ -157,8 +158,10 @@
                 <div class="row">
                     <div class="col-md-6">
                         <div class="form-group">
-                            <button type="button" onclick="intonghopdt('{{ '/nguon_kinh_phi/printf?maso=' }}')"
-                                style="border-width: 0px" class="btn btn-default btn-xs mbs">
+
+                            <button type="button" onclick="ThongTinKetXuat(true,'{{ $furl_dv . 'mau4b' }}',null)"
+                                style="border-width: 0px" class="btn btn-default btn-xs mbs" 
+                                data-target="#mautt107-modal" data-toggle="modal">
                                 <i class="fa fa-print"></i>&nbsp; Tổng hợp nhu cầu và nguồn thực hiện (Mẫu 4b)</button>
                         </div>
                     </div>
@@ -196,6 +199,7 @@
                     </div>
                 </div>
                 <input type="hidden" id="nam_dt" name="nam_dt" />
+                <input type="hidden" id="madv_dt" name="nam_dt" />
                 <input type="hidden" id="masodv_dt" name="masodv_dt" />
             </div>
 
@@ -204,8 +208,171 @@
             </div>
         </div>
     </div>
+-->
+<div id="indt-modal" tabindex="-1" role="dialog" aria-hidden="true" class="modal fade">
+    <div class="modal-full modal-dialog modal-content">
+        <div class="modal-header modal-header-primary">
+            <button type="button" data-dismiss="modal" aria-hidden="true" class="close">&times;</button>
+            <h4 id="hd-inbl" class="modal-title">In nhu cầu kinh phí</h4>
+        </div>
 
+        <div class="modal-body">
+
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <button onclick="ThongTinKetXuat(false,'{{ '/nguon_kinh_phi/mautt107' }}')" type="button"
+                            style="border-width: 0px" class="btn btn-default btn-xs mbs"
+                            data-target="#mautt107-modal" data-toggle="modal"
+                            title="Bảng lương của cán bộ theo mẫu C02-HD">
+                            <i class="fa fa-print"></i>&nbsp; Bảng lương mẫu C02-HD (TT107/2017/TT-BTC)</button>
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <button onclick="ThongTinKetXuat(false,'{{ '/nguon_kinh_phi/nangluong' }}')" type="button"
+                            style="border-width: 0px" class="btn btn-default btn-xs mbs"
+                            data-target="#mautt107-modal" data-toggle="modal" title="Danh sách cán bộ nâng lương">
+                            <i class="fa fa-print"></i>&nbsp; Danh sách cán bộ nâng lương</button>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <button type="button" onclick="ThongTinKetXuat(true,'{{ $furl_dv . 'tonghopnhucau_donvi' }}')"
+                            style="border-width: 0px" class="btn btn-default btn-xs mbs"
+                            data-target="#mautt107-modal" data-toggle="modal">
+                            <i class="fa fa-print"></i>&nbsp; Bảng tổng hợp nhu cầu kinh phí</button>
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <button type="button" onclick="ThongTinKetXuat(true,'{{ $furl_dv . 'mautt107_m2' }}')"
+                            style="border-width: 0px" class="btn btn-default btn-xs mbs"
+                            data-target="#mautt107-modal" data-toggle="modal">
+                            <i class="fa fa-print"></i>&nbsp; Bảng chi tiết nhu cầu kinh phí</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <button type="button"
+                            onclick="ThongTinKetXuat(true,'{{ $furl_dv . 'tonghopnhucau_donvi_2a?mau=1' }}')"
+                            style="border-width: 0px" class="btn btn-default btn-xs mbs"
+                            data-target="#mautt107-modal" data-toggle="modal">
+                            <i class="fa fa-print"></i>&nbsp; Bảng tổng hợp nhu cầu kinh phí (Mẫu 2a (1))</button>
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <button type="button"
+                            onclick="ThongTinKetXuat(true,'{{ $furl_dv . 'tonghopnhucau_donvi_2a?mau=2' }}')"
+                            style="border-width: 0px" class="btn btn-default btn-xs mbs"
+                            data-target="#mautt107-modal" data-toggle="modal">
+                            <i class="fa fa-print"></i>&nbsp; Bảng tổng hợp nhu cầu kinh phí (Mẫu 2a (2))</button>
+                    </div>
+                </div>                    
+            </div>
+
+
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <button type="button" onclick="ThongTinKetXuat(true,'{{ $furl_dv . 'mau2b' }}',null)"
+                            style="border-width: 0px" class="btn btn-default btn-xs mbs"
+                            data-target="#mautt107-modal" data-toggle="modal">
+                            <i class="fa fa-print"></i>&nbsp;Bảng tổng quỹ trợ cấp tăng thêm cho cán bộ đã nghỉ hưu
+                            (Mẫu 2b)</button>
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <button type="button" onclick="ThongTinKetXuat(true,'{{ $furl_dv . 'mau2c' }}',null)"
+                            style="border-width: 0px" class="btn btn-default btn-xs mbs"
+                            data-target="#mautt107-modal" data-toggle="modal">
+                            <i class="fa fa-print"></i>&nbsp;Tổng hợp kinh phí tăng thêm để thực hiện chế độ cho cán bộ
+                            không chuyên trách (Mẫu 2c)</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <button type="button" onclick="ThongTinKetXuat(true,'{{ $furl_dv . 'mau2d' }}',null)"
+                            style="border-width: 0px" class="btn btn-default btn-xs mbs"
+                            data-target="#mautt107-modal" data-toggle="modal">
+                            <i class="fa fa-print"></i>&nbsp;Tổng hợp kinh phí giảm theo nghị định số 33/2023/NĐ-CP -
+                            cán bộ, công chức cấp xã (Mẫu 2d)</button>
+                    </div>
+                </div>                    
+
+           
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <button type="button" onclick="ThongTinKetXuat(true,'{{ $furl_dv . 'mau2e' }}',null)"
+                            style="border-width: 0px" class="btn btn-default btn-xs mbs"
+                            data-target="#mautt107-modal" data-toggle="modal">
+                            <i class="fa fa-print"></i>&nbsp;Tổng hợp kinh phí tăng theo nghị định 34/2023/NĐ-CP -
+                            người hoạt động không chuyên trách ở cấp xã, ở thôn, tổ dân phố (Mẫu 2e)</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                {{-- <div class="col-md-6">
+                    <div class="form-group">
+                        <button type="button" onclick="ThongTinKetXuat(true,'{{ $furl . 'mau2g' }}',null)"
+                            style="border-width: 0px" class="btn btn-default btn-xs mbs"
+                            data-target="#mautt107-modal" data-toggle="modal">
+                            <i class="fa fa-print"></i>&nbsp;Báo cáo quỹ tiền lương, phụ cấp đối với lao động theo hợp
+                            đồng khu vực hành chính và đơn vị sự nghiệp
+                            (Mẫu 2g)</button>
+                    </div>
+                </div> --}}
+            </div>
+
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <button type="button" onclick="ThongTinKetXuat(true,'{{ $furl_dv . 'mau4a' }}',null)"
+                            style="border-width: 0px" class="btn btn-default btn-xs mbs"
+                            data-target="#mautt107-modal" data-toggle="modal">
+                            <i class="fa fa-print"></i>&nbsp;Báo cáo nguồn kinh phí để thực hiện cải cách tiền lương
+                            (Mẫu 4a)</button>
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <button type="button" onclick="ThongTinKetXuat(true,'{{ $furl_dv . 'mau4b' }}',null)"
+                            style="border-width: 0px" class="btn btn-default btn-xs mbs"
+                            data-target="#mautt107-modal" data-toggle="modal">
+                            <i class="fa fa-print"></i>&nbsp;Tổng hợp nhu cầu và nguồn thực hiện (Mẫu 4b)</button>
+                    </div>
+                </div>
+            </div>
+            <input type="hidden" id="nam_dt" name="nam_dt" />
+            <input type="hidden" id="masodv_dt" name="masodv_dt" />
+            <input type="hidden" id="madv_dt" name="madv_dt" />
+        </div>
+
+        <div class="modal-footer">
+            <button type="button" data-dismiss="modal" class="btn btn-default">Hủy thao tác</button>
+        </div>
+    </div>
+</div>
     <!--Mẫu TT107 -->
+    <!--
     {!! Form::open([
         'url' => (isset($furl) ? $furl : '') . 'mautt107',
         'method' => 'post',
@@ -255,7 +422,7 @@
         </div>
     </div>
     {!! Form::close() !!}
-
+-->
     <script>
         function confirmChuyen(masodv) {
             document.getElementById("masodv").value = masodv;
@@ -302,7 +469,7 @@
         })
 
         function innguon(namdt, masodv) {
-            $('#nam_dt').val(namdt);
+            $('#madv_dt').val(namdt);
             $('#masodv_dt').val(masodv);
         }
 
@@ -316,11 +483,11 @@
             window.open('/nguon_kinh_phi/nangluong?maso=' + masodv, '_blank');
         }
 
-        function ThongTinKetXuat(thang, url) {
-            var form = $('#printf_mautt107');
-            form.find("[id^='thang']").prop('disabled', thang);
-            form.prop('action', url);
-        }
+        // function ThongTinKetXuat(thang, url) {
+        //     var form = $('#printf_mautt107');
+        //     form.find("[id^='thang']").prop('disabled', thang);
+        //     form.prop('action', url);
+        // }
 
         function ClickBCtt107() {
             var masodv = $('#masodv_dt').val();
@@ -328,5 +495,5 @@
             $('#printf_mautt107').submit();
         }
     </script>
-
+    @include('functions.viewdata.nguonkinhphi.modal_printf')
 @stop

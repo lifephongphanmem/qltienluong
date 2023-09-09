@@ -12,7 +12,7 @@ Route::group(['prefix' => 'he_thong'], function () {
 
     Route::group(['prefix' => 'don_vi'], function () {
         Route::get('don_vi', 'dmdonviController@information_local');
-        Route::get('stopdv', 'quanlydonviController@index');
+        Route::get('stopdv', 'quanlydonviController@index');    
         Route::post('stopdv/stop', 'quanlydonviController@stop');
         Route::post('stopdv/active', 'quanlydonviController@active');
         Route::get('thong_tin', 'dmdonviController@edit_local');
