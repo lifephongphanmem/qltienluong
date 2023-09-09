@@ -3726,7 +3726,7 @@ class tonghopnguon_huyenController extends Controller
                 'XL3'=>$m_xl3
             ];
             //Tính toán số liệu cho phân loại phường
-            $ar_II[0] = array('phanloai'=>'','style' => 'font-weight: bold;', 'tt' => 'I', 'noidung' => 'Phường',);
+            $ar_II[0] = array('phanloai'=>'','style' => 'font-weight: bold;', 'tt' => 'I', 'noidung' => 'PHƯỜNG',);
 
             $ar_II[1] = array('phanloai'=>'PL1','style' => 'font-weight: bold;', 'tt' => '1', 'noidung' => 'Phường loại 1',);
             $m_pl1 = $m_nguonkp->where('phanloaixa', 'PL1')->where('soluongdinhbien_2d','<>',0);
