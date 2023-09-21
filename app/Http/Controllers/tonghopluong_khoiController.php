@@ -36,15 +36,18 @@ class tonghopluong_khoiController extends Controller
     {
         $ngay = date("Y-m-t", strtotime($nam.'-'.$thang.'-01'));
         $madv = session('admin')->madv;
-        $model_donvi = dmdonvi::select('madv', 'tendv')
+        $model_donvi = dmdonvi::select('*')
             ->where('macqcq', $madv)
             ->where('madv', '<>', $madv)
             ->wherenotin('madv', function ($query) use ($madv,$thang,$nam,$ngay) {
                 $query->select('madv')->from('dmdonvi')
-                    ->where('ngaydung', '<=', $ngay)
+                    // ->where('ngaydung', '<=', $ngay)
+                    ->whereMonth('ngaydung', '<=', $ngay)
+                    ->whereYear('ngaydung', '<=', $ngay)
                     ->where('trangthai', 'TD')
                     ->get();
-            })->get();
+            })
+            ->get();
         $kq = $model_donvi->count();
         return $kq;
     }
@@ -100,13 +103,14 @@ class tonghopluong_khoiController extends Controller
                     })->where('trangthai', 'DAGUI')
                         ->where('thang', $a_data[$i]['thang'])->where('nam', $inputs['nam'])
                         ->get();
+
                     //$dulieu = $model_donvi->where('thang', $a_data[$i]['thang'])->where('nam', $inputs['nam']);
-                    $dulieukhoi = tonghopluong_khoi::wherein('madv', function($query) use($madv,$thang,$nam){
-                        $query->select('madv')->from('tonghopluong_khoi')->where('macqcq',$madv)->where('madv','<>',$madv)
-                            ->where('thang', $thang)->where('nam', $nam)->where('trangthai','DAGUI')->get();
-                    })->where('trangthai', 'DAGUI')
-                        ->where('thang', $a_data[$i]['thang'])->where('nam', $inputs['nam'])
-                        ->get();
+                    // $dulieukhoi = tonghopluong_khoi::wherein('madv', function($query) use($madv,$thang,$nam){
+                    //     $query->select('madv')->from('tonghopluong_khoi')->where('macqcq',$madv)->where('madv','<>',$madv)
+                    //         ->where('thang', $thang)->where('nam', $nam)->where('trangthai','DAGUI')->get();
+                    // })->where('trangthai', 'DAGUI')
+                    //     ->where('thang', $a_data[$i]['thang'])->where('nam', $inputs['nam'])
+                    //     ->get();
                //}
                 //dd(count($tonghop));
                 //Kiểm tra xem đơn vị đã tổng hợp dữ liệu khối chưa
@@ -116,20 +120,24 @@ class tonghopluong_khoiController extends Controller
                     $a_data[$i]['trangthai'] = $tonghop->trangthai;
                     //$a_data[$i]['dvgui'] = $sldvcapduoi;
                     //if(session('admin')->phamvitonghop == 'KHOI')
-                    $a_data[$i]['dvgui'] = count($dulieu) + count($dulieukhoi);
+                    // $a_data[$i]['dvgui'] = count($dulieu) + count($dulieukhoi);
+                    $a_data[$i]['dvgui'] = count($dulieu) ;
                     $a_data[$i]['ngaylap'] = $tonghop->ngaylap;
 
                 } else {//chưa tổng hợp dữ liệu
                     $a_data[$i]['noidung'] = 'Đơn vị ' . $tendv . ' tổng hợp dữ liệu từ các đơn vị cấp dưới thời điểm ' . $a_data[$i]['thang'] . '/' . $inputs['nam'];
                     $a_data[$i]['ngaylap'] = null;
                     //Kiểm tra xem đơn vị cấp dưới đã gửi dữ liệu khối chưa
-                    if (count($dulieu)+ count($dulieukhoi)== 0) {//chưa gửi
+                    // if (count($dulieu)+ count($dulieukhoi)== 0) {//chưa gửi
+                        if (count($dulieu)== 0) {//chưa gửi
                         $a_data[$i]['trangthai'] = 'CHUADL';
-                    } elseif (count($dulieu)+ count($dulieukhoi) == $a_data[$i]['sldv']) { //kiểm tra xem có bao nhiêu đơn vị gửi / tổng số các đơn vị
+                    // } elseif (count($dulieu)+ count($dulieukhoi) == $a_data[$i]['sldv']) { //kiểm tra xem có bao nhiêu đơn vị gửi / tổng số các đơn vị
+                    } elseif (count($dulieu) == $a_data[$i]['sldv']) { //kiểm tra xem có bao nhiêu đơn vị gửi / tổng số các đơn vị
                         $a_data[$i]['trangthai'] = 'CHUAGUI';
                         $a_data[$i]['dvgui'] = $a_data[$i]['sldv'];
                     } else {
-                        $a_data[$i]['dvgui'] = count($dulieu)+ count($dulieukhoi);
+                        // $a_data[$i]['dvgui'] = count($dulieu)+ count($dulieukhoi);
+                        $a_data[$i]['dvgui'] = count($dulieu);
                         $a_data[$i]['trangthai'] = 'CHUADAYDU';
                     }
                 }
