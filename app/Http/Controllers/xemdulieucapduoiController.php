@@ -254,9 +254,6 @@ class xemdulieucapduoiController extends Controller
                             ->get();
                     })
                     ->distinct()->get();
-                    // $model_donvi = dmdonvi::join('dmphanloaidonvi', 'dmphanloaidonvi.maphanloai', 'dmdonvi.maphanloai')
-                    // ->select('dmdonvi.madv', 'dmdonvi.tendv', 'phanloaitaikhoan', 'dmdonvi.maphanloai', 'tenphanloai')
-                    // ->wherein('madv',getDonviHuyen($inputs['nam'],$madv)['m_donvi'])->get();
                 /* 13.04.23 bỏ phần lấy ở huyện vì giờ chuyển trực tiếp lên huyện ko có khối
                 $model_nguon = tonghopluong_huyen::wherein('madv', function ($query) use ($madv) {
                     $query->select('madv')->from('dmdonvi')->where('macqcq', $madv)->where('madv', '<>', $madv)->get();

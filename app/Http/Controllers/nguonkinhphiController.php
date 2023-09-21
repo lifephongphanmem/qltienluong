@@ -11,6 +11,7 @@ use App\dmphanloaict;
 use App\dmphucap_donvi;
 use App\dmphucap_thaisan;
 use App\dmthongtuquyetdinh;
+use App\dsdonviquanly;
 use App\hosocanbo;
 use App\hosocanbo_kiemnhiem;
 use App\hosotamngungtheodoi;
@@ -895,6 +896,15 @@ class nguonkinhphiController extends Controller
             }
 
             $m_nkp = nguonkinhphi::where('masodv', $inputs['masodv'])->first();
+            //1.tự động thêm danh sách quản lý
+            $chk_ql = dsdonviquanly::where('nam', $m_nkp->namns)->where('madv', $m_nkp->madv)->first();
+            if ($chk_ql == null)
+                dsdonviquanly::create([
+                    'nam' => $m_nkp->namns,
+                    'madv' => $m_nkp->madv,
+                    'macqcq' => $m_nkp->macqcq,
+                ]);
+            //1. hết
             $model = nguonkinhphi::where('sohieu', $m_nkp->sohieu)->where('madv', session('admin')->madv)->get();
             // dd($model);
             foreach ($model as $nguon) {

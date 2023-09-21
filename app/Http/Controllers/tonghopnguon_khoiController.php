@@ -70,30 +70,52 @@ class tonghopnguon_khoiController extends Controller
             $model = dmthongtuquyetdinh::all();
             $a_trangthai = getStatus();
             //Lấy dữ liệu các đơn vị cấp dưới đã gửi lên
+
+            //2023.09.13
             // $model_donvi = dmdonvi::select('madv', 'tendv')
             //     ->wherein('madv', function ($query) use ($madv) {
             //         $query->select('madv')->from('dmdonvi')->where('macqcq', $madv)->where('madv', '<>', $madv)->get();
             //     })->get();
+
             // $soluong = $model_donvi->count();
+
+
+
+            // dd($model_donvi);
+
             $dulieukhoi = nguonkinhphi_khoi::wherein('madv', function ($query) use ($madv) {
                 $query->select('madv')->from('nguonkinhphi_khoi')->where('macqcq', $madv)->where('madv', '<>', $madv)
                     ->where('trangthai', 'DAGUI')->get();
-            })->where('trangthai', 'DAGUI')
-                ->get();
+            })->where('trangthai', 'DAGUI')->get();
+            //  dd($model);
             foreach ($model as $dv) {
+                //dd($dv);
+                // $nam = $dv->namdt;
+                // $model_donvi = dmdonvi::select('madv', 'tendv', 'macqcq', 'maphanloai', 'phanloaitaikhoan')
+                //     ->wherein('madv', function ($query) use ($madv) {
+                //         $query->select('madv')->from('dmdonvi')->where('macqcq', $madv)->where('madv', '<>', $madv)->get();
+                //     })->wherenotin('madv', function ($query) use ($madv, $nam) {
+                //         $query->select('madv')->from('dmdonvi')
+                //             ->whereyear('ngaydung', '<=', $nam)
+                //             ->where('trangthai', 'TD')
+                //             ->get();
+                //     })->get();
+
+                // $soluong = $model_donvi->count();
                 $nguon_khoi = $model_nguon_khoi->where('sohieu', $dv->sohieu)->first();
                 $nam=$dv->namdt;
-                $model_donvi = dmdonvi::select('madv', 'tendv', 'macqcq', 'maphanloai', 'phanloaitaikhoan')
-                    ->wherein('madv', function ($query) use ($madv) {
-                        $query->select('madv')->from('dmdonvi')->where('macqcq', $madv)->where('madv', '<>', $madv)->get();
-                    })
-                    ->wherenotin('madv', function ($query) use ($madv, $nam) {
-                        $query->select('madv')->from('dmdonvi')
-                            ->whereyear('ngaydung', '<=', $nam)
-                            ->where('trangthai', 'TD')
-                            ->get();
-                    })->get();
-                $soluong = $model_donvi->count();
+                // $model_donvi = dmdonvi::select('madv', 'tendv', 'macqcq', 'maphanloai', 'phanloaitaikhoan')
+                //     ->wherein('madv', function ($query) use ($madv) {
+                //         $query->select('madv')->from('dmdonvi')->where('macqcq', $madv)->where('madv', '<>', $madv)->get();
+                //     })
+                //     ->wherenotin('madv', function ($query) use ($madv, $nam) {
+                //         $query->select('madv')->from('dmdonvi')
+                //             ->whereyear('ngaydung', '<=', $nam)
+                //             ->where('trangthai', 'TD')
+                //             ->get();
+                //     })->get();
+                // $soluong = $model_donvi->count();
+                $soluong = count(getDonviHuyen($nam,$madv)['m_donvi']);
                 if ($nguon_khoi != null) {
                     //Đã tổng hợp dữ liệu
                     $dv->sldv = $soluong . '/' . $soluong;
@@ -106,6 +128,10 @@ class tonghopnguon_khoiController extends Controller
                     $khoi = $dulieukhoi->where('sohieu', $dv->sohieu)->count();
                     $dv->sldv = $sl + $khoi . '/' . $soluong;
                     $dv->masodv = null;
+                    if ($dv->sohieu == 'tt78_2022') 
+                    
+                    //dd($khoi);
+
                     if (($sl + $khoi) == 0) {
                         $dv->trangthai = 'CHUADL';
                     } elseif (($sl + $khoi) < $soluong) {
@@ -156,7 +182,7 @@ class tonghopnguon_khoiController extends Controller
             $inputs = $requests->all();
             $madv = session('admin')->madv;
             $model_nguon_khoi = nguonkinhphi_khoi::where('sohieu', $inputs['sohieu'])->where('madv', $madv)->first();
-            
+
             //$model_nguon = nguonkinhphi::where('sohieu',$inputs['sohieu'])->where('macqcq', $madv)->get();
             if ($model_nguon_khoi != null) {
                 //Trường hợp đơn vị bị trả lại dữ liệu muốn gửi lại

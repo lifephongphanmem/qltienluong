@@ -83,7 +83,8 @@ class baocaobangluongController extends Controller
                 foreach ($model_phanloai as $key => $key)
                     $a_phanloai[$key] = $model_phanloai[$key];
             }
-            if (session('admin')->phamvitonghop == 'HUYEN') {
+            //if (session('admin')->phamvitonghop == 'HUYEN') { //2023.09.13 tạm thời thêm để cho giao diện KHOI
+            if (session('admin')->phamvitonghop == 'HUYEN' || session('admin')->phamvitonghop == 'KHOI') {
                 //$model_donvi = dmdonvi::where('macqcq', session('admin')->madv)->get();
                 $model_donvi = dmdonvi::where('madvbc', session('admin')->madvbc)->where('phanloaitaikhoan', '<>', 'TH')->get();
                 if (session('admin')->caphanhchinh == 'T' && session('admin')->phanloaitaikhoan == 'TH')
@@ -5745,8 +5746,8 @@ class baocaobangluongController extends Controller
             }
 
             $model_phanloai = dmphanloaidonvi::all();
-            $m_donvi = $model_donvi->where('madv',session('admin')->madv)->first();
-             
+            $m_donvi = $model_donvi->where('madv', session('admin')->madv)->first();
+
             return view('reports.baocaokhac.danhsachdonvi')
                 ->with('model', $model)
                 ->with('model_phanloai', $model_phanloai)

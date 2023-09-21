@@ -31,17 +31,17 @@ class xemdulieu_nguonController extends Controller
             $nam = dmthongtuquyetdinh::where('sohieu', $inputs['sohieu'])->first()->namdt;
             $a_trangthai = array('ALL' => '--Chọn trạng thái dữ liệu--', 'CHOGUI' => 'Chưa gửi dữ liệu', 'DAGUI' => 'Đã gửi dữ liệu');
 
-            $model_donvi = dmdonvi::select('madv', 'tendv', 'macqcq', 'maphanloai', 'phanloaitaikhoan')
-                ->wherein('madv', function ($query) use ($madv) {
-                    $query->select('madv')->from('dmdonvi')->where('macqcq', $madv)->where('madv', '<>', $madv)->get();
-                })
-                ->wherenotin('madv', function ($query) use ($madv, $nam) {
-                    $query->select('madv')->from('dmdonvi')
-                        ->whereyear('ngaydung', '<=', $nam)
-                        ->where('trangthai', 'TD')
-                        ->get();
-                })->get();
-                // dd($model_donvi);
+            // $model_donvi = dmdonvi::select('madv', 'tendv', 'macqcq', 'maphanloai', 'phanloaitaikhoan')
+            //     ->wherein('madv', function ($query) use ($madv) {
+            //         $query->select('madv')->from('dmdonvi')->where('macqcq', $madv)->where('madv', '<>', $madv)->get();
+            //     })->wherenotin('madv', function ($query) use ($madv, $nam) {
+            //         $query->select('madv')->from('dmdonvi')
+            //             ->whereyear('ngaydung', '<=', $nam)
+            //             ->where('trangthai', 'TD')
+            //             ->get();
+            //     })->get();
+                $model_donvi = dmdonvi::select('madv', 'tendv', 'maphanloai')->wherein('madv', getDonviHuyen($nam,$madv)['m_donvi'])->get();
+            //dd($model_donvi);
             $model_phanloai = dmphanloaidonvi::wherein('maphanloai', array_column($model_donvi->toarray(), 'maphanloai'))->get();
             $model_phanloai = array_column($model_phanloai->toarray(), 'tenphanloai', 'maphanloai');
             foreach ($model_phanloai as $key => $key)
@@ -82,7 +82,7 @@ class xemdulieu_nguonController extends Controller
             if (!isset($inputs['trangthai']) || $inputs['trangthai'] != 'ALL') {
                 $model_donvi = $model_donvi->where('trangthai', $inputs['trangthai']);
             }
-            $model_nhomct = dmphanloaicongtac::select('macongtac', 'tencongtac')->get();            
+            $model_nhomct = dmphanloaicongtac::select('macongtac', 'tencongtac')->get();
             $model_tenct = dmphanloaict::select('tenct', 'macongtac', 'mact')->get();
             return view('functions.viewdata.nguonkinhphi.index')
                 ->with('model', $model_donvi)
@@ -397,7 +397,7 @@ class xemdulieu_nguonController extends Controller
     public function getKhoiToCongTac(Request $request)
     {
         $inputs = $request->all();
-        $model = dmphongban::where('madv', $inputs['madv'])->get();       
+        $model = dmphongban::where('madv', $inputs['madv'])->get();
         $result['status'] = 'success';
         $result['message'] = '<div id="row_khoitocongtac" class="row"><div class="col-md-12">';
         $result['message'] .= '<label>Khối/Tổ công tác</label>';

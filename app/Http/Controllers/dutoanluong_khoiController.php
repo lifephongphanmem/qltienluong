@@ -53,17 +53,18 @@ class dutoanluong_khoiController extends Controller
                 $nam=$dv->namns;
                 $nguon_khoi = $model_nguon->where('namns', $dv->namns)->first();
                 $sl = $model_nguon->where('namns', $dv->namns)->count();
-                $model_donvi = dmdonvi::select('madv', 'tendv', 'macqcq', 'maphanloai', 'phanloaitaikhoan')
-                    ->wherein('madv', function ($query) use ($madv) {
-                        $query->select('madv')->from('dmdonvi')->where('macqcq', $madv)->where('madv', '<>', $madv)->get();
-                    })
-                    ->wherenotin('madv', function ($query) use ($madv, $nam) {
-                        $query->select('madv')->from('dmdonvi')
-                            ->whereyear('ngaydung', '<=', $nam)
-                            ->where('trangthai', 'TD')
-                            ->get();
-                    })->get();
-                $soluong = $model_donvi->count();
+                // $model_donvi = dmdonvi::select('madv', 'tendv', 'macqcq', 'maphanloai', 'phanloaitaikhoan')
+                //     ->wherein('madv', function ($query) use ($madv) {
+                //         $query->select('madv')->from('dmdonvi')->where('macqcq', $madv)->where('madv', '<>', $madv)->get();
+                //     })
+                //     ->wherenotin('madv', function ($query) use ($madv, $nam) {
+                //         $query->select('madv')->from('dmdonvi')
+                //             ->whereyear('ngaydung', '<=', $nam)
+                //             ->where('trangthai', 'TD')
+                //             ->get();
+                //     })->get();
+                // $soluong = $model_donvi->count();
+                $soluong = count(getDonviHuyen($nam,$madv)['m_donvi']);
                 if ($nguon_khoi != null) {
                     //Đã tổng hợp dữ liệu
                     // $dv->sldv = $soluong . '/' . $soluong;

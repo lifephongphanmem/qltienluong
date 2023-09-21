@@ -10,6 +10,7 @@ use App\dmphanloaicongtac;
 use App\dmphanloaicongtac_baohiem;
 use App\dmphanloaict;
 use App\dmphucap_donvi;
+use App\dsdonviquanly;
 use App\dutoanluong;
 use App\dutoanluong_bangluong;
 use App\dutoanluong_chitiet;
@@ -1532,7 +1533,14 @@ class dutoanluongController extends Controller
                 return view('errors.chuacqcq');
             }
             $model = dutoanluong::where('masodv', $inputs['masodv'])->first();
-
+            //1.tự động thêm danh sách quản lý
+            $chk_ql = dsdonviquanly::where('nam', $model->namns)->where('madv', $model->madv)->first();
+            if ($chk_ql == null)
+                dsdonviquanly::create([
+                    'nam' => $model->namns,
+                    'madv' => $model->madv,
+                    'macqcq' => $model->macqcq,
+                ]);
             //Xem lại tính năng (07/07/2022)
             // //check đơn vị chủ quản là gửi lên huyện => chuyển trạng thái; import bản ghi vào bảng huyện khối => chuyển trạng thái
             // if (session('admin')->macqcq == session('admin')->madvqlkv) { //đơn vị chủ quản là huyện
@@ -1572,6 +1580,8 @@ class dutoanluongController extends Controller
             $model->macqcq = $inputs['macqcq'];
             //dd($model);
             $model->save();
+
+            //thêm đơn vị quản lý
 
             return redirect('/nghiep_vu/quan_ly/du_toan/danh_sach');
         } else

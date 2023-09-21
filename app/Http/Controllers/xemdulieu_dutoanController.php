@@ -30,16 +30,17 @@ class xemdulieu_dutoanController extends Controller
             $madv = session('admin')->madv;
             $a_trangthai = array('ALL' => '--Chọn trạng thái dữ liệu--', 'CHOGUI' => 'Chưa gửi dữ liệu', 'DAGUI' => 'Đã gửi dữ liệu');
 
-            $model_donvi = dmdonvi::select('madv', 'tendv', 'macqcq', 'maphanloai', 'phanloaitaikhoan')
-                ->wherein('madv', function ($query) use ($madv) {
-                    $query->select('madv')->from('dmdonvi')->where('macqcq', $madv)->where('madv', '<>', $madv)->get();
-                })
-                ->wherenotin('madv', function ($query) use ($madv, $nam) {
-                    $query->select('madv')->from('dmdonvi')
-                        ->whereyear('ngaydung', '<=', $nam)
-                        ->where('trangthai', 'TD')
-                        ->get();
-                })->get();
+            // $model_donvi = dmdonvi::select('madv', 'tendv', 'macqcq', 'maphanloai', 'phanloaitaikhoan')
+            //     ->wherein('madv', function ($query) use ($madv) {
+            //         $query->select('madv')->from('dmdonvi')->where('macqcq', $madv)->where('madv', '<>', $madv)->get();
+            //     })
+            //     ->wherenotin('madv', function ($query) use ($madv, $nam) {
+            //         $query->select('madv')->from('dmdonvi')
+            //             ->whereyear('ngaydung', '<=', $nam)
+            //             ->where('trangthai', 'TD')
+            //             ->get();
+            //     })->get();
+                $model_donvi = dmdonvi::select('madv', 'tendv', 'maphanloai')->wherein('madv', getDonviHuyen($nam,$madv)['m_donvi'])->get();
                 // $model_donvi = dmdonvi::select('madv', 'tendv')
                 // ->wherein('madv', function ($query) use ($madv) {
                 //     $query->select('madv')->from('dmdonvi')->where('macqcq', $madv)->where('madv', '<>', $madv)->get();

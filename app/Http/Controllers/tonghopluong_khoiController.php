@@ -42,8 +42,8 @@ class tonghopluong_khoiController extends Controller
             ->wherenotin('madv', function ($query) use ($madv,$thang,$nam,$ngay) {
                 $query->select('madv')->from('dmdonvi')
                     // ->where('ngaydung', '<=', $ngay)
-                    ->whereMonth('ngaydung', '<=', $thang)
-                    ->whereYear('ngaydung', '<=', $nam)
+                    ->whereMonth('ngaydung', '<=', $ngay)
+                    ->whereYear('ngaydung', '<=', $ngay)
                     ->where('trangthai', 'TD')
                     ->get();
             })
