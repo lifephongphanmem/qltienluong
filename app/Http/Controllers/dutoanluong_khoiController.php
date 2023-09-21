@@ -32,16 +32,38 @@ class dutoanluong_khoiController extends Controller
             $model = dutoanluong::select('namns')->where('madvbc', session('admin')->madvbc)->distinct()->get();
             $a_trangthai = getStatus();
             //Lấy dữ liệu các đơn vị cấp dưới đã gửi lên
-            $model_donvi = dmdonvi::select('madv', 'tendv')
-                ->wherein('madv', function ($query) use ($madv) {
-                    $query->select('madv')->from('dmdonvi')->where('macqcq', $madv)->where('madv', '<>', $madv)->get();
-                })->get();
-            $soluong = $model_donvi->count();
-// dd($model);
+            // $model_donvi = dmdonvi::select('madv', 'tendv')
+            //     ->wherein('madv', function ($query) use ($madv) {
+            //         $query->select('madv')->from('dmdonvi')->where('macqcq', $madv)->where('madv', '<>', $madv)->get();
+            //     })->get();
+            // $model_donvi = dmdonvi::select('madv', 'tendv', 'macqcq', 'maphanloai', 'phanloaitaikhoan')
+            // ->wherein('madv', function ($query) use ($madv) {
+            //     $query->select('madv')->from('dmdonvi')->where('macqcq', $madv)->where('madv', '<>', $madv)->get();
+            // })
+            // ->wherenotin('madv', function ($query) use ($madv, $nam) {
+            //     $query->select('madv')->from('dmdonvi')
+            //         ->whereyear('ngaydung', '<=', $nam)
+            //         ->where('trangthai', 'TD')
+            //         ->get();
+            // })->get();
+            // $soluong = $model_donvi->count();
+            // dd($model);
             foreach ($model as $dv) {
                 // $nguon_khoi = $model_nguon_khoi->where('namns', $dv->namns)->first();
+                $nam=$dv->namns;
                 $nguon_khoi = $model_nguon->where('namns', $dv->namns)->first();
                 $sl = $model_nguon->where('namns', $dv->namns)->count();
+                $model_donvi = dmdonvi::select('madv', 'tendv', 'macqcq', 'maphanloai', 'phanloaitaikhoan')
+                    ->wherein('madv', function ($query) use ($madv) {
+                        $query->select('madv')->from('dmdonvi')->where('macqcq', $madv)->where('madv', '<>', $madv)->get();
+                    })
+                    ->wherenotin('madv', function ($query) use ($madv, $nam) {
+                        $query->select('madv')->from('dmdonvi')
+                            ->whereyear('ngaydung', '<=', $nam)
+                            ->where('trangthai', 'TD')
+                            ->get();
+                    })->get();
+                $soluong = $model_donvi->count();
                 if ($nguon_khoi != null) {
                     //Đã tổng hợp dữ liệu
                     // $dv->sldv = $soluong . '/' . $soluong;

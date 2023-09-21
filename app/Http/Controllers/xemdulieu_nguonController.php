@@ -140,23 +140,23 @@ class xemdulieu_nguonController extends Controller
                 //             ->get();
                 //     })
                 //     ->get();
-                $a_donvicapduoi = [];
-                //đơn vị nam=nam && macqcq=madv
-                $model_dsql = dsdonviquanly::where('nam', $nam)->where('macqcq', $madv)->get();
-                $a_donvicapduoi = array_unique(array_column($model_dsql->toarray(), 'madv'));
-                //dd($a_donvicapduoi);
+                // $a_donvicapduoi = [];
+                // //đơn vị nam=nam && macqcq=madv
+                // $model_dsql = dsdonviquanly::where('nam', $nam)->where('macqcq', $madv)->get();
+                // $a_donvicapduoi = array_unique(array_column($model_dsql->toarray(), 'madv'));
+                // //dd($a_donvicapduoi);
 
-                //đơn vị có macqcq = madv (bang dmdonvi)
-                $model_dmdv = dmdonvi::where('macqcq', $madv)
-                    ->wherenotin('madv', function ($qr) use ($nam) {
-                        $qr->select('madv')->from('dsdonviquanly')->where('nam', $nam)->distinct()->get();
-                    }) //lọc các đơn vị đã khai báo trong dsdonviquanly
-                    ->where('madv', '!=', $madv) //bỏ đơn vị tổng hợp
-                    ->get();
-                $a_donvicapduoi = array_unique(array_merge(array_column($model_dmdv->toarray(), 'madv'), $a_donvicapduoi));
-                $model_donvitamdung = dmdonvi::where('trangthai', 'TD')->wherein('madv', $a_donvicapduoi)->get();
-                $m_donvi = array_diff($a_donvicapduoi, array_column($model_donvitamdung->toarray(), 'madv'));
-                $model_donvi = dmdonvi::select('madv', 'tendv', 'maphanloai')->wherein('madv', $m_donvi)->get();
+                // //đơn vị có macqcq = madv (bang dmdonvi)
+                // $model_dmdv = dmdonvi::where('macqcq', $madv)
+                //     ->wherenotin('madv', function ($qr) use ($nam) {
+                //         $qr->select('madv')->from('dsdonviquanly')->where('nam', $nam)->distinct()->get();
+                //     }) //lọc các đơn vị đã khai báo trong dsdonviquanly
+                //     ->where('madv', '!=', $madv) //bỏ đơn vị tổng hợp
+                //     ->get();
+                // $a_donvicapduoi = array_unique(array_merge(array_column($model_dmdv->toarray(), 'madv'), $a_donvicapduoi));
+                // $model_donvitamdung = dmdonvi::where('trangthai', 'TD')->wherein('madv', $a_donvicapduoi)->get();
+                // $m_donvi = array_diff($a_donvicapduoi, array_column($model_donvitamdung->toarray(), 'madv'));
+                $model_donvi = dmdonvi::select('madv', 'tendv', 'maphanloai')->wherein('madv', getDonviHuyen($nam,$madv)['m_donvi'])->get();
 
                 $model_nguon = nguonkinhphi::where('trangthai', 'DAGUI')
                     ->where('macqcq', $madv)

@@ -40,6 +40,10 @@ class xemdulieu_dutoanController extends Controller
                         ->where('trangthai', 'TD')
                         ->get();
                 })->get();
+                // $model_donvi = dmdonvi::select('madv', 'tendv')
+                // ->wherein('madv', function ($query) use ($madv) {
+                //     $query->select('madv')->from('dmdonvi')->where('macqcq', $madv)->where('madv', '<>', $madv)->get();
+                // })->get();
             $model_nguon = dutoanluong::wherein('madv', function ($query) use ($madv) {
                 $query->select('madv')->from('dmdonvi')->where('macqcq', $madv)->where('madv', '<>', $madv)->get();
             })->get();
@@ -108,7 +112,7 @@ class xemdulieu_dutoanController extends Controller
             //đơn vị nam=nam && macqcq=madv
             $model_dsql = dsdonviquanly::where('nam', $nam)->where('macqcq', $madv)->get();
             $a_donvicapduoi = array_unique(array_column($model_dsql->toarray(), 'madv'));
-            //dd($a_donvicapduoi);
+            // dd($a_donvicapduoi);
 
             //đơn vị có macqcq = madv (bang dmdonvi)
             $model_dmdv = dmdonvi::where('macqcq', $madv)
@@ -117,6 +121,7 @@ class xemdulieu_dutoanController extends Controller
                 }) //lọc các đơn vị đã khai báo trong dsdonviquanly
                     ->where('madv','!=',$madv)
                 ->get();
+                // dd(array_column($model_dmdv->toarray(),'madv','tendv'));
             $a_donvicapduoi = array_unique(array_merge(array_column($model_dmdv->toarray(), 'madv'), $a_donvicapduoi));
             $model_donvitamdung = dmdonvi::where('trangthai', 'TD')->wherein('madv', $a_donvicapduoi)->get();
             $m_donvi=array_diff($a_donvicapduoi, array_column($model_donvitamdung->toarray(), 'madv'));

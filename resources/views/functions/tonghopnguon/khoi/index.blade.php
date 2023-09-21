@@ -164,7 +164,7 @@
         </div>
     </div>
 
-    <!--Modal thông tin tùy chọn in  -->
+    {{-- <!--Modal thông tin tùy chọn in  -->
     <div id="indt-modal" tabindex="-1" role="dialog" aria-hidden="true" class="modal fade">
         <input type="hidden" id="sohieu_in" />
         <input type="hidden" id="madvbc_in" />
@@ -382,7 +382,163 @@
                 <button type="button" data-dismiss="modal" class="btn btn-default">Hủy thao tác</button>
             </div>
         </div>
-    </div>
+    </div> --}}
+        <!--Modal thông tin tùy chọn in  -->
+        <div id="indt-modal" tabindex="-1" role="dialog" aria-hidden="true" class="modal fade">
+            <input type="hidden" id="sohieu_in" />
+            <input type="hidden" id="madvbc_in" />
+            <input type="hidden" id="macqcq_in" />
+            <div class="modal-lg modal-dialog modal-content">
+                <div class="modal-header modal-header-primary">
+                    <button type="button" data-dismiss="modal" aria-hidden="true" class="close">&times;</button>
+                    <h4 id="hd-inbl" class="modal-title">In số liệu</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <button type="button" onclick="insolieu('{{ $furl_th . 'tonghop' }}',null)"
+                                    style="border-width: 0px" class="btn btn-default btn-xs mbs"
+                                    data-target="#modal-insolieu" data-toggle="modal"
+                                    title="Dữ liệu (bao gồm cả cán bộ hợp đồng, không chuyên trách) theo phân loại đơn vị của thông tin đơn vị">
+                                    <i class="fa fa-print"></i>&nbsp;Bảng tổng hợp nhu cầu kinh phí (Mẫu 01)</button>
+                            </div>
+                        </div>
+                    </div>
+    
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <button type="button" onclick="insolieu('{{ $furl_th . 'tonghop_m2' }}',null)"
+                                    style="border-width: 0px" class="btn btn-default btn-xs mbs"
+                                    data-target="#modal-insolieu" data-toggle="modal"
+                                    title="Dữ liệu (bao gồm cả cán bộ hợp đồng, không chuyên trách) theo lĩnh vực hoạt động của nhu cầu kinh phí">
+                                    <i class="fa fa-print"></i>&nbsp;Bảng tổng hợp nhu cầu kinh phí (Mẫu 02)</button>
+                            </div>
+                        </div>
+                    </div>
+    
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <button type="button" onclick="insolieu('{{ $furl_th . 'mau2a' }}',null)"
+                                    style="border-width: 0px" class="btn btn-default btn-xs mbs"
+                                    data-target="#modal-insolieu" data-toggle="modal">
+                                    <i class="fa fa-print"></i>&nbsp;Bảng tổng hợp nhu cầu kinh phí (Mẫu 2a - Mẫu 1)</button>
+                            </div>
+                        </div>
+                    </div>
+    
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <button type="button" onclick="insolieu('{{ $furl_th . 'mau2a_2' }}',null)"
+                                    style="border-width: 0px" class="btn btn-default btn-xs mbs"
+                                    data-target="#modal-insolieu" data-toggle="modal">
+                                    <i class="fa fa-print"></i>&nbsp;Bảng tổng hợp nhu cầu kinh phí (Mẫu 2a - Mẫu 2)</button>
+                            </div>
+                        </div>
+                    </div>
+    
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <button type="button" onclick="insolieu('{{ $furl_th . 'mau2a_vn' }}',null)"
+                                    style="border-width: 0px" class="btn btn-default btn-xs mbs"
+                                    data-target="#modal-insolieu" data-toggle="modal">
+                                    <i class="fa fa-print"></i>&nbsp;Bảng tổng hợp nhu cầu kinh phí (Mẫu 2a - Vạn
+                                    Ninh)</button>
+                            </div>
+                        </div>
+                    </div>
+    
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <button type="button" onclick="insolieu('{{ $furl_th . 'mau2b' }}',null)"
+                                    style="border-width: 0px" class="btn btn-default btn-xs mbs"
+                                    data-target="#modal-insolieu" data-toggle="modal">
+                                    <i class="fa fa-print"></i>&nbsp;Bảng tổng quỹ trợ cấp tăng thêm cho cán bộ đã nghỉ hưu
+                                    (Mẫu 2b)</button>
+                            </div>
+                        </div>
+                    </div>
+    
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <button type="button" onclick="insolieu('{{ $furl_th . 'mau2c' }}',null)"
+                                    style="border-width: 0px" class="btn btn-default btn-xs mbs"
+                                    data-target="#modal-insolieu" data-toggle="modal">
+                                    <i class="fa fa-print"></i>&nbsp;Tổng hợp kinh phí tăng thêm để thực hiện chế độ cho cán bộ
+                                    không chuyên trách (Mẫu 2c)</button>
+                            </div>
+                        </div>
+                    </div>
+    
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <button type="button" onclick="insolieu('{{ $furl_th . 'mau2d' }}',null)"
+                                    style="border-width: 0px" class="btn btn-default btn-xs mbs"
+                                    data-target="#modal-insolieu" data-toggle="modal">
+                                    <i class="fa fa-print"></i>&nbsp;Tổng hợp kinh phí giảm theo nghị định số 33/2023/NĐ-CP -
+                                    cán bộ, công chức cấp xã (Mẫu 2d)</button>
+                            </div>
+                        </div>
+                    </div>                
+    
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <button type="button" onclick="insolieu('{{ $furl_th . 'mau2e' }}',null)"
+                                    style="border-width: 0px" class="btn btn-default btn-xs mbs"
+                                    data-target="#modal-insolieu" data-toggle="modal">
+                                    <i class="fa fa-print"></i>&nbsp;Tổng hợp kinh phí tăng theo nghị định 34/2023/NĐ-CP -
+                                    người hoạt động không chuyên trách ở cấp xã, ở thôn, tổ dân phố (Mẫu 2e)</button>
+                            </div>
+                        </div>
+                    </div>
+    
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <button type="button" onclick="insolieu('{{ $furl_th . 'mau2g' }}',null)"
+                                    style="border-width: 0px" class="btn btn-default btn-xs mbs"
+                                    data-target="#modal-insolieu" data-toggle="modal">
+                                    <i class="fa fa-print"></i>&nbsp;Tổng hợp phụ cấp ưu đãi nghề theo nghị định số 05/2023/NĐ-CP (Mẫu 2g)</button>
+                            </div>
+                        </div>
+                    </div>
+                   
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <button type="button" onclick="insolieu('{{ $furl_th . 'mau4a' }}',null)"
+                                    style="border-width: 0px" class="btn btn-default btn-xs mbs"
+                                    data-target="#modal-insolieu" data-toggle="modal">
+                                    <i class="fa fa-print"></i>&nbsp;Báo cáo nguồn kinh phí để thực hiện cải cách tiền lương
+                                    (Mẫu 4a)</button>
+                            </div>
+                        </div>
+                    </div>
+    
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <button type="button" onclick="insolieu('{{ $furl_th . 'mau4b' }}',null)"
+                                    style="border-width: 0px" class="btn btn-default btn-xs mbs"
+                                    data-target="#modal-insolieu" data-toggle="modal">
+                                    <i class="fa fa-print"></i>&nbsp;Tổng hợp nhu cầu, nguồn thực hiện (Mẫu 4b)</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" data-dismiss="modal" class="btn btn-default">Hủy thao tác</button>
+                </div>
+            </div>
+        </div>
 
     <!--Mẫu in số liệu -->
     {!! Form::open(['url' => '', 'method' => 'post', 'target' => '_blank', 'files' => true, 'id' => 'frm_insolieu']) !!}
