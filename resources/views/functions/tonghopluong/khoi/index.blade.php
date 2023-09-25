@@ -97,7 +97,8 @@
                                             <a href="{{url('/chuc_nang/xem_du_lieu/index?thang='.$value['thang'].'&nam='.$nam.'&trangthai=ALL'.'&phanloai=ALL')}}" class="btn btn-default btn-xs">
                                                 <i class="fa fa-list-alt"></i>&nbsp; Số liệu chi tiết</a>
 
-                                            @if($value['trangthai'] == 'TRALAI')
+                                            {{-- @if($value['trangthai'] == 'TRALAI' ) --}}
+                                            @if($value['trangthai'] == 'CHUAGUI' )
                                                 <button type="button" class="btn btn-default btn-sm" onclick="getLyDo('{{$value['mathdv']}}')" data-target="#tralai-modal" data-toggle="modal"><i class="fa fa-share-square-o"></i>&nbsp;
                                                     Lý do trả lại</button>
                                                 @if($value['sldv'] == $value['dvgui'])

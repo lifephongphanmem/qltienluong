@@ -554,18 +554,16 @@
                 </div>
                 <div class="modal-body">
                     <div class="form-horizontal">
-                        {{-- <div class="row">
-                            <div class="col-md-12">
-                                <label class="control-label">Phân loại đơn vị</label>
-                                {!! Form::select('maphanloai', [], null, ['class' => 'form-control', 'required']) !!}
-                            </div>
-                        </div> --}}
 
                         <div class="row">
                             <div class="col-md-6">
                                 <label class="control-label">Năm ngân sách</label>
                                 {!! Form::select('namns', getNam(), date('Y'), ['id' => 'namns', 'class' => 'form-control']) !!}
                             </div>
+                            {{-- <div class="col-md-6">
+                                <label class="control-label">Phân loại đơn vị</label>
+                                {!! Form::select('maphanloai', ['madvbc'=>'Địa bàn','macqcq'=>'Cơ quan chủ quản'], null, ['class' => 'form-control', 'required']) !!}
+                            </div> --}}
                         </div>
                     </div>    
                 </div>

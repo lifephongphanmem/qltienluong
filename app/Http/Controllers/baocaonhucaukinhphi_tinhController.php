@@ -22,7 +22,6 @@ class baocaonhucaukinhphi_tinhController  extends Controller
     {
         if (Session::has('admin')) {
             $inputs = $request->all();
-
             if ($inputs['madvbc'] != 'ALL') {
                 $m_nguonkp_tinh = nguonkinhphi_tinh::where('sohieu', $inputs['sohieu'])->where('madvbc', $inputs['madvbc'])->get();
                 $model_donvi_bc = dmdonvibaocao::where('madvbc', $inputs['madvbc'])->get();
