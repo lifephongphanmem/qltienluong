@@ -75,9 +75,11 @@ class dutoanluong_huyenController extends Controller
                 // //             ->where('trangthai', 'TD')
                 // //             ->get();
                 // //     })->get();
-                // // $dv->soluong = $model_donvi->count();
+                // $dv->soluong = $model_donvi->count();
                 $dv->soluong = count(getDonviHuyen($nam,$madv)['m_donvi']);
-                $dv->dagui = dutoanluong::where('macqcq', $madv)->where('namns', $nam)->where('trangthai', 'DAGUI')->wherenotin('madv', getDonviHuyen($nam,$madv)['model_donvitamdung'])->count();
+                $dvgui= dutoanluong::where('macqcq', $madv)->where('namns', $nam)->where('trangthai', 'DAGUI')->wherenotin('madv', getDonviHuyen($nam,$madv)['model_donvitamdung'])->get();
+                // $dv->dagui = dutoanluong::where('macqcq', $madv)->where('namns', $nam)->where('trangthai', 'DAGUI')->wherenotin('madv', getDonviHuyen($nam,$madv)['model_donvitamdung'])->count();
+                $dv->dagui = count(array_unique(array_column($dvgui->toarray(),'madv')));
             }
 
             $model_tenct = dmphanloaict::wherein('mact', getPLCTDuToan())->get();

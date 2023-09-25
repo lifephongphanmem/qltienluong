@@ -26,6 +26,7 @@ use Illuminate\Http\Request;
 
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
+use App\tonghopluong_tinh;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
 use Maatwebsite\Excel\Facades\Excel;
@@ -60,6 +61,7 @@ class tonghopluong_khoiController extends Controller
             //TRALAI: đã bị gửi trả lại
             $inputs = $requests->all();
             $madv = session('admin')->madv;
+            $madvbc = session('admin')->madvbc;
             $tendv = getTenDV($madv);
             //$sldvcapduoi = dmdonvi::where('macqcq', $madv)->count();
             $a_data = array(array('thang' => '01', 'mathdv' => null, 'noidung' => null, 'trangthai' => 'CHUADL', 'sldv' => $this->soluongdv('1',$inputs['nam']), 'dvgui' => 0),
@@ -91,9 +93,11 @@ class tonghopluong_khoiController extends Controller
                 ->where('trangthai', 'DAGUI')->get();
             //Lấy danh sách các dữ liệu đã tổng hợp theo khối
             $model_khoi = tonghopluong_khoi::where('madv', $madv)->get();
+            // $model_tonghop = tonghopluong_tinh::where('madvbc', $madvbc)->where('nam', $inputs['nam'])->get();
             for ($i = 0; $i < count($a_data); $i++) {
                 $a_data[$i]['maphanloai'] = session('admin')->maphanloai;
                 $tonghop = $model_khoi->where('thang', $a_data[$i]['thang'])->where('nam', $inputs['nam'])->first();
+                // dd($tonghop);
                 $thang = $a_data[$i]['thang'];
                 $nam = $inputs['nam'];
                 //if(session('admin')->phamvitonghop == 'KHOI'){

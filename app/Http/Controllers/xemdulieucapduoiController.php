@@ -34,14 +34,20 @@ class xemdulieucapduoiController extends Controller
             ->where('madv', '<>', $madv)
             ->wherenotin('madv', function ($query) use ($ngay) {
                 $query->select('madv')->from('dmdonvi')
-                    ->where('ngaydung', '<=', $ngay)
+                    // ->where('ngaydung', '<=', $ngay)
+                    ->whereMonth('ngaydung', '<=', $ngay)
+                    ->whereYear('ngaydung', '<=', $ngay)
                     ->where('trangthai', 'TD')
                     ->get();
             })->get();
         $kq = isset($model_donvi) ? count($model_donvi) : 0;
         return $kq;
     }
-
+    public function layDV($thang, $nam, $a_donvicapduoi, $model_donvitamdung)
+    {
+        $model_donvi = $model_donvitamdung->where('ngaydung', '<=', $nam . '-' . $thang . '-01');
+        return array_diff($a_donvicapduoi, array_column($model_donvi->toarray(), 'madv'));
+    }
     public function donvi_luong(Request $request)
     {
         if (Session::has('admin')) {
@@ -60,8 +66,8 @@ class xemdulieucapduoiController extends Controller
                 ->wherenotin('madv', function ($query) use ($madv, $thang, $nam,$ngay) {
                     $query->select('madv')->from('dmdonvi')
                     // ->where('ngaydung', '<=', $ngay)
-                        ->whereMonth('ngaydung', '<=', $thang)
-                        ->whereYear('ngaydung', '<=', $nam)
+                        ->whereMonth('ngaydung', '<=', $ngay)
+                        ->whereYear('ngaydung', '<=', $ngay)
                         ->where('trangthai', 'TD')
                         ->get();
                 })
@@ -223,6 +229,7 @@ class xemdulieucapduoiController extends Controller
                     $model_donvi = dmdonvi::join('dmphanloaidonvi', 'dmphanloaidonvi.maphanloai', 'dmdonvi.maphanloai')
                     ->select('dmdonvi.madv', 'dmdonvi.tendv', 'phanloaitaikhoan', 'dmdonvi.maphanloai', 'tenphanloai')
                     ->wherein('madv',getDonviHuyen($inputs['nam'],$madv)['m_donvi'])->get();
+                   
                 $model_nguon = tonghopluong_donvi::wherein('madv', function ($query) use ($madv) {
                     $query->select('madv')->from('dmdonvi')->where('macqcq', $madv)->where('madv', '<>', $madv)->get();
                 })->where('thang', $inputs['thang'])
@@ -244,16 +251,22 @@ class xemdulieucapduoiController extends Controller
                         $query->select('madv')->from('dmdonvi')->where('macqcq',$madv)->where('madv','<>',$madv)->get();
                     })->distinct()->get();
                 */
-                $model_donvi = dmdonvi::join('dmphanloaidonvi', 'dmphanloaidonvi.maphanloai', 'dmdonvi.maphanloai')
+                // $model_donvi = dmdonvi::join('dmphanloaidonvi', 'dmphanloaidonvi.maphanloai', 'dmdonvi.maphanloai')
+                //     ->select('dmdonvi.madv', 'dmdonvi.tendv', 'phanloaitaikhoan', 'dmdonvi.maphanloai', 'tenphanloai', 'linhvuchoatdong')
+                //     ->where('macqcq', $madv)->where('madv', '<>', $madv)
+                //     ->wherenotin('madv', function ($query) use ($madv, $ngay) {
+                //         $query->select('madv')->from('dmdonvi')
+                //             ->where('ngaydung', '<=', $ngay)
+                //             ->where('trangthai', 'TD')
+                //             ->get();
+                //     })
+                //     ->distinct()->get();
+                $model_donvitamdung = dmdonvi::where('trangthai', 'TD')->wherein('madv',  getDonviHuyen($inputs['nam'],$madv)['a_donvicapduoi'])->get();
+                $a_madv=$this->layDV($inputs['thang'], $inputs['nam'], getDonviHuyen($inputs['nam'],$madv)['a_donvicapduoi'], $model_donvitamdung);
+                    $model_donvi = dmdonvi::join('dmphanloaidonvi', 'dmphanloaidonvi.maphanloai', 'dmdonvi.maphanloai')
                     ->select('dmdonvi.madv', 'dmdonvi.tendv', 'phanloaitaikhoan', 'dmdonvi.maphanloai', 'tenphanloai', 'linhvuchoatdong')
-                    ->where('macqcq', $madv)->where('madv', '<>', $madv)
-                    ->wherenotin('madv', function ($query) use ($madv, $ngay) {
-                        $query->select('madv')->from('dmdonvi')
-                            ->where('ngaydung', '<=', $ngay)
-                            ->where('trangthai', 'TD')
-                            ->get();
-                    })
-                    ->distinct()->get();
+                    ->wherein('madv', $a_madv)
+                   ->get();
                 /* 13.04.23 bỏ phần lấy ở huyện vì giờ chuyển trực tiếp lên huyện ko có khối
                 $model_nguon = tonghopluong_huyen::wherein('madv', function ($query) use ($madv) {
                     $query->select('madv')->from('dmdonvi')->where('macqcq', $madv)->where('madv', '<>', $madv)->get();

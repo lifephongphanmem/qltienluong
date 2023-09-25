@@ -49,14 +49,17 @@
                                     <a href="#" data-target="#thoaichitra-modal" data-toggle="modal"
                                         onclick="ChiTraLuong('{{ $furl . 'tonghopluong_tinh' }}','POST', true)">Tổng hợp
                                         tình hình
-                                        chi trả lương (Mẫu tổng hợp )</a>
+                                        chi trả lương 
+                                        {{-- chi trả lương (Mẫu tổng hợp ) --}}
+                                    </a>
                                 </li>
-                                <li>
+                                  <!-- tạm ẩn 25/9/2023 -->
+                                {{-- <li>
                                     <a href="#" data-target="#thoaichitra-modal" data-toggle="modal"
                                         onclick="ChiTraLuong('{{ $inputs['furl_chiluong'] . 'TongHop' }}','GET', false)">Tổng
                                         hợp tình hình
                                         chi trả lương (Mẫu chi tiết )</a>
-                                </li>
+                                </li> --}}
                             </ol>
                         </div>
                     </div>
@@ -73,29 +76,34 @@
                                         onclick="inDuToan('{{ $furl . 'tonghopbienche' }}','1506672780;1506673604;1637915601')"
                                         data-target="#modal-indutoan" data-toggle="modal">Dự toán lương - Tổng hợp biên chế,
                                         hệ số
-                                        lương và phụ cấp có mặt (Mẫu tổng hợp)
+                                        {{-- lương và phụ cấp có mặt (Mẫu tổng hợp) --}}
+                                        lương và phụ cấp có mặt 
                                     </a>
                                 </li>
-                                <li>
+                                    <!-- tạm ẩn 25/9/2023 -->
+                                {{-- <li>
                                     <a href="#"
                                         onclick="inDuToan('{{ $furl . 'tonghopbienche' }}','1506672780;1506673604;1637915601')"
                                         data-target="#modal-indutoan" data-toggle="modal">Dự toán lương - Tổng hợp biên
                                         chế, hệ số
                                         lương và phụ cấp có mặt (Mẫu chi tiết)
                                     </a>
-                                </li>
+                                </li> --}}
                                 <li>
                                     <a href="#" onclick="inDuToan('{{ $furl . 'tonghophopdong' }}','1506673585')"
                                         data-target="#modal-indutoan" data-toggle="modal">Dự toán lương - Tổng hợp hợp đồng
-                                        bổ sung quỹ lương (Mẫu tổng hợp)
+                                        bổ sung quỹ lương 
+                                        {{-- bổ sung quỹ lương (Mẫu tổng hợp) --}}
                                     </a>
                                 </li>
-                                <li>
+
+                                <!-- tạm ẩn 25/9/2023 -->
+                                {{-- <li>
                                     <a href="#" onclick="inDuToan('{{ $furl . 'tonghophopdong' }}','1506673585')"
                                         data-target="#modal-indutoan" data-toggle="modal">Dự toán lương - Tổng hợp hợp
                                         đồng bổ sung quỹ lương (Mẫu chi tiết)
                                     </a>
-                                </li>
+                                </li> --}}
                             </ol>
                         </div>
                     </div>
@@ -135,102 +143,101 @@
 
                                 <li>
                                     <button type="button"
-                                        onclick="inNhuCauKP('{{ '/tong_hop_bao_cao/nhu_cau_kinh_phi/mau2a_tonghop' }}',true)"
+                                        onclick="inNhuCauKP('{{ '/tong_hop_bao_cao/nhu_cau_kinh_phi/mau2a_tonghop' }}','{{ '/tong_hop_bao_cao/nhu_cau_kinh_phi/mau2a' }}',true)"
                                         style="border-width: 0px" class="btn btn-default btn-xs mbs"
                                         data-target="#modal-innhucaukp" data-toggle="modal">
-                                        Bảng tổng hợp nhu cầu kinh phí (Mẫu 2a - Tổng hợp)</button>
+                                        Bảng tổng hợp nhu cầu kinh phí (Mẫu 2a)</button>
                                 </li>
-                                <li>
+                                {{-- <li>
                                     <button type="button"
                                         onclick="inNhuCauKP('{{ '/tong_hop_bao_cao/nhu_cau_kinh_phi/mau2a' }}',false)"
                                         style="border-width: 0px" class="btn btn-default btn-xs mbs"
                                         data-target="#modal-innhucaukp" data-toggle="modal">
                                         Bảng tổng hợp nhu cầu kinh phí (Mẫu 2a - Chi tiết)</button>
-                                </li>
+                                </li> --}}
 
                                 <li>
                                     <button type="button"
-                                        onclick="inNhuCauKP('{{ '/tong_hop_bao_cao/nhu_cau_kinh_phi/mau2b_tonghop' }}',true)"
+                                        onclick="inNhuCauKP('{{ '/tong_hop_bao_cao/nhu_cau_kinh_phi/mau2b_tonghop' }}','{{ '/tong_hop_bao_cao/nhu_cau_kinh_phi/mau2b' }}',true)"
                                         style="border-width: 0px" class="btn btn-default btn-xs mbs"
                                         data-target="#modal-innhucaukp" data-toggle="modal">
-                                        Bảng tổng quỹ trợ cấp tăng thêm cho cán bộ đã nghỉ hưu (Mẫu 2b - Tổng hợp)</button>
+                                        Bảng tổng quỹ trợ cấp tăng thêm cho cán bộ đã nghỉ hưu (Mẫu 2b)</button>
                                 </li>
-                                <li>
+                                {{-- <li>
                                     <button type="button"
                                         onclick="inNhuCauKP('{{ '/tong_hop_bao_cao/nhu_cau_kinh_phi/mau2b' }}',true)"
                                         style="border-width: 0px" class="btn btn-default btn-xs mbs"
                                         data-target="#modal-innhucaukp" data-toggle="modal">
                                         Bảng tổng quỹ trợ cấp tăng thêm cho cán bộ đã nghỉ hưu (Mẫu 2b)</button>
-                                </li>
+                                </li> --}}
 
                                 <li>
                                     <button type="button"
-                                        onclick="inNhuCauKP('{{ '/tong_hop_bao_cao/nhu_cau_kinh_phi/mau2c_tonghop' }}',true)"
+                                        onclick="inNhuCauKP('{{ '/tong_hop_bao_cao/nhu_cau_kinh_phi/mau2c_tonghop' }}','{{ '/tong_hop_bao_cao/nhu_cau_kinh_phi/mau2c' }}',true)"
                                         style="border-width: 0px" class="btn btn-default btn-xs mbs"
                                         data-target="#modal-innhucaukp" data-toggle="modal">
                                         Tổng hợp kinh phí tăng thêm để thực hiện chế độ cho cán bộ
-                                        không chuyên trách (Mẫu 2c - Tổng hợp)</button>
+                                        không chuyên trách (Mẫu 2c)</button>
                                 </li>
-                                <li>
+                                {{-- <li>
                                     <button type="button"
                                         onclick="inNhuCauKP('{{ '/tong_hop_bao_cao/nhu_cau_kinh_phi/mau2c' }}',true)"
                                         style="border-width: 0px" class="btn btn-default btn-xs mbs"
                                         data-target="#modal-innhucaukp" data-toggle="modal">
                                         Tổng hợp kinh phí tăng thêm để thực hiện chế độ cho cán bộ
                                         không chuyên trách (Mẫu 2c)</button>
-                                </li>
+                                </li> --}}
 
                                 <li>
                                     <button type="button"
-                                        onclick="inNhuCauKP('{{ '/tong_hop_bao_cao/nhu_cau_kinh_phi/mau2d_tonghop' }}',true)"
+                                        onclick="inNhuCauKP('{{ '/tong_hop_bao_cao/nhu_cau_kinh_phi/mau2d_tonghop' }}','{{ '/tong_hop_bao_cao/nhu_cau_kinh_phi/mau2d' }}',true)"
                                         style="border-width: 0px" class="btn btn-default btn-xs mbs"
                                         data-target="#modal-innhucaukp" data-toggle="modal">
                                         Tổng hợp kinh phí giảm theo nghị định số 33/2023/NĐ-CP -
-                                        cán bộ, công chức cấp xã (Mẫu 2d - Tổng hợp)</button>
+                                        cán bộ, công chức cấp xã (Mẫu 2d)</button>
                                 </li>
-                                <li>
+                                {{-- <li>
                                     <button type="button"
                                         onclick="inNhuCauKP('{{ '/tong_hop_bao_cao/nhu_cau_kinh_phi/mau2d' }}',true)"
                                         style="border-width: 0px" class="btn btn-default btn-xs mbs"
                                         data-target="#modal-innhucaukp" data-toggle="modal">
                                         Tổng hợp kinh phí giảm theo nghị định số 33/2023/NĐ-CP -
                                         cán bộ, công chức cấp xã (Mẫu 2d)</button>
-                                </li>
+                                </li> --}}
 
                                 <li>
                                     <button type="button"
-                                        onclick="inNhuCauKP('{{ '/tong_hop_bao_cao/nhu_cau_kinh_phi/mau2e_tonghop' }}',true)"
+                                        onclick="inNhuCauKP('{{ '/tong_hop_bao_cao/nhu_cau_kinh_phi/mau2e_tonghop' }}','{{ '/tong_hop_bao_cao/nhu_cau_kinh_phi/mau2e' }}',true)"
                                         style="border-width: 0px" class="btn btn-default btn-xs mbs"
                                         data-target="#modal-innhucaukp" data-toggle="modal">
                                         Tổng hợp kinh phí tăng theo nghị định 34/2023/NĐ-CP -
-                                        người hoạt động không chuyên trách ở cấp xã, ở thôn, tổ dân phố (Mẫu 2e - Tổng
-                                        hợp)</button>
+                                        người hoạt động không chuyên trách ở cấp xã, ở thôn, tổ dân phố (Mẫu 2e)</button>
                                 </li>
-                                <li>
+                                {{-- <li>
                                     <button type="button"
                                         onclick="inNhuCauKP('{{ '/tong_hop_bao_cao/nhu_cau_kinh_phi/mau2e' }}',true)"
                                         style="border-width: 0px" class="btn btn-default btn-xs mbs"
                                         data-target="#modal-innhucaukp" data-toggle="modal">
                                         Tổng hợp kinh phí tăng theo nghị định 34/2023/NĐ-CP -
                                         người hoạt động không chuyên trách ở cấp xã, ở thôn, tổ dân phố (Mẫu 2e)</button>
-                                </li>
+                                </li> --}}
                                 
                                 <li>
                                     <button type="button"
-                                        onclick="inNhuCauKP('{{ '/tong_hop_bao_cao/nhu_cau_kinh_phi/mau4a_tonghop' }}',true)"
+                                        onclick="inNhuCauKP('{{ '/tong_hop_bao_cao/nhu_cau_kinh_phi/mau4a_tonghop' }}','{{ '/tong_hop_bao_cao/nhu_cau_kinh_phi/mau4a' }}',true)"
                                         style="border-width: 0px" class="btn btn-default btn-xs mbs"
                                         data-target="#modal-innhucaukp" data-toggle="modal">
-                                        Báo cáo nguồn kinh phí để thực hiện cải cách tiền lương (Mẫu 4a - Tổng hợp)
+                                        Báo cáo nguồn kinh phí để thực hiện cải cách tiền lương (Mẫu 4a)
                                     </button>
                                 </li>
-                                <li>
+                                {{-- <li>
                                     <button type="button"
                                         onclick="inNhuCauKP('{{ '/tong_hop_bao_cao/nhu_cau_kinh_phi/mau4a' }}',false)"
                                         style="border-width: 0px" class="btn btn-default btn-xs mbs"
                                         data-target="#modal-innhucaukp" data-toggle="modal">
                                         Báo cáo nguồn kinh phí để thực hiện cải cách tiền lương (Mẫu 4a)
                                     </button>
-                                </li>
+                                </li> --}}
                                 
                                 {{-- <li>
                                     <button type="button"
@@ -241,7 +248,7 @@
                                 </li> --}}
                                 <li>
                                     <button type="button"
-                                        onclick="inNhuCauKP('{{ '/tong_hop_bao_cao/nhu_cau_kinh_phi/mau4b' }}',false)"
+                                        onclick="inNhuCauKP_mau4b('{{ '/tong_hop_bao_cao/nhu_cau_kinh_phi/mau4b' }}',false)"
                                         style="border-width: 0px" class="btn btn-default btn-xs mbs"
                                         data-target="#modal-innhucaukp" data-toggle="modal">
                                         Tổng hợp nhu cầu, nguồn thực hiện (Mẫu 4b)</button>
@@ -483,8 +490,15 @@
                             {!! Form::select('cochu', getCoChu(), 10, ['id' => 'cochu', 'class' => 'form-control select2me']) !!}
                         </div>
                     </div>
+                    <div class="row" id='maukhac'>
+                        <div class="col-md-12">
+                            <label class="control-label">Mẫu kết xuất</label>
+                            {!! Form::select('mauketxuat', ['th'=>'Tổng hợp','ct'=>'Chi tiết'], null, ['class' => 'form-control', 'required','id'=>'mauketxuat']) !!}
+                        </div>
+                    </div>
                 </div>
-
+                <input type="hidden" name="url_th" id="url_th">
+                <input type="hidden" name="url_ct" id="url_ct">
 
             </div>
             <div class="modal-footer">
@@ -516,9 +530,32 @@
         }
 
         //In nhu cầu kinh phí
-        function inNhuCauKP(url, trangthai_madvbc) {
+        function inNhuCauKP_mau4b(url, trangthai_madvbc) {
+            $('#maukhac').hide();
             $('#frm_innhucaukp').attr('action', url);
             $('#frm_innhucaukp').find("[name^='madvbc']").attr('disabled', trangthai_madvbc);
         }
+        function inNhuCauKP(url_th,url_ct, trangthai_madvbc) {
+            $('#maukhac').show();
+            $('#mauketxuat').val('th');
+            $('#frm_innhucaukp').attr('action', url_th);
+            $('#url_th').val(url_th);
+            $('#url_ct').val(url_ct);
+            $('#frm_innhucaukp').find("[name^='madvbc']").attr('disabled', trangthai_madvbc);
+        }
+        $('#mauketxuat').on('change',function(){
+            mauketxuat=$('#mauketxuat').val();
+            if(mauketxuat == 'th'){
+                url=$('#url_th').val();
+                $('#frm_innhucaukp').find("[name^='madvbc']").val('ALL');
+                $('#frm_innhucaukp').find("[name^='madvbc']").attr('disabled', true);
+            }else{
+                url=$('#url_ct').val();
+                $('#frm_innhucaukp').find("[name^='madvbc']").attr('disabled', false);
+            }
+            $('#frm_innhucaukp').attr('action', url);
+            
+
+        });
     </script>
 @stop
