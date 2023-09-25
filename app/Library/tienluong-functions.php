@@ -1401,6 +1401,9 @@ function getDonviHuyen($nam,$madv)
     ->get();
         //  dd($model_dmdv);
      $a_donvicapduoi = array_unique(array_merge(array_column($model_dmdv->toarray(), 'madv'), $a_donvicapduoi));
+    //lấy lại madv ở dmdonvi de tranh truong hop có madv o dsdonviquanly nhưng không có ở dmdonvi
+    $model_donvi=dmdonvi::select('madv')->wherein('madv',$a_donvicapduoi)->get();
+    $a_donvicapduoi=array_column($model_donvi->toarray(),'madv');
     //  dd($a_donvicapduoi);
      $model_donvitamdung = dmdonvi::where('trangthai', 'TD')->wherein('madv', $a_donvicapduoi)->get();
     $m_donvi=array_diff($a_donvicapduoi, array_column($model_donvitamdung->toarray(), 'madv'));
