@@ -1075,14 +1075,13 @@ class bangluongController extends Controller
 
             //trường hợp cán bộ tập sự, thử việc nộp bảo hiểm theo số lương thực nhận
             // (chỉ cần tính các phụ cấp theo hệ số và số tiền; hệ số theo % sẽ đc tính lại theo phụ cấp gốc)
-            //10032023: tạm bỏ để tính theo thông tư...(tỷ lệ hưởng lương tính cho mọi phân loại)
-            // if ($m_cb[$key]['theodoi'] == 6 || $m_cb[$key]['mact'] == '1506673422') {
-            //     foreach ($a_tapsu as $pc) {
-            //         if ($m_cb[$key][$pc] > 0 && $m_cb[$key][$pc] < 50) {
-            //             $m_cb[$key][$pc] = round($m_cb[$key][$pc] * $m_cb[$key]['pthuong'] / 100, session('admin')->lamtron);
-            //         }
-            //     }
-            // }
+            if ($m_cb[$key]['theodoi'] == 6 || $m_cb[$key]['mact'] == '1506673422') {
+                foreach ($a_tapsu as $pc) {
+                    if ($m_cb[$key][$pc] > 0 && $m_cb[$key][$pc] < 50) {
+                        $m_cb[$key][$pc] = round($m_cb[$key][$pc] * $m_cb[$key]['pthuong'] / 100, session('admin')->lamtron);
+                    }
+                }
+            }
             
 
             //$m_cb[$key]['vuotkhung'] = isset($m_cb[$key]['vuotkhung']) ? round($val['heso'] * $val['vuotkhung'] / 100, session('admin')->lamtron) : 0;
@@ -1174,8 +1173,6 @@ class bangluongController extends Controller
                 if ($m_cb[$key][$mapc] <= 0) {
                     continue;
                 }
-                //Tính tỉ lệ hưởng lương 10032023;
-                $m_cb[$key][$mapc] = round($m_cb[$key][$mapc] * $m_cb[$key]['pthuong'] / 100, session('admin')->lamtron);
 
                 //cán bộ được điều động đến chỉ hưởng các loại phụ cấp trong $a_dd
                 //chưa set các trường hợp để hệ sô, số tiền = 0 (3 phụ cấp gốc, cán bộ đc điều động đến ko đóng bảo hiểm)
@@ -1447,9 +1444,26 @@ class bangluongController extends Controller
                     $m_cb[$key][$mapc] = $m_cb[$key][$maso_st];
                 }
             }
+             //Tính % hưởng cho cán bộ
+             if ($m_cb[$key]['pthuong'] < 100) {
+                $tonghs = 0;
+                $tien = 0;
+                foreach ($a_pc as $k => $v) {
+                    $mapc = $v['mapc'];
+                    $mapc_st = 'st_' . $v['mapc'];
+
+                    $m_cb[$key][$mapc] = round($m_cb[$key][$mapc] * $m_cb[$key]['pthuong'] / 100, session('admin')->lamtron);
+                    $m_cb[$key][$mapc_st] = round($m_cb[$key][$mapc_st] * $m_cb[$key]['pthuong'] / 100, 0);
+
+                    $tonghs += $m_cb[$key][$mapc];
+                    $tien += $m_cb[$key][$mapc_st];
+                }
+
+            }
 
             $m_cb[$key]['tonghs'] = $tonghs;
             $m_cb[$key]['ttl'] = $tien;
+                       
 
             //tính thuế thu nhập
             $m_cb[$key]['thuetn'] = 0;
@@ -1497,9 +1511,11 @@ class bangluongController extends Controller
         $a_kn_canbo = array();
         //$a_kn_phucap = array();
         for ($i = 0; $i < count($m_cb_kn); $i++) {
+
             if (!array_key_exists($m_cb_kn[$i]['macanbo'], $m_cb)) {
                 continue;
             }
+    
             $a_nguon = explode(',', $m_cb_kn[$i]['manguonkp']);
             //nếu cán bộ ko set nguồn (null, '') hoặc trong nguồn thì sét luôn =  ma nguồn để tạo bang lương
             if ($m_cb_kn[$i]['manguonkp'] != '' && !in_array($inputs['manguonkp'], $a_nguon) && $m_cb_kn[$i]['manguonkp'] != null) {
@@ -1623,6 +1639,7 @@ class bangluongController extends Controller
                     $tonghs += $m_cb_kn[$i][$mapc];
                 }
             }
+            
             //Tính % hưởng cho cán bộ
             if ($m_cb_kn[$i]['pthuong'] < 100) {
                 $tonghs = 0;
@@ -1637,8 +1654,10 @@ class bangluongController extends Controller
                     $tonghs += $m_cb_kn[$i][$mapc];
                     $tien += $m_cb_kn[$i][$mapc_st];
                 }
+
             }
-            //dd($a_thaisan);
+
+            // dd($a_thaisan);
             //Tính thai sản cho cán bộ kiêm nhiệm
             $thaisan = isset($a_thaisan[$m_cb_kn[$i]['macanbo']]) ? true : false;
             $m_cb_kn[$i]['ghichu'] = '';
