@@ -87,7 +87,6 @@ class tonghopnguon_huyenController extends Controller
                 // $a_donvicapduoi = array_unique(array_merge(array_column($model_dmdv->toarray(), 'madv'), $a_donvicapduoi));
                 // $model_donvitamdung = dmdonvi::where('trangthai', 'TD')->wherein('madv', $a_donvicapduoi)->get();
                 $soluong = count(getDonviHuyen($nam,$madv)['m_donvi']);
-                // $soluong = dmdonvi::select('madv')->wherein('madv', getDonviHuyen($nam, $madv)['m_donvi'])->get()->count();
 
                 $nguon_huyen = $model_nguon_tinh->where('sohieu', $dv->sohieu)->first();
                 $m_dv = $model_nguon->where('sohieu', $dv->sohieu);
