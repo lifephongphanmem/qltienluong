@@ -1387,7 +1387,6 @@ function getDonviHuyen($nam,$madv)
      $a_donvicapduoi = array_unique(array_column($model_dsql->toarray(), 'madv'));
 
      //dd($a_donvicapduoi);
-// dd($madv);
      //đơn vị có macqcq = madv (bang dmdonvi)
     //  $model_dmdv = dmdonvi::where('macqcq', $madv)
     //      ->wherenotin('madv', function ($qr) use ($nam) {

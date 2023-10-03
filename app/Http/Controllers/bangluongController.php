@@ -1052,7 +1052,8 @@ class bangluongController extends Controller
 
         $a_goc = array_keys(getCongThucTinhPC(false));
         $a_pc = SapXepPhuCap($model_phucap);
-        //dd($model_phucap);
+        // dd($model_phucap);
+        // dd($a_pc);
         if (count($a_pc) == 0) {
             return view('errors.data_error')
                 ->with('message', 'Phụ cấp cơ sở bị lập lại. Bạn hãy kiểm tra lại danh mục phụ cấp trước khi tính lương')
@@ -1074,13 +1075,15 @@ class bangluongController extends Controller
 
             //trường hợp cán bộ tập sự, thử việc nộp bảo hiểm theo số lương thực nhận
             // (chỉ cần tính các phụ cấp theo hệ số và số tiền; hệ số theo % sẽ đc tính lại theo phụ cấp gốc)
-            if ($m_cb[$key]['theodoi'] == 6 || $m_cb[$key]['mact'] == '1506673422') {
-                foreach ($a_tapsu as $pc) {
-                    if ($m_cb[$key][$pc] > 0 && $m_cb[$key][$pc] < 50) {
-                        $m_cb[$key][$pc] = round($m_cb[$key][$pc] * $m_cb[$key]['pthuong'] / 100, session('admin')->lamtron);
-                    }
-                }
-            }
+            //10032023: tạm bỏ để tính theo thông tư...(tỷ lệ hưởng lương tính cho mọi phân loại)
+            // if ($m_cb[$key]['theodoi'] == 6 || $m_cb[$key]['mact'] == '1506673422') {
+            //     foreach ($a_tapsu as $pc) {
+            //         if ($m_cb[$key][$pc] > 0 && $m_cb[$key][$pc] < 50) {
+            //             $m_cb[$key][$pc] = round($m_cb[$key][$pc] * $m_cb[$key]['pthuong'] / 100, session('admin')->lamtron);
+            //         }
+            //     }
+            // }
+            
 
             //$m_cb[$key]['vuotkhung'] = isset($m_cb[$key]['vuotkhung']) ? round($val['heso'] * $val['vuotkhung'] / 100, session('admin')->lamtron) : 0;
             $m_cb[$key]['mabl'] = $inputs['mabl'];
@@ -1171,6 +1174,9 @@ class bangluongController extends Controller
                 if ($m_cb[$key][$mapc] <= 0) {
                     continue;
                 }
+                //Tính tỉ lệ hưởng lương 10032023;
+                $m_cb[$key][$mapc] = round($m_cb[$key][$mapc] * $m_cb[$key]['pthuong'] / 100, session('admin')->lamtron);
+
                 //cán bộ được điều động đến chỉ hưởng các loại phụ cấp trong $a_dd
                 //chưa set các trường hợp để hệ sô, số tiền = 0 (3 phụ cấp gốc, cán bộ đc điều động đến ko đóng bảo hiểm)
                 if ($m_cb[$key]['theodoi'] == 4) {
