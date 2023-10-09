@@ -135,12 +135,20 @@ class nguonkinhphiController extends Controller
             } else {
                 $m_ts = new Collection();
             }
+            if (isset($inputs['kyluat'])) {
+                $m_kl = hosotamngungtheodoi::where('madv', session('admin')->madv)->where('maphanloai', 'KYLUAT')
+                    ->whereBetween('ngayden', [Carbon::create($inputs['namdt'])->startOfYear(), Carbon::create($inputs['namdt'] + 1)->endOfYear()])
+                    ->get();
+            } else {
+                $m_kl = new Collection();
+            }
+            // dd($m_kl);
             //$a_pc_ts = array_column(dmphucap_thaisan::where('madv', session('admin')->madv)->get()->toarray(), 'mapc');
             $a_pc_ts = array_column(dmphucap_donvi::where('madv', session('admin')->madv)
                 ->where('phanloai', '<', '3')->where('thaisan', '1')->get()->toarray(), 'mapc');
             //dd($a_pc_ts);           
             $model = (new dataController())->getCanBo($model, $model_thongtu->ngayapdung, isset($inputs['nangluong']), $model_thongtu->ngayapdung);
-            //dd($model);
+            // dd($model);
             foreach ($model as $key => $cb) {
                 //xét thời hạn hợp đồng của cán bộ: nếu "ngayvao" > $model_thongtu->ngayapdung => gán lĩnh vực hoạt động = null để lọc theo lĩnh vực bỏ qua cán bộ
                 if (getDayVn($cb->ngayvao) != '' && $cb->ngayvao <= $model_thongtu->ngayapdung) {
@@ -305,7 +313,7 @@ class nguonkinhphiController extends Controller
                     }
                 }
             }
-            //dd($model);
+            // dd($model);
 
             $model = $model->wherein('mact', $a_plct)->where('lvhd', $inputs['linhvuchoatdong']);
             //lấy danh sách cán bộ chưa nâng lương từ tháng 01-06 => tự nâng lương
@@ -462,7 +470,7 @@ class nguonkinhphiController extends Controller
                     unset($m_cb[$key]);
                 }
             }
-
+            // dd($m_cb);
             //TÍnh lương cho phu cấp kiêm nhiệm
             $i = 1;
             foreach ($m_cb_kn as $val) {
@@ -555,6 +563,17 @@ class nguonkinhphiController extends Controller
                             $a_cb = $m_cb[$key];
                             //dd($this->getHeSoPc_ts($a_cb,$a_pc,$a_pc_ts));
                             $a_data[] = $this->getHeSoPc_ts($a_cb, $a_pc, $a_pc_ts);
+                            continue;
+                        }
+                    }
+                    if(isset($inputs['kyluat'])){
+                        //kiểm tra cán bộ bị kỷ luật
+                        $a_kl = $m_kl->where('macanbo', $key)->where('ngaytu', '<=', $ngaylap)->where('ngayden', '>=', $ngaylap);
+                        // dd($a_kl);
+                        if (count($a_kl) > 0) { //cán bộ bị kỷ luật
+                            $a_cb = $m_cb[$key];
+                            //dd($this->getHeSoPc_ts($a_cb,$a_pc,$a_pc_ts));
+                            $a_data[] = $this->getHeSoPc_kl($a_pc,$a_cb, $inputs['chenhlech']);
                             continue;
                         }
                     }
@@ -663,7 +682,7 @@ class nguonkinhphiController extends Controller
             // foreach (array_chunk($a_data_nl, 10) as $data) {
             //     nguonkinhphi_nangluong::insert($data);
             // }
-            //dd($a_data);
+            // dd($a_data);
             //chia nhỏ thành các mảng nhỏ 100 phần tử để insert
             $a_data = unset_key($a_data, $a_col);
             //dd($a_data[101]);
@@ -1403,8 +1422,10 @@ class nguonkinhphiController extends Controller
         for ($i = 0; $i < count($a_pc); $i++) {
             $mapc = $a_pc[$i]['mapc'];
             $mapc_st = 'st_' . $mapc;
-            //Tính tỉ lệ hưởng lương 10032023;
-            $m_cb[$mapc] = round($m_cb[$mapc] * $m_cb['pthuong'] / 100, session('admin')->lamtron);
+            //Tính tỉ lệ hưởng lương cho cán bộ bị kỷ luật 03102023;
+            // if($m_cb['theodoi'] == 7){
+            //     $m_cb[$mapc] = round($m_cb[$mapc] * $m_cb['pthuong'] / 100, session('admin')->lamtron);
+            // }           
             switch (getDbl($a_pc[$i]['phanloai'])) {
                 case 0: {
                         $m_cb['tonghs'] += $m_cb[$mapc];
@@ -1619,6 +1640,84 @@ class nguonkinhphiController extends Controller
         }
         $m_cb['tonghs'] = $tonghs;
         $m_cb['luongtn'] = round($m_cb['tonghs'] * $m_cb['luongcoban'], 0);
+        return $m_cb;
+    }
+    function getHeSoPc_kl($a_pc, $m_cb, $luongcb = 0, $vk = true)
+    {
+       
+        $stbhxh_dv = 0;
+        $stbhyt_dv = 0;
+        $stkpcd_dv = 0;
+        $stbhtn_dv = 0;
+        $m_cb['tonghs'] = 0;
+        $m_cb['luongtn'] = 0;
+        $m_cb['luongcoban'] = $luongcb;
+        $m_cb['tencanbo'] .= ' (kỷ luật)';
+        if ($vk) {
+            $m_cb['vuotkhung'] = round(($m_cb['heso'] * $m_cb['vuotkhung']) / 100, session('admin')->lamtron);
+        }
+        // $m_cb['vuotkhung'] = round(($m_cb['heso'] * $m_cb['vuotkhung']) / 100, session('admin')->lamtron);
+
+        for ($i = 0; $i < count($a_pc); $i++) {
+            $mapc = $a_pc[$i]['mapc'];
+            $mapc_st = 'st_' . $mapc;
+            //Tính tỉ lệ hưởng lương cho cán bộ bị kỷ luật 03102023;
+
+                $m_cb[$mapc] = round($m_cb[$mapc] * 0.5, session('admin')->lamtron);
+         
+            switch (getDbl($a_pc[$i]['phanloai'])) {
+                case 0: {
+                        $m_cb['tonghs'] += $m_cb[$mapc];
+                        $m_cb[$mapc_st] = round($m_cb[$mapc] * $luongcb);
+                        break;
+                    }
+                case 1: { //số tiền (không tính chênh lệch)
+                        //$m_cb['luongtn'] += $m_cb[$mapc];
+                        $m_cb[$mapc_st] = $m_cb[$mapc] = 0;
+                        break;
+                    }
+                case 2: { //phần trăm
+                        if ($mapc != 'vuotkhung') { //vượt khung đã tính ở trên
+                            $heso = 0;
+                            foreach (explode(',', $a_pc[$i]['congthuc']) as $cthuc) {
+                                if ($cthuc != '') {
+                                    $heso += $m_cb[$cthuc];
+                                }
+                            }
+                            $m_cb[$mapc] = round($heso * $m_cb[$mapc] / 100, session('admin')->lamtron);
+                        }
+                        $m_cb['tonghs'] += $m_cb[$mapc];
+                        $m_cb[$mapc_st] = round($m_cb[$mapc] * $luongcb);
+                        break;
+                    }
+                default: { //trường hợp còn lại (ẩn,...)
+                        $m_cb[$mapc] = 0;
+                        $m_cb[$mapc_st] = 0;
+                        break;
+                    }
+            }
+            if ($a_pc[$i]['baohiem'] == 1) {
+                $stbhxh_dv += round($m_cb['bhxh_dv'] * $m_cb[$mapc] * $luongcb, 0);
+                $stbhyt_dv += round($m_cb['bhyt_dv'] * $m_cb[$mapc] * $luongcb, 0);
+                $stkpcd_dv += round($m_cb['kpcd_dv'] * $m_cb[$mapc] * $luongcb, 0);
+                $stbhtn_dv += round($m_cb['bhtn_dv'] * $m_cb[$mapc] * $luongcb, 0);
+            }
+        }
+        $m_cb['luongtn'] = round($m_cb['tonghs'] * $luongcb);
+        //trường hợp đặc biêt mức lương khoán 
+        if ($m_cb['mucluongbaohiem'] > 0) {
+            $stbhxh_dv = round($m_cb['bhxh_dv'] * $m_cb['luongtn'], 0);
+            $stbhyt_dv = round($m_cb['bhyt_dv'] * $m_cb['luongtn'], 0);
+            $stkpcd_dv = round($m_cb['kpcd_dv'] * $m_cb['luongtn'], 0);
+            $stbhtn_dv = round($m_cb['bhtn_dv'] * $m_cb['luongtn'], 0);
+        }
+
+        $m_cb['stbhxh_dv'] = $stbhxh_dv;
+        $m_cb['stbhyt_dv'] = $stbhyt_dv;
+        $m_cb['stkpcd_dv'] = $stkpcd_dv;
+        $m_cb['stbhtn_dv'] = $stbhtn_dv;
+
+        $m_cb['ttbh_dv'] = $stbhxh_dv + $stbhyt_dv + $stkpcd_dv + $stbhtn_dv;
         return $m_cb;
     }
 }

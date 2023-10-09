@@ -206,6 +206,12 @@
                             <label for="thaisan">Tính thời gian nghỉ thai sản của cán bộ</label>
                         </div>
                     </div>
+                    <div class="row">
+                        <div class="col-md-offset-3 col-md-9" style="padding-top: 15px">
+                            <input type="checkbox" checked id="kyluat" name="kyluat" />
+                            <label for="kyluat">Tính thời gian kỷ luật của cán bộ</label>
+                        </div>
+                    </div>
 
                     <div class="row">
                         <div class="col-md-offset-3 col-md-9" style="padding-top: 15px">

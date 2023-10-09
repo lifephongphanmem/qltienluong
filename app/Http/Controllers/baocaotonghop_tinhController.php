@@ -355,14 +355,15 @@ class baocaotonghop_tinhController extends Controller
                 $this->getMaNhomPhanLoai($chitiet, $m_phanloai);
             }
             //dd($model->where('maphanloai','KVXP')->toArray());
-
+            
             //xử lý ẩn hiện cột phụ cấp => biết tổng số cột hiện => colspan trên báo cáo
 
             //$m_donvi = dmdonvi::where('madv', session('admin')->madv)->first();
             $m_huyen = dmdonvibaocao::where('baocao', 1)->get();
+
             $a_dv = array_column($m_huyen->toarray(), 'tendvbc', 'madvcq');
             $view = isset($inputs['madv']) ? 'reports.dutoanluong.tinh.tonghophopdong_ct' : 'reports.dutoanluong.tinh.tonghophopdong';
-            // dd($model);
+            // dd($view);
             return view($view)
                 ->with('model', $model)
                 ->with('lamtron', session('admin')->lamtron ?? 3)

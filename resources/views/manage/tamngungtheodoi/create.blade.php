@@ -63,7 +63,7 @@
                                 </div>
                             </div>
 
-                            @if(!in_array($inputs['phanloai'], array('THAISAN','KHONGLUONG','DAINGAY')))
+                            @if(!in_array($inputs['phanloai'], array('THAISAN','KHONGLUONG','DAINGAY','KYLUAT')))
                                 <div class="col-md-3">
                                     <div class="form-group">
                                         <label class="form-control-label">Ngày thanh toán<span

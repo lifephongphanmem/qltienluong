@@ -957,12 +957,13 @@ class bangluongController extends Controller
     {
         $ngaylap = Carbon::create($inputs['nam'], $inputs['thang'], '01');
         //dd($ngaylap);
-        $m_tamngung = hosotamngungtheodoi::wherein('maphanloai', ['THAISAN', 'KHONGLUONG', 'DAINGAY'])
+        $m_tamngung = hosotamngungtheodoi::wherein('maphanloai', ['THAISAN', 'KHONGLUONG', 'DAINGAY','KYLUAT'])
             ->where('ngaytu', '<=', $ngaylap)->where('ngayden', '>=', $ngaylap)
             ->where('madv', $inputs['madv'])->get();
         $a_khongluong = array_column($m_tamngung->where('maphanloai', 'KHONGLUONG')->toarray(), 'macanbo');
         $a_daingay = array_column($m_tamngung->where('maphanloai', 'DAINGAY')->toarray(), 'macanbo');
         $a_thaisan = $m_tamngung->where('maphanloai', 'THAISAN')->keyBy('macanbo')->toarray();
+        $a_kyluat = $m_tamngung->where('maphanloai', 'KYLUAT')->keyBy('macanbo')->toarray();
 
         $m_nghi = hosotamngungtheodoi::select('songaycong', 'songaynghi', 'macanbo', 'maphanloai')
             ->where('madv', $inputs['madv'])->wherein('maphanloai', ['NGHIPHEP', 'NGHIOM', 'DUONGSUC'])
@@ -1143,6 +1144,7 @@ class bangluongController extends Controller
             $nghi = isset($a_nghiphep[$m_cb[$key]['macanbo']]) ? true : false;
             $thaisan = isset($a_thaisan[$m_cb[$key]['macanbo']]) ? true : false;
             $duongsuc = isset($a_duongsuc[$m_cb[$key]['macanbo']]) ? true : false;
+            $kyluat = isset($a_kyluat[$m_cb[$key]['macanbo']]) ? true : false;
             //dd($m_cb[$key]);            
             //tính hệ số bảo hiểm (cán bộ thai sản + nghỉ ko lương + cán bộ điều động đến => ko pai đóng bảo hiểm =>set luon bảo hiểm = 0 để ko tính)
             if ($khongluong || $daingay || $thaisan || $m_cb[$key]['theodoi'] == 4 || $m_cb[$key]['baohiem'] == 0) {
@@ -1434,6 +1436,23 @@ class bangluongController extends Controller
                 }
                 $m_cb[$key]['giaml'] = $cb_nghi['songaynghi'] >= $ngaycong ? round($sotiencong) : ($tiencong * $cb_nghi['songaynghi']);
             }
+              //Tính % hưởng cho cán bộ bị kỷ luật
+              if ($kyluat) {
+                $tonghs = 0;
+                $tien = 0;
+                $m_cb[$key]['tencanbo'] .= ' (kỷ luật)';
+                foreach ($a_pc as $k => $v) {
+                    $mapc = $v['mapc'];
+                    $mapc_st = 'st_' . $v['mapc'];
+
+                    $m_cb[$key][$mapc] = round($m_cb[$key][$mapc] * 0.5, session('admin')->lamtron);
+                    $m_cb[$key][$mapc_st] = round($m_cb[$key][$mapc_st] * 0.5, 0);
+
+                    $tonghs += $m_cb[$key][$mapc];
+                    $tien += $m_cb[$key][$mapc_st];
+                }
+
+            }
 
             tinhluong:
 
@@ -1444,22 +1463,7 @@ class bangluongController extends Controller
                     $m_cb[$key][$mapc] = $m_cb[$key][$maso_st];
                 }
             }
-             //Tính % hưởng cho cán bộ
-             if ($m_cb[$key]['pthuong'] < 100) {
-                $tonghs = 0;
-                $tien = 0;
-                foreach ($a_pc as $k => $v) {
-                    $mapc = $v['mapc'];
-                    $mapc_st = 'st_' . $v['mapc'];
-
-                    $m_cb[$key][$mapc] = round($m_cb[$key][$mapc] * $m_cb[$key]['pthuong'] / 100, session('admin')->lamtron);
-                    $m_cb[$key][$mapc_st] = round($m_cb[$key][$mapc_st] * $m_cb[$key]['pthuong'] / 100, 0);
-
-                    $tonghs += $m_cb[$key][$mapc];
-                    $tien += $m_cb[$key][$mapc_st];
-                }
-
-            }
+           
 
             $m_cb[$key]['tonghs'] = $tonghs;
             $m_cb[$key]['ttl'] = $tien;

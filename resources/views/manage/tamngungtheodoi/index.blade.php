@@ -66,6 +66,10 @@
                                         class="btn btn-default btn-xs">
                                         Nghỉ không lương</a>
                                 </li>
+                                <li>
+                                    <a href="{{ url($furl . 'create?phanloai=KYLUAT') }}" class="btn btn-default btn-xs">
+                                        Kỷ luật</a>
+                                </li>
                             </ul>
                         </div>
                     </div>
@@ -90,16 +94,28 @@
                                         <td>{{ $value->phanloai }}</td>
                                         @switch($value->maphanloai)
                                             @case ('KHONGLUONG')
+
                                             @case ('DAINGAY')
+
                                             @case ('THAISAN')
                                                 <td>Từ {{ getDayVn($value->ngaytu) }} đến {{ getDayVn($value->ngayden) }}</td>
                                             @break
+
                                             @case ('DUONGSUC')
+
                                             @case ('NGHIOM')
+
                                             @case ('NGHIPHEP')
-                                                <td>Nghỉ từ ngày: {{ getDayVn($value->ngaytu) }} - Số ngày nghỉ: {{ $value->songaynghi }}
-                                                    <br>Ngày thanh toán: {{ getDayVn($value->ngaythanhtoan) }}</td>
+                                                <td>Nghỉ từ ngày: {{ getDayVn($value->ngaytu) }} - Số ngày nghỉ:
+                                                    {{ $value->songaynghi }}
+                                                    <br>Ngày thanh toán: {{ getDayVn($value->ngaythanhtoan) }}
+                                                </td>
                                             @break
+
+                                            @case ('KYLUAT')
+                                                <td>Từ {{ getDayVn($value->ngaytu) }} đến {{ getDayVn($value->ngayden) }}</td>
+                                            @break
+
                                             @default
                                                 <td></td>
                                         @endswitch

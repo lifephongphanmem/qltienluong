@@ -832,6 +832,7 @@ function getPhanLoaiCanBo()
         '2' => 'Cán bộ tạm ngưng theo dõi',
         '3' => 'Cán bộ đang điều động',
         '4' => 'Cán bộ được điều động',
+        '7' => 'Cán bộ bị kỷ luật',
         '9' => 'Cán bộ đã thôi công tác'
     );
 }
@@ -845,6 +846,7 @@ function getPhanLoaiCanBo_CongTac()
         '4' => 'Cán bộ được điều động đến',
         '5' => 'Cán bộ công tác tại vùng cao, biên giới, hải đảo',
         '6' => 'Cán bộ đang tập sự, thử việc',
+        // '7' => 'Cán bộ bị kỷ luật',
     );
 }
 
