@@ -282,7 +282,7 @@ class dutoanluongController extends Controller
     {
         if (Session::has('admin')) {
             $inputs = $request->all();
-            //dd($inputs);
+            // dd($inputs);
             if (dutoanluong::where('namns', $inputs['namns'])->where('madv', session('admin')->madv)->count() > 0) {
                 return view('errors.data_error')
                     ->with('message', 'Dự toán năm ' . $inputs['namdt'] . ' đã tồn tại.')
@@ -295,6 +295,7 @@ class dutoanluongController extends Controller
                 ->where('manguonkp', $inputs['manguonkp'])
                 ->where('phanloai', 'BANGLUONG')
                 ->first();
+                // dd($m_bl);
             if ($m_bl == null) {
                 return view('errors.data_error')
                     ->with('message', 'Bảng lương tháng ' . $inputs['thang'] . ' năm ' . $inputs['nam'] . ' không tồn tại. Bạn cần tạo bảng lương trước để có thể tạo dự toán.')
@@ -315,7 +316,7 @@ class dutoanluongController extends Controller
             $a_pc = getColDuToan();
 
             //thêm cán bộ chưa có từ $m_bl1 (phụ) vào $m_bl (chính)
-            //dd($m_bl_ct);
+            // dd($m_bl_ct);
             if ($m_bl_ct1 != null) {
                 $i = 1;
                 foreach ($m_bl_ct1 as $key => $val) {
@@ -658,7 +659,7 @@ class dutoanluongController extends Controller
             $inputs['sothonxakhac_heso'] = chkDbl($inputs['sothonxakhac_heso']);
             $inputs['sothonxaloai1_heso'] = chkDbl($inputs['sothonxaloai1_heso']);
             $inputs['phanloaixa_heso'] = chkDbl($inputs['phanloaixa_heso']);
-            //dd($a_data);
+            // dd($a_data);
             foreach (array_chunk($a_data, 50) as $data) {
                 dutoanluong_bangluong::insert($data);
             }

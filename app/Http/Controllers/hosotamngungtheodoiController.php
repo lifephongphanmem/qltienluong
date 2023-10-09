@@ -42,6 +42,7 @@ class hosotamngungtheodoiController extends Controller
             $insert['ngayden'] = getDateTime($insert['ngayden']);
             $insert['songaynghi'] = chkDbl($insert['songaynghi']);
             $insert['madv'] = session('admin')->madv;
+            // dd($insert);
             hosotamngungtheodoi::create($insert);
             return redirect('nghiep_vu/tam_ngung/danh_sach');
         } else
@@ -120,6 +121,15 @@ class hosotamngungtheodoiController extends Controller
                         $a_canbo = array_column(hosocanbo::where('madv', session('admin')->madv)
                             ->where('theodoi', '<', '9')->get()->toarray(), 'tencanbo', 'macanbo');
                         break;
+                    }
+                    case 'KYLUAT':{
+                        $a_phanloai = array(
+                            'KYLUAT' => 'Kỷ luật'
+                        );
+                        $a_canbo = array_column(hosocanbo::where('madv', session('admin')->madv)
+                        ->where('theodoi', '<', '9')->get()->toarray(), 'tencanbo', 'macanbo');
+                    break;
+
                     }
                 default: { //Nghỉ ko lưởng
                         $a_phanloai = array(
@@ -204,6 +214,15 @@ class hosotamngungtheodoiController extends Controller
                         $a_canbo = array_column(hosocanbo::where('madv', session('admin')->madv)
                             ->where('theodoi', '<', '9')->get()->toarray(), 'tencanbo', 'macanbo');
                         break;
+                    }
+                    case 'KYLUAT':{
+                        $a_phanloai = array(
+                            'KYLUAT' => 'Kỷ luật'
+                        );
+                        $a_canbo = array_column(hosocanbo::where('madv', session('admin')->madv)
+                        ->where('theodoi', '<', '9')->get()->toarray(), 'tencanbo', 'macanbo');
+                    break;
+
                     }
                 default: {
                         $a_phanloai = array(

@@ -174,7 +174,7 @@ class tonghopluong_donviController extends Controller
             $a_th = array_merge($a_th, $col_st);
             $a_ct = (new data())->getBangluong_ct_ar($thang, array_column($a_bangluong, 'mabl'), $a_th)->toarray();
 
-            //dd($a_ct);
+            // dd($a_ct);
 
             //$model_nguondm = nguonkinhphi_dinhmuc::where('madv',$madv)->get();
             //            $a_nguondm = nguonkinhphi_dinhmuc_ct::join('nguonkinhphi_dinhmuc','nguonkinhphi_dinhmuc_ct.maso','nguonkinhphi_dinhmuc.maso')
@@ -304,7 +304,7 @@ class tonghopluong_donviController extends Controller
             $a_data = unset_key($a_data,array('st_pctdt', 'pctdt','st_pcxaxe','pctaicu','st_pctaicu',
                 'pcxaxe','st_pcdith','pcdith','st_pcphth','pcphth','pclade', 'st_pclade', 'pcctp', 'st_pcctp'));//tạm
             */
-            //dd($a_data);
+            // dd($a_data);
             foreach (array_chunk($a_data, 1)  as $data) {
                 tonghopluong_donvi_bangluong::insert($data);
             }
@@ -778,7 +778,6 @@ class tonghopluong_donviController extends Controller
             $a_phucap = array();
             $col = 0;
             $m_pc = array_column(dmphucap_donvi::where('madv', $model_thongtin->madv)->get()->toarray(), 'report', 'mapc');
-
             foreach ($model as $chitiet) {
                 $chitiet->tennguonkp = isset($model_nguonkp[$chitiet->manguonkp]) ? $model_nguonkp[$chitiet->manguonkp] : '';
                 $chitiet->tenct = isset($model_ct[$chitiet->mact]) ? $model_ct[$chitiet->mact] : '';
@@ -795,7 +794,7 @@ class tonghopluong_donviController extends Controller
                 }
             }
             //dd($model->toarray());
-
+            // dd($model);
             foreach (getColTongHop() as $ct) {
                 if ($model->sum($ct) > 0) {
                     $a_phucap[$ct] = isset($m_pc[$ct]) ? $m_pc[$ct] : '';
@@ -824,7 +823,7 @@ class tonghopluong_donviController extends Controller
                     ->all();
             });
             $a_nguon = a_unique($model_nguon);
-            //dd($a_nguon);
+            // dd($a_nguon);
             $a_tonghop = $model->map(function ($data) {
                 return collect($data->toArray())
                     ->only(['tonghop'])
