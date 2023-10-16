@@ -94,7 +94,7 @@ class dutoanluongController extends Controller
                 ->where('manguonkp', $inputs['manguonkp'])
                 ->where('phanloai', 'BANGLUONG')
                 ->first();
-
+// dd($m_bl);
             $m_bl1 = bangluong::where('madv', session('admin')->madv)
                 ->where('thang', $inputs['thang1'])
                 ->where('nam', $inputs['nam1'])
@@ -120,7 +120,7 @@ class dutoanluongController extends Controller
                 }
             }
 
-            //dd($m_bl_ct);
+            // dd($m_bl_ct);
             $a_plct_bl = array_unique(array_column($m_bl_ct->toarray(), 'mact'));
             //xóa các chỉ tiêu cũ do có thể có 1 số plct thừa
             chitieubienche::where('madv', session('admin')->madv)->where('nam', $inputs['namns'])->delete();
@@ -330,6 +330,7 @@ class dutoanluongController extends Controller
 
             //dd($m_bl_ct);
             $a_baohiem = dmphanloaicongtac_baohiem::where('madv', session('admin')->madv)->get()->keyBy('mact')->toarray();
+            // dd($a_baohiem);
             $model_phucap = dmphucap_donvi::select('mapc', 'phanloai', 'congthuc', 'baohiem', 'tenpc', 'thaisan', 'nghiom', 'dieudong', 'thuetn', 'tapsu')
                 ->where('madv', session('admin')->madv)
                 ->wherein('mapc', $a_pc)->get();
@@ -374,7 +375,7 @@ class dutoanluongController extends Controller
                         $value->ttbh_dv = $value->stbhxh_dv + $value->stbhyt_dv + $value->stbhtn_dv + $value->stkpcd_dv;
 
 
-                        //dd($value);
+                        // dd($value);
                     } else {
                         //chạy lại 1 vòng để hệ số, số tiền (do báo cáo lấy hệ số, số tiền)
                         foreach ($a_pc as $pc) {

@@ -698,6 +698,7 @@ class bangluong_inController extends Controller
             //$inputs['mabl'] = $inputs['mabl'];
             //$model = $this->getBangLuong($inputs);
             $model = $this->getBangLuong($inputs)->wherein('phanloai', ['CVCHINH', 'KHONGCT']);
+            // dd($model);
             //dd($inputs);
             $mabl = $inputs['mabl'];
             $m_bl = bangluong::select('thang', 'nam', 'mabl', 'madv', 'ngaylap', 'phanloai', 'luongcoban', 'noidung')->where('mabl', $mabl)->first();
@@ -729,7 +730,7 @@ class bangluong_inController extends Controller
                     $col++;
                 }
             }
-            //dd($a_phucap);
+            // dd($a_phucap);
             //chạy lại để tính lại phụ cấp
             $luongcb = $m_bl->luongcoban;
             foreach ($model as $cb) {
@@ -746,6 +747,7 @@ class bangluong_inController extends Controller
                     $cb->giaml = $cb->ttl_tn - $cb->ttl; //in mức giảm lương
                 }
             }
+            // dd($model);
             return view('reports.bangluong.donvi.mautt107_m4')
                 ->with('model', $model)
                 ->with('model_pb', getPhongBan())
@@ -2299,7 +2301,7 @@ class bangluong_inController extends Controller
         $mabl = $inputs['mabl'];
         $m_bl = bangluong::select('madv', 'thang', 'mabl')->where('mabl', $mabl)->first();
         $model = (new data())->getBangluong_ct($m_bl->thang, $m_bl->mabl);
-        //dd($m_bl);
+        // dd($m_bl);
         $a_hoso = hosocanbo::select('macanbo', 'sunghiep', 'sotk', 'tennganhang', 'ngaytu', 'tnntungay', 'socmnd')
             ->where('madv', $m_bl->madv)->get()->keyby('macanbo')->toarray();
         $a_cv = dmchucvucq::all('tenvt', 'macvcq', 'tencv')->keyBy('macvcq')->toArray();
