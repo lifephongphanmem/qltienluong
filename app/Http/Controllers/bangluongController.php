@@ -1221,11 +1221,12 @@ class bangluongController extends Controller
                             }
                             // dd($heso);
                             // $sotien = round(($sotien * $m_cb[$key][$mapc]) / 100, session('admin')->lamtron);
-                            $sotien = round(($heso * $inputs['luongcoban']), session('admin')->lamtron);
-                            $a_pc[$k]['sotien'] = $sotien;
-                            $m_cb[$key][$mapc] = round($sotien / $inputs['luongcoban'], session('admin')->lamtron);
+                            $heso = round(($heso * $m_cb[$key][$mapc]) / 100, session('admin')->lamtron);
+
+                            $a_pc[$k]['sotien'] = round($heso * $inputs['luongcoban'], session('admin')->lamtron);
+                            $m_cb[$key][$mapc] = $heso;
                             //do tính hệ số đã làm tròn => (hệ số * lương cơ bản) != (số tiền) => nhân lại để đúng số tiền
-                            $a_pc[$k]['sotien'] = round($m_cb[$key][$mapc] * $inputs['luongcoban']);
+                            // $a_pc[$k]['sotien'] = round($m_cb[$key][$mapc] * $inputs['luongcoban']);
                             break;
                         }
                     default: { //trường hợp còn lại (ẩn,...)

@@ -305,10 +305,10 @@ class dutoanluong_insolieu_huyenController extends Controller
                 $m_donvi = dmdonvi::where('madv', $m_dutoan_huyen->madv)->first();
                 $m_dutoan = dutoanluong::where('masoh', $inputs['masodv'])->where('trangthai', 'DAGUI')->get();
             }
-            
+            // dd($m_donvi);
             //$m_phanloai = dmphanloaidonvi_baocao::where('madvbc', $m_donvi->madvbc)->get();
             $m_phanloai = dmphanloaidonvi_baocao::where('madvbc', $m_donvi->madvbc)->get();
-            
+            // dd($m_phanloai);
             $a_phanloai = array_column(dmphanloaidonvi::all()->toArray(), 'maphanloai');
             // $m_dutoan = dutoanluong::where('masoh', $inputs['masodv'])->where('trangthai', 'DAGUI')->get();
             $m_donvi_baocao = dmdonvi::wherein('madv', array_column($m_dutoan->toarray(), 'madv'))->get();
