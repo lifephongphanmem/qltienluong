@@ -83,7 +83,9 @@ class dutoanluongController extends Controller
     {
         if (Session::has('admin')) {
             $inputs = $request->all();
+
             $model = dutoanluong::where('madv', session('admin')->madv)->where('namns', $inputs['namns'])->first();
+            
             if ($model != null) {
                 return redirect('/nghiep_vu/quan_ly/du_toan?maso=' . $model->masodv);
             }
@@ -94,19 +96,21 @@ class dutoanluongController extends Controller
                 ->where('manguonkp', $inputs['manguonkp'])
                 ->where('phanloai', 'BANGLUONG')
                 ->first();
-// dd($m_bl);
+
             $m_bl1 = bangluong::where('madv', session('admin')->madv)
                 ->where('thang', $inputs['thang1'])
                 ->where('nam', $inputs['nam1'])
                 ->where('manguonkp', $inputs['manguonkp1'])
                 ->where('phanloai', 'BANGLUONG')
                 ->first();
-            if ($m_bl == null) {
+            if ($m_bl == null ) {
+                    $message='Bảng lương tháng ' . $inputs['thang'] . ' năm ' . $inputs['nam'] .' không tồn tại. Bạn cần tạo bảng lương trước để có thể tạo dự toán.';              
                 return view('errors.data_error')
-                    ->with('message', 'Bảng lương tháng ' . $inputs['thang'] . ' năm ' . $inputs['nam'] . ' không tồn tại. Bạn cần tạo bảng lương trước để có thể tạo dự toán.')
+                    ->with('message', $message)
                     ->with('furl', '/nghiep_vu/quan_ly/du_toan/danh_sach');
             }
-            $m_bl_ct = (new dataController())->getBangluong_ct($m_bl->thang, $m_bl->mabl);
+            // $m_bl_ct = (new dataController())->getBangluong_ct($m_bl->thang, $m_bl->mabl);
+            $m_bl_ct = (new dataController())->getBangluong_ct($m_bl->thang ?? 'null', $m_bl->mabl ?? 'null');
             $m_bl_ct1 = (new dataController())->getBangluong_ct($m_bl1->thang ?? 'null', $m_bl1->mabl ?? 'null');
 
             if ($m_bl_ct1 != null) {

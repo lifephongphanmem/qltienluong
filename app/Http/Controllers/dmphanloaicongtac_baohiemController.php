@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\dmchucvucq;
+use App\dmdonvi;
 use App\dmphanloaicongtac;
 use App\dmphanloaicongtac_baohiem;
 use App\dmphanloaict;
@@ -85,6 +86,7 @@ class dmphanloaicongtac_baohiemController extends Controller
     function capnhat(Request $request)
     {
         if (Session::has('admin')) {
+            // dd(session('admin'));
             $inputs = $request->all();
             $model_bh = dmphanloaicongtac_baohiem::where('madv', session('admin')->madv)->where('mact', $inputs['mact_bh'])->first();
             //chia làm 2 nhóm

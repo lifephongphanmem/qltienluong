@@ -49,7 +49,7 @@
         <tr style="">
             <th style="width: 2%;" rowspan="2">TỔNG</br>CỘNG</th>
             <th style="width: 2%;" rowspan="2">
-                HỆ</br>SỐ</br>LƯƠNG</br>THEO</br>NGẠCH,</br>BẬC</br>CHỨC</br>VỤ</th>
+             LƯƠNG</br>THEO</br>NGẠCH,</br>BẬC</br>CHỨC</br>VỤ</th>
             <th style="width: 2%;" rowspan="2">TỔNG</br>CÁC</br>KHOẢN</br>PHỤ</br>CẤP</th>
             <th style="width: 6%;" colspan="{{ $col }}">TRONG ĐÓ</th>
             <th style="width: 2%;"rowspan="2">CÁC</br>KHOẢN</br>ĐÓNG</br>GÓP</br>BHXH,</br>BHYT,</br>BHTN,</br>KPCĐ</th>

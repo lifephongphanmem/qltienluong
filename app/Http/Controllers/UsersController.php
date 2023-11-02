@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\dmchucvucq;
 use App\dmdonvi;
 use App\dmdonvibaocao;
 use App\dmnguonkinhphi;
@@ -18,6 +19,7 @@ use App\dutoanluong_chitiet;
 use App\dutoanluong_huyen;
 use App\dutoanluong_tinh;
 use App\GeneralConfigs;
+use App\hosocanbo;
 use App\nguonkinhphi_dinhmuc;
 use App\Users;
 use Illuminate\Foundation\Auth\User;
@@ -296,9 +298,80 @@ class UsersController extends Controller
                         'macqcq' => $donvi->macqcq,
                     ];
                 }
-                
+
                 dsdonviquanly::insert($a_kq);
                 //dd($a_kq);
+
+                //Thau đổi hệ số tỉ lệ đóng bảo hiểm của nhóm cán bộ chưa tuyển: chạy 1 lần rồi xóa
+                // $a_baohiem = [
+                //     'bhxh' => 8,
+                //     'bhyt' => 1.5,
+                //     'bhtn' => 1,
+                //     'kpcd' => 1,
+                //     'bhxh_dv' => 17.5,
+                //     'bhyt_dv' => 3,
+                //     'bhtn_dv' => 1,
+                //     'kpcd_dv' => 2
+                // ];
+
+                // // $m_donvi = dmdonvi::select('madv', 'maphanloai')->where('phanloaitaikhoan', 'SD')->get();
+                // $phanloai_ct = dmphanloaicongtac_baohiem::where('mact', '1637915601')
+                //     ->where('bhxh', '!=', $a_baohiem['bhxh'])
+                //     ->where('bhyt', '!=', $a_baohiem['bhyt'])
+                //     ->where('bhtn', '!=', $a_baohiem['bhtn'])
+                //     ->where('kpcd', '!=', $a_baohiem['kpcd'])
+                //     ->where('bhxh_dv', '!=', $a_baohiem['bhxh_dv'])
+                //     ->where('bhyt_dv', '!=', $a_baohiem['bhyt_dv'])
+                //     ->where('bhtn_dv', '!=', $a_baohiem['bhtn_dv'])
+                //     ->where('kpcd_dv', '!=', $a_baohiem['kpcd_dv'])
+                //     ->get();
+
+                // foreach ($phanloai_ct as $val) {
+                //     $val->update($a_baohiem);
+                // }
+
+                // hosocanbo::where('mact', '1637915601')->where('sunghiep', 'Công chức')
+                //     ->where('bhxh', '!=', $a_baohiem['bhxh'])
+                //     ->where('bhyt', '!=', $a_baohiem['bhyt'])
+                //     ->where('bhtn', '!=', 0)
+                //     ->where('kpcd', '!=', $a_baohiem['kpcd'])
+                //     ->update([
+                //         'bhxh' => $a_baohiem['bhxh'],
+                //         'bhyt' => $a_baohiem['bhyt'],
+                //         'bhtn' => 0,
+                //         'kpcd' => $a_baohiem['kpcd'],
+                //         'bhxh_dv' => $a_baohiem['bhxh_dv'],
+                //         'bhyt_dv' => $a_baohiem['bhyt_dv'],
+                //         'bhtn_dv' => 0,
+                //         'kpcd_dv' => $a_baohiem['kpcd_dv']
+                //     ]);
+                // //viên chức
+                // hosocanbo::where('mact', '1637915601')->where('sunghiep', '<>', 'Công chức')
+                //     ->where('bhxh', '!=', $a_baohiem['bhxh'])
+                //     ->where('bhyt', '!=', $a_baohiem['bhyt'])
+                //     ->where('bhtn', '!=', $a_baohiem['bhtn'])
+                //     ->where('kpcd', '!=', $a_baohiem['kpcd'])
+                //     ->update([
+                //         'bhxh' => $a_baohiem['bhxh'],
+                //         'bhyt' => $a_baohiem['bhyt'],
+                //         'bhtn' => $a_baohiem['bhtn'],
+                //         'kpcd' => $a_baohiem['kpcd'],
+                //         'bhxh_dv' => $a_baohiem['bhxh_dv'],
+                //         'bhyt_dv' => $a_baohiem['bhyt_dv'],
+                //         'bhtn_dv' => $a_baohiem['bhtn_dv'],
+                //         'kpcd_dv' => $a_baohiem['kpcd_dv']
+                //     ]);
+
+                // //thủ trương đơn vị (ko cần phân loại công tác)
+                // // $a_chucvu_vt =  dmchucvucq::select('macvcq')->where('maphanloai', $item->maphanloai)->where('ttdv', '1')
+                // //     ->wherein('madv', ['SA', $item->madv])->get()->toArray();
+                //     $a_chucvu_vt =  dmchucvucq::select('macvcq')->where('ttdv', '1')->get()->toArray();
+                // // hosocanbo::where('madv', $item->madv)->wherein('macvcq', $a_chucvu_vt)
+                // hosocanbo::wherein('macvcq', $a_chucvu_vt)
+                //     ->update([
+                //         'bhtn' => 0,
+                //         'bhtn_dv' => 0
+                //     ]);
             }
             //kiểm tra xem user thuộc đơn vị nào, nếu ko thuộc đơn vị nào (trừ tài khoản quản trị) => đăng nhập ko thành công
         }
