@@ -1044,7 +1044,7 @@ class bangluongController extends Controller
         }
 
         $m_cb = $m_cb->keyBy('macanbo')->toArray();
-        //dd($m_cb);
+        // dd($m_cb);
         $a_phanloai = dmphanloaicongtac_baohiem::where('madv', session('admin')->madv)->get()->keyBy('mact')->toArray();
         $a_nhomct = array_column(dmphanloaict::all()->toarray(), 'macongtac', 'mact');
         // dd($a_phanloai);
@@ -1233,7 +1233,7 @@ class bangluongController extends Controller
                             break;
                         }
                 }
-                //Tạm ẩn để tính phụ cấp
+
                 if ($khongluong) {
                     goto ketthuc_phucap;
                 }
@@ -1278,7 +1278,7 @@ class bangluongController extends Controller
                 }
                 ketthuc_phucap:
             }
-            // dd($m_cb[$key]);
+
             //  dd($a_pc);
             // dd($m_cb[$key]);
             //$ths = $ths + $heso_goc - $cb->heso;//do chỉ lương nb hưởng 85%, các hệ số hưởng %, bảo hiểm thì lấy 100% để tính
