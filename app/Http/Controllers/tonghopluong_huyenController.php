@@ -203,7 +203,8 @@ class tonghopluong_huyenController extends Controller
             //     ->get();
             // $a_donvicapduoi = array_unique(array_merge(array_column($model_dmdv->toarray(), 'madv'), $a_donvicapduoi));
             $model_donvitamdung = dmdonvi::where('trangthai', 'TD')->wherein('madv',  getDonviHuyen($nam,$madv)['a_donvicapduoi'])->get();
-            // dd($a_donvicapduoi);
+
+            // dd(getDonviHuyen($nam,$madv)['a_donvicapduoi']);
             $a_data = array(
                 array('thang' => '01', 'mathdv' => null, 'noidung' => null, 'sldv' => $this->laySoLuongDV('01', $inputs['nam'], getDonviHuyen($nam,$madv)['a_donvicapduoi'], $model_donvitamdung), 'dvgui' => 0),
                 array('thang' => '02', 'mathdv' => null, 'noidung' => null, 'sldv' => $this->laySoLuongDV('02', $inputs['nam'], getDonviHuyen($nam,$madv)['a_donvicapduoi'], $model_donvitamdung), 'dvgui' => 0),
@@ -221,10 +222,16 @@ class tonghopluong_huyenController extends Controller
             );
 
             if (session('admin')->phamvitonghop == 'HUYEN')
-                $model_nguon = tonghopluong_huyen::wherein('madv', getDonviHuyen($nam,$madv)['a_donvicapduoi'])
-                    ->where('nam', $inputs['nam'])
-                    ->wherein('trangthai', ['DAGUI', 'TRALAI'])
-                    ->get();
+                // $model_nguon = tonghopluong_huyen::wherein('madv', getDonviHuyen($nam,$madv)['a_donvicapduoi'])
+                //     ->where('nam', $inputs['nam'])
+                //     ->where('trangthai', 'DAGUI')
+                //     // ->wherein('trangthai', ['DAGUI', 'TRALAI'])
+                //     ->get();
+                $model_nguon = tonghopluong_donvi::wherein('madv', getDonviHuyen($nam,$madv)['a_donvicapduoi'])
+                ->where('nam', $inputs['nam'])
+                ->where('trangthai', 'DAGUI')
+                // ->wherein('trangthai', ['DAGUI', 'TRALAI'])
+                ->get();
             if (session('admin')->phamvitonghop == 'KHOI') {
                 $model_nguon = tonghopluong_donvi::wherein('madv', getDonviHuyen($nam,$madv)['a_donvicapduoi'])
                     ->where('nam', $inputs['nam'])
@@ -248,7 +255,7 @@ class tonghopluong_huyenController extends Controller
                     $dulieu = $model_nguon->where('thang', $a_data[$i]['thang']);
                     $dulieukhoi = $model_nguonkhoi->where('thang', $a_data[$i]['thang']);
                 }
-                //dd($dulieu);
+                // dd($dulieu);
                 //Kiểm tra xem đơn vị đã tổng hợp dữ liệu khối chưa
                 if (isset($tonghop)) { //lấy dữ liệu đã tổng hợp đưa ra kết quản
                     $a_data[$i]['noidung'] = $tonghop->noidung;

@@ -100,7 +100,7 @@
                                         <td>{{ $value->tenphanloai }}</td>
                                         <td>{{ $value->linhvuchoatdong }}</td>
                                         <td>
-                                            @if ($value->mathdv != null)
+                                            @if ($value->trangthai == 'DAGUI')
                                                 @if ($value->phanloaitaikhoan == 'TH')
                                                     <a href="#" data-target="#thkhoi-modal" data-toggle="modal"
                                                         onclick="baocao('{{ '/chuc_nang/tong_hop_luong/khoi/tonghop_khoi' }}','{{ $value['thang'] }}','{{ $nam }}','{{ $value['tendv'] }}','{{ $value['madv'] }}','') "
