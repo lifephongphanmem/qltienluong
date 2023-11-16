@@ -4,7 +4,9 @@ use App\dmdonvi;
 use App\dmphanloaict;
 use App\dmphucap;
 use App\dmphucap_donvi;
+use App\dmthongtuquyetdinh;
 use App\dsdonviquanly;
+use App\nguonkinhphi;
 
 /**
  * Created by PhpStorm.
@@ -1380,7 +1382,7 @@ function getNghiDinhPLXaPhuong($phanloaixa){
     return $kq;
 }
 
-function getDonviHuyen($nam,$madv)
+function getDonviHuyen($nam,$madv,$chucnang = null)
 {
      //lấy danh sách đơn vị: đơn vị có macqcq = madv (bang dmdonvi) + đơn vị nam=nam && macqcq=madv
      $a_donvicapduoi = [];
@@ -1406,7 +1408,17 @@ function getDonviHuyen($nam,$madv)
     $model_donvi=dmdonvi::select('madv')->wherein('madv',$a_donvicapduoi)->get();
     $a_donvicapduoi=array_column($model_donvi->toarray(),'madv');
     //  dd($a_donvicapduoi);
-     $model_donvitamdung = dmdonvi::where('trangthai', 'TD')->wherein('madv', $a_donvicapduoi)->get();
+    if($chucnang == 'DUTOAN'){
+        $model_donvitamdung = dmdonvi::where('trangthai', 'TD')->wherein('madv', $a_donvicapduoi)->where('ngaydung','<=',$nam.'-07-01')->get();
+    }elseif($chucnang == 'NKP'){
+        $model_donvitamdung = dmdonvi::where('trangthai', 'TD')->wherein('madv', $a_donvicapduoi)->get();
+        //So sánh ngày gửi dữ liệu nguồn kp với ngày dừng đh để hiện dữ liệu cho đơn vị
+
+ 
+    }else{
+        $model_donvitamdung = dmdonvi::where('trangthai', 'TD')->wherein('madv', $a_donvicapduoi)->get();
+    }
+     
     $m_donvi=array_diff($a_donvicapduoi, array_column($model_donvitamdung->toarray(), 'madv'));
     $array=[
         'm_donvi'=>$m_donvi,

@@ -118,13 +118,13 @@ class dutoanluong_insolieu_huyenController extends Controller
                 $madv = $m_dutoan->madv;
                 $nam = $m_dutoan->namns;
             }
-
             $model = dmdonvi::select('madv', 'tendv', 'maphanloai')
                 ->where('macqcq', $madv)
                 ->where('madv', '<>', $madv)
                 ->wherenotin('madv', function ($query) use ($nam) {
                     $query->select('madv')->from('dmdonvi')
-                        ->whereyear('ngaydung', '<=', $nam)
+                        // ->whereyear('ngaydung', '<=', $nam)
+                        ->where('ngaydung', '<=', $nam . '-07-01')
                         ->where('trangthai', 'TD')
                         ->get();
                 })->get();

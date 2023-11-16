@@ -127,7 +127,8 @@ class xemdulieu_dutoanController extends Controller
             // $model_donvitamdung = dmdonvi::where('trangthai', 'TD')->wherein('madv', $a_donvicapduoi)->get();
             // $m_donvi=array_diff($a_donvicapduoi, array_column($model_donvitamdung->toarray(), 'madv'));
                 // $model_donvi=dmdonvi::select('madv','tendv','maphanloai')->wherein('madv',$m_donvi)->get();
-                $model_donvi=dmdonvi::select('madv','tendv','maphanloai')->wherein('madv',getDonviHuyen($nam,$madv)['m_donvi'])->get();
+
+                $model_donvi=dmdonvi::select('madv','tendv','maphanloai')->wherein('madv',getDonviHuyen($nam,$madv,'DUTOAN')['m_donvi'])->get();
             $model_phanloai = dmphanloaidonvi::wherein('maphanloai', array_column($model_donvi->toarray(), 'maphanloai'))->get();
             $model_phanloai = array_column($model_phanloai->toarray(), 'tenphanloai', 'maphanloai');
             foreach ($model_phanloai as $key => $key)

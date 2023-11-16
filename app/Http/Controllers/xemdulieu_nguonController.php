@@ -40,7 +40,8 @@ class xemdulieu_nguonController extends Controller
             //             ->where('trangthai', 'TD')
             //             ->get();
             //     })->get();
-                $model_donvi = dmdonvi::select('madv', 'tendv', 'maphanloai')->wherein('madv', getDonviHuyen($nam,$madv)['m_donvi'])->get();
+                // $model_donvi = dmdonvi::select('madv', 'tendv', 'maphanloai')->wherein('madv', getDonviHuyen($nam,$madv)['m_donvi'])->get();
+                $model_donvi = dmdonvi::select('madv', 'tendv', 'maphanloai','ngaydung','trangthai')->where('macqcq',$madv)->get();
             //dd($model_donvi);
             $model_phanloai = dmphanloaidonvi::wherein('maphanloai', array_column($model_donvi->toarray(), 'maphanloai'))->get();
             $model_phanloai = array_column($model_phanloai->toarray(), 'tenphanloai', 'maphanloai');
@@ -66,6 +67,10 @@ class xemdulieu_nguonController extends Controller
                 }
 
                 $nguon = $model_nguon->where('sohieu', $inputs['sohieu'])->where('madv', $dv->madv)->first();
+                if(!isset($nguon)){
+                    continue;
+                }
+                // dd($nguon->ngaygui);
                 $khoi = $model_tonghopkhoi->where('sohieu', $inputs['sohieu'])->where('madv', $dv->madv)->first();
                 if ($nguon != null && $nguon->trangthai == 'DAGUI') {
                     $dv->masodv = $nguon->masodv;
@@ -156,7 +161,8 @@ class xemdulieu_nguonController extends Controller
                 // $a_donvicapduoi = array_unique(array_merge(array_column($model_dmdv->toarray(), 'madv'), $a_donvicapduoi));
                 // $model_donvitamdung = dmdonvi::where('trangthai', 'TD')->wherein('madv', $a_donvicapduoi)->get();
                 // $m_donvi = array_diff($a_donvicapduoi, array_column($model_donvitamdung->toarray(), 'madv'));
-                $model_donvi = dmdonvi::select('madv', 'tendv', 'maphanloai')->wherein('madv', getDonviHuyen($nam,$madv)['m_donvi'])->get();
+                // $model_donvi = dmdonvi::select('madv', 'tendv', 'maphanloai')->wherein('madv', getDonviHuyen($nam,$madv)['m_donvi'])->get();
+                $model_donvi = dmdonvi::select('madv', 'tendv', 'maphanloai','ngaydung','trangthai')->where('macqcq', $madv)->get();
 
                 $model_nguon = nguonkinhphi::where('trangthai', 'DAGUI')
                     ->where('macqcq', $madv)
@@ -173,8 +179,7 @@ class xemdulieu_nguonController extends Controller
 
 
             $model_nguon_khoi = nguonkinhphi_tinh::where('madv', $madv)->get();
-
-            foreach ($model_donvi as $dv) {
+            foreach ($model_donvi as $key=>$dv) {
                 //kiểm tra xem đã tổng hợp thành dữ liệu huyện gửi lên tỉnh chưa?
                 $nguon_khoi = $model_nguon_khoi->where('sohieu', $inputs['sohieu'])->first();
                 if (isset($nguon_khoi) && $nguon_khoi->trangthai == 'DAGUI') {
@@ -182,8 +187,15 @@ class xemdulieu_nguonController extends Controller
                 } else {
                     $dv->tralai = true;
                 }
-
                 $nguon = $model_nguon->where('sohieu', $inputs['sohieu'])->where('madv', $dv->madv)->first();
+                // dd($nguon);
+                if($dv->trangthai == 'TD'){//xét cho những đơn vị đã tạm dừng mà đã gửi dữ liệu
+                    if(!isset($nguon)){
+                        $model_donvi->forget($key);
+                        continue;
+                    }
+                    
+                }
                 $nguon_huyen = $model_nguon_huyen->where('sohieu', $inputs['sohieu'])->where('madv', $dv->madv)->first();
                 if (isset($nguon) && $nguon->trangthai == 'DAGUI') {
                     $dv->masodv = $nguon->masodv;
