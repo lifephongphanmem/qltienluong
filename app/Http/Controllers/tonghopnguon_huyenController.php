@@ -62,6 +62,7 @@ class tonghopnguon_huyenController extends Controller
             //     })->get();
 
             // $soluong = $model_donvi->count();
+            
             foreach ($model as $dv) {
                 $nam =  $dv->namdt = date('Y', strtotime($dv->ngayapdung)) ?? date('Y');
                 // $model_donvi = dmdonvi::select('madv', 'tendv', 'maphanloai')
@@ -86,7 +87,18 @@ class tonghopnguon_huyenController extends Controller
                 //     ->get();
                 // $a_donvicapduoi = array_unique(array_merge(array_column($model_dmdv->toarray(), 'madv'), $a_donvicapduoi));
                 // $model_donvitamdung = dmdonvi::where('trangthai', 'TD')->wherein('madv', $a_donvicapduoi)->get();
-                $soluong = count(getDonviHuyen($nam,$madv)['m_donvi']);
+                $model_donvi = dmdonvi::select('madv', 'tendv', 'maphanloai','ngaydung','trangthai')->where('macqcq', $madv)->get();
+                foreach($model_donvi as $key=>$ct){
+                    $nguon = $model_nguon->where('sohieu', $dv->sohieu)->where('madv', $ct->madv)->first();
+                    if($ct->trangthai == 'TD'){//xét cho những đơn vị đã tạm dừng mà đã gửi dữ liệu
+                        if(!isset($nguon)){
+                            $model_donvi->forget($key);
+                            continue;
+                        }                        
+                    }
+                }
+                // $soluong = count(getDonviHuyen($nam,$madv)['m_donvi']);
+                $soluong = count($model_donvi);
 
                 $nguon_huyen = $model_nguon_tinh->where('sohieu', $dv->sohieu)->first();
                 $m_dv = $model_nguon->where('sohieu', $dv->sohieu);
@@ -100,7 +112,8 @@ class tonghopnguon_huyenController extends Controller
                 } else {
                     //Chưa tổng hợp dữ liệu
                     // $a_madv = array_column($model_donvi->toarray(), 'madv');
-                    $a_madv =getDonviHuyen($nam, $madv)['m_donvi'];
+                    // $a_madv =getDonviHuyen($nam, $madv)['m_donvi'];
+                    $a_madv =array_column($model_donvi->toarray(),'madv');
                     $m_sl = $model_nguon->where('sohieu', $dv->sohieu)->wherein('madv', $a_madv)->unique('madv');
                     $sl = $m_sl->count();
                     $sl_huyen = $model_nguon_huyen->where('sohieu', $dv->sohieu)->count();
@@ -2630,7 +2643,7 @@ class tonghopnguon_huyenController extends Controller
             })->orwhere(function ($qr) use ($inputs) {
                 $qr->where('madv', $inputs['macqcq'])->where('sohieu', $inputs['sohieu']);
             })->get();
-
+            // dd($m_nguonkp->where('madv','1511709453'));
             $a_linhvuc = array_column($m_nguonkp->toarray(), 'linhvuchoatdong', 'masodv');
             $a_donvi =  array_column($m_nguonkp->toarray(), 'madv', 'masodv');
 
@@ -2645,6 +2658,7 @@ class tonghopnguon_huyenController extends Controller
             //$a_diaban = array_column(dmdonvibaocao::all()->toArray(), 'level', 'madvbc');
             //dd($a_donvi);
             $m_chitiet = nguonkinhphi_01thang::wherein('masodv', array_column($m_nguonkp->toarray(), 'masodv'))->get();
+
             $m_plct = dmphanloaict::all();
             $a_nhomplct_hc = array_column($m_plct->toArray(), 'nhomnhucau_hc', 'mact');
             $a_nhomplct_xp = array_column($m_plct->toArray(), 'nhomnhucau_xp', 'mact');
@@ -3233,6 +3247,7 @@ class tonghopnguon_huyenController extends Controller
 
             //Tính lại chi tiết để dải đơn vị
             $a_plct = array_column(dmphanloaict::all()->toArray(), 'tenct', 'mact');
+
             foreach ($m_chitiet as $chitiet) {
                 $chitiet->tenct = $a_plct[$chitiet->mact] ?? $chitiet->mact;
                 $chitiet->tongbh_dv = $chitiet->ttbh_dv / $chenhlech; //tính toán để dùng
@@ -3259,8 +3274,10 @@ class tonghopnguon_huyenController extends Controller
                 $chitiet->chenhlech01thang = $chitiet->tongcong_moi - $chitiet->tongcong_cu;
                 $chitiet->chenhlech06thang = $chitiet->chenhlech01thang * 6;
             }
+            // dd($m_chitiet->where('masodv','1511709453_1688477216'));
             //Tách nhóm giáo dục
             $m_nhomgiaoduc = $m_chitiet->where('linhvuchoatdong', 'GD');
+
             $m_chitiet = $m_chitiet->where('linhvuchoatdong', '<>', 'GD');
             $a_giaoduc = [
                 'MAMNON' => 'Khối Trường Mầm non',

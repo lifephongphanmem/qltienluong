@@ -292,7 +292,6 @@ class dutoanluongController extends Controller
                     ->with('message', 'Dự toán năm ' . $inputs['namdt'] . ' đã tồn tại.')
                     ->with('furl', '/nghiep_vu/quan_ly/du_toan/danh_sach');
             }
-
             $m_bl = bangluong::where('madv', session('admin')->madv)
                 ->where('thang', $inputs['thang'])
                 ->where('nam', $inputs['nam'])
