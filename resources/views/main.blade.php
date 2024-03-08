@@ -317,7 +317,11 @@
                                         href="{{ url('chuc_nang/bang_luong/chi_tra?thang=' . date('m') . '&nam=' . date('Y')) }}"><i
                                             class="fa fa-caret-right"></i>Chi trả lương</a>
                                 </li>
-
+                                <li>
+                                    <a
+                                        href="{{ url('/phanboluong/donvi') }}"><i
+                                            class="fa fa-caret-right"></i>Phân bổ lương</a>
+                                </li>
                                 <li>
                                     <a href="{{ url('chuc_nang/nang_luong/danh_sach') }}"><i
                                             class="fa fa-caret-right"></i>Nâng lương ngạch bậc</a>

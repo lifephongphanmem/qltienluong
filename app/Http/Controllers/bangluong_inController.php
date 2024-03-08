@@ -858,57 +858,59 @@ class bangluong_inController extends Controller
             }
             //dd($a_phucap);
             //chạy lại để tính lại phụ cấp, bảo hiểm cho cán bộ nghỉ
-            foreach ($model as $cb) {
-                if ($cb->congtac == 'DAINGAY' || $cb->congtac == 'THAISAN' || $cb->congtac == 'KHONGLUONG') {
-                    $heso = $sotien = 0;
-                    $stbhxh = $stbhyt = $stkpcd = $stbhtn = 0;
-                    $stbhxh_dv = $stbhyt_dv = $stkpcd_dv = $stbhtn_dv = 0;
+            //08032024: Không tính bảo hiểm cho mẫu đăng ký. Lấy luôn dữ liệu từ db
+            // foreach ($model as $cb) {
+            //     if ($cb->congtac == 'DAINGAY' || $cb->congtac == 'THAISAN' || $cb->congtac == 'KHONGLUONG') {
+            //         // dd($cb);
+            //         $heso = $sotien = 0;
+            //         $stbhxh = $stbhyt = $stkpcd = $stbhtn = 0;
+            //         $stbhxh_dv = $stbhyt_dv = $stkpcd_dv = $stbhtn_dv = 0;
+            //         foreach ($model_pc as $ct) {
+            //             $mapc = $ct->mapc;
+            //             $mapc_st = 'st_' . $ct->mapc;
 
-                    foreach ($model_pc as $ct) {
-                        $mapc = $ct->mapc;
-                        $mapc_st = 'st_' . $ct->mapc;
+            //             switch ($ct->phanloai) {
+            //                 case 1: { //số tiền
+            //                         $sotien += $cb->$mapc;
+            //                         $cb->$mapc_st = $cb->$mapc;
+            //                         break;
+            //                     }
 
-                        switch ($ct->phanloai) {
-                            case 1: { //số tiền
-                                    $sotien += $cb->$mapc;
-                                    $cb->$mapc_st = $cb->$mapc;
-                                    break;
-                                }
+            //                 default: { //trường hợp còn lại (ẩn,...)
+            //                         $heso += $cb->$mapc;
+            //                         $cb->$mapc_st = round($cb->$mapc * $cb->luongcoban);
+            //                         $sotien = 0;
+            //                         break;
+            //                     }
+            //             }
+            //             if ($ct->baohiem == 1) {
+            //                 $stbhxh += round($cb->$mapc_st * $cb->bhxh);
+            //                 $stbhyt += round($cb->$mapc_st * $cb->bhyt);
+            //                 $stkpcd += round($cb->$mapc_st * $cb->kpcd);
+            //                 $stbhtn += round($cb->$mapc_st * $cb->bhtn);
 
-                            default: { //trường hợp còn lại (ẩn,...)
-                                    $heso += $cb->$mapc;
-                                    $cb->$mapc_st = round($cb->$mapc * $cb->luongcoban);
-                                    $sotien = 0;
-                                    break;
-                                }
-                        }
-                        if ($ct->baohiem == 1) {
-                            $stbhxh += round($cb->$mapc_st * $cb->bhxh);
-                            $stbhyt += round($cb->$mapc_st * $cb->bhyt);
-                            $stkpcd += round($cb->$mapc_st * $cb->kpcd);
-                            $stbhtn += round($cb->$mapc_st * $cb->bhtn);
-
-                            $stbhxh_dv += round($cb->$mapc_st * $cb->bhxh_dv);
-                            $stbhyt_dv += round($cb->$mapc_st * $cb->bhyt_dv);
-                            $stkpcd_dv += round($cb->$mapc_st * $cb->kpcd_dv);
-                            $stbhtn_dv += round($cb->$mapc_st * $cb->bhtn_dv);
-                        }
-                    }
-                    $cb->stbhxh = $stbhxh;
-                    $cb->stbhyt = $stbhyt;
-                    $cb->stkpcd = $stkpcd;
-                    $cb->stbhtn = $stbhtn;
-                    $cb->ttbh = $stbhxh + $stbhyt + $stkpcd + $stbhtn;
-                    $cb->stbhxh_dv = $stbhxh_dv;
-                    $cb->stbhyt_dv = $stbhyt_dv;
-                    $cb->stkpcd_dv = $stkpcd_dv;
-                    $cb->stbhtn_dv = $stbhtn_dv;
-                    $cb->ttbh_dv = $stbhxh_dv + $stbhyt_dv + $stkpcd_dv + $stbhtn_dv;
-                    $cb->tonghs = $heso;
-                    $cb->ttl = $sotien;
-                }
-            }
-            //dd($model);
+            //                 $stbhxh_dv += round($cb->$mapc_st * $cb->bhxh_dv);
+            //                 $stbhyt_dv += round($cb->$mapc_st * $cb->bhyt_dv);
+            //                 $stkpcd_dv += round($cb->$mapc_st * $cb->kpcd_dv);
+            //                 $stbhtn_dv += round($cb->$mapc_st * $cb->bhtn_dv);
+            //             }
+            //         }
+            //         $cb->stbhxh = $stbhxh;
+            //         $cb->stbhyt = $stbhyt;
+            //         $cb->stkpcd = $stkpcd;
+            //         $cb->stbhtn = $stbhtn;
+            //         $cb->ttbh = $stbhxh + $stbhyt + $stkpcd + $stbhtn;
+            //         $cb->stbhxh_dv = $stbhxh_dv;
+            //         $cb->stbhyt_dv = $stbhyt_dv;
+            //         $cb->stkpcd_dv = $stkpcd_dv;
+            //         $cb->stbhtn_dv = $stbhtn_dv;
+            //         $cb->ttbh_dv = $stbhxh_dv + $stbhyt_dv + $stkpcd_dv + $stbhtn_dv;
+            //         $cb->tonghs = $heso;
+            //         $cb->ttl = $sotien;
+            //         // dd($cb);
+            //     }
+            // }
+            // dd($model);
             return view('reports.bangluong.donvi.mautt107_dk_m2')
                 ->with('model', $model)
                 ->with('m_dv', $m_dv)
