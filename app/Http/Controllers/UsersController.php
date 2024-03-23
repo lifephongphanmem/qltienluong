@@ -170,7 +170,10 @@ class UsersController extends Controller
             Session::flush();
         }
         $input = $request->all();
-        $input['user']=str_replace("-KYTUVA-","&",$input['user']);
+        if(isset($input['user'])){
+            $input['user']=str_replace("-KYTUVA-","&",$input['user']);
+        }
+      
         $username = isset($input['user']) ? $input['user'] : null;
         return view('system.users.login')
             ->with('username', $username)
