@@ -347,6 +347,11 @@ function chuyenkhongdau($str)
     foreach ($utf8 as $ascii => $uni) $str = preg_replace("/($uni)/i", $ascii, $str);
     return $str;
 }
+function chuyenkytulogin($text)
+{
+    $text=str_replace("&","-KYTUVA-",$text);
+    return $text;
+}
 
 function chuanhoachuoi($text)
 {

@@ -104,6 +104,7 @@ class UsersController extends Controller
 
             //Chỉnh sửa thông tin người dùng
             if (isset($inputs['username'])) {
+                $inputs['username']=str_replace("-KYTUVA-","&",$inputs['username']);
                 $model = Users::where('username', $inputs['username'])->first();
                 return view('system.users.edit')
                     ->with('model', $model)
@@ -169,6 +170,7 @@ class UsersController extends Controller
             Session::flush();
         }
         $input = $request->all();
+        $input['user']=str_replace("-KYTUVA-","&",$input['user']);
         $username = isset($input['user']) ? $input['user'] : null;
         return view('system.users.login')
             ->with('username', $username)

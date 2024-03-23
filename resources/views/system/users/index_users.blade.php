@@ -71,7 +71,7 @@
                                             <td>{{$value->status}}</td>
                                             <td>
                                                 @if(can('qltaikhoan','edit'))
-                                                    <a class="btn btn-default btn-xs mbs" href="{{url($url.'list_user?&username='.$value->username)}}">
+                                                    <a class="btn btn-default btn-xs mbs" href="{{url($url.'list_user?&username='.chuyenkytulogin($value->username))}}">
                                                         <i class="fa fa-edit"></i> Chỉnh sửa
                                                     </a>
                                                 @endif
@@ -79,7 +79,7 @@
                                                     <i class="fa fa-list-ul"></i> Phân quyền
                                                 </a-->
                                                 @if(can('qltaikhoan','delete'))
-                                                    <button type="button" onclick="cfDel('{{$url.'del_taikhoan/'.$value->username}}')" class="btn btn-default btn-xs mbs" data-target="#delete-modal-confirm" data-toggle="modal">
+                                                    <button type="button" onclick="cfDel('{{$url.'del_taikhoan/'.chuyenkytulogin($value->username)}}')" class="btn btn-default btn-xs mbs" data-target="#delete-modal-confirm" data-toggle="modal">
                                                         <i class="fa fa-trash-o"></i>&nbsp; Xóa</button>
                                                 @endif
                                             </td>

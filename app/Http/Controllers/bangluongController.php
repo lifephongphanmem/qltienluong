@@ -2038,7 +2038,7 @@ class bangluongController extends Controller
             $inputs['linhvuchoatdong'] = $inputs['linhvuchoatdong_truc'];
             //$inputs['songay'] = getDbl($inputs['songay_truc']);
             $inputs['phantramhuong'] = 100;
-            //dd($inputs);
+            // dd($inputs);
             $model = bangluong::where('mabl', $inputs['mabl'])->first();
             if ($model != null) {
                 $inputs['luongcoban'] = getDbl($inputs['luongcoban']);
@@ -2139,7 +2139,7 @@ class bangluongController extends Controller
                     //lưu vào bảng phụ cấp theo lương (chỉ có hệ số)
                     $a_data[] = $cb->toarray();
                 }
-                //dd($a_data);
+                // dd($a_data);
                 foreach (array_chunk($a_data, 50)  as $data) {
                     //bangluong_ct::insert($data);
                     (new data())->storeBangLuong($inputs['thang'], $data);
@@ -2509,6 +2509,7 @@ class bangluongController extends Controller
             //dd($inputs);
             $model_bangluong = bangluong::where('mabl', $inputs['mabl'])->first();
             $model = (new data())->getBangluong_ct_cb($model_bangluong->thang, $inputs['maso']);
+            // dd($model);
             $m_nb = ngachluong::where('msngbac', $model->msngbac)->first();
             $model->tennb = isset($m_nb) ? $m_nb->tenngachluong : '';
 
