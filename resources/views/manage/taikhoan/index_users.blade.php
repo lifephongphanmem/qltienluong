@@ -135,7 +135,7 @@
                                         <td>{{$value->phanloaitaikhoan}}</td>
                                         <td class="text-center">{{$value->status}}</td>
                                         <td>
-                                            <a href="{{url('/login?user='.$value->username)}}" class="btn btn-info btn-xs mbs">
+                                            <a href="{{url('/login?user='.chuyenkytulogin($value->username))}}" class="btn btn-info btn-xs mbs">
                                                 <i class="fa fa-edit"></i>&nbsp; Đăng nhập</a>
                                         </td>
                                     </tr>
