@@ -5506,6 +5506,7 @@ class bangluongController extends Controller
     {
         if (Session::has('admin')) {
             $inputs = $request->all();
+            // dd($inputs);
             $m_bl = bangluong::select('madv', 'thang', 'mabl', 'manguonkp', 'nam')->where('mabl', $inputs['mabl'])->first();
             // Lấy bảng lương truy lĩnh
             $m_truylinh = bangluong::select('madv', 'thang', 'mabl', 'manguonkp', 'nam')
@@ -5773,7 +5774,9 @@ class bangluongController extends Controller
             );
 
             $m_dv = dmdonvi::where('madv', $m_bl->madv)->first();
-            return view('reports.bangluong.donvi.mau09kh')
+            $view=isset($inputs['Madb'])?'reports.bangluong.donvi.mau09kh_vn':'reports.bangluong.donvi.mau09kh';
+            // return view('reports.bangluong.donvi.mau09kh')
+            return view($view)
                 ->with('model', $model)
                 ->with('a_sotk', $a_sotk)
                 ->with('a_nganhang', $a_nganhang)
