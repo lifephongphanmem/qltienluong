@@ -475,6 +475,13 @@
                                                 <i class="fa fa-print"></i> Bảng thanh toán tiền mặt (Mẫu xã, phường, thị trấn)</button>
                                         </div>
                                     </div>
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            <button type="button" style="border-width: 0px" onclick="in09('/chuc_nang/bang_luong/mau09_KH?Madb=VANNINH')" class="btn btn-default btn-xs mbs"
+                                            title="Bảng thanh toán cho đối tượng thụ hưởng" data-target="#mau09-modal" data-toggle="modal">
+                                        <i class="fa fa-print"></i>&nbsp; Bảng thanh toán cho đối tượng thụ hưởng</button>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
