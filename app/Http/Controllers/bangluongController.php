@@ -5507,6 +5507,7 @@ class bangluongController extends Controller
         if (Session::has('admin')) {
             $inputs = $request->all();
             // dd($inputs);
+
             $m_bl = bangluong::select('madv', 'thang', 'mabl', 'manguonkp', 'nam')->where('mabl', $inputs['mabl'])->first();
             // Lấy bảng lương truy lĩnh
             $m_truylinh = bangluong::select('madv', 'thang', 'mabl', 'manguonkp', 'nam')

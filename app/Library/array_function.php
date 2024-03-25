@@ -107,4 +107,10 @@ function a_getelement_equal($array, $indexs, $justvals = false)
     }
     return $newarray;
 }
+function lastdateofmonth($thang,$nam)
+{
+    $time=$nam.'-'.$thang.'-01';
+    return date("t/m/Y", strtotime($time));
+
+}
 ?>

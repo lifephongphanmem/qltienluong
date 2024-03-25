@@ -650,3 +650,4 @@ function toAlpha($data)
         return $alpha;
     }
 }
+

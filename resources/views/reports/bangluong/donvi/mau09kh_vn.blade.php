@@ -82,20 +82,19 @@
                 <th rowspan="2">Tên ngân hàng</th>
                 <th rowspan="2">Tổng số</th>
                 <th colspan="2">Lương và phụ cấp lương</th>
-                <th rowspan="2">Tiền công</br>lao động</br>thường xuyên</br>theo hợp đồng</br>tháng
-                    {{ $thongtin['thang'] . '/' . $thongtin['nam'] }}</th>
+                <th rowspan="2">Tiền công</br>lao động</br>theo HĐ</th>
                 <th rowspan="2">Tiền thu nhập</br>tăng thêm</th>
                 <th rowspan="2">Tiền thưởng</th>
                 <th rowspan="2">Tiền</br>phụ cấp</br>và</br>trợ cấp</br>khác</th>
-                <th rowspan="2">Tiền khoán</br>công tác
-                    phí</br>tháng</br>{{ $thongtin['thang'] == '01' ? 12 : $thongtin['thang'] }}/{{ $thongtin['thang'] == '01' ? str_pad($thongtin['nam'] - 1, 4, '0', STR_PAD_LEFT) : $thongtin['nam'] }}
+                <th rowspan="2">Tiền khoán</br>(Khoán công tác
+                    phí</br>tháng</br>{{ $thongtin['thang'] == '01' ? 12 : $thongtin['thang'] }}/{{ $thongtin['thang'] == '01' ? str_pad($thongtin['nam'] - 1, 4, '0', STR_PAD_LEFT) : $thongtin['nam']}})
                 </th>
                 <th rowspan="2">Tiền</br>học bổng</th>
             </tr>
             <tr>
                 {{-- <th>Lương tháng</br>{{ $thongtin['thang'] . '/' . $thongtin['nam'] }}</th> --}}
                 <th>Lương và phụ cấp lương</th>
-                <th>Truy lĩnh</br>lương tháng</br>{{ $thongtin['thang'] . '/' . $thongtin['nam'] }}</th>
+                <th>Truy lĩnh</br>lương từ ngày </br>01/{{ $thongtin['thang'] }} đến <br>{{lastdateofmonth($thongtin['thang'],$thongtin['nam'])}}</th>
             </tr>
             <?php $i = 1; ?>
             <tr style="text-align: center; font-weight: bold">
