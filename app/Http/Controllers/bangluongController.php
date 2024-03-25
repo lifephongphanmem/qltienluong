@@ -1213,7 +1213,7 @@ class bangluongController extends Controller
                     case 2: { //phần trăm
 
                             $sotien = 0;
-                            $heso=0;
+                            $heso = 0;
                             foreach (explode(',', $a_pc[$k]['congthuc']) as $ct) {
                                 if ($ct != '')
                                     // $sotien += $m_cb[$key]['st_' . $ct];
@@ -5619,8 +5619,8 @@ class bangluongController extends Controller
                     $ct->hopdong += $ct->luong;
                     $ct->luong = 0;
                 }
-                // $ct->tongso = $ct->luong + $ct->truylinh + $ct->hopdong + $ct->tangthem + $ct->tienthuong + $ct->phucap + $ct->khoan + $ct->hocbong;
-                $ct->tongso = $ct->luongtn + $ct->truylinh;
+                $ct->tongso = $ct->luong + $ct->truylinh + $ct->hopdong + $ct->tangthem + $ct->tienthuong + $ct->phucap + $ct->khoan + $ct->hocbong;
+                // $ct->tongso = $ct->luongtn + $ct->truylinh;
             }
 
             //Tính toán tiền chênh giữa 2 tháng
@@ -5788,6 +5788,7 @@ class bangluongController extends Controller
         } else
             return view('errors.notlogin');
     }
+
     public function printf_maublcbct(Request $request)
     {
         if (Session::has('admin')) {
