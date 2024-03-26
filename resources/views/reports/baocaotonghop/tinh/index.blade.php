@@ -416,7 +416,31 @@
                             </select>
                         </div>
                     </div>
-
+                    <div class="row">
+                        <div class="col-md-12">
+                            <label class="control-label">Phân loại công tác</label>
+                            <select class="form-control select2me" name="mact[]" id="mact" multiple=true>
+                                @foreach ($model_nhomct as $kieuct)
+                                    <optgroup label="{{ $kieuct->tencongtac }}">
+                                        <?php $mode_ct = $model_tenct->where('macongtac', $kieuct->macongtac); ?>
+                                        @foreach ($mode_ct as $ct)
+                                            <option value="{{ $ct->mact }}">{{ $ct->tenct }}</option>
+                                        @endforeach
+                                    </optgroup>
+                                @endforeach
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <label class="control-label">Lĩnh vực hoạt động</label>
+                            <select class="form-control select2me" name="linhvuchoatdong[]" id="mact" multiple=true>
+                                        @foreach ($a_linhvuchd as $key=>$ct)
+                                            <option value="{{ $key }}">{{ $ct }}</option>
+                                        @endforeach
+                            </select>
+                        </div>
+                    </div>
                     <div class="row">
                         <div class="col-md-6">
                             <label> Tháng</label>

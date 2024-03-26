@@ -54,7 +54,7 @@ class bangluong_thuyetminhController extends Controller
     {
         if (Session::has('admin')) {
             $inputs = $request->all();
-            //dd($inputs);
+            // dd($inputs);
             $inputs['phanloaibl'] = ['TRUYLINH', 'BANGLUONG']; //làm trc
             $model = bangthuyetminh::where('madv', session('admin')->madv)
                 ->where('thang', $inputs['thang'])->where('nam', $inputs['nam'])->first();

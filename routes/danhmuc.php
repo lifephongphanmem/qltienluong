@@ -1,4 +1,6 @@
 <?php
+
+use App\Http\Controllers\nhomphanloaictController;
 use Illuminate\Support\Facades\Route;
 
 Route::group(['prefix' => 'danh_muc'], function () {
@@ -167,5 +169,9 @@ Route::group(['prefix' => 'danh_muc'], function () {
         Route::post('store_detail', 'dmthuetncnController@store_detail');
         Route::get('get_detail', 'dmthuetncnController@getinfo_detail');
         Route::get('del_detail/{id}', 'dmthuetncnController@destroy_detail');
+    });
+    Route::prefix('nhomphanloaict')->group(function(){
+        Route::get('index',[nhomphanloaictController::class,'index']);
+        Route::post('store',[nhomphanloaictController::class,'store']);
     });
 });

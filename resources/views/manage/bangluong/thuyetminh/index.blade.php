@@ -160,7 +160,7 @@
 
                 <div class="row">
                     <div class="col-md-12">
-                        <label class="control-label">Tên cán bộ / Tên phụ cấp</label>
+                        <label class="control-label">Tên cán bộ / Tên phụ cấp/Tổng hợp</label>
                         {!! Form::text('noidung', null, ['class' => 'form-control']) !!}
                     </div>
                 </div>

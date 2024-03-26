@@ -10,6 +10,7 @@ use App\hosothoicongtac;
 use App\Http\Controllers\dataController as data;
 use App\bangluong_truc;
 use App\bangthuyetminh;
+use App\bangthuyetminh_chitiet;
 use App\dmchucvucq;
 use App\dmdonvi;
 use App\dmnguonkinhphi;
@@ -5554,6 +5555,7 @@ class bangluongController extends Controller
             $model = $this->getBangLuong($inputs);
             $model_congtac = dmphanloaict::select('mact', 'tenct', 'macongtac')
                 ->wherein('mact', a_unique(array_column($model->toarray(), 'mact')))->get();
+                // dd($model_congtac);
             // $hscb=hosocanbo::all();
             $m_hs = hosocanbo::wherein('macanbo', array_column($model->toarray(), 'macanbo'))->get();
             $a_macanbo = array_column($m_hs->toarray(), 'macanbo');
@@ -5775,6 +5777,9 @@ class bangluongController extends Controller
             );
 
             $m_dv = dmdonvi::where('madv', $m_bl->madv)->first();
+            $m_thuyetminh=bangthuyetminh::where('madv',$m_dv->madv)->where('thang',$m_bl->thang)->where('nam',$m_bl->nam)->first();
+            $thuyetminh_ct=bangthuyetminh_chitiet::where('mathuyetminh',$m_thuyetminh->mathuyetminh)->orderby('tanggiam', 'desc')->get();
+            // dd($thuyetminh_ct);
             $view=isset($inputs['Madb'])?'reports.bangluong.donvi.mau09kh_vn':'reports.bangluong.donvi.mau09kh';
             // return view('reports.bangluong.donvi.mau09kh')
             return view($view)
@@ -5788,6 +5793,7 @@ class bangluongController extends Controller
                 ->with('m_dv', $m_dv)
                 ->with('message', $message)
                 ->with('model_thaydoi', $model_thaydoi)
+                ->with('thuyetminh_ct', $thuyetminh_ct)
                 ->with('pageTitle', 'Bảng lương chi tiết');
         } else
             return view('errors.notlogin');

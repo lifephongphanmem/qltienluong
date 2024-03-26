@@ -55,6 +55,7 @@ class baocaotonghop_tinhController extends Controller
             $inputs['furl_dutoan'] = '/chuc_nang/du_toan_luong/huyen/';
             $inputs['furl_nhucaukp'] = '/chuc_nang/tong_hop_nguon/huyen/';
             $a_thongtuqd = array_column(dmthongtuquyetdinh::orderby('ngayapdung', 'desc')->get()->toarray(), 'tenttqd', 'sohieu');
+            $a_linhvuchd=array_column(dmkhoipb::all()->toarray(),'tenkhoipb','makhoipb');
             //dd($model_dvbc->toarray());
             return view('reports.baocaotonghop.tinh.index')
                 ->with('model_dv', $model_dv)
@@ -67,6 +68,7 @@ class baocaotonghop_tinhController extends Controller
                 //->with('model_phanloaict', $model_phanloaict)
                 ->with('model_tenct', $model_tenct)
                 ->with('model_nhomct', $model_nhomct)
+                ->with('a_linhvuchd', $a_linhvuchd)
                 ->with('furl', '/tong_hop_bao_cao/')
                 ->with('inputs', $inputs)
                 ->with('pageTitle', 'Báo cáo tổng hợp lương');
@@ -107,8 +109,15 @@ class baocaotonghop_tinhController extends Controller
                         })->get();
                     })
                     ->get();
-            })->get();
-
+            })->where(function($q) use ($inputs){
+                if (isset($inputs['mact'])) {
+                    $q->wherein('mact', $inputs['mact']);
+                }
+                if (isset($inputs['linhvuchoatdong'])) {
+                    $q->wherein('linhvuchoatdong', $inputs['linhvuchoatdong']);
+                }
+            })
+            ->get();
             $a_phucap = array();
             $col = 0;
             foreach (getColTongHop() as $ct) {

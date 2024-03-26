@@ -22,15 +22,16 @@ class tonghopluong_huyen_baocaoController extends Controller
     function TongHop_PhanLoaiDV(Request $request)
     {
         if (Session::has('admin')) {
-            $inputs = $request->all();            
+            $inputs = $request->all();
+
             $inputs['donvitinh'] = $inputs['donvitinh'] ?? 1;
             //lấy mã đơn vị quản lý trong trường hợp gọi từ "Báo cáo tổng hợp" giao diện Tỉnh
-            if(!isset($inputs['macqcq'])){
-                $inputs['macqcq'] = dmdonvibaocao::where('madvbc',$inputs['madvbc'])->first()->madvcq;
+            if (!isset($inputs['macqcq'])) {
+                $inputs['macqcq'] = dmdonvibaocao::where('madvbc', $inputs['madvbc'])->first()->madvcq;
             }
             $model_tonghop = tonghopluong_donvi::where('thang', $inputs['thang'])->where('nam', $inputs['nam'])->where('macqcq', $inputs['macqcq'])
                 ->where('trangthai', 'DAGUI')->get();
-            //dd($model_tonghop);
+            // dd($model_tonghop);
             // $m_dutoan_huyen = dutoanluong_huyen::where('masodv', $inputs['masodv'])->first();
 
             if ($model_tonghop->count() == 0) {
@@ -48,7 +49,15 @@ class tonghopluong_huyen_baocaoController extends Controller
             //dd($m_donvi_baocao);
             $a_donvi = array_column($model_tonghop->toarray(), 'madv', 'mathdv');
             $a_pl_donvi = array_column($m_donvi_baocao->toarray(), 'maphanloai', 'madv');
-            $model = tonghopluong_donvi_chitiet::wherein('mathdv', array_column($model_tonghop->toarray(), 'mathdv'))->get();
+            $model = tonghopluong_donvi_chitiet::where(function ($q) use ($inputs) {
+                if (isset($inputs['mact'])) {
+                    $q->wherein('mact', $inputs['mact']);
+                }
+                if (isset($inputs['linhvuchoatdong'])) {
+                    $q->wherein('linhvuchoatdong', $inputs['linhvuchoatdong']);
+                }
+            })
+                ->wherein('mathdv', array_column($model_tonghop->toarray(), 'mathdv'))->get();
             $a_plct = array_column(dmphanloaict::all()->toArray(), 'tenct', 'mact');
             $a_pc = getColTongHop();
             //$a_luongcb = array_column($model_tonghop->toarray(),'luongcoban','mathdv');
