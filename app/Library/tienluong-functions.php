@@ -30,6 +30,7 @@ function getPhanLoaiThuyetMinh()
     return [
         'CANBO' => 'Thuyết minh theo cán bộ',
         'PHUCAP' => 'Thuyết minh theo phụ cấp',
+        'TONGHOP'=>'Tổng hợp'
     ];
 }
 
@@ -1402,7 +1403,21 @@ function getDonviHuyen($nam,$madv,$chucnang = null)
     ->wherenotin('madv', $a_donvicapduoi) //lọc các đơn vị đã khai báo trong dsdonviquanly
     ->where('madv', '!=', $madv) //bỏ đơn vị tổng hợp
     ->get();
-        //  dd($model_dmdv);
+    // foreach($model_dmdv as $ct)
+    // {
+    //     if($ct->created_at != null){
+    //         $ct->ngaytao=date('Y-m-d',$ct->create_at);
+    //     }else{
+    //         $ct->ngaytao='2019-01-01';
+    //     }
+    //     $thangketxuat=$nam.'-'.$thang.'-01';
+    //     //loại các đơn vị có ngày tạo lớn hơn ngày tạo tháng kết xuất
+    //     if($ct->ngaytao > $thangketxuat){
+    //         // dd(1);
+    //     }
+
+    // }
+    // dd(23);
      $a_donvicapduoi = array_unique(array_merge(array_column($model_dmdv->toarray(), 'madv'), $a_donvicapduoi));
     //lấy lại madv ở dmdonvi de tranh truong hop có madv o dsdonviquanly nhưng không có ở dmdonvi
     $model_donvi=dmdonvi::select('madv')->wherein('madv',$a_donvicapduoi)->get();

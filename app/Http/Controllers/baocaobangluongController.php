@@ -104,6 +104,7 @@ class baocaobangluongController extends Controller
             $a_thongtuqd = array_column(dmthongtuquyetdinh::orderby('ngayapdung', 'desc')->get()->toarray(), 'tenttqd', 'sohieu');
             // dd(session('admin'));
             // dd($model_donvi);
+            $a_linhvuchd=array_column(dmkhoipb::all()->toarray(),'tenkhoipb','makhoipb');
             $inputs['madv'] = session('admin')->madv;
             $inputs['furl'] = '/bao_cao/bang_luong/';
             $inputs['furl_th'] = '/chuc_nang/du_toan_luong/huyen/';
@@ -117,6 +118,7 @@ class baocaobangluongController extends Controller
                 ->with('inputs', $inputs)
                 ->with('model_phanloai', $model_phanloai)
                 ->with('a_thang', $a_thang)
+                ->with('a_linhvuchd', $a_linhvuchd)
                 ->with('a_phanloai', $a_phanloai)
                 ->with('model_dv', $model_donvi)
                 ->with('model_phanloaict', $model_phanloaict)

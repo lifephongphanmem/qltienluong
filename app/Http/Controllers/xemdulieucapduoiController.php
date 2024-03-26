@@ -46,6 +46,7 @@ class xemdulieucapduoiController extends Controller
     public function layDV($thang, $nam, $a_donvicapduoi, $model_donvitamdung)
     {
         $model_donvi = $model_donvitamdung->where('ngaydung', '<=', $nam . '-' . $thang . '-01');
+        //Lấy danh sách các đon vị tạo từ tháng
         return array_diff($a_donvicapduoi, array_column($model_donvi->toarray(), 'madv'));
     }
     public function donvi_luong(Request $request)
@@ -228,7 +229,7 @@ class xemdulieucapduoiController extends Controller
                 //     ->distinct()->get();
                 $model_donvi = dmdonvi::join('dmphanloaidonvi', 'dmphanloaidonvi.maphanloai', 'dmdonvi.maphanloai')
                     ->select('dmdonvi.madv', 'dmdonvi.tendv', 'phanloaitaikhoan', 'dmdonvi.maphanloai', 'tenphanloai')
-                    ->wherein('madv', getDonviHuyen($inputs['nam'], $madv)['m_donvi'])->get();
+                    ->wherein('madv', getDonviHuyen($inputs['nam'], $madv,$inputs['thang'])['m_donvi'])->get();
 
                 $model_nguon = tonghopluong_donvi::wherein('madv', function ($query) use ($madv) {
                     $query->select('madv')->from('dmdonvi')->where('macqcq', $madv)->where('madv', '<>', $madv)->get();
@@ -261,9 +262,10 @@ class xemdulieucapduoiController extends Controller
                 //             ->get();
                 //     })
                 //     ->distinct()->get();
+                //Lấy đơn vị tạo theo tháng
+                // dd(getDonviHuyen($inputs['nam'], $madv,$inputs['thang']));
                 $model_donvitamdung = dmdonvi::where('trangthai', 'TD')->wherein('madv',  getDonviHuyen($inputs['nam'], $madv)['a_donvicapduoi'])->get();
                 $a_madv = $this->layDV($inputs['thang'], $inputs['nam'], getDonviHuyen($inputs['nam'], $madv)['a_donvicapduoi'], $model_donvitamdung);
-                // dd($a_madv);
                 $model_donvi = dmdonvi::join('dmphanloaidonvi', 'dmphanloaidonvi.maphanloai', 'dmdonvi.maphanloai')
                     ->select('dmdonvi.madv', 'dmdonvi.tendv', 'phanloaitaikhoan', 'dmdonvi.maphanloai', 'tenphanloai', 'linhvuchoatdong')
                     ->wherein('madv', $a_madv)
