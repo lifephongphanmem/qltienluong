@@ -16,6 +16,7 @@ use App\Http\Controllers\Controller;
 use App\tonghopluong_donvi;
 use App\tonghopluong_donvi_bangluong;
 use App\tonghopluong_donvi_chitiet;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\Session;
 
 class tonghopluong_huyen_baocaoController extends Controller
@@ -71,11 +72,21 @@ class tonghopluong_huyen_baocaoController extends Controller
                 $luongcb = 1800000;
 
 
-                $a_plct_dt = getPLCTDuToan();
-                $m_bl=tonghopluong_donvi_bangluong::wherein('mathdv',array_column($model->toarray(), 'mathdv'))->get();
-
+            $a_plct_dt = getPLCTDuToan();
+            $m_bl = tonghopluong_donvi_bangluong::wherein('mathdv', array_column($model->toarray(), 'mathdv'))->get();
+            // $m_donvi_nkp=$model->where('mact',1506672780)->where('madv',);
+            // dd($m_donvi_nkp);
             //dd($ngayketxuat);
-            foreach ($model as $chitiet) {
+            //lấy mảng key->id của model để xét
+            $a_key=array();
+            foreach($model as $key=>$val)
+            {
+
+                $a_key[$val->id]=$key;
+            }
+            // dd($model);
+            foreach ($model as $key=>$chitiet) {
+// dd($key);
                 $chitiet->madv = $a_donvi[$chitiet->mathdv];
                 $chitiet->maphanloai = $a_pl_donvi[$chitiet->madv];
                 $chitiet->tenct = $a_plct[$chitiet->mact] ?? '';
@@ -102,17 +113,58 @@ class tonghopluong_huyen_baocaoController extends Controller
                 // $chitiet->quyluong = ($chitiet->ttl + $chitiet->ttbh_dv) / $inputs['donvitinh'];
                 $this->getMaNhomPhanLoai($chitiet, $m_phanloai);
                 //Tính số lượng biên chế có mặt
-                foreach($a_plct_dt as $ct)
-                {
-                    if($ct == $chitiet->mact){
-                        $canbo=$m_bl->where('mathdv',$chitiet->mathdv)->where('mact',$ct);
+                foreach ($a_plct_dt as $ct) {
+                    if ($ct == $chitiet->mact) {
+                        $canbo = $m_bl->where('mathdv', $chitiet->mathdv)->where('mact', $ct);
                         $a_data = a_unique(a_split($canbo->toarray(), array('mact', 'macanbo')));
-                        $chitiet->soluongbienche=count($a_data);
+                        $chitiet->soluongbienche = count($a_data);
                     }
-
                 }
+                // dd($chitiet);
+                //Xét đơn vị có dùng 2 nguồn kinh phí để tạo bảng lương để cộng lại
+                // $m_donvi_nkp = $model->where('mact', $chitiet->mact)->where('mathdv', $chitiet->mathdv)->where('id','<>',$chitiet->id);
+                // // dd($m_donvi_nkp);
+                // if (count($m_donvi_nkp) > 0) {
+                //     // dd($m_donvi_nkp);
+                //     //Hệ số giữ nguyên, cộng số tiền
+                //     foreach ($m_donvi_nkp as $key => $ct) {
+                //             // dd($a_key[$ct->id]);
+                //             $ct->luongcoban = $luongcb;
+                //             $ct->ttl = $ct->luongtn;
+                //             $ct->bhtn_dv = round($ct->stbhtn_dv / $ct->luongcoban, 7);
+                //             $ct->baohiem = round(($chitiet->ttbh_dv - $ct->stbhtn_dv) / $ct->luongcoban, 7);
+                //             $ct->quyluong = $ct->ttl + $ct->ttbh_dv;
+
+                //             $chitiet->ttl += $ct->ttl;
+                //             $chitiet->bhtn_dv += $ct->bhtn_dv;
+                //             $chitiet->baohiem += $ct->baohiem;
+                //             $chitiet->quyluong += $ct->quyluong;
+                //             $model->forget($a_key[$ct->id]);
+                //     }
+                // }
             }
             // dd($model);
+            $model_h=new Collection();
+            foreach($model as $val){
+                $m_donvi_nkp = $model->where('madv',$val->madv)->where('mact',$val->mact)->where('mathdv', $val->mathdv);
+                if(count($model_h->where('madv',$val->madv)->where('mact',$val->mact)->where('mathdv', $val->mathdv))>0){
+                    continue;
+                }
+                if(count($m_donvi_nkp) == 1){
+                    $model_h->push($val);
+                }else{
+                    // dd($val);
+                    // dd($m_donvi_nkp->sum('baohiem'));
+                    $val->ttl=$m_donvi_nkp->sum('ttl');
+                    $val->bhtn_dv=$m_donvi_nkp->sum('bhtn_dv');
+                    $val->baohiem=$m_donvi_nkp->sum('baohiem');
+                    $val->quyluong=$m_donvi_nkp->sum('quyluong');
+                    // dd($val);
+                    $model_h->push($val);
+                }
+
+            }
+            // dd($model_h);
             //xử lý ẩn hiện cột phụ cấp => biết tổng số cột hiện => colspan trên báo cáo
             $a_tenpc = array_column(dmphucap::all()->toArray(), 'tenpc', 'mapc');
             $a_phucap = array();
@@ -131,7 +183,8 @@ class tonghopluong_huyen_baocaoController extends Controller
             //$m_donvi = dmdonvi::where('madv', session('admin')->madv)->first();
             //dd($model);
             return view('reports.tonghopluong.huyen.SoLieuTongHop_PhanLoaiDV')
-                ->with('model', $model)
+                // ->with('model', $model)
+                ->with('model', $model_h)
                 ->with('lamtron', 5)
                 ->with('m_donvi', $m_donvi)
                 ->with('col', $col)
