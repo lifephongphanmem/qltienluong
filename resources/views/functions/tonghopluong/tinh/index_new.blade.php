@@ -165,13 +165,23 @@
                 <div class="row">
                     <div class="col-md-12">
                         <div class="form-group">
-                            <a id="in_bl" href="" class="btn btn-default btn-xs mbs"
+                            <a  href="" data-target="#modal-chitraluong" data-toggle="modal" class="btn btn-default btn-xs mbs"
                                 onclick="insolieu(this,'/chuc_nang/tong_hop_luong/huyen/TongHop')"
-                                style="border-width: 0px;" target="_blank">
+                                style="border-width: 0px;" >
                                 <i class="fa fa-print"></i>&nbsp; In số liệu tổng hợp (mẫu 01)</a>
                         </div>
                     </div>
                 </div>
+                {{-- <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <a href="#" data-target="#modal-chitraluong" data-toggle="modal"
+                            onclick="inchitraluong('/chuc_nang/tong_hop_luong/huyen/TongHop')">
+                            <i class="fa fa-print"></i>&nbsp; In số liệu tổng hợp (mẫu 01)
+                        </a>
+                        </div>
+                    </div>
+                </div> --}}
                 <div class="modal-footer">
                     <button type="button" data-dismiss="modal" class="btn btn-default">Hủy thao tác</button>
                 </div>
@@ -214,6 +224,92 @@
     </div>
     {!! Form::close() !!}
 
+    <div id="modal-chitraluong" tabindex="-1" role="dialog" aria-hidden="true" class="modal fade">
+        {!! Form::open([
+            'url' => '#',
+            'target' => '_blank',
+            'method' => 'get',
+            'id' => 'frm_chitraluong',
+            'class' => 'form-horizontal form-validate',
+        ]) !!}
+        {{-- Các trường dữ liệu ẩn --}}
+        <input type="hidden" name="_token" value="{{ csrf_token() }}">
+        <input type="hidden" name="macqcq" id="madvbc" value="">
+        <input type="hidden" name="thang" id="thang_baocao" value="">
+        <input type="hidden" name="nam" id="nam_baocao" value="">
+        <div class="modal-dialog modal-content">
+            <div class="modal-header modal-header-primary">
+                <button type="button" data-dismiss="modal" aria-hidden="true" class="close">&times;</button>
+                <h4 id="modal-header-primary-label" class="modal-title">Thông tin kết xuất tổng hợp chi trả bảng lương
+                </h4>
+            </div>
+            <div class="modal-body">
+                <div class="form-horizontal">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <label class="control-label">Phân loại công tác</label>
+                            <select class="form-control select2me" name="mact[]" id="mact" multiple=true>
+                                @foreach ($model_nhomct as $kieuct)
+                                    <optgroup label="{{ $kieuct->tencongtac }}">
+                                        <?php $mode_ct = $model_tenct->where('macongtac', $kieuct->macongtac); ?>
+                                        @foreach ($mode_ct as $ct)
+                                            <option value="{{ $ct->mact }}">{{ $ct->tenct }}</option>
+                                        @endforeach
+                                    </optgroup>
+                                @endforeach
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <label class="control-label">Lĩnh vực hoạt động</label>
+                            <select class="form-control select2me" name="linhvuchoatdong[]" id="mact" multiple=true>
+                                        @foreach ($a_linhvuchd as $key=>$ct)
+                                            <option value="{{ $key }}">{{ $ct }}</option>
+                                        @endforeach
+                            </select>
+                        </div>
+                    </div>
+
+                    {{-- <div class="row">
+                        <div class="col-md-12">
+                            <label class="control-label"> Tháng<span class="require">*</span></label>
+                                {!! Form::select('thang', getThang(), date('m'), ['class' => 'form-control']) !!}
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <label class="control-label"> Năm<span class="require">*</span></label>
+                                {!! Form::select('nam', getNam(), date('Y'), ['class' => 'form-control']) !!}
+                        </div>
+                    </div> --}}
+
+                    {{-- <div class="form-group">
+                        <label class="col-md-4 control-label">Phân loại công tác<span class="require">*</span></label>
+                        <div class="col-md-8">
+                            <select class="form-control select2me" id="phanloaict" name="phanloaict[]" multiple=true>
+                                @foreach ($model_phanloaict as $phanloaict)
+                                    <option value="{{ $phanloaict['mact'] }}">{{ $phanloaict['tenct'] }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                    </div> --}}
+                    {{-- @endif --}}
+                    <div class="row">
+                        <div class="col-md-12">
+                            <label class="control-label"> Đơn vị tính</label>
+                                {!! Form::select('donvitinh', getDonViTinh(), '1', ['id' => 'donvitinh', 'class' => 'form-control']) !!}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" data-dismiss="modal" class="btn btn-default">Hủy thao tác</button>
+                <button type="submit" class="btn btn-primary">Đồng ý</button>
+            </div>
+        </div>
+        {!! Form::close() !!}
+    </div>
     <script>
         function setInChiLuong(thang, nam, madvbc) {
             $('#thang_bc').val(thang);
@@ -222,9 +318,16 @@
             $('#macqcq_bc').val(madvbc);
         }
 
-        function insolieu(obj, url) {
-            obj.href = url + '?thang=' + $('#thang_bc').val() + '&nam=' + $('#nam_bc').val() + '&macqcq=' + $('#macqcq_bc')
-                .val();
+        // function insolieu(obj, url) {
+        //     obj.href = url + '?thang=' + $('#thang_bc').val() + '&nam=' + $('#nam_bc').val() + '&macqcq=' + $('#macqcq_bc')
+        //         .val();
+        // }
+        function insolieu(obj,url)
+        {   
+            $('#madvbc').val($('#madvbc_bc').val());
+            $('#thang_baocao').val($('#thang_bc').val());
+            $('#nam_baocao').val($('#nam_bc').val());
+            $('#frm_chitraluong').attr('action', url);
         }
 
 
