@@ -127,6 +127,7 @@ class dmphucapController extends Controller
             }
 
             $inputs = $request->all();
+            // dd($inputs);
             $inputs['congthuc'] = getDbl($inputs['phanloai']) == 2 ? $inputs['congthuc'] : '';
             dmphucap::where('mapc', $inputs['mapc'])->first()->update($inputs);
             return redirect('/he_thong/phu_cap/index');
@@ -267,7 +268,7 @@ class dmphucapController extends Controller
                 return view('errors.notlogin');
             }
             $inputs = $request->all();
-            //dd($request);
+            // dd($inputs);
             if (in_array('ALL', $inputs['baohiem_plct'])) {
                 $inputs['baohiem_plct'] = 'ALL';
             } else {

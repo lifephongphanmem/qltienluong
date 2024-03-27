@@ -14,6 +14,7 @@ use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use App\tonghopluong_donvi;
+use App\tonghopluong_donvi_bangluong;
 use App\tonghopluong_donvi_chitiet;
 use Illuminate\Support\Facades\Session;
 
@@ -69,6 +70,10 @@ class tonghopluong_huyen_baocaoController extends Controller
             } else
                 $luongcb = 1800000;
 
+
+                $a_plct_dt = getPLCTDuToan();
+                $m_bl=tonghopluong_donvi_bangluong::wherein('mathdv',array_column($model->toarray(), 'mathdv'))->get();
+
             //dd($ngayketxuat);
             foreach ($model as $chitiet) {
                 $chitiet->madv = $a_donvi[$chitiet->mathdv];
@@ -96,8 +101,18 @@ class tonghopluong_huyen_baocaoController extends Controller
                 //$chitiet->tongcong = ($chitiet->luongthang + $chitiet->baohiem) / $inputs['donvitinh'];
                 // $chitiet->quyluong = ($chitiet->ttl + $chitiet->ttbh_dv) / $inputs['donvitinh'];
                 $this->getMaNhomPhanLoai($chitiet, $m_phanloai);
-            }
+                //Tính số lượng biên chế có mặt
+                foreach($a_plct_dt as $ct)
+                {
+                    if($ct == $chitiet->mact){
+                        $canbo=$m_bl->where('mathdv',$chitiet->mathdv)->where('mact',$ct);
+                        $a_data = a_unique(a_split($canbo->toarray(), array('mact', 'macanbo')));
+                        $chitiet->soluongbienche=count($a_data);
+                    }
 
+                }
+            }
+            // dd($model);
             //xử lý ẩn hiện cột phụ cấp => biết tổng số cột hiện => colspan trên báo cáo
             $a_tenpc = array_column(dmphucap::all()->toArray(), 'tenpc', 'mapc');
             $a_phucap = array();

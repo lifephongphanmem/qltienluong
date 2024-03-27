@@ -416,6 +416,7 @@
                             </select>
                         </div>
                     </div>
+                    <!--
                     <div class="row">
                         <div class="col-md-12">
                             <label class="control-label">Phân loại công tác</label>
@@ -441,6 +442,7 @@
                             </select>
                         </div>
                     </div>
+                -->
                     <div class="row">
                         <div class="col-md-6">
                             <label> Tháng</label>

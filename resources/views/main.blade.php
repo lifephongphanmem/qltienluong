@@ -281,11 +281,12 @@
                                         <a href="{{ url('nghiep_vu/da_nghi/danh_sach') }}">
                                             <i class="fa fa-caret-right"></i>Danh sách cán bộ đã thôi công tác</a>
                                     </li>
-                                    {{-- Bỏ qua do chỉ tiêu biên chế nhập tại dự toán lương 11/02/2023
+                                    {{-- Bỏ qua do chỉ tiêu biên chế nhập tại dự toán lương 11/02/2023 --}}
+                                    {{-- Có đơn vị yêu cầu xem chỉ tiêu biên chế nên mở lại  --}}
                                     <li>
                                         <a href="{{ url('nghiep_vu/chi_tieu/danh_sach?namct=' . date('Y')) }}">
                                             <i class="fa fa-caret-right"></i>Chỉ tiêu biên chế</a>
-                                    </li> --}}
+                                    </li>
 
                                     {{-- Bỏ qua do chưa hoàn thiện 11/02/2023
                                     <li>
@@ -317,11 +318,12 @@
                                         href="{{ url('chuc_nang/bang_luong/chi_tra?thang=' . date('m') . '&nam=' . date('Y')) }}"><i
                                             class="fa fa-caret-right"></i>Chi trả lương</a>
                                 </li>
-                                <li>
+                                {{-- <li>
+                                    //Chưa hoàn thiện
                                     <a
                                         href="{{ url('/phanboluong/donvi') }}"><i
                                             class="fa fa-caret-right"></i>Phân bổ lương</a>
-                                </li>
+                                </li> --}}
                                 <li>
                                     <a href="{{ url('chuc_nang/nang_luong/danh_sach') }}"><i
                                             class="fa fa-caret-right"></i>Nâng lương ngạch bậc</a>

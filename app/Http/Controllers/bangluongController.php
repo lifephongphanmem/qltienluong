@@ -1057,7 +1057,7 @@ class bangluongController extends Controller
         $a_no = array_column($model_phucap->where('nghiom', 1)->toarray(), 'mapc');
         $a_thue = array_column($model_phucap->where('thuetn', 1)->toarray(), 'mapc');
         $a_tapsu = array_column($model_phucap->where('tapsu', 1)->toarray(), 'mapc');
-
+        // dd($a_tapsu);
         $a_goc = array_keys(getCongThucTinhPC(false));
         $a_pc = SapXepPhuCap($model_phucap);
         // dd($model_phucap);
@@ -1212,20 +1212,25 @@ class bangluongController extends Controller
                             break;
                         }
                     case 2: { //phần trăm
-
                             $sotien = 0;
                             $heso = 0;
+                            //Lấy số tiền để tính
                             foreach (explode(',', $a_pc[$k]['congthuc']) as $ct) {
                                 if ($ct != '')
-                                    // $sotien += $m_cb[$key]['st_' . $ct];
-                                    $heso += $m_cb[$key][$ct];
+                                    $sotien += $m_cb[$key]['st_' . $ct];
+                                    // $heso += $m_cb[$key][$ct];
                             }
-                            // dd($heso);
-                            // $sotien = round(($sotien * $m_cb[$key][$mapc]) / 100, session('admin')->lamtron);
-                            $heso = round(($heso * $m_cb[$key][$mapc]) / 100, session('admin')->lamtron);
+                            // dd($m_cb[$key][$mapc]);
+                            $sotien = round(($sotien * $m_cb[$key][$mapc]) / 100, session('admin')->lamtron);
+                            $heso=round(($sotien/$inputs['luongcoban']),session('admin')->lamtron);
+                            $a_pc[$k]['sotien']=$sotien;
+                            $m_cb[$key][$mapc]=$sotien;
+                            // dd($m_cb[$k][$mapc]);
 
-                            $a_pc[$k]['sotien'] = round($heso * $inputs['luongcoban'], session('admin')->lamtron);
-                            $m_cb[$key][$mapc] = $heso;
+                            // $heso = round(($heso * $m_cb[$key][$mapc]) / 100, session('admin')->lamtron);
+                            // $a_pc[$k]['sotien'] = round($heso * $inputs['luongcoban'], session('admin')->lamtron);
+                            // $m_cb[$key][$mapc] = $heso;
+                            // dd( $heso);
                             //do tính hệ số đã làm tròn => (hệ số * lương cơ bản) != (số tiền) => nhân lại để đúng số tiền
                             // $a_pc[$k]['sotien'] = round($m_cb[$key][$mapc] * $inputs['luongcoban']);
                             break;
@@ -1234,7 +1239,7 @@ class bangluongController extends Controller
                             break;
                         }
                 }
-
+                // dd($m_cb[$key]);
                 if ($khongluong) {
                     goto ketthuc_phucap;
                 }
@@ -1255,6 +1260,7 @@ class bangluongController extends Controller
                 //                }
                 //$tien += $a_pc[$k]['sotien'];
                 $a_pc[$k]['sotien'] = $daingay ? round($a_pc[$k]['sotien'] * $ptdn, 0) : round($a_pc[$k]['sotien'], 0);
+
                 $tien += $a_pc[$k]['sotien'];
                 $m_cb[$key]['st_' . $mapc] = round($a_pc[$k]['sotien'], 0);
 
@@ -1280,7 +1286,6 @@ class bangluongController extends Controller
                 ketthuc_phucap:
             }
 
-            //  dd($a_pc);
             // dd($m_cb[$key]);
             //$ths = $ths + $heso_goc - $cb->heso;//do chỉ lương nb hưởng 85%, các hệ số hưởng %, bảo hiểm thì lấy 100% để tính
             //nếu cán bộ nghỉ thai sản (không gộp vào phần tính phụ cấp do trên bảng lương hiển thị hệ số nhưng ko có tiền)
@@ -3136,7 +3141,6 @@ class bangluongController extends Controller
             $inputs = $request->all();
             //$model = $this->getBangLuong($inputs)->wherein('phanloai', ['CVCHINH','KHONGCT']);
             $model = $this->getBangLuong($inputs);
-
             $mabl = $inputs['mabl'];
             $m_bl = bangluong::select('thang', 'nam', 'mabl', 'madv', 'ngaylap', 'phanloai', 'noidung')->where('mabl', $mabl)->first();
             $m_dv = dmdonvi::where('madv', $m_bl->madv)->first();
