@@ -109,15 +109,7 @@ class baocaotonghop_tinhController extends Controller
                         })->get();
                     })
                     ->get();
-            })->where(function($q) use ($inputs){
-                if (isset($inputs['mact'])) {
-                    $q->wherein('mact', $inputs['mact']);
-                }
-                if (isset($inputs['linhvuchoatdong'])) {
-                    $q->wherein('linhvuchoatdong', $inputs['linhvuchoatdong']);
-                }
-            })
-            ->get();
+            })->get();
             $a_phucap = array();
             $col = 0;
             foreach (getColTongHop() as $ct) {
