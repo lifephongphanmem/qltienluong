@@ -271,11 +271,11 @@ Route::group(['prefix' => 'nghiep_vu'], function () {
     //     });
     // });
 
-    // Route::group(['prefix' => 'chi_tieu'], function () {
-    //     Route::get('danh_sach', 'chitieubiencheController@index');
-    //     Route::get('create', 'chitieubiencheController@create');
-    //     Route::get('del/{id}', 'chitieubiencheController@destroy');
-    //     Route::post('store', 'chitieubiencheController@store');
-    //     Route::get('get', 'chitieubiencheController@get_detail');
-    // });
+    Route::group(['prefix' => 'chi_tieu'], function () {
+        Route::get('danh_sach', 'chitieubiencheController@index');
+        Route::get('create', 'chitieubiencheController@create');
+        Route::get('del/{id}', 'chitieubiencheController@destroy');
+        Route::post('store', 'chitieubiencheController@store');
+        Route::get('get', 'chitieubiencheController@get_detail');
+    });
 });
