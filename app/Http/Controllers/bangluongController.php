@@ -1217,19 +1217,19 @@ class bangluongController extends Controller
                             //Lấy số tiền để tính
                             foreach (explode(',', $a_pc[$k]['congthuc']) as $ct) {
                                 if ($ct != '')
-                                    $sotien += $m_cb[$key]['st_' . $ct];
-                                    // $heso += $m_cb[$key][$ct];
+                                    // $sotien += $m_cb[$key]['st_' . $ct];
+                                    $heso += $m_cb[$key][$ct];
                             }
                             // dd($m_cb[$key][$mapc]);
-                            $sotien = round(($sotien * $m_cb[$key][$mapc]) / 100, session('admin')->lamtron);
-                            $heso=round(($sotien/$inputs['luongcoban']),session('admin')->lamtron);
-                            $a_pc[$k]['sotien']=$sotien;
-                            $m_cb[$key][$mapc]= $heso;
+                            // $sotien = round(($sotien * $m_cb[$key][$mapc]) / 100, session('admin')->lamtron);
+                            // $heso=round(($sotien/$inputs['luongcoban']),session('admin')->lamtron);
+                            // $a_pc[$k]['sotien']=$sotien;
+                            // $m_cb[$key][$mapc]= $heso;
                             // dd($m_cb[$k][$mapc]);
 
-                            // $heso = round(($heso * $m_cb[$key][$mapc]) / 100, session('admin')->lamtron);
-                            // $a_pc[$k]['sotien'] = round($heso * $inputs['luongcoban'], session('admin')->lamtron);
-                            // $m_cb[$key][$mapc] = $heso;
+                            $heso = round(($heso * $m_cb[$key][$mapc]) / 100, session('admin')->lamtron);
+                            $a_pc[$k]['sotien'] = round($heso * $inputs['luongcoban'], session('admin')->lamtron);
+                            $m_cb[$key][$mapc] = $heso;
                             // dd( $heso);
                             //do tính hệ số đã làm tròn => (hệ số * lương cơ bản) != (số tiền) => nhân lại để đúng số tiền
                             // $a_pc[$k]['sotien'] = round($m_cb[$key][$mapc] * $inputs['luongcoban']);
